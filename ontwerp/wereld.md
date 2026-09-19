@@ -50,6 +50,17 @@ Die karakters zijn voorstellen.
 | De jagershut aan de bosrand | De jager heeft sporen van de reuzenspin gezien. |
 | De toren van de oude meester | Buiten het dorp. |
 
+## Bosvijanden (beelden klaar, 19 sep 2026)
+
+Dit zijn eenvoudige vijanden voor het bos. De manieren om ze te ontlopen zijn een voorstel.
+Volgens de kernregel kost een gevecht dat je ontloopt geen jaren.
+
+| Vijand | Hoe hij eruitziet | Hoe je hem ontloopt (voorstel) |
+|---|---|---|
+| Wolf | Grijs en mager, gele ogen, tanden bloot. | Hij jaagt op geur: vlees uit het dorp opzij gegooid leidt hem een paar beurten af, en een fakkel houdt hem op afstand. |
+| Reuzenspin | Zwart, met een paarse zandloper op het achterlijf en een tros gloeiende ogen. | Hij wacht roerloos tot je een draad raakt. Webben op de tegels maken een routepuzzel: je loopt eromheen, of je brandt een draad weg met een fakkel. Met een vuurschicht kost dat een jaar. |
+| Kobold | Groen en klein, met een kap en een mantel van herfstbladeren, en een speer of een knots. | Hij is hebzuchtig en laf. Een opgegooide munt stuurt hem erachteraan, in een gesprek is hij om te kopen, en een groepje vlucht als de eerste valt. |
+
 ## Wat de kernregel ervan vraagt
 
 - **Goud koopt nooit jaren terug.** Genezen bestaat niet, dus er zijn geen verjongingsdrankjes te
