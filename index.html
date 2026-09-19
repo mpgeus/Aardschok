@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>De Toren · proefje</title>
+  <link rel="stylesheet" href="stijl.css">
+</head>
+<body>
+  <canvas id="scherm"></canvas>
+
+  <div id="hud">
+    <div id="leven" class="paneel">
+      <div class="kop">Leven</div>
+      <div class="balk"><div id="leven-vul"></div></div>
+      <div id="leven-tekst"></div>
+    </div>
+    <div id="inventaris"></div>
+  </div>
+
+  <div id="plek"></div>
+  <div id="volgorde" class="paneel"></div>
+
+  <div id="actiebalk" class="paneel">
+    <div id="ap"></div>
+    <div id="knoppen">
+      <button data-actie="slaan"><kbd>1</kbd> Slaan <span class="kost">3</span></button>
+      <button data-actie="vuurschicht"><kbd>2</kbd> Vuurschicht <span class="kost">5</span></button>
+      <button data-actie="deur" class="verborgen"><kbd>3</kbd> Deur dicht <span class="kost">1</span></button>
+      <button data-actie="einde"><kbd>spatie</kbd> Einde beurt</button>
+    </div>
+  </div>
+
+  <div id="berichten"></div>
+  <div id="tooltip" class="verborgen"></div>
+
+  <div id="dialoog" class="paneel verborgen">
+    <div id="dialoog-naam"></div>
+    <p id="dialoog-tekst"></p>
+    <div id="dialoog-keuzes"></div>
+  </div>
+
+  <div id="overlay" class="verborgen">
+    <div class="paneel kaart">
+      <h1 id="overlay-titel"></h1>
+      <div id="overlay-tekst"></div>
+      <button id="overlay-knop"></button>
+    </div>
+  </div>
+
+  <div id="hulp">
+    Klik om te lopen, te praten of iets te gebruiken.<br>
+    In een gevecht: <kbd>1</kbd> slaan · <kbd>2</kbd> vuurschicht · <kbd>3</kbd> deur dicht · <kbd>spatie</kbd> einde beurt
+  </div>
+
+  <!-- Gewone scripts, geen modules: zo werkt het spel ook als je index.html los opent. -->
+  <script src="js/wereld.js"></script>
+  <script src="js/pad.js"></script>
+  <script src="js/iso.js"></script>
+  <script src="js/anim.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/dialoog.js"></script>
+  <script src="js/verkennen.js"></script>
+  <script src="js/gevecht.js"></script>
+  <script src="js/tekenen.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

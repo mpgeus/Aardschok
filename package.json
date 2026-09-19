@@ -1,0 +1,10 @@
+{
+  "name": "torenspel",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Proefje: een isometrisch avontuur met een naadloze overgang naar gevechten in beurten.",
+  "scripts": {
+    "start": "node server.cjs",
+    "test": "node --test"
+  }
+}

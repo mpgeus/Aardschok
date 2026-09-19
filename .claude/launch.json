@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "torenspel",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["server.cjs"],
+      "port": 8123
+    }
+  ]
+}
