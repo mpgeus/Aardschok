@@ -22,6 +22,7 @@ Code, commentaar en spelteksten zijn Nederlands, zoals in Marcels Planner.
   heeft dezelfde server onder de naam `aardschok`. Het browserpaneel kan een los bestand wel
   tonen maar niet bedienen, vandaar deze server.
 - `npm test` draait `test/*.test.cjs` met `node --test`: de regels zonder scherm.
+- `npm run pixelart` rendert alle HD-pixel art naar `gereedschap/pixelart/uit/` (niet in git).
 
 ## Opbouw
 
@@ -40,6 +41,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`planMonsterBeurt`, los van het scherm en dus te toetsen).
 - `js/dialoog.js`, `js/ui.js` (alle html over het beeld), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera).
+- `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
+  3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. Het
+  spel tekent zelf nog met vlakken; de sprites zitten er nog niet in.
 
 ## De kernregel: De laatste klim
 

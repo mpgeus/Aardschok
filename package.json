@@ -5,6 +5,7 @@
   "description": "Aardschok (werktitel). Proefje: een isometrisch avontuur met een naadloze overgang naar gevechten in beurten.",
   "scripts": {
     "start": "node server.cjs",
-    "test": "node --test"
+    "test": "node --test",
+    "pixelart": "node gereedschap/pixelart/export.cjs"
   }
 }
