@@ -245,7 +245,7 @@
   T.nieuwSpel(false);
   S.modus = 'titel';
   T.ui.toonOverlay(
-    'De Toren',
+    'Aardschok',
     '<p>Een proefje: rondlopen in een isometrische toren, en vechten in beurten op dezelfde vloer, zonder apart gevechtsscherm.</p>' +
       '<p>Klik om te lopen, te praten of iets te gebruiken. Begin maar bij Wim, de conciërge.</p>',
     'Beginnen',

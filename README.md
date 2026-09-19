@@ -1,4 +1,7 @@
-# De Toren (proefje)
+# Aardschok (werktitel)
+
+Een spel van Marcel en Claude. Wat hier nu staat, is een proefje: één torenverdieping om
+de kern te testen.
 
 Een isometrisch avontuur in de browser. Je loopt vrij rond, praat met mensen, pakt dingen op
 en opent deuren. Zodra een monster je ziet, bevriest de wereld en gaat het gevecht verder in

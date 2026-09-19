@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Proefje van een spel dat Marcel en Claude samen bouwen, met als doel het uiteindelijk te
+Aardschok (werktitel): een spel dat Marcel en Claude samen bouwen, met als doel het uiteindelijk te
 verkopen (Steam eerst, als los programma verpakt). Het idee: het isometrische beeld van Mystic
 Towers, de opbouw van een avonturenspel, en een naadloze overgang van rondlopen naar een
 gevecht in beurten op tegels, zonder apart gevechtsscherm. Referenties voor die overgang:
@@ -8,12 +8,18 @@ Fallout 1 en 2, Jagged Alliance 2, Shadowrun Returns.
 
 Code, commentaar en spelteksten zijn Nederlands, zoals in Marcels Planner.
 
+## Git
+
+- Opslagplaats: https://github.com/mpgeus/Aardschok. Werk rechtstreeks op `main`.
+- Een commit per onderwerp, met een Nederlands bericht dat ook het waarom vertelt.
+- Pushen alleen als Marcel erom vraagt ("push it"); dat is voor hem een aparte stap.
+
 ## Draaien en testen
 
 - `index.html` los openen werkt: de scripts zijn gewone `<script>`-bestanden, geen modules.
   Dat is een bewuste keuze. Modules werken niet vanaf `file://`, en er is geen bouwstap nodig.
 - `npm start` start `server.cjs` op poort 8123 (geen afhankelijkheden). `.claude/launch.json`
-  heeft dezelfde server onder de naam `torenspel`. Het browserpaneel kan een los bestand wel
+  heeft dezelfde server onder de naam `aardschok`. Het browserpaneel kan een los bestand wel
   tonen maar niet bedienen, vandaar deze server.
 - `npm test` draait `test/*.test.cjs` met `node --test`: de regels zonder scherm.
 

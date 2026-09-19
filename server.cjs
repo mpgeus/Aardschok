@@ -49,4 +49,4 @@ http
       res.end(data);
     });
   })
-  .listen(POORT, '127.0.0.1', () => console.log(`Torenspel draait op http://localhost:${POORT}`));
+  .listen(POORT, '127.0.0.1', () => console.log(`Aardschok draait op http://localhost:${POORT}`));
