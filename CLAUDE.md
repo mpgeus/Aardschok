@@ -63,6 +63,15 @@ houden gewone levenspunten. Aan het eind telt hoe oud je boven aankomt.
   om een gevecht te vermijden (praten, afleiden, een val) versterkt de kernregel; een nieuwe
   manier om te vechten zonder jaren te betalen, verzwakt hem.
 
+## Het verhaal tot nu toe
+
+Veertig jaar geleden sloot de tovenaar iets op, boven in zijn toren, en ging weg. Vannacht
+schudde de aarde (de aardschok van de titel) en brak het zegel. Wim, zijn vroegere leerling,
+bleef al die tijd en veegde elke dag de trap, voor als de meester terug zou komen. Wat er boven
+zit, weet Wim niet; dat is het mysterie van de klim. De gesprekken staan in `js/dialoog.js`, de
+openingstekst in `js/main.js`. De toon: weemoedig met een knipoog, nooit grappig ten koste van
+de ernst van de klim.
+
 ## Afspraken die het idee dragen
 
 - Eén raster voor rondlopen én vechten. Een wezen heeft een vloeiende positie (`x`, `y`) en

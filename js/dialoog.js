@@ -1,50 +1,59 @@
 // Gesprekken. Een gesprek is een handvol knopen met tekst en keuzes. Een knoop mag ook een
 // functie zijn, zodat Wim iets anders zegt als je de sleutel al hebt.
+//
+// Wim was de leerling van de meester. Toen de meester veertig jaar geleden vertrok, bleef hij,
+// en veegde elke dag de trap, voor als de meester ooit terug zou komen. Vannacht schudde de
+// aarde, en wat boven opgesloten zat, kwam naar beneden.
 (function (T) {
   'use strict';
 
-  const OPENING = [
-    { tekst: 'Hoe kom ik naar boven?', naar: 'boven' },
-    { tekst: 'Wat voor monsters?', naar: 'monsters' },
-    { tekst: 'Tot ziens, Wim.', naar: null },
+  const VRAGEN = [
+    { tekst: 'Wat is er vannacht gebeurd?', naar: 'aardschok' },
+    { tekst: 'Waar is de sleutel van het trappenhuis?', naar: 'sleutel' },
+    { tekst: 'Werkt de fontein nog?', naar: 'fontein' },
+    { tekst: 'Ik ga naar boven, Wim.', naar: null },
   ];
 
   T.DIALOOG_WIM = {
     start(S) {
       if (S.sleutelGebruikt) {
         return {
-          tekst: 'Het trappenhuis is open. Ga maar, ik houd de hal wel schoon.',
-          keuzes: [{ tekst: 'Tot ziens, Wim.', naar: null }],
+          tekst: 'Ga maar, meester. Ik veeg de trap nog één keer, voor het geval dat.',
+          keuzes: [{ tekst: 'Dank je, Wim.', naar: null }],
         };
       }
       if (S.inventaris.has('sleutel')) {
         return {
-          tekst: 'Je hebt de sleutel! Die zware deur hier in de hal, daarachter is het trappenhuis. Pas op voor het skelet.',
+          tekst: 'U hebt de sleutel. Wees voorzichtig daarboven, meester. Ik heb veertig jaar gewacht; ik wil nog even niet om u rouwen.',
           keuzes: [
-            { tekst: 'Wat weet je van dat skelet?', naar: 'monsters' },
-            { tekst: 'Tot ziens, Wim.', naar: null },
+            { tekst: 'Wat staat er bij de trap?', naar: 'monsters' },
+            { tekst: 'Ik ga, Wim.', naar: null },
           ],
         };
       }
       return {
-        tekst: 'Ah, bezoek! Ik ben Wim, de conciërge. Sinds de meester boven verdwenen is, lopen hier monsters rond. En niemand die zijn voeten veegt.',
-        keuzes: OPENING,
+        tekst: 'Meester? Meester! U leeft nog. Veertig jaar heb ik de trap geveegd, voor als u ooit terug zou komen. En nu, uitgerekend nu, na die aardschok van vannacht...',
+        keuzes: VRAGEN,
       };
     },
-    meer: { tekst: 'Wat wil je nog weten?', keuzes: OPENING },
-    boven: {
-      tekst: 'Via het trappenhuis, achter die zware deur hier in de hal. Die zit op slot. De sleutel ligt in de voorraadkamer, als die slijmkruiper hem tenminste niet heeft opgegeten.',
+    meer: { tekst: 'Wat wilt u nog weten, meester?', keuzes: VRAGEN },
+    aardschok: {
+      tekst: 'Het hele huis schudde. Boven kraakte iets, heel lang, en toen kwam er gespuis de trap af. U weet wel wat u daar hebt opgesloten. Ik niet. Dat hebt u me nooit verteld.',
       keuzes: [
-        { tekst: 'En als ik gewond raak?', naar: 'fontein' },
+        { tekst: 'Wat voor gespuis?', naar: 'monsters' },
         { tekst: 'Nog iets anders.', naar: 'meer' },
       ],
     },
     monsters: {
-      tekst: 'Een slijmkruiper in de voorraadkamer. Traag, maar hij bijt. En bij de trap staat een skelet met een zwaard. Dat is mijn voorganger. Die veegde ook nooit zijn voeten.',
+      tekst: 'Een slijmkruiper, in de voorraadkamer. En bij de trap staat iets met een zwaard. Het staat daar maar, alsof het op iemand wacht. Ik heb de deur op slot gedaan.',
+      keuzes: [{ tekst: 'Nog iets anders.', naar: 'meer' }],
+    },
+    sleutel: {
+      tekst: 'In de voorraadkamer. Ik liet hem vallen toen ik wegrende. Ik ben ook niet meer de jongste, meester. Maar dat bent u al helemaal niet meer.',
       keuzes: [{ tekst: 'Nog iets anders.', naar: 'meer' }],
     },
     fontein: {
-      tekst: 'Drink van de fontein, daar bij de muur. Het water is betoverd en gratis. Dat laatste vind ik het belangrijkst.',
+      tekst: 'Er zit nog één slok in. Eén. Hij maakt u een paar jaar jonger, maar daarna staat hij droog. Bewaar hem voor als het echt moet.',
       keuzes: [{ tekst: 'Nog iets anders.', naar: 'meer' }],
     },
   };

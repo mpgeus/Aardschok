@@ -43,7 +43,7 @@
     const p = T.naarScherm(held.x, held.y);
     S.camera = { x: p.x, y: p.y - 24 };
     T.ui.reset(S);
-    T.ui.bericht('Je staat in de hal van de toren. Misschien weet de conciërge meer.');
+    T.ui.bericht('Je bent terug in de hal van je toren, na veertig jaar. Wim staat er nog.');
     if (toonPlek) T.ui.plek('De hal');
   };
 
@@ -256,9 +256,10 @@
   S.modus = 'titel';
   T.ui.toonOverlay(
     'Aardschok',
-    '<p>Een proefje: rondlopen in een isometrische toren, en vechten in beurten op dezelfde vloer, zonder apart gevechtsscherm.</p>' +
-      '<p>Klik om te lopen, te praten of iets te gebruiken. Begin maar bij Wim, de conciërge.</p>',
-    'Beginnen',
+    '<p>Veertig jaar geleden sloot je iets op, boven in je toren, en ging je weg. Vannacht schudde de aarde, en het zegel brak.</p>' +
+      '<p>Je bent 84. Elke spreuk kost je een jaar van je leven, elke klap die je krijgt een paar maanden. Op je honderdste is het voorbij. Een gevecht dat je ontloopt, kost niets.</p>' +
+      '<p>Klik om te lopen, te praten of iets te gebruiken. <kbd>S</kbd> om te sluipen.</p>',
+    'Naar binnen',
     () => {
       S.modus = 'verkennen';
       T.ui.plek('De hal');
