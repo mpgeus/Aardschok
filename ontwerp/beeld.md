@@ -61,11 +61,15 @@ Zonder houding geeft hij de stand van nu; bestaande vellen blijven daardoor geli
 **Voeten die niet glijden.** Een stap moet passen bij de loopsnelheid in `js/anim.js`. Een voet
 op de grond schuift mee terug met de snelheid waarmee het spel de figuur vooruit schuift.
 
-Nu loopt de held 4,5 tegels per seconde. Dat is rennen, en met een echte loopcyclus zouden zijn
-stappen belachelijk lang worden. Voorstel, nog door Marcel te kiezen:
-- de held loopt ongeveer 2,5 tegels per seconde (een cyclus van 0,8 seconde, een tegel per stap);
-- hoe ouder, hoe trager, tot zo'n 1,8 op zijn 99e;
-- de monsters houden hun snelheid van nu (slijm 1,4, skelet 2,2).
+De held liep 4,5 tegels per seconde. Dat is rennen, en met een echte loopcyclus zouden zijn
+stappen belachelijk lang worden. Besloten (Marcel, 19 sep 2026):
+- de held loopt 2,5 tegels per seconde op zijn 84e (een cyclus van 0,8 seconde, een tegel per
+  stap);
+- hoe ouder, hoe trager: 2,1 op zijn 92e en 1,8 op zijn 99e. Zo voel je zijn leeftijd ook als
+  hij gewoon loopt;
+- de monsters houden hun snelheid (slijm 1,4, skelet 2,2).
+
+In het spel moet dit nog worden ingebouwd, na de spreuken.
 
 **Vellen.** Eén PNG per figuur per houding. De rijen zijn de acht richtingen in de volgorde
 Z ZW W NW N NO O ZO; de kolommen zijn de beelden. Een cel is 112×124 met de voeten op (56, 110).
