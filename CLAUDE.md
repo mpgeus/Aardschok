@@ -8,6 +8,23 @@ Fallout 1 en 2, Jagged Alliance 2, Shadowrun Returns.
 
 Code, commentaar en spelteksten zijn Nederlands, zoals in Marcels Planner.
 
+## Kennis over het spel: lees alleen wat je nodig hebt
+
+Dit bestand wordt elke sessie gelezen en blijft daarom kort. Het houdt de kaart, de kernregel en
+de afspraken bij. Het ontwerp staat in `ontwerp/`, één bestand per onderwerp. Bovenaan staat wat
+besloten is (met datum en waarom), onderaan wat nog open is. Lees bij een taak alleen het bestand
+dat erover gaat.
+
+Komt Marcel met een idee of besluit, schrijf het dan meteen in het juiste bestand, niet alleen in
+het gesprek; wat alleen in een gesprek staat, raakt kwijt. Laat groot zoek- en leeswerk aan een
+agent over, zodat alleen de samenvatting in het gesprek komt.
+
+- `ontwerp/verhaal.md`: het verhaal, de personen, de toon, en wat er boven in de toren zit.
+- `ontwerp/wereld.md`: het dorp, het bos, de toren van de oude meester; goud, quests, upgrades,
+  staf en uitrusting.
+- `ontwerp/spreuken.md`: de spreuken, en hoe de tovenaar met de jaren meer kan.
+- `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
+
 ## Git
 
 - Opslagplaats: https://github.com/mpgeus/Aardschok. Werk rechtstreeks op `main`.
@@ -67,14 +84,12 @@ houden gewone levenspunten. Aan het eind telt hoe oud je boven aankomt.
   om een gevecht te vermijden (praten, afleiden, een val) versterkt de kernregel; een nieuwe
   manier om te vechten zonder jaren te betalen, verzwakt hem.
 
-## Het verhaal tot nu toe
+## Het verhaal in het kort
 
-Veertig jaar geleden sloot de tovenaar iets op, boven in zijn toren, en ging weg. Vannacht
-schudde de aarde (de aardschok van de titel) en brak het zegel. Wim, zijn vroegere leerling,
-bleef al die tijd en veegde elke dag de trap, voor als de meester terug zou komen. Wat er boven
-zit, weet Wim niet; dat is het mysterie van de klim. De gesprekken staan in `js/dialoog.js`, de
-openingstekst in `js/main.js`. De toon: weemoedig met een knipoog, nooit grappig ten koste van
-de ernst van de klim.
+Veertig jaar geleden sloot de tovenaar iets op, boven in de toren. Vannacht brak de aardschok het
+zegel. Wim, zijn vroegere leerling, wachtte al die tijd. De toon: weemoedig met een knipoog,
+nooit grappig ten koste van de ernst van de klim. Meer, en wat nog open is, staat in
+`ontwerp/verhaal.md`.
 
 ## Afspraken die het idee dragen
 
