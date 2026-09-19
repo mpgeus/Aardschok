@@ -15,11 +15,14 @@
   - misschien voegt hij een element toe aan een spreuk.
   Een nieuwe staf koop je met goud (zie `wereld.md`).
 
-## Voorstel: leeftijd en meesterschap samen (nog niet gekozen)
+## Leeftijd en meesterschap samen (besloten, Marcel 19 sep 2026)
 
 **Twee assen, één munt: tijd.** Leeftijd bepaalt wat je kunt. Meesterschap bepaalt hoe goed je
 doet wat je werkelijk gebruikt. Er komt geen ervaringsbalk en er is geen ervaring voor het doden
 van monsters. Elke spreuk kost tijd, dus oefenen maakt je ouder: ervaring kost levensjaren.
+
+De getallen hieronder (grenzen van de kringen, drempels per trede, de treden per spreuk) zijn eerste
+waarden. Die stellen we bij het spelen bij.
 
 ### Leeftijd opent de deur
 
@@ -101,7 +104,6 @@ dan 6.
 
 ## Open vragen voor Marcel
 
-- **Twee assen, één munt:** is dit hoe hij leeftijd als ervaring ziet?
 - **Kringen per leeftijd:** 84, 88, 92 en 96, of andere grenzen?
 - **Meesterschap:** telt alleen raak gebruik? Zijn vijf treden met deze drempels goed?
 - **Elementen op de staf:** welke, en hoe vaak wissel je van staf?
