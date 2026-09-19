@@ -18,8 +18,12 @@
   koop.
 - **Het best passen upgrades en uitrusting die helpen een gevecht te ontlopen:** sluiproutes,
   vallen, afleiding, of Wim die iets voor je doet.
-- **Een staf** mag de magie sterker maken (schade, bereik) of een spreuk minder actiepunten laten
-  kosten, maar niet minder jaren.
+- **Een staf** (besloten, Marcel 19 sep 2026) doet drie dingen:
+  - hij versterkt bepaalde soorten spreuken;
+  - hij geeft kleine blijvende voordelen, zoals licht in het donker;
+  - misschien voegt hij een element toe aan een spreuk.
+
+  Een staf maakt een spreuk nooit goedkoper in jaren. De uitwerking staat in `spreuken.md`.
 - **Uitrusting die een klap minder maanden laat kosten** verzwakt de regel een beetje. Dat kan,
   maar met mate: bijvoorbeeld een mantel die de eerste klap per gevecht dempt.
 
