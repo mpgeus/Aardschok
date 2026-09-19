@@ -186,3 +186,16 @@ test('leeftijd en duur staan er zoals je ze zegt', () => {
   assert.equal(T.duurKort(12), '+1 jaar');
   assert.equal(T.duurKort(-24), '−2 jaar');
 });
+
+test('wie sluipt, wordt pas van twee tegels dichterbij opgemerkt', () => {
+  const w = T.maakWereld();
+  const S = { wereld: w, held: wezen(w, 'held'), sluipen: false };
+  const slijm = wezen(w, 'slijm');
+  zet(slijm, 16, 4);
+  zet(S.held, 12, 4); // vier tegels
+  assert.equal(T.zoekOntdekking(S), slijm);
+  S.sluipen = true;
+  assert.equal(T.zoekOntdekking(S), null);
+  zet(S.held, 13, 4); // drie tegels
+  assert.equal(T.zoekOntdekking(S), slijm);
+});

@@ -27,6 +27,7 @@
       inventaris: new Set(),
       sleutelGebruikt: false,
       fonteinLeeg: false,
+      sluipen: false,
       bezocht: new Set(['hal']),
       effecten: [],
       wachters: [],
@@ -202,6 +203,10 @@
       if (ev.key === 'Escape') T.sluitDialoog(S);
       return;
     }
+    if (S.modus === 'verkennen' && (ev.key === 's' || ev.key === 'S')) {
+      T.wisselSluipen(S);
+      return;
+    }
     if (S.modus !== 'gevecht') return;
     if (ev.key === '1') T.kiesActie(S, 'slaan');
     else if (ev.key === '2') T.kiesActie(S, 'vuurschicht');
@@ -219,6 +224,10 @@
     if (b.dataset.actie === 'einde') T.eindeBeurt(S);
     else if (b.dataset.actie === 'deur') T.deurDicht(S);
     else T.kiesActie(S, b.dataset.actie);
+  });
+  document.getElementById('sluip-knop').addEventListener('click', (ev) => {
+    ev.currentTarget.blur();
+    T.wisselSluipen(S);
   });
   window.addEventListener('resize', formaat);
 

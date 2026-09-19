@@ -101,7 +101,9 @@
     const dy = volgende.y - e.y;
     const afstand = Math.hypot(dx, dy);
     // In een gevecht lopen ook de trage monsters wat vlotter, anders duurt hun beurt te lang.
-    const snelheid = S.gevecht ? Math.max(3.2, e.snelheid * 1.4) : e.snelheid;
+    // Wie sluipt, gaat half zo snel.
+    let snelheid = S.gevecht ? Math.max(3.2, e.snelheid * 1.4) : e.snelheid;
+    if (e === S.held && S.sluipen && !S.gevecht) snelheid *= 0.5;
     const stap = snelheid * dt;
     if (stap >= afstand) {
       e.x = volgende.x;

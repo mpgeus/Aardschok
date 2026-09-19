@@ -106,16 +106,28 @@
     }
   };
 
+  // Wie sluipt, loopt half zo snel, maar wordt pas van twee tegels dichterbij opgemerkt.
+  // Een gevecht dat je zo ontloopt, kost je geen enkel jaar.
+  T.SLUIP_ZICHT = 2;
+
   // Ziet een monster de held? Dan geeft dit het monster terug.
   T.zoekOntdekking = function (S) {
     const w = S.wereld;
     const h = T.tegelVan(S.held);
+    const minder = S.sluipen ? T.SLUIP_ZICHT : 0;
     for (const m of w.wezens) {
       if (m.dood || m.kant !== 'monster') continue;
       const p = T.tegelVan(m);
-      if (T.afstand(p, h) <= m.zicht && T.zichtTussen(w, p, h)) return m;
+      if (T.afstand(p, h) <= m.zicht - minder && T.zichtTussen(w, p, h)) return m;
     }
     return null;
+  };
+
+  T.wisselSluipen = function (S) {
+    if (S.modus !== 'verkennen') return;
+    S.sluipen = !S.sluipen;
+    T.ui.toonSluipen(S.sluipen);
+    T.ui.bericht(S.sluipen ? 'Je sluipt: trager, maar minder snel opgemerkt.' : 'Je loopt weer gewoon.');
   };
 
   // Mag deze stap nog? Tijdens het rondlopen kan er intussen een monster in de weg staan.

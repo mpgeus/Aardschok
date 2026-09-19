@@ -323,7 +323,9 @@
     held(ctx, cx, cy, bob, e, S) {
       const ouder = Math.min(1, Math.max(0, (e.leeftijd - T.STARTLEEFTIJD) / (T.EINDLEEFTIJD - T.STARTLEEFTIJD)));
       const krom = ouder * 4; // hoofd schuift naar voren en omlaag
-      const lijf = 24 + bob - ouder * 3;
+      const sluip = S.sluipen && !S.gevecht ? 5 : 0; // ineengedoken
+      if (sluip) ctx.globalAlpha *= 0.8;
+      const lijf = 24 + bob - sluip - ouder * 3;
       T.blok(ctx, cx, cy, 0.2, 0.2, lijf, '#3f6fb7'); // gewaad
       const hx = cx + krom;
       const hy = cy - lijf - 7 + krom * 0.5;

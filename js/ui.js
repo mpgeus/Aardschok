@@ -20,6 +20,7 @@
       $('berichten').innerHTML = '';
       vorigeAp = '';
       this.toonLeeftijd(S.held);
+      this.toonSluipen(false);
       this.toonInventaris(S);
       this.toonGevecht(false);
       this.zetKnoppen(false);
@@ -39,6 +40,10 @@
       $('leeftijd-jaren').textContent = T.leeftijdTekst(m);
       const rest = T.EINDLEEFTIJD - m;
       $('leeftijd-rest').textContent = rest > 0 ? `nog ${T.duurTekst(rest)}` : 'geen tijd meer';
+    },
+
+    toonSluipen(aan) {
+      $('sluip-knop').classList.toggle('aan', aan);
     },
 
     toonInventaris(S) {

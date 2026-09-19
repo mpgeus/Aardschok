@@ -58,6 +58,10 @@ houden gewone levenspunten. Aan het eind telt hoe oud je boven aankomt.
   100. Een tweede weg naar `held.leeftijd` mist er vroeg of laat één van.
 - De vuurschicht raakt eerst en kost daarna zijn jaar: wie zo zijn honderdste haalt, velt met
   zijn laatste spreuk nog het monster.
+- Sluipen (`S`, alleen buiten een gevecht) is het eerste middel om een gevecht te ontlopen: half
+  zo snel, en monsters zien je pas van `T.SLUIP_ZICHT` (2) tegels dichterbij. Elke nieuwe manier
+  om een gevecht te vermijden (praten, afleiden, een val) versterkt de kernregel; een nieuwe
+  manier om te vechten zonder jaren te betalen, verzwakt hem.
 
 ## Afspraken die het idee dragen
 

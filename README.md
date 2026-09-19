@@ -20,6 +20,8 @@ eind telt hoe oud je boven aankomt.
 
 - Dubbelklik `index.html`, of draai `npm start` en ga naar http://localhost:8123.
 - Klik om te lopen, te praten of iets te gebruiken.
+- `S` (of de knop linksboven) laat je sluipen: je loopt half zo snel, maar monsters merken je pas
+  twee tegels later op. Zo ontloop je een gevecht, en dat kost geen enkel jaar.
 - In een gevecht heb je 8 actiepunten per beurt (vanaf je negentigste 7, vanaf je
   vijfennegentigste 6). Lopen kost 1 per stap (ook schuin), slaan met je staf 3, een vuurschicht
   5 (en een jaar), de laatste slok uit de fontein 3, een deur dichtgooien 1.
