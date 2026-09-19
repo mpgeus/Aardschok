@@ -40,8 +40,49 @@ Vijf agents werken tegelijk aan:
 
 Hun code komt daarna ook in `gereedschap/pixelart/`.
 
+## Animaties (Marcel, 19 sep 2026: "moet allemaal geanimeerd zijn")
+
+Een figuur is opgebouwd uit gewrichten. Een animatie is een reeks houdingen, gerenderd zoals een
+stilstaand beeld.
+
+**Model.** De bouwfunctie krijgt een houding mee: `maak({ houding: 'lopen', fase: 0..1 })`.
+Zonder houding geeft hij de stand van nu; bestaande vellen blijven daardoor gelijk.
+
+**Namen, beelden en snelheid:**
+
+| Houding | Beelden | Beelden per seconde | Herhaalt | Wat het is |
+|---|---|---|---|---|
+| staan | 4 | 4 | ja | Ademen: een klein wiegen, de baard of het slijm deint. |
+| lopen | 8 | 10 | ja | Een loopcyclus op de plaats; het spel verschuift de figuur. |
+| aanval | 6 | 12 | nee | Voor monsters. De tovenaar heeft `slaan` (met de staf) en `spreuk`. |
+| geraakt | 3 | 12 | nee | Terugdeinzen. |
+| sterven | 8 | 10 | nee | Het laatste beeld blijft liggen. |
+
+**Voeten die niet glijden.** Een stap moet passen bij de loopsnelheid in `js/anim.js`. Een voet
+op de grond schuift mee terug met de snelheid waarmee het spel de figuur vooruit schuift.
+
+Nu loopt de held 4,5 tegels per seconde. Dat is rennen, en met een echte loopcyclus zouden zijn
+stappen belachelijk lang worden. Voorstel, nog door Marcel te kiezen:
+- de held loopt ongeveer 2,5 tegels per seconde (een cyclus van 0,8 seconde, een tegel per stap);
+- hoe ouder, hoe trager, tot zo'n 1,8 op zijn 99e;
+- de monsters houden hun snelheid van nu (slijm 1,4, skelet 2,2).
+
+**Vellen.** Eén PNG per figuur per houding. De rijen zijn de acht richtingen in de volgorde
+Z ZW W NW N NO O ZO; de kolommen zijn de beelden. Een cel is 112×124 met de voeten op (56, 110).
+Een houding die niet in de cel past (liggen bij sterven), krijgt bredere cellen en vermeldt dat.
+
+**Beschrijving.** Bij elke figuur hoort een JSON:
+`{ naam, cel, anker, houdingen: { lopen: { beelden, fps, herhaal, cel? } } }`.
+
+**Bekijken.** `apng.cjs` maakt er een bewegende PNG van, die in elke browser en op het canvas
+beweegt.
+
+**De tovenaar loopt naar zijn leeftijd.** Op zijn 84e loopt hij kwiek; op zijn 99e schuifelt hij,
+leunend op de staf.
+
 ## Open
 
-- **Sprites in het spel.** `js/tekenen.js` tekent nog met vlakken.
-- **Loopanimaties.** De modellen kunnen bewegen; per richting zijn een paar standen nodig.
+- **Sprites in het spel.** `js/tekenen.js` tekent nog met vlakken; er is een speler nodig die
+  per toestand, richting en tijd het juiste beeld kiest.
+- **Bewegende omgeving:** vlammen, water, rook, bladeren, en de stofjes in de zonnebundel.
 - **Effecten** van spreuken, en portretten van dorpelingen voor de gesprekken.
