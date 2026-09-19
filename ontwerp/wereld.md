@@ -12,6 +12,44 @@
   - een nieuwe staf;
   - uitrusting.
 
+## Een flink dorp (Marcel, 19 sep 2026)
+
+Het dorp moet flink zijn: veel mensen, ook stellen en kinderen, en plekken die de moeite waard
+zijn.
+
+**Al getekend:**
+- de smid: nors maar behulpzaam, repareert wat de aardschok brak;
+- de herbergierster: weet alle roddels;
+- de boer: zwijgzaam, zijn land is gespleten;
+- de dorpsoudste: de oudste van het dorp en nog jonger dan de tovenaar; ze herinnert zich hem van
+  veertig jaar geleden.
+
+Die karakters zijn voorstellen.
+
+**Nog te maken:**
+- kinderen;
+- stellen: de vrouw van de smid, de boerin, een jong stel dat gaat trouwen, en een oud stel
+  waarvan de een dingen vergeet;
+- meer beroepen: bakker, molenaar, kruidenvrouw, jager, marskramer, koster, wachter;
+- een maker voor gewone dorpelingen in allerlei variaties.
+
+### Plekken die de moeite waard zijn (voorstel)
+
+| Plek | Wat er te doen is |
+|---|---|
+| Het dorpsplein | De waterput en een prikbord met klusjes en quests. |
+| De herberg ("De Scheve Toren"?) | Roddels, geruchten over de toren en het bos. |
+| De smidse | Uitrusting kopen en laten maken. |
+| De kapel en het kerkhof | Graven van mensen die de tovenaar kende. Misschien ligt de oude meester er. Weemoed. |
+| De molen aan de beek | De aardschok brak de molensteen. |
+| De boerderij | Het land is gespleten, en er komen wolven uit het bos: een brug naar het bos. |
+| De kruidenvrouw aan de bosrand | Geen genezing (die bestaat niet), wel lokmiddelen en rook: middelen om een gevecht te ontlopen. |
+| De markt | Op marktdag komt de marskramer met zeldzame dingen: rollen met spreuken en staven. |
+| Het huis van de dorpsoudste | Herinneringen aan de tovenaar van veertig jaar geleden. |
+| De brug en de vijver | Kinderen spelen er; iets glinstert in het water. |
+| De jagershut aan de bosrand | De jager heeft sporen van de reuzenspin gezien. |
+| De toren van de oude meester | Buiten het dorp. |
+
 ## Wat de kernregel ervan vraagt
 
 - **Goud koopt nooit jaren terug.** Genezen bestaat niet, dus er zijn geen verjongingsdrankjes te
