@@ -43,17 +43,18 @@
 
   // ap: actiepunten per beurt. snelheid: tegels per seconde tijdens het rondlopen.
   // zicht: vanaf hoe ver een monster je opmerkt. Namen staan met een kleine letter,
-  // omdat ze bijna altijd midden in een zin staan.
+  // omdat ze bijna altijd midden in een zin staan. De held heeft geen levenspunten maar een
+  // leeftijd (zie leeftijd.js); een klap van een monster kost hem maanden.
   const WEZENS = {
-    held: { naam: 'jij', kant: 'held', leven: 24, ap: 8, initiatief: 10, snelheid: 4.5 },
+    held: { naam: 'jij', kant: 'held', leven: 0, ap: 8, initiatief: 10, snelheid: 4.5 },
     wim: { naam: 'Wim', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 0 },
     slijm: {
       naam: 'slijmkruiper', kant: 'monster', leven: 10, ap: 4, initiatief: 4, snelheid: 1.4, zicht: 5, dwaalt: true,
-      aanval: { kosten: 3, schade: [2, 3], zin: 'bijt je' },
+      aanval: { kosten: 3, maanden: [3, 5], zin: 'bijt je' },
     },
     skelet: {
       naam: 'skeletwacht', kant: 'monster', leven: 18, ap: 6, initiatief: 6, snelheid: 2.2, zicht: 5, dwaalt: false,
-      aanval: { kosten: 3, schade: [3, 5], zin: 'slaat je met zijn zwaard' },
+      aanval: { kosten: 3, maanden: [5, 9], zin: 'raakt je met zijn zwaard' },
     },
   };
 
@@ -121,6 +122,7 @@
       dwaalt: !!s.dwaalt, aanval: s.aanval || null,
       dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
       dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0,
+      leeftijd: soort === 'held' ? T.STARTLEEFTIJD : null,
     };
   }
 

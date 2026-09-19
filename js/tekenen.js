@@ -318,27 +318,33 @@
   }
 
   const TEKENAARS = {
-    held(ctx, cx, cy, bob) {
-      T.blok(ctx, cx, cy, 0.2, 0.2, 24 + bob, '#3f6fb7'); // gewaad
-      const hy = cy - 24 - bob - 7;
-      rondje(ctx, cx, hy, 7, HOOFD);
-      rondje(ctx, cx - 2.5, hy - 1, 1.1, '#2b2118');
-      rondje(ctx, cx + 2.5, hy - 1, 1.1, '#2b2118');
+    // De meester wordt zichtbaar ouder: de baard groeit, de rug buigt, de hoedpunt zakt.
+    // Zo zie je aan de figuur zelf hoeveel tijd er nog is, niet alleen aan de balk.
+    held(ctx, cx, cy, bob, e, S) {
+      const ouder = Math.min(1, Math.max(0, (e.leeftijd - T.STARTLEEFTIJD) / (T.EINDLEEFTIJD - T.STARTLEEFTIJD)));
+      const krom = ouder * 4; // hoofd schuift naar voren en omlaag
+      const lijf = 24 + bob - ouder * 3;
+      T.blok(ctx, cx, cy, 0.2, 0.2, lijf, '#3f6fb7'); // gewaad
+      const hx = cx + krom;
+      const hy = cy - lijf - 7 + krom * 0.5;
+      rondje(ctx, hx, hy, 7, HOOFD);
+      rondje(ctx, hx - 2.5, hy - 1, 1.1, '#2b2118');
+      rondje(ctx, hx + 2.5, hy - 1, 1.1, '#2b2118');
       ctx.fillStyle = '#ece8dd'; // baard
       ctx.beginPath();
-      ctx.moveTo(cx - 6, hy + 1.5);
-      ctx.lineTo(cx + 6, hy + 1.5);
-      ctx.lineTo(cx + 1, hy + 15);
+      ctx.moveTo(hx - 6, hy + 1.5);
+      ctx.lineTo(hx + 6, hy + 1.5);
+      ctx.lineTo(hx + 1, hy + 15 + ouder * 12);
       ctx.closePath();
       ctx.fill();
-      ctx.fillStyle = '#233f7a'; // punthoed
+      ctx.fillStyle = '#233f7a'; // punthoed, waarvan de punt steeds verder omzakt
       ctx.beginPath();
-      ctx.ellipse(cx, hy - 5, 12, 4, 0, 0, Math.PI * 2);
+      ctx.ellipse(hx, hy - 5, 12, 4, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.beginPath();
-      ctx.moveTo(cx - 8, hy - 5);
-      ctx.lineTo(cx + 8, hy - 5);
-      ctx.lineTo(cx + 4, hy - 28);
+      ctx.moveTo(hx - 8, hy - 5);
+      ctx.lineTo(hx + 8, hy - 5);
+      ctx.lineTo(hx + 4 + ouder * 10, hy - 28 + ouder * 10);
       ctx.closePath();
       ctx.fill();
       ctx.strokeStyle = '#8b6b3d'; // staf
@@ -347,7 +353,8 @@
       ctx.moveTo(cx + 13, cy + 2);
       ctx.lineTo(cx + 13, cy - 44);
       ctx.stroke();
-      gloed(ctx, cx + 13, cy - 47, 8, 'rgba(255, 214, 110,', 0.9);
+      // hoe ouder, hoe sterker de magie: de gloed op de staf groeit mee
+      gloed(ctx, cx + 13, cy - 47, 8 + T.magieBonus(e.leeftijd) * 3, 'rgba(255, 214, 110,', 0.9);
       rondje(ctx, cx + 13, cy - 47, 2.8, '#fff0b0');
       return hy - 28;
     },

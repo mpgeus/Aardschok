@@ -44,14 +44,16 @@ kbd {
   text-align: center;
 }
 
-/* Leven en spullen, linksboven */
+/* Leeftijd en spullen, linksboven. De leeftijd is de levensbalk: hij vult zich
+   van zeventig tot honderd, en wat nog leeg is, is de tijd die je over hebt. */
 #hud { position: fixed; left: 16px; top: 16px; display: flex; gap: 10px; align-items: flex-start; }
-#leven { padding: 8px 12px 9px; width: 200px; }
-#leven .kop { font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; }
+#leeftijd { padding: 8px 12px 9px; width: 220px; }
+#leeftijd .kop { font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; }
+#leeftijd-jaren { font: 17px var(--kop); color: var(--inkt); margin-top: 1px; }
 .balk { height: 8px; margin: 5px 0 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
-#leven-vul { height: 100%; width: 100%; background: var(--groen); transition: width 0.3s, background 0.3s; }
-#leven-vul.laag { background: var(--rood); }
-#leven-tekst { font-size: 12px; color: var(--gedempt); }
+#leeftijd-vul { height: 100%; width: 0; background: #d9bf7e; transition: width 0.6s ease, background 0.3s; }
+#leeftijd-vul.laat { background: var(--rood); }
+#leeftijd-rest { font-size: 12px; color: var(--gedempt); }
 #inventaris .item {
   width: 44px;
   height: 44px;

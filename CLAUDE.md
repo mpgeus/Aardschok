@@ -41,6 +41,24 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/dialoog.js`, `js/ui.js` (alle html over het beeld), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera).
 
+## De kernregel: De laatste klim
+
+Gekozen door Marcel op 19 sep 2026, nadat het eerste proefje "dertien in een dozijn" voelde. De
+held is een tovenaar van 84, en zijn leeftijd is zijn levensbalk (`js/leeftijd.js`, geteld in
+hele maanden, nooit in kommagetallen). Elke vuurschicht kost een jaar, elke klap van een monster
+een paar maanden (`aanval.maanden`), en op zijn honderdste is het voorbij. Genezen bestaat niet;
+de fontein maakt één keer twee jaar jonger. Hoe ouder, hoe minder actiepunten (8, vanaf 90 jaar
+7, vanaf 95 jaar 6) en hoe sterker de magie (+1 schade per vijf jaar boven de 80). Slaan met de
+staf kost geen jaren. Die afweging, jaren tegen veiligheid, is het spel: een gevecht dat je
+vermijdt, kost niets, en daardoor hebben het avontuur en het gevecht elkaar nodig. Monsters
+houden gewone levenspunten. Aan het eind telt hoe oud je boven aankomt.
+
+- Alle jaren lopen via `T.verouder` (gevecht.js). Die toont het getal boven de held, werkt de
+  balk en de beurtvolgorde bij, meldt een nieuwe actiepuntengrens, en laat de held sterven op
+  100. Een tweede weg naar `held.leeftijd` mist er vroeg of laat één van.
+- De vuurschicht raakt eerst en kost daarna zijn jaar: wie zo zijn honderdste haalt, velt met
+  zijn laatste spreuk nog het monster.
+
 ## Afspraken die het idee dragen
 
 - Eén raster voor rondlopen én vechten. Een wezen heeft een vloeiende positie (`x`, `y`) en

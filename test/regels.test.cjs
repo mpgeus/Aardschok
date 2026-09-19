@@ -3,6 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
+require('../js/leeftijd.js');
 require('../js/wereld.js');
 require('../js/pad.js');
 require('../js/gevecht.js');
@@ -149,4 +150,39 @@ test('de deurknop hoort bij een open deur naast de held waar niemand in staat', 
   assert.equal(T.deurNaastHeld(S), T.deurOp(w, 9, 4));
   zet(wezen(w, 'slijm'), 9, 4);
   assert.equal(T.deurNaastHeld(S), null); // er staat iemand in de opening
+});
+
+// De laatste klim: je leeftijd is je levensbalk.
+test('de held begint op zijn vierentachtigste en sterft op zijn honderdste', () => {
+  const w = T.maakWereld();
+  assert.equal(wezen(w, 'held').leeftijd, 84 * 12);
+  assert.equal(T.EINDLEEFTIJD, 100 * 12);
+  assert.equal(wezen(w, 'slijm').leeftijd, null); // monsters hebben levenspunten, geen leeftijd
+});
+
+test('het lijf wordt trager met de jaren: 8, vanaf 90 jaar 7, vanaf 95 jaar 6 actiepunten', () => {
+  assert.equal(T.apVoorLeeftijd(89 * 12 + 11), 8);
+  assert.equal(T.apVoorLeeftijd(90 * 12), 7);
+  assert.equal(T.apVoorLeeftijd(94 * 12 + 11), 7);
+  assert.equal(T.apVoorLeeftijd(95 * 12), 6);
+});
+
+test('de magie wordt sterker met de jaren: +1 schade per vijf jaar boven de tachtig', () => {
+  assert.equal(T.magieBonus(84 * 12 + 11), 0);
+  assert.equal(T.magieBonus(85 * 12), 1);
+  assert.equal(T.magieBonus(90 * 12), 2);
+  const held = { leeftijd: 90 * 12 };
+  assert.deepEqual(T.schichtSchade(held), [7, 10]);
+});
+
+test('leeftijd en duur staan er zoals je ze zegt', () => {
+  assert.equal(T.leeftijdTekst(84 * 12), '84 jaar');
+  assert.equal(T.leeftijdTekst(84 * 12 + 1), '84 jaar en 1 maand');
+  assert.equal(T.leeftijdTekst(84 * 12 + 7), '84 jaar en 7 maanden');
+  assert.equal(T.duurTekst(4), '4 maanden');
+  assert.equal(T.duurTekst(12), 'een jaar');
+  assert.equal(T.duurTekst(24), '2 jaar');
+  assert.equal(T.duurKort(4), '+4 mnd');
+  assert.equal(T.duurKort(12), '+1 jaar');
+  assert.equal(T.duurKort(-24), '−2 jaar');
 });

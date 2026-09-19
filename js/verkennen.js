@@ -57,7 +57,10 @@
     }
     if (doel.voorwerp) {
       const v = doel.voorwerp;
-      if (v.soort === 'fontein') return { tekst: 'Drinken van de fontein', doe: () => loopNaast(S, v, () => drink(S)) };
+      if (v.soort === 'fontein') {
+        if (S.fonteinLeeg) return { tekst: 'De fontein staat droog', fout: true, doe: () => T.ui.bericht('De fontein staat droog. Wim had gelijk: het was de laatste slok.') };
+        return { tekst: `De laatste slok drinken (${T.duurTekst(T.FONTEIN.maanden)} jonger)`, doe: () => loopNaast(S, v, () => T.drinkLaatsteSlok(S)) };
+      }
       if (v.soort === 'sleutel') return { tekst: 'De sleutel oppakken', doe: () => loopNaar(S, v) };
       if (v.soort === 'trap') return { tekst: 'De trap op', doe: () => loopNaast(S, v, () => T.gewonnen(S)) };
       if (v.soort === 'kist') {
@@ -74,19 +77,6 @@
     if (!T.isZichtbaar(w, doel.x, doel.y) || !T.isBegaanbaar(w, doel.x, doel.y, { deurenOpenen: true })) return null;
     return { tekst: null, doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
   };
-
-  function drink(S) {
-    const held = S.held;
-    if (held.leven >= held.maxLeven) {
-      T.ui.bericht('Je drinkt van de fontein. Koud en helder.');
-      return;
-    }
-    const erbij = held.maxLeven - held.leven;
-    held.leven = held.maxLeven;
-    T.anim.tekst(S, held, '+' + erbij, '#8fd47a');
-    T.ui.toonLeven(held);
-    T.ui.bericht('Je drinkt van de fontein en voelt je weer helemaal fris.', 'goed');
-  }
 
   function ontsluit(S, d) {
     d.staat = 'open';
@@ -174,11 +164,15 @@
     }
   };
 
+  // Wat telt aan het eind, is hoe oud je boven aankomt.
   T.gewonnen = function (S) {
     S.modus = 'einde';
+    const verschil = S.held.leeftijd - T.STARTLEEFTIJD;
+    const kosten = verschil > 0 ? `Deze verdieping kostte je ${T.duurTekst(verschil)}.` : 'Deze verdieping kostte je geen dag.';
     T.ui.toonOverlay(
       'De trap op',
-      '<p>Je klimt naar de volgende verdieping van de toren.</p><p>Hier eindigt het proefje.</p>',
+      `<p>Je klimt naar de volgende verdieping. Boven is het stil, op iets na dat ademt.</p>` +
+        `<p>Je bent nu ${T.leeftijdTekst(S.held.leeftijd)}. ${kosten}</p><p>Hier eindigt het proefje.</p>`,
       'Opnieuw spelen',
       () => T.nieuwSpel(true),
     );

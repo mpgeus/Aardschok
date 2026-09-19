@@ -26,6 +26,7 @@
       actie: 'slaan',
       inventaris: new Set(),
       sleutelGebruikt: false,
+      fonteinLeeg: false,
       bezocht: new Set(['hal']),
       effecten: [],
       wachters: [],

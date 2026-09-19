@@ -19,7 +19,7 @@
     reset(S) {
       $('berichten').innerHTML = '';
       vorigeAp = '';
-      this.toonLeven(S.held);
+      this.toonLeeftijd(S.held);
       this.toonInventaris(S);
       this.toonGevecht(false);
       this.zetKnoppen(false);
@@ -28,12 +28,17 @@
       this.verbergTooltip();
     },
 
-    toonLeven(held) {
-      const f = held.leven / held.maxLeven;
-      const vul = $('leven-vul');
+    // De leeftijd is de levensbalk. De balk loopt van zeventig tot honderd en vult zich: hoe
+    // voller, hoe minder tijd er over is.
+    toonLeeftijd(held) {
+      const m = held.leeftijd;
+      const f = Math.min(1, Math.max(0, (m - 70 * 12) / (30 * 12)));
+      const vul = $('leeftijd-vul');
       vul.style.width = Math.round(f * 100) + '%';
-      vul.classList.toggle('laag', f <= 0.3);
-      $('leven-tekst').textContent = held.leven + ' / ' + held.maxLeven;
+      vul.classList.toggle('laat', T.jaren(m) >= 95);
+      $('leeftijd-jaren').textContent = T.leeftijdTekst(m);
+      const rest = T.EINDLEEFTIJD - m;
+      $('leeftijd-rest').textContent = rest > 0 ? `nog ${T.duurTekst(rest)}` : 'geen tijd meer';
     },
 
     toonInventaris(S) {
@@ -54,7 +59,10 @@
       if (!g) return;
       $('volgorde').innerHTML =
         g.volgorde
-          .map((e, i) => `<div class="chip ${e.kant}${i === g.beurt ? ' aan' : ''}"><span>${T.hoofdletter(e.naam)}</span><small>${e.leven}</small></div>`)
+          .map((e, i) => {
+            const stand = e.kant === 'held' ? `${T.jaren(e.leeftijd)} jr` : e.leven;
+            return `<div class="chip ${e.kant}${i === g.beurt ? ' aan' : ''}"><span>${T.hoofdletter(e.naam)}</span><small>${stand}</small></div>`;
+          })
           .join('') + `<div class="ronde">Ronde ${g.ronde}</div>`;
     },
 

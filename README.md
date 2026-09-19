@@ -7,12 +7,22 @@ Een isometrisch avontuur in de browser. Je loopt vrij rond, praat met mensen, pa
 en opent deuren. Zodra een monster je ziet, bevriest de wereld en gaat het gevecht verder in
 beurten, op dezelfde vloer: er is geen apart gevechtsscherm. Na het gevecht loop je gewoon door.
 
+## De laatste klim
+
+Je speelt een tovenaar van 84. Je leeftijd is je levensbalk: elke vuurschicht kost je een jaar
+van je leven, elke klap van een monster een paar maanden, en op je honderdste is het voorbij.
+Genezen bestaat niet; de fontein heeft nog één slok, die je twee jaar jonger maakt. Hoe ouder je
+wordt, hoe trager je lijf (minder actiepunten) en hoe sterker je magie. Slaan met je staf kost
+geen jaren, maar dan sta je wel binnen bereik. Een gevecht dat je vermijdt, kost niets. Aan het
+eind telt hoe oud je boven aankomt.
+
 ## Spelen
 
 - Dubbelklik `index.html`, of draai `npm start` en ga naar http://localhost:8123.
 - Klik om te lopen, te praten of iets te gebruiken.
-- In een gevecht heb je 8 actiepunten per beurt. Lopen kost 1 per stap (ook schuin), slaan 3,
-  een vuurschicht 5, drinken van de fontein 3, een deur dichtgooien 1.
+- In een gevecht heb je 8 actiepunten per beurt (vanaf je negentigste 7, vanaf je
+  vijfennegentigste 6). Lopen kost 1 per stap (ook schuin), slaan met je staf 3, een vuurschicht
+  5 (en een jaar), de laatste slok uit de fontein 3, een deur dichtgooien 1.
 - Toetsen in een gevecht: `1` slaan, `2` vuurschicht, `3` deur dicht, `spatie` einde beurt,
   `Esc` of rechtermuisknop annuleert de vuurschicht.
 

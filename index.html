@@ -10,10 +10,11 @@
   <canvas id="scherm"></canvas>
 
   <div id="hud">
-    <div id="leven" class="paneel">
-      <div class="kop">Leven</div>
-      <div class="balk"><div id="leven-vul"></div></div>
-      <div id="leven-tekst"></div>
+    <div id="leeftijd" class="paneel">
+      <div class="kop">Leeftijd</div>
+      <div id="leeftijd-jaren"></div>
+      <div class="balk"><div id="leeftijd-vul"></div></div>
+      <div id="leeftijd-rest"></div>
     </div>
     <div id="inventaris"></div>
   </div>
@@ -54,6 +55,7 @@
   </div>
 
   <!-- Gewone scripts, geen modules: zo werkt het spel ook als je index.html los opent. -->
+  <script src="js/leeftijd.js"></script>
   <script src="js/wereld.js"></script>
   <script src="js/pad.js"></script>
   <script src="js/iso.js"></script>
