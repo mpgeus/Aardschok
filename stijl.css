@@ -266,6 +266,8 @@ kbd {
   width: min(620px, calc(100vw - 32px));
   padding: 16px 18px;
   transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: 1fr;
 }
 #dialoog-naam { font: 17px var(--kop); color: var(--goud); }
 #dialoog-tekst { margin: 6px 0 12px; font-size: 15px; line-height: 1.55; }
@@ -282,6 +284,22 @@ kbd {
 }
 #dialoog-keuzes button:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(226, 182, 74, 0.5); }
 #dialoog-keuzes kbd { margin-right: 8px; }
+#dialoog-portret {
+  display: none;
+  grid-row: 1 / span 3;
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  border: 1px solid var(--rand);
+  object-fit: cover;
+  image-rendering: pixelated;
+  background: rgba(0, 0, 0, 0.25);
+}
+#dialoog.met-portret { grid-template-columns: 72px 1fr; column-gap: 14px; align-items: start; }
+#dialoog.met-portret #dialoog-portret { display: block; }
+#dialoog.met-portret #dialoog-naam,
+#dialoog.met-portret #dialoog-tekst,
+#dialoog.met-portret #dialoog-keuzes { grid-column: 2; }
 
 /* Begin- en eindscherm */
 #overlay { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; background: rgba(8, 7, 6, 0.55); }
