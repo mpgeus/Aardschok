@@ -67,4 +67,9 @@ dat is meteen de laatste les: dit overkomt jou ook, als je te makkelijk tovert.
   of jouw oude leerling die er al was? Hangt samen met de vraag hierboven.
 - **Hoe gaat de meester precies dood?** Voorstel hierboven: aan zijn eigen laatste spreuk. Het
   alternatief is dat wat er boven zit hem haalt, maar dan leert de speler de regel niet.
+- **De teksten in het spel gaan nog van het oude begin uit.** `js/main.js` opent met "Je bent
+  terug in de hal van je toren, na veertig jaar", en Wim zegt in `js/dialoog.js` dat hij veertig
+  jaar op zijn meester wachtte. Dat klopt niet meer met een spel dat bij de levende meester
+  begint. Aanpassen kan pas als besloten is wie er veertig jaar geleden wegging, en wat Wims rol
+  is; tot die tijd blijft het staan zoals het staat.
 - **Wat zit er boven?** Nog niet bedacht.
