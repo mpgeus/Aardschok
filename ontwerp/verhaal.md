@@ -80,6 +80,37 @@ Wat dat oplost, en wat het betekent:
 een eigen probleem. Zij zijn de enigen die begrijpen waar hij het over heeft, en ze zijn allemaal
 oud. Wat dat het spel geeft, staat in `wereld.md`.
 
+## Waarom de verdiepingen gevaarlijk zijn: verzuurde nalatenschap (20 sep 2026)
+
+Marcel vroeg hoe je verhalend verklaart dat er allerlei lastige verdiepingen zijn. Het goedkope
+antwoord is "er zijn monsters ingetrokken"; dat werkt, maar het vertelt niets. Het antwoord dat we
+nemen komt uit de opening zelf:
+
+**Een toren van een tovenaar is een werkplaats, en de meester heeft veertig jaar lang dingen
+begonnen en niet afgemaakt.** Een kweekkamer waar de planten nooit gestopt zijn met groeien. Een
+bibliotheek waar de woorden van de bladzijden zijn gekropen. Een spiegelkamer waar een opgeroepen
+gedaante nog staat te wachten tot iemand hem wegstuurt. Een alchemieverdieping waar iets al vier
+decennia pruttelt.
+
+**En magie veroudert slecht, net als alles in dit spel.** Een banspreuk die veertig jaar met rust
+wordt gelaten, wordt wild. Een gedienstige geest die nooit is afgedankt, wordt iets anders. Dat is
+het thema van het spel, toegepast op een gebouw: de tovenaar veroudert, de meester vergat, en de
+magie die niemand onderhield is verzuurd.
+
+Wat daar gratis uit komt:
+
+- **een moeilijkheidsverloop met een reden.** Hoe hoger, hoe dichter bij het ding dat sinds de
+  aardschok lekt. De bovenste verdiepingen zijn niet moeilijker omdat het einde nadert, maar omdat
+  je dichter bij de bron zit;
+- **verdiepingen die allemaal anders zijn** zonder dat het willekeurig voelt: elke verdieping is
+  een ander experiment van dezelfde man;
+- **je leert de meester kennen door zijn rommel.** Je klimt door zijn leven, en hij kan er zelf
+  maar stukjes van navertellen — soms verkeerd, en dat merk je pas boven. Dat is een gespreksmiddel
+  dat de hele klim meegaat.
+
+Het verandert ook wat herstellen betekent: je bent geen bouwvakker, je ruimt de nalatenschap op van
+iemand die te lang is doorgegaan. Dat past bij de toon: weemoedig, met een knipoog.
+
 ## Open
 
 - **Waar is Wim in de tutorial?** Knecht van de meester, of jouw oude leerling die er al was?
