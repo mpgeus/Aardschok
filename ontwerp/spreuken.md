@@ -117,6 +117,53 @@ waarden. Die stellen we bij het spelen bij.
 Vanaf 95 jaar heeft hij nog 6 actiepunten. Daarom kost geen enkele spreuk van de vierde kring meer
 dan 6.
 
+## Verdorren: jaren nemen van wat leeft (Marcel, 20 sep 2026)
+
+Marcel: "heerlijk duister, en opent echt een hele andere dimensie van het spel. Die wil ik sowieso."
+Een spreuk die het leven uit iets levends trekt en het aan jou geeft.
+
+**De regels die hem heel houden:**
+
+- **Wat je verdort komt nooit terug.** De boom blijft staan als dode boom (die sprite bestaat al).
+  Je erf raakt verdord, het bos om je toren wordt kaal, en dat zie je elke keer als je naar buiten
+  loopt. De prijs is niet een getal maar je eigen wereld. Zonder die regel is leeftijd
+  hernieuwbaar en is de kernregel stuk.
+- **Alleen buiten een gevecht,** net als sluipen. Kan het midden in een gevecht, dan is het een
+  genezingsspreuk en zijn we terug bij elk ander spel. Buiten het gevecht is het een bewuste daad
+  in de stilte, met tijd om je te bedenken.
+- **De opbrengst schaalt met hoeveel leven erin zit:** een struik dagen, een boom een maand, een
+  oude eik een seizoen, een dier maanden, een mens jaren. Daar zit de verleiding: hoe wanhopiger
+  je wordt, hoe groter je kijkt.
+- **Meesterschap geeft geen grotere opbrengst** maar toegang tot groter leven. Anders wordt het
+  een molen om jaren te malen.
+
+**Het dorp ziet het.** De gespreksvarianten op leeftijd (hieronder) werken twee kanten op: ze zien
+je ook jonger worden. "U ziet er beter uit dan vorige week, meester", met een aarzeling erachter.
+Ze zien de dode bomen langs de weg. Iemand legt het verband. Dat is enger dan welke strafmeter
+ook, en het kost alleen tekst.
+
+**Wat er boven zit (voorstel van Claude, nog niet besloten):** een tovenaar die nooit gestopt is
+met nemen. De meester sloot hem op en vergat hem, want zo werkt ouderdom. Jij hebt nu dezelfde
+spreuk in handen. Dan is het ding boven geen monster maar een spiegel, en gaat het laatste gevecht
+erover of jij geworden bent wat hij is. Dat sluit het verhaal, de systemen en de kernregel in een
+keer op elkaar aan.
+
+## Vergeten door ouderdom (Marcel, 20 sep 2026)
+
+De meester vergat wat hij opsloot. Dat overkomt jou ook: boven een bepaalde leeftijd zakt
+meesterschap terug als je een spreuk lang niet gebruikt — Meesterlijk wordt weer Geoefend.
+Leeftijd is dan niet alleen een balk die leegloopt maar iets dat je uitholt, en "herinneren door
+te oefenen" (zie hieronder bij de open punten) wordt een echte keuze: oefenen kost maanden, niet
+oefenen kost je je kunde.
+
+## Het dorp ziet je ouder worden (Marcel, 20 sep 2026)
+
+Je leeftijd staat boven je hoofd, dus laat de mensen erop reageren. "U ziet er slechter uit dan
+vorige week, meester." De herbergierster die zwijgt als je drie jaar ouder terugkomt dan je
+wegging. Het zijn gespreksvarianten op een getal, dus het kost bijna niets, en het maakt van dat
+getal iets waar je je rot over voelt in plaats van een balkje. Werkt ook de andere kant op, zie
+Verdorren hierboven.
+
 ## Open vragen voor Marcel
 
 - **Kringen per leeftijd:** 84, 88, 92 en 96, of andere grenzen?
