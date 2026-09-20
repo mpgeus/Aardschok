@@ -18,6 +18,12 @@
   krommer met de jaren; de punt van zijn hoed zakt om.
 - **Wim.** Zijn vroegere leerling, nu zelf grijs. Schort, pet, brilletje, bezem. Wacht al veertig
   jaar en zegt "meester".
+- **De oude meester (tegen de honderd).** Jouw leermeester, van wie je de toren erft, en die de
+  tutorial doet. Krijgt een eigen sprite (Marcel, 20 sep 2026): dezelfde school als de tovenaar,
+  maar veertig jaar verder. Voorstel: een wijnrood gewaad in plaats van blauw, een hoed waarvan de
+  punt helemaal is omgezakt, een baard tot op zijn gordel, en een kromme staf met een steen in een
+  klauw in plaats van een gladde bol. Die staf erf je na zijn dood, en die ruil je later met goud
+  in voor een betere.
 - **Monsters tot nu toe.** Een slijmkruiper in de voorraadkamer, en een skelet met een zwaard bij
   de trap ("het staat daar maar, alsof het op iemand wacht").
 
