@@ -73,6 +73,45 @@ monumentaliteit zit in de hoogte, niet in de breedte — en dit is je huisbasis,
 omheen loopt, geen eindbaas. Het gereedschap om zo'n keuze te maken staat in
 `gereedschap/pixelart/toren-maten.cjs`.
 
+## De toren is de ruggengraat (Marcel, 20 sep 2026)
+
+De toren is in zijn huidige staat onbegaanbaar op de meeste verdiepingen. Herstellen kost niet
+alleen goud maar ook **magische grondstoffen die in de wereld te vinden zijn**. Je herstelt per
+verdieping, en elke herstelde verdieping brengt een nieuwe uitdaging mee.
+
+Daarmee is de lus rond, en hebben het avontuur en de klim elkaar echt nodig:
+
+| Stap | Wat het is |
+|---|---|
+| Een verdieping is dicht | Het slot |
+| Goud en grondstoffen | De sleutel |
+| De wereld in om ze te halen | Waarom het dorp, het bos en de mijnen bestaan |
+| Elk gevecht onderweg | Kost jaren, dus de sleutel betaal je met je leven |
+| De herstelde verdieping | Een nieuwe uitdaging, en een stap hoger |
+
+Dat maakt de toren een gebouw dat je stukje bij beetje openlegt, en het verklaart waarom je de
+wereld in gaat zonder dat quests er als losse klusjes bij hangen.
+
+**De andere tovenaars** (ook 20 sep 2026): de meester heeft contact met andere tovenaars, elk met
+een eigen toren en een eigen uitdaging. Dat geeft drie dingen tegelijk: een reden voor de andere
+torens in het landschap (die bijna gratis zijn, zie hieronder), een bron van grondstoffen en
+kennis die niet uit het dorp komt, en gezelschap voor een man die de laatste van zijn vak is.
+Ze zijn allemaal oud.
+
+### Wat hier nog aan open staat
+
+- **Loopt de tijd door buiten een gevecht?** Dit is nu de scherpste vraag van het hele ontwerp.
+  Als verzamelen niets kost, kan de speler eindeloos sprokkelen en verliest leeftijd-als-levensbalk
+  zijn tanden: dan is de optimale speelwijze alles veilig verzamelen en pas daarna klimmen. Als
+  reizen of herstellen wel tijd kost, dwingt dat keuzes af, maar moet het eerlijk voelen.
+  Tussenweg: grondstoffen zijn schaars per gebied en groeien niet aan, zodat je ze niet kunt
+  uitmelken zonder verder te reizen en dus meer gevechten tegen te komen.
+- **Wat zijn die magische grondstoffen?** Als elke verdieping een andere vraagt, stuurt dat de
+  speler vanzelf naar een ander gebied, en heeft elk gebied een reden om te bestaan.
+- **Wat is de uitdaging per verdieping?** Een gevecht, een puzzel, iets dat je alleen met een
+  bepaalde spreuk oplost? Hier hangt aan of de klim afwisselend blijft.
+- **Leven de andere tovenaars nog,** en zijn het bondgenoten of mededingers?
+
 ## Ideeën van Marcel (19 sep 2026), nog niet uitgewerkt
 
 - **Een startdorp** met huizen en mensen die quests geven. Het dorp is de basis waar je tussen de
