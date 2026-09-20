@@ -175,9 +175,11 @@ monster op de goede tegel staat.
 
 Nog uit te zoeken:
 
-- **Nog niet in Tiled zelf geopend.** De vellen zijn gemaakt tegen de documentatie en de
-  broncode van Tiled, maar nog niet één keer in het programma zelf geprobeerd. Dat is het eerste
-  wat Marcel doet.
+- **De grond herhaalt zichtbaar.** Marcel opende `proef.tmj` in Tiled (20 sep 2026): de kaart
+  klopt en de gebouwen staan op hun voettegel, maar het gras is één tegel die naast zichzelf
+  ligt, dus de tufts vormen nette diagonale rijen. In een grote render valt dat niet op, want
+  daar wordt de grond in één keer getekend. De oplossing: een lap van vier bij vier tegels uit
+  hetzelfde ruisveld snijden, plus losse varianten om te strooien.
 - **Hoogte.** Tiled kent geen z. Terrassen en een richel moeten dus met lagen, of met een
   eigenschap per tegel, of we houden een gebied vlak.
 - **Grote gebouwen.** Een huis van 6×8 tegels is één object met een voetpunt, geen losse tegels.
