@@ -1,4 +1,6 @@
-# Wereld: dorp, bos, toren, goud
+# Wereld: de plekken, het dorp, het bos
+
+De klim en het herstel van de toren staan in `toren.md`; het tekenen van kaarten in `kaarten.md`.
 
 ## De indeling van de wereld (Marcel, 20 sep 2026)
 
@@ -43,6 +45,7 @@ doen hetzelfde. Daaruit de regel:
   blijft zo, ook al past dat niet in de romp van de toren.
 - **Probeer die twee niet te laten kloppen.** Dat kostte ons vandaag twee verbouwingen van de
   toren: eerst te smal omdat hij nergens uit volgde, daarna te breed omdat hij uit de hal volgde.
+
 ### De toren moet om zijn eigen hal passen (Marcel, 20 sep 2026)
 
 Marcel bij het eerste rondlopen buiten: "de toren voelt wat ielig aan, drie tovenaars naast
@@ -72,76 +75,6 @@ dan een dorpshuis, en leest door zijn hoogte en de kegel nog altijd meteen als t
 monumentaliteit zit in de hoogte, niet in de breedte — en dit is je huisbasis, waar je elke dag
 omheen loopt, geen eindbaas. Het gereedschap om zo'n keuze te maken staat in
 `gereedschap/pixelart/toren-maten.cjs`.
-
-## De toren is de ruggengraat (Marcel, 20 sep 2026)
-
-De toren is in zijn huidige staat onbegaanbaar op de meeste verdiepingen. Herstellen kost niet
-alleen goud maar ook **magische grondstoffen die in de wereld te vinden zijn**. Je herstelt per
-verdieping, en elke herstelde verdieping brengt een nieuwe uitdaging mee.
-
-Daarmee is de lus rond, en hebben het avontuur en de klim elkaar echt nodig:
-
-| Stap | Wat het is |
-|---|---|
-| Een verdieping is dicht | Het slot |
-| Goud en grondstoffen | De sleutel |
-| De wereld in om ze te halen | Waarom het dorp, het bos en de mijnen bestaan |
-| Elk gevecht onderweg | Kost jaren, dus de sleutel betaal je met je leven |
-| De herstelde verdieping | Een nieuwe uitdaging, en een stap hoger |
-
-Dat maakt de toren een gebouw dat je stukje bij beetje openlegt, en het verklaart waarom je de
-wereld in gaat zonder dat quests er als losse klusjes bij hangen.
-
-**De andere tovenaars** (ook 20 sep 2026): de meester heeft contact met andere tovenaars, elk met
-een eigen toren en een eigen uitdaging. Dat geeft drie dingen tegelijk: een reden voor de andere
-torens in het landschap (die bijna gratis zijn, zie hieronder), een bron van grondstoffen en
-kennis die niet uit het dorp komt, en gezelschap voor een man die de laatste van zijn vak is.
-Ze zijn allemaal oud.
-
-### Grondstoffen gaan naar de toren of naar jezelf (Marcel, 20 sep 2026)
-
-Marcel: "misschien moet jij als tovenaar wel jong genoeg worden om uiteindelijk de confrontatie
-aan te kunnen." Daaruit volgt een verdeelvraag die het hele spel draagt.
-
-**Dezelfde magische grondstof kan een verdieping herstellen óf jou jaren teruggeven.** Niet
-allebei. En om boven te komen heb je allebei nodig: een toren die hoog genoeg hersteld is om er te
-kómen, en een lijf dat het daar volhoudt. Het spel is dan één lange verdeling tussen het gebouw en
-je eigen lichaam, in plaats van een boodschappenlijstje.
-
-Waarom dat de kernregel niet ondermijnt:
-
-- **grondstoffen zijn eindig in de wereld en groeien niet aan.** Er valt dus niets te malen: alles
-  wat er is, is er, en jij verdeelt het;
-- **de bewaakte grondstoffen kosten jaren om te halen,** en de wisselkoers is nooit in je voordeel.
-  Je kunt jaren terugkopen, maar nooit meer dan je uitgaf. In gevoel loopt de balk dus nog steeds
-  één kant op, ook al gaat hij soms een stukje terug.
-
-**Geen harde grens voor de eindstrijd.** Een eis als "alleen onder de achtentachtig" zou de speler
-twintig uur ver onwinbaar kunnen zetten zonder dat hij het weet. In plaats daarvan verandert de
-eindstrijd mee met je leeftijd, met de regels die er al zijn (minder actiepunten, sterkere magie):
-
-| Hoe je aankomt | Hoe het gevecht speelt |
-|---|---|
-| Jong, rond de 86 | Acht actiepunten: bewegen, ontwijken, deuren dichtgooien, het uitspelen |
-| Oud, tegen de 98 | Drie handelingen, maar elke vuurschicht slaat in als een moker: het moet in twee klappen |
-
-Allebei winbaar, allebei anders. En het is een spiegel van het begin: de meester ging dood omdat
-hij roekeloos uitgaf; jij haalt het door zuinig te zijn, of door oud en woest genoeg te zijn om
-het in één keer te doen.
-
-### Wat hier nog aan open staat
-
-- **Loopt de tijd door buiten een gevecht?** Dit is nu de scherpste vraag van het hele ontwerp.
-  Als verzamelen niets kost, kan de speler eindeloos sprokkelen en verliest leeftijd-als-levensbalk
-  zijn tanden: dan is de optimale speelwijze alles veilig verzamelen en pas daarna klimmen. Als
-  reizen of herstellen wel tijd kost, dwingt dat keuzes af, maar moet het eerlijk voelen.
-  Tussenweg: grondstoffen zijn schaars per gebied en groeien niet aan, zodat je ze niet kunt
-  uitmelken zonder verder te reizen en dus meer gevechten tegen te komen.
-- **Wat zijn die magische grondstoffen?** Als elke verdieping een andere vraagt, stuurt dat de
-  speler vanzelf naar een ander gebied, en heeft elk gebied een reden om te bestaan.
-- **Wat is de uitdaging per verdieping?** Een gevecht, een puzzel, iets dat je alleen met een
-  bepaalde spreuk oplost? Hier hangt aan of de klim afwisselend blijft.
-- **Leven de andere tovenaars nog,** en zijn het bondgenoten of mededingers?
 
 ## Ideeën van Marcel (19 sep 2026), nog niet uitgewerkt
 
@@ -237,93 +170,6 @@ Volgens de kernregel kost een gevecht dat je ontloopt geen jaren.
 | Reuzenspin | Zwart, met een paarse zandloper op het achterlijf en een tros gloeiende ogen. | Hij wacht roerloos tot je een draad raakt. Webben op de tegels maken een routepuzzel: je loopt eromheen, of je brandt een draad weg met een fakkel. Met een vuurschicht kost dat een jaar. |
 | Kobold | Groen en klein, met een kap en een mantel van herfstbladeren, en een speer of een knots. | Hij is hebzuchtig en laf. Een opgegooide munt stuurt hem erachteraan, in een gesprek is hij om te kopen, en een groepje vlucht als de eerste valt. |
 
-## Wat de kernregel ervan vraagt
-
-- **Goud koopt nooit jaren terug.** Genezen bestaat niet, dus er zijn geen verjongingsdrankjes te
-  koop.
-- **Het best passen upgrades en uitrusting die helpen een gevecht te ontlopen:** sluiproutes,
-  vallen, afleiding, of Wim die iets voor je doet.
-- **Een staf** (besloten, Marcel 19 sep 2026) doet drie dingen:
-  - hij versterkt bepaalde soorten spreuken;
-  - hij geeft kleine blijvende voordelen, zoals licht in het donker;
-  - misschien voegt hij een element toe aan een spreuk.
-
-  Een staf maakt een spreuk nooit goedkoper in jaren. De uitwerking staat in `spreuken.md`.
-- **Uitrusting die een klap minder maanden laat kosten** verzwakt de regel een beetje. Dat kan,
-  maar met mate: bijvoorbeeld een mantel die de eerste klap per gevecht dempt.
-
-## De toren opknappen: verander de wereld, niet de held
-
-De toren is getekend in drie staten (19 sep 2026): krakkemikkig zoals je hem erft, half hersteld
-met steigers, en helemaal opgeknapt met wimpels, verlichte ramen en een lantaarn bij de deur.
-
-Een vuistregel die daarbij hoort: een reparatie mag de wereld veranderen, niet de getallen van de
-held. Dus geen "+1 actiepunt" of jaren terug. Wel:
-
-- een hersteld trapgat en steigers openen kortere routes naar boven, dus minder beurten in het
-  zicht van monsters;
-- een nieuwe deur die je dicht kunt gooien, luiken, en een lantaarn die een monster een tegel
-  eerder laat zien: allemaal manieren om een gevecht te ontlopen;
-- de aanbouw als opslag voor spullen die een spreuk besparen;
-- wat het dorp over je zegt verandert mee.
-
-## De kaarten tekenen we in een editor (Marcel, 20 sep 2026)
-
-Claude elke boom laten neerzetten kost te veel. De wereld wordt dus in een kaarteditor getekend.
-Gekozen richting: **Tiled** (mapeditor.org, open bron, al jaren de standaard in pixelspellen).
-Tiled kent isometrische kaarten van 64×32 en slaat op als JSON (`.tmj`), dus het spel kan een
-kaart gewoon inlezen. LDtk is moderner en prettiger, maar isometrisch is daar stiefmoederlijk
-bedeeld.
-
-Hoe het aan elkaar hangt:
-
-1. `gereedschap/pixelart/` blijft de beelden maken, maar schrijft er voortaan ook tegelvellen bij
-   met een `.tsx` per vel: het beeld, de tegelmaat, het voetpunt van hoge dingen, en wat vast
-   staat. Dan hoeft niemand in Tiled honderden sprites met de hand aan te wijzen.
-2. Marcel tekent in Tiled: een grondlaag (gras, pad, kasseien, water), een laag met wat vast
-   staat, en een objectlaag voor huizen, bomen, mensen en monsters.
-3. Eigenschappen per object vertellen het spel de rest: welk wezen, welke dorpeling (het zaad),
-   welke deur, welke quest, en waar je naar een ander gebied overgaat.
-4. `js/kaart.js` leest de `.tmj` en maakt daarvan wat `js/wereld.js` nu met de
-   hand opschrijft: begaanbaar, vast, deuren, voorwerpen, wezens.
-
-### De keten staat (20 sep 2026)
-
-| Stap | Wat het doet |
-|---|---|
-| `npm run tiled` | Rendert uit `dorp.cjs`, `dorp2.cjs` en `bomen.cjs` de vellen naar `tegels/`: grond, bomen, begroeiing en de vijftien gebouwen, elk met een `.tsx` waarin `vast` en `beslaat` al staan. |
-| Tiled | Marcel opent de `.tsx`-en en tekent een kaart, die hij opslaat als `kaarten/<naam>.tmj`. |
-| `npm run kaarten` | Bundelt elke `.tmj` tot `kaarten/kaarten.js` (`T.KAARTEN`), want `fetch` werkt niet vanaf `file://`. |
-| `T.laadKaart(T.KAARTEN.naam)` | Maakt er een wereld van: tegels, deuren, voorwerpen en wezens, waar `isBegaanbaar`, `isVast` en `raakt` ongewijzigd op werken. |
-
-Eigenschappen die Marcel op een object zet: `wezen` (welk wezen, uit dezelfde lijst als het
-spel), `zaad` (een gewone dorpeling), `staat` (een deur: open, dicht of opslot) en `overgang`
-(de naam van de kaart waar je heen gaat). Op de tegel zelf staan `naam`, `vast` en bij een
-gebouw `beslaat` ("7x5"). Een gebouw zet je neer op zijn achterste hoek en het beslaat de
-tegels rechtsonder daarvandaan, dezelfde afspraak als in de export.
-
-`kaarten/proef.tmj` is een kaart van 12×10 die met de hand is gezet, met `test/kaart.test.cjs`
-eromheen; die toetst dat het pad begaanbaar is, dat de voet van het huis vast is en dat het
-monster op de goede tegel staat.
-
-Nog uit te zoeken:
-
-- **De grond herhaalt zichtbaar.** Marcel opende `proef.tmj` in Tiled (20 sep 2026): de kaart
-  klopt en de gebouwen staan op hun voettegel, maar het gras is één tegel die naast zichzelf
-  ligt, dus de tufts vormen nette diagonale rijen. In een grote render valt dat niet op, want
-  daar wordt de grond in één keer getekend. De oplossing: een lap van vier bij vier tegels uit
-  hetzelfde ruisveld snijden, plus losse varianten om te strooien.
-- **Hoogte.** Besloten, zie "Hoogte is een getal per tegel" hieronder. Nog niet gebouwd.
-- **Grote gebouwen.** Een huis van 6×8 tegels is één object met een voetpunt, geen losse tegels.
-  De dieptesortering van het spel (op t) moet zulke objecten op hun voettegel inplannen.
-- **Wat blijft er in code?** De kamers binnen in de toren zijn klein en staan al in code. Die
-  mogen zo blijven tot de editor er staat.
-- **Wat er nog niet in de vellen zit:** dorpelingen, deuren en hekken als plaatje (de
-  eigenschappen werken wel, maar je ziet in Tiled een kaal blokje), stromend water, en het
-  bruggetje, dat geen heel aantal tegels breed is.
-- **Overgangen doen nog niets.** `overgang` wordt ingelezen, maar er is nog niets dat van kaart
-  wisselt.
-
 ## Welke plekken de wereld nog nodig heeft (Marcel, 20 sep 2026, nog niet besloten)
 
 Marcels lijst: dungeons, andere tovenaarstorens, questgebieden, mijnen, en een dorp dat meer een
@@ -362,48 +208,6 @@ decor dat er echt toe doet.
 
 **Voorgestelde volgorde na buiten-af:** randtegels, dan de mijn, dan de andere torens.
 
-### Hoogte is een getal per tegel (Marcel, 20 sep 2026)
-
-Tiled kent geen derde dimensie. Van de drie manieren die daarvoor rondgaan — een laag per
-verdieping, een getal per tegel, of sorteren op y — is de tweede voor ons de juiste.
-
-**Waarom geen laag per verdieping.** Alles in dit spel hangt aan één raster voor rondlopen én
-vechten; dat is wat de overgang naadloos maakt. Lagen geven twee rasters die met trappen aan
-elkaar geknoopt moeten worden, en dat raakt het lopen, het zoeken van een pad, het zicht, het
-bereik van een spreuk en de beurtvolgorde. Voor een huis met een bovenverdieping is het de goede
-aanpak; voor een heuvel met een beek eronder een dure omweg.
-
-**Hoe het in Tiled werkt.** Naast de grondlaag komt een laag `hoogte` met een klein palet: acht
-gekleurde ruiten met een cijfer, 0 tot en met 7, waarbij 0 het maaiveld is. Marcel schildert geen
-rotsen maar hoogtes, met dezelfde emmer en stempel als voor gras, en ziet de grond eronder
-doorschemeren. Eén extra tegel in dat palet is `helling`, met een richting: daar mag een
-hoogteverschil overbrugd worden.
-
-Een eigenschap per tegel in het tegelvel kan niet, want dezelfde graspol moet op elke hoogte
-kunnen liggen; een eigenschap per object zou betekenen dat je elke tegel apart aanklikt. Een laag
-schilder je.
-
-**Rotswanden worden afgeleid, niet getekend.** Staat er een 1 naast een 0, dan is daar een wand.
-Dat is dezelfde machinerie als de randtegels tussen twee grondsoorten, alleen tussen twee
-hoogtes. Een klifrand kan daardoor nooit fout liggen.
-
-**Wat het spel ermee doet:**
-
-- de tegel en alles wat erop staat schuift omhoog met hoogte maal een vaste trede (begin met
-  ongeveer een halve tegel; `iso.js` weet al dat één eenheid hoogte 0,866 pixel is);
-- lopen mag naar een buurtegel bij gelijke hoogte, of over een helling;
-- de dieptesortering krijgt hoogte als tweede sleutel: wie boven staat, komt over wie beneden
-  staat heen;
-- het exportstapje klaagt als een stuk is ingesloten waar geen helling heen leidt.
-
-**Wat het de kernregel oplevert,** want anders is het alleen mooi: vanaf hoog grond zie je verder,
-dus zie je een wolf eerder en kun je hem ontlopen. Een richel dwingt je te kiezen welke kant je
-omloopt. Naar beneden springen kan wel maar niet terug, dus dat is een eenrichtingsroute om weg te
-komen. Alle drie versterken ze de afweging tussen jaren en veiligheid.
-
-**Wanneer:** na de randtegels en nadat elke kaart vanzelf een gebied is, want hoogte bouwen in een
-wereld die nog niet af is, is de verkeerde volgorde.
-
 ### Water en een brug vragen de speler iets (Marcel, 20 sep 2026)
 
 Marcel koos de randtegels als eerste, en wilde er water en een bruggetje bij. Dat is geen
@@ -413,52 +217,6 @@ eromheen lopen kost tijd en erlangs vechten kost jaren. Een open grasveld vraagt
 
 Daarmee is landschap ook een middel om een gevecht te ontlopen, en dus een steun onder de
 kernregel in plaats van een versiering erbovenop.
-
-## De vorm van het spel: vrij, niet lineair (Marcel, 20 sep 2026)
-
-"Het moet vrij zijn, de speler mag kiezen. Niet saai en lineair." De spanning die daarin zit: een
-toren is per definitie een ladder, verdieping twee komt na verdieping één. De uitweg is dat de
-**ladder verticaal is en de vrijheid horizontaal.**
-
-- **Het doel ligt vast, de weg erheen niet.** Een verdieping vraagt grondstoffen, maar nooit één
-  bron. Die maansteen ligt in de mijn, of bij de marskramer, of bij een andere tovenaar die er iets
-  voor terug wil, of in een kelder waar iemand hem vergat. Vier wegen met een andere prijs in
-  jaren, goud en risico. Dat is de keuze: niet welke verdieping, maar wat je ervoor over hebt.
-- **Een verdieping is een probleem, geen gang.** Vechten, ontlopen, een val gebruiken, weglokken,
-  de puzzel oplossen, iemand inhuren, iets verdorren. Zodra er maar één antwoord is, is het saai;
-  dat is de toets bij elke verdieping.
-- **Verdiepingen overslaan mag.** Herstel je de steiger buitenom, dan bereik je vijf zonder drie en
-  vier. Duurder, gevaarlijker, en je mist wat daar lag. Wie slim is hoort een kortere weg te
-  krijgen, geen gesloten deur.
-- **De grootste vrijheid is wat voor tovenaar je wordt.** De vrek die alles ontloopt en op zijn
-  86e boven staat. De bruut die kwistig tovert en op zijn 98e aankomt met spreuken als mokers. De
-  koopman die alles uitbesteedt. De duistere, die de bomen om zijn toren liet verdorren en jonger
-  is dan toen hij begon — en die het dorp niet meer aankijkt. Het einde hoort te weten welke je was.
-- **Maar de doelen zijn zichtbaar.** Vrijheid zonder richting is verdwalen. Een kapotte verdieping
-  zegt zelf wat hij nodig heeft, en de mensen in het dorp praten over waar zulke dingen liggen. Je
-  weet altijd wát je zoekt, nooit hoe je het moet halen.
-
-### Uit Mystic Towers: vallen en het nest (20 sep 2026)
-
-- **Vallen in de toren** zijn een manier om een monster te vellen **zonder jaren te betalen.** Je
-  herstelt een verdieping, de oude mechanismen doen het weer, en het gebouw wordt je wapen in
-  plaats van je lijf. Dat beloont investeren in de toren op precies de goede manier.
-- **Het nest:** op een verdieping blijven monsters komen tot je de bron vindt. Elke beurt zoeken
-  kost maanden, elk gevecht kost jaren, dus je wilt dat nest snel vinden. Daarmee is een verdieping
-  een probleem in plaats van een gang met vijanden.
-- Sleutels, hendels en geheime doorgangen: een verdieping die een puzzel is, is een verdieping die
-  je jaren bespaart.
-
-### Uit Rage of Mages: huurlingen (20 sep 2026)
-
-Huurlingen die je met goud betaalt, maken de wisselkoers tussen onze twee valuta's echt: **goud
-koopt je uit het ouder worden.** Laat iemand anders die wolf doden en het kost munten in plaats van
-maanden. Gaan ze dood, dan ben je goud kwijt, geen jaren.
-
-Drie remmen, anders vecht je nooit meer zelf en is de kernregel dood: ze zijn duur, ze weigeren de
-toren in te gaan (bijgeloof — iedereen weet dat daar iets mee is), en de enigen die met een
-tovenaar van vierentachtig mee willen, zijn zelf ook oud. Dan is de wereld iets wat je kunt
-afkopen, en is de klim iets wat je alleen doet.
 
 ### Mensen die echt leven (Marcel, 20 sep 2026)
 
@@ -475,33 +233,6 @@ In oplopende kosten:
    bezig is in plaats van met een luidspreker voor een quest.
 
 Drie en vier zijn wat "ze onthouden je" echt betekent, en kosten vooral tekst.
-
-## Hoe groot wordt het (20 sep 2026)
-
-Marcel: "één toren klinkt als weinig content." De toren is de ruggengraat, niet het lichaam — de
-meeste speeltijd zit in de wereld, de toren is waar vooruitgang zichtbaar wordt. Wat het groot
-maakt, en alle drie goedkoop bij ons:
-
-1. **De andere tovenaars hebben hetzelfde probleem.** Elke oude tovenaar heeft een toren vol
-   vergeten werk dat verzuurd is. Dat is nu een sóórt plek, geen eenmalig decor: een toren die half
-   onder water staat, een in een klif, een waar het al veertig jaar binnen regent. Elk met een
-   eigen eigenaar, eigen rommel, eigen grondstoffen — en allemaal op dezelfde generator en dezelfde
-   binnenbouwdoos.
-2. **De toren verandert terwijl je hem herstelt.** Een herstelde verdieping is bruikbare ruimte:
-   een werkplaats voor vallen, een bibliotheek om spreuken terug te vinden, een kamer voor Wim. Je
-   komt er steeds terug en het is er steeds anders.
-3. **Mijnen, kelders en questplekken,** uit diezelfde binnenbouwdoos.
-
-**Schatting:** de toren van de meester acht à tien verdiepingen, drie of vier andere torens van
-drie à vier, een dorp, een bos, een mijn en een handvol questplekken. Zo'n vijfentwintig tot dertig
-ontworpen problemen, met goede quests vijftien à twintig uur.
-
-**De waarschuwing die daarbij hoort:** ons risico is niet te weinig inhoud maar te veel ondiepe.
-Zes uur die je niet vergeet verslaat dertig uur haalwerk, en Steam staat vol met grote lege
-spellen. Wat groot laat vóélen is variatie in problemen, niet in vierkante meters. De kunst
-schaalt vanzelf want die komt uit code; **het denkwerk schaalt niet.** Vijfentwintig verdiepingen
-betekent vijfentwintig keer bedenken wat daar interessant aan is, en dat is het werk dat Marcel en
-Claude samen moeten doen.
 
 ## Open vragen
 

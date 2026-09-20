@@ -20,8 +20,11 @@ het gesprek; wat alleen in een gesprek staat, raakt kwijt. Laat groot zoek- en l
 agent over, zodat alleen de samenvatting in het gesprek komt.
 
 - `ontwerp/verhaal.md`: het verhaal, de personen, de toon, en wat er boven in de toren zit.
-- `ontwerp/wereld.md`: het dorp, het bos, de toren van de oude meester; goud, quests, upgrades,
-  staf en uitrusting.
+- `ontwerp/wereld.md`: de plekken. Het erf, het bos, het dorp met zijn mensen, de maten, en de
+  bosvijanden.
+- `ontwerp/toren.md`: de klim. Het herstel per verdieping, goud en grondstoffen, de staf, en de
+  vorm van het spel (vrij en niet lineair, en hoe groot het wordt).
+- `ontwerp/kaarten.md`: van Tiled naar het spel, en hoe hoogte gaat werken.
 - `ontwerp/spreuken.md`: de spreuken, en hoe de tovenaar met de jaren meer kan.
 - `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
 
