@@ -7,7 +7,19 @@
   const ctx = canvas.getContext('2d');
   let bw = 0;
   let bh = 0;
-  const S = (T.S = { tijd: 0 });
+  const S = (T.S = { tijd: 0, wind: 0 });
+
+  // Eén windwaarde voor de hele wereld, ergens tussen -1 en 1: hoe hard en naar welke kant.
+  // Twee golven op een verhouding die niet deelt (dus het herhaalt niet merkbaar) plus af en toe
+  // een vlaag erbovenop, zodat het als weer leest en niet als een speeltje. js/sprites.js bakt
+  // hierop de standen van een voorwerp, js/tekenen.js bepaalt per voorwerp een eigen moment op
+  // deze golf (windVoorInstantie) zodat niet alles tegelijk beweegt. Zie ontwerp/beeld.md, "Eén
+  // wind door alles heen".
+  T.windWaarde = function (tijd) {
+    const golf = Math.sin(tijd * 0.31) * 0.4 + Math.sin(tijd * 0.13 + 1.3) * 0.3;
+    const vlaag = Math.max(0, Math.sin(tijd * 0.085 + 0.7)) ** 4 * 0.5;
+    return Math.max(-1, Math.min(1, golf + vlaag));
+  };
 
   // Hoe hoog iets boven zijn tegel uitsteekt, om erop te kunnen klikken. Met sprites zijn de
   // figuren groter dan de vlakken waren, dus vraagt het aanwijzen het aan de sprites zelf.
@@ -205,6 +217,7 @@
     // eerst geen maat), dus kijkt de lus zelf of het venster veranderd is.
     if (window.innerWidth !== bw || window.innerHeight !== bh) formaat();
     S.tijd += dt;
+    S.wind = T.windWaarde(S.tijd);
     T.werkAnimatiesBij(S, dt);
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie

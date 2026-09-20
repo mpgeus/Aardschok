@@ -217,14 +217,66 @@
   // en wat er op het erf staat. Ze staan in dezelfde projectie als alles hierboven, en tegels.js
   // (T.TEGELS) draagt per vel het ankerpunt: het punt in een cel dat op het midden van de tegel
   // hoort te liggen. Tekenen is dus ook hier niets meer dan het anker op T.naarScherm leggen.
-  S.buiten = function (velNaam, id) {
+  // -------------------------------------------------------------- wind
+  //
+  // Eén windwaarde voor de hele wereld (S.wind, T.windWaarde in js/main.js) buigt de was, de
+  // boomkruinen, de struiken en het gras — zie ontwerp/beeld.md, "Eén wind door alles heen". De
+  // sprites blijven stilstaande beelden: bij het laden verschuiven we een beeld in horizontale
+  // plakken, boven meer dan onder, zodat een boom buigt in plaats van schuift. Dat levert een
+  // handvol voorgebakken standen op (WIND_STANDEN); tekenen blijft daarna gewoon één drawImage,
+  // er wordt niets per beeld uitgerekend.
+  //
+  // Hoeveel een soort meebeweegt (in bronpixels, aan de bovenkant van het beeld): 0 is niets
+  // (een schuur, een muur, een rots), hoger buigt verder mee. Een boom een beetje, een doek
+  // veel; wat hier niet in staat, staat stil.
+  const WIND_GEWICHT = {
+    eik: 4, herfstEik: 4, den: 3, berk: 5, wilg: 6, appelboom: 4, dodeBoom: 1,
+    struik: 3, bessenStruik: 3, varen: 4, grasPol: 4, hoogGras: 5, bloemen: 4,
+    waslijn: 10,
+  };
+  const WIND_STANDEN = 5; // een handvol standen: sterk terug .. stil .. sterk mee
+  const WIND_PLAK = 4; // hoogte van een plak in bronpixels, alleen bij het bakken
+
+  // Bakt één stand van een windend beeld: in plakken van WIND_PLAK hoog, elke plak verder opzij
+  // naarmate hij hoger in het beeld staat (kwadratisch, zodat de voet stilstaat en de kruin het
+  // meest buigt). Dit gebeurt alleen bij het laden, één keer per (vel, id, stand).
+  function bakWindStand(bestand, sx, sy, b, h, anker, gewicht, stand) {
+    const bron = beelden.get(bestand);
+    if (!bron || typeof document === 'undefined') return stuk(bestand, sx, sy, b, h, anker);
+    const midden = (WIND_STANDEN - 1) / 2;
+    const uitslag = midden ? ((stand - midden) / midden) * gewicht : 0;
+    const c = document.createElement('canvas');
+    c.width = b;
+    c.height = h;
+    const cx = c.getContext('2d');
+    cx.imageSmoothingEnabled = false;
+    for (let y = 0; y < h; y += WIND_PLAK) {
+      const ph = Math.min(WIND_PLAK, h - y);
+      const t = 1 - y / h; // 1 boven aan het beeld, bijna 0 onderaan
+      const dx = Math.round(uitslag * t * t);
+      cx.drawImage(bron, sx, sy + y, b, ph, dx, y, b, ph);
+    }
+    return { beeld: c, sx: 0, sy: 0, b, h, ax: anker[0], ay: anker[1] };
+  }
+
+  // `wind`, als meegegeven, is de windwaarde voor dít voorwerp (-1..1, T.windWaarde in
+  // js/main.js). Weegt de soort niets mee (of wordt geen windwaarde meegegeven), dan gewoon het
+  // stilstaande beeld — precies zoals voorheen.
+  S.buiten = function (velNaam, id, wind) {
     const v = T.TEGELS && T.TEGELS[velNaam];
     if (!v || !v.bestand || id == null) return null;
-    return onthoud(`buiten,${velNaam},${id}`, () => {
-      const kol = v.kolommen || v.tiles.length;
-      const anker = v.anker || [Math.round(v.tegelB / 2), Math.round(v.tegelH / 2)];
-      return stuk(v.bestand, (id % kol) * v.tegelB, Math.floor(id / kol) * v.tegelH, v.tegelB, v.tegelH, anker);
-    });
+    const kol = v.kolommen || v.tiles.length;
+    const anker = v.anker || [Math.round(v.tegelB / 2), Math.round(v.tegelH / 2)];
+    const tegel = v.tiles[id];
+    const gewicht = wind != null && tegel && WIND_GEWICHT[tegel.naam];
+    if (!gewicht) {
+      return onthoud(`buiten,${velNaam},${id}`, () => stuk(v.bestand, (id % kol) * v.tegelB, Math.floor(id / kol) * v.tegelH, v.tegelB, v.tegelH, anker));
+    }
+    const midden = (WIND_STANDEN - 1) / 2;
+    const w = Math.max(-1, Math.min(1, wind));
+    const stand = Math.max(0, Math.min(WIND_STANDEN - 1, Math.round(midden + w * midden)));
+    return onthoud(`buitenwind,${velNaam},${id},${stand}`, () =>
+      bakWindStand(v.bestand, (id % kol) * v.tegelB, Math.floor(id / kol) * v.tegelH, v.tegelB, v.tegelH, anker, gewicht, stand));
   };
 
   // Hoe hoog steekt dit ding boven zijn tegel uit? Voor het aanwijzen met de muis. Het ankerpunt

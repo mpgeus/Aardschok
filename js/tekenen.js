@@ -722,6 +722,16 @@
     T.blok(ctx, m.x, m.y, b[0] / 2, b[1] / 2, hoog, v.soort === 'toren' ? '#7b7486' : '#8a6f4e', { helder });
   }
 
+  // Elk voorwerp buigt op zijn eigen moment mee met de wind, anders wappert het hele erf als één
+  // vlag: een vaste verschuiving in de tijd uit zijn eigen plek op de kaart (dezelfde soort som
+  // als de vlek in tekenVloeren hierboven). T.windWaarde (js/main.js) is de ene golf waar alles
+  // aan hangt; hier alleen op een ander moment bemonsterd. Weegt de soort van dit voorwerp niets
+  // mee, dan doet sprites.buiten er toch niets mee (zie WIND_GEWICHT daar).
+  function windVoorInstantie(S, v) {
+    const fase = ((v.x * 137 + v.y * 251) % 97) / 97 * 23;
+    return T.windWaarde(S.tijd + fase);
+  }
+
   function tekenVoorwerp(ctx, S, v, helder) {
     const p = T.naarScherm(v.x, v.y);
     // Buiten komt het plaatje uit de tegelvellen (tegels/, zie js/sprites.js): een boom, een
@@ -732,7 +742,7 @@
       const alpha = randDof(S.wereld, v.x, v.y) * (v.doorkijk == null ? 1 : v.doorkijk);
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;
-      const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id);
+      const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v));
       if (stuk) T.sprites.teken(ctx, stuk, p.x, p.y, helder);
       else tekenBuitenVlak(ctx, v, helder);
       if (alpha < 1) ctx.globalAlpha = 1;
