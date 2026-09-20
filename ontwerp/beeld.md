@@ -42,7 +42,16 @@ kolen, droogrekken, tonnen, karren), akkers in verschillende stadia, omheiningen
 **Van de referentie:** de sfeer.
 - **Warm licht met hard contrast:** zonlicht op de daken, diepe schaduw onder de overstek. Geen
   vlak fel groen, maar diep groen met zonnevlekken.
-- **Rode pannendaken** horen erbij, niet alleen op de herberg; daarnaast stro en schaliën.
+- **Vooral hout en stro** (Marcel, 20 sep 2026): riet op zo'n twee derde van de gebouwen,
+  schaliën op een paar, en rode pannen als uitzondering op de herberg, de kapel en een enkel
+  beter huis. Wanden van stapelhout, ruwe planken en vlechtwerk; veldsteen voor plinten,
+  schoorstenen en een enkele hele muur. Met variatie: verweerd grijs naast warmer bruin, vers
+  stro naast oud en gelapt.
+- **Huizen mogen niet op elkaar lijken** (Marcel, 20 sep 2026). Een dorp groeit in een eeuw,
+  het komt niet uit één catalogus. Varieer de plattegrond (ook een L-vorm, een aanbouw, een
+  afdak, een buitentrap), de hoogte en de dakhelling, de ouderdom (een doorgezakte nok, een
+  gelapt dak, een scheve luik), de ramen en deuren, en het erf: bij de een een houtstapel, bij
+  de ander een kippenren, kruidenbed of drooghekken.
 - **Diepte in lagen:** begroeiing als lijst aan de randen, en naar achteren toe waziger en
   doffer. Daarmee verdwijnt ook de harde rand van onze eilandjes.
 - **Hoogteverschil:** een pad dat over een richel loopt, met een leuning en lantaarns, en water
