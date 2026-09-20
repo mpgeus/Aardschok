@@ -67,7 +67,12 @@ de speler ziet.
 
 De toren en zijn kamers houden hun eigen sfeer, die uit Mystic Towers.
 
-### De tweede referentie: de boerderij met de watermolen (Marcel, 20 sep 2026)
+### De leidende referentie: de boerderij met de watermolen (Marcel, 20 sep 2026)
+
+**Dit is referentie nummer één** (Marcel: "deze laatste ref is bij mij nr 1"). Waar deze plaat
+botst met de eerdere referenties, wint deze. Knights and Merchants blijft gelden voor wat er in
+een dorp gebeurt (werkdorpen, erven, akkers), en de kliffenplaat voor het warme licht, maar hoe
+een gebouw eruitziet, komt hiervandaan.
 
 Marcel liet een isometrische pixel art-plaat zien van een boerderij met een watermolen aan een
 beek, en noemde die stijl "echt passend". Wat we eruit overnemen:
