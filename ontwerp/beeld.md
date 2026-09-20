@@ -28,6 +28,27 @@ https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:
 - de figuren in acht richtingen;
 - muren, vloeren en voorwerpen.
 
+## Het dorp: in de stijl van Knights and Merchants (Marcel, 20 sep 2026)
+
+Het eerste dorp werd te sprookjesachtig: wit vakwerk, rode pannen, fel groen gras. Marcel wil
+het werkdorp uit Knights and Merchants:
+
+- **Aardse, doffe kleuren.** Gras naar olijf en droog, modderwegen in bruin, verweerd hout,
+  grijsbruine steen. Geen verzadigd groen.
+- **Materialen:** stapelhout en ruwe planken, vlechtwerk, veldsteen. Daken van stro en houten
+  schaliën; rode pannen alleen op de herberg en de kapel.
+- **Werkplaatsen met een erf,** waar je het werk ziet: stapels stammen bij de zagerij, zakken
+  meel bij de bakkerij, een aambeeld en kolen bij de smidse, droogrekken, tonnen, karren.
+- **Akkers en omheiningen** van ruwe palen, en velden in verschillende stadia.
+
+De maten uit `wereld.md` blijven gelden, en de schaal is goed zoals hij is (Marcel, 20 sep
+2026). In het spel kijk je namelijk ingezoomd: op 1080p toont het spel ×2, dus zo'n 960 bij 540
+pixels, ongeveer vijftien bij zeventien tegels. Dan vullen twee of drie huizen het scherm en
+zijn de mensen groot genoeg. De brede platen die we renderen zijn overzichtskaarten, niet wat
+de speler ziet.
+
+De toren en zijn kamers houden hun eigen sfeer, die uit Mystic Towers.
+
 ## Wat er staat (20 sep 2026)
 
 Klaar en in `gereedschap/pixelart/`, met een exportscript per onderdeel:
