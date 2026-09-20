@@ -21,11 +21,44 @@
 - **Monsters tot nu toe.** Een slijmkruiper in de voorraadkamer, en een skelet met een zwaard bij
   de trap ("het staat daar maar, alsof het op iemand wacht").
 
+## De opening: de meester doet de tutorial en sterft (Marcel, 20 sep 2026)
+
+Het spel begint bij de toren, met de meester er nog. Hij leeft, hij doet de tutorial, en door een
+stuk verhaal gaat hij dood. Daarna neem jij het over. Daarmee is ook de vraag beantwoord of de
+toren geërfd is: ja, en je krijgt hem niet in een brief maar voor je ogen.
+
+Voorstel van Claude voor de invulling, nog niet gekozen: **laat hem sterven aan de kernregel
+zelf.** Hij is tegen de honderd. Terwijl hij je leert toveren, kost elke spreuk hem een jaar, en
+zie je zijn balk korter worden. Aan het eind is er nog één spreuk nodig, hij doet hem toch, en
+dan is hij honderd. Zo heeft de speler de regel zien gebeuren in plaats van gelezen.
+
+Wat de tutorial dan onderwijst, in de volgorde waarin het spel het nodig heeft: lopen en kijken,
+slaan met de staf (kost niets), een vuurschicht (kost hem een jaar, en dat zie je), sluipen om
+een gevecht te ontlopen, en een deur dichtgooien. De laatste les is de dood zelf.
+
+Dit verandert het begin van de wereld: de speler start op het erf van de toren, niet in het
+dorp. Het dorp komt na de dood van de meester, als er een reden is om erheen te gaan.
+
+**Hij speelt met zijn leeftijd, zodat jij begrijpt dat het meetelt** (Marcel, 20 sep 2026). De
+meester laat het getal boven zijn hoofd expres heen en weer gaan. Hij schiet een vuurschicht op
+een oude ton en lacht erom: zevenennegentig wordt achtennegentig. Dan schept hij uit de fontein
+en staat hij weer op zesennegentig, met zoiets als "zie je wel, het is maar een getal". Daarna
+mept hij de ton kapot met de staf, en wijst erbij dat dat het enige is wat niets kost.
+
+Zo leert de speler de hele afweging zonder uitlegscherm: magie kost jaren, de staf kost niets,
+en er is maar één manier om jaren terug te krijgen. En daarmee hangt het geweer aan de muur. De
+fontein die hij voor een grap leegschept (of aan jou geeft), is er aan het eind niet meer als
+hij hem nodig heeft. Hij haalt zijn honderdste met een spreuk die hij niet had hoeven doen, en
+dat is meteen de laatste les: dit overkomt jou ook, als je te makkelijk tovert.
+
 ## Open
 
-- **De toren geërfd?** (Marcel, 19 sep 2026) De tovenaar erft een krakkemikkige toren van zijn
-  oude meester. Dat botst met de opening, waarin het zijn eigen toren is. Voorstel: het zegel is
-  van de oude meester, en de tovenaar weet net zo weinig als Wim wat erboven zit. Dan moet ook
-  Wims rol opnieuw bekeken worden: is hij de leerling van de tovenaar, of de knecht van de oude
-  meester? Nog niet besloten.
+- **Wie sloot er veertig jaar geleden iets op?** Als de meester dat was, klopt het erfstuk: hij
+  laat je een toren na met iets erin dat hij zelf heeft opgesloten, en het zegel breekt op de
+  dag dat hij sterft. Als de held het zelf was, is de tutorial eerder een weerzien. Het eerste
+  is sterker; nog niet besloten.
+- **Waar is Wim in de tutorial?** Is hij de knecht van de meester (en erf je hem met de toren),
+  of jouw oude leerling die er al was? Hangt samen met de vraag hierboven.
+- **Hoe gaat de meester precies dood?** Voorstel hierboven: aan zijn eigen laatste spreuk. Het
+  alternatief is dat wat er boven zit hem haalt, maar dan leert de speler de regel niet.
 - **Wat zit er boven?** Nog niet bedacht.
