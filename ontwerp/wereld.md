@@ -25,6 +25,24 @@ Binnen klopte het al (de hal is 9×7 tegels, ruim 7 bij 5,5 meter). Buiten moet 
 | Kapel | 5×10 tegels | hoge muur, steil dak |
 | Deur | ~1,5 tegel breed | ~2 meter (96 px), net boven de tovenaar |
 
+## Buiten leest, binnen speelt (Marcel, 20 sep 2026)
+
+Toen de toren om zijn hal heen was gebouwd, werd hij te groot: "in verhouding nu toch wel wat
+aanwezig". Marcel stelde er meteen de vraag bij die het beslecht: "de huizen in het dorp zijn
+ook niet zoals ze aan de binnenkant zijn waarschijnlijk?" Nee, en dat hoort ook niet.
+
+Geen enkel spel in dit genre laat een binnenruimte in zijn buitenkant passen. In Stardew Valley
+is je huis van buiten een schuurtje en van binnen een woning; Fallout, Zelda en Baldur's Gate
+doen hetzelfde. Daaruit de regel:
+
+- **Een buitenkant is gemaakt om te lezen op het scherm.** Hoe groot iets is, volgt uit hoe het
+  zich verhoudt tot de figuren en de gebouwen ernaast, en uit hoeveel van het beeld het mag
+  vullen. Het spel toont ingezoomd ongeveer vijftien bij zeventien tegels.
+- **Een binnenruimte is gemaakt om in te spelen.** Er moet een gevecht op passen, met
+  actiepunten, dekking en een deur om dicht te gooien. De hal is daarom 9x7 tegels, en dat
+  blijft zo, ook al past dat niet in de romp van de toren.
+- **Probeer die twee niet te laten kloppen.** Dat kostte ons vandaag twee verbouwingen van de
+  toren: eerst te smal omdat hij nergens uit volgde, daarna te breed omdat hij uit de hal volgde.
 ### De toren moet om zijn eigen hal passen (Marcel, 20 sep 2026)
 
 Marcel bij het eerste rondlopen buiten: "de toren voelt wat ielig aan, drie tovenaars naast
