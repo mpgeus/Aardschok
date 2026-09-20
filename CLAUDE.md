@@ -106,8 +106,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 Gekozen door Marcel op 19 sep 2026, nadat het eerste proefje "dertien in een dozijn" voelde. De
 held is een tovenaar van 84, en zijn leeftijd is zijn levensbalk (`js/leeftijd.js`, geteld in
 hele maanden, nooit in kommagetallen). Elke vuurschicht kost een jaar, elke klap van een monster
-een paar maanden (`aanval.maanden`), en op zijn honderdste is het voorbij. Genezen bestaat niet;
-de fontein maakt één keer twee jaar jonger. Hoe ouder, hoe minder actiepunten (8, vanaf 90 jaar
+een paar maanden (`aanval.maanden`), en op zijn honderdste is het voorbij. Genezen bestaat niet,
+maar jaren terugkopen kan soms: magische grondstoffen uit de wereld geef je aan de toren óf aan
+jezelf, nooit aan allebei. Ze zijn eindig en meestal bewaakt, dus je komt er per saldo altijd op
+achteruit en loopt de balk in gevoel één kant op. De fontein maakt één keer twee jaar jonger. Hoe ouder, hoe minder actiepunten (8, vanaf 90 jaar
 7, vanaf 95 jaar 6) en hoe sterker de magie (+1 schade per vijf jaar boven de 80). Slaan met de
 staf kost geen jaren. Die afweging, jaren tegen veiligheid, is het spel: een gevecht dat je
 vermijdt, kost niets, en daardoor hebben het avontuur en het gevecht elkaar nodig. Monsters
@@ -126,6 +128,9 @@ houden gewone levenspunten. Aan het eind telt hoe oud je boven aankomt.
   daarom altijd terug op de basis. Het meesterschap staat per held (`held.meesterschap`), de
   hoogste open kring in `held.kring` (gaat alleen omhoog, in `T.verouder`, want wie door de
   fontein jonger wordt, vergeet niets).
+- De eindstrijd **blokkeert nooit** op leeftijd, hij verandert ervan. Jong aankomen geeft veel
+  beurten en dus ruimte om te bewegen en te ontwijken; oud aankomen geeft drie handelingen maar
+  spreuken als mokers. Een harde grens zou de speler twintig uur ver onwinbaar kunnen zetten.
 - Sluipen (`S`, alleen buiten een gevecht) is het eerste middel om een gevecht te ontlopen: half
   zo snel, en monsters zien je pas van `T.SLUIP_ZICHT` (2) tegels dichterbij. Elke nieuwe manier
   om een gevecht te vermijden (praten, afleiden, een val) versterkt de kernregel; een nieuwe

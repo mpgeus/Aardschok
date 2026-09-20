@@ -98,6 +98,37 @@ torens in het landschap (die bijna gratis zijn, zie hieronder), een bron van gro
 kennis die niet uit het dorp komt, en gezelschap voor een man die de laatste van zijn vak is.
 Ze zijn allemaal oud.
 
+### Grondstoffen gaan naar de toren of naar jezelf (Marcel, 20 sep 2026)
+
+Marcel: "misschien moet jij als tovenaar wel jong genoeg worden om uiteindelijk de confrontatie
+aan te kunnen." Daaruit volgt een verdeelvraag die het hele spel draagt.
+
+**Dezelfde magische grondstof kan een verdieping herstellen óf jou jaren teruggeven.** Niet
+allebei. En om boven te komen heb je allebei nodig: een toren die hoog genoeg hersteld is om er te
+kómen, en een lijf dat het daar volhoudt. Het spel is dan één lange verdeling tussen het gebouw en
+je eigen lichaam, in plaats van een boodschappenlijstje.
+
+Waarom dat de kernregel niet ondermijnt:
+
+- **grondstoffen zijn eindig in de wereld en groeien niet aan.** Er valt dus niets te malen: alles
+  wat er is, is er, en jij verdeelt het;
+- **de bewaakte grondstoffen kosten jaren om te halen,** en de wisselkoers is nooit in je voordeel.
+  Je kunt jaren terugkopen, maar nooit meer dan je uitgaf. In gevoel loopt de balk dus nog steeds
+  één kant op, ook al gaat hij soms een stukje terug.
+
+**Geen harde grens voor de eindstrijd.** Een eis als "alleen onder de achtentachtig" zou de speler
+twintig uur ver onwinbaar kunnen zetten zonder dat hij het weet. In plaats daarvan verandert de
+eindstrijd mee met je leeftijd, met de regels die er al zijn (minder actiepunten, sterkere magie):
+
+| Hoe je aankomt | Hoe het gevecht speelt |
+|---|---|
+| Jong, rond de 86 | Acht actiepunten: bewegen, ontwijken, deuren dichtgooien, het uitspelen |
+| Oud, tegen de 98 | Drie handelingen, maar elke vuurschicht slaat in als een moker: het moet in twee klappen |
+
+Allebei winbaar, allebei anders. En het is een spiegel van het begin: de meester ging dood omdat
+hij roekeloos uitgaf; jij haalt het door zuinig te zijn, of door oud en woest genoeg te zijn om
+het in één keer te doen.
+
 ### Wat hier nog aan open staat
 
 - **Loopt de tijd door buiten een gevecht?** Dit is nu de scherpste vraag van het hele ontwerp.
