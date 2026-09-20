@@ -1073,7 +1073,11 @@
       T.sprites.teken(ctx, deel, cx, cy);
       top = cy - T.sprites.hoogte(e.soort);
     } else {
-      top = TEKENAARS[e.soort](ctx, cx, cy - huppel, bob, e, S);
+      // Een wezen uit een kaart kan een soort hebben waar nog geen kunst bij is (een dorpeling
+      // heeft nog geen loopvellen). Dan tekenen we Wim: er staat iemand, en één zo'n figuur legt
+      // niet het hele beeld plat.
+      const teken = TEKENAARS[e.soort] || TEKENAARS.wim;
+      top = teken(ctx, cx, cy - huppel, bob, e, S);
     }
     if (e.brandt > 0 && !e.dood) tekenVlammen(ctx, S, cx, cy - huppel, top);
     if (e.flits > 0) {
