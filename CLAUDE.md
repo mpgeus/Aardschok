@@ -60,6 +60,9 @@ lang hij leeft. Daaruit volgt, van meest naar minst effect:
 - **Beoordeel op uitsneden.** Een plaat van 3200×1800 kost elke keer dat iemand hem bekijkt. Voor
   "is die steen nu grijs" is 600×400 genoeg.
 - **Sonnet voor uitvoerend werk, Opus voor oordeel.**
+- **Kijk eerst of het er al is.** Een agent kreeg de opdracht dorpelingen te laten dwalen, en
+  vond het al gebouwd; hij schreef er toen toetsen omheen. Nuttig, maar een goedkope zoekopdracht
+  vooraf had dat ook laten zien.
 - **Niet meer dan twee agents tegelijk die renderen.**
 
 ## Opbouw
