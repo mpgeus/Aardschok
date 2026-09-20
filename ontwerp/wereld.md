@@ -293,6 +293,16 @@ decor dat er echt toe doet.
 
 **Voorgestelde volgorde na buiten-af:** randtegels, dan de mijn, dan de andere torens.
 
+### Water en een brug vragen de speler iets (Marcel, 20 sep 2026)
+
+Marcel koos de randtegels als eerste, en wilde er water en een bruggetje bij. Dat is geen
+decoratie maar het goedkoopste middel om een kaart vragen te laten stellen. Een beek met een
+brug maakt een plek waar je langs moet; staat daar een wolf, dan is er een echte keuze, want
+eromheen lopen kost tijd en erlangs vechten kost jaren. Een open grasveld vraagt je niets.
+
+Daarmee is landschap ook een middel om een gevecht te ontlopen, en dus een steun onder de
+kernregel in plaats van een versiering erbovenop.
+
 ## Open vragen
 
 - **Welke upgrades heeft de toren?** Denkrichtingen:
