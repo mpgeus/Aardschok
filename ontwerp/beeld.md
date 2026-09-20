@@ -28,18 +28,27 @@ https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:
 - de figuren in acht richtingen;
 - muren, vloeren en voorwerpen.
 
-## Het dorp: in de stijl van Knights and Merchants (Marcel, 20 sep 2026)
+## Het dorp: het werk van Knights and Merchants, in warm licht met diepte (Marcel, 20 sep 2026)
 
-Het eerste dorp werd te sprookjesachtig: wit vakwerk, rode pannen, fel groen gras. Marcel wil
-het werkdorp uit Knights and Merchants:
+Het eerste dorp werd te sprookjesachtig: wit vakwerk, rode pannen, fel groen gras. Marcel noemde
+eerst Knights and Merchants, en liet daarna een referentie zien (een pixel art-scène met
+huisjes met rode pannendaken langs een pad over een klif, een rivier eronder, en een kasteel in
+de nevel). Die twee samen:
 
-- **Aardse, doffe kleuren.** Gras naar olijf en droog, modderwegen in bruin, verweerd hout,
-  grijsbruine steen. Geen verzadigd groen.
-- **Materialen:** stapelhout en ruwe planken, vlechtwerk, veldsteen. Daken van stro en houten
-  schaliën; rode pannen alleen op de herberg en de kapel.
-- **Werkplaatsen met een erf,** waar je het werk ziet: stapels stammen bij de zagerij, zakken
-  meel bij de bakkerij, een aambeeld en kolen bij de smidse, droogrekken, tonnen, karren.
-- **Akkers en omheiningen** van ruwe palen, en velden in verschillende stadia.
+**Van Knights and Merchants:** het werkdorp. Huizen dicht op elkaar, modderige paden met sporen,
+werkplaatsen met een erf waar je het werk ziet (stapels stammen, zakken meel, een aambeeld en
+kolen, droogrekken, tonnen, karren), akkers in verschillende stadia, omheiningen van ruwe palen.
+
+**Van de referentie:** de sfeer.
+- **Warm licht met hard contrast:** zonlicht op de daken, diepe schaduw onder de overstek. Geen
+  vlak fel groen, maar diep groen met zonnevlekken.
+- **Rode pannendaken** horen erbij, niet alleen op de herberg; daarnaast stro en schaliën.
+- **Diepte in lagen:** begroeiing als lijst aan de randen, en naar achteren toe waziger en
+  doffer. Daarmee verdwijnt ook de harde rand van onze eilandjes.
+- **Hoogteverschil:** een pad dat over een richel loopt, met een leuning en lantaarns, en water
+  op een lager niveau. Onze dozen kennen al een hoogte, en het water uit `dorp2.cjs` ligt al
+  onder het maaiveld, dus terrassen met een rotswand en trappen kunnen.
+- **Een silhouet in de verte:** iets om naartoe te kijken, in lage contrasten. Bij ons: de toren.
 
 De maten uit `wereld.md` blijven gelden, en de schaal is goed zoals hij is (Marcel, 20 sep
 2026). In het spel kijk je namelijk ingezoomd: op 1080p toont het spel ×2, dus zo'n 960 bij 540
