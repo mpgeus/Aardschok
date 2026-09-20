@@ -3,12 +3,17 @@
 // proef.tmj staat ook even hierboven per test, zodat een lezer niet heen en weer hoeft te kijken:
 // grond 12×10, gras overal behalve rij y = 8 (zandpad), een eik op (9, 2), een den op (10, 4),
 // een vakwerkhuis met zijn achterste voethoek op (1, 1) (beslaat 7×5, dus tegels 1..7 × 1..5), een
-// dichte deur op (4, 6) en een slijmkruiper op (9, 7).
+// dichte deur op (4, 6), een slijmkruiper op (9, 7) en op (0, 8) een overgang terug naar het erf
+// (elke kaart is vanzelf een gebied, zie js/gebied.js, en een gebied zonder uitgang is een val).
+//
+// En tegen kaarten/proefbos.tmj: dezelfde soort kaart, maar met randtegels (tegels/rand.tsx) —
+// een zandpad dat in gras overloopt, een beek met een brug eroverheen, bomen en een reuzenspin.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
 require('../js/leeftijd.js');
 require('../js/wereld.js');
+require('../beelden/beschrijving.js');
 require('../tegels/tegels.js');
 require('../kaarten/kaarten.js');
 require('../js/kaart.js');
@@ -84,4 +89,66 @@ test('een deur uit de kaart doet mee als een echte deur, met de goede richting',
   assert.equal(deur.richting, 'ns');
   assert.equal(T.isBegaanbaar(w, 4, 6, { deurenOpenen: false }), false);
   assert.equal(T.isBegaanbaar(w, 4, 6, { deurenOpenen: true }), true);
+});
+
+// ---------------------------------------------------------------- randtegels, oevers en de brug
+
+test('een kaart met randtegels krijgt zijn grondsoorten uit rand.tsx, op naam en niet op nummer', () => {
+  // Zelfde valkuil als bij "twee verschillende bomen" hierboven, maar dan een vel verder:
+  // rand.png groeide van 246 naar 262 tegels, en dan schuiven alle gid's van de vellen erachter
+  // op. Deze toets kijkt daarom naar de NAAM van de grond onder een tegel, niet naar een nummer:
+  // rij y = 6 van proefbos is van west naar oost een zandpad, dan gras, dan drie brugtegels, en
+  // daarachter weer gras. Klopt dat niet meer, dan is er iets verschoven.
+  const w = T.laadKaart(T.KAARTEN.proefbos);
+  const naam = (x, y) => w.grond[y][x] && w.grond[y][x].naam;
+  assert.equal(naam(4, 6), 'zandpad');
+  assert.equal(naam(9, 6), 'brug');
+  assert.equal(naam(10, 6), 'brug');
+  assert.equal(naam(11, 6), 'brug');
+  assert.equal(naam(16, 6), 'gras');
+  assert.equal(naam(10, 3), 'water'); // de beek, een rij verderop, naast de brug
+  // En de vellen die ACHTER rand staan in deze kaart (bomen, begroeiing): hun gid's beginnen waar
+  // rand ophoudt, dus groeit of krimpt rand.png, dan schuiven ze allemaal op. Twee soorten die er
+  // ver uit elkaar staan, en een plant, vangen dat op — de naam moet blijven wat hij was.
+  const soortOp = (x, y) => { const v = T.voorwerpOp(w, x, y); return v && v.soort; };
+  assert.equal(soortOp(3, 2), 'eik');
+  assert.equal(soortOp(21, 13), 'herfstEik');
+  assert.equal(soortOp(5, 4), 'varen');
+});
+
+test('water is vast, de brug niet — ook waar hij over het water ligt', () => {
+  // De kern van de brug: de beek loopt van noord naar zuid dwars over de kaart en is overal vast,
+  // behalve op de drie tegels waar de brug ligt. Kan de held daar niet overheen, dan is het bos
+  // aan de overkant onbereikbaar.
+  const w = T.laadKaart(T.KAARTEN.proefbos);
+  assert.equal(T.isVast(w, 10, 3), true, 'de beek stroomt en daar loop je niet doorheen');
+  assert.equal(T.isVast(w, 10, 9), true);
+  for (const x of [9, 10, 11]) {
+    assert.equal(T.isVast(w, x, 6), false, `de brug op (${x}, 6) draag je`);
+    assert.equal(T.isBegaanbaar(w, x, 6), true);
+  }
+  // en de hele rij ligt open, van het pad in het westen tot waar je vandaan komt in het oosten
+  for (let x = 2; x <= 21; x++) assert.equal(T.isBegaanbaar(w, x, 6), true, `(${x}, 6) hoort begaanbaar te zijn`);
+});
+
+test('een bosvijand uit Tiled is een gewoon wezen, met een figuur dat het spel kan tekenen', () => {
+  const w = T.laadKaart(T.KAARTEN.proefbos);
+  const spin = w.wezens.find((e) => e.soort === 'reuzenspin');
+  assert.ok(spin, 'de reuzenspin staat in het bos');
+  assert.equal(spin.kant, 'monster');
+  assert.equal(spin.dwaalt, true); // "straal" in Tiled laat hem rondlopen
+  // Wat Marcel kan neerzetten, moet het spel kunnen tekenen: de soort is tegelijk de naam van het
+  // figuur in beelden/beschrijving.js (js/sprites.js zoekt hem daar op de soort op).
+  assert.ok(T.BEELDEN.figuren[spin.soort], `beelden/figuren kent "${spin.soort}"`);
+  for (const h of ['staan', 'lopen', 'aanval', 'geraakt', 'sterven']) {
+    assert.ok(T.BEELDEN.figuren[spin.soort].houdingen[h], `de reuzenspin kan ${h}`);
+  }
+});
+
+test('elk wezen dat Marcel in Tiled kan neerzetten, heeft een figuur in beelden/', () => {
+  // De dorpelingen (het "zaad") vallen hier expres buiten: die hebben nog geen loopanimaties.
+  for (const soort of Object.keys(T.WEZENS)) {
+    const naam = soort === 'held' ? 'tovenaar' : soort;
+    assert.ok(T.BEELDEN.figuren[naam], `"${soort}" staat in T.WEZENS maar niet in beelden/ — of draai npm run pixelart:spel`);
+  }
 });

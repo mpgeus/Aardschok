@@ -25,8 +25,9 @@
 //   staat      dit object is een deur, "open", "dicht" of "opslot" (dezelfde woorden als
 //              wereld.js se eigen deuren). Zonder "staat" is een object geen deur.
 //   overgang   de naam van de kaart waar je heen gaat als je hier loopt (bijvoorbeeld "bos").
-//              T.laadKaart legt dat vast in w.overgangen; er is nu nog niets dat er iets mee
-//              doet — dat is aan wie verkennen.js op meerdere kaarten laat werken.
+//              T.laadKaart legt dat vast in w.overgangen, en js/gebied.js maakt van elke kaart
+//              vanzelf een gebied: zodra kaarten/bos.tmj bestaat en npm run kaarten gedraaid is,
+//              werkt die overgang, zonder dat er ergens iets geregistreerd hoeft te worden.
 // Een object zonder van deze eigenschappen, maar wel met een tegel uit tegels/ (een boom, een
 // huis, een bosje), wordt een voorwerp op zijn eigen tegel plus, bij "beslaat", de tegels
 // eromheen — precies zo vast als de tegel zelf zegt.
@@ -121,13 +122,20 @@
     // 1. de tegellagen: grond, en wat er verder vast staat. Elke tile-laag telt mee (niet alleen
     // de eerste), zodat Marcel "vast" ook los van het uiterlijk op een eigen laag kan zetten
     // (ontwerp/wereld.md noemt dat apart naast de grondlaag).
+    //
+    // De bovenste laag die hier een tegel heeft, wint — over het uiterlijk én over "vast". Dat
+    // moet wel: een brug over een beek is precies wat je bovenop het water legt, en water is
+    // vast terwijl de brug dat niet is. Eerst hield een vaste tegel eronder de tegel vast,
+    // en dan liep je tegen je eigen brug op. (De brugtegels uit rand.tsx tekenen het water er
+    // zelf onder, dus het maakt niet uit of Marcel de brug in de grondlaag legt of op een laag
+    // erboven; allebei komt het goed.)
     for (const laag of kaart.layers || []) {
       if (laag.type !== 'tilelayer' || !laag.data) continue;
       const breedte = laag.width || b;
       for (let y = 0; y < h; y++) {
         for (let x = 0; x < b; x++) {
           const gid = laag.data[y * breedte + x];
-          if (!gid || tegels[y][x] === 'muur') continue; // al vast door een eerdere laag
+          if (!gid) continue;
           const t = opzoek(gid);
           tegels[y][x] = t && t.eig.vast ? 'muur' : 'vloer';
           if (t) grond[y][x] = { vel: t.vel, id: t.id, naam: t.eig.naam };

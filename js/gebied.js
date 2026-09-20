@@ -3,23 +3,54 @@
 // getekend is (js/kaart.js). Eén deur, twee kanten op: je loopt de toren uit en staat op je erf,
 // je loopt het erf af en staat weer in je hal.
 //
+// Welke gebieden er zijn, staat nergens opgeschreven: elke kaart is er een (zie T.maakGebieden
+// hieronder). Marcel tekent in Tiled, draait npm run kaarten, en de wereld is groter geworden.
+//
 // De held verhuist mee — met zijn leeftijd, zijn meesterschap en wat hij bij zich heeft — en de
 // wereld die hij achterlaat blijft staan: een gedode wolf blijft dood, en een deur die je liet
 // openstaan staat er nog open als je terugkomt.
 (function (T) {
   'use strict';
 
-  T.GEBIEDEN = {
+  // Alleen de toren staat in code; al het andere is een kaart. Elke kaart in kaarten/kaarten.js
+  // (T.KAARTEN, gemaakt door npm run kaarten) is vanzelf een gebied, met zijn bestandsnaam als
+  // naam. Tekent Marcel kaarten/dorp.tmj, dan werkt `overgang: "dorp"` meteen — er valt niets
+  // te registreren, en er hoeft geen code bij. Dat is de hele bedoeling van de editor.
+  const IN_CODE = {
     toren: { naam: 'De toren', maak: () => T.maakWereld() },
-    erf: { naam: 'Het erf', maak: () => T.laadKaart(T.KAARTEN.erf) },
   };
 
-  // Het gebied bij deze naam, één keer gemaakt en daarna bewaard in S.gebieden.
+  // De naam die de speler in beeld krijgt, zonder de kaart al in te lezen: de eigenschap "naam"
+  // van de map zelf (in Tiled: de eigenschappen van de kaart), anders de bestandsnaam met een
+  // hoofdletter — "proefbos" wordt dan "Proefbos".
+  function kaartNaam(naam, kaart) {
+    for (const p of (kaart && kaart.properties) || []) {
+      if (p.name === 'naam' && typeof p.value === 'string' && p.value) return p.value;
+    }
+    return T.hoofdletter(naam);
+  }
+
+  // De lijst opnieuw opbouwen uit T.KAARTEN. Dat gebeurt één keer bij het laden; wie tijdens het
+  // spelen een kaart bijzet (Toren.KAARTEN.bos = ...), roept dit daarna zelf nog eens aan.
+  T.maakGebieden = function () {
+    const g = {};
+    for (const naam of Object.keys(T.KAARTEN || {})) {
+      g[naam] = { naam: kaartNaam(naam, T.KAARTEN[naam]), maak: () => T.laadKaart(T.KAARTEN[naam]) };
+    }
+    // Wat in code staat, wint van een kaart die toevallig zo heet: de toren is de toren.
+    return Object.assign(g, IN_CODE);
+  };
+
+  T.GEBIEDEN = T.maakGebieden();
+
+  // Het gebied bij deze naam, één keer gemaakt en daarna bewaard in S.gebieden. Geeft null
+  // terug als dat gebied niet bestaat; de aanroeper moet dan gewoon doorspelen (zie
+  // T.gaNaarGebied), want een kaart die nog niet getekend is, mag het spel niet omgooien.
   T.gebied = function (S, naam) {
     if (!S.gebieden) S.gebieden = {};
     if (!S.gebieden[naam]) {
       const g = T.GEBIEDEN[naam];
-      if (!g) throw new Error(`Onbekend gebied: ${naam}`);
+      if (!g) return null;
       const w = g.maak();
       w.gebied = naam;
       // Buiten is er één kamer die de hele kaart beslaat (js/kaart.js); die heet naar het gebied,
@@ -28,12 +59,23 @@
       // Een gebied zonder uitgang is een val: daar kom je nooit meer weg. Dat moet hoorbaar zijn
       // zodra het gebeurt, niet pas als een speler vaststaat.
       if (!w.overgangen || !w.overgangen.length) {
-        console.error(`Aardschok: gebied "${naam}" heeft geen enkele overgang — je komt er niet meer uit. Draai npm run kaart:erf opnieuw.`);
+        console.error(`Aardschok: gebied "${naam}" heeft geen enkele overgang — je komt er niet meer uit. Zet in Tiled een object met de eigenschap "overgang" op de kaart en draai npm run kaarten.`);
+      }
+      // En andersom: een overgang die naar een kaart wijst die niet bestaat. Ook dat hoort hier
+      // al te klagen, bij het inlezen, en niet pas als een speler er per ongeluk op stapt.
+      for (const o of w.overgangen || []) {
+        if (!T.GEBIEDEN[o.naar]) ontbreekt(o.naar, `de kaart "${naam}" wijst er op (${o.x}, ${o.y}) naartoe`);
       }
       S.gebieden[naam] = w;
     }
     return S.gebieden[naam];
   };
+
+  // Eén klacht voor allebei de plekken waar het opvalt, in dezelfde bewoording: wat er ontbreekt
+  // en wat Marcel eraan doet.
+  function ontbreekt(naar, waar) {
+    console.error(`Aardschok: overgang naar "${naar}", maar dat gebied bestaat niet (${waar}). Teken kaarten/${naar}.tmj in Tiled en draai npm run kaarten.`);
+  }
 
   T.overgangOp = function (w, x, y) {
     for (const o of w.overgangen || []) if (o.x === x && o.y === y) return o;
@@ -87,6 +129,13 @@
     if (naar === vanaf) return;
     const oud = S.wereld;
     const nieuw = T.gebied(S, naar);
+    // De kaart is nog niet getekend. Dan gebeurt er niets: je blijft staan waar je staat, want
+    // een half aangelegde wereld mag nooit een lopend spel omgooien.
+    if (!nieuw) {
+      ontbreekt(naar, 'je stapte er net op');
+      if (T.ui && T.ui.bericht) T.ui.bericht('Die kant op is nog niets, alleen mist.');
+      return;
+    }
 
     // De held verhuist: uit de ene lijst wezens, in de andere.
     if (oud) {

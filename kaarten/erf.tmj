@@ -10,7 +10,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 3,
- "nextobjectid": 463,
+ "nextobjectid": 464,
  "properties": [
   {
    "name": "naam",
@@ -9095,6 +9095,29 @@
        "name": "komt",
        "type": "string",
        "value": "34,33"
+      }
+     ]
+    },
+    {
+     "id": 463,
+     "name": "pad het bos in",
+     "point": true,
+     "x": 256,
+     "y": 1056,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "overgang",
+       "type": "string",
+       "value": "proefbos"
+      },
+      {
+       "name": "komt",
+       "type": "string",
+       "value": "9,33"
       }
      ]
     }

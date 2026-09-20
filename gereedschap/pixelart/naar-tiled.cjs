@@ -560,6 +560,74 @@ function bouwErfVel(veldNaam, dingen, notitie) {
   return beschrijving;
 }
 
+// ---------------------------------------------------------------- een vel dat elders gemaakt is
+//
+// De randtegels, oevers en de brug komen uit een eigen script (randtegels.cjs, npm run
+// randtegels): die worden heel anders gebouwd dan de rest — per overgang tussen twee grondsoorten,
+// met terreinsets (wangsets) erbij waaruit Tiled zelf de goede hoektegel kiest. Dat script
+// schrijft tegels/rand.png en tegels/rand.tsx, maar niet tegels.json, en juist dat laatste is wat
+// het spel leest (js/kaart.js, js/sprites.js).
+//
+// Daarom lezen we hier de .tsx in plaats van opnieuw te renderen. Dat heeft twee voordelen: de
+// tekening staat maar op één plek, en `npm run tiled` hoeft geen minuten renderwerk over te doen
+// voor een vel dat niet van hem is. Wat in de .tsx staat is precies wat tegels.json nodig heeft:
+// de maten, en per tegel `naam`, `vast`, `groep` en eventueel `beslaat`.
+function attr(tekst, naam) {
+  const m = tekst.match(new RegExp(`${naam}="([^"]*)"`));
+  return m ? m[1] : null;
+}
+const XML_UIT = (s) => String(s).replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+
+// De eigenschappen van één <tile>-blok, in dezelfde vorm als de tiles hierboven.
+function tileUitXml(blok) {
+  const t = { naam: null, vast: false };
+  for (const m of blok.matchAll(/<property\s+([^>]*?)\/>/g)) {
+    const naam = attr(m[1], 'name');
+    const waarde = XML_UIT(attr(m[1], 'value') || '');
+    if (naam === 'naam') t.naam = waarde;
+    else if (naam === 'vast') t.vast = waarde === 'true';
+    else if (naam === 'groep') t.groep = waarde;
+    else if (naam === 'beslaat') t.beslaat = waarde.split('x').map(Number);
+    else if (naam === 'staat_op_erf') t.staat = waarde;
+  }
+  return t;
+}
+
+function leesVelUitTsx(veldNaam) {
+  const pad = path.join(TEGELS, `${veldNaam}.tsx`);
+  if (!fs.existsSync(pad)) {
+    console.warn(`  overgeslagen: ${veldNaam}.tsx bestaat nog niet — draai eerst npm run ${veldNaam === 'rand' ? 'randtegels' : veldNaam}`);
+    return null;
+  }
+  const xml = fs.readFileSync(pad, 'utf8');
+  const kop = xml.slice(xml.indexOf('<tileset'), xml.indexOf('>', xml.indexOf('<tileset')));
+  const beeld = xml.slice(xml.indexOf('<image'), xml.indexOf('>', xml.indexOf('<image')));
+  const offset = xml.includes('<tileoffset') ? xml.slice(xml.indexOf('<tileoffset'), xml.indexOf('>', xml.indexOf('<tileoffset'))) : null;
+  const tiles = [];
+  // De id's staan in de .tsx op volgorde en zonder gaten (zo schrijft elk van onze scripts ze),
+  // maar we zetten elke tegel toch op zijn eigen id neer: een gat zou anders alles opschuiven.
+  for (const m of xml.matchAll(/<tile\s+id="(\d+)"[^>]*>([\s\S]*?)<\/tile>/g)) {
+    tiles[Number(m[1])] = tileUitXml(m[2]);
+  }
+  const aantal = Number(attr(kop, 'tilecount')) || tiles.length;
+  for (let i = 0; i < aantal; i++) if (!tiles[i]) tiles[i] = { naam: veldNaam, vast: false };
+  const vel = {
+    naam: veldNaam,
+    bestand: attr(beeld, 'source'),
+    breedte: Number(attr(beeld, 'width')),
+    hoogte: Number(attr(beeld, 'height')),
+    tegelB: Number(attr(kop, 'tilewidth')),
+    tegelH: Number(attr(kop, 'tileheight')),
+    aantal,
+    kolommen: Number(attr(kop, 'columns')) || aantal,
+    tileoffset: offset ? [Number(attr(offset, 'x')), Number(attr(offset, 'y'))] : null,
+    objectalignment: kop.includes('objectalignment="bottom"'),
+    tiles,
+  };
+  console.log(`${veldNaam}.tsx  ${vel.breedte}×${vel.hoogte}  (${aantal} tegels, ingelezen — gemaakt door een eigen script)`);
+  return vel;
+}
+
 // ---------------------------------------------------------------- alles samen, en het zijspoor
 // voor js/kaart.js: welke eigenschappen elke tegel heeft, zonder dat het spel de .tsx (xml) hoeft
 // te lezen. tegels.json is de bron, tegels.js dezelfde inhoud als gewoon script (zie
@@ -579,6 +647,8 @@ const wil = (naam) => !GEVRAAGD.length || GEVRAAGD.includes(naam);
 
 const velden = [
   wil('grond') && bouwGrondVel(),
+  // rand komt uit randtegels.cjs; hier wordt alleen zijn .tsx ingelezen (zie hierboven).
+  wil('rand') && leesVelUitTsx('rand'),
   wil('bomen') && bouwModelVel('bomen', BOMEN, BOMEN_VAST),
   wil('begroeiing') && bouwModelVel('begroeiing', BEGROEIING, (n) => !!BEGROEIING_VAST[n]),
   wil('gebouwen') && bouwGebouwenVel(),

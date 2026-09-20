@@ -1168,5 +1168,2118 @@
     ]
    }
   ]
+ },
+ "rand": {
+  "tsx": "tegels/rand.tsx",
+  "bestand": "tegels/rand.png",
+  "breedte": 512,
+  "hoogte": 1056,
+  "tegelB": 64,
+  "tegelH": 32,
+  "kolommen": 8,
+  "tileoffset": null,
+  "objectalignment": false,
+  "anker": [
+   32,
+   16
+  ],
+  "tiles": [
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "vlak",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over zandpad: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over kasseien: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "kasseien",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "zandpad",
+    "vast": false,
+    "beslaat": null,
+    "groep": "zandpad over kasseien: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven+rechts",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: boven+rechts+onder",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: boven+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: boven+rechts+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "water",
+    "vast": true,
+    "beslaat": null,
+    "groep": "gras over water: onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: boven+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "gras",
+    "vast": false,
+    "beslaat": null,
+    "groep": "gras over water: rechts+onder+links",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "brug",
+    "vast": false,
+    "beslaat": null,
+    "groep": "brug x begin",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "brug",
+    "vast": false,
+    "beslaat": null,
+    "groep": "brug x midden",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "brug",
+    "vast": false,
+    "beslaat": null,
+    "groep": "brug x eind",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "brug",
+    "vast": false,
+    "beslaat": null,
+    "groep": "brug y begin",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "brug",
+    "vast": false,
+    "beslaat": null,
+    "groep": "brug y midden",
+    "staat": null,
+    "doos": null
+   },
+   {
+    "naam": "brug",
+    "vast": false,
+    "beslaat": null,
+    "groep": "brug y eind",
+    "staat": null,
+    "doos": null
+   }
+  ]
  }
 }

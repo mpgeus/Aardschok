@@ -118,8 +118,12 @@ const FIGUURLIJST = {
   wim: { houdingen: ['staan', 'lopen', 'praten', 'vegen'] },
   skelet: { houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'] },
   slijm: { houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'] },
-  // Buiten, op het erf en straks in het bos.
+  // Buiten, op het erf en in het bos. Alles wat Marcel in Tiled kan neerzetten, moet het spel ook
+  // kunnen tekenen; deze drie staan in T.WEZENS (js/wereld.js) onder dezelfde naam als hier, want
+  // js/sprites.js zoekt het figuur op de soort van het wezen op.
   wolf: { map: ['vijanden', 'animaties'], houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'], bron: 'bosvijanden-anim.cjs' },
+  reuzenspin: { map: ['vijanden', 'animaties'], houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'], bron: 'bosvijanden-anim.cjs' },
+  kobold: { map: ['vijanden', 'animaties'], houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'], bron: 'bosvijanden-anim.cjs' },
 };
 
 function figuren() {

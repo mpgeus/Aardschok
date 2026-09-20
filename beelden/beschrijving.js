@@ -334,6 +334,158 @@
        ]
       }
      }
+    },
+    "reuzenspin": {
+     "naam": "reuzenspin",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 2,
+     "snelheidEenheid": "tegels per seconde",
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "bestand": "reuzenspin-staan.png"
+      },
+      "lopen": {
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "bestand": "reuzenspin-lopen.png",
+       "cel": [
+        128,
+        132
+       ],
+       "anker": [
+        64,
+        114
+       ],
+       "stap": 0.8
+      },
+      "aanval": {
+       "beelden": 6,
+       "fps": 12,
+       "herhaal": false,
+       "bestand": "reuzenspin-aanval.png",
+       "cel": [
+        144,
+        132
+       ],
+       "anker": [
+        72,
+        114
+       ]
+      },
+      "geraakt": {
+       "beelden": 3,
+       "fps": 12,
+       "herhaal": false,
+       "bestand": "reuzenspin-geraakt.png"
+      },
+      "sterven": {
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": false,
+       "bestand": "reuzenspin-sterven.png",
+       "cel": [
+        128,
+        132
+       ],
+       "anker": [
+        64,
+        114
+       ]
+      }
+     }
+    },
+    "kobold": {
+     "naam": "kobold",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 2.4,
+     "snelheidEenheid": "tegels per seconde",
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "bestand": "kobold-staan.png"
+      },
+      "lopen": {
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "bestand": "kobold-lopen.png",
+       "stap": 0.96
+      },
+      "aanval": {
+       "beelden": 6,
+       "fps": 12,
+       "herhaal": false,
+       "bestand": "kobold-aanval.png",
+       "cel": [
+        144,
+        132
+       ],
+       "anker": [
+        72,
+        114
+       ]
+      },
+      "geraakt": {
+       "beelden": 3,
+       "fps": 12,
+       "herhaal": false,
+       "bestand": "kobold-geraakt.png"
+      },
+      "sterven": {
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": false,
+       "bestand": "kobold-sterven.png",
+       "cel": [
+        160,
+        168
+       ],
+       "anker": [
+        80,
+        126
+       ]
+      }
+     }
     }
    },
    "muren": {

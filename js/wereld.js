@@ -70,6 +70,22 @@
       naam: 'wolf', kant: 'monster', leven: 12, ap: 6, initiatief: 8, snelheid: 2.6, zicht: 6, dwaalt: true,
       aanval: { kosten: 3, maanden: [4, 7], zin: 'bijt je' },
     },
+    // Dieper het bos in. De sleutel is hier de naam: js/sprites.js zoekt het figuur op de soort
+    // op, dus deze twee heten precies zoals hun animatievellen in beelden/figuren
+    // (bosvijanden-anim.cjs, via naar-spel.cjs). Zo kan Marcel ze in Tiled neerzetten met
+    // wezen="reuzenspin" of wezen="kobold", zonder dat er nog ergens iets bij moet.
+    //
+    // De spin is traag maar taai en bijt gif: wie haar ziet aankomen, loopt om. De kobold loopt
+    // bijna zo hard als een wolf en steekt met een speer, dus hij is juist niet te ontlopen — die
+    // afweging (omlopen of jaren betalen) is waar het spel om draait.
+    reuzenspin: {
+      naam: 'reuzenspin', kant: 'monster', leven: 14, ap: 5, initiatief: 5, snelheid: 2.0, zicht: 6, dwaalt: true,
+      aanval: { kosten: 3, maanden: [5, 8], zin: 'bijt je met haar giftanden' },
+    },
+    kobold: {
+      naam: 'kobold', kant: 'monster', leven: 16, ap: 6, initiatief: 7, snelheid: 2.4, zicht: 6, dwaalt: true,
+      aanval: { kosten: 3, maanden: [4, 8], zin: 'steekt je met zijn speer' },
+    },
   };
 
   // Waar je de toren uit loopt. Dezelfde vorm als de overgangen die js/kaart.js uit een .tmj
@@ -83,6 +99,9 @@
   // Alleen zodat js/kaart.js een wezen uit een ingelezen kaart in precies dezelfde vorm kan
   // neerzetten als hierboven; de vorm zelf (WEZENS, maakWezen) blijft hier, en verandert niet.
   T.maakWezen = maakWezen;
+  // De tabel zelf gaat mee naar buiten, want dit is precies de lijst die Marcel in Tiled mag
+  // invullen bij de eigenschap "wezen". Wie wil weten wat er te plaatsen valt, vraagt het hier.
+  T.WEZENS = WEZENS;
 
   T.hoofdletter = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   T.tegelVan = (e) => ({ x: e.tx, y: e.ty });

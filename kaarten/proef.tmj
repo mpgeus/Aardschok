@@ -10,7 +10,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 3,
- "nextobjectid": 6,
+ "nextobjectid": 7,
  "tilesets": [
   {
    "firstgid": 1,
@@ -236,6 +236,29 @@
        "name": "wezen",
        "type": "string",
        "value": "slijm"
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "name": "pad terug naar het erf",
+     "point": true,
+     "x": 0,
+     "y": 256,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "overgang",
+       "type": "string",
+       "value": "erf"
+      },
+      {
+       "name": "komt",
+       "type": "string",
+       "value": "1,8"
       }
      ]
     }

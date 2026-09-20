@@ -244,3 +244,64 @@ test('buiten bakent de kamer het slagveld niet af: alleen wie de held echt ziet,
   const mee = T.deelnemers(w, S.held, null);
   assert.equal(mee.includes(wolf), false, 'een wolf aan de andere kant van het erf doet niet mee');
 });
+
+// ------------------------------------------------- elke kaart is vanzelf een gebied (js/gebied.js)
+
+test('elke kaart uit T.KAARTEN is vanzelf een gebied, zonder dat er iets geregistreerd is', () => {
+  // Dit is de hele bedoeling van de editor: Marcel tekent kaarten/<naam>.tmj, draait npm run
+  // kaarten, en `overgang: "<naam>"` werkt. Staat er ergens weer een lijstje met de hand, dan
+  // valt een nieuwe kaart daar stilletjes buiten.
+  for (const naam of Object.keys(T.KAARTEN)) {
+    assert.ok(T.GEBIEDEN[naam], `kaart "${naam}" hoort een gebied te zijn`);
+  }
+  // en de naam die de speler ziet komt uit de kaart zelf (de eigenschap "naam" van de map)
+  assert.equal(T.GEBIEDEN.erf.naam, 'Het erf');
+  assert.equal(T.GEBIEDEN.proefbos.naam, 'Het proefbos');
+  assert.equal(T.GEBIEDEN.toren.naam, 'De toren'); // de toren blijft in code staan
+});
+
+test('lopend van het erf naar een kaart die daar niet in code staat, en weer terug', () => {
+  const S = nieuwSpel();
+  T.gaNaarGebied(S, 'erf');
+  const o = S.wereld.overgangen.find((x) => x.naar === 'proefbos');
+  assert.ok(o, 'vanaf het erf loopt er een pad het bos in');
+  S.netGeland = null;
+  S.held.pad = [];
+  T.bijAankomst(S, S.held, { x: o.x, y: o.y });
+  assert.equal(S.naarGebied, 'proefbos');
+  T.gaNaarGebied(S, S.naarGebied);
+  assert.equal(S.wereld.gebied, 'proefbos');
+  assert.equal(S.wereld.wezens.includes(S.held), true, 'de held verhuist mee');
+  // je landt naast de overgang terug, niet erop: anders kaats je heen en weer
+  assert.equal(T.overgangOp(S.wereld, S.held.tx, S.held.ty), null);
+  assert.equal(T.isBegaanbaar(S.wereld, S.held.tx, S.held.ty), true);
+  // en terug
+  const terug = S.wereld.overgangen.find((x) => x.naar === 'erf');
+  S.netGeland = null;
+  S.held.pad = [];
+  T.bijAankomst(S, S.held, { x: terug.x, y: terug.y });
+  T.gaNaarGebied(S, S.naarGebied);
+  assert.equal(S.wereld.gebied, 'erf');
+});
+
+test('een overgang naar een kaart die niet bestaat, laat de speler niet vastlopen', () => {
+  // Marcel typt "dorp" in Tiled en tekent kaarten/dorp.tmj pas morgen. Dan hoort het spel te
+  // klagen op de console, maar gewoon door te spelen: je blijft staan waar je staat.
+  const S = nieuwSpel();
+  T.gaNaarGebied(S, 'erf');
+  const waar = { x: S.held.tx, y: S.held.ty };
+  const wereld = S.wereld;
+  const fouten = [];
+  const oud = console.error;
+  console.error = (m) => fouten.push(m);
+  try {
+    T.gaNaarGebied(S, 'ditbestaatniet');
+  } finally {
+    console.error = oud;
+  }
+  assert.equal(S.wereld, wereld, 'je blijft in hetzelfde gebied');
+  assert.deepEqual({ x: S.held.tx, y: S.held.ty }, waar, 'en op dezelfde tegel');
+  assert.equal(S.naarGebied, null, 'de overgang wordt niet elke tel opnieuw geprobeerd');
+  assert.equal(S.wereld.wezens.includes(S.held), true, 'de held staat nog in zijn eigen wereld');
+  assert.ok(fouten.some((m) => String(m).includes('ditbestaatniet')), 'en het klaagt hoorbaar');
+});
