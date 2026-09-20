@@ -135,6 +135,35 @@ dorp houden hun eigen sfeer.
 - **Het reliëf in een gesneden boog is echt snijwerk in code.** Dat bewaren we voor een of twee
   belangrijke plekken, niet voor elke deur. Ruw gestapelde steen kunnen we wel gewoon.
 
+## Zelf maken, niet kopen (20 sep 2026)
+
+Marcel liet twee gekochte kits zien, een voor kelders en een voor buiten, als inspiratie. Ze zijn
+bruikbaar als **boodschappenlijst**, niet als kunst. Waarom we ze niet gebruiken:
+
+- alles bij ons komt uit één renderer, met één palet, één lichtrichting en één omlijningsregel. Dat
+  is waarom het dorp, de toren en de figuren als één wereld aanvoelen, en waarom één beslissing —
+  veldsteen grijs in plaats van paars — alles tegelijk kon bijstellen. Een gekochte kit zet een
+  tweede lichtrichting en een tweede palet in hetzelfde beeld, en dat zie je meteen;
+- gekochte kunst ligt vast. Onze klimop moet meebewegen met de wind, onze verdieping moet van
+  krakkemikkig naar hersteld kunnen, onze boom moet kunnen verdorren tot een dode boom. Dat kan
+  alleen als het uit code komt;
+- voor verkoop moet de licentie van zo'n pak nagelopen worden, en dat gedoe kunnen we onszelf
+  besparen.
+
+**Wat die twee kits wél opleverden — wat wij nog missen.**
+
+Voor een kelder (we hebben al: muren met negen versieringen in twee richtingen, deuren open, dicht
+en op slot, vloeren, kisten, tonnen, puin, wandrek, wandlamp): **trap** (die tekent het spel nu nog
+als vlak, want er is geen kunst voor), ladder, vloerrooster, ingestorte vloer, stalagmieten, vuur,
+botten, en mos en klimop op muren. En de les uit hun muurrijen: de rijkdom komt uit acht varianten
+van dezelfde muur — gaaf, gebarsten, bemost, begroeid, half ingestort — niet uit acht verschillende
+muren.
+
+Voor buiten: **dieren** (zie `spreuken.md`, ze zijn voer voor het verdorren), **klifranden** voor
+het hoogtesysteem, wegwijzers (horen bij "de doelen zijn zichtbaar"), tent en kampvuur voor
+questplekken, een stenen brug naast onze houten, en meer grondsoorten — elke soort erbij is een
+terreinset erbij.
+
 ## Wat er staat (20 sep 2026)
 
 Klaar en in `gereedschap/pixelart/`, met een exportscript per onderdeel:
