@@ -38,10 +38,10 @@
     fontein: { blokkeert: true, zichtDicht: false },
     kist: { blokkeert: true, zichtDicht: true },
     pilaar: { blokkeert: true, zichtDicht: true },
-    trap: { blokkeert: true, zichtDicht: false },
+    trap: { blokkeert: true, zichtDicht: false, voet: { dx: -2, dy: -2, b: 3, h: 3 } },
     // Het gat in de vloer waar de trap van beneden aankomt. Er staat er nog geen in de wereld —
     // de verdiepingen bestaan nog niet — maar het beeld ligt klaar (gereedschap/pixelart/trap.cjs).
-    trapgat: { blokkeert: true, zichtDicht: false },
+    trapgat: { blokkeert: true, zichtDicht: false, voet: { dx: -2, dy: -2, b: 3, h: 3 } },
     sleutel: { blokkeert: false, zichtDicht: false },
   };
 
@@ -213,7 +213,23 @@
   T.tegel = (w, x, y) => (x >= 0 && y >= 0 && x < w.b && y < w.h ? w.tegels[y][x] : 'buiten');
   T.deurOp = (w, x, y) => w.deuren.get(sleutelVan(x, y)) || null;
   T.kamerVan = (w, x, y) => w.kamers.find((k) => x >= k.x1 && x <= k.x2 && y >= k.y1 && y <= k.y2) || null;
-  T.voorwerpOp = (w, x, y) => w.voorwerpen.find((v) => v.x === x && v.y === y) || null;
+  // Een voorwerp staat meestal op één tegel, maar de spiraaltrap beslaat er drie bij drie: een
+  // spiraal waar een man door past is minstens twee meter breed. `voet` geeft die rechthoek ten
+  // opzichte van de tegel van het voorwerp zelf, als {dx, dy, b, h}. Die tegel is bij de trap de
+  // voorste hoek (de hoogste x+y), want daarop sorteert het tekenen; de voet loopt dus naar
+  // achteren, met negatieve dx en dy.
+  T.voetVan = function (v) {
+    const f = v.voet || (T.VOORWERPEN[v.soort] && T.VOORWERPEN[v.soort].voet);
+    if (!f) return { x1: v.x, y1: v.y, x2: v.x, y2: v.y };
+    return { x1: v.x + f.dx, y1: v.y + f.dy, x2: v.x + f.dx + f.b - 1, y2: v.y + f.dy + f.h - 1 };
+  };
+
+  T.voorwerpOp = function (w, x, y) {
+    return w.voorwerpen.find((v) => {
+      const f = T.voetVan(v);
+      return x >= f.x1 && x <= f.x2 && y >= f.y1 && y <= f.y2;
+    }) || null;
+  };
   T.wezenOp = (w, x, y, behalve) => w.wezens.find((e) => !e.dood && e !== behalve && e.tx === x && e.ty === y) || null;
 
   // Mag je deze tegel op? deurenOpenen: een dichte deur telt als doorgang (de held duwt
