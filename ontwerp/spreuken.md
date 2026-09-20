@@ -1,5 +1,20 @@
 # Spreuken en ervaring
 
+## In het spel (20 sep 2026)
+
+De drie startspreuken werken, met meesterschap door gebruik: `js/spreuken.js` (de regels) en
+`js/toveren.js` (kiezen, richten, uitspreken). Toetsen: 2 vuurschicht, 3 dwaallicht, 4 windstoot;
+een deur dichtgooien verhuisde naar D. Buiten een gevecht kost een spreuk geen actiepunten, wel
+dezelfde maanden. Een spreuk die niets zou doen, kun je niet uitspreken, en kost dus ook niets.
+
+Wat er nog niet in zit:
+- een melding als een kring opengaat (er zijn nog geen spreuken van de tweede kring);
+- "herinneren door te oefenen": een hogere spreuk die terugkomt als je een verwante beheerst;
+- donkere hoeken die een dwaallicht zichtbaar maakt (er is nog geen donker).
+
+Bij te stellen na het spelen: acht seconden dwaallicht voelt kort nu de held 2,5 tegels per
+seconde loopt, en sluipend 1,25.
+
 ## Besloten
 
 - **Vuurschicht** (in het spel sinds 19 sep 2026): 5 actiepunten, kost een jaar, 5–8 schade
