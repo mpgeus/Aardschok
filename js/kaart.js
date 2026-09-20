@@ -45,19 +45,25 @@
     return stuk.replace(/\.tsx$/i, '');
   }
 
-  // Voor deze ene kaart: elk tileset-blok (firstgid + veelnaam), aflopend op firstgid. Zo is de
-  // juiste set voor een gid de eerste waarvoor gid >= firstgid geldt.
+  // Voor deze ene kaart: elk tileset-blok (firstgid, veelnaam, en het vel uit T.TEGELS zelf). Een
+  // gid hoort bij een vel als hij binnen firstgid .. firstgid + aantal_tegels - 1 valt — niet
+  // zomaar "de eerste met firstgid <= gid", want dat gaat mis zodra vellen niet precies achter
+  // elkaar liggen (bijvoorbeeld na npm run tiled, als een vel meer of minder tegels heeft
+  // gekregen dan toen de kaart voor het laatst in Tiled openstond).
   function bouwOpzoeker(kaart) {
-    const sets = (kaart.tilesets || [])
-      .map((t) => ({ firstgid: t.firstgid || 1, naam: velNaam(t.source || t.name || '') }))
-      .sort((a, b) => b.firstgid - a.firstgid);
+    const sets = (kaart.tilesets || []).map((t) => {
+      const naam = velNaam(t.source || t.name || '');
+      const vel = T.TEGELS && T.TEGELS[naam];
+      return { firstgid: t.firstgid || 1, aantal: vel ? vel.tiles.length : t.tilecount || 0, vel };
+    });
     return function (gid) {
       const g = zonderVlag(gid);
       if (!g) return null;
-      const set = sets.find((s) => g >= s.firstgid);
-      const vel = set && T.TEGELS && T.TEGELS[set.naam];
-      if (!vel) return null;
-      return vel.tiles[g - set.firstgid] || null;
+      for (const s of sets) {
+        const lokaal = g - s.firstgid;
+        if (s.vel && lokaal >= 0 && lokaal < s.aantal) return s.vel.tiles[lokaal] || null;
+      }
+      return null;
     };
   }
 

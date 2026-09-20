@@ -12,22 +12,350 @@
      {
       "naam": "gras",
       "vast": false,
-      "beslaat": null
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
      },
      {
       "naam": "zandpad",
       "vast": false,
-      "beslaat": null
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
      },
      {
       "naam": "kasseien",
       "vast": false,
-      "beslaat": null
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "stempel"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "los"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "los"
+     },
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null,
+      "groep": "los"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "los"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "los"
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null,
+      "groep": "los"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "los"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "los"
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null,
+      "groep": "los"
      },
      {
       "naam": "water",
       "vast": true,
-      "beslaat": null
+      "beslaat": null,
+      "groep": "los"
      }
     ]
    },
@@ -44,37 +372,44 @@
      {
       "naam": "eik",
       "vast": true,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "herfstEik",
       "vast": true,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "den",
       "vast": true,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "berk",
       "vast": true,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "dodeBoom",
       "vast": true,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "wilg",
       "vast": true,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "appelboom",
       "vast": true,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      }
     ]
    },
@@ -91,52 +426,62 @@
      {
       "naam": "struik",
       "vast": true,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "bessenStruik",
       "vast": true,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "varen",
       "vast": false,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "grasPol",
       "vast": false,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "hoogGras",
       "vast": false,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "bloemen",
       "vast": false,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "paddenstoelen",
       "vast": false,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "boomstronk",
       "vast": true,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "rots",
       "vast": true,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      },
      {
       "naam": "kleineRots",
       "vast": false,
-      "beslaat": null
+      "beslaat": null,
+      "groep": null
      }
     ]
    },
@@ -156,7 +501,8 @@
       "beslaat": [
        7,
        5
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "stenenHuis",
@@ -164,7 +510,8 @@
       "beslaat": [
        6,
        8
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "herberg",
@@ -172,7 +519,8 @@
       "beslaat": [
        9,
        7
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "smidse",
@@ -180,7 +528,8 @@
       "beslaat": [
        7,
        5
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "dorpshuis1",
@@ -188,7 +537,8 @@
       "beslaat": [
        7,
        5
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "dorpshuis3",
@@ -196,7 +546,8 @@
       "beslaat": [
        6,
        8
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "dorpshuis5",
@@ -204,7 +555,8 @@
       "beslaat": [
        5,
        7
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "kapel",
@@ -212,7 +564,8 @@
       "beslaat": [
        5,
        10
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "kerkhof",
@@ -220,7 +573,8 @@
       "beslaat": [
        6,
        4
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "watermolen",
@@ -228,7 +582,8 @@
       "beslaat": [
        6,
        8
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "bakkerij",
@@ -236,7 +591,8 @@
       "beslaat": [
        8,
        6
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "kruidenhut",
@@ -244,7 +600,8 @@
       "beslaat": [
        6,
        5
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "jagershut",
@@ -252,7 +609,8 @@
       "beslaat": [
        7,
        6
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "oudstehuis",
@@ -260,7 +618,8 @@
       "beslaat": [
        7,
        5
-      ]
+      ],
+      "groep": null
      },
      {
       "naam": "schuur",
@@ -268,7 +627,8 @@
       "beslaat": [
        6,
        9
-      ]
+      ],
+      "groep": null
      }
     ]
    }

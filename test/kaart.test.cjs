@@ -43,6 +43,17 @@ test('de hele voet van het huis is vast, en er net naast niet', () => {
   assert.deepEqual(huis && { x: huis.x, y: huis.y }, { x: 1, y: 1 });
 });
 
+test('twee verschillende bomen blijven twee verschillende soorten (niet allebei de eerste boom)', () => {
+  // Ving eerder een fout op: grond.png kreeg met de stempel-lap veel meer tegels, waardoor de
+  // met de hand uitgerekende gid's van bomen.tsx niet meer klopten en de den als een herfsteik
+  // inlas (beide "vast", dus de test hierboven zag het verschil niet). Nu blijft elke boom zijn
+  // eigen naam houden, wat er ook aan grond.tsx verandert.
+  const w = T.laadKaart(T.KAARTEN.proef);
+  const den = T.voorwerpOp(w, 10, 4);
+  assert.ok(den);
+  assert.equal(den.soort, 'den');
+});
+
 test('een boom is een vast voorwerp op zijn eigen tegel', () => {
   const w = T.laadKaart(T.KAARTEN.proef);
   assert.equal(T.isVast(w, 9, 2), true);

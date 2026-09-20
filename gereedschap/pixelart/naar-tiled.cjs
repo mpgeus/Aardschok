@@ -52,20 +52,25 @@ function eigenschapXml(naam, waarde) {
   return `    <property name="${naam}" value="${XML_ESC(waarde)}"/>\n`;
 }
 
-// vel = { naam, bestand, breedte, hoogte, tegelB, tegelH, aantal, tileoffset: [x,y]|null,
-//         objectalignment: bool, tiles: [{ naam, vast, beslaat: [b,d]|null }] }
+// vel = { naam, bestand, breedte, hoogte, tegelB, tegelH, aantal, kolommen, notitie,
+//         tileoffset: [x,y]|null, objectalignment: bool,
+//         tiles: [{ naam, vast, beslaat: [b,d]|null, groep }] }
 function schrijfTsx(vel) {
   let x = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  x += `<tileset version="1.10" tiledversion="1.11.0" name="${vel.naam}" tilewidth="${vel.tegelB}" tileheight="${vel.tegelH}" tilecount="${vel.aantal}" columns="${vel.aantal}"`;
+  x += `<tileset version="1.10" tiledversion="1.11.0" name="${vel.naam}" tilewidth="${vel.tegelB}" tileheight="${vel.tegelH}" tilecount="${vel.aantal}" columns="${vel.kolommen || vel.aantal}"`;
   if (vel.objectalignment) x += ' objectalignment="bottom"';
   x += '>\n';
   if (vel.tileoffset) x += ` <tileoffset x="${vel.tileoffset[0]}" y="${vel.tileoffset[1]}"/>\n`;
+  // Een korte notitie bij het hele vel (Tiled toont dit bij de eigenschappen van de tileset
+  // zelf, niet van een tegel): hoe Marcel de tegels moet gebruiken, zie ook het verslag.
+  if (vel.notitie) x += ` <properties>\n  ${eigenschapXml('notitie', vel.notitie).trim()}\n </properties>\n`;
   x += ` <image source="${vel.bestand}" width="${vel.breedte}" height="${vel.hoogte}"/>\n`;
   vel.tiles.forEach((t, id) => {
     x += ` <tile id="${id}">\n  <properties>\n`;
     x += eigenschapXml('naam', t.naam);
     x += eigenschapXml('vast', !!t.vast);
     if (t.beslaat) x += eigenschapXml('beslaat', `${t.beslaat[0]}x${t.beslaat[1]}`);
+    if (t.groep) x += eigenschapXml('groep', t.groep);
     x += '  </properties>\n </tile>\n';
   });
   x += '</tileset>\n';
@@ -74,36 +79,100 @@ function schrijfTsx(vel) {
 
 // ---------------------------------------------------------------- grond (64×32, geen speling)
 
-// D.grondKaart({ vast: soort }) geeft overal dezelfde grondsoort terug (zie dorp.cjs): zo wordt
-// een tegel één schoon materiaal in plaats van een lapje met een paadje erdoorheen, en tegelt hij
-// naadloos. Eén pixel dikte (net onder het maaiveld) voorkomt een kier van één pixel aan de
-// zuidoostrand van de ruit; helemaal plat (0 dik) mist net die randpixels.
+// Eerst ging dit per tegel: dorp.grondTex() van precies 1×1 tegel renderen. Dat bleek in Tiled
+// meteen te herhalen — elke "gras"-tegel is dan letterlijk dezelfde bitmap, dus de plukjes en
+// het kasseienrooster vormen nette rijen zodra Marcel een stuk grond vult. In onze eigen platen
+// (dorp-export.cjs) viel dat niet op, want die tekenen de ruis in één keer over een groot vlak.
+//
+// De oplossing: een lap van STEMPEL × STEMPEL tegels in één moeite door renderen (de ruis loopt
+// dus gewoon door, op de echte wereld-gx/gy) en die achteraf in losse 64×32-tegels knippen
+// (Plaat.uitsnede, hetzelfde stukje gereedschap als de sprites-agent gebruikte voor de vloeren
+// binnen — zie naar-spel.cjs/beschrijving.json: vloeren.cel is ook een lap, 2×2 tegels, waar het
+// spel zelf een ruit uit snijdt; hier snijden wij vooraf, want Tiled kent geen "knip een ruit uit
+// een grotere plaat", alleen losse tegels). Marcel selecteert in Tiled de STEMPEL × STEMPEL-blok
+// tegels van één grondsoort als één stempel (ze staan expres aaneengesloten in de tileset, zie
+// "kolommen" hieronder) en herhaalt die over het veld: de herhaling valt dan om de vier tegels in
+// plaats van om de één, en binnen een stempel sluiten de randen exact aan, want dat is één
+// doorlopend bovenvlak. Erachteraan staan een paar LOSSE tegels (uit een ander stuk van diezelfde
+// ruis, dus geen kopie van iets in de stempel) om tussen het stempelwerk te strooien met Tiled se
+// eigen stempel-op-toeval; bij gras staat er ook net iets vaker een grasPol of bloem op.
+const STEMPEL = 4; // 4×4 tegels: ver genoeg uit elkaar dat het oog de herhaling niet meer volgt
+const DIKTE = 0.3; // net genoeg lager dan de vloer om de buitenrand van de lap heel te houden
+// (kwantiseer mist een randpixel bij 0 dik door een rakende lichtstraal; interne sneden in de lap
+// hebben dit niet nodig, want dat is geen rand van de doos maar gewoon het bovenvlak zelf).
+
 const GROND = [
   ['gras', D.grondKaart({}), false],
   ['zandpad', D.grondKaart({ vast: D.PAD }), false],
   ['kasseien', D.grondKaart({ vast: D.KASSEI }), false],
-  ['water', D.grondKaart({ vast: D.WATER }), true],
 ];
+// Losse tegels: telkens een flink stuk verderop in dezelfde ruis, zodat ze niet toevallig op een
+// tegel uit de stempel lijken. Geen vaste betekenis (geen "altijd een kiezel op tegel 2"): het
+// zijn gewoon andere plekken in hetzelfde grondtype, met bij gras een zwaardere grasPollen-hand.
+const LOS_OFFSETS = [[9, 2], [3, 12], [15, 8]];
 
-function grondTegel(kaart) {
-  const B = new K.Beeld(64, 32, 32, 0);
-  K.tekenDozen(B, [K.doos(0, 0, 1, 1, -1, 0, D.grondTex(kaart))]);
+// Eén lap van tegelsB × tegelsH tegels, met de linkerbovenhoek op wereldtegel (gx0, gy0). Het
+// canvas is precies zo groot als de lap (geen rand); die hoek valt op de bovenpunt van het
+// canvas, net als bij (gx0, gy0) = (0, 0) op een gewoon canvas van 64×32.
+function grondLap(kaart, tegelsB, tegelsH, gx0, gy0, dicht) {
+  const b = tegelsB * 64;
+  const h = tegelsH * 32;
+  const OX = tegelsB * 32 - (gx0 - gy0) * 32;
+  const OY = -(gx0 + gy0) * 16;
+  const B = new K.Beeld(b, h, OX, OY);
+  K.tekenDozen(B, [K.doos(gx0, gy0, gx0 + tegelsB, gy0 + tegelsH, -DIKTE, 0, D.grondTex(kaart))]);
+  if (dicht) D.grasPollen(B, kaart, { dicht, bloemen: dicht });
   K.belicht(B, { omgeving: () => 0.15 });
   return K.Plaat.van(K.kwantiseer(B));
 }
 
+// Tegel (tx, ty), 0-based binnen de lap, uit de lap-plaat snijden.
+function snijTegel(lapPlaat, tegelsB, tx, ty) {
+  const OX = tegelsB * 32;
+  return lapPlaat.uitsnede(OX + (tx - ty) * 32 - 32, (tx + ty) * 16, 64, 32);
+}
+
 function bouwGrondVel() {
-  const items = GROND.map(([naam, kaart, vast]) => ({ naam, vast, plaat: veilig(naam, () => grondTegel(kaart)) })).filter((i) => i.plaat);
-  const vel = new K.Plaat(64 * items.length, 32);
-  items.forEach((it, i) => vel.plak(it.plaat, i * 64, 0));
+  const soorten = [];
+  for (const [naam, kaart, vast] of GROND) {
+    const gelukt = veilig(naam, () => {
+      const stempel = [];
+      const lap = grondLap(kaart, STEMPEL, STEMPEL, 0, 0, naam === 'gras' ? 1 : 0);
+      for (let ty = 0; ty < STEMPEL; ty++) for (let tx = 0; tx < STEMPEL; tx++) stempel.push(snijTegel(lap, STEMPEL, tx, ty));
+      // een lap van 1×1 is al precies 64×32: grondLap zelf hoeft dan niet meer gesneden te worden.
+      const los = LOS_OFFSETS.map(([gx0, gy0]) => grondLap(kaart, 1, 1, gx0, gy0, naam === 'gras' ? 7 : 0));
+      return { naam, vast, stempel, los };
+    });
+    if (gelukt) soorten.push(gelukt);
+  }
+  // water blijft zoals het was: één tegel, geen stempel nodig voor iets wat toch overal
+  // hetzelfde golft.
+  const water = veilig('water', () => grondLap(D.grondKaart({ vast: D.WATER }), 1, 1, 0, 0, 0));
+
+  const kolommen = STEMPEL;
+  const tiles = [];
+  const platen = [];
+  for (const s of soorten) {
+    for (const p of s.stempel) { tiles.push({ naam: s.naam, vast: s.vast, groep: 'stempel' }); platen.push(p); }
+  }
+  for (const s of soorten) {
+    for (const p of s.los) { tiles.push({ naam: s.naam, vast: s.vast, groep: 'los' }); platen.push(p); }
+  }
+  if (water) { tiles.push({ naam: 'water', vast: true, groep: 'los' }); platen.push(water); }
+
+  const rijen = Math.ceil(platen.length / kolommen);
+  const vel = new K.Plaat(64 * kolommen, 32 * rijen);
+  platen.forEach((p, i) => vel.plak(p, (i % kolommen) * 64, Math.floor(i / kolommen) * 32));
   schrijfPng('grond.png', vel);
+  const namen = soorten.map((s) => s.naam).join('/');
   const beschrijving = {
     naam: 'grond', bestand: 'grond.png', breedte: vel.b, hoogte: vel.h,
-    tegelB: 64, tegelH: 32, aantal: items.length, tileoffset: null, objectalignment: false,
-    tiles: items.map((it) => ({ naam: it.naam, vast: it.vast })),
+    tegelB: 64, tegelH: 32, aantal: platen.length, kolommen, tileoffset: null, objectalignment: false,
+    notitie: `Elke grondsoort (${namen}) staat eerst als stempel van ${STEMPEL}×${STEMPEL} tegels (groep "stempel"): sleep dat blok in de tileset in één keer op de kaart en herhaal het, dan valt de herhaling niet meer op. Daarna een paar losse tegels (groep "los", ook water): die mag je er individueel tussen strooien, bijvoorbeeld met Tiled se stempel-op-toeval.`,
+    tiles,
   };
   schrijfTsx(beschrijving);
-  console.log(`grond.png  ${vel.b}×${vel.h}  (${items.length} tegels)`);
+  console.log(`grond.png  ${vel.b}×${vel.h}  (${platen.length} tegels: ${soorten.map((s) => `${s.naam} ${s.stempel.length}+${s.los.length}`).join(', ')}${water ? ', water 1' : ''})`);
   return beschrijving;
 }
 
@@ -297,7 +366,7 @@ for (const v of velden) {
     tileoffset: v.tileoffset,
     objectalignment: v.objectalignment,
     // per lokaal tegel-id (0, 1, 2, …, zoals in de .tsx) dezelfde eigenschappen als daar.
-    tiles: v.tiles.map((t) => ({ naam: t.naam, vast: t.vast, beslaat: t.beslaat || null })),
+    tiles: v.tiles.map((t) => ({ naam: t.naam, vast: t.vast, beslaat: t.beslaat || null, groep: t.groep || null })),
   };
 }
 const json = JSON.stringify(TEGELS_JSON, null, 1);
