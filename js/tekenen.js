@@ -272,15 +272,23 @@
     const wezens = [];
     for (const e of w.wezens) {
       if (!teltMee(S, e)) continue;
-      wezens.push({ d: e.x + e.y, doos: wezenDoos(e) });
+      wezens.push({ x: e.x, y: e.y, d: e.x + e.y, doos: wezenDoos(e) });
     }
     for (const v of voorwerpen) {
       const doos = voorwerpDoos(v);
-      const d = diepteVan(v);
       let bedekt = false;
       if (doos) {
+        // Bedekken kan alleen als dít voorwerp ná het wezen getekend wordt, dus als zijn voettegel
+        // dichter bij de camera ligt (een hogere x+y). Bij een gebouw dat met `beslaat` meer tegels
+        // beslaat (de toren) is de verste hoek (waar `diepteVan` de tekenvolgorde op sorteert) niet
+        // de juiste tegel om een wezen ernaast aan te toetsen: wie vlak voor de zuidrand staat, ligt
+        // al dichter bij de camera dan die hoek, maar staat nog altijd vóór het hele gebouw. Daarom
+        // hier de tegel van de voet die het dichtst bij dít wezen ligt (geklemd binnen `beslaat`).
+        const b = v.beslaat || [1, 1];
         for (const e of wezens) {
-          if (e.d >= d) continue; // die staat ervóór, dus hij verdwijnt er niet achter
+          const dTegel =
+            Math.min(Math.max(e.x, v.x), v.x + b[0] - 1) + Math.min(Math.max(e.y, v.y), v.y + b[1] - 1);
+          if (e.d >= dTegel) continue; // dat wezen staat ervóór, dus verdwijnt er niet achter
           if (raakt(doos, e.doos)) {
             bedekt = true;
             break;

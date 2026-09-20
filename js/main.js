@@ -182,7 +182,22 @@
       x += p.x;
       y += p.y;
     }
-    return { x: x / lijst.length, y: y / lijst.length - 24 };
+    return begrensCamera({ x: x / lijst.length, y: y / lijst.length - 24 });
+  }
+
+  const klem = (v, lo, hi) => (lo > hi ? (lo + hi) / 2 : Math.min(hi, Math.max(lo, v)));
+
+  // Buiten loopt de kaart ergens af, en daarachter staat niets getekend: een harde zwarte rand.
+  // De camera mag daar dus nooit voorbij kijken. Wat de camera laat zien is in beeldpixels een
+  // rechthoek, maar op de kaart (na de ruit-projectie) een scheefgetrokken vlak; in plaats van
+  // die rechthoek zelf te knijpen, rekenen we het middelpunt terug naar een tegelpositie
+  // (T.naarWereld) en houden dáár een marge aan tot de rand — de halve schermmaat, in tegels.
+  function begrensCamera(doel) {
+    const w = S.wereld;
+    if (!w || !w.buiten) return doel;
+    const marge = bw / 2 / S.zoom / (2 * T.HB) + bh / 2 / S.zoom / (2 * T.HH);
+    const f = T.naarWereld(doel.x, doel.y);
+    return T.naarScherm(klem(f.x, marge, w.b - 1 - marge), klem(f.y, marge, w.h - 1 - marge));
   }
 
   function werkBij(dt) {
