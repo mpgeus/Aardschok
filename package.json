@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.cjs",
     "test": "node --test",
-    "pixelart": "node gereedschap/pixelart/export.cjs"
+    "pixelart": "node gereedschap/pixelart/export.cjs",
+    "pixelart:animaties": "node gereedschap/pixelart/animaties-export.cjs"
   }
 }

@@ -466,11 +466,18 @@ function tekenModel(B, model, o = {}) {
     return null;
   }
 
-  // materialen en patronen rekenen in de maten van het oorspronkelijke model
+  // materialen en patronen rekenen in de maten van het oorspronkelijke model. Een deel dat een
+  // houding heeft verplaatst (zie houding.cjs) draagt `terug`, de weg naar zijn rusthouding: dan
+  // beweegt het patroon met het deel mee in plaats van dat het deel erdoorheen schuift.
   const naarModel = model.naarModel || ((x, y, z) => [x, y, z]);
+  const naarDeel = (deel, x, y, z) => {
+    const p = naarModel(x, y, z);
+    const terug = model.delen[deel].terug;
+    return terug ? terug(p[0], p[1], p[2]) : p;
+  };
   const materiaalVan = (deel, x, y, z) => {
     const p = model.delen[deel];
-    return typeof p.m === 'function' ? p.m(...naarModel(x, y, z)) : p.m;
+    return typeof p.m === 'function' ? p.m(...naarDeel(deel, x, y, z)) : p.m;
   };
 
   // eerste ronde: één straal per pixelmidden
@@ -580,7 +587,7 @@ function tekenModel(B, model, o = {}) {
       let vlag = o.omlijn === false ? 0 : VLAG.OMLIJN;
       const kijk = -(nx * vx + ny * vy + nz * vz); // 1 = recht naar de camera
       if (mat.gloei) {
-        stap = mat.gloei(...naarModel(x, y, z), kijk);
+        stap = mat.gloei(...naarDeel(deelI, x, y, z), kijk);
         vlag |= VLAG.GLOEI | VLAG.GLAD;
       } else {
         const nL = nx * lL[0] + ny * lL[1] + nz * lL[2];
@@ -617,7 +624,7 @@ function tekenModel(B, model, o = {}) {
         }
       }
       if (mat.patroon) {
-        const [mx0, my0, mz0] = naarModel(x, y, z);
+        const [mx0, my0, mz0] = naarDeel(deelI, x, y, z);
         const p = mat.patroon(mx0, my0, mz0, nx, ny, nz, stap);
         if (typeof p === 'number') stap += p;
         else if (p) {

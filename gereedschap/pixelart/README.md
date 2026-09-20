@@ -9,7 +9,8 @@ loopanimaties bij. Fallout en Diablo maakten hun poppetjes op dezelfde manier.
 Maten zoals in het spel: een tegel is 64×32, een muur 128 pixels hoog, de tovenaar zo'n 88.
 
 ```bash
-npm run pixelart
+npm run pixelart            # stilstaande beelden naar uit/
+npm run pixelart:animaties  # animaties naar uit/animaties/ (ruim een minuut, alle kernen)
 ```
 
 Dat schrijft alle beelden naar `uit/` (niet in git). Er zijn geen afhankelijkheden, alleen Node.
@@ -26,7 +27,15 @@ Dat schrijft alle beelden naar `uit/` (niet in git). Er zijn geen afhankelijkhed
 - `kamers.cjs`: stenen, vloeren, deuren, ramen, het wandkleed, de hal en de voorraadkamer, en
   het zonlicht door het glas-in-lood.
 - `portret.cjs`: hoofd en schouders voor het gesprek en het leeftijdspaneel.
+- `houding.cjs`: het gereedschap om figuren te laten bewegen. Een figuur bestaat uit botten,
+  groepen delen die samen star bewegen; een houding zet ze per beeld neer. Verder: de loopcyclus
+  van een voet (die op de grond precies met de loopsnelheid meeschuift, dus niet glijdt), de
+  elleboog bij een verplaatste hand, en de grensbol om een figuur in een nieuwe houding.
 - `export.cjs`: alles wegschrijven. `bekijk.cjs`: één figuur vergroot, om details te beoordelen.
+- `animaties-export.cjs`: de animaties. Per figuur en houding een vel (rij per richting, kolom
+  per beeld), een JSON met cel, anker, snelheid en houdingen, en bewegende PNG's om te kijken.
+  Een bouwfunctie krijgt de houding mee: `tovenaar(leeftijd, { houding, fase })`. Zonder houding
+  komt er precies de stilstaande figuur uit; de vellen van `npm run pixelart` blijven gelijk.
 - `apng.cjs`: een reeks beelden als bewegende PNG, om animaties te bekijken.
 
 De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
