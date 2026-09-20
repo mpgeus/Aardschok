@@ -25,6 +25,25 @@ Binnen klopte het al (de hal is 9×7 tegels, ruim 7 bij 5,5 meter). Buiten moet 
 | Kapel | 5×10 tegels | hoge muur, steil dak |
 | Deur | ~1,5 tegel breed | ~2 meter (96 px), net boven de tovenaar |
 
+### De toren moet om zijn eigen hal passen (Marcel, 20 sep 2026)
+
+Marcel bij het eerste rondlopen buiten: "de toren voelt wat ielig aan, drie tovenaars naast
+elkaar is ongeveer de breedte". Nagerekend klopte dat: de romp had een straal van 60 eenheden,
+dus een doorsnede van 120, en met een tegel van 45,25 is dat 2,6 tegels, ruim twee meter.
+
+De hal die erin zit is 9×7 tegels. Het binnenwerk was dus meer dan drie keer zo breed als de
+buitenkant. Daaruit volgt de maat:
+
+| Wat | Maat |
+|---|---|
+| Buitendoorsnede aan de voet | 11 à 12 tegels (ruim 9 meter), straal ongeveer 250 eenheden |
+| Muurdikte | ongeveer een tegel |
+| Verdiepingen | vier van ongeveer drie meter, plus de kegel erop |
+| Hoogte van het beeld | ruim 800 pixels |
+
+Daarmee is de toren het baken van het spel: je ziet hem vanuit het dorp staan, en je kijkt
+ertegenop. Dat maakt doorkijk (hierboven) meteen belangrijker, want zo'n romp bedekt veel.
+
 ## Ideeën van Marcel (19 sep 2026), nog niet uitgewerkt
 
 - **Een startdorp** met huizen en mensen die quests geven. Het dorp is de basis waar je tussen de
