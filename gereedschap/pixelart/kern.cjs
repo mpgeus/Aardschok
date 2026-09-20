@@ -97,6 +97,8 @@ const BASIS = {
   pleister: [['#4a4038', '#6e6256', '#948878', '#b8ae9c', '#d6cebc', '#ece6d6', '#faf6ec'], 7],
   vacht: [['#161416', '#28242a', '#3e383e', '#564e52', '#72686a', '#908484', '#b0a4a0'], 7],
   aarde: [['#1e140e', '#34241a', '#4c3626', '#664a34', '#806044', '#9a7856', '#b4926c'], 7],
+  // olijfgroen voor de huid van de kobold: groen, maar warmer dan gras, zodat hij niet wegvalt
+  olijf: [['#1b1a0e', '#2e2b14', '#45401c', '#5e5624', '#7a6e2e', '#96883c', '#b2a24e'], 7],
 };
 
 const RAMPEN = {};

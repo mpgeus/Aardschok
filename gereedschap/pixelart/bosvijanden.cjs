@@ -1247,7 +1247,7 @@ function kobold(wapen = 'speer', o = {}) {
 // ---------------------------------------------------------------- de kobold in beweging
 
 // de huid van de kobold: later een eigen olijfgroene ramp, nu die van het gras
-const KOBOLD_HUID = 'gras';
+const KOBOLD_HUID = 'olijf';
 // enkels in rust: links staat een stap vooruit
 const KOBOLD_ENKEL = [
   [-4.4, 2.8, 3.2],
