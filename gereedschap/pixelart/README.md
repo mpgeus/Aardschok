@@ -27,6 +27,20 @@ Dat schrijft alle beelden naar `uit/` (niet in git). Er zijn geen afhankelijkhed
   het zonlicht door het glas-in-lood.
 - `portret.cjs`: hoofd en schouders voor het gesprek en het leeftijdspaneel.
 - `export.cjs`: alles wegschrijven. `bekijk.cjs`: één figuur vergroot, om details te beoordelen.
+- `apng.cjs`: een reeks beelden als bewegende PNG, om animaties te bekijken.
+
+De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
+
+- `bomen.cjs`: eik, herfsteik, den, berk, dode boom, treurwilg en appelboom, plus struiken,
+  varens, gras, bloemen, paddenstoelen, stronken en rotsen, en een grasvloer.
+- `dorp.cjs` en `dorp2.cjs`: de grond (gras, zandpad, kasseien, water), de huizen (`huis(o)`
+  bouwt er een uit onderdelen), en de plekken: kapel, kerkhof, watermolen, bakkerij, kruidenhut,
+  jagershut, het huis van de dorpsoudste, het bruggetje en de vijver.
+- `dorpelingen.cjs`, `dorpelingen2.cjs` en `dorpelingen3.cjs`: negentien dorpelingen, van de smid
+  tot de kleuter, plus `dorpeling(zaad)` die uit elk zaad een andere gewone dorpeling maakt.
+- `bosvijanden.cjs`: wolf, reuzenspin en kobold, met houdingen (`bosvijanden-anim.cjs`).
+- `toren.cjs`: de toren van de oude meester in drie staten, met een eigen renderer voor zijn
+  hoogte, en `toren-lagen.cjs` dat hem in lagen snijdt voor het spel.
 
 ## Afspraken
 
