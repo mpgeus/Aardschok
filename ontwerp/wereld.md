@@ -52,15 +52,26 @@ dus een doorsnede van 120, en met een tegel van 45,25 is dat 2,6 tegels, ruim tw
 De hal die erin zit is 9×7 tegels. Het binnenwerk was dus meer dan drie keer zo breed als de
 buitenkant. Daaruit volgt de maat:
 
+Let op: de maat hieronder is daarna teruggeschroefd, zie het besluit eronder.
+
 | Wat | Maat |
 |---|---|
-| Buitendoorsnede aan de voet | 11 à 12 tegels (ruim 9 meter), straal ongeveer 250 eenheden |
+| Buitendoorsnede aan de voet | ~~11 à 12 tegels~~ → **8,7 tegels** (Marcel, 20 sep 2026), straal 163 eenheden |
 | Muurdikte | ongeveer een tegel |
 | Verdiepingen | vier van ongeveer drie meter, plus de kegel erop |
 | Hoogte van het beeld | ruim 800 pixels |
 
 Daarmee is de toren het baken van het spel: je ziet hem vanuit het dorp staan, en je kijkt
 ertegenop. Dat maakt doorkijk (hierboven) meteen belangrijker, want zo'n romp bedekt veel.
+
+**Teruggeschroefd naar 8,7 tegels** (Marcel, 20 sep 2026). Bij twaalf tegels vulde de toren ruim
+vier vijfde van het spelbeeld: een burcht, geen toren. We hebben hem in drie breedtes naast
+elkaar gerenderd (12,3 / 10,2 / 8,7), telkens met de tovenaar en een dorpshuis van 6×8 ernaast,
+en Marcel koos de smalste. Die vult iets meer dan de helft van het beeld, is nauwelijks breder
+dan een dorpshuis, en leest door zijn hoogte en de kegel nog altijd meteen als toren. De
+monumentaliteit zit in de hoogte, niet in de breedte — en dit is je huisbasis, waar je elke dag
+omheen loopt, geen eindbaas. Het gereedschap om zo'n keuze te maken staat in
+`gereedschap/pixelart/toren-maten.cjs`.
 
 ## Ideeën van Marcel (19 sep 2026), nog niet uitgewerkt
 
