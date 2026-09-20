@@ -154,6 +154,17 @@ function neemPlek(soorten) {
 // zodat de grens alleen vlak bij de ribben wordt rechtgetrokken.
 const demp = (t) => (t <= 0 || t >= 1 ? 0 : Math.pow(4 * t * (1 - t), 0.45));
 
+// Weet deze hoekcombinatie de rijrichting van een pad? Alleen als twee NABURIGE hoeken dezelfde
+// soort dragen (boven+rechts tegenover onder+links, of rechts+onder tegenover links+boven) snijdt
+// de grens de tegel als één rechte lijn, en staat de as loodrecht daarop vast. Bij één afwijkende
+// hoek (een bocht) of twee hoeken kruislings (boven+onder tegenover rechts+links, de dubbelzinnige
+// zadelvorm) golft de grens door de tegel en is er geen as te noemen. Dan zetten we geen sporen,
+// net zomin als op een open vlakte (zie de sporen-tak van randKaart hieronder).
+function duidelijkeDoorgang([boven, rechts, onder, links]) {
+  return (boven === rechts && onder === links && boven !== onder)
+    || (rechts === onder && links === boven && rechts !== links);
+}
+
 // hoeken: [boven, rechts, onder, links] van de ruit, 0 = soort a, 1 = soort b. Dat zijn tegelijk
 // de roosterpunten (gx0, gy0), (gx0+1, gy0), (gx0+1, gy0+1) en (gx0, gy0+1).
 function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
@@ -161,6 +172,7 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
   const b = SOORTEN[bNaam];
   const [hBoven, hRechts, hOnder, hLinks] = hoeken.map((h) => (h ? 1 : -1));
   const heeftKassei = aNaam === 'kasseien' || bNaam === 'kasseien';
+  const spoorAs = duidelijkeDoorgang(hoeken);
   // soort() geeft steeds hetzelfde object terug, precies als grondKaart in dorp.cjs: wie er twee
   // achter elkaar aanroept, moet de waarden eerst in eigen variabelen overschrijven.
   const U = { s: D.GRAS, d: 9, dwars: 0, rand: 9, randS: D.GRAS, langs: 0, diep: 0, vijver: null, akker: null };
@@ -175,6 +187,10 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
     const f = bil + demp(u) * demp(v) * ruw;
     // Het veld loopt over een tegel van −1 naar +1, dus een halve eenheid is een kwart tegel.
     const af = Math.min(Math.abs(f) / 2, 0.5);
+    // Voor de sporen willen we dezelfde afstand, maar zónder de ruw-term: die golft de grens
+    // mooi natuurlijk, maar zou een spoor (dat verder van de rand ligt, midden in demp se piek)
+    // in stukken breken. Een wagenwiel houdt een rechte lijn, het gras aan de kant niet.
+    const afSchoon = Math.min(Math.abs(bil) / 2, 0.5);
     const win = f > 0 ? b : a;
     const verlies = f > 0 ? a : b;
     U.dwars = 0;
@@ -191,7 +207,13 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
       U.d = -af;
       U.rand = 0;
       U.randS = D.GRAS;
-      if (win.s === D.WATER) {
+      if (win.s === D.PAD) {
+        // karrensporen: alleen zetten waar de hoekcombinatie de rijrichting kent (spoorAs), anders
+        // op 0 laten staan — dan tekent padPixel gewoon los zand zonder sporen, wat ook klopt bij
+        // een bocht of een open plek. afSchoon (0..0,5 tegel vanaf de rand) wordt zo 0..1 over de
+        // volle breedte die padPixel voor een spoor verwacht.
+        U.dwars = spoorAs ? Math.min(afSchoon * 2, 1) : 0;
+      } else if (win.s === D.WATER) {
         U.d = -Math.min(af, WATER_MAX);
         U.vijver = GEEN_STENEN;
         U.diep = WATER_DIEP;
@@ -219,6 +241,42 @@ const DIKTE = 0.3;
 // rietpol haalt dertien pixels, en díe zie je wel afknappen: vandaar deze grens.
 const HOOG_RIET = 14;
 
+// ---------------------------------------------------------------- modderig water
+//
+// dorp.cjs (waterPixel) tekent water met de gedeelde 'water'-ramp uit kern.cjs: helder
+// korenbloemblauw, met een fonkeling die tot bijna wit oploopt. De rest van de wereld is naar
+// olijf en gedempt gegaan — zie de 'veldsteen'-ramp die dorp.cjs zelf al naast 'steen' bijschreef,
+// om dezelfde reden (die te paars was). We raken dorp.cjs niet aan, dus doen we hetzelfde hier: een
+// eigen ramp, alleen voor dit vel. waterPixel blijft gewoon zijn diepte en rimpels uitrekenen (de
+// 'stap' van donker naar licht); wij zetten na afloop alleen de ramp om.
+if (K.RAMP.modderwater === undefined) {
+  // Modderig, maar het moet wel water blijven: de donkerste stap lag eerst op bijna zwart, en dan
+  // leest een beek als teer. Nu grijsgroen met een bruine inslag, van diep maar leesbaar tot een
+  // gedempte weerschijn van de lucht.
+  const hexen = ['#1f2622', '#2b342c', '#3a4536', '#4a5742', '#5c6a51', '#707e62', '#899677', '#a5b093'];
+  const rgb = hexen.map((h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]);
+  K.RAMPEN.modderwater = hexen;
+  K.RAMP.modderwater = K.RAMP_NAMEN.length;
+  K.RAMP_NAMEN.push('modderwater');
+  K.RAMP_RGB.push(rgb);
+  K.RAMP_LEN.push(hexen.length);
+}
+const MODDERWATER = K.RAMP.modderwater;
+
+// Om elke grondtextuur heen: laat dorp.cjs zijn werk doen, en waar dat de blauwe waterramp
+// neerzette, zet 'm om naar de modderige. De lichtste stap (7) is bij dorp.cjs de fonkeling —
+// bijna wit; die temperen we één stap terug, zodat er nog wel iets fonkelt, maar spaarzaam en
+// gedempt in plaats van wit en fel. Een gouden vonk (af en toe, zie waterPixel) laten we staan.
+function modderig(tex) {
+  return (vlak, X, Y, Z) => {
+    tex(vlak, X, Y, Z);
+    if (UIT.ramp === RAMP.water) {
+      UIT.ramp = MODDERWATER;
+      if (UIT.stap > 6) UIT.stap = 6;
+    }
+  };
+}
+
 function tegelBeeld(gx0, gy0) {
   return new K.Beeld(64, 32, 32 - (gx0 - gy0) * 32, -(gx0 + gy0) * 16);
 }
@@ -226,7 +284,7 @@ function tegelBeeld(gx0, gy0) {
 // dozen: alles wat er op deze tegel staat (de grond zelf hoort er als eerste bij).
 function rasterTegel(kaart, gx0, gy0, o = {}) {
   const B = tegelBeeld(gx0, gy0);
-  K.tekenDozen(B, [K.doos(gx0, gy0, gx0 + 1, gy0 + 1, -DIKTE, 0, o.grondTex || D.grondTex(kaart))]);
+  K.tekenDozen(B, [K.doos(gx0, gy0, gx0 + 1, gy0 + 1, -DIKTE, 0, modderig(o.grondTex || D.grondTex(kaart)))]);
   if (o.dozen) K.tekenDozen(B, o.dozen, 1);
   D.waterDiepte(B, kaart);
   if (o.pollen) {
@@ -287,6 +345,96 @@ function oeverTex(kaart) {
       UIT.ramp = korrel === 0 ? RAMP.aarde : RAMP.zand;
       UIT.stap = korrel === 0 ? 3 : 4 - (korrel === 1 ? 1 : 0);
     }
+  };
+}
+
+// ---------------------------------------------------------------- de kantlaag van het kasseiplein
+//
+// Los tot aan de rand oogt een kasseiplein als gemorst. Een echt plein heeft een kantlaag van
+// grotere, rechtere stenen die het vlak omlijst, en pas daarbinnen de kleine kasseien van
+// kasseiPixel (dorp.cjs). Zelfde recept als kasseiCel/kasseiPixel daar — Voronoi-cellen als kei,
+// een lichte rand linksboven en een donkere rechtsonder, een voeg ertussen — maar grover, met een
+// eigen zaad (anders vallen de twee roosters samen) en zonder de kleur-variatie van de kleine
+// keien: een kantlaag ligt gelijkmatiger.
+const KANT_BREED = 0.4; // tegels vanaf de rand van het plein waar de grotere stenen liggen
+const KAS_KANT = 15.5; // celgrootte van de kantstenen; kasseiPixel se KAS is 8,4
+
+function kantCel(X, Y) {
+  const j0 = Math.floor(Y / (KAS_KANT * 0.87));
+  let d1 = Infinity;
+  let d2 = Infinity;
+  let c1 = null;
+  let c2 = null;
+  for (let j = j0 - 1; j <= j0 + 1; j++) {
+    const off = (j & 1) * 0.5;
+    const i0 = Math.floor(X / KAS_KANT - off);
+    for (let i = i0 - 1; i <= i0 + 1; i++) {
+      const h = hash(i, j, 561);
+      const cx = (i + off + 0.5 + ((h & 255) / 255 - 0.5) * 0.3) * KAS_KANT;
+      const cy = (j + 0.5 + (((h >>> 8) & 255) / 255 - 0.5) * 0.28) * KAS_KANT * 0.87;
+      const d = (X - cx) ** 2 + (Y - cy) ** 2;
+      if (d < d1) {
+        d2 = d1;
+        c2 = c1;
+        d1 = d;
+        c1 = [cx, cy, h];
+      } else if (d < d2) {
+        d2 = d;
+        c2 = [cx, cy, h];
+      }
+    }
+  }
+  const ex = c2[0] - c1[0];
+  const ey = c2[1] - c1[1];
+  const el = Math.hypot(ex, ey);
+  const grens = (d2 - d1) / (2 * el);
+  const nx = ex / el;
+  const ny = ey / el;
+  const opScherm = Math.hypot((nx - ny) * SQ, (nx + ny) * 0.5 * SQ);
+  return { cx: c1[0], cy: c1[1], h: c1[2], voegPx: grens * opScherm };
+}
+
+function kantsteenPixel(X, Y, qx, qy) {
+  const c = kantCel(X, Y);
+  if (c.voegPx < 1.1) {
+    UIT.ramp = RAMP.aarde;
+    UIT.stap = 1;
+    return;
+  }
+  // 'steen' trekt naar paars (zie de veldsteen-ramp hierboven bij oeverTex): voor een nette
+  // kantlaag, "in dezelfde geest" als het gedempte water, gebruiken we diezelfde grijze ramp.
+  UIT.ramp = RAMP.veldsteen;
+  let s = 5;
+  const var_ = (c.h >>> 20) % 7;
+  if (var_ === 0) s -= 1;
+  else if (var_ === 1) s += 1;
+  // bol, zoals kasseiPixel: licht linksboven langs de voeg, donker rechtsonder.
+  const dsx = (X - c.cx - (Y - c.cy)) * SQ;
+  const dsy = (X - c.cx + (Y - c.cy)) * 0.5 * SQ;
+  const r = KAS_KANT * 0.5;
+  const hoog = (-dsx * 0.5 - dsy * 1.5) / r;
+  if (hoog > 0.25 && c.voegPx < 3) s += 1;
+  else if (hoog < -0.2 && c.voegPx < 2.4) s -= 1;
+  if (hash(qx, qy, 563) % 37 === 0) s -= 1;
+  UIT.stap = klem(s, 1, 8);
+}
+
+// Om de grondtextuur heen: binnen KANT_BREED van de rand van het plein (kaart.soort geeft dat via
+// k.d, negatief en aflopend naar 0 aan de rand) de grotere kantsteen, verder naar binnen — waar een
+// grote vlakke tegel het plein vult, staat k.d daar vast op zo'n 0,5 — gewoon kasseiPixel.
+function pleinKantTex(kaart) {
+  const basis = D.grondTex(kaart);
+  return (vlak, X, Y, Z) => {
+    if (vlak === 'z') {
+      const gx = X / TEGEL;
+      const gy = Y / TEGEL;
+      const k = kaart.soort(gx, gy);
+      if (k.s === D.KASSEI && -k.d < KANT_BREED) {
+        kantsteenPixel(X, Y, rasterX(X, Y), rasterY(X, Y));
+        return;
+      }
+    }
+    basis(vlak, X, Y, Z);
   };
 }
 
@@ -532,6 +680,7 @@ function bouw() {
     for (const id of vlakId[paar.a]) set.tegels.push({ id, wangid: wangId([0, 0, 0, 0]) });
     for (const id of vlakId[paar.b]) set.tegels.push({ id, wangid: wangId([1, 1, 1, 1]) });
     const water = paar.a === 'water';
+    const kassei = paar.a === 'kasseien' || paar.b === 'kasseien';
     for (let m = 1; m <= 14; m++) {
       const hoeken = maskerHoeken(m);
       const tel = telBits(m);
@@ -540,7 +689,7 @@ function bouw() {
         const [gx0, gy0] = neemPlek([paar.a, paar.b]);
         const kaart = randKaart(paar.a, paar.b, hoeken, gx0, gy0);
         platen.push(rasterTegel(kaart, gx0, gy0, {
-          grondTex: water ? oeverTex(kaart) : null,
+          grondTex: water ? oeverTex(kaart) : kassei ? pleinKantTex(kaart) : null,
           pollen: paar.b === 'gras' || paar.a === 'gras',
         }));
         set.tegels.push({ id: tiles.length, wangid: wangId(hoeken) });
