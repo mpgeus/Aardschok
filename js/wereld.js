@@ -39,6 +39,9 @@
     kist: { blokkeert: true, zichtDicht: true },
     pilaar: { blokkeert: true, zichtDicht: true },
     trap: { blokkeert: true, zichtDicht: false },
+    // Het gat in de vloer waar de trap van beneden aankomt. Er staat er nog geen in de wereld —
+    // de verdiepingen bestaan nog niet — maar het beeld ligt klaar (gereedschap/pixelart/trap.cjs).
+    trapgat: { blokkeert: true, zichtDicht: false },
     sleutel: { blokkeert: false, zichtDicht: false },
   };
 
@@ -146,7 +149,10 @@
       { soort: 'sleutel', x: 17, y: 2 },
       { soort: 'pilaar', x: 3, y: 11 },
       { soort: 'pilaar', x: 6, y: 11 },
-      { soort: 'trap', x: 8, y: 14 },
+      // De trap beslaat drie bij drie tegels (een spiraal waar een man door past is minstens
+      // twee meter breed), met zijn voorste hoek op deze tegel: zo staat hij precies in de
+      // zuidoosthoek van het trappenhuis. `staat` kiest het beeld; herstellen kan nog niet.
+      { soort: 'trap', x: 8, y: 14, staat: 'hersteld' },
     );
     w.wezens.push(
       maakWezen('held', 3, 5),

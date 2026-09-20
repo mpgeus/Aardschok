@@ -517,6 +517,27 @@
     "laagHoogte": 22,
     "hoogte": 128
    },
+   "trap": {
+    "bestand": "trap.png",
+    "cel": [
+     190,
+     250
+    ],
+    "anker": [
+     95,
+     232
+    ],
+    "tegels": 3,
+    "soorten": [
+     "trap",
+     "trapgat"
+    ],
+    "staten": [
+     "ingestort",
+     "provisorisch",
+     "hersteld"
+    ]
+   },
    "vloeren": {
     "bestand": "vloeren.png",
     "cel": [

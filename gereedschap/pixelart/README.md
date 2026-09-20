@@ -50,6 +50,11 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
 - `bosvijanden.cjs`: wolf, reuzenspin en kobold, met houdingen (`bosvijanden-anim.cjs`).
 - `toren.cjs`: de toren van de oude meester in drie staten, met een eigen renderer voor zijn
   hoogte, en `toren-lagen.cjs` dat hem in lagen snijdt voor het spel.
+- `trap.cjs`: de spiraaltrap, in dezelfde drie staten als de toren (ingestort, provisorisch,
+  hersteld). Twee stukken: de spiraal om een spil die door een gat in het plafond verdwijnt, en
+  het gat in de vloer waar de trap van beneden aankomt. Hij beslaat drie bij drie tegels, want
+  een spiraal waar een man doorheen past is minstens twee meter breed; het anker is de voorste
+  hoek van die negen tegels. `naar-spel.cjs` rendert hetzelfde vel naar `beelden/trap.png`.
 
 ## Afspraken
 

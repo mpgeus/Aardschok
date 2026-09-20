@@ -7,7 +7,7 @@
 // Er zijn twee manieren van tekenen. Staat de pixel art klaar (`beelden/`, zie js/sprites.js),
 // dan komt alles wat de kunst dekt uit de vellen: vloeren, muren, deuren, voorwerpen en
 // wezens. Wat er niet in zit — het raster, het bereik, de richtlijn, de zwevende teksten, de
-// spreukeffecten, de pilaar en de trap — blijft getekend met vlakken. Met
+// spreukeffecten en de pilaar — blijft getekend met vlakken. Met
 // `Toren.debug.vlakken = true` gaat alles terug naar vlakken, om te vergelijken.
 (function (T) {
   'use strict';
@@ -768,7 +768,15 @@
       if (alpha < 1) ctx.globalAlpha = 1;
       return;
     }
-    // De pilaar en de trap staan nog niet in de kunst; die blijven vlakken.
+    // De trap heeft een eigen vel, met een cel per staat (ingestort, provisorisch, hersteld).
+    if (v.soort === 'trap' || v.soort === 'trapgat') {
+      const spiraal = metSprites() && T.sprites.trap && T.sprites.trap(v.soort, v.staat);
+      if (spiraal) {
+        T.sprites.teken(ctx, spiraal, p.x, p.y, helder);
+        return;
+      }
+    }
+    // De pilaar staat nog niet in de kunst; die blijft vlakken.
     const deel = metSprites() && T.sprites.voorwerp(v.soort);
     if (deel) {
       if (v.soort === 'sleutel') {
@@ -824,6 +832,16 @@
       }
       const top = T.naarScherm(v.x - 0.26, v.y - 0.26);
       gloed(ctx, top.x, top.y - 40, 26, 'rgba(255, 214, 120,', 0.35 + Math.sin(S.tijd * 2) * 0.1);
+      return;
+    }
+    if (v.soort === 'trapgat') {
+      // een gat in de vloer: een donkere ruit met een lichte rand eromheen
+      T.ruit(ctx, p.x, p.y, 1.9);
+      ctx.fillStyle = T.rgb(T.kleur('#6f6a62'), helder);
+      ctx.fill();
+      T.ruit(ctx, p.x, p.y, 1.55);
+      ctx.fillStyle = 'rgba(10, 8, 14, 0.92)';
+      ctx.fill();
       return;
     }
     if (v.soort === 'sleutel') {

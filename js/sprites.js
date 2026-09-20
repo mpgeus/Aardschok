@@ -63,7 +63,9 @@
         S.mist.push('beschrijving');
         return false;
       }
-      const lijst = [gegevens.muren.bestand, gegevens.vloeren.bestand, gegevens.voorwerpen.bestand].map((f) => MAP + f);
+      const vellen = [gegevens.muren.bestand, gegevens.vloeren.bestand, gegevens.voorwerpen.bestand];
+      if (gegevens.trap) vellen.push(gegevens.trap.bestand);
+      const lijst = vellen.map((f) => MAP + f);
       for (const f of Object.values(gegevens.figuren)) {
         for (const h of Object.values(f.houdingen)) lijst.push(MAP + 'figuren/' + h.bestand);
       }
@@ -309,6 +311,18 @@
     const i = v.namen.indexOf(naam);
     if (i < 0) return null;
     return stuk(MAP + v.bestand, i * v.cel[0], 0, v.cel[0], v.cel[1], v.anker);
+  };
+
+  // De spiraaltrap: een rij per soort (`trap` omhoog, `trapgat` in de vloer), een kolom per
+  // staat (ingestort, provisorisch, hersteld). Het anker is de tegel waar het voorwerp op staat;
+  // de trap zelf beslaat drie bij drie tegels en reikt vanaf die tegel naar achteren.
+  S.trap = function (soort, staat) {
+    if (!gegevens || !gegevens.trap) return null;
+    const t = gegevens.trap;
+    const r = t.soorten.indexOf(soort);
+    const k = t.staten.indexOf(staat || 'hersteld');
+    if (r < 0 || k < 0) return null;
+    return stuk(MAP + t.bestand, k * t.cel[0], r * t.cel[1], t.cel[0], t.cel[1], t.anker);
   };
 
   // ---------------------------------------------------------------- de houding van een wezen

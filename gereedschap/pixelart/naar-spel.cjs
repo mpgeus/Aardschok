@@ -6,7 +6,7 @@
 // Twee soorten werk:
 //  - kopiëren: de animatievellen van de figuren en hun JSON, de vloeren en de voorwerpen.
 //    Die komen uit `npm run pixelart` en `npm run pixelart:animaties`.
-//  - renderen: de muurstukken. Die van hd-muren.png hebben een strook zandvloer voor zich,
+//  - renderen: de muurstukken en de spiraaltrap. Die van hd-muren.png hebben een strook zandvloer voor zich,
 //    en dat zou over de vloer van het spel heen liggen. Hier komen ze zonder vloer, in beide
 //    richtingen (noord- en westmuur), met een deur open, dicht en op slot, en met een laag
 //    muurtje voor de weggesneden voorrand.
@@ -15,6 +15,7 @@ const fs = require('fs');
 const path = require('path');
 const K = require('./kern.cjs');
 const Kamers = require('./kamers.cjs');
+const Trap = require('./trap.cjs');
 
 const UIT = path.join(__dirname, 'uit');
 const BEELDEN = path.join(__dirname, '..', '..', 'beelden');
@@ -94,6 +95,23 @@ function muren() {
   };
 }
 
+// ---------------------------------------------------------------- de spiraaltrap
+
+// Een rij per soort (de trap omhoog en het gat in de vloer), een kolom per staat. Zie
+// trap.cjs voor de maten: de trap beslaat drie bij drie tegels, met zijn voorste hoek op de
+// tegel waar het voorwerp staat — daar valt ook het anker.
+function trap() {
+  schrijf('trap.png', Trap.vel());
+  return {
+    bestand: 'trap.png',
+    cel: Trap.CEL,
+    anker: Trap.ANKER,
+    tegels: Trap.TEGELS,
+    soorten: Object.keys(Trap.SOORTEN),
+    staten: Trap.STATEN,
+  };
+}
+
 // ---------------------------------------------------------------- kopiëren
 
 function kopieer(vanaf, naar) {
@@ -168,6 +186,7 @@ const beschrijving = {
   tegel: [64, 32],
   figuren: figuren(),
   muren: muren(),
+  trap: trap(),
   vloeren: {
     bestand: 'vloeren.png',
     // Elke cel is een lap van twee bij twee tegels; het anker is het midden van tegel (0, 0).
