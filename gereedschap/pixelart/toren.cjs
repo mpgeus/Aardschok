@@ -685,30 +685,68 @@ function steenStap(st, basis, px, py, o = {}) {
 
 // ---------------------------------------------------------------- de toren: maten
 
-const R0 = 60; // straal van de romp aan de voet
-const R1 = 55; // en boven
-const H_TOP = 360; // bovenkant van de muur (px)
+// Marcel, 20 sep 2026 (ontwerp/wereld.md, "De toren moet om zijn eigen hal passen"): de romp had
+// een straal van 60 eenheden (2,6 tegels) terwijl de hal erbinnen 9×7 tegels is. Nieuwe maat: een
+// buitendoorsnede van 11 à 12 tegels (straal ongeveer 250), muren van ongeveer een tegel dik, en
+// vier verdiepingen boven de plint in plaats van de losse registers van vroeger.
+const R0 = 250; // straal van de romp aan de voet
+const R1 = 228; // en boven (dezelfde taps toelopende verhouding als de smalle romp)
+const R_SOK = 264; // plint
+const H_SOK = 24;
+const H_SOK2 = 32;
+const VLOER_H = 100; // hoogte van één verdieping (px); vier stuks boven de plint
+const H_KRAAG = H_SOK2 + 4 * VLOER_H; // onderkant van de kraagstenen, boven de vierde verdieping
+const H_LIJST = H_KRAAG + 20; // kroonlijst
+const H_TOP = H_LIJST + 24; // bovenkant van de muur (px)
 const Z_TOP = E(H_TOP);
-const R_SOK = 66; // plint
-const H_SOK = 20;
-const H_SOK2 = 27;
-const H_KRAAG = 324; // onderkant van de kraagstenen
-const H_LIJST = 338; // kroonlijst van H_LIJST tot H_TOP
-const BANDEN = [140, 250];
-const H_DAK = 352; // de dakrand
-const RU = 60; // U = hoek × RU: stenen even lang als binnen
+const BANDEN = [H_SOK2 + VLOER_H, H_SOK2 + 2 * VLOER_H, H_SOK2 + 3 * VLOER_H]; // een lijst tussen elke verdieping
+const H_DAK = H_TOP - 10; // de dakrand
+const RU = R0; // U = hoek × RU: even grote stenen als vóór het breder maken van de romp
 const rompStraal = (z) => R0 + ((R1 - R0) * z) / Z_TOP;
 const U_VAN = (graden) => graden * GRAAD * RU;
+// Klimop, scheuren en de bakstenen lap hieronder zijn ooit getekend voor de smalle romp (RU =
+// 60) in U- en H-eenheden. Op de brede romp verschuift RU mee met R0, dus schalen we die oude
+// getallen hiermee mee, zodat ze op dezelfde hoek en dezelfde relatieve hoogte blijven staan.
+const U_SCHAAL = RU / 60;
+const H_SCHAAL = H_TOP / 360;
+const RVERSCHIL = R0 - 60; // hoeveel verder de romp nu naar buiten staat: voor wat er vlak buiten hem staat (puin, steiger, schuur)
 
-// De openingen: phi (graden), H0 onderkant, Hm begin van de boog, hw halve breedte, spits.
+// De openingen: phi (graden), H0 onderkant, Hm begin van de boog, hw halve breedte, spits. Vier
+// verdiepingen, elk een rij ramen (Marcel, 20 sep 2026: "een rij ramen per verdieping, en
+// verspringende hoogtes zodat het geen gestapelde koker wordt"): per verdieping drie andere
+// hoeken en een beetje speling in de hoogte, zodat de ramen niet in een net rooster staan.
+// S.ramen[verdieping] is de staat van die hele rij (dicht, gat, glas of licht); vloer 1 heeft in
+// plaats van een raam een smal schietgat bij de trap.
+const VLOEREN = [
+  { phi: [-8, 96, 128], dH: [4, -6, 9] }, // begane grond: de deur (58°) laat hier ruimte
+  { phi: [20, 64, 110], dH: [-8, 6, -4], spleet: 0 }, // eerste verdieping: een schietgat bij de trap
+  { phi: [-4, 46, 100], dH: [7, -5, 8] },
+  { phi: [14, 58, 106], dH: [-6, 8, -7] }, // vlak onder de kroonlijst
+];
 function openingen(S) {
-  return [
-    { naam: 'deur', phi: 58, H0: H_SOK2, Hm: 104, hw: 16, spits: 0, diep: 12, soort: 'deur' },
-    { naam: 'spleet', phi: 27, H0: 60, Hm: 98, hw: 5, spits: 1.7, diep: 9, soort: S.ramen[0] },
-    { naam: 'raamL', phi: 104, H0: 168, Hm: 210, hw: 9, spits: 1.6, diep: 9, soort: S.ramen[1] },
-    { naam: 'raamR', phi: 14, H0: 176, Hm: 218, hw: 9, spits: 1.6, diep: 9, soort: S.ramen[2] },
-    { naam: 'raamB', phi: 66, H0: 266, Hm: 300, hw: 11, spits: 1.6, diep: 9, soort: S.ramen[3] },
-  ].map((o) => ({
+  const deur = { naam: 'deur', phi: 58, H0: H_SOK2, Hm: 95, hw: 33, spits: 0, diep: 20, soort: 'deur' };
+  const ramen = [];
+  VLOEREN.forEach((vl, vi) => {
+    const midden = H_SOK2 + vi * VLOER_H + VLOER_H * 0.42;
+    vl.phi.forEach((phi, i) => {
+      const smal = vl.spleet === i;
+      const hw = smal ? 5 : 10 + ((i + vi) % 3);
+      const H0 = Math.round(midden + vl.dH[i] - (smal ? 30 : 26));
+      const Hm = H0 + (smal ? 40 : 34 + (i % 2) * 4);
+      ramen.push({
+        naam: `raam${vi}-${i}`,
+        phi,
+        H0,
+        Hm,
+        hw,
+        spits: smal ? 1.8 : 1.5 + ((i + vi) % 3) * 0.15,
+        diep: smal ? 14 : 17,
+        soort: S.ramen[vi],
+        vloer: vi,
+      });
+    });
+  });
+  return [deur, ...ramen].map((o) => ({
     ...o,
     cos: Math.cos(o.phi * GRAAD),
     sin: Math.sin(o.phi * GRAAD),
@@ -725,15 +763,18 @@ function inOpening(o, qx, qy, qz) {
 
 // ---------------------------------------------------------------- de staten
 
-// Klimop: stengels in muurmaten. U = hoek × RU (135°, de linkerrand in beeld, is U = 141).
+// Klimop: stengels in muurmaten. U = hoek × RU (135°, de linkerrand in beeld, is U = RU × 2,36).
+// De getallen hieronder zijn nog die van de smalle romp (RU = 60); schaalKlimop zet ze om naar
+// dezelfde hoek en dezelfde relatieve hoogte op de brede.
+const schaalKlimop = (k) => ({ ...k, U: k.U * U_SCHAAL, A: k.A * U_SCHAAL, drift: k.drift * U_SCHAAL, top: k.top * H_SCHAAL, breed: k.breed * U_SCHAAL });
 const KLIMOP = [
   { U: 96, A: 6, f: 0.045, ph: 0.4, drift: 0.03, top: 196, breed: 22 },
   { U: 121, A: 8, f: 0.038, ph: 2.1, drift: -0.02, top: 292, breed: 27 },
   { U: 142, A: 6, f: 0.05, ph: 1.2, drift: 0, top: 322, breed: 22 },
-];
+].map(schaalKlimop);
 // in de halve staat is de klimop weggehaald waar de steiger staat; alleen achter de rand groeit
 // hij nog, en op de muur blijven kale, dode stengels achter
-const KLIMOP_REST = [{ U: 150, A: 5, f: 0.05, ph: 1.2, drift: 0, top: 240, breed: 16 }];
+const KLIMOP_REST = [{ U: 150, A: 5, f: 0.05, ph: 1.2, drift: 0, top: 240, breed: 16 }].map(schaalKlimop);
 
 const STATEN = {
   krakkemikkig: {
@@ -889,15 +930,17 @@ function bouwToren(S) {
   for (let i = 0; i < 3; i++) {
     const uit = R_SOK + 8 + (2 - i) * 7;
     const breed = deur.hw + 7 - i * 1.5;
+    const c0 = (uit + 40) / 2; // het midden van de trede, langs de deurrichting
+    const halfC = (uit - 40) / 2;
     voeg(romp, {
       f: T.veld((x, y, z) => {
         const a = -x * deur.sin + y * deur.cos;
         const c = x * deur.cos + y * deur.sin;
         // de onderste trede is bij de krakkemikkige toren verzakt: hij helt naar voren
-        const zz = S.schade > 0.5 && i === 0 ? z + (c - 60) * 0.06 : z;
-        return sdf.doos(a, c - (uit + 40) / 2, zz - E(i * 9 + 4.5) + 3, breed, (uit - 40) / 2, E(9) / 2 + 3, 0.6);
+        const zz = S.schade > 0.5 && i === 0 ? z + (c - c0) * 0.06 : z;
+        return sdf.doos(a, c - c0, zz - E(i * 9 + 4.5) + 3, breed, halfC, E(9) / 2 + 3, 0.6);
       }),
-      g: [...T.wereld(deur.cos * 70, deur.sin * 70, E(14)), 38],
+      g: [...T.wereld(deur.cos * c0, deur.sin * c0, E(i * 9 + 4.5)), Math.hypot(halfC, breed, 6) + 4],
       m: 'trede',
       deel: 6,
       trede: i,
@@ -929,8 +972,8 @@ function bouwToren(S) {
 
 // Een kegel met een iets uitlopende rand, op de kroonlijst. Hij kan scheef staan, de punt kan
 // afzakken (buig: verschuiving van de as, kwadratisch met de hoogte) en de rand kan doorzakken.
-const DAK_R = 80;
-const DAK_H = E(232);
+const DAK_R = R1 + 22;
+const DAK_H = E(255);
 const DAK_P = 1.18;
 const dakStraal = (z) => DAK_R * Math.pow(Math.max(0, 1 - z / DAK_H), DAK_P);
 const DAK_S = (() => {
@@ -1396,17 +1439,20 @@ function rompMaten(C, S) {
   return { qx, qy, qz, th, U, H, mU, mH, r: Math.hypot(qx, qy) };
 }
 
-// De bakstenen lap van de oude meester, de scheuren, en de verzakte plekken.
+// De bakstenen lap van de oude meester, de scheuren, en de verzakte plekken. Ook nog in de maten
+// van de smalle romp (RU = 60, muur tot 360 px); schaalPatch/schaalLijn zetten ze om.
+const schaalPatch = (p) => ({ ...p, U: p.U * U_SCHAAL, H: p.H * H_SCHAAL, wU: p.wU * U_SCHAAL, wH: p.wH * H_SCHAAL });
 const BAKSTEEN = [
   { U: 36, H: 152, wU: 22, wH: 25 },
   { U: 100, H: 300, wU: 20, wH: 24 },
-];
+].map(schaalPatch);
+const schaalLijn = (lijn) => lijn.map(([u, h]) => [u * U_SCHAAL, h * H_SCHAAL]);
 const SCHEUREN = [
   [[58, 121], [61, 131], [57, 142], [62, 155], [59, 166], [64, 178], [62, 190]],
   [[-8, 27], [-5, 39], [-10, 51], [-6, 62], [-11, 76], [-8, 88]],
   [[84, 330], [80, 318], [83, 307], [78, 296], [81, 284], [77, 272], [79, 262]],
   [[15, 250], [12, 240], [16, 229]],
-];
+].map(schaalLijn);
 // pixelafstand tot een gebroken lijn in muurmaten; teken > 0 als het punt rechts in beeld ligt
 function lijnAfstand(pnt, U, H, mU, mH) {
   let best = Infinity;
@@ -1435,9 +1481,9 @@ function lijnAfstand(pnt, U, H, mU, mH) {
 // hoeveel verval er op een plek is: meer boven, rond het bovenste raam, en waar de toren heen helt
 function verval(U, H) {
   let v = ruis2(U * 0.05 + 3, H * 0.035, 12) * 0.5;
-  v += glad(240, 330, H) * 0.45;
-  v += Math.max(0, 1 - Math.hypot((U - 70) / 36, (H - 296) / 40)) * 0.6;
-  v += Math.max(0, 1 - Math.hypot((U - 118) / 30, (H - 150) / 60)) * 0.4;
+  v += glad(240 * H_SCHAAL, 330 * H_SCHAAL, H) * 0.45;
+  v += Math.max(0, 1 - Math.hypot((U - 70 * U_SCHAAL) / (36 * U_SCHAAL), (H - 296 * H_SCHAAL) / (40 * H_SCHAAL))) * 0.6;
+  v += Math.max(0, 1 - Math.hypot((U - 118 * U_SCHAAL) / (30 * U_SCHAAL), (H - 150 * H_SCHAAL) / (60 * H_SCHAAL))) * 0.4;
   return v;
 }
 
@@ -1700,12 +1746,12 @@ function kraai(g, p, richting, deel) {
   for (const s of [-1, 1]) voeg(g, { ...stok(w(s * 0.9, 0.4, 0), w(s * 0.9, 0.2, 2.4), 0.35), m: 'snavel', deel });
 }
 function bouwKraaien(W, S) {
-  // één op de vensterbank van het kapotte bovenraam, één op het hakblok
-  const o = S.OPN.find((x) => x.naam === 'raamB');
+  // één op de vensterbank van een raam op de bovenste verdieping, één op het hakblok
+  const o = S.OPN.find((x) => x.naam === 'raam3-1');
   const bank = S.T.wereld(Math.cos((o.phi - 4) * GRAAD) * (o.Rw + 2.2), Math.sin((o.phi - 4) * GRAAD) * (o.Rw + 2.2), E(o.H0));
   kraai(W.groep('kraai-raam'), bank, -45, 190);
   // de tweede zit op het hakblok bij het schuurtje; staat dat er niet, dan zit hij er ook niet
-  if (S.schuur) kraai(W.groep('kraai-blok'), [44 + 30, -12 + 50, E(13.4)], 110, 191);
+  if (S.schuur) kraai(W.groep('kraai-blok'), [SCHUUR_O[0] + 30, SCHUUR_O[1] + 50, E(13.4)], 110, 191);
   W.mat.kraai = { ramp: 'pet', lo: 0.2, hi: 3.6, glans: 1.6, glansMacht: 10, rand: 1.6 };
   W.mat.snavel = { ramp: 'inkt', lo: 0.6, hi: 2.6 };
 }
@@ -1730,12 +1776,14 @@ function blokDeel(c, h, draai, kantel = 0, naar = 0, r = 1) {
 
 function bouwPuin(W, S) {
   const g = W.groep('puin');
-  // gevallen stenen: links onder de scheve kant en voor de toren, een paar voor de treden
+  // gevallen stenen: links onder de scheve kant en voor de toren, een paar voor de treden. De
+  // hoeken zijn nog die van de smalle romp; +RVERSCHIL zet de afstand tot de muur (r) mee naar
+  // buiten, zonder de blokken zelf groter te maken (puin wordt niet groter met de toren mee).
   const plekken = [
     [102, 78], [110, 88], [118, 74], [128, 84], [96, 94], [140, 76], [124, 98],
     [16, 82], [4, 90], [24, 96], [-6, 80],
     [38, 104], [84, 108],
-  ];
+  ].map(([phi, r]) => [phi, r + RVERSCHIL]);
   plekken.forEach(([phi, r], i) => {
     const a = phi * GRAAD;
     const groot = 3.2 + kans(i, 1, 3) * 3.6;
@@ -1748,7 +1796,7 @@ function bouwPuin(W, S) {
     voeg(g, { ...blok, m: 'puin', deel: 50 + i });
   });
   // scherven van dakpannen
-  [[70, 92], [88, 100], [30, 112], [120, 104], [8, 104]].forEach(([phi, r], i) => {
+  [[70, 92], [88, 100], [30, 112], [120, 104], [8, 104]].map(([phi, r]) => [phi, r + RVERSCHIL]).forEach(([phi, r], i) => {
     const a = phi * GRAAD;
     const c = [Math.cos(a) * r, Math.sin(a) * r, 1];
     voeg(g, { ...blokDeel(c, [4.4, 3, 0.9], kans(i, 7, 3) * 180, 8 + kans(i, 8, 3) * 20, kans(i, 9, 3) * 360, 0.4), m: 'scherfPan', deel: 70 + i });
@@ -1775,9 +1823,12 @@ function bouwPuin(W, S) {
 // beeld), een lessenaarsdak dat tegen de toren leunt, en brandhout. In lokale maten: x naar
 // buiten, y langs de muur. Krak: palen scheef, planken weg; heel: gerepareerd met nieuw hout;
 // mooi: netjes, met een dak van pannen.
+// Waar de schuur tegen de romp leunt: net als vroeger (toen 44 tegen R0 = 60) een eind onder de
+// buitenkant van de romp gestoken, zodat er nooit een kier tussen schuur en muur zit.
+const SCHUUR_O = [R0 - 16, -12, 0];
 function bouwSchuur(W, S) {
   const g = W.groep('schuur');
-  const O = [44, -12, 0];
+  const O = SCHUUR_O;
   const Sc = stelsel(O);
   const krak = S.schuur === 'krak';
   const heel = S.schuur === 'heel';
@@ -1934,11 +1985,11 @@ function schuurDakTex(C, Sc) {
 // buitenkant, korte kortelingen die in de muur steken (de gaten ervoor zitten in elke toren),
 // twee planken per vak, leuningen, schoren, touw om de knopen, een ladder, en een takel met een
 // emmer. De eerste laag ligt boven de deurboog, zodat je er onderdoor naar binnen kunt.
-const STEIGER_PHI = [16, 38, 78, 102, 126];
-const STEIGER_R = 84;
-const LAGEN = [152, 254, 352];
+const STEIGER_PHI = [16, 32, 50, 68, 86, 104, 122]; // meer palen, verdeeld over de bredere gevel
+const STEIGER_R = R0 + 24;
+const LAGEN = [201, 336, 465]; // de drie werkvloeren, verdeeld over de nu hogere muur
 function bouwSteiger(W, S) {
-  const top = E(404);
+  const top = E(534);
   const plek = (phi, r, z) => [Math.cos(phi * GRAAD) * r, Math.sin(phi * GRAAD) * r, z];
   let n = 0;
   // elke paal en elk vak een eigen groep: dan hoeft een schaduwstraal alleen de delen in de
@@ -1982,7 +2033,7 @@ function bouwSteiger(W, S) {
   // ladder naar de eerste laag, links van de deur
   g = W.groep('steiger-ladder');
   const lphi = 112;
-  const la = plek(lphi, 112, 0);
+  const la = plek(lphi, STEIGER_R + 28, 0);
   const lb = plek(lphi - 1, STEIGER_R + 3, E(LAGEN[0] + 22));
   const zij = [Math.cos((lphi + 90) * GRAAD) * 5.5, Math.sin((lphi + 90) * GRAAD) * 5.5, 0];
   for (const s of [-1, 1]) paal([la[0] + zij[0] * s, la[1] + zij[1] * s, la[2]], [lb[0] + zij[0] * s, lb[1] + zij[1] * s, lb[2]], 1.1, 'nieuwHout');
@@ -2000,7 +2051,7 @@ function bouwSteiger(W, S) {
   paal([arm1[0], arm1[1], arm1[2] - 2], [emmer[0], emmer[1], emmer[2] + 9], 0.5, 'touw');
   voeg(g, { f: (x, y, z) => Math.max(kegelStomp(x - emmer[0], y - emmer[1], z, emmer[2], emmer[2] + 9, 4, 5), -kegelStomp(x - emmer[0], y - emmer[1], z, emmer[2] + 1.5, emmer[2] + 12, 3, 4)), g: [emmer[0], emmer[1], emmer[2] + 5, 8], m: 'emmer', deel: 133 });
   // een stapel nieuwe pannen op de bovenste laag
-  const ps = plek(90, 72, E(LAGEN[2]) + 7);
+  const ps = plek(90, STEIGER_R - 12, E(LAGEN[2]) + 7);
   voeg(g, { ...blokDeel(ps, [7, 4.5, 3.2], 90, 0, 0, 0.6), m: 'pannenStapel', deel: 134 });
 
   W.mat.paal = { ramp: 'hout', lo: 1.6, hi: 6.8, rand: 1, patroon: (C) => (hash(C.px, 3, 3) % 4 === 0 ? -0.6 : 0) };
@@ -2016,19 +2067,19 @@ function bouwVoorraad(W, S) {
   const g = W.groep('voorraad');
   const plek = (phi, r, z) => [Math.cos(phi * GRAAD) * r, Math.sin(phi * GRAAD) * r, z];
   // een stapel stenen: twee lagen van drie, één bovenop
-  const basis = plek(122, 104, 0);
+  const basis = plek(122, 104 + RVERSCHIL, 0);
   let n = 0;
   for (const [dx, dy, dz] of [[-7, -6, 0], [7, -6, 0], [-7, 6, 0], [7, 6, 0], [0, 0, 1], [-3, 0, 2]]) {
     const c = [basis[0] + dx * 0.7 - dy * 0.7, basis[1] + dx * 0.7 + dy * 0.7, 4.2 + dz * 8.4];
     voeg(g, { ...blokDeel(c, [6.6, 5.6, 4.1], 45 + (kans(n, 1, 8) - 0.5) * 8, 0, 0, 0.7), m: 'nieuweSteen', deel: 140 + n++ });
   }
   // een kuip specie met een troffel
-  const kuip = plek(76, 102, 0);
+  const kuip = plek(76, 102 + RVERSCHIL, 0);
   voeg(g, { f: (x, y, z) => Math.max(sdf.doos(x - kuip[0], y - kuip[1], z - 4, 9, 7, 4, 0.8), -sdf.doos(x - kuip[0], y - kuip[1], z - 8, 7.6, 5.6, 3, 0.5)), g: [kuip[0], kuip[1], 4, 13], m: 'nieuwHout', deel: 150, toon: 0, zaad: 3 });
   voeg(g, { f: (x, y, z) => sdf.doos(x - kuip[0], y - kuip[1], z - 5.4, 7.8, 5.8, 0.6, 0.3), g: [kuip[0], kuip[1], 5.4, 10], m: 'specie', deel: 151 });
   voeg(g, { ...blokDeel([kuip[0] + 2, kuip[1] - 1, 7.2], [3.6, 1.6, 0.35], 30, 12, 0, 0.2), m: 'smeed', deel: 152 });
   // pannen, op hun kant tegen elkaar
-  const pan = plek(18, 104, 0);
+  const pan = plek(18, 104 + RVERSCHIL, 0);
   voeg(g, { ...blokDeel([pan[0], pan[1], 5], [8, 5, 5], 20, 0, 0, 0.6), m: 'pannenStapel', deel: 153 });
   W.mat.nieuweSteen = {
     ramp: 'steen',
@@ -2048,8 +2099,8 @@ function bouwVoorraad(W, S) {
 // Twee lange vaandels aan ijzeren stangen onder de kroonlijst: rood met een gouden rand, een
 // zwaluwstaart onderaan, en de ster van de tovenaar.
 const VAANDELS = [
-  { phi: 92, H1: 318, H0: 226, hw: 9 },
-  { phi: 36, H1: 318, H0: 232, hw: 9 },
+  { phi: 92, H1: 420, H0: 299, hw: 11 },
+  { phi: 36, H1: 420, H0: 307, hw: 11 },
 ];
 function bouwVaandels(W, S) {
   const g = W.groep('vaandels');
@@ -2109,7 +2160,7 @@ function bouwLantaarn(W, S) {
   const g = W.groep('lantaarn');
   const T = S.T;
   const phi = 84;
-  const H = 104;
+  const H = 138;
   const c = Math.cos(phi * GRAAD);
   const s = Math.sin(phi * GRAAD);
   const rw = rompStraal(E(H));
@@ -2159,9 +2210,9 @@ function tegelsteen(X, Y, maat = 15) {
 
 // afstand tot de middellijn van het pad: een boog van voor de treden naar de voorste hoek
 const PAD = (() => {
-  const a = [Math.cos(58 * GRAAD) * 92, Math.sin(58 * GRAAD) * 92];
-  const m = [Math.cos(52 * GRAAD) * 122, Math.sin(52 * GRAAD) * 122];
-  const b = [118, 118];
+  const a = [Math.cos(58 * GRAAD) * (92 + RVERSCHIL), Math.sin(58 * GRAAD) * (92 + RVERSCHIL)];
+  const m = [Math.cos(52 * GRAAD) * (122 + RVERSCHIL), Math.sin(52 * GRAAD) * (122 + RVERSCHIL)];
+  const b = [118 + RVERSCHIL, 118 + RVERSCHIL];
   const punten = [];
   for (let i = 0; i <= 16; i++) {
     const t = i / 16;
@@ -2180,6 +2231,9 @@ function padAfstand(X, Y) {
   return best;
 }
 
+// straal van het grasplaatje, in tegels: dekt de romp (nu 11 à 12 tegels breed) plus de steiger,
+// het puin en de schuur die er nog buiten staan
+const GROND_R = R0 / TEGEL + 1.7;
 function grondTex(S) {
   return (vlak, X, Y, Z, px, py) => {
     if (vlak !== 'z') {
@@ -2189,7 +2243,7 @@ function grondTex(S) {
     const gx = X / TEGEL;
     const gy = Y / TEGEL;
     const rand = Math.max(Math.abs(gx), Math.abs(gy));
-    const rafel = 2.46 + (ruis2(gx * 2.3 + 7, gy * 2.3, 11) - 0.5) * 0.3 + (rnd(px, py, 5) - 0.5) * 0.05;
+    const rafel = GROND_R + (ruis2(gx * 2.3 + 7, gy * 2.3, 11) - 0.5) * 0.3 + (rnd(px, py, 5) - 0.5) * 0.05;
     if (rand > rafel) {
       UIT.weg = true;
       return;
@@ -2203,9 +2257,9 @@ function grondTex(S) {
     const dy = Math.sin(deur);
     const langs = X * dx + Y * dy;
     const dwars = Math.abs(-X * dy + Y * dx);
-    const pad = langs > 60 && dwars < 13 + (ruis2(langs * 0.05, 1, 9) - 0.5) * 10;
+    const pad = langs > R_SOK - 6 && dwars < 13 + (ruis2(langs * 0.05, 1, 9) - 0.5) * 10;
     // een pad van platte stenen van de treden naar de voorste hoek van het veldje (hersteld)
-    if (S.pad && langs > 70 && padAfstand(X, Y) < 26) {
+    if (S.pad && langs > R_SOK + 4 && padAfstand(X, Y) < 26) {
       const t = tegelsteen(X, Y);
       const ml = t.mx * dx + t.my * dy;
       if (ml > 80 && padAfstand(t.mx, t.my) < 14.5) {
@@ -2224,8 +2278,8 @@ function grondTex(S) {
       }
     }
     // rond de voet: aarde (krakkemikkig), vertrapte grond met gruis (half), een bloembed (hersteld)
-    const aarde = (S.pad ? 78 : S.steiger ? 96 : 84) + (ruis2(hoek * 2.5 + 5, 0.5, 3) - 0.5) * (S.pad ? 6 : 26) + (ruis2(gx * 6, gy * 6, 4) - 0.5) * (S.pad ? 2 : 10);
-    if (S.pad && r < aarde && !(langs > 60 && dwars < 22)) {
+    const aarde = (S.pad ? R_SOK + 12 : S.steiger ? R_SOK + 30 : R_SOK + 18) + (ruis2(hoek * 2.5 + 5, 0.5, 3) - 0.5) * (S.pad ? 6 : 26) + (ruis2(gx * 6, gy * 6, 4) - 0.5) * (S.pad ? 2 : 10);
+    if (S.pad && r < aarde && !(langs > R_SOK - 6 && dwars < 22)) {
       UIT.ramp = RAMP.aarde;
       UIT.stap = 2.6 + (ruis2(gx * 7, gy * 7, 6) - 0.5);
       // bloemen: een lichte kop met een donkere stip eronder
@@ -2281,9 +2335,9 @@ function grondSchaduw(B, R) {
 
 // ---------------------------------------------------------------- alles samen
 
-const BREED = 384;
-const HOOG = 768;
-const ANKER = [192, 676];
+const BREED = 980;
+const HOOG = 1060;
+const ANKER = [490, 790];
 // licht van de lucht: bovenvlakken iets lichter
 const BUITEN = (B) => (X, Y, Z, px, py, i) => 0.05 + 0.25 * B.nrm[i * 3 + 2];
 
@@ -2356,7 +2410,8 @@ const LAAG_VAN = (naam) =>
 function toren(naam = 'krakkemikkig', o = {}) {
   const S = { ...STATEN[naam] };
   const B = new K.Beeld(o.b || BREED, o.h || HOOG, ...(o.anker || ANKER));
-  K.tekenDozen(B, [K.doos(-2.7, -2.7, 2.7, 2.7, -3, 0, grondTex(S))]);
+  const g = GROND_R + 0.3;
+  K.tekenDozen(B, [K.doos(-g, -g, g, g, -3, 0, grondTex(S))]);
   const tijd = Date.now();
   const { R } = tekenToren(B, naam, o);
   if (o.log) console.log(`  toren ${naam}: ${Date.now() - tijd} ms`);
@@ -2385,8 +2440,9 @@ function toren(naam = 'krakkemikkig', o = {}) {
     if (laag === 'grond') continue;
     const lijst = R.groepen.filter((g) => LAAG_VAN(g.naam) === laag);
     const v = [Infinity, Infinity, -Infinity, -Infinity];
-    for (let Y = -140; Y <= 140; Y += 1.5) {
-      for (let X = -140; X <= 140; X += 1.5) {
+    const REIK = R0 + 90; // ruim voorbij de steiger en het puin buiten de romp
+    for (let Y = -REIK; Y <= REIK; Y += 1.5) {
+      for (let X = -REIK; X <= REIK; X += 1.5) {
         if (veld(lijst, lijst.length, X, Y, 2) > 0) continue;
         v[0] = Math.min(v[0], X / TEGEL);
         v[1] = Math.min(v[1], Y / TEGEL);
