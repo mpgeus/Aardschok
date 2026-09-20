@@ -702,9 +702,13 @@ function steenKleur(st) {
 // een straal van 60 eenheden (2,6 tegels) terwijl de hal erbinnen 9×7 tegels is. Nieuwe maat: een
 // buitendoorsnede van 11 à 12 tegels (straal ongeveer 250), muren van ongeveer een tegel dik, en
 // vier verdiepingen boven de plint in plaats van de losse registers van vroeger.
-const R0 = 250; // straal van de romp aan de voet
-const R1 = 228; // en boven (dezelfde taps toelopende verhouding als de smalle romp)
-const R_SOK = 264; // plint
+// Marcel, 20 sep 2026 (ontwerp/wereld.md, "Buiten leest, binnen speelt"): die hal-redenering ging
+// van de verkeerde kant uit. Ingezoomd toont het spel maar zo'n vijftien bij zeventien tegels, en
+// een toren van twaalf tegels vulde dat bijna helemaal. Van drie breedtes naast elkaar (zie
+// gereedschap/pixelart/toren-maten.cjs) koos hij de smalste: ongeveer 8,7 tegels, straal 163.
+const R0 = 163; // straal van de romp aan de voet
+const R1 = 149; // en boven (dezelfde taps toelopende verhouding als de smalle romp)
+const R_SOK = 172; // plint
 const H_SOK = 24;
 const H_SOK2 = 32;
 const VLOER_H = 100; // hoogte van één verdieping (px); vier stuks boven de plint
@@ -1766,7 +1770,7 @@ function bouwKraaien(W, S) {
   const bank = S.T.wereld(Math.cos((o.phi - 4) * GRAAD) * (o.Rw + 2.2), Math.sin((o.phi - 4) * GRAAD) * (o.Rw + 2.2), E(o.H0));
   kraai(W.groep('kraai-raam'), bank, -45, 190);
   // de tweede zit op het hakblok bij het schuurtje; staat dat er niet, dan zit hij er ook niet
-  if (S.schuur) kraai(W.groep('kraai-blok'), [SCHUUR_O[0] + 30, SCHUUR_O[1] + 50, E(13.4)], 110, 191);
+  if (S.schuur) kraai(W.groep('kraai-blok'), [SCHUUR_O[0] + 30 * SCHUUR_SCHAAL, SCHUUR_O[1] + 50 * SCHUUR_SCHAAL, E(13.4)], 110, 191);
   W.mat.kraai = { ramp: 'pet', lo: 0.2, hi: 3.6, glans: 1.6, glansMacht: 10, rand: 1.6 };
   W.mat.snavel = { ramp: 'inkt', lo: 0.6, hi: 2.6 };
 }
@@ -1841,6 +1845,11 @@ function bouwPuin(W, S) {
 // Waar de schuur tegen de romp leunt: net als vroeger (toen 44 tegen R0 = 60) een eind onder de
 // buitenkant van de romp gestoken, zodat er nooit een kier tussen schuur en muur zit.
 const SCHUUR_O = [R0 - 16, -12, 0];
+// De schuur zelf is getekend voor de romp van 20 sep 2026 (R0 = 250), niet voor RU = 60 zoals
+// klimop en scheuren: zijn grondvlak (x en y; de hoogte niet, die hangt niet van R0 af, zie
+// H_SCHAAL hierboven) schaalt dus mee met de verhouding tot díe 250, niet met U_SCHAAL zelf. Bij
+// R0 = 250 is dit 1, dus verandert er niets aan de toren zoals hij tot nu toe was.
+const SCHUUR_SCHAAL = R0 / 250;
 function bouwSchuur(W, S) {
   const g = W.groep('schuur');
   const O = SCHUUR_O;
@@ -1856,7 +1865,7 @@ function bouwSchuur(W, S) {
   const dakZ = (x) => ZH + ((ZL - ZH) * (x + 4)) / 78;
   const scheef = krak ? 7 : 0; // de buitenkant helt naar +y
   const zakt = krak ? 5 : 0;
-  const W_ = (p) => Sc.wereld(...p);
+  const W_ = (p) => Sc.wereld(p[0] * SCHUUR_SCHAAL, p[1] * SCHUUR_SCHAAL, p[2]);
   // wat buiten het schuurtje op het erf ligt, is een eigen groep (een eigen laag in het spel)
   const erf = W.groep('erf');
   let n = 0;
@@ -1877,9 +1886,9 @@ function bouwSchuur(W, S) {
   if (mooi) {
     voeg(g, {
       f: Sc.veld((x, y, z) => {
-        const t = (x + 4) / 78;
+        const t = (x + 4 * SCHUUR_SCHAAL) / (78 * SCHUUR_SCHAAL);
         const zr = ZH + (ZL - ZH) * t;
-        const d = sdf.doos(x - 35, y - (Y0 + Y1) / 2, z - zr - 1.5, 39, (Y1 - Y0) / 2 + 5, 2.4, 0.4);
+        const d = sdf.doos(x - 35 * SCHUUR_SCHAAL, y - ((Y0 + Y1) / 2) * SCHUUR_SCHAAL, z - zr - 1.5, 39 * SCHUUR_SCHAAL, ((Y1 - Y0) / 2 + 5) * SCHUUR_SCHAAL, 2.4, 0.4);
         return d * 0.95;
       }),
       g: [...W_([35, (Y0 + Y1) / 2, (ZH + ZL) / 2]), 60],
@@ -1894,7 +1903,7 @@ function bouwSchuur(W, S) {
       const glij = krak && i === 6 ? 7 : 0;
       const zij = krak ? scheef * 0.9 : 0;
       const dz = krak ? (kans(i, 3, 9) - 0.5) * 2.4 : 0;
-      const hb = (Y1 - Y0 + 6) / nPlank / 2 - 0.2;
+      const hb = ((Y1 - Y0 + 6) / nPlank / 2 - 0.2) * SCHUUR_SCHAAL;
       const eind = 74 + glij - (krak ? kans(i, 4, 9) * 6 : 0);
       hout([-4, y, ZH + 1.4], [eind, y + zij + (krak && i === 6 ? 3 : 0), ZL - zakt + 1.4 + dz - glij * 0.5], hb, 0.9, [0.5, 0, 1], oudOfNieuw(i), { naad: hb });
     }
@@ -1907,7 +1916,7 @@ function bouwSchuur(W, S) {
     const top = dakZ(XB + 1) - 3 - zakt * (y > 0 ? 1 : 0.5);
     const kort = krak && i === 4 ? top * 0.55 : top;
     const kantel = krak && i === 6 ? 3 : 0;
-    const hb = (Y1 - Y0) / nWand / 2 - 0.15;
+    const hb = ((Y1 - Y0) / nWand / 2 - 0.15) * SCHUUR_SCHAAL;
     hout([XB + 1.5, y + kantel, 0], [XB + 1.5, y, kort], hb, 0.8, [1, 0, 0], oudOfNieuw(i + 20), { naad: hb });
   }
   // brandhout, met de kopse kanten naar voren (+y)
@@ -1927,12 +1936,13 @@ function bouwSchuur(W, S) {
   blokken.forEach(([x, z, laag], i) => {
     const y0 = laag < 0 ? 34 + i * 2 : Y0 + 6;
     const y1 = laag < 0 ? y0 + 30 : Y1 - 8 + (kans(i, 1, 4) - 0.5) * 6;
+    const halfLengte = ((y1 - y0) / 2) * SCHUUR_SCHAAL; // het stapeltje wordt korter mee, de blokken niet dunner
     const r = 3.3 + kans(i, 2, 4) * 0.8;
     const hoek = laag < 0 ? (laag === -1 ? 20 : -35) : 0;
     const BB = stelsel(W_([x, (y0 + y1) / 2, z]), draaiZ(hoek));
     voeg(laag < 0 ? erf : g, {
-      f: BB.veld((lx, ly, lz) => sdf.cilinder(lx, lz, ly, r, -(y1 - y0) / 2, (y1 - y0) / 2)),
-      g: [...W_([x, (y0 + y1) / 2, z]), (y1 - y0) / 2 + r + 1],
+      f: BB.veld((lx, ly, lz) => sdf.cilinder(lx, lz, ly, r, -halfLengte, halfLengte)),
+      g: [...W_([x, (y0 + y1) / 2, z]), halfLengte + r + 1],
       m: 'blok',
       deel: 90 + (i % 9),
       blok: { lok: BB.lok, r },

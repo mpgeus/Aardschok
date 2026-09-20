@@ -1007,35 +1007,35 @@
    "toren": {
     "tsx": "tegels/toren.tsx",
     "bestand": "tegels/toren.png",
-    "breedte": 555,
-    "hoogte": 919,
-    "tegelB": 555,
-    "tegelH": 919,
+    "breedte": 379,
+    "hoogte": 871,
+    "tegelB": 379,
+    "tegelH": 871,
     "kolommen": 1,
     "tileoffset": [
-     -12,
-     349
+     -16,
+     237
     ],
     "objectalignment": true,
     "anker": [
-     290,
-     570
+     206,
+     634
     ],
     "tiles": [
      {
       "naam": "toren",
       "vast": true,
       "beslaat": [
-       13,
-       13
+       9,
+       9
       ],
       "groep": null,
-      "staat": "-6,-6",
+      "staat": "-4,-4",
       "doos": [
-       290,
-       570,
-       265,
-       349
+       206,
+       634,
+       173,
+       237
       ]
      }
     ]

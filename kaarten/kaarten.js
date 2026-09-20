@@ -3542,10 +3542,10 @@
         "rotation": 0,
         "name": "toren",
         "gid": 91,
-        "x": 800,
-        "y": 672,
-        "width": 555,
-        "height": 919,
+        "x": 864,
+        "y": 736,
+        "width": 379,
+        "height": 871,
         "properties": []
        },
        {
@@ -3554,8 +3554,8 @@
         "rotation": 0,
         "name": "schuurtje",
         "gid": 92,
-        "x": 1248,
-        "y": 672,
+        "x": 1184,
+        "y": 704,
         "width": 460,
         "height": 285,
         "properties": []
@@ -3566,8 +3566,8 @@
         "rotation": 0,
         "name": "put",
         "gid": 93,
-        "x": 1184,
-        "y": 1120,
+        "x": 1120,
+        "y": 1056,
         "width": 460,
         "height": 285,
         "properties": []
@@ -3578,7 +3578,7 @@
         "rotation": 0,
         "name": "houtstapel",
         "gid": 94,
-        "x": 1248,
+        "x": 1184,
         "y": 864,
         "width": 460,
         "height": 285,
@@ -3590,8 +3590,8 @@
         "rotation": 0,
         "name": "waslijn",
         "gid": 95,
-        "x": 736,
-        "y": 1056,
+        "x": 768,
+        "y": 1024,
         "width": 460,
         "height": 285,
         "properties": []
@@ -3602,7 +3602,7 @@
         "rotation": 0,
         "name": "moestuin",
         "gid": 96,
-        "x": 608,
+        "x": 672,
         "y": 800,
         "width": 460,
         "height": 285,
@@ -3614,7 +3614,7 @@
         "rotation": 0,
         "name": "bank",
         "gid": 97,
-        "x": 1312,
+        "x": 1248,
         "y": 864,
         "width": 460,
         "height": 285,
@@ -3626,8 +3626,8 @@
         "rotation": 0,
         "name": "lantaarn",
         "gid": 98,
-        "x": 736,
-        "y": 1024,
+        "x": 800,
+        "y": 992,
         "width": 460,
         "height": 285,
         "properties": []
@@ -9085,8 +9085,8 @@
         "rotation": 0,
         "name": "deur van de toren",
         "point": true,
-        "x": 1120,
-        "y": 1088,
+        "x": 1088,
+        "y": 1024,
         "width": 0,
         "height": 0,
         "properties": [
@@ -9098,7 +9098,7 @@
          {
           "name": "komt",
           "type": "string",
-          "value": "35,35"
+          "value": "34,33"
          }
         ]
        }
