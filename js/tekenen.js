@@ -53,6 +53,12 @@
       if (!T.isZichtbaar(w, e.tx, e.ty)) continue;
       lijst.push({ d: e.x + e.y, l: 2, f: () => tekenWezen(ctx, S, e) });
     }
+    // Dwaallichten zweven: ze horen in dezelfde rij van voor naar achter, anders schijnen ze
+    // dwars door een muur die ervoor staat.
+    for (const l of S.lichten) {
+      if (!T.isZichtbaar(w, l.x, l.y)) continue;
+      lijst.push({ d: l.x + l.y + 0.02, l: 3, f: () => tekenLicht(ctx, S, l, 1) });
+    }
     lijst.sort((a, b) => a.d - b.d || a.l - b.l);
     for (const item of lijst) item.f();
 
@@ -122,14 +128,35 @@
     const licht = 'rgba(250, 240, 210, 0.9)';
     const rood = 'rgba(224, 96, 79, 0.9)';
 
-    // Bereik: waar de held deze beurt nog kan komen.
-    if (S.bereik && S.modus === 'gevecht' && !S.bezig && S.actie !== 'vuurschicht') {
+    // Bereik: waar de held deze beurt nog kan komen. Met een spreuk in de hand loop je niet,
+    // dan licht het bereik van de spreuk op.
+    if (S.bereik && S.modus === 'gevecht' && !S.bezig && !S.spreuk) {
       ctx.fillStyle = 'rgba(111, 160, 230, 0.17)';
       for (const k of S.bereik.keys()) {
         const [x, y] = k.split(',').map(Number);
         const p = T.naarScherm(x, y);
         T.ruit(ctx, p.x, p.y, 0.86);
         ctx.fill();
+      }
+    }
+
+    // Waar de gekozen spreuk bij kan, in zijn eigen kleur; open deuren binnen bereik van een
+    // windstoot krijgen een randje.
+    const sb = S.spreukBereik;
+    if (sb) {
+      const kleur = T.kleur(sb.kleur);
+      ctx.fillStyle = T.rgb(kleur, 1, 0.12);
+      for (const t of sb.tegels) {
+        const p = T.naarScherm(t.x, t.y);
+        T.ruit(ctx, p.x, p.y, 0.86);
+        ctx.fill();
+      }
+      ctx.strokeStyle = T.rgb(kleur, 1, 0.75);
+      ctx.lineWidth = 1.5;
+      for (const d of sb.deuren) {
+        const p = T.naarScherm(d.x, d.y);
+        T.ruit(ctx, p.x, p.y, 0.88);
+        ctx.stroke();
       }
     }
 
@@ -151,19 +178,63 @@
       ctx.stroke();
     }
 
-    // De lijn van een vuurschicht, over de vloer naar het doel.
+    // De lijn van een spreuk, over de vloer naar het doel. Gaat de schicht door het eerste doel
+    // heen (Legendarisch), dan loopt de lijn door naar het tweede.
     if (h && h.lijn) {
-      const a = T.naarScherm(S.held.x, S.held.y);
-      const b = T.naarScherm(h.lijn.x, h.lijn.y);
+      const punten = [T.naarScherm(S.held.x, S.held.y), T.naarScherm(h.lijn.x, h.lijn.y)];
+      if (h.tweede) punten.push(T.naarScherm(h.tweede.x, h.tweede.y));
       ctx.save();
       ctx.setLineDash([6, 6]);
-      ctx.strokeStyle = h.kan === false ? rood : 'rgba(255, 170, 80, 0.95)';
+      ctx.strokeStyle = h.kan === false ? rood : T.rgb(T.kleur(h.kleur || '#ffaa50'), 1, 0.95);
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(a.x, a.y);
-      ctx.lineTo(b.x, b.y);
+      ctx.moveTo(punten[0].x, punten[0].y);
+      for (const p of punten.slice(1)) ctx.lineTo(p.x, p.y);
       ctx.stroke();
       ctx.restore();
+      if (h.tweede) {
+        const p = punten[2];
+        ctx.strokeStyle = rood;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(p.x, p.y, 20, 10, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    // Waar een windstoot de wezens heen blaast: stippen over het pad en een ruit waar ze
+    // terechtkomen.
+    if (h && h.duw) {
+      ctx.fillStyle = 'rgba(225, 240, 255, 0.85)';
+      ctx.strokeStyle = 'rgba(225, 240, 255, 0.85)';
+      ctx.lineWidth = 2;
+      for (const d of h.duw) {
+        for (const t of d.pad) {
+          const p = T.naarScherm(t.x, t.y);
+          ctx.beginPath();
+          ctx.ellipse(p.x, p.y, 3.5, 2, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        if (!d.pad.length) continue;
+        const eind = d.pad[d.pad.length - 1];
+        const p = T.naarScherm(eind.x, eind.y);
+        T.ruit(ctx, p.x, p.y, 0.82);
+        ctx.stroke();
+      }
+    }
+
+    // Een dwaallicht dat er nog niet is: het bolletje als voorproefje, en een ring om ieder die
+    // erop af zou komen.
+    if (h && h.licht) {
+      tekenLicht(ctx, S, { x: h.licht.x, y: h.licht.y, van: null, begin: 0, vlucht: 0, tot: Infinity, nablijven: 0 }, 0.5);
+      ctx.strokeStyle = 'rgba(150, 220, 255, 0.85)';
+      ctx.lineWidth = 2;
+      for (const m of h.gelokt || []) {
+        const p = T.naarScherm(m.x, m.y);
+        ctx.beginPath();
+        ctx.ellipse(p.x, p.y, 19, 9.5, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
     }
 
     // Wat er onder de muis ligt.
@@ -453,6 +524,44 @@
     },
   };
 
+  // Een dwaallicht: een bolletje dat zacht op en neer deint, met vonkjes eromheen en een
+  // schijnsel op de vloer. Onderweg van de staf naar zijn plek maakt het een boogje. dekking
+  // onder 1: het voorproefje onder de muis.
+  function tekenLicht(ctx, S, l, dekking) {
+    const vliegt = l.van && l.vlucht ? Math.min(1, (S.tijd - l.begin) / l.vlucht) : 1;
+    const x = l.van ? l.van.x + (l.x - l.van.x) * vliegt : l.x;
+    const y = l.van ? l.van.y + (l.y - l.van.y) * vliegt : l.y;
+    const p = T.naarScherm(x, y);
+    const deining = Math.sin(S.tijd * 2.4 + l.begin * 3) * 3;
+    const hoog = 30 + deining + (1 - vliegt) * 16 + Math.sin(vliegt * Math.PI) * 14;
+    // Het dooft in de laatste seconde uit, zodat je ziet aankomen dat je tijd op is.
+    const rest = l.tot === Infinity ? 9 : l.tot - S.tijd;
+    const a = Math.max(0, Math.min(1, Math.min(rest, (S.tijd - l.begin) * 6, 1))) * dekking;
+    if (a <= 0) return;
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.scale(1, 0.5);
+    gloed(ctx, 0, 0, 40, 'rgba(150, 215, 255,', 0.3 * a);
+    ctx.restore();
+    gloed(ctx, p.x, p.y - hoog, 17, 'rgba(165, 225, 255,', 0.8 * a);
+    rondje(ctx, p.x, p.y - hoog, 3.4, `rgba(240, 250, 255, ${a})`);
+    for (let i = 0; i < 3; i++) {
+      const hoek = S.tijd * 2.2 + i * 2.09;
+      rondje(ctx, p.x + Math.cos(hoek) * 10, p.y - hoog - 2 + Math.sin(hoek) * 4, 1.3, `rgba(200, 240, 255, ${0.75 * a})`);
+    }
+  }
+
+  // Brandt het na van een vuurschicht: vlammetjes die flakkeren tot zijn volgende beurt.
+  function tekenVlammen(ctx, S, cx, cy, top) {
+    for (let i = 0; i < 3; i++) {
+      const fl = (Math.sin(S.tijd * 11 + i * 2.3) + 1) / 2;
+      const x = cx + (i - 1) * 7;
+      const y = (cy + top) / 2 + 4 - fl * 5 - (i === 1 ? 6 : 0);
+      gloed(ctx, x, y, 8 + fl * 3, 'rgba(255, 140, 50,', 0.5);
+      rondje(ctx, x, y, 1.8 + fl, '#ffd27a');
+    }
+  }
+
   function tekenWezen(ctx, S, e) {
     const p = T.naarScherm(e.x, e.y);
     let cx = p.x;
@@ -473,8 +582,10 @@
     ctx.ellipse(p.x, p.y, 14, 7, 0, 0, Math.PI * 2);
     ctx.fill();
     const bob = Math.sin(S.tijd * 2.6 + e.fase) * 1.3;
-    const huppel = e.onderweg ? Math.abs(Math.sin(S.tijd * 14)) * 2.5 : 0;
+    // Wie geduwd wordt, schuift weg: geen huppelpas.
+    const huppel = e.onderweg && !e.geduwd ? Math.abs(Math.sin(S.tijd * 14)) * 2.5 : 0;
     const top = TEKENAARS[e.soort](ctx, cx, cy - huppel, bob, e, S);
+    if (e.brandt > 0 && !e.dood) tekenVlammen(ctx, S, cx, cy - huppel, top);
     if (e.flits > 0) {
       ctx.fillStyle = `rgba(255, 70, 50, ${Math.min(0.55, e.flits * 2)})`;
       ctx.beginPath();
@@ -483,16 +594,19 @@
     }
     ctx.restore();
     if (!e.dood && e.kant === 'monster' && (S.gevecht || e.leven < e.maxLeven)) levensbalk(ctx, cx, top - 9, e);
-    if (e.alarm > 0) {
-      const sprong = Math.abs(Math.sin(e.alarm * 9)) * 4;
-      ctx.font = 'bold 24px Georgia, serif';
-      ctx.textAlign = 'center';
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = 'rgba(0,0,0,0.8)';
-      ctx.strokeText('!', cx, top - 14 - sprong);
-      ctx.fillStyle = '#ffd24a';
-      ctx.fillText('!', cx, top - 14 - sprong);
-    }
+    if (e.alarm > 0) roep(ctx, '!', cx, top - 14 - Math.abs(Math.sin(e.alarm * 9)) * 4, '#ffd24a');
+    // Een vraagteken: dit monster heeft iets gezien wat de held niet is.
+    else if (e.vraag > 0) roep(ctx, '?', cx, top - 14 - Math.abs(Math.sin(e.vraag * 7)) * 3, '#bfe6ff');
+  }
+
+  function roep(ctx, teken, cx, y, kleur) {
+    ctx.font = 'bold 24px Georgia, serif';
+    ctx.textAlign = 'center';
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+    ctx.strokeText(teken, cx, y);
+    ctx.fillStyle = kleur;
+    ctx.fillText(teken, cx, y);
   }
 
   function levensbalk(ctx, cx, y, e) {
@@ -507,6 +621,7 @@
   function tekenEffecten(ctx, S) {
     for (const fx of S.effecten) {
       const f = fx.t / fx.duur;
+      if (fx.t < 0) continue; // een tekst die nog even wacht
       if (fx.soort === 'tekst') {
         const p = T.naarScherm(fx.x, fx.y);
         const y = p.y - 64 - f * 30;
@@ -537,6 +652,33 @@
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.ellipse(p.x, p.y - 20, 8 + f * 26, 4 + f * 13, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      } else if (fx.soort === 'wind') {
+        // Drie lichte strepen die naast elkaar naar het doel waaien.
+        const a = T.naarScherm(fx.van.x, fx.van.y);
+        const b = T.naarScherm(fx.naar.x, fx.naar.y);
+        const lang = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+        const dx = -(b.y - a.y) / lang;
+        const dy = (b.x - a.x) / lang;
+        for (let i = 0; i < 3; i++) {
+          const kop = Math.min(1, f * 1.25 - i * 0.08);
+          if (kop <= 0) continue;
+          const staart = Math.max(0, kop - 0.4);
+          const zij = (i - 1) * 8;
+          const z = 20 + i * 6;
+          ctx.strokeStyle = `rgba(228, 242, 255, ${0.65 - i * 0.16})`;
+          ctx.lineWidth = 2.5 - i * 0.6;
+          ctx.beginPath();
+          ctx.moveTo(a.x + (b.x - a.x) * staart + dx * zij, a.y + (b.y - a.y) * staart + dy * zij - z);
+          ctx.lineTo(a.x + (b.x - a.x) * kop + dx * zij, a.y + (b.y - a.y) * kop + dy * zij - z);
+          ctx.stroke();
+        }
+      } else if (fx.soort === 'vlaag') {
+        const p = T.naarScherm(fx.x, fx.y);
+        ctx.strokeStyle = `rgba(228, 242, 255, ${0.8 * (1 - f)})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(p.x, p.y - 16, 10 + f * 24, 5 + f * 12, 0, 0, Math.PI * 2);
         ctx.stroke();
       }
     }

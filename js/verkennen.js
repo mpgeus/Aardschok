@@ -47,6 +47,8 @@
   // Wat gebeurt er als je hierop klikt? Geeft { tekst, doe, fout } terug, of null.
   // De tekst komt bij de muis te staan; het scherm en de klik stellen dus dezelfde vraag.
   T.handelingVerkennen = function (S, doel) {
+    // Met een spreuk in de hand richt elke klik die spreuk (zie toveren.js).
+    if (S.spreuk) return T.handelingSpreuk(S, doel);
     if (!doel) return null;
     const w = S.wereld;
     if (doel.wezen) {
@@ -87,11 +89,12 @@
     T.ui.bericht('De sleutel past. De zware deur zwaait open.', 'goed');
   }
 
-  // Monsters die dwalen, zetten af en toe een stap binnen hun eigen kamer.
+  // Monsters die dwalen, zetten af en toe een stap binnen hun eigen kamer. Wie op een
+  // dwaallicht afgaat, dwaalt zolang niet: dat monster heeft iets beters te doen (toveren.js).
   T.laatDwalen = function (S, dt) {
     const w = S.wereld;
     for (const m of w.wezens) {
-      if (m.dood || !m.dwaalt || m.pad.length) continue;
+      if (m.dood || !m.dwaalt || m.pad.length || m.gelokt) continue;
       m.dwaalTijd -= dt;
       if (m.dwaalTijd > 0) continue;
       m.dwaalTijd = 1.5 + Math.random() * 2.5;

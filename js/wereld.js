@@ -41,12 +41,14 @@
     sleutel: { blokkeert: false, zichtDicht: false },
   };
 
-  // ap: actiepunten per beurt. snelheid: tegels per seconde tijdens het rondlopen.
+  // ap: actiepunten per beurt. snelheid: tegels per seconde tijdens het rondlopen (bij de held
+  // hangt die af van zijn leeftijd).
   // zicht: vanaf hoe ver een monster je opmerkt. Namen staan met een kleine letter,
   // omdat ze bijna altijd midden in een zin staan. De held heeft geen levenspunten maar een
   // leeftijd (zie leeftijd.js); een klap van een monster kost hem maanden.
   const WEZENS = {
-    held: { naam: 'jij', kant: 'held', leven: 0, ap: 8, initiatief: 10, snelheid: 4.5 },
+    // De held heeft hier geen snelheid: hij loopt op zijn leeftijd (zie T.snelheidVan).
+    held: { naam: 'jij', kant: 'held', leven: 0, ap: 8, initiatief: 10, snelheid: 0 },
     wim: { naam: 'Wim', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 0 },
     slijm: {
       naam: 'slijmkruiper', kant: 'monster', leven: 10, ap: 4, initiatief: 4, snelheid: 1.4, zicht: 5, dwaalt: true,
@@ -64,6 +66,9 @@
   T.tegelVan = (e) => ({ x: e.tx, y: e.ty });
   // Afstand in stappen: schuin telt als één stap, net als bij het lopen.
   T.afstand = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
+  // Hoe snel loopt dit wezen? Een monster houdt zijn vaste snelheid; de held loopt trager
+  // naarmate hij ouder wordt, en dat is aan hem te zien (T.loopSnelheid).
+  T.snelheidVan = (e) => (e.leeftijd == null ? e.snelheid : T.loopSnelheid(e.leeftijd));
 
   T.maakWereld = function () {
     const h = PLATTEGROND.length;
@@ -123,6 +128,12 @@
       dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
       dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0,
       leeftijd: soort === 'held' ? T.STARTLEEFTIJD : null,
+      // Wat spreuken achterlaten: nabranden, punten kwijt door een windstoot, kijken naar een
+      // dwaallicht (vraag: het vraagteken boven het hoofd), en geduwd worden.
+      brandt: 0, apVerlies: 0, afgeleid: null, gelokt: null, vraag: 0, geduwd: false,
+      // Het meesterschap per spreuk, en de hoogste kring die open ging. Alleen de held tovert.
+      meesterschap: soort === 'held' ? {} : null,
+      kring: soort === 'held' ? T.kringVoorLeeftijd(T.STARTLEEFTIJD) : null,
     };
   }
 

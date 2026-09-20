@@ -6,6 +6,7 @@ const assert = require('node:assert/strict');
 require('../js/leeftijd.js');
 require('../js/wereld.js');
 require('../js/pad.js');
+require('../js/spreuken.js');
 require('../js/gevecht.js');
 require('../js/verkennen.js');
 const T = globalThis.Toren;
@@ -185,6 +186,21 @@ test('leeftijd en duur staan er zoals je ze zegt', () => {
   assert.equal(T.duurKort(4), '+4 mnd');
   assert.equal(T.duurKort(12), '+1 jaar');
   assert.equal(T.duurKort(-24), '−2 jaar');
+});
+
+// Hoe ouder, hoe trager de pas: dat moet je aan hem zien lopen.
+test('de held loopt trager naarmate hij ouder wordt, met rechte lijnen tussen de ijkpunten', () => {
+  const bijna = (a, b) => Math.abs(a - b) < 0.0001;
+  assert.equal(T.loopSnelheid(84 * 12), 2.5);
+  assert.equal(T.loopSnelheid(92 * 12), 2.1);
+  assert.equal(T.loopSnelheid(99 * 12), 1.8);
+  assert.equal(bijna(T.loopSnelheid(88 * 12), 2.3), true); // halverwege 84 en 92
+  assert.equal(bijna(T.loopSnelheid(95 * 12 + 6), 1.95), true); // halverwege 92 en 99
+  assert.equal(T.loopSnelheid(80 * 12), 2.5); // jonger dan het eerste ijkpunt
+  assert.equal(T.loopSnelheid(T.EINDLEEFTIJD), 1.8); // ouder dan het laatste
+  const w = T.maakWereld();
+  assert.equal(T.snelheidVan(wezen(w, 'held')), 2.5);
+  assert.equal(T.snelheidVan(wezen(w, 'slijm')), 1.4); // een monster houdt zijn vaste snelheid
 });
 
 test('wie sluipt, wordt pas van twee tegels dichterbij opgemerkt', () => {

@@ -4,6 +4,8 @@
 (function (T) {
   'use strict';
 
+  T.DUW_SNELHEID = 8; // tegels per seconde: een windstoot gaat harder dan wie dan ook loopt
+
   T.anim = {
     loop(e, pad) {
       return new Promise((klaar) => {
@@ -33,14 +35,45 @@
       });
     },
 
+    // Een windstoot waait van de held naar het doel. De belofte loopt af als hij aankomt, want
+    // dan pas gaat er iets vliegen of dicht.
+    wind(S, van, naar) {
+      return new Promise((klaar) => {
+        const afstand = Math.hypot(naar.x - van.x, naar.y - van.y);
+        S.effecten.push({
+          soort: 'wind', van: { x: van.x, y: van.y }, naar: { x: naar.x, y: naar.y },
+          t: 0, duur: 0.12 + afstand * 0.045, opKlaar: klaar,
+        });
+      });
+    },
+
+    // Weggeduwd worden gaat over hetzelfde pad als lopen, maar snel en zonder te huppelen.
+    duw(e, pad) {
+      return new Promise((klaar) => {
+        if (!pad.length) {
+          klaar();
+          return;
+        }
+        e.pad = pad.slice();
+        e.geduwd = true;
+        e.opKlaar = () => {
+          e.geduwd = false;
+          klaar();
+        };
+      });
+    },
+
     // Wachten in speltijd, niet in kloktijd: staat het spel stil (een verborgen tab, of
     // straks een pauzeknop), dan wacht dit mee.
     wacht(S, ms) {
       return new Promise((klaar) => S.wachters.push({ tot: S.tijd + ms / 1000, klaar }));
     },
 
-    tekst(S, e, tekst, kleur) {
-      S.effecten.push({ soort: 'tekst', x: e.x, y: e.y, tekst, kleur, t: 0, duur: 1.1 });
+    // opties.na: zoveel seconden later beginnen, zodat twee teksten boven hetzelfde hoofd
+    // elkaar niet in de weg zitten (de jaren eerst, dan de trede). opties.duur: hoe lang.
+    tekst(S, e, tekst, kleur, opties) {
+      const o = opties || {};
+      S.effecten.push({ soort: 'tekst', x: e.x, y: e.y, tekst, kleur, t: -(o.na || 0), duur: o.duur || 1.1 });
     },
   };
 
@@ -58,6 +91,7 @@
       }
       if (e.flits > 0) e.flits = Math.max(0, e.flits - dt);
       if (e.alarm > 0) e.alarm = Math.max(0, e.alarm - dt);
+      if (e.vraag > 0) e.vraag = Math.max(0, e.vraag - dt);
       if (e.dood) e.sterfTijd += dt;
     }
     if (S.wachters.length) {
@@ -75,6 +109,9 @@
         blijft.push(fx);
       } else if (fx.soort === 'schicht') {
         blijft.push({ soort: 'knal', x: fx.naar.x, y: fx.naar.y, t: 0, duur: 0.35 });
+        fx.opKlaar();
+      } else if (fx.soort === 'wind') {
+        blijft.push({ soort: 'vlaag', x: fx.naar.x, y: fx.naar.y, t: 0, duur: 0.3 });
         fx.opKlaar();
       }
     }
@@ -101,9 +138,10 @@
     const dy = volgende.y - e.y;
     const afstand = Math.hypot(dx, dy);
     // In een gevecht lopen ook de trage monsters wat vlotter, anders duurt hun beurt te lang.
-    // Wie sluipt, gaat half zo snel.
-    let snelheid = S.gevecht ? Math.max(3.2, e.snelheid * 1.4) : e.snelheid;
+    // Wie sluipt, gaat half zo snel. Wie geduwd wordt, schuift weg zonder eigen pas.
+    let snelheid = S.gevecht ? Math.max(3.2, T.snelheidVan(e) * 1.4) : T.snelheidVan(e);
     if (e === S.held && S.sluipen && !S.gevecht) snelheid *= 0.5;
+    if (e.geduwd) snelheid = T.DUW_SNELHEID;
     const stap = snelheid * dt;
     if (stap >= afstand) {
       e.x = volgende.x;

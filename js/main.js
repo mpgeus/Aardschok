@@ -23,7 +23,9 @@
       gevecht: null,
       overgang: null,
       bezig: false,
-      actie: 'slaan',
+      spreuk: null,
+      spreukBereik: null,
+      lichten: [],
       inventaris: new Set(),
       sleutelGebruikt: false,
       fonteinLeeg: false,
@@ -110,8 +112,21 @@
   // De muis wordt elk beeld opnieuw bekeken, want onder een stilstaande muis kan intussen
   // een monster doorlopen. Tekst bij de muis, pad op de vloer en de actiepunten zeggen
   // alle drie wat een klik zou doen.
+  // Wat er bij de muis staat: wat een klik doet, wat het aan punten kost en wat het aan leven
+  // kost. Alles uit hetzelfde antwoord, zodat het scherm niet iets anders belooft dan de klik.
+  function tipTekst(h) {
+    let t = h.tekst;
+    if (h.kosten) t += ` · ${h.kosten} AP`;
+    if (h.maanden) {
+      t += ` · ${T.duurKort(h.maanden)}`;
+      if (S.held.leeftijd + h.maanden >= T.EINDLEEFTIJD) t += ' · daarna ben je honderd';
+    }
+    return t;
+  }
+
   function werkHoverBij() {
     const actief = S.modus === 'verkennen' || (S.modus === 'gevecht' && !S.bezig && heldAanDeBeurt());
+    S.spreukBereik = actief && S.spreuk ? T.spreukBereik(S) : null;
     if (!S.muis || !actief) {
       S.hover = null;
       S.handeling = null;
@@ -123,16 +138,11 @@
     S.hover = zoekDoel(S.muis.x, S.muis.y);
     const h = S.modus === 'verkennen' ? T.handelingVerkennen(S, S.hover) : T.handelingGevecht(S, S.hover);
     S.handeling = h;
-    if (S.modus === 'gevecht') {
-      T.ui.toonAp(S.held.ap, S.held.maxAp, h ? h.kosten || 0 : 0, !h || h.kan !== false);
-      if (h) T.ui.tooltip(h.tekst + (h.kosten ? ` · ${h.kosten} AP` : ''), S.muis.x, S.muis.y, h.kan === false);
-      else T.ui.verbergTooltip();
-    } else if (h && h.tekst) {
-      T.ui.tooltip(h.tekst, S.muis.x, S.muis.y, !!h.fout);
-    } else {
-      T.ui.verbergTooltip();
-    }
-    canvas.style.cursor = h ? 'pointer' : 'default';
+    if (S.modus === 'gevecht') T.ui.toonAp(S.held.ap, S.held.maxAp, h ? h.kosten || 0 : 0, !h || h.kan !== false);
+    if (h && h.tekst) T.ui.tooltip(tipTekst(h), S.muis.x, S.muis.y, !!h.fout || h.kan === false);
+    else T.ui.verbergTooltip();
+    // Met een spreuk in de hand richt je: een kruisje in plaats van een wijzende hand.
+    canvas.style.cursor = h ? (S.spreuk ? 'crosshair' : 'pointer') : S.spreuk ? 'crosshair' : 'default';
   }
 
   // Bij het rondlopen volgt de camera de held; in een gevecht zoekt hij het midden tussen
@@ -155,6 +165,7 @@
     if (window.innerWidth !== bw || window.innerHeight !== bh) formaat();
     S.tijd += dt;
     T.werkAnimatiesBij(S, dt);
+    T.werkLichtenBij(S, dt);
     if (S.modus === 'verkennen') {
       T.laatDwalen(S, dt);
       const m = T.zoekOntdekking(S);
@@ -168,6 +179,7 @@
     S.camera.x += (doel.x - S.camera.x) * k;
     S.camera.y += (doel.y - S.camera.y) * k;
     werkHoverBij();
+    T.ui.toonSpreuken(S);
   }
 
   let vorige = 0;
@@ -194,8 +206,10 @@
   });
   canvas.addEventListener('contextmenu', (ev) => {
     ev.preventDefault();
-    if (S.gevecht) T.kiesActie(S, 'slaan');
+    T.kiesSpreuk(S, null);
   });
+  // De spreuktoetsen (2, 3, 4) werken binnen én buiten een gevecht, want een dwaallicht en een
+  // windstoot horen juist bij het rondlopen. 1 en Escape leggen een spreuk weer weg.
   window.addEventListener('keydown', (ev) => {
     if (S.modus === 'dialoog') {
       const n = parseInt(ev.key, 10);
@@ -203,15 +217,21 @@
       if (ev.key === 'Escape') T.sluitDialoog(S);
       return;
     }
-    if (S.modus === 'verkennen' && (ev.key === 's' || ev.key === 'S')) {
-      T.wisselSluipen(S);
+    if (S.modus !== 'verkennen' && S.modus !== 'gevecht') return;
+    const spreuk = T.SPREUK_VOLGORDE.find((id) => T.SPREUKEN[id].toets === ev.key);
+    if (spreuk) {
+      T.kiesSpreuk(S, spreuk);
       return;
     }
-    if (S.modus !== 'gevecht') return;
-    if (ev.key === '1') T.kiesActie(S, 'slaan');
-    else if (ev.key === '2') T.kiesActie(S, 'vuurschicht');
-    else if (ev.key === '3') T.deurDicht(S);
-    else if (ev.key === 'Escape') T.kiesActie(S, 'slaan');
+    if (ev.key === '1' || ev.key === 'Escape') {
+      T.kiesSpreuk(S, null);
+      return;
+    }
+    if (S.modus === 'verkennen') {
+      if (ev.key === 's' || ev.key === 'S') T.wisselSluipen(S);
+      return;
+    }
+    if (ev.key === 'd' || ev.key === 'D') T.deurDicht(S);
     else if (ev.key === ' ' || ev.key === 'Enter') {
       ev.preventDefault();
       T.eindeBeurt(S);
@@ -223,7 +243,13 @@
     b.blur(); // anders drukt de spatiebalk straks ook deze knop nog eens in
     if (b.dataset.actie === 'einde') T.eindeBeurt(S);
     else if (b.dataset.actie === 'deur') T.deurDicht(S);
-    else T.kiesActie(S, b.dataset.actie);
+    else T.kiesSpreuk(S, null);
+  });
+  document.getElementById('spreukbalk').addEventListener('click', (ev) => {
+    const b = ev.target.closest('button');
+    if (!b) return;
+    b.blur();
+    T.kiesSpreuk(S, b.dataset.spreuk);
   });
   document.getElementById('sluip-knop').addEventListener('click', (ev) => {
     ev.currentTarget.blur();
@@ -237,6 +263,13 @@
     naarBeeld(x, y) {
       const p = T.naarScherm(x, y);
       return vanVlak(p.x, p.y);
+    },
+    // Zet hoe vaak een spreuk al raak was, om de treden te proberen zonder ze te verdienen:
+    // Toren.debug.meesterschap('vuurschicht', 15) → 'Meesterlijk'.
+    meesterschap(id, aantal) {
+      if (!T.SPREUKEN[id]) return `Die spreuk ken ik niet: ${id}`;
+      S.held.meesterschap[id] = Math.max(0, Math.floor(aantal));
+      return T.TREDEN[T.trede(S.held, id)].naam;
     },
     // Laat het spel `seconden` verder lopen zonder op beelden van de browser te wachten.
     // Een verborgen tabblad tekent maar af en toe een beeld, en dan loopt alles in slow
@@ -257,8 +290,8 @@
   T.ui.toonOverlay(
     'Aardschok',
     '<p>Veertig jaar geleden sloot je iets op, boven in je toren, en ging je weg. Vannacht schudde de aarde, en het zegel brak.</p>' +
-      '<p>Je bent 84. Elke spreuk kost je een jaar van je leven, elke klap die je krijgt een paar maanden. Op je honderdste is het voorbij. Een gevecht dat je ontloopt, kost niets.</p>' +
-      '<p>Klik om te lopen, te praten of iets te gebruiken. <kbd>S</kbd> om te sluipen.</p>',
+      '<p>Je bent 84. Elke spreuk kost je tijd van je leven, een vuurschicht een heel jaar, en elke klap die je krijgt een paar maanden. Op je honderdste is het voorbij. Een gevecht dat je ontloopt, kost niets.</p>' +
+      '<p>Klik om te lopen, te praten of iets te gebruiken. <kbd>S</kbd> om te sluipen, <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> voor je spreuken.</p>',
     'Naar binnen',
     () => {
       S.modus = 'verkennen';

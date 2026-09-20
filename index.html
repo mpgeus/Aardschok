@@ -23,14 +23,18 @@
   <div id="plek"></div>
   <div id="volgorde" class="paneel"></div>
 
-  <div id="actiebalk" class="paneel">
-    <div id="ap"></div>
-    <div id="knoppen">
-      <button data-actie="slaan"><kbd>1</kbd> Slaan <span class="kost">3</span></button>
-      <button data-actie="vuurschicht"><kbd>2</kbd> Vuurschicht <span class="kost">5</span></button>
-      <button data-actie="deur" class="verborgen"><kbd>3</kbd> Deur dicht <span class="kost">1</span></button>
-      <button data-actie="einde"><kbd>spatie</kbd> Einde beurt</button>
+  <!-- Onderaan: de spreuken staan er altijd, de actiepunten en knoppen schuiven erbij zodra
+       het gevecht begint. -->
+  <div id="onder">
+    <div id="actiebalk" class="paneel">
+      <div id="ap"></div>
+      <div id="knoppen">
+        <button data-actie="slaan"><kbd>1</kbd> Slaan <span class="kost">3</span></button>
+        <button data-actie="deur" class="verborgen"><kbd>D</kbd> Deur dicht <span class="kost">1</span></button>
+        <button data-actie="einde"><kbd>spatie</kbd> Einde beurt</button>
+      </div>
     </div>
+    <div id="spreukbalk" class="paneel"></div>
   </div>
 
   <div id="berichten"></div>
@@ -52,19 +56,23 @@
 
   <div id="hulp">
     Klik om te lopen, te praten of iets te gebruiken. <kbd>S</kbd> sluipen<br>
-    In een gevecht: <kbd>1</kbd> slaan · <kbd>2</kbd> vuurschicht · <kbd>3</kbd> deur dicht · <kbd>spatie</kbd> einde beurt
+    Spreuken: <kbd>2</kbd> vuurschicht · <kbd>3</kbd> dwaallicht · <kbd>4</kbd> windstoot<br>
+    <kbd>Esc</kbd> of rechtsklik legt een spreuk weer weg<br>
+    In een gevecht: <kbd>1</kbd> slaan · <kbd>D</kbd> deur dicht · <kbd>spatie</kbd> einde beurt
   </div>
 
   <!-- Gewone scripts, geen modules: zo werkt het spel ook als je index.html los opent. -->
   <script src="js/leeftijd.js"></script>
   <script src="js/wereld.js"></script>
   <script src="js/pad.js"></script>
+  <script src="js/spreuken.js"></script>
   <script src="js/iso.js"></script>
   <script src="js/anim.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/dialoog.js"></script>
   <script src="js/verkennen.js"></script>
   <script src="js/gevecht.js"></script>
+  <script src="js/toveren.js"></script>
   <script src="js/tekenen.js"></script>
   <script src="js/main.js"></script>
 </body>

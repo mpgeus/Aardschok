@@ -50,6 +50,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wereld: `isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`, `isZichtbaar`.
 - `js/pad.js`: A* (`zoekPad`, acht richtingen, schuin kost ook 1, geen hoeken afsnijden) en
   `bereik` (alle tegels binnen N stappen).
+- `js/spreuken.js`: de spreuken als regels, zonder scherm en dus te toetsen: `T.SPREUKEN`
+  (kring, toets, kosten, en per trede wat hij erbij krijgt), de treden van meesterschap
+  (`T.spreuk`, `T.telGebruik`, `T.voortgang`) en de losse rekensommen eromheen: `T.duwPad`,
+  `T.windstootDuwen`, `T.volgendOpLijn` (doorboren), `T.lokt`/`T.lokPad` (dwaallicht).
+- `js/toveren.js`: een spreuk kiezen, richten en uitspreken, in en buiten een gevecht
+  (`T.kiesSpreuk`, `T.handelingSpreuk`), de dwaallichten in de wereld (`T.werkLichtenBij`) en
+  het meesterschap dat meetelt (`T.oefen`).
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
 - `js/anim.js`: beweging en effecten. `T.anim.*` geeft beloftes, zodat een beurt als gewone
   code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`.
@@ -78,11 +85,24 @@ houden gewone levenspunten. Aan het eind telt hoe oud je boven aankomt.
   balk en de beurtvolgorde bij, meldt een nieuwe actiepuntengrens, en laat de held sterven op
   100. Een tweede weg naar `held.leeftijd` mist er vroeg of laat één van.
 - De vuurschicht raakt eerst en kost daarna zijn jaar: wie zo zijn honderdste haalt, velt met
-  zijn laatste spreuk nog het monster.
+  zijn laatste spreuk nog het monster. Elke spreuk houdt die volgorde aan: eerst het effect,
+  dan de tijd via `T.verouder`, dan pas telt het meesterschap (`T.oefen`).
+- Meesterschap door gebruik (`ontwerp/spreuken.md`): vijf treden (Roestig, en dan na 3, 8, 15 en
+  25 keer raak). Een spreuk telt alleen als hij iets doet: raken, een wezen echt duwen, een deur
+  dichtgooien, een monster weglokken. Een trede geeft bereik, een extra effect of minder
+  actiepunten, maar maakt een spreuk **nooit** goedkoper in jaren; `T.spreuk` zet `maanden`
+  daarom altijd terug op de basis. Het meesterschap staat per held (`held.meesterschap`), de
+  hoogste open kring in `held.kring` (gaat alleen omhoog, in `T.verouder`, want wie door de
+  fontein jonger wordt, vergeet niets).
 - Sluipen (`S`, alleen buiten een gevecht) is het eerste middel om een gevecht te ontlopen: half
   zo snel, en monsters zien je pas van `T.SLUIP_ZICHT` (2) tegels dichterbij. Elke nieuwe manier
   om een gevecht te vermijden (praten, afleiden, een val) versterkt de kernregel; een nieuwe
-  manier om te vechten zonder jaren te betalen, verzwakt hem.
+  manier om te vechten zonder jaren te betalen, verzwakt hem. Het dwaallicht (een monster
+  weglokken) en de windstoot (van afstand een deur dichtgooien) zijn de tweede en derde manier,
+  en kosten maar een maand of drie.
+- De held loopt trager naarmate hij ouder wordt: `T.loopSnelheid` (2,5 tegels per seconde op zijn
+  84e, 2,1 op zijn 92e, 1,8 op zijn 99e). Wie iets wil weten over de snelheid van een wezen,
+  vraagt `T.snelheidVan(e)`; monsters houden hun vaste snelheid.
 
 ## Het verhaal in het kort
 
@@ -101,8 +121,14 @@ nooit grappig ten koste van de ernst van de klim. Meer, en wat nog open is, staa
   `{ tekst, kosten, kan, doe }` terug. De tekst bij de muis, het pad op de vloer, de
   actiepunten en de klik komen uit hetzelfde antwoord.
 - Een klik op een deur is altijd erheen lopen. Dichtgooien is in een gevecht een eigen knop
-  (`3`), die alleen verschijnt naast een open deur. Eerst ging een open deur dicht als je er
+  (`D`), die alleen verschijnt naast een open deur. Eerst ging een open deur dicht als je er
   naast stond en erop klikte, en dat is precies wat je niet wilt.
+- Toetsen: `1` slaan, `2` vuurschicht, `3` dwaallicht, `4` windstoot, `D` deur dicht, `spatie`
+  einde beurt, `S` sluipen. De spreuktoetsen werken binnen én buiten een gevecht, want een
+  dwaallicht en een windstoot horen juist bij het rondlopen. Een spreuk in de hand verandert wat
+  de muis doet: hij richt, en lopen kan pas als je hem weer weglegt met `Esc`, de rechtermuisknop
+  of dezelfde toets nog eens. De knoppen onderaan staan in één kolom: de spreukbalk altijd, en
+  daarboven schuiven in een gevecht de actiepunten en de knoppen erbij.
 - Monsters openen geen deuren. Kan geen enkel monster de held nog zien of bereiken, dan eindigt
   het gevecht ('kwijt').
 
@@ -113,3 +139,12 @@ nooit grappig ten koste van de ernst van de klim. Meer, en wat nog open is, staa
 wachten. Dat is nodig omdat een verborgen browserpaneel maar af en toe een beeld tekent; ook
 css-overgangen staan dan vrijwel stil. Het testgereedschap stuurt de spatiebalk niet goed door
 (lege `key`), dus test einde beurt met de knop of met een `KeyboardEvent`.
+`Toren.debug.meesterschap('vuurschicht', 15)` zet het meesterschap van een spreuk (hier op
+Meesterlijk), om de treden te proberen zonder ze te verdienen.
+
+Twee dingen die bij het mikken misgaan:
+
+- de camera glijdt mee, dus reken de schermpositie pas uit als hij stilstaat (een seconde
+  `stap` na elke verplaatsing), anders klik je een tegel ernaast;
+- wat vooraan staat, vangt de muis. Mik op het lijf van een wezen (zo'n 16 pixels boven zijn
+  tegel), niet op zijn voeten, anders klik je de kist die ervoor staat.

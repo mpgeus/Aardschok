@@ -25,8 +25,15 @@ eind telt hoe oud je boven aankomt.
 - In een gevecht heb je 8 actiepunten per beurt (vanaf je negentigste 7, vanaf je
   vijfennegentigste 6). Lopen kost 1 per stap (ook schuin), slaan met je staf 3, een vuurschicht
   5 (en een jaar), de laatste slok uit de fontein 3, een deur dichtgooien 1.
-- Toetsen in een gevecht: `1` slaan, `2` vuurschicht, `3` deur dicht, `spatie` einde beurt,
-  `Esc` of rechtermuisknop annuleert de vuurschicht.
+- Je kent drie spreuken, en ze worden beter naarmate je ze gebruikt (vijf treden, van Roestig
+  tot Legendarisch; alleen raak gebruik telt). Ze kosten geen levenspunten maar tijd:
+  - `2` **vuurschicht** (5 AP, een jaar): vuur op een monster dat je ziet, alleen in een gevecht;
+  - `3` **dwaallicht** (een maand): een lichtje dat je ergens heen stuurt. Een dwalend monster dat
+    het ziet, gaat kijken en blijft er even staan. Zo ontloop je een gevecht;
+  - `4` **windstoot** (3 AP, drie maanden): duwt in een gevecht een monster van je af, of gooit
+    van een afstand een open deur dicht — en monsters openen geen deuren.
+- Toetsen: `1` slaan · `2` `3` `4` je spreuken · `D` deur dicht · `spatie` einde beurt ·
+  `S` sluipen. `Esc` of de rechtermuisknop legt een spreuk weer weg.
 
 Het proefje is één verdieping met drie kamers: de hal (Wim, de conciërge, en een fontein), de
 voorraadkamer (de sleutel en een slijmkruiper) en het trappenhuis (een skelet en de trap naar
