@@ -10,6 +10,7 @@
     "pixelart:animaties": "node gereedschap/pixelart/animaties-export.cjs",
     "pixelart:spel": "node gereedschap/pixelart/naar-spel.cjs",
     "tiled": "node gereedschap/pixelart/naar-tiled.cjs",
+    "randtegels": "node gereedschap/pixelart/randtegels.cjs",
     "kaarten": "node gereedschap/pixelart/naar-kaarten.cjs"
   }
 }
