@@ -148,6 +148,18 @@ spreuk in handen. Dan is het ding boven geen monster maar een spiegel, en gaat h
 erover of jij geworden bent wat hij is. Dat sluit het verhaal, de systemen en de kernregel in een
 keer op elkaar aan.
 
+### Dieren geven verdorren zijn trap (20 sep 2026)
+
+Uit een plaat met bomen, planten en dieren die Marcel liet zien: konijnen, herten, vogels, uilen,
+vlinders. Wij hebben er nul, en ze leken versiering. Dat zijn ze niet — **ze zijn voer voor het
+verdorren.** Een struik is dagen, een boom een maand, maar een konijn? Een hert? Daarmee heeft de
+morele trap treden: van onkruid naar iets dat je aankijkt. Een bos waarin een hert staat, is iets
+anders als je weet dat het drie maanden van je leven waard is.
+
+Ze maken het bos ook levend op de goedkoopste manier die er is: vogels die opvliegen als je
+langsloopt, een vlinder die met de wind meedrijft. Twee besloten dingen tegelijk bediend, dus de
+moeite waard om vroeg te maken.
+
 ## Vergeten door ouderdom (Marcel, 20 sep 2026)
 
 De meester vergat wat hij opsloot. Dat overkomt jou ook: boven een bepaalde leeftijd zakt
