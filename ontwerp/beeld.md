@@ -28,17 +28,20 @@ https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:
 - de figuren in acht richtingen;
 - muren, vloeren en voorwerpen.
 
-## In de maak (19 sep 2026)
+## Wat er staat (20 sep 2026)
 
-Vijf agents werken tegelijk aan:
+Klaar en in `gereedschap/pixelart/`, met een exportscript per onderdeel:
 
-- bomen en begroeiing;
-- huizen en grond van het dorp;
-- dorpelingen;
-- bosvijanden;
-- de toren van de oude meester in drie staten.
+- de hal en de voorraadkamer, de figuren, de voorwerpen, muren en vloeren;
+- bomen en begroeiing, het dorp met zijn plekken, negentien dorpelingen, de bosvijanden, en de
+  toren in drie staten;
+- animaties voor de tovenaar, Wim, het skelet, de slijmkruiper, de wolf, de spin en de kobold.
 
-Hun code komt daarna ook in `gereedschap/pixelart/`.
+In de maak: grotere en middeleeuwsere huizen (de schaal klopte niet, zie `wereld.md`), het erf
+van de toren, en het bos als reisgebied.
+
+Een les uit het werk met meerdere agents: drie tegelijk die renderen, gaan hard door het
+budget. Eén tegelijk, en sprites hergebruiken in plaats van elke boom opnieuw uitrekenen.
 
 ## Animaties (Marcel, 19 sep 2026: "moet allemaal geanimeerd zijn")
 
