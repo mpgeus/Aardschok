@@ -72,6 +72,31 @@ het in één keer te doen.
   bepaalde spreuk oplost? Hier hangt aan of de klim afwisselend blijft.
 - **Leven de andere tovenaars nog,** en zijn het bondgenoten of mededingers?
 
+## Het torenpaneel: je vooruitgang als doorsnede (Marcel, 20 sep 2026)
+
+Marcel liet een tekening zien van een toren, twee keer: links de buitenkant, rechts uit elkaar
+getrokken in vijf verdiepingen, elk als een opengewerkte kamer met bedden, tafels, haarden en een
+trap naar boven. Bedoeld als inspiratie voor onze toren, en er zit een scherm in.
+
+**De doorsnede is het paneel waarin je je toren herstelt.** In één oogopslag zie je hoeveel
+verdiepingen er zijn, welke hersteld is, welke in puin ligt en welke je nog nooit gezien hebt.
+Daar geef je goud en grondstoffen uit, en daar zie je je vooruitgang als een tekening in plaats
+van als een lijstje. Dat maakt de hele herstellus tastbaar.
+
+Het is bij ons ook goedkoop: `gereedschap/pixelart/toren-lagen.cjs` snijdt de toren al in lagen.
+We hadden het gereedschap al zonder te weten waarvoor.
+
+En het is waarschijnlijk hét beeld van het spel — de plaat voor de winkelpagina. Een toren in
+doorsnede waarvan de onderste verdiepingen bewoonbaar zijn en de bovenste nog donker.
+
+**Een verdieping is een opengewerkte kamer,** zoals `kamers.cjs` de hal en de voorraadkamer al
+tekent: diorama in het donker, voorste muren laag weggesneden.
+
+**Buiten en binnen moeten in kenmerken kloppen, niet in vierkante meters.** Zit er van buiten een
+balkon, dan is er binnen een deur naar dat balkon; staat er een erker, dan zie je die binnen ook.
+De maat hoeft niet te kloppen (zie "Buiten leest, binnen speelt" in `wereld.md`), en niemand rekent
+dat na — maar een raam dat aan één kant bestaat en aan de andere niet, valt wél op.
+
 ## Wat de kernregel ervan vraagt
 
 - **Goud koopt nooit jaren terug.** Genezen bestaat niet, dus er zijn geen verjongingsdrankjes te
