@@ -26,8 +26,8 @@ const F = require('./figuren.cjs');
 const F2 = require('./figuren2.cjs');
 const V = require('./voorwerpen.cjs');
 
-const { TEGEL, PXH, RAMP, UIT, VLAG, klem, mix, hash, rnd, ruis2, ruis3, sdf } = K;
-const { Wereld, voeg, stelsel, tekenWereld, bouwToren, zonKleur } = T;
+const { TEGEL, PXH, RAMP, RAMP_LEN, UIT, VLAG, klem, mix, hash, rnd, ruis2, ruis3, sdf } = K;
+const { Wereld, voeg, stelsel, tekenWereld, bouwToren } = T;
 const { E, GRAAD, balk, stok, bol, blokDeel, draaiZ, kegelStomp, steenOp, steenStap, houtTex, kans } = T.hulp;
 
 const M = 56.6; // eenheden per meter
@@ -270,6 +270,28 @@ function bouwSchuurtje(W, S) {
   const goot = 1.9 * M;
   const nok = 2.9 * M;
   const p = (x, y, z) => [cx + x, cy + y, z];
+  // Het dak: mos volgt de vorm in plaats van toevallige vlekken. Vooral langs de druiplijn (de
+  // onderrand, waar het vocht het langst blijft staan) en tegen de nok aan, weinig er middenin
+  // op het vlak; en meer aan de kant die van de avondzon af ligt dan aan de zonkant.
+  const mosKant = AVONDZON[1] >= 0 ? -1 : 1;
+  W.mat.erfSchuurDak = {
+    ramp: 'schors',
+    lo: 1,
+    hi: 6.2,
+    rand: 0.8,
+    patroon: (C) => {
+      const r = houtTex(C, true);
+      if (typeof r === 'object') return r;
+      if (!S.oud) return r;
+      const t = klem((C.z - (goot - 7)) / (nok + 1 - (goot - 7)), 0, 1); // 0 = druiplijn, 1 = nok
+      const kant = C.y >= cy ? 1 : -1;
+      const zoom = Math.max(klem((0.22 - t) / 0.22, 0, 1), klem((t - 0.82) / 0.18, 0, 1) * 0.85);
+      const kans = (kant === mosKant ? 0.62 : 0.2) * (0.06 + 0.94 * zoom * zoom);
+      const n2 = ruis2(C.x * 0.11 + 5, (C.z + kant * 40) * 0.13, 71);
+      if (n2 < kans) return { ramp: 'mos', stap: klem(1 + C.stap * 0.55, 0, 5) };
+      return r;
+    },
+  };
   let n = 0;
   const hout = (a, b, hb, hd, op, m = 'erfHout', extra = {}) =>
     voeg(g, { ...balk(p(...a), p(...b), hb, hd, op, 0.35), m, deel: 10 + (n++ % 24), toon: (kans(n, 3, 7) - 0.5) * 1.1, zaad: n * 7, ...extra });
@@ -313,7 +335,7 @@ function bouwSchuurtje(W, S) {
     for (let x = -bx - 8; x < bx + 6; x += 16) {
       const a = p(x + 8, sy * (by + 9), goot - 7);
       const b = p(x + 8, sy * 1.5, nok + 1);
-      voeg(g, { ...balk(a, b, 8, 2.2, [0, 0, 1], 0.3), m: 'erfDak', deel: 44 + ((x / 16) % 6), toon: (kans(x, sy, 9) - 0.5) * 1.2, zaad: x + sy * 3, naad: 8 });
+      voeg(g, { ...balk(a, b, 8, 2.2, [0, 0, 1], 0.3), m: 'erfSchuurDak', deel: 44 + ((x / 16) % 6), toon: (kans(x, sy, 9) - 0.5) * 1.2, zaad: x + sy * 3, naad: 8 });
     }
   }
   hout([-bx - 6, 0, nok + 3], [bx + 6, 0, nok + 3], 3.4, 2.4, [0, 0, 1]);
@@ -695,6 +717,7 @@ function bouwMoestuin(W, S) {
 const BOMEN = [
   // achterrand (naar boven in beeld)
   ['den', 1, -11.5, -8.4, 16, 1.5],
+  ['herfstEik', 4, -7.0, -7.6, 22, 1.5],
   ['den', 5, -7.6, -8.8, 16, 1.5],
   ['eik', 2, -3.4, -8.2, 22, 1.5],
   ['den', 2, 0.6, -8.6, 16, 1.5],
@@ -707,14 +730,14 @@ const BOMEN = [
   // rechterrand (rechtsboven)
   ['eik', 3, 13.4, -4.6, 22, 1.5],
   ['den', 4, 13.0, -1.0, 16, 1.5],
-  ['herfstEik', 3, 13.2, 2.6, 22, 1.5],
+  ['eik', 8, 13.2, 2.6, 22, 1.5],
   ['berk', 2, 11.6, 5.2, 12, 1.4],
   ['den', 7, 13.6, 6.6, 16, 1.5],
   // voorrand (naar beneden in beeld)
   ['eik', 4, 8.6, 7.8, 22, 1.5],
   ['den', 8, 4.6, 8.0, 16, 1.5],
   ['berk', 5, 1.4, 8.2, 12, 1.4],
-  ['herfstEik', 4, -2.6, 8.0, 22, 1.5],
+  ['eik', 9, -2.6, 8.0, 22, 1.5],
   ['den', 9, -6.4, 7.8, 16, 1.5],
   ['eik', 5, -10.4, 7.0, 22, 1.5],
   // linkerrand (linksboven)
@@ -831,7 +854,7 @@ function erf(o = {}) {
   const t2 = Date.now();
   const gezet = [];
   for (const [naam, zaad, gx, gy, voet, sterkte] of [...BOMEN, ...KLEIN, ...RAND]) {
-    gezet.push({ ...Bm.zetBuiten(B, Bm[naam](zaad), gx, gy), voet, sterkte });
+    gezet.push({ ...Bm.zetBuiten(B, Bm[naam](zaad), gx, gy), naam, voet, sterkte });
   }
   log(`bomen ${((Date.now() - t2) / 1000).toFixed(1)} s`);
 
@@ -850,10 +873,12 @@ function erf(o = {}) {
   log(`voorwerpen en mensen ${((Date.now() - t3) / 1000).toFixed(1)} s`);
 
   // --- schaduwen: eerst de harde avondschaduw van de toren, het erf en de bomen samen (zet ook
-  // B.zon/B.schaduw voor avondlicht), dan de zachte contactschaduw (de donkere plek om de voet)
-  // van elk los ding nog erbovenop
+  // B.zon/B.schaduw voor avondlicht) — een lage zon met een lange reikwijdte, zodat de toren echt
+  // over het gras trekt in plaats van alleen zijn eigen voet te donkeren — dan de herfstEik
+  // dempen, dan de zachte contactschaduw (de donkere plek om de voet) van elk los ding erbovenop
   const t4 = Date.now();
-  avondSchaduw(B, R, gezet, { kracht: 2.3 });
+  avondSchaduw(B, R, gezet, { kracht: 2.8, reik: 1000 });
+  dempHerfst(B, gezet);
   for (const g of gezet) Bm.slagschaduw(B, g.model, { gx: g.gx, gy: g.gy, richting: g.richting, obj: g.obj, voet: g.voet, sterkte: (g.sterkte ?? 1) * 0.4 });
   log(`schaduwen ${((Date.now() - t4) / 1000).toFixed(1)} s`);
 
@@ -869,9 +894,10 @@ function erf(o = {}) {
       return 0.16 + 0.22 * nz + hoog * 0.2 - 0.75 * bos(X / TEGEL, Y / TEGEL) * (1 - hoog * 0.8);
     },
   });
-  // warm waar de avondzon raakt, koel in de schaduw (steen→bot, mos→gras, gras→den, ...)
+  // warm waar de avondzon raakt (steen→bot, mos→gras, gras zelf een stap lichter, ...), koel in
+  // de schaduw (gras/mos→den, riet/aarde→schors), en een warme rand op de zonkant van de kronen
   avondlicht(B);
-  zonKleur(B, 6.1);
+  boomrand(B);
   K.verwarm(B, 1.5);
   // nevel: dooft de rand van de open plek naar alle kanten weg in het bos, in plaats van de
   // rechte rand van de grasdoos tegen het niets
@@ -901,25 +927,31 @@ function erf(o = {}) {
 // blijft ongemoeid (een andere agent bouwt hem net opnieuw); dit is een eigen kopie, aangepast aan
 // het erf: nevel meet hier de afstand tot de rand van de open plek (naar alle kanten), niet de
 // diepte in de kijkrichting, want het erf is een besloten plek, geen dorp dat de zichtlijn uitloopt.
+// Lager dan de eerste versie (was z = 0.5): een echte lage avondzon, voor lange slagschaduwen en
+// een erf dat in twee grote vlakken uiteenvalt, licht en schaduw, in plaats van vlak middaglicht.
 const AVONDZON = (() => {
-  const v = [-0.3, 0.6, 0.5];
+  const v = [-0.3, 0.6, 0.32];
   const l = Math.hypot(...v);
   return v.map((x) => x / l);
 })();
 
-// steen→bot, mos→gras, riet→stro, aarde→zand in de zon; gras/mos→den, riet/aarde→schors in de
-// schaduw: steeds naar de tint met dezelfde lichtheid, zodat de vormen niet veranderen.
+// steen→bot, mos→gras, riet→stro, aarde→zand, gras→zichzelf maar lichter: in de zon. gras/mos→den,
+// riet/aarde→schors: in de schaduw, en een tint donkerder dan de eerste versie. Steeds naar de
+// tint met dezelfde lichtheid (de vorm blijft gelijk), maar met meer sprong tussen licht en
+// schaduw dan dorp.cjs gebruikt, want het erf is klein en moet het verschil in temperatuur dragen
+// zonder de vele gebouwen die het dorp heeft.
 const NAAR_WARM = {
-  steen: ['bot', [0, 0, 1, 2, 3, 3, 4, 5, 6]],
-  mos: ['gras', [0, 1, 2, 3, 4, 5]],
-  riet: ['stro', [0, 1, 1, 2, 3, 4, 5]],
-  aarde: ['zand', [0, 0, 1, 2, 3, 4, 5]],
+  steen: ['bot', [1, 2, 2, 3, 4, 5, 6, 7, 7]],
+  mos: ['gras', [1, 2, 3, 4, 5, 5]],
+  riet: ['stro', [1, 2, 2, 3, 4, 5, 6]],
+  aarde: ['zand', [1, 2, 3, 4, 5, 6, 7]],
+  gras: ['gras', [1, 2, 3, 4, 5, 6, 7, 7]],
 };
 const NAAR_KOEL = {
-  gras: ['den', [1, 2, 3, 4, 5, 6, 6, 6]],
-  mos: ['den', [1, 2, 3, 4, 5, 6]],
-  riet: ['schors', [0, 1, 2, 3, 4, 5, 6]],
-  aarde: ['schors', [0, 1, 2, 3, 4, 5, 6]],
+  gras: ['den', [0, 0, 1, 2, 3, 4, 4, 5]],
+  mos: ['den', [0, 0, 1, 2, 3, 4]],
+  riet: ['schors', [0, 0, 1, 1, 2, 3, 4]],
+  aarde: ['schors', [0, 0, 1, 1, 2, 3, 4]],
 };
 function avondlicht(B, o = {}) {
   if (!B.zon) return;
@@ -936,6 +968,54 @@ function avondlicht(B, o = {}) {
     const heel = klem(Math.round(s), 0, kaart[1].length - 1);
     B.ramp[i] = kaart[0];
     B.stap[i] = kaart[1][heel] + (s - Math.round(s));
+  }
+}
+
+// Een warme kus op de zonkant van de kronen: niet de hele boom omkleuren (dat wast alles uit),
+// alleen de lichtste bulten — de plekken die de eigen belichting al als hoogste bult koos — een
+// stap feller, precies zoals de allerlaatste lage zon over een boomtop schuurt. Na avondlicht(),
+// zodat het op de uiteindelijke stap werkt.
+function boomrand(B, o = {}) {
+  const drempelZon = o.drempelZon ?? 0.5;
+  const ramps = new Set([RAMP.blad, RAMP.den, RAMP.herfst].map((r) => r));
+  for (let i = 0; i < B.b * B.h; i++) {
+    const r = B.ramp[i];
+    if (!ramps.has(r) || !(B.zon[i] > drempelZon)) continue;
+    const top = RAMP_LEN[r] - 1;
+    if (B.stap[i] < top - 1.1) continue;
+    B.stap[i] = Math.min(top + 0.6, B.stap[i] + 1);
+  }
+}
+
+// De herfstEik dempen: de rampen goud en rood (fel geel en fel rood tussen de bladeren) vallen
+// terug tot het rustigere herfst-oranje, en een deel van de kroon — ruis in de wereld, dus geen
+// twee bomen gelijk, en geen harde vlekken — keert terug naar gewoon blad-groen. Dat geeft een
+// kroon die half is omgeslagen in plaats van in de fik, en minder verzadigd. Werkt alleen op de
+// herfstEik-bomen zelf (via hun object-nummer in gezet), na avondSchaduw (dat zet B.zon/B.schaduw)
+// en vóór avondlicht/boomrand, zodat die daarna nog gewoon op het resultaat werken.
+function dempHerfst(B, gezet) {
+  const eigen = new Set();
+  for (const g of gezet) if (g.naam === 'herfstEik') eigen.add(g.obj);
+  if (!eigen.size) return;
+  const [goud, rood, herfst, blad] = [RAMP.goud, RAMP.rood, RAMP.herfst, RAMP.blad];
+  for (let i = 0; i < B.b * B.h; i++) {
+    if (!eigen.has(B.obj[i])) continue;
+    const r = B.ramp[i];
+    if (r !== goud && r !== rood && r !== herfst) continue;
+    const X = B.pos[i * 3];
+    const Y = B.pos[i * 3 + 1];
+    const Z = B.pos[i * 3 + 2];
+    const n = ruis3(X * 0.045, Y * 0.045, Z * 0.06, 401);
+    const s = B.stap[i];
+    if (n > 0.5) {
+      B.ramp[i] = blad;
+      B.stap[i] = klem(Math.round((s * (RAMP_LEN[blad] - 1)) / (RAMP_LEN[r] - 1)), 0, RAMP_LEN[blad] - 1);
+    } else if (r !== herfst) {
+      B.ramp[i] = herfst;
+      B.stap[i] = klem(Math.round((s * (RAMP_LEN[herfst] - 1)) / (RAMP_LEN[r] - 1)) - 1, 0, RAMP_LEN[herfst] - 1);
+    } else {
+      B.stap[i] = klem(s - 0.6, 0, RAMP_LEN[herfst] - 1);
+    }
   }
 }
 
@@ -1024,13 +1104,13 @@ function avondSchaduw(B, R, gezet, o = {}) {
     const Z = B.pos[i * 3 + 2] + nz * 0.7;
     let raak = false;
     let t = 1;
-    for (let s = 0; s < 70 && t < reik; s++) {
+    for (let s = 0; s < 130 && t < reik; s++) {
       const d = R.f(X + L[0] * t, Y + L[1] * t, Z + L[2] * t);
       if (d < 0.15) {
         raak = true;
         break;
       }
-      t += Math.max(d * 0.85, 0.6);
+      t += Math.max(d * 0.85, 1);
     }
     if (!raak) {
       for (const g of gezet) {
