@@ -191,7 +191,25 @@ gevecht wat vlotter loopt. De tovenaar loopt op het vel van zijn leeftijd (84, 9
 
 Nog niet in de kunst: de pilaar en de trap (die blijven vlakken), en een houding voor sluipen.
 
+## Eén wind door alles heen (Marcel, 20 sep 2026)
+
+"Mag allemaal wel wat beweging in, die doeken enzo. Kan me voorstellen dat het soms waait?"
+
+Niet elk ding apart laten wiebelen, maar één windwaarde in de spelstaat waar alles aan hangt.
+Die loopt langzaam op en af, met vlagen, zodat het als weer leest en niet als speelgoed.
+
+- **Wat meebeweegt:** de doeken aan de waslijn, de boomkruinen en struiken, het gras, de rook uit
+  een schoorsteen, en de windwijzer op de toren, die met de richting meedraait.
+- **Hoe:** de sprites blijven stilstaand. Bij het laden wordt een beeld in horizontale plakken
+  verschoven, meer naar boven dan naar onder, zodat een boom buigt in plaats van te schuiven.
+  Dat levert een handvol standen per voorwerp op, die aan de windwaarde hangen. Zo blijft het
+  tekenen gewoon plakken, en hoeft er niets per beeld te worden uitgerekend.
+- **Niet alles even hard:** een zwaar ding (een schuur, een muur) beweegt niet, een boom een
+  beetje, een doek veel. De uitslag hoort bij het ding, de wind is voor iedereen gelijk.
+- **Uit de pas lopen:** elk voorwerp krijgt een eigen verschuiving in de tijd, anders wappert het
+  dorp als één vlag.
+
 ## Open
 
-- **Bewegende omgeving:** vlammen, water, rook, bladeren, en de stofjes in de zonnebundel.
+- **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
 - **Effecten** van spreuken, en portretten van dorpelingen voor de gesprekken.
