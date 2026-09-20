@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aardschok · gesprekken</title>
+  <link rel="stylesheet" href="../stijl.css">
+  <link rel="stylesheet" href="gesprekken-tool.css">
+</head>
+<body>
+  <header class="gt-kop">
+    <h1>Gesprekken</h1>
+    <label>Persoon
+      <select id="gt-persoon"></select>
+    </label>
+    <button id="gt-nieuw-persoon" type="button">+ Nieuw persoon</button>
+    <div class="gt-vul"></div>
+    <span id="gt-status" class="gt-status"></span>
+    <button id="gt-opslaan" type="button" class="gt-primair">Opslaan</button>
+  </header>
+
+  <div id="gt-opmerking-melding" class="gt-melding verborgen"></div>
+
+  <main class="gt-layout">
+    <section class="paneel gt-boom">
+      <h2>Knopen<div class="gt-vul"></div><button id="gt-nieuwe-knoop" type="button" class="gt-mini" title="Nieuwe knoop in deze persoon">+ knoop</button></h2>
+      <div id="gt-boom-inhoud"></div>
+    </section>
+
+    <section class="paneel gt-editor">
+      <h2>Bewerken</h2>
+      <div id="gt-persoon-editor"></div>
+      <div id="gt-knoop-editor"><p class="gt-leeg">Kies een knoop in de boom hiernaast.</p></div>
+    </section>
+
+    <section class="paneel gt-proef">
+      <h2>Proefgesprek</h2>
+      <div id="gt-proef-staat"></div>
+      <div id="gt-proef-gesprek"></div>
+    </section>
+
+    <section class="paneel gt-fouten">
+      <h2>Controle</h2>
+      <div id="gt-fouten-inhoud"></div>
+    </section>
+  </main>
+
+  <!-- Verborgen meetrek met dezelfde id's als in het spel (zie stijl.css: #dialoog, #dialoog-tekst,
+       #dialoog-keuzes). Zo meet het gereedschap met de echte styling hoe breed tekst in het spel
+       past, in plaats van dat zelf te gokken. -->
+  <div id="dialoog" class="paneel gt-meet">
+    <p id="dialoog-tekst"></p>
+    <div id="dialoog-keuzes"><button type="button"></button></div>
+  </div>
+
+  <!-- Dezelfde spelbestanden als het spel, gewoon geladen: leeftijd.js voor T.jaren, gesprekken.js
+       voor de gegevens (T.GESPREKKEN) en gesprek.js voor de regels. Dit gereedschap voegt alleen
+       het scherm toe (gesprekken-tool.js); het proefgesprek roept T.gesprekKnoop enzovoort
+       rechtstreeks aan, er is geen eigen kopie van de regels. -->
+  <script src="../js/leeftijd.js"></script>
+  <script src="../js/gesprekken.js"></script>
+  <script src="../js/gesprek.js"></script>
+  <script src="gesprekken-tool.js"></script>
+</body>
+</html>

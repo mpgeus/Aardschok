@@ -19,6 +19,59 @@ const SOORTEN = {
   '.mp3': 'audio/mpeg',
 };
 
+// Voor gereedschap/gesprekken.html: dit is het enige adres waarnaar geschreven mag worden, en
+// het schrijft altijd naar dit ene, vaste bestand — nooit naar een pad uit het verzoek. Zo kan
+// dit adres niet misbruikt worden om iets anders te overschrijven.
+const GESPREKKEN_PAD = '/gereedschap/api/gesprekken-opslaan';
+const GESPREKKEN_BESTAND = path.join(MAP, 'js', 'gesprekken.js');
+
+function slaGesprekkenOp(req, res) {
+  let body = '';
+  let teGroot = false;
+  req.setEncoding('utf8');
+  req.on('data', (stuk) => {
+    body += stuk;
+    if (body.length > 2_000_000) {
+      teGroot = true;
+      req.destroy();
+    }
+  });
+  req.on('end', () => {
+    if (teGroot) return;
+    if (!body.trim()) {
+      res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('Lege inhoud, niets opgeslagen');
+      return;
+    }
+    fs.readFile(GESPREKKEN_BESTAND, 'utf8', (foutLezen, huidig) => {
+      const schrijf = () => {
+        fs.writeFile(GESPREKKEN_BESTAND, body, 'utf8', (foutSchrijven) => {
+          if (foutSchrijven) {
+            res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+            res.end('Schrijven mislukt: ' + foutSchrijven.message);
+            return;
+          }
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+          res.end(JSON.stringify({ ok: true }));
+        });
+      };
+      if (foutLezen) {
+        // nog geen bestand om een reservekopie van te maken: dan meteen schrijven
+        schrijf();
+        return;
+      }
+      fs.writeFile(GESPREKKEN_BESTAND + '.bak', huidig, 'utf8', (foutKopie) => {
+        if (foutKopie) {
+          res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+          res.end('Reservekopie maken mislukt: ' + foutKopie.message);
+          return;
+        }
+        schrijf();
+      });
+    });
+  });
+}
+
 http
   .createServer((req, res) => {
     let pad;
@@ -27,6 +80,10 @@ http
     } catch {
       res.writeHead(400);
       res.end();
+      return;
+    }
+    if (req.method === 'POST' && pad === GESPREKKEN_PAD) {
+      slaGesprekkenOp(req, res);
       return;
     }
     const bestand = path.normalize(path.join(MAP, pad === '/' ? 'index.html' : pad));

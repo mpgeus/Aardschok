@@ -1,0 +1,193 @@
+/* Stijl voor gereedschap/gesprekken.html. Dit is gereedschap, geen kunstwerk: leesbaarheid
+   voor sfeer. Hergebruikt de kleuren en het lettertype uit ../stijl.css (--inkt, --goud,
+   --paneel, --rand, --kop); hier staat alleen de indeling van het gereedschap zelf. */
+
+html, body {
+  overflow: auto;
+  height: auto;
+  min-height: 100%;
+  user-select: text;
+}
+
+h1, h2, h3 { font-family: var(--kop); font-weight: normal; margin: 0; }
+h2 { font-size: 15px; color: var(--goud); display: flex; align-items: center; gap: 8px; }
+h3 { font-size: 13px; color: var(--gedempt); margin: 14px 0 6px; }
+
+input, select, textarea, button { font: 13px system-ui, sans-serif; color: var(--inkt); }
+input, select, textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--rand);
+  border-radius: 6px;
+  padding: 5px 7px;
+}
+textarea { width: 100%; resize: vertical; font-family: system-ui, sans-serif; }
+label { display: block; font-size: 12px; color: var(--gedempt); margin-bottom: 10px; }
+label > input, label > select, label > textarea { display: block; width: 100%; margin-top: 3px; color: var(--inkt); }
+
+button {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--rand);
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+button:hover { background: rgba(255, 255, 255, 0.09); }
+button.gt-primair { border-color: var(--goud); background: rgba(226, 182, 74, 0.16); color: var(--inkt); }
+button.gt-primair:hover { background: rgba(226, 182, 74, 0.26); }
+button.gt-mini { padding: 2px 7px; font-size: 12px; border-radius: 5px; }
+button.gt-mini-x { color: #f0b3a8; }
+button:disabled { opacity: 0.4; cursor: default; }
+
+/* Kopbalk */
+.gt-kop {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  background: rgba(12, 10, 8, 0.96);
+  border-bottom: 1px solid var(--rand);
+}
+.gt-kop h1 { font-size: 17px; color: var(--inkt); }
+.gt-kop label { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 12px; }
+.gt-kop label select { display: inline; width: auto; margin: 0; }
+.gt-vul { flex: 1; }
+.gt-status { font-size: 12px; color: var(--gedempt); }
+
+.gt-melding {
+  margin: 10px 16px 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(224, 96, 79, 0.12);
+  border: 1px solid rgba(224, 96, 79, 0.4);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+/* Hoofdindeling: boom | editor | proefgesprek + controle */
+.gt-layout {
+  display: grid;
+  grid-template-columns: 250px minmax(360px, 1fr) 360px;
+  grid-template-rows: auto auto;
+  gap: 14px;
+  padding: 14px 16px 60px;
+  align-items: start;
+}
+@media (max-width: 1150px) {
+  .gt-layout { grid-template-columns: 1fr; }
+  .gt-boom, .gt-editor, .gt-proef, .gt-fouten { grid-column: 1 !important; grid-row: auto !important; }
+}
+.gt-boom { grid-column: 1; grid-row: 1 / span 2; padding: 12px; max-height: calc(100vh - 90px); overflow: auto; }
+.gt-editor { grid-column: 2; grid-row: 1 / span 2; padding: 14px 16px; }
+.gt-proef { grid-column: 3; grid-row: 1; padding: 12px 14px; }
+.gt-fouten { grid-column: 3; grid-row: 2; padding: 12px 14px; max-height: 60vh; overflow: auto; }
+
+.gt-leeg { color: var(--gedempt); font-size: 12.5px; font-style: italic; }
+.gt-gedempt { color: var(--gedempt); }
+.gt-fout-tekst { color: #f0b3a8; }
+
+/* Boom */
+.gt-boom-lijst { list-style: none; margin: 4px 0; padding-left: 16px; }
+.gt-boom > #gt-boom-inhoud > .gt-boom-lijst { padding-left: 0; }
+.gt-boom-rij { display: flex; align-items: baseline; gap: 4px; padding: 2px 0; flex-wrap: wrap; }
+.gt-boom-keuze { color: var(--gedempt); font-size: 12px; }
+.gt-boom-id {
+  font-family: var(--kop);
+  font-size: 13px;
+  background: none;
+  border: 1px solid transparent;
+  padding: 1px 6px;
+  border-radius: 5px;
+  color: var(--inkt);
+}
+.gt-boom-id:hover { background: rgba(255, 255, 255, 0.08); }
+.gt-boom-id.gt-actief { border-color: var(--goud); background: rgba(226, 182, 74, 0.18); color: var(--goud); }
+.gt-boom-id.gt-proef-actief { box-shadow: inset 0 -2px 0 var(--groen); }
+.gt-boom-id.gt-fout { color: #f0b3a8; border-color: rgba(224, 96, 79, 0.5); }
+.gt-label { font-size: 11.5px; color: var(--gedempt); text-transform: uppercase; letter-spacing: 0.04em; margin: 10px 0 2px; }
+
+/* Editor: persoon + knoop */
+.gt-persoon-velden { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 6px; }
+.gt-knoop-kop { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.gt-knoop-kop input { font-family: var(--kop); font-size: 15px; color: var(--goud); width: 220px; }
+.gt-knoop-kop .gt-vul { flex: 1; }
+
+.gt-regel {
+  border: 1px solid var(--rand);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.gt-regel-boven { display: flex; gap: 8px; align-items: flex-start; }
+.gt-regel-boven .gt-zeg { flex: 1; min-height: 42px; }
+.gt-regelknoppen { display: flex; flex-direction: column; gap: 3px; }
+.gt-regel-onder { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; margin-top: 6px; }
+.gt-regel-lang { color: var(--goud); font-size: 11.5px; margin-top: 4px; }
+
+.gt-doel { min-width: 160px; }
+.gt-keuze-boven { display: flex; gap: 8px; align-items: center; }
+.gt-keuze-boven .gt-zeg { flex: 1; }
+
+.gt-als { display: flex; flex-direction: column; gap: 4px; }
+.gt-als-rijen { display: flex; flex-direction: column; gap: 4px; }
+.gt-als-rij { display: flex; gap: 4px; align-items: center; }
+.gt-als-rij select { width: auto; }
+.gt-als-waarde { width: 110px; }
+.gt-als-titel { font-size: 11px; color: var(--gedempt); }
+
+.gt-doe { display: flex; flex-direction: column; gap: 4px; min-width: 200px; }
+.gt-doe label { margin-bottom: 0; font-size: 11px; }
+.gt-doe input { width: 170px; }
+
+/* Proefgesprek */
+.gt-proef-staat { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--rand); }
+.gt-proef-rij { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.gt-proef-rij label { margin: 0; display: flex; align-items: center; gap: 5px; font-size: 12px; }
+.gt-proef-rij input[type="number"] { width: 64px; }
+.gt-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.gt-chip { display: flex; align-items: center; gap: 4px; font-size: 12px; border: 1px solid var(--rand); border-radius: 12px; padding: 2px 9px 2px 6px; }
+.gt-chip input { margin: 0; }
+.gt-toevoegen { display: flex; gap: 4px; }
+.gt-toevoegen input { width: 120px; }
+
+.gt-proef-naam { font-family: var(--kop); color: var(--goud); font-size: 15px; }
+.gt-proef-tekst { font-size: 14px; line-height: 1.5; margin: 6px 0 4px; }
+.gt-proef-reden { font-size: 11.5px; color: var(--gedempt); font-style: italic; margin-bottom: 8px; }
+.gt-proef-keuzes { display: flex; flex-direction: column; gap: 5px; }
+.gt-proef-keuzes button { text-align: left; }
+.gt-proef-verborgen { margin: 4px 0 0; padding-left: 18px; color: var(--gedempt); font-size: 11.5px; }
+.gt-proef-einde { color: var(--gedempt); font-style: italic; font-size: 12.5px; }
+
+/* Controle */
+.gt-melding-lijst { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.gt-melding-item {
+  text-align: left;
+  width: 100%;
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 6px 8px;
+  border-left: 3px solid var(--rand);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.gt-melding-item.fout { border-left-color: var(--rood); }
+.gt-melding-item.waarschuwing { border-left-color: var(--goud); }
+.gt-melding-item.info { border-left-color: var(--gedempt); }
+.gt-melding-soort { font-weight: bold; margin-right: 4px; }
+.gt-melding-item.fout .gt-melding-soort { color: var(--rood); }
+.gt-melding-item.waarschuwing .gt-melding-soort { color: var(--goud); }
+.gt-melding-item.info .gt-melding-soort { color: var(--gedempt); }
+.gt-schoon { color: var(--groen); font-size: 12.5px; }
+
+/* Verborgen meetrek: dezelfde id's als het spel (#dialoog, #dialoog-tekst, #dialoog-keuzes) zodat
+   de echte css uit ../stijl.css bepaalt hoe breed tekst mag zijn — geen gegokt getal hier. */
+#dialoog.gt-meet {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
