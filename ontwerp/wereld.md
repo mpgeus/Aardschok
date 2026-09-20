@@ -17,21 +17,24 @@
 Het dorp moet flink zijn: veel mensen, ook stellen en kinderen, en plekken die de moeite waard
 zijn.
 
-**Al getekend:**
-- de smid: nors maar behulpzaam, repareert wat de aardschok brak;
-- de herbergierster: weet alle roddels;
-- de boer: zwijgzaam, zijn land is gespleten;
-- de dorpsoudste: de oudste van het dorp en nog jonger dan de tovenaar; ze herinnert zich hem van
-  veertig jaar geleden.
+**Al getekend, met een karakter als haakje voor quests (voorstellen):**
 
-Die karakters zijn voorstellen.
+| Dorpeling | Wie het is |
+|---|---|
+| De smid | Nors maar behulpzaam; repareert wat de aardschok brak. |
+| De smidsvrouw | Doet de handel van de smidse, en voert iedereen die stil blijft staan. |
+| De herbergierster | Weet alle roddels. |
+| De boer | Zwijgzaam; zijn land is gespleten. |
+| De boerin | Ruilt eieren, en weet welke akkers zijn gescheurd. |
+| De dorpsoudste | De oudste van het dorp, nog jonger dan de tovenaar, en ze herinnert zich hem van veertig jaar geleden. |
+| De oude man | Haar man. Hij vergeet dingen, dus zijn aanwijzingen komen er in stukjes uit. |
+| De bruid en de bruidegom | Hun bruiloft ging niet door: de aardschok was juist die nacht. Zij staat nog in haar jurk. |
+| De jongen | Speelt dat hij een held is, met een houten zwaard en de pet van zijn vader. |
+| Het meisje | Haar zwarte kat verdwijnt op de dagen dat er een quest is. |
+| De kleuter | Sjokt achter iedereen aan die tegen hem praat, met een houten paardje. |
 
-**Nog te maken:**
-- kinderen;
-- stellen: de vrouw van de smid, de boerin, een jong stel dat gaat trouwen, en een oud stel
-  waarvan de een dingen vergeet;
-- meer beroepen: bakker, molenaar, kruidenvrouw, jager, marskramer, koster, wachter;
-- een maker voor gewone dorpelingen in allerlei variaties.
+**Nog te maken:** de beroepen (bakker, molenaar, kruidenvrouw, jager, marskramer, koster,
+wachter) en een maker voor gewone dorpelingen in allerlei variaties.
 
 ### Plekken die de moeite waard zijn (voorstel)
 
