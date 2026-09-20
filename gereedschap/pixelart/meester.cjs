@@ -47,16 +47,18 @@ const MANTEL_ONDER = S[2] - 9.5;
 const MANTEL_TOP = S[2] + 6.5;
 const RIEM_Z = 41.5; // een sober koord, geen sjerp met kwastjes: hij is de leermeester, niet de avonturier
 const BAARD_LEN = 24; // langer dan de tovenaar (19 op zijn 84e): tot op zijn riem
-const STEEN_R = 3.4;
+const STEEN_R = 4.6; // een flinke brok, geen schijfje: groter dan tovenaars gladde bol
 
-// De kromme staf: een stok om op te leunen, geen rechte staf naast hem. Vijf punten langs de as,
-// met een bocht erin; het greeppunt ligt op borsthoogte, de klauw ruim buiten zijn silhouet op
-// schouderhoogte (niet erboven, anders komt hij naast zijn hoofd te hangen).
+// De kromme staf: één doorlopende schacht van de grond tot ruim boven zijn ingezakte hoed, met
+// de klauw aan de top. Hij leunt met zijn hand op diezelfde schacht (bij het greeppunt, op
+// borsthoogte) — geen los tweede voorwerp. Eerst stond de klauw op schouderhoogte, en dat las als
+// een handspiegel naast een stok in plaats van één staf (Marcel, 20 sep 2026): de top moet boven
+// het silhouet van de hoed uitsteken om als staf te lezen, net zoals bij de tovenaar zijn bol.
 const STAF_ONDER = [-13, 15, 0];
-const STAF_KNIK1 = [-17.5, 10.5, 22];
-const STAF_GRIP = [-13, 16.5, 49];
-const STAF_KNIK2 = [-16.5, 13, 57];
-const STAF_TOP = [-18.5, 13.5, 63]; // middelpunt van de steen
+const STAF_KNIK1 = [-17, 11, 24];
+const STAF_GRIP = [-14, 15.5, 48];
+const STAF_KNIK2 = [-17.5, 12.5, 73];
+const STAF_TOP = [-16, 13, 93]; // middelpunt van de steen, boven de kruin van de hoed (~84)
 const GREEP = STAF_GRIP[2];
 const STAF_PAD = [STAF_ONDER, STAF_KNIK1, STAF_GRIP, STAF_KNIK2, STAF_TOP];
 // Waar de as van de staf zit op hoogte z (voor de botten): stuksgewijs langs STAF_PAD, want de
@@ -296,13 +298,18 @@ function meester(stand = null) {
     hi: 6.2,
     patroon: (x, y, z) => (Math.sin(z * 0.8 + Math.sin(x * 2.6) * 2.4) > 0.62 ? -0.8 : 0),
   };
+  // ruw en dof: geen glans, brede facetten in plaats van een glad oppervlak, en een duidelijk
+  // donkere kant (de patroon-waarden liggen ver uiteen) zodat hij als brok leest, niet als schijf
   mat[M.steen] = {
     ramp: 'steen',
-    lo: 1.6,
-    hi: 6.6,
-    patroon: (x, y, z) => (Math.sin(x * 1.4 + z * 1.8 + y * 0.9) > 0.5 ? 0.6 : -0.4),
+    lo: 1.2,
+    hi: 6.4,
+    patroon: (x, y, z) => {
+      const facet = Math.sin(x * 0.9 + z * 0.7) + Math.sin(y * 0.8 - z * 0.5 + 1.7) + Math.sin(x * 0.5 + y * 0.6 - 2.1);
+      return facet > 0.8 ? 1.1 : facet < -0.6 ? -1.8 : 0;
+    },
     // een steen, geen vurige bol: hij gloeit bleek op vanuit zichzelf in plaats van oranje
-    gloei: (x, y, z, kijk) => klem(1.3 + 2 * kijk * kijk + (hg ? hg.steen.gloed * 0.75 : 0), 1, 7),
+    gloei: (x, y, z, kijk) => klem(1.1 + 1.6 * kijk * kijk + (hg ? hg.steen.gloed * 0.75 : 0), 0.8, 6.5),
   };
   mat[M.leer] = { ramp: 'leer', lo: 0.8, hi: 5.2 };
   mat[M.hoed] = {
@@ -332,7 +339,8 @@ function meester(stand = null) {
     hi: 4.8,
     patroon: (x, y, z, nx, ny, nz, stap) => (z < MANTEL_ONDER + 1.6 ? naarRamp('goud', stap, [0.25, 4.8], [1.3, 6.2]) : 0),
   };
-  mat[M.klauw] = { ramp: 'ijzer', lo: 1.4, hi: 6.2, glans: 1.4 };
+  // geen glans: gepolijst metaal was precies waardoor de steen als een handspiegel oogde
+  mat[M.klauw] = { ramp: 'ijzer', lo: 1.2, hi: 5.4 };
 
   const delen = [];
   let vanaf = 0;
@@ -358,39 +366,49 @@ function meester(stand = null) {
     hg ? HH.naElkaar(Bval, HH.beweging({ as: [1, 0, 0], graden: hg.voet[i].hoek, om: [(i ? 1 : -1) * 4.8, 5, 0], dp: [0, hg.voet[i].y, hg.voet[i].z] })) : null,
   );
 
-  // --- staf (eerst, dan liggen de handen erover): krom, met geknoest hout, en een klauw die een
-  // steen vasthoudt in plaats van de tovenaars gladde gloeiende bol.
+  // --- staf (eerst, dan liggen de handen erover): één kromme, geknoeste schacht van de grond tot
+  // boven de hoed, met een klauw die een ruwe steen vasthoudt in plaats van de tovenaars gladde
+  // gloeiende bol.
   delen.push(...bochtKegel(STAF_ONDER, STAF_KNIK1, STAF_GRIP, 1.7, 1.35, 4, M.hout, D.staf, 1));
-  delen.push(...bochtKegel(STAF_GRIP, STAF_KNIK2, [STAF_TOP[0], STAF_TOP[1], STAF_TOP[2] - STEEN_R - 2], 1.35, 1.05, 3, M.hout, D.staf, 1));
-  for (const p of [HH.tussen(STAF_ONDER, STAF_KNIK1, 0.4), HH.tussen(STAF_KNIK1, STAF_GRIP, 0.35), HH.tussen(STAF_GRIP, STAF_KNIK2, 0.5)]) {
+  delen.push(...bochtKegel(STAF_GRIP, STAF_KNIK2, [STAF_TOP[0], STAF_TOP[1], STAF_TOP[2] - STEEN_R - 2], 1.4, 1.1, 5, M.hout, D.staf, 1));
+  for (const p of [
+    HH.tussen(STAF_ONDER, STAF_KNIK1, 0.4),
+    HH.tussen(STAF_KNIK1, STAF_GRIP, 0.35),
+    HH.tussen(STAF_GRIP, STAF_KNIK2, 0.3),
+    HH.tussen(STAF_GRIP, STAF_KNIK2, 0.75),
+  ]) {
     delen.push(bol(p, 1.85, M.hout, D.staf, 1.1));
   }
-  // klauw: drie zware, gekromde klauwen om de steen, in ijzer in plaats van hout
+  // klauw: drie zware, gekromde klauwen die duidelijk over de steen heen grijpen — ook in
+  // silhouet, want de punt van elke klauw eindigt boven het midden van de steen, niet ernaast.
   const bc = STAF_TOP;
   for (const [ax, ay] of [
-    [-1, 0.25],
-    [0.85, 0.75],
-    [0.25, -1.05],
+    [-1, 0.3],
+    [0.9, 0.7],
+    [0.15, -1.1],
   ]) {
     const n = Math.hypot(ax, ay);
     const ux = ax / n;
     const uy = ay / n;
     delen.push(
       ...bochtKegel(
-        [STAF_TOP[0], STAF_TOP[1], STAF_TOP[2] - STEEN_R - 1.8],
-        [bc[0] + ux * (STEEN_R + 3), bc[1] + uy * (STEEN_R + 3), STAF_TOP[2] - STEEN_R * 0.5],
-        [bc[0] + ux * (STEEN_R * 0.5), bc[1] + uy * (STEEN_R * 0.5), STAF_TOP[2] + STEEN_R * 0.9],
-        1.6,
-        0.55,
-        3,
+        [bc[0] + ux * STEEN_R * 0.3, bc[1] + uy * STEEN_R * 0.3, STAF_TOP[2] - STEEN_R * 1.15],
+        [bc[0] + ux * (STEEN_R + 3.6), bc[1] + uy * (STEEN_R + 3.6), STAF_TOP[2] - STEEN_R * 0.25],
+        [bc[0] + ux * (STEEN_R * 0.3), bc[1] + uy * (STEEN_R * 0.3), STAF_TOP[2] + STEEN_R * 1.05],
+        2.2,
+        0.9,
+        4,
         M.klauw,
         D.klauw,
-        0.7,
+        0.6,
       ),
     );
   }
-  delen.push(ellips(bc, [STEEN_R, STEEN_R * 0.85, STEEN_R * 1.05], M.steen, D.steen, 0.8));
-  delen.push(ellips(plus(bc, [1.6, 0.6, 1.1]), [STEEN_R * 0.55, STEEN_R * 0.5, STEEN_R * 0.6], M.steen, D.steen, 0.6));
+  // de steen: een ruwe, onregelmatige brok (drie overlappende bollen, geen gladde ellips), met
+  // een donkere kant en zonder glans — geen gepolijst schijfje
+  delen.push(ellips(bc, [STEEN_R, STEEN_R * 0.82, STEEN_R * 0.88], M.steen, D.steen, 1.2));
+  delen.push(ellips(plus(bc, [STEEN_R * 0.5, STEEN_R * 0.3, STEEN_R * 0.35]), [STEEN_R * 0.62, STEEN_R * 0.55, STEEN_R * 0.5], M.steen, D.steen, 1));
+  delen.push(ellips(plus(bc, [-STEEN_R * 0.42, -STEEN_R * 0.15, -STEEN_R * 0.3]), [STEEN_R * 0.5, STEEN_R * 0.46, STEEN_R * 0.46], M.steen, D.steen, 1));
   bot(Bstaf);
 
   // --- rok: dezelfde klokvormige techniek als de tovenaar (de benen zijn onzichtbaar maar
@@ -580,8 +598,12 @@ function meester(stand = null) {
   // romp of mantel), en ver genoeg naar buiten — de rand is zelf al 14,2 breed, dus een sliert die
   // daar niet ruim voorbij komt, verdwijnt gewoon binnen het silhouet van de rand.
   const kruin = plus(RAND, [0, -1, 7]);
-  delen.push(ellips(kruin, [6.4, 6, 5], M.hoed, D.hoed, 1.4));
-  delen.push(kegel(plus(kruin, [0, 0, 1]), [17, S[1] + 2, RAND[2] - 9], 5, 2.3, M.hoed, D.hoed, 1.3));
+  delen.push(ellips(kruin, [7.2, 6.8, 5.8], M.hoed, D.hoed, 1.4));
+  // een extra klont naar voren op de kruin, zodat de ingezakte vorm ook recht van voren steviger
+  // oogt en niet als een nette, ronde punt (Marcel, 20 sep 2026: van opzij en achteren was hij
+  // al goed, van voren mocht het steviger)
+  delen.push(ellips(plus(kruin, [0, 3.4, -0.8]), [5.2, 5.4, 4], M.hoed, D.hoed, 1.3));
+  delen.push(kegel(plus(kruin, [0, 0, 1]), [17, S[1] + 2, RAND[2] - 9], 5.2, 2.3, M.hoed, D.hoed, 1.3));
   delen.push(kegel([16, S[1] + 1.4, RAND[2] - 8], [23, S[1] - 3, RAND[2] - 19], 3, 1.2, M.hoed, D.hoed, 1.4));
   bot(Bhoed);
 
