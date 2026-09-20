@@ -95,6 +95,20 @@ beek, en noemde die stijl "echt passend". Wat we eruit overnemen:
 De plaat is een diorama op een schuin afgesneden plak grond. Dat is presentatie; onze wereld loopt
 door, dus die harde rand nemen we niet over.
 
+### Water is modderig, en een pad heeft karrensporen (Marcel, 20 sep 2026)
+
+Op de eerste proefplaat van de randtegels was het water fel korenbloemblauw met witte fonkeling,
+terwijl de rest van de wereld naar olijf en gedempt is gegaan en het water op de referentie
+modderig grijsgroen is. Hetzelfde soort uitschieter als de blauwe veldsteen.
+
+- **Water is modderig:** gedempt grijsgroen, donkerder naar het midden, warmer en ondieper bij de
+  kant. Fonkeling mag, maar spaarzaam en gedempt.
+- **Een pad heeft karrensporen:** twee sporen in de rijrichting met een hogere strook ertussen, en
+  een getrapte rand waar het gras uitdunt in plaats van een harde grens. Zonder dat leest een pad
+  als een modderplek, en een dorp moet juist een geheel worden met wegen die ergens heen gaan.
+- **Een kasseiplein heeft een rand:** een kantlaag van grotere stenen, zodat het gelegd oogt en
+  niet gemorst.
+
 ## Wat er staat (20 sep 2026)
 
 Klaar en in `gereedschap/pixelart/`, met een exportscript per onderdeel:
