@@ -102,10 +102,13 @@ Klaar en in `gereedschap/pixelart/`, met een exportscript per onderdeel:
 - de hal en de voorraadkamer, de figuren, de voorwerpen, muren en vloeren;
 - bomen en begroeiing, het dorp met zijn plekken, negentien dorpelingen, de bosvijanden, en de
   toren in drie staten;
+- de huizen op de leidende referentie, de schuur als eigen type, en de wereldkaart daarop
+  herbouwd (dorp linksonder, de weg naar de toren rechts);
+- het erf van de toren: de krakkemikkige toren met moestuin, waslijn, schuur en bosrand;
 - animaties voor de tovenaar, Wim, het skelet, de slijmkruiper, de wolf, de spin en de kobold.
 
-In de maak: grotere en middeleeuwsere huizen (de schaal klopte niet, zie `wereld.md`), het erf
-van de toren, en het bos als reisgebied.
+In de maak: het bos als reisgebied, de sprite van de oude meester, en de tegelvellen waarmee
+Marcel de kaarten in Tiled kan tekenen (zie `wereld.md`).
 
 Een les uit het werk met meerdere agents: drie tegelijk die renderen, gaan hard door het
 budget. Eén tegelijk, en sprites hergebruiken in plaats van elke boom opnieuw uitrekenen.
