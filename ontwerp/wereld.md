@@ -33,8 +33,23 @@ zijn.
 | Het meisje | Haar zwarte kat verdwijnt op de dagen dat er een quest is. |
 | De kleuter | Sjokt achter iedereen aan die tegen hem praat, met een houten paardje. |
 
-**Nog te maken:** de beroepen (bakker, molenaar, kruidenvrouw, jager, marskramer, koster,
-wachter) en een maker voor gewone dorpelingen in allerlei variaties.
+**De beroepen, met hun haakje (voorstellen van de agent):**
+
+| Beroep | Waar zijn quest over gaat |
+|---|---|
+| De bakker | Zijn oven is koud sinds de aardschok de schoorsteen spleet. |
+| De molenaar | De schok klemde de vang van de molen; er is geen meel tot iemand naar boven klimt. |
+| De kruidenvrouw | Woont aan de bosrand en weet welk kruid waarvoor dient, tegen betaling in iets uit de toren. |
+| De jager | Sinds de schok loopt er een nieuw spoor in het bos, en dat volgt hij niet alleen. |
+| De marskramer | Hij koopt ook. Vorige week kocht hij een sleutel van iemand die hem bij de toren zou hebben gevonden. |
+| De koster | Sluit elke avond elke deur en telt de graven. Eén telling klopte niet. |
+| De wachter | Sliep door de nacht waarin het zegel brak, en praat er liever niet over. |
+
+Let op bij de kruidenvrouw: kruiden mogen geen jaren teruggeven, want genezen bestaat niet. Wat
+ze wel mag verkopen, zijn middelen om een gevecht te ontlopen: rook, lokaas, slaapkruid.
+
+Naast deze mensen is er een maker voor gewone dorpelingen: per zaad een ander postuur, kapsel,
+kleding, hoofddeksel en iets in de handen. Daarmee kan het dorp druk aanvoelen.
 
 ### Plekken die de moeite waard zijn (voorstel)
 
