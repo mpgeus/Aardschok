@@ -151,17 +151,44 @@ Hoe het aan elkaar hangt:
    staat, en een objectlaag voor huizen, bomen, mensen en monsters.
 3. Eigenschappen per object vertellen het spel de rest: welk wezen, welke dorpeling (het zaad),
    welke deur, welke quest, en waar je naar een ander gebied overgaat.
-4. `js/kaart.js` (nog te maken) leest de `.tmj` en maakt daarvan wat `js/wereld.js` nu met de
+4. `js/kaart.js` leest de `.tmj` en maakt daarvan wat `js/wereld.js` nu met de
    hand opschrijft: begaanbaar, vast, deuren, voorwerpen, wezens.
+
+### De keten staat (20 sep 2026)
+
+| Stap | Wat het doet |
+|---|---|
+| `npm run tiled` | Rendert uit `dorp.cjs`, `dorp2.cjs` en `bomen.cjs` de vellen naar `tegels/`: grond, bomen, begroeiing en de vijftien gebouwen, elk met een `.tsx` waarin `vast` en `beslaat` al staan. |
+| Tiled | Marcel opent de `.tsx`-en en tekent een kaart, die hij opslaat als `kaarten/<naam>.tmj`. |
+| `npm run kaarten` | Bundelt elke `.tmj` tot `kaarten/kaarten.js` (`T.KAARTEN`), want `fetch` werkt niet vanaf `file://`. |
+| `T.laadKaart(T.KAARTEN.naam)` | Maakt er een wereld van: tegels, deuren, voorwerpen en wezens, waar `isBegaanbaar`, `isVast` en `raakt` ongewijzigd op werken. |
+
+Eigenschappen die Marcel op een object zet: `wezen` (welk wezen, uit dezelfde lijst als het
+spel), `zaad` (een gewone dorpeling), `staat` (een deur: open, dicht of opslot) en `overgang`
+(de naam van de kaart waar je heen gaat). Op de tegel zelf staan `naam`, `vast` en bij een
+gebouw `beslaat` ("7x5"). Een gebouw zet je neer op zijn achterste hoek en het beslaat de
+tegels rechtsonder daarvandaan, dezelfde afspraak als in de export.
+
+`kaarten/proef.tmj` is een kaart van 12×10 die met de hand is gezet, met `test/kaart.test.cjs`
+eromheen; die toetst dat het pad begaanbaar is, dat de voet van het huis vast is en dat het
+monster op de goede tegel staat.
 
 Nog uit te zoeken:
 
+- **Nog niet in Tiled zelf geopend.** De vellen zijn gemaakt tegen de documentatie en de
+  broncode van Tiled, maar nog niet één keer in het programma zelf geprobeerd. Dat is het eerste
+  wat Marcel doet.
 - **Hoogte.** Tiled kent geen z. Terrassen en een richel moeten dus met lagen, of met een
   eigenschap per tegel, of we houden een gebied vlak.
 - **Grote gebouwen.** Een huis van 6×8 tegels is één object met een voetpunt, geen losse tegels.
   De dieptesortering van het spel (op t) moet zulke objecten op hun voettegel inplannen.
 - **Wat blijft er in code?** De kamers binnen in de toren zijn klein en staan al in code. Die
   mogen zo blijven tot de editor er staat.
+- **Wat er nog niet in de vellen zit:** dorpelingen, deuren en hekken als plaatje (de
+  eigenschappen werken wel, maar je ziet in Tiled een kaal blokje), stromend water, en het
+  bruggetje, dat geen heel aantal tegels breed is.
+- **Overgangen doen nog niets.** `overgang` wordt ingelezen, maar er is nog niets dat van kaart
+  wisselt.
 
 ## Open vragen
 
