@@ -43,6 +43,25 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - `npm run pixelart:spel` zet daaruit alleen wat het spel tekent in `beelden/` (wél in git,
   want het spel heeft het nodig als het draait). Draai het opnieuw als de kunst verandert.
 
+## Zuinig werken met agents
+
+Gemeten op 20 sep 2026: de agents waren samen ruim 2,5 miljoen tekens, het gesprek zelf 284.000.
+De agents zijn dus zo'n negentig procent. Het knelpunt is de vijfuursgrens, niet de week.
+
+De duurste agent deed 84 aanroepen voor 740.000 tekens, bijna 9.000 per stap: een agent stuurt
+bij elke stap zijn hele eigen gesprek opnieuw mee, dus de kosten lopen kwadratisch op met hoe
+lang hij leeft. Daaruit volgt, van meest naar minst effect:
+
+- **Laat een agent kort leven.** Een verse agent met een korte opdracht die naar `ontwerp/`
+  wijst, is goedkoper dan dezelfde agent voor de vijfde keer terugsturen met commentaar. Alleen
+  doorgaan als hij iets weet dat nergens staat.
+- **Lees niet het hele bestand.** `dorp.cjs` en `kern.cjs` zijn duizenden regels; zoek de twintig
+  regels die je nodig hebt.
+- **Beoordeel op uitsneden.** Een plaat van 3200×1800 kost elke keer dat iemand hem bekijkt. Voor
+  "is die steen nu grijs" is 600×400 genoeg.
+- **Sonnet voor uitvoerend werk, Opus voor oordeel.**
+- **Niet meer dan twee agents tegelijk die renderen.**
+
 ## Opbouw
 
 Alles hangt aan één naamruimte, `globalThis.Toren` (in de code `T`), zodat hetzelfde bestand in
