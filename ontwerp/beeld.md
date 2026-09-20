@@ -154,9 +154,25 @@ beweegt.
 **De tovenaar loopt naar zijn leeftijd.** Op zijn 84e loopt hij kwiek; op zijn 99e schuifelt hij,
 leunend op de staf.
 
+## De sprites zitten in het spel (20 sep 2026)
+
+`npm run pixelart:spel` zet uit `uit/` precies neer wat het spel tekent, in `beelden/` (wél in
+git). De muurstukken worden daar opnieuw gerenderd, zonder de strook vloer die op de
+overzichtsplaat voor de muur ligt, en in beide richtingen: een noordmuur kijkt naar het
+zuidwesten, een westmuur naar het zuidoosten. Een muurstuk is een halve tegel dik, zoals in
+`kamers.cjs`, dus krijgt elke muurtegel er twee achter elkaar; het voorste draagt de
+versiering. Vloeren zijn lappen van twee bij twee tegels waar het spel per tegel een ruit uit
+knipt, zodat het verband doorloopt.
+
+`js/sprites.js` kiest het beeld, en leidt de houding af uit de spelstaat zelf in plaats van uit
+een tweede boekhouding: een pad is lopen, `uitval` is uithalen, `flits` is net geraakt, `dood`
+is sterven, en jaren die erbij komen zonder klap zijn een spreuk. De pas komt uit de afgelegde
+afstand en niet uit de klok, dus de voeten glijden niet, ook niet als een monster in een
+gevecht wat vlotter loopt. De tovenaar loopt op het vel van zijn leeftijd (84, 92 of 99).
+
+Nog niet in de kunst: de pilaar en de trap (die blijven vlakken), en een houding voor sluipen.
+
 ## Open
 
-- **Sprites in het spel.** `js/tekenen.js` tekent nog met vlakken; er is een speler nodig die
-  per toestand, richting en tijd het juiste beeld kiest.
 - **Bewegende omgeving:** vlammen, water, rook, bladeren, en de stofjes in de zonnebundel.
 - **Effecten** van spreuken, en portretten van dorpelingen voor de gesprekken.

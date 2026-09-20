@@ -3,11 +3,35 @@
 // de voorkant van de kamer waar de held staat, worden laag getekend: zo kijk je de kamer in,
 // zoals bij een poppenhuis. Kamers waar je niet bent, staan gedimd; kamers waar je nooit
 // geweest bent, blijven donker.
+//
+// Er zijn twee manieren van tekenen. Staat de pixel art klaar (`beelden/`, zie js/sprites.js),
+// dan komt alles wat de kunst dekt uit de vellen: vloeren, muren, deuren, voorwerpen en
+// wezens. Wat er niet in zit — het raster, het bereik, de richtlijn, de zwevende teksten, de
+// spreukeffecten, de pilaar en de trap — blijft getekend met vlakken. Met
+// `Toren.debug.vlakken = true` gaat alles terug naar vlakken, om te vergelijken.
 (function (T) {
   'use strict';
 
   const GEDIMD = 0.58;
   const HOOFD = '#e9c6a0';
+
+  const metSprites = () => !!(T.sprites && T.sprites.aan) && !(T.debug && T.debug.vlakken);
+
+  // Welke vloer ligt er in welke kamer? De hal en het trappenhuis hebben de zandvloer uit
+  // kamers.cjs, de voorraadkamer de houten. Een deur krijgt de vloer van een kamer ernaast.
+  const VLOERSOORT = { hal: 'zand', opslag: 'hout', trap: 'zand' };
+  function vloerSoort(w, x, y) {
+    const k = T.kamerVan(w, x, y);
+    if (k) return VLOERSOORT[k.id] || 'zand';
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const b = T.kamerVan(w, x + dx, y + dy);
+      if (b) return VLOERSOORT[b.id] || 'zand';
+    }
+    return 'zand';
+  }
+
+  // Een vast getal per tegel, zodat dezelfde muur elke keer dezelfde scheur heeft.
+  const ruis = (x, y) => (((x * 73856093) ^ (y * 19349663)) >>> 0) % 1000;
 
   T.tekenScene = function (ctx, S, bw, bh) {
     const w = S.wereld;
@@ -18,6 +42,8 @@
     ctx.translate(Math.round(bw / 2), Math.round(bh / 2));
     ctx.scale(S.zoom, S.zoom);
     ctx.translate(-Math.round(S.camera.x), -Math.round(S.camera.y));
+    // Pixel art wordt vergroot, nooit uitgesmeerd.
+    ctx.imageSmoothingEnabled = false;
 
     const inBeeld = (id) => id === w.huidigeKamer || (!!S.gevecht && S.gevecht.kamers.has(id));
     // Opengewerkt: de kamer van de held, en in een gevecht elke kamer waarin gevochten wordt.
@@ -33,7 +59,7 @@
         if (T.tegel(w, x, y) !== 'muur' || !T.isZichtbaar(w, x, y)) continue;
         const laag = isVoorrand(open, x, y);
         const helder = w.burenKamers[y][x].some(inBeeld) ? 1 : GEDIMD;
-        lijst.push({ d: x + y, l: 0, f: () => tekenMuur(ctx, x, y, laag, helder) });
+        lijst.push({ d: x + y, l: 0, f: () => tekenMuur(ctx, w, x, y, laag, helder) });
       }
     }
     for (const deur of w.deuren.values()) {
@@ -49,9 +75,10 @@
       lijst.push({ d: v.x + v.y, l: 1, f: () => tekenVoorwerp(ctx, S, v, helder) });
     }
     for (const e of w.wezens) {
-      if (e.dood && e.sterfTijd > 0.8) continue;
+      // Met sprites blijft het laatste beeld van het sterven liggen; met vlakken vervaagt het.
+      if (e.dood && e.sterfTijd > 0.8 && !metSprites()) continue;
       if (!T.isZichtbaar(w, e.tx, e.ty)) continue;
-      lijst.push({ d: e.x + e.y, l: 2, f: () => tekenWezen(ctx, S, e) });
+      lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, f: () => tekenWezen(ctx, S, e) });
     }
     // Dwaallichten zweven: ze horen in dezelfde rij van voor naar achter, anders schijnen ze
     // dwars door een muur die ervoor staat.
@@ -76,6 +103,7 @@
 
   function tekenVloeren(ctx, S, inBeeld) {
     const w = S.wereld;
+    const sp = metSprites();
     for (let y = 0; y < w.h; y++) {
       for (let x = 0; x < w.b; x++) {
         const t = T.tegel(w, x, y);
@@ -91,9 +119,20 @@
           hex = '#5b4c3c';
           helder = w.burenKamers[y][x].some(inBeeld) ? 1 : GEDIMD;
         }
-        const ruis = 0.95 + ((x * 73 + y * 151) % 11) / 100; // een tikje verschil per tegel
+        // Uit de lap van twee bij twee tegels wordt per tegel een ruit geknipt, een tikje
+        // ruim, zodat er geen haarlijn tussen twee tegels blijft staan.
+        const deel = sp && T.sprites.tegel(vloerSoort(w, x, y), x, y);
+        if (deel) {
+          ctx.save();
+          T.ruit(ctx, p.x, p.y, 1.02);
+          ctx.clip();
+          T.sprites.teken(ctx, deel, p.x, p.y, helder);
+          ctx.restore();
+          continue;
+        }
+        const vlek = 0.95 + ((x * 73 + y * 151) % 11) / 100; // een tikje verschil per tegel
         T.ruit(ctx, p.x, p.y, 1);
-        ctx.fillStyle = T.rgb(T.kleur(hex), helder * ruis);
+        ctx.fillStyle = T.rgb(T.kleur(hex), helder * vlek);
         ctx.fill();
         ctx.strokeStyle = 'rgba(0,0,0,0.24)';
         ctx.lineWidth = 1;
@@ -257,7 +296,57 @@
     }
   }
 
-  function tekenMuur(ctx, x, y, laag, helder) {
+  const isRuimte = (w, x, y) => {
+    const t = T.tegel(w, x, y);
+    return t === 'vloer' || t === 'deur';
+  };
+
+  // Wat hangt er aan deze muur? Vast per tegel, zodat een kamer er elke keer hetzelfde
+  // uitziet. Een raam alleen waar er buiten achter ligt; verder hier en daar een scheur, en
+  // spaarzaam een lamp, een wandkleed of een rek.
+  function muurDeco(w, x, y, west) {
+    const buiten = T.tegel(w, west ? x - 1 : x, west ? y : y - 1) === 'buiten';
+    const r = ruis(x, y);
+    if (buiten && r % 6 === 0) return 'raam';
+    if (r % 23 === 0) return 'lamp';
+    if (r % 19 === 0) return 'wandkleed';
+    if (r % 17 === 0) return 'rek';
+    if (r % 7 === 0) return 'scheur';
+    return 'muur';
+  }
+
+  // Een muur van sprites. Een muurstuk is een halve tegel dik, zoals in kamers.cjs, dus
+  // krijgt elke muurtegel er twee achter elkaar: dan is de tegel vol en klopt de bovenkant.
+  // Het voorste stuk draagt de versiering, want dat is de kant die de kamer in kijkt. Ligt er
+  // ook een kamer ten oosten, dan komt daar een westmuurstuk overheen.
+  function tekenMuurSprites(ctx, w, x, y, laag, helder) {
+    if (laag) {
+      const stomp = T.sprites.muur('laag');
+      if (!stomp) return false;
+      const p = T.naarScherm(x, y);
+      T.sprites.teken(ctx, stomp, p.x, p.y, helder);
+      return true;
+    }
+    const vlak = T.sprites.muur('muur', false);
+    if (!vlak) return false;
+    const achter = T.naarScherm(x, y + 0.5);
+    T.sprites.teken(ctx, vlak, achter.x, achter.y, helder);
+    const voor = T.naarScherm(x, y + 1);
+    const naarKamer = isRuimte(w, x, y + 1);
+    T.sprites.teken(ctx, (naarKamer && T.sprites.muur(muurDeco(w, x, y, false), false)) || vlak, voor.x, voor.y, helder);
+    if (isRuimte(w, x + 1, y)) {
+      const soort = muurDeco(w, x, y, true);
+      const zij = soort !== 'muur' && T.sprites.muur(soort, true);
+      if (zij) {
+        const o = T.naarScherm(x + 1, y);
+        T.sprites.teken(ctx, zij, o.x, o.y, helder);
+      }
+    }
+    return true;
+  }
+
+  function tekenMuur(ctx, w, x, y, laag, helder) {
+    if (metSprites() && tekenMuurSprites(ctx, w, x, y, laag, helder)) return;
     const p = T.naarScherm(x, y);
     const hoogte = laag ? T.MUUR_LAAG : T.MUUR_HOOG;
     T.blok(ctx, p.x, p.y, 0.5, 0.5, hoogte, '#7b7368', { helder });
@@ -277,10 +366,31 @@
     }
   }
 
+  // Een deur van sprites: dezelfde muurstukken, met een deur, een slot of een doorgang erin.
+  // Een open deur is een doorgang zonder stuk erachter, anders kijk je tegen steen aan.
+  // Het lage stompje van de voorrand blijft met vlakken: daar hoort een slot op te kunnen.
+  function tekenDeurSprites(ctx, d, laag, helder) {
+    if (laag) return false;
+    const west = d.richting === 'ns'; // de muur loopt van noord naar zuid: de deur kijkt naar het oosten
+    const deel = T.sprites.muur(d.staat === 'open' ? 'doorgang' : d.staat === 'opslot' ? 'slot' : 'deur', west);
+    if (!deel) return false;
+    if (d.staat !== 'open') {
+      const achter = T.sprites.muur('muur', west);
+      const a = west ? T.naarScherm(d.x + 0.5, d.y) : T.naarScherm(d.x, d.y + 0.5);
+      if (achter) T.sprites.teken(ctx, achter, a.x, a.y, helder);
+    }
+    const b = west ? T.naarScherm(d.x + 1, d.y) : T.naarScherm(d.x, d.y + 1);
+    T.sprites.teken(ctx, deel, b.x, b.y, helder);
+    return true;
+  }
+
   function tekenDeur(ctx, d, laag, helder) {
+    if (metSprites() && tekenDeurSprites(ctx, d, laag, helder)) return;
     const p = T.naarScherm(d.x, d.y);
     const ns = d.richting === 'ns'; // de muur loopt van noord naar zuid: het paneel is dun in x
-    const muurHoogte = laag ? T.MUUR_LAAG : T.MUUR_HOOG;
+    // Een laag stompje naast een lage muur van sprites moet even hoog zijn als die muur.
+    const laagH = metSprites() ? T.sprites.laagHoogte() : T.MUUR_LAAG;
+    const muurHoogte = laag ? laagH : T.MUUR_HOOG;
     const steen = '#6f675c';
     if (d.staat === 'open') {
       for (const s of [-0.4, 0.4]) {
@@ -292,7 +402,7 @@
     }
     const fx = ns ? 0.14 : 0.5;
     const fy = ns ? 0.5 : 0.14;
-    const hoogte = laag ? T.MUUR_LAAG : 54;
+    const hoogte = laag ? laagH : 54;
     T.blok(ctx, p.x, p.y, fx, fy, hoogte, d.staat === 'opslot' ? '#6b4526' : '#7d5431', { helder });
     if (laag) {
       // ook een lage deur laat zien dat hij op slot zit
@@ -333,6 +443,28 @@
 
   function tekenVoorwerp(ctx, S, v, helder) {
     const p = T.naarScherm(v.x, v.y);
+    // De pilaar en de trap staan nog niet in de kunst; die blijven vlakken.
+    const deel = metSprites() && T.sprites.voorwerp(v.soort);
+    if (deel) {
+      if (v.soort === 'sleutel') {
+        // De sleutel zweeft en glimt, anders zie je hem niet liggen.
+        gloed(ctx, p.x, p.y - 6, 16, 'rgba(226, 182, 74,', 0.3);
+        T.sprites.teken(ctx, deel, p.x, p.y - 8 - Math.sin(S.tijd * 3) * 3, helder);
+        return;
+      }
+      T.sprites.teken(ctx, deel, p.x, p.y, helder);
+      if (v.soort === 'fontein') {
+        // Het water blijft bewegen: een rimpel over de kom en een druppel in de straal.
+        const golf = (Math.sin(S.tijd * 2.2) + 1) / 2;
+        ctx.strokeStyle = `rgba(200, 230, 255, ${0.18 + golf * 0.22})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.ellipse(p.x, p.y - 14, 7 + golf * 8, 3.5 + golf * 4, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        rondje(ctx, p.x, p.y - 34 + Math.sin(S.tijd * 5) * 1.5, 1.6, 'rgba(210, 238, 255, 0.85)');
+      }
+      return;
+    }
     if (v.soort === 'kist') {
       T.blok(ctx, p.x, p.y, 0.34, 0.34, 28, '#8a5a2c', { helder });
       T.blok(ctx, p.x, p.y, 0.36, 0.36, 4, '#6e4622', { helder, basis: 28 });
@@ -572,8 +704,11 @@
       cx += (q.x - p.x) * 0.32 * k;
       cy += (q.y - p.y) * 0.32 * k;
     }
+    // Met sprites speelt het vel de houding af (staan, lopen, uithalen, geraakt, sterven);
+    // met vlakken blijft het bij een huppelpas en een vervagend lijk.
+    const deel = metSprites() ? T.sprites.wezen(S, e) : null;
     ctx.save();
-    if (e.dood) {
+    if (e.dood && !deel) {
       ctx.globalAlpha = Math.max(0, 1 - e.sterfTijd / 0.8);
       cy += e.sterfTijd * 10;
     }
@@ -583,8 +718,16 @@
     ctx.fill();
     const bob = Math.sin(S.tijd * 2.6 + e.fase) * 1.3;
     // Wie geduwd wordt, schuift weg: geen huppelpas.
-    const huppel = e.onderweg && !e.geduwd ? Math.abs(Math.sin(S.tijd * 14)) * 2.5 : 0;
-    const top = TEKENAARS[e.soort](ctx, cx, cy - huppel, bob, e, S);
+    const huppel = !deel && e.onderweg && !e.geduwd ? Math.abs(Math.sin(S.tijd * 14)) * 2.5 : 0;
+    let top;
+    if (deel) {
+      // Sluipen heeft nog geen eigen houding: de held doet het in het halfdonker.
+      if (e === S.held && S.sluipen && !S.gevecht) ctx.globalAlpha *= 0.8;
+      T.sprites.teken(ctx, deel, cx, cy);
+      top = cy - T.sprites.hoogte(e.soort);
+    } else {
+      top = TEKENAARS[e.soort](ctx, cx, cy - huppel, bob, e, S);
+    }
     if (e.brandt > 0 && !e.dood) tekenVlammen(ctx, S, cx, cy - huppel, top);
     if (e.flits > 0) {
       ctx.fillStyle = `rgba(255, 70, 50, ${Math.min(0.55, e.flits * 2)})`;

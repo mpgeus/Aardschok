@@ -9,9 +9,15 @@
   let bh = 0;
   const S = (T.S = { tijd: 0 });
 
-  // Hoe hoog iets boven zijn tegel uitsteekt, om erop te kunnen klikken.
+  // Hoe hoog iets boven zijn tegel uitsteekt, om erop te kunnen klikken. Met sprites zijn de
+  // figuren groter dan de vlakken waren, dus vraagt het aanwijzen het aan de sprites zelf.
   const WEZEN_HOOGTE = { wim: 48, slijm: 28, skelet: 52 };
   const VOORWERP_HOOGTE = { fontein: 32, kist: 36, trap: 46, sleutel: 28 };
+  const SPRITE_VOORWERP_HOOGTE = { fontein: 46, kist: 40, trap: 46, sleutel: 26 };
+  const hoogteVan = (e) =>
+    T.sprites.aan && !T.debug.vlakken ? T.sprites.hoogte(e.soort) : WEZEN_HOOGTE[e.soort] || 48;
+  const voorwerpHoogte = (v) =>
+    (T.sprites.aan && !T.debug.vlakken ? SPRITE_VOORWERP_HOOGTE : VOORWERP_HOOGTE)[v.soort];
 
   T.nieuwSpel = function (toonPlek) {
     const w = T.maakWereld();
@@ -85,13 +91,13 @@
     for (const e of w.wezens) {
       if (e.dood || e === S.held || !T.isZichtbaar(w, e.tx, e.ty)) continue;
       const p = T.naarScherm(e.x, e.y);
-      const hoog = WEZEN_HOOGTE[e.soort] || 48;
+      const hoog = hoogteVan(e);
       if (sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoog && sy < p.y + 9) {
         kandidaten.push({ d: e.x + e.y + 0.01, wezen: e, x: e.tx, y: e.ty });
       }
     }
     for (const v of w.voorwerpen) {
-      const hoog = VOORWERP_HOOGTE[v.soort];
+      const hoog = voorwerpHoogte(v);
       if (!hoog || !T.isZichtbaar(w, v.x, v.y)) continue;
       const p = T.naarScherm(v.x, v.y);
       if (sx > p.x - 20 && sx < p.x + 20 && sy > p.y - hoog && sy < p.y + 10) {
@@ -259,6 +265,9 @@
 
   // Voor het testen.
   T.debug = {
+    // Toren.debug.vlakken = true tekent weer met vlakken in plaats van met de pixel art,
+    // om te vergelijken en om te zien of er niets verdwenen is.
+    vlakken: false,
     // Waar staat tegel (x, y) nu op het scherm, in css-pixels? Voor echte klikken.
     naarBeeld(x, y) {
       const p = T.naarScherm(x, y);
@@ -285,6 +294,9 @@
   };
 
   formaat();
+  // De pixel art gaat meteen laden; tot hij klaar is tekent het spel zijn vlakken. Bij het
+  // titelscherm is dat nooit te zien.
+  T.sprites.laad();
   T.nieuwSpel(false);
   S.modus = 'titel';
   T.ui.toonOverlay(

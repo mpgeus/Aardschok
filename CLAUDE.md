@@ -40,6 +40,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   tonen maar niet bedienen, vandaar deze server.
 - `npm test` draait `test/*.test.cjs` met `node --test`: de regels zonder scherm.
 - `npm run pixelart` rendert alle HD-pixel art naar `gereedschap/pixelart/uit/` (niet in git).
+- `npm run pixelart:spel` zet daaruit alleen wat het spel tekent in `beelden/` (wél in git,
+  want het spel heeft het nodig als het draait). Draai het opnieuw als de kunst verandert.
 
 ## Opbouw
 
@@ -58,6 +60,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.kiesSpreuk`, `T.handelingSpreuk`), de dwaallichten in de wereld (`T.werkLichtenBij`) en
   het meesterschap dat meetelt (`T.oefen`).
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
+- `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
+  een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
+  spelstaat zelf (pad, uitval, flits, dood, en de jaren die erbij komen: dat is toveren), en
+  `T.sprites.teken` legt het anker van de cel op het midden van de tegel. Laadt alles met
+  `Image`, nooit `getImageData`: anders werkt `file://` niet meer.
 - `js/anim.js`: beweging en effecten. `T.anim.*` geeft beloftes, zodat een beurt als gewone
   code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`.
 - `js/verkennen.js`: rondlopen, klikhandelingen, dwalende monsters, ontdekt worden.
@@ -66,8 +73,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/dialoog.js`, `js/ui.js` (alle html over het beeld), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera).
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
-  3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. Het
-  spel tekent zelf nog met vlakken; de sprites zitten er nog niet in.
+  3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar.
+  `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel.
+- Het spel tekent met sprites zodra `beelden/` er is, en anders met vlakken. Wat de kunst niet
+  dekt (raster, bereik, richtlijn, zwevende tekst, spreukeffecten, pilaar en trap) blijft
+  altijd vlakken. `Toren.debug.vlakken = true` zet alles terug naar vlakken, om te vergelijken.
 
 ## De kernregel: De laatste klim
 
