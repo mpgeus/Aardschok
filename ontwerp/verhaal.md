@@ -9,8 +9,17 @@
 - **De held** is een tovenaar van 84. Zijn leeftijd is zijn levensbalk (de kernregel, zie
   `CLAUDE.md`). Aan het eind telt hoe oud hij boven aankomt.
 - **Toon.** Weemoedig met een knipoog, nooit grappig ten koste van de ernst van de klim.
-- **Waar de teksten staan.** De gesprekken zitten in `js/dialoog.js`, de openingstekst in
+- **Waar de teksten staan.** De gesprekken zijn gegevens (`js/gesprekken.js`), de regels eromheen
+  staan los (`js/gesprek.js`) en het venster in `js/dialoog.js`. De openingstekst staat in
   `js/main.js`.
+- **Gereedschap voor gesprekken** (Marcel, 20 sep 2026, nog te bouwen). Zoals Tiled voor de
+  kaarten: een pagina die de ontwikkelserver serveert, met de knopen van een persoon als boom,
+  voorwaarden uit een keuzelijst in plaats van uit het hoofd, en een proefgesprek waarin je de
+  leeftijd en de vlaggen zet en ziet welke regel wint. Plus controle op keuzes die nergens heen
+  wijzen, knopen die niemand bereikt, en tekst die niet in het venster past. Opslaan schrijft
+  `js/gesprekken.js` terug. **Het proefgesprek gebruikt `js/gesprek.js` zelf,** nooit een eigen
+  kopie van de regels — anders liegt het gereedschap vroeg of laat, en dat is erger dan geen
+  gereedschap.
 
 ## Personen
 
