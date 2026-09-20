@@ -26,6 +26,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   vorm van het spel (vrij en niet lineair, en hoe groot het wordt).
 - `ontwerp/kaarten.md`: van Tiled naar het spel, en hoe hoogte gaat werken.
 - `ontwerp/spreuken.md`: de spreuken, en hoe de tovenaar met de jaren meer kan.
+- `ontwerp/verpakken.md`: van map met bestanden naar programma op Steam, en wanneer er wél een
+  bouwstap komt.
 - `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
 
 ## Git
