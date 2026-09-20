@@ -244,6 +244,44 @@ Nog uit te zoeken:
 - **Overgangen doen nog niets.** `overgang` wordt ingelezen, maar er is nog niets dat van kaart
   wisselt.
 
+## Welke plekken de wereld nog nodig heeft (Marcel, 20 sep 2026, nog niet besloten)
+
+Marcels lijst: dungeons, andere tovenaarstorens, questgebieden, mijnen, en een dorp dat meer een
+geheel wordt zoals Stardew Valley, met wegen. Claudes weging daarbij, want bij ons is de vraag
+niet hoeveel sprites maar hoeveel generators:
+
+- **Verbindweefsel eerst.** Wat een wereld af laat voelen zijn niet de gebouwen maar de
+  verbindingen: een pad dat een hoek om gaat en netjes eindigt, een hek dat een hoek maakt, een
+  oever waar water en gras elkaar raken, een brug, een poort, een wegwijzer. Nu ligt alles als
+  losse eilandjes op een grasveld, en dat is wat "overvol maar leeg tegelijk" veroorzaakt.
+  Technisch: randtegels per overgang tussen twee grondsoorten, met hoeken en einden, die Tiled
+  zelf kan kiezen. Een generator, honderden tegels, de grootste sprong die er te halen is.
+- **Dungeons en mijnen zijn hetzelfde probleem,** en het goedkoopst. De binnenbouwdoos bestaat
+  al: muren van 128 pixels, vloeren, deuren, licht per kamer. Een grafkelder is die doos in
+  ander gesteente met ander licht; een mijn is dezelfde doos met stutbalken, rails, ertsaders en
+  lantaarns. Twee generators geven beide categorieen, met zoveel kamers als we tekenen.
+- **Andere tovenaarstorens zijn bijna gratis,** want `toren.cjs` is al een generator met drie
+  staten en een instelbare maat. Een andere hoogte, een ander dak, een ander palet. Thematisch
+  het sterkste van de lijst: als de held de laatste van een uitstervend vak is, hoort het land
+  vol te staan met torens van mensen die het niet gehaald hebben.
+- **Questgebieden zijn geen beeldcategorie maar een bouwdoos:** een kampement met tenten en een
+  vuur, een ruine met omgevallen zuilen, een schrijn, een grotmond, een kerkhof, een gebroken
+  brug. Tien losse stukken geven vijftig plekken; een aparte questgebied-generator zou duur en
+  saai zijn.
+
+**De waarschuwing die erbij hoort.** Elke plek moet een reden hebben binnen de kernregel, anders
+verdunt het onderwerp van het spel. Het kader dat past: alles buiten de toren is een manier om
+goud te verdienen of een spreuk te leren, en elk gevecht daar kost jaren. Dan is de wereld een
+winkel waar je met je leven betaalt. Een dungeon is geen inhoud maar een aanbod: hier ligt goud,
+en het kost je waarschijnlijk drie jaar.
+
+**Wat niet op de lijst stond maar wel nodig is:** binnenkanten van dorpshuizen (je wilt de smidse
+in om te handelen), portretten van de dorpelingen voor gesprekken (de generator bestaat al voor
+de tovenaar en Wim), en de top van de toren, want dat is het einde van het spel en het enige
+decor dat er echt toe doet.
+
+**Voorgestelde volgorde na buiten-af:** randtegels, dan de mijn, dan de andere torens.
+
 ## Open vragen
 
 - **Welke upgrades heeft de toren?** Denkrichtingen:
