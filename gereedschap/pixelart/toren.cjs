@@ -16,6 +16,10 @@
 'use strict';
 const K = require('./kern.cjs');
 const { TEGEL, PXH, RAMP, VLAG, UIT, EX, EY, LICHT, hash, rnd, ruis2, ruis3, klem, mix, glad, sdf } = K;
+// dorp.cjs meldt de veldsteen-ramp (grijs, met een koele zweem) aan bij kern.cjs; de romp
+// gebruikt hem nu ook (dezelfde steen als het dorp), dus vereisen we dorp.cjs hier alleen voor
+// dat neveneffect, ook als de toren ooit los van het dorp gerenderd wordt.
+require('./dorp.cjs');
 
 const [V0, V1, V2] = K.V;
 const [L0, L1, L2] = LICHT;
@@ -682,6 +686,15 @@ function steenStap(st, basis, px, py, o = {}) {
   return s;
 }
 
+// Dezelfde spreiding als de veldsteen in het dorp (dorp.cjs, veldsteenPixel): ongeveer één steen
+// op de zeven warm, en van de rest ongeveer één op de elf koel, zodat de muur gemengd oogt in
+// plaats van egaal grijs. Geeft de ramp om af te wijken van het steenvlak, of null voor gewoon.
+function steenKleur(st) {
+  if (st.pb < 1 || st.pr < 1) return null; // de voeg blijft altijd gewoon steen
+  if (st.id % 7 === 0) return 'bot';
+  if (st.id % 11 === 0) return 'pet';
+  return null;
+}
 
 // ---------------------------------------------------------------- de toren: maten
 
@@ -960,11 +973,11 @@ function bouwToren(S) {
 
   // --- materialen
   const oud = S.schade > 0.5;
-  W.mat.romp = { ramp: 'steen', lo: 1.2, hi: 8.3, rand: 0.7, patroon: (C) => rompTex(C, S) };
-  W.mat.plint = { ramp: 'steen', lo: 1, hi: 8, rand: 0.7, patroon: (C) => plintTex(C, S) };
-  W.mat.lijst = { ramp: 'steen', lo: 1.5, hi: 8.4, rand: 0.7, patroon: (C) => lijstTex(C, S) };
-  W.mat.kraag = { ramp: 'steen', lo: 1.2, hi: 8.2, rand: 0.7, patroon: (C) => (hash(C.px, C.py, 3) % 19 === 0 ? -0.8 : 0) };
-  W.mat.trede = { ramp: 'steen', lo: oud ? 1.1 : 1.5, hi: oud ? 6.8 : 7.4, rand: 0.6, patroon: (C) => tredeTex(C, S) };
+  W.mat.romp = { ramp: 'veldsteen', lo: 1.2, hi: 8.3, rand: 0.7, patroon: (C) => rompTex(C, S) };
+  W.mat.plint = { ramp: 'veldsteen', lo: 1, hi: 8, rand: 0.7, patroon: (C) => plintTex(C, S) };
+  W.mat.lijst = { ramp: 'veldsteen', lo: 1.5, hi: 8.4, rand: 0.7, patroon: (C) => lijstTex(C, S) };
+  W.mat.kraag = { ramp: 'veldsteen', lo: 1.2, hi: 8.2, rand: 0.7, patroon: (C) => (hash(C.px, C.py, 3) % 19 === 0 ? -0.8 : 0) };
+  W.mat.trede = { ramp: 'veldsteen', lo: oud ? 1.1 : 1.5, hi: oud ? 6.8 : 7.4, rand: 0.6, patroon: (C) => tredeTex(C, S) };
   return W;
 }
 
@@ -1674,7 +1687,8 @@ function rompTex(C, S) {
     if (schaduwKant > 0.2 && km > 0.9 - 0.12 * schaduwKant && hash(C.px, C.py, 5) % 3 !== 0) return { ramp: 'mos', stap: klem(1.6 + basis * 0.4, 0, 5) };
     if (M.H < H_SOK2 + 12 && ruis2(M.U * 0.2, M.H * 0.3, 22) > 0.66) return { ramp: 'mos', stap: klem(0.8 + basis * 0.4, 0, 5) };
   }
-  return { stap: s };
+  const kl = steenKleur(st);
+  return kl ? { ramp: kl, stap: s } : { stap: s };
 }
 
 function plintTex(C, S) {
@@ -1696,7 +1710,8 @@ function plintTex(C, S) {
     if (d < 0.5) return { stap: basis - 3.2 };
     if (d < 1.5 && rechts) s = basis + 1.2;
   }
-  return { stap: s };
+  const kl = steenKleur(st);
+  return kl ? { ramp: kl, stap: s } : { stap: s };
 }
 
 function lijstTex(C, S) {
@@ -1802,7 +1817,7 @@ function bouwPuin(W, S) {
     voeg(g, { ...blokDeel(c, [4.4, 3, 0.9], kans(i, 7, 3) * 180, 8 + kans(i, 8, 3) * 20, kans(i, 9, 3) * 360, 0.4), m: 'scherfPan', deel: 70 + i });
   });
   W.mat.puin = {
-    ramp: 'steen',
+    ramp: 'veldsteen',
     lo: 1,
     hi: 6.9,
     rand: 0.6,
@@ -2082,7 +2097,7 @@ function bouwVoorraad(W, S) {
   const pan = plek(18, 104 + RVERSCHIL, 0);
   voeg(g, { ...blokDeel([pan[0], pan[1], 5], [8, 5, 5], 20, 0, 0, 0.6), m: 'pannenStapel', deel: 153 });
   W.mat.nieuweSteen = {
-    ramp: 'steen',
+    ramp: 'veldsteen',
     lo: 1.8,
     hi: 7.6,
     rand: 0.6,
