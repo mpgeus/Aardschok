@@ -781,7 +781,7 @@ function watermolen(gx, gy, o = {}) {
   const T = TEGEL;
   const radVlak = o.radVlak || 'x';
   const g = D.huis({
-    gx, gy, b: 6, d: 8, nok: 'y', dak: 'pannen', sokkelH: 18, zaad: o.zaad ?? 23,
+    gx, gy, b: 6, d: 8, nok: 'y', dak: 'spanen', sokkelH: 18, zaad: o.zaad ?? 23,
     verdiepingen: [
       {
         muur: 'veldsteen', hoog: 104,

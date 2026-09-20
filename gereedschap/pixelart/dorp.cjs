@@ -188,6 +188,19 @@ function straalRaakt(v, P, R, max = Infinity) {
 // Hoeveel direct licht een vlak met normaal n krijgt (0..1)
 const lichtOp = (n) => Math.max(0, n[0] * LX + n[1] * LY + n[2] * LZ);
 
+// Een eigen ramp voor veldsteen. 'steen' trekt naar paars en 'pet' naar blauw; een muur hoort
+// grijs te zijn met hooguit een koele zweem. We schrijven hem hier bij in de tabellen van
+// kern.cjs, zodat dat bestand van iedereen blijft.
+if (K.RAMP.veldsteen === undefined) {
+  const hexen = ['#1e1f22', '#2e3035', '#414349', '#55585e', '#6b6e74', '#83868c', '#9da0a5', '#b9bbbf', '#d4d6d8'];
+  const rgb = hexen.map((h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]);
+  K.RAMPEN.veldsteen = hexen;
+  K.RAMP.veldsteen = K.RAMP_NAMEN.length;
+  K.RAMP_NAMEN.push('veldsteen');
+  K.RAMP_RGB.push(rgb);
+  K.RAMP_LEN.push(hexen.length);
+}
+
 // ---------------------------------------------------------------- de grondkaart
 
 // Waar ligt gras, waar een zandpad, waar kasseien? Paden zijn lijnen door tegelpunten met een
@@ -425,8 +438,8 @@ function grasPixel(gx, gy, qx, qy, rand, dor) {
   if (dor) {
     const droog = ruis2(gx * 0.85 + 11, gy * 0.85, 58) * 0.7 + ruis2(gx * 2.6, gy * 2.6, 59) * 0.3;
     // grote vlekken: waar de zon valt staat het gras lichter, in de laagtes dieper groen
-    const vlek = ruis2(gx * 0.42 + 31, gy * 0.42, 61);
-    s += vlek > 0.64 ? 1 : vlek < 0.33 ? -1 : 0;
+    const vlek = ruis2(gx * 0.3 + 31, gy * 0.3, 61);
+    s += vlek > 0.72 ? 1 : vlek < 0.26 ? -1 : 0;
     if (droog > 0.84 || (droog > 0.8 && hash(qx, qy, 57) % 3 === 0)) {
       UIT.ramp = RAMP.riet;
       UIT.stap = klem(s - 1 + (p === 1 ? 1 : 0), 1, 6);
@@ -1414,10 +1427,9 @@ function veldsteenPixel(u, h, W, basis, zaad, hoeken = true) {
   }
   const du = ui - s0;
   const lenS = s1 - s0;
-  // Koel grijsblauw in plaats van paars: de 'pet'-ramp ligt anderhalve stap lager in toon, dus
-  // die schuift er weer bij op.
-  const off = 1.4;
-  UIT.ramp = RAMP.pet;
+  // Grijs met een koele zweem; de warme en de donkerblauwe stenen zijn de uitzondering.
+  const off = 0;
+  UIT.ramp = RAMP.veldsteen;
   // voegen
   if (dh === rh - 1 || du === lenS - 1) {
     UIT.stap = basis - 3 + off;
@@ -1429,11 +1441,11 @@ function veldsteenPixel(u, h, W, basis, zaad, hoeken = true) {
     UIT.stap = basis - 3 + off;
     return;
   }
-  const warm = !inHoek && hs % 6 === 0;
-  const grijs = !warm && hs % 3 === 0; // een deel van de stenen blijft grijs in plaats van blauw
+  const warm = !inHoek && hs % 7 === 0;
+  const koel = !warm && hs % 11 === 0; // een enkele steen trekt naar blauw
   if (warm) UIT.ramp = RAMP.bot;
-  else if (grijs) UIT.ramp = RAMP.steen;
-  let s = basis + (warm || grijs ? 0 : off) + (inHoek ? 0.6 : 0) + (hs % 7 === 0 ? -1 : hs % 7 === 1 ? 0.6 : 0) - (warm ? 1 : 0);
+  else if (koel) UIT.ramp = RAMP.pet;
+  let s = basis + (koel ? 1.2 : 0) + (inHoek ? 0.6 : 0) + (hs % 7 === 0 ? -1 : hs % 7 === 1 ? 0.6 : 0) - (warm ? 1 : 0);
   if (dh === rh - 2) s += 1; // bovenrand in het licht
   else if (dh === 0) s -= 1; // onderrand
   if (du === 0) s += 0.5;
@@ -1699,12 +1711,16 @@ function rietPixel(e, kol, basis, zaad, mosExtra = 0) {
   if (f < 2) s = basis - 2; // de schaduw onder de laag erboven: een hele stap donkerder
   else if (f < 3.2) s = Math.min(s, basis - 1);
   else if (f > laagH - 2 && halm > 4) s = basis + 1; // de lichte neus van een laag
-  // mos: in plekken worden de donkere halmen en de schaduwranden groen, zodat het mos de
-  // nerf van het riet volgt
-  const mos = ruis2(u * 0.06, e * 0.1, zaad + 3) + (e < 20 ? 0.06 : 0) + mosExtra * 1.3;
-  if (mos > 0.92 && s < basis && f >= 2.5) {
-    UIT.ramp = RAMP.mos;
-    s = s - basis + (mos > 1.02 ? 4 : 3);
+  // Mos in plekken in plaats van spikkels: grote vlekken laag op het dak, waar het vocht blijft
+  // staan, en alleen op daken die oud genoeg zijn (dakMos).
+  if (mosExtra > 0.05) {
+    const vlek = ruis2(u * 0.021, e * 0.028, zaad + 3) * 0.72 + ruis2(u * 0.075, e * 0.1, zaad + 5) * 0.28;
+    const laag = klem((30 - e) / 30, 0, 1) * 0.22;
+    if (vlek + laag + mosExtra * 0.4 > 0.9) {
+      UIT.ramp = RAMP.mos;
+      UIT.stap = klem(Math.round(2 + (f < 2.5 ? -1 : 0) + (halm > 8 ? 1 : 0)), 0, 5);
+      return;
+    }
   }
   UIT.stap = s;
 }
@@ -1832,7 +1848,7 @@ function huis(o) {
   const riet = o.dak === 'riet';
   const spaan = o.dak === 'spanen';
   const lei = o.dak === 'leien' || spaan;
-  const dakRamp = spaan ? RAMP.hout : lei ? RAMP.pet : RAMP.dak;
+  const dakRamp = spaan ? RAMP.hout : lei ? RAMP.veldsteen : RAMP.dak;
   const zaad = o.zaad ?? 1;
   const sokkelH = o.sokkelH ?? 10;
   const vormen = [];
@@ -2990,6 +3006,7 @@ function zonSchaduw(B, vormen, o = {}) {
 // met dezelfde lichtheid, dus de vormen blijven gelijk. Na belicht(), voor omlijn().
 const NAAR_WARM = {
   steen: ['bot', [0, 0, 1, 2, 3, 3, 4, 5, 6]],
+  veldsteen: ['bot', [0, 0, 1, 2, 3, 4, 5, 6, 7]],
   mos: ['gras', [0, 1, 2, 3, 4, 5]],
   riet: ['stro', [0, 1, 1, 2, 3, 4, 5]],
   aarde: ['zand', [0, 0, 1, 2, 3, 4, 5]],
