@@ -142,6 +142,31 @@ die het niet zien zitten, en jij die weet wat het kost.
 - **En hij maakt de estafette mogelijk:** word je honderd, dan neemt hij de toren over met alles
   wat jij herstelde nog overeind. Niet nodig, wel mogelijk. Nog niet besloten.
 
+### Hij doet zijn moestuin, tot hij sterft (Marcel, 20 sep 2026)
+
+"Misschien dat die zich bezighoudt met de moestuin. Oud en krakkemikkig. Tot hij sterft?"
+
+De laatste grote tovenaar van zijn tijd, op zijn knieën tussen de bonenstaken. Iemand die iets
+verschrikkelijks boven heeft opgesloten en het vergeten is, en nu wortels verbouwt. Dat is de toon
+van dit spel in één beeld. De moestuin staat er al, op het erf.
+
+**Het lost ook de tutorial op.** Iemand die stilstaat en uitlegt is een tutorial; een oude man die
+doorwerkt terwijl hij praat is een scène. Hij legt niets uit, hij vraagt je dingen: hou dit eens
+vast, jaag die kraai weg, doe die deur dicht want het tocht. Ondertussen zie je alles wat je moet
+weten. Ook zijn demonstratie hoort daar: hij schiet die kraai van zijn kool (97 wordt 98, en hij
+lacht erom), schept uit de fontein en staat weer op 96.
+
+**Hij sterft bij zijn moestuin,** met aarde aan zijn handen — niet in een kamer met een boek. Dat
+is het beeld dat blijft hangen.
+
+**En dan is die tuin van jou.** Je erft niet alleen een kapotte toren en een probleem, maar ook
+zijn tuin: onderhouden of laten verwilderen. Kies je het duistere pad en laat je alles om je toren
+verdorren, dan verdort die tuin mee. Dat hoeft niemand te zeggen.
+
+**Lengte:** "tot hij sterft" mag geen half uur duren. De tutorial is één middag — hij werkt, hij
+leert je wat je moet weten, er komt iets van boven de trap af dat er niet hoort te zijn, hij
+handelt het af, en dat kost hem zijn laatste jaar.
+
 **De meester loopt rond** (Marcel, 20 sep 2026). Tijdens de tutorial hoort hij bij zijn toren te
 ijsberen, in een boek te kijken, de trap op te turen — niet als een standbeeld te wachten tot jij
 praat. Het dwaalsysteem werkt al (Wim doet het, zie `js/verkennen.js`) en zijn sprite is klaar, dus
