@@ -55,7 +55,7 @@ const SOORTEN = {
   water: { s: D.WATER, kleur: '#2e76b6' },
 };
 const VLAKKEN = ['gras', 'zandpad', 'kasseien', 'water'];
-const VARIANTEN_VLAK = 4; // losse vlakke tegels per grondsoort, zodat een vlak niet herhaalt
+const VARIANTEN_VLAK = 8; // losse vlakke tegels per grondsoort, zodat een groot vlak niet herhaalt
 // Vier vormen per hoekcombinatie: dezelfde ribben, een andere golf. Een rechte oever of een recht
 // stuk pad gebruikt telkens dezelfde hoekcombinatie, dus met minder varianten zie je de stenen in
 // de beek en de rietpollen op de kant in een keurig ritme terugkomen.
@@ -70,6 +70,13 @@ const PAREN = [
 ];
 
 const WATER_DIEP = 7; // pixels dat het water onder het maaiveld ligt (een beek, net als dorp.cjs)
+// dorp.cjs strooit in stromend water stenen met schuim, en in stilstaand water lelies. Allebei
+// mooi in één grote plaat, allebei dodelijk in een tegel: zo'n steen valt op, en een tegel die
+// dertig keer in dezelfde beek ligt, legt hem dertig keer op dezelfde plek. Een merkteken in
+// `vijver` slaat de stenen over, en de diepte blijft net onder de grens waarop lelies beginnen —
+// dan is het water schoon en zet Marcel er zelf rotsen bij uit begroeiing.tsx, waar ze horen.
+const GEEN_STENEN = { rand: true };
+const WATER_MAX = 0.19; // tegels van de kant af; daarboven zouden de lelies komen
 
 // ---------------------------------------------------------------- waar we in de ruis snijden
 //
@@ -185,6 +192,8 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
       U.rand = 0;
       U.randS = D.GRAS;
       if (win.s === D.WATER) {
+        U.d = -Math.min(af, WATER_MAX);
+        U.vijver = GEEN_STENEN;
         U.diep = WATER_DIEP;
         // rimpels langs lijnen van gelijke schermhoogte: op het scherm lopen ze horizontaal, zoals
         // het water in dorp.cjs.
@@ -580,7 +589,9 @@ function bouw() {
   console.log(`  vlakken     ${VLAKKEN.length} × ${VARIANTEN_VLAK}`);
   for (const p of PAREN) console.log(`  ${p.naam.padEnd(20)} 14 × ${VARIANTEN_RAND} randen`);
   console.log(`  brug        2 × ${BRUG_STUKKEN.length}`);
-  return vel;
+  // tiles en sets gaan mee terug, zodat randtegels-proef.cjs de tegels kan kiezen zoals Tiled dat
+  // doet — op wangid uit de terreinset — in plaats van tegelnummers na te rekenen.
+  return { vel, kolommen, tiles, sets };
 }
 
 if (require.main === module) bouw();
