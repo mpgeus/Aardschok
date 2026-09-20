@@ -176,6 +176,41 @@ wegging. Het zijn gespreksvarianten op een getal, dus het kost bijna niets, en h
 getal iets waar je je rot over voelt in plaats van een balkje. Werkt ook de andere kant op, zie
 Verdorren hierboven.
 
+## Waarom 84, en wat eraan wringt (20 sep 2026)
+
+Marcel vroeg waar 84 vandaan kwam. **Dat hadden we nooit opgeschreven** — het getal kwam binnen
+met de commit waarin de kernregel werd gekozen (19 sep, "De laatste klim: je leeftijd is je
+levensbalk"), en daar staat de regel wel maar de redenering niet. Dus alsnog, teruggerekend:
+
+- **Honderd is de echte keuze.** Dat is het getal waarbij iedereen aanvoelt dat een mensenleven op
+  is; daar hoef je niets bij uit te leggen.
+- **Vierentachtig is dan "zestien jaar te gaan".** Dat is het hele budget.
+- **En zestien jaar is zestien vuurschichten,** want een schicht kost een jaar. Weinig genoeg dat
+  je erover nadenkt, genoeg om een spel mee te vullen. Bij 85 waren het er vijftien en werd elke
+  spreuk zwaarder; bij 80 twintig, en verslapt het.
+- De rest is daarop gaan liggen: actiepunten zakken op 90 en 95, kringen gaan open op 84, 88, 92
+  en 96. Dat verdeelt de zestien jaar in vier stukken van vier.
+
+**Wat eraan wringt** (en Marcel, 20 sep 2026: "denk dat we dit nog wel moeten wijzigen"): de
+kringen gaan open mét de jaren, terwijl ouder worden juist je dood is. Een speler die zuinig
+speelt en op zijn zesentachtigste boven aankomt, ziet de derde en vierde kring nooit. **De beste
+speler krijgt de minste spreuken.**
+
+Dat kán een bewuste keuze zijn — je koopt macht met je leven, en dat is een mooie ruil — maar dan
+moet het voelen als een keuze en niet als een straf. Nu is het geen van beide; het is zo ontstaan.
+
+Richtingen om uit te kiezen, nog niet besloten:
+
+1. **Meesterschap opent de hogere kringen, niet leeftijd.** Dat systeem bestaat al (meesterschap
+   door gebruik), en oefenen kost maanden in plaats van jaren. Dan kan de zuinige speler er ook
+   bij, door te werken in plaats van te verouderen.
+2. **De toren opent ze.** Herstel de bibliotheek en je vindt de volgende kring terug. Dan hangt
+   macht aan de investering in het gebouw, en dat versterkt de lus.
+3. **Leeftijd blijft, maar er is een tweede weg:** een rol bij de marskramer, of een andere
+   tovenaar die het je leert.
+4. **Kringen helemaal loskoppelen van leeftijd.** Leeftijd doet dan alleen wat het al doet: minder
+   actiepunten, sterkere magie. Misschien is dat genoeg, en is de rest bedacht omdat het kon.
+
 ## Open vragen voor Marcel
 
 - **Kringen per leeftijd:** 84, 88, 92 en 96, of andere grenzen?

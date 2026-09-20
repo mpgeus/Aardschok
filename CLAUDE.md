@@ -134,6 +134,10 @@ houden gewone levenspunten. Aan het eind telt hoe oud je boven aankomt.
 - De eindstrijd **blokkeert nooit** op leeftijd, hij verandert ervan. Jong aankomen geeft veel
   beurten en dus ruimte om te bewegen en te ontwijken; oud aankomen geeft drie handelingen maar
   spreuken als mokers. Een harde grens zou de speler twintig uur ver onwinbaar kunnen zetten.
+- **Waarom 84 en 100.** Honderd is het getal waarbij een mensenleven voelbaar op is; daar hoeft
+  niets bij uitgelegd. Vierentachtig is dan "zestien jaar te gaan", en zestien jaar is zestien
+  vuurschichten: weinig genoeg om over na te denken, genoeg om een spel mee te vullen. Al het
+  andere is daarop geijkt. Zie `ontwerp/spreuken.md` voor wat daar nog aan wringt.
 - **Niets is een muur, alles is een prijs.** Een kapotte trap die een machtige tovenaar
   tegenhoudt, is flauw. Hij zweeft erlangs — en dat kost hem twee jaar, drie als de vloer weg is.
   Zo geldt het overal: een dichte deur, een ravijn, een ingestorte gang. Er is altijd een dure weg
