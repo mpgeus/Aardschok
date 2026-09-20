@@ -113,6 +113,22 @@ Marcel de kaarten in Tiled kan tekenen (zie `wereld.md`).
 Een les uit het werk met meerdere agents: drie tegelijk die renderen, gaan hard door het
 budget. Eén tegelijk, en sprites hergebruiken in plaats van elke boom opnieuw uitrekenen.
 
+## Wat je niet kunt zien, kun je niet spelen (Marcel, 20 sep 2026)
+
+Bij het eerste rondlopen buiten: "je kunt niets zien achter de toren" en "ik word aangevallen
+door een wolf die ik niet kan zien". Daar volgen drie regels uit, die voor alle buitengebieden
+gelden.
+
+- **Doorkijk.** Een hoog voorwerp dat de held of een wezen bedekt, wordt doorzichtig zolang dat
+  zo is, of het silhouet van de figuur wordt eroverheen getekend. Zo doen Fallout, Diablo en
+  Baldur's Gate het ook. Bepalen wat wat bedekt gaat op tegels en hoogte, niet op pixels, want
+  het moet elk beeld kunnen. De overgang loopt in een paar tienden van een seconde op en af,
+  anders klappert het.
+- **Niets valt je aan van buiten beeld.** Een wezen dat jou kan zien, moet jij kunnen zien. Als
+  het je ontdekt, gaat de camera ernaartoe en komt de melding.
+- **Waar je loopt, staat niets.** Dichte begroeiing hoort aan de rand, waar je niet komt. Wat er
+  op een begaanbare tegel staat, hoort daar niet; staat er iets, dan is die tegel vast.
+
 ## Animaties (Marcel, 19 sep 2026: "moet allemaal geanimeerd zijn")
 
 Een figuur is opgebouwd uit gewrichten. Een animatie is een reeks houdingen, gerenderd zoals een
