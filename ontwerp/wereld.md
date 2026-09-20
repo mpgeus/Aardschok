@@ -134,6 +134,35 @@ held. Dus geen "+1 actiepunt" of jaren terug. Wel:
 - de aanbouw als opslag voor spullen die een spreuk besparen;
 - wat het dorp over je zegt verandert mee.
 
+## De kaarten tekenen we in een editor (Marcel, 20 sep 2026)
+
+Claude elke boom laten neerzetten kost te veel. De wereld wordt dus in een kaarteditor getekend.
+Gekozen richting: **Tiled** (mapeditor.org, open bron, al jaren de standaard in pixelspellen).
+Tiled kent isometrische kaarten van 64×32 en slaat op als JSON (`.tmj`), dus het spel kan een
+kaart gewoon inlezen. LDtk is moderner en prettiger, maar isometrisch is daar stiefmoederlijk
+bedeeld.
+
+Hoe het aan elkaar hangt:
+
+1. `gereedschap/pixelart/` blijft de beelden maken, maar schrijft er voortaan ook tegelvellen bij
+   met een `.tsx` per vel: het beeld, de tegelmaat, het voetpunt van hoge dingen, en wat vast
+   staat. Dan hoeft niemand in Tiled honderden sprites met de hand aan te wijzen.
+2. Marcel tekent in Tiled: een grondlaag (gras, pad, kasseien, water), een laag met wat vast
+   staat, en een objectlaag voor huizen, bomen, mensen en monsters.
+3. Eigenschappen per object vertellen het spel de rest: welk wezen, welke dorpeling (het zaad),
+   welke deur, welke quest, en waar je naar een ander gebied overgaat.
+4. `js/kaart.js` (nog te maken) leest de `.tmj` en maakt daarvan wat `js/wereld.js` nu met de
+   hand opschrijft: begaanbaar, vast, deuren, voorwerpen, wezens.
+
+Nog uit te zoeken:
+
+- **Hoogte.** Tiled kent geen z. Terrassen en een richel moeten dus met lagen, of met een
+  eigenschap per tegel, of we houden een gebied vlak.
+- **Grote gebouwen.** Een huis van 6×8 tegels is één object met een voetpunt, geen losse tegels.
+  De dieptesortering van het spel (op t) moet zulke objecten op hun voettegel inplannen.
+- **Wat blijft er in code?** De kamers binnen in de toren zijn klein en staan al in code. Die
+  mogen zo blijven tot de editor er staat.
+
 ## Open vragen
 
 - **Welke upgrades heeft de toren?** Denkrichtingen:
