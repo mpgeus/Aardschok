@@ -439,7 +439,7 @@ function grasPixel(gx, gy, qx, qy, rand, dor) {
     const droog = ruis2(gx * 0.85 + 11, gy * 0.85, 58) * 0.7 + ruis2(gx * 2.6, gy * 2.6, 59) * 0.3;
     // grote vlekken: waar de zon valt staat het gras lichter, in de laagtes dieper groen
     const vlek = ruis2(gx * 0.3 + 31, gy * 0.3, 61);
-    s += vlek > 0.72 ? 1 : vlek < 0.26 ? -1 : 0;
+    s += vlek > 0.8 ? 1 : vlek < 0.34 ? -1 : 0;
     if (droog > 0.84 || (droog > 0.8 && hash(qx, qy, 57) % 3 === 0)) {
       UIT.ramp = RAMP.riet;
       UIT.stap = klem(s - 1 + (p === 1 ? 1 : 0), 1, 6);
@@ -1714,11 +1714,13 @@ function rietPixel(e, kol, basis, zaad, mosExtra = 0) {
   // Mos in plekken in plaats van spikkels: grote vlekken laag op het dak, waar het vocht blijft
   // staan, en alleen op daken die oud genoeg zijn (dakMos).
   if (mosExtra > 0.05) {
-    const vlek = ruis2(u * 0.021, e * 0.028, zaad + 3) * 0.72 + ruis2(u * 0.075, e * 0.1, zaad + 5) * 0.28;
-    const laag = klem((30 - e) / 30, 0, 1) * 0.22;
-    if (vlek + laag + mosExtra * 0.4 > 0.9) {
-      UIT.ramp = RAMP.mos;
-      UIT.stap = klem(Math.round(2 + (f < 2.5 ? -1 : 0) + (halm > 8 ? 1 : 0)), 0, 5);
+    // kleine plekken met een rafelige rand, laag op het dak waar het vocht blijft staan, en in
+    // het donkere grijsgroen van oud mos ('den'), niet in het frisse groen van 'mos'
+    const vlek = ruis2(u * 0.05, e * 0.065, zaad + 3) * 0.6 + ruis2(u * 0.15, e * 0.19, zaad + 5) * 0.4;
+    const laag = klem((34 - e) / 22, 0, 1);
+    if (laag > 0 && vlek + laag * 0.16 + mosExtra * 0.26 > 0.93) {
+      UIT.ramp = RAMP.den;
+      UIT.stap = klem(Math.round(2 + (f < 2.5 ? -1 : 0) + (halm > 8 ? 1 : 0)), 1, 4);
       return;
     }
   }
@@ -3007,7 +3009,7 @@ function zonSchaduw(B, vormen, o = {}) {
 const NAAR_WARM = {
   steen: ['bot', [0, 0, 1, 2, 3, 3, 4, 5, 6]],
   veldsteen: ['bot', [0, 0, 1, 2, 3, 4, 5, 6, 7]],
-  mos: ['gras', [0, 1, 2, 3, 4, 5]],
+  mos: ['mos', [1, 2, 3, 4, 5, 5]], // in de zon een stap lichter, maar wel olijf
   riet: ['stro', [0, 1, 1, 2, 3, 4, 5]],
   aarde: ['zand', [0, 0, 1, 2, 3, 4, 5]],
 };
