@@ -1,0 +1,276 @@
+// Gemaakt door gereedschap/pixelart/naar-tiled.cjs — niet met de hand bijwerken.
+// Dezelfde inhoud als tegels.json, als script, zodat file:// het ook kan lezen (zie js/kaart.js).
+(function (T) {
+  T.TEGELS = {
+   "grond": {
+    "tsx": "tegels/grond.tsx",
+    "tegelB": 64,
+    "tegelH": 32,
+    "tileoffset": null,
+    "objectalignment": false,
+    "tiles": [
+     {
+      "naam": "gras",
+      "vast": false,
+      "beslaat": null
+     },
+     {
+      "naam": "zandpad",
+      "vast": false,
+      "beslaat": null
+     },
+     {
+      "naam": "kasseien",
+      "vast": false,
+      "beslaat": null
+     },
+     {
+      "naam": "water",
+      "vast": true,
+      "beslaat": null
+     }
+    ]
+   },
+   "bomen": {
+    "tsx": "tegels/bomen.tsx",
+    "tegelB": 346,
+    "tegelH": 308,
+    "tileoffset": [
+     0,
+     26
+    ],
+    "objectalignment": true,
+    "tiles": [
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null
+     },
+     {
+      "naam": "herfstEik",
+      "vast": true,
+      "beslaat": null
+     },
+     {
+      "naam": "den",
+      "vast": true,
+      "beslaat": null
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null
+     },
+     {
+      "naam": "dodeBoom",
+      "vast": true,
+      "beslaat": null
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null
+     }
+    ]
+   },
+   "begroeiing": {
+    "tsx": "tegels/begroeiing.tsx",
+    "tegelB": 123,
+    "tegelH": 119,
+    "tileoffset": [
+     0,
+     26
+    ],
+    "objectalignment": true,
+    "tiles": [
+     {
+      "naam": "struik",
+      "vast": true,
+      "beslaat": null
+     },
+     {
+      "naam": "bessenStruik",
+      "vast": true,
+      "beslaat": null
+     },
+     {
+      "naam": "varen",
+      "vast": false,
+      "beslaat": null
+     },
+     {
+      "naam": "grasPol",
+      "vast": false,
+      "beslaat": null
+     },
+     {
+      "naam": "hoogGras",
+      "vast": false,
+      "beslaat": null
+     },
+     {
+      "naam": "bloemen",
+      "vast": false,
+      "beslaat": null
+     },
+     {
+      "naam": "paddenstoelen",
+      "vast": false,
+      "beslaat": null
+     },
+     {
+      "naam": "boomstronk",
+      "vast": true,
+      "beslaat": null
+     },
+     {
+      "naam": "rots",
+      "vast": true,
+      "beslaat": null
+     },
+     {
+      "naam": "kleineRots",
+      "vast": false,
+      "beslaat": null
+     }
+    ]
+   },
+   "gebouwen": {
+    "tsx": "tegels/gebouwen.tsx",
+    "tegelB": 648,
+    "tegelH": 632,
+    "tileoffset": [
+     -11,
+     263
+    ],
+    "objectalignment": true,
+    "tiles": [
+     {
+      "naam": "vakwerkhuis",
+      "vast": true,
+      "beslaat": [
+       7,
+       5
+      ]
+     },
+     {
+      "naam": "stenenHuis",
+      "vast": true,
+      "beslaat": [
+       6,
+       8
+      ]
+     },
+     {
+      "naam": "herberg",
+      "vast": true,
+      "beslaat": [
+       9,
+       7
+      ]
+     },
+     {
+      "naam": "smidse",
+      "vast": true,
+      "beslaat": [
+       7,
+       5
+      ]
+     },
+     {
+      "naam": "dorpshuis1",
+      "vast": true,
+      "beslaat": [
+       7,
+       5
+      ]
+     },
+     {
+      "naam": "dorpshuis3",
+      "vast": true,
+      "beslaat": [
+       6,
+       8
+      ]
+     },
+     {
+      "naam": "dorpshuis5",
+      "vast": true,
+      "beslaat": [
+       5,
+       7
+      ]
+     },
+     {
+      "naam": "kapel",
+      "vast": true,
+      "beslaat": [
+       5,
+       10
+      ]
+     },
+     {
+      "naam": "kerkhof",
+      "vast": true,
+      "beslaat": [
+       6,
+       4
+      ]
+     },
+     {
+      "naam": "watermolen",
+      "vast": true,
+      "beslaat": [
+       6,
+       8
+      ]
+     },
+     {
+      "naam": "bakkerij",
+      "vast": true,
+      "beslaat": [
+       8,
+       6
+      ]
+     },
+     {
+      "naam": "kruidenhut",
+      "vast": true,
+      "beslaat": [
+       6,
+       5
+      ]
+     },
+     {
+      "naam": "jagershut",
+      "vast": true,
+      "beslaat": [
+       7,
+       6
+      ]
+     },
+     {
+      "naam": "oudstehuis",
+      "vast": true,
+      "beslaat": [
+       7,
+       5
+      ]
+     },
+     {
+      "naam": "schuur",
+      "vast": true,
+      "beslaat": [
+       6,
+       9
+      ]
+     }
+    ]
+   }
+  };
+})(globalThis.Toren = globalThis.Toren || {});

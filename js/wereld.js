@@ -62,6 +62,10 @@
 
   const sleutelVan = (x, y) => x + ',' + y;
 
+  // Alleen zodat js/kaart.js een wezen uit een ingelezen kaart in precies dezelfde vorm kan
+  // neerzetten als hierboven; de vorm zelf (WEZENS, maakWezen) blijft hier, en verandert niet.
+  T.maakWezen = maakWezen;
+
   T.hoofdletter = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   T.tegelVan = (e) => ({ x: e.tx, y: e.ty });
   // Afstand in stappen: schuin telt als één stap, net als bij het lopen.

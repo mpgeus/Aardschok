@@ -8,6 +8,8 @@
     "test": "node --test",
     "pixelart": "node gereedschap/pixelart/export.cjs",
     "pixelart:animaties": "node gereedschap/pixelart/animaties-export.cjs",
-    "pixelart:spel": "node gereedschap/pixelart/naar-spel.cjs"
+    "pixelart:spel": "node gereedschap/pixelart/naar-spel.cjs",
+    "tiled": "node gereedschap/pixelart/naar-tiled.cjs",
+    "kaarten": "node gereedschap/pixelart/naar-kaarten.cjs"
   }
 }
