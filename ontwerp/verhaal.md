@@ -57,19 +57,38 @@ fontein die hij voor een grap leegschept (of aan jou geeft), is er aan het eind 
 hij hem nodig heeft. Hij haalt zijn honderdste met een spreuk die hij niet had hoeven doen, en
 dat is meteen de laatste les: dit overkomt jou ook, als je te makkelijk tovert.
 
+## Wat er boven zit, en waarom het los is (Marcel, 20 sep 2026)
+
+De meester heeft het daar opgesloten — **en is het door ouderdom vergeten.** Jarenlang hield het
+zich rustig, tot de aardschok het wakker maakte.
+
+Daarmee is de kernregel ook de oorzaak van het verhaal, en niet alleen de inzet ervan. Ouderdom
+is niet de vijand in de laatste akte maar de reden voor de eerste: het ding boven is los omdat
+een man oud werd en vergat. Jij bent vierentachtig en moet erheen. Dat hoeft niemand uit te
+leggen; de speler voelt het.
+
+Wat dat oplost, en wat het betekent:
+
+- de toren is geërfd én van de meester, zonder dat het botst: hij sloot het op, hij vergat het,
+  hij laat het aan jou na;
+- de meester weet aan het begin dus zelf niet wat er boven zit. Als hij het zich herinnert, is
+  dat een moment in het verhaal, geen uitleg vooraf;
+- Wim hoeft niet meer te kloppen met "veertig jaar wachten op zijn meester". Zijn rol is nog open,
+  maar hij is nu eerder de knecht van de meester dan jouw oude leerling.
+
+**De andere tovenaars.** De meester heeft contact met andere tovenaars, elk met een eigen toren en
+een eigen probleem. Zij zijn de enigen die begrijpen waar hij het over heeft, en ze zijn allemaal
+oud. Wat dat het spel geeft, staat in `wereld.md`.
+
 ## Open
 
-- **Wie sloot er veertig jaar geleden iets op?** Als de meester dat was, klopt het erfstuk: hij
-  laat je een toren na met iets erin dat hij zelf heeft opgesloten, en het zegel breekt op de
-  dag dat hij sterft. Als de held het zelf was, is de tutorial eerder een weerzien. Het eerste
-  is sterker; nog niet besloten.
-- **Waar is Wim in de tutorial?** Is hij de knecht van de meester (en erf je hem met de toren),
-  of jouw oude leerling die er al was? Hangt samen met de vraag hierboven.
+- **Waar is Wim in de tutorial?** Knecht van de meester, of jouw oude leerling die er al was?
+  Neigt nu naar het eerste, zie hierboven.
 - **Hoe gaat de meester precies dood?** Voorstel hierboven: aan zijn eigen laatste spreuk. Het
   alternatief is dat wat er boven zit hem haalt, maar dan leert de speler de regel niet.
 - **De teksten in het spel gaan nog van het oude begin uit.** `js/main.js` opent met "Je bent
   terug in de hal van je toren, na veertig jaar", en Wim zegt in `js/dialoog.js` dat hij veertig
   jaar op zijn meester wachtte. Dat klopt niet meer met een spel dat bij de levende meester
-  begint. Aanpassen kan pas als besloten is wie er veertig jaar geleden wegging, en wat Wims rol
-  is; tot die tijd blijft het staan zoals het staat.
+  begint. Nu besloten is dat de meester het opsloot en vergat, kan dit herschreven worden zodra
+  Wims rol vastligt.
 - **Wat zit er boven?** Nog niet bedacht.
