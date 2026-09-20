@@ -109,6 +109,32 @@ modderig grijsgroen is. Hetzelfde soort uitschieter als de blauwe veldsteen.
 - **Een kasseiplein heeft een rand:** een kantlaag van grotere stenen, zodat het gelegd oogt en
   niet gemorst.
 
+## Binnen is grijs, en kleur betekent iets (Marcel, 20 sep 2026)
+
+Naar aanleiding van een isometrische plaat die Marcel liet zien: een kelderhoek als diorama in een
+donkere doos, kasseivloer, ruwe stenen muren, een gesneden boog met een zwarte doorgang, een
+lantaarn, en klimop met witte bloemen die naar binnen kruipt. Bijna alles grijs. "Lijkt heel erg
+goed te passen bij onze stijl." Dat geldt voor kelders, grafkelders en mijnen — de toren en het
+dorp houden hun eigen sfeer.
+
+- **Bijna grijs, en kleur alleen waar het ertoe doet.** Dit is de belangrijkste regel, en hij is
+  niet alleen mooi maar ook speelbaar: in een grijze ruimte is alles met kleur meteen belangrijk.
+  Een gloeiende grondstof, een vijand, een deur die open kan — je ziet het zonder pijl. Het zet
+  ook het contrast aan met buiten, waar we juist warm en olijf zijn.
+- **Een donkere doorgang is een zwart gat,** geen deur met details. Dat is de gang die je nog niet
+  kent. Kost niets, werkt altijd.
+- **Klimop en planten kruipen naar binnen.** Veertig jaar niemand die iets onderhield, dus het
+  leven neemt het over. De plantengeneratoren bestaan al.
+- **Wat we niet overnemen:** op die plaat is de figuur een ornament, een zesde van de kamerhoogte.
+  Bij ons is de tovenaar 88 pixels op een tegel van 64×32 en dat blijft zo, want je moet in een
+  gevecht zijn houding en zijn gezicht kunnen lezen. En een gesloten doos met twee hele muren werkt
+  voor een plaat maar niet voor een spel: de voorste muren blijven laag weggesneden.
+- **Wat een kelder vooral nodig heeft, is een omgeving die leeft:** de vlam in de lantaarn,
+  druppelend water, stof in het licht, klimop die meebeweegt met de wind. Zie de open punten
+  onderaan.
+- **Het reliëf in een gesneden boog is echt snijwerk in code.** Dat bewaren we voor een of twee
+  belangrijke plekken, niet voor elke deur. Ruw gestapelde steen kunnen we wel gewoon.
+
 ## Wat er staat (20 sep 2026)
 
 Klaar en in `gereedschap/pixelart/`, met een exportscript per onderdeel:
