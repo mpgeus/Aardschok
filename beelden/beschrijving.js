@@ -254,6 +254,86 @@
        "herhaal": false
       }
      }
+    },
+    "wolf": {
+     "naam": "wolf",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 3.5,
+     "snelheidEenheid": "tegels per seconde",
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "bestand": "wolf-staan.png"
+      },
+      "lopen": {
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "bestand": "wolf-lopen.png",
+       "cel": [
+        112,
+        132
+       ],
+       "anker": [
+        56,
+        114
+       ],
+       "stap": 1.4
+      },
+      "aanval": {
+       "beelden": 6,
+       "fps": 12,
+       "herhaal": false,
+       "bestand": "wolf-aanval.png",
+       "cel": [
+        144,
+        136
+       ],
+       "anker": [
+        72,
+        116
+       ]
+      },
+      "geraakt": {
+       "beelden": 3,
+       "fps": 12,
+       "herhaal": false,
+       "bestand": "wolf-geraakt.png"
+      },
+      "sterven": {
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": false,
+       "bestand": "wolf-sterven.png",
+       "cel": [
+        160,
+        148
+       ],
+       "anker": [
+        80,
+        120
+       ]
+      }
+     }
     }
    },
    "muren": {

@@ -20,7 +20,8 @@
     (T.sprites.aan && !T.debug.vlakken ? SPRITE_VOORWERP_HOOGTE : VOORWERP_HOOGTE)[v.soort];
 
   T.nieuwSpel = function (toonPlek) {
-    const w = T.maakWereld();
+    S.gebieden = {}; // een nieuw spel begint met een schone toren en een schoon erf
+    const w = T.gebied(S, 'toren');
     const held = w.wezens.find((e) => e.soort === 'held');
     Object.assign(S, {
       wereld: w,
@@ -37,6 +38,9 @@
       fonteinLeeg: false,
       sluipen: false,
       bezocht: new Set(['hal']),
+      naarGebied: null,
+      netGeland: null, // de tegel waar de held zojuist is neergezet (js/gebied.js)
+      grond: null, // de buffer waar de grond op staat (js/tekenen.js)
       effecten: [],
       wachters: [],
       rasterAlpha: 0,
@@ -57,8 +61,15 @@
 
   // Het beeld zoomt mee met het venster: op een groot scherm wordt de toren groter, op een
   // klein scherm nooit kleiner dan ware grootte.
+  //
+  // De buffer is hele css-pixels, niet devicePixelRatio maal zoveel. Op een scherm met ratio 1,5
+  // tekende het spel op vol scherm 2880×1620 = 4,7 miljoen pixels per beeld, en dat levert voor
+  // pixel art niets op: de sprites worden toch al met een hele factor vergroot, en de browser
+  // schaalt de buffer daarna met image-rendering: pixelated na (zie stijl.css). Op een scherm met
+  // een echte hele ratio (2, een retina) tekenen we wel op die ratio, want daar levert het wél
+  // scherpere pixels op; een halve ratio ronden we naar beneden af.
   function formaat() {
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
     bw = window.innerWidth;
     bh = window.innerHeight;
     canvas.width = Math.round(bw * dpr);
@@ -153,8 +164,17 @@
 
   // Bij het rondlopen volgt de camera de held; in een gevecht zoekt hij het midden tussen
   // iedereen die meedoet, zodat het hele slagveld in beeld schuift.
+  //
+  // Dat begint al bij de overgang, vóór het gevecht: het monster dat je ziet, komt meteen in
+  // beeld, tegelijk met de melding. Buiten is dat het verschil tussen een gevecht dat begint en
+  // aangevallen worden door iets wat je niet kunt zien.
   function cameraDoel() {
-    const lijst = S.gevecht ? [S.held, ...S.gevecht.monsters.filter((m) => !m.dood)] : [S.held];
+    const aanleiding = S.overgang && S.overgang.aanleiding;
+    const lijst = S.gevecht
+      ? [S.held, ...S.gevecht.monsters.filter((m) => !m.dood)]
+      : aanleiding && !aanleiding.dood
+        ? [S.held, aanleiding]
+        : [S.held];
     let x = 0;
     let y = 0;
     for (const e of lijst) {
@@ -171,6 +191,10 @@
     if (window.innerWidth !== bw || window.innerHeight !== bh) formaat();
     S.tijd += dt;
     T.werkAnimatiesBij(S, dt);
+    // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
+    // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
+    // net doorheen.
+    if (S.naarGebied) T.gaNaarGebied(S, S.naarGebied);
     T.werkLichtenBij(S, dt);
     if (S.modus === 'verkennen') {
       T.laatDwalen(S, dt);
@@ -279,6 +303,31 @@
       if (!T.SPREUKEN[id]) return `Die spreuk ken ik niet: ${id}`;
       S.held.meesterschap[id] = Math.max(0, Math.floor(aantal));
       return T.TREDEN[T.trede(S.held, id)].naam;
+    },
+    // Hoeveel milliseconden kost één beeld? Toren.debug.meet() tekent n beelden achter elkaar en
+    // geeft het gemiddelde, de mediaan en de slechtste terug. Een beeld hoort ruim onder de 16 ms
+    // te blijven (zestig beelden per seconde), het liefst onder de 5, zodat er ruimte overblijft
+    // voor een tragere machine.
+    meet(n) {
+      const aantal = n || 120;
+      const tijden = [];
+      for (let i = 0; i < aantal; i++) {
+        const t0 = performance.now();
+        T.tekenScene(ctx, S, bw, bh);
+        tijden.push(performance.now() - t0);
+      }
+      tijden.sort((a, b) => a - b);
+      const som = tijden.reduce((a, b) => a + b, 0);
+      const af = (x) => Math.round(x * 100) / 100;
+      return {
+        venster: `${bw}×${bh}`, zoom: Math.round(S.zoom * 100) / 100, buffer: `${canvas.width}×${canvas.height}`,
+        gemiddeld: af(som / aantal), mediaan: af(tijden[aantal >> 1]), slechtste: af(tijden[aantal - 1]),
+      };
+    },
+    // Naar een ander gebied springen zonder ernaartoe te lopen: Toren.debug.gaNaar('erf').
+    gaNaar(naam) {
+      T.gaNaarGebied(S, naam);
+      return S.wereld.gebied;
     },
     // Laat het spel `seconden` verder lopen zonder op beelden van de browser te wachten.
     // Een verborgen tabblad tekent maar af en toe een beeld, en dan loopt alles in slow

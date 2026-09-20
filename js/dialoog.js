@@ -62,6 +62,10 @@
     const boom = T.DIALOOG_WIM;
     S.modus = 'dialoog';
     S.held.pad = [];
+    // Met wie je praat, staat stil en blijft zichtbaar: hij komt door een boom of de toren heen
+    // (js/tekenen.js, doorkijk) en hij dwaalt niet weg midden in het gesprek.
+    S.spreektMet = wie || null;
+    if (wie) wie.pad = [];
     const toon = (id) => {
       if (id === null) {
         T.sluitDialoog(S);
@@ -79,6 +83,7 @@
 
   T.sluitDialoog = function (S) {
     T.ui.sluitDialoog();
+    S.spreektMet = null;
     if (S.modus === 'dialoog') S.modus = 'verkennen';
   };
 })(globalThis.Toren = globalThis.Toren || {});

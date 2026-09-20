@@ -5,13 +5,14 @@
   'use strict';
 
   // Legenda: # muur, . vloer, D deur (dicht), L deur (op slot), spatie = buiten de toren.
+  // De deur helemaal links in rij 5 is de buitendeur: daarachter ligt het erf (zie OVERGANGEN).
   const PLATTEGROND = [
     '####################',
     '#........#.........#',
     '#........#.........#',
     '#........#.........#',
     '#........D.........#',
-    '#........#.........#',
+    'D........#.........#',
     '#........#.........#',
     '#........#.........#',
     '####L###############',
@@ -49,7 +50,10 @@
   const WEZENS = {
     // De held heeft hier geen snelheid: hij loopt op zijn leeftijd (zie T.snelheidVan).
     held: { naam: 'jij', kant: 'held', leven: 0, ap: 8, initiatief: 10, snelheid: 0 },
-    wim: { naam: 'Wim', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 0 },
+    // Wim veegt de hal, zoals hij veertig jaar deed: hij schuifelt een paar tegels heen en weer
+    // en staat er dan weer bij stil met zijn bezem (de houding "vegen", zie js/sprites.js). Hij
+    // begint nooit een gevecht — hij is neutraal — en hij blijft nooit naast een deur staan.
+    wim: { naam: 'Wim', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 3 },
     slijm: {
       naam: 'slijmkruiper', kant: 'monster', leven: 10, ap: 4, initiatief: 4, snelheid: 1.4, zicht: 5, dwaalt: true,
       aanval: { kosten: 3, maanden: [3, 5], zin: 'bijt je' },
@@ -58,7 +62,21 @@
       naam: 'skeletwacht', kant: 'monster', leven: 18, ap: 6, initiatief: 6, snelheid: 2.2, zicht: 5, dwaalt: false,
       aanval: { kosten: 3, maanden: [5, 9], zin: 'raakt je met zijn zwaard' },
     },
+    // Buiten, in het bos om het erf. Hij loopt harder dan de tovenaar en ziet verder dan wat er
+    // binnen rondloopt: buiten is er ruimte, en een wolf hoort eerder op te vallen dan een
+    // slijmkruiper in een kelder. Sluipen (T.SLUIP_ZICHT) scheelt dan twee tegels, en dat is
+    // precies genoeg om hem te ontlopen als je hem op tijd ziet.
+    wolf: {
+      naam: 'wolf', kant: 'monster', leven: 12, ap: 6, initiatief: 8, snelheid: 2.6, zicht: 6, dwaalt: true,
+      aanval: { kosten: 3, maanden: [4, 7], zin: 'bijt je' },
+    },
   };
+
+  // Waar je de toren uit loopt. Dezelfde vorm als de overgangen die js/kaart.js uit een .tmj
+  // haalt: `x`/`y` is de tegel die je erheen brengt (hier de buitendeur), `naar` het gebied waar
+  // je heen gaat, en `komt` de tegel waar je landt als je vanaf díe kant terugkomt — één stap van
+  // de deur af, zodat je niet meteen weer terugstapt. Zie js/gebied.js.
+  const OVERGANGEN = [{ x: 0, y: 5, naar: 'erf', komt: { x: 1, y: 5 } }];
 
   const sleutelVan = (x, y) => x + ',' + y;
 
@@ -96,6 +114,8 @@
       b, h, tegels, deuren, kamers: KAMERS,
       voorwerpen: [], wezens: [],
       bekend: new Set(['hal']), huidigeKamer: 'hal',
+      overgangen: OVERGANGEN.map((o) => ({ ...o, komt: { ...o.komt } })),
+      buiten: false,
     };
     // Loopt de muur rond de deur van noord naar zuid, dan staat het deurpaneel dwars op x.
     for (const d of deuren.values()) if (T.tegel(w, d.x, d.y - 1) === 'muur') d.richting = 'ns';
@@ -128,7 +148,10 @@
       x, y, tx: x, ty: y, pad: [], onderweg: false, opKlaar: null,
       leven: s.leven, maxLeven: s.leven, ap: s.ap, maxAp: s.ap,
       initiatief: s.initiatief, snelheid: s.snelheid, zicht: s.zicht || 0,
-      dwaalt: !!s.dwaalt, aanval: s.aanval || null,
+      // Waar hij hoort en hoe ver hij daarvandaan dwaalt. Zonder thuis blijft hij in zijn eigen
+      // kamer; dat werkt binnen, maar buiten is de hele kaart één kamer (zie T.laatDwalen).
+      dwaalt: !!s.dwaalt, thuis: s.straal ? { x, y } : null, straal: s.straal || 0,
+      aanval: s.aanval || null,
       dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
       dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0,
       leeftijd: soort === 'held' ? T.STARTLEEFTIJD : null,

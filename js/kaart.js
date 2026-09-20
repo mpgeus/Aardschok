@@ -54,14 +54,19 @@
     const sets = (kaart.tilesets || []).map((t) => {
       const naam = velNaam(t.source || t.name || '');
       const vel = T.TEGELS && T.TEGELS[naam];
-      return { firstgid: t.firstgid || 1, aantal: vel ? vel.tiles.length : t.tilecount || 0, vel };
+      return { naam, firstgid: t.firstgid || 1, aantal: vel ? vel.tiles.length : t.tilecount || 0, vel };
     });
+    // Geeft { vel, id, eig } terug: uit welk vel de tegel komt, welke hij daar is, en wat erover
+    // in de .tsx stond. Het spel heeft vel en id nodig om hem te kunnen tekenen (js/sprites.js).
     return function (gid) {
       const g = zonderVlag(gid);
       if (!g) return null;
       for (const s of sets) {
         const lokaal = g - s.firstgid;
-        if (s.vel && lokaal >= 0 && lokaal < s.aantal) return s.vel.tiles[lokaal] || null;
+        if (s.vel && lokaal >= 0 && lokaal < s.aantal) {
+          const eig = s.vel.tiles[lokaal];
+          return eig ? { vel: s.naam, id: lokaal, eig } : null;
+        }
       }
       return null;
     };
@@ -77,12 +82,15 @@
   // Dezelfde vorm als maakWezen in wereld.js (die geldt alleen voor een soort uit T.WEZENS), maar
   // dan voor een gewone dorpeling: geen gevecht, geen levensbalk, hij staat en kijkt. Het zaad
   // bepaalt straks zijn uiterlijk (dorpelingen.cjs).
-  function maakDorpeling(zaad, x, y) {
+  function maakDorpeling(zaad, x, y, straal) {
     return {
       soort: 'dorpeling', naam: 'dorpeling', kant: 'neutraal', zaad,
       x, y, tx: x, ty: y, pad: [], onderweg: false, opKlaar: null,
       leven: 0, maxLeven: 0, ap: 0, maxAp: 0, initiatief: 0, snelheid: 1.2, zicht: 0,
-      dwaalt: false, aanval: null,
+      // Waar hij hoort en hoe ver hij daarvandaan loopt: de smid bij de smidse, de boerin bij de
+      // akker. Zonder straal blijft hij staan waar hij staat. Hij begint nooit een gevecht (hij is
+      // neutraal) en telt niet mee in de beurtvolgorde.
+      thuis: { x, y }, straal: straal || 0, dwaalt: straal > 0, aanval: null,
       dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
       dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0, leeftijd: null,
       brandt: 0, apVerlies: 0, afgeleid: null, gelokt: null, vraag: 0, geduwd: false,
@@ -104,7 +112,11 @@
     const binnenRaster = (x, y) => x >= 0 && y >= 0 && x < b && y < h;
 
     const tegels = [];
-    for (let y = 0; y < h; y++) tegels.push(new Array(b).fill('buiten'));
+    const grond = []; // per tegel { vel, id }: welk plaatje eronder ligt, om hem te kunnen tekenen
+    for (let y = 0; y < h; y++) {
+      tegels.push(new Array(b).fill('buiten'));
+      grond.push(new Array(b).fill(null));
+    }
 
     // 1. de tegellagen: grond, en wat er verder vast staat. Elke tile-laag telt mee (niet alleen
     // de eerste), zodat Marcel "vast" ook los van het uiterlijk op een eigen laag kan zetten
@@ -116,8 +128,9 @@
         for (let x = 0; x < b; x++) {
           const gid = laag.data[y * breedte + x];
           if (!gid || tegels[y][x] === 'muur') continue; // al vast door een eerdere laag
-          const eig = opzoek(gid);
-          tegels[y][x] = eig && eig.vast ? 'muur' : 'vloer';
+          const t = opzoek(gid);
+          tegels[y][x] = t && t.eig.vast ? 'muur' : 'vloer';
+          if (t) grond[y][x] = { vel: t.vel, id: t.id, naam: t.eig.naam };
         }
       }
     }
@@ -148,32 +161,51 @@
           continue;
         }
         if (p.overgang !== undefined) {
-          overgangen.push({ x: gx, y: gy, naar: p.overgang });
+          // "komt" is de tegel waarop je landt als je uit dat andere gebied hierheen komt: één
+          // stap van de deur af. Ontbreekt hij, dan blijft hij leeg — en juist niet de
+          // overgangstegel zelf: dan zou je landen op de tegel die de overgang afvuurt, en kaats
+          // je heen en weer tussen twee gebieden. js/gebied.js zoekt in dat geval zelf een
+          // begaanbare buurtegel.
+          const k = typeof p.komt === 'string' ? p.komt.split(',').map(Number) : null;
+          const komt = k && k.length === 2 && k.every(Number.isFinite) ? { x: k[0], y: k[1] } : null;
+          if (!komt) console.warn(`T.laadKaart: overgang naar "${p.overgang}" op (${gx}, ${gy}) zonder "komt"; het spel kiest zelf een tegel ernaast`);
+          overgangen.push({ x: gx, y: gy, naar: p.overgang, komt });
           continue;
         }
         if (p.wezen !== undefined) {
           try {
-            wezens.push(T.maakWezen(p.wezen, gx, gy));
+            const e = T.maakWezen(p.wezen, gx, gy);
+            // "straal": hoe ver hij van deze plek af dwaalt. Zonder straal blijft hij binnen zijn
+            // eigen kamer, en dat is buiten de hele kaart — dus buiten hoor je er een te zetten.
+            if (Number(p.straal) > 0) {
+              e.thuis = { x: gx, y: gy };
+              e.straal = Number(p.straal);
+              e.dwaalt = true;
+            }
+            wezens.push(e);
           } catch (e) {
             console.warn(`T.laadKaart: onbekend wezen "${p.wezen}" op (${gx}, ${gy}), overgeslagen`);
           }
           continue;
         }
         if (p.zaad !== undefined) {
-          wezens.push(maakDorpeling(p.zaad, gx, gy));
+          wezens.push(maakDorpeling(p.zaad, gx, gy, Number(p.straal) || 0));
           continue;
         }
-        const eig = obj.gid ? opzoek(obj.gid) : null;
-        if (!eig) continue; // een leeg object zonder van bovenstaande: niets aan te doen
+        const t = obj.gid ? opzoek(obj.gid) : null;
+        if (!t) continue; // een leeg object zonder van bovenstaande: niets aan te doen
+        const eig = t.eig;
         registreerVoorwerp(eig.naam, eig.vast);
-        const [voetB, voetD] = eig.beslaat || [1, 1];
-        for (let dy = 0; dy < voetD; dy++) {
-          for (let dx = 0; dx < voetB; dx++) {
+        const beslaat = eig.beslaat || [1, 1];
+        for (let dy = 0; dy < beslaat[1]; dy++) {
+          for (let dx = 0; dx < beslaat[0]; dx++) {
             if (!eig.vast || !binnenRaster(gx + dx, gy + dy)) continue;
             tegels[gy + dy][gx + dx] = 'muur';
           }
         }
-        voorwerpen.push({ soort: eig.naam, x: gx, y: gy });
+        // vel en id erbij, zodat js/tekenen.js het plaatje kan opzoeken zonder de kaart opnieuw
+        // te hoeven lezen; beslaat, zodat het sorteren weet hoeveel tegels eronder liggen.
+        voorwerpen.push({ soort: eig.naam, x: gx, y: gy, vel: t.vel, id: t.id, beslaat });
       }
     }
 
@@ -194,11 +226,19 @@
       burenKamers.push(rij);
     }
 
+    // Eigenschappen van de kaart zelf (in Tiled: de eigenschappen van de map). `doof` zegt over
+    // hoeveel ringen vanaf de rand het bos naar het donker toe wegdooft, zodat een speler nooit
+    // het einde van de plaat ziet (js/tekenen.js).
+    const eig = eigenschappenVan(kaart);
+
     return {
-      b, h, tegels, deuren, kamers: [kamerBuiten],
+      b, h, tegels, grond, deuren, kamers: [kamerBuiten],
       voorwerpen, wezens,
       bekend: new Set(['buiten']), huidigeKamer: 'buiten',
       burenKamers, overgangen,
+      buiten: true, // geen kamers met muren: het spel tekent gras en hoge dingen
+      naam: typeof eig.naam === 'string' ? eig.naam : null,
+      doof: Number.isFinite(eig.doof) ? eig.doof : 0,
     };
   };
 

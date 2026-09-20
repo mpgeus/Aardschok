@@ -22,7 +22,13 @@ body {
   user-select: none;
 }
 
-canvas { display: block; }
+/* Het spel tekent op hele css-pixels (zie formaat() in js/main.js) en laat de browser de rest
+   doen. Voor pixel art moet dat opschalen met harde randen, niet met een waas ertussen. */
+canvas {
+  display: block;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated; /* wint waar de browser hem kent; crisp-edges is de oudere naam */
+}
 
 .verborgen { display: none !important; }
 

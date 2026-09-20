@@ -13,7 +13,10 @@
     const held = S.held;
     const pad = T.zoekPad(T.tegelVan(held), doel, heldMag(S), vast(S), { naast });
     if (pad === null) return null;
-    return held.onderweg ? [held.pad[0], ...pad] : pad;
+    // `onderweg` zonder een tegel om heen te stappen kan niet, maar als het toch gebeurt (iets
+    // dat de held verzette zonder het af te maken) zou er een leeg vakje voorin het pad komen, en
+    // daar loopt de beweging op stuk.
+    return held.onderweg && held.pad[0] ? [held.pad[0], ...pad] : pad;
   }
 
   function loopNaar(S, doel) {
@@ -77,6 +80,13 @@
     // Een open deur is gewoon een doorgang: wie erop klikt, wil erdoor. Dichtgooien kan
     // in een gevecht, met een eigen knop.
     if (!T.isZichtbaar(w, doel.x, doel.y) || !T.isBegaanbaar(w, doel.x, doel.y, { deurenOpenen: true })) return null;
+    // Een tegel die naar een ander gebied leidt, zegt dat erbij: anders loop je de toren uit
+    // zonder dat je het wilde.
+    const o = T.overgangOp(w, doel.x, doel.y);
+    if (o) {
+      const naam = (T.GEBIEDEN[o.naar] && T.GEBIEDEN[o.naar].naam) || o.naar;
+      return { tekst: `Naar ${naam.toLowerCase()}`, doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
+    }
     return { tekst: null, doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
   };
 
@@ -89,21 +99,47 @@
     T.ui.bericht('De sleutel past. De zware deur zwaait open.', 'goed');
   }
 
-  // Monsters die dwalen, zetten af en toe een stap binnen hun eigen kamer. Wie op een
-  // dwaallicht afgaat, dwaalt zolang niet: dat monster heeft iets beters te doen (toveren.js).
+  // Staat deze tegel een doorgang in de weg? Een deur, of de tegel er pal naast: daar mag niemand
+  // blijven staan te dwalen. Anders sta je voor een dichte deur te wachten tot iemand opschuift,
+  // en dat mag je nooit jaren kosten (ontwerp/wereld.md).
+  function bijDeur(w, x, y) {
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) if (T.tegel(w, x + dx, y + dy) === 'deur') return true;
+    }
+    return false;
+  }
+
+  // Waar hoort dit wezen rond te blijven? Wie een plek en een straal heeft (`thuis`), blijft daar
+  // in de buurt: de smid bij de smidse, Wim bij zijn trap, de wolf bij zijn stuk bos. Wie die niet
+  // heeft, blijft in zijn eigen kamer — binnen is een kamer vanzelf een stuk wereld, buiten is de
+  // hele kaart één kamer en zou een wolf tot de andere kant van het erf wandelen.
+  function magDwalenNaar(w, e, x, y) {
+    if (!T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e })) return false;
+    if (bijDeur(w, x, y)) return false;
+    if (e.thuis) return T.afstand(e.thuis, { x, y }) <= (e.straal || 3);
+    const k = T.kamerVan(w, e.tx, e.ty);
+    return !!k && T.kamerVan(w, x, y) === k;
+  }
+
+  // Wie dwaalt, zet af en toe een stap binnen zijn eigen stukje wereld en staat er daarna weer
+  // even bij stil — dan doet hij wat bij hem past (Wim veegt). Een dorpeling gebruikt hetzelfde
+  // loopwerk als een dwalend monster; het verschil is dat hij nooit een gevecht begint (hij is
+  // `neutraal`, en T.zoekOntdekking en T.deelnemers kijken alleen naar monsters).
+  //
+  // Wie op een dwaallicht afgaat, dwaalt zolang niet: dat monster heeft iets beters te doen
+  // (toveren.js). En wie een gesprek voert, staat stil tot het uit is.
   T.laatDwalen = function (S, dt) {
     const w = S.wereld;
     for (const m of w.wezens) {
-      if (m.dood || !m.dwaalt || m.pad.length || m.gelokt) continue;
+      if (m.dood || !m.dwaalt || m.pad.length || m.gelokt || m === S.spreektMet) continue;
       m.dwaalTijd -= dt;
-      if (m.dwaalTijd > 0) continue;
+      // Staat hij toevallig stil op een tegel waar hij een doorgang blokkeert, dan wacht hij daar
+      // niet zijn hele pauze uit maar stapt meteen door.
+      if (m.dwaalTijd > 0 && !bijDeur(w, m.tx, m.ty)) continue;
       m.dwaalTijd = 1.5 + Math.random() * 2.5;
-      const k = T.kamerVan(w, m.tx, m.ty);
       const opties = [];
       for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-        const x = m.tx + dx;
-        const y = m.ty + dy;
-        if (k && T.kamerVan(w, x, y) === k && T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: m })) opties.push({ x, y });
+        if (magDwalenNaar(w, m, m.tx + dx, m.ty + dy)) opties.push({ x: m.tx + dx, y: m.ty + dy });
       }
       if (opties.length) m.pad = [opties[Math.floor(Math.random() * opties.length)]];
     }
@@ -169,6 +205,26 @@
         S.inventaris.add('sleutel');
         T.ui.toonInventaris(S);
         T.ui.bericht('Je vindt de ijzeren sleutel.', 'goed');
+      }
+      // Stap je op een tegel die naar een ander gebied leidt, dan gaan we daarheen — maar niet
+      // hier, midden in de beweging: de spellus loopt nu door de lijst wezens van deze wereld
+      // heen, en die lijst verandert bij een overgang. main.js pakt het zo op.
+      //
+      // Alleen als je er echt op stápt. Wie er net is neergezet (S.netGeland, gezet door
+      // T.gaNaarGebied), staat er al, en dan zou de overgang meteen weer afgaan: heen en weer
+      // tussen twee gebieden. Die tegel staat pas weer scherp als hij er een keer af is geweest.
+      //
+      // En alleen als je daar je pas beëindigt. Buiten ligt de overgang midden op het erf, vóór
+      // de deur van de toren, en daar loop je aan één stuk door langs; wie naar de moestuin loopt,
+      // wil niet halverwege binnen staan. Wie naar de deur loopt, klikt op de deur (en het scherm
+      // zegt er "Naar de toren" bij).
+      const zojuist = S.netGeland && S.netGeland.x === t.x && S.netGeland.y === t.y;
+      if (!zojuist) S.netGeland = null;
+      const o = !zojuist && !e.pad.length && S.modus === 'verkennen' && !S.gevecht ? T.overgangOp(w, t.x, t.y) : null;
+      if (o) {
+        e.pad = [];
+        S.naLopen = null;
+        S.naarGebied = o.naar;
       }
     }
     if (S.gevecht) T.gevechtBijAankomst(S, e, t);

@@ -74,7 +74,7 @@
     if (!kamers.size) kamers.add(w.huidigeKamer);
     monsters.sort((a, b) => b.initiatief - a.initiatief);
     S.gevecht = { monsters, volgorde: [held, ...monsters], beurt: 0, ronde: 1, kamers, teller: 0 };
-    S.rasterTegels = rasterVoor(w, kamers);
+    S.rasterTegels = rasterVoor(w, kamers, S.gevecht.volgorde);
     S.rasterStart = S.tijd;
     S.rasterVan = T.tegelVan(held);
     S.modus = 'gevecht';
@@ -92,15 +92,32 @@
       if (m === aanleiding) return true;
       const p = T.tegelVan(m);
       const k = T.kamerVan(w, p.x, p.y);
-      if (k && kamerHeld && k === kamerHeld) return true;
+      // Buiten is de hele kaart één kamer; dan zou elk monster op het erf meedoen. Daar telt
+      // alleen wie de held echt kan zien.
+      if (!w.buiten && k && kamerHeld && k === kamerHeld) return true;
       return T.afstand(p, h) <= 8 && T.zichtTussen(w, p, h);
     });
   };
 
   // Het raster ligt op elke vloertegel van de kamers waarin gevochten wordt, en op de
   // deuropeningen ertussen.
-  function rasterVoor(w, kamers) {
+  // Hoe ver het raster buiten om de vechters heen reikt. Binnen bakent de kamer het slagveld af;
+  // buiten is er maar één kamer, de hele kaart, en een raster over het hele erf zegt niets meer.
+  const RASTER_BUITEN = 9;
+
+  function rasterVoor(w, kamers, vechters) {
     const lijst = [];
+    if (w.buiten) {
+      const wie = (vechters || []).filter((e) => !e.dood).map((e) => T.tegelVan(e));
+      if (!wie.length) return lijst;
+      for (let y = 0; y < w.h; y++) {
+        for (let x = 0; x < w.b; x++) {
+          if (T.tegel(w, x, y) !== 'vloer') continue;
+          if (wie.some((p) => T.afstand(p, { x, y }) <= RASTER_BUITEN)) lijst.push({ x, y });
+        }
+      }
+      return lijst;
+    }
     for (let y = 0; y < w.h; y++) {
       for (let x = 0; x < w.b; x++) {
         const t = T.tegel(w, x, y);
@@ -111,12 +128,17 @@
     return lijst;
   }
 
-  // Loopt iemand tijdens het gevecht een nieuwe kamer in, dan groeit het raster mee.
+  // Loopt iemand tijdens het gevecht een nieuwe kamer in, dan groeit het raster mee; buiten
+  // schuift het gewoon met de vechters mee.
   T.gevechtBijAankomst = function (S, e, t) {
     const g = S.gevecht;
     if (e === S.held) {
       e.ap = Math.max(0, e.ap - 1);
       T.ui.toonAp(e.ap, e.maxAp, 0, true);
+    }
+    if (S.wereld.buiten) {
+      if (e === S.held) S.rasterTegels = rasterVoor(S.wereld, g.kamers, g.volgorde);
+      return;
     }
     const k = T.kamerVan(S.wereld, t.x, t.y);
     if (k && !g.kamers.has(k.id)) {

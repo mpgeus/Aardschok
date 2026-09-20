@@ -33,9 +33,101 @@
   // Een vast getal per tegel, zodat dezelfde muur elke keer dezelfde scheur heeft.
   const ruis = (x, y) => (((x * 73856093) ^ (y * 19349663)) >>> 0) % 1000;
 
+  // ---------------------------------------------------------------- wat er in beeld is
+  //
+  // Binnen is de wereld twintig bij zestien tegels: dan kost het niets om alles elk beeld af te
+  // lopen. Het erf is vier keer zo groot, en het bos en het dorp worden groter. Dus tekent het
+  // spel alleen wat in beeld staat.
+  //
+  // De marges eromheen zijn er voor wat boven zijn eigen tegel uitsteekt: een boom is bijna
+  // driehonderd pixels hoog en driehonderdvijftig breed, dus een boom wiens tegel net onder de
+  // onderrand ligt, hangt nog wel in beeld.
+  const MARGE = { links: 200, rechts: 200, boven: 80, onder: 320 };
+
+  // De rechthoek die in beeld is, in de vlakte waarop getekend wordt (dus vóór het zoomen).
+  function zichtVlak(S, bw, bh) {
+    const halfB = bw / 2 / S.zoom;
+    const halfH = bh / 2 / S.zoom;
+    const cx = Math.round(S.camera.x);
+    const cy = Math.round(S.camera.y);
+    return { x0: cx - halfB, y0: cy - halfH, x1: cx + halfB, y1: cy + halfH };
+  }
+
+  // Welke tegels kunnen in die rechthoek iets tekenen? De ruit-projectie draait het raster, dus
+  // nemen we de vier hoeken van de (opgerekte) rechthoek en het vak daaromheen.
+  function tegelsIn(w, r) {
+    const hoeken = [
+      [r.x0 - MARGE.links, r.y0 - MARGE.boven],
+      [r.x1 + MARGE.rechts, r.y0 - MARGE.boven],
+      [r.x0 - MARGE.links, r.y1 + MARGE.onder],
+      [r.x1 + MARGE.rechts, r.y1 + MARGE.onder],
+    ];
+    let x0 = Infinity;
+    let y0 = Infinity;
+    let x1 = -Infinity;
+    let y1 = -Infinity;
+    for (const [sx, sy] of hoeken) {
+      const t = T.naarWereld(sx, sy);
+      x0 = Math.min(x0, t.x);
+      x1 = Math.max(x1, t.x);
+      y0 = Math.min(y0, t.y);
+      y1 = Math.max(y1, t.y);
+    }
+    return {
+      x0: Math.max(0, Math.floor(x0)),
+      y0: Math.max(0, Math.floor(y0)),
+      x1: Math.min(w.b - 1, Math.ceil(x1)),
+      y1: Math.min(w.h - 1, Math.ceil(y1)),
+    };
+  }
+  const inVak = (v, x, y) => x >= v.x0 && x <= v.x1 && y >= v.y0 && y <= v.y1;
+
+  // ---------------------------------------------------------------- de grond, één keer getekend
+  //
+  // De grond verandert alleen als de camera verschuift of als er iets zichtbaar wordt; de rest van
+  // het beeld verandert elk beeld. Dus tekenen we de grond naar een eigen vlak dat een stuk ruimer
+  // is dan het venster, en plakken die er daarna in één keer op. Pas als de camera buiten die rand
+  // komt (of als er iets anders verandert), wordt hij opnieuw getekend.
+  const BUFFERRAND = 192; // hoeveel ruimer dan het venster, in vlak-pixels
+
+  function grondSleutel(S) {
+    const w = S.wereld;
+    const g = S.gevecht ? S.gevecht.kamers.size : -1;
+    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}`;
+  }
+
+  function werkGrondBij(S, bw, bh, zicht, inBeeld) {
+    if (!S.grond) S.grond = { canvas: null, ctx: null, vx: 0, vy: 0, b: 0, h: 0, sleutel: '' };
+    const g = S.grond;
+    const b = Math.ceil(bw / S.zoom) + BUFFERRAND * 2;
+    const h = Math.ceil(bh / S.zoom) + BUFFERRAND * 2;
+    const past = g.canvas && g.b === b && g.h === h && zicht.x0 >= g.vx && zicht.y0 >= g.vy && zicht.x1 <= g.vx + b && zicht.y1 <= g.vy + h;
+    const sleutel = grondSleutel(S);
+    if (past && sleutel === g.sleutel) return g;
+    if (!g.canvas || g.b !== b || g.h !== h) {
+      g.canvas = document.createElement('canvas');
+      g.canvas.width = b;
+      g.canvas.height = h;
+      g.ctx = g.canvas.getContext('2d');
+      g.b = b;
+      g.h = h;
+    }
+    g.vx = Math.round((zicht.x0 + zicht.x1) / 2 - b / 2);
+    g.vy = Math.round((zicht.y0 + zicht.y1) / 2 - h / 2);
+    g.sleutel = sleutel;
+    const c = g.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.clearRect(0, 0, b, h);
+    c.setTransform(1, 0, 0, 1, -g.vx, -g.vy);
+    c.imageSmoothingEnabled = false;
+    tekenVloeren(c, S, inBeeld, tegelsIn(S.wereld, { x0: g.vx, y0: g.vy, x1: g.vx + b, y1: g.vy + h }));
+    return g;
+  }
+
   T.tekenScene = function (ctx, S, bw, bh) {
     const w = S.wereld;
-    ctx.fillStyle = '#0c0b0a';
+    // Buiten is het niets de nacht tussen de bomen, binnen het donker om de kamer heen.
+    ctx.fillStyle = w.buiten ? '#0e1310' : '#0c0b0a';
     ctx.fillRect(0, 0, bw, bh);
     ctx.save();
     // Dezelfde afronding als naarVlak in main.js, anders wijst de muis net naast de tegel.
@@ -48,36 +140,50 @@
     const inBeeld = (id) => id === w.huidigeKamer || (!!S.gevecht && S.gevecht.kamers.has(id));
     // Opengewerkt: de kamer van de held, en in een gevecht elke kamer waarin gevochten wordt.
     const open = w.kamers.filter((k) => inBeeld(k.id));
+    const zicht = zichtVlak(S, bw, bh);
+    const vak = tegelsIn(w, zicht);
 
-    tekenVloeren(ctx, S, inBeeld);
+    const g = werkGrondBij(S, bw, bh, zicht, inBeeld);
+    ctx.drawImage(g.canvas, g.vx, g.vy);
     tekenRaster(ctx, S);
     tekenMarkeringen(ctx, S);
 
     const lijst = [];
-    for (let y = 0; y < w.h; y++) {
-      for (let x = 0; x < w.b; x++) {
-        if (T.tegel(w, x, y) !== 'muur' || !T.isZichtbaar(w, x, y)) continue;
-        const laag = isVoorrand(open, x, y);
-        const helder = w.burenKamers[y][x].some(inBeeld) ? 1 : GEDIMD;
-        lijst.push({ d: x + y, l: 0, f: () => tekenMuur(ctx, w, x, y, laag, helder) });
+    // Buiten zijn er geen muren: wat daar "muur" heet, is de voet van een boom of een gebouw, en
+    // dat tekent zichzelf als voorwerp.
+    if (!w.buiten) {
+      for (let y = vak.y0; y <= vak.y1; y++) {
+        for (let x = vak.x0; x <= vak.x1; x++) {
+          if (T.tegel(w, x, y) !== 'muur' || !T.isZichtbaar(w, x, y)) continue;
+          const laag = isVoorrand(open, x, y);
+          const helder = w.burenKamers[y][x].some(inBeeld) ? 1 : GEDIMD;
+          lijst.push({ d: x + y, l: 0, f: () => tekenMuur(ctx, w, x, y, laag, helder) });
+        }
       }
     }
     for (const deur of w.deuren.values()) {
-      if (!T.isZichtbaar(w, deur.x, deur.y)) continue;
+      if (!inVak(vak, deur.x, deur.y) || !T.isZichtbaar(w, deur.x, deur.y)) continue;
       const laag = isVoorrand(open, deur.x, deur.y);
       const helder = w.burenKamers[deur.y][deur.x].some(inBeeld) ? 1 : GEDIMD;
       lijst.push({ d: deur.x + deur.y, l: 1, f: () => tekenDeur(ctx, deur, laag, helder) });
     }
+    const zichtbaar = [];
     for (const v of w.voorwerpen) {
-      if (!T.isZichtbaar(w, v.x, v.y)) continue;
+      if (!inVak(vak, v.x, v.y) || !T.isZichtbaar(w, v.x, v.y)) continue;
+      zichtbaar.push(v);
       const k = T.kamerVan(w, v.x, v.y);
       const helder = k && inBeeld(k.id) ? 1 : GEDIMD;
-      lijst.push({ d: v.x + v.y, l: 1, f: () => tekenVoorwerp(ctx, S, v, helder) });
+      lijst.push({ d: diepteVan(v), l: 1, f: () => tekenVoorwerp(ctx, S, v, helder) });
     }
+    // Doorkijk: wat de held of een wezen bedekt, wordt zolang doorzichtig. De tijd komt uit de
+    // spelklok, zodat het ook klopt als het spel even stilstaat of vooruitgespoeld wordt.
+    const dt = Math.max(0, Math.min(0.1, S.tijd - (S.doorkijkTijd || 0)));
+    S.doorkijkTijd = S.tijd;
+    werkDoorkijkBij(S, dt, zichtbaar);
     for (const e of w.wezens) {
       // Met sprites blijft het laatste beeld van het sterven liggen; met vlakken vervaagt het.
       if (e.dood && e.sterfTijd > 0.8 && !metSprites()) continue;
-      if (!T.isZichtbaar(w, e.tx, e.ty)) continue;
+      if (!inVak(vak, e.tx, e.ty) || !T.isZichtbaar(w, e.tx, e.ty)) continue;
       lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, f: () => tekenWezen(ctx, S, e) });
     }
     // Dwaallichten zweven: ze horen in dezelfde rij van voor naar achter, anders schijnen ze
@@ -94,6 +200,100 @@
     tekenVignet(ctx, S, bw, bh);
   };
 
+  // Op welke tegel plant een voorwerp zich in bij het sorteren van achter naar voor? Een boom
+  // staat op één tegel, maar een huis of de toren beslaat er meer (`beslaat`, vanaf zijn achterste
+  // hoek naar rechtsonder). Dan telt zijn vóórste hoek: alles wat daarvoor langs loopt, hoort er
+  // overheen getekend te worden, en wie erachter staat verdwijnt erachter.
+  T.diepteVan = diepteVan;
+  function diepteVan(v) {
+    const b = v.beslaat || [1, 1];
+    return v.x + (b[0] - 1) + v.y + (b[1] - 1);
+  }
+
+  // ---------------------------------------------------------------- doorkijk
+  //
+  // Buiten staan er dingen die hoger zijn dan een muur binnen: een eik is driehonderd pixels,
+  // de toren bijna zevenhonderd. Wie erachter loopt, is weg — en wat erger is: een wolf die jou
+  // wél ziet, zie jij dan niet. Dus wordt alles wat de held of een wezen bedekt zolang
+  // doorzichtig.
+  //
+  // Waarom doorzichtig en niet het silhouet van de figuur eroverheen: onze pixel art heeft zijn
+  // eigen omlijning van één pixel en leeft van textuur (ontwerp/beeld.md). Een egale vlek over
+  // een boom heen is een tweede beeldtaal, en je ziet er niet aan wáár je staat. Een boom die
+  // half wegvalt laat de tovenaar én de boom zien, en dat is ook wat Fallout en Baldur's Gate
+  // doen. De toren is het zwaarste geval; die krijgt daarom een tikje meer doorkijk dan de rest.
+  const DOORKIJK = 0.4;
+  const DOORKIJK_TOREN = 0.3;
+  const DOORKIJK_TIJD = 0.18; // seconden om op en af te lopen, zodat het niet klappert
+  const HOOG_GENOEG = 40; // hoger dan dit boven zijn voet: dan kan er iemand achter verdwijnen
+
+  // De doos die een wezen op het scherm inneemt, ruim genomen: zijn lijf plus wat lucht.
+  function wezenDoos(e) {
+    const p = T.naarScherm(e.x, e.y);
+    const h = metSprites() ? T.sprites.hoogte(e.soort) : 52;
+    return { x0: p.x - 15, x1: p.x + 15, y0: p.y - h - 6, y1: p.y + 6 };
+  }
+
+  // De doos die het beeld van een voorwerp inneemt, rond het midden van zijn eigen tegel. Elke
+  // tegel draagt zijn eigen maat (`doos`: links, boven, rechts, onder vanaf het ankerpunt), want
+  // een cel is voor alle tegels van een vel even groot maar een bank is geen waslijn. Zonder die
+  // maat valt het terug op de cel. Dit gaat op de voettegel en de maat van het beeld, niet op
+  // pixels: genoeg om te weten of er iemand achter kan staan.
+  function voorwerpDoos(v) {
+    const vel = T.TEGELS && T.TEGELS[v.vel];
+    const tegel = vel && vel.tiles[v.id];
+    if (!vel) return null;
+    const a = vel.anker || [Math.round(vel.tegelB / 2), Math.round(vel.tegelH / 2)];
+    const d = (tegel && tegel.doos) || [a[0], a[1], vel.tegelB - a[0], vel.tegelH - a[1]];
+    if (d[1] < HOOG_GENOEG) return null; // laag spul verbergt niemand
+    const p = T.naarScherm(v.x, v.y);
+    return { x0: p.x - d[0], x1: p.x + d[2], y0: p.y - d[1], y1: p.y + d[3] };
+  }
+
+  const raakt = (a, b) => a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
+
+  // Per beeld: welk hoog voorwerp bedekt iemand die je hoort te zien? Alleen voorwerpen die ná
+  // dat wezen getekend worden kunnen hem verbergen, en dat weten we al uit de diepte.
+  // Wie moet er door een boom of een toren heen te zien zijn? De held altijd. Verder alleen wie er
+  // toe doet op dit moment: wat meevecht, wat je net ontdekt heeft (het uitroepteken), en wie je
+  // aanspreekt. Een wolf die in zijn eentje achter de toren rondscharrelt hoeft de toren niet
+  // doorzichtig te maken — dan sta je ervoor en zie je hem wegvallen zonder te weten waarom.
+  function teltMee(S, e) {
+    if (e === S.held) return true;
+    if (e.dood) return false;
+    if (e.alarm > 0) return true;
+    if (S.gevecht && S.gevecht.volgorde.includes(e)) return true;
+    if (S.overgang && S.overgang.aanleiding === e) return true;
+    return S.spreektMet === e;
+  }
+
+  function werkDoorkijkBij(S, dt, voorwerpen) {
+    const w = S.wereld;
+    const wezens = [];
+    for (const e of w.wezens) {
+      if (!teltMee(S, e)) continue;
+      wezens.push({ d: e.x + e.y, doos: wezenDoos(e) });
+    }
+    for (const v of voorwerpen) {
+      const doos = voorwerpDoos(v);
+      const d = diepteVan(v);
+      let bedekt = false;
+      if (doos) {
+        for (const e of wezens) {
+          if (e.d >= d) continue; // die staat ervóór, dus hij verdwijnt er niet achter
+          if (raakt(doos, e.doos)) {
+            bedekt = true;
+            break;
+          }
+        }
+      }
+      const doel = bedekt ? (v.soort === 'toren' ? DOORKIJK_TOREN : DOORKIJK) : 1;
+      const nu = v.doorkijk == null ? 1 : v.doorkijk;
+      const stap = dt / DOORKIJK_TIJD;
+      v.doorkijk = doel > nu ? Math.min(doel, nu + stap) : Math.max(doel, nu - stap);
+    }
+  }
+
   // Ligt deze tegel aan de voorkant (zuid- of oostkant) van een van deze kamers?
   function isVoorrand(kamers, x, y) {
     return kamers.some(
@@ -101,17 +301,52 @@
     );
   }
 
-  function tekenVloeren(ctx, S, inBeeld) {
+  // De kleuren van de grond buiten, voor als de kunst er niet is (of Toren.debug.vlakken aan
+  // staat): gras, een zandpad, kasseien, water.
+  const BUITENKLEUR = {
+    gras: ['#3f6323', '#395d20'],
+    zandpad: ['#7a6238', '#735c33'],
+    kasseien: ['#6d6a64', '#65625c'],
+    water: ['#2d4f6e', '#284a6a'],
+  };
+
+  // Buiten houdt de kaart ergens op, en op een breed scherm kijk je op de hoek van het beeld
+  // zestien tegels ver: je ziet dus altijd voorbij de rand. Een speler hoort nooit het einde van
+  // de plaat te zien, dus dooft het bos naar de rand toe weg tot het niet meer van de donkere
+  // achtergrond te onderscheiden is — dezelfde truc als nevel() in erf-scene.cjs en dorp.cjs, die
+  // op de plaat de rand van het erf in het bos laat verdwijnen. De kaart zegt zelf over hoeveel
+  // ringen dat gaat (`doof`), zodat daar niet op twee plekken een getal staat.
+  //
+  // De kromme is kwadratisch: dichtbij de rand gaat het snel naar zwart, en naar het erf toe loopt
+  // hij zachtjes vol. Zo valt de overgang naar de echte achtergrond nergens op.
+  function randDof(w, x, y) {
+    const ringen = w.doof || 0;
+    if (!w.buiten || !ringen) return 1;
+    const d = Math.min(x, y, w.b - 1 - x, w.h - 1 - y);
+    if (d >= ringen) return 1;
+    const t = (d + 0.5) / ringen;
+    return Math.max(0.02, t * t);
+  }
+
+  function tekenVloeren(ctx, S, inBeeld, vak) {
     const w = S.wereld;
     const sp = metSprites();
-    for (let y = 0; y < w.h; y++) {
-      for (let x = 0; x < w.b; x++) {
+    const buiten = !!w.buiten;
+    for (let y = vak.y0; y <= vak.y1; y++) {
+      for (let x = vak.x0; x <= vak.x1; x++) {
         const t = T.tegel(w, x, y);
-        if ((t !== 'vloer' && t !== 'deur') || !T.isZichtbaar(w, x, y)) continue;
+        // Buiten ligt er ook gras onder een boom of een huis (die tegel heet "muur"): het
+        // plaatje van de boom laat het gras eromheen zien.
+        if (t === 'buiten' || (!buiten && t !== 'vloer' && t !== 'deur') || !T.isZichtbaar(w, x, y)) continue;
         const p = T.naarScherm(x, y);
+        const g = buiten && w.grond && w.grond[y] ? w.grond[y][x] : null;
         let hex;
         let helder;
-        if (t === 'vloer') {
+        if (buiten) {
+          const kleur = BUITENKLEUR[g && g.naam] || BUITENKLEUR.gras;
+          hex = kleur[(x + y) % 2];
+          helder = 1; // buiten is er geen kamer waar je niet bent
+        } else if (t === 'vloer') {
           const k = T.kamerVan(w, x, y);
           hex = k.vloer[(x + y) % 2];
           helder = inBeeld(k.id) ? 1 : GEDIMD;
@@ -119,24 +354,33 @@
           hex = '#5b4c3c';
           helder = w.burenKamers[y][x].some(inBeeld) ? 1 : GEDIMD;
         }
-        // Uit de lap van twee bij twee tegels wordt per tegel een ruit geknipt, een tikje
-        // ruim, zodat er geen haarlijn tussen twee tegels blijft staan.
-        const deel = sp && T.sprites.tegel(vloerSoort(w, x, y), x, y);
+        // De tegels zijn al klaargeknipt (js/sprites.js snijdt de vloerlappen bij het laden, en
+        // de grond van buiten komt per tegel uit de stempel van vier bij vier), dus hier is
+        // tekenen niets meer dan één drawImage.
+        // Naar de rand van de kaart toe wordt het donker. Dat gaat met doorzichtigheid en niet
+        // met een filter: een filter per tegel is in een browser duur, en hieronder ligt toch
+        // het donker van de achtergrond.
+        const dof = buiten ? randDof(w, x, y) : 1;
+        if (dof <= 0) continue;
+        if (dof < 1) ctx.globalAlpha = dof;
+        const deel = sp && (g ? T.sprites.buiten(g.vel, g.id) : !buiten && T.sprites.tegel(vloerSoort(w, x, y), x, y));
         if (deel) {
-          ctx.save();
-          T.ruit(ctx, p.x, p.y, 1.02);
-          ctx.clip();
           T.sprites.teken(ctx, deel, p.x, p.y, helder);
-          ctx.restore();
+          if (dof < 1) ctx.globalAlpha = 1;
           continue;
         }
         const vlek = 0.95 + ((x * 73 + y * 151) % 11) / 100; // een tikje verschil per tegel
         T.ruit(ctx, p.x, p.y, 1);
         ctx.fillStyle = T.rgb(T.kleur(hex), helder * vlek);
         ctx.fill();
-        ctx.strokeStyle = 'rgba(0,0,0,0.24)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
+        if (dof < 1) ctx.globalAlpha = 1;
+        // Binnen tekent het raster de voegen tussen de stenen; buiten hoort het gras juist
+        // nergens een raster te laten zien.
+        if (!buiten) {
+          ctx.strokeStyle = 'rgba(0,0,0,0.24)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
       }
     }
   }
@@ -441,8 +685,51 @@
     }
   }
 
+  // Wat buiten op de grond staat en geen eigen tekening met vlakken heeft: een boom is een stam
+  // met een kruin, een gebouw een blok zo groot als zijn voet. Genoeg om te zien waar je niet
+  // langs kunt, en om met Toren.debug.vlakken te kunnen vergelijken.
+  const BUITENVLAK = {
+    eik: ['#4a7030', 46, 0.30], herfstEik: ['#a9632a', 46, 0.30], den: ['#2f5734', 54, 0.26],
+    berk: ['#6f9a45', 40, 0.22], dodeBoom: ['#6b5a44', 44, 0.20], wilg: ['#5d7f3c', 42, 0.32],
+    appelboom: ['#4f7a33', 38, 0.30], struik: ['#3d6329', 18, 0.30], bessenStruik: ['#3a5f2c', 16, 0.30],
+    varen: ['#476b2c', 10, 0.26], grasPol: ['#4e7430', 8, 0.22], hoogGras: ['#577d33', 14, 0.22],
+    bloemen: ['#6d8a3c', 8, 0.24], paddenstoelen: ['#9a7250', 6, 0.16], boomstronk: ['#6a5238', 12, 0.26],
+    rots: ['#77736c', 20, 0.30], kleineRots: ['#7d7973', 10, 0.20],
+  };
+
+  function tekenBuitenVlak(ctx, v, helder) {
+    const p = T.naarScherm(v.x, v.y);
+    const b = v.beslaat || [1, 1];
+    const vorm = BUITENVLAK[v.soort];
+    if (vorm) {
+      const [hex, hoog, breed] = vorm;
+      if (hoog > 24) T.blok(ctx, p.x, p.y, 0.08, 0.08, hoog * 0.55, '#5a4632', { helder }); // stam
+      T.blok(ctx, p.x, p.y, breed, breed, hoog * 0.6, hex, { helder, basis: hoog > 24 ? hoog * 0.45 : 0 });
+      return;
+    }
+    // een gebouw of de toren: een blok zo groot als zijn voet, met zijn midden op het midden
+    // van die voet
+    const m = T.naarScherm(v.x + (b[0] - 1) / 2, v.y + (b[1] - 1) / 2);
+    const hoog = v.soort === 'toren' ? 260 : Math.max(40, 26 * Math.max(b[0], b[1]));
+    T.blok(ctx, m.x, m.y, b[0] / 2, b[1] / 2, hoog, v.soort === 'toren' ? '#7b7486' : '#8a6f4e', { helder });
+  }
+
   function tekenVoorwerp(ctx, S, v, helder) {
     const p = T.naarScherm(v.x, v.y);
+    // Buiten komt het plaatje uit de tegelvellen (tegels/, zie js/sprites.js): een boom, een
+    // struik, een gebouw, de toren. Het anker van de cel is de voet, dus hij valt precies op het
+    // midden van zijn eigen tegel.
+    if (v.vel) {
+      // dof: hoe ver van de rand van de kaart. doorkijk: staat er iemand achter?
+      const alpha = randDof(S.wereld, v.x, v.y) * (v.doorkijk == null ? 1 : v.doorkijk);
+      if (alpha <= 0.02) return;
+      if (alpha < 1) ctx.globalAlpha = alpha;
+      const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id);
+      if (stuk) T.sprites.teken(ctx, stuk, p.x, p.y, helder);
+      else tekenBuitenVlak(ctx, v, helder);
+      if (alpha < 1) ctx.globalAlpha = 1;
+      return;
+    }
     // De pilaar en de trap staan nog niet in de kunst; die blijven vlakken.
     const deel = metSprites() && T.sprites.voorwerp(v.soort);
     if (deel) {
@@ -653,6 +940,28 @@
       ctx.lineTo(cx + 3, hy + 4);
       ctx.stroke();
       return hy - 9;
+    },
+    // Laag en lang, met de kop vooruit: een wolf is geen mens op vier poten.
+    wolf(ctx, cx, cy, bob) {
+      T.blok(ctx, cx, cy, 0.3, 0.16, 15 + bob, '#6f6a63'); // romp
+      const hy = cy - 15 - bob - 6;
+      rondje(ctx, cx + 9, hy + 2, 5.5, '#7d7770'); // kop
+      ctx.fillStyle = '#5c574f'; // snuit
+      ctx.beginPath();
+      ctx.moveTo(cx + 13, hy + 1);
+      ctx.lineTo(cx + 21, hy + 4);
+      ctx.lineTo(cx + 13, hy + 6);
+      ctx.closePath();
+      ctx.fill();
+      rondje(ctx, cx + 10, hy + 1, 1.2, '#e8c24a'); // gele ogen
+      ctx.fillStyle = '#5c574f'; // staart
+      ctx.beginPath();
+      ctx.moveTo(cx - 9, hy + 6);
+      ctx.lineTo(cx - 19, hy - 1);
+      ctx.lineTo(cx - 17, hy + 6);
+      ctx.closePath();
+      ctx.fill();
+      return hy - 6;
     },
   };
 

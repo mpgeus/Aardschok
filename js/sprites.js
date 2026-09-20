@@ -13,30 +13,34 @@
   'use strict';
 
   const MAP = 'beelden/';
-  const beelden = new Map(); // bestandsnaam → Image
+  const beelden = new Map(); // pad → Image
   let gegevens = null;
   let belofte = null;
 
   const S = {
-    aan: false, // staan alle vellen klaar? Zo niet, tekent het spel zijn vlakken.
+    aan: false, // staan alle vellen van binnen klaar? Zo niet, tekent het spel zijn vlakken.
+    buitenAan: false, // en die van buiten (tegels/, gemaakt door npm run tiled)
     mist: [], // wat er niet geladen kon worden, om in de console te zien
   };
   T.sprites = S;
 
   // ---------------------------------------------------------------- laden
 
-  function laadBeeld(bestand) {
+  // `pad` is het pad vanaf index.html. De vellen van binnen staan in beelden/, die van buiten in
+  // tegels/ (daar maakt npm run tiled ze, voor Tiled én voor het spel: het zijn dezelfde
+  // plaatjes, in dezelfde projectie, met hetzelfde ankerpunt).
+  function laadBeeld(pad) {
     return new Promise((klaar) => {
       const img = new Image();
       img.onload = () => {
-        beelden.set(bestand, img);
+        beelden.set(pad, img);
         klaar(true);
       };
       img.onerror = () => {
-        S.mist.push(bestand);
+        S.mist.push(pad);
         klaar(false);
       };
-      img.src = MAP + bestand;
+      img.src = pad;
     });
   }
 
@@ -59,13 +63,18 @@
         S.mist.push('beschrijving');
         return false;
       }
-      const lijst = [gegevens.muren.bestand, gegevens.vloeren.bestand, gegevens.voorwerpen.bestand];
+      const lijst = [gegevens.muren.bestand, gegevens.vloeren.bestand, gegevens.voorwerpen.bestand].map((f) => MAP + f);
       for (const f of Object.values(gegevens.figuren)) {
-        for (const h of Object.values(f.houdingen)) lijst.push('figuren/' + h.bestand);
+        for (const h of Object.values(f.houdingen)) lijst.push(MAP + 'figuren/' + h.bestand);
       }
-      const uitslag = await Promise.all(lijst.map(laadBeeld));
+      // De vellen van buiten staan los: gaat daar iets mis, dan tekent het spel buiten vlakken
+      // en binnen nog gewoon zijn pixel art.
+      const buiten = [...new Set(Object.values(T.TEGELS || {}).map((v) => v.bestand).filter(Boolean))];
+      const [uitslag, uitBuiten] = await Promise.all([Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld))]);
       S.aan = uitslag.every(Boolean);
-      if (!S.aan) console.warn('Aardschok: sprites ontbreken, het spel tekent vlakken.', S.mist);
+      S.buitenAan = buiten.length > 0 && uitBuiten.every(Boolean);
+      if (S.aan) snijVloeren();
+      if (!S.aan || !S.buitenAan) console.warn('Aardschok: sprites ontbreken, het spel tekent daar vlakken.', S.mist);
       return S.aan;
     })();
     return belofte;
@@ -81,6 +90,17 @@
     if (!img) return null;
     return { beeld: img, sx, sy, b, h, ax: anker[0], ay: anker[1] };
   };
+
+  // Stukken die elk beeld opnieuw gevraagd worden (elke grastegel, elke boom in beeld), maar nooit
+  // veranderen: één keer uitrekenen en bewaren. Anders maakt het tekenen honderden objectjes per
+  // beeld die de opruimer daarna weer moet weghalen.
+  const bewaard = new Map();
+  function onthoud(sleutel, maak) {
+    if (bewaard.has(sleutel)) return bewaard.get(sleutel);
+    const s = maak();
+    if (s) bewaard.set(sleutel, s);
+    return s;
+  }
 
   // Tekent een stuk met zijn anker op (px, py), afgerond op hele pixels van het vlak zelf:
   // zo blijven de pixels van de pixel art op elkaar liggen. helder onder 1 dimt (een kamer
@@ -122,7 +142,7 @@
     const rij = Math.max(0, f.richtingen.indexOf(richting));
     let beeld = Math.floor((h.herhaal ? ((fase % 1) + 1) % 1 : Math.min(0.999999, Math.max(0, fase))) * h.beelden);
     beeld = Math.max(0, Math.min(h.beelden - 1, beeld));
-    return stuk('figuren/' + h.bestand, beeld * cel[0], rij * cel[1], cel[0], cel[1], h.anker || f.anker);
+    return stuk(MAP + 'figuren/' + h.bestand, beeld * cel[0], rij * cel[1], cel[0], cel[1], h.anker || f.anker);
   };
 
   // Hoe lang een houding duurt, in seconden.
@@ -140,27 +160,79 @@
   // Hoe hoog een figuur boven zijn tegel uitsteekt: waar zijn hoofd zit, voor de levensbalk,
   // het uitroepteken en het aanwijzen met de muis. De cel is hoger dan de figuur (er moet een
   // zwaard in de lucht in passen), dus dit is gemeten aan het vel zelf, op de houding staan.
-  const HOOG = { tovenaar: 90, wim: 66, skelet: 78, slijm: 28 };
+  const HOOG = { tovenaar: 90, wim: 66, skelet: 78, slijm: 28, wolf: 46 };
   S.figuurNaam = (soort) => (soort === 'held' ? 'tovenaar' : soort);
   S.hoogte = (soort) => HOOG[S.figuurNaam(soort)] || 60;
 
   // ---------------------------------------------------------------- vloeren, muren, voorwerpen
 
-  // Een vloer is een lap van twee bij twee tegels, zodat de steen niet elke tegel herhaalt.
-  // Het spel knipt er per tegel een ruit uit; `dx`/`dy` zeggen welke van de vier.
-  S.tegel = function (soort, x, y) {
-    if (!gegevens) return null;
+  // Een vloer is een lap van twee bij twee tegels, zodat de steen niet elke tegel herhaalt. Er
+  // moet per tegel een ruit uit geknipt worden — en knippen (save, pad, clip, restore) is in een
+  // browser een van de duurste dingen die je per beeld kunt doen. Dus knippen we één keer bij het
+  // laden: per soort vier kant-en-klare tegels op een eigen vlakje, net zoals naar-tiled.cjs de
+  // stempels van vier bij vier vooraf in losse tegels snijdt. Daarna is tekenen niets meer dan
+  // drawImage.
+  //
+  // Het vlakje is een tikje ruimer dan 64×32 en de ruit een tikje ruimer dan een tegel: dan
+  // overlappen twee buren elkaar met een halve pixel en blijft er geen haarlijn tussen staan.
+  const VLOER_B = 66;
+  const VLOER_H = 34;
+  const VLOER_ANKER = [33, 17];
+  const vloertegels = new Map(); // "soort,a,b" → stuk
+  function snijVloeren() {
+    if (!gegevens || typeof document === 'undefined') return;
     const v = gegevens.vloeren;
-    const k = v.soorten[soort];
-    if (k == null) return null;
-    const deel = stuk(v.bestand, k * v.cel[0], 0, v.cel[0], v.cel[1], v.anker);
-    if (!deel) return null;
-    // welke tegel van de lap: zo sluit het steenverband tussen de tegels op elkaar aan
+    const bron = beelden.get(MAP + v.bestand);
+    if (!bron) return;
+    for (const [soort, k] of Object.entries(v.soorten)) {
+      for (let b = 0; b < 2; b++) {
+        for (let a = 0; a < 2; a++) {
+          const c = document.createElement('canvas');
+          c.width = VLOER_B;
+          c.height = VLOER_H;
+          const cx = c.getContext('2d');
+          cx.imageSmoothingEnabled = false;
+          T.ruit(cx, VLOER_ANKER[0], VLOER_ANKER[1], 1.04);
+          cx.clip();
+          // Het anker van de lap ligt op het midden van tegel (0, 0); voor tegel (a, b) van de
+          // lap schuift dat een halve ruit op, zodat het verband tussen de tegels doorloopt.
+          const ax = v.anker[0] + (a - b) * T.HB;
+          const ay = v.anker[1] + (a + b) * T.HH;
+          cx.drawImage(bron, k * v.cel[0], 0, v.cel[0], v.cel[1], Math.round(VLOER_ANKER[0] - ax), Math.round(VLOER_ANKER[1] - ay), v.cel[0], v.cel[1]);
+          vloertegels.set(`${soort},${a},${b}`, { beeld: c, sx: 0, sy: 0, b: VLOER_B, h: VLOER_H, ax: VLOER_ANKER[0], ay: VLOER_ANKER[1] });
+        }
+      }
+    }
+  }
+
+  S.tegel = function (soort, x, y) {
     const a = ((x % 2) + 2) % 2;
     const b = ((y % 2) + 2) % 2;
-    deel.ax += (a - b) * T.HB;
-    deel.ay += (a + b) * T.HH;
-    return deel;
+    return vloertegels.get(`${soort},${a},${b}`) || null;
+  };
+
+  // ---------------------------------------------------------------- buiten (tegels/)
+  //
+  // De vellen die npm run tiled maakt: gras en paden, bomen en begroeiing, de gebouwen, de toren
+  // en wat er op het erf staat. Ze staan in dezelfde projectie als alles hierboven, en tegels.js
+  // (T.TEGELS) draagt per vel het ankerpunt: het punt in een cel dat op het midden van de tegel
+  // hoort te liggen. Tekenen is dus ook hier niets meer dan het anker op T.naarScherm leggen.
+  S.buiten = function (velNaam, id) {
+    const v = T.TEGELS && T.TEGELS[velNaam];
+    if (!v || !v.bestand || id == null) return null;
+    return onthoud(`buiten,${velNaam},${id}`, () => {
+      const kol = v.kolommen || v.tiles.length;
+      const anker = v.anker || [Math.round(v.tegelB / 2), Math.round(v.tegelH / 2)];
+      return stuk(v.bestand, (id % kol) * v.tegelB, Math.floor(id / kol) * v.tegelH, v.tegelB, v.tegelH, anker);
+    });
+  };
+
+  // Hoe hoog steekt dit ding boven zijn tegel uit? Voor het aanwijzen met de muis. Het ankerpunt
+  // is de voet, dus wat erboven zit is precies het stuk cel boven het anker.
+  S.buitenHoogte = function (velNaam) {
+    const v = T.TEGELS && T.TEGELS[velNaam];
+    if (!v) return 0;
+    return (v.anker || [0, 0])[1];
   };
 
   // Een muurstuk. `west` is waar of niet: een westmuur kijkt naar het zuidoosten, een
@@ -173,7 +245,7 @@
     if (r < 0) return null;
     const kol = soort === 'laag' ? 0 : k;
     if (kol < 0) return null;
-    return stuk(m.bestand, kol * m.cel[0], r * m.cel[1], m.cel[0], m.cel[1], m.anker);
+    return stuk(MAP + m.bestand, kol * m.cel[0], r * m.cel[1], m.cel[0], m.cel[1], m.anker);
   };
 
   S.muurSoorten = () => (gegevens ? gegevens.muren.kolommen : []);
@@ -184,7 +256,7 @@
     const v = gegevens.voorwerpen;
     const i = v.namen.indexOf(naam);
     if (i < 0) return null;
-    return stuk(v.bestand, i * v.cel[0], 0, v.cel[0], v.cel[1], v.anker);
+    return stuk(MAP + v.bestand, i * v.cel[0], 0, v.cel[0], v.cel[1], v.anker);
   };
 
   // ---------------------------------------------------------------- de houding van een wezen

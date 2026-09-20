@@ -111,29 +111,41 @@ function schrijf(naam, plaat) {
 }
 
 // Van elke figuur alleen de houdingen die het spel gebruikt; de losse -zo-plaatjes en de
-// overzichtsstroken blijven in uit/.
+// overzichtsstroken blijven in uit/. `map` zegt waar de vellen vandaan komen: de bosvijanden
+// worden door een eigen script gerenderd (bosvijanden-anim.cjs) en staan dus ergens anders.
 const FIGUURLIJST = {
-  tovenaar: ['staan', 'lopen-84', 'lopen-92', 'lopen-99', 'slaan', 'spreuk', 'geraakt', 'sterven'],
-  wim: ['staan', 'lopen', 'praten', 'vegen'],
-  skelet: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'],
-  slijm: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'],
+  tovenaar: { houdingen: ['staan', 'lopen-84', 'lopen-92', 'lopen-99', 'slaan', 'spreuk', 'geraakt', 'sterven'] },
+  wim: { houdingen: ['staan', 'lopen', 'praten', 'vegen'] },
+  skelet: { houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'] },
+  slijm: { houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'] },
+  // Buiten, op het erf en straks in het bos.
+  wolf: { map: ['vijanden', 'animaties'], houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'], bron: 'bosvijanden-anim.cjs' },
 };
 
 function figuren() {
   const uit = {};
-  for (const [naam, houdingen] of Object.entries(FIGUURLIJST)) {
-    const bron = path.join(UIT, 'animaties', `${naam}.json`);
+  for (const [naam, opzet] of Object.entries(FIGUURLIJST)) {
+    const map = path.join(UIT, ...(opzet.map || ['animaties']));
+    const bron = path.join(map, `${naam}.json`);
     if (!fs.existsSync(bron)) {
-      console.error(`ontbreekt: ${naam}.json — draai eerst npm run pixelart:animaties`);
+      console.error(`ontbreekt: ${naam}.json — draai eerst ${opzet.bron ? `node gereedschap/pixelart/${opzet.bron}` : 'npm run pixelart:animaties'}`);
       process.exitCode = 1;
       continue;
     }
     const beschrijving = JSON.parse(fs.readFileSync(bron, 'utf8'));
     const gekozen = {};
-    for (const h of houdingen) {
+    for (const h of opzet.houdingen) {
       const o = beschrijving.houdingen[h];
       if (!o) continue;
-      if (!kopieer(path.join(UIT, 'animaties', o.bestand), path.join(FIGUREN, o.bestand))) continue;
+      if (!kopieer(path.join(map, o.bestand), path.join(FIGUREN, o.bestand))) continue;
+      // `stap` (hoeveel tegels één pas is) houdt de voeten op de grond: js/sprites.js leidt de
+      // fase van de loopcyclus af uit de afgelegde afstand, niet uit de klok. Niet elk script
+      // schrijft hem, dus reken hem hier uit de snelheid waarvoor de cyclus gemaakt is: twee
+      // passen per cyclus.
+      if (h === 'lopen' && o.stap == null && beschrijving.snelheid) {
+        gekozen[h] = { ...o, stap: Math.round((beschrijving.snelheid * (o.beelden / o.fps)) / 2 * 100) / 100 };
+        continue;
+      }
       gekozen[h] = o;
     }
     beschrijving.houdingen = gekozen;

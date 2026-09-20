@@ -205,6 +205,10 @@ function materialen(W, S) {
       return s;
     },
   });
+  // het donker binnen het schuurtje en in de putschacht. Stond eerst in bouwSchuurtje, maar dan
+  // hangt bouwPut ervan af dat het schuurtje eerder gebouwd is; hier staat het één keer, zodat
+  // elk ding op het erf ook los te bouwen is (zie naar-tiled.cjs, het vel "erf").
+  W.mat.erfDonker = { ramp: 'inkt', lo: 0.4, hi: 1.8, rand: 0 };
   W.mat.erfLinnen = doek('perkament', 1.8, 7);
   W.mat.erfBlauw = doek('gewaad', 1.4, 6.4);
   W.mat.erfRood = doek('rood', 1.6, 6.8);
@@ -356,7 +360,6 @@ function bouwSchuurtje(W, S) {
   for (const z of [16, 78]) voeg(g, { ...balk(D.wereld(2, 2.4, z), D.wereld(deurB * 1.9, 2.4, z), 2.4, 1, [0, 1, 0], 0.2), m: 'erfRoest', deel: 51 });
   // het donker van binnen
   voeg(g, { f: (x, y, z) => sdf.doos(x - cx, y - cy + 6, z - goot / 2, bx - 8, by - 8, goot / 2 - 2, 1), g: [cx, cy - 6, goot / 2, Math.hypot(bx, by)], m: 'erfDonker', deel: 52 });
-  W.mat.erfDonker = { ramp: 'inkt', lo: 0.4, hi: 1.8, rand: 0 };
   // een ladder tegen de gevel, rechts van de deur
   const la = p(bx - 24, by + 10, 0);
   const lb = p(bx - 14, by - 2, nok - 10);
@@ -816,6 +819,46 @@ const RAND = [
   ['struik', 16, -4.4, -8.6, 18, 1.1],
 ];
 
+// ---------------------------------------------------------------- het erf als losse tegels
+//
+// Dezelfde plaatsing, maar dan per ding: hoeveel tegels zijn voet inneemt, of je erdoorheen kunt,
+// welke bouwer hem maakt, en hoe ruim het vlak moet zijn om hem los te renderen. naar-tiled.cjs
+// maakt hier tegels/erf.png en tegels/toren.png van (voor Tiled én voor het spel), erf-kaart.cjs
+// zet ze neer op kaarten/erf.tmj. Zo staat de plaatsing op één plek: verzet je hier de put, dan
+// schuift hij mee in de plaat, in de editor en in het spel.
+//
+// voet = [x0, y0, breed, diep] in tegels vanaf de voet van de toren. (x0, y0) is de achterste
+// hoek: de tegel die je in Tiled aanklikt, en waar het spel het ding op inplant bij het sorteren.
+const rondTuin = (i) => Math.round([PLEK.tuin.x0, PLEK.tuin.y0][i]);
+const TOREN_TEGELS = [
+  // De toren staat in een vel voor zich: hij is veel hoger dan al het andere op het erf, en in één
+  // gedeelde cel zou elke bank en elke lantaarn zevenhonderd pixels lucht meekrijgen. Later komen
+  // de drie staten (krakkemikkig, half, hersteld) er als tweede en derde tegel bij.
+  //
+  // `voet: null` betekent: opmeten. De toren wordt dikker gemaakt (hij moet om zijn eigen hal van
+  // 9×7 passen, zie ontwerp/wereld.md), en dan hoort zijn voetafdruk hier niet als getal te staan
+  // maar uit het model zelf te komen. naar-tiled.cjs meet hem en schrijft hem in tegels.json, en
+  // erf-kaart.cjs zet de toren daarmee op de kaart. Ook het vlak groeit dan vanzelf mee.
+  { naam: 'toren', voet: null, vast: true, bouw: null },
+];
+const ERF_TEGELS = [
+  { naam: 'schuurtje', voet: [5, -5, 5, 4], vast: true, bouw: bouwSchuurtje, vlak: [560, 560] },
+  { naam: 'put', voet: [3, 4, 1, 1], vast: true, bouw: bouwPut, vlak: [320, 360] },
+  { naam: 'houtstapel', voet: [4, 0, 2, 2], vast: true, bouw: bouwHout, vlak: [420, 400] },
+  // De waslijn hangt aan de torenmuur en loopt naar zijn paal: hij staat op de tegel van de paal,
+  // en je loopt er gewoon onderdoor (dus niet vast).
+  { naam: 'waslijn', voet: [Math.round(PLEK.lijnPaal[0]), Math.round(PLEK.lijnPaal[1]), 1, 1], vast: false, bouw: bouwWas, vlak: [860, 560] },
+  { naam: 'moestuin', voet: [rondTuin(0), rondTuin(1), 5, 5], vast: true, bouw: bouwMoestuin, vlak: [640, 560] },
+  { naam: 'bank', voet: [Math.round(PLEK.bank[0]), Math.round(PLEK.bank[1]), 1, 1], vast: true, bouw: bouwBank, vlak: [300, 300] },
+  { naam: 'lantaarn', voet: [Math.round(PLEK.lantaarn[0]), Math.round(PLEK.lantaarn[1]), 1, 1], vast: false, bouw: bouwLantaarn, vlak: [260, 320] },
+];
+// Welke kant de deur van de toren op kijkt, als richting vanaf het midden van de toren. Zie de
+// kale plek in grond(): die is om (1.2, 1.9) heen gelopen, want daar wordt gelopen. Het is met
+// opzet een richting en geen tegel: hoe ver de deur van het midden af ligt, hangt af van hoe dik
+// de toren is, en die wordt om zijn eigen hal heen gebouwd (zie ontwerp/wereld.md). erf-kaart.cjs
+// loopt vanaf het midden deze kant op tot hij de voet uit is; dáár staat hij voor de deur.
+const DEURKANT = [1.2, 1.9];
+
 // Het erf tekenen. o.staat: 'verwaarloosd' (zoals hij hem erft) of 'opgeknapt'.
 function erf(o = {}) {
   const log = o.log || (() => {});
@@ -1138,4 +1181,13 @@ function avondSchaduw(B, R, gezet, o = {}) {
   }
 }
 
-module.exports = { erf, BREED, HOOG, ANKER, VELD, PLEK, PAD_DORP, PAD_BOS };
+// De plaatsing en de bouwers staan er los bij, zodat erf-kaart.cjs er kaarten/erf.tmj uit kan
+// maken en naar-tiled.cjs elk ding op het erf ook los kan renderen (als tegel voor Tiled én voor
+// het spel). Wie hier iets verzet, verzet het meteen ook in het spel: er is maar één plaatsing.
+module.exports = {
+  erf, BREED, HOOG, ANKER, VELD, PLEK, PAD_DORP, PAD_BOS,
+  BOMEN, KLEIN, RAND, HEK, POORT, POORT2,
+  TOREN_TEGELS, ERF_TEGELS, DEURKANT,
+  materialen,
+  bouwSchuurtje, bouwPut, bouwHek, bouwHout, bouwWas, bouwBank, bouwLantaarn, bouwMoestuin,
+};
