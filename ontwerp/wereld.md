@@ -95,6 +95,21 @@ ze wel mag verkopen, zijn middelen om een gevecht te ontlopen: rook, lokaas, sla
 Naast deze mensen is er een maker voor gewone dorpelingen: per zaad een ander postuur, kapsel,
 kleding, hoofddeksel en iets in de handen. Daarmee kan het dorp druk aanvoelen.
 
+### Dorpelingen lopen rond (Marcel, 20 sep 2026)
+
+"NPC's mogen ook wel rondlopen, vind je niet?" Ja: de loopanimaties zijn er voor alle
+dorpelingen, en een dorp waar iedereen stilstaat voelt dood. Wat erbij hoort:
+
+- **Een dorpeling heeft een plek en een straal.** Hij dwaalt binnen een paar tegels van waar hij
+  hoort (de smid bij de smidse, de boerin bij de akker), blijft af en toe staan, en doet dan iets
+  dat bij hem past — Wim veegt, en die houding is er al.
+- **Een dorpeling begint nooit een gevecht** en telt niet mee in de beurtvolgorde. Dat is wat hem
+  onderscheidt van een dwalend monster, dat hetzelfde loopwerk gebruikt.
+- **Niemand blokkeert een deur of een doorgang.** Je mag nooit jaren kwijtraken omdat er iemand
+  in de weg liep. Een tegel naast een deur telt als plek waar een dorpeling niet blijft staan.
+- **Praten onderbreekt het dwalen:** wie tegen je praat, staat stil en kijkt je aan, en loopt pas
+  verder als het gesprek uit is.
+
 ### Plekken die de moeite waard zijn (voorstel)
 
 | Plek | Wat er te doen is |
