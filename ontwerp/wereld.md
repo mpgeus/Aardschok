@@ -1,5 +1,30 @@
 # Wereld: dorp, bos, toren, goud
 
+## De indeling van de wereld (Marcel, 20 sep 2026)
+
+Drie gebieden, en je reist ertussen:
+
+1. **Het erf van de toren:** jouw eigen plek, de toren met het bos eromheen. Zoals in Stardew
+   Valley heb je een eigen gebied dat je opknapt en inricht.
+2. **Het bos:** waar je doorheen reist, met eenvoudige vijanden.
+3. **Het dorp:** waar de mensen en de quests zijn. Het moet flink groter dan nu.
+
+## De maten (Marcel, 20 sep 2026: de schaal klopt niet)
+
+De mensen leken te groot naast de huizen. Nagerekend: een tegel is 64×32 pixels en de tovenaar
+is 88 pixels bij 1,75 meter, dus **een tegel is ongeveer 80 centimeter**. Een huis van 3×3
+tegels is dan 2,4 bij 2,4 meter: een schuurtje.
+
+Binnen klopte het al (de hal is 9×7 tegels, ruim 7 bij 5,5 meter). Buiten moet alles ruimer:
+
+| Wat | Plattegrond | Hoogte |
+|---|---|---|
+| Klein huisje | 5×7 tegels | één verdieping, muur ~100 px |
+| Gewoon huis | 6×8 tegels | anderhalve verdieping |
+| Herberg | 7×9 tegels | twee verdiepingen, muur ~200 px |
+| Kapel | 5×10 tegels | hoge muur, steil dak |
+| Deur | ~1,5 tegel breed | ~2 meter (96 px), net boven de tovenaar |
+
 ## Ideeën van Marcel (19 sep 2026), nog niet uitgewerkt
 
 - **Een startdorp** met huizen en mensen die quests geven. Het dorp is de basis waar je tussen de
