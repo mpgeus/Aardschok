@@ -120,6 +120,33 @@ Wat daar gratis uit komt:
 Het verandert ook wat herstellen betekent: je bent geen bouwvakker, je ruimt de nalatenschap op van
 iemand die te lang is doorgegaan. Dat past bij de toon: weemoedig, met een knipoog.
 
+## De leerling (Marcel, 20 sep 2026)
+
+"Ik wil ook nadenken over een leerling. Deze komt mogelijk voort uit een quest uit het dorp."
+
+Hij staat al half in `wereld.md`: de jongen die speelt dat hij een held is, met een houten zwaard
+en de pet van zijn vader, en die met je mee wil. Dat is de quest — een kind dat aandringt, ouders
+die het niet zien zitten, en jij die weet wat het kost.
+
+- **Hij is jouw spiegelbeeld.** Jong: veel actiepunten, zwakke magie. Jij oud: weinig beurten,
+  spreuken als mokers. Samen dekken jullie elkaars gat, en dat is een ander gevecht dan alleen.
+- **Hij draagt wat jij niet kunt** — maar hij komt alleen waar een trap staat. Dus hij is een réden
+  om die trap te herstellen, geen manier om eromheen te werken (zie `toren.md`).
+- **Hij onthoudt wat jij hem leert.** Jij gaat door ouderdom vergeten (`spreuken.md`); een spreuk
+  doorgeven vóórdat je hem kwijtraakt is het thema van dit spel in één handeling. Jij verliest, hij
+  houdt.
+- **Hij is je getuige.** Verdort je bomen en trek je dieren leeg, dan staat hij ernaast. Een dorp
+  dat je nakijkt is erg; een kind dat je ziet veranderen is erger.
+- **Dezelfde drie remmen als bij de huurlingen,** anders vecht je nooit meer zelf: hij is zwak, hij
+  kan echt dood, en hij komt niet waar geen trap is.
+- **En hij maakt de estafette mogelijk:** word je honderd, dan neemt hij de toren over met alles
+  wat jij herstelde nog overeind. Niet nodig, wel mogelijk. Nog niet besloten.
+
+**De meester loopt rond** (Marcel, 20 sep 2026). Tijdens de tutorial hoort hij bij zijn toren te
+ijsberen, in een boek te kijken, de trap op te turen — niet als een standbeeld te wachten tot jij
+praat. Het dwaalsysteem werkt al (Wim doet het, zie `js/verkennen.js`) en zijn sprite is klaar, dus
+het is een kwestie van hem `dwaalt`, `thuis` en een straal geven.
+
 ## Open
 
 - **Waar is Wim in de tutorial?** Knecht van de meester, of jouw oude leerling die er al was?
