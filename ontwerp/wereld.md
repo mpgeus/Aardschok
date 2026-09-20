@@ -243,8 +243,7 @@ Nog uit te zoeken:
   ligt, dus de tufts vormen nette diagonale rijen. In een grote render valt dat niet op, want
   daar wordt de grond in één keer getekend. De oplossing: een lap van vier bij vier tegels uit
   hetzelfde ruisveld snijden, plus losse varianten om te strooien.
-- **Hoogte.** Tiled kent geen z. Terrassen en een richel moeten dus met lagen, of met een
-  eigenschap per tegel, of we houden een gebied vlak.
+- **Hoogte.** Besloten, zie "Hoogte is een getal per tegel" hieronder. Nog niet gebouwd.
 - **Grote gebouwen.** Een huis van 6×8 tegels is één object met een voetpunt, geen losse tegels.
   De dieptesortering van het spel (op t) moet zulke objecten op hun voettegel inplannen.
 - **Wat blijft er in code?** De kamers binnen in de toren zijn klein en staan al in code. Die
@@ -292,6 +291,48 @@ de tovenaar en Wim), en de top van de toren, want dat is het einde van het spel 
 decor dat er echt toe doet.
 
 **Voorgestelde volgorde na buiten-af:** randtegels, dan de mijn, dan de andere torens.
+
+### Hoogte is een getal per tegel (Marcel, 20 sep 2026)
+
+Tiled kent geen derde dimensie. Van de drie manieren die daarvoor rondgaan — een laag per
+verdieping, een getal per tegel, of sorteren op y — is de tweede voor ons de juiste.
+
+**Waarom geen laag per verdieping.** Alles in dit spel hangt aan één raster voor rondlopen én
+vechten; dat is wat de overgang naadloos maakt. Lagen geven twee rasters die met trappen aan
+elkaar geknoopt moeten worden, en dat raakt het lopen, het zoeken van een pad, het zicht, het
+bereik van een spreuk en de beurtvolgorde. Voor een huis met een bovenverdieping is het de goede
+aanpak; voor een heuvel met een beek eronder een dure omweg.
+
+**Hoe het in Tiled werkt.** Naast de grondlaag komt een laag `hoogte` met een klein palet: acht
+gekleurde ruiten met een cijfer, 0 tot en met 7, waarbij 0 het maaiveld is. Marcel schildert geen
+rotsen maar hoogtes, met dezelfde emmer en stempel als voor gras, en ziet de grond eronder
+doorschemeren. Eén extra tegel in dat palet is `helling`, met een richting: daar mag een
+hoogteverschil overbrugd worden.
+
+Een eigenschap per tegel in het tegelvel kan niet, want dezelfde graspol moet op elke hoogte
+kunnen liggen; een eigenschap per object zou betekenen dat je elke tegel apart aanklikt. Een laag
+schilder je.
+
+**Rotswanden worden afgeleid, niet getekend.** Staat er een 1 naast een 0, dan is daar een wand.
+Dat is dezelfde machinerie als de randtegels tussen twee grondsoorten, alleen tussen twee
+hoogtes. Een klifrand kan daardoor nooit fout liggen.
+
+**Wat het spel ermee doet:**
+
+- de tegel en alles wat erop staat schuift omhoog met hoogte maal een vaste trede (begin met
+  ongeveer een halve tegel; `iso.js` weet al dat één eenheid hoogte 0,866 pixel is);
+- lopen mag naar een buurtegel bij gelijke hoogte, of over een helling;
+- de dieptesortering krijgt hoogte als tweede sleutel: wie boven staat, komt over wie beneden
+  staat heen;
+- het exportstapje klaagt als een stuk is ingesloten waar geen helling heen leidt.
+
+**Wat het de kernregel oplevert,** want anders is het alleen mooi: vanaf hoog grond zie je verder,
+dus zie je een wolf eerder en kun je hem ontlopen. Een richel dwingt je te kiezen welke kant je
+omloopt. Naar beneden springen kan wel maar niet terug, dus dat is een eenrichtingsroute om weg te
+komen. Alle drie versterken ze de afweging tussen jaren en veiligheid.
+
+**Wanneer:** na de randtegels en nadat elke kaart vanzelf een gebied is, want hoogte bouwen in een
+wereld die nog niet af is, is de verkeerde volgorde.
 
 ### Water en een brug vragen de speler iets (Marcel, 20 sep 2026)
 
