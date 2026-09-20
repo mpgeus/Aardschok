@@ -67,6 +67,29 @@ de speler ziet.
 
 De toren en zijn kamers houden hun eigen sfeer, die uit Mystic Towers.
 
+### De tweede referentie: de boerderij met de watermolen (Marcel, 20 sep 2026)
+
+Marcel liet een isometrische pixel art-plaat zien van een boerderij met een watermolen aan een
+beek, en noemde die stijl "echt passend". Wat we eruit overnemen:
+
+- **Het dak is het gebouw.** Het riet is de grootste massa, ruim de helft van de hoogte, en het
+  zakt laag over de muren heen. Je ziet de lagen riet per rij liggen, de nok is een dikke rol, en
+  onder de overstek zit diepe schaduw. Onze daken zijn te klein en te vlak.
+- **Steen onder, hout boven.** Een onderbouw van ruwe veldsteen (koel grijsblauw), daarboven hout
+  en vakwerk (warm oranjebruin). Twee temperaturen per huis; dat is wat het rijk maakt.
+- **Dingen die uitsteken.** Een erker op klossen, een dakkapel met een eigen rieten kapje, een
+  schoorsteen met een kap, gesneden windveren langs de gevel. Zulke randen maken het silhouet van
+  een huis van ver herkenbaar, en meteen anders dan dat van de buren.
+- **Elk huis is een werkplek.** Een rad in de beek, akkers in rijen, varkens in de modder, een kar
+  met een gebroken wiel, stapels stammen, een koe, een boer. Het erf vertelt wat er gebeurt.
+- **Het bijgebouw is geen klein huisje** maar een half ingegraven schuur met het dak bijna tot op
+  de grond en een gemetselde boogdeur.
+- **Bomen met variatie,** waaronder een kale dode boom tussen het groen, en slagschaduwen van de
+  bomen op het gras.
+
+De plaat is een diorama op een schuin afgesneden plak grond. Dat is presentatie; onze wereld loopt
+door, dus die harde rand nemen we niet over.
+
 ## Wat er staat (20 sep 2026)
 
 Klaar en in `gereedschap/pixelart/`, met een exportscript per onderdeel:
