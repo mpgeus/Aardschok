@@ -76,6 +76,21 @@ Volgens de kernregel kost een gevecht dat je ontloopt geen jaren.
 - **Uitrusting die een klap minder maanden laat kosten** verzwakt de regel een beetje. Dat kan,
   maar met mate: bijvoorbeeld een mantel die de eerste klap per gevecht dempt.
 
+## De toren opknappen: verander de wereld, niet de held
+
+De toren is getekend in drie staten (19 sep 2026): krakkemikkig zoals je hem erft, half hersteld
+met steigers, en helemaal opgeknapt met wimpels, verlichte ramen en een lantaarn bij de deur.
+
+Een vuistregel die daarbij hoort: een reparatie mag de wereld veranderen, niet de getallen van de
+held. Dus geen "+1 actiepunt" of jaren terug. Wel:
+
+- een hersteld trapgat en steigers openen kortere routes naar boven, dus minder beurten in het
+  zicht van monsters;
+- een nieuwe deur die je dicht kunt gooien, luiken, en een lantaarn die een monster een tegel
+  eerder laat zien: allemaal manieren om een gevecht te ontlopen;
+- de aanbouw als opslag voor spullen die een spreuk besparen;
+- wat het dorp over je zegt verandert mee.
+
 ## Open vragen
 
 - **Welke upgrades heeft de toren?** Denkrichtingen:
