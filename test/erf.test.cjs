@@ -91,6 +91,27 @@ test('een hoog ding plant zich in op zijn vóórste voettegel, zodat je erachter
   assert.ok(T.diepteVan({ x: 4, y: 2 }) < T.diepteVan(huis));
 });
 
+test('staatVoorGebouw beslist per tegel welke ervóór liggen en welke erachter, ook bij een brede voet', () => {
+  // Een gebouw van 13×13 op een bekende plek (net zo breed als de toren): x 5..17, y 5..17.
+  const toren = { x: 5, y: 5, beslaat: [13, 13] };
+  // Ten zuiden en ten oosten staat een wezen ervóór, ook vlak langs de rand of in de hoek.
+  assert.equal(T.staatVoorGebouw(11, 18, toren), true, 'ten zuiden van de toren');
+  assert.equal(T.staatVoorGebouw(18, 11, toren), true, 'ten oosten van de toren');
+  assert.equal(T.staatVoorGebouw(5, 18, toren), true, 'zuidrand, uiterst westen van de voet');
+  assert.equal(T.staatVoorGebouw(18, 5, toren), true, 'oostrand, uiterst noorden van de voet');
+  assert.equal(T.staatVoorGebouw(18, 18, toren), true, 'zuidoosthoek, voorbij allebei');
+  // Ten noorden en ten westen staat hij erachter.
+  assert.equal(T.staatVoorGebouw(11, 4, toren), false, 'ten noorden van de toren');
+  assert.equal(T.staatVoorGebouw(4, 11, toren), false, 'ten westen van de toren');
+  assert.equal(T.staatVoorGebouw(4, 4, toren), false, 'noordwesthoek');
+  // Marcels geval: recht ten zuiden staat een wezen ervóór, terwijl zijn eigen som (11 + 18 = 29)
+  // onder de vóórste hoek van diepteVan blijft (34) — precies de tegenstrijdigheid die de fout
+  // was: de tekenvolgorde zei "erachter" (lagere som) en de doorkijk zei "ervóór". Vandaar dat de
+  // tekenvolgorde nu ook staatVoorGebouw vraagt (vergelijkDiepte in js/tekenen.js), niet meer de
+  // som van diepteVan tegen een los wezen.
+  assert.ok(11 + 18 < T.diepteVan(toren), 'de som van het wezen ligt onder diepteVan(toren)');
+});
+
 // ---------------------------------------------------------------- de overgang
 
 function nieuwSpel() {

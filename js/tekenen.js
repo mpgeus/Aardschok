@@ -157,7 +157,7 @@
           if (T.tegel(w, x, y) !== 'muur' || !T.isZichtbaar(w, x, y)) continue;
           const laag = isVoorrand(open, x, y);
           const helder = w.burenKamers[y][x].some(inBeeld) ? 1 : GEDIMD;
-          lijst.push({ d: x + y, l: 0, f: () => tekenMuur(ctx, w, x, y, laag, helder) });
+          lijst.push({ d: x + y, l: 0, punt: { x, y }, f: () => tekenMuur(ctx, w, x, y, laag, helder) });
         }
       }
     }
@@ -165,7 +165,7 @@
       if (!inVak(vak, deur.x, deur.y) || !T.isZichtbaar(w, deur.x, deur.y)) continue;
       const laag = isVoorrand(open, deur.x, deur.y);
       const helder = w.burenKamers[deur.y][deur.x].some(inBeeld) ? 1 : GEDIMD;
-      lijst.push({ d: deur.x + deur.y, l: 1, f: () => tekenDeur(ctx, deur, laag, helder) });
+      lijst.push({ d: deur.x + deur.y, l: 1, punt: { x: deur.x, y: deur.y }, f: () => tekenDeur(ctx, deur, laag, helder) });
     }
     const zichtbaar = [];
     for (const v of w.voorwerpen) {
@@ -173,7 +173,10 @@
       zichtbaar.push(v);
       const k = T.kamerVan(w, v.x, v.y);
       const helder = k && inBeeld(k.id) ? 1 : GEDIMD;
-      lijst.push({ d: diepteVan(v), l: 1, f: () => tekenVoorwerp(ctx, S, v, helder) });
+      // Een gebouw (breder of dieper dan één tegel) krijgt `gebouw` mee: alleen dan is één
+      // scalair dieptegetal niet genoeg en beslist vergelijkDiepte per paar (zie hieronder).
+      const groot = v.beslaat && (v.beslaat[0] > 1 || v.beslaat[1] > 1);
+      lijst.push({ d: diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: groot ? v : undefined, f: () => tekenVoorwerp(ctx, S, v, helder) });
     }
     // Doorkijk: wat de held of een wezen bedekt, wordt zolang doorzichtig. De tijd komt uit de
     // spelklok, zodat het ook klopt als het spel even stilstaat of vooruitgespoeld wordt.
@@ -184,15 +187,15 @@
       // Met sprites blijft het laatste beeld van het sterven liggen; met vlakken vervaagt het.
       if (e.dood && e.sterfTijd > 0.8 && !metSprites()) continue;
       if (!inVak(vak, e.tx, e.ty) || !T.isZichtbaar(w, e.tx, e.ty)) continue;
-      lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, f: () => tekenWezen(ctx, S, e) });
+      lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, punt: { x: e.tx, y: e.ty }, f: () => tekenWezen(ctx, S, e) });
     }
     // Dwaallichten zweven: ze horen in dezelfde rij van voor naar achter, anders schijnen ze
     // dwars door een muur die ervoor staat.
     for (const l of S.lichten) {
       if (!T.isZichtbaar(w, l.x, l.y)) continue;
-      lijst.push({ d: l.x + l.y + 0.02, l: 3, f: () => tekenLicht(ctx, S, l, 1) });
+      lijst.push({ d: l.x + l.y + 0.02, l: 3, punt: { x: l.x, y: l.y }, f: () => tekenLicht(ctx, S, l, 1) });
     }
-    lijst.sort((a, b) => a.d - b.d || a.l - b.l);
+    lijst.sort((a, b) => vergelijkDiepte(a, b) || a.l - b.l);
     for (const item of lijst) item.f();
 
     tekenEffecten(ctx, S);
@@ -208,6 +211,30 @@
   function diepteVan(v) {
     const b = v.beslaat || [1, 1];
     return v.x + (b[0] - 1) + v.y + (b[1] - 1);
+  }
+
+  // Eén getal per gebouw volstaat niet om het tegen een los ding (een wezen, een dwaallicht, een
+  // boom) te sorteren: `diepteVan` telt de vóórste hoek, maar wie recht ten zuiden of ten oosten
+  // van een brede voet staat, kan een lagere som hebben dan die hoek en toch vóór het hele gebouw
+  // staan. Daarom hier de vraag die wél voor elke tegel klopt: staat (x, y) ten zuiden of ten
+  // oosten van de rechthoek die v beslaat (van v.x, v.y naar rechtsonder)? Dan staat hij ervóór,
+  // anders erachter. Dezelfde vraag stelt werkDoorkijkBij hieronder — dat was eerst een tweede,
+  // net iets andere som, en dat was precies de fout.
+  T.staatVoorGebouw = staatVoorGebouw;
+  function staatVoorGebouw(x, y, v) {
+    const b = v.beslaat || [1, 1];
+    return x > v.x + b[0] - 1 || y > v.y + b[1] - 1;
+  }
+
+  // De sortering van de tekenlijst: voor twee gewone dingen (twee wezens, twee losse voorwerpen)
+  // blijft de oude som `x + y` de maat, precies als voorheen. Draagt precies één kant `gebouw`
+  // (een voet groter dan één tegel), dan beslist staatVoorGebouw per paar in plaats van twee
+  // sommen tegen elkaar te leggen — twee gebouwen tegen elkaar (zeldzaam, komt in dit spel niet
+  // voor) vallen terug op de oude som.
+  function vergelijkDiepte(a, b) {
+    if (a.gebouw && !b.gebouw) return staatVoorGebouw(b.punt.x, b.punt.y, a.gebouw) ? -1 : 1;
+    if (b.gebouw && !a.gebouw) return staatVoorGebouw(a.punt.x, a.punt.y, b.gebouw) ? 1 : -1;
+    return a.d - b.d;
   }
 
   // ---------------------------------------------------------------- doorkijk
@@ -272,23 +299,16 @@
     const wezens = [];
     for (const e of w.wezens) {
       if (!teltMee(S, e)) continue;
-      wezens.push({ x: e.x, y: e.y, d: e.x + e.y, doos: wezenDoos(e) });
+      wezens.push({ tx: e.tx, ty: e.ty, doos: wezenDoos(e) });
     }
     for (const v of voorwerpen) {
       const doos = voorwerpDoos(v);
       let bedekt = false;
       if (doos) {
-        // Bedekken kan alleen als dít voorwerp ná het wezen getekend wordt, dus als zijn voettegel
-        // dichter bij de camera ligt (een hogere x+y). Bij een gebouw dat met `beslaat` meer tegels
-        // beslaat (de toren) is de verste hoek (waar `diepteVan` de tekenvolgorde op sorteert) niet
-        // de juiste tegel om een wezen ernaast aan te toetsen: wie vlak voor de zuidrand staat, ligt
-        // al dichter bij de camera dan die hoek, maar staat nog altijd vóór het hele gebouw. Daarom
-        // hier de tegel van de voet die het dichtst bij dít wezen ligt (geklemd binnen `beslaat`).
-        const b = v.beslaat || [1, 1];
+        // Bedekken kan alleen als dít voorwerp ná het wezen getekend wordt, dus als het wezen niet
+        // vóór het gebouw staat — staatVoorGebouw hierboven, dezelfde vraag als de tekenvolgorde.
         for (const e of wezens) {
-          const dTegel =
-            Math.min(Math.max(e.x, v.x), v.x + b[0] - 1) + Math.min(Math.max(e.y, v.y), v.y + b[1] - 1);
-          if (e.d >= dTegel) continue; // dat wezen staat ervóór, dus verdwijnt er niet achter
+          if (staatVoorGebouw(e.tx, e.ty, v)) continue; // dat wezen staat ervóór, dus verdwijnt er niet achter
           if (raakt(doos, e.doos)) {
             bedekt = true;
             break;
