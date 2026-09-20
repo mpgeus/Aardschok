@@ -134,6 +134,11 @@ houden gewone levenspunten. Aan het eind telt hoe oud je boven aankomt.
 - De eindstrijd **blokkeert nooit** op leeftijd, hij verandert ervan. Jong aankomen geeft veel
   beurten en dus ruimte om te bewegen en te ontwijken; oud aankomen geeft drie handelingen maar
   spreuken als mokers. Een harde grens zou de speler twintig uur ver onwinbaar kunnen zetten.
+- **Niets is een muur, alles is een prijs.** Een kapotte trap die een machtige tovenaar
+  tegenhoudt, is flauw. Hij zweeft erlangs — en dat kost hem twee jaar, drie als de vloer weg is.
+  Zo geldt het overal: een dichte deur, een ravijn, een ingestorte gang. Er is altijd een dure weg
+  eromheen, en de prijs staat er in jaren bij vóórdat je klikt. Herstellen is dan een investering
+  in plaats van een sleutel: één keer goud en grondstoffen, daarna gratis. Zie `ontwerp/toren.md`.
 - Sluipen (`S`, alleen buiten een gevecht) is het eerste middel om een gevecht te ontlopen: half
   zo snel, en monsters zien je pas van `T.SLUIP_ZICHT` (2) tegels dichterbij. Elke nieuwe manier
   om een gevecht te vermijden (praten, afleiden, een val) versterkt de kernregel; een nieuwe

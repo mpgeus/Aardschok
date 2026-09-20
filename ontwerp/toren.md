@@ -72,6 +72,55 @@ het in één keer te doen.
   bepaalde spreuk oplost? Hier hangt aan of de klim afwisselend blijft.
 - **Leven de andere tovenaars nog,** en zijn het bondgenoten of mededingers?
 
+## De trap is het slot, maar geen muur (Marcel, 20 sep 2026)
+
+De meeste verdiepingen zijn onbegaanbaar omdat **de trap weg is** — ingestort, verrot, of er zit
+een gat waar hij zat. Een verdieping herstellen is dus letterlijk de trap terugbouwen, en dat zie
+en begrijp je zonder uitleg. Drie staten, net als de toren zelf: ingestort, provisorisch (een
+ladder en wat steigerhout), en hersteld in steen. In een ronde toren is dat een spiraal, om een
+spil, met een gat in de vloer waar hij aankomt en een gat in het plafond waar hij verdwijnt.
+
+Elke verdieping wordt een eigen gebied (zoals het erf), en de traptegel is een overgang. Je loopt
+de spiraal dus niet echt op: dat kan niet op tegels zonder hoogte, en een spiraal kruist zichzelf
+in beeld.
+
+### Maar een kapotte trap houdt geen tovenaar tegen
+
+Marcel: "is wel flauw als je dan alleen wordt tegengehouden door een kapotte trap als machtige
+tovenaar toch?" Klopt. Dus: **zweven mag altijd, en het is gortig duur.** Drie prijzen die op
+elkaar stapelen:
+
+1. **Jaren.** Twee per verdieping, drie als de vloer helemaal weg is. Afgezet tegen je hele leven
+   van zestien jaar: tien verdiepingen omhoog zweven kost twintig jaar, en die heb je niet. Je
+   haalt er een stuk of zeven en sterft onderweg. Nooit een strategie, altijd een noodgreep.
+   De prijs staat er in jaren bij vóórdat je klikt.
+2. **Je handen zijn vol met jezelf.** Je draagt niets mee, omhoog niet en omlaag niet. Alles wat
+   je boven vindt blijft liggen tot er een trap staat. Een echte beperking uit de fictie, niet uit
+   een verzonnen rugzakgrootte.
+3. **Het stoort wat erboven zit.** Elke keer dat je in die toren tovert om ergens te komen, merkt
+   het dat. Geen straf met een rood cijfer maar iets dat opbouwt: hoe vaker, hoe onrustiger het
+   boven wordt. Wie zich naar boven zweeft, komt aan bij iets dat wakker is. Dat past ook bij het
+   verhaal: veertig jaar lag het stil omdat niemand het stoorde.
+
+Die derde maakt het samengesteld duur in plaats van lineair, en dat is wat "gortig" betekent.
+
+### Doorkomen is niet hetzelfde als herstellen
+
+Zweven brengt je boven, maar maakt de verdieping niet van jou. Wat je dan mist:
+
+- **je komt er niet mee thuis** (zie prijs 2), dus boven vinden en meenemen zijn twee dingen;
+- **wat je oversloeg staat nog achter je.** Een overgeslagen verdieping is een val die je zelf
+  zette; een herstelde is opgeruimd;
+- **je kunt er niet rusten.** Geen licht, geen haard, geen plek om te stoppen;
+- **de klim begint elke keer weer onderaan.** Herstelde verdiepingen zijn je tussenstations.
+
+Daarmee zijn er twee manieren van spelen, allebei goed: de **verkenningsvlucht** (omhoog, kijken
+wat verdieping vijf nodig heeft, terug — kennis is bij ons echt iets waard, want dan weet je wélke
+grondstof je zoekt) en de **echte klim** (herstellen terwijl je gaat, trager, maar alles wat je
+zet houd je). En wie in één ruk naar boven zweeft en de confrontatie aangaat op zijn
+zevenennegentigste, met drie handelingen en niets hersteld achter zich: dat mag, dat is waanzinnig,
+en dat hoort erin te zitten.
+
 ## Het torenpaneel: je vooruitgang als doorsnede (Marcel, 20 sep 2026)
 
 Marcel liet een tekening zien van een toren, twee keer: links de buitenkant, rechts uit elkaar
