@@ -72,6 +72,65 @@ het in één keer te doen.
   bepaalde spreuk oplost? Hier hangt aan of de klim afwisselend blijft.
 - **Leven de andere tovenaars nog,** en zijn het bondgenoten of mededingers?
 
+## Hoe een verdieping eruitziet (20 sep 2026)
+
+Marcel: "een paar kamers per floor is niet heel indrukwekkend." Klopt, en de fout zit in het woord
+kamers. Zolang we in kamers denken, bouwen we gangen met monsters erin.
+
+**Een verdieping is geen kamer maar een ruimte met één probleem.** Eén idee, groot uitgewerkt. En
+het mag veel groter zijn dan de toren van buiten is — zie "Buiten leest, binnen speelt" in
+`wereld.md`. Bij ons is dat niet eens vals spelen maar het verhaal zelf: de meester experimenteerde
+veertig jaar en alles wat hij begon is verzuurd (zie `verhaal.md`). Als één van die dingen de
+rúimte zelf was, dan is een verdieping die binnen groter is dan buiten geen truc maar een wonder —
+en precies het soort wonder dat hoort bij een man die te ver ging.
+
+Zeven verdiepingen als voorbeeld, nog niet vastgelegd als dé lijst:
+
+| Verdieping | Het idee |
+|---|---|
+| De kweekkamer | De planten zijn nooit gestopt. Een oerwoud onder glas; de wortel in het midden laat alles achter je weer dichtgroeien. |
+| De bibliotheek | De woorden zijn van de bladzijden gekropen. De kasten verschuiven terwijl je zoekt. |
+| De spiegelkamer | Een opgeroepen gedaante die nooit is weggestuurd en al veertig jaar wacht. De spiegels tonen je op andere leeftijden. |
+| De volière | Iets dat vliegt, dus dekking en zichtlijnen tellen in plaats van afstand. |
+| De alchemiezaal | Iets staat al vier decennia te pruttelen. Hitte, stoom, en een klok die tikt. |
+| De werkplaats | Halfafgemaakte mechanieken die nog één opdracht proberen uit te voeren. |
+| Zijn slaapkamer | Klein, stil, persoonlijk. Zijn bed, zijn aantekeningen, en op de muur gekrast wat hij niet wilde vergeten — en toch vergat. |
+
+**Die laatste is het belangrijkst,** want de eigenlijke techniek achter "indrukwekkend" is ritme.
+Een kleine, stille verdieping tussen twee grote maakt de grote pas groot. Als alles indrukwekkend
+is, is niets het meer.
+
+**En elke verdieping is er twee,** want na het herstel is hij van jou: de kweekkamer wordt je
+kruidentuin, de bibliotheek de plek waar je spreuken terugvindt, de werkplaats waar je vallen
+maakt. Acht verdiepingen zijn dan zestien ruimtes, en de tweede helft verdien je.
+
+Praktisch: elke verdieping is gewoon een kaart, net als het erf, dus Marcel kan ze in Tiled bouwen
+en de binnenbouwdoos bestaat al. Het dure zit niet in de kamers maar in die zeven ideeën.
+
+### Het zijn geen puzzels (20 sep 2026)
+
+Marcel: "maar zijn het dan puzzels?" Nee.
+
+**Een puzzel heeft één antwoord.** Je ziet het of je ziet het niet, en zie je het niet dan sta je
+stil — wat botst met "niets is een muur, alles is een prijs". Bovendien is een puzzel eenmalig:
+opgelost is versleten.
+
+**Het is een situatie met meerdere antwoorden die verschillend kosten.** De kweekkamer: er een pad
+doorheen branden (snel, jaren), de wortel zoeken en doden (traag, maanden, maar blijvend), er half
+zo snel doorheen sluipen (tijd en risico), een zeis kopen in het dorp (goud), wat erin huist
+weglokken met een dwaallicht (een paar maanden), of er overheen zweven (twee jaar, en het ding
+boven merkt het).
+
+**De toets per verdieping:** zijn er minstens drie geloofwaardige antwoorden, en kosten die
+verschillende dingen? Zo niet, dan is het een gang met een slot erop en moet het over.
+
+Ontdekken mag wel — die wortel vínden beloont oplettendheid. Het verschil met een raadsel: ontdekken
+beloont dat je kijkt, een raadsel straft dat je niet denkt zoals de ontwerper.
+
+En er is een reden in het personage zelf. Je speelt geen slimme jongen die raadsels oplost, maar
+een vermoeide oude meester die dit soort dingen vaker heeft gezien, drie manieren kent om erlangs
+te komen, en moet kiezen welke hij zich nog kan veroorloven.
+
 ## De trap is het slot, maar geen muur (Marcel, 20 sep 2026)
 
 De meeste verdiepingen zijn onbegaanbaar omdat **de trap weg is** — ingestort, verrot, of er zit
