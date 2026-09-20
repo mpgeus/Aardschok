@@ -62,14 +62,15 @@ function maten(maak) {
   return { links: 380 - x0 + 1, rechts: x1 - 380 + 1, boven: 500 - y0 + 1, onder: y1 - 500 + 1 };
 }
 const plekken = [
-  ['kapel', () => P.kapel(0, 0), '2×3'],
-  ['kerkhof', () => P.kerkhof(0, 0, { b: 3, d: 3, rijen: 3, kol: 3 }), '3×3'],
-  ['watermolen', () => P.watermolen(0, 0, { radVlak: 'y', rook: false }), '2×3'],
-  ['bakkerij', () => P.bakkerij(0, 0, { rook: false }), '3×2'],
-  ['kruidenhut', () => P.kruidenhut(0, 0, { rook: false }), '2×2'],
-  ['jagershut', () => P.jagershut(0, 0, { rook: false }), '3×2'],
-  ['oudstehuis', () => P.oudstehuis(0, 0, { rook: false }), '2×2'],
-  ['brug', () => P.brug(0.5, 1, { langs: 'y', lang: 2.5, breed: 0.85 }), '1×3'],
+  ['kapel', () => P.kapel(0, 0), '5×10'],
+  ['kerkhof', () => P.kerkhof(0, 0, { b: 6, d: 4, rijen: 4, kol: 3 }), '6×4'],
+  ['watermolen', () => P.watermolen(0, 0, { radVlak: 'y', rook: false }), '6×8'],
+  ['bakkerij', () => P.bakkerij(0, 0, { rook: false }), '8×6'],
+  ['kruidenhut', () => P.kruidenhut(0, 0, { rook: false }), '6×5'],
+  ['jagershut', () => P.jagershut(0, 0, { rook: false }), '7×6'],
+  ['oudstehuis', () => P.oudstehuis(0, 0, { rook: false }), '7×5'],
+  ['brug', () => P.brug(0.5, 1, { langs: 'y', lang: 2.5, breed: 0.85 }), '0,85×2,5'],
+  ['schuur', () => P.schuur(0, 0), '6×9'],
 ];
 const m = plekken.map(([, maak]) => maten(maak));
 const rand = 6;
@@ -84,7 +85,18 @@ const anker = [links + Math.floor((CB - links - rechts) / 2), boven + (CH - bove
 const vel = new K.Plaat(CB * plekken.length, CH);
 tijd('plekken', () => plekken.forEach(([, maak], i) => vel.plak(plekLos(maak, CB, CH, anker), i * CB, 0)));
 schrijf('plekken.png', vel, 2);
-verslag.plekken = { cel: [CB, CH], anker, volgorde: plekken.map(([n, , v]) => `${n} (${v})`) };
+const meetGebouw = (maak) => {
+  const g = maak();
+  const v = g.voet || [0, 0, 0, 0];
+  return { voet: [+((v[2] - v[0]) / K.TEGEL).toFixed(2), +((v[3] - v[1]) / K.TEGEL).toFixed(2)], hoog: Math.round(g.hoog || 0) };
+};
+verslag.plekken = {
+  cel: [CB, CH],
+  anker,
+  uitleg: 'één plek per cel, van links naar rechts. anker = het midden van tegel (gx, gy) op de grond: de eerste tegel van de plattegrond. voet = de plattegrond in tegels (b langs x, d langs y), hoog = de hoogte in pixels boven de grond.',
+  volgorde: plekken.map(([n, , v]) => `${n} (${v})`),
+  cellen: plekken.map(([n, maak, v], i) => ({ naam: n, cel: i, plattegrond: v, ...meetGebouw(maak) })),
+};
 
 // ---------------------------------------------------------------- de losse dingen
 
@@ -121,7 +133,13 @@ function dingLos(model, richting, z = 0) {
 const dingVel = new K.Plaat(VB * dingen.length, VH);
 tijd('voorwerpen', () => dingen.forEach(([, model, r, z], i) => dingVel.plak(dingLos(model, r, z), i * VB, 0)));
 schrijf('plekken-voorwerpen.png', dingVel, 2);
-verslag.voorwerpen = { cel: [VB, VH], anker: vAnker, volgorde: dingen.map(([n, , r]) => `${n} (${r})`) };
+verslag.voorwerpen = {
+  cel: [VB, VH],
+  anker: vAnker,
+  uitleg: 'één voorwerp per cel, van links naar rechts. anker = het midden van de tegel waarop het voorwerp staat. richting = de kant waarheen het kijkt.',
+  volgorde: dingen.map(([n, , r]) => `${n} (${r})`),
+  cellen: dingen.map(([n, , r], i) => ({ naam: n, cel: i, richting: r })),
+};
 
 // ---------------------------------------------------------------- water
 

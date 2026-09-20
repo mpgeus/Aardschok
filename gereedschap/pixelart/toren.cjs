@@ -253,6 +253,34 @@ function tekenWereld(B, W, o = {}) {
   const Y1 = Math.min(B.h - 1, Math.ceil(sy1) + 2);
   if (X1 < X0 || Y1 < Y0) return null;
 
+  // Een grof rooster over het scherm: welke groepen kunnen een pixel in dit vak nog raken? In een
+  // grote scène (een erf met tientallen groepen) scheelt dat veel: een straal vraagt alleen de
+  // groepen van zijn eigen vak.
+  const VAK = 48;
+  const kx = Math.ceil((X1 - X0 + 1) / VAK);
+  const ky = Math.ceil((Y1 - Y0 + 1) / VAK);
+  const vakken = Array.from({ length: kx * ky }, () => []);
+  for (const g of alle) {
+    let a0 = Infinity;
+    let a1 = -Infinity;
+    let b0 = Infinity;
+    let b1 = -Infinity;
+    for (const [dx, dy] of [[-1, -1], [1, 1], [-1, 1], [1, -1]]) {
+      for (const z of [g.z0, g.z1]) {
+        const [sx, sy] = K.naarScherm(B, g.cx + dx * g.cr + TX, g.cy + dy * g.cr + TY, z);
+        a0 = Math.min(a0, sx);
+        a1 = Math.max(a1, sx);
+        b0 = Math.min(b0, sy);
+        b1 = Math.max(b1, sy);
+      }
+    }
+    const i0 = Math.max(0, Math.floor((a0 - 1 - X0) / VAK));
+    const i1 = Math.min(kx - 1, Math.floor((a1 + 1 - X0) / VAK));
+    const j0 = Math.max(0, Math.floor((b0 - 1 - Y0) / VAK));
+    const j1 = Math.min(ky - 1, Math.floor((b1 + 1 - Y0) / VAK));
+    for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) vakken[j * kx + i].push(g);
+  }
+
   const lijst = new Array(NG);
   function straal(sx, sy) {
     const ax = sx - B.OX;
@@ -260,13 +288,14 @@ function tekenWereld(B, W, o = {}) {
     const ox = ax * EX[0] + ay * EY[0] - TX;
     const oy = ax * EX[1] + ay * EY[1] - TY;
     const oz = ay * EY[2];
+    const vak = vakken[klem(Math.floor((sy - Y0) / VAK), 0, ky - 1) * kx + klem(Math.floor((sx - X0) / VAK), 0, kx - 1)];
     let n = 0;
     let t0 = Infinity;
     let t1 = -Infinity;
-    for (let gi = 0; gi < NG; gi++) {
-      const r = doorGroep(alle[gi], ox, oy, oz, V0, V1, V2);
+    for (let gi = 0; gi < vak.length; gi++) {
+      const r = doorGroep(vak[gi], ox, oy, oz, V0, V1, V2);
       if (!r) continue;
-      lijst[n++] = alle[gi];
+      lijst[n++] = vak[gi];
       if (r[0] < t0) t0 = r[0];
       if (r[1] > t1) t1 = r[1];
     }
@@ -1675,7 +1704,8 @@ function bouwKraaien(W, S) {
   const o = S.OPN.find((x) => x.naam === 'raamB');
   const bank = S.T.wereld(Math.cos((o.phi - 4) * GRAAD) * (o.Rw + 2.2), Math.sin((o.phi - 4) * GRAAD) * (o.Rw + 2.2), E(o.H0));
   kraai(W.groep('kraai-raam'), bank, -45, 190);
-  kraai(W.groep('kraai-blok'), [44 + 30, -12 + 50, E(13.4)], 110, 191);
+  // de tweede zit op het hakblok bij het schuurtje; staat dat er niet, dan zit hij er ook niet
+  if (S.schuur) kraai(W.groep('kraai-blok'), [44 + 30, -12 + 50, E(13.4)], 110, 191);
   W.mat.kraai = { ramp: 'pet', lo: 0.2, hi: 3.6, glans: 1.6, glansMacht: 10, rand: 1.6 };
   W.mat.snavel = { ramp: 'inkt', lo: 0.6, hi: 2.6 };
 }
@@ -2385,4 +2415,8 @@ module.exports = {
   bouwToren,
   eigenaars,
   zonKleur,
+  grondSchaduw,
+  veld,
+  // bouwstenen voor andere plekken die met deze tekenaar gemaakt worden (het erf)
+  hulp: { E, GRAAD, balk, stok, bol, blokDeel, draaiZ, maalM, kegelStomp, boogVorm, draaiRechthoek, steenOp, steenStap, houtTex, voegenRij, kans },
 };

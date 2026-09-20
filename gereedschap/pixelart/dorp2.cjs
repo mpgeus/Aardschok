@@ -301,14 +301,16 @@ function sterSpits(o = {}) {
 // de gevel met de deur kijkt naar linksvoor.
 function kapel(gx, gy, o = {}) {
   const g = D.huis({
-    gx, gy, b: 2, d: 3, nok: 'y', muurH: 112, sokkelH: 12, muur: 'veldsteen', dak: 'leien', zaad: o.zaad ?? 13,
+    gx, gy, b: 5, d: 10, nok: 'y', muurH: 152, sokkelH: 20, muur: 'veldsteen', dak: 'leien', zaad: o.zaad ?? 13,
     overstek: 4,
     gevel: {
-      y: [boogdeurElement({ u: 21, b: 22, hoog: 64 }), roosvensterElement({ u: 21, h: 78, r: 11 })],
+      y: [boogdeurElement({ u: 54, b: 52, hoog: 104 }), roosvensterElement({ u: 52, h: 176, r: 28 })],
       x: [
-        glasraamElement({ u: 14, b: 15, h: 46, hoog: 26 }),
-        glasraamElement({ u: 42, b: 15, h: 46, hoog: 26 }),
-        glasraamElement({ u: 70, b: 15, h: 46, hoog: 26 }),
+        glasraamElement({ u: 30, b: 24, h: 62, hoog: 54 }),
+        glasraamElement({ u: 88, b: 24, h: 62, hoog: 54 }),
+        glasraamElement({ u: 146, b: 24, h: 62, hoog: 54 }),
+        glasraamElement({ u: 204, b: 24, h: 62, hoog: 54 }),
+        glasraamElement({ u: 262, b: 24, h: 62, hoog: 54 }),
       ],
     },
     ...o,
@@ -317,7 +319,7 @@ function kapel(gx, gy, o = {}) {
   const T = TEGEL;
   const nokY = (gy + 0.5) * T;
   const nokX = (gx + o.b0 ?? gx + 0.5) * T;
-  const kt = klokkentoren([(gx + 0.5) * T, nokY], g.hoog - 6, {});
+  const kt = klokkentoren([(gx + 2) * T, nokY], g.hoog - 6, {});
   void nokX;
   g.vormen.push(...kt.vormen);
   g.modellen.push({ model: sterSpits(), gx: kt.ster.gx, gy: kt.ster.gy, z: kt.ster.z, richting: 'ZO' });
@@ -779,41 +781,63 @@ function watermolen(gx, gy, o = {}) {
   const T = TEGEL;
   const radVlak = o.radVlak || 'x';
   const g = D.huis({
-    gx, gy, b: 2, d: 3, nok: 'y', dak: 'pannen', sokkelH: 10, zaad: o.zaad ?? 23,
+    gx, gy, b: 6, d: 8, nok: 'y', dak: 'pannen', sokkelH: 18, zaad: o.zaad ?? 23,
     verdiepingen: [
       {
-        muur: 'veldsteen', hoog: 72,
+        muur: 'veldsteen', hoog: 104,
         gevel: {
-          y: [D.raamElement({ u: 14, b: 16, h: 30, hoog: 22, lijst: 'hout', dorpel: 'steen', donker: true })],
+          y: [D.raamElement({ u: 36, b: 24, h: 48, hoog: 30, lijst: 'hout', dorpel: 'steen', donker: true }), D.raamElement({ u: 122, b: 24, h: 48, hoog: 30, lijst: 'hout', dorpel: 'steen', donker: true })],
           x: [
-            D.deurElement({ u: 16, b: 22, hoog: 60, ramp: 'hout' }),
-            D.raamElement({ u: 62, b: 16, h: 30, hoog: 22, lijst: 'hout', dorpel: 'steen' }),
+            D.deurElement({ u: 44, b: 46, hoog: 94, ramp: 'hout' }),
+            D.raamElement({ u: 128, b: 24, h: 48, hoog: 30, lijst: 'hout', dorpel: 'steen' }),
+            D.raamElement({ u: 196, b: 24, h: 48, hoog: 30, lijst: 'hout', dorpel: 'steen', leeg: true }),
           ],
         },
       },
       {
-        muur: 'vakwerk', hoog: 56,
+        muur: 'vakwerk', pleister: 'bot', hoog: 88,
         gevel: {
-          y: [D.raamElement({ u: 12, b: 14, h: 92, hoog: 18 }), D.raamElement({ u: 40, b: 14, h: 92, hoog: 18 })],
-          x: [D.raamElement({ u: 22, b: 14, h: 92, hoog: 18, luiken: 'hout' }), D.raamElement({ u: 70, b: 14, h: 92, hoog: 18, luiken: 'hout' })],
+          y: [D.raamElement({ u: 34, b: 22, h: 132, hoog: 26 }), D.raamElement({ u: 122, b: 22, h: 132, hoog: 26 })],
+          x: [D.raamElement({ u: 40, b: 22, h: 132, hoog: 26, luiken: 'hout' }), D.raamElement({ u: 122, b: 22, h: 132, hoog: 26, luiken: 'hout' }), D.raamElement({ u: 200, b: 22, h: 132, hoog: 26, luiken: 'hout', leeg: true })],
         },
       },
     ],
-    dakkapellen: [{ t: 0.5, b: 26, hoog: 26, element: D.deurElement({ u: 5, b: 16, h: 2, hoog: 20, ramp: 'hout', stoep: false }) }],
-    schoorsteen: { t: 0.82, c: -4, hoog: 18, rook: o.rook !== false },
-    bord: { vlak: 'x', u: 44, h: 64, verdieping: 0, teken: 'schoof', bordRamp: 'jas' },
+    dakkapellen: [{ t: 0.5, b: 40, hoog: 40, element: D.deurElement({ u: 8, b: 24, h: 2, hoog: 32, ramp: 'hout', stoep: false }) }],
+    schoorsteen: { t: 0.84, c: -4, hoog: 26, r: 10, rook: o.rook !== false },
+    bord: { vlak: 'x', u: 92, h: 104, verdieping: 0, teken: 'schoof', bordRamp: 'jas' },
     ...o,
   });
   // het rad tegen de gekozen wand, half in het water
-  const x1 = (gx + 1.5) * T;
-  const y1 = (gy + 2.5) * T;
+  const x1 = (gx + 5.5) * T;
+  const y1 = (gy + 7.5) * T;
   const waterZ = -(o.diep ?? 7) / PXH;
-  const rad = molenrad({ waterZ, R: o.R ?? 30, breed: 15 });
-  if (radVlak === 'x') g.modellen.push({ model: rad, gx: (x1 + 9) / T, gy: (gy + 1.1) * 1, richting: 'ZO', z: 0 });
-  else g.modellen.push({ model: rad, gx: gx + 0.55, gy: (y1 + 9) / T, richting: 'ZW', z: 0 });
-  if (o.molensteen !== false) g.modellen.push({ model: molensteen(3), gx: gx + (radVlak === 'x' ? -1.15 : 1.9), gy: gy + (radVlak === 'x' ? 2.3 : -1.15), richting: 'ZO', z: 0 });
-  g.rad = radVlak === 'x' ? { x: (x1 + 9) / T, y: gy + 1.1 } : { x: gx + 0.55, y: (y1 + 9) / T };
+  const rad = molenrad({ waterZ, R: o.R ?? 44, breed: 20 });
+  if (radVlak === 'x') g.modellen.push({ model: rad, gx: (x1 + 12) / T, gy: gy + 4.6, richting: 'ZO', z: 0 });
+  else g.modellen.push({ model: rad, gx: gx + 2.6, gy: (y1 + 12) / T, richting: 'ZW', z: 0 });
+  if (o.molensteen !== false) g.modellen.push({ model: molensteen(3), gx: gx + (radVlak === 'x' ? -1.6 : 7), gy: gy + (radVlak === 'x' ? 7 : -1.6), richting: 'ZO', z: 0 });
+  g.rad = radVlak === 'x' ? { x: (x1 + 12) / T, y: gy + 4.6 } : { x: gx + 2.6, y: (y1 + 12) / T };
   return g;
+}
+
+// De schuur: geen klein huisje maar een half ingegraven loods. De muren zijn maar een steek
+// hoog, het rieten dak zakt tot vlak boven de grond, en in de gevel zit een gemetselde boogdeur.
+// 6 × 9 tegels, nok langs y: de boogdeur kijkt naar de kijker.
+function schuur(gx, gy, o = {}) {
+  const b = o.b ?? 6;
+  const d = o.d ?? 9;
+  return D.huis({
+    gx, gy, b, d, nok: 'y', muurH: o.muurH ?? 54, sokkelH: o.sokkelH ?? 40,
+    muur: o.muur ?? 'veldsteen', dak: o.dak ?? 'riet', dakOud: o.dakOud ?? true, dakMos: o.dakMos ?? 0.5,
+    windveer: o.windveer ?? true, overstek: o.overstek ?? 26, zaad: o.zaad ?? 61,
+    gevel: {
+      y: [
+        boogdeurElement({ u: Math.round((b * 32 - 60) / 2), b: 60, hoog: 46 }),
+        D.raamElement({ u: 12, b: 18, h: 96, hoog: 20, kol: 2, rijen: 1, leeg: true }),
+      ],
+      x: [D.raamElement({ u: Math.round(d * 16 - 10), b: 20, h: 22, hoog: 18, kol: 2, rijen: 1, leeg: true })],
+    },
+    ...o,
+  });
 }
 
 // ---------------------------------------------------------------- de bakkerij
@@ -854,25 +878,29 @@ function broodplank(zaad = 1) {
 function bakkerij(gx, gy, o = {}) {
   const T = TEGEL;
   const g = D.huis({
-    gx, gy, b: 3, d: 2, nok: 'x', muurH: 92, sokkelH: 12, muur: 'vakwerk', dak: 'pannen', zaad: o.zaad ?? 29,
+    gx, gy, b: 8, d: 6, nok: 'x', muurH: 118, sokkelH: 16, muur: 'planken', hout: 'hout', dak: 'spanen', zaad: o.zaad ?? 29,
     gevel: {
       y: [
-        D.raamElement({ u: 8, b: 26, h: 40, hoog: 22, kol: 3, lijst: 'pleister' }),
-        D.deurElement({ u: 44, b: 20, hoog: 62, ramp: 'hout', raampje: true }),
-        D.raamElement({ u: 72, b: 16, h: 44, hoog: 20, luiken: 'rood', bloembak: true }),
+        D.raamElement({ u: 28, b: 44, h: 58, hoog: 30, kol: 4, lijst: 'pleister' }),
+        D.deurElement({ u: 110, b: 48, hoog: 96, ramp: 'hout', raampje: true }),
+        D.raamElement({ u: 190, b: 26, h: 58, hoog: 30, luiken: 'rood', bloembak: true }),
       ],
-      x: [D.raamElement({ u: 46, b: 14, h: 100, hoog: 16, rijen: 1 })],
+      x: [
+        D.raamElement({ u: 40, b: 24, h: 58, hoog: 28, luiken: 'rood' }),
+        D.raamElement({ u: 116, b: 24, h: 58, hoog: 28, leeg: true }),
+        D.raamElement({ u: 84, b: 20, h: 148, hoog: 22, rijen: 1 }),
+      ],
     },
-    schoorsteen: { t: 0.25, c: -3, hoog: 14, rook: false },
-    bord: { vlak: 'y', u: 36, h: 72, teken: 'krakeling', bordRamp: 'jas' },
+    schoorsteen: { t: 0.25, c: -3, hoog: 24, r: 10, rook: false },
+    bord: { vlak: 'y', u: 88, h: 112, teken: 'krakeling', bordRamp: 'jas' },
     ...o,
   });
   // de bakoven tegen de zijgevel (de wand die naar +x kijkt)
-  const x1 = (gx + 2.5) * T;
+  const x1 = (gx + 7.5) * T;
   const y0 = (gy - 0.5) * T;
-  const y1 = (gy + 1.5) * T;
-  const oy0 = y0 + 14;
-  const oy1 = y0 + 52;
+  const y1 = (gy + 5.5) * T;
+  const oy0 = y0 + 46;
+  const oy1 = y0 + 100;
   const ovenTex = (vlak, X, Y, Z) => {
     const h = Z * PXH;
     if (vlak === 'z') {
@@ -895,18 +923,18 @@ function bakkerij(gx, gy, o = {}) {
     }
     D.baksteenPixel(u, h, vlak === 'y' ? 4.5 : 3, 'rood');
   };
-  g.vormen.push(D.blok(x1 / T, oy0 / T, (x1 + 17) / T, oy1 / T, 0, 46, ovenTex, { deel: 40 }));
-  g.vormen.push(D.blok((x1 + 1) / T, (oy0 + 6) / T, (x1 + 13) / T, (oy1 - 6) / T, 46, 132, ovenTex, { deel: 40 }));
+  g.vormen.push(D.blok(x1 / T, oy0 / T, (x1 + 22) / T, oy1 / T, 0, 56, ovenTex, { deel: 40 }));
+  g.vormen.push(D.blok((x1 + 1) / T, (oy0 + 9) / T, (x1 + 16) / T, (oy1 - 9) / T, 56, 158, ovenTex, { deel: 40 }));
   g.vormen.push(
-    D.blok((x1 - 0.5) / T, (oy0 + 4.5) / T, (x1 + 14.5) / T, (oy1 - 4.5) / T, 132, 136, (vlak) => {
+    D.blok((x1 - 0.5) / T, (oy0 + 7.5) / T, (x1 + 17.5) / T, (oy1 - 7.5) / T, 158, 162, (vlak) => {
       UIT.ramp = RAMP.steen;
       UIT.stap = vlak === 'z' ? 6.5 : vlak === 'y' ? 6 : 4;
     }, { deel: 40 }),
   );
-  g.lichten.push({ pos: [x1 + 20, (oy0 + oy1) / 2, 16 / PXH], r: 90, sterk: 2.2, warm: 1, val: 1.3, zacht: 0.5 });
-  if (o.rook !== false) g.modellen.push({ model: D.rook(31), gx: (x1 + 7) / T, gy: (oy0 + oy1) / 2 / T, richting: 'N', z: 140 / PXH, omlijn: false, schaduw: false });
+  g.lichten.push({ pos: [x1 + 24, (oy0 + oy1) / 2, 18 / PXH], r: 110, sterk: 2.4, warm: 1, val: 1.3, zacht: 0.5 });
+  if (o.rook !== false) g.modellen.push({ model: D.rook(31), gx: (x1 + 8) / T, gy: (oy0 + oy1) / 2 / T, richting: 'N', z: 166 / PXH, omlijn: false, schaduw: false });
   // het uitklapluik met brood, onder het brede raam
-  g.modellen.push({ model: broodplank(), gx: gx - 0.5 + 21 / 32, gy: y1 / T + 0.12, richting: 'ZW', z: 38 / PXH });
+  g.modellen.push({ model: broodplank(), gx: gx - 0.5 + 50 / 32, gy: y1 / T + 0.12, richting: 'ZW', z: 56 / PXH });
   return g;
 }
 
@@ -1033,16 +1061,16 @@ function kruidenrek(zaad = 1) {
 function kruidenhut(gx, gy, o = {}) {
   const T = TEGEL;
   const g = D.huis({
-    gx, gy, b: 2, d: 2, nok: 'x', muurH: 64, sokkelH: 14, muur: 'vakwerk', dak: 'riet', zaad: o.zaad ?? 37,
+    gx, gy, b: 6, d: 5, nok: 'x', muurH: 112, sokkelH: 22, muur: 'vlecht', hout: 'schors', dak: 'riet', dakOud: true, dakMos: 0.8, windveer: true, zaad: o.zaad ?? 37,
     overstek: 13,
     dakMos: 0.24,
     gevel: {
       y: [
-        D.deurElement({ u: 10, b: 19, hoog: 50, ramp: 'hout' }),
-        D.raamElement({ u: 40, b: 14, h: 30, hoog: 16, luiken: 'mos', kol: 2, rijen: 1 }),
-        klimopElement({ u: 52, b: 14, h: 0, hoog: 52, zaad: 3 }),
+        D.deurElement({ u: 28, b: 44, hoog: 88, ramp: 'hout' }),
+        D.raamElement({ u: 102, b: 22, h: 44, hoog: 24, luiken: 'mos', kol: 2, rijen: 1 }),
+        klimopElement({ u: 148, b: 34, h: 0, hoog: 88, zaad: 3 }),
       ],
-      x: [D.raamElement({ u: 26, b: 12, h: 28, hoog: 14, kol: 2, rijen: 1, donker: true }), klimopElement({ u: 0, b: 16, h: 0, hoog: 44, zaad: 5 })],
+      x: [D.raamElement({ u: 56, b: 20, h: 44, hoog: 22, kol: 2, rijen: 1, donker: true }), klimopElement({ u: 0, b: 26, h: 0, hoog: 76, zaad: 5 })],
     },
     ...o,
   });
@@ -1156,17 +1184,17 @@ function huidenrek(zaad = 1) {
 function jagershut(gx, gy, o = {}) {
   const T = TEGEL;
   const g = D.huis({
-    gx, gy, b: 3, d: 2, nok: 'x', muurH: 76, sokkelH: 8, muur: 'blokhut', dak: 'spanen', zaad: o.zaad ?? 47,
+    gx, gy, b: 7, d: 6, nok: 'x', muurH: 100, sokkelH: 14, muur: 'blokhut', dak: 'spanen', zaad: o.zaad ?? 47,
     overstek: 8,
     gevel: {
       y: [
-        D.raamElement({ u: 12, b: 15, h: 38, hoog: 18, luiken: 'hout', kol: 2, rijen: 1 }),
-        D.deurElement({ u: 42, b: 20, hoog: 56, ramp: 'hout' }),
-        D.raamElement({ u: 72, b: 15, h: 38, hoog: 18, luiken: 'hout', kol: 2, rijen: 1 }),
+        D.raamElement({ u: 30, b: 24, h: 52, hoog: 26, luiken: 'hout', kol: 2, rijen: 1 }),
+        D.deurElement({ u: 96, b: 46, hoog: 94, ramp: 'hout' }),
+        D.raamElement({ u: 172, b: 24, h: 52, hoog: 26, luiken: 'hout', kol: 2, rijen: 1, leeg: true }),
       ],
-      x: [D.raamElement({ u: 24, b: 14, h: 38, hoog: 16, donker: true, kol: 2, rijen: 1 })],
+      x: [D.raamElement({ u: 46, b: 22, h: 52, hoog: 24, donker: true, kol: 2, rijen: 1 }), D.raamElement({ u: 124, b: 22, h: 52, hoog: 24, donker: true, kol: 2, rijen: 1 })],
     },
-    schoorsteen: { t: 0.2, c: -4, hoog: 16, steen: true, rook: o.rook !== false },
+    schoorsteen: { t: 0.2, c: -6, hoog: 26, r: 10, steen: true, rook: o.rook !== false },
     ...o,
   });
   const y1 = (gy + 1.5) * T;
@@ -1183,16 +1211,17 @@ function jagershut(gx, gy, o = {}) {
 function oudstehuis(gx, gy, o = {}) {
   const T = TEGEL;
   const g = D.huis({
-    gx, gy, b: 2, d: 2, nok: 'x', muurH: 82, sokkelH: 10, muur: 'vakwerk', dak: 'pannen', zaad: o.zaad ?? 53,
+    gx, gy, b: 7, d: 5, nok: 'x', muurH: 126, sokkelH: 22, muur: 'vlecht', hout: 'hout', dak: 'riet', dakOud: true, dakMos: 0.6, windveer: true, zaad: o.zaad ?? 53,
     gevel: {
       y: [
-        D.raamElement({ u: 8, b: 16, h: 38, hoog: 20, luiken: 'water', bloembak: true }),
-        D.deurElement({ u: 34, b: 20, hoog: 58, ramp: 'water', raampje: true }),
-        klimopElement({ u: 55, b: 12, h: 0, hoog: 56, zaad: 7 }),
+        D.raamElement({ u: 26, b: 24, h: 56, hoog: 30, luiken: 'water', bloembak: true }),
+        D.deurElement({ u: 88, b: 48, hoog: 96, ramp: 'water', raampje: true }),
+        D.raamElement({ u: 160, b: 24, h: 56, hoog: 30, luiken: 'water', bloembak: true }),
+        klimopElement({ u: 200, b: 24, h: 0, hoog: 104, zaad: 7 }),
       ],
-      x: [D.raamElement({ u: 14, b: 16, h: 38, hoog: 20, luiken: 'water', bloembak: true }), D.raamElement({ u: 44, b: 12, h: 92, hoog: 14, kol: 2, rijen: 1 })],
+      x: [D.raamElement({ u: 34, b: 24, h: 56, hoog: 30, luiken: 'water', bloembak: true }), D.raamElement({ u: 104, b: 22, h: 56, hoog: 28, luiken: 'water' }), D.raamElement({ u: 70, b: 20, h: 128, hoog: 24, kol: 2, rijen: 1 })],
     },
-    schoorsteen: { t: 0.24, c: -4, hoog: 20, rook: o.rook !== false },
+    schoorsteen: { t: 0.24, c: -4, hoog: 28, r: 10, steen: true, rook: o.rook !== false },
     ...o,
   });
   const y1 = (gy + 1.5) * T;
@@ -1323,39 +1352,42 @@ function brug(cx, cy, o = {}) {
 // o.fase (0..1) schuift de rimpels in het water op: zo zijn er later beeldjes van te maken.
 function beekProef(o = {}) {
   const Bm = require('./bomen.cjs');
-  const B = new K.Beeld(o.b ?? 960, o.h ?? 540, o.OX ?? 452, o.OY ?? 214);
+  const B = new K.Beeld(o.b ?? 1600, o.h ?? 1000, o.OX ?? 740, o.OY ?? 350);
   const fase = o.fase || 0;
-  const radX = 7.55;
-  const radY = 3.72;
+  const radX = 15.6;
+  const radY = 10.77;
   const kaart = D.grondKaart({
     zaad: 5,
-    beken: [{ punten: [[11.2, 1.6], [9.6, 2.9], [8.6, 4.0], [1.0, 4.0], [-1.6, 5.4]], breed: 1.5, diep: 7 }],
-    vijvers: [{ x: 7.0, y: 6.5, rx: 1.8, ry: 1.15, diep: 9 }],
+    beken: [{ punten: [[23, 6.4], [20, 7.8], [17.6, 10.8], [9.5, 10.8], [5, 12.6], [0, 14.2], [-3, 15]], breed: 1.5, diep: 7 }],
+    vijvers: [{ x: 10.5, y: 16.2, rx: 2.6, ry: 1.6, diep: 9 }],
     paden: [
-      { punten: [[1.5, 2.7], [3.3, 3.05]], breed: 0.7, ruw: 0.7 },
-      { punten: [[3.3, 5.1], [3.9, 6.5], [3.5, 8.2], [2.0, 8.3]], breed: 0.85 },
-      { punten: [[6.6, 2.6], [7.4, 2.5]], breed: 0.6, ruw: 0.6 },
+      { punten: [[8.4, 8.6], [6, 9.4], [4.6, 10.4]], breed: 0.8, ruw: 0.6 },
+      { punten: [[4.6, 11.4], [4.2, 13.4], [3, 15.4], [2.2, 16.4]], breed: 0.95 },
+      { punten: [[4.8, 12.2], [7.4, 13.6], [9.4, 14.6]], breed: 0.7, ruw: 0.6 },
+      { punten: [[2.5, 4.5], [4.5, 5.5], [8.6, 6.4]], breed: 0.7, ruw: 0.6 },
     ],
   });
-  const grond = D.grondTex(kaart, { fase, schuim: [{ x: radX, y: radY, r: 30 }] });
-  K.tekenDozen(B, [K.doos(-0.5, -0.5, 9.5, 8.5, -16, 0, grond)]);
+  const grond = D.grondTex(kaart, { fase, dor: true, schuim: [{ x: radX, y: radY, r: 34 }] });
+  K.tekenDozen(B, [K.doos(-2, -2, 21, 20, -16, 0, grond)]);
   D.waterDiepte(B, kaart);
   const gebouwen = [
-    kapel(1, 0),
-    watermolen(7, 1, { radVlak: 'y', molensteen: true }),
-    kerkhof(1, 6, { b: 3, d: 2, poort: 0.52, rijen: 4, kol: 2, zaad: 17 }),
-    brug(3.3, 4.0, { langs: 'y', lang: 2.5, breed: 0.85, waterH: 7 }),
+    kapel(5, -1),
+    watermolen(12, 3, { radVlak: 'y', molensteen: true }),
+    kerkhof(-0.5, 16.2, { b: 6, d: 4, poort: 0.55, rijen: 4, kol: 3, zaad: 17 }),
+    brug(4.6, 10.8, { langs: 'y', lang: 2.5, breed: 0.9, waterH: 7 }),
   ];
   for (const g of gebouwen) D.zetGebouw(B, g);
   // bomen: een donkere den en een dode boom bij het kerkhof, struiken langs het water
-  D.zetModel(B, Bm.den(2), -0.2, 0.6, 'Z');
-  D.zetModel(B, Bm.dodeBoom(2), 0.2, 4.8, 'Z');
-  for (const [x, y, z] of [[5.4, 4.9, 1], [8.9, 4.6, 3], [5.9, 8.3, 1], [3.3, 1.4, 2], [0.1, 7.9, 2]]) D.zetModel(B, Bm.struik(z), x, y, 'Z');
-  D.zetModel(B, Bm.grasPol(3, { hoog: true }), 6.2, 4.8, 'Z');
-  D.zetModel(B, Bm.grasPol(5, { hoog: true }), 8.9, 6.9, 'Z');
-  D.zetModel(B, Bm.paddenstoelen(2), 0.9, 5.1, 'Z');
+  D.zetModel(B, Bm.den(2), 12.4, -1.6, 'Z');
+  D.zetModel(B, Bm.dodeBoom(2), -2.2, 14.6, 'Z');
+  for (const [x, y, z] of [[8.4, 12.4, 1], [18.5, 8.6, 3], [5.4, 16.4, 1], [13.4, 13.6, 2], [0.4, 10.4, 2]]) D.zetModel(B, Bm.struik(z), x, y, 'Z');
+  D.zetModel(B, Bm.grasPol(3, { hoog: true }), 11.6, 11.6, 'Z');
+  D.zetModel(B, Bm.grasPol(5, { hoog: true }), 12.8, 15.4, 'Z');
+  D.zetModel(B, Bm.paddenstoelen(2), 1.4, 12.2, 'Z');
+  D.zetModel(B, D.houtstapel(3), 10.4, 8.4, 'ZO');
+  D.zetModel(B, D.mesthoop(4), 17.4, 4.4, 'ZO');
   // de tovenaar op het pad, voor de maat
-  if (o.tovenaar !== false) D.zetModel(B, F.tovenaar(o.leeftijd ?? 84), 4.55, 8.0, 'ZO');
+  if (o.tovenaar !== false) D.zetModel(B, F.tovenaar(o.leeftijd ?? 84), 4.2, 12.2, 'ZO');
   D.grasPollen(B, kaart);
   const vormen = gebouwen.flatMap((g) => g.vormen);
   D.zonSchaduw(B, vormen, { zon: D.AVONDZON });
@@ -1363,16 +1395,17 @@ function beekProef(o = {}) {
   K.belicht(B, { omgeving: () => 0.15 });
   D.avondlicht(B);
   K.verwarm(B, 1.8);
+  D.nevel(B, { van: 8, tot: -8, mid: 3.4, sterkte: 0.4 });
   K.omlijn(B);
   const p = K.Plaat.van(K.kwantiseer(B));
   // iets glinstert in de vijver
-  const [gx, gy] = K.tegelNaarScherm(B, 7.3, 6.7);
+  const [gx, gy] = K.tegelNaarScherm(B, 10.8, 16.4);
   D.glinstering(p, gx, gy + 3);
   return p;
 }
 
 module.exports = {
   GLAS, glasraamElement, roosvensterElement, boogdeurElement, klimopElement, klokkentoren, sterSpits, kapel,
-  grafsteen, tombe, kerkhofhek, kerkhof, molenrad, molensteen, watermolen, broodplank, bakkerij,
+  grafsteen, tombe, kerkhofhek, kerkhof, molenrad, molensteen, watermolen, broodplank, bakkerij, schuur,
   prikbord, ketel, kruidenrek, kruidenhut, gewei, huidenrek, jagershut, oudstehuis, brug, yCilinder, beekProef,
 };

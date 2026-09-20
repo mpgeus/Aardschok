@@ -63,11 +63,17 @@ function maten(maak) {
   return { links: 350 - x0 + 1, rechts: x1 - 350 + 1, boven: 450 - y0 + 1, onder: y1 - 450 + 1 };
 }
 const huizen = [
-  ['vakwerkhuis', () => D.vakwerkhuis(0, 0), '3×2'],
-  ['stenenHuis', () => D.stenenHuis(0, 0), '2×3'],
-  ['herberg', () => D.herberg(0, 0, { rook: false }), '3×3'],
+  ['vakwerkhuis', () => D.vakwerkhuis(0, 0), '7×5'],
+  ['stenenHuis', () => D.stenenHuis(0, 0), '6×8'],
+  ['herberg', () => D.herberg(0, 0, { rook: false }), '9×7'],
 ];
-if (D.smidse) huizen.push(['smidse', () => D.smidse(0, 0), '3×2']);
+if (D.smidse) huizen.push(['smidse', () => D.smidse(0, 0), '7×5']);
+// drie gewone dorpshuizen, elk uit een ander zaad: hout, riet en een andere plattegrond
+if (D.dorpshuis) {
+  huizen.push(['dorpshuis 1', () => D.dorpshuis(0, 0, 1, { maat: [7, 5], rook: false }), '7×5']);
+  huizen.push(['dorpshuis 3', () => D.dorpshuis(0, 0, 3, { maat: [6, 8], rook: false }), '6×8']);
+  huizen.push(['dorpshuis 5', () => D.dorpshuis(0, 0, 5, { maat: [5, 7], rook: false, muur: 'blokhut' }), '5×7']);
+}
 const m = huizen.map(([, maak]) => maten(maak));
 const rand = 6;
 const acht = (n) => Math.ceil(n / 8) * 8;
@@ -81,7 +87,20 @@ const anker = [links + Math.floor((CB - links - rechts) / 2), boven + (CH - bove
 const huisVel = new K.Plaat(CB * huizen.length, CH);
 tijd('huizen', () => huizen.forEach(([, maak], i) => huisVel.plak(gebouwLos(maak, CB, CH, anker), i * CB, 0)));
 schrijf('huizen.png', huisVel, 2);
-verslag.huizen = { cel: [CB, CH], anker, volgorde: huizen.map(([n, , v]) => `${n} (${v})`) };
+// De maten die het spel gebruikt, gemeten aan het gebouw zelf en niet overgeschreven: voet is de
+// plattegrond in tegels (b × d), hoog de hoogte in pixels boven de grond.
+const meetGebouw = (maak) => {
+  const g = maak();
+  const v = g.voet || [0, 0, 0, 0];
+  return { voet: [+((v[2] - v[0]) / K.TEGEL).toFixed(2), +((v[3] - v[1]) / K.TEGEL).toFixed(2)], hoog: Math.round(g.hoog || 0) };
+};
+verslag.huizen = {
+  cel: [CB, CH],
+  anker,
+  uitleg: 'één gebouw per cel, van links naar rechts. anker = het midden van tegel (gx, gy) op de grond: de eerste tegel van de plattegrond, dus de achterste hoek. voet = de plattegrond in tegels (b langs x, d langs y), hoog = de hoogte in pixels boven de grond.',
+  volgorde: huizen.map(([n, , v]) => `${n} (${v})`),
+  cellen: huizen.map(([n, maak, v], i) => ({ naam: n, cel: i, plattegrond: v, ...meetGebouw(maak) })),
+};
 
 // ---------------------------------------------------------------- voorwerpen
 
@@ -102,6 +121,18 @@ const voorwerpen = [
   ['aambeeld', D.aambeeld(), 'ZO'],
   ['ton', VW.ton(), 'ZO'],
   ['kist', VW.kist(), 'ZO'],
+  ['houtstapel', D.houtstapel(1), 'ZO'],
+  ['mesthoop', D.mesthoop(1), 'ZO'],
+  ['afdak', D.afdak(1), 'ZO'],
+  ['heg', D.heg(1), 'ZO'],
+  ['zakken', D.zakken(1), 'ZO'],
+  ['kolenhoop', D.kolenhoop(1), 'ZO'],
+  ['zaagbok', D.zaagbok(1), 'ZO'],
+  ['luifel', D.luifel(1), 'Z'],
+  ['hijsbalk', D.hijsbalk(1), 'Z'],
+  ['schoorpaal', D.schoorpaal(1), 'O'],
+  ['bijenkorf', D.bijenkorf(1), 'ZO'],
+  ['kippenren', D.kippenren(1), 'ZO'],
 ];
 const vVel = new K.Plaat(VB * voorwerpen.length, VH);
 function voorwerpLos(model, richting, z = 0) {
@@ -115,7 +146,13 @@ function voorwerpLos(model, richting, z = 0) {
 }
 tijd('voorwerpen', () => voorwerpen.forEach(([, model, r, z], i) => vVel.plak(voorwerpLos(model, r, z), i * VB, 0)));
 schrijf('dorp-voorwerpen.png', vVel, 2);
-verslag.voorwerpen = { cel: [VB, VH], anker: vAnker, volgorde: voorwerpen.map(([n, , r]) => `${n} (${r})`) };
+verslag.voorwerpen = {
+  cel: [VB, VH],
+  anker: vAnker,
+  uitleg: 'één voorwerp per cel, van links naar rechts. anker = het midden van de tegel waarop het voorwerp staat. richting = de kant waarheen het kijkt (Z = naar de kijker, ZO, ZW, NO, O).',
+  volgorde: voorwerpen.map(([n, , r]) => `${n} (${r})`),
+  cellen: voorwerpen.map(([n, , r], i) => ({ naam: n, cel: i, richting: r })),
+};
 
 // ---------------------------------------------------------------- grond
 
