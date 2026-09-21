@@ -95,6 +95,9 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 
 - **Kringen en leeftijd:** de beste speler krijgt nu de minste spreuken. Kiezen uit de vier
   richtingen in `spreuken.md`. Moet vóór het verdorren besloten zijn.
+- **Omheiningen die je schildert:** tuinhek, palissade, haag, aarden wal met vlechtwerk, en een
+  hekje, als een eigen laag met een terreinset in Tiled. Eén systeem, later ook voor een stadsmuur.
+  Zie `wereld.md`, "Een dorp heeft geen muur".
 - **Kinderkopjes** in plaats van platte kasseien: bolle ronde keien met mos in de voegen. Zie
   `beeld.md`. Alleen de tekening van `rand.tsx` verandert, dus bestaande paden gaan vanzelf mee.
 - **Windwijzer en schoorsteenrook** als losse elementen, zodat ze met de wind meebewegen.

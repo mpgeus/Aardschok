@@ -16,6 +16,22 @@ interieur op dezelfde kaart ligt: dat zou een binnenkant precies zo groot maken 
 buiten, en dan kan een smidse of een herberg niet de ruimte krijgen die hij nodig heeft om in te
 spelen. De toren is hoe dan ook apart, want die bestaat uit verdiepingen boven elkaar.
 
+## Een dorp heeft geen muur (Marcel, 21 sep 2026)
+
+Marcel dacht aan stadsmuren, en stemde in met het bezwaar: muren kostten een fortuin, dus een dorp
+had **alleen lichte bescherming** — een palissade van gepunte palen waar het ertoe doet, een haag,
+een aarden wal met vlechtwerk erop, en een eenvoudig hek als ingang. Een ommuurde stad, met een
+poort en torens, komt later als **eigen plek** verderop in de wereld; dan zijn het twee echt
+verschillende plekken in plaats van één die er half tussenin zit. Een stadspoort volgt dan de
+regel dat niets een muur is: door de poort (tol, wachters), over een ingestort stuk klimmen, of
+eroverheen zweven voor twee jaar.
+
+**Omheiningen schilder je, net als een pad.** Een tuinhek, een palissade, een haag en straks een
+stadsmuur zijn technisch hetzelfde: een lijn over tegels, met hoeken, einden en een hekje. Dat
+wordt één keer gebouwd, als een eigen laag in Tiled met een terreinset, zodat de hoeken vanzelf
+goed komen. Elk stuk staat op één tegel, dus ook de dieptesortering klopt, en niets is waterpas:
+palen staan scheef, een haag is ongelijk gesnoeid.
+
 ## De indeling van de wereld (Marcel, 20 sep 2026)
 
 Drie gebieden, en je reist ertussen:
