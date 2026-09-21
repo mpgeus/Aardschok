@@ -10,8 +10,6 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## Loopt nu
 
-- **Meer huizen naar referentie één** — klaar als er zo'n twaalf nieuwe gebouwen zijn die niet op
-  elkaar lijken, in `tegels/gebouwen.tsx` met de juiste voetafdruk, en in het spel te tekenen.
 
 ## Marcel, tegelijk
 
@@ -81,6 +79,8 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## Af
 
+- 21 sep 2026 — Twaalf nieuwe gebouwen naar referentie één, met aanbouw en L-vorm; en
+  tegelnummers die nooit meer verschuiven, zodat kaarten die Marcel tekent blijven kloppen.
 - 21 sep 2026 — Fundering van de tutorial: `T.verouder` voor elk wezen, en een regieboek
   (`js/regie.js`) waarin overslaan dezelfde eindtoestand geeft als uitkijken.
 - 21 sep 2026 — De verhaalsamenvatting in `CLAUDE.md` bijgewerkt; Wim is de knecht van de meester.

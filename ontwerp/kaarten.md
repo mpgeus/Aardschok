@@ -59,6 +59,26 @@ Nog uit te zoeken:
 - **Overgangen doen nog niets.** `overgang` wordt ingelezen, maar er is nog niets dat van kaart
   wisselt.
 
+### Een tegelnummer verandert nooit (21 sep 2026)
+
+Een kaart in Tiled bewaart per vel alleen een beginnummer. Groeit een vel, of komt er een tegel
+midden in de lijst, dan schuiven nummers op en toont een kaart die met de hand getekend is
+stilletjes de verkeerde plaatjes. Dat gebeurde toen het gebouwenvel van 15 naar 27 tegels ging.
+Twee regels, allebei nodig:
+
+- **Vaste volgorde.** Elk vel heeft `tegels/<vel>.volgorde.json`. Een nieuwe tegel komt
+  achteraan; een verdwenen tegel houdt zijn plek als lege cel. **Nooit invoegen in het midden**,
+  ook niet als het netter oogt naast verwante tegels. De kern staat in
+  `gereedschap/pixelart/vaste-volgorde.cjs`.
+- **Vaste capaciteit.** Elk vel is aangevuld met lege cellen tot een vast aantal (grond 160,
+  bomen 32, begroeiing 40, gebouwen 96, toren 8, erf 24, rand 600), zodat het aantal nooit
+  verandert als er iets bijkomt. Past er niets meer bij, dan gooit `npm run tiled` een fout; dan
+  wordt de capaciteit bewust verhoogd én worden de kaarten meeverhuisd.
+
+**Voor wie in Tiled werkt:** laat de lege cellen aan het eind van een vel met rust. Na een
+wijziging aan de kunst eerst `npm run tiled`, dan `npm run kaarten`; dat laatste klaagt luid als
+een kaart een nummer gebruikt dat nergens op uitkomt.
+
 ### Hoogte is een getal per tegel (Marcel, 20 sep 2026)
 
 Tiled kent geen derde dimensie. Van de drie manieren die daarvoor rondgaan — een laag per
