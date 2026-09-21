@@ -140,10 +140,26 @@
     },
 
     bericht(tekst, soort) {
+      const box = $('berichten');
+      // Dezelfde melding vlak achter elkaar ("Daar kun je niet komen.", vier keer geklikt) wordt
+      // één regel met een teller, en komt weer vers onderaan in beeld, in plaats van de hele
+      // lijst te vullen met hetzelfde.
+      const laatste = box.lastElementChild;
+      if (laatste && laatste.dataset.tekst === tekst && laatste.dataset.soort === (soort || '')) {
+        const keer = Number(laatste.dataset.keer || 1) + 1;
+        laatste.dataset.keer = keer;
+        laatste.textContent = `${tekst} (${keer}×)`;
+        // Het vervagen opnieuw laten beginnen, anders telt hij op in een regel die al half weg is.
+        laatste.style.animation = 'none';
+        void laatste.offsetWidth;
+        laatste.style.animation = '';
+        return;
+      }
       const el = document.createElement('div');
       el.className = 'bericht' + (soort ? ' ' + soort : '');
       el.textContent = tekst;
-      const box = $('berichten');
+      el.dataset.tekst = tekst;
+      el.dataset.soort = soort || '';
       box.appendChild(el);
       while (box.children.length > 5) box.removeChild(box.firstChild);
     },
