@@ -7,8 +7,32 @@
 //
 // Een spreuk in de hand verandert wat de muis doet: het scherm en de klik stellen dezelfde
 // vraag, net als bij lopen en slaan. Escape of de rechtermuisknop legt hem weer weg.
+//
+// Elke spreuk begint met een worp (T.worp): de tovenaar draait naar zijn doel, heft zijn staf,
+// en de spreuk groeit in de bol tot hij hem loslaat. Dan de vlucht, dan de inslag, en dan pas
+// de prijs: T.verouder int de maanden, en op dat moment gaat er grijs van hem af (de zucht,
+// js/tekenen.js), hoe groter de prijs hoe groter.
 (function (T) {
   'use strict';
+
+  // Hoe lang de worp duurt, in seconden: tot de bol opvlamt (beeld 3 van de houding spreuk,
+  // 12 beelden per seconde). Een dwaallicht is maar een klein lichtje.
+  T.WORP = { vuurschicht: 0.3, windstoot: 0.27, dwaallicht: 0.22 };
+
+  // De worp, voor elke tovenaar: de held, en ook de meester of Wim in een scène (js/regie.js).
+  // Het wezen krijgt `tovert` mee, zoals een uitval `uitval`: daaruit halen de sprites de houding
+  // en de kijkrichting, en tekenen.js wat er in de bol groeit en welk grijs erin wordt gezogen.
+  // De belofte loopt af op het moment dat de spreuk loskomt.
+  T.worp = function (S, wie, id, doel) {
+    const duur = T.WORP[id] || 0.25;
+    const eig = T.SPREUKEN[id];
+    wie.tovert = {
+      spreuk: id, begin: S.tijd, duur,
+      doel: doel ? { x: doel.x, y: doel.y } : null,
+      maanden: eig ? eig.basis.maanden : 0,
+    };
+    return T.anim.wacht(S, duur * 1000);
+  };
 
   const worp = (b) => b[0] + Math.floor(Math.random() * (b[1] - b[0] + 1));
   const heldAanDeBeurt = (S) => !!S.gevecht && S.gevecht.volgorde[S.gevecht.beurt] === S.held;
@@ -187,6 +211,7 @@
     S.held.ap -= eig.ap;
     T.ui.toonAp(S.held.ap, S.held.maxAp, 0, true);
     const telt = await werk();
+    S.held.tovert = null;
     T.verouder(S, eig.maanden, false);
     if (S.held.dood) return;
     if (telt) T.oefen(S, eig.id);
@@ -202,16 +227,20 @@
     S.naLopen = null;
     S.spreuk = null;
     const telt = await werk();
+    held.tovert = null;
     T.verouder(S, eig.maanden, false);
     if (held.dood) return;
     if (telt) T.oefen(S, eig.id);
   }
 
   // De schicht vliegt eerst en raakt; pas daarna eist de spreuk haar jaar op. Wie zo zijn
-  // honderdste haalt, velt met zijn laatste spreuk nog wel het monster.
+  // honderdste haalt, velt met zijn laatste spreuk nog wel het monster. Tussen de inslag en
+  // het jaar zit een tel, zodat je eerst de klap ziet en dan wat hij kostte: anders gebeuren
+  // ze tegelijk op twee plekken, en mis je er één.
   async function vuurschicht(S, eig, m, tweede) {
     await inGevecht(S, eig, async () => {
       const kost = `Het kost je ${T.duurTekst(eig.maanden)}.`;
+      await T.worp(S, S.held, 'vuurschicht', m);
       await T.anim.schicht(S, T.tegelVan(S.held), T.tegelVan(m));
       const van = T.tegelVan(m);
       schroei(S, eig, m, 'Je vuurschicht raakt de', tweede ? '' : kost);
@@ -219,6 +248,7 @@
         await T.anim.schicht(S, van, T.tegelVan(tweede));
         schroei(S, eig, tweede, 'Hij vliegt door en raakt de', kost);
       }
+      await T.anim.wacht(S, 200);
       return true;
     });
   }
@@ -233,6 +263,7 @@
   async function windstootOpWezens(S, eig, duwen) {
     await inGevecht(S, eig, async () => {
       const doel = duwen[0].wezen;
+      await T.worp(S, S.held, 'windstoot', doel);
       await T.anim.wind(S, T.tegelVan(S.held), T.tegelVan(doel));
       const gaan = duwen.filter((d) => d.pad.length && !d.wezen.dood);
       await Promise.all(gaan.map((d) => T.anim.duw(d.wezen, d.pad)));
@@ -259,6 +290,7 @@
   // opent geen deuren, dus zo sluit je een kamer af zonder dat het je een gevecht kost.
   async function windstootOpDeur(S, eig, d) {
     const werk = async () => {
+      await T.worp(S, S.held, 'windstoot', d);
       await T.anim.wind(S, T.tegelVan(S.held), d);
       if (d.staat !== 'open' || T.wezenOp(S.wereld, d.x, d.y)) {
         T.ui.bericht('De windstoot vindt de deur niet meer vrij.');
@@ -274,6 +306,7 @@
 
   function dwaallichtBuiten(S, eig, t) {
     buitenGevecht(S, eig, async () => {
+      await T.worp(S, S.held, 'dwaallicht', t);
       maakLicht(S, eig, t, false);
       T.ui.bericht(`Je stuurt een dwaallicht weg. Het kost je ${T.duurTekst(eig.maanden)}.`);
       // Het telt pas als er werkelijk een monster op afgaat; dat gebeurt in werkLichtenBij.
@@ -283,6 +316,7 @@
 
   async function dwaallichtInGevecht(S, eig, t, gelokt) {
     await inGevecht(S, eig, async () => {
+      await T.worp(S, S.held, 'dwaallicht', t);
       const l = maakLicht(S, eig, t, true);
       await T.anim.wacht(S, l.vlucht * 1000);
       for (const m of gelokt) {
@@ -299,8 +333,9 @@
   function maakLicht(S, eig, t, inGevechtLicht) {
     const held = S.held;
     const vlucht = 0.22 + T.afstand(T.tegelVan(held), t) * 0.05;
+    // `wie`: het licht komt uit de bol op zijn staf (js/tekenen.js).
     const l = {
-      x: t.x, y: t.y, van: { x: held.x, y: held.y },
+      x: t.x, y: t.y, van: { x: held.x, y: held.y }, wie: held,
       begin: S.tijd, vlucht, aankomst: S.tijd + vlucht,
       // Een licht in een gevecht hangt er tot de held weer aan de beurt is; buiten een gevecht
       // telt de klok van het spel.

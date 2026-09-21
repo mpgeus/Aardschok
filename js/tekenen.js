@@ -5,10 +5,11 @@
 // geweest bent, blijven donker.
 //
 // Er zijn twee manieren van tekenen. Staat de pixel art klaar (`beelden/`, zie js/sprites.js),
-// dan komt alles wat de kunst dekt uit de vellen: vloeren, muren, deuren, voorwerpen en
-// wezens. Wat er niet in zit — het raster, het bereik, de richtlijn, de zwevende teksten, de
-// spreukeffecten en de pilaar — blijft getekend met vlakken. Met
-// `Toren.debug.vlakken = true` gaat alles terug naar vlakken, om te vergelijken.
+// dan komt alles wat de kunst dekt uit de vellen: vloeren, muren, deuren, voorwerpen, wezens,
+// en de spreukeffecten (beelden/effecten/, zie "spreukeffecten in pixels" onderaan). Wat er niet
+// in zit — het raster, het bereik, de richtlijn, de zwevende teksten en de pilaar — blijft
+// getekend met vlakken. Met `Toren.debug.vlakken = true` gaat alles terug naar vlakken, om te
+// vergelijken.
 (function (T) {
   'use strict';
 
@@ -126,6 +127,7 @@
 
   T.tekenScene = function (ctx, S, bw, bh) {
     const w = S.wereld;
+    if (effectenAan()) werkNaklankBij(S);
     // Buiten is het niets de nacht tussen de bomen, binnen het donker om de kamer heen.
     ctx.fillStyle = w.buiten ? '#0e1310' : '#0c0b0a';
     ctx.fillRect(0, 0, bw, bh);
@@ -147,6 +149,7 @@
     ctx.drawImage(g.canvas, g.vx, g.vy);
     tekenRaster(ctx, S);
     tekenMarkeringen(ctx, S);
+    if (effectenAan()) tekenVloerlicht(ctx, S);
 
     const lijst = [];
     // Buiten zijn er geen muren: wat daar "muur" heet, is de voet van een boom of een gebouw, en
@@ -749,7 +752,9 @@
   // mee, dan doet sprites.buiten er toch niets mee (zie WIND_GEWICHT daar).
   function windVoorInstantie(S, v) {
     const fase = ((v.x * 137 + v.y * 251) % 97) / 97 * 23;
-    return T.windWaarde(S.tijd + fase);
+    const w = T.windWaarde(S.tijd + fase);
+    // een windstoot die hier net langskwam, buigt het extra mee (zie windstootOp)
+    return nk.lijst.length ? Math.max(-1, Math.min(1, w + windstootOp(S, v.x, v.y))) : w;
   }
 
   function tekenVoorwerp(ctx, S, v, helder) {
@@ -763,8 +768,10 @@
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;
       const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v));
-      if (stuk) T.sprites.teken(ctx, stuk, p.x, p.y, helder);
-      else tekenBuitenVlak(ctx, v, helder);
+      if (stuk) {
+        T.sprites.teken(ctx, stuk, p.x, p.y, helder);
+        if (effectenAan() && nk.lijst.length) overlaag(ctx, stuk, p.x, p.y, kleur('vuur', 5), flitsOp(S, v.x, v.y));
+      } else tekenBuitenVlak(ctx, v, helder);
       if (alpha < 1) ctx.globalAlpha = 1;
       return;
     }
@@ -786,6 +793,7 @@
         return;
       }
       T.sprites.teken(ctx, deel, p.x, p.y, helder);
+      if (effectenAan() && nk.lijst.length) overlaag(ctx, deel, p.x, p.y, kleur('vuur', 5), flitsOp(S, v.x, v.y));
       if (v.soort === 'fontein') {
         // Het water blijft bewegen: een rimpel over de kom en een druppel in de straal.
         const golf = (Math.sin(S.tijd * 2.2) + 1) / 2;
@@ -1025,6 +1033,10 @@
   // schijnsel op de vloer. Onderweg van de staf naar zijn plek maakt het een boogje. dekking
   // onder 1: het voorproefje onder de muis.
   function tekenLicht(ctx, S, l, dekking) {
+    if (effectenAan()) {
+      tekenDwaallicht(ctx, S, l, dekking);
+      return;
+    }
     const vliegt = l.van && l.vlucht ? Math.min(1, (S.tijd - l.begin) / l.vlucht) : 1;
     const x = l.van ? l.van.x + (l.x - l.van.x) * vliegt : l.x;
     const y = l.van ? l.van.y + (l.y - l.van.y) * vliegt : l.y;
@@ -1048,8 +1060,16 @@
     }
   }
 
-  // Brandt het na van een vuurschicht: vlammetjes die flakkeren tot zijn volgende beurt.
+  // Brandt het na van een vuurschicht: vlammetjes die flakkeren tot zijn volgende beurt. Met de
+  // effecten zijn het drie gerenderde vlammetjes, elk op een eigen moment in hun flakkering.
   function tekenVlammen(ctx, S, cx, cy, top) {
+    if (effectenAan()) {
+      for (let i = 0; i < 3; i++) {
+        const beeld = Math.floor(S.tijd * 10 + i * 1.7) % 4;
+        T.sprites.teken(ctx, effect('vlammetje', beeld), cx + (i - 1) * 8, (cy + top) / 2 + 12 - (i === 1 ? 7 : 0));
+      }
+      return;
+    }
     for (let i = 0; i < 3; i++) {
       const fl = (Math.sin(S.tijd * 11 + i * 2.3) + 1) / 2;
       const x = cx + (i - 1) * 7;
@@ -1090,6 +1110,13 @@
       if (e === S.held && S.sluipen && !S.gevecht) ctx.globalAlpha *= 0.8;
       T.sprites.teken(ctx, deel, cx, cy);
       top = cy - T.sprites.hoogte(e.soort);
+      if (effectenAan()) {
+        // de schaduw van ouderdom (als hij net voor een spreuk betaalde), de flits van een
+        // inslag vlakbij, en een klap
+        tekenSluier(ctx, S, deel, cx, cy, e);
+        if (nk.lijst.length) overlaag(ctx, deel, cx, cy, kleur('vuur', 5), flitsOp(S, e.x, e.y));
+        if (e.flits > 0) overlaag(ctx, deel, cx, cy, kleur('rood', 7), e.flits > 0.18 ? 0.5 : 0.25);
+      }
     } else {
       // Een wezen uit een kaart kan een soort hebben waar nog geen kunst bij is (een dorpeling
       // heeft nog geen loopvellen). Dan tekenen we Wim: er staat iemand, en één zo'n figuur legt
@@ -1098,7 +1125,7 @@
       top = teken(ctx, cx, cy - huppel, bob, e, S);
     }
     if (e.brandt > 0 && !e.dood) tekenVlammen(ctx, S, cx, cy - huppel, top);
-    if (e.flits > 0) {
+    if (e.flits > 0 && !(deel && effectenAan())) {
       ctx.fillStyle = `rgba(255, 70, 50, ${Math.min(0.55, e.flits * 2)})`;
       ctx.beginPath();
       ctx.ellipse(cx, (cy + top) / 2, 15, (cy - top) / 2 + 2, 0, 0, Math.PI * 2);
@@ -1131,11 +1158,17 @@
   }
 
   function tekenEffecten(ctx, S) {
+    // Met de vellen van de effecten: de spreuken als pixel art (zie hieronder). Dan blijven hier
+    // alleen de zwevende getallen over, en die komen erbovenop: het jaar uit de zucht.
+    const pixels = effectenAan();
+    if (pixels) tekenSpreukeffecten(ctx, S);
     for (const fx of S.effecten) {
       const f = fx.t / fx.duur;
       if (fx.t < 0) continue; // een tekst die nog even wacht
+      if (pixels && fx.soort !== 'tekst') continue;
       if (fx.soort === 'tekst') {
         const p = T.naarScherm(fx.x, fx.y);
+        if (pixels) p.x += opzijVoorZucht(S, fx);
         const y = p.y - 64 - f * 30;
         ctx.save();
         ctx.globalAlpha = Math.max(0, 1 - f * f);
@@ -1194,6 +1227,596 @@
         ctx.stroke();
       }
     }
+  }
+
+  // ---------------------------------------------------------------- spreukeffecten in pixels
+  //
+  // Staan de vellen van de effecten klaar (beelden/effecten/, zie js/sprites.js), dan tekent het
+  // spel de spreuken als pixel art, in drie tijden: de worp (de spreuk groeit in de bol van de
+  // staf), de vlucht, en de inslag. Wat een vorm heeft, is vooraf gerenderd (de kop van een
+  // vuurschicht, de inslag, het dwaallicht, stofjes, de zucht; gereedschap/pixelart/effecten.cjs).
+  // Wat van de plek afhangt — een staart die de kop achterlaat, vonken, slierten wind — zijn losse
+  // pixels, in dezelfde rampen, op hele pixels. Nooit een zachte gloed: licht is een dambord in
+  // de kleur van het licht, zoals op de vloer onder een inslag.
+  //
+  // En de prijs: wie ouder wordt zonder dat hij geraakt is (T.verouder zonder klap), heeft
+  // betaald voor een spreuk. Op dat moment trekt er een schaduw van ouderdom over hem heen, van
+  // zijn voeten naar zijn hoofd, en stijgt er een grijze zucht uit hem op die vervliegt. Hoe groter
+  // de prijs, hoe groter de zucht. Dat geldt voor iedereen met een leeftijd — de held, de meester,
+  // Wim in een scène — want het hangt aan de leeftijd zelf, niet aan wie de spreuk uitsprak.
+  //
+  // Alles is een functie van de speltijd sinds het begon, zodat het ook klopt als het spel
+  // vooruitgespoeld wordt. Er wordt alleen bijgehouden wat nog naklinkt (`nk`): de spelstaat kent
+  // alleen de vlucht zelf, en die is weg zodra hij aankomt.
+  const effectenAan = () => metSprites() && !!T.sprites.effectenAan;
+
+  // Een vast toevalsgetal (0..1) uit drie gehele getallen, voor deeltjes die elk beeld op
+  // dezelfde plek moeten uitkomen.
+  function hasj(a, b, c) {
+    let h = (Math.imul(a | 0, 374761393) + Math.imul(b | 0, 668265263) + Math.imul(c | 0, 2147483647)) >>> 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177) >>> 0;
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+  }
+  const kleur = (ramp, stap) => {
+    const r = T.sprites.effectRamp(ramp);
+    return r ? r[Math.max(0, Math.min(r.length - 1, stap))] : '#ffffff';
+  };
+  const effect = (naam, beeld, rij) => T.sprites.effect(naam, beeld, rij);
+  const duurVan = (naam) => {
+    const v = T.sprites.effectVel(naam);
+    return v ? v.beelden / v.fps : 0;
+  };
+
+  // Losse pixels, per kleur verzameld: zo wordt een kleur maar één keer per beeld gezet. `maat`:
+  // 1 of 2 pixels in het vierkant.
+  const stippen = new Map(); // kleur → [x, y, maat, x, y, maat, ...]
+  function stip(x, y, k, maat) {
+    let l = stippen.get(k);
+    if (!l) stippen.set(k, (l = []));
+    l.push(Math.round(x), Math.round(y), maat || 1);
+  }
+  function tekenStippen(ctx) {
+    for (const [k, l] of stippen) {
+      if (!l.length) continue;
+      ctx.fillStyle = k;
+      for (let i = 0; i < l.length; i += 3) ctx.fillRect(l[i], l[i + 1], l[i + 2], l[i + 2]);
+      l.length = 0;
+    }
+  }
+
+  // ---- een laag over een figuur: de schaduw van ouderdom, een lichtflits, een klap
+  //
+  // Een dambord in één kleur, alleen op de pixels van de figuur zelf (en alleen tussen de rijen
+  // `van` en `tot` van zijn cel). Het dambord ligt vast op het raster van de wereld, zodat het
+  // niet kruipt. Dichtheid 0,5 is om de pixel, 0,25 om de twee.
+  const laag = { canvas: null, ctx: null, patronen: new Map() };
+  const BAYER4 = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+  function patroon(k, dichtheid) {
+    const sleutel = `${k}|${dichtheid}`;
+    if (laag.patronen.has(sleutel)) return laag.patronen.get(sleutel);
+    const c = document.createElement('canvas');
+    c.width = 4;
+    c.height = 4;
+    const cx = c.getContext('2d');
+    cx.fillStyle = k;
+    for (let i = 0; i < 16; i++) if ((BAYER4[i] + 0.5) / 16 < dichtheid) cx.fillRect(i & 3, i >> 2, 1, 1);
+    const p = laag.ctx.createPattern(c, 'repeat');
+    laag.patronen.set(sleutel, p);
+    return p;
+  }
+  function overlaag(ctx, deel, px, py, k, dichtheid, van, tot) {
+    if (!deel || dichtheid <= 0) return;
+    if (!laag.canvas) {
+      laag.canvas = document.createElement('canvas');
+      laag.canvas.width = 192;
+      laag.canvas.height = 192;
+      laag.ctx = laag.canvas.getContext('2d');
+    }
+    // een boom of een gebouw buiten is groter dan een figuur: dan groeit het vlak mee
+    if (deel.b > laag.canvas.width || deel.h > laag.canvas.height) {
+      laag.canvas.width = Math.max(laag.canvas.width, deel.b);
+      laag.canvas.height = Math.max(laag.canvas.height, deel.h);
+    }
+    const ox = Math.round(px - deel.ax);
+    const oy = Math.round(py - deel.ay);
+    const a = Math.max(0, van == null ? 0 : van);
+    const b = Math.min(deel.h, tot == null ? deel.h : tot);
+    if (b <= a) return;
+    const c = laag.ctx;
+    c.globalCompositeOperation = 'copy';
+    c.drawImage(deel.beeld, deel.sx, deel.sy, deel.b, deel.h, 0, 0, deel.b, deel.h);
+    c.globalCompositeOperation = 'source-in';
+    const p = patroon(k, dichtheid);
+    p.setTransform(new DOMMatrix([1, 0, 0, 1, -(((ox % 4) + 4) % 4), -(((oy % 4) + 4) % 4)]));
+    c.fillStyle = p;
+    c.fillRect(0, a, deel.b, b - a);
+    c.globalCompositeOperation = 'source-over';
+    ctx.drawImage(laag.canvas, 0, 0, deel.b, deel.h, ox, oy, deel.b, deel.h);
+  }
+
+  // ---- wat er naklinkt
+
+  const nk = { S: null, tijd: -1, lijst: [], gezien: new WeakSet(), stand: new WeakMap() };
+
+  // Een wezen op een tegel, levend of anders dood (de eerste schicht van een doorboring vertrekt
+  // vanuit een monster dat misschien net gevallen is).
+  function wezenOpTegel(w, x, y) {
+    let dood = null;
+    for (const e of w.wezens) {
+      if (e.tx !== x || e.ty !== y) continue;
+      if (!e.dood) return e;
+      dood = e;
+    }
+    return dood;
+  }
+
+  // Waar een spreuk bij een wezen vertrekt: uit de bol op zijn staf als hij die heeft (gemeten op
+  // zijn vel, in het beeld van nu), en anders uit zijn hand, een stukje naar het doel toe.
+  function bronPunt(e, naarTegel) {
+    const p = T.naarScherm(e.x, e.y);
+    const b = T.sprites.bron(e);
+    if (b) return { x: p.x + b[0], y: p.y + b[1] };
+    const q = T.naarScherm(naarTegel.x, naarTegel.y);
+    const d = Math.hypot(q.x - p.x, q.y - p.y) || 1;
+    return { x: p.x + ((q.x - p.x) / d) * 8, y: p.y - Math.round(T.sprites.hoogte(e.soort) * 0.55) };
+  }
+  // Waar een spreuk aankomt: midden op het lijf van wie er staat, halverwege een deur, of net
+  // boven de vloer.
+  function doelPunt(S, tegel) {
+    const p = T.naarScherm(tegel.x, tegel.y);
+    const e = wezenOpTegel(S.wereld, tegel.x, tegel.y);
+    if (e) {
+      const q = T.naarScherm(e.x, e.y);
+      return { x: q.x, y: q.y - Math.round(T.sprites.hoogte(e.soort) * 0.5) };
+    }
+    return { x: p.x, y: p.y - (T.deurOp(S.wereld, tegel.x, tegel.y) ? 40 : 22) };
+  }
+
+  function maakVlucht(S, fx, geboren) {
+    const wie = wezenOpTegel(S.wereld, fx.van.x, fx.van.y);
+    const vuur = fx.soort === 'schicht';
+    const van = wie ? bronPunt(wie, fx.naar) : (() => {
+      const p = T.naarScherm(fx.van.x, fx.van.y);
+      return { x: p.x, y: p.y - 30 };
+    })();
+    return {
+      soort: vuur ? 'vuurvlucht' : 'windvlucht', geboren, vlucht: fx.duur,
+      duur: fx.duur + (vuur ? 0.3 : 1.4),
+      van, naar: doelPunt(S, fx.naar),
+      tegelVan: { x: fx.van.x, y: fx.van.y }, tegelNaar: { x: fx.naar.x, y: fx.naar.y },
+      grondVan: T.naarScherm(fx.van.x, fx.van.y), grondNaar: T.naarScherm(fx.naar.x, fx.naar.y),
+      zaad: Math.floor(geboren * 1000), buiten: !!S.wereld.buiten,
+    };
+  }
+
+  // Een inslag of vlaag komt waar de vlucht aankwam die daar net landde, op lijfhoogte.
+  function aankomst(soort, x, y) {
+    for (let i = nk.lijst.length - 1; i >= 0; i--) {
+      const n = nk.lijst[i];
+      if (n.soort === soort && n.tegelNaar.x === x && n.tegelNaar.y === y) return n.naar;
+    }
+    const q = T.naarScherm(x, y);
+    return { x: q.x, y: q.y - 24 };
+  }
+
+  // De prijs. Hoe groter, hoe groter de zucht, hoe langer de schaduw over hem heen trekt, en
+  // vanaf een half jaar stijgen er kleinere zuchten naast op. De zucht krult met de wind mee.
+  // De adem gaat naar voren, de kant op waar hij kijkt, en stijgt dan op: zo trekt hij langs
+  // zijn gezicht in plaats van eroverheen.
+  const VOORUIT = { Z: 0, ZW: -1, W: -1, NW: -1, N: 0, NO: 1, O: 1, ZO: 1 };
+  function maakZucht(S, e, maanden, geboren) {
+    const p = T.naarScherm(e.x, e.y);
+    const hoofd = T.sprites.hoofd(e) || [0, -Math.round(T.sprites.hoogte(e.soort) * 0.62)];
+    const vooruit = VOORUIT[e.beeldStand ? e.beeldStand.richting : 'Z'] || 0;
+    const maat = maanden <= 1 ? 'klein' : maanden <= 4 ? 'middel' : 'groot';
+    const extra = Math.min(3, Math.floor(maanden / 6));
+    const zaad = Math.floor(geboren * 1000);
+    // hij krult met de wind mee; waait er niets, dan de kant op waar hij kijkt
+    const links = S.wind < -0.05 || (Math.abs(S.wind) <= 0.05 && vooruit < 0);
+    return {
+      soort: 'zucht', wie: e, maanden, maat, geboren, extra, zaad,
+      duur: Math.max(duurVan('zucht-' + maat), extra ? 0.2 * extra + duurVan('zucht-klein') : 0),
+      sluier: Math.min(0.62, 0.26 + 0.03 * maanden),
+      x: p.x + hoofd[0] + vooruit * 7, y: p.y + hoofd[1] - 5,
+      // rij: variant a of b, en gespiegeld als hij naar links krult
+      rij: (hasj(zaad, 3, 5) < 0.5 ? 0 : 2) + (links ? 1 : 0),
+      links,
+    };
+  }
+
+  // Het getal dat T.verouder boven een zuchtend hoofd zet, schuift opzij, naar de kant waar de
+  // zucht niet heen krult: dan lees je allebei, het getal en wat het kostte.
+  function opzijVoorZucht(S, fx) {
+    for (const n of nk.lijst) {
+      if (n.soort === 'zucht' && n.wie.x === fx.x && n.wie.y === fx.y && S.tijd - n.geboren < 2) return n.links ? 20 : -20;
+    }
+    return 0;
+  }
+
+  // Aan het begin van elk beeld: wat is er nieuw in de spelstaat, en wie werd er ouder?
+  function werkNaklankBij(S) {
+    if (nk.S !== S || S.tijd < nk.tijd) {
+      nk.S = S;
+      nk.lijst = [];
+      nk.gezien = new WeakSet();
+      nk.stand = new WeakMap();
+    }
+    nk.tijd = S.tijd;
+    for (const fx of S.effecten) {
+      if (nk.gezien.has(fx)) continue;
+      nk.gezien.add(fx);
+      const geboren = S.tijd - Math.max(0, fx.t);
+      if (fx.soort === 'schicht' || fx.soort === 'wind') nk.lijst.push(maakVlucht(S, fx, geboren));
+      else if (fx.soort === 'knal') {
+        nk.lijst.push({
+          soort: 'inslag', geboren, duur: 0.62, p: aankomst('vuurvlucht', fx.x, fx.y),
+          tegel: { x: fx.x, y: fx.y }, grond: T.naarScherm(fx.x, fx.y), zaad: Math.floor(geboren * 1000),
+        });
+      } else if (fx.soort === 'vlaag') {
+        nk.lijst.push({
+          soort: 'vlaag', geboren, duur: 0.9, p: aankomst('windvlucht', fx.x, fx.y),
+          grond: T.naarScherm(fx.x, fx.y), zaad: Math.floor(geboren * 1000),
+        });
+      }
+    }
+    // Ouder geworden zonder klap: dat was een spreuk. Het moment staat in het getal dat
+    // T.verouder boven zijn hoofd zette (een tekst op zijn plek die net begon).
+    for (const e of S.wereld.wezens) {
+      if (e.leeftijd == null) continue;
+      const st = nk.stand.get(e);
+      const flits = e.flits || 0;
+      if (!st) {
+        nk.stand.set(e, { leeftijd: e.leeftijd, flits });
+        continue;
+      }
+      if (e.leeftijd > st.leeftijd && !(flits > st.flits)) {
+        const getal = S.effecten.find((fx) => fx.soort === 'tekst' && fx.x === e.x && fx.y === e.y && fx.t >= 0 && fx.t < 0.5);
+        nk.lijst.push(maakZucht(S, e, e.leeftijd - st.leeftijd, S.tijd - (getal ? getal.t : 0)));
+      }
+      st.leeftijd = e.leeftijd;
+      st.flits = flits;
+    }
+    if (nk.lijst.some((n) => S.tijd - n.geboren >= n.duur)) nk.lijst = nk.lijst.filter((n) => S.tijd - n.geboren < n.duur);
+  }
+
+  // ---- de worp: wat er in de bol groeit
+
+  function tekenWorp(ctx, S, e) {
+    const t = e.tovert;
+    const a = S.tijd - t.begin;
+    if (a < 0 || a > t.duur + 0.03) return;
+    const f = Math.min(1, a / t.duur);
+    const p = T.naarScherm(e.x, e.y);
+    const b = T.sprites.bron(e);
+    const hoogte = T.sprites.hoogte(e.soort);
+    const bron = b ? { x: p.x + b[0], y: p.y + b[1] } : { x: p.x, y: p.y - Math.round(hoogte * 0.6) };
+    // Zijn tijd gaat erin: grijze vlokjes die uit zijn lijf losraken en naar de bol worden
+    // gezogen, waar ze opgaan in wat daar groeit. Hoe duurder de spreuk, hoe meer.
+    const n = Math.min(10, 2 + Math.round(t.maanden / 2));
+    for (let i = 0; i < n; i++) {
+      const start = 0.45 * hasj(i, 7, 51);
+      const g = (f - start) / (1 - start);
+      if (g <= 0 || g >= 1) continue;
+      const bx = p.x + (hasj(i, 7, 52) - 0.5) * 22;
+      const by = p.y - hoogte * (0.3 + 0.35 * hasj(i, 7, 53));
+      const plek = (h) => {
+        const s = h * h * (3 - 2 * h);
+        return [bx + (bron.x - bx) * s + Math.sin(h * Math.PI) * (hasj(i, 7, 54) - 0.5) * 18, by + (bron.y - by) * s];
+      };
+      const [x, y] = plek(g);
+      const [sx, sy] = plek(Math.max(0, g - 0.12));
+      stip(sx, sy, kleur('baard', 2));
+      stip(x - 0.5, y - 0.5, kleur('baard', g < 0.6 ? 4 : 6), 2);
+    }
+    if (t.spreuk === 'vuurschicht') T.sprites.teken(ctx, effect('vuuropbouw', Math.floor(f * 5.99)), bron.x, bron.y);
+    else if (t.spreuk === 'dwaallicht') T.sprites.teken(ctx, effect('dwaallicht', Math.floor(f * 3.99), 1), bron.x, bron.y);
+    else {
+      // de lucht draait naar de bol toe
+      for (let i = 0; i < 7; i++) {
+        const r = 22 * (1 - f) + 3;
+        const hoek = i * 0.9 + f * 9 + hasj(i, 3, 61) * 6;
+        for (let j = 0; j < 3; j++) {
+          const h = hoek - j * 0.22;
+          stip(bron.x + Math.cos(h) * r, bron.y + Math.sin(h) * r * 0.7, kleur('water', 7 - j));
+        }
+      }
+    }
+    tekenStippen(ctx);
+  }
+
+  // ---- de vlucht
+
+  function richtingVan(n) {
+    const hoek = Math.atan2(n.naar.y - n.van.y, n.naar.x - n.van.x);
+    return ((Math.round(hoek / (Math.PI / 8)) % 16) + 16) % 16;
+  }
+  const langs = (n, g) => ({ x: n.van.x + (n.naar.x - n.van.x) * g, y: n.van.y + (n.naar.y - n.van.y) * g });
+
+  function tekenVuurvlucht(ctx, S, n) {
+    const a = S.tijd - n.geboren;
+    // De staart: vonken die de kop achterlaat, die stijgen, met de wind meedrijven en afkoelen van
+    // wit naar donkerrood.
+    const elk = 1 / 170;
+    const leven = 0.26;
+    const tot = Math.min(a, n.vlucht);
+    for (let k = Math.max(0, Math.floor((a - leven * 1.3) / elk)); k * elk <= tot; k++) {
+      const b = a - k * elk;
+      const eigen = leven * (0.7 + 0.6 * hasj(k, n.zaad, 1));
+      if (b < 0 || b > eigen) continue;
+      const q = langs(n, (k * elk) / n.vlucht);
+      const x = q.x + (hasj(k, n.zaad, 2) - 0.5) * 4 + S.wind * 10 * b;
+      const y = q.y + (hasj(k, n.zaad, 3) - 0.5) * 4 - 18 * b;
+      // vlak achter de kop nog dik en heet, verderop losse vonkjes
+      stip(x, y, kleur('vuur', Math.max(1, 7 - Math.floor((b / eigen) * 7))), b < 0.05 ? 2 : 1);
+    }
+    tekenStippen(ctx);
+    if (a < n.vlucht) {
+      const q = langs(n, a / n.vlucht);
+      T.sprites.teken(ctx, effect('vuurkop', Math.floor(a * 16) % 4, richtingVan(n)), q.x, q.y);
+    }
+    // het loslaten, in de bol
+    if (a < 0.15) T.sprites.teken(ctx, effect('loslaten', Math.floor(a * 20)), n.van.x, n.van.y);
+  }
+
+  // Een windstoot die je ziet gaan: slierten die golvend naar het doel waaien, stof dat van de
+  // vloer opwaait waar hij langskomt, en buiten blaadjes die hij meeneemt en daarna aan de wind
+  // van de wereld overlaat.
+  function tekenWindvlucht(ctx, S, n) {
+    const a = S.tijd - n.geboren;
+    const gx = n.grondNaar.x - n.grondVan.x;
+    const gy = n.grondNaar.y - n.grondVan.y;
+    const glang = Math.hypot(gx, gy) || 1;
+    // De baan: uit de bol duikt hij omlaag en scheert dan over de vloer naar zijn doel, zoals een
+    // vlaag die je met je staf wegslaat — niet recht als een schicht.
+    const hoogVan = n.grondVan.y - n.van.y;
+    const hoogNaar = n.grondNaar.y - n.naar.y;
+    const pad = (g) => {
+      const d = Math.pow(1 - Math.min(1, g), 3);
+      return { x: n.grondVan.x + gx * g + (n.van.x - n.grondVan.x) * d, y: n.grondVan.y + gy * g - (hoogNaar + (hoogVan - hoogNaar) * d) };
+    };
+    const nx = -gy / glang;
+    const ny = gx / glang;
+    const baan = glang + (hoogVan - hoogNaar) * 0.8; // ongeveer hoe lang de baan in pixels is
+    for (let s = 0; s < 6; s++) {
+      const kop = (a / n.vlucht) * (1 + 0.25 * hasj(s, n.zaad, 21)) - 0.07 * s;
+      if (kop <= 0) continue;
+      const stappen = Math.round(16 + 12 * hasj(s, n.zaad, 22));
+      const zij = (s - 2.5) * 4;
+      const golf = 2 + 2 * hasj(s, n.zaad, 23);
+      for (let j = 0; j <= stappen; j++) {
+        const g = kop - j / baan;
+        if (g < 0 || g > 1.25) continue;
+        const t = j / stappen;
+        if (t > 0.55 && j & 1) continue; // de staart dunt uit, om de pixel
+        const z = zij + Math.sin(g * baan * 0.16 + s * 1.7 - a * 10) * golf;
+        const q = pad(g);
+        stip(q.x + nx * z, q.y + ny * z * 0.5, kleur('water', t < 0.18 ? 7 : t < 0.55 ? 6 : 5), t < 0.12 ? 2 : 1);
+      }
+    }
+    tekenStippen(ctx);
+    const stofDuur = duurVan('stofje');
+    const aantal = Math.min(8, 3 + Math.floor(glang / 24));
+    for (let i = 0; i < aantal; i++) {
+      const u = (i + 0.3 + 0.4 * hasj(i, n.zaad, 31)) / aantal;
+      const b = a - u * n.vlucht;
+      if (b < 0 || b >= stofDuur) continue;
+      const x = n.grondVan.x + gx * u + (hasj(i, n.zaad, 32) - 0.5) * 12 + b * ((gx / glang) * 22 + S.wind * 12);
+      const y = n.grondVan.y + gy * u + (hasj(i, n.zaad, 33) - 0.5) * 6 + b * (gy / glang) * 22;
+      T.sprites.teken(ctx, effect('stofje', Math.floor((b / stofDuur) * 6), i & 1), x, y);
+    }
+    if (n.buiten) {
+      for (let i = 0; i < 5; i++) {
+        const u = 0.15 + 0.75 * hasj(i, n.zaad, 41);
+        const b = a - u * n.vlucht;
+        if (b < 0 || b > 1.3) continue;
+        const weg = 1 - Math.exp(-b * 3.2);
+        const x = n.grondVan.x + gx * u + (gx / glang) * 44 * weg + S.wind * 34 * b * b;
+        const y = n.grondVan.y + gy * u + (gy / glang) * 22 * weg - (42 * b - 26 * b * b) * (0.7 + 0.6 * hasj(i, n.zaad, 42));
+        T.sprites.teken(ctx, effect('blad', (Math.floor(b * 10) + i) % 4, i & 1), x, y);
+      }
+    }
+  }
+
+  // Waar de windstoot aankomt: de lucht krult om het doel heen, en er waait stof op.
+  function tekenVlaag(ctx, S, n) {
+    const a = S.tijd - n.geboren;
+    if (a < 0.4) {
+      const r = 9 + a * 55;
+      for (let s = 0; s < 3; s++) {
+        const begin = s * 2.1 + a * 11;
+        for (let j = 0; j < 9; j++) {
+          const h = begin - j * 0.13;
+          const t = j / 9;
+          if (t > 0.5 && j & 1) continue;
+          stip(n.p.x + Math.cos(h) * r, n.p.y + Math.sin(h) * r * 0.55, kleur('water', t < 0.25 ? 7 : 6));
+        }
+      }
+      tekenStippen(ctx);
+    }
+    const stofDuur = duurVan('stofje');
+    for (let i = 0; i < 3; i++) {
+      const b = a - 0.05 * i;
+      if (b < 0 || b >= stofDuur) continue;
+      const kant = i - 1;
+      T.sprites.teken(ctx, effect('stofje', Math.floor((b / stofDuur) * 6), i & 1), n.grond.x + kant * (8 + b * 26), n.grond.y + 2 - b * 6);
+    }
+  }
+
+  // ---- de inslag
+
+  function tekenInslag(ctx, S, n) {
+    const a = S.tijd - n.geboren;
+    const beeld = Math.floor(a * 22);
+    if (beeld < 8) T.sprites.teken(ctx, effect('inslag', beeld), n.p.x, n.p.y);
+    // Vonken: ze spatten weg, vallen, en koelen af. Elk laat één pixel spoor achter.
+    for (let i = 0; i < 14; i++) {
+      const leven = 0.3 + 0.3 * hasj(i, n.zaad, 11);
+      if (a > leven) continue;
+      const hoek = hasj(i, n.zaad, 12) * Math.PI * 2;
+      const v = 55 + 75 * hasj(i, n.zaad, 13);
+      const vx = Math.cos(hoek) * v;
+      const vy = Math.sin(hoek) * v * 0.6 - 50;
+      const plek = (t) => [n.p.x + vx * t, n.p.y + vy * t + 190 * t * t];
+      const stap = Math.max(2, 7 - Math.floor((a / leven) * 6));
+      const [x, y] = plek(a);
+      stip(x, y, kleur('vuur', stap), a < leven * 0.4 ? 2 : 1);
+      const [x2, y2] = plek(Math.max(0, a - 1 / 60));
+      if (Math.round(x2) !== Math.round(x) || Math.round(y2) !== Math.round(y)) stip(x2, y2, kleur('vuur', stap - 2));
+    }
+    tekenStippen(ctx);
+  }
+
+  // Hoe fel valt de flits van een inslag op iets op tegel (x, y)? Een dichtheid voor het dambord.
+  function flitsOp(S, x, y) {
+    let d = 0;
+    for (const n of nk.lijst) {
+      if (n.soort !== 'inslag') continue;
+      const a = S.tijd - n.geboren;
+      if (a >= 0.24) continue;
+      const afstand = Math.hypot(x - n.tegel.x, y - n.tegel.y);
+      if (afstand > 2.2) continue;
+      const trap = (a < 0.08 ? 0 : a < 0.16 ? 1 : 2) + (afstand > 1.2 ? 1 : 0);
+      d = Math.max(d, [0.25, 0.125, 0.0625, 0][trap]);
+    }
+    return d;
+  }
+
+  // ---- de zucht
+
+  function tekenZucht(ctx, S, n) {
+    const a = S.tijd - n.geboren;
+    const drijf = (b) => S.wind * 9 * b * b; // de wind neemt hem mee, eerst weinig, dan meer
+    const vel = 'zucht-' + n.maat;
+    const d = duurVan(vel);
+    if (a < d) T.sprites.teken(ctx, effect(vel, Math.floor(a * T.sprites.effectVel(vel).fps), n.rij), n.x + drijf(a), n.y);
+    const dk = duurVan('zucht-klein');
+    for (let k = 0; k < n.extra; k++) {
+      const b = a - 0.2 * (k + 1);
+      if (b < 0 || b >= dk) continue;
+      const kant = k % 2 ? 1 : -1;
+      const rij = (hasj(n.zaad, k, 7) < 0.5 ? 0 : 2) + (S.wind < 0 ? 1 : 0);
+      T.sprites.teken(ctx, effect('zucht-klein', Math.floor(b * T.sprites.effectVel('zucht-klein').fps), rij), n.x + kant * (8 + 4 * k) + drijf(b), n.y + 6 + 3 * k);
+    }
+  }
+
+  // De schaduw van ouderdom trekt over hem heen: een band grijs die van zijn voeten naar zijn
+  // hoofd schuift, met een dichte kern en ijle randen.
+  function zuchtVan(e) {
+    for (let i = nk.lijst.length - 1; i >= 0; i--) if (nk.lijst[i].soort === 'zucht' && nk.lijst[i].wie === e) return nk.lijst[i];
+    return null;
+  }
+  function tekenSluier(ctx, S, deel, cx, cy, e) {
+    const z = zuchtVan(e);
+    if (!z) return;
+    const a = S.tijd - z.geboren;
+    if (a < 0 || a >= z.sluier) return;
+    const hoog = T.sprites.hoogte(e.soort) + 4;
+    const band = hoog * (z.maanden >= 6 ? 0.5 : 0.34);
+    const midden = deel.ay - (a / z.sluier) * (hoog + band) + band / 2;
+    const grijs = kleur('baard', 2);
+    overlaag(ctx, deel, cx, cy, grijs, 0.25, Math.round(midden - band / 2), Math.round(midden + band / 2));
+    if (z.maanden >= 3) overlaag(ctx, deel, cx, cy, grijs, 0.5, Math.round(midden - band / 5), Math.round(midden + band / 5));
+  }
+
+  // ---- het dwaallicht
+
+  // Waar hangt het licht nu? Onderweg maakt het een boogje, vanuit de bol op de staf.
+  function lichtPlek(S, l) {
+    const vliegt = l.van && l.vlucht ? Math.min(1, (S.tijd - l.begin) / l.vlucht) : 1;
+    const x = l.van ? l.van.x + (l.x - l.van.x) * vliegt : l.x;
+    const y = l.van ? l.van.y + (l.y - l.van.y) * vliegt : l.y;
+    const p = T.naarScherm(x, y);
+    const deining = Math.round(Math.sin(S.tijd * 2.4 + l.begin * 3) * 3);
+    const b = l.wie && vliegt < 1 ? T.sprites.bron(l.wie) : null;
+    const start = b ? -b[1] : 46;
+    const zacht = vliegt * vliegt * (3 - 2 * vliegt);
+    const hoog = Math.round(start + (30 - start) * zacht + Math.sin(vliegt * Math.PI) * 14) + deining;
+    return { x: Math.round(p.x), y: Math.round(p.y), hoog, vliegt };
+  }
+
+  function tekenDwaallicht(ctx, S, l, dekking) {
+    const rest = l.tot === Infinity ? 9 : l.tot - S.tijd;
+    if (rest <= 0) return;
+    // In de laatste seconde knippert het, steeds sneller: je ziet je tijd opraken. Geen vervagen.
+    if (rest < 1 && Math.floor(S.tijd * (5 + (1 - rest) * 16)) % 2) return;
+    const plek = lichtPlek(S, l);
+    const oy = plek.y - plek.hoog;
+    if (dekking < 1) ctx.globalAlpha = dekking;
+    const beeld = Math.floor(S.tijd * 10 + l.begin * 7) % 8;
+    T.sprites.teken(ctx, effect('dwaallicht', beeld, 0), plek.x, oy);
+    // Stipjes die eromheen draaien en knipperen.
+    for (let i = 0; i < 3; i++) {
+      if (hasj(Math.floor(S.tijd * 8), i, 71) < 0.25) continue;
+      const hoek = S.tijd * 2.2 + i * 2.09;
+      stip(plek.x + Math.cos(hoek) * 10, oy - 1 + Math.sin(hoek) * 4, kleur('water', i ? 6 : 7));
+    }
+    // Lokt het iemand, dan roept het: een kring die telkens van het licht wegdeint.
+    const w = S.wereld;
+    const lokt = dekking >= 1 && w.wezens.some((m) => !m.dood && (m.gelokt === l || (m.afgeleid && m.afgeleid.x === l.x && m.afgeleid.y === l.y)));
+    if (lokt) {
+      const f = ((S.tijd - l.begin) % 1.2) / 0.55;
+      if (f < 1) {
+        const r = 6 + f * 13;
+        for (let i = 0; i < 12; i++) {
+          const h = (i / 12) * Math.PI * 2 + f;
+          stip(plek.x + Math.cos(h) * r, oy + Math.sin(h) * r * 0.7, kleur('water', f < 0.5 ? 6 : 5));
+        }
+      }
+    }
+    tekenStippen(ctx);
+    if (dekking < 1) ctx.globalAlpha = 1;
+  }
+
+  // ---- licht op de vloer, onder alles wat erop staat
+
+  function tekenVloerlicht(ctx, S) {
+    for (const n of nk.lijst) {
+      if (n.soort !== 'inslag') continue;
+      const a = S.tijd - n.geboren;
+      if (a < 0.24) T.sprites.teken(ctx, effect('lichtpoel-vuur', a < 0.07 ? 0 : a < 0.15 ? 1 : 2), n.grond.x, n.grond.y);
+    }
+    for (const l of S.lichten) {
+      if (!T.isZichtbaar(S.wereld, l.x, l.y)) continue;
+      const rest = l.tot === Infinity ? 9 : l.tot - S.tijd;
+      if (rest <= 0) continue;
+      const plek = lichtPlek(S, l);
+      const dip = Math.floor(S.tijd * 10 + l.begin * 7) % 8;
+      T.sprites.teken(ctx, effect('lichtpoel-water', dip === 3 || dip === 6 || rest < 1 ? 1 : 0), plek.x, plek.y);
+    }
+  }
+
+  // ---- de windstoot laat de wereld meewaaien
+  //
+  // Een boom, een struik of de was langs de baan van een windstoot buigt even mee, zodra de vlaag
+  // er langskomt: een duw bovenop de wind van de wereld, in de richting waarin hij waait.
+  function windstootOp(S, x, y) {
+    let duw = 0;
+    for (const n of nk.lijst) {
+      if (n.soort !== 'windvlucht') continue;
+      const dx = n.tegelNaar.x - n.tegelVan.x;
+      const dy = n.tegelNaar.y - n.tegelVan.y;
+      const l2 = dx * dx + dy * dy || 1;
+      const u = Math.max(0, Math.min(1.3, ((x - n.tegelVan.x) * dx + (y - n.tegelVan.y) * dy) / l2));
+      const afstand = Math.hypot(x - (n.tegelVan.x + dx * u), y - (n.tegelVan.y + dy * u));
+      if (afstand > 2) continue;
+      const b = S.tijd - (n.geboren + u * n.vlucht);
+      if (b < 0 || b > 1) continue;
+      duw += Math.sign(n.grondNaar.x - n.grondVan.x || 1) * 1.8 * (1 - b) * (1 - b) * (1 - afstand / 2);
+    }
+    return duw;
+  }
+
+  // ---- alles samen, in de effectenlaag
+
+  function tekenSpreukeffecten(ctx, S) {
+    for (const e of S.wereld.wezens) if (e.tovert && T.isZichtbaar(S.wereld, e.tx, e.ty)) tekenWorp(ctx, S, e);
+    for (const n of nk.lijst) {
+      if (n.soort === 'vuurvlucht') tekenVuurvlucht(ctx, S, n);
+      else if (n.soort === 'windvlucht') tekenWindvlucht(ctx, S, n);
+      else if (n.soort === 'inslag') tekenInslag(ctx, S, n);
+      else if (n.soort === 'vlaag') tekenVlaag(ctx, S, n);
+    }
+    for (const n of nk.lijst) if (n.soort === 'zucht') tekenZucht(ctx, S, n);
   }
 
   // Donkere randen; in een gevecht kleuren ze een fractie rood mee.

@@ -20,6 +20,7 @@
   const S = {
     aan: false, // staan alle vellen van binnen klaar? Zo niet, tekent het spel zijn vlakken.
     buitenAan: false, // en die van buiten (tegels/, gemaakt door npm run tiled)
+    effectenAan: false, // en de spreukeffecten (beelden/effecten/, gemaakt door effecten-export.cjs)
     mist: [], // wat er niet geladen kon worden, om in de console te zien
   };
   T.sprites = S;
@@ -70,11 +71,16 @@
         for (const h of Object.values(f.houdingen)) lijst.push(MAP + 'figuren/' + h.bestand);
       }
       // De vellen van buiten staan los: gaat daar iets mis, dan tekent het spel buiten vlakken
-      // en binnen nog gewoon zijn pixel art.
+      // en binnen nog gewoon zijn pixel art. De spreukeffecten ook: zonder die vellen tekent het
+      // spel de spreuken zoals vroeger.
       const buiten = [...new Set(Object.values(T.TEGELS || {}).map((v) => v.bestand).filter(Boolean))];
-      const [uitslag, uitBuiten] = await Promise.all([Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld))]);
+      const effectVellen = T.EFFECTEN ? [...new Set(Object.values(T.EFFECTEN.vellen).map((v) => MAP + 'effecten/' + v.bestand))] : [];
+      const [uitslag, uitBuiten, uitEffecten] = await Promise.all([
+        Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld)), Promise.all(effectVellen.map(laadBeeld)),
+      ]);
       S.aan = uitslag.every(Boolean);
       S.buitenAan = buiten.length > 0 && uitBuiten.every(Boolean);
+      S.effectenAan = effectVellen.length > 0 && uitEffecten.every(Boolean);
       if (S.aan) snijVloeren();
       if (!S.aan || !S.buitenAan) console.warn('Aardschok: sprites ontbreken, het spel tekent daar vlakken.', S.mist);
       return S.aan;
@@ -325,21 +331,74 @@
     return stuk(MAP + t.bestand, k * t.cel[0], r * t.cel[1], t.cel[0], t.cel[1], t.anker);
   };
 
+  // ---------------------------------------------------------------- spreukeffecten
+  //
+  // De vellen uit beelden/effecten/ (effecten-export.cjs): een rij per variant (een richting, een
+  // maat, gespiegeld), een kolom per beeld. T.EFFECTEN (beelden/effecten/effecten.js) beschrijft
+  // ze, en weet ook waar op een figuur de bol van zijn staf en zijn gezicht zitten: gemeten op de
+  // vellen van de figuren zelf, per richting en per beeld.
+  const effecten = () => T.EFFECTEN || null;
+
+  S.effectVel = (naam) => (effecten() && effecten().vellen[naam]) || null;
+  S.effectRamp = (naam) => (effecten() && effecten().rampen[naam]) || null;
+
+  // Eén cel van een effect. Een vel kan per rij een eigen anker hebben (gespiegeld).
+  S.effect = function (naam, beeld, rij) {
+    const v = S.effectVel(naam);
+    if (!v) return null;
+    const r = rij || 0;
+    const k = Math.max(0, Math.min(v.beelden - 1, beeld | 0));
+    const anker = (v.ankers && v.ankers[r]) || v.anker;
+    return onthoud(`effect,${naam},${r},${k}`, () => stuk(MAP + 'effecten/' + v.bestand, k * v.cel[0], r * v.cel[1], v.cel[0], v.cel[1], anker));
+  };
+
+  // Waar zit de bol op de staf van dit wezen, nu, in het beeld dat net getekend is? [dx, dy]
+  // vanaf zijn voeten, of null (geen staf, of nog niet getekend). Een houding waarin de bol niet
+  // gemeten is (lopen, slaan), valt terug op staan.
+  S.bron = function (e) {
+    const l = e.beeldStand && e.beeldStand.laatste;
+    const b = l && effecten() && effecten().bronnen[l.naam];
+    if (!b) return null;
+    const meting = b[l.houding] ? b[l.houding][l.richting] : b.staan && b.staan[l.richting];
+    if (!meting) return null;
+    return meting[b[l.houding] ? Math.min(meting.length - 1, l.beeld) : 0] || meting.find(Boolean) || null;
+  };
+
+  // Waar zit zijn gezicht, in de richting waarin hij nu kijkt? [dx, dy] vanaf zijn voeten, of null.
+  S.hoofd = function (e) {
+    const h = effecten() && effecten().hoofden[S.figuurNaam(e.soort)];
+    const richting = e.beeldStand ? e.beeldStand.richting : 'Z';
+    return (h && h[richting]) || null;
+  };
+
   // ---------------------------------------------------------------- de houding van een wezen
 
   // Wat doet dit wezen nu? Alles komt uit de spelstaat zelf, zodat er geen tweede boekhouding
   // ontstaat die uit de pas kan lopen: `dood` en `sterfTijd` zijn sterven, `flits` is net
-  // geraakt, `uitval` is uithalen, en een pad betekent lopen. Alleen toveren is niet aan één
-  // veld te zien: dat blijkt uit de jaren die de held erbij krijgt (T.verouder), en juist
-  // vóór de schicht vertrekt.
+  // geraakt, `uitval` is uithalen, `tovert` is toveren (de worp, T.worp in js/toveren.js), en
+  // een pad betekent lopen.
   //
   // Wat wél wordt onthouden, staat in `e.beeldStand`: hoe ver de voeten gelopen hebben (zodat
-  // de pas niet glijdt) en welke klap of spreuk nog aan het spelen is.
+  // de pas niet glijdt), welke klap of spreuk nog aan het spelen is, en het laatst getekende
+  // beeld (voor de bol op de staf, zie S.bron).
   function stand(e) {
     if (!e.beeldStand) {
-      e.beeldStand = { afgelegd: 0, x: e.x, y: e.y, richting: 'Z', eenmalig: null, tot: 0, begin: 0, leeftijd: e.leeftijd, flits: 0 };
+      e.beeldStand = { afgelegd: 0, x: e.x, y: e.y, richting: 'Z', eenmalig: null, tot: 0, begin: 0, flits: 0, laatste: null };
     }
     return e.beeldStand;
+  }
+
+  // Een spreuk die net bij dit wezen vertrekt zonder worp (een scène die meteen een schicht laat
+  // vliegen): de vlucht in de spelstaat die op zijn tegel begint en nog maar net onderweg is.
+  function nieuweVlucht(spel, e, st) {
+    for (const fx of spel.effecten || []) {
+      if ((fx.soort !== 'schicht' && fx.soort !== 'wind') || fx.t > 0.25 || fx === st.vlucht) continue;
+      if (fx.van.x === e.tx && fx.van.y === e.ty) {
+        st.vlucht = fx;
+        return fx;
+      }
+    }
+    return null;
   }
 
   // De tovenaar loopt naar zijn leeftijd: kwiek op zijn 84e, schuifelend op zijn 99e.
@@ -370,13 +429,15 @@
     if (e.uitval) st.richting = S.richtingVan(e.uitval.doel.x - e.x, e.uitval.doel.y - e.y);
 
     // Eenmalige houdingen: uithalen, toveren, geraakt worden. Ze worden vastgehouden tot ze
-    // zijn afgelopen, ook als het spel intussen alweer verder is.
-    const zet = (houding) => {
+    // zijn afgelopen, ook als het spel intussen alweer verder is. `begin`: wanneer het in de
+    // spelstaat begon, als dat bekend is (een worp) — dan klopt het beeld ook als er een tijd
+    // niet getekend werd.
+    const zet = (houding, begin) => {
       const duur = S.houdingDuur(naam, houding);
       if (!duur) return;
       st.eenmalig = houding;
-      st.tot = spel.tijd + duur;
-      st.begin = spel.tijd;
+      st.begin = begin == null ? spel.tijd : Math.min(spel.tijd, begin);
+      st.tot = st.begin + duur;
     };
     if (e.uitval) {
       if (st.uitval !== e.uitval) {
@@ -384,8 +445,24 @@
         zet(S.heeftHouding(naam, 'slaan') ? 'slaan' : 'aanval');
       }
     } else st.uitval = null;
-    if (e.leeftijd != null && e.leeftijd > st.leeftijd && !e.flits && !e.dood) zet('spreuk');
-    if (e.leeftijd != null) st.leeftijd = e.leeftijd;
+    // Toveren: de worp zet `tovert` op de tovenaar. Hij draait naar zijn doel en heft de staf;
+    // de bol vlamt op (beeld 3 van de houding) precies als de spreuk loskomt. Wie tovert zonder
+    // worp, heft zijn staf op het moment dat de spreuk bij hem vertrekt.
+    if (e.tovert) {
+      if (st.tovert !== e.tovert) {
+        st.tovert = e.tovert;
+        zet('spreuk', e.tovert.begin);
+      }
+      const doel = e.tovert.doel;
+      if (doel && spel.tijd < e.tovert.begin + 0.6 && (doel.x !== e.x || doel.y !== e.y)) st.richting = S.richtingVan(doel.x - e.x, doel.y - e.y);
+    } else {
+      st.tovert = null;
+      const vlucht = !e.dood && S.heeftHouding(naam, 'spreuk') ? nieuweVlucht(spel, e, st) : null;
+      if (vlucht) {
+        zet('spreuk', spel.tijd - Math.max(0, vlucht.t));
+        if (vlucht.naar.x !== e.x || vlucht.naar.y !== e.y) st.richting = S.richtingVan(vlucht.naar.x - e.x, vlucht.naar.y - e.y);
+      }
+    }
     // flits springt bij een klap naar 0,3 en telt daarna af: gaat hij omhoog, dan is het een
     // nieuwe klap. (Vergelijken met een optelsom van tijd en flits gaat mis op de laatste bit.)
     if (e.flits > (st.flits || 0) && !e.dood) zet('geraakt');
@@ -416,9 +493,19 @@
     return { naam, houding: staan, richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };
   };
 
-  // Het beeld dat bij die houding hoort, in één stap.
+  // Het beeld dat bij die houding hoort, in één stap. Welk beeld het werd, onthoudt het wezen
+  // (beeldStand.laatste): de bol op de staf zit in elk beeld ergens anders.
   S.wezen = function (spel, e) {
     const h = S.houding(spel, e);
-    return h ? S.figuur(h.naam, h.houding, h.richting, h.fase) : null;
+    if (!h) return null;
+    const f = S.figuurGegevens(h.naam);
+    const hd = f && (f.houdingen[h.houding] || f.houdingen.staan);
+    const fase = hd && hd.herhaal ? ((h.fase % 1) + 1) % 1 : Math.min(0.999999, Math.max(0, h.fase));
+    const l = e.beeldStand.laatste || (e.beeldStand.laatste = {});
+    l.naam = h.naam;
+    l.houding = h.houding;
+    l.richting = h.richting;
+    l.beeld = hd ? Math.floor(fase * hd.beelden) : 0;
+    return S.figuur(h.naam, h.houding, h.richting, h.fase);
   };
 })(globalThis.Toren = globalThis.Toren || {});
