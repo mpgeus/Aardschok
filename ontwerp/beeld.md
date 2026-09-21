@@ -281,4 +281,4 @@ Die loopt langzaam op en af, met vlagen, zodat het als weer leest en niet als sp
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
-- **Effecten** van spreuken, en portretten van dorpelingen voor de gesprekken.
+- **Portretten** van dorpelingen voor de gesprekken. (De effecten van spreuken zijn er sinds 21 sep 2026, zie `spreuken.md`.)

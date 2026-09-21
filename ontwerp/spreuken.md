@@ -117,6 +117,27 @@ waarden. Die stellen we bij het spelen bij.
 Vanaf 95 jaar heeft hij nog 6 actiepunten. Daarom kost geen enkele spreuk van de vierde kring meer
 dan 6.
 
+## Je ziet de prijs gebeuren (21 sep 2026)
+
+Marcel wilde mooie spreukanimaties, en de eis erbij was dat je de prijs ziet: het jaar is niet
+alleen een getal boven het hoofd maar iets wat je de tovenaar ziet kosten.
+
+- **Bij elke betaling** trekt er een grijze band over de tovenaar van zijn voeten naar zijn hoofd,
+  en stijgt er een zucht op die met de wind meekrult en vervliegt. Hoe groter de prijs, hoe groter
+  de zucht: een dwaallicht (een maand) klein, een windstoot (drie maanden) middel, een vuurschicht
+  (een jaar) groot, met twee kleine ernaast. Het werkt voor elke tovenaar, want het hangt aan de
+  leeftijd zelf (ouder geworden zonder klap), niet aan wie er tovert.
+- **Wanneer: op het moment dat het jaar geïnd wordt, dus ná de inslag.** Bij het vertrek kan het
+  niet, want de kernregel zegt eerst het effect en dan de tijd — wie zo zijn honderdste haalt, velt
+  met zijn laatste spreuk nog het monster. Om toch ook bij het vertrek iets te laten zien, worden
+  er tijdens de worp grijze vlokjes uit zijn lijf de bol in gezogen: je ziet zijn tijd vuur worden.
+  En bij de vuurschicht zit er 0,2 seconde tussen inslag en jaar, anders gebeurt het tegelijk op
+  twee plekken en mis je er één.
+- **Bij de dood van de meester** is die zucht zijn laatste adem. Daar is hij voor bedoeld.
+- **Stijl:** licht is een dambord, nooit gloed; wat vervliegt scheurt open op ruis. Wat een vorm
+  heeft komt uit `gereedschap/pixelart/effecten.cjs`, wat van de plek afhangt zijn losse pixels in
+  het spel. Het kost hooguit 0,3 ms per beeld.
+
 ## Verdorren: jaren nemen van wat leeft (Marcel, 20 sep 2026)
 
 Marcel: "heerlijk duister, en opent echt een hele andere dimensie van het spel. Die wil ik sowieso."
