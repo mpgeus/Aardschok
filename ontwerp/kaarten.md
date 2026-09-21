@@ -2,6 +2,65 @@
 
 Wat er op die kaarten komt te staan, staat in `wereld.md` en `toren.md`.
 
+## Werken in Tiled: zo teken je een kaart (21 sep 2026)
+
+**Het idee in één zin:** in Tiled plak je geen losse tegels, je schildert *soorten grond* — gras,
+zandpad, kasseien, water — en Tiled kiest zelf de tegel met de goede rand. Elke tegel heeft vier
+hoeken; jij kleurt hoeken, Tiled zoekt de tegel waarvan de vier hoeken kloppen. Daarom heet het
+"terrein".
+
+**Beginnen.** Open `gereedschap/tiled/nieuwe-kaart.tmj` in Tiled en kies meteen *Bestand > Opslaan
+als*, naar `kaarten/<naam>.tmj`. Die naam wordt de naam van het gebied (`dorp.tmj` → het dorp).
+Alles staat al goed: isometrisch 64×32, een grasveld van 48×40, de lagen `grond` en `objecten`,
+alle tegelvellen, en links in het midden een uitgang terug naar het erf. Groter maken kan met
+*Map > Formaat veranderen*.
+
+**Grond schilderen.**
+
+1. Klik links bij de lagen op `grond`.
+2. Open rechtsonder het tabblad **Terreinsets** (naast Tilesets).
+3. Kies een set. Elke set heeft twee kleuren: de ondergrond en wat erover komt. *Gras over zand*
+   voor een pad, *Gras over kasseien* voor een plein, *Gras aan water* voor een beek of vijver,
+   *Zand over kasseien* waar een pad een plein raakt.
+4. Klik de kleur aan die je wilt schilderen (bijvoorbeeld *zandpad*), pak de **terreinkwast** uit
+   de werkbalk, en sleep over het gras. Er komt een pad met nette randen en karrensporen.
+5. Weghalen = er met de andere kleur (*gras*) overheen schilderen. De gum werkt ook, maar laat een
+   gat achter.
+
+Let op: vul nooit met de stempels uit `grond.tsx` (die zitten bewust niet in het beginbestand).
+Tiled herkent die niet als terrein, en dan kloppen de randen eromheen niet.
+
+**Een beek met een brug.** Eerst het water (*Gras aan water*, kleur *water*). Dan de brug erop met
+de gewone **stempelkwast**, niet met terrein: in `rand.tsx` zijn de tegels 240, 241 en 242 begin,
+midden en eind van een brug die naar rechtsonder loopt, en 243, 244 en 245 van een brug naar
+linksonder. Zoveel middenstukken als de beek breed is. Pas daarna het pad ertegenaan: waar een pad
+een oever raakt wint er één van de twee, zo werkt terrein nu eenmaal.
+
+**Dingen neerzetten: bomen, planten, huizen.**
+
+1. Klik op de laag `objecten`.
+2. Kies bij Tilesets het vel (`bomen`, `begroeiing`, `gebouwen`) en klik een plaatje aan.
+3. Pak **Tegel invoegen** uit de werkbalk en klik op de kaart. Een huis zet je neer op zijn
+   achterste hoek; het beslaat de tegels rechtsonder daarvandaan.
+
+**Wezens en uitgangen** zijn gewone objecten met een eigenschap (rechts bij *Eigenschappen*, met
+het plusje *Eigenschap toevoegen*, soort *string*):
+
+| Eigenschap | Waarde | Wat het doet |
+|---|---|---|
+| `wezen` | `wolf`, `reuzenspin`, `kobold`, ... | er staat hier een wezen (de lijst is `T.WEZENS` in `js/wereld.js`) |
+| `straal` | een getal | hoe ver het rondloopt |
+| `overgang` | naam van een kaart | wie hier stapt, gaat naar die kaart |
+| `komt` | `x,y` | de tegel in déze kaart waar je landt als je van die andere kaart terugkomt |
+| `zaad` | een getal | een gewone dorpeling (nog zonder eigen kunst: hij wordt als Wim getekend) |
+
+Het beginbestand heeft er al een als voorbeeld: *pad terug naar het erf*.
+
+**Proberen in het spel.** Sla op in Tiled, draai `npm run kaarten`, en open het spel. Een nieuwe
+kaart is vanzelf een gebied, maar het erf heeft nog geen weg ernaartoe: zeg welke kaart het is,
+dan komt er een pad vanaf het erf. Tot die tijd kun je er in de browserconsole heen springen met
+`Toren.debug.gaNaar('dorp')`.
+
 ## De kaarten tekenen we in een editor (Marcel, 20 sep 2026)
 
 Claude elke boom laten neerzetten kost te veel. De wereld wordt dus in een kaarteditor getekend.
