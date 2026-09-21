@@ -67,7 +67,9 @@ verschillend. Wat de nieuwe bouwer moet kunnen, in Marcels woorden en daarna uit
 - **Renderen gebeurt één keer:** een huis kost zo'n twintig seconden, maar dat is het maken van het
   plaatje in het tegelvel. Het spel tekent het daarna af; de speler merkt er niets van.
 - **Uitbouwen:** dakkapellen die zacht in het riet zijn opgenomen, erkers op klossen, een aanbouw
-  met een eenzijdig dak, een buitentrap, luiken, bloembakken, schoorstenen.
+  met een eenzijdig dak, een buitentrap, luiken, bloembakken, schoorstenen, en **een houten
+  balkonnetje of galerij** langs de bovenverdieping (Marcel vroeg ernaar; ook de referentieplaat
+  heeft er een, op palen, met een raam erin). Past vooral bij de huizen met twee lagen.
 - **Niets is waterpas** in alles, en per zaad anders: plattegrond, verdiepingen, materiaal en
   ouderdom, zodat geen twee huizen op elkaar lijken.
 - **Het blijft bruikbaar:** elk huis komt in `tegels/gebouwen.tsx` met de goede voetafdruk en het

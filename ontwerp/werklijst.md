@@ -36,7 +36,7 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 2. **Materiaal.** Klaar als er planken, vlechtwerk en blokhut zijn naast vakwerk en veldsteen, en
    spanen, leien en pannen naast riet.
 3. **Uitbouwen.** Klaar als dakkapellen in het riet opgaan, en er erkers, aanbouwen, buitentrappen,
-   luiken, bloembakken en schoorstenen zijn.
+   luiken, bloembakken, schoorstenen en houten balkonnetjes zijn.
 4. **In gebruik.** Klaar als de nieuwe huizen in `gebouwen.tsx` staan met de goede voet en het goede
    anker, achteraan in de volgorde, en het dorp ermee getekend kan worden.
 
