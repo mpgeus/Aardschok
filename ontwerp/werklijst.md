@@ -95,6 +95,8 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 
 - **Kringen en leeftijd:** de beste speler krijgt nu de minste spreuken. Kiezen uit de vier
   richtingen in `spreuken.md`. Moet vóór het verdorren besloten zijn.
+- **Kinderkopjes** in plaats van platte kasseien: bolle ronde keien met mos in de voegen. Zie
+  `beeld.md`. Alleen de tekening van `rand.tsx` verandert, dus bestaande paden gaan vanzelf mee.
 - **Windwijzer en schoorsteenrook** als losse elementen, zodat ze met de wind meebewegen.
 - **Lage begroeiing op de erfkaart:** grassprieten, varens en bloemen staan er nog niet op.
 - **Bewegende omgeving:** vlammen, water, stof in het licht.

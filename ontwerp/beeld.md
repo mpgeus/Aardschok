@@ -230,6 +230,17 @@ het hoogtesysteem, wegwijzers (horen bij "de doelen zijn zichtbaar"), tent en ka
 questplekken, een stenen brug naast onze houten, en meer grondsoorten — elke soort erbij is een
 terreinset erbij.
 
+### Kinderkopjes in plaats van kasseien (Marcel, 21 sep 2026)
+
+"Mooie stenen straatjes, kinderkopjes zoals ze die hier noemen." Onze kasseien zijn platte,
+gezaagde stenen; kinderkopjes zijn bolle, ronde veldkeien. Elk een bolletje dat bovenop het licht
+vangt, met diepe donkere voegen, mos en gras ertussen, niet op een rij (zie "Niets is waterpas"),
+en in een straat vaak een goot van platte stenen in het midden waar het regenwater doorloopt.
+
+Het zijn dezelfde tegels in `tegels/rand.tsx`, alleen met een andere tekening, dus de paden die
+Marcel al heeft geschilderd worden vanzelf kinderkopjes. De volgorde en het aantal tegels blijven
+gelijk (`kaarten.md`, "Een tegelnummer verandert nooit").
+
 ## Wat er staat (20 sep 2026)
 
 Klaar en in `gereedschap/pixelart/`, met een exportscript per onderdeel:
