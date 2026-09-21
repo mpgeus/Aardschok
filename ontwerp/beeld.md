@@ -70,6 +70,12 @@ verschillend. Wat de nieuwe bouwer moet kunnen, in Marcels woorden en daarna uit
   met een eenzijdig dak, een buitentrap, luiken, bloembakken, schoorstenen, en **een houten
   balkonnetje of galerij** langs de bovenverdieping (Marcel vroeg ernaar; ook de referentieplaat
   heeft er een, op palen, met een raam erin). Past vooral bij de huizen met twee lagen.
+- **Een tuintje erbij** (Marcel, 21 sep 2026), maar **in losse stukken, niet vast aan het huis:**
+  een hek in stukken met een hekje, rijen groente, een kruidenbed, bloemen langs de muur, een
+  bankje, een regenton. Marcel zet ze zelf neer in Tiled. Dan krijgt elk huis een andere tuin, en
+  omdat elk stuk op zijn eigen tegel staat, klopt voor- en achterlangs lopen ook — een tuin die in
+  het huis gebakken zit, zou juist daar misgaan. Ook niet waterpas: een hek staat scheef, een rij
+  kool loopt net niet recht.
 - **Niets is waterpas** in alles, en per zaad anders: plattegrond, verdiepingen, materiaal en
   ouderdom, zodat geen twee huizen op elkaar lijken.
 - **Het blijft bruikbaar:** elk huis komt in `tegels/gebouwen.tsx` met de goede voetafdruk en het
