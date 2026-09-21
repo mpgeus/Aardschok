@@ -10,6 +10,12 @@ iets laadt. Alleen binnenkanten (de toren, straks huizen, kelders en mijnen) zij
 waar je door een deur in gaat; dat volgt uit "Buiten leest, binnen speelt" hieronder, want een
 binnenkant is groter dan het huis van buiten. Hoe dat in Tiled gaat, staat in `kaarten.md`.
 
+**Een huis in: door de deur naar een aparte kaart** (Marcel, 21 sep 2026), zoals in Stardew
+Valley — even zwart, en je staat binnen. Niet zoals Fallout 1 en 2, waar het dak wegvalt en het
+interieur op dezelfde kaart ligt: dat zou een binnenkant precies zo groot maken als het huis van
+buiten, en dan kan een smidse of een herberg niet de ruimte krijgen die hij nodig heeft om in te
+spelen. De toren is hoe dan ook apart, want die bestaat uit verdiepingen boven elkaar.
+
 ## De indeling van de wereld (Marcel, 20 sep 2026)
 
 Drie gebieden, en je reist ertussen:
