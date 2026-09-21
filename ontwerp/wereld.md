@@ -2,6 +2,14 @@
 
 De klim en het herstel van de toren staan in `toren.md`; het tekenen van kaarten in `kaarten.md`.
 
+## Eén doorlopende wereld, zonder overgangen (Marcel, 21 sep 2026)
+
+"Uiteindelijk wil ik één doorlopende wereld eigenlijk — geen overgangen zeg maar." Het erf, het
+bos en het dorp liggen op één doek: je loopt van je toren door het bos het dorp in zonder dat er
+iets laadt. Alleen binnenkanten (de toren, straks huizen, kelders en mijnen) zijn aparte kaarten
+waar je door een deur in gaat; dat volgt uit "Buiten leest, binnen speelt" hieronder, want een
+binnenkant is groter dan het huis van buiten. Hoe dat in Tiled gaat, staat in `kaarten.md`.
+
 ## De indeling van de wereld (Marcel, 20 sep 2026)
 
 Drie gebieden, en je reist ertussen:

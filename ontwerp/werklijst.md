@@ -18,9 +18,12 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## Direct daarna
 
-- **Paden met randtegels op het erf.** De erfkaart legt zijn paden nog met de oude vierkante
-  grondtegels, dus ze hebben trapjesranden. Klaar als `erf-kaart.cjs` paden en beek legt met de
-  terreinsets uit `rand.tsx` (zoals `randtegels-proef.cjs` dat al doet), met karrensporen.
+- **Eén doorlopende wereld.** Klaar als `kaarten/wereld.tmj` de hele buitenwereld is: het erf (één
+  keer gemaakt, met randtegels in plaats van de oude vierkante grond) en Marcels dorp op één doek,
+  met ruimte voor het bos ertussen; de deur van de toren uitkomt op het erf in die wereld; er geen
+  overgangen meer zijn tussen erf, bos en dorp; en Marcel verder tekent in dat ene bestand. Zie
+  `kaarten.md`, "Buiten is één grote kaart". Pas na de voetafdrukken, want die zitten in dezelfde
+  bestanden.
 
 
 ## Marcel, tegelijk

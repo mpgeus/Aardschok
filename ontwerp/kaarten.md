@@ -61,6 +61,26 @@ kaart is vanzelf een gebied, maar het erf heeft nog geen weg ernaartoe: zeg welk
 dan komt er een pad vanaf het erf. Tot die tijd kun je er in de browserconsole heen springen met
 `Toren.debug.gaNaar('dorp')`.
 
+## Buiten is één grote kaart (21 sep 2026)
+
+Marcel wil één doorlopende wereld (zie `wereld.md`). Tiled heeft daar een "World"-functie voor die
+losse kaarten naast elkaar legt, maar die kiezen we niet:
+
+- **Terrein werkt niet over de naad tussen twee kaarten.** Loopt een pad of beek van de ene kaart
+  de andere in, dan weet Tiled aan de rand niet wat aan de overkant ligt, en krijg je op elke grens
+  een harde snede in de randen die we net hebben opgelost.
+- Een World legt kaarten neer als rechthoeken in pixels; onze kaarten zijn ruiten, en de
+  documentatie zegt niets over isometrisch. Dat is een risico zonder reden.
+
+Dus: **`kaarten/wereld.tmj` is de hele buitenwereld, op één doek.** Tiled laat alles tegelijk
+zien, paden en beken lopen door, en het spel tekent al alleen wat in beeld is, dus de grootte is
+geen probleem. Binnenkanten blijven aparte kaarten met een deur als overgang.
+
+**Het erf wordt daarbij één keer gemaakt en dan van Marcel.** `erf-kaart.cjs` maakte het erf elke
+keer opnieuw uit de scène van de toren; in één grote kaart zet het het erf er één keer in (met
+randtegels in plaats van de oude vierkante grond), en daarna tekent Marcel alles buiten zelf. De
+meester en de wolf zijn dan objecten die hij kan verplaatsen, zoals elk ander wezen.
+
 ## De kaarten tekenen we in een editor (Marcel, 20 sep 2026)
 
 Claude elke boom laten neerzetten kost te veel. De wereld wordt dus in een kaarteditor getekend.
