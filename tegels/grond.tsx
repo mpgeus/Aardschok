@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="grond" tilewidth="64" tileheight="32" tilecount="58" columns="4">
+<tileset version="1.10" tiledversion="1.11.0" name="grond" tilewidth="64" tileheight="32" tilecount="160" columns="4">
  <properties>
-  <property name="notitie" value="Elke grondsoort (gras/zandpad/kasseien) staat eerst als stempel van 4×4 tegels (groep &quot;stempel&quot;): sleep dat blok in de tileset in één keer op de kaart en herhaal het, dan valt de herhaling niet meer op. Daarna een paar losse tegels (groep &quot;los&quot;, ook water): die mag je er individueel tussen strooien, bijvoorbeeld met Tiled se stempel-op-toeval."/>
+  <property name="notitie" value="Elke grondsoort (gras/zandpad/kasseien) staat eerst als stempel van 4×4 tegels (groep &quot;stempel&quot;): sleep dat blok in de tileset in één keer op de kaart en herhaal het, dan valt de herhaling niet meer op. Daarna een paar losse tegels (groep &quot;los&quot;, ook water): die mag je er individueel tussen strooien, bijvoorbeeld met Tiled se stempel-op-toeval. Tegels zonder naam, verderop in het vel, zijn gereserveerd voor een grondsoort die er later bij komt — laat ze met rust."/>
  </properties>
- <image source="grond.png" width="256" height="480"/>
+ <image source="grond.png" width="256" height="1280"/>
  <tile id="0">
   <properties>
     <property name="naam" value="gras"/>
@@ -408,6 +408,618 @@
     <property name="naam" value="water"/>
     <property name="vast" type="bool" value="true"/>
     <property name="groep" value="los"/>
+  </properties>
+ </tile>
+ <tile id="58">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="59">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="60">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="61">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="62">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="63">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="64">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="65">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="66">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="67">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="68">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="69">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="70">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="71">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="72">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="73">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="74">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="75">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="76">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="77">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="78">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="79">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="80">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="81">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="82">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="83">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="84">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="85">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="86">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="87">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="88">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="89">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="90">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="91">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="92">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="93">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="94">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="95">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="96">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="97">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="98">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="99">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="100">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="101">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="102">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="103">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="104">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="105">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="106">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="107">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="108">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="109">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="110">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="111">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="112">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="113">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="114">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="115">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="116">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="117">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="118">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="119">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="120">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="121">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="122">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="123">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="124">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="125">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="126">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="127">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="128">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="129">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="130">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="131">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="132">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="133">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="134">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="135">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="136">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="137">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="138">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="139">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="140">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="141">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="142">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="143">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="144">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="145">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="146">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="147">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="148">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="149">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="150">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="151">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="152">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="153">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="154">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="155">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="156">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="157">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="158">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="159">
+  <properties>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
   </properties>
  </tile>
 </tileset>

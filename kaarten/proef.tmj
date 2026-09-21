@@ -17,11 +17,11 @@
    "source": "../tegels/grond.tsx"
   },
   {
-   "firstgid": 59,
+   "firstgid": 161,
    "source": "../tegels/bomen.tsx"
   },
   {
-   "firstgid": 66,
+   "firstgid": 193,
    "source": "../tegels/gebouwen.tsx"
   }
  ],
@@ -172,7 +172,7 @@
      "visible": true,
      "rotation": 0,
      "name": "eik",
-     "gid": 59,
+     "gid": 161,
      "x": 288,
      "y": 64,
      "width": 346,
@@ -184,7 +184,7 @@
      "visible": true,
      "rotation": 0,
      "name": "den",
-     "gid": 61,
+     "gid": 163,
      "x": 320,
      "y": 128,
      "width": 346,
@@ -196,7 +196,7 @@
      "visible": true,
      "rotation": 0,
      "name": "vakwerkhuis",
-     "gid": 66,
+     "gid": 193,
      "x": 32,
      "y": 32,
      "width": 648,

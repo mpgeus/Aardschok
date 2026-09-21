@@ -19,7 +19,9 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const zlib = require('zlib');
 const K = require('./kern.cjs');
+const { vasteVolgordeEnCapaciteit: vasteVolgordeEnCapaciteitBasis } = require('./vaste-volgorde.cjs');
 const D = require('./dorp.cjs');
 const P = require('./dorp2.cjs');
 const Bm = require('./bomen.cjs');
@@ -40,6 +42,50 @@ function veilig(naam, f) {
     console.warn(`  overgeslagen: ${naam} (${e.message})`);
     return null;
   }
+}
+
+// ---------------------------------------------------------------- vaste volgorde, vaste capaciteit
+//
+// Tiled slaat per kaart alleen een beginnummer (firstgid) per tegelvel op; alle nummers erna
+// liggen dus vast zodra Marcel een kaart met de hand tekent. Groeit een vel later (een boom of
+// een huis erbij), dan schoof vroeger alles wat erna kwam mee — dat overkwam gebouwen.tsx op
+// 20 sep 2026 (van 15 naar 27 tegels, met de twaalf nieuwe huizen midden in de lijst in plaats
+// van achteraan) en eerder al rand.tsx (van 246 naar 262 tegels, zie test/kaart.test.cjs). Twee
+// regels lossen dat voorgoed op, voor altijd:
+//
+//  1. Vaste volgorde: elk vel houdt in tegels/<vel>.volgorde.json bij welke tegel bij welk
+//     nummer hoort (vasteVolgordeEnCapaciteit hieronder). Een tegel die de code nu levert maar
+//     nog niet in dat bestand staat, komt er ACHTERAAN bij — nooit ertussen, ook niet als de
+//     code zelf hem ergens in het midden van zijn eigen lijst produceert (zie gebouwenLijst).
+//     Verdwijnt een tegel uit de code (een boom die niet meer bestaat), dan houdt hij zijn
+//     plaats als lege cel: er wordt nooit opgeschoven.
+//  2. Vaste capaciteit: elk vel wordt aangevuld met lege cellen tot een vast aantal (tilecount),
+//     zodat dat aantal niet verandert als er een tegel bijkomt — en dus ook de vellen die in een
+//     kaart NA dit vel staan hun nummer houden. De marges hieronder zijn ruim: bij gebouwen kwam
+//     er vandaag in één keer twaalf bij, en 96 is nog niet eens vier keer zoveel als er nu al in
+//     zit.
+//
+// Beide gelden niet voor tegels/rand.tsx: dat vel komt uit randtegels.cjs (npm run randtegels),
+// een eigen script met een eigen agent. Zijn volgorde ligt al vast zolang niemand de lijsten
+// SOORTEN/PAREN daar herschikt (een nieuw paar komt er vanzelf achteraan bij, zie de toelichting
+// daar); zijn capaciteit vullen we hieronder aan zonder dat script aan te raken, zie
+// RAND_CAPACITEIT en padRandTegels() verderop.
+const VELCONFIG = {
+  grond: { capaciteit: 160, kolommen: 4 }, // nu 58 (3 grondsoorten × 19 + water): vijf soorten erbij kan
+  bomen: { capaciteit: 32, kolommen: 8 }, // nu 7: vijfentwintig boomsoorten erbij kan
+  begroeiing: { capaciteit: 40, kolommen: 8 }, // nu 10: dertig planten erbij kan
+  gebouwen: { capaciteit: 96, kolommen: 8 }, // nu 27, en daar kwamen er vandaag al twaalf van: een heel dorp moet erin passen
+  toren: { capaciteit: 8, kolommen: 4 }, // nu 1 (er is er maar één); een beetje lucht is vrijwel gratis
+  erf: { capaciteit: 24, kolommen: 8 }, // nu 7: nog een stuk of zeventien erfstukken erbij kan
+};
+
+// items: [{ key, ...eigen velden zoals `plaat` }]. `key` is de identiteit die nooit meer
+// verandert — meestal gewoon de naam, behalve bij grond, waar "gras" negentien keer voorkomt en
+// dus een fijnere sleutel nodig heeft (zie bouwGrondVel). De eigenlijke logica staat in
+// vaste-volgorde.cjs, een eigen bestand zonder dorp.cjs/bomen.cjs erbij, zodat
+// test/tegelvolgorde.test.cjs hem kan toetsen zonder ook maar één tegel te hoeven renderen.
+function vasteVolgordeEnCapaciteit(veldNaam, items, capaciteit, kolommen) {
+  return vasteVolgordeEnCapaciteitBasis(TEGELS, veldNaam, items, capaciteit, kolommen);
 }
 
 // Hoe ver reikt wat er op een plaat getekend is vanaf zijn ankerpunt: [links, boven, rechts,
@@ -89,7 +135,10 @@ function schrijfTsx(vel) {
   x += ` <image source="${vel.bestand}" width="${vel.breedte}" height="${vel.hoogte}"/>\n`;
   vel.tiles.forEach((t, id) => {
     x += ` <tile id="${id}">\n  <properties>\n`;
-    x += eigenschapXml('naam', t.naam);
+    // Een lege cel (t.naam is null: gereserveerd voor een tegel die er later bij komt, zie
+    // vasteVolgordeEnCapaciteit) krijgt een lege naam in plaats van de tekst "null", zodat
+    // naar-kaarten.cjs se wachter hem herkent als leeg.
+    x += eigenschapXml('naam', t.naam || '');
     x += eigenschapXml('vast', !!t.vast);
     if (t.beslaat) x += eigenschapXml('beslaat', `${t.beslaat[0]}x${t.beslaat[1]}`);
     if (t.groep) x += eigenschapXml('groep', t.groep);
@@ -156,6 +205,7 @@ function snijTegel(lapPlaat, tegelsB, tx, ty) {
 }
 
 function bouwGrondVel() {
+  const { capaciteit, kolommen } = VELCONFIG.grond;
   const soorten = [];
   for (const [naam, kaart, vast] of GROND) {
     const gelukt = veilig(naam, () => {
@@ -172,30 +222,31 @@ function bouwGrondVel() {
   // hetzelfde golft.
   const water = veilig('water', () => grondLap(D.grondKaart({ vast: D.WATER }), 1, 1, 0, 0, 0));
 
-  const kolommen = STEMPEL;
-  const tiles = [];
-  const platen = [];
-  for (const s of soorten) {
-    for (const p of s.stempel) { tiles.push({ naam: s.naam, vast: s.vast, groep: 'stempel' }); platen.push(p); }
-  }
-  for (const s of soorten) {
-    for (const p of s.los) { tiles.push({ naam: s.naam, vast: s.vast, groep: 'los' }); platen.push(p); }
-  }
-  if (water) { tiles.push({ naam: 'water', vast: true, groep: 'los' }); platen.push(water); }
+  // Elke losse tegel krijgt een sleutel die nooit verandert: <soort>#stempel#<i> of
+  // <soort>#los#<i> ("gras" alleen is geen goede sleutel — die naam komt negentien keer voor).
+  // Eerst ALLE stempels (zo blijft elk stempelblok van STEMPEL×STEMPEL een nette rechthoek van
+  // hele rijen, ook als er later een grondsoort bij komt: vasteVolgordeEnCapaciteit rondt af op
+  // een veelvoud van kolommen, dus die komt met een hele nieuwe rij), dan alle losse tegels, dan
+  // het water.
+  const items = [];
+  for (const s of soorten) s.stempel.forEach((p, i) => items.push({ key: `${s.naam}#stempel#${i}`, naam: s.naam, vast: s.vast, groep: 'stempel', plaat: p }));
+  for (const s of soorten) s.los.forEach((p, i) => items.push({ key: `${s.naam}#los#${i}`, naam: s.naam, vast: s.vast, groep: 'los', plaat: p }));
+  if (water) items.push({ key: 'water', naam: 'water', vast: true, groep: 'los', plaat: water });
 
-  const rijen = Math.ceil(platen.length / kolommen);
+  const geordend = vasteVolgordeEnCapaciteit('grond', items, capaciteit, kolommen);
+  const rijen = Math.ceil(capaciteit / kolommen);
   const vel = new K.Plaat(64 * kolommen, 32 * rijen);
-  platen.forEach((p, i) => vel.plak(p, (i % kolommen) * 64, Math.floor(i / kolommen) * 32));
+  geordend.forEach((it, i) => { if (it) vel.plak(it.plaat, (i % kolommen) * 64, Math.floor(i / kolommen) * 32); });
   schrijfPng('grond.png', vel);
   const namen = soorten.map((s) => s.naam).join('/');
   const beschrijving = {
     naam: 'grond', bestand: 'grond.png', breedte: vel.b, hoogte: vel.h,
-    tegelB: 64, tegelH: 32, aantal: platen.length, kolommen, tileoffset: null, objectalignment: false,
-    notitie: `Elke grondsoort (${namen}) staat eerst als stempel van ${STEMPEL}×${STEMPEL} tegels (groep "stempel"): sleep dat blok in de tileset in één keer op de kaart en herhaal het, dan valt de herhaling niet meer op. Daarna een paar losse tegels (groep "los", ook water): die mag je er individueel tussen strooien, bijvoorbeeld met Tiled se stempel-op-toeval.`,
-    tiles,
+    tegelB: 64, tegelH: 32, aantal: geordend.length, kolommen, tileoffset: null, objectalignment: false,
+    notitie: `Elke grondsoort (${namen}) staat eerst als stempel van ${STEMPEL}×${STEMPEL} tegels (groep "stempel"): sleep dat blok in de tileset in één keer op de kaart en herhaal het, dan valt de herhaling niet meer op. Daarna een paar losse tegels (groep "los", ook water): die mag je er individueel tussen strooien, bijvoorbeeld met Tiled se stempel-op-toeval. Tegels zonder naam, verderop in het vel, zijn gereserveerd voor een grondsoort die er later bij komt — laat ze met rust.`,
+    tiles: geordend.map((it) => (it ? { naam: it.naam, vast: it.vast, groep: it.groep } : { naam: null, vast: false })),
   };
   schrijfTsx(beschrijving);
-  console.log(`grond.png  ${vel.b}×${vel.h}  (${platen.length} tegels: ${soorten.map((s) => `${s.naam} ${s.stempel.length}+${s.los.length}`).join(', ')}${water ? ', water 1' : ''})`);
+  console.log(`grond.png  ${vel.b}×${vel.h}  (${items.length} echte tegels van ${capaciteit}: ${soorten.map((s) => `${s.naam} ${s.stempel.length}+${s.los.length}`).join(', ')}${water ? ', water 1' : ''})`);
   return beschrijving;
 }
 
@@ -217,41 +268,44 @@ function renderModel(model, cb, ch, ankerY) {
 
 // naam: de sleutel in Bm (bomen.cjs), zaad: welk exemplaar (1 = het eerste).
 function bouwModelVel(veldNaam, lijst, vastVan) {
+  const { capaciteit, kolommen } = VELCONFIG[veldNaam];
   const RAND_ONDER = 26; // ruimte onder het ankerpunt, voor schaduw/anti-aliasing (zie bosgebied-proef.cjs)
-  const items = [];
+  const gevonden = [];
   for (const naam of lijst) {
     const gelukt = veilig(naam, () => {
       const model = Bm[naam](1);
       const { b, h } = meetModel(model);
       return { naam, model, b, h };
     });
-    if (gelukt) items.push(gelukt);
+    if (gelukt) gevonden.push(gelukt);
   }
-  if (!items.length) return null;
-  const cb = Math.max(...items.map((i) => i.b));
-  const ch = Math.max(...items.map((i) => i.h));
+  if (!gevonden.length) return null;
+  const cb = Math.max(...gevonden.map((i) => i.b));
+  const ch = Math.max(...gevonden.map((i) => i.h));
   const ankerX = Math.round(cb / 2);
   const ankerY = ch - RAND_ONDER;
-  const vel = new K.Plaat(cb * items.length, ch);
-  items.forEach((it, i) => {
+  const items = [];
+  for (const it of gevonden) {
     const p = veilig(it.naam, () => renderModel(it.model, cb, ch, ankerY));
-    if (p) {
-      vel.plak(p, i * cb, 0);
-      it.doos = krapDoos(p, ankerX, ankerY);
-    }
-  });
+    if (p) items.push({ key: it.naam, naam: it.naam, vast: vastVan(it.naam), doos: krapDoos(p, ankerX, ankerY), plaat: p });
+  }
+  if (!items.length) return null;
+  const geordend = vasteVolgordeEnCapaciteit(veldNaam, items, capaciteit, kolommen);
+  const rijen = Math.ceil(capaciteit / kolommen);
+  const vel = new K.Plaat(cb * kolommen, ch * rijen);
+  geordend.forEach((it, i) => { if (it) vel.plak(it.plaat, (i % kolommen) * cb, Math.floor(i / kolommen) * ch); });
   schrijfPng(`${veldNaam}.png`, vel);
   const beschrijving = {
     naam: veldNaam, bestand: `${veldNaam}.png`, breedte: vel.b, hoogte: vel.h,
-    tegelB: cb, tegelH: ch, aantal: items.length,
+    tegelB: cb, tegelH: ch, aantal: geordend.length, kolommen,
     // Het model zet zijn eigen voet altijd op (ankerX, ankerY); "bottom" is dus alleen goed met
     // deze correctie: Tiled schuift het plaatje cb/2−ankerX opzij en ch−ankerY omlaag terug.
     tileoffset: [Math.round(cb / 2) - ankerX, ch - ankerY],
     objectalignment: true,
-    tiles: items.map((it) => ({ naam: it.naam, vast: vastVan(it.naam), doos: it.doos || null })),
+    tiles: geordend.map((it) => (it ? { naam: it.naam, vast: it.vast, doos: it.doos || null } : { naam: null, vast: false })),
   };
   schrijfTsx(beschrijving);
-  console.log(`${veldNaam}.png  ${vel.b}×${vel.h}  (${items.length} tegels)`);
+  console.log(`${veldNaam}.png  ${vel.b}×${vel.h}  (${items.length} echte tegels van ${capaciteit})`);
   return beschrijving;
 }
 
@@ -354,9 +408,10 @@ function gebouwenLijst() {
 }
 
 function bouwGebouwenVel() {
+  const { capaciteit, kolommen } = VELCONFIG.gebouwen;
   const RAND = 6;
   const acht = (n) => Math.ceil(n / 8) * 8;
-  const items = [];
+  const metingen = [];
   for (const [naam, maak] of gebouwenLijst()) {
     const gelukt = veilig(naam, () => {
       const g = maak();
@@ -365,37 +420,41 @@ function bouwGebouwenVel() {
       const beslaat = [Math.max(1, Math.round((v[2] - v[0]) / K.TEGEL)), Math.max(1, Math.round((v[3] - v[1]) / K.TEGEL))];
       return { naam, maak, m, beslaat };
     });
-    if (gelukt) items.push(gelukt);
+    if (gelukt) metingen.push(gelukt);
   }
-  if (!items.length) return null;
-  const links = Math.max(...items.map((i) => i.m.links)) + RAND;
-  const rechts = Math.max(...items.map((i) => i.m.rechts)) + RAND;
-  const boven = Math.max(...items.map((i) => i.m.boven)) + RAND;
-  const onder = Math.max(...items.map((i) => i.m.onder)) + RAND;
+  if (!metingen.length) return null;
+  const links = Math.max(...metingen.map((i) => i.m.links)) + RAND;
+  const rechts = Math.max(...metingen.map((i) => i.m.rechts)) + RAND;
+  const boven = Math.max(...metingen.map((i) => i.m.boven)) + RAND;
+  const onder = Math.max(...metingen.map((i) => i.m.onder)) + RAND;
   const cb = acht(links + rechts);
   const ch = acht(boven + onder);
   const ankerX = links + Math.floor((cb - links - rechts) / 2);
   const ankerY = boven + (ch - boven - onder);
-  const vel = new K.Plaat(cb * items.length, ch);
-  items.forEach((it, i) => {
+
+  const items = [];
+  for (const it of metingen) {
     const p = veilig(it.naam, () => gebouwLos(it.maak(), cb, ch, [ankerX, ankerY], it.m.hoek));
-    if (p) {
-      vel.plak(p, i * cb, 0);
-      // Het anker van een gebouw is zijn achterste voethoek; die ligt een halve tegel boven het
-      // midden van zijn tegel, en het spel tekent op dat midden (zie `anker` onderaan).
-      it.doos = krapDoos(p, ankerX, ankerY + 16);
-    }
-  });
+    if (!p) continue;
+    // Het anker van een gebouw is zijn achterste voethoek; die ligt een halve tegel boven het
+    // midden van zijn tegel, en het spel tekent op dat midden (zie `anker` onderaan).
+    items.push({ key: it.naam, naam: it.naam, vast: true, beslaat: it.beslaat, doos: krapDoos(p, ankerX, ankerY + 16), plaat: p });
+  }
+  if (!items.length) return null;
+  const geordend = vasteVolgordeEnCapaciteit('gebouwen', items, capaciteit, kolommen);
+  const rijen = Math.ceil(capaciteit / kolommen);
+  const vel = new K.Plaat(cb * kolommen, ch * rijen);
+  geordend.forEach((it, i) => { if (it) vel.plak(it.plaat, (i % kolommen) * cb, Math.floor(i / kolommen) * ch); });
   schrijfPng('gebouwen.png', vel);
   const beschrijving = {
     naam: 'gebouwen', bestand: 'gebouwen.png', breedte: vel.b, hoogte: vel.h,
-    tegelB: cb, tegelH: ch, aantal: items.length,
+    tegelB: cb, tegelH: ch, aantal: geordend.length, kolommen,
     tileoffset: [Math.round(cb / 2) - ankerX, ch - ankerY],
     objectalignment: true,
-    tiles: items.map((it) => ({ naam: it.naam, vast: true, beslaat: it.beslaat, doos: it.doos || null })),
+    tiles: geordend.map((it) => (it ? { naam: it.naam, vast: true, beslaat: it.beslaat, doos: it.doos || null } : { naam: null, vast: false })),
   };
   schrijfTsx(beschrijving);
-  console.log(`gebouwen.png  ${vel.b}×${vel.h}  (${items.length} tegels)`);
+  console.log(`gebouwen.png  ${vel.b}×${vel.h}  (${items.length} echte tegels van ${capaciteit})`);
   items.forEach((it) => console.log(`  ${it.naam.padEnd(14)} beslaat ${it.beslaat[0]}x${it.beslaat[1]}`));
   return beschrijving;
 }
@@ -534,12 +593,13 @@ function erfDingLos(naam, opgegeven, bouw, vlak) {
 }
 
 function bouwErfVel(veldNaam, dingen, notitie) {
+  const { capaciteit, kolommen } = VELCONFIG[veldNaam];
   const items = [];
   for (const { naam, voet, vast, bouw, vlak } of dingen) {
     const t0 = Date.now();
     const gelukt = veilig(naam, () => erfDingLos(naam, voet, bouw, vlak));
     if (!gelukt) continue;
-    items.push({ naam, vast, ...gelukt });
+    items.push({ key: naam, naam, vast, ...gelukt });
     console.log(`  ${naam.padEnd(12)} ${gelukt.plaat.b}×${gelukt.plaat.h}  anker ${gelukt.anker.join(',')}  voet ${gelukt.voet.join(',')}  ${Date.now() - t0} ms`);
   }
   if (!items.length) return null;
@@ -551,12 +611,14 @@ function bouwErfVel(veldNaam, dingen, notitie) {
   const onder = Math.max(...items.map((i) => i.plaat.h - i.anker[1]));
   const cb = links + rechts;
   const ch = boven + onder;
-  const vel = new K.Plaat(cb * items.length, ch);
-  items.forEach((it, i) => vel.plak(it.plaat, i * cb + links - it.anker[0], boven - it.anker[1]));
+  const geordend = vasteVolgordeEnCapaciteit(veldNaam, items, capaciteit, kolommen);
+  const rijen = Math.ceil(capaciteit / kolommen);
+  const vel = new K.Plaat(cb * kolommen, ch * rijen);
+  geordend.forEach((it, i) => { if (it) vel.plak(it.plaat, (i % kolommen) * cb + links - it.anker[0], Math.floor(i / kolommen) * ch + boven - it.anker[1]); });
   schrijfPng(`${veldNaam}.png`, vel);
   const beschrijving = {
     naam: veldNaam, bestand: `${veldNaam}.png`, breedte: vel.b, hoogte: vel.h,
-    tegelB: cb, tegelH: ch, aantal: items.length,
+    tegelB: cb, tegelH: ch, aantal: geordend.length, kolommen,
     // Het anker ligt op het midden van de voettegel; Tiled se "bottom" zet het onderste midden van
     // de cel op de tegel, dus corrigeren we daarheen terug (net als bij de bomen en de gebouwen).
     tileoffset: [Math.round(cb / 2) - links, ch - boven],
@@ -569,13 +631,13 @@ function bouwErfVel(veldNaam, dingen, notitie) {
     // `doos`: hoe ver het beeld links, boven, rechts en onder het ankerpunt reikt. De cel is voor
     // alle tegels van een vel even groot (Tiled wil dat zo), maar een bank is geen waslijn; het
     // spel heeft de echte maat nodig om te weten of dit ding iemand verbergt (doorkijk).
-    tiles: items.map((it) => ({
+    tiles: geordend.map((it) => (it ? {
       naam: it.naam, vast: it.vast, beslaat: [it.voet[2], it.voet[3]], staat: `${it.voet[0]},${it.voet[1]}`,
       doos: [it.anker[0], it.anker[1], it.plaat.b - it.anker[0], it.plaat.h - it.anker[1]],
-    })),
+    } : { naam: null, vast: false })),
   };
   schrijfTsx(beschrijving);
-  console.log(`${veldNaam}.png  ${vel.b}×${vel.h}  (${items.length} tegels)`);
+  console.log(`${veldNaam}.png  ${vel.b}×${vel.h}  (${items.length} echte tegels van ${capaciteit})`);
   return beschrijving;
 }
 
@@ -629,7 +691,9 @@ function leesVelUitTsx(veldNaam) {
     tiles[Number(m[1])] = tileUitXml(m[2]);
   }
   const aantal = Number(attr(kop, 'tilecount')) || tiles.length;
-  for (let i = 0; i < aantal; i++) if (!tiles[i]) tiles[i] = { naam: veldNaam, vast: false };
+  // Een gat (geen <tile>-blok voor dit id) is een lege cel, geen tegel die toevallig "de naam
+  // van het vel" draagt: anders zou naar-kaarten.cjs se wachter zo'n lege cel niet herkennen.
+  for (let i = 0; i < aantal; i++) if (!tiles[i]) tiles[i] = { naam: '', vast: false };
   const vel = {
     naam: veldNaam,
     bestand: attr(beeld, 'source'),
@@ -645,6 +709,147 @@ function leesVelUitTsx(veldNaam) {
   };
   console.log(`${veldNaam}.tsx  ${vel.breedte}×${vel.hoogte}  (${aantal} tegels, ingelezen — gemaakt door een eigen script)`);
   return vel;
+}
+
+// ---------------------------------------------------------------- rand: vaste capaciteit zonder
+// randtegels.cjs aan te raken
+//
+// rand.tsx/rand.png komen uit randtegels.cjs (npm run randtegels), een eigen script met een eigen
+// agent (zie hierboven). Zijn VOLGORDE ligt al vast zolang niemand de lijsten SOORTEN/PAREN daar
+// herschikt: elke terreinset levert zijn veertien hoekcombinaties in een vaste volgorde, en een
+// nieuw paar of een nieuwe grondsoort komt er vanzelf aan het EIND van tiles/platen bij (zie
+// bouw() daar). Wat randtegels.cjs niet uit zichzelf doet, is een vaste CAPACITEIT: tilecount is
+// er elke keer precies het echte aantal. Dat vullen we hier aan — na het lezen, en zonder
+// randtegels.cjs zelf aan te raken — door rand.tsx en rand.png een stuk te vergroten met lege
+// cellen.
+//
+// rand is verreweg het grootste vel en groeit het snelst: één nieuw PAREN-paar levert in één klap
+// 14 hoekcombinaties × 4 varianten = 56 tegels op. Met de huidige vier grondsoorten liggen er nog
+// twee paren niet vast (zandpad-water, kasseien-water: samen 112), en een hele nieuwe grondsoort
+// met volledige koppeling aan de bestaande vier kost in één klap 4×56+8 = 232. 600 is dus geen
+// overdreven marge: dat is nog niet eens twee van zulke stappen boven de huidige 262.
+const RAND_CAPACITEIT = 600;
+
+// Precies de omkering van K.png (kern.cjs): 8-bit RGBA, geen filter (filterbyte 0), één IDAT. We
+// lezen geen pixel uit om te "begrijpen" wat erop staat — de bestaande rijen kopiëren we als ruwe
+// bytes één-op-één mee naar een groter canvas, en de nieuwe rijen blijven overal nul. Dat is
+// precies hoe K.png een lege cel van een Plaat toch al zou wegschrijven (Plaat.rgba: een cel
+// zonder tekening is (0,0,0,0)), dus verandert er aan bestaande tegels pixel voor pixel niets. De
+// twee kleine helpers hieronder (crc32/chunk) staan ook al in kern.cjs, maar daar niet naar
+// buiten toe geëxporteerd — hier gekopieerd om kern.cjs niet aan te hoeven raken.
+const PNG_CRC = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+    t[n] = c >>> 0;
+  }
+  return t;
+})();
+function pngCrc32(buf) {
+  let c = 0xffffffff;
+  for (const b of buf) c = PNG_CRC[(c ^ b) & 0xff] ^ (c >>> 8);
+  return (c ^ 0xffffffff) >>> 0;
+}
+function pngChunk(type, data) {
+  const len = Buffer.alloc(4);
+  len.writeUInt32BE(data.length);
+  const td = Buffer.concat([Buffer.from(type, 'ascii'), data]);
+  const crc = Buffer.alloc(4);
+  crc.writeUInt32BE(pngCrc32(td));
+  return Buffer.concat([len, td, crc]);
+}
+
+// Vergroot een PNG die door K.png geschreven is tot `nieuweHoogte` (méér rijen, zelfde breedte),
+// met alleen doorzichtige pixels erbij. Gooit een duidelijke fout in plaats van te gokken zodra
+// het bestand er niet exact zo uitziet als verwacht (bijvoorbeeld met de hand bewerkt, of met een
+// ander programma dan K.png weggeschreven).
+function vergrootPngHoogte(pngPad, breedte, huidigeHoogte, nieuweHoogte) {
+  const buf = fs.readFileSync(pngPad);
+  if (buf.readUInt32BE(0) !== 0x89504e47) throw new Error(`${pngPad}: geen PNG (verkeerde signature)`);
+  let o = 8;
+  let ihdr = null;
+  const idatDelen = [];
+  while (o < buf.length) {
+    const len = buf.readUInt32BE(o);
+    const type = buf.toString('ascii', o + 4, o + 8);
+    const data = buf.subarray(o + 8, o + 8 + len);
+    if (type === 'IHDR') ihdr = data;
+    else if (type === 'IDAT') idatDelen.push(data);
+    o += 12 + len;
+  }
+  if (!ihdr) throw new Error(`${pngPad}: geen IHDR-blok gevonden`);
+  const breedteInBeeld = ihdr.readUInt32BE(0);
+  const hoogteInBeeld = ihdr.readUInt32BE(4);
+  const bitdiepte = ihdr[8];
+  const kleurtype = ihdr[9];
+  if (breedteInBeeld !== breedte || hoogteInBeeld !== huidigeHoogte) {
+    throw new Error(`${pngPad}: is ${breedteInBeeld}×${hoogteInBeeld}, verwacht ${breedte}×${huidigeHoogte} — draai npm run randtegels opnieuw`);
+  }
+  if (bitdiepte !== 8 || kleurtype !== 6) {
+    throw new Error(`${pngPad}: bitdiepte ${bitdiepte} kleurtype ${kleurtype}, verwacht 8-bit RGBA zoals K.png dat schrijft — is dit met de hand bewerkt?`);
+  }
+  const raw = zlib.inflateSync(Buffer.concat(idatDelen));
+  const rijLengte = breedte * 4 + 1;
+  if (raw.length !== rijLengte * huidigeHoogte) {
+    throw new Error(`${pngPad}: ${raw.length} bytes uitgepakt, verwacht ${rijLengte * huidigeHoogte}`);
+  }
+  for (let y = 0; y < huidigeHoogte; y++) {
+    if (raw[y * rijLengte] !== 0) throw new Error(`${pngPad}: rij ${y} heeft filterbyte ${raw[y * rijLengte]}, verwacht 0 — dit komt niet zomaar uit K.png`);
+  }
+  const nieuw = Buffer.concat([raw, Buffer.alloc(rijLengte * (nieuweHoogte - huidigeHoogte))]);
+  const nieuweIhdr = Buffer.from(ihdr);
+  nieuweIhdr.writeUInt32BE(nieuweHoogte, 4);
+  const png = Buffer.concat([
+    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+    pngChunk('IHDR', nieuweIhdr),
+    pngChunk('IDAT', zlib.deflateSync(nieuw, { level: 9 })),
+    pngChunk('IEND', Buffer.alloc(0)),
+  ]);
+  fs.writeFileSync(pngPad, png);
+}
+
+// Vult tegels/rand.tsx (en zo nodig rand.png) aan met lege cellen tot RAND_CAPACITEIT. Haalt
+// eerst een eerdere opvulling weg (aan de lege naam te herkennen) en telt dan de echte tegels
+// opnieuw: zo werkt dit ook goed na een nieuwe npm run randtegels (dan is er geen eerdere
+// opvulling) en na een latere wijziging van RAND_CAPACITEIT zelf.
+function padRandTegels() {
+  const tsxPad = path.join(TEGELS, 'rand.tsx');
+  const pngPad = path.join(TEGELS, 'rand.png');
+  if (!fs.existsSync(tsxPad) || !fs.existsSync(pngPad)) return; // leesVelUitTsx klaagt hier al over
+
+  const legeTileRe = / <tile id="\d+"><properties><property name="naam" value=""\/><property name="vast" type="bool" value="false"\/><\/properties><\/tile>\n/g;
+  let xml = fs.readFileSync(tsxPad, 'utf8').replace(legeTileRe, '');
+
+  const nEcht = (xml.match(/<tile id="\d+">/g) || []).length;
+  const kop = xml.slice(xml.indexOf('<tileset'), xml.indexOf('>', xml.indexOf('<tileset')));
+  const kolommen = Number(attr(kop, 'columns'));
+  const beeldKop = xml.slice(xml.indexOf('<image'), xml.indexOf('>', xml.indexOf('<image')) + 1);
+  const breedte = Number(attr(beeldKop, 'width'));
+  const huidigeHoogte = Number(attr(beeldKop, 'height'));
+
+  if (nEcht > RAND_CAPACITEIT) {
+    fs.writeFileSync(tsxPad, xml); // wel de weggehaalde oude opvulling laten staan weg
+    console.warn(`  let op: rand.tsx heeft ${nEcht} echte tegels, meer dan RAND_CAPACITEIT (${RAND_CAPACITEIT}) in naar-tiled.cjs — verhoog die eerst, anders schuiven de vellen na rand in een kaart op`);
+    return;
+  }
+
+  let nieuweTiles = '';
+  for (let id = nEcht; id < RAND_CAPACITEIT; id++) {
+    nieuweTiles += ` <tile id="${id}"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>\n`;
+  }
+  const wangsetsAt = xml.indexOf(' <wangsets>');
+  if (wangsetsAt < 0) throw new Error(`${tsxPad}: geen <wangsets> gevonden — is dit nog wel het bestand dat randtegels.cjs schrijft?`);
+  xml = xml.slice(0, wangsetsAt) + nieuweTiles + xml.slice(wangsetsAt);
+  xml = xml.replace(/tilecount="\d+"/, `tilecount="${RAND_CAPACITEIT}"`);
+
+  const rijenNodig = Math.ceil(RAND_CAPACITEIT / kolommen);
+  const nieuweHoogte = rijenNodig * 32;
+  xml = xml.replace(/(<image[^>]*\bheight=")\d+(")/, `$1${nieuweHoogte}$2`);
+  fs.writeFileSync(tsxPad, xml);
+
+  if (nieuweHoogte > huidigeHoogte) vergrootPngHoogte(pngPad, breedte, huidigeHoogte, nieuweHoogte);
+  console.log(`rand.tsx aangevuld: ${nEcht} echte tegels, lege cellen tot ${RAND_CAPACITEIT} (${kolommen}×${rijenNodig}, rand.png nu ${breedte}×${nieuweHoogte})`);
 }
 
 // ---------------------------------------------------------------- alles samen, en het zijspoor
@@ -664,9 +869,12 @@ function leesVelUitTsx(veldNaam) {
 const GEVRAAGD = process.argv.slice(2).filter((a) => !a.startsWith('-'));
 const wil = (naam) => !GEVRAAGD.length || GEVRAAGD.includes(naam);
 
+// rand komt uit randtegels.cjs; hier vullen we hem aan tot RAND_CAPACITEIT (zie padRandTegels
+// hierboven) en lezen we daarna pas zijn .tsx in, zodat tegels.json de aangevulde staat krijgt.
+if (wil('rand')) padRandTegels();
+
 const velden = [
   wil('grond') && bouwGrondVel(),
-  // rand komt uit randtegels.cjs; hier wordt alleen zijn .tsx ingelezen (zie hierboven).
   wil('rand') && leesVelUitTsx('rand'),
   wil('bomen') && bouwModelVel('bomen', BOMEN, BOMEN_VAST),
   wil('begroeiing') && bouwModelVel('begroeiing', BEGROEIING, (n) => !!BEGROEIING_VAST[n]),
