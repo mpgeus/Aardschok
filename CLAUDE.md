@@ -74,6 +74,9 @@ lang hij leeft. Daaruit volgt, van meest naar minst effect:
   kost dan meer aan opstarten dan het werk zelf.
 - **Een opdracht aan een agent verwijst naar deze paragraaf** in plaats van hem te herhalen, en
   naar één punt uit `ontwerp/werklijst.md` plus het ene ontwerpbestand dat erbij hoort.
+- **Nooit `git stash` of `git checkout` op de werkmap** als er meer agents tegelijk werken: dat zet
+  hun werk opzij of gooit het weg. Wie wil meten hoe het vóór een wijziging was, maakt een losse
+  kopie met `git worktree add`.
 - **De werklijst blijft kort:** onder "Af" staan alleen de laatste twee weken; ouder staat in
   `git log`.
 
