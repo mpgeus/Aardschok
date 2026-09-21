@@ -70,6 +70,12 @@ lang hij leeft. Daaruit volgt, van meest naar minst effect:
   vond het al gebouwd; hij schreef er toen toetsen omheen. Nuttig, maar een goedkope zoekopdracht
   vooraf had dat ook laten zien.
 - **Niet meer dan twee agents tegelijk die renderen.**
+- **Een kleine precieze klus doe je zelf.** Een kleur, één functie, een regel tekst: een agent
+  kost dan meer aan opstarten dan het werk zelf.
+- **Een opdracht aan een agent verwijst naar deze paragraaf** in plaats van hem te herhalen, en
+  naar één punt uit `ontwerp/werklijst.md` plus het ene ontwerpbestand dat erbij hoort.
+- **De werklijst blijft kort:** onder "Af" staan alleen de laatste twee weken; ouder staat in
+  `git log`.
 
 ## Opbouw
 
