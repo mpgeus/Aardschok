@@ -60,7 +60,12 @@ verschillend. Wat de nieuwe bouwer moet kunnen, in Marcels woorden en daarna uit
   met de bovenverdieping die een eindje overkraagt — dat is het middeleeuwse vakwerkhuis bij uitstek.
 - **Wanden:** vakwerk met pleister en veldsteen zijn er; planken, vlechtwerk en een blokhut van
   gestapelde stammen komen erbij.
-- **Daken:** riet is er; spanen, leien en pannen komen erbij, in lagen zoals het riet.
+- **Daken:** riet is er; spanen, leien en pannen komen erbij, in lagen zoals het riet. **Een plat
+  dak** (Marcel vroeg ernaar) alleen op steen, met een borstwering of kantelen eromheen: een
+  wachttoren, een poortgebouw, de toren van een kapel. Op een gewoon huis niet, want in een land
+  met riet en regen zijn daken steil, en een plat dak op vakwerk leest als Zuid-Europa.
+- **Renderen gebeurt één keer:** een huis kost zo'n twintig seconden, maar dat is het maken van het
+  plaatje in het tegelvel. Het spel tekent het daarna af; de speler merkt er niets van.
 - **Uitbouwen:** dakkapellen die zacht in het riet zijn opgenomen, erkers op klossen, een aanbouw
   met een eenzijdig dak, een buitentrap, luiken, bloembakken, schoorstenen.
 - **Niets is waterpas** in alles, en per zaad anders: plattegrond, verdiepingen, materiaal en
