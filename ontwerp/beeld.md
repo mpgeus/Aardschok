@@ -18,6 +18,34 @@
 - **Stijl van Mystic Towers.** De kamer staat als een diorama in het donker, en de voorste muren
   zijn laag weggesneden.
 
+## Niets is waterpas (Marcel, 21 sep 2026)
+
+"Het moet echt aanvoelen. In de middeleeuwen was er geen laserlijn, er was geen waterpas. Dingen
+werden op het oog gedaan. Dingen waren niet perfect, het mag een beetje afwijken. Zo wordt een
+wereld uniek en blijft het spannend." Een dorp vol huizen die we op 21 sep hadden, voelde volgens
+hem "ongelooflijk saai om doorheen te lopen, er zit geen leven in".
+
+Dit is een regel voor **alles wat uit code komt**, niet alleen voor huizen: een computer maakt
+uit zichzelf alles recht, gelijk en herhaald, en dat is precies wat een plek dood maakt.
+
+- **Niets is recht.** Een nok zakt in het midden door, een dakrand golft, een muur helt een fractie,
+  een schoorsteen leunt. Een hek staat scheef, een pad slingert.
+- **Niets is haaks.** Een plattegrond is een fractie scheef, een hoek niet precies negentig graden.
+- **Niets is gelijk.** Elke balk een andere dikte, planken van verschillende breedte, stenen van
+  verschillende maat, ramen op net verschillende hoogtes, een luik dat scheef hangt, een deur die
+  niet helemaal past.
+- **Alles heeft een geschiedenis.** Gelapt riet in een andere kleur, een vervangen plank, een
+  aanbouw die later is aangezet, een muur die met een schoor overeind wordt gehouden.
+- **Maar een beetje.** Het moet op het oog gemaakt lijken, niet kapot of lachwekkend. En het moet
+  op pixelmaat te zien zijn: een doorzakking van een paar pixels, niet een halve pixel die bij het
+  terugbrengen tot pixel art verdwijnt of alleen een rafelige lijn geeft.
+- **Per zaad anders, en vast.** Elk huis is op zijn eigen manier scheef, en dat blijft zo: hetzelfde
+  zaad geeft hetzelfde huis.
+
+Technisch betekent dit dat de huizen uit **ronde vormen** moeten komen (afstandsfuncties, zoals de
+figuren en de toren al doen), niet uit dozen en vlakken. Een doos is per definitie recht; een
+afstandsfunctie kun je laten doorbuigen, uitpuilen en golven.
+
 ## Ontwerpcanvas
 
 https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:
