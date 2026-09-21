@@ -63,6 +63,7 @@
       hover: null,
       handeling: null,
       naLopen: null,
+      regieCamera: null, // waar de camera in een scène naartoe kijkt (js/regie.js); null = de held volgen
     });
     const p = T.naarScherm(held.x, held.y);
     S.camera = { x: p.x, y: p.y - 24 };
@@ -181,6 +182,9 @@
   // beeld, tegelijk met de melding. Buiten is dat het verschil tussen een gevecht dat begint en
   // aangevallen worden door iets wat je niet kunt zien.
   function cameraDoel() {
+    // Een scène kan het beeld ergens anders op richten dan de held (js/regie.js); zonder dat
+    // blijft dit gewoon het gevecht of de held volgen.
+    if (S.regieCamera) return begrensCamera(T.naarScherm(S.regieCamera.x, S.regieCamera.y));
     const aanleiding = S.overgang && S.overgang.aanleiding;
     const lijst = S.gevecht
       ? [S.held, ...S.gevecht.monsters.filter((m) => !m.dood)]
@@ -275,6 +279,12 @@
       if (ev.key === 'Escape') T.sluitDialoog(S);
       return;
     }
+    // Tijdens een scène (js/regie.js) ligt de invoer stil op de overslaan-toets na: de speler
+    // kan niet wegwandelen, maar hoeft ook niet werkeloos toe te kijken.
+    if (S.modus === 'regie') {
+      if (ev.key === 'Escape') T.regie.overslaan();
+      return;
+    }
     if (S.modus !== 'verkennen' && S.modus !== 'gevecht') return;
     const spreuk = T.SPREUK_VOLGORDE.find((id) => T.SPREUKEN[id].toets === ev.key);
     if (spreuk) {
@@ -367,6 +377,22 @@
         for (let k = 0; k < 8; k++) await null;
       }
       T.tekenScene(ctx, S, bw, bh);
+    },
+    // Bewijs dat js/regie.js werkt: Wim loopt naar de fontein, zegt iets, wordt door een kleine
+    // vuurschicht zichtbaar een jaar ouder, en loopt terug. Wim, niet de meester: die staat nog
+    // niet in het spel. Toren.debug.regieProef() in de console van de browser.
+    async regieProef() {
+      const wim = S.wereld.wezens.find((e) => e.soort === 'wim');
+      // Alleen de held heeft normaal een leeftijd (js/wereld.js); voor de proef leent Wim er
+      // hier eentje, zodat T.verouder iets heeft om bij op te tellen.
+      if (wim.leeftijd == null) wim.leeftijd = 97 * 12;
+      await T.regie.speel(S, async () => {
+        await T.regie.loop(wim, 7, 5);
+        await T.regie.zeg(wim, 'Kijk eens, Wim kan ook ouder worden.');
+        await T.regie.tover(wim, 'vuurschicht', { x: 7, y: 6 });
+        await T.regie.loop(wim, 5, 2);
+      });
+      return `Wim is nu ${T.leeftijdTekst(wim.leeftijd)}.`;
     },
   };
 

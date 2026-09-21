@@ -15,26 +15,37 @@
 
   const worp = (b) => b[0] + Math.floor(Math.random() * (b[1] - b[0] + 1));
 
-  // Ouder worden (of, bij de fontein, jonger). Het getal zweeft boven het hoofd, de balk
-  // loopt mee, en wie zo een grens passeert, hoort dat zijn lijf trager wordt.
-  T.verouder = function (S, maanden, uitKlap) {
-    const held = S.held;
-    const apVoor = T.apVoorLeeftijd(held.leeftijd);
-    held.leeftijd = Math.min(T.EINDLEEFTIJD, Math.max(0, held.leeftijd + maanden));
+  // Ouder worden (of, bij de fontein, jonger) — van de held, of, met het vierde argument, van
+  // wie dan ook: de meester veroudert zichtbaar in zijn eigen scène (js/regie.js), lang voordat
+  // de speler het overneemt. Dit is de enige weg naar een leeftijd (CLAUDE.md, De kernregel):
+  // geen tweede functie, want die mist vroeg of laat iets. Voor iedereen geldt de leeftijd zelf,
+  // het zwevende getal boven het hoofd, en sterven op honderd; alleen van de held zijn het
+  // leeftijdspaneel, de beurtvolgorde, de meldingen over actiepunten, de kring en het einde van
+  // het spel (T.heldGevallen) — een ander wezen dat honderd wordt, sterft, maar het spel gaat
+  // door.
+  T.verouder = function (S, maanden, uitKlap, wezen) {
+    const e = wezen || S.held;
+    const isHeld = e === S.held;
+    const apVoor = isHeld ? T.apVoorLeeftijd(e.leeftijd) : 0;
+    e.leeftijd = Math.min(T.EINDLEEFTIJD, Math.max(0, e.leeftijd + maanden));
     // Een kring van spreuken die open is, blijft open, ook als de fontein je jonger maakt.
-    held.kring = Math.max(held.kring || 0, T.kringVoorLeeftijd(held.leeftijd));
-    if (uitKlap) held.flits = 0.3;
-    T.anim.tekst(S, held, T.duurKort(maanden), maanden > 0 ? '#e6d3a3' : '#9fe0a0');
-    T.ui.toonLeeftijd(held);
-    T.ui.toonVolgorde(S);
-    if (held.leeftijd >= T.EINDLEEFTIJD) {
-      held.dood = true;
-      held.sterfTijd = 0;
-      held.pad = [];
-      T.heldGevallen(S);
+    // Alleen de held tovert, dus alleen de held heeft een kring.
+    if (isHeld) e.kring = Math.max(e.kring || 0, T.kringVoorLeeftijd(e.leeftijd));
+    if (uitKlap) e.flits = 0.3;
+    T.anim.tekst(S, e, T.duurKort(maanden), maanden > 0 ? '#e6d3a3' : '#9fe0a0');
+    if (isHeld) {
+      T.ui.toonLeeftijd(e);
+      T.ui.toonVolgorde(S);
+    }
+    if (e.leeftijd >= T.EINDLEEFTIJD) {
+      e.dood = true;
+      e.sterfTijd = 0;
+      e.pad = [];
+      if (isHeld) T.heldGevallen(S);
       return;
     }
-    const apNa = T.apVoorLeeftijd(held.leeftijd);
+    if (!isHeld) return;
+    const apNa = T.apVoorLeeftijd(e.leeftijd);
     if (apNa < apVoor) T.ui.bericht(`Je lijf wordt trager: vanaf nu ${apNa} actiepunten per beurt. Je magie wordt sterker.`, 'gevaar');
     else if (apNa > apVoor) T.ui.bericht(`Je lijf voelt lichter: weer ${apNa} actiepunten per beurt.`, 'goed');
   };
