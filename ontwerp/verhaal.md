@@ -19,14 +19,22 @@
   wijzen, knopen die niemand bereikt, en tekst die niet in het venster past. Opslaan schrijft
   `js/gesprekken.js` terug. **Het proefgesprek gebruikt `js/gesprek.js` zelf,** nooit een eigen
   kopie van de regels — anders liegt het gereedschap vroeg of laat, en dat is erger dan geen
-  gereedschap.
+  gereedschap. **Gebouwd** (20 sep 2026): `gereedschap/gesprekken.html`.
+- **Quests in hetzelfde gereedschap** (Marcel, 21 sep 2026). Een quest en een gesprek zijn niet los
+  te zien: een quest begint in een gesprek, loopt via vlaggen, en eindigt in een gesprek. Daarom
+  één verhaaleditor voor allebei, met als grootste winst het proefgesprek per queststand: "wat zegt
+  de herbergierster als de bakkersquest halverwege is?" De volgorde ligt vast door dezelfde regel
+  als bij de gesprekken: **eerst het questsysteem in het spel, met toetsen, en pas dan het
+  gereedschap erop**, want het gereedschap moet de regels van het spel zelf gebruiken.
 
 ## Personen
 
 - **De tovenaar (84).** Blauw gewaad, hoed met ster, witte baard, staf met gloeiende bol. Wordt
   krommer met de jaren; de punt van zijn hoed zakt om.
-- **Wim.** Zijn vroegere leerling, nu zelf grijs. Schort, pet, brilletje, bezem. Wacht al veertig
-  jaar en zegt "meester".
+- **Wim** (besloten, Marcel 21 sep 2026). **De knecht van de meester.** Hij heeft zijn hele leven
+  voor hem gewerkt, en je erft hem samen met de toren. Nu zelf grijs; schort, pet, brilletje,
+  bezem. Hij rouwt om de meester als die sterft, en is daarna de enige die nog weet hoe het
+  vroeger was. Hij zegt "meester" — eerst tegen hem, en na de dood, aarzelend, tegen jou.
 - **De oude meester (tegen de honderd).** Jouw leermeester, van wie je de toren erft, en die de
   tutorial doet. Krijgt een eigen sprite (Marcel, 20 sep 2026): dezelfde school als de tovenaar,
   maar veertig jaar verder. Voorstel: een wijnrood gewaad in plaats van blauw, een hoed waarvan de
@@ -174,8 +182,6 @@ het is een kwestie van hem `dwaalt`, `thuis` en een straal geven.
 
 ## Open
 
-- **Waar is Wim in de tutorial?** Knecht van de meester, of jouw oude leerling die er al was?
-  Neigt nu naar het eerste, zie hierboven.
 - **Hoe gaat de meester precies dood?** Voorstel hierboven: aan zijn eigen laatste spreuk. Het
   alternatief is dat wat er boven zit hem haalt, maar dan leert de speler de regel niet.
 - **De teksten in het spel gaan nog van het oude begin uit.** `js/main.js` opent met "Je bent

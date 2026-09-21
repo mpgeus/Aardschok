@@ -205,6 +205,35 @@ balkon, dan is er binnen een deur naar dat balkon; staat er een erker, dan zie j
 De maat hoeft niet te kloppen (zie "Buiten leest, binnen speelt" in `wereld.md`), en niemand rekent
 dat na — maar een raam dat aan één kant bestaat en aan de andere niet, valt wél op.
 
+## Quests: waar het goud vandaan komt (21 sep 2026, nog niet gebouwd)
+
+Een quest is net als een gesprek **gegevens, geen code**, zodat Marcel ze kan schrijven. Een schets:
+
+```js
+T.QUESTS = {
+  bakker: {
+    naam: 'De koude oven', gever: 'bakker',
+    fasen: {
+      gevraagd: { doel: 'Er moet vuursteen komen voor de schoorsteen.' },
+      bezig:    { klaarAls: { heeft: 'vuursteen' } },
+      klaar:    { beloning: { goud: 20, vlag: 'oven-warm' } },
+    },
+  },
+};
+```
+
+In een gesprek wordt de stand een gewone voorwaarde (`als: { quest: 'bakker', fase: 'bezig' }`),
+zodat iedereen in het dorp erop kan reageren, niet alleen wie de quest gaf.
+
+Twee regels die uit de kernregel komen:
+
+- **Ook een quest moet de toets van drie antwoorden halen:** minstens drie geloofwaardige
+  manieren, die verschillende dingen kosten. De vuursteen ligt in de mijn (jaren), bij de
+  marskramer (goud), of iemand anders heeft hem en wil er iets voor terug (tijd, of een gunst).
+- **De beloning voedt de verdeelvraag:** goud en grondstoffen, die je aan de toren óf aan jezelf
+  geeft. Een quest die alleen goud oplevert, is minder interessant dan een die je een grondstof
+  geeft waarvan je nog niet weet waar hij heen moet.
+
 ## Wat de kernregel ervan vraagt
 
 - **Goud koopt nooit jaren terug.** Genezen bestaat niet, dus er zijn geen verjongingsdrankjes te
