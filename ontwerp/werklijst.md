@@ -12,9 +12,6 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 - **Meer huizen naar referentie één** — klaar als er zo'n twaalf nieuwe gebouwen zijn die niet op
   elkaar lijken, in `tegels/gebouwen.tsx` met de juiste voetafdruk, en in het spel te tekenen.
-- **Fundering van de tutorial** — klaar als `T.verouder` ook een ander wezen dan de held ouder en
-  jonger kan maken (met sterven maar zonder einde van het spel), en er een regieboek is waarmee
-  een scène leest als gewone code, met een toets om over te slaan.
 
 ## Marcel, tegelijk
 
@@ -84,6 +81,8 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## Af
 
+- 21 sep 2026 — Fundering van de tutorial: `T.verouder` voor elk wezen, en een regieboek
+  (`js/regie.js`) waarin overslaan dezelfde eindtoestand geeft als uitkijken.
 - 21 sep 2026 — De verhaalsamenvatting in `CLAUDE.md` bijgewerkt; Wim is de knecht van de meester.
 - 20 sep 2026 — Sprites in het spel; naar buiten lopen; wereld en dorp op referentie één; de
   toren op 8,7 tegels; randtegels met water en brug; elke kaart een gebied; gesprekken als
