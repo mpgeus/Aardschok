@@ -46,6 +46,29 @@ Technisch betekent dit dat de huizen uit **ronde vormen** moeten komen (afstands
 figuren en de toren al doen), niet uit dozen en vlakken. Een doos is per definitie recht; een
 afstandsfunctie kun je laten doorbuigen, uitpuilen en golven.
 
+### De huizenbouwer op ronde vormen (Marcel, 21 sep 2026)
+
+Het proefhuis (`gereedschap/pixelart/huis-sdf.cjs`, plaat in `uit/proefhuis/vergelijk.png`)
+bewees dat het kan: "ja zeker doen, dit ziet er al zoveel beter uit". Het dikke riet deed het
+meeste, daarna de grove maten; scheef is op spelmaat subtiel, en maakt huizen niet van elkaar
+verschillend. Wat de nieuwe bouwer moet kunnen, in Marcels woorden en daarna uitgewerkt:
+
+- **Plattegronden:** rechthoek, **L** en **T** (en later een U of een binnenplaats). Bij een L of T
+  krijg je waar twee daken elkaar raken een kil, en het riet moet daar doorlopen.
+- **Losse, vrijstaande huizen,** niet alleen rijen.
+- **Verdiepingen:** één laag, anderhalf (een zolder met dakkapellen in het riet), en **twee lagen**,
+  met de bovenverdieping die een eindje overkraagt — dat is het middeleeuwse vakwerkhuis bij uitstek.
+- **Wanden:** vakwerk met pleister en veldsteen zijn er; planken, vlechtwerk en een blokhut van
+  gestapelde stammen komen erbij.
+- **Daken:** riet is er; spanen, leien en pannen komen erbij, in lagen zoals het riet.
+- **Uitbouwen:** dakkapellen die zacht in het riet zijn opgenomen, erkers op klossen, een aanbouw
+  met een eenzijdig dak, een buitentrap, luiken, bloembakken, schoorstenen.
+- **Niets is waterpas** in alles, en per zaad anders: plattegrond, verdiepingen, materiaal en
+  ouderdom, zodat geen twee huizen op elkaar lijken.
+- **Het blijft bruikbaar:** elk huis komt in `tegels/gebouwen.tsx` met de goede voetafdruk en het
+  goede anker (`test/tegelanker.test.cjs` moet slagen), en nieuwe huizen komen **achteraan** in de
+  volgorde (`ontwerp/kaarten.md`, "Een tegelnummer verandert nooit").
+
 ## Ontwerpcanvas
 
 https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:

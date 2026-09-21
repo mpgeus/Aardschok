@@ -26,6 +26,20 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
   bestanden.
 
 
+## Tegelijk: de huizenbouwer op ronde vormen
+
+Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Zie `beeld.md`,
+"De huizenbouwer op ronde vormen".
+
+1. **Vorm.** Klaar als de bouwer elke maat kan, de nok langs beide richtingen, één, anderhalf en
+   twee lagen (met overkraging), en rechthoek, L en T met een doorlopende kil in het riet.
+2. **Materiaal.** Klaar als er planken, vlechtwerk en blokhut zijn naast vakwerk en veldsteen, en
+   spanen, leien en pannen naast riet.
+3. **Uitbouwen.** Klaar als dakkapellen in het riet opgaan, en er erkers, aanbouwen, buitentrappen,
+   luiken, bloembakken en schoorstenen zijn.
+4. **In gebruik.** Klaar als de nieuwe huizen in `gebouwen.tsx` staan met de goede voet en het goede
+   anker, achteraan in de volgorde, en het dorp ermee getekend kan worden.
+
 ## Marcel, tegelijk
 
 - **Kaarten tekenen in Tiled:** het dorp, het bos, de weg ertussen. Elke kaart in `kaarten/` is
