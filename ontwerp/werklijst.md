@@ -10,28 +10,14 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## Loopt nu
 
-- **Plaatje en voetafdruk gelijk.** Marcel liep de schuur en de put in: de plaatjes van het erf
-  en de toren zijn op het midden van hun voet verankerd, het spel zet ze op de achterste hoek, dus
-  elk gebouw staat een halve voet verschoven ten opzichte van waar het blokkeert. Klaar als het
-  rode vlak van de onbegaanbare tegels precies onder de muren ligt, de put zijn echte maat heeft,
-  en een toets dit voortaan vangt.
-
-## Direct daarna
-
-- **Eén doorlopende wereld.** Klaar als `kaarten/wereld.tmj` de hele buitenwereld is: het erf (één
-  keer gemaakt, met randtegels in plaats van de oude vierkante grond) en Marcels dorp op één doek,
-  met ruimte voor het bos ertussen; de deur van de toren uitkomt op het erf in die wereld; er geen
-  overgangen meer zijn tussen erf, bos en dorp; en Marcel verder tekent in dat ene bestand. Zie
-  `kaarten.md`, "Buiten is één grote kaart". Pas na de voetafdrukken, want die zitten in dezelfde
-  bestanden.
-
+- **De huizenbouwer, ronde 1 (vorm)** — zie het blok hieronder.
 
 ## Tegelijk: de huizenbouwer op ronde vormen
 
 Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Zie `beeld.md`,
 "De huizenbouwer op ronde vormen".
 
-1. **Vorm.** Klaar als de bouwer elke maat kan, de nok langs beide richtingen, één, anderhalf en
+1. **Vorm** (loopt). Klaar als de bouwer elke maat kan, de nok langs beide richtingen, één, anderhalf en
    twee lagen (met overkraging), en rechthoek, L en T met een doorlopende kil in het riet.
 2. **Materiaal.** Klaar als er planken, vlechtwerk en blokhut zijn naast vakwerk en veldsteen, en
    spanen, leien en pannen naast riet.
@@ -105,6 +91,11 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 21 sep 2026 — **Eén doorlopende wereld:** `kaarten/wereld.tmj` met het erf (nu met randtegels)
+  en het dorp op één kaart, en een strook ertussen voor het bos; de losse kaarten staan in
+  `kaarten/oud/`. De camera volgt de held altijd, en om elke buitenkaart staat bos. De gebouwen
+  staan op hun voet, en een tegelnummer verandert nooit meer.
 
 - 21 sep 2026 — De meester in het spel: zes houdingen, een eigen leeftijd, en hij scharrelt bij
   zijn moestuin. Meldingen die zich herhalen worden één regel met een teller.
