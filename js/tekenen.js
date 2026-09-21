@@ -56,7 +56,12 @@
 
   // Welke tegels kunnen in die rechthoek iets tekenen? De ruit-projectie draait het raster, dus
   // nemen we de vier hoeken van de (opgerekte) rechthoek en het vak daaromheen.
-  function tegelsIn(w, r) {
+  //
+  // `marge` (in tegels) rekt de grens op waarop dat vak wordt afgeknipt: 0 (de gewone vloeren en
+  // voorwerpen, die niet voorbij de kaart bestaan) knipt precies op de kaart, zoals altijd; de
+  // bosrand hieronder telt zelf zoveel ringen mee als hij diep is.
+  function tegelsIn(w, r, marge) {
+    const m = marge || 0;
     const hoeken = [
       [r.x0 - MARGE.links, r.y0 - MARGE.boven],
       [r.x1 + MARGE.rechts, r.y0 - MARGE.boven],
@@ -75,10 +80,10 @@
       y1 = Math.max(y1, t.y);
     }
     return {
-      x0: Math.max(0, Math.floor(x0)),
-      y0: Math.max(0, Math.floor(y0)),
-      x1: Math.min(w.b - 1, Math.ceil(x1)),
-      y1: Math.min(w.h - 1, Math.ceil(y1)),
+      x0: Math.max(-m, Math.floor(x0)),
+      y0: Math.max(-m, Math.floor(y0)),
+      x1: Math.min(w.b - 1 + m, Math.ceil(x1)),
+      y1: Math.min(w.h - 1 + m, Math.ceil(y1)),
     };
   }
   const inVak = (v, x, y) => x >= v.x0 && x <= v.x1 && y >= v.y0 && y <= v.y1;
@@ -181,6 +186,28 @@
       const groot = v.beslaat && (v.beslaat[0] > 1 || v.beslaat[1] > 1);
       lijst.push({ d: diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: groot ? v : undefined, f: () => tekenVoorwerp(ctx, S, v, helder) });
     }
+    // Het bos om de kaart heen (zie "het bos om de kaart heen" hieronder): dezelfde uitgebreide
+    // vak-berekening als tegelsIn, maar met ringen vóórbij de rand in plaats van eraan afgeknipt.
+    // Doet mee in `zichtbaar`, zodat een boom die de held bedekt net als elk ander hoog voorwerp
+    // wegdooft (werkDoorkijkBij hieronder), en in `lijst`, zodat de gewone dieptesortering hem
+    // netjes voor of achter de held zet.
+    if (w.buiten) {
+      const randVak = tegelsIn(w, zicht, BOSRAND_DIEP);
+      for (let y = randVak.y0; y <= randVak.y1; y++) {
+        for (let x = randVak.x0; x <= randVak.x1; x++) {
+          if (x >= 0 && y >= 0 && x < w.b && y < w.h) continue; // dat hoort al bij de kaart zelf
+          const v = bosrandOp(w, x, y);
+          if (!v) continue;
+          zichtbaar.push(v);
+          // Het item in de tekenlijst hangt aan v zelf en wordt maar één keer gemaakt: v zelf
+          // staat toch al vast in de cache van bosrandOp, dus hoeft dit sluiting-en-object-paar
+          // niet elk beeld opnieuw. Bij honderden bomen in een hoek scheelt dat veel afval voor de
+          // opruimer. ctx en S liggen zelf ook vast (één canvas, één spelstaat, heel de sessie).
+          if (!v.item) v.item = { d: v.x + v.y, l: 1, punt: { x: v.x, y: v.y }, f: () => tekenBosrandBoom(ctx, S, v) };
+          lijst.push(v.item);
+        }
+      }
+    }
     // Doorkijk: wat de held of een wezen bedekt, wordt zolang doorzichtig. De tijd komt uit de
     // spelklok, zodat het ook klopt als het spel even stilstaat of vooruitgespoeld wordt.
     const dt = Math.max(0, Math.min(0.1, S.tijd - (S.doorkijkTijd || 0)));
@@ -254,6 +281,15 @@
   // doen. De toren is het zwaarste geval; die krijgt daarom een tikje meer doorkijk dan de rest.
   const DOORKIJK = 0.4;
   const DOORKIJK_TOREN = 0.3;
+  // De bosrand (zie "het bos om de kaart heen" verderop) staat op een hoek van de kaart soms met
+  // twee dichte randen tegelijk om de held heen, en dan bedekken tien, twintig bomen hem
+  // allemaal tegelijk. Doorzichtigheid stapelt vermenigvuldigend (twee bomen op 0.4 laten samen
+  // nog maar 0.16 van de held zien, bij twintig is dat allang niets meer), dus een kleine waarde
+  // zoals bij de toren lost dat niet op — hoe laag ook, met genoeg bomen erbovenop verdwijnt hij
+  // toch. Eén los ding (de toren) mag zichtbaar blijven doorschemeren; een heel woud aan
+  // verwisselbare achtergrondbomen niet: die vallen daarom helemaal weg zolang ze de held
+  // bedekken, in plaats van te vervagen.
+  const BOSRAND_DOORKIJK = 0;
   const DOORKIJK_TIJD = 0.18; // seconden om op en af te lopen, zodat het niet klappert
   const HOOG_GENOEG = 40; // hoger dan dit boven zijn voet: dan kan er iemand achter verdwijnen
 
@@ -318,7 +354,7 @@
           }
         }
       }
-      const doel = bedekt ? (v.soort === 'toren' ? DOORKIJK_TOREN : DOORKIJK) : 1;
+      const doel = bedekt ? (v.bosrand ? BOSRAND_DOORKIJK : v.soort === 'toren' ? DOORKIJK_TOREN : DOORKIJK) : 1;
       const nu = v.doorkijk == null ? 1 : v.doorkijk;
       const stap = dt / DOORKIJK_TIJD;
       v.doorkijk = doel > nu ? Math.min(doel, nu + stap) : Math.max(doel, nu - stap);
@@ -755,6 +791,151 @@
     const w = T.windWaarde(S.tijd + fase);
     // een windstoot die hier net langskwam, buigt het extra mee (zie windstootOp)
     return nk.lijst.length ? Math.max(-1, Math.min(1, w + windstootOp(S, v.x, v.y))) : w;
+  }
+
+  // ---------------------------------------------------------------- het bos om de kaart heen
+  //
+  // Buiten de kaart stond tot nu toe niets: de camera hield daarom een marge aan tot de rand (de
+  // oude begrensCamera in js/main.js), en op een kleine kaart liep de held zo ver uit het midden
+  // dat hij onder het paneel verdween (Marcel, 21 sep 2026). De camera volgt de held nu altijd
+  // (js/main.js); in de plaats van die marge staat hier een bosrand, zodat er nooit leegte te
+  // zien is. Het dorp ligt toch al aan het bos (ontwerp/wereld.md), dus dat klopt ook verhalend.
+  //
+  // Drie regels uit ontwerp/beeld.md gelden hier samen:
+  // - "Waar je loopt, staat niets" / "dichte begroeiing hoort aan de rand, waar je niet komt"
+  //   (Wat je niet kunt zien, kun je niet spelen): de bosrand ligt allemaal buiten w.b/w.h, en
+  //   daar wijst T.isBegaanbaar hem toch al af — er is geen aparte blokkade voor nodig.
+  // - "Per zaad anders, en vast": elke tegel krijgt zijn boom (of geen boom) via een hasj van
+  //   zijn eigen (x, y) en de naam van het gebied, dus dezelfde kaart geeft altijd hetzelfde bos,
+  //   en het dorp en het erf krijgen niet toevallig precies dezelfde plek.
+  // - "gedithered, geen zachte gloed": verder van de kaart dunt het bos uit doordat een tegel via
+  //   die hasj kán overslaan (een echte, harde keuze per tegel — dat IS dither), niet doordat een
+  //   boom doorzichtiger wordt. Wat wél verdonkert, is de kleur zelf (`helder`, dezelfde
+  //   dim-techniek als een kamer waar je niet bent), nooit de doorzichtigheid. Voorbij de diepte
+  //   waar de dichtheid nul wordt, tekent deze code niets meer: de donkere achtergrond die
+  //   T.tekenScene daar al neerzet, is dan zelf het bos, dus het houdt nergens hard op.
+  const BOSRAND_SOORTEN = ['eik', 'herfstEik', 'den', 'berk', 'wilg', 'appelboom', 'dodeBoom', 'struik', 'bessenStruik'];
+  const BOSRAND_DICHT = 2; // ringen die helemaal vol staan, vlak tegen de kaart aan
+  const BOSRAND_DIEP = 16; // ringen waarna er niets meer bij komt
+  const BOSRAND_HELDER_MIN = 0.32;
+
+  // Welke (vel, id)-paren in tegels/bomen.png en tegels/begroeiing.png een boom of struik zijn:
+  // op naam opgezocht in T.TEGELS, niet op een vast nummer. De pixel-art-gereedschap maakt die
+  // vellen opnieuw aan (npm run pixelart), en dan kan de volgorde erin verschuiven.
+  let bosrandVellen = null;
+  function bosrandVellenOpbouwen() {
+    const r = [];
+    for (const velNaam of ['bomen', 'begroeiing']) {
+      const vel = T.TEGELS && T.TEGELS[velNaam];
+      if (!vel) continue;
+      vel.tiles.forEach((tegel, id) => {
+        if (tegel && BOSRAND_SOORTEN.includes(tegel.naam)) r.push({ vel: velNaam, id, soort: tegel.naam });
+      });
+    }
+    bosrandVellen = r;
+  }
+
+  // Hoeveel ringen deze tegel buiten de kaart ligt (1 = er direct tegenaan, schuin telt ook als
+  // één ring — dezelfde maat als T.afstand, maar dan tot de rechthoek van de kaart in plaats van
+  // tot een punt). Binnen de kaart, of op de rand zelf, is dit 0.
+  function bosrandRing(w, x, y) {
+    return Math.max(0, -x, -y, x - (w.b - 1), y - (w.h - 1));
+  }
+
+  // Eén geheel getal uit de naam van het gebied, zodat het dorp en het erf niet toevallig
+  // hetzelfde bos krijgen.
+  function bosrandZaad(w) {
+    let h = 0;
+    const naam = w.gebied || '';
+    for (let i = 0; i < naam.length; i++) h = (h * 131 + naam.charCodeAt(i)) | 0;
+    return h;
+  }
+
+  // Kwadratisch uitdunnen, maar dan aflopend in plaats van oplopend zoals randDof hierboven: vlak
+  // voorbij de dichte ring valt de kans snel terug, en daarna vlakt het af naar bijna niets. Dat
+  // is ook waarom dit betaalbaar blijft — de meeste tegels in bereik vallen af, in plaats van dat
+  // de dichtheid tot ver in de ringen hoog blijft — en het oogt hetzelfde: vlak bij de kaart dicht
+  // bos, verderop merk je het aflopen niet doordat het daar toch al bijna donker is.
+  function bosrandVorm(r) {
+    if (r <= BOSRAND_DICHT) return 1;
+    const t = Math.min(1, (r - BOSRAND_DICHT) / (BOSRAND_DIEP - BOSRAND_DICHT));
+    return (1 - t) * (1 - t);
+  }
+  const bosrandDichtheid = bosrandVorm;
+  const bosrandHelder = (r) => 1 - (1 - BOSRAND_HELDER_MIN) * (1 - bosrandVorm(r));
+
+  // Eén tegel in de bosrand: welke boom of struik er staat (of niets, als de dichtheid op deze
+  // plek een gat dithert), voor eens en altijd berekend en bewaard op de wereld zelf. Dat bewaren
+  // is niet (alleen) voor de snelheid: werkDoorkijkBij hieronder laat een boom vervagen als hij de
+  // held bedekt, en dat kan alleen vloeiend als het van beeld op beeld hetzelfde object blijft.
+  const bosrandPerWereld = new WeakMap();
+  function bosrandOp(w, x, y) {
+    let cache = bosrandPerWereld.get(w);
+    if (!cache) bosrandPerWereld.set(w, (cache = new Map()));
+    const sleutel = x + ',' + y;
+    if (cache.has(sleutel)) return cache.get(sleutel);
+    const r = bosrandRing(w, x, y);
+    let v = null;
+    if (r >= 1 && r <= BOSRAND_DIEP) {
+      const zaad = bosrandZaad(w);
+      if (hasj(x, y, zaad) < bosrandDichtheid(r)) {
+        if (!bosrandVellen) bosrandVellenOpbouwen();
+        if (bosrandVellen.length) {
+          const keuze = bosrandVellen[Math.floor(hasj(x, y, zaad + 1) * bosrandVellen.length)];
+          v = { soort: keuze.soort, vel: keuze.vel, id: keuze.id, x, y, beslaat: [1, 1], r, bosrand: true };
+        }
+      }
+    }
+    cache.set(sleutel, v);
+    return v;
+  }
+
+  // Elke boom hier donkerder tekenen met ctx.filter (zoals T.sprites.teken doet voor een gedimde
+  // kamer) kan met een enkele boom, maar niet met de paar honderd die in een hoek tegelijk in
+  // beeld staan: canvasfilter is op wisselende beelden een van de duurste dingen die een browser
+  // per tekening kan doen, en bij drie-, vierhonderd keer per beeld op zoveel verschillende
+  // plaatjes tegelijk kwam daar op sommige beelden een piek van een halve seconde uit — gemeten
+  // met Toren.debug.meet op een hoek van het dorp, ruim boven de 16 ms die één beeld hoort te
+  // kosten. Dus wordt hier, net als bij de windbuiging hierboven, één keer per plaatje-en-stap
+  // gebakken (BOSRAND_HELDER_STAPPEN stuks) in plaats van elke tekening opnieuw gefilterd: de
+  // stap wordt op het plaatje zelf donkerder gemaakt en daarna is tekenen weer gewoon drawImage.
+  const BOSRAND_HELDER_STAPPEN = 6;
+  const bosrandGedimdPerStuk = new WeakMap(); // stuk → Map(stap → alvast donkerder gebakken stuk)
+  function bosrandGedimd(stuk, helder) {
+    if (!stuk || helder >= 0.999 || typeof document === 'undefined') return stuk;
+    let perStap = bosrandGedimdPerStuk.get(stuk);
+    if (!perStap) bosrandGedimdPerStuk.set(stuk, (perStap = new Map()));
+    const stap = Math.max(0, Math.min(BOSRAND_HELDER_STAPPEN - 1, Math.round(helder * (BOSRAND_HELDER_STAPPEN - 1))));
+    const bestaand = perStap.get(stap);
+    if (bestaand) return bestaand;
+    const c = document.createElement('canvas');
+    c.width = stuk.b;
+    c.height = stuk.h;
+    const cx = c.getContext('2d');
+    cx.imageSmoothingEnabled = false;
+    cx.filter = `brightness(${stap / (BOSRAND_HELDER_STAPPEN - 1)})`;
+    cx.drawImage(stuk.beeld, stuk.sx, stuk.sy, stuk.b, stuk.h, 0, 0, stuk.b, stuk.h);
+    const gebakken = { beeld: c, sx: 0, sy: 0, b: stuk.b, h: stuk.h, ax: stuk.ax, ay: stuk.ay };
+    perStap.set(stap, gebakken);
+    return gebakken;
+  }
+
+  // Tekent één boom of struik van de bosrand: hetzelfde plaatje en dezelfde windbuiging als
+  // gewone buitenversiering (tekenVoorwerp hieronder), maar met bosrandHelder in plaats van
+  // randDof — dat laatste is voor het verbleken van bestaande kaartversiering vlak bij háár eigen
+  // rand (w.doof, door Marcel per kaart gezet) en is hier niet aan de orde.
+  function tekenBosrandBoom(ctx, S, v) {
+    const doorkijk = v.doorkijk == null ? 1 : v.doorkijk;
+    if (doorkijk <= 0.02) return; // helemaal weggevallen: dan is er niets te tekenen
+    const p = T.naarScherm(v.x, v.y);
+    if (doorkijk < 1) ctx.globalAlpha = doorkijk;
+    const helder = bosrandHelder(v.r);
+    const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v));
+    // Het donkerder maken zit al in het plaatje (bosrandGedimd); T.sprites.teken hoeft dus geen
+    // ctx.filter meer aan te zetten, vandaar de 1 hier.
+    if (ruw) T.sprites.teken(ctx, bosrandGedimd(ruw, helder), p.x, p.y, 1);
+    else tekenBuitenVlak(ctx, v, helder);
+    if (doorkijk < 1) ctx.globalAlpha = 1;
   }
 
   function tekenVoorwerp(ctx, S, v, helder) {

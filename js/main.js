@@ -181,10 +181,20 @@
   // Dat begint al bij de overgang, vóór het gevecht: het monster dat je ziet, komt meteen in
   // beeld, tegelijk met de melding. Buiten is dat het verschil tussen een gevecht dat begint en
   // aangevallen worden door iets wat je niet kunt zien.
+  // Vroeger hield de camera hier een marge aan tot de rand van de kaart (begrensCamera), zodat
+  // je nooit de lege ruimte erachter zag: de camera stopte al een halve schermmaat van de rand.
+  // Op een kleine kaart (het dorp, 48×40) liep de held daardoor ver uit het midden door en
+  // verdween in de hoek, tot onder het leeftijdspaneel (Marcel, 21 sep 2026) — de camera volgde
+  // niet meer mee terwijl de held nog een heel eind verder kon lopen. Nu js/tekenen.js voorbij de
+  // rand een bosrand tekent (zie daar "het bos om de kaart heen") is die marge niet meer nodig:
+  // wat er te zien komt voorbij de kaart is bos, geen leegte, dus de camera volgt de held gewoon
+  // altijd. Dat houdt hem ook vanzelf uit de buurt van het paneel en de knoppen onderaan, want
+  // zijn plek op het scherm staat dan vast in plaats van dat hij naar een bevroren camera toe kan
+  // weglopen.
   function cameraDoel() {
     // Een scène kan het beeld ergens anders op richten dan de held (js/regie.js); zonder dat
     // blijft dit gewoon het gevecht of de held volgen.
-    if (S.regieCamera) return begrensCamera(T.naarScherm(S.regieCamera.x, S.regieCamera.y));
+    if (S.regieCamera) return T.naarScherm(S.regieCamera.x, S.regieCamera.y);
     const aanleiding = S.overgang && S.overgang.aanleiding;
     const lijst = S.gevecht
       ? [S.held, ...S.gevecht.monsters.filter((m) => !m.dood)]
@@ -198,22 +208,7 @@
       x += p.x;
       y += p.y;
     }
-    return begrensCamera({ x: x / lijst.length, y: y / lijst.length - 24 });
-  }
-
-  const klem = (v, lo, hi) => (lo > hi ? (lo + hi) / 2 : Math.min(hi, Math.max(lo, v)));
-
-  // Buiten loopt de kaart ergens af, en daarachter staat niets getekend: een harde zwarte rand.
-  // De camera mag daar dus nooit voorbij kijken. Wat de camera laat zien is in beeldpixels een
-  // rechthoek, maar op de kaart (na de ruit-projectie) een scheefgetrokken vlak; in plaats van
-  // die rechthoek zelf te knijpen, rekenen we het middelpunt terug naar een tegelpositie
-  // (T.naarWereld) en houden dáár een marge aan tot de rand — de halve schermmaat, in tegels.
-  function begrensCamera(doel) {
-    const w = S.wereld;
-    if (!w || !w.buiten) return doel;
-    const marge = bw / 2 / S.zoom / (2 * T.HB) + bh / 2 / S.zoom / (2 * T.HH);
-    const f = T.naarWereld(doel.x, doel.y);
-    return T.naarScherm(klem(f.x, marge, w.b - 1 - marge), klem(f.y, marge, w.h - 1 - marge));
+    return { x: x / lijst.length, y: y / lijst.length - 24 };
   }
 
   function werkBij(dt) {
