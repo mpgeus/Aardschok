@@ -103,8 +103,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar.
   `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel.
 - Het spel tekent met sprites zodra `beelden/` er is, en anders met vlakken. Wat de kunst niet
-  dekt (raster, bereik, richtlijn, zwevende tekst, spreukeffecten, pilaar en trap) blijft
-  altijd vlakken. `Toren.debug.vlakken = true` zet alles terug naar vlakken, om te vergelijken.
+  dekt (raster, bereik, richtlijn, zwevende tekst, spreukeffecten, de pilaar) blijft altijd
+  vlakken. `Toren.debug.vlakken = true` zet alles terug naar vlakken, om te vergelijken.
 
 ## De kernregel: De laatste klim
 
@@ -157,10 +157,13 @@ houden gewone levenspunten. Aan het eind telt hoe oud je boven aankomt.
 
 ## Het verhaal in het kort
 
-Veertig jaar geleden sloot de tovenaar iets op, boven in de toren. Vannacht brak de aardschok het
-zegel. Wim, zijn vroegere leerling, wachtte al die tijd. De toon: weemoedig met een knipoog,
-nooit grappig ten koste van de ernst van de klim. Meer, en wat nog open is, staat in
-`ontwerp/verhaal.md`.
+Het spel begint bij de toren van de oude meester, die nog leeft: hij doet zijn moestuin en leert
+je toveren, en speelt daarbij met zijn eigen leeftijd. Boven in de toren zit iets dat hij lang
+geleden opsloot en door ouderdom vergat; de aardschok maakte het wakker. Hij sterft aan zijn eigen
+laatste spreuk, bij zijn moestuin, en jij erft de toren — die op de meeste verdiepingen
+onbegaanbaar is en per verdieping hersteld moet worden. De toon: weemoedig met een knipoog, nooit
+grappig ten koste van de ernst van de klim. Meer, en wat nog open is (Wims rol, en wat er precies
+boven zit), staat in `ontwerp/verhaal.md`.
 
 ## Afspraken die het idee dragen
 
