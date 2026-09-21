@@ -2,10 +2,9 @@
 
 ## Besloten
 
-- **Opening** (19 sep 2026). Veertig jaar geleden sloot de tovenaar iets op, boven in de toren,
-  en ging weg. Vannacht schudde de aarde (de aardschok van de titel) en brak het zegel. Wim bleef
-  al die tijd en veegde elke dag de trap, voor als de meester terug zou komen. Wat er boven zit,
-  weet Wim niet; dat is het mysterie van de klim.
+- ~~**Opening** (19 sep 2026). Veertig jaar geleden sloot de tovenaar iets op en ging weg; Wim
+  bleef en veegde elke dag de trap.~~ **Vervangen** op 20 sep 2026 door de opening met de levende
+  meester (zie hieronder). Wat blijft: de aardschok van de titel maakte het ding boven wakker.
 - **De held** is een tovenaar van 84. Zijn leeftijd is zijn levensbalk (de kernregel, zie
   `CLAUDE.md`). Aan het eind telt hoe oud hij boven aankomt.
 - **Toon.** Weemoedig met een knipoog, nooit grappig ten koste van de ernst van de klim.
@@ -26,6 +25,20 @@
   de herbergierster als de bakkersquest halverwege is?" De volgorde ligt vast door dezelfde regel
   als bij de gesprekken: **eerst het questsysteem in het spel, met toetsen, en pas dan het
   gereedschap erop**, want het gereedschap moet de regels van het spel zelf gebruiken.
+- **Een quest moet makkelijk te bouwen zijn** (Marcel, 21 sep 2026). Dat is de eis waar het
+  gereedschap op wordt afgerekend. Wat dat vraagt:
+  - **vormen om mee te beginnen.** De meeste quests zijn één van een handvol vormen: haal iets,
+    breng iets, ruim iets op, maak een keuze, praat met iemand. Kies een vorm en je hebt een
+    werkend geraamte met fasen, dat je alleen nog invult;
+  - **alles op één plek:** de quest zelf, de gesprekken die ernaar verwijzen, en de beloning — niet
+    drie bestanden die je bij elkaar moet zoeken;
+  - **een proef per fase:** zet de quest op "halverwege" en zie wat iedereen in het dorp zegt;
+  - **controle die meedenkt:** een quest die nooit af kan (het voorwerp ligt nergens in de wereld,
+    de gever bestaat niet), een beloning die nooit gegeven wordt, en — onze eigen regel — een quest
+    met maar één manier om hem op te lossen. Het gereedschap telt de routes en waarschuwt onder de
+    drie;
+  - **de wereld erbij:** waar liggen de dingen die de quest nodig heeft? Een eigenschap `quest` op
+    een object in Tiled koppelt het, en het gereedschap laat zien op welke kaart het ligt.
 
 ## Personen
 
@@ -90,8 +103,8 @@ Wat dat oplost, en wat het betekent:
   hij laat het aan jou na;
 - de meester weet aan het begin dus zelf niet wat er boven zit. Als hij het zich herinnert, is
   dat een moment in het verhaal, geen uitleg vooraf;
-- Wim hoeft niet meer te kloppen met "veertig jaar wachten op zijn meester". Zijn rol is nog open,
-  maar hij is nu eerder de knecht van de meester dan jouw oude leerling.
+- Wim hoeft niet meer te kloppen met "veertig jaar wachten op zijn meester": hij is de knecht van
+  de meester (besloten 21 sep 2026, zie Personen).
 
 **De andere tovenaars.** De meester heeft contact met andere tovenaars, elk met een eigen toren en
 een eigen probleem. Zij zijn de enigen die begrijpen waar hij het over heeft, en ze zijn allemaal
