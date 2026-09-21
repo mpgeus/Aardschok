@@ -76,6 +76,12 @@ function bouwOpzoeker(kaart) {
   };
 }
 
+// Vellen met dingen die boven de grond uitsteken. Die horen als object in de laag "objecten"
+// (Tegel invoegen), niet gestempeld in een tegellaag: daar tekent Tiled de rijen ervóór eroverheen,
+// en zie je van een huis alleen het dak nog boven het gras uitsteken. Marcel liep daar op 21 sep
+// 2026 tegenaan; zie "Werken in Tiled" in ontwerp/kaarten.md.
+const OBJECTVELLEN = new Set(['bomen', 'begroeiing', 'gebouwen', 'toren', 'erf']);
+
 let totaalFouten = 0;
 if (TEGELS) {
   for (const [naam, kaart] of Object.entries(kaarten)) {
@@ -93,7 +99,12 @@ if (TEGELS) {
           if (!gid) return;
           getoetst++;
           const t = opzoek(gid);
-          if (!t || !t.eig || !t.eig.naam) klaag(`laag "${laag.name}" tegel (${i % breedte}, ${Math.floor(i / breedte)})`, gid);
+          const waar = `laag "${laag.name}" tegel (${i % breedte}, ${Math.floor(i / breedte)})`;
+          if (!t || !t.eig || !t.eig.naam) klaag(waar, gid);
+          else if (OBJECTVELLEN.has(t.vel)) {
+            console.error(`  FOUT in ${naam}.tmj: ${waar} is een ${t.eig.naam} uit ${t.vel}.tsx. Die hoort in de laag "objecten", neergezet met Tegel invoegen — in een tegellaag tekent Tiled de grond ervóór eroverheen`);
+            fouten++;
+          }
         });
       } else if (laag.type === 'objectgroup') {
         for (const obj of laag.objects || []) {
@@ -109,6 +120,6 @@ if (TEGELS) {
   }
 }
 if (totaalFouten) {
-  console.error(`kaarten.js: ${totaalFouten} ongeldige tegelverwijzing(en) — zie hierboven`);
+  console.error(`kaarten.js: ${totaalFouten} fout(en) in de kaarten — zie hierboven`);
   process.exitCode = 1;
 }
