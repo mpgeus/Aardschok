@@ -17,7 +17,7 @@
   <properties>
     <property name="naam" value="put"/>
     <property name="vast" type="bool" value="true"/>
-    <property name="beslaat" value="1x1"/>
+    <property name="beslaat" value="2x2"/>
     <property name="staat_op_erf" value="3,4"/>
   </properties>
  </tile>

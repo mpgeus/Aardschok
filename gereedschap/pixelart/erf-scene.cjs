@@ -843,7 +843,9 @@ const TOREN_TEGELS = [
 ];
 const ERF_TEGELS = [
   { naam: 'schuurtje', voet: [5, -5, 5, 4], vast: true, bouw: bouwSchuurtje, vlak: [560, 560] },
-  { naam: 'put', voet: [3, 4, 1, 1], vast: true, bouw: bouwPut, vlak: [320, 360] },
+  // Een tegel is te krap: met zijn dakje op twee palen en de overstek is de put zo'n twee bij
+  // twee tegels breed (R = 34 eenheden voor de schacht, het dak steekt tot R + 12 uit).
+  { naam: 'put', voet: [3, 4, 2, 2], vast: true, bouw: bouwPut, vlak: [320, 360] },
   { naam: 'houtstapel', voet: [4, 0, 2, 2], vast: true, bouw: bouwHout, vlak: [420, 400] },
   // De waslijn hangt aan de torenmuur en loopt naar zijn paal: hij staat op de tegel van de paal,
   // en je loopt er gewoon onderdoor (dus niet vast).

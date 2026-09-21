@@ -2599,7 +2599,7 @@
     "tileheight": 32,
     "infinite": false,
     "nextlayerid": 3,
-    "nextobjectid": 465,
+    "nextobjectid": 466,
     "properties": [
      {
       "name": "naam",
@@ -11730,6 +11730,29 @@
           "name": "komt",
           "type": "string",
           "value": "9,33"
+         }
+        ]
+       },
+       {
+        "id": 465,
+        "visible": true,
+        "rotation": 0,
+        "name": "pad naar het dorp",
+        "point": true,
+        "x": 544,
+        "y": 1088,
+        "width": 0,
+        "height": 0,
+        "properties": [
+         {
+          "name": "overgang",
+          "type": "string",
+          "value": "dorp"
+         },
+         {
+          "name": "komt",
+          "type": "string",
+          "value": "18,34"
          }
         ]
        }

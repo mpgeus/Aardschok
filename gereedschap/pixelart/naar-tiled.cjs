@@ -451,6 +451,10 @@ function bouwGebouwenVel() {
     tegelB: cb, tegelH: ch, aantal: geordend.length, kolommen,
     tileoffset: [Math.round(cb / 2) - ankerX, ch - ankerY],
     objectalignment: true,
+    // Het anker dat het spel gebruikt is zijn achterste voethoek, niet (ankerX, ankerY) zelf: die
+    // hoek ligt een halve tegel (16 px) boven het midden van de tegel waar het spel op tekent (zie
+    // de toelichting hierboven bij `items.push`). Dezelfde +16 staat bij `bouwErfVel`.
+    anker: [ankerX, ankerY + 16],
     tiles: geordend.map((it) => (it ? { naam: it.naam, vast: true, beslaat: it.beslaat, doos: it.doos || null } : { naam: null, vast: false })),
   };
   schrijfTsx(beschrijving);
@@ -619,21 +623,27 @@ function bouwErfVel(veldNaam, dingen, notitie) {
   const beschrijving = {
     naam: veldNaam, bestand: `${veldNaam}.png`, breedte: vel.b, hoogte: vel.h,
     tegelB: cb, tegelH: ch, aantal: geordend.length, kolommen,
-    // Het anker ligt op het midden van de voettegel; Tiled se "bottom" zet het onderste midden van
-    // de cel op de tegel, dus corrigeren we daarheen terug (net als bij de bomen en de gebouwen).
+    // Tiled se "bottom" zet het onderste midden van de cel op de tegel; (links, boven) is het punt
+    // waarop erfDingLos elk ding heeft opgehangen (zie voet[0], voet[1] daar), dus dat corrigeren
+    // we daarheen terug — net als bij de bomen en de gebouwen.
     tileoffset: [Math.round(cb / 2) - links, ch - boven],
     objectalignment: true,
-    anker: [links, boven],
+    // Het anker dat het spel gebruikt is de achterste voethoek, niet (links, boven) zelf: die hoek
+    // ligt een halve tegel (16 px) boven het midden van de tegel waarop het spel tekent (dezelfde
+    // afspraak als bij de gebouwen, zie de toelichting bij `bouwGebouwenVel`). `voet[0], voet[1]`
+    // is en blijft de tegel die je in Tiled aanklikt; alleen het ankerpunt in de cel schuift.
+    anker: [links, boven + 16],
     notitie,
     // `staat`: op welke tegel dit ding hoort te staan, in tegels vanaf de voet van de toren. Zo
     // hoeft erf-kaart.cjs de plaatsing niet nog eens uit te rekenen, en klopt hij ook als de voet
     // van de toren opgemeten wordt in plaats van opgeschreven.
-    // `doos`: hoe ver het beeld links, boven, rechts en onder het ankerpunt reikt. De cel is voor
-    // alle tegels van een vel even groot (Tiled wil dat zo), maar een bank is geen waslijn; het
-    // spel heeft de echte maat nodig om te weten of dit ding iemand verbergt (doorkijk).
+    // `doos`: hoe ver het beeld links, boven, rechts en onder het ankerpunt reikt (dezelfde +16 als
+    // hierboven). De cel is voor alle tegels van een vel even groot (Tiled wil dat zo), maar een
+    // bank is geen waslijn; het spel heeft de echte maat nodig om te weten of dit ding iemand
+    // verbergt (doorkijk).
     tiles: geordend.map((it) => (it ? {
       naam: it.naam, vast: it.vast, beslaat: [it.voet[2], it.voet[3]], staat: `${it.voet[0]},${it.voet[1]}`,
-      doos: [it.anker[0], it.anker[1], it.plaat.b - it.anker[0], it.plaat.h - it.anker[1]],
+      doos: [it.anker[0], it.anker[1] + 16, it.plaat.b - it.anker[0], it.plaat.h - it.anker[1] - 16],
     } : { naam: null, vast: false })),
   };
   schrijfTsx(beschrijving);
@@ -857,11 +867,15 @@ function padRandTegels() {
 // te lezen. tegels.json is de bron, tegels.js dezelfde inhoud als gewoon script (zie
 // beelden/beschrijving.js): dat werkt ook als index.html los open staat, want fetch mag dan niet.
 //
-// tegels.json draagt ook `anker`: het punt in een cel dat op het midden van de tegel hoort te
-// liggen, in dezelfde vorm als beelden/beschrijving.json. Daarmee kan js/sprites.js de vellen
+// tegels.json draagt ook `anker`: het punt in een cel dat op T.naarScherm(x, y) van de tegel komt
+// te liggen, in dezelfde vorm als beelden/beschrijving.json. Daarmee kan js/sprites.js de vellen
 // tekenen zonder Tiled se tileoffset-rekenwerk na te doen. Voor grond is dat het midden van de
-// ruit, voor een model zijn voetpunt, en voor een gebouw de achterste voethoek — die ligt een
-// halve tegel hoger dan het midden van zijn tegel, vandaar de +16.
+// ruit, voor een model (boom, struikje) zijn voetpunt: T.naarScherm(x, y) is waar zijn stam de
+// grond raakt. Voor een gebouw, de toren of iets van het erf — alles met een "beslaat" — is het de
+// achterste voethoek: de tegel die je in Tiled aanklikt is de achterste van de voet, en die hoek
+// ligt een halve tegel (16 px) hoger dan het midden van die tegel, vandaar de +16 bij
+// `bouwGebouwenVel` en `bouwErfVel`. Eén afspraak voor alles met een voet, op één plek per vel
+// gezet — niet hier met een uitzondering per naam.
 
 // Welke vellen maken we deze keer? Zonder argumenten allemaal; met `node naar-tiled.cjs erf` alleen
 // dat vel, en dan blijft de rest van tegels.json staan. Dat scheelt minuten als er maar aan één
@@ -891,10 +905,12 @@ try {
   /* nog niets: dan bouwen we hem van voren af aan op */
 }
 for (const v of velden) {
-  // Een gebouw hangt aan zijn achterste voethoek; die ligt een halve tegel (16 px) boven het
-  // midden van zijn tegel, en het spel tekent op het midden.
+  // Een vel met een eigen voetpunt- of hoekafspraak (bomen, begroeiing, gebouwen, toren, erf) zet
+  // `anker` zelf op de bouwfunctie hierboven; hier valt het alleen terug op het midden van de cel
+  // (grond) of op tileoffset zonder verdere correctie (voetpunt: het model hangt al op het midden
+  // van zijn tegel, dat is geen achterste hoek en heeft dus ook geen +16 nodig, zie bouwModelVel).
   const anker = v.anker || (v.tileoffset
-    ? [Math.round(v.tegelB / 2) - v.tileoffset[0], v.tegelH - v.tileoffset[1] + (v.naam === 'gebouwen' ? 16 : 0)]
+    ? [Math.round(v.tegelB / 2) - v.tileoffset[0], v.tegelH - v.tileoffset[1]]
     : [Math.round(v.tegelB / 2), Math.round(v.tegelH / 2)]);
   TEGELS_JSON[v.naam] = {
     tsx: `tegels/${v.naam}.tsx`,

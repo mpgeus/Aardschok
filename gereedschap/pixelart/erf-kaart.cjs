@@ -412,6 +412,23 @@ if (tuin) {
 // plek als vóór deze editie van het gebouwenvel (die schoof alleen de gid's van gebouwen erna op).
 zetPunt('pad het bos in', 8, 33, { overgang: 'proefbos', komt: '9,33' });
 
+// 6b. het pad naar het dorp: aan het eind van Es.PAD_DORP, aan de rand van het erf, een overgang
+// naar "dorp" — Marcels eigen kaart, met de hand getekend (kaarten/dorp.tmj, niet hier gemaakt).
+// Die kaart heeft zelf al een uitgang terug naar het erf op haar tegel (1, 20) met komt: 2,20; dit
+// is de andere kant van diezelfde deur. "komt" hier ligt één stap terug het erf op, in de as
+// waarin het pad het laatst liep — dezelfde soort som als bij de deur van de toren hierboven.
+{
+  const pad = Es.PAD_DORP;
+  const [wx, wy] = pad[pad.length - 1];
+  const [pwx, pwy] = pad[pad.length - 2];
+  const ux = wx - pwx;
+  const uy = wy - pwy;
+  const stap = Math.abs(uy) >= Math.abs(ux) ? [0, -(Math.sign(uy) || 1)] : [-(Math.sign(ux) || 1), 0];
+  const [dx, dy] = naarKaart(wx, wy);
+  const [kx, ky] = naarKaart(wx + stap[0], wy + stap[1]);
+  zetPunt('pad naar het dorp', dx, dy, { overgang: 'dorp', komt: `${kx},${ky}` });
+}
+
 // ---------------------------------------------------------------- de .tmj schrijven
 
 const kaart = {
