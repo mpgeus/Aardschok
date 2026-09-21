@@ -14,7 +14,7 @@
     "tileheight": 32,
     "infinite": false,
     "nextlayerid": 3,
-    "nextobjectid": 464,
+    "nextobjectid": 465,
     "properties": [
      {
       "name": "naam",
@@ -9083,6 +9083,29 @@
         "id": 462,
         "visible": true,
         "rotation": 0,
+        "name": "meester",
+        "point": true,
+        "x": 640,
+        "y": 768,
+        "width": 0,
+        "height": 0,
+        "properties": [
+         {
+          "name": "wezen",
+          "type": "string",
+          "value": "meester"
+         },
+         {
+          "name": "straal",
+          "type": "string",
+          "value": "2"
+         }
+        ]
+       },
+       {
+        "id": 463,
+        "visible": true,
+        "rotation": 0,
         "name": "deur van de toren",
         "point": true,
         "x": 1088,
@@ -9103,7 +9126,7 @@
         ]
        },
        {
-        "id": 463,
+        "id": 464,
         "visible": true,
         "rotation": 0,
         "name": "pad het bos in",

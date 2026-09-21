@@ -136,6 +136,8 @@ const FIGUURLIJST = {
   wim: { houdingen: ['staan', 'lopen', 'praten', 'vegen'] },
   skelet: { houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'] },
   slijm: { houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'] },
+  // De oude meester, bij zijn moestuin op het erf (T.WEZENS.meester, js/wereld.js).
+  meester: { houdingen: ['staan', 'lopen', 'slaan', 'spreuk', 'geraakt', 'sterven'] },
   // Buiten, op het erf en in het bos. Alles wat Marcel in Tiled kan neerzetten, moet het spel ook
   // kunnen tekenen; deze drie staan in T.WEZENS (js/wereld.js) onder dezelfde naam als hier, want
   // js/sprites.js zoekt het figuur op de soort van het wezen op.

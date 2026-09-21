@@ -57,6 +57,17 @@
     // en staat er dan weer bij stil met zijn bezem (de houding "vegen", zie js/sprites.js). Hij
     // begint nooit een gevecht — hij is neutraal — en hij blijft nooit naast een deur staan.
     wim: { naam: 'Wim', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 3 },
+    // De oude meester scharrelt bij zijn moestuin, op het erf (ontwerp/verhaal.md, "Hij doet zijn
+    // moestuin, tot hij sterft"): neutraal als Wim, en tegen de honderd. Zijn leeftijd staat, net
+    // als bij de held, in hele maanden (js/leeftijd.js) — T.verouder werkt voor elk wezen, en
+    // laat het getal boven zijn hoofd verschijnen. `snelheid` is zijn eigen, tragere loopmaat
+    // (MEESTER_SNELHEID in gereedschap/pixelart/meester.cjs, waar zijn animatie op is afgestemd);
+    // T.snelheidVan gebruikt die altijd, ook al heeft hij een leeftijd — alleen de held loopt op
+    // T.loopSnelheid.
+    meester: {
+      naam: 'de oude meester', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.55,
+      dwaalt: true, straal: 2, leeftijd: 97 * 12,
+    },
     slijm: {
       naam: 'slijmkruiper', kant: 'monster', leven: 10, ap: 4, initiatief: 4, snelheid: 1.4, zicht: 5, dwaalt: true,
       aanval: { kosten: 3, maanden: [3, 5], zin: 'bijt je' },
@@ -110,9 +121,13 @@
   T.tegelVan = (e) => ({ x: e.tx, y: e.ty });
   // Afstand in stappen: schuin telt als één stap, net als bij het lopen.
   T.afstand = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
-  // Hoe snel loopt dit wezen? Een monster houdt zijn vaste snelheid; de held loopt trager
-  // naarmate hij ouder wordt, en dat is aan hem te zien (T.loopSnelheid).
-  T.snelheidVan = (e) => (e.leeftijd == null ? e.snelheid : T.loopSnelheid(e.leeftijd));
+  // Hoe snel loopt dit wezen? Alleen de held loopt trager naarmate hij ouder wordt
+  // (T.loopSnelheid); een monster of de oude meester houdt zijn eigen vaste snelheid, ook al
+  // heeft hij, net als de held, een leeftijd (T.verouder werkt voor elk wezen). Dat moet ook:
+  // zijn animatie is op precies één loopsnelheid afgestemd (zie MEESTER_SNELHEID in
+  // gereedschap/pixelart/meester.cjs), en T.loopSnelheid is de curve van de held, niet van hem —
+  // zijn voeten zouden over de grond gaan glijden.
+  T.snelheidVan = (e) => (e.soort === 'held' ? T.loopSnelheid(e.leeftijd) : e.snelheid);
 
   T.maakWereld = function () {
     const h = PLATTEGROND.length;
@@ -179,7 +194,9 @@
       aanval: s.aanval || null,
       dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
       dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0,
-      leeftijd: soort === 'held' ? T.STARTLEEFTIJD : null,
+      // Meestal null (geen leeftijd, geen levensbalk): alleen de held en wie in T.WEZENS zijn
+      // eigen `leeftijd` draagt (de oude meester) telt in maanden mee, zie T.verouder.
+      leeftijd: soort === 'held' ? T.STARTLEEFTIJD : s.leeftijd != null ? s.leeftijd : null,
       // Wat spreuken achterlaten: nabranden, punten kwijt door een windstoot, kijken naar een
       // dwaallicht (vraag: het vraagteken boven het hoofd), en geduwd worden.
       brandt: 0, apVerlies: 0, afgeleid: null, gelokt: null, vraag: 0, geduwd: false,

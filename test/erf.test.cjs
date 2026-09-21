@@ -62,6 +62,27 @@ test('het schuurtje, de moestuin, de waslijn en de houtstapel staan er, en de wa
   assert.equal(T.isVast(w, tuin.x, tuin.y), true, 'door de moestuin heen lopen niet');
 });
 
+test('de oude meester staat op het erf, vlak bij zijn moestuin, en scharrelt er met een kleine straal rond', () => {
+  const w = erf();
+  const meester = w.wezens.find((e) => e.soort === 'meester');
+  assert.ok(meester, 'de oude meester hoort op het erf te staan');
+  assert.equal(meester.kant, 'neutraal');
+  assert.equal(meester.leeftijd, 97 * 12);
+  assert.equal(meester.dwaalt, true);
+  assert.ok(meester.straal > 0 && meester.straal <= 3, `een kleine straal om zijn tuin, niet ${meester.straal}`);
+  assert.equal(T.isBegaanbaar(w, meester.tx, meester.ty), true);
+  // "vlak bij": de dichtstbijzijnde tuintegel ligt één stap van hem vandaan, niet erop (dat kan
+  // niet, de tuin is vast) en niet ergens ver op het erf.
+  const tuin = voorwerp(w, 'moestuin');
+  let dichtstbij = Infinity;
+  for (let dy = 0; dy < tuin.beslaat[1]; dy++) {
+    for (let dx = 0; dx < tuin.beslaat[0]; dx++) {
+      dichtstbij = Math.min(dichtstbij, T.afstand({ x: meester.tx, y: meester.ty }, { x: tuin.x + dx, y: tuin.y + dy }));
+    }
+  }
+  assert.equal(dichtstbij, 1, 'hij staat vlak naast de tuin');
+});
+
 test('elke tegel is óf begaanbaar óf bezet: op gras waar je loopt staat niets', () => {
   // De regel van Marcel: wat er staat, staat in de weg. Een varen waar je dwars doorheen loopt,
   // maakt het erf vol zonder dat het iets betekent.

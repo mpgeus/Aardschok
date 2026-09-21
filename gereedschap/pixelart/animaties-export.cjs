@@ -17,6 +17,7 @@ const path = require('path');
 const { Worker, isMainThread, parentPort } = require('worker_threads');
 const K = require('./kern.cjs');
 const F = { ...require('./figuren.cjs'), ...require('./figuren2.cjs') };
+const { meester, MEESTER_SNELHEID } = require('./meester.cjs');
 const { apng } = require('./apng.cjs');
 
 // Ruime cel om in te renderen; daarna wordt er krap uit gesneden. De figuur staat met zijn
@@ -30,6 +31,7 @@ function bouw(figuur, houding, fase, leeftijd) {
   if (figuur === 'tovenaar') return F.tovenaar(leeftijd, stand);
   if (figuur === 'wim') return F.wim(stand);
   if (figuur === 'skelet') return F.skelet(stand);
+  if (figuur === 'meester') return meester(stand);
   return F.slijm(false, stand);
 }
 const renderBeeld = (t) =>
@@ -89,6 +91,23 @@ const FIGUREN = [
       { naam: 'staan', beelden: 4, fps: 4, herhaal: true },
       { naam: 'lopen', beelden: 8, fps: 10, herhaal: true },
       { naam: 'aanval', beelden: 6, fps: 12, herhaal: false },
+      { naam: 'geraakt', beelden: 3, fps: 12, herhaal: false },
+      { naam: 'sterven', beelden: 8, fps: 10, herhaal: false },
+    ],
+  },
+  // De oude meester: dezelfde zes houdingen als de tovenaar (zie meester.cjs), maar zijn eigen,
+  // tragere loopcyclus. Zijn "lopen" rekent daar met T=0,95s (loopVoet, "trager en korter dan de
+  // tovenaar"); 19 beelden op 20 fps geeft precies dat (19/20=0,95), net zoals bij de tovenaar,
+  // het skelet en de slijm hun beelden/fps altijd exact optellen tot de T waarmee hun loopcyclus
+  // is getekend — anders schuift zijn voet zichtbaar over de grond terwijl hij loopt.
+  {
+    naam: 'meester',
+    snelheid: MEESTER_SNELHEID,
+    houdingen: [
+      { naam: 'staan', beelden: 4, fps: 4, herhaal: true },
+      { naam: 'lopen', beelden: 19, fps: 20, herhaal: true },
+      { naam: 'slaan', beelden: 6, fps: 12, herhaal: false },
+      { naam: 'spreuk', beelden: 6, fps: 12, herhaal: false },
       { naam: 'geraakt', beelden: 3, fps: 12, herhaal: false },
       { naam: 'sterven', beelden: 8, fps: 10, herhaal: false },
     ],

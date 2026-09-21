@@ -20,7 +20,7 @@
 //    lantaarn, elk op de tegels die erf-scene.cjs ervoor opgeeft (ERF_TEGELS).
 //  - elke boom, struik en graspol uit dezelfde scène, plus een bosrand eromheen die het erf
 //    afsluit: buiten die rand ligt geen grond, dus daar kun je niet komen.
-//  - één wolf, en de overgang bij de deur van de toren.
+//  - één wolf, de oude meester bij zijn moestuin, en de overgang bij de deur van de toren.
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -261,6 +261,10 @@ function weggeduwd(x, y, b, d) {
   return [x, y];
 }
 
+// Waar elk ding uiteindelijk staat (in wereldtegels, ná het eventuele opschuiven rond de toren):
+// zo kan sectie 4b de meester naast zijn moestuin zetten zonder haar plek een tweede keer uit te
+// rekenen — dat zou op den duur uit de pas gaan lopen met wat hier werkelijk neergezet is.
+const geplaatstOp = new Map();
 for (const d of [...Es.TOREN_TEGELS, ...Es.ERF_TEGELS]) {
   const v = velVan.get(d.naam);
   if (!v || !v.tegel.staat) {
@@ -277,6 +281,7 @@ for (const d of [...Es.TOREN_TEGELS, ...Es.ERF_TEGELS]) {
   }
   const [mx, my] = naarKaart(wx, wy);
   if (!zetTegel(d.naam, mx, my)) console.warn(`  ${d.naam} kon niet op (${mx}, ${my})`);
+  else geplaatstOp.set(d.naam, [wx, wy, vb, vd]);
 }
 
 // 1b. de deur van de toren. Welke tegel dat is, hangt af van hoe dik de toren is, en die wordt om
@@ -378,6 +383,18 @@ function vrijeTegel(wx, wy) {
 // `straal`: hoe ver hij van die plek af scharrelt. Zonder straal zou hij binnen "zijn kamer"
 // blijven, en dat is buiten de hele kaart — dan wandelt hij het erf af en vind je hem nooit meer.
 zetPunt('wolf', ...vrijeTegel(-12, -12), { wezen: 'wolf', straal: '7' });
+
+// 4b. de oude meester, vlak bij zijn moestuin (ontwerp/verhaal.md, "Hij doet zijn moestuin, tot
+// hij sterft"): zijn thuis is de eerste vrije tegel naast de tuin — vrijeTegel begint zoeken op
+// het midden van de tuin en slaat de tuin zelf vanzelf over, want die staat al in `bezet` — met
+// een kleine straal, zodat hij er wat rondscharrelt in plaats van stil te staan.
+const tuin = geplaatstOp.get('moestuin');
+if (tuin) {
+  const [tx, ty, tb, td] = tuin;
+  zetPunt('meester', ...vrijeTegel(tx + (tb - 1) / 2, ty + (td - 1) / 2), { wezen: 'meester', straal: '2' });
+} else {
+  console.warn('  meester overgeslagen: de moestuin staat niet op de kaart');
+}
 
 // 5. de deur van de toren: hier ga je naar binnen, en hier kom je buiten te staan als je van
 // binnen naar buiten loopt (zie js/gebied.js). "komt" is de tegel waar je landt, één stap van de

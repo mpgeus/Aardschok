@@ -255,6 +255,68 @@
       }
      }
     },
+    "meester": {
+     "naam": "meester",
+     "cel": [
+      112,
+      136
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.55,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "meester-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "meester-lopen.png",
+       "beelden": 19,
+       "fps": 20,
+       "herhaal": true,
+       "snelheid": 1.55,
+       "stap": 0.736
+      },
+      "slaan": {
+       "bestand": "meester-slaan.png",
+       "beelden": 6,
+       "fps": 12,
+       "herhaal": false
+      },
+      "spreuk": {
+       "bestand": "meester-spreuk.png",
+       "beelden": 6,
+       "fps": 12,
+       "herhaal": false
+      },
+      "geraakt": {
+       "bestand": "meester-geraakt.png",
+       "beelden": 3,
+       "fps": 12,
+       "herhaal": false
+      },
+      "sterven": {
+       "bestand": "meester-sterven.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": false
+      }
+     }
+    },
     "wolf": {
      "naam": "wolf",
      "cel": [
