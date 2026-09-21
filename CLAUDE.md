@@ -19,6 +19,7 @@ Komt Marcel met een idee of besluit, schrijf het dan meteen in het juiste bestan
 het gesprek; wat alleen in een gesprek staat, raakt kwijt. Laat groot zoek- en leeswerk aan een
 agent over, zodat alleen de samenvatting in het gesprek komt.
 
+- **`ontwerp/werklijst.md`: wat we doen, in welke volgorde. Begin een sessie hier.**
 - `ontwerp/verhaal.md`: het verhaal, de personen, de toon, en wat er boven in de toren zit.
 - `ontwerp/wereld.md`: de plekken. Het erf, het bos, het dorp met zijn mensen, de maten, en de
   bosvijanden.
