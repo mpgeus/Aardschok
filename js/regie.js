@@ -135,7 +135,14 @@
         const S = T.S;
         const van = punt(wie);
         const naar = punt(doel);
+        // Dezelfde worp als de held (js/toveren.js): de staf omhoog en de spreuk die in de bol
+        // opbouwt, met de grijze vlokjes die uit zijn lijf worden gezogen. Zonder dit vertrok de
+        // schicht van de meester zonder opbouw. Zonder js/toveren.js (in een toets) is er geen
+        // worp, en dan vertrekt hij gewoon.
+        if (T.worp) await T.worp(S, wie, spreukId, naar);
         await (eig.basis.schade ? T.anim.schicht(S, van, naar) : T.anim.wind(S, van, naar));
+        // Opruimen zoals de held dat doet, anders eindigt uitkijken anders dan overslaan.
+        wie.tovert = null;
         verouder();
       },
       verouder,

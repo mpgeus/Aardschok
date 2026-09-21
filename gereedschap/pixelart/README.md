@@ -37,6 +37,11 @@ Dat schrijft alle beelden naar `uit/` (niet in git). Er zijn geen afhankelijkhed
   Een bouwfunctie krijgt de houding mee: `tovenaar(leeftijd, { houding, fase })`. Zonder houding
   komt er precies de stilstaande figuur uit; de vellen van `npm run pixelart` blijven gelijk.
 - `apng.cjs`: een reeks beelden als bewegende PNG, om animaties te bekijken.
+- `effecten.cjs` (`npm run pixelart:effecten`): wat een spreuk laat zien. De kop van de
+  vuurschicht in zestien richtingen, het opbouwen in de bol, de inslag, het dwaallicht, en de
+  grijze zucht in drie maten die van een tovenaar opstijgt als hij betaalt. Het meet ook de bol en
+  het gezicht op de vellen van de figuren, zodat een spreuk precies uit de bol komt; draai het
+  dus opnieuw als er een figuur bijkomt. Schrijft naar `beelden/effecten/`.
 
 De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
 
