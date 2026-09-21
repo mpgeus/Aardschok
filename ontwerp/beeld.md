@@ -75,7 +75,9 @@ een dorp gebeurt (werkdorpen, erven, akkers), en de kliffenplaat voor het warme 
 een gebouw eruitziet, komt hiervandaan.
 
 Marcel liet een isometrische pixel art-plaat zien van een boerderij met een watermolen aan een
-beek, en noemde die stijl "echt passend". Wat we eruit overnemen:
+beek, en noemde die stijl "echt passend". De plaat:
+https://i.pinimg.com/originals/3b/7c/c8/3b7cc846ee7b292b5407a84939a1e821.gif (van iemand anders;
+alleen de link, niet het beeld zelf in de opslagplaats). Wat we eruit overnemen:
 
 - **Het dak is het gebouw.** Het riet is de grootste massa, ruim de helft van de hoogte, en het
   zakt laag over de muren heen. Je ziet de lagen riet per rij liggen, de nok is een dikke rol, en
