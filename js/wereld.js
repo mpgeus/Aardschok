@@ -106,7 +106,11 @@
   // haalt: `x`/`y` is de tegel die je erheen brengt (hier de buitendeur), `naar` het gebied waar
   // je heen gaat, en `komt` de tegel waar je landt als je vanaf díe kant terugkomt — één stap van
   // de deur af, zodat je niet meteen weer terugstapt. Zie js/gebied.js.
-  const OVERGANGEN = [{ x: 0, y: 5, naar: 'erf', komt: { x: 1, y: 5 } }];
+  //
+  // "wereld": sinds "Eén doorlopende wereld" (ontwerp/wereld.md) is buiten niet meer een los erf,
+  // maar kaarten/wereld.tmj — de hele buitenwereld op één doek, met het erf, het dorp en de ruimte
+  // ertussen. Het erf als zelfstandig gebied bestaat niet meer.
+  const OVERGANGEN = [{ x: 0, y: 5, naar: 'wereld', komt: { x: 1, y: 5 } }];
 
   const sleutelVan = (x, y) => x + ',' + y;
 
