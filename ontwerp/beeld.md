@@ -18,6 +18,14 @@
 - **Stijl van Mystic Towers.** De kamer staat als een diorama in het donker, en de voorste muren
   zijn laag weggesneden.
 
+## Alles valt en staat met overtuiging (Marcel, 21 sep 2026)
+
+De maat waar al het beeldwerk aan getoetst wordt: gelooft de speler dat hier mensen wonen? De
+regels hieronder zijn manieren om dat te bereiken. En het werkt ook andersom: **overtuiging gaat
+kapot aan één ding dat niet klopt** — een figuur die half in een put staat, grastufts in een
+raster, een huis waarvan alleen het dak boven het gras uitsteekt. Zo'n breuk gaat voor op nieuw
+moois, want één ervan doet meer kwaad dan tien mooie huizen goedmaken.
+
 ## Niets is waterpas (Marcel, 21 sep 2026)
 
 "Het moet echt aanvoelen. In de middeleeuwen was er geen laserlijn, er was geen waterpas. Dingen
