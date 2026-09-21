@@ -744,19 +744,19 @@
  "gebouwen": {
   "tsx": "tegels/gebouwen.tsx",
   "bestand": "tegels/gebouwen.png",
-  "breedte": 9720,
+  "breedte": 17496,
   "hoogte": 632,
   "tegelB": 648,
   "tegelH": 632,
-  "kolommen": 15,
+  "kolommen": 27,
   "tileoffset": [
    -11,
-   263
+   264
   ],
   "objectalignment": true,
   "anker": [
    335,
-   385
+   384
   ],
   "tiles": [
    {
@@ -869,6 +869,198 @@
      273,
      183,
      178
+    ]
+   },
+   {
+    "naam": "dorpKlein1",
+    "vast": true,
+    "beslaat": [
+     5,
+     7
+    ],
+    "groep": null,
+    "staat": null,
+    "doos": [
+     247,
+     254,
+     183,
+     178
+    ]
+   },
+   {
+    "naam": "dorpKlein2",
+    "vast": true,
+    "beslaat": [
+     5,
+     7
+    ],
+    "groep": null,
+    "staat": null,
+    "doos": [
+     234,
+     214,
+     170,
+     178
+    ]
+   },
+   {
+    "naam": "dorpKlein3",
+    "vast": true,
+    "beslaat": [
+     5,
+     7
+    ],
+    "groep": null,
+    "staat": null,
+    "doos": [
+     247,
+     267,
+     183,
+     178
+    ]
+   },
+   {
+    "naam": "dorpGewoonAanbouw",
+    "vast": true,
+    "beslaat": [
+     6,
+     9
+    ],
+    "groep": null,
+    "staat": null,
+    "doos": [
+     321,
+     300,
+     215,
+     210
+    ]
+   },
+   {
+    "naam": "dorpGewoonVleugel",
+    "vast": true,
+    "beslaat": [
+     9,
+     8
+    ],
+    "groep": null,
+    "staat": null,
+    "doos": [
+     279,
+     264,
+     218,
+     243
+    ]
+   },
+   {
+    "naam": "dorpGewoon3",
+    "vast": true,
+    "beslaat": [
+     6,
+     8
+    ],
+    "groep": null,
+    "staat": null,
+    "doos": [
+     266,
+     245,
+     202,
+     210
+    ]
+   },
+   {
+    "naam": "dorpGewoon4",
+    "vast": true,
+    "beslaat": [
+     6,
+     8
+    ],
+    "groep": null,
+    "staat": null,
+    "doos": [
+     279,
+     273,
+     215,
+     210
+    ]
+   },
+   {
+    "naam": "dorpGroot1",
+    "vast": true,
+    "beslaat": [
+     7,
+     9
+    ],
+    "groep": null,
+    "staat": null,
+    "doos": [
+     311,
+     305,
+     247,
+     242
+    ]
+   },
+   {
+    "naam": "dorpGroot2",
+    "vast": true,
+    "beslaat": [
+     7,
+     9
+    ],
+    "groep": null,
+    "staat": null,
+    "doos": [
+     298,
+     253,
+     234,
+     242
+    ]
+   },
+   {
+    "naam": "schuurBlokhut",
+    "vast": true,
+    "beslaat": [
+     5,
+     7
+    ],
+    "groep": null,
+    "staat": null,
+    "doos": [
+     250,
+     186,
+     186,
+     178
+    ]
+   },
+   {
+    "naam": "houtschuur",
+    "vast": true,
+    "beslaat": [
+     3,
+     4
+    ],
+    "groep": null,
+    "staat": null,
+    "doos": [
+     152,
+     144,
+     120,
+     98
+    ]
+   },
+   {
+    "naam": "kippenhok",
+    "vast": true,
+    "beslaat": [
+     2,
+     2
+    ],
+    "groep": null,
+    "staat": null,
+    "doos": [
+     81,
+     118,
+     81,
+     74
     ]
    },
    {

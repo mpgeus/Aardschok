@@ -2369,7 +2369,55 @@ function huis(o) {
     modellen.push({ model: uithangbord(b), gx: X / T, gy: Y / T, richting: b.vlak === 'y' ? 'ZW' : 'ZO', z: (b.h + hB) / PXH });
   }
   if (rookPluim) modellen.push(rookPluim);
-  const voet = [x0, y0, bx1, by1];
+  // --- aanbouw: een lagere vleugel tegen de zichtbare zijmuur (de lange wand onder de dakrand,
+  // niet de gevel), met een eigen dak haaks op de nok. Dezelfde truc als de dakkapel hierboven
+  // (een tweede huis() die meetekent), maar op de grond en uitstekend buiten de rechthoek van de
+  // muren in plaats van erbovenop. Eén optie geeft twee soorten silhouet: laag en smal is een
+  // afdak/aanbouw tegen de zijkant, hoog en breed (muurH dicht bij het hoofdhuis) is een
+  // L-vormige plattegrond. o.aanbouw (of een lijst): { t (0..1 langs de muur), b (breed, px),
+  // diep (hoe ver hij uitsteekt, px), overlap (hoeveel hij wegzakt in het hoofdhuis, px), muurH,
+  // sokkelH, muur, hout, pleister, dak, dakOud, dakMos, windveer, zaad, eind (gevelelementen voor
+  // de buitenmuur die naar de kijker toe steekt), zij (voor de lange kant ernaast) }.
+  let voetX0 = x0, voetY0 = y0, voetX1 = bx1, voetY1 = by1;
+  for (const an of o.aanbouw ? (Array.isArray(o.aanbouw) ? o.aanbouw : [o.aanbouw]) : []) {
+    const vleugelNok = nokX ? 'y' : 'x';
+    const acMid = a0 + (a1 - a0) * (an.t ?? 0.5);
+    const wb = (an.b ?? 90) / SQ;
+    const overlap = (an.overlap ?? 14) / SQ;
+    const wdiep = (an.diep ?? 70) / SQ;
+    const aMin = acMid - wb / 2, aMax = acMid + wb / 2;
+    const cMin = c1 - overlap, cMax = cMin + wdiep;
+    const vleugel = huis({
+      gx: (nokX ? aMin : cMin) / T + 0.5,
+      gy: (nokX ? cMin : aMin) / T + 0.5,
+      b: (nokX ? aMax - aMin : cMax - cMin) / T,
+      d: (nokX ? cMax - cMin : aMax - aMin) / T,
+      nok: vleugelNok,
+      muurH: an.muurH ?? Math.round(muurH * 0.68),
+      sokkelH: an.sokkelH ?? sokkelH,
+      muur: an.muur ?? bovenste.muur,
+      hout: an.hout ?? bovenste.hout,
+      pleister: an.pleister ?? bovenste.pleister,
+      dak: an.dak ?? o.dak,
+      dakOud: an.dakOud ?? o.dakOud,
+      dakMos: an.dakMos ?? o.dakMos,
+      windveer: an.windveer ?? o.windveer,
+      overstek: an.overstek,
+      dikte: an.dikte,
+      raamlicht: o.raamlicht,
+      zaad: an.zaad ?? zaad + 130,
+      gevel: vleugelNok === 'y' ? { y: an.eind || [], x: an.zij || [] } : { x: an.eind || [], y: an.zij || [] },
+    });
+    vormen.push(...vleugel.vormen);
+    lichten.push(...vleugel.lichten);
+    bloembakken.push(...vleugel.bloembakken);
+    modellen.push(...vleugel.modellen);
+    voetX0 = Math.min(voetX0, vleugel.voet[0]);
+    voetY0 = Math.min(voetY0, vleugel.voet[1]);
+    voetX1 = Math.max(voetX1, vleugel.voet[2]);
+    voetY1 = Math.max(voetY1, vleugel.voet[3]);
+  }
+  const voet = [voetX0, voetY0, voetX1, voetY1];
   lichten.push(...kapelLichten);
   bloembakken.push(...kapelBakken);
   return { vormen, lichten, bloembakken, modellen, voet, hoog: (zk + kapH) * PXH, lagen };
@@ -3593,6 +3641,28 @@ function luifel(zaad = 1) {
   return F.model(d, mat, { midden: [0, 8, 40], straal: 44 });
 }
 
+// Een buitentrap: stenen treden tegen de gevel op, naar een deur die hoger in de muur zit (een
+// opkamer boven een halfverzonken kelder — een typisch randje uit de leidende referentie). Het
+// model staat lokaal zoals de luifel: de bovenste trede (het bordes) op de oorsprong tegen de
+// gevel, de treden lopen vandaar in +y naar de kijker toe omlaag. Zet hem net als de luifel: gx/gy
+// op de gevellijn, richting dezelfde kant als de muur.
+function buitentrap(treden = 5, zaad = 1) {
+  const M = { steen: 0, hout: 1 };
+  const mat = [];
+  mat[M.steen] = { ramp: 'steen', lo: 2, hi: 6.2, patroon: (x, y, z) => (hash(Math.round(x / 3), Math.round(y / 3), zaad) % 6 === 0 ? -0.6 : 0) };
+  mat[M.hout] = { ramp: 'hout', lo: 1.6, hi: 5.2 };
+  const d = [];
+  const breed = 15, diep = 6.5, treeH = 7;
+  for (let i = 0; i < treden; i++) {
+    const y = i * (diep * 2 - 1);
+    const z = (treden - 1 - i) * treeH;
+    d.push(F.blok([0, y, z], [breed, diep, treeH / 2 + 0.6], 0.5, M.steen, 1));
+  }
+  const bodemY = (treden - 1) * (diep * 2 - 1);
+  for (const x of [-breed + 2, breed - 2]) d.push(F.kegel([x, 4, treden * treeH - 4], [x, bodemY, 2], 1.3, 1.5, M.hout, 2));
+  return F.model(d, mat, { midden: [0, bodemY / 2, (treden * treeH) / 2], straal: bodemY + treden * treeH + 14 });
+}
+
 // Een hijsbalk onder de nok, met een katrol en een touw: bij een huis met een luik in de gevel.
 function hijsbalk(zaad = 1) {
   const M = { hout: 0, touw: 1, ijzer: 2 };
@@ -3770,6 +3840,76 @@ function dorpshuis(gx, gy, zaad = 1, o = {}) {
   }
   if (oud && r(26) > 0.45) g.modellen.push({ model: schoorpaal(zaad), gx: (x1 + 3) / T, gy: (y1 - 30 / SQ) / T, richting: 'O', z: 0 });
   if (r(27) > 0.66) g.modellen.push({ model: afdak(zaad), gx: (x1 + 20) / T, gy: (y1 - 60 / SQ) / T, richting: 'O', z: 0 });
+  return g;
+}
+
+// Aanbouwhuis: een gewoon huis met een lage keukenaanbouw tegen de zijkant (o.aanbouw, laag en
+// smal) en een buitentrap naar een opkamerdeurtje in de geveltop. Dit is de "afdak of aanbouw
+// tegen de zijkant" uit de twee gekozen uitbreidingen van huis(): dezelfde o.aanbouw-optie als
+// vleugelhuis hieronder, maar met een muurH ruim onder die van het hoofdhuis, zodat hij als een
+// lage uitbouw oogt in plaats van een tweede huis. 6 × 8 tegels, nok langs x.
+function aanbouwhuis(gx, gy, o = {}) {
+  const b = 6, d = 8;
+  const loftU = 188;
+  const g = huis({
+    gx, gy, b, d, nok: 'x', muurH: 120, sokkelH: 38, muur: 'vlecht', dak: 'riet', windveer: true, zaad: o.zaad ?? 211,
+    gevel: {
+      y: [
+        deurElement({ u: 96, b: 44, hoog: 92 }),
+        raamElement({ u: 150, b: 24, h: 54, hoog: 28, luiken: 'hout', bloembak: true }),
+      ],
+      x: [
+        raamElement({ u: 26, b: 22, h: 56, hoog: 26, luiken: 'hout' }),
+        raamElement({ u: 96, b: 22, h: 56, hoog: 26, luiken: 'hout', leeg: true }),
+        deurElement({ u: loftU, b: 30, h: 46, hoog: 32, ramp: 'schors' }),
+      ],
+    },
+    schoorsteen: { t: 0.82, c: -8, hoog: 24, r: 9, steen: true },
+    aanbouw: {
+      t: 0.2, b: 68, diep: 58, overlap: 12, muurH: 78, muur: 'planken', dak: 'riet',
+      eind: [raamElement({ u: 16, b: 20, h: 22, hoog: 22, luiken: 'hout' })],
+      zij: [deurElement({ u: 8, b: 36, hoog: 70, ramp: 'hout' })],
+    },
+    ...o,
+  });
+  const T = TEGEL;
+  const x1 = (gx + b - 0.5) * T;
+  const y1 = (gy + d - 0.5) * T;
+  g.modellen.push({ model: buitentrap(6, o.zaad ?? 211), gx: x1 / T + 0.16, gy: (y1 - (loftU + 15) / SQ) / T, richting: 'O', z: 0 });
+  return g;
+}
+
+// Vleugelhuis: een gewoon huis met een brede, bijna even hoge vleugel tegen de zijkant (dezelfde
+// o.aanbouw als aanbouwhuis hierboven, maar breder en met een muurH dicht bij die van het
+// hoofdhuis). Dat is de "L-vormige plattegrond" uit de twee gekozen uitbreidingen van huis(): één
+// optie, twee heel verschillende silhouetten al naar gelang de maat die je hem meegeeft. 6 × 8
+// tegels, nok langs y (zodat de vleugel dit keer haaks de andere kant op steekt).
+function vleugelhuis(gx, gy, o = {}) {
+  const b = 6, d = 8;
+  const g = huis({
+    gx, gy, b, d, nok: 'y', muurH: 116, sokkelH: 30, muur: 'veldsteen', dak: 'riet', dakOud: true, dakMos: 0.35, zaad: o.zaad ?? 221,
+    gevel: {
+      x: [
+        raamElement({ u: 20, b: 22, h: 58, hoog: 30, lijst: 'pleister', dorpel: 'steen' }),
+        deurElement({ u: 190, b: 46, hoog: 94, ramp: 'schors' }),
+      ],
+      y: [
+        raamElement({ u: 30, b: 22, h: 60, hoog: 28, lijst: 'pleister', dorpel: 'steen' }),
+        raamElement({ u: 130, b: 20, h: 128, hoog: 24, kol: 2, rijen: 1, lijst: 'pleister' }),
+      ],
+    },
+    schoorsteen: { t: 0.2, c: 4, hoog: 26, r: 10 },
+    dakkapellen: [{ t: 0.5, b: 40, hoog: 38, raamB: 20 }],
+    aanbouw: {
+      t: 0.62, b: 132, diep: 110, overlap: 14, muurH: 96, muur: 'vlecht', dak: 'riet', windveer: true,
+      eind: [
+        deurElement({ u: 46, b: 42, hoog: 84 }),
+        raamElement({ u: 96, b: 22, h: 54, hoog: 26, luiken: 'hout' }),
+      ],
+      zij: [raamElement({ u: 20, b: 22, h: 54, hoog: 26, luiken: 'hout', bloembak: true })],
+    },
+    ...o,
+  });
   return g;
 }
 
@@ -4037,6 +4177,9 @@ module.exports = {
   bijenkorf,
   kippenren,
   dorpshuis,
+  aanbouwhuis,
+  vleugelhuis,
+  buitentrap,
   brandplek,
   verreToren,
   hek,

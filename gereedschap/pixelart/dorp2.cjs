@@ -840,6 +840,44 @@ function schuur(gx, gy, o = {}) {
   });
 }
 
+// Een houtschuur: een klein, laag onderkomen van boomstammen met een zwaar overstekend rieten
+// dak en een gemetselde boogdeur — dezelfde opzet als de schuur hierboven, maar kleiner en van
+// hout in plaats van veldsteen. Ernaast staat alvast een stapel brandhout. 3 × 4 tegels, nok
+// langs y: de boogdeur kijkt naar de kijker.
+function houtschuur(gx, gy, o = {}) {
+  const b = o.b ?? 3;
+  const d = o.d ?? 4;
+  const g = D.huis({
+    gx, gy, b, d, nok: 'y', muurH: o.muurH ?? 44, sokkelH: o.sokkelH ?? 12,
+    muur: o.muur ?? 'blokhut', hout: o.hout ?? 'schors', dak: o.dak ?? 'riet',
+    dakOud: o.dakOud ?? true, dakMos: o.dakMos ?? 0.3, overstek: o.overstek ?? 24, zaad: o.zaad ?? 63,
+    gevel: { y: [boogdeurElement({ u: Math.round((b * 32 - 60) / 2), b: 60, hoog: 38 })], x: [] },
+    ...o,
+  });
+  const x0 = (gx - 0.5) * TEGEL;
+  const y1 = (gy + d - 0.5) * TEGEL;
+  g.modellen.push({ model: D.houtstapel(o.zaad ?? 63), gx: (x0 + (b * 32) / 2 / SQ) / TEGEL, gy: y1 / TEGEL + 0.34, richting: 'Z', z: 0 });
+  return g;
+}
+
+// Een kippenhok: een piepklein onderkomen op een lage stenen voet, met een rieten dakje en een
+// laag luikje. D.kippenren (de rieten omheining) komt er alvast naast te staan, met zijn eigen
+// opening naar het hok toe. 2 × 2 tegels, nok langs y.
+function kippenhok(gx, gy, o = {}) {
+  const b = o.b ?? 2;
+  const d = o.d ?? 2;
+  const g = D.huis({
+    gx, gy, b, d, nok: 'y', muurH: o.muurH ?? 34, sokkelH: o.sokkelH ?? 8,
+    muur: o.muur ?? 'planken', hout: o.hout ?? 'hout', dak: o.dak ?? 'riet', overstek: o.overstek ?? 14, zaad: o.zaad ?? 47,
+    gevel: { y: [D.deurElement({ u: Math.round((b * 32 - 20) / 2), b: 20, hoog: 18, ramp: 'schors' })], x: [] },
+    ...o,
+  });
+  const x1 = (gx + b - 0.5) * TEGEL;
+  const y1 = (gy + d - 0.5) * TEGEL;
+  g.modellen.push({ model: D.kippenren(o.zaad ?? 47), gx: x1 / TEGEL + 0.75, gy: y1 / TEGEL - 0.05, richting: 'ZW', z: 0 });
+  return g;
+}
+
 // ---------------------------------------------------------------- de bakkerij
 
 // Een toonbank onder het luik: het luik klapt naar beneden en daar ligt het brood.
@@ -1407,5 +1445,6 @@ function beekProef(o = {}) {
 module.exports = {
   GLAS, glasraamElement, roosvensterElement, boogdeurElement, klimopElement, klokkentoren, sterSpits, kapel,
   grafsteen, tombe, kerkhofhek, kerkhof, molenrad, molensteen, watermolen, broodplank, bakkerij, schuur,
+  houtschuur, kippenhok,
   prikbord, ketel, kruidenrek, kruidenhut, gewei, huidenrek, jagershut, oudstehuis, brug, yCilinder, beekProef,
 };

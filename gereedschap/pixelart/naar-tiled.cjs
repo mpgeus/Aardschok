@@ -321,7 +321,26 @@ function gebouwenLijst() {
     lijst.push(['dorpshuis1', () => D.dorpshuis(0, 0, 1, { maat: [7, 5], rook: false })]);
     lijst.push(['dorpshuis3', () => D.dorpshuis(0, 0, 3, { maat: [6, 8], rook: false })]);
     lijst.push(['dorpshuis5', () => D.dorpshuis(0, 0, 5, { maat: [5, 7], rook: false, muur: 'blokhut' })]);
+    // Twaalf nieuwe gebouwen voor het dorp (20 sep 2026), in de geest van de leidende referentie
+    // (ontwerp/beeld.md): klein 5×7, gewoon 6×8, groot 7×9, riet als meerderheid, een enkele
+    // schaliën en hooguit één rode pannen, en geen twee met hetzelfde silhouet. dorpKlein/Gewoon/
+    // Groot leunen op dorpshuis (dat rolt zelf dakkapel/erker/windveer/schoorsteen/ouderdom per
+    // zaad); aanbouwhuis en vleugelhuis zijn expliciet, want die tonen de nieuwe o.aanbouw-optie
+    // op huis() (zie dorp.cjs): dezelfde optie, eenmaal laag als aanbouw tegen de zijkant en
+    // eenmaal breed als L-vormige plattegrond.
+    lijst.push(['dorpKlein1', () => D.dorpshuis(0, 0, 101, { maat: [5, 7], muur: 'vlecht', dak: 'riet', rook: false })]);
+    lijst.push(['dorpKlein2', () => D.dorpshuis(0, 0, 102, { maat: [5, 7], muur: 'planken', dak: 'leien', rook: false })]);
+    lijst.push(['dorpKlein3', () => D.dorpshuis(0, 0, 103, { maat: [5, 7], muur: 'blokhut', dak: 'riet', rook: false })]);
+    lijst.push(['dorpGewoonAanbouw', () => D.aanbouwhuis(0, 0)]);
+    lijst.push(['dorpGewoonVleugel', () => D.vleugelhuis(0, 0)]);
+    lijst.push(['dorpGewoon3', () => D.dorpshuis(0, 0, 106, { maat: [6, 8], muur: 'veldsteen', dak: 'leien', rook: false })]);
+    lijst.push(['dorpGewoon4', () => D.dorpshuis(0, 0, 107, { maat: [6, 8], muur: 'planken', dak: 'riet', rook: false })]);
+    lijst.push(['dorpGroot1', () => D.dorpshuis(0, 0, 108, { maat: [7, 9], muur: 'vlecht', dak: 'riet', rook: false })]);
+    lijst.push(['dorpGroot2', () => D.dorpshuis(0, 0, 109, { maat: [7, 9], muur: 'planken', dak: 'pannen', rook: false })]);
   }
+  if (typeof P.schuur === 'function') lijst.push(['schuurBlokhut', () => P.schuur(0, 0, { b: 5, d: 7, muur: 'blokhut', dakMos: 0.7, zaad: 77 })]);
+  if (typeof P.houtschuur === 'function') lijst.push(['houtschuur', () => P.houtschuur(0, 0)]);
+  if (typeof P.kippenhok === 'function') lijst.push(['kippenhok', () => P.kippenhok(0, 0)]);
   if (typeof P.kapel === 'function') lijst.push(['kapel', () => P.kapel(0, 0)]);
   if (typeof P.kerkhof === 'function') lijst.push(['kerkhof', () => P.kerkhof(0, 0, { b: 6, d: 4, rijen: 4, kol: 3 })]);
   if (typeof P.watermolen === 'function') lijst.push(['watermolen', () => P.watermolen(0, 0, { radVlak: 'y', rook: false })]);

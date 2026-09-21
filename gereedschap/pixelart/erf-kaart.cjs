@@ -388,6 +388,13 @@ zetPunt('wolf', ...vrijeTegel(-12, -12), { wezen: 'wolf', straal: '7' });
   zetPunt('deur van de toren', dx, dy, { overgang: 'toren', komt: `${kx},${ky}` });
 }
 
+// 6. het bospaadje: waar het achter de toren het bos in verdwijnt (zie het opschrift bovenaan),
+// staat een overgang naar "proefbos" — het bos zelf staat nog niet in code (Beeld: het bos als
+// reisgebied, half af en geparkeerd), dus proefbos is de tijdelijke bestemming, zoals
+// T.GEBIEDEN dat voor elke kaart zonder eigen regels al doet. Vaste tegel op de kaart, op dezelfde
+// plek als vóór deze editie van het gebouwenvel (die schoof alleen de gid's van gebouwen erna op).
+zetPunt('pad het bos in', 8, 33, { overgang: 'proefbos', komt: '9,33' });
+
 // ---------------------------------------------------------------- de .tmj schrijven
 
 const kaart = {
