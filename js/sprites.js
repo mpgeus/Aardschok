@@ -485,9 +485,14 @@
       const cyclus = 2 * ((h && h.stap) || 0.8);
       return { naam, houding, richting: st.richting, fase: (st.afgelegd / cyclus) % 1 };
     }
-    // Stilstaan: ademen, elk wezen in zijn eigen tempo (e.fase). Wim veegt ondertussen de
-    // trap, zoals hij veertig jaar deed, en in een gesprek praat hij.
-    const rust = naam === 'wim' ? (spel.modus === 'dialoog' ? 'praten' : 'vegen') : 'staan';
+    // Stilstaan: ademen, elk wezen in zijn eigen tempo (e.fase). Wim veegt ondertussen, en in een
+    // gesprek praat hij. In een scène (js/regie.js) praat hij als hij aan het woord is, en staat
+    // hij anders stil: niemand veegt terwijl zijn meester sterft.
+    const wimRust = () => {
+      if (spel.spreektMet === e) return 'praten'; // in een gesprek of een scène (S.spreektMet)
+      return spel.modus === 'regie' ? 'staan' : 'vegen';
+    };
+    const rust = naam === 'wim' ? wimRust() : 'staan';
     const staan = f.houdingen[rust] ? rust : f.houdingen.staan ? 'staan' : Object.keys(f.houdingen)[0];
     const duur = S.houdingDuur(naam, staan) || 1;
     return { naam, houding: staan, richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };

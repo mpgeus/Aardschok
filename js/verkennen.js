@@ -29,8 +29,12 @@
     S.naLopen = null;
   }
 
-  // Loop tot naast het doel en doe daar `actie`. Staat de held er al naast, dan meteen.
-  function loopNaast(S, doel, actie) {
+  // Loop tot naast het doel en doe daar `actie`. Staat de held er al naast, dan meteen. Is het
+  // doel een wezen, dan telt zijn tegel (tx, ty), niet zijn vloeiende plek: wie op Wim of de meester
+  // klikt terwijl die net een stap zet, gaf anders een halve tegel aan het padzoeken, en dat liep
+  // vast.
+  function loopNaast(S, wat, actie) {
+    const doel = wat.tx != null ? { x: wat.tx, y: wat.ty } : wat;
     const held = S.held;
     if (!held.onderweg && T.raakt(S.wereld, T.tegelVan(held), doel)) {
       held.pad = [];
@@ -47,17 +51,49 @@
     S.naLopen = { doel: { x: doel.x, y: doel.y }, actie };
   }
 
+  // Voor js/tutorial.js, dat met dezelfde klik iets anders laat gebeuren: erheen lopen gaat
+  // precies zoals hier.
+  T.loopNaar = loopNaar;
+  T.loopNaast = loopNaast;
+
+  // Wat je opraapt door erop te stappen: de sleutel van het trappenhuis, en de zak zaaigoed die
+  // de meester in de tutorial wil hebben. De tekst bij de muis, en wat er gemeld wordt.
+  const OPRAPEN = {
+    sleutel: { tekst: 'De sleutel oppakken', vind: 'Je vindt de ijzeren sleutel.' },
+    zak: { tekst: 'De zak zaaigoed oppakken', vind: 'Je tilt de zak zaaigoed op. Zwaarder dan hij eruitziet.' },
+  };
+
+  // Een ton of iets anders dat breekt (T.VOORWERPEN, `breekt`), sla je met je staf in stukken.
+  // Dat kost niets, net als slaan in een gevecht: het is het enige wat niets kost, en de meester
+  // laat het je in de tutorial zelf doen.
+  T.slaKapot = async function (S, v) {
+    const eig = T.VOORWERPEN[v.soort];
+    if (!eig || !eig.breekt) return;
+    await T.anim.uitval(S.held, { x: v.x, y: v.y });
+    if (T.VOORWERPEN[v.soort] !== eig) return; // intussen al gebroken
+    v.soort = eig.breekt;
+    T.ui.bericht(`Je slaat ${eig.naam || 'het'} in duigen. Het kost je niets.`, 'goed');
+  };
+
   // Wat gebeurt er als je hierop klikt? Geeft { tekst, doe, fout } terug, of null.
   // De tekst komt bij de muis te staan; het scherm en de klik stellen dus dezelfde vraag.
   T.handelingVerkennen = function (S, doel) {
     // Met een spreuk in de hand richt elke klik die spreuk (zie toveren.js).
     if (S.spreuk) return T.handelingSpreuk(S, doel);
     if (!doel) return null;
+    // Wat de tutorial op dit moment anders laat gaan (js/tutorial.js): de fontein schept water
+    // voor de meester in plaats van dat je hem zelf leegdrinkt, en de meester neemt aan wat je
+    // hem brengt.
+    const anders = T.tutorialHandeling && T.tutorialHandeling(S, doel);
+    if (anders) return anders;
     const w = S.wereld;
     if (doel.wezen) {
       const e = doel.wezen;
-      if (e.soort === 'wim') return { tekst: 'Praten met Wim', doe: () => loopNaast(S, e, () => T.openDialoog(S, e)) };
       if (e.kant === 'monster') return { tekst: `De ${e.naam} aanvallen`, doe: () => T.startGevecht(S, e, true) };
+      // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: Wim, en de meester.
+      if (T.GESPREKKEN && T.GESPREKKEN[e.soort]) {
+        return { tekst: `Praten met ${e.naam}`, doe: () => loopNaast(S, e, () => T.openDialoog(S, e)) };
+      }
       return null;
     }
     if (doel.voorwerp) {
@@ -66,7 +102,11 @@
         if (S.fonteinLeeg) return { tekst: 'De fontein staat droog', fout: true, doe: () => T.ui.bericht('De fontein staat droog. Wim had gelijk: het was de laatste slok.') };
         return { tekst: `De laatste slok drinken (${T.duurTekst(T.FONTEIN.maanden)} jonger)`, doe: () => loopNaast(S, v, () => T.drinkLaatsteSlok(S)) };
       }
-      if (v.soort === 'sleutel') return { tekst: 'De sleutel oppakken', doe: () => loopNaar(S, v) };
+      if (OPRAPEN[v.soort]) return { tekst: OPRAPEN[v.soort].tekst, doe: () => loopNaar(S, v) };
+      const eig = T.VOORWERPEN[v.soort];
+      if (eig && eig.breekt) {
+        return { tekst: `${T.hoofdletter(eig.naam || 'het')} kapotslaan met je staf (kost niets)`, doe: () => loopNaast(S, v, () => T.slaKapot(S, v)) };
+      }
       if (v.soort === 'trap') return { tekst: 'De trap op', doe: () => loopNaast(S, v, () => T.gewonnen(S)) };
       if (v.soort === 'kist') {
         return { tekst: 'De kist bekijken', doe: () => loopNaast(S, v, () => T.ui.bericht('Een kist vol versleten bezems. Wim gooit niets weg.')) };
@@ -200,11 +240,11 @@
       const d = T.deurOp(w, t.x, t.y);
       if (d) T.ontdekBijDeur(w, d);
       const v = T.voorwerpOp(w, t.x, t.y);
-      if (v && v.soort === 'sleutel') {
+      if (v && OPRAPEN[v.soort]) {
         w.voorwerpen.splice(w.voorwerpen.indexOf(v), 1);
-        S.inventaris.add('sleutel');
+        S.inventaris.add(v.soort);
         T.ui.toonInventaris(S);
-        T.ui.bericht('Je vindt de ijzeren sleutel.', 'goed');
+        T.ui.bericht(OPRAPEN[v.soort].vind, 'goed');
       }
       // Stap je op een tegel die naar een ander gebied leidt, dan gaan we daarheen — maar niet
       // hier, midden in de beweging: de spellus loopt nu door de lijst wezens van deze wereld

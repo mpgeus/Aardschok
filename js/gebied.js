@@ -97,6 +97,23 @@
     }
   }
 
+  // Een wezen naar een ander gebied verhuizen en daar neerzetten: Wim die in de tutorial de toren
+  // uit komt rennen, en weer naar binnen gaat, en de held die bij een nieuw spel op het erf begint
+  // (js/tutorial.js). Geen overgang met alles wat daarbij hoort — dat doet T.gaNaarGebied, voor de
+  // held tijdens het spelen — maar alleen uit de ene lijst wezens en in de andere. Waar hij daar
+  // rondscharrelt (`thuis`), en of het gebied nu S.wereld is, regelt de aanroeper.
+  T.zetInGebied = function (S, e, naar, x, y) {
+    const nieuw = T.gebied(S, naar);
+    if (!nieuw) return false;
+    for (const w of Object.values(S.gebieden)) {
+      const i = w.wezens.indexOf(e);
+      if (i >= 0 && w !== nieuw) w.wezens.splice(i, 1);
+    }
+    if (!nieuw.wezens.includes(e)) nieuw.wezens.push(e);
+    zetNeer(e, x, y);
+    return true;
+  };
+
   // Waar land je als je uit `vanaf` in `w` aankomt? Bij de overgang die terugwijst naar waar je
   // vandaan komt, op de tegel ernaast (`komt`).
   //

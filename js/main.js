@@ -24,20 +24,21 @@
   // Hoe hoog iets boven zijn tegel uitsteekt, om erop te kunnen klikken. Met sprites zijn de
   // figuren groter dan de vlakken waren, dus vraagt het aanwijzen het aan de sprites zelf.
   const WEZEN_HOOGTE = { wim: 48, slijm: 28, skelet: 52 };
-  const VOORWERP_HOOGTE = { fontein: 32, kist: 36, trap: 46, sleutel: 28 };
-  const SPRITE_VOORWERP_HOOGTE = { fontein: 46, kist: 40, trap: 46, sleutel: 26 };
+  const VOORWERP_HOOGTE = { fontein: 32, kist: 36, trap: 46, sleutel: 28, ton: 32, zak: 24 };
+  const SPRITE_VOORWERP_HOOGTE = { fontein: 46, kist: 40, trap: 46, sleutel: 26, ton: 40, zak: 28 };
   const hoogteVan = (e) =>
     T.sprites.aan && !T.debug.vlakken ? T.sprites.hoogte(e.soort) : WEZEN_HOOGTE[e.soort] || 48;
   const voorwerpHoogte = (v) =>
     (T.sprites.aan && !T.debug.vlakken ? SPRITE_VOORWERP_HOOGTE : VOORWERP_HOOGTE)[v.soort];
 
-  T.nieuwSpel = function (toonPlek) {
+  // Een nieuw spel begint op het erf, bij de oude meester in zijn moestuin: de tutorial
+  // (js/tutorial.js). Vanaf het titelscherm begint die pas als je op de knop drukt; na "Opnieuw"
+  // meteen.
+  T.nieuwSpel = function (meteen) {
     S.gebieden = {}; // een nieuw spel begint met een schone toren en een schoon erf
-    const w = T.gebied(S, 'toren');
-    const held = w.wezens.find((e) => e.soort === 'held');
     Object.assign(S, {
-      wereld: w,
-      held,
+      vlaggen: new Set(),
+      gesprekLeeftijd: {},
       modus: 'verkennen',
       gevecht: null,
       overgang: null,
@@ -64,12 +65,14 @@
       handeling: null,
       naLopen: null,
       regieCamera: null, // waar de camera in een scène naartoe kijkt (js/regie.js); null = de held volgen
+      spreektMet: null,
     });
-    const p = T.naarScherm(held.x, held.y);
+    T.beginOpHetErf(S); // zet S.wereld, S.held en S.tutorial
+    const p = T.naarScherm(S.held.x, S.held.y);
     S.camera = { x: p.x, y: p.y - 24 };
     T.ui.reset(S);
-    T.ui.bericht('Je bent terug in de hal van je toren, na veertig jaar. Wim staat er nog.');
-    if (toonPlek) T.ui.plek('De hal');
+    T.ui.bericht('Een middag in de nazomer. Je oude meester staat in zijn moestuin, zoals altijd.');
+    if (meteen) T.startTutorial(S);
   };
 
   // Het beeld zoomt mee met het venster: op een groot scherm wordt de toren groter, op een
@@ -223,6 +226,9 @@
     // net doorheen.
     if (S.naarGebied) T.gaNaarGebied(S, S.naarGebied);
     T.werkLichtenBij(S, dt);
+    // Heeft de speler gedaan wat de meester vroeg? Dan begint de volgende scène (js/tutorial.js),
+    // nog vóór er iets dwaalt of iemand je ziet.
+    T.werkTutorialBij(S);
     if (S.modus === 'verkennen') {
       T.laatDwalen(S, dt);
       const m = T.zoekOntdekking(S);
@@ -275,9 +281,14 @@
       return;
     }
     // Tijdens een scène (js/regie.js) ligt de invoer stil op de overslaan-toets na: de speler
-    // kan niet wegwandelen, maar hoeft ook niet werkeloos toe te kijken.
+    // kan niet wegwandelen, maar hoeft ook niet werkeloos toe te kijken. Enter, spatie of 1 is
+    // "Verder" bij een regel tekst.
     if (S.modus === 'regie') {
       if (ev.key === 'Escape') T.regie.overslaan();
+      else if (ev.key === 'Enter' || ev.key === ' ' || ev.key === '1') {
+        ev.preventDefault();
+        T.ui.kiesKeuze(0);
+      }
       return;
     }
     if (S.modus !== 'verkennen' && S.modus !== 'gevecht') return;
@@ -374,10 +385,11 @@
       T.tekenScene(ctx, S, bw, bh);
     },
     // Bewijs dat js/regie.js werkt: Wim loopt naar de fontein, zegt iets, wordt door een kleine
-    // vuurschicht zichtbaar een jaar ouder, en loopt terug. Wim, niet de meester: die staat nog
-    // niet in het spel. Toren.debug.regieProef() in de console van de browser.
+    // vuurschicht zichtbaar een jaar ouder, en loopt terug. Alleen in de hal, waar Wim staat;
+    // Toren.debug.regieProef() in de console van de browser.
     async regieProef() {
       const wim = S.wereld.wezens.find((e) => e.soort === 'wim');
+      if (!wim) return 'Wim staat hier niet: ga eerst de toren in.';
       // Alleen de held heeft normaal een leeftijd (js/wereld.js); voor de proef leent Wim er
       // hier eentje, zodat T.verouder iets heeft om bij op te tellen.
       if (wim.leeftijd == null) wim.leeftijd = 97 * 12;
@@ -389,6 +401,16 @@
       });
       return `Wim is nu ${T.leeftijdTekst(wim.leeftijd)}.`;
     },
+    // Waar staat de tutorial (js/tutorial.js)? Toren.debug.tutorial() in de console.
+    tutorial() {
+      const t = S.tutorial;
+      if (!t) return 'Geen tutorial.';
+      return {
+        fase: t.fase, bezig: t.bezig, gebied: S.wereld.gebied,
+        held: `${S.held.tx},${S.held.ty}`, meester: `${t.meester.tx},${t.meester.ty} · ${T.leeftijdTekst(t.meester.leeftijd)}${t.meester.dood ? ' · dood' : ''}`,
+        tonnen: [t.tonOud.soort, t.tonJij.soort], spullen: [...S.inventaris],
+      };
+    },
   };
 
   formaat();
@@ -397,15 +419,16 @@
   T.sprites.laad();
   T.nieuwSpel(false);
   S.modus = 'titel';
+  // Geen uitlegscherm: wat een spreuk kost en wat de staf kost, laat de meester je zien
+  // (ontwerp/verhaal.md, "Hij speelt met zijn leeftijd").
   T.ui.toonOverlay(
     'Aardschok',
-    '<p>Veertig jaar geleden sloot je iets op, boven in je toren, en ging je weg. Vannacht schudde de aarde, en het zegel brak.</p>' +
-      '<p>Je bent 84. Elke spreuk kost je tijd van je leven, een vuurschicht een heel jaar, en elke klap die je krijgt een paar maanden. Op je honderdste is het voorbij. Een gevecht dat je ontloopt, kost niets.</p>' +
-      '<p>Klik om te lopen, te praten of iets te gebruiken. <kbd>S</kbd> om te sluipen, <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> voor je spreuken.</p>',
-    'Naar binnen',
+    '<p>Je oude meester is zevenennegentig, en hij doet nog elke dag zijn moestuin. Jij bent vierentachtig. Voor hem ben je nog altijd de jongen.</p>' +
+      '<p>Klik om te lopen, te praten of iets te gebruiken. <kbd>Esc</kbd> slaat een scène over.</p>',
+    'Naar het erf',
     () => {
       S.modus = 'verkennen';
-      T.ui.plek('De hal');
+      T.startTutorial(S);
     },
   );
   requestAnimationFrame(lus);

@@ -43,6 +43,15 @@
     // de verdiepingen bestaan nog niet — maar het beeld ligt klaar (gereedschap/pixelart/trap.cjs).
     trapgat: { blokkeert: true, zichtDicht: false, voet: { dx: -2, dy: -2, b: 3, h: 3 } },
     sleutel: { blokkeert: false, zichtDicht: false },
+    // Een oude ton: breekt in duigen als je hem met je staf slaat (`breekt`: wat er dan van over
+    // is). De meester schiet er in de tutorial een vuurschicht op en mept hem daarna kapot, en
+    // jij doet de tweede (js/tutorial.js). Het beeld, het puin en de zak liggen klaar in
+    // beelden/voorwerpen.png.
+    ton: { blokkeert: true, zichtDicht: false, breekt: 'puin', naam: 'de ton' },
+    puin: { blokkeert: false, zichtDicht: false },
+    // De zak zaaigoed die de meester wil hebben; je raapt hem op door erop te stappen, net als de
+    // sleutel (js/verkennen.js).
+    zak: { blokkeert: false, zichtDicht: false },
   };
 
   // ap: actiepunten per beurt. snelheid: tegels per seconde tijdens het rondlopen (bij de held
@@ -53,8 +62,8 @@
   const WEZENS = {
     // De held heeft hier geen snelheid: hij loopt op zijn leeftijd (zie T.snelheidVan).
     held: { naam: 'jij', kant: 'held', leven: 0, ap: 8, initiatief: 10, snelheid: 0 },
-    // Wim veegt de hal, zoals hij veertig jaar deed: hij schuifelt een paar tegels heen en weer
-    // en staat er dan weer bij stil met zijn bezem (de houding "vegen", zie js/sprites.js). Hij
+    // Wim, de knecht van de meester, veegt de hal: hij schuifelt een paar tegels heen en weer en
+    // staat er dan weer bij stil met zijn bezem (de houding "vegen", zie js/sprites.js). Hij
     // begint nooit een gevecht — hij is neutraal — en hij blijft nooit naast een deur staan.
     wim: { naam: 'Wim', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 3 },
     // De oude meester scharrelt bij zijn moestuin, op het erf (ontwerp/verhaal.md, "Hij doet zijn

@@ -13,8 +13,10 @@
 (function (T) {
   'use strict';
 
-  // De scène die nu loopt, of null. `versnel` is de nooddeur van de stap die op dit moment
-  // wacht: overslaan roept hem aan, die past meteen de eindtoestand toe en meldt de stap klaar.
+  // De scène die nu loopt, of null. `lopend` zijn de nooddeuren van de stappen die op dit moment
+  // wachten: overslaan roept ze allemaal aan, en elk past meteen zijn eindtoestand toe en meldt
+  // zijn stap klaar. Meestal is dat er één, maar twee mensen kunnen tegelijk lopen (Wim rent de
+  // toren uit terwijl het skelet hem volgt, js/tutorial.js): dan wachten er twee.
   let huidige = null;
 
   // Eén stap met twee wegen: `normaal` speelt hem af (geeft een belofte terug), `versneld` zet
@@ -30,18 +32,17 @@
     }
     return new Promise((klaar) => {
       let gedaan = false;
+      const versnel = () => {
+        versneld();
+        meld();
+      };
       const meld = () => {
         if (gedaan) return;
         gedaan = true;
-        if (scn) scn.versnel = null;
+        if (scn) scn.lopend.delete(versnel);
         klaar();
       };
-      if (scn) {
-        scn.versnel = () => {
-          versneld();
-          meld();
-        };
-      }
+      if (scn) scn.lopend.add(versnel);
       normaal().then(meld);
     });
   }
@@ -81,14 +82,24 @@
   // zeg(wie, tekst) — een regel in het gespreksvenster, met één knop om verder te gaan. Dat
   // hergebruikt het scherm van een gesprek (T.ui.toonDialoog) zonder de knopenboom van
   // js/gesprek.js: een scène is geen gesprek met keuzes, maar een tekst die de speler wegklikt.
+  // Wie praat, is zolang S.spreektMet, net als in een gesprek: hij blijft dan zichtbaar achter
+  // een boom (js/tekenen.js, doorkijk) en Wim praat met zijn handen in plaats van te vegen.
   function zeg(wie, tekst) {
+    const S = T.S;
+    const klaarMetPraten = () => {
+      if (S.spreektMet === wie) S.spreektMet = null;
+    };
     return metOverslaan(
       () => new Promise((klaar) => {
+        S.spreektMet = wie;
         T.ui.toonDialoog(T.hoofdletter(wie.naam), tekst, [
-          { tekst: 'Verder', kies: () => { T.ui.sluitDialoog(); klaar(); } },
+          { tekst: 'Verder', kies: () => { T.ui.sluitDialoog(); klaarMetPraten(); klaar(); } },
         ]);
       }),
-      () => T.ui.sluitDialoog(),
+      () => {
+        T.ui.sluitDialoog();
+        klaarMetPraten();
+      },
     );
   }
 
@@ -116,15 +127,23 @@
     T.S.regieCamera = naar ? punt(naar) : null;
   }
 
-  // tover(wie, spreuk, doel) — een spreuk uitspreken als een ander wezen dan de held: eerst het
-  // (zichtbare) effect, dan pas het jaar via T.verouder — dezelfde volgorde als de held
+  // tover(wie, spreuk, doel, effect) — een spreuk uitspreken als een ander wezen dan de held:
+  // eerst het (zichtbare) effect, dan pas het jaar via T.verouder — dezelfde volgorde als de held
   // (js/toveren.js). Dit is geen tweede spreukenmotor: het kost geen actiepunten en telt niet
   // voor meesterschap (dat is alleen van de held); het speelt de vlucht af die bij de spreuk
-  // hoort en laat T.verouder de tijd innen. Een eigen wachtje zorgt dat dat jaar hooguit één
-  // keer wordt geïnd, of de stap nu uitgekeken of overgeslagen wordt.
-  function tover(wie, spreukId, doel) {
+  // hoort en laat T.verouder de tijd innen. `effect` (mag weg) is wat de spreuk bij aankomst
+  // doet — een skelet raken, bijvoorbeeld — en komt dus vóór het jaar: wie met zijn laatste
+  // spreuk honderd wordt, ziet hem nog raken. Eigen wachtjes zorgen dat het effect en het jaar
+  // allebei precies één keer gebeuren, of de stap nu uitgekeken of overgeslagen wordt.
+  function tover(wie, spreukId, doel, effect) {
     const eig = T.SPREUKEN[spreukId];
+    let geraakt = false;
     let geind = false;
+    const raak = () => {
+      if (geraakt) return;
+      geraakt = true;
+      if (effect) effect();
+    };
     const verouder = () => {
       if (geind) return;
       geind = true;
@@ -143,9 +162,36 @@
         await (eig.basis.schade ? T.anim.schicht(S, van, naar) : T.anim.wind(S, van, naar));
         // Opruimen zoals de held dat doet, anders eindigt uitkijken anders dan overslaan.
         wie.tovert = null;
+        raak();
         verouder();
       },
-      verouder,
+      () => {
+        wie.tovert = null;
+        raak();
+        verouder();
+      },
+    );
+  }
+
+  // sla(wie, doel, effect) — uithalen met de staf naar een tegel ernaast: de klap zelf is de
+  // uitval uit js/anim.js (dezelfde als in een gevecht), en `effect` gebeurt op het moment van
+  // de klap. Een klap met de staf kost niemand jaren; dat is juist wat de meester ermee laat zien.
+  function sla(wie, doel, effect) {
+    let geklapt = false;
+    const klap = () => {
+      if (geklapt) return;
+      geklapt = true;
+      if (effect) effect();
+    };
+    return metOverslaan(
+      async () => {
+        await T.anim.uitval(wie, punt(doel));
+        klap();
+      },
+      () => {
+        wie.uitval = null;
+        klap();
+      },
     );
   }
 
@@ -155,7 +201,7 @@
     // wordt.
     async speel(S, scene) {
       T.S = S; // zodat loop/zeg/wacht/kijk/camera/tover, die geen S krijgen, de goede spelstaat zien
-      const scn = { overgeslagen: false, versnel: null };
+      const scn = { overgeslagen: false, lopend: new Set() };
       const vorige = huidige;
       huidige = scn;
       const vorigeModus = S.modus;
@@ -176,9 +222,20 @@
     overslaan() {
       if (!huidige || huidige.overgeslagen) return;
       huidige.overgeslagen = true;
-      if (huidige.versnel) huidige.versnel();
+      for (const versnel of [...huidige.lopend]) versnel();
     },
 
-    loop, zeg, wacht, kijk, camera, tover,
+    // Loopt er nu een scène? Voor wie iets anders wil doen zolang er geregisseerd wordt.
+    bezig: () => !!huidige,
+
+    // Een nieuw hoofdstuk in dezelfde scène: wie hiervóór oversloeg, heeft dat stuk overgeslagen,
+    // niet de rest. Zo slaat Escape tijdens het gevecht aan het eind van de tutorial het gevecht
+    // over, maar niet Wim die daarna om de meester rouwt (js/tutorial.js). Het einde van wat
+    // overgeslagen werd, ligt er dan al precies zo bij als na uitkijken.
+    hoofdstuk() {
+      if (huidige) huidige.overgeslagen = false;
+    },
+
+    loop, zeg, wacht, kijk, camera, tover, sla,
   };
 })(globalThis.Toren = globalThis.Toren || {});

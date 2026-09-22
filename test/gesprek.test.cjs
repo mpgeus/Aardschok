@@ -77,12 +77,20 @@ test('ouderGewordenSinds geldt pas als de held sinds het afscheid ook echt ouder
   assert.equal(T.voorwaardeGeldt(S, 'wim', { ouderGewordenSinds: 12 }), false);
 });
 
+test('zolang de meester leeft, stuurt Wim je naar buiten, naar zijn bonen', () => {
+  const S = nieuweS();
+  const knoop = T.gesprekKnoop(S, 'wim', 'welkom');
+  assert.ok(knoop.tekst.includes('bij zijn bonen'));
+  assert.deepEqual(knoop.keuzes.map((k) => k.naar || 'sluit'), ['voorraad', 'sluit']);
+});
+
 test('Wims begroeting volgt de sleutel: nog niet gevonden, op zak, of al gebruikt', () => {
   const S = nieuweS();
+  T.zetVlag(S, 'meesterDood'); // na de tutorial: nu ben jij de meester
 
   let knoop = T.gesprekKnoop(S, 'wim', 'welkom');
-  assert.ok(knoop.tekst.includes('Veertig jaar heb ik de trap geveegd'));
-  assert.equal(knoop.keuzes.length, 4);
+  assert.ok(knoop.tekst.includes('Zo moet ik u nu noemen'));
+  assert.equal(knoop.keuzes.length, 5);
 
   S.inventaris.add('sleutel');
   knoop = T.gesprekKnoop(S, 'wim', 'welkom');
@@ -98,6 +106,7 @@ test('Wims begroeting volgt de sleutel: nog niet gevonden, op zak, of al gebruik
 
 test('Wim merkt op dat je meer dan een jaar ouder bent geworden sinds jullie elkaar spraken', () => {
   const S = nieuweS();
+  T.zetVlag(S, 'meesterDood');
 
   let knoop = T.gesprekKnoop(S, 'wim', 'welkom');
   assert.ok(!knoop.tekst.includes('een jaar ouder'));
@@ -110,12 +119,13 @@ test('Wim merkt op dat je meer dan een jaar ouder bent geworden sinds jullie elk
 
 test('vanuit de begroeting kun je via "aardschok" bij "monsters" komen en weer terug naar "meer"', () => {
   const S = nieuweS();
+  T.zetVlag(S, 'meesterDood');
   const begroeting = T.gesprekKnoop(S, 'wim', 'welkom');
   const naarAardschok = begroeting.keuzes.find((k) => k.zeg === 'Wat is er vannacht gebeurd?');
   assert.equal(naarAardschok.naar, 'aardschok');
 
   const aardschok = T.gesprekKnoop(S, 'wim', 'aardschok');
-  const naarMonsters = aardschok.keuzes.find((k) => k.zeg === 'Wat voor gespuis?');
+  const naarMonsters = aardschok.keuzes.find((k) => k.zeg === 'Wat kwam er de trap af?');
   assert.equal(naarMonsters.naar, 'monsters');
 
   const monsters = T.gesprekKnoop(S, 'wim', 'monsters');
