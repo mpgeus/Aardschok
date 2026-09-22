@@ -10,12 +10,11 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## Loopt nu
 
-- Punt 2, fase B1 (een agent): knieën in de loop van de dorpelingen, eerst voor de smid en de
-  twee gewone dorpelingen.
+- Punt 2, fase B2a (een agent): elf dorpelingen met een naam leren lopen, met knieën.
 - Ronde 4a van de huizenbouwer (een agent): de hekjes van wilgentenen en latten, en de
   tuinstukken als eigen vel in Tiled.
-- Claude zelf: de teksten van de tutorial poetsen (voor Marcel om te lezen), en punt 3, het
-  questsysteem, voorbereiden.
+- Wacht op Marcel: het draaiboek van de tutorial (gestuurd op 22 sep), en of De koude oven de
+  eerste quest wordt (`toren.md`).
 
 ## Tegelijk: de huizenbouwer op ronde vormen
 
@@ -71,13 +70,13 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    portretten zijn voor de gesprekken.
    **Fase A (af, 22 sep):** de smid en twee gewone dorpelingen lopen en ademen, ook in het spel
    (`T.WEZENS.smid`, en een `zaad` kiest zijn vel). Plaat: `uit/dorpelingen/lopen-proef.png`.
-   Been en arm draaien star om heup en schouder, zonder knie of elleboog; een rok zwaait zelf mee.
-   **Fase B:** geef de andere zestien hun eigen heup-, nek- en schouderpunten voor
-   `bottenDorpeling` (de smid in `dorpelingen.cjs` is het voorbeeld), render meer gewone
-   varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`), en zet de portretten in de gesprekken.
-   **Besloten:** knieën, zoals bij Wim (Marcel, 22 sep; `wereld.md`). Fase B in drie korte
-   stukken: B1 de knieën op de drie die er al zijn, B2 de andere zestien en meer gewone varianten,
-   B3 de portretten in de gesprekken.
+   **Besloten:** knieën, zoals bij Wim (Marcel, 22 sep; `wereld.md`). Fase B in korte stukken:
+   - B1 (af, 22 sep): knieën voor de smid en de twee gewone dorpelingen. De uitleg staat boven de
+     sectie "lopen en staan" in `dorpelingen.cjs`, met de smid als voorbeeld.
+   - B2a: de herbergierster, de boer, de dorpsoudste en de acht uit `dorpelingen2.cjs`.
+   - B2b: de zeven vaklieden uit `dorpelingen3.cjs` (daar neemt `been()` de knie al mee), en meer
+     gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
+   - B3: de portretten in de gesprekken.
 3. **Het questsysteem, met één quest helemaal af.** Klaar als quests gegevens zijn (zie
    `toren.md`), de stand van een quest een voorwaarde is in een gesprek, er goud bestaat, en één
    quest — bijvoorbeeld "De koude oven" — van begin tot eind speelt en de toets van drie antwoorden
