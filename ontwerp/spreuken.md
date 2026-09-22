@@ -232,6 +232,57 @@ Richtingen om uit te kiezen, nog niet besloten:
 4. **Kringen helemaal loskoppelen van leeftijd.** Leeftijd doet dan alleen wat het al doet: minder
    actiepunten, sterkere magie. Misschien is dat genoeg, en is de rest bedacht omdat het kon.
 
+## Spreuken leer je onderweg, en je kunt ze missen (Marcel, 22 sep 2026)
+
+Marcel: meer spreuken, ook spreuken die je tijdens het spelen nog moet leren, en die je ook kunt
+missen, zodat spelers met een andere set eindigen. Nog niet besloten hoe; hieronder het voorstel.
+
+**Een spreuk komt uit de wereld, niet uit een getal.** Elke spreuk heeft één of meer bronnen:
+
+- **Een leraar.** De meester leert je de drie startspreuken, en misschien een vierde als je hem
+  in zijn moestuin helpt vóórdat hij sterft. Wat hij je niet leerde, sterft met hem. Later: een
+  andere tovenaar (werklijst 13), de kruidenvrouw, de leerling die je iets terugleert.
+- **Een beloning van een quest.** Eén van de drie wegen van een quest geeft een spreuk, een
+  andere goud of een grondstof. Kies je de ene, dan mis je de andere. Dat past in de toets van drie
+  antwoorden die er al is.
+- **Een rol**, ergens bewaakt of verstopt, soms in een geheime doorgang. Staat het huis in brand
+  of gooi je er een vuurschicht doorheen, dan is de rol weg.
+- **De bibliotheek van de toren.** Die herstel je, en daar vind je spreuken terug. Duur, maar
+  zeker.
+- **Herinneren door te oefenen** (zie hierboven): een verwante spreuk goed beheersen brengt een
+  oude spreuk terug.
+
+**Missen is een gevolg van een keuze, niet van een gemiste hoek.** Een spreuk die je mist omdat
+je een kast niet opendeed, voelt als pech. Een spreuk die je mist omdat je de meester liet wachten
+of de andere weg koos, voelt als jouw verhaal. Daarom heeft elke spreuk die je kunt missen een
+bron die dichtgaat door iets wat je deed, en staat bij het kiezen dat er iets op het spel staat.
+
+**Geen spreuk is nodig om te winnen.** Dat is "niets is een muur" nog een keer: Ontgrendel is een
+goedkopere weg langs een slot, nooit de enige. En de eindstrijd moet met elke set te winnen zijn,
+net zoals hij met elke leeftijd te winnen moet zijn.
+
+**Dit lost misschien het wringen met de kringen op** (zie hierboven). Als je een spreuk vindt in
+plaats van hem met jaren te openen, hoeft de kring niet meer aan leeftijd te hangen: een spreuk
+van de derde kring ligt dan gewoon verder weg of hoger in de toren. De zuinige speler kan er ook
+bij, als hij de weg ernaartoe vindt. Dat is richting 2 en 4 samen.
+
+### Nieuwe spreuken (om over te praten)
+
+Aanvullend op de lijst hierboven. Het zwaartepunt ligt bij spreuken die een gevecht ontlopen, want
+die versterken de kernregel; vechtspreuken zijn er al genoeg.
+
+| Spreuk | Kost | Wat hij doet |
+|---|---|---|
+| Stemwerp | 1 maand | Een geluid ergens anders, ook achter een muur. Het dwaallicht voor wat je niet kunt zien. |
+| Schijnbeeld | 6 maanden | Een beeld van jezelf. Monsters lopen en slaan ernaar tot het breekt. |
+| Mist | 3 maanden | Een vak van 3×3 waar niemand doorheen kijkt. Samen met sluipen je ontsnapping. |
+| Dierentaal | 2 maanden | Met een beest praten in plaats van vechten: een wolf die honger heeft, gaat voor een worst. |
+| Vertragen | 6 maanden | Eén monster verliest de helft van zijn actiepunten, twee beurten lang. |
+| Vorst | 3 maanden | Water wordt ijs; een beek wordt een pad. De dure weg eromheen, als spreuk. |
+| Zweven | 2 jaar | Over een ravijn of een kapotte trap (`toren.md`). Een spreuk die je kunt leren en dus ook missen, maar nooit de enige weg. |
+| Uilenoog | 1 maand | Een tijdje kijken door de ogen van een uil: een kamer of een open plek verkennen vóór je erin loopt. |
+| Echo van wat was | 3 maanden | Laat zien wat hier gebeurde. Een spreuk voor het verhaal en voor quests, nooit voor een gevecht. |
+
 ## Onverhoeds raken: wie je niet ziet, raak je harder (Marcel, 22 sep 2026)
 
 Marcel: extra schade aan een beest dat je niet ziet, of dat je van achteren raakt. Nog niet
@@ -267,6 +318,8 @@ kijkrichting.
 
 ## Open vragen voor Marcel
 
+- **Spreuken leren en missen:** klopt het dat missen altijd uit een keuze komt, nooit uit pech?
+  Moeten kringen dan los van leeftijd? Welke nieuwe spreuken wel, welke niet?
 - **Onverhoeds raken:** kloppen +2 en +1, en is verdoven de goede prijs voor de staf?
 
 - **Kringen per leeftijd:** 84, 88, 92 en 96, of andere grenzen?
