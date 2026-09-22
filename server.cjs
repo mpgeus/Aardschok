@@ -27,6 +27,23 @@ const OPSLAAN = {
   '/gereedschap/api/quests-opslaan': path.join(MAP, 'js', 'quests.js'),
 };
 
+// En het enige leesadres dat verder gaat dan een bestand teruggeven: welke kaarten staan er in
+// kaarten/? Dat is er voor gereedschap/wereld.html, zodat een kaart die net in Tiled getekend is
+// meteen in de keuzelijst staat, ook voordat npm run kaarten gedraaid heeft. Het kijkt altijd in
+// die ene map en geeft alleen namen terug, nooit inhoud.
+function kaartNamen(res) {
+  fs.readdir(path.join(MAP, 'kaarten'), (fout, bestanden) => {
+    if (fout) {
+      res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('Kaarten lezen mislukt: ' + fout.message);
+      return;
+    }
+    const namen = bestanden.filter((b) => b.toLowerCase().endsWith('.tmj')).map((b) => b.slice(0, -4)).sort();
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    res.end(JSON.stringify(namen));
+  });
+}
+
 function slaOp(req, res, BESTAND) {
   let body = '';
   let teGroot = false;
@@ -86,6 +103,10 @@ http
     }
     if (req.method === 'POST' && OPSLAAN[pad]) {
       slaOp(req, res, OPSLAAN[pad]);
+      return;
+    }
+    if (req.method === 'GET' && pad === '/gereedschap/api/kaarten') {
+      kaartNamen(res);
       return;
     }
     const bestand = path.normalize(path.join(MAP, pad === '/' ? 'index.html' : pad));

@@ -783,9 +783,21 @@
 
   // Elk voorwerp buigt op zijn eigen moment mee met de wind, anders wappert het hele erf als één
   // vlag: een vaste verschuiving in de tijd uit zijn eigen plek op de kaart (dezelfde soort som
-  // als de vlek in tekenVloeren hierboven). T.windWaarde (js/main.js) is de ene golf waar alles
-  // aan hangt; hier alleen op een ander moment bemonsterd. Weegt de soort van dit voorwerp niets
-  // mee, dan doet sprites.buiten er toch niets mee (zie WIND_GEWICHT daar).
+  // als de vlek in tekenVloeren hierboven). T.windWaarde hieronder is de ene golf waar alles aan
+  // hangt; hier alleen op een ander moment bemonsterd. Weegt de soort van dit voorwerp niets mee,
+  // dan doet sprites.buiten er toch niets mee (zie WIND_GEWICHT daar).
+  //
+  // Eén windwaarde voor de hele wereld, ergens tussen -1 en 1: hoe hard en naar welke kant. Twee
+  // golven op een verhouding die niet deelt (dus het herhaalt niet merkbaar) plus af en toe een
+  // vlaag erbovenop, zodat het als weer leest en niet als een speeltje. js/sprites.js bakt hierop
+  // de standen van een voorwerp. Zie ontwerp/beeld.md, "Eén wind door alles heen". Stond in
+  // js/main.js; staat hier omdat gereedschap/wereld.html tekent zonder de spellus erbij te laden.
+  T.windWaarde = function (tijd) {
+    const golf = Math.sin(tijd * 0.31) * 0.4 + Math.sin(tijd * 0.13 + 1.3) * 0.3;
+    const vlaag = Math.max(0, Math.sin(tijd * 0.085 + 0.7)) ** 4 * 0.5;
+    return Math.max(-1, Math.min(1, golf + vlaag));
+  };
+
   function windVoorInstantie(S, v) {
     const fase = ((v.x * 137 + v.y * 251) % 97) / 97 * 23;
     const w = T.windWaarde(S.tijd + fase);

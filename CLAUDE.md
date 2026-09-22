@@ -224,10 +224,20 @@ Meesterlijk), om de treden te proberen zonder ze te verdienen.
 `Toren.debug.quest('bakker', 'terug')` zet een quest in een fase zonder hem te spelen ('uit' haalt
 hem weg, beloning en al); zonder fase zegt hij waar hij staat.
 
-Twee bladzijden gereedschap draaien op dezelfde server: `gereedschap/gesprekken.html` voor de
-gesprekken en `gereedschap/quests.html` voor de quests (fasen, wegen, het dorp per fase, en de
-controle die de toets van drie antwoorden nakijkt). Allebei gebruiken ze de regels uit `js/`
-zelf, nooit een eigen kopie, en allebei schrijven ze hun eigen bestand terug.
+Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken ze de regels uit
+`js/` zelf, nooit een eigen kopie:
+
+- `gereedschap/gesprekken.html` voor de gesprekken en `gereedschap/quests.html` voor de quests
+  (fasen, wegen, het dorp per fase, en de controle die de toets van drie antwoorden nakijkt).
+  Allebei schrijven ze hun eigen bestand terug.
+- `gereedschap/wereld.html` voor de kaarten: de kaart getekend met `js/tekenen.js` zelf, lagen
+  aan en uit (begaanbaar, mensen met hun dwaalstraal, quest en raakpunten, uitgangen), klik een
+  tegel en er staat wat het spel denkt dat daar is, en de controle. Het **schrijft niets**, en
+  het leest de `.tmj` rechtstreeks van schijf: opslaan in Tiled, verversen, zien — zonder
+  `npm run kaarten`. Ver uitgezoomd tekent het zelf een plattegrond, want de tekencode van het
+  spel is er niet op gebouwd. De controle zelf staat in `gereedschap/keuring.js` (`T.keurKaart`
+  en `T.keurDekking`, zonder scherm en dus getoetst): wat op de kaart staat en niet kan, en
+  omgekeerd wat het spel vraagt en nergens staat.
 
 Twee dingen die bij het mikken misgaan:
 

@@ -149,25 +149,53 @@ Daarom de scheiding (besloten, Marcel 22 sep 2026):
 marskramer neergezet worden. Gebeurt dat eerst met de hand, dan komt het gereedschap te laat voor
 precies het werk waar het voor bedoeld was.
 
-**In rondes, zoals de huizenbouwer, met na de eerste al iets bruikbaars:**
-
-1. **Kijken.** De kaart in de browser, getekend met de tekencode van het spel zelf. Lagen aan en
-   uit: begaanbaar, vast, wie waar staat met zijn dwaalstraal, welke voorwerpen bij welke
-   questfase horen, waar de uitgangen zitten. Klik een tegel: wat denkt het spel dat hier is.
-   Schrijft niets, dus geen enkel risico — en het antwoordt al op "klopt dit?" zonder het spel te
-   spelen.
-2. **Neerzetten.** Mensen en questvoorwerpen plaatsen, verslepen en weghalen, terug de `.tmj` in.
-3. **Betekenis erbij.** Klik op de bakker en zijn gesprek staat in hetzelfde scherm; hang er een
-   quest aan; leg de leem neer vanuit de fase waar hij bij hoort.
-4. **Eén controle.** Alles wat het spel van een kaart nodig heeft op één plek nagekeken, in beeld
-   in plaats van als regel in een terminal: een onbekend `wezen`, een `quest=` die een fase noemt
-   die niet bestaat, een `raak=` zonder raakpunt, een questvoorwerp dat vast is (mag niet), een
-   gebied zonder uitgang, gebouwen die elkaar overlappen.
-
-De helft ligt er al: `js/kaart.js` leest de `.tmj`, `js/tekenen.js` tekent hem, `npm run kaarten`
+De helft lag er al: `js/kaart.js` leest de `.tmj`, `js/tekenen.js` tekent hem, `npm run kaarten`
 vangt al ontbrekende tegels, objecten in de verkeerde laag en gebouwen die elkaar overlappen, en
 het questgereedschap leest de kaarten al uit om te zeggen waar de dingen liggen
 (`wereldHaakjes` in `gereedschap/quests-tool.js`).
+
+**In rondes, zoals de huizenbouwer, met na de eerste al iets bruikbaars:**
+
+1. **Kijken** — *af, 22 sep 2026*. De kaart in de browser, getekend met de tekencode van het spel
+   zelf. Lagen aan en uit: begaanbaar, vast, wie waar staat met zijn dwaalstraal, welke voorwerpen
+   bij welke questfase horen, waar de uitgangen zitten. Klik een tegel: wat denkt het spel dat
+   hier is. Schrijft niets, dus geen enkel risico — en het antwoordt al op "klopt dit?" zonder het
+   spel te spelen.
+2. **Neerzetten.** Mensen en questvoorwerpen plaatsen, verslepen en weghalen, terug de `.tmj` in.
+3. **Betekenis erbij.** Klik op de bakker en zijn gesprek staat in hetzelfde scherm; hang er een
+   quest aan; leg de leem neer vanuit de fase waar hij bij hoort.
+4. **Eén controle** — *af, 22 sep 2026, naar voren gehaald*. Alles wat het spel van een kaart
+   nodig heeft op één plek nagekeken, in beeld in plaats van als regel in een terminal: een
+   onbekend `wezen`, een `quest=` die een fase noemt die niet bestaat, een `raak=` zonder
+   raakpunt, een questvoorwerp dat vast is (mag niet), een gebied zonder uitgang, gebouwen die
+   elkaar overlappen.
+
+**Wat ronde 1 werd (22 sep 2026).** `gereedschap/wereld.html`, naast de twee bladzijden die er al
+waren, met `js/tekenen.js` en `js/kaart.js` van het spel zelf erin geladen. Drie dingen liepen
+anders dan hierboven bedacht, en alle drie met een reden:
+
+- **Het leest de `.tmj` rechtstreeks van schijf,** niet uit `kaarten/kaarten.js`. Opslaan in
+  Tiled, verversen, zien — zonder `npm run kaarten`. Dat haalt meteen een stap uit de vijf
+  waarover deze paragraaf gaat. Lukt fetchen niet (het blad los geopend), dan valt het terug op
+  het gebundelde en zegt de statusregel welke van de twee je ziet. De server kreeg er één
+  leesadres bij, `/gereedschap/api/kaarten`, zodat een kaart die net in Tiled getekend is meteen
+  in de keuzelijst staat.
+- **De controle (ronde 4) kwam meteen mee,** want de helft ervan bestond al en het is nú het
+  nuttigst: er moet neergezet worden. Hij staat in `gereedschap/keuring.js` — dus zonder scherm,
+  en `test/keuring.test.cjs` kijkt hem na — en kent twee vragen die tegengesteld wijzen.
+  `T.keurKaart` vraagt wat er op de kaart staat dat het spel niet kan gebruiken. `T.keurDekking`
+  vraagt het omgekeerde: wat vraagt het spel dat nergens staat? Die tweede is de nuttigste, want
+  die zegt precies wat er nog in Tiled moet: op 22 sep zijn dat de bakker, de marskramer, de
+  smidsvrouw, het raakpunt `oven` en de leem. De verdeling blijft die van hierboven: wat met de
+  tékening te maken heeft (een gid die niet bestaat, een boom in de verkeerde laag, twee gebouwen
+  over elkaar) blijft bij `npm run kaarten`, want dat kent de tegelvellen op schijf; de keuring
+  doet de betekenis.
+- **Ver uitgezoomd tekent het gereedschap zelf een plattegrond.** De tekencode van het spel zet
+  de grond op een eigen vlak van venster-gedeeld-door-zoom pixels; bij 13% (nodig om 184×88 in
+  één beeld te zien) is dat honderden megabytes. Onder de 40% komt er dus een schema in de plaats:
+  één ruit per tegel, in de kleur van de grond, met zwart waar iets vast staat. Geen kunst, maar
+  wel het hele dorp in één beeld — en het zijn de tegels zoals het spel ze léést, niet zoals Tiled
+  ze tekent.
 
 **Waar dit opnieuw bekeken moet worden:** hoogte (zie hieronder, en het werklijstpunt daarover). Als
 een hoogtelaag in Tiled niet blijkt te werken, is dát het moment waarop een eigen editor een echte

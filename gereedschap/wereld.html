@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Alles laadt vanaf de hoofdmap, net als index.html: js/sprites.js zoekt zijn vellen in
+       beelden/ en tegels/ met een pad vanaf daar, en dat moet hier hetzelfde uitkomen. Links naar
+       de andere twee gereedschappen krijgen daarom gereedschap/ ervoor. -->
+  <base href="../">
+  <title>Aardschok · wereld</title>
+  <link rel="stylesheet" href="stijl.css">
+  <link rel="stylesheet" href="gereedschap/gesprekken-tool.css">
+  <link rel="stylesheet" href="gereedschap/wereld-tool.css">
+</head>
+<body>
+  <header class="gt-kop">
+    <h1>Wereld</h1>
+    <label>Kaart
+      <select id="wt-kaart"></select>
+    </label>
+    <button id="wt-verversen" type="button" title="De .tmj opnieuw van schijf lezen (na opslaan in Tiled)">Verversen</button>
+    <label>Quest
+      <select id="wt-quest"></select>
+    </label>
+    <label>Fase
+      <select id="wt-fase"></select>
+    </label>
+    <div class="gt-vul"></div>
+    <a class="gt-naar" href="gereedschap/gesprekken.html">Gesprekken →</a>
+    <a class="gt-naar" href="gereedschap/quests.html">Quests →</a>
+    <span id="wt-status" class="gt-status"></span>
+  </header>
+
+  <main class="wt-layout">
+    <section class="wt-beeld">
+      <canvas id="wt-scherm"></canvas>
+      <div class="wt-knoppen">
+        <button id="wt-passend" type="button" title="De hele kaart in beeld">Hele kaart</button>
+        <button id="wt-ware" type="button" title="Op de grootte waarop je speelt">Ware grootte</button>
+        <span id="wt-zoom" class="gt-status"></span>
+        <span class="gt-vul"></span>
+        <span class="gt-status">Slepen = schuiven · wiel = zoomen · klik = tegel vastzetten</span>
+      </div>
+    </section>
+
+    <aside class="wt-zij">
+      <section class="paneel wt-lagen">
+        <h2>Lagen</h2>
+        <div id="wt-lagen"></div>
+      </section>
+
+      <section class="paneel wt-tegel">
+        <h2>Deze tegel<div class="gt-vul"></div><button id="wt-los" type="button" class="gt-mini">los</button></h2>
+        <div id="wt-tegel"><p class="gt-leeg">Beweeg over de kaart, of klik een tegel om hem vast te zetten.</p></div>
+      </section>
+
+      <section class="paneel wt-controle">
+        <h2>Controle<div class="gt-vul"></div><span id="wt-controle-tal" class="gt-status"></span></h2>
+        <div id="wt-controle"></div>
+      </section>
+    </aside>
+  </main>
+
+  <!-- Dezelfde spelbestanden als het spel, gewoon geladen — dit gereedschap heeft van niets een
+       eigen kopie. De kaart wordt ingelezen door js/kaart.js en getekend door js/tekenen.js, dus
+       wat hier in beeld staat, is wat het spel er ook van maakt. js/main.js blijft eruit: dat is
+       de spellus en de invoer van het spel zelf, en die heeft dit blad niet nodig. -->
+  <script src="beelden/beschrijving.js"></script>
+  <script src="beelden/effecten/effecten.js"></script>
+  <script src="tegels/tegels.js"></script>
+  <script src="kaarten/kaarten.js"></script>
+  <script src="js/leeftijd.js"></script>
+  <script src="js/wereld.js"></script>
+  <script src="js/kaart.js"></script>
+  <script src="js/gebied.js"></script>
+  <script src="js/pad.js"></script>
+  <script src="js/iso.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/gesprekken.js"></script>
+  <script src="js/gesprek.js"></script>
+  <script src="js/quests.js"></script>
+  <script src="js/quest.js"></script>
+  <script src="js/verkennen.js"></script>
+  <script src="js/tekenen.js"></script>
+  <script src="gereedschap/keuring.js"></script>
+  <script src="gereedschap/wereld-tool.js"></script>
+</body>
+</html>

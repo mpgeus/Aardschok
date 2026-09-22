@@ -1,0 +1,82 @@
+/* Stijl voor gereedschap/wereld.html. Leunt op ../stijl.css (de kleuren) en op
+   gesprekken-tool.css (de kopbalk, de panelen, de knoppen); hier staat alleen wat dit blad
+   eigen heeft: een kaart die het venster vult, met een kolom ernaast. */
+
+html, body { overflow: hidden; height: 100%; }
+
+.wt-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 10px;
+  padding: 10px;
+  height: calc(100vh - 47px);
+}
+
+.wt-beeld {
+  position: relative;
+  min-width: 0;
+  border: 1px solid var(--rand);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0e1310;
+}
+.wt-beeld canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
+.wt-beeld canvas.wt-sleept { cursor: grabbing; }
+
+.wt-knoppen {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  background: rgba(12, 10, 8, 0.82);
+  border-top: 1px solid var(--rand);
+}
+
+.wt-zij {
+  display: grid;
+  grid-template-rows: auto minmax(120px, auto) minmax(0, 1fr);
+  gap: 10px;
+  min-height: 0;
+}
+.wt-zij .paneel { padding: 10px 12px; overflow: auto; min-height: 0; }
+
+/* Lagen: een vinkje per laag, met het kleurtje waarmee hij in beeld komt. Het vinkje moet hier
+   z'n eigen breedte houden; gesprekken-tool.css rekt een input in een label op tot de volle
+   breedte, en dat is voor een vakje van dertien pixels niet de bedoeling. */
+.wt-laag { display: flex; align-items: center; gap: 7px; font-size: 12.5px; padding: 3px 0; margin: 0; }
+.wt-laag > input { display: inline-block; width: auto; flex: none; margin: 0; }
+.wt-laag .wt-kleur { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+.wt-laag .wt-naam { flex: 1; color: var(--inkt); }
+.wt-laag .wt-sneltoets { color: var(--gedempt); font-size: 11px; flex: none; }
+
+/* Deze tegel: rijen van "wat" en "wat het spel ervan vindt". */
+.wt-rij { display: flex; gap: 8px; font-size: 12.5px; padding: 1.5px 0; align-items: baseline; }
+.wt-rij .wt-wat { color: var(--gedempt); min-width: 84px; flex: none; }
+.wt-rij .wt-is { color: var(--inkt); }
+.wt-ja { color: var(--groen); }
+.wt-nee { color: var(--rood); }
+.wt-kop-tegel { font-family: var(--kop); color: var(--goud); font-size: 14px; margin: 8px 0 3px; }
+.wt-kop-tegel:first-child { margin-top: 0; }
+
+/* Controle: een lijst klachten waar je op kunt klikken om er in beeld heen te springen. */
+.wt-klacht {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 5px 7px;
+  margin-bottom: 4px;
+  border: 1px solid var(--rand);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+}
+.wt-klacht:hover { background: rgba(255, 255, 255, 0.09); }
+.wt-klacht.wt-fout { border-color: rgba(224, 96, 79, 0.45); }
+.wt-klacht.wt-letop { border-color: rgba(226, 182, 74, 0.4); }
+.wt-klacht.wt-geen-plek { cursor: default; }
+.wt-klacht .wt-waar { color: var(--gedempt); font-size: 11px; }
+.wt-goed { color: var(--groen); font-size: 12.5px; }

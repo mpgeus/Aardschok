@@ -18,8 +18,12 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 `claude/aardschok-quest-system-ywvpe7`; die is aan het eind in `main` gezet en gepusht, dus er
 staat niets meer los en de tak mag weg. Werk gewoon op `main`, zoals CLAUDE.md zegt.
 
-**Besloten op 22 sep, nog te bouwen:** een wereldgereedschap naast Tiled — Tiled houdt de grond,
-wij de betekenis. Dat is nu punt 4 hieronder en het staat uitgeschreven in `kaarten.md`.
+**Nieuw sinds 22 sep:** `gereedschap/wereld.html` staat er — het wereldgereedschap naast Tiled,
+ronde 1 (kijken) en ronde 4 (de controle). Open het met `npm start` op
+`http://localhost:8123/gereedschap/wereld.html`, of via de link bovenin de twee andere
+gereedschappen. **Het schrijft niets**, dus het kan niets breken. Het leest de `.tmj` van schijf:
+opslaan in Tiled, op Verversen, en je ziet het. De controle zegt op dit moment precies wat er nog
+in Tiled moet voor De koude oven; zie hieronder onder "Wacht op Marcel".
 
 **Tempo:** gewoon door. Marcel maakt het niet uit of de week vandaag of vrijdag op is (22 sep).
 Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halverwege stilvalt.
@@ -30,22 +34,21 @@ Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halver
 - In Tiled: het vel `tuin` aan `wereld.tmj` toevoegen, en de vier varens rond (51–52, 45–46) van de
   grondlaag naar `objecten` verplaatsen (`npm run kaarten` klaagt erover).
 - **De koude oven in Tiled neerzetten.** De quest is geschreven (22 sep) en speelt, maar de
-  mensen en de dingen staan nergens: `wezen="bakker"`, `wezen="marskramer"` en
-  `wezen="smidsvrouw"` in het dorp; een leemkuil bij de beek met de leem erin
-  (`quest="bakker:zoeken"`) en iets wat daar huist; en de oven van de bakker met `raak="oven"` op
+  mensen en de dingen staan nergens. Het wereldgereedschap zegt dit nu zelf, onder "Controle", en
+  die regels verdwijnen vanzelf zodra het klopt. Wat er moet komen: `wezen="bakker"`,
+  `wezen="marskramer"` en `wezen="smidsvrouw"` in het dorp; een leemkuil bij de beek met de leem
+  erin (`quest="bakker:zoeken"`) en iets wat daar huist; en de oven van de bakker met `raak="oven"` op
   een tegel waar je bij kunt. De eigenschappen staan in `kaarten.md`.
 
 **Klaar om te starten, in deze volgorde.** Bekijk eerst de meter (`get_usage`) als je een agent
 start; de onderste drie zijn renderwerk en dus zwaar.
 
-1. **Het wereldgereedschap, ronde 1: kijken** (punt 4). De kaart in de browser met de tekencode
-   van het spel zelf, lagen aan en uit (begaanbaar, vast, wie waar staat met zijn dwaalstraal,
-   questvoorwerpen per fase, uitgangen), en klik-een-tegel-en-zie-wat-het-spel-denkt. **Schrijft
-   niets, dus het kan niets breken,** en de helft ligt er al: `js/kaart.js` leest de kaart,
-   `js/tekenen.js` tekent hem, en `wereldHaakjes` in `gereedschap/quests-tool.js` leest de
-   Tiled-eigenschappen al uit. Geen agent nodig. **Waarom dit eerst:** het maakt het neerzetten
-   van De koude oven en van de negentien dorpelingen veel goedkoper, en dat neerzetten staat op
-   het punt te gebeuren. Zie `kaarten.md`, "Een wereldgereedschap naast Tiled".
+1. **Het wereldgereedschap, ronde 2: neerzetten** (punt 4). Mensen en questvoorwerpen plaatsen,
+   verslepen en weghalen, terug de `.tmj` in. Dit is het eerste stuk dat wél schrijft, dus de
+   botsingswacht hoort er meteen goed in: weigeren op te slaan als het bestand intussen op schijf
+   veranderd is, want Marcel kan dezelfde kaart in Tiled open hebben. Geen agent nodig.
+   **Waarom dit eerst:** ronde 1 laat nu zien wat er ontbreekt, maar je moet er nog steeds Tiled
+   bij om het neer te zetten.
 2. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder). Renderwerk.
 3. Fase B2b: de zeven vaklieden en meer gewone dorpelingen. Daar horen nu ook de bakker en de
    marskramer bij: die lenen het vel van Wim tot dit af is. Renderwerk.
@@ -53,6 +56,7 @@ start; de onderste drie zijn renderwerk en dus zwaar.
    ook nog geen. Renderwerk.
 
 **Het laatst af (22 sep):**
+- het wereldgereedschap, ronde 1 en de controle (`gereedschap/wereld.html`);
 - het questsysteem, De koude oven, en de verhaaleditor die quests kan;
 - de tutorial, met Marcels keuzes erin;
 - huizenbouwer ronde 3 en 4a: uitbouwen, tuinstukken en hekjes in Tiled;
@@ -142,8 +146,15 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    hun quest in hetzelfde scherm kunt bewerken, en één controle zegt wat er aan de kaart mankeert.
    Vier rondes; zie `kaarten.md`, "Een wereldgereedschap naast Tiled". **Hoort hier hoog, want het
    verdient zich terug op het neerzetten van de negentien dorpelingen en van De koude oven — doe
-   je dat eerst met de hand, dan komt het te laat.** Ronde 1 (kijken, schrijft niets) is het
-   eerste stuk.
+   je dat eerst met de hand, dan komt het te laat.**
+   **Stand (22 sep):** ronde 1 (kijken) en ronde 4 (de controle) zijn af, als
+   `gereedschap/wereld.html`. Het leest de `.tmj` rechtstreeks van schijf, dus opslaan in Tiled en
+   verversen is genoeg — `npm run kaarten` hoeft pas als het spel het moet zien. De controle staat
+   los in `gereedschap/keuring.js` met `test/keuring.test.cjs` eromheen, en zegt twee dingen: wat
+   er op de kaart staat dat het spel niet kan gebruiken, en wat het spel vraagt dat nergens staat.
+   Wat rest is ronde 2 (neerzetten en terugschrijven in de `.tmj`, met een botsingswacht omdat
+   Tiled hetzelfde bestand open kan hebben) en ronde 3 (het gesprek en de quest van wie je
+   aanklikt in hetzelfde scherm).
 
 5. **De verhaaleditor.** Klaar als het gesprekkengereedschap ook quests kan: vormen om mee te
    beginnen, alles op één plek, een proef per fase, controle die de routes telt, en de koppeling
