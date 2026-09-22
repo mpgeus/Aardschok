@@ -325,7 +325,44 @@ ijsberen, in een boek te kijken, de trap op te turen — niet als een standbeeld
 praat. Het dwaalsysteem werkt al (Wim doet het, zie `js/verkennen.js`) en zijn sprite is klaar, dus
 het is een kwestie van hem `dwaalt`, `thuis` en een straal geven.
 
+## Meer dan één einde, meer dan één weg (Marcel, 22 sep 2026)
+
+Marcel: meerdere eindes, en verschillende wegen die naar de finish leiden. Nog niet besloten hoe;
+hieronder het voorstel. Het hangt aan "wat zit er boven?", dat nog open is.
+
+**Het einde is de optelsom van het spel, niet een keuze in de laatste zin.** Een einde dat je
+kiest uit drie knoppen boven in de toren, maakt twintig uur spelen onbelangrijk. Hier volgt het
+uit wat je deed: hoe oud je boven komt, welke verdiepingen je herstelde en welke jaren je
+terugkocht, welke spreuken je hebt, of de leerling nog leeft en wat hij weet, en wat het dorp van
+je vindt. Pas boven kies je nog, maar alleen uit wat je dan nog kúnt.
+
+**Wegen naar boven.** Er is geen vaste volgorde (`toren.md`: vrij, niet lineair). Een verdieping
+kun je herstellen, of er duur langs zweven; een bewaker verslaan, ompraten of ontlopen. Wie sluipt
+en afleidt, komt ergens anders uit dan wie vecht, en met een andere set spreuken (`spreuken.md`).
+
+**Eindes om over te praten**, uit wat er al ligt:
+
+- **Verslaan.** Oud aankomen geeft spreuken als mokers, jong aankomen ruimte om te ontwijken. Het
+  voor de hand liggende einde.
+- **Opnieuw opsluiten.** Dat deed de meester ook, en hij vergat het. Jij gaat ook vergeten. Dus
+  werkt dit einde alleen als iemand het onthoudt: de leerling, aan wie je het doorgeeft. Zonder
+  hem is het uitstel, en dat zegt het einde je ook.
+- **De laatste spreuk.** Alle resterende jaren in één keer, zoals de meester bij zijn moestuin.
+  Hoe meer jaren er nog over zijn, hoe groter hij. Wie zuinig speelde, heeft hier het meest te
+  geven.
+- **Begrijpen.** Als het ding boven iets is wat de meester onrecht deed (de verzuurde nalatenschap
+  hierboven), kan praten een einde zijn. Alleen als je de stukjes verhaal onderweg vond, en de
+  goede stukjes geloofde.
+- **De estafette.** Word je onderweg honderd, dan is dat geen game over: de leerling neemt het
+  over met wat jij herstelde (zie De leerling). Een eigen einde, en misschien het droevigste.
+
+**Daarna een nawoord per plek**, zoals in Fallout 1 en 2: een plaat en een paar zinnen over het
+dorp, de bakker, Wim, de leerling, de toren. Goedkoop om te maken (een gespreksvariant per
+uitkomst), en het maakt zichtbaar dat kleine keuzes onderweg meetelden.
+
 ## Open
+
+- **Welke eindes?** Hangt aan wat er boven zit. Zie "Meer dan één einde" hierboven.
 
 - **Hoe lang is "te lang weg"?** Nu: verder dan twintig tegels van de moestuin, na een minuut
   roept hij je, na tweeënhalve minuut sterft hij zonder jou (`WEG` in `js/tutorial.js`). Voelen
