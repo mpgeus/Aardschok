@@ -1,22 +1,41 @@
 # Werklijst: wat we doen, in welke volgorde
 
-Begin een sessie hier. Bovenaan wat loopt, daaronder wat komt, in volgorde. Elk punt heeft een
-"klaar als", zodat afwerken iets is wat je kunt nakijken. Een punt dat af is, gaat naar onderen
-met een datum; een nieuw punt krijgt een plek met een reden.
+Begin een sessie hier. Bovenaan staat de stand: wat loopt, wat op Marcel wacht, en wat klaarstaat.
+Daaronder komt wat volgt, in volgorde. Elk punt heeft een "klaar als", zodat afwerken iets is wat
+je kunt nakijken. Een punt dat af is, gaat naar onderen met een datum; een nieuw punt krijgt een
+plek met een reden. **De stand wordt aan het eind van elke sessie bijgewerkt,** zodat een nieuwe
+sessie meteen weet waar we zijn.
 
 **Waarom deze volgorde:** eerst wat Marcel vrijmaakt om zelf te bouwen, dan de lus die het spel
 een spel maakt (quest → goud en grondstoffen → toren of jezelf → hoger), dan de inhoud, en pas
 aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog niet werkt.
 
-## Loopt nu
+## De stand (einde sessie 22 sep 2026)
 
-- Punt 2, fase B2a is af (22 sep): twaalf dorpelingen met een naam lopen, de smid meegeteld, en
-  staan in Tiled als `wezen` (zie `kaarten.md`). Er loopt nu geen agent.
-- Ronde 4a is af (22 sep): de hekjes en de tuinstukken staan in Tiled (`tegels/tuin.tsx`).
-- **Op de meter wachten:** op 22 sep stond de week op 70%, met nog bijna vier dagen te gaan. De
-  zware stukken (ronde 4b, fase B2b en het questsysteem) wachten tot Marcel zegt hoe hard we gaan.
-- Wacht op Marcel: het draaiboek van de tutorial (gestuurd op 22 sep), en of De koude oven de
-  eerste quest wordt (`toren.md`).
+**Loopt nu:** niets. Er draait geen agent.
+
+**Wacht op Marcel:**
+- **Het tempo tot de week weer vol is (vrijdag 26 sep).** Op 22 sep stond de week op 70%.
+  - A: rustig aan, alleen kleine dingen.
+  - B: door op het huidige tempo.
+- Opmerkingen bij het draaiboek van de tutorial (gestuurd op 22 sep; de teksten staan in
+  `T.TUTORIAL_TEKST` in `js/gesprekken.js`).
+- Of De koude oven de eerste quest wordt (`toren.md`, "Hoe het werkt").
+- In Tiled: het vel `tuin` aan `wereld.tmj` toevoegen, en de vier varens rond (51–52, 45–46) van de
+  grondlaag naar `objecten` verplaatsen (`npm run kaarten` klaagt erover).
+
+**Klaar om te starten, in deze volgorde.** Elk stuk is een korte agent. Bekijk eerst de meter.
+1. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder).
+2. Fase B2b: de zeven vaklieden en meer gewone dorpelingen (punt 2).
+3. Fase B3: de portretten in de gesprekken (punt 2).
+4. Het questsysteem met De koude oven (punt 3), zodra Marcel die quest goed vindt.
+
+**Het laatst af (22 sep):**
+- de tutorial, met Marcels keuzes erin;
+- huizenbouwer ronde 3 en 4a: uitbouwen, tuinstukken en hekjes in Tiled;
+- twaalf dorpelingen die lopen, met knieën.
+
+Details staan bij de punten hieronder en in `git log`.
 
 ## Tegelijk: de huizenbouwer op ronde vormen
 
