@@ -947,14 +947,20 @@ function chunk(type, data) {
 }
 function png(plaat, schaal = 1, achtergrond = null) {
   const src = plaat.rgba(achtergrond);
-  const b = plaat.b * schaal;
-  const h = plaat.h * schaal;
+  // b/h moeten hele pixels zijn: bij een niet-heel getal (een schaal als 1.49, om net onder een
+  // maximum te passen, zie dorpelingen-anim.cjs) is x*4+1 dat ook niet, en Buffer/TypedArray
+  // negeren een schrijfactie op een niet-heel index stilletjes — dan komt er bijna niets in raw
+  // terecht en is de plaat straks vrijwel leeg. Math.round ronden en de rij/kolom-opzoeking
+  // klemmen voorkomt dat (bij naar boven afronden zou de laatste rij/kolom anders net over de
+  // rand van plaat.b/plaat.h heen kunnen lezen).
+  const b = Math.round(plaat.b * schaal);
+  const h = Math.round(plaat.h * schaal);
   const raw = Buffer.alloc((b * 4 + 1) * h);
   for (let y = 0; y < h; y++) {
     const rij = y * (b * 4 + 1);
-    const sy = Math.floor(y / schaal);
+    const sy = Math.min(plaat.h - 1, Math.floor(y / schaal));
     for (let x = 0; x < b; x++) {
-      const s = (sy * plaat.b + Math.floor(x / schaal)) * 4;
+      const s = (sy * plaat.b + Math.min(plaat.b - 1, Math.floor(x / schaal))) * 4;
       const o = rij + 1 + x * 4;
       raw[o] = src[s];
       raw[o + 1] = src[s + 1];

@@ -9,7 +9,7 @@
 const { sdf, bouwSdf, klem, mix, rnd, ruis3 } = require('./kern.cjs');
 const { model, kegel, capsule, bol, ellips, bochtKegel, plus, naarRamp } = require('./figuren.cjs');
 const { ring, schijf, eenheid, langs } = require('./figuren2.cjs');
-const { profiel, grensbol, romp, schil, klokrok, blokGedraaid, schedel, glimlach, houdingDorpeling, bottenDorpeling } = require('./dorpelingen.cjs');
+const { profiel, grensbol, romp, schil, klokrok, blokGedraaid, schedel, glimlach, houdingDorpeling, bottenDorpeling, knieTussen, beenPunten, voetBot } = require('./dorpelingen.cjs');
 const HH = require('./houding.cjs');
 
 // Loopsnelheid van een gewone dorpeling: dezelfde 1,2 tegels/s als maakDorpeling in js/kaart.js
@@ -112,11 +112,27 @@ function arm(delen, S, E, Hd, o) {
 }
 
 // Een been van de heup naar de enkel, met een schoen (en desgewenst een laarsschacht tot laars).
+// o: geometrie zoals voorheen (x, heup, r, broek, schoen, dBenen, laars, voet, voor), plus optioneel
+// hg (de houding uit houdingDorpeling), i (0 = links, 1 = rechts) en bot (de bot()-afsluiter van de
+// aanroeper) om het been een knie te geven, met beenPunten/voetBot uit dorpelingen.cjs — zie de
+// uitleg bovenaan dat bestand. Zonder hg (bakker(), molenaar(), jager() en marskramer() geven nog
+// geen stand door) tekent been() precies het oude ene stijve stuk, geen pixel anders.
 function been(delen, s, o) {
-  const { x = 4.4, heup = 30, r = [4, 3.3], broek, schoen, dBenen, laars = 0, voet = [3.3, 5.6, 2.9], voor = 0.8 } = o;
-  delen.push(kegel([s * x, 0, heup], [s * (x - 0.1), voor, 7], r[0], r[1], broek, dBenen, 1));
+  const { x = 4.4, heup = 30, r = [4, 3.3], broek, schoen, dBenen, laars = 0, voet = [3.3, 5.6, 2.9], voor = 0.8, hg = null, i = 0, bot = null } = o;
+  if (hg) {
+    const heupR = [s * x, 0, heup];
+    const enkelR = [s * (x - 0.1), voor, 7];
+    const P = beenPunten(hg, i, { heup: heupR, knie: knieTussen(heupR, enkelR), enkel: enkelR });
+    const rM = (r[0] + r[1]) / 2;
+    delen.push(kegel(P.heup, P.knie, r[0], rM, broek, dBenen, 1));
+    delen.push(kegel(P.knie, P.enkel, rM, r[1], broek, dBenen, 1));
+  } else {
+    delen.push(kegel([s * x, 0, heup], [s * (x - 0.1), voor, 7], r[0], r[1], broek, dBenen, 1));
+  }
+  if (bot) bot(null);
   delen.push(ellips([s * x, 2.4, voet[2] - 0.2], voet, schoen, dBenen, 1.2));
   if (laars) delen.push(kegel([s * x, 0.6, 3], [s * x, 0.6, laars], r[1] + 0.5, r[1] + 0.7, schoen, dBenen, 1));
+  if (bot) bot(voetBot(hg, i, [s * x, 2.2, 0]));
 }
 
 // De plek op het gezicht (dx, dz ten opzichte van het midden van het hoofd): de voorkant van de
@@ -1213,15 +1229,15 @@ function dorpeling(zaad = 1, opties = {}, stand = null) {
   const Bn = bottenDorpeling(hg, {
     heup: [0, 0.6, zHeup],
     nek: [0, 0, zSch + 3],
-    heupen: [[-beenX, 0, zHeup], [beenX, 0, zHeup]],
     schouders: [[-schX, 0.6, zSch], [schX, 0.6, zSch]],
   });
 
-  // --- benen en schoenen; bij een vrouw verdwijnen ze onder de rok (zie hieronder). Ze blijven
-  // dan ook in hun rusthouding staan: stil, zoals de rok ze altijd al verstopte. Draaide het been
-  // mee, dan zwaait de schoen op het uiterste van de pas voorbij de zoom naar buiten — precies
-  // het been tonen dat de rok juist moest verbergen (zie de uitleg bovenaan dorpelingen.cjs).
-  const beenBeweegt = K.geslacht !== 'vrouw';
+  // --- benen en schoenen; bij een vrouw verdwijnt het been zelf onder de rok (zie hieronder), maar
+  // de voet beweegt gewoon mee. Vroeger stond het been van een rok-drager helemaal stil (het hele
+  // stijve been zwaaide anders in één grote boog om de heup en kwam zo een eind buiten de zoom);
+  // met een knie blijft de dij, het stuk vlak bij de rok, grotendeels overeind, dus dat is nu geen
+  // punt meer — onder een rok zie je de pas dan ook vooral aan de schoen bij de zoom en aan hoe de
+  // rok zelf meezwaait (zie de uitleg bovenaan dorpelingen.cjs).
   for (const s of [-1, 1]) {
     const i = s < 0 ? 0 : 1;
     been(delen, s, {
@@ -1232,8 +1248,8 @@ function dorpeling(zaad = 1, opties = {}, stand = null) {
       schoen: M.schoen,
       dBenen: D.benen,
       voet: [3.3 * breed, 5.7, 2.9],
+      hg, i, bot,
     });
-    bot(beenBeweegt ? Bn.Bbeen[i] : null);
   }
 
   // --- romp

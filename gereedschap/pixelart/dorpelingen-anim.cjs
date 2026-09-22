@@ -94,16 +94,16 @@ if (klem) process.exitCode = 1;
 // ---------------------------------------------------------------- de proefplaat
 
 // Wim erbij, met zijn eigen bouwfunctie: zo staat een bekende loop naast de nieuwe, om op te
-// vergelijken. Vier van de acht beelden (om de andere), in Z en ZO.
-const FASEN = [0, 2, 4, 6].map((i) => i / 8);
+// vergelijken. Alle acht beelden, in Z en ZO (knie: fase B1, 22 sep 2026 — voorheen de helft).
+const FASEN = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => i / 8);
 const wimPerKant = { Z: [], ZO: [] };
 for (const fase of FASEN) {
   const m = F.wim({ houding: 'lopen', fase });
   for (const kant of ['Z', 'ZO']) wimPerKant[kant].push(K.losRenderen(m, { b: CEL, h: HOOG, anker: ANKER, richting: kant }));
 }
 const kiesFasen = (perKant) => ({
-  Z: [0, 2, 4, 6].map((i) => perKant.Z[i]),
-  ZO: [0, 2, 4, 6].map((i) => perKant.ZO[i]),
+  Z: [0, 1, 2, 3, 4, 5, 6, 7].map((i) => perKant.Z[i]),
+  ZO: [0, 1, 2, 3, 4, 5, 6, 7].map((i) => perKant.ZO[i]),
 });
 const REGELS = [
   { naam: 'wim', kant: wimPerKant },

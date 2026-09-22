@@ -151,36 +151,53 @@ function glimlach(delen, H, [rx, ry, rz], m, deel, breed = 1.3, z = -4) {
   for (const s of [-1, 1]) delen.push(capsule(plus(H, [s * breed, opp(s * breed, z + 0.45) - 0.1, z + 0.45]), mid, 0.5, m, deel));
 }
 
-// ---------------------------------------------------------------- lopen en staan (fase A, 22 sep 2026)
+// ---------------------------------------------------------------- lopen en staan (fase A, 22 sep 2026; knie: fase B1, 22 sep 2026)
 //
 // Eén manier waarop een dorpeling kan lopen, licht genoeg om straks op alle negentien en op
-// dorpeling(zaad) (dorpelingen3.cjs) toe te passen (ontwerp/werklijst.md, punt 2). Anders dan Wim
-// en de oude meester (figuren2.cjs, meester.cjs) heeft een dorpeling geen knie en geen elleboog:
-// een been is van heup tot schoen één stijve kegel (zie been() in dorpelingen3.cjs en de benen
-// van smid() hieronder), een arm van schouder tot hand net zo. Bewegen is dus nooit
-// HH.elleboog-IK maar telkens één rotatie om één vast punt — "benen en armen draaien om heup en
-// schouder".
+// dorpeling(zaad) (dorpelingen3.cjs) toe te passen (ontwerp/werklijst.md, punt 2). Een dorpeling
+// heeft nu, net als Wim en de oude meester (figuren2.cjs, meester.cjs), een echte knie: een been
+// is dij (heup–knie) en scheen (knie–enkel), twee losse stukken in plaats van één stijve kegel van
+// heup tot schoen. Een arm blijft wel één stuk — er komt in deze stap geen elleboog bij, alleen
+// een knie (ontwerp/wereld.md, "Ze lopen met knieën, zoals Wim").
 //
-//   - Been: HH.loopVoet (houding.cjs) geeft de voorwaartse schuif die een glijdende voet
-//     voorkomt. Voor een stijf been zonder knie zet naarHoek() hieronder die schuif rechtstreeks
-//     om in de hoek waarmee het hele been om de heup draait (hoek = asin(schuif / beenlengte)):
-//     omdat het been een vaste lengte heeft, komt de voet daarmee precies op de plek die
-//     loopVoet bedoelt, dus glijdt hij niet. De boog van die rotatie tilt de voet vanzelf iets op
-//     als hij ver naar voren of achteren zwaait; een aparte optilbeweging is niet nodig.
+//   - Been: HH.loopVoet (houding.cjs) geeft het doel voor de enkel (de voorwaartse schuif die een
+//     glijdende voet voorkomt, plus nu ook `til`: een beetje optillen in de zwaaifase, want de
+//     oude truc "de boog van de heuprotatie tilt de voet vanzelf op" bestaat niet meer zonder die
+//     rotatie). `beenPunten` hieronder schuift de heup mee met de romp (zij/voor/zak) en legt de
+//     enkel op dat doel; de knie komt erbij via HH.elleboog — dezelfde IK als bij Wim en de
+//     meester (zie hun been()/wim()-code). De lengtes dij en scheen uit de ruststand blijven
+//     vast, alleen de hoek verandert: de knie buigt vanzelf het meest in de zwaaifase (de enkel
+//     komt dan dicht bij de heup) en een beetje in de steunfase, via `zak` (de romp zakt per stap
+//     iets in, ook al bestaand sinds fase A). Zonder stand (hg null) geeft `beenPunten` gewoon de
+//     ruststandpunten terug: het oude ene stijve stuk, geen pixel anders. Ook in rust staat de
+//     knie niet kaarsrecht — `knieTussen` legt hem een stukje vóór de rechte lijn heup–enkel,
+//     zoals de ruststand van Wim dat zelf ook al doet; net als bij Wim verandert die rust-buiging
+//     verder niet tijdens het ademhalen (`staan` hieronder raakt de knie niet aan).
+//   - Voet: de schoen blijft op zijn ruststandcoördinaten getekend; `voetBot` schuift en kantelt
+//     hem naar het echte doel (dezelfde Bvoet-truc als Wim en de meester), zodat hiel en bal nooit
+//     los van de scheen komen te staan.
 //   - Arm: geen aparte berekening; hij zwaait tegengesteld aan het been aan dezelfde kant
-//     (zodat de linkerarm meezwaait met het rechterbeen, zoals bij lopen hoort), met de hoek van
-//     dat been als maat.
+//     (zodat de linkerarm meezwaait met het rechterbeen, zoals bij lopen hoort), met dezelfde hoek
+//     die de oude, beenloze versie ook al gebruikte (beenLengte zet het loopVoet-doel om in een
+//     hoek, alleen nog voor de arm).
 //   - Romp en nek: een klein beetje wiegen, zakken en tegendraaien, zoals bij Wim en de meester.
-//   - Rok: bij een rok (klokrok, dorpelingen3.cjs) blijven de benen daaronder onzichtbaar (ze
-//     "verdwijnen onder de rok", zie dorpeling()); in plaats van ze te tonen zwaait de rok zelf
-//     iets breder mee dan de romp — "een rok zwaait mee in plaats van benen te tonen".
+//   - Rok: bij een rok (klokrok, dorpelingen3.cjs) blijft het been zelf onzichtbaar (het
+//     "verdwijnt onder de rok", zie dorpeling()), maar de voet beweegt nu gewoon mee. Onder een
+//     rok zie je de pas dus vooral aan de schoen die bij de zoom vandaan komt en aan hoe de rok
+//     zelf meezwaait (`rokZwaai`, al sinds fase A). Vroeger stond het been van een rok-drager
+//     helemaal stil, want het hele stijve been zwaaide in één grote boog om de heup en kwam zo
+//     een eind buiten de zoom; met een knie blijft de dij — het stuk vlak bij de rok — grotendeels
+//     overeind, dus dat probleem is er niet meer.
 //
 // Een bouwfunctie roept `houdingDorpeling(stand, o)` aan voor de generieke getallen en
-// `bottenDorpeling(hg, o)` om ze, met de eigen heup-, nek- en schouderpunten van die figuur, om
-// te zetten in HH-bewegingen; die past hij toe met dezelfde bot()/HH.beweegDeel-truc als wim() en
-// meester() (zie smid() hieronder voor het voorbeeld). Zonder stand (hg is dan null) komt overal
-// `null` uit bottenDorpeling en blijft bot() overal een no-op: het model blijft precies gelijk,
-// dus dorpelingen-export.cjs en dorpelingen3-export.cjs (die nog geen stand meegeven) blijven hun
+// `bottenDorpeling(hg, o)` om romp, nek, arm en rok, met de eigen heup-, nek- en schouderpunten
+// van die figuur, om te zetten in HH-bewegingen; die past hij toe met dezelfde bot()/
+// HH.beweegDeel-truc als wim() en meester() (zie smid() hieronder voor het voorbeeld). Voor het
+// been zelf roept hij `beenPunten` (heup/knie/enkel) en `voetBot` (het voetbot) rechtstreeks aan
+// met de eigen ruststandpunten van die figuur; `knieTussen` helpt aan een redelijke ruststand-
+// knie tussen twee eigen punten. Zonder stand (hg is dan null) komt overal `null` of de
+// ruststandpunten terug en blijft bot() een no-op: het model blijft precies gelijk, dus
+// dorpelingen-export.cjs en dorpelingen3-export.cjs (die nog geen stand meegeven) blijven hun
 // oude stilstaande vellen leveren, geen pixel anders.
 
 function rustDorpeling() {
@@ -188,7 +205,7 @@ function rustDorpeling() {
     zak: 0, zij: 0, voor: 0,
     romp: { buig: 0, draai: 0, omhoog: 0 },
     nek: { knik: 0, draai: 0 },
-    been: [{ hoek: 0 }, { hoek: 0 }], // 0 = links, 1 = rechts
+    voet: [{ y: 0, z: 0, hoek: 0 }, { y: 0, z: 0, hoek: 0 }], // 0 = links, 1 = rechts; het enkeldoel
     arm: [{ hoek: 0 }, { hoek: 0 }],
     rokZwaai: 0,
   };
@@ -215,11 +232,15 @@ function houdingDorpeling(stand, o = {}) {
       const v = snelheid * HH.PER_TEGEL;
       const T = 8 / fps; // acht beelden per cyclus
       const steun = 0.55;
-      const L = HH.loopVoet(fase, { v, T, steun });
-      const R = HH.loopVoet(fase, { v, T, steun, verzet: 0.5 });
+      const til = 2.6;
+      const L = HH.loopVoet(fase, { v, T, steun, til, hiel: 9, hak: 12 });
+      const R = HH.loopVoet(fase, { v, T, steun, til, hiel: 9, hak: 12, verzet: 0.5 });
+      h.voet = [{ y: L.y, z: L.z, hoek: L.hoek }, { y: R.y, z: R.z, hoek: R.hoek }];
+      // de arm heeft geen elleboog en zwaait dus nog star om de schouder, tegengesteld aan het
+      // been aan dezelfde kant; beenLengte zet het loopVoet-doel om in diezelfde hoek (net als
+      // vóór de knie, alleen niet meer voor het been zelf gebruikt)
       const naarHoek = (voet) => (Math.asin(klem(voet.y / beenLengte, -1, 1)) * 180) / Math.PI;
-      h.been = [{ hoek: naarHoek(L) }, { hoek: naarHoek(R) }];
-      h.arm = [{ hoek: -0.6 * h.been[0].hoek }, { hoek: -0.6 * h.been[1].hoek }];
+      h.arm = [{ hoek: -0.6 * naarHoek(L) }, { hoek: -0.6 * naarHoek(R) }];
       h.zak = 0.4 + 0.4 * HH.cosinus(2 * fase);
       h.zij = 0.5 * HH.sinus(fase);
       h.romp.buig = 1.5 + 0.8 * HH.cosinus(2 * fase);
@@ -236,22 +257,52 @@ function houdingDorpeling(stand, o = {}) {
 }
 
 // Zet de generieke houding hierboven om in HH-bewegingen, met de eigen gewrichtspunten van een
-// figuur: o = { heup, nek, heupen: [links, rechts], schouders: [links, rechts] }. Zonder houding
-// (hg null, dus geen stand meegegeven aan de bouwfunctie) komt overal `null` uit, en blijft
-// bot() overal een no-op.
+// figuur: o = { heup, nek, schouders: [links, rechts] }. Het been zelf staat hier niet bij — dat
+// gaat via beenPunten/voetBot hieronder, want die hebben de ruststandpunten (heup/knie/enkel) van
+// de eigen figuur nodig, niet alleen een scharnierpunt. Zonder houding (hg null, dus geen stand
+// meegegeven aan de bouwfunctie) komt overal `null` uit, en blijft bot() overal een no-op.
 function bottenDorpeling(hg, o) {
-  if (!hg) return { Bbeen: [null, null], Barm: [null, null] };
+  if (!hg) return { Barm: [null, null] };
   const draaiM = (buig, om) => HH.maalM(HH.draaiing([0, 0, 1], om), HH.draaiing([1, 0, 0], -buig));
   const Blijf = HH.beweging({ dp: [hg.zij, hg.voor, -hg.zak] });
   const Bromp = HH.naElkaar(Blijf, HH.beweging({ M: draaiM(hg.romp.buig, hg.romp.draai), om: o.heup, dp: [0, 0, hg.romp.omhoog] }));
   const Bnek = HH.naElkaar(Bromp, HH.beweging({ M: draaiM(hg.nek.knik, hg.nek.draai), om: o.nek }));
-  const Bbeen = [0, 1].map((i) => HH.beweging({ as: [1, 0, 0], graden: hg.been[i].hoek, om: o.heupen[i] }));
   const Barm = [0, 1].map((i) => HH.beweging({ as: [1, 0, 0], graden: hg.arm[i].hoek, om: o.schouders[i] }));
   // de rok zelf: rokZwaai (van houdingDorpeling) is een ruimere zwaai dan de romp, want stof
   // zwiert verder uit dan het lijf zelf beweegt (alleen van belang voor een figuur met een rok,
   // zie dorpelingen3.cjs — "een rok zwaait mee in plaats van benen te tonen")
   const Brok = HH.beweging({ dp: [hg.rokZwaai, hg.voor * 0.5, 0] });
-  return { Blijf, Bromp, Bnek, Bbeen, Barm, Brok };
+  return { Blijf, Bromp, Bnek, Barm, Brok };
+}
+
+// Een redelijke ruststand-knie tussen een heup- en een enkelpunt: in het midden, met een stukje
+// voorwaartse buiging (bump) zodat de knie niet kaarsrecht staat — zoals de ruststand van Wim dat
+// ook al doet (heup–knie–enkel in wim(), figuren2.cjs: de knie ligt zo'n anderhalve eenheid vóór
+// het midden van de rechte lijn heup–enkel).
+function knieTussen(heup, enkel, bump = 1.5) {
+  return HH.plus(HH.tussen(heup, enkel, 0.5), [0, bump, 0]);
+}
+
+// De knie via dezelfde IK als bij Wim en de meester (HH.elleboog, figuren2.cjs/meester.cjs): de
+// lengtes dij (heup–knie) en scheen (knie–enkel) uit de ruststand blijven vast, en de knie schuift
+// mee zodat de enkel op zijn nieuwe doel (hg.voet[i], het loopVoet-doel) uitkomt. o = { heup, knie,
+// enkel }: de drie ruststandpunten van de eigen figuur, met de zijkant (s) er al in verwerkt — zie
+// been() in dorpelingen3.cjs en de benen van smid() hieronder. Zonder houding (hg null) komen de
+// ruststandpunten ongewijzigd terug.
+function beenPunten(hg, i, o) {
+  if (!hg) return { heup: o.heup, knie: o.knie, enkel: o.enkel };
+  const heup = HH.plus(o.heup, [hg.zij, hg.voor, -hg.zak]);
+  const enkel = HH.plus(o.enkel, [0, hg.voet[i].y, hg.voet[i].z]);
+  const knie = HH.elleboog(o.heup, o.knie, o.enkel, heup, enkel);
+  return { heup, knie, enkel };
+}
+
+// Het voetbot: schuift en kantelt een deel dat nog op zijn ruststandcoördinaten staat (de schoen,
+// zie been() hieronder) naar zijn echte plek, om een punt vlak bij de bal van de voet op de grond
+// — dezelfde Bvoet-truc als Wim en de meester. Zonder houding (hg null) komt `null` terug (bot()
+// doet er dan niets mee).
+function voetBot(hg, i, om) {
+  return hg ? HH.beweging({ as: [1, 0, 0], graden: hg.voet[i].hoek, om, dp: [0, hg.voet[i].y, hg.voet[i].z] }) : null;
 }
 
 const SMID_SNELHEID = 1.5;
@@ -319,22 +370,31 @@ function smid(stand = null) {
   const Bn = bottenDorpeling(hg, {
     heup: [0, 0.4, 31],
     nek: [0, 2, 65],
-    heupen: [[-5.2, 0.2, 31], [5.2, 0.2, 31]],
     schouders: [[-14.2, 0.4, 60], [14.2, 0.4, 60]],
   });
 
-  // --- benen, heupen en laarzen (elk been draait als één stijf bot om de heup, zie de uitleg
-  // bovenaan dit bestand); het bekken zelf blijft bij de romp. Been en bekken houden hetzelfde
-  // deel (D.benen, zoals vóór deze wijziging) — bot() bepaalt de beweging, deel alleen de
-  // binnenlijnen, en zonder stand blijft dat dus precies het oude, stilstaande vel.
+  // --- benen, heupen en laarzen; het bekken zelf blijft bij de romp (D.benen, zoals vóór deze
+  // wijziging). Elk been buigt nu bij de knie (beenPunten hierboven, zie de uitleg bovenaan dit
+  // bestand) in plaats van als één stijf bot om de heup te draaien: dij en scheen staan daarom al
+  // op hun eindplek en hoeven geen bot() meer, alleen de laars schuift nog mee (voetBot). Zonder
+  // stand (hg null) tekent dit precies het oude, stilstaande vel.
   delen.push(ellips([0, 0.4, 31], [10.6, 7, 5], M.broek, D.benen, 2));
   bot(Bn.Bromp);
   for (const s of [-1, 1]) {
     const i = s < 0 ? 0 : 1;
-    delen.push(kegel([s * 5.2, 0.2, 31], [s * 5.3, 0.8, 9], 5, 4.2, M.broek, D.benen, 1));
+    if (hg) {
+      const heupR = [s * 5.2, 0.2, 31];
+      const enkelR = [s * 5.3, 0.8, 9];
+      const P = beenPunten(hg, i, { heup: heupR, knie: knieTussen(heupR, enkelR), enkel: enkelR });
+      delen.push(kegel(P.heup, P.knie, 5, 4.6, M.broek, D.benen, 1));
+      delen.push(kegel(P.knie, P.enkel, 4.6, 4.2, M.broek, D.benen, 1));
+    } else {
+      delen.push(kegel([s * 5.2, 0.2, 31], [s * 5.3, 0.8, 9], 5, 4.2, M.broek, D.benen, 1));
+    }
+    bot(null);
     delen.push(ellips([s * 5.3, 2.6, 2.9], [3.8, 6.2, 3.2], M.laars, D.benen, 1.2));
     delen.push(kegel([s * 5.3, 0.6, 3], [s * 5.3, 0.6, 12.5], 4.4, 4.2, M.laars, D.benen, 1));
-    bot(Bn.Bbeen[i]);
+    bot(voetBot(hg, i, [s * 5.3, 2.2, 0]));
   }
 
   // --- romp: een brede borst en een buikje, de schouders er als een juk op
@@ -811,5 +871,5 @@ const DORPELINGEN = [
 
 module.exports = {
   smid, herbergierster, boer, dorpsoudste, DORPELINGEN, profiel, grensbol, romp, schil, klokrok, blokGedraaid, schedel, glimlach,
-  rustDorpeling, houdingDorpeling, bottenDorpeling, SMID_SNELHEID, SMID_FPS,
+  rustDorpeling, houdingDorpeling, bottenDorpeling, knieTussen, beenPunten, voetBot, SMID_SNELHEID, SMID_FPS,
 };
