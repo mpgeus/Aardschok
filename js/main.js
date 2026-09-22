@@ -381,6 +381,34 @@
         gemiddeld: af(som / aantal), mediaan: af(tijden[aantal >> 1]), slechtste: af(tijden[aantal - 1]),
       };
     },
+    // Een quest in een fase zetten zonder hem te spelen, zoals debug.meesterschap dat voor de
+    // treden doet. Zo kun je zien wat het dorp in elke fase zegt terwijl je de kaart nog tekent:
+    //   Toren.debug.quest()                 → wat er loopt, en wat er te kiezen valt
+    //   Toren.debug.quest('bakker')         → de fasen van die quest, en waar hij nu staat
+    //   Toren.debug.quest('bakker', 'terug') → zet hem daar neer
+    //   Toren.debug.quest('bakker', 'uit')   → helemaal terug naar niet begonnen, beloning en al
+    quest(naam, fase) {
+      if (!naam) {
+        return {
+          loopt: { ...S.quests },
+          tekiezen: Object.fromEntries(Object.entries(T.QUESTS).map(([id, q]) => [id, Object.keys(q.fasen)])),
+        };
+      }
+      const q = T.QUESTS[naam];
+      if (!q) return `Die quest ken ik niet: ${naam}. Er is: ${Object.keys(T.QUESTS).join(', ') || 'nog niets'}.`;
+      if (!fase) return { nu: T.questFase(S, naam) || 'niet begonnen', weg: T.questWegVan(S, naam), fasen: Object.keys(q.fasen) };
+      if (fase === 'uit') {
+        delete S.quests[naam];
+        delete S.questWeg[naam];
+        for (const sleutel of [...S.questBeloond]) if (sleutel.startsWith(`${naam}:`)) S.questBeloond.delete(sleutel);
+        T.werkQuestVoorwerpen(S);
+        return `${q.naam}: niet begonnen. De beloning kan weer opnieuw.`;
+      }
+      if (!q.fasen[fase]) return `"${fase}" is geen fase van ${q.naam}. Er is: ${Object.keys(q.fasen).join(', ')}.`;
+      T.zetQuest(S, naam, fase);
+      const f = q.fasen[fase];
+      return { quest: q.naam, fase, doel: f.doel || null, goud: S.goud, tas: [...S.inventaris] };
+    },
     // Naar een ander gebied springen zonder ernaartoe te lopen: Toren.debug.gaNaar('erf').
     gaNaar(naam) {
       T.gaNaarGebied(S, naam);
