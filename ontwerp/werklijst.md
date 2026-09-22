@@ -47,9 +47,9 @@ Alle drie zijn renderwerk; het gereedschapswerk zonder kunst is af (punten 3 en 
 - twaalf dorpelingen die lopen, met knieën.
 
 **Niet vergeten, want het is nu nog gratis:** de schuld aan de smidsvrouw (`schuldSmidsvrouw`).
-Zij vraagt de eerste grondstof uit de toren, en tot punt 5 die schuld kan innen, kost haar weg
-door De koude oven de speler niets. Dan haalt die quest de toets van drie antwoorden alleen op
-papier.
+Zij vraagt de eerste grondstof uit de toren, en tot het punt over grondstoffen die schuld kan
+innen, kost haar weg door De koude oven de speler niets. Dan haalt die quest de toets van drie
+antwoorden alleen op papier.
 
 Details staan bij de punten hieronder en in `git log`.
 
@@ -124,43 +124,52 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    dat de toets van drie antwoorden door `npm test` laat bewaken. De koude oven is geschreven, met
    de gesprekken van de bakker, de marskramer en de smidsvrouw, en `test/quest.test.cjs` speelt
    alle vier de wegen uit. Wat rest is Tiled (zie "Wacht op Marcel").
-4. **De verhaaleditor.** Klaar als het gesprekkengereedschap ook quests kan: vormen om mee te
+4. **Het wereldgereedschap: Tiled houdt de grond, wij de betekenis** (Marcel, 22 sep 2026). Klaar
+   als je de kaart in de browser ziet met alles wat betekenis heeft erop — mensen,
+   questvoorwerpen, raakpunten, overgangen — ze daar kunt neerzetten en verslepen, hun gesprek en
+   hun quest in hetzelfde scherm kunt bewerken, en één controle zegt wat er aan de kaart mankeert.
+   Vier rondes; zie `kaarten.md`, "Een wereldgereedschap naast Tiled". **Hoort hier hoog, want het
+   verdient zich terug op het neerzetten van de negentien dorpelingen en van De koude oven — doe
+   je dat eerst met de hand, dan komt het te laat.** Ronde 1 (kijken, schrijft niets) is het
+   eerste stuk.
+
+5. **De verhaaleditor.** Klaar als het gesprekkengereedschap ook quests kan: vormen om mee te
    beginnen, alles op één plek, een proef per fase, controle die de routes telt, en de koppeling
    met Tiled. Zie `verhaal.md`, "Een quest moet makkelijk te bouwen zijn".
    **Stand (22 sep):** gebouwd als `gereedschap/quests.html`. Alle vijf de eisen zitten erin; de
    gaten staan in `verhaal.md` onder "Stand": twee van de vijf vormen ontbreken nog, en raakpunten
    zijn wel te controleren maar niet te bewerken.
-5. **Grondstoffen en de verdeelvraag.** Klaar als magische grondstoffen voorwerpen zijn die je aan
+6. **Grondstoffen en de verdeelvraag.** Klaar als magische grondstoffen voorwerpen zijn die je aan
    de toren óf aan jezelf geeft (jaren terug), ze eindig zijn in de wereld, en je er per saldo op
    achteruitgaat. Zie `toren.md`.
    **Hoort hier meteen bij:** de schuld aan de smidsvrouw (`schuldSmidsvrouw`, gezet door De koude
    oven). Zij vraagt de eerste grondstof uit de toren. Zolang die niet verzilverd wordt, is haar
    weg door de quest gratis, en dan klopt de toets van drie antwoorden alleen op papier.
-6. **De toren in verdiepingen.** Klaar als elke verdieping een eigen gebied is met de spiraaltrap
+7. **De toren in verdiepingen.** Klaar als elke verdieping een eigen gebied is met de spiraaltrap
    als overgang; zweven kan voor twee jaar (drie als de vloer weg is), je dan niets draagt en het
    iets boven stoort; en er een torenpaneel in doorsnede is waarin je herstelt. Zie `toren.md`.
-7. **De eerste verdieping, helemaal af.** Klaar als één verdieping — bijvoorbeeld de kweekkamer —
+8. **De eerste verdieping, helemaal af.** Klaar als één verdieping — bijvoorbeeld de kweekkamer —
    drie geloofwaardige antwoorden heeft die verschillend kosten, en na herstel iets anders wordt
    (een kruidentuin).
-8. **Verdorren.** Klaar als de spreuk er is met zijn vier regels (wat je verdort komt nooit terug,
+9. **Verdorren.** Klaar als de spreuk er is met zijn vier regels (wat je verdort komt nooit terug,
    alleen buiten een gevecht, opbrengst naar hoeveel leven erin zit, meesterschap geeft toegang
    maar geen grotere opbrengst), er dieren zijn om te verdorren, en het dorp het ziet. Zie
    `spreuken.md`.
-9. **Vergeten door ouderdom, en een dorp dat het ziet.** Klaar als meesterschap terugzakt als je een
+10. **Vergeten door ouderdom, en een dorp dat het ziet.** Klaar als meesterschap terugzakt als je een
     spreuk laat versloffen, en dorpelingen reageren op je leeftijd — ouder én jonger.
-10. **Hoogte.** Klaar als er een hoogtelaag is in Tiled, rotswanden vanzelf worden afgeleid, en
+11. **Hoogte.** Klaar als er een hoogtelaag is in Tiled, rotswanden vanzelf worden afgeleid, en
     lopen alleen kan bij gelijke hoogte of over een helling. Zie `kaarten.md`.
-11. **Kelders en mijnen.** Klaar als de grijze binnenbouwdoos er is (trap omlaag, ladder, rooster,
+12. **Kelders en mijnen.** Klaar als de grijze binnenbouwdoos er is (trap omlaag, ladder, rooster,
     ingestorte vloer, stalagmieten, vuur, botten, begroeide muren) en er één mijn te bezoeken is.
     Zie `beeld.md`.
-12. **Een andere tovenaarstoren.** Klaar als er één te bezoeken is, met een eigen oude eigenaar,
+13. **Een andere tovenaarstoren.** Klaar als er één te bezoeken is, met een eigen oude eigenaar,
     een eigen probleem en eigen grondstoffen.
-13. **De leerling.** Klaar als de quest met de jongen er is en hij met je meegaat, met zijn drie
+14. **De leerling.** Klaar als de quest met de jongen er is en hij met je meegaat, met zijn drie
     remmen. Zie `verhaal.md`.
-14. **Opslaan, titelscherm, instellingen, geluid.** Klaar als het spel een avond te spelen is en
+15. **Opslaan, titelscherm, instellingen, geluid.** Klaar als het spel een avond te spelen is en
     niets op de lijst "wat het browserig laat voelen" nog geldt, en wie opnieuw begint de
     tutorial kan overslaan. Zie `verpakken.md`.
-15. **Verpakken.** Klaar als er een programma is dat vanuit Steam start. Zie `verpakken.md`.
+16. **Verpakken.** Klaar als er een programma is dat vanuit Steam start. Zie `verpakken.md`.
 
 ## Klein, tussendoor als het past
 

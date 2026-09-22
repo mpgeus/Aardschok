@@ -130,7 +130,8 @@ kapotslaat); wat de trap af komt, is een tweede skelet van dezelfde soort, niet 
 het trappenhuis staat; een ton breekt met de staf, ook buiten een gevecht, en dat kost niets; de
 deurles is een echt gevecht met de slijmkruiper achter de deur van de voorraadkamer; monsters op
 het erf staan stil zolang de les loopt; en Escape slaat een hoofdstuk over, niet de hele tutorial
-(een knop "Tutorial overslaan" hoort bij het titelscherm, werklijst punt 14).
+(een knop "Tutorial overslaan" hoort bij het titelscherm; zie het werklijstpunt over opslaan
+en het titelscherm).
 
 ## Wat er boven zit, en waarom het los is (Marcel, 20 sep 2026)
 

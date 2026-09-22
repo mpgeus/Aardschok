@@ -121,6 +121,58 @@ Hoe het aan elkaar hangt:
 4. `js/kaart.js` leest de `.tmj` en maakt daarvan wat `js/wereld.js` nu met de
    hand opschrijft: begaanbaar, vast, deuren, voorwerpen, wezens.
 
+### Een wereldgereedschap naast Tiled (Marcel, 22 sep 2026, nog te bouwen)
+
+**Tiled houdt de grond, wij de betekenis.** Marcel: "een eigen tool om kaarten te maken, met alles
+erin — quest, tekst — dat zou het heel veel makkelijker maken."
+
+Waar dat vandaan komt: voor één dorpeling ga je nu langs vijf plekken. Tiled (neerzetten),
+`gesprekken.html` (tekst), `quests.html` (een quest eraan hangen), `npm run kaarten`, en dan het
+spel om ernaartoe te lopen en te kijken. Pas aan het eind zie je of het klopt.
+
+Tiled is goed in tékenen: terreinsets, lagen, ongedaan maken, selecties, kopiëren. Dat namaken is
+een jaar werk voor iets minders, en dat doen we dus niet. Maar Tiled is slecht in *betekenis*:
+voor Tiled is `wezen="bakker"` een stuk tekst. Het weet niet dat de bakker een gesprek heeft, dat
+er een quest aan hangt, dat die quest leem nodig heeft, en dat die leem nergens ligt.
+
+Daarom de scheiding (besloten, Marcel 22 sep 2026):
+
+- **In Tiled:** de grondlaag, de terreinsets, de bomen en de huizen. Het tekenwerk.
+- **In ons gereedschap:** alles wat iets betekent — mensen, questvoorwerpen, raakpunten,
+  overgangen — op een kaart die je ziet, met hun tekst en hun quest in hetzelfde scherm.
+- **De gegevens blijven in de `.tmj`** (besloten, Marcel 22 sep 2026), waar ze nu ook staan. Eén
+  waarheid, Tiled kan alles blijven lezen en bewerken, en `npm run kaarten` verandert niet. Het
+  gereedschap weigert op te slaan als het bestand intussen op schijf veranderd is, want anders
+  verliest er een als Marcel de kaart tegelijk in Tiled open heeft.
+
+**Waarom nu en niet later:** er moeten negentien dorpelingen, de bakkerij, de leemkuil en de
+marskramer neergezet worden. Gebeurt dat eerst met de hand, dan komt het gereedschap te laat voor
+precies het werk waar het voor bedoeld was.
+
+**In rondes, zoals de huizenbouwer, met na de eerste al iets bruikbaars:**
+
+1. **Kijken.** De kaart in de browser, getekend met de tekencode van het spel zelf. Lagen aan en
+   uit: begaanbaar, vast, wie waar staat met zijn dwaalstraal, welke voorwerpen bij welke
+   questfase horen, waar de uitgangen zitten. Klik een tegel: wat denkt het spel dat hier is.
+   Schrijft niets, dus geen enkel risico — en het antwoordt al op "klopt dit?" zonder het spel te
+   spelen.
+2. **Neerzetten.** Mensen en questvoorwerpen plaatsen, verslepen en weghalen, terug de `.tmj` in.
+3. **Betekenis erbij.** Klik op de bakker en zijn gesprek staat in hetzelfde scherm; hang er een
+   quest aan; leg de leem neer vanuit de fase waar hij bij hoort.
+4. **Eén controle.** Alles wat het spel van een kaart nodig heeft op één plek nagekeken, in beeld
+   in plaats van als regel in een terminal: een onbekend `wezen`, een `quest=` die een fase noemt
+   die niet bestaat, een `raak=` zonder raakpunt, een questvoorwerp dat vast is (mag niet), een
+   gebied zonder uitgang, gebouwen die elkaar overlappen.
+
+De helft ligt er al: `js/kaart.js` leest de `.tmj`, `js/tekenen.js` tekent hem, `npm run kaarten`
+vangt al ontbrekende tegels, objecten in de verkeerde laag en gebouwen die elkaar overlappen, en
+het questgereedschap leest de kaarten al uit om te zeggen waar de dingen liggen
+(`wereldHaakjes` in `gereedschap/quests-tool.js`).
+
+**Waar dit opnieuw bekeken moet worden:** hoogte (zie hieronder, en het werklijstpunt daarover). Als
+een hoogtelaag in Tiled niet blijkt te werken, is dát het moment waarop een eigen editor een echte
+vraag wordt. Dat weet je pas als je het probeert.
+
 ### De keten staat (20 sep 2026)
 
 | Stap | Wat het doet |
