@@ -14,6 +14,12 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 **Loopt nu:** niets. Er draait geen agent.
 
+**Let op waar het werk staat.** De sessie van 22 sep draaide in de cloud en moest op een eigen tak
+werken: `claude/aardschok-quest-system-ywvpe7`. Daar staan vier commits (het questsysteem, De
+koude oven, `debug.quest`, en de verhaaleditor voor quests) die **nog niet op `main`** staan.
+Haal ze binnen met `git merge claude/aardschok-quest-system-ywvpe7`, en werk daarna weer gewoon op
+`main` zoals CLAUDE.md zegt.
+
 **Tempo:** gewoon door. Marcel maakt het niet uit of de week vandaag of vrijdag op is (22 sep).
 Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halverwege stilvalt.
 
@@ -37,9 +43,15 @@ Alle drie zijn renderwerk; het gereedschapswerk zonder kunst is af (punten 3 en 
    hebben er nu ook nog geen.
 
 **Het laatst af (22 sep):**
+- het questsysteem, De koude oven, en de verhaaleditor die quests kan (punten 3 en 4);
 - de tutorial, met Marcels keuzes erin;
 - huizenbouwer ronde 3 en 4a: uitbouwen, tuinstukken en hekjes in Tiled;
 - twaalf dorpelingen die lopen, met knieën.
+
+**Niet vergeten, want het is nu nog gratis:** de schuld aan de smidsvrouw (`schuldSmidsvrouw`).
+Zij vraagt de eerste grondstof uit de toren, en tot punt 5 die schuld kan innen, kost haar weg
+door De koude oven de speler niets. Dan haalt die quest de toets van drie antwoorden alleen op
+papier.
 
 Details staan bij de punten hieronder en in `git log`.
 
