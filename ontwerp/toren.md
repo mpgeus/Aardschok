@@ -259,7 +259,7 @@ Zo sluit het aan op wat er al is: een gesprek kent voorwaarden (`als`) en gevolg
 - **In Tiled:** een voorwerp met de eigenschap `quest` (bijvoorbeeld `bakker:zoeken`) ligt er
   alleen zolang die quest in die fase is. Zo ligt de leem pas in de kuil als de bakker erom vroeg.
 
-**De eerste quest: De koude oven** (voorstel). De bakker bakt niet meer: de aardschok scheurde
+**De eerste quest: De koude oven** (Marcel: "is prima", 22 sep 2026). De bakker bakt niet meer: de aardschok scheurde
 zijn schoorsteen, en de rook blijft binnen. Er is leem nodig om de scheur dicht te smeren. De
 toets van drie antwoorden, plus de dure weg van de tovenaar:
 

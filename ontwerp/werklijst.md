@@ -12,7 +12,7 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## De stand (einde sessie 22 sep 2026)
 
-**Loopt nu:** niets. Er draait geen agent.
+**Loopt nu:** niets. Er draait geen agent, en alles is gepusht.
 
 **Wacht op Marcel:**
 - **Het tempo tot de week weer vol is (vrijdag 26 sep).** Op 22 sep stond de week op 70%.
@@ -20,7 +20,6 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
   - B: door op het huidige tempo.
 - Opmerkingen bij het draaiboek van de tutorial (gestuurd op 22 sep; de teksten staan in
   `T.TUTORIAL_TEKST` in `js/gesprekken.js`).
-- Of De koude oven de eerste quest wordt (`toren.md`, "Hoe het werkt").
 - In Tiled: het vel `tuin` aan `wereld.tmj` toevoegen, en de vier varens rond (51–52, 45–46) van de
   grondlaag naar `objecten` verplaatsen (`npm run kaarten` klaagt erover).
 
@@ -28,7 +27,7 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 1. **Het questsysteem (punt 3). Marcel wil dit eerst (22 sep).** Het zijn spelregels zonder kunst,
    dus het wacht niet op de huizen of de vaklieden. Het ontwerp staat in `toren.md`, "Hoe het
    werkt". De bakker en de marskramer lopen nog niet (dat is B2b), dus tot dan worden ze als Wim
-   getekend. De koude oven als eerste quest is nog een voorstel; laat Marcel dat eerst bevestigen.
+   getekend. De eerste quest is De koude oven (Marcel akkoord, 22 sep).
 2. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder).
 3. Fase B2b: de zeven vaklieden en meer gewone dorpelingen (punt 2).
 4. Fase B3: de portretten in de gesprekken (punt 2).
