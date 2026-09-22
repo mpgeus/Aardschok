@@ -11,7 +11,10 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 ## Loopt nu
 
 - Ronde 3 van de huizenbouwer (een agent), zie hieronder.
-- De tutorial is speelbaar (22 sep) en wacht op Marcels keuring; zie punt 1.
+- De tutorial is speelbaar (22 sep), met Marcels keuzes erin; wat rest staat bij punt 1.
+- Punt 2, fase A (een agent): de smid en twee gewone dorpelingen leren lopen, met één manier die
+  daarna voor alle negentien werkt. Marcel beoordeelt de loop op een plaat vóór fase B de rest
+  doet (en de portretten in de gesprekken zet).
 
 ## Tegelijk: de huizenbouwer op ronde vormen
 
@@ -47,10 +50,10 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    wordt 98), uit de fontein drinkt (weer 96) en de ton kapotmept met de staf (kost niets); er iets
    van boven de trap komt; hij sterft aan zijn laatste spreuk bij zijn moestuin; Wim om hem rouwt;
    en de oude openingsteksten ("na veertig jaar") zijn herschreven. Zie `verhaal.md`.
-   **Stand (22 sep):** speelbaar van begin tot eind. Nog te doen: Marcel keurt de keuzes
-   (`verhaal.md`, Open), de teksten poetsen (`T.TUTORIAL_TEKST` in `js/gesprekken.js`), en twee
-   kleine dingen: je kunt midden in de tutorial weglopen (mag dat, of roept de meester je
-   terug?), en de fontein heeft nog geen droge kunst (hij rimpelt niet meer, maar toont nog water).
+   **Stand (22 sep):** speelbaar van begin tot eind, met Marcels keuzes erin: er blijft één slok
+   in de fontein, en wie te lang wegblijft, vindt de meester dood terug. Nog te doen: de teksten
+   poetsen (`T.TUTORIAL_TEKST` in `js/gesprekken.js`), voelen hoe lang "te lang weg" is (`WEG` in
+   `js/tutorial.js`), en een droge fontein in de kunst (hij rimpelt niet meer, maar toont nog water).
 2. **Dorpelingen die er echt zijn.** Klaar als de negentien dorpelingen en de gewone
    `dorpeling(zaad)` loopanimaties hebben (en dus niet meer als Wim getekend worden), en er
    portretten zijn voor de gesprekken.

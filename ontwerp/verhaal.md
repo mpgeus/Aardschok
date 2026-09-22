@@ -83,9 +83,29 @@ mept hij de ton kapot met de staf, en wijst erbij dat dat het enige is wat niets
 
 Zo leert de speler de hele afweging zonder uitlegscherm: magie kost jaren, de staf kost niets,
 en er is maar één manier om jaren terug te krijgen. En daarmee hangt het geweer aan de muur. De
-fontein die hij voor een grap leegschept (of aan jou geeft), is er aan het eind niet meer als
-hij hem nodig heeft. Hij haalt zijn honderdste met een spreuk die hij niet had hoeven doen, en
-dat is meteen de laatste les: dit overkomt jou ook, als je te makkelijk tovert.
+laatste slok uit de fontein staat aan het eind in de hal, en hij staat buiten bij zijn moestuin.
+Hij haalt zijn honderdste met een spreuk die hij niet had hoeven doen, en dat is meteen de laatste
+les: dit overkomt jou ook, als je te makkelijk tovert.
+
+**De fontein houdt één slok over** (Marcel, 22 sep 2026: "In de fontein blijft 1 slok over. Dat
+is die laatste slok."). Je schept een kom water voor de meester, en in de fontein blijft één slok
+staan: de laatste. Die is van jou. Zo blijft "de fontein maakt één keer twee jaar jonger"
+(`CLAUDE.md`) ook voor de speler waar, en zie je in de tutorial al waar hij staat.
+
+**Weglopen mag** (Marcel, 22 sep 2026: "te lang wegblijven = meester is dood zonder dat je weet
+waarom"). De meester houdt je niet vast, maar de middag gaat door zonder jou. Wie te lang
+wegblijft, hoort hem eerst in de verte roepen, en vindt hem daarna dood terug bij zijn moestuin.
+Wat er de trap af kwam, gebeurde terwijl je er niet was, en niemand legt het je uit. Dat past bij
+een spel dat vrij is: de wereld wacht niet op je. In de toren ben je niet weg; daar doe je zijn
+boodschappen.
+
+**Wat de eerste speelbare versie verder koos** (22 sep 2026; Marcel had geen bezwaar): een ton in
+plaats van een kraai (er is nog geen kraai om te tekenen, en de ton rijmt op de tweede, die jij
+kapotslaat); wat de trap af komt, is een tweede skelet van dezelfde soort, niet het skelet dat in
+het trappenhuis staat; een ton breekt met de staf, ook buiten een gevecht, en dat kost niets; de
+deurles is een echt gevecht met de slijmkruiper achter de deur van de voorraadkamer; monsters op
+het erf staan stil zolang de les loopt; en Escape slaat een hoofdstuk over, niet de hele tutorial
+(een knop "Tutorial overslaan" hoort bij het titelscherm, werklijst punt 14).
 
 ## Wat er boven zit, en waarom het los is (Marcel, 20 sep 2026)
 
@@ -196,23 +216,9 @@ het is een kwestie van hem `dwaalt`, `thuis` en een straal geven.
 
 ## Open
 
-- **Keuzes uit de eerste speelbare tutorial (22 sep 2026), voor Marcel om te keuren.** De agent
-  die hem bouwde, moest hier en daar kiezen. Tot Marcel iets anders zegt, blijft het zo:
-  - *De fontein is na de tutorial leeg.* De meester stuurt je om water en drinkt de laatste slok.
-    Dat past bij "is er aan het eind niet meer" hierboven, maar dan heeft de speler zelf niet meer
-    "één keer twee jaar jonger" uit `CLAUDE.md`. Bevestigen, of de speler houdt één slok over.
-  - *Een ton in plaats van een kraai.* Er is nog geen kraai om te tekenen, en de ton rijmt op de
-    tweede, die jij kapotslaat. In de tekst zitten de kraaien er nog op.
-  - *Wat de trap af komt, is een tweede skelet van dezelfde soort,* niet het skelet dat in het
-    trappenhuis staat te wachten.
-  - *Een ton breekt met de staf, ook buiten een gevecht, en dat kost niets.* Een nieuwe regel,
-    in de lijn van "slaan kost geen jaren".
-  - *De deurles is een echt gevecht:* de slijmkruiper achter de deur van de voorraadkamer ziet je,
-    en je gooit de deur dicht.
-  - *Monsters op het erf staan stil zolang de tutorial loopt,* en gaan pas dwalen als je meer dan
-    twaalf tegels bij de meester vandaan bent.
-  - *Escape slaat een hoofdstuk over, niet de hele tutorial.* Wie opnieuw begint, moet er weer
-    doorheen; een knop "Tutorial overslaan" hoort bij het titelscherm (werklijst, punt 14).
+- **Hoe lang is "te lang weg"?** Nu: verder dan twintig tegels van de moestuin, na een minuut
+  roept hij je, na tweeënhalve minuut sterft hij zonder jou (`WEG` in `js/tutorial.js`). Voelen
+  en bijstellen.
 - **Waarom is de held "Roestig"?** De eerste trede van meesterschap heette zo omdat hij veertig
   jaar niet had getoverd (`js/spreuken.js`). In het nieuwe begin woont hij bij zijn meester; dan
   vraagt dat een andere reden, of een andere naam.

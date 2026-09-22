@@ -99,7 +99,7 @@
     if (doel.voorwerp) {
       const v = doel.voorwerp;
       if (v.soort === 'fontein') {
-        if (S.fonteinLeeg) return { tekst: 'De fontein staat droog', fout: true, doe: () => T.ui.bericht('De fontein staat droog. Wim had gelijk: het was de laatste slok.') };
+        if (S.fonteinLeeg) return { tekst: 'De fontein staat droog', fout: true, doe: () => T.ui.bericht('De fontein staat droog. Je nam zelf de laatste slok.') };
         return { tekst: `De laatste slok drinken (${T.duurTekst(T.FONTEIN.maanden)} jonger)`, doe: () => loopNaast(S, v, () => T.drinkLaatsteSlok(S)) };
       }
       if (OPRAPEN[v.soort]) return { tekst: OPRAPEN[v.soort].tekst, doe: () => loopNaar(S, v) };

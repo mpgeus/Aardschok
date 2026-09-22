@@ -122,8 +122,11 @@
   // camera(naar) — het beeld op iets richten dat niet de held is (de fontein, de meester). Dit
   // zet alleen het doel; main.js schuift er zelf soepel naartoe zolang S.modus 'regie' is
   // (cameraDoel), en T.regie.speel zet hem na afloop weer los. naar = null geeft de camera
-  // meteen terug aan de held.
+  // meteen terug aan de held. In een overgeslagen scène kijkt niemand, dus hoeft de camera nergens
+  // heen: anders schiet hij één beeld lang naar iets toe (de tutorial speelt zo een hele scène af
+  // terwijl jij ver weg bent, js/tutorial.js).
   function camera(naar) {
+    if (huidige && huidige.overgeslagen) return;
     T.S.regieCamera = naar ? punt(naar) : null;
   }
 

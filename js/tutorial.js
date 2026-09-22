@@ -205,7 +205,9 @@
     if (slijm) T.zetInGebied(S, slijm, 'toren', TOREN.slijmVoor.x, TOREN.slijmVoor.y);
 
     S.tutorial = {
-      fase: 'aankomst', // aankomst → naarMeester → boodschap → slaan → einde → klaar
+      // aankomst → naarMeester → boodschap → slaan → einde → klaar; wie te lang weg was (WEG):
+      // … → dood → klaar
+      fase: 'aankomst',
       bezig: null, // de naam van de scène die nu loopt
       erf, toren, meester, wim, slijm, tonOud, tonJij, zak, plek, vast,
       wimThuis: wim && wim.thuis ? { x: wim.thuis.x, y: wim.thuis.y } : null,
@@ -217,6 +219,8 @@
       geven: false, // je gaf de meester zijn spullen; de scène volgt het volgende beeld
       gevecht: false, // er liep een gevecht (de deurles)
       skelet: null,
+      wegSinds: null, // sinds wanneer (S.tijd) je weg bent van de tuin, of null (WEG)
+      geroepen: false, // hij riep je al, deze keer dat je weg bent
       klaar: false,
     };
   };
@@ -393,7 +397,8 @@
   // Wim komt de toren uit rennen en roept, en vlucht halverwege naar de meester. De meester stapt
   // naar de rand van zijn tuin, en achter Wim aan komt het skelet naar buiten (ontwerp: "er komt
   // iets van boven de trap af dat er niet hoort te zijn"; wat, zegt het ontwerp niet).
-  async function onraad(S, t) {
+  // `zonderJou`: je was er niet (zie zonderJou hieronder), dus je gaat ook niet achter hem staan.
+  async function onraad(S, t, zonderJou) {
     const R = T.regie;
     const w = S.wereld;
     const m = t.meester;
@@ -437,7 +442,7 @@
     await R.wacht(0.3);
     R.kijk(m, sk);
     await zegAlles(m, 'blijfAchter');
-    await R.loop(S.held, achter.x, achter.y);
+    if (!zonderJou) await R.loop(S.held, achter.x, achter.y);
     // Pas als Wim er is, komt het op hem af: zo loopt het nooit tegen Wim op.
     await wimVlucht;
   }
@@ -520,15 +525,73 @@
       await R.wacht(1.2);
       R.kijk(wim, S.held);
       await zegAlles(wim, 'overnemen', 0.8);
-      R.camera(null);
-      await R.loop(wim, t.plek.deur.x, t.plek.deur.y);
-      // Terug naar zijn hal, waar hij thuishoort.
-      if (t.wimThuis) {
-        T.zetInGebied(S, wim, 'toren', t.wimThuis.x, t.wimThuis.y);
-        wim.thuis = { x: t.wimThuis.x, y: t.wimThuis.y };
-        wim.straal = t.wimStraal;
-        wim.dwaalt = true;
+      await wimNaarBinnen(S, t);
+    }
+    sluitAf(S, t);
+  }
+
+  // Terug naar zijn hal, waar hij thuishoort.
+  async function wimNaarBinnen(S, t) {
+    const wim = t.wim;
+    T.regie.camera(null);
+    await T.regie.loop(wim, t.plek.deur.x, t.plek.deur.y);
+    if (t.wimThuis) {
+      T.zetInGebied(S, wim, 'toren', t.wimThuis.x, t.wimThuis.y);
+      wim.thuis = { x: t.wimThuis.x, y: t.wimThuis.y };
+      wim.straal = t.wimStraal;
+      wim.dwaalt = true;
+    }
+  }
+
+  // Je bleef te lang weg (WEG), en de middag ging door zonder jou: wat er de trap af kwam, en zijn
+  // laatste spreuk. Dezelfde scènes als wanneer je erbij bent, maar vanaf het begin overgeslagen,
+  // dus in één klap en zonder dat er een beeld tussen zit: dezelfde wereld als na uitkijken, alleen
+  // sta jij nog waar je stond. Wat niemand zag, komt ook niet in de berichten ("De skeletwacht is
+  // verslagen"). Wim blijft bij hem staan tot je terugkomt (rouwLaat).
+  async function zonderJou(S, t) {
+    const R = T.regie;
+    R.overslaan();
+    const bericht = T.ui.bericht;
+    T.ui.bericht = () => {};
+    try {
+      await onraad(S, t, true);
+      await laatsteSpreuk(S, t);
+    } finally {
+      T.ui.bericht = bericht;
+    }
+    const wim = t.wim;
+    if (wim && t.erf.wezens.includes(wim)) {
+      const bij = naastTegel(t.erf, t.meester, wim);
+      await R.loop(wim, bij.x, bij.y);
+      R.kijk(wim, t.meester);
+    }
+    // Er is geen les meer om op te wachten: wat op het erf rondloopt, dwaalt weer.
+    laatLos(t, () => true);
+  }
+
+  // Je komt terug, en hij ligt bij zijn moestuin, met Wim ernaast. Wat er gebeurd is, vertelt
+  // niemand je: je was er niet.
+  async function rouwLaat(S, t) {
+    const R = T.regie;
+    const m = t.meester;
+    const wim = t.wim;
+    stil(S.held);
+    S.naLopen = null;
+    R.camera(m);
+    await R.wacht(1);
+    if (wim && t.erf.wezens.includes(wim)) {
+      const regels = tekst('rouwLaat');
+      R.kijk(wim, S.held);
+      if (regels[0]) await R.zeg(wim, regels[0]);
+      R.kijk(wim, m);
+      for (const regel of regels.slice(1)) {
+        await R.wacht(1.3);
+        await R.zeg(wim, regel);
       }
+      await R.wacht(1.2);
+      R.kijk(wim, S.held);
+      await zegAlles(wim, 'overnemen', 0.8);
+      await wimNaarBinnen(S, t);
     }
     sluitAf(S, t);
   }
@@ -555,7 +618,7 @@
   }
 
   // Voor de toetsen: elke scène los, op dezelfde manier gestart als in het spel.
-  const SCENES = { roepen, ton, wimBinnen, wimSchep, terugkruipen, drinken, einde };
+  const SCENES = { roepen, ton, wimBinnen, wimSchep, terugkruipen, drinken, einde, zonderJou, rouwLaat };
   T.speelTutorialScene = (S, naam) => speel(S, S.tutorial, naam, SCENES[naam]);
 
   // ---------------------------------------------------------------- elk beeld
@@ -564,12 +627,12 @@
   // js/gevecht.js vragen het eerst hier).
   T.tutorialHandeling = function (S, doel) {
     const t = S.tutorial;
-    if (!t || t.klaar || !doel) return null;
+    if (!t || t.klaar || t.fase === 'dood' || !doel) return null;
     const v = doel.voorwerp;
     if (v && v.soort === 'fontein' && !t.geschept) {
       if (S.gevecht) return { tekst: 'Het water is voor de meester', kosten: 0, kan: false };
       if (t.fase !== 'boodschap') {
-        return { tekst: 'Het water is van de meester', fout: true, doe: () => T.ui.bericht('Dat water is van de meester. Er zit nog maar één slok in.') };
+        return { tekst: 'Het water is van de meester', fout: true, doe: () => T.ui.bericht('Dat water is van de meester. Er zit bijna niets meer in.') };
       }
       return { tekst: 'Een kom water scheppen voor de meester', doe: () => T.loopNaast(S, v, () => schep(S, t)) };
     }
@@ -597,16 +660,15 @@
     return null;
   };
 
-  // De laatste slok, in een kom voor de meester. De fontein staat daarna droog: aan het eind is
-  // hij er niet meer als de meester hem nodig heeft (ontwerp/verhaal.md, "Hij speelt met zijn
-  // leeftijd").
+  // Een kom water voor de meester. Daarna blijft er één slok in de fontein staan: de laatste, en
+  // die is van jou (ontwerp/verhaal.md, "De fontein houdt één slok over"). Vanaf nu is de fontein
+  // weer gewoon de fontein (T.drinkLaatsteSlok, js/gevecht.js).
   function schep(S, t) {
     if (t.geschept || S.fonteinLeeg) return;
     t.geschept = true;
-    S.fonteinLeeg = true;
     S.inventaris.add('kom');
     T.ui.toonInventaris(S);
-    T.ui.bericht('Je schept het laatste water uit de fontein in een kom. De fontein staat droog.', 'goed');
+    T.ui.bericht('Je schept een kom water voor de meester. Er blijft één slok in de fontein staan: de laatste.', 'goed');
     if (t.wim && S.wereld.wezens.includes(t.wim)) t.wimSchep = true;
   }
 
@@ -633,6 +695,26 @@
     return null;
   }
 
+  // Weglopen mag (ontwerp/verhaal.md, "Weglopen mag"): de meester houdt je niet vast, maar de
+  // middag gaat door zonder jou. Weg is buiten en verder dan `afstand` tegels van de tuin; in de
+  // toren doe je zijn boodschappen, dus daar ben je niet weg. Na `roep` seconden speltijd roept hij
+  // je, na `dood` sterft hij zonder jou (zonderJou), en wie daarna binnen `terug` tegels van de tuin
+  // komt, vindt hem (rouwLaat). Voelen en bijstellen.
+  const WEG = { afstand: 20, roep: 60, dood: 150, terug: 10 };
+
+  // Hoe lang ben je nu al weg, in seconden? 0 als je er bent.
+  function wegTijd(S, t) {
+    const weg = S.wereld !== t.toren && (S.wereld !== t.erf || T.afstand(punt(S.held), t.plek.tuin) > WEG.afstand);
+    if (!weg) {
+      t.wegSinds = null;
+      t.geroepen = false;
+      return 0;
+    }
+    if (t.wegSinds == null) t.wegSinds = S.tijd;
+    return S.tijd - t.wegSinds;
+  }
+  T.TUTORIAL_WEG = WEG; // voor de toetsen
+
   // Elk beeld (js/main.js): heeft de speler gedaan wat er gevraagd werd? Dan de volgende scène.
   T.werkTutorialBij = function (S) {
     const t = S.tutorial;
@@ -644,6 +726,26 @@
       return;
     }
     T.ui.opdracht(opdrachtTekst(S, t));
+    // Hij ligt bij zijn tuin, en jij komt terug.
+    if (t.fase === 'dood') {
+      if (!t.bezig && S.modus === 'verkennen' && S.wereld === t.erf && T.afstand(punt(S.held), t.plek.tuin) <= WEG.terug) {
+        speel(S, t, 'rouwLaat', rouwLaat);
+      }
+      return;
+    }
+    // Te lang weg? De klok loopt ook door als je ergens anders vecht; wat er dan gebeurt, wacht tot
+    // je weer gewoon rondloopt, buiten.
+    const weg = t.fase === 'einde' ? 0 : wegTijd(S, t);
+    if (weg >= WEG.roep && !t.geroepen) {
+      t.geroepen = true;
+      T.ui.bericht('Ver weg, bij de toren, roept de meester je naam.');
+    }
+    if (weg >= WEG.dood && !t.bezig && S.modus === 'verkennen' && S.wereld === t.erf) {
+      t.fase = 'dood';
+      T.ui.opdracht(null);
+      speel(S, t, 'zonderJou', zonderJou);
+      return;
+    }
     if (S.gevecht || S.modus === 'overgang') {
       t.gevecht = true;
       return;

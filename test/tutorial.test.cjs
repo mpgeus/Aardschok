@@ -151,7 +151,8 @@ test('de hele middag speelt van begin tot eind zoals een speler hem speelt, en k
   const fontein = toren.voorwerpen.find((v) => v.soort === 'fontein');
   assert.match(T.handelingVerkennen(S, opVoorwerp(fontein)).tekst, /scheppen voor de meester/);
   await klikTot(S, opVoorwerp(fontein), () => S.inventaris.has('kom'), 30, 'water scheppen');
-  assert.equal(S.fonteinLeeg, true, 'het was de laatste slok');
+  assert.equal(S.fonteinLeeg, false, 'er blijft één slok over: de laatste, voor jou');
+  assert.match(T.handelingVerkennen(S, opVoorwerp(fontein)).tekst, /laatste slok drinken/);
   await wachtOp(S, () => !t.bezig && S.modus === 'verkennen', 20, 'Wim zag het');
 
   // De deur: wie de voorraadkamer opendoet, wordt gezien, ook gebukt. Een stap terug, de deur
@@ -249,6 +250,94 @@ test('de meester sterft op honderd aan zijn laatste spreuk: eerst valt het skele
   assert.equal(S.held.leeftijd, T.STARTLEEFTIJD);
 });
 
+// ---------------------------------------------------------------- weglopen
+
+// De dichtstbijzijnde tegel bij `doel` waar de held kan staan (geen boom, geen wezen, geen
+// overgang naar een ander gebied).
+function vrijBij(S, doel) {
+  for (let r = 0; r < 25; r++) {
+    for (let dy = -r; dy <= r; dy++) {
+      for (let dx = -r; dx <= r; dx++) {
+        const x = Math.round(doel.x) + dx;
+        const y = Math.round(doel.y) + dy;
+        if (T.isBegaanbaar(S.wereld, x, y, { wezensBlokkeren: true }) && !T.overgangOp(S.wereld, x, y)) return { x, y };
+      }
+    }
+  }
+  return assert.fail(`geen vrije tegel bij (${doel.x}, ${doel.y})`);
+}
+
+// Wat er in de berichten komt, bijhouden. T.ui is zonder scherm een Proxy (zie boven); wie er een
+// functie op zet (zoals de tutorial even met T.ui.bericht doet), krijgt die ook terug.
+function volgBerichten() {
+  const zonder = T.ui;
+  const gemeld = [];
+  T.ui = new Proxy({}, {
+    get: (eigen, naam) => (naam in eigen ? eigen[naam] : naam === 'bericht' ? (tekst) => gemeld.push(tekst) : zonder[naam]),
+  });
+  return { gemeld, stop: () => (T.ui = zonder) };
+}
+
+test('wie te lang wegblijft, hoort de meester roepen en vindt hem daarna dood terug, zonder het te zien', async () => {
+  const S = nieuwSpel();
+  const t = S.tutorial;
+  const WEG = T.TUTORIAL_WEG;
+  const berichten = volgBerichten();
+  try {
+    T.startTutorial(S);
+    await wachtOp(S, () => t.fase === 'naarMeester' && !t.bezig, 20, 'de meester roept je');
+
+    // Ver weg, buiten, en daar blijven.
+    const ver = vrijBij(S, { x: t.plek.tuin.x - WEG.afstand - 25, y: t.plek.tuin.y });
+    assert.ok(T.afstand(ver, t.plek.tuin) > WEG.afstand, 'echt weg');
+    T.zetInGebied(S, S.held, S.wereld.gebied, ver.x, ver.y);
+    await stap(S, 0.2);
+    S.tijd += WEG.roep;
+    await stap(S, 0.2);
+    assert.ok(berichten.gemeld.some((b) => /roept de meester je naam/.test(b)), 'eerst roept hij je');
+    assert.equal(t.fase, 'naarMeester', 'maar hij leeft nog');
+
+    S.tijd += WEG.dood - WEG.roep;
+    await stap(S, 0.5);
+    assert.equal(t.fase, 'dood');
+    assert.equal(t.meester.dood, true);
+    assert.equal(t.meester.leeftijd, T.EINDLEEFTIJD, 'hij stierf aan zijn laatste spreuk');
+    assert.equal(totDeTuin(S, T.tegelVan(t.meester)), 1, 'bij zijn moestuin');
+    assert.equal(t.skelet.dood, true, 'en wat er de trap af kwam, ligt er ook');
+    assert.deepEqual(T.tegelVan(S.held), ver, 'jij staat nog waar je stond');
+    assert.equal(S.held.leeftijd, T.STARTLEEFTIJD);
+    assert.equal(S.modus, 'verkennen', 'en je merkt er niets van');
+    assert.ok(!berichten.gemeld.some((b) => /verslagen/.test(b)), 'niemand meldt wat er gebeurde');
+    assert.ok(T.afstand(T.tegelVan(t.wim), T.tegelVan(t.meester)) <= 1, 'Wim staat bij hem');
+    assert.ok(t.vast.every((v) => v.los), 'er is geen les meer: wat op het erf staat, dwaalt weer');
+
+    // Terug bij de tuin: Wim, en dan is de toren van jou.
+    const terug = vrijBij(S, { x: t.plek.tuin.x - 4, y: t.plek.tuin.y + 4 });
+    assert.ok(T.afstand(terug, t.plek.tuin) <= WEG.terug);
+    T.zetInGebied(S, S.held, S.wereld.gebied, terug.x, terug.y);
+    await wachtOp(S, () => t.klaar && !t.bezig, 60, 'Wim bij het lichaam');
+    assert.ok(T.gebied(S, 'toren').wezens.includes(t.wim), 'Wim is weer naar binnen');
+    assert.equal(t.wim.dwaalt, true);
+    assert.equal(S.modus, 'verkennen');
+  } finally {
+    berichten.stop();
+  }
+});
+
+test('in de toren ben je niet weg: daar doe je zijn boodschappen', async () => {
+  const S = nieuwSpel();
+  const t = S.tutorial;
+  T.startTutorial(S);
+  await wachtOp(S, () => t.fase === 'naarMeester' && !t.bezig, 20, 'de meester roept je');
+  t.fase = 'boodschap';
+  T.gaNaarGebied(S, 'toren');
+  await stap(S, 0.2);
+  S.tijd += T.TUTORIAL_WEG.dood + 60;
+  await stap(S, 0.5);
+  assert.equal(t.fase, 'boodschap');
+  assert.ok(!t.meester.dood);
+});
+
 // ---------------------------------------------------------------- overslaan
 
 // Wat na een scène vast moet liggen, of je hem nu uitkeek of oversloeg.
@@ -311,7 +400,6 @@ const SCENES = {
     t.fase = 'boodschap';
     t.meester.leeftijd = 98 * 12;
     t.geschept = true;
-    S.fonteinLeeg = true;
     S.inventaris.add('kom');
     S.inventaris.add('zak');
     naastDeMeester(S);

@@ -102,7 +102,7 @@
         },
         fontein: {
           tekst: [
-            { als: { vlag: 'fonteinLeeg' }, zeg: 'Die staat droog, meester. Het laatste water heeft hij vanmiddag opgedronken. Voor de grap.' },
+            { als: { vlag: 'fonteinLeeg' }, zeg: 'Die staat droog, meester. De laatste slok heeft u zelf genomen.' },
             { zeg: 'Er zit nog één slok in. Eén. Hij maakt u een paar jaar jonger, maar daarna staat hij droog. Bewaar hem voor als het echt moet.' },
           ],
           keuzes: [{ zeg: 'Nog iets anders.', naar: 'meer' }],
@@ -158,10 +158,10 @@
     // Wim, als je voor het eerst de hal in komt.
     wimBinnen: [
       'O, u bent het. Ik dacht even dat het de meester was.',
-      'Water uit de fontein? Voor hem? Daar zit nog één slok in, en dat weet hij best.',
+      'Water uit de fontein? Voor hem? Er zit bijna niets meer in, en dat weet hij best.',
     ],
-    // Wim, als je de kom hebt geschept.
-    wimSchep: ['Dat was de laatste. Als hij er later om verlegen zit: ik heb het gezegd.'],
+    // Wim, als je de kom hebt geschept. Er blijft één slok over: de laatste, en die is van jou.
+    wimSchep: ['Nu zit er nog één slok in. De laatste. Als hij er later om verlegen zit: ik heb het gezegd.'],
     // Wim, als de slijmkruiper je gezien heeft en jij de deur hebt dichtgegooid.
     terugkruipen: ['Hij kruipt weer naar achteren, hoor ik. Nu gebukt erin, dan hoort hij u niet.'],
     // De meester, als je hem zijn water en zaaigoed brengt.
@@ -183,6 +183,9 @@
     laatste: ['Negenennegentig.', 'Had ik die ton maar laten staan.', 'Nog één, jongen. Kijk goed.'],
     // Wim, bij de meester.
     rouw: ['Meester?', 'Meester.', 'Hij had zijn bonen nog niet gedaan.'],
+    // Wim, bij de meester, als je te lang weg was en hem dood terugvindt. De eerste regel tegen jou,
+    // de rest tegen hem. Wat er gebeurd is, vertelt hij niet.
+    rouwLaat: ['U was er niet.', 'Hij had zijn bonen nog niet gedaan.'],
     // Wim, tegen jou.
     overnemen: ['...Meester?', 'Ik ga de trap vegen. Dat deed ik altijd, als ik niet wist wat ik moest doen.'],
   };
