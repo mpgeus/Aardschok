@@ -262,7 +262,10 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
   het gesprek in deze situatie, vanzelf neergelegd, klikken springt naar de tekst — een kaartje
   erbij en geen canvas in plaats van, want slepen is een tweede baan en een canvas zet alle
   voorwaarden weer tegelijk in beeld. In de kopbalk **zoek je over alle mensen heen**; klikken
-  brengt je naar een situatie waarin die zin ook echt klinkt. Zie `ontwerp/verhaal.md`.
+  brengt je naar een situatie waarin die zin ook echt klinkt. Onderaan de personenlijst staat
+  **het draaiboek van de tutorial** (`T.TUTORIAL_TEKST`): geen gesprek maar de momenten van de
+  openingsscène, in de volgorde die uit `js/tutorial.js` zelf gelezen wordt. Zie
+  `ontwerp/verhaal.md`.
   Allebei starten ze zichzelf niet meer: de bladzijde die ze gebruikt roept
   `T.gesprekkenTool.start()` of `T.questsTool.start()` aan, met `.kies(...)` en `.begin(...)` /
   `.beginVoor(...)` erbij. Zo zet `wereld.html` dezelfde bewerkers in een paneel, zonder een

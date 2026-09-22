@@ -119,6 +119,29 @@
   verwarring terugbrengen die de situatiebalk wegnam. En er staat bij wáár een antwoord staat,
   want Wim vraagt op twee plekken "Werkt de fontein nog?".
 
+- **Het draaiboek van de tutorial staat er ook in** (Marcel, 22 sep 2026: "doe maar").
+  `T.TUTORIAL_TEKST` staat in hetzelfde bestand maar is geen gesprek: geen keuzes, geen
+  voorwaarden, geen situaties, alleen de zesentwintig momenten van de openingsscène in volgorde.
+  Daarom is het geen persoon maar een eigen keuze onderaan dezelfde lijst ("Los van een gesprek"),
+  en verdwijnen de situatiebalk, het kaartje en de quest zodra je hem kiest — het scherm eronder
+  is een ander scherm.
+
+  **De volgorde en wie het zegt komen uit `js/tutorial.js` zelf**, niet uit een tweede lijst hier:
+  het gereedschap leest die bron en zoekt de aanroepen op (`zegAlles(m, 'tonNa')`). Wat alleen
+  opgevraagd wordt en niet afgespeeld (`tekst('tonVoor')`) heeft daar geen spreker bij staan; dan
+  zegt het commentaar het, dat met "De meester, …" of "Wim, …" begint. Een tweede lijst hier zou
+  vroeg of laat uit de pas gaan lopen met de code die hem gebruikt.
+
+  De zes momenten voor als de speler vastzit staan apart onderaan, want die worden niet
+  afgespeeld maar opgezocht. Ze mogen leeg blijven: dan zegt er niemand iets, en dat is beter dan
+  een uitlegger. De controle klaagt wél over een regel die er is maar leeg — die wordt namelijk
+  gewoon gezegd.
+
+  Opslaan gaat langs dezelfde regel als de rest: `T.bronBlok` knipt ook dit blok los, alleen dat
+  blok wordt opnieuw geschreven, en het commentaar erboven gaat letterlijk mee terug. Dat
+  commentaar is hier niet te bewerken — daar staat het waarom van een regel, en dat is niet aan
+  een bewerker om te herschrijven.
+
 - **De tutorial legt uit in plaats van te spelen** (Marcel, 22 sep 2026: "veel te cringe"). Wat
   eraan gedaan is en waarom, staat hieronder bij "De opening".
 

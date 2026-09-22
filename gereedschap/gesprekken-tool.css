@@ -599,3 +599,23 @@ button.gt-proef-keuze { display: block; width: 100%; text-align: left; margin-bo
 .gt-kop button, .gt-kop .gt-naar, .gt-kop label { white-space: nowrap; }
 .gt-kop .gt-zoek-doos { flex: 0 1 auto; min-width: 0; }
 #gt-zoek { width: 100%; max-width: 220px; min-width: 110px; }
+
+/* ── Het draaiboek van de tutorial ──
+   Geen gesprek: geen keuzes, geen voorwaarden, geen situaties. Alleen momenten met regels, in de
+   volgorde waarin ze vallen. Daarom staat de naam van het moment erboven en niet de vraag die
+   ernaartoe leidt: bij een tutorial is er geen vraag, er is een plek in de scène. */
+.gt-wie-kop { font-family: var(--kop); font-size: 20px; color: var(--goud); }
+.gt-moment { margin-bottom: 18px; }
+.gt-moment-kop { display: flex; align-items: baseline; gap: 10px; padding-top: 12px; border-top: 1px solid var(--rand); margin-bottom: 4px; }
+.gt-moment-naam { font-family: var(--kop); font-size: 13px; color: #cfe4f3; flex: none; }
+.gt-moment-uitleg { font-size: 11.5px; color: var(--gedempt); font-style: italic; }
+.gt-moment > .gt-knoop { border-left: none; padding-left: 0; margin: 0; }
+.gt-draai-leeg { color: var(--gedempt); font-size: 12.5px; font-style: italic; padding: 4px 0 4px 72px; }
+.gt-draai-uitleg { color: var(--gedempt); font-size: 12.5px; line-height: 1.5; max-width: 72ch; margin-bottom: 8px; }
+
+/* "de oude meester" en "de smidsvrouw" pasten niet in tweeënzestig pixels en werden "de oude …";
+   wie iets zegt hoort leesbaar te zijn, dat is de hele kolom. */
+.gt-zinrij .gt-wie-merk, .gt-elders-knoop .gt-wie-merk { width: 92px; }
+.gt-draai-leeg { padding-left: 102px; }
+/* Het draaiboek heeft geen situaties, en dan hoort er ook geen lege balk te staan. */
+.gt-situatiebalk:empty { display: none; }

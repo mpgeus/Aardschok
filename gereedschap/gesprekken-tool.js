@@ -635,11 +635,26 @@
     const select = $('gt-persoon');
     if (!select) return;
     select.innerHTML = '';
+    const mensen = document.createElement('optgroup');
+    mensen.label = 'Wie er praat';
     Object.entries(T.GESPREKKEN).forEach(([id, p]) => {
       const o = document.createElement('option'); o.value = id; o.textContent = p.naam + ' (' + id + ')';
       if (id === huidigePersoonId) o.selected = true;
-      select.appendChild(o);
+      mensen.appendChild(o);
     });
+    select.appendChild(mensen);
+    // Het draaiboek is geen persoon maar staat wel in hetzelfde bestand, en je komt er vanuit
+    // hetzelfde scherm bij. Vandaar hier, met een streep ertussen.
+    if (T.TUTORIAL_TEKST) {
+      const los = document.createElement('optgroup');
+      los.label = 'Los van een gesprek';
+      const o = document.createElement('option');
+      o.value = TUTORIAL;
+      o.textContent = 'Het draaiboek van de tutorial';
+      if (isDraaiboek()) o.selected = true;
+      los.appendChild(o);
+      select.appendChild(los);
+    }
   }
 
   // Wie het is: één regel, geen formulier. Meer valt er over een persoon niet te zeggen.
@@ -647,6 +662,14 @@
     const wrap = $('gt-persoon-editor');
     if (!wrap) return;
     wrap.innerHTML = '';
+    if (isDraaiboek()) {
+      const rij = el('div', 'gt-wie');
+      rij.appendChild(el('h2', 'gt-wie-kop', 'Het draaiboek van de tutorial'));
+      rij.appendChild(el('div', 'gt-vul'));
+      rij.appendChild(el('span', 'gt-wie-bij', 'de openingsscène, in volgorde — geen keuzes, geen voorwaarden'));
+      wrap.appendChild(rij);
+      return;
+    }
     const persoon = T.GESPREKKEN[huidigePersoonId];
     if (!persoon) { wrap.appendChild(el('p', 'gt-leeg', 'Nog geen personen — maak er hierboven één.')); return; }
     const rij = el('div', 'gt-wie');
@@ -676,6 +699,7 @@
     const balk = $('gt-situaties');
     if (!balk) return;
     balk.innerHTML = '';
+    if (isDraaiboek()) return;
     const persoon = T.GESPREKKEN[huidigePersoonId];
     if (!persoon) return;
     const lijst = situatiesVan(huidigePersoonId);
@@ -739,6 +763,7 @@
 
   // Het gesprek zelf.
   function renderGesprek() {
+    if (isDraaiboek()) { renderDraaiboek(); return; }
     const wrap = $('gt-gesprek');
     if (!wrap) return;
     wrap.innerHTML = '';
@@ -997,6 +1022,172 @@
     setTimeout(() => doel.classList.remove('gt-aangewezen'), 1200);
   }
 
+  // ---------- het draaiboek van de tutorial ----------
+  //
+  // T.TUTORIAL_TEKST staat in hetzelfde bestand maar is geen gesprek: geen keuzes, geen
+  // voorwaarden, geen situaties. Het zijn de regels van de openingsscène, in volgorde — de
+  // meester roept je, slaat de ton kapot, drinkt zijn water, sterft; Wim komt de toren uitrennen.
+  // Vandaar dat het hier geen persoon is maar een eigen keuze in dezelfde lijst: het scherm
+  // eronder is een ander scherm.
+  //
+  // Twee dingen komen niet uit de gegevens maar uit de code die ze gebruikt (js/tutorial.js):
+  // de volgorde waarin de momenten vallen, en wie het zegt. Dat wordt hier uit de bron gelezen in
+  // plaats van hier overgeschreven, want een tweede lijst loopt vroeg of laat uit de pas.
+  const TUTORIAL = '__draaiboek__';
+  const isDraaiboek = () => huidigePersoonId === TUTORIAL;
+
+  let MOMENTEN = [];          // [{ naam, wie }] in de volgorde van de scène
+  let TUT_KOP = '';
+  let TUT_STAART = '';
+  let TUT_GELEZEN = false;
+  let TUT_VOOR = {};          // naam -> de regels commentaar erboven, letterlijk
+
+  function leidMomentenAf(bronTutorial) {
+    const uit = [];
+    const gezien = new Set();
+    const re = /zegAlles\(\s*([\w.]+)\s*,\s*'(\w+)'|\btekst\('(\w+)'\)/g;
+    let m;
+    while ((m = re.exec(bronTutorial))) {
+      const naam = m[2] || m[3];
+      if (gezien.has(naam)) continue;
+      gezien.add(naam);
+      const w = m[1] || '';
+      const wie = /wim/i.test(w) ? 'Wim' : (/meester|^m$/.test(w) ? 'de oude meester' : null);
+      uit.push({ naam, wie });
+    }
+    // De momenten voor als je vastzit worden niet afgespeeld maar opgezocht (vastTekst), dus die
+    // staan niet in de lijst hierboven. Ze horen bij elkaar en komen daarom apart, onderaan.
+    //
+    // Op de naam zoeken en niet op de vorm eromheen: vastGezien staat er als `? 'vastGezien' :`
+    // en de rest als `return 'vastKom'`, en op "return" zoeken miste er dus precies één — die
+    // kwam dan onder "wordt nergens gebruikt" te staan, wat het tegendeel is van waar.
+    const vast = bronTutorial.match(/'(vast\w+)'/g) || [];
+    for (const r of vast) {
+      const naam = r.slice(1, -1);
+      if (!gezien.has(naam)) { gezien.add(naam); uit.push({ naam, wie: null, vast: true }); }
+    }
+    MOMENTEN = uit;
+  }
+
+  // Het draaiboek staat ná T.GESPREKKEN, dus in de staart. Dezelfde behandeling: alleen het blok
+  // dat we kennen wordt opnieuw geschreven, de rest gaat letterlijk mee terug.
+  function verwerkTutorialBron() {
+    TUT_VOOR = {};
+    const b = T.bronBlok(RUWE_STAART, 'T.TUTORIAL_TEKST');
+    if (!b) { TUT_GELEZEN = false; return; }
+    TUT_KOP = b.kop;
+    TUT_STAART = b.staart;
+    TUT_GELEZEN = true;
+    let buffer = [];
+    for (const regel of b.blok.split('\n')) {
+      const sleutel = regel.match(/^ {4}(\w+): /);
+      if (sleutel) {
+        if (buffer.length) TUT_VOOR[sleutel[1]] = buffer;
+        buffer = [];
+        continue;
+      }
+      // Commentaar en de witregels ertussen horen bij wat eronder staat en gaan letterlijk mee:
+      // daar staat het waarom van een regel, en dat is niet aan een bewerker om te herschrijven.
+      if (/^\s*\/\//.test(regel) || !regel.trim()) buffer.push(regel);
+      else buffer = [];
+    }
+  }
+
+  // De laatste alinea van het commentaar, als één leesbare zin: dat is wat er over het moment
+  // gezegd wordt. De rest (een kopje, een heel verhaal) blijft in het bestand staan.
+  function momentUitleg(naam) {
+    const regels = (TUT_VOOR[naam] || []).map((r) => r.replace(/^\s*\/\/ ?/, ''));
+    const alinea = [];
+    for (let i = regels.length - 1; i >= 0; i--) {
+      if (!regels[i].trim() || /^─/.test(regels[i])) break;
+      alinea.unshift(regels[i]);
+    }
+    return alinea.join(' ').trim();
+  }
+
+  function renderDraaiboek() {
+    const wrap = $('gt-gesprek');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    if (!T.TUTORIAL_TEKST) { wrap.appendChild(el('p', 'gt-leeg', 'Geen draaiboek gevonden.')); return; }
+    const gedaan = new Set();
+    const gewoon = MOMENTEN.filter((m) => !m.vast);
+    const vast = MOMENTEN.filter((m) => m.vast);
+
+    for (const m of gewoon) { wrap.appendChild(bouwMoment(m)); gedaan.add(m.naam); }
+
+    const rest = Object.keys(T.TUTORIAL_TEKST).filter((n) => !gedaan.has(n) && !vast.some((v) => v.naam === n));
+    if (rest.length) {
+      wrap.appendChild(el('h3', 'gt-kopje gt-fout-tekst', 'Deze momenten worden door js/tutorial.js nergens gebruikt'));
+      for (const naam of rest) wrap.appendChild(bouwMoment({ naam, wie: null }));
+    }
+
+    if (vast.length) {
+      wrap.appendChild(el('h3', 'gt-kopje', 'Als de speler vastzit'));
+      wrap.appendChild(el('p', 'gt-draai-uitleg', 'Sta je 45 seconden stil op hetzelfde punt, dan zegt Wim er iets over als hij in de buurt is, en anders de meester. Eén zin. Laat je er een leeg, dan zegt er niemand iets — en dat is beter dan een uitlegger.'));
+      for (const m of vast) wrap.appendChild(bouwMoment(m));
+    }
+  }
+
+  // Wie het zegt. Meestal staat dat in de code (zegAlles(m, 'tonNa')), maar een paar momenten
+  // worden alleen opgevraagd (tekst('tonVoor')). Dan zegt het commentaar het: die begint met
+  // "De meester, ..." of "Wim, ...".
+  function wieZegt(moment) {
+    if (moment.wie) return moment.wie;
+    const uitleg = momentUitleg(moment.naam);
+    if (/^wim\b/i.test(uitleg)) return 'Wim';
+    if (/^de (oude )?meester\b/i.test(uitleg)) return 'de oude meester';
+    return '';
+  }
+
+  function bouwMoment(moment) {
+    const naam = moment.naam;
+    const regels = T.TUTORIAL_TEKST[naam] || (T.TUTORIAL_TEKST[naam] = []);
+    const doos = el('section', 'gt-blok gt-moment');
+    doos.id = 'knoop-' + naam;
+
+    const kop = el('div', 'gt-moment-kop');
+    kop.appendChild(el('span', 'gt-moment-naam', naam));
+    const uitleg = momentUitleg(naam);
+    if (uitleg) kop.appendChild(el('span', 'gt-moment-uitleg', uitleg));
+    doos.appendChild(kop);
+
+    const lijf = el('div', 'gt-knoop');
+    regels.forEach((zin, i) => {
+      const rij = el('div', 'gt-zinrij gt-hij');
+      rij.appendChild(el('span', 'gt-wie-merk', wieZegt(moment)));
+      rij.appendChild(zinVeld(zin, 'wat hij zegt', (v) => { regels[i] = v; naVeldWijziging(); }));
+      const achter = el('div', 'gt-achter');
+      const lang = teLang(zin, false, false);
+      if (lang) achter.appendChild(el('span', 'gt-chipje gt-fout-tekst', `${lang} regels hoog`));
+      achter.appendChild(bouwVerplaatsKnoppen(regels, i));
+      rij.appendChild(achter);
+      lijf.appendChild(rij);
+    });
+    if (!regels.length) lijf.appendChild(el('p', 'gt-draai-leeg', 'Nog niets — en dan zegt er niemand iets.'));
+    lijf.appendChild(knop('gt-mini gt-erbij', '+ regel', () => {
+      regels.push('');
+      naDataStructuurWijziging();
+    }));
+    doos.appendChild(lijf);
+    return doos;
+  }
+
+  // Het draaiboek terugschrijven. Eén regel blijft op één regel als hij kort genoeg is, precies
+  // zoals het er met de hand in staat — anders wordt elke wijziging een diff van het hele blok.
+  function serDraaiboek() {
+    let out = '  T.TUTORIAL_TEKST = {\n';
+    for (const [naam, regels] of Object.entries(T.TUTORIAL_TEKST)) {
+      for (const r of TUT_VOOR[naam] || []) out += r + '\n';
+      const opEenRegel = `    ${naam}: [${(regels || []).map(str).join(', ')}],`;
+      out += opEenRegel.length <= 112
+        ? opEenRegel + '\n'
+        : `    ${naam}: [\n${(regels || []).map((r) => '      ' + str(r) + ',\n').join('')}    ],\n`;
+    }
+    out += '  };';
+    return out;
+  }
+
   // ---------- het kaartje: de vorm van het gesprek ----------
   //
   // Marcel stuurde op 22 sep een node-editor voor RPG Maker ("misschien dat dat helpt"): blokjes
@@ -1012,6 +1203,7 @@
     const wrap = $('gt-kaart');
     if (!wrap) return;
     wrap.innerHTML = '';
+    if (isDraaiboek()) return;
     const persoon = T.GESPREKKEN[huidigePersoonId];
     if (!persoon || !persoon.knopen[persoon.start]) return;
     const sit = huidigeSituatie();
@@ -1120,6 +1312,16 @@
         }
       }
     }
+    for (const [naam, regels] of Object.entries(T.TUTORIAL_TEKST || {})) {
+      const moment = MOMENTEN.find((m) => m.naam === naam);
+      for (const zin of regels || []) {
+        if ((zin || '').toLowerCase().includes(t)) {
+          // "moment:" en niet "na:", want een moment in het draaiboek komt niet na een vraag —
+          // het is een plek in de scène.
+          uit.push({ pid: TUTORIAL, kid: naam, zeg: zin, wie: wieZegt(moment || { naam }) || 'tutorial', moment: naam });
+        }
+      }
+    }
     return uit.slice(0, 40);
   }
 
@@ -1145,7 +1347,8 @@
       zin.appendChild(el('mark', null, r.zeg.slice(i, i + t.length)));
       zin.appendChild(document.createTextNode(r.zeg.slice(i + t.length)));
       b.appendChild(zin);
-      if (r.waar) b.appendChild(el('span', 'gt-zoek-waar', 'na: ' + r.waar));
+      if (r.moment) b.appendChild(el('span', 'gt-zoek-waar', 'moment: ' + r.moment));
+      else if (r.waar) b.appendChild(el('span', 'gt-zoek-waar', 'na: ' + r.waar));
       b.addEventListener('click', () => { uit.classList.add('verborgen'); veld.value = ''; gaNaarRegel(r.pid, r.kid, r.als); });
       uit.appendChild(b);
     }
@@ -1155,6 +1358,14 @@
   // Liefst een waarin de gevonden zin zélf klinkt — anders spring je naar een plek waar hij wel
   // staat maar niet te zien is, en dat is precies de verwarring die de situatiebalk wegnam.
   function gaNaarRegel(pid, kid, als) {
+    if (pid === TUTORIAL) {
+      huidigePersoonId = TUTORIAL;
+      herbouwAlles();
+      vuil = false;
+      updateStatus();
+      setTimeout(() => gaNaarKnoop(kid), 40);
+      return;
+    }
     if (!T.GESPREKKEN[pid]) return;
     huidigePersoonId = pid;
     const persoon = T.GESPREKKEN[pid];
@@ -1180,6 +1391,7 @@
     const wrap = $('gt-quest');
     if (!wrap) return;
     wrap.innerHTML = '';
+    if (isDraaiboek()) return;
     const q = questVanPersoon(huidigePersoonId);
     if (!q) {
       if (!T.QUESTS) return;
@@ -1305,6 +1517,21 @@
         });
       }
     }
+    for (const m of MOMENTEN) {
+      const regels = (T.TUTORIAL_TEKST || {})[m.naam];
+      if (!regels) {
+        meldingen.push({ soort: 'fout', tekst: `Draaiboek: js/tutorial.js vraagt om "${m.naam}", en dat moment staat er niet in.`, persoonId: TUTORIAL, knoopId: m.naam });
+        continue;
+      }
+      regels.forEach((zin, i) => {
+        if (!zin || !zin.trim()) {
+          meldingen.push({ soort: 'fout', tekst: `Draaiboek, "${m.naam}": regel ${i + 1} is leeg. Een lege regel is niet hetzelfde als geen regel — hij wordt wel gezegd.`, persoonId: TUTORIAL, knoopId: m.naam });
+          return;
+        }
+        const lang = teLang(zin, false, false);
+        if (lang) meldingen.push({ soort: 'waarschuwing', tekst: `Draaiboek, "${m.naam}": regel ${i + 1} is ongeveer ${lang} regels hoog (past niet lekker in beeld).`, persoonId: TUTORIAL, knoopId: m.naam });
+      });
+    }
     for (const [naam, plekken] of gezet) {
       if (!gelezen.has(naam)) meldingen.push({ soort: 'waarschuwing', tekst: `Vlag "${naam}" wordt gezet (bij ${beschrijfPlek(plekken[0])}) maar in de gesprekken nergens gelezen.`, ...plekken[0] });
     }
@@ -1339,7 +1566,7 @@
       b.appendChild(document.createTextNode(m.tekst));
       b.addEventListener('click', () => {
         if (m.persoonId && m.persoonId !== huidigePersoonId) { huidigePersoonId = m.persoonId; huidigeSituatieNr = 0; herbouwAlles(); }
-        if (m.knoopId) gaNaarKnoop(m.knoopId);
+        if (m.knoopId) setTimeout(() => gaNaarKnoop(m.knoopId), 20);
       });
       li.appendChild(b);
       return li;
@@ -1553,7 +1780,11 @@
     let blok = '  T.GESPREKKEN = {\n';
     blok += Object.entries(T.GESPREKKEN).map(([id, p]) => serPersoon(id, p, '    ')).join('');
     blok += '  };';
-    return RUWE_KOP + blok + RUWE_STAART;
+    // Het draaiboek zit in de staart en krijgt dezelfde behandeling: alleen zijn eigen blok wordt
+    // opnieuw geschreven. Lukte dat lezen niet, dan blijft de staart zoals hij was — dan is het
+    // draaiboek in dit scherm ook niet te bewerken, en schrijven we er dus niets overheen.
+    const staart = TUT_GELEZEN ? TUT_KOP + serDraaiboek() + TUT_STAART : RUWE_STAART;
+    return RUWE_KOP + blok + staart;
   }
 
   async function opslaan() {
@@ -1584,12 +1815,17 @@
 
   // ---------- opstarten ----------
   async function init() {
-    const [gesprekkenBron, gesprekBron] = await Promise.all([
+    const [gesprekkenBron, gesprekBron, tutorialBron] = await Promise.all([
       fetch('../js/gesprekken.js').then((r) => r.text()),
       fetch('../js/gesprek.js').then((r) => r.text()),
+      // De volgorde van de scène en wie wat zegt staan in de code die de teksten gebruikt, niet
+      // in de teksten zelf. Die worden daar gelezen in plaats van hier overgeschreven.
+      fetch('../js/tutorial.js').then((r) => r.text()).catch(() => ''),
     ]);
     leidVoorwaardenAf(gesprekkenBron, gesprekBron);
     verwerkRuweBron(gesprekkenBron);
+    verwerkTutorialBron();
+    leidMomentenAf(tutorialBron);
     renderOpmerkingMelding();
 
     huidigePersoonId = Object.keys(T.GESPREKKEN)[0] || null;
@@ -1602,7 +1838,12 @@
     koppel('gt-persoon', 'change', (e) => { huidigePersoonId = e.target.value; huidigeSituatieNr = 0; herbouwAlles(); vuil = false; updateStatus(); });
     koppel('gt-nieuw-persoon', 'click', nieuwPersoon);
     koppel('gt-opslaan', 'click', opslaan);
-    koppel('gt-proberen', 'click', () => { const p = $('gt-proef'); if (p) p.classList.remove('verborgen'); beginProef(); });
+    koppel('gt-proberen', 'click', () => {
+      if (isDraaiboek()) { alert('Het draaiboek speelt zichzelf af in het spel; hier valt niets te kiezen.'); return; }
+      const p = $('gt-proef');
+      if (p) p.classList.remove('verborgen');
+      beginProef();
+    });
     koppel('gt-zoek', 'input', renderZoek);
     koppel('gt-zoek', 'keydown', (e) => { if (e.key === 'Escape') { e.target.value = ''; renderZoek(); } });
     // Buiten de uitslag klikken sluit hem; anders blijft er een lijst over de tekst hangen.
