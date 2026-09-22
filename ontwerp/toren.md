@@ -234,6 +234,45 @@ Twee regels die uit de kernregel komen:
   geeft. Een quest die alleen goud oplevert, is minder interessant dan een die je een grondstof
   geeft waarvan je nog niet weet waar hij heen moet.
 
+### Hoe het werkt (voorstel, 22 sep 2026)
+
+Zo sluit het aan op wat er al is: een gesprek kent voorwaarden (`als`) en gevolgen (`doe`) in
+`js/gesprek.js`, en de tutorial heeft al een vak linksboven voor wat je moet doen.
+
+- **Een quest is een rij fasen,** als gegevens in `js/quests.js` (`T.QUESTS`, net als
+  `js/gesprekken.js`). De stand staat in `S.quests` als de naam van de fase, bijvoorbeeld
+  `{ bakker: 'zoeken' }`. Staat een quest daar niet in, dan is hij nog niet begonnen. Eén woord
+  per quest houdt opslaan simpel.
+- **Een gesprek zet een quest in een fase:** `doe: { quest: 'bakker', fase: 'zoeken' }`. Een fase
+  met `beloning` (goud, een voorwerp, een vlag) geeft die zodra de quest erin komt, en maar één
+  keer.
+- **Een fase kan vanzelf verder** met `klaarAls`, met dezelfde voorwaarden als in een gesprek.
+  Heb je wat de bakker nodig heeft, dan gaat "zoeken" naar "terugbrengen", met een bericht. Het
+  spel kijkt dat elk beeld na (`T.werkQuestsBij`), net als de tutorial.
+- **Iedereen kan erop reageren:** `als: { quest: 'bakker', fase: 'zoeken' }` werkt in elk gesprek,
+  niet alleen bij wie de quest gaf. `fase` mag ook een lijstje zijn.
+- **Goud** is een getal (`S.goud`) en staat bij je leeftijd in beeld. Een gesprek kan erop
+  letten: `als: { goud: 10 }` betekent minstens tien. Het kan het ook veranderen:
+  `doe: { goud: -10 }`. Voorwerpen gaan net zo: `doe: { geef: 'leem' }` en `doe: { neem: 'leem' }`.
+  Zo is kopen bij de marskramer gewoon een gesprek.
+- **Wat je nu moet doen,** staat als `doel` bij de fase, en verschijnt in het vak linksboven.
+- **In Tiled:** een voorwerp met de eigenschap `quest` (bijvoorbeeld `bakker:zoeken`) ligt er
+  alleen zolang die quest in die fase is. Zo ligt de leem pas in de kuil als de bakker erom vroeg.
+
+**De eerste quest: De koude oven** (voorstel). De bakker bakt niet meer: de aardschok scheurde
+zijn schoorsteen, en de rook blijft binnen. Er is leem nodig om de scheur dicht te smeren. De
+toets van drie antwoorden, plus de dure weg van de tovenaar:
+
+1. **De leemkuil bij de beek.** Daar huist sinds de schok iets. Vechten kost jaren; sluipen kost
+   niets, maar het is een risico.
+2. **De marskramer** heeft een zak vuurklei. Die kost goud, en je hebt nog weinig goud.
+3. **De smidsvrouw** heeft oude vuurstenen van de smidse over, en geeft ze als je iets voor haar
+   doet. Dat kost tijd, of een gunst.
+4. **Toveren:** een vuurschicht in de oven bakt de scheur dicht. Dat is snel, en kost een jaar.
+
+De beloning is goud, en het dorp ruikt weer naar brood (`vlag: 'ovenWarm'`). De herbergierster en
+de kinderen merken het op.
+
 ## Wat de kernregel ervan vraagt
 
 - **Goud koopt nooit jaren terug.** Genezen bestaat niet, dus er zijn geen verjongingsdrankjes te
