@@ -164,8 +164,14 @@ het questgereedschap leest de kaarten al uit om te zeggen waar de dingen liggen
 2. **Neerzetten** — *af, 22 sep 2026*. Mensen, dorpelingen, deuren, geheime doorgangen,
    aansluitingen en voorwerpen plaatsen, verslepen en weghalen — niet terug de `.tmj` in, maar in
    `kaarten/<naam>.betekenis.json` (zie het besluit hierboven).
-3. **Betekenis erbij.** Klik op de bakker en zijn gesprek staat in hetzelfde scherm; hang er een
-   quest aan; leg de leem neer vanuit de fase waar hij bij hoort.
+3. **Betekenis erbij** — *gesprekken af, 22 sep 2026*. Klik op de bakker en zijn gesprek staat in
+   hetzelfde scherm; hang er een quest aan; leg de leem neer vanuit de fase waar hij bij hoort.
+   Het gesprek werkt: een breed paneel over de kaart, met de hele bewerker uit
+   `gesprekken-tool.js` erin — niet nagemaakt maar hergebruikt, want twee bewerkers voor hetzelfde
+   bestand lopen vroeg of laat uit elkaar. Die bewerker start zichzelf daarom niet meer;
+   `T.gesprekkenTool.start()`, `.kies(wie)` en `.begin(wie, naam)` zijn wat een bladzijde aanroept.
+   Wat nog rest van ronde 3: de quest van wie je aanklikt in hetzelfde scherm, en de leem neerleggen
+   vanuit de fase waar hij bij hoort.
 4. **Eén controle** — *af, 22 sep 2026, naar voren gehaald*. Alles wat het spel van een kaart
    nodig heeft op één plek nagekeken, in beeld in plaats van als regel in een terminal: een
    onbekend `wezen`, een `quest=` die een fase noemt die niet bestaat, een `raak=` zonder

@@ -229,7 +229,9 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
 
 - `gereedschap/gesprekken.html` voor de gesprekken en `gereedschap/quests.html` voor de quests
   (fasen, wegen, het dorp per fase, en de controle die de toets van drie antwoorden nakijkt).
-  Allebei schrijven ze hun eigen bestand terug.
+  Allebei schrijven ze hun eigen bestand terug. De gespreksbewerker (`gesprekken-tool.js`) start
+  zichzelf niet meer: de bladzijde die hem gebruikt roept `T.gesprekkenTool.start()` aan. Zo kan
+  `wereld.html` dezelfde bewerker in een paneel zetten, zonder een tweede te bouwen.
 - `gereedschap/wereld.html` voor de kaarten, en dat is de bladzijde waar het spel gemaakt wordt.
   **Tiled tekent alleen nog de grond; alles wat betekenis heeft ontstaat en verandert hier**
   (Marcel, 22 sep; `ontwerp/kaarten.md`). Het tekent de kaart met `js/tekenen.js` zelf, kent lagen
@@ -245,6 +247,11 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
     het spel het meteen ziet.
   - Een aansluiting leg je in één handeling: klik de tegel waar je vertrekt, het blad springt
     naar de andere kaart, klik waar je aankomt, en beide kanten staan er — `komt` erbij bedacht.
+  - **Klik een poppetje en zijn gesprek staat ernaast** (dubbelklik, of de knop in het
+    tegelpaneel): een breed paneel over de kaart met de volledige bewerker uit
+    `gesprekken-tool.js` — knopen, regels, voorwaarden, gevolgen, het proefgesprek en de
+    controle. Aanwijzen gaat op het lijf van een wezen, niet op zijn voeten, met dezelfde maten
+    als `zoekDoel` in `js/main.js`. Esc sluit het paneel.
   - De controle staat in `gereedschap/keuring.js` (`T.keurKaart` en `T.keurDekking`, zonder scherm
     en dus getoetst): wat op de kaart staat en niet kan, en omgekeerd wat het spel vraagt en
     nergens staat. Die tweede zegt precies wat er nog neergezet moet worden.

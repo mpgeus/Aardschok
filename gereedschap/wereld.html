@@ -45,6 +45,43 @@
       </div>
     </section>
 
+    <!-- Het gesprek van wie je aanklikt, in hetzelfde scherm. Dit zijn precies de elementen die
+         gereedschap/gesprekken-tool.js zoekt (gt-persoon, gt-boom-inhoud, …): die bewerker is
+         hier niet nagemaakt maar hergebruikt, zodat er niet twee bewerkers voor hetzelfde
+         bestaan. Het paneel schuift over de kaart en gaat weer dicht met Esc. -->
+    <section class="wt-gesprek verborgen" id="wt-gesprek">
+      <header class="wt-gesprek-kop">
+        <h2 id="wt-gesprek-wie">Gesprek</h2>
+        <label>Persoon <select id="gt-persoon"></select></label>
+        <button id="gt-nieuw-persoon" type="button" class="gt-mini">+ persoon</button>
+        <div class="gt-vul"></div>
+        <span id="gt-status" class="gt-status"></span>
+        <button id="gt-opslaan" type="button" class="gt-primair">Opslaan</button>
+        <button id="wt-gesprek-dicht" type="button" class="gt-mini" title="Sluiten (Esc)">✕</button>
+      </header>
+      <div id="gt-opmerking-melding" class="gt-melding verborgen"></div>
+      <div class="wt-gesprek-lijf">
+        <section class="paneel">
+          <h2>Knopen<div class="gt-vul"></div><button id="gt-nieuwe-knoop" type="button" class="gt-mini" title="Nieuwe knoop in deze persoon">+ knoop</button></h2>
+          <div id="gt-boom-inhoud"></div>
+        </section>
+        <section class="paneel">
+          <h2>Bewerken</h2>
+          <div id="gt-persoon-editor"></div>
+          <div id="gt-knoop-editor"><p class="gt-leeg">Kies een knoop in de boom hierboven.</p></div>
+        </section>
+        <section class="paneel">
+          <h2>Proefgesprek</h2>
+          <div id="gt-proef-staat"></div>
+          <div id="gt-proef-gesprek"></div>
+        </section>
+        <section class="paneel">
+          <h2>Controle</h2>
+          <div id="gt-fouten-inhoud"></div>
+        </section>
+      </div>
+    </section>
+
     <aside class="wt-zij">
       <section class="paneel wt-lagen">
         <h2>Lagen</h2>
@@ -72,6 +109,13 @@
        eigen kopie. De kaart wordt ingelezen door js/kaart.js en getekend door js/tekenen.js, dus
        wat hier in beeld staat, is wat het spel er ook van maakt. js/main.js blijft eruit: dat is
        de spellus en de invoer van het spel zelf, en die heeft dit blad niet nodig. -->
+  <!-- Verborgen meetrek met dezelfde id's als in het spel (zie stijl.css): zo meet de
+       gespreksbewerker met de echte styling of een regel in het spel past. -->
+  <div id="dialoog" class="paneel gt-meet">
+    <p id="dialoog-tekst"></p>
+    <div id="dialoog-keuzes"><button type="button"></button></div>
+  </div>
+
   <script src="beelden/beschrijving.js"></script>
   <script src="beelden/effecten/effecten.js"></script>
   <script src="tegels/tegels.js"></script>
@@ -90,6 +134,7 @@
   <script src="js/verkennen.js"></script>
   <script src="js/tekenen.js"></script>
   <script src="gereedschap/keuring.js"></script>
+  <script src="gereedschap/gesprekken-tool.js"></script>
   <script src="gereedschap/wereld-tool.js"></script>
 </body>
 </html>

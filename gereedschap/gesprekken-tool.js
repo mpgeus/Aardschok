@@ -839,5 +839,48 @@
     $('gt-opslaan').addEventListener('click', opslaan);
     window.addEventListener('beforeunload', (e) => { if (vuil) { e.preventDefault(); e.returnValue = ''; } });
   }
-  init();
+
+  // De bewerker is ook van gereedschap/wereld.html: klik daar een poppetje en zijn gesprek staat
+  // in hetzelfde scherm. Er is geen tweede bewerker — dit is hem, en die bladzijde levert alleen
+  // dezelfde gt-*-elementen aan. Vandaar dat dit bestand zichzelf niet meer start: de bladzijde
+  // die hem gebruikt, zegt wanneer.
+  let gestart = false;
+  T.gesprekkenTool = {
+    // Eén keer opstarten (bron inlezen, voorwaarden afleiden); daarna alleen opnieuw tekenen.
+    async start() {
+      if (gestart) {
+        herbouwAlles();
+        vuil = false;
+        updateStatus();
+        return;
+      }
+      gestart = true;
+      await init();
+    },
+    // Naar één persoon springen. Geeft false als die nog geen gesprek heeft, zodat de aanroeper
+    // kan vragen of er een moet komen.
+    kies(persoonId) {
+      if (!T.GESPREKKEN[persoonId]) return false;
+      huidigePersoonId = persoonId;
+      huidigeKnoopId = T.GESPREKKEN[persoonId].start;
+      nieuwProefgesprek();
+      herbouwAlles();
+      vuil = false;
+      updateStatus();
+      return true;
+    },
+    // Een gesprek beginnen voor iemand die er nog geen heeft, met zijn eigen id (de soort uit
+    // T.WEZENS, want daarop zoekt js/verkennen.js het gesprek op).
+    begin(persoonId, naam) {
+      if (T.GESPREKKEN[persoonId]) return this.kies(persoonId);
+      T.GESPREKKEN[persoonId] = { naam: naam || persoonId, start: 'welkom', knopen: { welkom: { tekst: [{ zeg: '' }], keuzes: [] } } };
+      huidigePersoonId = persoonId;
+      huidigeKnoopId = 'welkom';
+      nieuwProefgesprek();
+      herbouwAlles();
+      return true;
+    },
+    heeft: (persoonId) => !!T.GESPREKKEN[persoonId],
+    isVuil: () => vuil,
+  };
 })();

@@ -458,6 +458,46 @@
     veranderd();
   }
 
+  // ---------------------------------------------------------------- het gesprek erbij
+  //
+  // Klik een poppetje en zijn gesprek staat in hetzelfde scherm. De bewerker is niet nagemaakt:
+  // gereedschap/gesprekken-tool.js wordt hier gewoon geladen en vindt in wereld.html dezelfde
+  // gt-*-elementen als in gesprekken.html. Eén bewerker, twee bladzijden.
+  let gesprekGestart = false;
+
+  async function toonGesprek(soort, naam) {
+    const paneel = el('wt-gesprek');
+    paneel.classList.remove('verborgen');
+    el('wt-gesprek-wie').textContent = naam ? `Gesprek · ${naam}` : 'Gesprek';
+    if (!gesprekGestart) {
+      gesprekGestart = true;
+      await T.gesprekkenTool.start();
+    }
+    if (soort) {
+      if (!T.gesprekkenTool.heeft(soort)) {
+        if (!confirm(`"${soort}" heeft nog geen gesprek. Een nieuw gesprek voor hem beginnen?`)) return;
+        T.gesprekkenTool.begin(soort, naam || soort);
+        herbouw(); // de controle zegt nu iets anders over wie er wel en niet praat
+      } else {
+        T.gesprekkenTool.kies(soort);
+      }
+    }
+  }
+
+  function sluitGesprek() {
+    el('wt-gesprek').classList.add('verborgen');
+  }
+
+  const gesprekOpen = () => !el('wt-gesprek').classList.contains('verborgen');
+
+  // Wie staat er op deze tegel, en kan die praten? Alleen een neutraal wezen of een dorpeling;
+  // een wolf heeft geen gesprek en krijgt er ook geen knop voor.
+  function pratenOp(t) {
+    const w = S.wereld;
+    if (!w || !t) return null;
+    return w.wezens.find((e) => e.tx === t.x && e.ty === t.y && e.kant !== 'monster') || null;
+  }
+
   // ---------------------------------------------------------------- de questfase
 
   function zetQuestKeuze() {
@@ -559,6 +599,45 @@
     y: (my - Math.round(bh / 2)) / S.zoom + Math.round(S.camera.y),
   });
 
+  // Wat ligt er onder de muis? Een poppetje steekt boven zijn tegel uit, dus je klikt hem op zijn
+  // lijf en niet op zijn voeten — anders mik je op de tegel ervoor en pak je de boom die er staat.
+  // Dezelfde vraag als zoekDoel in js/main.js, en met dezelfde maten, zodat aanwijzen hier
+  // precies zo voelt als in het spel. Van voor naar achter, want wat vooraan staat vangt de muis.
+  function zoekDoel(mx, my) {
+    const w = S.wereld;
+    if (!w) return null;
+    const { x: sx, y: sy } = naarVlak(mx, my);
+    const kandidaten = [];
+    for (const e of w.wezens) {
+      const p = T.naarScherm(e.x, e.y);
+      const hoog = T.sprites.aan && !T.debug.vlakken ? T.sprites.hoogte(e.soort) : 48;
+      if (sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoog && sy < p.y + 9) {
+        kandidaten.push({ d: e.x + e.y + 0.01, wezen: e, x: e.tx, y: e.ty });
+      }
+    }
+    // Alleen de voorwerpen die uit het betekenisbestand komen: dat zijn de dingen die je hier
+    // kunt pakken. Een boom of een huis uit Tiled vangt de muis niet, want daar valt hier toch
+    // niets aan te doen — en anders zou elke boom het poppetje erachter afschermen.
+    for (const v of [...w.voorwerpen, ...(w.questVoorwerpen || [])]) {
+      if (!dingOp(v.x, v.y)) continue;
+      const hoog = (T.sprites.buitenHoogte && T.sprites.buitenHoogte(v.vel)) || 32;
+      const p = T.naarScherm(v.x, v.y);
+      if (sx > p.x - 24 && sx < p.x + 24 && sy > p.y - hoog && sy < p.y + 10) {
+        kandidaten.push({ d: v.x + v.y, voorwerp: v, x: v.x, y: v.y });
+      }
+    }
+    if (kandidaten.length) {
+      kandidaten.sort((a, b) => b.d - a.d);
+      return kandidaten[0];
+    }
+    const f = T.naarWereld(sx, sy);
+    const x = Math.round(f.x);
+    const y = Math.round(f.y);
+    return x >= 0 && y >= 0 && x < w.b && y < w.h ? { x, y } : null;
+  }
+
+  // Alleen de tegel, zonder wat erop staat: voor het verslepen, waar de tegel onder de muis telt
+  // en niet het lijf dat eroverheen hangt.
   function tegelOnder(mx, my) {
     const v = naarVlak(mx, my);
     const t = T.naarWereld(v.x, v.y);
@@ -601,7 +680,7 @@
   let sleept = null;
   canvas.addEventListener('mousedown', (e) => {
     const vak = canvas.getBoundingClientRect();
-    const t = tegelOnder(e.clientX - vak.left, e.clientY - vak.top);
+    const t = zoekDoel(e.clientX - vak.left, e.clientY - vak.top);
     // In de bewerkstand pakt de muis een ding op als er een onder ligt; anders schuift hij de
     // kaart, net als altijd.
     const ding = bewerken() && t && penseel.soort !== 'aansluiting' ? dingOp(t.x, t.y) : null;
@@ -630,7 +709,8 @@
       S.camera.y = sleept.cy - dy / S.zoom;
       return;
     }
-    onderMuis = tegelOnder(e.clientX - vak.left, e.clientY - vak.top);
+    onderMuis = zoekDoel(e.clientX - vak.left, e.clientY - vak.top);
+    canvas.classList.toggle('wt-wijst', !!(onderMuis && dingOp(onderMuis.x, onderMuis.y)));
     if (!vast) toonTegel(onderMuis);
   });
   window.addEventListener('mouseup', (e) => {
@@ -641,7 +721,7 @@
     canvas.classList.remove('wt-sleept');
     if (!stil || e.target !== canvas) return;
     const vak = canvas.getBoundingClientRect();
-    const t = tegelOnder(e.clientX - vak.left, e.clientY - vak.top);
+    const t = zoekDoel(e.clientX - vak.left, e.clientY - vak.top);
     vast = t;
     if (bewerken() && t) {
       if (ding) gekozen = ding;
@@ -649,6 +729,13 @@
       return;
     }
     toonTegel(vast);
+  });
+  // Dubbelklik op een poppetje: zijn gesprek erbij, zonder eerst de knop te zoeken.
+  canvas.addEventListener('dblclick', (e) => {
+    const vak = canvas.getBoundingClientRect();
+    const t = zoekDoel(e.clientX - vak.left, e.clientY - vak.top);
+    const wie = pratenOp(t);
+    if (wie) toonGesprek(wie.soort, wie.naam);
   });
   canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
@@ -664,7 +751,10 @@
   }, { passive: false });
 
   window.addEventListener('keydown', (e) => {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+    // Met het gesprekspaneel open zijn de lettertoetsen van het typen, niet van de lagen; alleen
+    // Escape blijft van het paneel zelf.
+    if (gesprekOpen() && e.key !== 'Escape') return;
     const laag = LAGEN.find((l) => l.toets === e.key.toLowerCase());
     if (laag) {
       laag.aan = !laag.aan;
@@ -683,6 +773,10 @@
     else if (e.key === 'Delete' || e.key === 'Backspace') {
       if (bewerken() && gekozen) haalWeg(gekozen);
     } else if (e.key === 'Escape') {
+      if (gesprekOpen()) {
+        sluitGesprek();
+        return;
+      }
       vast = null;
       gekozen = null;
       if (aansluiting) {
@@ -855,8 +949,17 @@
       rij(doel, 'kant', e.kant);
       if (e.leven) rij(doel, 'leven', `${e.leven}/${e.maxLeven}`);
       rij(doel, 'dwaalt', e.dwaalt ? `ja, straal ${e.straal} vanaf (${e.thuis.x}, ${e.thuis.y})` : 'nee', kl(e.dwaalt));
-      if (T.GESPREKKEN && T.GESPREKKEN[e.soort]) rij(doel, 'gesprek', 'ja', 'wt-ja');
-      else if (e.kant === 'neutraal') rij(doel, 'gesprek', 'geen', 'wt-nee');
+      const praat = T.GESPREKKEN && T.GESPREKKEN[e.soort];
+      if (praat) rij(doel, 'gesprek', 'ja', 'wt-ja');
+      else if (e.kant === 'neutraal') rij(doel, 'gesprek', 'nog geen', 'wt-nee');
+      if (e.kant !== 'monster') {
+        const knop = document.createElement('button');
+        knop.type = 'button';
+        knop.className = 'gt-mini';
+        knop.textContent = praat ? 'Gesprek bewerken' : 'Een gesprek beginnen';
+        knop.addEventListener('click', () => toonGesprek(e.soort, e.naam));
+        doel.appendChild(knop);
+      }
     }
 
     const o = (w.overgangen || []).find((o) => o.x === t.x && o.y === t.y);
@@ -1113,6 +1216,7 @@
       toonTegel(vast || onderMuis);
     });
     el('wt-opslaan').addEventListener('click', slaOp);
+    el('wt-gesprek-dicht').addEventListener('click', sluitGesprek);
     window.addEventListener('beforeunload', (e) => {
       if ([...open.values()].some((b) => b.vuil)) e.preventDefault();
     });

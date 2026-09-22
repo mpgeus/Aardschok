@@ -28,8 +28,13 @@ deuren, geheime doorgangen, aansluitingen en questvoorwerpen zet je hier neer, e
 verhuisd: `wereld.tmj`, `proef.tmj` en `proefbos.tmj` houden alleen nog tekening. Na Opslaan
 bundelt het blad zelf, dus het spel ziet het meteen.
 
-Wat er nog niet is: ronde 3 — een poppetje aanklikken en zijn gesprek in hetzelfde scherm
-bewerken. Dat is nu het eerste punt hieronder.
+**Een poppetje aanklikken geeft zijn gesprek** (ronde 3, de helft): dubbelklik hem, of gebruik de
+knop in het tegelpaneel, en er schuift een breed paneel over de kaart met de hele bewerker uit
+`gesprekken.html` erin. Niet nagemaakt maar hergebruikt: er is één bewerker. Aanwijzen gaat op
+zijn lijf, niet op zijn voeten, net als in het spel.
+
+Wat er nog niet is: de quest van wie je aanklikt in datzelfde scherm, en een questvoorwerp
+neerleggen vanuit de fase waar het bij hoort. Dat is nu het eerste punt hieronder.
 
 **Tempo:** gewoon door. Marcel maakt het niet uit of de week vandaag of vrijdag op is (22 sep).
 Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halverwege stilvalt.
@@ -48,12 +53,12 @@ Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halver
 **Klaar om te starten, in deze volgorde.** Bekijk eerst de meter (`get_usage`) als je een agent
 start; de onderste drie zijn renderwerk en dus zwaar.
 
-1. **Het wereldgereedschap, ronde 3: betekenis erbij** (punt 4). Klik op de bakker en zijn
-   gesprek staat in hetzelfde scherm, met de knopen uit `gereedschap/gesprekken.html`; hang er een
-   quest aan; leg de leem neer vanuit de fase waar hij bij hoort. Geen agent nodig.
-   **Waarom dit eerst:** neerzetten kan nu, maar voor de tekst moet je nog steeds naar een ander
-   blad — en dat is de laatste van de vijf plekken waar Marcel voor één dorpeling langsging.
-   **Daarna, als De koude oven staat:** de dorpelingen neerzetten met de nieuwe editor.
+1. **Het wereldgereedschap, de rest van ronde 3: de quest erbij** (punt 4). Het gesprek van wie je
+   aanklikt staat er (22 sep); de quest nog niet. Klaar als je vanuit een poppetje zijn quest kunt
+   openen en bewerken zoals `gereedschap/quests.html` dat kan — dezelfde bewerker hergebruikt,
+   zoals met de gesprekken — en als je een questvoorwerp kunt neerleggen vanuit de fase waar het
+   bij hoort. Geen agent nodig.
+   **Daarna, als De koude oven staat:** de negentien dorpelingen neerzetten met de nieuwe editor.
 2. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder). Renderwerk.
 3. Fase B2b: de zeven vaklieden en meer gewone dorpelingen. Daar horen nu ook de bakker en de
    marskramer bij: die lenen het vel van Wim tot dit af is. Renderwerk.
@@ -61,8 +66,8 @@ start; de onderste drie zijn renderwerk en dus zwaar.
    ook nog geen. Renderwerk.
 
 **Het laatst af (22 sep):**
-- het wereldgereedschap, rondes 1, 2 en 4 (`gereedschap/wereld.html`), en de verhuizing van de
-  betekenis uit Tiled;
+- het wereldgereedschap, rondes 1, 2 en 4 plus het gesprek uit ronde 3
+  (`gereedschap/wereld.html`), en de verhuizing van de betekenis uit Tiled;
 - het questsysteem, De koude oven, en de verhaaleditor die quests kan;
 - de tutorial, met Marcels keuzes erin;
 - huizenbouwer ronde 3 en 4a: uitbouwen, tuinstukken en hekjes in Tiled;
@@ -160,7 +165,14 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    Een aansluiting leg je in één handeling over twee kaarten. Een geheime doorgang bestaat nu ook
    in het spel zelf (`staat: "geheim"` met een `als`; `T.werkGeheimenBij` in `js/quest.js`). De
    controle staat los in `gereedschap/keuring.js` met `test/keuring.test.cjs` eromheen.
-   Wat rest is ronde 3: het gesprek en de quest van wie je aanklikt, in hetzelfde scherm.
+   Van ronde 3 staat het gesprek er: dubbelklik een poppetje en de bewerker uit
+   `gesprekken-tool.js` schuift in een paneel over de kaart — dezelfde bewerker, niet een tweede.
+   Wat rest is de quest van wie je aanklikt, en een questvoorwerp neerleggen vanuit zijn fase.
+
+   **Let op bij het opslaan van een gesprek:** `js/gesprekken.js` heeft 21 opmerkingen die de
+   bewerker niet bij een persoon of knoop kan plaatsen, en die gaan bij het opslaan verloren. Hij
+   waarschuwt ervoor en vraagt het na. Dat gold al voor `gesprekken.html`, maar het is nu één klik
+   dichterbij.
 
 5. **De verhaaleditor.** Klaar als het gesprekkengereedschap ook quests kan: vormen om mee te
    beginnen, alles op één plek, een proef per fase, controle die de routes telt, en de koppeling
