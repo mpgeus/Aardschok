@@ -53,6 +53,25 @@ hoeft, blijft `zaad: 7` en is menigte. Het gereedschap heeft er een doorzoekbare
 wie er staat en waar, wie nog nergens staat, en klikken legt hem in je hand. Zie `wereld.md`,
 "Wie is wie, als het er honderd worden".
 
+**De tutorial legt niets meer uit** (22 sep, na Marcel: "veel te cringe"). Het opdrachtvak is
+weg — geen lijstje met wat je moet doen, geen "Let op" boven in beeld. Wat overblijft is de
+meester die praat, en één vangnet: zit je 45 seconden stil in dezelfde fase, dan zegt hij één
+regel (`kijkOfHijVastzit` in `js/tutorial.js`). Die zes regels staan nog leeg in
+`T.TUTORIAL_TEKST`; **die schrijft Marcel** (`vastGezien`, `vastMeester`, `vastKom`, `vastZak`,
+`vastBrengen`, `vastSlaan`). Is een regel leeg, dan zegt niemand iets — zo doet een half
+ingevulde lijst geen kwaad.
+
+**Een gesprek schrijf je als een script, niet als een formulier** (22 sep, na Marcel: "totaal
+onlogisch"). Het hele gesprek staat nu op één bladzijde, in leesvolgorde: de zin als tekst, de
+voorwaarde klein erachter in gewone taal ("alleen als de bakker nog zoekt"), en pas een formulier
+als je hem aanraakt. "naar voorraad ↗" is een link. Dat scherm zit ook in `wereld.html`, want dat
+hergebruikt dezelfde bewerker.
+
+**Wat er bij het opslaan bijna misging:** de gespreksbewerker schreef `js/gesprekken.js` helemaal
+opnieuw en kende `T.TUTORIAL_TEKST` niet, dus wiste één keer opslaan het hele draaiboek van de
+tutorial. Nu knipt `gereedschap/bronblok.js` het bestand in kop, blok en staart, en schrijft een
+bewerker alleen zijn eigen blok. `test/bronblok.test.cjs` bewaakt dat op de echte bestanden.
+
 **Het gereedschap is daarmee af voor wat het moest doen.** Wat nu volgt is het gebruiken: De koude
 oven neerzetten, en daarna de negentien dorpelingen.
 
@@ -60,8 +79,11 @@ oven neerzetten, en daarna de negentien dorpelingen.
 Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halverwege stilvalt.
 
 **Wacht op Marcel:**
-- Opmerkingen bij het draaiboek van de tutorial (gestuurd op 22 sep; de teksten staan in
-  `T.TUTORIAL_TEKST` in `js/gesprekken.js`).
+- **De zes regels voor als de speler vastzit** invullen in `T.TUTORIAL_TEKST`
+  (`js/gesprekken.js`): `vastGezien`, `vastMeester`, `vastKom`, `vastZak`, `vastBrengen`,
+  `vastSlaan`. Elk is één zin van de meester, na 45 seconden stilstand. En, als je toch bezig
+  bent: de lesjestoon uit de bestaande regels ("Let op", "Onthoud dat", "Het is maar een getal").
+  `T.TUTORIAL_TEKST` staat nog niet in het gereedschap; zeg het als je het daar wilt typen.
 - In Tiled: het vel `tuin` aan `wereld.tmj` toevoegen. (De vier varens rond (51–52, 45–46) zijn op
   22 sep verhuisd naar `objecten`, met gras eronder; `npm run kaarten` klaagt nergens meer over.)
 - **De koude oven neerzetten**, nu met `gereedschap/wereld.html` (niet meer in Tiled). Zet
@@ -86,6 +108,7 @@ start; de onderste drie zijn renderwerk en dus zwaar.
    ook nog geen. Renderwerk.
 
 **Het laatst af (22 sep):**
+- het gesprekkenscherm als script, en het opdrachtvak uit de tutorial;
 - het wereldgereedschap, alle vier de rondes (`gereedschap/wereld.html`), en de verhuizing van de
   betekenis uit Tiled;
 - het questsysteem, De koude oven, en de verhaaleditor die quests kan;
