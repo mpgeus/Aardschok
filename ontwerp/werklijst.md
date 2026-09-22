@@ -45,6 +45,13 @@ een dorpeling vraagt om een eigen naam.
 loopregels van het spel zelf. Een poppetje op een eilandje achter de bomen is een fout; losse
 tegels zijn een "let op" (op `wereld.tmj` 767 van de 6330 — gaten in het bos). Laag `o`.
 
+**Een mens is nu één regel** (`js/mensen.js`, 22 sep). Marcel: "Hoe houden we alle poppetjes uit
+elkaar? Het kunnen er wel 100 worden." `T.MENSEN` zegt wie iemand is — naam, uiterlijk,
+dwaalstraal, gesprek — en de kaart zegt alleen nog wáár hij staat (`wie: "koster"`). Wie geen naam
+hoeft, blijft `zaad: 7` en is menigte. Het gereedschap heeft er een doorzoekbare mensenlijst voor:
+wie er staat en waar, wie nog nergens staat, en klikken legt hem in je hand. Zie `wereld.md`,
+"Wie is wie, als het er honderd worden".
+
 **Het gereedschap is daarmee af voor wat het moest doen.** Wat nu volgt is het gebruiken: De koude
 oven neerzetten, en daarna de negentien dorpelingen.
 
@@ -66,9 +73,11 @@ Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halver
 start; de onderste drie zijn renderwerk en dus zwaar.
 
 1. **De koude oven neerzetten met het nieuwe gereedschap** (zie "Wacht op Marcel" hierboven).
-   Dat is het eerste echte gebruik: de bakker, de marskramer en de smidsvrouw in het dorp, de
-   leemkuil met de leem erin, en de oven met zijn raakpunt. De controle rechts telt af terwijl je
-   het doet. **Daarna:** de negentien dorpelingen.
+   Dat is het eerste echte gebruik: de bakker, de marskramer en de smidsvrouw uit de mensenlijst
+   in het dorp, de leemkuil met de leem erin, en de oven met zijn raakpunt. De controle rechts
+   telt af terwijl je het doet, en de mensenlijst zegt wie er nog nergens staat.
+   **Daarna:** de rest van de mensen, en zoveel figuranten (`zaad`) als het dorp druk moet doen
+   aanvoelen.
 2. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder). Renderwerk.
 3. Fase B2b: de zeven vaklieden en meer gewone dorpelingen. Daar horen nu ook de bakker en de
    marskramer bij: die lenen het vel van Wim tot dit af is. Renderwerk.
