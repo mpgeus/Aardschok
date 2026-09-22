@@ -77,36 +77,10 @@
       naam: 'de oude meester', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.55,
       dwaalt: true, straal: 2, leeftijd: 97 * 12,
     },
-    // De smid, bij de smidse in het dorp: neutraal en dwalend als de meester, met zijn eigen
-    // loopmaat (SMID_SNELHEID in gereedschap/pixelart/dorpelingen.cjs). Een gewone dorpeling komt
-    // niet hier te staan — die zet js/kaart.js zelf neer met de soort "dorpeling" (zijn zaad kiest
-    // het vel, zie S.dorpelingVariant in js/sprites.js) — maar de smid heeft, net als Wim en de
-    // meester, een eigen naam en plek en dus een eigen ingang.
-    smid: {
-      naam: 'de smid', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.5,
-      dwaalt: true, straal: 3,
-    },
-    // De andere elf dorpelingen van fase B2a (ontwerp/werklijst.md, punt 2): dezelfde vorm als de
-    // smid hierboven, elk met zijn eigen loopmaat (de SNELHEID-constanten in dorpelingen.cjs en
-    // dorpelingen2.cjs, gereedschap/pixelart) — snelheid hier moet daaraan gelijk zijn, anders
-    // gaan de voeten van die dorpeling glijden (zie SMID_SNELHEID hierboven). Marcel zet ze neer
-    // in Tiled met wezen="<naam>".
-    herbergierster: { naam: 'de herbergierster', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 3 },
-    boer: { naam: 'de boer', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.5, dwaalt: true, straal: 3 },
-    dorpsoudste: { naam: 'de dorpsoudste', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1, dwaalt: true, straal: 3 },
-    jongen: { naam: 'de jongen', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.3, dwaalt: true, straal: 3 },
-    meisje: { naam: 'het meisje', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.25, dwaalt: true, straal: 3 },
-    kleuter: { naam: 'de kleuter', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 0.85, dwaalt: true, straal: 3 },
-    smidsvrouw: { naam: 'de smidsvrouw', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.45, dwaalt: true, straal: 3 },
-    boerin: { naam: 'de boerin', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 3 },
-    bruidegom: { naam: 'de bruidegom', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.5, dwaalt: true, straal: 3 },
-    bruid: { naam: 'de bruid', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.3, dwaalt: true, straal: 3 },
-    oudeman: { naam: 'de oude man', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1, dwaalt: true, straal: 3 },
-    // De twee die De koude oven nodig heeft (js/quests.js). Hun eigen vellen komen bij fase B2b
-    // (ontwerp/werklijst.md); tot die tijd lenen ze dat van Wim, zodat de quest nu al te spelen
-    // is. Hun snelheid is daarom ook die van Wim -- anders glijden zijn voeten over de grond.
-    bakker: { naam: 'de bakker', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 2, vel: 'wim' },
-    marskramer: { naam: 'de marskramer', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 2, vel: 'wim' },
+    // De mensen van het dorp staan niet hier maar in js/mensen.js: wie ze zijn, hoe ze heten, hoe
+    // snel ze lopen en welk vel ze krijgen. Deze tabel gaat over wat een wezen ís — wat vecht,
+    // wat een leeftijd draagt, wat in code wordt neergezet — en een dorpeling is dat niet. Zie
+    // ontwerp/wereld.md, "Wie is wie, als het er honderd worden".
     slijm: {
       naam: 'slijmkruiper', kant: 'monster', leven: 10, ap: 4, initiatief: 4, snelheid: 1.4, zicht: 5, dwaalt: true,
       aanval: { kosten: 3, maanden: [3, 5], zin: 'bijt je' },

@@ -20,42 +20,51 @@
 //
 //   T.MENSEN.<id> = {
 //     naam:     'de bakker',   // wat er boven zijn hoofd staat; mag weg als `wezen` het al zegt
-//     wezen:    'bakker',      // leent uiterlijk en stats van dat wezen uit js/wereld.js
-//     zaad:     4,             // óf: een gewone dorpeling met dit zaad als uiterlijk
+//     vel:      'wim',         // het vel dat hij leent zolang het zijne nog niet getekend is
+//     zaad:     4,             // óf: hij ís zolang een gewone dorpeling, met dit zaad
+//     wezen:    'wim',         // óf: hij leent een hele ingang uit T.WEZENS (alleen Wim en de
+//                              //     meester, want die worden in code neergezet)
 //     straal:   3,             // hoe ver hij van zijn plek af dwaalt (de kaart mag het overrulen)
 //     snelheid: 1.3,           // alleen als hij anders loopt dan zijn wezen of een dorpeling
 //     gesprek:  'bakker',      // welk gesprek hij voert; zonder dit is het zijn eigen id
 //   }
 //
-// `wezen` of `zaad`, niet allebei. Een mens met `wezen` is iemand die al getekend is; een mens met
-// `zaad` leent zolang het vel van een gewone dorpeling, precies zoals de bakker en de marskramer
-// dat deden voordat ze hun eigen tekeningen hadden.
+// Zonder `wezen` en zonder `zaad` is hij zichzelf: zijn id is de naam van zijn vel. De veertien
+// dorpelingen stonden tot 22 sep als eigen ingang in T.WEZENS, met veertien keer dezelfde regel
+// `kant: 'neutraal', leven: 10, ap: 0, initiatief: 0`. Die tabel gaat over wat een wezen ís — wat
+// vecht, wat een leeftijd draagt — en een dorpeling is dat niet; hier staat hij in één regel.
 (function (T) {
   'use strict';
 
   T.MENSEN = {
-    // Op het erf en in de toren.
+    // Wie in code wordt neergezet en dus een eigen T.WEZENS-ingang houdt: Wim veegt de hal van de
+    // toren (T.maakWereld), de meester draagt een leeftijd en heeft zijn eigen loopmaat.
     meester: { wezen: 'meester' },
     wim: { wezen: 'wim' },
 
-    // Het dorp, zoals ontwerp/wereld.md het opschrijft. Wie al getekend is, leent zijn eigen vel.
-    smid: { wezen: 'smid' },
-    smidsvrouw: { wezen: 'smidsvrouw' },
-    herbergierster: { wezen: 'herbergierster' },
-    boer: { wezen: 'boer' },
-    boerin: { wezen: 'boerin' },
-    dorpsoudste: { wezen: 'dorpsoudste' },
-    oudeman: { wezen: 'oudeman' },
-    bruid: { wezen: 'bruid' },
-    bruidegom: { wezen: 'bruidegom' },
-    jongen: { wezen: 'jongen' },
-    meisje: { wezen: 'meisje' },
-    kleuter: { wezen: 'kleuter' },
-    bakker: { wezen: 'bakker' },
-    marskramer: { wezen: 'marskramer' },
+    // Het dorp, zoals ontwerp/wereld.md het opschrijft. `snelheid` moet gelijk zijn aan de
+    // SNELHEID-constante van zijn animatie (de dorpelingen*.cjs in gereedschap/pixelart), anders
+    // gaan zijn voeten over de grond glijden.
+    smid: { naam: 'de smid', snelheid: 1.5, straal: 3 },
+    smidsvrouw: { naam: 'de smidsvrouw', snelheid: 1.45, straal: 3 },
+    herbergierster: { naam: 'de herbergierster', snelheid: 1.4, straal: 3 },
+    boer: { naam: 'de boer', snelheid: 1.5, straal: 3 },
+    boerin: { naam: 'de boerin', snelheid: 1.4, straal: 3 },
+    dorpsoudste: { naam: 'de dorpsoudste', snelheid: 1, straal: 3 },
+    oudeman: { naam: 'de oude man', snelheid: 1, straal: 3 },
+    bruid: { naam: 'de bruid', snelheid: 1.3, straal: 3 },
+    bruidegom: { naam: 'de bruidegom', snelheid: 1.5, straal: 3 },
+    jongen: { naam: 'de jongen', snelheid: 1.3, straal: 3 },
+    meisje: { naam: 'het meisje', snelheid: 1.25, straal: 3 },
+    kleuter: { naam: 'de kleuter', snelheid: 0.85, straal: 3 },
 
-    // En de vaklieden die wel een haakje hebben in wereld.md maar nog geen tekening: zij lenen
-    // het vel van een gewone dorpeling tot dat er is (zie de werklijst, fase B2b).
+    // De twee die De koude oven nodig heeft. Hun eigen vellen komen bij fase B2b; tot die tijd
+    // lenen ze dat van Wim, en dus ook zijn loopmaat.
+    bakker: { naam: 'de bakker', snelheid: 1.4, straal: 2, vel: 'wim' },
+    marskramer: { naam: 'de marskramer', snelheid: 1.4, straal: 2, vel: 'wim' },
+
+    // En de vaklieden die wel een haakje hebben in wereld.md maar nog geen tekening: zij zijn
+    // zolang een gewone dorpeling, want die vellen bestaan al (zie de werklijst, fase B2b).
     molenaar: { naam: 'de molenaar', zaad: 11, straal: 3 },
     kruidenvrouw: { naam: 'de kruidenvrouw', zaad: 12, straal: 2 },
     jager: { naam: 'de jager', zaad: 13, straal: 4 },
@@ -63,8 +72,8 @@
     wachter: { naam: 'de wachter', zaad: 15, straal: 2 },
   };
 
-  // Hoe heet deze mens? Zijn eigen naam, anders die van het wezen dat hij leent, anders zijn id.
-  // Zo staat "de bakker" maar op één plek: in js/wereld.js, waar hij toch al stond.
+  // Hoe heet deze mens? Zijn eigen naam, anders die van het wezen dat hij leent (Wim, de
+  // meester), anders zijn id.
   T.naamVanMens = function (id) {
     const m = T.MENSEN[id];
     if (!m) return id;
@@ -77,13 +86,51 @@
   // bruidegom desnoods hetzelfde gesprek delen zonder dat het een ongelukje lijkt.
   T.gesprekVanMens = (id) => (T.MENSEN[id] && T.MENSEN[id].gesprek) || id;
 
-  // Een mens neerzetten als wezen in de wereld. `maakDorpeling` komt uit js/kaart.js en wordt
-  // meegegeven, zodat dit bestand niets over het inlezen van kaarten hoeft te weten.
-  T.maakMens = function (id, x, y, straal, maakDorpeling) {
+  // Een gewone dorpeling: geen gevecht, geen levensbalk, hij staat en kijkt en dwaalt wat rond.
+  // Dezelfde vorm als maakWezen in wereld.js, maar zonder een ingang in T.WEZENS — want die
+  // tabel gaat over wat een wezen ís, en er komen er honderd van deze. Het zaad bepaalt zijn
+  // uiterlijk (S.dorpelingVariant in js/sprites.js), en `gesprek` welke tekst hij voert.
+  T.maakDorpeling = function (zaad, x, y, straal, gesprek) {
+    return {
+      soort: 'dorpeling', naam: 'dorpeling', kant: 'neutraal', zaad, gesprek: gesprek || null,
+      x, y, tx: x, ty: y, pad: [], onderweg: false, opKlaar: null,
+      leven: 0, maxLeven: 0, ap: 0, maxAp: 0, initiatief: 0, snelheid: 1.2, zicht: 0,
+      // Waar hij hoort en hoe ver hij daarvandaan loopt: de smid bij de smidse, de boerin bij de
+      // akker. Zonder straal blijft hij staan waar hij staat. Hij begint nooit een gevecht (hij is
+      // neutraal) en telt niet mee in de beurtvolgorde.
+      thuis: { x, y }, straal: straal || 0, dwaalt: straal > 0, aanval: null,
+      vel: null,
+      dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
+      dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0, leeftijd: null,
+      brandt: 0, apVerlies: 0, afgeleid: null, gelokt: null, vraag: 0, geduwd: false,
+      meesterschap: null, kring: null,
+    };
+  };
+
+  // Een mens neerzetten als wezen in de wereld.
+  //
+  // Welk vel hij krijgt volgt uit wat er over hem bekend is (js/sprites.js, S.houding):
+  //   `wezen`  — hij leent een hele ingang uit T.WEZENS: Wim, de meester.
+  //   `zaad`   — hij is zolang een gewone dorpeling, met dat zaad als uiterlijk.
+  //   geen van beide — hij is zichzelf: zijn id is de naam van zijn vel, en `vel` is het vel dat
+  //                    hij leent zolang het zijne nog niet getekend is.
+  T.maakMens = function (id, x, y, straal) {
     const m = T.MENSEN[id];
     if (!m) throw new Error(`onbekende mens "${id}"`);
     const ver = straal != null && straal > 0 ? straal : m.straal || 0;
-    const e = m.wezen ? T.maakWezen(m.wezen, x, y) : maakDorpeling(m.zaad || 0, x, y, ver);
+    let e;
+    if (m.wezen) {
+      e = T.maakWezen(m.wezen, x, y);
+    } else {
+      e = T.maakDorpeling(m.zaad != null ? m.zaad : 0, x, y, ver);
+      if (m.zaad == null) {
+        e.soort = id; // zijn eigen vel, onder zijn eigen naam
+        e.zaad = null;
+      }
+      if (m.vel) e.vel = m.vel;
+      // Een mens is geen naamloze figurant: hij heeft, net als Wim en de meester, levenspunten.
+      e.leven = e.maxLeven = 10;
+    }
     e.wie = id;
     e.naam = T.naamVanMens(id);
     e.gesprek = T.gesprekVanMens(id);

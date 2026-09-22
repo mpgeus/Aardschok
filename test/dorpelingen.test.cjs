@@ -11,6 +11,7 @@ const assert = require('node:assert/strict');
 
 require('../js/leeftijd.js');
 require('../js/wereld.js');
+require('../js/mensen.js');
 require('../js/gebied.js');
 require('../js/pad.js');
 require('../js/spreuken.js');
@@ -69,55 +70,56 @@ test('de oude meester wordt, net als Wim, nooit ontdekt en telt nooit mee als de
   assert.deepEqual(T.deelnemers(w, held, meester), []);
 });
 
-// Fase A (ontwerp/werklijst.md, punt 2): de smid heeft nu een eigen T.WEZENS-ingang, net als de
-// meester — dezelfde regel dus, en dezelfde reden om hem te toetsen: dwalen en nooit ontdekt
-// worden is de gewone regel voor elk neutraal wezen, geen Wim- of meester-specifieke uitzondering.
-test('de smid wordt, net als Wim en de meester, nooit ontdekt en telt nooit mee als deelnemer, en begint dus nooit een gevecht', () => {
-  const w = T.maakWereld();
-  const held = wezen(w, 'held');
-  const smid = T.maakWezen('smid', 6, 3);
-  w.wezens.push(smid);
-  zet(held, 5, 3); // vlak naast hem
-  const S = { wereld: w, held, sluipen: false };
-
-  assert.equal(smid.kant, 'neutraal');
-  assert.notEqual(smid.kant, 'monster'); // alleen 'monster' laat T.startGevecht/de klik aanvallen
-  assert.equal(T.zoekOntdekking(S), null);
-  assert.deepEqual(T.deelnemers(w, held, smid), []);
-});
-
-// Fase B2a (ontwerp/werklijst.md, punt 2): de andere elf genoemde dorpelingen (herbergierster,
-// boer en dorpsoudste uit dorpelingen.cjs; de acht uit dorpelingen2.cjs) hebben nu ook een eigen
-// T.WEZENS-ingang, net als de smid hierboven — dezelfde regel dus, in één toets over de hele rij
-// in plaats van elf keer dezelfde losse toets. "heeft een vel": beelden/beschrijving.js kent zijn
-// naam met een "staan"- en een "lopen"-houding (npm run pixelart:spel zet dat daar neer).
-const NAMEN_B2A = [
-  'herbergierster', 'boer', 'dorpsoudste',
-  'jongen', 'meisje', 'kleuter', 'smidsvrouw', 'boerin', 'bruidegom', 'bruid', 'oudeman',
-];
-
-test('elke dorpeling van fase B2a is neutraal, wordt nooit ontdekt en heeft een vel', () => {
-  for (const naam of NAMEN_B2A) {
+// De mensen van het dorp staan sinds 22 sep in js/mensen.js en niet meer als eigen ingang in
+// T.WEZENS (ontwerp/wereld.md, "Wie is wie, als het er honderd worden"). De regel eromheen is
+// niet veranderd en wordt hier over de hele lijst getoetst in plaats van per persoon: dwalen en
+// nooit ontdekt worden is de gewone regel voor elk neutraal wezen, geen uitzondering voor Wim of
+// de meester. Dat deze toets over T.MENSEN heen loopt en niet over een lijst hier, is het punt:
+// wie er morgen bij komt, wordt vanzelf meegetoetst.
+test('elke mens is neutraal, wordt nooit ontdekt en telt nooit mee als deelnemer', () => {
+  for (const id of Object.keys(T.MENSEN)) {
     const w = T.maakWereld();
     const held = wezen(w, 'held');
-    const e = T.maakWezen(naam, 6, 3);
+    const e = T.maakMens(id, 6, 3);
     w.wezens.push(e);
     zet(held, 5, 3); // vlak naast hem
     const S = { wereld: w, held, sluipen: false };
 
-    assert.equal(e.kant, 'neutraal', `${naam} is neutraal`);
-    assert.equal(T.zoekOntdekking(S), null, `${naam} wordt niet ontdekt`);
-    assert.deepEqual(T.deelnemers(w, held, e), [], `${naam} telt niet mee als deelnemer`);
-    assert.ok(T.BEELDEN.figuren[naam], `"${naam}" heeft een vel in beelden/ (of draai npm run pixelart:spel)`);
-    assert.ok(T.BEELDEN.figuren[naam].houdingen.staan, `${naam} kan staan`);
-    assert.ok(T.BEELDEN.figuren[naam].houdingen.lopen, `${naam} kan lopen`);
+    assert.equal(e.kant, 'neutraal', `${id} is neutraal`);
+    assert.notEqual(e.kant, 'monster'); // alleen 'monster' laat T.startGevecht/de klik aanvallen
+    assert.equal(T.zoekOntdekking(S), null, `${id} wordt niet ontdekt`);
+    assert.deepEqual(T.deelnemers(w, held, e), [], `${id} telt niet mee als deelnemer`);
+    assert.equal(e.naam, T.naamVanMens(id), `${id} draagt zijn eigen naam`);
+    assert.equal(e.wie, id);
+  }
+});
+
+// Elke mens komt in beeld: met zijn eigen vel, met een geleend vel, of als gewone dorpeling.
+// "heeft een vel": beelden/beschrijving.js kent die naam met een "staan"- en een "lopen"-houding
+// (npm run pixelart:spel zet dat daar neer).
+test('elke mens heeft een vel om mee getekend te worden', () => {
+  for (const id of Object.keys(T.MENSEN)) {
+    const m = T.MENSEN[id];
+    const e = T.maakMens(id, 6, 3);
+    // Een gewone dorpeling wordt uit zijn zaad getekend (dorpeling0, dorpeling1, …); die vellen
+    // toetst de rij hieronder al.
+    if (e.soort === 'dorpeling') {
+      assert.ok(Number.isFinite(e.zaad), `${id} heeft een zaad om een vel mee te kiezen`);
+      continue;
+    }
+    const vel = T.BEELDEN.figuren[e.soort] ? e.soort : e.vel;
+    assert.ok(vel, `"${id}" heeft geen vel en leent er ook geen (zie js/mensen.js)`);
+    assert.ok(T.BEELDEN.figuren[vel], `"${vel}" staat niet in beelden/ (of draai npm run pixelart:spel)`);
+    assert.ok(T.BEELDEN.figuren[vel].houdingen.staan, `${id} kan staan`);
+    assert.ok(T.BEELDEN.figuren[vel].houdingen.lopen, `${id} kan lopen`);
+    if (m.snelheid) assert.equal(e.snelheid, m.snelheid, `${id} loopt op zijn eigen maat`);
   }
 });
 
 test('de smid dwaalt bij de smidse, maar blijft binnen zijn straal van thuis', () => {
   const w = T.maakWereld();
   const S = { wereld: w, spreektMet: null };
-  const smid = T.maakWezen('smid', 4, 3);
+  const smid = T.maakMens('smid', 4, 3);
   w.wezens.push(smid);
   assert.equal(smid.dwaalt, true);
   assert.ok(smid.straal > 0);

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aardschok · gereedschap</title>
+  <link rel="stylesheet" href="../stijl.css">
+  <link rel="stylesheet" href="gesprekken-tool.css">
+  <style>
+    body { display: grid; place-items: center; min-height: 100vh; padding: 24px; }
+    .gs-lijst { max-width: 640px; width: 100%; }
+    .gs-lijst h1 { font-family: var(--kop); font-weight: normal; color: var(--goud); margin: 0 0 4px; }
+    .gs-lijst > p { color: var(--gedempt); margin: 0 0 20px; font-size: 13.5px; }
+    .gs-kaart {
+      display: block; text-decoration: none; color: inherit;
+      padding: 14px 16px; margin-bottom: 10px;
+      background: var(--paneel); border: 1px solid var(--rand); border-radius: 10px;
+    }
+    .gs-kaart:hover { border-color: var(--goud); }
+    .gs-kaart strong { display: block; font-family: var(--kop); font-weight: normal; font-size: 17px; color: var(--goud); }
+    .gs-kaart span { display: block; font-size: 13px; color: var(--gedempt); margin-top: 3px; }
+  </style>
+</head>
+<body>
+  <main class="gs-lijst">
+    <h1>Aardschok</h1>
+    <p>Het spel en het gereedschap eromheen. Alles draait op dezelfde server (<code>npm start</code>).</p>
+
+    <a class="gs-kaart" href="../index.html"><strong>Het spel</strong><span>Spelen wat er nu staat.</span></a>
+
+    <a class="gs-kaart" href="wereld.html"><strong>Wereld</strong><span>De kaarten: mensen neerzetten en verslepen, deuren en geheime doorgangen, aansluitingen tussen kaarten, en per poppetje zijn gesprek en zijn quest. Met de controle die zegt wat er nog ontbreekt.</span></a>
+
+    <a class="gs-kaart" href="gesprekken.html"><strong>Gesprekken</strong><span>Wie wat zegt, met een proefgesprek ernaast. (Ook te bereiken vanuit Wereld, door een poppetje aan te klikken.)</span></a>
+
+    <a class="gs-kaart" href="quests.html"><strong>Quests</strong><span>Fasen en wegen, het dorp per fase, en de controle die de toets van drie antwoorden nakijkt.</span></a>
+  </main>
+</body>
+</html>

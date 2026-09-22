@@ -45,9 +45,12 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 
 - `index.html` los openen werkt: de scripts zijn gewone `<script>`-bestanden, geen modules.
   Dat is een bewuste keuze. Modules werken niet vanaf `file://`, en er is geen bouwstap nodig.
-- `npm start` start `server.cjs` op poort 8123 (geen afhankelijkheden). `.claude/launch.json`
-  heeft dezelfde server onder de naam `aardschok`. Het browserpaneel kan een los bestand wel
-  tonen maar niet bedienen, vandaar deze server.
+- `npm start` start `server.cjs` op poort 8123 (geen afhankelijkheden) en drukt meteen af waar
+  alles zit. `.claude/launch.json` heeft dezelfde server onder de naam `aardschok`. Het
+  browserpaneel kan een los bestand wel tonen maar niet bedienen, vandaar deze server.
+  - het spel: `http://localhost:8123/`
+  - **het gereedschap: `http://localhost:8123/gereedschap/`** — een bladzijde die naar alle drie
+    wijst. De belangrijkste is `gereedschap/wereld.html`: daar wordt het spel gemaakt.
 - `npm test` draait `test/*.test.cjs` met `node --test`: de regels zonder scherm.
 - `npm run pixelart` rendert alle HD-pixel art naar `gereedschap/pixelart/uit/` (niet in git).
 - `npm run pixelart:spel` zet daaruit alleen wat het spel tekent in `beelden/` (wél in git,
@@ -126,13 +129,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/dialoog.js`, `js/ui.js` (alle html over het beeld), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera).
 - `js/mensen.js`: **wie de mensen van het dorp zijn, op één plek.** `T.MENSEN.<id>` zegt hoe hij
-  heet, hoe hij eruitziet (`wezen: 'bakker'` leent een soort uit `wereld.js`, `zaad: 14` leent
-  een dorpelingvel tot hij getekend is), hoe ver hij dwaalt en welk gesprek hij voert. De kaart
-  zegt alleen nog wáár hij staat: `{ x, y, wie: 'koster' }`. Dat is er gekomen omdat het er
-  honderd kunnen worden (Marcel, 22 sep): een mens stond over vier plekken verdeeld en niets
-  verbond ze, dus kon dezelfde bakker op twee plekken staan zonder dat iets klaagde.
-  `T.naamVanMens`, `T.gesprekVanMens` en `T.maakMens` zijn de vragen eromheen.
+  heet, hoe snel hij loopt, hoe ver hij dwaalt, welk gesprek hij voert en welk vel hij krijgt —
+  zijn eigen (zijn id is de naam van het vel), een geleend vel (`vel: 'wim'`) of dat van een
+  gewone dorpeling (`zaad: 14`). De kaart zegt alleen nog wáár hij staat:
+  `{ x, y, wie: 'koster' }`. Dat is er gekomen omdat het er honderd kunnen worden (Marcel,
+  22 sep): een mens stond over vier plekken verdeeld en niets verbond ze, dus kon dezelfde bakker
+  op twee plekken staan zonder dat iets klaagde. `T.naamVanMens`, `T.gesprekVanMens`,
+  `T.maakDorpeling` en `T.maakMens` zijn de vragen eromheen.
   **Wie geen naam hoeft te hebben, staat er niet in:** `{ x, y, zaad: 7 }` is menigte.
+  **`T.WEZENS` gaat over wat een wezen ís** — wat vecht, wat een leeftijd draagt, wat in code
+  wordt neergezet — en een dorpeling is dat niet. Daar staan alleen nog de held, Wim, de meester
+  en de monsters; de veertien dorpelingen die er met veertien keer dezelfde regel in stonden, zijn
+  op 22 sep naar `mensen.js` verhuisd. Een mens met `wezen: 'wim'` leent er nog wel een.
 - Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): zijn `gesprek`
   als hij er een heeft, anders zijn soort. Zo delen honderd figuranten één soort (`dorpeling`)
   zonder alle honderd hetzelfde te zeggen.

@@ -216,7 +216,8 @@ http
       slaBetekenisOp(req, res, pad.slice('/gereedschap/api/betekenis/'.length));
       return;
     }
-    const bestand = path.normalize(path.join(MAP, pad === '/' ? 'index.html' : pad));
+    // Een map opvragen geeft zijn index.html: /gereedschap/ toont de drie bladzijden gereedschap.
+    const bestand = path.normalize(path.join(MAP, pad.endsWith('/') ? pad + 'index.html' : pad));
     // Alleen bestanden uit deze map, niets daarboven.
     if (!bestand.startsWith(MAP + path.sep) && bestand !== MAP) {
       res.writeHead(403);
@@ -236,4 +237,15 @@ http
       res.end(data);
     });
   })
-  .listen(POORT, '127.0.0.1', () => console.log(`Aardschok draait op http://localhost:${POORT}`));
+  .listen(POORT, '127.0.0.1', () => {
+    // De adressen erbij, want "waar zit het gereedschap?" is anders elke keer weer zoeken.
+    const hier = `http://localhost:${POORT}`;
+    console.log(`Aardschok draait op ${hier}`);
+    console.log('');
+    console.log(`  het spel       ${hier}/`);
+    console.log(`  de wereld      ${hier}/gereedschap/wereld.html      kaarten, mensen, quests, controle`);
+    console.log(`  de gesprekken  ${hier}/gereedschap/gesprekken.html`);
+    console.log(`  de quests      ${hier}/gereedschap/quests.html`);
+    console.log('');
+    console.log(`  alles bij elkaar: ${hier}/gereedschap/`);
+  });

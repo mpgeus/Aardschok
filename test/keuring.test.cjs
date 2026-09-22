@@ -126,7 +126,7 @@ test('een komt die naar de overgangstegel zelf wijst, kaatst je heen en weer', (
 test('twee mensen op dezelfde tegel, en een straal die geen getal is', () => {
   const klachten = keur([
     UITGANG,
-    { x: 3, y: 2, wezen: 'boer' },
+    { x: 3, y: 2, wezen: 'wim' },
     { x: 3, y: 2, zaad: 7, straal: 'veel' },
   ]);
   assert.match(teksten(klachten), /staat op dezelfde tegel als/);
@@ -162,7 +162,7 @@ test('een voorwerp uit het betekenisbestand staat er op naam, niet op nummer', (
 });
 
 test('wat betekenis heeft en nog in Tiled staat, hoort in het betekenisbestand', () => {
-  const klachten = keur([UITGANG], [{ naam: 'de smid', x: 3, y: 2, eig: { wezen: 'smid' } }]);
+  const klachten = keur([UITGANG], [{ naam: 'de slijmkruiper', x: 3, y: 2, eig: { wezen: 'slijm' } }]);
   assert.equal(klachten.length, 1);
   assert.equal(klachten[0].soort, 'let op');
   assert.match(klachten[0].tekst, /staat nog in Tiled; het hoort in proefje\.betekenis\.json/);

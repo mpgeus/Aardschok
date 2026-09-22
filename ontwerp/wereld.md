@@ -188,6 +188,18 @@ Wat daaruit volgt, en wat het gereedschap ervoor heeft:
   twee poppetjes die hetzelfde gesprek voeren is een "let op" (bij de bruid en de bruidegom kan
   het expres zijn), en wie nog nergens staat wordt in één regel opgeteld — dat is de werklijst.
 
+**En `T.WEZENS` is opgeruimd** (22 sep). Daar stonden de veertien dorpelingen als eigen ingang, elk
+met dezelfde regel `kant: 'neutraal', leven: 10, ap: 0, initiatief: 0` erin. Die tabel gaat over
+wat een wezen ís — wat vecht, wat een leeftijd draagt, wat in code wordt neergezet — en een
+dorpeling is dat niet. Er staan nu nog acht ingangen: de held, Wim, de meester en de vijf
+monsters. Wim en de meester blijven, want `T.maakWereld` zet ze in code neer en de tutorial zoekt
+ze op hun soort; in `T.MENSEN` staan ze als `{ wezen: 'wim' }`, één woord.
+
+Welk vel een mens krijgt, volgt daarmee uit één regel: heeft hij een `zaad`, dan is hij zolang een
+gewone dorpeling; anders is zijn id de naam van zijn vel, met `vel:` als geleend vel tot het zijne
+getekend is (de bakker en de marskramer lenen dat van Wim). Zo hoeft er voor een nieuwe dorpeling
+nergens anders iets bij.
+
 ### Dorpelingen lopen rond (Marcel, 20 sep 2026)
 
 "NPC's mogen ook wel rondlopen, vind je niet?" Ja: de loopanimaties zijn er voor alle
