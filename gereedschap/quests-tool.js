@@ -64,6 +64,9 @@
   let keuze = { soort: 'quest' }; // { soort: 'quest' | 'fase' | 'weg', fase, weg }
   let vuil = false;
   let RUWE_KOP = '';
+  let RUWE_TUSSEN = '';
+  let RUWE_STAART = '';
+  let BRON_GELEZEN = false;
   let VERLOREN_OPMERKINGEN = [];
   let VOORWAARDEN = []; // afgeleid uit het kop-commentaar van gesprekken.js
   let OPRAAPBAAR = []; // wat je in de wereld kunt oprapen (uit verkennen.js)
@@ -154,9 +157,22 @@
   // bij het opslaan terug als "_opmerking" op dat object. Zonder dit zou één keer opslaan alle
   // uitleg tússen de gegevens opeten, en juist daar staat waaróm een weg is wat hij is.
   function verwerkRuweBron(tekst) {
+    // Alleen de twee blokken die deze bewerker kent worden opnieuw geschreven; alles ervoor,
+    // ertussen en erna gaat letterlijk mee terug (gereedschap/bronblok.js). Dat is niet
+    // netjes-doen maar noodzaak: de gespreksbewerker wiste zo ooit het hele draaiboek van de
+    // tutorial, omdat het onder T.GESPREKKEN in hetzelfde bestand stond.
+    const q = T.bronBlok(tekst, 'T.QUESTS');
+    const r = T.bronBlok(tekst, 'T.RAAKPUNTEN');
+    if (q && r) {
+      RUWE_KOP = q.kop;
+      RUWE_TUSSEN = tekst.replace(/\r\n/g, '\n').split('\n').slice(q.tot + 1, r.vanaf).join('\n');
+      RUWE_STAART = r.staart;
+      BRON_GELEZEN = true;
+    } else {
+      BRON_GELEZEN = false;
+    }
     const merker = '(function (T) {';
     const i = tekst.indexOf(merker);
-    RUWE_KOP = i === -1 ? '' : tekst.slice(0, i);
     if (i === -1) return;
     const regels = tekst.slice(i).replace(/\r\n/g, '\n').split('\n');
     let buffer = [];
@@ -755,26 +771,34 @@
     out += `${sp}},\n`;
     return out;
   }
+  // Alleen de twee blokken die deze bewerker kent; de rest van het bestand gaat letterlijk mee.
+  // Lukte het lezen niet, dan null en slaan we niet op — beter niets schrijven dan iets
+  // kwijtraken wat deze bewerker niet kent.
   function bouwBestandTekst() {
-    let out = RUWE_KOP || '// De quests, als gewone gegevens.\n';
-    out += '(function (T) {\n';
-    out += "  'use strict';\n\n";
+    if (!BRON_GELEZEN) return null;
+    let out = RUWE_KOP;
     out += '  T.QUESTS = {\n';
     out += Object.entries(T.QUESTS).map(([id, q]) => serQuest(id, q, '    ')).join('');
-    out += '  };\n\n';
+    out += '  };';
+    out += RUWE_TUSSEN ? '\n' + RUWE_TUSSEN + '\n' : '\n\n';
     out += '  T.RAAKPUNTEN = {\n';
     out += Object.entries(T.RAAKPUNTEN || {}).map(([id, r]) => serRaakpunt(id, r, '    ')).join('');
-    out += '  };\n';
-    out += '})(globalThis.Toren = globalThis.Toren || {});\n';
+    out += '  };';
+    out += RUWE_STAART;
     return out;
   }
   async function opslaan() {
     const fouten = controleer().filter((m) => m.soort === 'fout');
     if (fouten.length && !confirm(`Er staan nog ${fouten.length} fout(en) in de controle. Toch opslaan?`)) return;
     const statusEl = $('qt-status');
+    const inhoud = bouwBestandTekst();
+    if (inhoud == null) {
+      statusEl.textContent = 'Niet opgeslagen: js/quests.js was niet te lezen, en dan schrijven we liever niets.';
+      return;
+    }
     statusEl.textContent = 'Opslaan…';
     try {
-      const resp = await fetch('/gereedschap/api/quests-opslaan', { method: 'POST', headers: { 'Content-Type': 'text/plain; charset=utf-8' }, body: bouwBestandTekst() });
+      const resp = await fetch('/gereedschap/api/quests-opslaan', { method: 'POST', headers: { 'Content-Type': 'text/plain; charset=utf-8' }, body: inhoud });
       if (!resp.ok) throw new Error(await resp.text());
       vuil = false;
       const tijd = 'opgeslagen om ' + new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });

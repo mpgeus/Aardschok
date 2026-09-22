@@ -118,6 +118,11 @@
       }
       if (p.wezen !== undefined || p.zaad !== undefined) {
         const wie = p.wezen !== undefined ? `"${p.wezen}"` : `een dorpeling (zaad ${p.zaad})`;
+        // Een eigen gesprek, los van de soort (T.gesprekIdVan in js/gesprek.js). Staat er een
+        // naam die niet bestaat, dan zegt hij niets en merk je dat pas als je ernaartoe loopt.
+        if (p.gesprek !== undefined && (!T.GESPREKKEN || !T.GESPREKKEN[p.gesprek])) {
+          fout(o.x, o.y, `${wie} verwijst naar gesprek "${p.gesprek}", en dat bestaat niet in js/gesprekken.js`);
+        }
         if (vast(o.x, o.y)) fout(o.x, o.y, `${wie} staat op een vaste tegel — in een boom, een muur of een huis; hij kan daar niet vandaan`);
         const sleutel = o.x + ',' + o.y;
         if (bezet.has(sleutel)) letOp(o.x, o.y, `${wie} staat op dezelfde tegel als ${bezet.get(sleutel)}`);
@@ -180,6 +185,11 @@
       }
     }
 
+    // De vlekvulling kost op de grote kaart een fractie van een seconde. Dat mag bij elke
+    // wijziging, maar niet bij elke muisbeweging terwijl je iets versleept: dan vraagt het
+    // gereedschap om een snelle keuring en komt deze er bij het loslaten achteraan.
+    if (!(opties && opties.snel)) keurBereik(w, fout, letOp);
+
     if (helden > 1) fout(null, null, `er staan ${helden} objecten met wezen="held" op deze kaart; het spel weet dan niet waar je begint`);
     // Een gebied zonder uitgang is een val: daar kom je nooit meer weg. js/gebied.js roept dat
     // ook, maar pas als een speler er staat.
@@ -189,6 +199,81 @@
 
     return { wereld: w, klachten };
   };
+
+  // ── Waar je kunt komen ──
+
+  // Welke tegels kun je vanaf een uitgang belopen? Met de loopregels van het spel zelf
+  // (T.bereik in js/pad.js: acht richtingen, geen hoeken afsnijden), en met deuren die je mag
+  // openen — een dichte deur is geen muur, een deur op slot wel.
+  //
+  // Waarom dit nodig is: een poppetje kan op een begaanbare tegel staan die helemaal door bomen
+  // is ingesloten, of een heel stuk dorp kan onbereikbaar liggen. Niets zei dat, en je merkt het
+  // pas als je er in het spel naartoe loopt en er niet komt.
+  // Geeft { kan, los } terug: de verzameling tegels waar je kunt komen ("x,y"), en de vraag of
+  // een tegel wél begaanbaar maar níet bereikbaar is. Allebei uit hetzelfde raster, want de vraag
+  // twee keer stellen is op de grote kaart een kwart seconde.
+  T.bereikbaar = function (w) {
+    const gezien = new Set();
+    if (!w || !T.bereik) return { kan: gezien, los: () => false };
+    // Eén keer de hele kaart aflopen en onthouden wat begaanbaar en wat vast is. T.isBegaanbaar
+    // kijkt per tegel de hele lijst voorwerpen af, en de vlekvulling vraagt het acht keer per
+    // tegel — dat werd op de grote kaart driekwart seconde, en dit gereedschap keurt bij elke
+    // wijziging opnieuw. Nu is het één pass, en de vlekvulling kijkt alleen nog in het raster.
+    const binnen = (x, y) => x >= 0 && y >= 0 && x < w.b && y < w.h;
+    const kan = [];
+    const vastRaster = [];
+    for (let y = 0; y < w.h; y++) {
+      kan.push(new Uint8Array(w.b));
+      vastRaster.push(new Uint8Array(w.b));
+      for (let x = 0; x < w.b; x++) {
+        kan[y][x] = T.isBegaanbaar(w, x, y, { deurenOpenen: true }) ? 1 : 0;
+        vastRaster[y][x] = T.isVast(w, x, y) ? 1 : 0;
+      }
+    }
+    const magBetreden = (x, y) => binnen(x, y) && !!kan[y][x];
+    const isVast = (x, y) => !binnen(x, y) || !!vastRaster[y][x];
+    // Vanaf elke uitgang: daar komt de speler binnen. De tegel waarop hij landt is `komt`, en
+    // anders de uitgang zelf (js/gebied.js zoekt dan zelf een buur).
+    for (const o of w.overgangen || []) {
+      for (const start of [o.komt, { x: o.x, y: o.y }]) {
+        if (!start || !magBetreden(start.x, start.y)) continue;
+        gezien.add(start.x + ',' + start.y);
+        for (const sleutel of T.bereik(start, w.b * w.h, magBetreden, isVast).keys()) gezien.add(sleutel);
+      }
+    }
+    return { kan: gezien, los: (x, y) => binnen(x, y) && !!kan[y][x] && !gezien.has(x + ',' + y) };
+  };
+
+  // Wat er op een onbereikbare tegel staat, en hoeveel tegels er onbereikbaar zijn.
+  function keurBereik(w, fout, letOp) {
+    if (!(w.overgangen || []).length) return; // geen uitgang: dat is al een fout op zichzelf
+    const { kan, los } = T.bereikbaar(w);
+
+    for (const e of w.wezens) {
+      if (los(e.tx, e.ty)) fout(e.tx, e.ty, `"${e.soort}" staat op een tegel waar je vanaf geen enkele uitgang kunt komen`);
+    }
+    for (const v of [...w.voorwerpen, ...(w.questVoorwerpen || [])]) {
+      if (!v.raak && !v.grendel) continue;
+      // Een raakpunt hoef je niet te betreden, maar je moet er wel naast kunnen staan.
+      const bij = v.raak
+        ? BUREN.some(([dx, dy]) => kan.has(v.x + dx + ',' + (v.y + dy)))
+        : kan.has(v.x + ',' + v.y);
+      if (!bij) fout(v.x, v.y, `"${v.soort}" hangt aan ${v.raak ? `raakpunt "${v.raak}"` : `quest "${v.grendel.quest}"`} maar ligt buiten alles wat je kunt bereiken`);
+    }
+
+    let losseTegels = 0;
+    let eerste = null;
+    for (let y = 0; y < w.h; y++) {
+      for (let x = 0; x < w.b; x++) {
+        if (!los(x, y)) continue;
+        losseTegels++;
+        if (!eerste) eerste = { x, y };
+      }
+    }
+    if (losseTegels) {
+      letOp(eerste.x, eerste.y, `${losseTegels} tegel(s) zijn begaanbaar maar vanaf geen enkele uitgang te bereiken; de eerste ligt op (${eerste.x}, ${eerste.y})`);
+    }
+  }
 
   // ── Wat het spel vraagt en de wereld niet geeft ──
 
@@ -236,11 +321,17 @@
     const werelden = alleWerelden(opties);
 
     // Wie staat er, en waar dan? De plek erbij, zodat de lijst ook zegt wat er wél goed staat.
+    // Het gaat om gesprek-ids, niet om soorten: negentien dorpelingen delen één soort maar kunnen
+    // elk hun eigen gesprek voeren (T.gesprekIdVan in js/gesprek.js).
     const wezens = new Map();
     const raakpunten = new Map();
     const questVoorwerpen = [];
     for (const [naam, w] of Object.entries(werelden)) {
-      for (const e of w.wezens) if (!wezens.has(e.soort)) wezens.set(e.soort, naam);
+      for (const e of w.wezens) {
+        const id = (T.gesprekIdVan && T.gesprekIdVan(e)) || e.soort;
+        if (!wezens.has(id)) wezens.set(id, naam);
+        if (!wezens.has(e.soort)) wezens.set(e.soort, naam);
+      }
       for (const v of [...w.voorwerpen, ...(w.questVoorwerpen || [])]) {
         if (v.raak && !raakpunten.has(v.raak)) raakpunten.set(v.raak, naam);
         if (v.grendel) questVoorwerpen.push({ v, kaart: naam });

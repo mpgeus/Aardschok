@@ -35,7 +35,7 @@
   }
 
   T.openDialoog = function (S, wie) {
-    const wieId = wie.soort;
+    const wieId = T.gesprekIdVan(wie);
     const gesprek = T.GESPREKKEN[wieId];
     S.modus = 'dialoog';
     S.held.pad = [];

@@ -125,6 +125,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en `T.keurQuests`, dat de toets van drie antwoorden nakijkt.
 - `js/dialoog.js`, `js/ui.js` (alle html over het beeld), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera).
+- Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): normaal zijn
+  soort, maar een dorpeling kan er een eigen hebben. Negentien dorpelingen delen namelijk één
+  soort (`dorpeling`), en die hoeven niet alle negentien hetzelfde te zeggen; in het
+  betekenisbestand staat dan `gesprek: "vrouwBijDePut"`.
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar.
   `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel.
@@ -229,11 +233,18 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
 
 - `gereedschap/gesprekken.html` voor de gesprekken en `gereedschap/quests.html` voor de quests
   (fasen, wegen, het dorp per fase, en de controle die de toets van drie antwoorden nakijkt).
-  Allebei schrijven ze hun eigen bestand terug. Allebei starten ze zichzelf niet meer: de
-  bladzijde die ze gebruikt roept `T.gesprekkenTool.start()` of `T.questsTool.start()` aan, met
-  `.kies(...)` en `.begin(...)` / `.beginVoor(...)` erbij. Zo zet `wereld.html` dezelfde
-  bewerkers in een paneel, zonder een tweede te bouwen — want twee bewerkers voor hetzelfde
-  bestand lopen vroeg of laat uit elkaar.
+  Allebei starten ze zichzelf niet meer: de bladzijde die ze gebruikt roept
+  `T.gesprekkenTool.start()` of `T.questsTool.start()` aan, met `.kies(...)` en `.begin(...)` /
+  `.beginVoor(...)` erbij. Zo zet `wereld.html` dezelfde bewerkers in een paneel, zonder een
+  tweede te bouwen — want twee bewerkers voor hetzelfde bestand lopen vroeg of laat uit elkaar.
+- **Een bewerker schrijft alleen het blok dat hij kent.** `gereedschap/bronblok.js` knipt een
+  bestand in kop, blok en staart (`T.bronBlok(tekst, 'T.GESPREKKEN')`); de bewerker regenereert
+  alleen het blok, en kop en staart gaan letterlijk mee terug. Dat is geen netheid maar noodzaak:
+  vóór 22 sep schreef de gespreksbewerker `js/gesprekken.js` helemaal opnieuw, kende
+  `T.TUTORIAL_TEKST` niet, en wiste één keer opslaan dus het hele draaiboek van de tutorial. Wie
+  een bewerker bouwt of uitbreidt, houdt zich hieraan; `test/bronblok.test.cjs` bewaakt het op de
+  echte bestanden. Commentaar in het bestand hangt aan wat eronder staat — een persoon, een knoop,
+  één regel tekst, één antwoord — en komt bij het opslaan terug op zijn plek.
 - `gereedschap/wereld.html` voor de kaarten, en dat is de bladzijde waar het spel gemaakt wordt.
   **Tiled tekent alleen nog de grond; alles wat betekenis heeft ontstaat en verandert hier**
   (Marcel, 22 sep; `ontwerp/kaarten.md`). Het tekent de kaart met `js/tekenen.js` zelf, kent lagen

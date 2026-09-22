@@ -74,29 +74,66 @@
   // bij het opslaan terug als "_opmerking" op dat object. Andere opmerkingen (bijvoorbeeld boven
   // één tekstregel) kan dit gereedschap niet plaatsen; die worden hier verzameld zodat ze niet
   // stilzwijgend verdwijnen bij het opslaan.
+  // Wat er vóór en ná T.GESPREKKEN in het bestand staat, letterlijk bewaard. Dat is niet netjes-
+  // doen maar noodzaak: js/gesprekken.js heeft er T.TUTORIAL_TEKST bij staan, en die kent deze
+  // bewerker niet. Voordat dit er was, wiste één keer opslaan het hele draaiboek van de tutorial.
+  // De regel is nu: alleen het blok T.GESPREKKEN wordt opnieuw geschreven, de rest gaat
+  // onveranderd mee terug (gereedschap/bronblok.js, test/bronblok.test.cjs).
   let RUWE_KOP = '';
+  let RUWE_STAART = '';
+  let BRON_GELEZEN = false;
   let VERLOREN_OPMERKINGEN = [];
+
+  // Het commentaar in het bestand hoort bij wat eronder staat, en dat komt bij het opslaan terug
+  // op zijn plek. Dat kan bij een persoon, bij een knoop, én bij één regel tekst of één antwoord
+  // — en dat laatste is waar het meeste van staat: het waarom van een zin staat erboven.
   function verwerkRuweBron(tekst) {
-    const merker = '(function (T) {';
-    const i = tekst.indexOf(merker);
-    RUWE_KOP = i === -1 ? '' : tekst.slice(0, i);
-    if (i === -1) return;
-    const regels = tekst.slice(i).replace(/\r\n/g, '\n').split('\n');
+    const b = T.bronBlok(tekst, 'T.GESPREKKEN');
+    if (!b) {
+      VERLOREN_OPMERKINGEN = [];
+      BRON_GELEZEN = false;
+      return;
+    }
+    RUWE_KOP = b.kop;
+    RUWE_STAART = b.staart;
+    BRON_GELEZEN = true;
     let buffer = [];
-    let huidigPersoon = null;
-    for (const regel of regels) {
+    let persoon = null;
+    let knoop = null;
+    let lijst = null; // 'tekst' of 'keuzes': in welke rij we zitten
+    let index = 0;
+    const leg = (doel) => {
+      if (!buffer.length) return;
+      if (doel) doel._opmerking = buffer.join('\n');
+      else VERLOREN_OPMERKINGEN.push(buffer.join('\n'));
+    };
+    for (const regel of b.blok.split('\n')) {
       const commentaar = regel.match(/^\s*\/\/ ?(.*)$/);
       if (commentaar) { buffer.push(commentaar[1]); continue; }
+      if (!regel.trim()) continue; // een witregel tussen een kopje en wat eronder staat breekt niets
       const persoonKop = regel.match(/^ {4}(\w+): \{$/);
       const knoopKop = regel.match(/^ {8}(\w+): \{$/);
+      const rijKop = regel.match(/^ {10}(tekst|keuzes): \[$/);
+      const ingang = /^ {12}\{/.test(regel);
       if (persoonKop) {
-        huidigPersoon = persoonKop[1];
-        if (buffer.length && T.GESPREKKEN[huidigPersoon]) T.GESPREKKEN[huidigPersoon]._opmerking = buffer.join('\n');
-        else if (buffer.length) VERLOREN_OPMERKINGEN.push(buffer.join('\n'));
-      } else if (knoopKop && huidigPersoon && T.GESPREKKEN[huidigPersoon] && T.GESPREKKEN[huidigPersoon].knopen[knoopKop[1]]) {
-        if (buffer.length) T.GESPREKKEN[huidigPersoon].knopen[knoopKop[1]]._opmerking = buffer.join('\n');
-      } else if (buffer.length) {
-        VERLOREN_OPMERKINGEN.push(buffer.join('\n'));
+        persoon = T.GESPREKKEN[persoonKop[1]] || null;
+        knoop = null;
+        lijst = null;
+        leg(persoon);
+      } else if (knoopKop && persoon) {
+        knoop = (persoon.knopen && persoon.knopen[knoopKop[1]]) || null;
+        lijst = null;
+        leg(knoop);
+      } else if (rijKop && knoop) {
+        lijst = rijKop[1];
+        index = 0;
+        leg(null);
+      } else if (ingang && knoop && lijst) {
+        leg((knoop[lijst] || [])[index]);
+        index++;
+      } else {
+        if (/^ {10}\]/.test(regel)) lijst = null;
+        leg(null);
       }
       buffer = [];
     }
@@ -105,7 +142,7 @@
     const doos = $('gt-opmerking-melding');
     if (!VERLOREN_OPMERKINGEN.length) { doos.classList.add('verborgen'); return; }
     doos.classList.remove('verborgen');
-    doos.textContent = `Let op: js/gesprekken.js bevat ${VERLOREN_OPMERKINGEN.length} opmerking(en) die dit gereedschap niet bij een persoon of knoop kan plaatsen (bijvoorbeeld boven één tekstregel). Bij het opslaan gaan die verloren. Voorbeeld: "${VERLOREN_OPMERKINGEN[0].slice(0, 90)}${VERLOREN_OPMERKINGEN[0].length > 90 ? '…' : ''}"`;
+    doos.textContent = `Let op: js/gesprekken.js bevat ${VERLOREN_OPMERKINGEN.length} opmerking(en) die dit gereedschap nergens aan kan ophangen. Bij het opslaan gaan die verloren. Voorbeeld: "${VERLOREN_OPMERKINGEN[0].slice(0, 90)}${VERLOREN_OPMERKINGEN[0].length > 90 ? '…' : ''}"`;
   }
 
   // ---------- meten of tekst past in het gesprekvenster van het spel ----------
@@ -760,13 +797,18 @@
     if (!opmerking) return '';
     return opmerking.split('\n').map((r) => (sp + '// ' + r).replace(/ +$/, '')).join('\n') + '\n';
   }
+  // Een rij regels of antwoorden, elk met zijn eigen opmerking erboven als hij er een heeft.
+  function serRij(lijst, ser, sp) {
+    return (lijst || []).map((r) => opmComment(r._opmerking, sp) + sp + ser(r) + ',').join('\n');
+  }
   function serKnoop(id, knoop, sp) {
     const sp2 = sp + '  ';
+    const sp3 = sp2 + '  ';
     let out = opmComment(knoop._opmerking, sp);
     out += `${sp}${id}: {\n`;
-    out += `${sp2}tekst: [\n${(knoop.tekst || []).map((r) => sp2 + '  ' + serRegel(r) + ',').join('\n')}\n${sp2}],\n`;
+    out += `${sp2}tekst: [\n${serRij(knoop.tekst, serRegel, sp3)}\n${sp2}],\n`;
     out += (knoop.keuzes && knoop.keuzes.length)
-      ? `${sp2}keuzes: [\n${knoop.keuzes.map((k) => sp2 + '  ' + serKeuze(k) + ',').join('\n')}\n${sp2}],\n`
+      ? `${sp2}keuzes: [\n${serRij(knoop.keuzes, serKeuze, sp3)}\n${sp2}],\n`
       : `${sp2}keuzes: [],\n`;
     out += `${sp}},\n`;
     return out;
@@ -782,16 +824,15 @@
     out += `${sp}},\n`;
     return out;
   }
+  // Alleen het blok T.GESPREKKEN wordt opnieuw geschreven; kop en staart gaan letterlijk mee.
+  // Lukte het lezen niet, dan geeft dit null en slaat de bewerker niet op — beter niets schrijven
+  // dan iets kwijtraken wat hij niet kent.
   function bouwBestandTekst() {
-    const kop = RUWE_KOP || '// De gesprekken, als gewone gegevens.\n';
-    let out = kop;
-    out += '(function (T) {\n';
-    out += "  'use strict';\n\n";
-    out += '  T.GESPREKKEN = {\n';
-    out += Object.entries(T.GESPREKKEN).map(([id, p]) => serPersoon(id, p, '    ')).join('');
-    out += '  };\n';
-    out += '})(globalThis.Toren = globalThis.Toren || {});\n';
-    return out;
+    if (!BRON_GELEZEN) return null;
+    let blok = '  T.GESPREKKEN = {\n';
+    blok += Object.entries(T.GESPREKKEN).map(([id, p]) => serPersoon(id, p, '    ')).join('');
+    blok += '  };';
+    return RUWE_KOP + blok + RUWE_STAART;
   }
 
   async function opslaan() {
@@ -803,6 +844,10 @@
     }
     const inhoud = bouwBestandTekst();
     const statusEl = $('gt-status');
+    if (inhoud == null) {
+      statusEl.textContent = 'Niet opgeslagen: js/gesprekken.js was niet te lezen, en dan schrijven we liever niets.';
+      return;
+    }
     statusEl.textContent = 'Opslaan…';
     try {
       const resp = await fetch('/gereedschap/api/gesprekken-opslaan', { method: 'POST', headers: { 'Content-Type': 'text/plain; charset=utf-8' }, body: inhoud });

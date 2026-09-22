@@ -95,8 +95,9 @@
     if (doel.wezen) {
       const e = doel.wezen;
       if (e.kant === 'monster') return { tekst: `De ${e.naam} aanvallen`, doe: () => T.startGevecht(S, e, true) };
-      // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: Wim, en de meester.
-      if (T.GESPREKKEN && T.GESPREKKEN[e.soort]) {
+      // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: Wim, en de meester. Welk
+      // gesprek dat is, zegt T.gesprekIdVan — een dorpeling kan er een eigen hebben.
+      if (T.gesprekVan && T.gesprekVan(e)) {
         return { tekst: `Praten met ${e.naam}`, doe: () => loopNaast(S, e, () => T.openDialoog(S, e)) };
       }
       return null;

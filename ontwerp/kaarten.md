@@ -251,6 +251,20 @@ Wat daar meteen uit volgt:
 - **Bomen en huizen blijven voorlopig in Tiled,** want dat is tekenen: terreinsets, selecties,
   kopiëren. De grens loopt bij betekenis, niet bij "object of tegel".
 
+### Wat de keuring nakijkt (22 sep 2026)
+
+`gereedschap/keuring.js`, met `test/keuring.test.cjs` eromheen. Twee vragen die tegengesteld
+wijzen — wat staat er op de kaart dat het spel niet kan gebruiken (`T.keurKaart`), en wat vraagt
+het spel dat nergens staat (`T.keurDekking`) — plus één die over de vorm van de kaart zelf gaat:
+
+**Bereikbaarheid.** Vanaf elke uitgang een vlekvulling met de loopregels van het spel zelf
+(`T.bereik` in `js/pad.js`: acht richtingen, geen hoeken afsnijden, een dichte deur mag open en
+een deur op slot niet). Wat begaanbaar is maar niet bereikt wordt, is een eilandje. Een poppetje
+of een questvoorwerp dat daarop staat is een fout — je spreekt hem nooit; de losse tegels zelf
+zijn een "let op", want plukjes gras achter de bomen mogen er zijn. Het gereedschap heeft er een
+laag voor (`o`). Op `wereld.tmj` zijn dat er op 22 sep 767 van de 6330, verspreid over de hele
+kaart: gaten in het bos. Wordt dat ineens veel meer, dan is er waarschijnlijk een pad dichtgegroeid.
+
 **Waar dit opnieuw bekeken moet worden:** hoogte (zie hieronder, en het werklijstpunt daarover). Als
 een hoogtelaag in Tiled niet blijkt te werken, is dát het moment waarop een eigen editor een echte
 vraag wordt. Dat weet je pas als je het probeert.

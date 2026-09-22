@@ -28,6 +28,9 @@
 //              in T.WEZENS.
 //   straal     (bij een wezen of een dorpeling) hoe ver hij van deze plek af dwaalt. Zonder
 //              straal blijft hij staan waar hij staat.
+//   gesprek    (bij een wezen of een dorpeling, mag weg) welk gesprek hij voert. Normaal is dat
+//              zijn soort, maar negentien dorpelingen delen er één ("dorpeling"), en die hoeven
+//              niet allemaal hetzelfde te zeggen. Zie T.gesprekIdVan in js/gesprek.js.
 //   staat      dit is een deur: "open", "dicht", "opslot" (dezelfde woorden als wereld.js se
 //              eigen deuren) of "geheim".
 //   als        (bij staat: "geheim") wanneer de doorgang er is: { vlag: 'x' } of
@@ -132,9 +135,9 @@
   // Dezelfde vorm als maakWezen in wereld.js (die geldt alleen voor een soort uit T.WEZENS), maar
   // dan voor een gewone dorpeling: geen gevecht, geen levensbalk, hij staat en kijkt. Het zaad
   // bepaalt straks zijn uiterlijk (dorpelingen.cjs).
-  function maakDorpeling(zaad, x, y, straal) {
+  function maakDorpeling(zaad, x, y, straal, gesprek) {
     return {
-      soort: 'dorpeling', naam: 'dorpeling', kant: 'neutraal', zaad,
+      soort: 'dorpeling', naam: 'dorpeling', kant: 'neutraal', zaad, gesprek: gesprek || null,
       x, y, tx: x, ty: y, pad: [], onderweg: false, opKlaar: null,
       leven: 0, maxLeven: 0, ap: 0, maxAp: 0, initiatief: 0, snelheid: 1.2, zicht: 0,
       // Waar hij hoort en hoe ver hij daarvandaan loopt: de smid bij de smidse, de boerin bij de
@@ -251,6 +254,8 @@
             e.straal = Number(p.straal);
             e.dwaalt = true;
           }
+          // Een eigen gesprek, los van de soort: zo praten twee smeden niet per se hetzelfde.
+          if (p.gesprek) e.gesprek = String(p.gesprek);
           wezens.push(e);
         } catch (e) {
           console.warn(`T.laadKaart: onbekend wezen "${p.wezen}" op (${gx}, ${gy}), overgeslagen`);
@@ -258,7 +263,7 @@
         return;
       }
       if (p.zaad !== undefined) {
-        wezens.push(maakDorpeling(p.zaad, gx, gy, Number(p.straal) || 0));
+        wezens.push(maakDorpeling(p.zaad, gx, gy, Number(p.straal) || 0, p.gesprek ? String(p.gesprek) : null));
         return;
       }
       if (!t) return; // een leeg object zonder van bovenstaande: niets aan te doen

@@ -30,6 +30,16 @@
     S.gesprekLeeftijd[wieId] = S.held.leeftijd;
   };
 
+  // Wiens gesprek voert dit wezen? Normaal zijn soort ("wim", "bakker"), want daaronder staat het
+  // in T.GESPREKKEN. Maar negentien dorpelingen delen één soort ("dorpeling", zie js/kaart.js), en
+  // die hoeven niet allemaal hetzelfde te zeggen: staat er `gesprek` op, dan telt die. Zo krijgt
+  // de vrouw bij de put haar eigen tekst zonder dat er een wezensoort voor bij hoeft.
+  T.gesprekIdVan = (wezen) => (wezen && wezen.gesprek) || (wezen && wezen.soort) || null;
+  T.gesprekVan = (wezen) => {
+    const id = T.gesprekIdVan(wezen);
+    return id && T.GESPREKKEN ? T.GESPREKKEN[id] || null : null;
+  };
+
   // Eén voorwaarde (als); zie de uitleg boven in gesprekken.js voor wat erin mag staan.
   T.voorwaardeGeldt = function (S, wieId, als) {
     if (!als) return true;

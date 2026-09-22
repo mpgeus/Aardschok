@@ -58,11 +58,21 @@ const keur = (dingen, objecten, extraLagen) =>
   T.keurKaart('proefje', kaartje(objecten || [], extraLagen), { betekenis: { dingen } }).klachten;
 const teksten = (klachten) => klachten.map((k) => k.tekst).join(' | ');
 
-test('de kaarten die er nu zijn, hebben geen enkele klacht', () => {
+test('de kaarten die er nu zijn, hebben geen enkele fout', () => {
   for (const naam of Object.keys(T.KAARTEN)) {
     const klachten = T.keurKaart(naam, T.KAARTEN[naam]).klachten;
-    assert.deepEqual(klachten, [], `${naam}: ${teksten(klachten)}`);
+    const fouten = klachten.filter((k) => k.soort === 'fout');
+    assert.deepEqual(fouten, [], `${naam}: ${teksten(fouten)}`);
   }
+});
+
+test('wat er op de grote kaart nog "let op" is, staat hier zwart op wit', () => {
+  // Niet elke opmerking is een defect: op wereld.tmj liggen plukjes gras achter de bomen waar je
+  // niet bij kunt. Dat mag, maar het hoort geteld te worden, zodat het opvalt als het ineens
+  // veel meer wordt — dan is er waarschijnlijk een pad dichtgegroeid.
+  const klachten = T.keurKaart('wereld', T.KAARTEN.wereld).klachten;
+  assert.deepEqual(klachten.map((k) => k.soort), ['let op']);
+  assert.match(klachten[0].tekst, /tegel\(s\) zijn begaanbaar maar vanaf geen enkele uitgang te bereiken/);
 });
 
 test('een kaart zonder uitgang is een val', () => {
@@ -197,6 +207,26 @@ test('een aansluiting die maar een kant heeft', () => {
 
   terug.overgangen.push({ x: 9, y: 9, naar: 'dorp' });
   assert.doesNotMatch(teksten(T.keurDekking({ werelden: { dorp: heen, bos: terug } })), /maar één kant/);
+});
+
+test('een eilandje achter de bomen valt op', () => {
+  // Een dorpeling op een tegel waar je vanaf de uitgang niet kunt komen: hij staat er wel, maar
+  // je spreekt hem nooit. Vier bomen eromheen is genoeg om hem op te sluiten.
+  const grondAantal = T.TEGELS.grond.tiles.length;
+  const eik = T.TEGELS.bomen.tiles.findIndex((t) => t && t.naam === 'eik');
+  const boom = (x, y) => ({ naam: 'eik', x, y, gid: 1 + grondAantal + eik });
+  const kaart = kaartje([boom(2, 1), boom(3, 1), boom(4, 1), boom(2, 2), boom(4, 2), boom(2, 3), boom(3, 3), boom(4, 3)]);
+  kaart.tilesets.push({ firstgid: 1 + grondAantal, source: '../tegels/bomen.tsx' });
+  const klachten = T.keurKaart('proefje', kaart, {
+    betekenis: { dingen: [UITGANG, { x: 3, y: 2, zaad: 1 }] },
+  }).klachten;
+  assert.match(teksten(klachten), /staat op een tegel waar je vanaf geen enkele uitgang kunt komen/);
+
+  // En zonder die bomen staat hij gewoon bereikbaar.
+  const open = T.keurKaart('proefje', kaartje([]), {
+    betekenis: { dingen: [UITGANG, { x: 3, y: 2, zaad: 1 }] },
+  }).klachten;
+  assert.doesNotMatch(teksten(open), /geen enkele uitgang kunt komen/);
 });
 
 test('de dekking zegt wat het spel vraagt en nergens staat', () => {

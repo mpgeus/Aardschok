@@ -44,6 +44,7 @@
   // blijven in het geheugen als je van kaart wisselt, want een aansluiting leg je nu juist op
   // twee kaarten tegelijk en dan mag het werk op de eerste niet verdwijnen.
   const open = new Map();
+  let bereik = null; // waar je vanaf een uitgang kunt komen (T.bereikbaar); voor de laag hieronder
   let gekozen = null; // het ding uit het betekenisbestand dat aangeklikt is
   let aansluiting = null; // halverwege een aansluiting: { vanKaart, van, naar }
   const bewerken = () => el('wt-bewerken').checked;
@@ -60,6 +61,7 @@
     { id: 'mensen', naam: 'Mensen, met dwaalstraal', kleur: '#e2b64a', toets: 'm', aan: true },
     { id: 'quest', naam: 'Quest en raakpunten', kleur: '#b98ce0', toets: 'q', aan: true },
     { id: 'uitgangen', naam: 'Uitgangen', kleur: '#6fa0e6', toets: 'u', aan: true },
+    { id: 'onbereikbaar', naam: 'Onbereikbaar', kleur: '#c86bbd', toets: 'o', aan: false },
     { id: 'klachten', naam: 'Wat de controle vond', kleur: '#e0604f', toets: 'c', aan: true },
     { id: 'namen', naam: 'Namen erbij', kleur: 'rgba(239, 230, 210, 0.75)', toets: 'n', aan: true },
     { id: 'vlakken', naam: 'Kunst uit (vlakken)', kleur: 'rgba(239, 230, 210, 0.3)', toets: 'k', aan: false },
@@ -161,21 +163,22 @@
   // Er is iets veranderd: de wereld opnieuw laten maken door het spel zelf, opnieuw keuren, en
   // de knop Opslaan wakker maken. Dat kost op de grote kaart een paar milliseconden, dus het mag
   // gewoon bij elke wijziging.
-  function veranderd() {
+  function veranderd(snel) {
     const b = nu();
     if (b) b.vuil = true;
-    herbouw();
+    herbouw(snel);
     werkKnoppenBij();
   }
 
-  function herbouw() {
+  function herbouw(snel) {
     const b = nu();
     // Wat hier open staat, is wat de keuring moet zien — ook als het nog niet opgeslagen is.
     // T.GEBIEDEN leest T.BETEKENIS op het moment dat het een wereld maakt, dus door het daar neer
     // te zetten rekent de dekking (wie staat er nergens?) mee met wat je zojuist neerzette.
     T.BETEKENIS = T.BETEKENIS || {};
     for (const [naam, open] of openKaarten()) T.BETEKENIS[naam] = open.inhoud;
-    const uitslag = T.keurKaart(kaartNaam, T.KAARTEN[kaartNaam], { betekenis: b && b.inhoud });
+    const uitslag = T.keurKaart(kaartNaam, T.KAARTEN[kaartNaam], { betekenis: b && b.inhoud, snel });
+    if (!snel) bereik = T.bereikbaar(uitslag.wereld);
     const camera = { x: S.camera.x, y: S.camera.y };
     S.wereld = uitslag.wereld;
     S.wereld.gebied = kaartNaam;
@@ -265,7 +268,7 @@
   // staat alleen hoe je ze met de muis legt.
   const penseel = {
     soort: 'wezen',
-    wezen: 'bakker', zaad: 1, straal: 3,
+    wezen: 'bakker', zaad: 1, straal: 3, gesprek: '',
     staat: 'dicht', vlag: '',
     naar: '', vel: 'bomen', tegel: 'eik', raak: '', quest: '',
   };
@@ -383,9 +386,11 @@
     if (penseel.soort === 'wezen') {
       keuzeVeld(doel, 'wie', Object.keys(T.WEZENS), penseel.wezen, (v) => (penseel.wezen = v));
       tekstVeld(doel, 'dwaalstraal', penseel.straal, (v) => (penseel.straal = v), 'number');
+      gesprekVeld(doel, penseel.gesprek, (v) => (penseel.gesprek = v));
     } else if (penseel.soort === 'dorpeling') {
       tekstVeld(doel, 'zaad', penseel.zaad, (v) => (penseel.zaad = v), 'number');
       tekstVeld(doel, 'dwaalstraal', penseel.straal, (v) => (penseel.straal = v), 'number');
+      gesprekVeld(doel, penseel.gesprek, (v) => (penseel.gesprek = v));
     } else if (penseel.soort === 'deur') {
       keuzeVeld(doel, 'staat', ['dicht', 'open', 'opslot', 'geheim'], penseel.staat, (v) => {
         penseel.staat = v;
@@ -417,6 +422,13 @@
     }
   }
 
+  // Welk gesprek voert dit poppetje? Leeg is "zijn soort", en dat klopt voor Wim en de bakker.
+  // Maar negentien dorpelingen delen één soort, dus daar kies je er een eigen bij — anders zeggen
+  // ze alle negentien hetzelfde (T.gesprekIdVan in js/gesprek.js).
+  function gesprekVeld(doel, waarde, zet) {
+    keuzeVeld(doel, 'gesprek', [['', '— zijn soort —'], ...Object.keys(T.GESPREKKEN || {})], waarde || '', zet);
+  }
+
   const dingenNu = () => (nu() ? nu().inhoud.dingen : []);
   const dingOp = (x, y) => dingenNu().find((d) => d.x === x && d.y === y) || null;
 
@@ -430,14 +442,10 @@
   }
 
   function maakDing(t) {
-    if (penseel.soort === 'wezen') {
-      const d = { x: t.x, y: t.y, wezen: penseel.wezen };
+    if (penseel.soort === 'wezen' || penseel.soort === 'dorpeling') {
+      const d = penseel.soort === 'wezen' ? { x: t.x, y: t.y, wezen: penseel.wezen } : { x: t.x, y: t.y, zaad: penseel.zaad };
       if (penseel.straal > 0) d.straal = penseel.straal;
-      return d;
-    }
-    if (penseel.soort === 'dorpeling') {
-      const d = { x: t.x, y: t.y, zaad: penseel.zaad };
-      if (penseel.straal > 0) d.straal = penseel.straal;
+      if (penseel.gesprek) d.gesprek = penseel.gesprek;
       return d;
     }
     if (penseel.soort === 'deur') {
@@ -523,26 +531,55 @@
     if (welke === 'quest') toonQuestVan(wieOpen);
   }
 
-  async function toonGesprek(soort, naam, tab) {
+  // `wie` is het wezen op de kaart. Welk gesprek hij voert, zegt T.gesprekIdVan: normaal zijn
+  // soort, maar een dorpeling kan er een eigen hebben — negentien dorpelingen delen één soort en
+  // hoeven niet alle negentien hetzelfde te zeggen.
+  async function toonGesprek(wie, tab) {
     const paneel = el('wt-gesprek');
     paneel.classList.remove('verborgen');
-    wieOpen = soort ? { soort, naam } : wieOpen;
-    el('wt-gesprek-wie').textContent = naam || 'Gesprek';
+    if (wie) wieOpen = wie;
+    el('wt-gesprek-wie').textContent = (wieOpen && wieOpen.naam) || 'Gesprek';
     if (!gesprekGestart) {
       gesprekGestart = true;
       await T.gesprekkenTool.start();
     }
-    if (soort) {
-      if (!T.gesprekkenTool.heeft(soort)) {
-        if (confirm(`"${soort}" heeft nog geen gesprek. Een nieuw gesprek voor hem beginnen?`)) {
-          T.gesprekkenTool.begin(soort, naam || soort);
-          herbouw(); // de controle zegt nu iets anders over wie er wel en niet praat
-        }
-      } else {
-        T.gesprekkenTool.kies(soort);
-      }
+    if (wieOpen) {
+      const id = T.gesprekIdVan(wieOpen);
+      if (T.gesprekkenTool.heeft(id)) T.gesprekkenTool.kies(id);
+      else beginGesprekVoor(wieOpen);
     }
     kiesTab(tab || 'gesprek');
+  }
+
+  // Een gesprek beginnen voor wie er nog geen heeft. Bij een gewoon wezen ("bakker") gaat dat op
+  // zijn soort; bij een dorpeling vraagt het om een eigen naam, en die komt als `gesprek` op het
+  // ding te staan — anders zegt elke dorpeling op de kaart hetzelfde.
+  function beginGesprekVoor(wie) {
+    const dorpeling = wie.soort === 'dorpeling';
+    let id = wie.soort;
+    if (dorpeling) {
+      const voorstel = vrijGesprekId('dorpeling');
+      id = prompt(`Deze dorpeling deelt zijn gesprek met alle andere dorpelingen. Geef hem een eigen naam (één woord), of laat dit leeg om de gedeelde tekst te bewerken:`, voorstel);
+      if (id === null) return;
+      id = String(id).trim().replace(/[^A-Za-z0-9]/g, '') || 'dorpeling';
+    } else if (!confirm(`"${wie.soort}" heeft nog geen gesprek. Een nieuw gesprek voor hem beginnen?`)) {
+      return;
+    }
+    if (!T.gesprekkenTool.heeft(id)) T.gesprekkenTool.begin(id, wie.naam || id);
+    else T.gesprekkenTool.kies(id);
+    // En het ding op de kaart eraan knopen, als het niet gewoon zijn soort is.
+    const ding = dingOp(wie.tx, wie.ty);
+    if (ding && id !== wie.soort) {
+      ding.gesprek = id;
+      veranderd();
+    } else {
+      herbouw(); // de controle zegt nu iets anders over wie er wel en niet praat
+    }
+  }
+
+  function vrijGesprekId(basis) {
+    if (!T.gesprekkenTool.heeft(basis)) return basis;
+    for (let n = 2; ; n++) if (!T.gesprekkenTool.heeft(basis + n)) return basis + n;
   }
 
   // Het questblad: de quest die deze persoon geeft. Geeft hij er geen, dan bied aan er een te
@@ -553,15 +590,16 @@
       await T.questsTool.start();
     }
     if (!wie) return;
-    const bestaand = T.questsTool.voorGever(wie.soort);
+    const id = T.gesprekIdVan(wie);
+    const bestaand = T.questsTool.voorGever(id);
     if (bestaand) {
       T.questsTool.kies(bestaand);
       return;
     }
     const vormen = T.questsTool.vormen();
-    const vorm = prompt(`"${wie.soort}" geeft nog geen quest. Een nieuwe beginnen? Welke vorm?\n${vormen.join(' / ')}`, vormen[0]);
+    const vorm = prompt(`"${id}" geeft nog geen quest. Een nieuwe beginnen? Welke vorm?\n${vormen.join(' / ')}`, vormen[0]);
     if (!vorm || !vormen.includes(vorm)) return;
-    T.questsTool.beginVoor(wie.soort, `Quest van ${wie.naam || wie.soort}`, vorm);
+    T.questsTool.beginVoor(id, `Quest van ${wie.naam || id}`, vorm);
     herbouw();
   }
 
@@ -782,7 +820,7 @@
           sleept.ding.x = t.x;
           sleept.ding.y = t.y;
           vast = t;
-          veranderd();
+          veranderd(true);
         }
         return;
       }
@@ -798,8 +836,10 @@
     if (!sleept) return;
     const stil = sleept.ver < 4;
     const ding = sleept.ding;
+    const versleept = !stil && !!ding;
     sleept = null;
     canvas.classList.remove('wt-sleept');
+    if (versleept) veranderd(); // nu wel de volledige keuring, inclusief de vlekvulling
     if (!stil || e.target !== canvas) return;
     const vak = canvas.getBoundingClientRect();
     const t = zoekDoel(e.clientX - vak.left, e.clientY - vak.top);
@@ -816,7 +856,7 @@
     const vak = canvas.getBoundingClientRect();
     const t = zoekDoel(e.clientX - vak.left, e.clientY - vak.top);
     const wie = pratenOp(t);
-    if (wie) toonGesprek(wie.soort, wie.naam);
+    if (wie) toonGesprek(wie);
   });
   canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
@@ -917,6 +957,7 @@
       tekstVeld(doel, 'zaad', d.zaad, zet('zaad'), 'number');
       tekstVeld(doel, 'dwaalstraal', d.straal, zet('straal'), 'number');
     }
+    if (d.wezen !== undefined || d.zaad !== undefined) gesprekVeld(doel, d.gesprek, zet('gesprek'));
     if (d.staat !== undefined) {
       keuzeVeld(doel, 'staat', ['dicht', 'open', 'opslot', 'geheim'], d.staat, (v) => {
         d.staat = v;
@@ -1030,10 +1071,11 @@
       rij(doel, 'kant', e.kant);
       if (e.leven) rij(doel, 'leven', `${e.leven}/${e.maxLeven}`);
       rij(doel, 'dwaalt', e.dwaalt ? `ja, straal ${e.straal} vanaf (${e.thuis.x}, ${e.thuis.y})` : 'nee', kl(e.dwaalt));
-      const praat = T.GESPREKKEN && T.GESPREKKEN[e.soort];
-      if (praat) rij(doel, 'gesprek', 'ja', 'wt-ja');
+      const gesprekId = T.gesprekIdVan(e);
+      const praat = T.GESPREKKEN && T.GESPREKKEN[gesprekId];
+      if (praat) rij(doel, 'gesprek', gesprekId + (gesprekId === e.soort ? '' : ' (eigen)'), 'wt-ja');
       else if (e.kant === 'neutraal') rij(doel, 'gesprek', 'nog geen', 'wt-nee');
-      const quest = T.questsTool && T.questsTool.voorGever(e.soort);
+      const quest = T.questsTool && T.questsTool.voorGever(gesprekId);
       if (quest) rij(doel, 'quest', T.QUESTS[quest].naam || quest, 'wt-ja');
       if (e.kant !== 'monster') {
         const knoppen = document.createElement('div');
@@ -1043,7 +1085,7 @@
           knop.type = 'button';
           knop.className = 'gt-mini';
           knop.textContent = tekst;
-          knop.addEventListener('click', () => toonGesprek(e.soort, e.naam, tab));
+          knop.addEventListener('click', () => toonGesprek(e, tab));
           knoppen.appendChild(knop);
         }
         doel.appendChild(knoppen);
@@ -1220,6 +1262,20 @@
           if (o.komt) {
             markeer(o.komt.x, o.komt.y, 'rgba(111, 160, 230, 0.55)', 1.5, 0.6);
             schrijf(o.komt.x, o.komt.y, 'komt aan', 'rgba(111, 160, 230, 0.8)', 12);
+          }
+        }
+      }
+
+      // Begaanbaar maar nergens vanaf een uitgang te bereiken: een eilandje achter de bomen, of
+      // een heel stuk kaart dat je in het spel nooit ziet.
+      if (aan('onbereikbaar') && bereik) {
+        ctx.fillStyle = 'rgba(200, 107, 189, 0.30)';
+        for (let y = vak.y0; y <= vak.y1; y++) {
+          for (let x = vak.x0; x <= vak.x1; x++) {
+            if (!bereik.los(x, y)) continue;
+            const p = T.naarScherm(x, y);
+            T.ruit(ctx, p.x, p.y, 0.94);
+            ctx.fill();
           }
         }
       }
