@@ -52,6 +52,7 @@ het plusje *Eigenschap toevoegen*, soort *string*):
 | `straal` | een getal | hoe ver het rondloopt |
 | `overgang` | naam van een kaart | wie hier stapt, gaat naar die kaart |
 | `komt` | `x,y` | de tegel in déze kaart waar je landt als je van die andere kaart terugkomt |
+| `tekst` | bijvoorbeeld `Naar binnen` | wat er bij de muis staat boven een overgang (zonder: "Naar" en de naam van de kaart) |
 | `zaad` | een getal | een gewone dorpeling (nog zonder eigen kunst: hij wordt als Wim getekend) |
 
 Het beginbestand heeft er al een als voorbeeld: *pad terug naar het erf*.
@@ -135,8 +136,6 @@ Nog uit te zoeken:
 - **Wat er nog niet in de vellen zit:** dorpelingen, deuren en hekken als plaatje (de
   eigenschappen werken wel, maar je ziet in Tiled een kaal blokje), stromend water, en het
   bruggetje, dat geen heel aantal tegels breed is.
-- **Overgangen doen nog niets.** `overgang` wordt ingelezen, maar er is nog niets dat van kaart
-  wisselt.
 
 ### Een tegelnummer verandert nooit (21 sep 2026)
 

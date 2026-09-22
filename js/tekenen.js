@@ -975,8 +975,9 @@
       }
       T.sprites.teken(ctx, deel, p.x, p.y, helder);
       if (effectenAan() && nk.lijst.length) overlaag(ctx, deel, p.x, p.y, kleur('vuur', 5), flitsOp(S, v.x, v.y));
-      if (v.soort === 'fontein') {
-        // Het water blijft bewegen: een rimpel over de kom en een druppel in de straal.
+      if (v.soort === 'fontein' && !S.fonteinLeeg) {
+        // Het water blijft bewegen: een rimpel over de kom en een druppel in de straal. Een lege
+        // fontein (de meester dronk de laatste slok, js/tutorial.js) staat stil.
         const golf = (Math.sin(S.tijd * 2.2) + 1) / 2;
         ctx.strokeStyle = `rgba(200, 230, 255, ${0.18 + golf * 0.22})`;
         ctx.lineWidth = 1;
@@ -992,6 +993,19 @@
       T.blok(ctx, p.x, p.y, 0.36, 0.36, 4, '#6e4622', { helder, basis: 28 });
       return;
     }
+    // Wat de tutorial neerzet (js/tutorial.js): een ton, wat er van een ton over is, en een zak.
+    if (v.soort === 'ton') {
+      T.blok(ctx, p.x, p.y, 0.26, 0.26, 30, '#7a5230', { helder });
+      return;
+    }
+    if (v.soort === 'puin') {
+      T.blok(ctx, p.x, p.y, 0.3, 0.3, 3, '#6e4622', { helder });
+      return;
+    }
+    if (v.soort === 'zak') {
+      T.blok(ctx, p.x, p.y, 0.22, 0.22, 16, '#b99a64', { helder });
+      return;
+    }
     if (v.soort === 'pilaar') {
       T.blok(ctx, p.x, p.y, 0.32, 0.32, 8, '#6f6a62', { helder });
       T.blok(ctx, p.x, p.y, 0.22, 0.22, 74, '#8d877d', { helder, basis: 8 });
@@ -1001,8 +1015,12 @@
     if (v.soort === 'fontein') {
       T.blok(ctx, p.x, p.y, 0.42, 0.42, 16, '#8a8478', { helder });
       T.ruit(ctx, p.x, p.y - 16, 0.64);
-      ctx.fillStyle = T.rgb(T.kleur('#3f7fc2'), helder);
+      ctx.fillStyle = T.rgb(T.kleur(S.fonteinLeeg ? '#5d574d' : '#3f7fc2'), helder);
       ctx.fill();
+      if (S.fonteinLeeg) {
+        T.blok(ctx, p.x, p.y, 0.07, 0.07, 14, '#9c968a', { helder, basis: 16 });
+        return;
+      }
       const golf = (Math.sin(S.tijd * 2.2) + 1) / 2;
       ctx.strokeStyle = `rgba(200, 230, 255, ${0.25 + golf * 0.3})`;
       ctx.lineWidth = 1;

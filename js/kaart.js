@@ -28,6 +28,8 @@
 //              T.laadKaart legt dat vast in w.overgangen, en js/gebied.js maakt van elke kaart
 //              vanzelf een gebied: zodra kaarten/bos.tmj bestaat en npm run kaarten gedraaid is,
 //              werkt die overgang, zonder dat er ergens iets geregistreerd hoeft te worden.
+//   tekst      (bij een overgang, mag weg) wat er bij de muis staat, bijvoorbeeld "Naar binnen".
+//              Zonder staat er "Naar" en de naam van de kaart.
 // Een object zonder van deze eigenschappen, maar wel met een tegel uit tegels/ (een boom, een
 // huis, een bosje), wordt een voorwerp op zijn eigen tegel plus, bij "beslaat", de tegels
 // eromheen — precies zo vast als de tegel zelf zegt.
@@ -177,7 +179,7 @@
           const k = typeof p.komt === 'string' ? p.komt.split(',').map(Number) : null;
           const komt = k && k.length === 2 && k.every(Number.isFinite) ? { x: k[0], y: k[1] } : null;
           if (!komt) console.warn(`T.laadKaart: overgang naar "${p.overgang}" op (${gx}, ${gy}) zonder "komt"; het spel kiest zelf een tegel ernaast`);
-          overgangen.push({ x: gx, y: gy, naar: p.overgang, komt });
+          overgangen.push({ x: gx, y: gy, naar: p.overgang, komt, tekst: typeof p.tekst === 'string' && p.tekst ? p.tekst : null });
           continue;
         }
         if (p.wezen !== undefined) {

@@ -125,7 +125,7 @@
     const o = T.overgangOp(w, doel.x, doel.y);
     if (o) {
       const naam = (T.GEBIEDEN[o.naar] && T.GEBIEDEN[o.naar].naam) || o.naar;
-      return { tekst: `Naar ${naam.toLowerCase()}`, doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
+      return { tekst: o.tekst || `Naar ${naam.toLowerCase()}`, doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
     }
     return { tekst: null, doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
   };

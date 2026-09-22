@@ -119,7 +119,7 @@
   // "wereld": sinds "Eén doorlopende wereld" (ontwerp/wereld.md) is buiten niet meer een los erf,
   // maar kaarten/wereld.tmj — de hele buitenwereld op één doek, met het erf, het dorp en de ruimte
   // ertussen. Het erf als zelfstandig gebied bestaat niet meer.
-  const OVERGANGEN = [{ x: 0, y: 5, naar: 'wereld', komt: { x: 1, y: 5 } }];
+  const OVERGANGEN = [{ x: 0, y: 5, naar: 'wereld', komt: { x: 1, y: 5 }, tekst: 'Naar buiten' }];
 
   const sleutelVan = (x, y) => x + ',' + y;
 
