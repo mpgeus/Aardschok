@@ -35,6 +35,16 @@ hergebruikt. Geeft hij nog geen gesprek of quest, dan biedt het paneel aan er ee
 Aanwijzen gaat op zijn lijf, niet op zijn voeten, net als in het spel. Een questvoorwerp hang je
 aan een fase met twee keuzelijsten, en de kaart springt mee naar die fase.
 
+**Elke dorpeling kan zijn eigen gesprek hebben** (22 sep). Het spel zocht op `soort`, en die is
+voor elke dorpeling met een zaad gewoon "dorpeling" — negentien dorpelingen zouden dus alle
+negentien hetzelfde zeggen. Nu beslist `T.gesprekIdVan` (`js/gesprek.js`): zijn soort, tenzij er
+`gesprek` op staat. In het gereedschap kies je dat uit een lijst, en "een gesprek beginnen" voor
+een dorpeling vraagt om een eigen naam.
+
+**De controle kijkt ook of je er kunt komen** (22 sep): een vlekvulling vanaf elke uitgang, met de
+loopregels van het spel zelf. Een poppetje op een eilandje achter de bomen is een fout; losse
+tegels zijn een "let op" (op `wereld.tmj` 767 van de 6330 — gaten in het bos). Laag `o`.
+
 **Het gereedschap is daarmee af voor wat het moest doen.** Wat nu volgt is het gebruiken: De koude
 oven neerzetten, en daarna de negentien dorpelingen.
 
@@ -44,8 +54,8 @@ Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halver
 **Wacht op Marcel:**
 - Opmerkingen bij het draaiboek van de tutorial (gestuurd op 22 sep; de teksten staan in
   `T.TUTORIAL_TEKST` in `js/gesprekken.js`).
-- In Tiled: het vel `tuin` aan `wereld.tmj` toevoegen, en de vier varens rond (51–52, 45–46) van de
-  grondlaag naar `objecten` verplaatsen (`npm run kaarten` klaagt erover).
+- In Tiled: het vel `tuin` aan `wereld.tmj` toevoegen. (De vier varens rond (51–52, 45–46) zijn op
+  22 sep verhuisd naar `objecten`, met gras eronder; `npm run kaarten` klaagt nergens meer over.)
 - **De koude oven neerzetten**, nu met `gereedschap/wereld.html` (niet meer in Tiled). Zet
   "Bewerken" aan; de controle rechts zegt wat er ontbreekt en die regels verdwijnen terwijl je
   neerzet. Het gaat om: de bakker, de marskramer en de smidsvrouw in het dorp; een leemkuil bij
@@ -169,10 +179,11 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    paneel over de kaart, met de bewerkers uit `gesprekken-tool.js` en `quests-tool.js` zelf —
    dezelfde bewerkers, niet een tweede stel. Alle vier de rondes zijn daarmee af.
 
-   **Let op bij het opslaan van een gesprek:** `js/gesprekken.js` heeft 21 opmerkingen die de
-   bewerker niet bij een persoon of knoop kan plaatsen, en die gaan bij het opslaan verloren. Hij
-   waarschuwt ervoor en vraagt het na. Dat gold al voor `gesprekken.html`, maar het is nu één klik
-   dichterbij.
+   **Opslaan is veilig geworden (22 sep).** Het was dat niet: de gespreksbewerker schreef
+   `js/gesprekken.js` helemaal opnieuw en kende `T.TUTORIAL_TEKST` niet, dus wiste één keer
+   opslaan het hele draaiboek van de tutorial. Nu knipt `gereedschap/bronblok.js` een bestand in
+   kop, blok en staart en wordt alleen het blok herschreven. Ook het commentaar blijft staan, tot
+   op de losse tekstregel: van 21 verloren opmerkingen naar geen enkele.
 
 5. **De verhaaleditor.** Klaar als het gesprekkengereedschap ook quests kan: vormen om mee te
    beginnen, alles op één plek, een proef per fase, controle die de routes telt, en de koppeling
