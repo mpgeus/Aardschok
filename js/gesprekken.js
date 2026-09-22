@@ -341,5 +341,33 @@
     rouwLaat: ['U was er niet.', 'Hij had zijn bonen nog niet gedaan.'],
     // Wim, tegen jou.
     overnemen: ['...Meester?', 'Ik ga de trap vegen. Dat deed ik altijd, als ik niet wist wat ik moest doen.'],
+
+    // ── Als je vastzit ──
+    //
+    // Het vak linksboven dat je vertelde welke knop je moest indrukken, is er op 22 sep uit
+    // gegaan (Marcel: "veel te cringe"). ontwerp/verhaal.md zegt waarom: iemand die stilstaat en
+    // uitlegt is een tutorial. Wat ervoor in de plaats komt is een mens: sta je een poos stil op
+    // hetzelfde moment, dan zegt Wim er iets over als hij in de buurt is, en anders de meester.
+    //
+    // Zolang hieronder niets staat, zegt er ook niemand iets. Dat is met opzet: beter stil dan
+    // een uitlegger. Wat er komt te staan, hoort te klinken als iemand die zich ermee bemoeit —
+    // niet als een aanwijzing. ("Hij staat daar. Bij zijn bonen." zegt hetzelfde als "Loop naar de
+    // meester", maar het is iemand die het zegt.)
+    //
+    // Te bewerken in gereedschap/gesprekken.html, onder "De tutorial".
+
+    // Je bent de toren uit en de meester roept je, maar je blijft staan.
+    vastMeester: [],
+    // Hij vroeg om water uit de fontein, en je hebt de kom nog niet.
+    vastKom: [],
+    // De kom heb je; de zak zaaigoed uit de voorraadkamer nog niet. Daar zit de slijmkruiper.
+    vastZak: [],
+    // Je hebt allebei, maar je brengt ze hem niet.
+    vastBrengen: [],
+    // De slijmkruiper heeft je gezien en je staat stil in het gevecht. (Een stap terug, de deur
+    // dicht — dat zei hij zelf al bij de boodschap, dus dit is de herinnering, niet de uitleg.)
+    vastGezien: [],
+    // Hij heeft één ton kapotgeslagen en wacht tot jij de andere doet.
+    vastSlaan: [],
   };
 })(globalThis.Toren = globalThis.Toren || {});

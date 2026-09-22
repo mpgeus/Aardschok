@@ -412,80 +412,116 @@
     });
   }
 
+  // De persoon is één regel bovenaan het script, geen formulier: wie het is, met welk portret en
+  // waar hij begint. Meer valt er over een persoon niet te zeggen.
   function renderPersoonEditor() {
     const wrap = $('gt-persoon-editor');
     wrap.innerHTML = '';
     const persoon = T.GESPREKKEN[huidigePersoonId];
     if (!persoon) { wrap.appendChild(el('p', 'gt-leeg', 'Nog geen personen — maak er hierboven één.')); return; }
-    const velden = el('div', 'gt-persoon-velden');
+    const rij = el('div', 'gt-wie');
 
-    const naamLabel = el('label', null, 'Naam (boven het gesprek)');
-    const naamInv = document.createElement('input'); naamInv.type = 'text'; naamInv.value = persoon.naam || '';
+    const naamInv = document.createElement('input');
+    naamInv.className = 'gt-wie-naam';
+    naamInv.value = persoon.naam || '';
+    naamInv.title = 'Zoals hij boven het gesprek staat';
     naamInv.addEventListener('input', () => { persoon.naam = naamInv.value; naVeldWijziging(); });
-    naamLabel.appendChild(naamInv); velden.appendChild(naamLabel);
+    rij.appendChild(naamInv);
+    rij.appendChild(el('div', 'gt-vul'));
 
-    const portretLabel = el('label', null, 'Portret (bestandsnaam, leeg = nog geen)');
-    const portretInv = document.createElement('input'); portretInv.type = 'text'; portretInv.value = persoon.portret || '';
+    rij.appendChild(el('span', 'gt-wie-bij', 'portret'));
+    const portretInv = document.createElement('input');
+    portretInv.className = 'gt-wie-klein';
+    portretInv.value = persoon.portret || '';
+    portretInv.placeholder = 'nog geen';
     portretInv.addEventListener('input', () => { persoon.portret = portretInv.value.trim() || undefined; naVeldWijziging(); });
-    portretLabel.appendChild(portretInv); velden.appendChild(portretLabel);
+    rij.appendChild(portretInv);
 
-    const startLabel = el('label', null, 'Startknoop');
+    rij.appendChild(el('span', 'gt-wie-bij', 'begint bij'));
     const startSelect = document.createElement('select');
+    startSelect.className = 'gt-wie-klein';
     Object.keys(persoon.knopen).forEach((id) => { const o = document.createElement('option'); o.value = id; o.textContent = id; if (id === persoon.start) o.selected = true; startSelect.appendChild(o); });
     startSelect.addEventListener('change', () => { persoon.start = startSelect.value; herbouwAlles(); });
-    startLabel.appendChild(startSelect); velden.appendChild(startLabel);
+    rij.appendChild(startSelect);
 
-    wrap.appendChild(velden);
+    wrap.appendChild(rij);
   }
 
+  // In welke volgorde lees je een gesprek? Vanaf de start, en dan wat je vanuit daar kunt
+  // bereiken, in de volgorde waarin de antwoorden staan. Wat nergens vandaan te bereiken is,
+  // komt onderaan — dat is bijna altijd een vergissing en hoort op te vallen.
+  function leesVolgorde(persoon) {
+    const uit = [];
+    const gezien = new Set();
+    const loop = (id) => {
+      if (!id || gezien.has(id) || !persoon.knopen[id]) return;
+      gezien.add(id);
+      uit.push(id);
+      for (const k of persoon.knopen[id].keuzes || []) loop(k.naar);
+    };
+    loop(persoon.start);
+    const los = Object.keys(persoon.knopen).filter((id) => !gezien.has(id));
+    return { uit, los };
+  }
+
+  // Waar komt iemand vandaan? Per knoop wie ernaar verwijst, zodat je terug kunt lopen.
+  function komtVan(persoon) {
+    const van = new Map();
+    for (const [id, knoop] of Object.entries(persoon.knopen)) {
+      for (const k of knoop.keuzes || []) {
+        if (!k.naar) continue;
+        if (!van.has(k.naar)) van.set(k.naar, []);
+        if (!van.get(k.naar).includes(id)) van.get(k.naar).push(id);
+      }
+    }
+    return van;
+  }
+
+  // Links: de knopen van dit gesprek als lijst, met hun eerste zin eronder. Geen uitgerolde boom
+  // meer die zichzelf vijftien regels diep herhaalt — een lijst die je kunt overzien, en waarin
+  // je ziet waar je bent.
   function renderBoom() {
     const wrap = $('gt-boom-inhoud');
     wrap.innerHTML = '';
     const persoon = T.GESPREKKEN[huidigePersoonId];
     if (!persoon) return;
-    const { wortel, onbereikbaar } = bouwBoom(persoon);
-    if (wortel) {
-      const ul = el('ul', 'gt-boom-lijst');
-      ul.appendChild(boomKnoopLi(persoon, wortel, '(start)'));
-      wrap.appendChild(ul);
-    }
-    if (onbereikbaar.length) {
-      wrap.appendChild(el('div', 'gt-label gt-fout-tekst', 'Niet bereikbaar vanaf start'));
-      const ul = el('ul', 'gt-boom-lijst');
-      onbereikbaar.forEach((id) => ul.appendChild(boomKnoopLi(persoon, { knoopId: id, soort: 'knoop', kinderen: [] }, null)));
-      wrap.appendChild(ul);
+    const { uit, los } = leesVolgorde(persoon);
+    const van = komtVan(persoon);
+
+    const maak = (id, isStart) => {
+      const b = el('button', 'gt-knooprij', null);
+      b.type = 'button';
+      if (id === huidigeKnoopId) b.classList.add('gt-actief');
+      if (id === proefKnoopId) b.classList.add('gt-proef-actief');
+      const kop = el('div', 'gt-knooprij-kop', null);
+      kop.appendChild(el('span', 'gt-knooprij-id', id));
+      if (isStart) kop.appendChild(el('span', 'gt-knooprij-start', 'start'));
+      const binnen = van.get(id);
+      if (binnen && binnen.length) kop.appendChild(el('span', 'gt-knooprij-van', '← ' + binnen.join(', ')));
+      b.appendChild(kop);
+      const eerste = (persoon.knopen[id].tekst || []).find((r) => r.zeg);
+      b.appendChild(el('div', 'gt-knooprij-zin', eerste ? eerste.zeg : '(nog niets gezegd)'));
+      b.addEventListener('click', () => gaNaarKnoop(id));
+      return b;
+    };
+
+    for (const id of uit) wrap.appendChild(maak(id, id === persoon.start));
+    if (los.length) {
+      wrap.appendChild(el('div', 'gt-label gt-fout-tekst', 'Hier komt niemand'));
+      for (const id of los) wrap.appendChild(maak(id, false));
     }
   }
-  function boomKnoopLi(persoon, node, keuzeLabel) {
-    const li = document.createElement('li');
-    const rij = el('div', 'gt-boom-rij');
-    if (keuzeLabel) rij.appendChild(el('span', 'gt-boom-keuze', keuzeLabel + ' →'));
-    const idKnop = el('button', 'gt-boom-id', node.knoopId);
-    idKnop.type = 'button';
-    if (node.knoopId === huidigeKnoopId) idKnop.classList.add('gt-actief');
-    if (node.knoopId === proefKnoopId) idKnop.classList.add('gt-proef-actief');
-    if (node.soort === 'ontbreekt') idKnop.classList.add('gt-fout');
-    idKnop.addEventListener('click', () => { if (persoon.knopen[node.knoopId]) { huidigeKnoopId = node.knoopId; herbouwKnoopEditor(); renderBoom(); } });
-    rij.appendChild(idKnop);
-    if (node.soort === 'cyclus') rij.appendChild(el('span', 'gt-gedempt', '↩ komt hierboven al voor'));
-    if (node.soort === 'ontbreekt') rij.appendChild(el('span', 'gt-fout-tekst', 'bestaat niet'));
-    li.appendChild(rij);
-    if (node.soort === 'knoop' && node.kinderen.length) {
-      const ul = el('ul', 'gt-boom-lijst');
-      node.kinderen.forEach((k) => {
-        if (k.kind) ul.appendChild(boomKnoopLi(persoon, k.kind, k.keuze.zeg));
-        else {
-          const li2 = document.createElement('li');
-          const rij2 = el('div', 'gt-boom-rij');
-          rij2.appendChild(el('span', 'gt-boom-keuze', k.keuze.zeg + ' →'));
-          rij2.appendChild(el('span', 'gt-gedempt', '(sluit gesprek)'));
-          li2.appendChild(rij2);
-          ul.appendChild(li2);
-        }
-      });
-      li.appendChild(ul);
+
+  // Naar een knoop toe: hem aanwijzen in de lijst en in het script erheen schuiven.
+  function gaNaarKnoop(id) {
+    huidigeKnoopId = id;
+    renderBoom();
+    const doel = document.getElementById('knoop-' + id);
+    if (doel) {
+      doel.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      doel.classList.add('gt-aangewezen');
+      setTimeout(() => doel.classList.remove('gt-aangewezen'), 1200);
     }
-    return li;
   }
 
   function renderFouten() {
@@ -588,85 +624,197 @@
     return wrap;
   }
 
+  // ---------- het script: het gesprek zoals je het leest ----------
+  //
+  // Hier stond tot 22 sep één knoop per keer, als formulier: honderdzeven invoervelden in één
+  // kolom, waarin de zin die iemand zegt even zwaar was opgemaakt als de voorwaarde eronder
+  // (Marcel: "totaal onlogisch"). Nu staat het hele gesprek op één bladzijde, van start naar
+  // beneden, en ziet een knoop eruit als een scène: wie wat zegt, en welke antwoorden je kunt
+  // geven. De voorwaarde staat er klein achter in gewone taal en klapt pas open als je hem
+  // aanraakt — het formulier is er nog, maar pas als je erom vraagt.
+
+  // Een voorwaarde in gewone taal. Valt een veld hier niet onder, dan gewoon "naam: waarde";
+  // zo groeit dit mee als er ooit een voorwaarde bijkomt zonder dat er iets stukgaat.
+  const ALS_TAAL = {
+    vlag: (v) => `als ${v}`,
+    nietVlag: (v) => `zolang niet ${v}`,
+    heeft: (v) => `als je ${v} hebt`,
+    nietHeeft: (v) => `als je geen ${v} hebt`,
+    ouderDan: (v) => `als je ouder bent dan ${v}`,
+    jongerDan: (v) => `als je jonger bent dan ${v}`,
+    ouderGewordenSinds: (v) => `als je ${v} maanden ouder werd sinds hij je zag`,
+    quest: (v) => `als quest ${v}`,
+    fase: (v) => `in fase ${v}`,
+    weg: (v) => `via ${v}`,
+    goud: (v) => `als je ${v} goud hebt`,
+  };
+  function alsInTaal(als) {
+    if (!als) return '';
+    return Object.entries(als).map(([naam, v]) => (ALS_TAAL[naam] ? ALS_TAAL[naam](v) : `${naam}: ${v}`)).join(' en ');
+  }
+  const DOE_TAAL = {
+    zetVlag: (v) => `zet ${v}`,
+    wisVlag: (v) => `wist ${v}`,
+    geef: (v) => `geeft ${v}`,
+    neem: (v) => `neemt ${v}`,
+    goud: (v) => `${Number(v) < 0 ? '' : '+'}${v} goud`,
+    quest: (v) => `quest ${v}`,
+    fase: (v) => `naar fase ${v}`,
+  };
+  function doeInTaal(doe) {
+    if (!doe) return '';
+    return Object.entries(doe).map(([naam, v]) => (DOE_TAAL[naam] ? DOE_TAAL[naam](v) : `${naam}: ${v}`)).join(', ');
+  }
+
+  // Een chip die openklapt: dicht laat hij in gewone taal zien wat er staat, open staat het
+  // formulier eronder. `maakInhoud` bouwt dat formulier pas als het nodig is.
+  function klapChip(tekst, leegTekst, maakInhoud) {
+    const doos = el('div', 'gt-chip-doos');
+    const knopje = el('button', 'gt-chipje' + (tekst ? '' : ' gt-chipje-leeg'), tekst || leegTekst);
+    knopje.type = 'button';
+    // Een lange voorwaarde wordt afgeknipt met het hele verhaal in de tooltip: anders valt één
+    // regel met drie voorwaarden over twee regels en staat het script scheef.
+    if (tekst) knopje.title = tekst;
+    const inhoud = el('div', 'gt-chip-open verborgen');
+    knopje.addEventListener('click', () => {
+      inhoud.classList.toggle('verborgen');
+      if (!inhoud.firstChild) inhoud.appendChild(maakInhoud());
+    });
+    doos.appendChild(knopje);
+    doos.appendChild(inhoud);
+    return doos;
+  }
+
+  // Een zin: een tekstvlak dat eruitziet als tekst. Geen rand tot je erin klikt, en hij groeit
+  // mee met wat je typt — anders schrijf je in een kokertje van twee regels.
+  function zinVeld(waarde, plaatshouder, zet) {
+    const t = document.createElement('textarea');
+    t.className = 'gt-zin';
+    t.rows = 1;
+    t.placeholder = plaatshouder;
+    t.value = waarde || '';
+    const meegroeien = () => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; };
+    t.addEventListener('input', () => { zet(t.value); meegroeien(); });
+    setTimeout(meegroeien, 0);
+    return t;
+  }
+
   function herbouwKnoopEditor() {
     const wrap = $('gt-knoop-editor');
     wrap.innerHTML = '';
     const persoon = T.GESPREKKEN[huidigePersoonId];
-    const knoop = persoon && persoon.knopen[huidigeKnoopId];
-    if (!persoon || !knoop) { wrap.appendChild(el('p', 'gt-leeg', 'Kies een knoop in de boom hiernaast.')); return; }
+    if (!persoon) { wrap.appendChild(el('p', 'gt-leeg', 'Nog geen personen — maak er bovenaan één.')); return; }
+    const { uit, los } = leesVolgorde(persoon);
+    for (const id of uit) wrap.appendChild(bouwKnoop(persoon, id));
+    if (los.length) {
+      wrap.appendChild(el('div', 'gt-label gt-fout-tekst', 'Hier komt niemand — vanaf de start is dit niet te bereiken'));
+      for (const id of los) wrap.appendChild(bouwKnoop(persoon, id));
+    }
+    wrap.appendChild(knop('gt-mini gt-nieuw-knoop', '+ knoop', nieuweKnoop));
+  }
 
+  function bouwKnoop(persoon, id) {
+    const knoop = persoon.knopen[id];
+    const doos = el('section', 'gt-knoop');
+    doos.id = 'knoop-' + id;
+    if (id === proefKnoopId) doos.classList.add('gt-proef-actief');
+
+    // De kop: hoe hij heet, en wat je ermee kunt. Klein, want het gaat om wat eronder staat.
     const kop = el('div', 'gt-knoop-kop');
     const idInv = document.createElement('input');
-    idInv.value = huidigeKnoopId;
-    idInv.title = 'Knoop-id — wijzigen past ook alle keuzes aan die hiernaar verwijzen';
+    idInv.className = 'gt-knoop-id';
+    idInv.value = id;
+    idInv.title = 'De naam van deze knoop. Hernoemen past ook alle antwoorden aan die hiernaartoe wijzen.';
     idInv.addEventListener('keydown', (e) => { if (e.key === 'Enter') idInv.blur(); });
-    idInv.addEventListener('blur', () => hernoemKnoop(idInv));
+    idInv.addEventListener('blur', () => { huidigeKnoopId = id; hernoemKnoop(idInv); });
     kop.appendChild(idInv);
+    if (id === persoon.start) kop.appendChild(el('span', 'gt-knooprij-start', 'start'));
     kop.appendChild(el('div', 'gt-vul'));
-    kop.appendChild(knop('gt-mini gt-mini-x', 'Verwijder knoop', () => verwijderKnoop(huidigeKnoopId)));
-    wrap.appendChild(kop);
+    kop.appendChild(klapChip(knoop._opmerking ? 'notitie' : '', '+ notitie', () => {
+      const t = document.createElement('textarea');
+      t.rows = 2;
+      t.placeholder = 'Waarom deze knoop is zoals hij is. Komt als commentaar boven hem in het bestand te staan.';
+      t.value = knoop._opmerking || '';
+      t.addEventListener('input', () => { knoop._opmerking = t.value || undefined; naVeldWijziging(); });
+      return t;
+    }));
+    kop.appendChild(knop('gt-mini gt-mini-x', '✕', () => { huidigeKnoopId = id; verwijderKnoop(id); }));
+    doos.appendChild(kop);
 
-    const opmLabel = el('label', null, 'Opmerking (blijft alleen bewaard boven deze knoop in het bestand)');
-    const opmInv = document.createElement('textarea'); opmInv.rows = 2; opmInv.value = knoop._opmerking || '';
-    opmInv.addEventListener('input', () => { knoop._opmerking = opmInv.value || undefined; naVeldWijziging(); });
-    opmLabel.appendChild(opmInv);
-    wrap.appendChild(opmLabel);
-
-    wrap.appendChild(el('h3', null, 'Tekst — de eerste regel waarvan de voorwaarde klopt, wint'));
-    const tekstLijst = el('div', null, null);
-    (knoop.tekst || []).forEach((regel, i) => tekstLijst.appendChild(bouwRegelEditor(knoop, i)));
-    wrap.appendChild(tekstLijst);
-    wrap.appendChild(knop('gt-mini', '+ tekstregel', () => { knoop.tekst = knoop.tekst || []; knoop.tekst.push({ zeg: '' }); herbouwKnoopEditor(); naDataStructuurWijziging(); }));
-
-    wrap.appendChild(el('h3', null, 'Keuzes — alles waarvan de voorwaarde klopt, is zichtbaar'));
-    const keuzeLijst = el('div', null, null);
-    (knoop.keuzes || []).forEach((keuze, i) => keuzeLijst.appendChild(bouwKeuzeEditor(persoon, knoop, i)));
-    wrap.appendChild(keuzeLijst);
-    wrap.appendChild(knop('gt-mini', '+ keuze', () => { knoop.keuzes = knoop.keuzes || []; knoop.keuzes.push({ zeg: '', sluit: true }); herbouwKnoopEditor(); naDataStructuurWijziging(); }));
-  }
-
-  function bouwRegelEditor(knoop, i) {
-    const regel = knoop.tekst[i];
-    const doos = el('div', 'gt-regel');
-    const boven = el('div', 'gt-regel-boven');
-    const zeg = document.createElement('textarea'); zeg.className = 'gt-zeg'; zeg.placeholder = 'wat deze persoon zegt'; zeg.value = regel.zeg || '';
-    zeg.addEventListener('input', () => { regel.zeg = zeg.value; naVeldWijziging(); });
-    boven.appendChild(zeg);
-    boven.appendChild(bouwVerplaatsKnoppen(knoop.tekst, i));
-    doos.appendChild(boven);
-    const onder = el('div', 'gt-regel-onder');
-    onder.appendChild(bouwAlsEditor(regel, (structureel) => { if (structureel) naDataStructuurWijziging(); else naVeldWijziging(); }));
-    doos.appendChild(onder);
-    return doos;
-  }
-
-  function bouwKeuzeEditor(persoon, knoop, i) {
-    const keuze = knoop.keuzes[i];
-    const doos = el('div', 'gt-regel');
-    const boven = el('div', 'gt-keuze-boven');
-    const zeg = document.createElement('input'); zeg.type = 'text'; zeg.className = 'gt-zeg'; zeg.placeholder = 'wat de speler zegt'; zeg.value = keuze.zeg || '';
-    zeg.addEventListener('input', () => { keuze.zeg = zeg.value; naVeldWijziging(); });
-    boven.appendChild(zeg);
-
-    const doel = document.createElement('select'); doel.className = 'gt-doel';
-    const optieSluit = document.createElement('option'); optieSluit.value = '__sluit__'; optieSluit.textContent = '— sluit gesprek —';
-    doel.appendChild(optieSluit);
-    Object.keys(persoon.knopen).forEach((id) => { const o = document.createElement('option'); o.value = id; o.textContent = '→ ' + id; doel.appendChild(o); });
-    doel.value = keuze.sluit || !keuze.naar ? '__sluit__' : keuze.naar;
-    doel.addEventListener('change', () => {
-      if (doel.value === '__sluit__') { keuze.sluit = true; delete keuze.naar; }
-      else { keuze.naar = doel.value; delete keuze.sluit; }
+    // Wat hij zegt. De eerste regel waarvan de voorwaarde klopt, wint — dat is hier te zien in
+    // plaats van dat het erboven staat uitgelegd: wat altijd geldt, staat zonder chip.
+    const zegt = el('div', 'gt-zegt');
+    (knoop.tekst || []).forEach((regel, i) => zegt.appendChild(bouwZin(persoon, knoop, knoop.tekst, i, false)));
+    zegt.appendChild(knop('gt-mini gt-erbij', '+ regel', () => {
+      knoop.tekst = knoop.tekst || [];
+      knoop.tekst.push({ zeg: '' });
       naDataStructuurWijziging();
-    });
-    boven.appendChild(doel);
-    boven.appendChild(bouwVerplaatsKnoppen(knoop.keuzes, i));
-    doos.appendChild(boven);
+    }));
+    doos.appendChild(zegt);
 
-    const onder = el('div', 'gt-regel-onder');
-    onder.appendChild(bouwAlsEditor(keuze, (structureel) => { if (structureel) naDataStructuurWijziging(); else naVeldWijziging(); }));
-    onder.appendChild(bouwDoeEditor(keuze, () => naVeldWijziging()));
-    doos.appendChild(onder);
+    // En wat jij kunt antwoorden.
+    const antwoorden = el('div', 'gt-antwoorden');
+    (knoop.keuzes || []).forEach((keuze, i) => antwoorden.appendChild(bouwZin(persoon, knoop, knoop.keuzes, i, true)));
+    antwoorden.appendChild(knop('gt-mini gt-erbij', '+ antwoord', () => {
+      knoop.keuzes = knoop.keuzes || [];
+      knoop.keuzes.push({ zeg: '', sluit: true });
+      naDataStructuurWijziging();
+    }));
+    doos.appendChild(antwoorden);
     return doos;
+  }
+
+  // Eén regel in het script: een zin van hem, of een antwoord van jou. Ze zien er bijna hetzelfde
+  // uit, want ze zijn allebei tekst; een antwoord heeft er een pijl voor en zegt waar hij heen gaat.
+  function bouwZin(persoon, knoop, lijst, i, isAntwoord) {
+    const item = lijst[i];
+    const rij = el('div', 'gt-scriptregel' + (isAntwoord ? ' gt-antwoord' : ''));
+    if (isAntwoord) rij.appendChild(el('span', 'gt-pijl', '→'));
+    rij.appendChild(zinVeld(item.zeg, isAntwoord ? 'wat jij zegt' : 'wat hij zegt', (v) => { item.zeg = v; naVeldWijziging(); }));
+
+    const achter = el('div', 'gt-achter');
+    if (isAntwoord) {
+      // Waar dit antwoord heen gaat, als link: zo loop je door het gesprek zoals een speler.
+      const naar = el('span', 'gt-naar-doel');
+      const bouwNaar = () => {
+        naar.innerHTML = '';
+        if (item.sluit || !item.naar) {
+          naar.appendChild(el('span', 'gt-sluit', 'sluit'));
+        } else {
+          const link = el('button', 'gt-sprong', item.naar + ' ↗');
+          link.type = 'button';
+          link.title = 'Ga naar deze knoop';
+          link.addEventListener('click', () => gaNaarKnoop(item.naar));
+          naar.appendChild(link);
+        }
+        const kies = document.createElement('select');
+        kies.className = 'gt-naar-kies';
+        kies.title = 'Waar dit antwoord heen gaat';
+        const sluitOptie = document.createElement('option');
+        sluitOptie.value = '__sluit__';
+        sluitOptie.textContent = 'sluit gesprek';
+        kies.appendChild(sluitOptie);
+        Object.keys(persoon.knopen).forEach((id) => { const o = document.createElement('option'); o.value = id; o.textContent = 'naar ' + id; kies.appendChild(o); });
+        kies.value = item.sluit || !item.naar ? '__sluit__' : item.naar;
+        kies.addEventListener('change', () => {
+          if (kies.value === '__sluit__') { item.sluit = true; delete item.naar; }
+          else { item.naar = kies.value; delete item.sluit; }
+          naDataStructuurWijziging();
+        });
+        naar.appendChild(kies);
+      };
+      bouwNaar();
+      achter.appendChild(naar);
+    }
+
+    achter.appendChild(klapChip(alsInTaal(item.als), 'altijd', () =>
+      bouwAlsEditor(item, (structureel) => { if (structureel) naDataStructuurWijziging(); else naVeldWijziging(); })));
+    if (isAntwoord) {
+      achter.appendChild(klapChip(doeInTaal(item.doe), '+ gevolg', () => bouwDoeEditor(item, () => naVeldWijziging())));
+    }
+    achter.appendChild(bouwVerplaatsKnoppen(lijst, i));
+    rij.appendChild(achter);
+    return rij;
   }
 
   function bouwVerplaatsKnoppen(lijst, i) {

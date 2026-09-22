@@ -603,7 +603,6 @@
     t.fase = 'klaar';
     t.klaar = true;
     laatLos(t, (v) => !t.erf.wezens.includes(v.e));
-    T.ui.opdracht(null);
     T.ui.plek('De toren is van jou');
   }
 
@@ -672,27 +671,57 @@
     if (t.wim && S.wereld.wezens.includes(t.wim)) t.wimSchep = true;
   }
 
-  // Wat de meester je op dit moment gevraagd heeft, voor het vak linksboven (T.ui.opdracht).
-  function opdrachtTekst(S, t) {
-    if (t.bezig) return null;
-    const inToren = S.wereld === t.toren;
-    if (S.gevecht || S.modus === 'overgang') {
-      if (!inToren) return null;
-      return 'Gezien! Klik op de vloer achter je om terug de hal in te stappen, gooi met <kbd>D</kbd> de deur dicht en eindig je beurt met <kbd>spatie</kbd>. Die beesten doen geen deuren open.';
-    }
-    if (t.fase === 'naarMeester') return 'Loop naar de meester, bij zijn moestuin. Klik op de grond om te lopen.';
+  // Vastgelopen? Dan zegt er iemand iets — geen vakje.
+  //
+  // Hier stond tot 22 sep een vak linksboven dat je vertelde welke knop je moest indrukken
+  // ("Loop naar de meester. Klik op de grond om te lopen."), naast de scène die het al deed.
+  // ontwerp/verhaal.md zegt waarom dat weg moest: "Iemand die stilstaat en uitlegt is een
+  // tutorial; een oude man die doorwerkt terwijl hij praat is een scène." Bij het weghalen bleek
+  // het vak niets te zeggen wat er niet al gezegd werd — sluipen en de deur staan in de vraag van
+  // de meester zelf, en welke toets een deur dichtgooit staat rechtsboven bij de andere toetsen.
+  //
+  // Wat overblijft is een vangnet voor wie écht niet weet waar hij het zoeken moet: na een poos
+  // stilstaan zegt Wim er iets over als hij in de buurt is, en anders de meester. De regels staan
+  // in T.TUTORIAL_TEKST, en zolang daar niets staat, zegt er ook niemand iets — beter stil dan
+  // een uitlegger.
+  const VAST = { na: 45, opnieuw: 60 }; // seconden speltijd stil in dezelfde fase
+
+  function vastTekst(S, t) {
+    if (S.gevecht || S.modus === 'overgang') return S.wereld === t.toren ? 'vastGezien' : null;
+    if (t.fase === 'naarMeester') return 'vastMeester';
     if (t.fase === 'boodschap') {
-      const kom = S.inventaris.has('kom');
-      const zak = S.inventaris.has('zak');
-      if (kom && zak) return 'Breng de meester zijn water en zijn zaaigoed: klik op hem.';
-      const nog = [!kom && 'een kom water uit de fontein in de hal', !zak && 'een zak zaaigoed uit de voorraadkamer'];
-      let regel = `Haal ${nog.filter(Boolean).join(', en ')}.`;
-      if (!inToren) regel += ' Naar binnen: klik op de deur van de toren.';
-      else if (!zak) regel += ' In de voorraadkamer zit iets. Sluip met <kbd>S</kbd>: dan ziet het je pas als je er vlak bij bent.';
-      return regel;
+      if (!S.inventaris.has('kom')) return 'vastKom';
+      if (!S.inventaris.has('zak')) return 'vastZak';
+      return 'vastBrengen';
     }
-    if (t.fase === 'slaan') return 'Sla de andere ton kapot: klik erop. Slaan met je staf kost niets.';
+    if (t.fase === 'slaan') return 'vastSlaan';
     return null;
+  }
+
+  // De klok loopt per moment: doe je iets waardoor het moment verandert, dan begint hij opnieuw.
+  function kijkOfHijVastzit(S, t) {
+    const naam = vastTekst(S, t);
+    if (!naam || t.bezig) {
+      t.vastSinds = null;
+      t.vastMoment = naam || null;
+      return;
+    }
+    if (t.vastMoment !== naam) {
+      t.vastMoment = naam;
+      t.vastSinds = S.tijd;
+      return;
+    }
+    if (t.vastSinds == null) t.vastSinds = S.tijd;
+    if (S.tijd - t.vastSinds < VAST.na) return;
+    t.vastSinds = S.tijd + VAST.opnieuw - VAST.na; // pas over een poos nog eens
+    const regels = tekst(naam);
+    if (!regels.length) return; // niets geschreven: dan ook niets gezegd
+    const wim = t.wim && S.wereld.wezens.includes(t.wim) && !t.wim.dood ? t.wim : null;
+    const wie = wim || (S.wereld === t.erf && t.meester && !t.meester.dood ? t.meester : null);
+    if (!wie) return;
+    speel(S, t, naam, async () => {
+      for (const regel of regels) await T.regie.zeg(wie, regel);
+    });
   }
 
   // Weglopen mag (ontwerp/verhaal.md, "Weglopen mag"): de meester houdt je niet vast, maar de
@@ -729,7 +758,7 @@
       if (S.wereld !== t.erf || T.afstand(punt(S.held), t.plek.tuin) > 12) laatLos(t, () => true);
       return;
     }
-    T.ui.opdracht(opdrachtTekst(S, t));
+    kijkOfHijVastzit(S, t);
     // Hij ligt bij zijn tuin, en jij komt terug.
     if (t.fase === 'dood') {
       if (!t.bezig && S.modus === 'verkennen' && S.wereld === t.erf && T.afstand(punt(S.held), t.plek.tuin) <= WEG.terug) {
@@ -746,7 +775,6 @@
     }
     if (weg >= WEG.dood && !t.bezig && S.modus === 'verkennen' && S.wereld === t.erf) {
       t.fase = 'dood';
-      T.ui.opdracht(null);
       speel(S, t, 'zonderJou', zonderJou);
       return;
     }

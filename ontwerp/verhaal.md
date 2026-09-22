@@ -33,6 +33,20 @@
   per fase zegt, welke antwoorden welke weg nemen, en waar de dingen in Tiled liggen. Alleen de
   gesprékstekst schrijf je nog op de andere bladzijde. Als dat in de praktijk schuurt, is het
   samenvoegen alsnog te doen — maar dan weten we waarom.
+- **Het gesprekkengereedschap is zo niet te gebruiken** (Marcel, 22 sep 2026: "totaal onlogisch,
+  dat moet echt beter"). Dat gaat vóór er iets bij komt. Wat er te zien is als je het openslaat:
+  honderdzeven invoervelden in één kolom voor één persoon; een boom links die knoopnamen,
+  antwoorden en "komt hierboven al voor" door elkaar zet en vijftien regels diep nest; de velden
+  van de persoon en die van een knoop in hetzelfde paneel zonder scheiding; en velden die over de
+  opslag gaan in plaats van over het gesprek ("Opmerking — blijft alleen bewaard boven deze knoop
+  in het bestand", "Portret (bestandsnaam)"). De zin die hij zegt is even zwaar opgemaakt als de
+  voorwaarde ernaast. Het is een formulier over de gegevensstructuur, en geen plek om een gesprek
+  te schrijven. Het proefgesprek rechts is het enige deel dat wél doet wat het moet — en dat staat
+  in de smalste kolom.
+
+- **De tutorial legt uit in plaats van te spelen** (Marcel, 22 sep 2026: "veel te cringe"). Wat
+  eraan gedaan is en waarom, staat hieronder bij "De opening".
+
 - **Een quest moet makkelijk te bouwen zijn** (Marcel, 21 sep 2026). Dat is de eis waar het
   gereedschap op wordt afgerekend. Wat dat vraagt:
   - **vormen om mee te beginnen.** De meeste quests zijn één van een handvol vormen: haal iets,
@@ -230,6 +244,23 @@ is het beeld dat blijft hangen.
 **En dan is die tuin van jou.** Je erft niet alleen een kapotte toren en een probleem, maar ook
 zijn tuin: onderhouden of laten verwilderen. Kies je het duistere pad en laat je alles om je toren
 verdorren, dan verdort die tuin mee. Dat hoeft niemand te zeggen.
+
+**Het vak linksboven is eruit** (Marcel, 22 sep 2026: "veel te cringe"). Daar stond wat je moest
+doen én welke knop je daarvoor indrukte — "Loop naar de meester, bij zijn moestuin. Klik op de
+grond om te lopen." — naast de scène die het al deed. Dat is precies wat hierboven staat: iemand
+die stilstaat en uitlegt. Bij het weghalen bleek het niets te zeggen wat er niet al gezegd werd:
+sluipen en de deur dichtgooien staan in de vraag van de meester zelf, en welke toets dat is staat
+rechtsboven bij de andere toetsen.
+
+Wat ervoor in de plaats komt is een mens. Sta je een poos stil op hetzelfde moment, dan zegt Wim
+er iets over als hij in de buurt is, en anders de meester (`vastMeester`, `vastKom`, `vastZak`,
+`vastBrengen`, `vastGezien`, `vastSlaan` in `T.TUTORIAL_TEKST`). Zolang daar niets staat, zegt er
+ook niemand iets — beter stil dan een uitlegger. En wat er komt te staan, hoort te klinken als
+iemand die zich ermee bemoeit, niet als een aanwijzing: "Hij staat daar. Bij zijn bonen." zegt
+hetzelfde als "Loop naar de meester", maar er is iemand die het zegt.
+
+**De regels zelf schrijft Marcel** (22 sep). Claude doet de vorm — wanneer wie praat, wat er
+verdwijnt — en de woorden blijven van hem.
 
 **Lengte:** "tot hij sterft" mag geen half uur duren. De tutorial is één middag — hij werkt, hij
 leert je wat je moet weten, er komt iets van boven de trap af dat er niet hoort te zijn, hij

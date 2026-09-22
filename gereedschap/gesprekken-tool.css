@@ -69,7 +69,7 @@ button:disabled { opacity: 0.4; cursor: default; }
 /* Hoofdindeling: boom | editor | proefgesprek + controle */
 .gt-layout {
   display: grid;
-  grid-template-columns: 250px minmax(360px, 1fr) 360px;
+  grid-template-columns: 230px minmax(520px, 1fr) 340px;
   grid-template-rows: auto auto;
   gap: 14px;
   padding: 14px 16px 60px;
@@ -80,7 +80,7 @@ button:disabled { opacity: 0.4; cursor: default; }
   .gt-boom, .gt-editor, .gt-proef, .gt-fouten { grid-column: 1 !important; grid-row: auto !important; }
 }
 .gt-boom { grid-column: 1; grid-row: 1 / span 2; padding: 12px; max-height: calc(100vh - 90px); overflow: auto; }
-.gt-editor { grid-column: 2; grid-row: 1 / span 2; padding: 14px 16px; }
+.gt-editor { grid-column: 2; grid-row: 1 / span 2; padding: 14px 18px; }
 .gt-proef { grid-column: 3; grid-row: 1; padding: 12px 14px; }
 .gt-fouten { grid-column: 3; grid-row: 2; padding: 12px 14px; max-height: 60vh; overflow: auto; }
 
@@ -235,3 +235,108 @@ button:disabled { opacity: 0.4; cursor: default; }
   border-radius: 999px;
   padding: 0 6px;
 }
+
+/* ── Het script: het gesprek zoals je het leest ──
+   Hier stond een formulier van honderdzeven velden per persoon. Nu staat het hele gesprek op één
+   bladzijde en ziet een knoop eruit als een scène. De regel die iemand zegt is tekst; alles
+   eromheen (voorwaarden, gevolgen, waar een antwoord heen gaat) is klein en klapt pas open als je
+   het aanraakt. Zie ontwerp/verhaal.md, "Het gesprekkengereedschap is zo niet te gebruiken". */
+
+/* Wie het is: één regel, geen formulier. */
+.gt-wie { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.gt-wie-naam {
+  font-family: var(--kop); font-size: 20px; color: var(--goud);
+  background: none; border: none; border-bottom: 1px solid transparent; border-radius: 0;
+  padding: 2px 0; width: auto; flex: 0 1 auto; min-width: 120px;
+}
+.gt-wie-naam:focus { border-bottom-color: var(--rand); outline: none; }
+.gt-wie-bij { font-size: 11.5px; color: var(--gedempt); }
+.gt-wie-klein { width: auto; font-size: 12px; padding: 3px 6px; }
+
+/* Eén knoop = één scène. */
+.gt-knoop {
+  border-left: 2px solid var(--rand);
+  padding: 2px 0 10px 14px;
+  margin: 0 0 22px;
+  transition: border-color 0.4s, background 0.4s;
+}
+.gt-knoop.gt-proef-actief { border-left-color: var(--groen); }
+.gt-knoop.gt-aangewezen { border-left-color: var(--goud); background: rgba(226, 182, 74, 0.06); }
+.gt-knoop-kop { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.gt-knoop-id {
+  font-family: var(--kop); font-size: 13px; color: var(--gedempt);
+  background: none; border: none; border-bottom: 1px solid transparent; border-radius: 0;
+  padding: 1px 0; width: auto; min-width: 60px;
+}
+.gt-knoop-id:focus { border-bottom-color: var(--rand); outline: none; color: var(--inkt); }
+
+/* Een regel in het script: tekst, met alles eromheen klein erachter. */
+.gt-scriptregel { display: flex; align-items: flex-start; gap: 8px; padding: 1px 0; }
+.gt-scriptregel .gt-zin {
+  flex: 1; min-width: 0;
+  background: none; border: 1px solid transparent; border-radius: 5px;
+  padding: 4px 6px; margin: 0;
+  font-size: 14.5px; line-height: 1.45; resize: none; overflow: hidden;
+}
+.gt-scriptregel .gt-zin:hover { border-color: rgba(255, 255, 255, 0.07); }
+.gt-scriptregel .gt-zin:focus { border-color: var(--rand); background: rgba(255, 255, 255, 0.04); outline: none; }
+.gt-antwoorden { margin-top: 8px; }
+.gt-antwoord .gt-zin { color: var(--goud); font-size: 13.5px; }
+.gt-pijl { color: var(--gedempt); padding-top: 6px; flex: none; }
+.gt-achter { display: flex; align-items: flex-start; gap: 4px; flex: none; padding-top: 3px; flex-wrap: wrap; justify-content: flex-end; max-width: 46%; }
+
+/* Waar een antwoord heen gaat: als link, met de keuzelijst ernaast om het te verzetten. */
+.gt-naar-doel { display: flex; align-items: center; gap: 4px; }
+.gt-sprong { background: none; border: none; color: #6fa0e6; font-size: 11.5px; padding: 2px 3px; }
+.gt-sprong:hover { background: rgba(111, 160, 230, 0.15); }
+.gt-sluit { color: var(--gedempt); font-size: 11.5px; padding: 2px 3px; }
+.gt-naar-kies { width: auto; font-size: 11px; padding: 2px 4px; opacity: 0.45; }
+.gt-naar-kies:hover, .gt-naar-kies:focus { opacity: 1; }
+
+/* Een chip die openklapt: dicht in gewone taal, open het formulier. */
+.gt-chip-doos { position: relative; }
+.gt-chipje {
+  background: rgba(255, 255, 255, 0.05); border: 1px solid var(--rand); border-radius: 11px;
+  padding: 1px 9px; font-size: 11px; color: var(--gedempt); white-space: nowrap;
+  max-width: 30ch; overflow: hidden; text-overflow: ellipsis;
+}
+.gt-chipje:hover { color: var(--inkt); }
+.gt-chipje-leeg { border-style: dashed; opacity: 0.45; }
+.gt-chipje-leeg:hover { opacity: 1; }
+.gt-chip-open {
+  position: absolute; right: 0; top: 22px; z-index: 5; min-width: 260px;
+  background: rgba(20, 16, 12, 0.98); border: 1px solid var(--rand); border-radius: 8px;
+  padding: 8px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.gt-chip-open textarea { min-height: 48px; }
+
+.gt-erbij { opacity: 0.4; margin-left: 6px; }
+.gt-erbij:hover { opacity: 1; }
+.gt-nieuw-knoop { margin-top: 4px; }
+
+/* Links: de knopen als lijst in plaats van een uitgerolde boom. */
+.gt-knooprij {
+  display: block; width: 100%; text-align: left; background: none;
+  border: 1px solid transparent; border-radius: 6px; padding: 5px 7px; margin-bottom: 3px;
+}
+.gt-knooprij:hover { background: rgba(255, 255, 255, 0.06); }
+.gt-knooprij.gt-actief { border-color: var(--goud); }
+.gt-knooprij.gt-proef-actief { box-shadow: inset 2px 0 0 var(--groen); }
+.gt-knooprij-kop { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.gt-knooprij-id { font-family: var(--kop); font-size: 13px; color: var(--inkt); }
+.gt-knooprij-start { font-size: 10px; color: var(--goud); border: 1px solid var(--goud); border-radius: 8px; padding: 0 5px; }
+.gt-knooprij-van { font-size: 10.5px; color: var(--gedempt); }
+.gt-knooprij-zin { font-size: 11.5px; color: var(--gedempt); margin-top: 2px; line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Wat je alleen nodig hebt als je ergens mee bezig bent, staat er pas als je erbij bent: de
+   knoppen om een regel te verplaatsen of weg te halen, en de keuzelijst naast "naar voorraad ↗".
+   Ze houden hun plek (anders springt het script onder je handen weg), maar ze zijn er niet. */
+.gt-achter .gt-regelknoppen { flex-direction: row; gap: 2px; }
+.gt-achter .gt-regelknoppen button, .gt-naar-kies { visibility: hidden; }
+.gt-scriptregel:hover .gt-regelknoppen button,
+.gt-scriptregel:focus-within .gt-regelknoppen button,
+.gt-scriptregel:hover .gt-naar-kies,
+.gt-scriptregel:focus-within .gt-naar-kies { visibility: visible; }
+.gt-achter .gt-regelknoppen button { padding: 0 5px; font-size: 11px; line-height: 1.6; opacity: 0.55; }
+.gt-achter .gt-regelknoppen button:hover { opacity: 1; }
