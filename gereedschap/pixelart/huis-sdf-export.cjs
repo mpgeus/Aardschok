@@ -7,6 +7,12 @@
 //                                                          uit/proefhuis/een.png en een-x2.png
 //   node gereedschap/pixelart/huis-sdf-export.cjs           uit/proefhuis/vergelijk.png
 //   node gereedschap/pixelart/huis-sdf-export.cjs knoppen   ook uit/proefhuis/knoppen.png
+//   node gereedschap/pixelart/huis-sdf-export.cjs uitbouwen uit/proefhuis/uitbouwen.png
+//
+// uitbouwen.png (ronde 3): de uitbouwen elk op een huis, de losse tuinstukken (tuin-sdf.cjs) naast
+// elkaar met een tuintje daaruit, en zes huizen met willekeurige zaden, los van elkaar. De platen
+// van ronde 1 en 2 zetten de uitbouwen uit (uit: false), zodat ze blijven zoals Marcel ze zag.
+// Met 'een' vraagt uit=aanbouw,erker,kapellen:2,luiken:den ze op, en uit=false zet ze uit.
 //
 // materiaal.png (ronde 2): de wanden naast elkaar, de daken op een L, twee torens met een plat dak
 // en de lap in het riet van dichtbij, en een dorp van zes willekeurige zaden in één beeld. Met
@@ -30,6 +36,7 @@ const F = require('./figuren.cjs');
 const D = require('./dorp.cjs');
 const T = require('./toren.cjs');
 const HS = require('./huis-sdf.cjs');
+const TU = require('./tuin-sdf.cjs');
 const { VLAG, RAMP, LICHT } = K;
 
 const UIT = path.join(__dirname, 'uit', 'proefhuis');
@@ -176,6 +183,8 @@ function kaderVan(H) {
   }
   const S = H.schoorsteen;
   if (S) zie(...S.V.wereld(S.a, S.q), S.V.nokZ(S.a) + H.dik + S.hoog + 12);
+  // en wat er uitsteekt: een aanbouw, een erker, een galerij, een trap, een gevelschoorsteen
+  for (const p of H.uitPunten || []) zie(...p);
   // en de tovenaar voor de deur
   const [tx, ty] = HS.voorDeDeur(H, 1.25);
   const X = tx * K.TEGEL;
@@ -224,7 +233,7 @@ const VORMEN = [
   { naam: 'T 11x10', vorm: 'T', lagen: 1, zaad: 7, b: 11, d: 6, b2: 5, p2: 4 },
   { naam: 'T 11x10 gelijk', vorm: 'T', lagen: 1.5, zaad: 8, b: 11, d: 6, b2: 6, p2: 4, nok: 'y' },
   { naam: 'T 12x10', vorm: 'T', lagen: 2, zaad: 9, b: 12, d: 6, b2: 5, p2: 4 },
-].map((s) => ({ dak: 'riet', wand: 'vakwerk', ...s })); // ronde 1: alles riet en vakwerk
+].map((s) => ({ dak: 'riet', wand: 'vakwerk', uit: false, ...s })); // ronde 1: alles riet en vakwerk, zonder uitbouwen
 const LAGEN = { 1: '1 laag', 1.5: '1,5 laag', 2: '2 lagen' };
 const opschrift = (s) => `${s.naam}  ${LAGEN[s.lagen]}  nok ${s.nok || 'x'}  zaad ${s.zaad}`;
 
@@ -259,7 +268,7 @@ function paneelDorp(zaden, o = {}) {
   const TG = K.TEGEL;
   const SQ = Math.SQRT1_2;
   const huizen = zaden.map((z) => {
-    const spec = HS.kiesHuis(z);
+    const spec = { ...HS.kiesHuis(z), ...(o.uit === false ? { uit: false } : {}) };
     const H = HS.maten(z, spec);
     return { spec, H, kd: kaderVan(H), vo: voetAfdruk(H) };
   });
@@ -321,10 +330,160 @@ function D_grond(B, o = {}) {
   return kaart;
 }
 
-// Een draad die panelen rendert: een huis ({ spec, o }) of een dorp ({ dorp: zaden, o }).
+// ---------------------------------------------------------------- ronde 3: tuinstukken en een losse rij
+
+// Eén tuinstuk op een stukje gras: het midden van zijn tegel op (b/2, h - onder).
+function paneelTuin(naam, zaad, o = {}) {
+  const t0 = Date.now();
+  const b = o.b ?? 150;
+  const h = o.h ?? 136;
+  const B = new K.Beeld(b, h, Math.round(b / 2), h - (o.onder ?? 34));
+  const kaart = grond(B);
+  const W = TU.tuinstuk(naam, zaad);
+  const R = T.tekenWereld(B, W);
+  const ms = Date.now() - t0;
+  D.grasPollen(B, kaart, { dicht: 0.5 });
+  grondZon(B, R || { f: () => 1e9 }, { kracht: 2.6 });
+  K.belicht(B, { omgeving: () => 0.2 });
+  D.avondlicht(B, { warm: WARM });
+  K.verwarm(B, 1.8);
+  K.omlijn(B);
+  return { p: K.Plaat.van(K.kwantiseer(B)), ms, msTotaal: Date.now() - t0 };
+}
+
+// Een tuintje uit de losse stukken, zoals Marcel het in Tiled zou neerzetten: vijf bij vier tegels
+// met een hek eromheen, een hekje aan de voorkant, groente en kruiden erin, en een ton en een
+// bankje ernaast. Elk stuk rendert los (tekenWereld per stuk); de hekken sluiten aan omdat hun
+// regels op de rand van elke tegel even hoog liggen.
+const TUINTJE = [
+  ['hek-hoek-boven', 0, 0], ['hek-x', 1, 0], ['hek-x', 2, 0], ['hek-x', 3, 0], ['hek-hoek-rechts', 4, 0],
+  ['hek-y', 0, 1], ['hek-y', 0, 2], ['hek-hoek-links', 0, 3],
+  ['hek-y', 4, 1], ['hek-y', 4, 2], ['hek-hoek-onder', 4, 3],
+  ['hek-x', 1, 3], ['hekje-x', 2, 3], ['hek-x', 3, 3],
+  ['kool', 1, 1], ['prei', 2, 1], ['bonen', 3, 1], ['kruidenbed', 1, 2], ['kool', 2, 2], ['prei', 3, 2],
+  ['regenton', 5, 0.6], ['bankje-y', 5.3, 2.2],
+];
+function paneelTuintje(o = {}) {
+  const t0 = Date.now();
+  const TG = K.TEGEL;
+  const b = o.b ?? 380;
+  const h = o.h ?? 270;
+  // het midden van de tuin (tegel 2, 1.5) in het midden van het paneel
+  const B = new K.Beeld(b, h, Math.round(b / 2 - (2 - 1.5) * 32), Math.round(h / 2 + 40 - (2 + 1.5) * 16));
+  const kaart = grond(B);
+  const Rs = [];
+  TUINTJE.forEach(([naam, tx, ty], i) => {
+    const W = TU.tuinstuk(naam, 70 + i);
+    const R = T.tekenWereld(B, W, { plek: [tx * TG, ty * TG] });
+    if (R) Rs.push(R);
+  });
+  const ms = Date.now() - t0;
+  D.zetModel(B, F.tovenaar(84), 0.9, 4.45, 'Z'); // links voor het hekje, niet ervoor
+  D.grasPollen(B, kaart, { dicht: 0.5 });
+  grondZon(B, { f: (x, y, z) => Math.min(...Rs.map((R) => R.f(x, y, z))) }, { kracht: 2.6 });
+  K.belicht(B, { omgeving: () => 0.2 });
+  D.avondlicht(B, { warm: WARM });
+  K.verwarm(B, 1.8);
+  K.omlijn(B);
+  return { p: K.Plaat.van(K.kwantiseer(B)), ms, msTotaal: Date.now() - t0 };
+}
+
+// Zes huizen met willekeurige zaden in één scène, in twee rijen van drie, en zo ver uit elkaar
+// dat hun kaders op het scherm elkaar nergens raken: op materiaal.png stonden ze zo dicht dat de
+// daken en muren van de een voor die van de ander vielen, tot iets wat nergens op aansloot. De
+// tovenaar staat tussen de voorste twee.
+function paneelZes(zaden, o = {}) {
+  const t0 = Date.now();
+  const TG = K.TEGEL;
+  const SQ = Math.SQRT1_2;
+  const gat = o.gat ?? 70;
+  const huizen = zaden.map((z) => {
+    const spec = HS.kiesHuis(z);
+    const H = HS.maten(z, spec);
+    return { spec, H, kd: kaderVan(H) };
+  });
+  // per rij van links naar rechts, de voeten op één lijn; de voorste rij onder de achterste
+  const rijen = [huizen.slice(0, 3), huizen.slice(3)];
+  let y = 0;
+  for (const rij of rijen) {
+    let x = 0;
+    const boven = Math.max(...rij.map((hu) => -hu.kd.y0));
+    for (const hu of rij) {
+      hu.sx = x - hu.kd.x0;
+      hu.sy = y + boven;
+      x += hu.kd.b + gat;
+    }
+    const breed = x - gat;
+    for (const hu of rij) hu.sx -= breed / 2;
+    y = Math.max(...rij.map((hu) => hu.sy + hu.kd.y1)) + gat;
+  }
+  // het midden van de scène op de oorsprong, anders loopt hij van de grond af
+  const mx = (Math.min(...huizen.map((h) => h.sx + h.kd.x0)) + Math.max(...huizen.map((h) => h.sx + h.kd.x1))) / 2;
+  const my = (Math.min(...huizen.map((h) => h.sy + h.kd.y0)) + Math.max(...huizen.map((h) => h.sy + h.kd.y1))) / 2;
+  for (const hu of huizen) {
+    hu.sx -= mx;
+    hu.sy -= my;
+  }
+  // van een plek op het scherm naar de grond in de wereld
+  const naarWereld = (sx, sy) => [(sx / SQ + sy / (SQ / 2)) / 2, (sy / (SQ / 2) - sx / SQ) / 2];
+  for (const hu of huizen) [hu.X, hu.Y] = naarWereld(hu.sx, hu.sy);
+  const x0 = Math.min(...huizen.map((h) => h.sx + h.kd.x0));
+  const x1 = Math.max(...huizen.map((h) => h.sx + h.kd.x1));
+  const y0 = Math.min(...huizen.map((h) => h.sy + h.kd.y0));
+  const y1 = Math.max(...huizen.map((h) => h.sy + h.kd.y1));
+  const b = Math.ceil(x1 - x0 + 60);
+  const h = Math.ceil(y1 - y0 + 60);
+  const B = new K.Beeld(b, h, Math.round(30 - x0), Math.round(30 - y0));
+  const kaart = grond(B);
+  const Rs = [];
+  for (const hu of huizen) {
+    const W = HS.huis(hu.spec.zaad, hu.spec);
+    Rs.push(T.tekenWereld(B, W, { plek: [hu.X, hu.Y] }));
+    for (const l of W.lichten) B.lichten.push({ ...l, pos: [l.pos[0] + hu.X, l.pos[1] + hu.Y, l.pos[2]] });
+  }
+  const ms = Date.now() - t0;
+  // de tovenaar in het gat tussen de eerste twee huizen van de voorste rij, op hun voetlijn
+  const [a, c] = rijen[1];
+  const [tx, ty] = naarWereld((a.sx + a.kd.x1 + c.sx + c.kd.x0) / 2, Math.max(a.sy, c.sy) - 30);
+  D.zetModel(B, F.tovenaar(84), tx / TG, ty / TG, 'Z');
+  D.grasPollen(B, kaart, { dicht: 0.8 });
+  // de schaduw op de grond: ver van een huis is de afstand tot zijn grensbol genoeg, dan hoeft
+  // een straal naar de zon niet elk huis helemaal na te vragen (dat scheelt minuten)
+  const bollen = Rs.map((R) => {
+    const gs = R.groepen;
+    const c = [0, 1].map((k) => gs.reduce((s, g) => s + (k ? g.cy : g.cx), 0) / gs.length);
+    const cz = (Math.min(...gs.map((g) => g.z0)) + Math.max(...gs.map((g) => g.z1))) / 2;
+    const r = Math.max(...gs.map((g) => Math.hypot(g.cx - c[0], g.cy - c[1]) + g.cr + Math.max(Math.abs(g.z0 - cz), Math.abs(g.z1 - cz))));
+    return { R, x: c[0] + R.plek[0], y: c[1] + R.plek[1], z: cz, r };
+  });
+  const f = (x, y, z) => {
+    let d = Infinity;
+    for (const b of bollen) {
+      const db = Math.hypot(x - b.x, y - b.y, z - b.z) - b.r;
+      d = Math.min(d, db > 4 ? db : b.R.f(x, y, z));
+    }
+    return d;
+  };
+  grondZon(B, { f }, { kracht: 2.6 });
+  K.belicht(B, { omgeving: () => 0.2 });
+  D.avondlicht(B, { warm: WARM });
+  K.verwarm(B, 1.8);
+  K.omlijn(B);
+  const extra = huizen.map((hu) => ({
+    zaad: hu.spec.zaad,
+    x: hu.sx + (hu.kd.x0 + hu.kd.x1) / 2 + B.OX,
+    y: hu.sy + hu.kd.y0 + B.OY,
+    tekst: `${hu.spec.vorm} ${hu.spec.lagen} ${hu.H.dak} ${hu.H.wandLagen.map((l) => l.join('/')).join(',')}`,
+    uit: Object.entries(hu.H.uitbouw).filter(([, v]) => v).map(([k, v]) => (v === true ? k : `${k} ${v}`)).join(', ') || 'geen uitbouw',
+  }));
+  return { p: K.Plaat.van(K.kwantiseer(B)), ms, msTotaal: Date.now() - t0, extra };
+}
+
+// Een draad die panelen rendert: een huis ({ spec, o }), een dorp ({ dorp: zaden, o }), een
+// tuinstuk ({ tuin: naam, zaad }), het tuintje ({ tuintje: true }) of de zes ({ zes: zaden }).
 if (!isMainThread && workerData === 'huis') {
-  parentPort.on('message', ({ i, spec, o, dorp }) => {
-    const r = dorp ? paneelDorp(dorp, o) : paneelHuis(spec, o);
+  parentPort.on('message', ({ i, spec, o, dorp, tuin, zaad, tuintje, zes }) => {
+    const r = zes ? paneelZes(zes, o) : tuintje ? paneelTuintje(o) : tuin ? paneelTuin(tuin, zaad, o) : dorp ? paneelDorp(dorp, o) : paneelHuis(spec, o);
     parentPort.postMessage({ i, b: r.p.b, h: r.p.h, px: r.p.px, ms: r.ms, msTotaal: r.msTotaal, extra: r.extra });
   });
 }
@@ -395,8 +554,8 @@ const WANDPLAAT = [
   ['planken bruin', { wand: 'planken', hout: 'hout' }],
   ['blokhut', { wand: 'blokhut' }],
   ['veldsteen', { wand: 'veldsteen' }],
-].map(([naam, w], i) => ({ naam, spec: { zaad: 31 + i, vorm: 'rechthoek', b: 7, d: 5, lagen: 1, dak: 'riet', ...w } }));
-const DAKPLAAT = ['riet', 'spanen', 'leien', 'pannen'].map((dak, i) => ({ naam: dak, spec: { zaad: 41 + i, vorm: 'L', b: 8, d: 5, b2: 4, d2: 7, lagen: 1, dak, wand: 'vakwerk' } }));
+].map(([naam, w], i) => ({ naam, spec: { zaad: 31 + i, vorm: 'rechthoek', b: 7, d: 5, lagen: 1, dak: 'riet', uit: false, ...w } }));
+const DAKPLAAT = ['riet', 'spanen', 'leien', 'pannen'].map((dak, i) => ({ naam: dak, spec: { zaad: 41 + i, vorm: 'L', b: 8, d: 5, b2: 4, d2: 7, lagen: 1, dak, wand: 'vakwerk', uit: false } }));
 const TORENPLAAT = [
   { naam: 'wachttoren, kantelen', spec: { zaad: 51, dak: 'plat', lagen: 3, b: 4, d: 4 } },
   { naam: 'borstwering', spec: { zaad: 52, dak: 'plat', lagen: 2, b: 5, d: 4, kantelen: false } },
@@ -427,7 +586,7 @@ async function materiaal() {
     ...WANDPLAAT.map((t) => ({ ...t, o: { b: wb, h: wh, onder: 36 } })),
     ...DAKPLAAT.map((t) => ({ ...t, o: { b: db, h: dh, onder: 36 } })),
     ...TORENPLAAT.map((t) => ({ ...t, o: { b: tb, h: th, onder: 36 } })),
-    { naam: 'dorp, zaden ' + DORPZADEN.join(' '), dorp: DORPZADEN, o: {} },
+    { naam: 'dorp, zaden ' + DORPZADEN.join(' '), dorp: DORPZADEN, o: { uit: false } },
   ];
   // het dorp duurt het langst (zes huizen achter elkaar): dat eerst
   const volgorde = [taken.length - 1, ...taken.slice(0, -1).map((_, i) => i)];
@@ -494,6 +653,100 @@ async function materiaal() {
   for (const e of dorp.extra) log(`  zaad ${e.zaad}: ${e.vorm} ${e.lagen} laag, ${e.dak}, ${e.wand}, ${e.hout}`);
 }
 
+// ---------------------------------------------------------------- uitbouwen.png (ronde 3)
+
+// (a) elke uitbouw op een huis; (b) de tuinstukken naast elkaar, en een tuintje daaruit; (c) zes
+// huizen met willekeurige zaden, los van elkaar.
+const UITPLAAT = [
+  { naam: 'dakkapellen in het riet', spec: { zaad: 18, vorm: 'rechthoek', b: 10, d: 6, lagen: 1.5, dak: 'riet', wand: 'vakwerk', uit: { kapellen: 2 } } },
+  { naam: 'dakkapellen op pannen', spec: { zaad: 30, vorm: 'rechthoek', b: 11, d: 6, lagen: 1.5, dak: 'pannen', wand: 'vakwerk', uit: { kapellen: 2 } } },
+  { naam: 'dakkapel op leien, luiken', spec: { zaad: 21, vorm: 'rechthoek', b: 9, d: 6, lagen: 1.5, dak: 'leien', wand: 'veldsteen', uit: { kapellen: 1, luiken: 'pet' } } },
+  { naam: 'aanbouw met eenzijdig dak', spec: { zaad: 9, vorm: 'rechthoek', b: 9, d: 6, lagen: 1, dak: 'riet', wand: 'vakwerk', uit: { aanbouw: true } } },
+  { naam: 'erker, luiken, bloembakken', spec: { zaad: 3, vorm: 'rechthoek', b: 9, d: 7, lagen: 2, dak: 'riet', wand: 'vakwerk', uit: { erker: true, luiken: 'den', bakken: 2 } } },
+  { naam: 'galerij op palen, dakkapel op spanen', spec: { zaad: 12, vorm: 'rechthoek', b: 9, d: 7, lagen: 2, dak: 'spanen', wand: 'planken', uit: { balkon: true, kapellen: 1 } } },
+  { naam: 'buitentrap naar de opkamer', spec: { zaad: 33, vorm: 'rechthoek', b: 8, d: 6, lagen: 1, dak: 'riet', wand: 'veldsteen', uit: { trap: true, luiken: 'rood', bakken: 1 } } },
+  { naam: 'schoorsteen op de gevel', spec: { zaad: 15, vorm: 'rechthoek', b: 8, d: 6, lagen: 1, dak: 'riet', wand: 'blokhut', uit: { gevelschoorsteen: true } } },
+  { naam: 'L met aanbouw, luiken', spec: { zaad: 44, vorm: 'L', b: 12, d: 6, b2: 5, d2: 10, lagen: 1.5, dak: 'riet', wand: 'vlecht', uit: { aanbouw: true, luiken: 'rood', bakken: 1 } } },
+];
+const TUINZAAD = 5;
+const ZES = [272, 273, 274, 275, 276, 277];
+
+async function uitbouwen() {
+  const t0 = Date.now();
+  const S = STROOK;
+  // de huizen in rijen van drie, elke kolom even breed, elke rij zo hoog als zijn hoogste huis
+  const kaders = UITPLAAT.map((t) => kaderVan(HS.maten(t.spec.zaad, t.spec)));
+  const per = 3;
+  const kolB = Math.ceil(Math.max(...kaders.map((k) => k.b)) + 12);
+  const rijH = [];
+  for (let i = 0; i < UITPLAAT.length; i += per) rijH.push(Math.ceil(Math.max(...kaders.slice(i, i + per).map((k) => k.h)) + 60));
+  const TB = 140;
+  const TH = 136;
+  const taken = [
+    { naam: 'zes willekeurige zaden', zes: ZES, o: {} },
+    ...UITPLAAT.map((t, i) => ({ naam: t.naam, spec: t.spec, o: { b: kolB, h: rijH[Math.floor(i / per)], onder: 40 } })),
+    { naam: 'tuintje', tuintje: true, o: {} },
+    ...TU.STUKKEN.map((n, i) => ({ naam: n, tuin: n, zaad: TUINZAAD + i, o: { b: TB, h: TH } })),
+  ];
+  const draden = Math.max(2, Math.min(14, os.cpus().length - 2));
+  const r = await renderAlle(taken, draden);
+  const zes = r[0];
+  const huizen = r.slice(1, 1 + UITPLAAT.length);
+  const tuintje = r[1 + UITPLAAT.length];
+  const stukken = r.slice(2 + UITPLAAT.length);
+
+  // de maat van de plaat
+  const tuinKol = 11;
+  const tuinB = tuinKol * TB;
+  const tuinRijen = Math.ceil(stukken.length / tuinKol);
+  // het tuintje twee keer vergroot, om te zien of de stukken op elkaar aansluiten
+  const tuintjeGroot = vergroot(tuintje.p, 2);
+  const blokB = tuinB + 16 + tuintjeGroot.b;
+  const blokH = Math.max(tuinRijen * (S + TH), S + tuintjeGroot.h);
+  const B = Math.max(per * kolB, blokB, zes.p.b);
+  const Hh = S + rijH.reduce((s, h) => s + S + h, 0) + S + S + blokH + 2 * S + S + 3 * 14 + zes.p.h;
+  const plaat = new K.Plaat(B, Hh);
+  let y = 0;
+  schrijf(plaat, 'a  uitbouwen, elk op een huis', 8, y + 6);
+  y += S;
+  huizen.forEach((q, i) => {
+    const rij = Math.floor(i / per);
+    const yy = y + rijH.slice(0, rij).reduce((s, h) => s + S + h, 0);
+    const x = (i % per) * kolB;
+    plaat.plak(q.p, x, yy + S);
+    schrijf(plaat, UITPLAAT[i].naam, x + 8, yy + 6);
+  });
+  y += rijH.reduce((s, h) => s + S + h, 0) + S;
+  schrijf(plaat, 'b  tuinstukken, elk op een tegel, en een tuintje daaruit', 8, y + 6);
+  y += S;
+  stukken.forEach((q, i) => {
+    const x = (i % tuinKol) * TB;
+    const yy = y + Math.floor(i / tuinKol) * (S + TH);
+    plaat.plak(q.p, x, yy + S);
+    schrijf(plaat, TU.STUKKEN[i], x + 6, yy + 10, 1);
+  });
+  plaat.plak(tuintjeGroot, tuinB + 16, y + S);
+  schrijf(plaat, 'het tuintje, 5 bij 4 tegels, x2', tuinB + 24, y + 6);
+  y += blokH + 2 * S;
+  schrijf(plaat, 'c  zes willekeurige zaden, los van elkaar', 8, y + 6);
+  y += S;
+  // per huis: zaad, vorm en materiaal, en wat het zaad aan uitbouwen koos
+  zes.extra.forEach((e, i) => {
+    const regel = y + (i % 3) * 14;
+    const x = 8 + (i < 3 ? 0 : Math.round(B / 2));
+    schrijf(plaat, `zaad ${e.zaad}: ${e.tekst}  -  ${e.uit}`, x, regel, 1);
+  });
+  y += 3 * 14;
+  plaat.plak(zes.p, Math.round((B - zes.p.b) / 2), y);
+  fs.writeFileSync(path.join(UIT, 'uitbouwen.png'), K.png(plaat, 1, '#0e0a14'));
+  log(`uitbouwen.png  ${plaat.b}×${plaat.h}, ${draden} draden, ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  const ms = huizen.map((q) => q.ms);
+  log(`een huis met uitbouwen: ${(Math.min(...ms) / 1000).toFixed(1)} tot ${(Math.max(...ms) / 1000).toFixed(1)} s, gemiddeld ${(ms.reduce((a, b) => a + b, 0) / ms.length / 1000).toFixed(1)} s`);
+  const mt = stukken.map((q) => q.ms);
+  log(`een tuinstuk: ${(Math.min(...mt) / 1000).toFixed(1)} tot ${(Math.max(...mt) / 1000).toFixed(1)} s; het tuintje ${(tuintje.ms / 1000).toFixed(1)} s; de zes ${(zes.ms / 1000).toFixed(1)} s`);
+  for (const e of zes.extra) log(`  zaad ${e.zaad}: ${e.tekst}, ${e.uit}`);
+}
+
 // ---------------------------------------------------------------- letters
 
 // Een klein lettertype van 5 × 7, alleen de letters die de opschriften nodig hebben.
@@ -536,6 +789,10 @@ const LETTERS = {
   ',': ['.....', '.....', '.....', '.....', '.....', '..#..', '.#...'],
   '.': ['.....', '.....', '.....', '.....', '.....', '.....', '..#..'],
   ' ': ['.....', '.....', '.....', '.....', '.....', '.....', '.....'],
+  '-': ['.....', '.....', '.....', '.###.', '.....', '.....', '.....'],
+  '+': ['.....', '..#..', '..#..', '#####', '..#..', '..#..', '.....'],
+  '/': ['....#', '....#', '...#.', '..#..', '.#...', '#....', '#....'],
+  ':': ['.....', '..#..', '.....', '.....', '.....', '..#..', '.....'],
 };
 function schrijf(p, tekst, x, y, s = 2) {
   for (const ch of tekst.toUpperCase()) {
@@ -621,17 +878,22 @@ if (isMainThread && require.main === module) {
     vormen().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'materiaal') {
     materiaal().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
+  } else if (wat === 'uitbouwen') {
+    uitbouwen().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'een') {
     // één huis naar keuze: een <vorm> <lagen> <zaad> [nok] [sleutel=waarde ...]; schrijft het
     // paneel en het huis twee keer vergroot. snede=x,y,b,h kiest een uitsnede voor het vergrote.
     const [vorm = 'rechthoek', lagen = '1', zaad = '1', nok = 'x', ...rest] = process.argv.slice(3);
     const spec = { vorm, lagen: Number(lagen), zaad: Number(zaad), nok };
     let snede = null;
+    // uit=false zet de uitbouwen uit; uit=aanbouw,erker,kapellen:2,luiken:den vraagt ze op
+    const waarde = (v) => (v === 'false' ? false : v === 'true' ? true : Number.isNaN(Number(v)) ? v : Number(v));
     for (const kv of rest) {
       const [k, v] = kv.split('=');
       if (k === 'snede') snede = v.split(',').map(Number);
       else if (k === 'wand' && v.includes(',')) spec.wand = v.split(',');
-      else spec[k] = k === 'voor' || k === 'kantelen' ? v !== 'false' : Number.isNaN(Number(v)) ? v : Number(v);
+      else if (k === 'uit') spec.uit = v === 'false' ? false : Object.fromEntries(v.split(',').map((n) => (n.includes(':') ? [n.split(':')[0], waarde(n.split(':')[1])] : [n, true])));
+      else spec[k] = k === 'voor' || k === 'kantelen' ? v !== 'false' : waarde(v);
     }
     const r = paneelHuis(spec);
     fs.writeFileSync(path.join(UIT, 'een.png'), K.png(r.p, 1, '#0e0a14'));
@@ -652,7 +914,7 @@ if (isMainThread && require.main === module) {
     vergelijk();
     if (wat === 'knoppen') knoppen();
   }
-  if (wat !== 'vormen' && wat !== 'materiaal') log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  if (wat !== 'vormen' && wat !== 'materiaal' && wat !== 'uitbouwen') log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 }
 
-module.exports = { paneelNu, paneelProef, paneelHuis, kaderVan, grondZon };
+module.exports = { paneelNu, paneelProef, paneelHuis, paneelTuin, paneelTuintje, paneelZes, kaderVan, grondZon };
