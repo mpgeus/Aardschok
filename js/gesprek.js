@@ -41,12 +41,19 @@
   };
 
   // Eén voorwaarde (als); zie de uitleg boven in gesprekken.js voor wat erin mag staan.
+  // Eén naam, of een lijstje — net als zetVlag in een gevolg. Een lijstje betekent "allemaal":
+  // { vlag: ['meesterDood', 'sleutelGebruikt'] } geldt pas als ze allebei staan. Dat is er op
+  // 22 sep bij gekomen omdat een situatie in de gespreksschrijver een toestand is en er dus twee
+  // vlaggen tegelijk in kunnen staan; zonder dit kon je in zo'n situatie geen antwoord toevoegen
+  // dat er ook echt stond.
+  const elk = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
+
   T.voorwaardeGeldt = function (S, wieId, als) {
     if (!als) return true;
-    if (als.vlag && !T.heeftVlag(S, als.vlag)) return false;
-    if (als.nietVlag && T.heeftVlag(S, als.nietVlag)) return false;
-    if (als.heeft && !(S.inventaris && S.inventaris.has(als.heeft))) return false;
-    if (als.nietHeeft && S.inventaris && S.inventaris.has(als.nietHeeft)) return false;
+    if (!elk(als.vlag).every((n) => T.heeftVlag(S, n))) return false;
+    if (elk(als.nietVlag).some((n) => T.heeftVlag(S, n))) return false;
+    if (!elk(als.heeft).every((n) => S.inventaris && S.inventaris.has(n))) return false;
+    if (elk(als.nietHeeft).some((n) => S.inventaris && S.inventaris.has(n))) return false;
     if (als.ouderDan != null && T.jaren(S.held.leeftijd) <= als.ouderDan) return false;
     if (als.jongerDan != null && T.jaren(S.held.leeftijd) >= als.jongerDan) return false;
     if (als.ouderGewordenSinds != null) {

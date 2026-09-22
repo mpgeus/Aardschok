@@ -21,9 +21,8 @@
 //   situaties: [{ naam: 'Na zijn dood', als: { vlag: 'meesterDood' } }]
 //
 // Wat hier ontkent (nietVlag, nietHeeft, nietQuest) hoeft niets te doen: de toestand begint leeg.
-// 'vlag' en 'heeft' mogen hier wél een lijstje zijn — een toestand kan twee vlaggen hebben, een
-// voorwaarde vraagt er één. De fasen van een quest staan er vanzelf bij bij wie hem geeft, en
-// staan daarom niet in deze lijst.
+// De fasen van een quest staan er vanzelf bij bij wie hem geeft, en staan daarom niet in deze
+// lijst.
 //
 // Een knoop heeft:
 //   tekst  — een lijstje regels. De eerste regel waarvan de voorwaarde (als) klopt, wint. Een
@@ -33,10 +32,10 @@
 //            'sluit: true' (het gesprek stopt); 'doe' mag erbij, voor een gevolg.
 //
 // Een voorwaarde (als) mag hebben:
-//   vlag: 'naam'              — waar als die vlag gezet is
-//   nietVlag: 'naam'          — waar als die vlag NIET gezet is
-//   heeft: 'ding'              — waar als je dat in je inventaris hebt
-//   nietHeeft: 'ding'          — waar als je dat niet hebt
+//   vlag: 'naam'              — waar als die vlag gezet is (of een lijstje: dan allemaal)
+//   nietVlag: 'naam'          — waar als die vlag NIET gezet is (of een lijstje: dan geen ervan)
+//   heeft: 'ding'              — waar als je dat in je inventaris hebt (of een lijstje: allemaal)
+//   nietHeeft: 'ding'          — waar als je dat niet hebt (of een lijstje: geen ervan)
 //   ouderDan: 88               — waar als je ouder bent dan dat, in hele jaren
 //   jongerDan: 88              — waar als je jonger bent dan dat, in hele jaren
 //   ouderGewordenSinds: 12     — waar als je zoveel maanden of meer ouder bent geworden sinds je

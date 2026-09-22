@@ -75,3 +75,14 @@ test('wie een quest geeft, krijgt zijn fasen als situatie zonder ze te verzinnen
     assert.ok(namen.includes(fase), `fase "${fase}" hoort in de situatiebalk van de bakker te staan`);
   }
 });
+
+test('een voorwaarde mag een lijstje vlaggen zijn, net als een gevolg', () => {
+  const S = staatVanSituatie({ vlag: ['meesterDood', 'sleutelGebruikt'] }, 'wim');
+  assert.ok(T.voorwaardeGeldt(S, 'wim', { vlag: ['meesterDood', 'sleutelGebruikt'] }), 'allebei gezet');
+  assert.equal(T.voorwaardeGeldt(S, 'wim', { vlag: ['meesterDood', 'fonteinLeeg'] }), false, 'één ervan mist');
+  assert.equal(T.voorwaardeGeldt(S, 'wim', { nietVlag: ['fonteinLeeg', 'meesterDood'] }), false, 'één ervan staat wél');
+  assert.ok(T.voorwaardeGeldt(S, 'wim', { nietVlag: ['fonteinLeeg', 'ovenWarm'] }), 'geen van beide');
+  // Zo kun je in een situatie met twee vlaggen een antwoord toevoegen dat er ook echt staat:
+  // de schrijver zet de voorwaarde van de situatie op wat je erbij maakt.
+  assert.ok(T.voorwaardeGeldt(S, 'wim', { heeft: [] }), 'een leeg lijstje houdt niets tegen');
+});
