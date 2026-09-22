@@ -11,8 +11,9 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 ## Loopt nu
 
 - Punt 2, fase B2a (een agent): elf dorpelingen met een naam leren lopen, met knieën.
-- Ronde 4a van de huizenbouwer (een agent): de hekjes van wilgentenen en latten, en de
-  tuinstukken als eigen vel in Tiled.
+- Ronde 4a is af (22 sep): de hekjes en de tuinstukken staan in Tiled (`tegels/tuin.tsx`).
+- **Op de meter wachten:** op 22 sep stond de week op 70%, met nog bijna vier dagen te gaan. De
+  zware stukken (ronde 4b, fase B2b en het questsysteem) wachten tot Marcel zegt hoe hard we gaan.
 - Wacht op Marcel: het draaiboek van de tutorial (gestuurd op 22 sep), en of De koude oven de
   eerste quest wordt (`toren.md`).
 
@@ -45,7 +46,7 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    - Tussen de palen van een galerij en de muur kan niemand staan; die tegels moeten vast.
    - De tuinstukken krijgen een eigen vel van 1×1, anker op het midden van de tegel. Vast zijn het
      hek, de bank en de regenton; het hekje en de bedden niet (Marcel, 22 sep).
-   Ronde 3 was één lange agent (235 stappen), dus ronde 4 gaat in twee stukken: **4a** de hekjes
+   Ronde 3 was één lange agent (235 stappen), dus ronde 4 gaat in twee stukken: **4a** (af, 22 sep) de hekjes
    van wilgentenen en latten (`beeld.md`) en de tuinstukken als eigen vel in Tiled; **4b** de
    huizen in `gebouwen.tsx`.
 
