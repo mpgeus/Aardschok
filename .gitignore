@@ -1,3 +1,5 @@
 node_modules/
 # gegenereerde pixel art: komt uit npm run pixelart
 gereedschap/pixelart/uit/
+# reservekopieën van het gereedschap (gereedschap/gesprekken.html en quests.html)
+*.bak

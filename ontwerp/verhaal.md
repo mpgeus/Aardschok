@@ -25,6 +25,14 @@
   de herbergierster als de bakkersquest halverwege is?" De volgorde ligt vast door dezelfde regel
   als bij de gesprekken: **eerst het questsysteem in het spel, met toetsen, en pas dan het
   gereedschap erop**, want het gereedschap moet de regels van het spel zelf gebruiken.
+  **Gebouwd** (22 sep 2026): `gereedschap/quests.html`, met `quests-tool.js`. Eén afwijking van
+  het plan: het werd een **tweede bladzijde** naast `gesprekken.html`, niet één scherm. Dat
+  gereedschap is een afgesloten geheel van achthonderd regels, en er dwars doorheen opereren kost
+  meer dan het oplevert; de twee staan bovenin aan elkaar geknoopt. De eis "alles op één plek"
+  wordt gehaald vanuit de quest gezien: de questbladzijde toont de fasen, wat iedereen in het dorp
+  per fase zegt, welke antwoorden welke weg nemen, en waar de dingen in Tiled liggen. Alleen de
+  gesprékstekst schrijf je nog op de andere bladzijde. Als dat in de praktijk schuurt, is het
+  samenvoegen alsnog te doen — maar dan weten we waarom.
 - **Een quest moet makkelijk te bouwen zijn** (Marcel, 21 sep 2026). Dat is de eis waar het
   gereedschap op wordt afgerekend. Wat dat vraagt:
   - **vormen om mee te beginnen.** De meeste quests zijn één van een handvol vormen: haal iets,
@@ -39,6 +47,23 @@
     drie;
   - **de wereld erbij:** waar liggen de dingen die de quest nodig heeft? Een eigenschap `quest` op
     een object in Tiled koppelt het, en het gereedschap laat zien op welke kaart het ligt.
+
+  **Stand (22 sep 2026).** Alle vijf zitten erin, met twee gaten die erbij horen te staan:
+
+  - **vormen:** drie van de vijf (haal iets, ruim iets op, maak een keuze). "Breng iets" en "praat
+    met iemand" nog niet; die komen erbij als we ze nodig hebben, want een vorm verzinnen zonder
+    quest die hem gebruikt is gokken. Elke vorm levert meteen iets op dat de toets van drie
+    antwoorden haalt — dat is het punt van een vorm.
+  - **een proef per fase** doet er iets bij dat niet gevraagd was en dat het nuttigst blijkt: naast
+    wat iedereen zegt, staat erbij **wie het merkt**. Het gereedschap vergelijkt de regel die wint
+    met de regel die zou winnen als de quest niet liep, en zet een merkje bij wie anders praat. Zo
+    zie je in één oogopslag of het dorp je quest eigenlijk wel opvalt.
+  - **controle** telt de routes (`T.keurQuests`, dezelfde als `npm test` draait) en kijkt
+    daarnaast: begint een gesprek deze quest wel, bestaat de gever, is er een weg die nergens
+    genomen wordt, wacht een weg op iets wat niets in de wereld of in een gesprek geeft, noemt een
+    Tiled-object een fase die niet bestaat, en staat een raakpunt op geen enkele kaart.
+  - **nog niet:** raakpunten (`T.RAAKPUNTEN`) worden wel bewaard bij het opslaan en gecontroleerd,
+    maar je kunt ze nog niet in een formulier bewerken; dat gaat met de hand in `js/quests.js`.
 
 ## Personen
 

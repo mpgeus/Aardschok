@@ -191,3 +191,47 @@ button:disabled { opacity: 0.4; cursor: default; }
   visibility: hidden;
   pointer-events: none;
 }
+
+/* ---- quests.html (gereedschap/quests-tool.js) ---- */
+/* De twee bladzijden van het gereedschap zijn aan elkaar geknoopt met deze link bovenin. */
+.gt-naar {
+  color: var(--gedempt);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 4px 8px;
+  border: 1px solid var(--rand);
+  border-radius: 6px;
+}
+.gt-naar:hover { color: var(--inkt); }
+
+/* Een weg hangt onder zijn fase, met zijn prijs ernaast: zo zie je in één oogopslag of een
+   quest drie antwoorden heeft die verschillend kosten (ontwerp/toren.md). */
+.gt-boom-weg { font-family: inherit; font-size: 12px; }
+.gt-kost {
+  font-size: 11px;
+  padding: 0 6px;
+  border-radius: 999px;
+  border: 1px solid var(--rand);
+  color: var(--gedempt);
+}
+.gt-kost-jaren { color: #e8a0a0; border-color: rgba(232, 160, 160, 0.5); }
+.gt-kost-goud { color: #e2b64a; border-color: rgba(226, 182, 74, 0.5); }
+.gt-kost-gunst { color: #9ec9e8; border-color: rgba(158, 201, 232, 0.5); }
+.gt-kost-risico { color: #c9a6e8; border-color: rgba(201, 166, 232, 0.5); }
+
+/* Het proefdorp: iedereen die iets zegt, en wie het verschil merkt. */
+.gt-proef-persoon {
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.gt-proef-persoon:first-child { border-top: none; }
+.gt-proef-persoon.gt-reageert .gt-proef-tekst { color: var(--inkt); }
+.gt-proef-persoon:not(.gt-reageert) { opacity: 0.55; }
+.gt-merkt {
+  margin-left: 6px;
+  font-size: 11px;
+  color: var(--goud);
+  border: 1px solid rgba(226, 182, 74, 0.5);
+  border-radius: 999px;
+  padding: 0 6px;
+}

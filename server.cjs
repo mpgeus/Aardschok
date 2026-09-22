@@ -19,13 +19,15 @@ const SOORTEN = {
   '.mp3': 'audio/mpeg',
 };
 
-// Voor gereedschap/gesprekken.html: dit is het enige adres waarnaar geschreven mag worden, en
-// het schrijft altijd naar dit ene, vaste bestand — nooit naar een pad uit het verzoek. Zo kan
-// dit adres niet misbruikt worden om iets anders te overschrijven.
-const GESPREKKEN_PAD = '/gereedschap/api/gesprekken-opslaan';
-const GESPREKKEN_BESTAND = path.join(MAP, 'js', 'gesprekken.js');
+// Voor het gereedschap in gereedschap/: dit zijn de enige adressen waarnaar geschreven mag
+// worden, en elk schrijft altijd naar één vast bestand — nooit naar een pad uit het verzoek. Zo
+// kan geen van deze adressen misbruikt worden om iets anders te overschrijven.
+const OPSLAAN = {
+  '/gereedschap/api/gesprekken-opslaan': path.join(MAP, 'js', 'gesprekken.js'),
+  '/gereedschap/api/quests-opslaan': path.join(MAP, 'js', 'quests.js'),
+};
 
-function slaGesprekkenOp(req, res) {
+function slaOp(req, res, BESTAND) {
   let body = '';
   let teGroot = false;
   req.setEncoding('utf8');
@@ -43,9 +45,9 @@ function slaGesprekkenOp(req, res) {
       res.end('Lege inhoud, niets opgeslagen');
       return;
     }
-    fs.readFile(GESPREKKEN_BESTAND, 'utf8', (foutLezen, huidig) => {
+    fs.readFile(BESTAND, 'utf8', (foutLezen, huidig) => {
       const schrijf = () => {
-        fs.writeFile(GESPREKKEN_BESTAND, body, 'utf8', (foutSchrijven) => {
+        fs.writeFile(BESTAND, body, 'utf8', (foutSchrijven) => {
           if (foutSchrijven) {
             res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
             res.end('Schrijven mislukt: ' + foutSchrijven.message);
@@ -60,7 +62,7 @@ function slaGesprekkenOp(req, res) {
         schrijf();
         return;
       }
-      fs.writeFile(GESPREKKEN_BESTAND + '.bak', huidig, 'utf8', (foutKopie) => {
+      fs.writeFile(BESTAND + '.bak', huidig, 'utf8', (foutKopie) => {
         if (foutKopie) {
           res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
           res.end('Reservekopie maken mislukt: ' + foutKopie.message);
@@ -82,8 +84,8 @@ http
       res.end();
       return;
     }
-    if (req.method === 'POST' && pad === GESPREKKEN_PAD) {
-      slaGesprekkenOp(req, res);
+    if (req.method === 'POST' && OPSLAAN[pad]) {
+      slaOp(req, res, OPSLAAN[pad]);
       return;
     }
     const bestand = path.normalize(path.join(MAP, pad === '/' ? 'index.html' : pad));

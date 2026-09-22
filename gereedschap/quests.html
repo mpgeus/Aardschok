@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aardschok · quests</title>
+  <link rel="stylesheet" href="../stijl.css">
+  <link rel="stylesheet" href="gesprekken-tool.css">
+</head>
+<body>
+  <header class="gt-kop">
+    <h1>Quests</h1>
+    <label>Quest
+      <select id="qt-quest"></select>
+    </label>
+    <button id="qt-nieuwe-quest" type="button">+ Nieuwe quest</button>
+    <div class="gt-vul"></div>
+    <a class="gt-naar" href="gesprekken.html">Gesprekken →</a>
+    <span id="qt-status" class="gt-status"></span>
+    <button id="qt-opslaan" type="button" class="gt-primair">Opslaan</button>
+  </header>
+
+  <div id="qt-opmerking-melding" class="gt-melding verborgen"></div>
+
+  <main class="gt-layout">
+    <section class="paneel gt-boom">
+      <h2>Fasen en wegen<div class="gt-vul"></div><button id="qt-nieuwe-fase" type="button" class="gt-mini" title="Nieuwe fase in deze quest">+ fase</button></h2>
+      <div id="qt-boom-inhoud"></div>
+    </section>
+
+    <section class="paneel gt-editor">
+      <h2>Bewerken</h2>
+      <div id="qt-editor"><p class="gt-leeg">Kies een fase of een weg in de boom hiernaast.</p></div>
+    </section>
+
+    <section class="paneel gt-proef">
+      <h2>Het dorp in deze fase</h2>
+      <div id="qt-proef-staat"></div>
+      <div id="qt-proef-dorp"></div>
+    </section>
+
+    <section class="paneel gt-fouten">
+      <h2>Controle</h2>
+      <div id="qt-fouten"></div>
+    </section>
+  </main>
+
+  <!-- Dezelfde spelbestanden als het spel, gewoon geladen. De regels komen rechtstreeks uit
+       ../js/quest.js en ../js/gesprek.js — dit gereedschap heeft er geen eigen kopie van, zodat
+       het proefdorp precies hetzelfde beslist als het spel. kaarten.js is erbij voor de vraag
+       "waar ligt dat ding dan?": daar staan de Tiled-objecten met quest= en raak= in. -->
+  <script src="../js/leeftijd.js"></script>
+  <script src="../js/gesprekken.js"></script>
+  <script src="../js/gesprek.js"></script>
+  <script src="../js/quests.js"></script>
+  <script src="../js/quest.js"></script>
+  <script src="../kaarten/kaarten.js"></script>
+  <script src="quests-tool.js"></script>
+</body>
+</html>

@@ -29,10 +29,12 @@ Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halver
   een tegel waar je bij kunt. De eigenschappen staan in `kaarten.md`.
 
 **Klaar om te starten, in deze volgorde.** Elk stuk is een korte agent. Bekijk eerst de meter.
+Alle drie zijn renderwerk; het gereedschapswerk zonder kunst is af (punten 3 en 4).
 1. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder).
 2. Fase B2b: de zeven vaklieden en meer gewone dorpelingen (punt 2). Daar horen nu ook de bakker
    en de marskramer bij: zonder hen kan De koude oven niet gespeeld worden.
-3. Fase B3: de portretten in de gesprekken (punt 2).
+3. Fase B3: de portretten in de gesprekken (punt 2). De bakker, de marskramer en de smidsvrouw
+   hebben er nu ook nog geen.
 
 **Het laatst af (22 sep):**
 - de tutorial, met Marcels keuzes erin;
@@ -115,6 +117,9 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 4. **De verhaaleditor.** Klaar als het gesprekkengereedschap ook quests kan: vormen om mee te
    beginnen, alles op één plek, een proef per fase, controle die de routes telt, en de koppeling
    met Tiled. Zie `verhaal.md`, "Een quest moet makkelijk te bouwen zijn".
+   **Stand (22 sep):** gebouwd als `gereedschap/quests.html`. Alle vijf de eisen zitten erin; de
+   gaten staan in `verhaal.md` onder "Stand": twee van de vijf vormen ontbreken nog, en raakpunten
+   zijn wel te controleren maar niet te bewerken.
 5. **Grondstoffen en de verdeelvraag.** Klaar als magische grondstoffen voorwerpen zijn die je aan
    de toren óf aan jezelf geeft (jaren terug), ze eindig zijn in de wereld, en je er per saldo op
    achteruitgaat. Zie `toren.md`.
@@ -165,6 +170,17 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 22 sep 2026 — **De verhaaleditor kan quests** (`gereedschap/quests.html`): de fasen en wegen als
+  boom met hun prijs ernaast, formulieren voor fase, weg, klaarAls en beloning, drie vormen om mee
+  te beginnen die meteen de toets van drie antwoorden halen, en opslaan dat `js/quests.js`
+  terugschrijft met de uitleg tussen de gegevens intact. Twee dingen die er beter uit kwamen dan
+  gevraagd: de proef per fase zet een merkje bij **wie het merkt** (het vergelijkt met hoe het dorp
+  zou praten zonder de quest), en de controle kijkt naast het tellen van routes ook of een gesprek
+  de quest wel begint, of een weg wacht op iets wat niets geeft, en of wat in Tiled aan een fase
+  hangt die fase ook heeft. Eén afwijking van het plan: het werd een tweede bladzijde naast
+  gesprekken.html, met een link ertussen — waarom staat in `verhaal.md`.
+  Erbij: `Toren.debug.quest('bakker', 'terug')` zet een quest in een fase zonder hem te spelen.
 
 - 22 sep 2026 — **De koude oven, de eerste quest:** vier wegen die elk iets anders kosten (de kuil
   met wat erin huist, de vuurklei van de marskramer, de vuurstenen van de smidsvrouw, en een

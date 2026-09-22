@@ -113,7 +113,9 @@
         },
         terug: {
           doel: 'Breng het naar de bakker.',
-          wegen: { afgeven: { kost: 'niets', naar: 'klaar', doe: { neem: ['leem', 'vuurklei', 'vuursteen'] } } },
+          wegen: {
+            afgeven: { kost: 'niets', naar: 'klaar', doe: { neem: ['leem', 'vuurklei', 'vuursteen'] } },
+          },
         },
         // Twee einden, want hoe je het oploste hoort het dorp te merken. Wie het dichtbakte met
         // magie krijgt hetzelfde goud maar een andere vlag: sommigen vinden dat prachtig, en de

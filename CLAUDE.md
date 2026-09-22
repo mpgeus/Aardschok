@@ -221,6 +221,13 @@ css-overgangen staan dan vrijwel stil. Het testgereedschap stuurt de spatiebalk 
 (lege `key`), dus test einde beurt met de knop of met een `KeyboardEvent`.
 `Toren.debug.meesterschap('vuurschicht', 15)` zet het meesterschap van een spreuk (hier op
 Meesterlijk), om de treden te proberen zonder ze te verdienen.
+`Toren.debug.quest('bakker', 'terug')` zet een quest in een fase zonder hem te spelen ('uit' haalt
+hem weg, beloning en al); zonder fase zegt hij waar hij staat.
+
+Twee bladzijden gereedschap draaien op dezelfde server: `gereedschap/gesprekken.html` voor de
+gesprekken en `gereedschap/quests.html` voor de quests (fasen, wegen, het dorp per fase, en de
+controle die de toets van drie antwoorden nakijkt). Allebei gebruiken ze de regels uit `js/`
+zelf, nooit een eigen kopie, en allebei schrijven ze hun eigen bestand terug.
 
 Twee dingen die bij het mikken misgaan:
 
