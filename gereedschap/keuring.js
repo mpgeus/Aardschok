@@ -24,7 +24,7 @@
   const lijst = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
   const BUREN = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
   // Wat een ding betékent, en dus niet meer in Tiled hoort te staan (ontwerp/kaarten.md).
-  const BETEKENISVELDEN = ['wezen', 'zaad', 'staat', 'overgang', 'quest', 'raak'];
+  const BETEKENISVELDEN = ['wie', 'wezen', 'zaad', 'staat', 'overgang', 'quest', 'raak'];
   const DEURSTANDEN = ['open', 'dicht', 'opslot', 'geheim'];
 
   // Alles wat er op een kaart staat, uit allebei de bronnen: de objecten die Marcel in Tiled
@@ -77,6 +77,8 @@
 
     let helden = 0;
     const bezet = new Map(); // tegel -> wie er al staat, voor twee mensen op dezelfde plek
+    const mensenHier = new Map(); // welke mens waar: dezelfde twee keer neerzetten kan niet
+    const gesprekkenHier = new Map(); // welk gesprek waar: twee monden voor één tekst
 
     for (const o of objecten) {
       const p = o.eig;
@@ -108,6 +110,18 @@
       }
 
       // ── wie hier staat ──
+      // Eén mens uit T.MENSEN (js/mensen.js). Twee keer dezelfde neerzetten kan niet: dan zou
+      // dezelfde bakker op twee plekken staan, en weet niemand meer welke de echte is.
+      if (p.wie !== undefined) {
+        if (!T.MENSEN || !T.MENSEN[p.wie]) {
+          fout(o.x, o.y, `onbekende mens "${p.wie}"; het spel slaat hem over. Kijk de lijst na in js/mensen.js`);
+        } else if (mensenHier.has(p.wie)) {
+          const eerder = mensenHier.get(p.wie);
+          fout(o.x, o.y, `"${T.naamVanMens(p.wie)}" staat ook al op (${eerder.x}, ${eerder.y}); één mens kan niet op twee plekken staan`);
+        } else {
+          mensenHier.set(p.wie, { x: o.x, y: o.y });
+        }
+      }
       if (p.wezen !== undefined) {
         if (!T.WEZENS || !T.WEZENS[p.wezen]) {
           fout(o.x, o.y, `onbekend wezen "${p.wezen}"; het spel slaat het over. Kijk de spelling na tegen T.WEZENS in js/wereld.js`);
@@ -116,8 +130,21 @@
           if (p.zaad !== undefined) letOp(o.x, o.y, `"${p.wezen}" heeft ook een zaad; het spel neemt het wezen en laat het zaad liggen`);
         }
       }
-      if (p.wezen !== undefined || p.zaad !== undefined) {
-        const wie = p.wezen !== undefined ? `"${p.wezen}"` : `een dorpeling (zaad ${p.zaad})`;
+      if (p.wie !== undefined || p.wezen !== undefined || p.zaad !== undefined) {
+        const wie = p.wie !== undefined ? `"${T.naamVanMens(p.wie)}"`
+          : p.wezen !== undefined ? `"${p.wezen}"`
+          : `een dorpeling (zaad ${p.zaad})`;
+        // Twee poppetjes die hetzelfde gesprek voeren, zeggen woord voor woord hetzelfde. Bij de
+        // bruid en de bruidegom kan dat expres zijn; meestal is het een vergissing.
+        const gesprek = p.wie !== undefined ? T.gesprekVanMens(p.wie) : p.gesprek;
+        if (gesprek && T.GESPREKKEN && T.GESPREKKEN[gesprek]) {
+          if (gesprekkenHier.has(gesprek)) {
+            const eerder = gesprekkenHier.get(gesprek);
+            letOp(o.x, o.y, `${wie} voert hetzelfde gesprek "${gesprek}" als wie er op (${eerder.x}, ${eerder.y}) staat; ze zeggen dan precies hetzelfde`);
+          } else {
+            gesprekkenHier.set(gesprek, { x: o.x, y: o.y });
+          }
+        }
         // Een eigen gesprek, los van de soort (T.gesprekIdVan in js/gesprek.js). Staat er een
         // naam die niet bestaat, dan zegt hij niets en merk je dat pas als je ernaartoe loopt.
         if (p.gesprek !== undefined && (!T.GESPREKKEN || !T.GESPREKKEN[p.gesprek])) {
@@ -352,6 +379,15 @@
           fout(`de aansluiting van "${naam}" (${o.x}, ${o.y}) naar "${o.naar}" heeft maar één kant: in "${o.naar}" is geen overgang terug naar "${naam}"`);
         }
       }
+    }
+
+    // Wie uit de mensenlijst staat er nog nergens? Bij honderd poppetjes is dat de werklijst
+    // zelf, dus in één regel en niet één klacht per persoon.
+    const geplaatst = new Set();
+    for (const w of Object.values(werelden)) for (const e of w.wezens) if (e.wie) geplaatst.add(e.wie);
+    const ontbreekt = Object.keys(T.MENSEN || {}).filter((id) => !geplaatst.has(id));
+    if (ontbreekt.length) {
+      letOp(`${ontbreekt.length} van de ${Object.keys(T.MENSEN).length} mensen staan nog nergens: ${ontbreekt.join(', ')}`);
     }
 
     for (const id of Object.keys(T.GESPREKKEN || {})) {

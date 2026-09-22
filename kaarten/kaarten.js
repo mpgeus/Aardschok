@@ -24167,7 +24167,7 @@
      {
       "x": 140,
       "y": 28,
-      "wezen": "meester",
+      "wie": "meester",
       "straal": 2
      },
      {

@@ -40,9 +40,20 @@ html, body { overflow: hidden; height: 100%; }
   flex-direction: column;
   gap: 10px;
   min-height: 0;
+  /* Past het toch niet, dan schuift de kolom; niets valt van het scherm af. */
+  overflow-y: auto;
 }
-.wt-zij .paneel { padding: 10px 12px; overflow: auto; flex: none; max-height: 45%; }
-.wt-zij .wt-controle { flex: 1 1 auto; min-height: 90px; max-height: none; }
+/* Vijf panelen in één kolom: de koppen blijven altijd staan en elk paneel scrollt van binnen.
+   Anders duwt de mensenlijst de controle van het scherm af, en dat is juist wat je wilt zien. */
+.wt-zij .paneel { padding: 10px 12px; flex: none; display: flex; flex-direction: column; min-height: 0; }
+.wt-zij .paneel > h2 { flex: none; }
+.wt-zij .paneel > div { overflow: auto; min-height: 0; }
+#wt-lagen { max-height: 220px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 10px; }
+#wt-mensen { max-height: 190px; }
+#wt-neerzetten { max-height: 210px; }
+#wt-tegel { max-height: 200px; }
+.wt-zij .wt-controle { flex: 1 1 auto; min-height: 100px; }
+.wt-zij .wt-controle > div { max-height: none; }
 
 /* Neerzetten: de soort bovenaan, daaronder alleen de velden die bij die soort horen. */
 .wt-soorten { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
@@ -61,6 +72,7 @@ html, body { overflow: hidden; height: 100%; }
 .wt-laag .wt-kleur { width: 10px; height: 10px; border-radius: 2px; flex: none; }
 .wt-laag .wt-naam { flex: 1; color: var(--inkt); }
 .wt-laag .wt-sneltoets { color: var(--gedempt); font-size: 11px; flex: none; }
+.wt-laag .wt-naam { font-size: 12px; }
 
 /* Deze tegel: rijen van "wat" en "wat het spel ervan vindt". */
 .wt-rij { display: flex; gap: 8px; font-size: 12.5px; padding: 1.5px 0; align-items: baseline; }
@@ -138,3 +150,26 @@ html, body { overflow: hidden; height: 100%; }
 .wt-tabblad.verborgen { display: none !important; }
 .wt-onderkop { border-bottom: 1px solid var(--rand); }
 .wt-knoprij { display: flex; gap: 4px; margin-top: 6px; }
+
+/* De mensenlijst: bij honderd poppetjes is dit het antwoord op "waar stond de koster ook alweer".
+   Wie er nog niet staat, staat er gedempt bij; klik hem en hij ligt in je hand. */
+.wt-mensen input[type="search"] { width: 100%; margin: 0 0 6px; flex: none; }
+.wt-mens {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  width: 100%;
+  text-align: left;
+  font-size: 12.5px;
+  padding: 3px 6px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: none;
+  cursor: pointer;
+}
+.wt-mens:hover { background: rgba(255, 255, 255, 0.08); }
+.wt-mens.wt-aan { border-color: var(--goud); }
+.wt-mens .wt-mens-naam { flex: 1; color: var(--inkt); }
+.wt-mens .wt-mens-waar { color: var(--gedempt); font-size: 11px; }
+.wt-mens .wt-stip { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.wt-mens.wt-nergens .wt-mens-naam { color: var(--gedempt); font-style: italic; }

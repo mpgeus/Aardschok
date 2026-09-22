@@ -20,6 +20,9 @@
 // WAT EEN DING BETEKENT. Eén ding in kaarten/<naam>.betekenis.json is een gewoon vakje met x en y
 // en daarnaast één van deze velden. Dezelfde namen gelden voor een object dat nog in Tiled staat
 // (als eigenschap), want er is maar één stel regels dat ze uitlegt — deze:
+//   wie        één mens uit T.MENSEN (js/mensen.js): "bakker", "koster". Dat is de gewone manier
+//              om iemand neer te zetten die een naam heeft — wie hij is, hoe hij eruitziet en wat
+//              hij zegt staat daar op één plek, en de kaart zegt alleen waar hij staat.
 //   wezen      welk wezen hier staat: een naam die T.maakWezen kent ('held' voor de beginplek
 //              van de tovenaar, 'wim', 'slijm', 'bakker', de bosvijanden). Verkeerd gespeld?
 //              Dan komt er een waarschuwing op de console en slaan we het ding over.
@@ -259,6 +262,16 @@
           wezens.push(e);
         } catch (e) {
           console.warn(`T.laadKaart: onbekend wezen "${p.wezen}" op (${gx}, ${gy}), overgeslagen`);
+        }
+        return;
+      }
+      if (p.wie !== undefined) {
+        // Eén mens uit T.MENSEN (js/mensen.js). De kaart zegt alleen waar hij staat; wie hij is,
+        // hoe hij eruitziet en wat hij zegt staat daar, op één plek.
+        try {
+          wezens.push(T.maakMens(String(p.wie), gx, gy, Number(p.straal), maakDorpeling));
+        } catch (e) {
+          console.warn(`T.laadKaart: onbekende mens "${p.wie}" op (${gx}, ${gy}), overgeslagen`);
         }
         return;
       }

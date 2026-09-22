@@ -13,6 +13,7 @@ require('../js/wereld.js');
 require('../beelden/beschrijving.js');
 require('../tegels/tegels.js');
 require('../kaarten/kaarten.js');
+require('../js/mensen.js');
 require('../js/kaart.js');
 require('../js/gebied.js');
 require('../js/pad.js');
@@ -272,4 +273,37 @@ test('een questvoorwerp dat niet op te rapen is, loopt dood', () => {
     },
   };
   assert.match(teksten(T.keurDekking({ werelden })), /staat niet in T.OPRAPEN/);
+});
+
+test('één mens kan niet op twee plekken staan', () => {
+  const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'bakker' }, { x: 4, y: 2, wie: 'bakker' }]);
+  assert.match(teksten(klachten), /"de bakker" staat ook al op \(2, 2\)/);
+});
+
+test('een mens die niet in de lijst staat, wordt bij naam genoemd', () => {
+  assert.match(teksten(keur([UITGANG, { x: 2, y: 2, wie: 'slager' }])), /onbekende mens "slager"/);
+});
+
+test('twee monden voor één tekst valt op', () => {
+  // De bakker en een dorpeling die zijn gesprek leent: ze zeggen dan woord voor woord hetzelfde.
+  const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'bakker' }, { x: 4, y: 2, zaad: 3, gesprek: 'bakker' }]);
+  assert.match(teksten(klachten), /voert hetzelfde gesprek "bakker"/);
+});
+
+test('een mens komt met zijn eigen naam en zijn eigen gesprek uit de kaart', () => {
+  const uitslag = T.keurKaart('proefje', kaartje([]), {
+    betekenis: { dingen: [UITGANG, { x: 3, y: 2, wie: 'koster' }] },
+  });
+  const e = uitslag.wereld.wezens.find((e) => e.wie === 'koster');
+  assert.equal(e.naam, 'de koster');
+  assert.equal(T.gesprekIdVan(e), 'koster');
+  assert.equal(e.soort, 'dorpeling', 'de koster is nog niet getekend en leent een dorpelingvel');
+  assert.equal(e.dwaalt, true);
+});
+
+test('de dekking telt in één regel op wie er nog nergens staat', () => {
+  const werelden = { proefje: { wezens: [{ soort: 'bakker', wie: 'bakker' }], voorwerpen: [], overgangen: [] } };
+  const tekst = teksten(T.keurDekking({ werelden }));
+  assert.match(tekst, /van de \d+ mensen staan nog nergens/);
+  assert.doesNotMatch(tekst, /nergens: .*\bbakker\b/);
 });

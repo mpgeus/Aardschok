@@ -125,10 +125,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en `T.keurQuests`, dat de toets van drie antwoorden nakijkt.
 - `js/dialoog.js`, `js/ui.js` (alle html over het beeld), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera).
-- Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): normaal zijn
-  soort, maar een dorpeling kan er een eigen hebben. Negentien dorpelingen delen namelijk één
-  soort (`dorpeling`), en die hoeven niet alle negentien hetzelfde te zeggen; in het
-  betekenisbestand staat dan `gesprek: "vrouwBijDePut"`.
+- `js/mensen.js`: **wie de mensen van het dorp zijn, op één plek.** `T.MENSEN.<id>` zegt hoe hij
+  heet, hoe hij eruitziet (`wezen: 'bakker'` leent een soort uit `wereld.js`, `zaad: 14` leent
+  een dorpelingvel tot hij getekend is), hoe ver hij dwaalt en welk gesprek hij voert. De kaart
+  zegt alleen nog wáár hij staat: `{ x, y, wie: 'koster' }`. Dat is er gekomen omdat het er
+  honderd kunnen worden (Marcel, 22 sep): een mens stond over vier plekken verdeeld en niets
+  verbond ze, dus kon dezelfde bakker op twee plekken staan zonder dat iets klaagde.
+  `T.naamVanMens`, `T.gesprekVanMens` en `T.maakMens` zijn de vragen eromheen.
+  **Wie geen naam hoeft te hebben, staat er niet in:** `{ x, y, zaad: 7 }` is menigte.
+- Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): zijn `gesprek`
+  als hij er een heeft, anders zijn soort. Zo delen honderd figuranten één soort (`dorpeling`)
+  zonder alle honderd hetzelfde te zeggen.
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar.
   `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel.

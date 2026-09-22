@@ -10,6 +10,7 @@ require('../js/leeftijd.js');
 require('../js/wereld.js');
 require('../tegels/tegels.js');
 require('../kaarten/kaarten.js');
+require('../js/mensen.js');
 require('../js/kaart.js');
 require('../js/gebied.js');
 require('../js/pad.js');

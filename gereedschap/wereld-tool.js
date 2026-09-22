@@ -55,16 +55,17 @@
 
   // Elke laag een vinkje, een kleur en een sneltoets. `wat` tekent hem, in hetzelfde vlak waarin
   // het spel tekent (dus in wereldpixels, na het schuiven en zoomen).
+  // Korte namen, want ze staan in twee kolommen; wat ze precies doen staat in de tooltip.
   const LAGEN = [
-    { id: 'raster', naam: 'Raster', kleur: 'rgba(245, 230, 190, 0.28)', toets: 'r', aan: false },
-    { id: 'begaanbaar', naam: 'Begaanbaar / vast', kleur: '#86c46f', toets: 'b', aan: false },
-    { id: 'mensen', naam: 'Mensen, met dwaalstraal', kleur: '#e2b64a', toets: 'm', aan: true },
-    { id: 'quest', naam: 'Quest en raakpunten', kleur: '#b98ce0', toets: 'q', aan: true },
-    { id: 'uitgangen', naam: 'Uitgangen', kleur: '#6fa0e6', toets: 'u', aan: true },
-    { id: 'onbereikbaar', naam: 'Onbereikbaar', kleur: '#c86bbd', toets: 'o', aan: false },
-    { id: 'klachten', naam: 'Wat de controle vond', kleur: '#e0604f', toets: 'c', aan: true },
-    { id: 'namen', naam: 'Namen erbij', kleur: 'rgba(239, 230, 210, 0.75)', toets: 'n', aan: true },
-    { id: 'vlakken', naam: 'Kunst uit (vlakken)', kleur: 'rgba(239, 230, 210, 0.3)', toets: 'k', aan: false },
+    { id: 'raster', naam: 'Raster', uitleg: 'De tegelruiten', kleur: 'rgba(245, 230, 190, 0.28)', toets: 'r', aan: false },
+    { id: 'begaanbaar', naam: 'Begaanbaar', uitleg: 'Groen waar je kunt lopen, rood waar iets vast staat', kleur: '#86c46f', toets: 'b', aan: false },
+    { id: 'mensen', naam: 'Mensen', uitleg: 'Wie waar staat, met de straal waarbinnen hij dwaalt', kleur: '#e2b64a', toets: 'm', aan: true },
+    { id: 'quest', naam: 'Quest', uitleg: 'Wat aan een questfase hangt, en waar een spreuk op werkt', kleur: '#b98ce0', toets: 'q', aan: true },
+    { id: 'uitgangen', naam: 'Uitgangen', uitleg: 'De aansluitingen naar andere kaarten, en waar je aankomt', kleur: '#6fa0e6', toets: 'u', aan: true },
+    { id: 'onbereikbaar', naam: 'Onbereikbaar', uitleg: 'Begaanbaar, maar vanaf geen enkele uitgang te bereiken', kleur: '#c86bbd', toets: 'o', aan: false },
+    { id: 'klachten', naam: 'Controle', uitleg: 'De plekken waar de controle iets over te zeggen heeft', kleur: '#e0604f', toets: 'c', aan: true },
+    { id: 'namen', naam: 'Namen', uitleg: 'De naam bij elk poppetje en elk ding', kleur: 'rgba(239, 230, 210, 0.75)', toets: 'n', aan: true },
+    { id: 'vlakken', naam: 'Kunst uit', uitleg: 'Tekenen met vlakken in plaats van met de pixel art', kleur: 'rgba(239, 230, 210, 0.3)', toets: 'k', aan: false },
   ];
   const aan = (id) => !!(LAGEN.find((l) => l.id === id) || {}).aan;
 
@@ -74,6 +75,7 @@
     for (const laag of LAGEN) {
       const rij = document.createElement('label');
       rij.className = 'wt-laag';
+      rij.title = `${laag.uitleg} (toets ${laag.toets})`;
       const vink = document.createElement('input');
       vink.type = 'checkbox';
       vink.checked = laag.aan;
@@ -187,6 +189,7 @@
     objecten = T.kaartObjecten(T.KAARTEN[kaartNaam], b && b.inhoud);
     pasQuestFaseToe();
     keur(uitslag.klachten);
+    bouwMensen();
     toonTegel(vast || onderMuis);
   }
 
@@ -267,12 +270,13 @@
   // { x, y, tegel: 'bomen/eik' }. De velden en wat ze betekenen staan boven in js/kaart.js; hier
   // staat alleen hoe je ze met de muis legt.
   const penseel = {
-    soort: 'wezen',
-    wezen: 'bakker', zaad: 1, straal: 3, gesprek: '',
+    soort: 'mens',
+    wie: 'bakker', wezen: 'bakker', zaad: 1, straal: 3, gesprek: '',
     staat: 'dicht', vlag: '',
     naar: '', vel: 'bomen', tegel: 'eik', raak: '', quest: '',
   };
   const SOORTEN = [
+    ['mens', 'Mens'],
     ['wezen', 'Wezen'],
     ['dorpeling', 'Dorpeling'],
     ['deur', 'Deur'],
@@ -383,7 +387,22 @@
     }
     doel.appendChild(rij);
 
-    if (penseel.soort === 'wezen') {
+    if (penseel.soort === 'mens') {
+      keuzeVeld(doel, 'wie', mensOpties(), penseel.wie, (v) => {
+        penseel.wie = v;
+        bouwNeerzetten();
+      });
+      tekstVeld(doel, 'dwaalstraal', penseel.straal, (v) => (penseel.straal = v), 'number');
+      const m = T.MENSEN[penseel.wie];
+      if (m) {
+        const uit = document.createElement('p');
+        uit.className = 'gt-leeg';
+        uit.textContent = m.wezen
+          ? `Leent uiterlijk en snelheid van wezen "${m.wezen}".`
+          : `Leent het vel van een gewone dorpeling (zaad ${m.zaad}) tot hij getekend is.`;
+        doel.appendChild(uit);
+      }
+    } else if (penseel.soort === 'wezen') {
       keuzeVeld(doel, 'wie', Object.keys(T.WEZENS), penseel.wezen, (v) => (penseel.wezen = v));
       tekstVeld(doel, 'dwaalstraal', penseel.straal, (v) => (penseel.straal = v), 'number');
       gesprekVeld(doel, penseel.gesprek, (v) => (penseel.gesprek = v));
@@ -422,6 +441,13 @@
     }
   }
 
+  // Iedereen uit js/mensen.js, op naam, met zijn id als waarde. Gesorteerd op wat je leest.
+  function mensOpties() {
+    return Object.keys(T.MENSEN || {})
+      .map((id) => [id, `${T.naamVanMens(id)} (${id})`])
+      .sort((a, b) => a[1].localeCompare(b[1], 'nl'));
+  }
+
   // Welk gesprek voert dit poppetje? Leeg is "zijn soort", en dat klopt voor Wim en de bakker.
   // Maar negentien dorpelingen delen één soort, dus daar kies je er een eigen bij — anders zeggen
   // ze alle negentien hetzelfde (T.gesprekIdVan in js/gesprek.js).
@@ -442,6 +468,11 @@
   }
 
   function maakDing(t) {
+    if (penseel.soort === 'mens') {
+      const d = { x: t.x, y: t.y, wie: penseel.wie };
+      if (penseel.straal > 0) d.straal = penseel.straal;
+      return d;
+    }
     if (penseel.soort === 'wezen' || penseel.soort === 'dorpeling') {
       const d = penseel.soort === 'wezen' ? { x: t.x, y: t.y, wezen: penseel.wezen } : { x: t.x, y: t.y, zaad: penseel.zaad };
       if (penseel.straal > 0) d.straal = penseel.straal;
@@ -663,6 +694,78 @@
     const fase = el('wt-fase').value;
     if (id && fase) T.zetQuest(S, id, fase);
     else T.werkQuestVoorwerpen(S);
+  }
+
+  // ---------------------------------------------------------------- de mensenlijst
+  //
+  // Bij honderd poppetjes is dit het antwoord op "waar stond de koster ook alweer". Iedereen uit
+  // js/mensen.js staat erin: wie op deze kaart staat met zijn plek, wie nog nergens staat gedempt.
+  // Klik iemand die er staat en de camera gaat naar hem toe; klik iemand die er niet staat en hij
+  // ligt in je hand om neer te zetten.
+
+  // Wat heeft deze mens te bieden? Dat bepaalt zijn kleur, hier én op de kaart.
+  function rolVan(id) {
+    const gesprek = T.gesprekVanMens ? T.gesprekVanMens(id) : id;
+    if (T.QUESTS && Object.values(T.QUESTS).some((q) => q.gever === gesprek)) return 'quest';
+    if (T.GESPREKKEN && T.GESPREKKEN[gesprek]) return 'gesprek';
+    return 'menigte';
+  }
+  const ROLKLEUR = { quest: '#e2b64a', gesprek: '#efe6d2', menigte: 'rgba(239, 230, 210, 0.45)' };
+
+  // De kleur van een poppetje op de kaart: rood als hij vecht, groen voor de held, en anders
+  // naar wat hij te bieden heeft — zo zie je in één oogopslag waar in het dorp iets te doen is.
+  function kleurVanWezen(e) {
+    if (e.kant === 'monster') return '#e0604f';
+    if (e.soort === 'held') return '#86c46f';
+    return ROLKLEUR[rolVan(T.gesprekIdVan(e) || e.soort)] || ROLKLEUR.menigte;
+  }
+
+  function bouwMensen() {
+    const doel = el('wt-mensen');
+    const zoek = el('wt-mensen-zoek').value.trim().toLowerCase();
+    const w = S.wereld;
+    const staat = new Map();
+    if (w) for (const e of w.wezens) if (e.wie) staat.set(e.wie, e);
+    doel.innerHTML = '';
+    const ids = Object.keys(T.MENSEN || {}).sort((a, b) => T.naamVanMens(a).localeCompare(T.naamVanMens(b), 'nl'));
+    let getoond = 0;
+    for (const id of ids) {
+      const naam = T.naamVanMens(id);
+      if (zoek && !naam.toLowerCase().includes(zoek) && !id.toLowerCase().includes(zoek)) continue;
+      getoond++;
+      const e = staat.get(id);
+      const knop = document.createElement('button');
+      knop.type = 'button';
+      knop.className = 'wt-mens' + (e ? '' : ' wt-nergens') + (penseel.soort === 'mens' && penseel.wie === id && !e ? ' wt-aan' : '');
+      const stip = document.createElement('span');
+      stip.className = 'wt-stip';
+      stip.style.background = ROLKLEUR[rolVan(id)];
+      const naamEl = document.createElement('span');
+      naamEl.className = 'wt-mens-naam';
+      naamEl.textContent = naam;
+      const waar = document.createElement('span');
+      waar.className = 'wt-mens-waar';
+      waar.textContent = e ? `${e.tx}, ${e.ty}` : 'staat nergens';
+      knop.append(stip, naamEl, waar);
+      knop.addEventListener('click', () => {
+        if (e) {
+          kijkNaar(e.tx, e.ty);
+          vast = { x: e.tx, y: e.ty };
+          toonTegel(vast);
+        } else {
+          // Nog niet neergezet: leg hem in de hand, dan is één klik op de kaart genoeg.
+          el('wt-bewerken').checked = true;
+          penseel.soort = 'mens';
+          penseel.wie = id;
+          bouwNeerzetten();
+          werkKnoppenBij();
+          bouwMensen();
+        }
+      });
+      doel.appendChild(knop);
+    }
+    el('wt-mensen-tal').textContent = `${staat.size} van ${ids.length} staan er` + (zoek ? ` · ${getoond} gevonden` : '');
+    if (!getoond) doel.innerHTML = '<p class="gt-leeg">Niemand met die naam.</p>';
   }
 
   // ---------------------------------------------------------------- de controle
@@ -933,6 +1036,7 @@
 
   // Hoe heet dit ding in één regel? Dezelfde volgorde als js/kaart.js hem uitlegt.
   function omschrijf(d) {
+    if (d.wie !== undefined) return T.naamVanMens(d.wie);
     if (d.wezen !== undefined) return d.wezen;
     if (d.zaad !== undefined) return `dorpeling (zaad ${d.zaad})`;
     if (d.staat !== undefined) return d.staat === 'geheim' ? 'geheime doorgang' : `deur (${d.staat})`;
@@ -949,8 +1053,12 @@
       else d[sleutel] = waarde;
       veranderd();
     };
+    if (d.wie !== undefined) {
+      keuzeVeld(doel, 'wie', mensOpties(), d.wie, zet('wie'));
+      tekstVeld(doel, 'dwaalstraal', d.straal, zet('straal'), 'number');
+    }
     if (d.wezen !== undefined) {
-      keuzeVeld(doel, 'wie', Object.keys(T.WEZENS), d.wezen, zet('wezen'));
+      keuzeVeld(doel, 'soort wezen', Object.keys(T.WEZENS), d.wezen, zet('wezen'));
       tekstVeld(doel, 'dwaalstraal', d.straal, zet('straal'), 'number');
     }
     if (d.zaad !== undefined) {
@@ -1219,7 +1327,7 @@
 
       if (aan('mensen')) {
         for (const e of w.wezens) {
-          const kleur = e.kant === 'monster' ? '#e0604f' : e.soort === 'held' ? '#86c46f' : '#e2b64a';
+          const kleur = kleurVanWezen(e);
           // De dwaalstraal als de ring waar hij binnen blijft: dezelfde rekensom als het dwalen
           // zelf (js/verkennen.js kijkt naar de afstand tot `thuis`).
           if (e.dwaalt && e.straal > 0) {
@@ -1237,7 +1345,8 @@
             }
           }
           markeer(e.tx, e.ty, kleur, 2);
-          schrijf(e.tx, e.ty, e.soort, kleur, 26);
+          // Zijn eigen naam, niet zijn soort: honderd keer "dorpeling" zegt niets.
+          schrijf(e.tx, e.ty, e.naam || e.soort, kleur, 26);
         }
       }
 
@@ -1360,6 +1469,7 @@
       toonTegel(vast || onderMuis);
     });
     el('wt-opslaan').addEventListener('click', slaOp);
+    el('wt-mensen-zoek').addEventListener('input', bouwMensen);
     el('wt-gesprek-dicht').addEventListener('click', sluitGesprek);
     for (const knop of document.querySelectorAll('.wt-tabs button')) {
       knop.addEventListener('click', () => kiesTab(knop.dataset.tab));

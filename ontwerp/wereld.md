@@ -157,6 +157,37 @@ ze wel mag verkopen, zijn middelen om een gevecht te ontlopen: rook, lokaas, sla
 Naast deze mensen is er een maker voor gewone dorpelingen: per zaad een ander postuur, kapsel,
 kleding, hoofddeksel en iets in de handen. Daarmee kan het dorp druk aanvoelen.
 
+### Wie is wie, als het er honderd worden (Marcel, 22 sep 2026)
+
+Marcel: *"Hoe houden we alle poppetjes uit elkaar? Het kunnen er wel 100 worden."*
+
+Het antwoord begint bij de tabel hierboven: **je hoeft er geen honderd uit elkaar te houden.**
+Achttien mensen hebben een karakter en een haakje; de rest is menigte, en die hoeft geen naam,
+geen gesprek en geen plek in je hoofd. Uit elkaar houden geldt alleen voor wie iets te zeggen
+heeft.
+
+Voor die achttien stond een mens over vier plekken verdeeld: zijn uiterlijk en zijn stats in
+`T.WEZENS`, zijn tekst in `T.GESPREKKEN`, zijn quest als `gever` in `T.QUESTS`, en zijn punt op de
+kaart. Bij achttien kun je dat onthouden; bij honderd niet, en niets verbond ze — dezelfde bakker
+kon op twee plekken staan zonder dat iets klaagde.
+
+**Besloten: één mens is één regel, in `js/mensen.js`** (`T.MENSEN`). Daar staat wie hij is: naam,
+uiterlijk (een wezen dat hij leent, of een zaad tot hij getekend is), dwaalstraal en gesprek. De
+kaart zegt alleen nog wáár hij staat (`{ x, y, wie: 'koster' }`). Een figurant blijft
+`{ x, y, zaad: 7 }` en staat niet in de lijst.
+
+Wat daaruit volgt, en wat het gereedschap ervoor heeft:
+
+- **Zijn eigen naam boven zijn hoofd** in plaats van honderd keer "dorpeling".
+- **Een kleur naar wat hij te bieden heeft:** goud als hij een quest geeft, licht als hij een
+  gesprek heeft, gedempt als hij menigte is. Zo zie je uitgezoomd waar in het dorp iets te doen is.
+- **Een doorzoekbare mensenlijst** naast de kaart: wie er staat en waar, wie nog nergens staat.
+  Klik iemand die er staat en de camera gaat erheen; klik iemand die er niet staat en hij ligt in
+  je hand. Dat is het antwoord op "waar stond de koster ook alweer".
+- **De controle:** dezelfde mens twee keer neergezet is een fout, een onbekende naam is een fout,
+  twee poppetjes die hetzelfde gesprek voeren is een "let op" (bij de bruid en de bruidegom kan
+  het expres zijn), en wie nog nergens staat wordt in één regel opgeteld — dat is de werklijst.
+
 ### Dorpelingen lopen rond (Marcel, 20 sep 2026)
 
 "NPC's mogen ook wel rondlopen, vind je niet?" Ja: de loopanimaties zijn er voor alle
