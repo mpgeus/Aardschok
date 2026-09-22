@@ -10,18 +10,25 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## Loopt nu
 
-- **De huizenbouwer, ronde 1 (vorm)** — zie het blok hieronder.
+Niets. Volgende sessie: overleggen of ronde 3 van de huizenbouwer begint.
 
 ## Tegelijk: de huizenbouwer op ronde vormen
 
 Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Zie `beeld.md`,
 "De huizenbouwer op ronde vormen".
 
-1. **Vorm** (loopt). Klaar als de bouwer elke maat kan, de nok langs beide richtingen, één, anderhalf en
+1. **Vorm** (af, 21 sep). Klaar als de bouwer elke maat kan, de nok langs beide richtingen, één, anderhalf en
    twee lagen (met overkraging), en rechthoek, L en T met een doorlopende kil in het riet.
-2. **Materiaal.** Klaar als er planken, vlechtwerk en blokhut zijn naast vakwerk en veldsteen, en
+2. **Materiaal** (af, 22 sep). Klaar als er planken, vlechtwerk en blokhut zijn naast vakwerk en veldsteen, en
    spanen, leien en pannen naast riet.
-3. **Uitbouwen.** Klaar als dakkapellen in het riet opgaan, en er erkers, aanbouwen, buitentrappen,
+3. **Uitbouwen.** Wat ronde 2 opschreef dat hiervoor nodig is: een dakkapel in het riet is een
+   bult in het dak, waar de rijen riet overheen moeten buigen (dat hoort in `plekV`); een aanbouw
+   met een eenzijdig dak en een dakkapel op een dun dak vragen méér dan twee vleugels, en
+   `dakPlek`, `onderDak` en de kil kennen er nu twee; erkers, luiken, bloembakken, trappen en
+   balkons hangen aan een stuk muur en hebben daar al hulpjes voor, maar een nieuw muurvlak (een
+   erker) moet een eigen stuk muur worden, anders krijgt het geen patroon; en de losse tuinstukken
+   horen in een eigen bestand dat de hout- en plankpatronen deelt met `huis-sdf.cjs`.
+   Klaar als dakkapellen in het riet opgaan, en er erkers, aanbouwen, buitentrappen,
    luiken, bloembakken, schoorstenen en houten balkonnetjes zijn, plus losse tuinstukken (hek,
    hekje, groente, kruidenbed, bloemen, bankje) om zelf neer te zetten.
 4. **In gebruik.** Klaar als de nieuwe huizen in `gebouwen.tsx` staan met de goede voet en het goede
@@ -91,6 +98,11 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 22 sep 2026 — Huizenbouwer ronde 1 en 2: elke vorm (rechthoek, L, T; één, anderhalf en twee
+  lagen, met riet dat in de kil doorloopt) en alle materialen (vakwerk, vlechtwerk, planken,
+  blokhut, veldsteen; riet, spanen, leien, pannen; een wachttoren met plat dak). Platen in
+  `gereedschap/pixelart/uit/proefhuis/`.
 
 - 21 sep 2026 — **Eén doorlopende wereld:** `kaarten/wereld.tmj` met het erf (nu met randtegels)
   en het dorp op één kaart, en een strook ertussen voor het bos; de losse kaarten staan in
