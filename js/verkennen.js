@@ -58,13 +58,15 @@
 
   // Wat je opraapt door erop te stappen: de sleutel van het trappenhuis, en de zak zaaigoed die
   // de meester in de tutorial wil hebben. De tekst bij de muis, en wat er gemeld wordt.
-  const OPRAPEN = {
+  // Ook naar buiten, zodat de keuring (gereedschap/keuring.js) kan zeggen dat een voorwerp
+  // dat aan een quest hangt niet op te rapen is — dan ligt het er wel en doet het niets.
+  const OPRAPEN = (T.OPRAPEN = {
     sleutel: { tekst: 'De sleutel oppakken', vind: 'Je vindt de ijzeren sleutel.' },
     zak: { tekst: 'De zak zaaigoed oppakken', vind: 'Je tilt de zak zaaigoed op. Zwaarder dan hij eruitziet.' },
     // De leemkuil bij de beek (De koude oven, js/quests.js). De leem ligt er alleen zolang de
     // bakker erom vroeg: in Tiled heeft dat voorwerp quest="bakker:zoeken".
     leem: { tekst: 'Leem uit de kuil scheppen', vind: 'Je schept een handvol natte leem. Koud, en zwaarder dan je dacht.' },
-  };
+  });
 
   // Een ton of iets anders dat breekt (T.VOORWERPEN, `breekt`), sla je met je staf in stukken.
   // Dat kost niets, net als slaan in een gevecht: het is het enige wat niets kost, en de meester
