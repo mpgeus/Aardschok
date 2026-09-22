@@ -347,12 +347,15 @@ function opzoekerVoor(kaart, tegelsJson) {
   };
 }
 
-test('het dorpsdeel van de wereld heeft dezelfde tegels en objecten als kaarten/oud/dorp.tmj, op naam vergeleken', () => {
+// Dit toetst het script dat de wereld bouwde, niet kaarten/wereld.tmj zelf: daar tekent Marcel in
+// verder, en dan wijkt het dorpsdeel terecht af van zijn oude losse dorpskaart (op 22 sep 2026 lag er
+// al water waar eerst gras lag, en faalde deze toets om de verkeerde reden).
+test('het wereldscript neemt het dorp precies over uit kaarten/oud/dorp.tmj, op naam vergeleken', () => {
   const WORTEL = path.join(__dirname, '..');
   const dorpOud = JSON.parse(fs.readFileSync(path.join(WORTEL, 'kaarten', 'oud', 'dorp.tmj'), 'utf8'));
   const tegelsJson = JSON.parse(fs.readFileSync(path.join(WORTEL, 'tegels', 'tegels.json'), 'utf8'));
   const opzoekOud = opzoekerVoor(dorpOud, tegelsJson);
-  const wereldKaart = T.KAARTEN.wereld;
+  const wereldKaart = require('../gereedschap/tiled/maak-wereld.cjs').kaart;
   const opzoekWereld = opzoekerVoor(wereldKaart, tegelsJson);
 
   const grondOud = dorpOud.layers.find((l) => l.type === 'tilelayer');

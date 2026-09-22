@@ -665,9 +665,12 @@ if (require.main === module) {
 }
 
 // Voor test/wereld.test.cjs: waar het dorpsdeel binnen wereld.tmj precies ligt, zodat de toets dat
-// tegen kaarten/oud/dorp.tmj kan leggen zonder deze getallen een tweede keer over te typen.
+// tegen kaarten/oud/dorp.tmj kan leggen zonder deze getallen een tweede keer over te typen. En de
+// kaart zoals dit script hem bouwt: de toets hoort het script te controleren, niet kaarten/wereld.tmj
+// zelf, want daar tekent Marcel in verder en dan wijkt het dorpsdeel terecht af.
 module.exports = {
   DOX, DOY, DORP_B: dorp.B, DORP_H: dorp.H,
   EOX, EOY, ERF_B: erf.B, ERF_H: erf.H,
   BREEDTE, HOOGTE, RIJ,
+  kaart,
 };
