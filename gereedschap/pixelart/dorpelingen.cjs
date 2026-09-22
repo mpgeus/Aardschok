@@ -474,11 +474,17 @@ function smid(stand = null) {
   return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 42], straal: 50 });
 }
 
+const HERBERGIERSTER_SNELHEID = 1.4;
+const HERBERGIERSTER_FPS = 10;
+
 // ---------------------------------------------------------------- de herbergierster
 
 // De herbergierster: rond en hartelijk, een rode jurk met een wit schort, het haar in een knot.
 // De vuist in de zij, en in de andere hand een kroes bier die ze je al voorhoudt.
-function herbergierster() {
+// stand: zie smid() hierboven. Ze heeft geen zichtbaar been (de rok dekt haar helemaal, net als
+// dorpsoudste hieronder) — de rok zwaait daarom zelf mee (Bn.Brok), zoals bij een rok-drager in
+// dorpeling() (dorpelingen3.cjs).
+function herbergierster(stand = null) {
   const M = { huid: 0, jurk: 1, lijfje: 2, bloes: 3, schort: 4, haar: 5, oog: 6, kroes: 7, band: 8, schuim: 9, mond: 10, oorbel: 11 };
   const D = { rok: 1, lijf: 2, schort: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, haar: 9, kroes: 10 };
   const H = [0, 3.2, 65];
@@ -528,6 +534,18 @@ function herbergierster() {
   mat[M.oorbel] = { ramp: 'goud', lo: 2.6, hi: 6.6, glans: 1.2, detail: true };
 
   const delen = [];
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: HERBERGIERSTER_SNELHEID, fps: HERBERGIERSTER_FPS, beenLengte: 27 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.6, 37],
+    nek: [0, 0, 55.5],
+    schouders: [[-10.4, 0.4, 52.5], [10.4, 0.4, 52.5]],
+  });
+
   // --- rok en schort
   const rokTop = 38;
   const rok = {
@@ -536,6 +554,7 @@ function herbergierster() {
     cy: () => 0.8,
   };
   delen.push(klokrok(rokTop, [15.5, 10], [13.5, 8], () => 0.8, M.jurk, D.rok, 1));
+  bot(Bn.Brok);
   delen.push(schil(rok, { los: 1.2, d: 0.6, breed: (z) => mix(8.8, 6.9, z / rokTop), z0: 5, z1: rokTop - 0.5 }, M.schort, D.schort));
 
   // --- lijfje met veters tot de schouders, voorop een witte halslijn; pofmouwen
@@ -566,6 +585,7 @@ function herbergierster() {
     delen.push(ellips(plus(strik, [s * 2.2, -0.2, 0.5]), [2, 0.9, 1.4], M.schort, D.schort, 0.5));
     delen.push(kegel(plus(strik, [s * 0.5, -0.2, -1]), plus(strik, [s * 1.6, -0.8, -8]), 0.9, 0.8, M.schort, D.schort));
   }
+  bot(Bn.Bromp);
 
   // --- armen: witte pofmouwen, blote onderarmen. Rechts de vuist in de zij, links de kroes.
   const arm = (Sch, El, Hand, dArm, dHand) => {
@@ -579,13 +599,17 @@ function herbergierster() {
     delen.push(ellips(Hand, [2.7, 2.9, 3.1], M.huid, dHand, 0.6));
   };
   arm([10.4, 0.4, 52.5], [16, -1.8, 44.5], [11.6, 1.8, 39], D.armR, D.handR);
-  // de kroes: houten duigen, twee ijzeren banden, een oor aan de kant van de hand, schuim erop
+  bot(Bn.Barm[1]);
+  // de kroes: houten duigen, twee ijzeren banden, een oor aan de kant van de hand, schuim erop —
+  // ze houdt hem in haar linkerhand, dus hij zwaait mee met die arm (Wat iemand vasthoudt beweegt
+  // mee met de hand).
   const kroes = (x, y, z) => (Math.abs(z - K[2] + 2.2) < 0.7 || Math.abs(z - K[2] - 2) < 0.7 ? M.band : M.kroes);
   delen.push(kegel(plus(K, [0, 0, -3.4]), plus(K, [0, 0, 2.8]), 2.9, 2.7, kroes, D.kroes));
   delen.push(ring(plus(K, [-3.1, 0, 0]), [0, 1, 0], 1.8, 0.65, M.band, D.kroes));
   delen.push(ellips(plus(K, [0, 0, 3.6]), [2.9, 2.9, 1.5], M.schuim, D.kroes, 0.8));
   delen.push(bol(plus(K, [1.4, 2.1, 3]), 1.1, M.schuim, D.kroes, 0.8));
   arm([-10.4, 0.4, 52.5], [-13.8, 3, 43], plus(K, [-4.6, -0.3, 0.2]), D.armL, D.handL);
+  bot(Bn.Barm[0]);
 
   // --- hoofd: blosjes, een glimlach, het haar strak naar achteren in een knot
   const oy = schedel(delen, H, M, D, { maat: [6.8, 6.6, 7.3], oog: [2.6, 0.8], oor: 0.8 });
@@ -609,15 +633,20 @@ function herbergierster() {
     k: 0.8,
   });
   delen.push(ellips(plus(H, [0, -3.8, 6.3]), [3.8, 3.6, 3.6], M.haar, D.haar));
+  bot(Bn.Bnek);
 
-  return model(delen, mat, { midden: [0, 2, 38], straal: 46 });
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 38], straal: 46 });
 }
+
+const BOER_SNELHEID = 1.5;
+const BOER_FPS = 10;
 
 // ---------------------------------------------------------------- de boer
 
 // De boer: lang en mager, een strohoed achter op het hoofd, een donkerblauwe boerenkiel met een rode
 // halsdoek, klompen, een strootje in de mondhoek. De hooivork staat naast hem.
-function boer() {
+// stand: zie smid() hierboven.
+function boer(stand = null) {
   const M = { huid: 0, kiel: 1, broek: 2, klomp: 3, haar: 4, oog: 5, stro: 6, lint: 7, doek: 8, hout: 9, ijzer: 10, strootje: 11 };
   const D = { benen: 1, kiel: 2, armL: 3, armR: 4, handL: 5, handR: 6, hoofd: 7, hoed: 8, doek: 9, vork: 10 };
   const H = [0, 4, 68.5];
@@ -646,11 +675,35 @@ function boer() {
   mat[M.strootje] = { ramp: 'stro', lo: 4.2, hi: 6.6 };
 
   const delen = [];
-  // --- benen en klompen
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: BOER_SNELHEID, fps: BOER_FPS, beenLengte: 24 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.3, 30],
+    nek: [0, 0, 59],
+    schouders: [[-10, 0.3, 56], [10, 0.3, 56]],
+  });
+
+  // --- benen en klompen: elk been buigt bij de knie (beenPunten, zie de uitleg bovenaan dit
+  // bestand); zonder stand (hg null) tekent dit het oude, stilstaande been.
   for (const s of [-1, 1]) {
-    delen.push(kegel([s * 4.4, 0, 30], [s * 4.3, 0.8, 7], 3.9, 3.4, M.broek, D.benen, 1));
+    const i = s < 0 ? 0 : 1;
+    if (hg) {
+      const heupR = [s * 4.4, 0, 30];
+      const enkelR = [s * 4.3, 0.8, 7];
+      const P = beenPunten(hg, i, { heup: heupR, knie: knieTussen(heupR, enkelR), enkel: enkelR });
+      delen.push(kegel(P.heup, P.knie, 3.9, 3.65, M.broek, D.benen, 1));
+      delen.push(kegel(P.knie, P.enkel, 3.65, 3.4, M.broek, D.benen, 1));
+    } else {
+      delen.push(kegel([s * 4.4, 0, 30], [s * 4.3, 0.8, 7], 3.9, 3.4, M.broek, D.benen, 1));
+    }
+    bot(null);
     delen.push(ellips([s * 4.4, 2.6, 3], [3.5, 6.6, 3.2], M.klomp, D.benen, 1));
     delen.push(bol([s * 4.4, 8.4, 3.9], 1.7, M.klomp, D.benen, 1.8));
+    bot(voetBot(hg, i, [s * 4.4, 2.2, 0]));
   }
   // --- kiel: los en wijd, tot halverwege de dij; schouders erop
   const kiel = {
@@ -669,6 +722,7 @@ function boer() {
   });
   delen.push(bol([0.6, 7, 59.4], 1.6, M.doek, D.doek, 0.6));
   delen.push(kegel([0.6, 7.2, 58.8], [1.4, 8.4, 54.6], 1.8, 0.7, M.doek, D.doek));
+  bot(Bn.Bromp);
 
   // --- armen: mouwen opgestroopt. Links de hooivork, rechts hangt de arm langs het lijf.
   const arm = (Sch, El, Hand, dArm, dHand) => {
@@ -679,7 +733,9 @@ function boer() {
     delen.push(kegel(El, pols, 3.1, 2.4, M.huid, dArm, 1));
     delen.push(ellips(Hand, [2.6, 2.8, 3.1], M.huid, dHand, 0.6));
   };
-  // hooivork: de steel op de grond links voor hem, drie tanden in een vlak dat schuin staat
+  // hooivork: de steel op de grond links voor hem, drie tanden in een vlak dat schuin staat. Hij
+  // staat vast op de grond (net als het paardje van de kleuter), dus hij zwaait niet mee met de
+  // arm — dat zou zijn punt los van de grond laten zwiepen; alleen de hand rust ertegen.
   const voet = [-12.4, 8.4, 0.5];
   const top = [-13.9, 6.7, 69.5];
   delen.push(kegel(voet, top, 1.1, 1.15, M.hout, D.vork));
@@ -690,8 +746,11 @@ function boer() {
     const b = plus(top, maal(dwars, t));
     delen.push(...bochtKegel(b, plus(b, [0, 0.3, 5.4]), plus(b, [0, 1.7, 10.6]), 0.8, 0.55, 3, M.ijzer, D.vork, 0.4));
   }
+  bot(null);
   arm([-10, 0.3, 56], [-13.6, -0.6, 45.4], langs(voet, top, 0.69), D.armL, D.handL);
+  bot(Bn.Barm[0]);
   arm([10, 0.3, 56], [12.3, 0.4, 45.5], [11.4, 2.6, 36.2], D.armR, D.handR);
+  bot(Bn.Barm[1]);
 
   // --- hoofd: lang gezicht, grote neus, flaporen; bruin haar onder de hoed uit
   const oy = schedel(delen, H, M, D, { maat: [6.7, 6.7, 7.8], oog: [2.6, 0.8], oor: 1 });
@@ -721,15 +780,26 @@ function boer() {
     deel: D.hoed,
     k: 1,
   });
+  bot(Bn.Bnek);
 
-  return model(delen, mat, { midden: [0, 2, 43], straal: 50 });
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 43], straal: 50 });
 }
+
+const DORPSOUDSTE_SNELHEID = 1;
+// fps blijft 10 (zie SMID_FPS): dat getal stuurt de aslengte van de pas in houdingDorpeling
+// (T = 8/fps) en moet gelijk zijn aan de vaste 10 waarmee dorpelingen-anim.cjs "stap" (tegels per
+// pas) uitrekent (HOUDINGEN, hieronder), anders passen loopbeeld en werkelijke afstand niet meer
+// bij elkaar en gaat de voet toch een beetje glijden. Trager lopen komt alleen van een lagere
+// snelheid, nooit van een andere fps hier.
+const DORPSOUDSTE_FPS = 10;
 
 // ---------------------------------------------------------------- de dorpsoudste
 
 // De dorpsoudste: een krom oud vrouwtje met wit haar in een knotje, een paarse omslagdoek met
 // een gouden speld, en een wandelstok. De oudste van het dorp, en toch jonger dan de tovenaar.
-function dorpsoudste() {
+// stand: zie smid() hierboven. Ze is oud en loopt trager (DORPSOUDSTE_SNELHEID); geen been
+// getekend, net als de herbergierster, dus de rok zwaait zelf mee (Bn.Brok).
+function dorpsoudste(stand = null) {
   const M = { huid: 0, jurk: 1, doek: 2, haar: 3, oog: 4, hout: 5, speld: 6, mond: 7, rok: 8, schort: 9 };
   const D = { rok: 1, lijf: 2, doek: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, haar: 9, stok: 10, schort: 11 };
   const H = [0, 9.2, 65.5];
@@ -757,6 +827,18 @@ function dorpsoudste() {
   mat[M.mond] = { ramp: 'huid', lo: 1.6, hi: 2.6, detail: true, rand: 0, schaduw: false };
 
   const delen = [];
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: DORPSOUDSTE_SNELHEID, fps: DORPSOUDSTE_FPS, beenLengte: 24 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 1.5, 36.5],
+    nek: [0, 3, 56.5],
+    schouders: [[-9.6, 3.8, 53.5], [9.6, 3.8, 53.5]],
+  });
+
   // --- lange rok, een krom lijf: de rug rond, de schouders en het hoofd naar voren
   const rok = {
     rx: (z) => mix(13.6, 9.8, Math.pow(klem(z / 36.5, 0, 1), 0.8)),
@@ -764,6 +846,7 @@ function dorpsoudste() {
     cy: (z) => mix(1.2, 1.9, klem(z / 36.5, 0, 1)),
   };
   delen.push(klokrok(36.5, [13.6, 9.8], [12.2, 7.9], (t) => mix(1.2, 1.9, t), M.rok, D.rok, 0.8));
+  bot(Bn.Brok);
   delen.push(schil(rok, { los: 1, d: 0.55, breed: (z) => mix(7.6, 6.2, z / 36.5), z0: 6, z1: 36 }, M.schort, D.schort));
   const lijf = {
     rx: profiel([[34.5, 9.7], [42, 9.8], [49, 10], [56.5, 9.3]]),
@@ -794,6 +877,7 @@ function dorpsoudste() {
   });
   const speld = [-0.6, lijf.cy(51.5) + lijf.ry(51.5) + 2.6, 52];
   delen.push(bol(speld, 1.3, M.speld, D.doek));
+  bot(Bn.Bromp);
 
   // --- armen in donkere mouwen: rechts op de stok, links houdt de doek bij de speld dicht
   const arm = (Sch, El, Hand, dArm, dHand) => {
@@ -802,14 +886,18 @@ function dorpsoudste() {
     delen.push(kegel(El, pols, 3.2, 2.6, M.jurk, dArm, 1));
     delen.push(ellips(Hand, [2.5, 2.7, 2.9], M.huid, dHand, 0.6));
   };
-  // wandelstok met een gebogen handvat
+  // wandelstok met een gebogen handvat: staat vast op de grond (net als de hooivork van de boer),
+  // dus hij zwaait niet mee met de arm — alleen de hand rust op de kromming.
   const stokOnder = [10.4, 13.2, 0.5];
   const stokBoven = [9.8, 12.2, 42];
   delen.push(kegel(stokOnder, stokBoven, 1, 1.15, M.hout, D.stok));
   delen.push(...bochtKegel(stokBoven, plus(stokBoven, [0, 0.4, 3.6]), plus(stokBoven, [0, 3.8, 3]), 1.15, 1.05, 4, M.hout, D.stok, 0.5));
   delen.push(...bochtKegel(plus(stokBoven, [0, 3.8, 3]), plus(stokBoven, [0, 5.4, 2.4]), plus(stokBoven, [0, 5.2, 0.2]), 1.05, 0.95, 3, M.hout, D.stok, 0.5));
+  bot(null);
   arm([9.6, 3.8, 53.5], [12.6, 5.6, 46.5], plus(stokBoven, [0, 1.2, 3.4]), D.armR, D.handR);
+  bot(Bn.Barm[1]);
   arm([-9.6, 3.8, 53.5], [-11.6, 6.8, 46], plus(speld, [-3.2, 0.6, -0.8]), D.armL, D.handL);
+  bot(Bn.Barm[0]);
 
   // --- hoofd: iets voorover, rimpels, wit haar strak naar achteren in een knotje
   const oy = schedel(delen, H, M, D, { maat: [6.6, 6.5, 7.2], oog: [2.6, 0.9], oor: 0.85 });
@@ -831,8 +919,9 @@ function dorpsoudste() {
     k: 0.8,
   });
   delen.push(ellips(plus(H, [0, -4.2, 5.4]), [3.5, 3.3, 3.4], M.haar, D.haar));
+  bot(Bn.Bnek);
 
-  return model(delen, mat, { midden: [0, 3, 38], straal: 46 });
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 3, 38], straal: 46 });
 }
 
 // ---------------------------------------------------------------- alle dorpelingen
@@ -872,4 +961,5 @@ const DORPELINGEN = [
 module.exports = {
   smid, herbergierster, boer, dorpsoudste, DORPELINGEN, profiel, grensbol, romp, schil, klokrok, blokGedraaid, schedel, glimlach,
   rustDorpeling, houdingDorpeling, bottenDorpeling, knieTussen, beenPunten, voetBot, SMID_SNELHEID, SMID_FPS,
+  HERBERGIERSTER_SNELHEID, HERBERGIERSTER_FPS, BOER_SNELHEID, BOER_FPS, DORPSOUDSTE_SNELHEID, DORPSOUDSTE_FPS,
 };

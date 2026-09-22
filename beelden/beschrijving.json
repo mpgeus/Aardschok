@@ -659,6 +659,424 @@
      "stap": 0.48
     }
    }
+  },
+  "herbergierster": {
+   "naam": "herbergierster",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "herbergierster-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "herbergierster-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56
+    }
+   }
+  },
+  "boer": {
+   "naam": "boer",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "boer-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "boer-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6
+    }
+   }
+  },
+  "dorpsoudste": {
+   "naam": "dorpsoudste",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "dorpsoudste-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "dorpsoudste-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1,
+     "stap": 0.4
+    }
+   }
+  },
+  "jongen": {
+   "naam": "jongen",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.3,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "jongen-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "jongen-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.3,
+     "stap": 0.52
+    }
+   }
+  },
+  "meisje": {
+   "naam": "meisje",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.25,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "meisje-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "meisje-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.25,
+     "stap": 0.5
+    }
+   }
+  },
+  "kleuter": {
+   "naam": "kleuter",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 0.85,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "kleuter-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "kleuter-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 0.85,
+     "stap": 0.34
+    }
+   }
+  },
+  "smidsvrouw": {
+   "naam": "smidsvrouw",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.45,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "smidsvrouw-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "smidsvrouw-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.45,
+     "stap": 0.58
+    }
+   }
+  },
+  "boerin": {
+   "naam": "boerin",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "boerin-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "boerin-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56
+    }
+   }
+  },
+  "bruidegom": {
+   "naam": "bruidegom",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "bruidegom-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "bruidegom-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6
+    }
+   }
+  },
+  "bruid": {
+   "naam": "bruid",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.3,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "bruid-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "bruid-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.3,
+     "stap": 0.52
+    }
+   }
+  },
+  "oudeman": {
+   "naam": "oudeman",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "oudeman-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "oudeman-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1,
+     "stap": 0.4
+    }
+   }
   }
  },
  "muren": {

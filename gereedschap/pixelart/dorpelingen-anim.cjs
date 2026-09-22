@@ -3,19 +3,37 @@
 // bosvijanden-anim.cjs: per figuur per houding één vel (rijen zijn de acht richtingen
 // Z ZW W NW N NO O ZO, kolommen de beelden) en een JSON met de maten en de loopsnelheid.
 // Fase A (ontwerp/werklijst.md, punt 2): alleen de smid en twee gewone dorpelingen (dorpeling0 =
-// man, dorpeling1 = vrouw); de rest van de negentien volgt in fase B met dezelfde manier (zie
-// dorpelingen.cjs, "lopen en staan").
+// man, dorpeling1 = vrouw). Fase B2a voegt de andere elf genoemde dorpelingen toe (herbergierster,
+// boer en dorpsoudste uit dorpelingen.cjs; de acht uit dorpelingen2.cjs), met dezelfde manier (zie
+// dorpelingen.cjs, "lopen en staan"). De zeven vaklieden en meer gewone varianten volgen in B2b.
 //   uit/dorpelingen/animaties/<naam>.json          { naam, cel, anker, snelheid, richtingen, houdingen }
 //   uit/dorpelingen/animaties/<naam>-<houding>.png de vellen die naar-spel.cjs kopieert
 //   uit/dorpelingen/lopen-proef.png                 de proefplaat om te beoordelen: de drie naast
 //                                                    Wim, in Z en ZO, een paar loopbeelden op een rij
+//   uit/dorpelingen/lopen-proef-b2a.png             de proefplaat van fase B2a: de elf nieuwe, in
+//                                                    ZO, vier loopbeelden elk, in twee kolommen
 //
 //   node gereedschap/pixelart/dorpelingen-anim.cjs
 const fs = require('fs');
 const path = require('path');
 const K = require('./kern.cjs');
-const { smid, SMID_SNELHEID, SMID_FPS } = require('./dorpelingen.cjs');
+const {
+  smid, SMID_SNELHEID, SMID_FPS,
+  herbergierster, HERBERGIERSTER_SNELHEID, HERBERGIERSTER_FPS,
+  boer, BOER_SNELHEID, BOER_FPS,
+  dorpsoudste, DORPSOUDSTE_SNELHEID, DORPSOUDSTE_FPS,
+} = require('./dorpelingen.cjs');
 const { dorpeling, DORPELING_SNELHEID } = require('./dorpelingen3.cjs');
+const {
+  jongen, JONGEN_SNELHEID, JONGEN_FPS,
+  meisje, MEISJE_SNELHEID, MEISJE_FPS,
+  kleuter, KLEUTER_SNELHEID, KLEUTER_FPS,
+  smidsvrouw, SMIDSVROUW_SNELHEID, SMIDSVROUW_FPS,
+  boerin, BOERIN_SNELHEID, BOERIN_FPS,
+  bruidegom, BRUIDEGOM_SNELHEID, BRUIDEGOM_FPS,
+  bruid, BRUID_SNELHEID, BRUID_FPS,
+  oudeMan, OUDEMAN_SNELHEID, OUDEMAN_FPS,
+} = require('./dorpelingen2.cjs');
 const F = require('./figuren2.cjs'); // Wim, alleen voor de proefplaat hieronder
 
 const UIT = path.join(__dirname, 'uit', 'dorpelingen');
@@ -26,12 +44,27 @@ const CEL = 112;
 const HOOG = 124;
 const ANKER = [56, 110];
 
-// Fase A: drie figuren, telkens dezelfde manier (dorpelingen.cjs). dorpeling0/1 zijn de eerste
-// twee van de "aantal gerenderde varianten" waar js/sprites.js straks zaad % aantal op doet.
+// Fase A: drie figuren (smid, dorpeling0/1), telkens dezelfde manier (dorpelingen.cjs).
+// dorpeling0/1 zijn de eerste twee van de "aantal gerenderde varianten" waar js/sprites.js straks
+// zaad % aantal op doet. Fase B2a: de andere elf genoemde dorpelingen, elk met zijn eigen
+// loopmaat (snelheid moet gelijk zijn aan T.WEZENS.<naam>.snelheid in js/wereld.js, anders gaan
+// de voeten glijden — zie de uitleg bij DORPSOUDSTE_FPS in dorpelingen.cjs). fps is voor iedereen
+// 10: alleen de snelheid maakt een figuur trager.
 const FIGUREN = [
   { naam: 'smid', snelheid: SMID_SNELHEID, fps: SMID_FPS, maak: (stand) => smid(stand) },
   { naam: 'dorpeling0', snelheid: DORPELING_SNELHEID, maak: (stand) => dorpeling(0, { geslacht: 'man' }, stand) },
   { naam: 'dorpeling1', snelheid: DORPELING_SNELHEID, maak: (stand) => dorpeling(1, { geslacht: 'vrouw' }, stand) },
+  { naam: 'herbergierster', snelheid: HERBERGIERSTER_SNELHEID, fps: HERBERGIERSTER_FPS, maak: (stand) => herbergierster(stand) },
+  { naam: 'boer', snelheid: BOER_SNELHEID, fps: BOER_FPS, maak: (stand) => boer(stand) },
+  { naam: 'dorpsoudste', snelheid: DORPSOUDSTE_SNELHEID, fps: DORPSOUDSTE_FPS, maak: (stand) => dorpsoudste(stand) },
+  { naam: 'jongen', snelheid: JONGEN_SNELHEID, fps: JONGEN_FPS, maak: (stand) => jongen(stand) },
+  { naam: 'meisje', snelheid: MEISJE_SNELHEID, fps: MEISJE_FPS, maak: (stand) => meisje(stand) },
+  { naam: 'kleuter', snelheid: KLEUTER_SNELHEID, fps: KLEUTER_FPS, maak: (stand) => kleuter(stand) },
+  { naam: 'smidsvrouw', snelheid: SMIDSVROUW_SNELHEID, fps: SMIDSVROUW_FPS, maak: (stand) => smidsvrouw(stand) },
+  { naam: 'boerin', snelheid: BOERIN_SNELHEID, fps: BOERIN_FPS, maak: (stand) => boerin(stand) },
+  { naam: 'bruidegom', snelheid: BRUIDEGOM_SNELHEID, fps: BRUIDEGOM_FPS, maak: (stand) => bruidegom(stand) },
+  { naam: 'bruid', snelheid: BRUID_SNELHEID, fps: BRUID_FPS, maak: (stand) => bruid(stand) },
+  { naam: 'oudeman', snelheid: OUDEMAN_SNELHEID, fps: OUDEMAN_FPS, maak: (stand) => oudeMan(stand) },
 ];
 const HOUDINGEN = [
   { naam: 'staan', beelden: 4, fps: 4, herhaal: true },
@@ -156,3 +189,52 @@ REGELS.forEach((r, rij) => {
 const proef = K.png(vel, SCHAAL, '#2a2236');
 fs.writeFileSync(path.join(UIT, 'lopen-proef.png'), proef);
 console.log(`lopen-proef.png: ${vel.b * SCHAAL}×${vel.h * SCHAAL} (schaal ${SCHAAL})`);
+
+// ---------------------------------------------------------------- fase B2a: proefplaat van de elf
+
+// De elf dorpelingen van deze stap (ontwerp/werklijst.md, punt 2, fase B2a), in ZO, vier van de
+// acht loopbeelden elk (om en om, zodat de hele pas te zien is: neerzetten, zwaaien, het andere
+// been neerzetten, zwaaien), in twee kolommen zodat de plaat binnen 1400×900 blijft. Los van
+// lopen-proef.png hierboven, dat de fase A-vergelijking met Wim blijft.
+const NAMEN_B2A = [
+  'herbergierster', 'boer', 'dorpsoudste', 'jongen', 'meisje', 'kleuter',
+  'smidsvrouw', 'boerin', 'bruidegom', 'bruid', 'oudeman',
+];
+const FRAMES_B2A = [0, 2, 4, 6];
+let bx0 = CEL, bx1 = -1, by0 = HOOG, by1 = -1;
+const platenB2a = {};
+for (const naam of NAMEN_B2A) {
+  const rijZO = gerendered[naam].lopen.ZO;
+  platenB2a[naam] = FRAMES_B2A.map((i) => rijZO[i]);
+  for (const p of platenB2a[naam]) {
+    const k = kader(p);
+    if (k.x1 < 0) continue;
+    bx0 = Math.min(bx0, k.x0);
+    bx1 = Math.max(bx1, k.x1);
+    by0 = Math.min(by0, k.y0);
+    by1 = Math.max(by1, k.y1);
+  }
+}
+const RANDB = 2;
+bx0 = Math.max(0, bx0 - RANDB);
+by0 = Math.max(0, by0 - RANDB);
+const BREEDB = Math.min(CEL, bx1 + RANDB - bx0 + 1);
+const HOOGB = Math.min(HOOG, by1 + RANDB - by0 + 1);
+const RIJGATB = 4;
+const KOLGAT = 16;
+const KOLOM = Math.ceil(NAMEN_B2A.length / 2); // rijen per kolom (6, dan 5)
+const breedteB2a = 2 * FRAMES_B2A.length * BREEDB + KOLGAT;
+const hoogteB2a = KOLOM * HOOGB + (KOLOM - 1) * RIJGATB;
+const SCHAALB = Math.min(2, Math.floor(Math.min(1400 / breedteB2a, 900 / hoogteB2a) * 100) / 100);
+
+const velB2a = new K.Plaat(breedteB2a, hoogteB2a);
+NAMEN_B2A.forEach((naam, idx) => {
+  const kol = Math.floor(idx / KOLOM);
+  const rij = idx % KOLOM;
+  const x = kol * (FRAMES_B2A.length * BREEDB + KOLGAT);
+  const y = rij * (HOOGB + RIJGATB);
+  platenB2a[naam].forEach((p, i) => velB2a.plak(p.uitsnede(bx0, by0, BREEDB, HOOGB), x + i * BREEDB, y));
+});
+const proefB2a = K.png(velB2a, SCHAALB, '#2a2236');
+fs.writeFileSync(path.join(UIT, 'lopen-proef-b2a.png'), proefB2a);
+console.log(`lopen-proef-b2a.png: ${velB2a.b * SCHAALB}×${velB2a.h * SCHAALB} (schaal ${SCHAALB})`);

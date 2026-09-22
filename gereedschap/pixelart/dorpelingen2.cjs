@@ -14,7 +14,11 @@
 const { sdf, bouwSdf, klem, mix } = require('./kern.cjs');
 const { model, kegel, capsule, bol, ellips, bochtKegel, plus, naarRamp } = require('./figuren.cjs');
 const { ring, schijf, eenheid, langs } = require('./figuren2.cjs');
-const { DORPELINGEN, profiel, romp, schil, klokrok, schedel, glimlach } = require('./dorpelingen.cjs');
+const HH = require('./houding.cjs');
+const {
+  DORPELINGEN, profiel, romp, schil, klokrok, schedel, glimlach,
+  houdingDorpeling, bottenDorpeling, knieTussen, beenPunten, voetBot,
+} = require('./dorpelingen.cjs');
 
 // ---------------------------------------------------------------- hulpjes
 
@@ -172,12 +176,17 @@ function draaiDelen(delen, as, graden, c) {
   }));
 }
 
+const JONGEN_SNELHEID = 1.3;
+// fps blijft 10, ook al is hij een kind: zie DORPSOUDSTE_FPS (dorpelingen.cjs) voor waarom.
+const JONGEN_FPS = 10;
+
 // ---------------------------------------------------------------- de jongen
 
 // De jongen: een pet van zijn vader die hem veel te groot is en scheef zakt, een groen hemd met
 // bretels, een korte broek met blote knieën, en een houten zwaard dat hij heldhaftig omhoog steekt.
 // De andere vuist in de zij, net als de grote mensen.
-function jongen() {
+// stand: zie smid() (dorpelingen.cjs). Kinderen lopen in een vlugger maatje dan volwassenen.
+function jongen(stand = null) {
   const M = { huid: 0, hemd: 1, broek: 2, sok: 3, laars: 4, haar: 5, oog: 6, pet: 7, hout: 8, touw: 9, mond: 10, bretel: 11 };
   const D = { benen: 1, lijf: 2, bretels: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, pet: 9, zwaard: 10 };
   const H = [0, 2.4, 51];
@@ -197,11 +206,36 @@ function jongen() {
   mat[M.bretel] = { ramp: 'leer', lo: 0.8, hi: 4 };
 
   const delen = [];
-  // --- laarsjes, sokken tot onder de knie, blote knieën, korte broek
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: JONGEN_SNELHEID, fps: JONGEN_FPS, beenLengte: 17 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.3, 23.5],
+    nek: [0, 0, 39.5],
+    schouders: [[-7.8, 0.3, 36.5], [7.8, 0.3, 36.5]],
+  });
+
+  // --- laarsjes, sokken tot onder de knie, blote knieën, korte broek. Het been (sok/knie/broek in
+  // één kegel, per z-hoogte gekleurd) buigt bij de knie; de laars is dan het voetstuk (voetBot).
   for (const s of [-1, 1]) {
+    const i = s < 0 ? 0 : 1;
+    const beenMat = (x, y, z) => (z < 11 ? M.sok : z < 14.5 ? M.huid : M.broek);
+    if (hg) {
+      const heupR = [s * 3.4, 0, 24];
+      const enkelR = [s * 3.3, 0.3, 5];
+      const P = beenPunten(hg, i, { heup: heupR, knie: knieTussen(heupR, enkelR), enkel: enkelR });
+      delen.push(kegel(P.heup, P.knie, 3, 2.7, beenMat, D.benen, 1));
+      delen.push(kegel(P.knie, P.enkel, 2.7, 2.4, beenMat, D.benen, 1));
+    } else {
+      delen.push(kegel([s * 3.4, 0, 24], [s * 3.3, 0.3, 5], 3, 2.4, beenMat, D.benen, 1));
+    }
+    bot(null);
     delen.push(ellips([s * 3.3, 1.6, 2.1], [2.6, 4.2, 2.3], M.laars, D.benen, 1));
     delen.push(kegel([s * 3.3, 0.3, 2.4], [s * 3.3, 0.3, 6.6], 2.7, 2.6, M.laars, D.benen, 1));
-    delen.push(kegel([s * 3.4, 0, 24], [s * 3.3, 0.3, 5], 3, 2.4, (x, y, z) => (z < 11 ? M.sok : z < 14.5 ? M.huid : M.broek), D.benen, 1));
+    bot(voetBot(hg, i, [s * 3.3, 1.6, 0]));
   }
   delen.push(ellips([0, 0.3, 23.5], [7.6, 5.4, 4.6], M.broek, D.benen, 1.5));
   // --- hemd, schouders, bretels die het lijf volgen
@@ -219,8 +253,11 @@ function jongen() {
     m: M.bretel,
     deel: D.bretels,
   });
+  bot(Bn.Bromp);
 
-  // --- armen: korte mouwen. Rechts steekt hij het zwaard omhoog, links de vuist in de zij.
+  // --- armen: korte mouwen. Rechts steekt hij het zwaard omhoog, links de vuist in de zij. Het
+  // zwaard houdt hij vast (niet op de grond, net als de hamer van de smid), dus het zwaait mee
+  // met de rechterarm.
   const kind = { mouw: M.hemd, huid: M.huid, r: [2.5, 2.1, 1.7], tot: 0.55, hand: [1.9, 2, 2.2] };
   const hand = [9.6, 2.8, 43.6];
   const richting = eenheid([0.16, 0.1, 1]);
@@ -230,7 +267,9 @@ function jongen() {
   delen.push(kegel(kruisHout, plus(kruisHout, maal(richting, 13)), 1.1, 0.85, M.hout, D.zwaard));
   delen.push(ring(kruisHout, richting, 1.2, 0.5, M.touw, D.zwaard));
   arm(delen, [7.8, 0.3, 36.5], [12, 1, 38.6], hand, { ...kind, dArm: D.armR, dHand: D.handR });
+  bot(Bn.Barm[1]);
   arm(delen, [-7.8, 0.3, 36.5], [-11.4, -1.4, 31], [-8.4, 1.4, 27.4], { ...kind, dArm: D.armL, dHand: D.handL });
+  bot(Bn.Barm[0]);
 
   // --- hoofd: rond, grote lage ogen, een brede grijns; bruin haar onder de pet uit
   const oy = schedel(delen, H, M, D, { maat, oog: [2.5, -0.3], oogR: 1, oor: 0.95 });
@@ -256,15 +295,21 @@ function jongen() {
     },
   ];
   delen.push(...draaiDelen(pet, [0, 1, 0], -13, plus(H, [0, 0, 1])));
+  bot(Bn.Bnek);
 
-  return model(delen, mat, { midden: [0, 2, 32], straal: 40 });
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 32], straal: 40 });
 }
+
+const MEISJE_SNELHEID = 1.25;
+// fps blijft 10: zie DORPSOUDSTE_FPS (dorpelingen.cjs) voor waarom.
+const MEISJE_FPS = 10;
 
 // ---------------------------------------------------------------- het meisje
 
 // Het meisje: blonde vlechten die opzij uitsteken, met rode strikjes, een oranje jurk met een wit
 // kraagje en pofmouwtjes, en in haar armen een zwarte kat met gele ogen.
-function meisje() {
+// stand: zie smid() (dorpelingen.cjs).
+function meisje(stand = null) {
   const M = { huid: 0, jurk: 1, bloes: 2, kous: 3, schoen: 4, haar: 5, oog: 6, strik: 7, kat: 8, katoog: 9, mond: 10 };
   const D = { benen: 1, rok: 2, lijf: 3, kraag: 4, armL: 5, armR: 6, handL: 7, handR: 8, hoofd: 9, haar: 10, kat: 11 };
   const H = [0, 2.6, 49];
@@ -292,13 +337,40 @@ function meisje() {
   mat[M.mond] = MOND;
 
   const delen = [];
-  // --- schoentjes, witte kousen, blote knieën
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: MEISJE_SNELHEID, fps: MEISJE_FPS, beenLengte: 15 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.3, 20],
+    nek: [0, 0, 40.2],
+    schouders: [[-7.4, 0.3, 37.2], [7.4, 0.3, 37.2]],
+  });
+
+  // --- schoentjes, witte kousen, blote knieën: het rokje is kort, dus de benen blijven zichtbaar
+  // en buigen bij de knie.
   for (const s of [-1, 1]) {
+    const i = s < 0 ? 0 : 1;
+    const beenMat = (x, y, z) => (z < 12.5 ? M.kous : M.huid);
+    if (hg) {
+      const heupR = [s * 3.1, 0, 20];
+      const enkelR = [s * 3, 0.3, 3];
+      const P = beenPunten(hg, i, { heup: heupR, knie: knieTussen(heupR, enkelR), enkel: enkelR });
+      delen.push(kegel(P.heup, P.knie, 2.7, 2.45, beenMat, D.benen, 1));
+      delen.push(kegel(P.knie, P.enkel, 2.45, 2.2, beenMat, D.benen, 1));
+    } else {
+      delen.push(kegel([s * 3.1, 0, 20], [s * 3, 0.3, 3], 2.7, 2.2, beenMat, D.benen, 1));
+    }
+    bot(null);
     delen.push(ellips([s * 3, 1.5, 1.7], [2.3, 3.8, 1.9], M.schoen, D.benen, 1));
-    delen.push(kegel([s * 3.1, 0, 20], [s * 3, 0.3, 3], 2.7, 2.2, (x, y, z) => (z < 12.5 ? M.kous : M.huid), D.benen, 1));
+    bot(voetBot(hg, i, [s * 3, 1.5, 0]));
   }
-  // --- jurk: een klokrokje tot net boven de knie, een lijfje, een wit kraagje
+  // --- jurk: een klokrokje tot net boven de knie, een lijfje, een wit kraagje. De rok zwaait
+  // zelf mee (Bn.Brok), ook al is hij kort — een rok wiebelt altijd wat breder dan het lijf.
   delen.push(rokVan(14, 29, [9.4, 7], [8, 5.6], () => 0.5, M.jurk, D.rok, 1.2));
+  bot(Bn.Brok);
   const lijf = {
     rx: profiel([[27, 6.8], [33, 7.1], [39.5, 7.2]]),
     ry: profiel([[27, 5.2], [33, 5.4], [39.5, 4.6]]),
@@ -329,12 +401,18 @@ function meisje() {
   delen.push(bol(plus(kop, [0, 2.3, -0.9]), 1.2, M.kat, D.kat, 0.8));
   for (const x of [2, 3.6]) delen.push(bol([x, 10.8, 30.2], 1, M.kat, D.kat, 0.6));
   delen.push(...bochtKegel([-4.4, 8.2, 31.8], [-7.4, 9.4, 29.2], [-6.8, 11.4, 25.4], 1, 0.6, 4, M.kat, D.kat, 0.4));
+  // ze draagt de kat met twee handen tegen zich aan: hij beweegt dus mee met de romp (Bn.Bromp),
+  // niet met één arm apart.
+  bot(Bn.Bromp);
 
   // --- armen: pofmouwtjes; ze houdt de kat met twee handen vast
   const kind = { mouw: M.bloes, huid: M.huid, r: [2.4, 2, 1.6], tot: 0.45, hand: [1.8, 1.9, 2.1] };
-  for (const s of [-1, 1]) delen.push(bol([s * 7.4, 0.3, 37.4], 2.9, M.bloes, s > 0 ? D.armR : D.armL, 1));
+  delen.push(bol([7.4, 0.3, 37.4], 2.9, M.bloes, D.armR, 1));
   arm(delen, [7.4, 0.3, 37.2], [9, 3.4, 31.2], [4, 8.8, 29.8], { ...kind, dArm: D.armR, dHand: D.handR });
+  bot(Bn.Barm[1]);
+  delen.push(bol([-7.4, 0.3, 37.4], 2.9, M.bloes, D.armL, 1));
   arm(delen, [-7.4, 0.3, 37.2], [-8.8, 3, 31.4], [-4.6, 9.4, 32.4], { ...kind, dArm: D.armL, dHand: D.handL });
+  bot(Bn.Barm[0]);
 
   // --- hoofd: pony, een scheiding, en twee vlechten die opzij uitsteken
   const oy = schedel(delen, H, M, D, { maat, oog: [2.4, -0.3], oogR: 1, oor: 0.8 });
@@ -361,16 +439,23 @@ function meisje() {
     delen.push(ellips(plus(eind, [-s * 1.4, 0.4, 0.5]), [1.4, 1.1, 0.9], M.strik, D.haar, 0.3));
     delen.push(bol(plus(eind, [s * 0.9, 0.2, -1.6]), 0.9, M.haar, D.haar, 0.3));
   }
+  bot(Bn.Bnek);
 
-  return model(delen, mat, { midden: [0, 2, 30], straal: 38 });
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 30], straal: 38 });
 }
+
+const KLEUTER_SNELHEID = 0.85;
+// fps blijft 10, ook al is hij traag: zie DORPSOUDSTE_FPS (dorpelingen.cjs) voor waarom — trager
+// lopen komt alleen van de lagere snelheid hierboven.
+const KLEUTER_FPS = 10;
 
 // ---------------------------------------------------------------- de kleuter
 
 // De kleuter: een peertje op mollige beentjes, een geel kieltje met een kanten zoom en een wit
 // kraagje, rode schoentjes, één krulletje. Aan een touwtje trekt hij een houten paardje op
 // rode wieltjes; met de andere hand houdt hij verlegen zijn kieltje vast.
-function kleuter() {
+// stand: zie smid() (dorpelingen.cjs). Hij is klein en loopt trager dan de andere kinderen.
+function kleuter(stand = null) {
   const M = { huid: 0, kiel: 1, kraag: 2, schoen: 3, haar: 4, oog: 5, paard: 6, manen: 7, rood: 8, mond: 9, plank: 10, touw: 11 };
   const D = { benen: 1, lijf: 2, kraag: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, haar: 9, paard: 10, wiel: 11, touw: 12 };
   const H = [0, 2.2, 45];
@@ -395,10 +480,33 @@ function kleuter() {
   mat[M.touw] = { ramp: 'pleister', lo: 3, hi: 6, detail: true };
 
   const delen = [];
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: KLEUTER_SNELHEID, fps: KLEUTER_FPS, beenLengte: 9 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.4, 13.5],
+    nek: [0, 0, 34.6],
+    schouders: [[-6.6, 0.5, 31.6], [6.6, 0.5, 31.6]],
+  });
+
   // --- mollige beentjes, rode schoentjes
   for (const s of [-1, 1]) {
+    const i = s < 0 ? 0 : 1;
+    if (hg) {
+      const heupR = [s * 2.9, 0.4, 13.5];
+      const enkelR = [s * 2.7, 0.6, 2.8];
+      const P = beenPunten(hg, i, { heup: heupR, knie: knieTussen(heupR, enkelR), enkel: enkelR });
+      delen.push(kegel(P.heup, P.knie, 2.9, 2.6, M.huid, D.benen, 1));
+      delen.push(kegel(P.knie, P.enkel, 2.6, 2.3, M.huid, D.benen, 1));
+    } else {
+      delen.push(kegel([s * 2.9, 0.4, 13.5], [s * 2.7, 0.6, 2.8], 2.9, 2.3, M.huid, D.benen, 1));
+    }
+    bot(null);
     delen.push(ellips([s * 2.8, 1.6, 1.6], [2.1, 3.3, 1.7], M.schoen, D.benen, 1));
-    delen.push(kegel([s * 2.9, 0.4, 13.5], [s * 2.7, 0.6, 2.8], 2.9, 2.3, M.huid, D.benen, 1));
+    bot(voetBot(hg, i, [s * 2.8, 1.6, 0]));
   }
   // --- een peervormig kieltje, onderaan een kanten zoom, bovenaan een wit kraagje
   const lijf = {
@@ -420,9 +528,12 @@ function kleuter() {
     m: M.kraag,
     deel: D.kraag,
   });
+  bot(Bn.Bromp);
 
   // --- het trekpaardje: op een plankje met rode wieltjes, rechts voor hem, met de flank naar
-  // voren, zodat je het van de meeste kanten als paardje ziet
+  // voren, zodat je het van de meeste kanten als paardje ziet. Het staat vast op de grond (net
+  // als de hooivork van de boer en de wandelstok van de dorpsoudste), dus het paardje en het
+  // touwtje zwaaien niet mee met zijn lijf of arm — anders zou het over de grond gaan zweven.
   const P = [14.6, 9.4, 0];
   const u = eenheid([1, 0.35, 0]); // de richting van de kop
   const b = [-u[1], u[0], 0]; // naar links van het paardje
@@ -478,11 +589,14 @@ function kleuter() {
   // het touwtje, van zijn hand naar de hals van het paardje
   const hand = [10.4, 6.8, 21.4];
   delen.push(capsule(hand, op(5.4, 0, 13.2), 0.32, M.touw, D.touw));
+  bot(null);
 
   // --- armpjes: pofmouwtjes. Rechts het touwtje, links verlegen aan het kieltje.
   const kind = { mouw: M.kiel, huid: M.huid, r: [2.6, 2.3, 1.9], tot: 0.6, hand: [1.9, 2, 2.1] };
   arm(delen, [6.6, 0.5, 31.6], [9.6, 2.6, 26], hand, { ...kind, dArm: D.armR, dHand: D.handR });
+  bot(Bn.Barm[1]);
   arm(delen, [-6.6, 0.5, 31.6], [-8.8, 2.2, 25], [-7.4, 5.4, 19.8], { ...kind, dArm: D.armL, dHand: D.handL });
+  bot(Bn.Barm[0]);
 
   // --- hoofd: groot en rond, bolle wangen, dun blond haar met één krul op het voorhoofd
   const oy = schedel(delen, H, M, D, { maat, oog: [2.7, -0.2], oogR: 1.05, oor: 0.85 });
@@ -504,18 +618,23 @@ function kleuter() {
     k: 0.5,
   });
   delen.push(...bochtKegel(plus(H, [0.3, 5, 4.6]), plus(H, [1.1, 6.6, 5.4]), plus(H, [0.1, 7, 4]), 0.9, 0.5, 3, M.haar, D.haar, 0.5));
+  bot(Bn.Bnek);
 
-  return model(delen, mat, { midden: [4, 3, 24], straal: 36 });
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [4, 3, 24], straal: 36 });
 }
 
 // ---------------------------------------------------------------- volwassenen: gedeelde delen
 
 // Een vrouwenfiguur tot aan de hals: een lange klokrok, een lijfje met boezem en schouders. Geeft
 // het lijfprofiel terug (voor een schort of een sjerp). o.rok = [rx, ry] onder/boven, o.lijf =
-// profielen, o.mat = materiaal (getal of functie), o.deel.
+// profielen, o.mat = materiaal (getal of functie), o.deel. o.botRok: als de aanroeper loopt (stand),
+// een callback die de rok net gezet meteen zijn eigen zwaai geeft (Bn.Brok) vóórdat het lijf erna
+// wordt gebouwd — anders zitten rok en lijf in dezelfde bot()-groep en zwaait de rok niet breder
+// mee dan de romp (zie de uitleg bovenaan dorpelingen.cjs, "Rok").
 function vrouwenlijf(delen, o) {
-  const { rokTop = 38, rokRx = [15, 10.2], rokRy = [13, 8.2], lijf, boezem, schouders, mRok, mLijf, dRok, dLijf, plooi = 1 } = o;
+  const { rokTop = 38, rokRx = [15, 10.2], rokRy = [13, 8.2], lijf, boezem, schouders, mRok, mLijf, dRok, dLijf, plooi = 1, botRok = null } = o;
   delen.push(klokrok(rokTop, rokRx, rokRy, () => 0.8, mRok, dRok, plooi));
+  if (botRok) botRok();
   delen.push(romp(lijf, lijf.z0, lijf.z1, mLijf, dLijf, 2));
   if (boezem) delen.push(ellips(boezem[0], boezem[1], mLijf, dLijf, 2.5));
   delen.push(ellips(schouders[0], schouders[1], mLijf, dLijf, 2.5));
@@ -561,12 +680,17 @@ function haarKap(H, [rx, ry, rz], m, deel, grens = [4.8, 5]) {
   };
 }
 
+const SMIDSVROUW_SNELHEID = 1.45;
+const SMIDSVROUW_FPS = 10;
+
 // ---------------------------------------------------------------- de smidsvrouw
 
 // De smidsvrouw: stevig als haar man, de mouwen opgestroopt, een rode doek met witte stippen om
 // het haar, bovenop geknoopt, en een olijfgroene jurk met een lichte schort. Aan haar arm hangt
 // een mand vers brood.
-function smidsvrouw() {
+// stand: zie smid() (dorpelingen.cjs). Geen been getekend (de rok dekt haar helemaal), dus de rok
+// zwaait zelf mee (Bn.Brok).
+function smidsvrouw(stand = null) {
   const M = { huid: 0, jurk: 1, bloes: 2, schort: 3, doek: 4, haar: 5, oog: 6, riet: 7, brood: 8, mond: 9 };
   const D = { rok: 1, lijf: 2, schort: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, haar: 9, doek: 10, mand: 11, brood: 12 };
   const H = [0, 3.4, 68];
@@ -593,6 +717,18 @@ function smidsvrouw() {
   mat[M.mond] = MOND;
 
   const delen = [];
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: SMIDSVROUW_SNELHEID, fps: SMIDSVROUW_FPS, beenLengte: 27 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.6, 36],
+    nek: [0, 0, 58],
+    schouders: [[-11.2, 0.4, 55], [11.2, 0.4, 55]],
+  });
+
   const lijf = {
     z0: 35,
     z1: 57.5,
@@ -612,18 +748,23 @@ function smidsvrouw() {
     mLijf: halsV,
     dRok: D.rok,
     dLijf: D.lijf,
+    botRok: () => bot(Bn.Brok),
   });
   delen.push(schil(rok, { los: 1.2, d: 0.6, breed: (z) => mix(8.6, 6.8, z / 38), z0: 6, z1: 37.5 }, M.schort, D.schort));
   middelband(delen, lijf, 37.4, M.schort, D.schort);
+  bot(Bn.Bromp);
 
-  // --- sterke armen, mouwen opgestroopt tot boven de elleboog; links de broodmand aan de arm
+  // --- sterke armen, mouwen opgestroopt tot boven de elleboog; links de broodmand aan de arm —
+  // die zwaait dus mee met die arm (Bn.Barm[0]).
   const sterk = { mouw: M.bloes, huid: M.huid, r: [4.2, 3.7, 2.8], tot: 0.8, rol: 1.1, hand: [2.9, 3.1, 3.2] };
   const top = mand(delen, mandC, [7, 5], 6.6, M.riet, D.mand, 12);
   delen.push(ellips(plus(top, [-2.8, -0.8, 1.3]), [2.8, 2.4, 2.2], M.brood, D.brood, 0.5));
   delen.push(ellips(plus(top, [1.8, 1, 1.1]), [2.6, 2.3, 2], M.brood, D.brood, 0.5));
   delen.push(capsule(plus(top, [1.8, -0.6, 0.4]), plus(top, [-5.8, 2.4, 9.6]), 1.5, M.brood, D.brood));
   arm(delen, [-11.2, 0.4, 55], [-16.8, -1.2, 45.8], [-13.6, 7.4, 44.8], { ...sterk, dArm: D.armL, dHand: D.handL });
+  bot(Bn.Barm[0]);
   arm(delen, [11.2, 0.4, 55], [13.6, 1.2, 45], [12.6, 3.4, 35.6], { ...sterk, dArm: D.armR, dHand: D.handR });
+  bot(Bn.Barm[1]);
 
   // --- hoofd: een doek in de nek geknoopt, donker haar aan de slapen, een brede lach
   const oy = schedel(delen, H, M, D, { maat, oog: [2.7, 0.7], oor: 0.9 });
@@ -637,16 +778,21 @@ function smidsvrouw() {
   const knoop = plus(H, [0, 2.6, 8.4]);
   delen.push(bol(knoop, 1.7, M.doek, D.doek, 0.6));
   for (const s of [-1, 1]) delen.push(kegel(plus(knoop, [s * 0.8, 0.2, 0.4]), plus(knoop, [s * 2.6, 0.6, 3]), 1.2, 0.55, M.doek, D.doek, 0.4));
+  bot(Bn.Bnek);
 
-  return model(delen, mat, { midden: [-2, 2, 40], straal: 48 });
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [-2, 2, 40], straal: 48 });
 }
+
+const BOERIN_SNELHEID = 1.4;
+const BOERIN_FPS = 10;
 
 // ---------------------------------------------------------------- de boerin
 
 // De boerin: rond en bedrijvig, een witte hoofddoek onder de kin geknoopt, een terracotta jurk met
 // lange mouwen en een donkerblauw schort (net als de kiel van haar man). Voor zich uit draagt ze
 // een mandje eieren.
-function boerin() {
+// stand: zie smid() (dorpelingen.cjs). Geen been getekend, dus de rok zwaait zelf mee (Bn.Brok).
+function boerin(stand = null) {
   const M = { huid: 0, jurk: 1, schort: 2, doek: 3, haar: 4, oog: 5, riet: 6, ei: 7, mond: 8, bruinEi: 9 };
   const D = { rok: 1, lijf: 2, schort: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, doek: 9, mand: 10, ei: 11 };
   const H = [0, 3.4, 66.5];
@@ -665,6 +811,18 @@ function boerin() {
   mat[M.mond] = MOND;
 
   const delen = [];
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: BOERIN_SNELHEID, fps: BOERIN_FPS, beenLengte: 27 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.6, 36],
+    nek: [0, 0, 56.6],
+    schouders: [[-10.6, 0.4, 53.6], [10.6, 0.4, 53.6]],
+  });
+
   const lijf = {
     z0: 35,
     z1: 56,
@@ -683,20 +841,25 @@ function boerin() {
     mLijf: M.jurk,
     dRok: D.rok,
     dLijf: D.lijf,
+    botRok: () => bot(Bn.Brok),
   });
   delen.push(schil(rok, { los: 1.2, d: 0.6, breed: (z) => mix(9.4, 7.4, z / 37), z0: 5, z1: 36.5 }, M.schort, D.schort));
   middelband(delen, lijf, 36.4, M.schort, D.schort);
 
-  // --- het mandje eieren voor haar buik, twee handen aan de rand; lange mouwen
+  // --- het mandje eieren voor haar buik, twee handen aan de rand; lange mouwen. Ze draagt het met
+  // twee handen tegen zich aan, dus het beweegt mee met de romp (Bn.Bromp), niet met één arm.
   const top = mand(delen, mandC, [6, 4.4], 5, M.riet, D.mand, 0);
   const eieren = [[-3, -0.8], [-1, 0.9], [1.2, -0.9], [3.1, 0.7], [0.1, -0.1], [-2.3, 1.3], [2.3, -1.6]];
   eieren.forEach(([x, y], i) => {
     const c = plus(top, [x, y, 0.4 + (i % 3) * 0.3]);
     delen.push({ ...ellips(c, [1.15, 1.15, 1.45], i % 3 === 1 ? M.bruinEi : M.ei, D.ei, 0), k: undefined });
   });
+  bot(Bn.Bromp);
   const mouw = { mouw: M.jurk, huid: M.huid, r: [3.8, 3.3, 2.6], tot: 1.92, rol: 0.8, hand: [2.5, 2.7, 2.9] };
   arm(delen, [10.6, 0.4, 53.6], [13.2, 3.6, 44.6], plus(top, [6.6, -0.4, 0.6]), { ...mouw, dArm: D.armR, dHand: D.handR });
+  bot(Bn.Barm[1]);
   arm(delen, [-10.6, 0.4, 53.6], [-13.2, 3.6, 44.6], plus(top, [-6.6, -0.4, 0.6]), { ...mouw, dArm: D.armL, dHand: D.handL });
+  bot(Bn.Barm[0]);
 
   // --- hoofd: rond gezicht in een witte doek, een pluk haar voorop, de knoop onder de kin
   const oy = schedel(delen, H, M, D, { maat, oog: [2.6, 0.6], oor: 0.8 });
@@ -710,16 +873,21 @@ function boerin() {
   // de punt van de doek hangt achter in de nek
   delen.push(kegel(plus(H, [0, -7.2, -3.6]), plus(H, [0, -8.4, -10.6]), 3.4, 0.6, M.doek, D.doek, 1));
   for (const s of [-1, 1]) delen.push(kegel(plus(knoop, [s * 0.5, 0.3, -0.6]), plus(knoop, [s * 1.8, 1.4, -4.6]), 1.1, 0.5, M.doek, D.doek, 0.4));
+  bot(Bn.Bnek);
 
-  return model(delen, mat, { midden: [0, 3, 38], straal: 46 });
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 3, 38], straal: 46 });
 }
 
 // ---------------------------------------------------------------- de bruidegom
 
+const BRUIDEGOM_SNELHEID = 1.5;
+const BRUIDEGOM_FPS = 10;
+
 // De bruidegom: jong en lang, op zijn zondags: een zwart vest met koperen knoopjes over een wit
 // hemd, een zwarte broek, gepoetste schoenen, een bloem op zijn borst. Zijn pet houdt hij
 // zenuwachtig met twee handen voor zich; de bruiloft ging niet door, de aarde schudde.
-function bruidegom() {
+// stand: zie smid() (dorpelingen.cjs).
+function bruidegom(stand = null) {
   const M = { huid: 0, hemd: 1, vest: 2, broek: 3, schoen: 4, haar: 5, oog: 6, knoop: 7, pet: 8, bloem: 9, blad: 10, mond: 11, das: 12 };
   const D = { benen: 1, lijf: 2, vest: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, haar: 9, pet: 10, bloem: 11 };
   const H = [0, 3.2, 73];
@@ -750,11 +918,35 @@ function bruidegom() {
   mat[M.das] = { ramp: 'rood', lo: 1, hi: 4 };
 
   const delen = [];
-  // --- lange benen, gepoetste schoenen
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: BRUIDEGOM_SNELHEID, fps: BRUIDEGOM_FPS, beenLengte: 27 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.4, 35.5],
+    nek: [0, 0, 60],
+    schouders: [[-10.8, 0.3, 57], [10.8, 0.3, 57]],
+  });
+
+  // --- lange benen, gepoetste schoenen; elk been buigt bij de knie
   delen.push(ellips([0, 0.4, 35.5], [9.6, 6.4, 5], M.broek, D.benen, 2));
+  bot(Bn.Bromp);
   for (const s of [-1, 1]) {
-    delen.push(kegel([s * 4.6, 0.2, 35.5], [s * 4.4, 0.6, 5], 4.4, 3.4, M.broek, D.benen, 1));
+    const i = s < 0 ? 0 : 1;
+    if (hg) {
+      const heupR = [s * 4.6, 0.2, 35.5];
+      const enkelR = [s * 4.4, 0.6, 5];
+      const P = beenPunten(hg, i, { heup: heupR, knie: knieTussen(heupR, enkelR), enkel: enkelR });
+      delen.push(kegel(P.heup, P.knie, 4.4, 3.9, M.broek, D.benen, 1));
+      delen.push(kegel(P.knie, P.enkel, 3.9, 3.4, M.broek, D.benen, 1));
+    } else {
+      delen.push(kegel([s * 4.6, 0.2, 35.5], [s * 4.4, 0.6, 5], 4.4, 3.4, M.broek, D.benen, 1));
+    }
+    bot(null);
     delen.push(ellips([s * 4.4, 2.4, 2.4], [3.2, 5.8, 2.6], M.schoen, D.benen, 1));
+    bot(voetBot(hg, i, [s * 4.4, 2.4, 0]));
   }
   // --- hemd, met het vest eroverheen: een schil op het lijf, voorop open in een V
   const lijf = {
@@ -776,7 +968,8 @@ function bruidegom() {
   delen.push(bol(bloem, 1.3, M.bloem, D.bloem));
   delen.push(ellips(plus(bloem, [0.9, 0.2, -1.4]), [1, 0.5, 0.7], M.blad, D.bloem, 0.3));
 
-  // --- armen in witte mouwen; de pet in twee handen voor zijn buik
+  // --- armen in witte mouwen; de pet in twee handen voor zijn buik. Hij houdt hem met twee
+  // handen vast, dus de pet beweegt mee met de romp (Bn.Bromp), niet met één arm apart.
   const pet = [0, 10.2, 42.6];
   delen.push({
     f: (x, y, z) => sdf.ellipsoide(x - pet[0], y - pet[1], z - pet[2], 4.8, 1.5, 4.3) * 0.9,
@@ -790,9 +983,12 @@ function bruidegom() {
     m: M.pet,
     deel: D.pet,
   });
+  bot(Bn.Bromp);
   const mouw = { mouw: M.hemd, huid: M.huid, r: [3.8, 3.3, 2.6], tot: 1.9, rol: 0.6, hand: [2.5, 2.6, 2.9] };
   arm(delen, [10.8, 0.3, 57], [12.6, 3.4, 47.4], plus(pet, [4.4, 1.2, 1.2]), { ...mouw, dArm: D.armR, dHand: D.handR });
+  bot(Bn.Barm[1]);
   arm(delen, [-10.8, 0.3, 57], [-12.6, 3.4, 47.4], plus(pet, [-4.4, 1.2, 1.2]), { ...mouw, dArm: D.armL, dHand: D.handL });
+  bot(Bn.Barm[0]);
 
   // --- hoofd: jong, gladgeschoren, het haar netjes met een scheiding, een verlegen lach
   const oy = schedel(delen, H, M, D, { maat, oog: [2.7, 0.8] });
@@ -814,15 +1010,21 @@ function bruidegom() {
   });
   // een gekamde golf voorop, naar rechts gestreken
   delen.push(ellips(plus(H, [1.4, 3.8, 6.6]), [4.2, 2.8, 1.9], M.haar, D.haar, 1.2));
+  bot(Bn.Bnek);
 
-  return model(delen, mat, { midden: [0, 2, 42], straal: 48 });
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 42], straal: 48 });
 }
 
 // ---------------------------------------------------------------- de bruid
 
+const BRUID_SNELHEID = 1.3;
+const BRUID_FPS = 10;
+
 // De bruid: een lange witte jurk met een groene sjerp, een krans van veldbloemen die na de
 // aardschok een beetje scheef zit, een lange koperrode vlecht op haar rug, en een boeketje.
-function bruid() {
+// stand: zie smid() (dorpelingen.cjs). Geen been getekend, dus de rok zwaait zelf mee (Bn.Brok);
+// de lange jurk maakt haar pas ook wat voorzichtiger (BRUID_SNELHEID).
+function bruid(stand = null) {
   const M = { huid: 0, jurk: 1, sjerp: 2, haar: 3, oog: 4, blad: 5, rood: 6, geel: 7, wit: 8, paars: 9, mond: 10, steel: 11 };
   const D = { rok: 1, lijf: 2, sjerp: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, haar: 9, krans: 10, boeket: 11, vlecht: 12 };
   const H = [0, 3.2, 67.5];
@@ -851,6 +1053,18 @@ function bruid() {
   mat[M.steel] = { ramp: 'blad', lo: 1.2, hi: 4 };
 
   const delen = [];
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: BRUID_SNELHEID, fps: BRUID_FPS, beenLengte: 26 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.5, 36],
+    nek: [0, 0, 56.8],
+    schouders: [[-9.8, 0.3, 53.8], [9.8, 0.3, 53.8]],
+  });
+
   const lijf = {
     z0: 35,
     z1: 56,
@@ -870,10 +1084,12 @@ function bruid() {
     dRok: D.rok,
     dLijf: D.lijf,
     plooi: 1.3,
+    botRok: () => bot(Bn.Brok),
   });
   middelband(delen, lijf, 38, M.sjerp, D.sjerp, 1.6);
 
-  // --- het boeketje, met twee handen voor zich; lange witte mouwen
+  // --- het boeketje, met twee handen voor zich; lange witte mouwen. Ze houdt het met twee handen
+  // vast, dus het beweegt mee met de romp (Bn.Bromp), niet met één arm apart.
   const boeket = [0, 10.6, 41.4];
   delen.push(kegel(plus(boeket, [0, -0.6, -1]), plus(boeket, [0, -1.4, -7]), 1.1, 0.8, M.steel, D.boeket));
   delen.push(ellips(boeket, [3, 2.6, 2], M.blad, D.boeket, 0.6));
@@ -882,9 +1098,12 @@ function bruid() {
     const a = (i / kleuren.length) * Math.PI * 2;
     delen.push(bol(plus(boeket, i === 0 ? [0, 0.6, 1.6] : [Math.cos(a) * 2.2, Math.sin(a) * 1.6 + 0.4, 1 + Math.sin(a * 2) * 0.3]), 1.05, m, D.boeket));
   });
+  bot(Bn.Bromp);
   const mouw = { mouw: M.jurk, huid: M.huid, r: [3.4, 3, 2.3], tot: 1.9, hand: [2.3, 2.5, 2.7] };
   arm(delen, [9.8, 0.3, 53.8], [11.6, 4.4, 45.4], plus(boeket, [3.2, -0.8, -2.2]), { ...mouw, dArm: D.armR, dHand: D.handR });
+  bot(Bn.Barm[1]);
   arm(delen, [-9.8, 0.3, 53.8], [-11.6, 4.4, 45.4], plus(boeket, [-3.2, -0.8, -2.2]), { ...mouw, dArm: D.armL, dHand: D.handL });
+  bot(Bn.Barm[0]);
 
   // --- hoofd: koperrood haar met een scheiding, een lange vlecht op de rug, en de krans
   const oy = schedel(delen, H, M, D, { maat, oog: [2.6, 0.6], oor: 0.8 });
@@ -909,16 +1128,22 @@ function bruid() {
     krans.push(bol(plus(kc, [Math.cos(a) * 6.9, Math.sin(a) * 6.9, 0.9]), 1.2, [M.rood, M.geel, M.wit, M.paars][i % 4], D.krans));
   }
   delen.push(...draaiDelen(krans, [0, 1, 0.3], 9, kc));
+  bot(Bn.Bnek);
 
-  return model(delen, mat, { midden: [0, 1, 38], straal: 46 });
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 1, 38], straal: 46 });
 }
 
 // ---------------------------------------------------------------- de oude man
 
+const OUDEMAN_SNELHEID = 1;
+// fps blijft 10: zie DORPSOUDSTE_FPS (dorpelingen.cjs) voor waarom.
+const OUDEMAN_FPS = 10;
+
 // De oude man, de echtgenoot van de dorpsoudste: kaal met een krans wit haar en één pluk die
 // overeind staat, een pijp, een wollen vest dat hij scheef heeft dichtgeknoopt, pantoffels. Hij
 // krabt zich achter het oor en kijkt wat verloren: hij vergeet dingen.
-function oudeMan() {
+// stand: zie smid() (dorpelingen.cjs). Hij is oud en loopt trager, net als zijn vrouw.
+function oudeMan(stand = null) {
   const M = { huid: 0, vest: 1, hemd: 2, broek: 3, pantoffel: 4, haar: 5, oog: 6, pijp: 7, gloed: 8, knoop: 9, neus: 10 };
   const D = { benen: 1, lijf: 2, vest: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, haar: 9, pijp: 10 };
   const H = [0, 6.4, 68.5];
@@ -946,11 +1171,35 @@ function oudeMan() {
   mat[M.knoop] = { ramp: 'hout', lo: 0.6, hi: 3, detail: true };
 
   const delen = [];
-  // --- benen in een grijze broek, pantoffels
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: OUDEMAN_SNELHEID, fps: OUDEMAN_FPS, beenLengte: 24 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.6, 31],
+    nek: [0, 0, 58],
+    schouders: [[-10.6, 2.6, 55], [10.6, 2.6, 55]],
+  });
+
+  // --- benen in een grijze broek, pantoffels; elk been buigt bij de knie
   delen.push(ellips([0, 0.6, 31], [9.6, 6.6, 5], M.broek, D.benen, 2));
+  bot(Bn.Bromp);
   for (const s of [-1, 1]) {
-    delen.push(kegel([s * 4.6, 0.4, 31], [s * 4.4, 0.8, 4], 4.2, 3.4, M.broek, D.benen, 1));
+    const i = s < 0 ? 0 : 1;
+    if (hg) {
+      const heupR = [s * 4.6, 0.4, 31];
+      const enkelR = [s * 4.4, 0.8, 4];
+      const P = beenPunten(hg, i, { heup: heupR, knie: knieTussen(heupR, enkelR), enkel: enkelR });
+      delen.push(kegel(P.heup, P.knie, 4.2, 3.8, M.broek, D.benen, 1));
+      delen.push(kegel(P.knie, P.enkel, 3.8, 3.4, M.broek, D.benen, 1));
+    } else {
+      delen.push(kegel([s * 4.6, 0.4, 31], [s * 4.4, 0.8, 4], 4.2, 3.4, M.broek, D.benen, 1));
+    }
+    bot(null);
     delen.push(ellips([s * 4.4, 2.4, 1.9], [3.3, 5.6, 2.1], M.pantoffel, D.benen, 1));
+    bot(voetBot(hg, i, [s * 4.4, 2.4, 0]));
   }
   // --- een wit hemd, en het vest eroverheen, links een knoopsgat verkeerd: de linkerpand hangt
   // lager dan de rechter
@@ -978,11 +1227,14 @@ function oudeMan() {
   for (const [z, dx] of [[52, 0], [47, 0.3], [41.5, 0.6], [35.5, 0.9]]) {
     delen.push(bol([dx, lijf.cy(z) + lijf.ry(z) + 0.2, z], 0.8, M.knoop, D.vest));
   }
+  bot(Bn.Bromp);
 
   // --- armen: de rechterhand krabt achter het oor, de linker hangt
   const mouw = { mouw: M.vest, huid: M.huid, r: [4, 3.5, 2.8], tot: 1.86, rol: 1, hand: [2.5, 2.7, 2.9] };
   arm(delen, [10.6, 2.6, 55], [15.2, 4, 62], plus(H, [7.6, -1.6, -0.6]), { ...mouw, dArm: D.armR, dHand: D.handR });
+  bot(Bn.Barm[1]);
   arm(delen, [-10.6, 2.6, 55], [-12.6, 3.4, 45], [-11.8, 5, 36.4], { ...mouw, dArm: D.armL, dHand: D.handL });
+  bot(Bn.Barm[0]);
 
   // --- hoofd: een beetje scheef, verbaasde wenkbrauwen, een rode neus, de pijp in de mond
   const hoofd = [];
@@ -1002,9 +1254,15 @@ function oudeMan() {
   hoofd.push(kegel(plus(kop, [0, 0, -1.6]), plus(kop, [0, 0.2, 1.2]), 1.2, 1.35, M.pijp, D.pijp, 0.4));
   hoofd.push(bol(plus(kop, [0, 0.2, 1.3]), 0.85, M.gloed, D.pijp));
   delen.push(...draaiDelen(hoofd, [0.3, 1, 0], -9, plus(H, [0, -1, -6])));
+  bot(Bn.Bnek);
 
+  // De gloed van de pijp: alleen de vaste scheve stand (-9°) telt mee, niet het kleine ademen van
+  // Bn.Bnek erna — dat verschil is op deze schaal niet te zien, en niet elke stand hoeft een
+  // apart lichtpunt te berekenen.
   const gloed = draaiDelen([{ f: () => 0, g: [...plus(kop, [0, 0.2, 1.3]), 1] }], [0.3, 1, 0], -9, plus(H, [0, -1, -6]))[0].g;
-  return model(delen, mat, { midden: [2, 3, 40], straal: 48, lichten: [{ pos: gloed.slice(0, 3), r: 7, sterk: 0.8, warm: 1 }] });
+  return model(delen, mat, hg
+    ? { ...HH.omvat(delen, 2), lichten: [{ pos: gloed.slice(0, 3), r: 7, sterk: 0.8, warm: 1 }] }
+    : { midden: [2, 3, 40], straal: 48, lichten: [{ pos: gloed.slice(0, 3), r: 7, sterk: 0.8, warm: 1 }] });
 }
 
 // ---------------------------------------------------------------- alle nieuwe dorpelingen
@@ -1113,4 +1371,7 @@ module.exports = {
   vrouwenlijf,
   middelband,
   haarKap,
+  JONGEN_SNELHEID, JONGEN_FPS, MEISJE_SNELHEID, MEISJE_FPS, KLEUTER_SNELHEID, KLEUTER_FPS,
+  SMIDSVROUW_SNELHEID, SMIDSVROUW_FPS, BOERIN_SNELHEID, BOERIN_FPS,
+  BRUIDEGOM_SNELHEID, BRUIDEGOM_FPS, BRUID_SNELHEID, BRUID_FPS, OUDEMAN_SNELHEID, OUDEMAN_FPS,
 };

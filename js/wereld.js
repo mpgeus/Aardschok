@@ -86,6 +86,22 @@
       naam: 'de smid', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.5,
       dwaalt: true, straal: 3,
     },
+    // De andere elf dorpelingen van fase B2a (ontwerp/werklijst.md, punt 2): dezelfde vorm als de
+    // smid hierboven, elk met zijn eigen loopmaat (de SNELHEID-constanten in dorpelingen.cjs en
+    // dorpelingen2.cjs, gereedschap/pixelart) — snelheid hier moet daaraan gelijk zijn, anders
+    // gaan de voeten van die dorpeling glijden (zie SMID_SNELHEID hierboven). Marcel zet ze neer
+    // in Tiled met wezen="<naam>".
+    herbergierster: { naam: 'de herbergierster', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 3 },
+    boer: { naam: 'de boer', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.5, dwaalt: true, straal: 3 },
+    dorpsoudste: { naam: 'de dorpsoudste', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1, dwaalt: true, straal: 3 },
+    jongen: { naam: 'de jongen', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.3, dwaalt: true, straal: 3 },
+    meisje: { naam: 'het meisje', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.25, dwaalt: true, straal: 3 },
+    kleuter: { naam: 'de kleuter', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 0.85, dwaalt: true, straal: 3 },
+    smidsvrouw: { naam: 'de smidsvrouw', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.45, dwaalt: true, straal: 3 },
+    boerin: { naam: 'de boerin', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 3 },
+    bruidegom: { naam: 'de bruidegom', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.5, dwaalt: true, straal: 3 },
+    bruid: { naam: 'de bruid', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.3, dwaalt: true, straal: 3 },
+    oudeman: { naam: 'de oude man', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1, dwaalt: true, straal: 3 },
     slijm: {
       naam: 'slijmkruiper', kant: 'monster', leven: 10, ap: 4, initiatief: 4, snelheid: 1.4, zicht: 5, dwaalt: true,
       aanval: { kosten: 3, maanden: [3, 5], zin: 'bijt je' },

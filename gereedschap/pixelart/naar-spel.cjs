@@ -146,11 +146,23 @@ const FIGUURLIJST = {
   kobold: { map: ['vijanden', 'animaties'], houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'], bron: 'bosvijanden-anim.cjs' },
   // De smid, en de eerste twee vellen van de gewone dorpeling(zaad) (fase A, ontwerp/werklijst.md
   // punt 2): T.WEZENS.smid (js/wereld.js) staat op "smid", en een dorpeling kiest tussen
-  // "dorpeling0" en "dorpeling1" met zijn zaad (js/sprites.js, S.dorpelingVariant). Fase B rendert
-  // er meer met dezelfde manier (dorpelingen.cjs, "lopen en staan") en breidt deze rij dan uit.
+  // "dorpeling0" en "dorpeling1" met zijn zaad (js/sprites.js, S.dorpelingVariant). Fase B2a
+  // rendert er elf meer met dezelfde manier (dorpelingen.cjs, "lopen en staan"), elk met een
+  // eigen T.WEZENS-ingang zoals smid; de zeven vaklieden en meer gewone varianten volgen in B2b.
   smid: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
   dorpeling0: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
   dorpeling1: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  herbergierster: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  boer: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  dorpsoudste: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  jongen: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  meisje: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  kleuter: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  smidsvrouw: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  boerin: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  bruidegom: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  bruid: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  oudeman: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
 };
 
 function figuren() {

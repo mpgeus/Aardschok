@@ -17,6 +17,7 @@ require('../js/spreuken.js');
 require('../js/gevecht.js');
 require('../js/verkennen.js');
 require('../js/sprites.js');
+require('../beelden/beschrijving.js'); // T.BEELDEN, voor "heeft een vel" hieronder
 const T = globalThis.Toren;
 
 const wezen = (w, soort) => w.wezens.find((e) => e.soort === soort);
@@ -83,6 +84,34 @@ test('de smid wordt, net als Wim en de meester, nooit ontdekt en telt nooit mee 
   assert.notEqual(smid.kant, 'monster'); // alleen 'monster' laat T.startGevecht/de klik aanvallen
   assert.equal(T.zoekOntdekking(S), null);
   assert.deepEqual(T.deelnemers(w, held, smid), []);
+});
+
+// Fase B2a (ontwerp/werklijst.md, punt 2): de andere elf genoemde dorpelingen (herbergierster,
+// boer en dorpsoudste uit dorpelingen.cjs; de acht uit dorpelingen2.cjs) hebben nu ook een eigen
+// T.WEZENS-ingang, net als de smid hierboven — dezelfde regel dus, in één toets over de hele rij
+// in plaats van elf keer dezelfde losse toets. "heeft een vel": beelden/beschrijving.js kent zijn
+// naam met een "staan"- en een "lopen"-houding (npm run pixelart:spel zet dat daar neer).
+const NAMEN_B2A = [
+  'herbergierster', 'boer', 'dorpsoudste',
+  'jongen', 'meisje', 'kleuter', 'smidsvrouw', 'boerin', 'bruidegom', 'bruid', 'oudeman',
+];
+
+test('elke dorpeling van fase B2a is neutraal, wordt nooit ontdekt en heeft een vel', () => {
+  for (const naam of NAMEN_B2A) {
+    const w = T.maakWereld();
+    const held = wezen(w, 'held');
+    const e = T.maakWezen(naam, 6, 3);
+    w.wezens.push(e);
+    zet(held, 5, 3); // vlak naast hem
+    const S = { wereld: w, held, sluipen: false };
+
+    assert.equal(e.kant, 'neutraal', `${naam} is neutraal`);
+    assert.equal(T.zoekOntdekking(S), null, `${naam} wordt niet ontdekt`);
+    assert.deepEqual(T.deelnemers(w, held, e), [], `${naam} telt niet mee als deelnemer`);
+    assert.ok(T.BEELDEN.figuren[naam], `"${naam}" heeft een vel in beelden/ (of draai npm run pixelart:spel)`);
+    assert.ok(T.BEELDEN.figuren[naam].houdingen.staan, `${naam} kan staan`);
+    assert.ok(T.BEELDEN.figuren[naam].houdingen.lopen, `${naam} kan lopen`);
+  }
 });
 
 test('de smid dwaalt bij de smidse, maar blijft binnen zijn straal van thuis', () => {
