@@ -88,6 +88,10 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 
 - **Kringen en leeftijd:** de beste speler krijgt nu de minste spreuken. Kiezen uit de vier
   richtingen in `spreuken.md`. Moet vóór het verdorren besloten zijn.
+- **Wachter voor gebouwen die elkaar overlappen.** In Tiled kun je twee huizen over elkaar zetten,
+  en dan steken in het spel daken door muren (Marcel zag het op de proefplaat van ronde 2, waar zes
+  huizen te dicht langs een pad stonden). `npm run kaarten` hoort te klagen als de voeten van twee
+  gebouwen elkaar raken, zoals hij al klaagt over planten in de grondlaag.
 - **Omheiningen die je schildert:** tuinhek, palissade, haag, aarden wal met vlechtwerk, en een
   hekje, als een eigen laag met een terreinset in Tiled. Eén systeem, later ook voor een stadsmuur.
   Zie `wereld.md`, "Een dorp heeft geen muur".
