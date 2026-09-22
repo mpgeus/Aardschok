@@ -14,13 +14,14 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 **Loopt nu:** niets. Er draait geen agent.
 
-**Alles staat op `main`.** De sessie van 22 sep draaide in de cloud en werkte op de tak
-`claude/aardschok-quest-system-ywvpe7`; die is aan het eind in `main` gezet en gepusht, dus er
-staat niets meer los en de tak mag weg. Werk gewoon op `main`, zoals CLAUDE.md zegt.
+**Alles staat op `main`.** De twee sessies van 22 sep draaiden in de cloud, op de takken
+`claude/aardschok-quest-system-ywvpe7` en `claude/wereld-gereedschap-maken-iyn8qs`; allebei zijn
+aan het eind in `main` gezet en gepusht, dus er staat niets meer los en die takken mogen weg. Werk
+gewoon op `main`, zoals CLAUDE.md zegt.
 
-**Nieuw sinds 22 sep: `gereedschap/wereld.html`.** Open het met `npm start` op
-`http://localhost:8123/gereedschap/wereld.html`, of via de link bovenin de twee andere
-gereedschappen. Rondes 1, 2 en 4 staan erin: kijken, neerzetten en de controle.
+**Nieuw sinds 22 sep: `gereedschap/wereld.html`.** `npm start` drukt af waar alles zit; de ingang
+is `http://localhost:8123/gereedschap/index.html`, en daar staat het gereedschap op een rij.
+Alle vier de rondes staan erin: kijken, neerzetten, betekenis erbij en de controle.
 
 **Tiled tekent voortaan alleen nog de grond** (besluit van Marcel, 22 sep; `kaarten.md`). Mensen,
 deuren, geheime doorgangen, aansluitingen en questvoorwerpen zet je hier neer, en ze gaan naar
