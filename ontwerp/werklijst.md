@@ -10,7 +10,8 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## Loopt nu
 
-- Punt 2, fase B2a (een agent): elf dorpelingen met een naam leren lopen, met knieën.
+- Punt 2, fase B2a is af (22 sep): twaalf dorpelingen met een naam lopen, de smid meegeteld, en
+  staan in Tiled als `wezen` (zie `kaarten.md`). Er loopt nu geen agent.
 - Ronde 4a is af (22 sep): de hekjes en de tuinstukken staan in Tiled (`tegels/tuin.tsx`).
 - **Op de meter wachten:** op 22 sep stond de week op 70%, met nog bijna vier dagen te gaan. De
   zware stukken (ronde 4b, fase B2b en het questsysteem) wachten tot Marcel zegt hoe hard we gaan.
@@ -74,7 +75,8 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    **Besloten:** knieën, zoals bij Wim (Marcel, 22 sep; `wereld.md`). Fase B in korte stukken:
    - B1 (af, 22 sep): knieën voor de smid en de twee gewone dorpelingen. De uitleg staat boven de
      sectie "lopen en staan" in `dorpelingen.cjs`, met de smid als voorbeeld.
-   - B2a: de herbergierster, de boer, de dorpsoudste en de acht uit `dorpelingen2.cjs`.
+   - B2a (af, 22 sep): de herbergierster, de boer, de dorpsoudste en de acht uit
+     `dorpelingen2.cjs`. Plaat: `uit/dorpelingen/lopen-proef-b2a.png`.
    - B2b: de zeven vaklieden uit `dorpelingen3.cjs` (daar neemt `been()` de knie al mee), en meer
      gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
    - B3: de portretten in de gesprekken.

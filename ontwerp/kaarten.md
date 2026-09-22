@@ -64,6 +64,7 @@ het plusje *Eigenschap toevoegen*, soort *string*):
 | Eigenschap | Waarde | Wat het doet |
 |---|---|---|
 | `wezen` | `wolf`, `reuzenspin`, `kobold`, ... | er staat hier een wezen (de lijst is `T.WEZENS` in `js/wereld.js`) |
+| `wezen` | `smid`, `herbergierster`, `boer`, `boerin`, `dorpsoudste`, `oudeman`, `smidsvrouw`, `bruid`, `bruidegom`, `jongen`, `meisje`, `kleuter` | een dorpeling met een naam; hij dwaalt rond waar je hem neerzet (met `straal` kies je hoe ver) |
 | `straal` | een getal | hoe ver het rondloopt |
 | `overgang` | naam van een kaart | wie hier stapt, gaat naar die kaart |
 | `komt` | `x,y` | de tegel in déze kaart waar je landt als je van die andere kaart terugkomt |
