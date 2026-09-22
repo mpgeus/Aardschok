@@ -168,7 +168,7 @@
   // Hoe hoog een figuur boven zijn tegel uitsteekt: waar zijn hoofd zit, voor de levensbalk,
   // het uitroepteken en het aanwijzen met de muis. De cel is hoger dan de figuur (er moet een
   // zwaard in de lucht in passen), dus dit is gemeten aan het vel zelf, op de houding staan.
-  const HOOG = { tovenaar: 90, wim: 66, skelet: 78, slijm: 28, wolf: 46 };
+  const HOOG = { tovenaar: 90, wim: 66, skelet: 78, slijm: 28, wolf: 46, bakker: 66, marskramer: 66 };
   S.figuurNaam = (soort) => (soort === 'held' ? 'tovenaar' : soort);
   S.hoogte = (soort) => HOOG[S.figuurNaam(soort)] || 60;
 
@@ -425,7 +425,10 @@
   // De houding van dit wezen op dit moment: { naam, houding, richting, fase }.
   // `naam` is het figuur op het vel; de held heet daar tovenaar, een gewone dorpeling zijn zaad.
   S.houding = function (spel, e) {
-    const naam = e.soort === 'dorpeling' ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
+    let naam = e.soort === 'dorpeling' ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
+    // Wie nog geen eigen vel heeft, mag er een lenen (T.WEZENS, vel: 'wim'): zo kan de bakker
+    // meedoen voordat hij getekend is. Zie ontwerp/werklijst.md, fase B2b.
+    if (!S.figuurGegevens(naam) && e.vel) naam = e.vel;
     const f = S.figuurGegevens(naam);
     if (!f) return null;
     const st = stand(e);

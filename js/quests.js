@@ -83,8 +83,63 @@
 (function (T) {
   'use strict';
 
-  // Nog leeg: De koude oven schrijven Marcel en Claude samen (werklijst, punt "het
-  // questsysteem"). De regels eronder staan wel, en de toetsen bewaken ze.
-  T.QUESTS = {};
-  T.RAAKPUNTEN = {};
+  T.QUESTS = {
+    // De koude oven, de eerste quest (Marcel en Claude, 22 sep 2026; ontwerp/toren.md). De
+    // aardschok spleet de schoorsteen van de bakker, en de rook blijft binnen. Vier wegen, die
+    // elk iets anders kosten -- dat is de toets van drie antwoorden, en T.keurQuests kijkt hem na.
+    bakker: {
+      naam: 'De koude oven', gever: 'bakker', begin: 'zoeken',
+      fasen: {
+        zoeken: {
+          doel: 'Zoek iets om de scheur in de schoorsteen van de bakker mee te dichten.',
+          wegen: {
+            // De leemkuil bij de beek: daar huist sinds de schok iets. Vechten kost jaren,
+            // sluipen kost niets -- en dat is precies het risico. De leem ligt er in Tiled met
+            // quest="bakker:zoeken", dus pas als de bakker erom vroeg.
+            kuil: { kost: 'risico', naar: 'terug', klaarAls: { heeft: 'leem' } },
+            // De marskramer verkoopt vuurklei. Vijftien, en je erft er acht van de meester: de
+            // weg ligt open en je kunt hem net niet nemen.
+            kramer: { kost: 'goud', naar: 'terug', doe: { goud: -15, geef: 'vuurklei' } },
+            // De smidsvrouw geeft de oude vuurstenen van de smidse meteen, en vraagt er de
+            // eerste magische grondstof uit de toren voor terug (Marcel, 22 sep 2026). Vandaag
+            // kost dat niets; straks precies datgene wat het duurst is, want een grondstof geef
+            // je aan de toren of aan jezelf, nooit aan allebei. De schuld staat als vlag klaar
+            // en wordt bij punt 5 van de werklijst verzilverd.
+            smidsvrouw: { kost: 'gunst', naar: 'terug', doe: { geef: 'vuursteen', zetVlag: 'schuldSmidsvrouw' } },
+            // De dure weg van de tovenaar: een vuurschicht in de oven bakt de scheur dicht. Dat
+            // gaat langs T.RAAKPUNTEN hieronder en kost een jaar.
+            oven: { kost: 'jaren', naar: 'gebakken', klaarAls: { vlag: 'ovenGebakken' } },
+          },
+        },
+        terug: {
+          doel: 'Breng het naar de bakker.',
+          wegen: { afgeven: { kost: 'niets', naar: 'klaar', doe: { neem: ['leem', 'vuurklei', 'vuursteen'] } } },
+        },
+        // Twee einden, want hoe je het oploste hoort het dorp te merken. Wie het dichtbakte met
+        // magie krijgt hetzelfde goud maar een andere vlag: sommigen vinden dat prachtig, en de
+        // koster niet.
+        gebakken: {
+          eind: true,
+          melding: 'De scheur trekt dicht. Morgen ruikt het dorp weer naar brood.',
+          beloning: { goud: 20, vlag: ['ovenWarm', 'ovenMetMagie'] },
+        },
+        klaar: {
+          eind: true,
+          melding: 'De bakker smeert de scheur dicht. Morgen ruikt het dorp weer naar brood.',
+          beloning: { goud: 20, vlag: 'ovenWarm' },
+        },
+      },
+    },
+  };
+
+  T.RAAKPUNTEN = {
+    // De mond van de oven, in Tiled een voorwerp met raak="oven" op een tegel waar je bij kunt.
+    oven: {
+      spreuk: 'vuurschicht',
+      tekst: 'de scheur in de schoorsteen dichtbakken',
+      melding: 'De klei sist en zet uit, en de scheur trekt dicht als een wond.',
+      zetVlag: 'ovenGebakken',
+      als: { quest: 'bakker', fase: 'zoeken' },
+    },
+  };
 })(globalThis.Toren = globalThis.Toren || {});

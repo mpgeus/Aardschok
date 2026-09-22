@@ -74,8 +74,12 @@
     const lijst = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
     for (const naam of lijst(doe.zetVlag)) T.zetVlag(S, naam);
     for (const naam of lijst(doe.wisVlag)) T.wisVlag(S, naam);
+    const tas = lijst(doe.geef).concat(lijst(doe.neem));
     for (const soort of lijst(doe.geef)) S.inventaris.add(soort);
     for (const soort of lijst(doe.neem)) S.inventaris.delete(soort);
+    // Wat je in een gesprek krijgt of afgeeft, hoort meteen in beeld te staan; rondlopen doet
+    // dat zelf (js/verkennen.js), maar een gesprek kwam daar niet langs.
+    if (tas.length && T.ui && T.ui.toonInventaris) T.ui.toonInventaris(S);
     if (T.questGevolg) T.questGevolg(S, doe);
   };
 })(globalThis.Toren = globalThis.Toren || {});

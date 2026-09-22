@@ -147,8 +147,14 @@ test('een bosvijand uit Tiled is een gewoon wezen, met een figuur dat het spel k
 
 test('elk wezen dat Marcel in Tiled kan neerzetten, heeft een figuur in beelden/', () => {
   // De dorpelingen (het "zaad") vallen hier expres buiten: die hebben nog geen loopanimaties.
-  for (const soort of Object.keys(T.WEZENS)) {
-    const naam = soort === 'held' ? 'tovenaar' : soort;
-    assert.ok(T.BEELDEN.figuren[naam], `"${soort}" staat in T.WEZENS maar niet in beelden/ — of draai npm run pixelart:spel`);
+  // Wie nog niet getekend is, mag een vel lenen (T.WEZENS, vel: 'wim'), zoals de bakker tot
+  // fase B2b — dan moet dát vel er wel zijn, anders staat er straks niets op de kaart.
+  for (const [soort, w] of Object.entries(T.WEZENS)) {
+    const eigen = soort === 'held' ? 'tovenaar' : soort;
+    const vel = T.BEELDEN.figuren[eigen] ? eigen : w.vel;
+    assert.ok(
+      vel && T.BEELDEN.figuren[vel],
+      `"${soort}" staat in T.WEZENS maar heeft geen figuur in beelden/ en leent er ook geen (vel:) — of draai npm run pixelart:spel`,
+    );
   }
 });

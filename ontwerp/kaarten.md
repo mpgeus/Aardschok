@@ -65,7 +65,10 @@ het plusje *Eigenschap toevoegen*, soort *string*):
 |---|---|---|
 | `wezen` | `wolf`, `reuzenspin`, `kobold`, ... | er staat hier een wezen (de lijst is `T.WEZENS` in `js/wereld.js`) |
 | `wezen` | `smid`, `herbergierster`, `boer`, `boerin`, `dorpsoudste`, `oudeman`, `smidsvrouw`, `bruid`, `bruidegom`, `jongen`, `meisje`, `kleuter` | een dorpeling met een naam; hij dwaalt rond waar je hem neerzet (met `straal` kies je hoe ver) |
+| `wezen` | `bakker`, `marskramer` | de twee van De koude oven. Ze zijn nog niet getekend en lenen tot fase B2b het vel van Wim, dus ze lopen wel, maar ze zien er als Wim uit |
 | `straal` | een getal | hoe ver het rondloopt |
+| `quest` | `bakker:zoeken` | dit voorwerp ligt er alleen zolang die quest in die fase staat (meer fasen mag: `bakker:zoeken,terug`). Zo ligt de leem pas in de kuil als de bakker erom vroeg. Het voorwerp mag niet vast zijn |
+| `raak` | `oven` | dit voorwerp wacht op een spreuk (de lijst is `T.RAAKPUNTEN` in `js/quests.js`). Zet het op een tegel waar je bij kunt, niet in een muur: een spreuk vraagt vrij zicht |
 | `overgang` | naam van een kaart | wie hier stapt, gaat naar die kaart |
 | `komt` | `x,y` | de tegel in déze kaart waar je landt als je van die andere kaart terugkomt |
 | `tekst` | bijvoorbeeld `Naar binnen` | wat er bij de muis staat boven een overgang (zonder: "Naar" en de naam van de kaart) |

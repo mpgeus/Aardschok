@@ -102,6 +102,11 @@
     bruidegom: { naam: 'de bruidegom', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.5, dwaalt: true, straal: 3 },
     bruid: { naam: 'de bruid', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.3, dwaalt: true, straal: 3 },
     oudeman: { naam: 'de oude man', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1, dwaalt: true, straal: 3 },
+    // De twee die De koude oven nodig heeft (js/quests.js). Hun eigen vellen komen bij fase B2b
+    // (ontwerp/werklijst.md); tot die tijd lenen ze dat van Wim, zodat de quest nu al te spelen
+    // is. Hun snelheid is daarom ook die van Wim -- anders glijden zijn voeten over de grond.
+    bakker: { naam: 'de bakker', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 2, vel: 'wim' },
+    marskramer: { naam: 'de marskramer', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 2, vel: 'wim' },
     slijm: {
       naam: 'slijmkruiper', kant: 'monster', leven: 10, ap: 4, initiatief: 4, snelheid: 1.4, zicht: 5, dwaalt: true,
       aanval: { kosten: 3, maanden: [3, 5], zin: 'bijt je' },
@@ -230,6 +235,8 @@
       // kamer; dat werkt binnen, maar buiten is de hele kaart één kamer (zie T.laatDwalen).
       dwaalt: !!s.dwaalt, thuis: s.straal ? { x, y } : null, straal: s.straal || 0,
       aanval: s.aanval || null,
+      // Een geleend vel, zolang dit figuur nog niet getekend is (js/sprites.js, S.houding).
+      vel: s.vel || null,
       dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
       dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0,
       // Meestal null (geen leeftijd, geen levensbalk): alleen de held en wie in T.WEZENS zijn

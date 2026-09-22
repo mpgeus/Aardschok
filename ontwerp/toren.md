@@ -295,19 +295,30 @@ toets van drie antwoorden, plus de dure weg van de tovenaar:
 De beloning is goud, en het dorp ruikt weer naar brood (`vlag: 'ovenWarm'`). De herbergierster en
 de kinderen merken het op.
 
-**Nog te schrijven (22 sep 2026).** De regels staan er, de quest nog niet: Marcel en Claude
-schrijven hem samen. Wat er eerst moet zijn, en waarom het niet in dezelfde beweging kon:
+**Geschreven op 22 sep 2026** (Marcel en Claude samen). De quest staat in `js/quests.js`, de
+gesprekken van de bakker, de marskramer en de smidsvrouw in `js/gesprekken.js`, en
+`test/quest.test.cjs` speelt alle vier de wegen uit. Twee besluiten die er bij het schrijven uit
+kwamen:
 
-- **De vier mensen staan nergens.** De bakker en de marskramer bestaan niet als wezen (dat is
-  fase B2b), en op `wereld.tmj` staan nog maar twee wezens: Marcel tekent daar zelf aan. Tot B2b
-  worden ze als Wim getekend.
-- **De leemkuil bij de beek** is nog geen plek, en wat er sinds de schok huist ook niet.
-- **De oven** heeft een voorwerp nodig met `raak="oven"` op een tegel waar je bij kunt, en een
-  regel in `T.RAAKPUNTEN`.
-- **Goud zonder bron.** De beloning van deze quest is goud, maar route 2 (de marskramer) kost
-  goud. De eerste keer dat je hem speelt, kun je die weg dus waarschijnlijk niet betalen. Dat
-  hoeft geen fout te zijn — een weg die je ziet en nog niet kunt nemen, is ook een keuze — maar
-  het moet een besluit zijn en geen ongeluk. Zie ook `ontwerp/werklijst.md`, punt "Grondstoffen".
+- **Een gunst moet ook echt iets kosten** (Marcel, 22 sep 2026). In het eerste ontwerp kostte de
+  weg van de smidsvrouw "tijd", maar tijd bestaat in dit spel niet als prijs: de klok loopt alleen
+  door spreuken en klappen. Een gratis weg maakt de andere drie zinloos. Daarom geeft ze de
+  vuurstenen meteen en vraagt ze er **de eerste magische grondstof uit de toren** voor terug — een
+  schuld die vandaag niets kost en straks precies datgene wat het duurst is, want een grondstof
+  geef je aan de toren óf aan jezelf. De vlag `schuldSmidsvrouw` staat klaar; verzilveren gebeurt
+  bij het punt "Grondstoffen en de verdeelvraag" in `ontwerp/werklijst.md`. **Zonder dat blijft
+  deze weg gratis, en dan klopt de quest niet.**
+- **De beurs van de meester: acht munten** (Marcel, 22 sep 2026). Je erft de toren, Wim, en wat er
+  in de la lag. De marskramer vraagt vijftien. Zo ligt de weg met goud open en kun je hem net niet
+  nemen — pijnlijker en beter dan een deur die dicht zit zonder dat je weet waarom. Wim biedt hem
+  aan en je mag hem laten liggen; dan staat het aanbod er morgen nog.
+- **Twee einden.** Wie het dichtbakte met een vuurschicht krijgt hetzelfde goud maar de vlag
+  `ovenMetMagie` erbij, zodat het dorp weet hóé het ging. Daar is `S.questWeg` voor.
+
+**Wat er nog moet gebeuren, en dat is Marcels werk in Tiled:** de bakker, de marskramer en de
+smidsvrouw neerzetten (`wezen="bakker"` enzovoort; de eerste twee lenen tot fase B2b het vel van
+Wim), de leemkuil bij de beek met de leem erin (`quest="bakker:zoeken"`) en iets wat daar huist,
+en de oven van de bakker met `raak="oven"` op een tegel waar je bij kunt.
 
 ## Wat de kernregel ervan vraagt
 

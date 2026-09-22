@@ -87,6 +87,7 @@ test('zolang de meester leeft, stuurt Wim je naar buiten, naar zijn bonen', () =
 test('Wims begroeting volgt de sleutel: nog niet gevonden, op zak, of al gebruikt', () => {
   const S = nieuweS();
   T.zetVlag(S, 'meesterDood'); // na de tutorial: nu ben jij de meester
+  T.zetVlag(S, 'beursVanDeMeester'); // de beurs is al geweest; die vraag heeft zijn eigen toets
 
   let knoop = T.gesprekKnoop(S, 'wim', 'welkom');
   assert.ok(knoop.tekst.includes('Zo moet ik u nu noemen'));
@@ -102,6 +103,23 @@ test('Wims begroeting volgt de sleutel: nog niet gevonden, op zak, of al gebruik
   knoop = T.gesprekKnoop(S, 'wim', 'welkom');
   assert.ok(knoop.tekst.includes('Ik veeg de trap nog één keer'));
   assert.equal(knoop.keuzes.length, 1);
+});
+
+// De beurs van de meester is je eerste goud, en expres te weinig voor de marskramer
+// (ontwerp/toren.md). Je mag er altijd naar vragen tot je hem hebt gehad; weigeren zet geen vlag,
+// dus dan staat het aanbod er morgen nog, precies zoals Wim zegt.
+test('Wim biedt de beurs van de meester aan, en daarna niet meer', () => {
+  const S = nieuweS();
+  T.zetVlag(S, 'meesterDood');
+  const keuzes = () => T.zichtbareKeuzes(S, 'wim', T.GESPREKKEN.wim.knopen.welkom.keuzes);
+  const gevraagd = () => keuzes().some((k) => k.naar === 'beurs');
+
+  assert.equal(gevraagd(), true);
+  S.inventaris.add('sleutel'); // ook met de sleutel op zak mag je er nog naar vragen
+  assert.equal(gevraagd(), true);
+
+  T.zetVlag(S, 'beursVanDeMeester');
+  assert.equal(gevraagd(), false);
 });
 
 test('Wim merkt op dat je meer dan een jaar ouder bent geworden sinds jullie elkaar spraken', () => {

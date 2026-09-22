@@ -22,9 +22,11 @@ Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halver
   `T.TUTORIAL_TEKST` in `js/gesprekken.js`).
 - In Tiled: het vel `tuin` aan `wereld.tmj` toevoegen, en de vier varens rond (51–52, 45–46) van de
   grondlaag naar `objecten` verplaatsen (`npm run kaarten` klaagt erover).
-- **De koude oven samen schrijven.** De regels van het questsysteem staan er (22 sep), de quest
-  nog niet: dat is een uur aan gegevens en gesprekstekst, en Marcel wilde erbij zijn. Wat er eerst
-  moet zijn, staat in `toren.md` onder "Nog te schrijven".
+- **De koude oven in Tiled neerzetten.** De quest is geschreven (22 sep) en speelt, maar de
+  mensen en de dingen staan nergens: `wezen="bakker"`, `wezen="marskramer"` en
+  `wezen="smidsvrouw"` in het dorp; een leemkuil bij de beek met de leem erin
+  (`quest="bakker:zoeken"`) en iets wat daar huist; en de oven van de bakker met `raak="oven"` op
+  een tegel waar je bij kunt. De eigenschappen staan in `kaarten.md`.
 
 **Klaar om te starten, in deze volgorde.** Elk stuk is een korte agent. Bekijk eerst de meter.
 1. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder).
@@ -105,17 +107,20 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    `toren.md`), de stand van een quest een voorwaarde is in een gesprek, er goud bestaat, en één
    quest — bijvoorbeeld "De koude oven" — van begin tot eind speelt en de toets van drie antwoorden
    haalt.
-   **Stand (22 sep):** de regels staan er en zijn getoetst — fasen en wegen, goud, het vak
-   linksboven, de Tiled-eigenschappen `quest` en `raak`, en `T.keurQuests`, dat de toets van drie
-   antwoorden door `npm test` laat bewaken. Nog te doen: De koude oven schrijven (samen met
-   Marcel), en daarvoor de bakker, de marskramer, de smidsvrouw, de leemkuil en de oven in de
-   wereld zetten.
+   **Stand (22 sep):** af, op het neerzetten na. De regels staan er en zijn getoetst — fasen en
+   wegen, goud, het vak linksboven, de Tiled-eigenschappen `quest` en `raak`, en `T.keurQuests`,
+   dat de toets van drie antwoorden door `npm test` laat bewaken. De koude oven is geschreven, met
+   de gesprekken van de bakker, de marskramer en de smidsvrouw, en `test/quest.test.cjs` speelt
+   alle vier de wegen uit. Wat rest is Tiled (zie "Wacht op Marcel").
 4. **De verhaaleditor.** Klaar als het gesprekkengereedschap ook quests kan: vormen om mee te
    beginnen, alles op één plek, een proef per fase, controle die de routes telt, en de koppeling
    met Tiled. Zie `verhaal.md`, "Een quest moet makkelijk te bouwen zijn".
 5. **Grondstoffen en de verdeelvraag.** Klaar als magische grondstoffen voorwerpen zijn die je aan
    de toren óf aan jezelf geeft (jaren terug), ze eindig zijn in de wereld, en je er per saldo op
    achteruitgaat. Zie `toren.md`.
+   **Hoort hier meteen bij:** de schuld aan de smidsvrouw (`schuldSmidsvrouw`, gezet door De koude
+   oven). Zij vraagt de eerste grondstof uit de toren. Zolang die niet verzilverd wordt, is haar
+   weg door de quest gratis, en dan klopt de toets van drie antwoorden alleen op papier.
 6. **De toren in verdiepingen.** Klaar als elke verdieping een eigen gebied is met de spiraaltrap
    als overgang; zweven kan voor twee jaar (drie als de vloer weg is), je dan niets draagt en het
    iets boven stoort; en er een torenpaneel in doorsnede is waarin je herstelt. Zie `toren.md`.
@@ -160,6 +165,14 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 22 sep 2026 — **De koude oven, de eerste quest:** vier wegen die elk iets anders kosten (de kuil
+  met wat erin huist, de vuurklei van de marskramer, de vuurstenen van de smidsvrouw, en een
+  vuurschicht in de oven), met de gesprekken erbij en een toets die alle vier uitspeelt. Twee
+  besluiten van Marcel: een gunst moet ook echt iets kosten, dus de smidsvrouw vraagt de eerste
+  grondstof uit de toren; en je erft acht munten van de meester, zeven te weinig voor de
+  marskramer. De bakker en de marskramer bestaan nu als wezen en lenen tot fase B2b het vel van
+  Wim.
 
 - 22 sep 2026 — **Het questsysteem, de regels:** quests als gegevens (`js/quests.js`) met de
   regels erachter (`js/quest.js`), goud naast de leeftijd, het vak linksboven dat nu ook van een
