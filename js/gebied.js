@@ -35,7 +35,10 @@
   T.maakGebieden = function () {
     const g = {};
     for (const naam of Object.keys(T.KAARTEN || {})) {
-      g[naam] = { naam: kaartNaam(naam, T.KAARTEN[naam]), maak: () => T.laadKaart(T.KAARTEN[naam]) };
+      // De betekenis (mensen, deuren, doorgangen, aansluitingen) staat in een eigen bestand
+      // naast de kaart en komt via T.BETEKENIS binnen; zie ontwerp/kaarten.md, "Tiled tekent
+      // alleen nog de grond". Bestaat dat bestand niet, dan is de kaart gewoon wat Tiled heeft.
+      g[naam] = { naam: kaartNaam(naam, T.KAARTEN[naam]), maak: () => T.laadKaart(T.KAARTEN[naam], T.BETEKENIS && T.BETEKENIS[naam]) };
     }
     // Wat in code staat, wint van een kaart die toevallig zo heet: de toren is de toren.
     return Object.assign(g, IN_CODE);

@@ -32,12 +32,23 @@
   T.debug = T.debug || {};
 
   let kaartNaam = '';
-  let objecten = []; // de Tiled-objecten, voor de lagen die eigenschappen laten zien
+  let objecten = []; // alles wat er op de kaart staat, uit Tiled en uit het betekenisbestand
   let klachten = [];
   let vast = null; // de tegel die met een klik is vastgezet
   let onderMuis = null;
   let bw = 0;
   let bh = 0;
+
+  // De betekenisbestanden die dit blad open heeft, per kaart: wat erin staat, hoe het van schijf
+  // kwam (voor de wacht tegen overschrijven) en of er sinds het laden iets veranderd is. Ze
+  // blijven in het geheugen als je van kaart wisselt, want een aansluiting leg je nu juist op
+  // twee kaarten tegelijk en dan mag het werk op de eerste niet verdwijnen.
+  const open = new Map();
+  let gekozen = null; // het ding uit het betekenisbestand dat aangeklikt is
+  let aansluiting = null; // halverwege een aansluiting: { vanKaart, van, naar }
+  const bewerken = () => el('wt-bewerken').checked;
+  const nu = () => open.get(kaartNaam);
+  const openKaarten = () => [...open.entries()];
 
   // ---------------------------------------------------------------- de lagen
 
@@ -118,6 +129,109 @@
     el('wt-status').textContent = tekst;
   }
 
+  // ---------------------------------------------------------------- het betekenisbestand
+  //
+  // Dit is het enige bestand dat dit blad schrijft (zie ontwerp/kaarten.md, "Tiled tekent alleen
+  // nog de grond"). Tiled komt er nooit in, dus er valt niets mee te botsen behalve een tweede
+  // blad; daarvoor sturen we bij het opslaan mee hoe het bestand eruitzag toen we het lazen.
+  async function haalBetekenis(naam) {
+    try {
+      const r = await fetch(`kaarten/${naam}.betekenis.json`, { cache: 'no-store' });
+      if (r.ok) {
+        const tekst = await r.text();
+        return { inhoud: JSON.parse(tekst), tekst, vuil: false };
+      }
+    } catch (e) {
+      /* los geopend blad: dan het gebundelde, en opslaan kan toch niet */
+    }
+    const uitBundel = T.BETEKENIS && T.BETEKENIS[naam];
+    if (uitBundel) return { inhoud: JSON.parse(JSON.stringify(uitBundel)), tekst: null, vuil: false };
+    // Nog geen betekenis voor deze kaart: dan beginnen we er een.
+    return {
+      inhoud: {
+        versie: 1,
+        uitleg: `De betekenis van kaarten/${naam}.tmj: mensen, deuren, doorgangen en aansluitingen. Tiled tekent de grond, dit bestand zegt wat het is. Geschreven door gereedschap/wereld.html.`,
+        dingen: [],
+      },
+      tekst: null,
+      vuil: false,
+    };
+  }
+
+  // Er is iets veranderd: de wereld opnieuw laten maken door het spel zelf, opnieuw keuren, en
+  // de knop Opslaan wakker maken. Dat kost op de grote kaart een paar milliseconden, dus het mag
+  // gewoon bij elke wijziging.
+  function veranderd() {
+    const b = nu();
+    if (b) b.vuil = true;
+    herbouw();
+    werkKnoppenBij();
+  }
+
+  function herbouw() {
+    const b = nu();
+    // Wat hier open staat, is wat de keuring moet zien — ook als het nog niet opgeslagen is.
+    // T.GEBIEDEN leest T.BETEKENIS op het moment dat het een wereld maakt, dus door het daar neer
+    // te zetten rekent de dekking (wie staat er nergens?) mee met wat je zojuist neerzette.
+    T.BETEKENIS = T.BETEKENIS || {};
+    for (const [naam, open] of openKaarten()) T.BETEKENIS[naam] = open.inhoud;
+    const uitslag = T.keurKaart(kaartNaam, T.KAARTEN[kaartNaam], { betekenis: b && b.inhoud });
+    const camera = { x: S.camera.x, y: S.camera.y };
+    S.wereld = uitslag.wereld;
+    S.wereld.gebied = kaartNaam;
+    S.camera = camera;
+    S.grond = null;
+    objecten = T.kaartObjecten(T.KAARTEN[kaartNaam], b && b.inhoud);
+    pasQuestFaseToe();
+    keur(uitslag.klachten);
+    toonTegel(vast || onderMuis);
+  }
+
+  function werkKnoppenBij() {
+    const vuil = [...open.values()].filter((b) => b.vuil);
+    const knop = el('wt-opslaan');
+    knop.disabled = !vuil.length;
+    knop.textContent = vuil.length > 1 ? `Opslaan (${vuil.length} kaarten)` : 'Opslaan';
+    el('wt-neerzetten-paneel').classList.toggle('verborgen', !bewerken());
+  }
+
+  async function slaOp() {
+    const teDoen = [...open.entries()].filter(([, b]) => b.vuil);
+    for (const [naam, b] of teDoen) {
+      status(`${naam} opslaan…`);
+      const r = await fetch(`gereedschap/api/betekenis/${naam}`, {
+        method: 'POST',
+        body: JSON.stringify({ vorige: b.tekst, inhoud: b.inhoud }),
+      });
+      if (!r.ok) {
+        status(`Niet opgeslagen: ${await r.text()}`);
+        return;
+      }
+      const antwoord = await r.json();
+      b.tekst = antwoord.tekst;
+      b.vuil = false;
+    }
+    werkKnoppenBij();
+    herbouw();
+    // En meteen bundelen, want het spel leest kaarten/kaarten.js en niet de losse bestanden. Zo
+    // is opslaan hier genoeg om het in het spel te zien, zonder npm run kaarten in een terminal.
+    // En meteen bundelen. naar-kaarten.cjs schrijft kaarten.js ook als het over de tekening iets
+    // te klagen heeft (een tegel in de verkeerde laag); dat is niet "mislukt", dat is een
+    // opmerking. De hele uitvoer gaat naar de console, de statusregel houdt het kort.
+    let gebundeld = ' (bundelen mislukte; draai npm run kaarten)';
+    try {
+      const r = await fetch('gereedschap/api/bundelen', { method: 'POST' });
+      const uit = await r.text();
+      console.log(uit);
+      const klaar = /kaarten\.js klaar/.test(uit);
+      const opmerkingen = (uit.match(/FOUT/g) || []).length;
+      if (klaar) gebundeld = opmerkingen ? `, gebundeld (${opmerkingen} opmerking(en) over de tekening, zie de console)` : ' en gebundeld voor het spel';
+    } catch (e) {
+      /* geen server: dan blijft de melding hierboven staan */
+    }
+    status(`Opgeslagen${gebundeld}: ${teDoen.map(([n]) => n + '.betekenis.json').join(', ')}.`);
+  }
+
   async function laadKaart(naam, houdCamera) {
     status(`${naam} laden…`);
     const { kaart, bron } = await haalKaart(naam);
@@ -127,20 +241,221 @@
     T.KAARTEN = T.KAARTEN || {};
     T.KAARTEN[naam] = kaart;
     T.GEBIEDEN = T.maakGebieden();
+    // Wie deze kaart al open had met werk erin, houdt dat werk; anders van schijf.
+    if (!open.has(naam) || !open.get(naam).vuil) open.set(naam, await haalBetekenis(naam));
 
-    objecten = T.kaartObjecten(kaart);
-    const uitslag = T.keurKaart(naam, kaart);
-    S.wereld = uitslag.wereld;
-    S.wereld.gebied = naam;
-    S.grond = null;
     vast = null;
     onderMuis = null;
-    toonTegel(null);
+    gekozen = null;
     zetQuestKeuze();
-    pasQuestFaseToe();
-    keur(uitslag.klachten);
+    herbouw();
+    werkKnoppenBij();
     if (!houdCamera) passend();
-    status(`${naam} — ${S.wereld.b}×${S.wereld.h} tegels, ${objecten.length} objecten (${bron})`);
+    const b = nu();
+    status(`${naam} — ${S.wereld.b}×${S.wereld.h} tegels, ${objecten.length} dingen (${bron}), ${b.inhoud.dingen.length} met betekenis`);
+    if (aansluiting && aansluiting.naar === naam) {
+      el('wt-neerzetten-hint').textContent = `Klik de tegel waar je aankomt uit "${aansluiting.vanKaart}"`;
+    }
+  }
+
+  // ---------------------------------------------------------------- neerzetten
+  //
+  // Wat je neerzet, is een gewoon vakje in het betekenisbestand: { x, y, wezen: 'bakker' } of
+  // { x, y, tegel: 'bomen/eik' }. De velden en wat ze betekenen staan boven in js/kaart.js; hier
+  // staat alleen hoe je ze met de muis legt.
+  const penseel = {
+    soort: 'wezen',
+    wezen: 'bakker', zaad: 1, straal: 3,
+    staat: 'dicht', vlag: '',
+    naar: '', vel: 'bomen', tegel: 'eik', raak: '', quest: '',
+  };
+  const SOORTEN = [
+    ['wezen', 'Wezen'],
+    ['dorpeling', 'Dorpeling'],
+    ['deur', 'Deur'],
+    ['aansluiting', 'Aansluiting'],
+    ['voorwerp', 'Voorwerp'],
+  ];
+
+  // Een rij met een label en een invoer; `maak` bouwt de invoer, `leg` zegt wat ermee gebeurt.
+  function veld(doel, label, maak) {
+    const rij = document.createElement('label');
+    rij.className = 'wt-veld';
+    const naam = document.createElement('span');
+    naam.textContent = label;
+    rij.append(naam, maak());
+    doel.appendChild(rij);
+  }
+
+  function keuzeVeld(doel, label, waarden, waarde, kies) {
+    veld(doel, label, () => {
+      const k = document.createElement('select');
+      for (const w of waarden) {
+        const o = document.createElement('option');
+        o.value = typeof w === 'string' ? w : w[0];
+        o.textContent = typeof w === 'string' ? w : w[1];
+        k.appendChild(o);
+      }
+      k.value = waarde;
+      k.addEventListener('change', () => kies(k.value));
+      return k;
+    });
+  }
+
+  function tekstVeld(doel, label, waarde, zet, soort) {
+    veld(doel, label, () => {
+      const i = document.createElement('input');
+      i.type = soort || 'text';
+      i.value = waarde == null ? '' : waarde;
+      i.addEventListener('change', () => zet(soort === 'number' ? Number(i.value) : i.value));
+      return i;
+    });
+  }
+
+  const velNamen = () => Object.keys(T.TEGELS || {});
+  const tegelNamen = (vel) => {
+    const v = T.TEGELS && T.TEGELS[vel];
+    return v ? [...new Set(v.tiles.filter(Boolean).map((t) => t.naam))].sort() : [];
+  };
+
+  function bouwNeerzetten() {
+    const doel = el('wt-neerzetten');
+    doel.innerHTML = '';
+    const rij = document.createElement('div');
+    rij.className = 'wt-soorten';
+    for (const [id, naam] of SOORTEN) {
+      const knop = document.createElement('button');
+      knop.type = 'button';
+      knop.textContent = naam;
+      knop.className = 'gt-mini' + (penseel.soort === id ? ' wt-aan' : '');
+      knop.addEventListener('click', () => {
+        penseel.soort = id;
+        aansluiting = null;
+        bouwNeerzetten();
+      });
+      rij.appendChild(knop);
+    }
+    doel.appendChild(rij);
+
+    if (penseel.soort === 'wezen') {
+      keuzeVeld(doel, 'wie', Object.keys(T.WEZENS), penseel.wezen, (v) => (penseel.wezen = v));
+      tekstVeld(doel, 'dwaalstraal', penseel.straal, (v) => (penseel.straal = v), 'number');
+    } else if (penseel.soort === 'dorpeling') {
+      tekstVeld(doel, 'zaad', penseel.zaad, (v) => (penseel.zaad = v), 'number');
+      tekstVeld(doel, 'dwaalstraal', penseel.straal, (v) => (penseel.straal = v), 'number');
+    } else if (penseel.soort === 'deur') {
+      keuzeVeld(doel, 'staat', ['dicht', 'open', 'opslot', 'geheim'], penseel.staat, (v) => {
+        penseel.staat = v;
+        bouwNeerzetten();
+      });
+      if (penseel.staat === 'geheim') {
+        tekstVeld(doel, 'als vlag', penseel.vlag, (v) => (penseel.vlag = v));
+      }
+    } else if (penseel.soort === 'aansluiting') {
+      const anders = [...el('wt-kaart').options].map((o) => o.value).filter((n) => n !== kaartNaam);
+      if (!penseel.naar || !anders.includes(penseel.naar)) penseel.naar = anders[0] || 'toren';
+      keuzeVeld(doel, 'naar', [...anders, 'toren'], penseel.naar, (v) => (penseel.naar = v));
+      const uitleg = document.createElement('p');
+      uitleg.className = 'gt-leeg';
+      uitleg.textContent = 'Klik de tegel waar je hier vertrekt. Daarna springt het gereedschap naar die kaart en klik je waar je aankomt; beide kanten worden in één keer gelegd.';
+      doel.appendChild(uitleg);
+    } else if (penseel.soort === 'voorwerp') {
+      keuzeVeld(doel, 'vel', velNamen(), penseel.vel, (v) => {
+        penseel.vel = v;
+        penseel.tegel = tegelNamen(v)[0] || '';
+        bouwNeerzetten();
+      });
+      keuzeVeld(doel, 'tegel', tegelNamen(penseel.vel), penseel.tegel, (v) => (penseel.tegel = v));
+      tekstVeld(doel, 'raak', penseel.raak, (v) => (penseel.raak = v));
+      tekstVeld(doel, 'quest', penseel.quest, (v) => (penseel.quest = v));
+    }
+  }
+
+  const dingenNu = () => (nu() ? nu().inhoud.dingen : []);
+  const dingOp = (x, y) => dingenNu().find((d) => d.x === x && d.y === y) || null;
+
+  // Waar land je als je hiernaartoe komt? Eén stap van de doorgang af, liefst naar onderen (dat is
+  // "het huis uit"), en anders de eerste begaanbare buur. Zo hoeft Marcel "komt" nooit zelf te
+  // bedenken, en kaatst hij nooit heen en weer tussen twee gebieden.
+  function kiesKomt(w, x, y) {
+    const om = [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]];
+    for (const [dx, dy] of om) if (T.isBegaanbaar(w, x + dx, y + dy)) return { x: x + dx, y: y + dy };
+    return null;
+  }
+
+  function maakDing(t) {
+    if (penseel.soort === 'wezen') {
+      const d = { x: t.x, y: t.y, wezen: penseel.wezen };
+      if (penseel.straal > 0) d.straal = penseel.straal;
+      return d;
+    }
+    if (penseel.soort === 'dorpeling') {
+      const d = { x: t.x, y: t.y, zaad: penseel.zaad };
+      if (penseel.straal > 0) d.straal = penseel.straal;
+      return d;
+    }
+    if (penseel.soort === 'deur') {
+      const d = { x: t.x, y: t.y, staat: penseel.staat };
+      if (penseel.staat === 'geheim' && penseel.vlag) d.als = { vlag: penseel.vlag };
+      return d;
+    }
+    if (penseel.soort === 'voorwerp') {
+      const d = { x: t.x, y: t.y, tegel: `${penseel.vel}/${penseel.tegel}` };
+      if (penseel.raak) d.raak = penseel.raak;
+      if (penseel.quest) d.quest = penseel.quest;
+      return d;
+    }
+    return null;
+  }
+
+  // Een aansluiting heeft twee kanten, en die leggen we in één handeling (ontwerp/kaarten.md).
+  // Eerste klik: de tegel waar je hier vertrekt. Dan springt het blad naar de andere kaart, en de
+  // tweede klik zegt waar je daar aankomt — inclusief de weg terug.
+  async function legAansluiting(t) {
+    if (!aansluiting) {
+      const komt = kiesKomt(S.wereld, t.x, t.y);
+      dingenNu().push({ x: t.x, y: t.y, overgang: penseel.naar, komt });
+      aansluiting = { vanKaart: kaartNaam, van: { x: t.x, y: t.y }, naar: penseel.naar };
+      veranderd();
+      if (penseel.naar === 'toren') {
+        // De toren staat in code (js/wereld.js) en heeft zijn eigen deur terug; daar valt niets
+        // neer te zetten.
+        aansluiting = null;
+        el('wt-neerzetten-hint').textContent = 'De toren regelt zijn eigen kant.';
+        return;
+      }
+      el('wt-kaart').value = penseel.naar;
+      await laadKaart(penseel.naar, false);
+      return;
+    }
+    const terug = aansluiting;
+    aansluiting = null;
+    dingenNu().push({ x: t.x, y: t.y, overgang: terug.vanKaart, komt: kiesKomt(S.wereld, t.x, t.y) });
+    veranderd();
+    el('wt-neerzetten-hint').textContent = `Aansluiting ${terug.vanKaart} ↔ ${terug.naar} ligt.`;
+  }
+
+  async function klikInBewerken(t) {
+    if (penseel.soort === 'aansluiting') return legAansluiting(t);
+    const er = dingOp(t.x, t.y);
+    if (er) {
+      gekozen = er;
+      toonTegel(t);
+      return;
+    }
+    const d = maakDing(t);
+    if (!d) return;
+    dingenNu().push(d);
+    gekozen = d;
+    veranderd();
+  }
+
+  function haalWeg(d) {
+    const i = dingenNu().indexOf(d);
+    if (i < 0) return;
+    dingenNu().splice(i, 1);
+    if (gekozen === d) gekozen = null;
+    veranderd();
   }
 
   // ---------------------------------------------------------------- de questfase
@@ -285,7 +600,12 @@
 
   let sleept = null;
   canvas.addEventListener('mousedown', (e) => {
-    sleept = { mx: e.clientX, my: e.clientY, cx: S.camera.x, cy: S.camera.y, ver: 0 };
+    const vak = canvas.getBoundingClientRect();
+    const t = tegelOnder(e.clientX - vak.left, e.clientY - vak.top);
+    // In de bewerkstand pakt de muis een ding op als er een onder ligt; anders schuift hij de
+    // kaart, net als altijd.
+    const ding = bewerken() && t && penseel.soort !== 'aansluiting' ? dingOp(t.x, t.y) : null;
+    sleept = { mx: e.clientX, my: e.clientY, cx: S.camera.x, cy: S.camera.y, ver: 0, ding };
     canvas.classList.add('wt-sleept');
   });
   window.addEventListener('mousemove', (e) => {
@@ -294,6 +614,18 @@
       const dx = e.clientX - sleept.mx;
       const dy = e.clientY - sleept.my;
       sleept.ver = Math.max(sleept.ver, Math.abs(dx) + Math.abs(dy));
+      if (sleept.ding) {
+        // Verslepen: pas opnieuw bouwen als hij werkelijk op een andere tegel komt, anders
+        // herbouwen we de hele wereld bij elke muisbeweging.
+        const t = tegelOnder(e.clientX - vak.left, e.clientY - vak.top);
+        if (t && (t.x !== sleept.ding.x || t.y !== sleept.ding.y)) {
+          sleept.ding.x = t.x;
+          sleept.ding.y = t.y;
+          vast = t;
+          veranderd();
+        }
+        return;
+      }
       S.camera.x = sleept.cx - dx / S.zoom;
       S.camera.y = sleept.cy - dy / S.zoom;
       return;
@@ -304,11 +636,18 @@
   window.addEventListener('mouseup', (e) => {
     if (!sleept) return;
     const stil = sleept.ver < 4;
+    const ding = sleept.ding;
     sleept = null;
     canvas.classList.remove('wt-sleept');
     if (!stil || e.target !== canvas) return;
     const vak = canvas.getBoundingClientRect();
-    vast = tegelOnder(e.clientX - vak.left, e.clientY - vak.top);
+    const t = tegelOnder(e.clientX - vak.left, e.clientY - vak.top);
+    vast = t;
+    if (bewerken() && t) {
+      if (ding) gekozen = ding;
+      klikInBewerken(t);
+      return;
+    }
     toonTegel(vast);
   });
   canvas.addEventListener('wheel', (e) => {
@@ -341,8 +680,15 @@
     else if (e.key === 'ArrowRight') S.camera.x += stap;
     else if (e.key === 'ArrowUp') S.camera.y -= stap;
     else if (e.key === 'ArrowDown') S.camera.y += stap;
-    else if (e.key === 'Escape') {
+    else if (e.key === 'Delete' || e.key === 'Backspace') {
+      if (bewerken() && gekozen) haalWeg(gekozen);
+    } else if (e.key === 'Escape') {
       vast = null;
+      gekozen = null;
+      if (aansluiting) {
+        aansluiting = null;
+        el('wt-neerzetten-hint').textContent = 'Aansluiting afgebroken; de ene kant staat er wel.';
+      }
       toonTegel(onderMuis);
     }
   });
@@ -370,6 +716,73 @@
     doel.appendChild(h);
   }
 
+  // Hoe heet dit ding in één regel? Dezelfde volgorde als js/kaart.js hem uitlegt.
+  function omschrijf(d) {
+    if (d.wezen !== undefined) return d.wezen;
+    if (d.zaad !== undefined) return `dorpeling (zaad ${d.zaad})`;
+    if (d.staat !== undefined) return d.staat === 'geheim' ? 'geheime doorgang' : `deur (${d.staat})`;
+    if (d.overgang !== undefined) return `aansluiting → ${d.overgang}`;
+    if (d.tegel !== undefined) return String(d.tegel).split('/').pop();
+    return 'ding';
+  }
+
+  // De velden van het gekozen ding. Alleen de velden die erbij horen, zodat er niets in staat wat
+  // voor dit ding niets betekent.
+  function bouwDingVelden(doel, d) {
+    const zet = (sleutel) => (waarde) => {
+      if (waarde === '' || waarde == null || (typeof waarde === 'number' && !Number.isFinite(waarde))) delete d[sleutel];
+      else d[sleutel] = waarde;
+      veranderd();
+    };
+    if (d.wezen !== undefined) {
+      keuzeVeld(doel, 'wie', Object.keys(T.WEZENS), d.wezen, zet('wezen'));
+      tekstVeld(doel, 'dwaalstraal', d.straal, zet('straal'), 'number');
+    }
+    if (d.zaad !== undefined) {
+      tekstVeld(doel, 'zaad', d.zaad, zet('zaad'), 'number');
+      tekstVeld(doel, 'dwaalstraal', d.straal, zet('straal'), 'number');
+    }
+    if (d.staat !== undefined) {
+      keuzeVeld(doel, 'staat', ['dicht', 'open', 'opslot', 'geheim'], d.staat, (v) => {
+        d.staat = v;
+        if (v !== 'geheim') delete d.als;
+        veranderd();
+      });
+      if (d.staat === 'geheim') {
+        tekstVeld(doel, 'als vlag', (d.als && d.als.vlag) || '', (v) => {
+          if (v) d.als = { vlag: v };
+          else delete d.als;
+          veranderd();
+        });
+      }
+    }
+    if (d.overgang !== undefined) {
+      tekstVeld(doel, 'naar', d.overgang, zet('overgang'));
+      tekstVeld(doel, 'komt aan', d.komt ? `${d.komt.x},${d.komt.y}` : '', (v) => {
+        const k = String(v).split(',').map(Number);
+        if (k.length === 2 && k.every(Number.isFinite)) d.komt = { x: k[0], y: k[1] };
+        else delete d.komt;
+        veranderd();
+      });
+      tekstVeld(doel, 'tekst', d.tekst, zet('tekst'));
+    }
+    if (d.tegel !== undefined) {
+      const vel = String(d.tegel).split('/')[0];
+      keuzeVeld(doel, 'vel', velNamen(), vel, (v) => {
+        d.tegel = `${v}/${tegelNamen(v)[0] || ''}`;
+        veranderd();
+      });
+      keuzeVeld(doel, 'tegel', tegelNamen(vel), String(d.tegel).split('/').pop(), (v) => {
+        d.tegel = `${vel}/${v}`;
+        veranderd();
+      });
+      tekstVeld(doel, 'raak', d.raak, zet('raak'));
+      tekstVeld(doel, 'quest', d.quest, zet('quest'));
+    }
+    tekstVeld(doel, 'x', d.x, (v) => { d.x = Math.round(v); veranderd(); }, 'number');
+    tekstVeld(doel, 'y', d.y, (v) => { d.y = Math.round(v); veranderd(); }, 'number');
+  }
+
   function toonTegel(t) {
     const doel = el('wt-tegel');
     const w = S.wereld;
@@ -382,6 +795,21 @@
     const ja = (b) => (b ? 'ja' : 'nee');
     const kl = (b) => (b ? 'wt-ja' : 'wt-nee');
 
+    // In de bewerkstand staat bovenaan het ding zelf, met zijn velden om in te typen. Wat je hier
+    // verandert, gaat rechtstreeks het betekenisbestand in.
+    const d = bewerken() ? dingOp(t.x, t.y) : null;
+    if (d) {
+      gekozen = d;
+      kop(doel, `${omschrijf(d)} — bewerken`);
+      bouwDingVelden(doel, d);
+      const weg = document.createElement('button');
+      weg.type = 'button';
+      weg.className = 'gt-mini gt-mini-x';
+      weg.textContent = 'Weghalen';
+      weg.addEventListener('click', () => haalWeg(d));
+      doel.appendChild(weg);
+    }
+
     kop(doel, `Tegel (${t.x}, ${t.y})`);
     const g = w.grond[t.y][t.x];
     rij(doel, 'grond', g ? `${g.naam} (${g.vel} #${g.id})` : '— niets getekend —', g ? '' : 'wt-nee');
@@ -389,11 +817,16 @@
     rij(doel, 'begaanbaar', ja(T.isBegaanbaar(w, t.x, t.y)), kl(T.isBegaanbaar(w, t.x, t.y)));
     rij(doel, 'vast', ja(T.isVast(w, t.x, t.y)), kl(!T.isVast(w, t.x, t.y)));
 
-    const d = T.deurOp(w, t.x, t.y);
-    if (d) {
+    const deur = T.deurOp(w, t.x, t.y);
+    if (deur) {
       kop(doel, 'Deur');
-      rij(doel, 'staat', d.staat);
-      rij(doel, 'richting', d.richting);
+      rij(doel, 'staat', deur.staat + (deur.geheim ? ' (geheim, en de voorwaarde geldt)' : ''));
+      rij(doel, 'richting', deur.richting);
+    }
+    for (const g of (w.geheimen || []).filter((g) => g.x === t.x && g.y === t.y && !w.deuren.has(t.x + ',' + t.y))) {
+      kop(doel, 'Geheime doorgang');
+      rij(doel, 'nu', 'ziet eruit als ' + g.onder, 'wt-nee');
+      rij(doel, 'als', g.als ? JSON.stringify(g.als) : 'geen voorwaarde', g.als ? '' : 'wt-nee');
     }
 
     for (const v of w.voorwerpen.filter((v) => v.x === t.x && v.y === t.y)) {
@@ -607,6 +1040,15 @@
         }
       }
 
+      // In de bewerkstand: een stipje op alles wat uit het betekenisbestand komt, want dat is
+      // wat je hier kunt pakken en verslepen. Wat in Tiled staat, blijft van Tiled.
+      if (bewerken()) {
+        for (const d of dingenNu()) {
+          markeer(d.x, d.y, d === gekozen ? '#efe6d2' : 'rgba(239, 230, 210, 0.45)', d === gekozen ? 2.5 : 1.2, 0.55);
+        }
+        if (aansluiting && aansluiting.vanKaart === kaartNaam) markeer(aansluiting.van.x, aansluiting.van.y, '#6fa0e6', 3, 1.1);
+      }
+
       const t = vast || onderMuis;
       if (t) markeer(t.x, t.y, vast ? '#efe6d2' : 'rgba(239, 230, 210, 0.55)', 2, 1);
     });
@@ -663,7 +1105,19 @@
       pasQuestFaseToe();
     });
     el('wt-fase').addEventListener('change', pasQuestFaseToe);
+    el('wt-bewerken').addEventListener('change', () => {
+      gekozen = null;
+      aansluiting = null;
+      bouwNeerzetten();
+      werkKnoppenBij();
+      toonTegel(vast || onderMuis);
+    });
+    el('wt-opslaan').addEventListener('click', slaOp);
+    window.addEventListener('beforeunload', (e) => {
+      if ([...open.values()].some((b) => b.vuil)) e.preventDefault();
+    });
     await laadKaart(keuze.value);
+    bouwNeerzetten();
     requestAnimationFrame(lus);
   }
 

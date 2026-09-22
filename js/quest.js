@@ -50,6 +50,7 @@
     if (f.melding) zeg(f.melding);
     keerUit(S, naam, fase, f.beloning);
     T.werkQuestVoorwerpen(S);
+    T.werkGeheimenBij(S);
   };
 
   // Een beloning wordt één keer uitgekeerd, ook als je later nog eens in die fase komt. Wat er
@@ -96,6 +97,7 @@
       }
     }
     T.werkQuestVoorwerpen(S);
+    T.werkGeheimenBij(S);
   };
 
   // Wat er linksboven staat: de eerste lopende quest die iets van je wil. Dat is de quest die je
@@ -173,6 +175,34 @@
       const i = w.voorwerpen.indexOf(v);
       if (hoort && i < 0) w.voorwerpen.push(v);
       else if (!hoort && i >= 0) w.voorwerpen.splice(i, 1);
+    }
+  };
+
+  // ── Geheime doorgangen ──
+
+  // Een geheime doorgang ziet eruit als muur tot je ervan hoort (ontwerp/kaarten.md, "Geheim is:
+  // je hoort ervan, en dan is hij er"): een dorpeling vertelt het, of een quest komt in een fase.
+  // Daarna is het een gewone dichte deur, die je opent zoals elke andere. Dezelfde vorm als de
+  // questvoorwerpen hierboven: ze staan apart in w.geheimen en schuiven in en uit w.deuren, zodat
+  // lopen, tekenen en klikken niets van geheimen hoeven te weten.
+  //
+  // Waarom dit bij de kernregel past: de dure weg is er altijd (om de rots heen, of erlangs
+  // zweven voor twee jaar). Een geheime doorgang is de goedkope weg, en die verdien je met
+  // praten, niet met jaren. Zie CLAUDE.md, "Niets is een muur, alles is een prijs".
+  T.werkGeheimenBij = function (S) {
+    const w = S.wereld;
+    if (!w || !w.geheimen) return;
+    for (const g of w.geheimen) {
+      const sleutel = g.x + ',' + g.y;
+      const hoort = !g.als || T.voorwaardeGeldt(S, null, g.als);
+      const staatEr = w.deuren.get(sleutel) === g;
+      if (hoort && !staatEr) {
+        w.deuren.set(sleutel, g);
+        w.tegels[g.y][g.x] = 'deur';
+      } else if (!hoort && staatEr) {
+        w.deuren.delete(sleutel);
+        w.tegels[g.y][g.x] = g.onder;
+      }
     }
   };
 

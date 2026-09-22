@@ -25,6 +25,8 @@
     <label>Fase
       <select id="wt-fase"></select>
     </label>
+    <label class="wt-schakel"><input type="checkbox" id="wt-bewerken"> Bewerken</label>
+    <button id="wt-opslaan" type="button" class="gt-primair" disabled>Opslaan</button>
     <div class="gt-vul"></div>
     <a class="gt-naar" href="gereedschap/gesprekken.html">Gesprekken →</a>
     <a class="gt-naar" href="gereedschap/quests.html">Quests →</a>
@@ -39,7 +41,7 @@
         <button id="wt-ware" type="button" title="Op de grootte waarop je speelt">Ware grootte</button>
         <span id="wt-zoom" class="gt-status"></span>
         <span class="gt-vul"></span>
-        <span class="gt-status">Slepen = schuiven · wiel = zoomen · klik = tegel vastzetten</span>
+        <span class="gt-status">Slepen = schuiven · wiel = zoomen · klik = tegel vastzetten · in de bewerkstand: klik = neerzetten, slepen = verplaatsen, Delete = weghalen</span>
       </div>
     </section>
 
@@ -47,6 +49,11 @@
       <section class="paneel wt-lagen">
         <h2>Lagen</h2>
         <div id="wt-lagen"></div>
+      </section>
+
+      <section class="paneel wt-neerzetten verborgen" id="wt-neerzetten-paneel">
+        <h2>Neerzetten<div class="gt-vul"></div><span id="wt-neerzetten-hint" class="gt-status"></span></h2>
+        <div id="wt-neerzetten"></div>
       </section>
 
       <section class="paneel wt-tegel">

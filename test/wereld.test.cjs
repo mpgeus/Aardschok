@@ -25,7 +25,7 @@ const T = globalThis.Toren;
 // Zonder scherm doet elke aanroep naar T.ui niets.
 T.ui = new Proxy({}, { get: () => () => {} });
 
-const laadWereld = () => T.laadKaart(T.KAARTEN.wereld);
+const laadWereld = () => T.laadKaart(T.KAARTEN.wereld, T.BETEKENIS.wereld);
 const voorwerp = (w, soort) => w.voorwerpen.find((v) => v.soort === soort);
 // Waar het erf en het dorp binnen wereld.tmj precies liggen (zie gereedschap/tiled/maak-wereld.cjs).
 const { EOX, DOX, DOY, DORP_B, DORP_H } = require('../gereedschap/tiled/maak-wereld.cjs');

@@ -20,7 +20,7 @@ require('../js/kaart.js');
 const T = globalThis.Toren;
 
 test('een ingelezen kaart heeft de goede afmeting en een begaanbare wereld', () => {
-  const w = T.laadKaart(T.KAARTEN.proef);
+  const w = T.laadKaart(T.KAARTEN.proef, T.BETEKENIS.proef);
   assert.equal(w.b, 12);
   assert.equal(w.h, 10);
   assert.equal(T.tegel(w, 0, 0), 'vloer'); // gras: geen tegel-eigenschap "vast"
@@ -28,14 +28,14 @@ test('een ingelezen kaart heeft de goede afmeting en een begaanbare wereld', () 
 });
 
 test('het zandpad is begaanbaar, net als het gras ernaast', () => {
-  const w = T.laadKaart(T.KAARTEN.proef);
+  const w = T.laadKaart(T.KAARTEN.proef, T.BETEKENIS.proef);
   assert.equal(T.tegel(w, 3, 8), 'vloer');
   assert.equal(T.isBegaanbaar(w, 3, 8), true); // op het pad (rij y = 8)
   assert.equal(T.isBegaanbaar(w, 3, 7), true); // op het gras ernaast
 });
 
 test('de hele voet van het huis is vast, en er net naast niet', () => {
-  const w = T.laadKaart(T.KAARTEN.proef);
+  const w = T.laadKaart(T.KAARTEN.proef, T.BETEKENIS.proef);
   for (let y = 1; y <= 5; y++) {
     for (let x = 1; x <= 7; x++) {
       assert.equal(T.isVast(w, x, y), true, `(${x}, ${y}) hoort bij de voet van het huis`);
@@ -53,14 +53,14 @@ test('twee verschillende bomen blijven twee verschillende soorten (niet allebei 
   // met de hand uitgerekende gid's van bomen.tsx niet meer klopten en de den als een herfsteik
   // inlas (beide "vast", dus de test hierboven zag het verschil niet). Nu blijft elke boom zijn
   // eigen naam houden, wat er ook aan grond.tsx verandert.
-  const w = T.laadKaart(T.KAARTEN.proef);
+  const w = T.laadKaart(T.KAARTEN.proef, T.BETEKENIS.proef);
   const den = T.voorwerpOp(w, 10, 4);
   assert.ok(den);
   assert.equal(den.soort, 'den');
 });
 
 test('een boom is een vast voorwerp op zijn eigen tegel', () => {
-  const w = T.laadKaart(T.KAARTEN.proef);
+  const w = T.laadKaart(T.KAARTEN.proef, T.BETEKENIS.proef);
   assert.equal(T.isVast(w, 9, 2), true);
   const eik = T.voorwerpOp(w, 9, 2);
   assert.ok(eik);
@@ -69,7 +69,7 @@ test('een boom is een vast voorwerp op zijn eigen tegel', () => {
 });
 
 test('het monster staat op de goede tegel, met zijn gewone spullen uit T.WEZENS', () => {
-  const w = T.laadKaart(T.KAARTEN.proef);
+  const w = T.laadKaart(T.KAARTEN.proef, T.BETEKENIS.proef);
   const monster = w.wezens.find((e) => e.soort === 'slijm');
   assert.ok(monster);
   assert.equal(monster.tx, 9);
@@ -79,7 +79,7 @@ test('het monster staat op de goede tegel, met zijn gewone spullen uit T.WEZENS'
 });
 
 test('een deur uit de kaart doet mee als een echte deur, met de goede richting', () => {
-  const w = T.laadKaart(T.KAARTEN.proef);
+  const w = T.laadKaart(T.KAARTEN.proef, T.BETEKENIS.proef);
   assert.equal(T.tegel(w, 4, 6), 'deur');
   const deur = T.deurOp(w, 4, 6);
   assert.ok(deur);
@@ -99,7 +99,7 @@ test('een kaart met randtegels krijgt zijn grondsoorten uit rand.tsx, op naam en
   // op. Deze toets kijkt daarom naar de NAAM van de grond onder een tegel, niet naar een nummer:
   // rij y = 6 van proefbos is van west naar oost een zandpad, dan gras, dan drie brugtegels, en
   // daarachter weer gras. Klopt dat niet meer, dan is er iets verschoven.
-  const w = T.laadKaart(T.KAARTEN.proefbos);
+  const w = T.laadKaart(T.KAARTEN.proefbos, T.BETEKENIS.proefbos);
   const naam = (x, y) => w.grond[y][x] && w.grond[y][x].naam;
   assert.equal(naam(4, 6), 'zandpad');
   assert.equal(naam(9, 6), 'brug');
@@ -120,7 +120,7 @@ test('water is vast, de brug niet — ook waar hij over het water ligt', () => {
   // De kern van de brug: de beek loopt van noord naar zuid dwars over de kaart en is overal vast,
   // behalve op de drie tegels waar de brug ligt. Kan de held daar niet overheen, dan is het bos
   // aan de overkant onbereikbaar.
-  const w = T.laadKaart(T.KAARTEN.proefbos);
+  const w = T.laadKaart(T.KAARTEN.proefbos, T.BETEKENIS.proefbos);
   assert.equal(T.isVast(w, 10, 3), true, 'de beek stroomt en daar loop je niet doorheen');
   assert.equal(T.isVast(w, 10, 9), true);
   for (const x of [9, 10, 11]) {
@@ -132,7 +132,7 @@ test('water is vast, de brug niet — ook waar hij over het water ligt', () => {
 });
 
 test('een bosvijand uit Tiled is een gewoon wezen, met een figuur dat het spel kan tekenen', () => {
-  const w = T.laadKaart(T.KAARTEN.proefbos);
+  const w = T.laadKaart(T.KAARTEN.proefbos, T.BETEKENIS.proefbos);
   const spin = w.wezens.find((e) => e.soort === 'reuzenspin');
   assert.ok(spin, 'de reuzenspin staat in het bos');
   assert.equal(spin.kant, 'monster');

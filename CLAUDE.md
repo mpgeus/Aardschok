@@ -230,14 +230,24 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
 - `gereedschap/gesprekken.html` voor de gesprekken en `gereedschap/quests.html` voor de quests
   (fasen, wegen, het dorp per fase, en de controle die de toets van drie antwoorden nakijkt).
   Allebei schrijven ze hun eigen bestand terug.
-- `gereedschap/wereld.html` voor de kaarten: de kaart getekend met `js/tekenen.js` zelf, lagen
-  aan en uit (begaanbaar, mensen met hun dwaalstraal, quest en raakpunten, uitgangen), klik een
-  tegel en er staat wat het spel denkt dat daar is, en de controle. Het **schrijft niets**, en
-  het leest de `.tmj` rechtstreeks van schijf: opslaan in Tiled, verversen, zien — zonder
-  `npm run kaarten`. Ver uitgezoomd tekent het zelf een plattegrond, want de tekencode van het
-  spel is er niet op gebouwd. De controle zelf staat in `gereedschap/keuring.js` (`T.keurKaart`
-  en `T.keurDekking`, zonder scherm en dus getoetst): wat op de kaart staat en niet kan, en
-  omgekeerd wat het spel vraagt en nergens staat.
+- `gereedschap/wereld.html` voor de kaarten, en dat is de bladzijde waar het spel gemaakt wordt.
+  **Tiled tekent alleen nog de grond; alles wat betekenis heeft ontstaat en verandert hier**
+  (Marcel, 22 sep; `ontwerp/kaarten.md`). Het tekent de kaart met `js/tekenen.js` zelf, kent lagen
+  die aan en uit kunnen (begaanbaar, mensen met hun dwaalstraal, quest en raakpunten, uitgangen),
+  zegt bij een klik wat het spel denkt dat daar is, en keurt de kaart. Ver uitgezoomd tekent het
+  zijn eigen plattegrond, want de tekencode van het spel is er niet op gebouwd.
+  - Het leest de `.tmj` rechtstreeks van schijf: opslaan in Tiled, verversen, zien.
+  - **Het schrijft alleen `kaarten/<naam>.betekenis.json`** — mensen, dorpelingen, deuren,
+    geheime doorgangen, aansluitingen en voorwerpen met hun `raak=` en `quest=`. Eén ding per
+    regel, zodat een verplaatsing ook één regel in `git diff` is. Tiled komt in dat bestand
+    nooit, dus er valt niets mee te botsen; tegen een tweede open blad stuurt het mee hoe het
+    bestand eruitzag toen het het las. Na het opslaan bundelt het zelf (`npm run kaarten`), zodat
+    het spel het meteen ziet.
+  - Een aansluiting leg je in één handeling: klik de tegel waar je vertrekt, het blad springt
+    naar de andere kaart, klik waar je aankomt, en beide kanten staan er — `komt` erbij bedacht.
+  - De controle staat in `gereedschap/keuring.js` (`T.keurKaart` en `T.keurDekking`, zonder scherm
+    en dus getoetst): wat op de kaart staat en niet kan, en omgekeerd wat het spel vraagt en
+    nergens staat. Die tweede zegt precies wat er nog neergezet moet worden.
 
 Twee dingen die bij het mikken misgaan:
 

@@ -1,0 +1,10 @@
+{
+  "versie": 1,
+  "proef": true,
+  "uitleg": "De betekenis van kaarten/proef.tmj. Tiled tekent de grond en de bomen, dit bestand zegt wat er iets betekent; zie ontwerp/kaarten.md, 'Tiled tekent alleen nog de grond'. Een proefkaart: hij bestaat voor de toetsen en doet in het spel niet mee.",
+  "dingen": [
+    {"x":4,"y":6,"staat":"dicht"},
+    {"x":9,"y":7,"wezen":"slijm"},
+    {"x":0,"y":8,"overgang":"wereld","komt":{"x":1,"y":8}}
+  ]
+}

@@ -48,9 +48,14 @@ function kaartje(objecten, extraLagen) {
   };
 }
 
-// Een uitgang, want een kaart zonder uitgang is op zichzelf al een fout; die toetsen we apart.
-const UITGANG = { x: 0, y: 0, eig: { overgang: 'toren', komt: '1,0' } };
-const keur = (objecten, extra) => T.keurKaart('proefje', kaartje(objecten, extra)).klachten;
+// Sinds 22 sep staat de betekenis in een eigen bestand en tekent Tiled alleen nog de grond
+// (ontwerp/kaarten.md). Dus gaan de dingen die iets betekenen hier als `dingen` mee, en wat er
+// nog wel in Tiled staat, is een eigen toets.
+// Een uitgang zit er standaard bij, want een kaart zonder uitgang is op zichzelf al een fout;
+// die toetsen we apart.
+const UITGANG = { x: 0, y: 0, overgang: 'toren', komt: '1,0' };
+const keur = (dingen, objecten, extraLagen) =>
+  T.keurKaart('proefje', kaartje(objecten || [], extraLagen), { betekenis: { dingen } }).klachten;
 const teksten = (klachten) => klachten.map((k) => k.tekst).join(' | ');
 
 test('de kaarten die er nu zijn, hebben geen enkele klacht', () => {
@@ -68,7 +73,7 @@ test('een kaart zonder uitgang is een val', () => {
 });
 
 test('een wezen dat niet bestaat, wordt bij naam genoemd', () => {
-  const klachten = keur([UITGANG, { x: 2, y: 2, eig: { wezen: 'bakkr' } }]);
+  const klachten = keur([UITGANG, { x: 2, y: 2, wezen: 'bakkr' }]);
   assert.equal(klachten.length, 1);
   assert.match(klachten[0].tekst, /onbekend wezen "bakkr"/);
   assert.equal(klachten[0].x, 2);
@@ -76,60 +81,122 @@ test('een wezen dat niet bestaat, wordt bij naam genoemd', () => {
 });
 
 test('een quest die niet bestaat, en een fase die de quest niet heeft', () => {
-  const geenQuest = keur([UITGANG, { naam: 'leem', x: 2, y: 2, eig: { quest: 'slager:zoeken' } }]);
+  const geenQuest = keur([UITGANG, { x: 2, y: 2, quest: 'slager:zoeken' }]);
   assert.match(teksten(geenQuest), /quest "slager", en die bestaat niet/);
 
-  const geenFase = keur([UITGANG, { naam: 'leem', x: 2, y: 2, eig: { quest: 'bakker:bakken' } }]);
+  const geenFase = keur([UITGANG, { x: 2, y: 2, quest: 'bakker:bakken' }]);
   assert.match(teksten(geenFase), /fase "bakken", en die heeft "bakker" niet/);
 });
 
 test('een raakpunt dat nergens op slaat, en een raakpunt zonder tegel', () => {
-  const klachten = keur([UITGANG, { naam: 'oven', x: 2, y: 2, eig: { raak: 'molen' } }]);
+  const klachten = keur([UITGANG, { x: 2, y: 2, raak: 'molen' }]);
   assert.match(teksten(klachten), /raak="molen" bestaat niet/);
   assert.match(teksten(klachten), /zonder tegel/);
 });
 
 test('een overgang naar een gebied dat niet bestaat, en een komt die nergens op slaat', () => {
-  const klachten = keur([{ x: 0, y: 0, eig: { overgang: 'moeras', komt: '9,9' } }]);
+  const klachten = keur([{ x: 0, y: 0, overgang: 'moeras', komt: '9,9' }]);
   assert.match(teksten(klachten), /dat gebied bestaat niet/);
   assert.match(teksten(klachten), /"komt" van de overgang naar "moeras" wijst naar een tegel/);
 });
 
 test('een overgang zonder komt is geen fout maar wel iets om te weten', () => {
-  const klachten = keur([{ x: 0, y: 0, eig: { overgang: 'toren' } }]);
+  const klachten = keur([{ x: 0, y: 0, overgang: 'toren' }]);
   assert.equal(klachten.length, 1);
   assert.equal(klachten[0].soort, 'let op');
   assert.match(klachten[0].tekst, /geen "komt"/);
 });
 
 test('een komt die naar de overgangstegel zelf wijst, kaatst je heen en weer', () => {
-  const klachten = keur([{ x: 0, y: 0, eig: { overgang: 'toren', komt: '0,0' } }]);
+  const klachten = keur([{ x: 0, y: 0, overgang: 'toren', komt: '0,0' }]);
   assert.match(teksten(klachten), /kaats je heen en weer/);
 });
 
 test('twee mensen op dezelfde tegel, en een straal die geen getal is', () => {
   const klachten = keur([
     UITGANG,
-    { x: 3, y: 2, eig: { wezen: 'boer' } },
-    { x: 3, y: 2, eig: { zaad: 7, straal: 'veel' } },
+    { x: 3, y: 2, wezen: 'boer' },
+    { x: 3, y: 2, zaad: 7, straal: 'veel' },
   ]);
   assert.match(teksten(klachten), /staat op dezelfde tegel als/);
   assert.match(teksten(klachten), /dat is geen getal boven nul/);
 });
 
 test('twee keer de held: het spel weet dan niet waar je begint', () => {
-  const klachten = keur([UITGANG, { x: 2, y: 1, eig: { wezen: 'held' } }, { x: 3, y: 1, eig: { wezen: 'held' } }]);
+  const klachten = keur([UITGANG, { x: 2, y: 1, wezen: 'held' }, { x: 3, y: 1, wezen: 'held' }]);
   assert.match(teksten(klachten), /2 objecten met wezen="held"/);
 });
 
 test('een dorpeling in een boom komt daar niet meer vandaan', () => {
-  // Een boom uit bomen.tsx, als tweede vel achter grond.tsx, en een dorpeling op dezelfde tegel.
+  // De boom blijft in Tiled staan -- dat is tekenen -- en de dorpeling komt uit het
+  // betekenisbestand, op dezelfde tegel.
   const grondAantal = T.TEGELS.grond.tiles.length;
   const eik = T.TEGELS.bomen.tiles.findIndex((t) => t && t.naam === 'eik');
-  const kaart = kaartje([UITGANG, { naam: 'eik', x: 3, y: 2, gid: 1 + grondAantal + eik }, { x: 3, y: 2, eig: { zaad: 3 } }]);
+  const kaart = kaartje([{ naam: 'eik', x: 3, y: 2, gid: 1 + grondAantal + eik }]);
   kaart.tilesets.push({ firstgid: 1 + grondAantal, source: '../tegels/bomen.tsx' });
-  const klachten = T.keurKaart('proefje', kaart).klachten;
+  const klachten = T.keurKaart('proefje', kaart, { betekenis: { dingen: [UITGANG, { x: 3, y: 2, zaad: 3 }] } }).klachten;
   assert.match(teksten(klachten), /staat op een vaste tegel/);
+});
+
+test('een voorwerp uit het betekenisbestand staat er op naam, niet op nummer', () => {
+  const kaart = kaartje([]);
+  const uitslag = T.keurKaart('proefje', kaart, {
+    betekenis: { dingen: [UITGANG, { x: 3, y: 2, tegel: 'bomen/eik' }] },
+  });
+  assert.deepEqual(uitslag.klachten, [], teksten(uitslag.klachten));
+  const v = uitslag.wereld.voorwerpen.find((v) => v.x === 3 && v.y === 2);
+  assert.equal(v.soort, 'eik');
+  assert.equal(v.vel, 'bomen');
+  assert.equal(T.isVast(uitslag.wereld, 3, 2), true);
+});
+
+test('wat betekenis heeft en nog in Tiled staat, hoort in het betekenisbestand', () => {
+  const klachten = keur([UITGANG], [{ naam: 'de smid', x: 3, y: 2, eig: { wezen: 'smid' } }]);
+  assert.equal(klachten.length, 1);
+  assert.equal(klachten[0].soort, 'let op');
+  assert.match(klachten[0].tekst, /staat nog in Tiled; het hoort in proefje\.betekenis\.json/);
+});
+
+test('een geheime doorgang is er pas als zijn vlag staat', () => {
+  const uitslag = T.keurKaart('proefje', kaartje([]), {
+    betekenis: { dingen: [UITGANG, { x: 3, y: 2, staat: 'geheim', als: { vlag: 'bakkerVertelde' } }] },
+  });
+  assert.deepEqual(uitslag.klachten, [], teksten(uitslag.klachten));
+  const w = uitslag.wereld;
+  assert.equal(w.geheimen.length, 1);
+  assert.equal(T.deurOp(w, 3, 2), null, 'zonder de vlag staat er geen deur');
+
+  const S = { wereld: w, vlaggen: new Set(), inventaris: new Set(), quests: {} };
+  T.werkGeheimenBij(S);
+  assert.equal(T.deurOp(w, 3, 2), null, 'nog steeds niet, de vlag staat niet');
+  S.vlaggen.add('bakkerVertelde');
+  T.werkGeheimenBij(S);
+  const d = T.deurOp(w, 3, 2);
+  assert.ok(d, 'met de vlag is het een gewone dichte deur');
+  assert.equal(d.staat, 'dicht');
+  assert.equal(T.tegel(w, 3, 2), 'deur');
+  // En weer weg als de vlag weggaat: dan staat de tegel er weer zoals hij was.
+  S.vlaggen.delete('bakkerVertelde');
+  T.werkGeheimenBij(S);
+  assert.equal(T.deurOp(w, 3, 2), null);
+});
+
+test('een geheime doorgang zonder voorwaarde is niet geheim, en een onbekende quest is fout', () => {
+  assert.match(teksten(keur([UITGANG, { x: 3, y: 2, staat: 'geheim' }])), /zonder "als" is er meteen/);
+  assert.match(
+    teksten(keur([UITGANG, { x: 3, y: 2, staat: 'geheim', als: { quest: 'slager' } }])),
+    /wacht op quest "slager", en die bestaat niet/,
+  );
+});
+
+test('een aansluiting die maar een kant heeft', () => {
+  const heen = { overgangen: [{ x: 1, y: 1, naar: 'bos' }], wezens: [], voorwerpen: [] };
+  const terug = { overgangen: [], wezens: [], voorwerpen: [] };
+  const tekst = teksten(T.keurDekking({ werelden: { dorp: heen, bos: terug } }));
+  assert.match(tekst, /van "dorp" \(1, 1\) naar "bos" heeft maar een kant|heeft maar één kant/);
+
+  terug.overgangen.push({ x: 9, y: 9, naar: 'dorp' });
+  assert.doesNotMatch(teksten(T.keurDekking({ werelden: { dorp: heen, bos: terug } })), /maar één kant/);
 });
 
 test('de dekking zegt wat het spel vraagt en nergens staat', () => {

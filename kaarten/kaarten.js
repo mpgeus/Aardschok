@@ -1,5 +1,6 @@
 // Gemaakt door gereedschap/pixelart/naar-kaarten.cjs — niet met de hand bijwerken.
-// Elke kaarten/*.tmj, als gewoon script, zodat file:// ze ook kan lezen (zie js/kaart.js).
+// Elke kaarten/*.tmj en elk kaarten/*.betekenis.json, als gewoon script, zodat file:// ze ook
+// kan lezen (zie js/kaart.js).
 (function (T) {
   T.KAARTEN = {
    "proef": {
@@ -206,65 +207,6 @@
         "width": 648,
         "height": 632,
         "properties": []
-       },
-       {
-        "id": 4,
-        "visible": true,
-        "rotation": 0,
-        "name": "poort",
-        "point": true,
-        "x": 128,
-        "y": 192,
-        "width": 0,
-        "height": 0,
-        "properties": [
-         {
-          "name": "staat",
-          "type": "string",
-          "value": "dicht"
-         }
-        ]
-       },
-       {
-        "id": 5,
-        "visible": true,
-        "rotation": 0,
-        "name": "slijmkruiper",
-        "point": true,
-        "x": 288,
-        "y": 224,
-        "width": 0,
-        "height": 0,
-        "properties": [
-         {
-          "name": "wezen",
-          "type": "string",
-          "value": "slijm"
-         }
-        ]
-       },
-       {
-        "id": 6,
-        "name": "pad terug naar het erf",
-        "point": true,
-        "x": 0,
-        "y": 256,
-        "width": 0,
-        "height": 0,
-        "rotation": 0,
-        "visible": true,
-        "properties": [
-         {
-          "name": "overgang",
-          "type": "string",
-          "value": "wereld"
-         },
-         {
-          "name": "komt",
-          "type": "string",
-          "value": "1,8"
-         }
-        ]
        }
       ]
      }
@@ -930,52 +872,6 @@
         "rotation": 0,
         "visible": true,
         "properties": []
-       },
-       {
-        "id": 15,
-        "name": "pad terug naar het erf",
-        "point": true,
-        "x": 672,
-        "y": 192,
-        "width": 0,
-        "height": 0,
-        "rotation": 0,
-        "visible": true,
-        "properties": [
-         {
-          "name": "overgang",
-          "type": "string",
-          "value": "wereld"
-         },
-         {
-          "name": "komt",
-          "type": "string",
-          "value": "20,6"
-         }
-        ]
-       },
-       {
-        "id": 16,
-        "name": "reuzenspin",
-        "point": true,
-        "x": 128,
-        "y": 448,
-        "width": 0,
-        "height": 0,
-        "rotation": 0,
-        "visible": true,
-        "properties": [
-         {
-          "name": "wezen",
-          "type": "string",
-          "value": "reuzenspin"
-         },
-         {
-          "name": "straal",
-          "type": "int",
-          "value": 2
-         }
-        ]
        }
       ]
      }
@@ -23164,81 +23060,6 @@
         "y": 1632
        },
        {
-        "height": 0,
-        "id": 460,
-        "name": "wolf",
-        "opacity": 1,
-        "point": true,
-        "properties": [
-         {
-          "name": "straal",
-          "type": "string",
-          "value": "7"
-         },
-         {
-          "name": "wezen",
-          "type": "string",
-          "value": "wolf"
-         }
-        ],
-        "rotation": 0,
-        "type": "",
-        "visible": true,
-        "width": 0,
-        "x": 4448,
-        "y": 608
-       },
-       {
-        "height": 0,
-        "id": 461,
-        "name": "meester",
-        "opacity": 1,
-        "point": true,
-        "properties": [
-         {
-          "name": "straal",
-          "type": "string",
-          "value": "2"
-         },
-         {
-          "name": "wezen",
-          "type": "string",
-          "value": "meester"
-         }
-        ],
-        "rotation": 0,
-        "type": "",
-        "visible": true,
-        "width": 0,
-        "x": 4480,
-        "y": 896
-       },
-       {
-        "height": 0,
-        "id": 462,
-        "name": "deur van de toren",
-        "opacity": 1,
-        "point": true,
-        "properties": [
-         {
-          "name": "komt",
-          "type": "string",
-          "value": "154,37"
-         },
-         {
-          "name": "overgang",
-          "type": "string",
-          "value": "toren"
-         }
-        ],
-        "rotation": 0,
-        "type": "",
-        "visible": true,
-        "width": 0,
-        "x": 4928,
-        "y": 1152
-       },
-       {
         "gid": 677,
         "height": 632,
         "id": 463,
@@ -24230,6 +24051,84 @@
     "type": "map",
     "version": "1.10",
     "width": 184
+   }
+  };
+  T.BETEKENIS = {
+   "proef": {
+    "versie": 1,
+    "proef": true,
+    "uitleg": "De betekenis van kaarten/proef.tmj. Tiled tekent de grond en de bomen, dit bestand zegt wat er iets betekent; zie ontwerp/kaarten.md, 'Tiled tekent alleen nog de grond'. Een proefkaart: hij bestaat voor de toetsen en doet in het spel niet mee.",
+    "dingen": [
+     {
+      "x": 4,
+      "y": 6,
+      "staat": "dicht"
+     },
+     {
+      "x": 9,
+      "y": 7,
+      "wezen": "slijm"
+     },
+     {
+      "x": 0,
+      "y": 8,
+      "overgang": "wereld",
+      "komt": {
+       "x": 1,
+       "y": 8
+      }
+     }
+    ]
+   },
+   "proefbos": {
+    "versie": 1,
+    "proef": true,
+    "uitleg": "De betekenis van kaarten/proefbos.tmj. Zie ontwerp/kaarten.md, 'Tiled tekent alleen nog de grond'. Een proefkaart: hij bestaat voor de toetsen en doet in het spel niet mee.",
+    "dingen": [
+     {
+      "x": 21,
+      "y": 6,
+      "overgang": "wereld",
+      "komt": {
+       "x": 20,
+       "y": 6
+      }
+     },
+     {
+      "x": 4,
+      "y": 14,
+      "wezen": "reuzenspin",
+      "straal": 2
+     }
+    ]
+   },
+   "wereld": {
+    "versie": 1,
+    "uitleg": "De betekenis van kaarten/wereld.tmj: mensen, deuren, doorgangen en aansluitingen. Tiled tekent de grond, dit bestand zegt wat het is. Geschreven door gereedschap/wereld.html; zie ontwerp/kaarten.md, 'Tiled tekent alleen nog de grond'.",
+    "dingen": [
+     {
+      "x": 139,
+      "y": 19,
+      "wezen": "wolf",
+      "straal": 7
+     },
+     {
+      "x": 140,
+      "y": 28,
+      "wezen": "meester",
+      "straal": 2
+     },
+     {
+      "x": 154,
+      "y": 36,
+      "overgang": "toren",
+      "komt": {
+       "x": 154,
+       "y": 37
+      },
+      "tekst": "De toren in"
+     }
+    ]
    }
   };
 })(globalThis.Toren = globalThis.Toren || {});

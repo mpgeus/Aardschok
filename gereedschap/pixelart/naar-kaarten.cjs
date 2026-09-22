@@ -19,28 +19,39 @@ const KAARTEN = path.join(__dirname, '..', '..', 'kaarten');
 fs.mkdirSync(KAARTEN, { recursive: true });
 
 const kaarten = {};
+const betekenis = {};
 for (const bestand of fs.readdirSync(KAARTEN)) {
-  if (!bestand.endsWith('.tmj')) continue;
-  const naam = bestand.replace(/\.tmj$/, '');
-  try {
-    kaarten[naam] = JSON.parse(fs.readFileSync(path.join(KAARTEN, bestand), 'utf8'));
-  } catch (e) {
-    console.warn(`  overgeslagen: ${bestand} (${e.message})`);
-  }
+  const lees = (naam, doel) => {
+    try {
+      doel[naam] = JSON.parse(fs.readFileSync(path.join(KAARTEN, bestand), 'utf8'));
+    } catch (e) {
+      console.warn(`  overgeslagen: ${bestand} (${e.message})`);
+    }
+  };
+  // Twee bestanden per kaart: de .tmj met de grond die Marcel in Tiled tekent, en het
+  // betekenisbestand van gereedschap/wereld.html met de mensen, de deuren, de doorgangen en de
+  // aansluitingen. Zie ontwerp/kaarten.md, "Tiled tekent alleen nog de grond".
+  if (bestand.endsWith('.betekenis.json')) lees(bestand.replace(/\.betekenis\.json$/, ''), betekenis);
+  else if (bestand.endsWith('.tmj')) lees(bestand.replace(/\.tmj$/, ''), kaarten);
 }
 
-const json = JSON.stringify(kaarten, null, 1);
+const alsScript = (waarde) => JSON.stringify(waarde, null, 1).replace(/\n/g, '\n  ');
 fs.writeFileSync(
   path.join(KAARTEN, 'kaarten.js'),
   '// Gemaakt door gereedschap/pixelart/naar-kaarten.cjs — niet met de hand bijwerken.\n' +
-    '// Elke kaarten/*.tmj, als gewoon script, zodat file:// ze ook kan lezen (zie js/kaart.js).\n' +
+    '// Elke kaarten/*.tmj en elk kaarten/*.betekenis.json, als gewoon script, zodat file:// ze ook\n' +
+    '// kan lezen (zie js/kaart.js).\n' +
     '(function (T) {\n  T.KAARTEN = ' +
-    json.replace(/\n/g, '\n  ') +
+    alsScript(kaarten) +
+    ';\n  T.BETEKENIS = ' +
+    alsScript(betekenis) +
     ';\n})(globalThis.Toren = globalThis.Toren || {});\n',
 );
 
 const namen = Object.keys(kaarten);
+const metBetekenis = Object.keys(betekenis);
 console.log(`kaarten.js klaar: ${namen.length} kaart(en)${namen.length ? ' — ' + namen.join(', ') : ''}`);
+console.log(`  betekenis: ${metBetekenis.length ? metBetekenis.map((n) => `${n} (${(betekenis[n].dingen || []).length})`).join(', ') : 'nog geen enkele kaart'}`);
 
 // ---------------------------------------------------------------- de wachter
 //

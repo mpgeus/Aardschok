@@ -35,12 +35,22 @@ html, body { overflow: hidden; height: 100%; }
 }
 
 .wt-zij {
-  display: grid;
-  grid-template-rows: auto minmax(120px, auto) minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 10px;
   min-height: 0;
 }
-.wt-zij .paneel { padding: 10px 12px; overflow: auto; min-height: 0; }
+.wt-zij .paneel { padding: 10px 12px; overflow: auto; flex: none; max-height: 45%; }
+.wt-zij .wt-controle { flex: 1 1 auto; min-height: 90px; max-height: none; }
+
+/* Neerzetten: de soort bovenaan, daaronder alleen de velden die bij die soort horen. */
+.wt-soorten { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+.wt-soorten button.wt-aan { border-color: var(--goud); background: rgba(226, 182, 74, 0.2); color: var(--goud); }
+.wt-veld { display: flex; align-items: center; gap: 8px; font-size: 12.5px; margin: 0 0 5px; }
+.wt-veld > span { color: var(--gedempt); min-width: 84px; flex: none; }
+.wt-veld > input, .wt-veld > select { display: inline-block; width: auto; flex: 1; margin: 0; min-width: 0; }
+.wt-schakel { display: flex; align-items: center; gap: 5px; margin: 0; font-size: 12px; }
+.wt-schakel > input { display: inline-block; width: auto; margin: 0; }
 
 /* Lagen: een vinkje per laag, met het kleurtje waarmee hij in beeld komt. Het vinkje moet hier
    z'n eigen breedte houden; gesprekken-tool.css rekt een input in een label op tot de volle
@@ -80,3 +90,10 @@ html, body { overflow: hidden; height: 100%; }
 .wt-klacht.wt-geen-plek { cursor: default; }
 .wt-klacht .wt-waar { color: var(--gedempt); font-size: 11px; }
 .wt-goed { color: var(--groen); font-size: 12.5px; }
+
+/* De kopbalk draagt inmiddels veel: houd de knoppen op één regel en laat alleen de statusregel
+   inkorten als het krap wordt. */
+.gt-kop { gap: 10px; flex-wrap: nowrap; }
+.gt-kop .gt-naar { white-space: nowrap; }
+.gt-kop button { white-space: nowrap; }
+#wt-status { max-width: 30ch; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

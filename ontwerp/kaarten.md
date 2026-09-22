@@ -161,7 +161,9 @@ het questgereedschap leest de kaarten al uit om te zeggen waar de dingen liggen
    bij welke questfase horen, waar de uitgangen zitten. Klik een tegel: wat denkt het spel dat
    hier is. Schrijft niets, dus geen enkel risico — en het antwoordt al op "klopt dit?" zonder het
    spel te spelen.
-2. **Neerzetten.** Mensen en questvoorwerpen plaatsen, verslepen en weghalen, terug de `.tmj` in.
+2. **Neerzetten** — *af, 22 sep 2026*. Mensen, dorpelingen, deuren, geheime doorgangen,
+   aansluitingen en voorwerpen plaatsen, verslepen en weghalen — niet terug de `.tmj` in, maar in
+   `kaarten/<naam>.betekenis.json` (zie het besluit hierboven).
 3. **Betekenis erbij.** Klik op de bakker en zijn gesprek staat in hetzelfde scherm; hang er een
    quest aan; leg de leem neer vanuit de fase waar hij bij hoort.
 4. **Eén controle** — *af, 22 sep 2026, naar voren gehaald*. Alles wat het spel van een kaart
@@ -197,6 +199,52 @@ anders dan hierboven bedacht, en alle drie met een reden:
   wel het hele dorp in één beeld — en het zijn de tegels zoals het spel ze léést, niet zoals Tiled
   ze tekent.
 
+### Tiled tekent alleen nog de grond (Marcel, 22 sep 2026)
+
+Marcel, nadat ronde 1 er stond: *"Je moet ook aansluitingen kunnen maken naar andere kaarten etc.
+Ook geheime deuren, op die manier doorgangen etc. Per poppetje kunnen klikken en dialogen bekijken
+en editen. Dus alleen basislaag uit Tiled halen en de rest moet hier. Hier maken we eigenlijk het
+echte spel natuurlijk."*
+
+Dat scherpt de scheiding hierboven aan. Het was: Tiled tekent, wij kijken mee. Het wordt: **Tiled
+tekent alleen nog de grond, en alles wat betekenis heeft ontstaat, verhuist en verandert in ons
+eigen gereedschap.** Niet alleen de mensen en de questvoorwerpen, maar ook de deuren, de
+doorgangen, de geheime doorgangen en de aansluitingen tussen kaarten. Dit blad is daarmee geen
+kijkglas meer naast de editor; het ís de editor, en de bladzijde waar het spel gemaakt wordt.
+
+**Besloten, 22 sep 2026:**
+
+- **De betekenis krijgt een eigen bestand naast de kaart:** `kaarten/<naam>.betekenis.json`, van
+  ons gereedschap. Dat herroept het besluit van eerder die dag om alles in de `.tmj` te houden, en
+  wel hierom: Tiled schrijft de `.tmj` ook. Schrijven wij erin, dan wordt elke opslag een diff van
+  tweehonderdvijftig kilobyte waarin je nooit meer ziet wat er werkelijk veranderde, en moet er een
+  botsingswacht omheen voor als de kaart in Tiled openstaat. In een eigen bestand komt Tiled nooit,
+  dus is er niets om mee te botsen, blijft de diff klein en leesbaar, en kunnen er dingen in die
+  Tiled niet kent: een geheime doorgang met zijn voorwaarde, een aansluiting die van allebei zijn
+  kanten weet, een gesprek aan een persoon. `npm run kaarten` voegt de twee samen tot één kaart,
+  net als nu.
+- **Een voorwerp staat er op naam, niet op nummer.** In de `.tmj` is een boom een gid, en die
+  nummers schuiven zodra `npm run tiled` een vel groter of kleiner maakt. In het betekenisbestand
+  staat `"eik"` uit `bomen.tsx`, en dan maakt hernummeren niet uit.
+- **Geheim is: je hoort ervan, en dan is hij er.** Een geheime doorgang ziet eruit als muur tot een
+  vlag of een questfase staat — een dorpeling vertelt het, of je vindt een aantekening. Daarna is
+  hij een gewone deur. Dat past op de kernregel: praten is gratis en jaren niet, en elke nieuwe
+  manier om een prijs te ontlopen versterkt het spel (CLAUDE.md). Een spreuk die geheime dingen laat
+  oplichten mag er later bij; dan is de goedkope weg zelf ook een kleine prijs.
+
+Wat daar meteen uit volgt:
+
+- **Een aansluiting heeft twee kanten,** en die horen in één handeling gelegd te worden: wijs een
+  tegel op deze kaart aan, kies de kaart ernaast, wijs daar de tegel aan, en het gereedschap
+  schrijft `overgang` en `komt` aan beide kanten. Nu zet je ze los van elkaar neer en merkt niemand
+  het als ze niet bij elkaar passen. De keuring hoort er dan bij te zeggen dat een aansluiting maar
+  één kant heeft.
+- **Een geheime doorgang is nieuw voor het spel zelf,** niet alleen voor de editor. `js/wereld.js`
+  kent open, dicht en opslot; geheim is een vierde staat, plus de vraag wat hem onthult. Zie de
+  open vragen onderaan dit bestand.
+- **Bomen en huizen blijven voorlopig in Tiled,** want dat is tekenen: terreinsets, selecties,
+  kopiëren. De grens loopt bij betekenis, niet bij "object of tegel".
+
 **Waar dit opnieuw bekeken moet worden:** hoogte (zie hieronder, en het werklijstpunt daarover). Als
 een hoogtelaag in Tiled niet blijkt te werken, is dát het moment waarop een eigen editor een echte
 vraag wordt. Dat weet je pas als je het probeert.
@@ -206,15 +254,17 @@ vraag wordt. Dat weet je pas als je het probeert.
 | Stap | Wat het doet |
 |---|---|
 | `npm run tiled` | Rendert uit `dorp.cjs`, `dorp2.cjs` en `bomen.cjs` de vellen naar `tegels/`: grond, bomen, begroeiing en de vijftien gebouwen, elk met een `.tsx` waarin `vast` en `beslaat` al staan. |
-| Tiled | Marcel opent de `.tsx`-en en tekent een kaart, die hij opslaat als `kaarten/<naam>.tmj`. |
-| `npm run kaarten` | Bundelt elke `.tmj` tot `kaarten/kaarten.js` (`T.KAARTEN`), want `fetch` werkt niet vanaf `file://`. |
-| `T.laadKaart(T.KAARTEN.naam)` | Maakt er een wereld van: tegels, deuren, voorwerpen en wezens, waar `isBegaanbaar`, `isVast` en `raakt` ongewijzigd op werken. |
+| Tiled | Marcel opent de `.tsx`-en en tekent de grond, die hij opslaat als `kaarten/<naam>.tmj`. |
+| `gereedschap/wereld.html` | Marcel legt de betekenis: mensen, deuren, doorgangen, aansluitingen, questvoorwerpen. Schrijft `kaarten/<naam>.betekenis.json` en bundelt daarna zelf. |
+| `npm run kaarten` | Bundelt elke `.tmj` én elk `.betekenis.json` tot `kaarten/kaarten.js` (`T.KAARTEN` en `T.BETEKENIS`), want `fetch` werkt niet vanaf `file://`. |
+| `T.laadKaart(T.KAARTEN.naam, T.BETEKENIS.naam)` | Maakt er een wereld van: tegels, deuren, voorwerpen en wezens, waar `isBegaanbaar`, `isVast` en `raakt` ongewijzigd op werken. |
 
-Eigenschappen die Marcel op een object zet: `wezen` (welk wezen, uit dezelfde lijst als het
-spel), `zaad` (een gewone dorpeling), `staat` (een deur: open, dicht of opslot) en `overgang`
-(de naam van de kaart waar je heen gaat). Op de tegel zelf staan `naam`, `vast` en bij een
-gebouw `beslaat` ("7x5"). Een gebouw zet je neer op zijn achterste hoek en het beslaat de
-tegels rechtsonder daarvandaan, dezelfde afspraak als in de export.
+Wat er in een ding kan staan — `wezen`, `zaad`, `straal`, `staat` (open, dicht, opslot, geheim),
+`als`, `overgang`, `komt`, `tekst`, `tegel`, `raak`, `quest` — staat uitgeschreven boven in
+`js/kaart.js`, want daar wordt het uitgelegd. Dezelfde namen gelden voor een object dat nog in
+Tiled staat; er is maar één stel regels. Op de tegel zelf staan `naam`, `vast` en bij een gebouw
+`beslaat` ("7x5"). Een gebouw zet je neer op zijn achterste hoek en het beslaat de tegels
+rechtsonder daarvandaan, dezelfde afspraak als in de export.
 
 `kaarten/proef.tmj` is een kaart van 12×10 die met de hand is gezet, met `test/kaart.test.cjs`
 eromheen; die toetst dat het pad begaanbaar is, dat de voet van het huis vast is en dat het

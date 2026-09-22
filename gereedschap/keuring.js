@@ -23,11 +23,16 @@
 
   const lijst = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
   const BUREN = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
+  // Wat een ding betékent, en dus niet meer in Tiled hoort te staan (ontwerp/kaarten.md).
+  const BETEKENISVELDEN = ['wezen', 'zaad', 'staat', 'overgang', 'quest', 'raak'];
+  const DEURSTANDEN = ['open', 'dicht', 'opslot', 'geheim'];
 
-  // De objecten uit een .tmj zoals Marcel ze in Tiled neerzette, met hun tegel en hun
-  // eigenschappen. Dezelfde omrekening als js/kaart.js: op een isometrische kaart deelt Tiled
-  // x én y door de tegelhoogte (zie de uitleg daar).
-  T.kaartObjecten = function (kaart) {
+  // Alles wat er op een kaart staat, uit allebei de bronnen: de objecten die Marcel in Tiled
+  // neerzette, en de dingen uit kaarten/<naam>.betekenis.json. `bron` zegt waar het vandaan komt,
+  // want dat is zelf iets om over te klagen: wat betekenis heeft, hoort niet meer in Tiled.
+  // Dezelfde omrekening als js/kaart.js: op een isometrische kaart deelt Tiled x én y door de
+  // tegelhoogte (zie de uitleg daar).
+  T.kaartObjecten = function (kaart, betekenis) {
     const th = kaart.tileheight || 32;
     const uit = [];
     for (const laag of kaart.layers || []) {
@@ -36,10 +41,16 @@
         const eig = {};
         for (const p of obj.properties || []) eig[p.name] = p.value;
         uit.push({
-          naam: obj.name || '', laag: laag.name || '', gid: obj.gid || 0,
+          bron: 'tiled', naam: obj.name || '', laag: laag.name || '', gid: obj.gid || 0,
           x: Math.round(obj.x / th), y: Math.round(obj.y / th), eig,
         });
       }
+    }
+    for (const ding of (betekenis && betekenis.dingen) || []) {
+      uit.push({
+        bron: 'betekenis', naam: String(ding.tegel || ding.wezen || ding.overgang || ''), laag: '', gid: 0,
+        x: Math.round(ding.x), y: Math.round(ding.y), eig: ding,
+      });
     }
     return uit;
   };
@@ -54,8 +65,9 @@
     const fout = (x, y, tekst) => klachten.push({ soort: 'fout', kaart: naam, x, y, tekst });
     const letOp = (x, y, tekst) => klachten.push({ soort: 'let op', kaart: naam, x, y, tekst });
 
-    const w = (opties && opties.wereld) || T.laadKaart(kaart);
-    const objecten = T.kaartObjecten(kaart);
+    const betekenis = (opties && opties.betekenis) || (T.BETEKENIS && T.BETEKENIS[naam]) || null;
+    const w = (opties && opties.wereld) || T.laadKaart(kaart, betekenis);
+    const objecten = T.kaartObjecten(kaart, betekenis);
     const binnen = (x, y) => x >= 0 && y >= 0 && x < w.b && y < w.h;
     const vast = (x, y) => binnen(x, y) && w.tegels[y][x] === 'muur';
     // Waar liggen de voorwerpen die het spel er werkelijk van maakte? Daarmee kunnen we een
@@ -73,6 +85,26 @@
       if (!binnen(o.x, o.y)) {
         fout(null, null, `${waar} valt buiten de kaart (${o.x}, ${o.y}); het spel slaat het over`);
         continue;
+      }
+
+      // ── staat het nog in Tiled? ──
+      // Tiled tekent alleen nog de grond (ontwerp/kaarten.md). Wat iets betekent, hoort in het
+      // betekenisbestand, waar het gereedschap het kan neerzetten en verslepen.
+      if (o.bron === 'tiled' && BETEKENISVELDEN.some((v) => p[v] !== undefined)) {
+        letOp(o.x, o.y, `${waar} heeft betekenis (${BETEKENISVELDEN.filter((v) => p[v] !== undefined).join(', ')}) maar staat nog in Tiled; het hoort in ${naam}.betekenis.json`);
+      }
+
+      // ── een deur, en een geheime doorgang ──
+      if (p.staat !== undefined) {
+        if (!DEURSTANDEN.includes(String(p.staat))) {
+          fout(o.x, o.y, `staat="${p.staat}" is geen deur; het moet ${DEURSTANDEN.join(', ')} zijn`);
+        }
+        if (p.staat === 'geheim' && !p.als) {
+          letOp(o.x, o.y, 'een geheime doorgang zonder "als" is er meteen; zet er een vlag of een questfase op, anders is hij niet geheim');
+        }
+        if (p.staat === 'geheim' && p.als && p.als.quest && T.QUESTS && !T.QUESTS[p.als.quest]) {
+          fout(o.x, o.y, `de geheime doorgang wacht op quest "${p.als.quest}", en die bestaat niet`);
+        }
       }
 
       // ── wie hier staat ──
@@ -216,11 +248,26 @@
     }
     const bronnen = bronnenVanVoorwerpen(werelden);
 
+    // Een aansluiting heeft twee kanten (ontwerp/kaarten.md). Loopt er een overgang van het dorp
+    // naar het bos, dan hoort er in het bos een terug te zijn — anders is het een wip waar je
+    // wel op komt en niet meer af. Het gereedschap legt ze in één handeling, maar een kaart die
+    // met de hand gemaakt is, of waar er later een weggehaald wordt, kan scheef staan.
+    for (const [naam, w] of Object.entries(werelden)) {
+      if (w.proef) continue; // een proefkaart doet in het spel niet mee
+      for (const o of w.overgangen || []) {
+        const ander = werelden[o.naar];
+        if (!ander || ander.proef) continue; // dat het gebied niet bestaat, zegt T.keurKaart al
+        if (!(ander.overgangen || []).some((t) => t.naar === naam)) {
+          fout(`de aansluiting van "${naam}" (${o.x}, ${o.y}) naar "${o.naar}" heeft maar één kant: in "${o.naar}" is geen overgang terug naar "${naam}"`);
+        }
+      }
+    }
+
     for (const id of Object.keys(T.GESPREKKEN || {})) {
-      if (!wezens.has(id)) fout(`"${id}" heeft een gesprek, maar staat nergens in de wereld. Zet in Tiled een object neer met wezen="${id}"`);
+      if (!wezens.has(id)) fout(`"${id}" heeft een gesprek, maar staat nergens in de wereld. Zet hem neer met gereedschap/wereld.html`);
     }
     for (const id of Object.keys(T.RAAKPUNTEN || {})) {
-      if (!raakpunten.has(id)) fout(`raakpunt "${id}" wacht op een ${(T.RAAKPUNTEN[id] || {}).spreuk || 'spreuk'}, maar staat nergens. Zet in Tiled raak="${id}" op het ding dat geraakt moet worden`);
+      if (!raakpunten.has(id)) fout(`raakpunt "${id}" wacht op een ${(T.RAAKPUNTEN[id] || {}).spreuk || 'spreuk'}, maar staat nergens. Zet raak="${id}" op het ding dat geraakt moet worden, met gereedschap/wereld.html`);
     }
     for (const [id, q] of Object.entries(T.QUESTS || {})) {
       if (q.gever && !wezens.has(q.gever)) fout(`quest "${q.naam || id}" komt van "${q.gever}", en die staat nergens in de wereld`);

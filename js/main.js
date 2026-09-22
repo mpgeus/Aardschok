@@ -390,6 +390,7 @@
         delete S.questWeg[naam];
         for (const sleutel of [...S.questBeloond]) if (sleutel.startsWith(`${naam}:`)) S.questBeloond.delete(sleutel);
         T.werkQuestVoorwerpen(S);
+        T.werkGeheimenBij(S);
         return `${q.naam}: niet begonnen. De beloning kan weer opnieuw.`;
       }
       if (!q.fasen[fase]) return `"${fase}" is geen fase van ${q.naam}. Er is: ${Object.keys(q.fasen).join(', ')}.`;
