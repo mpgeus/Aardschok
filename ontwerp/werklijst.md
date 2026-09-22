@@ -88,10 +88,10 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 
 - **Kringen en leeftijd:** de beste speler krijgt nu de minste spreuken. Kiezen uit de vier
   richtingen in `spreuken.md`. Moet vóór het verdorren besloten zijn.
-- **Wachter voor gebouwen die elkaar overlappen.** In Tiled kun je twee huizen over elkaar zetten,
-  en dan steken in het spel daken door muren (Marcel zag het op de proefplaat van ronde 2, waar zes
-  huizen te dicht langs een pad stonden). `npm run kaarten` hoort te klagen als de voeten van twee
-  gebouwen elkaar raken, zoals hij al klaagt over planten in de grondlaag.
+- **Een omheining is geen blok** (om samen te bespreken). Het kerkhof, de kippenren en de moestuin
+  staan in het spel als één vast blok, dus je kunt niet tussen de graven lopen, en een boomstronk
+  die Marcel binnen de kerkhofmuurtjes zette, staat technisch "in" het kerkhof. Een omheining zou
+  alleen zijn rand vast moeten hebben.
 - **Omheiningen die je schildert:** tuinhek, palissade, haag, aarden wal met vlechtwerk, en een
   hekje, als een eigen laag met een terreinset in Tiled. Eén systeem, later ook voor een stadsmuur.
   Zie `wereld.md`, "Een dorp heeft geen muur".
@@ -102,6 +102,9 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 22 sep 2026 — Wachter voor gebouwen die elkaar overlappen: `npm run kaarten` klaagt als twee
+  gebouwen van meer dan één tegel over elkaar staan.
 
 - 22 sep 2026 — Huizenbouwer ronde 1 en 2: elke vorm (rechthoek, L, T; één, anderhalf en twee
   lagen, met riet dat in de kil doorloopt) en alle materialen (vakwerk, vlechtwerk, planken,

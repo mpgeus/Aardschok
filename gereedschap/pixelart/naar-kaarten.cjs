@@ -107,11 +107,44 @@ if (TEGELS) {
           }
         });
       } else if (laag.type === 'objectgroup') {
+        // Twee vaste dingen mogen nooit dezelfde tegel beslaan: dan steekt in het spel een dak door
+        // een muur, of staat er een boom midden in een huis (Marcel zag het op 22 sep 2026 op een
+        // proefplaat). Dezelfde regel als js/kaart.js: de tegel van het object, en bij "beslaat"
+        // de tegels rechtsonder daarvandaan.
+        const th = kaart.tileheight || 32;
+        const bezet = new Map(); // "x,y" → { naam, x, y }
+        const gemeld = new Set();
         for (const obj of laag.objects || []) {
           if (!obj.gid) continue;
           getoetst++;
           const t = opzoek(obj.gid);
-          if (!t || !t.eig || !t.eig.naam) klaag(`object "${obj.name || obj.id}"`, obj.gid);
+          if (!t || !t.eig || !t.eig.naam) {
+            klaag(`object "${obj.name || obj.id}"`, obj.gid);
+            continue;
+          }
+          if (!t.eig.vast) continue;
+          const b = t.eig.beslaat || [1, 1];
+          // Alleen gebouwen van meer dan één tegel tegen elkaar. Een los ding binnen een groot object
+          // kan juist bedoeld zijn: een boomstronk op het kerkhof, binnen de muurtjes. Het kerkhof
+          // is een omheining, geen blok, maar dat onderscheid kent het spel nog niet.
+          if (b[0] * b[1] <= 1) continue;
+          const gx = Math.round(obj.x / th);
+          const gy = Math.round(obj.y / th);
+          for (let dy = 0; dy < b[1]; dy++) {
+            for (let dx = 0; dx < b[0]; dx++) {
+              const sleutel = `${gx + dx},${gy + dy}`;
+              const ander = bezet.get(sleutel);
+              if (!ander) {
+                bezet.set(sleutel, { naam: t.eig.naam, x: gx, y: gy });
+                continue;
+              }
+              const paar = `${ander.x},${ander.y}|${gx},${gy}`;
+              if (gemeld.has(paar)) continue;
+              gemeld.add(paar);
+              console.error(`  FOUT in ${naam}.tmj: ${t.eig.naam} op (${gx}, ${gy}) staat over ${ander.naam} op (${ander.x}, ${ander.y}) heen — twee vaste dingen op dezelfde tegel (${sleutel}); zet er een een stukje verder`);
+              fouten++;
+            }
+          }
         }
       }
     }
