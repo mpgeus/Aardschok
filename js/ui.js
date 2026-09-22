@@ -32,7 +32,7 @@
     ['zak', 'Een zak zaaigoed, voor de meester', ZAK_ICOON],
   ];
 
-  // De opdracht van dit moment (js/tutorial.js), linksboven onder de leeftijd. Het element staat
+  // De opdracht van dit moment (js/tutorial.js of een quest), linksboven onder de leeftijd. Het element staat
   // niet in index.html maar wordt hier gemaakt, zoals het portret in js/dialoog.js, en de opmaak
   // staat erbij. Alleen als de tekst verandert, wordt hij aangeraakt.
   let opdrachtEl = null;
@@ -59,6 +59,7 @@
       this.toonLeeftijd(S.held);
       this.toonSluipen(false);
       this.toonInventaris(S);
+      this.toonGoud(S);
       this.toonGevecht(false);
       this.zetKnoppen(false);
       this.sluitDialoog();
@@ -90,17 +91,28 @@
         .join('');
     },
 
-    // Wat de tutorial je nu vraagt; null laat het vak verdwijnen. `tekst` mag <kbd> bevatten.
-    opdracht(tekst) {
-      if (tekst === vorigeOpdracht) return;
-      vorigeOpdracht = tekst;
+    // Wat er nu van je gevraagd wordt; null laat het vak verdwijnen. `tekst` mag <kbd> bevatten.
+    // De kop zegt wie het vraagt: de meester in de tutorial, anders de naam van de quest.
+    opdracht(tekst, kop) {
+      const nu = tekst ? `${kop || 'De meester vraagt'}|${tekst}` : null;
+      if (nu === vorigeOpdracht) return;
+      vorigeOpdracht = nu;
       const el = opdrachtVak();
       el.classList.toggle('verborgen', !tekst);
       if (tekst) {
         el.innerHTML =
-          '<div style="font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em">De meester vraagt</div>' +
+          `<div style="font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em">${kop || 'De meester vraagt'}</div>` +
           `<div>${tekst}</div>`;
       }
+    },
+
+    // Goud, naast de leeftijd. Het vakje komt pas als je ooit goud had: in de tutorial heeft
+    // niemand het erover, en een leeg vakje dat nul zegt is alleen maar ruis.
+    toonGoud(S) {
+      const el = $('goud');
+      if (!el) return;
+      el.classList.toggle('verborgen', !S.goudGehad);
+      $('goud-aantal').textContent = S.goud || 0;
     },
 
     // De gevechtsbalken schuiven in en uit beeld via één klasse op body, zodat de overgang

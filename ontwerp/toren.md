@@ -205,25 +205,12 @@ balkon, dan is er binnen een deur naar dat balkon; staat er een erker, dan zie j
 De maat hoeft niet te kloppen (zie "Buiten leest, binnen speelt" in `wereld.md`), en niemand rekent
 dat na — maar een raam dat aan één kant bestaat en aan de andere niet, valt wél op.
 
-## Quests: waar het goud vandaan komt (21 sep 2026, nog niet gebouwd)
+## Quests: waar het goud vandaan komt (21 sep 2026; de regels gebouwd 22 sep)
 
-Een quest is net als een gesprek **gegevens, geen code**, zodat Marcel ze kan schrijven. Een schets:
-
-```js
-T.QUESTS = {
-  bakker: {
-    naam: 'De koude oven', gever: 'bakker',
-    fasen: {
-      gevraagd: { doel: 'Er moet vuursteen komen voor de schoorsteen.' },
-      bezig:    { klaarAls: { heeft: 'vuursteen' } },
-      klaar:    { beloning: { goud: 20, vlag: 'oven-warm' } },
-    },
-  },
-};
-```
-
-In een gesprek wordt de stand een gewone voorwaarde (`als: { quest: 'bakker', fase: 'bezig' }`),
-zodat iedereen in het dorp erop kan reageren, niet alleen wie de quest gaf.
+Een quest is net als een gesprek **gegevens, geen code**, zodat Marcel ze kan schrijven. De vorm
+staat uitgeschreven boven in `js/quests.js`, en hoe het werkt staat hieronder. In een gesprek wordt
+de stand een gewone voorwaarde (`als: { quest: 'bakker', fase: 'zoeken' }`), zodat iedereen in het
+dorp erop kan reageren, niet alleen wie de quest gaf.
 
 Twee regels die uit de kernregel komen:
 
@@ -234,30 +221,65 @@ Twee regels die uit de kernregel komen:
   geeft. Een quest die alleen goud oplevert, is minder interessant dan een die je een grondstof
   geeft waarvan je nog niet weet waar hij heen moet.
 
-### Hoe het werkt (voorstel, 22 sep 2026)
+### Hoe het werkt (gebouwd, 22 sep 2026)
 
-Zo sluit het aan op wat er al is: een gesprek kent voorwaarden (`als`) en gevolgen (`doe`) in
-`js/gesprek.js`, en de tutorial heeft al een vak linksboven voor wat je moet doen.
+De regels staan er; de quests zelf nog niet. `js/quests.js` is de gegevens (leeg, met de vorm
+erboven uitgeschreven), `js/quest.js` de regels, `test/quest.test.cjs` de toetsen. Het sluit aan
+op wat er al was: een gesprek kent voorwaarden (`als`) en gevolgen (`doe`) in `js/gesprek.js`, en
+de tutorial had al een vak linksboven.
 
-- **Een quest is een rij fasen,** als gegevens in `js/quests.js` (`T.QUESTS`, net als
-  `js/gesprekken.js`). De stand staat in `S.quests` als de naam van de fase, bijvoorbeeld
-  `{ bakker: 'zoeken' }`. Staat een quest daar niet in, dan is hij nog niet begonnen. Eén woord
-  per quest houdt opslaan simpel.
-- **Een gesprek zet een quest in een fase:** `doe: { quest: 'bakker', fase: 'zoeken' }`. Een fase
-  met `beloning` (goud, een voorwerp, een vlag) geeft die zodra de quest erin komt, en maar één
-  keer.
-- **Een fase kan vanzelf verder** met `klaarAls`, met dezelfde voorwaarden als in een gesprek.
-  Heb je wat de bakker nodig heeft, dan gaat "zoeken" naar "terugbrengen", met een bericht. Het
-  spel kijkt dat elk beeld na (`T.werkQuestsBij`), net als de tutorial.
+- **Een quest is een rij fasen.** De stand staat in `S.quests` als de naam van de fase,
+  bijvoorbeeld `{ bakker: 'zoeken' }`. Staat een quest daar niet in, dan is hij nog niet begonnen.
+  Eén woord per quest houdt opslaan simpel.
+- **Een weg is een antwoord.** Wat in het voorstel nog `klaarAls` op de fase was, staat nu op de
+  weg: een fase heeft `wegen`, en elke weg heeft `kost`, `naar`, en eventueel `klaarAls` (dan gaat
+  hij vanzelf) of een `doe`. Dat scheelt niet alleen een laag — het onthoudt ook *hoe* je het
+  oploste (`S.questWeg`), zodat het dorp daarop kan reageren: `als: { quest: 'bakker',
+  weg: 'marskramer' }`. Een dorp dat weet dat je de marskramer hebt leeggekocht, is meer waard dan
+  een dorp dat alleen weet dat de oven warm is.
+- **De toets van drie antwoorden is een toets geworden** (Marcel, 22 sep 2026). `T.keurQuests`
+  loopt `T.QUESTS` na en `npm test` klaagt: minstens drie wegen die niet `kost: 'niets'` zijn, en
+  niet allemaal dezelfde soort kosten (`jaren`, `goud`, `gunst`, `risico`). Daar komt het gewone
+  nakijkwerk bij: een weg die nergens heen gaat, een fase waar je niet meer uit komt, een einde dat
+  onbereikbaar is. Zo kan een quest die later in de verhaaleditor wordt gemaakt niet stiekem één
+  antwoord krijgen. Het kost één woord per weg, en het bewaakt de regel waar het spel op staat.
+- **Een fase gaat vanzelf verder** als een van haar wegen een `klaarAls` heeft die klopt. Het spel
+  kijkt dat elk beeld na (`T.werkQuestsBij`), net als de tutorial, en doet hoogstens één stap per
+  quest per beeld — zo kan een lus van fasen die elkaar meteen waarmaken het spel niet laten hangen.
+- **Een beloning** (goud, een voorwerp, een vlag) wordt uitgekeerd zodra de quest in die fase komt,
+  en maar één keer, ook als je er later nog eens doorheen loopt.
 - **Iedereen kan erop reageren:** `als: { quest: 'bakker', fase: 'zoeken' }` werkt in elk gesprek,
-  niet alleen bij wie de quest gaf. `fase` mag ook een lijstje zijn.
-- **Goud** is een getal (`S.goud`) en staat bij je leeftijd in beeld. Een gesprek kan erop
-  letten: `als: { goud: 10 }` betekent minstens tien. Het kan het ook veranderen:
-  `doe: { goud: -10 }`. Voorwerpen gaan net zo: `doe: { geef: 'leem' }` en `doe: { neem: 'leem' }`.
-  Zo is kopen bij de marskramer gewoon een gesprek.
-- **Wat je nu moet doen,** staat als `doel` bij de fase, en verschijnt in het vak linksboven.
-- **In Tiled:** een voorwerp met de eigenschap `quest` (bijvoorbeeld `bakker:zoeken`) ligt er
-  alleen zolang die quest in die fase is. Zo ligt de leem pas in de kuil als de bakker erom vroeg.
+  niet alleen bij wie de quest gaf; `fase` mag een lijstje zijn. Verder kwamen erbij:
+  `nietQuest`, `questAf`, `goud: 10` (minstens tien), en als gevolg `goud: -15`, `geef`, `neem`,
+  en `quest` met `fase` of `weg`.
+- **Goud** is een getal (`S.goud`) naast de leeftijd in beeld. Het vakje komt pas als je ooit goud
+  had: in de tutorial heeft niemand het erover.
+- **Wat je nu moet doen** staat als `doel` bij de fase en verschijnt linksboven, met de naam van de
+  quest als kop. Zolang de meester nog iets vraagt, is dat vak van hem.
+- **In Tiled:** een voorwerp met `quest="bakker:zoeken"` ligt er alleen zolang die quest in die
+  fase is (meer fasen mag: `"bakker:zoeken,terug"`). Zo ligt de leem pas in de kuil als de bakker
+  erom vroeg. Zo'n voorwerp mag niet vast zijn — dan zou er een muur komen en gaan waar net iemand
+  liep — en `js/kaart.js` klaagt erover.
+
+### Een spreuk mag ook een ding raken (Marcel, 22 sep 2026)
+
+Een spreuk raakte alleen een wezen, en daarmee was de vierde weg van De koude oven — een
+vuurschicht in de oven — onmogelijk. In plaats van de oven een uitzondering te maken is er nu een
+algemene haak: een voorwerp met `raak="<naam>"` in Tiled wijst naar `T.RAAKPUNTEN` in
+`js/quests.js`, waar staat welke spreuk erop werkt, wat er bij de muis staat, wat er gebeurt en
+welke vlag het zet. Dat werkt meteen voor elke spreuk en elke latere quest: een windstoot op een
+molen, een dwaallicht dat iets weglokt van een kist.
+
+Drie dingen die daaruit volgen:
+
+- **Buiten een gevecht mag je de vuurschicht dan wél pakken,** maar alleen als er zo'n ding binnen
+  bereik staat. Dat is geen uitzondering op de kernregel maar een toepassing: het jaar kost hij net
+  zo goed, en de prijs staat bij de muis vóór je klikt ("Vuurschicht: de scheur in de schoorsteen
+  dichtbakken · 1 jaar").
+- **De volgorde blijft dezelfde als bij een monster:** eerst het effect, dan de tijd via
+  `T.verouder`, dan pas het meesterschap. Een scheur dichtbakken telt: de spreuk deed iets.
+- **Een raakpunt hoort op een tegel waar je bij kunt** (de mond van de oven), niet in een muur: een
+  spreuk vraagt vrij zicht, en dwars door de muur die je wilt raken is er geen.
 
 **De eerste quest: De koude oven** (Marcel: "is prima", 22 sep 2026). De bakker bakt niet meer: de aardschok scheurde
 zijn schoorsteen, en de rook blijft binnen. Er is leem nodig om de scheur dicht te smeren. De
@@ -272,6 +294,20 @@ toets van drie antwoorden, plus de dure weg van de tovenaar:
 
 De beloning is goud, en het dorp ruikt weer naar brood (`vlag: 'ovenWarm'`). De herbergierster en
 de kinderen merken het op.
+
+**Nog te schrijven (22 sep 2026).** De regels staan er, de quest nog niet: Marcel en Claude
+schrijven hem samen. Wat er eerst moet zijn, en waarom het niet in dezelfde beweging kon:
+
+- **De vier mensen staan nergens.** De bakker en de marskramer bestaan niet als wezen (dat is
+  fase B2b), en op `wereld.tmj` staan nog maar twee wezens: Marcel tekent daar zelf aan. Tot B2b
+  worden ze als Wim getekend.
+- **De leemkuil bij de beek** is nog geen plek, en wat er sinds de schok huist ook niet.
+- **De oven** heeft een voorwerp nodig met `raak="oven"` op een tegel waar je bij kunt, en een
+  regel in `T.RAAKPUNTEN`.
+- **Goud zonder bron.** De beloning van deze quest is goud, maar route 2 (de marskramer) kost
+  goud. De eerste keer dat je hem speelt, kun je die weg dus waarschijnlijk niet betalen. Dat
+  hoeft geen fout te zijn — een weg die je ziet en nog niet kunt nemen, is ook een keuze — maar
+  het moet een besluit zijn en geen ongeluk. Zie ook `ontwerp/werklijst.md`, punt "Grondstoffen".
 
 ## Wat de kernregel ervan vraagt
 

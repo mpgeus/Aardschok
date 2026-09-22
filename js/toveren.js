@@ -61,7 +61,14 @@
       if (held.ap < eig.ap) return `Daar heb je de punten niet meer voor: een ${eig.naam} kost er ${eig.ap}.`;
       return null;
     }
-    if (S.modus === 'verkennen') return eig.buiten ? null : NIET_BUITEN[id] || 'Niet hier.';
+    if (S.modus === 'verkennen') {
+      if (eig.buiten) return null;
+      // Een vuurschicht bewaar je voor een gevecht — behalve als er iets staat dat er juist om
+      // vraagt (de scheur in de oven; T.RAAKPUNTEN in js/quests.js). Dat is geen uitzondering op
+      // de kernregel maar een toepassing ervan: de jaren kost hij net zo goed.
+      if (T.raakpuntInBereik && T.raakpuntInBereik(S, id, eig.bereik)) return null;
+      return NIET_BUITEN[id] || 'Niet hier.';
+    }
     return 'Nu even niet.';
   };
 
@@ -100,11 +107,36 @@
   T.handelingSpreuk = function (S, doel) {
     if (!doel || !S.spreuk) return null;
     const eig = T.spreuk(S.held, S.spreuk);
+    // Eerst de dingen die op een spreuk wachten: dat geldt voor elke spreuk, dus het staat hier
+    // en niet drie keer hieronder.
+    const rp = T.raakpuntOp && T.raakpuntOp(S, doel, S.spreuk);
+    if (rp) return richtOpDing(S, eig, rp);
     if (S.spreuk === 'vuurschicht') return richtVuurschicht(S, eig, doel);
     if (S.spreuk === 'windstoot') return richtWindstoot(S, eig, doel);
     if (S.spreuk === 'dwaallicht') return richtDwaallicht(S, eig, doel);
     return null;
   };
+
+  // Een ding dat om deze spreuk vraagt: dezelfde afstand, hetzelfde vrije zicht en dezelfde prijs
+  // als wanneer je een monster raakt. Buiten een gevecht kost hij geen punten, net als de
+  // windstoot op een deur — maar wel zijn maanden, en die staan bij de muis vóór je klikt.
+  function richtOpDing(S, eig, rp) {
+    const w = S.wereld;
+    const h = T.tegelVan(S.held);
+    const p = { x: rp.voorwerp.x, y: rp.voorwerp.y };
+    const naam = eig.naam.charAt(0).toUpperCase() + eig.naam.slice(1);
+    const mis = (waarom) => ({ tekst: `${naam}: ${waarom}`, kosten: 0, kan: false, fout: true, lijn: p, kleur: eig.kleur });
+    if (!T.isZichtbaar(w, p.x, p.y)) return null;
+    if (T.afstand(h, p) > eig.bereik) return mis('te ver weg');
+    if (!T.zichtTussen(w, h, p)) return mis('geen vrij zicht');
+    return {
+      tekst: `${naam}: ${rp.raak.tekst}`,
+      kosten: S.gevecht ? eig.ap : 0, maanden: eig.maanden,
+      kan: !S.gevecht || S.held.ap >= eig.ap,
+      doe: () => spreukOpDing(S, eig, rp, p),
+      lijn: p, kleur: eig.kleur,
+    };
+  }
 
   function richtVuurschicht(S, eig, doel) {
     if (!S.gevecht) return null;
@@ -251,6 +283,23 @@
       await T.anim.wacht(S, 200);
       return true;
     });
+  }
+
+  // Dezelfde volgorde als bij een monster (ontwerp/toren.md, de kernregel): eerst het effect,
+  // dan de tijd via T.verouder, dan pas het meesterschap. De wikkel hieronder doet die laatste
+  // twee; wat er hier gebeurt is het effect.
+  async function spreukOpDing(S, eig, rp, p) {
+    const werk = async () => {
+      await T.worp(S, S.held, eig.id, p);
+      await T.anim.schicht(S, T.tegelVan(S.held), p);
+      if (rp.raak.melding) T.ui.bericht(rp.raak.melding);
+      for (const vlag of [].concat(rp.raak.zetVlag || [])) T.zetVlag(S, vlag);
+      if (rp.raak.doe) T.doeGevolg(S, rp.raak.doe);
+      await T.anim.wacht(S, 200);
+      return true; // iets gedaan, dus het telt voor het meesterschap
+    };
+    if (S.gevecht) await inGevecht(S, eig, werk);
+    else await buitenGevecht(S, eig, werk);
   }
 
   function schroei(S, eig, m, zin, staart) {

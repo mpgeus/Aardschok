@@ -47,6 +47,11 @@
       spreukBereik: null,
       lichten: [],
       inventaris: new Set(),
+      goud: 0,
+      goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
+      quests: {}, // per quest de fase waarin hij staat (js/quest.js)
+      questWeg: {}, // en hoe je hem oploste, zodat het dorp erop kan reageren
+      questBeloond: new Set(),
       sleutelGebruikt: false,
       fonteinLeeg: false,
       sluipen: false,
@@ -229,6 +234,14 @@
     // Heeft de speler gedaan wat de meester vroeg? Dan begint de volgende scène (js/tutorial.js),
     // nog vóór er iets dwaalt of iemand je ziet.
     T.werkTutorialBij(S);
+    // Quests gaan net zo vanzelf verder (js/quest.js): heb je wat de bakker nodig heeft, dan
+    // schuift de fase op. Het vak linksboven is van de meester zolang hij nog iets vraagt, en
+    // daarna van de quest die je het eerst aannam.
+    T.werkQuestsBij(S);
+    if (!T.tutorialLoopt(S)) {
+      const doelNu = T.questDoel(S);
+      T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop);
+    }
     if (S.modus === 'verkennen') {
       T.laatDwalen(S, dt);
       const m = T.zoekOntdekking(S);

@@ -28,9 +28,16 @@
 //   ouderGewordenSinds: 12     — waar als je zoveel maanden of meer ouder bent geworden sinds je
 //                                 deze persoon voor het laatst sprak (bij de allereerste keer
 //                                 geldt hij nooit: er is dan nog geen "vorige keer")
+//   quest: 'bakker'            — waar als die quest loopt; met fase: 'zoeken' (of een lijstje
+//                                 fasen) alleen in die fase, met weg: 'marskramer' alleen als je
+//                                 hem zo oploste
+//   nietQuest: 'bakker'        — waar als die quest nog niet begonnen is
+//   questAf: 'bakker'          — waar als die quest af is
+//   goud: 10                   — waar als je er minstens tien hebt
 //
-// Een gevolg (doe) mag hebben: zetVlag: 'naam' en/of wisVlag: 'naam' (één naam, of een lijstje).
-// Goud en quests bestaan nog niet; daar is later ruimte voor, maar dat verzinnen we hier nog niet.
+// Een gevolg (doe) mag hebben: zetVlag en/of wisVlag (één naam, of een lijstje), geef en/of neem
+// (een voorwerp in je tas of eruit), goud: 20 of goud: -15, en quest: 'bakker' met fase: 'zoeken'
+// of weg: 'marskramer' (quest zonder allebei begint hem). Zie js/quests.js voor de quests zelf.
 (function (T) {
   'use strict';
 

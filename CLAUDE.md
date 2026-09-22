@@ -118,6 +118,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/verkennen.js`: rondlopen, klikhandelingen, dwalende monsters, ontdekt worden.
 - `js/gevecht.js`: de overgang, beurtvolgorde, actiepunten, handelingen, monster-AI
   (`planMonsterBeurt`, los van het scherm en dus te toetsen).
+- `js/quests.js`: de quests en de raakpunten als gegevens (nu nog leeg, met de vorm erboven);
+  `js/quest.js`: de regels erachter, zonder scherm en dus te toetsen — fasen en wegen
+  (`T.zetQuest`, `T.neemWeg`, `T.werkQuestsBij`), goud (`T.geefGoud`), de haken waarmee een
+  gesprek erop let (`T.questVoorwaarde`, `T.questGevolg`), voorwerpen die aan een quest hangen,
+  en `T.keurQuests`, dat de toets van drie antwoorden nakijkt.
 - `js/dialoog.js`, `js/ui.js` (alle html over het beeld), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera).
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine

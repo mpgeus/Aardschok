@@ -43,6 +43,9 @@
       const maanden = T.ouderGewordenSinds(S, wieId);
       if (maanden == null || maanden < als.ouderGewordenSinds) return false;
     }
+    // Quests en goud wonen in js/quest.js en haken hier in, zoals js/verkennen.js dat met
+    // T.tutorialHandeling doet: zonder dat bestand werkt een gesprek gewoon door.
+    if (T.questVoorwaarde && !T.questVoorwaarde(S, als)) return false;
     return true;
   };
 
@@ -64,12 +67,15 @@
     return { tekst: regel ? regel.zeg : '', keuzes: T.zichtbareKeuzes(S, wieId, knoop.keuzes) };
   };
 
-  // Wat een antwoord doet: een vlag zetten en/of wissen (een naam, of een lijstje namen). Goud en
-  // quests bestaan nog niet; die kunnen hier later bij.
+  // Wat een antwoord doet: een vlag zetten of wissen, en iets in je tas stoppen of eruit halen
+  // (een naam, of een lijstje namen). Goud en quests staan in js/quest.js en haken hier in.
   T.doeGevolg = function (S, doe) {
     if (!doe) return;
-    const lijst = (v) => (Array.isArray(v) ? v : [v]);
-    if (doe.zetVlag) for (const naam of lijst(doe.zetVlag)) T.zetVlag(S, naam);
-    if (doe.wisVlag) for (const naam of lijst(doe.wisVlag)) T.wisVlag(S, naam);
+    const lijst = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
+    for (const naam of lijst(doe.zetVlag)) T.zetVlag(S, naam);
+    for (const naam of lijst(doe.wisVlag)) T.wisVlag(S, naam);
+    for (const soort of lijst(doe.geef)) S.inventaris.add(soort);
+    for (const soort of lijst(doe.neem)) S.inventaris.delete(soort);
+    if (T.questGevolg) T.questGevolg(S, doe);
   };
 })(globalThis.Toren = globalThis.Toren || {});

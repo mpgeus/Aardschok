@@ -715,6 +715,10 @@
   }
   T.TUTORIAL_WEG = WEG; // voor de toetsen
 
+  // Vraagt de meester nu nog iets? Zolang dat zo is, is het vak linksboven van hem en niet van
+  // een quest (js/main.js). Aan het begin (aankomst) en na afloop schrijft de tutorial er niets.
+  T.tutorialLoopt = (S) => !!(S.tutorial && !S.tutorial.klaar && S.tutorial.fase !== 'aankomst');
+
   // Elk beeld (js/main.js): heeft de speler gedaan wat er gevraagd werd? Dan de volgende scène.
   T.werkTutorialBij = function (S) {
     const t = S.tutorial;

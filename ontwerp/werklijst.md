@@ -12,7 +12,7 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## De stand (einde sessie 22 sep 2026)
 
-**Loopt nu:** niets. Er draait geen agent, en alles is gepusht.
+**Loopt nu:** niets. Er draait geen agent.
 
 **Tempo:** gewoon door. Marcel maakt het niet uit of de week vandaag of vrijdag op is (22 sep).
 Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halverwege stilvalt.
@@ -22,15 +22,15 @@ Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halver
   `T.TUTORIAL_TEKST` in `js/gesprekken.js`).
 - In Tiled: het vel `tuin` aan `wereld.tmj` toevoegen, en de vier varens rond (51–52, 45–46) van de
   grondlaag naar `objecten` verplaatsen (`npm run kaarten` klaagt erover).
+- **De koude oven samen schrijven.** De regels van het questsysteem staan er (22 sep), de quest
+  nog niet: dat is een uur aan gegevens en gesprekstekst, en Marcel wilde erbij zijn. Wat er eerst
+  moet zijn, staat in `toren.md` onder "Nog te schrijven".
 
 **Klaar om te starten, in deze volgorde.** Elk stuk is een korte agent. Bekijk eerst de meter.
-1. **Het questsysteem (punt 3). Marcel wil dit eerst (22 sep).** Het zijn spelregels zonder kunst,
-   dus het wacht niet op de huizen of de vaklieden. Het ontwerp staat in `toren.md`, "Hoe het
-   werkt". De bakker en de marskramer lopen nog niet (dat is B2b), dus tot dan worden ze als Wim
-   getekend. De eerste quest is De koude oven (Marcel akkoord, 22 sep).
-2. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder).
-3. Fase B2b: de zeven vaklieden en meer gewone dorpelingen (punt 2).
-4. Fase B3: de portretten in de gesprekken (punt 2).
+1. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder).
+2. Fase B2b: de zeven vaklieden en meer gewone dorpelingen (punt 2). Daar horen nu ook de bakker
+   en de marskramer bij: zonder hen kan De koude oven niet gespeeld worden.
+3. Fase B3: de portretten in de gesprekken (punt 2).
 
 **Het laatst af (22 sep):**
 - de tutorial, met Marcels keuzes erin;
@@ -105,6 +105,11 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    `toren.md`), de stand van een quest een voorwaarde is in een gesprek, er goud bestaat, en één
    quest — bijvoorbeeld "De koude oven" — van begin tot eind speelt en de toets van drie antwoorden
    haalt.
+   **Stand (22 sep):** de regels staan er en zijn getoetst — fasen en wegen, goud, het vak
+   linksboven, de Tiled-eigenschappen `quest` en `raak`, en `T.keurQuests`, dat de toets van drie
+   antwoorden door `npm test` laat bewaken. Nog te doen: De koude oven schrijven (samen met
+   Marcel), en daarvoor de bakker, de marskramer, de smidsvrouw, de leemkuil en de oven in de
+   wereld zetten.
 4. **De verhaaleditor.** Klaar als het gesprekkengereedschap ook quests kan: vormen om mee te
    beginnen, alles op één plek, een proef per fase, controle die de routes telt, en de koppeling
    met Tiled. Zie `verhaal.md`, "Een quest moet makkelijk te bouwen zijn".
@@ -155,6 +160,14 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 22 sep 2026 — **Het questsysteem, de regels:** quests als gegevens (`js/quests.js`) met de
+  regels erachter (`js/quest.js`), goud naast de leeftijd, het vak linksboven dat nu ook van een
+  quest kan zijn, en in Tiled `quest="bakker:zoeken"` op een voorwerp. Twee dingen die uit het
+  bouwen kwamen: een weg door een quest is nu een ding in de gegevens met een `kost`, zodat
+  `npm test` de toets van drie antwoorden bewaakt en het spel onthoudt *hoe* je iets oploste; en
+  een spreuk kan een ding raken in plaats van alleen een wezen (`raak="oven"`), waarmee de
+  toverweg van De koude oven kan bestaan zonder dat de oven een uitzondering wordt.
 
 - 22 sep 2026 — Wachter voor gebouwen die elkaar overlappen: `npm run kaarten` klaagt als twee
   gebouwen van meer dan één tegel over elkaar staan.

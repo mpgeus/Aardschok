@@ -147,6 +147,7 @@
 
     const deuren = new Map();
     const voorwerpen = [];
+    const questVoorwerpen = []; // wat aan een quest hangt; T.werkQuestVoorwerpen schuift het erin
     const wezens = [];
     const overgangen = [];
 
@@ -215,7 +216,21 @@
         }
         // vel en id erbij, zodat js/tekenen.js het plaatje kan opzoeken zonder de kaart opnieuw
         // te hoeven lezen; beslaat, zodat het sorteren weet hoeveel tegels eronder liggen.
-        voorwerpen.push({ soort: eig.naam, x: gx, y: gy, vel: t.vel, id: t.id, beslaat });
+        const v = { soort: eig.naam, x: gx, y: gy, vel: t.vel, id: t.id, beslaat };
+        // raak="<naam>": dit ding wacht op een spreuk (js/quests.js, T.RAAKPUNTEN). Het hoort op
+        // een tegel waar je bij kunt, want een spreuk vraagt vrij zicht.
+        if (p.raak !== undefined) v.raak = String(p.raak);
+        // quest="bakker:zoeken": dit ding ligt er alleen zolang die quest in die fase is. Vast
+        // kan het niet zijn — dan zou er een muur komen en gaan waar net iemand liep.
+        const grendel = p.quest !== undefined && T.questGrendel ? T.questGrendel(String(p.quest)) : null;
+        if (grendel && eig.vast) {
+          console.warn(`T.laadKaart: "${eig.naam}" op (${gx}, ${gy}) is vast en kan dus niet aan een quest hangen`);
+        } else if (grendel) {
+          v.grendel = grendel;
+          questVoorwerpen.push(v);
+          continue;
+        }
+        voorwerpen.push(v);
       }
     }
 
@@ -243,7 +258,7 @@
 
     return {
       b, h, tegels, grond, deuren, kamers: [kamerBuiten],
-      voorwerpen, wezens,
+      voorwerpen, questVoorwerpen, wezens,
       bekend: new Set(['buiten']), huidigeKamer: 'buiten',
       burenKamers, overgangen,
       buiten: true, // geen kamers met muren: het spel tekent gras en hoge dingen

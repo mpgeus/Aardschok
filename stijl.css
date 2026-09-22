@@ -72,6 +72,19 @@ kbd {
 #sluip-knop:hover { color: var(--inkt); }
 #sluip-knop.aan { color: var(--inkt); border-color: rgba(226, 182, 74, 0.6); background: rgba(40, 32, 18, 0.9); }
 .in-gevecht #sluip-knop { opacity: 0.35; pointer-events: none; }
+/* Goud: naast de leeftijd, in dezelfde maat als een vakje van de inventaris. Het komt pas in
+   beeld als je ooit goud had (js/ui.js, toonGoud). */
+#goud {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 0 12px;
+  font: 15px/1 var(--kop), system-ui, sans-serif;
+  color: var(--inkt);
+}
+#goud .munt { color: #e2b64a; font-size: 13px; }
+
 #inventaris .item {
   width: 44px;
   height: 44px;
