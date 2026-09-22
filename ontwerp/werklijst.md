@@ -10,7 +10,7 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## Loopt nu
 
-- Ronde 3 van de huizenbouwer (een agent), zie hieronder.
+- De huizenbouwer wacht op Marcel: ronde 3 is af, ronde 4 begint als hij de plaat goed vindt.
 - De tutorial is speelbaar (22 sep), met Marcels keuzes erin; wat rest staat bij punt 1.
 - Punt 2, fase A (een agent): de smid en twee gewone dorpelingen leren lopen, met één manier die
   daarna voor alle negentien werkt. Marcel beoordeelt de loop op een plaat vóór fase B de rest
@@ -25,18 +25,27 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    twee lagen (met overkraging), en rechthoek, L en T met een doorlopende kil in het riet.
 2. **Materiaal** (af, 22 sep). Klaar als er planken, vlechtwerk en blokhut zijn naast vakwerk en veldsteen, en
    spanen, leien en pannen naast riet.
-3. **Uitbouwen.** Wat ronde 2 opschreef dat hiervoor nodig is: een dakkapel in het riet is een
-   bult in het dak, waar de rijen riet overheen moeten buigen (dat hoort in `plekV`); een aanbouw
-   met een eenzijdig dak en een dakkapel op een dun dak vragen méér dan twee vleugels, en
-   `dakPlek`, `onderDak` en de kil kennen er nu twee; erkers, luiken, bloembakken, trappen en
-   balkons hangen aan een stuk muur en hebben daar al hulpjes voor, maar een nieuw muurvlak (een
-   erker) moet een eigen stuk muur worden, anders krijgt het geen patroon; en de losse tuinstukken
-   horen in een eigen bestand dat de hout- en plankpatronen deelt met `huis-sdf.cjs`.
-   Klaar als dakkapellen in het riet opgaan, en er erkers, aanbouwen, buitentrappen,
-   luiken, bloembakken, schoorstenen en houten balkonnetjes zijn, plus losse tuinstukken (hek,
-   hekje, groente, kruidenbed, bloemen, bankje) om zelf neer te zetten.
+3. **Uitbouwen** (af, 22 sep). Dakkapellen (in het riet een bult), aanbouwen met een eenzijdig dak,
+   erkers, luiken, bloembakken, buitentrappen, galerijen, gevelschoorstenen, en 21 losse
+   tuinstukken in `tuin-sdf.cjs`. Plaat: `uit/proefhuis/uitbouwen.png`. Wat nog wringt: een bult
+   in het riet past niet naast een aanbouw of op een L, het erkerkapje raakt bij twee lagen de rand
+   van het grote dak, en het hek leest op ware grootte als een dicht staketsel.
 4. **In gebruik.** Klaar als de nieuwe huizen in `gebouwen.tsx` staan met de goede voet en het goede
-   anker, achteraan in de volgorde, en het dorp ermee getekend kan worden.
+   anker, achteraan in de volgorde, en het dorp ermee getekend kan worden. Wat ronde 3 hiervoor
+   opschreef:
+   - Een aanbouw, trap of galerij steekt 1 tot 2,5 tegels voor de muur uit. Er is een `voetVan(H)`
+     nodig (of opmeten zoals `meetVoet` in `naar-tiled.cjs`), met het anker op de achterste
+     voethoek (+16), anders slaat `test/tegelanker.test.cjs` uit.
+   - Renderen zonder gras en grondschaduw, anders wordt de slagschaduw de onderste pixelrij.
+   - Per tegel een vaste opgave met een uitgeschreven `uit: {…}`, zodat andere kansen later het vel
+     niet veranderen.
+   - `naar-tiled.cjs` rendert in één draad (twaalf huizen: 5 tot 10 minuten); werkers of een cache
+     per opgave.
+   - Een huis met twee lagen en uitbouwen is zo'n 710×880 px: misschien een eigen vel.
+   - Tussen de palen van een galerij en de muur kan niemand staan; die tegels moeten vast.
+   - De tuinstukken krijgen een eigen vel van 1×1, anker op het midden van de tegel. Marcel beslist
+     wat vast is (hek, bank en ton wel; hekje en bedden niet?).
+   Ronde 3 was één lange agent (235 stappen); deel ronde 4 op in kortere stukken.
 
 ## Marcel, tegelijk
 
