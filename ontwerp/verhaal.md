@@ -63,8 +63,8 @@ Het spel begint bij de toren, met de meester er nog. Hij leeft, hij doet de tuto
 stuk verhaal gaat hij dood. Daarna neem jij het over. Daarmee is ook de vraag beantwoord of de
 toren geërfd is: ja, en je krijgt hem niet in een brief maar voor je ogen.
 
-Voorstel van Claude voor de invulling, nog niet gekozen: **laat hem sterven aan de kernregel
-zelf.** Hij is tegen de honderd. Terwijl hij je leert toveren, kost elke spreuk hem een jaar, en
+Gekozen (voorstel van Claude, Marcel op 20 sep 2026: "ja heel goed idee"): **hij sterft aan de
+kernregel zelf.** Hij is tegen de honderd. Terwijl hij je leert toveren, kost elke spreuk hem een jaar, en
 zie je zijn balk korter worden. Aan het eind is er nog één spreuk nodig, hij doet hem toch, en
 dan is hij honderd. Zo heeft de speler de regel zien gebeuren in plaats van gelezen.
 
@@ -195,8 +195,6 @@ het is een kwestie van hem `dwaalt`, `thuis` en een straal geven.
 
 ## Open
 
-- **Hoe gaat de meester precies dood?** Voorstel hierboven: aan zijn eigen laatste spreuk. Het
-  alternatief is dat wat er boven zit hem haalt, maar dan leert de speler de regel niet.
 - **De teksten in het spel gaan nog van het oude begin uit.** `js/main.js` opent met "Je bent
   terug in de hal van je toren, na veertig jaar", en Wim zegt in `js/dialoog.js` dat hij veertig
   jaar op zijn meester wachtte. Dat klopt niet meer met een spel dat bij de levende meester
