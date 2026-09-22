@@ -14,11 +14,9 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 **Loopt nu:** niets. Er draait geen agent.
 
-**Let op waar het werk staat.** De sessie van 22 sep draaide in de cloud en moest op een eigen tak
-werken: `claude/aardschok-quest-system-ywvpe7`. Daar staan vier commits (het questsysteem, De
-koude oven, `debug.quest`, en de verhaaleditor voor quests) die **nog niet op `main`** staan.
-Haal ze binnen met `git merge claude/aardschok-quest-system-ywvpe7`, en werk daarna weer gewoon op
-`main` zoals CLAUDE.md zegt.
+**Alles staat op `main`.** De sessie van 22 sep draaide in de cloud en werkte op de tak
+`claude/aardschok-quest-system-ywvpe7`; die is aan het eind in `main` gezet en gepusht, dus er
+staat niets meer los. Werk gewoon op `main`, zoals CLAUDE.md zegt.
 
 **Tempo:** gewoon door. Marcel maakt het niet uit of de week vandaag of vrijdag op is (22 sep).
 Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halverwege stilvalt.
