@@ -10,9 +10,12 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## Loopt nu
 
-- De huizenbouwer wacht op Marcel: ronde 3 is af, ronde 4 begint als hij de plaat goed vindt.
-- De tutorial is speelbaar (22 sep), met Marcels keuzes erin; wat rest staat bij punt 1.
-- Punt 2 wacht op Marcel: fase A is af, en hij beoordeelt de loop vóór fase B de rest doet.
+- Punt 2, fase B1 (een agent): knieën in de loop van de dorpelingen, eerst voor de smid en de
+  twee gewone dorpelingen.
+- Ronde 4a van de huizenbouwer (een agent): de hekjes van wilgentenen en latten, en de
+  tuinstukken als eigen vel in Tiled.
+- Claude zelf: de teksten van de tutorial poetsen (voor Marcel om te lezen), en punt 3, het
+  questsysteem, voorbereiden.
 
 ## Tegelijk: de huizenbouwer op ronde vormen
 
@@ -41,9 +44,11 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
      per opgave.
    - Een huis met twee lagen en uitbouwen is zo'n 710×880 px: misschien een eigen vel.
    - Tussen de palen van een galerij en de muur kan niemand staan; die tegels moeten vast.
-   - De tuinstukken krijgen een eigen vel van 1×1, anker op het midden van de tegel. Marcel beslist
-     wat vast is (hek, bank en ton wel; hekje en bedden niet?).
-   Ronde 3 was één lange agent (235 stappen); deel ronde 4 op in kortere stukken.
+   - De tuinstukken krijgen een eigen vel van 1×1, anker op het midden van de tegel. Vast zijn het
+     hek, de bank en de regenton; het hekje en de bedden niet (Marcel, 22 sep).
+   Ronde 3 was één lange agent (235 stappen), dus ronde 4 gaat in twee stukken: **4a** de hekjes
+   van wilgentenen en latten (`beeld.md`) en de tuinstukken als eigen vel in Tiled; **4b** de
+   huizen in `gebouwen.tsx`.
 
 ## Marcel, tegelijk
 
@@ -70,7 +75,9 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    **Fase B:** geef de andere zestien hun eigen heup-, nek- en schouderpunten voor
    `bottenDorpeling` (de smid in `dorpelingen.cjs` is het voorbeeld), render meer gewone
    varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`), en zet de portretten in de gesprekken.
-   Eerst Marcel: is de loop zonder knie goed genoeg, of moeten er knieën in zoals bij Wim?
+   **Besloten:** knieën, zoals bij Wim (Marcel, 22 sep; `wereld.md`). Fase B in drie korte
+   stukken: B1 de knieën op de drie die er al zijn, B2 de andere zestien en meer gewone varianten,
+   B3 de portretten in de gesprekken.
 3. **Het questsysteem, met één quest helemaal af.** Klaar als quests gegevens zijn (zie
    `toren.md`), de stand van een quest een voorwaarde is in een gesprek, er goud bestaat, en één
    quest — bijvoorbeeld "De koude oven" — van begin tot eind speelt en de toets van drie antwoorden

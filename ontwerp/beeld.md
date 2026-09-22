@@ -84,6 +84,12 @@ verschillend. Wat de nieuwe bouwer moet kunnen, in Marcels woorden en daarna uit
   omdat elk stuk op zijn eigen tegel staat, klopt voor- en achterlangs lopen ook — een tuin die in
   het huis gebakken zit, zou juist daar misgaan. Ook niet waterpas: een hek staat scheef, een rij
   kool loopt net niet recht.
+- **Hekjes van wilgentenen en van latten** (Marcel, 22 sep 2026). Het eerste hek uit ronde 3 was
+  een dicht staketsel van planken, en op ware grootte las dat als een palissade om een fort. Een
+  moestuin krijgt een laag, open hekje: gevlochten wilgentenen tussen paaltjes, of een paar latten
+  op palen. Twee soorten, zodat niet elke tuin hetzelfde hek heeft.
+- **Wat vast is** (Marcel akkoord, 22 sep 2026): het hek, de bank en de regenton houden je tegen;
+  het hekje en de bedden niet. Door een hekje loop je de tuin in, en door een bed stap je heen.
 - **Niets is waterpas** in alles, en per zaad anders: plattegrond, verdiepingen, materiaal en
   ouderdom, zodat geen twee huizen op elkaar lijken.
 - **Het blijft bruikbaar:** elk huis komt in `tegels/gebouwen.tsx` met de goede voetafdruk en het

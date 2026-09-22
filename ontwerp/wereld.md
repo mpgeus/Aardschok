@@ -171,6 +171,9 @@ dorpelingen, en een dorp waar iedereen stilstaat voelt dood. Wat erbij hoort:
   in de weg liep. Een tegel naast een deur telt als plek waar een dorpeling niet blijft staan.
 - **Praten onderbreekt het dwalen:** wie tegen je praat, staat stil en kijkt je aan, en loopt pas
   verder als het gesprek uit is.
+- **Ze lopen met knieën, zoals Wim** (Marcel, 22 sep 2026). De eerste loop draaide been en arm
+  star om heup en schouder, en naast Wim oogde dat marcherend. Een dorp moet leven, dus buigen de
+  knieën mee, zoals bij Wim en de meester.
 
 ### Plekken die de moeite waard zijn (voorstel)
 
