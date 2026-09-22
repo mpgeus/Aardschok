@@ -16,6 +16,7 @@ require('../js/pad.js');
 require('../js/spreuken.js');
 require('../js/gevecht.js');
 require('../js/verkennen.js');
+require('../js/sprites.js');
 const T = globalThis.Toren;
 
 const wezen = (w, soort) => w.wezens.find((e) => e.soort === soort);
@@ -65,6 +66,44 @@ test('de oude meester wordt, net als Wim, nooit ontdekt en telt nooit mee als de
   assert.equal(meester.kant, 'neutraal');
   assert.equal(T.zoekOntdekking(S), null);
   assert.deepEqual(T.deelnemers(w, held, meester), []);
+});
+
+// Fase A (ontwerp/werklijst.md, punt 2): de smid heeft nu een eigen T.WEZENS-ingang, net als de
+// meester — dezelfde regel dus, en dezelfde reden om hem te toetsen: dwalen en nooit ontdekt
+// worden is de gewone regel voor elk neutraal wezen, geen Wim- of meester-specifieke uitzondering.
+test('de smid wordt, net als Wim en de meester, nooit ontdekt en telt nooit mee als deelnemer, en begint dus nooit een gevecht', () => {
+  const w = T.maakWereld();
+  const held = wezen(w, 'held');
+  const smid = T.maakWezen('smid', 6, 3);
+  w.wezens.push(smid);
+  zet(held, 5, 3); // vlak naast hem
+  const S = { wereld: w, held, sluipen: false };
+
+  assert.equal(smid.kant, 'neutraal');
+  assert.notEqual(smid.kant, 'monster'); // alleen 'monster' laat T.startGevecht/de klik aanvallen
+  assert.equal(T.zoekOntdekking(S), null);
+  assert.deepEqual(T.deelnemers(w, held, smid), []);
+});
+
+test('de smid dwaalt bij de smidse, maar blijft binnen zijn straal van thuis', () => {
+  const w = T.maakWereld();
+  const S = { wereld: w, spreektMet: null };
+  const smid = T.maakWezen('smid', 4, 3);
+  w.wezens.push(smid);
+  assert.equal(smid.dwaalt, true);
+  assert.ok(smid.straal > 0);
+  for (let i = 0; i < 200; i++) {
+    smid.pad = [];
+    T.laatDwalen(S, 100); // dwingt meteen een besluit
+    if (!smid.pad.length) continue;
+    const doel = smid.pad[0];
+    assert.ok(
+      T.afstand(smid.thuis, doel) <= smid.straal,
+      `(${doel.x},${doel.y}) buiten straal ${smid.straal} van thuis (${smid.thuis.x},${smid.thuis.y})`,
+    );
+    smid.tx = doel.x;
+    smid.ty = doel.y;
+  }
 });
 
 test('een dorpeling die toevallig naast een deur staat, wacht zijn pauze niet uit', () => {
@@ -126,4 +165,19 @@ test('wie in gesprek is, dwaalt niet mee, ook niet als zijn pauze om is', () => 
   const S = { wereld: w, spreektMet: wim };
   T.laatDwalen(S, 0.1);
   assert.deepEqual(wim.pad, []);
+});
+
+// Fase A: een gewone dorpeling (maakDorpeling hierboven, soort "dorpeling") kiest zijn vel uit
+// zijn zaad, modulo het aantal gerenderde varianten (js/sprites.js, T.sprites.dorpelingVariant) —
+// zodat hetzelfde zaad altijd hetzelfde uiterlijk geeft, en elk zaad een geldige variant oplevert,
+// ook een negatief zaad of nul varianten (nog niets gerenderd; dan blijft het vlakken, zie
+// dorpelingVel in js/sprites.js).
+test('het zaad van een dorpeling kiest zijn vel via een modulo die altijd binnen het aantal varianten blijft', () => {
+  assert.equal(T.sprites.dorpelingVariant(0, 2), 0);
+  assert.equal(T.sprites.dorpelingVariant(1, 2), 1);
+  assert.equal(T.sprites.dorpelingVariant(2, 2), 0); // loopt rond: hetzelfde als zaad 0
+  assert.equal(T.sprites.dorpelingVariant(3, 2), 1);
+  assert.equal(T.sprites.dorpelingVariant(-1, 2), 1); // een negatief zaad blijft geldig
+  assert.equal(T.sprites.dorpelingVariant(5, 3), 2);
+  assert.equal(T.sprites.dorpelingVariant(7, 0), 0); // nog geen varianten: geen crash
 });

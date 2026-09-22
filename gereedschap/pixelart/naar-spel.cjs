@@ -144,6 +144,13 @@ const FIGUURLIJST = {
   wolf: { map: ['vijanden', 'animaties'], houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'], bron: 'bosvijanden-anim.cjs' },
   reuzenspin: { map: ['vijanden', 'animaties'], houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'], bron: 'bosvijanden-anim.cjs' },
   kobold: { map: ['vijanden', 'animaties'], houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'], bron: 'bosvijanden-anim.cjs' },
+  // De smid, en de eerste twee vellen van de gewone dorpeling(zaad) (fase A, ontwerp/werklijst.md
+  // punt 2): T.WEZENS.smid (js/wereld.js) staat op "smid", en een dorpeling kiest tussen
+  // "dorpeling0" en "dorpeling1" met zijn zaad (js/sprites.js, S.dorpelingVariant). Fase B rendert
+  // er meer met dezelfde manier (dorpelingen.cjs, "lopen en staan") en breidt deze rij dan uit.
+  smid: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  dorpeling0: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  dorpeling1: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
 };
 
 function figuren() {

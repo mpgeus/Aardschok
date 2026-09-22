@@ -77,6 +77,15 @@
       naam: 'de oude meester', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.55,
       dwaalt: true, straal: 2, leeftijd: 97 * 12,
     },
+    // De smid, bij de smidse in het dorp: neutraal en dwalend als de meester, met zijn eigen
+    // loopmaat (SMID_SNELHEID in gereedschap/pixelart/dorpelingen.cjs). Een gewone dorpeling komt
+    // niet hier te staan — die zet js/kaart.js zelf neer met de soort "dorpeling" (zijn zaad kiest
+    // het vel, zie S.dorpelingVariant in js/sprites.js) — maar de smid heeft, net als Wim en de
+    // meester, een eigen naam en plek en dus een eigen ingang.
+    smid: {
+      naam: 'de smid', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.5,
+      dwaalt: true, straal: 3,
+    },
     slijm: {
       naam: 'slijmkruiper', kant: 'monster', leven: 10, ap: 4, initiatief: 4, snelheid: 1.4, zicht: 5, dwaalt: true,
       aanval: { kosten: 3, maanden: [3, 5], zin: 'bijt je' },

@@ -172,6 +172,18 @@
   S.figuurNaam = (soort) => (soort === 'held' ? 'tovenaar' : soort);
   S.hoogte = (soort) => HOOG[S.figuurNaam(soort)] || 60;
 
+  // Een gewone dorpeling deelt één soort ("dorpeling", zie js/kaart.js) maar heeft meerdere
+  // vellen (dorpeling0, dorpeling1, ...); zijn zaad kiest welk, zodat hetzelfde zaad altijd
+  // hetzelfde uiterlijk geeft (ontwerp/wereld.md, "Een flink dorp"). Puur, dus apart te toetsen.
+  S.dorpelingVariant = (zaad, aantal) => (aantal ? ((zaad % aantal) + aantal) % aantal : 0);
+  // Het aantal varianten volgt uit wat er echt gerenderd is (dorpeling0, dorpeling1, ...), zodat
+  // fase B er zonder codewijziging hier meer bij kan zetten.
+  function dorpelingVel(zaad) {
+    let n = 0;
+    while (S.figuurGegevens('dorpeling' + n)) n++;
+    return n ? 'dorpeling' + S.dorpelingVariant(zaad, n) : null;
+  }
+
   // ---------------------------------------------------------------- vloeren, muren, voorwerpen
 
   // Een vloer is een lap van twee bij twee tegels, zodat de steen niet elke tegel herhaalt. Er
@@ -411,9 +423,9 @@
   }
 
   // De houding van dit wezen op dit moment: { naam, houding, richting, fase }.
-  // `naam` is het figuur op het vel; de held heet daar tovenaar.
+  // `naam` is het figuur op het vel; de held heet daar tovenaar, een gewone dorpeling zijn zaad.
   S.houding = function (spel, e) {
-    const naam = S.figuurNaam(e.soort);
+    const naam = e.soort === 'dorpeling' ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
     const f = S.figuurGegevens(naam);
     if (!f) return null;
     const st = stand(e);

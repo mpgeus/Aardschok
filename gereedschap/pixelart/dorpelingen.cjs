@@ -7,6 +7,7 @@
 const { sdf, bouwSdf, klem, mix, ruis3 } = require('./kern.cjs');
 const { model, kegel, capsule, bol, ellips, bochtKegel, plus, naarRamp } = require('./figuren.cjs');
 const { ring, eenheid, langs } = require('./figuren2.cjs');
+const HH = require('./houding.cjs');
 
 // ---------------------------------------------------------------- hulpjes
 
@@ -150,11 +151,119 @@ function glimlach(delen, H, [rx, ry, rz], m, deel, breed = 1.3, z = -4) {
   for (const s of [-1, 1]) delen.push(capsule(plus(H, [s * breed, opp(s * breed, z + 0.45) - 0.1, z + 0.45]), mid, 0.5, m, deel));
 }
 
+// ---------------------------------------------------------------- lopen en staan (fase A, 22 sep 2026)
+//
+// Eén manier waarop een dorpeling kan lopen, licht genoeg om straks op alle negentien en op
+// dorpeling(zaad) (dorpelingen3.cjs) toe te passen (ontwerp/werklijst.md, punt 2). Anders dan Wim
+// en de oude meester (figuren2.cjs, meester.cjs) heeft een dorpeling geen knie en geen elleboog:
+// een been is van heup tot schoen één stijve kegel (zie been() in dorpelingen3.cjs en de benen
+// van smid() hieronder), een arm van schouder tot hand net zo. Bewegen is dus nooit
+// HH.elleboog-IK maar telkens één rotatie om één vast punt — "benen en armen draaien om heup en
+// schouder".
+//
+//   - Been: HH.loopVoet (houding.cjs) geeft de voorwaartse schuif die een glijdende voet
+//     voorkomt. Voor een stijf been zonder knie zet naarHoek() hieronder die schuif rechtstreeks
+//     om in de hoek waarmee het hele been om de heup draait (hoek = asin(schuif / beenlengte)):
+//     omdat het been een vaste lengte heeft, komt de voet daarmee precies op de plek die
+//     loopVoet bedoelt, dus glijdt hij niet. De boog van die rotatie tilt de voet vanzelf iets op
+//     als hij ver naar voren of achteren zwaait; een aparte optilbeweging is niet nodig.
+//   - Arm: geen aparte berekening; hij zwaait tegengesteld aan het been aan dezelfde kant
+//     (zodat de linkerarm meezwaait met het rechterbeen, zoals bij lopen hoort), met de hoek van
+//     dat been als maat.
+//   - Romp en nek: een klein beetje wiegen, zakken en tegendraaien, zoals bij Wim en de meester.
+//   - Rok: bij een rok (klokrok, dorpelingen3.cjs) blijven de benen daaronder onzichtbaar (ze
+//     "verdwijnen onder de rok", zie dorpeling()); in plaats van ze te tonen zwaait de rok zelf
+//     iets breder mee dan de romp — "een rok zwaait mee in plaats van benen te tonen".
+//
+// Een bouwfunctie roept `houdingDorpeling(stand, o)` aan voor de generieke getallen en
+// `bottenDorpeling(hg, o)` om ze, met de eigen heup-, nek- en schouderpunten van die figuur, om
+// te zetten in HH-bewegingen; die past hij toe met dezelfde bot()/HH.beweegDeel-truc als wim() en
+// meester() (zie smid() hieronder voor het voorbeeld). Zonder stand (hg is dan null) komt overal
+// `null` uit bottenDorpeling en blijft bot() overal een no-op: het model blijft precies gelijk,
+// dus dorpelingen-export.cjs en dorpelingen3-export.cjs (die nog geen stand meegeven) blijven hun
+// oude stilstaande vellen leveren, geen pixel anders.
+
+function rustDorpeling() {
+  return {
+    zak: 0, zij: 0, voor: 0,
+    romp: { buig: 0, draai: 0, omhoog: 0 },
+    nek: { knik: 0, draai: 0 },
+    been: [{ hoek: 0 }, { hoek: 0 }], // 0 = links, 1 = rechts
+    arm: [{ hoek: 0 }, { hoek: 0 }],
+    rokZwaai: 0,
+  };
+}
+
+// stand: { houding, fase } — 'staan' (ademen) en 'lopen' (acht beelden, zie hierboven).
+// o: { snelheid (tegels per seconde — dezelfde als waarmee de figuur ook echt rondloopt, anders
+// lijkt hij toch te glijden), fps, beenLengte (heup tot voet, voor naarHoek hierboven) }.
+function houdingDorpeling(stand, o = {}) {
+  const naam = typeof stand === 'string' ? stand : stand && stand.houding;
+  if (!naam) return null;
+  const fase = (typeof stand === 'object' && stand.fase) || 0;
+  const { snelheid = 1.3, fps = 10, beenLengte = 27 } = o;
+  const h = rustDorpeling();
+  const rij = (r) => HH.langsRij(r, fase);
+  switch (naam) {
+    case 'staan': {
+      const adem = rij([0, 1, 1, 0, 0]);
+      h.romp.omhoog = 0.55 * adem;
+      h.nek.knik = -0.9 * adem;
+      break;
+    }
+    case 'lopen': {
+      const v = snelheid * HH.PER_TEGEL;
+      const T = 8 / fps; // acht beelden per cyclus
+      const steun = 0.55;
+      const L = HH.loopVoet(fase, { v, T, steun });
+      const R = HH.loopVoet(fase, { v, T, steun, verzet: 0.5 });
+      const naarHoek = (voet) => (Math.asin(klem(voet.y / beenLengte, -1, 1)) * 180) / Math.PI;
+      h.been = [{ hoek: naarHoek(L) }, { hoek: naarHoek(R) }];
+      h.arm = [{ hoek: -0.6 * h.been[0].hoek }, { hoek: -0.6 * h.been[1].hoek }];
+      h.zak = 0.4 + 0.4 * HH.cosinus(2 * fase);
+      h.zij = 0.5 * HH.sinus(fase);
+      h.romp.buig = 1.5 + 0.8 * HH.cosinus(2 * fase);
+      h.romp.draai = 3 * HH.sinus(fase);
+      h.nek.knik = -1.3 - h.romp.buig * 0.3;
+      h.nek.draai = -0.5 * h.romp.draai;
+      h.rokZwaai = 4.5 * HH.sinus(fase);
+      break;
+    }
+    default:
+      throw new Error(`Een dorpeling kent de houding "${naam}" niet.`);
+  }
+  return h;
+}
+
+// Zet de generieke houding hierboven om in HH-bewegingen, met de eigen gewrichtspunten van een
+// figuur: o = { heup, nek, heupen: [links, rechts], schouders: [links, rechts] }. Zonder houding
+// (hg null, dus geen stand meegegeven aan de bouwfunctie) komt overal `null` uit, en blijft
+// bot() overal een no-op.
+function bottenDorpeling(hg, o) {
+  if (!hg) return { Bbeen: [null, null], Barm: [null, null] };
+  const draaiM = (buig, om) => HH.maalM(HH.draaiing([0, 0, 1], om), HH.draaiing([1, 0, 0], -buig));
+  const Blijf = HH.beweging({ dp: [hg.zij, hg.voor, -hg.zak] });
+  const Bromp = HH.naElkaar(Blijf, HH.beweging({ M: draaiM(hg.romp.buig, hg.romp.draai), om: o.heup, dp: [0, 0, hg.romp.omhoog] }));
+  const Bnek = HH.naElkaar(Bromp, HH.beweging({ M: draaiM(hg.nek.knik, hg.nek.draai), om: o.nek }));
+  const Bbeen = [0, 1].map((i) => HH.beweging({ as: [1, 0, 0], graden: hg.been[i].hoek, om: o.heupen[i] }));
+  const Barm = [0, 1].map((i) => HH.beweging({ as: [1, 0, 0], graden: hg.arm[i].hoek, om: o.schouders[i] }));
+  // de rok zelf: rokZwaai (van houdingDorpeling) is een ruimere zwaai dan de romp, want stof
+  // zwiert verder uit dan het lijf zelf beweegt (alleen van belang voor een figuur met een rok,
+  // zie dorpelingen3.cjs — "een rok zwaait mee in plaats van benen te tonen")
+  const Brok = HH.beweging({ dp: [hg.rokZwaai, hg.voor * 0.5, 0] });
+  return { Blijf, Bromp, Bnek, Bbeen, Barm, Brok };
+}
+
+const SMID_SNELHEID = 1.5;
+const SMID_FPS = 10;
+
 // ---------------------------------------------------------------- de smid
 
 // De smid: breed en sterk, kaal met een zwarte baard, een leren schort vol roet, de mouwen
 // opgestroopt. De voorhamer rust op zijn schouder, de andere vuist in zijn zij.
-function smid() {
+// stand: { houding, fase } laat hem lopen of ademen (zie houdingDorpeling hierboven); zonder
+// stand staat hij stil — precies het oude, stilstaande model, geen pixel anders.
+function smid(stand = null) {
   const M = { huid: 0, hemd: 1, schort: 2, broek: 3, laars: 4, baard: 5, oog: 6, ijzer: 7, hout: 8, riem: 9, krans: 10 };
   const D = { benen: 1, romp: 2, schort: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, baard: 9, hamer: 10 };
   const H = [0, 3.4, 74.5];
@@ -201,12 +310,31 @@ function smid() {
   mat[M.krans] = { ramp: 'vacht', lo: 1.4, hi: 5.2, patroon: (x, y, z) => (Math.sin(z * 2.1 + x * 0.8) > 0.5 ? 0.6 : 0) };
 
   const delen = [];
-  // --- benen, heupen en laarzen
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: SMID_SNELHEID, fps: SMID_FPS, beenLengte: 28 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.4, 31],
+    nek: [0, 2, 65],
+    heupen: [[-5.2, 0.2, 31], [5.2, 0.2, 31]],
+    schouders: [[-14.2, 0.4, 60], [14.2, 0.4, 60]],
+  });
+
+  // --- benen, heupen en laarzen (elk been draait als één stijf bot om de heup, zie de uitleg
+  // bovenaan dit bestand); het bekken zelf blijft bij de romp. Been en bekken houden hetzelfde
+  // deel (D.benen, zoals vóór deze wijziging) — bot() bepaalt de beweging, deel alleen de
+  // binnenlijnen, en zonder stand blijft dat dus precies het oude, stilstaande vel.
   delen.push(ellips([0, 0.4, 31], [10.6, 7, 5], M.broek, D.benen, 2));
+  bot(Bn.Bromp);
   for (const s of [-1, 1]) {
+    const i = s < 0 ? 0 : 1;
     delen.push(kegel([s * 5.2, 0.2, 31], [s * 5.3, 0.8, 9], 5, 4.2, M.broek, D.benen, 1));
     delen.push(ellips([s * 5.3, 2.6, 2.9], [3.8, 6.2, 3.2], M.laars, D.benen, 1.2));
     delen.push(kegel([s * 5.3, 0.6, 3], [s * 5.3, 0.6, 12.5], 4.4, 4.2, M.laars, D.benen, 1));
+    bot(Bn.Bbeen[i]);
   }
 
   // --- romp: een brede borst en een buikje, de schouders er als een juk op
@@ -242,6 +370,7 @@ function smid() {
     const hoek = [s * 5.6, vorm.cy(63) + vorm.ry(63) * Math.sqrt(1 - (5.6 / vorm.rx(63)) ** 2) + 1, 63];
     delen.push(capsule(hoek, [s * 5, -1.5, 69], 0.8, M.riem, D.schort));
   }
+  bot(Bn.Bromp);
 
   // --- armen: de rechter houdt de hamer op de schouder, de linker vuist staat in de zij
   const arm = (Sch, El, Hand, dArm, dHand) => {
@@ -264,7 +393,9 @@ function smid() {
   delen.push(kegel(A, B, 1.4, 1.5, M.hout, D.hamer));
   delen.push(blokGedraaid(plus(B, maal(u, 1.2)), [v, w, u], [2.9, 6.4, 3], 0.9, M.ijzer, D.hamer));
   arm([14.2, 0.4, 60], [18.2, 4, 49], langs(A, B, 0.2), D.armR, D.handR);
+  bot(Bn.Barm[1]);
   arm([-14.2, 0.4, 60], [-21, -2.2, 50], [-13.4, 1.8, 41.5], D.armL, D.handL);
+  bot(Bn.Barm[0]);
 
   // --- hoofd: kaal en glimmend, een krans haar achter, borstelige wenkbrauwen, volle baard
   const oy = schedel(delen, H, M, D, { maat: [7.2, 7, 7.8], oog: [2.8, 0.8] });
@@ -278,8 +409,9 @@ function smid() {
   }
   delen.push(ellips(plus(H, [0, 3.2, -7.4]), [6.8, 6.2, 6.2], M.baard, D.baard, 1.5));
   delen.push(kegel(plus(H, [0, 4.2, -9]), plus(H, [0, 6.6, -15.5]), 6.2, 3.8, M.baard, D.baard, 2));
+  bot(Bn.Bnek);
 
-  return model(delen, mat, { midden: [0, 2, 42], straal: 50 });
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 42], straal: 50 });
 }
 
 // ---------------------------------------------------------------- de herbergierster
@@ -677,4 +809,7 @@ const DORPELINGEN = [
   },
 ];
 
-module.exports = { smid, herbergierster, boer, dorpsoudste, DORPELINGEN, profiel, grensbol, romp, schil, klokrok, blokGedraaid, schedel, glimlach };
+module.exports = {
+  smid, herbergierster, boer, dorpsoudste, DORPELINGEN, profiel, grensbol, romp, schil, klokrok, blokGedraaid, schedel, glimlach,
+  rustDorpeling, houdingDorpeling, bottenDorpeling, SMID_SNELHEID, SMID_FPS,
+};

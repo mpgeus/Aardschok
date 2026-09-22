@@ -9,7 +9,12 @@
 const { sdf, bouwSdf, klem, mix, rnd, ruis3 } = require('./kern.cjs');
 const { model, kegel, capsule, bol, ellips, bochtKegel, plus, naarRamp } = require('./figuren.cjs');
 const { ring, schijf, eenheid, langs } = require('./figuren2.cjs');
-const { profiel, grensbol, romp, schil, klokrok, blokGedraaid, schedel, glimlach } = require('./dorpelingen.cjs');
+const { profiel, grensbol, romp, schil, klokrok, blokGedraaid, schedel, glimlach, houdingDorpeling, bottenDorpeling } = require('./dorpelingen.cjs');
+const HH = require('./houding.cjs');
+
+// Loopsnelheid van een gewone dorpeling: dezelfde 1,2 tegels/s als maakDorpeling in js/kaart.js
+// hem in het spel geeft (anders lijkt hij te glijden — zie de uitleg in dorpelingen.cjs).
+const DORPELING_SNELHEID = 1.2;
 
 // ---------------------------------------------------------------- hulpjes
 
@@ -1122,7 +1127,9 @@ const stofMat = (naam, extra) => ({ ramp: naam, lo: STOF[naam] ? STOF[naam][0] :
 // de hand. Hetzelfde zaad geeft altijd dezelfde dorpeling, zodat het dorp bij elk spel hetzelfde
 // volk heeft. Met opties dwing je een keuze af: dorpeling(3, { geslacht: 'vrouw', draagt: 'emmer' }).
 // Het model krijgt hoofd, portret en kenmerken mee, net als de vaklieden in BEROEPEN.
-function dorpeling(zaad = 1, opties = {}) {
+// stand: { houding, fase } laat hem lopen of ademen (zie houdingDorpeling in dorpelingen.cjs);
+// zonder stand staat hij stil — precies het oude, stilstaande model, geen pixel anders.
+function dorpeling(zaad = 1, opties = {}, stand = null) {
   const r = (k) => rnd(zaad * 7919 + 13, k * 131 + 7);
   const uit = (k, lijst) => lijst[Math.min(lijst.length - 1, Math.floor(r(k) * lijst.length))];
   const K = {
@@ -1160,7 +1167,7 @@ function dorpeling(zaad = 1, opties = {}) {
   const oog = [kopR * 0.385, 0.8];
 
   const M = { huid: 0, boven: 1, onder: 2, hemd: 3, schoen: 4, haar: 5, oog: 6, hoed: 7, schort: 8, riem: 9, mond: 10, ding1: 11, ding2: 12, ding3: 13, band: 14 };
-  const D = { benen: 1, romp: 2, rok: 3, schort: 4, armL: 5, armR: 6, handL: 7, handR: 8, hoofd: 9, haar: 10, hoed: 11, ding: 12, riem: 13 };
+  const D = { benen: 1, romp: 3, rok: 4, schort: 5, armL: 6, armR: 7, handL: 8, handR: 9, hoofd: 10, haar: 11, hoed: 12, ding: 13, riem: 14 };
   const mat = [];
   const huid = HUID[K.huid];
   mat[M.huid] = {
@@ -1196,9 +1203,27 @@ function dorpeling(zaad = 1, opties = {}) {
   mat[M.band] = { ramp: 'ijzer', lo: 1, hi: 4.6, glans: 1 };
 
   const delen = [];
-  // --- benen en schoenen; bij een vrouw verdwijnen ze onder de rok
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
   const beenX = 4.4 * breed;
+  const hg = houdingDorpeling(stand, { snelheid: DORPELING_SNELHEID, fps: 10, beenLengte: zHeup - 3 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.6, zHeup],
+    nek: [0, 0, zSch + 3],
+    heupen: [[-beenX, 0, zHeup], [beenX, 0, zHeup]],
+    schouders: [[-schX, 0.6, zSch], [schX, 0.6, zSch]],
+  });
+
+  // --- benen en schoenen; bij een vrouw verdwijnen ze onder de rok (zie hieronder). Ze blijven
+  // dan ook in hun rusthouding staan: stil, zoals de rok ze altijd al verstopte. Draaide het been
+  // mee, dan zwaait de schoen op het uiterste van de pas voorbij de zoom naar buiten — precies
+  // het been tonen dat de rok juist moest verbergen (zie de uitleg bovenaan dorpelingen.cjs).
+  const beenBeweegt = K.geslacht !== 'vrouw';
   for (const s of [-1, 1]) {
+    const i = s < 0 ? 0 : 1;
     been(delen, s, {
       x: beenX,
       heup: zHeup,
@@ -1208,6 +1233,7 @@ function dorpeling(zaad = 1, opties = {}) {
       dBenen: D.benen,
       voet: [3.3 * breed, 5.7, 2.9],
     });
+    bot(beenBeweegt ? Bn.Bbeen[i] : null);
   }
 
   // --- romp
@@ -1238,6 +1264,7 @@ function dorpeling(zaad = 1, opties = {}) {
   if (K.geslacht === 'vrouw') {
     // rok tot op de grond, lijfje erboven
     delen.push(klokrok(rokTop, [13.2 * breed, 9.4 * breed], [11.6 * breed, 7.4 * breed], () => 0.8, M.onder, D.rok, 1));
+    bot(Bn.Brok);
     delen.push(romp(lijf, zT0, zT1, rompMat, D.romp, 2));
   } else {
     delen.push(romp(lijf, K.dracht === 'kiel' ? zT0 - 3.5 : zT0, zT1, rompMat, D.romp, 2));
@@ -1256,6 +1283,7 @@ function dorpeling(zaad = 1, opties = {}) {
       delen.push(band(lijf, [0, 0, z1s], [0, 0, 1], 0.9, { los: 0.4, d: 0.6, z0: z1s - 2, z1: z1s + 2 }, M.schort, D.schort));
     }
   }
+  bot(Bn.Bromp);
 
   // --- wat hij of zij draagt bepaalt de armen
   const mouw = K.dracht === 'vest' ? M.hemd : K.geslacht === 'vrouw' ? M.hemd : M.boven;
@@ -1296,8 +1324,10 @@ function dorpeling(zaad = 1, opties = {}) {
       });
     }
     arm(delen, [schX, 0.6, zSch], E, Hd, armR);
+    bot(Bn.Barm[1]);
     const [EL, HL] = houding(-1);
     arm(delen, [-schX, 0.6, zSch], EL, HL, armL);
+    bot(Bn.Barm[0]);
   } else if (K.draagt === 'takkenbos' || K.draagt === 'zak') {
     const Hd = K.draagt === 'zak' ? [schX + 0.3, 8, zSch - 2.4] : [schX + 0.6, 10.2, zSch - 7.5];
     if (K.draagt === 'takkenbos') {
@@ -1330,13 +1360,17 @@ function dorpeling(zaad = 1, opties = {}) {
       delen.push(ring(plus(z0, [0, 0.3, -0.6]), eenheid([0.05, 0.4, -1]), 1.9, 0.6, M.riem, D.ding));
     }
     arm(delen, [schX, 0.6, zSch], [schX + 4.8, 3.4, zSch - 11], Hd, armR);
+    bot(Bn.Barm[1]);
     const [EL, HL] = houding(-1);
     arm(delen, [-schX, 0.6, zSch], EL, HL, armL);
+    bot(Bn.Barm[0]);
   } else {
     const [ER, HR] = (r(24) < 0.3 ? inZij : hangend)(1);
     const [EL, HL] = (r(27) < 0.3 ? inZij : hangend)(-1);
     arm(delen, [schX, 0.6, zSch], ER, HR, armR);
+    bot(Bn.Barm[1]);
     arm(delen, [-schX, 0.6, zSch], EL, HL, armL);
+    bot(Bn.Barm[0]);
   }
 
   // --- hoofd
@@ -1476,7 +1510,9 @@ function dorpeling(zaad = 1, opties = {}) {
     delen.push(kegel(plus(H, [0, -6.2, 3.2]), plus(H, [0.4, -10.6, -4.6]), 3, 1, M.hoed, D.hoed, 1.2));
   }
 
-  const m = model(delen, mat, { midden: [0, 0, 42 * lang], straal: 52 });
+  bot(Bn.Bnek);
+
+  const m = model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 0, 42 * lang], straal: 52 });
   m.hoofd = H;
   m.portret = { kant: 'ZO', midden: 0.5 };
   m.kenmerken = K;
@@ -1540,6 +1576,7 @@ const BEROEPEN = [
 module.exports = {
   BEROEPEN,
   dorpeling,
+  DORPELING_SNELHEID,
   bakker,
   molenaar,
   kruidenvrouw,

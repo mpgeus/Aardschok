@@ -548,6 +548,120 @@
        ]
       }
      }
+    },
+    "smid": {
+     "naam": "smid",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "smid-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "smid-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6
+      }
+     }
+    },
+    "dorpeling0": {
+     "naam": "dorpeling0",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.2,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "dorpeling0-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "dorpeling0-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.2,
+       "stap": 0.48
+      }
+     }
+    },
+    "dorpeling1": {
+     "naam": "dorpeling1",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.2,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "dorpeling1-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "dorpeling1-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.2,
+       "stap": 0.48
+      }
+     }
     }
    },
    "muren": {
