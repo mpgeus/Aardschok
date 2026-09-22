@@ -173,9 +173,9 @@ Het spel begint bij de toren van de oude meester, die nog leeft: hij doet zijn m
 je toveren, en speelt daarbij met zijn eigen leeftijd. Boven in de toren zit iets dat hij lang
 geleden opsloot en door ouderdom vergat; de aardschok maakte het wakker. Hij sterft aan zijn eigen
 laatste spreuk, bij zijn moestuin, en jij erft de toren — die op de meeste verdiepingen
-onbegaanbaar is en per verdieping hersteld moet worden. De toon: weemoedig met een knipoog, nooit
-grappig ten koste van de ernst van de klim. Meer, en wat nog open is (Wims rol, en wat er precies
-boven zit), staat in `ontwerp/verhaal.md`.
+onbegaanbaar is en per verdieping hersteld moet worden. Wim, zijn knecht, erf je erbij. De toon:
+weemoedig met een knipoog, nooit grappig ten koste van de ernst van de klim. Meer, en wat nog open
+is (wat er precies boven zit), staat in `ontwerp/verhaal.md`.
 
 ## Afspraken die het idee dragen
 

@@ -10,7 +10,8 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## Loopt nu
 
-Niets. Volgende sessie: overleggen of ronde 3 van de huizenbouwer begint.
+- Ronde 3 van de huizenbouwer (een agent), zie hieronder.
+- De tutorial is speelbaar (22 sep) en wacht op Marcels keuring; zie punt 1.
 
 ## Tegelijk: de huizenbouwer op ronde vormen
 
@@ -42,10 +43,14 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 ## Daarna, in deze volgorde
 
 1. **De tutorial.** Klaar als het spel op het erf begint; de meester in zijn moestuin werkt en je
-   laat lopen, slaan, sluipen en een deur dichtgooien; een kraai van zijn kool schiet (97 wordt
-   98), uit de fontein schept (weer 96) en een ton kapotmept met de staf (kost niets); er iets van
-   boven de trap komt; hij sterft aan zijn laatste spreuk bij zijn moestuin; Wim om hem rouwt; en
-   de oude openingsteksten ("na veertig jaar") zijn herschreven. Zie `verhaal.md`.
+   laat lopen, slaan, sluipen en een deur dichtgooien; een vuurschicht op een oude ton schiet (97
+   wordt 98), uit de fontein drinkt (weer 96) en de ton kapotmept met de staf (kost niets); er iets
+   van boven de trap komt; hij sterft aan zijn laatste spreuk bij zijn moestuin; Wim om hem rouwt;
+   en de oude openingsteksten ("na veertig jaar") zijn herschreven. Zie `verhaal.md`.
+   **Stand (22 sep):** speelbaar van begin tot eind. Nog te doen: Marcel keurt de keuzes
+   (`verhaal.md`, Open), de teksten poetsen (`T.TUTORIAL_TEKST` in `js/gesprekken.js`), en twee
+   kleine dingen: je kunt midden in de tutorial weglopen (mag dat, of roept de meester je
+   terug?), en de fontein heeft nog geen droge kunst (hij rimpelt niet meer, maar toont nog water).
 2. **Dorpelingen die er echt zijn.** Klaar als de negentien dorpelingen en de gewone
    `dorpeling(zaad)` loopanimaties hebben (en dus niet meer als Wim getekend worden), en er
    portretten zijn voor de gesprekken.
@@ -81,7 +86,8 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 13. **De leerling.** Klaar als de quest met de jongen er is en hij met je meegaat, met zijn drie
     remmen. Zie `verhaal.md`.
 14. **Opslaan, titelscherm, instellingen, geluid.** Klaar als het spel een avond te spelen is en
-    niets op de lijst "wat het browserig laat voelen" nog geldt. Zie `verpakken.md`.
+    niets op de lijst "wat het browserig laat voelen" nog geldt, en wie opnieuw begint de
+    tutorial kan overslaan. Zie `verpakken.md`.
 15. **Verpakken.** Klaar als er een programma is dat vanuit Steam start. Zie `verpakken.md`.
 
 ## Klein, tussendoor als het past

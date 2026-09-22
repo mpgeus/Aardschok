@@ -173,9 +173,10 @@ van dit spel in één beeld. De moestuin staat er al, op het erf.
 
 **Het lost ook de tutorial op.** Iemand die stilstaat en uitlegt is een tutorial; een oude man die
 doorwerkt terwijl hij praat is een scène. Hij legt niets uit, hij vraagt je dingen: hou dit eens
-vast, jaag die kraai weg, doe die deur dicht want het tocht. Ondertussen zie je alles wat je moet
-weten. Ook zijn demonstratie hoort daar: hij schiet die kraai van zijn kool (97 wordt 98, en hij
-lacht erom), schept uit de fontein en staat weer op 96.
+vast, haal eens water, doe die deur dicht want het tocht. Ondertussen zie je alles wat je moet
+weten. Ook zijn demonstratie hoort daar: hij schiet een vuurschicht op de oude ton waar de kraaien
+op zitten (97 wordt 98, en hij lacht erom), drinkt de laatste slok uit de fontein en staat weer op
+96.
 
 **Hij sterft bij zijn moestuin,** met aarde aan zijn handen — niet in een kamer met een boek. Dat
 is het beeld dat blijft hangen.
@@ -195,9 +196,24 @@ het is een kwestie van hem `dwaalt`, `thuis` en een straal geven.
 
 ## Open
 
-- **De teksten in het spel gaan nog van het oude begin uit.** `js/main.js` opent met "Je bent
-  terug in de hal van je toren, na veertig jaar", en Wim zegt in `js/dialoog.js` dat hij veertig
-  jaar op zijn meester wachtte. Dat klopt niet meer met een spel dat bij de levende meester
-  begint. Nu besloten is dat de meester het opsloot en vergat, kan dit herschreven worden zodra
-  Wims rol vastligt.
+- **Keuzes uit de eerste speelbare tutorial (22 sep 2026), voor Marcel om te keuren.** De agent
+  die hem bouwde, moest hier en daar kiezen. Tot Marcel iets anders zegt, blijft het zo:
+  - *De fontein is na de tutorial leeg.* De meester stuurt je om water en drinkt de laatste slok.
+    Dat past bij "is er aan het eind niet meer" hierboven, maar dan heeft de speler zelf niet meer
+    "één keer twee jaar jonger" uit `CLAUDE.md`. Bevestigen, of de speler houdt één slok over.
+  - *Een ton in plaats van een kraai.* Er is nog geen kraai om te tekenen, en de ton rijmt op de
+    tweede, die jij kapotslaat. In de tekst zitten de kraaien er nog op.
+  - *Wat de trap af komt, is een tweede skelet van dezelfde soort,* niet het skelet dat in het
+    trappenhuis staat te wachten.
+  - *Een ton breekt met de staf, ook buiten een gevecht, en dat kost niets.* Een nieuwe regel,
+    in de lijn van "slaan kost geen jaren".
+  - *De deurles is een echt gevecht:* de slijmkruiper achter de deur van de voorraadkamer ziet je,
+    en je gooit de deur dicht.
+  - *Monsters op het erf staan stil zolang de tutorial loopt,* en gaan pas dwalen als je meer dan
+    twaalf tegels bij de meester vandaan bent.
+  - *Escape slaat een hoofdstuk over, niet de hele tutorial.* Wie opnieuw begint, moet er weer
+    doorheen; een knop "Tutorial overslaan" hoort bij het titelscherm (werklijst, punt 14).
+- **Waarom is de held "Roestig"?** De eerste trede van meesterschap heette zo omdat hij veertig
+  jaar niet had getoverd (`js/spreuken.js`). In het nieuwe begin woont hij bij zijn meester; dan
+  vraagt dat een andere reden, of een andere naam.
 - **Wat zit er boven?** Nog niet bedacht.
