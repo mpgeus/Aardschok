@@ -312,10 +312,53 @@
     });
   }
 
+  // Aan welke quest en welke fase hangt dit voorwerp? Twee keuzelijsten in plaats van een
+  // tekstregel, want "bakker:zoeken" met de hand typen is precies waar een typefout in sluipt die
+  // je pas merkt als het ding nooit verschijnt. Staat er al een waarde met meer fasen
+  // ("bakker:zoeken,terug"), dan blijft die als eigen keuze staan zodat hij niet wegvalt.
+  function questVeld(doel, waarde, zet) {
+    const g = waarde ? T.questGrendel(String(waarde)) : null;
+    const questId = g ? g.quest : '';
+    const fasen = questId && T.QUESTS[questId] ? Object.keys(T.QUESTS[questId].fasen || {}) : [];
+    const huidigeFase = g && g.fase ? g.fase.join(',') : '';
+    keuzeVeld(doel, 'quest', [['', '— geen —'], ...Object.keys(T.QUESTS || {}).map((id) => [id, T.QUESTS[id].naam || id])], questId, (v) => {
+      if (!v) return zet('');
+      const eerste = Object.keys(T.QUESTS[v].fasen || {})[0];
+      zet(eerste ? `${v}:${eerste}` : v);
+    });
+    if (!questId) return;
+    const opties = [['', '— elke fase —'], ...fasen.map((f) => [f, f])];
+    if (huidigeFase && !fasen.includes(huidigeFase)) opties.push([huidigeFase, huidigeFase]);
+    keuzeVeld(doel, 'fase', opties, huidigeFase, (v) => {
+      zet(v ? `${questId}:${v}` : questId);
+      // Meteen ook de kaart in die fase zetten, anders leg je iets neer wat je niet ziet liggen.
+      if (v) {
+        el('wt-quest').value = questId;
+        zetFaseKeuze();
+        el('wt-fase').value = v;
+        pasQuestFaseToe();
+      }
+    });
+  }
+
   const velNamen = () => Object.keys(T.TEGELS || {});
+  // De namen op een vel, zonder de lege cellen en zonder de tegels die geen naam hebben (die
+  // zijn er: een vel is een raster en niet elke cel is gevuld).
   const tegelNamen = (vel) => {
     const v = T.TEGELS && T.TEGELS[vel];
-    return v ? [...new Set(v.tiles.filter(Boolean).map((t) => t.naam))].sort() : [];
+    if (!v) return [];
+    return [...new Set(v.tiles.filter((t) => t && t.naam).map((t) => t.naam))].sort();
+  };
+
+  // Dezelfde namen, maar met "· vast" erachter waar dat zo is. Dat is precies wat je wilt weten
+  // vóór je kiest: een vast ding blokkeert het lopen, en aan een quest kan het niet hangen (dan
+  // zou er een muur komen en gaan waar net iemand liep).
+  const tegelOpties = (vel) => {
+    const v = T.TEGELS && T.TEGELS[vel];
+    return tegelNamen(vel).map((naam) => {
+      const t = v.tiles.find((t) => t && t.naam === naam);
+      return [naam, t && t.vast ? `${naam} · vast` : naam];
+    });
   };
 
   function bouwNeerzetten() {
@@ -365,9 +408,12 @@
         penseel.tegel = tegelNamen(v)[0] || '';
         bouwNeerzetten();
       });
-      keuzeVeld(doel, 'tegel', tegelNamen(penseel.vel), penseel.tegel, (v) => (penseel.tegel = v));
-      tekstVeld(doel, 'raak', penseel.raak, (v) => (penseel.raak = v));
-      tekstVeld(doel, 'quest', penseel.quest, (v) => (penseel.quest = v));
+      keuzeVeld(doel, 'tegel', tegelOpties(penseel.vel), penseel.tegel, (v) => (penseel.tegel = v));
+      keuzeVeld(doel, 'raak', [['', '— geen —'], ...Object.keys(T.RAAKPUNTEN || {})], penseel.raak, (v) => (penseel.raak = v));
+      questVeld(doel, penseel.quest, (v) => {
+        penseel.quest = v;
+        bouwNeerzetten();
+      });
     }
   }
 
@@ -464,24 +510,59 @@
   // gereedschap/gesprekken-tool.js wordt hier gewoon geladen en vindt in wereld.html dezelfde
   // gt-*-elementen als in gesprekken.html. Eén bewerker, twee bladzijden.
   let gesprekGestart = false;
+  let questGestart = false;
+  let wieOpen = null; // van wie het paneel nu openstaat
 
-  async function toonGesprek(soort, naam) {
+  function kiesTab(welke) {
+    for (const knop of document.querySelectorAll('.wt-tabs button')) {
+      knop.classList.toggle('wt-aan', knop.dataset.tab === welke);
+    }
+    for (const blad of document.querySelectorAll('.wt-tabblad')) {
+      blad.classList.toggle('verborgen', blad.dataset.tab !== welke);
+    }
+    if (welke === 'quest') toonQuestVan(wieOpen);
+  }
+
+  async function toonGesprek(soort, naam, tab) {
     const paneel = el('wt-gesprek');
     paneel.classList.remove('verborgen');
-    el('wt-gesprek-wie').textContent = naam ? `Gesprek · ${naam}` : 'Gesprek';
+    wieOpen = soort ? { soort, naam } : wieOpen;
+    el('wt-gesprek-wie').textContent = naam || 'Gesprek';
     if (!gesprekGestart) {
       gesprekGestart = true;
       await T.gesprekkenTool.start();
     }
     if (soort) {
       if (!T.gesprekkenTool.heeft(soort)) {
-        if (!confirm(`"${soort}" heeft nog geen gesprek. Een nieuw gesprek voor hem beginnen?`)) return;
-        T.gesprekkenTool.begin(soort, naam || soort);
-        herbouw(); // de controle zegt nu iets anders over wie er wel en niet praat
+        if (confirm(`"${soort}" heeft nog geen gesprek. Een nieuw gesprek voor hem beginnen?`)) {
+          T.gesprekkenTool.begin(soort, naam || soort);
+          herbouw(); // de controle zegt nu iets anders over wie er wel en niet praat
+        }
       } else {
         T.gesprekkenTool.kies(soort);
       }
     }
+    kiesTab(tab || 'gesprek');
+  }
+
+  // Het questblad: de quest die deze persoon geeft. Geeft hij er geen, dan bied aan er een te
+  // beginnen — met hem als gever, want daarop zoekt de keuring hem straks terug.
+  async function toonQuestVan(wie) {
+    if (!questGestart) {
+      questGestart = true;
+      await T.questsTool.start();
+    }
+    if (!wie) return;
+    const bestaand = T.questsTool.voorGever(wie.soort);
+    if (bestaand) {
+      T.questsTool.kies(bestaand);
+      return;
+    }
+    const vormen = T.questsTool.vormen();
+    const vorm = prompt(`"${wie.soort}" geeft nog geen quest. Een nieuwe beginnen? Welke vorm?\n${vormen.join(' / ')}`, vormen[0]);
+    if (!vorm || !vormen.includes(vorm)) return;
+    T.questsTool.beginVoor(wie.soort, `Quest van ${wie.naam || wie.soort}`, vorm);
+    herbouw();
   }
 
   function sluitGesprek() {
@@ -866,12 +947,12 @@
         d.tegel = `${v}/${tegelNamen(v)[0] || ''}`;
         veranderd();
       });
-      keuzeVeld(doel, 'tegel', tegelNamen(vel), String(d.tegel).split('/').pop(), (v) => {
+      keuzeVeld(doel, 'tegel', tegelOpties(vel), String(d.tegel).split('/').pop(), (v) => {
         d.tegel = `${vel}/${v}`;
         veranderd();
       });
-      tekstVeld(doel, 'raak', d.raak, zet('raak'));
-      tekstVeld(doel, 'quest', d.quest, zet('quest'));
+      keuzeVeld(doel, 'raak', [['', '— geen —'], ...Object.keys(T.RAAKPUNTEN || {})], d.raak || '', zet('raak'));
+      questVeld(doel, d.quest, zet('quest'));
     }
     tekstVeld(doel, 'x', d.x, (v) => { d.x = Math.round(v); veranderd(); }, 'number');
     tekstVeld(doel, 'y', d.y, (v) => { d.y = Math.round(v); veranderd(); }, 'number');
@@ -952,13 +1033,20 @@
       const praat = T.GESPREKKEN && T.GESPREKKEN[e.soort];
       if (praat) rij(doel, 'gesprek', 'ja', 'wt-ja');
       else if (e.kant === 'neutraal') rij(doel, 'gesprek', 'nog geen', 'wt-nee');
+      const quest = T.questsTool && T.questsTool.voorGever(e.soort);
+      if (quest) rij(doel, 'quest', T.QUESTS[quest].naam || quest, 'wt-ja');
       if (e.kant !== 'monster') {
-        const knop = document.createElement('button');
-        knop.type = 'button';
-        knop.className = 'gt-mini';
-        knop.textContent = praat ? 'Gesprek bewerken' : 'Een gesprek beginnen';
-        knop.addEventListener('click', () => toonGesprek(e.soort, e.naam));
-        doel.appendChild(knop);
+        const knoppen = document.createElement('div');
+        knoppen.className = 'wt-knoprij';
+        for (const [tekst, tab] of [[praat ? 'Gesprek' : 'Gesprek beginnen', 'gesprek'], [quest ? 'Quest' : 'Quest beginnen', 'quest']]) {
+          const knop = document.createElement('button');
+          knop.type = 'button';
+          knop.className = 'gt-mini';
+          knop.textContent = tekst;
+          knop.addEventListener('click', () => toonGesprek(e.soort, e.naam, tab));
+          knoppen.appendChild(knop);
+        }
+        doel.appendChild(knoppen);
       }
     }
 
@@ -1217,6 +1305,9 @@
     });
     el('wt-opslaan').addEventListener('click', slaOp);
     el('wt-gesprek-dicht').addEventListener('click', sluitGesprek);
+    for (const knop of document.querySelectorAll('.wt-tabs button')) {
+      knop.addEventListener('click', () => kiesTab(knop.dataset.tab));
+    }
     window.addEventListener('beforeunload', (e) => {
       if ([...open.values()].some((b) => b.vuil)) e.preventDefault();
     });

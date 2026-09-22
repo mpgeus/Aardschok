@@ -28,13 +28,15 @@ deuren, geheime doorgangen, aansluitingen en questvoorwerpen zet je hier neer, e
 verhuisd: `wereld.tmj`, `proef.tmj` en `proefbos.tmj` houden alleen nog tekening. Na Opslaan
 bundelt het blad zelf, dus het spel ziet het meteen.
 
-**Een poppetje aanklikken geeft zijn gesprek** (ronde 3, de helft): dubbelklik hem, of gebruik de
-knop in het tegelpaneel, en er schuift een breed paneel over de kaart met de hele bewerker uit
-`gesprekken.html` erin. Niet nagemaakt maar hergebruikt: er is één bewerker. Aanwijzen gaat op
-zijn lijf, niet op zijn voeten, net als in het spel.
+**Een poppetje aanklikken geeft zijn gesprek én zijn quest** (ronde 3, af): dubbelklik hem, of
+gebruik de knoppen in het tegelpaneel, en er schuift een breed paneel over de kaart met twee
+tabbladen — de hele bewerkers uit `gesprekken.html` en `quests.html`, niet nagemaakt maar
+hergebruikt. Geeft hij nog geen gesprek of quest, dan biedt het paneel aan er een te beginnen.
+Aanwijzen gaat op zijn lijf, niet op zijn voeten, net als in het spel. Een questvoorwerp hang je
+aan een fase met twee keuzelijsten, en de kaart springt mee naar die fase.
 
-Wat er nog niet is: de quest van wie je aanklikt in datzelfde scherm, en een questvoorwerp
-neerleggen vanuit de fase waar het bij hoort. Dat is nu het eerste punt hieronder.
+**Het gereedschap is daarmee af voor wat het moest doen.** Wat nu volgt is het gebruiken: De koude
+oven neerzetten, en daarna de negentien dorpelingen.
 
 **Tempo:** gewoon door. Marcel maakt het niet uit of de week vandaag of vrijdag op is (22 sep).
 Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halverwege stilvalt.
@@ -53,12 +55,10 @@ Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halver
 **Klaar om te starten, in deze volgorde.** Bekijk eerst de meter (`get_usage`) als je een agent
 start; de onderste drie zijn renderwerk en dus zwaar.
 
-1. **Het wereldgereedschap, de rest van ronde 3: de quest erbij** (punt 4). Het gesprek van wie je
-   aanklikt staat er (22 sep); de quest nog niet. Klaar als je vanuit een poppetje zijn quest kunt
-   openen en bewerken zoals `gereedschap/quests.html` dat kan — dezelfde bewerker hergebruikt,
-   zoals met de gesprekken — en als je een questvoorwerp kunt neerleggen vanuit de fase waar het
-   bij hoort. Geen agent nodig.
-   **Daarna, als De koude oven staat:** de negentien dorpelingen neerzetten met de nieuwe editor.
+1. **De koude oven neerzetten met het nieuwe gereedschap** (zie "Wacht op Marcel" hierboven).
+   Dat is het eerste echte gebruik: de bakker, de marskramer en de smidsvrouw in het dorp, de
+   leemkuil met de leem erin, en de oven met zijn raakpunt. De controle rechts telt af terwijl je
+   het doet. **Daarna:** de negentien dorpelingen.
 2. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder). Renderwerk.
 3. Fase B2b: de zeven vaklieden en meer gewone dorpelingen. Daar horen nu ook de bakker en de
    marskramer bij: die lenen het vel van Wim tot dit af is. Renderwerk.
@@ -66,8 +66,8 @@ start; de onderste drie zijn renderwerk en dus zwaar.
    ook nog geen. Renderwerk.
 
 **Het laatst af (22 sep):**
-- het wereldgereedschap, rondes 1, 2 en 4 plus het gesprek uit ronde 3
-  (`gereedschap/wereld.html`), en de verhuizing van de betekenis uit Tiled;
+- het wereldgereedschap, alle vier de rondes (`gereedschap/wereld.html`), en de verhuizing van de
+  betekenis uit Tiled;
 - het questsysteem, De koude oven, en de verhaaleditor die quests kan;
 - de tutorial, met Marcels keuzes erin;
 - huizenbouwer ronde 3 en 4a: uitbouwen, tuinstukken en hekjes in Tiled;
@@ -165,9 +165,9 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    Een aansluiting leg je in één handeling over twee kaarten. Een geheime doorgang bestaat nu ook
    in het spel zelf (`staat: "geheim"` met een `als`; `T.werkGeheimenBij` in `js/quest.js`). De
    controle staat los in `gereedschap/keuring.js` met `test/keuring.test.cjs` eromheen.
-   Van ronde 3 staat het gesprek er: dubbelklik een poppetje en de bewerker uit
-   `gesprekken-tool.js` schuift in een paneel over de kaart — dezelfde bewerker, niet een tweede.
-   Wat rest is de quest van wie je aanklikt, en een questvoorwerp neerleggen vanuit zijn fase.
+   Ronde 3 staat er ook: dubbelklik een poppetje en zijn gesprek én zijn quest staan in een
+   paneel over de kaart, met de bewerkers uit `gesprekken-tool.js` en `quests-tool.js` zelf —
+   dezelfde bewerkers, niet een tweede stel. Alle vier de rondes zijn daarmee af.
 
    **Let op bij het opslaan van een gesprek:** `js/gesprekken.js` heeft 21 opmerkingen die de
    bewerker niet bij een persoon of knoop kan plaatsen, en die gaan bij het opslaan verloren. Hij

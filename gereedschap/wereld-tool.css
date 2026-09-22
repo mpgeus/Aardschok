@@ -130,3 +130,11 @@ html, body { overflow: hidden; height: 100%; }
 .wt-gesprek-lijf { flex: 1; overflow: auto; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
 .wt-gesprek-lijf .paneel { padding: 10px 12px; }
 .wt-gesprek-lijf #gt-boom-inhoud { max-height: 26vh; overflow: auto; }
+
+/* Twee tabbladen in hetzelfde paneel: het gesprek van wie je aanklikt, en zijn quest. */
+.wt-tabs { display: flex; gap: 4px; }
+.wt-tabs button.wt-aan { border-color: var(--goud); background: rgba(226, 182, 74, 0.2); color: var(--goud); }
+.wt-tabblad { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.wt-tabblad.verborgen { display: none !important; }
+.wt-onderkop { border-bottom: 1px solid var(--rand); }
+.wt-knoprij { display: flex; gap: 4px; margin-top: 6px; }

@@ -570,7 +570,7 @@
     const mijn = wereldHaakjes().filter((h) => (h.grendel && h.grendel.quest === questId)
       || (h.raak && T.RAAKPUNTEN[h.raak] && T.RAAKPUNTEN[h.raak].als && T.RAAKPUNTEN[h.raak].als.quest === questId));
     if (!mijn.length) {
-      wrap.appendChild(el('p', 'gt-gedempt', 'Nog niets. Zet in Tiled op een object quest="' + questId + ':<fase>" of raak="<naam>".'));
+      wrap.appendChild(el('p', 'gt-gedempt', 'Nog niets. Leg het neer in gereedschap/wereld.html: zet "Bewerken" aan, kies Voorwerp, en kies daar deze quest en de fase waarin het ding er moet liggen — of het raakpunt waarop een spreuk werkt.'));
       return;
     }
     const ul = el('ul', 'gt-proef-keuzes');
@@ -816,5 +816,51 @@
     $('qt-opslaan').addEventListener('click', opslaan);
     window.addEventListener('beforeunload', (e) => { if (vuil) { e.preventDefault(); e.returnValue = ''; } });
   }
-  init();
+
+  // Net als de gespreksbewerker is deze ook van gereedschap/wereld.html: klik daar een poppetje en
+  // zijn quest staat in hetzelfde scherm. Er is geen tweede bewerker — dit is hem, en die
+  // bladzijde levert alleen dezelfde qt-*-elementen aan. Vandaar dat dit bestand zichzelf niet
+  // meer start: de bladzijde die hem gebruikt, zegt wanneer.
+  let gestart = false;
+  T.questsTool = {
+    async start() {
+      if (gestart) {
+        herbouwAlles();
+        vuil = false;
+        updateStatus();
+        return;
+      }
+      gestart = true;
+      await init();
+    },
+    kies(id) {
+      if (!T.QUESTS[id]) return false;
+      questId = id;
+      keuze = { soort: 'quest' };
+      proef.fase = T.QUESTS[id].begin;
+      herbouwAlles();
+      vuil = false;
+      updateStatus();
+      return true;
+    },
+    // Welke quest komt van deze persoon? Daarop springt wereld.html als je hem aanklikt.
+    voorGever(wie) {
+      return Object.keys(T.QUESTS).find((id) => T.QUESTS[id].gever === wie) || null;
+    },
+    // Een quest beginnen voor iemand die er nog geen geeft, in een van de vormen uit VORMEN.
+    beginVoor(wie, naam, vorm) {
+      const maak = VORMEN[vorm] || VORMEN[Object.keys(VORMEN)[0]];
+      const id = vrijeId(wie, (n) => !T.QUESTS[n]);
+      T.QUESTS[id] = maak();
+      T.QUESTS[id].gever = wie;
+      if (naam) T.QUESTS[id].naam = naam;
+      questId = id;
+      keuze = { soort: 'quest' };
+      proef.fase = T.QUESTS[id].begin;
+      herbouwAlles();
+      return id;
+    },
+    vormen: () => Object.keys(VORMEN),
+    isVuil: () => vuil,
+  };
 })();
