@@ -248,6 +248,9 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
 
 - `gereedschap/gesprekken.html` voor de gesprekken en `gereedschap/quests.html` voor de quests
   (fasen, wegen, het dorp per fase, en de controle die de toets van drie antwoorden nakijkt).
+  **Een gesprek schrijf je daar als een script, niet als een formulier** (22 sep): het hele
+  gesprek op één bladzijde, de zin als tekst, de voorwaarde klein erachter in gewone taal en pas
+  een formulier als je hem aanraakt, en "naar voorraad ↗" als link. Zie `ontwerp/verhaal.md`.
   Allebei starten ze zichzelf niet meer: de bladzijde die ze gebruikt roept
   `T.gesprekkenTool.start()` of `T.questsTool.start()` aan, met `.kies(...)` en `.begin(...)` /
   `.beginVoor(...)` erbij. Zo zet `wereld.html` dezelfde bewerkers in een paneel, zonder een

@@ -33,16 +33,26 @@
   per fase zegt, welke antwoorden welke weg nemen, en waar de dingen in Tiled liggen. Alleen de
   gesprékstekst schrijf je nog op de andere bladzijde. Als dat in de praktijk schuurt, is het
   samenvoegen alsnog te doen — maar dan weten we waarom.
-- **Het gesprekkengereedschap is zo niet te gebruiken** (Marcel, 22 sep 2026: "totaal onlogisch,
-  dat moet echt beter"). Dat gaat vóór er iets bij komt. Wat er te zien is als je het openslaat:
-  honderdzeven invoervelden in één kolom voor één persoon; een boom links die knoopnamen,
-  antwoorden en "komt hierboven al voor" door elkaar zet en vijftien regels diep nest; de velden
-  van de persoon en die van een knoop in hetzelfde paneel zonder scheiding; en velden die over de
-  opslag gaan in plaats van over het gesprek ("Opmerking — blijft alleen bewaard boven deze knoop
-  in het bestand", "Portret (bestandsnaam)"). De zin die hij zegt is even zwaar opgemaakt als de
-  voorwaarde ernaast. Het is een formulier over de gegevensstructuur, en geen plek om een gesprek
-  te schrijven. Het proefgesprek rechts is het enige deel dat wél doet wat het moet — en dat staat
-  in de smalste kolom.
+- **Een gesprek schrijf je als een script, niet als een formulier** (Marcel, 22 sep 2026: "totaal
+  onlogisch, dat moet echt beter"). Wat er stond: honderdzeven invoervelden in één kolom voor één
+  persoon; een boom links die knoopnamen, antwoorden en "komt hierboven al voor" door elkaar zette
+  en vijftien regels diep nestte; de velden van de persoon en die van een knoop in hetzelfde
+  paneel zonder scheiding; velden die over de opslag gingen in plaats van over het gesprek
+  ("Opmerking — blijft alleen bewaard boven deze knoop in het bestand"); en de zin die iemand zegt
+  even zwaar opgemaakt als de voorwaarde ernaast. Marcel wees twee dingen aan als het ergste: je
+  ziet niet hoe het gesprek loopt, en het is een formulier in plaats van tekst.
+
+  **Wat ervoor in de plaats kwam:** het hele gesprek op één bladzijde, van de start naar beneden,
+  waarin een knoop eruitziet als een scène — wat hij zegt, en wat jij kunt antwoorden. De zin is
+  tekst (geen rand tot je erin klikt, en hij groeit mee); de voorwaarde staat er klein achter in
+  gewone taal ("zolang niet meesterDood", "als je sleutel hebt") en klapt pas open als je hem
+  aanraakt. Waar een antwoord heen gaat, is een link: zo loop je door het gesprek zoals een speler
+  dat doet. Links geen uitgerolde boom meer maar een lijst knopen met hun eerste zin eronder en
+  wie ernaar verwijst. Het proefgesprek en de controle bleven, want die deden het wél.
+
+  De regel eronder: **wat je alleen nodig hebt als je ergens mee bezig bent, is er pas als je
+  erbij bent.** De knoppen om een regel te verplaatsen, de keuzelijst om een antwoord te verzetten,
+  het formulier achter een voorwaarde — ze houden hun plek, maar ze staan er niet.
 
 - **De tutorial legt uit in plaats van te spelen** (Marcel, 22 sep 2026: "veel te cringe"). Wat
   eraan gedaan is en waarom, staat hieronder bij "De opening".
