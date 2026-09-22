@@ -91,6 +91,10 @@ oven neerzetten, en daarna de negentien dorpelingen.
 Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halverwege stilvalt.
 
 **Wacht op Marcel:**
+- **De openingsscène uit de verhalenmachine** (22 sep): staat bij Open in `verhaal.md`, met wat
+  eruit te halen valt (de misrekening: hij sterft omdat hij een getal verkeerd onthield) en wat
+  erin botst (een held van 18, andere torens leegroven, en meteen vertellen wat er boven zit).
+  Marcel denkt erover; niet aan beginnen tot hij het zegt.
 - **De zes regels voor als de speler vastzit** invullen in `T.TUTORIAL_TEKST`
   (`js/gesprekken.js`): `vastGezien`, `vastMeester`, `vastKom`, `vastZak`, `vastBrengen`,
   `vastSlaan`. Elk is één zin van de meester, na 45 seconden stilstand. En, als je toch bezig
