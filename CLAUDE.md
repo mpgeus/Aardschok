@@ -85,8 +85,10 @@ lang hij leeft. Daaruit volgt, van meest naar minst effect:
   `git log`.
 - **Kijk naar de meter, ook naar de week.** Op 22 sep stond de week op 70%, met nog bijna vier
   dagen te gaan. Dat kwam na een dag met vijf agents van 300.000 tot 750.000 tokens elk. Het
-  gesprek zelf was toen 400.000 tokens groot, en dat gaat bij elke stap mee. Vraag het verbruik
-  op (`get_usage`) voordat je een zware agent start. Begin na een groot stuk werk een nieuwe
+  gesprek zelf was toen 400.000 tokens groot, en dat gaat bij elke stap mee. Hard of zacht gaan
+  maakt Marcel niet uit: de week is even groot, of hij nu vandaag of vrijdag op is. Het gaat erom
+  dat er niets verloren gaat. Vraag daarom het verbruik op (`get_usage`) voordat je een zware agent
+  start, zodat hij niet halverwege tegen de grens loopt. Begin na een groot stuk werk een nieuwe
   sessie; de werklijst draagt alles over.
 
 ## Opbouw

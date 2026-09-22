@@ -14,10 +14,10 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 **Loopt nu:** niets. Er draait geen agent, en alles is gepusht.
 
+**Tempo:** gewoon door. Marcel maakt het niet uit of de week vandaag of vrijdag op is (22 sep).
+Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halverwege stilvalt.
+
 **Wacht op Marcel:**
-- **Het tempo tot de week weer vol is (vrijdag 26 sep).** Op 22 sep stond de week op 70%.
-  - A: rustig aan, alleen kleine dingen.
-  - B: door op het huidige tempo.
 - Opmerkingen bij het draaiboek van de tutorial (gestuurd op 22 sep; de teksten staan in
   `T.TUTORIAL_TEKST` in `js/gesprekken.js`).
 - In Tiled: het vel `tuin` aan `wereld.tmj` toevoegen, en de vier varens rond (51–52, 45–46) van de
