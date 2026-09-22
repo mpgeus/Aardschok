@@ -35,7 +35,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 
 - Opslagplaats: https://github.com/mpgeus/Aardschok. Werk rechtstreeks op `main`.
 - Een commit per onderwerp, met een Nederlands bericht dat ook het waarom vertelt.
-- Pushen alleen als Marcel erom vraagt ("push it"); dat is voor hem een aparte stap.
+- Pushen alleen als Marcel erom vraagt ("push it"); dat is voor hem een aparte stap. En alleen als
+  `npm test` groen is: op 22 sep ging er een falende toets mee omdat de opdracht de uitslag wel
+  toonde maar de push niet tegenhield (`npm test && git push`).
 
 ## Draaien en testen
 
