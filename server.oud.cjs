@@ -247,5 +247,5 @@ http
     console.log(`  de gesprekken  ${hier}/gereedschap/gesprekken.html`);
     console.log(`  de quests      ${hier}/gereedschap/quests.html`);
     console.log('');
-    console.log(`  alles bij elkaar: ${hier}/gereedschap/index.html`);
+    console.log(`  alles bij elkaar: ${hier}/gereedschap/`);
   });
