@@ -12,9 +12,7 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 - De huizenbouwer wacht op Marcel: ronde 3 is af, ronde 4 begint als hij de plaat goed vindt.
 - De tutorial is speelbaar (22 sep), met Marcels keuzes erin; wat rest staat bij punt 1.
-- Punt 2, fase A (een agent): de smid en twee gewone dorpelingen leren lopen, met één manier die
-  daarna voor alle negentien werkt. Marcel beoordeelt de loop op een plaat vóór fase B de rest
-  doet (en de portretten in de gesprekken zet).
+- Punt 2 wacht op Marcel: fase A is af, en hij beoordeelt de loop vóór fase B de rest doet.
 
 ## Tegelijk: de huizenbouwer op ronde vormen
 
@@ -66,6 +64,13 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 2. **Dorpelingen die er echt zijn.** Klaar als de negentien dorpelingen en de gewone
    `dorpeling(zaad)` loopanimaties hebben (en dus niet meer als Wim getekend worden), en er
    portretten zijn voor de gesprekken.
+   **Fase A (af, 22 sep):** de smid en twee gewone dorpelingen lopen en ademen, ook in het spel
+   (`T.WEZENS.smid`, en een `zaad` kiest zijn vel). Plaat: `uit/dorpelingen/lopen-proef.png`.
+   Been en arm draaien star om heup en schouder, zonder knie of elleboog; een rok zwaait zelf mee.
+   **Fase B:** geef de andere zestien hun eigen heup-, nek- en schouderpunten voor
+   `bottenDorpeling` (de smid in `dorpelingen.cjs` is het voorbeeld), render meer gewone
+   varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`), en zet de portretten in de gesprekken.
+   Eerst Marcel: is de loop zonder knie goed genoeg, of moeten er knieën in zoals bij Wim?
 3. **Het questsysteem, met één quest helemaal af.** Klaar als quests gegevens zijn (zie
    `toren.md`), de stand van een quest een voorwaarde is in een gesprek, er goud bestaat, en één
    quest — bijvoorbeeld "De koude oven" — van begin tot eind speelt en de toets van drie antwoorden
