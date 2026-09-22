@@ -340,3 +340,196 @@ button:disabled { opacity: 0.4; cursor: default; }
 .gt-scriptregel:focus-within .gt-naar-kies { visibility: visible; }
 .gt-achter .gt-regelknoppen button { padding: 0 5px; font-size: 11px; line-height: 1.6; opacity: 0.55; }
 .gt-achter .gt-regelknoppen button:hover { opacity: 1; }
+
+/* ══ De gespreksschrijver: één situatie tegelijk ══
+   Wat hier tot 22 sep stond was een boom links, een formulier in het midden en een proefgesprek
+   rechts: drie weergaven van hetzelfde, en geen ervan was het gesprek (Marcel: "rommelig,
+   onduidelijk, ik weet niet wat ik hier mee moet"). Nu is er één kolom die leest als een gesprek,
+   met bovenin de situatie waar je doorheen kijkt. Zie het kop-commentaar van
+   gesprekken-tool.js. */
+
+/* De situatiebalk. Hij blijft staan als je scrollt, want alles eronder hangt ervan af. */
+.gt-situatiebalk {
+  position: sticky; top: 0; z-index: 6;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--rand);
+  background: rgba(226, 182, 74, 0.05);
+  backdrop-filter: blur(3px);
+}
+.gt-sit-label { font-size: 12px; color: var(--gedempt); margin-right: 2px; }
+.gt-sit-groep { font-size: 11.5px; color: var(--goud); opacity: 0.8; margin-left: 6px; }
+button.gt-sit { border-radius: 14px; padding: 3px 12px; font-size: 12.5px; }
+button.gt-sit-quest { border-style: dashed; }
+button.gt-sit-aan { border-color: var(--goud); background: rgba(226, 182, 74, 0.22); color: var(--goud); border-style: solid; }
+button.gt-sit-plus { opacity: 0.5; padding: 3px 9px; }
+button.gt-sit-plus:hover { opacity: 1; }
+.gt-sit-uitleg { font-size: 11.5px; color: var(--gedempt); font-style: italic; max-width: 46ch; text-align: right; }
+
+/* Eén kolom, op leesbreedte. Een gesprek is tekst, en tekst lees je niet over 1600 pixels. */
+.gt-blad { max-width: 940px; margin: 0 auto; padding: 18px 20px 80px; }
+.gt-blad > #gt-persoon-editor { margin-bottom: 6px; }
+
+/* Een blok: een stuk gesprek, met de vraag erboven waarmee je er komt. */
+.gt-blok { margin: 0 0 6px; }
+.gt-blok.gt-aangewezen { background: rgba(226, 182, 74, 0.07); border-radius: 8px; }
+.gt-blokkop {
+  display: flex; align-items: baseline; gap: 6px;
+  margin: 26px 0 4px; padding-top: 12px;
+  border-top: 1px solid var(--rand);
+}
+.gt-blokkop-pijl { color: var(--gedempt); }
+.gt-blokkop-zin { font-family: var(--kop); font-size: 14px; color: #cfe4f3; }
+
+/* Een knoop binnen een blok. Op het eerste niveau geen streep (dat is de bladzijde zelf); een
+   ingesprongen vervolg krijgt er wel een, want daar gaat het gesprek verder. */
+.gt-blok > .gt-knoop { border-left: none; padding-left: 0; margin-bottom: 10px; }
+.gt-tak { margin: 2px 0 12px 40px; }
+.gt-tak > .gt-knoop { border-left: 2px solid rgba(239, 230, 210, 0.11); padding: 0 0 0 16px; margin: 0; }
+
+/* Eén regel: wie het zegt, de zin, en alles eromheen klein erachter. */
+.gt-zinrij { display: flex; align-items: flex-start; gap: 10px; padding: 1px 0; }
+.gt-zinrij .gt-wie-merk {
+  flex: none; width: 46px; text-align: right;
+  font-size: 11px; color: var(--gedempt); padding-top: 8px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.gt-zinrij .gt-zin {
+  flex: 1; min-width: 0;
+  background: none; border: 1px solid transparent; border-radius: 5px;
+  padding: 4px 7px; margin: 0;
+  font-size: 15px; line-height: 1.5; resize: none; overflow: hidden;
+}
+.gt-zinrij .gt-zin:hover { border-color: rgba(255, 255, 255, 0.07); }
+.gt-zinrij .gt-zin:focus { border-color: var(--rand); background: rgba(255, 255, 255, 0.04); outline: none; }
+.gt-jij { margin-top: 5px; }
+.gt-jij .gt-zin { color: #cfe4f3; font-size: 13.5px; }
+.gt-jij .gt-zin::placeholder { color: rgba(207, 228, 243, 0.35); }
+.gt-geenzin { flex: 1; font-size: 13px; font-style: italic; padding: 5px 7px; }
+
+/* Wat je alleen nodig hebt als je bij een regel bent, staat er pas als je erbij bent. De plek
+   blijft (anders springt het gesprek onder je handen weg), maar het is er niet. */
+.gt-zinrij .gt-regelknoppen { flex-direction: row; gap: 2px; }
+.gt-zinrij .gt-regelknoppen button, .gt-zinrij .gt-naar-kies { visibility: hidden; }
+.gt-zinrij:hover .gt-regelknoppen button,
+.gt-zinrij:focus-within .gt-regelknoppen button,
+.gt-zinrij:hover .gt-naar-kies,
+.gt-zinrij:focus-within .gt-naar-kies { visibility: visible; }
+.gt-zinrij .gt-regelknoppen button { padding: 0 5px; font-size: 11px; line-height: 1.6; opacity: 0.55; }
+.gt-zinrij .gt-regelknoppen button:hover { opacity: 1; }
+.gt-zinrij .gt-achter { padding-top: 5px; }
+
+/* Een vouw: alles wat er wel is maar hier niet klinkt. Dicht is het één regel. */
+.gt-vouw { margin: 2px 0 2px 56px; }
+.gt-vouw-knop {
+  background: none; border: none; padding: 1px 6px; border-radius: 4px;
+  font-size: 11.5px; color: var(--gedempt); opacity: 0.6;
+}
+.gt-vouw-knop:hover { opacity: 1; background: rgba(255, 255, 255, 0.07); }
+.gt-vouw-inhoud { border-left: 2px solid rgba(239, 230, 210, 0.08); padding: 4px 0 4px 12px; margin: 3px 0 6px; }
+.gt-elders-regel { opacity: 0.72; }
+.gt-elders-regel:hover, .gt-elders-regel:focus-within { opacity: 1; }
+.gt-elders-regel .gt-zin { font-size: 13.5px; }
+.gt-waar { flex: none; font-size: 11px; color: var(--gedempt); padding-top: 8px; white-space: nowrap; }
+
+/* Onderaan: wat hij in een ándere situatie zegt. Klik erop en je gaat erheen. */
+.gt-kopje { font-family: var(--kop); font-size: 13px; color: var(--goud); margin: 28px 0 8px; }
+.gt-elders { display: flex; flex-direction: column; gap: 2px; }
+.gt-elders-knoop {
+  display: flex; align-items: baseline; gap: 10px; width: 100%; text-align: left;
+  background: none; border: 1px solid transparent; border-radius: 6px;
+  padding: 4px 7px; opacity: 0.6;
+}
+.gt-elders-knoop:hover { opacity: 1; background: rgba(255, 255, 255, 0.06); }
+.gt-elders-knoop .gt-wie-merk { flex: none; width: 46px; text-align: right; font-size: 11px; color: var(--gedempt); }
+.gt-elders-zin { flex: 1; font-size: 13px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gt-erbij-klein { font-size: 11.5px; margin-left: 56px; }
+
+/* De quest die aan dit gesprek hangt. Hij staat op dezelfde bladzijde omdat hij eraan vastzit:
+   zijn fasen zijn de knoppen in de situatiebalk hierboven. */
+.gt-quest-doos { margin-top: 30px; padding: 12px 16px; }
+.gt-quest-doos .gt-kopje { margin-top: 0; }
+.gt-fase { border-left: 2px solid var(--rand); padding: 2px 0 6px 12px; margin-bottom: 10px; }
+.gt-fase-nu { border-left-color: var(--goud); }
+.gt-fase-kop { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.gt-fase-regel { display: flex; align-items: flex-start; gap: 8px; }
+.gt-fase-wat { flex: none; width: 54px; font-size: 11px; color: var(--gedempt); padding-top: 7px; }
+.gt-fase-regel .gt-zin {
+  flex: 1; min-width: 0; background: none; border: 1px solid transparent; border-radius: 5px;
+  padding: 4px 6px; margin: 0; font-size: 13px; line-height: 1.45; resize: none; overflow: hidden;
+}
+.gt-fase-regel .gt-zin:hover { border-color: rgba(255, 255, 255, 0.07); }
+.gt-fase-regel .gt-zin:focus { border-color: var(--rand); background: rgba(255, 255, 255, 0.04); outline: none; }
+.gt-merkje { font-size: 10px; color: var(--goud); border: 1px solid rgba(226, 182, 74, 0.5); border-radius: 8px; padding: 0 6px; }
+.gt-weg { display: flex; align-items: baseline; gap: 8px; font-size: 11.5px; padding: 2px 0 2px 54px; flex-wrap: wrap; }
+.gt-weg-naam { color: var(--inkt); }
+.gt-weg-kost { color: var(--gedempt); border: 1px solid var(--rand); border-radius: 999px; padding: 0 6px; font-size: 10.5px; }
+.gt-weg-naar { color: var(--gedempt); }
+.gt-weg-als { color: var(--gedempt); font-style: italic; }
+.gt-weg-via { color: #6fa0e6; }
+.gt-quest-naar { margin-top: 8px; }
+
+/* De controle staat onderaan, niet in een kolom ernaast: het is een nalooplijst, geen gezelschap. */
+.gt-blad > .gt-controle { margin-top: 30px; padding: 12px 16px; max-height: 40vh; overflow: auto; }
+
+/* Proberen: een paneel dat over de rechterkant schuift en het gesprek speelt zoals het spel. */
+aside.gt-proef {
+  position: fixed; right: 14px; top: 100px; width: 330px; max-height: 70vh; overflow: auto;
+  z-index: 8; padding: 12px 14px;
+  background: rgba(14, 11, 9, 0.97);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.55);
+}
+aside.gt-proef.verborgen { display: none; }
+.gt-proef-kop { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.gt-proef-sit { font-size: 11.5px; color: var(--gedempt); margin-bottom: 8px; }
+.gt-proef-zegt { font-size: 14px; line-height: 1.5; margin-bottom: 8px; }
+button.gt-proef-keuze { display: block; width: 100%; text-align: left; margin-bottom: 4px; color: #cfe4f3; }
+.gt-proef-eind { color: var(--gedempt); font-style: italic; font-size: 12.5px; }
+
+/* De chips achter een regel horen op één regel rechts, niet in het midden te gaan zwerven. De
+   oude .gt-achter mocht over 46% van de breedte afbreken; in een gesprek geeft dat een rommelige
+   rechterkant, en juist die rust is het hele punt. */
+.gt-zinrij .gt-achter {
+  flex: none; display: flex; align-items: center; gap: 4px;
+  flex-wrap: nowrap; justify-content: flex-end; max-width: none;
+}
+.gt-zinrij .gt-naar-doel { flex-wrap: nowrap; white-space: nowrap; }
+.gt-zinrij .gt-sluit, .gt-zinrij .gt-sprong { white-space: nowrap; max-width: 26ch; overflow: hidden; text-overflow: ellipsis; }
+.gt-zinrij .gt-chipje { max-width: 24ch; }
+/* "+ versie van deze zin" hoort er pas te zijn als je bij die zin bent. */
+.gt-zegt .gt-erbij-klein { visibility: hidden; }
+.gt-zegt:hover .gt-erbij-klein, .gt-zegt:focus-within .gt-erbij-klein { visibility: visible; }
+
+/* De zin gaat vóór. Wat rechts staat mag inkrimpen, de zin heeft een bodem — anders drukken vijf
+   chips een antwoord tot één letter per regel, en dat is precies wat er de eerste keer gebeurde.
+   Het gereedschap dat pas bij het aanwijzen verschijnt, neemt geen ruimte meer in (display: none
+   in plaats van visibility: hidden): een onzichtbare keuzelijst van honderd pixels telde mee. */
+.gt-zinrij .gt-zin { flex: 1 1 auto; min-width: 190px; }
+.gt-zinrij .gt-achter { flex: 0 1 auto; min-width: 0; overflow: hidden; }
+.gt-zinrij .gt-regelknoppen button, .gt-zinrij .gt-naar-kies { display: none; visibility: visible; }
+.gt-zinrij:hover .gt-regelknoppen button,
+.gt-zinrij:focus-within .gt-regelknoppen button { display: inline-block; }
+.gt-zinrij:hover .gt-naar-kies,
+.gt-zinrij:focus-within .gt-naar-kies { display: inline-block; }
+/* Minder ver inspringen: vier niveaus diep moet nog leesbaar zijn op een halve bladzijde. */
+.gt-tak { margin: 2px 0 12px 26px; }
+.gt-tak > .gt-knoop { padding-left: 12px; }
+/* De naam en de voorwaarde van de situatie die je bewerkt, bij elkaar op het eind van de balk. */
+.gt-situatiebalk .gt-chip-doos { order: 1; }
+
+/* Niet wegknippen maar laten inkrimpen: met overflow:hidden op de rij verdween de linkerkant van
+   een chip ("…d en zola…"), en dat is net het deel dat zegt wat er staat. */
+.gt-zinrij .gt-achter { overflow: visible; }
+.gt-zinrij .gt-achter > * { min-width: 0; }
+.gt-zinrij .gt-chip-doos { flex: 0 1 auto; min-width: 0; }
+.gt-zinrij .gt-chipje { max-width: 22ch; min-width: 0; }
+.gt-zinrij .gt-naar-doel { flex: 0 0 auto; }
+/* Een lege chip ("altijd", "+ gevolg", "+ notitie") zegt niets en staat er bij elke regel. Hij
+   verschijnt als je bij de regel bent; wat er wél staat, staat er altijd. */
+.gt-zinrij .gt-chipje-leeg { display: none; }
+.gt-zinrij:hover .gt-chipje-leeg,
+.gt-zinrij:focus-within .gt-chipje-leeg { display: inline-block; }
+
+/* Wie het zegt: één regel, hoe lang de naam ook is ("de herbergierster"). */
+.gt-zinrij .gt-wie-merk, .gt-elders-knoop .gt-wie-merk { width: 62px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gt-controle .gt-vouw { margin-left: 0; margin-top: 8px; }

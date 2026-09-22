@@ -13,40 +13,38 @@
     <label>Persoon
       <select id="gt-persoon"></select>
     </label>
-    <button id="gt-nieuw-persoon" type="button">+ Nieuw persoon</button>
+    <button id="gt-nieuw-persoon" type="button">+ nieuw persoon</button>
     <div class="gt-vul"></div>
     <a class="gt-naar" href="quests.html">Quests &rarr;</a>
     <a class="gt-naar" href="wereld.html">Wereld &rarr;</a>
     <a class="gt-naar" href="index.html">Alle gereedschap</a>
+    <button id="gt-proberen" type="button">Proberen &#9656;</button>
     <span id="gt-status" class="gt-status"></span>
     <button id="gt-opslaan" type="button" class="gt-primair">Opslaan</button>
   </header>
 
   <div id="gt-opmerking-melding" class="gt-melding verborgen"></div>
 
-  <main class="gt-layout">
-    <section class="paneel gt-boom">
-      <h2>Knopen<div class="gt-vul"></div><button id="gt-nieuwe-knoop" type="button" class="gt-mini" title="Nieuwe knoop in deze persoon">+ knoop</button></h2>
-      <div id="gt-boom-inhoud"></div>
+  <!-- De situatiebalk: waar je doorheen kijkt. Alles eronder wordt getekend zoals het gesprek in
+       díe situatie loopt. Zie het kop-commentaar van gesprekken-tool.js. -->
+  <div id="gt-situaties" class="gt-situatiebalk"></div>
+
+  <main class="gt-blad">
+    <div id="gt-persoon-editor"></div>
+    <div id="gt-gesprek"></div>
+
+    <section class="paneel gt-quest-doos">
+      <div id="gt-quest"></div>
     </section>
 
-    <section class="paneel gt-editor">
-      <h2>Bewerken</h2>
-      <div id="gt-persoon-editor"></div>
-      <div id="gt-knoop-editor"><p class="gt-leeg">Kies een knoop in de boom hiernaast.</p></div>
-    </section>
-
-    <section class="paneel gt-proef">
-      <h2>Proefgesprek</h2>
-      <div id="gt-proef-staat"></div>
-      <div id="gt-proef-gesprek"></div>
-    </section>
-
-    <section class="paneel gt-fouten">
-      <h2>Controle</h2>
+    <section class="paneel gt-controle">
+      <h2>Controle<div class="gt-vul"></div><span id="gt-controle-tal" class="gt-status"></span></h2>
       <div id="gt-fouten-inhoud"></div>
     </section>
   </main>
+
+  <!-- Het gesprek spelen zoals het spel dat doet, vanaf de situatie die bovenin staat. -->
+  <aside id="gt-proef" class="paneel gt-proef verborgen"></aside>
 
   <!-- Verborgen meetrek met dezelfde id's als in het spel (zie stijl.css: #dialoog, #dialoog-tekst,
        #dialoog-keuzes). Zo meet het gereedschap met de echte styling hoe breed tekst in het spel
@@ -57,16 +55,17 @@
   </div>
 
   <!-- Dezelfde spelbestanden als het spel, gewoon geladen: leeftijd.js voor T.jaren, gesprekken.js
-       voor de gegevens (T.GESPREKKEN) en gesprek.js voor de regels. Dit gereedschap voegt alleen
-       het scherm toe (gesprekken-tool.js); het proefgesprek roept T.gesprekKnoop enzovoort
-       rechtstreeks aan, er is geen eigen kopie van de regels. -->
+       en quests.js voor de gegevens, gesprek.js en quest.js voor de regels. Dit gereedschap voegt
+       alleen het scherm toe; het beoordeelt een voorwaarde nooit zelf. -->
   <script src="../js/leeftijd.js"></script>
   <script src="../js/gesprekken.js"></script>
   <script src="../js/gesprek.js"></script>
+  <script src="../js/quests.js"></script>
+  <script src="../js/quest.js"></script>
   <script src="bronblok.js"></script>
   <script src="gesprekken-tool.js"></script>
-  <!-- De bewerker start zichzelf niet meer: gereedschap/wereld.html gebruikt hem ook, en daar
-       hangt hij in een paneel dat pas opengaat als je een poppetje aanklikt. -->
+  <!-- De schrijver start zichzelf niet: gereedschap/wereld.html gebruikt hem ook, en daar hangt
+       hij in een paneel dat pas opengaat als je een poppetje aanklikt. -->
   <script>Toren.gesprekkenTool.start();</script>
 </body>
 </html>

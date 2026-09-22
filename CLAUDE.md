@@ -248,9 +248,17 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
 
 - `gereedschap/gesprekken.html` voor de gesprekken en `gereedschap/quests.html` voor de quests
   (fasen, wegen, het dorp per fase, en de controle die de toets van drie antwoorden nakijkt).
-  **Een gesprek schrijf je daar als een script, niet als een formulier** (22 sep): het hele
-  gesprek op één bladzijde, de zin als tekst, de voorwaarde klein erachter in gewone taal en pas
-  een formulier als je hem aanraakt, en "naar voorraad ↗" als link. Zie `ontwerp/verhaal.md`.
+  **In de gespreksschrijver kijk je door één situatie tegelijk** (22 sep): bovenin staan de
+  situaties, je klikt er een, en het gesprek wordt getekend zoals het dán loopt — één zin per
+  knoop, alleen de antwoorden die je dan kunt geven, ingesprongen zoals een gesprek loopt. Wat in
+  die situatie niet klinkt, zakt naar onderen met de situatie erachter waarin het wél klinkt. Dat
+  is er gekomen omdat het scherm de gegevens liet zien en niet het gesprek: Wims vijf versies van
+  één zin stonden alle vijf onder elkaar, alsof hij ze achter elkaar zei.
+  Een situatie staat bij de persoon (`situaties` in `js/gesprekken.js`), is geschreven in dezelfde
+  woorden als een voorwaarde, en het spel leest hem nooit. **De fasen van een quest zíjn
+  situaties** en staan er vanzelf bij bij wie hem geeft; de quest staat daarom op dezelfde
+  bladzijde, met erbij welk antwoord welke weg neemt. `test/situaties.test.cjs` bewaakt dat elke
+  zin met een voorwaarde ergens wint. Zie `ontwerp/verhaal.md`.
   Allebei starten ze zichzelf niet meer: de bladzijde die ze gebruikt roept
   `T.gesprekkenTool.start()` of `T.questsTool.start()` aan, met `.kies(...)` en `.begin(...)` /
   `.beginVoor(...)` erbij. Zo zet `wereld.html` dezelfde bewerkers in een paneel, zonder een

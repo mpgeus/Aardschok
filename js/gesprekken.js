@@ -8,8 +8,22 @@
 //     naam: 'Wim',          // boven het gesprek
 //     portret: 'wim',       // bestandsnaam van het portret; weg laten als die er nog niet is
 //     start: 'welkom',      // met welke knoop het gesprek begint
+//     situaties: [...],     // alleen voor de schrijver; het spel leest ze nooit (zie hieronder)
 //     knopen: { <knoop-id>: { tekst: [...], keuzes: [...] }, ... },
 //   }
+//
+// 'situaties' is van gereedschap/gesprekken.html en van niemand anders. Een gesprek dat over vijf
+// momenten in het verhaal gaat, staat hier als één hoop regels met voorwaarden ernaast, en dat is
+// niet te lezen — dus kijkt de schrijver door één situatie tegelijk en tekent hij het gesprek
+// zoals het dán loopt. Een situatie is een toestand, opgeschreven in dezelfde woorden als een
+// voorwaarde, zodat er maar één woordenlijst is:
+//
+//   situaties: [{ naam: 'Na zijn dood', als: { vlag: 'meesterDood' } }]
+//
+// Wat hier ontkent (nietVlag, nietHeeft, nietQuest) hoeft niets te doen: de toestand begint leeg.
+// 'vlag' en 'heeft' mogen hier wél een lijstje zijn — een toestand kan twee vlaggen hebben, een
+// voorwaarde vraagt er één. De fasen van een quest staan er vanzelf bij bij wie hem geeft, en
+// staan daarom niet in deze lijst.
 //
 // Een knoop heeft:
 //   tekst  — een lijstje regels. De eerste regel waarvan de voorwaarde (als) klopt, wint. Een
@@ -50,6 +64,14 @@
       naam: 'Wim',
       portret: 'wim',
       start: 'welkom',
+      situaties: [
+        { naam: 'Na zijn dood', als: { vlag: 'meesterDood' } },
+        { naam: 'De beurs gehad', als: { vlag: ['meesterDood', 'beursVanDeMeester'] } },
+        { naam: 'Sleutel in de hand', als: { vlag: 'meesterDood', heeft: 'sleutel' } },
+        { naam: 'Onderweg naar boven', als: { vlag: ['meesterDood', 'sleutelGebruikt'] } },
+        { naam: 'Een jaar weggeweest', als: { vlag: 'meesterDood', ouderGewordenSinds: 12 } },
+        { naam: 'De fontein is leeg', als: { vlag: ['meesterDood', 'fonteinLeeg'] } },
+      ],
       knopen: {
         welkom: {
           tekst: [
@@ -70,20 +92,26 @@
             { zeg: 'Wat staat er bij de trap?', naar: 'monsters', als: { vlag: 'meesterDood', heeft: 'sleutel' } },
             { zeg: 'Ik ga, Wim.', sluit: true, als: { vlag: 'meesterDood', heeft: 'sleutel' } },
             { zeg: 'Heeft hij nog iets nagelaten?', naar: 'beurs', als: { vlag: 'meesterDood', nietVlag: 'beursVanDeMeester' } },
-            { zeg: 'Wat is er vannacht gebeurd?', naar: 'aardschok', als: { vlag: 'meesterDood', nietHeeft: 'sleutel', nietVlag: 'sleutelGebruikt' } },
-            { zeg: 'Waar is de sleutel van het trappenhuis?', naar: 'sleutel', als: { vlag: 'meesterDood', nietHeeft: 'sleutel', nietVlag: 'sleutelGebruikt' } },
-            { zeg: 'Werkt de fontein nog?', naar: 'fontein', als: { vlag: 'meesterDood', nietHeeft: 'sleutel', nietVlag: 'sleutelGebruikt' } },
-            { zeg: 'En de meester?', naar: 'deMeester', als: { vlag: 'meesterDood', nietHeeft: 'sleutel', nietVlag: 'sleutelGebruikt' } },
-            { zeg: 'Ik ga naar boven, Wim.', sluit: true, als: { vlag: 'meesterDood', nietHeeft: 'sleutel', nietVlag: 'sleutelGebruikt' } },
+            { zeg: 'Wat is er vannacht gebeurd?', naar: 'aardschok', als: { vlag: 'meesterDood', nietVlag: 'sleutelGebruikt', nietHeeft: 'sleutel' } },
+            { zeg: 'Waar is de sleutel van het trappenhuis?', naar: 'sleutel', als: { vlag: 'meesterDood', nietVlag: 'sleutelGebruikt', nietHeeft: 'sleutel' } },
+            { zeg: 'Werkt de fontein nog?', naar: 'fontein', als: { vlag: 'meesterDood', nietVlag: 'sleutelGebruikt', nietHeeft: 'sleutel' } },
+            { zeg: 'En de meester?', naar: 'deMeester', als: { vlag: 'meesterDood', nietVlag: 'sleutelGebruikt', nietHeeft: 'sleutel' } },
+            { zeg: 'Ik ga naar boven, Wim.', sluit: true, als: { vlag: 'meesterDood', nietVlag: 'sleutelGebruikt', nietHeeft: 'sleutel' } },
           ],
         },
         // Zolang de meester leeft: de slijmkruiper die de tutorial je leert ontlopen.
         voorraad: {
-          tekst: [{ zeg: 'Iets wat er gisteren nog niet zat. Het kwam vannacht de trap af, na die schok, en nu zit het vlak achter de deur. Ik ga er niet meer in.' }],
-          keuzes: [{ zeg: 'Tot straks, Wim.', sluit: true }],
+          tekst: [
+            { zeg: 'Iets wat er gisteren nog niet zat. Het kwam vannacht de trap af, na die schok, en nu zit het vlak achter de deur. Ik ga er niet meer in.' },
+          ],
+          keuzes: [
+            { zeg: 'Tot straks, Wim.', sluit: true },
+          ],
         },
         meer: {
-          tekst: [{ zeg: 'Wat wilt u nog weten, meester?' }],
+          tekst: [
+            { zeg: 'Wat wilt u nog weten, meester?' },
+          ],
           keuzes: [
             { zeg: 'Wat is er vannacht gebeurd?', naar: 'aardschok' },
             { zeg: 'Waar is de sleutel van het trappenhuis?', naar: 'sleutel' },
@@ -94,59 +122,90 @@
         },
         // De meester sloot het op en vergat het (ontwerp/verhaal.md, "Wat er boven zit").
         aardschok: {
-          tekst: [{ zeg: 'Vannacht schudde het hele huis, en boven kraakte iets, heel lang. De meester zei dat het huis oud was, net als wij. Hij heeft daarboven ooit iets opgesloten, meester. Wat, dat wist hij zelf niet meer.' }],
+          tekst: [
+            { zeg: 'Vannacht schudde het hele huis, en boven kraakte iets, heel lang. De meester zei dat het huis oud was, net als wij. Hij heeft daarboven ooit iets opgesloten, meester. Wat, dat wist hij zelf niet meer.' },
+          ],
           keuzes: [
             { zeg: 'Wat kwam er de trap af?', naar: 'monsters' },
             { zeg: 'Nog iets anders.', naar: 'meer' },
           ],
         },
         monsters: {
-          tekst: [{ zeg: 'Die slijmkruiper, in de voorraadkamer. En bij de trap staat er nog zo een als dat van vanmiddag. Het staat daar maar, alsof het op iemand wacht. Ik heb de deur op slot gedaan.' }],
-          keuzes: [{ zeg: 'Nog iets anders.', naar: 'meer' }],
+          tekst: [
+            { zeg: 'Die slijmkruiper, in de voorraadkamer. En bij de trap staat er nog zo een als dat van vanmiddag. Het staat daar maar, alsof het op iemand wacht. Ik heb de deur op slot gedaan.' },
+          ],
+          keuzes: [
+            { zeg: 'Nog iets anders.', naar: 'meer' },
+          ],
         },
         sleutel: {
-          tekst: [{ zeg: 'In de voorraadkamer. Ik liet hem vallen toen ik wegrende. Ik ben ook niet meer de jongste, meester. Maar dat bent u al helemaal niet meer.' }],
-          keuzes: [{ zeg: 'Nog iets anders.', naar: 'meer' }],
+          tekst: [
+            { zeg: 'In de voorraadkamer. Ik liet hem vallen toen ik wegrende. Ik ben ook niet meer de jongste, meester. Maar dat bent u al helemaal niet meer.' },
+          ],
+          keuzes: [
+            { zeg: 'Nog iets anders.', naar: 'meer' },
+          ],
         },
         fontein: {
           tekst: [
             { als: { vlag: 'fonteinLeeg' }, zeg: 'Die staat droog, meester. De laatste slok heeft u zelf genomen.' },
             { zeg: 'Er zit nog één slok in. Eén. Hij maakt u een paar jaar jonger, maar daarna staat hij droog. Bewaar hem voor als het echt moet.' },
           ],
-          keuzes: [{ zeg: 'Nog iets anders.', naar: 'meer' }],
+          keuzes: [
+            { zeg: 'Nog iets anders.', naar: 'meer' },
+          ],
         },
         deMeester: {
-          tekst: [{ zeg: 'Ik begraaf hem bij zijn bonen. Daar wilde hij liggen, zei hij altijd. Al wist je bij hem nooit of hij een grapje maakte.' }],
-          keuzes: [{ zeg: 'Nog iets anders.', naar: 'meer' }],
+          tekst: [
+            { zeg: 'Ik begraaf hem bij zijn bonen. Daar wilde hij liggen, zei hij altijd. Al wist je bij hem nooit of hij een grapje maakte.' },
+          ],
+          keuzes: [
+            { zeg: 'Nog iets anders.', naar: 'meer' },
+          ],
         },
         // De beurs van de meester: je eerste goud, en expres te weinig (ontwerp/toren.md). Acht
         // munten tegen de vijftien die de marskramer vraagt -- zo ligt die weg open en kun je hem
         // net niet nemen, en dat is pijnlijker en beter dan een deur die dicht zit zonder reden.
         // Weigeren zet geen vlag: dan blijft het aanbod staan, precies zoals Wim zegt.
         beurs: {
-          tekst: [{ zeg: 'In de la bij zijn bed lag een beursje. Acht munten, meester. Hij zei altijd dat een tovenaar geen geld nodig heeft. Nou, daar had hij dan gelijk in, want meer was het niet.' }],
+          tekst: [
+            { zeg: 'In de la bij zijn bed lag een beursje. Acht munten, meester. Hij zei altijd dat een tovenaar geen geld nodig heeft. Nou, daar had hij dan gelijk in, want meer was het niet.' },
+          ],
           keuzes: [
-            { zeg: 'Geef maar hier, Wim.', naar: 'beursGekregen', doe: { goud: 8, zetVlag: 'beursVanDeMeester' } },
+            { zeg: 'Geef maar hier, Wim.', naar: 'beursGekregen', doe: { zetVlag: 'beursVanDeMeester', goud: 8 } },
             { zeg: 'Houd jij het maar.', naar: 'beursGeweigerd' },
           ],
         },
         beursGekregen: {
-          tekst: [{ zeg: 'Acht. Ik heb ze twee keer geteld, want ik geloofde het zelf niet.' }],
-          keuzes: [{ zeg: 'Dank je, Wim.', sluit: true }],
+          tekst: [
+            { zeg: 'Acht. Ik heb ze twee keer geteld, want ik geloofde het zelf niet.' },
+          ],
+          keuzes: [
+            { zeg: 'Dank je, Wim.', sluit: true },
+          ],
         },
         beursGeweigerd: {
-          tekst: [{ zeg: 'Dat doe ik niet, meester. Ik leg het terug in de la. Dan ligt het er als u van gedachten verandert.' }],
-          keuzes: [{ zeg: 'Goed, Wim.', sluit: true }],
+          tekst: [
+            { zeg: 'Dat doe ik niet, meester. Ik leg het terug in de la. Dan ligt het er als u van gedachten verandert.' },
+          ],
+          keuzes: [
+            { zeg: 'Goed, Wim.', sluit: true },
+          ],
         },
       },
     },
-
     // De oude meester, in de tutorial (js/tutorial.js): wat hij zegt als je hem aanspreekt
     // tussen de scènes door, namelijk waar hij je voor nodig heeft. De scènes zelf staan hieronder,
     // in T.TUTORIAL_TEKST.
     meester: {
       naam: 'de oude meester',
       start: 'nu',
+      situaties: [
+        { naam: 'Om de boodschap gevraagd', als: { vlag: 'boodschapGevraagd' } },
+        { naam: 'Water gehaald', als: { vlag: 'boodschapGevraagd', heeft: 'kom' } },
+        { naam: 'Zaaigoed gehaald', als: { vlag: 'boodschapGevraagd', heeft: 'zak' } },
+        { naam: 'Om de ton gevraagd', als: { vlag: 'tonGevraagd' } },
+      ],
       knopen: {
         nu: {
           tekst: [
@@ -156,18 +215,21 @@
             { als: { vlag: 'boodschapGevraagd' }, zeg: 'Een kom water uit de fontein, en een zak zaaigoed uit de voorraadkamer. Ik ben hier. Waar zou ik anders zijn.' },
             { zeg: 'Kom eens hier, jongen.' },
           ],
-          keuzes: [{ zeg: 'Ja, meester.', sluit: true }],
+          keuzes: [
+            { zeg: 'Ja, meester.', sluit: true },
+          ],
         },
       },
     },
-
     // ── Het dorp: De koude oven (js/quests.js) ──
-
     // De bakker geeft de quest. Sinds de aardschok is zijn schoorsteen gespleten en blijft de
     // rook binnen. Hij klaagt graag en deelt uit; dat is dezelfde man.
     bakker: {
       naam: 'de bakker',
       start: 'welkom',
+      situaties: [
+        { naam: 'Met magie gebakken', als: { vlag: 'ovenMetMagie', questAf: 'bakker' } },
+      ],
       knopen: {
         welkom: {
           tekst: [
@@ -180,12 +242,14 @@
           keuzes: [
             { zeg: 'Wat is er met uw oven?', naar: 'scheur', als: { nietQuest: 'bakker' } },
             { zeg: 'Waar zou ik zoiets vinden?', naar: 'waar', als: { quest: 'bakker', fase: 'zoeken' } },
-            { zeg: 'Hier. Voor de scheur.', naar: 'gedankt', doe: { quest: 'bakker', weg: 'afgeven' }, als: { quest: 'bakker', fase: 'terug' } },
+            { zeg: 'Hier. Voor de scheur.', naar: 'gedankt', als: { quest: 'bakker', fase: 'terug' }, doe: { quest: 'bakker', weg: 'afgeven' } },
             { zeg: 'Sterkte, bakker.', sluit: true },
           ],
         },
         scheur: {
-          tekst: [{ zeg: 'De schok heeft de schoorsteen gespleten, van boven tot onder. De rook blijft binnen en het vuur wil niet trekken. Er moet leem in die scheur, of iets wat op leem lijkt en tegen hitte kan.' }],
+          tekst: [
+            { zeg: 'De schok heeft de schoorsteen gespleten, van boven tot onder. De rook blijft binnen en het vuur wil niet trekken. Er moet leem in die scheur, of iets wat op leem lijkt en tegen hitte kan.' },
+          ],
           keuzes: [
             { zeg: 'Ik zoek wel iets voor u.', naar: 'waar', doe: { quest: 'bakker' } },
             { zeg: 'Dat is dan pech, bakker.', sluit: true },
@@ -194,21 +258,33 @@
         // De drie wegen, verteld zoals een bakker ze vertelt. De vierde noemt hij niet: dat je
         // er een vuurschicht in kunt gooien, moet de speler zelf bedenken.
         waar: {
-          tekst: [{ zeg: 'Bij de beek is een leemkuil. Alleen huist daar sinds die nacht iets, en ik ben bakker, geen held. De marskramer heeft vuurklei, maar die vraagt er een prijs voor waar ik hard voor moet kneden. En de vrouw van de smid heeft nog oude vuurstenen liggen, geloof ik.' }],
-          keuzes: [{ zeg: 'Ik kijk wat ik kan doen.', sluit: true }],
+          tekst: [
+            { zeg: 'Bij de beek is een leemkuil. Alleen huist daar sinds die nacht iets, en ik ben bakker, geen held. De marskramer heeft vuurklei, maar die vraagt er een prijs voor waar ik hard voor moet kneden. En de vrouw van de smid heeft nog oude vuurstenen liggen, geloof ik.' },
+          ],
+          keuzes: [
+            { zeg: 'Ik kijk wat ik kan doen.', sluit: true },
+          ],
         },
         gedankt: {
-          tekst: [{ zeg: 'Kijk. Kijk nou toch. — Neem brood mee. Nee, u neemt brood mee. Dat is geen vraag.' }],
-          keuzes: [{ zeg: 'Dank u, bakker.', sluit: true }],
+          tekst: [
+            { zeg: 'Kijk. Kijk nou toch. — Neem brood mee. Nee, u neemt brood mee. Dat is geen vraag.' },
+          ],
+          keuzes: [
+            { zeg: 'Dank u, bakker.', sluit: true },
+          ],
         },
       },
     },
-
     // De marskramer trekt van dorp tot dorp en koopt ook. De sleutel die hij vorige week kocht
     // (ontwerp/wereld.md) blijft hier een losse draad: die pakken we later op.
     marskramer: {
       naam: 'de marskramer',
       start: 'welkom',
+      situaties: [
+        { naam: 'De bakker zoekt leem', als: { quest: 'bakker', fase: 'zoeken' } },
+        { naam: '…en je hebt het geld', als: { quest: 'bakker', goud: 15, fase: 'zoeken' } },
+        { naam: 'De oven is weer warm', als: { vlag: 'ovenWarm' } },
+      ],
       knopen: {
         welkom: {
           tekst: [
@@ -228,28 +304,37 @@
             { zeg: 'Vuurklei. Een hele zak. Vijftien. — U kijkt alsof u er acht hebt. Zo kijken ze hier allemaal.' },
           ],
           keuzes: [
-            { zeg: 'Vijftien. Hier.', naar: 'gekocht', doe: { quest: 'bakker', weg: 'kramer' }, als: { quest: 'bakker', fase: 'zoeken', goud: 15 } },
+            { zeg: 'Vijftien. Hier.', naar: 'gekocht', als: { quest: 'bakker', goud: 15, fase: 'zoeken' }, doe: { quest: 'bakker', weg: 'kramer' } },
             { zeg: 'Ik kom terug.', naar: 'welkom' },
           ],
         },
         gekocht: {
-          tekst: [{ zeg: 'Voorzichtig, hij is zwaarder dan hij eruitziet. Net als de meeste dingen die vijftien kosten.' }],
-          keuzes: [{ zeg: 'Tot ziens.', sluit: true }],
+          tekst: [
+            { zeg: 'Voorzichtig, hij is zwaarder dan hij eruitziet. Net als de meeste dingen die vijftien kosten.' },
+          ],
+          keuzes: [
+            { zeg: 'Tot ziens.', sluit: true },
+          ],
         },
         waren: {
-          tekst: [{ zeg: 'Lint, zout, spijkers, een spiegel die niet helemaal recht is. En soms iets waarvan ik zelf niet goed weet wat het is. Vorige week kocht ik nog een sleutel van iemand die zei dat hij hem bij uw toren had gevonden.' }],
+          tekst: [
+            { zeg: 'Lint, zout, spijkers, een spiegel die niet helemaal recht is. En soms iets waarvan ik zelf niet goed weet wat het is. Vorige week kocht ik nog een sleutel van iemand die zei dat hij hem bij uw toren had gevonden.' },
+          ],
           keuzes: [
             { zeg: 'Bij mijn toren?', naar: 'sleutel' },
             { zeg: 'Een andere keer.', sluit: true },
           ],
         },
         sleutel: {
-          tekst: [{ zeg: 'Dat zei hij. Ik vraag nooit door, dat is slecht voor de handel. — Nee, ik heb hem niet meer. Verkocht, twee dorpen terug.' }],
-          keuzes: [{ zeg: 'Hm.', sluit: true }],
+          tekst: [
+            { zeg: 'Dat zei hij. Ik vraag nooit door, dat is slecht voor de handel. — Nee, ik heb hem niet meer. Verkocht, twee dorpen terug.' },
+          ],
+          keuzes: [
+            { zeg: 'Hm.', sluit: true },
+          ],
         },
       },
     },
-
     // De smidsvrouw doet de handel van de smidse en voert iedereen die stil blijft staan
     // (ontwerp/wereld.md). Zij geeft de vuurstenen meteen en vraagt er de eerste grondstof uit
     // de toren voor terug: een schuld die vandaag niets kost en straks precies datgene wat het
@@ -257,6 +342,10 @@
     smidsvrouw: {
       naam: 'de smidsvrouw',
       start: 'welkom',
+      situaties: [
+        { naam: 'De bakker zoekt leem', als: { quest: 'bakker', fase: 'zoeken' } },
+        { naam: 'Je staat bij haar in het krijt', als: { vlag: 'schuldSmidsvrouw' } },
+      ],
       knopen: {
         welkom: {
           tekst: [
@@ -270,19 +359,29 @@
           ],
         },
         vuurstenen: {
-          tekst: [{ zeg: 'Een hele kist vol, en mijn man gebruikt ze toch niet meer. Neemt u mee. — Maar dan wil ik er iets voor terug, en niet in goud. Het eerste wat u uit die toren haalt dat glimt zoals hier niets glimt, dat brengt u eerst bij mij. Kijken mag toch.' }],
+          tekst: [
+            { zeg: 'Een hele kist vol, en mijn man gebruikt ze toch niet meer. Neemt u mee. — Maar dan wil ik er iets voor terug, en niet in goud. Het eerste wat u uit die toren haalt dat glimt zoals hier niets glimt, dat brengt u eerst bij mij. Kijken mag toch.' },
+          ],
           keuzes: [
             { zeg: 'Afgesproken.', naar: 'afgesproken', doe: { quest: 'bakker', weg: 'smidsvrouw' } },
             { zeg: 'Dat beloof ik liever niet.', naar: 'geweigerd' },
           ],
         },
         afgesproken: {
-          tekst: [{ zeg: 'Dan is dat dat. — En nu eet u wél iets, want afspraken maak ik niet met mensen die omvallen.' }],
-          keuzes: [{ zeg: 'Dank u.', sluit: true }],
+          tekst: [
+            { zeg: 'Dan is dat dat. — En nu eet u wél iets, want afspraken maak ik niet met mensen die omvallen.' },
+          ],
+          keuzes: [
+            { zeg: 'Dank u.', sluit: true },
+          ],
         },
         geweigerd: {
-          tekst: [{ zeg: 'Verstandig. De meeste mensen beloven te snel. Ze liggen hier nog, als u zich bedenkt.' }],
-          keuzes: [{ zeg: 'Ik denk erover.', sluit: true }],
+          tekst: [
+            { zeg: 'Verstandig. De meeste mensen beloven te snel. Ze liggen hier nog, als u zich bedenkt.' },
+          ],
+          keuzes: [
+            { zeg: 'Ik denk erover.', sluit: true },
+          ],
         },
       },
     },

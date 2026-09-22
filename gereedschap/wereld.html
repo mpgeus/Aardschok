@@ -47,9 +47,9 @@
     </section>
 
     <!-- Het gesprek van wie je aanklikt, in hetzelfde scherm. Dit zijn precies de elementen die
-         gereedschap/gesprekken-tool.js zoekt (gt-persoon, gt-boom-inhoud, …): die bewerker is
-         hier niet nagemaakt maar hergebruikt, zodat er niet twee bewerkers voor hetzelfde
-         bestaan. Het paneel schuift over de kaart en gaat weer dicht met Esc. -->
+         gereedschap/gesprekken-tool.js zoekt (gt-persoon, gt-situaties, gt-gesprek, …): die
+         schrijver is hier niet nagemaakt maar hergebruikt, zodat er niet twee bewerkers voor
+         hetzelfde bestand bestaan. Het paneel schuift over de kaart en gaat dicht met Esc. -->
     <section class="wt-gesprek verborgen" id="wt-gesprek">
       <header class="wt-gesprek-kop">
         <h2 id="wt-gesprek-wie">Gesprek</h2>
@@ -66,30 +66,24 @@
           <label>Persoon <select id="gt-persoon"></select></label>
           <button id="gt-nieuw-persoon" type="button" class="gt-mini">+ persoon</button>
           <div class="gt-vul"></div>
+          <button id="gt-proberen" type="button" class="gt-mini">Proberen &#9656;</button>
           <span id="gt-status" class="gt-status"></span>
           <button id="gt-opslaan" type="button" class="gt-primair">Opslaan</button>
         </div>
         <div id="gt-opmerking-melding" class="gt-melding verborgen"></div>
+        <div id="gt-situaties" class="gt-situatiebalk"></div>
         <div class="wt-gesprek-lijf">
-          <section class="paneel">
-            <h2>Knopen<div class="gt-vul"></div><button id="gt-nieuwe-knoop" type="button" class="gt-mini" title="Nieuwe knoop in deze persoon">+ knoop</button></h2>
-            <div id="gt-boom-inhoud"></div>
+          <div id="gt-persoon-editor"></div>
+          <div id="gt-gesprek"></div>
+          <section class="paneel gt-quest-doos">
+            <div id="gt-quest"></div>
           </section>
-          <section class="paneel">
-            <h2>Bewerken</h2>
-            <div id="gt-persoon-editor"></div>
-            <div id="gt-knoop-editor"><p class="gt-leeg">Kies een knoop in de boom hierboven.</p></div>
-          </section>
-          <section class="paneel">
-            <h2>Proefgesprek</h2>
-            <div id="gt-proef-staat"></div>
-            <div id="gt-proef-gesprek"></div>
-          </section>
-          <section class="paneel">
-            <h2>Controle</h2>
+          <section class="paneel gt-controle">
+            <h2>Controle<div class="gt-vul"></div><span id="gt-controle-tal" class="gt-status"></span></h2>
             <div id="gt-fouten-inhoud"></div>
           </section>
         </div>
+        <aside id="gt-proef" class="paneel gt-proef verborgen"></aside>
       </div>
 
       <div class="wt-tabblad verborgen" data-tab="quest">

@@ -54,6 +54,50 @@
   erbij bent.** De knoppen om een regel te verplaatsen, de keuzelijst om een antwoord te verzetten,
   het formulier achter een voorwaarde — ze houden hun plek, maar ze staan er niet.
 
+- **Je kijkt door één situatie tegelijk** (Marcel, 22 sep 2026: "het is nogsteeds niet intuïtief…
+  rommelig, onduidelijk, ik weet niet wat ik hier mee moet"). Het script hierboven loste de opmaak
+  op maar niet het probleem, en het probleem zat een laag dieper: het scherm liet de **gegevens**
+  zien, niet het gesprek. Wim heeft vijf versies van zijn openingszin — de speler hoort er altijd
+  precies één — en ze stonden alle vijf onder elkaar, alsof hij ze achter elkaar zei. Daaronder
+  elf antwoorden, waarvan er in geen enkele toestand meer dan vijf tegelijk te zien zijn. Plus
+  een knopenlijst met technische namen en een kolom "NU VERBORGEN": drie weergaven van hetzelfde,
+  en geen ervan was het gesprek.
+
+  Marcel zei wat hij wil, en dat is de maat: *"Ik wil gewoon character selecteren. Gesprek maken.
+  Aantal zinnen met reacties. En eventuele hooks eraan zetten."*
+
+  **Eén keuze draagt de rest.** Bovenin staan de situaties; je klikt er een, en het gesprek wordt
+  getekend zoals het dán loopt: één zin per knoop, alleen de antwoorden die je dan echt kunt
+  geven, ingesprongen zoals een gesprek loopt. Wat in deze situatie niet klinkt, zakt naar onderen
+  met de situatie erachter waarin het wél klinkt. Daaruit volgt de rest:
+
+  - **Een situatie schrijf je in dezelfde woorden als een voorwaarde** ("meesterDood is gezet,
+    sleutel in je tas"). Zo is er één woordenlijst voor het hele scherm en kan dezelfde editor
+    hem bewerken. Ze staan bij de persoon (`situaties` in `js/gesprekken.js`); het spel leest ze
+    nooit. Marcel benoemt ze zelf — een situatie is een moment in het verhaal ("Na zijn dood",
+    "Sleutel in de hand"), en dat weet alleen hij.
+  - **De fasen van een quest zíjn situaties** en staan er vanzelf bij bij wie hem geeft. Daar
+    raken gesprek en quest elkaar, en daarom staat de quest op dezelfde bladzijde: zijn fasen,
+    doelen, meldingen en wegen, met erbij welk antwoord uit dit gesprek welke weg neemt. Marcel,
+    22 sep: "een quest kan ook aan een dialoog hangen, dus ze horen bij elkaar."
+  - **Een antwoord springt in als het gesprek doorloopt** (één vraag komt op die zin uit) en
+    krijgt een eigen blok als er meer op uitkomen — Wims "Nog iets anders", waar vijf vragen op
+    uitkomen, is een plek waar je steeds terugkomt en geen vervolg. Zo wordt het nooit acht
+    niveaus diep, en heet een stuk gesprek naar zijn eerste zin in plaats van naar `beursGeweigerd`.
+  - **Een haakje is een keuzelijst, geen tekstvak.** Een gevolg deed tot nu toe alleen vlaggen,
+    terwijl een antwoord in het spel al goud gaf en quests startte; die waren dus alleen in de
+    code te bewerken. Nu staat dezelfde lijst in het scherm als in het bestand, en kies je een
+    quest, een fase en een weg uit een lijst in plaats van `bakker:zoeken` te typen.
+
+  Wat weg is: de knopenlijst, de kolom "NU VERBORGEN" en de vlaggenvinkjes. "Proberen" nam het
+  proefgesprek over en speelt het gewoon af vanaf de situatie die bovenin staat, met de regels uit
+  `js/gesprek.js` zelf.
+
+  **En een toets eromheen** (`test/situaties.test.cjs`): elke zin met een voorwaarde moet in
+  minstens één situatie wínnen, en elk antwoord met een voorwaarde ergens te zien zijn. Een zin
+  die nergens klinkt is bijna altijd een vergeten situatie, en de schrijver zegt dat wel op het
+  scherm — maar alleen als je die persoon toevallig openslaat.
+
 - **De tutorial legt uit in plaats van te spelen** (Marcel, 22 sep 2026: "veel te cringe"). Wat
   eraan gedaan is en waarom, staat hieronder bij "De opening".
 
