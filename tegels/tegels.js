@@ -8180,6 +8180,575 @@
       "doos": null
      }
     ]
+   },
+   "tuin": {
+    "tsx": "tegels/tuin.tsx",
+    "bestand": "tegels/tuin.png",
+    "breedte": 576,
+    "hoogte": 582,
+    "tegelB": 72,
+    "tegelH": 97,
+    "kolommen": 8,
+    "tileoffset": [
+     0,
+     22
+    ],
+    "objectalignment": true,
+    "anker": [
+     36,
+     75
+    ],
+    "tiles": [
+     {
+      "naam": "hek-tenen-x",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       29,
+       18,
+       11
+      ]
+     },
+     {
+      "naam": "hek-tenen-y",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       29,
+       18,
+       11
+      ]
+     },
+     {
+      "naam": "hek-tenen-hoek-boven",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       21,
+       18,
+       11
+      ]
+     },
+     {
+      "naam": "hek-tenen-hoek-onder",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       30,
+       18,
+       6
+      ]
+     },
+     {
+      "naam": "hek-tenen-hoek-links",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       5,
+       29,
+       18,
+       11
+      ]
+     },
+     {
+      "naam": "hek-tenen-hoek-rechts",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       30,
+       4,
+       11
+      ]
+     },
+     {
+      "naam": "hek-tenen-eind+x",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       5,
+       21,
+       18,
+       11
+      ]
+     },
+     {
+      "naam": "hek-tenen-eind-x",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       30,
+       4,
+       6
+      ]
+     },
+     {
+      "naam": "hek-tenen-eind+y",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       21,
+       4,
+       11
+      ]
+     },
+     {
+      "naam": "hek-tenen-eind-y",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       5,
+       30,
+       18,
+       6
+      ]
+     },
+     {
+      "naam": "hek-lat-x",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       30,
+       18,
+       7
+      ]
+     },
+     {
+      "naam": "hek-lat-y",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       30,
+       18,
+       7
+      ]
+     },
+     {
+      "naam": "hek-lat-hoek-boven",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       24,
+       18,
+       7
+      ]
+     },
+     {
+      "naam": "hek-lat-hoek-onder",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       30,
+       18,
+       7
+      ]
+     },
+     {
+      "naam": "hek-lat-hoek-links",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       5,
+       30,
+       18,
+       7
+      ]
+     },
+     {
+      "naam": "hek-lat-hoek-rechts",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       30,
+       4,
+       7
+      ]
+     },
+     {
+      "naam": "hek-lat-eind+x",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       5,
+       24,
+       18,
+       7
+      ]
+     },
+     {
+      "naam": "hek-lat-eind-x",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       30,
+       4,
+       7
+      ]
+     },
+     {
+      "naam": "hek-lat-eind+y",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       24,
+       4,
+       7
+      ]
+     },
+     {
+      "naam": "hek-lat-eind-y",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       5,
+       30,
+       18,
+       7
+      ]
+     },
+     {
+      "naam": "hekje-tenen-x",
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       30,
+       18,
+       11
+      ]
+     },
+     {
+      "naam": "hekje-tenen-y",
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       30,
+       18,
+       11
+      ]
+     },
+     {
+      "naam": "hekje-lat-x",
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       30,
+       18,
+       11
+      ]
+     },
+     {
+      "naam": "hekje-lat-y",
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       18,
+       30,
+       18,
+       11
+      ]
+     },
+     {
+      "naam": "kool",
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       27,
+       24,
+       27,
+       16
+      ]
+     },
+     {
+      "naam": "prei",
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       27,
+       29,
+       27,
+       16
+      ]
+     },
+     {
+      "naam": "bonen",
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       22,
+       69,
+       22,
+       14
+      ]
+     },
+     {
+      "naam": "kruidenbed",
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       30,
+       28,
+       30,
+       16
+      ]
+     },
+     {
+      "naam": "bloemen-x",
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       12,
+       65,
+       28,
+       8
+      ]
+     },
+     {
+      "naam": "bloemen-y",
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       28,
+       65,
+       13,
+       8
+      ]
+     },
+     {
+      "naam": "bankje-x",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       19,
+       31,
+       19,
+       11
+      ]
+     },
+     {
+      "naam": "bankje-y",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       20,
+       31,
+       19,
+       11
+      ]
+     },
+     {
+      "naam": "regenton",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": [
+       19,
+       52,
+       19,
+       10
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "doos": null
+     }
+    ]
    }
   };
 })(globalThis.Toren = globalThis.Toren || {});

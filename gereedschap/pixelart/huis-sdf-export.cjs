@@ -354,12 +354,13 @@ function paneelTuin(naam, zaad, o = {}) {
 // Een tuintje uit de losse stukken, zoals Marcel het in Tiled zou neerzetten: vijf bij vier tegels
 // met een hek eromheen, een hekje aan de voorkant, groente en kruiden erin, en een ton en een
 // bankje ernaast. Elk stuk rendert los (tekenWereld per stuk); de hekken sluiten aan omdat hun
-// regels op de rand van elke tegel even hoog liggen.
+// regels op de rand van elke tegel even hoog liggen. Hek van latten (ronde 4a); zie hekjes.png
+// (`node gereedschap/pixelart/proef-hekjes.cjs`) voor de vergelijking met het wilgentenenhek.
 const TUINTJE = [
-  ['hek-hoek-boven', 0, 0], ['hek-x', 1, 0], ['hek-x', 2, 0], ['hek-x', 3, 0], ['hek-hoek-rechts', 4, 0],
-  ['hek-y', 0, 1], ['hek-y', 0, 2], ['hek-hoek-links', 0, 3],
-  ['hek-y', 4, 1], ['hek-y', 4, 2], ['hek-hoek-onder', 4, 3],
-  ['hek-x', 1, 3], ['hekje-x', 2, 3], ['hek-x', 3, 3],
+  ['hek-lat-hoek-boven', 0, 0], ['hek-lat-x', 1, 0], ['hek-lat-x', 2, 0], ['hek-lat-x', 3, 0], ['hek-lat-hoek-rechts', 4, 0],
+  ['hek-lat-y', 0, 1], ['hek-lat-y', 0, 2], ['hek-lat-hoek-links', 0, 3],
+  ['hek-lat-y', 4, 1], ['hek-lat-y', 4, 2], ['hek-lat-hoek-onder', 4, 3],
+  ['hek-lat-x', 1, 3], ['hekje-lat-x', 2, 3], ['hek-lat-x', 3, 3],
   ['kool', 1, 1], ['prei', 2, 1], ['bonen', 3, 1], ['kruidenbed', 1, 2], ['kool', 2, 2], ['prei', 3, 2],
   ['regenton', 5, 0.6], ['bankje-y', 5.3, 2.2],
 ];

@@ -18,7 +18,7 @@ const HOOG = 40;
 // rand.tsx eerst: daar zitten het vlakke gras en de terreinsets waarmee je paden, pleinen en
 // water schildert. grond.tsx hoort er niet bij: Tiled kent die stempels niet als terrein, en dan
 // kloppen de randen niet (zie de randtegels in ontwerp/kaarten.md).
-const VELLEN = ['rand', 'bomen', 'begroeiing', 'gebouwen', 'toren', 'erf'];
+const VELLEN = ['rand', 'bomen', 'begroeiing', 'gebouwen', 'toren', 'erf', 'tuin'];
 
 function tegelAantal(vel) {
   const tsx = fs.readFileSync(path.join(WORTEL, 'tegels', vel + '.tsx'), 'utf8');

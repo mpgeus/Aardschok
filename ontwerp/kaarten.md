@@ -36,12 +36,27 @@ midden en eind van een brug die naar rechtsonder loopt, en 243, 244 en 245 van e
 linksonder. Zoveel middenstukken als de beek breed is. Pas daarna het pad ertegenaan: waar een pad
 een oever raakt wint er één van de twee, zo werkt terrein nu eenmaal.
 
-**Dingen neerzetten: bomen, planten, huizen.**
+**Dingen neerzetten: bomen, planten, huizen, een tuin.**
 
 1. Klik op de laag `objecten`.
-2. Kies bij Tilesets het vel (`bomen`, `begroeiing`, `gebouwen`) en klik een plaatje aan.
+2. Kies bij Tilesets het vel (`bomen`, `begroeiing`, `gebouwen`, `tuin`) en klik een plaatje aan.
 3. Pak **Tegel invoegen** uit de werkbalk en klik op de kaart. Een huis zet je neer op zijn
-   achterste hoek; het beslaat de tegels rechtsonder daarvandaan.
+   achterste hoek; het beslaat de tegels rechtsonder daarvandaan. Een tuinstuk (`tuin`) staat
+   anders: op het **midden** van zijn eigen tegel, dus een recht stuk hek staat voor de helft op de
+   tegel ernaast — gewoon aanklikken en neerzetten, net als een boom.
+
+**Een tuintje van losse stukken** (ronde 4a, 22 sep 2026; ontwerp/beeld.md, "Een tuintje erbij").
+`tuin.tsx` heeft twee hekken — `hek-tenen-*` (gevlochten wilgentenen tussen dunne staken) en
+`hek-lat-*` (een paar latten op palen), allebei met een recht stuk in beide richtingen, een hoek,
+een eind en een hekje — en daarnaast los: groente (`kool`, `prei`, `bonen`), een `kruidenbed`,
+`bloemen-x`/`bloemen-y` (voor een muur), `bankje-x`/`bankje-y` en `regenton`. Zet ze los rond een
+huis, niet erin gebakken: dan krijgt elk huis een andere tuin, en klopt voor- en achterlangs lopen
+vanzelf. Vast zijn de hekken, de bank en de regenton; het hekje, de bedden en de bloemen niet — daar
+loop je doorheen of overheen. Staat `tuin` nog niet in je Tilesets-paneel (een kaart van vóór 22 sep
+2026), voeg hem toe met het plusje onderaan dat paneel (een bestaande tileset toevoegen) en kies
+`tegels/tuin.tsx`; nieuwe kaarten via `nieuwe-kaart.tmj` hebben hem al staan. Beoordeel de twee
+hekken op ware grootte naast de tovenaar in `gereedschap/pixelart/uit/proefhuis/hekjes.png`
+(`node gereedschap/pixelart/proef-hekjes.cjs` om hem opnieuw te maken).
 
 **Wezens en uitgangen** zijn gewone objecten met een eigenschap (rechts bij *Eigenschappen*, met
 het plusje *Eigenschap toevoegen*, soort *string*):
@@ -149,7 +164,7 @@ Twee regels, allebei nodig:
   ook niet als het netter oogt naast verwante tegels. De kern staat in
   `gereedschap/pixelart/vaste-volgorde.cjs`.
 - **Vaste capaciteit.** Elk vel is aangevuld met lege cellen tot een vast aantal (grond 160,
-  bomen 32, begroeiing 40, gebouwen 96, toren 8, erf 24, rand 600), zodat het aantal nooit
+  bomen 32, begroeiing 40, gebouwen 96, toren 8, erf 24, tuin 48, rand 600), zodat het aantal nooit
   verandert als er iets bijkomt. Past er niets meer bij, dan gooit `npm run tiled` een fout; dan
   wordt de capaciteit bewust verhoogd én worden de kaarten meeverhuisd.
 

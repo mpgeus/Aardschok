@@ -25,6 +25,7 @@ const { vasteVolgordeEnCapaciteit: vasteVolgordeEnCapaciteitBasis } = require('.
 const D = require('./dorp.cjs');
 const P = require('./dorp2.cjs');
 const Bm = require('./bomen.cjs');
+const Tn = require('./tuin-sdf.cjs');
 
 const TEGELS = path.join(__dirname, '..', '..', 'tegels');
 fs.mkdirSync(TEGELS, { recursive: true });
@@ -77,6 +78,7 @@ const VELCONFIG = {
   gebouwen: { capaciteit: 96, kolommen: 8 }, // nu 27, en daar kwamen er vandaag al twaalf van: een heel dorp moet erin passen
   toren: { capaciteit: 8, kolommen: 4 }, // nu 1 (er is er maar één); een beetje lucht is vrijwel gratis
   erf: { capaciteit: 24, kolommen: 8 }, // nu 7: nog een stuk of zeventien erfstukken erbij kan
+  tuin: { capaciteit: 48, kolommen: 8 }, // nu 33 (tuin-sdf.cjs se STUKKEN): ruim voor een derde hek of meer groente
 };
 
 // items: [{ key, ...eigen velden zoals `plaat` }]. `key` is de identiteit die nooit meer
@@ -318,6 +320,79 @@ const BEGROEIING = Bm.BEGROEIING || ['struik', 'bessenStruik', 'varen', 'grasPol
 // Lage planten (varen, gras, bloemen, paddenstoelen, los steengruis) zijn geen obstakel; struiken
 // en een stronk of rots wel. Een korte, expliciete lijst: makkelijker te lezen dan een regel.
 const BEGROEIING_VAST = { struik: true, bessenStruik: true, boomstronk: true, rots: true };
+
+// ------------------------------------------------------- tuin (losse tuinstukken, SDF, ronde 4a)
+//
+// Anders dan bomen/begroeiing (die op hun voetpunt staan) hoort een tuinstuk op het MIDDEN van
+// zijn tegel te staan (tuin-sdf.cjs, en ontwerp/werklijst.md ronde 4): een recht stuk hek staat
+// voor de helft op de ene buurtegel, voor de helft op de andere, dus het anker kan niet een
+// voethoek of -punt zijn. tuin-sdf.cjs bouwt met toren.cjs se Wereld/tekenWereld (zoals de toren
+// en het erf), niet met de "model"-vorm van figuren.cjs/bomen.cjs, dus dit vel rendert met
+// Tr.tekenWereld op een eigen Beeld in plaats van met K.losRenderen (bouwModelVel hierboven).
+//
+// Geen analytische maat zoals model.straal voorhanden, dus eerst een ruime proefplaat per stuk om
+// zijn werkelijke bereik vanaf het midden te meten (net als krapDoos dat al doet), en pas daarna
+// de cel op maat renderen — dat scheelt gokken naar hoe groot de cel moet zijn.
+const TUIN_VAST = (naam) => naam.startsWith('hek-') || naam.startsWith('bankje-') || naam === 'regenton';
+
+function renderTuinstuk(naam, b, h, ankerX, ankerY) {
+  const B = new K.Beeld(b, h, ankerX, ankerY);
+  Tr.tekenWereld(B, Tn.tuinstuk(naam, 1));
+  K.belicht(B);
+  K.omlijn(B);
+  const p = K.Plaat.van(K.kwantiseer(B));
+  Bm.ontspikkel(p);
+  return p;
+}
+
+function bouwTuinVel() {
+  const { capaciteit, kolommen } = VELCONFIG.tuin;
+  const RAND = 6; // marge rond het gemeten bereik, voor de omlijning
+  const proefB = 260;
+  const proefH = 220;
+  const proefAnkerX = Math.round(proefB / 2);
+  const proefAnkerY = proefH - 40;
+  const gevonden = [];
+  for (const naam of Tn.STUKKEN) {
+    const gelukt = veilig(naam, () => ({ naam, doos: krapDoos(renderTuinstuk(naam, proefB, proefH, proefAnkerX, proefAnkerY), proefAnkerX, proefAnkerY) }));
+    if (gelukt) gevonden.push(gelukt);
+  }
+  if (!gevonden.length) return null;
+  const links = Math.max(...gevonden.map((i) => i.doos[0])) + RAND;
+  const boven = Math.max(...gevonden.map((i) => i.doos[1])) + RAND;
+  const rechts = Math.max(...gevonden.map((i) => i.doos[2])) + RAND;
+  const onder = Math.max(...gevonden.map((i) => i.doos[3])) + RAND;
+  const cb = links + rechts;
+  const ch = boven + onder;
+  const ankerX = links;
+  const ankerY = boven;
+  const items = [];
+  for (const { naam } of gevonden) {
+    const p = veilig(naam, () => renderTuinstuk(naam, cb, ch, ankerX, ankerY));
+    if (p) items.push({ key: naam, naam, vast: TUIN_VAST(naam), doos: krapDoos(p, ankerX, ankerY), plaat: p });
+  }
+  if (!items.length) return null;
+  const geordend = vasteVolgordeEnCapaciteit('tuin', items, capaciteit, kolommen);
+  const rijen = Math.ceil(capaciteit / kolommen);
+  const vel = new K.Plaat(cb * kolommen, ch * rijen);
+  geordend.forEach((it, i) => { if (it) vel.plak(it.plaat, (i % kolommen) * cb, Math.floor(i / kolommen) * ch); });
+  schrijfPng('tuin.png', vel);
+  const beschrijving = {
+    naam: 'tuin', bestand: 'tuin.png', breedte: vel.b, hoogte: vel.h,
+    tegelB: cb, tegelH: ch, aantal: geordend.length, kolommen,
+    tileoffset: [Math.round(cb / 2) - ankerX, ch - ankerY],
+    objectalignment: true,
+    // Expliciet, in plaats van de val op tileoffset terug (zie de toelichting bij "alles samen"
+    // onderaan): die val neemt aan dat het anker horizontaal in het midden van de cel staat, en
+    // dat klopt hier niet voor een hoek- of eindstuk (asymmetrisch bereik vanaf het midden).
+    anker: [ankerX, ankerY],
+    notitie: 'Losse tuinstukken, één per tegel, niet vast aan een huis (ontwerp/beeld.md, "Een tuintje erbij"): twee hekken (hek-tenen-*, van gevlochten wilgentenen, en hek-lat-*, van een paar latten — elk met een recht stuk in beide richtingen, een hoek, een eind en een hekje), groente, een kruidenbed, bloemen langs een muur, een bankje en een regenton. Het anker staat op het midden van de tegel, niet op een voethoek: een recht stuk hek staat voor de helft op de ene buurtegel. Vast zijn de hekken, de bank en de regenton; het hekje, de bedden en de bloemen niet — daar loop je doorheen of overheen.',
+    tiles: geordend.map((it) => (it ? { naam: it.naam, vast: it.vast, doos: it.doos || null } : { naam: null, vast: false })),
+  };
+  schrijfTsx(beschrijving);
+  console.log(`tuin.png  ${vel.b}×${vel.h}  (${items.length} echte tegels van ${capaciteit}, cel ${cb}×${ch})`);
+  return beschrijving;
+}
 
 // ---------------------------------------------------------------- gebouwen & plekken (vormen)
 
@@ -895,6 +970,7 @@ const velden = [
   wil('gebouwen') && bouwGebouwenVel(),
   wil('toren') && bouwErfVel('toren', Es.TOREN_TEGELS, 'De toren van de oude meester, zoals je hem erft. Zijn voet beslaat 3×3 tegels; zet hem neer op de tegel linksboven daarvan.'),
   wil('erf') && bouwErfVel('erf', Es.ERF_TEGELS, 'Wat er op het erf van de toren staat: het schuurtje, de put, de houtstapel, de waslijn, de moestuin, de bank en de lantaarn. Zet ze neer op de tegel linksboven van hun voet ("beslaat"); kaarten/erf.tmj doet dat al vanzelf uit erf-scene.cjs.'),
+  wil('tuin') && bouwTuinVel(),
 ].filter(Boolean);
 
 // Het bestaande tegels.json blijft staan voor de vellen die deze keer niet aan de beurt waren.

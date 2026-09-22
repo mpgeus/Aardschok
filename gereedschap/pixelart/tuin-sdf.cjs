@@ -4,24 +4,32 @@
 // hek langs loopt, loopt voor of achter die ene tegel langs. Een tuin die in het huis gebakken zit,
 // zou juist daar misgaan.
 //
-//   hek-x, hek-y              een recht stuk hek (langs x of langs y)
-//   hek-hoek-boven/onder/links/rechts   een hoek (boven: de achterste hoek van een tuin, enz.)
-//   hek-eind+x, -x, +y, -y    het eind van een hek, bijvoorbeeld tegen een muur
-//   hekje-x, hekje-y          een hekje tussen twee palen, dat op een kier staat
+//   hek-tenen-x, hek-tenen-y  gevlochten wilgentenen tussen dunne staken (recht, langs x of y)
+//   hek-lat-x, hek-lat-y      een paar latten op palen (recht, langs x of y)
+//   hek-<soort>-hoek-boven/onder/links/rechts   een hoek (boven: de achterste hoek van een tuin)
+//   hek-<soort>-eind+x,-x,+y,-y   het eind van een hek, bijvoorbeeld tegen een muur
+//   hekje-<soort>-x, hekje-<soort>-y   een hekje tussen twee palen, dat op een kier staat
 //   kool, prei, bonen         rijen groente op een bed van omgespitte aarde
 //   kruidenbed                een bed met een rand van stenen, vol kruiden
 //   bloemen-x, bloemen-y      stokrozen en lage bloemen langs een muur (de muur achter de tegel)
 //   bankje-x, bankje-y        een bank van planken op twee stompen
 //   regenton                  een ton met hoepels, vol water
 //
+// Twee soorten hek (Marcel, 22 sep 2026): het eerste hek (ronde 3) was een dicht staketsel van
+// planken, en las op ware grootte als een palissade om een fort. 'tenen' (gevlochten wilgentenen
+// tussen paaltjes) en 'lat' (een paar latten op palen) zijn allebei laag en open — ruim de knie
+// van de tovenaar (1,75 m), niet zijn schouder — en zien er verschillend uit, zodat niet elke tuin
+// hetzelfde hek heeft.
+//
 // tuinstuk(naam, zaad) geeft een Wereld (toren.cjs, tekenWereld) met het stuk rond de oorsprong:
 // het midden van zijn tegel. Het hout en de knoppen komen uit huis-sdf.cjs (balkPatroon,
 // knoppenVan), zodat een hek hetzelfde hout heeft als de huizen.
 //
-// Ook hier is niets waterpas: een hekpaal staat scheef en zijn regels lopen er schuin naar toe,
-// spijlen zijn ongelijk lang en hellen, een rij kool loopt net niet recht, de ton staat een tikje
-// scheef op zijn stenen. Per zaad anders, en vast. Een hek sluit toch aan: waar een regel de rand
-// van de tegel raakt, ligt hij altijd op dezelfde hoogte (REGELS), daartussen mag hij zakken.
+// Ook hier is niets waterpas: een hekpaal staat scheef en zijn regels of tenen lopen er schuin
+// naar toe, staken zijn ongelijk lang en hellen, een rij kool loopt net niet recht, de ton staat
+// een tikje scheef op zijn stenen. Per zaad anders, en vast. Een hek sluit toch aan: waar het de
+// rand van de tegel raakt, ligt het altijd op dezelfde hoogte (REGELS), daartussen mag het zakken
+// of golven.
 'use strict';
 const K = require('./kern.cjs');
 const T = require('./toren.cjs');
@@ -32,7 +40,9 @@ const { GRAAD, balk, stok, draaiZ } = T.hulp;
 
 const M = 56.6; // eenheden per meter, zoals op het erf
 const HALF = TEGEL / 2; // van het midden van een tegel tot zijn rand
-const REGELS = [13, 31]; // de hoogte (eenheden) waar de regels van een hek de rand van de tegel raken
+const HEK_HOOG = M * 0.4; // de bovenkant van het hek: ruim de knie van de tovenaar, niet zijn schouder
+const REGELS = [HEK_HOOG * 0.32, HEK_HOOG * 0.62, HEK_HOOG * 0.92]; // waar het hek de rand van de tegel
+// raakt: 'hek-lat' gebruikt de eerste en de laatste (twee latten), 'hek-tenen' alle drie
 
 // ---------------------------------------------------------------- materialen
 
@@ -130,85 +140,116 @@ function spijl(a, b, hb, hd, op) {
 // ---------------------------------------------------------------- het hek
 
 // Een stuk hek: een paal in het midden van de tegel, en naar elke arm (een rand van de tegel: [1,
-// 0] is +x, [0, -1] is -y) twee regels en drie spijlen. De spijlen staan aan de +y-kant van een
-// arm langs x en aan de +x-kant van een arm langs y. `paal` false: geen paal in het midden (het
-// hekje zet er zelf twee neer).
-function hek(W, H, armen, o = {}) {
+// 0] is +x, [0, -1] is -y) het vlechtwerk ('tenen') of de latten ('lat'). `paal` false: geen paal
+// in het midden (het hekje zet er zelf twee neer). `soort`: 'tenen' | 'lat'.
+function hek(W, H, armen, soort, o = {}) {
   const g = W.groep('hek');
   const { sch, sp } = H;
   const R = (k) => H.r(100 + k);
   const RS = (k) => H.rs(100 + k);
-  const paalH = M * (0.86 + 0.1 * R(1));
+  const paalH = HEK_HOOG * (0.94 + 0.12 * R(1)) * (soort === 'tenen' ? 1.03 : 1); // een staak steekt iets boven het vlechtwerk uit
   const hel = sch * (2 + 3 * R(2)) * GRAAD;
   const helR = R(3) * Math.PI * 2;
   const top = [Math.sin(hel) * Math.cos(helR) * paalH, Math.sin(hel) * Math.sin(helR) * paalH, paalH];
   const opPaal = (h) => [(top[0] * h) / paalH, (top[1] * h) / paalH, h];
-  let deel = 10;
-  if (o.paal !== false) voeg(g, { ...spijl([0, 0, -5], top, sp ? 2.6 : 2.2, sp ? 2.6 : 2.2, [1, 0, 0]), m: 'hout', deel: deel++, zaad: 3.3, toon: RS(4) * 0.5 });
+  const dik = soort === 'tenen' ? (sp ? 1.9 : 1.6) : sp ? 2.4 : 2;
+  if (o.paal !== false) voeg(g, { ...spijl([0, 0, -5], top, dik, dik, [1, 0, 0]), m: 'hout', deel: 10, zaad: 3.3, toon: RS(4) * 0.5 });
   let k = 0;
   for (const [dx, dy] of armen) {
-    const n = [dy === 0 ? 0 : 1, dy === 0 ? 1 : 0]; // de kant van de spijlen
+    const n = [dy === 0 ? 0 : 1, dy === 0 ? 1 : 0]; // de kant van de staken/spijlen
     const van = o.van ?? 0; // waar de arm begint (een hekje heeft zijn eigen palen)
-    // de regels: aan de paal op zijn eigen hoogte, aan de rand van de tegel op REGELS
-    REGELS.forEach((hR, j) => {
-      const a = van ? [dx * van, dy * van, hR + RS(10 + j + k * 3) * 2] : opPaal(hR + 2 + RS(10 + j + k * 3) * 3);
-      const b = [dx * (HALF + 0.3), dy * (HALF + 0.3), hR];
-      // een regel zakt een fractie door
-      const m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2 - sch * (0.6 + R(20 + j + k * 3))];
-      for (const [p0, p1, i] of [[a, m, 0], [m, b, 1]]) voeg(g, { ...balk(p0, p1, 1.3, 1.9, [0, 0, 1], 0.4), m: 'hout', deel: 20 + k * 4 + j * 2 + i, zaad: 5.1 + j + k, toon: RS(30 + j + k * 3) * 0.5 });
-    });
-    // de spijlen, verweerd, ongelijk lang, en af en toe een die mist of een die gebroken is
-    for (let i = 0; i < 3; i++) {
-      const s = van ? van + 2 + ((HALF - van - 3) * (i + 0.5)) / 3 : 3.8 + i * 7.5;
-      if (s > HALF - 1.5) continue;
-      const id = hash(i, k, H.zaad + 7);
-      if (sch && id % 17 === 3) continue;
-      const hoog = (sp ? 42 : 39) * (0.9 + 0.2 * rnd(i, k, H.zaad + 8)) * (sch && id % 19 === 5 ? 0.62 : 1);
-      const lean = sch * (rnd(i, k, H.zaad + 9) - 0.5) * 5;
-      const bx = dx * s + n[0] * 2.4;
-      const by = dy * s + n[1] * 2.4;
-      const t = [bx + dx * lean * 0.5 + n[0] * lean * 0.3, by + dy * lean * 0.5 + n[1] * lean * 0.3, hoog];
-      voeg(g, { ...spijl([bx, by, -3], t, sp ? 2.2 : 1.9, 0.7, [n[0], n[1], 0]), m: 'houtOud', deel: 40 + k * 5 + i, zaad: i * 2.7 + k, toon: sch ? (rnd(i, k, H.zaad + 10) - 0.5) * 1.1 : 0 });
-    }
+    if (soort === 'tenen') hekArmTenen(g, H, dx, dy, n, van, k);
+    else hekArmLat(g, H, dx, dy, n, van, opPaal, k, R, RS);
     k++;
   }
   return g;
 }
 
+// 'lat': twee vlakke latten van de paal naar de rand van de tegel, ongelijk en een fractie
+// doorgezakt — dezelfde opzet als de oude regels, maar breder en zonder spijlen.
+function hekArmLat(g, H, dx, dy, n, van, opPaal, k, R, RS) {
+  const { sch } = H;
+  [REGELS[0], REGELS[2]].forEach((hR, j) => {
+    const a = van ? [dx * van, dy * van, hR + RS(10 + j + k * 3) * 1.4] : opPaal(hR + 1.4 + RS(10 + j + k * 3) * 2);
+    const b = [dx * (HALF + 0.3), dy * (HALF + 0.3), hR];
+    const m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2 - sch * (0.5 + R(20 + j + k * 3))];
+    for (const [p0, p1, i] of [[a, m, 0], [m, b, 1]]) voeg(g, { ...balk(p0, p1, 1.1, 3.2, [0, 0, 1], 0.5), m: 'hout', deel: 20 + k * 4 + j * 2 + i, zaad: 5.1 + j + k, toon: RS(30 + j + k * 3) * 0.5 });
+  });
+}
+
+// 'tenen': een paar dunne staken tussen de paal en de rand van de tegel, met drie hoogtes
+// wilgenteen die er in korte stukjes overheen golven — geen echte over-en-onder vlechting (te
+// klein op ware grootte), maar de zigzag en de vele dunne staken lezen als vlechtwerk.
+function hekArmTenen(g, H, dx, dy, n, van, k) {
+  const { sch, sp } = H;
+  const eind = HALF + 0.3;
+  const tussen = 7.6; // ruimte tussen de staken
+  const aantal = Math.max(1, Math.round((eind - van) / tussen));
+  const staken = [van];
+  for (let i = 1; i <= aantal; i++) staken.push(van + ((eind - van) * i) / aantal);
+  // de tussenstaken zelf: dun, ongelijk, een puntige top die boven de tenen uitsteekt. Geen staak
+  // precies op de rand (i === staken.length - 1): de tenen halen die toch, en anders verdubbelt
+  // hij met de staak van de buurtegel.
+  for (let i = 1; i < staken.length - 1; i++) {
+    const s = staken[i];
+    const id = hash(i, k, H.zaad + 15);
+    const hoog = REGELS[2] + (1.5 + 3 * rnd(i, k, H.zaad + 16)) * (sch && id % 13 === 4 ? 0.5 : 1);
+    const lean = sch * (rnd(i, k, H.zaad + 17) - 0.5) * 6;
+    const bx = dx * s + n[0] * 1.4;
+    const by = dy * s + n[1] * 1.4;
+    const topS = [bx + n[0] * lean * 0.4, by + n[1] * lean * 0.4, hoog];
+    voeg(g, { ...spijl([bx, by, -4], topS, sp ? 1.6 : 1.3, sp ? 1.6 : 1.3, [n[0], n[1], 0]), m: 'houtOud', deel: 40 + k * 6 + i, zaad: i * 3.1 + k, toon: (rnd(i, k, H.zaad + 18) - 0.5) * 0.9 });
+  }
+  // de tenen: per hoogte een ketting van dunne stokjes tussen paal, staken en rand, die om en om
+  // een fractie op en neer golft
+  REGELS.forEach((hR, j) => {
+    for (let i = 0; i < staken.length - 1; i++) {
+      const p0 = staken[i];
+      const p1 = staken[i + 1];
+      const zig = (i % 2 ? 1 : -1) * (1.1 + H.rs(160 + i + j * 5 + k * 20) * 0.8);
+      const a = [dx * p0, dy * p0, hR + zig];
+      const b = [dx * p1, dy * p1, hR - zig];
+      voeg(g, { ...stok(a, b, sp ? 1.25 : 1.05), m: 'houtOud', deel: 60 + k * 10 + j * 4 + i, zaad: i + j });
+    }
+  });
+}
+
 // Een hekje in een recht stuk hek (langs x of langs y): twee palen, en een deurtje van drie
-// planken met klampen en een schoor, dat aan de ene paal hangt en een eindje open staat.
-function hekje(W, H, langs) {
+// planken met klampen en een schoor, dat aan de ene paal hangt en een eindje open staat. Zelfde
+// deurtje voor beide soorten (een gehangen deurtje is altijd van plank, ook in een wilgentenenhek).
+function hekje(W, H, langs, soort) {
   const { sch, sp } = H;
   const R = (k) => H.r(200 + k);
   const d = langs === 'x' ? [1, 0] : [0, 1];
   const n = langs === 'x' ? [0, 1] : [1, 0];
   const g = W.groep('hekje');
   const pw = 12.5; // de palen staan zo ver van het midden
-  const paalH = M * 1.15;
+  const paalH = HEK_HOOG * 1.08; // het hekje mag een fractie boven het hek uitkomen
+  const dik = soort === 'tenen' ? (sp ? 2 : 1.7) : sp ? 2.7 : 2.3;
   for (const s of [-1, 1]) {
     const lean = sch * (R(1 + s) - 0.5) * 3;
-    voeg(g, { ...spijl([s * pw * d[0], s * pw * d[1], -5], [s * pw * d[0] + n[0] * lean, s * pw * d[1] + n[1] * lean, paalH], sp ? 3 : 2.6, sp ? 3 : 2.6, [n[0], n[1], 0]), m: 'hout', deel: 1 + (s > 0 ? 1 : 0), zaad: 7 + s, toon: 0.2 });
+    voeg(g, { ...spijl([s * pw * d[0], s * pw * d[1], -5], [s * pw * d[0] + n[0] * lean, s * pw * d[1] + n[1] * lean, paalH], dik, dik, [n[0], n[1], 0]), m: 'hout', deel: 1 + (s > 0 ? 1 : 0), zaad: 7 + s, toon: 0.2 });
   }
   // de rest van het hek, van de palen naar de randen
-  hek(W, H, langs === 'x' ? [[1, 0], [-1, 0]] : [[0, 1], [0, -1]], { paal: false, van: pw });
+  hek(W, H, langs === 'x' ? [[1, 0], [-1, 0]] : [[0, 1], [0, -1]], soort, { paal: false, van: pw });
   // het deurtje hangt aan de paal bij -pw en staat naar +n open
   const open = (14 + 16 * R(4)) * GRAAD * (langs === 'x' ? 1 : -1);
   const scharnier = [-pw * d[0], -pw * d[1], 0];
   const hoek = Math.atan2(d[1], d[0]) + open;
   const D = stelsel(scharnier, draaiZ(hoek / GRAAD));
   const breed = 2 * pw - 5;
-  const hoog = M * 0.86;
-  const zak = sch * (1.5 + 2 * R(5)); // het deurtje hangt wat door aan de loze kant
+  const hoog = paalH * 0.75; // ongeveer de lengte van een plank in het deurtje
+  const zak = sch * (1.2 + 1.6 * R(5)); // het deurtje hangt wat door aan de loze kant
   let deel = 60;
   for (let i = 0; i < 3; i++) {
     const u = 2.5 + ((breed - 3) * (i + 0.5)) / 3;
-    const z0 = 7 - (zak * u) / breed;
+    const z0 = hoog * 0.14 - (zak * u) / breed;
     voeg(g, { ...spijl(D.wereld(u, 0, z0), D.wereld(u, 0, z0 + hoog - 4 * (i % 2)), (breed - 3) / 6 - 0.2, 0.9, D.wereld(0, 1, 0).map((v, j) => v - scharnier[j])), m: 'houtOud', deel: deel++, zaad: 11 + i, toon: (R(6 + i) - 0.5) * 0.8 });
   }
   const klamp = (u0, z0, u1, z1) => voeg(g, { ...balk(D.wereld(u0, 1.6, z0), D.wereld(u1, 1.6, z1), 1.9, 0.9, D.wereld(0, 1, 0).map((v, j) => v - scharnier[j]), 0.3), m: 'hout', deel: deel++, zaad: 21 + u0, toon: 0.1 });
-  klamp(1, 14 - zak * 0.1, breed, 14 - zak);
-  klamp(1, hoog - 6 - zak * 0.1, breed, hoog - 6 - zak);
-  klamp(3, 17 - zak * 0.1, breed - 2, hoog - 9 - zak);
+  klamp(1, hoog * 0.29 - zak * 0.1, breed, hoog * 0.29 - zak);
+  klamp(1, hoog * 0.88 - zak * 0.1, breed, hoog * 0.88 - zak);
+  klamp(3, hoog * 0.35 - zak * 0.1, breed - 2, hoog * 0.82 - zak);
   return g;
 }
 
@@ -459,22 +500,27 @@ function regenton(W, H) {
 
 // ---------------------------------------------------------------- de stukken
 
-const HEKKEN = {
-  'hek-x': [[1, 0], [-1, 0]],
-  'hek-y': [[0, 1], [0, -1]],
-  'hek-hoek-boven': [[1, 0], [0, 1]],
-  'hek-hoek-onder': [[-1, 0], [0, -1]],
-  'hek-hoek-links': [[1, 0], [0, -1]],
-  'hek-hoek-rechts': [[-1, 0], [0, 1]],
-  'hek-eind+x': [[1, 0]],
-  'hek-eind-x': [[-1, 0]],
-  'hek-eind+y': [[0, 1]],
-  'hek-eind-y': [[0, -1]],
+// Elke richting bestaat één keer per soort hek (HEK_SOORTEN): hek-tenen-x, hek-lat-x, enz. Zo
+// kiest Marcel in Tiled per tuin welk hek hij neerzet.
+const HEK_RICHTINGEN = {
+  x: [[1, 0], [-1, 0]],
+  y: [[0, 1], [0, -1]],
+  'hoek-boven': [[1, 0], [0, 1]],
+  'hoek-onder': [[-1, 0], [0, -1]],
+  'hoek-links': [[1, 0], [0, -1]],
+  'hoek-rechts': [[-1, 0], [0, 1]],
+  'eind+x': [[1, 0]],
+  'eind-x': [[-1, 0]],
+  'eind+y': [[0, 1]],
+  'eind-y': [[0, -1]],
 };
+const HEK_SOORTEN = ['tenen', 'lat'];
+const HEKKEN = {};
+for (const soort of HEK_SOORTEN) for (const [vorm, armen] of Object.entries(HEK_RICHTINGEN)) HEKKEN[`hek-${soort}-${vorm}`] = { soort, armen };
+const HEKJE_NAAM = /^hekje-(tenen|lat)-([xy])$/;
 const STUKKEN = [
   ...Object.keys(HEKKEN),
-  'hekje-x',
-  'hekje-y',
+  ...HEK_SOORTEN.flatMap((soort) => [`hekje-${soort}-x`, `hekje-${soort}-y`]),
   'kool',
   'prei',
   'bonen',
@@ -498,8 +544,9 @@ function tuinstuk(naam, zaad = 1) {
   const H = knoppen(zaad);
   W.H = H;
   tuinMaterialen(W, H);
-  if (HEKKEN[naam]) hek(W, H, HEKKEN[naam]);
-  else if (naam === 'hekje-x' || naam === 'hekje-y') hekje(W, H, naam.slice(-1));
+  const hekjeM = naam.match(HEKJE_NAAM);
+  if (HEKKEN[naam]) hek(W, H, HEKKEN[naam].armen, HEKKEN[naam].soort);
+  else if (hekjeM) hekje(W, H, hekjeM[2], hekjeM[1]);
   else if (naam === 'kool') kool(W, H);
   else if (naam === 'prei') prei(W, H);
   else if (naam === 'bonen') bonen(W, H);
@@ -511,4 +558,4 @@ function tuinstuk(naam, zaad = 1) {
   return W;
 }
 
-module.exports = { tuinstuk, STUKKEN, HEKKEN, REGELS, HALF };
+module.exports = { tuinstuk, STUKKEN, HEKKEN, HEK_SOORTEN, REGELS, HALF, HEK_HOOG };

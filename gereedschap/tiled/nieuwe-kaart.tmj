@@ -2005,6 +2005,10 @@
   {
    "firstgid": 777,
    "source": "../../tegels/erf.tsx"
+  },
+  {
+   "firstgid": 801,
+   "source": "../../tegels/tuin.tsx"
   }
  ],
  "type": "map",

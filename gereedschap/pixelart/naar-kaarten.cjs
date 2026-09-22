@@ -80,7 +80,7 @@ function bouwOpzoeker(kaart) {
 // (Tegel invoegen), niet gestempeld in een tegellaag: daar tekent Tiled de rijen ervóór eroverheen,
 // en zie je van een huis alleen het dak nog boven het gras uitsteken. Marcel liep daar op 21 sep
 // 2026 tegenaan; zie "Werken in Tiled" in ontwerp/kaarten.md.
-const OBJECTVELLEN = new Set(['bomen', 'begroeiing', 'gebouwen', 'toren', 'erf']);
+const OBJECTVELLEN = new Set(['bomen', 'begroeiing', 'gebouwen', 'toren', 'erf', 'tuin']);
 
 let totaalFouten = 0;
 if (TEGELS) {
