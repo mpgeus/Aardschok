@@ -61,6 +61,16 @@ regel (`kijkOfHijVastzit` in `js/tutorial.js`). Die zes regels staan nog leeg in
 `vastBrengen`, `vastSlaan`). Is een regel leeg, dan zegt niemand iets — zo doet een half
 ingevulde lijst geen kwaad.
 
+**Je kijkt door één situatie tegelijk** (22 sep, na Marcel: "het is nogsteeds niet intuïtief…
+ik weet niet wat ik hier mee moet"). Het script hieronder loste de opmaak op maar niet het
+probleem: het scherm liet de gegevens zien, niet het gesprek. Bovenin staan nu de situaties, je
+klikt er een, en het gesprek staat er zoals het dán loopt — één zin per knoop, alleen de
+antwoorden die je dan kunt geven. Wat er niet klinkt, zakt naar onderen met de situatie erachter
+waar het wél klinkt. **De fasen van een quest zijn situaties**, en de quest staat op dezelfde
+bladzijde met erbij welk antwoord welke weg neemt. Een situatie benoem je zelf; ze staan bij de
+persoon in `js/gesprekken.js` en het spel leest ze nooit. `test/situaties.test.cjs` bewaakt dat
+elke zin ergens klinkt. Zie `ontwerp/verhaal.md`.
+
 **Een gesprek schrijf je als een script, niet als een formulier** (22 sep, na Marcel: "totaal
 onlogisch"). Het hele gesprek staat nu op één bladzijde, in leesvolgorde: de zin als tekst, de
 voorwaarde klein erachter in gewone taal ("alleen als de bakker nog zoekt"), en pas een formulier
@@ -108,6 +118,7 @@ start; de onderste drie zijn renderwerk en dus zwaar.
    ook nog geen. Renderwerk.
 
 **Het laatst af (22 sep):**
+- de gespreksschrijver: één situatie tegelijk, met de quest eronder;
 - het gesprekkenscherm als script, en het opdrachtvak uit de tutorial;
 - het wereldgereedschap, alle vier de rondes (`gereedschap/wereld.html`), en de verhuizing van de
   betekenis uit Tiled;
