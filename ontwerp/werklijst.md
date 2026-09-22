@@ -271,6 +271,9 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
 
 - **Kringen en leeftijd:** de beste speler krijgt nu de minste spreuken. Kiezen uit de vier
   richtingen in `spreuken.md`. Moet vóór het verdorren besloten zijn.
+- **Onverhoeds raken** (Marcel, 22 sep): meer schade aan een monster dat je niet zag of dat je van
+  achteren raakt. Klaar als de bonus in `handelingGevecht` zit, bij de muis staat, en getoetst is.
+  Zie `spreuken.md`; eerst Marcels antwoord op de staf.
 - **Een omheining is geen blok** (om samen te bespreken). Het kerkhof, de kippenren en de moestuin
   staan in het spel als één vast blok, dus je kunt niet tussen de graven lopen, en een boomstronk
   die Marcel binnen de kerkhofmuurtjes zette, staat technisch "in" het kerkhof. Een omheining zou

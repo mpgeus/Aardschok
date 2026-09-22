@@ -232,7 +232,42 @@ Richtingen om uit te kiezen, nog niet besloten:
 4. **Kringen helemaal loskoppelen van leeftijd.** Leeftijd doet dan alleen wat het al doet: minder
    actiepunten, sterkere magie. Misschien is dat genoeg, en is de rest bedacht omdat het kon.
 
+## Onverhoeds raken: wie je niet ziet, raak je harder (Marcel, 22 sep 2026)
+
+Marcel: extra schade aan een beest dat je niet ziet, of dat je van achteren raakt. Nog niet
+gebouwd, en de getallen zijn een voorstel.
+
+**Twee gevallen.**
+
+- **Niet gezien.** De klap die een gevecht opent terwijl het monster je nog niet had ontdekt ("Je
+  valt de wolf aan!" in plaats van "De wolf ziet je!"). Dat haak zit er al: `heldBegint` in
+  `js/gevecht.js`.
+- **Van achteren.** Het monster kijkt de andere kant op. Elk wezen heeft al een kijkrichting van
+  acht (`beeldStand.richting`, voor de sprite); "achter" zijn de drie richtingen tegenover waar hij
+  kijkt. In een gevecht draait een monster naar wie hij aanvalt, dus eromheen lopen kost
+  actiepunten — zoals in Jagged Alliance.
+
+**Waarom het past.** Het versterkt de kernregel in plaats van hem te verzwakken: een spreuk wordt
+er nooit goedkoper door in jaren, maar een gevecht wordt korter, en dus heb je er minder nodig.
+Sluipen krijgt er een tweede kant bij: niet alleen een gevecht ontlopen, maar het ook op jouw
+voorwaarden beginnen. En het dwaallicht wordt meer waard: een monster dat naar het licht kijkt,
+keert jou zijn rug toe.
+
+**Waar het wringt: de staf is gratis.** Een verrassingsklap met de staf die een wolf in één keer
+velt, is een gevecht zonder jaren — precies wat de kernregel verbiedt. Voorstel:
+
+- een **spreuk** krijgt de bonus als schade: niet gezien +2, van achteren +1 (niet opgeteld; het
+  hoogste telt);
+- de **staf** krijgt geen schade erbij maar iets wat een gevecht ontloopt: het monster is
+  **verdoofd** en slaat zijn eerste beurt over. Tijd om weg te lopen of om goed te gaan staan.
+
+**Zichtbaar vóór je klikt**, zoals alles: de tekst bij de muis zegt het ("van achteren: +1"), uit
+hetzelfde antwoord van `handelingGevecht`, en onder een monster staat een klein teken voor zijn
+kijkrichting.
+
 ## Open vragen voor Marcel
+
+- **Onverhoeds raken:** kloppen +2 en +1, en is verdoven de goede prijs voor de staf?
 
 - **Kringen per leeftijd:** 84, 88, 92 en 96, of andere grenzen?
 - **Meesterschap:** telt alleen raak gebruik? Zijn vijf treden met deze drempels goed?
