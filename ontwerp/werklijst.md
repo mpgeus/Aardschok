@@ -25,10 +25,13 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
   grondlaag naar `objecten` verplaatsen (`npm run kaarten` klaagt erover).
 
 **Klaar om te starten, in deze volgorde.** Elk stuk is een korte agent. Bekijk eerst de meter.
-1. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder).
-2. Fase B2b: de zeven vaklieden en meer gewone dorpelingen (punt 2).
-3. Fase B3: de portretten in de gesprekken (punt 2).
-4. Het questsysteem met De koude oven (punt 3), zodra Marcel die quest goed vindt.
+1. **Het questsysteem (punt 3). Marcel wil dit eerst (22 sep).** Het zijn spelregels zonder kunst,
+   dus het wacht niet op de huizen of de vaklieden. Het ontwerp staat in `toren.md`, "Hoe het
+   werkt". De bakker en de marskramer lopen nog niet (dat is B2b), dus tot dan worden ze als Wim
+   getekend. De koude oven als eerste quest is nog een voorstel; laat Marcel dat eerst bevestigen.
+2. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder).
+3. Fase B2b: de zeven vaklieden en meer gewone dorpelingen (punt 2).
+4. Fase B3: de portretten in de gesprekken (punt 2).
 
 **Het laatst af (22 sep):**
 - de tutorial, met Marcels keuzes erin;
