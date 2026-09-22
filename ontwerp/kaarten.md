@@ -68,7 +68,7 @@ het plusje *Eigenschap toevoegen*, soort *string*):
 | `overgang` | naam van een kaart | wie hier stapt, gaat naar die kaart |
 | `komt` | `x,y` | de tegel in déze kaart waar je landt als je van die andere kaart terugkomt |
 | `tekst` | bijvoorbeeld `Naar binnen` | wat er bij de muis staat boven een overgang (zonder: "Naar" en de naam van de kaart) |
-| `zaad` | een getal | een gewone dorpeling (nog zonder eigen kunst: hij wordt als Wim getekend) |
+| `zaad` | een getal | een gewone dorpeling; het getal kiest zijn uiterlijk, en hetzelfde getal geeft altijd dezelfde |
 
 Het beginbestand heeft er al een als voorbeeld: *pad terug naar het erf*.
 
