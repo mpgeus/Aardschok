@@ -378,3 +378,32 @@ het is een kwestie van hem `dwaalt`, `thuis` en een straal geven.
   jaar niet had getoverd (`js/spreuken.js`). In het nieuwe begin woont hij bij zijn meester; dan
   vraagt dat een andere reden, of een andere naam.
 - **Wat zit er boven?** Nog niet bedacht.
+
+- **De openingsscène uit een verhalenmachine** (Marcel, 22 sep 2026: "Dit wordt de openingsscene").
+  Marcel stuurde een scenario van een AI Story Generator: Archibald (80-plus) verknoeit een spreuk
+  in zijn instortende toren, verschrompelt ter plekke, en laat zijn leerling Kael (18) achter met
+  de janitor Barnaby. De bovenverdiepingen zijn "phased out" en kosten goud en kristallen; boven
+  zit iets wat de meester vergeten is en Barnaby nog weet.
+
+  Dat is grotendeels ons eigen verhaal terug, met Engelse namen — Barnaby is Wim, Archibald is de
+  meester, en de vergeten bewoner boven staat hierboven al. **Wat er nieuw in zit, is één zin:**
+
+      ARCHIBALD (raspend): Ah. Four drops. My mistake.
+
+  Hij sterft niet ómdat hij jou redt, maar omdat hij een getal verkeerd onthouden had. Dat is
+  dichter bij de kernregel dan onze huidige dood: ouderdom is hier niet de prijs die hij bewust
+  betaalt, maar wat hem het getal afneemt. En het is een grap die de ernst niet ondermijnt maar
+  ís. **Nog te beslissen** of de laatste spreuk van de tutorial zo'n misrekening wordt in plaats
+  van een bewuste uitgave.
+
+  Drie dingen uit dat scenario botsen met wat al besloten is, en dat is geen detail:
+  - **De held is daar 18.** Bij ons is hij 84, en dat is het hele spel (`De laatste klim`): de
+    leeftijdsbalk, jaren als munt, en hoe oud je boven aankomt. Een jonge leerling heeft geen
+    balk en geen prijs.
+  - **Andere torens leegroven.** Bij ons is het één toren, verdieping voor verdieping hersteld
+    met goud en grondstoffen (`ontwerp/toren.md`).
+  - **Barnaby vertelt meteen wat er boven zit.** Dat houden wij juist open; het is waar je
+    naartoe klimt.
+
+  En de toon is breder dan "weemoedig met een knipoog": "Typical." en "Grab a broom. We've got
+  work to do." is het register dat op dezelfde dag over de tutorial "veel te cringe" heette.
