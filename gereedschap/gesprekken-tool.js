@@ -689,6 +689,7 @@
       const b = knop('gt-sit' + (i === huidigeSituatieNr ? ' gt-sit-aan' : '') + (s.quest ? ' gt-sit-quest' : ''), s.naam, () => {
         huidigeSituatieNr = i;
         renderSituaties();
+        renderKaart();
         renderGesprek();
         renderQuest();
       });
@@ -702,7 +703,7 @@
     if (nu && nu.eigen != null) {
       balk.appendChild(knop('gt-mini', 'naam…', () => hernoemSituatie(nu.eigen)));
       balk.appendChild(klapChip(alsInTaal(nu.als) || 'niets gezet', 'niets gezet', () =>
-        bouwAlsEditor(persoon.situaties[nu.eigen], () => { naVeldWijziging(); renderSituaties(); renderGesprek(); }, { lijsten: true })));
+        bouwAlsEditor(persoon.situaties[nu.eigen], () => { naVeldWijziging(); renderSituaties(); renderKaart(); renderGesprek(); }, { lijsten: true })));
       balk.appendChild(knop('gt-mini gt-mini-x', '✕', () => {
         if (!confirm(`Situatie "${nu.naam}" weghalen? Het gesprek zelf verandert er niet van.`)) return;
         persoon.situaties.splice(nu.eigen, 1);
@@ -983,7 +984,7 @@
     rij.appendChild(el('span', 'gt-waar' + (lab.fout ? ' gt-fout-tekst' : ''), lab.tekst));
     rij.addEventListener('click', () => {
       const naar = situatiesVan(huidigePersoonId).findIndex((s) => waar.has(s.naam));
-      if (naar >= 0) { huidigeSituatieNr = naar; renderSituaties(); renderGesprek(); renderQuest(); setTimeout(() => gaNaarKnoop(id), 30); }
+      if (naar >= 0) { huidigeSituatieNr = naar; renderSituaties(); renderKaart(); renderGesprek(); renderQuest(); setTimeout(() => gaNaarKnoop(id), 30); }
     });
     return rij;
   }
@@ -994,6 +995,178 @@
     doel.scrollIntoView({ block: 'center', behavior: 'smooth' });
     doel.classList.add('gt-aangewezen');
     setTimeout(() => doel.classList.remove('gt-aangewezen'), 1200);
+  }
+
+  // ---------- het kaartje: de vorm van het gesprek ----------
+  //
+  // Marcel stuurde op 22 sep een node-editor voor RPG Maker ("misschien dat dat helpt"): blokjes
+  // op een canvas die je sleept en verbindt. Wat dat beter doet is de vórm laten zien, en dat
+  // miste hier. Wat het slechter doet voor ons: een canvas zet alle voorwaarden weer tegelijk in
+  // beeld (precies wat de situatiebalk wegnam), je schrijft er alinea's in blokjes van tweehonderd
+  // pixels, en slepen is een tweede baan naast het schrijven. Dus: een kaartje erbij, geen canvas
+  // in plaats van. Het volgt de situatie, het legt zichzelf neer, en klikken springt naar de tekst.
+  const KB = 176, KH = 52, KGX = 54, KGY = 30; // blokje, en de ruimte ertussen
+  let kaartOpen = true;
+
+  function renderKaart() {
+    const wrap = $('gt-kaart');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    const persoon = T.GESPREKKEN[huidigePersoonId];
+    if (!persoon || !persoon.knopen[persoon.start]) return;
+    const sit = huidigeSituatie();
+    const plan = planGesprek(persoon, staatVanSituatie(sit && sit.als, huidigePersoonId));
+    const kop = el('div', 'gt-kaart-kop');
+    kop.appendChild(knop('gt-vouw-knop', `Kaartje · ${maal(plan.zichtbaar.size, 'stuk', 'stukken')} gesprek ${kaartOpen ? '▴' : '▾'}`, () => {
+      kaartOpen = !kaartOpen;
+      renderKaart();
+    }));
+    wrap.appendChild(kop);
+    if (!kaartOpen) return;
+    wrap.appendChild(bouwKaart(persoon, plan));
+  }
+
+  function bouwKaart(persoon, plan) {
+    // Hoe ver sta je van het begin? Dat is de kolom waarin een stuk gesprek komt; wie in dezelfde
+    // kolom staat, komt eronder. Genoeg voor een gesprek van tien stukken, en niemand hoeft te
+    // slepen.
+    const diepte = new Map([[persoon.start, 0]]);
+    const randen = [];
+    const rij = [persoon.start];
+    while (rij.length) {
+      const id = rij.shift();
+      for (const k of (plan.zichtbaar.get(id) || { keuzes: [] }).keuzes) {
+        if (!k.naar || !plan.zichtbaar.has(k.naar)) continue;
+        randen.push({ van: id, naar: k.naar });
+        if (!diepte.has(k.naar)) { diepte.set(k.naar, diepte.get(id) + 1); rij.push(k.naar); }
+      }
+    }
+    const lagen = new Map();
+    for (const [id, d] of diepte) { if (!lagen.has(d)) lagen.set(d, []); lagen.get(d).push(id); }
+    const plek = new Map();
+    let hoogsteRij = 0;
+    [...lagen.keys()].sort((a, b) => a - b).forEach((d) => {
+      lagen.get(d).forEach((id, i) => plek.set(id, { x: 8 + d * (KB + KGX), y: 8 + i * (KH + KGY) }));
+      hoogsteRij = Math.max(hoogsteRij, lagen.get(d).length);
+    });
+    const breed = 16 + lagen.size * (KB + KGX);
+    const hoog = 16 + hoogsteRij * (KH + KGY);
+
+    const doos = el('div', 'gt-kaart-blad');
+    doos.style.width = breed + 'px';
+    doos.style.height = hoog + 'px';
+
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('width', breed);
+    svg.setAttribute('height', hoog);
+    svg.setAttribute('class', 'gt-kaart-lijnen');
+    const defs = document.createElementNS(NS, 'defs');
+    defs.innerHTML = '<marker id="gt-pijl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">'
+      + '<path d="M0,0 L7,3 L0,6 z" fill="currentColor"/></marker>';
+    svg.appendChild(defs);
+    for (const r of randen) {
+      const a = plek.get(r.van), b = plek.get(r.naar);
+      // Terug naar iets wat eerder kwam (Wims "Nog iets anders") gaat onderlangs en gestippeld:
+      // anders lijkt een lus op voortgang, en dat is het niet.
+      const terug = b.x <= a.x;
+      const p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', terug
+        ? `M${a.x + KB / 2},${a.y + KH} C${a.x + KB / 2},${a.y + KH + 26} ${b.x + KB / 2},${b.y + KH + 26} ${b.x + KB / 2},${b.y + KH}`
+        : `M${a.x + KB},${a.y + KH / 2} C${a.x + KB + KGX / 2},${a.y + KH / 2} ${b.x - KGX / 2},${b.y + KH / 2} ${b.x},${b.y + KH / 2}`);
+      p.setAttribute('class', 'gt-kaart-lijn' + (terug ? ' gt-kaart-terug' : ''));
+      p.setAttribute('marker-end', 'url(#gt-pijl)');
+      svg.appendChild(p);
+    }
+    doos.appendChild(svg);
+
+    for (const [id, p] of plek) {
+      const opgelost = plan.zichtbaar.get(id);
+      const b = el('button', 'gt-kaart-knoop' + (id === persoon.start ? ' gt-kaart-start' : ''));
+      b.type = 'button';
+      b.style.left = p.x + 'px';
+      b.style.top = p.y + 'px';
+      b.appendChild(el('span', 'gt-kaart-zin', opgelost.regel ? opgelost.regel.zeg : '(zegt hier niets)'));
+      const verder = opgelost.keuzes.filter((k) => k.naar && plan.zichtbaar.has(k.naar)).length;
+      const stopt = opgelost.keuzes.filter((k) => k.sluit || !k.naar).length;
+      const merk = [];
+      if (verder) merk.push(maal(verder, 'vraag', 'vragen'));
+      if (stopt) merk.push(stopt + '× einde');
+      if (!opgelost.keuzes.length) merk.push('geen antwoord');
+      b.appendChild(el('span', 'gt-kaart-merk', merk.join(' · ')));
+      b.title = 'Ga naar dit stuk gesprek';
+      b.addEventListener('click', () => gaNaarKnoop(id));
+      doos.appendChild(b);
+    }
+    return doos;
+  }
+
+  // ---------- zoeken over alle mensen heen ----------
+  // Bij twintig personen weet je niet meer wie wat zegt, en "waar stond die zin over de fontein
+  // ook alweer" is dan een kwartier scrollen.
+  function zoekResultaten(term) {
+    const t = term.trim().toLowerCase();
+    if (t.length < 2) return [];
+    const uit = [];
+    for (const [pid, p] of Object.entries(T.GESPREKKEN)) {
+      for (const [kid, knoop] of Object.entries(p.knopen)) {
+        for (const r of knoop.tekst || []) {
+          if ((r.zeg || '').toLowerCase().includes(t)) uit.push({ pid, kid, zeg: r.zeg, wie: p.naam, antwoord: false, als: r.als });
+        }
+        for (const k of knoop.keuzes || []) {
+          // Waar het antwoord staat erbij: Wim vraagt twee keer "Werkt de fontein nog?", op twee
+          // verschillende plekken, en zonder dat zijn die twee regels niet te onderscheiden.
+          if ((k.zeg || '').toLowerCase().includes(t)) uit.push({ pid, kid, zeg: k.zeg, wie: p.naam, antwoord: true, als: k.als, waar: eersteZin(p, kid) });
+        }
+      }
+    }
+    return uit.slice(0, 40);
+  }
+
+  function renderZoek() {
+    const veld = $('gt-zoek');
+    const uit = $('gt-zoek-uit');
+    if (!veld || !uit) return;
+    const term = veld.value;
+    uit.innerHTML = '';
+    const rijen = zoekResultaten(term);
+    if (term.trim().length < 2) { uit.classList.add('verborgen'); return; }
+    uit.classList.remove('verborgen');
+    if (!rijen.length) { uit.appendChild(el('p', 'gt-leeg', 'Niets gevonden.')); return; }
+    const t = term.trim().toLowerCase();
+    for (const r of rijen) {
+      const b = el('button', 'gt-zoek-rij');
+      b.type = 'button';
+      b.appendChild(el('span', 'gt-zoek-wie', r.wie));
+      const zin = el('span', 'gt-zoek-zin' + (r.antwoord ? ' gt-zoek-antwoord' : ''));
+      // De gevonden woorden oplichten, zodat je ziet waaróm deze regel er staat.
+      const i = r.zeg.toLowerCase().indexOf(t);
+      zin.appendChild(document.createTextNode(r.zeg.slice(0, i)));
+      zin.appendChild(el('mark', null, r.zeg.slice(i, i + t.length)));
+      zin.appendChild(document.createTextNode(r.zeg.slice(i + t.length)));
+      b.appendChild(zin);
+      if (r.waar) b.appendChild(el('span', 'gt-zoek-waar', 'na: ' + r.waar));
+      b.addEventListener('click', () => { uit.classList.add('verborgen'); veld.value = ''; gaNaarRegel(r.pid, r.kid, r.als); });
+      uit.appendChild(b);
+    }
+  }
+
+  // Naar een gevonden regel: de juiste persoon, en dan een situatie waarin je er ook echt komt.
+  // Liefst een waarin de gevonden zin zélf klinkt — anders spring je naar een plek waar hij wel
+  // staat maar niet te zien is, en dat is precies de verwarring die de situatiebalk wegnam.
+  function gaNaarRegel(pid, kid, als) {
+    if (!T.GESPREKKEN[pid]) return;
+    huidigePersoonId = pid;
+    const persoon = T.GESPREKKEN[pid];
+    const lijst = situatiesVan(pid);
+    const komtErUit = (s) => planGesprek(persoon, staatVanSituatie(s.als, pid)).zichtbaar.has(kid);
+    let nr = lijst.findIndex((s) => komtErUit(s) && T.voorwaardeGeldt(staatVanSituatie(s.als, pid), pid, als));
+    if (nr < 0) nr = lijst.findIndex(komtErUit);
+    huidigeSituatieNr = nr >= 0 ? nr : 0;
+    herbouwAlles();
+    vuil = false;
+    updateStatus();
+    setTimeout(() => gaNaarKnoop(kid), 40);
   }
 
   // ---------- de quest die aan dit gesprek hangt ----------
@@ -1024,7 +1197,7 @@
       const b = knop('gt-sit gt-sit-quest' + (fid === nuFase ? ' gt-sit-aan' : ''), fid, () => {
         if (naarSit < 0) return;
         huidigeSituatieNr = naarSit;
-        renderSituaties(); renderGesprek(); renderQuest();
+        renderSituaties(); renderKaart(); renderGesprek(); renderQuest();
       });
       b.title = 'Laat het gesprek zien zoals het in deze fase loopt';
       kop.appendChild(b);
@@ -1271,6 +1444,7 @@
   }
   function naDataStructuurWijziging() {
     renderSituaties();
+    renderKaart();
     renderGesprek();
     renderQuest();
     naVeldWijziging();
@@ -1279,6 +1453,7 @@
     renderPersonen();
     renderPersoonEditor();
     renderSituaties();
+    renderKaart();
     renderGesprek();
     renderQuest();
     renderFouten();
@@ -1428,6 +1603,13 @@
     koppel('gt-nieuw-persoon', 'click', nieuwPersoon);
     koppel('gt-opslaan', 'click', opslaan);
     koppel('gt-proberen', 'click', () => { const p = $('gt-proef'); if (p) p.classList.remove('verborgen'); beginProef(); });
+    koppel('gt-zoek', 'input', renderZoek);
+    koppel('gt-zoek', 'keydown', (e) => { if (e.key === 'Escape') { e.target.value = ''; renderZoek(); } });
+    // Buiten de uitslag klikken sluit hem; anders blijft er een lijst over de tekst hangen.
+    document.addEventListener('click', (e) => {
+      const uit = $('gt-zoek-uit');
+      if (uit && !uit.contains(e.target) && e.target !== $('gt-zoek')) uit.classList.add('verborgen');
+    });
     window.addEventListener('beforeunload', (e) => { if (vuil) { e.preventDefault(); e.returnValue = ''; } });
   }
 

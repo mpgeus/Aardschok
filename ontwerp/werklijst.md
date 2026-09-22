@@ -69,7 +69,9 @@ antwoorden die je dan kunt geven. Wat er niet klinkt, zakt naar onderen met de s
 waar het wél klinkt. **De fasen van een quest zijn situaties**, en de quest staat op dezelfde
 bladzijde met erbij welk antwoord welke weg neemt. Een situatie benoem je zelf; ze staan bij de
 persoon in `js/gesprekken.js` en het spel leest ze nooit. `test/situaties.test.cjs` bewaakt dat
-elke zin ergens klinkt. Zie `ontwerp/verhaal.md`.
+elke zin ergens klinkt. Erboven klapt een **kaartje** open dat de vorm van het gesprek laat zien
+(vanzelf neergelegd, klikken springt naar de tekst), en in de kopbalk **zoek je over alle mensen
+heen**. Zie `ontwerp/verhaal.md`.
 
 **Een gesprek schrijf je als een script, niet als een formulier** (22 sep, na Marcel: "totaal
 onlogisch"). Het hele gesprek staat nu op één bladzijde, in leesvolgorde: de zin als tekst, de

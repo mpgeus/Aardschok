@@ -98,6 +98,27 @@
   die nergens klinkt is bijna altijd een vergeten situatie, en de schrijver zegt dat wel op het
   scherm — maar alleen als je die persoon toevallig openslaat.
 
+- **Een kaartje erbij, geen canvas in plaats van** (Marcel, 22 sep 2026, met een link naar een
+  node-editor voor RPG Maker: "misschien dat dat helpt"). Zo'n editor is een canvas met blokjes
+  die je sleept en met lijnen verbindt. Wat die beter doet, is de **vorm** van het gesprek laten
+  zien, en dat miste in het script hierboven. Wat hij slechter doet, is precies wat we net hadden
+  opgelost: een canvas zet alle voorwaarden weer tegelijk in beeld, je schrijft er alinea's in
+  blokjes van tweehonderd pixels (onze regels zijn geen oneliners), en slepen is een tweede baan
+  naast het schrijven. Plus de maat: Wim is met elf stukken veruit de grootste, de bakker heeft er
+  vier, en het worden er honderd van vier à zes — een canvas is dan vooral lege ruimte.
+
+  Dus: een **kaartje** boven het script dat je open- en dichtklapt. Het legt zichzelf neer (kolom
+  = hoe ver je van het begin staat), het volgt de situatie zoals al het andere, een lus terug naar
+  een eerdere plek loopt onderlangs en gestippeld — want een lus is geen voortgang — en klikken
+  springt naar dat stuk in de tekst. Niets te slepen, niets bij te houden.
+
+  Daar hoort **zoeken over alle mensen heen** bij, wat die plugin wel had en wij niet: typ een
+  woord en je krijgt elke zin en elk antwoord waar het in staat, met de gevonden woorden
+  opgelicht. Klikken brengt je naar de juiste persoon én naar een situatie waarin die zin ook
+  echt klinkt — springen naar een plek waar hij wel staat maar niet te zien is, zou precies de
+  verwarring terugbrengen die de situatiebalk wegnam. En er staat bij wáár een antwoord staat,
+  want Wim vraagt op twee plekken "Werkt de fontein nog?".
+
 - **De tutorial legt uit in plaats van te spelen** (Marcel, 22 sep 2026: "veel te cringe"). Wat
   eraan gedaan is en waarom, staat hieronder bij "De opening".
 

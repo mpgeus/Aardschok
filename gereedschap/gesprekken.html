@@ -14,6 +14,10 @@
       <select id="gt-persoon"></select>
     </label>
     <button id="gt-nieuw-persoon" type="button">+ nieuw persoon</button>
+    <div class="gt-zoek-doos">
+      <input id="gt-zoek" type="search" placeholder="zoek een zin, bij iedereen…" autocomplete="off">
+      <div id="gt-zoek-uit" class="gt-zoek-uit verborgen"></div>
+    </div>
     <div class="gt-vul"></div>
     <a class="gt-naar" href="quests.html">Quests &rarr;</a>
     <a class="gt-naar" href="wereld.html">Wereld &rarr;</a>
@@ -31,6 +35,9 @@
 
   <main class="gt-blad">
     <div id="gt-persoon-editor"></div>
+    <!-- Het kaartje: de vorm van het gesprek in deze situatie, vanzelf neergelegd. Klikken springt
+         naar dat stuk in de tekst eronder. -->
+    <div id="gt-kaart" class="gt-kaart"></div>
     <div id="gt-gesprek"></div>
 
     <section class="paneel gt-quest-doos">
