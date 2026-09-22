@@ -16,7 +16,10 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 **Alles staat op `main`.** De sessie van 22 sep draaide in de cloud en werkte op de tak
 `claude/aardschok-quest-system-ywvpe7`; die is aan het eind in `main` gezet en gepusht, dus er
-staat niets meer los. Werk gewoon op `main`, zoals CLAUDE.md zegt.
+staat niets meer los en de tak mag weg. Werk gewoon op `main`, zoals CLAUDE.md zegt.
+
+**Besloten op 22 sep, nog te bouwen:** een wereldgereedschap naast Tiled — Tiled houdt de grond,
+wij de betekenis. Dat is nu punt 4 hieronder en het staat uitgeschreven in `kaarten.md`.
 
 **Tempo:** gewoon door. Marcel maakt het niet uit of de week vandaag of vrijdag op is (22 sep).
 Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halverwege stilvalt.
@@ -32,16 +35,25 @@ Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halver
   (`quest="bakker:zoeken"`) en iets wat daar huist; en de oven van de bakker met `raak="oven"` op
   een tegel waar je bij kunt. De eigenschappen staan in `kaarten.md`.
 
-**Klaar om te starten, in deze volgorde.** Elk stuk is een korte agent. Bekijk eerst de meter.
-Alle drie zijn renderwerk; het gereedschapswerk zonder kunst is af (punten 3 en 4).
-1. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder).
-2. Fase B2b: de zeven vaklieden en meer gewone dorpelingen (punt 2). Daar horen nu ook de bakker
-   en de marskramer bij: zonder hen kan De koude oven niet gespeeld worden.
-3. Fase B3: de portretten in de gesprekken (punt 2). De bakker, de marskramer en de smidsvrouw
-   hebben er nu ook nog geen.
+**Klaar om te starten, in deze volgorde.** Bekijk eerst de meter (`get_usage`) als je een agent
+start; de onderste drie zijn renderwerk en dus zwaar.
+
+1. **Het wereldgereedschap, ronde 1: kijken** (punt 4). De kaart in de browser met de tekencode
+   van het spel zelf, lagen aan en uit (begaanbaar, vast, wie waar staat met zijn dwaalstraal,
+   questvoorwerpen per fase, uitgangen), en klik-een-tegel-en-zie-wat-het-spel-denkt. **Schrijft
+   niets, dus het kan niets breken,** en de helft ligt er al: `js/kaart.js` leest de kaart,
+   `js/tekenen.js` tekent hem, en `wereldHaakjes` in `gereedschap/quests-tool.js` leest de
+   Tiled-eigenschappen al uit. Geen agent nodig. **Waarom dit eerst:** het maakt het neerzetten
+   van De koude oven en van de negentien dorpelingen veel goedkoper, en dat neerzetten staat op
+   het punt te gebeuren. Zie `kaarten.md`, "Een wereldgereedschap naast Tiled".
+2. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder). Renderwerk.
+3. Fase B2b: de zeven vaklieden en meer gewone dorpelingen. Daar horen nu ook de bakker en de
+   marskramer bij: die lenen het vel van Wim tot dit af is. Renderwerk.
+4. Fase B3: de portretten in de gesprekken. De bakker, de marskramer en de smidsvrouw hebben er
+   ook nog geen. Renderwerk.
 
 **Het laatst af (22 sep):**
-- het questsysteem, De koude oven, en de verhaaleditor die quests kan (punten 3 en 4);
+- het questsysteem, De koude oven, en de verhaaleditor die quests kan;
 - de tutorial, met Marcels keuzes erin;
 - huizenbouwer ronde 3 en 4a: uitbouwen, tuinstukken en hekjes in Tiled;
 - twaalf dorpelingen die lopen, met knieën.
