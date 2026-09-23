@@ -44,15 +44,24 @@
     wol: 'Wol. Van de schapen op de meent.',
     hout: 'Hout. Uit het bos van de heer.',
   };
+  // Het aantal mensen, en hoeveel woonruimte er is (js/gebouwen.js): dezelfde stijl als een
+  // grondstof, maar met "/" in plaats van een los getal, dus geen eigen icoon uit GRONDSTOF_ICOON.
+  const BEVOLKING_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<circle cx="9" cy="7" r="3" fill="#c9972f"/><path d="M3 19c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke="#c9972f" stroke-width="1.6" stroke-linecap="round"/>' +
+    '<circle cx="17" cy="8.5" r="2.4" fill="#e2b64a"/><path d="M13.3 19c.3-2.7 2.2-4.8 4.7-4.8 2.6 0 4.7 2.3 5 5" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
+    '</svg>';
 
   // De voorraadbalk wordt één keer gemaakt, zoals de spreukbalk in js/ui.js (bouwSpreuken);
-  // daarna verandert alleen het getal per grondstof.
+  // daarna verandert alleen het getal per grondstof, en het getal bij de mensen.
   function bouwVoorraadbalk(box) {
     box.innerHTML = T.GRONDSTOFFEN.map(
       (wat) =>
         `<div class="grondstof" data-wat="${wat}" title="${GRONDSTOF_UITLEG[wat]}">` +
         `<span class="icoon">${GRONDSTOF_ICOON[wat]}</span><span class="aantal">0</span></div>`,
-    ).join('');
+    ).join('') +
+      `<div class="grondstof" data-wat="bevolking" title="Mensen in het dorp, en hoeveel er wonen kunnen (js/gebouwen.js: elk huis geeft woonruimte).">` +
+      `<span class="icoon">${BEVOLKING_ICOON}</span><span class="aantal">0/0</span></div>`;
   }
 
   T.ui = T.ui || {};
@@ -75,6 +84,64 @@
       box.querySelector(`[data-wat="${wat}"] .aantal`).textContent = Math.floor(S.voorraad[wat] || 0);
     }
   };
+
+  // Het aantal mensen en de woonruimte (js/gebouwen.js, T.werkGebouwenBij): een eigen functie,
+  // want die twee veranderen niet via T.wijzigVoorraad en dus niet vanzelf mee met toonVoorraad.
+  T.ui.toonBevolking = function (S) {
+    const box = $('voorraadbalk');
+    if (!box.children.length) bouwVoorraadbalk(box);
+    const el = box.querySelector('[data-wat="bevolking"] .aantal');
+    if (el) el.textContent = `${Math.floor(S.bevolking)}/${Math.floor(S.woonruimte)}`;
+  };
+
+  // Het bouwmenu: de soorten van de huidige trede, met hun kosten en wat ze doen (ontwerp/spel.md,
+  // "Gebouwen"). Een klik op een rij geeft T.S.bouwSoort dat gebouw mee — daarna richt de muis
+  // een spookbeeld (js/main.js, js/tekenen.js) tot een klik op de kaart hem neerzet.
+  function bouwmenuInhoud(S) {
+    const rijen = Object.keys(T.GEBOUWEN)
+      .filter((id) => T.GEBOUWEN[id].trede === S.trede && T.GEBOUWEN[id].menu !== false)
+      .map((id) => {
+        const g = T.GEBOUWEN[id];
+        const kosten = Object.entries(g.kosten).map(([wat, n]) => `${n} ${wat}`).join(', ');
+        return (
+          `<button data-soort="${id}">` +
+          `<span class="bouw-naam">${T.hoofdletter(g.naam)}</span>` +
+          `<span class="bouw-kosten">${kosten} · ${g.bouwtijd} dag${g.bouwtijd === 1 ? '' : 'en'}</span>` +
+          `<span class="bouw-uitleg">${g.beschrijving}</span>` +
+          `</button>`
+        );
+      })
+      .join('');
+    return `<div class="kop">Bouwen — het ${S.trede}</div>${rijen || '<p class="bouw-leeg">Hier valt nu niets te bouwen.</p>'}`;
+  }
+
+  T.ui.toonBouwmenu = function (S) {
+    const box = $('bouwmenu');
+    box.classList.toggle('verborgen', !S.bouwMenuOpen);
+    if (S.bouwMenuOpen) box.innerHTML = bouwmenuInhoud(S);
+    $('bouwmenu-knop').classList.toggle('actief', S.bouwMenuOpen || !!S.bouwSoort);
+  };
+
+  $('bouwmenu').addEventListener('click', (ev) => {
+    const b = ev.target.closest('button');
+    if (!b || !T.S) return;
+    T.S.bouwSoort = b.dataset.soort;
+    T.S.bouwMenuOpen = false;
+    T.ui.toonBouwmenu(T.S);
+  });
+
+  $('bouwmenu-knop').addEventListener('click', (ev) => {
+    ev.currentTarget.blur();
+    const S = T.S;
+    if (!S) return;
+    if (S.bouwSoort || S.bouwMenuOpen) {
+      S.bouwSoort = null;
+      S.bouwMenuOpen = false;
+    } else {
+      S.bouwMenuOpen = true;
+    }
+    T.ui.toonBouwmenu(S);
+  });
 
   // Eén stap trager of sneller, van pauze tot 3x. T.zetSnelheid (js/tijd.js) onthoudt de laatste
   // snelheid, zodat P na een stapje terug weer daar hervat.

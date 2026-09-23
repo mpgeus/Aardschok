@@ -384,3 +384,50 @@ kbd {
 #voorraadbalk .grondstof { display: flex; align-items: center; gap: 5px; }
 #voorraadbalk .grondstof .icoon { display: flex; width: 22px; height: 22px; }
 #voorraadbalk .grondstof .aantal { font: 15px var(--kop), system-ui, sans-serif; color: var(--inkt); min-width: 1.4em; }
+/* Het scheidingslijntje voor de mensen, los van de vier grondstoffen ervoor. */
+#voorraadbalk .grondstof[data-wat="bevolking"] { padding-left: 13px; border-left: 1px solid var(--rand); }
+
+/* Het bouwmenu (js/hud.js, js/gebouwen.js): de knop in dezelfde rij als de kalender en de
+   voorraad, en het paneel met de soorten van de huidige trede eronder. */
+#bouwmenu-knop {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 0 14px;
+  font: 13px system-ui, sans-serif;
+  color: var(--gedempt);
+  cursor: pointer;
+}
+#bouwmenu-knop:hover { color: var(--inkt); }
+#bouwmenu-knop.actief { color: #1b1510; background: var(--goud); border-color: var(--goud); }
+#bouwmenu-knop.actief kbd { color: inherit; border-color: currentColor; opacity: 0.7; }
+#bouwmenu {
+  position: fixed;
+  left: 16px;
+  top: 112px;
+  width: 300px;
+  max-height: calc(100vh - 130px);
+  overflow-y: auto;
+  padding: 10px 12px 12px;
+}
+#bouwmenu .kop { font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; margin-bottom: 6px; }
+#bouwmenu button {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
+  padding: 7px 9px;
+  margin-bottom: 4px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--rand);
+  border-radius: 6px;
+  cursor: pointer;
+}
+#bouwmenu button:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(226, 182, 74, 0.5); }
+#bouwmenu button:last-child { margin-bottom: 0; }
+#bouwmenu .bouw-naam { font: 14px var(--kop); color: var(--inkt); }
+#bouwmenu .bouw-kosten { font-size: 11px; color: var(--goud); }
+#bouwmenu .bouw-uitleg { font-size: 12px; color: var(--gedempt); line-height: 1.3; }
+#bouwmenu .bouw-leeg { font-size: 12px; color: var(--gedempt); }

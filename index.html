@@ -35,7 +35,13 @@
       <div id="kalender-seizoen"></div>
     </div>
     <div id="voorraadbalk" class="paneel"></div>
+    <button id="bouwmenu-knop" class="paneel" title="Bouwen"><kbd>B</kbd> Bouwen</button>
   </div>
+
+  <!-- Het bouwmenu (js/hud.js, T.ui.toonBouwmenu): de soorten van de huidige trede, met hun
+       kosten en wat ze doen. Kies er een, en een spookbeeld volgt de muis (js/main.js,
+       js/tekenen.js) tot een klik hem neerzet. -->
+  <div id="bouwmenu" class="paneel verborgen"></div>
 
   <div id="plek"></div>
   <div id="volgorde" class="paneel"></div>
@@ -80,7 +86,8 @@
 
   <div id="hulp-gehucht">
     Klik om te lopen, te praten of iets te gebruiken.<br>
-    Kalender: <kbd>P</kbd> pauze/hervat · <kbd>-</kbd> <kbd>=</kbd> trager/sneller
+    Kalender: <kbd>P</kbd> pauze/hervat · <kbd>-</kbd> <kbd>=</kbd> trager/sneller<br>
+    <kbd>B</kbd> bouwen · <kbd>Esc</kbd> of rechtsklik legt een gebouw weer weg
   </div>
 
   <!-- Gewone scripts, geen modules: zo werkt het spel ook als je index.html los opent.
@@ -98,6 +105,7 @@
   <script src="js/voorraad.js"></script>
   <script src="js/wereld.js"></script>
   <script src="js/mensen.js"></script>
+  <script src="js/gebouwen.js"></script>
   <script src="js/kaart.js"></script>
   <script src="js/gebied.js"></script>
   <script src="js/pad.js"></script>

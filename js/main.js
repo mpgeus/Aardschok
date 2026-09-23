@@ -41,6 +41,10 @@
       inventaris: new Set(),
       kalender: T.nieuweKalender(), // dag, seizoen, jaar en snelheid (js/tijd.js)
       voorraad: T.nieuweVoorraad(), // goud, graan, wol, hout (js/voorraad.js)
+      gebouwen: [], // wat er staat of in aanbouw is (js/gebouwen.js), en hoe ver S.gebouwenDag is
+      bevolking: 0, woonruimte: 0, // aantal mensen, en hoeveel er als woonruimte gegeven is
+      trede: 'gehucht', // de hoogste trede van het dorp; omhoog gaat pas mee met "Groei" (werklijst.md, punt 5)
+      bouwSoort: null, bouwHover: null, bouwMenuOpen: false, // het bouwmenu (T.NIEUWE_HUD, js/hud.js)
       goud: 0,
       goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
       quests: {}, // per quest de fase waarin hij staat (js/quest.js)
@@ -159,7 +163,32 @@
     return t;
   }
 
+  // Een gebouw in de hand (S.bouwSoort, het bouwmenu in js/hud.js) verandert wat de muis doet,
+  // net als een spreuk in de hand (CLAUDE.md, "Een spreuk in de hand verandert wat de muis
+  // doet"): hij richt een voet in plaats van dat er iets van het gewone rondlopen gebeurt. De
+  // tegel onder de muis is de linkerbovenhoek van die voet (dezelfde afspraak als "beslaat" op de
+  // kaart, js/kaart.js); T.gebouwPast zegt of hij daar past.
+  function werkBouwHoverBij() {
+    if (!S.muis) {
+      S.bouwHover = null;
+      return;
+    }
+    const { x: sx, y: sy } = naarVlak(S.muis.x, S.muis.y);
+    const f = T.naarWereld(sx, sy);
+    const x = Math.round(f.x);
+    const y = Math.round(f.y);
+    S.bouwHover = { x, y, ok: T.gebouwPast(S, S.bouwSoort, x, y) };
+    canvas.style.cursor = 'crosshair';
+    T.ui.verbergTooltip();
+    S.hover = null;
+    S.handeling = null;
+  }
+
   function werkHoverBij() {
+    if (S.bouwSoort) {
+      werkBouwHoverBij();
+      return;
+    }
     const actief = S.modus === 'verkennen' || (S.modus === 'gevecht' && !S.bezig && heldAanDeBeurt());
     S.spreukBereik = actief && S.spreuk ? T.spreukBereik(S) : null;
     if (!S.muis || !actief) {
@@ -225,6 +254,7 @@
     // De kalender loopt op haar eigen klok, niet op S.tijd (CLAUDE.md, "Testen in de browser"):
     // zo laat pauzeren of versnellen nooit een animatie stilvallen of doorschieten.
     T.tikKalender(S, dt);
+    T.werkGebouwenBij(S); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
     T.werkAnimatiesBij(S, dt);
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
@@ -276,12 +306,32 @@
   canvas.addEventListener('click', (ev) => {
     S.muis = { x: ev.clientX, y: ev.clientY };
     werkHoverBij();
+    if (S.bouwSoort) {
+      const soort = S.bouwSoort;
+      const hover = S.bouwHover;
+      if (!hover || !hover.ok) {
+        T.ui.bericht('Daar past het niet.', 'gevaar');
+        return;
+      }
+      const r = T.plaatsGebouw(S, soort, hover.x, hover.y);
+      if (!r.gelukt) {
+        T.ui.bericht(r.reden, 'gevaar');
+        return;
+      }
+      T.ui.bericht(`${T.GEBOUWEN[soort].naam} in aanbouw (${T.GEBOUWEN[soort].bouwtijd} dagen).`, 'goed');
+      S.bouwSoort = null;
+      return;
+    }
     const h = S.handeling;
     if (!h || !h.doe || h.kan === false) return;
     h.doe();
   });
   canvas.addEventListener('contextmenu', (ev) => {
     ev.preventDefault();
+    if (S.bouwSoort) {
+      S.bouwSoort = null;
+      return;
+    }
     T.kiesSpreuk(S, null);
   });
   // De spreuktoetsen (2, 3, 4) werken binnen én buiten een gevecht, want een dwaallicht en een
@@ -305,13 +355,34 @@
       return;
     }
     if (S.modus !== 'verkennen' && S.modus !== 'gevecht') return;
+    // B: het bouwmenu (js/hud.js), alleen in het nieuwe spel en alleen bij het rondlopen — botst
+    // nergens mee (CLAUDE.md, "Toetsen"). Nog eens B, Esc of rechtsklik legt een gebouw weer weg,
+    // net als bij een spreuk.
+    if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'b' || ev.key === 'B')) {
+      T.kiesSpreuk(S, null);
+      if (S.bouwSoort || S.bouwMenuOpen) {
+        S.bouwSoort = null;
+        S.bouwMenuOpen = false;
+      } else {
+        S.bouwMenuOpen = true;
+      }
+      if (T.ui.toonBouwmenu) T.ui.toonBouwmenu(S);
+      return;
+    }
     const spreuk = T.SPREUK_VOLGORDE.find((id) => T.SPREUKEN[id].toets === ev.key);
     if (spreuk) {
+      S.bouwSoort = null;
+      S.bouwMenuOpen = false;
       T.kiesSpreuk(S, spreuk);
       return;
     }
     if (ev.key === '1' || ev.key === 'Escape') {
       T.kiesSpreuk(S, null);
+      if (S.bouwSoort || S.bouwMenuOpen) {
+        S.bouwSoort = null;
+        S.bouwMenuOpen = false;
+        if (T.ui.toonBouwmenu) T.ui.toonBouwmenu(S);
+      }
       return;
     }
     if (S.modus === 'verkennen') {
@@ -369,6 +440,11 @@
       if (snelheid != null) T.zetSnelheid(S, snelheid);
       T.ui.toonKalender(S); // ook bijwerken als alleen de dag rechtstreeks gezet is
       return { ...T.datumVanDag(S.kalender.dag), snelheid: S.kalender.snelheid };
+    },
+    // Een gebouw rechtstreeks neerzetten, zonder het bouwmenu: Toren.debug.bouw('huis', 10, 10).
+    // Zelfde antwoord als een klik in het bouwmenu (js/gebouwen.js, T.plaatsGebouw).
+    bouw(soort, x, y) {
+      return T.plaatsGebouw(S, soort, x, y);
     },
     // Hoeveel milliseconden kost één beeld? Toren.debug.meet() tekent n beelden achter elkaar en
     // geeft het gemiddelde, de mediaan en de slechtste terug. Een beeld hoort ruim onder de 16 ms

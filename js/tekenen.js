@@ -154,6 +154,7 @@
     ctx.drawImage(g.canvas, g.vx, g.vy);
     tekenRaster(ctx, S);
     tekenMarkeringen(ctx, S);
+    tekenBouwSpook(ctx, S);
     if (effectenAan()) tekenVloerlicht(ctx, S);
 
     const lijst = [];
@@ -531,6 +532,23 @@
       ctx.stroke();
     }
     ctx.restore();
+  }
+
+  // Het gebouw dat de speler in de hand heeft (S.bouwSoort, het bouwmenu in js/hud.js): zijn hele
+  // voet licht op, groen als T.gebouwPast hem daar toestaat, anders rood — dezelfde twee kleuren
+  // als tekenMarkeringen voor het looppad gebruikt (licht/rood hieronder).
+  function tekenBouwSpook(ctx, S) {
+    if (!S.bouwSoort || !S.bouwHover) return;
+    const voet = T.gebouwVoet(S.bouwSoort);
+    if (!voet) return;
+    ctx.fillStyle = S.bouwHover.ok ? 'rgba(134, 196, 111, 0.45)' : 'rgba(224, 96, 79, 0.45)';
+    for (let dy = 0; dy < voet.h; dy++) {
+      for (let dx = 0; dx < voet.b; dx++) {
+        const p = T.naarScherm(S.bouwHover.x + dx, S.bouwHover.y + dy);
+        T.ruit(ctx, p.x, p.y, 0.94);
+        ctx.fill();
+      }
+    }
   }
 
   function tekenMarkeringen(ctx, S) {
@@ -1036,7 +1054,9 @@
       const dof = randDof(S.wereld, v.x, v.y);
       const dekking = v.doorkijk == null ? 1 : v.doorkijk;
       const isToren = v.soort === 'toren';
-      const alpha = isToren ? dof * dekking : dof;
+      // In aanbouw (js/gebouwen.js, T.plaatsGebouw): bleker, zodat je ziet dat hij er nog niet
+      // helemaal staat, zonder er een tweede tekening voor nodig te hebben.
+      const alpha = (isToren ? dof * dekking : dof) * (v.inAanbouw ? 0.45 : 1);
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;
       const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v));
