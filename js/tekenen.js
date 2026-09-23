@@ -887,24 +887,33 @@
   //   waar de dichtheid nul wordt, tekent deze code niets meer: de donkere achtergrond die
   //   T.tekenScene daar al neerzet, is dan zelf het bos, dus het houdt nergens hard op.
   const BOSRAND_SOORTEN = ['eik', 'herfstEik', 'den', 'berk', 'wilg', 'appelboom', 'dodeBoom', 'struik', 'bessenStruik'];
+  // herfstEik is de oranje-rode herfstvariant van de eik (gereedschap/pixelart/bomen.cjs); in het
+  // gehucht staat de kalender op lente (js/tijd.js, S.kalender), dus daar hoort geen herfstboom te
+  // staan (Marcel, 23 sep 2026). Seizoenen die bomen écht laten verkleuren komen later; dit is de
+  // plek waar dat dan aan S.kalender.seizoen moet gaan hangen in plaats van aan de gebiedsnaam.
+  const HERFST_SOORTEN = ['herfstEik'];
+  const BOSRAND_GEBIEDEN_ZONDER_HERFST = ['gehucht'];
   const BOSRAND_DICHT = 2; // ringen die helemaal vol staan, vlak tegen de kaart aan
   const BOSRAND_DIEP = 16; // ringen waarna er niets meer bij komt
   const BOSRAND_HELDER_MIN = 0.32;
 
   // Welke (vel, id)-paren in tegels/bomen.png en tegels/begroeiing.png een boom of struik zijn:
   // op naam opgezocht in T.TEGELS, niet op een vast nummer. De pixel-art-gereedschap maakt die
-  // vellen opnieuw aan (npm run pixelart), en dan kan de volgorde erin verschuiven.
-  let bosrandVellen = null;
-  function bosrandVellenOpbouwen() {
+  // vellen opnieuw aan (npm run pixelart), en dan kan de volgorde erin verschuiven. Twee lijsten
+  // (met en zonder herfstvarianten), want welke van de twee een gebied krijgt hangt af van het
+  // gebied zelf (zie bosrandOp hieronder) en dat kan per wereld verschillen.
+  const bosrandVellenPerSoort = {};
+  function bosrandVellenOpbouwen(metHerfst) {
     const r = [];
     for (const velNaam of ['bomen', 'begroeiing']) {
       const vel = T.TEGELS && T.TEGELS[velNaam];
       if (!vel) continue;
       vel.tiles.forEach((tegel, id) => {
-        if (tegel && BOSRAND_SOORTEN.includes(tegel.naam)) r.push({ vel: velNaam, id, soort: tegel.naam });
+        if (!tegel || !BOSRAND_SOORTEN.includes(tegel.naam)) return;
+        if (!metHerfst && HERFST_SOORTEN.includes(tegel.naam)) return;
+        r.push({ vel: velNaam, id, soort: tegel.naam });
       });
     }
-    bosrandVellen = r;
     return r;
   }
 
@@ -952,7 +961,10 @@
     if (r >= 1 && r <= BOSRAND_DIEP) {
       const zaad = bosrandZaad(w);
       if (hasj(x, y, zaad) < bosrandDichtheid(r)) {
-        if (!bosrandVellen) bosrandVellenOpbouwen();
+        const metHerfst = !BOSRAND_GEBIEDEN_ZONDER_HERFST.includes(w.gebied);
+        const soort = metHerfst ? 'met' : 'zonder';
+        if (!bosrandVellenPerSoort[soort]) bosrandVellenPerSoort[soort] = bosrandVellenOpbouwen(metHerfst);
+        const bosrandVellen = bosrandVellenPerSoort[soort];
         if (bosrandVellen.length) {
           const keuze = bosrandVellen[Math.floor(hasj(x, y, zaad + 1) * bosrandVellen.length)];
           v = { soort: keuze.soort, vel: keuze.vel, id: keuze.id, x, y, beslaat: [1, 1], r, bosrand: true };
