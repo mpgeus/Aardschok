@@ -30,10 +30,9 @@ eruit na het proefje (punt 3).
 **Wacht op Marcel:**
 - De open vragen in `spel.md`, vooral: hoe je als poppetje honderden mensen bestuurt, welke
   goederen de heer vraagt, en hoe ver de politiek gaat. Die zijn nodig voor het proefje.
+- **Het voorstel voor de kern** in `spel.md` ("De kern voor het proefje"): goederen, wat de heer
+  wil, wat de inner ziet, drie groepen en vijf keuren. Schrappen en aanvullen.
 - Een naam; "Aardschok" past niet meer.
-- In de werkmap staan nog bloemen en twee reuzenspinnen op `wereld.tmj`
-  (`kaarten/wereld.betekenis.json` en `kaarten/kaarten.js`) die niet vastgelegd zijn. Vastleggen
-  of weggooien?
 
 **Klaar om te starten:**
 1. **De kern op papier,** samen met Marcel. Klaar als `spel.md` zegt welke goederen er zijn en wie

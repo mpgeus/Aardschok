@@ -106,6 +106,68 @@ beheer gaat over hoeveel, het avontuur over wie, en ze hebben elkaar nodig.
 Hiervoor kan veel terugkomen wat er al is: de gesprekken met hun situaties, de quests met drie
 antwoorden, en het wereldgereedschap.
 
+## De kern voor het proefje (Claude, 23 sep; voorstel om te schrappen en aan te vullen)
+
+Marcel: "ja graag, laten we daarmee starten." Genoeg voor één jaar in een gehucht, niet meer.
+
+**Het gehucht.** Vijf boerengezinnen met elk een akker, een meent (gedeelde wei) met schapen, een
+stuk bos van de heer, een beek. Jij woont er als schout. Schepenen zijn er nog niet; die komen bij
+de trede dorp. In het proefje bouw je nog niets, behalve een verstopplek.
+
+**Goederen, en wie ze maakt:**
+
+| Goed | Wie | Waar | Wanneer | Waarvoor |
+|---|---|---|---|---|
+| Graan | de boeren | hun akker | zaaien in de lente, oogst in augustus | eten, pacht, zaaigoed, verkopen |
+| Wol | een boer met schapen | de meent | scheren in juni | pacht, verkopen |
+| Hout | een keuter | het bos van de heer | vooral 's winters | stoken, bouwen |
+| Kippen en eieren | elk gezin | het erf | het hele jaar | eten, pachthoenders voor de heer |
+| Stuivers | de markt in het buurdorp | | 's zomers | pacht in geld, dingen kopen |
+
+Later erbij: molenaar (meel), bakker (brood), brouwer (bier), wever (laken), smid.
+
+**Zaaigoed is de eerste echte keus:** wat je de heer geeft, kun je niet meer zaaien. Wie in
+november te veel afstaat, oogst volgend jaar minder.
+
+**Wat de heer wil.** Op Sint-Maarten een deel van het graan (de pacht), wol, pachthoenders en wat
+stuivers. In de oogsttijd herendienst: dagen werk op zijn land, precies als je eigen graan van het
+veld moet. En één gril per jaar.
+
+**Wat de inner ziet.** Hij komt in de oogsttijd de schoven op het veld tellen, zoals een
+tiendheffer dat echt deed, en rekent: zoveel akker, zoveel graan. Wat je vóór zijn komst 's nachts
+binnenhaalt en verstopt, telt hij niet, maar hij ziet wel stoppels waar schoven hadden moeten
+staan. Wie minder heeft dan hij verwacht, heeft een reden nodig: hagel, wilde zwijnen, een zieke
+boer. Hij kijkt ook naar wat rijk oogt: pannen in plaats van riet, vette varkens, nieuw
+gereedschap. **Wat je bouwt, is wat hij ziet.**
+
+**Drie groepen,** elk met een vertrouwen in jou dat stijgt en daalt met je keuren en keuzes:
+
+- **De boeren**, de vijf gezinnen met land. Ze willen genoeg eten, hun zaaigoed houden, en een
+  eerlijke verdeling van de herendienst. Gezicht: de rijkste boer. En ze doen met jou wat jij met
+  de heer doet: ze verstoppen graan voor de schout.
+- **De keuters**, wie geen land heeft: dagloners, de houthakker, een weduwe. Ze doen het zwaarste
+  werk en lopen als eersten weg of gaan stelen. In een opstand doen ze ook als eersten mee.
+  Gezicht: de weduwe.
+- **De kerk**, de pastoor. Hij wil zijn eigen tiende en een volle kerk, en preekt gehoorzaamheid of
+  niet, al naargelang je hem behandelt. Hij hoort de biecht, dus hij weet wie wat verstopt.
+
+**Vijf keuren:**
+
+1. **Rantsoen:** hoeveel graan elk gezin per week eet. Meer maakt sterker en tevredener; minder
+   laat meer over om te betalen of te verstoppen.
+2. **Herendienst:** wie er in de oogsttijd voor de heer werkt: bij loting, de keuters, de rijksten,
+   of je koopt de dagen af met stuivers.
+3. **Houtkap:** mag er hout gehaald worden in het bos van de heer? Warme huizen en bouwhout, maar
+   de inner kan de stronken tellen.
+4. **Avondklok:** niemand buiten na donker. Minder diefstal, en minder getuigen als jij 's nachts
+   iets verstopt, maar de mensen mogen het niet.
+5. **Vreemden:** mogen nieuwkomers zich vestigen? Meer handen en de eerste stap naar een dorp, maar
+   ook meer monden, en wie weet wie ze zijn.
+
+**Wat het proefje moet laten voelen:** één jaar, van de lente tot Sint-Maarten. Je loopt rond,
+zet een keur, de oogst komt, de inner telt, je verstopt iets of niet, en op Sint-Maarten betaal je.
+Is rijk worden en arm lijken leuk?
+
 ## Open
 
 - **Een poppetje en honderden mensen.** Met vijf boeren kun je ieder aanspreken, met vijfhonderd
@@ -116,7 +178,8 @@ antwoorden, en het wereldgereedschap.
   je met wie voor hen spreekt, en bestuur je met keuren.
 - Hoe ver gaat de politiek: keuren, schepenen en groepen zoals hierboven, of ook verkiezingen,
   partijen en intriges aan het hof van de heer?
-- Welke goederen vraagt de heer (graan, wol, bier, geld), en wie maakt wat?
+- Goederen, groepen en keuren: een eerste voorstel staat hierboven ("De kern voor het proefje"),
+  en wacht op Marcel.
 - De koning: kan hij stadsrechten geven buiten de heer om?
 - Hoe ziet de opstand eruit: het eigen dorp verdedigen, of het kasteel bestormen?
 - De naam van het spel.
