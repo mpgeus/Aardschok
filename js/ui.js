@@ -88,6 +88,10 @@
       this.verbergOverlay();
       this.verbergTooltip();
       this.opdracht(null);
+      // De kalender en de voorraad van het gehuchtspel (js/hud.js); dat bestand laadt na dit
+      // bestand, dus staan de functies er dan al, maar niet als ui.js ooit alleen gebruikt wordt.
+      if (this.toonKalender) this.toonKalender(S);
+      if (this.toonVoorraad) this.toonVoorraad(S);
     },
 
     // De leeftijd is de levensbalk. De balk loopt van zeventig tot honderd en vult zich: hoe

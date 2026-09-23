@@ -21,6 +21,22 @@
     <div id="inventaris"></div>
   </div>
 
+  <!-- Het scherm van het gehuchtspel (js/hud.js): aan met ?hud of ?kaart=gehucht in de
+       adresbalk, en dan gaan de panelen hierboven weg (stijl.css, .nieuwe-hud). -->
+  <div id="hud-gehucht">
+    <div id="kalenderbalk" class="paneel">
+      <div id="kalender-knoppen">
+        <button data-snelheid="0" title="Pauzeer de tijd (P)"><kbd>P</kbd> Pauze</button>
+        <button data-snelheid="1" title="Gewone snelheid">1×</button>
+        <button data-snelheid="2" title="Twee keer zo snel">2×</button>
+        <button data-snelheid="3" title="Drie keer zo snel: een jaar duurt dan een minuut of vijf">3×</button>
+      </div>
+      <div id="kalender-datum"></div>
+      <div id="kalender-seizoen"></div>
+    </div>
+    <div id="voorraadbalk" class="paneel"></div>
+  </div>
+
   <div id="plek"></div>
   <div id="volgorde" class="paneel"></div>
 
@@ -62,6 +78,11 @@
     In een gevecht: <kbd>1</kbd> slaan · <kbd>D</kbd> deur dicht · <kbd>spatie</kbd> einde beurt
   </div>
 
+  <div id="hulp-gehucht">
+    Klik om te lopen, te praten of iets te gebruiken.<br>
+    Kalender: <kbd>P</kbd> pauze/hervat · <kbd>-</kbd> <kbd>=</kbd> trager/sneller
+  </div>
+
   <!-- Gewone scripts, geen modules: zo werkt het spel ook als je index.html los opent.
        beelden/beschrijving.js hoort bij de pixel art (gemaakt door naar-spel.cjs),
        beelden/effecten/effecten.js bij de spreukeffecten (effecten-export.cjs), tegels/tegels.js
@@ -73,6 +94,8 @@
   <script src="tegels/tegels.js"></script>
   <script src="kaarten/kaarten.js"></script>
   <script src="js/leeftijd.js"></script>
+  <script src="js/tijd.js"></script>
+  <script src="js/voorraad.js"></script>
   <script src="js/wereld.js"></script>
   <script src="js/mensen.js"></script>
   <script src="js/kaart.js"></script>
@@ -83,6 +106,7 @@
   <script src="js/sprites.js"></script>
   <script src="js/anim.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/hud.js"></script>
   <script src="js/gesprekken.js"></script>
   <script src="js/gesprek.js"></script>
   <script src="js/quests.js"></script>

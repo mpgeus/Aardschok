@@ -95,6 +95,19 @@ kbd {
   border-radius: 10px;
 }
 
+/* Het nieuwe scherm voor het gehuchtspel (js/hud.js): aan met ?hud of ?kaart=gehucht in de
+   adresbalk (T.NIEUWE_HUD zet dan de klasse .nieuwe-hud op body). De panelen van het oude spel
+   (leeftijd, spreukbalk, actiepunten, de oude uitleg rechtsboven) gaan dan weg, en de kalender en
+   de voorraad linksboven komen ervoor in de plaats. Zonder ?hud of ?kaart=gehucht blijft alles
+   zoals het was (CLAUDE.md). */
+#hud-gehucht,
+#hulp-gehucht { display: none; }
+.nieuwe-hud #hud-gehucht { position: fixed; left: 16px; top: 16px; display: flex; gap: 10px; align-items: flex-start; }
+.nieuwe-hud #hulp-gehucht { display: block; }
+.nieuwe-hud #hud,
+.nieuwe-hud #onder,
+.nieuwe-hud #hulp { display: none; }
+
 /* De naam van een kamer als je hem voor het eerst binnenloopt */
 #plek {
   position: fixed;
@@ -333,7 +346,8 @@ kbd {
 #overlay-knop:hover { filter: brightness(1.08); }
 
 /* De uitleg rechtsboven */
-#hulp {
+#hulp,
+#hulp-gehucht {
   position: fixed;
   right: 16px;
   top: 16px;
@@ -346,3 +360,27 @@ kbd {
   border-radius: 8px;
   text-align: right;
 }
+
+/* De kalender en de voorraad, linksboven waar bij het oude spel de leeftijd stond. */
+#kalenderbalk { padding: 8px 12px 9px; min-width: 210px; }
+#kalender-knoppen { display: flex; gap: 4px; margin-bottom: 7px; }
+#kalender-knoppen button {
+  padding: 3px 8px;
+  font: 12px system-ui, sans-serif;
+  color: var(--gedempt);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--rand);
+  border-radius: 5px;
+  cursor: pointer;
+}
+#kalender-knoppen button:hover { color: var(--inkt); background: rgba(255, 255, 255, 0.09); }
+#kalender-knoppen button.actief { color: #1b1510; background: var(--goud); border-color: var(--goud); }
+#kalender-knoppen kbd { color: inherit; border-color: currentColor; opacity: 0.7; }
+#kalender-datum { font: 17px var(--kop); color: var(--inkt); }
+#kalender-datum.sint-maarten { color: var(--goud); }
+#kalender-seizoen { font-size: 12px; color: var(--gedempt); margin-top: 1px; }
+
+#voorraadbalk { display: flex; gap: 13px; padding: 0 14px; height: 44px; align-items: center; }
+#voorraadbalk .grondstof { display: flex; align-items: center; gap: 5px; }
+#voorraadbalk .grondstof .icoon { display: flex; width: 22px; height: 22px; }
+#voorraadbalk .grondstof .aantal { font: 15px var(--kop), system-ui, sans-serif; color: var(--inkt); min-width: 1.4em; }

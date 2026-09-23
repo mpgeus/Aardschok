@@ -116,9 +116,17 @@
   // Goud koopt nooit jaren terug (ontwerp/toren.md, "Wat de kernregel ervan vraagt"); het koopt
   // dingen waarmee je jaren kunt vermijden. Het vakje in beeld komt pas als je ooit goud had:
   // in de tutorial heeft niemand het er nog over.
+  // Sinds het gehuchtspel (js/voorraad.js) is goud ook een van de vier grondstoffen. Loopt die
+  // mee (S.voorraad bestaat, en T.wijzigVoorraad is geladen), dan gaat de wijziging daarlangs en
+  // blijft S.goud gewoon in de pas lopen; zonder S.voorraad (de bestaande toetsen, en het oude
+  // gereedschap) werkt deze functie zoals hij altijd deed.
   T.geefGoud = function (S, n) {
-    S.goud = Math.max(0, (S.goud || 0) + n);
-    if (S.goud > 0) S.goudGehad = true;
+    if (T.wijzigVoorraad && S.voorraad) {
+      T.wijzigVoorraad(S, 'goud', n);
+    } else {
+      S.goud = Math.max(0, (S.goud || 0) + n);
+      if (S.goud > 0) S.goudGehad = true;
+    }
     if (T.ui && T.ui.toonGoud) T.ui.toonGoud(S);
   };
 

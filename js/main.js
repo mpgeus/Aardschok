@@ -39,6 +39,8 @@
       spreukBereik: null,
       lichten: [],
       inventaris: new Set(),
+      kalender: T.nieuweKalender(), // dag, seizoen, jaar en snelheid (js/tijd.js)
+      voorraad: T.nieuweVoorraad(), // goud, graan, wol, hout (js/voorraad.js)
       goud: 0,
       goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
       quests: {}, // per quest de fase waarin hij staat (js/quest.js)
@@ -220,6 +222,9 @@
     if (window.innerWidth !== bw || window.innerHeight !== bh) formaat();
     S.tijd += dt;
     S.wind = T.windWaarde(S.tijd);
+    // De kalender loopt op haar eigen klok, niet op S.tijd (CLAUDE.md, "Testen in de browser"):
+    // zo laat pauzeren of versnellen nooit een animatie stilvallen of doorschieten.
+    T.tikKalender(S, dt);
     T.werkAnimatiesBij(S, dt);
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
@@ -355,6 +360,15 @@
       if (!T.SPREUKEN[id]) return `Die spreuk ken ik niet: ${id}`;
       S.held.meesterschap[id] = Math.max(0, Math.floor(aantal));
       return T.TREDEN[T.trede(S.held, id)].naam;
+    },
+    // De kalender een dag of een snelheid geven zonder te wachten (zoals debug.meesterschap voor
+    // een spreuk doet): Toren.debug.kalender(310) → naar dag 310, Toren.debug.kalender(null, 3)
+    // → 3x. Zonder argumenten zegt het waar de kalender nu staat.
+    kalender(dag, snelheid) {
+      if (dag != null) S.kalender.dag = dag;
+      if (snelheid != null) T.zetSnelheid(S, snelheid);
+      T.ui.toonKalender(S); // ook bijwerken als alleen de dag rechtstreeks gezet is
+      return { ...T.datumVanDag(S.kalender.dag), snelheid: S.kalender.snelheid };
     },
     // Hoeveel milliseconden kost één beeld? Toren.debug.meet() tekent n beelden achter elkaar en
     // geeft het gemiddelde, de mediaan en de slechtste terug. Een beeld hoort ruim onder de 16 ms
