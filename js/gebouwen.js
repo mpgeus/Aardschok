@@ -197,15 +197,13 @@
       opmerking: 'Zijn waarde is verhaal, geen grondstof; dat komt met het avontuur (werklijst.md, punt 8).',
     },
     kapel: {
-      naam: 'kapel', trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 10, goud: 8 }, bouwtijd: 4,
+      naam: 'kapel', trede: 'gehucht', voet: { b: 5, h: 5 }, kosten: { hout: 10, goud: 8 }, bouwtijd: 4,
       handen: 1, woonruimte: 0, maakt: null, verdacht: false, kerk: true, menu: true,
       tekening: 'gebouwen/kapel', beschrijving: 'de kerk als groep, en tevredenheid',
       opmerking: 'De tevredenheid (T.heeftKerk, js/behoeften.js, werklijst.md punt 3) is er; de kerk '
         + 'als groep met eigen belangen komt pas met de politiek (werklijst.md, punt 9). Zijn trede '
-        + 'is "dorp": op het gehucht (?kaart=gehucht) staat hij daarom niet in het bouwmenu (js/hud.js '
-        + 'filtert op S.trede) — Toren.debug.bouw("kapel", x, y) zet hem toch neer, want T.plaatsGebouw '
-        + 'kijkt zelf niet naar de trede. Tot punt 14 ("De treden") de speler laat doorgroeien, is een '
-        + 'kerk op het gehucht dus wel te bereiken, maar niet via het gewone menu.',
+        + 'is "gehucht" (was "dorp"): het gehucht vraagt om een kerk (js/behoeften.js), dus moet hij daar '
+        + 'ook te bouwen zijn; een gehucht had vaak een kapelletje. Een grotere kerk komt later.',
     },
     tiendschuur: {
       naam: 'tiendschuur', trede: 'dorp', voet: { b: 6, h: 5 }, kosten: { hout: 14, goud: 6 }, bouwtijd: 3,
