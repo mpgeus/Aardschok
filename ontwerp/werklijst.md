@@ -6,134 +6,51 @@ je kunt nakijken. Een punt dat af is, gaat naar onderen met een datum; een nieuw
 plek met een reden. **De stand wordt aan het eind van elke sessie bijgewerkt,** zodat een nieuwe
 sessie meteen weet waar we zijn.
 
-**Waarom deze volgorde:** eerst de kern op papier en een klein proefje dat laat voelen of hij leuk
-is, dan het oude spel uit de code, dan de groei, de keuren en de politiek, de heer, het avontuur en
-de twee wegen naar vrijheid, en pas aan het eind de afwerking. Een stad bouwen op een kern die niet
-leuk is, is poetsen aan iets wat nog niet werkt.
+**Waarom deze volgorde:** eerst een dorp dat draait, dan de heer die eraan trekt (en daarmee de
+kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
+groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (23 sep 2026)
+## De stand (einde sessie 23 sep 2026)
 
-**Het spel is omgegooid.** Marcel was niet blij met het doel van De laatste klim ("de toren
-beklimmen is leuk, maar niet als einddoel"). Na vijf rondes ideeën van Claude die het niet waren,
-kwam hij zelf met het nieuwe spel: **een bouw- en beheerspel in isometrisch beeld, met politiek en
-avontuur erin.** Jij bent de schout van een dorp onder een verwarde heer die alleen geld ziet. Je
-breidt het dorp uit tot een stad, bestuurt het met keuren, en maakt je aan het eind van de heer
-los, met stadsrechten of een opstand. Alles staat in `spel.md`; de rondes ideeën staan in
-`verhaal.md`, "Het doel staat weer open".
+**Het spel is omgegooid** (23 sep). Marcel vond het doel van De laatste klim niet goed genoeg en
+kwam, na vijf rondes ideeën van Claude, zelf met het nieuwe spel: **een bouw- en beheerspel in
+isometrisch beeld, met politiek en avontuur erin.** Jij bent de schout van een gehucht onder een
+verwarde heer die alleen geld ziet; je breidt het uit tot een stad en maakt je aan het eind van de
+heer los. Alles staat in `spel.md`, en `CLAUDE.md` is bijgewerkt. De code van het oude spel (toren,
+spreuken, leeftijd, tutorial) staat er nog; die gaat eruit bij punt 7.
 
-**Wat blijft:** de kunst en de techniek eronder. `verhaal.md`, `toren.md` en `spreuken.md` horen
-bij het oude spel, net als de code voor de toren, de spreuken, de leeftijd en de tutorial; die gaat
-eruit na het tweede proefje (punt 7).
+**Wat er nu speelt** (`http://localhost:8123/?kaart=gehucht`): een open kaart met een gehucht en
+een es; graan dat met de kalender groeit, wuift en door de boeren gemaaid wordt (en alleen zo
+binnenkomt); een balk met kalender (oude maandnamen, pauze, 1–3×), voorraad, bevolking en
+tevredenheid; 45 soorten gebouwen met een bouwmenu (`B`) en fases tijdens het bouwen; een
+bevolking die groeit met ruimte, eten en tevredenheid; en een winter die zonder brandhout mensen
+kost. `npm test`: 293/293. `await Toren.debug.schermafdruk('naam')` bewaart een blik op het spel.
 
-**Loopt nu (23 sep, avond):** de gebouwen als soorten (punt 2) in een eigen worktree op de tak
-`gebouwen`: `T.GEBOUWEN`, bevolking en woonruimte, werkplaatsen, en een bouwmenu. **Die tak moet
-daarna nog naar `main`.**
+**Loopt nu:** niets. Er draait geen agent.
 
-**Af vandaag, allemaal op `main`:**
-- het graan als plaat, twee rondes (`gereedschap/pixelart/graan.cjs`, platen in `uit/graan/`): vijf
-  stadia met varianten, hoogte met een achter- en voorlaag, wind als golf, schoven, rafelranden;
-- de maaier met zeis (`maaier.cjs`, acht richtingen, 12 beelden; het zwad staat nog als paaltjes
-  en de slag is nog symmetrisch);
-- de interface (`js/tijd.js`, `js/voorraad.js`, `js/hud.js`): kalender met oude maandnamen vanaf
-  1 lentemaand 1323, pauze en 1–3×, voorraad goud/graan/wol/hout, aan met `?kaart=gehucht` of `?hud`;
-- het gehucht (`gereedschap/tiled/maak-gehucht.cjs`, `kaarten/gehucht.tmj`): een kale, open kaart
-  van 50×50 met het dorpje in het midden en een es van vijf lange stroken ernaast;
-  `index.html?kaart=gehucht` begint er zonder tutorial, de schout als gewone dorpeling;
-- een kijkgat rond de schout in plaats van een doorzichtig spookhuis, en geen herfstbomen in de lente;
-- de toets `bronblok` vergelijkt nu met de LF-versie, zodat hij ook op Windows groen is;
-- **1b, het graan in het spel, en daarmee heel punt 1 af** (`js/akkers.js`, nieuw). Eén tabel
-  (`T.AKKER_STADIA`) zegt welk stadium een akker heeft op welke dag — geploegd in de vroege lente,
-  kiemend, groen, rijp in hooi- en oogstmaand — met een vangnet: haalt een boer de oogst niet op
-  tijd, dan wordt bij herfstmaand toch de hele akker in één keer "gemaaid". Groen en rijp wuiven
-  per tegel met een golf (`T.windBeeld`, op `S.tijd`, niet de kalender: `beeld = (tijd + x·a +
-  y·b) mod 8`) en staan als achter/voorlaag om het wezen heen (`js/tekenen.js`), zodat een boer
-  tot zijn middel in het graan staat. Het graanvel zelf komt uit een nieuw, apart script
-  (`gereedschap/pixelart/graan-vel.cjs`, roept alleen `graan.cjs` aan) en de maaier kreeg zijn
-  eigen spelvel (`gereedschap/pixelart/maaier-anim.cjs`: acht richtingen, twaalf beelden, in
-  `beelden/figuren/`) — allebei nu ingehaakt in `naar-spel.cjs`. De vijf boeren zijn nu eigen
-  ingangen `T.MENSEN.boer1..boer5` (lenen om en om het boer/boerin-vel): met hun oude, gedeelde
-  `zaad`-plek kon `T.keurKaart` niet zien dat het vijf verschillende mensen waren en klaagde
-  terecht dat "de boer" twee keer op de kaart stond. In het groeiseizoen dwalen ze nu op en rond
-  hun eigen akker (`T.wandelAnker`) in plaats van alleen bij hun huis, en in de oogsttijd maaien
-  ze tegel voor tegel met de zeis-animatie (`T.werkOogstBij`, in de browser bekeken: een boer
-  loopt naar de dichtstbijzijnde rijpe tegel, maait, en gaat door tot zijn akker klaar is of het
-  seizoen om is). `js/kaart.js` koppelt een boer aan zijn akker(s) via `huis` (dezelfde id op de
-  boer als op de akker in `kaarten/gehucht.betekenis.json`). Getoetst in `test/akkers.test.cjs`
-  (231/231 groen); met `Toren.debug.kalender(dag, snelheid)` door het jaar heen bekeken, in de
-  browser. Nog ruw: een boer met twee akkers (boer1, boer3) werkt er maar één van af; er is geen
-  apart "zaaien"-moment te zien, geploegd gaat direct over in kiemend; en de golfrichting/-snelheid
-  van de wind (`T.WIND_GOLF_Y`, `T.WIND_GOLF_TIJD`) zijn een eerste gok, niet door Marcel bekeken.
-- **punt 3, behoeften en de winter** (`js/behoeften.js`, nieuw; `test/behoeften.test.cjs`, 25
-  toetsen; `npm test` 287/287 groen). Elke dag rekent `T.berekenTevredenheid` (puur, geen
-  bijwerkingen) de tevredenheid uit (0..1) uit drie delen: eten (graan als basis, ongewijzigd —
-  plus groente/vis/vlees, die als ze op voorraad zijn ook echt worden opgegeten en het dorp
-  tevredener maken: meer soorten weegt zwaarder dan alleen graan), brandhout (hout of turf, eerst
-  turf, per huishouden — `T.GEBOUWEN_INSTELLINGEN.gezinGrootte` leent dezelfde maat als een nieuw
-  gezin — en alleen gestookt in wintermaand/louwmaand/sprokkelmaand) en een kerk (de kapel, die al
-  bestond maar nog niets deed: `T.GEBOUWEN.kapel.kerk = true`, zodat een latere "echte" kerk
-  dezelfde vlag kan delen). Tevredenheid stuurt drie dingen: de productie in `T.tikGebouwenDag`
-  schaalt ermee mee (de helft bij 0% tevreden), een nieuw gezin komt er alleen nog bij boven
-  `groeiDrempel`, en ver eronder (`vertrekDrempel`) trekt op een groeidag juist een gezin weg. Een
-  aanhoudend tekort in de winter kost mensen: een fractie van de bevolking per tekortdag, opgebouwd
-  in `S.behoeften.winterVerliesRest` zodat het deterministisch is (dezelfde voorraad geeft altijd
-  hetzelfde verlies), geen dobbelsteen. Een hut of huis die de speler zelf bouwde, groeit door
-  (`T.GEBOUWEN[x].wordt`, hut → huis → stenen huis) na `huisGroeiDagen` dagen op rij boven
-  `huisGroeiDrempel`: dezelfde tekening-ingang als bij het neerzetten (`T.registreerGebouwSoort`,
-  nu gedeeld met `js/gebouwen.js`), dus geen tweede voorwerp. Onderweg bleek de échte tekening van
-  "hut" (5×7) en "huis" (7×5) niet alleen groter maar ook van vorm te wisselen — de eerste versie
-  liet dan een onzichtbare muur staan waar de oude voet niet meer met de nieuwe overlapte; nu geeft
-  `groeiGebouw` dat stuk grond weer vrij (met een eigen toets: "een huis dat van vorm wisselt...").
-  De balk (`js/hud.js`) toont de tevredenheid met een gezichtje en, op hover, wat het dorp mist
-  ("brandhout voor de winter", "een kerk"); rood onder de vertrekdrempel. Alle getallen in één
-  blok, `T.BEHOEFTEN_INSTELLINGEN` bovenaan `js/behoeften.js`.
-  **In de browser bekeken** (`?kaart=gehucht`, 25 mensen bij het begin, met
-  `Toren.debug.kalender(dag, 3)` en `Toren.debug.stap(…)` door de winter heen): met ruim hout (500)
-  en graan (500) kost de winter niemand het leven (bevolking blijft 25; het hout zakt van 500 naar
-  405 — precies de 7 huishoudens × 0,15 per dag × 90 winterdagen). Dezelfde winter met 0 hout/turf
-  en maar 40 graan (te weinig voor de hele winter) zakt de bevolking van 25 naar 2: elf keer een
-  melding dat de kou een dorpeling kost, drie keer dat een heel gezin wegtrekt. Dat is hard —
-  waarschijnlijk wil Marcel `winterVerliesFactor` en/of hoe zwaar een tekort meetelt bijstellen;
-  het is nu een eerste gok, net als bij de wind in punt 1b hierboven. Schermafdrukken (doek alleen):
-  `gereedschap/pixelart/uit/schermen/winter-met-hout-doek.png`,
-  `.../winter-zonder-hout-doek.png`, `.../huis-gegroeid-doek.png` (niet in git).
-  Nog ruw: alleen de kapel telt als kerk; een gebouw dat al vanaf de kaart klaarstond
-  (`T.zetBestaandeGebouwen`, dus zonder eigen voorwerp) groeit niet mee, alleen wat de speler zelf
-  neerzet; de kapel staat op trede "dorp" en dus niet in het bouwmenu op het gehucht
-  (`Toren.debug.bouw('kapel', x, y)` zet hem wel neer — zie de opmerking bij `T.GEBOUWEN.kapel`);
-  en de tevredenheid van een huishouden is nu het hele dorp gemiddeld, niet per huis.
+**Volgende stap: punt 4, Handel** (de marskramer). Daarna B: Sint-Maarten, en rijk worden en arm
+lijken — het tweede proefje, en de vraag of de kern leuk is.
+
+**Nog ruw, om te onthouden:**
+- de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
+  bijstellen als hij speelt;
+- in een huis in aanbouw branden de ramen al;
+- een boer met twee akkers werkt er maar één af, en er is geen apart zaaimoment;
+- het zwad van de maaier staat als paaltjes, en de slag is symmetrisch;
+- de bevolking is een getal, geen poppetjes; nieuwe goederen (steen, klei, riet, …) staan niet in
+  de balk;
+- veel nieuwe gebouwen lenen een tekening (hut, schaapskooi, timmerman, brouwerij, tiendschuur,
+  wapenmaker, wachthuis, …), en kapel, watermolen en put hebben nog geen bouwfases: tekenwerk.
 
 **Voor als Marcel "push it" zegt:** op GitHub staan twee commits uit de cloudsessie van 22 sep die
 lokaal niet in `main` zitten (`bd0e742`, `b92336a`: een kaartje en zoeken in de gespreksschrijver,
 en het draaiboek van de tutorial erin). Eerst `origin/main` samenvoegen, dan `npm test`, dan pushen.
 
 **Wacht op Marcel:**
-- De open vragen in `spel.md`, vooral: hoe je als poppetje honderden mensen bestuurt, welke
-  goederen de heer vraagt, en hoe ver de politiek gaat. Die zijn nodig voor het proefje.
-- **Het voorstel voor de kern** in `spel.md` ("De kern voor het tweede proefje"): goederen, wat de heer
-  wil, wat de inner ziet, drie groepen en vijf keuren. Schrappen en aanvullen.
+- Spelen, en zeggen hoe het voelt: vooral de winter, en hoe snel een jaar gaat.
+- Het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): goederen, wat de heer
+  wil, wat de inner ziet, drie groepen en vijf keuren. Schrappen en aanvullen, vóór punt 5.
 - Een naam; "Aardschok" past niet meer.
-
-**Klaar om te starten:**
-1. **Het eerste proefje: een gehucht met akkers, en de sfeer** (af, 23 sep; Marcel, 23 sep: "Ik
-   wil iets van graan zien", "simpel houden", "de sfeer is belangrijk"; zie `spel.md`).
-   - **1a. Graan als plaat** (af, 23 sep). Een akker in vijf stadia (geploegd, kiemend, groen,
-     rijp, gemaaid met schoven), met hoogte zodat een boer er tot zijn middel in staat, en wind die
-     als een golf over het rijpe veld rolt. Renderwerk.
-   - **1b. In het spel** (af, 23 sep). Als schout door het gehucht lopen, het graan in een snel
-     jaar zien opkomen, rijpen en gemaaid worden, en de boeren op hun akker zien werken en maaien.
-     Zie de "Af vandaag" hierboven voor wat er nog ruw aan is.
-2. **Gebouwen als soorten** (Marcel, 23 sep: "huis, deze zorgen ervoor dat je populatie kan
-   groeien; boerderij, meer mensen op de akker. Smidse, timmerman, wapenmaker. En alle anderen").
-   Het voorstel met de soorten per trede staat in `spel.md`, "Gebouwen". Klaar als de soorten
-   gegevens zijn op één plek (zoals `T.MENSEN` voor mensen), de schout ze met een bouwmenu kan
-   neerzetten, een huis ruimte geeft zodat er mensen bij komen, en een werkplaats handen vraagt en
-   iets maakt. Eerst met de tekeningen die er al zijn; wat nog niet getekend is, krijgt voorlopig een
-   bestaand huis. **Stand (23 sep):** gebouwd op de tak `gebouwen` (33 soorten in `js/gebouwen.js`,
-   bevolking, handen, bouwmenu onder `B`, een beginvoorraad); moet nog naar `main`.
-   - **2b. Bouwen in fases** (Marcel, 23 sep: "eerst zie je een paar stenen, dan wat hout erbij en
-     gaandeweg steeds meer van het gebouw tot het klaar is"). Klaar als een gebouw in aanbouw zijn
-     fase laat zien (fundering, geraamte, muren met steigers, dakgebinte, half gedekt, klaar),
-     getekend uit hetzelfde model, en het spel de fase kiest naar hoe ver de bouw is. Renderwerk.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
@@ -144,7 +61,7 @@ nog nodig is".
 
 *A. Een dorp dat draait*
 
-3. **Behoeften en de winter** (af, 23 sep 2026 — zie "Af vandaag" hieronder). Klaar als mensen
+3. **Behoeften en de winter** (af, 23 sep 2026). Klaar als mensen
    eten, brandhout en een kerk willen, tevredenheid bepaalt hoe hard ze werken en of ze blijven,
    een huis groeit (hut, huis, stenen huis) als zijn bewoners krijgen wat ze willen, en een winter
    zonder brandhout of voorraad mensen kost.
@@ -255,6 +172,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 23 sep 2026 — **Het gehucht speelt.** Punt 1: graan als plaat en in het spel (groeit met de
+  kalender, wuift, boeren maaien, de oogst brengt het graan binnen). Punt 2 en 2b: 45 soorten
+  gebouwen (`js/gebouwen.js`) met bouwmenu, bevolking, handen, en een huis dat in vijf fases
+  oprijst (`bouwfasen.cjs`). Punt 3: behoeften, tevredenheid en de winter (`js/behoeften.js`).
+  Verder de interface (kalender, voorraad), de kale kaart met de es, het kijkgat, de maaier, en
+  `Toren.debug.schermafdruk`. Details in `git log`.
 
 - 23 sep 2026 — **Het nieuwe spel gekozen:** de schout, de heer en het dorp dat een stad wordt, met
   keuren, politiek en avontuur (`spel.md`). De laatste klim is vervallen.
