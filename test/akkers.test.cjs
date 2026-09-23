@@ -6,6 +6,7 @@ const assert = require('node:assert/strict');
 
 require('../js/tijd.js');
 require('../js/akkers.js');
+require('../js/voorraad.js');
 const T = globalThis.Toren;
 
 function stadiumOp(naam, dag) {
@@ -141,7 +142,7 @@ test('T.werkOogstBij: buiten het oogstseizoen gebeurt er niets', () => {
 
 test('T.werkOogstBij: loopt naar een tegel, maait hem, en gaat door tot de hele akker klaar is', () => {
   const { w, akker, boer } = nieuweBoerWereld();
-  const S = { wereld: w, tijd: 0, kalender: { dag: RIJP_DAG } };
+  const S = { wereld: w, tijd: 0, kalender: { dag: RIJP_DAG }, voorraad: { graan: 0 } };
 
   let veiligheid = 0;
   while (akker.geoogst.size < 4 && veiligheid++ < 200) {
@@ -156,6 +157,8 @@ test('T.werkOogstBij: loopt naar een tegel, maait hem, en gaat door tot de hele 
     }
   }
   assert.equal(akker.geoogst.size, 4, 'niet alle vier de tegels van de akker zijn gemaaid geraakt');
+  // elke gemaaide tegel brengt zijn graan binnen, en dat is de enige weg (geen boerderij-opbrengst)
+  assert.equal(S.voorraad.graan, 4 * T.GRAAN_PER_TEGEL);
   assert.equal(boer.maait, null);
   assert.equal(boer.oogstDoel, null);
 });

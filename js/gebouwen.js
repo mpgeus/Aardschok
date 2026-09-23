@@ -64,12 +64,11 @@
     },
     boerderij: {
       naam: 'boerderij', trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, bouwtijd: 5,
-      handen: 2, woonruimte: 4, maakt: { uit: { graan: 3 } }, verdacht: false, menu: true,
+      handen: 2, woonruimte: 4, maakt: null, verdacht: false, menu: true,
       tekening: 'gebouwen/schuur', beschrijving: 'boeren voor de akkers, en een schuur voor de oogst',
-      opmerking: 'De boeren op de akkers zelf lopen en werken al (kaarten/gehucht.betekenis.json, '
-        + '"akker"); "maakt" hieronder is een voorlopige, abstracte opbrengst tot dat systeem zelf '
-        + 'naar S.voorraad schrijft (ontwerp/werklijst.md, punt 1b) — dan mag dit weer weg, anders '
-        + 'telt het dubbel.',
+      opmerking: 'Maakt zelf geen graan: dat komt binnen als de boeren een akkertegel maaien '
+        + '(T.GRAAN_PER_TEGEL in js/akkers.js). Eerst stond hier een abstracte opbrengst, en dan '
+        + 'telde het dubbel.',
     },
     akker: {
       naam: 'akker', trede: 'gehucht', voet: null, kosten: { hout: 2 }, bouwtijd: 1,

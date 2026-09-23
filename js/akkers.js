@@ -94,6 +94,13 @@
   // In speeltijd (S.tijd, wall-clock), niet in kalenderdagen — zie ook de opmerking bij T.windBeeld.
   T.OOGST_TEGEL_DUUR = 1.6;
 
+  // Wat één gemaaide tegel oplevert, in S.voorraad.graan. Dit is de enige weg waarlangs graan
+  // binnenkomt: de boerderij maakt het niet meer zelf (js/gebouwen.js), anders telde het dubbel.
+  // Wat bij het vangnet in herfstmaand nog op het veld staat, is verloren: dat is rot.
+  // Ter ijking: de es van het gehucht is zo'n 200 tegels, dus 400 graan per jaar; 25 mensen eten
+  // er 450 (T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag). Krap, en dat is de bedoeling.
+  T.GRAAN_PER_TEGEL = 2;
+
   function onbeslistTegels(akker) {
     const open = [];
     for (const t of T.akkerTegels(akker)) {
@@ -128,6 +135,7 @@
       if (e.maait) {
         if (S.tijd >= e.maait.tot) {
           akker.geoogst.add(e.maait.x + ',' + e.maait.y);
+          if (S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'graan', T.GRAAN_PER_TEGEL);
           e.maait = null;
           e.oogstDoel = null;
         }
