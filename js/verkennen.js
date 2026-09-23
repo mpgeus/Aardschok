@@ -194,6 +194,25 @@
       if (m.dwaalTijd > 0 && !bijDeur(w, m.tx, m.ty)) continue;
       m.dwaalTijd = 1.5 + Math.random() * 2.5;
       const thuisNu = (T.wandelAnker && T.wandelAnker(m, basis)) || m.thuis;
+      // Ligt hij nu buiten die straal — een boer wiens huis niet naast zijn akker staat, bij het
+      // begin van het groeiseizoen — dan is geen van de vier buurtegels ooit dichtbij genoeg, en
+      // zou hij voor eeuwig blijven staan. Dan eerst een heus pad ernaartoe (T.zoekPad, net als
+      // T.werkOogstBij dat doet); eenmaal aangekomen pakt de gewone dwaalstap het weer over.
+      const straalNu = thuisNu && (thuisNu.straal != null ? thuisNu.straal : (m.straal || 3));
+      if (thuisNu && T.afstand(thuisNu, { x: m.tx, y: m.ty }) > straalNu) {
+        const doel = { x: Math.round(thuisNu.x), y: Math.round(thuisNu.y) };
+        const pad = T.zoekPad(
+          { x: m.tx, y: m.ty },
+          doel,
+          (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: m }),
+          (x, y) => T.isVast(w, x, y),
+          {},
+        );
+        if (pad && pad.length) {
+          m.pad = pad;
+          continue;
+        }
+      }
       const opties = [];
       for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
         if (magDwalenNaar(w, m, m.tx + dx, m.ty + dy, thuisNu)) opties.push({ x: m.tx + dx, y: m.ty + dy });
