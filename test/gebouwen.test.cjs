@@ -39,6 +39,9 @@ test('alle soorten uit spel.md staan erin', () => {
     'markt', 'weverij', 'pakhuis', 'kuiper', 'slager', 'leerlooier', 'steenbakkerij', 'badhuis', 'gasthuis',
     'stenenHuis', 'raadhuis', 'stadsmuur',
     'wapenmaker', 'schuttershof', 'palissade',
+    // grondstoffen halen, en orde en leger (Marcel, 23 sep)
+    'steengroeve', 'kleiput', 'rietsnijder', 'jager', 'visser', 'turfsteker', 'ertsgraver', 'kalkbrander',
+    'wachthuis', 'gevang', 'tuighuis', 'kazerne',
   ]) {
     assert.ok(T.GEBOUWEN[id], `"${id}" ontbreekt in T.GEBOUWEN`);
   }

@@ -113,6 +113,46 @@
         + 'Hij blokkeert zijn voet en telt mee, maar tekent nu nog niets (js/tekenen.js).',
     },
 
+    // ── Grondstoffen halen (Marcel, 23 sep: "houthakkers, steengroeve etc moeten we ook hebben";
+    //    spel.md, "Grondstoffen halen"). De houthakker staat hierboven al. ──
+    steengroeve: {
+      naam: 'steengroeve', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 12, goud: 4 }, bouwtijd: 3,
+      handen: 2, woonruimte: 0, maakt: { uit: { steen: 1 } }, verdacht: false, menu: true,
+      tekening: 'gebouwen/houtschuur', beschrijving: 'steen voor funderingen en stenen huizen',
+      opmerking: 'nieuw: nog niet getekend (een groeve is een kuil met een kraan, geen huis), leent voorlopig de houtschuur.',
+    },
+    kleiput: {
+      naam: 'kleiput', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, bouwtijd: 2,
+      handen: 1, woonruimte: 0, maakt: { uit: { klei: 2 } }, verdacht: false, menu: true,
+      tekening: 'erf/schuurtje', beschrijving: 'klei voor de steenbakkerij: bakstenen, zo bouwde men hier echt',
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje.',
+    },
+    rietsnijder: {
+      naam: 'rietsnijder', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, bouwtijd: 2,
+      handen: 1, woonruimte: 0, maakt: { uit: { riet: 2 } }, verdacht: false, menu: true,
+      tekening: 'erf/schuurtje', beschrijving: 'riet uit de beek en het moeras, voor rieten daken',
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje. Hoort aan het water.',
+    },
+    jager: {
+      naam: 'jager', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 8 }, bouwtijd: 2,
+      handen: 1, woonruimte: 0, maakt: { uit: { vlees: 1, huiden: 1 } }, verdacht: false, menu: true,
+      tekening: 'gebouwen/jagershut', beschrijving: 'wild uit het bos, en huiden voor de looier',
+      opmerking: 'Het bos is van de heer: stropen is ook een keuze.',
+    },
+    visser: {
+      naam: 'visser', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, bouwtijd: 2,
+      handen: 1, woonruimte: 0, maakt: { uit: { vis: 2 } }, verdacht: false, menu: true,
+      tekening: 'erf/schuurtje', beschrijving: 'vis uit de beek',
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje. Hoort aan het water.',
+    },
+    wachthuis: {
+      naam: 'wachthuis', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 10, goud: 4 }, bouwtijd: 3,
+      handen: 2, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      tekening: 'gebouwen/dorpKlein3', beschrijving: 'rakkers en de nachtwacht: orde houden, dieven pakken, keuren handhaven, of wegkijken',
+      opmerking: 'nieuw (Marcel, 23 sep: "orde bewaarders, leger etc moeten een optie zijn"): nog niet getekend, '
+        + 'leent voorlopig een klein dorpshuis. De heer vindt het goed; voor wie de rakkers echt werken, is de vraag.',
+    },
+
     // ── Dorp ──
     smidse: {
       naam: 'smidse', trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 10 }, bouwtijd: 4,
@@ -259,6 +299,44 @@
       handen: 0, woonruimte: 0, maakt: null, verdacht: true, menu: false,
       tekening: null, beschrijving: 'een muur zonder stadsrechten is een opstand die je aankondigt',
       opmerking: 'Zelfde reden als stadsmuur hierboven: geen los blokje, gaat niet via dit bouwmenu.',
+    },
+    tuighuis: {
+      naam: 'tuighuis', trede: 'dorp', voet: { b: 4, h: 4 }, kosten: { hout: 14, goud: 10 }, bouwtijd: 4,
+      handen: 0, woonruimte: 0, maakt: null, verdacht: true, menu: true,
+      tekening: 'gebouwen/schuur', beschrijving: 'waar de wapens liggen; wie een tuighuis heeft, heeft een leger',
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig de schuur. Bergt wat de wapenmaker maakt.',
+    },
+    kazerne: {
+      naam: 'kazerne', trede: 'stad', voet: { b: 6, h: 6 }, kosten: { hout: 30, steen: 30, goud: 30 }, bouwtijd: 8,
+      handen: 0, woonruimte: 6, maakt: null, verdacht: true, menu: true,
+      tekening: 'gebouwen/dorpGroot1', beschrijving: 'huurlingen: duur, en een leger is een opstand',
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis. Verdacht tot de stad vrij is.',
+    },
+
+    // ── Grondstoffen en orde die pas bij het dorp komen ──
+    turfsteker: {
+      naam: 'turfsteker', trede: 'dorp', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, bouwtijd: 2,
+      handen: 2, woonruimte: 0, maakt: { uit: { turf: 2 } }, verdacht: false, menu: true,
+      tekening: 'erf/schuurtje', beschrijving: 'turf uit het veen, om te stoken als het bos op is',
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje.',
+    },
+    ertsgraver: {
+      naam: 'ertsgraver', trede: 'dorp', voet: { b: 4, h: 4 }, kosten: { hout: 14, goud: 8 }, bouwtijd: 4,
+      handen: 2, woonruimte: 0, maakt: { uit: { ijzer: 1 } }, verdacht: false, menu: true,
+      tekening: 'gebouwen/houtschuur', beschrijving: 'moerasijzer uit de grond, zoals op de Veluwe: ijzer zonder de marskramer',
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig de houtschuur. IJzer wordt ook wapens; dat ziet de inner graag van dichtbij.',
+    },
+    kalkbrander: {
+      naam: 'kalkbrander', trede: 'dorp', voet: { b: 3, h: 3 }, kosten: { hout: 10, steen: 4 }, bouwtijd: 3,
+      handen: 1, woonruimte: 0, maakt: { in: { hout: 1 }, uit: { kalk: 1 } }, verdacht: false, menu: true,
+      tekening: 'erf/schuurtje', beschrijving: 'kalk uit schelpen, voor metselspecie',
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje.',
+    },
+    gevang: {
+      naam: 'gevang', trede: 'dorp', voet: { b: 3, h: 3 }, kosten: { hout: 8, steen: 10, goud: 6 }, bouwtijd: 4,
+      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      tekening: 'gebouwen/dorpKlein1', beschrijving: 'wie de schout veroordeelt, zit hier',
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis. Hoort bij de rechtspraak (werklijst 10).',
     },
   };
 
