@@ -12,6 +12,36 @@ Nog niet besloten of dit het spel wordt; wel de richting waar nu over gedacht wo
 > dorp etc. Marktkramen etc. Als je het goed doet wordt het dorp een stad en trek je meer handel
 > aan. Uiteindelijk kun je, als je over voldoende middelen beschikt, de strijd aan met de landheer.
 
+## Besloten (Marcel, 23 sep 2026)
+
+- **Je bent een poppetje in het dorp**, geen hand van bovenaf. Je loopt rond, praat met mensen en
+  zet ze aan het werk; de strijd aan het eind is een gevecht in beurten op dezelfde kaart. Waarom:
+  zo speelt geen bouwspel, en de kunst is ervoor gemaakt.
+- **De landheer straft op alle vier de manieren:** in het dorp (schandpaal, een huis in brand, een
+  boer aan de galg, en jij wijst aan wie), jou zelf (boetes, bezit, je ambt, je leven), met hogere
+  eisen naarmate het beter gaat, en met soldaten die hij bij je inkwartiert.
+- **Er komt iemand kijken, en je verbergt dingen.** De belastinginner loopt door het dorp; wat je
+  opzij zet voor de vrijheid moet buiten zijn zicht.
+- **Twee wegen naar vrijheid:** een opstand met een gevecht, of stadsrechten kopen. (Niet: de heer
+  langs een omweg ten val brengen.)
+
+Het woord is voorlopig **schout**, en burgemeester als de stad vrij is (zie Open).
+
+## Hoe het zou kunnen spelen (Claude, 23 sep; voorstel, niet besloten)
+
+**De kern in één zin: je moet rijk worden en arm lijken.** De heer vraagt meer naarmate het beter
+gaat, stadsrechten worden duurder als hij ziet hoe rijk je bent, en een opstand vraagt een kist
+goud en wapens die hij niet mag vinden. Alle drie vragen hetzelfde: verbergen. Maar wie te arm
+lijkt voor zo'n druk dorp, maakt de inner achterdochtig, en dan komen de soldaten.
+
+- **Het jaar als ritme.** Lente zaaien, zomer groeien en markt, herfst oogsten, en op
+  **Sint-Maarten** (11 november, de dag waarop pacht van oudsher betaald werd) komt de heer innen.
+  Winter: overleven en plannen, en 's nachts trainen.
+- **Groeien in treden:** gehucht, dorp, marktrecht (een weekmarkt, kramen, handelaars van buiten),
+  stad. Elke trede zie je in de huizen; stadsrechten zijn de laatste, en daar splitsen de wegen.
+- **Straffen maken het persoonlijk.** Moet er iemand aan de schandpaal, dan wijs jij hem aan en
+  voer jij het uit. Het dorp onthoudt wie je koos.
+
 ## Wat erin zit (Claude, 23 sep; om na te lopen met Marcel)
 
 - **Jij staat ertussen.** Boven je de landheer, die geld en goederen wil; onder je het dorp, dat ze
@@ -34,9 +64,10 @@ Nog niet besloten of dit het spel wordt; wel de richting waar nu over gedacht wo
   belasting. Voorstel: je begint als schout en wordt burgemeester als het dorp stadsrechten heeft;
   de titel wisselt dan mee met je trouw. "Voorman" klinkt eerder als een fabriek. In het Engels
   bestaat precies dit ambt als *reeve*.
-- Speel je de voorman als poppetje dat door het dorp loopt, of kijk je van bovenaf zoals in een
-  bouwspel?
-- Wat eist de landheer, en hoe straft hij?
-- Komt er iemand kijken, en moet je dingen verbergen?
-- Hoe gaat de strijd: een opstand, stadsrechten kopen (zo werden Nederlandse steden vrij), of de
-  heer op een andere manier ten val brengen?
+- **Wordt dit het spel?** Dan gaan de toren, de oude tovenaar en de leeftijd eruit, en moeten
+  `CLAUDE.md` en de werklijst opnieuw. Wat van de code kan blijven: de kunst, de huizenbouwer,
+  lopende dorpelingen, de gesprekken en quests, het wereldgereedschap, en het gevecht in beurten.
+- Welke goederen vraagt de heer (graan, wol, bier, geld), en wie maakt wat?
+- Wie is de heer: een figuur die je ziet en spreekt, of een naam op een brief?
+- Hoe ziet de opstand eruit: het eigen dorp verdedigen, of zijn kasteel bestormen?
+- De werktitel "Aardschok" past niet meer.
