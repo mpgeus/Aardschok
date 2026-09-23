@@ -480,6 +480,27 @@ Voorstel van Claude: 1, omdat de gruwel in de handen van de speler ligt (jij kie
 jezelf opgeeft), het met rondlopen en gevechten in beurten werkt, en de haak in één zin blijft
 hangen. 4 laat het best zien wat onze kunst kan. Nog niet besloten.
 
+Marcel: "nee allemaal ruk." En daarna: "opnieuw."
+
+### Ronde 5: kort en breed (23 sep 2026)
+
+Na vier rondes mis: geen uitgewerkte voorstellen meer met een dilemma en een voorbeeldspel erbij,
+maar veel korte ideeën die elk met een handeling beginnen, zodat Marcel kan aanwijzen wat iets
+heeft.
+
+1. **Slachtmaand.** "Het is november. Je bent een varken." Ontsnappen, alles vreten, groeien, en
+   met de kerst jaagt het dorp op iets wat niet meer in een hok past.
+2. **Het dode dorp.** "Iedereen is vannacht gestorven. Morgen komt de belastinginner." Zet de doden
+   neer alsof ze leven, want als het uitkomt, steekt de heer het dorp in brand, met jou erin.
+3. **De zondeneter.** Je eet het brood van de borst van elke dode, en daarmee zijn zonden en wat
+   hij kon. 's Nachts loopt je lijf zonder jou verder en doet wat de doden deden.
+4. **De pop.** Je bent de pop van een meisje van zes en kunt alleen bewegen als niemand kijkt. Wie
+   haar pijn doet, krijgt met jou te maken. Maar ze wordt ouder en gaat je dingen vragen.
+5. **De nar.** "Hij lacht alleen als het pijn doet." Jij zet in het dorp de grappen klaar voor een
+   wrede heer, elke dag wreder, want anders gaat je eigen hoofd eraf.
+6. **De tandenfee.** "Ze heeft een quotum." 's Nachts met een tang de huizen in, tanden uit slapende
+   monden; wie wakker wordt, slaat terug.
+
 ## Open
 
 - **Wat voor spel wordt het?** Alles behalve de kunst staat open; zie "Het doel staat weer open" en
