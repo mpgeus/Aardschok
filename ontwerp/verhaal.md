@@ -399,10 +399,39 @@ leeftijd als levensbalk:
 Voorstel van Claude: 1, eventueel met 5 erdoorheen, omdat het bijna alles gebruikt wat er ligt en
 van de leeftijd het onderwerp maakt in plaats van een levensbalk. Nog niet besloten.
 
+### Ronde 2: alles open behalve de kunst (Marcel, 23 sep 2026)
+
+Marcel: "Nee, geen van allen. Verzin eens iets nieuws zonder te leunen op wat we hebben behalve de
+art dan." Dus ook de tovenaar, de leeftijd, de toren en het gevecht in beurten staan ter discussie.
+Wat blijft: het isometrische beeld, de HD-pixel art, en dat huizen, mensen en bos uit code komen —
+waardoor we eindeloos verschillende dorpen kunnen maken.
+
+1. **Zeven dagen.** "Het dorp betaalt je in graan. Over zeven dagen komen de rovers." Je bent de
+   aanvoerder van een troepje huurlingen. Zes dagen bereid je een arm dorp voor (mensen leren
+   kennen, sloten, palissade, brug weg, boeren trainen); de zevende nacht is het gevecht in beurten
+   op de kaart die jij klaarzette. Daarna het volgende dorp. Materiaal doet ertoe: riet brandt,
+   steen houdt. De Zeven Samoerai met Jagged Alliance erin.
+2. **De weerwolf.** "Het hele dorp zoekt de weerwolf. Jij bent het." Overdag dorpeling (werken,
+   praten, verdenking sturen, elke avond een stemming), 's nachts sluipend jagen. Honger dwingt, en
+   elke dode maakt het dorp banger en slimmer. Weerwolven van Wakkerdam, omgedraaid, voor één
+   speler.
+3. **Eén dag.** "Om middernacht brandt het dorp af. Morgenochtend word je weer wakker." Een dag die
+   zich herhaalt, tachtig mensen met een dagindeling, en je houdt alleen wat je weet. Majora's Mask,
+   Outer Wilds. Klein van oppervlak, veel schrijfwerk.
+4. **De rattenvanger.** "Ze betaalden hem niet. Toen nam hij de kinderen mee." Van stad naar stad
+   met een fluit; met melodieën drijf je zwermen door steegjes en de rivier in. Vooraf onderhandelen,
+   achteraf bedrogen worden, en dan kiezen. Je naam reist voor je uit.
+5. **De vloed.** "Het is november 1421, en het water komt." Dijkgraaf van een dorp in de delta:
+   dijken, molens, terpen, en een storm per najaar tot de Sint-Elisabethsvloed. Een bouwspel met
+   water als tegenstander; het verst van Marcels voorbeelden.
+
+Voorstel van Claude: 1, omdat het het dichtst bij Jagged Alliance en Fallout ligt en de
+huizenbouwer speelgoed maakt; 2 als het om de haak op Steam gaat. Nog niet besloten.
+
 ## Open
 
-- **Wat is het doel van het spel?** Zie "Het doel staat weer open" hierboven. Tot dat besloten is,
-  hangt alles over verdiepingen herstellen in `toren.md` in de lucht.
+- **Wat voor spel wordt het?** Alles behalve de kunst staat open; zie "Het doel staat weer open" en
+  "Ronde 2" hierboven. Tot dat besloten is, hangt ook de rest van dit bestand in de lucht.
 - **Welke eindes?** Hangt aan wat er boven zit. Zie "Meer dan één einde" hierboven.
 
 - **Hoe lang is "te lang weg"?** Nu: verder dan twintig tegels van de moestuin, na een minuut

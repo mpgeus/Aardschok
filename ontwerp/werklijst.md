@@ -12,6 +12,11 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 
 ## De stand (einde sessie 22 sep 2026)
 
+**Het spel zelf staat open (23 sep).** Marcel is niet blij met het doel, en wil iets nieuws
+waarbij alleen de kunst blijft. Twee rondes ideeën staan in `verhaal.md`, "Het doel staat weer
+open". Wacht met bouwen aan toren, quests en spreuken tot er gekozen is; de lijst hieronder kan
+daarna flink veranderen.
+
 **Loopt nu:** niets. Er draait geen agent.
 
 **Alles staat op `main`.** De twee sessies van 22 sep draaiden in de cloud, op de takken
