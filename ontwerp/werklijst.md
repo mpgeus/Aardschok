@@ -63,6 +63,44 @@ daarna nog naar `main`.**
   browser. Nog ruw: een boer met twee akkers (boer1, boer3) werkt er maar één van af; er is geen
   apart "zaaien"-moment te zien, geploegd gaat direct over in kiemend; en de golfrichting/-snelheid
   van de wind (`T.WIND_GOLF_Y`, `T.WIND_GOLF_TIJD`) zijn een eerste gok, niet door Marcel bekeken.
+- **punt 3, behoeften en de winter** (`js/behoeften.js`, nieuw; `test/behoeften.test.cjs`, 25
+  toetsen; `npm test` 287/287 groen). Elke dag rekent `T.berekenTevredenheid` (puur, geen
+  bijwerkingen) de tevredenheid uit (0..1) uit drie delen: eten (graan als basis, ongewijzigd —
+  plus groente/vis/vlees, die als ze op voorraad zijn ook echt worden opgegeten en het dorp
+  tevredener maken: meer soorten weegt zwaarder dan alleen graan), brandhout (hout of turf, eerst
+  turf, per huishouden — `T.GEBOUWEN_INSTELLINGEN.gezinGrootte` leent dezelfde maat als een nieuw
+  gezin — en alleen gestookt in wintermaand/louwmaand/sprokkelmaand) en een kerk (de kapel, die al
+  bestond maar nog niets deed: `T.GEBOUWEN.kapel.kerk = true`, zodat een latere "echte" kerk
+  dezelfde vlag kan delen). Tevredenheid stuurt drie dingen: de productie in `T.tikGebouwenDag`
+  schaalt ermee mee (de helft bij 0% tevreden), een nieuw gezin komt er alleen nog bij boven
+  `groeiDrempel`, en ver eronder (`vertrekDrempel`) trekt op een groeidag juist een gezin weg. Een
+  aanhoudend tekort in de winter kost mensen: een fractie van de bevolking per tekortdag, opgebouwd
+  in `S.behoeften.winterVerliesRest` zodat het deterministisch is (dezelfde voorraad geeft altijd
+  hetzelfde verlies), geen dobbelsteen. Een hut of huis die de speler zelf bouwde, groeit door
+  (`T.GEBOUWEN[x].wordt`, hut → huis → stenen huis) na `huisGroeiDagen` dagen op rij boven
+  `huisGroeiDrempel`: dezelfde tekening-ingang als bij het neerzetten (`T.registreerGebouwSoort`,
+  nu gedeeld met `js/gebouwen.js`), dus geen tweede voorwerp. Onderweg bleek de échte tekening van
+  "hut" (5×7) en "huis" (7×5) niet alleen groter maar ook van vorm te wisselen — de eerste versie
+  liet dan een onzichtbare muur staan waar de oude voet niet meer met de nieuwe overlapte; nu geeft
+  `groeiGebouw` dat stuk grond weer vrij (met een eigen toets: "een huis dat van vorm wisselt...").
+  De balk (`js/hud.js`) toont de tevredenheid met een gezichtje en, op hover, wat het dorp mist
+  ("brandhout voor de winter", "een kerk"); rood onder de vertrekdrempel. Alle getallen in één
+  blok, `T.BEHOEFTEN_INSTELLINGEN` bovenaan `js/behoeften.js`.
+  **In de browser bekeken** (`?kaart=gehucht`, 25 mensen bij het begin, met
+  `Toren.debug.kalender(dag, 3)` en `Toren.debug.stap(…)` door de winter heen): met ruim hout (500)
+  en graan (500) kost de winter niemand het leven (bevolking blijft 25; het hout zakt van 500 naar
+  405 — precies de 7 huishoudens × 0,15 per dag × 90 winterdagen). Dezelfde winter met 0 hout/turf
+  en maar 40 graan (te weinig voor de hele winter) zakt de bevolking van 25 naar 2: elf keer een
+  melding dat de kou een dorpeling kost, drie keer dat een heel gezin wegtrekt. Dat is hard —
+  waarschijnlijk wil Marcel `winterVerliesFactor` en/of hoe zwaar een tekort meetelt bijstellen;
+  het is nu een eerste gok, net als bij de wind in punt 1b hierboven. Schermafdrukken (doek alleen):
+  `gereedschap/pixelart/uit/schermen/winter-met-hout-doek.png`,
+  `.../winter-zonder-hout-doek.png`, `.../huis-gegroeid-doek.png` (niet in git).
+  Nog ruw: alleen de kapel telt als kerk; een gebouw dat al vanaf de kaart klaarstond
+  (`T.zetBestaandeGebouwen`, dus zonder eigen voorwerp) groeit niet mee, alleen wat de speler zelf
+  neerzet; de kapel staat op trede "dorp" en dus niet in het bouwmenu op het gehucht
+  (`Toren.debug.bouw('kapel', x, y)` zet hem wel neer — zie de opmerking bij `T.GEBOUWEN.kapel`);
+  en de tevredenheid van een huishouden is nu het hele dorp gemiddeld, niet per huis.
 
 **Voor als Marcel "push it" zegt:** op GitHub staan twee commits uit de cloudsessie van 22 sep die
 lokaal niet in `main` zitten (`bd0e742`, `b92336a`: een kaartje en zoeken in de gespreksschrijver,
@@ -106,9 +144,10 @@ nog nodig is".
 
 *A. Een dorp dat draait*
 
-3. **Behoeften en de winter.** Klaar als mensen eten, brandhout en een kerk willen, tevredenheid
-   bepaalt hoe hard ze werken en of ze blijven, een huis groeit (hut, huis, stenen huis) als zijn
-   bewoners krijgen wat ze willen, en een winter zonder brandhout of voorraad mensen kost.
+3. **Behoeften en de winter** (af, 23 sep 2026 — zie "Af vandaag" hieronder). Klaar als mensen
+   eten, brandhout en een kerk willen, tevredenheid bepaalt hoe hard ze werken en of ze blijven,
+   een huis groeit (hut, huis, stenen huis) als zijn bewoners krijgen wat ze willen, en een winter
+   zonder brandhout of voorraad mensen kost.
 4. **Handel.** Klaar als er een marskramer langskomt die ijzer, zout en stenen verkoopt en koopt
    wat je over hebt, en de smidse zonder ijzer stilvalt.
 
