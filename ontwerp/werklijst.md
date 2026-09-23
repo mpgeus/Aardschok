@@ -25,29 +25,28 @@ los, met stadsrechten of een opstand. Alles staat in `spel.md`; de rondes ideeë
 bij het oude spel, net als de code voor de toren, de spreuken, de leeftijd en de tutorial; die gaat
 eruit na het proefje (punt 4).
 
-**Loopt nu:** vier agents (Sonnet). Het graan als plaat (1a) staat er (`graan.cjs`, commit
-ad53477; het rijpe veld is goed), en een tweede ronde verbetert kiemend, groen, de schoven en de
-randen. Een aparte agent maakt een boer die met een zeis maait (Marcel, 23 sep), in `maaier.cjs`,
-als plaat en bewegende PNG in `uit/maaier/`. Een derde agent werkt in een eigen worktree aan de
-interface (Marcel: "goud etc., dag, jaar etc."): de kalender met oude maandnamen in `js/tijd.js`,
-een voorraad, en een balk met datum, snelheid en voorraad, aan met `?kaart=gehucht` of `?hud`.
-Zijn tak moet daarna nog naar `main`.
+**Loopt nu (23 sep, avond):** twee agents (Sonnet). De een zet het graan in het spel (rest van 1b):
+de akkers groeien met de kalender, wuiven in de wind, de boeren werken op hun akker en maaien met
+de zeis. De ander bouwt de gebouwen als soorten (punt 2) in een eigen worktree op de tak
+`gebouwen`: `T.GEBOUWEN`, bevolking en woonruimte, werkplaatsen, en een bouwmenu. **Die tak moet
+daarna nog naar `main`.**
 
-**Het begin van 1b staat er (23 sep):** `gereedschap/tiled/maak-gehucht.cjs` schrijft
-`kaarten/gehucht.tmj` en `kaarten/gehucht.betekenis.json` — vijf boerenhuizen (riet) rond een
-brinkje met een put en een eik, het stenen huis van de schout, een zandweg die het gehucht in en
-uit loopt, een beek met een bruggetje en wilgen op de oevers, een bosrand, tuintjes, en vijf
-akkers als lange stroken (samen zo'n 22% van de kaart). `js/kaart.js` kent het soort ding `akker`
-nu (naam, x/y/b/h, welk huis). `index.html?kaart=gehucht` begint er meteen, zonder titelscherm en
-zonder tutorial: de schout staat bij zijn huis met het vel van een gewone dorpeling (niet de
-tovenaar — dat kon via een kleine, veilige omweg: `held.soort = 'dorpeling'` overschrijven raakt
-alleen het plaatje, `kant` blijft `'held'` voor de HUD en de beurtvolgorde, zie
-`T.beginOpKaart` in `js/gebied.js`), en vijf boeren dwalen bij hun eigen huis. Het gewone begin
-(zonder `?kaart=`) is ongewijzigd getoetst. `npm test`: 199/200 groen — de ene "not ok" is
-`test/bronblok.test.cjs` op `js/gesprekken.js`, en bestond al vóór dit werk: dat bestand staat in
-git met LF-regeleindes, maar staat door `core.autocrlf=true` van Windows als CRLF op schijf.
-Nog kaal: de akkers zijn nu nog gewoon zandgrond (het graan moet er nog in, zie 1a hierboven), en
-er is geen jaar dat om gaat — dat is de rest van 1b.
+**Af vandaag, allemaal op `main`:**
+- het graan als plaat, twee rondes (`gereedschap/pixelart/graan.cjs`, platen in `uit/graan/`): vijf
+  stadia met varianten, hoogte met een achter- en voorlaag, wind als golf, schoven, rafelranden;
+- de maaier met zeis (`maaier.cjs`, acht richtingen, 12 beelden; het zwad staat nog als paaltjes
+  en de slag is nog symmetrisch);
+- de interface (`js/tijd.js`, `js/voorraad.js`, `js/hud.js`): kalender met oude maandnamen vanaf
+  1 lentemaand 1323, pauze en 1–3×, voorraad goud/graan/wol/hout, aan met `?kaart=gehucht` of `?hud`;
+- het gehucht (`gereedschap/tiled/maak-gehucht.cjs`, `kaarten/gehucht.tmj`): een kale, open kaart
+  van 50×50 met het dorpje in het midden en een es van vijf lange stroken ernaast;
+  `index.html?kaart=gehucht` begint er zonder tutorial, de schout als gewone dorpeling;
+- een kijkgat rond de schout in plaats van een doorzichtig spookhuis, en geen herfstbomen in de lente;
+- de toets `bronblok` vergelijkt nu met de LF-versie, zodat hij ook op Windows groen is.
+
+**Voor als Marcel "push it" zegt:** op GitHub staan twee commits uit de cloudsessie van 22 sep die
+lokaal niet in `main` zitten (`bd0e742`, `b92336a`: een kaartje en zoeken in de gespreksschrijver,
+en het draaiboek van de tutorial erin). Eerst `origin/main` samenvoegen, dan `npm test`, dan pushen.
 
 **Wacht op Marcel:**
 - De open vragen in `spel.md`, vooral: hoe je als poppetje honderden mensen bestuurt, welke
