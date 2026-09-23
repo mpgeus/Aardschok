@@ -106,7 +106,21 @@ beheer gaat over hoeveel, het avontuur over wie, en ze hebben elkaar nodig.
 Hiervoor kan veel terugkomen wat er al is: de gesprekken met hun situaties, de quests met drie
 antwoorden, en het wereldgereedschap.
 
-## De kern voor het proefje (Claude, 23 sep; voorstel om te schrappen en aan te vullen)
+## Het eerste proefje: een dorp met akkers, en de sfeer (Marcel, 23 sep 2026)
+
+> We moeten een dorp hebben, met wat akkers. Ik wil iets van graan zien. — We moeten de eerste
+> proef simpel houden. — De sfeer is belangrijk.
+
+Dus eerst geen keuren, groepen of inner, maar een gehucht met akkers waar je het graan ziet staan,
+groeien en wuiven. De kern hieronder komt in het tweede proefje. Volgorde:
+
+1. **Graan in onze stijl, als plaat** (om te beoordelen vóór het in het spel gaat): een akker in
+   vijf stadia — geploegd, kiemend, groen, rijp, gemaaid met schoven — met hoogte, zodat een boer
+   er tot zijn middel in staat, en wind die als een golf over het rijpe veld rolt.
+2. **In het spel:** een klein gehucht met een paar huizen en akkers, een jaar dat snel voorbijgaat
+   zodat je het graan ziet opkomen, rijpen en gemaaid worden, en boeren die op hun akker werken.
+
+## De kern voor het tweede proefje (Claude, 23 sep; voorstel om te schrappen en aan te vullen)
 
 Marcel: "ja graag, laten we daarmee starten." Genoeg voor één jaar in een gehucht, niet meer.
 
@@ -178,7 +192,7 @@ Is rijk worden en arm lijken leuk?
   je met wie voor hen spreekt, en bestuur je met keuren.
 - Hoe ver gaat de politiek: keuren, schepenen en groepen zoals hierboven, of ook verkiezingen,
   partijen en intriges aan het hof van de heer?
-- Goederen, groepen en keuren: een eerste voorstel staat hierboven ("De kern voor het proefje"),
+- Goederen, groepen en keuren: een eerste voorstel staat hierboven ("De kern voor het tweede proefje"),
   en wacht op Marcel.
 - De koning: kan hij stadsrechten geven buiten de heer om?
 - Hoe ziet de opstand eruit: het eigen dorp verdedigen, of het kasteel bestormen?

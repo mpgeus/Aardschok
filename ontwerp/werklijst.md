@@ -30,18 +30,22 @@ eruit na het proefje (punt 3).
 **Wacht op Marcel:**
 - De open vragen in `spel.md`, vooral: hoe je als poppetje honderden mensen bestuurt, welke
   goederen de heer vraagt, en hoe ver de politiek gaat. Die zijn nodig voor het proefje.
-- **Het voorstel voor de kern** in `spel.md` ("De kern voor het proefje"): goederen, wat de heer
+- **Het voorstel voor de kern** in `spel.md` ("De kern voor het tweede proefje"): goederen, wat de heer
   wil, wat de inner ziet, drie groepen en vijf keuren. Schrappen en aanvullen.
 - Een naam; "Aardschok" past niet meer.
 
 **Klaar om te starten:**
-1. **De kern op papier,** samen met Marcel. Klaar als `spel.md` zegt welke goederen er zijn en wie
-   ze maakt, hoe het jaar loopt, wat de heer eist en hoe hij grilt, wat de inner ziet, welke
-   keuren en groepen er in het begin zijn, en hoe je als poppetje stuurt. Genoeg voor het proefje,
-   niet meer.
-2. **Het proefje: één jaar in een gehucht.** Klaar als je met vijf boeren een akker bewerkt, één
-   keur kunt uitvaardigen, op Sint-Maarten de heer betaalt, de inner één keer rondloopt, en er iets
-   te verbergen valt. De vraag die het moet beantwoorden: is rijk worden en arm lijken leuk?
+1. **Het eerste proefje: een gehucht met akkers, en de sfeer** (Marcel, 23 sep: "Ik wil iets van
+   graan zien", "simpel houden", "de sfeer is belangrijk"; zie `spel.md`).
+   - **1a. Graan als plaat.** Klaar als er een akker is in vijf stadia (geploegd, kiemend, groen,
+     rijp, gemaaid met schoven), met hoogte zodat een boer er tot zijn middel in staat, en wind die
+     als een golf over het rijpe veld rolt, en Marcel de plaat goed vindt. Renderwerk.
+   - **1b. In het spel.** Klaar als je als schout door een klein gehucht loopt, het graan in een
+     snel jaar ziet opkomen, rijpen en gemaaid worden, en de boeren op hun akker werken.
+2. **Het tweede proefje: één jaar met de heer.** Eerst de kern op papier (het voorstel staat in
+   `spel.md`, "De kern voor het tweede proefje", en wacht op Marcel). Klaar als je één keur kunt
+   uitvaardigen, op Sint-Maarten de heer betaalt, de inner één keer rondloopt, en er iets te
+   verbergen valt. De vraag die het moet beantwoorden: is rijk worden en arm lijken leuk?
 
 ## Daarna, in deze volgorde (voorstel)
 
