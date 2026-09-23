@@ -268,6 +268,21 @@ Bouwen vraagt materiaal, en dat moet ergens vandaan. Voorstel (Claude) voor wat 
 Een eigen ertsgraver betekent dat je voor ijzer niet van de marskramer afhangt, en ijzer wordt ook
 wapens: dat ziet de inner graag van dichtbij.
 
+**Ordebewaarders en een leger** (Marcel, 23 sep: "orde bewaarders, leger etc moeten een optie
+zijn"). Voorstel (Claude), van mag tot mag niet:
+
+| Wie | Wat ze doen | Wat de heer ervan vindt |
+|---|---|---|
+| Rakkers (dienders van de schout) | orde houden, dieven pakken, keuren handhaven, smokkelaars vangen, of wegkijken | goed: ze helpen innen. Maar voor wie werken ze echt? |
+| Nachtwacht | met een lantaarn rond, roept de uren, ziet wie er na de avondklok buiten is, ook jouw eigen smokkelaars | goed |
+| Schutterij | een burgerwacht die oefent met boog en piek, tegen rovers en wolven | verdacht zodra ze te goed worden |
+| Huurlingen | betaalde soldaten, duur, voor verdediging en voor de opstand | een leger is een opstand |
+
+Gebouwen erbij: wachthuis, gevang, schuttershof (doelen), tuighuis (wapens), en later een kazerne en
+een poort met wacht. Daartegenover staan de soldaten van de heer, die hij bij je inkwartiert. Wie je
+ordebewaarders zijn, is ook politiek: een rakker die door de heer betaald wordt, is een verklikker
+met een knuppel.
+
 **Bouwen kost tijd, en je ziet het groeien** (Marcel, 23 sep): "eerst zie je een paar stenen, dan
 wat hout erbij en gaandeweg steeds meer van het gebouw tot het klaar is." Dus geen bleek spookbeeld
 dat ineens af is, maar fases: de fundering (een paar stenen op de voet, een stapel hout en stenen
