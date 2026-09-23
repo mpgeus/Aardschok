@@ -222,6 +222,10 @@ css-overgangen staan dan vrijwel stil. Het testgereedschap stuurt de spatiebalk 
 Meesterlijk), om de treden te proberen zonder ze te verdienen.
 `Toren.debug.quest('bakker', 'terug')` zet een quest in een fase zonder hem te spelen ('uit' haalt
 hem weg, beloning en al); zonder fase zegt hij waar hij staat.
+`await Toren.debug.schermafdruk('naam')` bewaart het doek als PNG in
+`gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
+blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In het gehucht:
+`Toren.debug.kalender(dag, snelheid)` springt door het jaar, `Toren.debug.bouw('huis', x, y)` bouwt.
 
 Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken ze de regels uit
 `js/` zelf, nooit een eigen kopie:
