@@ -182,6 +182,79 @@ gereedschap. **Wat je bouwt, is wat hij ziet.**
 zet een keur, de oogst komt, de inner telt, je verstopt iets of niet, en op Sint-Maarten betaal je.
 Is rijk worden en arm lijken leuk?
 
+## Gebouwen (Marcel, 23 sep 2026)
+
+> We hebben types gebouwen nodig. Dus huis, deze zorgen ervoor dat je populatie kan groeien;
+> boerderij, meer mensen op de akker. Smidse, timmerman, wapenmaker. En alle anderen.
+
+**Besloten:** gebouwen zijn soorten met een taak. Een huis geeft ruimte, zodat er mensen bij kunnen
+komen; een boerderij zet meer mensen op de akker; ambachtslieden maken wat het dorp nodig heeft.
+
+**Voorstel (Claude, 23 sep) voor de soorten,** per trede waarop ze vrijkomen. "Bestaat" wil zeggen
+dat er al een tekening in `tegels/gebouwen.tsx` of `dorp.cjs` is. Wat het dorp maakt, gaat van hand
+tot hand: graan wordt meel wordt brood, ijzer wordt gereedschap, en gereedschap maakt elk ander
+werk sneller.
+
+*Gehucht*
+
+| Gebouw | Wat het doet | Tekening |
+|---|---|---|
+| Hut | ruimte voor een gezin; goedkoop, en arm om te zien | nieuw (plaggenhut) |
+| Huis | ruimte voor meer mensen | bestaat (dorpshuizen) |
+| Boerderij | boeren voor de akkers, en een schuur voor de oogst | bestaat (huis met schuur) |
+| Akker | graan (rogge, gerst) | wordt gemaakt (`graan.cjs`) |
+| Houthakker | hout uit het bos van de heer | bestaat (houtschuur, jagershut) |
+| Schaapskooi | wol, van schapen op de meent | nieuw |
+| Kippenhok | eieren, en de pachthoenders voor de heer | bestaat |
+| Moestuin | groente bij het huis | bestaat |
+| Put | water; zonder put wordt het dorp ziek | bestaat |
+| Verstopplek | een kelder of kuil die de inner niet ziet | nieuw |
+
+*Dorp*
+
+| Gebouw | Wat het doet | Tekening |
+|---|---|---|
+| Smidse | ijzer tot gereedschap; betere werktuigen, sneller werk | bestaat |
+| Timmerman | hout tot planken en balken, nodig om te bouwen | nieuw |
+| Molen | graan tot meel. De heer wil dat je bij zíjn molen maalt en betaalt (het banrecht); een eigen molen is verzet | bestaat (watermolen) |
+| Bakkerij | meel tot brood | bestaat |
+| Brouwerij | gerst tot bier; de heer heft er belasting op | nieuw |
+| Herberg | reizigers, nieuws en verhalen, bier | bestaat |
+| Kapel, later kerk | de kerk als groep, en tevredenheid | bestaat (kapel, kerkhof) |
+| Tiendschuur | van de heer: hier lever je op Sint-Maarten, en hier zit de inner | nieuw |
+
+*Marktrecht*
+
+| Gebouw | Wat het doet | Tekening |
+|---|---|---|
+| Markt en kramen | handel met buiten; handelaars komen | nieuw (kraam bestaat in `dorp.cjs`) |
+| Weverij | wol tot laken, het rijkste handelsgoed | nieuw |
+| Pakhuis | opslag, en een goede plek om iets tussen te schuiven | nieuw |
+| Kuiper | vaten voor bier en opslag | nieuw |
+| Slager, leerlooier | vlees en leer (de looier stinkt, dus aan de rand) | nieuw |
+| Steenbakkerij | stenen voor stenen huizen, die rijk ogen | nieuw |
+| Badhuis, gasthuis | gezondheid en armenzorg | nieuw |
+
+*Stad*
+
+| Gebouw | Wat het doet | Tekening |
+|---|---|---|
+| Stenen huis | veel ruimte, en rijk om te zien | bestaat |
+| Raadhuis | waar de schepenen stemmen; de schout wordt burgemeester | nieuw |
+| Stadsmuur en poort | pas mag het met stadsrechten; zonder is het opstand | nieuw (palissade staat op de lijst) |
+
+*Verdacht: wat de heer niet mag zien*
+
+| Gebouw | Wat het doet | Tekening |
+|---|---|---|
+| Wapenmaker | ijzer en hout tot wapens, voor de opstand. Verboden, dus verstopt: achter de smidse, of 's nachts | nieuw |
+| Schuttershof | mannen oefenen; als de inner het ziet, heet het een feest | nieuw |
+| Palissade | een muur zonder stadsrechten is een opstand die je aankondigt | nieuw |
+
+Hoe het samen draait (voorstel): mensen komen als er ruimte, eten en rust is; elk gebouw vraagt
+handen; wat het maakt, gaat naar de voorraad of naar het volgende gebouw; en alles wat je bouwt,
+ziet de inner, behalve wat verstopt is.
+
 ## Open
 
 - **Een poppetje en honderden mensen.** Met vijf boeren kun je ieder aanspreken, met vijfhonderd

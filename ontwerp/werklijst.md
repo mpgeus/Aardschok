@@ -23,7 +23,7 @@ los, met stadsrechten of een opstand. Alles staat in `spel.md`; de rondes ideeë
 
 **Wat blijft:** de kunst en de techniek eronder. `verhaal.md`, `toren.md` en `spreuken.md` horen
 bij het oude spel, net als de code voor de toren, de spreuken, de leeftijd en de tutorial; die gaat
-eruit na het proefje (punt 3).
+eruit na het proefje (punt 4).
 
 **Loopt nu:** vier agents (Sonnet). Het graan als plaat (1a) staat er (`graan.cjs`, commit
 ad53477; het rijpe veld is goed), en een tweede ronde verbetert kiemend, groen, de schoven en de
@@ -64,27 +64,34 @@ er is geen jaar dat om gaat — dat is de rest van 1b.
      als een golf over het rijpe veld rolt, en Marcel de plaat goed vindt. Renderwerk.
    - **1b. In het spel.** Klaar als je als schout door een klein gehucht loopt, het graan in een
      snel jaar ziet opkomen, rijpen en gemaaid worden, en de boeren op hun akker werken.
-2. **Het tweede proefje: één jaar met de heer.** Eerst de kern op papier (het voorstel staat in
+2. **Gebouwen als soorten** (Marcel, 23 sep: "huis, deze zorgen ervoor dat je populatie kan
+   groeien; boerderij, meer mensen op de akker. Smidse, timmerman, wapenmaker. En alle anderen").
+   Het voorstel met de soorten per trede staat in `spel.md`, "Gebouwen". Klaar als de soorten
+   gegevens zijn op één plek (zoals `T.MENSEN` voor mensen), de schout ze met een bouwmenu kan
+   neerzetten, een huis ruimte geeft zodat er mensen bij komen, en een werkplaats handen vraagt en
+   iets maakt. Eerst met de tekeningen die er al zijn; wat nog niet getekend is, krijgt voorlopig een
+   bestaand huis.
+3. **Het tweede proefje: één jaar met de heer.** Eerst de kern op papier (het voorstel staat in
    `spel.md`, "De kern voor het tweede proefje", en wacht op Marcel). Klaar als je één keur kunt
    uitvaardigen, op Sint-Maarten de heer betaalt, de inner één keer rondloopt, en er iets te
    verbergen valt. De vraag die het moet beantwoorden: is rijk worden en arm lijken leuk?
 
 ## Daarna, in deze volgorde (voorstel)
 
-3. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
+4. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
    zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel beschrijft.
-4. **Groei.** Klaar als het dorp in treden groeit (gehucht, dorp, marktrecht, stad), er winkels,
+5. **Groei.** Klaar als het dorp in treden groeit (gehucht, dorp, marktrecht, stad), er winkels,
    marktkramen en handelaars van buiten komen, en het aantal mensen meegroeit.
-5. **Keuren en politiek.** Klaar als er groepen zijn met vertrouwen in jou, schepenen die stemmen,
+6. **Keuren en politiek.** Klaar als er groepen zijn met vertrouwen in jou, schepenen die stemmen,
    keuren die elk iets kosten, en plakkaten van de heer die je uitvoert of niet.
-6. **De heer.** Klaar als hij grillen heeft, op alle vier de manieren straft, en soldaten
+7. **De heer.** Klaar als hij grillen heeft, op alle vier de manieren straft, en soldaten
    inkwartiert.
-7. **Het avontuur.** Klaar als de grillen van de heer opdrachten zijn, er mensen met een verhaal
+8. **Het avontuur.** Klaar als de grillen van de heer opdrachten zijn, er mensen met een verhaal
    zijn, en er buiten het dorp iets te halen valt (bos, buurdorp, handelsweg, het kasteel).
-8. **Stadsrechten kopen.**
-9. **De opstand:** trainen, wapens verbergen, en het gevecht in beurten.
-10. **Opslaan, titelscherm, instellingen, geluid.** Zie `verpakken.md`.
-11. **Verpakken.** Klaar als er een programma is dat vanuit Steam start.
+9. **Stadsrechten kopen.**
+10. **De opstand:** trainen, wapens verbergen, en het gevecht in beurten.
+11. **Opslaan, titelscherm, instellingen, geluid.** Zie `verpakken.md`.
+12. **Verpakken.** Klaar als er een programma is dat vanuit Steam start.
 
 ## Tegelijk: de huizenbouwer, en meer mensen
 
