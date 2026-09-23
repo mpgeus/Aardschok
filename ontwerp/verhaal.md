@@ -454,6 +454,32 @@ Voorstel van Claude: 3, omdat het past bij Fallout en Jagged Alliance, een haak 
 zin uitlegt, en een eigen duister middel (je bent zelf de besmetting). 1 is het origineelst.
 Nog niet besloten.
 
+### Ronde 4: fucked up (Marcel, 23 sep 2026)
+
+Marcel, nog voor ronde 3 op zijn scherm stond: "aan de kant van fucked up zeg maar." Ronde 3 is
+duister maar netjes. Dit gaat verder, in de hoek van Fear & Hunger, Darkwood en The Binding of
+Isaac, en weer met het lieve dorp als dekmantel.
+
+1. **De heilige.** "Je kunt niet dood. Het dorp verkoopt je in stukjes." Je ligt in een kelder
+   onder de kerk; wat ze afhakken, groeit terug, en je vingers, tanden en ogen gaan als relikwie
+   naar pelgrims. Je lijf is je uitrusting: zonder benen kruip je, met één oog zie je half, en om
+   uit een boei te komen bijt je je eigen hand af. Ontsnappen is het begin; het hele dorp wil je
+   terug.
+2. **De herberg.** "Een gezellige herberg aan de handelsweg. Niemand gaat weg." Jij kiest 's nachts
+   welke reiziger niet meer wakker wordt, en het dorp eet mee. Slachten, koken, verbergen — en elke
+   reiziger heeft iemand die komt zoeken, tot de baljuw toe.
+3. **De jassen.** "Je draagt mensen als jassen. Ze gaan niet lang mee." Een geest zonder lijf die in
+   dorpelingen kruipt en hun leven leidt; een gedragen lijf rot, dus je moet steeds over, en dat
+   gaat alleen via bloed, een kus of een beet. De pastoor begint te tellen.
+4. **De put.** "Hoe meer je hem voert, hoe minder mens ze worden." De put vervult wensen, jij
+   bepaalt wat erin gaat (varkens, dan mensen), en alles wat hij geeft, groeit verkeerd: de smid
+   krijgt sterkere armen, en dan meer armen. Stop je met voeren, dan neemt hij terug wat hij gaf.
+   De figuren komen uit 3D-modellen, dus we kunnen elke dorpeling stap voor stap laten vergroeien.
+
+Voorstel van Claude: 1, omdat de gruwel in de handen van de speler ligt (jij kiest wat je van
+jezelf opgeeft), het met rondlopen en gevechten in beurten werkt, en de haak in één zin blijft
+hangen. 4 laat het best zien wat onze kunst kan. Nog niet besloten.
+
 ## Open
 
 - **Wat voor spel wordt het?** Alles behalve de kunst staat open; zie "Het doel staat weer open" en
