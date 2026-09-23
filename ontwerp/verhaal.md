@@ -360,8 +360,49 @@ en afleidt, komt ergens anders uit dan wie vecht, en met een andere set spreuken
 dorp, de bakker, Wim, de leerling, de toren. Goedkoop om te maken (een gespreksvariant per
 uitkomst), en het maakt zichtbaar dat kleine keuzes onderweg meetelden.
 
+## Het doel staat weer open (Marcel, 23 sep 2026)
+
+Marcel: "Ik vind de stijl tof, het isometrische etc. De artstyle ook. Het spel en doel ben ik nog
+niet happy mee. Het idee van de toren beklimmen is leuk, maar niet als einddoel." De kunst blijft
+dus, en de toren als plek ook. De vraag is wat het spel van je wil.
+
+**Waarom het wringt, vermoedelijk** (nog na te vragen bij Marcel):
+
+- het doel is een plek, geen reden. "Naar boven" is het doel van een kerker; het dorp wordt een
+  winkel voor grondstoffen, en niemand daar heeft iets te verliezen;
+- de lus is sleutels halen: verdieping dicht, grondstof halen, verdieping open. `toren.md` waarschuwt
+  zelf al voor haalwerk;
+- de leeftijd vraagt iets groters dan het doel: "waar geef je je laatste jaren aan?" De toren
+  vraagt alleen hoe oud je boven komt.
+
+**Vijf richtingen**, allemaal met dezelfde kunst, het dorp, het bos, de toren als plek en de
+leeftijd als levensbalk:
+
+1. **De opvolger.** Je gaat dood; het spel is wie je achterlaat. Kandidaten in het dorp (de jongen
+   met het houten zwaard, de dochter van de smid, Wim). Wat je doorgeeft, houden ze; wat je door
+   ouderdom vergeet, is weg. Word je honderd of kies je je laatste spreuk, dan speel je het laatste
+   bedrijf als de leerling, met wat jij doorgaf, herstelde en aan vrienden maakte. De estafette
+   hierboven wordt dan het hele spel, en het begin (de meester sterft en laat na) wordt het einde.
+2. **Het dal.** De aardschok opende scheuren in het hele dal (bos, mijn, molen, buurdorp). Jij bent
+   de laatste tovenaar; wat je beveiligt, blijft veilig. Het dal moet de winter door. De toren is
+   je thuisbasis. Zoals Jagged Alliance 2: het dorp zelf staat op het spel.
+3. **De laatste reis.** Wat boven zat, kan alleen opgesloten worden waar het vandaan kwam, ver weg
+   (of: de meester wil begraven waar hij geboren is). Een reis met Wim langs kaarten die elk een
+   eigen plek zijn; terug gaat niet. Het doel is aankomen. Veel afwisseling, maar ook nieuwe
+   landschappen om te maken.
+4. **Wat je zestig jaar geleden deed.** Een mysterie: jij hielp het ooit opsluiten en bent het ook
+   vergeten. De oudsten in het dorp weten meer dan jij, de verdiepingen zijn stukken van je eigen
+   verleden, en het verleden zien kost jaren. Gesprekken worden het hart; het meeste schrijfwerk.
+5. **De verleiding.** Het ding boven biedt je jeugd terug. Hoe meer je tovert, hoe beter dat
+   klinkt. Het einde is een beslissing, geen gevecht. Kan los, of als laag onder 1 of 4.
+
+Voorstel van Claude: 1, eventueel met 5 erdoorheen, omdat het bijna alles gebruikt wat er ligt en
+van de leeftijd het onderwerp maakt in plaats van een levensbalk. Nog niet besloten.
+
 ## Open
 
+- **Wat is het doel van het spel?** Zie "Het doel staat weer open" hierboven. Tot dat besloten is,
+  hangt alles over verdiepingen herstellen in `toren.md` in de lucht.
 - **Welke eindes?** Hangt aan wat er boven zit. Zie "Meer dan één einde" hierboven.
 
 - **Hoe lang is "te lang weg"?** Nu: verder dan twintig tegels van de moestuin, na een minuut
