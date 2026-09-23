@@ -54,6 +54,12 @@
 //              vast als de tegel zelf zegt. In Tiled is dat een object met een gid.
 //   raak       dit ding wacht op een spreuk (T.RAAKPUNTEN, js/quests.js).
 //   quest      "bakker:zoeken": dit ding ligt er alleen zolang die quest in die fase staat.
+//   akker      een naam ("akker1"): dit is geen los vakje maar een hele strook, x/y de
+//              linkerbovenhoek en b/h de maat in tegels (net als "beslaat" bij een gebouw), en
+//              "huis" welk huis (een vrije naam, bijvoorbeeld "boer1") hem bewerkt. Zolang er
+//              geen graantegels zijn (gereedschap/pixelart/graan*.cjs) is de grond zelf gewoon
+//              zandpad, getekend in de .tmj; dit ding zegt alleen wát er ligt en van wie. Zie
+//              gereedschap/tiled/maak-gehucht.cjs en ontwerp/werklijst.md, punt 1b.
 //
 // En op het betekenisbestand zelf: "proef": true zegt dat de kaart alleen voor de toetsen bestaat
 // en in het spel niet meetelt.
@@ -185,6 +191,7 @@
     const questVoorwerpen = []; // wat aan een quest hangt; T.werkQuestVoorwerpen schuift het erin
     const wezens = [];
     const overgangen = [];
+    const akkers = []; // strokens land, geen vakjes; zie "akker" hierboven
 
     // 2. alles wat op de grond staat: bomen, huizen, deuren, wezens, dorpelingen, overgangen.
     // Dat komt uit twee bronnen, en allebei belanden ze in dezelfde `zetNeer` hieronder:
@@ -260,6 +267,17 @@
         wezens.push(T.maakDorpeling(p.zaad, gx, gy, Number(p.straal) || 0, p.gesprek ? String(p.gesprek) : null));
         return;
       }
+      if (p.akker !== undefined) {
+        // Geen vakje maar een hele strook; de grond zelf staat al in de .tmj (kale zandgrond
+        // zolang er geen graantegels zijn), dit is alleen de betekenis erbij. Zie "akker"
+        // hierboven.
+        akkers.push({
+          naam: String(p.akker), x: gx, y: gy,
+          b: Number(p.b) || 1, h: Number(p.h) || 1,
+          huis: p.huis !== undefined ? String(p.huis) : null,
+        });
+        return;
+      }
       if (!t) return; // een leeg object zonder van bovenstaande: niets aan te doen
       const eig = t.eig;
       registreerVoorwerp(eig.naam, eig.vast);
@@ -332,7 +350,7 @@
       b, h, tegels, grond, deuren, geheimen, kamers: [kamerBuiten],
       voorwerpen, questVoorwerpen, wezens,
       bekend: new Set(['buiten']), huidigeKamer: 'buiten',
-      burenKamers, overgangen,
+      burenKamers, overgangen, akkers,
       buiten: true, // geen kamers met muren: het spel tekent gras en hoge dingen
       naam: typeof eig.naam === 'string' ? eig.naam : null,
       // "proef": true in het betekenisbestand zegt dat deze kaart alleen voor de toetsen bestaat

@@ -209,4 +209,34 @@
     if (S.bezocht) S.bezocht.add(naar);
     return nieuw;
   };
+
+  // Een nieuw spel beginnen op een gewone kaart, zonder tutorial: voor een proefje
+  // (index.html?kaart=<naam>, zie js/main.js), niet voor het gewone begin (dat is
+  // T.beginOpHetErf, js/tutorial.js). Geeft true terug als het gelukt is; S.wereld en S.held
+  // staan dan klaar. Bestaat de kaart niet, of staat er geen "held" op en lukt het ook niet er
+  // zelf een neer te zetten, dan false — de aanroeper valt dan terug op het gewone begin.
+  T.beginOpKaart = function (S, naam) {
+    S.tutorial = null;
+    const w = T.gebied(S, naam);
+    if (!w) {
+      console.warn(`Toren.beginOpKaart: kaart "${naam}" bestaat niet — draai npm run kaarten?`);
+      return false;
+    }
+    S.wereld = w;
+    let held = w.wezens.find((e) => e.soort === 'held');
+    if (!held) {
+      console.warn(`Toren.beginOpKaart: geen "held" op kaart "${naam}", hij begint op (0, 0)`);
+      held = T.maakWezen('held', 0, 0);
+      w.wezens.push(held);
+    }
+    // Een schout is geen tovenaar: hij krijgt hier het vel van een gewone dorpeling. `kant`
+    // blijft 'held' (die staat al vast sinds T.maakWezen, zie T.WEZENS in js/wereld.js), dus de
+    // HUD en de beurtvolgorde blijven gewoon op hem letten; alleen T.sprites.houding kijkt naar
+    // `soort` om het plaatje te kiezen (js/sprites.js). Zie ontwerp/werklijst.md, punt 1b.
+    held.soort = 'dorpeling';
+    if (held.zaad == null) held.zaad = 1;
+    S.held = held;
+    zetNeer(held, held.x, held.y);
+    return true;
+  };
 })(globalThis.Toren = globalThis.Toren || {});

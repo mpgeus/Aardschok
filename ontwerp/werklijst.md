@@ -25,7 +25,29 @@ los, met stadsrechten of een opstand. Alles staat in `spel.md`; de rondes ideeë
 bij het oude spel, net als de code voor de toren, de spreuken, de leeftijd en de tutorial; die gaat
 eruit na het proefje (punt 3).
 
-**Loopt nu:** niets. Er draait geen agent.
+**Loopt nu:** vier agents (Sonnet). Het graan als plaat (1a) staat er (`graan.cjs`, commit
+ad53477; het rijpe veld is goed), en een tweede ronde verbetert kiemend, groen, de schoven en de
+randen. Een aparte agent maakt een boer die met een zeis maait (Marcel, 23 sep), in `maaier.cjs`,
+als plaat en bewegende PNG in `uit/maaier/`. Een derde agent werkt in een eigen worktree aan de
+interface (Marcel: "goud etc., dag, jaar etc."): de kalender met oude maandnamen in `js/tijd.js`,
+een voorraad, en een balk met datum, snelheid en voorraad, aan met `?kaart=gehucht` of `?hud`.
+Zijn tak moet daarna nog naar `main`.
+
+**Het begin van 1b staat er (23 sep):** `gereedschap/tiled/maak-gehucht.cjs` schrijft
+`kaarten/gehucht.tmj` en `kaarten/gehucht.betekenis.json` — vijf boerenhuizen (riet) rond een
+brinkje met een put en een eik, het stenen huis van de schout, een zandweg die het gehucht in en
+uit loopt, een beek met een bruggetje en wilgen op de oevers, een bosrand, tuintjes, en vijf
+akkers als lange stroken (samen zo'n 22% van de kaart). `js/kaart.js` kent het soort ding `akker`
+nu (naam, x/y/b/h, welk huis). `index.html?kaart=gehucht` begint er meteen, zonder titelscherm en
+zonder tutorial: de schout staat bij zijn huis met het vel van een gewone dorpeling (niet de
+tovenaar — dat kon via een kleine, veilige omweg: `held.soort = 'dorpeling'` overschrijven raakt
+alleen het plaatje, `kant` blijft `'held'` voor de HUD en de beurtvolgorde, zie
+`T.beginOpKaart` in `js/gebied.js`), en vijf boeren dwalen bij hun eigen huis. Het gewone begin
+(zonder `?kaart=`) is ongewijzigd getoetst. `npm test`: 199/200 groen — de ene "not ok" is
+`test/bronblok.test.cjs` op `js/gesprekken.js`, en bestond al vóór dit werk: dat bestand staat in
+git met LF-regeleindes, maar staat door `core.autocrlf=true` van Windows als CRLF op schijf.
+Nog kaal: de akkers zijn nu nog gewoon zandgrond (het graan moet er nog in, zie 1a hierboven), en
+er is geen jaar dat om gaat — dat is de rest van 1b.
 
 **Wacht op Marcel:**
 - De open vragen in `spel.md`, vooral: hoe je als poppetje honderden mensen bestuurt, welke
