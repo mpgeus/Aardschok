@@ -6,16 +6,21 @@
 // laat er telkens een ander deel van zien:
 //
 //   1. fundering       — geen bestaand onderdeel: een eigen, lage ring van stenen (één, twee
-//                         lagen hoog) rond de omtrek van de voet (`funderingRing`), met een
-//                         stapel hout (houtstapel) en steen (puin) ernaast.
+//                         lagen hoog) RONDOM de hele omtrek van de voet (`funderingRing`), met een
+//                         stapel hout (houtstapel) en steen (puin) ernaast — allebei een maat
+//                         groter dan hun gewone plaatje, zodat meteen duidelijk is dat hier
+//                         gebouwd gaat worden.
 //   2. geraamte        — ook geen bestaand onderdeel: een houten skelet dat alleen uit de voet en
-//                         de muurhoogte volgt (`geraamteVormen`) — hoekstijlen, stijlen langs de
-//                         muren, en twee balklagen (op de fundering en bovenaan), met lucht
-//                         ertussen. De plint (sokkel) staat er wél al echt bij, die is af.
+//                         de muurhoogte volgt (`geraamteVormen`) — hoekstijlen, tussenstijlen langs
+//                         alle vier de muren, en twee balklagen rondom (op de fundering en
+//                         bovenaan), met lucht ertussen. De plint (sokkel) staat er wél al echt
+//                         bij, die is af.
 //   3. muren-steigers  — de muren zijn hier weer nieuwe geometrie (`muurSchilVormen`): een dunne
 //                         schil (de echte wandtextuur uit huis(), niet meer als massief blok) tot
-//                         twee derde hoogte, met een donker binnenste erachter, en steigerpalen
-//                         én -planken ertegenaan (`steigerVormen`). Sokkel en stoep blijven echt.
+//                         twee derde hoogte, RONDOM alle vier de kanten, met een donker binnenste
+//                         erachter, en steigerpalen én -planken ertegenaan (`steigerVormen`, met
+//                         palen die boven de muur uitsteken zodat de steiger ook als steiger
+//                         leesbaar is). Sokkel en stoep blijven echt.
 //   4. dakgebinte      — muren, sokkel en stoep zijn nu heel en echt. Het dak niet: dat knippen we
 //                         in losse spanten (`dakgebinteVormen`) — dezelfde dakvlakken als het
 //                         echte dak, maar in repen langs de helling met lucht ertussen, kaal hout
@@ -23,6 +28,12 @@
 //   5. half-gedekt     — het dak: de onderste helft in zijn eigen bedekking, de bovenste helft
 //                         nog kaal hout; de helft minder steigers.
 //   Klaar (fase 6, niet hier) is gewoon de bestaande tekening in tegels/gebouwen.tsx.
+//
+//   Fundering/geraamte/muren-steigers staan RONDOM (alle vier de kanten), niet alleen de twee
+//   die je bij het AFGEWERKTE huis ooit ziet (de zuid- en oostwand, zie de toelichting bij
+//   `funderingRing` hieronder): zonder dak erop kijk je bij deze drie fases over de lage
+//   voor-wanden heen zó naar binnen, en dan moeten de achterste twee wanden er ook staan — anders
+//   oogt het huis als een decorstuk van twee wanden in plaats van een gebouw in aanbouw.
 //
 // Hoe dat "een ander deel laten zien" werkt: elke vorm die huis() tekent (een muur, het dak, de
 // nokkap, de schoorsteen, de plint, het stoepje …) draagt een `deel`-getal (D in huis(), hier
@@ -57,8 +68,9 @@
 //   gereedschap/pixelart/uit/bouwfasen/<tekening>.png   per gebouw, de vijf fases naast elkaar
 //   gereedschap/pixelart/uit/bouwfasen/overzicht.png    alle gebouwen onder elkaar
 //   (geen van deze twee in git — net als de rest van uit/, zie CLAUDE.md)
-//   tegels/bouwfasen.png + tegels/bouwfasen.json        het vel voor het spel, zie de toelichting
-//                                                        onderaan bij `schrijfSpelVel`.
+//   tegels/bouwfasen.png + .json + .js                  het vel voor het spel (.js is dezelfde
+//                                                        inhoud als .json, als script voor file://
+//                                                        — zie de toelichting bij `schrijfSpelVel`).
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -68,6 +80,7 @@ const K = require('./kern.cjs');
 const D = require('./dorp.cjs');
 const P = require('./dorp2.cjs');
 const VW = require('./voorwerpen.cjs');
+const F = require('./figuren.cjs');
 const { RAMP, UIT, PXH, TEGEL } = K;
 
 const PIXELART = __dirname;
@@ -272,37 +285,56 @@ function fasesVan(g0) {
 function extraModellen(g, fase, zaad) {
   if (!fase.stapel) return [];
   const [x0, , , y1] = g.voet;
+  // Een maat groter dan het gewone plaatje (F.geschaald, hetzelfde recept als D.kar/D.hooibaal
+  // e.a.): zo val je meteen op als "hier wordt gebouwd" naast een fundering die zelf nog maar een
+  // lage ring is. De offsets hieronder schalen mee, anders kruipen de twee grotere hopen in elkaar.
+  const s = 1.4;
   // Twee losse hopen, niet twee die elkaar overlappen: in dit isometrische aanzicht liggen twee
   // punten die in de wereld een eind uit elkaar staan op het scherm soms bijna op elkaar (X en Y
   // wegen allebei half mee in de schermbreedte) — vandaar de ruime, ongelijke afstand hieronder.
   return [
-    { model: D.houtstapel(zaad), gx: x0 / TEGEL - 0.3, gy: y1 / TEGEL + 0.6, richting: 'Z', z: 0 },
-    { model: VW.puin(zaad + 5, 7), gx: x0 / TEGEL - 1.9, gy: y1 / TEGEL + 0.6, richting: 'Z', z: 0 },
+    { model: F.geschaald(D.houtstapel(zaad), s), gx: x0 / TEGEL - 0.3 * s, gy: y1 / TEGEL + 0.6 * s, richting: 'Z', z: 0 },
+    { model: F.geschaald(VW.puin(zaad + 5, 7), s), gx: x0 / TEGEL - 1.9 * s, gy: y1 / TEGEL + 0.6 * s, richting: 'Z', z: 0 },
   ];
 }
 
 // ---------------------------------------------------------------- nieuwe geometrie per fase
 // De vier functies hieronder tekenen GEEN deel van het echte huis: ze bouwen zelf `blok`-vormen
 // (dozen, convex — zie dorp.cjs "convexe vormen") uit alleen `g0.voet` ([x0,y0,x1,y1], wereld-
-// pixels) en de hoogtes uit `g0.lagen`. Zichtbaar zijn in dit isometrische aanzicht altijd maar
-// twee van de vier wanden (de zuidwand op y1, de oostwand op x1 — dezelfde twee als `laag.wanden`
-// in huis()): de andere twee liggen nooit in beeld, dus krijgen ze ook hier geen geometrie.
+// pixels) en de hoogtes uit `g0.lagen`. Zichtbaar in dit isometrische aanzicht zijn altijd maar
+// twee van de vier wanden VAN EEN MASSIEVE DOOS (de zuidwand op y1, de oostwand op x1 — dezelfde
+// twee als `laag.wanden` in huis(): een massieve doos toont nooit zijn eigen achterkant, welke
+// kant dat ook is). Bij het AFGEWERKTE huis is dat dus terecht: de noord- en westwand liggen
+// binnen in de doos verscholen en krijgen in huis() geen textuur. Deze vier fases zijn echter geen
+// massieve dozen — een lage ring, een los geraamte, een dunne schil — en zonder dak erop kijk je
+// er zo overheen naar binnen. Dan wordt zichtbaar wat er nog ONTBREEKT als je alleen de zuid- en
+// oostkant zou tekenen: een decorstuk van twee wanden in plaats van een gebouw met vier. Daarom
+// bouwen `funderingRing`, `geraamteVormen` en `muurSchilVormen` hun vormen RONDOM (alle vier de
+// kanten) — de noord- en westkant met dezelfde soort dunne strook, maar dan tegen de ACHTERKANT
+// van de voet aan (bij x0/y0 in plaats van x1/y1). Zo'n strook heeft zelf ook maar twee zichtbare
+// vlakken (nooit zijn buitenkant, die wijst weg van de camera) — maar dat ene zichtbare binnenvlak
+// is precies het vlak dat je van bovenaf, door het open dak heen, hoort te zien.
 
-// Fase 1, fundering: een lage ring (één, twee lagen steen) langs de omtrek van de voet.
+// Fase 1, fundering: een lage ring (één, twee lagen steen) rondom de hele omtrek van de voet.
 function funderingRing(g0) {
   const [x0, y0, x1, y1] = g0.voet;
   const dik = 8; // wereld-pixels dik, over de rand van de voet heen
   const hoog = 12; // wereld-pixels — bewust laag, dit is nog geen muur
   const tex = heleSteen(4);
   return [
-    D.blok(x0 / TEGEL, (y1 - dik / 2) / TEGEL, x1 / TEGEL, (y1 + dik / 2) / TEGEL, 0, hoog, tex, { deel: DEEL.sokkel }),
-    D.blok((x1 - dik / 2) / TEGEL, y0 / TEGEL, (x1 + dik / 2) / TEGEL, y1 / TEGEL, 0, hoog, tex, { deel: DEEL.sokkel }),
+    D.blok(x0 / TEGEL, (y1 - dik / 2) / TEGEL, x1 / TEGEL, (y1 + dik / 2) / TEGEL, 0, hoog, tex, { deel: DEEL.sokkel }), // zuid
+    D.blok((x1 - dik / 2) / TEGEL, y0 / TEGEL, (x1 + dik / 2) / TEGEL, y1 / TEGEL, 0, hoog, tex, { deel: DEEL.sokkel }), // oost
+    D.blok(x0 / TEGEL, (y0 - dik / 2) / TEGEL, x1 / TEGEL, (y0 + dik / 2) / TEGEL, 0, hoog, tex, { deel: DEEL.sokkel }), // noord (van binnen zichtbaar)
+    D.blok((x0 - dik / 2) / TEGEL, y0 / TEGEL, (x0 + dik / 2) / TEGEL, y1 / TEGEL, 0, hoog, tex, { deel: DEEL.sokkel }), // west (van binnen zichtbaar)
   ];
 }
 
-// Fase 2, geraamte: hoekstijlen en stijlen langs de muren, met twee balklagen erover (op de
-// fundering en bovenaan) — losse dunne balken, met lucht ertussen. `sokkelHoogtePx(g0)` (hierboven
-// gedefinieerd) is het echte, al gebouwde plint; de stijlen beginnen daar bovenop.
+// Fase 2, geraamte: hoekstijlen en tussenstijlen langs alle vier de muren, met twee balklagen
+// rondom (op de fundering en bovenaan) — losse dunne balken, met lucht ertussen.
+// `sokkelHoogtePx(g0)` (hierboven gedefinieerd) is het echte, al gebouwde plint; de stijlen
+// beginnen daar bovenop. De hoekstijlen tellen al als alle vier de hoeken (ze staan op
+// [x0,y0]/[x1,y0]/[x0,y1]/[x1,y1]); de tussenstijlen en balklagen hieronder gaan nu ook rondom, zie
+// de toelichting bij `funderingRing`.
 function geraamteVormen(g0) {
   const [x0, y0, x1, y1] = g0.voet;
   const sokkelTop = sokkelHoogtePx(g0);
@@ -312,13 +344,23 @@ function geraamteVormen(g0) {
   const vormen = [];
   const stijl = (px, py) => vormen.push(D.blok((px - dik / 2) / TEGEL, (py - dik / 2) / TEGEL, (px + dik / 2) / TEGEL, (py + dik / 2) / TEGEL, sokkelTop, muurTop, tex, { deel: DEEL.muur }));
   for (const [px, py] of [[x0, y0], [x1, y0], [x0, y1], [x1, y1]]) stijl(px, py);
-  const nZ = Math.max(0, Math.round((x1 - x0) / 55) - 1); // tussenstijlen langs de zuidwand
-  for (let i = 1; i <= nZ; i++) stijl(x0 + ((x1 - x0) * i) / (nZ + 1), y1);
-  const nO = Math.max(0, Math.round((y1 - y0) / 55) - 1); // en langs de oostwand
-  for (let i = 1; i <= nO; i++) stijl(x1, y0 + ((y1 - y0) * i) / (nO + 1));
-  for (const h of [sokkelTop + dik / 2, muurTop - dik / 2]) { // onderregel en bovenregel
-    vormen.push(D.blok(x0 / TEGEL, (y1 - dik) / TEGEL, x1 / TEGEL, y1 / TEGEL, h - dik / 2, h + dik / 2, tex, { deel: DEEL.muur }));
-    vormen.push(D.blok((x1 - dik) / TEGEL, y0 / TEGEL, x1 / TEGEL, y1 / TEGEL, h - dik / 2, h + dik / 2, tex, { deel: DEEL.muur }));
+  const nZ = Math.max(0, Math.round((x1 - x0) / 55) - 1); // tussenstijlen langs zuid- én noordwand
+  for (let i = 1; i <= nZ; i++) {
+    const px = x0 + ((x1 - x0) * i) / (nZ + 1);
+    stijl(px, y1);
+    stijl(px, y0);
+  }
+  const nO = Math.max(0, Math.round((y1 - y0) / 55) - 1); // en langs oost- én westwand
+  for (let i = 1; i <= nO; i++) {
+    const py = y0 + ((y1 - y0) * i) / (nO + 1);
+    stijl(x1, py);
+    stijl(x0, py);
+  }
+  for (const h of [sokkelTop + dik / 2, muurTop - dik / 2]) { // onderregel en bovenregel, rondom
+    vormen.push(D.blok(x0 / TEGEL, (y1 - dik) / TEGEL, x1 / TEGEL, y1 / TEGEL, h - dik / 2, h + dik / 2, tex, { deel: DEEL.muur })); // zuid
+    vormen.push(D.blok((x1 - dik) / TEGEL, y0 / TEGEL, x1 / TEGEL, y1 / TEGEL, h - dik / 2, h + dik / 2, tex, { deel: DEEL.muur })); // oost
+    vormen.push(D.blok(x0 / TEGEL, y0 / TEGEL, x1 / TEGEL, (y0 + dik) / TEGEL, h - dik / 2, h + dik / 2, tex, { deel: DEEL.muur })); // noord
+    vormen.push(D.blok(x0 / TEGEL, y0 / TEGEL, (x0 + dik) / TEGEL, y1 / TEGEL, h - dik / 2, h + dik / 2, tex, { deel: DEEL.muur })); // west
   }
   return vormen;
 }
@@ -343,20 +385,32 @@ function muurSchilVormen(g0, cutPx) {
     // laag.x1/y1, niet g0.voet[2]/[3]: bij een overstekende verdieping (de herberg) staat de
     // bovenste laag verder naar voren dan de onderste, en dat is precies wat laag.x1/y1 al weet.
     const { x1, y1 } = laag;
-    vormen.push(D.blok(x0 / TEGEL, (y1 - dik) / TEGEL, x1 / TEGEL, y1 / TEGEL, laag.h0, top, laag.tex, { deel: DEEL.muur }));
-    vormen.push(D.blok((x1 - dik) / TEGEL, y0 / TEGEL, x1 / TEGEL, y1 / TEGEL, laag.h0, top, laag.tex, { deel: DEEL.muur }));
+    vormen.push(D.blok(x0 / TEGEL, (y1 - dik) / TEGEL, x1 / TEGEL, y1 / TEGEL, laag.h0, top, laag.tex, { deel: DEEL.muur })); // zuid
+    vormen.push(D.blok((x1 - dik) / TEGEL, y0 / TEGEL, x1 / TEGEL, y1 / TEGEL, laag.h0, top, laag.tex, { deel: DEEL.muur })); // oost
+    // Noord en west: dezelfde dunne schil, maar tegen de ACHTERKANT van de voet (bij x0/y0) — het
+    // vlak dat laag.tex hier tekent (D.blok se 'y'/'x'-vlak, de BINNENkant van deze strook) is
+    // precies het vlak dat je van bovenaf, door het open dak heen, naar binnen ziet, zie de
+    // toelichting bij `funderingRing` hierboven. Dezelfde echte wandtextuur als zuid/oost (ramen
+    // en al): huis() heeft nooit een eigen gevelontwerp voor de achterkant, dus is dit de
+    // dichtstbijzijnde echte muurtextuur.
+    vormen.push(D.blok(x0 / TEGEL, y0 / TEGEL, x1 / TEGEL, (y0 + dik) / TEGEL, laag.h0, top, laag.tex, { deel: DEEL.muur })); // noord
+    vormen.push(D.blok(x0 / TEGEL, y0 / TEGEL, (x0 + dik) / TEGEL, y1 / TEGEL, laag.h0, top, laag.tex, { deel: DEEL.muur })); // west
   }
   return vormen;
 }
 
-// Steigerpalen (rechtop, dun, om de ~45px langs de wand) én -planken (twee liggers, op 40% en
-// 80% van `hoogte`), een stukje los van de gevel. `zijden`: welke van de twee zichtbare wanden
-// ('Z' zuid/y, 'O' oost/x) — fase 5 (half-gedekt) krijgt alleen 'Z', de helft minder dan fase 3/4.
+// Steigerpalen (rechtop, dun, om de ~45px langs de wand — nu tot ruim boven de muur, zodat de
+// steiger ook als steiger leesbaar is en niet als een tweede, dunnere muur) én -planken (twee
+// liggers, op 40% en 80% van `hoogte`), een stukje los van de gevel. `zijden`: welke van de twee
+// zichtbare wanden ('Z' zuid/y, 'O' oost/x) — fase 5 (half-gedekt) krijgt alleen 'Z', de helft
+// minder dan fase 3/4.
 function steigerVormen(g0, hoogte, zijden) {
   const [x0, y0, x1, y1] = g0.voet;
   const paalDik = 5;
-  const plankDik = 3;
+  const plankDik = 4;
   const uit = 8; // hoe ver de steiger los van de gevel staat
+  const uitsteek = 16; // hoeveel de palen boven `hoogte` (de muur, op dat moment) uitsteken
+  const paalTop = hoogte + uitsteek;
   const tex = heleHout(3);
   const vormen = [];
   const liggerHoogtes = [Math.round(hoogte * 0.4), Math.round(hoogte * 0.8)];
@@ -364,7 +418,7 @@ function steigerVormen(g0, hoogte, zijden) {
     const n = Math.max(2, Math.round((x1 - x0) / 45));
     for (let i = 0; i <= n; i++) {
       const px = x0 + ((x1 - x0) * i) / n;
-      vormen.push(D.blok((px - paalDik / 2) / TEGEL, (y1 + uit) / TEGEL, (px + paalDik / 2) / TEGEL, (y1 + uit + paalDik) / TEGEL, 0, hoogte, tex, { deel: DEEL.muur }));
+      vormen.push(D.blok((px - paalDik / 2) / TEGEL, (y1 + uit) / TEGEL, (px + paalDik / 2) / TEGEL, (y1 + uit + paalDik) / TEGEL, 0, paalTop, tex, { deel: DEEL.muur }));
     }
     for (const h of liggerHoogtes) vormen.push(D.blok(x0 / TEGEL, (y1 + uit) / TEGEL, x1 / TEGEL, (y1 + uit + plankDik) / TEGEL, h, h + 5, tex, { deel: DEEL.muur }));
   }
@@ -372,7 +426,7 @@ function steigerVormen(g0, hoogte, zijden) {
     const n = Math.max(2, Math.round((y1 - y0) / 45));
     for (let i = 0; i <= n; i++) {
       const py = y0 + ((y1 - y0) * i) / n;
-      vormen.push(D.blok((x1 + uit) / TEGEL, (py - paalDik / 2) / TEGEL, (x1 + uit + paalDik) / TEGEL, (py + paalDik / 2) / TEGEL, 0, hoogte, tex, { deel: DEEL.muur }));
+      vormen.push(D.blok((x1 + uit) / TEGEL, (py - paalDik / 2) / TEGEL, (x1 + uit + paalDik) / TEGEL, (py + paalDik / 2) / TEGEL, 0, paalTop, tex, { deel: DEEL.muur }));
     }
     for (const h of liggerHoogtes) vormen.push(D.blok((x1 + uit) / TEGEL, y0 / TEGEL, (x1 + uit + plankDik) / TEGEL, y1 / TEGEL, h, h + 5, tex, { deel: DEEL.muur }));
   }
@@ -606,7 +660,7 @@ function schrijfSpelVel(resultaten) {
   }
   fs.mkdirSync(TEGELS, { recursive: true });
   schrijfPng(path.join(TEGELS, 'bouwfasen.png'), vel, null);
-  const json = {
+  const data = {
     _lees_dit: 'Vijf bouwfases per gebouw uit tegels/gebouwen.tsx, gemaakt door '
       + 'gereedschap/pixelart/bouwfasen.cjs — niet met de hand bijwerken. Sleutel is de '
       + 'tekeningnaam (T.GEBOUWEN.<soort>.tekening, na "gebouwen/"). Per fase (0..4, oplopend '
@@ -618,7 +672,20 @@ function schrijfSpelVel(resultaten) {
     breedte: vel.b, hoogte: vel.h, bestand: 'bouwfasen.png',
     fasen: fasenJson,
   };
-  fs.writeFileSync(path.join(TEGELS, 'bouwfasen.json'), JSON.stringify(json, null, 1) + '\n');
+  // bouwfasen.json is de bron, bouwfasen.js dezelfde inhoud als gewoon script (zelfde recept als
+  // tegels.js/naar-tiled.cjs), zodat file:// hem ook kan lezen — het spel opent index.html soms
+  // rechtstreeks vanaf schijf, zonder server, en dan werkt fetch() niet (CLAUDE.md, "Draaien en
+  // testen"; js/sprites.js leest T.BOUWFASEN vandaar, niet via fetch).
+  const json = JSON.stringify(data, null, 1);
+  fs.writeFileSync(path.join(TEGELS, 'bouwfasen.json'), json + '\n');
+  fs.writeFileSync(
+    path.join(TEGELS, 'bouwfasen.js'),
+    '// Gemaakt door gereedschap/pixelart/bouwfasen.cjs — niet met de hand bijwerken.\n'
+      + '// Dezelfde inhoud als bouwfasen.json, als script, zodat file:// het ook kan lezen (zie js/sprites.js).\n'
+      + '(function (T) {\n  T.BOUWFASEN = '
+      + json.replace(/\n/g, '\n  ')
+      + ';\n})(globalThis.Toren = globalThis.Toren || {});\n',
+  );
   return { breedte: vel.b, hoogte: vel.h };
 }
 
@@ -639,7 +706,7 @@ async function main() {
   const { breedte, hoogte } = schrijfSpelVel(resultaten);
   console.log(`klaar in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   console.log(`  proefplaten: gereedschap/pixelart/uit/bouwfasen/ (${resultaten.length} + overzicht.png, niet in git)`);
-  console.log(`  spelvel: tegels/bouwfasen.png (${breedte}×${hoogte}) + tegels/bouwfasen.json`);
+  console.log(`  spelvel: tegels/bouwfasen.png (${breedte}×${hoogte}) + tegels/bouwfasen.json + .js`);
 }
 
 if (isMainThread && require.main === module) {
