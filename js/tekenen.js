@@ -292,6 +292,13 @@
   const BOSRAND_DOORKIJK = 0;
   const DOORKIJK_TIJD = 0.18; // seconden om op en af te lopen, zodat het niet klappert
   const HOOG_GENOEG = 40; // hoger dan dit boven zijn voet: dan kan er iemand achter verdwijnen
+  // Een gewoon gebouw (geen toren, geen bosrand) vervaagt niet meer als geheel: dat zag er bij een
+  // rieten dak uit als een doorzichtig geelgroen spook (Marcel, 23 sep 2026). In plaats daarvan
+  // blijft het huis gewoon staan en tekenen we wie erachter loopt nog eens overheen, door een
+  // zachte cirkel — een kijkgat. KIJKGAT_OMHOOG tilt het midden van die cirkel van zijn voeten naar
+  // zijn romp, zodat een heel figuur er ongeveer in past.
+  const KIJKGAT_STRAAL = 58;
+  const KIJKGAT_OMHOOG = 28;
 
   // De doos die een wezen op het scherm inneemt, ruim genomen: zijn lijf plus wat lucht.
   function wezenDoos(e) {
@@ -338,27 +345,80 @@
     const wezens = [];
     for (const e of w.wezens) {
       if (!teltMee(S, e)) continue;
-      wezens.push({ tx: e.tx, ty: e.ty, doos: wezenDoos(e) });
+      wezens.push({ e, tx: e.tx, ty: e.ty, doos: wezenDoos(e) });
     }
     for (const v of voorwerpen) {
       const doos = voorwerpDoos(v);
       let bedekt = false;
+      const dekkers = [];
       if (doos) {
         // Bedekken kan alleen als dít voorwerp ná het wezen getekend wordt, dus als het wezen niet
         // vóór het gebouw staat — staatVoorGebouw hierboven, dezelfde vraag als de tekenvolgorde.
-        for (const e of wezens) {
-          if (staatVoorGebouw(e.tx, e.ty, v)) continue; // dat wezen staat ervóór, dus verdwijnt er niet achter
-          if (raakt(doos, e.doos)) {
+        for (const kandidaat of wezens) {
+          if (staatVoorGebouw(kandidaat.tx, kandidaat.ty, v)) continue; // staat ervóór, verdwijnt niet
+          if (raakt(doos, kandidaat.doos)) {
             bedekt = true;
-            break;
+            dekkers.push(kandidaat.e);
           }
         }
       }
+      // Alleen overschrijven als er nu iemand bedekt wordt: tijdens het wegdoezelen (v.doorkijk
+      // loopt terug naar 1) blijft tekenKijkgat zo de laatst bekende dekker nog even overtekenen,
+      // dezelfde afweging als bosrandOp hierboven ("kan alleen vloeiend als het dezelfde blijft").
+      if (dekkers.length) v.kijkgat = dekkers;
       const doel = bedekt ? (v.bosrand ? BOSRAND_DOORKIJK : v.soort === 'toren' ? DOORKIJK_TOREN : DOORKIJK) : 1;
       const nu = v.doorkijk == null ? 1 : v.doorkijk;
       const stap = dt / DOORKIJK_TIJD;
       v.doorkijk = doel > nu ? Math.min(doel, nu + stap) : Math.max(doel, nu - stap);
     }
+  }
+
+  // Eén klein vlak, hergebruikt over alle kijkgaten en alle beelden heen (net als de grondbuffer
+  // hierboven): er staat maar zelden meer dan één figuur tegelijk in een kijkgat, dus volstaat één
+  // canvas dat per figuur opnieuw beschreven en meteen overgeplakt wordt.
+  let kijkgatCv = null;
+  let kijkgatCx = null;
+  function kijkgatBuffer(maat) {
+    if (!kijkgatCv) {
+      kijkgatCv = document.createElement('canvas');
+      kijkgatCx = kijkgatCv.getContext('2d');
+    }
+    if (kijkgatCv.width !== maat || kijkgatCv.height !== maat) {
+      kijkgatCv.width = maat;
+      kijkgatCv.height = maat;
+    }
+    return kijkgatCx;
+  }
+
+  // Tekent e nog eens overheen, maar dan alleen binnen een zachte cirkel rond zijn romp: het
+  // "kijkgat" waarmee een gebouw dat hem bedekt (tekenVoorwerp hieronder) hem toch laat zien.
+  // sterkte (0..1) is hoever v.doorkijk al opgelopen is naar zijn doel, zodat het kijkgat net zo
+  // vloeiend in- en uitfaadt als de oude doorzichtigheid deed.
+  function tekenKijkgat(ctx, S, e, sterkte) {
+    if (typeof document === 'undefined') return;
+    const p = T.naarScherm(e.x, e.y);
+    const mx = p.x;
+    const my = p.y - KIJKGAT_OMHOOG;
+    const pad = 12;
+    const maat = (KIJKGAT_STRAAL + pad) * 2;
+    const ox = Math.round(mx - maat / 2);
+    const oy = Math.round(my - maat / 2);
+    const bx = kijkgatBuffer(maat);
+    bx.setTransform(1, 0, 0, 1, 0, 0);
+    bx.clearRect(0, 0, maat, maat);
+    bx.imageSmoothingEnabled = false;
+    bx.setTransform(1, 0, 0, 1, -ox, -oy);
+    tekenWezen(bx, S, e);
+    bx.setTransform(1, 0, 0, 1, 0, 0);
+    bx.globalCompositeOperation = 'destination-in';
+    const g = bx.createRadialGradient(mx - ox, my - oy, 0, mx - ox, my - oy, KIJKGAT_STRAAL);
+    g.addColorStop(0, `rgba(0,0,0,${sterkte})`);
+    g.addColorStop(0.65, `rgba(0,0,0,${sterkte})`);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    bx.fillStyle = g;
+    bx.fillRect(0, 0, maat, maat);
+    bx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(kijkgatCv, 0, 0, maat, maat, ox, oy, maat, maat);
   }
 
   // Ligt deze tegel aan de voorkant (zuid- of oostkant) van een van deze kamers?
@@ -845,6 +905,7 @@
       });
     }
     bosrandVellen = r;
+    return r;
   }
 
   // Hoeveel ringen deze tegel buiten de kaart ligt (1 = er direct tegenaan, schuin telt ook als
@@ -956,8 +1017,14 @@
     // struik, een gebouw, de toren. Het anker van de cel is de voet, dus hij valt precies op het
     // midden van zijn eigen tegel.
     if (v.vel) {
-      // dof: hoe ver van de rand van de kaart. doorkijk: staat er iemand achter?
-      const alpha = randDof(S.wereld, v.x, v.y) * (v.doorkijk == null ? 1 : v.doorkijk);
+      // dof: hoe ver van de rand van de kaart — dat vervaagt nog altijd het hele voorwerp.
+      // dekking: staat er iemand achter? Alleen de toren vervaagt daar nog als geheel op (te groot
+      // voor één kijkgat, ontwerp/beeld.md); een gewoon gebouw blijft gewoon staan en krijgt na het
+      // tekenen een kijkgat overheen (tekenKijkgat hierboven) op wie erachter loopt.
+      const dof = randDof(S.wereld, v.x, v.y);
+      const dekking = v.doorkijk == null ? 1 : v.doorkijk;
+      const isToren = v.soort === 'toren';
+      const alpha = isToren ? dof * dekking : dof;
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;
       const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v));
@@ -966,6 +1033,10 @@
         if (effectenAan() && nk.lijst.length) overlaag(ctx, stuk, p.x, p.y, kleur('vuur', 5), flitsOp(S, v.x, v.y));
       } else tekenBuitenVlak(ctx, v, helder);
       if (alpha < 1) ctx.globalAlpha = 1;
+      if (!isToren && dekking < 1 && v.kijkgat && v.kijkgat.length) {
+        const sterkte = Math.max(0, Math.min(1, (1 - dekking) / (1 - DOORKIJK)));
+        if (sterkte > 0.02) for (const e of v.kijkgat) tekenKijkgat(ctx, S, e, sterkte);
+      }
       return;
     }
     // De trap heeft een eigen vel, met een cel per staat (ingestort, provisorisch, hersteld).
