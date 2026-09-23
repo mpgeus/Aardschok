@@ -251,6 +251,14 @@ werk sneller.
 | Schuttershof | mannen oefenen; als de inner het ziet, heet het een feest | nieuw |
 | Palissade | een muur zonder stadsrechten is een opstand die je aankondigt | nieuw |
 
+**Bouwen kost tijd, en je ziet het groeien** (Marcel, 23 sep): "eerst zie je een paar stenen, dan
+wat hout erbij en gaandeweg steeds meer van het gebouw tot het klaar is." Dus geen bleek spookbeeld
+dat ineens af is, maar fases: de fundering (een paar stenen op de voet, een stapel hout en stenen
+ernaast), het houten geraamte (bij vakwerk precies zoals het echt ging), de muren met steigers, het
+dakgebinte, het dak half gedekt, en klaar. De huizen komen uit code, dus de fases kunnen uit
+hetzelfde model komen door onderdelen weg te laten. Later lopen er bouwlieden heen en weer met hout
+en stenen, en hoor je ze timmeren.
+
 Hoe het samen draait (voorstel): mensen komen als er ruimte, eten en rust is; elk gebouw vraagt
 handen; wat het maakt, gaat naar de voorraad of naar het volgende gebouw; en alles wat je bouwt,
 ziet de inner, behalve wat verstopt is.

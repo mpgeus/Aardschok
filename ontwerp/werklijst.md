@@ -25,9 +25,7 @@ los, met stadsrechten of een opstand. Alles staat in `spel.md`; de rondes ideeë
 bij het oude spel, net als de code voor de toren, de spreuken, de leeftijd en de tutorial; die gaat
 eruit na het tweede proefje (punt 7).
 
-**Loopt nu (23 sep, avond):** twee agents (Sonnet). De een zet het graan in het spel (rest van 1b):
-de akkers groeien met de kalender, wuiven in de wind, de boeren werken op hun akker en maaien met
-de zeis. De ander bouwt de gebouwen als soorten (punt 2) in een eigen worktree op de tak
+**Loopt nu (23 sep, avond):** de gebouwen als soorten (punt 2) in een eigen worktree op de tak
 `gebouwen`: `T.GEBOUWEN`, bevolking en woonruimte, werkplaatsen, en een bouwmenu. **Die tak moet
 daarna nog naar `main`.**
 
@@ -42,7 +40,29 @@ daarna nog naar `main`.**
   van 50×50 met het dorpje in het midden en een es van vijf lange stroken ernaast;
   `index.html?kaart=gehucht` begint er zonder tutorial, de schout als gewone dorpeling;
 - een kijkgat rond de schout in plaats van een doorzichtig spookhuis, en geen herfstbomen in de lente;
-- de toets `bronblok` vergelijkt nu met de LF-versie, zodat hij ook op Windows groen is.
+- de toets `bronblok` vergelijkt nu met de LF-versie, zodat hij ook op Windows groen is;
+- **1b, het graan in het spel, en daarmee heel punt 1 af** (`js/akkers.js`, nieuw). Eén tabel
+  (`T.AKKER_STADIA`) zegt welk stadium een akker heeft op welke dag — geploegd in de vroege lente,
+  kiemend, groen, rijp in hooi- en oogstmaand — met een vangnet: haalt een boer de oogst niet op
+  tijd, dan wordt bij herfstmaand toch de hele akker in één keer "gemaaid". Groen en rijp wuiven
+  per tegel met een golf (`T.windBeeld`, op `S.tijd`, niet de kalender: `beeld = (tijd + x·a +
+  y·b) mod 8`) en staan als achter/voorlaag om het wezen heen (`js/tekenen.js`), zodat een boer
+  tot zijn middel in het graan staat. Het graanvel zelf komt uit een nieuw, apart script
+  (`gereedschap/pixelart/graan-vel.cjs`, roept alleen `graan.cjs` aan) en de maaier kreeg zijn
+  eigen spelvel (`gereedschap/pixelart/maaier-anim.cjs`: acht richtingen, twaalf beelden, in
+  `beelden/figuren/`) — allebei nu ingehaakt in `naar-spel.cjs`. De vijf boeren zijn nu eigen
+  ingangen `T.MENSEN.boer1..boer5` (lenen om en om het boer/boerin-vel): met hun oude, gedeelde
+  `zaad`-plek kon `T.keurKaart` niet zien dat het vijf verschillende mensen waren en klaagde
+  terecht dat "de boer" twee keer op de kaart stond. In het groeiseizoen dwalen ze nu op en rond
+  hun eigen akker (`T.wandelAnker`) in plaats van alleen bij hun huis, en in de oogsttijd maaien
+  ze tegel voor tegel met de zeis-animatie (`T.werkOogstBij`, in de browser bekeken: een boer
+  loopt naar de dichtstbijzijnde rijpe tegel, maait, en gaat door tot zijn akker klaar is of het
+  seizoen om is). `js/kaart.js` koppelt een boer aan zijn akker(s) via `huis` (dezelfde id op de
+  boer als op de akker in `kaarten/gehucht.betekenis.json`). Getoetst in `test/akkers.test.cjs`
+  (231/231 groen); met `Toren.debug.kalender(dag, snelheid)` door het jaar heen bekeken, in de
+  browser. Nog ruw: een boer met twee akkers (boer1, boer3) werkt er maar één van af; er is geen
+  apart "zaaien"-moment te zien, geploegd gaat direct over in kiemend; en de golfrichting/-snelheid
+  van de wind (`T.WIND_GOLF_Y`, `T.WIND_GOLF_TIJD`) zijn een eerste gok, niet door Marcel bekeken.
 
 **Voor als Marcel "push it" zegt:** op GitHub staan twee commits uit de cloudsessie van 22 sep die
 lokaal niet in `main` zitten (`bd0e742`, `b92336a`: een kaartje en zoeken in de gespreksschrijver,
@@ -56,20 +76,26 @@ en het draaiboek van de tutorial erin). Eerst `origin/main` samenvoegen, dan `np
 - Een naam; "Aardschok" past niet meer.
 
 **Klaar om te starten:**
-1. **Het eerste proefje: een gehucht met akkers, en de sfeer** (Marcel, 23 sep: "Ik wil iets van
-   graan zien", "simpel houden", "de sfeer is belangrijk"; zie `spel.md`).
-   - **1a. Graan als plaat.** Klaar als er een akker is in vijf stadia (geploegd, kiemend, groen,
+1. **Het eerste proefje: een gehucht met akkers, en de sfeer** (af, 23 sep; Marcel, 23 sep: "Ik
+   wil iets van graan zien", "simpel houden", "de sfeer is belangrijk"; zie `spel.md`).
+   - **1a. Graan als plaat** (af, 23 sep). Een akker in vijf stadia (geploegd, kiemend, groen,
      rijp, gemaaid met schoven), met hoogte zodat een boer er tot zijn middel in staat, en wind die
-     als een golf over het rijpe veld rolt, en Marcel de plaat goed vindt. Renderwerk.
-   - **1b. In het spel.** Klaar als je als schout door een klein gehucht loopt, het graan in een
-     snel jaar ziet opkomen, rijpen en gemaaid worden, en de boeren op hun akker werken.
+     als een golf over het rijpe veld rolt. Renderwerk.
+   - **1b. In het spel** (af, 23 sep). Als schout door het gehucht lopen, het graan in een snel
+     jaar zien opkomen, rijpen en gemaaid worden, en de boeren op hun akker zien werken en maaien.
+     Zie de "Af vandaag" hierboven voor wat er nog ruw aan is.
 2. **Gebouwen als soorten** (Marcel, 23 sep: "huis, deze zorgen ervoor dat je populatie kan
    groeien; boerderij, meer mensen op de akker. Smidse, timmerman, wapenmaker. En alle anderen").
    Het voorstel met de soorten per trede staat in `spel.md`, "Gebouwen". Klaar als de soorten
    gegevens zijn op één plek (zoals `T.MENSEN` voor mensen), de schout ze met een bouwmenu kan
    neerzetten, een huis ruimte geeft zodat er mensen bij komen, en een werkplaats handen vraagt en
    iets maakt. Eerst met de tekeningen die er al zijn; wat nog niet getekend is, krijgt voorlopig een
-   bestaand huis.
+   bestaand huis. **Stand (23 sep):** gebouwd op de tak `gebouwen` (33 soorten in `js/gebouwen.js`,
+   bevolking, handen, bouwmenu onder `B`, een beginvoorraad); moet nog naar `main`.
+   - **2b. Bouwen in fases** (Marcel, 23 sep: "eerst zie je een paar stenen, dan wat hout erbij en
+     gaandeweg steeds meer van het gebouw tot het klaar is"). Klaar als een gebouw in aanbouw zijn
+     fase laat zien (fundering, geraamte, muren met steigers, dakgebinte, half gedekt, klaar),
+     getekend uit hetzelfde model, en het spel de fase kiest naar hoe ver de bouw is. Renderwerk.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
