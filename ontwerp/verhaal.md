@@ -428,6 +428,32 @@ waardoor we eindeloos verschillende dorpen kunnen maken.
 Voorstel van Claude: 1, omdat het het dichtst bij Jagged Alliance en Fallout ligt en de
 huizenbouwer speelgoed maakt; 2 als het om de haak op Steam gaat. Nog niet besloten.
 
+### Ronde 3: iets duisters (Marcel, 23 sep 2026)
+
+Marcel: "laten we iets duisters verzinnen." Het mooie, warme dorp in onze stijl helpt daarbij: het
+duister werkt het best als het achter iets liefs zit (zoals in Dredge en Cult of the Lamb).
+
+1. **De beul.** "Overdag hang je ze op. 's Nachts genees je ze." Scherprechter van een ommuurde
+   stad rond 1600, woont buiten de muren bij het galgenveld. Voert vonnissen uit en kiest hoe
+   (genadig, hard, of mislukt — en dan keert de menigte zich tegen hem), geneest 's nachts wie hem
+   overdag bespuugt, en zoekt uit of wie hij morgen ophangt wel schuldig is. Doel: zijn kinderen
+   hoeven geen beul te worden. Naar Meister Frantz uit Neurenberg, die er een dagboek van hield.
+2. **Het veen.** "Het dorp is gelukkig. Daar is een reden voor." Het rijkste dorp van de streek,
+   en elke midzomer gaat er één het veen in. Jij kiest wie. Bedriegen kan (een vreemde, een dier),
+   maar het veen merkt het. Het mooie dorp ís de horror: het is betaald. Wicker Man, Midsommar,
+   het Meisje van Yde.
+3. **1349.** "De pest heeft half het land leeggemaakt. Jij bent niet ziek geworden. Waarom niet?"
+   Fallout in de Zwarte Dood: lege dorpen, geselaars, een heer die zijn poort dichtmetselde,
+   pestmeesters, rovers. Jij bent immuun (heilige, heks of proefdier, al naar wie je spreekt), en
+   je kunt de ziekte meedragen: een dorp dat je helpt, kan na je bezoek sterven.
+4. **Wat in het bos woont.** "Ze vertellen hun kinderen over jou." Je speelt het monster: lichtjes,
+   nagedane stemmen, een wisselkind in de wieg. Angst voedt je, maar een bang dorp zet fakkels,
+   honden en pastoors in, en op het laatst een jager die weet wat hij doet.
+
+Voorstel van Claude: 3, omdat het past bij Fallout en Jagged Alliance, een haak heeft die in één
+zin uitlegt, en een eigen duister middel (je bent zelf de besmetting). 1 is het origineelst.
+Nog niet besloten.
+
 ## Open
 
 - **Wat voor spel wordt het?** Alles behalve de kunst staat open; zie "Het doel staat weer open" en
