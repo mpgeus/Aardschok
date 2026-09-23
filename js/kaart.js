@@ -257,7 +257,12 @@
         // Eén mens uit T.MENSEN (js/mensen.js). De kaart zegt alleen waar hij staat; wie hij is,
         // hoe hij eruitziet en wat hij zegt staat daar, op één plek.
         try {
-          wezens.push(T.maakMens(String(p.wie), gx, gy, Number(p.straal)));
+          const e = T.maakMens(String(p.wie), gx, gy, Number(p.straal));
+          // "huis": dezelfde id als een akker se "huis" hieronder (bijv. "boer1") — zo koppelt
+          // T.laadKaart hieronder een boer aan zijn akker(s), voor T.wandelAnker/T.werkOogstBij
+          // (js/akkers.js, ontwerp/werklijst.md punt 1b: "huis koppelt akker en boer").
+          if (p.huis !== undefined) e.huis = String(p.huis);
+          wezens.push(e);
         } catch (e) {
           console.warn(`T.laadKaart: onbekende mens "${p.wie}" op (${gx}, ${gy}), overgeslagen`);
         }
@@ -315,6 +320,14 @@
     }
     for (const ding of (betekenis && betekenis.dingen) || []) {
       zetNeer(ding, Math.round(ding.x), Math.round(ding.y), ding.tegel ? opzoekNaam(ding.tegel) : null, `"${ding.tegel || ding.wezen || ding.overgang || ding.staat || 'ding'}" uit het betekenisbestand`);
+    }
+    // Wie een "huis" draagt (een boer), krijgt de akkers met datzelfde "huis" erbij: meestal één,
+    // soms twee (boer1 en boer3 hebben ook nog een klein stuk onder de es). js/akkers.js gebruikt
+    // dit om te bepalen waar hij in het groeiseizoen dwaalt en wat hij oogst.
+    if (akkers.length) {
+      for (const e of wezens) {
+        if (e.huis) e.werkAkkers = akkers.filter((a) => a.huis === e.huis);
+      }
     }
 
     // 3. de deurrichting, net als T.maakWereld in wereld.js: loopt de muur rond de deur van

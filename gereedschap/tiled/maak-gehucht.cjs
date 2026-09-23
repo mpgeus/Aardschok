@@ -367,9 +367,13 @@ const dingen = [];
 // De schout begint bij zijn eigen huis (js/gebied.js, T.beginOpKaart zet hem daarna in het vel
 // van een gewone dorpeling, want de schout is geen tovenaar — zie ontwerp/werklijst.md).
 dingen.push({ x: SCHOUT_HUIS.x + Math.floor(SCHOUT_HUIS.b / 2), y: SCHOUT_HUIS.y + SCHOUT_HUIS.d, wezen: 'held' });
-// De vijf boeren, elk bij zijn eigen huis, dwalend (T.laatDwalen, js/verkennen.js).
+// De vijf boeren, elk bij zijn eigen huis, dwalend (T.laatDwalen, js/verkennen.js) en in het
+// groeiseizoen op en rond hun eigen akker (T.wandelAnker, js/akkers.js). "wie" is hier gelijk aan
+// "huis" (T.MENSEN.boer1..boer5, js/mensen.js, lenen om en om het boer/boerin-vel): vijf eigen
+// ingangen, want T.keurKaart (gereedschap/keuring.js) staat niet toe dat dezelfde mens twee keer
+// op de kaart staat, en "huis" koppelt hem aan zijn akker(s) hierboven (js/kaart.js).
 for (const [id, h] of Object.entries(HUIZEN)) {
-  dingen.push({ x: h.x + Math.floor(h.b / 2), y: h.y + h.d, zaad: h.zaad, straal: 3 });
+  dingen.push({ x: h.x + Math.floor(h.b / 2), y: h.y + h.d, wie: id, straal: 3, huis: id });
 }
 // De akkers: wie ze niet nodig heeft (js/tekenen.js tekent nu alleen de kale zandgrond), leest
 // ze straks voor het graan (js/kaart.js, "WAT EEN DING BETEKENT").

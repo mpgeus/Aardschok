@@ -66,6 +66,7 @@
       }
       const vellen = [gegevens.muren.bestand, gegevens.vloeren.bestand, gegevens.voorwerpen.bestand];
       if (gegevens.trap) vellen.push(gegevens.trap.bestand);
+      if (gegevens.graan) vellen.push(gegevens.graan.bestand);
       const lijst = vellen.map((f) => MAP + f);
       for (const f of Object.values(gegevens.figuren)) {
         for (const h of Object.values(f.houdingen)) lijst.push(MAP + 'figuren/' + h.bestand);
@@ -343,6 +344,33 @@
     return stuk(MAP + t.bestand, k * t.cel[0], r * t.cel[1], t.cel[0], t.cel[1], t.anker);
   };
 
+  // ---------------------------------------------------------------- het graan (gereedschap/pixelart/graan-vel.cjs)
+  //
+  // Een vel met per stadium een eigen band: geploegd/kiemend/gemaaid hebben alleen varianten
+  // (S.graanTegel), groen/rijp ook windbeelden en een achter/voorlaag om een wezen tussenin te
+  // zetten (S.graanLaag; js/tekenen.js roept 'm twee keer aan, vóór en ná het wezen). Welk
+  // stadium en welke variant een tegel heeft, weet js/akkers.js (T.akkerStadium, T.akkerVariant,
+  // T.windBeeld) — hier wordt alleen het plaatje erbij gezocht.
+  S.graanVarianten = () => (gegevens && gegevens.graan ? gegevens.graan.varianten : 0);
+
+  S.graanTegel = function (stadium, variant) {
+    const g = gegevens && gegevens.graan;
+    const st = g && g.stadia[stadium];
+    if (!st) return null;
+    const v = ((variant % g.varianten) + g.varianten) % g.varianten;
+    return onthoud(`graan,${stadium},${v}`, () => stuk(MAP + g.bestand, v * st.cel[0], st.y0, st.cel[0], st.cel[1], st.anker));
+  };
+
+  S.graanLaag = function (stadium, variant, laag, frame) {
+    const g = gegevens && gegevens.graan;
+    const st = g && g.stadia[stadium];
+    if (!st || !st.frames) return null;
+    const v = ((variant % g.varianten) + g.varianten) % g.varianten;
+    const f = ((frame % st.frames) + st.frames) % st.frames;
+    const kol = (laag === 'voor' ? st.frames : 0) + f;
+    return onthoud(`graan,${stadium},${v},${laag},${f}`, () => stuk(MAP + g.bestand, kol * st.cel[0], st.y0 + v * st.cel[1], st.cel[0], st.cel[1], st.anker));
+  };
+
   // ---------------------------------------------------------------- spreukeffecten
   //
   // De vellen uit beelden/effecten/ (effecten-export.cjs): een rij per variant (een richting, een
@@ -425,7 +453,10 @@
   // De houding van dit wezen op dit moment: { naam, houding, richting, fase }.
   // `naam` is het figuur op het vel; de held heet daar tovenaar, een gewone dorpeling zijn zaad.
   S.houding = function (spel, e) {
-    let naam = e.soort === 'dorpeling' ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
+    // Een boer die aan het maaien is (T.werkOogstBij, js/akkers.js) leent zolang het vel van de
+    // maaier in plaats van zijn eigen boer/boerin-vel — maar alleen als dat vel er ook echt is,
+    // anders blijft hij gewoon zichzelf staan (geen kunst mist dan nooit iemand helemaal).
+    let naam = e.maait && S.figuurGegevens('maaier') ? 'maaier' : e.soort === 'dorpeling' ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
     // Wie nog geen eigen vel heeft, mag er een lenen (T.WEZENS, vel: 'wim'): zo kan de bakker
     // meedoen voordat hij getekend is. Zie ontwerp/werklijst.md, fase B2b.
     if (!S.figuurGegevens(naam) && e.vel) naam = e.vel;
@@ -492,6 +523,13 @@
       return { naam, houding: st.eenmalig, richting: st.richting, fase: (spel.tijd - st.begin) / duur };
     }
     st.eenmalig = null;
+    // Maaien is geen eenmalige houding (zoals slaan of toveren) maar een lus, zolang T.werkOogstBij
+    // (js/akkers.js) deze tegel nog bezig is: dezelfde manier van doorlopen als het zo-meteen
+    // stilstaan hieronder, alleen met de houding 'maaien' in plaats van 'staan'.
+    if (e.maait && naam === 'maaier' && S.heeftHouding(naam, 'maaien')) {
+      const duur = S.houdingDuur(naam, 'maaien') || 1;
+      return { naam, houding: 'maaien', richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };
+    }
     if (e.pad && e.pad.length) {
       const houding = loopHouding(naam, e);
       const h = f.houdingen[houding];

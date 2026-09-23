@@ -251,6 +251,23 @@ werk sneller.
 | Schuttershof | mannen oefenen; als de inner het ziet, heet het een feest | nieuw |
 | Palissade | een muur zonder stadsrechten is een opstand die je aankondigt | nieuw |
 
+**Grondstoffen halen** (Marcel, 23 sep: "houthakkers, steengroeve etc moeten we ook hebben").
+Bouwen vraagt materiaal, en dat moet ergens vandaan. Voorstel (Claude) voor wat erbij hoort:
+
+| Gebouw | Haalt | Waarvoor |
+|---|---|---|
+| Houthakker | hout uit het bos (van de heer: de keur houtkap) | bouwen, stoken, de timmerman |
+| Steengroeve | steen | fundering, stenen huizen, de steenhouwer |
+| Kleiput | klei | de steenbakkerij (bakstenen: zo bouwde men hier echt) |
+| Rietsnijder | riet uit de beek en het moeras | rieten daken |
+| Turfsteker | turf uit het veen | stoken, als het bos op is |
+| Ertsgraver | moerasijzer (ijzeroer uit de grond, zoals op de Veluwe) | de smidse, en zo ook de wapenmaker |
+| Jager, visser | wild en vis | eten, huiden voor de looier |
+| Kalkbrander | kalk uit schelpen | metselspecie |
+
+Een eigen ertsgraver betekent dat je voor ijzer niet van de marskramer afhangt, en ijzer wordt ook
+wapens: dat ziet de inner graag van dichtbij.
+
 **Bouwen kost tijd, en je ziet het groeien** (Marcel, 23 sep): "eerst zie je een paar stenen, dan
 wat hout erbij en gaandeweg steeds meer van het gebouw tot het klaar is." Dus geen bleek spookbeeld
 dat ineens af is, maar fases: de fundering (een paar stenen op de voet, een stapel hout en stenen

@@ -159,10 +159,14 @@
   // in de buurt: de smid bij de smidse, Wim bij zijn trap, de wolf bij zijn stuk bos. Wie die niet
   // heeft, blijft in zijn eigen kamer — binnen is een kamer vanzelf een stuk wereld, buiten is de
   // hele kaart één kamer en zou een wolf tot de andere kant van het erf wandelen.
-  function magDwalenNaar(w, e, x, y) {
+  //
+  // `thuisNu` is waar T.laatDwalen hieronder nu voor deze wezen aanhoudt (normaal `e.thuis`, maar
+  // voor een boer in het groeiseizoen zijn eigen akker — T.wandelAnker, js/akkers.js); die draagt
+  // dan zijn eigen `straal` mee, en anders valt het terug op `e.straal`.
+  function magDwalenNaar(w, e, x, y, thuisNu) {
     if (!T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e })) return false;
     if (bijDeur(w, x, y)) return false;
-    if (e.thuis) return T.afstand(e.thuis, { x, y }) <= (e.straal || 3);
+    if (thuisNu) return T.afstand(thuisNu, { x, y }) <= (thuisNu.straal != null ? thuisNu.straal : (e.straal || 3));
     const k = T.kamerVan(w, e.tx, e.ty);
     return !!k && T.kamerVan(w, x, y) === k;
   }
@@ -173,19 +177,26 @@
   // `neutraal`, en T.zoekOntdekking en T.deelnemers kijken alleen naar monsters).
   //
   // Wie op een dwaallicht afgaat, dwaalt zolang niet: dat monster heeft iets beters te doen
-  // (toveren.js). En wie een gesprek voert, staat stil tot het uit is.
+  // (toveren.js). Wie een gesprek voert, staat stil tot het uit is. En wie aan het maaien is
+  // (T.werkOogstBij, js/akkers.js — roep die vóór T.laatDwalen aan) staat ook stil: hij heeft
+  // net zijn doel bereikt en zwaait daar de zeis, dat is geen moment om weg te dwalen.
   T.laatDwalen = function (S, dt) {
     const w = S.wereld;
+    // Eén keer per beurt de datum omrekenen, niet per wezen: T.wandelAnker heeft alleen het
+    // stadium nodig (kiemend/groen/rijp), niet de datum zelf.
+    const datum = T.datumVanDag && S.kalender ? T.datumVanDag(S.kalender.dag) : null;
+    const basis = datum && T.akkerStadium ? T.akkerStadium(datum.maand, datum.dagVanMaand) : null;
     for (const m of w.wezens) {
-      if (m.dood || !m.dwaalt || m.pad.length || m.gelokt || m === S.spreektMet) continue;
+      if (m.dood || !m.dwaalt || m.pad.length || m.gelokt || m === S.spreektMet || m.maait) continue;
       m.dwaalTijd -= dt;
       // Staat hij toevallig stil op een tegel waar hij een doorgang blokkeert, dan wacht hij daar
       // niet zijn hele pauze uit maar stapt meteen door.
       if (m.dwaalTijd > 0 && !bijDeur(w, m.tx, m.ty)) continue;
       m.dwaalTijd = 1.5 + Math.random() * 2.5;
+      const thuisNu = (T.wandelAnker && T.wandelAnker(m, basis)) || m.thuis;
       const opties = [];
       for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-        if (magDwalenNaar(w, m, m.tx + dx, m.ty + dy)) opties.push({ x: m.tx + dx, y: m.ty + dy });
+        if (magDwalenNaar(w, m, m.tx + dx, m.ty + dy, thuisNu)) opties.push({ x: m.tx + dx, y: m.ty + dy });
       }
       if (opties.length) m.pad = [opties[Math.floor(Math.random() * opties.length)]];
     }
