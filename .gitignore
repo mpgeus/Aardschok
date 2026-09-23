@@ -3,3 +3,5 @@ node_modules/
 gereedschap/pixelart/uit/
 # reservekopieën van het gereedschap (gereedschap/gesprekken.html en quests.html)
 *.bak
+# losse werkkopieën van agents (git worktree), niet van het spel zelf
+.claude/worktrees/
