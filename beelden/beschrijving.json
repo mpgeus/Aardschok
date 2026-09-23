@@ -1077,6 +1077,35 @@
      "stap": 0.4
     }
    }
+  },
+  "maaier": {
+   "naam": "maaier",
+   "cel": [
+    145,
+    121
+   ],
+   "anker": [
+    73,
+    80
+   ],
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "maaien": {
+     "bestand": "maaier-maaien.png",
+     "beelden": 12,
+     "fps": 8,
+     "herhaal": true
+    }
+   }
   }
  },
  "muren": {
@@ -1128,6 +1157,69 @@
    "provisorisch",
    "hersteld"
   ]
+ },
+ "graan": {
+  "bestand": "graan.png",
+  "varianten": 3,
+  "stadia": {
+   "geploegd": {
+    "y0": 0,
+    "cel": [
+     84,
+     54
+    ],
+    "anker": [
+     42,
+     12
+    ]
+   },
+   "kiemend": {
+    "y0": 54,
+    "cel": [
+     84,
+     58
+    ],
+    "anker": [
+     42,
+     16
+    ]
+   },
+   "groen": {
+    "y0": 112,
+    "cel": [
+     84,
+     79
+    ],
+    "anker": [
+     42,
+     37
+    ],
+    "frames": 8
+   },
+   "rijp": {
+    "y0": 349,
+    "cel": [
+     84,
+     97
+    ],
+    "anker": [
+     42,
+     55
+    ],
+    "frames": 8
+   },
+   "gemaaid": {
+    "y0": 640,
+    "cel": [
+     84,
+     100
+    ],
+    "anker": [
+     42,
+     58
+    ]
+   }
+  }
  },
  "vloeren": {
   "bestand": "vloeren.png",
