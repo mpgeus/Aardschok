@@ -283,7 +283,11 @@ in vier lagen:
 **De drie die het spel maken:** voorvallen met een keuze (zonder wordt een bouwspel een
 spreadsheet), argwaan met verstopplekken en het bezoek van de inner (de kern), en behoeften met de
 winter (die maken groeien moeilijk genoeg om over na te denken). Rechtspraak is de vierde: dat
-heeft geen ander bouwspel. Nog niet besloten; Marcel kiest de volgorde.
+heeft geen ander bouwspel.
+
+**Besloten (Marcel, 23 sep): "Ik wil het allemaal."** Alle vier de lagen komen erin. De volgorde
+staat in `werklijst.md`: eerst een dorp dat draait, dan de heer en de kern, dan verhalen en
+besturen, dan de nacht en het verzet, en dan de groei naar vrijheid.
 
 ## Open
 
