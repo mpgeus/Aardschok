@@ -503,8 +503,9 @@ heeft.
 
 ## Open
 
-- **Wat voor spel wordt het?** Alles behalve de kunst staat open; zie "Het doel staat weer open" en
-  "Ronde 2" hierboven. Tot dat besloten is, hangt ook de rest van dit bestand in de lucht.
+- **Wat voor spel wordt het?** Alles behalve de kunst staat open; zie "Het doel staat weer open"
+  hierboven. Marcels eigen idee van 23 sep, de voorman, staat in `voorman.md`. Tot dat besloten
+  is, hangt ook de rest van dit bestand in de lucht.
 - **Welke eindes?** Hangt aan wat er boven zit. Zie "Meer dan één einde" hierboven.
 
 - **Hoe lang is "te lang weg"?** Nu: verder dan twintig tegels van de moestuin, na een minuut

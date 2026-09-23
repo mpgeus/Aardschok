@@ -13,8 +13,10 @@ aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog n
 ## De stand (einde sessie 22 sep 2026)
 
 **Het spel zelf staat open (23 sep).** Marcel is niet blij met het doel, en wil iets nieuws
-waarbij alleen de kunst blijft. Twee rondes ideeën staan in `verhaal.md`, "Het doel staat weer
-open". Wacht met bouwen aan toren, quests en spreuken tot er gekozen is; de lijst hieronder kan
+waarbij alleen de kunst blijft. Vijf rondes ideeën van Claude (`verhaal.md`, "Het doel staat weer
+open") waren het niet; daarna kwam Marcel zelf met **de voorman** (`voorman.md`): een voorman die
+het dorp aan het werk houdt voor de landheer, het dorp tot stad laat groeien, en aan het eind de
+strijd aangaat. Dat is nu de richting waar over gedacht wordt. Wacht met bouwen aan toren, quests en spreuken tot er gekozen is; de lijst hieronder kan
 daarna flink veranderen.
 
 **Loopt nu:** niets. Er draait geen agent.
