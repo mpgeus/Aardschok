@@ -506,9 +506,8 @@ heeft.
 
 ## Open
 
-- **Wat voor spel wordt het?** Alles behalve de kunst staat open; zie "Het doel staat weer open"
-  hierboven. Marcels eigen idee van 23 sep, de voorman, staat in `voorman.md`. Tot dat besloten
-  is, hangt ook de rest van dit bestand in de lucht.
+- ~~**Wat voor spel wordt het?**~~ Besloten op 23 sep 2026: de schout, Marcels eigen idee. Zie
+  `spel.md`. Wat hieronder nog open staat, hoort bij het oude spel.
 - **Welke eindes?** Hangt aan wat er boven zit. Zie "Meer dan één einde" hierboven.
 
 - **Hoe lang is "te lang weg"?** Nu: verder dan twintig tegels van de moestuin, na een minuut
