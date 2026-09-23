@@ -120,6 +120,35 @@ function slaBetekenisOp(req, res, naam) {
   });
 }
 
+// Een schermafdruk van het spel als PNG bewaren in gereedschap/pixelart/uit/schermen/<naam>.png
+// (niet in git), zodat een sessie of agent een blik op het spel kan laten zien zonder de hele
+// afbeelding als tekst door zijn eigen gesprek te halen. Toren.debug.schermafdruk('naam') in
+// js/main.js stuurt het doek hierheen. Alleen letters, cijfers en streepjes in de naam.
+function slaSchermafdrukOp(req, res, naam) {
+  if (!/^[a-z0-9-]{1,60}$/i.test(naam)) {
+    res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Ongeldige naam');
+    return;
+  }
+  const stukken = [];
+  let lengte = 0;
+  req.on('data', (stuk) => {
+    lengte += stuk.length;
+    if (lengte > 30_000_000) req.destroy();
+    else stukken.push(stuk);
+  });
+  req.on('end', () => {
+    const map = path.join(MAP, 'gereedschap', 'pixelart', 'uit', 'schermen');
+    const bestand = path.join(map, naam + '.png');
+    fs.mkdir(map, { recursive: true }, () => {
+      fs.writeFile(bestand, Buffer.concat(stukken), (fout) => {
+        res.writeHead(fout ? 500 : 200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify(fout ? { ok: false, fout: fout.message } : { ok: true, bestand }));
+      });
+    });
+  });
+}
+
 // Het lijf van een POST binnenhalen, met een grens eraan.
 function leesLijf(req, res, klaar) {
   let body = '';
@@ -214,6 +243,10 @@ http
     }
     if (req.method === 'POST' && pad.startsWith('/gereedschap/api/betekenis/')) {
       slaBetekenisOp(req, res, pad.slice('/gereedschap/api/betekenis/'.length));
+      return;
+    }
+    if (req.method === 'POST' && pad.startsWith('/gereedschap/api/schermafdruk/')) {
+      slaSchermafdrukOp(req, res, pad.slice('/gereedschap/api/schermafdruk/'.length));
       return;
     }
     // Een map opvragen geeft zijn index.html: /gereedschap/ toont de drie bladzijden gereedschap.

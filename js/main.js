@@ -450,6 +450,16 @@
     bouw(soort, x, y) {
       return T.plaatsGebouw(S, soort, x, y);
     },
+    // Het doek als PNG bewaren: await Toren.debug.schermafdruk('graan-rijp') schrijft
+    // gereedschap/pixelart/uit/schermen/graan-rijp.png (via server.cjs; werkt niet vanaf file://).
+    // Alleen het doek, dus zonder de html-balken erover. Zo kan een sessie of agent een blik op het
+    // spel laten zien zonder de hele afbeelding als tekst door zijn gesprek te halen.
+    async schermafdruk(naam) {
+      const doek = document.querySelector('canvas');
+      const blob = await new Promise((klaar) => doek.toBlob(klaar, 'image/png'));
+      const r = await fetch('/gereedschap/api/schermafdruk/' + encodeURIComponent(naam), { method: 'POST', body: blob });
+      return r.json();
+    },
     // Hoeveel milliseconden kost één beeld? Toren.debug.meet() tekent n beelden achter elkaar en
     // geeft het gemiddelde, de mediaan en de slechtste terug. Een beeld hoort ruim onder de 16 ms
     // te blijven (zestig beelden per seconde), het liefst onder de 5, zodat er ruimte overblijft
