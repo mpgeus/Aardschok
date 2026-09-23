@@ -29221,32 +29221,37 @@
      {
       "x": 17,
       "y": 14,
-      "zaad": 21,
-      "straal": 3
+      "wie": "boer1",
+      "straal": 3,
+      "huis": "boer1"
      },
      {
       "x": 32,
       "y": 16,
-      "zaad": 22,
-      "straal": 3
+      "wie": "boer2",
+      "straal": 3,
+      "huis": "boer2"
      },
      {
       "x": 32,
       "y": 29,
-      "zaad": 23,
-      "straal": 3
+      "wie": "boer3",
+      "straal": 3,
+      "huis": "boer3"
      },
      {
       "x": 13,
       "y": 29,
-      "zaad": 24,
-      "straal": 3
+      "wie": "boer4",
+      "straal": 3,
+      "huis": "boer4"
      },
      {
       "x": 23,
       "y": 38,
-      "zaad": 25,
-      "straal": 3
+      "wie": "boer5",
+      "straal": 3,
+      "huis": "boer5"
      },
      {
       "gebouw": "boerderij",

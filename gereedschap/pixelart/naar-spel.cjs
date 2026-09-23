@@ -16,6 +16,7 @@ const path = require('path');
 const K = require('./kern.cjs');
 const Kamers = require('./kamers.cjs');
 const Trap = require('./trap.cjs');
+const Graan = require('./graan-vel.cjs');
 
 const UIT = path.join(__dirname, 'uit');
 const BEELDEN = path.join(__dirname, '..', '..', 'beelden');
@@ -112,6 +113,18 @@ function trap() {
   };
 }
 
+// ---------------------------------------------------------------- het graan
+//
+// Het akkervel zelf komt uit graan-vel.cjs (geploegd/kiemend/gemaaid als losse tegel per variant,
+// groen/rijp als achter/voorlaag per variant en windbeeld); hier alleen wegschrijven, zoals
+// muren() en trap() hierboven. js/akkers.js kiest per tegel het stadium, de variant en het
+// windbeeld; js/sprites.js (S.graanTegel/S.graanLaag) zoekt het plaatje er hiermee bij op.
+function graan() {
+  const { plaat, stadia } = Graan.vel();
+  schrijf('graan.png', plaat);
+  return { bestand: 'graan.png', varianten: Graan.VARIANTEN, stadia };
+}
+
 // ---------------------------------------------------------------- kopiëren
 
 function kopieer(vanaf, naar) {
@@ -163,6 +176,9 @@ const FIGUURLIJST = {
   bruidegom: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
   bruid: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
   oudeman: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  // De boer met de zeis, in de oogsttijd (T.werkOogstBij, js/akkers.js): één houding, "maaien",
+  // die een boer of boerin zolang leent voor hij weer zichzelf is (js/sprites.js, S.houding).
+  maaier: { map: ['maaier', 'animaties'], houdingen: ['maaien'], bron: 'maaier-anim.cjs' },
 };
 
 function figuren() {
@@ -208,6 +224,7 @@ const beschrijving = {
   figuren: figuren(),
   muren: muren(),
   trap: trap(),
+  graan: graan(),
   vloeren: {
     bestand: 'vloeren.png',
     // Elke cel is een lap van twee bij twee tegels; het anker is het midden van tegel (0, 0).

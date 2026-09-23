@@ -273,6 +273,10 @@
       T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop);
     }
     if (S.modus === 'verkennen') {
+      // Vóór T.laatDwalen: wie hier een pad krijgt of aan het maaien slaat (T.werkOogstBij,
+      // js/akkers.js, alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
+      // T.laatDwalen al "bezig" (m.pad.length of m.maait) en dwaalt deze beurt niet ook nog weg.
+      if (T.werkOogstBij) T.werkOogstBij(S, dt);
       T.laatDwalen(S, dt);
       const m = T.zoekOntdekking(S);
       if (m) T.startGevecht(S, m, false);

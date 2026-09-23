@@ -187,6 +187,44 @@
       const groot = v.beslaat && (v.beslaat[0] > 1 || v.beslaat[1] > 1);
       lijst.push({ d: diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: groot ? v : undefined, f: () => tekenVoorwerp(ctx, S, v, helder) });
     }
+    // De akkers (alleen het nieuwe spel, ?kaart=gehucht — ontwerp/werklijst.md punt 1b): welk
+    // stadium en welke variant een tegel heeft, weet js/akkers.js (T.akkerStadium e.a.); hier
+    // wordt alleen getekend, en alleen wat in beeld staat (vak, net als de muren-loop hierboven —
+    // "Performance: teken alleen wat in beeld is"). Groen en rijp wuiven en staan als twee lagen
+    // in de tekenlijst, met dezelfde diepte `d` als het wezen dat er misschien op staat maar een
+    // lagere/hogere `l`: eerst de achterlaag (l 1, vóór een wezen l 2), dan via de gewone
+    // sortering het wezen zelf, dan de voorlaag (l 2,5) erover — zo lijkt een boer tot zijn
+    // middel in het graan te staan. De andere drie stadia zijn plat genoeg voor één laag. Zonder
+    // sprites blijft een akker gewoon de kale zandgrond die er al ligt.
+    if (w.akkers && w.akkers.length && metSprites()) {
+      const datum = T.datumVanDag(S.kalender.dag);
+      const basis = T.akkerStadium(datum.maand, datum.dagVanMaand);
+      const varianten = T.sprites.graanVarianten();
+      for (const akker of w.akkers) {
+        const ax0 = Math.max(vak.x0, akker.x);
+        const ay0 = Math.max(vak.y0, akker.y);
+        const ax1 = Math.min(vak.x1, akker.x + akker.b - 1);
+        const ay1 = Math.min(vak.y1, akker.y + akker.h - 1);
+        for (let y = ay0; y <= ay1; y++) {
+          for (let x = ax0; x <= ax1; x++) {
+            if (!T.isZichtbaar(w, x, y)) continue;
+            const stadium = T.akkerTegelStadium(akker, x, y, basis);
+            const variant = T.akkerVariant(x, y, varianten);
+            const p = T.naarScherm(x, y);
+            if (stadium === 'groen' || stadium === 'rijp') {
+              const frame = T.windBeeld(S.tijd, x, y);
+              const achter = T.sprites.graanLaag(stadium, variant, 'achter', frame);
+              const voor = T.sprites.graanLaag(stadium, variant, 'voor', frame);
+              lijst.push({ d: x + y, l: 1, punt: { x, y }, f: () => T.sprites.teken(ctx, achter, p.x, p.y, 1) });
+              lijst.push({ d: x + y, l: 2.5, punt: { x, y }, f: () => T.sprites.teken(ctx, voor, p.x, p.y, 1) });
+            } else {
+              const deel = T.sprites.graanTegel(stadium, variant);
+              lijst.push({ d: x + y, l: 1, punt: { x, y }, f: () => T.sprites.teken(ctx, deel, p.x, p.y, 1) });
+            }
+          }
+        }
+      }
+    }
     // Het bos om de kaart heen (zie "het bos om de kaart heen" hieronder): dezelfde uitgebreide
     // vak-berekening als tegelsIn, maar met ringen vóórbij de rand in plaats van eraan afgeknipt.
     // Doet mee in `zichtbaar`, zodat een boom die de held bedekt net als elk ander hoog voorwerp

@@ -70,6 +70,18 @@
     jager: { naam: 'de jager', zaad: 13, straal: 4 },
     koster: { naam: 'de koster', zaad: 14, straal: 3 },
     wachter: { naam: 'de wachter', zaad: 15, straal: 2 },
+
+    // De vijf boerengezinnen van het gehucht (kaarten/gehucht.betekenis.json, ontwerp/spel.md,
+    // "Het eerste proefje"), elk met zijn eigen akker (`huis` op de kaart koppelt hem aan zijn
+    // akker(s), js/kaart.js/js/akkers.js). Vijf eigen ingangen in plaats van steeds "boer"/
+    // "boerin" hierboven, want één mens kan van T.keurKaart maar op één plek staan (gereedschap/
+    // keuring.js) — dit zijn wél vijf keer hetzelfde geleende vel, en dat mag: net als de bakker
+    // hierboven lenen ze het van wie het al heeft, om en om "boer" en "boerin" voor wat variatie.
+    boer1: { naam: 'de boer', vel: 'boer', snelheid: 1.5, straal: 3 },
+    boer2: { naam: 'de boerin', vel: 'boerin', snelheid: 1.4, straal: 3 },
+    boer3: { naam: 'de boer', vel: 'boer', snelheid: 1.5, straal: 3 },
+    boer4: { naam: 'de boerin', vel: 'boerin', snelheid: 1.4, straal: 3 },
+    boer5: { naam: 'de boer', vel: 'boer', snelheid: 1.5, straal: 3 },
   };
 
   // Hoe heet deze mens? Zijn eigen naam, anders die van het wezen dat hij leent (Wim, de

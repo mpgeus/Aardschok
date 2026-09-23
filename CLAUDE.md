@@ -149,6 +149,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wordt neergezet — en een dorpeling is dat niet. Daar staan alleen nog de held, Wim, de meester
   en de monsters; de veertien dorpelingen die er met veertien keer dezelfde regel in stonden, zijn
   op 22 sep naar `mensen.js` verhuisd. Een mens met `wezen: 'wim'` leent er nog wel een.
+- `js/akkers.js`: **alleen het gehucht** (`?kaart=gehucht`, `ontwerp/spel.md`): welk stadium een
+  akker heeft op welke dag (`T.AKKER_STADIA`, één tabel, `T.akkerStadium`), het windbeeld per
+  tegel (`T.windBeeld`) en zijn vaste variant (`T.akkerVariant`), waar een boer in het
+  groeiseizoen dwaalt (`T.wandelAnker`, anders gewoon bij zijn huis) en de oogst zelf, tegel voor
+  tegel (`T.werkOogstBij`, met een vangnet: haalt hij het seizoen niet, dan wordt bij de volgende
+  ploegtijd toch de hele akker in één keer "gemaaid"). `js/tekenen.js` tekent ermee (achterlaag,
+  wezen, voorlaag, zodat iemand tot zijn middel in het graan staat); `js/kaart.js` koppelt een
+  boer aan zijn akker(s) via `huis`, dezelfde id op de boer als op de akker.
 - Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): zijn `gesprek`
   als hij er een heeft, anders zijn soort. Zo delen honderd figuranten één soort (`dorpeling`)
   zonder alle honderd hetzelfde te zeggen.
