@@ -237,6 +237,12 @@
     if (held.zaad == null) held.zaad = 1;
     S.held = held;
     zetNeer(held, held.x, held.y);
+    // Een klein beginvoorraadje (kaarten/<naam>.betekenis.json, "beginVoorraad") en de gebouwen
+    // die al op de kaart staan (js/gebouwen.js) — zodat een dorp niet leeg begint.
+    if (w.beginVoorraad && T.zetVoorraad) {
+      for (const wat in w.beginVoorraad) T.zetVoorraad(S, wat, w.beginVoorraad[wat]);
+    }
+    if (T.zetBestaandeGebouwen) T.zetBestaandeGebouwen(S);
     return true;
   };
 })(globalThis.Toren = globalThis.Toren || {});

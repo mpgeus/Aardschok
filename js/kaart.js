@@ -60,9 +60,17 @@
 //              geen graantegels zijn (gereedschap/pixelart/graan*.cjs) is de grond zelf gewoon
 //              zandpad, getekend in de .tmj; dit ding zegt alleen wát er ligt en van wie. Zie
 //              gereedschap/tiled/maak-gehucht.cjs en ontwerp/werklijst.md, punt 1b.
+//   gebouw     een soort uit T.GEBOUWEN (js/gebouwen.js): dit gebouw staat al op de kaart —
+//              x/y de linkerbovenhoek van zijn voet, b/h de maat in tegels (weer net als
+//              "beslaat"). Zijn tekening staat al in de .tmj zelf, als een gewoon Tiled-object
+//              (precies zoals een boom); dit ding voegt er alleen de betekenis aan toe, zodat
+//              T.zetBestaandeGebouwen hem als klaar gebouw meetelt (woonruimte, handen) zonder
+//              dat het spel leeg begint. Zie gereedschap/tiled/maak-gehucht.cjs, "HUIZEN".
 //
 // En op het betekenisbestand zelf: "proef": true zegt dat de kaart alleen voor de toetsen bestaat
-// en in het spel niet meetelt.
+// en in het spel niet meetelt; "beginVoorraad": { hout: 40, ... } geeft S.voorraad die waarden
+// mee zodra het spel op deze kaart begint (T.beginOpKaart, js/gebied.js), zodat een dorp niet met
+// lege handen begint.
 (function (T) {
   'use strict';
 
@@ -123,6 +131,10 @@
     console.warn(`T.laadKaart: tegel "${wat}" bestaat niet in tegels/ — draai npm run tiled, of kijk de naam na`);
     return null;
   }
+  // Naar buiten toe, voor wie op naam een tekening wil opzoeken zonder eerst een hele kaart te
+  // lezen — js/gebouwen.js doet dat voor een gebouw dat de speler zelf neerzet (T.plaatsGebouw):
+  // dezelfde "vel/naam" als hierboven, en dezelfde { vel, id, eig } terug.
+  T.opzoekTegelNaam = opzoekNaam;
 
   // Een tegel als "12,7" (zoals Tiled hem als tekst opslaat) of als { x, y } (zoals het
   // betekenisbestand hem schrijft). Alles anders is niets.
@@ -192,6 +204,7 @@
     const wezens = [];
     const overgangen = [];
     const akkers = []; // strokens land, geen vakjes; zie "akker" hierboven
+    const gebouwenOpKaart = []; // gebouwen die er al staan; zie "gebouw" hierboven
 
     // 2. alles wat op de grond staat: bomen, huizen, deuren, wezens, dorpelingen, overgangen.
     // Dat komt uit twee bronnen, en allebei belanden ze in dezelfde `zetNeer` hieronder:
@@ -278,6 +291,15 @@
         });
         return;
       }
+      if (p.gebouw !== undefined) {
+        // Zijn tekening staat al in de .tmj (een gewoon Tiled-object, zoals een boom); dit is
+        // alleen de betekenis erbij. Zie "gebouw" hierboven en T.zetBestaandeGebouwen.
+        gebouwenOpKaart.push({
+          soort: String(p.gebouw), x: gx, y: gy,
+          b: Number(p.b) || 1, h: Number(p.h) || 1,
+        });
+        return;
+      }
       if (!t) return; // een leeg object zonder van bovenstaande: niets aan te doen
       const eig = t.eig;
       registreerVoorwerp(eig.naam, eig.vast);
@@ -350,7 +372,7 @@
       b, h, tegels, grond, deuren, geheimen, kamers: [kamerBuiten],
       voorwerpen, questVoorwerpen, wezens,
       bekend: new Set(['buiten']), huidigeKamer: 'buiten',
-      burenKamers, overgangen, akkers,
+      burenKamers, overgangen, akkers, gebouwenOpKaart,
       buiten: true, // geen kamers met muren: het spel tekent gras en hoge dingen
       naam: typeof eig.naam === 'string' ? eig.naam : null,
       // "proef": true in het betekenisbestand zegt dat deze kaart alleen voor de toetsen bestaat
@@ -358,6 +380,9 @@
       // geheel gaat (een aansluiting die maar één kant heeft, bijvoorbeeld).
       proef: !!(betekenis && betekenis.proef),
       doof: Number.isFinite(eig.doof) ? eig.doof : 0,
+      // Een klein beginvoorraadje, zodat een dorp niet met lege handen begint (T.beginOpKaart,
+      // js/gebied.js zet het over naar S.voorraad); zonder "beginVoorraad" gebeurt er niets.
+      beginVoorraad: betekenis && betekenis.beginVoorraad ? { ...betekenis.beginVoorraad } : null,
     };
   };
 

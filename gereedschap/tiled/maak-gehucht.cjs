@@ -371,6 +371,12 @@ dingen.push({ x: SCHOUT_HUIS.x + Math.floor(SCHOUT_HUIS.b / 2), y: SCHOUT_HUIS.y
 for (const [id, h] of Object.entries(HUIZEN)) {
   dingen.push({ x: h.x + Math.floor(h.b / 2), y: h.y + h.d, zaad: h.zaad, straal: 3 });
 }
+// De huizen zelf, als gebouw (js/gebouwen.js, T.zetBestaandeGebouwen): hun tekening staat al op
+// de kaart (hierboven, zetTegel), dit is alleen de betekenis erbij, zodat het dorp niet leeg
+// begint (ontwerp/werklijst.md, punt 2). De vijf boerenhuizen tellen als "boerderij", het stenen
+// huis van de schout als "huis".
+for (const h of Object.values(HUIZEN)) dingen.push({ gebouw: 'boerderij', x: h.x, y: h.y, b: h.b, h: h.d });
+dingen.push({ gebouw: 'huis', x: SCHOUT_HUIS.x, y: SCHOUT_HUIS.y, b: SCHOUT_HUIS.b, h: SCHOUT_HUIS.d });
 // De akkers: wie ze niet nodig heeft (js/tekenen.js tekent nu alleen de kale zandgrond), leest
 // ze straks voor het graan (js/kaart.js, "WAT EEN DING BETEKENT").
 for (const a of AKKERS) dingen.push(a);
@@ -385,6 +391,9 @@ const betekenis = {
   versie: 1,
   proef: true,
   uitleg: 'De betekenis van kaarten/gehucht.tmj: de schout, de vijf boeren en hun akkers. Zie ontwerp/kaarten.md, "Tiled tekent alleen nog de grond". "proef": true omdat dit gehucht nog aan geen andere kaart vasthangt (ontwerp/werklijst.md); zodra er een echte aansluiting naar "wereld" komt, mag dat weer weg.',
+  // Een klein beginvoorraadje, zodat er meteen iets te bouwen valt (js/gebouwen.js, T.plaatsGebouw
+  // via het bouwmenu) zonder eerst te hoeven wachten op de eerste opbrengst.
+  beginVoorraad: { hout: 40, goud: 20, graan: 60 },
   dingen,
 };
 
