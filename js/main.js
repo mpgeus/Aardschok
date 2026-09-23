@@ -43,6 +43,7 @@
       voorraad: T.nieuweVoorraad(), // goud, graan, wol, hout (js/voorraad.js)
       gebouwen: [], // wat er staat of in aanbouw is (js/gebouwen.js), en hoe ver S.gebouwenDag is
       bevolking: 0, woonruimte: 0, // aantal mensen, en hoeveel er als woonruimte gegeven is
+      behoeften: T.nieuweBehoeften ? T.nieuweBehoeften() : null, // tevredenheid en wat het dorp mist (js/behoeften.js)
       trede: 'gehucht', // de hoogste trede van het dorp; omhoog gaat pas mee met "Groei" (werklijst.md, punt 5)
       bouwSoort: null, bouwHover: null, bouwMenuOpen: false, // het bouwmenu (T.NIEUWE_HUD, js/hud.js)
       goud: 0,

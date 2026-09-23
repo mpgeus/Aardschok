@@ -386,6 +386,10 @@ kbd {
 #voorraadbalk .grondstof .aantal { font: 15px var(--kop), system-ui, sans-serif; color: var(--inkt); min-width: 1.4em; }
 /* Het scheidingslijntje voor de mensen, los van de vier grondstoffen ervoor. */
 #voorraadbalk .grondstof[data-wat="bevolking"] { padding-left: 13px; border-left: 1px solid var(--rand); }
+/* De tevredenheid (js/behoeften.js), met haar eigen lijntje, en rood als het dorp wegtrekt
+   (T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel). */
+#voorraadbalk .grondstof[data-wat="tevredenheid"] { padding-left: 13px; border-left: 1px solid var(--rand); }
+#voorraadbalk .grondstof[data-wat="tevredenheid"].laag .aantal { color: var(--rood); }
 
 /* Het bouwmenu (js/hud.js, js/gebouwen.js): de knop in dezelfde rij als de kalender en de
    voorraad, en het paneel met de soorten van de huidige trede eronder. */

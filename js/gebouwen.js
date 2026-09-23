@@ -15,9 +15,16 @@
 //     bouwtijd:    4,                // dagen tot hij klaar is
 //     handen:      0,                // hoeveel mensen hij als werkplaats vraagt
 //     woonruimte:  5,                // hoeveel mensen erbij kunnen als hij klaar is
+//     wordt:       'huis',           // waar hij in doorgroeit als zijn bewoners lang genoeg
+//                                    // tevreden zijn (js/behoeften.js, T.tikBehoeftenDag); alleen
+//                                    // bij een huis dat de speler zelf neerzette. Ontbreekt hij,
+//                                    // dan groeit deze soort niet door.
 //     maakt:       null,             // of { in: {hout: 1}, uit: {planken: 1} }: per dag, op volle
-//                                    // bezetting (T.tikGebouwenDag schaalt mee met hoe bezet hij is)
+//                                    // bezetting (T.tikGebouwenDag schaalt mee met hoe bezet hij is
+//                                    // én, sinds js/behoeften.js, met de tevredenheid)
 //     verdacht:    false,            // moet de heer dit niet zien? (wapenmaker, schuttershof, …)
+//     kerk:        false,            // telt als "een kerk" voor de behoeften (js/behoeften.js:
+//                                    // T.heeftKerk) — nu alleen de kapel, later ook de kerk zelf
 //     menu:        true,             // false: niet via het bouwmenu (akker, stadsmuur, palissade —
 //                                    // die hebben een eigen manier van neerzetten, geen enkele voet)
 //     tekening:    'gebouwen/dorpshuis1',  // "vel/naam" uit tegels/, zoals T.laadKaart "tegel" leest
@@ -53,13 +60,13 @@
     // ── Gehucht ──
     hut: {
       naam: 'hut', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, bouwtijd: 2,
-      handen: 0, woonruimte: 3, maakt: null, verdacht: false, menu: true,
+      handen: 0, woonruimte: 3, wordt: 'huis', maakt: null, verdacht: false, menu: true,
       tekening: 'gebouwen/dorpKlein2', beschrijving: 'ruimte voor een gezin; goedkoop, en arm om te zien',
       opmerking: 'nieuw (plaggenhut): nog niet getekend, leent voorlopig het kleinste bestaande huis.',
     },
     huis: {
       naam: 'huis', trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 4 }, bouwtijd: 4,
-      handen: 0, woonruimte: 5, maakt: null, verdacht: false, menu: true,
+      handen: 0, woonruimte: 5, wordt: 'stenenHuis', maakt: null, verdacht: false, menu: true,
       tekening: 'gebouwen/dorpshuis1', beschrijving: 'ruimte voor meer mensen', opmerking: '',
     },
     boerderij: {
@@ -191,9 +198,14 @@
     },
     kapel: {
       naam: 'kapel', trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 10, goud: 8 }, bouwtijd: 4,
-      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: null, verdacht: false, kerk: true, menu: true,
       tekening: 'gebouwen/kapel', beschrijving: 'de kerk als groep, en tevredenheid',
-      opmerking: 'De groep en de tevredenheid komen met de politiek (werklijst.md, punt 6).',
+      opmerking: 'De tevredenheid (T.heeftKerk, js/behoeften.js, werklijst.md punt 3) is er; de kerk '
+        + 'als groep met eigen belangen komt pas met de politiek (werklijst.md, punt 9). Zijn trede '
+        + 'is "dorp": op het gehucht (?kaart=gehucht) staat hij daarom niet in het bouwmenu (js/hud.js '
+        + 'filtert op S.trede) — Toren.debug.bouw("kapel", x, y) zet hem toch neer, want T.plaatsGebouw '
+        + 'kijkt zelf niet naar de trede. Tot punt 14 ("De treden") de speler laat doorgroeien, is een '
+        + 'kerk op het gehucht dus wel te bereiken, maar niet via het gewone menu.',
     },
     tiendschuur: {
       naam: 'tiendschuur', trede: 'dorp', voet: { b: 6, h: 5 }, kosten: { hout: 14, goud: 6 }, bouwtijd: 3,
@@ -389,11 +401,12 @@
 
   // Eén keer aan T.VOORWERPEN toevoegen, zoals kaart.js dat doet voor een tegel uit Tiled: hij
   // blokkeert altijd zijn voet (dat ís zijn voet immers al in de tegelslaag hieronder), en het
-  // zicht — een half gebouw is nog altijd een heel gebouw voor het oog.
-  function registreerGebouwSoort(naam) {
+  // zicht — een half gebouw is nog altijd een heel gebouw voor het oog. Ook voor js/behoeften.js
+  // (een huis dat doorgroeit naar een soort die deze sessie nog nooit is neergezet).
+  T.registreerGebouwSoort = function (naam) {
     T.VOORWERPEN = T.VOORWERPEN || {};
     if (!T.VOORWERPEN[naam]) T.VOORWERPEN[naam] = { blokkeert: true, zichtDicht: true };
-  }
+  };
 
   // Het voorwerp in S.wereld zetten (zo tekent js/tekenen.js hem mee, op precies dezelfde manier
   // als een gebouw dat in Tiled staat, CLAUDE.md "Testen in de browser": "via de gewone weg
@@ -407,7 +420,7 @@
     const opz = g.tekening && T.opzoekTegelNaam ? T.opzoekTegelNaam(g.tekening) : null;
     const voet = T.gebouwVoet(instantie.soort) || { b: 1, h: 1 };
     const naam = 'gebouw:' + instantie.soort;
-    registreerGebouwSoort(naam);
+    T.registreerGebouwSoort(naam);
     const v = {
       soort: naam, x: instantie.x, y: instantie.y,
       vel: opz ? opz.vel : null, id: opz ? opz.id : null,
@@ -477,6 +490,12 @@
   // dag aan) zodat hij ook in een toets in één keer op een vaste dag te proberen is.
   T.tikGebouwenDag = function (S, dag) {
     const IN = T.GEBOUWEN_INSTELLINGEN;
+    // 0. Behoeften: eten, brandhout en een kerk, en de tevredenheid die daaruit volgt
+    // (js/behoeften.js, T.tikBehoeftenDag) — vóór de rest, zodat stap 4 en 6 hieronder de
+    // tevredenheid van vandaag gebruiken. Zacht gekoppeld (net als T.ui hieronder): zonder
+    // js/behoeften.js geladen (bijvoorbeeld in een toets die alleen gebouwen.js laadt) blijft
+    // alles zoals het was.
+    if (T.tikBehoeftenDag) T.tikBehoeftenDag(S, dag);
     // 1. Gebouwen die vandaag klaarkomen: het spookbeeld wordt de tekening zelf (dezelfde
     // voorwerp-ingang, zie zetGebouwVoorwerp hierboven — er komt er geen tweede bij).
     for (const g of S.gebouwen) {
@@ -493,9 +512,13 @@
     // een dorp dat te veel monden telt, eet zijn voorraad dus leeg in plaats van dat er iemand
     // wegkwijnt; dat laatste is een vraag voor later, geen regel nu).
     if (S.bevolking > 0) T.wijzigVoorraad(S, 'graan', -S.bevolking * IN.etenPerMensPerDag);
-    // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als er nog ruimte is en de voorraad
-    // een buffer overhoudt (zodat een net geboren gezin niet meteen honger lijdt).
-    if (dag > 0 && dag % IN.gezinDagen === 0 && S.bevolking < woonruimte && S.voorraad.graan >= IN.graanBufferVoorGroei) {
+    // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als er nog ruimte is, de voorraad
+    // een buffer overhoudt (zodat een net geboren gezin niet meteen honger lijdt), en het dorp
+    // tevreden genoeg is (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel). Zonder
+    // S.behoeften (behoeften.js niet geladen, of nog geen dag getikt) blokkeert dat laatste
+    // niets — zie de opmerking bij stap 0 hierboven.
+    const tevredenGenoeg = !S.behoeften || S.behoeften.tevredenheid >= T.BEHOEFTEN_INSTELLINGEN.groeiDrempel;
+    if (dag > 0 && dag % IN.gezinDagen === 0 && S.bevolking < woonruimte && S.voorraad.graan >= IN.graanBufferVoorGroei && tevredenGenoeg) {
       S.bevolking = Math.min(woonruimte, S.bevolking + IN.gezinGrootte);
     }
     // 5. Handen: verdeeld over de werkplaatsen op volgorde van S.gebouwen (eerst de gebouwen die
@@ -511,11 +534,16 @@
       vrij -= g.handen;
     }
     // 6. Productie: wat een gebouw maakt, gaat per dag naar de voorraad — naar rato van hoe bezet
-    // hij is (de helft van zijn handen geeft de helft van zijn opbrengst).
+    // hij is (de helft van zijn handen geeft de helft van zijn opbrengst), en van de tevredenheid
+    // (js/behoeften.js: "hoe hard er gewerkt wordt"; T.BEHOEFTEN_INSTELLINGEN.werkBasis is de
+    // ondergrens bij 0% tevreden, 1 is geen effect). Zelfde zachte koppeling als hierboven.
+    const werkFactor = S.behoeften
+      ? T.BEHOEFTEN_INSTELLINGEN.werkBasis + (1 - T.BEHOEFTEN_INSTELLINGEN.werkBasis) * S.behoeften.tevredenheid
+      : 1;
     for (const g of S.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
       if (!g.klaar || !soort.maakt) continue;
-      const factor = soort.handen > 0 ? g.handen / soort.handen : 1;
+      const factor = (soort.handen > 0 ? g.handen / soort.handen : 1) * werkFactor;
       if (factor <= 0) continue;
       if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(S, wat, -soort.maakt.in[wat] * factor);
       if (soort.maakt.uit) for (const wat in soort.maakt.uit) T.wijzigVoorraad(S, wat, soort.maakt.uit[wat] * factor);

@@ -51,6 +51,13 @@
     '<circle cx="9" cy="7" r="3" fill="#c9972f"/><path d="M3 19c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke="#c9972f" stroke-width="1.6" stroke-linecap="round"/>' +
     '<circle cx="17" cy="8.5" r="2.4" fill="#e2b64a"/><path d="M13.3 19c.3-2.7 2.2-4.8 4.7-4.8 2.6 0 4.7 2.3 5 5" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
     '</svg>';
+  // De tevredenheid van het dorp (js/behoeften.js): een gezichtje, in dezelfde stijl als hierboven.
+  const TEVREDENHEID_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<circle cx="12" cy="12" r="8.6" fill="none" stroke="#e2b64a" stroke-width="1.5"/>' +
+    '<circle cx="8.7" cy="10.2" r="1.1" fill="#e2b64a"/><circle cx="15.3" cy="10.2" r="1.1" fill="#e2b64a"/>' +
+    '<path d="M8 14.6c1.1 1.3 2.5 1.9 4 1.9s2.9-.6 4-1.9" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
+    '</svg>';
 
   // De voorraadbalk wordt één keer gemaakt, zoals de spreukbalk in js/ui.js (bouwSpreuken);
   // daarna verandert alleen het getal per grondstof, en het getal bij de mensen.
@@ -61,7 +68,9 @@
         `<span class="icoon">${GRONDSTOF_ICOON[wat]}</span><span class="aantal">0</span></div>`,
     ).join('') +
       `<div class="grondstof" data-wat="bevolking" title="Mensen in het dorp, en hoeveel er wonen kunnen (js/gebouwen.js: elk huis geeft woonruimte).">` +
-      `<span class="icoon">${BEVOLKING_ICOON}</span><span class="aantal">0/0</span></div>`;
+      `<span class="icoon">${BEVOLKING_ICOON}</span><span class="aantal">0/0</span></div>` +
+      `<div class="grondstof" data-wat="tevredenheid" title="Tevredenheid.">` +
+      `<span class="icoon">${TEVREDENHEID_ICOON}</span><span class="aantal">100%</span></div>`;
   }
 
   T.ui = T.ui || {};
@@ -92,6 +101,22 @@
     if (!box.children.length) bouwVoorraadbalk(box);
     const el = box.querySelector('[data-wat="bevolking"] .aantal');
     if (el) el.textContent = `${Math.floor(S.bevolking)}/${Math.floor(S.woonruimte)}`;
+  };
+
+  // De tevredenheid (js/behoeften.js, T.tikBehoeftenDag) en, op hover, wat het dorp mist — dezelfde
+  // vraag als T.ui.toonBevolking hierboven, met een eigen functie om dezelfde reden: tevredenheid
+  // verandert niet via T.wijzigVoorraad.
+  T.ui.toonTevredenheid = function (S) {
+    const box = $('voorraadbalk');
+    if (!box.children.length) bouwVoorraadbalk(box);
+    const cel = box.querySelector('[data-wat="tevredenheid"]');
+    if (!cel || !S.behoeften) return;
+    const pct = Math.round(S.behoeften.tevredenheid * 100);
+    cel.querySelector('.aantal').textContent = `${pct}%`;
+    cel.classList.toggle('laag', S.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel);
+    cel.title = S.behoeften.mist.length
+      ? `Tevredenheid: ${pct}%. Het dorp mist: ${S.behoeften.mist.join(', ')}.`
+      : `Tevredenheid: ${pct}%. Het dorp heeft wat het nodig heeft.`;
   };
 
   // Het bouwmenu: de soorten van de huidige trede, met hun kosten en wat ze doen (ontwerp/spel.md,
