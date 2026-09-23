@@ -21,7 +21,10 @@ test('kop + blok + staart is weer precies het bestand', () => {
     ['js/quests.js', 'T.QUESTS'],
     ['js/quests.js', 'T.RAAKPUNTEN'],
   ]) {
-    const bron = lees(bestand);
+    // Op Windows zet git (core.autocrlf) de bestanden met CRLF op schijf. bronBlok werkt in LF,
+    // dus opslaan schrijft het bestand in LF terug, en dat ziet git niet als verschil. Vergelijk
+    // daarom met de LF-versie; anders faalt deze toets op elke Windows-machine.
+    const bron = lees(bestand).replace(/\r\n/g, '\n');
     const b = T.bronBlok(bron, naam);
     assert.ok(b, `${naam} niet gevonden in ${bestand}`);
     assert.equal(b.kop + b.blok + b.staart, bron, `${bestand} · ${naam}`);
