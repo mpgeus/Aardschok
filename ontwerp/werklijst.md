@@ -6,150 +6,75 @@ je kunt nakijken. Een punt dat af is, gaat naar onderen met een datum; een nieuw
 plek met een reden. **De stand wordt aan het eind van elke sessie bijgewerkt,** zodat een nieuwe
 sessie meteen weet waar we zijn.
 
-**Waarom deze volgorde:** eerst wat Marcel vrijmaakt om zelf te bouwen, dan de lus die het spel
-een spel maakt (quest → goud en grondstoffen → toren of jezelf → hoger), dan de inhoud, en pas
-aan het eind de afwerking. Afwerking vóór de lus is poetsen aan iets wat nog niet werkt.
+**Waarom deze volgorde:** eerst de kern op papier en een klein proefje dat laat voelen of hij leuk
+is, dan het oude spel uit de code, dan de groei, de keuren en de politiek, de heer, het avontuur en
+de twee wegen naar vrijheid, en pas aan het eind de afwerking. Een stad bouwen op een kern die niet
+leuk is, is poetsen aan iets wat nog niet werkt.
 
-## De stand (einde sessie 22 sep 2026)
+## De stand (23 sep 2026)
 
-**Het spel zelf staat open (23 sep).** Marcel is niet blij met het doel, en wil iets nieuws
-waarbij alleen de kunst blijft. Vijf rondes ideeën van Claude (`verhaal.md`, "Het doel staat weer
-open") waren het niet; daarna kwam Marcel zelf met **de voorman** (`voorman.md`): een voorman die
-het dorp aan het werk houdt voor de landheer, het dorp tot stad laat groeien, en aan het eind de
-strijd aangaat. Dat is nu de richting waar over gedacht wordt. Wacht met bouwen aan toren, quests en spreuken tot er gekozen is; de lijst hieronder kan
-daarna flink veranderen.
+**Het spel is omgegooid.** Marcel was niet blij met het doel van De laatste klim ("de toren
+beklimmen is leuk, maar niet als einddoel"). Na vijf rondes ideeën van Claude die het niet waren,
+kwam hij zelf met het nieuwe spel: **een bouw- en beheerspel in isometrisch beeld, met politiek en
+avontuur erin.** Jij bent de schout van een dorp onder een verwarde heer die alleen geld ziet. Je
+breidt het dorp uit tot een stad, bestuurt het met keuren, en maakt je aan het eind van de heer
+los, met stadsrechten of een opstand. Alles staat in `spel.md`; de rondes ideeën staan in
+`verhaal.md`, "Het doel staat weer open".
+
+**Wat blijft:** de kunst en de techniek eronder. `verhaal.md`, `toren.md` en `spreuken.md` horen
+bij het oude spel, net als de code voor de toren, de spreuken, de leeftijd en de tutorial; die gaat
+eruit na het proefje (punt 3).
 
 **Loopt nu:** niets. Er draait geen agent.
 
-**Alles staat op `main`.** De twee sessies van 22 sep draaiden in de cloud, op de takken
-`claude/aardschok-quest-system-ywvpe7` en `claude/wereld-gereedschap-maken-iyn8qs`; allebei zijn
-aan het eind in `main` gezet en gepusht, dus er staat niets meer los en die takken mogen weg. Werk
-gewoon op `main`, zoals CLAUDE.md zegt.
-
-**Nieuw sinds 22 sep: `gereedschap/wereld.html`.** `npm start` drukt af waar alles zit; de ingang
-is `http://localhost:8123/gereedschap/index.html`, en daar staat het gereedschap op een rij.
-Alle vier de rondes staan erin: kijken, neerzetten, betekenis erbij en de controle.
-
-**Tiled tekent voortaan alleen nog de grond** (besluit van Marcel, 22 sep; `kaarten.md`). Mensen,
-deuren, geheime doorgangen, aansluitingen en questvoorwerpen zet je hier neer, en ze gaan naar
-`kaarten/<naam>.betekenis.json` — een eigen bestand waar Tiled nooit in komt. Wat er al stond, is
-verhuisd: `wereld.tmj`, `proef.tmj` en `proefbos.tmj` houden alleen nog tekening. Na Opslaan
-bundelt het blad zelf, dus het spel ziet het meteen.
-
-**Een poppetje aanklikken geeft zijn gesprek én zijn quest** (ronde 3, af): dubbelklik hem, of
-gebruik de knoppen in het tegelpaneel, en er schuift een breed paneel over de kaart met twee
-tabbladen — de hele bewerkers uit `gesprekken.html` en `quests.html`, niet nagemaakt maar
-hergebruikt. Geeft hij nog geen gesprek of quest, dan biedt het paneel aan er een te beginnen.
-Aanwijzen gaat op zijn lijf, niet op zijn voeten, net als in het spel. Een questvoorwerp hang je
-aan een fase met twee keuzelijsten, en de kaart springt mee naar die fase.
-
-**Elke dorpeling kan zijn eigen gesprek hebben** (22 sep). Het spel zocht op `soort`, en die is
-voor elke dorpeling met een zaad gewoon "dorpeling" — negentien dorpelingen zouden dus alle
-negentien hetzelfde zeggen. Nu beslist `T.gesprekIdVan` (`js/gesprek.js`): zijn soort, tenzij er
-`gesprek` op staat. In het gereedschap kies je dat uit een lijst, en "een gesprek beginnen" voor
-een dorpeling vraagt om een eigen naam.
-
-**De controle kijkt ook of je er kunt komen** (22 sep): een vlekvulling vanaf elke uitgang, met de
-loopregels van het spel zelf. Een poppetje op een eilandje achter de bomen is een fout; losse
-tegels zijn een "let op" (op `wereld.tmj` 767 van de 6330 — gaten in het bos). Laag `o`.
-
-**Een mens is nu één regel** (`js/mensen.js`, 22 sep). Marcel: "Hoe houden we alle poppetjes uit
-elkaar? Het kunnen er wel 100 worden." `T.MENSEN` zegt wie iemand is — naam, uiterlijk,
-dwaalstraal, gesprek — en de kaart zegt alleen nog wáár hij staat (`wie: "koster"`). Wie geen naam
-hoeft, blijft `zaad: 7` en is menigte. Het gereedschap heeft er een doorzoekbare mensenlijst voor:
-wie er staat en waar, wie nog nergens staat, en klikken legt hem in je hand. Zie `wereld.md`,
-"Wie is wie, als het er honderd worden".
-
-**De tutorial legt niets meer uit** (22 sep, na Marcel: "veel te cringe"). Het opdrachtvak is
-weg — geen lijstje met wat je moet doen, geen "Let op" boven in beeld. Wat overblijft is de
-meester die praat, en één vangnet: zit je 45 seconden stil in dezelfde fase, dan zegt hij één
-regel (`kijkOfHijVastzit` in `js/tutorial.js`). Die zes regels staan nog leeg in
-`T.TUTORIAL_TEKST`; **die schrijft Marcel** (`vastGezien`, `vastMeester`, `vastKom`, `vastZak`,
-`vastBrengen`, `vastSlaan`). Is een regel leeg, dan zegt niemand iets — zo doet een half
-ingevulde lijst geen kwaad.
-
-**Je kijkt door één situatie tegelijk** (22 sep, na Marcel: "het is nogsteeds niet intuïtief…
-ik weet niet wat ik hier mee moet"). Het script hieronder loste de opmaak op maar niet het
-probleem: het scherm liet de gegevens zien, niet het gesprek. Bovenin staan nu de situaties, je
-klikt er een, en het gesprek staat er zoals het dán loopt — één zin per knoop, alleen de
-antwoorden die je dan kunt geven. Wat er niet klinkt, zakt naar onderen met de situatie erachter
-waar het wél klinkt. **De fasen van een quest zijn situaties**, en de quest staat op dezelfde
-bladzijde met erbij welk antwoord welke weg neemt. Een situatie benoem je zelf; ze staan bij de
-persoon in `js/gesprekken.js` en het spel leest ze nooit. `test/situaties.test.cjs` bewaakt dat
-elke zin ergens klinkt. Zie `ontwerp/verhaal.md`.
-
-**Een gesprek schrijf je als een script, niet als een formulier** (22 sep, na Marcel: "totaal
-onlogisch"). Het hele gesprek staat nu op één bladzijde, in leesvolgorde: de zin als tekst, de
-voorwaarde klein erachter in gewone taal ("alleen als de bakker nog zoekt"), en pas een formulier
-als je hem aanraakt. "naar voorraad ↗" is een link. Dat scherm zit ook in `wereld.html`, want dat
-hergebruikt dezelfde bewerker.
-
-**Wat er bij het opslaan bijna misging:** de gespreksbewerker schreef `js/gesprekken.js` helemaal
-opnieuw en kende `T.TUTORIAL_TEKST` niet, dus wiste één keer opslaan het hele draaiboek van de
-tutorial. Nu knipt `gereedschap/bronblok.js` het bestand in kop, blok en staart, en schrijft een
-bewerker alleen zijn eigen blok. `test/bronblok.test.cjs` bewaakt dat op de echte bestanden.
-
-**Het gereedschap is daarmee af voor wat het moest doen.** Wat nu volgt is het gebruiken: De koude
-oven neerzetten, en daarna de negentien dorpelingen.
-
-**Tempo:** gewoon door. Marcel maakt het niet uit of de week vandaag of vrijdag op is (22 sep).
-Bekijk wel de vijfuursgrens voor je een zware agent start, zodat hij niet halverwege stilvalt.
-
 **Wacht op Marcel:**
-- **De zes regels voor als de speler vastzit** invullen in `T.TUTORIAL_TEKST`
-  (`js/gesprekken.js`): `vastGezien`, `vastMeester`, `vastKom`, `vastZak`, `vastBrengen`,
-  `vastSlaan`. Elk is één zin van de meester, na 45 seconden stilstand. En, als je toch bezig
-  bent: de lesjestoon uit de bestaande regels ("Let op", "Onthoud dat", "Het is maar een getal").
-  `T.TUTORIAL_TEKST` staat nog niet in het gereedschap; zeg het als je het daar wilt typen.
-- In Tiled: het vel `tuin` aan `wereld.tmj` toevoegen. (De vier varens rond (51–52, 45–46) zijn op
-  22 sep verhuisd naar `objecten`, met gras eronder; `npm run kaarten` klaagt nergens meer over.)
-- **De koude oven neerzetten**, nu met `gereedschap/wereld.html` (niet meer in Tiled). Zet
-  "Bewerken" aan; de controle rechts zegt wat er ontbreekt en die regels verdwijnen terwijl je
-  neerzet. Het gaat om: de bakker, de marskramer en de smidsvrouw in het dorp; een leemkuil bij
-  de beek met de leem erin (voorwerp met `quest` = `bakker:zoeken`) en iets wat daar huist; en de
-  oven van de bakker met `raak` = `oven` op een tegel waar je bij kunt.
+- De open vragen in `spel.md`, vooral: hoe je als poppetje honderden mensen bestuurt, welke
+  goederen de heer vraagt, en hoe ver de politiek gaat. Die zijn nodig voor het proefje.
+- Een naam; "Aardschok" past niet meer.
+- In de werkmap staan nog bloemen en twee reuzenspinnen op `wereld.tmj`
+  (`kaarten/wereld.betekenis.json` en `kaarten/kaarten.js`) die niet vastgelegd zijn. Vastleggen
+  of weggooien?
 
-**Klaar om te starten, in deze volgorde.** Bekijk eerst de meter (`get_usage`) als je een agent
-start; de onderste drie zijn renderwerk en dus zwaar.
+**Klaar om te starten:**
+1. **De kern op papier,** samen met Marcel. Klaar als `spel.md` zegt welke goederen er zijn en wie
+   ze maakt, hoe het jaar loopt, wat de heer eist en hoe hij grilt, wat de inner ziet, welke
+   keuren en groepen er in het begin zijn, en hoe je als poppetje stuurt. Genoeg voor het proefje,
+   niet meer.
+2. **Het proefje: één jaar in een gehucht.** Klaar als je met vijf boeren een akker bewerkt, één
+   keur kunt uitvaardigen, op Sint-Maarten de heer betaalt, de inner één keer rondloopt, en er iets
+   te verbergen valt. De vraag die het moet beantwoorden: is rijk worden en arm lijken leuk?
 
-1. **De koude oven neerzetten met het nieuwe gereedschap** (zie "Wacht op Marcel" hierboven).
-   Dat is het eerste echte gebruik: de bakker, de marskramer en de smidsvrouw uit de mensenlijst
-   in het dorp, de leemkuil met de leem erin, en de oven met zijn raakpunt. De controle rechts
-   telt af terwijl je het doet, en de mensenlijst zegt wie er nog nergens staat.
-   **Daarna:** de rest van de mensen, en zoveel figuranten (`zaad`) als het dorp druk moet doen
-   aanvoelen.
-2. Ronde 4b: de huizen in Tiled (zie de huizenbouwer hieronder). Renderwerk.
-3. Fase B2b: de zeven vaklieden en meer gewone dorpelingen. Daar horen nu ook de bakker en de
-   marskramer bij: die lenen het vel van Wim tot dit af is. Renderwerk.
-4. Fase B3: de portretten in de gesprekken. De bakker, de marskramer en de smidsvrouw hebben er
-   ook nog geen. Renderwerk.
+## Daarna, in deze volgorde (voorstel)
 
-**Het laatst af (22 sep):**
-- de gespreksschrijver: één situatie tegelijk, met de quest eronder;
-- het gesprekkenscherm als script, en het opdrachtvak uit de tutorial;
-- het wereldgereedschap, alle vier de rondes (`gereedschap/wereld.html`), en de verhuizing van de
-  betekenis uit Tiled;
-- het questsysteem, De koude oven, en de verhaaleditor die quests kan;
-- de tutorial, met Marcels keuzes erin;
-- huizenbouwer ronde 3 en 4a: uitbouwen, tuinstukken en hekjes in Tiled;
-- twaalf dorpelingen die lopen, met knieën.
+3. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
+   zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel beschrijft.
+4. **Groei.** Klaar als het dorp in treden groeit (gehucht, dorp, marktrecht, stad), er winkels,
+   marktkramen en handelaars van buiten komen, en het aantal mensen meegroeit.
+5. **Keuren en politiek.** Klaar als er groepen zijn met vertrouwen in jou, schepenen die stemmen,
+   keuren die elk iets kosten, en plakkaten van de heer die je uitvoert of niet.
+6. **De heer.** Klaar als hij grillen heeft, op alle vier de manieren straft, en soldaten
+   inkwartiert.
+7. **Het avontuur.** Klaar als de grillen van de heer opdrachten zijn, er mensen met een verhaal
+   zijn, en er buiten het dorp iets te halen valt (bos, buurdorp, handelsweg, het kasteel).
+8. **Stadsrechten kopen.**
+9. **De opstand:** trainen, wapens verbergen, en het gevecht in beurten.
+10. **Opslaan, titelscherm, instellingen, geluid.** Zie `verpakken.md`.
+11. **Verpakken.** Klaar als er een programma is dat vanuit Steam start.
 
-**Niet vergeten, want het is nu nog gratis:** de schuld aan de smidsvrouw (`schuldSmidsvrouw`).
-Zij vraagt de eerste grondstof uit de toren, en tot het punt over grondstoffen die schuld kan
-innen, kost haar weg door De koude oven de speler niets. Dan haalt die quest de toets van drie
-antwoorden alleen op papier.
+## Tegelijk: de huizenbouwer, en meer mensen
 
-Details staan bij de punten hieronder en in `git log`.
-
-## Tegelijk: de huizenbouwer op ronde vormen
+Een stad vraagt veel huizen en veel mensen, dus dit weegt nu zwaarder dan eerst. In het nieuwe spel
+zet de speler de huizen neer, dus voet en anker doen er nog meer toe; of ze daarvoor ook in Tiled
+moeten, hangt af van punt 1.
 
 Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Zie `beeld.md`,
 "De huizenbouwer op ronde vormen".
 
-1. **Vorm** (af, 21 sep). Klaar als de bouwer elke maat kan, de nok langs beide richtingen, één, anderhalf en
-   twee lagen (met overkraging), en rechthoek, L en T met een doorlopende kil in het riet.
-2. **Materiaal** (af, 22 sep). Klaar als er planken, vlechtwerk en blokhut zijn naast vakwerk en veldsteen, en
-   spanen, leien en pannen naast riet.
+1. **Vorm** (af, 21 sep). Klaar als de bouwer elke maat kan, de nok langs beide richtingen, één,
+   anderhalf en twee lagen (met overkraging), en rechthoek, L en T met een doorlopende kil in het
+   riet.
+2. **Materiaal** (af, 22 sep). Klaar als er planken, vlechtwerk en blokhut zijn naast vakwerk en
+   veldsteen, en spanen, leien en pannen naast riet.
 3. **Uitbouwen** (af, 22 sep). Dakkapellen (in het riet een bult), aanbouwen met een eenzijdig dak,
    erkers, luiken, bloembakken, buitentrappen, galerijen, gevelschoorstenen, en 21 losse
    tuinstukken in `tuin-sdf.cjs`. Plaat: `uit/proefhuis/uitbouwen.png`. Wat nog wringt: een bult
@@ -170,131 +95,31 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    - Tussen de palen van een galerij en de muur kan niemand staan; die tegels moeten vast.
    - De tuinstukken krijgen een eigen vel van 1×1, anker op het midden van de tegel. Vast zijn het
      hek, de bank en de regenton; het hekje en de bedden niet (Marcel, 22 sep).
-   Ronde 3 was één lange agent (235 stappen), dus ronde 4 gaat in twee stukken: **4a** (af, 22 sep) de hekjes
-   van wilgentenen en latten (`beeld.md`) en de tuinstukken als eigen vel in Tiled; **4b** de
-   huizen in `gebouwen.tsx`.
+   Ronde 3 was één lange agent (235 stappen), dus ronde 4 gaat in twee stukken: **4a** (af, 22 sep)
+   de hekjes van wilgentenen en latten (`beeld.md`) en de tuinstukken als eigen vel in Tiled; **4b**
+   de huizen in `gebouwen.tsx`.
 
-## Marcel, tegelijk
-
-- **Kaarten tekenen in Tiled:** het dorp, het bos, de weg ertussen. Elke kaart in `kaarten/` is
-  vanzelf een gebied. Laat weten of de randtegels de goede kant op liggen.
-
-## Daarna, in deze volgorde
-
-1. **De tutorial.** Klaar als het spel op het erf begint; de meester in zijn moestuin werkt en je
-   laat lopen, slaan, sluipen en een deur dichtgooien; een vuurschicht op een oude ton schiet (97
-   wordt 98), uit de fontein drinkt (weer 96) en de ton kapotmept met de staf (kost niets); er iets
-   van boven de trap komt; hij sterft aan zijn laatste spreuk bij zijn moestuin; Wim om hem rouwt;
-   en de oude openingsteksten ("na veertig jaar") zijn herschreven. Zie `verhaal.md`.
-   **Stand (22 sep):** speelbaar van begin tot eind, met Marcels keuzes erin: er blijft één slok
-   in de fontein, en wie te lang wegblijft, vindt de meester dood terug. Nog te doen: de teksten
-   poetsen (`T.TUTORIAL_TEKST` in `js/gesprekken.js`), voelen hoe lang "te lang weg" is (`WEG` in
-   `js/tutorial.js`), en een droge fontein in de kunst (hij rimpelt niet meer, maar toont nog water).
-2. **Dorpelingen die er echt zijn.** Klaar als de negentien dorpelingen en de gewone
-   `dorpeling(zaad)` loopanimaties hebben (en dus niet meer als Wim getekend worden), en er
-   portretten zijn voor de gesprekken.
-   **Fase A (af, 22 sep):** de smid en twee gewone dorpelingen lopen en ademen, ook in het spel
-   (`T.WEZENS.smid`, en een `zaad` kiest zijn vel). Plaat: `uit/dorpelingen/lopen-proef.png`.
-   **Besloten:** knieën, zoals bij Wim (Marcel, 22 sep; `wereld.md`). Fase B in korte stukken:
-   - B1 (af, 22 sep): knieën voor de smid en de twee gewone dorpelingen. De uitleg staat boven de
-     sectie "lopen en staan" in `dorpelingen.cjs`, met de smid als voorbeeld.
-   - B2a (af, 22 sep): de herbergierster, de boer, de dorpsoudste en de acht uit
-     `dorpelingen2.cjs`. Plaat: `uit/dorpelingen/lopen-proef-b2a.png`.
-   - B2b: de zeven vaklieden uit `dorpelingen3.cjs` (daar neemt `been()` de knie al mee), en meer
-     gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
-   - B3: de portretten in de gesprekken.
-3. **Het questsysteem, met één quest helemaal af.** Klaar als quests gegevens zijn (zie
-   `toren.md`), de stand van een quest een voorwaarde is in een gesprek, er goud bestaat, en één
-   quest — bijvoorbeeld "De koude oven" — van begin tot eind speelt en de toets van drie antwoorden
-   haalt.
-   **Stand (22 sep):** af, op het neerzetten na. De regels staan er en zijn getoetst — fasen en
-   wegen, goud, het vak linksboven, de Tiled-eigenschappen `quest` en `raak`, en `T.keurQuests`,
-   dat de toets van drie antwoorden door `npm test` laat bewaken. De koude oven is geschreven, met
-   de gesprekken van de bakker, de marskramer en de smidsvrouw, en `test/quest.test.cjs` speelt
-   alle vier de wegen uit. Wat rest is Tiled (zie "Wacht op Marcel").
-4. **Het wereldgereedschap: Tiled houdt de grond, wij de betekenis** (Marcel, 22 sep 2026). Klaar
-   als je de kaart in de browser ziet met alles wat betekenis heeft erop — mensen,
-   questvoorwerpen, raakpunten, overgangen — ze daar kunt neerzetten en verslepen, hun gesprek en
-   hun quest in hetzelfde scherm kunt bewerken, en één controle zegt wat er aan de kaart mankeert.
-   Vier rondes; zie `kaarten.md`, "Een wereldgereedschap naast Tiled". **Hoort hier hoog, want het
-   verdient zich terug op het neerzetten van de negentien dorpelingen en van De koude oven — doe
-   je dat eerst met de hand, dan komt het te laat.**
-   **Stand (22 sep):** rondes 1, 2 en 4 zijn af, als `gereedschap/wereld.html`. Marcels besluit
-   van die dag — *"alleen basislaag uit Tiled halen en de rest moet hier; hier maken we eigenlijk
-   het echte spel"* — is uitgevoerd: de betekenis staat in `kaarten/<naam>.betekenis.json`, een
-   eigen bestand waar Tiled nooit in komt, en het gereedschap zet neer, versleept en haalt weg.
-   Een aansluiting leg je in één handeling over twee kaarten. Een geheime doorgang bestaat nu ook
-   in het spel zelf (`staat: "geheim"` met een `als`; `T.werkGeheimenBij` in `js/quest.js`). De
-   controle staat los in `gereedschap/keuring.js` met `test/keuring.test.cjs` eromheen.
-   Ronde 3 staat er ook: dubbelklik een poppetje en zijn gesprek én zijn quest staan in een
-   paneel over de kaart, met de bewerkers uit `gesprekken-tool.js` en `quests-tool.js` zelf —
-   dezelfde bewerkers, niet een tweede stel. Alle vier de rondes zijn daarmee af.
-
-   **Opslaan is veilig geworden (22 sep).** Het was dat niet: de gespreksbewerker schreef
-   `js/gesprekken.js` helemaal opnieuw en kende `T.TUTORIAL_TEKST` niet, dus wiste één keer
-   opslaan het hele draaiboek van de tutorial. Nu knipt `gereedschap/bronblok.js` een bestand in
-   kop, blok en staart en wordt alleen het blok herschreven. Ook het commentaar blijft staan, tot
-   op de losse tekstregel: van 21 verloren opmerkingen naar geen enkele.
-
-5. **De verhaaleditor.** Klaar als het gesprekkengereedschap ook quests kan: vormen om mee te
-   beginnen, alles op één plek, een proef per fase, controle die de routes telt, en de koppeling
-   met Tiled. Zie `verhaal.md`, "Een quest moet makkelijk te bouwen zijn".
-   **Stand (22 sep):** gebouwd als `gereedschap/quests.html`. Alle vijf de eisen zitten erin; de
-   gaten staan in `verhaal.md` onder "Stand": twee van de vijf vormen ontbreken nog, en raakpunten
-   zijn wel te controleren maar niet te bewerken.
-6. **Grondstoffen en de verdeelvraag.** Klaar als magische grondstoffen voorwerpen zijn die je aan
-   de toren óf aan jezelf geeft (jaren terug), ze eindig zijn in de wereld, en je er per saldo op
-   achteruitgaat. Zie `toren.md`.
-   **Hoort hier meteen bij:** de schuld aan de smidsvrouw (`schuldSmidsvrouw`, gezet door De koude
-   oven). Zij vraagt de eerste grondstof uit de toren. Zolang die niet verzilverd wordt, is haar
-   weg door de quest gratis, en dan klopt de toets van drie antwoorden alleen op papier.
-7. **De toren in verdiepingen.** Klaar als elke verdieping een eigen gebied is met de spiraaltrap
-   als overgang; zweven kan voor twee jaar (drie als de vloer weg is), je dan niets draagt en het
-   iets boven stoort; en er een torenpaneel in doorsnede is waarin je herstelt. Zie `toren.md`.
-8. **De eerste verdieping, helemaal af.** Klaar als één verdieping — bijvoorbeeld de kweekkamer —
-   drie geloofwaardige antwoorden heeft die verschillend kosten, en na herstel iets anders wordt
-   (een kruidentuin).
-9. **Verdorren.** Klaar als de spreuk er is met zijn vier regels (wat je verdort komt nooit terug,
-   alleen buiten een gevecht, opbrengst naar hoeveel leven erin zit, meesterschap geeft toegang
-   maar geen grotere opbrengst), er dieren zijn om te verdorren, en het dorp het ziet. Zie
-   `spreuken.md`.
-10. **Vergeten door ouderdom, en een dorp dat het ziet.** Klaar als meesterschap terugzakt als je een
-    spreuk laat versloffen, en dorpelingen reageren op je leeftijd — ouder én jonger.
-11. **Hoogte.** Klaar als er een hoogtelaag is in Tiled, rotswanden vanzelf worden afgeleid, en
-    lopen alleen kan bij gelijke hoogte of over een helling. Zie `kaarten.md`.
-12. **Kelders en mijnen.** Klaar als de grijze binnenbouwdoos er is (trap omlaag, ladder, rooster,
-    ingestorte vloer, stalagmieten, vuur, botten, begroeide muren) en er één mijn te bezoeken is.
-    Zie `beeld.md`.
-13. **Een andere tovenaarstoren.** Klaar als er één te bezoeken is, met een eigen oude eigenaar,
-    een eigen probleem en eigen grondstoffen.
-14. **De leerling.** Klaar als de quest met de jongen er is en hij met je meegaat, met zijn drie
-    remmen. Zie `verhaal.md`.
-15. **Opslaan, titelscherm, instellingen, geluid.** Klaar als het spel een avond te spelen is en
-    niets op de lijst "wat het browserig laat voelen" nog geldt, en wie opnieuw begint de
-    tutorial kan overslaan. Zie `verpakken.md`.
-16. **Verpakken.** Klaar als er een programma is dat vanuit Steam start. Zie `verpakken.md`.
+**Meer mensen:** fase B2b, de zeven vaklieden uit `dorpelingen3.cjs` (daar neemt `been()` de knie
+al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`). Renderwerk.
 
 ## Klein, tussendoor als het past
 
-- **Kringen en leeftijd:** de beste speler krijgt nu de minste spreuken. Kiezen uit de vier
-  richtingen in `spreuken.md`. Moet vóór het verdorren besloten zijn.
-- **Onverhoeds raken** (Marcel, 22 sep): meer schade aan een monster dat je niet zag of dat je van
-  achteren raakt. Klaar als de bonus in `handelingGevecht` zit, bij de muis staat, en getoetst is.
-  Zie `spreuken.md`; eerst Marcels antwoord op de staf.
 - **Een omheining is geen blok** (om samen te bespreken). Het kerkhof, de kippenren en de moestuin
-  staan in het spel als één vast blok, dus je kunt niet tussen de graven lopen, en een boomstronk
-  die Marcel binnen de kerkhofmuurtjes zette, staat technisch "in" het kerkhof. Een omheining zou
+  staan in het spel als één vast blok, dus je kunt niet tussen de graven lopen. Een omheining zou
   alleen zijn rand vast moeten hebben.
 - **Omheiningen die je schildert:** tuinhek, palissade, haag, aarden wal met vlechtwerk, en een
-  hekje, als een eigen laag met een terreinset in Tiled. Eén systeem, later ook voor een stadsmuur.
-  Zie `wereld.md`, "Een dorp heeft geen muur".
+  hekje, als een eigen laag. Eén systeem, later ook voor een stadsmuur. Zie `wereld.md`, "Een dorp
+  heeft geen muur".
 - **Kinderkopjes** in plaats van platte kasseien: bolle ronde keien met mos in de voegen. Zie
   `beeld.md`. Alleen de tekening van `rand.tsx` verandert, dus bestaande paden gaan vanzelf mee.
 - **Windwijzer en schoorsteenrook** als losse elementen, zodat ze met de wind meebewegen.
-- **Lage begroeiing op de erfkaart:** grassprieten, varens en bloemen staan er nog niet op.
+- **Lage begroeiing:** grassprieten, varens en bloemen.
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 23 sep 2026 — **Het nieuwe spel gekozen:** de schout, de heer en het dorp dat een stad wordt, met
+  keuren, politiek en avontuur (`spel.md`). De laatste klim is vervallen.
 
 - 22 sep 2026 — **De verhaaleditor kan quests** (`gereedschap/quests.html`): de fasen en wegen als
   boom met hun prijs ernaast, formulieren voor fase, weg, klaarAls en beloning, drie vormen om mee

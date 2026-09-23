@@ -1,5 +1,8 @@
 # De toren: de klim, het herstel en de vorm van het spel
 
+> **Oud spel.** Dit bestand hoort bij De laatste klim, dat op 23 sep 2026 is vervangen door het
+> spel in `spel.md`. Het blijft staan als bron, niet als besluit.
+
 Hoe de plekken eruitzien staat in `wereld.md`; het tekenen van kaarten in `kaarten.md`.
 
 ## De toren is de ruggengraat (Marcel, 20 sep 2026)

@@ -1,5 +1,8 @@
 # Verhaal
 
+> **Oud spel.** Dit bestand hoort bij De laatste klim, dat op 23 sep 2026 is vervangen door het
+> spel in `spel.md`. Het blijft staan als bron, niet als besluit.
+
 ## Besloten
 
 - ~~**Opening** (19 sep 2026). Veertig jaar geleden sloot de tovenaar iets op en ging weg; Wim

@@ -1,5 +1,8 @@
 # Spreuken en ervaring
 
+> **Oud spel.** Dit bestand hoort bij De laatste klim, dat op 23 sep 2026 is vervangen door het
+> spel in `spel.md`. Het blijft staan als bron, niet als besluit.
+
 ## In het spel (20 sep 2026)
 
 De drie startspreuken werken, met meesterschap door gebruik: `js/spreuken.js` (de regels) en

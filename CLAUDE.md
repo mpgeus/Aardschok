@@ -1,10 +1,18 @@
 # CLAUDE.md
 
-Aardschok (werktitel): een spel dat Marcel en Claude samen bouwen, met als doel het uiteindelijk te
-verkopen (Steam eerst, als los programma verpakt). Het idee: het isometrische beeld van Mystic
-Towers, de opbouw van een avonturenspel, en een naadloze overgang van rondlopen naar een
-gevecht in beurten op tegels, zonder apart gevechtsscherm. Referenties voor die overgang:
-Fallout 1 en 2, Jagged Alliance 2, Shadowrun Returns.
+Aardschok (werktitel, past niet meer): een spel dat Marcel en Claude samen bouwen, met als doel het
+uiteindelijk te verkopen (Steam eerst, als los programma verpakt). **Sinds 23 sep 2026 een ander
+spel:** een bouw- en beheerspel in isometrisch beeld, met politiek en avontuur erin. Je bent de
+schout van een dorp onder een verwarde heer die alleen geld ziet. Je breidt het dorp uit tot een
+stad, bestuurt het met keuren, en maakt je aan het eind van de heer los, met stadsrechten of een
+opstand. Zie "Het spel in het kort" hieronder, en `ontwerp/spel.md`.
+
+Tot 23 sep was het De laatste klim: een tovenaar van 84 met zijn leeftijd als levensbalk, in een
+toren. Marcel vond het doel niet goed genoeg. De kunst en de techniek eronder blijven: het
+isometrische beeld (Mystic Towers als voorbeeld), de HD-pixel art uit code, en een naadloze
+overgang van rondlopen naar een gevecht in beurten op tegels (Fallout, Jagged Alliance 2). De code
+van het oude spel (toren, spreuken, leeftijd, tutorial) staat er nog tot hij eruit gaat; zie de
+werklijst.
 
 Code, commentaar en spelteksten zijn Nederlands, zoals in Marcels Planner.
 
@@ -22,16 +30,16 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - **`ontwerp/werklijst.md`: wat we doen, in welke volgorde. Begin een sessie hier.** Lees de stand
   bovenaan en zeg Marcel in een paar regels waar we zijn. Werk de stand bij aan het eind van de
   sessie.
-- `ontwerp/verhaal.md`: het verhaal, de personen, de toon, en wat er boven in de toren zit.
-- `ontwerp/wereld.md`: de plekken. Het erf, het bos, het dorp met zijn mensen, de maten, en de
-  bosvijanden.
-- `ontwerp/toren.md`: de klim. Het herstel per verdieping, goud en grondstoffen, de staf, en de
-  vorm van het spel (vrij en niet lineair, en hoe groot het wordt).
+- **`ontwerp/spel.md`: het spel.** De schout, de heer en de inner, keuren en politiek, avontuur,
+  en wat nog open is.
+- `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
 - `ontwerp/kaarten.md`: van Tiled naar het spel, en hoe hoogte gaat werken.
-- `ontwerp/spreuken.md`: de spreuken, en hoe de tovenaar met de jaren meer kan.
+- `ontwerp/wereld.md`: de plekken en mensen van het oude spel (erf, bos, dorp); het dorp en zijn
+  mensen zijn nog bruikbaar.
 - `ontwerp/verpakken.md`: van map met bestanden naar programma op Steam, en wanneer er wél een
   bouwstap komt.
-- `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
+- Van het oude spel, alleen nog als bron: `ontwerp/verhaal.md` (met de vijf rondes ideeën van
+  23 sep die tot het nieuwe spel leidden), `ontwerp/toren.md` en `ontwerp/spreuken.md`.
 
 ## Git
 
@@ -151,66 +159,30 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   dekt (raster, bereik, richtlijn, zwevende tekst, spreukeffecten, de pilaar) blijft altijd
   vlakken. `Toren.debug.vlakken = true` zet alles terug naar vlakken, om te vergelijken.
 
-## De kernregel: De laatste klim
+## Het spel in het kort
 
-Gekozen door Marcel op 19 sep 2026, nadat het eerste proefje "dertien in een dozijn" voelde. De
-held is een tovenaar van 84, en zijn leeftijd is zijn levensbalk (`js/leeftijd.js`, geteld in
-hele maanden, nooit in kommagetallen). Elke vuurschicht kost een jaar, elke klap van een monster
-een paar maanden (`aanval.maanden`), en op zijn honderdste is het voorbij. Genezen bestaat niet,
-maar jaren terugkopen kan soms: magische grondstoffen uit de wereld geef je aan de toren óf aan
-jezelf, nooit aan allebei. Ze zijn eindig en meestal bewaakt, dus je komt er per saldo altijd op
-achteruit en loopt de balk in gevoel één kant op. De fontein maakt één keer twee jaar jonger. Hoe ouder, hoe minder actiepunten (8, vanaf 90 jaar
-7, vanaf 95 jaar 6) en hoe sterker de magie (+1 schade per vijf jaar boven de 80). Slaan met de
-staf kost geen jaren. Die afweging, jaren tegen veiligheid, is het spel: een gevecht dat je
-vermijdt, kost niets, en daardoor hebben het avontuur en het gevecht elkaar nodig. Monsters
-houden gewone levenspunten. Aan het eind telt hoe oud je boven aankomt.
+Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 
-- Alle jaren lopen via `T.verouder` (gevecht.js). Die toont het getal boven de held, werkt de
-  balk en de beurtvolgorde bij, meldt een nieuwe actiepuntengrens, en laat de held sterven op
-  100. Een tweede weg naar `held.leeftijd` mist er vroeg of laat één van.
-- De vuurschicht raakt eerst en kost daarna zijn jaar: wie zo zijn honderdste haalt, velt met
-  zijn laatste spreuk nog het monster. Elke spreuk houdt die volgorde aan: eerst het effect,
-  dan de tijd via `T.verouder`, dan pas telt het meesterschap (`T.oefen`).
-- Meesterschap door gebruik (`ontwerp/spreuken.md`): vijf treden (Roestig, en dan na 3, 8, 15 en
-  25 keer raak). Een spreuk telt alleen als hij iets doet: raken, een wezen echt duwen, een deur
-  dichtgooien, een monster weglokken. Een trede geeft bereik, een extra effect of minder
-  actiepunten, maar maakt een spreuk **nooit** goedkoper in jaren; `T.spreuk` zet `maanden`
-  daarom altijd terug op de basis. Het meesterschap staat per held (`held.meesterschap`), de
-  hoogste open kring in `held.kring` (gaat alleen omhoog, in `T.verouder`, want wie door de
-  fontein jonger wordt, vergeet niets).
-- De eindstrijd **blokkeert nooit** op leeftijd, hij verandert ervan. Jong aankomen geeft veel
-  beurten en dus ruimte om te bewegen en te ontwijken; oud aankomen geeft drie handelingen maar
-  spreuken als mokers. Een harde grens zou de speler twintig uur ver onwinbaar kunnen zetten.
-- **Waarom 84 en 100.** Honderd is het getal waarbij een mensenleven voelbaar op is; daar hoeft
-  niets bij uitgelegd. Vierentachtig is dan "zestien jaar te gaan", en zestien jaar is zestien
-  vuurschichten: weinig genoeg om over na te denken, genoeg om een spel mee te vullen. Al het
-  andere is daarop geijkt. Zie `ontwerp/spreuken.md` voor wat daar nog aan wringt.
-- **Niets is een muur, alles is een prijs.** Een kapotte trap die een machtige tovenaar
-  tegenhoudt, is flauw. Hij zweeft erlangs — en dat kost hem twee jaar, drie als de vloer weg is.
-  Zo geldt het overal: een dichte deur, een ravijn, een ingestorte gang. Er is altijd een dure weg
-  eromheen, en de prijs staat er in jaren bij vóórdat je klikt. Herstellen is dan een investering
-  in plaats van een sleutel: één keer goud en grondstoffen, daarna gratis. Zie `ontwerp/toren.md`.
-- Sluipen (`S`, alleen buiten een gevecht) is het eerste middel om een gevecht te ontlopen: half
-  zo snel, en monsters zien je pas van `T.SLUIP_ZICHT` (2) tegels dichterbij. Elke nieuwe manier
-  om een gevecht te vermijden (praten, afleiden, een val) versterkt de kernregel; een nieuwe
-  manier om te vechten zonder jaren te betalen, verzwakt hem. Het dwaallicht (een monster
-  weglokken) en de windstoot (van afstand een deur dichtgooien) zijn de tweede en derde manier,
-  en kosten maar een maand of drie.
-- De held loopt trager naarmate hij ouder wordt: `T.loopSnelheid` (2,5 tegels per seconde op zijn
-  84e, 2,1 op zijn 92e, 1,8 op zijn 99e). Wie iets wil weten over de snelheid van een wezen,
-  vraagt `T.snelheidVan(e)`; monsters houden hun vaste snelheid.
+- Je bent de **schout**, een poppetje dat door het dorp loopt, geen hand van bovenaf. Je breidt
+  het dorp uit en bestuurt het met **keuren** (regels), samen met de schepenen.
+- De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het
+  dorp, jou zelf, met hogere eisen, en met soldaten. Zijn **inner** komt kijken, en wat je opzij
+  zet, moet uit zijn zicht.
+- Het dorp groeit tot een stad met boeren, winkels, een markt en handel. Het zit vol **groepen**
+  met eigen belangen (de politiek) en mensen met een verhaal (het avontuur).
+- Vrij word je door **stadsrechten** te kopen of door een **opstand**, een gevecht in beurten op
+  dezelfde kaart. Dan word je burgemeester.
+- De kern zoals Claude hem voorstelt, nog te toetsen met een proefje: **rijk worden en arm
+  lijken.**
+- Toon: zwarte satire. De heer is lachwekkend, zijn straffen niet (voorstel).
 
-## Het verhaal in het kort
+De regels van het oude spel (de leeftijd als levensbalk, `T.verouder`, meesterschap, de toetsen
+voor spreuken) staan in `git show 0eb8269:CLAUDE.md`, voor wie aan die code komt voordat hij weg is.
 
-Het spel begint bij de toren van de oude meester, die nog leeft: hij doet zijn moestuin en leert
-je toveren, en speelt daarbij met zijn eigen leeftijd. Boven in de toren zit iets dat hij lang
-geleden opsloot en door ouderdom vergat; de aardschok maakte het wakker. Hij sterft aan zijn eigen
-laatste spreuk, bij zijn moestuin, en jij erft de toren — die op de meeste verdiepingen
-onbegaanbaar is en per verdieping hersteld moet worden. Wim, zijn knecht, erf je erbij. De toon:
-weemoedig met een knipoog, nooit grappig ten koste van de ernst van de klim. Meer, en wat nog open
-is (wat er precies boven zit), staat in `ontwerp/verhaal.md`.
+## Afspraken in de code
 
-## Afspraken die het idee dragen
+Uit het oude spel; ze gelden voor de code zoals die er nu staat. Het raster en de overgang naar een
+gevecht gaan mee naar het nieuwe spel, de spreuken niet.
 
 - Eén raster voor rondlopen én vechten. Een wezen heeft een vloeiende positie (`x`, `y`) en
   een tegel (`tx`, `ty`); bezetting vraag je altijd aan `tx`/`ty`. Bij het begin van een
