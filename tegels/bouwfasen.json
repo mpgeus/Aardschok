@@ -1,0 +1,1160 @@
+{
+ "_lees_dit": "Vijf bouwfases per gebouw uit tegels/gebouwen.tsx, gemaakt door gereedschap/pixelart/bouwfasen.cjs — niet met de hand bijwerken. Sleutel is de tekeningnaam (T.GEBOUWEN.<soort>.tekening, na \"gebouwen/\"). Per fase (0..4, oplopend in afbouw): x/y/b/h snijdt de cel uit bouwfasen.png, anker is het punt in die cel dat op T.naarScherm(x, y) van de aangeklikte tegel komt — dezelfde achterste-voethoek-afspraak als tegels.json (\"anker\" bij de tsx-vellen), en beslaat is dezelfde tegelmaat als in gebouwen.tsx voor dezelfde tekening. Fase 5 (klaar) staat niet hier: dat is gewoon de bestaande tegel in tegels/gebouwen.png.",
+ "breedte": 2835,
+ "hoogte": 7897,
+ "bestand": "bouwfasen.png",
+ "fasen": {
+  "dorpKlein2": {
+   "gebouw": "hut",
+   "beslaat": [
+    5,
+    7
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 0,
+     "b": 413,
+     "h": 397,
+     "anker": [
+      239,
+      215
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 413,
+     "y": 0,
+     "b": 413,
+     "h": 397,
+     "anker": [
+      239,
+      215
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 826,
+     "y": 0,
+     "b": 413,
+     "h": 397,
+     "anker": [
+      239,
+      215
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1239,
+     "y": 0,
+     "b": 413,
+     "h": 397,
+     "anker": [
+      239,
+      215
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 1652,
+     "y": 0,
+     "b": 413,
+     "h": 397,
+     "anker": [
+      239,
+      215
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "dorpshuis1": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 397,
+     "b": 439,
+     "h": 453,
+     "anker": [
+      188,
+      271
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 439,
+     "y": 397,
+     "b": 439,
+     "h": 453,
+     "anker": [
+      188,
+      271
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 878,
+     "y": 397,
+     "b": 439,
+     "h": 453,
+     "anker": [
+      188,
+      271
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1317,
+     "y": 397,
+     "b": 439,
+     "h": 453,
+     "anker": [
+      188,
+      271
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 1756,
+     "y": 397,
+     "b": 439,
+     "h": 453,
+     "anker": [
+      188,
+      271
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "schuur": {
+   "gebouw": "boerderij",
+   "beslaat": [
+    6,
+    9
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 850,
+     "b": 541,
+     "h": 437,
+     "anker": [
+      319,
+      207
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 541,
+     "y": 850,
+     "b": 541,
+     "h": 437,
+     "anker": [
+      319,
+      207
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1082,
+     "y": 850,
+     "b": 541,
+     "h": 437,
+     "anker": [
+      319,
+      207
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1623,
+     "y": 850,
+     "b": 541,
+     "h": 437,
+     "anker": [
+      319,
+      207
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 2164,
+     "y": 850,
+     "b": 541,
+     "h": 437,
+     "anker": [
+      319,
+      207
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "houtschuur": {
+   "gebouw": "houthakker",
+   "beslaat": [
+    3,
+    4
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1287,
+     "b": 281,
+     "h": 251,
+     "anker": [
+      157,
+      149
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 281,
+     "y": 1287,
+     "b": 281,
+     "h": 251,
+     "anker": [
+      157,
+      149
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 562,
+     "y": 1287,
+     "b": 281,
+     "h": 251,
+     "anker": [
+      157,
+      149
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 843,
+     "y": 1287,
+     "b": 281,
+     "h": 251,
+     "anker": [
+      157,
+      149
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 1124,
+     "y": 1287,
+     "b": 281,
+     "h": 251,
+     "anker": [
+      157,
+      149
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "schuurBlokhut": {
+   "gebouw": "schaapskooi",
+   "beslaat": [
+    5,
+    7
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1538,
+     "b": 445,
+     "h": 373,
+     "anker": [
+      255,
+      191
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 445,
+     "y": 1538,
+     "b": 445,
+     "h": 373,
+     "anker": [
+      255,
+      191
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 890,
+     "y": 1538,
+     "b": 445,
+     "h": 373,
+     "anker": [
+      255,
+      191
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1335,
+     "y": 1538,
+     "b": 445,
+     "h": 373,
+     "anker": [
+      255,
+      191
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 1780,
+     "y": 1538,
+     "b": 445,
+     "h": 373,
+     "anker": [
+      255,
+      191
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "kippenhok": {
+   "gebouw": "kippenhok",
+   "beslaat": [
+    2,
+    2
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1911,
+     "b": 171,
+     "h": 201,
+     "anker": [
+      86,
+      123
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 171,
+     "y": 1911,
+     "b": 171,
+     "h": 201,
+     "anker": [
+      86,
+      123
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 342,
+     "y": 1911,
+     "b": 171,
+     "h": 201,
+     "anker": [
+      86,
+      123
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 513,
+     "y": 1911,
+     "b": 171,
+     "h": 201,
+     "anker": [
+      86,
+      123
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 684,
+     "y": 1911,
+     "b": 171,
+     "h": 201,
+     "anker": [
+      86,
+      123
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "vakwerkhuis": {
+   "gebouw": "vakwerkhuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 2112,
+     "b": 439,
+     "h": 445,
+     "anker": [
+      188,
+      263
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 439,
+     "y": 2112,
+     "b": 439,
+     "h": 445,
+     "anker": [
+      188,
+      263
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 878,
+     "y": 2112,
+     "b": 439,
+     "h": 445,
+     "anker": [
+      188,
+      263
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1317,
+     "y": 2112,
+     "b": 439,
+     "h": 445,
+     "anker": [
+      188,
+      263
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 1756,
+     "y": 2112,
+     "b": 439,
+     "h": 445,
+     "anker": [
+      188,
+      263
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "stenenHuis": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    6,
+    8
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 2557,
+     "b": 477,
+     "h": 466,
+     "anker": [
+      271,
+      252
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 477,
+     "y": 2557,
+     "b": 477,
+     "h": 466,
+     "anker": [
+      271,
+      252
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 954,
+     "y": 2557,
+     "b": 477,
+     "h": 466,
+     "anker": [
+      271,
+      252
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1431,
+     "y": 2557,
+     "b": 477,
+     "h": 466,
+     "anker": [
+      271,
+      252
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 1908,
+     "y": 2557,
+     "b": 477,
+     "h": 466,
+     "anker": [
+      271,
+      252
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "herberg": {
+   "gebouw": "herberg",
+   "beslaat": [
+    9,
+    7
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 3023,
+     "b": 555,
+     "h": 610,
+     "anker": [
+      246,
+      364
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 555,
+     "y": 3023,
+     "b": 555,
+     "h": 610,
+     "anker": [
+      246,
+      364
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1110,
+     "y": 3023,
+     "b": 555,
+     "h": 610,
+     "anker": [
+      246,
+      364
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1665,
+     "y": 3023,
+     "b": 555,
+     "h": 610,
+     "anker": [
+      246,
+      364
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 2220,
+     "y": 3023,
+     "b": 555,
+     "h": 610,
+     "anker": [
+      246,
+      364
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "smidse": {
+   "gebouw": "smidse",
+   "beslaat": [
+    7,
+    5
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 3633,
+     "b": 413,
+     "h": 408,
+     "anker": [
+      175,
+      226
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 413,
+     "y": 3633,
+     "b": 413,
+     "h": 408,
+     "anker": [
+      175,
+      226
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 826,
+     "y": 3633,
+     "b": 413,
+     "h": 408,
+     "anker": [
+      175,
+      226
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1239,
+     "y": 3633,
+     "b": 413,
+     "h": 408,
+     "anker": [
+      175,
+      226
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 1652,
+     "y": 3633,
+     "b": 413,
+     "h": 408,
+     "anker": [
+      175,
+      226
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "dorpshuis3": {
+   "gebouw": "timmerman",
+   "beslaat": [
+    6,
+    8
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 4041,
+     "b": 503,
+     "h": 485,
+     "anker": [
+      284,
+      271
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 503,
+     "y": 4041,
+     "b": 503,
+     "h": 485,
+     "anker": [
+      284,
+      271
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1006,
+     "y": 4041,
+     "b": 503,
+     "h": 485,
+     "anker": [
+      284,
+      271
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1509,
+     "y": 4041,
+     "b": 503,
+     "h": 485,
+     "anker": [
+      284,
+      271
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 2012,
+     "y": 4041,
+     "b": 503,
+     "h": 485,
+     "anker": [
+      284,
+      271
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "dorpshuis5": {
+   "gebouw": "brouwerij",
+   "beslaat": [
+    5,
+    7
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 4526,
+     "b": 439,
+     "h": 460,
+     "anker": [
+      252,
+      278
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 439,
+     "y": 4526,
+     "b": 439,
+     "h": 460,
+     "anker": [
+      252,
+      278
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 878,
+     "y": 4526,
+     "b": 439,
+     "h": 460,
+     "anker": [
+      252,
+      278
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1317,
+     "y": 4526,
+     "b": 439,
+     "h": 460,
+     "anker": [
+      252,
+      278
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 1756,
+     "y": 4526,
+     "b": 439,
+     "h": 460,
+     "anker": [
+      252,
+      278
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "dorpKlein1": {
+   "gebouw": "dorpKlein1",
+   "beslaat": [
+    5,
+    7
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 4986,
+     "b": 439,
+     "h": 441,
+     "anker": [
+      252,
+      259
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 439,
+     "y": 4986,
+     "b": 439,
+     "h": 441,
+     "anker": [
+      252,
+      259
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 878,
+     "y": 4986,
+     "b": 439,
+     "h": 441,
+     "anker": [
+      252,
+      259
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1317,
+     "y": 4986,
+     "b": 439,
+     "h": 441,
+     "anker": [
+      252,
+      259
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 1756,
+     "y": 4986,
+     "b": 439,
+     "h": 441,
+     "anker": [
+      252,
+      259
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "dorpKlein3": {
+   "gebouw": "dorpKlein3",
+   "beslaat": [
+    5,
+    7
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 5427,
+     "b": 439,
+     "h": 454,
+     "anker": [
+      252,
+      272
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 439,
+     "y": 5427,
+     "b": 439,
+     "h": 454,
+     "anker": [
+      252,
+      272
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 878,
+     "y": 5427,
+     "b": 439,
+     "h": 454,
+     "anker": [
+      252,
+      272
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1317,
+     "y": 5427,
+     "b": 439,
+     "h": 454,
+     "anker": [
+      252,
+      272
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 1756,
+     "y": 5427,
+     "b": 439,
+     "h": 454,
+     "anker": [
+      252,
+      272
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "dorpGewoon3": {
+   "gebouw": "dorpGewoon3",
+   "beslaat": [
+    6,
+    8
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 5881,
+     "b": 477,
+     "h": 464,
+     "anker": [
+      271,
+      250
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 477,
+     "y": 5881,
+     "b": 477,
+     "h": 464,
+     "anker": [
+      271,
+      250
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 954,
+     "y": 5881,
+     "b": 477,
+     "h": 464,
+     "anker": [
+      271,
+      250
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1431,
+     "y": 5881,
+     "b": 477,
+     "h": 464,
+     "anker": [
+      271,
+      250
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 1908,
+     "y": 5881,
+     "b": 477,
+     "h": 464,
+     "anker": [
+      271,
+      250
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "dorpGewoon4": {
+   "gebouw": "dorpGewoon4",
+   "beslaat": [
+    6,
+    8
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 6345,
+     "b": 503,
+     "h": 492,
+     "anker": [
+      284,
+      278
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 503,
+     "y": 6345,
+     "b": 503,
+     "h": 492,
+     "anker": [
+      284,
+      278
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1006,
+     "y": 6345,
+     "b": 503,
+     "h": 492,
+     "anker": [
+      284,
+      278
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1509,
+     "y": 6345,
+     "b": 503,
+     "h": 492,
+     "anker": [
+      284,
+      278
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 2012,
+     "y": 6345,
+     "b": 503,
+     "h": 492,
+     "anker": [
+      284,
+      278
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "dorpGroot1": {
+   "gebouw": "dorpGroot1",
+   "beslaat": [
+    7,
+    9
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 6837,
+     "b": 567,
+     "h": 556,
+     "anker": [
+      316,
+      310
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 567,
+     "y": 6837,
+     "b": 567,
+     "h": 556,
+     "anker": [
+      316,
+      310
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1134,
+     "y": 6837,
+     "b": 567,
+     "h": 556,
+     "anker": [
+      316,
+      310
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1701,
+     "y": 6837,
+     "b": 567,
+     "h": 556,
+     "anker": [
+      316,
+      310
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 2268,
+     "y": 6837,
+     "b": 567,
+     "h": 556,
+     "anker": [
+      316,
+      310
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "dorpGroot2": {
+   "gebouw": "dorpGroot2",
+   "beslaat": [
+    7,
+    9
+   ],
+   "fasen": [
+    {
+     "x": 0,
+     "y": 7393,
+     "b": 541,
+     "h": 504,
+     "anker": [
+      303,
+      258
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 541,
+     "y": 7393,
+     "b": 541,
+     "h": 504,
+     "anker": [
+      303,
+      258
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1082,
+     "y": 7393,
+     "b": 541,
+     "h": 504,
+     "anker": [
+      303,
+      258
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 1623,
+     "y": 7393,
+     "b": 541,
+     "h": 504,
+     "anker": [
+      303,
+      258
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 2164,
+     "y": 7393,
+     "b": 541,
+     "h": 504,
+     "anker": [
+      303,
+      258
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  }
+ }
+}
