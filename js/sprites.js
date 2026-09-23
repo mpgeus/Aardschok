@@ -13,6 +13,7 @@
   'use strict';
 
   const MAP = 'beelden/';
+  const TEGELMAP = 'tegels/';
   const beelden = new Map(); // pad → Image
   let gegevens = null;
   let belofte = null;
@@ -21,6 +22,7 @@
     aan: false, // staan alle vellen van binnen klaar? Zo niet, tekent het spel zijn vlakken.
     buitenAan: false, // en die van buiten (tegels/, gemaakt door npm run tiled)
     effectenAan: false, // en de spreukeffecten (beelden/effecten/, gemaakt door effecten-export.cjs)
+    bouwfasenAan: false, // en het bouwfasenvel (tegels/bouwfasen.png, gemaakt door bouwfasen.cjs)
     mist: [], // wat er niet geladen kon worden, om in de console te zien
   };
   T.sprites = S;
@@ -73,15 +75,20 @@
       }
       // De vellen van buiten staan los: gaat daar iets mis, dan tekent het spel buiten vlakken
       // en binnen nog gewoon zijn pixel art. De spreukeffecten ook: zonder die vellen tekent het
-      // spel de spreuken zoals vroeger.
+      // spel de spreuken zoals vroeger. Het bouwfasenvel (tegels/bouwfasen.png, T.BOUWFASEN uit
+      // tegels/bouwfasen.js — CLAUDE.md "Opbouw", js/gebouwen.js) net zo los: zonder dat vel blijft
+      // een gebouw in aanbouw gewoon bleker tekenen, zoals vóór de fases er waren.
       const buiten = [...new Set(Object.values(T.TEGELS || {}).map((v) => v.bestand).filter(Boolean))];
       const effectVellen = T.EFFECTEN ? [...new Set(Object.values(T.EFFECTEN.vellen).map((v) => MAP + 'effecten/' + v.bestand))] : [];
-      const [uitslag, uitBuiten, uitEffecten] = await Promise.all([
+      const bouwfasenPad = T.BOUWFASEN ? TEGELMAP + T.BOUWFASEN.bestand : null;
+      const [uitslag, uitBuiten, uitEffecten, bouwfasenOk] = await Promise.all([
         Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld)), Promise.all(effectVellen.map(laadBeeld)),
+        bouwfasenPad ? laadBeeld(bouwfasenPad) : Promise.resolve(false),
       ]);
       S.aan = uitslag.every(Boolean);
       S.buitenAan = buiten.length > 0 && uitBuiten.every(Boolean);
       S.effectenAan = effectVellen.length > 0 && uitEffecten.every(Boolean);
+      S.bouwfasenAan = !!bouwfasenOk;
       if (S.aan) snijVloeren();
       if (!S.aan || !S.buitenAan) console.warn('Aardschok: sprites ontbreken, het spel tekent daar vlakken.', S.mist);
       return S.aan;
@@ -342,6 +349,23 @@
     const k = t.staten.indexOf(staat || 'hersteld');
     if (r < 0 || k < 0) return null;
     return stuk(MAP + t.bestand, k * t.cel[0], r * t.cel[1], t.cel[0], t.cel[1], t.anker);
+  };
+
+  // ---------------------------------------------------------------- bouwfasen (tegels/bouwfasen.png + .json/.js)
+  //
+  // Een gebouw in aanbouw: vijf fases tussen "net begonnen" en de afgewerkte tekening
+  // (gereedschap/pixelart/bouwfasen.cjs, ontwerp/werklijst.md punt 2b). `tekeningNaam` is dezelfde
+  // naam als T.GEBOUWEN.<soort>.tekening na "gebouwen/" (js/gebouwen.js zet 'm op het voorwerp),
+  // `faseIndex` komt uit T.bouwFaseIndex (ook js/gebouwen.js). Niet elk gebouw heeft fases (kapel,
+  // watermolen, put, ...): dan geeft dit null en blijft tekenVoorwerp (js/tekenen.js) bij het
+  // bestaande gedrag (bleker tot hij klaar is).
+  S.bouwfase = function (tekeningNaam, faseIndex) {
+    if (!S.bouwfasenAan || !T.BOUWFASEN || !tekeningNaam) return null;
+    const g = T.BOUWFASEN.fasen[tekeningNaam];
+    if (!g || !g.fasen.length) return null;
+    const f = g.fasen[Math.max(0, Math.min(g.fasen.length - 1, faseIndex))];
+    if (!f) return null;
+    return onthoud(`bouwfase,${tekeningNaam},${faseIndex}`, () => stuk(TEGELMAP + T.BOUWFASEN.bestand, f.x, f.y, f.b, f.h, f.anker));
   };
 
   // ---------------------------------------------------------------- het graan (gereedschap/pixelart/graan-vel.cjs)

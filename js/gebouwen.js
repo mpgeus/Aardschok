@@ -406,12 +406,25 @@
     if (!T.VOORWERPEN[naam]) T.VOORWERPEN[naam] = { blokkeert: true, zichtDicht: true };
   };
 
+  // Welke van de vijf bouwfases (tegels/bouwfasen.png + .json, gereedschap/pixelart/bouwfasen.cjs)
+  // een gebouw in aanbouw nu toont: de bouwtijd in vijf gelijke stukken, fase 0 (fundering) in het
+  // eerste stuk, fase 4 (half-gedekt) in het laatste — daarna is hij klaar (T.tikGebouwenDag zet
+  // `klaar`, js/tekenen.js tekent dan de gewone, afgewerkte tekening in plaats van een fase). Puur
+  // (geen S, geen scherm) en dus in een toets te vangen zonder een gebouw echt neer te zetten.
+  const AANTAL_BOUWFASEN = 5;
+  T.bouwFaseIndex = function (dagNu, klaarOp, bouwtijd) {
+    if (!(bouwtijd > 0)) return AANTAL_BOUWFASEN - 1; // bouwtijd 0: meteen de laatste fase
+    const voortgang = 1 - (klaarOp - dagNu) / bouwtijd;
+    return Math.max(0, Math.min(AANTAL_BOUWFASEN - 1, Math.floor(voortgang * AANTAL_BOUWFASEN)));
+  };
+
   // Het voorwerp in S.wereld zetten (zo tekent js/tekenen.js hem mee, op precies dezelfde manier
   // als een gebouw dat in Tiled staat, CLAUDE.md "Testen in de browser": "via de gewone weg
   // waarop het spel gebouwen tekent") en zijn voet vast maken. Nog in aanbouw? Dan staat hij er al
-  // (bleek, `inAanbouw: true` — js/tekenen.js dimt hem), zodat de speler ziet waar hij bezig is;
-  // T.tikGebouwenDag zet dat om zodra de bouwtijd om is, op hetzelfde voorwerp, dus zonder dat er
-  // ooit een tweede bij komt.
+  // (bleek, `inAanbouw: true` — js/tekenen.js dimt hem, of toont een bouwfase als het gebouw die
+  // heeft, zie T.bouwFaseIndex hierboven en T.sprites.bouwfase in js/sprites.js), zodat de speler
+  // ziet waar hij bezig is; T.tikGebouwenDag zet dat om zodra de bouwtijd om is, op hetzelfde
+  // voorwerp, dus zonder dat er ooit een tweede bij komt.
   function zetGebouwVoorwerp(S, instantie) {
     const g = T.GEBOUWEN[instantie.soort];
     const w = S.wereld;
@@ -423,6 +436,12 @@
       soort: naam, x: instantie.x, y: instantie.y,
       vel: opz ? opz.vel : null, id: opz ? opz.id : null,
       beslaat: [voet.b, voet.h], inAanbouw: !instantie.klaar,
+      // Voor de bouwfase (T.bouwFaseIndex + T.sprites.bouwfase): de kale tekeningnaam
+      // ("dorpKlein2", niet "gebouwen/dorpKlein2" — dezelfde sleutel als in
+      // tegels/bouwfasen.json), en wanneer hij klaar is en hoelang hij duurt. Zonder tekening
+      // (g.tekening null) blijft tekeningNaam ook null: gewoon geen fases, net als voorheen.
+      tekeningNaam: g.tekening ? g.tekening.split('/').pop() : null,
+      klaarOp: instantie.klaarOp, bouwtijd: g.bouwtijd,
     };
     w.voorwerpen.push(v);
     instantie.voorwerp = v;

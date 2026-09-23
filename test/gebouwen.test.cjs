@@ -260,3 +260,56 @@ test('T.zetBestaandeGebouwen: een onbekende soort wordt overgeslagen, niet een t
   assert.doesNotThrow(() => T.zetBestaandeGebouwen(S));
   assert.equal(S.gebouwen.length, 0);
 });
+
+// T.bouwFaseIndex: welke van de vijf bouwfases (tegels/bouwfasen.json, js/tekenen.js) een gebouw
+// in aanbouw op een gegeven dag toont — de bouwtijd in vijf gelijke stukken. Puur, dus zonder
+// S of een echt gebouw te toetsen (ontwerp/werklijst.md, punt 2b).
+test('T.bouwFaseIndex: verdeelt de bouwtijd in vijf gelijke stukken, oplopend', () => {
+  // bouwtijd 10 dagen, klaar op dag 10 (begonnen op dag 0): om de twee dagen een stuk verder, dus
+  // ruim in het midden van elk stuk getoetst (niet precies op een grens: 2/10, 4/10, ... vallen
+  // door afrondingen in drijvendekommagetallen niet altijd aan de kant die de wiskunde zegt).
+  assert.equal(T.bouwFaseIndex(0, 10, 10), 0);
+  assert.equal(T.bouwFaseIndex(1, 10, 10), 0);
+  assert.equal(T.bouwFaseIndex(3, 10, 10), 1);
+  assert.equal(T.bouwFaseIndex(5, 10, 10), 2);
+  assert.equal(T.bouwFaseIndex(7, 10, 10), 3);
+  assert.equal(T.bouwFaseIndex(9, 10, 10), 4); // nog niet klaar (dag < klaarOp): laatste fase, niet de afgewerkte tekening
+});
+
+test('T.bouwFaseIndex: begint bij fase 0, ook bij een korte bouwtijd', () => {
+  assert.equal(T.bouwFaseIndex(0, 2, 2), 0);
+  assert.equal(T.bouwFaseIndex(1, 2, 2), 2); // 1 dag van de 2 om: 3/5 → fase 2
+});
+
+test('T.bouwFaseIndex: bouwtijd 0 geeft meteen de laatste fase, nooit een crash door delen door nul', () => {
+  assert.equal(T.bouwFaseIndex(0, 0, 0), 4);
+});
+
+test('T.bouwFaseIndex: klemt buiten bereik (voor het begin, of voorbij klaarOp) tussen 0 en 4', () => {
+  assert.equal(T.bouwFaseIndex(-5, 10, 10), 0);
+  assert.equal(T.bouwFaseIndex(50, 10, 10), 4);
+});
+
+test('T.plaatsGebouw: zet tekeningNaam, klaarOp en bouwtijd op het voorwerp, voor de bouwfase', () => {
+  const S = maakS();
+  T.zetVoorraad(S, 'hout', 8);
+  const r = T.plaatsGebouw(S, 'hut', 2, 2);
+  assert.equal(r.gelukt, true);
+  const v = r.instantie.voorwerp;
+  // T.GEBOUWEN.hut.tekening is 'gebouwen/dorpKlein2' — hier hoort alleen het laatste deel te
+  // staan, dezelfde sleutel als tegels/bouwfasen.json.
+  assert.equal(v.tekeningNaam, 'dorpKlein2');
+  assert.equal(v.klaarOp, T.GEBOUWEN.hut.bouwtijd);
+  assert.equal(v.bouwtijd, T.GEBOUWEN.hut.bouwtijd);
+});
+
+test('T.plaatsGebouw: tekeningNaam blijft leeg voor een soort zonder tekening', () => {
+  const S = maakS();
+  T.zetVoorraad(S, 'hout', 6);
+  // De verstopplek heeft bewust geen tekening (een tekening zou 'm juist verraden) — precies het
+  // geval waarvoor tekenVoorwerp (js/tekenen.js) terugvalt op gewoon bleker tot hij klaar is.
+  assert.equal(T.GEBOUWEN.verstopplek.tekening, null);
+  const r = T.plaatsGebouw(S, 'verstopplek', 2, 2);
+  assert.equal(r.gelukt, true);
+  assert.equal(r.instantie.voorwerp.tekeningNaam, null);
+});

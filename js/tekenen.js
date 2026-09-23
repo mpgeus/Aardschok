@@ -1092,12 +1092,16 @@
       const dof = randDof(S.wereld, v.x, v.y);
       const dekking = v.doorkijk == null ? 1 : v.doorkijk;
       const isToren = v.soort === 'toren';
-      // In aanbouw (js/gebouwen.js, T.plaatsGebouw): bleker, zodat je ziet dat hij er nog niet
-      // helemaal staat, zonder er een tweede tekening voor nodig te hebben.
-      const alpha = (isToren ? dof * dekking : dof) * (v.inAanbouw ? 0.45 : 1);
+      // In aanbouw (js/gebouwen.js, T.plaatsGebouw): heeft dit gebouw fases in tegels/bouwfasen.png
+      // (T.bouwFaseIndex kiest welke, op hoe ver de bouwtijd is), dan die — anders (kapel,
+      // watermolen, put, ...) net als voorheen gewoon bleker tot hij klaar is, zonder er een
+      // tweede tekening voor nodig te hebben.
+      const fase = v.inAanbouw && v.tekeningNaam && T.bouwFaseIndex && metSprites() && T.sprites.bouwfase
+        && T.sprites.bouwfase(v.tekeningNaam, T.bouwFaseIndex(S.kalender ? S.kalender.dag : 0, v.klaarOp, v.bouwtijd));
+      const alpha = (isToren ? dof * dekking : dof) * (v.inAanbouw && !fase ? 0.45 : 1);
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;
-      const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v));
+      const stuk = fase || (metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v)));
       if (stuk) {
         T.sprites.teken(ctx, stuk, p.x, p.y, helder);
         if (effectenAan() && nk.lijst.length) overlaag(ctx, stuk, p.x, p.y, kleur('vuur', 5), flitsOp(S, v.x, v.y));
