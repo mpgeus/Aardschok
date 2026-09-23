@@ -304,7 +304,7 @@ function gebouwLos(g, cb, ch, ankerX, ankerY, hoek) {
 
 // Alles voor één gebouw: meet zijn vijf fases (dezelfde `maak()` als de tekening in gebouwen.tsx,
 // zie BUILDINGEN), bepaalt de gedeelde cel/anker, en rendert. Zwaar (5×meetGebouw + 5×renderen) —
-// dit is de stap die renderFaseTaak (het werk per draad) uitvoert.
+// dit is het werk dat elke werker hieronder per taak (één gebouw) uitvoert.
 function renderGebouw(spec) {
   const g0 = spec.maak();
   const fasen = fasesVan(g0);
