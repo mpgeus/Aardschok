@@ -3,6 +3,16 @@
 // "maak maar een klein dorpje", "simpel houden", "de sfeer is belangrijk"). Zie
 // ontwerp/werklijst.md, punt 1b.
 //
+// Tweede versie (Marcel, 23 sep 2026, bij het bekijken van de eerste): "nieuwe kale map
+// gebruiken met een dorpje en akkers". Drie dingen anders dan de eerste versie:
+// - een kale, open kaart: vooral gras, weinig rommel, een klein dorpje in het midden;
+// - de akkers niet meer als vijf losse, verspreide stroken tegen de rand van de kaart aan, maar
+//   als één grote es naast het dorp — lange smalle stroken naast elkaar, één blok, goed te zien
+//   als open land — plus een paar kleinere akkers erbij. **Nergens raakt een akker de rand van de
+//   kaart of de bosrand**: rondom blijft een marge gras en losse bomen over.
+// - alleen groene bomen (zie BOSBOMEN hieronder): geen herfstEik in een kaart waar de kalender
+//   lente zegt (ontwerp/werklijst.md).
+//
 // Naar het voorbeeld van maak-wereld.cjs (de grond via de terreinsets van tegels/rand.tsx, de
 // tegelnummers op naam opgezocht in plaats van hard gecodeerd), maar zelfstandig: dit gehucht
 // hangt nog aan geen enkele andere kaart vast.
@@ -11,8 +21,8 @@
 //
 // Wat erin komt: vijf boerenhuizen (riet) rond een brinkje met een put en een grote eik, het
 // iets betere stenen huis van de schout, een zandweg die het gehucht in en uit loopt, een beek
-// met een bruggetje en wilgen op de oevers, een bosrand aan de noordkant, wat tuintjes, en vijf
-// akkers als lange smalle stroken (samen zo'n kwart van de kaart) — zolang er nog geen
+// met een bruggetje en wilgen op de oevers, een bosrand aan de noordkant, wat tuintjes, en de
+// akkers als één es met vijf lange stroken plus twee kleinere stukken — zolang er nog geen
 // graantegels zijn (een andere agent maakt die in gereedschap/pixelart/graan*.cjs) is een akker
 // gewoon zandpad-grond. Welke akker van welk huis is, staat in het betekenisbestand, niet in de
 // .tmj: zie ontwerp/kaarten.md, "Tiled tekent alleen nog de grond".
@@ -140,22 +150,29 @@ for (const k of ['x-begin', 'x-midden', 'x-eind', 'y-begin', 'y-midden', 'y-eind
 // ==================================================================================================
 // DE MAAT EN DE ZONES
 // ==================================================================================================
-const B = 44;
-const H = 44;
+const B = 50;
+const H = 50;
 const BOS_DIEP = 7; // y < BOS_DIEP: de bosrand aan de noordkant
 const BOSDICHT = [0.85, 0.7, 0.55, 0.4, 0.28, 0.16, 0.08]; // per rij, dunner naar het gehucht toe
-const BEEK_X0 = 9;
-const BEEK_X1 = 11; // de beek, drie tegels breed
-const WEG_Y = 22; // de zandweg, oost-west, het gehucht in en uit
+const BEEK_X0 = 5;
+const BEEK_X1 = 7; // de beek, drie tegels breed, ruim ten westen van het dorp
+const WEG_Y = 19; // de zandweg, oost-west, het gehucht in en uit
 
-// De vijf akkers: lange smalle stroken, elk van één boer (ontwerp/wereld.md-stijl: "zo lagen
-// middeleeuwse akkers"). x, y is de linkerbovenhoek (net als een gebouw), b/h de maat in tegels.
+// De es: één blok naast het dorp (ten oosten), lange smalle stroken naast elkaar — "zo lagen
+// middeleeuwse akkers" (ontwerp/wereld.md) — met daaronder nog twee kleinere stukken. x, y is de
+// linkerbovenhoek (net als een gebouw), b/h de maat in tegels: b (breed, 2-3) staat dwars op de
+// stroken, h (lang, hier 14) is hun lengte. Rondom blijft ruim marge gras over tot de rand van de
+// kaart (B-1 hier is 49, de verste strook eindigt op 46) en tot de bosrand (die stopt bij
+// BOS_DIEP=7, de es begint pas op y=22).
 const AKKERS = [
-  { akker: 'akker1', x: 13, y: 18, b: 7, h: 10, huis: 'boer1' },
-  { akker: 'akker2', x: 40, y: 7, b: 4, h: 13, huis: 'boer2' },
-  { akker: 'akker3', x: 40, y: 20, b: 4, h: 20, huis: 'boer3' },
-  { akker: 'akker4', x: 0, y: 17, b: 8, h: 14, huis: 'boer4' },
-  { akker: 'akker5', x: 0, y: 31, b: 8, h: 13, huis: 'boer5' },
+  { akker: 'akker1', x: 36, y: 22, b: 2, h: 14, huis: 'boer1' },
+  { akker: 'akker2', x: 38, y: 22, b: 2, h: 14, huis: 'boer2' },
+  { akker: 'akker3', x: 40, y: 22, b: 3, h: 14, huis: 'boer3' },
+  { akker: 'akker4', x: 43, y: 22, b: 2, h: 14, huis: 'boer4' },
+  { akker: 'akker5', x: 45, y: 22, b: 2, h: 14, huis: 'boer5' },
+  // de twee kleinere stukken, onder de es, van dezelfde twee boeren
+  { akker: 'akker6', x: 36, y: 37, b: 5, h: 6, huis: 'boer1' },
+  { akker: 'akker7', x: 42, y: 37, b: 5, h: 5, huis: 'boer3' },
 ];
 function inAkker(x, y) {
   return AKKERS.some((a) => x >= a.x && x < a.x + a.b && y >= a.y && y < a.y + a.h);
@@ -244,24 +261,29 @@ function zetTegel(naam, mx, my) {
 
 // ---- de vijf boerenhuizen (riet) en het stenen huis van de schout ----
 const HUIZEN = {
-  boer1: { tegel: 'dorpshuis1', x: 14, y: 12, b: 7, d: 5, zaad: 21 },
-  boer2: { tegel: 'dorpshuis5', x: 33, y: 12, b: 5, d: 7, zaad: 22 },
-  boer3: { tegel: 'dorpKlein1', x: 35, y: 26, b: 5, d: 7, zaad: 23 },
-  boer4: { tegel: 'dorpKlein3', x: 13, y: 28, b: 5, d: 7, zaad: 24 },
-  boer5: { tegel: 'dorpGewoon4', x: 22, y: 34, b: 6, d: 8, zaad: 25 },
+  boer1: { tegel: 'dorpshuis1', x: 14, y: 9, b: 7, d: 5, zaad: 21 },
+  boer2: { tegel: 'dorpshuis5', x: 30, y: 9, b: 5, d: 7, zaad: 22 },
+  boer3: { tegel: 'dorpKlein1', x: 30, y: 22, b: 5, d: 7, zaad: 23 },
+  boer4: { tegel: 'dorpKlein3', x: 11, y: 22, b: 5, d: 7, zaad: 24 },
+  boer5: { tegel: 'dorpGewoon4', x: 20, y: 30, b: 6, d: 8, zaad: 25 },
 };
-const SCHOUT_HUIS = { tegel: 'stenenHuis', x: 23, y: 25, b: 6, d: 8 };
+const SCHOUT_HUIS = { tegel: 'stenenHuis', x: 21, y: 21, b: 6, d: 8 };
 
 for (const [id, h] of Object.entries(HUIZEN)) zetTegel(h.tegel, h.x, h.y);
 zetTegel(SCHOUT_HUIS.tegel, SCHOUT_HUIS.x, SCHOUT_HUIS.y);
 
 // ---- het brinkje: een put en een grote eik, met een bankje ----
-zetTegel('put', 24, 20);
-zetTegel('eik', 28, 21);
-zetTegel('bank', 29, 21);
+zetTegel('put', 22, 16);
+zetTegel('eik', 26, 16);
+zetTegel('bank', 27, 16);
 
 // ---- de bosrand aan de noordkant ----
-const BOSBOMEN = ['den', 'eik', 'berk', 'herfstEik', 'den'];
+// Alleen groene bomen: geen herfstEik (de oranje-rode variant van de eik, zie
+// gereedschap/pixelart/bomen.cjs) zolang de kalender in het gehucht lente zegt. Seizoenen die
+// bomen echt laten verkleuren (ontwerp/werklijst.md) komen later en moeten dan hier, en in
+// js/tekenen.js bij BOSRAND_SOORTEN, de kleur aan S.kalender gaan koppelen in plaats van de
+// herfstvariant nu al te laten staan.
+const BOSBOMEN = ['den', 'eik', 'berk', 'den', 'eik'];
 for (let y = 0; y < BOS_DIEP; y++) {
   const kans = BOSDICHT[y] || 0;
   for (let x = 0; x < B; x++) {
