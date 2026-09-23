@@ -255,6 +255,36 @@ Hoe het samen draait (voorstel): mensen komen als er ruimte, eten en rust is; el
 handen; wat het maakt, gaat naar de voorraad of naar het volgende gebouw; en alles wat je bouwt,
 ziet de inner, behalve wat verstopt is.
 
+## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
+
+De ruggengraat staat of wordt gebouwd: bouwen, mensen, werk, kalender, voorraad. Wat er nog mist,
+in vier lagen:
+
+1. **Het dorp in leven houden.** *Behoeften*: eten, brandhout in de winter, een kerk, bier; wie
+   krijgt wat hij wil, werkt harder en blijft, en zijn huis groeit (hut, huis, stenen huis), wat de
+   inner weer ziet. *De winter en het weer*: hagel, droogte, een natte oogst, een wolvenwinter;
+   plannen en risico, en een smoes voor de inner. *Handel*: ijzer, zout en stenen heeft het dorp
+   niet, dus zonder handel geen smidse. *Brand en ziekte*: riet brandt, een vuile put maakt ziek.
+2. **De heer te slim af zijn, de kern.** *Argwaan*: een meter bij de inner die stijgt als wat hij
+   ziet niet klopt met wat je levert. *Verstopplekken* met plaats voor zoveel, tot iemand ze
+   verraadt. *Het rekenboek*: het echte en dat voor de heer. *Het bezoek van de inner* als scène:
+   meelopen, de route kiezen, praten, afleiden, omkopen. *De grillen van de heer* als brieven.
+3. **Het dorp besturen.** *Keuren* (hierboven). *Rechtspraak*: de schout was ook politie en
+   aanklager; een dief, een vechtpartij, een verdachte vreemdeling, en jij oordeelt. Streng houdt de
+   orde, mild houdt vrienden, en een veroordeelde kan verraden. *Groepen en gezichten*, en
+   *verklikkers*: iemand praat met de inner. *Voorvallen*: een vreemdeling die wil blijven, een
+   bruiloft, een ruzie over een akkergrens, een handelaar met gestolen goed, een brief van de heer;
+   twee of drie antwoorden, elk met een prijs (zoals de quests).
+4. **De weg naar vrijheid.** *De eigen buidel en de dorpskas*: wie te veel in zijn eigen zak
+   steekt, verliest het dorp. *De nacht*: verstoppen, smokkelen en oefenen gebeurt in het donker,
+   met avondklok, wachters en lantaarns. *Een militie in het geheim*, met rovers en wolven als reden.
+   *Verliezen*: je ambt kwijt, de galg, of een leeg dorp; duidelijk wanneer het misgaat.
+
+**De drie die het spel maken:** voorvallen met een keuze (zonder wordt een bouwspel een
+spreadsheet), argwaan met verstopplekken en het bezoek van de inner (de kern), en behoeften met de
+winter (die maken groeien moeilijk genoeg om over na te denken). Rechtspraak is de vierde: dat
+heeft geen ander bouwspel. Nog niet besloten; Marcel kiest de volgorde.
+
 ## Open
 
 - **Een poppetje en honderden mensen.** Met vijf boeren kun je ieder aanspreken, met vijfhonderd
