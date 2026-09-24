@@ -90,6 +90,16 @@
       ],
     },
     {
+      id: 'boeren', naam: 'Wie de boeren zijn', standaard: 'geloot',
+      uitleg: 'Hun karakter en wat ze kunnen: hoe snel ze maaien, hoeveel hun akker geeft, hoe zuinig ze zaaien, en hoe het dorp ze ziet.',
+      keuzes: [
+        { id: 'geloot', naam: 'Geloot', zet: { 'BOEREN_INSTELLINGEN.loten': true },
+          uitleg: 'Bij elk nieuw spel anders: de een maait sneller dan de ander, en wie de weduwe is, weet je vooraf niet.' },
+        { id: 'vast', naam: 'Vast', zet: { 'BOEREN_INSTELLINGEN.loten': false },
+          uitleg: 'Zoals ze eerst geschreven waren (Klaas zingt, Aaltje is weduwe, …), en allemaal even goed.' },
+      ],
+    },
+    {
       id: 'hongerBuitenWinter', naam: 'Honger buiten de winter', standaard: 'tevredenheid',
       uitleg: 'Wat er gebeurt als het graan op is in de lente, de zomer of de herfst. In de winter kost honger altijd mensen.',
       keuzes: [
@@ -121,6 +131,7 @@
     { naam: 'Behoeften en de winter', blok: 'BEHOEFTEN_INSTELLINGEN' },
     { naam: 'De marskramer', blok: 'HANDEL_INSTELLINGEN' },
     { naam: 'De heer', blok: 'HEER_INSTELLINGEN' },
+    { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },
   ];
 
   // ---------------------------------------------------------------------------------------------
@@ -215,6 +226,8 @@
       if (eigen && eigen !== standaard.namen[id]) nu.namen[id] = eigen;
     }
     T.OPTIES_NU = nu;
+    // Geloot of vast (js/boeren.js): de poppetjes die er al staan, meteen bijwerken.
+    if (S && T.pasLotToe) T.pasLotToe(S);
     return nu;
   };
 

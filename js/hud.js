@@ -585,8 +585,10 @@
       );
     }).join('');
     const namen = T.NAAM_OPTIES.map((id) => {
-      const m = T.MENSEN[id] || {};
-      const wie = id === 'heer' ? 'de heer, die standaard geen naam heeft' : m.eigenschap || '';
+      // Wie een boer nu is en wat hij kan (js/boeren.js), zoals het poppetje het in dit spel heeft.
+      const e = T.S && T.S.wereld && T.S.wereld.wezens.find((x) => x.wie === id);
+      const over = e && T.overBoerTekst ? T.overBoerTekst(e) : '';
+      const wie = id === 'heer' ? 'de heer, die standaard geen naam heeft' : over;
       const leeg = id === 'heer' ? 'de heer' : T.standaardNaam(id);
       return (
         `<label class="naam-rij"><input type="text" maxlength="30" data-naam="${id}" value="${veilig(T.OPTIES_NU.namen[id] || '')}" placeholder="${veilig(leeg)}">` +
@@ -611,7 +613,10 @@
       `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
       `<p class="venster-staat">Wat je verandert, geldt meteen, ook midden in een spel, en de browser onthoudt het. De standaard is wat Marcel koos.</p>` +
       `<div class="kop">De regels</div>${keuzes}` +
-      `<div class="kop">Namen</div><div class="namen">${namen}</div>` +
+      `<div class="kop">Namen, en wie de boeren zijn</div><div class="namen">${namen}</div>` +
+      (T.lootBoeren && T.BOEREN_INSTELLINGEN && T.BOEREN_INSTELLINGEN.loten
+        ? `<div class="regels-voet"><button data-actie="loot">Loot de boeren opnieuw</button><span>Een ander karakter en andere eigenschappen, nu meteen.</span></div>`
+        : '') +
       `<div class="kop">Werkbank: alle getallen</div>` +
       `<p class="venster-staat">Elk getal uit de regels. Wat je hier zet, gaat vóór wat een regel hierboven zet; ↺ zet het terug.</p>${werkbank}` +
       `<div class="regels-voet"><button data-actie="terug">Alles terug naar de standaard</button>` +
@@ -685,6 +690,9 @@
       T.ui.sluitSpelregels(S);
     } else if (b.dataset.actie === 'terug') {
       T.optiesTerug(S);
+      toonSpelregels();
+    } else if (b.dataset.actie === 'loot') {
+      T.lootBoeren(S);
       toonSpelregels();
     } else if (b.dataset.optie) {
       T.zetOptie(b.dataset.optie, b.dataset.keuze, S);

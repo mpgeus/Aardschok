@@ -46,8 +46,11 @@
     const toon = (knoopId) => {
       const knoop = T.gesprekKnoop(S, wieId, knoopId);
       toonPortret(gesprek.portret);
+      // Een boer voert het gesprek van zijn karakter (js/boeren.js), maar heet zoals hij heet:
+      // Aaltje, en niet "de weduwe". Onder zijn naam staat wie hij is en wat hij kan.
+      const over = T.overBoerTekst ? T.overBoerTekst(wie) : '';
       T.ui.toonDialoog(
-        T.hoofdletter(gesprek.naam),
+        T.hoofdletter(over && wie.naam ? wie.naam : gesprek.naam),
         knoop.tekst,
         knoop.keuzes.map((keuze) => ({
           tekst: keuze.zeg,
@@ -57,6 +60,7 @@
             else toon(keuze.naar);
           },
         })),
+        over,
       );
     };
     toon(gesprek.start);
