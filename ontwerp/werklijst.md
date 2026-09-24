@@ -24,20 +24,28 @@ tevredenheid; 45 soorten gebouwen met een bouwmenu (`B`); behoeften en de winter
 vorst ligt het stil; bouwers met een klophamer en spaanders op de bouwplaats; pannenbier op het
 hoogste punt), en **de marskramer** (punt 4, af), en **Sint-Maarten** (punt 5, af): de brief van de heer een maand
 vooraf, de aftelregel onder de kalender, betalen, de straf naar het tekort (hogere eisen,
-soldaten, de schandpaal waarbij jij aanwijst), en afgezet worden. De schout kon in het gehucht niet
-lopen (snelheid 0); dat is gerepareerd. `npm test`: 347/347.
+soldaten, de schandpaal waarbij jij aanwijst), en afgezet worden. En **de inner** (punt 6, af):
+na de oogst schrijf je in het rekenboek wat je opgeeft, je verstopt het verschil in een
+verstopplek, en op 15 herfstmaand loop je met de inner mee langs de akkers, de schuur en wat nieuw
+is. Bij elke plek kies je: uitleggen, afleiden, omkopen of zwijgen. Zijn argwaan en wat hij vond,
+bepalen de brief van de heer. Daarmee is het tweede proefje (punt 5 en 6) speelbaar. De schout kon
+in het gehucht niet lopen (snelheid 0); dat is gerepareerd. `npm test`: 360/360.
 
-**Loopt nu:** een agent die voor één type (het huis: vakwerk met riet) echte bouwfases maakt uit
-de niet-waterpas huizenbouwer `huis-sdf.cjs`, in `gereedschap/pixelart/bouwfasen-sdf.cjs`, met een
-proefplaat in `uit/bouwfasen-sdf/`. Marcel vond de fases op de oude, rechte `dorp.cjs` nep (zie
-`beeld.md`, "Bouwen: een huis dat groeit").
+**De bouwfases uit de niet-waterpas huizenbouwer:** er is een proefplaat voor één type (het huis:
+vakwerk met riet), uit `gereedschap/pixelart/bouwfasen-sdf.cjs`, met de platen in
+`uit/bouwfasen-sdf/` (niet in git; opnieuw maken kost zo'n drie minuten). Zeven fases van
+hetzelfde huis met hetzelfde zaad: uitzetten, voet, gebint met steiger, kap met meiboom, riet van
+de voet omhoog, leem, af. Marcel vond de fases op de oude, rechte `dorp.cjs` nep (zie `beeld.md`,
+"Bouwen: een huis dat groeit"). Wat nog wringt, staat bij "Nog ruw".
 
-**Volgende stap:** de proefplaat aan Marcel laten zien. Keurt hij hem goed, dan de andere types
-van het gehucht (hut, boerderij als hallehuis, houthakker, schaapskooi, kippenhok, wachthuis,
-kapel) op dezelfde manier, en dan **ronde 4b**: de niet-waterpas huizen als de gebouwen in het spel,
-met hun fases (per type zoveel als het werk vraagt, elk zo lang als het werk duurt, het hoogste punt
-waar de kap staat). Daarna punt 6: rijk worden en arm lijken (de inner, verstopplekken, twee
-rekenboeken), het tweede proefje.
+**Volgende stap:** Marcel speelt het tweede proefje (is rijk worden en arm lijken leuk?) en
+beoordeelt de proefplaat. Keurt hij hem goed, dan de andere types van het gehucht (hut, boerderij
+als hallehuis, houthakker, schaapskooi, kippenhok, wachthuis, kapel) op dezelfde manier, en dan
+**ronde 4b**: de niet-waterpas huizen als de gebouwen in het spel, met hun fases (per type zoveel
+als het werk vraagt, elk zo lang als het werk duurt, het hoogste punt waar de kap staat). Dan
+punt 7, het oude spel eruit. Dat raakt twintig bestanden, dus eerst met Marcel: wat komt er in
+een gevecht in de plaats van de leeftijd, en wat blijft er van de oude wereld (het dorp en zijn
+mensen, de meester, Wim, De koude oven)?
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
@@ -45,10 +53,20 @@ rekenboeken), het tweede proefje.
 - de prijzen en tussenpozen van de marskramer, de getallen van het bouwen en wat de heer vraagt,
   zijn een eerste gok (`T.HANDEL_INSTELLINGEN`, `T.BOUWEN_INSTELLINGEN`, `T.HEER_INSTELLINGEN`);
 - het graan is krap: de akkers geven zo'n 420 per jaar, het dorp eet er 450, en het begint met 60,
-  dus voor de eerste oogst is het al op; de heer vraagt er dan nog 53 bij. Samen met Marcel
-  bijstellen als hij speelt;
+  dus voor de eerste oogst is het al op; de heer vraagt er dan nog een achtste bij van wat je
+  opgeeft (zo'n 50 als je alles opgeeft). Samen met Marcel bijstellen als hij speelt;
 - de vijf boeren hebben een naam gekregen (Gerrit, Aleid, Wouter, Machteld, Jan): een voorstel;
 - de huizen in het spel en hun bouwfases komen nog uit de rechte `dorp.cjs` (zie hierboven);
+- de proefplaat van de bouwfases: de bouwplaats steekt ruim buiten de voet van 7×5 (stapels,
+  steiger, leemkuil), dus in het spel moet de voet tijdens het bouwen groter, of de stapels binnen
+  de voet; de schoorsteen komt pas bij het leem; de meiboom is klein (25 px); in de rietfase steekt
+  het riet aan de gevel als een losse rol uit; het spel kent `huis` nog als 6×6;
+- de inner: hij leent het vel van de dorpsoudste; zijn route ligt vast (akkers, schuur, het
+  nieuwste rijke gebouw); **zwijgen is altijd slechter dan uitleggen**, dus die keuze is er nog
+  alleen voor de vorm; de getallen (`T.INNER_INSTELLINGEN`) zijn een eerste gok;
+- de verstopplek tekent niets en blokkeert toch zijn voet: je loopt tegen iets aan wat je niet
+  ziet. Voorstel: een houtmijt of hooiopper erop, iets gewoons, zodat je ziet waar hij is en de
+  inner niet;
 - de bouwers lopen alleen het laatste stuk van hun weg (acht tegels), want lopen gaat in echte
   seconden en een dag duurt er 2,5; ze dragen nog niets (hout, riet); de slag van de hamer is een
   zwaai opzij, geen slag van boven; er is nog geen geluid;
@@ -60,6 +78,10 @@ rekenboeken), het tweede proefje.
 
 
 **Wacht op Marcel:**
+- Het tweede proefje spelen: een jaar met de heer en de inner. Is rijk worden en arm lijken leuk?
+- De proefplaat van de bouwfases (`uit/bouwfasen-sdf/proef.png`): goed genoeg om door te gaan?
+- Punt 7: wat komt er in een gevecht in de plaats van de leeftijd, en wat blijft er van de oude
+  wereld?
 - Spelen, en zeggen hoe het voelt: vooral de winter, en hoe snel een jaar gaat.
 - Het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): goederen, wat de heer
   wil, wat de inner ziet, drie groepen en vijf keuren. Schrappen en aanvullen, vóór punt 5.
@@ -88,10 +110,12 @@ nog nodig is".
    tekortschiet (in het dorp, jou zelf, hogere eisen, soldaten), en je je ambt kunt verliezen.
    Nog niet: een straf voor jou zelf (die wacht op je eigen buidel, punt 12), en de soldaten als
    poppetjes (nu een regel onder de kalender; er is nog geen vel voor een soldaat).
-6. **Rijk worden en arm lijken.** Klaar als de inner argwaan heeft die stijgt als wat hij ziet niet
-   klopt met wat je levert, er verstopplekken zijn met plaats voor zoveel, je twee rekenboeken
-   bijhoudt, en zijn bezoek een scène is waarin jij meeloopt, de route kiest, praat, afleidt of
-   omkoopt. De vraag van het proefje: is dit leuk?
+6. **Rijk worden en arm lijken** (af, 24 sep 2026). Klaar als de inner argwaan heeft die stijgt als
+   wat hij ziet niet klopt met wat je levert, er verstopplekken zijn met plaats voor zoveel, je twee
+   rekenboeken bijhoudt, en zijn bezoek een scène is waarin jij meeloopt, de route kiest, praat,
+   afleidt of omkoopt. De vraag van het proefje: is dit leuk? Nog niet: de route zelf kiezen (nu
+   alleen een plek overslaan met afleiden), een verklikker (punt 10), en verstoppen bij nacht
+   (punt 11).
 7. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
    zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel beschrijft. Hier, omdat
    er daarna veel nieuwe code bovenop komt.
@@ -188,6 +212,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 24 sep 2026 — **Rijk worden en arm lijken** (punt 6): het rekenboek op 1 herfstmaand, met een
+  reden als je minder opgeeft; verstopplekken met een paneel (wat daar ligt, eet het dorp ook
+  niet op); het bezoek van de inner als scène waarin je meeloopt, met bij elke plek een keuze; en
+  een brief van de heer die met het rapport rekent (`js/inner.js`). Bij het nakijken bleek afleiden
+  een truc, want daarmee kostte een lage opgave bijna niets. Van de akkers leid je hem nu niet weg.
+  Verder de proefplaat van de bouwfases uit de niet-waterpas huizenbouwer
+  (`bouwfasen-sdf.cjs`).
 - 24 sep 2026 — **Sint-Maarten** (punt 5): de brief van de heer op 11 wijnmaand, met wat hij wil
   naar wat hij ziet (akkers, schapen, kippen, mensen, hoe rijk de gebouwen ogen, open handel);
   betalen op 11 slachtmaand; straf naar het tekort; afgezet na drie jaar tekort of één keer niets

@@ -167,14 +167,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwplaats), `js/handel.js` (de marskramer: komen en gaan, kopen en verkopen, stil verkopen als
   heler in `S.handel.boek`), `js/heer.js` (de heer: zijn brief op 11 wijnmaand met wat hij wil naar
   wat hij ziet, Sint-Maarten, de straf naar het tekort, de schandpaal, afgezet worden),
-  `js/behoeften.js` (tevredenheid uit eten, brandhout en een kerk; de
+  `js/inner.js` (rijk worden en arm lijken: het echte boek van de oogst in `S.oogsten` en het
+  rekenboek voor de heer in `S.rekenboek`, verstopplekken, en het bezoek van de inner met zijn
+  argwaan; zijn rapport stuurt `T.aanslag`), `js/behoeften.js` (tevredenheid uit eten, brandhout en een kerk; de
   winter; zout voor vis en vlees; stemmingen met een reden; een huis dat doorgroeit), en `js/hud.js` (de balk,
-  het bouwmenu onder `B`, een vraag met knoppen via `T.ui.vraag`, en het handelspaneel; alleen met
+  het bouwmenu onder `B`, een vraag met knoppen via `T.ui.vraag`, het handelspaneel en dat van de
+  verstopplek; alleen met
   `?kaart=gehucht` of `?hud`). Het begin zonder tutorial is `T.beginOpKaart` (`js/gebied.js`); de
   kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de bouwfases uit
   `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen om bij te
   stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
-  `T.BOUWEN_INSTELLINGEN`, `T.HANDEL_INSTELLINGEN`, `T.HEER_INSTELLINGEN`, `T.BEHOEFTEN_INSTELLINGEN`,
+  `T.BOUWEN_INSTELLINGEN`, `T.HANDEL_INSTELLINGEN`, `T.HEER_INSTELLINGEN`, `T.INNER_INSTELLINGEN`,
+  `T.BEHOEFTEN_INSTELLINGEN`,
   `T.AKKER_STADIA`,
   `T.GRAAN_PER_TEGEL`).
 - Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): zijn `gesprek`
@@ -252,7 +256,10 @@ marskramer komt voor het eerst op dag 6 (`Toren.debug.kalender(6.2)`, dan een pa
 begint met de gebouwen die al op de kaart staan; het huis van de schout is ook een `'huis'`.
 De brief van de heer komt op dag 220 (11 wijnmaand, `Toren.debug.kalender(219.95)`), Sint-Maarten
 is dag 250. Spring je er in één keer heen, dan tikken alle dagen ertussen, en eet het dorp zijn
-graan op zonder dat de boeren maaien: zet de voorraad dan vlak ervoor.
+graan op zonder dat de boeren maaien: zet de voorraad dan vlak ervoor. De inner: het rekenboek
+op dag 180 (1 herfstmaand; zet `S.oogsten = { 1323: 400 }` voor een oogst die er bij een sprong
+niet komt), de aankondiging op 191, het bezoek op 194. Zolang hij rondloopt staat de kalender stil;
+hij vraagt pas iets als de schout binnen vier tegels staat, en kijkt anders na vier tellen alleen.
 
 Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken ze de regels uit
 `js/` zelf, nooit een eigen kopie:
