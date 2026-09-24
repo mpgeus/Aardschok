@@ -80,6 +80,12 @@
     '<circle cx="9" cy="7" r="3" fill="#c9972f"/><path d="M3 19c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke="#c9972f" stroke-width="1.6" stroke-linecap="round"/>' +
     '<circle cx="17" cy="8.5" r="2.4" fill="#e2b64a"/><path d="M13.3 19c.3-2.7 2.2-4.8 4.7-4.8 2.6 0 4.7 2.3 5 5" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
     '</svg>';
+  // De argwaan van de inner (js/inner.js): een oog, in dezelfde stijl.
+  const ARGWAAN_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M2.5 12c2.4-4 5.7-6 9.5-6s7.1 2 9.5 6c-2.4 4-5.7 6-9.5 6s-7.1-2-9.5-6z" fill="none" stroke="#e2b64a" stroke-width="1.5" stroke-linejoin="round"/>' +
+    '<circle cx="12" cy="12" r="3.2" fill="#c9972f"/><circle cx="12" cy="12" r="1.2" fill="#1b1510"/>' +
+    '</svg>';
   // De tevredenheid van het dorp (js/behoeften.js): een gezichtje, in dezelfde stijl als hierboven.
   const TEVREDENHEID_ICOON =
     '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
@@ -99,7 +105,9 @@
       `<div class="grondstof" data-wat="bevolking" title="Mensen in het dorp, en hoeveel er wonen kunnen (js/gebouwen.js: elk huis geeft woonruimte).">` +
       `<span class="icoon">${BEVOLKING_ICOON}</span><span class="aantal">0/0</span></div>` +
       `<div class="grondstof" data-wat="tevredenheid" title="Tevredenheid.">` +
-      `<span class="icoon">${TEVREDENHEID_ICOON}</span><span class="aantal">100%</span></div>`;
+      `<span class="icoon">${TEVREDENHEID_ICOON}</span><span class="aantal">100%</span></div>` +
+      `<div class="grondstof verborgen" data-wat="argwaan" title="De argwaan van de inner.">` +
+      `<span class="icoon">${ARGWAAN_ICOON}</span><span class="aantal">0%</span></div>`;
   }
 
   T.ui = T.ui || {};
@@ -164,6 +172,29 @@
     cel.title = S.behoeften.mist.length
       ? `Tevredenheid: ${pct}%. Het dorp mist: ${S.behoeften.mist.join(', ')}.${last}`
       : `Tevredenheid: ${pct}%. Het dorp heeft wat het nodig heeft.${last}`;
+  };
+
+  // De argwaan van de inner (js/inner.js), en op hover waarom en wat ze doet. Pas in de balk als hij
+  // er eens geweest is, of als er argwaan is: in het begin blijft de balk kort.
+  T.ui.toonArgwaan = function (S) {
+    const box = $('voorraadbalk');
+    if (!box.children.length) bouwVoorraadbalk(box);
+    const cel = box.querySelector('[data-wat="argwaan"]');
+    const I = S.inner;
+    const IN = T.INNER_INSTELLINGEN;
+    if (!cel || !IN) return;
+    const zichtbaar = !!(I && (I.argwaan > 0 || I.rapport || I.bezoek));
+    cel.classList.toggle('verborgen', !zichtbaar);
+    if (!zichtbaar) return;
+    const pct = (x) => `${Math.round(x * 100)}%`;
+    cel.querySelector('.aantal').textContent = pct(I.argwaan);
+    cel.classList.toggle('hoog', I.argwaan >= IN.doorzoekenVanaf);
+    const waarom = I.waarom.length ? ` Waarom: ${I.waarom.join('; ')}.` : '';
+    const nu = I.argwaan > 0 && IN.toeslag > 0 ? ` Nu vraagt de heer ${pct(I.argwaan * IN.toeslag)} meer.` : '';
+    cel.title =
+      `Argwaan van de inner: ${pct(I.argwaan)}.${waarom}${nu} ` +
+      `Vanaf ${pct(IN.terugkomenVanaf)} komt hij onverwacht terug, vanaf ${pct(IN.doorzoekenVanaf)} doorzoeken de soldaten op Sint-Maarten het dorp, ` +
+      `en vanaf ${pct(IN.rapportTeltNietVanaf)} gelooft de heer zijn rapport niet meer en vraagt hij naar alles. Na Sint-Maarten zakt ze.`;
   };
 
   // Het bouwmenu: de soorten van de huidige trede, met hun kosten en wat ze doen (ontwerp/spel.md,
@@ -365,7 +396,7 @@
       `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
       `<div class="brief-tekst">` +
       `<p>Aan Onze trouwe schout,</p>` +
-      `<p>Het is Ons ter ore gekomen dat het u goed gaat. Dat verheugt Ons zeer, want het gaat Ons ook graag goed. Op Sint-Maarten komen Wij persoonlijk ophalen wat Ons toekomt. Naar wat Wij nu zien, is dat:</p>` +
+      `<p>Het is Ons ter ore gekomen dat het u goed gaat. Dat verheugt Ons zeer, want het gaat Ons ook graag goed. Op Sint-Maarten komen Wij persoonlijk ophalen wat Ons toekomt. ${brief.eis.rapport ? 'Naar wat Onze inner in oogstmaand zag' : 'Naar wat Wij nu zien'}, is dat:</p>` +
       `<ul class="brief-lijst">${regels || '<li>niets. Dat kan niet kloppen.</li>'}</ul>${samen}` +
       `<p>Wat er tot Sint-Maarten bijkomt, zien Wij ook. Wie Ons tekortdoet, zal het merken, want Wij tellen zeer zorgvuldig. Bijna altijd.</p>` +
       `<p class="brief-groet">Uw genadige heer${T.naamVanDeHeer && T.naamVanDeHeer() ? `,<br>${veilig(T.naamVanDeHeer())}` : ''}</p>` +

@@ -570,7 +570,8 @@
         console.warn(`T.zetBestaandeGebouwen: onbekende soort "${d.soort}" op (${d.x}, ${d.y}), overgeslagen`);
         continue;
       }
-      S.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
+      // Zijn voet uit het betekenisbestand: die heeft de inner nodig om te weten wat hij ziet (js/inner.js).
+      S.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
       woonruimte += g.woonruimte || 0;
     }
     // Ze staan er al vol: de boeren die je ziet lopen, wonen al in hun huis.
@@ -600,6 +601,8 @@
     if (T.tikHandelDag) T.tikHandelDag(S, dag);
     // En de heer (js/heer.js): zijn brief in wijnmaand, hijzelf op Sint-Maarten, en de soldaten.
     if (T.tikHeerDag) T.tikHeerDag(S, dag);
+    // En de inner (js/inner.js): hij komt in oogstmaand tellen, en soms onverwacht terug.
+    if (T.tikInnerDag) T.tikInnerDag(S, dag);
     // 1. Gebouwen die vandaag klaarkomen: het spookbeeld wordt de tekening zelf (dezelfde
     // voorwerp-ingang, zie zetGebouwVoorwerp hierboven — er komt er geen tweede bij).
     for (const g of S.gebouwen) {

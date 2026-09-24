@@ -470,6 +470,48 @@
         },
       },
     },
+    // De inner (js/inner.js, ontwerp/spel.md "Rijk worden en arm lijken"): de man van de heer die in
+    // oogstmaand komt tellen. Geen grap zoals zijn heer: hij telt goed, en hij weet het. Wat hij ziet,
+    // komt in zijn rapport; wie met hem meeloopt, bepaalt wat hij ziet. innerOpBezoek en
+    // innerOnverwacht zet js/inner.js. Praten, afleiden en omkopen komen later (werklijst punt 6).
+    inner: {
+      naam: 'de inner',
+      start: 'welkom',
+      situaties: [
+        { naam: 'Oogstmaand: hij komt tellen', als: { vlag: 'innerOpBezoek' } },
+        { naam: 'Hij komt onverwacht terug', als: { vlag: ['innerOpBezoek', 'innerOnverwacht'] } },
+      ],
+      knopen: {
+        welkom: {
+          tekst: [
+            { als: { vlag: 'innerOnverwacht' }, zeg: 'Schout. Ik was toevallig in de buurt. Dat is niet waar: ik kwam speciaal. Zijne Genade vroeg zich af of ik wel goed geteld had. Ik tel altijd goed. Maar ik tel graag twee keer.' },
+            { zeg: 'Goedendag, schout. Ik ben de inner van Zijne Genade, en ik kom tellen: de huizen, de schuren en de velden. Wat ik zie, schrijf ik op. Wat ik opschrijf, betaalt u op Sint-Maarten.' },
+          ],
+          keuzes: [
+            { zeg: 'Loop maar met me mee. Ik laat u alles zien.', sluit: true },
+            { zeg: 'Wat telt u precies?', naar: 'wat' },
+            { zeg: 'Tel maar raak.', sluit: true },
+          ],
+        },
+        wat: {
+          tekst: [
+            { zeg: 'Huizen, want daar wonen zielen, en zielen betalen hoofdgeld. Schuren, want daar ligt graan. Velden, want daar staat graan dat straks in de schuren ligt. En ik weet wat een veld geeft, schout. Ligt er minder in de schuur dan er op het veld stond, dan schrijf ik dat ook op.' },
+          ],
+          keuzes: [
+            { zeg: 'En wat u niet ziet?', naar: 'nietGezien' },
+            { zeg: 'Loop maar met me mee.', sluit: true },
+          ],
+        },
+        nietGezien: {
+          tekst: [
+            { zeg: 'Wat ik niet zie, tel ik niet. Dat is geen gunst, schout, dat is boekhouden. Maar ik heb goede ogen, en nog meer geduld dan Zijne Genade. Ongeveer.' },
+          ],
+          keuzes: [
+            { zeg: 'Loop maar met me mee.', sluit: true },
+          ],
+        },
+      },
+    },
     // De karakters van de boeren (T.KARAKTERS, js/mensen.js). Bij elk spel trekt elke boer er een
     // (js/boeren.js), en voert hij het gesprek van zijn karakter; de naam boven het gesprek is die
     // van de boer zelf (js/dialoog.js). Daarom zegt geen van deze zinnen hij of zij, tenzij het

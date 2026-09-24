@@ -258,6 +258,7 @@
     T.werkGebouwenBij(S); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
     T.werkMarskramerBij(S); // zijn poppetje: over de weg binnen, naar de brink, en weer weg (js/handel.js)
     T.werkHeerBij(S); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)
+    T.werkInnerBij(S); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
     T.werkAnimatiesBij(S, dt);
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
@@ -498,6 +499,30 @@
     brief() {
       T.stuurBrief(S, Math.floor(S.kalender.dag));
       return T.eisVanDeHeer(S).per;
+    },
+    // De inner nu laten komen, zonder op oogstmaand te wachten (js/inner.js): Toren.debug.inner(),
+    // of Toren.debug.inner(true) voor zijn onverwachte tweede bezoek. Is hij er al, dan zegt het
+    // wat hij zag, hoeveel geduld hij nog heeft, en wat er in zijn rapport staat.
+    inner(onverwacht) {
+      const I = S.inner || (S.inner = T.nieuweInner());
+      if (!I.bezoek) T.innerKomt(S, Math.floor(S.kalender.dag), !!onverwacht);
+      const b = I.bezoek;
+      const r = I.rapport;
+      return {
+        geduld: b.geduld, volgt: b.volgt, weg: b.weg, gebouwen: b.gebouwen.size, tegels: b.tegels.size,
+        nogTeZien: b.weg ? 0 : T.innerNogTeZien(S).length, argwaan: I.argwaan, waarom: I.waarom.slice(),
+        rapport: r && { gebouwen: r.gebouwen, woonruimte: r.woonruimte, tegels: r.tegels, graanGezien: r.graanGezien, graanVerwacht: r.graanVerwacht },
+      };
+    },
+    // Zijn argwaan zetten (0..1), om te zien wat ze doet: Toren.debug.argwaan(0.6). Zonder getal
+    // zegt het hoe hoog ze is, en waarom.
+    argwaan(n) {
+      const I = S.inner || (S.inner = T.nieuweInner());
+      if (typeof n === 'number') {
+        I.argwaan = Math.max(0, Math.min(1, n));
+        if (T.ui.toonArgwaan) T.ui.toonArgwaan(S);
+      }
+      return { argwaan: I.argwaan, waarom: I.waarom.slice() };
     },
     // Het doek als PNG bewaren: await Toren.debug.schermafdruk('graan-rijp') schrijft
     // gereedschap/pixelart/uit/schermen/graan-rijp.png (via server.cjs; werkt niet vanaf file://).

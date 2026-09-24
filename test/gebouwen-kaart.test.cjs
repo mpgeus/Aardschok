@@ -63,4 +63,6 @@ test('T.zetBestaandeGebouwen via een echt ingelezen wereld: de vijf boerderijen 
   T.zetBestaandeGebouwen(S);
   assert.equal(S.gebouwen.length, 3);
   assert.equal(S.woonruimte, 2 * T.GEBOUWEN.boerderij.woonruimte + T.GEBOUWEN.huis.woonruimte);
+  // Met hun voet: die heeft de inner nodig om te weten of hij ze ziet (js/inner.js).
+  assert.deepEqual(S.gebouwen[2].voet, { b: 2, h: 2 });
 });

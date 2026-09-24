@@ -21,6 +21,9 @@ require('../js/handel.js');
 require('../js/heer.js');
 const T = globalThis.Toren;
 const IN = T.HEER_INSTELLINGEN;
+// Deze toetsen rekenen met de pacht per akkertegel: vast en makkelijk na te tellen. Een deel van
+// wat de inner telde (de standaard sinds punt 6) staat in test/inner.test.cjs.
+IN.graan = 'pacht';
 
 // De dag (vanaf het begin van het spel, 1 lentemaand) van een datum, in het eerste of een later jaar.
 function dagVan(maand, dagVanMaand, jaar) {

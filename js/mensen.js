@@ -77,6 +77,10 @@
     // gereedschap/wereld.html vraagt niet waar hij staat.
     heer: { naam: 'de heer', snelheid: 1.55, straal: 1, vel: 'meester', bezoeker: true },
     soldaat: { naam: 'een soldaat', snelheid: 1.5, straal: 2, vel: 'smid', bezoeker: true },
+    // De inner (js/inner.js): de man van de heer die in oogstmaand komt tellen. Zijn eigen vel is
+    // tekenwerk; tot die tijd leent hij het zondagse pak van de bruidegom, die op geen kaart van
+    // het gehucht staat.
+    inner: { naam: 'de inner', snelheid: 1.5, straal: 1, vel: 'bruidegom', bezoeker: true },
 
     // En de vaklieden die wel een haakje hebben in wereld.md maar nog geen tekening: zij zijn
     // zolang een gewone dorpeling, want die vellen bestaan al (zie de werklijst, fase B2b).

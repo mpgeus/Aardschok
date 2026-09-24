@@ -26,6 +26,15 @@
     // wat bij zijn soort staat (T.GEBOUWEN[soort].heer, js/gebouwen.js). Hij rondt naar boven af.
     pachtPerAkkertegel: 0.5,
     hoofdgeldPerMens: 0.2,
+    // Waar hij de rekening op maakt (Marcel, 24 sep; js/inner.js): 'rapport' (wat zijn inner in
+    // oogstmaand zag; wat die niet zag, betaal je dat jaar niet) of 'alles' (hij ziet alles zelf).
+    // Zonder rapport (de inner kwam niet) ziet hij alles, en bij heel hoge argwaan ook.
+    rekening: 'rapport',
+    // Wat hij van het graan vraagt: 'deel' (dit deel van het graan dat de inner telde: in de schuren
+    // en op de velden die hij zag) of 'pacht' (pachtPerAkkertegel voor elke akkertegel). Het deel is
+    // zo gekozen dat wie niets verstopt, ongeveer betaalt wat de pacht was: de honger blijft.
+    graan: 'deel',
+    deelVanGraan: 0.15,
     // Waarin hij betaald wil worden: 'watHijZiet' (wol voor een schaapskooi, eieren voor een
     // kippenhok, hout voor zijn bos), 'graanEnGoud' (de pacht in graan, de rest omgerekend naar
     // goud) of 'alleenGoud' (alles omgerekend naar goud, ook de pacht). Omrekenen gaat met
@@ -126,13 +135,31 @@
       const n = Math.ceil(aantal - 1e-9);
       if (n > 0) regels.push({ wat, aantal: n, waarom });
     };
+    // Waar hij de rekening op maakt: het rapport van de inner (js/inner.js), tenzij hij alles zelf
+    // wil zien, er geen rapport is, of de argwaan zo hoog is dat hij het rapport niet meer gelooft.
+    const I = S.inner;
+    const argwaan = (I && I.argwaan) || 0;
+    const INN = T.INNER_INSTELLINGEN;
+    const rapport = IN().rekening === 'rapport' && I && I.rapport && !(INN && argwaan >= INN.rapportTeltNietVanaf) ? I.rapport : null;
     const akkers = (S.wereld && S.wereld.akkers) || [];
-    const tegels = akkers.reduce((n, a) => n + a.b * a.h, 0);
-    if (tegels) tel('graan', tegels * IN().pachtPerAkkertegel, `de pacht voor ${tegels} akkertegels`);
-    if (S.bevolking > 0) tel('goud', S.bevolking * IN().hoofdgeldPerMens, `hoofdgeld voor ${S.bevolking} zielen`);
-    // Per soort gebouw één regel, in de volgorde van T.GEBOUWEN.
+    if (rapport) {
+      if (IN().graan === 'deel') tel('graan', rapport.graanGezien * IN().deelVanGraan, `een deel van de ${Math.round(rapport.graanGezien)} graan die Onze inner telde`);
+      else if (rapport.tegels) tel('graan', rapport.tegels * IN().pachtPerAkkertegel, `de pacht voor ${rapport.tegels} akkertegels die Onze inner zag`);
+      if (rapport.woonruimte) tel('goud', rapport.woonruimte * IN().hoofdgeldPerMens, `hoofdgeld voor ${rapport.woonruimte} zielen in de huizen die hij zag`);
+    } else {
+      const tegels = akkers.reduce((n, a) => n + a.b * a.h, 0);
+      if (IN().graan === 'deel') {
+        const graan = (S.voorraad && S.voorraad.graan) || 0;
+        tel('graan', graan * IN().deelVanGraan, `een deel van de ${Math.round(graan)} graan in uw schuren`);
+      } else if (tegels) {
+        tel('graan', tegels * IN().pachtPerAkkertegel, `de pacht voor ${tegels} akkertegels`);
+      }
+      if (S.bevolking > 0) tel('goud', S.bevolking * IN().hoofdgeldPerMens, `hoofdgeld voor ${S.bevolking} zielen`);
+    }
+    // Per soort gebouw één regel, in de volgorde van T.GEBOUWEN: wat in het rapport staat, of alles.
     const aantal = {};
-    for (const g of S.gebouwen || []) aantal[g.soort] = (aantal[g.soort] || 0) + 1;
+    if (rapport) Object.assign(aantal, rapport.gebouwen);
+    else for (const g of S.gebouwen || []) aantal[g.soort] = (aantal[g.soort] || 0) + 1;
     for (const id of Object.keys(T.GEBOUWEN || {})) {
       const n = aantal[id];
       const prijs = T.GEBOUWEN[id].heer;
@@ -151,12 +178,19 @@
         r.wat = 'goud';
       }
     }
+    // De argwaan van zijn inner kost een toeslag in goud, naar rato (Marcel, 24 sep: "de heer vraagt
+    // meer"): bij volle argwaan T.INNER_INSTELLINGEN.toeslag van alles wat hij vraagt, in waarde.
+    if (argwaan > 0 && INN && INN.toeslag > 0) {
+      // Over wat hij dit jaar vraagt, niet over de oude schuld: daar zit de boete al in.
+      const waarde = regels.reduce((n, r) => n + r.aantal * T.waardeVoorDeHeer(r.wat), 0) - (h && h.schuld > 0 ? h.schuld : 0);
+      tel('goud', waarde * argwaan * INN.toeslag, 'een toeslag, want Onze inner vertrouwt u niet');
+    }
     // Per goed opgeteld; graan en goud voorop, de rest in de volgorde waarin hij ze tegenkwam.
     const per = {};
     for (const r of regels) per[r.wat] = (per[r.wat] || 0) + r.aantal;
     const volgorde = ['graan', 'goud'].filter((w) => per[w]).concat(Object.keys(per).filter((w) => w !== 'graan' && w !== 'goud'));
     regels.sort((a, b) => volgorde.indexOf(a.wat) - volgorde.indexOf(b.wat));
-    return { per, regels, volgorde };
+    return { per, regels, volgorde, rapport: !!rapport };
   };
 
   // Wat één stuk van iets voor hem waard is, in goud. Goud is goud; wat de marskramer koopt, is
@@ -304,6 +338,8 @@
     h.brief = null;
     b.betaald = g;
     h.jaren.push({ jaar: T.datumVanDag(dagNu(S)).jaar, deel: g.deel, straf: g.straf });
+    // Het rapport van de inner is betaald, en zijn argwaan zakt (js/inner.js).
+    if (T.innerNaSintMaarten) T.innerNaSintMaarten(S);
     if (T.zetVlag) {
       T.zetVlag(S, 'heerBetaald');
       T.wisVlag(S, 'heerSchuld');
@@ -511,6 +547,12 @@
     const b = h.bezoek;
     if (!b || b.staat) return;
     b.staat = true;
+    // Op de brink kijkt hij rond: wat hij ziet en niet in het rapport van zijn inner staat, komt
+    // alsnog op de rekening, en dat maakt argwanend (js/inner.js). En is de argwaan hoog genoeg,
+    // dan doorzoeken zijn soldaten het dorp.
+    if (T.heerKijktRond) T.heerKijktRond(S);
+    const INN = T.INNER_INSTELLINGEN;
+    if (INN && S.inner && S.inner.argwaan >= INN.doorzoekenVanaf && T.doorzoekDorp) T.doorzoekDorp(S);
     b.wachtTot = dagNu(S) + IN().wachtDagen;
     if (S.kalender && S.kalender.snelheid > 0 && T.zetSnelheid) {
       h.snelheidVoorWachten = S.kalender.snelheid;
