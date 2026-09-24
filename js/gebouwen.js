@@ -494,7 +494,7 @@
   };
 
   // ---------------------------------------------------------------------------------------------
-  // Elke dag: bouwen, woonruimte, eten, groei, handen, productie, handel en de heer
+  // Elke dag: bouwen, woonruimte, eten, groei, handen, productie, handel, de inner en de heer
   // ---------------------------------------------------------------------------------------------
 
   // Hoe hard er vandaag gewerkt wordt, van werkBasis (0% tevreden) tot 1 (helemaal tevreden):
@@ -586,7 +586,10 @@
     }
     // 7. Handel (js/handel.js): komt de marskramer vandaag, of trekt hij verder? Zacht gekoppeld.
     if (T.tikHandelDag) T.tikHandelDag(S, dag);
-    // 8. De heer (js/heer.js): de brief een maand vooraf, en Sint-Maarten. Na de productie van
+    // 8. De inner (js/inner.js): het rekenboek na de oogst, en zijn bezoek. Vóór de heer, want
+    // wat de inner ziet, bepaalt zijn brief.
+    if (T.tikInnerDag) T.tikInnerDag(S, dag);
+    // 9. De heer (js/heer.js): de brief een maand vooraf, en Sint-Maarten. Na de productie van
     // vandaag, zodat wat er vandaag binnenkwam ook mee kan.
     if (T.tikHeerDag) T.tikHeerDag(S, dag);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);

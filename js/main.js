@@ -282,6 +282,8 @@
       if (T.werkBouwersBij) T.werkBouwersBij(S);
       // De marskramer (js/handel.js): het gehucht in, bij de brink, en weer weg.
       if (T.werkMarskramerBij) T.werkMarskramerBij(S);
+      // De inner (js/inner.js): zijn bezoek na de oogst, van plek naar plek.
+      if (T.werkInnerBij) T.werkInnerBij(S);
       T.laatDwalen(S, dt);
       const m = T.zoekOntdekking(S);
       if (m) T.startGevecht(S, m, false);

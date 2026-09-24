@@ -111,6 +111,12 @@
     // hoeveel bouwers, hoe lang nog, en waarom het stilligt. Waar je ook op zijn voet wijst.
     const bouw = T.bouwplaatsOp && T.bouwplaatsOp(S, doel.x, doel.y);
     if (bouw) return { tekst: T.bouwStand(S, bouw).tekst };
+    // Een verstopplek die af is (js/inner.js): erheen lopen, en dan erin of eruit.
+    const kuil = T.verstopplekOp && T.verstopplekOp(S, doel.x, doel.y);
+    if (kuil && T.ui && T.ui.openVerstop) {
+      const r = T.verstopRuimte(S, kuil);
+      return { tekst: `De verstopplek (${Math.round(r.bezet)} van ${r.totaal} vol)`, doe: () => loopNaast(S, { x: doel.x, y: doel.y }, () => T.ui.openVerstop(S, kuil)) };
+    }
     if (doel.voorwerp) {
       const v = doel.voorwerp;
       if (v.soort === 'fontein') {

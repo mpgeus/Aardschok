@@ -17,6 +17,8 @@
   T.HEER_INSTELLINGEN = {
     brief: { maand: 'wijnmaand', dag: 11 }, // een maand voor Sint-Maarten
     pachtPerAkkertegel: 0.25, // graan: een achtste van wat een akkertegel opbrengt (T.GRAAN_PER_TEGEL)
+    pachtDeel: 0.125, // ... of een achtste van de oogst in het rekenboek, als de inner kwam (js/inner.js)
+    argwaanGoud: 0.5, // bij volle argwaan van de inner vraagt hij de helft meer goud
     wolPerSchaapskooi: 6,
     eierenPerKippenhok: 20, // de pachthoenders, in eieren
     hoofdgeld: 0.3, // goud per mens
@@ -85,16 +87,25 @@
 
   // Wat hij dit jaar vraagt (jaar 1 is het eerste jaar van het spel). Afgerond naar boven: een heer
   // rekent niet in halve eieren.
+  //
+  // Heeft de inner dit jaar zijn rapport gebracht (js/inner.js), dan vraagt de heer zijn pacht naar de
+  // oogst die je in het rekenboek opgaf (een achtste), maar hoe argwaniger de inner, hoe meer hij
+  // rekent met wat de inner zelf telde; en bovenop het goud komt een deel voor de argwaan.
   T.aanslag = function (S, jaar) {
     const IN = T.HEER_INSTELLINGEN;
     const H = S.heer || T.nieuweHeer();
     const z = T.watDeHeerZiet(S);
     const keer = (1 + IN.groeiPerJaar * Math.max(0, (jaar || 1) - 1)) * H.verhoging;
+    const r = T.rapportVanDitJaar ? T.rapportVanDitJaar(S) : null;
+    const argwaan = r ? r.argwaan / 100 : 0;
+    const graanBasis = r
+      ? (r.opgegeven + (r.geteld - r.opgegeven) * argwaan) * IN.pachtDeel
+      : z.akkertegels * IN.pachtPerAkkertegel;
     const a = {
-      graan: Math.ceil(z.akkertegels * IN.pachtPerAkkertegel * keer),
+      graan: Math.ceil(graanBasis * keer),
       wol: Math.ceil(z.schaapskooien * IN.wolPerSchaapskooi * keer),
       eieren: Math.ceil(z.kippenhokken * IN.eierenPerKippenhok * keer),
-      goud: Math.ceil((z.mensen * IN.hoofdgeld + z.pronk * IN.pronkGoud + z.openHandel * IN.handelsDeel) * keer + H.schuld),
+      goud: Math.ceil((z.mensen * IN.hoofdgeld + z.pronk * IN.pronkGoud + z.openHandel * IN.handelsDeel) * keer * (1 + argwaan * IN.argwaanGoud) + H.schuld),
     };
     for (const wat of Object.keys(a)) if (!a[wat]) delete a[wat];
     return a;
@@ -254,12 +265,22 @@
         ? 'Vorig jaar waren Wij tevreden. Daarom vragen Wij nu iets meer; dat begrijpt u.'
         : 'Wij vergeten niet wat er vorig jaar ontbrak. Wij vergeten nooit iets, behalve wat Wij vergeten.';
     const schuld = H.schuld > 0 ? ' Met daarbij wat u Ons schuldig bleef, en wat rente, want Wij zijn geen klooster.' : '';
+    const r = T.rapportVanDitJaar ? T.rapportVanDitJaar(S) : null;
+    const inner = !r
+      ? ''
+      : r.gevonden && r.gevonden.length
+        ? ' Onze inner vond wat u voor Ons verstopt had. Dat hebben Wij nu, en u krijgt er deze brief bij.'
+        : r.argwaan < 25
+          ? ' Onze inner zag weinig, en dat stemt Ons treurig.'
+          : r.argwaan < 60
+            ? ' Onze inner zegt dat er dingen niet kloppen. Wij zeggen niets; Wij vragen alleen meer.'
+            : ' Onze inner vertrouwt u niet, en Wij vertrouwen Onze inner.';
     return {
       kop: 'Een brief van de heer',
       tekst:
         `Wij, heer van dit gehucht en van alles wat erin groeit, laten Onze schout weten dat Wij op ` +
         `Sint-Maarten, de elfde der slachtmaand, het Onze komen halen: ${opsomming(H.aanslag)}. ` +
-        `${zin}${schuld} Wie Ons tekortdoet, doet de Hemel tekort. ` +
+        `${zin}${inner}${schuld} Wie Ons tekortdoet, doet de Hemel tekort. ` +
         `Gegeven op Ons slot, met Onze eigen hand (die van de klerk).`,
     };
   };

@@ -136,6 +136,8 @@
         if (S.tijd >= e.maait.tot) {
           akker.geoogst.add(e.maait.x + ',' + e.maait.y);
           if (S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'graan', T.GRAAN_PER_TEGEL);
+          // Het echte rekenboek: wat er dit jaar binnenkwam (js/inner.js).
+          if (T.telOogst) T.telOogst(S, T.GRAAN_PER_TEGEL);
           e.maait = null;
           e.oogstDoel = null;
         }

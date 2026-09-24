@@ -104,6 +104,7 @@
     // voorraad.
     if (vragen.length) toonVraag();
     if (handelOpen) toonHandel(S);
+    if (verstopPlek) toonVerstop(S);
     toonAanslag(S);
   };
 
@@ -220,12 +221,23 @@
       snelheidVoorPauze = null;
     }
   }
+  // Boven de berichten, en mee omhoog als die groeien: vijf berichten van twee of drie regels zijn
+  // hoger dan een vaste plek, en dan dekte de vraag het bovenste af (de inner, 24 sep). Een brief
+  // heeft zijn eigen plek midden in beeld.
+  function schuifBovenBerichten() {
+    const box = $('vraag');
+    const lijst = $('berichten');
+    if (!box || !lijst) return;
+    box.style.bottom = box.classList.contains('brief') ? '' : `${16 + lijst.offsetHeight + 8}px`;
+  }
+  if (typeof ResizeObserver !== 'undefined' && $('berichten')) new ResizeObserver(schuifBovenBerichten).observe($('berichten'));
   function toonVraag() {
     const box = $('vraag');
     if (!box) return;
     const v = vragen[0];
     box.classList.toggle('verborgen', !v);
     box.classList.toggle('brief', !!(v && v.brief));
+    schuifBovenBerichten();
     pauzeVoorVraag(v);
     if (!v) {
       box.innerHTML = '';
@@ -262,8 +274,8 @@
   // het rood; en of er soldaten in het dorp zijn. Bij elke dag en elke verandering in de voorraad.
   function toonAanslag(S) {
     const el = $('aanslag');
-    const H = S && S.heer;
-    if (!el || !H) return;
+    const H = (S && S.heer) || {};
+    if (!el || !S) return;
     const regels = [];
     if (H.aanslag && T.dagenTot) {
       const n = T.dagenTot(S.kalender.dag, T.SINT_MAARTEN);
@@ -272,6 +284,13 @@
         .map(([wat, aantal]) => `<span class="${(S.voorraad[wat] || 0) >= aantal ? 'genoeg' : 'kort'}">${aantal} ${wat}</span>`)
         .join(' · ');
       regels.push(`<div title="Wat de heer in zijn brief vroeg. Rood: wat je nog niet hebt.">Sint-Maarten ${wanneer}: ${goederen}</div>`);
+    }
+    const I = S.inner;
+    if (I && I.komtOp != null && !I.bezoek) {
+      const n = Math.max(0, I.komtOp - Math.floor(S.kalender.dag));
+      regels.push(`<div class="kort">De inner komt ${n === 0 ? 'vandaag' : n === 1 ? 'morgen' : `over ${n} dagen`}</div>`);
+    } else if (I && I.rapport && T.rapportVanDitJaar && T.rapportVanDitJaar(S)) {
+      regels.push(`<div title="Hoe argwanend de inner na zijn bezoek is. Dat telt mee in de brief van de heer.">Argwaan van de inner: ${T.argwaanWoord(I.argwaan)}</div>`);
     }
     if (H.soldaten) {
       const nog = Math.max(0, H.soldaten.tot - Math.floor(S.kalender.dag));
@@ -396,6 +415,53 @@
     toonHandel(T.S);
   });
 
+  // Een verstopplek (js/inner.js): wat erin ligt, wat er nog bij past, en per goed erin of eruit.
+  // Open na een klik erop (js/verkennen.js); dicht met ×, Esc of als je wegloopt.
+  let verstopPlek = null;
+  T.ui.openVerstop = function (S, b) {
+    verstopPlek = b;
+    toonVerstop(S);
+  };
+  T.ui.verstopOpen = () => verstopPlek;
+  T.ui.sluitVerstop = function () {
+    verstopPlek = null;
+    $('verstop').classList.add('verborgen');
+  };
+  function toonVerstop(S) {
+    const box = $('verstop');
+    if (!verstopPlek || !S) return T.ui.sluitVerstop();
+    const r = T.verstopRuimte(S, verstopPlek);
+    const erin = T.verstoptIn(S, verstopPlek);
+    const stap = (wat) => (wat === 'goud' ? 5 : 10);
+    const rijen = T.VERSTOPBAAR.map((wat) => {
+      const heb = Math.floor(S.voorraad[wat] || 0);
+      const ligt = erin[wat] || 0;
+      if (!heb && !ligt) return '';
+      return (
+        `<div class="handel-rij"><span class="goed">${T.hoofdletter(wat)}</span><span class="nog">je hebt ${heb}</span><span class="prijs">verstopt ${ligt}</span>` +
+        `<button data-verstop="${wat}" data-n="${stap(wat)}"${heb ? '' : ' disabled'}>Erin ${stap(wat)}</button>` +
+        `<button data-haal="${wat}" data-n="${stap(wat)}"${ligt ? '' : ' disabled'}>Eruit ${stap(wat)}</button></div>`
+      );
+    }).join('');
+    box.innerHTML =
+      `<div class="kop">De verstopplek<button class="sluit" title="Sluiten (Esc)">×</button></div>` +
+      `<p class="handel-uitleg">Vol: ${Math.round(r.bezet)} van ${r.totaal}. Goud neemt weinig plaats in. Wat hier ligt, telt de inner niet, tenzij hij de plek vindt. En wat hier ligt, eet het dorp ook niet op.</p>` +
+      (rijen || '<p class="handel-leeg">Er is niets om te verstoppen.</p>');
+    box.classList.remove('verborgen');
+  }
+  $('verstop').addEventListener('click', (ev) => {
+    const b = ev.target.closest('button');
+    const S = T.S;
+    if (!b || !S || !verstopPlek) return;
+    b.blur();
+    if (b.classList.contains('sluit')) return T.ui.sluitVerstop();
+    const r = b.dataset.verstop
+      ? T.verstop(S, verstopPlek, b.dataset.verstop, Number(b.dataset.n))
+      : T.haalOp(S, verstopPlek, b.dataset.haal, Number(b.dataset.n));
+    if (!r.gelukt) T.ui.bericht(r.reden, 'gevaar');
+    toonVerstop(S);
+  });
+
   // Eén stap trager of sneller, van pauze tot 3x. T.zetSnelheid (js/tijd.js) onthoudt de laatste
   // snelheid, zodat P na een stapje terug weer daar hervat.
   function stapSnelheid(delta) {
@@ -416,6 +482,10 @@
     if (!T.NIEUWE_HUD || !T.S || !T.S.kalender) return;
     if (ev.key === 'Escape' && handelOpen) {
       T.ui.sluitHandel();
+      return;
+    }
+    if (ev.key === 'Escape' && verstopPlek) {
+      T.ui.sluitVerstop();
       return;
     }
     if (ev.key === 'p' || ev.key === 'P') {
