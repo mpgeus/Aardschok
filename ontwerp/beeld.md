@@ -405,6 +405,15 @@ rendert alleen de genoemde figuren, en `naar-spel.cjs --alleen heer,soldaat,inne
 het spel. Zonder `--alleen` bouwt het de hele beschrijving opnieuw op uit `uit/`, en in een verse
 kopie is die map leeg: dan verdwijnen alle andere figuren.
 
+## De schandpaal: een paal met een halsijzer (Marcel, 24 sep 2026)
+
+Een dikke eiken paal op een stenen trede, met een ijzeren halsband aan een ketting, en bovenop een
+bordje met het wapen van de heer in rood en geel. Wie eraan staat, staat rechtop: dat kunnen de
+poppetjes al, en de halsband komt vóór hem in beeld. Marcel koos dit boven een schandblok (hoofd
+en handen door een plank, wat een nieuwe gebogen houding voor elk vel had gevraagd) en een
+verhoogde kaak met een trapje. Wanneer hij er staat, is een spelregel: zie `spel.md`,
+"Sint-Maarten".
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

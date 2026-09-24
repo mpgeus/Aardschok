@@ -491,8 +491,11 @@ uit het bouwen kwamen:
   tevredenheid, gezinnen die wegtrekken, of mensen die sterven; zie "Instelbaar").
 - De heer heeft standaard geen naam en tekent met "Uw genadige heer"; in de spelregels geef je hem
   er een.
-- Een schandpaal, een koets, eigen vellen voor de heer en zijn soldaten, en braakland met onkruid
-  zijn tekenwerk. Nu leent de heer de rode mantel van de meester, en lenen de soldaten de smid.
+- Een koets en braakland met onkruid zijn tekenwerk. De heer en zijn soldaten hebben sinds 24 sep
+  hun eigen figuren (`beeld.md`, "Het huis van de heer draagt rood en geel").
+- **De schandpaal komt er de eerste keer dat de heer iemand straft, en blijft staan** (Marcel,
+  24 sep): het dorp ziet elke dag waar het gebeurde. Hij staat er dus niet vanaf het begin als
+  dreigement, en wordt ook niet na elke straf weer weggehaald.
 - Akkers kun je niet bijbouwen, dus het graan groeit niet mee met het dorp. Zie punt 14.
 
 ## Instelbaar: opties in plaats van één keuze (Marcel, 24 sep 2026)
