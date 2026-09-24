@@ -168,7 +168,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.kanVerkopen`; hij staat op de plek `"marskramer"` uit het betekenisbestand), `js/heer.js`
   (Sint-Maarten: zijn brief in wijnmaand, wat hij vraagt naar wat hij ziet via `T.eisVanDeHeer` en
   `T.GEBOUWEN[soort].heer`, `T.gevolgVanBetaling` voor venster en knop, de straffen tot je ambt
-  kwijt; zaaien en braak staan in `js/akkers.js`), `js/boeren.js` (wie de boeren zijn, geloot per
+  kwijt; zaaien en braak staan in `js/akkers.js`), `js/inner.js` (de inner in oogstmaand: wat hij
+  ziet, in een rechte lijn en niet door huizen, `T.innerKijkt`; zijn rapport, `T.maakRapport`, dat
+  `T.eisVanDeHeer` als rekening neemt; de argwaan, `T.zetArgwaan`, en wat ze doet; zijn poppetje dat
+  zijn eigen ronde loopt of met de schout mee, `T.werkInnerBij`; en `T.heerKijktRond` op
+  Sint-Maarten), `js/boeren.js` (wie de boeren zijn, geloot per
   spel: een karakter uit `T.KARAKTERS` in `js/mensen.js`, met een eigen gesprek onder dezelfde naam,
   en de eigenschappen maaien, opbrengst, zaaien en aanzien; de regels vragen `T.boerFactor` en
   `T.aanzienVan`, het scherm `T.overBoerTekst`), `js/opties.js` (de spelregels: `T.OPTIES` op
@@ -182,7 +186,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen
   om bij te stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
   `T.BEHOEFTEN_INSTELLINGEN`, `T.AKKER_STADIA`, `T.GRAAN_PER_TEGEL`, `T.HANDEL_INSTELLINGEN`,
-  `T.HEER_INSTELLINGEN`).
+  `T.HEER_INSTELLINGEN`, `T.INNER_INSTELLINGEN`).
 - Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): zijn `gesprek`
   als hij er een heeft, anders zijn soort. Zo delen honderd figuranten één soort (`dorpeling`)
   zonder alle honderd hetzelfde te zeggen.
@@ -256,7 +260,8 @@ hem weg, beloning en al); zonder fase zegt hij waar hij staat.
 blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In het gehucht:
 `Toren.debug.kalender(dag, snelheid)` springt door het jaar, `Toren.debug.bouw('huis', x, y)` bouwt,
 `Toren.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
-`Toren.debug.brief()` stuurt de brief van de heer nu, en `Toren.debug.heer()` laat hem nu komen.
+`Toren.debug.brief()` stuurt de brief van de heer nu, `Toren.debug.heer()` laat hem nu komen,
+`Toren.debug.inner()` de inner (`(true)`: onverwacht), en `Toren.debug.argwaan(0.6)` zet zijn argwaan.
 De spelregels die de browser onthield (`localStorage`, `aardschok.spelregels`) gelden ook voor wie
 test; `Toren.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
 Een sprong met `kalender` tikt alle dagen ertussen af: valt 1 wijnmaand erin, dan staat de brief

@@ -43,28 +43,38 @@ gezaaid kan worden, ligt braak.
 **En de spelregels** (Marcel, 24 sep: "Dit moeten allemaal opties worden die instelbaar zijn";
 `spel.md`, "Instelbaar"). Onder `O` of de knop naast Bouwen staat één venster met de keuzes
 (graan, waarin de heer betaald wil worden, hoe hij telt, de schout aan de paal, honger buiten
-de winter), de namen van de heer en de boeren, en een werkbank met alle 91 getallen uit de
-regels. Wat je verandert, geldt meteen, en de browser onthoudt het.
+de winter, en sinds punt 6 waar de heer de rekening op maakt en wat hij van het graan vraagt), de
+namen van de heer en de boeren, en een werkbank met alle 135 getallen uit de regels. Wat je
+verandert, geldt meteen, en de browser onthoudt het.
 
 **En de boeren worden geloot** (Marcel, 24 sep: "Ze moeten random eigenschappen hebben"). Bij elk
 spel trekt elke boer een karakter uit een stapel van tien (met een eigen gesprek) en vier
 eigenschappen: maaien, opbrengst, zaaien en aanzien. Je ziet het bij de muis, boven het gesprek en
 bij de schandpaal. In de spelregels: geloot of vast, de kansen in de werkbank, en opnieuw loten.
-`npm test`: 387/387.
+
+**En de inner komt tellen** (punt 6, stap 1 van 3; `spel.md`, "Rijk worden en arm lijken"). Op
+15 oogstmaand komt hij over de weg, en zolang hij er is, staat de tijd stil. Alleen loopt hij naar
+wat hij nog niet zag; sta je naast hem, dan loopt hij met jou mee, tot zijn geduld op is. Wat hij
+ziet (zeven tegels ver, niet door huizen heen), komt in zijn rapport, en dat rapport is de rekening
+van de heer: wat hij niet zag, betaal je dat jaar niet. Klopt het graan niet met zijn velden, dan
+groeit zijn argwaan (een oog in de balk), en die doet vier dingen: de heer vraagt meer, de inner
+komt onverwacht terug, soldaten doorzoeken het dorp, en bij heel veel argwaan telt het rapport niet
+meer. Op Sint-Maarten kijkt de heer zelf rond vanaf de brink; dat is een voorstel van Claude.
+Onderweg bleek dat **de schout in het gehucht niet kon lopen** (sinds punt 1b, 23 sep); dat is
+hersteld. `npm test`: 407/407.
 
 Om te proberen: `Toren.debug.brief()` stuurt zijn brief nu, `Toren.debug.heer()` laat hem nu
-komen, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
+komen, `Toren.debug.inner()` de inner (`(true)`: onverwacht terug), `Toren.debug.argwaan(0.6)` zet
+zijn argwaan, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
 bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
 
 **Loopt nu:** niets. Er draait geen agent.
 
-**Volgende stap: punt 6, rijk worden en arm lijken,** het tweede proefje, en de vraag of de kern
-leuk is. Wat de inner ziet, wordt een optie in de spelregels (Marcel, 24 sep). Het voorstel in
-`spel.md` ("De kern voor het tweede proefje") wordt dan de standaard, maar vraag Marcel eerst of
-hij het zo wil. Een proef van drie jaar zonder
-scherm liet zien waarom punt 6 nodig is: minder geven helpt in punt 5 nog niet. Wie de pacht
-inhoudt, krijgt soldaten die een derde weer opeten en een boete in goud, en de eis liep in de
-proef op van 12 naar 56 goud. De uitweg is minder laten zien (`spel.md`, "Sint-Maarten").
+**Volgende stap: punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud,
+die de inner niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de
+argwaan om het graan en het doorzoeken door de soldaten (`T.zoekVerstopt`, nu nog leeg) staan al
+klaar. Leg Marcel eerst een voorstel voor: hoeveel erin past, hoe je iets wegzet (erheen lopen?),
+en wat de soldaten vinden. Daarna stap 3: praten, afleiden, omkopen en de twee rekenboeken.
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
@@ -73,9 +83,10 @@ proef op van 12 naar 56 goud. De uitweg is minder laten zien (`spel.md`, "Sint-M
 - **honger valt in het voorjaar**, vlak vóór de oogst (het zaaigraan gaat voor), en kost buiten de
   winter standaard geen mensen, alleen tevredenheid. Wie de heer alles geeft, heeft zo elk jaar
   een maand honger, en elk jaar iets meer. Of hij meer pijn doet, stel je in de spelregels in;
-- de heer, zijn soldaten, een koets, de schandpaal en braakland met onkruid zijn tekenwerk. Nu
-  leent de heer de rode mantel van de meester, lenen de soldaten de smid, en blijft braakland
-  kale geploegde grond; aan de paal zie je alleen wie er staat, op de brink;
+- de heer, zijn soldaten, de inner, een koets, de schandpaal en braakland met onkruid zijn
+  tekenwerk. Nu leent de heer de rode mantel van de meester, lenen de soldaten de smid, leent de
+  inner het zondagse pak van de bruidegom, en blijft braakland kale geploegde grond; aan de paal
+  zie je alleen wie er staat, op de brink;
 - het zwad van de maaier staat als paaltjes, en de slag is symmetrisch;
 - de bevolking is een getal, geen poppetjes; van de nieuwe goederen staan alleen ijzer, zout en
   gereedschap in de balk (steen, klei, riet, vis, … niet); wat de marskramer koopt, zie je wel in
@@ -99,9 +110,12 @@ proef op van 12 naar 56 goud. De uitweg is minder laten zien (`spel.md`, "Sint-M
 - De namen van de heer en de boeren stel je nu zelf in (spelregels). De tien karakters en hun
   zinnen (de vrome, de roddelaar, de oudste, de nieuwkomer, de drinker zijn nieuw) zijn een voorstel
   van Claude: lees ze eens in `gereedschap/gesprekken.html`.
-- De rest van het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): wat de
-  inner ziet (vóór punt 6), en de drie groepen en vijf keuren (vóór punt 9). Wat de heer wil, is
-  voor een deel besloten (`spel.md`, "Sint-Maarten").
+- Het bezoek van de inner spelen (`Toren.debug.inner()`, of wachten tot oogstmaand): voelt
+  meelopen goed, is 90 stappen geduld te veel of te weinig, en mag de heer op Sint-Maarten zelf
+  rondkijken vanaf de brink (een voorstel van Claude, `spel.md`)?
+- De rest van het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): de drie
+  groepen en vijf keuren (vóór punt 9). Wat de heer wil, is voor een deel besloten (`spel.md`,
+  "Sint-Maarten").
 - Of het ijs op de beek ook te zien moet zijn (tekenwerk), en of de jager 's winters minder vangt.
 - Een naam; "Aardschok" past niet meer.
 
@@ -136,7 +150,9 @@ nog nodig is".
 6. **Rijk worden en arm lijken.** Klaar als de inner argwaan heeft die stijgt als wat hij ziet niet
    klopt met wat je levert, er verstopplekken zijn met plaats voor zoveel, je twee rekenboeken
    bijhoudt, en zijn bezoek een scène is waarin jij meeloopt, de route kiest, praat, afleidt of
-   omkoopt. De vraag van het proefje: is dit leuk?
+   omkoopt. De vraag van het proefje: is dit leuk? Besloten op 24 sep, zie `spel.md`, "Rijk worden
+   en arm lijken". In drie stappen: het bezoek, het rapport en de argwaan (af, 24 sep); de
+   verstopplekken; praten, afleiden, omkopen en de rekenboeken.
 7. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
    zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel beschrijft. Hier, omdat
    er daarna veel nieuwe code bovenop komt.

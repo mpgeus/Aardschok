@@ -201,6 +201,46 @@ Marcel koos uit een voorstel van Claude, vóór het bouwen:
   argwaan; dan verstopplekken met plaats voor zoveel graan of goud; dan praten (een smoes), afleiden
   (een kroes bier: dat kost hem geduld) en omkopen, en de twee rekenboeken.
 
+**Gebouwd, stap 1 (24 sep 2026): het bezoek, het rapport en de argwaan** (`js/inner.js`,
+`test/inner.test.cjs`). De getallen zijn een eerste gok en staan allemaal in de werkbank onder
+"De inner".
+
+- Tien dagen vooraf hoor je dat hij komt; op 15 oogstmaand komt hij over de weg. Hij kijkt zeven
+  tegels ver, in een rechte lijn, en huizen en schuren houden zijn blik tegen. Een verstopplek ziet
+  hij niet.
+- Alleen loopt hij steeds naar wat hij nog niet zag. Zo ziet hij het hele gehucht in zo'n 45
+  stappen. Sta je binnen twee tegels van hem, dan volgt hij jou, en loopt hij in jouw pas mee,
+  tot je meer dan vijf tegels wegloopt. Zijn geduld is 90 stappen. Stilstaan kost ook geduld (een
+  stap per halve seconde), anders kon je hem eindeloos in een hoek houden. Praten kost (nog) niets.
+- Zijn rapport bevat de gebouwen die hij zag, met hun woonruimte voor het hoofdgeld, en het graan:
+  wat in de schuren ligt en wat nog staat op de velden die hij zag. De heer vraagt daar 15% van.
+  Bij "Honger" is dat ongeveer de oude pacht, dus wie niets verbergt, betaalt wat hij betaalde. Per
+  gebouw dat hij zag, komt de prijs van dat gebouw erbij.
+- Graan dat al gemaaid is, ligt in de schuur, en die telt hij helemaal. Hem langs lege velden
+  leiden scheelt dus weinig graan (behalve bij de pacht per akker), maar wel gebouwen en hoofdgeld.
+  Het graan is voor stap 2: wegzetten wat hij niet mag zien, en niet zoveel dat het opvalt.
+- Argwaan loopt van 0 tot 100%. Je ziet haar als een oog in de balk; bij de muis staat waarom ze
+  er is en wat ze doet. Ligt er minder dan 60% van het graan dat zijn velden beloven, dan kost dat
+  wat het scheelt. Komt hij onverwacht terug en ligt er ineens meer graan, dan weet hij genoeg.
+  Vanaf 40% komt hij 20 tot 45 dagen later onverwacht terug. Vanaf 50% doorzoeken de soldaten op
+  Sint-Maarten het dorp (nu vinden ze nog niets, want verstopplekken zijn er nog niet). Vanaf 80%
+  gelooft de heer het rapport niet meer en vraagt hij naar alles. Daarnaast vraagt de heer een
+  toeslag in goud van argwaan × 50% van zijn rekening. Na Sint-Maarten zakt ze tot de helft.
+- **Bedacht door Claude, nog te keuren door Marcel:** op Sint-Maarten kijkt de heer zelf rond
+  vanaf de brink, zes tegels ver. Wat hij daar ziet en wat niet in het rapport staat (omdat je het
+  na het bezoek bouwde, of omdat de inner het miste), komt alsnog op de rekening, en elk ding kost
+  15% argwaan: "Wat is DÁT, schout?" Zo is bouwen na zijn bezoek niet vanzelf gratis, maar bouwen
+  uit het zicht van de brink wel. Het klopt ook met zijn brief: "Wat er tot Sint-Maarten bijkomt,
+  zien Wij ook." Uit te zetten in de werkbank (heer zicht op 0).
+- In de spelregels staan twee keuzes. "Waar de heer de rekening op maakt": wat de inner zag, of
+  alles (dan komt er geen inner). "Wat de heer van het graan vraagt": een deel van wat hij telde, of
+  pacht per akkertegel die hij zag.
+- Nog niet gebouwd: verstopplekken (stap 2), en praten, afleiden, omkopen en de rekenboeken (stap
+  3). Hij heeft nog geen eigen tekening en leent het zondagse pak van de bruidegom.
+- Bij het bouwen kwam een fout uit punt 1b boven: de schout kon in het gehucht niet lopen (snelheid
+  0, sinds hij het vel van een dorpeling kreeg). Hij loopt nu 2,2 tegels per seconde
+  (`T.SCHOUT_SNELHEID`, `js/gebied.js`).
+
 ## Gebouwen (Marcel, 23 sep 2026)
 
 > We hebben types gebouwen nodig. Dus huis, deze zorgen ervoor dat je populatie kan groeien;
