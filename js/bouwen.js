@@ -289,7 +289,10 @@
     const w = S.wereld;
     if (!w || !w.wezens || !S.gebouwen) return;
     for (const b of S.gebouwen) {
-      if (!b.voorwerp) continue;
+      // Alleen in de wereld waar de bouwplaats ligt: loopt de schout een ander gebied in, dan
+      // verschijnen de bouwers daar niet op dezelfde plek. Die van hier blijven in hun eigen wereld
+      // staan, en zijn er weer als hij terugkomt.
+      if (!b.voorwerp || !w.voorwerpen.includes(b.voorwerp)) continue;
       const poppen = b.poppen || (b.poppen = []);
       const wil = b.klaar ? 0 : Math.min(b.bouwers || 0, T.BOUWEN_INSTELLINGEN.zichtbaar);
       while (poppen.length > wil) haalWeg(w, poppen.pop());

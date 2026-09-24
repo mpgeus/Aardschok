@@ -191,7 +191,11 @@
   // op de echte kaart wel komen?).
   T.marskramerPlekken = (w) => ({ ingang: vrijeTegelBij(w, ingang(w)), standplaats: vrijeTegelBij(w, standplaats(w)) });
 
-  function stuurNaar(w, e, doel) {
+  // Een pad zoeken kost wat; kan hij er niet komen (iemand staat in de weg), dan pas over een
+  // seconde opnieuw proberen, niet elk beeld.
+  function stuurNaar(S, w, e, doel) {
+    if (e.volgendePoging && S.tijd < e.volgendePoging) return;
+    e.volgendePoging = S.tijd + 1;
     const pad = T.zoekPad(
       { x: e.tx, y: e.ty },
       doel,
@@ -209,7 +213,10 @@
     const m = S.marskramer;
     const w = S.wereld;
     if (!m || !w || !w.wezens) return;
-    // Een andere kaart (het oude spel, een ander gebied): daar is hij niet.
+    // Hij komt in de wereld waar hij aankwam (het gehucht). Loopt de schout een ander gebied in,
+    // dan staat de marskramer daar niet op dezelfde plek.
+    if (!m.wereld) m.wereld = w;
+    if (m.wereld !== w) return;
     if (m.pop && !w.wezens.includes(m.pop)) m.pop = null;
     if (m.aanwezig && !m.pop) {
       const start = vrijeTegelBij(w, ingang(w));
@@ -230,7 +237,7 @@
           e.dwaalt = true;
           e.thuis = { x: e.tx, y: e.ty };
           e.straal = 1;
-        } else stuurNaar(w, e, e.doel);
+        } else stuurNaar(S, w, e, e.doel);
       }
     } else {
       // Hij gaat: terug naar de weg, en daar verdwijnt hij.
@@ -243,7 +250,7 @@
         S.marskramer = null;
         return;
       }
-      if (!e.pad.length) stuurNaar(w, e, uit);
+      if (!e.pad.length) stuurNaar(S, w, e, uit);
     }
     if (T.ui && T.ui.handelOpen && T.ui.handelOpen() && S.held && T.afstand({ x: S.held.tx, y: S.held.ty }, { x: e.tx, y: e.ty }) > 3) {
       T.ui.sluitHandel();
