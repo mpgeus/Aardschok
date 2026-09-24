@@ -291,9 +291,38 @@ dakgebinte, het dak half gedekt, en klaar. De huizen komen uit code, dus de fase
 hetzelfde model komen door onderdelen weg te laten. Later lopen er bouwlieden heen en weer met hout
 en stenen, en hoor je ze timmeren.
 
+**Bouwen kost handen** (Marcel, 24 sep, na het onderzoek in `beeld.md`, "Bouwen: een huis dat
+groeit"). Een gebouw komt niet meer vanzelf af als de dagen om zijn:
+
+- **De bouwers komen uit de bevolking,** vóór de werkplaatsen: wie bouwt, hakt geen hout en
+  scheert geen schapen. Elke bouwplaats vraagt een ploeg; met minder mensen gaat het trager, en
+  zonder ligt het stil. Bouwplaatsen krijgen hun ploeg op volgorde van neerzetten.
+- **Ze staan er echt:** zoveel bouwers als er aan het werk zijn, lopen op de bouwplaats en timmeren.
+- **Drie keer zo lang als eerst:** een hut 6 dagen, een huis 12, met een volle ploeg.
+- **In de vorst ligt het werk stil** (de drie wintermaanden): leem en kalk bevriezen, en de dagen
+  zijn te kort. Wie voor de winter wil wonen, begint op tijd.
+- **Het hoogste punt:** als het dakgebinte staat, komt de meiboom op de nok en willen de bouwers
+  pannenbier. Geef je het (bier, of anders een paar stuivers voor een rondje), dan is het dorp een
+  tijdje tevredener. Geef je niets, dan mopperen ze en werken ze trager tot het af is.
+
 Hoe het samen draait (voorstel): mensen komen als er ruimte, eten en rust is; elk gebouw vraagt
 handen; wat het maakt, gaat naar de voorraad of naar het volgende gebouw; en alles wat je bouwt,
 ziet de inner, behalve wat verstopt is.
+
+## Handel: de marskramer, ook heler (Marcel, 24 sep 2026)
+
+IJzer, zout en steen heeft het gehucht niet; die komen van de marskramer. Voorstel van Claude,
+gekozen door Marcel:
+
+- **Hij komt langs:** om de paar weken, niet in de winter, loopt hij het gehucht in en staat een
+  paar dagen bij de weg. Jij loopt erheen en praat met hem; dan handel je.
+- **Hij verkoopt** ijzer, zout en steen, en **koopt je overschot**: graan, wol, eieren, hout.
+  Zijn buidel is niet bodemloos, en wie veel van hetzelfde verkoopt, krijgt er steeds minder voor.
+- **Hij is ook heler.** Hij koopt ook stil, zonder vragen, voor minder. Wat je stil verkoopt, staat
+  niet in de boeken, en munten zijn kleiner dan graan, dus makkelijker te verstoppen. Zo wordt
+  handel een manier om rijk te worden en arm te lijken. Maar hij kletst: wat hij hoort en ziet,
+  kan de inner ter ore komen. Dat laatste komt bij punt 6, met de argwaan.
+- **Zonder ijzer valt de smidse stil.** Een eigen ertsgraver maakt je minder afhankelijk van hem.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 

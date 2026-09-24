@@ -369,6 +369,91 @@ Die loopt langzaam op en af, met vlagen, zodat het als weer leest en niet als sp
 - **Uit de pas lopen:** elk voorwerp krijgt een eigen verschuiving in de tijd, anders wappert het
   dorp als één vlag.
 
+## Bouwen: een huis dat groeit (onderzoek Claude, 24 sep 2026)
+
+Marcel, 23 sep: "eerst zie je een paar stenen, dan wat hout erbij en gaandeweg steeds meer van het
+gebouw tot het klaar is." En 24 sep: "De bouwfase van de gebouwen zijn nog niet goed genoeg."
+
+**Wat er nu mis is** (in het spel bekeken, op spelgrootte):
+
+- **Het is te kort om te zien.** Een dag duurt 2,5 seconde. Een hut staat er in 5 seconden, een
+  huis in 10; elke fase is 1 tot 2 seconden in beeld, op 3× een halve.
+- **Er vallen fases weg.** Neerzetten rondt de dag naar beneden af (`klaarOp`), de fase rekent met
+  de dag mét breuk. Wie laat op de dag bouwt, begint in fase 2 of 3 en is ook eerder klaar.
+- **Het wisselt in plaats van te groeien.** De stenen ring, het houten geraamte en het hek van
+  steigers verdwijnen weer in de volgende fase. Het zijn vijf losse plaatjes, geen huis dat
+  aangroeit.
+- **Het is geen bouwplaats.** De fundering is een dun grijs lijntje in het gras; binnen de muren
+  groeit gras; de ramen branden en de luiken hangen er al; een stenen huis krijgt een houten kooi
+  die er later niet meer is; de steiger leest als een hek; het dakgebinte leest op spelgrootte als
+  een bruin gestreept dak, en half gedekt als een dak in twee kleuren.
+- **Er gebeurt niets.** Geen bouwers, geen stof, geen geluid, geen stapel die slinkt. In elk
+  bouwspel is de bouwplaats de plek waar het meest beweegt; hier is het de stilste plek van het dorp.
+
+**Hoe anderen het doen:**
+
+- *The Settlers II*: een bord op de plek, dan stapels planken en stenen bij de deur die één voor
+  één worden aangevoerd en opgebruikt. Het huis staat er twee keer in: eerst het houten geraamte,
+  dan het afgewerkte huis, allebei van onder naar boven zichtbaar naarmate er gebouwd is (in de
+  nabouw Return to the Roots: `skeleton.drawPercent` en `building.drawPercent`).
+- *Knights and Merchants*, onze referentie voor het dorp: ook hout en dan steen, maar niet met een
+  rechte lijn. De nabouw (KaM Remake) tekent een huis in aanbouw met een alpha-toets op een tweede
+  textuur: elke pixel heeft zijn eigen drempel, dus het huis groeit rafelig, steen voor steen.
+- *Manor Lords*: de grond wordt geëffend, het materiaal aangevoerd, en er wordt gebouwd tot het op
+  is. De maker heeft bestudeerd hoe er toen gebouwd werd (vakwerk, stijl en regel, krukspanten).
+- *Anno*: bijna meteen, met stof en een steiger die opspringt. Bouwen is daar geen schouwspel.
+
+**Hoe het echt ging:**
+
+- Steigers waren palen, met touw gesjord. Korte balkjes staken in gaten in de muur (die gaten zie je
+  nog in oude kerken en kastelen), de vloeren waren horden van vlechtwerk, en de ladders waren van
+  ruwe palen.
+- Riet gaat vanaf de dakvoet omhoog, laag over laag, op horizontale latten; de nok komt het laatst.
+- Vakwerk: eerst het geraamte, dan de vakken dicht met vlechtwerk en leem. Het geraamte blijft
+  zichtbaar in het afgewerkte huis. Een stenen huis heeft geen houten geraamte: de muren groeien
+  laag voor laag.
+- Het hoogste punt: als het dakgebinte staat, komt er een meiboom op de nok en krijgen de bouwers
+  pannenbier. In Limburg en de Achterhoek doen ze het nog; de meiboom zelf staat al in
+  13e-eeuwse Duitse bronnen.
+
+**Het inzicht:** onze kunst komt uit 3D. Wat Knights and Merchants per huis als masker meegaf,
+kunnen wij uitrekenen: elke pixel weet hoe hoog hij in de wereld zit. Zo groeit een muur laag voor
+laag, ook de achterste, en raakt een dak vanaf de voet bedekt tot aan de nok, met wat ruis per
+steen of bundel zodat het niet als een schuifje leest.
+
+**Voorstel, in drie lagen:**
+
+1. **Vloeiend** (spelcode, klein): de fout eruit, en tussen twee fases groeit de volgende van
+   onder naar boven over de vorige heen, in plaats van vijf sprongen.
+2. **Nieuwe fases** (`bouwfasen.cjs`): elke fase telt op en haalt niets weg. Per materiaal de echte
+   volgorde (steen: muren laag voor laag; vakwerk: geraamte, dak, dan de vakken; blokhut: balk op
+   balk). Kale grond met paaltjes en touw; stapels hout, steen en riet die slinken; een steiger met
+   ladder en horden; slanke sporen met lucht ertussen, dan latten, dan riet of leien vanaf de voet;
+   ramen en deur donker tot het af is; de meiboom op het hoogste punt.
+3. **Leven** (raakt het spel): bouwers die er lopen en timmeren; bouwen kost handen, dus wie bouwt,
+   oogst niet; in de vorst ligt het werk stil; pannenbier als klein moment.
+
+**Besloten (Marcel, 24 sep 2026):** laag 2 en 3: nieuwe fases, bouwers op de bouwplaats, en bouwen
+kost handen (met de vorst en het pannenbier, zie `spel.md`, "Bouwen kost handen"). Vloeiend groeien
+niet. Een gebouw staat drie keer zo lang in de steigers als eerst (hut 6 dagen, huis 12): een halve
+minuut op 1×. De fout met de overgeslagen fases verdwijnt vanzelf, want de voortgang komt nu uit
+gedaan werk en niet meer uit de klok.
+
+**Vast stramien voor de fases:** vijf per gebouw, en de vierde (index 3) is altijd het hoogste
+punt: het dakgebinte staat en de meiboom zit op de nok. Het pannenbier in het spel hangt aan die
+fase. Wat de fases per materiaal laten zien:
+
+| Fase | Steen | Vakwerk en vlechtwerk | Planken | Blokhut |
+|---|---|---|---|---|
+| 0 | kale grond, paaltjes en touw, sleuf met de eerste laag, grote stapels | idem, met de stenen voet | idem | idem, met de onderste balk |
+| 1 | muren tot een derde, gaten voor deur en ramen | het geraamte, zoals het in het afgewerkte huis zit | het geraamte van stijlen | balken tot een derde |
+| 2 | muren op hoogte, met steiger | geraamte heel, met steiger | planken tot halverwege, met steiger | balken op hoogte, met steiger |
+| 3 | dakgebinte en meiboom | idem | idem | idem |
+| 4 | latten, dak vanaf de voet half gedekt | idem, en de vakken half dicht | idem, planken af | idem |
+
+In alle fases: wat er staat, blijft staan; de stapels slinken; binnen is kale grond; ramen en deur
+zijn donkere gaten tot het gebouw af is.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
