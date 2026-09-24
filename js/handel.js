@@ -113,17 +113,16 @@
     }
   };
 
-  // Hij gaat: vanaf nu handelt hij niet meer. Heeft hij een poppetje, dan loopt dat eerst de weg
-  // op (T.werkMarskramerBij haalt hem daar weg); zonder poppetje is hij meteen weg.
-  function vertrek(S) {
+  // Hij gaat, op deze dag: vanaf nu handelt hij niet meer. Heeft hij een poppetje, dan loopt dat
+  // eerst de weg op (T.werkMarskramerBij haalt hem daar weg); zonder poppetje is hij meteen weg.
+  // De dag komt van T.tikHandelDag en niet van de kalender: springt die vooruit, dan tikken de
+  // dagen ertussen één voor één na, en rekent "wanneer komt hij terug" vanaf zijn eigen dag.
+  function vertrek(S, dag) {
     const m = S.marskramer;
     m.weg = true;
     if (T.zetVlag) T.zetVlag(S, 'marskramerVertrekt');
     if (T.ui && T.ui.sluitHandel && S.modus === 'handel') T.ui.sluitHandel(S);
-    if (T.ui && T.ui.bericht) {
-      const dag = S.kalender ? Math.floor(S.kalender.dag) : m.gaatOp;
-      T.ui.bericht(`De marskramer trekt verder. Hij komt terug in ${T.volgendeMarskramer(dag)}.`);
-    }
+    if (T.ui && T.ui.bericht) T.ui.bericht(`De marskramer trekt verder. Hij komt terug in ${T.volgendeMarskramer(dag)}.`);
     if (!m.wezen) haalWeg(S);
   }
 
@@ -149,7 +148,7 @@
     if (!magKomen(S)) return;
     const m = S.marskramer;
     // Zolang hij nog over de weg aan komt lopen, telt zijn tijd niet: zie blijftDagen.
-    if (m && !m.weg && (!m.wezen || m.staat) && dag >= m.gaatOp) vertrek(S);
+    if (m && !m.weg && (!m.wezen || m.staat) && dag >= m.gaatOp) vertrek(S, dag);
     if (!S.marskramer) {
       const i = T.marskramerBegintOp(dag);
       if (i != null) T.marskramerKomt(S, i, dag);

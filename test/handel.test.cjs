@@ -81,6 +81,21 @@ test('waar hij geen plek heeft (het oude spel), komt hij nooit', () => {
   assert.ok(!T.heeftVlag(S, 'marskramerOpBezoek'));
 });
 
+test('bij zijn vertrek zegt hij wanneer hij terugkomt, gerekend vanaf zijn eigen dag', () => {
+  const S = maakS();
+  S.kalender.dag = dagVan('wijnmaand', 20); // de kalender sprong al verder
+  const berichten = [];
+  const oudeUi = T.ui;
+  T.ui = { bericht: (t) => berichten.push(t) };
+  try {
+    const komt = dagVan('hooimaand', 5);
+    for (let dag = komt; dag <= komt + T.HANDEL_INSTELLINGEN.blijftDagen; dag++) T.tikHandelDag(S, dag);
+  } finally {
+    T.ui = oudeUi;
+  }
+  assert.match(berichten[berichten.length - 1], /terug in wijnmaand/);
+});
+
 test('na wijnmaand komt hij pas in grasmaand terug', () => {
   assert.equal(T.volgendeMarskramer(dagVan('wijnmaand', 20)), 'grasmaand');
   assert.equal(T.volgendeMarskramer(dagVan('grasmaand', 20)), 'hooimaand');
