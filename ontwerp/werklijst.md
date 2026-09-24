@@ -10,37 +10,46 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (einde sessie 23 sep 2026)
+## De stand (sessie 24 sep 2026, werkt op de branch `claude/bouwfase-gebouwen-verbeteren-c4kh12`)
 
-**Het spel is omgegooid** (23 sep). Marcel vond het doel van De laatste klim niet goed genoeg en
-kwam, na vijf rondes ideeën van Claude, zelf met het nieuwe spel: **een bouw- en beheerspel in
-isometrisch beeld, met politiek en avontuur erin.** Jij bent de schout van een gehucht onder een
-verwarde heer die alleen geld ziet; je breidt het uit tot een stad en maakt je aan het eind van de
-heer los. Alles staat in `spel.md`, en `CLAUDE.md` is bijgewerkt. De code van het oude spel (toren,
-spreuken, leeftijd, tutorial) staat er nog; die gaat eruit bij punt 7.
+**Het spel is omgegooid** (23 sep): een bouw- en beheerspel in isometrisch beeld, met politiek en
+avontuur erin. Jij bent de schout van een gehucht onder een verwarde heer die alleen geld ziet.
+Alles staat in `spel.md`. De code van het oude spel (toren, spreuken, leeftijd, tutorial) gaat eruit
+bij punt 7.
 
-**Wat er nu speelt** (`http://localhost:8123/?kaart=gehucht`): een open kaart met een gehucht en
-een es; graan dat met de kalender groeit, wuift en door de boeren gemaaid wordt (en alleen zo
-binnenkomt); een balk met kalender (oude maandnamen, pauze, 1–3×), voorraad, bevolking en
-tevredenheid; 45 soorten gebouwen met een bouwmenu (`B`) en fases tijdens het bouwen; een
-bevolking die groeit met ruimte, eten en tevredenheid; en een winter die zonder brandhout mensen
-kost. `npm test`: 293/293. `await Toren.debug.schermafdruk('naam')` bewaart een blik op het spel.
+**Wat er nu speelt** (`http://localhost:8123/?kaart=gehucht`): graan dat groeit en gemaaid wordt;
+een balk met kalender, voorraad (en kleine chips voor ijzer, zout, steen, …), bevolking en
+tevredenheid; 45 soorten gebouwen met een bouwmenu (`B`); behoeften en de winter. Sinds 24 sep:
+**bouwen kost handen** (een ploeg uit de bevolking, vóór de werkplaatsen; drie keer zo lang; in de
+vorst ligt het stil; bouwers met een klophamer en spaanders op de bouwplaats; pannenbier op het
+hoogste punt), en **de marskramer** (punt 4, af). De schout kon in het gehucht niet lopen
+(snelheid 0); dat is gerepareerd. `npm test`: 329/329.
 
-**Loopt nu:** niets. Er draait geen agent.
+**Loopt nu:** een agent die voor één type (het huis: vakwerk met riet) echte bouwfases maakt uit
+de niet-waterpas huizenbouwer `huis-sdf.cjs`, in `gereedschap/pixelart/bouwfasen-sdf.cjs`, met een
+proefplaat in `uit/bouwfasen-sdf/`. Marcel vond de fases op de oude, rechte `dorp.cjs` nep (zie
+`beeld.md`, "Bouwen: een huis dat groeit").
 
-**Volgende stap: punt 4, Handel** (de marskramer). Daarna B: Sint-Maarten, en rijk worden en arm
-lijken — het tweede proefje, en de vraag of de kern leuk is.
+**Volgende stap:** de proefplaat aan Marcel laten zien. Keurt hij hem goed, dan de andere types
+van het gehucht (hut, boerderij als hallehuis, houthakker, schaapskooi, kippenhok, wachthuis,
+kapel) op dezelfde manier, en dan **ronde 4b**: de niet-waterpas huizen als de gebouwen in het spel,
+met hun fases (per type zoveel als het werk vraagt, elk zo lang als het werk duurt, het hoogste punt
+waar de kap staat). Daarna B: Sint-Maarten.
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
   bijstellen als hij speelt;
-- in een huis in aanbouw branden de ramen al;
+- de prijzen en tussenpozen van de marskramer, en de getallen van het bouwen, zijn een eerste gok
+  (`T.HANDEL_INSTELLINGEN`, `T.BOUWEN_INSTELLINGEN`); stil verkopen levert nu alleen minder op, de
+  winst daarvan komt bij punt 6;
+- de huizen in het spel en hun bouwfases komen nog uit de rechte `dorp.cjs` (zie hierboven);
+- de bouwers verschijnen op de bouwplaats in plaats van ernaartoe te lopen; de slag van de hamer
+  is een zwaai opzij, geen slag van boven; er is nog geen geluid;
 - een boer met twee akkers werkt er maar één af, en er is geen apart zaaimoment;
 - het zwad van de maaier staat als paaltjes, en de slag is symmetrisch;
-- de bevolking is een getal, geen poppetjes; nieuwe goederen (steen, klei, riet, …) staan niet in
-  de balk;
+- de bevolking is een getal, geen poppetjes (behalve de bouwers);
 - veel nieuwe gebouwen lenen een tekening (hut, schaapskooi, timmerman, brouwerij, tiendschuur,
-  wapenmaker, wachthuis, …), en kapel, watermolen en put hebben nog geen bouwfases: tekenwerk.
+  wapenmaker, wachthuis, …), en kapel, watermolen en put hebben nog geen bouwfases.
 
 
 **Wacht op Marcel:**
@@ -62,8 +71,8 @@ nog nodig is".
    eten, brandhout en een kerk willen, tevredenheid bepaalt hoe hard ze werken en of ze blijven,
    een huis groeit (hut, huis, stenen huis) als zijn bewoners krijgen wat ze willen, en een winter
    zonder brandhout of voorraad mensen kost.
-4. **Handel.** Klaar als er een marskramer langskomt die ijzer, zout en stenen verkoopt en koopt
-   wat je over hebt, en de smidse zonder ijzer stilvalt.
+4. **Handel** (af, 24 sep 2026). Klaar als er een marskramer langskomt die ijzer, zout en stenen
+   verkoopt en koopt wat je over hebt, en de smidse zonder ijzer stilvalt.
 
 *B. De heer, en de kern (dit is het tweede proefje)*
 
@@ -169,6 +178,15 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 24 sep 2026 — **Bouwen kost handen, en de marskramer.** Na onderzoek naar hoe andere spellen een
+  gebouw laten groeien (Settlers II, Knights and Merchants, Manor Lords; `beeld.md`) koos Marcel:
+  bouwers uit de bevolking vóór de werkplaatsen, voortgang uit gedaan werk (dus geen overgeslagen
+  fases meer), drie keer zo lang, stilstand in de vorst, pannenbier op het hoogste punt, en
+  bouwers met een klophamer en spaanders op de bouwplaats (`js/bouwen.js`). Punt 4: de
+  marskramer komt om de drie à vier weken, verkoopt ijzer, zout en steen, koopt je overschot, en
+  koopt ook stil als heler (`js/handel.js`); een werkplaats zonder grondstof valt stil, en zout
+  houdt vis en vlees goed in de winter. En de schout kon in het gehucht niet lopen: gerepareerd.
 
 - 23 sep 2026 — **Het gehucht speelt.** Punt 1: graan als plaat en in het spel (groeit met de
   kalender, wuift, boeren maaien, de oogst brengt het graan binnen). Punt 2 en 2b: 45 soorten
