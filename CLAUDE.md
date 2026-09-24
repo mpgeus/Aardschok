@@ -157,6 +157,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ploegtijd toch de hele akker in één keer "gemaaid"). `js/tekenen.js` tekent ermee (achterlaag,
   wezen, voorlaag, zodat iemand tot zijn middel in het graan staat); `js/kaart.js` koppelt een
   boer aan zijn akker(s) via `huis`, dezelfde id op de boer als op de akker.
+- **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen, eigen
+  klok naast `S.tijd`, snelheid), `js/voorraad.js` (`S.voorraad`; alles verandert via
+  `T.wijzigVoorraad`, zoals vroeger de jaren via `T.verouder`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
+  soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag,
+  `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`), `js/behoeften.js` (tevredenheid uit eten,
+  brandhout en een kerk; de winter; een huis dat doorgroeit), en `js/hud.js` (de balk en het
+  bouwmenu onder `B`, alleen met `?kaart=gehucht` of `?hud`). Het begin zonder tutorial is
+  `T.beginOpKaart` (`js/gebied.js`); de kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de
+  bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen
+  om bij te stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
+  `T.BEHOEFTEN_INSTELLINGEN`, `T.AKKER_STADIA`, `T.GRAAN_PER_TEGEL`).
 - Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): zijn `gesprek`
   als hij er een heeft, anders zijn soort. Zo delen honderd figuranten één soort (`dorpeling`)
   zonder alle honderd hetzelfde te zeggen.
