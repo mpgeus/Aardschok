@@ -328,6 +328,8 @@
   // doe: { heer: true }), met daarin de schandpaal als die erbij hoort. Het einde (je ambt kwijt)
   // gebruikt het scherm over alles heen uit js/ui.js (T.ui.toonOverlay).
   const hebNu = (S, wat) => Math.floor((S.voorraad && S.voorraad[wat]) || 0);
+  // Een naam kan de speler zelf geven (js/opties.js), dus die gaat nooit rauw in de html.
+  const veilig = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || 'niets');
   const eisInTaal = (eis) => opsomming(eis.volgorde.map((wat) => `${eis.per[wat]} ${wat}`));
 
@@ -366,7 +368,7 @@
       `<p>Het is Ons ter ore gekomen dat het u goed gaat. Dat verheugt Ons zeer, want het gaat Ons ook graag goed. Op Sint-Maarten komen Wij persoonlijk ophalen wat Ons toekomt. Naar wat Wij nu zien, is dat:</p>` +
       `<ul class="brief-lijst">${regels || '<li>niets. Dat kan niet kloppen.</li>'}</ul>${samen}` +
       `<p>Wat er tot Sint-Maarten bijkomt, zien Wij ook. Wie Ons tekortdoet, zal het merken, want Wij tellen zeer zorgvuldig. Bijna altijd.</p>` +
-      `<p class="brief-groet">Uw genadige heer</p>` +
+      `<p class="brief-groet">Uw genadige heer${T.naamVanDeHeer && T.naamVanDeHeer() ? `,<br>${veilig(T.naamVanDeHeer())}` : ''}</p>` +
       `</div>` +
       `<p class="venster-staat">Je hebt nu ${nu}. Wat je hem aan graan geeft, kun je in de lente niet zaaien.${marskramer}</p>` +
       `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit; de knop Brief bovenin opent hem weer.</p>`
@@ -447,8 +449,8 @@
         ? `Het dorp neemt het je niet kwalijk. De heer lacht, en zet er ${k.boete} goud bij.`
         : `Het dorp is ${Math.round(k.kost * 100)}% minder tevreden, en vergeet het pas na maanden.`;
       return (
-        `<button class="paal-keuze" data-wie="${k.wie}"><span class="paal-naam">${k.naam}</span>` +
-        `<span class="paal-wie">${k.eigenschap}</span><span class="paal-prijs">${prijs}</span></button>`
+        `<button class="paal-keuze" data-wie="${k.wie}"><span class="paal-naam">${veilig(k.naam)}</span>` +
+        `<span class="paal-wie">${veilig(k.eigenschap)}</span><span class="paal-prijs">${prijs}</span></button>`
       );
     }).join('');
     return (
@@ -564,6 +566,147 @@
     );
   };
 
+  // ── De spelregels (js/opties.js; spel.md, "Instelbaar") ──
+  // Eén venster in drie delen: de keuzes, de namen, en de werkbank met alle getallen. Wat je
+  // verandert, geldt meteen, en de browser onthoudt het. Zolang het open is, staat de tijd stil.
+  // Namen typt de speler zelf, dus alles wat van hem komt, gaat door veilig() (bij de heer, hierboven).
+  const alsGetal = (x) => (Number.isInteger(x) ? String(x) : String(Math.round(x * 1000) / 1000).replace('.', ','));
+
+  function regelsInhoud() {
+    const keuzes = T.OPTIES.map((o) => {
+      const nu = T.optieKeuze(o.id);
+      const gekozen = o.keuzes.find((k) => k.id === nu);
+      const knoppen = o.keuzes
+        .map((k) => `<button class="regel-keuze${k.id === nu ? ' gekozen' : ''}" data-optie="${o.id}" data-keuze="${k.id}" title="${veilig(k.uitleg)}">${k.naam}${k.id === o.standaard ? '<small>standaard</small>' : ''}</button>`)
+        .join('');
+      return (
+        `<div class="regel"><div class="regel-naam">${o.naam}<small>${o.uitleg}</small></div>` +
+        `<div class="regel-keuzes">${knoppen}</div><p class="regel-uitleg">${gekozen ? gekozen.uitleg : ''}</p></div>`
+      );
+    }).join('');
+    const namen = T.NAAM_OPTIES.map((id) => {
+      const m = T.MENSEN[id] || {};
+      const wie = id === 'heer' ? 'de heer, die standaard geen naam heeft' : m.eigenschap || '';
+      const leeg = id === 'heer' ? 'de heer' : T.standaardNaam(id);
+      return (
+        `<label class="naam-rij"><input type="text" maxlength="30" data-naam="${id}" value="${veilig(T.OPTIES_NU.namen[id] || '')}" placeholder="${veilig(leeg)}">` +
+        `<span>${veilig(wie)}</span></label>`
+      );
+    }).join('');
+    const werkbank = T.WERKBANK.map((deel, i) => {
+      const rijen = T.werkbankGetallen(deel).map((g) => {
+        const b = T.werkbankBereik(g.standaard);
+        const door = g.doorOptie ? `<small>via ${veilig(g.doorOptie)}</small>` : '';
+        return (
+          `<div class="werk-rij${g.eigen ? ' eigen' : ''}" data-rij="${g.pad}"><span class="werk-naam">${veilig(g.label)}${door}</span>` +
+          `<input type="range" min="${b.min}" max="${Math.max(b.max, g.waarde)}" step="${b.stap}" value="${g.waarde}" data-pad="${g.pad}">` +
+          `<input type="number" step="${b.stap}" value="${g.waarde}" data-pad="${g.pad}">` +
+          `<button class="werk-terug" data-terug="${g.pad}" title="Terug naar ${alsGetal(g.standaard)}"${g.eigen ? '' : ' disabled'}>↺</button></div>`
+        );
+      }).join('');
+      return `<details class="werk-deel" data-deel="${i}"><summary>${deel.naam}</summary>${rijen}</details>`;
+    }).join('');
+    return (
+      `<div class="venster-kop"><span class="venster-titel">Spelregels</span><span class="venster-wanneer">wat je zelf instelt</span>` +
+      `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
+      `<p class="venster-staat">Wat je verandert, geldt meteen, ook midden in een spel, en de browser onthoudt het. De standaard is wat Marcel koos.</p>` +
+      `<div class="kop">De regels</div>${keuzes}` +
+      `<div class="kop">Namen</div><div class="namen">${namen}</div>` +
+      `<div class="kop">Werkbank: alle getallen</div>` +
+      `<p class="venster-staat">Elk getal uit de regels. Wat je hier zet, gaat vóór wat een regel hierboven zet; ↺ zet het terug.</p>${werkbank}` +
+      `<div class="regels-voet"><button data-actie="terug">Alles terug naar de standaard</button>` +
+      `<span>Zolang dit open is, staat de tijd stil. <kbd>Esc</kbd> sluit.</span></div>`
+    );
+  }
+
+  // Opnieuw tekenen, maar met de open delen van de werkbank en de plek waar je was.
+  function toonSpelregels() {
+    const box = $('spelregels');
+    const open = [...box.querySelectorAll('details[open]')].map((d) => d.dataset.deel);
+    const waar = box.scrollTop;
+    box.innerHTML = regelsInhoud();
+    for (const d of box.querySelectorAll('details')) if (open.includes(d.dataset.deel)) d.open = true;
+    box.scrollTop = waar;
+  }
+
+  T.ui.spelregelsOpen = () => !$('spelregels').classList.contains('verborgen');
+
+  T.ui.openSpelregels = function (S) {
+    if (!T.OPTIES) return;
+    S.modus = 'spelregels';
+    S.bouwSoort = null;
+    S.bouwMenuOpen = false;
+    T.ui.toonBouwmenu(S);
+    if (T.ui.briefOpen()) T.ui.sluitBrief(S);
+    zetTijdStil(S, 'regelsVoorSnelheid');
+    $('spelregels').classList.remove('verborgen');
+    toonSpelregels();
+    $('spelregels-knop').classList.add('actief');
+  };
+
+  T.ui.sluitSpelregels = function (S) {
+    $('spelregels').classList.add('verborgen');
+    $('spelregels-knop').classList.remove('actief');
+    if (S.modus === 'spelregels') S.modus = 'verkennen';
+    laatTijdLopen(S, 'regelsVoorSnelheid');
+    // Wat een regel verandert, kan de balk raken (de snelheid van een dag, wat de heer vraagt).
+    T.ui.toonVoorraad(S);
+    T.ui.toonKalender(S);
+  };
+
+  $('spelregels-knop').addEventListener('click', (ev) => {
+    ev.currentTarget.blur();
+    const S = T.S;
+    if (!S) return;
+    if (T.ui.spelregelsOpen()) T.ui.sluitSpelregels(S);
+    else if (S.modus === 'verkennen') T.ui.openSpelregels(S);
+  });
+
+  // Eén getal van de werkbank bijwerken zonder het hele venster opnieuw te tekenen: anders valt
+  // de schuif uit je hand terwijl je sleept.
+  function werkRijBij(pad) {
+    const rij = $('spelregels').querySelector(`[data-rij="${pad}"]`);
+    if (!rij) return;
+    const g = T.WERKBANK.flatMap((deel) => T.werkbankGetallen(deel)).find((x) => x.pad === pad);
+    if (!g) return;
+    for (const i of rij.querySelectorAll('input')) if (document.activeElement !== i) i.value = g.waarde;
+    rij.classList.toggle('eigen', g.eigen);
+    const terug = rij.querySelector('.werk-terug');
+    terug.disabled = !g.eigen;
+    terug.title = `Terug naar ${alsGetal(g.standaard)}`;
+  }
+
+  $('spelregels').addEventListener('click', (ev) => {
+    const b = ev.target.closest('button');
+    const S = T.S;
+    if (!b || !S) return;
+    b.blur();
+    if (b.dataset.actie === 'sluit') {
+      T.ui.sluitSpelregels(S);
+    } else if (b.dataset.actie === 'terug') {
+      T.optiesTerug(S);
+      toonSpelregels();
+    } else if (b.dataset.optie) {
+      T.zetOptie(b.dataset.optie, b.dataset.keuze, S);
+      toonSpelregels();
+    } else if (b.dataset.terug) {
+      T.zetGetal(b.dataset.terug, null, S);
+      werkRijBij(b.dataset.terug);
+    }
+  });
+
+  $('spelregels').addEventListener('input', (ev) => {
+    const el = ev.target;
+    const S = T.S;
+    if (!S) return;
+    if (el.dataset.naam) {
+      T.zetNaam(el.dataset.naam, el.value, S);
+    } else if (el.dataset.pad && el.value !== '' && Number.isFinite(Number(el.value))) {
+      T.zetGetal(el.dataset.pad, Number(el.value), S);
+      werkRijBij(el.dataset.pad);
+    }
+  });
+
   // Eén stap trager of sneller, van pauze tot 3x. T.zetSnelheid (js/tijd.js) onthoudt de laatste
   // snelheid, zodat P na een stapje terug weer daar hervat.
   function stapSnelheid(delta) {
@@ -582,6 +725,9 @@
   // P, - en = botsen nergens mee: de spatie en 1-4 zijn van het oude spel (CLAUDE.md).
   window.addEventListener('keydown', (ev) => {
     if (!T.NIEUWE_HUD || !T.S || !T.S.kalender) return;
+    // Niet terwijl je een naam typt, en niet in de spelregels (daar staat de tijd bewust stil).
+    if (ev.target && (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA')) return;
+    if (T.S.modus === 'spelregels') return;
     if (ev.key === 'p' || ev.key === 'P') {
       const k = T.S.kalender;
       T.zetSnelheid(T.S, k.snelheid > 0 ? 0 : k.laatsteSnelheid || 1);

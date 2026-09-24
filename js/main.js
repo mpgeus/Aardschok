@@ -356,6 +356,11 @@
       return;
     }
     if (S.modus === 'einde') return;
+    // De spelregels (js/hud.js): daar typ je ook namen, dus alleen Esc doet iets.
+    if (S.modus === 'spelregels') {
+      if (ev.key === 'Escape') T.ui.sluitSpelregels(S);
+      return;
+    }
     if (ev.key === 'Escape' && T.ui.briefOpen && T.ui.briefOpen()) {
       T.ui.sluitBrief(S);
       return;
@@ -381,6 +386,11 @@
     // B: het bouwmenu (js/hud.js), alleen in het nieuwe spel en alleen bij het rondlopen — botst
     // nergens mee (CLAUDE.md, "Toetsen"). Nog eens B, Esc of rechtsklik legt een gebouw weer weg,
     // net als bij een spreuk.
+    // O: de spelregels (js/hud.js, js/opties.js), net als B alleen bij het rondlopen.
+    if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'o' || ev.key === 'O')) {
+      T.ui.openSpelregels(S);
+      return;
+    }
     if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'b' || ev.key === 'B')) {
       T.kiesSpreuk(S, null);
       if (S.bouwSoort || S.bouwMenuOpen) {

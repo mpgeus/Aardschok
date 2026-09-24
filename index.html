@@ -37,6 +37,7 @@
     <div id="voorraadbalk" class="paneel"></div>
     <button id="bouwmenu-knop" class="paneel" title="Bouwen"><kbd>B</kbd> Bouwen</button>
     <button id="brief-knop" class="paneel verborgen" title="De brief van de heer: wat hij op Sint-Maarten wil">Brief</button>
+    <button id="spelregels-knop" class="paneel" title="Spelregels: wat je zelf instelt (O)"><kbd>O</kbd> Spelregels</button>
   </div>
 
   <!-- Het bouwmenu (js/hud.js, T.ui.toonBouwmenu): de soorten van de huidige trede, met hun
@@ -52,6 +53,10 @@
        wijnmaand, en het betalen op Sint-Maarten, met de schandpaal als die erbij hoort. -->
   <div id="brief" class="paneel verborgen"></div>
   <div id="heer" class="paneel verborgen"></div>
+
+  <!-- De spelregels (js/hud.js, T.ui.openSpelregels; de lijst in js/opties.js): de keuzes, de
+       namen, en de werkbank met alle getallen. -->
+  <div id="spelregels" class="paneel verborgen"></div>
 
   <div id="plek"></div>
   <div id="volgorde" class="paneel"></div>
@@ -97,7 +102,8 @@
   <div id="hulp-gehucht">
     Klik om te lopen, te praten of iets te gebruiken.<br>
     Kalender: <kbd>P</kbd> pauze/hervat · <kbd>-</kbd> <kbd>=</kbd> trager/sneller<br>
-    <kbd>B</kbd> bouwen · <kbd>Esc</kbd> of rechtsklik legt een gebouw weer weg
+    <kbd>B</kbd> bouwen · <kbd>Esc</kbd> of rechtsklik legt een gebouw weer weg<br>
+    <kbd>O</kbd> spelregels: wat je zelf instelt
   </div>
 
   <!-- Gewone scripts, geen modules: zo werkt het spel ook als je index.html los opent.
@@ -141,6 +147,8 @@
   <script src="js/regie.js"></script>
   <script src="js/tutorial.js"></script>
   <script src="js/tekenen.js"></script>
+  <!-- Na alle regels en gesprekken: de spelregels nemen hun waarden als standaard. -->
+  <script src="js/opties.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
