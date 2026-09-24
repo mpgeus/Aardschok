@@ -359,12 +359,45 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 5):
   meer zaaien. Dat is de eerste echte keus op Sint-Maarten.
 - Herendienst en zijn grillen komen later, bij punt 8.
 
-**Nog open, voor wie punt 5 bouwt** (voorstellen, niet besloten):
+**De uitwerking** (Marcel koos op 24 sep uit een voorstel van Claude, vóór het bouwen):
 
-- Wat hij precies vraagt. Het voorstel voor de kern zegt: een deel van het graan (de pacht), wol,
-  pachthoenders en wat stuivers (goud).
-- Hoeveel zaaigraan een akkertegel kost, en wat er gebeurt zonder zaaigraan (de tegel ligt braak).
-- Hoeveel tekort welke straf geeft, en wat "veel te weinig" is.
+- **Een gewoon jaar is honger.** Wie de heer alles in graan geeft, komt elk jaar graan tekort.
+  De heer bedriegen is dan geen keuze meer, maar nood. Een akkertegel geeft 3,5 graan en kost er
+  1 zaaigraan. Claude stelde eerst 3 voor, maar dan heeft het dorp ook honger als je de heer
+  níéts geeft: dan is bedriegen geen uitweg meer, alleen ellende. Bij 3,5 houdt wie de pacht
+  inhoudt zo'n 70 graan over, en komt wie alles in graan betaalt er zo'n 30 tekort, en 70 als
+  hij ook graan moet verkopen voor het goud. (Een eerste gok in één blok, om bij te stellen na
+  spelen.)
+- **Hij vraagt naar wat hij ziet, en in wat hij ziet.** Voor elke akkertegel een half graan (de
+  pacht, ook als de tegel braak lag: hij telt de akkers, niet wat erop groeide), voor elke mens
+  hoofdgeld in goud, en voor elk gebouw zijn eigen prijs: voor de schaapskooi wol, voor het
+  kippenhok eieren (de pachthoenders), voor de houthakker hout (het bos is van hem), en voor huizen
+  en de rest goud. Een hut kost niets (hij ziet er arm uit), een verstopplek ook niet (die ziet
+  hij niet), en een huis in aanbouw telt al mee (hij ziet een steiger en rekent een huis). Die
+  prijs staat bij het gebouw in `T.GEBOUWEN`, en het bouwmenu laat hem zien.
+- **Goud neemt hij altijd in de plaats van iets anders:** hij ziet alleen geld. Wie genoeg goud
+  verdient bij de marskramer, kan zijn graan houden. Wat iets waard is, zeggen de prijzen van de
+  marskramer.
+- **Hij telt slecht.** Geef je in waarde minstens negen tiende, dan merkt hij niets. Daaronder:
+  tot twee derde een boete (het tekort komt volgend jaar terug in goud, met de helft erbij), tot
+  de helft ook soldaten, en minder dan de helft ("veel te weinig") ook de schandpaal. Twee keer
+  achter elkaar veel te weinig, en je bent je ambt kwijt.
+- **De schout mag zichzelf aanwijzen voor de schandpaal.** Dan neemt het dorp het je niet
+  kwalijk, maar de heer vindt het lachwekkend en verhoogt de boete. Kies je een ander, dan staat
+  die drie dagen op de brink, en onthouden hij en het dorp het. Daarom hebben de vijf boeren een
+  naam en een eigenschap gekregen, en weegt het ene aanwijzen zwaarder dan het andere.
+- **De brief komt op 1 wijnmaand,** vóór het laatste bezoek van de marskramer (5 wijnmaand),
+  zodat je nog kunt verkopen voor zijn goud. De brief is een schatting. Op Sint-Maarten vraagt
+  hij naar wat hij díé dag ziet, dus wat je na de brief bouwt, telt mee. Bouwen doe je dus liever
+  ná Sint-Maarten.
+- **Zaaien gebeurt op 1 lentemaand**, vanaf het tweede jaar (het eerste jaar is al gezaaid). Wat
+  er dan niet gezaaid kan worden, ligt dat jaar braak. Het venster op Sint-Maarten zegt vooraf of
+  je graan het haalt: eten tot de oogst, en zaaigraan voor zoveel tegels.
+- **Wat eraan voorafging, om het graan te laten kloppen:** een boer maait nu al zijn akkers (boer 1
+  en boer 3 lieten hun tweede akker liggen), en wat bij het vangnet in herfstmaand nog staat, halen
+  de boeren alsnog binnen. Tot 24 sep rotte dat, en omdat het maaien op de klok van het scherm
+  loopt en de kalender niet, rotte er op 3× veel meer: wie snel speelde, verloor graan zonder het
+  te weten.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
