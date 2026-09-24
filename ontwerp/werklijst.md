@@ -14,8 +14,9 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 **Het spel is omgegooid** (23 sep): een bouw- en beheerspel in isometrisch beeld, met politiek en
 avontuur erin. Jij bent de schout van een gehucht onder een verwarde heer die alleen geld ziet.
-Alles staat in `spel.md`. De code van het oude spel gaat eruit bij punt 7, dat loopt: het spel
-begint nu in het gehucht, en de tutorial, de regie, de meester en De koude oven zijn weg (stap 1-3).
+Alles staat in `spel.md`. De code van het oude spel is eruit (punt 7, af): het spel begint in het
+gehucht, en de toren, de spreuken, de leeftijd, de tutorial, de meester, Wim en De koude oven zijn
+weg. In een gevecht heeft de schout voorlopig gewone levenspunten.
 
 **Wat er nu speelt** (`http://localhost:8123/`): graan dat groeit en gemaaid wordt;
 een balk met kalender, voorraad (en kleine chips voor ijzer, zout, steen, …), bevolking en
@@ -40,10 +41,11 @@ uit `gereedschap/pixelart/bouwfasen-sdf.cjs` (fase 7 is de tegel; `naar-tiled.cj
 rendert hem mee). Een type met een eigen fasevel en een `rand` krijgt een ring rond zijn voet
 (`T.bouwRandVan`, `T.werkBouwplaatsBij` in `js/bouwen.js`; `T.gebouwPast` houdt de ring vrij).
 
-**Volgende stap:** punt 7 afmaken (stap 4 de spreuken, 5 de leeftijd wordt levenspunten, 6 de
-toren, 7 opruimen en `CLAUDE.md`). Dan de andere types van het gehucht (hut, boerderij als
-hallehuis, houthakker, schaapskooi, kippenhok, wachthuis, kapel) langs dezelfde weg als het
-vakwerkhuis.
+**Volgende stap:** de andere types van het gehucht langs dezelfde weg als het vakwerkhuis
+(Marcel vond het vakwerkhuis in het spel goed, 24 sep). Voorstel voor de volgorde: de hut (die
+wordt het meest gebouwd en leent nu een tekening), dan de boerderij als hallehuis (eerst de
+gebinten, de wanden het laatst), dan houthakker, schaapskooi, kippenhok, wachthuis en kapel.
+Daarna punt 8, de voorvallen.
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
@@ -67,6 +69,13 @@ vakwerkhuis.
   alleen voor de vorm; de getallen (`T.INNER_INSTELLINGEN`) zijn een eerste gok;
 - de verstopplek is de houtstapel van het erf, en die heeft geen bouwfases: in aanbouw is hij
   bleker;
+- wat er van het oude spel nog ligt, maar niet meer gebruikt wordt: de beelden van de tovenaar,
+  de meester en de spreukeffecten in `beelden/`, `tegels/toren.*`, en in `gereedschap/pixelart/` de
+  scripts voor toren, trap, meester, effecten en erf. De bakker leent nog het vel van Wim, en de
+  schout heeft nog geen eigen vel (in het gehucht is hij een dorpeling). De oude balk linksboven
+  (sluipen, goud, spullen) staat verborgen in `index.html`;
+- de oude wereldkaart (`kaarten/wereld.tmj`) is nu het dorp van het oude spel met het bos: de weg
+  uit het gehucht komt daar uit, en er is een weg terug. Er staan nog geen mensen op;
 - de bouwers lopen alleen het laatste stuk van hun weg (acht tegels), want lopen gaat in echte
   seconden en een dag duurt er 2,5; ze dragen nog niets (hout, riet); de slag van de hamer is een
   zwaai opzij, geen slag van boven; er is nog geen geluid;
@@ -113,9 +122,9 @@ nog nodig is".
    afleidt of omkoopt. De vraag van het proefje: is dit leuk? Nog niet: de route zelf kiezen (nu
    alleen een plek overslaan met afleiden), een verklikker (punt 10), en verstoppen bij nacht
    (punt 11).
-7. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
-   zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel beschrijft. Hier, omdat
-   er daarna veel nieuwe code bovenop komt. Marcel koos op 24 sep:
+7. **Het oude spel eruit** (af, 24 sep 2026). Klaar als de toren, de spreuken, de leeftijd en de
+   tutorial uit de code zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel
+   beschrijft. Hier, omdat er daarna veel nieuwe code bovenop komt. Marcel koos op 24 sep:
    - **In een gevecht komen voorlopig gewone levenspunten** in de plaats van de leeftijd, zodat de
      gevechtscode blijft werken. Het echte ontwerp komt bij punt 13, als er weer gevochten wordt;
      zo ontwerpen we het niet twee keer.
@@ -123,8 +132,7 @@ nog nodig is".
      gesprekken en quests (voor het avontuur). De toren, het erf, de meester, Wim, de tutorial en
      De koude oven gaan eruit (`wereld.md`).
 
-   **Het plan, in stappen die elk met `npm test` groen eindigen** (kaart gemaakt op 24 sep; stap 1
-   tot 3 zijn af):
+   **Af op 24 sep, in zeven stappen die elk met `npm test` groen eindigden:**
    1. Het spel begint in het gehucht. `BEGIN_KAART` in `main.js` wordt `'gehucht'`, het
       titelscherm gaat weg, en `NIEUWE_HUD` staat altijd aan. Let op: `nieuwSpel` zet heer, inner,
       handel en oogsten niet terug, dus "Opnieuw" doet een `location.reload()`.
@@ -241,10 +249,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 24 sep 2026 — **Het oude spel eruit** (punt 7): het spel begint in het gehucht; de tutorial,
+  de regie, de meester, De koude oven, de spreuken, de leeftijd, de toren en Wim zijn weg (samen
+  zo'n 5000 regels); de schout heeft voorlopig levenspunten; de wereldkaart heeft een weg terug
+  naar het gehucht; `CLAUDE.md` en de README beschrijven alleen nog het nieuwe spel.
 - 24 sep 2026 — **Het vakwerkhuis in het spel** (ronde 4b voor één type), met zijn bouwplaats in
   een ring en stapels die slinken; de verstopplek draagt een houtmijt; de tekenvolgorde zonder
-  cirkels. En punt 7, stap 1 tot 3: het spel begint in het gehucht, en de tutorial, de regie, de
-  meester en De koude oven zijn eruit.
+  cirkels.
 - 24 sep 2026 — **Rijk worden en arm lijken** (punt 6): het rekenboek op 1 herfstmaand, met een
   reden als je minder opgeeft; verstopplekken met een paneel (wat daar ligt, eet het dorp ook
   niet op); het bezoek van de inner als scène waarin je meeloopt, met bij elke plek een keuze; en

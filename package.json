@@ -2,7 +2,7 @@
   "name": "aardschok",
   "version": "0.1.0",
   "private": true,
-  "description": "Aardschok (werktitel). Proefje: een isometrisch avontuur met een naadloze overgang naar gevechten in beurten.",
+  "description": "Aardschok (werktitel). Een bouw- en beheerspel in isometrisch beeld: de schout van een gehucht onder een heer die alleen geld ziet.",
   "scripts": {
     "start": "node server.cjs",
     "test": "node --test",

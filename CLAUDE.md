@@ -11,8 +11,8 @@ Tot 23 sep was het De laatste klim: een tovenaar van 84 met zijn leeftijd als le
 toren. Marcel vond het doel niet goed genoeg. De kunst en de techniek eronder blijven: het
 isometrische beeld (Mystic Towers als voorbeeld), de HD-pixel art uit code, en een naadloze
 overgang van rondlopen naar een gevecht in beurten op tegels (Fallout, Jagged Alliance 2). De code
-van het oude spel (toren, spreuken, leeftijd, tutorial) staat er nog tot hij eruit gaat; zie de
-werklijst.
+van het oude spel ging er op 24 sep uit (werklijst, punt 7): de toren, de spreuken, de leeftijd,
+de tutorial, de meester en Wim. Wie iets zoekt, vindt het in `git log`.
 
 Code, commentaar en spelteksten zijn Nederlands, zoals in Marcels Planner.
 
@@ -107,29 +107,26 @@ lang hij leeft. Daaruit volgt, van meest naar minst effect:
 Alles hangt aan één naamruimte, `globalThis.Toren` (in de code `T`), zodat hetzelfde bestand in
 de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html` telt.
 
-- `js/wereld.js`: plattegrond, kamers, deuren, voorwerpen en wezens, en de vragen over de
-  wereld: `isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`, `isZichtbaar`.
+- `js/wereld.js`: plattegrond, kamers, deuren, voorwerpen en wezens (`T.WEZENS`: de schout en de
+  monsters), en de vragen over de wereld: `isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`,
+  `isZichtbaar`. Binnen (kamers, deuren, zicht per kamer) staat er geen kaart meer, maar de
+  machinerie blijft, getoetst op `test/decor/binnen.cjs` (de plattegrond van de oude toren).
 - `js/pad.js`: A* (`zoekPad`, acht richtingen, schuin kost ook 1, geen hoeken afsnijden) en
   `bereik` (alle tegels binnen N stappen).
-- `js/spreuken.js`: de spreuken als regels, zonder scherm en dus te toetsen: `T.SPREUKEN`
-  (kring, toets, kosten, en per trede wat hij erbij krijgt), de treden van meesterschap
-  (`T.spreuk`, `T.telGebruik`, `T.voortgang`) en de losse rekensommen eromheen: `T.duwPad`,
-  `T.windstootDuwen`, `T.volgendOpLijn` (doorboren), `T.lokt`/`T.lokPad` (dwaallicht).
-- `js/toveren.js`: een spreuk kiezen, richten en uitspreken, in en buiten een gevecht
-  (`T.kiesSpreuk`, `T.handelingSpreuk`), de dwaallichten in de wereld (`T.werkLichtenBij`) en
-  het meesterschap dat meetelt (`T.oefen`).
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
   een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
-  spelstaat zelf (pad, uitval, flits, dood, en de jaren die erbij komen: dat is toveren), en
+  spelstaat zelf (pad, uitval, flits, dood), en
   `T.sprites.teken` legt het anker van de cel op het midden van de tegel. Laadt alles met
   `Image`, nooit `getImageData`: anders werkt `file://` niet meer.
 - `js/anim.js`: beweging en effecten. `T.anim.*` geeft beloftes, zodat een beurt als gewone
   code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`.
 - `js/verkennen.js`: rondlopen, klikhandelingen, dwalende monsters, ontdekt worden.
 - `js/gevecht.js`: de overgang, beurtvolgorde, actiepunten, handelingen, monster-AI
-  (`planMonsterBeurt`, los van het scherm en dus te toetsen).
-- `js/quests.js`: de quests en de raakpunten als gegevens (nu nog leeg, met de vorm erboven);
+  (`planMonsterBeurt`, los van het scherm en dus te toetsen). De schout heeft voorlopig gewone
+  levenspunten (Marcel, 24 sep): het echte ontwerp komt bij punt 13 van de werklijst.
+- `js/quests.js`: de quests als gegevens (leeg sinds 24 sep, met de vorm erboven; De koude oven
+  staat als voorbeeld in `git log`, en `T.RAAKPUNTEN` is leeg omdat er geen spreuken meer zijn);
   `js/quest.js`: de regels erachter, zonder scherm en dus te toetsen — fasen en wegen
   (`T.zetQuest`, `T.neemWeg`, `T.werkQuestsBij`), goud (`T.geefGoud`), de haken waarmee een
   gesprek erop let (`T.questVoorwaarde`, `T.questGevolg`), voorwerpen die aan een quest hangen,
@@ -138,18 +135,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (spellus, invoer, zoom, camera).
 - `js/mensen.js`: **wie de mensen van het dorp zijn, op één plek.** `T.MENSEN.<id>` zegt hoe hij
   heet, hoe snel hij loopt, hoe ver hij dwaalt, welk gesprek hij voert en welk vel hij krijgt —
-  zijn eigen (zijn id is de naam van het vel), een geleend vel (`vel: 'wim'`) of dat van een
+  zijn eigen (zijn id is de naam van het vel), een geleend vel (de bakker leent `vel: 'wim'`) of dat van een
   gewone dorpeling (`zaad: 14`). De kaart zegt alleen nog wáár hij staat:
   `{ x, y, wie: 'koster' }`. Dat is er gekomen omdat het er honderd kunnen worden (Marcel,
   22 sep): een mens stond over vier plekken verdeeld en niets verbond ze, dus kon dezelfde bakker
   op twee plekken staan zonder dat iets klaagde. `T.naamVanMens`, `T.gesprekVanMens`,
   `T.maakDorpeling` en `T.maakMens` zijn de vragen eromheen.
   **Wie geen naam hoeft te hebben, staat er niet in:** `{ x, y, zaad: 7 }` is menigte.
-  **`T.WEZENS` gaat over wat een wezen ís** — wat vecht, wat een leeftijd draagt, wat in code
-  wordt neergezet — en een dorpeling is dat niet. Daar staan alleen nog de held, Wim, de meester
-  en de monsters; de veertien dorpelingen die er met veertien keer dezelfde regel in stonden, zijn
-  op 22 sep naar `mensen.js` verhuisd. Een mens met `wezen: 'wim'` leent er nog wel een.
-- `js/akkers.js`: **alleen het gehucht** (`?kaart=gehucht`, `ontwerp/spel.md`): welk stadium een
+  **`T.WEZENS` gaat over wat een wezen ís** — wat vecht — en een dorpeling is dat niet. Daar
+  staan alleen de held (de schout) en de monsters; de veertien dorpelingen die er met veertien
+  keer dezelfde regel in stonden, zijn op 22 sep naar `mensen.js` verhuisd.
+- `js/akkers.js`: **alleen het gehucht** (`ontwerp/spel.md`): welk stadium een
   akker heeft op welke dag (`T.AKKER_STADIA`, één tabel, `T.akkerStadium`), het windbeeld per
   tegel (`T.windBeeld`) en zijn vaste variant (`T.akkerVariant`), waar een boer in het
   groeiseizoen dwaalt (`T.wandelAnker`, anders gewoon bij zijn huis) en de oogst zelf, tegel voor
@@ -159,7 +155,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   boer aan zijn akker(s) via `huis`, dezelfde id op de boer als op de akker.
 - **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen, eigen
   klok naast `S.tijd`, snelheid), `js/voorraad.js` (`S.voorraad`; alles verandert via
-  `T.wijzigVoorraad`, zoals vroeger de jaren via `T.verouder`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
+  `T.wijzigVoorraad`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
   soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag, een
   werkplaats zonder grondstof valt stil, `T.plaatsGebouw`), `js/bouwen.js` (een gebouw in
   aanbouw: de ploeg komt uit de bevolking vóór de werkplaatsen, `voortgang` 0..1 uit gedaan werk,
@@ -173,8 +169,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   argwaan; zijn rapport stuurt `T.aanslag`), `js/behoeften.js` (tevredenheid uit eten, brandhout en een kerk; de
   winter; zout voor vis en vlees; stemmingen met een reden; een huis dat doorgroeit), en `js/hud.js` (de balk,
   het bouwmenu onder `B`, een vraag met knoppen via `T.ui.vraag`, het handelspaneel en dat van de
-  verstopplek; alleen met
-  `?kaart=gehucht` of `?hud`). Het begin zonder tutorial is `T.beginOpKaart` (`js/gebied.js`); de
+  verstopplek). Het spel begint in het gehucht met `T.beginOpKaart` (`js/gebied.js`; met
+  `?kaart=<naam>` op een andere kaart, voor een proefje); de
   kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de bouwfases uit
   `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`), en die van het
   vakwerkhuis (`huis`, het eerste niet-waterpas huis in het spel) uit `bouwfasen-sdf.cjs`
@@ -193,8 +189,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar.
   `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel.
 - Het spel tekent met sprites zodra `beelden/` er is, en anders met vlakken. Wat de kunst niet
-  dekt (raster, bereik, richtlijn, zwevende tekst, spreukeffecten, de pilaar) blijft altijd
-  vlakken. `Toren.debug.vlakken = true` zet alles terug naar vlakken, om te vergelijken.
+  dekt (raster, bereik, zwevende tekst) blijft altijd vlakken. `Toren.debug.vlakken = true` zet
+  alles terug naar vlakken, om te vergelijken. De naamruimte heet nog `Toren`, naar het oude spel.
 
 ## Het spel in het kort
 
@@ -214,12 +210,12 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 - Toon: zwarte satire. De heer is lachwekkend, zijn straffen niet (voorstel).
 
 De regels van het oude spel (de leeftijd als levensbalk, `T.verouder`, meesterschap, de toetsen
-voor spreuken) staan in `git show 0eb8269:CLAUDE.md`, voor wie aan die code komt voordat hij weg is.
+voor spreuken) staan in `git show 0eb8269:CLAUDE.md`; de code ervan ging er op 24 sep uit.
 
 ## Afspraken in de code
 
-Uit het oude spel; ze gelden voor de code zoals die er nu staat. Het raster en de overgang naar een
-gevecht gaan mee naar het nieuwe spel, de spreuken niet.
+Uit het oude spel, en ze blijven gelden: het raster en de overgang naar een gevecht horen ook bij
+het nieuwe spel (rovers, wolven, de opstand).
 
 - Eén raster voor rondlopen én vechten. Een wezen heeft een vloeiende positie (`x`, `y`) en
   een tegel (`tx`, `ty`); bezetting vraag je altijd aan `tx`/`ty`. Bij het begin van een
@@ -231,12 +227,10 @@ gevecht gaan mee naar het nieuwe spel, de spreuken niet.
 - Een klik op een deur is altijd erheen lopen. Dichtgooien is in een gevecht een eigen knop
   (`D`), die alleen verschijnt naast een open deur. Eerst ging een open deur dicht als je er
   naast stond en erop klikte, en dat is precies wat je niet wilt.
-- Toetsen: `1` slaan, `2` vuurschicht, `3` dwaallicht, `4` windstoot, `D` deur dicht, `spatie`
-  einde beurt, `S` sluipen. De spreuktoetsen werken binnen én buiten een gevecht, want een
-  dwaallicht en een windstoot horen juist bij het rondlopen. Een spreuk in de hand verandert wat
-  de muis doet: hij richt, en lopen kan pas als je hem weer weglegt met `Esc`, de rechtermuisknop
-  of dezelfde toets nog eens. De knoppen onderaan staan in één kolom: de spreukbalk altijd, en
-  daarboven schuiven in een gevecht de actiepunten en de knoppen erbij.
+- Toetsen: `B` het bouwmenu (`Esc` of de rechtermuisknop legt een gebouw weer weg), `P` pauze,
+  `-` en `=` trager en sneller, `S` sluipen; in een gevecht `D` deur dicht en `spatie` einde
+  beurt. Een monster sla je door erop te klikken. In een gevecht schuift de actiebalk onderaan in
+  beeld (actiepunten, deur dicht, einde beurt); daarbuiten is hij weg.
 - Monsters openen geen deuren. Kan geen enkel monster de held nog zien of bereiken, dan eindigt
   het gevecht ('kwijt').
 
@@ -247,9 +241,7 @@ gevecht gaan mee naar het nieuwe spel, de spreuken niet.
 wachten. Dat is nodig omdat een verborgen browserpaneel maar af en toe een beeld tekent; ook
 css-overgangen staan dan vrijwel stil. Het testgereedschap stuurt de spatiebalk niet goed door
 (lege `key`), dus test einde beurt met de knop of met een `KeyboardEvent`.
-`Toren.debug.meesterschap('vuurschicht', 15)` zet het meesterschap van een spreuk (hier op
-Meesterlijk), om de treden te proberen zonder ze te verdienen.
-`Toren.debug.quest('bakker', 'terug')` zet een quest in een fase zonder hem te spelen ('uit' haalt
+`Toren.debug.quest(naam, fase)` zet een quest in een fase zonder hem te spelen ('uit' haalt
 hem weg, beloning en al); zonder fase zegt hij waar hij staat.
 `await Toren.debug.schermafdruk('naam')` bewaart het doek als PNG in
 `gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
@@ -285,10 +277,8 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
   het gesprek in deze situatie, vanzelf neergelegd, klikken springt naar de tekst — een kaartje
   erbij en geen canvas in plaats van, want slepen is een tweede baan en een canvas zet alle
   voorwaarden weer tegelijk in beeld. In de kopbalk **zoek je over alle mensen heen**; klikken
-  brengt je naar een situatie waarin die zin ook echt klinkt. Onderaan de personenlijst staat
-  **het draaiboek van de tutorial** (`T.TUTORIAL_TEKST`): geen gesprek maar de momenten van de
-  openingsscène, in de volgorde die uit `js/tutorial.js` zelf gelezen wordt. Zie
-  `ontwerp/verhaal.md`.
+  brengt je naar een situatie waarin die zin ook echt klinkt. (Sinds 24 sep zijn de gesprekken en
+  quests leeg: die van het oude spel gingen er met punt 7 uit. De bewerkers wachten op nieuwe.)
   Allebei starten ze zichzelf niet meer: de bladzijde die ze gebruikt roept
   `T.gesprekkenTool.start()` of `T.questsTool.start()` aan, met `.kies(...)` en `.begin(...)` /
   `.beginVoor(...)` erbij. Zo zet `wereld.html` dezelfde bewerkers in een paneel, zonder een
@@ -296,8 +286,8 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
 - **Een bewerker schrijft alleen het blok dat hij kent.** `gereedschap/bronblok.js` knipt een
   bestand in kop, blok en staart (`T.bronBlok(tekst, 'T.GESPREKKEN')`); de bewerker regenereert
   alleen het blok, en kop en staart gaan letterlijk mee terug. Dat is geen netheid maar noodzaak:
-  vóór 22 sep schreef de gespreksbewerker `js/gesprekken.js` helemaal opnieuw, kende
-  `T.TUTORIAL_TEKST` niet, en wiste één keer opslaan dus het hele draaiboek van de tutorial. Wie
+  vóór 22 sep schreef de gespreksbewerker `js/gesprekken.js` helemaal opnieuw, kende het draaiboek
+  van de tutorial niet dat erachter stond, en wiste één keer opslaan dus het hele draaiboek. Wie
   een bewerker bouwt of uitbreidt, houdt zich hieraan; `test/bronblok.test.cjs` bewaakt het op de
   echte bestanden. Commentaar in het bestand hangt aan wat eronder staat — een persoon, een knoop,
   één regel tekst, één antwoord — en komt bij het opslaan terug op zijn plek.
