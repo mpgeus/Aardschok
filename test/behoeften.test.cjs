@@ -11,6 +11,7 @@ require('../js/tijd.js');
 require('../js/voorraad.js');
 require('../js/mensen.js');
 require('../js/gebouwen.js');
+require('../js/bouwen.js');
 require('../js/behoeften.js');
 const T = globalThis.Toren;
 
@@ -31,6 +32,15 @@ function maakS(b, h) {
     kalender: { dag: 0 },
     behoeften: T.nieuweBehoeften(),
   };
+}
+
+// Een gebouw afbouwen: dagen tikken tot het af is (js/bouwen.js: met een ploeg uit de bevolking,
+// dus S.bevolking moet er al zijn). Geeft de dag terug waarop het af kwam.
+function bouwAf(S, i) {
+  let dag = 0;
+  while (!S.gebouwen[i].klaar && dag < 200) T.tikGebouwenDag(S, ++dag);
+  assert.equal(S.gebouwen[i].klaar, true, 'het gebouw kwam niet af');
+  return dag;
 }
 
 // dag 280 valt in wintermaand (T.MAANDEN, seizoen "winter"), en is een veelvoud van
@@ -250,17 +260,15 @@ test('T.tikBehoeftenDag: een huis groeit door (T.GEBOUWEN[x].wordt) als het lang
   T.zetVoorraad(S, 'hout', 8);
   const r = T.plaatsGebouw(S, 'hut', 10, 10); // voet 3x3; "huis" is 6x6 en past ruim in de lege wereld
   assert.equal(r.gelukt, true);
-  for (let d = 1; d <= T.GEBOUWEN.hut.bouwtijd; d++) T.tikGebouwenDag(S, d);
-  assert.equal(S.gebouwen[0].klaar, true);
+  S.bevolking = 4; // de bouwers komen uit de bevolking (js/bouwen.js)
+  let dag = bouwAf(S, 0);
 
-  S.bevolking = 4;
   T.zetVoorraad(S, 'graan', 100000);
   T.zetVoorraad(S, 'groente', 1000);
   T.zetVoorraad(S, 'vis', 1000);
   T.zetVoorraad(S, 'vlees', 1000);
   S.gebouwen.push({ soort: 'kapel', x: 30, y: 30, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
 
-  let dag = T.GEBOUWEN.hut.bouwtijd;
   for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen; i++) {
     dag++;
     T.tikGebouwenDag(S, dag);
@@ -275,7 +283,8 @@ test('T.tikBehoeftenDag: een huis groeit niet door als er geen ruimte voor de ui
   const S = maakS(40, 40);
   T.zetVoorraad(S, 'hout', 8);
   T.plaatsGebouw(S, 'hut', 10, 10); // voet 3x3: (10..12, 10..12)
-  for (let d = 1; d <= T.GEBOUWEN.hut.bouwtijd; d++) T.tikGebouwenDag(S, d);
+  S.bevolking = 4; // de bouwers komen uit de bevolking (js/bouwen.js)
+  let dag = bouwAf(S, 0);
 
   // De hele wereld op muur, op de hut zelf na: "huis" (6x6) past dan nergens.
   for (let y = 0; y < 40; y++) {
@@ -291,7 +300,6 @@ test('T.tikBehoeftenDag: een huis groeit niet door als er geen ruimte voor de ui
   T.zetVoorraad(S, 'vlees', 1000);
   S.gebouwen.push({ soort: 'kapel', x: 10, y: 10, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
 
-  let dag = T.GEBOUWEN.hut.bouwtijd;
   for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen + 5; i++) {
     dag++;
     T.tikGebouwenDag(S, dag);

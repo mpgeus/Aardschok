@@ -484,6 +484,8 @@
     // Wie nog geen eigen vel heeft, mag er een lenen (T.WEZENS, vel: 'wim'): zo kan de bakker
     // meedoen voordat hij getekend is. Zie ontwerp/werklijst.md, fase B2b.
     if (!S.figuurGegevens(naam) && e.vel) naam = e.vel;
+    // Een bouwer (js/bouwen.js) is zolang zijn eigen vel er niet is een gewone dorpeling met zijn zaad.
+    if (!S.figuurGegevens(naam) && e.soort === 'bouwer') naam = dorpelingVel(e.zaad || 0);
     const f = S.figuurGegevens(naam);
     if (!f) return null;
     const st = stand(e);
@@ -553,6 +555,16 @@
     if (e.maait && naam === 'maaier' && S.heeftHouding(naam, 'maaien')) {
       const duur = S.houdingDuur(naam, 'maaien') || 1;
       return { naam, houding: 'maaien', richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };
+    }
+    // Een bouwer die naast zijn bouwplaats stilstaat (js/bouwen.js, T.naarBouwplaats) timmert, met
+    // zijn gezicht naar de muur: net als maaien een lus, zolang hij daar staat.
+    if (e.bouwVoet && !(e.pad && e.pad.length) && T.naarBouwplaats && S.heeftHouding(naam, 'timmeren')) {
+      const r = T.naarBouwplaats(e);
+      if (r) {
+        st.richting = S.richtingVan(r.dx, r.dy);
+        const duur = S.houdingDuur(naam, 'timmeren') || 1;
+        return { naam, houding: 'timmeren', richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };
+      }
     }
     if (e.pad && e.pad.length) {
       const houding = loopHouding(naam, e);

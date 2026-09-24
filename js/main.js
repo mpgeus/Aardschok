@@ -278,6 +278,8 @@
       // js/akkers.js, alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
       // T.laatDwalen al "bezig" (m.pad.length of m.maait) en dwaalt deze beurt niet ook nog weg.
       if (T.werkOogstBij) T.werkOogstBij(S, dt);
+      // De bouwers op de bouwplaatsen (js/bouwen.js): zoveel als er vandaag aan elk gebouw werken.
+      if (T.werkBouwersBij) T.werkBouwersBij(S);
       T.laatDwalen(S, dt);
       const m = T.zoekOntdekking(S);
       if (m) T.startGevecht(S, m, false);
@@ -323,7 +325,12 @@
         T.ui.bericht(r.reden, 'gevaar');
         return;
       }
-      T.ui.bericht(`${T.GEBOUWEN[soort].naam} in aanbouw (${T.GEBOUWEN[soort].bouwtijd} dagen).`, 'goed');
+      // Wie in de vorst bouwt, moet weten waarom er niets gebeurt (js/bouwen.js).
+      const vorst = T.vriestHet && S.kalender && T.vriestHet(Math.floor(S.kalender.dag));
+      T.ui.bericht(
+        `${T.hoofdletter(T.GEBOUWEN[soort].naam)} in aanbouw` + (vorst ? ': het vriest, er wordt gebouwd als het dooit.' : ` (${T.GEBOUWEN[soort].bouwtijd} dagen met een volle ploeg).`),
+        'goed',
+      );
       S.bouwSoort = null;
       return;
     }

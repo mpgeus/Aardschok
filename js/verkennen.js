@@ -102,6 +102,10 @@
       }
       return null;
     }
+    // Een gebouw in aanbouw zegt bij de muis hoe het ervoor staat (js/bouwen.js): hoe ver, met
+    // hoeveel bouwers, hoe lang nog, en waarom het stilligt. Waar je ook op zijn voet wijst.
+    const bouw = T.bouwplaatsOp && T.bouwplaatsOp(S, doel.x, doel.y);
+    if (bouw) return { tekst: T.bouwStand(S, bouw).tekst };
     if (doel.voorwerp) {
       const v = doel.voorwerp;
       if (v.soort === 'fontein') {

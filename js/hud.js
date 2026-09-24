@@ -92,6 +92,8 @@
     for (const wat of T.GRONDSTOFFEN) {
       box.querySelector(`[data-wat="${wat}"] .aantal`).textContent = Math.floor(S.voorraad[wat] || 0);
     }
+    // Een open vraag met een prijs erin (het pannenbier) kijkt mee met de voorraad.
+    if (vragen.length) toonVraag();
   };
 
   // Het aantal mensen en de woonruimte (js/gebouwen.js, T.werkGebouwenBij): een eigen functie,
@@ -114,9 +116,9 @@
     const pct = Math.round(S.behoeften.tevredenheid * 100);
     cel.querySelector('.aantal').textContent = `${pct}%`;
     cel.classList.toggle('laag', S.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel);
-    cel.title = S.behoeften.mist.length
+    cel.title = (S.behoeften.mist.length
       ? `Tevredenheid: ${pct}%. Het dorp mist: ${S.behoeften.mist.join(', ')}.`
-      : `Tevredenheid: ${pct}%. Het dorp heeft wat het nodig heeft.`;
+      : `Tevredenheid: ${pct}%. Het dorp heeft wat het nodig heeft.`) + (S.behoeften.feest ? ' Het pannenbier doet nog na.' : '');
   };
 
   // Het bouwmenu: de soorten van de huidige trede, met hun kosten en wat ze doen (ontwerp/spel.md,
@@ -128,10 +130,13 @@
       .map((id) => {
         const g = T.GEBOUWEN[id];
         const kosten = Object.entries(g.kosten).map(([wat, n]) => `${n} ${wat}`).join(', ');
+        // Hoe lang, en met hoeveel man (js/bouwen.js): de dagen gelden voor een volle ploeg.
+        const ploeg = T.ploegVan ? T.ploegVan(id) : 0;
+        const duur = `${g.bouwtijd} dag${g.bouwtijd === 1 ? '' : 'en'}` + (ploeg ? `, ${ploeg} bouwer${ploeg === 1 ? '' : 's'}` : '');
         return (
           `<button data-soort="${id}">` +
           `<span class="bouw-naam">${T.hoofdletter(g.naam)}</span>` +
-          `<span class="bouw-kosten">${kosten} · ${g.bouwtijd} dag${g.bouwtijd === 1 ? '' : 'en'}</span>` +
+          `<span class="bouw-kosten">${kosten} · ${duur}</span>` +
           `<span class="bouw-uitleg">${g.beschrijving}</span>` +
           `</button>`
         );
@@ -166,6 +171,60 @@
       S.bouwMenuOpen = true;
     }
     T.ui.toonBouwmenu(S);
+  });
+
+  // Een vraag aan de speler, met twee of drie antwoorden: het pannenbier op het hoogste punt
+  // (js/bouwen.js, T.vraagPannenbier), later de voorvallen (ontwerp/werklijst.md, punt 8).
+  //   T.ui.vraag({ sleutel, kop, tekst, keuzes: [{ tekst, doe, kan, waarom }] })
+  // `tekst` en `kan` van een keuze mogen functies zijn: ze worden bij elk tekenen opnieuw gevraagd,
+  // ook als de voorraad verandert, zodat een prijs of een knop nooit verouderd in beeld staat.
+  // `doe` mag { gelukt: false, reden } teruggeven: dan blijft de vraag staan en zegt een bericht
+  // waarom. Eén vraag tegelijk in beeld; wat erbij komt, wacht in de rij. `sleutel` is waarmee
+  // T.ui.sluitVraag hem weer weghaalt (het gebouw is af voordat er een antwoord kwam).
+  const vragen = [];
+  const waarde = (x) => (typeof x === 'function' ? x() : x);
+  function toonVraag() {
+    const box = $('vraag');
+    if (!box) return;
+    const v = vragen[0];
+    box.classList.toggle('verborgen', !v);
+    if (!v) {
+      box.innerHTML = '';
+      return;
+    }
+    box.innerHTML =
+      `<div class="kop">${v.kop}</div><p>${v.tekst}</p><div class="keuzes">` +
+      v.keuzes
+        .map((k, i) => {
+          const kan = k.kan == null ? true : waarde(k.kan);
+          return `<button data-i="${i}"${kan ? '' : ` disabled title="${k.waarom || ''}"`}>${waarde(k.tekst)}</button>`;
+        })
+        .join('') +
+      '</div>';
+  }
+  T.ui.vraag = function (v) {
+    vragen.push(v);
+    toonVraag();
+  };
+  T.ui.sluitVraag = function (sleutel) {
+    const i = vragen.findIndex((v) => v.sleutel === sleutel);
+    if (i < 0) return;
+    vragen.splice(i, 1);
+    toonVraag();
+  };
+  $('vraag').addEventListener('click', (ev) => {
+    const b = ev.target.closest('button');
+    const v = vragen[0];
+    if (!b || !v) return;
+    b.blur();
+    const r = v.keuzes[Number(b.dataset.i)].doe();
+    if (r && r.gelukt === false) {
+      T.ui.bericht(r.reden, 'gevaar');
+      toonVraag();
+      return;
+    }
+    vragen.shift();
+    toonVraag();
   });
 
   // Eén stap trager of sneller, van pauze tot 3x. T.zetSnelheid (js/tijd.js) onthoudt de laatste

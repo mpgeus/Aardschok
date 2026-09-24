@@ -1093,11 +1093,11 @@
       const dekking = v.doorkijk == null ? 1 : v.doorkijk;
       const isToren = v.soort === 'toren';
       // In aanbouw (js/gebouwen.js, T.plaatsGebouw): heeft dit gebouw fases in tegels/bouwfasen.png
-      // (T.bouwFaseIndex kiest welke, op hoe ver de bouwtijd is), dan die — anders (kapel,
-      // watermolen, put, ...) net als voorheen gewoon bleker tot hij klaar is, zonder er een
-      // tweede tekening voor nodig te hebben.
+      // (T.bouwFaseIndex, js/bouwen.js, kiest welke, op hoe ver het werk is), dan die — anders
+      // (kapel, watermolen, put, ...) gewoon bleker tot hij klaar is, zonder er een tweede tekening
+      // voor nodig te hebben.
       const fase = v.inAanbouw && v.tekeningNaam && T.bouwFaseIndex && metSprites() && T.sprites.bouwfase
-        && T.sprites.bouwfase(v.tekeningNaam, T.bouwFaseIndex(S.kalender ? S.kalender.dag : 0, v.klaarOp, v.bouwtijd));
+        && T.sprites.bouwfase(v.tekeningNaam, T.bouwFaseIndex(v.voortgang));
       const alpha = (isToren ? dof * dekking : dof) * (v.inAanbouw && !fase ? 0.45 : 1);
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;

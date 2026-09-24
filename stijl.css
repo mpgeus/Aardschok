@@ -262,6 +262,30 @@ kbd {
 .bericht.gevaar { color: #f3b1a5; }
 .bericht.goed { color: #bfe3ab; }
 .bericht.rust { color: #c9d6ea; }
+/* Een vraag aan de speler (js/hud.js, T.ui.vraag): boven de berichten, want hij hoort erbij, maar hij
+   blijft staan tot er een antwoord is. */
+#vraag {
+  position: fixed;
+  left: 16px;
+  bottom: 170px;
+  width: min(360px, 44vw);
+  padding: 10px 12px 12px;
+  border-color: rgba(226, 182, 74, 0.6);
+}
+#vraag .kop { font: 13px var(--kop); color: var(--goud); letter-spacing: 0.04em; margin-bottom: 4px; }
+#vraag p { margin: 0 0 8px; font-size: 13px; line-height: 1.35; }
+#vraag .keuzes { display: flex; gap: 6px; flex-wrap: wrap; }
+#vraag button {
+  padding: 5px 10px;
+  font-size: 13px;
+  color: var(--inkt);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--rand);
+  border-radius: 6px;
+  cursor: pointer;
+}
+#vraag button:hover:not(:disabled) { background: rgba(255, 255, 255, 0.12); border-color: rgba(226, 182, 74, 0.6); }
+#vraag button:disabled { opacity: 0.45; cursor: default; }
 @keyframes vervaag {
   0% { opacity: 0; transform: translateY(4px); }
   4% { opacity: 1; transform: none; }

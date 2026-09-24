@@ -95,7 +95,10 @@
     const heeftKerk = T.heeftKerk(S);
     const kerkFactor = heeftKerk ? 1 : IN.kerkBasis;
 
-    const tevredenheid = IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor;
+    // Een feest maakt een paar dagen extra tevreden, tot het maximum: het pannenbier op het hoogste
+    // punt van een nieuw gebouw (js/bouwen.js, T.schenkPannenbier zet S.feest).
+    const feest = S.feest && dag < S.feest.tot ? S.feest.bonus : 0;
+    const tevredenheid = Math.min(1, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + feest);
 
     const mist = [];
     if (voedselDekking < 1) mist.push('eten');
@@ -106,7 +109,7 @@
       tevredenheid, mist, inWinter,
       voedselDekking, extraSoorten, voedselFactor,
       brandhoutDekking, brandhoutBenodigd, brandhoutVoorraad, brandhoutFactor,
-      huishoudens, heeftKerk, kerkFactor,
+      huishoudens, heeftKerk, kerkFactor, feest,
     };
   };
 
@@ -240,6 +243,7 @@
     const b = T.berekenTevredenheid(S, dag);
     S.behoeften.tevredenheid = b.tevredenheid;
     S.behoeften.mist = b.mist;
+    S.behoeften.feest = b.feest;
 
     // De extra soorten worden ook echt opgegeten, anders stapelt de moestuin zich oneindig op.
     for (const wat of b.extraSoorten) T.wijzigVoorraad(S, wat, -(S.bevolking || 0) * IN.extraVoedselPerMensPerDag);
