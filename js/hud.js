@@ -503,7 +503,9 @@
     geef = null;
     const h = S.heer;
     if (h && (!h.bezoek || h.bezoek.weg) && h.snelheidVoorWachten) {
-      S.heerVoorSnelheid = h.snelheidVoorWachten;
+      // Stond de tijd al stil voor hem toen je het venster opende, dan loopt hij weer zoals vóór
+      // zijn komst; had je hem zelf weer aangezet, dan zoals jij hem zette.
+      if (!S.heerVoorSnelheid) S.heerVoorSnelheid = h.snelheidVoorWachten;
       h.snelheidVoorWachten = null;
     }
     laatTijdLopen(S, 'heerVoorSnelheid');
