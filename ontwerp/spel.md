@@ -468,8 +468,16 @@ werkbank heeft 91 getallen, elk met een schuif, een getalveld en ↺, een leesba
 graan · prijs · lente"), en erbij welke keuze het getal zet. Een naam geldt overal tegelijk: bij de
 mens, in zijn gesprek en op zijn poppetje. De heer tekent zijn brief ermee.
 
-Nog open: de voorinstellingen Mild en Streng (wat staat er dan?), en of de eigenschappen van de
-boeren ook instelbaar moeten zijn.
+Nog open: de voorinstellingen Mild en Streng (wat staat er dan?).
+
+### De boeren krijgen willekeurige eigenschappen (Marcel, 24 sep 2026)
+
+> Ze moeten random eigenschappen hebben. De ene oogst dan wat sneller dan de ander. Etc
+
+Het antwoord op de vraag of de eigenschappen van de boeren instelbaar moeten worden: ze worden
+geloot, en ze doen iets in het spel. Nog te vragen, vóór het bouwen: welke eigenschappen er als
+eerste komen, of ook hun karakter (Klaas zingt, Aaltje is weduwe, …) geloot wordt, en of je ze
+ziet of zelf moet ontdekken.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
