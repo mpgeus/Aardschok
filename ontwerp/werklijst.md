@@ -48,11 +48,10 @@ proefje, en de vraag of de kern leuk is. Wacht wel eerst op Marcels oordeel over
   zijn venster;
 - **het eerste voorjaar is krap:** het gehucht begint met 60 graan voor 25 mensen, dus half
   grasmaand is het op, ruim drie maanden vóór de oogst. Bij het eerste bezoek van de marskramer
-  heb je dan ook bijna niets te verkopen (wat hout). Bijstellen met Marcel: meer beginvoorraad, of
-  juist zo laten, want de lente vóór de oogst was echt de hongertijd;
-- zout doet nu nog weinig: vis en vlees komen het hele jaar binnen. Het gaat pas echt tellen als de
-  visser en de jager 's winters minder vangen, of met het slachten in slachtmaand (`spel.md`,
-  "Handel", voor later);
+  heb je dan ook bijna niets te verkopen (wat hout). Marcel (24 sep): "het graan passen we
+  gaandeweg wel aan na spelen";
+- zout telt sinds 24 sep voor de vis, want de beek vriest 's winters dicht. Het vlees van de jager
+  komt het hele jaar binnen; het slachten in slachtmaand is voor later (`spel.md`, "Handel");
 - de marskramer leent het vel van Wim, en loopt van de weg naar de brink op 1× een week;
 - wat een gebouw zegt, lees je alleen op zijn voet (het dak vangt de muis niet), en alleen bij
   gebouwen die je zelf neerzette;

@@ -317,6 +317,9 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
 - **Gereedschap laat sneller werken, en slijt.** Met gereedschap in de voorraad werkt iedereen
   harder. Het slijt langzaam, dus je blijft de smidse nodig hebben.
 - **Zout bewaart vis en vlees.** Zonder zout bederft er elke dag een deel van.
+- **De beek vriest 's winters dicht** (Marcel, 24 sep: "die beek is wel een leuk detail"). De
+  visser vangt dan niets, dus vis die je in de winter wilt eten, moet je in de herfst zouten. Zo
+  telt het zout. Of je het ijs ook ziet, is nog open: dat is tekenwerk.
 - **Stenen komen later, met een kar.** Een marskramer draagt zijn waar op zijn rug: zout en een
   staaf ijzer passen erin, een lading stenen niet. Bij de trede dorp komt er een voerman met een
   kar. Zo groeit de handel mee met het dorp: de marskramer in het gehucht, de voerman in het dorp,
