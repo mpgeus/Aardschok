@@ -1513,6 +1513,25 @@
     ctx.fillRect(cx - b / 2, y, b * f, 4);
   }
 
+  // Spaanders van een hamerslag op een bouwplaats (js/bouwen.js): vijf snippers hout die in een
+  // boogje van de muur springen en vallen. Losse pixels op hele pixels, geen gloed (zie de
+  // spreukeffecten hieronder: dezelfde regel).
+  const SPAANDER_KLEUREN = ['#c89a5a', '#8a5a2c', '#e0c48a', '#a8743e', '#d8b070'];
+  function tekenSpaanders(ctx, fx, f) {
+    const p = T.naarScherm(fx.x, fx.y);
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, 1 - f * f);
+    for (let i = 0; i < 5; i++) {
+      const s = Math.sin(fx.zaad * 97 + i * 12.9);
+      const t = f * fx.duur;
+      const x = p.x + (i - 2) * 11 * t + s * 3;
+      const y = p.y - 26 - (38 + s * 14) * t + 140 * t * t;
+      ctx.fillStyle = SPAANDER_KLEUREN[i];
+      ctx.fillRect(Math.round(x), Math.round(y), 2, 2);
+    }
+    ctx.restore();
+  }
+
   function tekenEffecten(ctx, S) {
     // Met de vellen van de effecten: de spreuken als pixel art (zie hieronder). Dan blijven hier
     // alleen de zwevende getallen over, en die komen erbovenop: het jaar uit de zucht.
@@ -1521,6 +1540,10 @@
     for (const fx of S.effecten) {
       const f = fx.t / fx.duur;
       if (fx.t < 0) continue; // een tekst die nog even wacht
+      if (fx.soort === 'spaanders') {
+        tekenSpaanders(ctx, fx, f);
+        continue;
+      }
       if (pixels && fx.soort !== 'tekst') continue;
       if (fx.soort === 'tekst') {
         const p = T.naarScherm(fx.x, fx.y);

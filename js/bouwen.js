@@ -32,6 +32,7 @@
     feestDagen: 10, // ... zo veel dagen lang
     mopperTempo: 0.75, // zonder pannenbier werkt de ploeg zo veel trager, tot het gebouw af is
     zichtbaar: 3, // hoogstens zo veel bouwers per bouwplaats als poppetje (T.werkBouwersBij)
+    slag: 0.5, // waar in de houding 'timmeren' (0..1) de hamer de muur raakt: dan vliegen de spaanders
   };
 
   const bericht = (tekst, soort) => {
@@ -302,7 +303,34 @@
         poppen.push(e);
       }
     }
+    spaanders(S);
   };
+
+  // Bij elke slag van de hamer een handvol spaanders tegen de muur (js/tekenen.js tekent ze). Alleen
+  // als de bouwer zijn eigen vel met de houding 'timmeren' heeft (zonder hamer in de hand zouden ze
+  // uit het niets komen), en alleen aan de voorkant van het gebouw, waar je het ziet: een bouwer
+  // achter het huis is zelf ook niet te zien. De fase is dezelfde som als in js/sprites.js.
+  function spaanders(S) {
+    const Sp = T.sprites;
+    if (!S.effecten || !Sp || !Sp.heeftHouding || !Sp.heeftHouding('bouwer', 'timmeren')) return;
+    const duur = Sp.houdingDuur('bouwer', 'timmeren');
+    const slag = T.BOUWEN_INSTELLINGEN.slag;
+    for (const b of S.gebouwen) {
+      for (const e of b.poppen || []) {
+        const r = e.pad.length ? null : T.naarBouwplaats(e);
+        if (!r || r.dx > 0 || r.dy > 0) {
+          e.slagFase = null;
+          continue;
+        }
+        const fase = ((S.tijd + e.fase) / duur) % 1;
+        const was = e.slagFase;
+        e.slagFase = fase;
+        if (was == null) continue;
+        const raak = fase >= was ? was < slag && fase >= slag : was < slag || fase >= slag;
+        if (raak) S.effecten.push({ soort: 'spaanders', x: e.x + r.dx * 0.5, y: e.y + r.dy * 0.5, t: 0, duur: 0.5, zaad: Math.random() });
+      }
+    }
+  }
 
   // Staat deze bouwer naast zijn bouwplaats? Dan de richting ernaartoe ({ dx, dy }, één stap), zodat
   // js/sprites.js hem met zijn gezicht naar de muur laat timmeren; anders null.
