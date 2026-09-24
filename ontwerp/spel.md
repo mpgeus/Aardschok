@@ -388,7 +388,10 @@ Uitgewerkt door Claude (voorstel, de getallen staan in `T.INNER_INSTELLINGEN`):
 - **Wie niet meeloopt,** laat hem alleen kijken: dan zegt niemand iets, en dat valt ook op.
 - **Omkopen kost goud,** meer naarmate hij argwaniger is, en elk jaar meer: hij went eraan.
 - **Afleiden** laat hem een plek overslaan, en een verstopplek in de buurt van die plek blijft
-  onopgemerkt, maar hij merkt dat je hem wegleidt.
+  onopgemerkt, maar hij merkt dat je hem wegleidt, en de tweede keer in hetzelfde bezoek beter dan
+  de eerste (+5, dan +10). **Niet bij de akkers:** daarvoor komt hij. Kon het daar wel, dan kostte
+  een lage opgave bijna niets: de helft opgeven gaf bij de akkers +52 argwaan, en afleiden maakte
+  er +5 van (gevonden bij het nakijken, 24 sep).
 - **Wat hij vindt,** neemt hij mee voor de heer, en het staat in zijn rapport.
 - **De brief van de heer** vraagt pacht naar de opgegeven oogst (een achtste), maar hoe argwaniger
   de inner, hoe meer de heer rekent met wat de inner zelf telde, en hoe meer goud hij er bovenop

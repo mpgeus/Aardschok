@@ -39,7 +39,7 @@
     argwaanTeWeinig: 10, // minder dan de helft van wat hij verwacht: waar is het?
     argwaanPerPronk: 2, // per punt pronk van wat nieuw is, als je minder opgaf dan hij telde
     uitleggen: 0.5, // uitleggen haalt zoveel van de argwaan van die plek weg
-    afleiden: 5, // argwaan erbij als je hem wegleidt
+    afleiden: 5, // argwaan erbij als je hem wegleidt, en bij elke volgende keer in hetzelfde bezoek 5 meer
     wegblijven: 8, // argwaan erbij als de schout er niet bij is
     omkopen: { basis: 5, perArgwaan: 0.1, erbijPerKeer: 0.5, zakt: 20 },
     vinden: { straal: 3, kans: 0.35, perArgwaan: 0.004, argwaan: 40 },
@@ -230,7 +230,7 @@
     const geteld = Math.round(echt * (1 + IN().telFout * (hashTal(jaar, 7) * 2 - 1)));
     const sinds = Math.max(0, dag - dagVan(jaar, IN().rekenboek));
     const eten = (T.GEBOUWEN_INSTELLINGEN && T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag) || 0.05;
-    I.bezoek = { jaar, dag, stops: routeVan(S), i: 0, geteld, gegetenSinds: (S.bevolking || 0) * eten * sinds, gevonden: [], argwaanVoor: I.argwaan };
+    I.bezoek = { jaar, dag, stops: routeVan(S), i: 0, geteld, gegetenSinds: (S.bevolking || 0) * eten * sinds, gevonden: [], afgeleid: 0, argwaanVoor: I.argwaan };
     I.komtOp = null;
     return I.bezoek;
   };
@@ -242,6 +242,12 @@
     return vanafLouw - T.TIJD_START_MAAND * T.DAGEN_PER_MAAND;
   }
 
+  // Afleiden laat hem een plek overslaan, maar niet de akkers: daarvoor komt hij, en een akker kun je
+  // niet voor hem verbergen. Kon het wel, dan kostte een lage opgave bijna niets meer (24 sep: de
+  // helft opgeven gaf daar +52 argwaan, en afleiden maakte er +5 van).
+  const NIET_VAN_DE_AKKERS = 'Van de akkers leid je hem niet weg: daarvoor is hij gekomen.';
+  T.kanAfleiden = (stop) => !!stop && stop.soort !== 'akkers';
+
   // Jouw antwoord bij de plek waar hij nu staat: 'zwijgen', 'uitleggen', 'afleiden', 'omkopen', of
   // 'weg' (de schout was er niet bij). Daarna kijkt hij rond: een verstopplek dichtbij kan hij vinden.
   // Geeft { gelukt, reden } of { gelukt, argwaan, gevonden } terug.
@@ -250,6 +256,7 @@
     const B = I.bezoek;
     if (!B || B.i >= B.stops.length) return { gelukt: false, reden: 'De inner is er niet.' };
     const stop = B.stops[B.i];
+    if (keuze === 'afleiden' && !T.kanAfleiden(stop)) return { gelukt: false, reden: NIET_VAN_DE_AKKERS };
     const w = T.waarneming(S, stop);
     const C = IN();
     let erbij = w.argwaan;
@@ -260,8 +267,11 @@
       I.omgekocht++;
       erbij -= C.omkopen.zakt;
     } else if (keuze === 'uitleggen') erbij *= 1 - C.uitleggen;
-    else if (keuze === 'afleiden') erbij = C.afleiden;
-    else if (keuze === 'weg') erbij += C.wegblijven;
+    else if (keuze === 'afleiden') {
+      // Hij merkt dat je hem wegleidt, en de tweede keer beter dan de eerste.
+      erbij = C.afleiden * (1 + B.afgeleid);
+      B.afgeleid++;
+    } else if (keuze === 'weg') erbij += C.wegblijven;
     I.argwaan = Math.max(0, Math.min(100, I.argwaan + erbij));
     const gevonden = keuze === 'afleiden' ? [] : zoekRond(S, stop, B.i);
     if (stop.gebouw) I.gezien.push(sleutel(stop.gebouw));
@@ -486,7 +496,7 @@
       tekst: w.tekst,
       keuzes: [
         { tekst: 'Uitleggen', doe: klaar('uitleggen') },
-        { tekst: 'Afleiden', doe: klaar('afleiden') },
+        { tekst: 'Afleiden', kan: () => T.kanAfleiden(stop), waarom: NIET_VAN_DE_AKKERS, doe: klaar('afleiden') },
         { tekst: `Omkopen (${prijs} goud)`, kan: () => (S.voorraad.goud || 0) >= prijs, waarom: 'Zoveel goud is er niet.', doe: klaar('omkopen') },
         { tekst: 'Zwijgen', doe: klaar('zwijgen') },
       ],

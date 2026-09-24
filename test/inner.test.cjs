@@ -143,13 +143,31 @@ test('uitleggen, afleiden, omkopen en wegblijven werken elk anders', () => {
   };
   const zwijgen = uitkomst('zwijgen').erbij;
   assert.ok(Math.abs(uitkomst('uitleggen').erbij - zwijgen * (1 - I.uitleggen)) < 1e-9);
-  assert.equal(uitkomst('afleiden').erbij, I.afleiden);
+  const af = uitkomst('afleiden');
+  assert.equal(af.r.gelukt, false, 'van de akkers leid je hem niet weg');
+  assert.equal(af.S.inner.bezoek.i, 0, 'en hij staat er nog');
   assert.ok(Math.abs(uitkomst('weg').erbij - (zwijgen + I.wegblijven)) < 1e-9);
   assert.equal(uitkomst('omkopen', 0).r.gelukt, false, 'zonder goud koop je niemand om');
   const om = uitkomst('omkopen', 100);
   assert.ok(om.erbij < zwijgen, 'omkopen helpt');
   assert.ok(om.S.voorraad.goud < 100, 'en kost goud');
   assert.equal(om.S.inner.omgekocht, 1);
+});
+
+test('afleiden laat hem een plek overslaan, en de tweede keer merkt hij het beter', () => {
+  const S = maakS();
+  oogst(S, 400);
+  S.gebouwen.push({ soort: 'stenenHuis', x: 10, y: 20, klaar: true, voortgang: 1, handen: 0, voorwerp: {} });
+  for (let d = 151; d < BEZOEK; d++) T.tikInnerDag(S, d);
+  T.beginBezoek(S, BEZOEK);
+  assert.deepEqual(S.inner.bezoek.stops.map((s) => s.soort), ['akkers', 'schuur', 'nieuw']);
+  T.antwoord(S, 'zwijgen'); // de akkers
+  const a0 = S.inner.argwaan;
+  T.antwoord(S, 'afleiden'); // de schuur
+  const a1 = S.inner.argwaan;
+  T.antwoord(S, 'afleiden'); // het nieuwe huis
+  assert.equal(a1 - a0, I.afleiden);
+  assert.equal(S.inner.argwaan - a1, 2 * I.afleiden);
 });
 
 test('omkopen wordt elk jaar duurder, en duurder naarmate hij argwaniger is', () => {
