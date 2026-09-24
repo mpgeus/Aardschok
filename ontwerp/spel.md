@@ -356,6 +356,44 @@ Uitgewerkt door Claude (voorstel, de getallen staan in `T.HEER_INSTELLINGEN`):
 - **Tevredenheid heeft nu stemmingen:** een tijdelijk plus of min met een reden (het pannenbier, de
   schandpaal, soldaten in het dorp), die bij de muis op de tevredenheid staan.
 
+## Rijk worden en arm lijken: de inner (Marcel, 24 sep 2026)
+
+Punt 6 van de werklijst, het tweede proefje. Marcel koos uit de voorstellen van Claude:
+
+- **De inner komt na de oogst,** één keer per jaar, in herfstmaand, een paar dagen vooraf
+  aangekondigd. Wat hij ziet, bepaalt de brief van de heer een maand later: laat je hem weinig
+  zien, dan vraagt de heer weinig.
+- **Verstoppen doe je in een verstopplek:** een kuil of kelder met plaats voor zoveel, waar je graan,
+  wol of goud in zet of uit haalt, met een paneel zoals bij de marskramer. Wat verstopt is, telt hij
+  niet, tenzij hij de plek vindt.
+- **Je loopt met hem mee.** Hij loopt een route langs wat hij wil zien: de akkers, de schuur, wat er
+  nieuw gebouwd is. Bij elke plek kies je: uitleggen, afleiden naar een andere plek, of omkopen.
+  Komt hij dicht bij een verstopplek, dan kan hij hem vinden.
+- **In het rekenboek voor de heer schrijf je de oogst die je opgeeft,** met een reden als het minder
+  is: hagel, wilde zwijnen, een natte zomer. De inner vergelijkt met wat hij ziet; klopt het niet,
+  dan stijgt zijn argwaan. Het echte boek houd je zelf bij.
+
+Uitgewerkt door Claude (voorstel, de getallen staan in `T.INNER_INSTELLINGEN`):
+
+- **Het jaar:** de oogst in oogstmaand; op 1 herfstmaand schrijf je op wat je opgeeft; op 12
+  herfstmaand hoor je dat de inner komt; op 15 herfstmaand komt hij; op 11 wijnmaand de brief; op
+  11 slachtmaand Sint-Maarten. Zolang hij rondloopt, staat de kalender stil.
+- **Wat hij telt en ziet:** op de akkers telt hij de stoppels (dat is ongeveer de echte oogst); in de
+  schuur ziet hij het graan dat niet verstopt is, en hij rekent terug wat er sinds de oogst gegeten
+  en open verkocht is; en hij ziet wat er sinds vorig jaar gebouwd is, en hoe rijk dat oogt.
+- **Argwaan** (0 tot 100) stijgt als je oogst lager opgeeft dan hij telt (een goede reden vangt een
+  deel op, een ongeloofwaardige niet), als er in de schuur meer ligt dan je opgaf (wie laag opgeeft
+  maar niets verstopt, valt door de mand), als er nieuw en rijk gebouwd is terwijl je arm doet, en
+  vooral als hij een verstopplek vindt. Ze daalt als je goed uitlegt, en als je omkoopt.
+- **Wie niet meeloopt,** laat hem alleen kijken: dan zegt niemand iets, en dat valt ook op.
+- **Omkopen kost goud,** meer naarmate hij argwaniger is, en elk jaar meer: hij went eraan.
+- **Afleiden** laat hem een plek overslaan, en een verstopplek in de buurt van die plek blijft
+  onopgemerkt, maar hij merkt dat je hem wegleidt.
+- **Wat hij vindt,** neemt hij mee voor de heer, en het staat in zijn rapport.
+- **De brief van de heer** vraagt pacht naar de opgegeven oogst (een achtste), maar hoe argwaniger
+  de inner, hoe meer de heer rekent met wat de inner zelf telde, en hoe meer goud hij er bovenop
+  vraagt.
+
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
 De ruggengraat staat of wordt gebouwd: bouwen, mensen, werk, kalender, voorraad. Wat er nog mist,
