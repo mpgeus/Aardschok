@@ -28,7 +28,7 @@ kost. **Sinds 24 sep ook handel:** de marskramer komt drie keer per jaar over de
 Je praat met hem en handelt in een venster, en zolang dat open is, staat de tijd stil. De prijzen
 verschillen per bezoek. Een gebouw maakt alleen wat zijn grondstof toelaat (de smidse staat
 zonder ijzer stil en zegt dat bij de muis), gereedschap laat harder werken, en zout houdt vis en
-vlees goed. `npm test`: 314/314. `await Toren.debug.schermafdruk('naam')` bewaart een blik op het
+vlees goed. 's Winters ligt de beek dicht, dus gezouten vis is dan je voorraad. `npm test`: 317/317. `await Toren.debug.schermafdruk('naam')` bewaart een blik op het
 spel, en `Toren.debug.marskramer()` laat hem meteen komen.
 
 **Loopt nu:** niets. Er draait geen agent.
