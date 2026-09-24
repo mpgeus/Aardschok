@@ -1,58 +1,22 @@
-// De wereld: één verdieping van de toren. Plattegrond, kamers, deuren, voorwerpen en
-// wezens, plus de vragen die de rest van het spel erover stelt: kan ik hier staan,
-// zie ik daar iets, in welke kamer ligt dit.
+// De wereld: tegels, kamers, deuren, voorwerpen en wezens, en de vragen die de rest van het
+// spel erover stelt: kan ik hier staan, zie ik daar iets, in welke kamer ligt dit.
+//
+// Een wereld komt uit een kaart (js/kaart.js). Tot 24 sep 2026 stond hier ook de toren van het
+// oude spel, met de hand opgeschreven (T.maakWereld); die ging eruit met het oude spel (werklijst
+// punt 7). De machinerie voor binnen bleef: kamers die je ontdekt, deuren, zicht per kamer, en een
+// gevecht dat binnen begint (js/gevecht.js). De plattegrond van de toren leeft voort als
+// toetsdecor, in test/decor/binnen.cjs.
 (function (T) {
   'use strict';
 
-  // Legenda: # muur, . vloer, D deur (dicht), L deur (op slot), spatie = buiten de toren.
-  // De deur helemaal links in rij 5 is de buitendeur: daarachter ligt het erf (zie OVERGANGEN).
-  const PLATTEGROND = [
-    '####################',
-    '#........#.........#',
-    '#........#.........#',
-    '#........#.........#',
-    '#........D.........#',
-    'D........#.........#',
-    '#........#.........#',
-    '#........#.........#',
-    '####L###############',
-    '#........#          ',
-    '#........#          ',
-    '#........#          ',
-    '#........#          ',
-    '#........#          ',
-    '#........#          ',
-    '##########          ',
-  ];
-
-  // Een kamer is een rechthoek vloer. De muren eromheen horen er niet bij: een muur
-  // scheidt twee kamers, en welke kant de voorkant is, hangt af van waar je staat.
-  const KAMERS = [
-    { id: 'hal', naam: 'De hal', x1: 1, y1: 1, x2: 8, y2: 7, vloer: ['#6e5c48', '#675643'] },
-    { id: 'opslag', naam: 'De voorraadkamer', x1: 10, y1: 1, x2: 18, y2: 7, vloer: ['#5f4b37', '#584532'] },
-    { id: 'trap', naam: 'Het trappenhuis', x1: 1, y1: 9, x2: 8, y2: 14, vloer: ['#51555a', '#4b4f54'] },
-  ];
-
-  // blokkeert: je kunt er niet op staan. zichtDicht: je kijkt er niet langs.
-  T.VOORWERPEN = {
-    fontein: { blokkeert: true, zichtDicht: false },
-    kist: { blokkeert: true, zichtDicht: true },
-    pilaar: { blokkeert: true, zichtDicht: true },
-    trap: { blokkeert: true, zichtDicht: false, voet: { dx: -2, dy: -2, b: 3, h: 3 } },
-    // Het gat in de vloer waar de trap van beneden aankomt. Er staat er nog geen in de wereld —
-    // de verdiepingen bestaan nog niet — maar het beeld ligt klaar (gereedschap/pixelart/trap.cjs).
-    trapgat: { blokkeert: true, zichtDicht: false, voet: { dx: -2, dy: -2, b: 3, h: 3 } },
-    sleutel: { blokkeert: false, zichtDicht: false },
-    // Een oude ton: breekt in duigen als je hem met je staf slaat (`breekt`: wat er dan van over
-    // is). De meester schiet er in de tutorial een vuurschicht op en mept hem daarna kapot, en
-    // jij doet de tweede (js/tutorial.js). Het beeld, het puin en de zak liggen klaar in
-    // beelden/voorwerpen.png.
-    ton: { blokkeert: true, zichtDicht: false, breekt: 'puin', naam: 'de ton' },
-    puin: { blokkeert: false, zichtDicht: false },
-    // De zak zaaigoed die de meester wil hebben; je raapt hem op door erop te stappen, net als de
-    // sleutel (js/verkennen.js).
-    zak: { blokkeert: false, zichtDicht: false },
-  };
+  // Welke soorten voorwerpen er zijn en wat ze doen. blokkeert: je kunt er niet op staan.
+  // zichtDicht: je kijkt er niet langs. voet (mag weg): een voorwerp dat meer dan één tegel
+  // beslaat, zie T.voetVan hieronder.
+  //
+  // Leeg om mee te beginnen: js/kaart.js zet er elke soort bij die op een kaart staat (een eik,
+  // een huis), en js/gebouwen.js elk gebouw dat de speler neerzet. Tot 24 sep stonden hier de
+  // meubels van de toren (een fontein, kisten, een trap, een sleutel, een ton).
+  T.VOORWERPEN = {};
 
   // ap: actiepunten per beurt. snelheid: tegels per seconde tijdens het rondlopen.
   // zicht: vanaf hoe ver een monster je opmerkt. aanval.schade: hoeveel levenspunten een klap kost
@@ -66,10 +30,6 @@
   T.SCHOUT_SNELHEID = 2.5; // tegels per seconde; een dorpeling doet 1,2
   const WEZENS = {
     held: { naam: 'jij', kant: 'held', leven: 24, ap: 8, initiatief: 10, snelheid: T.SCHOUT_SNELHEID },
-    // Wim, de knecht van de meester, veegt de hal: hij schuifelt een paar tegels heen en weer en
-    // staat er dan weer bij stil met zijn bezem (de houding "vegen", zie js/sprites.js). Hij
-    // begint nooit een gevecht — hij is neutraal — en hij blijft nooit naast een deur staan.
-    wim: { naam: 'Wim', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 3 },
     // De mensen van het dorp staan niet hier maar in js/mensen.js: wie ze zijn, hoe ze heten, hoe
     // snel ze lopen en welk vel ze krijgen. Deze tabel gaat over wat een wezen ís — wat vecht,
     // wat een leeftijd draagt, wat in code wordt neergezet — en een dorpeling is dat niet. Zie
@@ -107,20 +67,10 @@
     },
   };
 
-  // Waar je de toren uit loopt. Dezelfde vorm als de overgangen die js/kaart.js uit een .tmj
-  // haalt: `x`/`y` is de tegel die je erheen brengt (hier de buitendeur), `naar` het gebied waar
-  // je heen gaat, en `komt` de tegel waar je landt als je vanaf díe kant terugkomt — één stap van
-  // de deur af, zodat je niet meteen weer terugstapt. Zie js/gebied.js.
-  //
-  // "wereld": sinds "Eén doorlopende wereld" (ontwerp/wereld.md) is buiten niet meer een los erf,
-  // maar kaarten/wereld.tmj — de hele buitenwereld op één doek, met het erf, het dorp en de ruimte
-  // ertussen. Het erf als zelfstandig gebied bestaat niet meer.
-  const OVERGANGEN = [{ x: 0, y: 5, naar: 'wereld', komt: { x: 1, y: 5 }, tekst: 'Naar buiten' }];
-
   const sleutelVan = (x, y) => x + ',' + y;
 
-  // Alleen zodat js/kaart.js een wezen uit een ingelezen kaart in precies dezelfde vorm kan
-  // neerzetten als hierboven; de vorm zelf (WEZENS, maakWezen) blijft hier, en verandert niet.
+  // Zodat js/kaart.js (en js/mensen.js) een wezen uit een ingelezen kaart in precies dezelfde vorm
+  // kan neerzetten; de vorm zelf (WEZENS, maakWezen) blijft hier, en verandert niet.
   T.maakWezen = maakWezen;
   // De tabel zelf gaat mee naar buiten, want dit is precies de lijst die Marcel in Tiled mag
   // invullen bij de eigenschap "wezen". Wie wil weten wat er te plaatsen valt, vraagt het hier.
@@ -133,56 +83,6 @@
   // Hoe snel loopt dit wezen? Elk wezen heeft zijn eigen vaste snelheid: zijn animatie is op
   // precies die loopsnelheid afgestemd, anders glijden zijn voeten over de grond.
   T.snelheidVan = (e) => e.snelheid;
-
-  T.maakWereld = function () {
-    const h = PLATTEGROND.length;
-    const b = PLATTEGROND[0].length;
-    const tegels = [];
-    const deuren = new Map();
-    for (let y = 0; y < h; y++) {
-      const rij = [];
-      for (let x = 0; x < b; x++) {
-        const t = PLATTEGROND[y][x];
-        if (t === '#') rij.push('muur');
-        else if (t === '.') rij.push('vloer');
-        else if (t === 'D' || t === 'L') {
-          rij.push('deur');
-          deuren.set(sleutelVan(x, y), { x, y, staat: t === 'L' ? 'opslot' : 'dicht', richting: 'ow' });
-        } else rij.push('buiten');
-      }
-      tegels.push(rij);
-    }
-    const w = {
-      b, h, tegels, deuren, kamers: KAMERS,
-      voorwerpen: [], wezens: [],
-      bekend: new Set(['hal']), huidigeKamer: 'hal',
-      overgangen: OVERGANGEN.map((o) => ({ ...o, komt: { ...o.komt } })),
-      buiten: false,
-    };
-    // Loopt de muur rond de deur van noord naar zuid, dan staat het deurpaneel dwars op x.
-    for (const d of deuren.values()) if (T.tegel(w, d.x, d.y - 1) === 'muur') d.richting = 'ns';
-    w.voorwerpen.push(
-      { soort: 'fontein', x: 7, y: 6 },
-      { soort: 'kist', x: 12, y: 2 },
-      { soort: 'kist', x: 13, y: 5 },
-      { soort: 'kist', x: 14, y: 5 },
-      { soort: 'sleutel', x: 17, y: 2 },
-      { soort: 'pilaar', x: 3, y: 11 },
-      { soort: 'pilaar', x: 6, y: 11 },
-      // De trap beslaat drie bij drie tegels (een spiraal waar een man door past is minstens
-      // twee meter breed), met zijn voorste hoek op deze tegel: zo staat hij precies in de
-      // zuidoosthoek van het trappenhuis. `staat` kiest het beeld; herstellen kan nog niet.
-      { soort: 'trap', x: 8, y: 14, staat: 'hersteld' },
-    );
-    w.wezens.push(
-      maakWezen('held', 3, 5),
-      maakWezen('wim', 5, 2),
-      maakWezen('slijm', 16, 4),
-      maakWezen('skelet', 5, 13),
-    );
-    w.burenKamers = berekenBurenKamers(w);
-    return w;
-  };
 
   // x en y lopen vloeiend mee tijdens het lopen; tx en ty zijn de tegel waar het wezen
   // staat of naartoe stapt. Wie iets over bezetting vraagt, vraagt tx en ty.
@@ -206,8 +106,9 @@
   }
 
   // Per tegel: welke kamers liggen er direct omheen (ook schuin). Een muur of deur is
-  // zichtbaar zodra een van die kamers bekend is.
-  function berekenBurenKamers(w) {
+  // zichtbaar zodra een van die kamers bekend is (T.isZichtbaar hieronder). Wie een wereld met
+  // kamers maakt, zet dit erbij als w.burenKamers, nadat de tegels en de kamers er zijn.
+  T.burenKamers = function (w) {
     const r = [];
     for (let y = 0; y < w.h; y++) {
       const rij = [];
@@ -224,16 +125,15 @@
       r.push(rij);
     }
     return r;
-  }
+  };
 
   T.tegel = (w, x, y) => (x >= 0 && y >= 0 && x < w.b && y < w.h ? w.tegels[y][x] : 'buiten');
   T.deurOp = (w, x, y) => w.deuren.get(sleutelVan(x, y)) || null;
   T.kamerVan = (w, x, y) => w.kamers.find((k) => x >= k.x1 && x <= k.x2 && y >= k.y1 && y <= k.y2) || null;
-  // Een voorwerp staat meestal op één tegel, maar de spiraaltrap beslaat er drie bij drie: een
-  // spiraal waar een man door past is minstens twee meter breed. `voet` geeft die rechthoek ten
-  // opzichte van de tegel van het voorwerp zelf, als {dx, dy, b, h}. Die tegel is bij de trap de
-  // voorste hoek (de hoogste x+y), want daarop sorteert het tekenen; de voet loopt dus naar
-  // achteren, met negatieve dx en dy.
+  // Een voorwerp staat meestal op één tegel, maar kan er meer beslaan (een spiraaltrap van drie
+  // bij drie, in het toetsdecor). `voet` geeft die rechthoek ten opzichte van de tegel van het
+  // voorwerp zelf, als {dx, dy, b, h}. Die tegel is dan de voorste hoek (de hoogste x+y), want
+  // daarop sorteert het tekenen; de voet loopt dus naar achteren, met negatieve dx en dy.
   T.voetVan = function (v) {
     const f = v.voet || (T.VOORWERPEN[v.soort] && T.VOORWERPEN[v.soort].voet);
     if (!f) return { x1: v.x, y1: v.y, x2: v.x, y2: v.y };

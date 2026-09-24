@@ -1,7 +1,7 @@
-// Gebieden en de overgang ertussen. De toren staat in code (js/wereld.js), want zijn kamers zijn
-// klein en hangen aan het verhaal; alles wat buiten speelt komt uit een kaart die in Tiled
-// getekend is (js/kaart.js). Eén deur, twee kanten op: je loopt de toren uit en staat op je erf,
-// je loopt het erf af en staat weer in je hal.
+// Gebieden en de overgang ertussen. Elk gebied komt uit een kaart die in Tiled getekend is
+// (js/kaart.js). Eén weg, twee kanten op: je loopt het gehucht uit en staat in de wereld, je loopt
+// de wereld uit en staat weer op de weg in het gehucht. (Tot 24 sep 2026 stond de toren van het
+// oude spel hier als enige gebied in code; die ging eruit met het oude spel, werklijst punt 7.)
 //
 // Welke gebieden er zijn, staat nergens opgeschreven: elke kaart is er een (zie T.maakGebieden
 // hieronder). Marcel tekent in Tiled, draait npm run kaarten, en de wereld is groter geworden.
@@ -11,14 +11,6 @@
 // openstaan staat er nog open als je terugkomt.
 (function (T) {
   'use strict';
-
-  // Alleen de toren staat in code; al het andere is een kaart. Elke kaart in kaarten/kaarten.js
-  // (T.KAARTEN, gemaakt door npm run kaarten) is vanzelf een gebied, met zijn bestandsnaam als
-  // naam. Tekent Marcel kaarten/dorp.tmj, dan werkt `overgang: "dorp"` meteen — er valt niets
-  // te registreren, en er hoeft geen code bij. Dat is de hele bedoeling van de editor.
-  const IN_CODE = {
-    toren: { naam: 'De toren', maak: () => T.maakWereld() },
-  };
 
   // De naam die de speler in beeld krijgt, zonder de kaart al in te lezen: de eigenschap "naam"
   // van de map zelf (in Tiled: de eigenschappen van de kaart), anders de bestandsnaam met een
@@ -30,6 +22,11 @@
     return T.hoofdletter(naam);
   }
 
+  // Elke kaart in kaarten/kaarten.js (T.KAARTEN, gemaakt door npm run kaarten) is vanzelf een
+  // gebied, met zijn bestandsnaam als naam. Tekent Marcel kaarten/dorp.tmj, dan werkt
+  // `overgang: "dorp"` meteen — er valt niets te registreren, en er hoeft geen code bij. Dat is de
+  // hele bedoeling van de editor.
+  //
   // De lijst opnieuw opbouwen uit T.KAARTEN. Dat gebeurt één keer bij het laden; wie tijdens het
   // spelen een kaart bijzet (Toren.KAARTEN.bos = ...), roept dit daarna zelf nog eens aan.
   T.maakGebieden = function () {
@@ -40,8 +37,7 @@
       // alleen nog de grond". Bestaat dat bestand niet, dan is de kaart gewoon wat Tiled heeft.
       g[naam] = { naam: kaartNaam(naam, T.KAARTEN[naam]), maak: () => T.laadKaart(T.KAARTEN[naam], T.BETEKENIS && T.BETEKENIS[naam]) };
     }
-    // Wat in code staat, wint van een kaart die toevallig zo heet: de toren is de toren.
-    return Object.assign(g, IN_CODE);
+    return g;
   };
 
   T.GEBIEDEN = T.maakGebieden();
@@ -57,7 +53,7 @@
       const w = g.maak();
       w.gebied = naam;
       // Buiten is er één kamer die de hele kaart beslaat (js/kaart.js); die heet naar het gebied,
-      // zodat "Het erf" in beeld komt en niet "Buiten".
+      // zodat "Het gehucht" in beeld komt en niet "Buiten".
       if (w.buiten && w.kamers.length === 1) w.kamers[0].naam = g.naam;
       // Een gebied zonder uitgang is een val: daar kom je nooit meer weg. Dat moet hoorbaar zijn
       // zodra het gebeurt, niet pas als een speler vaststaat.
@@ -182,8 +178,8 @@
     S.camera = { x: p.x, y: p.y - 24 };
     if (S.grond) S.grond.sleutel = ''; // de grondbuffer opnieuw tekenen (js/tekenen.js)
 
-    // Binnen zegt de kamer waar je bent ("De hal"), buiten heet de enige kamer naar het gebied
-    // zelf ("Het erf"): allebei uit dezelfde vraag.
+    // Binnen zegt de kamer waar je bent, buiten heet de enige kamer naar het gebied zelf ("Het
+    // gehucht"): allebei uit dezelfde vraag.
     const naam = (k && k.naam) || (T.GEBIEDEN[naar] && T.GEBIEDEN[naar].naam) || naar;
     T.ui.plek(naam);
     if (S.bezocht) S.bezocht.add(naar);

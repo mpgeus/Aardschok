@@ -20,14 +20,7 @@ const T = globalThis.Toren;
 
 function beginGehucht() {
   const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, kalender: { dag: 0 }, bezocht: new Set() };
-  // (T.laadKaart waarschuwt over de overgang zonder "komt"; die hoort bij de kaart, niet bij deze toets.)
-  const warn = console.warn;
-  console.warn = () => {};
-  try {
-    assert.equal(T.beginOpKaart(S, 'gehucht'), true);
-  } finally {
-    console.warn = warn;
-  }
+  assert.equal(T.beginOpKaart(S, 'gehucht'), true);
   return S;
 }
 

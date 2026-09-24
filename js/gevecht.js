@@ -1,7 +1,7 @@
 // Het gevecht in beurten. Het begint op de plek waar iedereen staat: wie onderweg is, maakt
 // zijn stap af, daarna verschijnt het raster op dezelfde vloer en gaat de wereld verder in
-// beurten. Er is geen apart gevechtsscherm, en dat is de kern van het idee: de kamer waarin
-// je rondliep, is het slagveld, met dezelfde deuren, kisten en fontein.
+// beurten. Er is geen apart gevechtsscherm, en dat is de kern van het idee: de plek waar je
+// rondliep, is het slagveld, met dezelfde deuren, bomen en huizen.
 (function (T) {
   'use strict';
 
@@ -221,8 +221,6 @@
       const totaal = pad.length + k;
       return { tekst: 'Erheen lopen en slaan', kosten: totaal, kan: ap >= totaal, doe: () => slaan(S, m, pad), pad };
     }
-
-    if (doel.voorwerp && doel.voorwerp.soort === 'trap') return { tekst: 'Niet midden in een gevecht', kosten: 0, kan: false };
 
     if (doel.x === h.x && doel.y === h.y) return null;
     if (!T.isZichtbaar(w, doel.x, doel.y) || !T.isBegaanbaar(w, doel.x, doel.y, { deurenOpenen: true, wezensBlokkeren: true, wie: held })) return null;

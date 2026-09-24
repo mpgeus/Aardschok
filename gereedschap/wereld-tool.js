@@ -26,7 +26,7 @@
     rasterAlpha: 0, rasterTegels: [], rasterStart: 0, rasterVan: null,
     inventaris: new Set(), vlaggen: new Set(), bezocht: new Set(),
     quests: {}, questWeg: {}, questBeloond: new Set(),
-    goud: 0, goudGehad: false, sluipen: false, fonteinLeeg: false, spreektMet: null,
+    goud: 0, goudGehad: false, sluipen: false, spreektMet: null,
     gebieden: {},
   });
   T.debug = T.debug || {};
@@ -420,8 +420,8 @@
       }
     } else if (penseel.soort === 'aansluiting') {
       const anders = [...el('wt-kaart').options].map((o) => o.value).filter((n) => n !== kaartNaam);
-      if (!penseel.naar || !anders.includes(penseel.naar)) penseel.naar = anders[0] || 'toren';
-      keuzeVeld(doel, 'naar', [...anders, 'toren'], penseel.naar, (v) => (penseel.naar = v));
+      if (!penseel.naar || !anders.includes(penseel.naar)) penseel.naar = anders[0] || '';
+      keuzeVeld(doel, 'naar', anders, penseel.naar, (v) => (penseel.naar = v));
       const uitleg = document.createElement('p');
       uitleg.className = 'gt-leeg';
       uitleg.textContent = 'Klik de tegel waar je hier vertrekt. Daarna springt het gereedschap naar die kaart en klik je waar je aankomt; beide kanten worden in één keer gelegd.';
@@ -448,7 +448,7 @@
       .sort((a, b) => a[1].localeCompare(b[1], 'nl'));
   }
 
-  // Welk gesprek voert dit poppetje? Leeg is "zijn soort", en dat klopt voor Wim en de bakker.
+  // Welk gesprek voert dit poppetje? Leeg is "zijn soort", en dat klopt voor de bakker.
   // Maar negentien dorpelingen delen één soort, dus daar kies je er een eigen bij — anders zeggen
   // ze alle negentien hetzelfde (T.gesprekIdVan in js/gesprek.js).
   function gesprekVeld(doel, waarde, zet) {
@@ -498,17 +498,14 @@
   // tweede klik zegt waar je daar aankomt — inclusief de weg terug.
   async function legAansluiting(t) {
     if (!aansluiting) {
+      if (!penseel.naar) {
+        el('wt-neerzetten-hint').textContent = 'Er is geen andere kaart om op aan te sluiten.';
+        return;
+      }
       const komt = kiesKomt(S.wereld, t.x, t.y);
       dingenNu().push({ x: t.x, y: t.y, overgang: penseel.naar, komt });
       aansluiting = { vanKaart: kaartNaam, van: { x: t.x, y: t.y }, naar: penseel.naar };
       veranderd();
-      if (penseel.naar === 'toren') {
-        // De toren staat in code (js/wereld.js) en heeft zijn eigen deur terug; daar valt niets
-        // neer te zetten.
-        aansluiting = null;
-        el('wt-neerzetten-hint').textContent = 'De toren regelt zijn eigen kant.';
-        return;
-      }
       el('wt-kaart').value = penseel.naar;
       await laadKaart(penseel.naar, false);
       return;

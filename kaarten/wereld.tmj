@@ -107,110 +107,6 @@
          "name":"objecten",
          "objects":[
                 {
-                 "gid":769,
-                 "height":871,
-                 "id":1,
-                 "name":"toren",
-                 "opacity":1,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":379,
-                 "x":4704,
-                 "y":864
-                }, 
-                {
-                 "gid":777,
-                 "height":285,
-                 "id":2,
-                 "name":"schuurtje",
-                 "opacity":1,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":460,
-                 "x":5024,
-                 "y":832
-                }, 
-                {
-                 "gid":778,
-                 "height":285,
-                 "id":3,
-                 "name":"put",
-                 "opacity":1,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":460,
-                 "x":4960,
-                 "y":1184
-                }, 
-                {
-                 "gid":779,
-                 "height":285,
-                 "id":4,
-                 "name":"houtstapel",
-                 "opacity":1,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":460,
-                 "x":5024,
-                 "y":992
-                }, 
-                {
-                 "gid":780,
-                 "height":285,
-                 "id":5,
-                 "name":"waslijn",
-                 "opacity":1,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":460,
-                 "x":4608,
-                 "y":1152
-                }, 
-                {
-                 "gid":781,
-                 "height":285,
-                 "id":6,
-                 "name":"moestuin",
-                 "opacity":1,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":460,
-                 "x":4512,
-                 "y":928
-                }, 
-                {
-                 "gid":782,
-                 "height":285,
-                 "id":7,
-                 "name":"bank",
-                 "opacity":1,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":460,
-                 "x":5088,
-                 "y":992
-                }, 
-                {
-                 "gid":783,
-                 "height":285,
-                 "id":8,
-                 "name":"lantaarn",
-                 "opacity":1,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":460,
-                 "x":4640,
-                 "y":1120
-                }, 
-                {
                  "gid":603,
                  "height":308,
                  "id":9,
@@ -7102,10 +6998,6 @@
         {
          "firstgid":673,
          "source":"..\/tegels\/gebouwen.tsx"
-        }, 
-        {
-         "firstgid":769,
-         "source":"..\/tegels\/toren.tsx"
         }, 
         {
          "firstgid":777,

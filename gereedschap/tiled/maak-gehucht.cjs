@@ -384,17 +384,15 @@ dingen.push({ gebouw: 'huis', x: SCHOUT_HUIS.x, y: SCHOUT_HUIS.y, b: SCHOUT_HUIS
 // De akkers: wie ze niet nodig heeft (js/tekenen.js tekent nu alleen de kale zandgrond), leest
 // ze straks voor het graan (js/kaart.js, "WAT EEN DING BETEKENT").
 for (const a of AKKERS) dingen.push(a);
-// De enige uitgang: het gehucht hangt nog aan geen andere kaart vast (ontwerp/werklijst.md,
-// "Wacht op Marcel"). Zonder "komt" kiest het spel zelf een tegel (js/kaart.js); "proef": true
-// hieronder laat de keuring met rust dat "wereld" niet terugwijst (gereedschap/keuring.js,
-// T.keurDekking: "een aansluiting heeft twee kanten" — dat geldt pas zodra dit gehucht echt op
-// de kaart van de wereld komt te liggen).
-dingen.push({ x: B - 1, y: WEG_Y, overgang: 'wereld', tekst: 'De weg de wereld in' });
+// De enige uitgang: de weg de wereld in, aan het eind van de weg. Wie terugkomt, landt één tegel
+// terug op diezelfde weg ("komt"). De andere kant ligt in kaarten/wereld.betekenis.json, waar het
+// pad van de kasseien de wereldkaart aan de onderrand verlaat (sinds 24 sep, toen de toren eruit
+// ging: tot dan hing het gehucht aan niets vast en stond hier "proef": true).
+dingen.push({ x: B - 1, y: WEG_Y, overgang: 'wereld', komt: { x: B - 2, y: WEG_Y }, tekst: 'De weg de wereld in' });
 
 const betekenis = {
   versie: 1,
-  proef: true,
-  uitleg: 'De betekenis van kaarten/gehucht.tmj: de schout, de vijf boeren en hun akkers. Zie ontwerp/kaarten.md, "Tiled tekent alleen nog de grond". "proef": true omdat dit gehucht nog aan geen andere kaart vasthangt (ontwerp/werklijst.md); zodra er een echte aansluiting naar "wereld" komt, mag dat weer weg.',
+  uitleg: 'De betekenis van kaarten/gehucht.tmj: de schout, de vijf boeren en hun akkers, en de weg naar de wereld. Zie ontwerp/kaarten.md, "Tiled tekent alleen nog de grond".',
   // Een klein beginvoorraadje, zodat er meteen iets te bouwen valt (js/gebouwen.js, T.plaatsGebouw
   // via het bouwmenu) zonder eerst te hoeven wachten op de eerste opbrengst.
   beginVoorraad: { hout: 40, goud: 20, graan: 60 },

@@ -6,9 +6,8 @@
 //
 // Er zijn twee manieren van tekenen. Staat de pixel art klaar (`beelden/`, zie js/sprites.js),
 // dan komt alles wat de kunst dekt uit de vellen: vloeren, muren, deuren, voorwerpen en wezens.
-// Wat er niet in zit — het raster, het bereik, de zwevende teksten en de pilaar — blijft
-// getekend met vlakken. Met `Toren.debug.vlakken = true` gaat alles terug naar vlakken, om te
-// vergelijken.
+// Wat er niet in zit — het raster, het bereik en de zwevende teksten — blijft getekend met
+// vlakken. Met `Toren.debug.vlakken = true` gaat alles terug naar vlakken, om te vergelijken.
 (function (T) {
   'use strict';
 
@@ -17,15 +16,15 @@
 
   const metSprites = () => !!(T.sprites && T.sprites.aan) && !(T.debug && T.debug.vlakken);
 
-  // Welke vloer ligt er in welke kamer? De hal en het trappenhuis hebben de zandvloer uit
-  // kamers.cjs, de voorraadkamer de houten. Een deur krijgt de vloer van een kamer ernaast.
-  const VLOERSOORT = { hal: 'zand', opslag: 'hout', trap: 'zand' };
+  // Welke vloer ligt er in welke kamer? Een kamer mag het zelf zeggen (`vloerSoort`: 'zand' of
+  // 'hout', de lappen uit kamers.cjs); anders is het zand. Een deur krijgt de vloer van een kamer
+  // ernaast.
   function vloerSoort(w, x, y) {
     const k = T.kamerVan(w, x, y);
-    if (k) return VLOERSOORT[k.id] || 'zand';
+    if (k) return k.vloerSoort || 'zand';
     for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
       const b = T.kamerVan(w, x + dx, y + dy);
-      if (b) return VLOERSOORT[b.id] || 'zand';
+      if (b) return b.vloerSoort || 'zand';
     }
     return 'zand';
   }
@@ -264,7 +263,7 @@
   };
 
   // Op welke tegel plant een voorwerp zich in bij het sorteren van achter naar voor? Een boom
-  // staat op één tegel, maar een huis of de toren beslaat er meer (`beslaat`, vanaf zijn achterste
+  // staat op één tegel, maar een huis beslaat er meer (`beslaat`, vanaf zijn achterste
   // hoek naar rechtsonder). Dan telt zijn vóórste hoek: alles wat daarvoor langs loopt, hoort er
   // overheen getekend te worden, en wie erachter staat verdwijnt erachter.
   T.diepteVan = diepteVan;
@@ -322,30 +321,27 @@
 
   // ---------------------------------------------------------------- doorkijk
   //
-  // Buiten staan er dingen die hoger zijn dan een muur binnen: een eik is driehonderd pixels,
-  // de toren bijna zevenhonderd. Wie erachter loopt, is weg — en wat erger is: een wolf die jou
-  // wél ziet, zie jij dan niet. Dus wordt alles wat de held of een wezen bedekt zolang
-  // doorzichtig.
+  // Buiten staan er dingen die hoger zijn dan een muur binnen: een eik is driehonderd pixels.
+  // Wie erachter loopt, is weg — en wat erger is: een wolf die jou wél ziet, zie jij dan niet.
+  // Dus wordt alles wat de held of een wezen bedekt zolang doorzichtig.
   //
   // Waarom doorzichtig en niet het silhouet van de figuur eroverheen: onze pixel art heeft zijn
   // eigen omlijning van één pixel en leeft van textuur (ontwerp/beeld.md). Een egale vlek over
   // een boom heen is een tweede beeldtaal, en je ziet er niet aan wáár je staat. Een boom die
   // half wegvalt laat de tovenaar én de boom zien, en dat is ook wat Fallout en Baldur's Gate
-  // doen. De toren is het zwaarste geval; die krijgt daarom een tikje meer doorkijk dan de rest.
+  // doen.
   const DOORKIJK = 0.4;
-  const DOORKIJK_TOREN = 0.3;
   // De bosrand (zie "het bos om de kaart heen" verderop) staat op een hoek van de kaart soms met
   // twee dichte randen tegelijk om de held heen, en dan bedekken tien, twintig bomen hem
   // allemaal tegelijk. Doorzichtigheid stapelt vermenigvuldigend (twee bomen op 0.4 laten samen
   // nog maar 0.16 van de held zien, bij twintig is dat allang niets meer), dus een kleine waarde
-  // zoals bij de toren lost dat niet op — hoe laag ook, met genoeg bomen erbovenop verdwijnt hij
-  // toch. Eén los ding (de toren) mag zichtbaar blijven doorschemeren; een heel woud aan
-  // verwisselbare achtergrondbomen niet: die vallen daarom helemaal weg zolang ze de held
-  // bedekken, in plaats van te vervagen.
+  // lost dat niet op — hoe laag ook, met genoeg bomen erbovenop verdwijnt hij toch. Een heel woud
+  // aan verwisselbare achtergrondbomen valt daarom helemaal weg zolang het de held bedekt, in
+  // plaats van te vervagen.
   const BOSRAND_DOORKIJK = 0;
   const DOORKIJK_TIJD = 0.18; // seconden om op en af te lopen, zodat het niet klappert
   const HOOG_GENOEG = 40; // hoger dan dit boven zijn voet: dan kan er iemand achter verdwijnen
-  // Een gewoon gebouw (geen toren, geen bosrand) vervaagt niet meer als geheel: dat zag er bij een
+  // Een gewoon gebouw (geen bosrand) vervaagt niet meer als geheel: dat zag er bij een
   // rieten dak uit als een doorzichtig geelgroen spook (Marcel, 23 sep 2026). In plaats daarvan
   // blijft het huis gewoon staan en tekenen we wie erachter loopt nog eens overheen, door een
   // zachte cirkel — een kijkgat. KIJKGAT_OMHOOG tilt het midden van die cirkel van zijn voeten naar
@@ -380,10 +376,10 @@
 
   // Per beeld: welk hoog voorwerp bedekt iemand die je hoort te zien? Alleen voorwerpen die ná
   // dat wezen getekend worden kunnen hem verbergen, en dat weten we al uit de diepte.
-  // Wie moet er door een boom of een toren heen te zien zijn? De held altijd. Verder alleen wie er
+  // Wie moet er door een boom of een huis heen te zien zijn? De held altijd. Verder alleen wie er
   // toe doet op dit moment: wat meevecht, wat je net ontdekt heeft (het uitroepteken), en wie je
-  // aanspreekt. Een wolf die in zijn eentje achter de toren rondscharrelt hoeft de toren niet
-  // doorzichtig te maken — dan sta je ervoor en zie je hem wegvallen zonder te weten waarom.
+  // aanspreekt. Een wolf die in zijn eentje achter een huis rondscharrelt hoeft er geen kijkgat
+  // in te maken — dan sta je ervoor en zie je het ineens openvallen zonder te weten waarom.
   function teltMee(S, e) {
     if (e === S.held) return true;
     if (e.dood) return false;
@@ -419,7 +415,7 @@
       // loopt terug naar 1) blijft tekenKijkgat zo de laatst bekende dekker nog even overtekenen,
       // dezelfde afweging als bosrandOp hierboven ("kan alleen vloeiend als het dezelfde blijft").
       if (dekkers.length) v.kijkgat = dekkers;
-      const doel = bedekt ? (v.bosrand ? BOSRAND_DOORKIJK : v.soort === 'toren' ? DOORKIJK_TOREN : DOORKIJK) : 1;
+      const doel = bedekt ? (v.bosrand ? BOSRAND_DOORKIJK : DOORKIJK) : 1;
       const nu = v.doorkijk == null ? 1 : v.doorkijk;
       const stap = dt / DOORKIJK_TIJD;
       v.doorkijk = doel > nu ? Math.min(doel, nu + stap) : Math.max(doel, nu - stap);
@@ -750,7 +746,7 @@
     const p = T.naarScherm(d.x, d.y);
     const ns = d.richting === 'ns'; // de muur loopt van noord naar zuid: het paneel is dun in x
     // Een laag stompje naast een lage muur van sprites moet even hoog zijn als die muur.
-    const laagH = metSprites() ? T.sprites.laagHoogte() : T.MUUR_LAAG;
+    const laagH = (metSprites() && T.sprites.laagHoogte()) || T.MUUR_LAAG;
     const muurHoogte = laag ? laagH : T.MUUR_HOOG;
     const steen = '#6f675c';
     if (d.staat === 'open') {
@@ -824,11 +820,10 @@
       T.blok(ctx, p.x, p.y, breed, breed, hoog * 0.6, hex, { helder, basis: hoog > 24 ? hoog * 0.45 : 0 });
       return;
     }
-    // een gebouw of de toren: een blok zo groot als zijn voet, met zijn midden op het midden
-    // van die voet
+    // een gebouw: een blok zo groot als zijn voet, met zijn midden op het midden van die voet
     const m = T.naarScherm(v.x + (b[0] - 1) / 2, v.y + (b[1] - 1) / 2);
-    const hoog = v.soort === 'toren' ? 260 : Math.max(40, 26 * Math.max(b[0], b[1]));
-    T.blok(ctx, m.x, m.y, b[0] / 2, b[1] / 2, hoog, v.soort === 'toren' ? '#7b7486' : '#8a6f4e', { helder });
+    const hoog = Math.max(40, 26 * Math.max(b[0], b[1]));
+    T.blok(ctx, m.x, m.y, b[0] / 2, b[1] / 2, hoog, '#8a6f4e', { helder });
   }
 
   // Elk voorwerp buigt op zijn eigen moment mee met de wind, anders wappert het hele erf als één
@@ -1019,148 +1014,35 @@
   }
 
   function tekenVoorwerp(ctx, S, v, helder) {
+    // Het plaatje komt uit de tegelvellen (tegels/, zie js/sprites.js): een boom, een struik, een
+    // gebouw. Het anker van de cel is de voet, dus hij valt precies op het midden van zijn eigen
+    // tegel. Een voorwerp zonder vel (een gebouw zonder tekening) tekent niets. Tot 24 sep tekende
+    // hier ook de toren zijn meubels (een fontein, kisten, een trap, een sleutel); die gingen
+    // eruit met het oude spel (werklijst punt 7).
+    if (!v.vel) return;
     const p = T.naarScherm(v.x, v.y);
-    // Buiten komt het plaatje uit de tegelvellen (tegels/, zie js/sprites.js): een boom, een
-    // struik, een gebouw, de toren. Het anker van de cel is de voet, dus hij valt precies op het
-    // midden van zijn eigen tegel.
-    if (v.vel) {
-      // dof: hoe ver van de rand van de kaart — dat vervaagt nog altijd het hele voorwerp.
-      // dekking: staat er iemand achter? Alleen de toren vervaagt daar nog als geheel op (te groot
-      // voor één kijkgat, ontwerp/beeld.md); een gewoon gebouw blijft gewoon staan en krijgt na het
-      // tekenen een kijkgat overheen (tekenKijkgat hierboven) op wie erachter loopt.
-      const dof = randDof(S.wereld, v.x, v.y);
-      const dekking = v.doorkijk == null ? 1 : v.doorkijk;
-      const isToren = v.soort === 'toren';
-      // In aanbouw (js/gebouwen.js, T.plaatsGebouw): heeft dit gebouw fases in tegels/bouwfasen.png
-      // (T.bouwFaseIndex, js/bouwen.js, kiest welke, op hoe ver het werk is), dan die — anders
-      // (kapel, watermolen, put, ...) gewoon bleker tot hij klaar is, zonder er een tweede tekening
-      // voor nodig te hebben.
-      const fase = v.inAanbouw && v.tekeningNaam && T.bouwFaseIndex && metSprites() && T.sprites.bouwfase
-        && T.sprites.bouwfase(v.tekeningNaam, T.bouwFaseIndex(v.voortgang, T.fasenVan(v.tekeningNaam)));
-      const alpha = (isToren ? dof * dekking : dof) * (v.inAanbouw && !fase ? 0.45 : 1);
-      if (alpha <= 0.02) return;
-      if (alpha < 1) ctx.globalAlpha = alpha;
-      const stuk = fase || (metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v)));
-      if (stuk) {
-        T.sprites.teken(ctx, stuk, p.x, p.y, helder);
-      } else tekenBuitenVlak(ctx, v, helder);
-      if (alpha < 1) ctx.globalAlpha = 1;
-      if (!isToren && dekking < 1 && v.kijkgat && v.kijkgat.length) {
-        const sterkte = Math.max(0, Math.min(1, (1 - dekking) / (1 - DOORKIJK)));
-        if (sterkte > 0.02) for (const e of v.kijkgat) tekenKijkgat(ctx, S, e, sterkte);
-      }
-      return;
-    }
-    // De trap heeft een eigen vel, met een cel per staat (ingestort, provisorisch, hersteld).
-    if (v.soort === 'trap' || v.soort === 'trapgat') {
-      const spiraal = metSprites() && T.sprites.trap && T.sprites.trap(v.soort, v.staat);
-      if (spiraal) {
-        T.sprites.teken(ctx, spiraal, p.x, p.y, helder);
-        return;
-      }
-    }
-    // De pilaar staat nog niet in de kunst; die blijft vlakken.
-    const deel = metSprites() && T.sprites.voorwerp(v.soort);
-    if (deel) {
-      if (v.soort === 'sleutel') {
-        // De sleutel zweeft en glimt, anders zie je hem niet liggen.
-        gloed(ctx, p.x, p.y - 6, 16, 'rgba(226, 182, 74,', 0.3);
-        T.sprites.teken(ctx, deel, p.x, p.y - 8 - Math.sin(S.tijd * 3) * 3, helder);
-        return;
-      }
-      T.sprites.teken(ctx, deel, p.x, p.y, helder);
-      if (v.soort === 'fontein' && !S.fonteinLeeg) {
-        // Het water blijft bewegen: een rimpel over de kom en een druppel in de straal. Een lege
-        // fontein (de meester dronk de laatste slok, js/tutorial.js) staat stil.
-        const golf = (Math.sin(S.tijd * 2.2) + 1) / 2;
-        ctx.strokeStyle = `rgba(200, 230, 255, ${0.18 + golf * 0.22})`;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.ellipse(p.x, p.y - 14, 7 + golf * 8, 3.5 + golf * 4, 0, 0, Math.PI * 2);
-        ctx.stroke();
-        rondje(ctx, p.x, p.y - 34 + Math.sin(S.tijd * 5) * 1.5, 1.6, 'rgba(210, 238, 255, 0.85)');
-      }
-      return;
-    }
-    if (v.soort === 'kist') {
-      T.blok(ctx, p.x, p.y, 0.34, 0.34, 28, '#8a5a2c', { helder });
-      T.blok(ctx, p.x, p.y, 0.36, 0.36, 4, '#6e4622', { helder, basis: 28 });
-      return;
-    }
-    // Wat de tutorial neerzet (js/tutorial.js): een ton, wat er van een ton over is, en een zak.
-    if (v.soort === 'ton') {
-      T.blok(ctx, p.x, p.y, 0.26, 0.26, 30, '#7a5230', { helder });
-      return;
-    }
-    if (v.soort === 'puin') {
-      T.blok(ctx, p.x, p.y, 0.3, 0.3, 3, '#6e4622', { helder });
-      return;
-    }
-    if (v.soort === 'zak') {
-      T.blok(ctx, p.x, p.y, 0.22, 0.22, 16, '#b99a64', { helder });
-      return;
-    }
-    if (v.soort === 'pilaar') {
-      T.blok(ctx, p.x, p.y, 0.32, 0.32, 8, '#6f6a62', { helder });
-      T.blok(ctx, p.x, p.y, 0.22, 0.22, 74, '#8d877d', { helder, basis: 8 });
-      T.blok(ctx, p.x, p.y, 0.32, 0.32, 8, '#6f6a62', { helder, basis: 82 });
-      return;
-    }
-    if (v.soort === 'fontein') {
-      T.blok(ctx, p.x, p.y, 0.42, 0.42, 16, '#8a8478', { helder });
-      T.ruit(ctx, p.x, p.y - 16, 0.64);
-      ctx.fillStyle = T.rgb(T.kleur(S.fonteinLeeg ? '#5d574d' : '#3f7fc2'), helder);
-      ctx.fill();
-      if (S.fonteinLeeg) {
-        T.blok(ctx, p.x, p.y, 0.07, 0.07, 14, '#9c968a', { helder, basis: 16 });
-        return;
-      }
-      const golf = (Math.sin(S.tijd * 2.2) + 1) / 2;
-      ctx.strokeStyle = `rgba(200, 230, 255, ${0.25 + golf * 0.3})`;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.ellipse(p.x, p.y - 16, 8 + golf * 10, 4 + golf * 5, 0, 0, Math.PI * 2);
-      ctx.stroke();
-      T.blok(ctx, p.x, p.y, 0.07, 0.07, 14, '#9c968a', { helder, basis: 16 });
-      rondje(ctx, p.x, p.y - 32 + Math.sin(S.tijd * 5) * 1.5, 2.2, 'rgba(190, 225, 255, 0.9)');
-      return;
-    }
-    if (v.soort === 'trap') {
-      // treden die naar achteren oplopen, met een gloed boven: daar is de uitgang
-      for (let i = 2; i >= 0; i--) {
-        const o = T.naarScherm(v.x - 0.13 * i, v.y - 0.13 * i);
-        T.blok(ctx, o.x, o.y, 0.45 - 0.13 * i, 0.45 - 0.13 * i, 12 * (i + 1), '#7d776d', { helder });
-      }
-      const top = T.naarScherm(v.x - 0.26, v.y - 0.26);
-      gloed(ctx, top.x, top.y - 40, 26, 'rgba(255, 214, 120,', 0.35 + Math.sin(S.tijd * 2) * 0.1);
-      return;
-    }
-    if (v.soort === 'trapgat') {
-      // een gat in de vloer: een donkere ruit met een lichte rand eromheen
-      T.ruit(ctx, p.x, p.y, 1.9);
-      ctx.fillStyle = T.rgb(T.kleur('#6f6a62'), helder);
-      ctx.fill();
-      T.ruit(ctx, p.x, p.y, 1.55);
-      ctx.fillStyle = 'rgba(10, 8, 14, 0.92)';
-      ctx.fill();
-      return;
-    }
-    if (v.soort === 'sleutel') {
-      const z = 13 + Math.sin(S.tijd * 3) * 3;
-      gloed(ctx, p.x, p.y, 16, 'rgba(226, 182, 74,', 0.3);
-      const kx = p.x - 5;
-      const ky = p.y - z;
-      ctx.strokeStyle = '#e8c04e';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.arc(kx, ky, 4.5, 0, Math.PI * 2);
-      ctx.moveTo(kx + 4.5, ky);
-      ctx.lineTo(kx + 15, ky);
-      ctx.moveTo(kx + 11, ky);
-      ctx.lineTo(kx + 11, ky + 4);
-      ctx.moveTo(kx + 14.5, ky);
-      ctx.lineTo(kx + 14.5, ky + 3);
-      ctx.stroke();
+    // dof: hoe ver van de rand van de kaart — dat vervaagt nog altijd het hele voorwerp.
+    // dekking: staat er iemand achter? Dan blijft het voorwerp gewoon staan en krijgt het na het
+    // tekenen een kijkgat overheen (tekenKijkgat hierboven) op wie erachter loopt.
+    const dof = randDof(S.wereld, v.x, v.y);
+    const dekking = v.doorkijk == null ? 1 : v.doorkijk;
+    // In aanbouw (js/gebouwen.js, T.plaatsGebouw): heeft dit gebouw fases in tegels/bouwfasen.png
+    // (T.bouwFaseIndex, js/bouwen.js, kiest welke, op hoe ver het werk is), dan die — anders
+    // (kapel, watermolen, put, ...) gewoon bleker tot hij klaar is, zonder er een tweede tekening
+    // voor nodig te hebben.
+    const fase = v.inAanbouw && v.tekeningNaam && T.bouwFaseIndex && metSprites() && T.sprites.bouwfase
+      && T.sprites.bouwfase(v.tekeningNaam, T.bouwFaseIndex(v.voortgang, T.fasenVan(v.tekeningNaam)));
+    const alpha = dof * (v.inAanbouw && !fase ? 0.45 : 1);
+    if (alpha <= 0.02) return;
+    if (alpha < 1) ctx.globalAlpha = alpha;
+    const stuk = fase || (metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v)));
+    if (stuk) {
+      T.sprites.teken(ctx, stuk, p.x, p.y, helder);
+    } else tekenBuitenVlak(ctx, v, helder);
+    if (alpha < 1) ctx.globalAlpha = 1;
+    if (dekking < 1 && v.kijkgat && v.kijkgat.length) {
+      const sterkte = Math.max(0, Math.min(1, (1 - dekking) / (1 - DOORKIJK)));
+      if (sterkte > 0.02) for (const e of v.kijkgat) tekenKijkgat(ctx, S, e, sterkte);
     }
   }
 
@@ -1207,7 +1089,10 @@
       return hy - 28;
     },
 
-    wim(ctx, cx, cy, bob) {
+    // Iemand zonder eigen tekening: een man in een stofjas, met pet, snor en bezem (zo zag Wim,
+    // de knecht uit het oude spel, eruit). Wie geen eigen tekenaar heeft, krijgt deze; zie
+    // tekenWezen hieronder.
+    mens(ctx, cx, cy, bob) {
       ctx.strokeStyle = '#9a7a4a'; // bezem
       ctx.lineWidth = 2.5;
       ctx.beginPath();
@@ -1353,9 +1238,9 @@
       top = cy - T.sprites.hoogte(e.soort);
     } else {
       // Een wezen uit een kaart kan een soort hebben waar nog geen kunst bij is (een dorpeling
-      // heeft nog geen loopvellen). Dan tekenen we Wim: er staat iemand, en één zo'n figuur legt
-      // niet het hele beeld plat.
-      const teken = TEKENAARS[e.soort] || TEKENAARS.wim;
+      // heeft nog geen loopvellen). Dan tekenen we iemand: er staat een mens, en één zo'n figuur
+      // legt niet het hele beeld plat.
+      const teken = TEKENAARS[e.soort] || TEKENAARS.mens;
       top = teken(ctx, cx, cy - huppel, bob, e, S);
     }
     if (e.flits > 0) {

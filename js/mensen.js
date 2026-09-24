@@ -20,10 +20,10 @@
 //
 //   T.MENSEN.<id> = {
 //     naam:     'de bakker',   // wat er boven zijn hoofd staat; mag weg als `wezen` het al zegt
-//     vel:      'wim',         // het vel dat hij leent zolang het zijne nog niet getekend is
+//     vel:      'boer',        // het vel dat hij leent zolang het zijne nog niet getekend is
 //     zaad:     4,             // óf: hij ís zolang een gewone dorpeling, met dit zaad
-//     wezen:    'wim',         // óf: hij leent een hele ingang uit T.WEZENS (alleen Wim en de
-//                              //     meester, want die worden in code neergezet)
+//     wezen:    '<soort>',     // óf: hij leent een hele ingang uit T.WEZENS, met levenspunten en
+//                              //     al (dat deden alleen Wim en de meester, en die zijn weg)
 //     straal:   3,             // hoe ver hij van zijn plek af dwaalt (de kaart mag het overrulen)
 //     snelheid: 1.3,           // alleen als hij anders loopt dan zijn wezen of een dorpeling
 //     gesprek:  'bakker',      // welk gesprek hij voert; zonder dit is het zijn eigen id
@@ -37,10 +37,6 @@
   'use strict';
 
   T.MENSEN = {
-    // Wie in code wordt neergezet en dus een eigen T.WEZENS-ingang houdt: Wim veegt de hal van de
-    // toren (T.maakWereld). Hij gaat er met de toren uit (werklijst punt 7, stap 6).
-    wim: { wezen: 'wim' },
-
     // Het dorp, zoals ontwerp/wereld.md het opschrijft. `snelheid` moet gelijk zijn aan de
     // SNELHEID-constante van zijn animatie (de dorpelingen*.cjs in gereedschap/pixelart), anders
     // gaan zijn voeten over de grond glijden.
@@ -57,9 +53,10 @@
     meisje: { naam: 'het meisje', snelheid: 1.25, straal: 3 },
     kleuter: { naam: 'de kleuter', snelheid: 0.85, straal: 3 },
 
-    // De twee die De koude oven nodig heeft. De bakker leent tot fase B2b het vel van Wim, en dus
-    // ook zijn loopmaat; de marskramer heeft sinds 24 sep zijn eigen vel (dorpelingen3.cjs, met
-    // zijn draagrek), omdat hij in het gehucht komt handelen (js/handel.js).
+    // De twee die De koude oven nodig had. De bakker leent tot fase B2b het vel van Wim, de knecht
+    // uit het oude spel (dat vel ligt nog in beelden/), en dus ook zijn loopmaat; de marskramer
+    // heeft sinds 24 sep zijn eigen vel (dorpelingen3.cjs, met zijn draagrek), omdat hij in het
+    // gehucht komt handelen (js/handel.js).
     bakker: { naam: 'de bakker', snelheid: 1.4, straal: 2, vel: 'wim' },
     marskramer: { naam: 'de marskramer', snelheid: 1.4, straal: 2 },
 
@@ -86,8 +83,7 @@
     boer5: { naam: 'Jan', vel: 'boer', snelheid: 1.5, straal: 3 },
   };
 
-  // Hoe heet deze mens? Zijn eigen naam, anders die van het wezen dat hij leent (Wim, de
-  // meester), anders zijn id.
+  // Hoe heet deze mens? Zijn eigen naam, anders die van het wezen dat hij leent, anders zijn id.
   T.naamVanMens = function (id) {
     const m = T.MENSEN[id];
     if (!m) return id;
@@ -123,7 +119,7 @@
   // Een mens neerzetten als wezen in de wereld.
   //
   // Welk vel hij krijgt volgt uit wat er over hem bekend is (js/sprites.js, S.houding):
-  //   `wezen`  — hij leent een hele ingang uit T.WEZENS: Wim, de meester.
+  //   `wezen`  — hij leent een hele ingang uit T.WEZENS, met levenspunten en al.
   //   `zaad`   — hij is zolang een gewone dorpeling, met dat zaad als uiterlijk.
   //   geen van beide — hij is zichzelf: zijn id is de naam van zijn vel, en `vel` is het vel dat
   //                    hij leent zolang het zijne nog niet getekend is.
@@ -141,7 +137,7 @@
         e.zaad = null;
       }
       if (m.vel) e.vel = m.vel;
-      // Een mens is geen naamloze figurant: hij heeft, net als Wim en de meester, levenspunten.
+      // Een mens is geen naamloze figurant: hij heeft, net als een wezen, levenspunten.
       e.leven = e.maxLeven = 10;
     }
     e.wie = id;

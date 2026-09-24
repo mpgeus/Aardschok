@@ -20,7 +20,8 @@
   let faseVelGeladen = new Set(); // de bouwfasenvellen die geladen zijn (tegels/bouwfasen.png, bouwfasen-sdf.png, ...)
 
   const S = {
-    aan: false, // staan alle vellen van binnen klaar? Zo niet, tekent het spel zijn vlakken.
+    aan: false, // staan de figuren (en het graan) klaar? Zo niet, tekent het spel zijn vlakken.
+    binnenAan: false, // en de muren en vloeren van binnen? Die mogen ontbreken, zie S.laad
     buitenAan: false, // en die van buiten (tegels/, gemaakt door npm run tiled)
     bouwfasenAan: false, // en de bouwfasenvellen (tegels/bouwfasen.png uit bouwfasen.cjs; een type kan een eigen vel hebben)
     mist: [], // wat er niet geladen kon worden, om in de console te zien
@@ -29,9 +30,9 @@
 
   // ---------------------------------------------------------------- laden
 
-  // `pad` is het pad vanaf index.html. De vellen van binnen staan in beelden/, die van buiten in
-  // tegels/ (daar maakt npm run tiled ze, voor Tiled én voor het spel: het zijn dezelfde
-  // plaatjes, in dezelfde projectie, met hetzelfde ankerpunt).
+  // `pad` is het pad vanaf index.html. De figuren en de vellen van binnen staan in beelden/, die
+  // van buiten in tegels/ (daar maakt npm run tiled ze, voor Tiled én voor het spel: het zijn
+  // dezelfde plaatjes, in dezelfde projectie, met hetzelfde ankerpunt).
   function laadBeeld(pad) {
     return new Promise((klaar) => {
       const img = new Image();
@@ -66,13 +67,17 @@
         S.mist.push('beschrijving');
         return false;
       }
-      const vellen = [gegevens.muren.bestand, gegevens.vloeren.bestand, gegevens.voorwerpen.bestand];
-      if (gegevens.trap) vellen.push(gegevens.trap.bestand);
-      if (gegevens.graan) vellen.push(gegevens.graan.bestand);
-      const lijst = vellen.map((f) => MAP + f);
+      // Waar het spel op wacht: de figuren en het graan.
+      const lijst = gegevens.graan ? [MAP + gegevens.graan.bestand] : [];
       for (const f of Object.values(gegevens.figuren)) {
         for (const h of Object.values(f.houdingen)) lijst.push(MAP + 'figuren/' + h.bestand);
       }
+      // De muren en vloeren van binnen (kamers.cjs) laden mee, maar het spel wacht er niet op. Er
+      // is nu geen binnenwereld in het spel (de toren ging eruit, werklijst punt 7), wel de
+      // machinerie ervoor; ontbreken ze, dan tekent binnen met vlakken en de rest gewoon met
+      // sprites. De vellen voor de meubels en de trap van de toren (voorwerpen.png, trap.png)
+      // laadt het niet meer: niets tekent ze nog.
+      const binnen = gegevens.muren && gegevens.vloeren ? [MAP + gegevens.muren.bestand, MAP + gegevens.vloeren.bestand] : [];
       // De vellen van buiten staan los: gaat daar iets mis, dan tekent het spel buiten vlakken
       // en binnen nog gewoon zijn pixel art. Het bouwfasenvel (tegels/bouwfasen.png, T.BOUWFASEN uit
       // tegels/bouwfasen.js — CLAUDE.md "Opbouw", js/gebouwen.js) net zo los: zonder dat vel blijft
@@ -81,15 +86,16 @@
       // Een type met zijn eigen vel (tegels/bouwfasen-sdf.js: `bestand` op de ingang zelf) laadt
       // dat vel erbij; mislukt het, dan tekent alleen dat type zonder fases.
       const faseVellen = T.BOUWFASEN ? [...new Set([T.BOUWFASEN.bestand, ...Object.values(T.BOUWFASEN.fasen || {}).map((g) => g && g.bestand)].filter(Boolean))] : [];
-      const [uitslag, uitBuiten, uitFasen] = await Promise.all([
-        Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld)),
+      const [uitslag, uitBinnen, uitBuiten, uitFasen] = await Promise.all([
+        Promise.all(lijst.map(laadBeeld)), Promise.all(binnen.map(laadBeeld)), Promise.all(buiten.map(laadBeeld)),
         Promise.all(faseVellen.map((f) => laadBeeld(TEGELMAP + f))),
       ]);
       S.aan = uitslag.every(Boolean);
+      S.binnenAan = binnen.length > 0 && uitBinnen.every(Boolean);
       S.buitenAan = buiten.length > 0 && uitBuiten.every(Boolean);
       faseVelGeladen = new Set(faseVellen.filter((f, i) => uitFasen[i]));
       S.bouwfasenAan = faseVelGeladen.size > 0;
-      if (S.aan) snijVloeren();
+      if (S.binnenAan) snijVloeren();
       if (!S.aan || !S.buitenAan) console.warn('Aardschok: sprites ontbreken, het spel tekent daar vlakken.', S.mist);
       return S.aan;
     })();
@@ -176,7 +182,7 @@
   // Hoe hoog een figuur boven zijn tegel uitsteekt: waar zijn hoofd zit, voor de levensbalk,
   // het uitroepteken en het aanwijzen met de muis. De cel is hoger dan de figuur (er moet een
   // zwaard in de lucht in passen), dus dit is gemeten aan het vel zelf, op de houding staan.
-  const HOOG = { tovenaar: 90, wim: 66, skelet: 78, slijm: 28, wolf: 46, bakker: 66, marskramer: 66 };
+  const HOOG = { tovenaar: 90, skelet: 78, slijm: 28, wolf: 46, bakker: 66, marskramer: 66 };
   S.figuurNaam = (soort) => (soort === 'held' ? 'tovenaar' : soort);
   S.hoogte = (soort) => HOOG[S.figuurNaam(soort)] || 60;
 
@@ -192,7 +198,7 @@
     return n ? 'dorpeling' + S.dorpelingVariant(zaad, n) : null;
   }
 
-  // ---------------------------------------------------------------- vloeren, muren, voorwerpen
+  // ---------------------------------------------------------------- vloeren en muren (binnen)
 
   // Een vloer is een lap van twee bij twee tegels, zodat de steen niet elke tegel herhaalt. Er
   // moet per tegel een ruit uit geknipt worden — en knippen (save, pad, clip, restore) is in een
@@ -241,8 +247,8 @@
 
   // ---------------------------------------------------------------- buiten (tegels/)
   //
-  // De vellen die npm run tiled maakt: gras en paden, bomen en begroeiing, de gebouwen, de toren
-  // en wat er op het erf staat. Ze staan in dezelfde projectie als alles hierboven, en tegels.js
+  // De vellen die npm run tiled maakt: gras en paden, bomen en begroeiing, de gebouwen, en wat er
+  // verder buiten staat. Ze staan in dezelfde projectie als alles hierboven, en tegels.js
   // (T.TEGELS) draagt per vel het ankerpunt: het punt in een cel dat op het midden van de tegel
   // hoort te liggen. Tekenen is dus ook hier niets meer dan het anker op T.naarScherm leggen.
   // -------------------------------------------------------------- wind
@@ -318,7 +324,7 @@
   // Een muurstuk. `west` is waar of niet: een westmuur kijkt naar het zuidoosten, een
   // noordmuur naar het zuidwesten. Het anker is de tegel vóór de muur.
   S.muur = function (soort, west) {
-    if (!gegevens) return null;
+    if (!S.binnenAan) return null;
     const m = gegevens.muren;
     const k = m.kolommen.indexOf(soort);
     const r = m.rijen.indexOf(soort === 'laag' ? 'laag' : west ? 'west' : 'noord');
@@ -328,28 +334,10 @@
     return stuk(MAP + m.bestand, kol * m.cel[0], r * m.cel[1], m.cel[0], m.cel[1], m.anker);
   };
 
-  S.muurSoorten = () => (gegevens ? gegevens.muren.kolommen : []);
-  S.laagHoogte = () => (gegevens ? gegevens.muren.laagHoogte : 22);
-
-  S.voorwerp = function (naam) {
-    if (!gegevens) return null;
-    const v = gegevens.voorwerpen;
-    const i = v.namen.indexOf(naam);
-    if (i < 0) return null;
-    return stuk(MAP + v.bestand, i * v.cel[0], 0, v.cel[0], v.cel[1], v.anker);
-  };
-
-  // De spiraaltrap: een rij per soort (`trap` omhoog, `trapgat` in de vloer), een kolom per
-  // staat (ingestort, provisorisch, hersteld). Het anker is de tegel waar het voorwerp op staat;
-  // de trap zelf beslaat drie bij drie tegels en reikt vanaf die tegel naar achteren.
-  S.trap = function (soort, staat) {
-    if (!gegevens || !gegevens.trap) return null;
-    const t = gegevens.trap;
-    const r = t.soorten.indexOf(soort);
-    const k = t.staten.indexOf(staat || 'hersteld');
-    if (r < 0 || k < 0) return null;
-    return stuk(MAP + t.bestand, k * t.cel[0], r * t.cel[1], t.cel[0], t.cel[1], t.anker);
-  };
+  S.muurSoorten = () => (S.binnenAan ? gegevens.muren.kolommen : []);
+  // Hoe hoog een lage muur van sprites is; null als de muren niet geladen zijn (dan tekent binnen
+  // met vlakken, en een lage deur dus ook).
+  S.laagHoogte = () => (S.binnenAan ? gegevens.muren.laagHoogte : null);
 
   // ---------------------------------------------------------------- bouwfasen (tegels/bouwfasen.png + .json/.js)
   //
@@ -426,7 +414,7 @@
     // maaier in plaats van zijn eigen boer/boerin-vel — maar alleen als dat vel er ook echt is,
     // anders blijft hij gewoon zichzelf staan (geen kunst mist dan nooit iemand helemaal).
     let naam = e.maait && S.figuurGegevens('maaier') ? 'maaier' : e.soort === 'dorpeling' ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
-    // Wie nog geen eigen vel heeft, mag er een lenen (T.WEZENS, vel: 'wim'): zo kan de bakker
+    // Wie nog geen eigen vel heeft, mag er een lenen (`vel` in js/mensen.js): zo kan de bakker
     // meedoen voordat hij getekend is. Zie ontwerp/werklijst.md, fase B2b.
     if (!S.figuurGegevens(naam) && e.vel) naam = e.vel;
     // Een bouwer (js/bouwen.js) is zolang zijn eigen vel er niet is een gewone dorpeling met zijn zaad.
@@ -501,14 +489,9 @@
       const cyclus = 2 * ((h && h.stap) || 0.8);
       return { naam, houding, richting: st.richting, fase: (st.afgelegd / cyclus) % 1 };
     }
-    // Stilstaan: ademen, elk wezen in zijn eigen tempo (e.fase). Wim veegt ondertussen, en in een
-    // gesprek praat hij. In een scène (js/regie.js) praat hij als hij aan het woord is, en staat
-    // hij anders stil: niemand veegt terwijl zijn meester sterft.
-    const wimRust = () => {
-      if (spel.spreektMet === e) return 'praten'; // in een gesprek of een scène (S.spreektMet)
-      return spel.modus === 'regie' ? 'staan' : 'vegen';
-    };
-    const rust = naam === 'wim' ? wimRust() : 'staan';
+    // Stilstaan: ademen, elk wezen in zijn eigen tempo (e.fase). Wie je aanspreekt en op zijn vel
+    // een houding "praten" heeft, praat zolang het gesprek duurt (S.spreektMet).
+    const rust = spel.spreektMet === e && f.houdingen.praten ? 'praten' : 'staan';
     const staan = f.houdingen[rust] ? rust : f.houdingen.staan ? 'staan' : Object.keys(f.houdingen)[0];
     const duur = S.houdingDuur(naam, staan) || 1;
     return { naam, houding: staan, richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };

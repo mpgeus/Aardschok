@@ -3,7 +3,7 @@
 // proef.tmj staat ook even hierboven per test, zodat een lezer niet heen en weer hoeft te kijken:
 // grond 12×10, gras overal behalve rij y = 8 (zandpad), een eik op (9, 2), een den op (10, 4),
 // een vakwerkhuis met zijn achterste voethoek op (1, 1) (beslaat 7×5, dus tegels 1..7 × 1..5), een
-// dichte deur op (4, 6), een slijmkruiper op (9, 7) en op (0, 8) een overgang terug naar het erf
+// dichte deur op (4, 6), een slijmkruiper op (9, 7) en op (0, 8) een overgang naar de wereld
 // (elke kaart is vanzelf een gebied, zie js/gebied.js, en een gebied zonder uitgang is een val).
 //
 // En tegen kaarten/proefbos.tmj: dezelfde soort kaart, maar met randtegels (tegels/rand.tsx) —
@@ -75,7 +75,7 @@ test('het monster staat op de goede tegel, met zijn gewone spullen uit T.WEZENS'
   assert.equal(monster.tx, 9);
   assert.equal(monster.ty, 7);
   assert.equal(monster.kant, 'monster');
-  assert.equal(monster.leven, 10); // komt uit T.maakWezen, dus uit dezelfde WEZENS-tabel als T.maakWereld()
+  assert.equal(monster.leven, 10); // komt uit T.maakWezen, dus uit de WEZENS-tabel in js/wereld.js
 });
 
 test('een deur uit de kaart doet mee als een echte deur, met de goede richting', () => {
@@ -85,7 +85,7 @@ test('een deur uit de kaart doet mee als een echte deur, met de goede richting',
   assert.ok(deur);
   assert.equal(deur.staat, 'dicht');
   // ten noorden van de deur ligt de voet van het huis (vast): dan staat het deurpaneel dwars op x,
-  // net als T.maakWereld() dat voor de deuren in de toren uitrekent.
+  // net als binnen (het toetsdecor, test/decor/binnen.cjs).
   assert.equal(deur.richting, 'ns');
   assert.equal(T.isBegaanbaar(w, 4, 6, { deurenOpenen: false }), false);
   assert.equal(T.isBegaanbaar(w, 4, 6, { deurenOpenen: true }), true);
@@ -147,8 +147,8 @@ test('een bosvijand uit Tiled is een gewoon wezen, met een figuur dat het spel k
 
 test('elk wezen dat Marcel in Tiled kan neerzetten, heeft een figuur in beelden/', () => {
   // De dorpelingen (het "zaad") vallen hier expres buiten: die hebben nog geen loopanimaties.
-  // Wie nog niet getekend is, mag een vel lenen (T.WEZENS, vel: 'wim'), zoals de bakker tot
-  // fase B2b — dan moet dát vel er wel zijn, anders staat er straks niets op de kaart.
+  // Wie nog niet getekend is, mag een vel lenen (`vel`), zoals de bakker tot fase B2b — dan moet
+  // dát vel er wel zijn, anders staat er straks niets op de kaart.
   for (const [soort, w] of Object.entries(T.WEZENS)) {
     const eigen = soort === 'held' ? 'tovenaar' : soort;
     const vel = T.BEELDEN.figuren[eigen] ? eigen : w.vel;

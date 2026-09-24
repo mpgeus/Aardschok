@@ -2,10 +2,10 @@
 // dwalen als een monster (T.laatDwalen, js/verkennen.js). Deze toetsen gaan over wat een
 // dorpeling juist anders maakt: hij ontdekt de held nooit en telt nooit mee als deelnemer, hij
 // blijft niet op een tegel naast een deur staan, hij houdt zich aan zijn straal, en een gesprek
-// onderbreekt het dwalen. Wim (al neutraal, met dwaalt/straal in js/wereld.js), een losse
-// dorpeling in de vorm die js/kaart.js voor een "zaad" op de kaart maakt, en de oude meester (ook
-// een gewoon T.WEZENS-wezen, net als Wim) laten zien dat dat geen Wim-specifieke uitzondering is
-// maar de gewone regel voor elk neutraal wezen.
+// onderbreekt het dwalen. Een losse dorpeling in de vorm die js/kaart.js voor een "zaad" op de
+// kaart maakt, en elke mens uit js/mensen.js, laten zien dat dat de gewone regel is voor elk
+// neutraal wezen. Ze lopen door de kamers van het toetsdecor (test/decor/binnen.cjs), want daar
+// zijn deuren om niet naast te blijven staan.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -17,6 +17,7 @@ require('../js/gevecht.js');
 require('../js/verkennen.js');
 require('../js/sprites.js');
 require('../beelden/beschrijving.js'); // T.BEELDEN, voor "heeft een vel" hieronder
+const { maakBinnen } = require('./decor/binnen.cjs');
 const T = globalThis.Toren;
 
 const wezen = (w, soort) => w.wezens.find((e) => e.soort === soort);
@@ -37,24 +38,22 @@ function maakDorpeling(x, y, straal) {
 }
 
 test('een dorpeling wordt nooit ontdekt en telt nooit mee als deelnemer, ook niet als aanleiding', () => {
-  const w = T.maakWereld();
+  const w = maakBinnen();
   const held = wezen(w, 'held');
   wezen(w, 'slijm').dood = true;
   wezen(w, 'skelet').dood = true;
-  const wim = wezen(w, 'wim');
   const dorpeling = maakDorpeling(6, 3, 3);
   w.wezens.push(dorpeling);
-  zet(held, 5, 3); // vlak naast allebei
+  zet(held, 5, 3); // vlak naast hem
   const S = { wereld: w, held, sluipen: false };
 
   assert.equal(T.zoekOntdekking(S), null);
-  assert.deepEqual(T.deelnemers(w, held, wim), []);
   assert.deepEqual(T.deelnemers(w, held, dorpeling), []);
 });
 
 test('elke mens is neutraal, wordt nooit ontdekt en telt nooit mee als deelnemer', () => {
   for (const id of Object.keys(T.MENSEN)) {
-    const w = T.maakWereld();
+    const w = maakBinnen();
     const held = wezen(w, 'held');
     const e = T.maakMens(id, 6, 3);
     w.wezens.push(e);
@@ -93,7 +92,7 @@ test('elke mens heeft een vel om mee getekend te worden', () => {
 });
 
 test('de smid dwaalt bij de smidse, maar blijft binnen zijn straal van thuis', () => {
-  const w = T.maakWereld();
+  const w = maakBinnen();
   const S = { wereld: w, spreektMet: null };
   const smid = T.maakMens('smid', 4, 3);
   w.wezens.push(smid);
@@ -114,19 +113,18 @@ test('de smid dwaalt bij de smidse, maar blijft binnen zijn straal van thuis', (
 });
 
 test('een dorpeling die toevallig naast een deur staat, wacht zijn pauze niet uit', () => {
-  const w = T.maakWereld();
-  const wim = wezen(w, 'wim');
-  zet(wim, 8, 4); // pal naast de deur op (9, 4)
-  wim.pad = [];
-  wim.dwaalTijd = 10; // zijn pauze is nog lang niet om
+  const w = maakBinnen();
+  const dorpeling = maakDorpeling(8, 4, 3); // pal naast de deur op (9, 4)
+  dorpeling.dwaalTijd = 10; // zijn pauze is nog lang niet om
+  w.wezens.push(dorpeling);
   const S = { wereld: w, spreektMet: null };
   T.laatDwalen(S, 0.01);
   // (8,3) en (8,5) liggen ook naast die deur; (7,4) is de enige stap die dat niet doet.
-  assert.deepEqual(wim.pad, [{ x: 7, y: 4 }]);
+  assert.deepEqual(dorpeling.pad, [{ x: 7, y: 4 }]);
 });
 
 test('een dwalende dorpeling blijft binnen zijn straal van thuis', () => {
-  const w = T.maakWereld();
+  const w = maakBinnen();
   const S = { wereld: w, spreektMet: null };
   const dorpeling = maakDorpeling(4, 3, 2);
   w.wezens.push(dorpeling);
@@ -145,13 +143,13 @@ test('een dwalende dorpeling blijft binnen zijn straal van thuis', () => {
 });
 
 test('wie in gesprek is, dwaalt niet mee, ook niet als zijn pauze om is', () => {
-  const w = T.maakWereld();
-  const wim = wezen(w, 'wim');
-  wim.pad = [];
-  wim.dwaalTijd = -1; // allang tijd voor een stap
-  const S = { wereld: w, spreektMet: wim };
+  const w = maakBinnen();
+  const dorpeling = maakDorpeling(4, 3, 2);
+  dorpeling.dwaalTijd = -1; // allang tijd voor een stap
+  w.wezens.push(dorpeling);
+  const S = { wereld: w, spreektMet: dorpeling };
   T.laatDwalen(S, 0.1);
-  assert.deepEqual(wim.pad, []);
+  assert.deepEqual(dorpeling.pad, []);
 });
 
 // Fase A: een gewone dorpeling (maakDorpeling hierboven, soort "dorpeling") kiest zijn vel uit

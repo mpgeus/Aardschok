@@ -30,7 +30,7 @@
   }
 
   // Loop tot naast het doel en doe daar `actie`. Staat de held er al naast, dan meteen. Is het
-  // doel een wezen, dan telt zijn tegel (tx, ty), niet zijn vloeiende plek: wie op Wim of de meester
+  // doel een wezen, dan telt zijn tegel (tx, ty), niet zijn vloeiende plek: wie op een dorpeling
   // klikt terwijl die net een stap zet, gaf anders een halve tegel aan het padzoeken, en dat liep
   // vast.
   function loopNaast(S, wat, actie) {
@@ -56,25 +56,12 @@
   T.loopNaar = loopNaar;
   T.loopNaast = loopNaast;
 
-  // Wat je opraapt door erop te stappen: nu alleen nog de sleutel van het trappenhuis van de
-  // toren (die gaat er met de toren uit, werklijst punt 7). De tekst bij de muis, en wat er gemeld
-  // wordt. Ook naar buiten, zodat de keuring (gereedschap/keuring.js) kan zeggen dat een voorwerp
-  // dat aan een quest hangt niet op te rapen is — dan ligt het er wel en doet het niets.
-  const OPRAPEN = (T.OPRAPEN = {
-    sleutel: { tekst: 'De sleutel oppakken', vind: 'Je vindt de ijzeren sleutel.' },
-  });
-
-  // Een ton of iets anders dat breekt (T.VOORWERPEN, `breekt`), sla je met je staf in stukken.
-  // Dat kost niets, net als slaan in een gevecht: het is het enige wat niets kost, en de meester
-  // laat het je in de tutorial zelf doen.
-  T.slaKapot = async function (S, v) {
-    const eig = T.VOORWERPEN[v.soort];
-    if (!eig || !eig.breekt) return;
-    await T.anim.uitval(S.held, { x: v.x, y: v.y });
-    if (T.VOORWERPEN[v.soort] !== eig) return; // intussen al gebroken
-    v.soort = eig.breekt;
-    T.ui.bericht(`Je slaat ${eig.naam || 'het'} in duigen. Het kost je niets.`, 'goed');
-  };
+  // Wat je opraapt door erop te stappen, per soort: de tekst bij de muis en wat er gemeld wordt,
+  // bijvoorbeeld { tekst: 'De sleutel oppakken', vind: 'Je vindt de ijzeren sleutel.' }. Leeg
+  // sinds de sleutel van de toren eruit ging (werklijst punt 7); een quest legt er zijn eigen
+  // dingen in. Ook naar buiten, zodat de keuring (gereedschap/keuring.js) kan zeggen dat een
+  // voorwerp dat aan een quest hangt niet op te rapen is — dan ligt het er wel en doet het niets.
+  const OPRAPEN = (T.OPRAPEN = {});
 
   // Wat gebeurt er als je hierop klikt? Geeft { tekst, doe, fout } terug, of null.
   // De tekst komt bij de muis te staan; het scherm en de klik stellen dus dezelfde vraag.
@@ -89,8 +76,8 @@
       if (e.handelaar && T.ui.openHandel) {
         return { tekst: 'Handelen met de marskramer', doe: () => loopNaast(S, e, () => T.ui.openHandel(S)) };
       }
-      // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: Wim, en de meester. Welk
-      // gesprek dat is, zegt T.gesprekIdVan — een dorpeling kan er een eigen hebben.
+      // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee. Welk gesprek dat is, zegt
+      // T.gesprekIdVan — een dorpeling kan er een eigen hebben.
       if (T.gesprekVan && T.gesprekVan(e)) {
         return { tekst: `Praten met ${e.naam}`, doe: () => loopNaast(S, e, () => T.openDialoog(S, e)) };
       }
@@ -109,23 +96,17 @@
     if (doel.voorwerp) {
       const v = doel.voorwerp;
       if (OPRAPEN[v.soort]) return { tekst: OPRAPEN[v.soort].tekst, doe: () => loopNaar(S, v) };
-      const eig = T.VOORWERPEN[v.soort];
-      if (eig && eig.breekt) {
-        return { tekst: `${T.hoofdletter(eig.naam || 'het')} kapotslaan met je staf (kost niets)`, doe: () => loopNaast(S, v, () => T.slaKapot(S, v)) };
-      }
-      if (v.soort === 'kist') {
-        return { tekst: 'De kist bekijken', doe: () => loopNaast(S, v, () => T.ui.bericht('Een kist vol versleten bezems. Wim gooit niets weg.')) };
-      }
     }
+    // Een deur op slot gaat open met een sleutel uit je tas (die een quest of een gesprek je geeft).
     const d = T.deurOp(w, doel.x, doel.y);
     if (d && d.staat === 'opslot') {
       if (S.inventaris.has('sleutel')) return { tekst: 'De deur openen met de sleutel', doe: () => loopNaast(S, d, () => ontsluit(S, d)) };
-      return { tekst: 'Op slot', fout: true, doe: () => T.ui.bericht('De deur zit op slot. Misschien weet Wim waar de sleutel is.') };
+      return { tekst: 'Op slot', fout: true, doe: () => T.ui.bericht('De deur zit op slot.') };
     }
     // Een open deur is gewoon een doorgang: wie erop klikt, wil erdoor. Dichtgooien kan
     // in een gevecht, met een eigen knop.
     if (!T.isZichtbaar(w, doel.x, doel.y) || !T.isBegaanbaar(w, doel.x, doel.y, { deurenOpenen: true })) return null;
-    // Een tegel die naar een ander gebied leidt, zegt dat erbij: anders loop je de toren uit
+    // Een tegel die naar een ander gebied leidt, zegt dat erbij: anders loop je het gebied uit
     // zonder dat je het wilde.
     const o = T.overgangOp(w, doel.x, doel.y);
     if (o) {
@@ -155,7 +136,7 @@
   }
 
   // Waar hoort dit wezen rond te blijven? Wie een plek en een straal heeft (`thuis`), blijft daar
-  // in de buurt: de smid bij de smidse, Wim bij zijn trap, de wolf bij zijn stuk bos. Wie die niet
+  // in de buurt: de smid bij de smidse, een boer bij zijn huis, de wolf bij zijn stuk bos. Wie die niet
   // heeft, blijft in zijn eigen kamer — binnen is een kamer vanzelf een stuk wereld, buiten is de
   // hele kaart één kamer en zou een wolf tot de andere kant van het erf wandelen.
   //
@@ -171,7 +152,7 @@
   }
 
   // Wie dwaalt, zet af en toe een stap binnen zijn eigen stukje wereld en staat er daarna weer
-  // even bij stil — dan doet hij wat bij hem past (Wim veegt). Een dorpeling gebruikt hetzelfde
+  // even bij stil. Een dorpeling gebruikt hetzelfde
   // loopwerk als een dwalend monster; het verschil is dat hij nooit een gevecht begint (hij is
   // `neutraal`, en T.zoekOntdekking en T.deelnemers kijken alleen naar monsters).
   //
@@ -288,10 +269,9 @@
       // T.gaNaarGebied), staat er al, en dan zou de overgang meteen weer afgaan: heen en weer
       // tussen twee gebieden. Die tegel staat pas weer scherp als hij er een keer af is geweest.
       //
-      // En alleen als je daar je pas beëindigt. Buiten ligt de overgang midden op het erf, vóór
-      // de deur van de toren, en daar loop je aan één stuk door langs; wie naar de moestuin loopt,
-      // wil niet halverwege binnen staan. Wie naar de deur loopt, klikt op de deur (en het scherm
-      // zegt er "Naar de toren" bij).
+      // En alleen als je daar je pas beëindigt. Een overgang kan midden op een pad liggen, en daar
+      // loop je aan één stuk door langs; wie erlangs loopt, wil niet halverwege in een ander gebied
+      // staan. Wie erheen wil, klikt erop (en het scherm zegt er "Naar ..." bij).
       const zojuist = S.netGeland && S.netGeland.x === t.x && S.netGeland.y === t.y;
       if (!zojuist) S.netGeland = null;
       const o = !zojuist && !e.pad.length && S.modus === 'verkennen' && !S.gevecht ? T.overgangOp(w, t.x, t.y) : null;

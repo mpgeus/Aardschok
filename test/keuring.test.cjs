@@ -84,7 +84,7 @@ function kaartje(objecten, extraLagen) {
 // nog wel in Tiled staat, is een eigen toets.
 // Een uitgang zit er standaard bij, want een kaart zonder uitgang is op zichzelf al een fout;
 // die toetsen we apart.
-const UITGANG = { x: 0, y: 0, overgang: 'toren', komt: '1,0' };
+const UITGANG = { x: 0, y: 0, overgang: 'wereld', komt: '1,0' };
 const keur = (dingen, objecten, extraLagen) =>
   T.keurKaart('proefje', kaartje(objecten || [], extraLagen), { betekenis: { dingen } }).klachten;
 const teksten = (klachten) => klachten.map((k) => k.tekst).join(' | ');
@@ -142,21 +142,21 @@ test('een overgang naar een gebied dat niet bestaat, en een komt die nergens op 
 });
 
 test('een overgang zonder komt is geen fout maar wel iets om te weten', () => {
-  const klachten = keur([{ x: 0, y: 0, overgang: 'toren' }]);
+  const klachten = keur([{ x: 0, y: 0, overgang: 'wereld' }]);
   assert.equal(klachten.length, 1);
   assert.equal(klachten[0].soort, 'let op');
   assert.match(klachten[0].tekst, /geen "komt"/);
 });
 
 test('een komt die naar de overgangstegel zelf wijst, kaatst je heen en weer', () => {
-  const klachten = keur([{ x: 0, y: 0, overgang: 'toren', komt: '0,0' }]);
+  const klachten = keur([{ x: 0, y: 0, overgang: 'wereld', komt: '0,0' }]);
   assert.match(teksten(klachten), /kaats je heen en weer/);
 });
 
 test('twee mensen op dezelfde tegel, en een straal die geen getal is', () => {
   const klachten = keur([
     UITGANG,
-    { x: 3, y: 2, wezen: 'wim' },
+    { x: 3, y: 2, wie: 'smid' },
     { x: 3, y: 2, zaad: 7, straal: 'veel' },
   ]);
   assert.match(teksten(klachten), /staat op dezelfde tegel als/);

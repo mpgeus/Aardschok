@@ -1,6 +1,6 @@
-// De wereld (kaarten/wereld.tmj, gemaakt door gereedschap/tiled/maak-wereld.cjs): het erf met de
-// toren erop, het sorteren van hoge dingen op hun voettegel, en de overgang van binnen naar buiten
-// en terug. Alles zonder scherm.
+// De wereld (kaarten/wereld.tmj, eens gemaakt door gereedschap/tiled/maak-wereld.cjs en sinds
+// 22 sep met de hand bewerkt): wat erop staat, het sorteren van hoge dingen op hun voettegel, en
+// de overgang van het gehucht naar de wereld en terug. Alles zonder scherm.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
@@ -29,43 +29,20 @@ const voorwerp = (w, soort) => w.voorwerpen.find((v) => v.soort === soort);
 // Waar het erf en het dorp binnen wereld.tmj precies liggen (zie gereedschap/tiled/maak-wereld.cjs).
 const { EOX, DOX, DOY, DORP_B, DORP_H } = require('../gereedschap/tiled/maak-wereld.cjs');
 
-test('de wereld is begaanbaar, met de toren op het erf', () => {
+test('de wereld is begaanbaar, en de toren en het erf staan er niet meer op', () => {
   const w = laadWereld();
   assert.equal(w.buiten, true);
   // erf + kloof + dorp op één doek (ontwerp/werklijst.md "Eén doorlopende wereld"): een stuk ruimer
   // dan het erf alleen ooit was.
   assert.ok(w.b >= 150 && w.h >= 70, `de wereld is ${w.b}×${w.h}; dat is te krap voor erf, kloof en dorp samen`);
-  const toren = voorwerp(w, 'toren');
-  assert.ok(toren, 'de toren staat op het erf');
-  // De hele voet van de toren is vast, en er net buiten niet.
-  const [tb, td] = toren.beslaat;
-  for (let y = 0; y < td; y++) {
-    for (let x = 0; x < tb; x++) assert.equal(T.isVast(w, toren.x + x, toren.y + y), true, `de voet van de toren op (${toren.x + x}, ${toren.y + y})`);
+  // Marcel, 24 sep 2026 (ontwerp/wereld.md): de toren en het erf gaan eruit met het oude spel. Waar
+  // de toren stond (zijn voet begon op (147, 27)), ligt nu gewoon gras.
+  for (const soort of ['toren', 'schuurtje', 'put', 'houtstapel', 'waslijn', 'moestuin', 'bank']) {
+    assert.equal(voorwerp(w, soort), undefined, `${soort} hoorde bij het erf, en dat is weg`);
   }
-  assert.equal(T.isVast(w, toren.x + tb, toren.y), false);
-});
-
-test('de maat van de toren komt uit het tegelvel, niet uit een getal hier', () => {
-  // De toren wordt dikker gemaakt (hij moet om zijn eigen hal passen); dan hoort zijn voet mee te
-  // groeien zonder dat er ergens een 3 of een 12 staat.
-  const vel = T.TEGELS.toren;
-  assert.ok(vel, 'tegels/toren.tsx bestaat (npm run tiled)');
-  const tegel = vel.tiles[0];
-  assert.ok(Array.isArray(tegel.beslaat) && tegel.beslaat[0] >= 1, 'de toren draagt zijn eigen beslaat');
-  assert.match(tegel.staat, /^-?\d+,-?\d+$/, 'de toren draagt de tegel waarop hij staat');
-  const w = laadWereld();
-  assert.deepEqual(voorwerp(w, 'toren').beslaat, tegel.beslaat);
-});
-
-test('het schuurtje, de moestuin, de waslijn en de houtstapel staan er, en de waslijn staat niet in de weg', () => {
-  const w = laadWereld();
-  for (const soort of ['schuurtje', 'moestuin', 'waslijn', 'houtstapel', 'put']) {
-    assert.ok(voorwerp(w, soort), `${soort} hoort op het erf te staan`);
-  }
-  const was = voorwerp(w, 'waslijn');
-  assert.equal(T.isVast(w, was.x, was.y), false, 'onder de waslijn door lopen moet kunnen');
-  const tuin = voorwerp(w, 'moestuin');
-  assert.equal(T.isVast(w, tuin.x, tuin.y), true, 'door de moestuin heen lopen niet');
+  assert.equal(T.isBegaanbaar(w, 150, 30), true, 'waar de toren stond, kun je lopen');
+  // De vier lantaarns langs de weg door de kloof horen niet bij het erf; die blijven.
+  assert.equal(w.voorwerpen.filter((v) => v.soort === 'lantaarn').length, 4);
 });
 
 test('elke tegel is óf begaanbaar óf bezet: op gras waar je loopt staat niets', () => {
@@ -73,8 +50,9 @@ test('elke tegel is óf begaanbaar óf bezet: op gras waar je loopt staat niets'
   // varen waar je dwars doorheen loopt, maakt het erf vol zonder dat het iets betekent. Het dorp is
   // Marcels eigen, met de hand getekende kaart — daar geldt deze regel niet vanzelf ook voor (een
   // los grasplukje in de berm mag daar best), dus de toets kijkt alleen naar het erfdeel (x >= EOX).
+  // Het erf zelf ging op 24 sep weg; zijn bos staat er nog.
   const w = laadWereld();
-  const los = w.voorwerpen.filter((v) => v.x >= EOX && !T.isVast(w, v.x, v.y) && v.soort !== 'waslijn' && v.soort !== 'lantaarn');
+  const los = w.voorwerpen.filter((v) => v.x >= EOX && !T.isVast(w, v.x, v.y));
   assert.deepEqual(los.map((v) => `${v.soort}@${v.x},${v.y}`), [], 'niets losstaands op een begaanbare tegel van het erf');
 });
 
@@ -83,11 +61,12 @@ test('de grond ligt per tegel klaar om te tekenen, uit de terreinsets van rand.t
   // van grond.tsx, maar uit de terreinsets van rand.tsx (net als het dorp), zodat het pad nette
   // randen en karrensporen heeft. Zie gereedschap/tiled/maak-wereld.cjs.
   const w = laadWereld();
-  const o = w.overgangen[0];
+  const o = w.overgangen.find((x) => x.naar === 'gehucht');
   const g = w.grond[o.y][o.x];
   assert.ok(g && g.vel === 'rand', 'elke tegel weet welk grondplaatje eronder ligt, uit tegels/rand.tsx');
   assert.ok(Number.isInteger(g.id));
-  assert.ok(['gras', 'zandpad'].includes(g.naam), `bij de deur van de toren hoort gras of een zandpad, niet "${g.naam}"`);
+  // De weg naar het gehucht ligt waar een pad de kaart verlaat: het pad van kasseien aan de onderrand.
+  assert.ok(['zandpad', 'kasseien'].includes(g.naam), `de weg naar het gehucht hoort op een pad te beginnen, niet op "${g.naam}"`);
 });
 
 test('een hoog ding plant zich in op zijn vóórste voettegel, zodat je erachter verdwijnt en ervoor weer opduikt', () => {
@@ -154,60 +133,62 @@ test('de tekenvolgorde kent geen cirkels: wat achter een huis staat, blijft erac
 
 // ---------------------------------------------------------------- de overgang
 
+// Het spel begint in het gehucht (js/main.js); de schout staat daar al op de kaart.
 function nieuwSpel() {
   const S = { tijd: 0, effecten: [], wachters: [], bezocht: new Set(), gebieden: {} };
-  S.wereld = T.gebied(S, 'toren');
+  S.wereld = T.gebied(S, 'gehucht');
   S.held = S.wereld.wezens.find((e) => e.soort === 'held');
   S.modus = 'verkennen';
   return S;
 }
 
-test('de deur van het erf ligt naast de voet van de toren, niet eronder', () => {
-  // De toren wordt dikker; dan schuift de tegel waar je voor de deur staat mee naar buiten. Ligt
-  // hij binnen de voet, dan is hij vast en kom je de toren nooit meer in.
+test('de weg naar het gehucht ligt aan de rand van de wereld, en je landt ernaast op het pad', () => {
   const w = laadWereld();
-  const o = w.overgangen.find((x) => x.naar === 'toren');
-  assert.ok(o, 'er is een weg terug de toren in');
-  assert.equal(T.isBegaanbaar(w, o.x, o.y), true, 'je kunt op de tegel voor de deur staan');
-  assert.equal(T.isBegaanbaar(w, o.komt.x, o.komt.y), true, 'en op de tegel waar je landt');
-  const toren = voorwerp(w, 'toren');
-  const inVoet = (p) => p.x >= toren.x && p.x < toren.x + toren.beslaat[0] && p.y >= toren.y && p.y < toren.y + toren.beslaat[1];
-  assert.equal(inVoet(o), false);
+  const o = w.overgangen.find((x) => x.naar === 'gehucht');
+  assert.ok(o, 'er is een weg van de wereld naar het gehucht');
+  assert.equal(T.isBegaanbaar(w, o.x, o.y), true, 'je kunt op de tegel van de weg staan');
+  assert.ok(o.komt, 'en hij zegt waar je landt als je uit het gehucht komt');
+  assert.equal(T.isBegaanbaar(w, o.komt.x, o.komt.y), true, 'en daar kun je staan');
+  assert.equal(T.afstand(o, o.komt), 1);
+  // Aan de rand: een stap verder de kaart uit ligt er geen grond meer.
+  assert.ok([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => T.tegel(w, o.x + dx, o.y + dy) === 'buiten'), 'de weg ligt aan de rand');
 });
 
-test('de toren heeft een buitendeur, en die brengt je naar het erf', () => {
+test('het gehucht heeft een weg de wereld in, en die brengt je daar op het pad', () => {
   const S = nieuwSpel();
-  const o = S.wereld.overgangen[0];
-  assert.equal(o.naar, 'wereld');
-  assert.equal(T.tegel(S.wereld, o.x, o.y), 'deur');
+  const o = S.wereld.overgangen.find((x) => x.naar === 'wereld');
+  assert.ok(o, 'het gehucht heeft een uitgang naar de wereld');
   // erop stappen zet de overgang klaar; de spellus voert hem uit (js/main.js)
   T.bijAankomst(S, S.held, { x: o.x, y: o.y });
   assert.equal(S.naarGebied, 'wereld');
   T.gaNaarGebied(S, S.naarGebied);
   assert.equal(S.wereld.gebied, 'wereld');
   assert.equal(S.wereld.buiten, true);
-  // hij staat náást de deur, niet erin, en kan daar staan
-  const terug = S.wereld.overgangen.find((x) => x.naar === 'toren');
+  // hij staat náást de weg terug, niet erop, en precies op de tegel die "komt" zegt
+  const terug = S.wereld.overgangen.find((x) => x.naar === 'gehucht');
   assert.notDeepEqual([S.held.tx, S.held.ty], [terug.x, terug.y]);
-  assert.equal(T.afstand({ x: S.held.tx, y: S.held.ty }, terug), 1);
+  assert.deepEqual({ x: S.held.tx, y: S.held.ty }, terug.komt);
   assert.equal(T.isBegaanbaar(S.wereld, S.held.tx, S.held.ty), true);
-  assert.ok(S.wereld.wezens.includes(S.held), 'de held hoort nu bij het erf');
+  assert.ok(S.wereld.wezens.includes(S.held), 'de held hoort nu bij de wereld');
 });
 
-test('en weer terug: dezelfde deur, de andere kant op, met dezelfde held', () => {
+test('en weer terug: dezelfde weg, de andere kant op, met dezelfde held', () => {
   const S = nieuwSpel();
-  S.held.leeftijd += 7; // zeven maanden ouder onderweg
+  const held = S.held;
+  held.leven -= 5; // onderweg gewond geraakt
   T.gaNaarGebied(S, 'wereld');
-  const leeftijd = S.held.leeftijd;
-  const o = S.wereld.overgangen.find((x) => x.naar === 'toren');
+  const leven = held.leven;
+  const o = S.wereld.overgangen.find((x) => x.naar === 'gehucht');
   T.bijAankomst(S, S.held, { x: o.x, y: o.y });
-  assert.equal(S.naarGebied, 'toren');
+  assert.equal(S.naarGebied, 'gehucht');
   T.gaNaarGebied(S, S.naarGebied);
-  assert.equal(S.wereld.gebied, 'toren');
-  assert.equal(S.held.leeftijd, leeftijd, 'een overgang kost geen tijd van je leven');
-  const deur = S.wereld.overgangen[0];
-  assert.equal(T.afstand({ x: S.held.tx, y: S.held.ty }, deur), 1);
-  assert.equal(T.kamerVan(S.wereld, S.held.tx, S.held.ty).id, 'hal');
+  assert.equal(S.wereld.gebied, 'gehucht');
+  assert.equal(S.held, held, 'dezelfde held');
+  assert.equal(S.held.leven, leven, 'een overgang kost geen levenspunten');
+  // hij landt één tegel terug op de weg waar hij het gehucht uit liep, niet ergens anders
+  const weg = S.wereld.overgangen.find((x) => x.naar === 'wereld');
+  assert.deepEqual({ x: S.held.tx, y: S.held.ty }, weg.komt);
+  assert.equal(T.afstand({ x: S.held.tx, y: S.held.ty }, weg), 1);
 });
 
 test('de ronde naar buiten en terug kaatst niet: je landt nooit op een overgangstegel', () => {
@@ -216,7 +197,7 @@ test('de ronde naar buiten en terug kaatst niet: je landt nooit op een overgangs
   // als je er een keer af bent geweest (S.netGeland).
   const S = nieuwSpel();
   for (let ronde = 0; ronde < 3; ronde++) {
-    for (const naar of ['wereld', 'toren']) {
+    for (const naar of ['wereld', 'gehucht']) {
       T.gaNaarGebied(S, naar);
       const w = S.wereld;
       assert.equal(w.gebied, naar);
@@ -231,20 +212,20 @@ test('de ronde naar buiten en terug kaatst niet: je landt nooit op een overgangs
 });
 
 test('een overgang gaat pas af als je er je pas beëindigt, niet als je erlangs loopt', () => {
-  // De deur van de toren ligt buiten midden op het gras; wie naar de moestuin loopt, wil niet
-  // halverwege binnen staan.
+  // Een overgang kan midden op een pad liggen; wie erlangs loopt, wil niet halverwege in een ander
+  // gebied staan.
   const S = nieuwSpel();
   T.gaNaarGebied(S, 'wereld');
-  const o = S.wereld.overgangen.find((x) => x.naar === 'toren');
+  const o = S.wereld.overgangen.find((x) => x.naar === 'gehucht');
   S.netGeland = null;
   // er doorheen lopen: er staat nog een stap in het pad
   S.held.pad = [{ x: o.x + 1, y: o.y }];
   T.bijAankomst(S, S.held, { x: o.x, y: o.y });
-  assert.equal(S.naarGebied, null, 'erlangs lopen brengt je niet naar binnen');
+  assert.equal(S.naarGebied, null, 'erlangs lopen brengt je niet terug naar het gehucht');
   // er je pas beëindigen: dan wel
   S.held.pad = [];
   T.bijAankomst(S, S.held, { x: o.x, y: o.y });
-  assert.equal(S.naarGebied, 'toren');
+  assert.equal(S.naarGebied, 'gehucht');
 });
 
 test('elk gebied heeft een weg terug', () => {
@@ -266,7 +247,7 @@ test('een gebied blijft staan zoals je het achterliet', () => {
   const wolf = S.wereld.wezens.find((e) => e.soort === 'wolf');
   assert.ok(wolf, 'er loopt een wolf buiten');
   wolf.dood = true;
-  T.gaNaarGebied(S, 'toren');
+  T.gaNaarGebied(S, 'gehucht');
   T.gaNaarGebied(S, 'wereld');
   assert.equal(S.wereld.wezens.find((e) => e.soort === 'wolf').dood, true, 'een gedode wolf blijft dood');
 });
@@ -295,14 +276,17 @@ test('elke kaart uit T.KAARTEN is vanzelf een gebied, zonder dat er iets geregis
   // en de naam die de speler ziet komt uit de kaart zelf (de eigenschap "naam" van de map)
   assert.equal(T.GEBIEDEN.wereld.naam, 'De wereld');
   assert.equal(T.GEBIEDEN.proefbos.naam, 'Het proefbos');
-  assert.equal(T.GEBIEDEN.toren.naam, 'De toren'); // de toren blijft in code staan
+  assert.equal(T.GEBIEDEN.gehucht.naam, 'Het gehucht');
+  // Er staat geen gebied meer in code: de toren ging eruit met het oude spel (werklijst punt 7).
+  assert.deepEqual(Object.keys(T.GEBIEDEN).sort(), Object.keys(T.KAARTEN).sort());
 });
 
 // Vroeger liep hier een toets die van het erf naar de toetskaart "proefbos" liep en weer terug: dat
 // was tegelijk het bewijs dat een kaart zonder eigen registratie vanzelf een gebied wordt. Sinds
 // "Eén doorlopende wereld" heeft de wereld geen overgang meer naar het bos (dat bos komt er zelf
-// straks als getekend gebied, niet als teleport naar een toetskaart) — de toren-overgang hierboven
-// en "elk gebied heeft een weg terug" hieronder dekken diezelfde machinerie nog steeds.
+// straks als getekend gebied, niet als teleport naar een toetskaart) — de overgang tussen het
+// gehucht en de wereld hierboven en "elk gebied heeft een weg terug" dekken diezelfde machinerie
+// nog steeds.
 
 test('een overgang naar een kaart die niet bestaat, laat de speler niet vastlopen', () => {
   // Marcel typt "dorp" in Tiled en tekent kaarten/dorp.tmj pas morgen. Dan hoort het spel te

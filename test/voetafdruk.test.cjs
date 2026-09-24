@@ -4,11 +4,12 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 require('../js/wereld.js');
+const { maakBinnen } = require('./decor/binnen.cjs'); // de trap in het trappenhuis
 
 const T = globalThis.Toren;
 
 test('de trap blokkeert zijn hele voet van drie bij drie, en niets daarbuiten', () => {
-  const w = T.maakWereld();
+  const w = maakBinnen();
   const trap = w.voorwerpen.find((v) => v.soort === 'trap');
   assert.ok(trap, 'er staat een trap in het trappenhuis');
 
@@ -26,7 +27,7 @@ test('de trap blokkeert zijn hele voet van drie bij drie, en niets daarbuiten', 
 });
 
 test('een voorwerp zonder voet beslaat nog gewoon één tegel', () => {
-  const w = T.maakWereld();
+  const w = maakBinnen();
   const fontein = w.voorwerpen.find((v) => v.soort === 'fontein');
   const voet = T.voetVan(fontein);
   assert.deepEqual(voet, { x1: fontein.x, y1: fontein.y, x2: fontein.x, y2: fontein.y });

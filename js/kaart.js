@@ -1,8 +1,9 @@
 // Een kaart inlezen als een gewone wereld. T.laadKaart(kaart, betekenis) neemt de grond die
 // Marcel in Tiled tekende én de betekenis die in gereedschap/wereld.html gelegd is, en geeft
-// terug wat js/wereld.js voor de toren met de hand opschrijft: begaanbaar, vast, voorwerpen,
-// wezens, deuren. wereld.js zelf verandert niet mee: T.isBegaanbaar, T.isVast, T.raakt, T.tegel,
-// T.deurOp en T.voorwerpOp werken op zo'n ingelezen wereld precies als op T.maakWereld().
+// een gewone wereld terug: begaanbaar, vast, voorwerpen, wezens, deuren. De vragen in
+// js/wereld.js (T.isBegaanbaar, T.isVast, T.raakt, T.tegel, T.deurOp en T.voorwerpOp) werken op
+// zo'n ingelezen wereld precies als op een wereld met kamers (het toetsdecor voor binnen,
+// test/decor/binnen.cjs).
 //
 // Hoe de keten aan elkaar hangt (zie ontwerp/kaarten.md, "Tiled tekent alleen nog de grond"):
 //   dorp.cjs, dorp2.cjs, bomen.cjs  (de kunst)
@@ -11,7 +12,7 @@
 //   en legt de betekenis in gereedschap/wereld.html     -> kaarten/<naam>.betekenis.json
 //     -> npm run kaarten (naar-kaarten.cjs)              -> kaarten/kaarten.js
 //                                                           (T.KAARTEN en T.BETEKENIS)
-//   T.laadKaart(T.KAARTEN.proef, T.BETEKENIS.proef)      -> een wereld, zoals T.maakWereld()
+//   T.laadKaart(T.KAARTEN.proef, T.BETEKENIS.proef)      -> een wereld (S.wereld)
 //
 // Eigenschappen die in Tiled op een TEGEL staan (in de .tsx, geldt voor elk exemplaar, zie
 // naar-tiled.cjs): "naam" (de soort), "vast" (of je erdoorheen kunt) en bij een gebouw "beslaat"
@@ -24,7 +25,7 @@
 //              om iemand neer te zetten die een naam heeft — wie hij is, hoe hij eruitziet en wat
 //              hij zegt staat daar op één plek, en de kaart zegt alleen waar hij staat.
 //   wezen      welk wezen hier staat: een naam die T.maakWezen kent ('held' voor de beginplek
-//              van de tovenaar, 'wim', 'slijm', 'bakker', de bosvijanden). Verkeerd gespeld?
+//              van de schout, 'wolf', 'slijm', de bosvijanden). Verkeerd gespeld?
 //              Dan komt er een waarschuwing op de console en slaan we het ding over.
 //   zaad       in plaats van "wezen": een gewone dorpeling met dit zaad als uiterlijk (zie
 //              gereedschap/pixelart/dorpelingen.cjs). Doet niet mee in een gevecht en staat niet
@@ -352,8 +353,8 @@
       }
     }
 
-    // 3. de deurrichting, net als T.maakWereld in wereld.js: loopt de muur rond de deur van
-    // noord naar zuid, dan staat het deurpaneel dwars op x.
+    // 3. de deurrichting: loopt de muur rond de deur van noord naar zuid, dan staat het
+    // deurpaneel dwars op x.
     const tegelBij = (x, y) => (binnenRaster(x, y) ? tegels[y][x] : 'buiten');
     for (const d of deuren.values()) if (tegelBij(d.x, d.y - 1) === 'muur') d.richting = 'ns';
     // En de geheime doorgangen, die nog niet in `deuren` staan: hun richting, en wat er op hun
@@ -364,8 +365,8 @@
       if (tegelBij(g.x, g.y - 1) === 'muur') g.richting = 'ns';
     }
 
-    // 4. één kamer die de hele kaart beslaat en van meet af aan bekend is: buiten is geen
-    // toren met kamers die je ontdekt. T.isZichtbaar (de mist-van-oorlog) is dus voor een
+    // 4. één kamer die de hele kaart beslaat en van meet af aan bekend is: buiten zijn er geen
+    // kamers die je ontdekt. T.isZichtbaar (de mist-van-oorlog) is dus voor een
     // ingelezen kaart altijd "alles gezien"; dat hoort niet bij deze opdracht (T.isBegaanbaar,
     // T.isVast en T.raakt wel, en die vragen niets aan kamers).
     const kamerBuiten = { id: 'buiten', naam: 'Buiten', x1: 0, y1: 0, x2: b - 1, y2: h - 1, vloer: ['#3c5e1e', '#355f22'] };

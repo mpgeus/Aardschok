@@ -15,13 +15,14 @@
 
   // Hoe hoog iets boven zijn tegel uitsteekt, om erop te kunnen klikken. Met sprites zijn de
   // figuren groter dan de vlakken waren, dus vraagt het aanwijzen het aan de sprites zelf.
-  const WEZEN_HOOGTE = { wim: 48, slijm: 28, skelet: 52 };
-  const VOORWERP_HOOGTE = { fontein: 32, kist: 36, trap: 46, sleutel: 28, ton: 32, zak: 24 };
-  const SPRITE_VOORWERP_HOOGTE = { fontein: 46, kist: 40, trap: 46, sleutel: 26, ton: 40, zak: 28 };
+  const WEZEN_HOOGTE = { slijm: 28, skelet: 52 };
   const hoogteVan = (e) =>
     T.sprites.aan && !T.debug.vlakken ? T.sprites.hoogte(e.soort) : WEZEN_HOOGTE[e.soort] || 48;
-  const voorwerpHoogte = (v) =>
-    (T.sprites.aan && !T.debug.vlakken ? SPRITE_VOORWERP_HOOGTE : VOORWERP_HOOGTE)[v.soort];
+  // Een voorwerp wijs je alleen zelf aan als je er iets mee kunt: wat je opraapt (T.OPRAPEN,
+  // js/verkennen.js). Een boom of een huis wijs je aan via zijn tegel. (Tot 24 sep stonden hier de
+  // meubels van de toren, met elk hun eigen hoogte.)
+  const OPRAAP_HOOGTE = 28;
+  const voorwerpHoogte = (v) => (T.OPRAPEN && T.OPRAPEN[v.soort] ? OPRAAP_HOOGTE : 0);
 
   // Een nieuw spel begint op de kaart van het begin: het gehucht, of een proefkaart (?kaart=).
   T.nieuwSpel = function () {
@@ -47,7 +48,7 @@
       questBeloond: new Set(),
       sleutelGebruikt: false,
       sluipen: false,
-      bezocht: new Set(['hal']),
+      bezocht: new Set(),
       naarGebied: null,
       netGeland: null, // de tegel waar de held zojuist is neergezet (js/gebied.js)
       grond: null, // de buffer waar de grond op staat (js/tekenen.js)
@@ -71,7 +72,7 @@
     T.ui.reset(S);
   };
 
-  // Het beeld zoomt mee met het venster: op een groot scherm wordt de toren groter, op een
+  // Het beeld zoomt mee met het venster: op een groot scherm wordt het dorp groter, op een
   // klein scherm nooit kleiner dan ware grootte.
   //
   // De buffer is hele css-pixels, niet devicePixelRatio maal zoveel. Op een scherm met ratio 1,5
@@ -451,7 +452,7 @@
       const f = q.fasen[fase];
       return { quest: q.naam, fase, doel: f.doel || null, goud: S.goud, tas: [...S.inventaris] };
     },
-    // Naar een ander gebied springen zonder ernaartoe te lopen: Toren.debug.gaNaar('erf').
+    // Naar een ander gebied springen zonder ernaartoe te lopen: Toren.debug.gaNaar('wereld').
     gaNaar(naam) {
       T.gaNaarGebied(S, naam);
       return S.wereld.gebied;

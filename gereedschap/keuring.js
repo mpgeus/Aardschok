@@ -304,7 +304,7 @@
 
   // ── Wat het spel vraagt en de wereld niet geeft ──
 
-  // Alle gebieden bij elkaar, ook de toren (die staat in code, js/wereld.js). Deze vraag gaat
+  // Alle gebieden bij elkaar (elke kaart, js/gebied.js). Deze vraag gaat
   // over het spel als geheel: de bakker mag op elke kaart staan, als hij maar ergens staat.
   function alleWerelden(opties) {
     if (opties && opties.werelden) return opties.werelden;
