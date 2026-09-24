@@ -43,8 +43,9 @@ waar de kap staat). Daarna B: Sint-Maarten.
   (`T.HANDEL_INSTELLINGEN`, `T.BOUWEN_INSTELLINGEN`); stil verkopen levert nu alleen minder op, de
   winst daarvan komt bij punt 6;
 - de huizen in het spel en hun bouwfases komen nog uit de rechte `dorp.cjs` (zie hierboven);
-- de bouwers verschijnen op de bouwplaats in plaats van ernaartoe te lopen; de slag van de hamer
-  is een zwaai opzij, geen slag van boven; er is nog geen geluid;
+- de bouwers lopen alleen het laatste stuk van hun weg (acht tegels), want lopen gaat in echte
+  seconden en een dag duurt er 2,5; ze dragen nog niets (hout, riet); de slag van de hamer is een
+  zwaai opzij, geen slag van boven; er is nog geen geluid;
 - een boer met twee akkers werkt er maar één af, en er is geen apart zaaimoment;
 - het zwad van de maaier staat als paaltjes, en de slag is symmetrisch;
 - de bevolking is een getal, geen poppetjes (behalve de bouwers);

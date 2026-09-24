@@ -32,6 +32,7 @@
     feestDagen: 10, // ... zo veel dagen lang
     mopperTempo: 0.75, // zonder pannenbier werkt de ploeg zo veel trager, tot het gebouw af is
     zichtbaar: 3, // hoogstens zo veel bouwers per bouwplaats als poppetje (T.werkBouwersBij)
+    aanloop: 8, // zoveel tegels lopen de bouwers van huis naar het werk en terug (zie T.werkBouwersBij)
     slag: 0.55, // waar in de houding 'timmeren' (0..1) de hamer raakt (beeld 5 van 9): dan vliegen de spaanders
   };
 
@@ -283,6 +284,40 @@
       .sort((p, q) => q.x - b.x + (q.y - b.y) - (p.x - b.x + (p.y - b.y)));
   }
 
+  // Waar een bouwer woont: een vrije tegel naast het dichtstbijzijnde huis dat af is, aan de kant van
+  // de bouwplaats. Van daar loopt hij 's morgens naar het werk en 's avonds terug. Zonder huis in de
+  // buurt, of zonder js/pad.js (een toets die er niet om vraagt), staat hij meteen op de bouwplaats.
+  function woning(S, b) {
+    const w = S.wereld;
+    let best = null;
+    for (const h of S.gebouwen) {
+      const soort = T.GEBOUWEN[h.soort];
+      if (h === b || !h.klaar || !soort || !(soort.woonruimte > 0)) continue;
+      const v = T.gebouwVoet(h.soort) || { b: 1, h: 1 };
+      const d = Math.abs(h.x + v.b / 2 - b.x) + Math.abs(h.y + v.h / 2 - b.y);
+      if (!best || d < best.d) best = { h, v, d };
+    }
+    if (!best) return null;
+    const { h, v } = best;
+    const rond = [];
+    for (let x = h.x - 1; x <= h.x + v.b; x++) rond.push({ x, y: h.y - 1 }, { x, y: h.y + v.h });
+    for (let y = h.y; y < h.y + v.h; y++) rond.push({ x: h.x - 1, y }, { x: h.x + v.b, y });
+    const afstand = (p) => Math.abs(p.x - b.x) + Math.abs(p.y - b.y);
+    return rond.filter((p) => T.isBegaanbaar(w, p.x, p.y, { wezensBlokkeren: true })).sort((p, q) => afstand(p) - afstand(q))[0] || null;
+  }
+
+  function padNaar(S, e, doel) {
+    const w = S.wereld;
+    if (!T.zoekPad || !doel) return [];
+    return T.zoekPad(
+      { x: e.tx, y: e.ty },
+      doel,
+      (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e }),
+      (x, y) => T.isVast(w, x, y),
+      {},
+    ) || [];
+  }
+
   function zetBouwerNeer(S, b, i) {
     const w = S.wereld;
     const voet = T.gebouwVoet(b.soort) || { b: 1, h: 1 };
@@ -291,23 +326,81 @@
     // Uit elkaar: de i-de bouwer op zijn eigen stuk van de voorkant.
     const t = rand[Math.floor((i * rand.length) / (2 * T.BOUWEN_INSTELLINGEN.zichtbaar)) % rand.length];
     const straal = Math.floor(Math.max(voet.b, voet.h) / 2) + 1;
+    const van = T.zoekPad ? woning(S, b) : null;
+    const start = van || t;
     // Een gewone dorpeling (T.maakDorpeling, js/mensen.js) met zijn eigen vel als dat er is
     // (js/sprites.js valt anders terug op het vel van zijn zaad), die om het midden van de voet
     // dwaalt (T.laatDwalen, js/verkennen.js) en timmert als hij ernaast stilstaat (T.naarBouwplaats).
-    const e = T.maakDorpeling(1000 + ((b.x * 31 + b.y * 17 + i * 7) % 97), t.x, t.y, straal);
+    const e = T.maakDorpeling(1000 + ((b.x * 31 + b.y * 17 + i * 7) % 97), start.x, start.y, straal);
     e.soort = 'bouwer';
     e.naam = 'de bouwer';
     e.thuis = { x: b.x + (voet.b - 1) / 2, y: b.y + (voet.h - 1) / 2 };
     // Alleen gewone getallen, geen verwijzing terug naar de bouwplaats: een wezen moet later zonder
     // kringen op te slaan zijn.
     e.bouwVoet = { x: b.x, y: b.y, b: voet.b, h: voet.h };
+    e.naarPlek = { x: t.x, y: t.y };
     w.wezens.push(e);
+    // Van huis naar het werk; lukt dat niet, dan staat hij er gewoon. Maar alleen het laatste stuk:
+    // lopen gaat in echte seconden en een dag duurt er maar 2,5, dus wie de hele weg liep, kwam pas
+    // halverwege de bouw aan (en op 3× als het huis al af was). Hij verschijnt op zijn weg vanaf huis.
+    if (van) {
+      const heel = padNaar(S, e, t);
+      if (!heel.length) zetOp(e, t);
+      else {
+        const n = T.BOUWEN_INSTELLINGEN.aanloop;
+        if (heel.length > n) zetOp(e, heel[heel.length - n - 1]);
+        e.pad = heel.slice(-n);
+      }
+    }
     return e;
+  }
+
+  function zetOp(e, t) {
+    e.x = e.tx = t.x;
+    e.y = e.ty = t.y;
   }
 
   function haalWeg(w, e) {
     const i = w.wezens.indexOf(e);
     if (i >= 0) w.wezens.splice(i, 1);
+  }
+
+  // Niet meer nodig (het werk is af, of er zijn minder handen): naar huis, en daar verdwijnt hij.
+  // Zonder huis of pad meteen weg.
+  function naarHuis(S, b, e) {
+    const w = S.wereld;
+    e.dwaalt = false;
+    e.bouwVoet = null; // hij timmert niet meer
+    // Net als heen: een stuk van de weg naar huis, en dan is hij uit beeld van de bouwplaats.
+    e.pad = padNaar(S, e, T.zoekPad ? woning(S, b) : null).slice(0, T.BOUWEN_INSTELLINGEN.aanloop);
+    if (!e.pad.length) {
+      haalWeg(w, e);
+      return;
+    }
+    e.naarHuisTot = (S.tijd || 0) + 40; // hangt hij ergens vast, dan is hij na veertig tellen toch weg
+    (S.vertrekkers || (S.vertrekkers = [])).push(e);
+  }
+
+  // Wie naar huis loopt en er is (of vastzit), verdwijnt.
+  function volgVertrekkers(S) {
+    const w = S.wereld;
+    if (!S.vertrekkers || !S.vertrekkers.length) return;
+    S.vertrekkers = S.vertrekkers.filter((e) => {
+      const weg = !e.pad.length || (S.tijd || 0) > e.naarHuisTot || !w.wezens.includes(e);
+      if (weg) haalWeg(w, e);
+      return !weg;
+    });
+  }
+
+  // Wie naar het werk liep en onderweg werd opgehouden, probeert het over een seconde opnieuw.
+  function volgLopers(S, b) {
+    for (const e of b.poppen || []) {
+      if (e.pad.length || !e.naarPlek || T.naarBouwplaats(e)) continue;
+      const ver = T.afstand(e.thuis, { x: e.tx, y: e.ty }) > e.straal;
+      if (!ver || (e.volgendePoging && (S.tijd || 0) < e.volgendePoging)) continue;
+      e.volgendePoging = (S.tijd || 0) + 1;
+      e.pad = padNaar(S, e, e.naarPlek);
+    }
   }
 
   // Zoveel bouwers als er vandaag aan een gebouw werken (hoogstens `zichtbaar`), als poppetje op de
@@ -324,13 +417,15 @@
       if (!b.voorwerp || !w.voorwerpen.includes(b.voorwerp)) continue;
       const poppen = b.poppen || (b.poppen = []);
       const wil = b.klaar ? 0 : Math.min(b.bouwers || 0, T.BOUWEN_INSTELLINGEN.zichtbaar);
-      while (poppen.length > wil) haalWeg(w, poppen.pop());
+      while (poppen.length > wil) naarHuis(S, b, poppen.pop());
       while (poppen.length < wil) {
         const e = zetBouwerNeer(S, b, poppen.length);
         if (!e) break;
         poppen.push(e);
       }
+      volgLopers(S, b);
     }
+    volgVertrekkers(S);
     spaanders(S);
   };
 
