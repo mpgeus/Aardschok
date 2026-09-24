@@ -5,6 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 require('../js/leeftijd.js');
+require('../js/tijd.js');
 require('../js/wereld.js');
 require('../js/voorraad.js');
 require('../js/mensen.js');
@@ -387,4 +388,17 @@ test('de muis op de voet van een neergezet gebouw vindt dat gebouw (T.gebouwOp)'
   assert.equal(T.gebouwOp(S, 3 + b - 1, 4 + h - 1), r.instantie);
   assert.equal(T.gebouwOp(S, 3 + b, 4), null);
   assert.match(T.gebouwToestand(S, r.instantie), /in aanbouw/);
+});
+
+test('de visser vangt niets als de beek dichtligt, en zegt dat', () => {
+  const S = metGebouw('visser');
+  const winterdag = 280; // wintermaand
+  assert.equal(T.datumVanDag(winterdag).seizoen, 'winter');
+  T.tikGebouwenDag(S, winterdag);
+  assert.equal(S.voorraad.vis || 0, 0);
+  assert.match(T.gebouwToestand(S, S.gebouwen[0]), /staat stil, de beek ligt dicht/);
+  assert.equal(T.gereedschapDekking(S, 'winter').handen, 0, 'wie stilligt, gebruikt geen gereedschap');
+  T.tikGebouwenDag(S, 30); // grasmaand: de beek is weer open
+  assert.ok(S.voorraad.vis > 0);
+  assert.doesNotMatch(T.gebouwToestand(S, S.gebouwen[0]), /beek/);
 });

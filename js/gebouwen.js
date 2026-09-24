@@ -22,6 +22,8 @@
 //     maakt:       null,             // of { in: {hout: 1}, uit: {planken: 1} }: per dag, op volle
 //                                    // bezetting (T.tikGebouwenDag schaalt mee met hoe bezet hij is
 //                                    // én, sinds js/behoeften.js, met de tevredenheid)
+//     stilIn:      null,             // of { winter: 'de beek ligt dicht' }: in dat seizoen maakt hij
+//                                    // niets, en dit is waarom (de visser; spel.md, "Handel")
 //     verdacht:    false,            // moet de heer dit niet zien? (wapenmaker, schuttershof, …)
 //     kerk:        false,            // telt als "een kerk" voor de behoeften (js/behoeften.js:
 //                                    // T.heeftKerk) — nu alleen de kapel, later ook de kerk zelf
@@ -154,6 +156,9 @@
     visser: {
       naam: 'visser', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, bouwtijd: 2,
       handen: 1, woonruimte: 0, maakt: { uit: { vis: 2 } }, verdacht: false, menu: true,
+      // Marcel, 24 sep: 's winters ligt de beek dicht, dus wie dan vis wil eten, heeft hem in de
+      // herfst gezouten (spel.md, "Handel").
+      stilIn: { winter: 'de beek ligt dicht' },
       tekening: 'erf/schuurtje', beschrijving: 'vis uit de beek',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje. Hoort aan het water.',
     },
@@ -385,18 +390,27 @@
     for (const wat in kosten) T.wijzigVoorraad(S, wat, -kosten[wat]);
   };
 
+  // Het seizoen van een dag (js/tijd.js), of null. Zonder tijd.js (een toets die alleen gebouwen.js
+  // laadt) is er geen seizoen, en ligt er dus ook niets stil vanwege het seizoen.
+  function seizoenVan(dag) {
+    return T.datumVanDag && dag != null ? T.datumVanDag(dag).seizoen : null;
+  }
+
   // Hoeveel handen er vandaag iets maken, en hoeveel daarvan gereedschap hebben: de dekking
   // (0..1) en wat dat aan harder werken geeft (factor, 1 is niets extra). Leest g.handen van
   // vandaag, dus pas na stap 5 van T.tikGebouwenDag; ook voor de balk (js/hud.js), die bij het
   // gereedschap zegt hoeveel handen het dekt.
-  T.gereedschapDekking = function (S) {
+  T.gereedschapDekking = function (S, seizoen) {
     const IN = T.GEBOUWEN_INSTELLINGEN;
+    const nu = seizoen !== undefined ? seizoen : seizoenVan(S.kalender && S.kalender.dag);
     let handen = 0;
     for (const g of S.gebouwen || []) {
       const soort = T.GEBOUWEN[g.soort];
       if (!g.klaar || !soort || !soort.maakt || !(g.handen > 0)) continue;
-      // Wie niets te bewerken heeft (een smidse zonder ijzer), gebruikt ook geen gereedschap.
+      // Wie niets te bewerken heeft (een smidse zonder ijzer) of in dit seizoen stilligt (de
+      // visser als de beek dichtligt), gebruikt ook geen gereedschap.
       if (soort.maakt.in && Object.keys(soort.maakt.in).some((wat) => !((S.voorraad || {})[wat] > 0))) continue;
+      if (soort.stilIn && nu && soort.stilIn[nu]) continue;
       handen += g.handen;
     }
     const heeft = (S.voorraad && S.voorraad.gereedschap) || 0;
@@ -429,6 +443,7 @@
       return `${naam}: in aanbouw, nog ${nog} dag${nog === 1 ? '' : 'en'}.`;
     }
     if (!soort.maakt) return `${naam}: ${soort.beschrijving}.`;
+    if (g.stilWant) return `${naam}: staat stil, ${g.stilWant}.`;
     if (soort.handen > 0 && !g.handen) return `${naam}: staat stil, er zijn geen handen voor.`;
     if (g.tekort && !(g.werkte > 0)) return `${naam}: staat stil, er is geen ${g.tekort}.`;
     if (g.tekort) return `${naam}: werkt maar half, er is te weinig ${g.tekort}.`;
@@ -620,12 +635,23 @@
       : 1;
     // Gereedschap: wie iets maakt en er gereedschap voor heeft, werkt harder (alleen wie handen
     // heeft: een kippenhok werkt niet harder met een hamer), en het slijt (hieronder, na het werk).
-    const gereedschap = T.gereedschapDekking(S);
+    // Wie in dit seizoen stilligt (T.GEBOUWEN[x].stilIn: de visser als de beek dichtligt), maakt
+    // vandaag niets; de eerste dag dat het zo is, zegt het dorp het.
+    const seizoen = seizoenVan(dag);
+    const gereedschap = T.gereedschapDekking(S, seizoen);
     for (const g of S.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
+      const wasStil = g.stilWant;
       g.tekort = null;
       g.werkte = 0;
+      g.stilWant = null;
       if (!g.klaar || !soort.maakt) continue;
+      const stil = soort.stilIn && seizoen && soort.stilIn[seizoen];
+      if (stil) {
+        g.stilWant = stil;
+        if (!wasStil && T.ui && T.ui.bericht) T.ui.bericht(`${T.hoofdletter(soort.naam)} staat stil: ${stil}.`);
+        continue;
+      }
       let factor = soort.handen > 0 ? (g.handen / soort.handen) * werkFactor * gereedschap.factor : werkFactor;
       if (factor <= 0) continue;
       // Wat hij nodig heeft, bepaalt hoeveel hij kan: een smidse zonder ijzer staat stil, met ijzer

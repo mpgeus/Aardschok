@@ -387,3 +387,22 @@ test('wie gezouten vis eet, eet het zout mee op', () => {
   assert.ok(Math.abs(S.voorraad.vis - (50 - gegeten)) < 1e-9, 'de vis is gegeten, en er bedierf niets');
   assert.ok(Math.abs(S.voorraad.zout - (10 - gegeten / IN.zoutHoudtGoed)) < 1e-9);
 });
+
+test('de beek ligt \'s winters dicht: zonder zout is de vis dan op, met zout blijft hij', () => {
+  const IN = T.BEHOEFTEN_INSTELLINGEN;
+  function winterMetVis(zout) {
+    const S = maakS();
+    S.gebouwen.push({ soort: 'visser', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
+    S.bevolking = 1;
+    S.voorraad.graan = 1000;
+    S.voorraad.hout = 1000;
+    S.voorraad.vis = 40;
+    S.voorraad.zout = zout;
+    for (let dag = WINTERDAG; dag < WINTERDAG + 45; dag++) T.tikGebouwenDag(S, dag);
+    return S;
+  }
+  const zonder = winterMetVis(0);
+  const met = winterMetVis(10);
+  assert.ok(zonder.voorraad.vis < IN.extraVoedselDrempel, `zonder zout: ${zonder.voorraad.vis}`);
+  assert.ok(met.voorraad.vis > 35, `met zout: ${met.voorraad.vis}`);
+});

@@ -299,7 +299,7 @@
             { als: { vlag: 'marskramerVertrekt' }, zeg: 'Mijn ezel staat al met zijn kop naar de weg, schout. Tot de volgende keer.' },
             { als: { vlag: 'marskramerLente' }, zeg: 'Grasmaand, en de wegen zijn weer te begaan. Wie nu nog graan heeft, is rijk: overal is het op. Ik betaal er goed voor.' },
             { als: { vlag: 'marskramerZomer' }, zeg: 'Hooimaand. Alles staat te groeien en niemand heeft een stuiver. En wol heb ik deze week genoeg gezien: iedereen heeft net geschoren.' },
-            { als: { vlag: 'marskramerHerfst' }, zeg: 'Wijnmaand, mijn laatste ronde vóór de winter. Na Sint-Maarten zijn de wegen modder, en dan ziet u mij pas in grasmaand terug. Zout voor het vlees, ijzer voor de smid: nu, of pas in de lente.' },
+            { als: { vlag: 'marskramerHerfst' }, zeg: 'Wijnmaand, mijn laatste ronde vóór de winter. Na Sint-Maarten zijn de wegen modder, straks ligt de beek dicht, en dan ziet u mij pas in grasmaand terug. Zout voor de vis, ijzer voor de smid: nu, of pas in de lente.' },
             { als: { vlag: 'ovenWarm' }, zeg: 'De bakker bakt weer, hoor ik. Jammer. Ik had nog een mooie zak vuurklei.' },
             { als: { quest: 'bakker', fase: 'zoeken' }, zeg: 'Een tovenaar! Dan heb ik iets voor u. Nee, wacht — ú hebt iets voor mij. Dat voel ik.' },
             { zeg: 'Alles wat in een kar past, en een paar dingen die er niet in passen. Kijkt u gerust.' },
