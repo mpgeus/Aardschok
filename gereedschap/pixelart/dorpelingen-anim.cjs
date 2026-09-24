@@ -23,7 +23,7 @@ const {
   boer, BOER_SNELHEID, BOER_FPS,
   dorpsoudste, DORPSOUDSTE_SNELHEID, DORPSOUDSTE_FPS,
 } = require('./dorpelingen.cjs');
-const { dorpeling, DORPELING_SNELHEID } = require('./dorpelingen3.cjs');
+const { dorpeling, DORPELING_SNELHEID, marskramer, MARSKRAMER_SNELHEID, MARSKRAMER_FPS } = require('./dorpelingen3.cjs');
 const {
   jongen, JONGEN_SNELHEID, JONGEN_FPS,
   meisje, MEISJE_SNELHEID, MEISJE_FPS,
@@ -65,6 +65,9 @@ const FIGUREN = [
   { naam: 'bruidegom', snelheid: BRUIDEGOM_SNELHEID, fps: BRUIDEGOM_FPS, maak: (stand) => bruidegom(stand) },
   { naam: 'bruid', snelheid: BRUID_SNELHEID, fps: BRUID_FPS, maak: (stand) => bruid(stand) },
   { naam: 'oudeman', snelheid: OUDEMAN_SNELHEID, fps: OUDEMAN_FPS, maak: (stand) => oudeMan(stand) },
+  // De marskramer leende tot nu toe het vel van Wim (js/mensen.js); hij krijgt hier zijn eigen
+  // staan/lopen, op dezelfde manier (dorpelingen3.cjs, marskramer(stand)).
+  { naam: 'marskramer', snelheid: MARSKRAMER_SNELHEID, fps: MARSKRAMER_FPS, maak: (stand) => marskramer(stand) },
 ];
 const HOUDINGEN = [
   { naam: 'staan', beelden: 4, fps: 4, herhaal: true },

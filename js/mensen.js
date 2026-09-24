@@ -58,10 +58,11 @@
     meisje: { naam: 'het meisje', snelheid: 1.25, straal: 3 },
     kleuter: { naam: 'de kleuter', snelheid: 0.85, straal: 3 },
 
-    // De twee die De koude oven nodig heeft. Hun eigen vellen komen bij fase B2b; tot die tijd
-    // lenen ze dat van Wim, en dus ook zijn loopmaat.
+    // De twee die De koude oven nodig heeft. De bakker leent tot fase B2b het vel van Wim, en dus
+    // ook zijn loopmaat; de marskramer heeft sinds 24 sep zijn eigen vel (dorpelingen3.cjs, met
+    // zijn draagrek), omdat hij in het gehucht komt handelen (js/handel.js).
     bakker: { naam: 'de bakker', snelheid: 1.4, straal: 2, vel: 'wim' },
-    marskramer: { naam: 'de marskramer', snelheid: 1.4, straal: 2, vel: 'wim' },
+    marskramer: { naam: 'de marskramer', snelheid: 1.4, straal: 2 },
 
     // En de vaklieden die wel een haakje hebben in wereld.md maar nog geen tekening: zij zijn
     // zolang een gewone dorpeling, want die vellen bestaan al (zie de werklijst, fase B2b).

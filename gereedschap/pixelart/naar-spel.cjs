@@ -179,6 +179,12 @@ const FIGUURLIJST = {
   // De boer met de zeis, in de oogsttijd (T.werkOogstBij, js/akkers.js): één houding, "maaien",
   // die een boer of boerin zolang leent voor hij weer zichzelf is (js/sprites.js, S.houding).
   maaier: { map: ['maaier', 'animaties'], houdingen: ['maaien'], bron: 'maaier-anim.cjs' },
+  // De marskramer had tot nu toe geen eigen vel (hij leende dat van Wim, js/mensen.js); hij
+  // rendert net als de andere dorpelingen hierboven (dorpelingen3.cjs, marskramer(stand)).
+  marskramer: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  // De bouwer (nieuw, ontwerp/werklijst.md): staan en lopen zoals een gewone dorpeling, en
+  // timmeren (de hamer heffen en neerslaan) voor bij een bouwplaats (bouwer.cjs/bouwer-anim.cjs).
+  bouwer: { map: ['bouwer', 'animaties'], houdingen: ['staan', 'lopen', 'timmeren'], bron: 'bouwer-anim.cjs' },
 };
 
 function figuren() {

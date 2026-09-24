@@ -32,7 +32,7 @@
     feestDagen: 10, // ... zo veel dagen lang
     mopperTempo: 0.75, // zonder pannenbier werkt de ploeg zo veel trager, tot het gebouw af is
     zichtbaar: 3, // hoogstens zo veel bouwers per bouwplaats als poppetje (T.werkBouwersBij)
-    slag: 0.5, // waar in de houding 'timmeren' (0..1) de hamer de muur raakt: dan vliegen de spaanders
+    slag: 0.55, // waar in de houding 'timmeren' (0..1) de hamer raakt (beeld 5 van 9): dan vliegen de spaanders
   };
 
   const bericht = (tekst, soort) => {

@@ -1106,6 +1106,88 @@
      "herhaal": true
     }
    }
+  },
+  "marskramer": {
+   "naam": "marskramer",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "marskramer-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "marskramer-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56
+    }
+   }
+  },
+  "bouwer": {
+   "naam": "bouwer",
+   "cel": [
+    92,
+    94
+   ],
+   "anker": [
+    46,
+    82
+   ],
+   "snelheid": 1.2,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "bouwer-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "bouwer-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.2,
+     "stap": 0.48
+    },
+    "timmeren": {
+     "bestand": "bouwer-timmeren.png",
+     "beelden": 9,
+     "fps": 8,
+     "herhaal": true
+    }
+   }
   }
  },
  "muren": {

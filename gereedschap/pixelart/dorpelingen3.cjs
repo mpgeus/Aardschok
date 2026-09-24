@@ -727,10 +727,17 @@ function jager() {
 
 // ---------------------------------------------------------------- de marskramer
 
+const MARSKRAMER_SNELHEID = 1.4;
+const MARSKRAMER_FPS = 10;
+
 // De marskramer: klein en krom onder een draagrek vol potten, pannen, een opgerolde deken en linten.
 // Een lappenjas in alle kleuren, gestreepte kousen, een rode hoed met een gele veer, een wandelstok.
 // Hij heeft alles bij zich wat een dorp niet zelf maakt, en voor jou maakt hij een prijsje.
-function marskramer() {
+// stand: { houding, fase } laat hem lopen of ademen (zie houdingDorpeling in dorpelingen.cjs, en
+// boer() daar voor dezelfde soort figuur met gereedschap in de hand). Zonder stand (hg null) staat
+// hij zoals voorheen: het been krijgt nu wel één gedeeld kniepunt in plaats van de twee net iets
+// verschillende punten van vroeger (zie beenPunten hieronder), maar dat is geen zichtbaar verschil.
+function marskramer(stand = null) {
   const M = { huid: 0, jas: 1, broek: 2, kous: 3, schoen: 4, hoed: 5, veer: 6, oog: 7, baard: 8, sjaal: 9, hout: 10, doek: 11, touw: 12, deken: 13, pot: 14, koper: 15, mond: 16, oorbel: 17, lint1: 18, lint2: 19 };
   const D = { benen: 1, romp: 2, armL: 3, armR: 4, handL: 5, handR: 6, hoofd: 7, hoed: 8, rek: 9, stok: 10, sjaal: 11, pot: 12, pan: 13, deken: 14, baard: 15 };
   const H = [0, 9.8, 60.5];
@@ -787,12 +794,31 @@ function marskramer() {
   mat[M.lint2] = { ramp: 'blad', lo: 2.4, hi: 6 };
 
   const delen = [];
-  // --- benen: korte broek tot de knie, daaronder gestreepte kousen en schoenen met een krul
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const hg = houdingDorpeling(stand, { snelheid: MARSKRAMER_SNELHEID, fps: MARSKRAMER_FPS, beenLengte: 22 });
+  const Bn = bottenDorpeling(hg, {
+    heup: [0, 0.4, 27.5],
+    nek: [0, 4, 55],
+    schouders: [[-10.2, 5.4, 50.5], [10.2, 5.4, 50.5]],
+  });
+
+  // --- benen: korte broek tot de knie, daaronder gestreepte kousen en schoenen met een krul; de
+  // knie (beenPunten, dorpelingen.cjs) buigt tussen heup en enkel, net als bij boer()
   for (const s of [-1, 1]) {
-    delen.push(kegel([s * 4.5, 0, 27.5], [s * 4.7, 0.8, 14], 4.4, 3.5, M.broek, D.benen, 1));
-    delen.push(kegel([s * 4.7, 0.8, 15], [s * 4.6, 0.8, 5], 3.1, 2.7, M.kous, D.benen, 1));
+    const i = s < 0 ? 0 : 1;
+    const heupR = [s * 4.5, 0, 27.5];
+    const enkelR = [s * 4.6, 0.8, 5];
+    const P = beenPunten(hg, i, { heup: heupR, knie: knieTussen(heupR, enkelR), enkel: enkelR });
+    delen.push(kegel(P.heup, P.knie, 4.4, 3.5, M.broek, D.benen, 1));
+    delen.push(kegel(P.knie, P.enkel, 3.1, 2.7, M.kous, D.benen, 1));
+    bot(null);
     delen.push(ellips([s * 4.6, 2.8, 2.6], [3.2, 5.8, 2.7], M.schoen, D.benen, 1.2));
     delen.push(bol([s * 4.6, 8, 4], 1.3, M.schoen, D.benen, 1.2));
+    bot(voetBot(hg, i, [s * 4.6, 2.2, 0]));
   }
   // --- romp: voorovergebogen onder het gewicht van het rek
   const vorm = {
@@ -850,14 +876,19 @@ function marskramer() {
   delen.push(kegel([7.6, -8.6, 84.2], [9.2, -10.2, 77], 0.9, 0.6, M.lint2, D.rek));
   // draagbanden over de schouders
   for (const s of [-1, 1]) delen.push(...bochtKegel([s * 6.4, -6.6, 58], [s * 6.6, 1.6, 56.5], [s * 6.2, 9.2, 44], 1.1, 1, 4, M.touw, D.romp, 0.6));
+  bot(Bn.Bromp);
 
-  // --- armen: rechts de wandelstok, links een duim achter de draagband
+  // --- armen: rechts de wandelstok, links een duim achter de draagband. De stok staat vast op de
+  // grond (net als de hooivork van boer() in dorpelingen.cjs) en zwaait dus niet mee met de arm.
   const stokOnder = [15.6, 16.4, 0.5];
   const stokBoven = [13.8, 12.6, 71];
   delen.push(kegel(stokOnder, stokBoven, 1.1, 1.2, M.hout, D.stok));
   delen.push(bol(plus(stokBoven, [0, -0.2, 0.6]), 1.9, M.hout, D.stok, 1));
+  bot(null);
   arm(delen, [10.2, 5.4, 50.5], [15.2, 7, 41.6], [14.4, 14.2, 47], { r: [4, 3.5, 2.7], mouw: 2, stof: M.jas, huid: M.huid, dArm: D.armR, dHand: D.handR });
+  bot(Bn.Barm[1]);
   arm(delen, [-10.2, 5.4, 50.5], [-13.8, 6.4, 41.4], [-6.6, 12.6, 45.4], { r: [4, 3.5, 2.7], mouw: 2, stof: M.jas, huid: M.huid, dArm: D.armL, dHand: D.handL });
+  bot(Bn.Barm[0]);
 
   // --- hoofd: een knolneus, een sik, een gouden ring in het oor en een grijns
   schedel(delen, H, M, D, { maat: kop, oog });
@@ -883,8 +914,9 @@ function marskramer() {
   });
   delen.push(ellips(plus(hoed, [0.4, -1, 3.2]), [6.3, 6.1, 4], M.hoed, D.hoed, 1.2));
   delen.push(...bochtKegel(plus(hoed, [4.4, -3.2, 3.2]), plus(hoed, [7.6, -8, 8.4]), plus(hoed, [6.4, -14.2, 11]), 1.3, 0.35, 5, M.veer, D.hoed, 0.5));
+  bot(Bn.Bnek);
 
-  return model(delen, mat, { midden: [0, -2, 46], straal: 54 });
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, -2, 46], straal: 54 });
 }
 
 // ---------------------------------------------------------------- de koster
@@ -1598,6 +1630,8 @@ module.exports = {
   kruidenvrouw,
   jager,
   marskramer,
+  MARSKRAMER_SNELHEID,
+  MARSKRAMER_FPS,
   koster,
   wachter,
   HUID,
