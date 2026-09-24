@@ -77,6 +77,10 @@ klaar. Leg Marcel eerst een voorstel voor: hoeveel erin past, hoe je iets wegzet
 en wat de soldaten vinden. Daarna stap 3: praten, afleiden, omkopen en de twee rekenboeken.
 
 **Nog ruw, om te onthouden:**
+- **de brink ligt achter twee daken.** Vanuit de camera staan het huis van de schout en de
+  boerderij van boer 3 vóór de brink. De heer, de marskramer, de schandpaal en wie eraan staat,
+  vallen daardoor grotendeels achter een dak. De held zie je door een kijkgat, de rest niet.
+  Dit kwam op 24 sep boven bij de schandpaal, en wacht op Marcel (zie hieronder);
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
   bijstellen als hij speelt;
 - in een huis in aanbouw branden de ramen al;
@@ -104,6 +108,9 @@ en wat de soldaten vinden. Daarna stap 3: praten, afleiden, omkopen en de twee r
 
 
 **Wacht op Marcel:**
+- Hoe de brink in beeld komt: de plek van de marskramer en de heer verleggen naar een open plek,
+  de huizen ervoor verzetten, of daken doorzichtig maken als er iets belangrijks achter staat (ook
+  voor later, als de speler zelf een huis voor de brink bouwt).
 - Spelen, en zeggen hoe het voelt: vooral de winter, hoe snel een jaar gaat, en nu ook Sint-Maarten
   (is de honger te veel of te weinig; mag hij harder, of juist zachter).
 - De namen van de heer en de boeren stel je nu zelf in (spelregels). De tien karakters en hun
@@ -251,6 +258,9 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 24 sep 2026 — **De schandpaal.** Een eiken paal met een halsijzer en het wapen van de heer. Hij komt
+  er de eerste keer dat de heer iemand straft en blijft staan; wie gestraft wordt, staat ervoor met
+  de halsband om (`js/heer.js`, `gereedschap/pixelart/schandpaal.cjs`, `beeld.md`).
 - 24 sep 2026 — **Het huis van de heer, in rood en geel.** De heer (klein en dik onder een veel te
   grote hoed), zijn soldaten en de inner zijn eigen figuren, met staan en lopen
   (`gereedschap/pixelart/heer.cjs`, `beeld.md`). Er kunnen nu ook losse figuren gerenderd en in het

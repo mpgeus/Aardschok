@@ -414,6 +414,23 @@ en handen door een plank, wat een nieuwe gebogen houding voor elk vel had gevraa
 verhoogde kaak met een trapje. Wanneer hij er staat, is een spelregel: zie `spel.md`,
 "Sint-Maarten".
 
+**Gemaakt (24 sep 2026)** in `gereedschap/pixelart/schandpaal.cjs`, als eigen vel
+`beelden/schandpaal.png` met drie delen:
+- **leeg:** het halsijzer hangt open tegen de paal;
+- **bezet:** de ketting loopt naar wie ervoor staat;
+- **het halsijzer** zelf, als laag over die persoon heen.
+
+De balk leunt een paar pixels, heeft droogscheuren en is onderaan bemost. Het wapen is gevierendeeld
+rood en geel, zoals de wapenrok van de soldaten, met hier en daar afgebladderde verf. De paal komt
+92 px boven zijn voet uit, zo'n 58 px boven het hoofd van wie ervoor staat, en de halsband zit 51
+px boven diens voeten (gemeten op de boer en de boerin). Wie eraan staat, kijkt naar voren, met zijn
+rug naar de paal.
+
+Nog niet goed:
+- de boer houdt aan de paal zijn hooivork vast, want zo is zijn vel voor staan;
+- in het gehucht staat de paal, net als de heer en de marskramer, achter het dak van een huis: zie
+  de werklijst.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
