@@ -14,10 +14,10 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 **Het spel is omgegooid** (23 sep): een bouw- en beheerspel in isometrisch beeld, met politiek en
 avontuur erin. Jij bent de schout van een gehucht onder een verwarde heer die alleen geld ziet.
-Alles staat in `spel.md`. De code van het oude spel (toren, spreuken, leeftijd, tutorial) gaat eruit
-bij punt 7.
+Alles staat in `spel.md`. De code van het oude spel gaat eruit bij punt 7, dat loopt: het spel
+begint nu in het gehucht, en de tutorial, de regie, de meester en De koude oven zijn weg (stap 1-3).
 
-**Wat er nu speelt** (`http://localhost:8123/?kaart=gehucht`): graan dat groeit en gemaaid wordt;
+**Wat er nu speelt** (`http://localhost:8123/`): graan dat groeit en gemaaid wordt;
 een balk met kalender, voorraad (en kleine chips voor ijzer, zout, steen, …), bevolking en
 tevredenheid; 45 soorten gebouwen met een bouwmenu (`B`); behoeften en de winter. Sinds 24 sep:
 **bouwen kost handen** (een ploeg uit de bevolking, vóór de werkplaatsen; drie keer zo lang; in de
@@ -28,22 +28,22 @@ soldaten, de schandpaal waarbij jij aanwijst), en afgezet worden. En **de inner*
 na de oogst schrijf je in het rekenboek wat je opgeeft, je verstopt het verschil in een
 verstopplek, en op 15 herfstmaand loop je met de inner mee langs de akkers, de schuur en wat nieuw
 is. Bij elke plek kies je: uitleggen, afleiden, omkopen of zwijgen. Zijn argwaan en wat hij vond,
-bepalen de brief van de heer. Daarmee is het tweede proefje (punt 5 en 6) speelbaar. De schout kon
-in het gehucht niet lopen (snelheid 0); dat is gerepareerd. `npm test`: 360/360.
+bepalen de brief van de heer. Daarmee is het tweede proefje (punt 5 en 6) speelbaar. De
+verstopplek draagt een houtmijt. En **het huis is het eerste niet-waterpas huis**: het vakwerkhuis
+met riet uit `huis-sdf.cjs`, met zes bouwfases en een bouwplaats in een ring rond de voet
+(stapels die hun tegels bezetten en slinken). De tekenvolgorde had cirkels (een ton achter een huis
+kwam erbovenop); dat is gerepareerd.
 
-**De bouwfases uit de niet-waterpas huizenbouwer:** er is een proefplaat voor één type (het huis:
-vakwerk met riet), uit `gereedschap/pixelart/bouwfasen-sdf.cjs`, met de platen in
-`uit/bouwfasen-sdf/` (niet in git; opnieuw maken kost zo'n drie minuten). Zeven fases van
-hetzelfde huis met hetzelfde zaad: uitzetten, voet, gebint met steiger, kap met meiboom, riet van
-de voet omhoog, leem, af. Marcel vond de fases op de oude, rechte `dorp.cjs` nep (zie `beeld.md`,
-"Bouwen: een huis dat groeit"). Wat nog wringt, staat bij "Nog ruw".
+**Het vakwerkhuis en zijn bouwplaats** (ronde 4b voor één type, 24 sep): de tegel
+`huisVakwerkRiet` in `tegels/gebouwen.tsx` en de zes fases in `tegels/bouwfasen-sdf.*`, allebei
+uit `gereedschap/pixelart/bouwfasen-sdf.cjs` (fase 7 is de tegel; `naar-tiled.cjs gebouwen`
+rendert hem mee). Een type met een eigen fasevel en een `rand` krijgt een ring rond zijn voet
+(`T.bouwRandVan`, `T.werkBouwplaatsBij` in `js/bouwen.js`; `T.gebouwPast` houdt de ring vrij).
 
-**Volgende stap (Marcel koos op 24 sep):** eerst **dit ene huis in het spel** (ronde 4b voor één
-type): het vakwerkhuis met zijn zeven fases als het `huis` van het gehucht, met de bouwplaats die
-breder is dan de voet. Dan de andere types van het gehucht (hut, boerderij als hallehuis,
-houthakker, schaapskooi, kippenhok, wachthuis, kapel) langs dezelfde weg. Tussendoor de
-verstopplek met iets gewoons erop (een houtmijt of hooiopper, `spel.md`). Dan punt 7, het oude
-spel eruit, met Marcels keuzes van 24 sep (zie punt 7).
+**Volgende stap:** punt 7 afmaken (stap 4 de spreuken, 5 de leeftijd wordt levenspunten, 6 de
+toren, 7 opruimen en `CLAUDE.md`). Dan de andere types van het gehucht (hut, boerderij als
+hallehuis, houthakker, schaapskooi, kippenhok, wachthuis, kapel) langs dezelfde weg als het
+vakwerkhuis.
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
@@ -54,16 +54,19 @@ spel eruit, met Marcels keuzes van 24 sep (zie punt 7).
   dus voor de eerste oogst is het al op; de heer vraagt er dan nog een achtste bij van wat je
   opgeeft (zo'n 50 als je alles opgeeft). Samen met Marcel bijstellen als hij speelt;
 - de vijf boeren hebben een naam gekregen (Gerrit, Aleid, Wouter, Machteld, Jan): een voorstel;
-- de huizen in het spel en hun bouwfases komen nog uit de rechte `dorp.cjs` (zie hierboven);
-- de proefplaat van de bouwfases: de bouwplaats steekt ruim buiten de voet van 7×5 (stapels,
-  steiger, leemkuil), dus in het spel moet de voet tijdens het bouwen groter, of de stapels binnen
-  de voet; de schoorsteen komt pas bij het leem; de meiboom is klein (25 px); in de rietfase steekt
-  het riet aan de gevel als een losse rol uit; het spel kent `huis` nog als 6×6;
+- op het huis na komen de gebouwen in het spel en hun fases nog uit de rechte `dorp.cjs`, dus
+  het vakwerkhuis staat tussen rechte huizen;
+- het vakwerkhuis: de schoorsteen komt pas bij het leem; de meiboom is klein (25 px); in de
+  rietfase steekt het riet aan de gevel als een losse rol uit; de stapels achter het huis zie je
+  niet meer zodra de muren staan; de leemkuil is klein; zijn tegel kreeg id 32 (27 tot 31 bleven
+  leeg, want `vaste-volgorde.cjs` begint een nieuwe tegel op een nieuwe rij);
+- wie op de ring naast de noordoosthoek van een bouwplaats staat, kan net over de gevel heen
+  getekend worden: dat is de grens van één getal per ding in de tekenvolgorde;
 - de inner: hij leent het vel van de dorpsoudste; zijn route ligt vast (akkers, schuur, het
   nieuwste rijke gebouw); **zwijgen is altijd slechter dan uitleggen**, dus die keuze is er nog
   alleen voor de vorm; de getallen (`T.INNER_INSTELLINGEN`) zijn een eerste gok;
-- de verstopplek tekent niets en blokkeert toch zijn voet: je loopt tegen iets aan wat je niet
-  ziet. Marcel koos een houtmijt of hooiopper erop (`spel.md`);
+- de verstopplek is de houtstapel van het erf, en die heeft geen bouwfases: in aanbouw is hij
+  bleker;
 - de bouwers lopen alleen het laatste stuk van hun weg (acht tegels), want lopen gaat in echte
   seconden en een dag duurt er 2,5; ze dragen nog niets (hout, riet); de slag van de hamer is een
   zwaai opzij, geen slag van boven; er is nog geen geluid;
@@ -120,7 +123,8 @@ nog nodig is".
      gesprekken en quests (voor het avontuur). De toren, het erf, de meester, Wim, de tutorial en
      De koude oven gaan eruit (`wereld.md`).
 
-   **Het plan, in stappen die elk met `npm test` groen eindigen** (kaart gemaakt op 24 sep):
+   **Het plan, in stappen die elk met `npm test` groen eindigen** (kaart gemaakt op 24 sep; stap 1
+   tot 3 zijn af):
    1. Het spel begint in het gehucht. `BEGIN_KAART` in `main.js` wordt `'gehucht'`, het
       titelscherm gaat weg, en `NIEUWE_HUD` staat altijd aan. Let op: `nieuwSpel` zet heer, inner,
       handel en oogsten niet terug, dus "Opnieuw" doet een `location.reload()`.
@@ -237,6 +241,10 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 24 sep 2026 — **Het vakwerkhuis in het spel** (ronde 4b voor één type), met zijn bouwplaats in
+  een ring en stapels die slinken; de verstopplek draagt een houtmijt; de tekenvolgorde zonder
+  cirkels. En punt 7, stap 1 tot 3: het spel begint in het gehucht, en de tutorial, de regie, de
+  meester en De koude oven zijn eruit.
 - 24 sep 2026 — **Rijk worden en arm lijken** (punt 6): het rekenboek op 1 herfstmaand, met een
   reden als je minder opgeeft; verstopplekken met een paneel (wat daar ligt, eet het dorp ook
   niet op); het bezoek van de inner als scène waarin je meeloopt, met bij elke plek een keuze; en

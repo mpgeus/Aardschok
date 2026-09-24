@@ -163,8 +163,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag, een
   werkplaats zonder grondstof valt stil, `T.plaatsGebouw`), `js/bouwen.js` (een gebouw in
   aanbouw: de ploeg komt uit de bevolking vóór de werkplaatsen, `voortgang` 0..1 uit gedaan werk,
-  de vorst, `T.bouwFaseIndex`, het hoogste punt met pannenbier, en de bouwers als poppetjes op de
-  bouwplaats), `js/handel.js` (de marskramer: komen en gaan, kopen en verkopen, stil verkopen als
+  de vorst, `T.bouwFaseIndex`, het hoogste punt met pannenbier, de bouwers als poppetjes op de
+  bouwplaats, en voor een type met een eigen fasevel een ring rond de voet waarop de stapels hun
+  tegels bezetten: `T.bouwRandVan`, `T.werkBouwplaatsBij`), `js/handel.js` (de marskramer: komen en gaan, kopen en verkopen, stil verkopen als
   heler in `S.handel.boek`), `js/heer.js` (de heer: zijn brief op 11 wijnmaand met wat hij wil naar
   wat hij ziet, Sint-Maarten, de straf naar het tekort, de schandpaal, afgezet worden),
   `js/inner.js` (rijk worden en arm lijken: het echte boek van de oogst in `S.oogsten` en het
@@ -175,7 +176,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   verstopplek; alleen met
   `?kaart=gehucht` of `?hud`). Het begin zonder tutorial is `T.beginOpKaart` (`js/gebied.js`); de
   kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de bouwfases uit
-  `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen om bij te
+  `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`), en die van het
+  vakwerkhuis (`huis`, het eerste niet-waterpas huis in het spel) uit `bouwfasen-sdf.cjs`
+  (`tegels/bouwfasen-sdf.*`, met `rand` en per fase `bezet`; de tegel `huisVakwerkRiet` is fase 7).
+  De tekenvolgorde is één getal per ding (`T.sorteerTekenlijst`, `js/tekenen.js`): wie vóór een
+  gebouw staat maar lager telt, schuift door tot achter hem. Getallen om bij te
   stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
   `T.BOUWEN_INSTELLINGEN`, `T.HANDEL_INSTELLINGEN`, `T.HEER_INSTELLINGEN`, `T.INNER_INSTELLINGEN`,
   `T.BEHOEFTEN_INSTELLINGEN`,
