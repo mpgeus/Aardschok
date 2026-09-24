@@ -25,6 +25,37 @@ require('../js/verkennen.js');
 require('../gereedschap/keuring.js');
 const T = globalThis.Toren;
 
+// Een proefquest en een proefgesprek voor de bakker, zodat hier iets na te kijken valt. Tot 24 sep
+// deed De koude oven dat zelf, maar die ging eruit met het oude spel (werklijst punt 7).
+T.QUESTS.bakker = {
+  naam: 'De koude oven', gever: 'bakker', begin: 'zoeken',
+  fasen: {
+    zoeken: {
+      doel: 'Zoek iets om de scheur in de schoorsteen mee te dichten.',
+      wegen: {
+        kuil: { kost: 'risico', naar: 'terug', klaarAls: { heeft: 'leem' } },
+        kramer: { kost: 'goud', naar: 'terug', doe: { goud: -15, geef: 'vuurklei' } },
+        smidsvrouw: { kost: 'gunst', naar: 'terug', doe: { geef: 'vuursteen', zetVlag: 'schuldSmidsvrouw' } },
+      },
+    },
+    terug: { doel: 'Breng het naar de bakker.', wegen: { afgeven: { kost: 'niets', naar: 'klaar', doe: { neem: ['leem', 'vuurklei', 'vuursteen'] } } } },
+    klaar: { eind: true, melding: 'De bakker smeert de scheur dicht.', beloning: { goud: 20, vlag: 'ovenWarm' } },
+  },
+};
+T.GESPREKKEN.bakker = {
+  naam: 'de bakker', start: 'welkom',
+  knopen: {
+    welkom: {
+      tekst: [{ als: { quest: 'bakker', fase: 'zoeken' } , zeg: 'Heb je al iets voor mijn schoorsteen?' }, { zeg: 'De oven is koud, en de rook blijft binnen.' }],
+      keuzes: [
+        { zeg: 'Ik zoek iets.', naar: 'welkom', als: { nietQuest: 'bakker' }, doe: { quest: 'bakker' } },
+        { zeg: 'Tot ziens.', sluit: true },
+      ],
+    },
+  },
+};
+T.OPRAPEN.leem = { tekst: 'Leem uit de kuil scheppen', vind: 'Je schept een handvol natte leem.' };
+
 // Een kaartje van 6×4 gras met één object erop, om een enkele fout te kunnen laten zien. De
 // vorm is die van een .tmj zoals Tiled hem opslaat; grond.tsx begint bij gid 1.
 function kaartje(objecten, extraLagen) {
