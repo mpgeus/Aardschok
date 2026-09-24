@@ -33,9 +33,10 @@ spel, en `Toren.debug.marskramer()` laat hem meteen komen.
 
 **Loopt nu:** niets. Er draait geen agent.
 
-**Volgende stap: punt 5, Sint-Maarten.** Dan punt 6, rijk worden en arm lijken: samen het tweede
-proefje, en de vraag of de kern leuk is. Wacht wel eerst op Marcels oordeel over de kern
-(hieronder).
+**Volgende stap: punt 5, Sint-Maarten, in een nieuwe sessie.** Marcel koos op 24 sep hoe het
+moet: de heer komt zelf, hij vraagt naar wat hij ziet, alle vier de straffen, en zaaigoed telt
+(`spel.md`, "Sint-Maarten"). Dan punt 6, rijk worden en arm lijken: samen het tweede proefje, en
+de vraag of de kern leuk is.
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
@@ -61,8 +62,10 @@ proefje, en de vraag of de kern leuk is. Wacht wel eerst op Marcels oordeel over
 
 **Wacht op Marcel:**
 - Spelen, en zeggen hoe het voelt: vooral de winter, en hoe snel een jaar gaat.
-- Het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): goederen, wat de heer
-  wil, wat de inner ziet, drie groepen en vijf keuren. Schrappen en aanvullen, vóór punt 5.
+- De rest van het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): wat de
+  inner ziet (vóór punt 6), en de drie groepen en vijf keuren (vóór punt 9). Wat de heer wil, is
+  voor een deel besloten (`spel.md`, "Sint-Maarten").
+- Of het ijs op de beek ook te zien moet zijn (tekenwerk), en of de jager 's winters minder vangt.
 - Een naam; "Aardschok" past niet meer.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
@@ -87,9 +90,12 @@ nog nodig is".
 
 *B. De heer, en de kern (dit is het tweede proefje)*
 
-5. **Sint-Maarten.** Klaar als de heer op 11 slachtmaand zijn deel vraagt, in goederen en goud, zijn
-   eisen meegroeien met hoe rijk het dorp oogt, hij straft als je tekortschiet (in het dorp, jou
-   zelf, hogere eisen, soldaten), en je je ambt kunt verliezen.
+5. **Sint-Maarten.** Klaar als de heer zelf op 11 slachtmaand naar de brink komt (met in
+   wijnmaand een brief vooraf), zijn deel vraagt in goederen en goud, naar wat hij ziet, en je
+   betaalt in een venster; als tekortschieten oploopt van een boete en hogere eisen, via soldaten
+   die inkwartieren en de schandpaal (jij wijst aan wie), tot je ambt kwijt; en als zaaigoed telt:
+   wat je hem geeft, kun je niet zaaien. Besloten op 24 sep, zie `spel.md`, "Sint-Maarten"; wat
+   nog open is, staat daar onderaan.
 6. **Rijk worden en arm lijken.** Klaar als de inner argwaan heeft die stijgt als wat hij ziet niet
    klopt met wat je levert, er verstopplekken zijn met plaats voor zoveel, je twee rekenboeken
    bijhoudt, en zijn bezoek een scène is waarin jij meeloopt, de route kiest, praat, afleidt of

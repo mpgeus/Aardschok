@@ -334,6 +334,38 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
   punt 6 (verstoppen) en punt 10 (verklikkers).
 - Met gereedschap zou ook de oogst sneller kunnen gaan: ijzeren sikkels en zeisen.
 
+## Sint-Maarten: de heer komt innen (Marcel, 24 sep 2026)
+
+Besloten op een voorstel van Claude (`werklijst.md`, punt 5):
+
+- **De heer komt zelf,** op 11 slachtmaand, in zijn koets met twee soldaten, over de weg naar de
+  brink. Hij is de grap: verward, ijdel, en hij telt slecht. Zijn soldaten zijn geen grap. De
+  inner, die nuchter is en alles ziet, komt pas in punt 6.
+- **In wijnmaand komt zijn brief** met wat hij dit jaar wil. Dan heb je tijd om te bewaren, te
+  verkopen of te verstoppen.
+- **Je betaalt in een venster,** zoals bij de marskramer: wat hij vraagt, wat je hebt, en wat je
+  geeft. Hij loopt net zo naar de brink als de marskramer (`js/handel.js`).
+- **Wat hij vraagt, groeit met wat hij ziet:** akkers, huizen, gebouwen en mensen. Elk gebouw
+  krijgt zo een prijs op Sint-Maarten: een stenen huis is mooi, maar het maakt hem hebberig. In
+  punt 6 kun je dingen voor hem verbergen.
+- **Wie tekortschiet, betaalt ervoor, en steeds zwaarder.** Alle vier de straffen horen in de
+  eerste versie:
+  1. een boete en hogere eisen: wat je tekortkwam, komt er volgend jaar bij, met een boete erop;
+  2. soldaten die inkwartieren: twee soldaten blijven de winter over en eten mee van je graan;
+  3. de schandpaal: iemand uit het dorp wordt gestraft, jij wijst aan wie, en het dorp onthoudt
+     het (dat kost tevredenheid);
+  4. je ambt kwijt: twee keer achter elkaar veel te weinig, en het spel is uit.
+- **Zaaigoed telt.** In de lente kost elke akker zaaigraan, en wat je de heer gaf, kun je niet
+  meer zaaien. Dat is de eerste echte keus op Sint-Maarten.
+- Herendienst en zijn grillen komen later, bij punt 8.
+
+**Nog open, voor wie punt 5 bouwt** (voorstellen, niet besloten):
+
+- Wat hij precies vraagt. Het voorstel voor de kern zegt: een deel van het graan (de pacht), wol,
+  pachthoenders en wat stuivers (goud).
+- Hoeveel zaaigraan een akkertegel kost, en wat er gebeurt zonder zaaigraan (de tegel ligt braak).
+- Hoeveel tekort welke straf geeft, en wat "veel te weinig" is.
+
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
 De ruggengraat staat of wordt gebouwd: bouwen, mensen, werk, kalender, voorraad. Wat er nog mist,
