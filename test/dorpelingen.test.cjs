@@ -54,28 +54,6 @@ test('een dorpeling wordt nooit ontdekt en telt nooit mee als deelnemer, ook nie
   assert.deepEqual(T.deelnemers(w, held, dorpeling), []);
 });
 
-test('de oude meester wordt, net als Wim, nooit ontdekt en telt nooit mee als deelnemer', () => {
-  // Hij is een gewoon T.WEZENS-wezen (kant: 'neutraal'), niet een met de hand nagebouwde vorm
-  // zoals maakDorpeling hierboven — dit toetst dus ook meteen dat T.maakWezen('meester', ...) de
-  // goede vorm aflevert.
-  const w = T.maakWereld();
-  const held = wezen(w, 'held');
-  const meester = T.maakWezen('meester', 6, 3);
-  w.wezens.push(meester);
-  zet(held, 5, 3); // vlak naast hem
-  const S = { wereld: w, held, sluipen: false };
-
-  assert.equal(meester.kant, 'neutraal');
-  assert.equal(T.zoekOntdekking(S), null);
-  assert.deepEqual(T.deelnemers(w, held, meester), []);
-});
-
-// De mensen van het dorp staan sinds 22 sep in js/mensen.js en niet meer als eigen ingang in
-// T.WEZENS (ontwerp/wereld.md, "Wie is wie, als het er honderd worden"). De regel eromheen is
-// niet veranderd en wordt hier over de hele lijst getoetst in plaats van per persoon: dwalen en
-// nooit ontdekt worden is de gewone regel voor elk neutraal wezen, geen uitzondering voor Wim of
-// de meester. Dat deze toets over T.MENSEN heen loopt en niet over een lijst hier, is het punt:
-// wie er morgen bij komt, wordt vanzelf meegetoetst.
 test('elke mens is neutraal, wordt nooit ontdekt en telt nooit mee als deelnemer', () => {
   for (const id of Object.keys(T.MENSEN)) {
     const w = T.maakWereld();
@@ -165,26 +143,6 @@ test('een dwalende dorpeling blijft binnen zijn straal van thuis', () => {
     );
     dorpeling.tx = doel.x;
     dorpeling.ty = doel.y;
-  }
-});
-
-test('de oude meester dwaalt bij zijn moestuin, maar blijft binnen zijn straal van thuis', () => {
-  const w = T.maakWereld();
-  const S = { wereld: w, spreektMet: null };
-  const meester = T.maakWezen('meester', 4, 3);
-  w.wezens.push(meester);
-  assert.equal(meester.straal, 2, 'een kleine straal: hij scharrelt bij zijn tuin, hij trekt niet weg');
-  for (let i = 0; i < 200; i++) {
-    meester.pad = [];
-    T.laatDwalen(S, 100); // dwingt meteen een besluit
-    if (!meester.pad.length) continue;
-    const doel = meester.pad[0];
-    assert.ok(
-      T.afstand(meester.thuis, doel) <= meester.straal,
-      `(${doel.x},${doel.y}) buiten straal ${meester.straal} van thuis (${meester.thuis.x},${meester.thuis.y})`,
-    );
-    meester.tx = doel.x;
-    meester.ty = doel.y;
   }
 });
 

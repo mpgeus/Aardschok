@@ -38,8 +38,7 @@
 
   T.MENSEN = {
     // Wie in code wordt neergezet en dus een eigen T.WEZENS-ingang houdt: Wim veegt de hal van de
-    // toren (T.maakWereld), de meester draagt een leeftijd en heeft zijn eigen loopmaat.
-    meester: { wezen: 'meester' },
+    // toren (T.maakWereld). Hij gaat er met de toren uit (werklijst punt 7, stap 6).
     wim: { wezen: 'wim' },
 
     // Het dorp, zoals ontwerp/wereld.md het opschrijft. `snelheid` moet gelijk zijn aan de

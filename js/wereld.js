@@ -66,17 +66,6 @@
     // staat er dan weer bij stil met zijn bezem (de houding "vegen", zie js/sprites.js). Hij
     // begint nooit een gevecht — hij is neutraal — en hij blijft nooit naast een deur staan.
     wim: { naam: 'Wim', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 3 },
-    // De oude meester scharrelt bij zijn moestuin, op het erf (ontwerp/verhaal.md, "Hij doet zijn
-    // moestuin, tot hij sterft"): neutraal als Wim, en tegen de honderd. Zijn leeftijd staat, net
-    // als bij de held, in hele maanden (js/leeftijd.js) — T.verouder werkt voor elk wezen, en
-    // laat het getal boven zijn hoofd verschijnen. `snelheid` is zijn eigen, tragere loopmaat
-    // (MEESTER_SNELHEID in gereedschap/pixelart/meester.cjs, waar zijn animatie op is afgestemd);
-    // T.snelheidVan gebruikt die altijd, ook al heeft hij een leeftijd — alleen de held loopt op
-    // T.loopSnelheid.
-    meester: {
-      naam: 'de oude meester', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.55,
-      dwaalt: true, straal: 2, leeftijd: 97 * 12,
-    },
     // De mensen van het dorp staan niet hier maar in js/mensen.js: wie ze zijn, hoe ze heten, hoe
     // snel ze lopen en welk vel ze krijgen. Deze tabel gaat over wat een wezen ís — wat vecht,
     // wat een leeftijd draagt, wat in code wordt neergezet — en een dorpeling is dat niet. Zie

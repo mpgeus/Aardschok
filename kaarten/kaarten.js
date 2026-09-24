@@ -29418,12 +29418,6 @@
       "straal": 7
      },
      {
-      "x": 140,
-      "y": 28,
-      "wie": "meester",
-      "straal": 2
-     },
-     {
       "x": 154,
       "y": 36,
       "overgang": "toren",

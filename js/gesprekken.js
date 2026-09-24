@@ -5,8 +5,8 @@
 //
 // Vorm van één gesprek:
 //   T.GESPREKKEN.<id> = {
-//     naam: 'Wim',          // boven het gesprek
-//     portret: 'wim',       // bestandsnaam van het portret; weg laten als die er nog niet is
+//     naam: 'de koster',    // boven het gesprek
+//     portret: 'koster',    // bestandsnaam van het portret; weg laten als die er nog niet is
 //     start: 'welkom',      // met welke knoop het gesprek begint
 //     situaties: [...],     // alleen voor de schrijver; het spel leest ze nooit (zie hieronder)
 //     knopen: { <knoop-id>: { tekst: [...], keuzes: [...] }, ... },
@@ -18,7 +18,7 @@
 // zoals het dán loopt. Een situatie is een toestand, opgeschreven in dezelfde woorden als een
 // voorwaarde, zodat er maar één woordenlijst is:
 //
-//   situaties: [{ naam: 'Na zijn dood', als: { vlag: 'meesterDood' } }]
+//   situaties: [{ naam: 'Na de brief van de heer', als: { vlag: 'briefGelezen' } }]
 //
 // Wat hier ontkent (nietVlag, nietHeeft, nietQuest) hoeft niets te doen: de toestand begint leeg.
 // De fasen van een quest staan er vanzelf bij bij wie hem geeft, en staan daarom niet in deze
@@ -55,171 +55,6 @@
   'use strict';
 
   T.GESPREKKEN = {
-    // Wim is de knecht van de meester (ontwerp/verhaal.md, Personen). Hij heeft zijn hele leven
-    // voor hem gewerkt, en je erft hem samen met de toren. Zolang de meester leeft (de tutorial,
-    // js/tutorial.js), zegt Wim "meester" tegen hém en "u" tegen jou. Na de dood (vlag
-    // meesterDood) zegt hij het, aarzelend, tegen jou.
-    wim: {
-      naam: 'Wim',
-      portret: 'wim',
-      start: 'welkom',
-      situaties: [
-        { naam: 'Na zijn dood', als: { vlag: 'meesterDood' } },
-        { naam: 'De beurs gehad', als: { vlag: ['meesterDood', 'beursVanDeMeester'] } },
-        { naam: 'Sleutel in de hand', als: { vlag: 'meesterDood', heeft: 'sleutel' } },
-        { naam: 'Onderweg naar boven', als: { vlag: ['meesterDood', 'sleutelGebruikt'] } },
-        { naam: 'Een jaar weggeweest', als: { vlag: 'meesterDood', ouderGewordenSinds: 12 } },
-        { naam: 'De fontein is leeg', als: { vlag: ['meesterDood', 'fonteinLeeg'] } },
-      ],
-      knopen: {
-        welkom: {
-          tekst: [
-            { als: { nietVlag: 'meesterDood' }, zeg: 'De meester? Die is buiten, bij zijn bonen. Waar anders.' },
-            { als: { vlag: 'sleutelGebruikt' }, zeg: 'Ga maar, meester. Ik veeg de trap nog één keer, voor het geval dat.' },
-            { als: { heeft: 'sleutel' }, zeg: 'U hebt de sleutel. Wees voorzichtig daarboven, meester. Eén meester begraven is genoeg voor een knecht.' },
-            // Het bewijs dat het dorp je ouder ziet worden (ontwerp/spreuken.md, "Het dorp ziet
-            // je ouder worden"): terughoudend, geen grap over wat er met honderd jaar gebeurt.
-            { als: { ouderGewordenSinds: 12 }, zeg: 'U bent weer terug, meester — en een jaar ouder dan toen u wegging. Ik zal er verder niets over zeggen.' },
-            { zeg: 'Meester. Zo moet ik u nu noemen, hè. Het went wel. Denk ik.' },
-          ],
-          keuzes: [
-            // Zolang de meester leeft.
-            { zeg: 'Wat zit er in de voorraadkamer?', naar: 'voorraad', als: { nietVlag: 'meesterDood' } },
-            { zeg: 'Tot straks, Wim.', sluit: true, als: { nietVlag: 'meesterDood' } },
-            // Daarna.
-            { zeg: 'Dank je, Wim.', sluit: true, als: { vlag: 'sleutelGebruikt' } },
-            { zeg: 'Wat staat er bij de trap?', naar: 'monsters', als: { vlag: 'meesterDood', heeft: 'sleutel' } },
-            { zeg: 'Ik ga, Wim.', sluit: true, als: { vlag: 'meesterDood', heeft: 'sleutel' } },
-            { zeg: 'Heeft hij nog iets nagelaten?', naar: 'beurs', als: { vlag: 'meesterDood', nietVlag: 'beursVanDeMeester' } },
-            { zeg: 'Wat is er vannacht gebeurd?', naar: 'aardschok', als: { vlag: 'meesterDood', nietVlag: 'sleutelGebruikt', nietHeeft: 'sleutel' } },
-            { zeg: 'Waar is de sleutel van het trappenhuis?', naar: 'sleutel', als: { vlag: 'meesterDood', nietVlag: 'sleutelGebruikt', nietHeeft: 'sleutel' } },
-            { zeg: 'Werkt de fontein nog?', naar: 'fontein', als: { vlag: 'meesterDood', nietVlag: 'sleutelGebruikt', nietHeeft: 'sleutel' } },
-            { zeg: 'En de meester?', naar: 'deMeester', als: { vlag: 'meesterDood', nietVlag: 'sleutelGebruikt', nietHeeft: 'sleutel' } },
-            { zeg: 'Ik ga naar boven, Wim.', sluit: true, als: { vlag: 'meesterDood', nietVlag: 'sleutelGebruikt', nietHeeft: 'sleutel' } },
-          ],
-        },
-        // Zolang de meester leeft: de slijmkruiper die de tutorial je leert ontlopen.
-        voorraad: {
-          tekst: [
-            { zeg: 'Iets wat er gisteren nog niet zat. Het kwam vannacht de trap af, na die schok, en nu zit het vlak achter de deur. Ik ga er niet meer in.' },
-          ],
-          keuzes: [
-            { zeg: 'Tot straks, Wim.', sluit: true },
-          ],
-        },
-        meer: {
-          tekst: [
-            { zeg: 'Wat wilt u nog weten, meester?' },
-          ],
-          keuzes: [
-            { zeg: 'Wat is er vannacht gebeurd?', naar: 'aardschok' },
-            { zeg: 'Waar is de sleutel van het trappenhuis?', naar: 'sleutel' },
-            { zeg: 'Werkt de fontein nog?', naar: 'fontein' },
-            { zeg: 'En de meester?', naar: 'deMeester' },
-            { zeg: 'Ik ga naar boven, Wim.', sluit: true },
-          ],
-        },
-        // De meester sloot het op en vergat het (ontwerp/verhaal.md, "Wat er boven zit").
-        aardschok: {
-          tekst: [
-            { zeg: 'Vannacht schudde het hele huis, en boven kraakte iets, heel lang. De meester zei dat het huis oud was, net als wij. Hij heeft daarboven ooit iets opgesloten, meester. Wat, dat wist hij zelf niet meer.' },
-          ],
-          keuzes: [
-            { zeg: 'Wat kwam er de trap af?', naar: 'monsters' },
-            { zeg: 'Nog iets anders.', naar: 'meer' },
-          ],
-        },
-        monsters: {
-          tekst: [
-            { zeg: 'Die slijmkruiper, in de voorraadkamer. En bij de trap staat er nog zo een als dat van vanmiddag. Het staat daar maar, alsof het op iemand wacht. Ik heb de deur op slot gedaan.' },
-          ],
-          keuzes: [
-            { zeg: 'Nog iets anders.', naar: 'meer' },
-          ],
-        },
-        sleutel: {
-          tekst: [
-            { zeg: 'In de voorraadkamer. Ik liet hem vallen toen ik wegrende. Ik ben ook niet meer de jongste, meester. Maar dat bent u al helemaal niet meer.' },
-          ],
-          keuzes: [
-            { zeg: 'Nog iets anders.', naar: 'meer' },
-          ],
-        },
-        fontein: {
-          tekst: [
-            { als: { vlag: 'fonteinLeeg' }, zeg: 'Die staat droog, meester. De laatste slok heeft u zelf genomen.' },
-            { zeg: 'Er zit nog één slok in. Eén. Hij maakt u een paar jaar jonger, maar daarna staat hij droog. Bewaar hem voor als het echt moet.' },
-          ],
-          keuzes: [
-            { zeg: 'Nog iets anders.', naar: 'meer' },
-          ],
-        },
-        deMeester: {
-          tekst: [
-            { zeg: 'Ik begraaf hem bij zijn bonen. Daar wilde hij liggen, zei hij altijd. Al wist je bij hem nooit of hij een grapje maakte.' },
-          ],
-          keuzes: [
-            { zeg: 'Nog iets anders.', naar: 'meer' },
-          ],
-        },
-        // De beurs van de meester: je eerste goud, en expres te weinig (ontwerp/toren.md). Acht
-        // munten tegen de vijftien die de marskramer vraagt -- zo ligt die weg open en kun je hem
-        // net niet nemen, en dat is pijnlijker en beter dan een deur die dicht zit zonder reden.
-        // Weigeren zet geen vlag: dan blijft het aanbod staan, precies zoals Wim zegt.
-        beurs: {
-          tekst: [
-            { zeg: 'In de la bij zijn bed lag een beursje. Acht munten, meester. Hij zei altijd dat een tovenaar geen geld nodig heeft. Nou, daar had hij dan gelijk in, want meer was het niet.' },
-          ],
-          keuzes: [
-            { zeg: 'Geef maar hier, Wim.', naar: 'beursGekregen', doe: { zetVlag: 'beursVanDeMeester', goud: 8 } },
-            { zeg: 'Houd jij het maar.', naar: 'beursGeweigerd' },
-          ],
-        },
-        beursGekregen: {
-          tekst: [
-            { zeg: 'Acht. Ik heb ze twee keer geteld, want ik geloofde het zelf niet.' },
-          ],
-          keuzes: [
-            { zeg: 'Dank je, Wim.', sluit: true },
-          ],
-        },
-        beursGeweigerd: {
-          tekst: [
-            { zeg: 'Dat doe ik niet, meester. Ik leg het terug in de la. Dan ligt het er als u van gedachten verandert.' },
-          ],
-          keuzes: [
-            { zeg: 'Goed, Wim.', sluit: true },
-          ],
-        },
-      },
-    },
-    // De oude meester, in de tutorial (js/tutorial.js): wat hij zegt als je hem aanspreekt
-    // tussen de scènes door, namelijk waar hij je voor nodig heeft. De scènes zelf staan hieronder,
-    // in T.TUTORIAL_TEKST.
-    meester: {
-      naam: 'de oude meester',
-      start: 'nu',
-      situaties: [
-        { naam: 'Om de boodschap gevraagd', als: { vlag: 'boodschapGevraagd' } },
-        { naam: 'Water gehaald', als: { vlag: 'boodschapGevraagd', heeft: 'kom' } },
-        { naam: 'Zaaigoed gehaald', als: { vlag: 'boodschapGevraagd', heeft: 'zak' } },
-        { naam: 'Om de ton gevraagd', als: { vlag: 'tonGevraagd' } },
-      ],
-      knopen: {
-        nu: {
-          tekst: [
-            { als: { vlag: 'tonGevraagd' }, zeg: 'Die andere ton, jongen. Met je staf. Dat kost niets.' },
-            { als: { heeft: 'kom', nietHeeft: 'zak' }, zeg: 'Water, mooi. En mijn zaaigoed? Dat staat in de voorraadkamer.' },
-            { als: { heeft: 'zak', nietHeeft: 'kom' }, zeg: 'Zaaigoed, mooi. En mijn water? De fontein staat in de hal.' },
-            { als: { vlag: 'boodschapGevraagd' }, zeg: 'Een kom water uit de fontein, en een zak zaaigoed uit de voorraadkamer. Ik ben hier. Waar zou ik anders zijn.' },
-            { zeg: 'Kom eens hier, jongen.' },
-          ],
-          keuzes: [
-            { zeg: 'Ja, meester.', sluit: true },
-          ],
-        },
-      },
-    },
     // ── Het dorp: De koude oven (js/quests.js) ──
     // De bakker geeft de quest. Sinds de aardschok is zijn schoorsteen gespleten en blijft de
     // rook binnen. Hij klaagt graag en deelt uit; dat is dezelfde man.
@@ -384,88 +219,5 @@
         },
       },
     },
-  };
-
-  // De tutorial: wat de meester en Wim zeggen in de scènes van js/tutorial.js, in de volgorde
-  // waarin het gebeurt. Elke regel is één keer "Verder". Wie er praat, staat bij de naam van het
-  // stuk; de meester zegt "jongen" tegen je, al ben je vierentachtig. Eerste, ruwe versie
-  // (22 sep 2026): om te polijsten. De toon: weemoedig met een knipoog, nooit grappig ten koste
-  // van de ernst (ontwerp/verhaal.md).
-  T.TUTORIAL_TEKST = {
-    // De meester, als het spel begint: hij staat in zijn moestuin en ziet je de toren uit komen.
-    roepen: ['Daar ben je. Kom eens hier, jongen. Ik roep niet meer zo hard als vroeger.'],
-    // De meester, bij de oude ton (in het ontwerp een kraai op zijn kool; die is er nog niet).
-    tonVoor: [
-      "Zie je die ouwe ton? Daar zitten de hele dag kraaien op, en 's avonds zitten ze in mijn kool.",
-      'Let op.',
-    ],
-    // Na de vuurschicht: zevenennegentig werd achtennegentig, en hij lacht erom.
-    tonNa: ['Ha! Achtennegentig. Een heel jaar, voor een ton. En hij staat er nog ook.'],
-    boodschap: [
-      'Weet je wat? Haal eens een kom water uit de fontein voor me. En een zak zaaigoed uit de voorraadkamer; de wintergroente moet erin voor het gaat vriezen.',
-      'Wim zegt dat er sinds vannacht iets in de voorraadkamer zit. Loop gebukt, dan ziet het je pas als je er vlak bij bent.',
-      'En ziet het je toch: een stap terug, en de deur dicht. Die beesten doen geen deuren open. Dat heeft niemand ze ooit geleerd.',
-    ],
-    // Wim, als je voor het eerst de hal in komt.
-    wimBinnen: [
-      'O, u bent het. Ik dacht even dat het de meester was.',
-      'Water uit de fontein? Voor hem? Er zit bijna niets meer in, en dat weet hij best.',
-    ],
-    // Wim, als je de kom hebt geschept. Er blijft één slok over: de laatste, en die is van jou.
-    wimSchep: ['Nu zit er nog één slok in. De laatste. Als hij er later om verlegen zit: ik heb het gezegd.'],
-    // Wim, als de slijmkruiper je gezien heeft en jij de deur hebt dichtgegooid.
-    terugkruipen: ['Hij kruipt weer naar achteren, hoor ik. Nu gebukt erin, dan hoort hij u niet.'],
-    // De meester, als je hem zijn water en zaaigoed brengt.
-    drinkenVoor: ['Ah. Water.'],
-    // Na het water: achtennegentig werd zesennegentig.
-    drinkenNa: ['Zie je wel? Zesennegentig. Het is maar een getal.'],
-    // Na de klap met zijn staf.
-    staf: ['En dit kost niets. Een goeie klap met je staf. Het enige in dit vak dat niets kost.'],
-    jij: ['Daar staat er nog een. Jij.'],
-    // Als jij de tweede ton kapot hebt geslagen.
-    goedzo: ['Zo. Niets gekost. Onthoud dat, als je ooit denkt dat je moet toveren.'],
-    bonen: ['Nu de bonen nog.'],
-    // Wim, die de toren uit komt rennen.
-    wimOnraad: ['Meester! Meester! Er komt iets de trap af!'],
-    // De meester, tussen jou en de toren.
-    blijfAchter: ['Blijf achter me, jongen.'],
-    taai: ['Taai ding.'],
-    // Voor de laatste spreuk: hij staat op negenennegentig, en weet wat de volgende kost.
-    laatste: ['Negenennegentig.', 'Had ik die ton maar laten staan.', 'Nog één, jongen. Kijk goed.'],
-    // Wim, bij de meester.
-    rouw: ['Meester?', 'Meester.', 'Hij had zijn bonen nog niet gedaan.'],
-    // Wim, bij de meester, als je te lang weg was en hem dood terugvindt. De eerste regel tegen jou,
-    // de rest tegen hem. Wat er gebeurd is, vertelt hij niet.
-    rouwLaat: ['U was er niet.', 'Hij had zijn bonen nog niet gedaan.'],
-    // Wim, tegen jou.
-    overnemen: ['...Meester?', 'Ik ga de trap vegen. Dat deed ik altijd, als ik niet wist wat ik moest doen.'],
-
-    // ── Als je vastzit ──
-    //
-    // Het vak linksboven dat je vertelde welke knop je moest indrukken, is er op 22 sep uit
-    // gegaan (Marcel: "veel te cringe"). ontwerp/verhaal.md zegt waarom: iemand die stilstaat en
-    // uitlegt is een tutorial. Wat ervoor in de plaats komt is een mens: sta je een poos stil op
-    // hetzelfde moment, dan zegt Wim er iets over als hij in de buurt is, en anders de meester.
-    //
-    // Zolang hieronder niets staat, zegt er ook niemand iets. Dat is met opzet: beter stil dan
-    // een uitlegger. Wat er komt te staan, hoort te klinken als iemand die zich ermee bemoeit —
-    // niet als een aanwijzing. ("Hij staat daar. Bij zijn bonen." zegt hetzelfde als "Loop naar de
-    // meester", maar het is iemand die het zegt.)
-    //
-    // Te bewerken in gereedschap/gesprekken.html, onder "De tutorial".
-
-    // Je bent de toren uit en de meester roept je, maar je blijft staan.
-    vastMeester: [],
-    // Hij vroeg om water uit de fontein, en je hebt de kom nog niet.
-    vastKom: [],
-    // De kom heb je; de zak zaaigoed uit de voorraadkamer nog niet. Daar zit de slijmkruiper.
-    vastZak: [],
-    // Je hebt allebei, maar je brengt ze hem niet.
-    vastBrengen: [],
-    // De slijmkruiper heeft je gezien en je staat stil in het gevecht. (Een stap terug, de deur
-    // dicht — dat zei hij zelf al bij de boodschap, dus dit is de herinnering, niet de uitleg.)
-    vastGezien: [],
-    // Hij heeft één ton kapotgeslagen en wacht tot jij de andere doet.
-    vastSlaan: [],
   };
 })(globalThis.Toren = globalThis.Toren || {});

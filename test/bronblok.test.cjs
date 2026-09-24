@@ -38,13 +38,30 @@ test('het blok begint en eindigt waar het hoort', () => {
 });
 
 test('wat de gespreksbewerker niet kent, zit in de staart', () => {
-  // Dit is de kern: T.TUTORIAL_TEKST staat ná T.GESPREKKEN en hoort dus volledig in de staart.
-  const b = T.bronBlok(lees('js/gesprekken.js'), 'T.GESPREKKEN');
-  // Op de definitie letten en niet op de naam: binnen het blok staat een opmerking die naar
-  // T.TUTORIAL_TEKST verwijst, en die mag er gewoon zijn.
-  assert.ok(b.staart.includes('T.TUTORIAL_TEKST = {'), 'het draaiboek van de tutorial hoort in de staart');
-  assert.ok(!b.blok.includes('T.TUTORIAL_TEKST = {'), 'en niet in het blok dat opnieuw geschreven wordt');
+  // Dit is de kern: wat ná T.GESPREKKEN in hetzelfde bestand staat, hoort volledig in de staart.
+  // Tot 24 sep stond daar het draaiboek van de tutorial (T.TUTORIAL_TEKST), en vóór 22 sep wiste
+  // één keer opslaan het. Het draaiboek is weg (werklijst punt 7), dus toetsen we met een eigen
+  // bron: de wacht blijft staan, ook als het echte bestand na het blok niets meer heeft.
+  const bron = [
+    '(function (T) {',
+    "  'use strict';",
+    '',
+    '  T.GESPREKKEN = {',
+    "    // Een opmerking die naar T.DRAAIBOEK verwijst, binnen het blok: dat mag gewoon.",
+    "    koster: { naam: 'de koster', start: 'a', knopen: { a: { tekst: [{ zeg: 'Een {accolade} in een zin.' }], keuzes: [] } } },",
+    '  };',
+    '',
+    '  T.DRAAIBOEK = {',
+    "    begin: ['Eerste regel.'],",
+    '  };',
+    '})(globalThis.Toren = globalThis.Toren || {});',
+    '',
+  ].join('\n');
+  const b = T.bronBlok(bron, 'T.GESPREKKEN');
+  assert.ok(b.staart.includes('T.DRAAIBOEK = {'), 'wat na het blok staat, hoort in de staart');
+  assert.ok(!b.blok.includes('T.DRAAIBOEK = {'), 'en niet in het blok dat opnieuw geschreven wordt');
   assert.ok(b.kop.includes("'use strict'"), 'de kop houdt het begin van het bestand vast');
+  assert.equal(b.kop + b.blok + b.staart, bron);
 });
 
 test('een accolade in een zin telt niet mee voor de diepte', () => {

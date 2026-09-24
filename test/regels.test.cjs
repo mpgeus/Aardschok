@@ -204,18 +204,6 @@ test('de held loopt trager naarmate hij ouder wordt, met rechte lijnen tussen de
   assert.equal(T.snelheidVan(wezen(w, 'slijm')), 1.4); // een monster houdt zijn vaste snelheid
 });
 
-test('een wezen met een leeftijd dat niet de held is, loopt toch op zijn eigen snelheid', () => {
-  // De oude meester heeft, net als de held, een leeftijd (T.verouder werkt voor elk wezen) —
-  // maar zijn animatie (gereedschap/pixelart/meester.cjs) is op precies één vaste snelheid
-  // afgestemd. Zou T.snelheidVan hem, omdat hij een leeftijd heeft, over T.loopSnelheid laten
-  // lopen (op zijn 97e zo'n 1,9 tegel/s, de curve van de héld), dan gaan zijn voeten over de
-  // grond glijden. Alleen `soort === 'held'` mag die curve gebruiken.
-  const meester = T.maakWezen('meester', 0, 0);
-  assert.notEqual(meester.leeftijd, null);
-  assert.equal(T.snelheidVan(meester), T.WEZENS.meester.snelheid);
-  assert.notEqual(T.snelheidVan(meester), T.loopSnelheid(meester.leeftijd));
-});
-
 test('wie sluipt, wordt pas van twee tegels dichterbij opgemerkt', () => {
   const w = T.maakWereld();
   const S = { wereld: w, held: wezen(w, 'held'), sluipen: false };

@@ -261,10 +261,6 @@
     // Met een spreuk in de hand vraagt elke klik iets anders (zie toveren.js).
     if (S.spreuk) return T.handelingSpreuk(S, doel);
     if (!doel) return null;
-    // Wat de tutorial hier anders laat gaan (js/tutorial.js): het water in de fontein is dan voor
-    // de meester, ook midden in een gevecht.
-    const anders = T.tutorialHandeling && T.tutorialHandeling(S, doel);
-    if (anders) return anders;
     const w = S.wereld;
     const held = S.held;
     const ap = held.ap;

@@ -4,8 +4,8 @@
 // ontwerp/toren.md, "Quests: waar het goud vandaan komt".
 //
 // Dit bestand hangt zichzelf aan het gesprekssysteem in plaats van andersom: gesprek.js roept
-// T.questVoorwaarde en T.questGevolg alleen aan als ze bestaan, zoals verkennen.js dat met
-// T.tutorialHandeling doet. Zo blijft een gesprek zonder quests gewoon werken.
+// T.questVoorwaarde en T.questGevolg alleen aan als ze bestaan. Zo blijft een gesprek zonder
+// quests gewoon werken.
 //
 // De stand is expres saai: per quest één woord (de fase) en één woord (de weg die je nam), plus
 // een lijstje uitgekeerde beloningen. Alles zijn strings, dus opslaan is later geen kunststuk.

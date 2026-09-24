@@ -260,8 +260,6 @@ test('een wereld met de leem erin haalt die klacht weg', () => {
   assert.doesNotMatch(tekst, /nergens te krijgen/);
   assert.doesNotMatch(tekst, /raakpunt "oven"/);
   for (const wie of ['bakker', 'marskramer', 'smidsvrouw']) assert.doesNotMatch(tekst, new RegExp(`"${wie}" heeft een gesprek`));
-  // wim en de meester staan in dit proefwereldje niet, en dat hoort de dekking dan ook te zeggen.
-  assert.match(tekst, /"wim" heeft een gesprek/);
 });
 
 test('een questvoorwerp dat niet op te rapen is, loopt dood', () => {

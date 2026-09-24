@@ -3,7 +3,6 @@
   "uitleg": "De betekenis van kaarten/wereld.tmj: mensen, deuren, doorgangen en aansluitingen. Tiled tekent de grond, dit bestand zegt wat het is. Geschreven door gereedschap/wereld.html; zie ontwerp/kaarten.md, 'Tiled tekent alleen nog de grond'.",
   "dingen": [
     {"x":139,"y":19,"wezen":"wolf","straal":7},
-    {"x":140,"y":28,"wie":"meester","straal":2},
     {"x":154,"y":36,"overgang":"toren","komt":{"x":154,"y":37},"tekst":"De toren in"}
   ]
 }

@@ -23,11 +23,9 @@
   const voorwerpHoogte = (v) =>
     (T.sprites.aan && !T.debug.vlakken ? SPRITE_VOORWERP_HOOGTE : VOORWERP_HOOGTE)[v.soort];
 
-  // Een nieuw spel begint op het erf, bij de oude meester in zijn moestuin: de tutorial
-  // (js/tutorial.js). Vanaf het titelscherm begint die pas als je op de knop drukt; na "Opnieuw"
-  // meteen.
-  T.nieuwSpel = function (meteen) {
-    S.gebieden = {}; // een nieuw spel begint met een schone toren en een schoon erf
+  // Een nieuw spel begint op de kaart van het begin: het gehucht, of een proefkaart (?kaart=).
+  T.nieuwSpel = function () {
+    S.gebieden = {}; // een nieuw spel begint met schone kaarten
     Object.assign(S, {
       vlaggen: new Set(),
       gesprekLeeftijd: {},
@@ -68,12 +66,11 @@
       hover: null,
       handeling: null,
       naLopen: null,
-      regieCamera: null, // waar de camera in een scène naartoe kijkt (js/regie.js); null = de held volgen
       spreektMet: null,
     });
-    // Lukt de kaart niet (hij bestaat niet), dan valt het terug op het erf van het oude spel — een
-    // half aangelegde wereld mag nooit het spel breken. Dat erf gaat er bij punt 7 nog uit.
-    if (!T.beginOpKaart(S, BEGIN_KAART)) T.beginOpHetErf(S);
+    // Bestaat een proefkaart niet, dan begint het gewoon in het gehucht: een half aangelegde
+    // wereld mag nooit het spel breken.
+    if (!T.beginOpKaart(S, BEGIN_KAART) && !T.beginOpKaart(S, 'gehucht')) throw new Error(`Geen kaart om op te beginnen: ${BEGIN_KAART}`);
     const p = T.naarScherm(S.held.x, S.held.y);
     S.camera = { x: p.x, y: p.y - 24 };
     T.ui.reset(S);
@@ -224,9 +221,6 @@
   // zijn plek op het scherm staat dan vast in plaats van dat hij naar een bevroren camera toe kan
   // weglopen.
   function cameraDoel() {
-    // Een scène kan het beeld ergens anders op richten dan de held (js/regie.js); zonder dat
-    // blijft dit gewoon het gevecht of de held volgen.
-    if (S.regieCamera) return T.naarScherm(S.regieCamera.x, S.regieCamera.y);
     const aanleiding = S.overgang && S.overgang.aanleiding;
     const lijst = S.gevecht
       ? [S.held, ...S.gevecht.monsters.filter((m) => !m.dood)]
@@ -259,17 +253,11 @@
     // net doorheen.
     if (S.naarGebied) T.gaNaarGebied(S, S.naarGebied);
     T.werkLichtenBij(S, dt);
-    // Heeft de speler gedaan wat de meester vroeg? Dan begint de volgende scène (js/tutorial.js),
-    // nog vóór er iets dwaalt of iemand je ziet.
-    T.werkTutorialBij(S);
-    // Quests gaan net zo vanzelf verder (js/quest.js): heb je wat de bakker nodig heeft, dan
-    // schuift de fase op. Het vak linksboven is van de meester zolang hij nog iets vraagt, en
-    // daarna van de quest die je het eerst aannam.
+    // Quests gaan vanzelf verder (js/quest.js): heb je wat iemand nodig heeft, dan schuift de fase
+    // op. Het vak linksboven is van de quest die je het eerst aannam.
     T.werkQuestsBij(S);
-    if (!T.tutorialLoopt(S)) {
-      const doelNu = T.questDoel(S);
-      T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop);
-    }
+    const doelNu = T.questDoel(S);
+    T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop);
     if (S.modus === 'verkennen') {
       // Vóór T.laatDwalen: wie hier een pad krijgt of aan het maaien slaat (T.werkOogstBij,
       // js/akkers.js, alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
@@ -354,17 +342,6 @@
       const n = parseInt(ev.key, 10);
       if (n >= 1 && n <= 9) T.ui.kiesKeuze(n - 1);
       if (ev.key === 'Escape') T.sluitDialoog(S);
-      return;
-    }
-    // Tijdens een scène (js/regie.js) ligt de invoer stil op de overslaan-toets na: de speler
-    // kan niet wegwandelen, maar hoeft ook niet werkeloos toe te kijken. Enter, spatie of 1 is
-    // "Verder" bij een regel tekst.
-    if (S.modus === 'regie') {
-      if (ev.key === 'Escape') T.regie.overslaan();
-      else if (ev.key === 'Enter' || ev.key === ' ' || ev.key === '1') {
-        ev.preventDefault();
-        T.ui.kiesKeuze(0);
-      }
       return;
     }
     if (S.modus !== 'verkennen' && S.modus !== 'gevecht') return;
@@ -534,40 +511,12 @@
       }
       T.tekenScene(ctx, S, bw, bh);
     },
-    // Bewijs dat js/regie.js werkt: Wim loopt naar de fontein, zegt iets, wordt door een kleine
-    // vuurschicht zichtbaar een jaar ouder, en loopt terug. Alleen in de hal, waar Wim staat;
-    // Toren.debug.regieProef() in de console van de browser.
-    async regieProef() {
-      const wim = S.wereld.wezens.find((e) => e.soort === 'wim');
-      if (!wim) return 'Wim staat hier niet: ga eerst de toren in.';
-      // Alleen de held heeft normaal een leeftijd (js/wereld.js); voor de proef leent Wim er
-      // hier eentje, zodat T.verouder iets heeft om bij op te tellen.
-      if (wim.leeftijd == null) wim.leeftijd = 97 * 12;
-      await T.regie.speel(S, async () => {
-        await T.regie.loop(wim, 7, 5);
-        await T.regie.zeg(wim, 'Kijk eens, Wim kan ook ouder worden.');
-        await T.regie.tover(wim, 'vuurschicht', { x: 7, y: 6 });
-        await T.regie.loop(wim, 5, 2);
-      });
-      return `Wim is nu ${T.leeftijdTekst(wim.leeftijd)}.`;
-    },
-    // Waar staat de tutorial (js/tutorial.js)? Toren.debug.tutorial() in de console.
-    tutorial() {
-      const t = S.tutorial;
-      if (!t) return 'Geen tutorial.';
-      return {
-        fase: t.fase, bezig: t.bezig, gebied: S.wereld.gebied,
-        held: `${S.held.tx},${S.held.ty}`, meester: `${t.meester.tx},${t.meester.ty} · ${T.leeftijdTekst(t.meester.leeftijd)}${t.meester.dood ? ' · dood' : ''}`,
-        tonnen: [t.tonOud.soort, t.tonJij.soort], spullen: [...S.inventaris],
-      };
-    },
   };
 
   formaat();
-  // De pixel art gaat meteen laden; tot hij klaar is tekent het spel zijn vlakken. Bij het
-  // titelscherm is dat nooit te zien.
+  // De pixel art gaat meteen laden; tot hij klaar is tekent het spel zijn vlakken.
   T.sprites.laad();
-  T.nieuwSpel(false);
+  T.nieuwSpel();
   // Geen titelscherm en geen tutorial meer (die hoorden bij De laatste klim): meteen spelen.
   S.modus = 'verkennen';
   requestAnimationFrame(lus);
