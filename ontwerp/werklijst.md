@@ -42,10 +42,10 @@ rendert hem mee). Een type met een eigen fasevel en een `rand` krijgt een ring r
 (`T.bouwRandVan`, `T.werkBouwplaatsBij` in `js/bouwen.js`; `T.gebouwPast` houdt de ring vrij).
 
 **Volgende stap:** de andere types van het gehucht langs dezelfde weg als het vakwerkhuis
-(Marcel vond het vakwerkhuis in het spel goed, 24 sep). Voorstel voor de volgorde: de hut (die
-wordt het meest gebouwd en leent nu een tekening), dan de boerderij als hallehuis (eerst de
-gebinten, de wanden het laatst), dan houthakker, schaapskooi, kippenhok, wachthuis en kapel.
-Daarna punt 8, de voorvallen.
+(Marcel vond het vakwerkhuis in het spel goed, 24 sep). Marcel koos de volgorde: eerst de hut, van
+vlechtwerk met leem (zie `beeld.md`), dan de boerderij als hallehuis (eerst de gebinten, de wanden
+het laatst), dan houthakker, schaapskooi, kippenhok, wachthuis en kapel. Daarna punt 8, de
+voorvallen.
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel

@@ -466,6 +466,22 @@ dak van riet dekken kost meer dagen dan een kap opzetten). Het hoogste punt is w
 6. Leem in de vakken, de nok gedekt, de schoorsteen.
 7. Af: gewit (vakwerk) of bruin (vlecht), deur, luiken, de steiger weg.
 
+*Vlechtwerk met leem, met riet: de hut (Marcel, 24 sep: van vlechtwerk, en als eerste na het
+vakwerkhuis).* Een lage hut van één ruimte, zoals de armsten in een dorp rond 1323 woonden. Hij
+staat op de grond, zonder stenen voet, en heeft geen schoorsteen: de haard ligt midden in de hut,
+en de rook trekt door een rookgat in het riet.
+
+1. Uitzetten: vertrapte grond, de hoeken afgezet. Ernaast een bos staken, bossen wilgentenen,
+   schoven riet, een leemkuil met stro.
+2. Palen: de hoekpalen en de staken van de wanden in de grond, de deurstijlen en een drempel.
+3. Vlechtwerk: de tenen tussen de staken gevlochten, van onder naar boven, tot de muurplaat. Het
+   venstertje is een gat.
+4. De kap (het hoogste punt): een paar sporen op de muurplaat, een nokbalk, en een tak op de nok.
+   Ook de armen vieren het hoogste punt.
+5. Riet: latten op de sporen, en het riet van de onderkant omhoog, met het rookgat.
+6. Leem: leem met stro op het vlechtwerk, nog nat en donker.
+7. Af: de leem droog en licht, een deur van planken.
+
 *Veldsteen.* Uitzetten met een sleuf; de muren laag voor laag tot heuphoogte, het deurkozijn staat
 er al in; op hoogte, met een steiger van gesjorde palen, korte balkjes die in gaten in de muur
 steken, horden als vloer en een ladder, en lateien boven ramen en deur; de kap en de meiboom; het
