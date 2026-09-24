@@ -170,3 +170,118 @@ test('T.werkOogstBij: een nieuw jaar (geploegd) veegt de oogst van vorig jaar we
   T.werkOogstBij(S, 0.1);
   assert.equal(akker.geoogst.size, 0);
 });
+
+// Een boer die met de hand maait tot er niets meer staat: loopt, maait, springt naar het eind van
+// de slag (zoals hierboven), met een veiligheidsgrens.
+function maaiTotKlaar(S, boer, klaar) {
+  let veiligheid = 0;
+  while (!klaar() && veiligheid++ < 500) {
+    T.werkOogstBij(S, 0.1);
+    if (boer.pad.length) {
+      boer.tx = boer.pad[0].x;
+      boer.ty = boer.pad[0].y;
+      boer.pad = [];
+    } else if (boer.maait) {
+      S.tijd = boer.maait.tot;
+    }
+  }
+}
+
+test('T.werkOogstBij: een boer met twee akkers maait ze allebei (tot 24 sep bleef de tweede staan)', () => {
+  const eerste = { x: 0, y: 0, b: 2, h: 1, huis: 'boer1', geoogst: new Set() };
+  const tweede = { x: 10, y: 10, b: 1, h: 2, huis: 'boer1', geoogst: new Set() };
+  const boer = { tx: 5, ty: 5, x: 5, y: 5, dood: false, pad: [], werkAkkers: [eerste, tweede] };
+  const S = { wereld: { wezens: [boer], akkers: [eerste, tweede] }, tijd: 0, kalender: { dag: RIJP_DAG }, voorraad: { graan: 0 } };
+  maaiTotKlaar(S, boer, () => eerste.geoogst.size + tweede.geoogst.size === 4);
+  assert.equal(eerste.geoogst.size, 2);
+  assert.equal(tweede.geoogst.size, 2, 'de tweede akker is niet gemaaid');
+  assert.equal(S.voorraad.graan, 4 * T.GRAAN_PER_TEGEL);
+});
+
+// De dag (vanaf het begin van het spel, 1 lentemaand) van een datum, in het eerste of een later jaar.
+function dagVan(maand, dagVanMaand, jaar) {
+  const m = T.MAANDEN.findIndex((x) => x.naam === maand);
+  return (jaar || 0) * T.DAGEN_PER_JAAR + ((m - T.TIJD_START_MAAND + 12) % 12) * T.DAGEN_PER_MAAND + dagVanMaand - 1;
+}
+
+// Een wereld met twee akkers: één met een boer, één zonder.
+function tweeAkkers() {
+  const metBoer = { x: 0, y: 0, b: 2, h: 3, huis: 'boer1', geoogst: new Set() };
+  const zonder = { x: 10, y: 0, b: 1, h: 4, huis: 'niemand', geoogst: new Set() };
+  const boer = { tx: 5, ty: 5, dood: false, pad: [], werkAkkers: [metBoer] };
+  const S = { wereld: { wezens: [boer], akkers: [metBoer, zonder] }, tijd: 0, kalender: { dag: 0 }, voorraad: T.nieuweVoorraad() };
+  return { S, metBoer, zonder, boer };
+}
+
+test('T.haalOogstBinnen: wat na de oogsttijd nog staat, komt alsnog binnen, maar niet zonder boer', () => {
+  const { S, metBoer, zonder } = tweeAkkers();
+  metBoer.geoogst.add('0,0'); // die had hij al gemaaid (en dat graan is al binnen)
+  const tegels = T.haalOogstBinnen(S);
+  assert.equal(tegels, 5);
+  assert.equal(S.voorraad.graan, 5 * T.GRAAN_PER_TEGEL);
+  assert.equal(metBoer.geoogst.size, 6);
+  assert.equal(zonder.geoogst.size, 0, 'een akker zonder boer rot nog wel: niemand haalt hem binnen');
+  // Nog een keer levert niets meer op: het staat er niet meer.
+  assert.equal(T.haalOogstBinnen(S), 0);
+  assert.equal(S.voorraad.graan, 5 * T.GRAAN_PER_TEGEL);
+});
+
+test('T.tikAkkersDag: het vangnet valt op 1 herfstmaand, de eerste dag na de oogsttijd', () => {
+  const { S } = tweeAkkers();
+  T.tikAkkersDag(S, dagVan('oogstmaand', 30));
+  assert.equal(S.voorraad.graan, 0);
+  T.tikAkkersDag(S, dagVan('herfstmaand', 1));
+  assert.equal(S.voorraad.graan, 6 * T.GRAAN_PER_TEGEL);
+});
+
+test('T.zaaiAkkers: genoeg zaaigraan, dan gaat alles de grond in en ligt er niets braak', () => {
+  const { S, metBoer, zonder } = tweeAkkers();
+  T.zetVoorraad(S, 'graan', 50);
+  const r = T.zaaiAkkers(S);
+  assert.deepEqual(r, { tegels: 10, gezaaid: 10, braak: 0, graan: 10 * T.ZAAIGRAAN_PER_TEGEL });
+  assert.equal(S.voorraad.graan, 50 - 10 * T.ZAAIGRAAN_PER_TEGEL);
+  assert.equal(metBoer.braak.size + zonder.braak.size, 0);
+});
+
+test('T.zaaiAkkers: te weinig zaaigraan, dan ligt het verste stuk van elke akker braak', () => {
+  const { S, metBoer, zonder } = tweeAkkers();
+  T.zetVoorraad(S, 'graan', 5 * T.ZAAIGRAAN_PER_TEGEL); // voor de helft van de tien tegels
+  const r = T.zaaiAkkers(S);
+  assert.equal(r.gezaaid, 5);
+  assert.equal(r.braak, 5);
+  assert.equal(S.voorraad.graan, 0);
+  // Naar rato: 6 en 4 tegels worden 3 en 2 gezaaid, elk gezin een deel.
+  assert.equal(metBoer.braak.size, 3);
+  assert.equal(zonder.braak.size, 2);
+  // Braak ligt achteraan (T.akkerTegels telt vanaf de hoek), dus de hoek zelf is gezaaid.
+  assert.ok(!metBoer.braak.has('0,0'));
+  assert.ok(metBoer.braak.has('1,2'));
+  // Een braak tegel groeit niet en valt niet te maaien.
+  assert.equal(T.akkerTegelStadium(metBoer, 1, 2, 'rijp'), 'geploegd');
+  assert.equal(T.akkerTegelStadium(metBoer, 0, 0, 'rijp'), 'rijp');
+  assert.equal(T.akkerOnbeslistTegels(metBoer).length, 3);
+  // En het vangnet haalt ook alleen binnen wat gezaaid was.
+  assert.equal(T.haalOogstBinnen(S), 3);
+});
+
+test('T.zaaiAkkers: zonder graan ligt alles braak, en de oogst van vorig jaar is vergeten', () => {
+  const { S, metBoer, zonder } = tweeAkkers();
+  metBoer.geoogst.add('0,0');
+  const r = T.zaaiAkkers(S);
+  assert.equal(r.gezaaid, 0);
+  assert.equal(metBoer.braak.size + zonder.braak.size, 10);
+  assert.equal(metBoer.geoogst.size, 0);
+});
+
+test('T.tikAkkersDag: het eerste jaar is al gezaaid, vanaf het tweede kost zaaien graan', () => {
+  const { S, metBoer } = tweeAkkers();
+  T.zetVoorraad(S, 'graan', 100);
+  T.tikAkkersDag(S, 0); // 1 lentemaand van het eerste jaar
+  assert.equal(S.voorraad.graan, 100);
+  assert.equal(metBoer.braak, undefined);
+  T.tikAkkersDag(S, dagVan('lentemaand', 1, 1)); // een jaar later
+  assert.equal(S.voorraad.graan, 100 - 10 * T.ZAAIGRAAN_PER_TEGEL);
+  assert.equal(metBoer.braak.size, 0);
+  T.tikAkkersDag(S, dagVan('lentemaand', 2, 1)); // de dag erna niet nog eens
+  assert.equal(S.voorraad.graan, 100 - 10 * T.ZAAIGRAAN_PER_TEGEL);
+});

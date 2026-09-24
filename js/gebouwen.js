@@ -581,7 +581,10 @@
   // dag aan) zodat hij ook in een toets in één keer op een vaste dag te proberen is.
   T.tikGebouwenDag = function (S, dag) {
     const IN = T.GEBOUWEN_INSTELLINGEN;
-    // 0. Behoeften: eten, brandhout en een kerk, en de tevredenheid die daaruit volgt
+    // 0. De akkers (js/akkers.js): zaaien op 1 lentemaand, en het vangnet na de oogsttijd. Als
+    // eerste: de boeren zaaien 's morgens, en daarna eet het dorp van wat er over is.
+    if (T.tikAkkersDag) T.tikAkkersDag(S, dag);
+    // Behoeften: eten, brandhout en een kerk, en de tevredenheid die daaruit volgt
     // (js/behoeften.js, T.tikBehoeftenDag) — vóór de rest, zodat stap 4 en 6 hieronder de
     // tevredenheid van vandaag gebruiken. Zacht gekoppeld (net als T.ui hieronder): zonder
     // js/behoeften.js geladen (bijvoorbeeld in een toets die alleen gebouwen.js laadt) blijft
