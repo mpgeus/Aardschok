@@ -86,11 +86,11 @@
   // Leeg sinds 24 sep 2026: De koude oven, de eerste quest, hoorde bij De laatste klim (de toren,
   // de vuurschicht) en ging er met punt 7 van de werklijst uit. Hij staat nog in `git log` als
   // voorbeeld. De quests van het nieuwe spel komen hier, in dezelfde vorm (zie hierboven).
+  // T.RAAKPUNTEN (een ding dat een spreuk kan raken) is leeg omdat er geen spreuken meer zijn; het
+  // blok blijft staan, want gereedschap/quests-tool.js schrijft alleen terug als beide er zijn.
   T.QUESTS = {
   };
 
-  // Een raakpunt is een ding dat een spreuk kan raken; zonder spreuken is er geen. Het blok blijft
-  // staan, want gereedschap/quests-tool.js schrijft alleen terug als beide blokken er zijn.
   T.RAAKPUNTEN = {
   };
 })(globalThis.Toren = globalThis.Toren || {});

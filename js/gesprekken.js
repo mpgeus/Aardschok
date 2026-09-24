@@ -49,9 +49,9 @@
 (function (T) {
   'use strict';
 
+  // Leeg sinds 24 sep 2026 (werklijst punt 7): de gesprekken van De laatste klim gingen over de
+  // toren, de meester en De koude oven. De mensen van het dorp zelf staan nog in js/mensen.js;
+  // hun gesprekken voor het nieuwe spel komen hier, in de vorm die bovenaan staat.
   T.GESPREKKEN = {
-    // Leeg sinds 24 sep 2026 (werklijst punt 7): de gesprekken van De laatste klim gingen over de
-    // toren, de meester en De koude oven. De mensen van het dorp zelf staan nog in js/mensen.js;
-    // hun gesprekken voor het nieuwe spel komen hier, in de vorm die bovenaan staat.
   };
 })(globalThis.Toren = globalThis.Toren || {});

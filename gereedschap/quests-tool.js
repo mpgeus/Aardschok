@@ -189,8 +189,17 @@
       if (commentaar) { buffer.push(commentaar[1]); continue; }
       if (/T\.QUESTS\s*=/.test(regel) || /T\.RAAKPUNTEN\s*=/.test(regel)) {
         waar = /T\.QUESTS/.test(regel) ? 'quests' : 'raakpunten';
+        // Commentaar vóór een blok staat in de kop of tussen de blokken, en die gaan letterlijk
+        // mee terug (RUWE_KOP, RUWE_TUSSEN): dat raakt niet kwijt.
+        buffer = [];
+        continue;
+      }
+      // Het einde van een blok: commentaar dat nog in de buffer zit, stond onderaan ín het blok, na
+      // de laatste quest, en dát gaat bij het opslaan verloren.
+      if (waar && /^ {2}\};/.test(regel)) {
         leg(null);
         buffer = [];
+        waar = null;
         continue;
       }
       // vier spaties: een quest of een raakpunt; acht: een fase; twaalf: een weg. Dezelfde
@@ -207,7 +216,7 @@
         leg(fId ? T.QUESTS[qId].fasen[fId] : null);
       } else if (drie && waar === 'quests' && fId && T.QUESTS[qId]) {
         leg((T.QUESTS[qId].fasen[fId].wegen || {})[drie[1]]);
-      } else {
+      } else if (waar) {
         leg(null);
       }
       buffer = [];
