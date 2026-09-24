@@ -1109,6 +1109,120 @@
        "herhaal": true
       }
      }
+    },
+    "heer": {
+     "naam": "heer",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.55,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "heer-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "heer-lopen.png",
+       "beelden": 8,
+       "fps": 20,
+       "herhaal": true,
+       "snelheid": 1.55,
+       "stap": 0.31
+      }
+     }
+    },
+    "soldaat": {
+     "naam": "soldaat",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "soldaat-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "soldaat-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6
+      }
+     }
+    },
+    "inner": {
+     "naam": "inner",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "inner-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "inner-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6
+      }
+     }
     }
    },
    "muren": {

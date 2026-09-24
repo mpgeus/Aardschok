@@ -70,17 +70,20 @@
     marskramer: { naam: 'de marskramer', snelheid: 1.4, straal: 2, vel: 'wim' },
 
     // De heer en zijn soldaten (js/heer.js): ze komen op Sint-Maarten over de weg, en niet op een
-    // kaart. Hun eigen vellen, en de koets, zijn tekenwerk. Tot die tijd leent de heer de rode
-    // mantel met goud van de meester, en lenen de soldaten de smid: groot, kaal, en iets zwaars in
-    // de hand. Twee soldaten zijn twee keer dezelfde mens; dat mag, want ze staan op geen kaart.
+    // kaart. Sinds 24 sep hebben ze hun eigen vellen, in rood en geel, het huis van de heer
+    // (gereedschap/pixelart/heer.cjs, ontwerp/beeld.md): de heer klein en dik onder een veel te
+    // grote hoed, de soldaten groot en zwaar met een hellebaard. De koets is nog tekenwerk. Twee
+    // soldaten zijn twee keer dezelfde mens; dat mag, want ze staan op geen kaart.
     // `bezoeker`: hij komt over de weg en staat op geen kaart, dus de controle in
     // gereedschap/wereld.html vraagt niet waar hij staat.
-    heer: { naam: 'de heer', snelheid: 1.55, straal: 1, vel: 'meester', bezoeker: true },
-    soldaat: { naam: 'een soldaat', snelheid: 1.5, straal: 2, vel: 'smid', bezoeker: true },
-    // De inner (js/inner.js): de man van de heer die in oogstmaand komt tellen. Zijn eigen vel is
-    // tekenwerk; tot die tijd leent hij het zondagse pak van de bruidegom, die op geen kaart van
-    // het gehucht staat.
-    inner: { naam: 'de inner', snelheid: 1.5, straal: 1, vel: 'bruidegom', bezoeker: true },
+    // Hun loopvellen (heer.cjs) zijn op deze snelheden gemaakt. Glijden doen hun voeten nooit (het
+    // spel telt de pas uit de afgelegde weg, js/sprites.js), maar met een andere snelheid stappen
+    // ze vlugger of trager dan bedoeld: render de vellen dan opnieuw.
+    heer: { naam: 'de heer', snelheid: 1.55, straal: 1, vel: 'heer', bezoeker: true },
+    soldaat: { naam: 'een soldaat', snelheid: 1.5, straal: 2, vel: 'soldaat', bezoeker: true },
+    // De inner (js/inner.js): de man van de heer die in oogstmaand komt tellen. Mager en sober in
+    // het donker, met een rekenboek onder de arm; alleen zijn hozen dragen de livrei.
+    inner: { naam: 'de inner', snelheid: 1.5, straal: 1, vel: 'inner', bezoeker: true },
 
     // En de vaklieden die wel een haakje hebben in wereld.md maar nog geen tekening: zij zijn
     // zolang een gewone dorpeling, want die vellen bestaan al (zie de werklijst, fase B2b).

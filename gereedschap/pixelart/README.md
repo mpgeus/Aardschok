@@ -52,6 +52,9 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   jagershut, het huis van de dorpsoudste, het bruggetje en de vijver.
 - `dorpelingen.cjs`, `dorpelingen2.cjs` en `dorpelingen3.cjs`: negentien dorpelingen, van de smid
   tot de kleuter, plus `dorpeling(zaad)` die uit elk zaad een andere gewone dorpeling maakt.
+- `heer.cjs`: het huis van de heer, in rood en geel: de heer, de soldaat en de inner, met staan en
+  lopen (`node dorpelingen-anim.cjs heer soldaat inner`, daarna
+  `node naar-spel.cjs --alleen heer,soldaat,inner`).
 - `bosvijanden.cjs`: wolf, reuzenspin en kobold, met houdingen (`bosvijanden-anim.cjs`).
 - `toren.cjs`: de toren van de oude meester in drie staten, met een eigen renderer voor zijn
   hoogte, en `toren-lagen.cjs` dat hem in lagen snijdt voor het spel.
