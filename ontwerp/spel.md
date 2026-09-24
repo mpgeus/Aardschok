@@ -295,6 +295,42 @@ Hoe het samen draait (voorstel): mensen komen als er ruimte, eten en rust is; el
 handen; wat het maakt, gaat naar de voorraad of naar het volgende gebouw; en alles wat je bouwt,
 ziet de inner, behalve wat verstopt is.
 
+## Handel: de marskramer (Marcel, 24 sep 2026)
+
+Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
+
+- **Hij komt drie keer per jaar,** op vaste tijden: in grasmaand, hooimaand en wijnmaand, telkens
+  zo'n tien dagen. Hij komt over de weg binnen, staat op de brink en loopt dan weer weg. **In de
+  winter komt hij niet,** want dan zijn de wegen slecht. Zout en ijzer voor de winter koop je dus
+  in wijnmaand.
+- **Je loopt naar hem toe en praat met hem.** Vanuit het gesprek open je het handelsvenster, en
+  zolang dat open is, staat de kalender stil. Hij heeft maar zoveel geld bij zich en zoveel plaats
+  in zijn mars, dus je kunt niet alles in één keer kwijt.
+- **De prijs verschilt per bezoek.** Na de oogst is graan goedkoop, in de lente duur. Wie graan
+  door Sint-Maarten heen houdt (en verstopt), verkoopt het in de lente voor het dubbele. Zo hoort
+  handel bij de kern en is het geen losse winkel.
+- **Een gebouw maakt alleen zoveel als zijn grondstof toelaat.** Tot 24 sep maakte een smidse
+  zonder ijzer toch gereedschap, en maalde een molen zonder graan toch meel. Een gebouw dat
+  stilstaat, zegt waarom.
+- **De smidse kan al in het gehucht.** Eerst ben je voor ijzer van de marskramer afhankelijk; de
+  ertsgraver (bij het dorp) maakt je later vrij.
+- **Gereedschap laat sneller werken, en slijt.** Met gereedschap in de voorraad werkt iedereen
+  harder. Het slijt langzaam, dus je blijft de smidse nodig hebben.
+- **Zout bewaart vis en vlees.** Zonder zout bederft er elke dag een deel van.
+- **Stenen komen later, met een kar.** Een marskramer draagt zijn waar op zijn rug: zout en een
+  staaf ijzer passen erin, een lading stenen niet. Bij de trede dorp komt er een voerman met een
+  kar. Zo groeit de handel mee met het dorp: de marskramer in het gehucht, de voerman in het dorp,
+  en de weekmarkt bij marktrecht.
+
+**Voor later** (voorstel van Claude, nog niet gebouwd):
+
+- Het slachten in slachtmaand (de naam zegt het al): wat je dan niet zout, moet je meteen opeten,
+  anders gaat het verloren.
+- De marskramer komt ook op het kasteel. Hij kan je beste hulp zijn, want hij koopt wat de inner
+  niet mag zien. Hij kan je ook verraden, want daar vertelt hij wat hij van je kocht. Dat hoort bij
+  punt 6 (verstoppen) en punt 10 (verklikkers).
+- Met gereedschap zou ook de oogst sneller kunnen gaan: ijzeren sikkels en zeisen.
+
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
 De ruggengraat staat of wordt gebouwd: bouwen, mensen, werk, kalender, voorraad. Wat er nog mist,

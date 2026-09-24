@@ -62,8 +62,11 @@ nog nodig is".
    eten, brandhout en een kerk willen, tevredenheid bepaalt hoe hard ze werken en of ze blijven,
    een huis groeit (hut, huis, stenen huis) als zijn bewoners krijgen wat ze willen, en een winter
    zonder brandhout of voorraad mensen kost.
-4. **Handel.** Klaar als er een marskramer langskomt die ijzer, zout en stenen verkoopt en koopt
-   wat je over hebt, en de smidse zonder ijzer stilvalt.
+4. **Handel.** Klaar als de marskramer drie keer per jaar langskomt (niet in de winter), ijzer en
+   zout verkoopt en koopt wat je over hebt, tegen een prijs die per bezoek verschilt; een gebouw
+   alleen maakt wat zijn grondstof toelaat, zodat de smidse zonder ijzer stilvalt; gereedschap
+   sneller werk geeft en slijt; en zout vis en vlees bewaart. Besloten op 24 sep, zie `spel.md`,
+   "Handel". Stenen komen niet van hem maar bij punt 14, met een voerman met een kar.
 
 *B. De heer, en de kern (dit is het tweede proefje)*
 
@@ -102,7 +105,8 @@ nog nodig is".
 *E. Groeien naar vrijheid*
 
 14. **De treden.** Klaar als het gehucht een dorp wordt, dan marktrecht krijgt (markt, kramen,
-    handelaars) en een stad wordt, met schepenen die stemmen.
+    handelaars) en een stad wordt, met schepenen die stemmen. Met het dorp komt de voerman met
+    een kar, die stenen brengt (`spel.md`, "Handel").
 15. **Stadsrechten kopen.**
 16. **De opstand:** trainen, wapens verbergen, en het gevecht in beurten.
 
