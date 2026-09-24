@@ -134,7 +134,8 @@
   // invullen bij de eigenschap "wezen". Wie wil weten wat er te plaatsen valt, vraagt het hier.
   T.WEZENS = WEZENS;
 
-  T.hoofdletter = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+  // "ij" is in het Nederlands één letter: ijzer wordt IJzer, niet Ijzer.
+  T.hoofdletter = (s) => (/^ij/.test(s) ? 'IJ' + s.slice(2) : s.charAt(0).toUpperCase() + s.slice(1));
   T.tegelVan = (e) => ({ x: e.tx, y: e.ty });
   // Afstand in stappen: schuin telt als één stap, net als bij het lopen.
   T.afstand = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
