@@ -75,7 +75,7 @@ const VELCONFIG = {
   grond: { capaciteit: 160, kolommen: 4 }, // nu 58 (3 grondsoorten × 19 + water): vijf soorten erbij kan
   bomen: { capaciteit: 32, kolommen: 8 }, // nu 7: vijfentwintig boomsoorten erbij kan
   begroeiing: { capaciteit: 40, kolommen: 8 }, // nu 10: dertig planten erbij kan
-  gebouwen: { capaciteit: 96, kolommen: 8 }, // nu 27, en daar kwamen er vandaag al twaalf van: een heel dorp moet erin passen
+  gebouwen: { capaciteit: 96, kolommen: 8 }, // nu 28 (het vakwerkhuis uit huis-sdf.cjs erbij), en op 20 sep kwamen er in één keer twaalf: een heel dorp moet erin passen
   toren: { capaciteit: 8, kolommen: 4 }, // nu 1 (er is er maar één); een beetje lucht is vrijwel gratis
   erf: { capaciteit: 24, kolommen: 8 }, // nu 7: nog een stuk of zeventien erfstukken erbij kan
   tuin: { capaciteit: 48, kolommen: 8 }, // nu 33 (tuin-sdf.cjs se STUKKEN): ruim voor een derde hek of meer groente
@@ -482,6 +482,16 @@ function gebouwenLijst() {
   return lijst;
 }
 
+// De huizen die niet waterpas zijn (huis-sdf.cjs, ronde 4b van de huizenbouwer). Die komen niet uit
+// dorp.cjs en tekenen dus niet met zetGebouw: bouwfasen-sdf.cjs rendert ze, als de laatste fase
+// ('af') van hun bouw, in hetzelfde beeld als de fases ervoor. Zo vallen de muren van de tegel en
+// van elke fase op dezelfde pixels, met hetzelfde anker. maakFn geeft { plaat, hoek, beslaat }:
+// hoek is de achterste voethoek op die plaat.
+function sdfGebouwenLijst() {
+  const Bf = veilig('bouwfasen-sdf.cjs', () => require('./bouwfasen-sdf.cjs'));
+  return Bf ? [[Bf.TEGEL_NAAM, () => Bf.afgewerkt()]] : [];
+}
+
 function bouwGebouwenVel() {
   const { capaciteit, kolommen } = VELCONFIG.gebouwen;
   const RAND = 6;
@@ -497,6 +507,26 @@ function bouwGebouwenVel() {
     });
     if (gelukt) metingen.push(gelukt);
   }
+  // Een huis dat niet waterpas is, wordt één keer gerenderd en op de plaat zelf gemeten, met
+  // dezelfde maten als meetGebouw (vanaf de achterste voethoek), en straks alleen verplaatst.
+  for (const [naam, maak] of sdfGebouwenLijst()) {
+    const gelukt = veilig(naam, () => {
+      const { plaat, hoek, beslaat } = maak();
+      const [hx, hy] = hoek;
+      let x0 = 1e9, x1 = -1, y0 = 1e9, y1 = -1;
+      for (let y = 0; y < plaat.h; y++) {
+        for (let x = 0; x < plaat.b; x++) {
+          if (plaat.px[(y * plaat.b + x) * 2] < 0) continue;
+          if (x < x0) x0 = x;
+          if (x > x1) x1 = x;
+          if (y < y0) y0 = y;
+          if (y > y1) y1 = y;
+        }
+      }
+      return { naam, plaat, hoek, beslaat, m: { links: hx - x0 + 1, rechts: x1 - hx + 1, boven: hy - y0 + 1, onder: y1 - hy + 1 } };
+    });
+    if (gelukt) metingen.push(gelukt);
+  }
   if (!metingen.length) return null;
   const links = Math.max(...metingen.map((i) => i.m.links)) + RAND;
   const rechts = Math.max(...metingen.map((i) => i.m.rechts)) + RAND;
@@ -509,7 +539,13 @@ function bouwGebouwenVel() {
 
   const items = [];
   for (const it of metingen) {
-    const p = veilig(it.naam, () => gebouwLos(it.maak(), cb, ch, [ankerX, ankerY], it.m.hoek));
+    const p = veilig(it.naam, () => {
+      if (!it.plaat) return gebouwLos(it.maak(), cb, ch, [ankerX, ankerY], it.m.hoek);
+      // al gerenderd: alleen verplaatsen, de achterste voethoek op (ankerX, ankerY)
+      const cel = new K.Plaat(cb, ch);
+      cel.plak(it.plaat, ankerX - it.hoek[0], ankerY - it.hoek[1]);
+      return cel;
+    });
     if (!p) continue;
     // Het anker van een gebouw is zijn achterste voethoek; die ligt een halve tegel boven het
     // midden van zijn tegel, en het spel tekent op dat midden (zie `anker` onderaan).

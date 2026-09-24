@@ -1,0 +1,403 @@
+// Gemaakt door gereedschap/pixelart/bouwfasen-sdf.cjs — niet met de hand bijwerken.
+// Dezelfde inhoud als bouwfasen-sdf.json, als script, zodat file:// het ook kan lezen. Wordt ná
+// tegels/bouwfasen.js geladen en voegt één type toe aan T.BOUWFASEN; het vervangt niets.
+(function (T) {
+  T.BOUWFASEN = T.BOUWFASEN || { fasen: {} };
+  T.BOUWFASEN.fasen.huisVakwerkRiet = {
+   "_lees_dit": "Een vakwerkhuis met riet in aanbouw, gemaakt door gereedschap/pixelart/bouwfasen-sdf.cjs (huis-sdf.cjs zaad 4) — niet met de hand bijwerken. Afgewerkt is het de tegel \"huisVakwerkRiet\" in tegels/gebouwen.tsx, uit dezelfde render: zelfde anker, zelfde muren. Per fase (0..5, oplopend in afbouw): x/y/b/h snijdt de cel uit bestand, anker is het punt in die cel dat op T.naarScherm(x, y) van de aangeklikte tegel komt (de achterste voethoek, een halve tegel boven het midden van die tegel, zoals tegels.json), vanaf is de voortgang (0..1) waarop de fase begint, en bezet zijn de ringtegels [dx, dy] waar dan een stapel of de leemkuil ligt, gerekend vanaf de achterste voettegel (dx van -rand tot beslaat[0]-1+rand, dy net zo; +x en +y liggen vooraan). De steiger staat op de rij dy = beslaat[1] maar is niet bezet: daaronder loop je door. rand is hoe breed de ring is; alles van de bouwplaats valt daarbinnen. hoogstePunt is de fase waarin de kap staat (de meiboom, het pannenbier).",
+   "gebouw": "huis",
+   "bestand": "bouwfasen-sdf.png",
+   "beslaat": [
+    7,
+    5
+   ],
+   "rand": 1,
+   "hoogstePunt": 3,
+   "fasen": [
+    {
+     "x": 0,
+     "y": 0,
+     "b": 492,
+     "h": 509,
+     "anker": [
+      211,
+      313
+     ],
+     "naam": "uitzetten",
+     "vanaf": 0,
+     "bezet": [
+      [
+       0,
+       -1
+      ],
+      [
+       1,
+       -1
+      ],
+      [
+       2,
+       -1
+      ],
+      [
+       3,
+       -1
+      ],
+      [
+       4,
+       -1
+      ],
+      [
+       5,
+       -1
+      ],
+      [
+       6,
+       -1
+      ],
+      [
+       7,
+       0
+      ],
+      [
+       -1,
+       1
+      ],
+      [
+       7,
+       1
+      ],
+      [
+       -1,
+       2
+      ],
+      [
+       7,
+       2
+      ],
+      [
+       -1,
+       3
+      ],
+      [
+       7,
+       3
+      ],
+      [
+       -1,
+       4
+      ],
+      [
+       7,
+       4
+      ]
+     ]
+    },
+    {
+     "x": 492,
+     "y": 0,
+     "b": 492,
+     "h": 509,
+     "anker": [
+      211,
+      313
+     ],
+     "naam": "voet",
+     "vanaf": 0.06,
+     "bezet": [
+      [
+       0,
+       -1
+      ],
+      [
+       1,
+       -1
+      ],
+      [
+       2,
+       -1
+      ],
+      [
+       3,
+       -1
+      ],
+      [
+       4,
+       -1
+      ],
+      [
+       5,
+       -1
+      ],
+      [
+       6,
+       -1
+      ],
+      [
+       7,
+       0
+      ],
+      [
+       -1,
+       1
+      ],
+      [
+       7,
+       1
+      ],
+      [
+       -1,
+       2
+      ],
+      [
+       7,
+       2
+      ],
+      [
+       -1,
+       3
+      ],
+      [
+       7,
+       3
+      ],
+      [
+       -1,
+       4
+      ],
+      [
+       7,
+       4
+      ]
+     ]
+    },
+    {
+     "x": 984,
+     "y": 0,
+     "b": 492,
+     "h": 509,
+     "anker": [
+      211,
+      313
+     ],
+     "naam": "gebint",
+     "vanaf": 0.2,
+     "bezet": [
+      [
+       0,
+       -1
+      ],
+      [
+       1,
+       -1
+      ],
+      [
+       2,
+       -1
+      ],
+      [
+       3,
+       -1
+      ],
+      [
+       4,
+       -1
+      ],
+      [
+       6,
+       -1
+      ],
+      [
+       7,
+       0
+      ],
+      [
+       -1,
+       1
+      ],
+      [
+       7,
+       1
+      ],
+      [
+       -1,
+       2
+      ],
+      [
+       7,
+       2
+      ],
+      [
+       -1,
+       3
+      ],
+      [
+       7,
+       3
+      ],
+      [
+       -1,
+       4
+      ],
+      [
+       7,
+       4
+      ]
+     ]
+    },
+    {
+     "x": 1476,
+     "y": 0,
+     "b": 492,
+     "h": 509,
+     "anker": [
+      211,
+      313
+     ],
+     "naam": "kap",
+     "vanaf": 0.4,
+     "bezet": [
+      [
+       6,
+       -1
+      ],
+      [
+       7,
+       0
+      ],
+      [
+       -1,
+       1
+      ],
+      [
+       7,
+       1
+      ],
+      [
+       -1,
+       2
+      ],
+      [
+       7,
+       2
+      ],
+      [
+       -1,
+       3
+      ],
+      [
+       7,
+       3
+      ],
+      [
+       -1,
+       4
+      ],
+      [
+       7,
+       4
+      ]
+     ]
+    },
+    {
+     "x": 1968,
+     "y": 0,
+     "b": 492,
+     "h": 509,
+     "anker": [
+      211,
+      313
+     ],
+     "naam": "riet",
+     "vanaf": 0.52,
+     "bezet": [
+      [
+       6,
+       -1
+      ],
+      [
+       7,
+       0
+      ],
+      [
+       -1,
+       1
+      ],
+      [
+       7,
+       1
+      ],
+      [
+       -1,
+       2
+      ],
+      [
+       7,
+       2
+      ],
+      [
+       -1,
+       3
+      ],
+      [
+       7,
+       3
+      ],
+      [
+       -1,
+       4
+      ],
+      [
+       7,
+       4
+      ]
+     ]
+    },
+    {
+     "x": 2460,
+     "y": 0,
+     "b": 492,
+     "h": 509,
+     "anker": [
+      211,
+      313
+     ],
+     "naam": "leem",
+     "vanaf": 0.8,
+     "bezet": [
+      [
+       6,
+       -1
+      ],
+      [
+       7,
+       0
+      ],
+      [
+       -1,
+       1
+      ],
+      [
+       7,
+       1
+      ],
+      [
+       -1,
+       2
+      ],
+      [
+       -1,
+       3
+      ],
+      [
+       -1,
+       4
+      ],
+      [
+       7,
+       4
+      ]
+     ]
+    }
+   ]
+  };
+})(globalThis.Toren = globalThis.Toren || {});

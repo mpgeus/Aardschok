@@ -71,7 +71,10 @@
     huis: {
       naam: 'huis', trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 4 }, bouwtijd: 12,
       handen: 0, woonruimte: 5, wordt: 'stenenHuis', maakt: null, verdacht: false, menu: true,
-      tekening: 'gebouwen/dorpshuis1', beschrijving: 'ruimte voor meer mensen', opmerking: '',
+      tekening: 'gebouwen/huisVakwerkRiet', beschrijving: 'ruimte voor meer mensen',
+      opmerking: 'Het eerste huis uit de huizenbouwer die niet waterpas is (huis-sdf.cjs, zaad 4), met zijn '
+        + 'zes bouwfases en een bouwplaats in een ring rond de voet (tegels/bouwfasen-sdf.js; Marcel, '
+        + '24 sep: eerst dit ene huis in het spel). De andere types volgen langs dezelfde weg.',
     },
     boerderij: {
       naam: 'boerderij', trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, bouwtijd: 15,

@@ -1,8 +1,12 @@
 'use strict';
 // bouwfasen-sdf.cjs: een huis in aanbouw, uit de huizenbouwer die niet waterpas is (huis-sdf.cjs).
 //
-//   node gereedschap/pixelart/bouwfasen-sdf.cjs             alles: het vel en de twee proefplaten
+//   node gereedschap/pixelart/bouwfasen-sdf.cjs             alles: het vel in tegels/ en de proefplaten
 //   node gereedschap/pixelart/bouwfasen-sdf.cjs fase <n>    één fase (1..7), om te kijken
+//   node gereedschap/pixelart/bouwfasen-sdf.cjs ring        alleen de controle van de ring, zonder beeld
+//
+// Het afgewerkte huis (fase 7) staat als tegel `huisVakwerkRiet` in tegels/gebouwen.tsx; dat maakt
+// naar-tiled.cjs, met afgewerkt() hieronder, uit dezelfde render in hetzelfde beeld.
 //
 // Waarom (ontwerp/beeld.md, "Bouwen: een huis dat groeit", "Nog steeds nep"): de fases uit
 // bouwfasen.cjs staan op de rechte huis() van dorp.cjs, en een recht huis blijft nep hoe je het ook
@@ -45,12 +49,19 @@
 // (ring() en vlak() rekenen nu met één vleugel); bij veldsteen, planken of een blokhut een eigen
 // volgorde (beeld.md), met dezelfde bouwstenen (de plint in lagen, de steiger, de stapels).
 //
-// Uitvoer, alles in gereedschap/pixelart/uit/bouwfasen-sdf/ (nog niet in tegels/ of het spel):
-//   vel.png + vel.json   de zeven fases in cellen van dezelfde maat met hetzelfde anker (de
-//                        achterste voethoek, een halve tegel boven het midden van die tegel, zoals
-//                        tegels.json), zonder gras en zonder grondschaduw
-//   proef.png            alle fases op gras naast elkaar, zo groot als het spel ze tekent
-//   proef-x2.png         drie fases twee keer vergroot, voor de details
+// De bouwplaats past in één ring van tegels rond de voet (RING hieronder): het spel houdt die ring
+// vrij zolang er gebouwd wordt, en weet per fase welke ringtegels vol liggen.
+//
+// Uitvoer:
+//   tegels/bouwfasen-sdf.png   de fases 1..6 (niet 'af': dat is de tegel in gebouwen.png) in cellen
+//                              van dezelfde maat met hetzelfde anker (de achterste voethoek, een
+//                              halve tegel boven het midden van die tegel, zoals tegels.json), zonder
+//                              gras en zonder grondschaduw, met de vertrapte grond
+//   tegels/bouwfasen-sdf.json  per fase de cel, het anker, waar de fase begint (vanaf) en welke
+//   + .js                      ringtegels vol liggen (bezet); het .js voegt toe aan T.BOUWFASEN
+//   uit/bouwfasen-sdf/proef.png      alle zeven op gras naast elkaar, zo groot als het spel ze tekent
+//   uit/bouwfasen-sdf/proef-x2.png   drie fases twee keer vergroot, voor de details
+//   uit/bouwfasen-sdf/ringproef.png  alle zeven op gras met de ringtegels erbij (rood bezet, groen vrij)
 
 const fs = require('fs');
 const os = require('os');
@@ -77,6 +88,7 @@ const UIT = path.join(__dirname, 'uit', 'bouwfasen-sdf');
 // niet bij een nieuw. De uitbouwen staan er uitgeschreven, zodat andere kansen in huis-sdf.cjs dit
 // huis later niet veranderen.
 const ZAAD = 4;
+const TEGEL_NAAM = 'huisVakwerkRiet'; // zo heet het afgewerkte huis in tegels/gebouwen.tsx
 const SPEC = {
   vorm: 'rechthoek',
   b: 7,
@@ -491,45 +503,98 @@ function bundel(g, a, b, r, m, zaad, band = true) {
 
 // ---------------------------------------------------------------- de bouwplaats
 
-// Waar alles staat, in eenheden rond het midden van het huis (x langs de nok, y ernaar toe). De
-// camera kijkt van +x+y: de lange muur met de deur is de voorkant (links in beeld), de gevel met
-// het raam de rechterkant. De stapels liggen waar ze het huis niet verbergen: links voorbij de
-// linkerhoek, rechts voorbij de rechterhoek, en de leemkuil voor de gevel.
+// De bouwplaats past in één ring van tegels rond de voet: het spel houdt die ring vrij zolang er
+// gebouwd wordt (js/bouwen.js). Een ringtegel heet (dx, dy), gerekend vanaf de achterste voettegel:
+// dx van -1 tot b, dy van -1 tot d, en +x en +y liggen vooraan (de camera kijkt van +x+y). De lange
+// muur met de deur is de +y-kant (dy = d, links in beeld), de gevel met het raam de +x-kant (dx = b).
+//
+// Elke stapel ligt op vaste ringtegels (van, tot: een rechthoek, beide erbij), en ligt er zolang er
+// nog iets van over is: daar kan niemand lopen (`bezet` in tegels/bouwfasen-sdf.json). voorraad
+// zegt per fase (1..6) hoeveel er nog ligt; een stapel die slinkt, kan met `rest` op minder tegels
+// komen. Wat vroeg opgaat (sporen, balken, steen) ligt achter het huis: dat zie je zolang de muren
+// laag zijn, en daarna hoeft het niet meer. Wat laat opgaat (riet, tenen, leem) ligt voor de gevel,
+// waar je het ziet slinken. De hoektegels blijven leeg, want daar staan in fase 1 en 2 de paaltjes.
+//
+// De steiger staat op de rij dy = d maar is niet bezet: onder een steiger loop je door. Vooraan
+// (die rij en de kolom dx = b) blijft zo het meeste vrij: daar staan de bouwers, en de deur.
+const RING = {
+  // de ronde sporen voor de kap: drie onder, twee erop, langs de achtermuur
+  sporen: { van: [0, -1], tot: [4, -1], voorraad: [5, 5, 4, 0, 0, 0] },
+  // een lange hoop veldstenen achter de rechterhoek; wat na de voet overblijft, op één tegel
+  stenen: { van: [5, -1], tot: [6, -1], voorraad: [18, 9, 5, 4, 3, 3], rest: { van: [6, -1], tot: [6, -1], vanaf: 3 } },
+  // eiken balken met telmerken op twee klossen, achter de achtergevel: [onderste laag, erop]
+  balken: { van: [-1, 1], tot: [-1, 4], voorraad: [[3, 2], [3, 2], [2, 1], [2, 0], [1, 0], [1, 0]] },
+  // schoven riet, drie lagen, de stoppels om en om naar buiten
+  riet: { van: [7, 0], tot: [7, 1], voorraad: [[3, 2, 1], [3, 2, 1], [3, 2, 1], [3, 2, 1], [3, 1, 0], [1, 0, 0]] },
+  // bossen tenen voor het vlechtwerk in de vakken
+  tenen: { van: [7, 2], tot: [7, 3], voorraad: [4, 4, 4, 4, 2, 0] },
+  // de leemkuil, met de uitgegraven kluiten ertegen de gevel op
+  kuil: { van: [7, 4], tot: [7, 4], voorraad: [1, 1, 1, 1, 1, 1] },
+};
+const RAND = 1; // de ring is één tegel breed
+
+// hoeveel er van een stapel ligt in fase n (een getal, of het totaal van de lagen)
+const telVoorraad = (st, n) => [].concat(st.voorraad[n - 1]).reduce((a, b) => a + b, 0);
+// de tegels waar een stapel in fase n ligt: [van, tot]
+const stapelTegels = (st, n) => (st.rest && n >= st.rest.vanaf ? [st.rest.van, st.rest.tot] : [st.van, st.tot]);
+// de ringtegels die in fase n vol liggen, als [[dx, dy], ...]
+function bezet(n) {
+  const uit = new Map();
+  for (const st of Object.values(RING)) {
+    if (!telVoorraad(st, n)) continue;
+    const [van, tot] = stapelTegels(st, n);
+    for (let dx = van[0]; dx <= tot[0]; dx++) for (let dy = van[1]; dy <= tot[1]; dy++) uit.set(`${dx},${dy}`, [dx, dy]);
+  }
+  return [...uit.values()].sort((a, b) => a[1] - b[1] || a[0] - b[0]);
+}
+
+// Een rechthoek van ringtegels in de wereld (eenheden rond het midden van het huis, dat midden op
+// de voet valt): x0..x1, y0..y1, het midden c, de lengte langs de strook en de breedte erdwars,
+// en de hoek waaronder de strook ligt (0: langs x, 90°: langs y).
+function strook(van, tot) {
+  const X0 = (-SPEC.b / 2) * K.TEGEL;
+  const Y0 = (-SPEC.d / 2) * K.TEGEL;
+  const x0 = X0 + van[0] * K.TEGEL;
+  const y0 = Y0 + van[1] * K.TEGEL;
+  const x1 = X0 + (tot[0] + 1) * K.TEGEL;
+  const y1 = Y0 + (tot[1] + 1) * K.TEGEL;
+  const langsX = x1 - x0 >= y1 - y0;
+  return { x0, y0, x1, y1, c: [(x0 + x1) / 2, (y0 + y1) / 2], lang: Math.max(x1 - x0, y1 - y0), breed: Math.min(x1 - x0, y1 - y0), hoek: langsX ? 0 : 90 * GRAAD };
+}
+
+// Waar alles staat, in eenheden rond het midden van het huis (x langs de nok, y ernaar toe). Zo
+// geschreven voor een rechthoek met de nok langs x (SPEC), waar het stelsel van de vleugel dat van
+// de wereld is.
 function plaats(H) {
   const V = H.vleugels[0];
   const { ha, hq } = V;
+  // de buitenrand van de ring: daarbinnen valt alles van de bouwplaats
+  const omtrek = strook([-RAND, -RAND], [SPEC.b - 1 + RAND, SPEC.d - 1 + RAND]);
   return {
     V,
     ha,
     hq,
-    stenen: { c: [ha + 44, -hq + 6], r: 34 },
-    balken: { c: [-ha - 52, hq - 18], hoek: 90 * GRAAD },
-    riet: { c: [-ha + 10, hq + 78], hoek: 4 * GRAAD },
-    tenen: { c: [ha + 66, 12], hoek: 93 * GRAAD },
-    kuil: { c: [ha + 50, hq + 42], rx: 26, ry: 20 },
-    steiger: { u: [8, 66, 124], uit: 52, vloer: 86 },
+    omtrek,
+    stapel: (naam, n) => strook(...stapelTegels(RING[naam], n)),
+    // de steiger langs de lange muur, zijn staanders midden op de rij dy = d
+    steiger: { u: [8, 66, 124], uit: 34, vloer: 86 },
   };
 }
 
-// De grond: vertrapte aarde rond het huis en onder de stapels, met een rafelige rand, en de
-// leemkuil erin.
+// De grond: vertrapte aarde over de voet en de ring, met een rafelige rand die binnen de ring blijft
+// (de ruis duwt hem tot ruim tien eenheden naar buiten), en de leemkuil erin.
 function grond(W, H, B, fase) {
-  const { ha, hq } = B;
-  const K_ = B.kuil;
-  const vlekken = [
-    [0, 0, ha + 34, hq + 36, 40],
-    [B.stenen.c[0], B.stenen.c[1], 46, 44, 30],
-    [B.balken.c[0] + 6, B.balken.c[1] + 10, 42, 96, 30],
-    [B.riet.c[0] + 20, B.riet.c[1] - 10, 86, 40, 30],
-    [K_.c[0] - 6, K_.c[1] - 8, 50, 58, 30],
-  ];
+  const { omtrek } = B;
+  const sk = B.stapel('kuil', fase);
+  const K_ = { c: sk.c, rx: 13, ry: 14 }; // ry langs de gevel: daar is de tegel het ruimst
+  const vlekken = [[0, 0, (omtrek.x1 - omtrek.x0) / 2 - 15, (omtrek.y1 - omtrek.y0) / 2 - 15, 26]];
   const vorm = (x, y) => {
     let d = Infinity;
     for (const [cx, cy, hx, hy, r] of vlekken) d = Math.min(d, doos2(x - cx, y - cy, hx, hy, r));
     return d + (ruis2(x * 0.035, y * 0.035, H.zaad + 401) - 0.5) * 16 + (ruis2(x * 0.11, y * 0.11, H.zaad + 402) - 0.5) * 5;
   };
   const kuil = (x, y) => (Math.hypot((x - K_.c[0]) / K_.rx, (y - K_.c[1]) / K_.ry) - 1) * Math.min(K_.rx, K_.ry);
-  const kom = (x, y, z, e = 0) => sdf.ellipsoide(x - K_.c[0], y - K_.c[1], z, K_.rx + e, K_.ry + e, 10 + e);
+  const kom = (x, y, z, e = 0) => sdf.ellipsoide(x - K_.c[0], y - K_.c[1], z, K_.rx + e, K_.ry + e, 8 + e);
   const top = (x, y) => (ruis2(x * 0.09, y * 0.09, H.zaad + 403) - 0.5) * 0.7;
   const V = B.V;
   const binnen = (x, y) => Math.abs(x) < V.ha - 4 && Math.abs(y) < V.hq - 4;
@@ -542,29 +607,31 @@ function grond(W, H, B, fase) {
     deel: nieuwDeel(),
   });
   // de kuil: een kom in de grond, en het leem erin, nat, dat minder wordt
-  voeg(g, { f: (x, y, z) => Math.max(-kom(x, y, z), kom(x, y, z, 3), z), g: [K_.c[0], K_.c[1], -5, K_.rx + 8], m: 'kluit', deel: nieuwDeel() });
-  const peil = [-2, -3, -3.5, -4, -5, -7.5][fase - 1];
-  voeg(g, { f: (x, y, z) => Math.max(kom(x, y, z, -0.3), z - peil), g: [K_.c[0], K_.c[1], -5, K_.rx + 6], m: 'klei', deel: nieuwDeel() });
-  // de uitgegraven aarde ernaast: een lage wal van kluiten achter de kuil
+  const kg = W.groep('kuil');
+  voeg(kg, { f: (x, y, z) => Math.max(-kom(x, y, z), kom(x, y, z, 3), z), g: [K_.c[0], K_.c[1], -5, K_.rx + 8], m: 'kluit', deel: nieuwDeel() });
+  const peil = [-1.5, -2.2, -2.6, -3, -3.8, -5.6][fase - 1];
+  voeg(kg, { f: (x, y, z) => Math.max(kom(x, y, z, -0.3), z - peil), g: [K_.c[0], K_.c[1], -5, K_.rx + 6], m: 'klei', deel: nieuwDeel() });
+  // de uitgegraven aarde ernaast: een lage wal van kluiten tussen de kuil en de gevel (vanaf de
+  // camera erachter), die met het leem mee slinkt
   const wal = W.groep('kluiten');
-  const nK = fase <= 2 ? 14 : fase <= 4 ? 11 : 7;
+  const nK = fase <= 2 ? 10 : fase <= 4 ? 8 : 6;
   for (let i = 0; i < nK; i++) {
     const R = (k) => rnd(i, k, H.zaad + 411);
-    const t = 0.3 + (2.3 * i) / nK + (R(1) - 0.5) * 0.2;
-    const rr = 1.22 + 0.2 * R(2);
+    const t = -1.05 + (2.1 * i) / Math.max(1, nK - 1) + (R(1) - 0.5) * 0.16;
+    const rr = 1.12 + 0.14 * R(2);
     const c = [K_.c[0] - Math.cos(t) * K_.rx * rr, K_.c[1] - Math.sin(t) * K_.ry * rr, 0.6];
-    const sz = 2.6 + 2.4 * R(3);
+    const sz = 2.4 + 2.2 * R(3);
     voeg(wal, { f: (x, y, z) => sdf.ellipsoide(x - c[0], y - c[1], z - c[2], sz * 1.25, sz, sz * 0.55), g: [c[0], c[1], c[2], sz * 1.3 + 1], m: 'kluit', deel: nieuwDeel() });
   }
-  // graspollen die de rand van de bouwplaats breken, en een paar die binnen zijn blijven staan
+  // graspollen die de rand van de bouwplaats breken
   let np = 0;
-  for (let i = 0; i < 400 && np < 46; i++) {
+  for (let i = 0; i < 600 && np < 40; i++) {
     const R = (k) => rnd(i, k, H.zaad + 421);
-    const x = -300 + 600 * R(1);
-    const y = -240 + 480 * R(2);
+    const x = omtrek.x0 + (omtrek.x1 - omtrek.x0) * R(1);
+    const y = omtrek.y0 + (omtrek.y1 - omtrek.y0) * R(2);
     const v = vorm(x, y);
-    if (v > -1 || v < -9 - (i % 5 === 0 ? 20 : 0)) continue;
-    if (Math.abs(x) < V.ha + 26 && Math.abs(y) < V.hq + 26) continue;
+    if (v > -1.5 || v < -9 - (i % 5 === 0 ? 12 : 0)) continue;
+    if (Math.abs(x) < V.ha + 18 && Math.abs(y) < V.hq + 18) continue;
     if (kuil(x, y) < 8) continue;
     np++;
     const pollen = W.groep('pol');
@@ -573,7 +640,7 @@ function grond(W, H, B, fase) {
       const hoek = R(3 + j) * Math.PI * 2;
       const lang = 5 + 4 * R(10 + j);
       const vt = [x + Math.cos(hoek) * 1.2, y + Math.sin(hoek) * 1.2, -0.5];
-      const tp = [x + Math.cos(hoek) * lang * 0.55, y + Math.sin(hoek) * lang * 0.55, lang * 0.8];
+      const tp = [x + Math.cos(hoek) * lang * 0.5, y + Math.sin(hoek) * lang * 0.5, lang * 0.8];
       voeg(pollen, { f: (px, py, pz) => sdf.rondeKegel(px, py, pz, vt[0], vt[1], vt[2], tp[0], tp[1], tp[2], 1.1, 0.35), g: [(vt[0] + tp[0]) / 2, (vt[1] + tp[1]) / 2, (vt[2] + tp[2]) / 2, lang + 2], m: 'gras', deel: 900 });
     }
   }
@@ -618,58 +685,79 @@ function uitzetten(W, H, B, fase) {
   }
 }
 
-// Het hout op de stapel: eiken balken op twee klossen, met telmerken, en de ronde sporen ernaast.
+// Een plek op een strook: l langs de strook, d erdwars, z omhoog.
+function opStrook(S) {
+  const ca = Math.cos(S.hoek);
+  const sa = Math.sin(S.hoek);
+  return (l, d, z) => [S.c[0] + l * ca - d * sa, S.c[1] + l * sa + d * ca, z];
+}
+
+// Het hout op de stapel: eiken balken op twee klossen, met telmerken. Drie naast elkaar is zo breed
+// als een tegel toelaat; de tweede laag ligt in de voegen van de eerste.
 function balkenStapel(W, H, B, fase) {
+  const [n0, n1] = RING.balken.voorraad[fase - 1];
+  if (!n0 && !n1) return;
   const g = W.groep('balken');
-  const [cx, cy] = B.balken.c;
-  const h = B.balken.hoek;
-  const ca = Math.cos(h);
-  const sa = Math.sin(h);
-  const P = (l, d, z) => [cx + l * ca - d * sa, cy + l * sa + d * ca, z];
-  // wat er nog ligt: [balken in de onderste laag, in de tweede, ronde sporen]
-  const voorraad = [[5, 4, 5], [5, 4, 5], [3, 1, 4], [2, 0, 0], [1, 0, 0], [1, 0, 0]][fase - 1];
+  const S = B.stapel('balken', fase);
+  const P = opStrook(S);
   const lang = 150;
-  // de klossen
-  for (const l of [-lang * 0.3, lang * 0.3]) hout(g, P(l, -34, 3.2), P(l + 1.5, 36, 3.6), 4.2, 3.3, [0, 0, 1], 60 + l, 'stapelhout', 1.2);
-  const r = 7.2;
+  // de klossen, dwars onder de balken
+  for (const l of [-lang * 0.3, lang * 0.3]) hout(g, P(l, -19, 3.2), P(l + 1.5, 19, 3.6), 4.2, 3.3, [0, 0, 1], 60 + l, 'stapelhout', 1.2);
+  const r = 6.4;
+  const tussen = 2 * r + 1;
   let merk = 1;
-  const laag = (n, z0, d0, zaad) => {
+  const laag = (n, z0, zaad) => {
     for (let i = 0; i < n; i++) {
       const R = (k) => rnd(i, k, zaad);
-      const d = d0 + i * (2 * r + 1.6) + (R(1) - 0.5) * 2;
-      const l0 = -lang / 2 + (R(2) - 0.5) * 16;
-      const l1 = lang / 2 + (R(3) - 0.5) * 16;
-      const p = hout(g, P(l0, d, z0 + r + (R(4) - 0.5) * 0.8), P(l1, d + (R(5) - 0.5) * 3, z0 + r + (R(6) - 0.5) * 0.8), r, r * 0.95, [0, 0, 1], zaad * 10 + i, 'stapelhout', 1.4);
+      const d = (i - (n - 1) / 2) * tussen + (R(1) - 0.5) * 1.4;
+      const l0 = -lang / 2 + (R(2) - 0.5) * 12;
+      const l1 = lang / 2 + (R(3) - 0.5) * 12;
+      const p = hout(g, P(l0, d, z0 + r + (R(4) - 0.5) * 0.8), P(l1, d + (R(5) - 0.5) * 1.4, z0 + r + (R(6) - 0.5) * 0.8), r, r * 0.95, [0, 0, 1], zaad * 10 + i, 'stapelhout', 1.4);
       p.merk = 1 + (merk++ % 4);
     }
   };
-  const [n0, n1, nS] = voorraad;
-  laag(n0, 6.6, -30, 3);
-  if (n1) laag(n1, 6.6 + 2 * r, -23, 4);
-  // de sporen: lange ronde palen, naast de balken
-  for (let i = 0; i < nS; i++) {
+  laag(n0, 6.6, 3);
+  if (n1) laag(n1, 6.6 + 2 * r - 1.2, 4);
+}
+
+// De sporen voor de kap: lange ronde palen, drie op de grond en twee erop.
+function sporenStapel(W, H, B, fase) {
+  const n = RING.sporen.voorraad[fase - 1];
+  if (!n) return;
+  const g = W.groep('sporen');
+  const S = B.stapel('sporen', fase);
+  const P = opStrook(S);
+  const r = 4.4;
+  const lang = S.lang - 12;
+  for (let i = 0; i < n; i++) {
     const R = (k) => rnd(i, k, H.zaad + 521);
-    const d = 50 + i * 9.2;
-    const z = 4.6 + (i % 2) * 0.3;
-    paal(g, P(-118 + R(1) * 8, d, z), P(112 + R(2) * 8, d + (R(3) - 0.5) * 6, z + 0.4), 4.4, 90 + i);
+    const boven = i >= 3;
+    const j = boven ? i - 3 : i;
+    const d = boven ? (j - 0.5) * (2 * r + 0.6) : (j - 1) * (2 * r + 0.6);
+    const z = r + 0.2 + (boven ? 2 * r - 1.6 : 0) + (i % 2) * 0.3;
+    paal(g, P(-lang / 2 + R(1) * 6, d + (R(3) - 0.5) * 1.2, z), P(lang / 2 - R(2) * 6, d + (R(4) - 0.5) * 1.2, z + 0.4), r, 90 + i);
   }
 }
 
-// Een hoop veldstenen: ronde keien, grijs met een warme en een koele hier en daar.
+// Een hoop veldstenen: ronde keien, grijs met een warme en een koele hier en daar. Een lange hoop
+// op zijn strook, in het midden het hoogst.
 function stenenHoop(W, H, B, fase) {
+  const n = RING.stenen.voorraad[fase - 1];
+  if (!n) return;
   const g = W.groep('stenen');
-  const n = [34, 16, 6, 4, 3, 3][fase - 1];
-  const [cx, cy] = B.stenen.c;
-  const R0 = B.stenen.r;
-  const hoogte = [26, 17, 9, 7, 6, 6][fase - 1];
+  const S = B.stapel('stenen', fase);
+  const P = opStrook(S);
+  const MAX = 12; // de grootste steen, van het midden tot de rand
+  const rl = S.lang / 2 - MAX - 1.5;
+  const rd = S.breed / 2 - MAX - 1.5;
+  const hoogte = [20, 15, 10, 8, 7, 7][fase - 1];
   for (let i = 0; i < n; i++) {
     const R = (k) => rnd(i, k, H.zaad + 531);
     const hoek = R(1) * Math.PI * 2;
-    const rr = Math.sqrt(R(2)) * R0 * (fase === 1 ? 1 : 0.8);
-    const x = cx + Math.cos(hoek) * rr;
-    const y = cy + Math.sin(hoek) * rr * 0.9;
+    const rr = Math.sqrt(R(2));
     const s = 5.2 + 3.6 * R(3);
-    const zBerg = hoogte * Math.max(0, 1 - (rr / R0) ** 2);
+    const zBerg = hoogte * Math.max(0, 1 - rr * rr);
+    const [x, y] = P(Math.cos(hoek) * rr * rl, Math.sin(hoek) * rr * rd, 0);
     const z = zBerg + s * 0.45;
     const [a, b, c] = [s * (1 + 0.35 * R(4)), s * (0.85 + 0.3 * R(5)), s * (0.62 + 0.2 * R(6))];
     const draai = R(7) * Math.PI;
@@ -689,49 +777,48 @@ function stenenHoop(W, H, B, fase) {
   }
 }
 
-// Schoven riet op een stapel, de stoppels naar buiten, en bossen tenen.
+// Schoven riet op een stapel, de stoppels om en om naar buiten, en bossen tenen.
 function rietEnTenen(W, H, B, fase) {
-  const g = W.groep('schoven');
-  const [cx, cy] = B.riet.c;
-  const h = B.riet.hoek;
-  const ca = Math.cos(h);
-  const sa = Math.sin(h);
-  const P = (l, d, z) => [cx + l * ca - d * sa, cy + l * sa + d * ca, z];
-  const lagen = [[6, 5, 3], [6, 5, 3], [6, 5, 3], [6, 5, 2], [4, 2, 0], [2, 0, 0]][fase - 1];
-  const r = 7;
-  lagen.forEach((n, j) => {
-    for (let i = 0; i < n; i++) {
-      const R = (k) => rnd(i * 5 + j, k, H.zaad + 541);
-      const d = -((n - 1) * (2 * r - 0.8)) / 2 + i * (2 * r - 0.8) + (R(1) - 0.5) * 3;
-      const z = r * 0.92 + j * (2 * r - 3.2);
-      const l = 50 + (R(2) - 0.5) * 10;
-      const om = i % 2 ? 1 : -1; // de stoppels om en om naar buiten
-      bundel(g, P(-om * l + (R(3) - 0.5) * 6, d, z + (R(4) - 0.5)), P(om * l + (R(5) - 0.5) * 6, d + (R(6) - 0.5) * 3, z), r, 'schoof', i * 13 + j);
-    }
-  });
-  // bossen tenen: roeden van wilgen, elk bos met twee banden
+  const lagen = RING.riet.voorraad[fase - 1];
+  if (lagen.some(Boolean)) {
+    const g = W.groep('schoven');
+    const S = B.stapel('riet', fase);
+    const P = opStrook(S);
+    const r = 6.6;
+    lagen.forEach((n, j) => {
+      for (let i = 0; i < n; i++) {
+        const R = (k) => rnd(i * 5 + j, k, H.zaad + 541);
+        const d = -((n - 1) * (2 * r - 0.8)) / 2 + i * (2 * r - 0.8) + (R(1) - 0.5) * 2;
+        const z = r * 0.92 + j * (2 * r - 3.2);
+        const l = 37 + (R(2) - 0.5) * 4;
+        const om = (i + j) % 2 ? 1 : -1; // de stoppels om en om naar buiten
+        bundel(g, P(-om * l + (R(3) - 0.5) * 4, d, z + (R(4) - 0.5)), P(om * l + (R(5) - 0.5) * 4, d + (R(6) - 0.5) * 2, z), r, 'schoof', i * 13 + j);
+      }
+    });
+  }
+  // bossen tenen: roeden van wilgen, elk bos met twee banden; drie naast elkaar, één erop
+  const n = RING.tenen.voorraad[fase - 1];
+  if (!n) return;
   const t = W.groep('tenen');
-  const [tx, ty] = B.tenen.c;
-  const th = B.tenen.hoek;
-  const tc = Math.cos(th);
-  const ts = Math.sin(th);
-  const n = [4, 4, 4, 4, 2, 0][fase - 1];
+  const S = B.stapel('tenen', fase);
+  const P = opStrook(S);
   for (let i = 0; i < n; i++) {
     const R = (k) => rnd(i, k, H.zaad + 551);
-    const d = i * 11 - 16;
-    const z0 = i === 3 ? 7.5 : 0;
-    const l = 60 + R(1) * 8;
-    const P = (ll, dd, z) => [tx + ll * tc - dd * ts, ty + ll * ts + dd * tc, z];
+    const d = i < 3 ? (i - 1) * 11 : -5.5;
+    const z0 = i < 3 ? 0 : 6.4;
+    const l = 34 + R(1) * 4;
     // zes roeden, dik bij de voet en dun naar de top, een beetje door elkaar
     for (let j = 0; j < 6; j++) {
       const hoek = (j / 6) * Math.PI * 2 + R(2);
       const dd = d + Math.cos(hoek) * 2.2;
       const zz = z0 + 3 + Math.sin(hoek) * 2.2;
-      const eind = l + (R(3 + j) - 0.5) * 14;
+      const eind = l + (R(3 + j) - 0.5) * 10;
       const A = P(-eind, dd + (R(10 + j) - 0.5) * 3, zz + (R(20 + j) - 0.5));
       const Bp = P(l * 0.95, dd, zz);
       voeg(t, { f: (x, y, z) => sdf.rondeKegel(x, y, z, A[0], A[1], A[2], Bp[0], Bp[1], Bp[2], 0.75, 1.35), g: [(A[0] + Bp[0]) / 2, (A[1] + Bp[1]) / 2, (A[2] + Bp[2]) / 2, eind + 2], m: 'teen', deel: 800 + i * 10 + j, toon: ((j * 3 + i) % 5 - 2) * 0.35 });
     }
+    const tc = Math.cos(S.hoek);
+    const ts = Math.sin(S.hoek);
     for (const lb of [-l * 0.35, l * 0.45]) {
       const c = P(lb, d, z0 + 3);
       voeg(t, { f: (x, y, z) => { const dx = x - c[0]; const dy = y - c[1]; const al = dx * tc + dy * ts; const ra = Math.hypot(-dx * ts + dy * tc, z - c[2]); return Math.max(Math.abs(ra - 3.6) - 0.9, Math.abs(al) - 1.1); }, g: [c[0], c[1], c[2], 6], m: 'band', deel: 890 + i });
@@ -1118,10 +1205,12 @@ function steiger(W, H, B, fase) {
   const sb = laatst.op(E(196));
   paal(g, [sa[0] + V.Qx * 4, sa[1] + V.Qy * 4, sa[2]], [sb[0] + V.Qx * 4, sb[1] + V.Qy * 4, sb[2]], 2.3, 97);
   sjorring(g, [sb[0], sb[1], sb[2] - 2], 3.3);
-  // de ladder tegen de legger, links
-  const [lx, ly] = V.wereld(eerst.a - 30, eerst.q + 34);
-  const [tx, ty] = V.wereld(eerst.a - 22, eerst.q - 2);
-  ladder(g, [lx, ly, 0], [tx, ty, zL + 30], 17, 19, 120);
+  // de ladder links, langs de muur tegen het uiteinde van de legger: zijn voet op de hoektegel
+  // (dy = d, dx = -1), zodat hij binnen de ring blijft
+  const qL = eerst.q - 5.4;
+  const [lx, ly] = V.wereld(-V.ha - K.TEGEL * 0.68, qL);
+  const [tx, ty] = V.wereld(eerst.a - 9, qL);
+  ladder(g, [lx, ly, 0], [tx, ty, zL + 30], 16, 19, 120);
   return { zH, staand };
 }
 
@@ -1145,6 +1234,7 @@ function fase(n) {
   grond(W, H, B, n);
   if (n <= 2) uitzetten(W, H, B, n);
   balkenStapel(W, H, B, n);
+  sporenStapel(W, H, B, n);
   stenenHoop(W, H, B, n);
   rietEnTenen(W, H, B, n);
 
@@ -1244,13 +1334,17 @@ function render(n) {
   D.avondlicht(B, { warm: WARM });
   K.verwarm(B, 1.8);
   K.omlijn(B);
-  return { p: K.Plaat.van(K.kwantiseer(B)), ms: Date.now() - t0 };
+  // de hoogte in de wereld per pixel (NaN waar niets staat), voor de ringproef: een lijn op de grond
+  // is alleen te zien waar de grond te zien is
+  const z = new Float32Array(B.b * B.h).fill(NaN);
+  for (let i = 0; i < B.b * B.h; i++) if (B.ramp[i] >= 0 && B.diep[i] > -1e8) z[i] = B.pos[i * 3 + 2];
+  return { p: K.Plaat.van(K.kwantiseer(B)), z, ms: Date.now() - t0 };
 }
 
 if (!isMainThread && workerData === 'fase') {
   parentPort.on('message', ({ n }) => {
     const r = render(n);
-    parentPort.postMessage({ n, b: r.p.b, h: r.p.h, px: r.p.px, ms: r.ms });
+    parentPort.postMessage({ n, b: r.p.b, h: r.p.h, px: r.p.px, z: r.z, ms: r.ms });
   });
 }
 
@@ -1270,6 +1364,7 @@ function renderAlle(nummers) {
       w.on('message', (m) => {
         const p = new K.Plaat(m.b, m.h);
         p.px = m.px;
+        p.z = m.z;
         uit[m.n] = p;
         console.log(`fase ${m.n} ${FASEN[m.n - 1]}`.padEnd(20), `${(m.ms / 1000).toFixed(1)} s`);
         if (++gedaan === nummers.length) {
@@ -1328,45 +1423,142 @@ function vergroot(p, s) {
   return q;
 }
 
+// De achterste voethoek van de muren op het beeld van render(): die komt op het anker, voor elke
+// fase en voor de tegel in gebouwen.png. Heel, want de voet is een heel aantal tegels.
+function hoekOpScherm() {
+  const B0 = new K.Beeld(1, 1, BEELD.OX, BEELD.OY);
+  const [ax, ay] = K.naarScherm(B0, (-SPEC.b / 2) * K.TEGEL, (-SPEC.d / 2) * K.TEGEL, 0);
+  return [Math.round(ax), Math.round(ay)];
+}
+
+// Het afgewerkte huis voor tegels/gebouwen.png (naar-tiled.cjs): precies fase 7, uit dezelfde render
+// in hetzelfde beeld als de fases, zodat de muren van tegel en fases op dezelfde pixels vallen (de
+// patronen rekenen met de pixel op het beeld, dus een ander beeld gaf een ander huis).
+function afgewerkt() {
+  return { plaat: render(7).p, hoek: hoekOpScherm(), beslaat: [SPEC.b, SPEC.d] };
+}
+
+// ---------------------------------------------------------------- de ring nagemeten
+
+// Zonder beeld: prik elk deel van de bouwplaats op een rooster van twee eenheden af, vlak boven de
+// grond (tot 40 hoog: daar liggen de stapels, en de voet van alles wat hoger is), en kijk of het
+// binnen de ring valt, en elke stapel binnen zijn eigen tegels. Geeft per fase de tegels waar elke
+// stapel echt ligt, zodat `bezet` en het beeld niet uit elkaar kunnen lopen.
+const STAPEL_VAN = { balken: 'balken', sporen: 'sporen', stenen: 'stenen', schoven: 'riet', tenen: 'tenen', kuil: 'kuil', kluiten: 'kuil' };
+const BOUWPLAATS = new Set([...Object.keys(STAPEL_VAN), 'grond', 'pol', 'paaltjes', 'steiger']);
+function ringToets(n) {
+  const W = fase(n);
+  const B = plaats(W.H);
+  const T_ = K.TEGEL;
+  const X0 = (-SPEC.b / 2) * T_;
+  const Y0 = (-SPEC.d / 2) * T_;
+  const tegel = (x, y) => [Math.floor((x - X0) / T_), Math.floor((y - Y0) / T_)];
+  const fouten = [];
+  const echt = {}; // stapel -> Set van "dx,dy"
+  const STAP = 2;
+  for (const g of W.groepen) {
+    if (!BOUWPLAATS.has(g.naam)) continue;
+    const stapel = STAPEL_VAN[g.naam];
+    const eigen = stapel ? B.stapel(stapel, n) : null;
+    for (const p of g.delen) {
+      // het bereik: een bol (g: x, y, z, straal) of een cilinder (grens: x, y, straal, z0, z1)
+      if (!p.g && !p.grens) continue;
+      const [cx, cy, r, z0, z1] = p.g ? [p.g[0], p.g[1], p.g[3], p.g[2] - p.g[3], p.g[2] + p.g[3]] : p.grens;
+      const zs = [];
+      for (let z = Math.max(z0, -1.5); z <= Math.min(z1, 40); z += 2.5) zs.push(z);
+      if (g.naam === 'grond') zs.splice(0, zs.length, -0.3);
+      const f = p.f;
+      for (let x = Math.floor((cx - r) / STAP) * STAP + 1; x <= cx + r; x += STAP) {
+        for (let y = Math.floor((cy - r) / STAP) * STAP + 1; y <= cy + r; y += STAP) {
+          if (!zs.some((z) => f(x, y, z) < 0)) continue;
+          const { omtrek } = B;
+          if (x < omtrek.x0 - 0.5 || x > omtrek.x1 + 0.5 || y < omtrek.y0 - 0.5 || y > omtrek.y1 + 0.5) fouten.push(`${g.naam} buiten de ring op (${x}, ${y})`);
+          if (!stapel) continue;
+          if (x < eigen.x0 - 1 || x > eigen.x1 + 1 || y < eigen.y0 - 1 || y > eigen.y1 + 1) fouten.push(`${stapel} buiten zijn tegels op (${x}, ${y})`);
+          (echt[stapel] = echt[stapel] || new Set()).add(tegel(x, y).join(','));
+        }
+      }
+    }
+  }
+  // de tegels die volgens RING vol liggen, en of er ook echt iets ligt
+  const gezegd = new Set(bezet(n).map((t) => t.join(',')));
+  const gevonden = new Set(Object.values(echt).flatMap((s_) => [...s_]));
+  for (const t of gezegd) if (!gevonden.has(t)) fouten.push(`tegel ${t} heet bezet, maar er ligt niets`);
+  const uniek = [...new Set(fouten)];
+  return { fouten: uniek, echt };
+}
+
+// ---------------------------------------------------------------- alles
+
+const TEGELS = path.join(__dirname, '..', '..', 'tegels');
+const VANAF = [0, 0.06, 0.2, 0.4, 0.52, 0.8]; // waar elke fase begint, in voortgang 0..1 (js/bouwen.js)
+const HOOGSTE_PUNT = FASEN.indexOf('kap');
+
 async function alles() {
   fs.mkdirSync(UIT, { recursive: true });
   const t0 = Date.now();
+  // eerst de ring, zonder beeld: dat is in een paar tellen klaar
+  let fout = false;
+  for (let n = 1; n <= 6; n++) {
+    const r = ringToets(n);
+    for (const f of r.fouten.slice(0, 8)) console.warn(`  fase ${n}: ${f}`);
+    if (r.fouten.length) fout = true;
+  }
+  if (fout) console.warn('de bouwplaats past niet in de ring (zie hierboven)');
+  else console.log('ring: alles valt binnen de ring, elke stapel op zijn tegels');
+
   const nummers = [1, 2, 3, 4, 5, 6, 7];
   const platen = await renderAlle(nummers);
   const lijst = nummers.map((n) => platen[n]);
-  // één cel voor alle fases, met een rand van twee pixels
+  const [hx, hy] = hoekOpScherm();
+
+  // het vel voor het spel: de fases 1..6 in één rij cellen van dezelfde maat, met een rand van twee
+  // pixels, en hetzelfde anker (de achterste voethoek, +16 naar het midden van zijn tegel)
+  const bouw = lijst.slice(0, 6);
+  const kb = kaderVan(bouw);
+  const bx0 = kb.x0 - 2;
+  const by0 = kb.y0 - 2;
+  const bb = kb.x1 - kb.x0 + 5;
+  const bh = kb.y1 - kb.y0 + 5;
+  const vel = new K.Plaat(bb * bouw.length, bh);
+  bouw.forEach((p, i) => vel.plak(p.uitsnede(bx0, by0, bb, bh), i * bb, 0));
+  fs.writeFileSync(path.join(TEGELS, 'bouwfasen-sdf.png'), K.png(vel, 1, null));
+  const anker = [hx - bx0, hy - by0 + 16];
+  const data = {
+    _lees_dit:
+      'Een vakwerkhuis met riet in aanbouw, gemaakt door gereedschap/pixelart/bouwfasen-sdf.cjs (huis-sdf.cjs zaad ' + ZAAD + ') — niet met de hand bijwerken. ' +
+      'Afgewerkt is het de tegel ' + JSON.stringify(TEGEL_NAAM) + ' in tegels/gebouwen.tsx, uit dezelfde render: zelfde anker, zelfde muren. ' +
+      'Per fase (0..5, oplopend in afbouw): x/y/b/h snijdt de cel uit bestand, anker is het punt in die cel dat op T.naarScherm(x, y) van de aangeklikte tegel komt ' +
+      '(de achterste voethoek, een halve tegel boven het midden van die tegel, zoals tegels.json), vanaf is de voortgang (0..1) waarop de fase begint, ' +
+      'en bezet zijn de ringtegels [dx, dy] waar dan een stapel of de leemkuil ligt, gerekend vanaf de achterste voettegel (dx van -rand tot beslaat[0]-1+rand, dy net zo; ' +
+      '+x en +y liggen vooraan). De steiger staat op de rij dy = beslaat[1] maar is niet bezet: daaronder loop je door. ' +
+      'rand is hoe breed de ring is; alles van de bouwplaats valt daarbinnen. hoogstePunt is de fase waarin de kap staat (de meiboom, het pannenbier).',
+    gebouw: 'huis',
+    bestand: 'bouwfasen-sdf.png',
+    beslaat: [SPEC.b, SPEC.d],
+    rand: RAND,
+    hoogstePunt: HOOGSTE_PUNT,
+    fasen: bouw.map((p, i) => ({ x: i * bb, y: 0, b: bb, h: bh, anker, naam: FASEN[i], vanaf: VANAF[i], bezet: bezet(i + 1) })),
+  };
+  const json = JSON.stringify(data, null, 1);
+  fs.writeFileSync(path.join(TEGELS, 'bouwfasen-sdf.json'), json + '\n');
+  fs.writeFileSync(
+    path.join(TEGELS, 'bouwfasen-sdf.js'),
+    '// Gemaakt door gereedschap/pixelart/bouwfasen-sdf.cjs — niet met de hand bijwerken.\n' +
+      '// Dezelfde inhoud als bouwfasen-sdf.json, als script, zodat file:// het ook kan lezen. Wordt ná\n' +
+      '// tegels/bouwfasen.js geladen en voegt één type toe aan T.BOUWFASEN; het vervangt niets.\n' +
+      '(function (T) {\n  T.BOUWFASEN = T.BOUWFASEN || { fasen: {} };\n  T.BOUWFASEN.fasen.' + TEGEL_NAAM + ' = ' +
+      json.replace(/\n/g, '\n  ') +
+      ';\n})(globalThis.Toren = globalThis.Toren || {});\n',
+  );
+
+  // de proefplaten: alle zeven op gras, in één cel die ook het afgewerkte huis omvat
   const k = kaderVan(lijst);
   const cx0 = k.x0 - 2;
   const cy0 = k.y0 - 2;
   const cb = k.x1 - k.x0 + 5;
   const ch = k.y1 - k.y0 + 5;
   const cellen = lijst.map((p) => p.uitsnede(cx0, cy0, cb, ch));
-  // het anker: de achterste voethoek van de muren (tegels.json: een halve tegel boven het midden
-  // van die tegel), voor elke fase op dezelfde plek in de cel
-  const H = HS.maten(ZAAD, SPEC);
-  const V = H.vleugels[0];
-  const [hx, hy] = V.wereld(-V.ha, -V.hq);
-  const B0 = new K.Beeld(1, 1, BEELD.OX, BEELD.OY);
-  const [ax, ay] = K.naarScherm(B0, hx, hy, 0);
-  const anker = [Math.round(ax - cx0), Math.round(ay - cy0) + 16];
-  // het vel: de zeven cellen naast elkaar
-  const vel = new K.Plaat(cb * cellen.length, ch);
-  cellen.forEach((c, i) => vel.plak(c, i * cb, 0));
-  fs.writeFileSync(path.join(UIT, 'vel.png'), K.png(vel, 1, null));
-  const data = {
-    uitleg:
-      'Een vakwerkhuis met riet in aanbouw (bouwfasen-sdf.cjs, huis-sdf.cjs zaad ' + ZAAD + '): zeven cellen van dezelfde maat, de laatste is het afgewerkte huis. ' +
-      'anker is het punt in elke cel dat op T.naarScherm(x, y) van de achterste tegel komt (de achterste voethoek, een halve tegel boven het midden van die tegel), zoals tegels.json. ' +
-      'beslaat is de voet van de muren in tegels; de bouwplaats (grond, stapels, steiger) steekt daar buiten.',
-    bestand: 'vel.png',
-    breedte: vel.b,
-    hoogte: vel.h,
-    beslaat: [SPEC.b, SPEC.d],
-    anker,
-    cellen: cellen.map((c, i) => ({ x: i * cb, y: 0, b: cb, h: ch, naam: FASEN[i] })),
-  };
-  fs.writeFileSync(path.join(UIT, 'vel.json'), JSON.stringify(data, null, 1) + '\n');
-  // de proefplaat: alles op gras, op ware grootte
   const onder = gras(cb, ch, BEELD.OX - cx0, BEELD.OY - cy0);
   const STROOK = 22;
   const proef = new K.Plaat(cb * cellen.length, ch + STROOK);
@@ -1387,8 +1579,97 @@ async function alles() {
     schrijf(x2, `${n} ${FASEN[n - 1]} x2`, i * cb * 2 + 8, 5);
   });
   fs.writeFileSync(path.join(UIT, 'proef-x2.png'), K.png(x2, 1, '#0e0a14'));
-  console.log(`cel ${cb}×${ch}, anker ${anker.join(', ')}; vel ${vel.b}×${vel.h}; ${((Date.now() - t0) / 1000).toFixed(1)} s`);
-  console.log(`  ${path.relative(process.cwd(), UIT)}/: vel.png, vel.json, proef.png, proef-x2.png`);
+  // de ringproef: dezelfde zeven, met de ringtegels als dunne ruitjes (rood bezet, groen vrij) en
+  // de voet in wit. Het paneel is zo groot dat de hele ring erop past. Een lijn ligt op de grond:
+  // waar iets hogers ervoor staat (een stapel, een muur), is hij maar zwak te zien.
+  const T_ = K.TEGEL;
+  const X0 = (-SPEC.b / 2) * T_;
+  const Y0 = (-SPEC.d / 2) * T_;
+  const Bb = new K.Beeld(1, 1, BEELD.OX, BEELD.OY);
+  const ringHoeken = [[X0 - RAND * T_, Y0 - RAND * T_], [-X0 + RAND * T_, Y0 - RAND * T_], [-X0 + RAND * T_, -Y0 + RAND * T_], [X0 - RAND * T_, -Y0 + RAND * T_]].map(([x, y]) => K.naarScherm(Bb, x, y, 0));
+  const px0 = Math.floor(Math.min(k.x0, ...ringHoeken.map((q) => q[0]))) - 6;
+  const py0 = Math.floor(Math.min(k.y0, ...ringHoeken.map((q) => q[1]))) - 6;
+  const pb = Math.ceil(Math.max(k.x1, ...ringHoeken.map((q) => q[0]))) + 7 - px0;
+  const ph = Math.ceil(Math.max(k.y1, ...ringHoeken.map((q) => q[1]))) + 7 - py0;
+  const grasR = gras(pb, ph, BEELD.OX - px0, BEELD.OY - py0);
+  const ringProef = new K.Plaat(pb * lijst.length, ph + STROOK);
+  lijst.forEach((p, i) => {
+    ringProef.plak(grasR, i * pb, STROOK);
+    ringProef.plak(p.uitsnede(px0, py0, pb, ph), i * pb, STROOK);
+    const n = i + 1;
+    schrijf(ringProef, n <= 6 ? `${n} ${FASEN[i]} ${bezet(n).length} bezet` : `${n} ${FASEN[i]}`, i * pb + 8, 5);
+  });
+  const rgba = ringProef.rgba('#0e0a14');
+  const B0 = new K.Beeld(1, 1, BEELD.OX - px0, BEELD.OY - py0 + STROOK);
+  const lijn = (i, a, b, kleur) => {
+    const [x0, y0] = K.naarScherm(B0, a[0], a[1], 0);
+    const [x1, y1] = K.naarScherm(B0, b[0], b[1], 0);
+    const stappen = Math.ceil(Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) * 2);
+    for (let s_ = 0; s_ <= stappen; s_++) {
+      const x = Math.round(x0 + ((x1 - x0) * s_) / stappen);
+      const y = Math.round(y0 + ((y1 - y0) * s_) / stappen);
+      if (x < 0 || y < STROOK || x >= pb || y >= ph + STROOK) continue;
+      // wat staat er op die pixel in de render van deze fase, en hoe hoog?
+      const z = lijst[i].z[(y - STROOK + py0) * BEELD.b + (x + px0)];
+      const dekking = Number.isNaN(z) || z < 1.5 ? 0.85 : 0.22;
+      const o = (y * ringProef.b + i * pb + x) * 4;
+      for (let c = 0; c < 3; c++) rgba[o + c] = Math.round(rgba[o + c] * (1 - dekking) + kleur[c] * dekking);
+    }
+  };
+  const ruit = (i, xa, ya, xb, yb, kleur) => {
+    const h = [[xa, ya], [xb, ya], [xb, yb], [xa, yb]];
+    for (let q = 0; q < 4; q++) lijn(i, h[q], h[(q + 1) % 4], kleur);
+  };
+  const ROOD = [235, 50, 40];
+  const GROEN = [70, 235, 90];
+  for (let i = 0; i < lijst.length; i++) {
+    const n = i + 1;
+    const vol = new Set(n <= 6 ? bezet(n).map((t) => t.join(',')) : []);
+    const inzet = 3; // eenheden, zodat twee buren elk hun eigen rand houden
+    for (let dx = -RAND; dx < SPEC.b + RAND; dx++) {
+      for (let dy = -RAND; dy < SPEC.d + RAND; dy++) {
+        if (dx >= 0 && dx < SPEC.b && dy >= 0 && dy < SPEC.d) continue;
+        const kleur = vol.has(`${dx},${dy}`) ? ROOD : GROEN;
+        ruit(i, X0 + dx * T_ + inzet, Y0 + dy * T_ + inzet, X0 + (dx + 1) * T_ - inzet, Y0 + (dy + 1) * T_ - inzet, kleur);
+      }
+    }
+    ruit(i, X0, Y0, -X0, -Y0, [255, 255, 255]);
+  }
+  fs.writeFileSync(path.join(UIT, 'ringproef.png'), pngRgba(ringProef.b, ringProef.h, rgba));
+  console.log(`tegels/bouwfasen-sdf.png: cel ${bb}×${bh}, anker ${anker.join(', ')}, vel ${vel.b}×${vel.h}; ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  for (let n = 1; n <= 6; n++) console.log(`  ${n} ${FASEN[n - 1].padEnd(10)} bezet ${bezet(n).map((t) => `(${t.join(',')})`).join(' ')}`);
+  console.log(`  ${path.relative(process.cwd(), UIT)}/: proef.png, proef-x2.png, ringproef.png`);
+}
+
+// een PNG uit losse RGBA-bytes (kern.png neemt alleen een Plaat)
+function pngRgba(b, h, rgba) {
+  const zlib = require('zlib');
+  const tabel = new Uint32Array(256).map((_, n) => {
+    let c = n;
+    for (let k_ = 0; k_ < 8; k_++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+    return c >>> 0;
+  });
+  const crc = (buf) => {
+    let c = 0xffffffff;
+    for (const x of buf) c = tabel[(c ^ x) & 255] ^ (c >>> 8);
+    return (c ^ 0xffffffff) >>> 0;
+  };
+  const stuk = (type, gegevens) => {
+    const l = Buffer.alloc(4);
+    l.writeUInt32BE(gegevens.length);
+    const td = Buffer.concat([Buffer.from(type, 'ascii'), gegevens]);
+    const c = Buffer.alloc(4);
+    c.writeUInt32BE(crc(td));
+    return Buffer.concat([l, td, c]);
+  };
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(b, 0);
+  ihdr.writeUInt32BE(h, 4);
+  ihdr[8] = 8;
+  ihdr[9] = 6;
+  const raw = Buffer.alloc((b * 4 + 1) * h);
+  for (let y = 0; y < h; y++) rgba.copy(raw, y * (b * 4 + 1) + 1, y * b * 4, (y + 1) * b * 4);
+  return Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), stuk('IHDR', ihdr), stuk('IDAT', zlib.deflateSync(raw, { level: 9 })), stuk('IEND', Buffer.alloc(0))]);
 }
 
 // een klein lettertype voor de opschriften (5 × 7)
@@ -1420,6 +1701,9 @@ const LETTERS = {
   5: ['#####', '#....', '####.', '....#', '....#', '#...#', '.###.'],
   6: ['.###.', '#....', '#....', '####.', '#...#', '#...#', '.###.'],
   7: ['#####', '....#', '...#.', '..#..', '.#...', '.#...', '.#...'],
+  8: ['.###.', '#...#', '#...#', '.###.', '#...#', '#...#', '.###.'],
+  9: ['.###.', '#...#', '#...#', '.####', '....#', '....#', '.###.'],
+  0: ['.###.', '#...#', '#..##', '#.#.#', '##..#', '#...#', '.###.'],
   ' ': ['.....', '.....', '.....', '.....', '.....', '.....', '.....'],
 };
 function schrijf(p, tekst, x, y, s = 2) {
@@ -1437,7 +1721,17 @@ function schrijf(p, tekst, x, y, s = 2) {
 
 if (isMainThread && require.main === module) {
   const wat = process.argv[2];
-  if (wat === 'fase') {
+  if (wat === 'ring') {
+    // alleen de controle van de ring, zonder beeld
+    for (let n = 1; n <= 6; n++) {
+      const r = ringToets(n);
+      const echt = Object.entries(r.echt).map(([st, t]) => `${st} ${[...t].sort().map((x) => `(${x})`).join('')}`).join('; ');
+      console.log(`fase ${n} ${FASEN[n - 1].padEnd(10)} bezet ${bezet(n).map((t) => `(${t.join(',')})`).join('')}`);
+      console.log(`  echt: ${echt}`);
+      for (const f of r.fouten.slice(0, 12)) console.log(`  FOUT ${f}`);
+      if (r.fouten.length > 12) console.log(`  ... en nog ${r.fouten.length - 12}`);
+    }
+  } else if (wat === 'fase') {
     // één fase, om te kijken: schrijft uit/bouwfasen-sdf/fase-<n>.png (en -x2)
     fs.mkdirSync(UIT, { recursive: true });
     const n = Number(process.argv[3] || 1);
@@ -1449,4 +1743,4 @@ if (isMainThread && require.main === module) {
   } else alles();
 }
 
-module.exports = { fase, FASEN, ZAAD, SPEC };
+module.exports = { fase, FASEN, ZAAD, SPEC, RING, bezet, afgewerkt, hoekOpScherm, ringToets, TEGEL_NAAM };

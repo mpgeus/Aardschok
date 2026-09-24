@@ -2491,12 +2491,20 @@
       "doos": null
      },
      {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
+      "naam": "huisVakwerkRiet",
+      "vast": true,
+      "beslaat": [
+       7,
+       5
+      ],
       "groep": null,
       "staat": null,
-      "doos": null
+      "doos": [
+       202,
+       311,
+       279,
+       179
+      ]
      },
      {
       "naam": null,

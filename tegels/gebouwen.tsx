@@ -223,8 +223,9 @@
  </tile>
  <tile id="32">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="huisVakwerkRiet"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="7x5"/>
   </properties>
  </tile>
  <tile id="33">
