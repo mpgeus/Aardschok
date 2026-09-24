@@ -6,7 +6,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/leeftijd.js');
 require('../js/wereld.js');
 require('../js/tijd.js');
 require('../js/voorraad.js');

@@ -115,7 +115,7 @@
       thuis: { x, y }, straal: straal || 0, dwaalt: straal > 0, aanval: null,
       vel: null,
       dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
-      dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0, leeftijd: null,
+      dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0,
       vraag: 0,
     };
   };

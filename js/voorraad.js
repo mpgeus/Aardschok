@@ -1,6 +1,6 @@
 // De voorraad van het gehucht: goud, graan, wol en hout. Eén plek waarlangs hij verandert
-// (T.wijzigVoorraad), zoals T.verouder dat voor jaren doet (js/gevecht.js), zodat het scherm
-// altijd bijblijft en niets zelf aan S.voorraad hoeft te zitten.
+// (T.wijzigVoorraad), zodat het scherm altijd bijblijft en niets zelf aan S.voorraad hoeft te
+// zitten.
 (function (T) {
   'use strict';
 

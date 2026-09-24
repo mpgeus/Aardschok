@@ -40,7 +40,6 @@
     reset(S) {
       $('berichten').innerHTML = '';
       vorigeAp = '';
-      this.toonLeeftijd(S.held);
       this.toonSluipen(false);
       this.toonInventaris(S);
       this.toonGoud(S);
@@ -54,19 +53,6 @@
       // bestand, dus staan de functies er dan al, maar niet als ui.js ooit alleen gebruikt wordt.
       if (this.toonKalender) this.toonKalender(S);
       if (this.toonVoorraad) this.toonVoorraad(S);
-    },
-
-    // De leeftijd is de levensbalk. De balk loopt van zeventig tot honderd en vult zich: hoe
-    // voller, hoe minder tijd er over is.
-    toonLeeftijd(held) {
-      const m = held.leeftijd;
-      const f = Math.min(1, Math.max(0, (m - 70 * 12) / (30 * 12)));
-      const vul = $('leeftijd-vul');
-      vul.style.width = Math.round(f * 100) + '%';
-      vul.classList.toggle('laat', T.jaren(m) >= 95);
-      $('leeftijd-jaren').textContent = T.leeftijdTekst(m);
-      const rest = T.EINDLEEFTIJD - m;
-      $('leeftijd-rest').textContent = rest > 0 ? `nog ${T.duurTekst(rest)}` : 'geen tijd meer';
     },
 
     toonSluipen(aan) {
@@ -116,7 +102,7 @@
       $('volgorde').innerHTML =
         g.volgorde
           .map((e, i) => {
-            const stand = e.kant === 'held' ? `${T.jaren(e.leeftijd)} jr` : e.leven;
+            const stand = e.leven;
             return `<div class="chip ${e.kant}${i === g.beurt ? ' aan' : ''}"><span>${T.hoofdletter(e.naam)}</span><small>${stand}</small></div>`;
           })
           .join('') + `<div class="ronde">Ronde ${g.ronde}</div>`;

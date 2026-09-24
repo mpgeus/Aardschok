@@ -5,44 +5,11 @@
 (function (T) {
   'use strict';
 
-  // Eén potje actiepunten per beurt voor lopen (1 per stap), slaan en drinken.
+  // Eén potje actiepunten per beurt voor lopen (1 per stap) en slaan.
   T.SLAAN = { kosten: 3, schade: [3, 5] };
-  T.FONTEIN = { kosten: 3, maanden: 24 };
   T.DEUR_SLUITEN = 1;
 
   const worp = (b) => b[0] + Math.floor(Math.random() * (b[1] - b[0] + 1));
-
-  // Ouder worden (of, bij de fontein, jonger) — van de held, of, met het vierde argument, van
-  // wie dan ook: de meester veroudert zichtbaar in zijn eigen scène (js/regie.js), lang voordat
-  // de speler het overneemt. Dit is de enige weg naar een leeftijd (CLAUDE.md, De kernregel):
-  // geen tweede functie, want die mist vroeg of laat iets. Voor iedereen geldt de leeftijd zelf,
-  // het zwevende getal boven het hoofd, en sterven op honderd; alleen van de held zijn het
-  // leeftijdspaneel, de beurtvolgorde, de meldingen over actiepunten, de kring en het einde van
-  // het spel (T.heldGevallen) — een ander wezen dat honderd wordt, sterft, maar het spel gaat
-  // door.
-  T.verouder = function (S, maanden, uitKlap, wezen) {
-    const e = wezen || S.held;
-    const isHeld = e === S.held;
-    const apVoor = isHeld ? T.apVoorLeeftijd(e.leeftijd) : 0;
-    e.leeftijd = Math.min(T.EINDLEEFTIJD, Math.max(0, e.leeftijd + maanden));
-    if (uitKlap) e.flits = 0.3;
-    T.anim.tekst(S, e, T.duurKort(maanden), maanden > 0 ? '#e6d3a3' : '#9fe0a0');
-    if (isHeld) {
-      T.ui.toonLeeftijd(e);
-      T.ui.toonVolgorde(S);
-    }
-    if (e.leeftijd >= T.EINDLEEFTIJD) {
-      e.dood = true;
-      e.sterfTijd = 0;
-      e.pad = [];
-      if (isHeld) T.heldGevallen(S);
-      return;
-    }
-    if (!isHeld) return;
-    const apNa = T.apVoorLeeftijd(e.leeftijd);
-    if (apNa < apVoor) T.ui.bericht(`Je lijf wordt trager: vanaf nu ${apNa} actiepunten per beurt. Je magie wordt sterker.`, 'gevaar');
-    else if (apNa > apVoor) T.ui.bericht(`Je lijf voelt lichter: weer ${apNa} actiepunten per beurt.`, 'goed');
-  };
 
   // Stap 1 van de overgang: de wereld bevriest. De spellus roept beginGevecht aan zodra
   // niemand meer onderweg is.
@@ -164,8 +131,6 @@
         T.eindeGevecht(S, 'kwijt');
         return;
       }
-      // Hoeveel punten er in een beurt zitten, hangt af van hoe oud je nu bent.
-      S.held.maxAp = T.apVoorLeeftijd(S.held.leeftijd);
       S.held.ap = S.held.maxAp;
       S.bezig = false;
       T.ververBereik(S);
@@ -257,17 +222,6 @@
       return { tekst: 'Erheen lopen en slaan', kosten: totaal, kan: ap >= totaal, doe: () => slaan(S, m, pad), pad };
     }
 
-    if (doel.voorwerp && doel.voorwerp.soort === 'fontein') {
-      if (S.fonteinLeeg) return { tekst: 'De fontein staat droog', kosten: 0, kan: false };
-      const v = doel.voorwerp;
-      const pad = T.raakt(w, h, v) ? [] : heldPad(S, v, true);
-      if (!pad) return null;
-      const kosten = pad.length + T.FONTEIN.kosten;
-      return {
-        tekst: `De laatste slok: ${T.duurTekst(T.FONTEIN.maanden)} jonger`,
-        kosten, kan: ap >= kosten, doe: () => drinken(S, pad), pad,
-      };
-    }
     if (doel.voorwerp && doel.voorwerp.soort === 'trap') return { tekst: 'Niet midden in een gevecht', kosten: 0, kan: false };
 
     if (doel.x === h.x && doel.y === h.y) return null;
@@ -305,23 +259,6 @@
     await T.anim.wacht(S, 320);
     naHandeling(S);
   }
-
-  async function drinken(S, pad) {
-    bezigMet(S);
-    if (pad.length) await T.anim.loop(S.held, pad);
-    S.held.ap -= T.FONTEIN.kosten;
-    T.drinkLaatsteSlok(S);
-    await T.anim.wacht(S, 350);
-    naHandeling(S);
-  }
-
-  // De fontein heeft nog één slok, en die maakt je twee jaar jonger. Wanneer je hem neemt,
-  // is een keuze: nu, midden in een gevecht, of bewaren voor erger.
-  T.drinkLaatsteSlok = function (S) {
-    S.fonteinLeeg = true;
-    T.verouder(S, -T.FONTEIN.maanden, false);
-    T.ui.bericht(`Je drinkt de laatste slok en voelt je ${T.duurTekst(T.FONTEIN.maanden)} jonger. De fontein staat droog.`, 'goed');
-  };
 
   // Een open deur naast de held, waar niemand in staat. Die kan hij dichtgooien: een
   // monster opent geen deuren, dus zo snijd je een achtervolger af.
@@ -372,17 +309,22 @@
     }
   }
 
-  // Een monster verliest levenspunten. De held niet: die wordt ouder (zie T.verouder).
+  // Een klap kost levenspunten, de held net zo goed als een monster (voorlopig, tot punt 13 van de
+  // werklijst). Valt de held, dan is het spel voorbij.
   function raak(S, doel, n) {
     doel.leven = Math.max(0, doel.leven - n);
     doel.flits = 0.3;
-    T.anim.tekst(S, doel, '-' + n, '#ffd36b');
-    if (doel.leven <= 0) sterf(S, doel);
-    else T.ui.toonVolgorde(S);
+    T.anim.tekst(S, doel, '-' + n, doel === S.held ? '#f3b1a5' : '#ffd36b');
+    if (doel.leven > 0) T.ui.toonVolgorde(S);
+    else if (doel === S.held) {
+      doel.dood = true;
+      doel.sterfTijd = 0;
+      doel.pad = [];
+      T.heldGevallen(S);
+    } else sterf(S, doel);
   }
 
-  // Ook buiten een gevecht: in een scène kan de meester een monster vellen (js/tutorial.js), en
-  // dan is er geen beurtvolgorde om het uit te halen.
+  // Een monster is verslagen: uit de beurtvolgorde, ook als er (nog) geen gevecht is.
   function sterf(S, e) {
     e.dood = true;
     e.sterfTijd = 0;
@@ -403,12 +345,12 @@
     S.bezig = true;
     S.gevecht = null;
     T.ui.toonGevecht(false);
-    T.ui.bericht('Je bent honderd geworden.', 'gevaar');
+    T.ui.bericht('Je gaat neer.', 'gevaar');
     T.anim.wacht(S, 1100).then(() => {
       T.ui.toonOverlay(
-        'Honderd',
-        '<p>Je bent honderd jaar geworden. Je gaat zitten waar je staat, net als je meester, en sluit je ogen. Wim zal de trap nog één keer vegen.</p>',
-        'Opnieuw proberen',
+        'Gevallen',
+        '<p>De schout gaat neer en staat niet meer op. De heer stuurt een nieuwe, en die weet van niets.</p>',
+        'Opnieuw beginnen',
         // Helemaal opnieuw: T.nieuwSpel zet de heer, de inner en de handel niet terug.
         () => location.reload(),
       );
@@ -447,9 +389,9 @@
       if (held.dood || !S.gevecht) return;
       if (!T.raakt(w, T.tegelVan(m), T.tegelVan(held))) break;
       await T.anim.uitval(m, T.tegelVan(held));
-      const n = worp(m.aanval.maanden);
-      T.ui.bericht(`De ${m.naam} ${m.aanval.zin}. Het kost je ${T.duurTekst(n)}.`, 'gevaar');
-      T.verouder(S, n, true);
+      const n = worp(m.aanval.schade);
+      T.ui.bericht(`De ${m.naam} ${m.aanval.zin}: ${n} schade.`, 'gevaar');
+      raak(S, held, n);
       await T.anim.wacht(S, 380);
     }
     if (held.dood || !S.gevecht) return;

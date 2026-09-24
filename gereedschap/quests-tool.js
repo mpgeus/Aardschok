@@ -338,8 +338,8 @@
     // Met de hand neergezet en niet via T.zetQuest: dat zou een beloning uitkeren, en een proef
     // hoort niets te veranderen.
     const S = {
-      held: { leeftijd: T.STARTLEEFTIJD },
-      inventaris: new Set(proef.tas), vlaggen: new Set(proef.vlaggen), gesprekLeeftijd: {},
+      held: {},
+      inventaris: new Set(proef.tas), vlaggen: new Set(proef.vlaggen),
       goud: proef.goud, quests: {}, questWeg: {}, questBeloond: new Set(),
     };
     if (metQuest && proef.fase) {
@@ -513,7 +513,6 @@
       wrap.appendChild(rij('Naam', veld('text', q.naam, (v) => { q.naam = v; naVeldWijziging(); })));
       wrap.appendChild(rij('Gever', kiesUit([{ waarde: '', tekst: '— kies —' }, ...personen()], q.gever || '', (v) => { q.gever = v; naVeldWijziging(); })));
       wrap.appendChild(rij('Begint in', kiesUit(fasen(), q.begin, (v) => { q.begin = v; naStructuurWijziging(); })));
-      wrap.appendChild(el('p', 'gt-gedempt', 'De gever is ook wie "je" is bij ouderGewordenSinds in een klaarAls.'));
       wereldPaneel(wrap);
       return;
     }

@@ -54,14 +54,18 @@
     zak: { blokkeert: false, zichtDicht: false },
   };
 
-  // ap: actiepunten per beurt. snelheid: tegels per seconde tijdens het rondlopen (bij de held
-  // hangt die af van zijn leeftijd).
-  // zicht: vanaf hoe ver een monster je opmerkt. Namen staan met een kleine letter,
-  // omdat ze bijna altijd midden in een zin staan. De held heeft geen levenspunten maar een
-  // leeftijd (zie leeftijd.js); een klap van een monster kost hem maanden.
+  // ap: actiepunten per beurt. snelheid: tegels per seconde tijdens het rondlopen.
+  // zicht: vanaf hoe ver een monster je opmerkt. aanval.schade: hoeveel levenspunten een klap kost
+  // (tussen de twee getallen). Namen staan met een kleine letter, omdat ze bijna altijd midden in
+  // een zin staan.
+  //
+  // De levenspunten van de schout zijn voorlopig (Marcel, 24 sep 2026; werklijst punt 7): een
+  // gewone balk, zodat een gevecht blijft werken. Het echte ontwerp komt bij punt 13, als er weer
+  // gevochten wordt. De schade van de monsters is de helft van wat een klap vroeger aan maanden
+  // kostte, naar boven afgerond: hun onderlinge sterkte blijft zo gelijk.
+  T.SCHOUT_SNELHEID = 2.5; // tegels per seconde; een dorpeling doet 1,2
   const WEZENS = {
-    // De held heeft hier geen snelheid: hij loopt op zijn leeftijd (zie T.snelheidVan).
-    held: { naam: 'jij', kant: 'held', leven: 0, ap: 8, initiatief: 10, snelheid: 0 },
+    held: { naam: 'jij', kant: 'held', leven: 24, ap: 8, initiatief: 10, snelheid: T.SCHOUT_SNELHEID },
     // Wim, de knecht van de meester, veegt de hal: hij schuifelt een paar tegels heen en weer en
     // staat er dan weer bij stil met zijn bezem (de houding "vegen", zie js/sprites.js). Hij
     // begint nooit een gevecht — hij is neutraal — en hij blijft nooit naast een deur staan.
@@ -72,11 +76,11 @@
     // ontwerp/wereld.md, "Wie is wie, als het er honderd worden".
     slijm: {
       naam: 'slijmkruiper', kant: 'monster', leven: 10, ap: 4, initiatief: 4, snelheid: 1.4, zicht: 5, dwaalt: true,
-      aanval: { kosten: 3, maanden: [3, 5], zin: 'bijt je' },
+      aanval: { kosten: 3, schade: [2, 3], zin: 'bijt je' },
     },
     skelet: {
       naam: 'skeletwacht', kant: 'monster', leven: 18, ap: 6, initiatief: 6, snelheid: 2.2, zicht: 5, dwaalt: false,
-      aanval: { kosten: 3, maanden: [5, 9], zin: 'raakt je met zijn zwaard' },
+      aanval: { kosten: 3, schade: [3, 5], zin: 'raakt je met zijn zwaard' },
     },
     // Buiten, in het bos om het erf. Hij loopt harder dan de tovenaar en ziet verder dan wat er
     // binnen rondloopt: buiten is er ruimte, en een wolf hoort eerder op te vallen dan een
@@ -84,7 +88,7 @@
     // precies genoeg om hem te ontlopen als je hem op tijd ziet.
     wolf: {
       naam: 'wolf', kant: 'monster', leven: 12, ap: 6, initiatief: 8, snelheid: 2.6, zicht: 6, dwaalt: true,
-      aanval: { kosten: 3, maanden: [4, 7], zin: 'bijt je' },
+      aanval: { kosten: 3, schade: [2, 4], zin: 'bijt je' },
     },
     // Dieper het bos in. De sleutel is hier de naam: js/sprites.js zoekt het figuur op de soort
     // op, dus deze twee heten precies zoals hun animatievellen in beelden/figuren
@@ -92,15 +96,14 @@
     // wezen="reuzenspin" of wezen="kobold", zonder dat er nog ergens iets bij moet.
     //
     // De spin is traag maar taai en bijt gif: wie haar ziet aankomen, loopt om. De kobold loopt
-    // bijna zo hard als een wolf en steekt met een speer, dus hij is juist niet te ontlopen — die
-    // afweging (omlopen of jaren betalen) is waar het spel om draait.
+    // bijna zo hard als een wolf en steekt met een speer, dus hij is juist niet te ontlopen.
     reuzenspin: {
       naam: 'reuzenspin', kant: 'monster', leven: 14, ap: 5, initiatief: 5, snelheid: 2.0, zicht: 6, dwaalt: true,
-      aanval: { kosten: 3, maanden: [5, 8], zin: 'bijt je met haar giftanden' },
+      aanval: { kosten: 3, schade: [3, 4], zin: 'bijt je met haar giftanden' },
     },
     kobold: {
       naam: 'kobold', kant: 'monster', leven: 16, ap: 6, initiatief: 7, snelheid: 2.4, zicht: 6, dwaalt: true,
-      aanval: { kosten: 3, maanden: [4, 8], zin: 'steekt je met zijn speer' },
+      aanval: { kosten: 3, schade: [2, 4], zin: 'steekt je met zijn speer' },
     },
   };
 
@@ -127,13 +130,9 @@
   T.tegelVan = (e) => ({ x: e.tx, y: e.ty });
   // Afstand in stappen: schuin telt als één stap, net als bij het lopen.
   T.afstand = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
-  // Hoe snel loopt dit wezen? Alleen de held loopt trager naarmate hij ouder wordt
-  // (T.loopSnelheid); een monster of de oude meester houdt zijn eigen vaste snelheid, ook al
-  // heeft hij, net als de held, een leeftijd (T.verouder werkt voor elk wezen). Dat moet ook:
-  // zijn animatie is op precies één loopsnelheid afgestemd (zie MEESTER_SNELHEID in
-  // gereedschap/pixelart/meester.cjs), en T.loopSnelheid is de curve van de held, niet van hem —
-  // zijn voeten zouden over de grond gaan glijden.
-  T.snelheidVan = (e) => (e.soort === 'held' ? T.loopSnelheid(e.leeftijd) : e.snelheid);
+  // Hoe snel loopt dit wezen? Elk wezen heeft zijn eigen vaste snelheid: zijn animatie is op
+  // precies die loopsnelheid afgestemd, anders glijden zijn voeten over de grond.
+  T.snelheidVan = (e) => e.snelheid;
 
   T.maakWereld = function () {
     const h = PLATTEGROND.length;
@@ -202,9 +201,6 @@
       vel: s.vel || null,
       dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
       dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0,
-      // Meestal null (geen leeftijd, geen levensbalk): alleen de held en wie in T.WEZENS zijn
-      // eigen `leeftijd` draagt (de oude meester) telt in maanden mee, zie T.verouder.
-      leeftijd: soort === 'held' ? T.STARTLEEFTIJD : s.leeftijd != null ? s.leeftijd : null,
       vraag: 0, // het vraagteken boven het hoofd: dit wezen heeft iets gezien wat de held niet is
     };
   }

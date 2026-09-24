@@ -37,8 +37,8 @@
   };
 
   // Een quest in een fase zetten. Dat is het enige wat de fase verandert, zodat er één plek is
-  // waar een beloning wordt uitgekeerd en een melding komt — net zoals alle jaren via T.verouder
-  // lopen. Dezelfde fase nog eens doet niets.
+  // waar een beloning wordt uitgekeerd en een melding komt, zoals alle voorraad via
+  // T.wijzigVoorraad loopt. Dezelfde fase nog eens doet niets.
   T.zetQuest = function (S, naam, fase, weg) {
     const q = T.QUESTS[naam];
     if (!q) return console.warn(`T.zetQuest: onbekende quest "${naam}"`);

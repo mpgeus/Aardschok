@@ -3,7 +3,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/leeftijd.js');
 require('../js/wereld.js');
 
 const T = globalThis.Toren;

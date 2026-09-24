@@ -1165,10 +1165,10 @@
   }
 
   const TEKENAARS = {
-    // De meester wordt zichtbaar ouder: de baard groeit, de rug buigt, de hoedpunt zakt.
-    // Zo zie je aan de figuur zelf hoeveel tijd er nog is, niet alleen aan de balk.
+    // De held in vlakken, als er geen sprites zijn: een figuur met een staf (de vorm van de
+    // tovenaar van het oude spel, op zijn 84e, tot de schout zijn eigen vel heeft).
     held(ctx, cx, cy, bob, e, S) {
-      const ouder = Math.min(1, Math.max(0, (e.leeftijd - T.STARTLEEFTIJD) / (T.EINDLEEFTIJD - T.STARTLEEFTIJD)));
+      const ouder = 0;
       const krom = ouder * 4; // hoofd schuift naar voren en omlaag
       const sluip = S.sluipen && !S.gevecht ? 5 : 0; // ineengedoken
       if (sluip) ctx.globalAlpha *= 0.8;
@@ -1202,8 +1202,7 @@
       ctx.moveTo(cx + 13, cy + 2);
       ctx.lineTo(cx + 13, cy - 44);
       ctx.stroke();
-      // hoe ouder, hoe sterker de magie: de gloed op de staf groeit mee
-      gloed(ctx, cx + 13, cy - 47, 8 + T.magieBonus(e.leeftijd) * 3, 'rgba(255, 214, 110,', 0.9);
+      gloed(ctx, cx + 13, cy - 47, 8, 'rgba(255, 214, 110,', 0.9);
       rondje(ctx, cx + 13, cy - 47, 2.8, '#fff0b0');
       return hy - 28;
     },
@@ -1366,7 +1365,7 @@
       ctx.fill();
     }
     ctx.restore();
-    if (!e.dood && e.kant === 'monster' && (S.gevecht || e.leven < e.maxLeven)) levensbalk(ctx, cx, top - 9, e);
+    if (!e.dood && (e.kant === 'monster' || e.kant === 'held') && (S.gevecht || e.leven < e.maxLeven)) levensbalk(ctx, cx, top - 9, e);
     if (e.alarm > 0) roep(ctx, '!', cx, top - 14 - Math.abs(Math.sin(e.alarm * 9)) * 4, '#ffd24a');
     // Een vraagteken: dit monster heeft iets gezien wat de held niet is.
     else if (e.vraag > 0) roep(ctx, '?', cx, top - 14 - Math.abs(Math.sin(e.vraag * 7)) * 3, '#bfe6ff');

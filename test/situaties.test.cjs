@@ -11,7 +11,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/leeftijd.js');
 require('../js/gesprekken.js');
 require('../js/gesprek.js');
 require('../js/quests.js');

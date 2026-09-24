@@ -108,16 +108,11 @@
     }
     if (doel.voorwerp) {
       const v = doel.voorwerp;
-      if (v.soort === 'fontein') {
-        if (S.fonteinLeeg) return { tekst: 'De fontein staat droog', fout: true, doe: () => T.ui.bericht('De fontein staat droog. Je nam zelf de laatste slok.') };
-        return { tekst: `De laatste slok drinken (${T.duurTekst(T.FONTEIN.maanden)} jonger)`, doe: () => loopNaast(S, v, () => T.drinkLaatsteSlok(S)) };
-      }
       if (OPRAPEN[v.soort]) return { tekst: OPRAPEN[v.soort].tekst, doe: () => loopNaar(S, v) };
       const eig = T.VOORWERPEN[v.soort];
       if (eig && eig.breekt) {
         return { tekst: `${T.hoofdletter(eig.naam || 'het')} kapotslaan met je staf (kost niets)`, doe: () => loopNaast(S, v, () => T.slaKapot(S, v)) };
       }
-      if (v.soort === 'trap') return { tekst: 'De trap op', doe: () => loopNaast(S, v, () => T.gewonnen(S)) };
       if (v.soort === 'kist') {
         return { tekst: 'De kist bekijken', doe: () => loopNaast(S, v, () => T.ui.bericht('Een kist vol versleten bezems. Wim gooit niets weg.')) };
       }
@@ -312,20 +307,5 @@
       S.naLopen = null;
       if (T.raakt(w, t, n.doel)) n.actie();
     }
-  };
-
-  // Wat telt aan het eind, is hoe oud je boven aankomt.
-  T.gewonnen = function (S) {
-    S.modus = 'einde';
-    const verschil = S.held.leeftijd - T.STARTLEEFTIJD;
-    const kosten = verschil > 0 ? `Deze verdieping kostte je ${T.duurTekst(verschil)}.` : 'Deze verdieping kostte je geen dag.';
-    T.ui.toonOverlay(
-      'De trap op',
-      `<p>Je klimt naar de volgende verdieping. Boven is het stil, op iets na dat ademt.</p>` +
-        `<p>Je bent nu ${T.leeftijdTekst(S.held.leeftijd)}. ${kosten}</p><p>Hier eindigt het proefje.</p>`,
-      'Opnieuw spelen',
-      // Helemaal opnieuw: T.nieuwSpel zet de heer, de inner en de handel niet terug.
-      () => location.reload(),
-    );
   };
 })(globalThis.Toren = globalThis.Toren || {});

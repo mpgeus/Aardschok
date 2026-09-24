@@ -7,7 +7,7 @@
 //
 //   T.QUESTS.<id> = {
 //     naam: 'De koude oven',   // in het vak linksboven, boven het doel
-//     gever: 'bakker',         // wie hem geeft; ook wie "je" is bij ouderGewordenSinds
+//     gever: 'bakker',         // wie hem geeft
 //     begin: 'zoeken',         // de fase waarin hij begint
 //     fasen: { <fase-id>: { ... }, ... },
 //   }

@@ -3,7 +3,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/leeftijd.js');
 require('../js/wereld.js');
 require('../js/gebied.js');
 require('../js/pad.js');
@@ -154,53 +153,6 @@ test('de deurknop hoort bij een open deur naast de held waar niemand in staat', 
 });
 
 // De laatste klim: je leeftijd is je levensbalk.
-test('de held begint op zijn vierentachtigste en sterft op zijn honderdste', () => {
-  const w = T.maakWereld();
-  assert.equal(wezen(w, 'held').leeftijd, 84 * 12);
-  assert.equal(T.EINDLEEFTIJD, 100 * 12);
-  assert.equal(wezen(w, 'slijm').leeftijd, null); // monsters hebben levenspunten, geen leeftijd
-});
-
-test('het lijf wordt trager met de jaren: 8, vanaf 90 jaar 7, vanaf 95 jaar 6 actiepunten', () => {
-  assert.equal(T.apVoorLeeftijd(89 * 12 + 11), 8);
-  assert.equal(T.apVoorLeeftijd(90 * 12), 7);
-  assert.equal(T.apVoorLeeftijd(94 * 12 + 11), 7);
-  assert.equal(T.apVoorLeeftijd(95 * 12), 6);
-});
-
-test('de magie wordt sterker met de jaren: +1 schade per vijf jaar boven de tachtig', () => {
-  assert.equal(T.magieBonus(84 * 12 + 11), 0);
-  assert.equal(T.magieBonus(85 * 12), 1);
-  assert.equal(T.magieBonus(90 * 12), 2);
-});
-
-test('leeftijd en duur staan er zoals je ze zegt', () => {
-  assert.equal(T.leeftijdTekst(84 * 12), '84 jaar');
-  assert.equal(T.leeftijdTekst(84 * 12 + 1), '84 jaar en 1 maand');
-  assert.equal(T.leeftijdTekst(84 * 12 + 7), '84 jaar en 7 maanden');
-  assert.equal(T.duurTekst(4), '4 maanden');
-  assert.equal(T.duurTekst(12), 'een jaar');
-  assert.equal(T.duurTekst(24), '2 jaar');
-  assert.equal(T.duurKort(4), '+4 mnd');
-  assert.equal(T.duurKort(12), '+1 jaar');
-  assert.equal(T.duurKort(-24), '−2 jaar');
-});
-
-// Hoe ouder, hoe trager de pas: dat moet je aan hem zien lopen.
-test('de held loopt trager naarmate hij ouder wordt, met rechte lijnen tussen de ijkpunten', () => {
-  const bijna = (a, b) => Math.abs(a - b) < 0.0001;
-  assert.equal(T.loopSnelheid(84 * 12), 2.5);
-  assert.equal(T.loopSnelheid(92 * 12), 2.1);
-  assert.equal(T.loopSnelheid(99 * 12), 1.8);
-  assert.equal(bijna(T.loopSnelheid(88 * 12), 2.3), true); // halverwege 84 en 92
-  assert.equal(bijna(T.loopSnelheid(95 * 12 + 6), 1.95), true); // halverwege 92 en 99
-  assert.equal(T.loopSnelheid(80 * 12), 2.5); // jonger dan het eerste ijkpunt
-  assert.equal(T.loopSnelheid(T.EINDLEEFTIJD), 1.8); // ouder dan het laatste
-  const w = T.maakWereld();
-  assert.equal(T.snelheidVan(wezen(w, 'held')), 2.5);
-  assert.equal(T.snelheidVan(wezen(w, 'slijm')), 1.4); // een monster houdt zijn vaste snelheid
-});
-
 test('wie sluipt, wordt pas van twee tegels dichterbij opgemerkt', () => {
   const w = T.maakWereld();
   const S = { wereld: w, held: wezen(w, 'held'), sluipen: false };
@@ -212,4 +164,18 @@ test('wie sluipt, wordt pas van twee tegels dichterbij opgemerkt', () => {
   assert.equal(T.zoekOntdekking(S), null);
   zet(S.held, 13, 4); // drie tegels
   assert.equal(T.zoekOntdekking(S), slijm);
+});
+
+test('de schout heeft voorlopig levenspunten, en een monster doet schade in plaats van maanden', () => {
+  // Marcel, 24 sep 2026 (werklijst punt 7): een gewone balk tot het echte ontwerp bij punt 13.
+  const held = T.maakWezen('held', 0, 0);
+  assert.equal(held.leven, T.WEZENS.held.leven);
+  assert.ok(held.leven > 0);
+  assert.equal(held.maxLeven, held.leven);
+  assert.equal(T.snelheidVan(held), T.SCHOUT_SNELHEID);
+  for (const [soort, w] of Object.entries(T.WEZENS)) {
+    if (w.kant !== 'monster') continue;
+    assert.ok(Array.isArray(w.aanval.schade) && w.aanval.schade[0] <= w.aanval.schade[1], `${soort} doet schade`);
+    assert.equal(w.aanval.maanden, undefined, `${soort} kost geen maanden meer`);
+  }
 });

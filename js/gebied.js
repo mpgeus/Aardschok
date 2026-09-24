@@ -6,7 +6,7 @@
 // Welke gebieden er zijn, staat nergens opgeschreven: elke kaart is er een (zie T.maakGebieden
 // hieronder). Marcel tekent in Tiled, draait npm run kaarten, en de wereld is groter geworden.
 //
-// De held verhuist mee — met zijn leeftijd en wat hij bij zich heeft — en de
+// De held verhuist mee — met zijn levenspunten en wat hij bij zich heeft — en de
 // wereld die hij achterlaat blijft staan: een gedode wolf blijft dood, en een deur die je liet
 // openstaan staat er nog open als je terugkomt.
 (function (T) {
@@ -194,8 +194,6 @@
   // zie js/main.js). Geeft true terug als het gelukt is; S.wereld en S.held staan dan klaar.
   // Bestaat de kaart niet, of staat er geen "held" op en lukt het ook niet er zelf een neer te
   // zetten, dan false — de aanroeper valt dan terug op het gehucht.
-  // De schout loopt zo snel (tegels per seconde; een dorpeling doet 1,2).
-  T.SCHOUT_SNELHEID = 2.5;
   T.beginOpKaart = function (S, naam) {
     const w = T.gebied(S, naam);
     if (!w) {
@@ -215,10 +213,8 @@
     // `soort` om het plaatje te kiezen (js/sprites.js). Zie ontwerp/werklijst.md, punt 1b.
     held.soort = 'dorpeling';
     if (held.zaad == null) held.zaad = 1;
-    // Maar T.snelheidVan (js/wereld.js) geeft alleen een wezen van soort 'held' zijn loopsnelheid
-    // (die van de tovenaar, naar zijn leeftijd); iedereen anders loopt op zijn eigen `snelheid`.
-    // Zonder die stond de schout tot 24 sep stil: een klik op de grond gaf een pad, maar geen stap.
-    // Zo vlot als de tovenaar op zijn 84e: de speler wacht niet op zijn eigen poppetje.
+    // Zijn eigen vaste snelheid (T.SCHOUT_SNELHEID, js/wereld.js): zonder die stond de schout tot
+    // 24 sep stil, want een kaart zet een wezen neer zonder. De speler wacht niet op zijn poppetje.
     held.snelheid = T.SCHOUT_SNELHEID;
     S.held = held;
     zetNeer(held, held.x, held.y);

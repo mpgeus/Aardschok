@@ -238,16 +238,13 @@
   // is al leeg.
   function staatVanSituatie(als, persoonId) {
     const S = {
-      held: { leeftijd: T.STARTLEEFTIJD },
-      inventaris: new Set(), vlaggen: new Set(), gesprekLeeftijd: {},
+      held: {},
+      inventaris: new Set(), vlaggen: new Set(),
       quests: {}, questWeg: {}, questBeloond: new Set(), goud: 0,
     };
     if (!als) return S;
     for (const naam of alsLijst(als.vlag)) S.vlaggen.add(naam);
     for (const naam of alsLijst(als.heeft)) S.inventaris.add(naam);
-    if (als.ouderDan != null) S.held.leeftijd = (Number(als.ouderDan) + 1) * 12;
-    if (als.jongerDan != null) S.held.leeftijd = Math.max(12, (Number(als.jongerDan) - 1) * 12);
-    if (als.ouderGewordenSinds != null) S.gesprekLeeftijd[persoonId] = S.held.leeftijd - Number(als.ouderGewordenSinds);
     if (als.goud != null) S.goud = Number(als.goud);
     if (als.quest && T.QUESTS && T.QUESTS[als.quest]) {
       const q = T.QUESTS[als.quest];
@@ -365,9 +362,6 @@
     nietVlag: (v) => `zolang niet ${enNog(v)}`,
     heeft: (v) => `als je ${enNog(v)} hebt`,
     nietHeeft: (v) => `als je geen ${enNog(v)} hebt`,
-    ouderDan: (v) => `als je ouder bent dan ${v}`,
-    jongerDan: (v) => `als je jonger bent dan ${v}`,
-    ouderGewordenSinds: (v) => `als je ${v} maanden ouder werd sinds hij je zag`,
     quest: (v) => `als ${questNaam(v)} loopt`,
     nietQuest: (v) => `zolang ${questNaam(v)} niet begonnen is`,
     questAf: (v) => `als ${questNaam(v)} af is`,

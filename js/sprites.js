@@ -412,12 +412,10 @@
     return e.beeldStand;
   }
 
-  // De tovenaar loopt naar zijn leeftijd: kwiek op zijn 84e, schuifelend op zijn 99e.
+  // Een figuur zonder gewone loophouding: de tovenaar van het oude spel, die de schout tot zijn
+  // eigen vel er is nog leent, liep naar zijn leeftijd. Zonder leeftijd loopt hij kwiek, op zijn 84e.
   function loopHouding(naam, e) {
-    if (!S.heeftHouding(naam, 'lopen') && e.leeftijd != null) {
-      const j = T.jaren(e.leeftijd);
-      return j >= 96 ? 'lopen-99' : j >= 88 ? 'lopen-92' : 'lopen-84';
-    }
+    if (!S.heeftHouding(naam, 'lopen') && S.heeftHouding(naam, 'lopen-84')) return 'lopen-84';
     return 'lopen';
   }
 

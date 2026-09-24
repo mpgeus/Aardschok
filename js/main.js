@@ -28,7 +28,6 @@
     S.gebieden = {}; // een nieuw spel begint met schone kaarten
     Object.assign(S, {
       vlaggen: new Set(),
-      gesprekLeeftijd: {},
       modus: 'verkennen',
       gevecht: null,
       overgang: null,
@@ -47,7 +46,6 @@
       questWeg: {}, // en hoe je hem oploste, zodat het dorp erop kan reageren
       questBeloond: new Set(),
       sleutelGebruikt: false,
-      fonteinLeeg: false,
       sluipen: false,
       bezocht: new Set(['hal']),
       naarGebied: null,
@@ -143,15 +141,11 @@
   // De muis wordt elk beeld opnieuw bekeken, want onder een stilstaande muis kan intussen
   // een monster doorlopen. Tekst bij de muis, pad op de vloer en de actiepunten zeggen
   // alle drie wat een klik zou doen.
-  // Wat er bij de muis staat: wat een klik doet, wat het aan punten kost en wat het aan leven
-  // kost. Alles uit hetzelfde antwoord, zodat het scherm niet iets anders belooft dan de klik.
+  // Wat er bij de muis staat: wat een klik doet en wat het aan punten kost. Uit hetzelfde
+  // antwoord als de klik, zodat het scherm niet iets anders belooft.
   function tipTekst(h) {
     let t = h.tekst;
     if (h.kosten) t += ` · ${h.kosten} AP`;
-    if (h.maanden) {
-      t += ` · ${T.duurKort(h.maanden)}`;
-      if (S.held.leeftijd + h.maanden >= T.EINDLEEFTIJD) t += ' · daarna ben je honderd';
-    }
     return t;
   }
 

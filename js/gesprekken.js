@@ -36,11 +36,6 @@
 //   nietVlag: 'naam'          — waar als die vlag NIET gezet is (of een lijstje: dan geen ervan)
 //   heeft: 'ding'              — waar als je dat in je inventaris hebt (of een lijstje: allemaal)
 //   nietHeeft: 'ding'          — waar als je dat niet hebt (of een lijstje: geen ervan)
-//   ouderDan: 88               — waar als je ouder bent dan dat, in hele jaren
-//   jongerDan: 88              — waar als je jonger bent dan dat, in hele jaren
-//   ouderGewordenSinds: 12     — waar als je zoveel maanden of meer ouder bent geworden sinds je
-//                                 deze persoon voor het laatst sprak (bij de allereerste keer
-//                                 geldt hij nooit: er is dan nog geen "vorige keer")
 //   quest: 'bakker'            — waar als die quest loopt; met fase: 'zoeken' (of een lijstje
 //                                 fasen) alleen in die fase, met weg: 'marskramer' alleen als je
 //                                 hem zo oploste
