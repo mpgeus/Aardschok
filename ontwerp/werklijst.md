@@ -35,17 +35,29 @@ met riet uit `huis-sdf.cjs`, met zes bouwfases en een bouwplaats in een ring ron
 (stapels die hun tegels bezetten en slinken). De tekenvolgorde had cirkels (een ton achter een huis
 kwam erbovenop); dat is gerepareerd.
 
-**Het vakwerkhuis en zijn bouwplaats** (ronde 4b voor één type, 24 sep): de tegel
-`huisVakwerkRiet` in `tegels/gebouwen.tsx` en de zes fases in `tegels/bouwfasen-sdf.*`, allebei
-uit `gereedschap/pixelart/bouwfasen-sdf.cjs` (fase 7 is de tegel; `naar-tiled.cjs gebouwen`
-rendert hem mee). Een type met een eigen fasevel en een `rand` krijgt een ring rond zijn voet
-(`T.bouwRandVan`, `T.werkBouwplaatsBij` in `js/bouwen.js`; `T.gebouwPast` houdt de ring vrij).
+**De niet-waterpas gebouwen en hun bouwplaats** (ronde 4b, per type): het vakwerkhuis (`huis`,
+tegel `huisVakwerkRiet`) en de hut van vlechtwerk (`hut`, tegel `hutVlechtRiet`, 5×4, geen
+schoorsteen maar een rookgat) staan in het spel, elk met zes bouwfases en een bouwplaats in een
+ring. Ze komen uit `gereedschap/pixelart/bouwfasen-sdf.cjs` (`TYPES`: per type een model, een
+zaad en een SPEC; fase 7 is de tegel, en `naar-tiled.cjs gebouwen` rendert die mee in
+`tegels/gebouwen.tsx`). De fases staan in `tegels/bouwfasen-sdf.*` (het vakwerkhuis) en
+`tegels/bouwfasen-sdf-hut.png`. Een type met een eigen fasevel en een `rand` krijgt een ring rond
+zijn voet (`T.bouwRandVan`, `T.werkBouwplaatsBij` in `js/bouwen.js`; `T.gebouwPast` houdt de ring
+vrij). Een nieuw type gaat zo: model en fases in `bouwfasen-sdf.cjs` (volgorde uit `beeld.md`),
+`node … <type>` en `node … ring <type>`, dan `node gereedschap/pixelart/naar-tiled.cjs gebouwen`,
+en in `js/gebouwen.js` de tekening en de voet. Houd bestaande tegels pixelgelijk (vergelijk met
+git HEAD).
 
-**Volgende stap:** de andere types van het gehucht langs dezelfde weg als het vakwerkhuis
-(Marcel vond het vakwerkhuis in het spel goed, 24 sep). Marcel koos de volgorde: eerst de hut, van
-vlechtwerk met leem (zie `beeld.md`), dan de boerderij als hallehuis (eerst de gebinten, de wanden
-het laatst), dan houthakker, schaapskooi, kippenhok, wachthuis en kapel. Daarna punt 8, de
-voorvallen.
+**Volgende stap:** de boerderij als hallehuis (eerst de poeren en de gebinten, dan de kap met de
+meiboom en het riet, de wanden het laatst; `beeld.md`), langs dezelfde weg als het vakwerkhuis en
+de hut. Dan houthakker, schaapskooi, kippenhok, wachthuis en kapel. Daarna punt 8, de voorvallen.
+
+**Voorstel vóór de boerderij (Claude, 24 sep; nog niet besloten):** een cache per type in
+`bouwfasen-sdf.cjs` en `naar-tiled.cjs`. Nu rendert elk nieuw type alles opnieuw (het gebouwenvel
+met alle gebouwen 5 tot 10 minuten, de fases van het vakwerkhuis 3 minuten), en moet elke keer
+worden nagekeken of wat er al was pixelgelijk bleef. Met een cache rendert alleen het nieuwe type,
+en kan wat er al staat niet per ongeluk veranderen. Scheelt per type zo'n tien minuten wachten, en
+de tokens van de agent die wacht.
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
@@ -58,6 +70,8 @@ voorvallen.
 - de vijf boeren hebben een naam gekregen (Gerrit, Aleid, Wouter, Machteld, Jan): een voorstel;
 - op het huis na komen de gebouwen in het spel en hun fases nog uit de rechte `dorp.cjs`, dus
   het vakwerkhuis staat tussen rechte huizen;
+- de hut: het rookgat is op spelgrootte klein, rook die het spel eruit tekent zou het afmaken; de
+  gevel die in de leemfase nog vlechtwerk is, zie je pas vergroot;
 - het vakwerkhuis: de schoorsteen komt pas bij het leem; de meiboom is klein (25 px); in de
   rietfase steekt het riet aan de gevel als een losse rol uit; de stapels achter het huis zie je
   niet meer zodra de muren staan; de leemkuil is klein; zijn tegel kreeg id 32 (27 tot 31 bleven
@@ -87,6 +101,10 @@ voorvallen.
 
 
 **Wacht op Marcel:**
+- De hut (platen hieronder, in `gereedschap/pixelart/uit/bouwfasen-sdf/hut-proef.png`): door het
+  steile dak is hij maar 32 px lager dan het vakwerkhuis. Nederiger kan met een dak van 50 tot 52
+  graden in plaats van 55.
+- Het voorstel voor een cache per type (hierboven).
 - Het tweede proefje spelen: een jaar met de heer en de inner. Is rijk worden en arm lijken leuk?
 - Spelen, en zeggen hoe het voelt: vooral de winter, en hoe snel een jaar gaat.
 - Het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): goederen, wat de heer
@@ -249,6 +267,8 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 24 sep 2026 — **De hut van vlechtwerk in het spel** (Marcels keuze): op de grond, zonder
+  schoorsteen maar met een rookgat, met zes fases en een bouwplaats in een ring.
 - 24 sep 2026 — **Het oude spel eruit** (punt 7): het spel begint in het gehucht; de tutorial,
   de regie, de meester, De koude oven, de spreuken, de leeftijd, de toren en Wim zijn weg (samen
   zo'n 5000 regels); de schout heeft voorlopig levenspunten; de wereldkaart heeft een weg terug

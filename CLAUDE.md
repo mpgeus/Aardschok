@@ -172,9 +172,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   verstopplek). Het spel begint in het gehucht met `T.beginOpKaart` (`js/gebied.js`; met
   `?kaart=<naam>` op een andere kaart, voor een proefje); de
   kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de bouwfases uit
-  `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`), en die van het
-  vakwerkhuis (`huis`, het eerste niet-waterpas huis in het spel) uit `bouwfasen-sdf.cjs`
-  (`tegels/bouwfasen-sdf.*`, met `rand` en per fase `bezet`; de tegel `huisVakwerkRiet` is fase 7).
+  `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`), en die van de
+  niet-waterpas gebouwen (het vakwerkhuis `huis` en de hut `hut`, straks meer) uit
+  `bouwfasen-sdf.cjs` (`TYPES`; `tegels/bouwfasen-sdf.*` en `bouwfasen-sdf-hut.png`, met `rand` en
+  per fase `bezet`; hun tegels `huisVakwerkRiet` en `hutVlechtRiet` zijn fase 7). Hoe er een type
+  bij komt, staat bovenaan in `ontwerp/werklijst.md`.
   De tekenvolgorde is één getal per ding (`T.sorteerTekenlijst`, `js/tekenen.js`): wie vóór een
   gebouw staat maar lager telt, schuift door tot achter hem. Getallen om bij te
   stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
