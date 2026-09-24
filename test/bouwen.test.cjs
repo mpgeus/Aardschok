@@ -187,9 +187,9 @@ test('pannenbier schenken kost bier als dat er is, en maakt het dorp een tijdje 
   // De bonus telt in de tevredenheid, en na de feestdagen niet meer.
   const dag = Math.floor(S.kalender.dag);
   const met = T.berekenTevredenheid(S, dag).tevredenheid;
-  const zonder = T.berekenTevredenheid({ ...S, feest: null }, dag).tevredenheid;
+  const zonder = T.berekenTevredenheid({ ...S, stemmingen: [] }, dag).tevredenheid;
   assert.ok(met > zonder, `${met} hoort meer te zijn dan ${zonder}`);
-  assert.equal(T.berekenTevredenheid(S, dag + T.BOUWEN_INSTELLINGEN.feestDagen).feest, 0);
+  assert.equal(T.berekenTevredenheid(S, dag + T.BOUWEN_INSTELLINGEN.feestDagen).stemming, 0);
 });
 
 test('zonder bier kost een rondje goud, en zonder allebei kan het niet', () => {

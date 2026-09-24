@@ -78,11 +78,13 @@
     // "boerin" hierboven, want één mens kan van T.keurKaart maar op één plek staan (gereedschap/
     // keuring.js) — dit zijn wél vijf keer hetzelfde geleende vel, en dat mag: net als de bakker
     // hierboven lenen ze het van wie het al heeft, om en om "boer" en "boerin" voor wat variatie.
-    boer1: { naam: 'de boer', vel: 'boer', snelheid: 1.5, straal: 3 },
-    boer2: { naam: 'de boerin', vel: 'boerin', snelheid: 1.4, straal: 3 },
-    boer3: { naam: 'de boer', vel: 'boer', snelheid: 1.5, straal: 3 },
-    boer4: { naam: 'de boerin', vel: 'boerin', snelheid: 1.4, straal: 3 },
-    boer5: { naam: 'de boer', vel: 'boer', snelheid: 1.5, straal: 3 },
+    // Sinds 24 sep met een naam (voorstel van Claude, ontwerp/spel.md "Sint-Maarten"): wie aan de
+    // schandpaal moet, wijs je aan (js/heer.js), en dan moet je weten wie je aanwijst.
+    boer1: { naam: 'Gerrit', vel: 'boer', snelheid: 1.5, straal: 3 },
+    boer2: { naam: 'Aleid', vel: 'boerin', snelheid: 1.4, straal: 3 },
+    boer3: { naam: 'Wouter', vel: 'boer', snelheid: 1.5, straal: 3 },
+    boer4: { naam: 'Machteld', vel: 'boerin', snelheid: 1.4, straal: 3 },
+    boer5: { naam: 'Jan', vel: 'boer', snelheid: 1.5, straal: 3 },
   };
 
   // Hoe heet deze mens? Zijn eigen naam, anders die van het wezen dat hij leent (Wim, de

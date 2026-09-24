@@ -87,6 +87,7 @@
     for (const b of document.querySelectorAll('#kalender-knoppen button')) {
       b.classList.toggle('actief', Number(b.dataset.snelheid) === S.kalender.snelheid);
     }
+    toonAanslag(S);
   };
 
   T.ui.toonVoorraad = function (S) {
@@ -103,6 +104,7 @@
     // voorraad.
     if (vragen.length) toonVraag();
     if (handelOpen) toonHandel(S);
+    toonAanslag(S);
   };
 
   // Het aantal mensen en de woonruimte (js/gebouwen.js, T.werkGebouwenBij): een eigen functie,
@@ -115,6 +117,14 @@
     // Eén keer per dag (js/gebouwen.js): hoe lang de marskramer nog blijft.
     if (handelOpen) toonHandel(S);
   };
+
+  // Wat het dorp nu extra blij of boos maakt (js/behoeften.js, T.voegStemmingToe), met een reden.
+  const STEMMING_NAAM = { pannenbier: 'het pannenbier', schandpaal: 'de schandpaal', soldaten: 'soldaten in het dorp' };
+  function stemmingTekst(lijst) {
+    if (!lijst || !lijst.length) return '';
+    const delen = lijst.map((s) => `${STEMMING_NAAM[s.reden] || s.reden} ${s.waarde > 0 ? '+' : '−'}${Math.round(Math.abs(s.waarde) * 100)}%`);
+    return ` Nu: ${delen.join(', ')}.`;
+  }
 
   // De tevredenheid (js/behoeften.js, T.tikBehoeftenDag) en, op hover, wat het dorp mist — dezelfde
   // vraag als T.ui.toonBevolking hierboven, met een eigen functie om dezelfde reden: tevredenheid
@@ -129,7 +139,7 @@
     cel.classList.toggle('laag', S.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel);
     cel.title = (S.behoeften.mist.length
       ? `Tevredenheid: ${pct}%. Het dorp mist: ${S.behoeften.mist.join(', ')}.`
-      : `Tevredenheid: ${pct}%. Het dorp heeft wat het nodig heeft.`) + (S.behoeften.feest ? ' Het pannenbier doet nog na.' : '');
+      : `Tevredenheid: ${pct}%. Het dorp heeft wat het nodig heeft.`) + stemmingTekst(S.behoeften.stemmingen);
   };
 
   // Het bouwmenu: de soorten van de huidige trede, met hun kosten en wat ze doen (ontwerp/spel.md,
@@ -192,13 +202,31 @@
   // `doe` mag { gelukt: false, reden } teruggeven: dan blijft de vraag staan en zegt een bericht
   // waarom. Eén vraag tegelijk in beeld; wat erbij komt, wacht in de rij. `sleutel` is waarmee
   // T.ui.sluitVraag hem weer weghaalt (het gebouw is af voordat er een antwoord kwam).
+  //
+  // `pauze: true` zet het spel stil zolang de vraag in beeld is, en daarna weer op de snelheid van
+  // daarvoor (de brief van de heer, Sint-Maarten: js/heer.js). `brief: true` geeft hem het uiterlijk
+  // van een brief op perkament.
   const vragen = [];
   const waarde = (x) => (typeof x === 'function' ? x() : x);
+  let snelheidVoorPauze = null; // niet null: de vraag heeft het spel stilgezet, en dit was de snelheid
+  function pauzeVoorVraag(v) {
+    const S = T.S;
+    if (!S || !S.kalender) return;
+    if (v && v.pauze && snelheidVoorPauze == null) {
+      snelheidVoorPauze = S.kalender.snelheid;
+      if (snelheidVoorPauze > 0) T.zetSnelheid(S, 0);
+    } else if (!(v && v.pauze) && snelheidVoorPauze != null) {
+      if (snelheidVoorPauze > 0 && S.kalender.snelheid === 0) T.zetSnelheid(S, snelheidVoorPauze);
+      snelheidVoorPauze = null;
+    }
+  }
   function toonVraag() {
     const box = $('vraag');
     if (!box) return;
     const v = vragen[0];
     box.classList.toggle('verborgen', !v);
+    box.classList.toggle('brief', !!(v && v.brief));
+    pauzeVoorVraag(v);
     if (!v) {
       box.innerHTML = '';
       return;
@@ -223,6 +251,49 @@
     vragen.splice(i, 1);
     toonVraag();
   };
+
+  // Een brief van de heer (js/heer.js, T.briefVanDeHeer): een vraag met één knop, op perkament, en
+  // het spel staat stil tot je hem gelezen hebt.
+  T.ui.brief = function (b) {
+    T.ui.vraag({ sleutel: 'brief', pauze: true, brief: true, kop: b.kop, tekst: b.tekst, keuzes: [{ tekst: 'Gelezen', doe: () => ({ gelukt: true }) }] });
+  };
+
+  // Onder de kalender: wat de heer op Sint-Maarten wil, vanaf zijn brief, met wat er nog ontbreekt in
+  // het rood; en of er soldaten in het dorp zijn. Bij elke dag en elke verandering in de voorraad.
+  function toonAanslag(S) {
+    const el = $('aanslag');
+    const H = S && S.heer;
+    if (!el || !H) return;
+    const regels = [];
+    if (H.aanslag && T.dagenTot) {
+      const n = T.dagenTot(S.kalender.dag, T.SINT_MAARTEN);
+      const wanneer = n === 0 ? 'vandaag' : n === 1 ? 'morgen' : `over ${n} dagen`;
+      const goederen = Object.entries(H.aanslag)
+        .map(([wat, aantal]) => `<span class="${(S.voorraad[wat] || 0) >= aantal ? 'genoeg' : 'kort'}">${aantal} ${wat}</span>`)
+        .join(' · ');
+      regels.push(`<div title="Wat de heer in zijn brief vroeg. Rood: wat je nog niet hebt.">Sint-Maarten ${wanneer}: ${goederen}</div>`);
+    }
+    if (H.soldaten) {
+      const nog = Math.max(0, H.soldaten.tot - Math.floor(S.kalender.dag));
+      regels.push(`<div class="kort">Soldaten in het dorp: ${H.soldaten.aantal}, nog ${nog} dag${nog === 1 ? '' : 'en'}</div>`);
+    }
+    el.innerHTML = regels.join('');
+    el.classList.toggle('verborgen', !regels.length);
+  }
+  T.ui.toonAanslag = toonAanslag;
+
+  // De heer zet je af (js/heer.js, T.zetAf): het spel is voorbij. Het staat stil, en er is maar één
+  // knop. (Opslaan en een titelscherm komen bij punt 17.)
+  T.ui.afgezet = function (S, b) {
+    const box = $('afgezet');
+    box.querySelector('.kop').textContent = b.kop;
+    box.querySelector('p').textContent = b.tekst;
+    box.classList.remove('verborgen');
+    if (S && S.kalender) T.zetSnelheid(S, 0);
+  };
+  $('afgezet').addEventListener('click', (ev) => {
+    if (ev.target.closest('button')) location.reload();
+  });
   $('vraag').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
     const v = vragen[0];

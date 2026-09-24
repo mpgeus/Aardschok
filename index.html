@@ -33,6 +33,8 @@
       </div>
       <div id="kalender-datum"></div>
       <div id="kalender-seizoen"></div>
+      <!-- Wat de heer op Sint-Maarten wil, vanaf zijn brief (js/heer.js, js/hud.js). -->
+      <div id="aanslag" class="verborgen"></div>
     </div>
     <div id="voorraadbalk" class="paneel"></div>
     <button id="bouwmenu-knop" class="paneel" title="Bouwen"><kbd>B</kbd> Bouwen</button>
@@ -66,6 +68,8 @@
   <div id="vraag" class="paneel verborgen"></div>
   <!-- Handelen met de marskramer (js/hud.js, T.ui.openHandel; de regels in js/handel.js). -->
   <div id="handel" class="paneel verborgen"></div>
+  <!-- De heer zet je af (js/heer.js, T.zetAf): het spel is voorbij. -->
+  <div id="afgezet" class="verborgen"><div class="paneel"><div class="kop"></div><p></p><button>Opnieuw beginnen</button></div></div>
   <div id="tooltip" class="verborgen"></div>
 
   <div id="dialoog" class="paneel verborgen">
@@ -114,6 +118,7 @@
   <script src="js/gebouwen.js"></script>
   <script src="js/bouwen.js"></script>
   <script src="js/handel.js"></script>
+  <script src="js/heer.js"></script>
   <script src="js/behoeften.js"></script>
   <script src="js/kaart.js"></script>
   <script src="js/gebied.js"></script>

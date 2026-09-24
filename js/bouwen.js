@@ -211,9 +211,11 @@
     if (!prijs) return { gelukt: false, reden: 'Er is geen bier, en geen goud voor een rondje.' };
     T.betaalKosten(S, prijs);
     b.pannenbier = 'gegeven';
-    // Het dorp drinkt mee: een tijdje tevredener (T.berekenTevredenheid, js/behoeften.js). Een
-    // tweede feest vlak na het eerste verlengt het, maar telt niet dubbel.
-    S.feest = { tot: vandaag(S) + IN.feestDagen, bonus: IN.feestBonus };
+    // Het dorp drinkt mee: een tijdje tevredener (een stemming, js/behoeften.js). Een tweede feest
+    // vlak na het eerste verlengt het, maar telt niet dubbel.
+    const feest = { reden: 'pannenbier', waarde: IN.feestBonus, tot: vandaag(S) + IN.feestDagen };
+    if (T.voegStemmingToe) T.voegStemmingToe(S, feest);
+    else (S.stemmingen = S.stemmingen || []).push(feest);
     bericht('Pannenbier! De bouwers drinken op het nieuwe dak, en het dorp drinkt mee.', 'goed');
     return { gelukt: true };
   };

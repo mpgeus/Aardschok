@@ -267,7 +267,7 @@ kbd {
 #vraag {
   position: fixed;
   left: 16px;
-  bottom: 170px;
+  bottom: 240px; /* boven vijf berichten van twee regels */
   width: min(360px, 44vw);
   padding: 10px 12px 12px;
   border-color: rgba(226, 182, 74, 0.6);
@@ -403,6 +403,34 @@ kbd {
 #kalender-datum { font: 17px var(--kop); color: var(--inkt); }
 #kalender-datum.sint-maarten { color: var(--goud); }
 #kalender-seizoen { font-size: 12px; color: var(--gedempt); margin-top: 1px; }
+/* Wat de heer op Sint-Maarten wil (js/heer.js, js/hud.js): rood wat er nog ontbreekt. */
+#aanslag { margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--rand); font-size: 12px; color: var(--gedempt); max-width: 250px; }
+#aanslag .genoeg { color: var(--inkt); }
+#aanslag .kort { color: var(--rood); }
+
+/* Een brief van de heer: perkament, met donkere inkt, en zijn eigen plek midden in beeld. */
+#vraag.brief {
+  left: 50%;
+  bottom: auto;
+  top: 18%;
+  transform: translateX(-50%);
+  width: min(460px, 86vw);
+  padding: 18px 22px 16px;
+  color: #3b2a18;
+  background: linear-gradient(180deg, #efe0bd, #e2cc9b);
+  border: 1px solid #a8864e;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(120, 80, 30, 0.25);
+}
+#vraag.brief .kop { color: #6b3f16; font-size: 16px; }
+#vraag.brief p { font: italic 14px/1.5 var(--kop); color: #3b2a18; }
+#vraag.brief button { color: #3b2a18; background: rgba(255, 255, 255, 0.35); border-color: #a8864e; }
+
+/* De heer zet je af: het spel is voorbij (js/hud.js, T.ui.afgezet). */
+#afgezet { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(8, 6, 4, 0.72); z-index: 50; }
+#afgezet .paneel { width: min(520px, 88vw); padding: 22px 26px; text-align: center; }
+#afgezet .kop { font: 22px var(--kop); color: var(--rood); margin-bottom: 10px; }
+#afgezet p { font: italic 15px/1.5 var(--kop); color: var(--inkt); }
+#afgezet button { margin-top: 12px; padding: 7px 16px; font-size: 14px; color: #1b1510; background: var(--goud); border: none; border-radius: 6px; cursor: pointer; }
 
 #voorraadbalk { display: flex; gap: 13px; padding: 0 14px; height: 44px; align-items: center; }
 #voorraadbalk .grondstof { display: flex; align-items: center; gap: 5px; }

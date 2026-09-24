@@ -63,6 +63,19 @@
     huisGroeiDrempel: 0.7,
   };
 
+  // Een stemming: een tijdelijk plus of min op de tevredenheid, met een reden die bij de muis staat
+  // (js/hud.js). Het pannenbier (js/bouwen.js) is een plus; de schandpaal en soldaten in het dorp
+  // (js/heer.js) een min. Dezelfde reden nog eens verlengt de stemming, maar telt niet dubbel.
+  //   T.voegStemmingToe(S, { reden: 'pannenbier', waarde: 0.1, tot: dag + 10 })
+  T.voegStemmingToe = function (S, s) {
+    S.stemmingen = S.stemmingen || [];
+    const was = S.stemmingen.find((x) => x.reden === s.reden);
+    if (was) {
+      was.tot = Math.max(was.tot, s.tot);
+      was.waarde = s.waarde;
+    } else S.stemmingen.push({ ...s });
+  };
+
   T.nieuweBehoeften = function () {
     return { tevredenheid: 1, mist: [], winterVerliesRest: 0 };
   };
@@ -103,10 +116,11 @@
     const heeftKerk = T.heeftKerk(S);
     const kerkFactor = heeftKerk ? 1 : IN.kerkBasis;
 
-    // Een feest maakt een paar dagen extra tevreden, tot het maximum: het pannenbier op het hoogste
-    // punt van een nieuw gebouw (js/bouwen.js, T.schenkPannenbier zet S.feest).
-    const feest = S.feest && dag < S.feest.tot ? S.feest.bonus : 0;
-    const tevredenheid = Math.min(1, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + feest);
+    // De stemmingen van dit moment (T.voegStemmingToe hierboven), bij elkaar opgeteld; de
+    // tevredenheid blijft tussen 0 en 1.
+    const stemmingen = (S.stemmingen || []).filter((s) => dag < s.tot);
+    const stemming = stemmingen.reduce((som, s) => som + s.waarde, 0);
+    const tevredenheid = Math.max(0, Math.min(1, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + stemming));
 
     const mist = [];
     if (voedselDekking < 1) mist.push('eten');
@@ -118,7 +132,7 @@
       tevredenheid, mist, inWinter,
       voedselDekking, extraSoorten, voedselFactor, zoutNodig,
       brandhoutDekking, brandhoutBenodigd, brandhoutVoorraad, brandhoutFactor,
-      huishoudens, heeftKerk, kerkFactor, feest,
+      huishoudens, heeftKerk, kerkFactor, stemming, stemmingen,
     };
   };
 
@@ -252,7 +266,9 @@
     const b = T.berekenTevredenheid(S, dag);
     S.behoeften.tevredenheid = b.tevredenheid;
     S.behoeften.mist = b.mist;
-    S.behoeften.feest = b.feest;
+    S.behoeften.stemmingen = b.stemmingen;
+    // Wat voorbij is, hoeft niet meer bewaard.
+    if (S.stemmingen) S.stemmingen = S.stemmingen.filter((s) => dag < s.tot);
 
     // De extra soorten worden ook echt opgegeten, anders stapelt de moestuin zich oneindig op.
     for (const wat of b.extraSoorten) T.wijzigVoorraad(S, wat, -(S.bevolking || 0) * IN.extraVoedselPerMensPerDag);
