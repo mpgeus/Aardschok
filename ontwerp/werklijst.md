@@ -120,6 +120,31 @@ nog nodig is".
      gesprekken en quests (voor het avontuur). De toren, het erf, de meester, Wim, de tutorial en
      De koude oven gaan eruit (`wereld.md`).
 
+   **Het plan, in stappen die elk met `npm test` groen eindigen** (kaart gemaakt op 24 sep):
+   1. Het spel begint in het gehucht. `BEGIN_KAART` in `main.js` wordt `'gehucht'`, het
+      titelscherm gaat weg, en `NIEUWE_HUD` staat altijd aan. Let op: `nieuwSpel` zet heer, inner,
+      handel en oogsten niet terug, dus "Opnieuw" doet een `location.reload()`.
+   2. De tutorial, de regie, de meester en Wim eruit, met hun gesprekken en toetsen. De meester gaat
+      in dezelfde commit uit `wereld.betekenis.json` als uit `T.MENSEN`, anders klaagt de keuring.
+   3. De koude oven eruit. `T.QUESTS` en `T.RAAKPUNTEN` blijven als leeg blok staan, want de
+      questbewerker slaat alleen op als beide blokken er zijn. De gesprekken van de bakker, de
+      marskramer en de smidsvrouw gaan over de oven en de toren, dus die gaan mee; hun mensen
+      blijven.
+   4. De spreuken eruit. Twee plekken crashen zonder bewaking: `T.SPREUK_VOLGORDE` in `main.js` en
+      `toonSpreuken` in `ui.reset`. `planAfgeleid` roept `T.lokPad` aan. Toets `1` is geen slag
+      maar "spreuk weg"; een monster sla je door erop te klikken.
+   5. De leeftijd wordt levenspunten. Eerst `wereld.js` (de held krijgt `leven`, en een monster
+      `aanval.schade` in plaats van maanden), dan `leeftijd.js` weg, met twintig `require`-regels
+      en vier scripttags. `kaart.js` slikt fouten van `maakWezen` in: een vergeten
+      `T.kringVoorLeeftijd` laat de schout stil van de kaart vallen.
+   6. De toren eruit. `T.maakWereld` wordt een toetsdecor voor binnen. In `wereld.tmj` gaan het
+      torenvoorwerp en de meester eruit, en de toren-uitgang krijgt een nieuwe bestemming. Die kaart
+      blijft gebundeld, want het gehucht, de marskramer en de proefkaarten gaan erheen. Maak hem nooit
+      opnieuw met `maak-wereld.cjs`: dat wist Marcels eigen werk van 22 sep.
+   7. Opruimen en `CLAUDE.md`. Het beeld van het oude spel (`gereedschap/pixelart/toren*`,
+      `meester*`, `effecten*`, `tegels/toren.*`, de tovenaar en Wim in `beelden/`) gaat pas als
+      `sprites.js` niet meer op die vellen wacht.
+
 *C. Verhalen en besturen*
 
 8. **Voorvallen.** Klaar als er dingen gebeuren die een keuze vragen, met twee of drie antwoorden
