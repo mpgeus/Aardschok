@@ -482,6 +482,9 @@ en de rook trekt door een rookgat in het riet.
 6. Leem: leem met stro op het vlechtwerk, nog nat en donker.
 7. Af: de leem droog en licht, een deur van planken.
 
+Zo staat hij sinds 24 sep in het spel (`hutVlechtRiet`, 5×4). Marcel vond hem goed, en er mag nog
+één armer type hut bij ("crappier"): een plaggenhut of een krot, nog te kiezen.
+
 *Veldsteen.* Uitzetten met een sleuf; de muren laag voor laag tot heuphoogte, het deurkozijn staat
 er al in; op hoogte, met een steiger van gesjorde palen, korte balkjes die in gaten in de muur
 steken, horden als vloer en een ladder, en lateien boven ramen en deur; de kap en de meiboom; het

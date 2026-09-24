@@ -48,16 +48,21 @@ vrij). Een nieuw type gaat zo: model en fases in `bouwfasen-sdf.cjs` (volgorde u
 en in `js/gebouwen.js` de tekening en de voet. Houd bestaande tegels pixelgelijk (vergelijk met
 git HEAD).
 
-**Volgende stap:** de boerderij als hallehuis (eerst de poeren en de gebinten, dan de kap met de
-meiboom en het riet, de wanden het laatst; `beeld.md`), langs dezelfde weg als het vakwerkhuis en
-de hut. Dan houthakker, schaapskooi, kippenhok, wachthuis en kapel. Daarna punt 8, de voorvallen.
-
-**Voorstel vóór de boerderij (Claude, 24 sep; nog niet besloten):** een cache per type in
-`bouwfasen-sdf.cjs` en `naar-tiled.cjs`. Nu rendert elk nieuw type alles opnieuw (het gebouwenvel
-met alle gebouwen 5 tot 10 minuten, de fases van het vakwerkhuis 3 minuten), en moet elke keer
-worden nagekeken of wat er al was pixelgelijk bleef. Met een cache rendert alleen het nieuwe type,
-en kan wat er al staat niet per ongeluk veranderen. Scheelt per type zo'n tien minuten wachten, en
-de tokens van de agent die wacht.
+**Volgende stap, in deze volgorde:**
+1. **Een cache per type** (Marcel, 24 sep: "Cache is goed idee"), in `bouwfasen-sdf.cjs` en
+   `naar-tiled.cjs`. Nu rendert elk nieuw type alles opnieuw (het gebouwenvel met alle gebouwen 5
+   tot 10 minuten, de fases van het vakwerkhuis 3 minuten), en moet elke keer worden nagekeken of
+   wat er al was pixelgelijk bleef. Met een cache (per type het model, het zaad en de SPEC als
+   sleutel) rendert alleen wat nieuw of veranderd is, en kan wat er al staat niet per ongeluk
+   veranderen. Klaar als een tweede keer draaien zonder wijziging niets rendert, en de vellen
+   daarbij byte voor byte gelijk blijven.
+2. **De boerderij als hallehuis** (eerst de poeren en de gebinten, dan de kap met de meiboom en
+   het riet, de wanden het laatst; `beeld.md`), langs dezelfde weg als het vakwerkhuis en de hut.
+3. **Een tweede, armere hut** (Marcel, 24 sep: "Er mag nog wel 1 crappier type hut komen"). De hut
+   van vlechtwerk blijft zoals hij is. Eerst met Marcel kiezen wat de armere wordt: een plaggenhut
+   (half in de grond, wanden van graszoden) of een krot (scheve palen, vlechtwerk zonder leem, een
+   dak dat doorzakt), en waar hij in het spel past (de keuters zonder land?).
+4. Dan houthakker, schaapskooi, kippenhok, wachthuis en kapel. Daarna punt 8, de voorvallen.
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
@@ -101,10 +106,7 @@ de tokens van de agent die wacht.
 
 
 **Wacht op Marcel:**
-- De hut (platen hieronder, in `gereedschap/pixelart/uit/bouwfasen-sdf/hut-proef.png`): door het
-  steile dak is hij maar 32 px lager dan het vakwerkhuis. Nederiger kan met een dak van 50 tot 52
-  graden in plaats van 55.
-- Het voorstel voor een cache per type (hierboven).
+- Wat de tweede, armere hut wordt (zie "Volgende stap", 3).
 - Het tweede proefje spelen: een jaar met de heer en de inner. Is rijk worden en arm lijken leuk?
 - Spelen, en zeggen hoe het voelt: vooral de winter, en hoe snel een jaar gaat.
 - Het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): goederen, wat de heer
