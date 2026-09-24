@@ -388,6 +388,23 @@ Voorstel van Claude voor de andere twee, te beoordelen op de proefplaat:
 - **De inner is mager en sober,** in donkere kleren, met een rekenboek onder de arm en een pen
   achter zijn oor. Alleen zijn hozen dragen de livrei: het ene been rood, het andere geel.
 
+**Gemaakt (24 sep 2026)** in `gereedschap/pixelart/heer.cjs`, met staan en lopen in acht
+richtingen; de proefplaat is `uit/dorpelingen/huis-van-de-heer.png`. Naast een boer (kruin 66 px)
+is de heer 48 px tot zijn kruin en 61 tot 69 px met hoed en veren, en is zijn hoed 45 px breed
+tegen 37 voor de boer. De soldaat is 70 px, 93 met hellebaard; de inner 68 px. Wat onderweg bleek:
+
+- de heer trippelt: hij loopt met 20 beelden per seconde, want met 10 was elke pas langer dan zijn
+  beentjes;
+- hermelijn onder zijn ronde gezicht leek een witte baard, dus is zijn bont bruin, met een kraag
+  die voorop open is;
+- de rand van zijn hoed wipt voorop op, anders zie je van boven zijn ogen niet;
+- het gezicht van de soldaat ligt in de schaduw van zijn hoed: grimmig, en bewust klein.
+
+Twee nieuwe gereedschappen maakten het klein werk: `dorpelingen-anim.cjs heer soldaat inner`
+rendert alleen de genoemde figuren, en `naar-spel.cjs --alleen heer,soldaat,inner` zet alleen die in
+het spel. Zonder `--alleen` bouwt het de hele beschrijving opnieuw op uit `uit/`, en in een verse
+kopie is die map leeg: dan verdwijnen alle andere figuren.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

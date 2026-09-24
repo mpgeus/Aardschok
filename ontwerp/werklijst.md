@@ -68,9 +68,7 @@ komen, `Toren.debug.inner()` de inner (`(true)`: onverwacht terug), `Toren.debug
 zijn argwaan, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
 bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
 
-**Loopt nu:** tekenwerk (Marcel, 24 sep: "Laten we wat tekenwerk doen"). Eén agent maakt de
-heer, zijn soldaten en de inner als eigen figuren, in rood en geel (`beeld.md`, "Het huis van de
-heer draagt rood en geel"), met een proefplaat voor Marcel.
+**Loopt nu:** niets. Er draait geen agent.
 
 **Volgende stap: punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud,
 die de inner niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de
@@ -85,10 +83,9 @@ en wat de soldaten vinden. Daarna stap 3: praten, afleiden, omkopen en de twee r
 - **honger valt in het voorjaar**, vlak vóór de oogst (het zaaigraan gaat voor), en kost buiten de
   winter standaard geen mensen, alleen tevredenheid. Wie de heer alles geeft, heeft zo elk jaar
   een maand honger, en elk jaar iets meer. Of hij meer pijn doet, stel je in de spelregels in;
-- de heer, zijn soldaten, de inner, een koets, de schandpaal en braakland met onkruid zijn
-  tekenwerk. Nu leent de heer de rode mantel van de meester, lenen de soldaten de smid, leent de
-  inner het zondagse pak van de bruidegom, en blijft braakland kale geploegde grond; aan de paal
-  zie je alleen wie er staat, op de brink;
+- een koets, de schandpaal en braakland met onkruid zijn tekenwerk: braakland blijft kale
+  geploegde grond, en aan de paal zie je alleen wie er staat, op de brink. De heer, zijn soldaten
+  en de inner hebben sinds 24 sep hun eigen figuren (`beeld.md`);
 - het zwad van de maaier staat als paaltjes, en de slag is symmetrisch;
 - de bevolking is een getal, geen poppetjes; van de nieuwe goederen staan alleen ijzer, zout en
   gereedschap in de balk (steen, klei, riet, vis, … niet); wat de marskramer koopt, zie je wel in
@@ -254,6 +251,10 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 24 sep 2026 — **Het huis van de heer, in rood en geel.** De heer (klein en dik onder een veel te
+  grote hoed), zijn soldaten en de inner zijn eigen figuren, met staan en lopen
+  (`gereedschap/pixelart/heer.cjs`, `beeld.md`). Er kunnen nu ook losse figuren gerenderd en in het
+  spel gezet worden, zonder de rest.
 - 24 sep 2026 — **De inner komt tellen (punt 6, stap 1).** Op 15 oogstmaand loopt hij zijn ronde
   of met de schout mee; wat hij ziet, is de rekening van de heer, en argwaan doet vier dingen
   (`js/inner.js`). Onderweg hersteld: de schout kon in het gehucht niet lopen (sinds 23 sep), en
