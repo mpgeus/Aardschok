@@ -336,7 +336,8 @@
       `<p>Je klimt naar de volgende verdieping. Boven is het stil, op iets na dat ademt.</p>` +
         `<p>Je bent nu ${T.leeftijdTekst(S.held.leeftijd)}. ${kosten}</p><p>Hier eindigt het proefje.</p>`,
       'Opnieuw spelen',
-      () => T.nieuwSpel(true),
+      // Helemaal opnieuw: T.nieuwSpel zet de heer, de inner en de handel niet terug.
+      () => location.reload(),
     );
   };
 })(globalThis.Toren = globalThis.Toren || {});

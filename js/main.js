@@ -9,9 +9,9 @@
   let bh = 0;
   const S = (T.S = { tijd: 0, wind: 0 });
 
-  // index.html?kaart=gehucht begint direct op die kaart, zonder tutorial: voor een proefje
-  // (T.beginOpKaart, js/gebied.js). Zonder "kaart" verandert er niets aan het gewone begin.
-  const BEGIN_KAART = new URLSearchParams(window.location.search).get('kaart');
+  // Het spel begint in het gehucht (Marcel, 24 sep 2026; werklijst punt 7), met T.beginOpKaart
+  // (js/gebied.js). Met ?kaart=<naam> begint het op een andere kaart, voor een proefje.
+  const BEGIN_KAART = new URLSearchParams(window.location.search).get('kaart') || 'gehucht';
 
   // Hoe hoog iets boven zijn tegel uitsteekt, om erop te kunnen klikken. Met sprites zijn de
   // figuren groter dan de vlakken waren, dus vraagt het aanwijzen het aan de sprites zelf.
@@ -71,15 +71,12 @@
       regieCamera: null, // waar de camera in een scène naartoe kijkt (js/regie.js); null = de held volgen
       spreektMet: null,
     });
-    // Een proefje (?kaart=) begint zonder tutorial op zijn eigen kaart; lukt dat niet (de kaart
-    // bestaat niet), dan valt het terug op het gewone begin — een half aangelegde wereld mag
-    // nooit het spel breken.
-    if (!BEGIN_KAART || !T.beginOpKaart(S, BEGIN_KAART)) T.beginOpHetErf(S); // zet S.wereld, S.held en S.tutorial
+    // Lukt de kaart niet (hij bestaat niet), dan valt het terug op het erf van het oude spel — een
+    // half aangelegde wereld mag nooit het spel breken. Dat erf gaat er bij punt 7 nog uit.
+    if (!T.beginOpKaart(S, BEGIN_KAART)) T.beginOpHetErf(S);
     const p = T.naarScherm(S.held.x, S.held.y);
     S.camera = { x: p.x, y: p.y - 24 };
     T.ui.reset(S);
-    if (!BEGIN_KAART) T.ui.bericht('Een middag in de nazomer. Je oude meester staat in zijn moestuin, zoals altijd.');
-    if (meteen) T.startTutorial(S);
   };
 
   // Het beeld zoomt mee met het venster: op een groot scherm wordt de toren groter, op een
@@ -571,23 +568,7 @@
   // titelscherm is dat nooit te zien.
   T.sprites.laad();
   T.nieuwSpel(false);
-  if (BEGIN_KAART && S.wereld && S.wereld.gebied === BEGIN_KAART) {
-    // Een proefje: geen titelscherm en geen tutorial, meteen spelen.
-    S.modus = 'verkennen';
-  } else {
-    S.modus = 'titel';
-    // Geen uitlegscherm: wat een spreuk kost en wat de staf kost, laat de meester je zien
-    // (ontwerp/verhaal.md, "Hij speelt met zijn leeftijd").
-    T.ui.toonOverlay(
-      'Aardschok',
-      '<p>Je oude meester is zevenennegentig, en hij doet nog elke dag zijn moestuin. Jij bent vierentachtig. Voor hem ben je nog altijd de jongen.</p>' +
-        '<p>Klik om te lopen, te praten of iets te gebruiken. <kbd>Esc</kbd> slaat een scène over.</p>',
-      'Naar het erf',
-      () => {
-        S.modus = 'verkennen';
-        T.startTutorial(S);
-      },
-    );
-  }
+  // Geen titelscherm en geen tutorial meer (die hoorden bij De laatste klim): meteen spelen.
+  S.modus = 'verkennen';
   requestAnimationFrame(lus);
 })(globalThis.Toren = globalThis.Toren || {});

@@ -452,7 +452,8 @@
         'Honderd',
         '<p>Je bent honderd jaar geworden. Je gaat zitten waar je staat, net als je meester, en sluit je ogen. Wim zal de trap nog één keer vegen.</p>',
         'Opnieuw proberen',
-        () => T.nieuwSpel(true),
+        // Helemaal opnieuw: T.nieuwSpel zet de heer, de inner en de handel niet terug.
+        () => location.reload(),
       );
     });
   };

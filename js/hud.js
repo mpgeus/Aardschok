@@ -1,12 +1,11 @@
 // Het scherm van het gehuchtspel: de kalender (dag, seizoen, jaar) en de voorraad (goud, graan,
 // wol, hout) -- in de stijl en de plek van js/ui.js, maar in een eigen bestand, want het hoort
-// bij het nieuwe spel en niet bij De laatste klim. Aan met ?hud of ?kaart=gehucht in de
-// adresbalk (T.NIEUWE_HUD); zonder een van die twee blijft alles bij het oude (CLAUDE.md).
+// bij het nieuwe spel en niet bij De laatste klim. Sinds het spel in het gehucht begint (punt 7)
+// staat het altijd aan; T.NIEUWE_HUD en de klasse op body blijven tot de oude balk weg is.
 (function (T) {
   'use strict';
 
-  const params = new URLSearchParams(location.search);
-  T.NIEUWE_HUD = params.has('hud') || params.get('kaart') === 'gehucht';
+  T.NIEUWE_HUD = true;
   document.body.classList.toggle('nieuwe-hud', T.NIEUWE_HUD);
 
   const $ = (id) => document.getElementById(id);
