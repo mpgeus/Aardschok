@@ -168,7 +168,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.kanVerkopen`; hij staat op de plek `"marskramer"` uit het betekenisbestand), `js/heer.js`
   (Sint-Maarten: zijn brief in wijnmaand, wat hij vraagt naar wat hij ziet via `T.eisVanDeHeer` en
   `T.GEBOUWEN[soort].heer`, `T.gevolgVanBetaling` voor venster en knop, de straffen tot je ambt
-  kwijt; zaaien en braak staan in `js/akkers.js`), en `js/hud.js` (de balk, het bouwmenu onder
+  kwijt; zaaien en braak staan in `js/akkers.js`), `js/opties.js` (de spelregels: `T.OPTIES` op
+  één plek, zoals `T.GEBOUWEN`; een keuze zet alleen waarden in de instellingenblokken, zodat elk
+  getal één plek houdt; de namen; en `T.WERKBANK` met alle getallen, die vóór een keuze gaan. Het
+  komt ná alle regels en gesprekken, want het neemt hun waarden als standaard, en het gereedschap
+  laadt het bewust niet), en `js/hud.js` (de balk, het bouwmenu onder
   `B`, het handelsvenster, de brief en het betalen aan de heer, alleen met `?kaart=gehucht` of
   `?hud`). Het begin zonder tutorial is
   `T.beginOpKaart` (`js/gebied.js`); de kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de
@@ -202,6 +206,9 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 - De kern zoals Claude hem voorstelt, nog te toetsen met een proefje: **rijk worden en arm
   lijken.**
 - Toon: zwarte satire. De heer is lachwekkend, zijn straffen niet (voorstel).
+- **Instelbaar** (Marcel, 24 sep): waar een ontwerpvraag meer dan één goed antwoord heeft, wordt het
+  een optie in de spelregels (`js/opties.js`), en wat Marcel koos, is de standaard. Bouw een nieuwe
+  keuze dus als optie, niet als vaste regel.
 
 De regels van het oude spel (de leeftijd als levensbalk, `T.verouder`, meesterschap, de toetsen
 voor spreuken) staan in `git show 0eb8269:CLAUDE.md`, voor wie aan die code komt voordat hij weg is.
@@ -247,6 +254,8 @@ blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In he
 `Toren.debug.kalender(dag, snelheid)` springt door het jaar, `Toren.debug.bouw('huis', x, y)` bouwt,
 `Toren.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
 `Toren.debug.brief()` stuurt de brief van de heer nu, en `Toren.debug.heer()` laat hem nu komen.
+De spelregels die de browser onthield (`localStorage`, `aardschok.spelregels`) gelden ook voor wie
+test; `Toren.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
 Een sprong met `kalender` tikt alle dagen ertussen af: valt 1 wijnmaand erin, dan staat de brief
 open en de tijd stil tot je hem sluit.
 

@@ -38,16 +38,24 @@ half graan pacht per akkertegel, hoofdgeld, en per gebouw zijn prijs, die ook in
 staat. Hij telt slecht. Wie te weinig geeft, krijgt een boete, soldaten die meeëten, en de
 schandpaal, waarvoor je een van de vijf boeren aanwijst (die hebben nu een naam) of jezelf. Twee
 keer veel te weinig kost je je ambt. Zaaien kost vanaf het tweede jaar graan, en wat niet
-gezaaid kan worden, ligt braak. `npm test`: 354/354.
+gezaaid kan worden, ligt braak.
+
+**En de spelregels** (Marcel, 24 sep: "Dit moeten allemaal opties worden die instelbaar zijn";
+`spel.md`, "Instelbaar"). Onder `O` of de knop naast Bouwen staat één venster met de keuzes
+(graan, waarin de heer betaald wil worden, hoe hij telt, de schout aan de paal, honger buiten
+de winter), de namen van de heer en de boeren, en een werkbank met alle 91 getallen uit de
+regels. Wat je verandert, geldt meteen, en de browser onthoudt het. `npm test`: 373/373.
 
 Om te proberen: `Toren.debug.brief()` stuurt zijn brief nu, `Toren.debug.heer()` laat hem nu
 komen, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
-bewaart een blik op het spel.
+bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
 
 **Loopt nu:** niets. Er draait geen agent.
 
 **Volgende stap: punt 6, rijk worden en arm lijken,** het tweede proefje, en de vraag of de kern
-leuk is. Eerst moet Marcel kiezen wat de inner ziet (hieronder). Een proef van drie jaar zonder
+leuk is. Wat de inner ziet, wordt een optie in de spelregels (Marcel, 24 sep). Het voorstel in
+`spel.md` ("De kern voor het tweede proefje") wordt dan de standaard, maar vraag Marcel eerst of
+hij het zo wil. Een proef van drie jaar zonder
 scherm liet zien waarom punt 6 nodig is: minder geven helpt in punt 5 nog niet. Wie de pacht
 inhoudt, krijgt soldaten die een derde weer opeten en een boete in goud, en de eis liep in de
 proef op van 12 naar 56 goud. De uitweg is minder laten zien (`spel.md`, "Sint-Maarten").
@@ -57,8 +65,8 @@ proef op van 12 naar 56 goud. De uitweg is minder laten zien (`spel.md`, "Sint-M
   bijstellen als hij speelt;
 - in een huis in aanbouw branden de ramen al;
 - **honger valt in het voorjaar**, vlak vóór de oogst (het zaaigraan gaat voor), en kost buiten de
-  winter geen mensen, alleen tevredenheid. Wie de heer alles geeft, heeft zo elk jaar een maand
-  honger, en elk jaar iets meer. Of honger buiten de winter meer pijn moet doen, is open;
+  winter standaard geen mensen, alleen tevredenheid. Wie de heer alles geeft, heeft zo elk jaar
+  een maand honger, en elk jaar iets meer. Of hij meer pijn doet, stel je in de spelregels in;
 - de heer, zijn soldaten, een koets, de schandpaal en braakland met onkruid zijn tekenwerk. Nu
   leent de heer de rode mantel van de meester, lenen de soldaten de smid, en blijft braakland
   kale geploegde grond; aan de paal zie je alleen wie er staat, op de brink;
@@ -82,8 +90,8 @@ proef op van 12 naar 56 goud. De uitweg is minder laten zien (`spel.md`, "Sint-M
 **Wacht op Marcel:**
 - Spelen, en zeggen hoe het voelt: vooral de winter, hoe snel een jaar gaat, en nu ook Sint-Maarten
   (is de honger te veel of te weinig; mag hij harder, of juist zachter).
-- De namen en eigenschappen van de vijf boeren (Klaas, Aaltje, Gerrit, Trijn, Wouter) zijn een
-  voorstel van Claude; en de heer heeft nog geen naam.
+- De namen van de heer en de boeren stel je nu zelf in (spelregels); de eigenschappen van de boeren
+  (Klaas zingt, Aaltje is weduwe, …) zijn nog een voorstel van Claude.
 - De rest van het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): wat de
   inner ziet (vóór punt 6), en de drie groepen en vijf keuren (vóór punt 9). Wat de heer wil, is
   voor een deel besloten (`spel.md`, "Sint-Maarten").
@@ -157,7 +165,9 @@ nog nodig is".
 
 *F. Afwerking*
 
-17. **Opslaan, titelscherm, instellingen, geluid.** Zie `verpakken.md`.
+17. **Opslaan, titelscherm, instellingen, geluid.** Zie `verpakken.md`. Het venster Spelregels
+    komt dan ook bij Nieuw spel, met drie voorinstellingen: Mild, Zoals bedoeld en Streng
+    (`spel.md`, "Instelbaar").
 18. **Verpakken.** Klaar als er een programma is dat vanuit Steam start.
 
 Het tweede proefje (één jaar met de heer: is rijk worden en arm lijken leuk?) zijn nu de punten 5 en 6.
@@ -218,6 +228,10 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 24 sep 2026 — **De spelregels.** Marcel wil geen vaste antwoorden waar er meer goede zijn: één
+  venster (`O`) met de keuzes van Sint-Maarten, honger buiten de winter, de namen, en alle
+  getallen als werkbank (`js/opties.js`). De standaard is wat hij koos; de browser onthoudt de rest.
 
 - 24 sep 2026 — **Sint-Maarten (punt 5).** De heer stuurt in wijnmaand een brief, komt op
   Sint-Maarten zelf met twee soldaten, en vraagt naar wat hij ziet (`js/heer.js`). Je betaalt in

@@ -428,8 +428,10 @@ uit het bouwen kwamen:
 
 **Nog open** (voorstellen, niet besloten):
 
-- Moet honger ook buiten de winter pijn doen (mensen die wegtrekken, of zwakker werken)?
-- De heer heeft nog geen naam; hij ondertekent met "Uw genadige heer".
+- Moet honger ook buiten de winter pijn doen? Dat is nu een optie in de spelregels (alleen
+  tevredenheid, gezinnen die wegtrekken, of mensen die sterven; zie "Instelbaar").
+- De heer heeft standaard geen naam en tekent met "Uw genadige heer"; in de spelregels geef je hem
+  er een.
 - Een schandpaal, een koets, eigen vellen voor de heer en zijn soldaten, en braakland met onkruid
   zijn tekenwerk. Nu leent de heer de rode mantel van de meester, en lenen de soldaten de smid.
 - Akkers kun je niet bijbouwen, dus het graan groeit niet mee met het dorp. Zie punt 14.
@@ -459,6 +461,15 @@ eerder koos, is dan de standaard.
 Hoe het in de code zit (voorstel van Claude): één lijst `T.OPTIES` op één plek, net als
 `T.GEBOUWEN`. Een keuze zet alleen waarden in de instellingenblokken die er al zijn, zodat elk
 getal één plek houdt. Wat je in de werkbank zet, gaat vóór wat een optie zet.
+
+**Gebouwd op 24 sep** (`js/opties.js`, het venster in `js/hud.js`, `test/opties.test.cjs`). Het
+venster opent met `O` of de knop naast Bouwen, en zolang het open is, staat de tijd stil. De
+werkbank heeft 91 getallen, elk met een schuif, een getalveld en ↺, een leesbare naam ("koopt ·
+graan · prijs · lente"), en erbij welke keuze het getal zet. Een naam geldt overal tegelijk: bij de
+mens, in zijn gesprek en op zijn poppetje. De heer tekent zijn brief ermee.
+
+Nog open: de voorinstellingen Mild en Streng (wat staat er dan?), en of de eigenschappen van de
+boeren ook instelbaar moeten zijn.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
