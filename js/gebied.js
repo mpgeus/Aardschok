@@ -215,6 +215,8 @@
   // T.beginOpHetErf, js/tutorial.js). Geeft true terug als het gelukt is; S.wereld en S.held
   // staan dan klaar. Bestaat de kaart niet, of staat er geen "held" op en lukt het ook niet er
   // zelf een neer te zetten, dan false — de aanroeper valt dan terug op het gewone begin.
+  // De schout loopt zo snel (tegels per seconde; een dorpeling doet 1,2).
+  T.SCHOUT_SNELHEID = 2.5;
   T.beginOpKaart = function (S, naam) {
     S.tutorial = null;
     const w = T.gebied(S, naam);
@@ -235,6 +237,11 @@
     // `soort` om het plaatje te kiezen (js/sprites.js). Zie ontwerp/werklijst.md, punt 1b.
     held.soort = 'dorpeling';
     if (held.zaad == null) held.zaad = 1;
+    // Maar T.snelheidVan (js/wereld.js) geeft alleen een wezen van soort 'held' zijn loopsnelheid
+    // (die van de tovenaar, naar zijn leeftijd); iedereen anders loopt op zijn eigen `snelheid`.
+    // Zonder die stond de schout tot 24 sep stil: een klik op de grond gaf een pad, maar geen stap.
+    // Zo vlot als de tovenaar op zijn 84e: de speler wacht niet op zijn eigen poppetje.
+    held.snelheid = T.SCHOUT_SNELHEID;
     S.held = held;
     zetNeer(held, held.x, held.y);
     // Een klein beginvoorraadje (kaarten/<naam>.betekenis.json, "beginVoorraad") en de gebouwen

@@ -1,0 +1,37 @@
+// Het gehucht zoals het spel het begint (T.beginOpKaart, js/gebied.js, met kaarten/gehucht.tmj en
+// zijn betekenis): wat er op de echte kaart moet kunnen. Los van de andere toetsen, die met een
+// lege wereld werken.
+const test = require('node:test');
+const assert = require('node:assert/strict');
+
+require('../js/leeftijd.js');
+require('../js/tijd.js');
+require('../js/wereld.js');
+require('../js/voorraad.js');
+require('../beelden/beschrijving.js');
+require('../tegels/tegels.js');
+require('../kaarten/kaarten.js');
+require('../js/mensen.js');
+require('../js/pad.js');
+require('../js/gebouwen.js');
+require('../js/kaart.js');
+require('../js/gebied.js');
+const T = globalThis.Toren;
+
+function beginGehucht() {
+  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, kalender: { dag: 0 }, bezocht: new Set() };
+  // (T.laadKaart waarschuwt over de overgang zonder "komt"; die hoort bij de kaart, niet bij deze toets.)
+  const warn = console.warn;
+  console.warn = () => {};
+  try {
+    assert.equal(T.beginOpKaart(S, 'gehucht'), true);
+  } finally {
+    console.warn = warn;
+  }
+  return S;
+}
+
+test('de schout kan lopen (tot 24 sep stond hij stil: snelheid 0)', () => {
+  const S = beginGehucht();
+  assert.ok(T.snelheidVan(S.held) > 0);
+});
