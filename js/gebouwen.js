@@ -54,6 +54,11 @@
     etenPerMensPerDag: 0.05, // graan dat één mens per dag eet (T.wijzigVoorraad haalt dit uit S.voorraad.graan)
     graanBufferVoorGroei: 20, // zonder ten minste dit in de voorraad komt er geen nieuw gezin bij:
     // zo eet een groeiend dorp zichzelf niet meteen leeg.
+    // Gereedschap (van de smidse, spel.md "Handel"): wie iets maakt en er gereedschap voor heeft,
+    // werkt zoveel harder (0,25 is een kwart). Eén stuk per hand aan het werk is genoeg; met de
+    // helft werkt de helft harder. Een stuk in gebruik gaat zoveel dagen mee en is dan versleten.
+    gereedschapBonus: 0.25,
+    gereedschapSlijtDagen: 180,
   };
 
   T.GEBOUWEN = {
@@ -160,13 +165,16 @@
         + 'leent voorlopig een klein dorpshuis. De heer vindt het goed; voor wie de rakkers echt werken, is de vraag.',
     },
 
-    // ── Dorp ──
+    // Al in het gehucht (Marcel, 24 sep 2026; spel.md, "Handel"): eerst hangt hij voor zijn ijzer
+    // af van de marskramer (js/handel.js), de ertsgraver (dorp) maakt hem later vrij.
     smidse: {
-      naam: 'smidse', trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 10 }, bouwtijd: 4,
+      naam: 'smidse', trede: 'gehucht', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 10 }, bouwtijd: 4,
       handen: 2, woonruimte: 0, maakt: { in: { ijzer: 1 }, uit: { gereedschap: 1 } }, verdacht: false,
       menu: true, tekening: 'gebouwen/smidse', beschrijving: 'ijzer tot gereedschap; betere werktuigen, sneller werk',
-      opmerking: 'Niets levert nu nog ijzer; de ketting begint pas te lopen zodra dat er is.',
+      opmerking: 'Zonder ijzer staat hij stil (T.tikGebouwenDag, stap 6). IJzer komt van de marskramer, tot er een ertsgraver is.',
     },
+
+    // ── Dorp ──
     timmerman: {
       naam: 'timmerman', trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 12, goud: 6 }, bouwtijd: 3,
       handen: 2, woonruimte: 0, maakt: { in: { hout: 2 }, uit: { planken: 2 } }, verdacht: false,
@@ -377,6 +385,57 @@
     for (const wat in kosten) T.wijzigVoorraad(S, wat, -kosten[wat]);
   };
 
+  // Hoeveel handen er vandaag iets maken, en hoeveel daarvan gereedschap hebben: de dekking
+  // (0..1) en wat dat aan harder werken geeft (factor, 1 is niets extra). Leest g.handen van
+  // vandaag, dus pas na stap 5 van T.tikGebouwenDag; ook voor de balk (js/hud.js), die bij het
+  // gereedschap zegt hoeveel handen het dekt.
+  T.gereedschapDekking = function (S) {
+    const IN = T.GEBOUWEN_INSTELLINGEN;
+    let handen = 0;
+    for (const g of S.gebouwen || []) {
+      const soort = T.GEBOUWEN[g.soort];
+      if (!g.klaar || !soort || !soort.maakt || !(g.handen > 0)) continue;
+      // Wie niets te bewerken heeft (een smidse zonder ijzer), gebruikt ook geen gereedschap.
+      if (soort.maakt.in && Object.keys(soort.maakt.in).some((wat) => !((S.voorraad || {})[wat] > 0))) continue;
+      handen += g.handen;
+    }
+    const heeft = (S.voorraad && S.voorraad.gereedschap) || 0;
+    const dekking = handen > 0 ? Math.min(1, heeft / handen) : 0;
+    return { handen, heeft, dekking, factor: 1 + IN.gereedschapBonus * dekking };
+  };
+
+  // Het gebouw dat de speler neerzette en waarvan deze tegel onder de voet ligt, of null. De
+  // gebouwen die al op de kaart stonden (T.zetBestaandeGebouwen) hebben geen eigen voorwerp en
+  // tellen hier niet mee: dat zijn huizen, die niets maken en dus ook niet stil kunnen staan.
+  T.gebouwOp = function (S, x, y) {
+    for (const g of S.gebouwen || []) {
+      const v = g.voorwerp;
+      if (!v || !v.beslaat) continue;
+      if (x >= v.x && x < v.x + v.beslaat[0] && y >= v.y && y < v.y + v.beslaat[1]) return g;
+    }
+    return null;
+  };
+
+  // Hoe het met één gebouw staat, in één zin: voor de muis op een gebouw (js/verkennen.js). Leest
+  // wat T.tikGebouwenDag de laatste dag zag (g.werkte, g.tekort), dus hij zegt wat er vandaag
+  // gebeurde, niet wat er misschien zou kunnen.
+  T.gebouwToestand = function (S, g) {
+    const soort = T.GEBOUWEN[g.soort];
+    if (!soort) return '';
+    const naam = T.hoofdletter(soort.naam);
+    if (!g.klaar) {
+      const dagNu = S.kalender ? Math.floor(S.kalender.dag) : 0;
+      const nog = Math.max(1, g.klaarOp - dagNu);
+      return `${naam}: in aanbouw, nog ${nog} dag${nog === 1 ? '' : 'en'}.`;
+    }
+    if (!soort.maakt) return `${naam}: ${soort.beschrijving}.`;
+    if (soort.handen > 0 && !g.handen) return `${naam}: staat stil, er zijn geen handen voor.`;
+    if (g.tekort && !(g.werkte > 0)) return `${naam}: staat stil, er is geen ${g.tekort}.`;
+    if (g.tekort) return `${naam}: werkt maar half, er is te weinig ${g.tekort}.`;
+    const handen = soort.handen > 0 ? ` (${g.handen} van ${soort.handen} handen)` : '';
+    return `${naam}: aan het werk${handen}.`;
+  };
+
   // ---------------------------------------------------------------------------------------------
   // Neerzetten: past het, en dan echt neerzetten (bouwmenu, T.plaatsGebouw hieronder) — en de
   // gebouwen die al op de kaart staan (js/gebied.js, T.zetBestaandeGebouwen)
@@ -557,14 +616,39 @@
     const werkFactor = S.behoeften
       ? T.BEHOEFTEN_INSTELLINGEN.werkBasis + (1 - T.BEHOEFTEN_INSTELLINGEN.werkBasis) * S.behoeften.tevredenheid
       : 1;
+    // Gereedschap: wie iets maakt en er gereedschap voor heeft, werkt harder (alleen wie handen
+    // heeft: een kippenhok werkt niet harder met een hamer), en het slijt (hieronder, na het werk).
+    const gereedschap = T.gereedschapDekking(S);
     for (const g of S.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
+      g.tekort = null;
+      g.werkte = 0;
       if (!g.klaar || !soort.maakt) continue;
-      const factor = (soort.handen > 0 ? g.handen / soort.handen : 1) * werkFactor;
+      let factor = soort.handen > 0 ? (g.handen / soort.handen) * werkFactor * gereedschap.factor : werkFactor;
+      if (factor <= 0) continue;
+      // Wat hij nodig heeft, bepaalt hoeveel hij kan: een smidse zonder ijzer staat stil, met ijzer
+      // voor een halve dag werkt hij een halve dag. Tot 24 sep maakte hij toch gereedschap, uit
+      // niets, en maalde een molen zonder graan toch meel (spel.md, "Handel").
+      if (soort.maakt.in) {
+        for (const wat in soort.maakt.in) {
+          const kan = (S.voorraad[wat] || 0) / soort.maakt.in[wat];
+          if (kan < factor) {
+            factor = kan;
+            g.tekort = wat;
+          }
+        }
+      }
+      g.werkte = factor;
       if (factor <= 0) continue;
       if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(S, wat, -soort.maakt.in[wat] * factor);
       if (soort.maakt.uit) for (const wat in soort.maakt.uit) T.wijzigVoorraad(S, wat, soort.maakt.uit[wat] * factor);
     }
+    // Wat in gebruik was, slijt: één stuk per hand die vandaag echt iets maakte (een smidse zonder
+    // ijzer slijt zijn hamers niet).
+    let aanHetWerk = 0;
+    for (const g of S.gebouwen) if (g.werkte > 0 && g.handen > 0) aanHetWerk += g.handen;
+    const slijt = Math.min(S.voorraad.gereedschap || 0, aanHetWerk) / IN.gereedschapSlijtDagen;
+    if (slijt > 0) T.wijzigVoorraad(S, 'gereedschap', -slijt);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
   };
 

@@ -118,6 +118,14 @@
         return { tekst: 'De kist bekijken', doe: () => loopNaast(S, v, () => T.ui.bericht('Een kist vol versleten bezems. Wim gooit niets weg.')) };
       }
     }
+    // Een gebouw dat de speler neerzette (js/gebouwen.js): de muis op zijn voet zegt hoe het ermee
+    // staat — in aanbouw, aan het werk, of stil en waarom (spel.md, "Handel": een smidse zonder
+    // ijzer staat stil, en zegt dat).
+    const gebouw = T.gebouwOp && T.gebouwOp(S, doel.x, doel.y);
+    if (gebouw) {
+      const tekst = T.gebouwToestand(S, gebouw);
+      return { tekst, doe: () => T.ui.bericht(tekst) };
+    }
     const d = T.deurOp(w, doel.x, doel.y);
     if (d && d.staat === 'opslot') {
       if (S.inventaris.has('sleutel')) return { tekst: 'De deur openen met de sleutel', doe: () => loopNaast(S, d, () => ontsluit(S, d)) };

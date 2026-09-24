@@ -313,3 +313,78 @@ test('T.plaatsGebouw: tekeningNaam blijft leeg voor een soort zonder tekening', 
   assert.equal(r.gelukt, true);
   assert.equal(r.instantie.voorwerp.tekeningNaam, null);
 });
+
+// ---------------------------------------------------------------------------------------------
+// Een gebouw maakt alleen wat zijn grondstof toelaat, en gereedschap (spel.md, "Handel", 24 sep
+// 2026). Tot die dag maakte een smidse zonder ijzer toch gereedschap, en maalde een molen zonder
+// graan toch meel.
+// ---------------------------------------------------------------------------------------------
+
+// Een dorp met één klaar gebouw van deze soort, en precies genoeg mensen voor zijn handen.
+function metGebouw(soort) {
+  const S = maakS();
+  S.gebouwen.push({ soort, x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
+  S.bevolking = T.GEBOUWEN[soort].handen;
+  S.voorraad.graan = 1000; // genoeg eten: het eten gaat hier niet over
+  return S;
+}
+
+test('de smidse kan al in het gehucht', () => {
+  assert.equal(T.GEBOUWEN.smidse.trede, 'gehucht');
+});
+
+test('een smidse zonder ijzer staat stil, en zegt dat', () => {
+  const S = metGebouw('smidse');
+  for (let dag = 1; dag <= 10; dag++) T.tikGebouwenDag(S, dag);
+  assert.equal(S.voorraad.gereedschap || 0, 0, 'uit niets komt geen gereedschap');
+  assert.equal(S.gebouwen[0].tekort, 'ijzer');
+  assert.match(T.gebouwToestand(S, S.gebouwen[0]), /staat stil, er is geen ijzer/);
+});
+
+test('met ijzer voor anderhalve dag werkt de smidse anderhalve dag', () => {
+  const S = metGebouw('smidse');
+  S.voorraad.ijzer = 1.5;
+  for (let dag = 1; dag <= 5; dag++) T.tikGebouwenDag(S, dag);
+  assert.equal(S.voorraad.ijzer, 0);
+  // Anderhalf stuk gemaakt, min wat er al van sleet.
+  assert.ok(S.voorraad.gereedschap > 1.45 && S.voorraad.gereedschap <= 1.5, `gereedschap ${S.voorraad.gereedschap}`);
+});
+
+test('een molen zonder graan maalt niets', () => {
+  const S = metGebouw('molen');
+  S.voorraad.graan = 0;
+  T.tikGebouwenDag(S, 1);
+  assert.equal(S.voorraad.meel || 0, 0);
+});
+
+test('gereedschap laat harder werken, en wat in gebruik is, slijt', () => {
+  const zonder = metGebouw('houthakker');
+  const met = metGebouw('houthakker');
+  met.voorraad.gereedschap = 1;
+  T.tikGebouwenDag(zonder, 1);
+  T.tikGebouwenDag(met, 1);
+  const IN = T.GEBOUWEN_INSTELLINGEN;
+  assert.ok(Math.abs(met.voorraad.hout - zonder.voorraad.hout * (1 + IN.gereedschapBonus)) < 1e-9);
+  assert.ok(Math.abs(met.voorraad.gereedschap - (1 - 1 / IN.gereedschapSlijtDagen)) < 1e-9);
+});
+
+test('gereedschap bij wie stilstaat, slijt niet en telt niet mee', () => {
+  const S = metGebouw('smidse'); // zonder ijzer: de smid heeft niets te smeden
+  S.voorraad.gereedschap = 3;
+  T.tikGebouwenDag(S, 1);
+  assert.equal(S.voorraad.gereedschap, 3);
+  assert.equal(T.gereedschapDekking(S).handen, 0);
+});
+
+test('de muis op de voet van een neergezet gebouw vindt dat gebouw (T.gebouwOp)', () => {
+  const S = maakS();
+  S.voorraad.hout = 100;
+  S.voorraad.goud = 100;
+  const r = T.plaatsGebouw(S, 'smidse', 3, 4);
+  assert.equal(r.gelukt, true);
+  const [b, h] = r.instantie.voorwerp.beslaat;
+  assert.equal(T.gebouwOp(S, 3, 4), r.instantie);
+  assert.equal(T.gebouwOp(S, 3 + b - 1, 4 + h - 1), r.instantie);
+  assert.equal(T.gebouwOp(S, 3 + b, 4), null);
+  assert.match(T.gebouwToestand(S, r.instantie), /in aanbouw/);
+});

@@ -209,12 +209,12 @@ werk sneller.
 | Moestuin | groente bij het huis | bestaat |
 | Put | water; zonder put wordt het dorp ziek | bestaat |
 | Verstopplek | een kelder of kuil die de inner niet ziet | nieuw |
+| Smidse | ijzer tot gereedschap; betere werktuigen, sneller werk. Sinds 24 sep al in het gehucht, met ijzer van de marskramer (zie "Handel") | bestaat |
 
 *Dorp*
 
 | Gebouw | Wat het doet | Tekening |
 |---|---|---|
-| Smidse | ijzer tot gereedschap; betere werktuigen, sneller werk | bestaat |
 | Timmerman | hout tot planken en balken, nodig om te bouwen | nieuw |
 | Molen | graan tot meel. De heer wil dat je bij zíjn molen maalt en betaalt (het banrecht); een eigen molen is verzet | bestaat (watermolen) |
 | Bakkerij | meel tot brood | bestaat |
