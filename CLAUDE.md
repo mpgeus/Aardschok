@@ -160,14 +160,20 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen, eigen
   klok naast `S.tijd`, snelheid), `js/voorraad.js` (`S.voorraad`; alles verandert via
   `T.wijzigVoorraad`, zoals vroeger de jaren via `T.verouder`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
-  soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag,
-  `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`), `js/behoeften.js` (tevredenheid uit eten,
-  brandhout en een kerk; de winter; een huis dat doorgroeit), en `js/hud.js` (de balk en het
-  bouwmenu onder `B`, alleen met `?kaart=gehucht` of `?hud`). Het begin zonder tutorial is
-  `T.beginOpKaart` (`js/gebied.js`); de kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de
-  bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen
-  om bij te stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
-  `T.BEHOEFTEN_INSTELLINGEN`, `T.AKKER_STADIA`, `T.GRAAN_PER_TEGEL`).
+  soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag, een
+  werkplaats zonder grondstof valt stil, `T.plaatsGebouw`), `js/bouwen.js` (een gebouw in
+  aanbouw: de ploeg komt uit de bevolking vóór de werkplaatsen, `voortgang` 0..1 uit gedaan werk,
+  de vorst, `T.bouwFaseIndex`, het hoogste punt met pannenbier, en de bouwers als poppetjes op de
+  bouwplaats), `js/handel.js` (de marskramer: komen en gaan, kopen en verkopen, stil verkopen als
+  heler in `S.handel.boek`), `js/behoeften.js` (tevredenheid uit eten, brandhout en een kerk; de
+  winter; zout voor vis en vlees; een feest; een huis dat doorgroeit), en `js/hud.js` (de balk,
+  het bouwmenu onder `B`, een vraag met knoppen via `T.ui.vraag`, en het handelspaneel; alleen met
+  `?kaart=gehucht` of `?hud`). Het begin zonder tutorial is `T.beginOpKaart` (`js/gebied.js`); de
+  kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de bouwfases uit
+  `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen om bij te
+  stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
+  `T.BOUWEN_INSTELLINGEN`, `T.HANDEL_INSTELLINGEN`, `T.BEHOEFTEN_INSTELLINGEN`, `T.AKKER_STADIA`,
+  `T.GRAAN_PER_TEGEL`).
 - Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): zijn `gesprek`
   als hij er een heeft, anders zijn soort. Zo delen honderd figuranten één soort (`dorpeling`)
   zonder alle honderd hetzelfde te zeggen.
@@ -236,7 +242,11 @@ hem weg, beloning en al); zonder fase zegt hij waar hij staat.
 `await Toren.debug.schermafdruk('naam')` bewaart het doek als PNG in
 `gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
 blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In het gehucht:
-`Toren.debug.kalender(dag, snelheid)` springt door het jaar, `Toren.debug.bouw('huis', x, y)` bouwt.
+`Toren.debug.kalender(dag, snelheid)` springt door het jaar, `Toren.debug.bouw('huis', x, y)` bouwt
+(een bouwplaats komt pas verder op de volgende dag, met een ploeg uit de bevolking), en de
+marskramer komt voor het eerst op dag 6 (`Toren.debug.kalender(6.2)`, dan een paar seconden
+`stap` om hem naar de brink te laten lopen). Let op bij pannenbier en handel: `Toren.S.gebouwen`
+begint met de gebouwen die al op de kaart staan; het huis van de schout is ook een `'huis'`.
 
 Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken ze de regels uit
 `js/` zelf, nooit een eigen kopie:
