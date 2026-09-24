@@ -168,7 +168,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.kanVerkopen`; hij staat op de plek `"marskramer"` uit het betekenisbestand), `js/heer.js`
   (Sint-Maarten: zijn brief in wijnmaand, wat hij vraagt naar wat hij ziet via `T.eisVanDeHeer` en
   `T.GEBOUWEN[soort].heer`, `T.gevolgVanBetaling` voor venster en knop, de straffen tot je ambt
-  kwijt; zaaien en braak staan in `js/akkers.js`), `js/opties.js` (de spelregels: `T.OPTIES` op
+  kwijt; zaaien en braak staan in `js/akkers.js`), `js/boeren.js` (wie de boeren zijn, geloot per
+  spel: een karakter uit `T.KARAKTERS` in `js/mensen.js`, met een eigen gesprek onder dezelfde naam,
+  en de eigenschappen maaien, opbrengst, zaaien en aanzien; de regels vragen `T.boerFactor` en
+  `T.aanzienVan`, het scherm `T.overBoerTekst`), `js/opties.js` (de spelregels: `T.OPTIES` op
   één plek, zoals `T.GEBOUWEN`; een keuze zet alleen waarden in de instellingenblokken, zodat elk
   getal één plek houdt; de namen; en `T.WERKBANK` met alle getallen, die vóór een keuze gaan. Het
   komt ná alle regels en gesprekken, want het neemt hun waarden als standaard, en het gereedschap

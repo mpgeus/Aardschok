@@ -494,6 +494,28 @@ Een inzicht van Claude vooraf: sinds het vangnet komt al het graan toch binnen, 
 bepaalt alleen wánneer het graan er is, niet hoeveel. Dat telt vooral in de hongerweken vlak vóór
 de oogst. Wie meer of minder oplevert, zegt de opbrengst.
 
+**Gebouwd op 24 sep** (`js/boeren.js`, de stapel `T.KARAKTERS` in `js/mensen.js`, de gesprekken in
+`js/gesprekken.js`, `test/boeren.test.cjs`):
+
+- **Tien karakters:** de vijf die er waren (de zanger, de weduwe, de woekeraar, de vroedvrouw, het
+  heethoofd) en vijf nieuwe: de vrome ("bidt drie keer per dag, en één keer voor de heer"), de
+  roddelaar, de oudste ("zag drie heren komen en gaan"), de nieuwkomer (uit het buurdorp, en
+  niemand weet waarom) en de drinker. Elk karakter heeft een eigen gesprek dat de brief, de
+  soldaten en de schandpaal onthoudt. De naam boven het gesprek is die van de boer.
+- **De eigenschappen:** een snelle maaier doet 30% korter over een tegel, groene vingers geven 15%
+  meer graan (ook bij het vangnet), een zuinige boer zaait met 20% minder, en wie geliefd is, kost
+  de schandpaal het dorp 30% tevredenheid, wie gehaat is 5%. Meestal is een boer gewoon. Kansen en
+  sterktes staan in de werkbank ("De boeren").
+- Je ziet het bij de muis ("Praten met Aaltje (drinker · gehaat)"), onder de naam boven het
+  gesprek, en bij de schandpaal. In de spelregels staan bij de namen wat elke boer nu is, en een
+  knop om opnieuw te loten.
+- Vast (de optie) is zoals het eerst was: Klaas zingt, Aaltje is weduwe, Gerrit de woekeraar, Trijn
+  de vroedvrouw, Wouter het heethoofd, en allemaal even goed.
+
+Nog open: de boeren zien er nog hetzelfde uit (twee vellen, boer en boerin); een eigen gezicht per
+karakter is tekenwerk. Eigenschappen voor wie geen boer is (de marskramer, straks de ambachtslieden)
+en meer soorten (sluw, praatziek, sterk) komen bij de punten waar ze iets doen.
+
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
 De ruggengraat staat of wordt gebouwd: bouwen, mensen, werk, kalender, voorraad. Wat er nog mist,

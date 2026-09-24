@@ -44,7 +44,13 @@ gezaaid kan worden, ligt braak.
 `spel.md`, "Instelbaar"). Onder `O` of de knop naast Bouwen staat één venster met de keuzes
 (graan, waarin de heer betaald wil worden, hoe hij telt, de schout aan de paal, honger buiten
 de winter), de namen van de heer en de boeren, en een werkbank met alle 91 getallen uit de
-regels. Wat je verandert, geldt meteen, en de browser onthoudt het. `npm test`: 373/373.
+regels. Wat je verandert, geldt meteen, en de browser onthoudt het.
+
+**En de boeren worden geloot** (Marcel, 24 sep: "Ze moeten random eigenschappen hebben"). Bij elk
+spel trekt elke boer een karakter uit een stapel van tien (met een eigen gesprek) en vier
+eigenschappen: maaien, opbrengst, zaaien en aanzien. Je ziet het bij de muis, boven het gesprek en
+bij de schandpaal. In de spelregels: geloot of vast, de kansen in de werkbank, en opnieuw loten.
+`npm test`: 387/387.
 
 Om te proberen: `Toren.debug.brief()` stuurt zijn brief nu, `Toren.debug.heer()` laat hem nu
 komen, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
@@ -90,8 +96,9 @@ proef op van 12 naar 56 goud. De uitweg is minder laten zien (`spel.md`, "Sint-M
 **Wacht op Marcel:**
 - Spelen, en zeggen hoe het voelt: vooral de winter, hoe snel een jaar gaat, en nu ook Sint-Maarten
   (is de honger te veel of te weinig; mag hij harder, of juist zachter).
-- De namen van de heer en de boeren stel je nu zelf in (spelregels); de eigenschappen van de boeren
-  (Klaas zingt, Aaltje is weduwe, …) zijn nog een voorstel van Claude.
+- De namen van de heer en de boeren stel je nu zelf in (spelregels). De tien karakters en hun
+  zinnen (de vrome, de roddelaar, de oudste, de nieuwkomer, de drinker zijn nieuw) zijn een voorstel
+  van Claude: lees ze eens in `gereedschap/gesprekken.html`.
 - De rest van het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): wat de
   inner ziet (vóór punt 6), en de drie groepen en vijf keuren (vóór punt 9). Wat de heer wil, is
   voor een deel besloten (`spel.md`, "Sint-Maarten").
@@ -229,6 +236,9 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 24 sep 2026 — **Geloote boeren.** Elk spel een ander karakter (tien, elk met een gesprek) en
+  andere eigenschappen (maaien, opbrengst, zaaien, aanzien), zichtbaar bij de muis, in het gesprek
+  en bij de schandpaal; geloot of vast in de spelregels (`js/boeren.js`).
 - 24 sep 2026 — **De spelregels.** Marcel wil geen vaste antwoorden waar er meer goede zijn: één
   venster (`O`) met de keuzes van Sint-Maarten, honger buiten de winter, de namen, en alle
   getallen als werkbank (`js/opties.js`). De standaard is wat hij koos; de browser onthoudt de rest.
