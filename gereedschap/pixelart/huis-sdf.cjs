@@ -3893,16 +3893,20 @@ function huis(zaad = 1, o = {}) {
   const dik = (basis) => basis * (sch ? 0.78 + 0.5 * r(kb++) : 1);
   const wiebel = (m = 2.2) => (sch ? rs(kb++) * m : 0);
   let deel = 10;
+  // o.balkDiep: zoveel eenheden verder de muur in. Voor bouwfasen-sdf.cjs, waar het gebint nog
+  // zonder vulling staat en de balken dus hun echte dikte moeten tonen. Het afgewerkte huis ziet
+  // er niets van: dat stuk zit in de muur (zonder de optie is het huis pixel voor pixel gelijk).
+  const achter = o.balkDiep || 0;
   // een balk op muur P van (u0, h0) naar (u1, h1), breed in px, uit eenheden voor de muur
   const wandBalk = (groep, P, u0, h0, u1, h1, breed, uit, m = 'hout') => {
-    const nc = (uit - 2.5) / 2;
+    const nc = (uit - 2.5 - achter) / 2;
     const a = P.pos(u0, h0, nc);
     const b = P.pos(u1, h1, nc);
     const du = Math.abs(u1 - u0);
     const dh = Math.abs(h1 - h0);
     const l = Math.hypot(du, dh) || 1;
     const hb = (breed / 2) * (du / l / PXH + dh / l / SQ);
-    const p = balk(a, b, hb, (uit + 2.5) / 2, [P.N[0], P.N[1], 0], sp ? 1.6 : 0.8);
+    const p = balk(a, b, hb, (uit + 2.5 + achter) / 2, [P.N[0], P.N[1], 0], sp ? 1.6 : 0.8);
     p.m = m;
     p.deel = deel++;
     p.zaad = kb * 3.1;
@@ -4513,5 +4517,7 @@ function voorDeDeur(H, afstand = 1.3) {
 }
 
 // Wat de losse tuinstukken (tuin-sdf.cjs) met de huizen delen: het hout (balkPatroon voor balken
-// en planken, stamHuid voor stammen, vlechtwerk voor twijgen), de knoppen en het zaad.
-module.exports = { huis, proefhuis, maten, dakPlek, voorDeDeur, kiesHuis, DAKEN, WANDEN, balkPatroon, stamHuid, vlechtwerk, knoppenVan, meng, kiesUit };
+// en planken, stamHuid voor stammen, vlechtwerk voor twijgen), de knoppen en het zaad. En wat
+// bouwfasen-sdf.cjs nodig heeft om hetzelfde huis in aanbouw te tekenen: het uitpuilen van de
+// muren (bolQ, bolA), de bovenkant van de steen (steenLijn) en de vormen van een opening.
+module.exports = { huis, proefhuis, maten, dakPlek, voorDeDeur, kiesHuis, DAKEN, WANDEN, balkPatroon, stamHuid, vlechtwerk, knoppenVan, meng, kiesUit, bolQ, bolA, steenLijn, laag, rechthoek };
