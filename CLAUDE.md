@@ -165,12 +165,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   toelaat, en gereedschap laat harder werken), `js/behoeften.js` (tevredenheid uit eten, brandhout
   en een kerk; de winter; een huis dat doorgroeit; zout dat vis en vlees goed houdt),
   `js/handel.js` (de marskramer: drie bezoeken per jaar, prijzen per bezoek, `T.kanKopen` en
-  `T.kanVerkopen`; hij staat op de plek `"marskramer"` uit het betekenisbestand), en `js/hud.js`
-  (de balk, het bouwmenu onder `B` en het handelsvenster, alleen met `?kaart=gehucht` of `?hud`). Het begin zonder tutorial is
+  `T.kanVerkopen`; hij staat op de plek `"marskramer"` uit het betekenisbestand), `js/heer.js`
+  (Sint-Maarten: zijn brief in wijnmaand, wat hij vraagt naar wat hij ziet via `T.eisVanDeHeer` en
+  `T.GEBOUWEN[soort].heer`, `T.gevolgVanBetaling` voor venster en knop, de straffen tot je ambt
+  kwijt; zaaien en braak staan in `js/akkers.js`), en `js/hud.js` (de balk, het bouwmenu onder
+  `B`, het handelsvenster, de brief en het betalen aan de heer, alleen met `?kaart=gehucht` of
+  `?hud`). Het begin zonder tutorial is
   `T.beginOpKaart` (`js/gebied.js`); de kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de
   bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen
   om bij te stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
-  `T.BEHOEFTEN_INSTELLINGEN`, `T.AKKER_STADIA`, `T.GRAAN_PER_TEGEL`).
+  `T.BEHOEFTEN_INSTELLINGEN`, `T.AKKER_STADIA`, `T.GRAAN_PER_TEGEL`, `T.HANDEL_INSTELLINGEN`,
+  `T.HEER_INSTELLINGEN`).
 - Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): zijn `gesprek`
   als hij er een heeft, anders zijn soort. Zo delen honderd figuranten één soort (`dorpeling`)
   zonder alle honderd hetzelfde te zeggen.
@@ -240,7 +245,10 @@ hem weg, beloning en al); zonder fase zegt hij waar hij staat.
 `gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
 blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In het gehucht:
 `Toren.debug.kalender(dag, snelheid)` springt door het jaar, `Toren.debug.bouw('huis', x, y)` bouwt,
-`Toren.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek).
+`Toren.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
+`Toren.debug.brief()` stuurt de brief van de heer nu, en `Toren.debug.heer()` laat hem nu komen.
+Een sprong met `kalender` tikt alle dagen ertussen af: valt 1 wijnmaand erin, dan staat de brief
+open en de tijd stil tot je hem sluit.
 
 Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken ze de regels uit
 `js/` zelf, nooit een eigen kopie:

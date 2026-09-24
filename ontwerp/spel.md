@@ -399,6 +399,41 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 5):
   loopt en de kalender niet, rotte er op 3× veel meer: wie snel speelde, verloor graan zonder het
   te weten.
 
+**Gebouwd op 24 sep** (`js/heer.js`, de vensters in `js/hud.js`, `test/heer.test.cjs`). Dingen die
+uit het bouwen kwamen:
+
+- **De tijd staat stil als hij op de brink staat,** tot je bij hem bent geweest. Anders zijn zijn
+  drie wachtdagen op 3× nog geen drie seconden, en haal je hem nooit. Zet je de tijd zelf weer
+  aan, dan tellen ze wel, en neemt hij het daarna zelf mee.
+- **Het venster rekent vooruit:** vóór je bevestigt, zie je of je graan het haalt tot de oogst,
+  met het zaaigraan en de soldaten meegerekend. Zo zie je de keus die Marcel bedoelde: wat je hem
+  geeft, kun je niet zaaien.
+- **De dagen aan de schandpaal tellen pas als hij er staat,** net als bij de marskramer. Drie
+  dagen zijn op 1× maar zeven seconden, en eerst mocht Aaltje al naar huis voor ze er was.
+- **De namen van de boeren:** Klaas zingt in de schuur, Aaltje is weduwe met drie kinderen,
+  Gerrit is de rijkste en leent graan tegen woeker, Trijn is de vroedvrouw, en Wouter sloeg eens
+  een knecht van de heer. Elk heeft een gesprek dat de schandpaal, de soldaten en de brief
+  onthoudt. Het zijn voorstellen van Claude: Marcel mag ze veranderen.
+
+**Wat een proef van drie jaar zonder scherm liet zien** (de echte regels, zonder verstoppen):
+
+- Wie alles betaalt, heeft elk jaar zo'n 30 tot 40 dagen honger vlak vóór de oogst, in
+  bloeimaand en zomermaand, en elk jaar iets meer. Dat is de honger die Marcel koos, maar hij valt
+  in het voorjaar en niet in de late winter, want het zaaigraan gaat voor. Honger buiten de
+  winter kost geen mensen, alleen tevredenheid (en dus groei).
+- **Minder geven helpt in punt 5 nog niet.** Wie de helft van de pacht inhoudt, krijgt soldaten
+  die een derde ervan weer opeten, en een boete in goud, die je in wijnmaand weer met graan moet
+  kopen tegen de laagste prijs. De eis liep in de proef op van 12 naar 40 naar 56 goud. De uitweg
+  is niet weigeren maar minder laten zien: dat is punt 6, verstoppen.
+
+**Nog open** (voorstellen, niet besloten):
+
+- Moet honger ook buiten de winter pijn doen (mensen die wegtrekken, of zwakker werken)?
+- De heer heeft nog geen naam; hij ondertekent met "Uw genadige heer".
+- Een schandpaal, een koets, eigen vellen voor de heer en zijn soldaten, en braakland met onkruid
+  zijn tekenwerk. Nu leent de heer de rode mantel van de meester, en lenen de soldaten de smid.
+- Akkers kun je niet bijbouwen, dus het graan groeit niet mee met het dorp. Zie punt 14.
+
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
 De ruggengraat staat of wordt gebouwd: bouwen, mensen, werk, kalender, voorraad. Wat er nog mist,

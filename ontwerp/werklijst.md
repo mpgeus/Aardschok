@@ -28,21 +28,40 @@ kost. **Sinds 24 sep ook handel:** de marskramer komt drie keer per jaar over de
 Je praat met hem en handelt in een venster, en zolang dat open is, staat de tijd stil. De prijzen
 verschillen per bezoek. Een gebouw maakt alleen wat zijn grondstof toelaat (de smidse staat
 zonder ijzer stil en zegt dat bij de muis), gereedschap laat harder werken, en zout houdt vis en
-vlees goed. 's Winters ligt de beek dicht, dus gezouten vis is dan je voorraad. `npm test`: 317/317. `await Toren.debug.schermafdruk('naam')` bewaart een blik op het
-spel, en `Toren.debug.marskramer()` laat hem meteen komen.
+vlees goed. 's Winters ligt de beek dicht, dus gezouten vis is dan je voorraad.
+
+**Sinds 24 sep (later die dag) ook de heer** (punt 5, `spel.md`, "Sint-Maarten"). Op 1 wijnmaand
+komt zijn brief met wat hij wil. Op Sint-Maarten loopt hij met twee soldaten over de weg naar de
+brink, en daar staat de tijd stil tot je bij hem bent geweest. Je betaalt in een venster met
+schuiven, en dat venster rekent vooruit of je graan het haalt. Hij vraagt naar wat hij ziet: een
+half graan pacht per akkertegel, hoofdgeld, en per gebouw zijn prijs, die ook in het bouwmenu
+staat. Hij telt slecht. Wie te weinig geeft, krijgt een boete, soldaten die meeëten, en de
+schandpaal, waarvoor je een van de vijf boeren aanwijst (die hebben nu een naam) of jezelf. Twee
+keer veel te weinig kost je je ambt. Zaaien kost vanaf het tweede jaar graan, en wat niet
+gezaaid kan worden, ligt braak. `npm test`: 354/354.
+
+Om te proberen: `Toren.debug.brief()` stuurt zijn brief nu, `Toren.debug.heer()` laat hem nu
+komen, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
+bewaart een blik op het spel.
 
 **Loopt nu:** niets. Er draait geen agent.
 
-**Volgende stap: punt 5, Sint-Maarten, in een nieuwe sessie.** Marcel koos op 24 sep hoe het
-moet: de heer komt zelf, hij vraagt naar wat hij ziet, alle vier de straffen, en zaaigoed telt
-(`spel.md`, "Sint-Maarten"). Dan punt 6, rijk worden en arm lijken: samen het tweede proefje, en
-de vraag of de kern leuk is.
+**Volgende stap: punt 6, rijk worden en arm lijken,** het tweede proefje, en de vraag of de kern
+leuk is. Eerst moet Marcel kiezen wat de inner ziet (hieronder). Een proef van drie jaar zonder
+scherm liet zien waarom punt 6 nodig is: minder geven helpt in punt 5 nog niet. Wie de pacht
+inhoudt, krijgt soldaten die een derde weer opeten en een boete in goud, en de eis liep in de
+proef op van 12 naar 56 goud. De uitweg is minder laten zien (`spel.md`, "Sint-Maarten").
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
   bijstellen als hij speelt;
 - in een huis in aanbouw branden de ramen al;
-- een boer met twee akkers werkt er maar één af, en er is geen apart zaaimoment;
+- **honger valt in het voorjaar**, vlak vóór de oogst (het zaaigraan gaat voor), en kost buiten de
+  winter geen mensen, alleen tevredenheid. Wie de heer alles geeft, heeft zo elk jaar een maand
+  honger, en elk jaar iets meer. Of honger buiten de winter meer pijn moet doen, is open;
+- de heer, zijn soldaten, een koets, de schandpaal en braakland met onkruid zijn tekenwerk. Nu
+  leent de heer de rode mantel van de meester, lenen de soldaten de smid, en blijft braakland
+  kale geploegde grond; aan de paal zie je alleen wie er staat, op de brink;
 - het zwad van de maaier staat als paaltjes, en de slag is symmetrisch;
 - de bevolking is een getal, geen poppetjes; van de nieuwe goederen staan alleen ijzer, zout en
   gereedschap in de balk (steen, klei, riet, vis, … niet); wat de marskramer koopt, zie je wel in
@@ -61,7 +80,10 @@ de vraag of de kern leuk is.
 
 
 **Wacht op Marcel:**
-- Spelen, en zeggen hoe het voelt: vooral de winter, en hoe snel een jaar gaat.
+- Spelen, en zeggen hoe het voelt: vooral de winter, hoe snel een jaar gaat, en nu ook Sint-Maarten
+  (is de honger te veel of te weinig; mag hij harder, of juist zachter).
+- De namen en eigenschappen van de vijf boeren (Klaas, Aaltje, Gerrit, Trijn, Wouter) zijn een
+  voorstel van Claude; en de heer heeft nog geen naam.
 - De rest van het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): wat de
   inner ziet (vóór punt 6), en de drie groepen en vijf keuren (vóór punt 9). Wat de heer wil, is
   voor een deel besloten (`spel.md`, "Sint-Maarten").
@@ -90,12 +112,12 @@ nog nodig is".
 
 *B. De heer, en de kern (dit is het tweede proefje)*
 
-5. **Sint-Maarten.** Klaar als de heer zelf op 11 slachtmaand naar de brink komt (met in
-   wijnmaand een brief vooraf), zijn deel vraagt in goederen en goud, naar wat hij ziet, en je
-   betaalt in een venster; als tekortschieten oploopt van een boete en hogere eisen, via soldaten
-   die inkwartieren en de schandpaal (jij wijst aan wie), tot je ambt kwijt; en als zaaigoed telt:
-   wat je hem geeft, kun je niet zaaien. Besloten op 24 sep, zie `spel.md`, "Sint-Maarten"; wat
-   nog open is, staat daar onderaan.
+5. **Sint-Maarten** (af, 24 sep 2026). Klaar als de heer zelf op 11 slachtmaand naar de brink
+   komt (met in wijnmaand een brief vooraf), zijn deel vraagt in goederen en goud, naar wat hij
+   ziet, en je betaalt in een venster; als tekortschieten oploopt van een boete en hogere eisen,
+   via soldaten die inkwartieren en de schandpaal (jij wijst aan wie), tot je ambt kwijt; en als
+   zaaigoed telt: wat je hem geeft, kun je niet zaaien. Besloten op 24 sep, zie `spel.md`,
+   "Sint-Maarten"; wat nog open is, staat daar onderaan.
 6. **Rijk worden en arm lijken.** Klaar als de inner argwaan heeft die stijgt als wat hij ziet niet
    klopt met wat je levert, er verstopplekken zijn met plaats voor zoveel, je twee rekenboeken
    bijhoudt, en zijn bezoek een scène is waarin jij meeloopt, de route kiest, praat, afleidt of
@@ -196,6 +218,14 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 24 sep 2026 — **Sint-Maarten (punt 5).** De heer stuurt in wijnmaand een brief, komt op
+  Sint-Maarten zelf met twee soldaten, en vraagt naar wat hij ziet (`js/heer.js`). Je betaalt in
+  een venster dat vooruitrekent. Wie tekortschiet, krijgt een boete, soldaten, de schandpaal (jij
+  wijst aan wie, ook jezelf), en de tweede keer ben je je ambt kwijt. Zaaien kost graan, en daarom
+  klopt het graan nu: een boer maait al zijn akkers, en het vangnet haalt de rest binnen. Marcel
+  koos vóór het bouwen; wat Claude zag en wat een proef van drie jaar liet zien, staat in
+  `spel.md`, "Sint-Maarten".
 
 - 24 sep 2026 — **Handel (punt 4).** De marskramer komt drie keer per jaar, je handelt met hem
   in een venster (`js/handel.js`, `js/hud.js`), en de prijzen verschillen per bezoek. Een gebouw
