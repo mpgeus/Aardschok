@@ -393,6 +393,10 @@ Uitgewerkt door Claude (voorstel, de getallen staan in `T.INNER_INSTELLINGEN`):
   een lage opgave bijna niets: de helft opgeven gaf bij de akkers +52 argwaan, en afleiden maakte
   er +5 van (gevonden bij het nakijken, 24 sep).
 - **Wat hij vindt,** neemt hij mee voor de heer, en het staat in zijn rapport.
+- **Een verstopplek draagt iets gewoons (Marcel, 24 sep):** een houtmijt of een hooiopper met de
+  kuil eronder. Jij ziet waar hij is, de inner ziet een houtstapel. Eerst was hij onzichtbaar, maar
+  hij blokkeerde wel zijn voet, dus liep je tegen iets aan wat je niet zag. Later kan meetellen waar
+  hij staat: een houtmijt bij de schuur valt minder op dan een hooiopper midden in het dorp.
 - **De brief van de heer** vraagt pacht naar de opgegeven oogst (een achtste), maar hoe argwaniger
   de inner, hoe meer de heer rekent met wat de inner zelf telde, en hoe meer goud hij er bovenop
   vraagt.

@@ -487,6 +487,13 @@ het laatst.
 kale grond; ramen en deur zijn donkere gaten tot het gebouw af is; niets is recht, ook de steiger
 niet.
 
+**De proefplaat, en eerst dit ene huis in het spel (Marcel, 24 sep).** Het vakwerkhuis met riet staat
+in zeven fases uit `gereedschap/pixelart/bouwfasen-sdf.cjs` (zaad 4, `uit/bouwfasen-sdf/`). Marcel
+koos om dit ene type eerst in het spel te zetten (ronde 4b, voor één huis), vóór de andere types.
+Waarom: de plaat liet zien dat de bouwplaats breder is dan de voet (stapels, steiger, leemkuil), en
+het spel kent een huis nog als 6×6 terwijl dit er een van 7×5 is. Dat los je op met één type, en
+dan gaan de andere types langs dezelfde weg.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

@@ -2,6 +2,11 @@
 
 De klim en het herstel van de toren staan in `toren.md`; het tekenen van kaarten in `kaarten.md`.
 
+**Wat blijft (Marcel, 24 sep 2026, bij punt 7 van de werklijst):** het oude dorp en zijn mensen (de
+bakker, de koster, de smidsvrouw en de anderen), als bron voor het nieuwe spel. De toren, het erf,
+de meester, Wim, de tutorial en De koude oven (die hangt aan de toren en de vuurschicht) gaan eruit.
+Wat hieronder over de toren en het erf staat, is dus alleen nog geschiedenis.
+
 ## Eén doorlopende wereld, zonder overgangen (Marcel, 21 sep 2026)
 
 "Uiteindelijk wil ik één doorlopende wereld eigenlijk — geen overgangen zeg maar." Het erf, het

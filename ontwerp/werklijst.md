@@ -38,14 +38,12 @@ hetzelfde huis met hetzelfde zaad: uitzetten, voet, gebint met steiger, kap met 
 de voet omhoog, leem, af. Marcel vond de fases op de oude, rechte `dorp.cjs` nep (zie `beeld.md`,
 "Bouwen: een huis dat groeit"). Wat nog wringt, staat bij "Nog ruw".
 
-**Volgende stap:** Marcel speelt het tweede proefje (is rijk worden en arm lijken leuk?) en
-beoordeelt de proefplaat. Keurt hij hem goed, dan de andere types van het gehucht (hut, boerderij
-als hallehuis, houthakker, schaapskooi, kippenhok, wachthuis, kapel) op dezelfde manier, en dan
-**ronde 4b**: de niet-waterpas huizen als de gebouwen in het spel, met hun fases (per type zoveel
-als het werk vraagt, elk zo lang als het werk duurt, het hoogste punt waar de kap staat). Dan
-punt 7, het oude spel eruit. Dat raakt twintig bestanden, dus eerst met Marcel: wat komt er in
-een gevecht in de plaats van de leeftijd, en wat blijft er van de oude wereld (het dorp en zijn
-mensen, de meester, Wim, De koude oven)?
+**Volgende stap (Marcel koos op 24 sep):** eerst **dit ene huis in het spel** (ronde 4b voor één
+type): het vakwerkhuis met zijn zeven fases als het `huis` van het gehucht, met de bouwplaats die
+breder is dan de voet. Dan de andere types van het gehucht (hut, boerderij als hallehuis,
+houthakker, schaapskooi, kippenhok, wachthuis, kapel) langs dezelfde weg. Tussendoor de
+verstopplek met iets gewoons erop (een houtmijt of hooiopper, `spel.md`). Dan punt 7, het oude
+spel eruit, met Marcels keuzes van 24 sep (zie punt 7).
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
@@ -65,8 +63,7 @@ mensen, de meester, Wim, De koude oven)?
   nieuwste rijke gebouw); **zwijgen is altijd slechter dan uitleggen**, dus die keuze is er nog
   alleen voor de vorm; de getallen (`T.INNER_INSTELLINGEN`) zijn een eerste gok;
 - de verstopplek tekent niets en blokkeert toch zijn voet: je loopt tegen iets aan wat je niet
-  ziet. Voorstel: een houtmijt of hooiopper erop, iets gewoons, zodat je ziet waar hij is en de
-  inner niet;
+  ziet. Marcel koos een houtmijt of hooiopper erop (`spel.md`);
 - de bouwers lopen alleen het laatste stuk van hun weg (acht tegels), want lopen gaat in echte
   seconden en een dag duurt er 2,5; ze dragen nog niets (hout, riet); de slag van de hamer is een
   zwaai opzij, geen slag van boven; er is nog geen geluid;
@@ -79,9 +76,6 @@ mensen, de meester, Wim, De koude oven)?
 
 **Wacht op Marcel:**
 - Het tweede proefje spelen: een jaar met de heer en de inner. Is rijk worden en arm lijken leuk?
-- De proefplaat van de bouwfases (`uit/bouwfasen-sdf/proef.png`): goed genoeg om door te gaan?
-- Punt 7: wat komt er in een gevecht in de plaats van de leeftijd, en wat blijft er van de oude
-  wereld?
 - Spelen, en zeggen hoe het voelt: vooral de winter, en hoe snel een jaar gaat.
 - Het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): goederen, wat de heer
   wil, wat de inner ziet, drie groepen en vijf keuren. Schrappen en aanvullen, vóór punt 5.
@@ -118,7 +112,13 @@ nog nodig is".
    (punt 11).
 7. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
    zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel beschrijft. Hier, omdat
-   er daarna veel nieuwe code bovenop komt.
+   er daarna veel nieuwe code bovenop komt. Marcel koos op 24 sep:
+   - **In een gevecht komen voorlopig gewone levenspunten** in de plaats van de leeftijd, zodat de
+     gevechtscode blijft werken. Het echte ontwerp komt bij punt 13, als er weer gevochten wordt;
+     zo ontwerpen we het niet twee keer.
+   - **Van de oude wereld blijven het dorp en zijn mensen,** als bron, en het gereedschap voor
+     gesprekken en quests (voor het avontuur). De toren, het erf, de meester, Wim, de tutorial en
+     De koude oven gaan eruit (`wereld.md`).
 
 *C. Verhalen en besturen*
 
