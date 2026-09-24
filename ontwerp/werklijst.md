@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (einde sessie 23 sep 2026)
+## De stand (einde sessie 24 sep 2026)
 
 **Het spel is omgegooid** (23 sep). Marcel vond het doel van De laatste klim niet goed genoeg en
 kwam, na vijf rondes ideeën van Claude, zelf met het nieuwe spel: **een bouw- en beheerspel in
@@ -24,12 +24,18 @@ een es; graan dat met de kalender groeit, wuift en door de boeren gemaaid wordt 
 binnenkomt); een balk met kalender (oude maandnamen, pauze, 1–3×), voorraad, bevolking en
 tevredenheid; 45 soorten gebouwen met een bouwmenu (`B`) en fases tijdens het bouwen; een
 bevolking die groeit met ruimte, eten en tevredenheid; en een winter die zonder brandhout mensen
-kost. `npm test`: 293/293. `await Toren.debug.schermafdruk('naam')` bewaart een blik op het spel.
+kost. **Sinds 24 sep ook handel:** de marskramer komt drie keer per jaar over de weg naar de brink.
+Je praat met hem en handelt in een venster, en zolang dat open is, staat de tijd stil. De prijzen
+verschillen per bezoek. Een gebouw maakt alleen wat zijn grondstof toelaat (de smidse staat
+zonder ijzer stil en zegt dat bij de muis), gereedschap laat harder werken, en zout houdt vis en
+vlees goed. `npm test`: 314/314. `await Toren.debug.schermafdruk('naam')` bewaart een blik op het
+spel, en `Toren.debug.marskramer()` laat hem meteen komen.
 
 **Loopt nu:** niets. Er draait geen agent.
 
-**Volgende stap: punt 4, Handel** (de marskramer). Daarna B: Sint-Maarten, en rijk worden en arm
-lijken — het tweede proefje, en de vraag of de kern leuk is.
+**Volgende stap: punt 5, Sint-Maarten.** Dan punt 6, rijk worden en arm lijken: samen het tweede
+proefje, en de vraag of de kern leuk is. Wacht wel eerst op Marcels oordeel over de kern
+(hieronder).
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
@@ -37,8 +43,19 @@ lijken — het tweede proefje, en de vraag of de kern leuk is.
 - in een huis in aanbouw branden de ramen al;
 - een boer met twee akkers werkt er maar één af, en er is geen apart zaaimoment;
 - het zwad van de maaier staat als paaltjes, en de slag is symmetrisch;
-- de bevolking is een getal, geen poppetjes; nieuwe goederen (steen, klei, riet, …) staan niet in
-  de balk;
+- de bevolking is een getal, geen poppetjes; van de nieuwe goederen staan alleen ijzer, zout en
+  gereedschap in de balk (steen, klei, riet, vis, … niet); wat de marskramer koopt, zie je wel in
+  zijn venster;
+- **het eerste voorjaar is krap:** het gehucht begint met 60 graan voor 25 mensen, dus half
+  grasmaand is het op, ruim drie maanden vóór de oogst. Bij het eerste bezoek van de marskramer
+  heb je dan ook bijna niets te verkopen (wat hout). Bijstellen met Marcel: meer beginvoorraad, of
+  juist zo laten, want de lente vóór de oogst was echt de hongertijd;
+- zout doet nu nog weinig: vis en vlees komen het hele jaar binnen. Het gaat pas echt tellen als de
+  visser en de jager 's winters minder vangen, of met het slachten in slachtmaand (`spel.md`,
+  "Handel", voor later);
+- de marskramer leent het vel van Wim, en loopt van de weg naar de brink op 1× een week;
+- wat een gebouw zegt, lees je alleen op zijn voet (het dak vangt de muis niet), en alleen bij
+  gebouwen die je zelf neerzette;
 - veel nieuwe gebouwen lenen een tekening (hut, schaapskooi, timmerman, brouwerij, tiendschuur,
   wapenmaker, wachthuis, …), en kapel, watermolen en put hebben nog geen bouwfases: tekenwerk.
 
@@ -62,11 +79,12 @@ nog nodig is".
    eten, brandhout en een kerk willen, tevredenheid bepaalt hoe hard ze werken en of ze blijven,
    een huis groeit (hut, huis, stenen huis) als zijn bewoners krijgen wat ze willen, en een winter
    zonder brandhout of voorraad mensen kost.
-4. **Handel.** Klaar als de marskramer drie keer per jaar langskomt (niet in de winter), ijzer en
-   zout verkoopt en koopt wat je over hebt, tegen een prijs die per bezoek verschilt; een gebouw
-   alleen maakt wat zijn grondstof toelaat, zodat de smidse zonder ijzer stilvalt; gereedschap
-   sneller werk geeft en slijt; en zout vis en vlees bewaart. Besloten op 24 sep, zie `spel.md`,
-   "Handel". Stenen komen niet van hem maar bij punt 14, met een voerman met een kar.
+4. **Handel** (af, 24 sep 2026). Klaar als de marskramer drie keer per jaar langskomt (niet in
+   de winter), ijzer en zout verkoopt en koopt wat je over hebt, tegen een prijs die per bezoek
+   verschilt; een gebouw alleen maakt wat zijn grondstof toelaat, zodat de smidse zonder ijzer
+   stilvalt; gereedschap sneller werk geeft en slijt; en zout vis en vlees bewaart. Besloten op
+   24 sep, zie `spel.md`, "Handel". Stenen komen niet van hem maar bij punt 14, met een voerman
+   met een kar.
 
 *B. De heer, en de kern (dit is het tweede proefje)*
 
@@ -173,6 +191,12 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 24 sep 2026 — **Handel (punt 4).** De marskramer komt drie keer per jaar, je handelt met hem
+  in een venster (`js/handel.js`, `js/hud.js`), en de prijzen verschillen per bezoek. Een gebouw
+  maakt alleen wat zijn grondstof toelaat, de smidse kan al in het gehucht, gereedschap laat
+  harder werken, en zout houdt vis en vlees goed. Het eerste voorstel ging aan Marcel voor, en hij
+  koos alle vier de keuzes; wat Claude zag voordat er gebouwd werd, staat in `spel.md`, "Handel".
 
 - 23 sep 2026 — **Het gehucht speelt.** Punt 1: graan als plaat en in het spel (groeit met de
   kalender, wuift, boeren maaien, de oogst brengt het graan binnen). Punt 2 en 2b: 45 soorten
