@@ -434,6 +434,32 @@ uit het bouwen kwamen:
   zijn tekenwerk. Nu leent de heer de rode mantel van de meester, en lenen de soldaten de smid.
 - Akkers kun je niet bijbouwen, dus het graan groeit niet mee met het dorp. Zie punt 14.
 
+## Instelbaar: opties in plaats van één keuze (Marcel, 24 sep 2026)
+
+> Dit moeten allemaal opties worden die instelbaar zijn.
+
+Gezegd na Sint-Maarten, over wat nog openstond: de namen van de boeren en de heer, of honger buiten
+de winter meer pijn moet doen, en wat de inner ziet (punt 6). Dus waar een ontwerpvraag meer dan
+één goed antwoord heeft, kiezen we niet één antwoord, maar maken we er een optie van. Wat Marcel
+eerder koos, is dan de standaard.
+
+**Besloten (Marcel, 24 sep, uit een voorstel van Claude):**
+
+- **Voor de speler én voor Marcel:** één venster Spelregels, dat je altijd kunt openen, ook
+  midden in een spel. Zo kan Marcel nu proberen. Later (punt 17) komt hetzelfde venster bij Nieuw
+  spel op het titelscherm, met drie voorinstellingen: Mild, Zoals bedoeld en Streng.
+- **Welke:** de keuzes van Sint-Maarten (graan: ruim, net rond of honger; betalen in: naar wat hij
+  ziet, graan en goud, of alleen goud; hoe hij telt: slecht, precies of steeds zwaarder; of de
+  schout zichzelf aan de paal mag zetten), honger buiten de winter (alleen tevredenheid,
+  gezinnen die wegtrekken, of mensen die sterven), de namen van de heer en de vijf boeren, en
+  **alle getallen** uit de instellingenblokken als werkbank.
+- Wat Marcel eerder koos, is de standaard. De browser onthoudt wat je instelt.
+- Wat de inner ziet, wordt bij punt 6 meteen als opties gebouwd.
+
+Hoe het in de code zit (voorstel van Claude): één lijst `T.OPTIES` op één plek, net als
+`T.GEBOUWEN`. Een keuze zet alleen waarden in de instellingenblokken die er al zijn, zodat elk
+getal één plek houdt. Wat je in de werkbank zet, gaat vóór wat een optie zet.
+
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
 De ruggengraat staat of wordt gebouwd: bouwen, mensen, werk, kalender, voorraad. Wat er nog mist,
