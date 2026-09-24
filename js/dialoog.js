@@ -34,15 +34,23 @@
     else el.removeAttribute('src');
   }
 
+  // Stilstaan, maar niet halverwege een stap: wie onderweg is, maakt zijn lopende stap af (zoals
+  // bij het begin van een gevecht). Een leeg pad midden in een stap bleef hangen: de beweging
+  // (js/anim.js) kijkt alleen naar het pad, en de inner (js/inner.js) wacht tot hij niet meer
+  // onderweg is, dus die stond na een gesprek voorgoed stil.
+  const staStil = (e) => {
+    e.pad = e.onderweg && e.pad[0] ? [e.pad[0]] : [];
+  };
+
   T.openDialoog = function (S, wie) {
     const wieId = T.gesprekIdVan(wie);
     const gesprek = T.GESPREKKEN[wieId];
     S.modus = 'dialoog';
-    S.held.pad = [];
+    staStil(S.held);
     // Met wie je praat, staat stil en blijft zichtbaar: hij komt door een boom of de toren heen
     // (js/tekenen.js, doorkijk) en hij dwaalt niet weg midden in het gesprek.
     S.spreektMet = wie || null;
-    if (wie) wie.pad = [];
+    if (wie) staStil(wie);
     const toon = (knoopId) => {
       const knoop = T.gesprekKnoop(S, wieId, knoopId);
       toonPortret(gesprek.portret);
