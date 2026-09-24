@@ -252,6 +252,10 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 24 sep 2026 — **De inner komt tellen (punt 6, stap 1).** Op 15 oogstmaand loopt hij zijn ronde
+  of met de schout mee; wat hij ziet, is de rekening van de heer, en argwaan doet vier dingen
+  (`js/inner.js`). Onderweg hersteld: de schout kon in het gehucht niet lopen (sinds 23 sep), en
+  na een gesprek bleef wie liep halverwege een stap staan.
 - 24 sep 2026 — **Geloote boeren.** Elk spel een ander karakter (tien, elk met een gesprek) en
   andere eigenschappen (maaien, opbrengst, zaaien, aanzien), zichtbaar bij de muis, in het gesprek
   en bij de schandpaal; geloot of vast in de spelregels (`js/boeren.js`).

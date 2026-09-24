@@ -523,7 +523,7 @@ getal één plek houdt. Wat je in de werkbank zet, gaat vóór wat een optie zet
 
 **Gebouwd op 24 sep** (`js/opties.js`, het venster in `js/hud.js`, `test/opties.test.cjs`). Het
 venster opent met `O` of de knop naast Bouwen, en zolang het open is, staat de tijd stil. De
-werkbank heeft 91 getallen, elk met een schuif, een getalveld en ↺, een leesbare naam ("koopt ·
+werkbank heeft 135 getallen (sinds de inner), elk met een schuif, een getalveld en ↺, een leesbare naam ("koopt ·
 graan · prijs · lente"), en erbij welke keuze het getal zet. Een naam geldt overal tegelijk: bij de
 mens, in zijn gesprek en op zijn poppetje. De heer tekent zijn brief ermee.
 
