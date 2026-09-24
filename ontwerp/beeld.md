@@ -439,20 +439,53 @@ niet. Een gebouw staat drie keer zo lang in de steigers als eerst (hut 6 dagen, 
 minuut op 1×. De fout met de overgeslagen fases verdwijnt vanzelf, want de voortgang komt nu uit
 gedaan werk en niet meer uit de klok.
 
-**Vast stramien voor de fases:** vijf per gebouw, en de vierde (index 3) is altijd het hoogste
-punt: het dakgebinte staat en de meiboom zit op de nok. Het pannenbier in het spel hangt aan die
-fase. Wat de fases per materiaal laten zien:
+**Nog steeds nep (Marcel, 24 sep, na de eerste ronde):** "Gebruik ook de niet waterpas module om
+de huizen 'echt' te maken. [...] Het bouwproces moet realistisch zijn en overeenkomstig met het type
+gebouw. Detail is wat dit spel overeind houdt." De oorzaak: de huizen in het spel, en dus ook hun
+fases, komen nog uit de oude `huis()` in `dorp.cjs`, die uit rechte dozen bouwt. De huizen die niet
+waterpas zijn (`huis-sdf.cjs`, rondes 1 tot 3 van de huizenbouwer) zijn nooit in het spel gekomen:
+ronde 4b staat nog open. Bouwfases op een recht huis blijven nep, hoe ze ook getekend zijn. Een
+schema van vijf gelijke fases voor elk huis ook: dat is geen bouwen, dat is een diavoorstelling.
 
-| Fase | Steen | Vakwerk en vlechtwerk | Planken | Blokhut |
-|---|---|---|---|---|
-| 0 | kale grond, paaltjes en touw, sleuf met de eerste laag, grote stapels | idem, met de stenen voet | idem | idem, met de onderste balk |
-| 1 | muren tot een derde, gaten voor deur en ramen | het geraamte, zoals het in het afgewerkte huis zit | het geraamte van stijlen | balken tot een derde |
-| 2 | muren op hoogte, met steiger | geraamte heel, met steiger | planken tot halverwege, met steiger | balken op hoogte, met steiger |
-| 3 | dakgebinte en meiboom | idem | idem | idem |
-| 4 | latten, dak vanaf de voet half gedekt | idem, en de vakken half dicht | idem, planken af | idem |
+**Voorstel (Claude, 24 sep):** de fases komen uit `huis-sdf.cjs`, uit hetzelfde huis als het
+afgewerkte, met hetzelfde zaad. Dan zit in elke fase dezelfde scheve balk, dezelfde doorzakkende
+nok, dezelfde leunende schoorsteen: het huis groeit echt naar zichzelf toe. En elk type gaat zoals
+het echt ging, met zoveel stappen als het werk vraagt, en elke stap zo lang als het werk duurt (een
+dak van riet dekken kost meer dagen dan een kap opzetten). Het hoogste punt is waar de kap staat.
 
-In alle fases: wat er staat, blijft staan; de stapels slinken; binnen is kale grond; ramen en deur
-zijn donkere gaten tot het gebouw af is.
+*Vakwerk (gepleisterd) en vlechtwerk (leem), met riet: het huis.*
+
+1. Uitzetten: de grond geëffend en vertrapt, paaltjes met een touw op de hoeken. Ernaast eiken
+   balken met telmerken, veldstenen, schoven riet, bossen tenen, een leemkuil.
+2. De voet: een lage muur van veldsteen, laag voor laag in de leem gelegd.
+3. Het gebint: voetbalken, stijlen, regels en schoren, en de muurplaat erop. Precies het vakwerk van
+   het afgewerkte huis, dezelfde scheve balken, maar met lucht in de vakken. De kozijnen staan er al.
+4. De kap (hoogste punt): sporen, hanenbalken, de nok met zijn doorzakking. De meiboom op de nok.
+5. Het riet: latten op de sporen, en het riet van de voet omhoog, laag voor laag, met de ladder
+   van de rietdekker op het dak en schoven erbij. De vakken dicht met staken en tenen.
+6. Leem in de vakken, de nok gedekt, de schoorsteen.
+7. Af: gewit (vakwerk) of bruin (vlecht), deur, luiken, de steiger weg.
+
+*Veldsteen.* Uitzetten met een sleuf; de muren laag voor laag tot heuphoogte, het deurkozijn staat
+er al in; op hoogte, met een steiger van gesjorde palen, korte balkjes die in gaten in de muur
+steken, horden als vloer en een ladder, en lateien boven ramen en deur; de kap en de meiboom; het
+dak vanaf de voet; af.
+
+*Planken.* Uitzetten; de voet en de voetbalk; stijlen en regels; planken van onder naar boven, met
+steiger; de kap en de meiboom; het dak; af.
+
+*Blokhut.* Uitzetten met een stapel geschilde stammen; de onderste stammen op stenen, de hoeken
+gekeept; stammen tot halverwege, met gaten voor deur en raam; op hoogte, met de kopgevels; de kap en
+de meiboom; het dak; af.
+
+*De boerderij (een hallehuis) gaat anders:* eerst de poeren, dan de gebinten (rijen van twee stijlen
+met een ankerbalk, met touwen overeind gezet), dan de kap met de meiboom, dan het riet, en pas dan
+de wanden tussen de stijlen en de grote deur in de kopgevel. De wanden dragen niets, dus ze komen
+het laatst.
+
+*In elke fase:* wat er staat, blijft staan; de stapels worden kleiner naarmate ze opgaan; binnen is
+kale grond; ramen en deur zijn donkere gaten tot het gebouw af is; niets is recht, ook de steiger
+niet.
 
 ## Open
 
