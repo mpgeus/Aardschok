@@ -31,6 +31,9 @@
     // gedekte tafel).
     extraVoedselPerMensPerDag: 0.01,
     extraVoedselDrempel: 1,
+    // In de winter bederven vis en vlees zonder zout (het zout komt van de marskramer, js/handel.js):
+    // dan tellen ze alleen mee als er zout is, en gaat er per mens per dag zoveel zout op.
+    zoutPerMensPerDag: 0.005,
     // Brandhout: hout of turf (eerst turf — dat stoken is toch al zijn enige nut, hout kan de
     // timmerman nog gebruiken), per huishouden (T.GEBOUWEN_INSTELLINGEN.gezinGrootte leent de
     // maat van een gezin, dezelfde als bij groei) per dag, alleen in wintermaand, louwmaand en
@@ -81,8 +84,13 @@
 
     const voedselBenodigd = bevolking * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
     const voedselDekking = voedselBenodigd > 0 ? Math.min(1, (v.graan || 0) / voedselBenodigd) : 1;
-    const extraSoorten = ['groente', 'vis', 'vlees'].filter((wat) => (v[wat] || 0) >= IN.extraVoedselDrempel);
+    // In de winter blijven vis en vlees alleen goed met zout (js/handel.js: de marskramer).
+    const zoutOp = inWinter && (v.zout || 0) < IN.extraVoedselDrempel;
+    const bederft = (wat) => zoutOp && (wat === 'vis' || wat === 'vlees');
+    const extraSoorten = ['groente', 'vis', 'vlees'].filter((wat) => (v[wat] || 0) >= IN.extraVoedselDrempel && !bederft(wat));
     const voedselFactor = voedselDekking * (0.5 + 0.5 * (extraSoorten.length / 3));
+    // Er gaat zout op als er in de winter vis of vlees gegeten wordt.
+    const zoutNodig = inWinter && extraSoorten.some((wat) => wat === 'vis' || wat === 'vlees') ? bevolking * IN.zoutPerMensPerDag : 0;
 
     const huishoudens = Math.ceil(bevolking / T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
     const brandhoutBenodigd = huishoudens * IN.brandhoutPerHuishoudenPerDag;
@@ -103,11 +111,12 @@
     const mist = [];
     if (voedselDekking < 1) mist.push('eten');
     if (brandhoutDekking < 1) mist.push('brandhout voor de winter');
+    if (zoutOp && ['vis', 'vlees'].some((wat) => (v[wat] || 0) >= IN.extraVoedselDrempel)) mist.push('zout voor vis en vlees');
     if (!heeftKerk) mist.push('een kerk');
 
     return {
       tevredenheid, mist, inWinter,
-      voedselDekking, extraSoorten, voedselFactor,
+      voedselDekking, extraSoorten, voedselFactor, zoutNodig,
       brandhoutDekking, brandhoutBenodigd, brandhoutVoorraad, brandhoutFactor,
       huishoudens, heeftKerk, kerkFactor, feest,
     };
@@ -247,6 +256,8 @@
 
     // De extra soorten worden ook echt opgegeten, anders stapelt de moestuin zich oneindig op.
     for (const wat of b.extraSoorten) T.wijzigVoorraad(S, wat, -(S.bevolking || 0) * IN.extraVoedselPerMensPerDag);
+    // En in de winter het zout dat vis en vlees goed hield.
+    if (b.zoutNodig > 0) T.wijzigVoorraad(S, 'zout', -b.zoutNodig);
 
     pasBrandhoutToe(S, b);
     pasWinterVerliesToe(S, b);

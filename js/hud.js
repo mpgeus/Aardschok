@@ -67,6 +67,9 @@
         `<div class="grondstof" data-wat="${wat}" title="${GRONDSTOF_UITLEG[wat]}">` +
         `<span class="icoon">${GRONDSTOF_ICOON[wat]}</span><span class="aantal">0</span></div>`,
     ).join('') +
+      // Wat het gehucht verder heeft (ijzer, zout en steen van de marskramer, eieren, riet, ...):
+      // alleen wat er is, klein, zodat de balk niet volloopt met nullen.
+      `<div class="overig" title="Wat het gehucht verder in voorraad heeft."></div>` +
       `<div class="grondstof" data-wat="bevolking" title="Mensen in het dorp, en hoeveel er wonen kunnen (js/gebouwen.js: elk huis geeft woonruimte).">` +
       `<span class="icoon">${BEVOLKING_ICOON}</span><span class="aantal">0/0</span></div>` +
       `<div class="grondstof" data-wat="tevredenheid" title="Tevredenheid.">` +
@@ -92,8 +95,14 @@
     for (const wat of T.GRONDSTOFFEN) {
       box.querySelector(`[data-wat="${wat}"] .aantal`).textContent = Math.floor(S.voorraad[wat] || 0);
     }
-    // Een open vraag met een prijs erin (het pannenbier) kijkt mee met de voorraad.
+    const overig = Object.keys(S.voorraad).filter((wat) => !T.GRONDSTOFFEN.includes(wat) && (S.voorraad[wat] || 0) >= 1);
+    box.querySelector('.overig').innerHTML = overig
+      .map((wat) => `<span class="goed"><span class="naam">${wat}</span> ${Math.floor(S.voorraad[wat])}</span>`)
+      .join('');
+    // Een open vraag met een prijs erin (het pannenbier), en het handelspaneel, kijken mee met de
+    // voorraad.
     if (vragen.length) toonVraag();
+    if (handelOpen) toonHandel(S);
   };
 
   // Het aantal mensen en de woonruimte (js/gebouwen.js, T.werkGebouwenBij): een eigen functie,
@@ -103,6 +112,8 @@
     if (!box.children.length) bouwVoorraadbalk(box);
     const el = box.querySelector('[data-wat="bevolking"] .aantal');
     if (el) el.textContent = `${Math.floor(S.bevolking)}/${Math.floor(S.woonruimte)}`;
+    // Eén keer per dag (js/gebouwen.js): hoe lang de marskramer nog blijft.
+    if (handelOpen) toonHandel(S);
   };
 
   // De tevredenheid (js/behoeften.js, T.tikBehoeftenDag) en, op hover, wat het dorp mist — dezelfde
@@ -227,6 +238,93 @@
     toonVraag();
   });
 
+  // Handelen met de marskramer (js/handel.js): wat hij verkoopt, wat hij van jou koopt, zijn buidel,
+  // en of je stil verkoopt (voor minder, zonder vragen, en niet in de boeken: hij is ook heler).
+  // Open na een klik op hem (js/verkennen.js); dicht met ×, Esc, als je wegloopt, of als hij gaat.
+  let handelOpen = false;
+  let handelStil = false;
+  // Een prijs onder de één met twee cijfers achter de komma (graan is 0,25), de rest met één.
+  const getal = (x) => x.toLocaleString('nl-NL', { maximumFractionDigits: Math.abs(x) < 1 ? 2 : 1 });
+  T.ui.handelOpen = () => handelOpen;
+  T.ui.openHandel = function (S) {
+    handelOpen = true;
+    toonHandel(S);
+  };
+  T.ui.sluitHandel = function () {
+    handelOpen = false;
+    const box = $('handel');
+    box.classList.add('verborgen');
+    box.innerHTML = '';
+  };
+  function toonHandel(S) {
+    const box = $('handel');
+    const m = S && S.marskramer;
+    if (!handelOpen || !m || !m.aanwezig) {
+      T.ui.sluitHandel();
+      return;
+    }
+    const nogDagen = Math.max(0, m.vertrekOp - Math.floor(S.kalender.dag));
+    const goud = S.voorraad.goud || 0;
+    const verkoopt = Object.entries(T.MARSKRAMER_WAREN)
+      .map(([goed, w]) => {
+        const heeft = m.waren[goed] || 0;
+        const uit = heeft >= 1 && goud >= w.prijs ? '' : ' disabled';
+        return (
+          `<div class="handel-rij" title="${w.uitleg}"><span class="goed">${T.hoofdletter(goed)}</span>` +
+          `<span class="prijs">${getal(w.prijs)} goud</span><span class="nog">nog ${heeft}</span>` +
+          `<button data-koop="${goed}" data-n="1"${uit}>Koop 1</button><button data-koop="${goed}" data-n="5"${uit}>5</button></div>`
+        );
+      })
+      .join('');
+    const koopt =
+      Object.keys(T.MARSKRAMER_KOOPT)
+        .filter((goed) => (S.voorraad[goed] || 0) >= 1)
+        .map((goed) => {
+          const per = T.marskramerBod(S, goed, 1, handelStil);
+          const uit = per > m.buidel + 1e-9 ? ' disabled' : '';
+          return (
+            `<div class="handel-rij"><span class="goed">${T.hoofdletter(goed)}</span>` +
+            `<span class="prijs">${getal(per)} per stuk</span><span class="nog">je hebt ${Math.floor(S.voorraad[goed])}</span>` +
+            `<button data-verkoop="${goed}" data-n="1"${uit}>Verkoop 1</button><button data-verkoop="${goed}" data-n="10"${uit}>10</button></div>`
+          );
+        })
+        .join('') || '<p class="handel-leeg">Je hebt niets wat hij wil.</p>';
+    const boek = T.handelTotaal(S);
+    box.innerHTML =
+      `<div class="kop">De marskramer<button class="sluit" title="Sluiten (Esc)">×</button></div>` +
+      `<p class="handel-uitleg">In zijn buidel: ${getal(m.buidel)} goud. Hij blijft nog ${nogDagen} dag${nogDagen === 1 ? '' : 'en'}.</p>` +
+      `<div class="kop2">Hij verkoopt</div>${verkoopt}` +
+      `<div class="kop2">Hij koopt</div>${koopt}` +
+      `<label class="handel-stil"><input type="checkbox" id="handel-stil"${handelStil ? ' checked' : ''}> Stil verkopen: voor minder, zonder vragen, en niet in de boeken</label>` +
+      `<p class="handel-boek">In de boeken: ${getal(boek.open)} goud verkocht. Stil: ${getal(boek.stil)} goud.</p>`;
+    box.classList.remove('verborgen');
+  }
+  $('handel').addEventListener('click', (ev) => {
+    const b = ev.target.closest('button');
+    const S = T.S;
+    if (!b || !S) return;
+    b.blur();
+    if (b.classList.contains('sluit')) {
+      T.ui.sluitHandel();
+      return;
+    }
+    const n = Number(b.dataset.n);
+    if (b.dataset.koop) {
+      const r = T.koopVanMarskramer(S, b.dataset.koop, n);
+      T.ui.bericht(r.gelukt ? `Gekocht: ${r.aantal} ${b.dataset.koop} voor ${getal(r.goud)} goud.` : r.reden, r.gelukt ? 'goed' : 'gevaar');
+    } else if (b.dataset.verkoop) {
+      const r = T.verkoopAanMarskramer(S, b.dataset.verkoop, n, handelStil);
+      const wat = handelStil ? 'Stil verkocht' : 'Verkocht';
+      T.ui.bericht(r.gelukt ? `${wat}: ${r.aantal} ${b.dataset.verkoop} voor ${getal(r.goud)} goud.` : r.reden, r.gelukt ? 'goed' : 'gevaar');
+    }
+    toonHandel(S);
+  });
+  $('handel').addEventListener('change', (ev) => {
+    if (ev.target.id !== 'handel-stil') return;
+    handelStil = ev.target.checked;
+    toonHandel(T.S);
+  });
+
   // Eén stap trager of sneller, van pauze tot 3x. T.zetSnelheid (js/tijd.js) onthoudt de laatste
   // snelheid, zodat P na een stapje terug weer daar hervat.
   function stapSnelheid(delta) {
@@ -245,6 +343,10 @@
   // P, - en = botsen nergens mee: de spatie en 1-4 zijn van het oude spel (CLAUDE.md).
   window.addEventListener('keydown', (ev) => {
     if (!T.NIEUWE_HUD || !T.S || !T.S.kalender) return;
+    if (ev.key === 'Escape' && handelOpen) {
+      T.ui.sluitHandel();
+      return;
+    }
     if (ev.key === 'p' || ev.key === 'P') {
       const k = T.S.kalender;
       T.zetSnelheid(T.S, k.snelheid > 0 ? 0 : k.laatsteSnelheid || 1);

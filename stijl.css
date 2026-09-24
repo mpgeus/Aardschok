@@ -430,6 +430,44 @@ kbd {
 #bouwmenu-knop:hover { color: var(--inkt); }
 #bouwmenu-knop.actief { color: #1b1510; background: var(--goud); border-color: var(--goud); }
 #bouwmenu-knop.actief kbd { color: inherit; border-color: currentColor; opacity: 0.7; }
+
+/* Wat het gehucht verder heeft (ijzer, zout, steen, eieren, ...): klein, en alleen wat er is. */
+#voorraadbalk .overig { display: flex; gap: 9px; font-size: 12px; }
+#voorraadbalk .overig:empty { display: none; }
+#voorraadbalk .overig .goed { white-space: nowrap; color: var(--inkt); }
+#voorraadbalk .overig .naam { color: var(--gedempt); }
+
+/* Handelen met de marskramer (js/hud.js, js/handel.js): rechts, onder de uitleg rechtsboven. */
+#handel {
+  position: fixed;
+  right: 16px;
+  top: 150px;
+  width: 360px;
+  max-height: calc(100vh - 130px);
+  overflow-y: auto;
+  padding: 10px 12px 12px;
+}
+#handel .kop { display: flex; justify-content: space-between; align-items: center; font: 15px var(--kop); color: var(--goud); }
+#handel .sluit { background: none; border: none; color: var(--gedempt); font-size: 18px; cursor: pointer; }
+#handel .sluit:hover { color: var(--inkt); }
+#handel .kop2 { margin: 10px 0 4px; font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; }
+#handel .handel-uitleg, #handel .handel-boek, #handel .handel-leeg { margin: 4px 0; font-size: 12px; color: var(--gedempt); }
+#handel .handel-rij { display: grid; grid-template-columns: 1fr auto auto auto auto; gap: 6px; align-items: center; padding: 3px 0; font-size: 13px; }
+#handel .handel-rij .prijs { color: var(--goud); font-size: 12px; }
+#handel .handel-rij .nog { color: var(--gedempt); font-size: 12px; }
+#handel .handel-rij button {
+  padding: 3px 8px;
+  font-size: 12px;
+  color: var(--inkt);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--rand);
+  border-radius: 5px;
+  cursor: pointer;
+}
+#handel .handel-rij button:hover:not(:disabled) { background: rgba(255, 255, 255, 0.12); border-color: rgba(226, 182, 74, 0.6); }
+#handel .handel-rij button:disabled { opacity: 0.4; cursor: default; }
+#handel .handel-stil { display: flex; gap: 6px; align-items: flex-start; margin-top: 10px; font-size: 12px; color: var(--inkt); cursor: pointer; }
+
 #bouwmenu {
   position: fixed;
   left: 16px;

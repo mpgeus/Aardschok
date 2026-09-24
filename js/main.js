@@ -280,6 +280,8 @@
       if (T.werkOogstBij) T.werkOogstBij(S, dt);
       // De bouwers op de bouwplaatsen (js/bouwen.js): zoveel als er vandaag aan elk gebouw werken.
       if (T.werkBouwersBij) T.werkBouwersBij(S);
+      // De marskramer (js/handel.js): het gehucht in, bij de brink, en weer weg.
+      if (T.werkMarskramerBij) T.werkMarskramerBij(S);
       T.laatDwalen(S, dt);
       const m = T.zoekOntdekking(S);
       if (m) T.startGevecht(S, m, false);

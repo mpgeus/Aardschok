@@ -95,6 +95,11 @@
     if (doel.wezen) {
       const e = doel.wezen;
       if (e.kant === 'monster') return { tekst: `De ${e.naam} aanvallen`, doe: () => T.startGevecht(S, e, true) };
+      // De marskramer in het gehucht (js/handel.js): met hem handel je, in plaats van het gesprek dat
+      // hij in het oude spel voerde.
+      if (e.handelaar && T.ui.openHandel) {
+        return { tekst: 'Handelen met de marskramer', doe: () => loopNaast(S, e, () => T.ui.openHandel(S)) };
+      }
       // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: Wim, en de meester. Welk
       // gesprek dat is, zegt T.gesprekIdVan — een dorpeling kan er een eigen hebben.
       if (T.gesprekVan && T.gesprekVan(e)) {

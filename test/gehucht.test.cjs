@@ -16,6 +16,7 @@ require('../js/pad.js');
 require('../js/gebouwen.js');
 require('../js/kaart.js');
 require('../js/gebied.js');
+require('../js/handel.js');
 const T = globalThis.Toren;
 
 function beginGehucht() {
@@ -34,4 +35,14 @@ function beginGehucht() {
 test('de schout kan lopen (tot 24 sep stond hij stil: snelheid 0)', () => {
   const S = beginGehucht();
   assert.ok(T.snelheidVan(S.held) > 0);
+});
+
+test('de marskramer kan van de weg naar de brink lopen, en terug', () => {
+  const S = beginGehucht();
+  const w = S.wereld;
+  const { ingang, standplaats } = T.marskramerPlekken(w);
+  assert.ok(ingang, 'er is een plek waar hij binnenkomt');
+  assert.ok(standplaats, 'er is een plek bij de brink');
+  const pad = T.zoekPad(ingang, standplaats, (x, y) => T.isBegaanbaar(w, x, y), (x, y) => T.isVast(w, x, y), {});
+  assert.ok(pad && pad.length, 'er loopt een weg van de ingang naar de brink');
 });

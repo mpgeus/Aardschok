@@ -494,7 +494,7 @@
   };
 
   // ---------------------------------------------------------------------------------------------
-  // Elke dag: bouwen, woonruimte, eten, groei, handen en productie
+  // Elke dag: bouwen, woonruimte, eten, groei, handen, productie en handel
   // ---------------------------------------------------------------------------------------------
 
   // Hoe hard er vandaag gewerkt wordt, van werkBasis (0% tevreden) tot 1 (helemaal tevreden):
@@ -560,11 +560,32 @@
     for (const g of S.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
       if (!g.klaar || !soort.maakt) continue;
-      const factor = (soort.handen > 0 ? g.handen / soort.handen : 1) * werkFactor;
+      let factor = (soort.handen > 0 ? g.handen / soort.handen : 1) * werkFactor;
       if (factor <= 0) continue;
-      if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(S, wat, -soort.maakt.in[wat] * factor);
+      // Wat er niet is, kan niet verwerkt worden: zonder ijzer maakt de smidse niets (werklijst,
+      // punt 4; het ijzer komt van de marskramer, js/handel.js). Is er te weinig, dan werkt hij naar
+      // rato van wat er wel is. Het bericht komt één keer, als het tekort begint.
+      let deel = 1;
+      let gebrek = null;
+      for (const wat in soort.maakt.in || {}) {
+        const nodig = soort.maakt.in[wat] * factor;
+        const er = S.voorraad[wat] || 0;
+        if (er < nodig && er / nodig < deel) {
+          deel = er / nodig;
+          gebrek = wat;
+        }
+      }
+      if (gebrek && deel <= 0 && g.gebrek !== gebrek && T.ui && T.ui.bericht) {
+        T.ui.bericht(`${T.hoofdletter(soort.naam)} staat stil: er is geen ${gebrek}.`, 'gevaar');
+      }
+      g.gebrek = deel <= 0 ? gebrek : null;
+      factor *= deel;
+      if (factor <= 0) continue;
+      for (const wat in soort.maakt.in || {}) T.wijzigVoorraad(S, wat, -soort.maakt.in[wat] * factor);
       if (soort.maakt.uit) for (const wat in soort.maakt.uit) T.wijzigVoorraad(S, wat, soort.maakt.uit[wat] * factor);
     }
+    // 7. Handel (js/handel.js): komt de marskramer vandaag, of trekt hij verder? Zacht gekoppeld.
+    if (T.tikHandelDag) T.tikHandelDag(S, dag);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
   };
 
