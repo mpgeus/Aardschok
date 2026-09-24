@@ -392,6 +392,7 @@
     fase: (v) => `naar fase ${v}`,
     weg: (v) => `via ${v}`,
     handel: () => 'opent de handel',
+    heer: () => 'opent het betalen aan de heer',
   };
   function doeInTaal(doe) {
     if (!doe) return '';
@@ -569,6 +570,7 @@
     { naam: 'fase', soort: 'fase', uitleg: 'zet die quest in deze fase' },
     { naam: 'weg', soort: 'weg', uitleg: 'los die quest zo op' },
     { naam: 'handel', soort: 'aan', uitleg: 'opent het handelsvenster van de marskramer (js/handel.js)' },
+    { naam: 'heer', soort: 'aan', uitleg: 'opent het venster waarin je de heer betaalt op Sint-Maarten (js/heer.js)' },
   ];
   // De beginwaarde van een nieuw gevolg: een getal begint op nul, een aan/uit (handel) staat aan.
   const beginWaarde = (g) => (g && g.soort === 'getal' ? 0 : g && g.soort === 'aan' ? true : '');

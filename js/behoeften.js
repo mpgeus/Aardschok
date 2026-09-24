@@ -69,7 +69,7 @@
   };
 
   T.nieuweBehoeften = function () {
-    return { tevredenheid: 1, mist: [], winterVerliesRest: 0 };
+    return { tevredenheid: 1, mist: [], last: [], winterVerliesRest: 0 };
   };
 
   // Hoeveel vis en vlees er ligt, en hoeveel daarvan het zout goed houdt. Puur; ook voor de balk
@@ -113,7 +113,11 @@
     const heeftKerk = T.heeftKerk(S);
     const kerkFactor = heeftKerk ? 1 : IN.kerkBasis;
 
-    const tevredenheid = IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor;
+    // Wat de heer bracht (js/heer.js): soldaten in huis, en wie jij aan de schandpaal zette. Dat
+    // mist het dorp niet, daar heeft het last van; het gaat eraf, tot niet onder nul.
+    const heer = T.heerOntevredenheid ? T.heerOntevredenheid(S, dag) : { minder: 0, waarom: [] };
+
+    const tevredenheid = Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor - heer.minder);
 
     const mist = [];
     if (voedselDekking < 1) mist.push('eten');
@@ -121,7 +125,7 @@
     if (!heeftKerk) mist.push('een kerk');
 
     return {
-      tevredenheid, mist, inWinter,
+      tevredenheid, mist, last: heer.waarom, inWinter,
       voedselDekking, extraSoorten, voedselFactor,
       brandhoutDekking, brandhoutBenodigd, brandhoutVoorraad, brandhoutFactor,
       huishoudens, heeftKerk, kerkFactor,
@@ -274,6 +278,7 @@
     const b = T.berekenTevredenheid(S, dag);
     S.behoeften.tevredenheid = b.tevredenheid;
     S.behoeften.mist = b.mist;
+    S.behoeften.last = b.last;
 
     // De extra soorten worden ook echt opgegeten, anders stapelt de moestuin zich oneindig op.
     let bederfelijkGegeten = 0;

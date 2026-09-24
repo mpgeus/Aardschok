@@ -27,6 +27,9 @@
 //     straal:   3,             // hoe ver hij van zijn plek af dwaalt (de kaart mag het overrulen)
 //     snelheid: 1.3,           // alleen als hij anders loopt dan zijn wezen of een dorpeling
 //     gesprek:  'bakker',      // welk gesprek hij voert; zonder dit is het zijn eigen id
+//     eigenschap: 'weduwe…',   // wie hij is in een paar woorden, voor de schandpaal (js/heer.js)
+//     schandpaal: 0.3,         // wat het het dorp aan tevredenheid kost als jij hem daar zet;
+//                              // zonder dit kan hij er niet aan (de marskramer, de heer zelf)
 //   }
 //
 // Zonder `wezen` en zonder `zaad` is hij zichzelf: zijn id is de naam van zijn vel. De veertien
@@ -63,6 +66,13 @@
     bakker: { naam: 'de bakker', snelheid: 1.4, straal: 2, vel: 'wim' },
     marskramer: { naam: 'de marskramer', snelheid: 1.4, straal: 2, vel: 'wim' },
 
+    // De heer en zijn soldaten (js/heer.js): ze komen op Sint-Maarten over de weg, en niet op een
+    // kaart. Hun eigen vellen, en de koets, zijn tekenwerk. Tot die tijd leent de heer de rode
+    // mantel met goud van de meester, en lenen de soldaten de smid: groot, kaal, en iets zwaars in
+    // de hand. Twee soldaten zijn twee keer dezelfde mens; dat mag, want ze staan op geen kaart.
+    heer: { naam: 'de heer', snelheid: 1.55, straal: 1, vel: 'meester' },
+    soldaat: { naam: 'een soldaat', snelheid: 1.5, straal: 2, vel: 'smid' },
+
     // En de vaklieden die wel een haakje hebben in wereld.md maar nog geen tekening: zij zijn
     // zolang een gewone dorpeling, want die vellen bestaan al (zie de werklijst, fase B2b).
     molenaar: { naam: 'de molenaar', zaad: 11, straal: 3 },
@@ -77,11 +87,17 @@
     // "boerin" hierboven, want één mens kan van T.keurKaart maar op één plek staan (gereedschap/
     // keuring.js) — dit zijn wél vijf keer hetzelfde geleende vel, en dat mag: net als de bakker
     // hierboven lenen ze het van wie het al heeft, om en om "boer" en "boerin" voor wat variatie.
-    boer1: { naam: 'de boer', vel: 'boer', snelheid: 1.5, straal: 3 },
-    boer2: { naam: 'de boerin', vel: 'boerin', snelheid: 1.4, straal: 3 },
-    boer3: { naam: 'de boer', vel: 'boer', snelheid: 1.5, straal: 3 },
-    boer4: { naam: 'de boerin', vel: 'boerin', snelheid: 1.4, straal: 3 },
-    boer5: { naam: 'de boer', vel: 'boer', snelheid: 1.5, straal: 3 },
+    //
+    // Sinds Sint-Maarten (24 sep, js/heer.js) hebben ze een naam en een eigenschap: wie de heer te
+    // weinig geeft, moet iemand aan de schandpaal zetten, en dan moet je ze uit elkaar kunnen
+    // houden. `schandpaal` is wat het het dorp aan tevredenheid kost als jij hém aanwijst (het
+    // slijt weer weg, T.HEER_INSTELLINGEN.wrokDagen): de weduwe vergeeft het dorp je niet snel, de
+    // woekeraar gunt het hem stiekem. Gerrit en Klaas hebben ook de meeste akkers (drie en twee).
+    boer1: { naam: 'Klaas', vel: 'boer', snelheid: 1.5, straal: 3, eigenschap: 'zingt \'s avonds in de schuur, en de hele buurt zingt mee', schandpaal: 0.2 },
+    boer2: { naam: 'Aaltje', vel: 'boerin', snelheid: 1.4, straal: 3, eigenschap: 'weduwe, met drie kleine kinderen', schandpaal: 0.3 },
+    boer3: { naam: 'Gerrit', vel: 'boer', snelheid: 1.5, straal: 3, eigenschap: 'de rijkste boer; hij leent graan uit tegen woeker', schandpaal: 0.05 },
+    boer4: { naam: 'Trijn', vel: 'boerin', snelheid: 1.4, straal: 3, eigenschap: 'de vroedvrouw: ze heeft de halve buurt ter wereld geholpen', schandpaal: 0.25 },
+    boer5: { naam: 'Wouter', vel: 'boer', snelheid: 1.5, straal: 3, eigenschap: 'een heethoofd; hij sloeg eens een knecht van de heer', schandpaal: 0.1 },
   };
 
   // Hoe heet deze mens? Zijn eigen naam, anders die van het wezen dat hij leent (Wim, de

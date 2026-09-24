@@ -51,7 +51,8 @@
 // Een gevolg (doe) mag hebben: zetVlag en/of wisVlag (één naam, of een lijstje), geef en/of neem
 // (een voorwerp in je tas of eruit), goud: 20 of goud: -15, en quest: 'bakker' met fase: 'zoeken'
 // of weg: 'marskramer' (quest zonder allebei begint hem). Zie js/quests.js voor de quests zelf.
-// En handel: true opent het handelsvenster van de marskramer (js/handel.js, js/hud.js).
+// En handel: true opent het handelsvenster van de marskramer (js/handel.js, js/hud.js), en
+// heer: true het venster waarin je de heer betaalt op Sint-Maarten (js/heer.js, js/hud.js).
 (function (T) {
   'use strict';
 
@@ -409,6 +410,186 @@
           ],
           keuzes: [
             { zeg: 'Ik denk erover.', sluit: true },
+          ],
+        },
+      },
+    },
+    // De heer (js/heer.js, ontwerp/spel.md "Sint-Maarten"): hij komt op Sint-Maarten zelf innen.
+    // Hij is de grap: verward, ijdel, en hij telt slecht; hij spreekt over zichzelf als Wij. Zijn
+    // soldaten zijn geen grap. heerOpBezoek, heerSchuld, heerBetaald en heerVertrekt zet js/heer.js.
+    heer: {
+      naam: 'de heer',
+      start: 'welkom',
+      situaties: [
+        { naam: 'Sint-Maarten: hij wacht op zijn geld', als: { vlag: 'heerOpBezoek' } },
+        { naam: '…en je bleef hem vorig jaar wat schuldig', als: { vlag: ['heerOpBezoek', 'heerSchuld'] } },
+        { naam: 'Je hebt betaald', als: { vlag: ['heerOpBezoek', 'heerBetaald'] } },
+      ],
+      knopen: {
+        welkom: {
+          tekst: [
+            { als: { vlag: 'heerBetaald' }, zeg: 'Wij hebben alles geteld. Twee keer zelfs, en het kwam er twee keer anders uit, dus het klopt vast. Tot volgend jaar, schout. Houd het gehucht netjes. En arm. Nee, rijk. Rijk is beter voor Ons.' },
+            { als: { vlag: 'heerSchuld' }, zeg: 'Schout! Wij vergeten nooit iets. Behalve wat Wij vergeten, maar dit niet: u bent Ons nog wat schuldig van vorig jaar. Met de boete erbij. De boete is het mooiste deel.' },
+            { zeg: 'Schout! Wat een... gehucht. Klein. Modderig. Het ruikt naar koe. Maar Wij zagen onderweg een nieuw dak, en een nieuw dak kost geld. Laten Wij eens kijken wat u voor Ons hebt.' },
+          ],
+          keuzes: [
+            { zeg: 'Hier is wat het gehucht u verschuldigd is.', sluit: true, als: { vlag: 'heerOpBezoek', nietVlag: 'heerBetaald' }, doe: { heer: true } },
+            { zeg: 'Hoe was de reis, heer?', naar: 'reis', als: { nietVlag: 'heerBetaald' } },
+            { zeg: 'Goede reis terug, heer.', sluit: true, als: { vlag: 'heerBetaald' } },
+            { zeg: 'Een ogenblik, heer.', sluit: true, als: { nietVlag: 'heerBetaald' } },
+          ],
+        },
+        reis: {
+          tekst: [
+            { zeg: 'Afschuwelijk. Uw weg zit vol gaten. Wij hebben ze laten tellen: honderdzeven. Daar zullen Wij weggeld voor moeten heffen. Om ze te laten dichten, of om ze nog eens te laten tellen. Een van de twee.' },
+          ],
+          keuzes: [
+            { zeg: 'Hier is wat het gehucht u verschuldigd is.', sluit: true, als: { vlag: 'heerOpBezoek', nietVlag: 'heerBetaald' }, doe: { heer: true } },
+            { zeg: 'Een ogenblik, heer.', sluit: true },
+          ],
+        },
+      },
+    },
+    // Zijn soldaten: twee, en wie te weinig geeft, houdt ze de winter over (soldatenInHuis).
+    soldaat: {
+      naam: 'een soldaat',
+      start: 'welkom',
+      situaties: [
+        { naam: 'Met de heer mee', als: { vlag: 'heerOpBezoek' } },
+        { naam: 'Ingekwartierd tot de lente', als: { vlag: 'soldatenInHuis' } },
+      ],
+      knopen: {
+        welkom: {
+          tekst: [
+            { als: { vlag: 'soldatenInHuis' }, zeg: 'We blijven tot de lente, zegt de heer. Wat eten we vanavond? En morgen? En de dag daarna?' },
+            { zeg: 'Wij zijn hier alleen om te tellen, schout. En om wie verkeerd telt, te helpen tellen.' },
+          ],
+          keuzes: [
+            { zeg: 'Tot ziens.', sluit: true },
+          ],
+        },
+      },
+    },
+    // De vijf boeren van het gehucht (js/mensen.js). Sinds Sint-Maarten hebben ze een naam en een
+    // eigenschap, want wie de heer te weinig geeft, wijst iemand aan voor de schandpaal, en dat
+    // onthouden ze (schandpaalBoer1 … schandpaalBoer5, en schoutAanDeSchandpaal als je er zelf
+    // stond). briefVanDeHeer en soldatenInHuis zet js/heer.js.
+    boer1: {
+      naam: 'Klaas',
+      start: 'welkom',
+      situaties: [
+        { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
+        { naam: 'Er zijn soldaten ingekwartierd', als: { vlag: 'soldatenInHuis' } },
+        { naam: 'Jij zette Klaas aan de schandpaal', als: { vlag: 'schandpaalBoer1' } },
+        { naam: 'Je stond er zelf', als: { vlag: 'schoutAanDeSchandpaal' } },
+      ],
+      knopen: {
+        welkom: {
+          tekst: [
+            { als: { vlag: 'schandpaalBoer1' }, zeg: 'Drie dagen aan de paal, en niemand die zong. Ik zing ook niet meer, schout. Niet voor jou.' },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf, aan die paal. Daar hebben we een lied over gemaakt, schout. Geen spotlied.' },
+            { als: { vlag: 'soldatenInHuis' }, zeg: 'Die twee soldaten zingen mee in de schuur. Vals. En ze eten voor zes.' },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: 'Hoeveel wil hij dit jaar? Nee, zeg het maar niet. Ik zing liever nog even.' },
+            { zeg: 'Kom vanavond naar de schuur, schout. We zingen tot de lamp op is.' },
+          ],
+          keuzes: [
+            { zeg: 'Tot ziens.', sluit: true },
+          ],
+        },
+      },
+    },
+    boer2: {
+      naam: 'Aaltje',
+      start: 'welkom',
+      situaties: [
+        { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
+        { naam: 'Er zijn soldaten ingekwartierd', als: { vlag: 'soldatenInHuis' } },
+        { naam: 'Jij zette Aaltje aan de schandpaal', als: { vlag: 'schandpaalBoer2' } },
+        { naam: 'Je stond er zelf', als: { vlag: 'schoutAanDeSchandpaal' } },
+      ],
+      knopen: {
+        welkom: {
+          tekst: [
+            { als: { vlag: 'schandpaalBoer2' }, zeg: 'Mijn kinderen hebben drie dagen naar hun moeder aan de paal gekeken. Ze vragen of jij dat zo wilde. Wat moet ik ze zeggen?' },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf, in plaats van een van ons. De kinderen hebben je brood gebracht. Dat mocht niet, dus deden ze het in het donker.' },
+            { als: { vlag: 'soldatenInHuis' }, zeg: 'Er slaapt een soldaat in mijn hooi. Hij eet wat mijn kinderen hadden moeten eten, en hij bedankt er niet eens voor.' },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: 'Er is een brief van de heer, hoor ik. Ik heb drie monden te voeden, schout. Vergeet dat niet als je gaat tellen.' },
+            { zeg: 'Drie kinderen, één akker, en geen man meer. Het gaat, schout. Het moet.' },
+          ],
+          keuzes: [
+            { zeg: 'Tot ziens.', sluit: true },
+          ],
+        },
+      },
+    },
+    boer3: {
+      naam: 'Gerrit',
+      start: 'welkom',
+      situaties: [
+        { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
+        { naam: 'Er zijn soldaten ingekwartierd', als: { vlag: 'soldatenInHuis' } },
+        { naam: 'Jij zette Gerrit aan de schandpaal', als: { vlag: 'schandpaalBoer3' } },
+        { naam: 'Je stond er zelf', als: { vlag: 'schoutAanDeSchandpaal' } },
+      ],
+      knopen: {
+        welkom: {
+          tekst: [
+            { als: { vlag: 'schandpaalBoer3' }, zeg: 'Aan de paal. Ik. De enige hier die zijn pacht altijd op tijd heeft. Onthoud dit, schout: wie mij schuldig is, betaalt voortaan dubbel. En iedereen hier is mij schuldig.' },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf. Dom. Je had mij kunnen aanwijzen. Ik had het je vergeven, tegen een kleine rente.' },
+            { als: { vlag: 'soldatenInHuis' }, zeg: 'Twee soldaten, de hele winter. Ik verkoop ze graan. Aan wie anders, schout?' },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: 'De brief is er. Komt het gehucht tekort, kom dan bij mij. Ik leen graag. Tegen een redelijke rente.' },
+            { zeg: 'Graan nodig, schout? Ik leen het je. Tien zakken nu, twaalf na de oogst. Dat is geen woeker, dat is rekenen.' },
+          ],
+          keuzes: [
+            { zeg: 'Tot ziens.', sluit: true },
+          ],
+        },
+      },
+    },
+    boer4: {
+      naam: 'Trijn',
+      start: 'welkom',
+      situaties: [
+        { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
+        { naam: 'Er zijn soldaten ingekwartierd', als: { vlag: 'soldatenInHuis' } },
+        { naam: 'Jij zette Trijn aan de schandpaal', als: { vlag: 'schandpaalBoer4' } },
+        { naam: 'Je stond er zelf', als: { vlag: 'schoutAanDeSchandpaal' } },
+      ],
+      knopen: {
+        welkom: {
+          tekst: [
+            { als: { vlag: 'schandpaalBoer4' }, zeg: 'De halve buurt heb ik ter wereld geholpen, en de halve buurt keek toe hoe ik aan de paal stond. Zij keken weg, schout. Jij niet.' },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf. Ik heb je polsen ingesmeerd, daarna. Dat doe ik niet voor elke schout.' },
+            { als: { vlag: 'soldatenInHuis' }, zeg: 'Die soldaten blijven tot de lente, zeggen ze. Ik tel de maanden. Dat is mijn vak.' },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: 'Een brief van de heer. Die man is zelf ook ooit geboren, schout. Ik weet niet wie dat op haar geweten heeft.' },
+            { zeg: 'Twee kinderen deze maand, en allebei gezond. Nog een paar jaar, en dit gehucht is een dorp.' },
+          ],
+          keuzes: [
+            { zeg: 'Tot ziens.', sluit: true },
+          ],
+        },
+      },
+    },
+    boer5: {
+      naam: 'Wouter',
+      start: 'welkom',
+      situaties: [
+        { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
+        { naam: 'Er zijn soldaten ingekwartierd', als: { vlag: 'soldatenInHuis' } },
+        { naam: 'Jij zette Wouter aan de schandpaal', als: { vlag: 'schandpaalBoer5' } },
+        { naam: 'Je stond er zelf', als: { vlag: 'schoutAanDeSchandpaal' } },
+      ],
+      knopen: {
+        welkom: {
+          tekst: [
+            { als: { vlag: 'schandpaalBoer5' }, zeg: 'Drie dagen aan de paal. Ik heb de gezichten onthouden, schout. Van de soldaten. En het jouwe.' },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf, en je keek hem recht aan. Als het ooit zover komt, schout, dan sta ik naast je. Niet achter je. Naast je.' },
+            { als: { vlag: 'soldatenInHuis' }, zeg: 'Twee soldaten, met een zwaard en een grote mond. Het zwaard kan ik ze niet afpakken. Nog niet.' },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: 'Een brief. Hij schrijft, wij betalen. Ooit schrijven wij hem een brief, schout.' },
+            { zeg: 'Die knecht van de heer? Die viel. Tegen mijn vuist. Dat kan gebeuren.' },
+          ],
+          keuzes: [
+            { zeg: 'Tot ziens.', sluit: true },
           ],
         },
       },

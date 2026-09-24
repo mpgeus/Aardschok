@@ -237,13 +237,15 @@
   // ---------------------------------------------------------------------------------------------
 
   // Waar hij het gehucht in komt, en waar hij het weer uit gaat: "komt" bij de plek in het
-  // betekenisbestand, anders de eerste uitgang van de kaart (de weg de wereld in).
+  // betekenisbestand, anders de eerste uitgang van de kaart (de weg de wereld in). De heer komt
+  // over dezelfde weg (js/heer.js), dus die vraagt het hier ook.
   function deWeg(w) {
     const p = w.marskramer;
-    if (p.komt) return p.komt;
+    if (p && p.komt) return p.komt;
     const o = (w.overgangen || [])[0];
     return o ? { x: o.x, y: o.y } : null;
   }
+  T.wegInEnUit = (w) => (w ? deWeg(w) : null);
 
   T.werkMarskramerBij = function (S) {
     const m = S.marskramer;

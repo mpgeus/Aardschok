@@ -69,7 +69,11 @@
   // Heeft hij er meer dan één (boer1 en boer3 hebben ook nog een klein stuk onder de es), dan
   // telt voorlopig alleen de eerste mee voor het dwalen — de tweede telt wel gewoon mee voor de
   // groei en de oogst hieronder, hij loopt er alleen niet expliciet naartoe om te dwalen.
+  //
+  // Moet hij even ergens anders zijn (`moetNaar`: aan de schandpaal op de brink, js/heer.js), dan
+  // gaat dat voor alles.
   T.wandelAnker = function (e, stadium) {
+    if (e.moetNaar) return e.moetNaar;
     const a = e.werkAkkers && e.werkAkkers[0];
     if (a && (stadium === 'kiemend' || stadium === 'groen' || stadium === 'rijp')) {
       return { x: a.x + (a.b - 1) / 2, y: a.y + (a.h - 1) / 2, straal: Math.max(a.b, a.h) / 2 + 1 };

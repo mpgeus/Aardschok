@@ -101,5 +101,7 @@
     // Handelen met de marskramer (js/handel.js): het venster staat in js/hud.js. Het gesprek sluit
     // daarna gewoon (sluit: true op hetzelfde antwoord); het venster blijft open.
     if (doe.handel && T.ui && T.ui.openHandel) T.ui.openHandel(S);
+    // De heer betalen op Sint-Maarten (js/heer.js): net zo, het venster staat in js/hud.js.
+    if (doe.heer && T.ui && T.ui.openHeer) T.ui.openHeer(S);
   };
 })(globalThis.Toren = globalThis.Toren || {});
