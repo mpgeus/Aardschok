@@ -68,7 +68,9 @@ komen, `Toren.debug.inner()` de inner (`(true)`: onverwacht terug), `Toren.debug
 zijn argwaan, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
 bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
 
-**Loopt nu:** niets. Er draait geen agent.
+**Loopt nu:** tekenwerk (Marcel, 24 sep: "Laten we wat tekenwerk doen"). Eén agent maakt de
+heer, zijn soldaten en de inner als eigen figuren, in rood en geel (`beeld.md`, "Het huis van de
+heer draagt rood en geel"), met een proefplaat voor Marcel.
 
 **Volgende stap: punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud,
 die de inner niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de

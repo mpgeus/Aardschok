@@ -369,6 +369,25 @@ Die loopt langzaam op en af, met vlagen, zodat het als weer leest en niet als sp
 - **Uit de pas lopen:** elk voorwerp krijgt een eigen verschuiving in de tijd, anders wappert het
   dorp als één vlag.
 
+## Het huis van de heer draagt rood en geel (Marcel, 24 sep 2026)
+
+Toen we aan het tekenwerk begonnen, koos Marcel:
+
+- **Eerst de heer, zijn soldaten en de inner.** Zij liepen in andermans kleren (de mantel van de
+  meester, de smid, de bruidegom), en ze komen elk jaar langs.
+- **De heer is klein en dik, met een veel te grote hoed:** een rond mannetje in een mantel met bont,
+  gouden kettingen over zijn buik, en een hoed met veren die veel te groot is. IJdel en een beetje
+  belachelijk. Zwarte satire: hij is lachwekkend, zijn straffen niet.
+- **Het huis van de heer draagt rood en geel.** Zijn soldaten en de inner dragen die kleuren ook,
+  zodat je meteen ziet wie van hem is.
+
+Voorstel van Claude voor de andere twee, te beoordelen op de proefplaat:
+
+- **De soldaten zijn geen grap:** groot en zwaar, een wapenrok in rood en geel over een gewatteerd
+  wambuis, een ijzeren hoed en een hellebaard.
+- **De inner is mager en sober,** in donkere kleren, met een rekenboek onder de arm en een pen
+  achter zijn oor. Alleen zijn hozen dragen de livrei: het ene been rood, het andere geel.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
