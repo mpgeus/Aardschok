@@ -220,39 +220,6 @@ test('een voorwerp aan een quest ligt er alleen in die fase, en verdwijnt weer',
   assert.equal(S.wereld.voorwerpen.length, 0, 'en het blijft niet als gat achter');
 });
 
-// ── Raakpunten: een spreuk op een ding ──
-
-test('een raakpunt hoort bij één spreuk, en is op zodra zijn vlag staat', () => {
-  const S = nieuweS();
-  T.RAAKPUNTEN.proefOven = {
-    spreuk: 'vuurschicht', tekst: 'de scheur dichtbakken',
-    melding: 'De klei sist.', zetVlag: 'ovenGebakken',
-  };
-  const oven = { soort: 'oven', x: 6, y: 5, raak: 'proefOven' };
-  S.wereld = { voorwerpen: [oven], questVoorwerpen: [] };
-
-  assert.equal(T.raakpuntOp(S, { x: 6, y: 5 }, 'windstoot'), null, 'de verkeerde spreuk doet niets');
-  assert.equal(T.raakpuntOp(S, { x: 6, y: 5 }, 'vuurschicht').voorwerp, oven);
-  assert.equal(T.raakpuntInBereik(S, 'vuurschicht', 5).voorwerp, oven);
-  assert.equal(T.raakpuntInBereik(S, 'vuurschicht', 0), null, 'buiten bereik telt niet');
-
-  T.zetVlag(S, 'ovenGebakken');
-  assert.equal(T.raakpuntOp(S, { x: 6, y: 5 }, 'vuurschicht'), null, 'gebakken is gebakken');
-});
-
-test('een raakpunt kan aan de stand van een quest hangen', () => {
-  metQuest();
-  const S = nieuweS();
-  T.RAAKPUNTEN.proefOven = {
-    spreuk: 'vuurschicht', tekst: 'de scheur dichtbakken', zetVlag: 'ovenGebakken',
-    als: { quest: 'proef', fase: 'zoeken' },
-  };
-  S.wereld = { voorwerpen: [{ soort: 'oven', x: 6, y: 5, raak: 'proefOven' }], questVoorwerpen: [] };
-  assert.equal(T.raakpuntOp(S, { x: 6, y: 5 }, 'vuurschicht'), null, 'de bakker heeft nog niets gevraagd');
-  T.zetQuest(S, 'proef', 'zoeken');
-  assert.ok(T.raakpuntOp(S, { x: 6, y: 5 }, 'vuurschicht'));
-});
-
 // ── De toets van drie antwoorden ──
 
 test('een quest met vier wegen die verschillend kosten, is goed', () => {

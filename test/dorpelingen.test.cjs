@@ -14,7 +14,6 @@ require('../js/wereld.js');
 require('../js/mensen.js');
 require('../js/gebied.js');
 require('../js/pad.js');
-require('../js/spreuken.js');
 require('../js/gevecht.js');
 require('../js/verkennen.js');
 require('../js/sprites.js');
@@ -34,7 +33,7 @@ function maakDorpeling(x, y, straal) {
     soort: 'dorpeling', naam: 'dorpeling', kant: 'neutraal',
     x, y, tx: x, ty: y, pad: [], dood: false,
     thuis: { x, y }, straal, dwaalt: straal > 0,
-    dwaalTijd: 0, gelokt: null, zicht: 0,
+    dwaalTijd: 0, zicht: 0,
   };
 }
 

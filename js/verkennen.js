@@ -79,8 +79,6 @@
   // Wat gebeurt er als je hierop klikt? Geeft { tekst, doe, fout } terug, of null.
   // De tekst komt bij de muis te staan; het scherm en de klik stellen dus dezelfde vraag.
   T.handelingVerkennen = function (S, doel) {
-    // Met een spreuk in de hand richt elke klik die spreuk (zie toveren.js).
-    if (S.spreuk) return T.handelingSpreuk(S, doel);
     if (!doel) return null;
     const w = S.wereld;
     if (doel.wezen) {
@@ -182,10 +180,9 @@
   // loopwerk als een dwalend monster; het verschil is dat hij nooit een gevecht begint (hij is
   // `neutraal`, en T.zoekOntdekking en T.deelnemers kijken alleen naar monsters).
   //
-  // Wie op een dwaallicht afgaat, dwaalt zolang niet: dat monster heeft iets beters te doen
-  // (toveren.js). Wie een gesprek voert, staat stil tot het uit is. En wie aan het maaien is
-  // (T.werkOogstBij, js/akkers.js — roep die vóór T.laatDwalen aan) staat ook stil: hij heeft
-  // net zijn doel bereikt en zwaait daar de zeis, dat is geen moment om weg te dwalen.
+  // Wie een gesprek voert, staat stil tot het uit is. En wie aan het maaien is (T.werkOogstBij,
+  // js/akkers.js — roep die vóór T.laatDwalen aan) staat ook stil: hij heeft net zijn doel
+  // bereikt en zwaait daar de zeis, dat is geen moment om weg te dwalen.
   T.laatDwalen = function (S, dt) {
     const w = S.wereld;
     // Eén keer per beurt de datum omrekenen, niet per wezen: T.wandelAnker heeft alleen het
@@ -193,7 +190,7 @@
     const datum = T.datumVanDag && S.kalender ? T.datumVanDag(S.kalender.dag) : null;
     const basis = datum && T.akkerStadium ? T.akkerStadium(datum.maand, datum.dagVanMaand) : null;
     for (const m of w.wezens) {
-      if (m.dood || !m.dwaalt || m.pad.length || m.gelokt || m === S.spreektMet || m.maait) continue;
+      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait) continue;
       m.dwaalTijd -= dt;
       // Staat hij toevallig stil op een tegel waar hij een doorgang blokkeert, dan wacht hij daar
       // niet zijn hele pauze uit maar stapt meteen door.

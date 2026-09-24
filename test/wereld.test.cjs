@@ -16,7 +16,6 @@ require('../js/gebied.js');
 require('../js/pad.js');
 require('../js/iso.js');
 require('../js/sprites.js');
-require('../js/spreuken.js');
 require('../js/anim.js');
 require('../js/verkennen.js');
 require('../js/gevecht.js');
@@ -157,7 +156,7 @@ test('de tekenvolgorde kent geen cirkels: wat achter een huis staat, blijft erac
 // ---------------------------------------------------------------- de overgang
 
 function nieuwSpel() {
-  const S = { tijd: 0, effecten: [], wachters: [], lichten: [], bezocht: new Set(), gebieden: {} };
+  const S = { tijd: 0, effecten: [], wachters: [], bezocht: new Set(), gebieden: {} };
   S.wereld = T.gebied(S, 'toren');
   S.held = S.wereld.wezens.find((e) => e.soort === 'held');
   S.modus = 'verkennen';
@@ -199,7 +198,6 @@ test('de toren heeft een buitendeur, en die brengt je naar het erf', () => {
 test('en weer terug: dezelfde deur, de andere kant op, met dezelfde held', () => {
   const S = nieuwSpel();
   S.held.leeftijd += 7; // zeven maanden ouder onderweg
-  S.held.meesterschap.vuurschicht = 4;
   T.gaNaarGebied(S, 'wereld');
   const leeftijd = S.held.leeftijd;
   const o = S.wereld.overgangen.find((x) => x.naar === 'toren');
@@ -208,7 +206,6 @@ test('en weer terug: dezelfde deur, de andere kant op, met dezelfde held', () =>
   T.gaNaarGebied(S, S.naarGebied);
   assert.equal(S.wereld.gebied, 'toren');
   assert.equal(S.held.leeftijd, leeftijd, 'een overgang kost geen tijd van je leven');
-  assert.equal(S.held.meesterschap.vuurschicht, 4, 'wat je kunt, neem je mee');
   const deur = S.wereld.overgangen[0];
   assert.equal(T.afstand({ x: S.held.tx, y: S.held.ty }, deur), 1);
   assert.equal(T.kamerVan(S.wereld, S.held.tx, S.held.ty).id, 'hal');

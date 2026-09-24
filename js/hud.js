@@ -58,8 +58,8 @@
     '<path d="M8 14.6c1.1 1.3 2.5 1.9 4 1.9s2.9-.6 4-1.9" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
     '</svg>';
 
-  // De voorraadbalk wordt één keer gemaakt, zoals de spreukbalk in js/ui.js (bouwSpreuken);
-  // daarna verandert alleen het getal per grondstof, en het getal bij de mensen.
+  // De voorraadbalk wordt één keer gemaakt; daarna verandert alleen het getal per grondstof,
+  // en het getal bij de mensen.
   function bouwVoorraadbalk(box) {
     box.innerHTML = T.GRONDSTOFFEN.map(
       (wat) =>

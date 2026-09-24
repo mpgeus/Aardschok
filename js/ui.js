@@ -8,7 +8,6 @@
   let vorigeAp = '';
   let vorigeTip = '';
   let keuzes = [];
-  const vorigeSpreuk = new Map(); // per spreuk: waaraan te zien is dat er iets veranderd is
 
   const SLEUTEL_ICOON =
     '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">' +
@@ -41,8 +40,6 @@
     reset(S) {
       $('berichten').innerHTML = '';
       vorigeAp = '';
-      vorigeSpreuk.clear();
-      this.toonSpreuken(S);
       this.toonLeeftijd(S.held);
       this.toonSluipen(false);
       this.toonInventaris(S);
@@ -158,38 +155,6 @@
       b.disabled = !kan;
     },
 
-    // De spreukbalk. Die staat er ook buiten een gevecht, want een dwaallicht en een windstoot
-    // horen juist bij het rondlopen. Hij wordt elk beeld nagelopen, maar alleen aangeraakt als
-    // er iets veranderd is: een gekozen spreuk, punten erbij of eraf, een trede hoger.
-    toonSpreuken(S) {
-      const box = $('spreukbalk');
-      if (!box.children.length) bouwSpreuken(box);
-      for (const id of T.SPREUK_VOLGORDE) {
-        const eig = T.spreuk(S.held, id);
-        const v = T.voortgang(S.held, id);
-        const waarom = T.waaromNiet(S, id);
-        const sleutel = [eig.ap, eig.maanden, v.aantal, v.trede, S.spreuk === id, waarom || ''].join('|');
-        const knop = box.querySelector(`[data-spreuk="${id}"]`);
-        const vorig = vorigeSpreuk.get(id);
-        if (vorig && vorig.sleutel === sleutel) continue;
-        vorigeSpreuk.set(id, { sleutel, trede: v.trede });
-        knop.querySelector('.prijs').textContent = `${eig.ap} AP · ${T.duurKort(eig.maanden)}`;
-        knop.querySelector('.tredenaam').textContent = v.naam;
-        knop.querySelector('.stippen').innerHTML = v.volgende
-          ? Array.from({ length: v.nodig }, (_, i) => `<span class="stip${i < v.binnen ? ' vol' : ''}"></span>`).join('')
-          : '<span class="ster">✦</span>';
-        knop.classList.toggle('gekozen', S.spreuk === id);
-        knop.classList.toggle('uit', !!waarom);
-        knop.title = spreukUitleg(eig, v, waarom);
-        // Een trede erbij laat de knop even gloeien.
-        if (vorig && v.trede > vorig.trede) {
-          knop.classList.remove('hoger');
-          void knop.offsetWidth;
-          knop.classList.add('hoger');
-        }
-      }
-    },
-
     bericht(tekst, soort) {
       const box = $('berichten');
       // Dezelfde melding vlak achter elkaar ("Daar kun je niet komen.", vier keer geklikt) wordt
@@ -286,29 +251,4 @@
       $('overlay').classList.add('verborgen');
     },
   };
-
-  // De knoppen van de spreukbalk worden één keer gemaakt; daarna verandert alleen hun inhoud.
-  function bouwSpreuken(box) {
-    box.innerHTML = T.SPREUK_VOLGORDE.map((id) => {
-      const s = T.SPREUKEN[id];
-      return (
-        `<button class="spreuk" data-spreuk="${id}" style="--kleur: ${s.kleur}">` +
-        `<span class="kop"><kbd>${s.toets}</kbd><span class="naam">${T.hoofdletter(s.naam)}</span></span>` +
-        '<span class="prijs"></span>' +
-        '<span class="trede"><span class="tredenaam"></span><span class="stippen"></span></span>' +
-        '</button>'
-      );
-    }).join('');
-  }
-
-  // De uitleg bij de muis boven een spreukknop: wat hij doet, hoe goed je hem beheerst, wat de
-  // volgende trede geeft, en waarom hij nu niet kan.
-  function spreukUitleg(eig, v, waarom) {
-    const regels = [`${T.hoofdletter(eig.naam)} · kring ${eig.kring}`, T.SPREUKEN[eig.id].uitleg];
-    regels.push(`${v.naam}: ${v.aantal} keer raak.`);
-    if (v.volgende) regels.push(`Nog ${v.volgende.nog} tot ${v.volgende.naam}: ${v.volgende.tekst}.`);
-    else regels.push('Hoger kan niet.');
-    if (waarom) regels.push(waarom);
-    return regels.join('\n');
-  }
 })(globalThis.Toren = globalThis.Toren || {});

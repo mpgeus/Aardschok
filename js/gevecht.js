@@ -5,10 +5,7 @@
 (function (T) {
   'use strict';
 
-  // Eén potje actiepunten per beurt voor lopen (1 per stap), slaan, toveren en drinken.
-  // Daar staat de afweging waar het spel om draait: slaan met de staf kost geen levensjaren,
-  // maar is zwak en brengt je binnen bereik van de klappen; een vuurschicht is sterk en werkt
-  // op afstand, maar kost een jaar van je leven. De spreuken staan in spreuken.js.
+  // Eén potje actiepunten per beurt voor lopen (1 per stap), slaan en drinken.
   T.SLAAN = { kosten: 3, schade: [3, 5] };
   T.FONTEIN = { kosten: 3, maanden: 24 };
   T.DEUR_SLUITEN = 1;
@@ -28,9 +25,6 @@
     const isHeld = e === S.held;
     const apVoor = isHeld ? T.apVoorLeeftijd(e.leeftijd) : 0;
     e.leeftijd = Math.min(T.EINDLEEFTIJD, Math.max(0, e.leeftijd + maanden));
-    // Een kring van spreuken die open is, blijft open, ook als de fontein je jonger maakt.
-    // Alleen de held tovert, dus alleen de held heeft een kring.
-    if (isHeld) e.kring = Math.max(e.kring || 0, T.kringVoorLeeftijd(e.leeftijd));
     if (uitKlap) e.flits = 0.3;
     T.anim.tekst(S, e, T.duurKort(maanden), maanden > 0 ? '#e6d3a3' : '#9fe0a0');
     if (isHeld) {
@@ -56,12 +50,10 @@
     if (S.modus !== 'verkennen') return;
     S.modus = 'overgang';
     S.naLopen = null;
-    S.spreuk = null;
     S.overgang = { aanleiding };
-    // Wie op een dwaallicht afging, schrikt op: nu telt alleen nog de held.
+    // Alleen de held telt nog mee; de rest maakt hoogstens zijn lopende stap af.
     for (const e of S.wereld.wezens) {
       e.pad = e.onderweg ? [e.pad[0]] : [];
-      e.gelokt = null;
     }
     if (!heldBegint) aanleiding.alarm = 1.3;
     T.ui.verbergTooltip();
@@ -175,10 +167,7 @@
       // Hoeveel punten er in een beurt zitten, hangt af van hoe oud je nu bent.
       S.held.maxAp = T.apVoorLeeftijd(S.held.leeftijd);
       S.held.ap = S.held.maxAp;
-      S.spreuk = null;
       S.bezig = false;
-      // Een dwaallicht uit de vorige ronde heeft zijn werk gedaan: elk monster had zijn beurt.
-      S.lichten = S.lichten.filter((l) => !l.inGevecht);
       T.ververBereik(S);
       knoppenAan(S);
       T.ui.toonAp(S.held.ap, S.held.maxAp, 0, true);
@@ -207,27 +196,20 @@
     if (!g || S.bezig || g.volgorde[g.beurt] !== S.held) return;
     S.bezig = true;
     S.bereik = null;
-    S.spreuk = null;
     T.ui.zetKnoppen(false);
     volgendeBeurt(S);
   };
 
-  // Na het gevecht is alles wat nog voor een volgende beurt bewaard werd (nabranden, punten
-  // kwijt door een windstoot, kijken naar een dwaallicht), voorbij.
   T.eindeGevecht = function (S, reden) {
     S.gevecht = null;
     S.modus = 'verkennen';
     S.bezig = false;
     S.bereik = null;
-    S.spreuk = null;
-    S.lichten = S.lichten.filter((l) => !l.inGevecht);
     T.ui.toonGevecht(false);
     T.ui.zetKnoppen(false);
     T.ui.bericht(reden === 'kwijt' ? 'Ze zijn je kwijt. Het wordt weer stil.' : 'Het is weer stil.', 'rust');
+    // Wie meevocht, dwaalt na afloop niet meteen weer weg.
     for (const m of S.wereld.wezens) {
-      m.brandt = 0;
-      m.apVerlies = 0;
-      m.afgeleid = null;
       if (m.kant === 'monster' && !m.dood) m.dwaalTijd = 2.5;
     }
   };
@@ -258,8 +240,6 @@
   // { tekst, kosten, maanden, kan, doe, pad, lijn } terug. kan = false: wel tonen, niet doen.
   // kosten staat alleen op 0 als het niet aan de punten ligt (te ver, geen zicht).
   T.handelingGevecht = function (S, doel) {
-    // Met een spreuk in de hand vraagt elke klik iets anders (zie toveren.js).
-    if (S.spreuk) return T.handelingSpreuk(S, doel);
     if (!doel) return null;
     const w = S.wereld;
     const held = S.held;
@@ -366,9 +346,8 @@
   };
 
   // De knoppen staan aan in de eigen beurt; de deurknop verschijnt alleen naast een open deur.
-  // Slaan is gekozen zolang er geen spreuk in de hand is.
   function knoppenAan(S) {
-    T.ui.zetKnoppen(true, S.spreuk || 'slaan');
+    T.ui.zetKnoppen(true, 'slaan');
     T.ui.toonDeurKnop(!!T.deurNaastHeld(S), S.held.ap >= T.DEUR_SLUITEN);
   }
 
@@ -408,8 +387,6 @@
     e.dood = true;
     e.sterfTijd = 0;
     e.pad = [];
-    e.brandt = 0;
-    e.gelokt = null;
     T.ui.bericht(`De ${e.naam} is verslagen.`, 'goed');
     const g = S.gevecht;
     if (!g) return;
@@ -419,22 +396,6 @@
       if (i < g.beurt) g.beurt--;
     }
     T.ui.toonVolgorde(S);
-  }
-
-  // Brandt een monster aan het begin van zijn eigen beurt dood, dan is de volgorde al
-  // opgeschoven: wie na hem kwam, staat nu op zijn plek en is dus meteen aan de beurt.
-  function naDoodInEigenBeurt(S) {
-    const g = S.gevecht;
-    if (!g) return;
-    if (!g.monsters.some((m) => !m.dood)) {
-      T.eindeGevecht(S, 'gewonnen');
-      return;
-    }
-    if (g.beurt >= g.volgorde.length) {
-      g.beurt = 0;
-      g.ronde++;
-    }
-    beginBeurt(S);
   }
 
   T.heldGevallen = function (S) {
@@ -454,9 +415,8 @@
     });
   };
 
-  // Met hoeveel punten begint een monster zijn beurt? Een windstoot vanaf Geoefend laat het
-  // wankelen, en dan heeft het er deze ene beurt minder.
-  T.monsterAp = (m) => Math.max(0, m.maxAp - (m.apVerlies || 0));
+  // Met hoeveel punten begint een monster zijn beurt?
+  T.monsterAp = (m) => m.maxAp;
 
   // Wat doet een monster in zijn beurt? Het loopt zo kort mogelijk naar de held, en slaat
   // toe zo vaak als de overgebleven punten toelaten. Haalt het de held niet, dan komt het
@@ -476,42 +436,12 @@
     return { pad: pad.slice(0, stappen), aanvallen, kanNiet: false };
   };
 
-  // Een monster dat naar een dwaallicht kijkt, loopt er in zijn beurt heen in plaats van aan
-  // te vallen, zo ver als zijn punten reiken.
-  T.planAfgeleid = function (w, m, licht) {
-    const pad = T.lokPad(w, m, licht) || [];
-    return { pad: pad.slice(0, T.monsterAp(m)), aanvallen: 0, kanNiet: false };
-  };
-
   async function monsterBeurt(S, m) {
     const w = S.wereld;
     const held = S.held;
     await T.anim.wacht(S, 260);
     if (!S.gevecht) return;
-    // Nabranden van een vuurschicht gaat voor: daar begint de beurt mee, en soms eindigt hij
-    // er ook mee.
-    if (m.brandt > 0) {
-      const n = m.brandt;
-      m.brandt = 0;
-      T.ui.bericht(`De ${m.naam} brandt na: ${n} schade.`);
-      raak(S, m, n);
-      await T.anim.wacht(S, 420);
-      if (!S.gevecht) return;
-      if (m.dood) {
-        naDoodInEigenBeurt(S);
-        return;
-      }
-    }
-    // Kijkt het naar een dwaallicht, dan loopt het daarheen en slaat het niet. Allebei de
-    // gevolgen van een spreuk gelden maar één beurt.
-    const afgeleid = m.afgeleid;
-    const plan = afgeleid ? T.planAfgeleid(w, m, afgeleid) : T.planMonsterBeurt(w, m, held);
-    m.afgeleid = null;
-    m.apVerlies = 0;
-    if (afgeleid) {
-      m.vraag = 1.2;
-      T.ui.bericht(`De ${m.naam} gaat op het dwaallicht af.`);
-    }
+    const plan = T.planMonsterBeurt(w, m, held);
     if (plan.pad.length) await T.anim.loop(m, plan.pad);
     for (let i = 0; i < plan.aanvallen; i++) {
       if (held.dood || !S.gevecht) return;
@@ -537,11 +467,4 @@
     const pad = T.zoekPad(a, h, (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: false }), (x, y) => T.isVast(w, x, y), { naast: true });
     return pad !== null;
   }
-
-  // Voor toveren.js: een spreuk in een gevecht gaat door dezelfde molen als slaan. Knoppen uit,
-  // effect, en daarna is de held weer aan zet.
-  T.bezigMet = bezigMet;
-  T.naHandeling = naHandeling;
-  T.raak = raak;
-  T.knoppenAan = knoppenAan;
 })(globalThis.Toren = globalThis.Toren || {});

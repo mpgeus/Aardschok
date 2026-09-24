@@ -6,7 +6,7 @@
 // Welke gebieden er zijn, staat nergens opgeschreven: elke kaart is er een (zie T.maakGebieden
 // hieronder). Marcel tekent in Tiled, draait npm run kaarten, en de wereld is groter geworden.
 //
-// De held verhuist mee — met zijn leeftijd, zijn meesterschap en wat hij bij zich heeft — en de
+// De held verhuist mee — met zijn leeftijd en wat hij bij zich heeft — en de
 // wereld die hij achterlaat blijft staan: een gedode wolf blijft dood, en een deur die je liet
 // openstaan staat er nog open als je terugkomt.
 (function (T) {
@@ -153,14 +153,11 @@
     S.netGeland = { x: plek.x, y: plek.y };
 
     S.wereld = nieuw;
-    // Alles wat bij de vorige plek hoorde, blijft daar: dwaallichten, effecten, het bereik, de
-    // spreuk in de hand en een gevecht dat nog liep.
+    // Alles wat bij de vorige plek hoorde, blijft daar: effecten, het bereik en een gevecht dat
+    // nog liep.
     S.gevecht = null;
     S.modus = 'verkennen';
     S.bezig = false;
-    S.spreuk = null;
-    S.spreukBereik = null;
-    S.lichten = [];
     S.effecten = [];
     S.wachters = [];
     S.bereik = null;

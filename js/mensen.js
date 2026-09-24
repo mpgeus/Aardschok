@@ -116,8 +116,7 @@
       vel: null,
       dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
       dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0, leeftijd: null,
-      brandt: 0, apVerlies: 0, afgeleid: null, gelokt: null, vraag: 0, geduwd: false,
-      meesterschap: null, kring: null,
+      vraag: 0,
     };
   };
 

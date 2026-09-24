@@ -7,7 +7,6 @@ require('../js/leeftijd.js');
 require('../js/wereld.js');
 require('../js/gebied.js');
 require('../js/pad.js');
-require('../js/spreuken.js');
 require('../js/gevecht.js');
 require('../js/verkennen.js');
 const T = globalThis.Toren;
@@ -173,8 +172,6 @@ test('de magie wordt sterker met de jaren: +1 schade per vijf jaar boven de tach
   assert.equal(T.magieBonus(84 * 12 + 11), 0);
   assert.equal(T.magieBonus(85 * 12), 1);
   assert.equal(T.magieBonus(90 * 12), 2);
-  const held = { leeftijd: 90 * 12 };
-  assert.deepEqual(T.schichtSchade(held), [7, 10]);
 });
 
 test('leeftijd en duur staan er zoals je ze zegt', () => {

@@ -214,38 +214,6 @@
     }
   };
 
-  // ── Raakpunten: een spreuk op een ding ──
-
-  // Het raakpunt onder de muis, als deze spreuk erop werkt en het nog te doen is. Zie de uitleg
-  // boven in quests.js; js/toveren.js vraagt het bij elke spreuk, dus dit werkt net zo goed voor
-  // een windstoot op een molen als voor een vuurschicht in een oven.
-  T.raakpuntOp = function (S, doel, spreukId) {
-    const w = S.wereld;
-    const v = (doel && doel.voorwerp) || (w && doel && T.voorwerpOp(w, doel.x, doel.y));
-    return v ? raakpuntVan(S, v, spreukId) : null;
-  };
-
-  function raakpuntVan(S, v, spreukId) {
-    const r = v && v.raak && T.RAAKPUNTEN[v.raak];
-    if (!r || r.spreuk !== spreukId) return null;
-    if (lijst(r.zetVlag).some((vlag) => T.heeftVlag(S, vlag))) return null; // al gedaan
-    if (!T.voorwaardeGeldt(S, null, r.als)) return null;
-    return { voorwerp: v, raak: r };
-  }
-
-  // Staat er iets binnen bereik dat om deze spreuk vraagt? Daarop kijkt T.waaromNiet, zodat je
-  // een vuurschicht buiten een gevecht wél mag pakken als er een scheur staat te wachten.
-  T.raakpuntInBereik = function (S, spreukId, bereik) {
-    const w = S.wereld;
-    if (!w) return null;
-    const h = T.tegelVan(S.held);
-    for (const v of w.voorwerpen) {
-      const rp = raakpuntVan(S, v, spreukId);
-      if (rp && T.afstand(h, { x: v.x, y: v.y }) <= bereik) return rp;
-    }
-    return null;
-  };
-
   // ── De toets van drie antwoorden ──
 
   // De regel uit ontwerp/toren.md, als iets wat npm test nakijkt: elke quest heeft minstens drie

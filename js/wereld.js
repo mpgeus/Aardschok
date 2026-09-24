@@ -205,12 +205,7 @@
       // Meestal null (geen leeftijd, geen levensbalk): alleen de held en wie in T.WEZENS zijn
       // eigen `leeftijd` draagt (de oude meester) telt in maanden mee, zie T.verouder.
       leeftijd: soort === 'held' ? T.STARTLEEFTIJD : s.leeftijd != null ? s.leeftijd : null,
-      // Wat spreuken achterlaten: nabranden, punten kwijt door een windstoot, kijken naar een
-      // dwaallicht (vraag: het vraagteken boven het hoofd), en geduwd worden.
-      brandt: 0, apVerlies: 0, afgeleid: null, gelokt: null, vraag: 0, geduwd: false,
-      // Het meesterschap per spreuk, en de hoogste kring die open ging. Alleen de held tovert.
-      meesterschap: soort === 'held' ? {} : null,
-      kring: soort === 'held' ? T.kringVoorLeeftijd(T.STARTLEEFTIJD) : null,
+      vraag: 0, // het vraagteken boven het hoofd: dit wezen heeft iets gezien wat de held niet is
     };
   }
 

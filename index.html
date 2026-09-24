@@ -48,8 +48,7 @@
   <div id="plek"></div>
   <div id="volgorde" class="paneel"></div>
 
-  <!-- Onderaan: de spreuken staan er altijd, de actiepunten en knoppen schuiven erbij zodra
-       het gevecht begint. -->
+  <!-- Onderaan: de actiepunten en knoppen van een gevecht schuiven erbij zodra het begint. -->
   <div id="onder">
     <div id="actiebalk" class="paneel">
       <div id="ap"></div>
@@ -59,7 +58,6 @@
         <button data-actie="einde"><kbd>spatie</kbd> Einde beurt</button>
       </div>
     </div>
-    <div id="spreukbalk" class="paneel"></div>
   </div>
 
   <div id="berichten"></div>
@@ -90,8 +88,6 @@
 
   <div id="hulp">
     Klik om te lopen, te praten of iets te gebruiken. <kbd>S</kbd> sluipen<br>
-    Spreuken: <kbd>2</kbd> vuurschicht · <kbd>3</kbd> dwaallicht · <kbd>4</kbd> windstoot<br>
-    <kbd>Esc</kbd> of rechtsklik legt een spreuk weer weg<br>
     In een gevecht: <kbd>1</kbd> slaan · <kbd>D</kbd> deur dicht · <kbd>spatie</kbd> einde beurt
   </div>
 
@@ -102,13 +98,11 @@
   </div>
 
   <!-- Gewone scripts, geen modules: zo werkt het spel ook als je index.html los opent.
-       beelden/beschrijving.js hoort bij de pixel art (gemaakt door naar-spel.cjs),
-       beelden/effecten/effecten.js bij de spreukeffecten (effecten-export.cjs), tegels/tegels.js
+       beelden/beschrijving.js hoort bij de pixel art (gemaakt door naar-spel.cjs), tegels/tegels.js
        en kaarten/kaarten.js bij de kaarten die Marcel in Tiled tekent (naar-tiled.cjs, npm run
-       tiled, en naar-kaarten.cjs, npm run kaarten): alledrie als script, want fetch mag niet
+       tiled, en naar-kaarten.cjs, npm run kaarten): alle drie als script, want fetch mag niet
        vanaf file://. -->
   <script src="beelden/beschrijving.js"></script>
-  <script src="beelden/effecten/effecten.js"></script>
   <script src="tegels/tegels.js"></script>
   <script src="tegels/bouwfasen.js"></script>
   <script src="tegels/bouwfasen-sdf.js"></script>
@@ -128,7 +122,6 @@
   <script src="js/gebied.js"></script>
   <script src="js/pad.js"></script>
   <script src="js/akkers.js"></script>
-  <script src="js/spreuken.js"></script>
   <script src="js/iso.js"></script>
   <script src="js/sprites.js"></script>
   <script src="js/anim.js"></script>
@@ -141,7 +134,6 @@
   <script src="js/dialoog.js"></script>
   <script src="js/verkennen.js"></script>
   <script src="js/gevecht.js"></script>
-  <script src="js/toveren.js"></script>
   <script src="js/tekenen.js"></script>
   <script src="js/main.js"></script>
 </body>

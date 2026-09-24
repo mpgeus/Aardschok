@@ -24,8 +24,7 @@
     return v[wat];
   };
 
-  // Een aantal recht neerzetten in plaats van erbij op te tellen, voor gereedschap en toetsen
-  // (zoals Toren.debug.meesterschap dat voor een spreuk doet).
+  // Een aantal recht neerzetten in plaats van erbij op te tellen, voor gereedschap en toetsen.
   T.zetVoorraad = function (S, wat, aantal) {
     return T.wijzigVoorraad(S, wat, Math.max(0, aantal) - (S.voorraad[wat] || 0));
   };

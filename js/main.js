@@ -33,9 +33,6 @@
       gevecht: null,
       overgang: null,
       bezig: false,
-      spreuk: null,
-      spreukBereik: null,
-      lichten: [],
       inventaris: new Set(),
       kalender: T.nieuweKalender(), // dag, seizoen, jaar en snelheid (js/tijd.js)
       voorraad: T.nieuweVoorraad(), // goud, graan, wol, hout (js/voorraad.js)
@@ -158,10 +155,9 @@
     return t;
   }
 
-  // Een gebouw in de hand (S.bouwSoort, het bouwmenu in js/hud.js) verandert wat de muis doet,
-  // net als een spreuk in de hand (CLAUDE.md, "Een spreuk in de hand verandert wat de muis
-  // doet"): hij richt een voet in plaats van dat er iets van het gewone rondlopen gebeurt. De
-  // tegel onder de muis is de linkerbovenhoek van die voet (dezelfde afspraak als "beslaat" op de
+  // Een gebouw in de hand (S.bouwSoort, het bouwmenu in js/hud.js) verandert wat de muis doet:
+  // hij richt een voet in plaats van dat er iets van het gewone rondlopen gebeurt. De tegel
+  // onder de muis is de linkerbovenhoek van die voet (dezelfde afspraak als "beslaat" op de
   // kaart, js/kaart.js); T.gebouwPast zegt of hij daar past.
   function werkBouwHoverBij() {
     if (!S.muis) {
@@ -185,7 +181,6 @@
       return;
     }
     const actief = S.modus === 'verkennen' || (S.modus === 'gevecht' && !S.bezig && heldAanDeBeurt());
-    S.spreukBereik = actief && S.spreuk ? T.spreukBereik(S) : null;
     if (!S.muis || !actief) {
       S.hover = null;
       S.handeling = null;
@@ -200,8 +195,7 @@
     if (S.modus === 'gevecht') T.ui.toonAp(S.held.ap, S.held.maxAp, h ? h.kosten || 0 : 0, !h || h.kan !== false);
     if (h && h.tekst) T.ui.tooltip(tipTekst(h), S.muis.x, S.muis.y, !!h.fout || h.kan === false);
     else T.ui.verbergTooltip();
-    // Met een spreuk in de hand richt je: een kruisje in plaats van een wijzende hand.
-    canvas.style.cursor = h ? (S.spreuk ? 'crosshair' : 'pointer') : S.spreuk ? 'crosshair' : 'default';
+    canvas.style.cursor = h ? 'pointer' : 'default';
   }
 
   // Bij het rondlopen volgt de camera de held; in een gevecht zoekt hij het midden tussen
@@ -252,7 +246,6 @@
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
     // net doorheen.
     if (S.naarGebied) T.gaNaarGebied(S, S.naarGebied);
-    T.werkLichtenBij(S, dt);
     // Quests gaan vanzelf verder (js/quest.js): heb je wat iemand nodig heeft, dan schuift de fase
     // op. Het vak linksboven is van de quest die je het eerst aannam.
     T.werkQuestsBij(S);
@@ -281,7 +274,6 @@
     S.camera.x += (doel.x - S.camera.x) * k;
     S.camera.y += (doel.y - S.camera.y) * k;
     werkHoverBij();
-    T.ui.toonSpreuken(S);
   }
 
   let vorige = 0;
@@ -329,14 +321,8 @@
   });
   canvas.addEventListener('contextmenu', (ev) => {
     ev.preventDefault();
-    if (S.bouwSoort) {
-      S.bouwSoort = null;
-      return;
-    }
-    T.kiesSpreuk(S, null);
+    if (S.bouwSoort) S.bouwSoort = null;
   });
-  // De spreuktoetsen (2, 3, 4) werken binnen én buiten een gevecht, want een dwaallicht en een
-  // windstoot horen juist bij het rondlopen. 1 en Escape leggen een spreuk weer weg.
   window.addEventListener('keydown', (ev) => {
     if (S.modus === 'dialoog') {
       const n = parseInt(ev.key, 10);
@@ -346,10 +332,8 @@
     }
     if (S.modus !== 'verkennen' && S.modus !== 'gevecht') return;
     // B: het bouwmenu (js/hud.js), alleen in het nieuwe spel en alleen bij het rondlopen — botst
-    // nergens mee (CLAUDE.md, "Toetsen"). Nog eens B, Esc of rechtsklik legt een gebouw weer weg,
-    // net als bij een spreuk.
+    // nergens mee (CLAUDE.md, "Toetsen"). Nog eens B, Esc of rechtsklik legt een gebouw weer weg.
     if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'b' || ev.key === 'B')) {
-      T.kiesSpreuk(S, null);
       if (S.bouwSoort || S.bouwMenuOpen) {
         S.bouwSoort = null;
         S.bouwMenuOpen = false;
@@ -359,15 +343,7 @@
       if (T.ui.toonBouwmenu) T.ui.toonBouwmenu(S);
       return;
     }
-    const spreuk = T.SPREUK_VOLGORDE.find((id) => T.SPREUKEN[id].toets === ev.key);
-    if (spreuk) {
-      S.bouwSoort = null;
-      S.bouwMenuOpen = false;
-      T.kiesSpreuk(S, spreuk);
-      return;
-    }
-    if (ev.key === '1' || ev.key === 'Escape') {
-      T.kiesSpreuk(S, null);
+    if (ev.key === 'Escape') {
       if (S.bouwSoort || S.bouwMenuOpen) {
         S.bouwSoort = null;
         S.bouwMenuOpen = false;
@@ -391,13 +367,6 @@
     b.blur(); // anders drukt de spatiebalk straks ook deze knop nog eens in
     if (b.dataset.actie === 'einde') T.eindeBeurt(S);
     else if (b.dataset.actie === 'deur') T.deurDicht(S);
-    else T.kiesSpreuk(S, null);
-  });
-  document.getElementById('spreukbalk').addEventListener('click', (ev) => {
-    const b = ev.target.closest('button');
-    if (!b) return;
-    b.blur();
-    T.kiesSpreuk(S, b.dataset.spreuk);
   });
   document.getElementById('sluip-knop').addEventListener('click', (ev) => {
     ev.currentTarget.blur();
@@ -415,16 +384,9 @@
       const p = T.naarScherm(x, y);
       return vanVlak(p.x, p.y);
     },
-    // Zet hoe vaak een spreuk al raak was, om de treden te proberen zonder ze te verdienen:
-    // Toren.debug.meesterschap('vuurschicht', 15) → 'Meesterlijk'.
-    meesterschap(id, aantal) {
-      if (!T.SPREUKEN[id]) return `Die spreuk ken ik niet: ${id}`;
-      S.held.meesterschap[id] = Math.max(0, Math.floor(aantal));
-      return T.TREDEN[T.trede(S.held, id)].naam;
-    },
-    // De kalender een dag of een snelheid geven zonder te wachten (zoals debug.meesterschap voor
-    // een spreuk doet): Toren.debug.kalender(310) → naar dag 310, Toren.debug.kalender(null, 3)
-    // → 3x. Zonder argumenten zegt het waar de kalender nu staat.
+    // De kalender een dag of een snelheid geven zonder te wachten: Toren.debug.kalender(310) →
+    // naar dag 310, Toren.debug.kalender(null, 3) → 3x. Zonder argumenten zegt het waar de
+    // kalender nu staat.
     kalender(dag, snelheid) {
       if (dag != null) S.kalender.dag = dag;
       if (snelheid != null) T.zetSnelheid(S, snelheid);
@@ -466,8 +428,8 @@
         gemiddeld: af(som / aantal), mediaan: af(tijden[aantal >> 1]), slechtste: af(tijden[aantal - 1]),
       };
     },
-    // Een quest in een fase zetten zonder hem te spelen, zoals debug.meesterschap dat voor de
-    // treden doet. Zo kun je zien wat het dorp in elke fase zegt terwijl je de kaart nog tekent:
+    // Een quest in een fase zetten zonder hem te spelen. Zo kun je zien wat het dorp in elke
+    // fase zegt terwijl je de kaart nog tekent:
     //   Toren.debug.quest()                 → wat er loopt, en wat er te kiezen valt
     //   Toren.debug.quest('bakker')         → de fasen van die quest, en waar hij nu staat
     //   Toren.debug.quest('bakker', 'terug') → zet hem daar neer
