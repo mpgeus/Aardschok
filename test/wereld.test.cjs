@@ -140,9 +140,39 @@ test('staatVoorGebouw beslist per tegel welke ervóór liggen en welke erachter,
   // Marcels geval: recht ten zuiden staat een wezen ervóór, terwijl zijn eigen som (11 + 18 = 29)
   // onder de vóórste hoek van diepteVan blijft (34) — precies de tegenstrijdigheid die de fout
   // was: de tekenvolgorde zei "erachter" (lagere som) en de doorkijk zei "ervóór". Vandaar dat de
-  // tekenvolgorde nu ook staatVoorGebouw vraagt (vergelijkDiepte in js/tekenen.js), niet meer de
-  // som van diepteVan tegen een los wezen.
+  // tekenvolgorde nu ook staatVoorGebouw vraagt (T.sorteerTekenlijst in js/tekenen.js), niet
+  // meer de som van diepteVan tegen een los wezen.
   assert.ok(11 + 18 < T.diepteVan(toren), 'de som van het wezen ligt onder diepteVan(toren)');
+});
+
+test('de tekenvolgorde kent geen cirkels: wat achter een huis staat, blijft erachter', () => {
+  // 24 sep: een regenton, een bloempot en twee boeren die áchter een bouwplaats liepen, stonden
+  // bovenop het gebint getekend. De oude sortering vroeg per paar staatVoorGebouw tegen het huis,
+  // en x + y tussen al het andere, en die twee samen maakten cirkels waar Array.sort niet mee
+  // overweg kan. Hier zo'n cirkel: de ton staat achter het huis, de boer vóór het huis (ten oosten)
+  // maar met een lagere som dan de ton, en daarmee zei de oude volgorde ton < huis < boer < ton.
+  const huis = { x: 10, y: 10, beslaat: [7, 5] }; // x 10..16, y 10..14, vóórste hoek 16 + 14 = 30
+  const item = (naam, x, y, l = 1) => ({ naam, d: x + y, l, punt: { x, y } });
+  const lijst = [
+    item('boer ten oosten, bij de noordhoek', 17, 10, 2), // som 27, maar vóór het huis
+    item('ton achter het huis', 15, 9), // som 24, erachter (ten noorden)
+    item('pot ten westen', 9, 14), // som 23, erachter (ten westen)
+    { naam: 'huis', d: T.diepteVan(huis), l: 1, punt: { x: 10, y: 10 }, gebouw: huis },
+    item('man ten zuiden', 12, 15, 2), // som 27, vóór het huis
+    item('boom ver naar het noordoosten', 25, 2), // som 27, ten oosten maar ver weg: blijft in zijn buurt
+    item('kist vooraan', 18, 16), // som 34, sowieso ervóór
+  ];
+  // In elke volgorde erin, dezelfde uitkomst eruit.
+  for (let n = 0; n < 7; n++) {
+    const volgorde = T.sorteerTekenlijst(lijst.map((e, i) => ({ ...e, i })).sort((a, b) => ((a.i + n) % 7) - ((b.i + n) % 7))).map((e) => e.naam);
+    const plek = (naam) => volgorde.indexOf(naam);
+    assert.ok(plek('ton achter het huis') < plek('huis'), volgorde.join(' · '));
+    assert.ok(plek('pot ten westen') < plek('huis'));
+    assert.ok(plek('boer ten oosten, bij de noordhoek') > plek('huis'));
+    assert.ok(plek('man ten zuiden') > plek('huis'));
+    assert.ok(plek('kist vooraan') > plek('huis'));
+    assert.ok(plek('boom ver naar het noordoosten') < plek('huis'), 'wie het huis op het scherm niet raakt, schuift niet door');
+  }
 });
 
 // ---------------------------------------------------------------- de overgang

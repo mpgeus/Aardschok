@@ -182,8 +182,8 @@
       zichtbaar.push(v);
       const k = T.kamerVan(w, v.x, v.y);
       const helder = k && inBeeld(k.id) ? 1 : GEDIMD;
-      // Een gebouw (breder of dieper dan één tegel) krijgt `gebouw` mee: alleen dan is één
-      // scalair dieptegetal niet genoeg en beslist vergelijkDiepte per paar (zie hieronder).
+      // Een gebouw (breder of dieper dan één tegel) krijgt `gebouw` mee: wie ervóór staat maar
+      // lager telt, schuift in sorteerTekenlijst (hieronder) door tot achter hem.
       const groot = v.beslaat && (v.beslaat[0] > 1 || v.beslaat[1] > 1);
       lijst.push({ d: diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: groot ? v : undefined, f: () => tekenVoorwerp(ctx, S, v, helder) });
     }
@@ -264,7 +264,7 @@
       if (!T.isZichtbaar(w, l.x, l.y)) continue;
       lijst.push({ d: l.x + l.y + 0.02, l: 3, punt: { x: l.x, y: l.y }, f: () => tekenLicht(ctx, S, l, 1) });
     }
-    lijst.sort((a, b) => vergelijkDiepte(a, b) || a.l - b.l);
+    sorteerTekenlijst(lijst);
     for (const item of lijst) item.f();
 
     tekenEffecten(ctx, S);
@@ -295,15 +295,38 @@
     return x > v.x + b[0] - 1 || y > v.y + b[1] - 1;
   }
 
-  // De sortering van de tekenlijst: voor twee gewone dingen (twee wezens, twee losse voorwerpen)
-  // blijft de oude som `x + y` de maat, precies als voorheen. Draagt precies één kant `gebouw`
-  // (een voet groter dan één tegel), dan beslist staatVoorGebouw per paar in plaats van twee
-  // sommen tegen elkaar te leggen — twee gebouwen tegen elkaar (zeldzaam, komt in dit spel niet
-  // voor) vallen terug op de oude som.
-  function vergelijkDiepte(a, b) {
-    if (a.gebouw && !b.gebouw) return staatVoorGebouw(b.punt.x, b.punt.y, a.gebouw) ? -1 : 1;
-    if (b.gebouw && !a.gebouw) return staatVoorGebouw(a.punt.x, a.punt.y, b.gebouw) ? 1 : -1;
-    return a.d - b.d;
+  // De sortering van de tekenlijst, van achter naar voor: één getal per ding (`d`, de som x + y),
+  // en bij gelijk getal de laag (`l`). Een gebouw (een voet groter dan één tegel, `gebouw`) telt
+  // met zijn vóórste hoek. Wie vóór zo'n gebouw staat (staatVoorGebouw: ten zuiden of ten oosten
+  // van zijn voet) maar een lager getal heeft dan die hoek — naast de oostgevel, bij de noordhoek —
+  // schuift door naar net achter het gebouw, zodat hij erover getekend wordt.
+  //
+  // Eerst beslisten twee regels door elkaar: per paar staatVoorGebouw tegen een gebouw, en x + y
+  // tussen al het andere. Die twee samen maakten cirkels (A vóór B vóór C vóór A), en daar kan
+  // Array.sort niet mee overweg: op 24 sep stonden een regenton, een bloempot en twee boeren die
+  // áchter een bouwplaats liepen, bovenop het gebint getekend. Met één getal per ding bestaan
+  // zulke cirkels niet.
+  //
+  // Alleen wie op het scherm boven het gebouw kan uitkomen, schuift door (`sx`, de schermkolom,
+  // binnen de breedte van de voet plus een tegel speling): een ding ver naar het noordoosten staat
+  // ook "ten oosten", maar raakt het gebouw niet, en hoort in zijn eigen buurt te blijven staan.
+  T.sorteerTekenlijst = sorteerTekenlijst;
+  function sorteerTekenlijst(lijst) {
+    for (const e of lijst) e.d0 = e.d;
+    for (const g of lijst) {
+      if (!g.gebouw) continue;
+      const v = g.gebouw;
+      const b = v.beslaat || [1, 1];
+      const links = v.x - (v.y + b[1] - 1) - 2;
+      const rechts = v.x + b[0] - v.y + 1;
+      for (const e of lijst) {
+        if (e.gebouw || !e.punt || e.d0 > g.d0) continue;
+        const sx = e.punt.x - e.punt.y;
+        if (sx < links || sx > rechts || !staatVoorGebouw(e.punt.x, e.punt.y, v)) continue;
+        e.d = Math.max(e.d, g.d0 + 0.5);
+      }
+    }
+    return lijst.sort((a, b) => a.d - b.d || a.d0 - b.d0 || a.l - b.l);
   }
 
   // ---------------------------------------------------------------- doorkijk
