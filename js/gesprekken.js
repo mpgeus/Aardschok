@@ -51,6 +51,7 @@
 // Een gevolg (doe) mag hebben: zetVlag en/of wisVlag (één naam, of een lijstje), geef en/of neem
 // (een voorwerp in je tas of eruit), goud: 20 of goud: -15, en quest: 'bakker' met fase: 'zoeken'
 // of weg: 'marskramer' (quest zonder allebei begint hem). Zie js/quests.js voor de quests zelf.
+// En handel: true opent het handelsvenster van de marskramer (js/handel.js, js/hud.js).
 (function (T) {
   'use strict';
 
@@ -274,12 +275,20 @@
         },
       },
     },
-    // De marskramer trekt van dorp tot dorp en koopt ook. De sleutel die hij vorige week kocht
-    // (ontwerp/wereld.md) blijft hier een losse draad: die pakken we later op.
+    // De marskramer trekt van dorp tot dorp en koopt ook. In het gehucht komt hij drie keer per jaar
+    // langs, en daar handel je met hem (js/handel.js; spel.md, "Handel"). De vlaggen
+    // marskramerOpBezoek, marskramerLente, -Zomer, -Herfst en marskramerVertrekt zet js/handel.js
+    // zolang hij er is. De vuurklei en de sleutel zijn van het oude spel en gaan eruit met punt 7
+    // van de werklijst; de sleutel die hij vorige week kocht (ontwerp/wereld.md) was daar een
+    // losse draad.
     marskramer: {
       naam: 'de marskramer',
       start: 'welkom',
       situaties: [
+        { naam: 'In het gehucht, grasmaand', als: { vlag: ['marskramerOpBezoek', 'marskramerLente'] } },
+        { naam: 'In het gehucht, hooimaand', als: { vlag: ['marskramerOpBezoek', 'marskramerZomer'] } },
+        { naam: 'In het gehucht, wijnmaand', als: { vlag: ['marskramerOpBezoek', 'marskramerHerfst'] } },
+        { naam: 'In het gehucht, hij vertrekt', als: { vlag: ['marskramerOpBezoek', 'marskramerVertrekt'] } },
         { naam: 'De bakker zoekt leem', als: { quest: 'bakker', fase: 'zoeken' } },
         { naam: '…en je hebt het geld', als: { quest: 'bakker', goud: 15, fase: 'zoeken' } },
         { naam: 'De oven is weer warm', als: { vlag: 'ovenWarm' } },
@@ -287,14 +296,34 @@
       knopen: {
         welkom: {
           tekst: [
+            { als: { vlag: 'marskramerVertrekt' }, zeg: 'Mijn ezel staat al met zijn kop naar de weg, schout. Tot de volgende keer.' },
+            { als: { vlag: 'marskramerLente' }, zeg: 'Grasmaand, en de wegen zijn weer te begaan. Wie nu nog graan heeft, is rijk: overal is het op. Ik betaal er goed voor.' },
+            { als: { vlag: 'marskramerZomer' }, zeg: 'Hooimaand. Alles staat te groeien en niemand heeft een stuiver. En wol heb ik deze week genoeg gezien: iedereen heeft net geschoren.' },
+            { als: { vlag: 'marskramerHerfst' }, zeg: 'Wijnmaand, mijn laatste ronde vóór de winter. Na Sint-Maarten zijn de wegen modder, en dan ziet u mij pas in grasmaand terug. Zout voor het vlees, ijzer voor de smid: nu, of pas in de lente.' },
             { als: { vlag: 'ovenWarm' }, zeg: 'De bakker bakt weer, hoor ik. Jammer. Ik had nog een mooie zak vuurklei.' },
             { als: { quest: 'bakker', fase: 'zoeken' }, zeg: 'Een tovenaar! Dan heb ik iets voor u. Nee, wacht — ú hebt iets voor mij. Dat voel ik.' },
             { zeg: 'Alles wat in een kar past, en een paar dingen die er niet in passen. Kijkt u gerust.' },
           ],
           keuzes: [
+            { zeg: 'Laat zien wat u bij u hebt.', sluit: true, als: { vlag: 'marskramerOpBezoek', nietVlag: 'marskramerVertrekt' }, doe: { handel: true } },
+            { zeg: 'Wat is er nieuws?', naar: 'nieuws', als: { vlag: 'marskramerOpBezoek' } },
             { zeg: 'Hebt u iets voor een gescheurde schoorsteen?', naar: 'vuurklei', als: { quest: 'bakker', fase: 'zoeken' } },
-            { zeg: 'Wat verkoopt u zoal?', naar: 'waren' },
+            { zeg: 'Wat verkoopt u zoal?', naar: 'waren', als: { nietVlag: 'marskramerOpBezoek' } },
             { zeg: 'Een andere keer.', sluit: true },
+          ],
+        },
+        // Hij komt ook op het kasteel (spel.md, "Handel", voor later): wat hij daar hoort, vertelt
+        // hij hier. En omgekeerd, maar dat zegt hij niet.
+        nieuws: {
+          tekst: [
+            { als: { vlag: 'marskramerLente' }, zeg: 'Uw heer heeft een spiegel van mij gekocht. Hij wilde zien hoe rijk hij eruitziet. Nu wil hij er nog een, voor de achterkant.' },
+            { als: { vlag: 'marskramerZomer' }, zeg: 'Op het kasteel tellen ze de dagen tot Sint-Maarten. Ik hoorde de inner zeggen dat uw gehucht er welvarend uitziet. Hij bedoelde het niet als compliment.' },
+            { als: { vlag: 'marskramerHerfst' }, zeg: 'Ze zeggen dat de heer dit jaar meer wil. Dat zeggen ze elk jaar. En elk jaar klopt het.' },
+            { zeg: 'Niets wat u niet al weet, schout. En wat u niet weet, weet ik ook niet. Dat is gezonder.' },
+          ],
+          keuzes: [
+            { zeg: 'Laat zien wat u bij u hebt.', sluit: true, als: { vlag: 'marskramerOpBezoek', nietVlag: 'marskramerVertrekt' }, doe: { handel: true } },
+            { zeg: 'Tot de volgende keer.', sluit: true },
           ],
         },
         vuurklei: {

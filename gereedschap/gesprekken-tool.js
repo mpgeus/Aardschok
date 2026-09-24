@@ -391,6 +391,7 @@
     quest: (v) => `${questNaam(v)}`,
     fase: (v) => `naar fase ${v}`,
     weg: (v) => `via ${v}`,
+    handel: () => 'opent de handel',
   };
   function doeInTaal(doe) {
     if (!doe) return '';
@@ -567,7 +568,10 @@
     { naam: 'quest', soort: 'quest', uitleg: 'een quest; zonder fase of weg begint hij' },
     { naam: 'fase', soort: 'fase', uitleg: 'zet die quest in deze fase' },
     { naam: 'weg', soort: 'weg', uitleg: 'los die quest zo op' },
+    { naam: 'handel', soort: 'aan', uitleg: 'opent het handelsvenster van de marskramer (js/handel.js)' },
   ];
+  // De beginwaarde van een nieuw gevolg: een getal begint op nul, een aan/uit (handel) staat aan.
+  const beginWaarde = (g) => (g && g.soort === 'getal' ? 0 : g && g.soort === 'aan' ? true : '');
   function bouwDoeEditor(houder, naVerandering) {
     const wrap = el('div', 'gt-als');
     const rijen = el('div', 'gt-als-rijen');
@@ -575,7 +579,7 @@
       if (!houder.doe) houder.doe = {};
       const vrij = GEVOLGEN.find((g) => houder.doe[g.naam] === undefined);
       if (!vrij) return;
-      houder.doe[vrij.naam] = vrij.soort === 'getal' ? 0 : '';
+      houder.doe[vrij.naam] = beginWaarde(vrij);
       herbouw(); naVerandering(true);
     });
     function waardeVeld(g) {
@@ -583,6 +587,7 @@
       if (g.soort === 'quest') return keuzelijst(questOpties(), houder.doe.quest, zet, '—');
       if (g.soort === 'fase') return keuzelijst(faseOpties(houder.doe.quest), houder.doe.fase, zet, '—');
       if (g.soort === 'weg') return keuzelijst(wegOpties(houder.doe.quest, houder.doe.fase), houder.doe.weg, zet, '—');
+      if (g.soort === 'aan') return el('span', 'gt-als-waarde', 'aan');
       const inv = document.createElement('input');
       inv.className = 'gt-als-waarde';
       inv.type = g.soort === 'getal' ? 'number' : 'text';
@@ -607,7 +612,7 @@
       select.addEventListener('change', () => {
         delete houder.doe[naam];
         const nieuw = GEVOLGEN.find((x) => x.naam === select.value);
-        houder.doe[select.value] = nieuw && nieuw.soort === 'getal' ? 0 : '';
+        houder.doe[select.value] = beginWaarde(nieuw);
         herbouw(); naVerandering(true);
       });
       const verwijder = knop('gt-mini gt-mini-x', '✕', () => {
@@ -1700,7 +1705,7 @@
     return JSON.stringify(s);
   }
   function serWaarde(v) {
-    if (typeof v === 'number') return String(v);
+    if (typeof v === 'number' || typeof v === 'boolean') return String(v);
     if (Array.isArray(v)) return '[' + v.map(str).join(', ') + ']';
     return str(v);
   }

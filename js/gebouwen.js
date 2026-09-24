@@ -572,6 +572,8 @@
     // js/behoeften.js geladen (bijvoorbeeld in een toets die alleen gebouwen.js laadt) blijft
     // alles zoals het was.
     if (T.tikBehoeftenDag) T.tikBehoeftenDag(S, dag);
+    // En de marskramer (js/handel.js): komt hij vandaag, of is zijn tijd om? Zelfde zachte koppeling.
+    if (T.tikHandelDag) T.tikHandelDag(S, dag);
     // 1. Gebouwen die vandaag klaarkomen: het spookbeeld wordt de tekening zelf (dezelfde
     // voorwerp-ingang, zie zetGebouwVoorwerp hierboven — er komt er geen tweede bij).
     for (const g of S.gebouwen) {

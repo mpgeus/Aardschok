@@ -70,7 +70,8 @@
 // En op het betekenisbestand zelf: "proef": true zegt dat de kaart alleen voor de toetsen bestaat
 // en in het spel niet meetelt; "beginVoorraad": { hout: 40, ... } geeft S.voorraad die waarden
 // mee zodra het spel op deze kaart begint (T.beginOpKaart, js/gebied.js), zodat een dorp niet met
-// lege handen begint.
+// lege handen begint; "marskramer": { x, y } is de plek waar de marskramer zijn waar uitstalt
+// (js/handel.js), met "komt": { x, y } erbij als hij niet over de eerste uitgang binnenkomt.
 (function (T) {
   'use strict';
 
@@ -396,6 +397,9 @@
       // Een klein beginvoorraadje, zodat een dorp niet met lege handen begint (T.beginOpKaart,
       // js/gebied.js zet het over naar S.voorraad); zonder "beginVoorraad" gebeurt er niets.
       beginVoorraad: betekenis && betekenis.beginVoorraad ? { ...betekenis.beginVoorraad } : null,
+      // Waar de marskramer zijn waar uitstalt (js/handel.js), en eventueel waar hij de kaart op
+      // komt ("komt"; anders de eerste uitgang). Zonder "marskramer" komt hij hier nooit.
+      marskramer: betekenis && betekenis.marskramer ? { ...betekenis.marskramer } : null,
     };
   };
 

@@ -398,6 +398,9 @@ const betekenis = {
   // Een klein beginvoorraadje, zodat er meteen iets te bouwen valt (js/gebouwen.js, T.plaatsGebouw
   // via het bouwmenu) zonder eerst te hoeven wachten op de eerste opbrengst.
   beginVoorraad: { hout: 40, goud: 20, graan: 60 },
+  // Waar de marskramer zijn waar uitstalt (js/handel.js): op de brink, tussen de put en de eik. Hij
+  // komt over de weg binnen (de uitgang hieronder) en gaat daar ook weer heen.
+  marskramer: { x: 24, y: 18 },
   dingen,
 };
 

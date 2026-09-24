@@ -14,6 +14,9 @@
   T.wijzigVoorraad = function (S, wat, delta) {
     const v = S.voorraad;
     v[wat] = Math.max(0, (v[wat] || 0) + delta);
+    // Wat je ooit gehad hebt: de balk (js/hud.js) laat ijzer, zout en gereedschap pas zien als ze er
+    // eens geweest zijn, en daarna altijd, zodat hij niet heen en weer springt.
+    if (v[wat] > 0) (S.gehad || (S.gehad = {}))[wat] = true;
     // Goud had al een naam van vóór de voorraad bestond, S.goud (js/quest.js); die loopt hier
     // gewoon in de pas mee, zodat het oude gereedschap en de bestaande toetsen blijven werken.
     if (wat === 'goud') {

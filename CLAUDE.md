@@ -161,9 +161,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   klok naast `S.tijd`, snelheid), `js/voorraad.js` (`S.voorraad`; alles verandert via
   `T.wijzigVoorraad`, zoals vroeger de jaren via `T.verouder`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
   soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag,
-  `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`), `js/behoeften.js` (tevredenheid uit eten,
-  brandhout en een kerk; de winter; een huis dat doorgroeit), en `js/hud.js` (de balk en het
-  bouwmenu onder `B`, alleen met `?kaart=gehucht` of `?hud`). Het begin zonder tutorial is
+  `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; een gebouw maakt alleen wat zijn grondstof
+  toelaat, en gereedschap laat harder werken), `js/behoeften.js` (tevredenheid uit eten, brandhout
+  en een kerk; de winter; een huis dat doorgroeit; zout dat vis en vlees goed houdt),
+  `js/handel.js` (de marskramer: drie bezoeken per jaar, prijzen per bezoek, `T.kanKopen` en
+  `T.kanVerkopen`; hij staat op de plek `"marskramer"` uit het betekenisbestand), en `js/hud.js`
+  (de balk, het bouwmenu onder `B` en het handelsvenster, alleen met `?kaart=gehucht` of `?hud`). Het begin zonder tutorial is
   `T.beginOpKaart` (`js/gebied.js`); de kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de
   bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen
   om bij te stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
@@ -236,7 +239,8 @@ hem weg, beloning en al); zonder fase zegt hij waar hij staat.
 `await Toren.debug.schermafdruk('naam')` bewaart het doek als PNG in
 `gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
 blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In het gehucht:
-`Toren.debug.kalender(dag, snelheid)` springt door het jaar, `Toren.debug.bouw('huis', x, y)` bouwt.
+`Toren.debug.kalender(dag, snelheid)` springt door het jaar, `Toren.debug.bouw('huis', x, y)` bouwt,
+`Toren.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek).
 
 Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken ze de regels uit
 `js/` zelf, nooit een eigen kopie:

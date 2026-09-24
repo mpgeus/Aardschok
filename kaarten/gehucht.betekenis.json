@@ -3,6 +3,7 @@
  "proef": true,
  "uitleg": "De betekenis van kaarten/gehucht.tmj: de schout, de vijf boeren en hun akkers. Zie ontwerp/kaarten.md, \"Tiled tekent alleen nog de grond\". \"proef\": true omdat dit gehucht nog aan geen andere kaart vasthangt (ontwerp/werklijst.md); zodra er een echte aansluiting naar \"wereld\" komt, mag dat weer weg.",
  "beginVoorraad": { "hout": 40, "goud": 20, "graan": 60 },
+ "marskramer": { "x": 24, "y": 18 },
  "dingen": [
   {
    "x": 24,

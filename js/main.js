@@ -256,6 +256,7 @@
     // zo laat pauzeren of versnellen nooit een animatie stilvallen of doorschieten.
     T.tikKalender(S, dt);
     T.werkGebouwenBij(S); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
+    T.werkMarskramerBij(S); // zijn poppetje: over de weg binnen, naar de brink, en weer weg (js/handel.js)
     T.werkAnimatiesBij(S, dt);
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
@@ -342,6 +343,11 @@
   // De spreuktoetsen (2, 3, 4) werken binnen én buiten een gevecht, want een dwaallicht en een
   // windstoot horen juist bij het rondlopen. 1 en Escape leggen een spreuk weer weg.
   window.addEventListener('keydown', (ev) => {
+    // Bij de marskramer (js/hud.js, het handelsvenster) ligt de rest stil; Esc sluit het venster.
+    if (S.modus === 'handel') {
+      if (ev.key === 'Escape') T.ui.sluitHandel(S);
+      return;
+    }
     if (S.modus === 'dialoog') {
       const n = parseInt(ev.key, 10);
       if (n >= 1 && n <= 9) T.ui.kiesKeuze(n - 1);
@@ -450,6 +456,14 @@
     // Zelfde antwoord als een klik in het bouwmenu (js/gebouwen.js, T.plaatsGebouw).
     bouw(soort, x, y) {
       return T.plaatsGebouw(S, soort, x, y);
+    },
+    // De marskramer nu laten komen, zonder op grasmaand te wachten: Toren.debug.marskramer() voor
+    // het bezoek van de lente, (1) voor de zomer, (2) voor de herfst (js/handel.js). Is hij er al,
+    // dan zegt het hoe het met hem staat.
+    marskramer(bezoek) {
+      if (!S.marskramer) T.marskramerKomt(S, bezoek || 0, Math.floor(S.kalender.dag));
+      const m = S.marskramer;
+      return m && { bezoek: m.bezoek, beurs: m.beurs, plaats: m.plaats, heeft: { ...m.heeft }, staat: m.staat, weg: m.weg, gaatOp: m.gaatOp };
     },
     // Het doek als PNG bewaren: await Toren.debug.schermafdruk('graan-rijp') schrijft
     // gereedschap/pixelart/uit/schermen/graan-rijp.png (via server.cjs; werkt niet vanaf file://).

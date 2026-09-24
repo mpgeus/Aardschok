@@ -37,13 +37,42 @@
     '<circle cx="8" cy="14.5" r="1.6" fill="none" stroke="#c89a5a" stroke-width="0.9"/>' +
     '<circle cx="16" cy="14.5" r="1.6" fill="none" stroke="#c89a5a" stroke-width="0.9"/>' +
     '</svg>';
-  const GRONDSTOF_ICOON = { goud: GOUD_ICOON, graan: GRAAN_ICOON, wol: WOL_ICOON, hout: HOUT_ICOON };
+  // Wat de marskramer brengt en de smidse ervan maakt (js/handel.js; spel.md, "Handel"): een staaf
+  // ijzer, een zakje zout, en een hamer.
+  const IJZER_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M4 15.5l4-5h12l-4 5z" fill="#8f949a" stroke="#c3c7cc" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<path d="M4 15.5h12v2.6H4z" fill="#6c7176" stroke="#c3c7cc" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<path d="M16 15.5l4-5v2.6l-4 5z" fill="#5a5f64" stroke="#c3c7cc" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '</svg>';
+  const ZOUT_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M8.5 7.5c-1.8 2.2-3 5.2-3 8 0 2.6 2.9 4 6.5 4s6.5-1.4 6.5-4c0-2.8-1.2-5.8-3-8z" fill="#cdb48a" stroke="#e6d3ad" stroke-width="1.1"/>' +
+    '<path d="M8.2 7.5c1.2-.9 2.4-1.3 3.8-1.3s2.6.4 3.8 1.3M9.5 5.2l2.5 1 2.5-1" fill="none" stroke="#8a6a3c" stroke-width="1.3" stroke-linecap="round"/>' +
+    '<circle cx="10" cy="14" r="1" fill="#f4efe6"/><circle cx="13.5" cy="12.5" r="1" fill="#f4efe6"/><circle cx="12.5" cy="16" r="1" fill="#f4efe6"/>' +
+    '</svg>';
+  const GEREEDSCHAP_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M11 10.5l8.5 8.5" stroke="#8a5a2c" stroke-width="2.4" stroke-linecap="round"/>' +
+    '<path d="M4.5 8.5l5-5 2.2 2.2-1.5 1.5 2.6 2.6-2.2 2.2-2.6-2.6-1.3 1.3z" fill="#8f949a" stroke="#c3c7cc" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '</svg>';
+  const GRONDSTOF_ICOON = {
+    goud: GOUD_ICOON, graan: GRAAN_ICOON, wol: WOL_ICOON, hout: HOUT_ICOON,
+    ijzer: IJZER_ICOON, zout: ZOUT_ICOON, gereedschap: GEREEDSCHAP_ICOON,
+  };
   const GRONDSTOF_UITLEG = {
     goud: 'Goud. Wat de heer het liefst ziet.',
     graan: 'Graan. Van de akkers: eten, zaaigoed, en pacht op Sint-Maarten.',
     wol: 'Wol. Van de schapen op de meent.',
     hout: 'Hout. Uit het bos van de heer.',
+    ijzer: 'IJzer. Van de marskramer; de smidse maakt er gereedschap van.',
+    zout: 'Zout. Van de marskramer: het houdt vis en vlees goed.',
+    gereedschap: 'Gereedschap. Van de smidse: wie het heeft, werkt harder. Het slijt.',
   };
+  // Deze staan pas in de balk als het dorp ze eens gehad heeft (S.gehad, js/voorraad.js): in het
+  // begin blijft de balk kort.
+  const BALK_LATER = ['ijzer', 'zout', 'gereedschap'];
+  const BALK = T.GRONDSTOFFEN.concat(BALK_LATER);
   // Het aantal mensen, en hoeveel woonruimte er is (js/gebouwen.js): dezelfde stijl als een
   // grondstof, maar met "/" in plaats van een los getal, dus geen eigen icoon uit GRONDSTOF_ICOON.
   const BEVOLKING_ICOON =
@@ -62,9 +91,9 @@
   // De voorraadbalk wordt één keer gemaakt, zoals de spreukbalk in js/ui.js (bouwSpreuken);
   // daarna verandert alleen het getal per grondstof, en het getal bij de mensen.
   function bouwVoorraadbalk(box) {
-    box.innerHTML = T.GRONDSTOFFEN.map(
+    box.innerHTML = BALK.map(
       (wat) =>
-        `<div class="grondstof" data-wat="${wat}" title="${GRONDSTOF_UITLEG[wat]}">` +
+        `<div class="grondstof${BALK_LATER.includes(wat) ? ' verborgen' : ''}" data-wat="${wat}" title="${GRONDSTOF_UITLEG[wat]}">` +
         `<span class="icoon">${GRONDSTOF_ICOON[wat]}</span><span class="aantal">0</span></div>`,
     ).join('') +
       `<div class="grondstof" data-wat="bevolking" title="Mensen in het dorp, en hoeveel er wonen kunnen (js/gebouwen.js: elk huis geeft woonruimte).">` +
@@ -89,8 +118,24 @@
   T.ui.toonVoorraad = function (S) {
     const box = $('voorraadbalk');
     if (!box.children.length) bouwVoorraadbalk(box);
-    for (const wat of T.GRONDSTOFFEN) {
-      box.querySelector(`[data-wat="${wat}"] .aantal`).textContent = Math.floor(S.voorraad[wat] || 0);
+    for (const wat of BALK) {
+      const cel = box.querySelector(`[data-wat="${wat}"]`);
+      cel.querySelector('.aantal').textContent = Math.floor(S.voorraad[wat] || 0);
+      if (BALK_LATER.includes(wat)) cel.classList.toggle('verborgen', !(S.gehad && S.gehad[wat]));
+    }
+    // Wat zout en gereedschap nu doen, bij de muis: hoeveel vis en vlees het zout goed houdt, en
+    // hoeveel handen het gereedschap dekt (js/behoeften.js, js/gebouwen.js).
+    if (T.zoutDekking) {
+      const d = T.zoutDekking(S);
+      box.querySelector('[data-wat="zout"]').title = d.totaal >= 1
+        ? `Zout. Eén zout houdt ${T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed} vis of vlees goed; de rest bederft. Nu gezouten: ${Math.floor(d.gezouten)} van de ${Math.floor(d.totaal)}.`
+        : GRONDSTOF_UITLEG.zout;
+    }
+    if (T.gereedschapDekking) {
+      const d = T.gereedschapDekking(S);
+      box.querySelector('[data-wat="gereedschap"]').title = d.handen
+        ? `Gereedschap. Genoeg voor ${Math.min(d.handen, Math.floor(d.heeft))} van de ${d.handen} handen aan het werk: er wordt ${Math.round((d.factor - 1) * 100)}% harder gewerkt. Het slijt.`
+        : GRONDSTOF_UITLEG.gereedschap;
     }
   };
 
@@ -166,6 +211,108 @@
       S.bouwMenuOpen = true;
     }
     T.ui.toonBouwmenu(S);
+  });
+
+  // ── Handelen met de marskramer (js/handel.js; spel.md, "Handel") ──
+  // Je opent het venster vanuit zijn gesprek (doe: { handel: true }). Zolang het open is, staat de
+  // kalender stil en ligt de rest van de invoer stil (S.modus 'handel', js/main.js): je staat bij
+  // zijn uitgestalde waar. Elke knop stelt dezelfde vraag als de klik (T.kanKopen,
+  // T.kanVerkopen), dus een knop die niet kan, zegt bij de muis waarom.
+  const PRIJS_TAAL = {
+    koopt: { duur: 'hij betaalt nu goed', goedkoop: 'hij betaalt nu weinig' },
+    verkoopt: { duur: 'nu duur', goedkoop: 'nu goedkoop' },
+  };
+
+  // Of dit de duurste of goedkoopste keer van het jaar is, als regeltje onder de prijs.
+  function prijsMerk(S, wat, kant) {
+    const hoe = T.prijsVanHetJaar(S, wat, kant);
+    return hoe ? `<span class="handel-merk ${hoe}">${PRIJS_TAAL[kant][hoe]}</span>` : '';
+  }
+
+  function handelKnop(actie, wat, n, tekst, k) {
+    const titel = k.kan ? '' : ` title="${k.reden.replace(/"/g, '&quot;')}"`;
+    return `<button data-actie="${actie}" data-wat="${wat}" data-n="${n}"${k.kan ? '' : ' disabled'}${titel}>${tekst}</button>`;
+  }
+
+  function handelInhoud(S) {
+    const m = S.marskramer;
+    const H = T.HANDEL_INSTELLINGEN;
+    const v = S.voorraad;
+    const heb = (wat) => Math.floor(v[wat] || 0);
+    const verkoopt = Object.keys(H.verkoopt).map((wat) => {
+      const k = T.kanKopen(S, wat, 1);
+      return (
+        `<div class="handel-rij"><span class="handel-naam">${T.hoofdletter(wat)} <small>je hebt ${heb(wat)}</small></span>` +
+        `<span class="handel-prijs">${k.prijs} goud per stuk<small>${prijsMerk(S, wat, 'verkoopt')}hij heeft er nog ${m.heeft[wat] || 0}</small></span>` +
+        `<span class="handel-knoppen">${handelKnop('koop', wat, 1, 'Koop 1', k)}${handelKnop('koop', wat, 5, 'Koop 5', T.kanKopen(S, wat, 5))}</span></div>`
+      );
+    });
+    // Wat hij koopt, voor zover je er iets van hebt. Bij het graan staat hoeveel dagen het dorp
+    // ervan kan eten, zodat je niet per ongeluk je wintereten verkoopt.
+    const etenPerDag = (S.bevolking || 0) * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
+    const koopt = Object.keys(H.koopt).filter((wat) => heb(wat) > 0).map((wat) => {
+      const k = T.kanVerkopen(S, wat, 1);
+      const eten = wat === 'graan' && etenPerDag > 0 ? ` · eten voor ${Math.floor((v.graan || 0) / etenPerDag)} dagen` : '';
+      return (
+        `<div class="handel-rij"><span class="handel-naam">${T.hoofdletter(wat)} <small>je hebt ${heb(wat)}${eten}</small></span>` +
+        `<span class="handel-prijs">${k.per} voor ${k.prijs} goud<small>${prijsMerk(S, wat, 'koopt')}</small></span>` +
+        `<span class="handel-knoppen">${handelKnop('verkoop', wat, 1, `Verkoop ${k.per}`, k)}${handelKnop('verkoop', wat, 5, `Verkoop ${k.per * 5}`, T.kanVerkopen(S, wat, 5))}</span></div>`
+      );
+    });
+    const maand = H.bezoeken[m.bezoek].maand;
+    return (
+      `<div class="handel-kop"><span class="handel-titel">De marskramer</span><span class="handel-wanneer">${maand}</span>` +
+      `<button class="handel-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
+      `<p class="handel-staat">Hij heeft <b>${m.beurs} goud</b> bij zich en plaats voor <b>${m.plaats} pak${m.plaats === 1 ? '' : 'ken'}</b>. ` +
+      `Jij hebt <b>${heb('goud')} goud</b>.</p>` +
+      `<div class="kop">Hij verkoopt</div>${verkoopt.join('')}` +
+      `<div class="kop">Hij koopt</div>${koopt.join('') || '<p class="handel-leeg">Je hebt niets wat hij wil.</p>'}` +
+      `<p class="handel-voet">Zolang je handelt, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`
+    );
+  }
+
+  function toonHandel(S) {
+    const box = $('handel');
+    box.innerHTML = handelInhoud(S);
+    box.classList.remove('verborgen');
+  }
+
+  T.ui.openHandel = function (S) {
+    if (!T.kanHandelen || !T.kanHandelen(S)) return;
+    S.modus = 'handel';
+    S.bouwSoort = null;
+    S.bouwMenuOpen = false;
+    T.ui.toonBouwmenu(S);
+    // De kalender stil, en onthouden hoe hij liep: bij het sluiten loopt hij zo weer verder.
+    if (S.kalender) {
+      S.handelVoorSnelheid = S.kalender.snelheid;
+      if (S.kalender.snelheid) T.zetSnelheid(S, 0);
+    }
+    toonHandel(S);
+  };
+
+  T.ui.sluitHandel = function (S) {
+    $('handel').classList.add('verborgen');
+    if (S.modus === 'handel') S.modus = 'verkennen';
+    // Heeft de speler de tijd zelf weer aangezet, dan laten we die snelheid staan.
+    if (S.kalender && S.kalender.snelheid === 0 && S.handelVoorSnelheid) T.zetSnelheid(S, S.handelVoorSnelheid);
+    S.handelVoorSnelheid = null;
+  };
+
+  $('handel').addEventListener('click', (ev) => {
+    const b = ev.target.closest('button');
+    const S = T.S;
+    if (!b || !S) return;
+    b.blur();
+    if (b.dataset.actie === 'sluit') {
+      T.ui.sluitHandel(S);
+      return;
+    }
+    const n = Number(b.dataset.n);
+    const r = b.dataset.actie === 'koop' ? T.koop(S, b.dataset.wat, n) : T.verkoop(S, b.dataset.wat, n);
+    if (!r.kan && T.ui.bericht) T.ui.bericht(r.reden);
+    if (T.kanHandelen(S)) toonHandel(S);
+    else T.ui.sluitHandel(S);
   });
 
   // Eén stap trager of sneller, van pauze tot 3x. T.zetSnelheid (js/tijd.js) onthoudt de laatste
