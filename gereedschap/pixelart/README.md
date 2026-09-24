@@ -55,6 +55,10 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
 - `heer.cjs`: het huis van de heer, in rood en geel: de heer, de soldaat en de inner, met staan en
   lopen (`node dorpelingen-anim.cjs heer soldaat inner`, daarna
   `node naar-spel.cjs --alleen heer,soldaat,inner`).
+- `schandpaal.cjs`: de schandpaal, leeg en bezet, en het halsijzer als eigen laag over wie eraan
+  staat (`node schandpaal.cjs` maakt de proefplaat `uit/schandpaal-proef.png`, daarna
+  `node naar-spel.cjs --alleen schandpaal`). De hoogte van de nek wordt gemeten op de boer en de
+  boerin zelf; komt er een vel bij dat aan de paal kan, zet het dan in `FIGUREN` daar.
 - `bosvijanden.cjs`: wolf, reuzenspin en kobold, met houdingen (`bosvijanden-anim.cjs`).
 - `toren.cjs`: de toren van de oude meester in drie staten, met een eigen renderer voor zijn
   hoogte, en `toren-lagen.cjs` dat hem in lagen snijdt voor het spel.

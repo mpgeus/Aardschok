@@ -3,6 +3,7 @@
 //
 //   node gereedschap/pixelart/naar-spel.cjs      (of: npm run pixelart:spel)
 //   node gereedschap/pixelart/naar-spel.cjs --alleen heer,soldaat,inner
+//   node gereedschap/pixelart/naar-spel.cjs --alleen schandpaal
 //
 // Met --alleen werkt het alleen de genoemde figuren bij: het leest de bestaande
 // beelden/beschrijving.json, zet die figuren erin (erbij, of in de plaats van wat er stond),
@@ -10,6 +11,8 @@
 // voorwerpen blijven zoals ze zijn en worden niet opnieuw gerenderd. Dat is nodig omdat uit/ niet
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
+// Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
+// schandpaal) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn ingang gezet.
 //
 // Twee soorten werk:
 //  - kopiëren: de animatievellen van de figuren en hun JSON, de vloeren en de voorwerpen.
@@ -25,6 +28,7 @@ const K = require('./kern.cjs');
 const Kamers = require('./kamers.cjs');
 const Trap = require('./trap.cjs');
 const Graan = require('./graan-vel.cjs');
+const Schandpaal = require('./schandpaal.cjs');
 
 const UIT = path.join(__dirname, 'uit');
 const BEELDEN = path.join(__dirname, '..', '..', 'beelden');
@@ -132,6 +136,20 @@ function graan() {
   schrijf('graan.png', plaat);
   return { bestand: 'graan.png', varianten: Graan.VARIANTEN, stadia };
 }
+
+// ---------------------------------------------------------------- de schandpaal
+//
+// Eén rij: de paal leeg, de paal bezet, en het halsijzer dat over wie eraan staat heen komt
+// (schandpaal.cjs, ontwerp/beeld.md). js/sprites.js zoekt ze op met S.schandpaal(deel) en weet met
+// S.nekHoogte waar het halsijzer komt; js/tekenen.js tekent ze.
+function schandpaal() {
+  schrijf('schandpaal.png', Schandpaal.vel());
+  return Schandpaal.beschrijving('schandpaal.png');
+}
+
+// Losse vellen die --alleen ook kent, naast de figuren: ze worden hier gerenderd, niet gekopieerd
+// uit uit/, en geven hun ingang in de beschrijving terug.
+const LOSSE_VELLEN = { schandpaal };
 
 // ---------------------------------------------------------------- kopiëren
 
@@ -249,7 +267,7 @@ function schrijfBeschrijving(beschrijving) {
   );
 }
 
-// --alleen a,b,c (of --alleen=a,b,c): alleen deze figuren bijwerken, zie bovenaan
+// --alleen a,b,c (of --alleen=a,b,c): alleen deze figuren of losse vellen bijwerken, zie bovenaan
 function alleenGevraagd() {
   const i = process.argv.findIndex((a) => a === '--alleen' || a.startsWith('--alleen='));
   if (i < 0) return null;
@@ -258,13 +276,14 @@ function alleenGevraagd() {
   return lijst.split(',').map((n) => n.trim()).filter(Boolean);
 }
 
-// Alleen de genoemde figuren in de bestaande beschrijving zetten. De volgorde blijft die van
-// FIGUURLIJST, zoals een volledige ronde hem ook zou schrijven; wat er stond en niet genoemd is,
-// blijft letterlijk staan.
-function alleenFiguren(namen) {
-  const onbekend = namen.filter((n) => !FIGUURLIJST[n]);
+// Alleen de genoemde figuren en losse vellen in de bestaande beschrijving zetten. De volgorde van
+// de figuren blijft die van FIGUURLIJST, zoals een volledige ronde hem ook zou schrijven; een los
+// vel krijgt zijn eigen ingang (erbij, of in de plaats van wat er stond). Wat er stond en niet
+// genoemd is, blijft letterlijk staan.
+function alleenBijwerken(namen) {
+  const onbekend = namen.filter((n) => !FIGUURLIJST[n] && !LOSSE_VELLEN[n]);
   if (!namen.length || onbekend.length) {
-    console.error(`--alleen: ${namen.length ? `onbekende figuur ${onbekend.join(', ')}` : 'geen figuren genoemd'}. Kies uit: ${Object.keys(FIGUURLIJST).join(', ')}.`);
+    console.error(`--alleen: ${namen.length ? `onbekend: ${onbekend.join(', ')}` : 'niets genoemd'}. Kies uit: ${[...Object.keys(FIGUURLIJST), ...Object.keys(LOSSE_VELLEN)].join(', ')}.`);
     process.exitCode = 1;
     return;
   }
@@ -275,21 +294,25 @@ function alleenFiguren(namen) {
     return;
   }
   const beschrijving = JSON.parse(fs.readFileSync(pad, 'utf8'));
-  const nieuw = figuren(namen);
-  const mist = namen.filter((n) => !nieuw[n]);
-  if (mist.length) {
-    console.error(`--alleen: niets geschreven, want ${mist.join(', ')} ontbreekt in uit/`);
-    process.exitCode = 1;
-    return;
+  const figuurNamen = namen.filter((n) => FIGUURLIJST[n]);
+  if (figuurNamen.length) {
+    const nieuw = figuren(figuurNamen);
+    const mist = figuurNamen.filter((n) => !nieuw[n]);
+    if (mist.length) {
+      console.error(`--alleen: niets geschreven, want ${mist.join(', ')} ontbreekt in uit/`);
+      process.exitCode = 1;
+      return;
+    }
+    const oud = beschrijving.figuren || {};
+    const samen = {};
+    for (const naam of Object.keys(FIGUURLIJST)) {
+      if (nieuw[naam]) samen[naam] = nieuw[naam];
+      else if (oud[naam]) samen[naam] = oud[naam];
+    }
+    for (const [naam, f] of Object.entries(oud)) if (!samen[naam]) samen[naam] = f;
+    beschrijving.figuren = samen;
   }
-  const oud = beschrijving.figuren || {};
-  const samen = {};
-  for (const naam of Object.keys(FIGUURLIJST)) {
-    if (nieuw[naam]) samen[naam] = nieuw[naam];
-    else if (oud[naam]) samen[naam] = oud[naam];
-  }
-  for (const [naam, f] of Object.entries(oud)) if (!samen[naam]) samen[naam] = f;
-  beschrijving.figuren = samen;
+  for (const naam of namen.filter((n) => LOSSE_VELLEN[n])) beschrijving[naam] = LOSSE_VELLEN[naam]();
   schrijfBeschrijving(beschrijving);
   console.log(`bijgewerkt: ${namen.join(', ')}`);
 }
@@ -299,10 +322,10 @@ function alleenFiguren(namen) {
 fs.mkdirSync(FIGUREN, { recursive: true });
 
 const ALLEEN = alleenGevraagd();
-if (ALLEEN) alleenFiguren(ALLEEN);
+if (ALLEEN) alleenBijwerken(ALLEEN);
 else alles();
 
-// Alles opnieuw: figuren, muren, trap, graan, vloeren en voorwerpen.
+// Alles opnieuw: figuren, muren, trap, graan, vloeren, voorwerpen en de losse vellen.
 function alles() {
   const beschrijving = {
     // Alles is gerenderd in dezelfde projectie als het spel: een tegel is 64×32 en het anker
@@ -326,6 +349,7 @@ function alles() {
       namen: ['tafel', 'fontein', 'kist', 'ton', 'zak', 'puin', 'sleutel', 'vuurschicht'],
     },
   };
+  for (const [naam, maak] of Object.entries(LOSSE_VELLEN)) beschrijving[naam] = maak();
   kopieer(path.join(UIT, 'hd-vloeren.png'), path.join(BEELDEN, 'vloeren.png'));
   kopieer(path.join(UIT, 'hd-voorwerpen.png'), path.join(BEELDEN, 'voorwerpen.png'));
   schrijfBeschrijving(beschrijving);

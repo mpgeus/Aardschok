@@ -252,11 +252,15 @@
     const dt = Math.max(0, Math.min(0.1, S.tijd - (S.doorkijkTijd || 0)));
     S.doorkijkTijd = S.tijd;
     werkDoorkijkBij(S, dt, zichtbaar);
+    // Wie aan de schandpaal staat, krijgt het halsijzer om: een eigen laag ná zijn beeld (l 2,5,
+    // zoals de voorlaag van het graan), zodat de band vóór zijn nek komt.
+    const aanDePaal = metSprites() && T.aanDePaal ? T.aanDePaal(S) : null;
     for (const e of w.wezens) {
       // Met sprites blijft het laatste beeld van het sterven liggen; met vlakken vervaagt het.
       if (e.dood && e.sterfTijd > 0.8 && !metSprites()) continue;
       if (!inVak(vak, e.tx, e.ty) || !T.isZichtbaar(w, e.tx, e.ty)) continue;
       lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, punt: { x: e.tx, y: e.ty }, f: () => tekenWezen(ctx, S, e) });
+      if (e === aanDePaal) lijst.push({ d: e.x + e.y, l: 2.5, punt: { x: e.tx, y: e.ty }, f: () => tekenHalsijzer(ctx, e) });
     }
     // Dwaallichten zweven: ze horen in dezelfde rij van voor naar achter, anders schijnen ze
     // dwars door een muur die ervoor staat.
@@ -1079,6 +1083,16 @@
     if (doorkijk < 1) ctx.globalAlpha = 1;
   }
 
+  // Het halsijzer om de nek van wie aan de schandpaal staat (js/heer.js, T.aanDePaal): het anker van
+  // de cel is het midden van de band, en dat komt zo hoog boven zijn voeten als zijn vel zijn nek
+  // heeft (T.sprites.nekHoogte).
+  function tekenHalsijzer(ctx, e) {
+    const deel = T.sprites.schandpaal && T.sprites.schandpaal('halsijzer');
+    if (!deel) return;
+    const p = T.naarScherm(e.x, e.y);
+    T.sprites.teken(ctx, deel, p.x, p.y - T.sprites.nekHoogte(e), 1);
+  }
+
   function tekenVoorwerp(ctx, S, v, helder) {
     const p = T.naarScherm(v.x, v.y);
     // Buiten komt het plaatje uit de tegelvellen (tegels/, zie js/sprites.js): een boom, een
@@ -1164,7 +1178,14 @@
       return;
     }
     if (v.soort === 'schandpaal') {
-      // De schandpaal (js/heer.js) zonder kunst: een stenen trede en een eiken paal.
+      // De schandpaal (js/heer.js): leeg, met het halsijzer open tegen de paal, of bezet, met de
+      // ketting naar wie ervoor staat (T.aanDePaal); diens halsijzer komt ná hem (tekenHalsijzer).
+      const paal = metSprites() && T.sprites.schandpaal && T.sprites.schandpaal(T.aanDePaal && T.aanDePaal(S) ? 'bezet' : 'leeg');
+      if (paal) {
+        T.sprites.teken(ctx, paal, p.x, p.y, helder);
+        return;
+      }
+      // Zonder kunst: een stenen trede en een eiken paal.
       T.blok(ctx, p.x, p.y, 0.3, 0.3, 6, '#6f6a62', { helder });
       T.blok(ctx, p.x, p.y, 0.08, 0.08, 80, '#6e4a2a', { helder, basis: 6 });
       return;

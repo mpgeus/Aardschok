@@ -69,6 +69,7 @@
       const vellen = [gegevens.muren.bestand, gegevens.vloeren.bestand, gegevens.voorwerpen.bestand];
       if (gegevens.trap) vellen.push(gegevens.trap.bestand);
       if (gegevens.graan) vellen.push(gegevens.graan.bestand);
+      if (gegevens.schandpaal) vellen.push(gegevens.schandpaal.bestand);
       const lijst = vellen.map((f) => MAP + f);
       for (const f of Object.values(gegevens.figuren)) {
         for (const h of Object.values(f.houdingen)) lijst.push(MAP + 'figuren/' + h.bestand);
@@ -351,6 +352,29 @@
     return stuk(MAP + t.bestand, k * t.cel[0], r * t.cel[1], t.cel[0], t.cel[1], t.anker);
   };
 
+  // De schandpaal (js/heer.js, gereedschap/pixelart/schandpaal.cjs): één rij met drie delen. `leeg`
+  // (het halsijzer hangt open tegen de paal) en `bezet` (de ketting loopt naar wie ervoor staat)
+  // hebben hun anker op de tegel van de paal; `halsijzer` komt over wie eraan staat heen, en zijn
+  // anker is het midden van de halsband: dat hoort op zijn nek (S.nekHoogte).
+  S.schandpaal = function (deel) {
+    if (!gegevens || !gegevens.schandpaal) return null;
+    const t = gegevens.schandpaal;
+    const i = t.delen.indexOf(deel);
+    if (i < 0) return null;
+    return stuk(MAP + t.bestand, i * t.cel[0], 0, t.cel[0], t.cel[1], deel === 'halsijzer' ? t.halsAnker : t.anker);
+  };
+
+  // Hoe hoog boven zijn voeten de halsband om de nek van dit wezen komt, in pixels. Gemeten op de
+  // vellen van wie aan de paal kan (de boer en de boerin, schandpaal.cjs); T.EFFECTEN.hoofden (S.hoofd)
+  // kent die vellen niet. Voor een ander vel: die van de boer.
+  S.nekHoogte = function (e) {
+    const t = gegevens && gegevens.schandpaal;
+    if (!t) return 0;
+    const l = e.beeldStand && e.beeldStand.laatste;
+    const naam = (l && l.naam) || e.vel || S.figuurNaam(e.soort);
+    return t.nek[naam] != null ? t.nek[naam] : t.nek.standaard;
+  };
+
   // ---------------------------------------------------------------- bouwfasen (tegels/bouwfasen.png + .json/.js)
   //
   // Een gebouw in aanbouw: vijf fases tussen "net begonnen" en de afgewerkte tekening
@@ -493,9 +517,12 @@
     st.x = e.x;
     st.y = e.y;
 
-    // Kijkrichting: onderweg naar de volgende tegel kijken, anders blijven staan zoals je stond.
+    // Kijkrichting: onderweg naar de volgende tegel kijken, anders blijven staan zoals je stond —
+    // of, wie een vaste kant op moet kijken zolang hij stilstaat (`e.kijkt`: aan de schandpaal met
+    // zijn rug naar de paal, js/heer.js), die kant op.
     if (e.pad && e.pad.length) st.richting = S.richtingVan(e.pad[0].x - e.x, e.pad[0].y - e.y);
     else if (dx || dy) st.richting = S.richtingVan(dx, dy);
+    else if (e.kijkt) st.richting = e.kijkt;
     if (e.uitval) st.richting = S.richtingVan(e.uitval.doel.x - e.x, e.uitval.doel.y - e.y);
 
     // Eenmalige houdingen: uithalen, toveren, geraakt worden. Ze worden vastgehouden tot ze

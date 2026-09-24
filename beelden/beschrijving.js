@@ -1373,6 +1373,31 @@
      "sleutel",
      "vuurschicht"
     ]
+   },
+   "schandpaal": {
+    "bestand": "schandpaal.png",
+    "cel": [
+     60,
+     116
+    ],
+    "anker": [
+     30,
+     102
+    ],
+    "delen": [
+     "leeg",
+     "bezet",
+     "halsijzer"
+    ],
+    "halsAnker": [
+     30,
+     61
+    ],
+    "nek": {
+     "standaard": 51,
+     "boer": 51,
+     "boerin": 51
+    }
    }
   };
 })(globalThis.Toren = globalThis.Toren || {});

@@ -566,6 +566,48 @@ test('de dagen aan de schandpaal tellen pas als hij er staat (drie dagen zijn op
   assert.equal(aaltje.moetNaar, null, 'haar dagen zijn om: ze mag naar huis');
 });
 
+test('wie aan de schandpaal staat, staat met zijn rug naar de paal, en zolang is de paal bezet', () => {
+  const S = metHeer();
+  S.wereld.overgangen = [{ x: 9, y: 5, naar: 'wereld' }];
+  const aaltje = T.maakMens('boer2', 3, 3);
+  S.wereld.wezens.push(aaltje);
+  T.betaalHeer(S, geefDeel(S, 0.3));
+  T.zetAanDeSchandpaal(S, 'boer2');
+  T.werkHeerBij(S);
+  assert.equal(T.aanDePaal(S), null, 'ze is er nog niet: de paal is leeg');
+  assert.ok(!aaltje.kijkt, 'onderweg kijkt ze waar ze heen loopt');
+  // Nog een stap onderweg naar de tegel vóór de paal: nog niet bezet, want de ketting hangt dan
+  // aan iemand die nog loopt.
+  aaltje.tx = 8;
+  aaltje.ty = 6;
+  aaltje.x = 7.5;
+  aaltje.y = 5.5;
+  T.werkHeerBij(S);
+  assert.equal(T.aanDePaal(S), null);
+  // Ze staat er: met haar rug naar de paal, dus in beeld naar voren (Z, js/sprites.js).
+  aaltje.x = 8;
+  aaltje.y = 6;
+  assert.equal(T.aanDePaal(S), aaltje);
+  assert.equal(aaltje.kijkt, 'Z');
+  // Haar dagen zijn om: ze kijkt weer waar ze heen loopt, en de paal is leeg.
+  T.tikHeerDag(S, S.kalender.dag + IN.schandpaalDagen);
+  assert.equal(T.aanDePaal(S), null);
+  assert.equal(aaltje.kijkt, null);
+});
+
+test('de schandpaal heeft kunst: leeg, bezet en het halsijzer, en een nek voor elk vel dat eraan kan', () => {
+  require('../beelden/beschrijving.js');
+  const t = T.BEELDEN.schandpaal;
+  assert.ok(t, 'draai node gereedschap/pixelart/naar-spel.cjs --alleen schandpaal');
+  assert.deepEqual(t.delen, ['leeg', 'bezet', 'halsijzer']);
+  // Aan de paal kunnen de boeren (wie een karakter heeft, js/boeren.js). Komt er een vel bij, zet het
+  // dan in FIGUREN in gereedschap/pixelart/schandpaal.cjs, zodat zijn nek gemeten wordt.
+  for (const [id, m] of Object.entries(T.MENSEN)) {
+    if (!m.karakter) continue;
+    assert.ok(Number.isFinite(t.nek[m.vel]), `de nek van ${id} (vel ${m.vel}) is niet gemeten`);
+  }
+});
+
 // ---------------------------------------------------------------------------------------------
 // De opties in de Spelregels (js/opties.js; Marcel, 24 sep): de regels volgen ze
 // ---------------------------------------------------------------------------------------------

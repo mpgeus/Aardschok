@@ -489,6 +489,24 @@
     return eersteRond(doel, 3, (x, y) => vrijOpDeBrink(S.wereld, x, y)) || doel;
   }
 
+  // Wie staat er nu aan de paal? Wie voor zijn straf op de tegel ervóór moet (h.wrok, moetNaar),
+  // daar is aangekomen (zijn dagen tellen) en stilstaat; anders null. Dan is de paal bezet: de
+  // ketting loopt naar hem en hij draagt het halsijzer (js/tekenen.js). Puur.
+  T.aanDePaal = function (S) {
+    const h = S.heer;
+    const w = S.wereld;
+    if (!h || !h.paal || !w || !w.wezens) return null;
+    const x = h.paal.x + VOOR_DE_PAAL.dx;
+    const y = h.paal.y + VOOR_DE_PAAL.dy;
+    for (const wr of h.wrok) {
+      if (!wr.staat || wr.vanaf == null) continue;
+      const e = w.wezens.find((m) => m.wie === wr.wie && !m.dood);
+      if (!e || !e.moetNaar || e.moetNaar.x !== x || e.moetNaar.y !== y) continue;
+      if (e.tx === x && e.ty === y && e.x === x && e.y === y && !(e.pad && e.pad.length)) return e;
+    }
+    return null;
+  };
+
   // De vlag die een gesprek laat weten dat iemand aan de schandpaal stond, naar het gesprek dat hij
   // voert: een boer met het karakter weduwe (js/boeren.js) krijgt "schandpaalWeduwe", en dat leest
   // het gesprek van de weduwe. Elk karakter hoort in een spel bij één boer.
@@ -651,7 +669,10 @@
       if (!klaar) continue;
       w.staat = false;
       const e = ((S.wereld && S.wereld.wezens) || []).find((x) => x.wie === w.wie);
-      if (e) e.moetNaar = null;
+      if (e) {
+        e.moetNaar = null;
+        e.kijkt = null;
+      }
     }
     if (d.maand === maandIdx(IN().brief.maand) && d.dagVanMaand === IN().brief.dag && !h.bezoek) T.stuurBrief(S, dag);
     if (d.sintMaarten && !h.bezoek) T.heerKomt(S, dag);
@@ -714,11 +735,15 @@
       b.wezens = nog;
       if (!nog.length) haalHeerWeg(S);
     }
-    // Wie aan de schandpaal moet: staat hij er, dan beginnen zijn dagen.
+    // Wie aan de schandpaal moet: staat hij er, dan beginnen zijn dagen, en staat hij met zijn rug
+    // naar de paal (e.kijkt, js/sprites.js): de paal staat een tegel schuin achter hem, dus naar Z.
     for (const wr of h.wrok) {
       if (!wr.staat || wr.vanaf != null) continue;
       const e = w.wezens.find((x) => x.wie === wr.wie);
-      if (e && e.moetNaar && e.tx === e.moetNaar.x && e.ty === e.moetNaar.y) wr.vanaf = dagNu(S);
+      if (e && e.moetNaar && e.tx === e.moetNaar.x && e.ty === e.moetNaar.y) {
+        wr.vanaf = dagNu(S);
+        e.kijkt = 'Z';
+      }
     }
     const s = h.soldaten;
     if (s && s.weg) {
