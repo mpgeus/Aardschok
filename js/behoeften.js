@@ -10,6 +10,7 @@
 //   1. Eten: graan is de basis en blijft precies zoals het was (T.GEBOUWEN_INSTELLINGEN.eten-
 //      PerMensPerDag trekt het af, in gebouwen.js) — hier alleen kijken of het genoeg is, en of er
 //      ook groente, vis of vlees is. Meer soorten maakt tevredener, en wordt ook echt opgegeten.
+//      Vis en vlees bederven, tenzij ze gezouten zijn (pasBederfToe; zout komt van de marskramer).
 //   2. Brandhout: hout of turf, per huishouden per dag, maar alleen gestookt in de winter.
 //   3. Een kerk: heeft het dorp een klare kapel (T.GEBOUWEN.kapel.kerk)?
 //   4. Daaruit volgt S.behoeften.tevredenheid (0..1) en S.behoeften.mist (wat het dorp mist, voor
@@ -58,10 +59,27 @@
     // tevreden was; hoger dan groeiDrempel, want een huis groeien is meer dan net rondkomen.
     huisGroeiDagen: 30,
     huisGroeiDrempel: 0.7,
+    // Zout (Marcel, 24 sep 2026; spel.md, "Handel"): vis en vlees bederven, tenzij ze gezouten zijn.
+    // Eén zout houdt zoveel vis of vlees goed (zoutHoudtGoed); van wat het zout niet dekt, bederft
+    // elke dag een deel (bederfPerDag). Wie gezouten vis eet, eet het zout mee op. Zout komt van de
+    // marskramer (js/handel.js).
+    bederfelijk: ['vis', 'vlees'],
+    zoutHoudtGoed: 10,
+    bederfPerDag: 0.1,
   };
 
   T.nieuweBehoeften = function () {
     return { tevredenheid: 1, mist: [], winterVerliesRest: 0 };
+  };
+
+  // Hoeveel vis en vlees er ligt, en hoeveel daarvan het zout goed houdt. Puur; ook voor de balk
+  // (js/hud.js), die bij het zout zegt wat het dekt.
+  T.zoutDekking = function (S) {
+    const IN = T.BEHOEFTEN_INSTELLINGEN;
+    const v = S.voorraad || {};
+    const totaal = IN.bederfelijk.reduce((n, wat) => n + (v[wat] || 0), 0);
+    const gezouten = Math.min(totaal, (v.zout || 0) * IN.zoutHoudtGoed);
+    return { totaal, gezouten, onbeschermd: totaal - gezouten };
   };
 
   T.heeftKerk = function (S) {
@@ -110,9 +128,25 @@
     };
   };
 
-  // De vier "pas ... toe"-functies hieronder passen wat T.berekenTevredenheid uitrekende ook
-  // echt toe op S: stoken, de winter zijn tol laten eisen, een gezin laten vertrekken, een huis
-  // laten doorgroeien. Los van elkaar, zodat T.tikBehoeftenDag zelf leest als de lijst hierboven.
+  // De vijf "pas ... toe"-functies hieronder passen wat T.berekenTevredenheid uitrekende ook
+  // echt toe op S: bederven, stoken, de winter zijn tol laten eisen, een gezin laten vertrekken,
+  // een huis laten doorgroeien. Los van elkaar, zodat T.tikBehoeftenDag zelf leest als de lijst
+  // hierboven.
+
+  // Wat vandaag van vis en vlees gegeten is, neemt zijn zout mee; van wat daarna nog ongezouten
+  // ligt, bederft een deel. Naar rato verdeeld over vis en vlees.
+  function pasBederfToe(S, gegeten) {
+    const IN = T.BEHOEFTEN_INSTELLINGEN;
+    const v = S.voorraad;
+    if (gegeten > 0 && (v.zout || 0) > 0) T.wijzigVoorraad(S, 'zout', -Math.min(v.zout, gegeten / IN.zoutHoudtGoed));
+    const d = T.zoutDekking(S);
+    if (d.onbeschermd <= 0) return;
+    for (const wat of IN.bederfelijk) {
+      const deel = (v[wat] || 0) / d.totaal;
+      if (deel > 0) T.wijzigVoorraad(S, wat, -d.onbeschermd * deel * IN.bederfPerDag);
+    }
+  }
+
   function pasBrandhoutToe(S, b) {
     if (!b.inWinter || b.brandhoutBenodigd <= 0) return;
     const nodig = Math.min(b.brandhoutBenodigd, b.brandhoutVoorraad);
@@ -242,8 +276,14 @@
     S.behoeften.mist = b.mist;
 
     // De extra soorten worden ook echt opgegeten, anders stapelt de moestuin zich oneindig op.
-    for (const wat of b.extraSoorten) T.wijzigVoorraad(S, wat, -(S.bevolking || 0) * IN.extraVoedselPerMensPerDag);
+    let bederfelijkGegeten = 0;
+    for (const wat of b.extraSoorten) {
+      const hoeveel = Math.min(S.voorraad[wat] || 0, (S.bevolking || 0) * IN.extraVoedselPerMensPerDag);
+      T.wijzigVoorraad(S, wat, -hoeveel);
+      if (IN.bederfelijk.includes(wat)) bederfelijkGegeten += hoeveel;
+    }
 
+    pasBederfToe(S, bederfelijkGegeten);
     pasBrandhoutToe(S, b);
     pasWinterVerliesToe(S, b);
     pasVertrekToe(S, b, dag);

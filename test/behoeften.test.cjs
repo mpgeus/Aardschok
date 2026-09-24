@@ -350,3 +350,40 @@ test('T.tikBehoeftenDag: een gebouw zonder eigen voorwerp (al op de kaart, T.zet
   }
   assert.equal(S.gebouwen[0].soort, 'hut');
 });
+
+// ---------------------------------------------------------------------------------------------
+// Zout houdt vis en vlees goed (spel.md, "Handel", 24 sep 2026)
+// ---------------------------------------------------------------------------------------------
+
+test('zonder zout bederft vis; met genoeg zout niet; met half genoeg de helft', () => {
+  const IN = T.BEHOEFTEN_INSTELLINGEN;
+  const zonder = maakS();
+  zonder.voorraad.vis = 100;
+  T.tikBehoeftenDag(zonder, ZOMERDAG);
+  assert.ok(Math.abs(zonder.voorraad.vis - 100 * (1 - IN.bederfPerDag)) < 1e-9);
+
+  const met = maakS();
+  met.voorraad.vis = 100;
+  met.voorraad.zout = 100 / IN.zoutHoudtGoed;
+  T.tikBehoeftenDag(met, ZOMERDAG);
+  assert.equal(met.voorraad.vis, 100);
+
+  const half = maakS();
+  half.voorraad.vis = 100;
+  half.voorraad.zout = 50 / IN.zoutHoudtGoed;
+  T.tikBehoeftenDag(half, ZOMERDAG);
+  assert.ok(Math.abs(half.voorraad.vis - (100 - 50 * IN.bederfPerDag)) < 1e-9);
+});
+
+test('wie gezouten vis eet, eet het zout mee op', () => {
+  const IN = T.BEHOEFTEN_INSTELLINGEN;
+  const S = maakS();
+  S.bevolking = 100;
+  S.voorraad.graan = 1000;
+  S.voorraad.vis = 50;
+  S.voorraad.zout = 10;
+  T.tikBehoeftenDag(S, ZOMERDAG);
+  const gegeten = 100 * IN.extraVoedselPerMensPerDag;
+  assert.ok(Math.abs(S.voorraad.vis - (50 - gegeten)) < 1e-9, 'de vis is gegeten, en er bedierf niets');
+  assert.ok(Math.abs(S.voorraad.zout - (10 - gegeten / IN.zoutHoudtGoed)) < 1e-9);
+});
