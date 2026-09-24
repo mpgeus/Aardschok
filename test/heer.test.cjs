@@ -481,3 +481,26 @@ test('zijn gesprek opent het betalen, en na het betalen niet meer', () => {
   T.zetVlag(S, 'heerBetaald');
   assert.ok(!T.gesprekKnoop(S, 'heer', 'welkom').keuzes.some((k) => k.doe && k.doe.heer));
 });
+
+test('de dagen aan de schandpaal tellen pas als hij er staat (drie dagen zijn op 1× maar zeven seconden)', () => {
+  const S = metHeer();
+  S.wereld.overgangen = [{ x: 9, y: 5, naar: 'wereld' }];
+  const aaltje = T.maakMens('boer2', 3, 3);
+  S.wereld.wezens.push(aaltje);
+  T.betaalHeer(S, geefDeel(S, 0.3));
+  T.zetAanDeSchandpaal(S, 'boer2');
+  const paal = aaltje.moetNaar;
+  assert.ok(paal);
+  // Ze is er nog niet: haar dagen tellen niet.
+  T.tikHeerDag(S, SINT_MAARTEN + IN.schandpaalDagen + 1);
+  assert.deepEqual(aaltje.moetNaar, paal);
+  // Ze staat er: nu wel.
+  aaltje.tx = aaltje.x = paal.x;
+  aaltje.ty = aaltje.y = paal.y;
+  S.kalender.dag = SINT_MAARTEN + 5;
+  T.werkHeerBij(S);
+  T.tikHeerDag(S, SINT_MAARTEN + 5 + IN.schandpaalDagen - 1);
+  assert.deepEqual(aaltje.moetNaar, paal, 'nog niet genoeg dagen');
+  T.tikHeerDag(S, SINT_MAARTEN + 5 + IN.schandpaalDagen);
+  assert.equal(aaltje.moetNaar, null, 'haar dagen zijn om: ze mag naar huis');
+});

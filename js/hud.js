@@ -113,6 +113,7 @@
     for (const b of document.querySelectorAll('#kalender-knoppen button')) {
       b.classList.toggle('actief', Number(b.dataset.snelheid) === S.kalender.snelheid);
     }
+    werkBriefKnopBij(S);
   };
 
   T.ui.toonVoorraad = function (S) {
@@ -159,9 +160,10 @@
     const pct = Math.round(S.behoeften.tevredenheid * 100);
     cel.querySelector('.aantal').textContent = `${pct}%`;
     cel.classList.toggle('laag', S.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel);
+    const last = S.behoeften.last && S.behoeften.last.length ? ` Het heeft last van ${S.behoeften.last.join(' en ')}.` : '';
     cel.title = S.behoeften.mist.length
-      ? `Tevredenheid: ${pct}%. Het dorp mist: ${S.behoeften.mist.join(', ')}.`
-      : `Tevredenheid: ${pct}%. Het dorp heeft wat het nodig heeft.`;
+      ? `Tevredenheid: ${pct}%. Het dorp mist: ${S.behoeften.mist.join(', ')}.${last}`
+      : `Tevredenheid: ${pct}%. Het dorp heeft wat het nodig heeft.${last}`;
   };
 
   // Het bouwmenu: de soorten van de huidige trede, met hun kosten en wat ze doen (ontwerp/spel.md,
@@ -173,11 +175,16 @@
       .map((id) => {
         const g = T.GEBOUWEN[id];
         const kosten = Object.entries(g.kosten).map(([wat, n]) => `${n} ${wat}`).join(', ');
+        // Wat de heer er elk jaar voor wil (js/heer.js): zo weet je bij elk gebouw wat het je op
+        // Sint-Maarten kost, want wat je bouwt, is wat hij ziet.
+        const heer = g.heer ? Object.entries(g.heer).map(([wat, n]) => `${n} ${wat}`).join(', ') : '';
+        const heerTekst = heer ? `Op Sint-Maarten wil de heer er ${heer} voor.` : 'De heer vraagt er niets voor.';
         return (
           `<button data-soort="${id}">` +
           `<span class="bouw-naam">${T.hoofdletter(g.naam)}</span>` +
           `<span class="bouw-kosten">${kosten} · ${g.bouwtijd} dag${g.bouwtijd === 1 ? '' : 'en'}</span>` +
           `<span class="bouw-uitleg">${g.beschrijving}</span>` +
+          (g.heer ? `<span class="bouw-heer">${heerTekst}</span>` : '') +
           `</button>`
         );
       })
@@ -314,6 +321,246 @@
     if (T.kanHandelen(S)) toonHandel(S);
     else T.ui.sluitHandel(S);
   });
+
+  // ── De heer (js/heer.js; spel.md, "Sint-Maarten") ──
+  // Twee vensters in de stijl van dat van de marskramer: zijn brief (1 wijnmaand; de knop Brief
+  // opent hem weer tot hij geweest is), en het betalen op Sint-Maarten (vanuit zijn gesprek,
+  // doe: { heer: true }), met daarin de schandpaal als die erbij hoort. Het einde (je ambt kwijt)
+  // gebruikt het scherm over alles heen uit js/ui.js (T.ui.toonOverlay).
+  const hebNu = (S, wat) => Math.floor((S.voorraad && S.voorraad[wat]) || 0);
+  const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || 'niets');
+  const eisInTaal = (eis) => opsomming(eis.volgorde.map((wat) => `${eis.per[wat]} ${wat}`));
+
+  // De tijd stil zolang een venster open is, en daarna weer zoals hij liep (tenzij de speler hem
+  // intussen zelf weer aanzette). Elk venster onthoudt dat onder zijn eigen sleutel in S.
+  function zetTijdStil(S, sleutel) {
+    if (!S.kalender) return;
+    S[sleutel] = S.kalender.snelheid;
+    if (S.kalender.snelheid) T.zetSnelheid(S, 0);
+  }
+  function laatTijdLopen(S, sleutel) {
+    if (S.kalender && S.kalender.snelheid === 0 && S[sleutel]) T.zetSnelheid(S, S[sleutel]);
+    S[sleutel] = null;
+  }
+
+  // De knop Brief naast Bouwen: alleen zolang er een brief is.
+  function werkBriefKnopBij(S) {
+    $('brief-knop').classList.toggle('verborgen', !(S.heer && S.heer.brief));
+  }
+
+  function briefInhoud(S) {
+    const brief = S.heer.brief;
+    const regels = brief.eis.regels.map((r) => `<li><b>${r.aantal} ${r.wat}</b> <span>${r.waarom}</span></li>`).join('');
+    const samen = brief.eis.regels.length > 1 ? `<p class="brief-samen">Samen: ${eisInTaal(brief.eis)}.</p>` : '';
+    const nu = opsomming(brief.eis.volgorde.map((wat) => `${hebNu(S, wat)} ${wat}`));
+    // Komt de marskramer nog, dan kun je nog verkopen voor zijn goud (daarom valt de brief ervóór).
+    const herfst = T.HANDEL_INSTELLINGEN && T.HANDEL_INSTELLINGEN.bezoeken[T.HANDEL_INSTELLINGEN.bezoeken.length - 1];
+    const vandaag = T.datumVanDag(S.kalender ? S.kalender.dag : brief.dag);
+    const komtNog = herfst && T.MAANDEN[vandaag.maand].naam === herfst.maand && vandaag.dagVanMaand < herfst.dag;
+    const marskramer = komtNog ? ` De marskramer komt op ${herfst.dag} ${herfst.maand}: dan kun je nog verkopen voor zijn goud.` : '';
+    return (
+      `<div class="venster-kop"><span class="venster-titel">Een brief van de heer</span><span class="venster-wanneer">${T.datumVanDag(brief.dag).tekst}</span>` +
+      `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
+      `<div class="brief-tekst">` +
+      `<p>Aan Onze trouwe schout,</p>` +
+      `<p>Het is Ons ter ore gekomen dat het u goed gaat. Dat verheugt Ons zeer, want het gaat Ons ook graag goed. Op Sint-Maarten komen Wij persoonlijk ophalen wat Ons toekomt. Naar wat Wij nu zien, is dat:</p>` +
+      `<ul class="brief-lijst">${regels || '<li>niets. Dat kan niet kloppen.</li>'}</ul>${samen}` +
+      `<p>Wat er tot Sint-Maarten bijkomt, zien Wij ook. Wie Ons tekortdoet, zal het merken, want Wij tellen zeer zorgvuldig. Bijna altijd.</p>` +
+      `<p class="brief-groet">Uw genadige heer</p>` +
+      `</div>` +
+      `<p class="venster-staat">Je hebt nu ${nu}. Wat je hem aan graan geeft, kun je in de lente niet zaaien.${marskramer}</p>` +
+      `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit; de knop Brief bovenin opent hem weer.</p>`
+    );
+  }
+
+  T.ui.toonBrief = function (S) {
+    if (!S.heer || !S.heer.brief) return;
+    const box = $('brief');
+    box.innerHTML = briefInhoud(S);
+    if (box.classList.contains('verborgen')) zetTijdStil(S, 'briefVoorSnelheid');
+    box.classList.remove('verborgen');
+    werkBriefKnopBij(S);
+  };
+
+  T.ui.sluitBrief = function (S) {
+    $('brief').classList.add('verborgen');
+    laatTijdLopen(S, 'briefVoorSnelheid');
+  };
+
+  T.ui.briefOpen = () => !$('brief').classList.contains('verborgen');
+
+  $('brief').addEventListener('click', (ev) => {
+    const b = ev.target.closest('button');
+    if (b && b.dataset.actie === 'sluit' && T.S) T.ui.sluitBrief(T.S);
+  });
+  $('brief-knop').addEventListener('click', (ev) => {
+    ev.currentTarget.blur();
+    if (!T.S) return;
+    if (T.ui.briefOpen()) T.ui.sluitBrief(T.S);
+    else T.ui.toonBrief(T.S);
+  });
+
+  // Wat de schout de heer geeft, per goed, zoals het in het venster staat. Het begint op alles wat
+  // hij vraagt, voor zover je het hebt; wie minder wil geven, schuift naar beneden.
+  let geef = null;
+
+  function heerRijen(S, eis) {
+    return eis.volgorde.map((wat) => {
+      // Goud mag meer zijn dan hij vraagt: dat neemt hij in de plaats van wat er verder ontbreekt.
+      const max = wat === 'goud' ? hebNu(S, 'goud') : Math.min(eis.per[wat], hebNu(S, wat));
+      const waarom = eis.regels.filter((r) => r.wat === wat).map((r) => `${r.aantal} voor ${r.waarom}`).join(' · ');
+      const nu = Math.min(geef[wat] || 0, max);
+      return (
+        `<div class="heer-rij">` +
+        `<span class="heer-naam">${T.hoofdletter(wat)} <small>hij vraagt ${eis.per[wat]} · je hebt ${hebNu(S, wat)}</small>` +
+        `<small class="heer-waarom">${waarom}</small></span>` +
+        `<input type="range" min="0" max="${max}" step="1" value="${nu}" data-wat="${wat}"${max ? '' : ' disabled'}>` +
+        `<span class="heer-geef" data-geef="${wat}">${nu}</span>` +
+        `</div>`
+      );
+    }).join('');
+  }
+
+  // Het deel dat met de schuiven meeverandert: hoeveel je geeft, wat dat kost, en of je graan het
+  // haalt tot de oogst. Dezelfde vraag als de knop (T.gevolgVanBetaling).
+  function heerSamenvatting(S, eis) {
+    const g = T.gevolgVanBetaling(S, geef, eis);
+    const v = T.heerVooruitzicht(S, g);
+    const pct = Math.floor(g.deel * 100 + 1e-9);
+    const soort = g.ambtKwijt || g.schandpaal ? 'zwaar' : g.boete ? 'boete' : 'goed';
+    const goudExtra = g.neemt.goud > (eis.per.goud || 0) ? ` Van je goud neemt hij ${g.neemt.goud}, ook in de plaats van wat er verder ontbreekt.` : '';
+    const soldaten = v.soldaten ? `, zijn soldaten ${Math.round(v.soldaten)}` : '';
+    const rest = Math.round(v.over);
+    const uitkomst = rest >= 0 ? `er blijft ${rest} over` : `je komt ${-rest} graan tekort, en dat is honger vóór de oogst`;
+    return (
+      `<p class="heer-deel ${soort}">Je geeft hem ${pct}% van wat hij vraagt. ${g.tekst}${goudExtra}</p>` +
+      `<p class="heer-vooruit">Daarna heb je ${Math.round(v.na)} graan. Tot de oogst eet het dorp er zo'n ${Math.round(v.eten)}${soldaten}, ` +
+      `en zaaien in lentemaand kost ${Math.round(v.zaaien)}: ${uitkomst}.</p>` +
+      `<div class="heer-knoppen"><button data-actie="alles">Alles wat hij vraagt</button>` +
+      `<button class="heer-geef-knop" data-actie="betaal"${g.kan ? '' : ` disabled title="${g.reden}"`}>Geef het hem</button></div>`
+    );
+  }
+
+  function schandpaalInhoud(S) {
+    const rijen = T.schandpaalKeuzes(S).map((k) => {
+      const prijs = k.wie === 'schout'
+        ? `Het dorp neemt het je niet kwalijk. De heer lacht, en zet er ${k.boete} goud bij.`
+        : `Het dorp is ${Math.round(k.kost * 100)}% minder tevreden, en vergeet het pas na maanden.`;
+      return (
+        `<button class="paal-keuze" data-wie="${k.wie}"><span class="paal-naam">${k.naam}</span>` +
+        `<span class="paal-wie">${k.eigenschap}</span><span class="paal-prijs">${prijs}</span></button>`
+      );
+    }).join('');
+    return (
+      `<div class="venster-kop"><span class="venster-titel">De schandpaal</span><span class="venster-wanneer">Sint-Maarten</span></div>` +
+      `<p class="venster-staat">"Iemand moet dit voelen, schout. U mag kiezen wie." Wie staat er drie dagen aan de paal op de brink?</p>` +
+      rijen
+    );
+  }
+
+  function toonHeer(S) {
+    const box = $('heer');
+    const b = S.heer && S.heer.bezoek;
+    if (b && b.schandpaal) {
+      box.innerHTML = schandpaalInhoud(S);
+    } else {
+      const eis = T.eisVanDeHeer(S);
+      if (!geef) {
+        geef = {};
+        for (const wat of eis.volgorde) geef[wat] = Math.min(eis.per[wat], hebNu(S, wat));
+      }
+      box.innerHTML =
+        `<div class="venster-kop"><span class="venster-titel">Sint-Maarten</span><span class="venster-wanneer">de heer telt</span>` +
+        `<button class="venster-sluit" data-actie="sluit" title="Nog niet (Esc)">✕</button></div>` +
+        `<p class="venster-staat">Hij vraagt ${eisInTaal(eis)}. Wat je hem geeft, schuif je hieronder. Goud neemt hij altijd, ook in de plaats van iets anders.</p>` +
+        heerRijen(S, eis) +
+        `<div class="heer-samen">${heerSamenvatting(S, eis)}</div>` +
+        `<p class="venster-voet">Zolang je bij hem staat, staat de tijd stil. <kbd>Esc</kbd>: nog niet (hij wacht).</p>`;
+    }
+    box.classList.remove('verborgen');
+  }
+
+  T.ui.openHeer = function (S) {
+    const b = S.heer && S.heer.bezoek;
+    if (!T.heerWacht(S) && !(b && b.schandpaal)) return;
+    S.modus = 'heer';
+    S.bouwSoort = null;
+    S.bouwMenuOpen = false;
+    T.ui.toonBouwmenu(S);
+    if (T.ui.briefOpen()) T.ui.sluitBrief(S);
+    geef = null;
+    zetTijdStil(S, 'heerVoorSnelheid');
+    toonHeer(S);
+  };
+
+  // Dicht. Bij de schandpaal kan dat niet: daar moet je kiezen. Is de heer weg, dan loopt de tijd
+  // weer zoals vóór zijn komst (hij zette hem stil toen hij op de brink stond, js/heer.js).
+  T.ui.sluitHeer = function (S) {
+    const b = S.heer && S.heer.bezoek;
+    if (b && b.schandpaal) return;
+    $('heer').classList.add('verborgen');
+    if (S.modus === 'heer') S.modus = 'verkennen';
+    geef = null;
+    const h = S.heer;
+    if (h && (!h.bezoek || h.bezoek.weg) && h.snelheidVoorWachten) {
+      S.heerVoorSnelheid = h.snelheidVoorWachten;
+      h.snelheidVoorWachten = null;
+    }
+    laatTijdLopen(S, 'heerVoorSnelheid');
+    werkBriefKnopBij(S);
+  };
+
+  $('heer').addEventListener('input', (ev) => {
+    const r = ev.target.closest('input[type="range"]');
+    const S = T.S;
+    if (!r || !S || !geef) return;
+    geef[r.dataset.wat] = Number(r.value);
+    $('heer').querySelector(`[data-geef="${r.dataset.wat}"]`).textContent = r.value;
+    $('heer').querySelector('.heer-samen').innerHTML = heerSamenvatting(S, T.eisVanDeHeer(S));
+  });
+
+  $('heer').addEventListener('click', (ev) => {
+    const b = ev.target.closest('button');
+    const S = T.S;
+    if (!b || !S) return;
+    b.blur();
+    if (b.dataset.actie === 'sluit') {
+      T.ui.sluitHeer(S);
+    } else if (b.dataset.actie === 'alles') {
+      geef = null;
+      toonHeer(S);
+    } else if (b.dataset.actie === 'betaal') {
+      const g = T.betaalHeer(S, geef);
+      if (!g.kan) {
+        T.ui.bericht(g.reden);
+        return;
+      }
+      if (S.einde) return; // het einde staat al in beeld (T.ui.toonEinde)
+      if (S.heer.bezoek && S.heer.bezoek.schandpaal) toonHeer(S);
+      else T.ui.sluitHeer(S);
+    } else if (b.dataset.wie) {
+      T.zetAanDeSchandpaal(S, b.dataset.wie);
+      T.ui.sluitHeer(S);
+    }
+  });
+
+  // Je ambt kwijt: het spel is uit. Het scherm over alles heen, met wat er elk jaar gebeurde.
+  T.ui.toonEinde = function (S) {
+    S.modus = 'einde';
+    $('heer').classList.add('verborgen');
+    if (T.ui.briefOpen()) $('brief').classList.add('verborgen');
+    const jaren = ((S.heer && S.heer.jaren) || [])
+      .map((j) => `${j.jaar}: ${Math.floor(j.deel * 100 + 1e-9)}%${j.straf ? `, ${j.straf}` : ''}`)
+      .join(' · ');
+    T.ui.toonOverlay(
+      'Je ambt kwijt',
+      `<p>Twee keer achter elkaar gaf je de heer veel te weinig. Hij heeft een nieuwe schout benoemd: zijn neef, die ook niet kan tellen.</p>` +
+        `<p>Jij bent weer een gewone dorpeling, en je buren weten nog precies wat je deed.</p>` +
+        (jaren ? `<p class="einde-jaren">Wat de heer kreeg: ${jaren}</p>` : ''),
+      'Opnieuw beginnen',
+      () => location.reload(),
+    );
+  };
 
   // Eén stap trager of sneller, van pauze tot 3x. T.zetSnelheid (js/tijd.js) onthoudt de laatste
   // snelheid, zodat P na een stapje terug weer daar hervat.

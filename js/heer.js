@@ -222,6 +222,24 @@
     return 'De heer telt twee keer, en het komt twee keer anders uit. "Het klopt," zegt hij. "Tot volgend jaar."';
   }
 
+  // Wat je na deze betaling overhoudt tot de volgende oogst, voor het venster: zo zie je vóór het
+  // betalen of je graan het haalt. Het dorp eet tot de oogst begint (T.AKKER_STADIA "rijp"), de
+  // soldaten eten mee tot de lente als ze komen, en zaaien kost een zaaigraan per tegel.
+  // { na, eten, soldaten, zaaien, over, dagen }: `over` onder nul is honger vóór de oogst.
+  T.heerVooruitzicht = function (S, g) {
+    const dag = dagNu(S);
+    const rijp = T.AKKER_STADIA && T.AKKER_STADIA.find((s) => s.stadium === 'rijp');
+    const oogst = rijp ? volgendeKeer(dag, { maand: T.MAANDEN[rijp.maand].naam, dag: rijp.dag }) : dag;
+    const lente = volgendeKeer(dag, IN().soldatenTot);
+    const perMens = T.GEBOUWEN_INSTELLINGEN ? T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag : 0;
+    const eten = (S.bevolking || 0) * perMens * (oogst - dag);
+    const soldaten = g && g.soldaten ? IN().soldaten * IN().soldaatEetAls * perMens * (lente - dag) : 0;
+    const tegels = ((S.wereld && S.wereld.akkers) || []).reduce((n, a) => n + a.b * a.h, 0);
+    const zaaien = tegels * (T.ZAAIGRAAN_PER_TEGEL || 0);
+    const na = ((S.voorraad && S.voorraad.graan) || 0) - ((g && g.neemt && g.neemt.graan) || 0);
+    return { na, eten, soldaten, zaaien, over: na - eten - soldaten - zaaien, dagen: oogst - dag };
+  };
+
   // Betalen. Geeft het gevolg terug (T.gevolgVanBetaling), of { kan: false, reden }.
   T.betaalHeer = function (S, geef) {
     if (!T.heerWacht(S)) return { kan: false, reden: 'De heer is er niet.' };
@@ -328,6 +346,23 @@
     return lijst;
   };
 
+  // Waar de schandpaal staat: een tegel op de brink waar je kunt staan, een eindje naast de heer.
+  // Er is nog geen tekening van een schandpaal (tekenwerk); je ziet alleen wie er staat.
+  function paalOpDeBrink(S) {
+    const w = S.wereld;
+    const plek = brinkVan(w);
+    const doel = { x: plek.x + 2, y: plek.y + 1 };
+    if (!w.tegels || !T.isBegaanbaar) return doel;
+    for (let r = 0; r <= 3; r++) {
+      for (let y = doel.y - r; y <= doel.y + r; y++) {
+        for (let x = doel.x - r; x <= doel.x + r; x++) {
+          if (Math.max(Math.abs(x - doel.x), Math.abs(y - doel.y)) === r && T.isBegaanbaar(w, x, y)) return { x, y };
+        }
+      }
+    }
+    return doel;
+  }
+
   // De vlag die een gesprek laat weten dat iemand aan de schandpaal stond: "schandpaalBoer2".
   T.schandpaalVlag = (wie) => 'schandpaal' + wie.charAt(0).toUpperCase() + wie.slice(1);
 
@@ -343,13 +378,16 @@
       if (T.zetVlag) T.zetVlag(S, 'schoutAanDeSchandpaal');
       bericht(`Je zet jezelf aan de schandpaal. Het dorp kijkt zwijgend toe. De heer lacht tot hij hikt, en zet er ${keuze.boete} goud bij.`, 'gevaar');
     } else {
-      h.wrok.push({ wie, dag: dagNu(S), kost: keuze.kost, staat: true });
-      if (T.zetVlag) T.zetVlag(S, T.schandpaalVlag(wie));
-      // Zijn poppetje staat die dagen op de brink (T.wandelAnker, js/akkers.js, kijkt naar moetNaar).
-      const plek = brinkVan(S.wereld);
+      // Zijn poppetje loopt naar de brink en staat daar (T.wandelAnker, js/akkers.js, kijkt naar
+      // moetNaar). Zijn dagen aan de paal tellen pas als hij er staat (T.werkHeerBij), net als bij
+      // de marskramer: drie dagen zijn op 1× maar zeven seconden, en anders mocht hij al naar huis
+      // voor hij er was. Zonder poppetje of zonder wereld om in te lopen staat hij er meteen.
       const e = ((S.wereld && S.wereld.wezens) || []).find((x) => x.wie === wie && !x.dood);
-      if (e && plek) e.moetNaar = { x: plek.x + 2, y: plek.y + 1, straal: 0 };
-      bericht(`${keuze.naam} staat ${IN().schandpaalDagen} dagen aan de schandpaal. Het dorp zal het onthouden.`, 'gevaar');
+      const lopen = !!(e && kanLopen(S));
+      h.wrok.push({ wie, dag: dagNu(S), kost: keuze.kost, staat: true, vanaf: lopen ? null : dagNu(S) });
+      if (T.zetVlag) T.zetVlag(S, T.schandpaalVlag(wie));
+      if (e) e.moetNaar = { ...paalOpDeBrink(S), straal: 0 };
+      bericht(`${keuze.naam} moet ${IN().schandpaalDagen} dagen aan de schandpaal op de brink. Het dorp zal het onthouden.`, 'gevaar');
     }
     b.schandpaal = false;
     T.heerVertrekt(S);
@@ -469,9 +507,12 @@
       if (dag >= h.soldaten.tot) soldatenGaan(S);
       else if (S.voorraad) T.wijzigVoorraad(S, 'graan', -IN().soldaten * IN().soldaatEetAls * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag);
     }
-    // Wie aan de schandpaal stond, mag na zijn dagen weer naar huis.
+    // Wie aan de schandpaal stond, mag na zijn dagen weer naar huis. Die tellen vanaf dat hij er
+    // staat; komt hij er om wat voor reden ook niet, dan mag hij na een week ook naar huis.
     for (const w of h.wrok) {
-      if (!w.staat || dag < w.dag + IN().schandpaalDagen) continue;
+      if (!w.staat) continue;
+      const klaar = w.vanaf != null ? dag >= w.vanaf + IN().schandpaalDagen : dag >= w.dag + IN().schandpaalDagen + 7;
+      if (!klaar) continue;
       w.staat = false;
       const e = ((S.wereld && S.wereld.wezens) || []).find((x) => x.wie === w.wie);
       if (e) e.moetNaar = null;
@@ -536,6 +577,12 @@
       haalUitWereld(S, b.wezens.filter((e) => !nog.includes(e)));
       b.wezens = nog;
       if (!nog.length) haalHeerWeg(S);
+    }
+    // Wie aan de schandpaal moet: staat hij er, dan beginnen zijn dagen.
+    for (const wr of h.wrok) {
+      if (!wr.staat || wr.vanaf != null) continue;
+      const e = w.wezens.find((x) => x.wie === wr.wie);
+      if (e && e.moetNaar && e.tx === e.moetNaar.x && e.ty === e.moetNaar.y) wr.vanaf = dagNu(S);
     }
     const s = h.soldaten;
     if (s && s.weg) {

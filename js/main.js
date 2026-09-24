@@ -349,6 +349,17 @@
       if (ev.key === 'Escape') T.ui.sluitHandel(S);
       return;
     }
+    // Bij de heer net zo (js/hud.js, betalen op Sint-Maarten; bij de schandpaal moet je kiezen),
+    // en als je je ambt kwijt bent, is het spel uit.
+    if (S.modus === 'heer') {
+      if (ev.key === 'Escape') T.ui.sluitHeer(S);
+      return;
+    }
+    if (S.modus === 'einde') return;
+    if (ev.key === 'Escape' && T.ui.briefOpen && T.ui.briefOpen()) {
+      T.ui.sluitBrief(S);
+      return;
+    }
     if (S.modus === 'dialoog') {
       const n = parseInt(ev.key, 10);
       if (n >= 1 && n <= 9) T.ui.kiesKeuze(n - 1);
@@ -465,6 +476,18 @@
       if (!S.marskramer) T.marskramerKomt(S, bezoek || 0, Math.floor(S.kalender.dag));
       const m = S.marskramer;
       return m && { bezoek: m.bezoek, beurs: m.beurs, plaats: m.plaats, heeft: { ...m.heeft }, staat: m.staat, weg: m.weg, gaatOp: m.gaatOp };
+    },
+    // De heer nu laten komen, zonder op Sint-Maarten te wachten (js/heer.js): Toren.debug.heer().
+    // Is hij er al, dan zegt het wat hij vraagt en hoe het met hem staat. Toren.debug.brief()
+    // stuurt zijn brief van wijnmaand nu.
+    heer() {
+      if (!S.heer || !S.heer.bezoek) T.heerKomt(S, Math.floor(S.kalender.dag));
+      const b = S.heer.bezoek;
+      return { vraagt: T.eisVanDeHeer(S).per, staat: b.staat, betaald: !!b.betaald, schuld: S.heer.schuld };
+    },
+    brief() {
+      T.stuurBrief(S, Math.floor(S.kalender.dag));
+      return T.eisVanDeHeer(S).per;
     },
     // Het doek als PNG bewaren: await Toren.debug.schermafdruk('graan-rijp') schrijft
     // gereedschap/pixelart/uit/schermen/graan-rijp.png (via server.cjs; werkt niet vanaf file://).

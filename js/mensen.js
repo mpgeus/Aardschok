@@ -70,8 +70,10 @@
     // kaart. Hun eigen vellen, en de koets, zijn tekenwerk. Tot die tijd leent de heer de rode
     // mantel met goud van de meester, en lenen de soldaten de smid: groot, kaal, en iets zwaars in
     // de hand. Twee soldaten zijn twee keer dezelfde mens; dat mag, want ze staan op geen kaart.
-    heer: { naam: 'de heer', snelheid: 1.55, straal: 1, vel: 'meester' },
-    soldaat: { naam: 'een soldaat', snelheid: 1.5, straal: 2, vel: 'smid' },
+    // `bezoeker`: hij komt over de weg en staat op geen kaart, dus de controle in
+    // gereedschap/wereld.html vraagt niet waar hij staat.
+    heer: { naam: 'de heer', snelheid: 1.55, straal: 1, vel: 'meester', bezoeker: true },
+    soldaat: { naam: 'een soldaat', snelheid: 1.5, straal: 2, vel: 'smid', bezoeker: true },
 
     // En de vaklieden die wel een haakje hebben in wereld.md maar nog geen tekening: zij zijn
     // zolang een gewone dorpeling, want die vellen bestaan al (zie de werklijst, fase B2b).

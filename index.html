@@ -36,6 +36,7 @@
     </div>
     <div id="voorraadbalk" class="paneel"></div>
     <button id="bouwmenu-knop" class="paneel" title="Bouwen"><kbd>B</kbd> Bouwen</button>
+    <button id="brief-knop" class="paneel verborgen" title="De brief van de heer: wat hij op Sint-Maarten wil">Brief</button>
   </div>
 
   <!-- Het bouwmenu (js/hud.js, T.ui.toonBouwmenu): de soorten van de huidige trede, met hun
@@ -46,6 +47,11 @@
   <!-- Handelen met de marskramer (js/hud.js, T.ui.openHandel; de regels in js/handel.js): wat hij
        verkoopt en wat hij koopt, tegen de prijs van dit bezoek. Je opent het vanuit zijn gesprek. -->
   <div id="handel" class="paneel verborgen"></div>
+
+  <!-- De heer (js/hud.js, T.ui.toonBrief en T.ui.openHeer; de regels in js/heer.js): zijn brief in
+       wijnmaand, en het betalen op Sint-Maarten, met de schandpaal als die erbij hoort. -->
+  <div id="brief" class="paneel verborgen"></div>
+  <div id="heer" class="paneel verborgen"></div>
 
   <div id="plek"></div>
   <div id="volgorde" class="paneel"></div>

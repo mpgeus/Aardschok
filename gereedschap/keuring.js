@@ -385,13 +385,16 @@
     // zelf, dus in één regel en niet één klacht per persoon.
     const geplaatst = new Set();
     for (const w of Object.values(werelden)) for (const e of w.wezens) if (e.wie) geplaatst.add(e.wie);
-    const ontbreekt = Object.keys(T.MENSEN || {}).filter((id) => !geplaatst.has(id));
+    // Wie over de weg komt (T.MENSEN[id].bezoeker: de heer en zijn soldaten, js/heer.js), staat op
+    // geen kaart, en hoort dus ook niet in dit lijstje.
+    const bezoeker = (id) => !!(T.MENSEN && T.MENSEN[id] && T.MENSEN[id].bezoeker);
+    const ontbreekt = Object.keys(T.MENSEN || {}).filter((id) => !geplaatst.has(id) && !bezoeker(id));
     if (ontbreekt.length) {
       letOp(`${ontbreekt.length} van de ${Object.keys(T.MENSEN).length} mensen staan nog nergens: ${ontbreekt.join(', ')}`);
     }
 
     for (const id of Object.keys(T.GESPREKKEN || {})) {
-      if (!wezens.has(id)) fout(`"${id}" heeft een gesprek, maar staat nergens in de wereld. Zet hem neer met gereedschap/wereld.html`);
+      if (!wezens.has(id) && !bezoeker(id)) fout(`"${id}" heeft een gesprek, maar staat nergens in de wereld. Zet hem neer met gereedschap/wereld.html`);
     }
     for (const id of Object.keys(T.RAAKPUNTEN || {})) {
       if (!raakpunten.has(id)) fout(`raakpunt "${id}" wacht op een ${(T.RAAKPUNTEN[id] || {}).spreuk || 'spreuk'}, maar staat nergens. Zet raak="${id}" op het ding dat geraakt moet worden, met gereedschap/wereld.html`);

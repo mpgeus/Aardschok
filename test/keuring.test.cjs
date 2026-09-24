@@ -236,8 +236,9 @@ test('de dekking zegt wat het spel vraagt en nergens staat', () => {
   // De koude oven is geschreven maar nog niet in Tiled neergezet (22 sep 2026). Zodra dat wel zo
   // is, horen deze regels vanzelf te verdwijnen — en dan zegt deze toets dat ze er niet meer zijn.
   for (const wie of Object.keys(T.GESPREKKEN)) {
-    const staat = Object.values(T.GEBIEDEN).some((g) => g.maak().wezens.some((e) => e.soort === wie));
-    assert.equal(!tekst.includes(`"${wie}" heeft een gesprek`), staat, `${wie}: de dekking en de wereld zijn het oneens`);
+    // Wie over de weg komt (de heer en zijn soldaten), hoeft nergens te staan.
+    const staat = (T.MENSEN[wie] && T.MENSEN[wie].bezoeker) || Object.values(T.GEBIEDEN).some((g) => g.maak().wezens.some((e) => e.soort === wie));
+    assert.equal(!tekst.includes(`"${wie}" heeft een gesprek`), !!staat, `${wie}: de dekking en de wereld zijn het oneens`);
   }
 });
 
