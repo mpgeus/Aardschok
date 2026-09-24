@@ -215,6 +215,11 @@
   // T.beginOpHetErf, js/tutorial.js). Geeft true terug als het gelukt is; S.wereld en S.held
   // staan dan klaar. Bestaat de kaart niet, of staat er geen "held" op en lukt het ook niet er
   // zelf een neer te zetten, dan false — de aanroeper valt dan terug op het gewone begin.
+  // Hoe snel de schout loopt, in tegels per seconde: wat vlotter dan een dorpeling (1,2 tot 1,5),
+  // zodat rondlopen niet sleept. Zijn loopbeeld telt de afgelegde weg (js/sprites.js), dus zijn
+  // voeten glijden bij geen enkele snelheid.
+  T.SCHOUT_SNELHEID = 2.2;
+
   T.beginOpKaart = function (S, naam) {
     S.tutorial = null;
     const w = T.gebied(S, naam);
@@ -234,6 +239,10 @@
     // HUD en de beurtvolgorde blijven gewoon op hem letten; alleen T.sprites.houding kijkt naar
     // `soort` om het plaatje te kiezen (js/sprites.js). Zie ontwerp/werklijst.md, punt 1b.
     held.soort = 'dorpeling';
+    // Daarmee loopt hij ook niet meer op de leeftijd van een tovenaar (T.snelheidVan, js/wereld.js,
+    // kijkt alleen bij soort 'held' naar de leeftijd) maar op zijn eigen maat. Die moet hier dus
+    // gezet: een 'held' heeft zelf snelheid 0, en van 23 tot 24 sep stond de schout daardoor stil.
+    held.snelheid = T.SCHOUT_SNELHEID;
     if (held.zaad == null) held.zaad = 1;
     S.held = held;
     zetNeer(held, held.x, held.y);
