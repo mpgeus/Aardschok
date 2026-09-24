@@ -122,6 +122,10 @@
   T.GRAAN_PER_TEGEL = 3.5;
   T.ZAAIGRAAN_PER_TEGEL = 1;
 
+  // Wat een boer kan (js/boeren.js: maaien, opbrengst, zaaien), als factor; 1 zonder dat bestand
+  // of voor wie gewoon is.
+  const factor = (e, soort) => (e && T.boerFactor ? T.boerFactor(e, soort) : 1);
+
   // De tegels van een akker die nog te maaien zijn: gezaaid, en nog niet gemaaid.
   function onbeslistTegels(akker) {
     const open = [];
@@ -161,7 +165,7 @@
       if (e.maait) {
         if (S.tijd >= e.maait.tot) {
           e.maait.akker.geoogst.add(sleutel(e.maait.x, e.maait.y));
-          if (S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'graan', T.GRAAN_PER_TEGEL);
+          if (S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'graan', T.GRAAN_PER_TEGEL * factor(e, 'opbrengst'));
           e.maait = null;
           e.oogstDoel = null;
         }
@@ -169,7 +173,7 @@
       }
       if (e.pad && e.pad.length) continue; // onderweg naar zijn doel
       if (e.oogstDoel && e.tx === e.oogstDoel.x && e.ty === e.oogstDoel.y) {
-        e.maait = { x: e.tx, y: e.ty, tot: S.tijd + T.OOGST_TEGEL_DUUR, akker: e.oogstDoel.akker };
+        e.maait = { x: e.tx, y: e.ty, tot: S.tijd + T.OOGST_TEGEL_DUUR * factor(e, 'maaien'), akker: e.oogstDoel.akker };
         continue;
       }
       let doel = null;
@@ -209,9 +213,9 @@
   // T.tikBehoeftenDag, dus een kalender die vooruitspringt slaat geen van beide over.
   // ---------------------------------------------------------------------------------------------
 
-  // Wie werkt deze akker? Een levende boer die hem in zijn werkAkkers heeft (js/kaart.js).
-  function heeftBoer(w, akker) {
-    return (w.wezens || []).some((e) => !e.dood && e.werkAkkers && e.werkAkkers.includes(akker));
+  // Wie werkt deze akker? Een levende boer die hem in zijn werkAkkers heeft (js/kaart.js), of null.
+  function boerVan(w, akker) {
+    return (w.wezens || []).find((e) => !e.dood && e.werkAkkers && e.werkAkkers.includes(akker)) || null;
   }
 
   // Het vangnet (Marcel, 24 sep; ontwerp/spel.md, "Sint-Maarten"): wat op de eerste dag na de
@@ -224,19 +228,20 @@
     const w = S.wereld;
     if (!w || !w.akkers) return 0;
     let tegels = 0;
+    let graan = 0;
     for (const akker of w.akkers) {
-      if (!heeftBoer(w, akker)) continue;
+      const boer = boerVan(w, akker);
+      if (!boer) continue;
       if (!akker.geoogst) akker.geoogst = new Set();
       for (const t of onbeslistTegels(akker)) {
         akker.geoogst.add(sleutel(t.x, t.y));
         tegels++;
+        graan += T.GRAAN_PER_TEGEL * factor(boer, 'opbrengst'); // groene vingers of slordig
       }
     }
     if (tegels && S.voorraad && T.wijzigVoorraad) {
-      T.wijzigVoorraad(S, 'graan', tegels * T.GRAAN_PER_TEGEL);
-      if (T.ui && T.ui.bericht) {
-        T.ui.bericht(`De boeren halen de rest van de oogst binnen: ${Math.round(tegels * T.GRAAN_PER_TEGEL)} graan.`, 'goed');
-      }
+      T.wijzigVoorraad(S, 'graan', graan);
+      if (T.ui && T.ui.bericht) T.ui.bericht(`De boeren halen de rest van de oogst binnen: ${Math.round(graan)} graan.`, 'goed');
     }
     return tegels;
   };
@@ -250,37 +255,41 @@
   T.zaaiAkkers = function (S) {
     const w = S.wereld;
     if (!w || !w.akkers || !w.akkers.length) return null;
-    const per = T.ZAAIGRAAN_PER_TEGEL;
+    // Wat een tegel aan zaaigraan kost, per akker: een zuinige boer zaait met minder, een kwistige
+    // met meer (js/boeren.js).
+    const per = w.akkers.map((a) => T.ZAAIGRAAN_PER_TEGEL * factor(boerVan(w, a), 'zaaien'));
     const maat = w.akkers.map((a) => a.b * a.h);
     const totaal = maat.reduce((n, m) => n + m, 0);
+    const nodig = maat.reduce((n, m, i) => n + m * per[i], 0);
     const heb = (S.voorraad && S.voorraad.graan) || 0;
-    const kan = per > 0 ? Math.min(totaal, Math.floor(heb / per + 1e-9)) : totaal;
-    // Elke akker zijn deel, naar beneden afgerond; wat er dan nog over is, één voor één aan de
-    // akkers op volgorde (hooguit één per akker, dus er is altijd plaats).
-    const deel = maat.map((m) => Math.floor((kan * m) / totaal));
-    let over = kan - deel.reduce((n, d) => n + d, 0);
-    for (let i = 0; over > 0 && i < maat.length; i++) {
-      if (deel[i] < maat[i]) {
-        deel[i]++;
-        over--;
+    // Elke akker zijn deel, naar beneden afgerond; wat er dan nog over is, hooguit één tegel per
+    // akker erbij, op volgorde, zolang het graan het toelaat.
+    const deel = nodig > 0 ? Math.min(1, heb / nodig) : 1;
+    const gezaaid = maat.map((m) => Math.floor(m * deel + 1e-9));
+    let kost = gezaaid.reduce((n, g, i) => n + g * per[i], 0);
+    for (let i = 0; i < maat.length; i++) {
+      if (gezaaid[i] < maat[i] && kost + per[i] <= heb + 1e-9) {
+        gezaaid[i]++;
+        kost += per[i];
       }
     }
+    const kan = gezaaid.reduce((n, g) => n + g, 0);
     w.akkers.forEach((a, i) => {
       a.braak = new Set();
       if (a.geoogst) a.geoogst.clear();
       T.akkerTegels(a).forEach((t, j) => {
-        if (j >= deel[i]) a.braak.add(sleutel(t.x, t.y));
+        if (j >= gezaaid[i]) a.braak.add(sleutel(t.x, t.y));
       });
     });
-    if (kan > 0 && per > 0 && S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'graan', -kan * per);
+    if (kost > 0 && S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'graan', -kost);
     if (T.ui && T.ui.bericht) {
       if (kan < totaal) {
         T.ui.bericht(`Er is zaaigraan voor ${kan} van de ${totaal} akkertegels. De rest ligt dit jaar braak.`, 'gevaar');
       } else {
-        T.ui.bericht(`De boeren zaaien: ${Math.round(kan * per)} graan gaat de grond in.`);
+        T.ui.bericht(`De boeren zaaien: ${Math.round(kost)} graan gaat de grond in.`);
       }
     }
-    return { tegels: totaal, gezaaid: kan, braak: totaal - kan, graan: kan * per };
+    return { tegels: totaal, gezaaid: kan, braak: totaal - kan, graan: kost };
   };
 
   // Zaaien en het vangnet vallen op de dagen uit T.AKKER_STADIA zelf: zaaien bij "geploegd", het

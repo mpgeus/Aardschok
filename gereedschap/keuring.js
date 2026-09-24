@@ -393,8 +393,11 @@
       letOp(`${ontbreekt.length} van de ${Object.keys(T.MENSEN).length} mensen staan nog nergens: ${ontbreekt.join(', ')}`);
     }
 
+    // Het gesprek van een karakter (T.KARAKTERS, js/mensen.js) hoort bij geen kaart: een boer voert
+    // het als hij dat karakter trekt (js/boeren.js).
+    const karakter = (id) => !!(T.KARAKTERS && T.KARAKTERS[id]);
     for (const id of Object.keys(T.GESPREKKEN || {})) {
-      if (!wezens.has(id) && !bezoeker(id)) fout(`"${id}" heeft een gesprek, maar staat nergens in de wereld. Zet hem neer met gereedschap/wereld.html`);
+      if (!wezens.has(id) && !bezoeker(id) && !karakter(id)) fout(`"${id}" heeft een gesprek, maar staat nergens in de wereld. Zet hem neer met gereedschap/wereld.html`);
     }
     for (const id of Object.keys(T.RAAKPUNTEN || {})) {
       if (!raakpunten.has(id)) fout(`raakpunt "${id}" wacht op een ${(T.RAAKPUNTEN[id] || {}).spreuk || 'spreuk'}, maar staat nergens. Zet raak="${id}" op het ding dat geraakt moet worden, met gereedschap/wereld.html`);

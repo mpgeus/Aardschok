@@ -243,6 +243,8 @@
       for (const wat in w.beginVoorraad) T.zetVoorraad(S, wat, w.beginVoorraad[wat]);
     }
     if (T.zetBestaandeGebouwen) T.zetBestaandeGebouwen(S);
+    // Wie de boeren zijn en wat ze kunnen, wordt bij elk nieuw spel geloot (js/boeren.js).
+    if (T.lootBoeren) T.lootBoeren(S);
     return true;
   };
 })(globalThis.Toren = globalThis.Toren || {});

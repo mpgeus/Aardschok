@@ -378,17 +378,18 @@
     }
   }
 
-  // Wie er aan de schandpaal kan: de mensen met een naam die het dorp iets kost
-  // (T.MENSEN[id].schandpaal), en de schout zelf. [{ wie, naam, eigenschap, kost, boete }]:
-  // kost is de tevredenheid, boete het goud dat de heer erbij zet (alleen bij de schout).
+  // Wie er aan de schandpaal kan: de boeren (wie een karakter heeft, js/boeren.js), met wat het het
+  // dorp kost naar hun aanzien, en de schout zelf. [{ wie, naam, eigenschap, kost, boete }]: kost is
+  // de tevredenheid, boete het goud dat de heer erbij zet (alleen bij de schout).
   T.schandpaalKeuzes = function (S) {
     const lijst = [];
     const gezien = new Set();
     for (const e of (S.wereld && S.wereld.wezens) || []) {
-      const m = e.wie && T.MENSEN && T.MENSEN[e.wie];
-      if (!m || m.schandpaal == null || e.dood || gezien.has(e.wie)) continue;
+      const kost = T.aanzienVan ? T.aanzienVan(e) : null;
+      if (kost == null || e.dood || gezien.has(e.wie)) continue;
       gezien.add(e.wie);
-      lijst.push({ wie: e.wie, naam: T.naamVanMens(e.wie), eigenschap: m.eigenschap || '', kost: m.schandpaal, boete: 0 });
+      const eigenschap = T.overBoerTekst ? T.overBoerTekst(e) : '';
+      lijst.push({ wie: e.wie, naam: e.naam || T.naamVanMens(e.wie), eigenschap, kost, boete: 0 });
     }
     if (!IN().schoutMagZelf) return lijst;
     const h = S.heer;
@@ -414,7 +415,9 @@
     return doel;
   }
 
-  // De vlag die een gesprek laat weten dat iemand aan de schandpaal stond: "schandpaalBoer2".
+  // De vlag die een gesprek laat weten dat iemand aan de schandpaal stond, naar het gesprek dat hij
+  // voert: een boer met het karakter weduwe (js/boeren.js) krijgt "schandpaalWeduwe", en dat leest
+  // het gesprek van de weduwe. Elk karakter hoort in een spel bij één boer.
   T.schandpaalVlag = (wie) => 'schandpaal' + wie.charAt(0).toUpperCase() + wie.slice(1);
 
   T.zetAanDeSchandpaal = function (S, wie) {
@@ -436,7 +439,7 @@
       const e = ((S.wereld && S.wereld.wezens) || []).find((x) => x.wie === wie && !x.dood);
       const lopen = !!(e && kanLopen(S));
       h.wrok.push({ wie, dag: dagNu(S), kost: keuze.kost, staat: true, vanaf: lopen ? null : dagNu(S) });
-      if (T.zetVlag) T.zetVlag(S, T.schandpaalVlag(wie));
+      if (T.zetVlag) T.zetVlag(S, T.schandpaalVlag(e && T.gesprekIdVan ? T.gesprekIdVan(e) : wie));
       if (e) e.moetNaar = { ...paalOpDeBrink(S), straal: 0 };
       bericht(`${keuze.naam} moet ${IN().schandpaalDagen} dagen aan de schandpaal op de brink. Het dorp zal het onthouden.`, 'gevaar');
     }

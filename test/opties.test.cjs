@@ -15,12 +15,13 @@ require('../js/behoeften.js');
 require('../js/akkers.js');
 require('../js/handel.js');
 require('../js/heer.js');
+require('../js/boeren.js');
 require('../js/gesprekken.js');
 require('../js/gesprek.js');
 const T = globalThis.Toren;
 
 // De blokken zoals de bestanden ze zetten, vóór opties.js er iets mee doet.
-const BLOKKEN = ['GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN'];
+const BLOKKEN = ['GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN', 'BOEREN_INSTELLINGEN'];
 const LOS = ['GRAAN_PER_TEGEL', 'ZAAIGRAAN_PER_TEGEL', 'DAG_LENGTE'];
 const bestanden = {};
 for (const k of BLOKKEN.concat(LOS)) bestanden[k] = JSON.parse(JSON.stringify(T[k]));
@@ -112,7 +113,9 @@ test('een naam komt overal: bij de mens, in zijn gesprek, en op zijn poppetje', 
   const S = { wereld: { wezens: [e] } };
   T.pasOptiesToe({ namen: { boer2: 'Grietje' } }, S);
   assert.equal(T.naamVanMens('boer2'), 'Grietje');
-  assert.equal(T.GESPREKKEN.boer2.naam, 'Grietje');
+  // Een boer voert het gesprek van zijn karakter (js/boeren.js); dat heet zoals het karakter, en de
+  // naam boven het gesprek komt van de boer zelf (js/dialoog.js).
+  assert.equal(T.GESPREKKEN.weduwe.naam, 'de weduwe');
   assert.equal(e.naam, 'Grietje');
   // Leeg, of alleen spaties, is de standaard.
   T.pasOptiesToe({ namen: { boer2: '   ' } }, S);

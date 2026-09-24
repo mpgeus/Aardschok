@@ -27,9 +27,12 @@
 //     straal:   3,             // hoe ver hij van zijn plek af dwaalt (de kaart mag het overrulen)
 //     snelheid: 1.3,           // alleen als hij anders loopt dan zijn wezen of een dorpeling
 //     gesprek:  'bakker',      // welk gesprek hij voert; zonder dit is het zijn eigen id
-//     eigenschap: 'weduwe…',   // wie hij is in een paar woorden, voor de schandpaal (js/heer.js)
-//     schandpaal: 0.3,         // wat het het dorp aan tevredenheid kost als jij hem daar zet;
-//                              // zonder dit kan hij er niet aan (de marskramer, de heer zelf)
+//     karakter: 'zanger',      // alleen de boeren: wie hij is als er niet geloot wordt (T.KARAKTERS
+//                              // hieronder, js/boeren.js). Zijn gesprek is dan dat van zijn
+//                              // karakter, en alleen wie een karakter heeft, kan aan de schandpaal.
+//     geslacht: 'vrouw',       // alleen de boeren: een weduwe of vroedvrouw wordt altijd een boerin
+//     aanzien:  'geliefd',     // alleen de boeren: hoe het dorp hem ziet als er niet geloot wordt en
+//                              // zijn karakter het niet vastlegt (js/boeren.js)
 //   }
 //
 // Zonder `wezen` en zonder `zaad` is hij zichzelf: zijn id is de naam van zijn vel. De veertien
@@ -90,16 +93,35 @@
     // keuring.js) — dit zijn wél vijf keer hetzelfde geleende vel, en dat mag: net als de bakker
     // hierboven lenen ze het van wie het al heeft, om en om "boer" en "boerin" voor wat variatie.
     //
-    // Sinds Sint-Maarten (24 sep, js/heer.js) hebben ze een naam en een eigenschap: wie de heer te
-    // weinig geeft, moet iemand aan de schandpaal zetten, en dan moet je ze uit elkaar kunnen
-    // houden. `schandpaal` is wat het het dorp aan tevredenheid kost als jij hém aanwijst (het
-    // slijt weer weg, T.HEER_INSTELLINGEN.wrokDagen): de weduwe vergeeft het dorp je niet snel, de
-    // woekeraar gunt het hem stiekem. Gerrit en Klaas hebben ook de meeste akkers (drie en twee).
-    boer1: { naam: 'Klaas', vel: 'boer', snelheid: 1.5, straal: 3, eigenschap: 'zingt \'s avonds in de schuur, en de hele buurt zingt mee', schandpaal: 0.2 },
-    boer2: { naam: 'Aaltje', vel: 'boerin', snelheid: 1.4, straal: 3, eigenschap: 'weduwe, met drie kleine kinderen', schandpaal: 0.3 },
-    boer3: { naam: 'Gerrit', vel: 'boer', snelheid: 1.5, straal: 3, eigenschap: 'de rijkste boer; hij leent graan uit tegen woeker', schandpaal: 0.05 },
-    boer4: { naam: 'Trijn', vel: 'boerin', snelheid: 1.4, straal: 3, eigenschap: 'de vroedvrouw: ze heeft de halve buurt ter wereld geholpen', schandpaal: 0.25 },
-    boer5: { naam: 'Wouter', vel: 'boer', snelheid: 1.5, straal: 3, eigenschap: 'een heethoofd; hij sloeg eens een knecht van de heer', schandpaal: 0.1 },
+    // Sinds Sint-Maarten (24 sep, js/heer.js) hebben ze een naam, want wie de heer te weinig geeft,
+    // zet iemand aan de schandpaal, en dan moet je ze uit elkaar kunnen houden. Wie ze zijn en wat
+    // ze kunnen, wordt bij elk spel geloot (Marcel, 24 sep; js/boeren.js): de naam hoort bij de
+    // boer, het karakter niet. Wat hier als karakter staat, is wie ze zijn als er niet geloot wordt:
+    // zoals ze eerst geschreven waren.
+    boer1: { naam: 'Klaas', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'zanger', aanzien: 'geliefd' },
+    boer2: { naam: 'Aaltje', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3, karakter: 'weduwe' },
+    boer3: { naam: 'Gerrit', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'woekeraar' },
+    boer4: { naam: 'Trijn', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3, karakter: 'vroedvrouw' },
+    boer5: { naam: 'Wouter', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'heethoofd' },
+  };
+
+  // De stapel karakters waaruit de boeren trekken (js/boeren.js, T.lootBoeren): wie een boer is,
+  // in één woord (kort, bij de muis) en in een paar (lang, boven zijn gesprek en bij de
+  // schandpaal). Elk karakter voert zijn eigen gesprek in js/gesprekken.js, onder dezelfde naam.
+  // `geslacht` alleen waar het karakter het vastlegt; `aanzien` alleen waar het dorp er vanzelf
+  // iets van vindt (js/boeren.js, T.BOEREN_INSTELLINGEN.aanzien). De teksten zeggen
+  // geen hij of zij, want dezelfde zanger kan een boer of een boerin zijn.
+  T.KARAKTERS = {
+    zanger: { kort: 'zanger', lang: "zingt 's avonds in de schuur, en de hele buurt zingt mee" },
+    weduwe: { kort: 'weduwe', lang: 'weduwe, met drie kleine kinderen', geslacht: 'vrouw', aanzien: 'geliefd' },
+    woekeraar: { kort: 'woekeraar', lang: 'leent graan uit tegen woeker', aanzien: 'gehaat' },
+    vroedvrouw: { kort: 'vroedvrouw', lang: 'de vroedvrouw: de halve buurt heeft ze ter wereld geholpen', geslacht: 'vrouw', aanzien: 'geliefd' },
+    heethoofd: { kort: 'heethoofd', lang: 'een heethoofd; sloeg eens een knecht van de heer' },
+    vrome: { kort: 'vroom', lang: 'bidt drie keer per dag, en één keer voor de heer' },
+    roddelaar: { kort: 'roddelaar', lang: 'weet alles van iedereen, en vertelt het ook' },
+    grijsaard: { kort: 'de oudste', lang: 'de oudste van het gehucht; zag drie heren komen en gaan' },
+    nieuwkomer: { kort: 'nieuwkomer', lang: 'kwam vorig jaar uit het buurdorp, en niemand weet waarom' },
+    drinker: { kort: 'drinker', lang: 'drinkt meer bier dan er ooit gebrouwen werd' },
   };
 
   // Hoe heet deze mens? Zijn eigen naam, anders die van het wezen dat hij leent (Wim, de
@@ -114,7 +136,8 @@
 
   // Welk gesprek voert hij? Zijn eigen id, tenzij er iets anders staat — zo kunnen de bruid en de
   // bruidegom desnoods hetzelfde gesprek delen zonder dat het een ongelukje lijkt.
-  T.gesprekVanMens = (id) => (T.MENSEN[id] && T.MENSEN[id].gesprek) || id;
+  // Een boer voert het gesprek van zijn karakter (js/boeren.js zet het geloote op zijn poppetje).
+  T.gesprekVanMens = (id) => (T.MENSEN[id] && (T.MENSEN[id].gesprek || T.MENSEN[id].karakter)) || id;
 
   // Een gewone dorpeling: geen gevecht, geen levensbalk, hij staat en kijkt en dwaalt wat rond.
   // Dezelfde vorm als maakWezen in wereld.js, maar zonder een ingang in T.WEZENS — want die

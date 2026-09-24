@@ -14,6 +14,7 @@ require('../js/mensen.js');
 require('../js/gebouwen.js');
 require('../js/behoeften.js');
 require('../js/akkers.js');
+require('../js/boeren.js');
 require('../js/gesprek.js');
 require('../js/gesprekken.js');
 require('../js/handel.js');
@@ -273,7 +274,8 @@ test('de schandpaal: jij wijst aan wie, en het dorp onthoudt het een tijd', () =
   assert.match(keuzes[0].eigenschap, /weduwe/);
   const r = T.zetAanDeSchandpaal(S, 'boer2');
   assert.equal(r.kan, true);
-  assert.ok(T.heeftVlag(S, 'schandpaalBoer2'), 'haar gesprek weet het');
+  // Ze voert het gesprek van haar karakter (hier het vaste: de weduwe), en dat weet het.
+  assert.ok(T.heeftVlag(S, 'schandpaalWeduwe'), 'haar gesprek weet het');
   assert.equal(S.heer.bezoek, null, 'daarna gaat de heer');
   // Ze staat op de brink, en na haar dagen mag ze weer naar huis.
   const aaltje = S.wereld.wezens.find((e) => e.wie === 'boer2');
@@ -283,7 +285,7 @@ test('de schandpaal: jij wijst aan wie, en het dorp onthoudt het een tijd', () =
   assert.equal(aaltje.moetNaar, null);
   // Het dorp is minder tevreden, en dat slijt weg.
   const nu = T.heerOntevredenheid(S, SINT_MAARTEN);
-  assert.ok(Math.abs(nu.minder - (IN.soldatenOntevreden + T.MENSEN.boer2.schandpaal)) < 1e-9);
+  assert.ok(Math.abs(nu.minder - (IN.soldatenOntevreden + T.aanzienVan(aaltje))) < 1e-9);
   assert.ok(nu.waarom.includes('de schandpaal'));
   const later = T.heerOntevredenheid(S, SINT_MAARTEN + IN.wrokDagen / 2);
   assert.ok(later.minder < nu.minder);
@@ -291,11 +293,17 @@ test('de schandpaal: jij wijst aan wie, en het dorp onthoudt het een tijd', () =
 });
 
 test('de schandpaal kost het dorp zoveel als wie jij kiest: de weduwe meer dan de woekeraar', () => {
-  assert.ok(T.MENSEN.boer2.schandpaal > T.MENSEN.boer3.schandpaal);
+  // Zonder lot (js/boeren.js) is iedere boer zoals hij geschreven was: Aaltje de weduwe, Gerrit de
+  // woekeraar. Het karakter legt hier het aanzien vast: de weduwe is geliefd, de woekeraar gehaat.
+  const aaltje = T.maakMens('boer2', 3, 3);
+  const gerrit = T.maakMens('boer3', 4, 4);
+  assert.ok(T.aanzienVan(aaltje) > T.aanzienVan(gerrit));
   for (const id of ['boer1', 'boer2', 'boer3', 'boer4', 'boer5']) {
-    assert.ok(T.MENSEN[id].eigenschap, `${id} heeft geen eigenschap`);
+    assert.ok(T.KARAKTERS[T.MENSEN[id].karakter], `${id} heeft geen karakter`);
     assert.notEqual(T.naamVanMens(id), 'de boer', `${id} heeft geen naam`);
   }
+  // Wie geen boer is, kan er niet aan.
+  assert.equal(T.aanzienVan(T.maakMens('marskramer', 1, 1)), null);
 });
 
 test('de schout mag zichzelf aanwijzen: het dorp neemt het niet kwalijk, maar de boete gaat omhoog', () => {
@@ -402,7 +410,7 @@ test('komt hij zelf halen en moet er iemand aan de schandpaal, dan wijst hij zel
   S.kalender.dag = SINT_MAARTEN;
   T.tikHeerDag(S, SINT_MAARTEN);
   T.tikHeerDag(S, SINT_MAARTEN + IN.wachtDagen); // niets in de voorraad
-  assert.ok(T.heeftVlag(S, 'schandpaalBoer2'), 'de weduwe');
+  assert.ok(T.heeftVlag(S, 'schandpaalWeduwe'), 'de weduwe');
   assert.equal(S.heer.bezoek, null);
 });
 
