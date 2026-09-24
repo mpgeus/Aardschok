@@ -63,6 +63,7 @@
   // Een stenen huis (30 goud) oogt veel rijker dan een hut (geen goud).
   T.pronkVan = function (soort) {
     const g = T.GEBOUWEN[soort];
+    if (g && Number.isFinite(g.pronk)) return g.pronk; // een houtmijt oogt niet rijk
     return g ? 0.5 + 0.25 * ((g.kosten && g.kosten.goud) || 0) : 0;
   };
 

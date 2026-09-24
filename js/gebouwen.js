@@ -118,10 +118,11 @@
     },
     verstopplek: {
       naam: 'verstopplek', trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 6 }, bouwtijd: 6,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: true,
-      tekening: null, beschrijving: 'een kelder of kuil die de inner niet ziet',
-      opmerking: 'Bewust zonder tekening: een verstopplek die je wél ziet staan is geen verstopplek. '
-        + 'Hij blokkeert zijn voet en telt mee, maar tekent nu nog niets (js/tekenen.js).',
+      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: true, pronk: 0,
+      tekening: 'erf/houtstapel', beschrijving: 'een kuil onder een houtmijt, die de inner niet ziet',
+      opmerking: 'Iets gewoons erop (Marcel, 24 sep; ontwerp/spel.md): jij ziet waar hij is, de inner '
+        + 'ziet een houtstapel. Eerst tekende hij niets en blokkeerde hij toch zijn voet, dus liep je '
+        + 'tegen iets aan wat je niet zag. Een houtmijt oogt ook niet rijk (pronk 0, js/heer.js).',
     },
 
     // ── Grondstoffen halen (Marcel, 23 sep: "houthakkers, steengroeve etc moeten we ook hebben";

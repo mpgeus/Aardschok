@@ -281,10 +281,23 @@ test('T.plaatsGebouw: zet tekeningNaam en voortgang op het voorwerp, voor de bou
 test('T.plaatsGebouw: tekeningNaam blijft leeg voor een soort zonder tekening', () => {
   const S = maakS();
   T.zetVoorraad(S, 'hout', 6);
-  // De verstopplek heeft bewust geen tekening (een tekening zou 'm juist verraden) — precies het
-  // geval waarvoor tekenVoorwerp (js/tekenen.js) terugvalt op gewoon bleker tot hij klaar is.
-  assert.equal(T.GEBOUWEN.verstopplek.tekening, null);
-  const r = T.plaatsGebouw(S, 'verstopplek', 2, 2);
-  assert.equal(r.gelukt, true);
-  assert.equal(r.instantie.voorwerp.tekeningNaam, null);
+  // Een proefsoort zonder tekening: precies het geval waarvoor tekenVoorwerp (js/tekenen.js)
+  // terugvalt op gewoon bleker tot hij klaar is. (Tot 24 sep was de verstopplek dat voorbeeld;
+  // die draagt nu een houtmijt, zie hieronder.)
+  T.GEBOUWEN.zonderTekening = { ...T.GEBOUWEN.verstopplek, naam: 'zonder tekening', tekening: null };
+  try {
+    const r = T.plaatsGebouw(S, 'zonderTekening', 2, 2);
+    assert.equal(r.gelukt, true);
+    assert.equal(r.instantie.voorwerp.tekeningNaam, null);
+  } finally {
+    delete T.GEBOUWEN.zonderTekening;
+  }
+});
+
+test('de verstopplek draagt een houtmijt: jij ziet waar hij is, en rijk oogt hij niet', () => {
+  // Marcel, 24 sep (ontwerp/spel.md): iets gewoons erop. Eerst tekende hij niets en blokkeerde hij
+  // toch zijn voet, dus liep je tegen iets aan wat je niet zag.
+  assert.equal(T.GEBOUWEN.verstopplek.tekening, 'erf/houtstapel');
+  assert.deepEqual(T.GEBOUWEN.verstopplek.voet, { b: 2, h: 2 }, 'even groot als de houtstapel op het erf');
+  assert.equal(T.GEBOUWEN.verstopplek.pronk, 0);
 });
