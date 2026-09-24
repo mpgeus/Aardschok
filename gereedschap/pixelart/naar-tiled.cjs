@@ -75,7 +75,7 @@ const VELCONFIG = {
   grond: { capaciteit: 160, kolommen: 4 }, // nu 58 (3 grondsoorten × 19 + water): vijf soorten erbij kan
   bomen: { capaciteit: 32, kolommen: 8 }, // nu 7: vijfentwintig boomsoorten erbij kan
   begroeiing: { capaciteit: 40, kolommen: 8 }, // nu 10: dertig planten erbij kan
-  gebouwen: { capaciteit: 96, kolommen: 8 }, // nu 28 (het vakwerkhuis uit huis-sdf.cjs erbij), en op 20 sep kwamen er in één keer twaalf: een heel dorp moet erin passen
+  gebouwen: { capaciteit: 96, kolommen: 8 }, // nu 29 (het vakwerkhuis en de hut uit huis-sdf.cjs erbij), en op 20 sep kwamen er in één keer twaalf: een heel dorp moet erin passen
   toren: { capaciteit: 8, kolommen: 4 }, // nu 1 (er is er maar één); een beetje lucht is vrijwel gratis
   erf: { capaciteit: 24, kolommen: 8 }, // nu 7: nog een stuk of zeventien erfstukken erbij kan
   tuin: { capaciteit: 48, kolommen: 8 }, // nu 33 (tuin-sdf.cjs se STUKKEN): ruim voor een derde hek of meer groente
@@ -486,10 +486,11 @@ function gebouwenLijst() {
 // dorp.cjs en tekenen dus niet met zetGebouw: bouwfasen-sdf.cjs rendert ze, als de laatste fase
 // ('af') van hun bouw, in hetzelfde beeld als de fases ervoor. Zo vallen de muren van de tegel en
 // van elke fase op dezelfde pixels, met hetzelfde anker. maakFn geeft { plaat, hoek, beslaat }:
-// hoek is de achterste voethoek op die plaat.
+// hoek is de achterste voethoek op die plaat. Eén per type in bouwfasen-sdf.cjs (TYPES): het
+// vakwerkhuis, de hut, en wat er nog bij komt; een nieuw type komt vanzelf achteraan.
 function sdfGebouwenLijst() {
   const Bf = veilig('bouwfasen-sdf.cjs', () => require('./bouwfasen-sdf.cjs'));
-  return Bf ? [[Bf.TEGEL_NAAM, () => Bf.afgewerkt()]] : [];
+  return Bf ? Bf.TYPES.map((TY) => [TY.tegel, () => Bf.afgewerkt(TY)]) : [];
 }
 
 function bouwGebouwenVel() {

@@ -59,6 +59,22 @@
 //   uit        false (geen), of { kapellen: 2, aanbouw: true, erker: true, balkon: true,
 //              trap: true, gevelschoorsteen: true, luiken: 'den', bakken: 2 }
 //
+// Ronde 4b, de hut (bouwfasen-sdf.cjs, 24 sep 2026): de wand 'lemen', staken en tenen met leem
+// erop, zonder vakwerk en zonder stenen voet (een hut staat op de grond), met ronde hoekpalen. En
+// een paar opgaven die het zaad niet kiest; zonder opgave is het huis precies als voorheen:
+//
+//   plaatH     de hoogte van de muur (px, waar de bovenregel ligt): laag voor een hut
+//   helling    de dakhelling in graden (het zaad doet er nog een paar graden bij of af)
+//   schoorsteen false: geen schoorsteen
+//   rookgat    { a, b, l }: een rookgat in het riet van het voorste schild, vlak onder de nok. a is
+//              waar langs de nok (-1 links, 1 rechts), b hoe breed en l hoe lang (eenheden)
+//   deur       { zijde, f, b, h, arm }: de deur op de muur aan die zijde ('q' of 'a'), op f van zijn
+//              lengte, zo breed en hoog (px); arm: planken met klampen en een schoor, zonder ijzer,
+//              en een houten drempel
+//   ramen      [{ zijde, f, h0, b, h, gat }]: precies deze ramen en geen andere; gat: een gat met
+//              een latei en twee staken ervoor, zonder kozijn en zonder glas
+//   knop       false: geen knop in de top van de windveren
+//
 // De losse tuinstukken staan in tuin-sdf.cjs, en delen het hout met dit bestand.
 //
 // Assen als in kern.cjs: +x rechtsonder in beeld, +y linksonder, z omhoog, in eenheden (een tegel
@@ -106,9 +122,10 @@ const DUN = {
   pannen: { rij: 12.5, pan: 15.5, stoot: 1.6, golf: 0.7, helling: 46, ramp: 'dak', nokR: 6.8, nokL: 23 },
 };
 // het materiaal van de muur tussen het hout, per wand
-const WANDMAT = { vakwerk: 'pleister', vlecht: 'leem', planken: 'plank', blokhut: 'blok', veldsteen: 'steen' };
-// hoe hoog de stenen plint is, als deel van de gewone (H.hS): stammen en planken staan lager
-const PLINT = { vakwerk: 1, vlecht: 1, planken: 0.72, blokhut: 0.42, veldsteen: 1 };
+const WANDMAT = { vakwerk: 'pleister', vlecht: 'leem', planken: 'plank', blokhut: 'blok', veldsteen: 'steen', lemen: 'lemen' };
+// hoe hoog de stenen plint is, als deel van de gewone (H.hS): stammen en planken staan lager, en
+// een lemen wand staat zonder voet op de grond (onder nul, ook waar de steenlijn schuin loopt)
+const PLINT = { vakwerk: 1, vlecht: 1, planken: 0.72, blokhut: 0.42, veldsteen: 1, lemen: -0.5 };
 const HOUTWAND = (w) => w === 'vakwerk' || w === 'vlecht';
 
 // kies uit een lijst [naam, kans] met een getal van 0 tot 1
@@ -134,6 +151,29 @@ function rechthoek(a, v, hx, hy) {
 function laag(d, n, n0, n1) {
   const dn = Math.max(n0 - n, n - n1);
   return d > 0 || dn > 0 ? Math.hypot(Math.max(d, 0), Math.max(dn, 0)) : Math.max(d, dn);
+}
+// Een ronde paal of stok van a naar b, met een lok voor balkPatroon: langs de paal, en rond de paal
+// (de boog), zodat de nerf in de lengte loopt. Het ijzer van balkPatroon valt er net buiten.
+function rondePaal(a, b, r) {
+  const p = T.hulp.stok(a, b, r);
+  const L = Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]);
+  const u = [(b[0] - a[0]) / L, (b[1] - a[1]) / L, (b[2] - a[2]) / L];
+  let w = Math.abs(u[2]) > 0.9 ? [1, 0, 0] : [-u[1], u[0], 0];
+  const wd = w[0] * u[0] + w[1] * u[1] + w[2] * u[2];
+  w = [w[0] - u[0] * wd, w[1] - u[1] * wd, w[2] - u[2] * wd];
+  const wl = Math.hypot(...w);
+  w = w.map((c) => c / wl);
+  const v = [u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]];
+  const m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2];
+  p.lok = (x, y, z) => {
+    const px = x - m[0];
+    const py = y - m[1];
+    const pz = z - m[2];
+    const l = px * u[0] + py * u[1] + pz * u[2];
+    return [l, Math.atan2(px * v[0] + py * v[1] + pz * v[2], px * w[0] + py * w[1] + pz * w[2]) * r, 0];
+  };
+  p.L = L + 14;
+  return p;
 }
 
 // Gekopieerd uit toren.cjs (steenKleur wordt daar niet geëxporteerd): één steen op de zeven
@@ -339,7 +379,7 @@ function maten(zaad = 1, o = {}) {
   // --- de hoogtes, in px. plaatH is de bovenregel van een lange muur. voetPx is de voet van het
   // dak (de middellijn van het pak): het riet hangt vóór de muur tot zo'n 36 px lager, en een dun
   // dak ligt hoger, zodat zijn rand in beeld op dezelfde lijn valt als die van het riet.
-  const plaatH = (H.lagen === 2 ? 306 : H.lagen === 1.5 ? 222 : 166) - 36;
+  const plaatH = o.plaatH ?? (H.lagen === 2 ? 306 : H.lagen === 1.5 ? 222 : 166) - 36;
   const voetPx = plaatH + (H.dun ? 16 : 36);
   H.voetPx = voetPx;
   H.voetZ = E(voetPx);
@@ -392,7 +432,7 @@ function maten(zaad = 1, o = {}) {
     H.ov = 22; // overstek aan de goot
     H.ovg = pak ? 20 : 12; // overstek aan de gevel
     H.kopR = pak ? 8 : 1;
-    H.helling = (HELLING + sch * rs(34) * 3) * GRAAD;
+    H.helling = ((o.helling ?? HELLING) + sch * rs(34) * 3) * GRAAD;
     H.laagL = sp ? 30 : 20;
     H.laagH = pak ? 1.6 : 0;
     H.worstR = pak ? 18 : 0;
@@ -489,6 +529,18 @@ function maten(zaad = 1, o = {}) {
       hoog: E(36 + 14 * r(33)),
     };
   }
+  // Een hut heeft geen schoorsteen: de haard ligt midden op de vloer, en de rook trekt door een gat
+  // in het riet vlak onder de nok (op het voorste schild, zodat je het ziet).
+  if (o.schoorsteen === false) H.schoorsteen = null;
+  if (o.rookgat) {
+    const g = o.rookgat;
+    H.rookgat = { V: VA, a: (g.a ?? 0) * (VA.ha - (g.b ?? 30)), hb: (g.b ?? 30) / 2, l0: H.worstR * 0.75, l1: H.worstR * 0.75 + (g.l ?? 26) };
+  } else H.rookgat = null;
+  // de knop in de top van de windveren (o.knop false: geen)
+  H.knop = o.knop;
+  // de deur en de ramen, als ze zijn opgegeven (verdeel)
+  H.deurOpgave = o.deur || null;
+  H.ramenOpgave = o.ramen || null;
 
   // --- de uitbouwen (ronde 3): wat het zaad kiest, of wat o.uit vraagt. Wat op het dak zit en de
   // aanbouw eerst, want die veranderen het dak en welke muren je ziet.
@@ -1054,8 +1106,10 @@ function verdeel(H) {
   const R = () => r(k++);
   const raamB = sp ? 36 : 24;
   const raamH = sp ? 42 : 30;
-  const deurB = sp ? 50 : 42;
-  const deurH = sp ? 102 : 94;
+  // een opgegeven deur (o.deur) staat waar hij gevraagd is, zo groot als gevraagd
+  const DO = H.deurOpgave;
+  const deurB = DO?.b ?? (sp ? 50 : 42);
+  const deurH = DO?.h ?? (sp ? 102 : 94);
   const jamb = sp ? 12 : 7;
 
   // Wat een uitbouw al van een muur inneemt (een buitentrap, een erker, een gevelschoorsteen, of
@@ -1071,11 +1125,11 @@ function verdeel(H) {
     return zones.filter(([a, b]) => b >= a);
   };
 
-  let deurStuk = null;
+  let deurStuk = DO ? H.stukken.find((P) => !P.U && P.s === 0 && P.zijde === (DO.zijde || 'q')) || null : null;
   let beste = -1;
   // een huis heeft altijd een voordeur: past hij nergens naast wat er al staat, dan toch op de
   // beste muur
-  for (const streng of [true, false]) {
+  for (const streng of DO ? [] : [true, false]) {
     for (const P of H.stukken) {
       if (P.U || P.s !== 0 || P.Lu < 120 || P.zicht < 0.6) continue;
       if (streng && (P.bezet.length || P.openingen.length) && !deurZones(P).length) continue;
@@ -1093,7 +1147,7 @@ function verdeel(H) {
   const diepte = (P, basis) => (P.wand === 'veldsteen' ? basis + (sp ? 6 : 4) : basis + P.voor);
   const raam = (P, reg, u, h0, b, h, warm, extra = {}) => {
     const w = { P, reg, u, h0, b: b - kleiner(P) + (sch ? Math.round(RS() * 2) : 0), h: h - kleiner(P) + (sch ? Math.round(RS() * 3) : 0), hoek: sch * RS() * 2 * GRAAD, warm, ...extra };
-    w.op = opening(P, w.u, w.h0, w.b, w.h, w.hoek, diepte(P, sp ? 7 : 5), warm ? 'glasWarm' : 'glas');
+    w.op = opening(P, w.u, w.h0, w.b, w.h, w.hoek, diepte(P, sp ? 7 : 5), w.gat ? 'donker' : warm ? 'glasWarm' : 'glas');
     Object.assign(w.op, { reg, raam: w });
     P.openingen.push(w.op);
     H.openingen.push(w.op);
@@ -1134,7 +1188,7 @@ function verdeel(H) {
           const lo = 30 + deurB / 2 + jamb;
           const hi = P.Lu - 30 - deurB / 2 - jamb;
           // op een korte muur staat de deur naar één kant, zodat er aan de andere kant een raam past
-          const f = P.Lu < 240 ? (R() < 0.5 ? 0.27 : 0.73) + RS() * 0.03 : 0.4 + 0.2 * R();
+          const f = DO?.f !== undefined ? DO.f : P.Lu < 240 ? (R() < 0.5 ? 0.27 : 0.73) + RS() * 0.03 : 0.4 + 0.2 * R();
           let u = Math.round(klem(P.Lu * f, lo, Math.max(lo, hi)));
           // staat er al iets (een buitentrap, een erker): de deur schuift naar de dichtstbijzijnde
           // plek waar hij wel past
@@ -1150,6 +1204,7 @@ function verdeel(H) {
             }
           }
           const d = { P, u, b: deurB, h: deurH, h0: 0, hoek: sch * RS() * 1.1 * GRAAD, blad: sch * RS() * 2.4 * GRAAD };
+          if (DO?.arm) d.arm = true;
           d.op = opening(P, u, 0, d.b, d.h, d.hoek, diepte(P, 7), 'donker');
           Object.assign(d.op, { reg: reg.i, deur: d });
           P.openingen.push(d.op);
@@ -1160,7 +1215,8 @@ function verdeel(H) {
         }
         const warm = P.gevel ? 0.5 : 0.25;
         bezet.push(...voorbezet(P, 50, 50 + raamH + 20));
-        vul(P, reg.i, vrij(P, bezet, 16, 18), raamB, (u) => raam(P, reg.i, u, steenLijnStuk(H, P, u) + (sp ? 14 : 10) + sch * RS() * 3.5, raamB - (P.gevel ? 2 : 0), raamH - (P.gevel ? 2 : 0), R() < warm));
+        // opgegeven ramen (o.ramen) komen hieronder, en dan geen andere
+        if (!H.ramenOpgave) vul(P, reg.i, vrij(P, bezet, 16, 18), raamB, (u) => raam(P, reg.i, u, steenLijnStuk(H, P, u) + (sp ? 14 : 10) + sch * RS() * 3.5, raamB - (P.gevel ? 2 : 0), raamH - (P.gevel ? 2 : 0), R() < warm));
       } else if (H.lagen === 1.5) {
         const bulten = P.gevel || P.zijde !== 'q' ? [] : bultenOp(P);
         if (P.gevel) {
@@ -1201,7 +1257,7 @@ function verdeel(H) {
         } else vul(P, reg.i, vrij(P, bz, 22, 22), raamB, (u) => raam(P, reg.i, u, h0 + sch * RS() * 3, raamB, raamH, R() < 0.35));
       }
       // de top van een gevel: een raam onder de nok, als het past
-      if (P.gevel && reg.boven === 'trek') {
+      if (P.gevel && reg.boven === 'trek' && !H.ramenOpgave) {
         const b = raamB - 6;
         const h = raamH - 4;
         const u = -P.l0 * P.dirU * SQ + sch * RS() * 8; // onder de nok
@@ -1210,6 +1266,11 @@ function verdeel(H) {
         if (past) raam(P, reg.i, u, h0, b, h, R() < 0.4, { top: true });
       }
     }
+  }
+  // de opgegeven ramen (o.ramen): precies deze, op de muur aan hun zijde, op f van zijn lengte
+  for (const w of H.ramenOpgave || []) {
+    const P = H.stukken.find((Q) => !Q.U && Q.s === 0 && Q.zijde === (w.zijde || 'q'));
+    if (P) raam(P, 0, P.Lu * w.f, w.h0, w.b, w.h, false, { gat: !!w.gat });
   }
 }
 
@@ -1433,6 +1494,55 @@ function pakAfstand(H, P) {
   if (P.langs < 0) return Math.hypot(P.langs, P.dm) - rT;
   if (P.e > 0) return Math.hypot(P.e, P.dm) - rT;
   return Math.abs(P.dm) - rT;
+}
+
+// Het rookgat van een hut (o.rookgat): hoe ver een punt buiten het gat ligt, in eenheden langs het
+// voorste schild (negatief is erin). Een afgeronde rechthoek in (a langs de nok, langs de helling
+// vanaf de nok), recht door het pak.
+function rookgatAfstand(H, x, y, z) {
+  const G = H.rookgat;
+  const V = G.V;
+  if ((x - V.cx) * V.Qx + (y - V.cy) * V.Qy < 0) return 99;
+  const P = plekV(H, V, x, y, z);
+  const r = 7;
+  // de rand is het riet zelf: bundels die elk ergens anders ophouden
+  const rafel = (hash(Math.floor(P.a / 4), Math.floor(P.langs / 6), H.zaad + 953) % 5) * 0.7;
+  return rechthoek(P.a - G.a, P.langs - (G.l0 + G.l1) / 2, G.hb - r, (G.l1 - G.l0) / 2 - r) - r + rafel;
+}
+// Roet rond het rookgat: hoeveel stappen het riet en de nok daar donkerder zijn. Het meest aan de
+// bovenrand en op de nok erboven, waar de rook langs strijkt; opzij en eronder een smalle rand.
+function roet(H, x, y, z) {
+  const G = H.rookgat;
+  if (!G) return 0;
+  const V = G.V;
+  const [a, q] = V.lok(x, y);
+  if (q < -6 || Math.abs(a - G.a) > G.hb + 26) return 0;
+  const g = rookgatAfstand(H, x, y, z);
+  const P = plekV(H, V, x, y, z);
+  const vlek = ruis2(a * 0.12, P.langs * 0.12, H.zaad + 951) * 0.9;
+  // de nok boven het gat: daar strijkt de rook overheen
+  if (P.langs < G.l0) {
+    const da = Math.abs(a - G.a) - G.hb * 0.8;
+    return klem(1 - da / 16, 0, 1) * klem(1 - (G.l0 - P.langs) / 34, 0, 1) * (1.5 + vlek);
+  }
+  // boven: 1 boven het gat (tot de nok), naar 0 eronder
+  const boven = klem(((G.l0 + G.l1) / 2 - P.langs) / 10 + 0.5, 0, 1);
+  // in de lengte van de halmen trekt het roet verder omhoog, in strepen
+  const streep = (hash(Math.floor(a / 1.414), 3, H.zaad + 955) % 5) * 1.6;
+  const k = klem(1 - g / (5 + (19 + streep) * boven), 0, 1);
+  return Math.pow(k, 1.3) * (1.5 + vlek) * (0.45 + 0.55 * boven);
+}
+// Een patroon met roet erop (voor het riet en de nok): een beetje roet maakt het stro donkerder,
+// veel roet maakt het grauw (de ramp van schors), zoals riet dat jaren in de rook heeft gehangen.
+function metRoet(H, C, r) {
+  const k = roet(H, C.x, C.y, C.z);
+  if (!k) return r;
+  const plus = typeof r === 'number' ? r : r && r.plus !== undefined ? r.plus : 0;
+  if (k > 0.55) return { ramp: 'schors', plus: plus * 0.6 - (k - 0.55) * 0.9 + 0.3 };
+  if (typeof r === 'number') return r - k;
+  if (!r) return -k;
+  if (r.stap !== undefined) return { ...r, stap: r.stap - k };
+  return { ...r, plus: (r.plus || 0) - k };
 }
 
 function dakVeld(H) {
@@ -1754,6 +1864,7 @@ function deurPatroon(H, C) {
   const p = C.deel;
   const [a, v, n] = p.lok(C.x, C.y, C.z);
   if (n < -1) return 0;
+  if (p.arm) return armeDeur(H, C, p, a, v);
   const hb = p.hb;
   const hh = p.hh;
   const plankB = (H.sp ? 9 : 7) / SQ;
@@ -1773,6 +1884,43 @@ function deurPatroon(H, C) {
   if (Math.abs(dr - 3.2) < 0.9) return { ramp: 'ijzer', stap: 3 };
   const nerf = Math.sin(a * 1.9 + Math.sin(v * 0.1 + i) * 2.2 + i * 1.7);
   if (nerf > 0.85) s -= 0.7;
+  return s;
+}
+
+// Een arme deur (o.deur.arm): brede, ruwe planken met twee klampen en een schoor ertussen, van de
+// scharnierkant (links) onder naar de klinkkant boven, en geen ijzer: hij hangt aan leren lussen, en
+// je trekt hem dicht aan een touw door een gat.
+function armeDeur(H, C, p, a, v) {
+  const hb = p.hb;
+  const hh = p.hh;
+  const plankB = (H.sp ? 11 : 9) / SQ;
+  const pa = (a + hb) / plankB;
+  const i = Math.floor(pa);
+  const fr = (pa - i) * plankB;
+  if (fr < 1.414 && i > 0) return -2.3;
+  let s = ((hash(i, 3, H.zaad) % 3) - 1) * 0.55 - 0.2;
+  // de lussen aan de scharnierkant, over de klampen
+  const lus = (vk) => Math.abs(v - vk * hh) < E(3) && a < -hb + 5;
+  if (lus(0.55) || lus(-0.6)) return { ramp: 'leer', stap: 2.2 + (hash(Math.floor(C.px), Math.floor(C.py), 5) % 2) * 0.8 };
+  // de klampen: een lichte bovenkant, een donkere onderkant
+  for (const vk of [0.55, -0.6]) {
+    const dv = v - vk * hh;
+    if (Math.abs(dv) < E(5)) return s + (dv > E(3.5) ? 0.8 : dv < -E(3.5) ? -1.4 : 0.4);
+  }
+  // de schoor van links onder naar rechts boven, tussen de klampen
+  const [a0, v0, a1, v1] = [-hb + 2, -0.6 * hh + E(5), hb - 2, 0.55 * hh - E(5)];
+  const L = Math.hypot(a1 - a0, v1 - v0);
+  const t = ((a - a0) * (a1 - a0) + (v - v0) * (v1 - v0)) / (L * L);
+  const dl = ((a - a0) * (v1 - v0) - (v - v0) * (a1 - a0)) / L;
+  if (t > 0 && t < 1 && Math.abs(dl) < E(4.2)) return s + (dl > E(3) ? -1.3 : dl < -E(3) ? 0.7 : 0.35);
+  // het gat met het touw, aan de klinkkant
+  const dg = Math.hypot(a - hb * 0.6, v - hh * 0.04);
+  if (dg < E(1.6)) return -2.6;
+  const dr = Math.hypot(a - hb * 0.6, v - hh * 0.04 + E(4.5));
+  if (Math.abs(dr - E(4)) < E(1) && v < hh * 0.04 - E(2)) return { ramp: 'bot', stap: 2.6 };
+  const nerf = Math.sin(a * 1.7 + Math.sin(v * 0.09 + i) * 2.6 + i * 1.3);
+  if (nerf > 0.8) s -= 0.75;
+  if (hash(i, Math.floor(v / 9), H.zaad + 3) % 13 === 0) s -= 0.6; // een kwast
   return s;
 }
 
@@ -1960,6 +2108,50 @@ function vlechtwerk(H, u, h, zk) {
   if (hash(kol, rij, zk + 76) % 7 === 0) s -= 0.5;
   // de twijgen in het andere hout dan de balken, anders lezen ze als een balk
   return { ramp: H.hout === 'schors' ? 'hout' : 'schors', plus: s };
+}
+
+// De lemen wand van een hut (ronde 4b): leem met stro, met de hand op het vlechtwerk gesmeerd tot
+// het dicht is. Waar het leem dun ligt (onderaan, waar de regen opspat, en op de bulten van de tenen)
+// schijnt het vlechtwerk erdoor. Droog is het vaal en licht, met krimpscheuren, strootjes en de
+// vegen van de hand; nat (bouwfasen-sdf.cjs, fase leem) is het dezelfde wand, met dezelfde vegen en
+// dezelfde dunne plekken, maar donker en zonder scheuren.
+function lemenPatroon(H, C, nat = false) {
+  const m = opMuur(H, C.x, C.y, C.z);
+  const u = m ? m.u : (C.x - C.y) * SQ;
+  const h = m ? m.h : C.z * PXH;
+  const zk = H.zaad * 5 + (m ? m.P.idx * 17 : 0);
+  // waar het leem dun ligt
+  const dun = ruis2(u * 0.045, h * 0.06, zk + 81) * 0.72 + ruis2(u * 0.12, h * 0.15, zk + 82) * 0.28 + 0.2 * klem((34 - h) / 30, 0, 1);
+  if (dun > 0.77) {
+    const v = vlechtwerk(H, u, h, zk);
+    return nat ? { ...v, plus: v.plus - 0.5 } : v;
+  }
+  // de rand van het leem: dik aangesmeerd, met een schaduwlijn eronder en een lichte rand erboven
+  if (dun > 0.745) return hash(Math.floor(u), Math.floor(h), zk) % 3 ? -1.2 : 0.7;
+  let s = 0;
+  const n = ruis2(u * 0.05, h * 0.05, zk + 83);
+  if (n > 0.7) s -= 0.65;
+  else if (n < 0.26) s += 0.55;
+  // de vegen van de hand: liggende bogen, uitgerekte vlekken die een beetje golven
+  const veeg = ruis2(u * 0.07 + Math.sin(h * 0.21 + u * 0.05) * 0.35, h * 0.24, zk + 84);
+  if (veeg > 0.72) s -= 0.6;
+  else if (veeg < 0.22) s += 0.5;
+  // korrels zand en klei
+  if (hash(Math.floor(C.px), Math.floor(C.py), zk + 90) % 11 === 0) s -= 0.35;
+  // stro in het leem: korte lichte streepjes
+  if (hash(Math.floor(C.px / 2), Math.floor(C.py), zk + 86) % 67 === 0) return { ramp: 'stro', stap: nat ? 2.2 : C.stap - 0.3 };
+  if (nat) {
+    // net aangesmeerd: vlekken waar het natter is, en het natst onderaan
+    if (ruis2(u * 0.09, h * 0.09, zk + 88) > 0.62) s -= 0.55;
+    if (h < 40) s -= 0.5 * klem((40 - h) / 30, 0, 1);
+    return s;
+  }
+  // krimpscheuren: haarlijnen, meest van boven naar onder, in een paar stukken van de muur
+  const sc = ruis2(u * 0.055, h * 0.016, zk + 87);
+  if (Math.abs(sc - 0.5) < 0.012 && ruis2(u * 0.02, h * 0.02, zk + 89) > 0.6) return s - 1.6;
+  // onderaan spat de regen de grond tegen de muur
+  if (h < 18) s -= 0.8 * klem((18 - h) / 14, 0, 1);
+  return s;
 }
 
 // Stammen op de muur: nerf in de lengte, scheuren, een kwast, en in de naden leem of mos.
@@ -3658,8 +3850,8 @@ function huis(zaad = 1, o = {}) {
   const houtHi = (sp ? 6.6 : 5.8) - (H.hout === 'schors' ? 0.8 : 0); // schors heeft een tint minder
   W.mat = {
     // het riet in de zon komt op stap 4 à 5 uit, zodat er boven nog licht en onder nog schaduw past
-    riet: { ramp: 'stro', lo: sp ? 0.2 : 1.2, hi: sp ? 4.9 : 5.3, schaduwKracht: sp ? 0.18 : 0.35, patroon: (C) => rietPatroon(H, C) },
-    nok: { ramp: 'stro', lo: 0.2, hi: sp ? 4.3 : 4.8, schaduwKracht: diepe, patroon: (C) => nokPatroon(H, C) },
+    riet: { ramp: 'stro', lo: sp ? 0.2 : 1.2, hi: sp ? 4.9 : 5.3, schaduwKracht: sp ? 0.18 : 0.35, patroon: H.rookgat ? (C) => metRoet(H, C, rietPatroon(H, C)) : (C) => rietPatroon(H, C) },
+    nok: { ramp: 'stro', lo: 0.2, hi: sp ? 4.3 : 4.8, schaduwKracht: diepe, patroon: H.rookgat ? (C) => metRoet(H, C, nokPatroon(H, C)) : (C) => nokPatroon(H, C) },
     steen: { ramp: 'veldsteen', lo: sp ? 0.8 : 1.6, hi: sp ? 7.8 : 7, schaduwKracht: diepe, patroon: metRand(H, (C) => steenPatroon(H, C, sp ? [13, 22, 16] : [9, 13, 9])) },
     schoorsteen: { ramp: 'veldsteen', lo: 1, hi: sp ? 7.6 : 7, schaduwKracht: diepe, patroon: (C) => steenPatroon(H, C, sp ? [9, 14, 8] : [7, 10, 6]) },
     drempel: { ramp: 'veldsteen', lo: 1.4, hi: 7, schaduwKracht: diepe },
@@ -3678,6 +3870,8 @@ function huis(zaad = 1, o = {}) {
     blok: { ramp: H.hout, lo: 0.4, hi: houtHi + 0.3, schaduwKracht: diepe, patroon: metRand(H, (C) => blokPatroon(H, C)) },
     gehakt: { ramp: 'veldsteen', lo: 1.6, hi: 7.4, schaduwKracht: diepe, patroon: metRand(H, (C) => gehaktPatroon(H, C)) },
     luik: { ramp: H.hout, lo: 0.5, hi: houtHi - 0.4, schaduwKracht: diepe, patroon: (C) => balkPatroon(C, true) },
+    // de lemen wand van een hut: droog leem, vaal en licht
+    lemen: { ramp: 'zand', lo: sp ? 1.9 : 2.1, hi: sp ? 5.7 : 5.3, schaduwKracht: diepe, patroon: metRand(H, (C) => lemenPatroon(H, C)) },
   };
   if (H.dun) {
     // het dak: pannen rood, leien grijs (niet blauw: zie de veldsteen in beeld.md), spanen hout
@@ -3700,9 +3894,23 @@ function huis(zaad = 1, o = {}) {
 
   // --- het lichaam: muren en gevels, hellend, uitpuilend, met de openingen eruit
   const romp = W.groep('romp');
-  voeg(romp, { f: rompVeld(H), grens: [0, 0, straal + helling + 14, -3, H.zTop + 5], m: rompMat(H), deel: 1 });
-  // de drempel: een platte steen voor de deur, niet recht gelegd
-  if (H.deur) {
+  // door een rookgat kijk je de hut in: daar is het donker
+  const rm = rompMat(H);
+  const rompM = H.rookgat ? (x, y, z) => (z > H.voetZ && rookgatAfstand(H, x, y, z) < 6 ? 'donker' : rm(x, y, z)) : rm;
+  voeg(romp, { f: rompVeld(H), grens: [0, 0, straal + helling + 14, -3, H.zTop + 5], m: rompM, deel: 1 });
+  // de drempel van een arme deur: een balk in de muur, tussen de stijlen
+  if (H.deur && H.deur.arm) {
+    const P = H.deur.P;
+    const d = H.deur;
+    const breed = d.b / 2 + (sp ? 12 : 7) + 3;
+    const p = balk(P.pos(d.u - breed, 2.6, -3), P.pos(d.u + breed, 2.6 + sch * rs(80) * 1.2, -3), 6.5, 3.2, [0, 0, 1], 1.2);
+    p.m = 'hout';
+    p.deel = 9;
+    p.zaad = 9.3;
+    p.toon = -0.2;
+    voeg(romp, p);
+  } else if (H.deur) {
+    // de drempel: een platte steen voor de deur, niet recht gelegd
     const P = H.deur.P;
     const [dx, dy] = P.pos(H.deur.u, 0, 7);
     const hoek = sch * rs(80) * 5 * GRAAD;
@@ -3727,8 +3935,10 @@ function huis(zaad = 1, o = {}) {
 
   // --- het dak: riet, of een dunne plaat spanen, leien of pannen
   if (!H.plat) {
+    const dv = dakVeld(H);
     voeg(W.groep(H.dun ? 'dak' : 'riet'), {
-      f: dakVeld(H),
+      // een rookgat gaat recht door het pak, haaks op het dak
+      f: H.rookgat ? (x, y, z) => Math.max(dv(x, y, z), -rookgatAfstand(H, x, y, z)) : dv,
       grens: [0, 0, dakStraal, H.voetZ - H.dik * 2 - 24, H.zNmax + H.dik + 14],
       m: H.dun ? 'dak' : 'riet',
       deel: 2,
@@ -4392,6 +4602,8 @@ function huis(zaad = 1, o = {}) {
         voeg(wv, p);
       }
     }
+    // de knop in de top (een hut heeft er geen: o.knop false)
+    if (H.knop === false) continue;
     const zk = V.nokZ(x) + H.dik + (H.worstR ? H.worstR * 0.9 : 3);
     const [kx, ky] = V.wereld(x, 0);
     voeg(wv, { f: (px, py, pz) => sdf.bol(px - kx, py - ky, pz - zk, sp ? 7 : 4.5), g: [kx, ky, zk, (sp ? 7 : 4.5) + 1], m: 'windveer', deel: 62 + V.i * 100 });
@@ -4399,7 +4611,7 @@ function huis(zaad = 1, o = {}) {
 
   // --- ramen: kozijn met een kruis en een vensterbank, en het glas achterin het gat
   // (een spleet in een torenmuur heeft geen kozijn en geen glas)
-  const ramen = H.openingen.filter((op) => op.raam && !op.raam.spleet).map((op) => op.raam);
+  const ramen = H.openingen.filter((op) => op.raam && !op.raam.spleet && !op.raam.gat).map((op) => op.raam);
   const ramenG = W.groep('ramen');
   ramen.forEach((w, i) => {
     const op = w.op;
@@ -4451,6 +4663,42 @@ function huis(zaad = 1, o = {}) {
     }
   });
 
+  // --- een gat als raam (o.ramen met gat, een hut): binnen is het donker (raam() gaf het gat een
+  // donkere binnenkant), met een latei van een ronde stok erboven en twee staken erin
+  H.openingen.filter((op) => op.raam && op.raam.gat).forEach((op, i) => {
+    const w = op.raam;
+    const P = w.P;
+    const g = W.groep('ramen');
+    const hL = w.h0 + w.h + (sp ? 4 : 3);
+    const latei = rondePaal(P.pos(w.u - w.b / 2 - (sp ? 8 : 5), hL + wiebel(1.5), 1.2), P.pos(w.u + w.b / 2 + (sp ? 8 : 5), hL + wiebel(1.5), 1.2), sp ? 2.4 : 1.8);
+    for (const [k, q] of [[-1, 1], [1, 2]]) {
+      const u = w.u + (k * w.b) / 5 + wiebel(1);
+      voeg(g, Object.assign(rondePaal(P.pos(u, w.h0 - 4, -3.6), P.pos(u + wiebel(1.2), w.h0 + w.h + 4, -3.6), sp ? 1.45 : 1.1), { m: 'hout', deel: 480 + i * 4 + q, zaad: 3.3 * q + i, toon: -0.3 }));
+    }
+    voeg(g, Object.assign(latei, { m: 'hout', deel: 480 + i * 4, zaad: 7.1 + i, toon: 0.1 }));
+  });
+
+  // --- de hoekpalen van een lemen wand: ronde palen in de grond, half in het leem, tot onder het
+  // riet. De achterste staat er ook, al zie je hem niet (bouwfasen-sdf.cjs zet ze in de grond).
+  H.vleugels.forEach((V) => {
+    if (V.wanden[0] !== 'lemen') return;
+    const g = W.groep('hoekpalen');
+    H.hoekpalen = [];
+    for (const [sa, sq, i] of [[-1, -1, 0], [1, -1, 1], [-1, 1, 2], [1, 1, 3]]) {
+      const R = (k) => r(990 + i * 7 + k);
+      const rp = (sp ? 6.2 : 4.6) * (0.92 + 0.16 * R(1));
+      const uit = 2.4; // zoveel steekt hij uit elke muur
+      const top = H.plaatH + 8 + sch * rs(991 + i * 7) * 5;
+      const c = (h) => {
+        const z = h / PXH;
+        return [...V.wereld(sa * (V.ha - rp + uit) + V.hellA * z, sq * (V.hq - rp + uit) + V.hellQ * z), z];
+      };
+      const p = rondePaal(c(-6), c(top), rp);
+      voeg(g, Object.assign(p, { m: 'hout', deel: 470 + i, zaad: 5.3 * i + 1, toon: sch ? rs(995 + i * 7) * 0.5 : 0 }));
+      H.hoekpalen.push({ sa, sq, r: rp, top, voet: c(-6), kop: c(top) });
+    }
+  });
+
   // --- de uitbouwen (ronde 3)
   bouwUitbouwen(W, H, { wandBalk, hoekStijl, omlijsting, dik, wiebel, balkH, stijlB });
 
@@ -4481,6 +4729,7 @@ function huis(zaad = 1, o = {}) {
       lok,
       hb,
       hh,
+      arm: !!D.arm,
     });
   });
   return W;
@@ -4519,5 +4768,7 @@ function voorDeDeur(H, afstand = 1.3) {
 // Wat de losse tuinstukken (tuin-sdf.cjs) met de huizen delen: het hout (balkPatroon voor balken
 // en planken, stamHuid voor stammen, vlechtwerk voor twijgen), de knoppen en het zaad. En wat
 // bouwfasen-sdf.cjs nodig heeft om hetzelfde huis in aanbouw te tekenen: het uitpuilen van de
-// muren (bolQ, bolA), de bovenkant van de steen (steenLijn) en de vormen van een opening.
-module.exports = { huis, proefhuis, maten, dakPlek, voorDeDeur, kiesHuis, DAKEN, WANDEN, balkPatroon, stamHuid, vlechtwerk, knoppenVan, meng, kiesUit, bolQ, bolA, steenLijn, laag, rechthoek };
+// muren (bolQ, bolA), de bovenkant van de steen (steenLijn), de vormen van een opening, en voor de
+// hut het leem (lemenPatroon, met de schaduw onder de dakrand: metRand), het rookgat en zijn roet,
+// de plek op het dak (plekV) en een ronde paal.
+module.exports = { huis, proefhuis, maten, dakPlek, plekV, voorDeDeur, kiesHuis, DAKEN, WANDEN, balkPatroon, stamHuid, vlechtwerk, lemenPatroon, metRand, rookgatAfstand, roet, rondePaal, knoppenVan, meng, kiesUit, bolQ, bolA, steenLijn, laag, rechthoek };

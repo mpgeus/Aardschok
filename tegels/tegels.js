@@ -2563,12 +2563,20 @@
       "doos": null
      },
      {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
+      "naam": "hutVlechtRiet",
+      "vast": true,
+      "beslaat": [
+       5,
+       4
+      ],
       "groep": null,
       "staat": null,
-      "doos": null
+      "doos": [
+       168,
+       291,
+       210,
+       138
+      ]
      },
      {
       "naam": null,

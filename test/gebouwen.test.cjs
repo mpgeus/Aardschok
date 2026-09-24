@@ -271,9 +271,9 @@ test('T.plaatsGebouw: zet tekeningNaam en voortgang op het voorwerp, voor de bou
   const r = T.plaatsGebouw(S, 'hut', 2, 2);
   assert.equal(r.gelukt, true);
   const v = r.instantie.voorwerp;
-  // T.GEBOUWEN.hut.tekening is 'gebouwen/dorpKlein2' — hier hoort alleen het laatste deel te
-  // staan, dezelfde sleutel als tegels/bouwfasen.json.
-  assert.equal(v.tekeningNaam, 'dorpKlein2');
+  // T.GEBOUWEN.hut.tekening is 'gebouwen/hutVlechtRiet' — hier hoort alleen het laatste deel te
+  // staan, dezelfde sleutel als in tegels/bouwfasen-sdf.json.
+  assert.equal(v.tekeningNaam, 'hutVlechtRiet');
   assert.equal(v.voortgang, 0);
 });
 

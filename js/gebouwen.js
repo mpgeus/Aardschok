@@ -63,10 +63,13 @@
   T.GEBOUWEN = {
     // ── Gehucht ──
     hut: {
-      naam: 'hut', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, bouwtijd: 6,
+      naam: 'hut', trede: 'gehucht', voet: { b: 5, h: 4 }, kosten: { hout: 8 }, bouwtijd: 6,
+      bouwers: 2, // een hut zet je met z'n tweeën op, al is zijn voet 5×4
       handen: 0, woonruimte: 3, wordt: 'huis', maakt: null, verdacht: false, menu: true,
-      tekening: 'gebouwen/dorpKlein2', beschrijving: 'ruimte voor een gezin; goedkoop, en arm om te zien',
-      opmerking: 'nieuw (plaggenhut): nog niet getekend, leent voorlopig het kleinste bestaande huis.',
+      tekening: 'gebouwen/hutVlechtRiet', beschrijving: 'ruimte voor een gezin; goedkoop, en arm om te zien',
+      opmerking: 'Vlechtwerk met leem onder riet, op de grond en zonder schoorsteen: een rookgat in het '
+        + 'riet (Marcel, 24 sep; ontwerp/beeld.md). Uit de huizenbouwer die niet waterpas is, met zes '
+        + 'bouwfases en een bouwplaats in een ring, net als het huis (tegels/bouwfasen-sdf.*).',
     },
     huis: {
       naam: 'huis', trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 4 }, bouwtijd: 12,
