@@ -52,6 +52,9 @@
     // De zak zaaigoed die de meester wil hebben; je raapt hem op door erop te stappen, net als de
     // sleutel (js/verkennen.js).
     zak: { blokkeert: false, zichtDicht: false },
+    // De schandpaal van de heer op de brink: komt er de eerste keer dat hij iemand straft, en blijft
+    // staan (js/heer.js, T.zetSchandpaalNeer).
+    schandpaal: { blokkeert: true, zichtDicht: false, naam: 'de schandpaal' },
   };
 
   // ap: actiepunten per beurt. snelheid: tegels per seconde tijdens het rondlopen (bij de held

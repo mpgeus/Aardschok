@@ -95,6 +95,7 @@
       soldaten: null, // { tot, wezens }: ingekwartierd tot de lente
       wrok: [], // [{ wie, dag, kost, staat }]: wie jij aan de schandpaal zette
       jaren: [], // [{ jaar, deel, straf }]: hoe elk Sint-Maarten afliep
+      paal: null, // { x, y }: waar de schandpaal staat, vanaf de eerste keer (T.zetSchandpaalNeer)
     };
   };
 
@@ -434,21 +435,58 @@
     return lijst;
   };
 
-  // Waar de schandpaal staat: een tegel op de brink waar je kunt staan, een eindje naast de heer.
-  // Er is nog geen tekening van een schandpaal (tekenwerk); je ziet alleen wie er staat.
-  function paalOpDeBrink(S) {
-    const w = S.wereld;
-    const plek = brinkVan(w);
-    const doel = { x: plek.x + 2, y: plek.y + 1 };
-    if (!w.tegels || !T.isBegaanbaar) return doel;
-    for (let r = 0; r <= 3; r++) {
+  // De schandpaal: een paal met een halsijzer, die er komt de eerste keer dat de heer iemand straft,
+  // en dan blijft staan (Marcel, 24 sep; ontwerp/spel.md, "Sint-Maarten"). Hij staat een eindje
+  // naast de heer op de brink. Wie gestraft wordt, staat op de tegel ervóór (x+1, y+1: in beeld
+  // recht eronder), met zijn rug tegen de paal.
+  const VOOR_DE_PAAL = { dx: 1, dy: 1 };
+
+  // Mag hier de paal, of iemand die eraan staat? Begaanbaar, en niet in een akker.
+  function vrijOpDeBrink(w, x, y) {
+    if (!w.tegels || !T.isBegaanbaar) return true;
+    if (!T.isBegaanbaar(w, x, y)) return false;
+    return !(w.akkers || []).some((a) => x >= a.x && x < a.x + a.b && y >= a.y && y < a.y + a.h);
+  }
+
+  // Een tegel op afstand r van `doel` (de ringen rond `doel`), de eerste waarvoor `past` ja zegt.
+  function eersteRond(doel, tot, past) {
+    for (let r = 0; r <= tot; r++) {
       for (let y = doel.y - r; y <= doel.y + r; y++) {
         for (let x = doel.x - r; x <= doel.x + r; x++) {
-          if (Math.max(Math.abs(x - doel.x), Math.abs(y - doel.y)) === r && T.isBegaanbaar(w, x, y)) return { x, y };
+          if (Math.max(Math.abs(x - doel.x), Math.abs(y - doel.y)) === r && past(x, y)) return { x, y };
         }
       }
     }
-    return doel;
+    return null;
+  }
+
+  // Waar de paal komt: zo dicht mogelijk bij twee tegels rechts van de heer, waar de paal én de
+  // tegel ervoor vrij zijn. Puur: zet nog niets neer.
+  T.plekVoorDeSchandpaal = function (S) {
+    const w = S.wereld;
+    const plek = brinkVan(w);
+    const doel = { x: plek.x + 2, y: plek.y };
+    return eersteRond(doel, 4, (x, y) => !(x === plek.x && y === plek.y)
+      && vrijOpDeBrink(w, x, y) && vrijOpDeBrink(w, x + VOOR_DE_PAAL.dx, y + VOOR_DE_PAAL.dy)) || doel;
+  };
+
+  // De paal neerzetten, als hij er nog niet staat: een voorwerp dat zijn tegel beslaat
+  // (T.VOORWERPEN.schandpaal, js/wereld.js). Geeft waar hij staat.
+  T.zetSchandpaalNeer = function (S) {
+    const h = S.heer || (S.heer = T.nieuweHeer());
+    if (h.paal) return h.paal;
+    const w = S.wereld;
+    h.paal = T.plekVoorDeSchandpaal(S);
+    (w.voorwerpen || (w.voorwerpen = [])).push({ soort: 'schandpaal', x: h.paal.x, y: h.paal.y });
+    return h.paal;
+  };
+
+  // Waar wie gestraft wordt, staat: vóór de paal. Is die tegel intussen bebouwd, dan de
+  // dichtstbijzijnde vrije tegel ernaast.
+  function voorDePaal(S) {
+    const paal = T.zetSchandpaalNeer(S);
+    const doel = { x: paal.x + VOOR_DE_PAAL.dx, y: paal.y + VOOR_DE_PAAL.dy };
+    return eersteRond(doel, 3, (x, y) => vrijOpDeBrink(S.wereld, x, y)) || doel;
   }
 
   // De vlag die een gesprek laat weten dat iemand aan de schandpaal stond, naar het gesprek dat hij
@@ -462,6 +500,8 @@
     if (!b || !b.schandpaal) return { kan: false, reden: 'Er hoeft niemand aan de schandpaal.' };
     const keuze = T.schandpaalKeuzes(S).find((k) => k.wie === wie);
     if (!keuze) return { kan: false, reden: 'Die is er niet.' };
+    // De eerste keer komt de paal er, en die blijft staan.
+    T.zetSchandpaalNeer(S);
     if (wie === 'schout') {
       // Het dorp neemt het je niet kwalijk, maar de heer vindt het lachwekkend (Marcel, 24 sep).
       h.schuld += keuze.boete;
@@ -476,7 +516,7 @@
       const lopen = !!(e && kanLopen(S));
       h.wrok.push({ wie, dag: dagNu(S), kost: keuze.kost, staat: true, vanaf: lopen ? null : dagNu(S) });
       if (T.zetVlag) T.zetVlag(S, T.schandpaalVlag(e && T.gesprekIdVan ? T.gesprekIdVan(e) : wie));
-      if (e) e.moetNaar = { ...paalOpDeBrink(S), straal: 0 };
+      if (e) e.moetNaar = { ...voorDePaal(S), straal: 0 };
       bericht(`${keuze.naam} moet ${IN().schandpaalDagen} dagen aan de schandpaal op de brink. Het dorp zal het onthouden.`, 'gevaar');
     }
     b.schandpaal = false;

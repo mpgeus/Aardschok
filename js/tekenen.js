@@ -1163,6 +1163,12 @@
       T.blok(ctx, p.x, p.y, 0.22, 0.22, 16, '#b99a64', { helder });
       return;
     }
+    if (v.soort === 'schandpaal') {
+      // De schandpaal (js/heer.js) zonder kunst: een stenen trede en een eiken paal.
+      T.blok(ctx, p.x, p.y, 0.3, 0.3, 6, '#6f6a62', { helder });
+      T.blok(ctx, p.x, p.y, 0.08, 0.08, 80, '#6e4a2a', { helder, basis: 6 });
+      return;
+    }
     if (v.soort === 'pilaar') {
       T.blok(ctx, p.x, p.y, 0.32, 0.32, 8, '#6f6a62', { helder });
       T.blok(ctx, p.x, p.y, 0.22, 0.22, 74, '#8d877d', { helder, basis: 8 });

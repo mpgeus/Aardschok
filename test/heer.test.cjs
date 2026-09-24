@@ -493,6 +493,56 @@ test('zijn gesprek opent het betalen, en na het betalen niet meer', () => {
   assert.ok(!T.gesprekKnoop(S, 'heer', 'welkom').keuzes.some((k) => k.doe && k.doe.heer));
 });
 
+test('de schandpaal komt er de eerste keer, blijft staan, en wie gestraft wordt, staat ervoor', () => {
+  const S = metHeer();
+  S.wereld.overgangen = [{ x: 9, y: 5, naar: 'wereld' }];
+  const aaltje = T.maakMens('boer2', 3, 3);
+  S.wereld.wezens.push(aaltje);
+  assert.equal(S.heer.paal, null, 'nog geen paal');
+  T.betaalHeer(S, geefDeel(S, 0.3));
+  T.zetAanDeSchandpaal(S, 'boer2');
+  const palen = () => (S.wereld.voorwerpen || []).filter((v) => v.soort === 'schandpaal');
+  assert.deepEqual(S.heer.paal, { x: 7, y: 5 }, 'twee tegels rechts van de brink');
+  assert.deepEqual(palen(), [{ soort: 'schandpaal', x: 7, y: 5 }]);
+  assert.deepEqual(aaltje.moetNaar, { x: 8, y: 6, straal: 0 }, 'vóór de paal, in beeld recht eronder');
+  // Haar straf is voorbij: zij mag naar huis, de paal blijft.
+  aaltje.tx = aaltje.x = 8;
+  aaltje.ty = aaltje.y = 6;
+  T.werkHeerBij(S);
+  T.tikHeerDag(S, SINT_MAARTEN + IN.schandpaalDagen + 1);
+  assert.equal(aaltje.moetNaar, null);
+  assert.equal(palen().length, 1);
+  // Een tweede keer: dezelfde paal, geen tweede.
+  assert.deepEqual(T.zetSchandpaalNeer(S), { x: 7, y: 5 });
+  assert.equal(palen().length, 1);
+});
+
+test('wie zichzelf aan de schandpaal zet, zet hem er ook neer', () => {
+  const S = metHeer();
+  T.betaalHeer(S, geefDeel(S, 0.3));
+  T.zetAanDeSchandpaal(S, 'schout');
+  assert.deepEqual(S.heer.paal, { x: 7, y: 5 });
+});
+
+test('de schandpaal komt niet in een akker of waar de heer staat, en beslaat zijn tegel', () => {
+  const S = maakS();
+  const w = S.wereld;
+  w.b = 14;
+  w.h = 12;
+  w.tegels = Array.from({ length: w.h }, () => new Array(w.b).fill('gras'));
+  w.voorwerpen = [];
+  // Een akker precies op de plek die hij het liefst neemt (twee tegels rechts van de brink).
+  w.akkers = [{ x: 6, y: 4, b: 3, h: 3 }];
+  const inAkker = (x, y) => x >= 6 && x < 9 && y >= 4 && y < 7;
+  const p = T.plekVoorDeSchandpaal(S);
+  assert.ok(!inAkker(p.x, p.y) && !inAkker(p.x + 1, p.y + 1), `niet in de akker: ${p.x},${p.y}`);
+  assert.ok(!(p.x === 5 && p.y === 5), 'niet waar de heer staat');
+  S.heer = T.nieuweHeer();
+  T.zetSchandpaalNeer(S);
+  assert.ok(!T.isBegaanbaar(w, p.x, p.y), 'op de paal kun je niet staan');
+  assert.ok(T.isBegaanbaar(w, p.x + 1, p.y + 1), 'ervoor wel');
+});
+
 test('de dagen aan de schandpaal tellen pas als hij er staat (drie dagen zijn op 1× maar zeven seconden)', () => {
   const S = metHeer();
   S.wereld.overgangen = [{ x: 9, y: 5, naar: 'wereld' }];
