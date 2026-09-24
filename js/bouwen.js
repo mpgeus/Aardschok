@@ -96,6 +96,65 @@
     return T.BOUWEN_INSTELLINGEN.hoogstePunt;
   };
 
+  // ---------------------------------------------------------------------------------------------
+  // De bouwplaats: een ring van tegels rond de voet
+  // ---------------------------------------------------------------------------------------------
+  //
+  // Een type met fases uit een vel met een ring (tegels/bouwfasen-sdf.js: `rand`, en per fase
+  // `bezet`) heeft zolang hij in aanbouw is meer nodig dan zijn voet: de stapels balken, de stenen,
+  // de leemkuil en de steiger staan eromheen (ontwerp/beeld.md, "Bouwen: een huis dat groeit"). Op
+  // een tegel die in deze fase vol ligt, kan niemand lopen; onder de steiger wel. De stapels slinken
+  // naarmate ze opgaan, en als het huis af is, is de ring weer vrij. Dat niemand anders op de ring
+  // bouwt, bewaakt T.gebouwPast (js/gebouwen.js).
+  const tekeningNaamVan = (soort) => {
+    const g = T.GEBOUWEN[soort];
+    return g && g.tekening ? g.tekening.split('/').pop() : null;
+  };
+  T.bouwRandVan = function (soort) {
+    const naam = tekeningNaamVan(soort);
+    const g = naam && T.BOUWFASEN && T.BOUWFASEN.fasen && T.BOUWFASEN.fasen[naam];
+    return g && g.rand > 0 ? g.rand : 0;
+  };
+  // Het vlak van een bouwplaats in kaarttegels (van x0, y0 tot en met x1, y1): de voet, en met
+  // `metRing` de ring erbij.
+  T.bouwVlak = function (soort, x, y, metRing) {
+    const voet = T.gebouwVoet(soort) || { b: 1, h: 1 };
+    const r = metRing ? T.bouwRandVan(soort) : 0;
+    return { x0: x - r, y0: y - r, x1: x + voet.b - 1 + r, y1: y + voet.h - 1 + r };
+  };
+  // Welke tegels van de ring er nu vol liggen, in kaarttegels, naar de fase van zijn voortgang.
+  T.bezetteRingTegels = function (b) {
+    if (b.klaar || !(T.bouwRandVan(b.soort) > 0)) return [];
+    const fasen = T.fasenVan(tekeningNaamVan(b.soort));
+    if (!fasen) return [];
+    const f = fasen[T.bouwFaseIndex(b.voortgang || 0, fasen)];
+    return ((f && f.bezet) || []).map(([dx, dy]) => ({ x: b.x + dx, y: b.y + dy }));
+  };
+  // Leg de ring op de kaart: wat nu vol ligt, wordt een muur; wat niet meer vol ligt, krijgt zijn
+  // oude tegel terug. Staat er net iemand op een tegel die vol moet, dan wacht die tot de volgende
+  // keer: niemand komt in een stapel balken vast te zitten. Bij het neerzetten (T.plaatsGebouw),
+  // elke bouwdag, en als het af is.
+  T.werkBouwplaatsBij = function (S, b) {
+    const w = S.wereld;
+    if (!w || !w.tegels) return;
+    const sleutel = (t) => `${t.x},${t.y}`;
+    const moet = T.bezetteRingTegels(b);
+    const moetSet = new Set(moet.map(sleutel));
+    b.ringBezet = (b.ringBezet || []).filter((t) => {
+      if (moetSet.has(sleutel(t))) return true;
+      if (w.tegels[t.y] && w.tegels[t.y][t.x] === 'muur') w.tegels[t.y][t.x] = t.was;
+      return false;
+    });
+    const heeft = new Set(b.ringBezet.map(sleutel));
+    for (const t of moet) {
+      const rij = w.tegels[t.y];
+      if (heeft.has(sleutel(t)) || !rij || rij[t.x] === undefined || rij[t.x] === 'muur' || rij[t.x] === 'buiten') continue;
+      if (T.wezenOp(w, t.x, t.y)) continue;
+      b.ringBezet.push({ x: t.x, y: t.y, was: rij[t.x] });
+      rij[t.x] = 'muur';
+    }
+  };
+
   // Vriest het op deze dag? Zacht gekoppeld aan js/tijd.js: zonder kalender (een toets die alleen
   // de gebouwen laadt) vriest het nooit.
   T.vriestHet = function (dag) {
@@ -132,6 +191,7 @@
       b.pannenbier = null;
       if (T.ui && T.ui.sluitVraag) T.ui.sluitVraag(b);
     }
+    T.werkBouwplaatsBij(S, b);
     bericht(`${T.hoofdletter(T.GEBOUWEN[b.soort].naam)} is af.`, 'goed');
   }
 
@@ -172,6 +232,7 @@
         maakAf(S, b);
         continue;
       }
+      T.werkBouwplaatsBij(S, b);
       const hoogste = T.hoogstePuntVan(b.soort);
       if (voor < hoogste && b.voortgang >= hoogste && !b.pannenbier && T.heeftHoogstePunt(b.soort)) {
         b.pannenbier = 'gevraagd';

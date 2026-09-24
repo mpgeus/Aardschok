@@ -398,6 +398,24 @@
         if (T.isVast(w, x + dx, y + dy)) return false;
       }
     }
+    // Een bouwplaats met een ring (js/bouwen.js, T.bouwRandVan) heeft die ring nodig zolang hij in
+    // aanbouw is: vrij van muren en gebouwen, want daar komen de stapels en de steiger. En niemand
+    // bouwt over de ring van een bouwplaats die nog niet af is. Zacht gekoppeld: zonder
+    // js/bouwen.js telt alleen de voet.
+    if (!T.bouwRandVan) return true;
+    const r = T.bouwRandVan(soort);
+    for (let dy = -r; dy < voet.h + r; dy++) {
+      for (let dx = -r; dx < voet.b + r; dx++) {
+        if (dx >= 0 && dy >= 0 && dx < voet.b && dy < voet.h) continue;
+        if (T.isVast(w, x + dx, y + dy)) return false;
+      }
+    }
+    const mijn = T.bouwVlak(soort, x, y, true);
+    for (const g of S.gebouwen || []) {
+      if (g.klaar || !(r > 0 || T.bouwRandVan(g.soort) > 0)) continue;
+      const hun = T.bouwVlak(g.soort, g.x, g.y, true);
+      if (mijn.x0 <= hun.x1 && hun.x0 <= mijn.x1 && mijn.y0 <= hun.y1 && hun.y0 <= mijn.y1) return false;
+    }
     return true;
   };
 
@@ -464,6 +482,8 @@
     const instantie = { soort, x, y, klaar, voortgang: klaar ? 1 : 0, bouwers: 0, handen: 0, voorwerp: null };
     S.gebouwen.push(instantie);
     zetGebouwVoorwerp(S, instantie);
+    // De stapels en de leemkuil van de eerste fase liggen er meteen (js/bouwen.js).
+    if (T.werkBouwplaatsBij) T.werkBouwplaatsBij(S, instantie);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
     return { gelukt: true, instantie };
   };

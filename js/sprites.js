@@ -17,12 +17,13 @@
   const beelden = new Map(); // pad → Image
   let gegevens = null;
   let belofte = null;
+  let faseVelGeladen = new Set(); // de bouwfasenvellen die geladen zijn (tegels/bouwfasen.png, bouwfasen-sdf.png, ...)
 
   const S = {
     aan: false, // staan alle vellen van binnen klaar? Zo niet, tekent het spel zijn vlakken.
     buitenAan: false, // en die van buiten (tegels/, gemaakt door npm run tiled)
     effectenAan: false, // en de spreukeffecten (beelden/effecten/, gemaakt door effecten-export.cjs)
-    bouwfasenAan: false, // en het bouwfasenvel (tegels/bouwfasen.png, gemaakt door bouwfasen.cjs)
+    bouwfasenAan: false, // en de bouwfasenvellen (tegels/bouwfasen.png uit bouwfasen.cjs; een type kan een eigen vel hebben)
     mist: [], // wat er niet geladen kon worden, om in de console te zien
   };
   T.sprites = S;
@@ -80,15 +81,18 @@
       // een gebouw in aanbouw gewoon bleker tekenen, zoals vóór de fases er waren.
       const buiten = [...new Set(Object.values(T.TEGELS || {}).map((v) => v.bestand).filter(Boolean))];
       const effectVellen = T.EFFECTEN ? [...new Set(Object.values(T.EFFECTEN.vellen).map((v) => MAP + 'effecten/' + v.bestand))] : [];
-      const bouwfasenPad = T.BOUWFASEN ? TEGELMAP + T.BOUWFASEN.bestand : null;
-      const [uitslag, uitBuiten, uitEffecten, bouwfasenOk] = await Promise.all([
+      // Een type met zijn eigen vel (tegels/bouwfasen-sdf.js: `bestand` op de ingang zelf) laadt
+      // dat vel erbij; mislukt het, dan tekent alleen dat type zonder fases.
+      const faseVellen = T.BOUWFASEN ? [...new Set([T.BOUWFASEN.bestand, ...Object.values(T.BOUWFASEN.fasen || {}).map((g) => g && g.bestand)].filter(Boolean))] : [];
+      const [uitslag, uitBuiten, uitEffecten, uitFasen] = await Promise.all([
         Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld)), Promise.all(effectVellen.map(laadBeeld)),
-        bouwfasenPad ? laadBeeld(bouwfasenPad) : Promise.resolve(false),
+        Promise.all(faseVellen.map((f) => laadBeeld(TEGELMAP + f))),
       ]);
       S.aan = uitslag.every(Boolean);
       S.buitenAan = buiten.length > 0 && uitBuiten.every(Boolean);
       S.effectenAan = effectVellen.length > 0 && uitEffecten.every(Boolean);
-      S.bouwfasenAan = !!bouwfasenOk;
+      faseVelGeladen = new Set(faseVellen.filter((f, i) => uitFasen[i]));
+      S.bouwfasenAan = faseVelGeladen.size > 0;
       if (S.aan) snijVloeren();
       if (!S.aan || !S.buitenAan) console.warn('Aardschok: sprites ontbreken, het spel tekent daar vlakken.', S.mist);
       return S.aan;
@@ -363,9 +367,11 @@
     if (!S.bouwfasenAan || !T.BOUWFASEN || !tekeningNaam) return null;
     const g = T.BOUWFASEN.fasen[tekeningNaam];
     if (!g || !g.fasen.length) return null;
+    const vel = g.bestand || T.BOUWFASEN.bestand;
+    if (!faseVelGeladen.has(vel)) return null;
     const f = g.fasen[Math.max(0, Math.min(g.fasen.length - 1, faseIndex))];
     if (!f) return null;
-    return onthoud(`bouwfase,${tekeningNaam},${faseIndex}`, () => stuk(TEGELMAP + T.BOUWFASEN.bestand, f.x, f.y, f.b, f.h, f.anker));
+    return onthoud(`bouwfase,${tekeningNaam},${faseIndex}`, () => stuk(TEGELMAP + vel, f.x, f.y, f.b, f.h, f.anker));
   };
 
   // ---------------------------------------------------------------- het graan (gereedschap/pixelart/graan-vel.cjs)
