@@ -55,6 +55,11 @@
     // S.behoeften.winterVerliesRest in plaats van met de dobbelstenen, zodat twee spellen met
     // dezelfde voorraad ook altijd hetzelfde verlies geven (net als T.akkerVariant in akkers.js).
     winterVerliesFactor: 0.01,
+    // Honger buiten de winter (een optie in de Spelregels, js/opties.js; Marcel, 24 sep):
+    // 'tevredenheid' (alleen dat, zoals het tot 24 sep was), 'wegtrekken' (op een groeidag trekt
+    // een gezin weg zolang er geen eten genoeg is), of 'sterven' (net als in de winter kost een
+    // tekort aan eten mensen, met dezelfde winterVerliesFactor, maar dan het hele jaar).
+    hongerBuitenWinter: 'tevredenheid',
     // Een huis groeit door (T.GEBOUWEN[x].wordt) als het dit veel dagen op rij minstens zo
     // tevreden was; hoger dan groeiDrempel, want een huis groeien is meer dan net rondkomen.
     huisGroeiDagen: 30,
@@ -160,38 +165,45 @@
     if (uitHout > 0) T.wijzigVoorraad(S, 'hout', -uitHout);
   }
 
+  // In de winter kost een tekort aan brandhout of eten mensen; met de optie hongerBuitenWinter
+  // 'sterven' ook een tekort aan eten in de rest van het jaar.
   function pasWinterVerliesToe(S, b) {
-    if (!b.inWinter) {
+    const IN = T.BEHOEFTEN_INSTELLINGEN;
+    const hongerDoodt = IN.hongerBuitenWinter === 'sterven';
+    if (!b.inWinter && !hongerDoodt) {
       S.behoeften.winterVerliesRest = 0; // een nieuwe winter begint weer vers
       return;
     }
-    const tekort = 1 - Math.min(b.brandhoutDekking, b.voedselDekking);
+    const tekort = b.inWinter ? 1 - Math.min(b.brandhoutDekking, b.voedselDekking) : 1 - b.voedselDekking;
     if (tekort <= 0 || S.bevolking <= 0) return;
-    const IN = T.BEHOEFTEN_INSTELLINGEN;
     S.behoeften.winterVerliesRest += S.bevolking * tekort * IN.winterVerliesFactor;
     const verlies = Math.floor(S.behoeften.winterVerliesRest);
     if (verlies <= 0) return;
     S.behoeften.winterVerliesRest -= verlies;
     S.bevolking = Math.max(0, S.bevolking - verlies);
     if (T.ui && T.ui.bericht) {
+      const wat = b.inWinter ? 'De winter is hard' : 'De honger is hard';
       T.ui.bericht(
-        verlies === 1
-          ? 'De winter is hard: het dorp verliest een dorpeling.'
-          : `De winter is hard: het dorp verliest ${verlies} dorpelingen.`,
+        verlies === 1 ? `${wat}: het dorp verliest een dorpeling.` : `${wat}: het dorp verliest ${verlies} dorpelingen.`,
         'gevaar',
       );
     }
   }
 
   // Ver onder de groeidrempel trekt op een groeidag een heel gezin juist weg, in plaats van dat
-  // er (js/gebouwen.js, stap 4) een bij komt.
+  // er (js/gebouwen.js, stap 4) een bij komt. Met de optie hongerBuitenWinter 'wegtrekken' ook als
+  // er buiten de winter geen eten genoeg is.
   function pasVertrekToe(S, b, dag) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     if (dag <= 0 || dag % T.GEBOUWEN_INSTELLINGEN.gezinDagen !== 0) return;
-    if (S.bevolking <= 0 || b.tevredenheid >= IN.vertrekDrempel) return;
+    if (S.bevolking <= 0) return;
+    const honger = IN.hongerBuitenWinter === 'wegtrekken' && !b.inWinter && b.voedselDekking < 1;
+    if (b.tevredenheid >= IN.vertrekDrempel && !honger) return;
     const verlies = Math.min(S.bevolking, T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
     S.bevolking -= verlies;
-    if (T.ui && T.ui.bericht) T.ui.bericht(`Een gezin trekt weg: het dorp is niet tevreden genoeg. (-${verlies})`, 'gevaar');
+    if (T.ui && T.ui.bericht) {
+      T.ui.bericht(honger ? `Een gezin trekt weg: er is geen eten. (-${verlies})` : `Een gezin trekt weg: het dorp is niet tevreden genoeg. (-${verlies})`, 'gevaar');
+    }
   }
 
   // Ruilt het voorwerp van een gebouw voor zijn "wordt"-soort: dezelfde tekening-ingang als

@@ -504,3 +504,98 @@ test('de dagen aan de schandpaal tellen pas als hij er staat (drie dagen zijn op
   T.tikHeerDag(S, SINT_MAARTEN + 5 + IN.schandpaalDagen);
   assert.equal(aaltje.moetNaar, null, 'haar dagen zijn om: ze mag naar huis');
 });
+
+// ---------------------------------------------------------------------------------------------
+// De opties in de Spelregels (js/opties.js; Marcel, 24 sep): de regels volgen ze
+// ---------------------------------------------------------------------------------------------
+
+// Zet instellingen van de heer zolang de toets loopt, en daarna weer terug.
+function metHeerInstelling(zet, fn) {
+  const was = {};
+  for (const k in zet) {
+    was[k] = IN[k];
+    IN[k] = zet[k];
+  }
+  try {
+    fn();
+  } finally {
+    Object.assign(IN, was);
+  }
+}
+
+test('betalen in "graan en goud": de pacht in graan, wat hij verder ziet in goud', () => {
+  metHeerInstelling({ betalenIn: 'graanEnGoud' }, () => {
+    const S = gehucht();
+    S.gebouwen.push({ soort: 'schaapskooi', klaar: true });
+    const eis = T.eisVanDeHeer(S);
+    assert.equal(eis.per.wol, undefined);
+    assert.equal(eis.per.graan, 5);
+    // 20 wol × 8/15 = 10,7, naar boven 11, bij de 12 goud die hij al vroeg.
+    assert.equal(eis.per.goud, 12 + 11);
+    assert.ok(eis.regels.some((r) => /in plaats van 20 wol/.test(r.waarom)));
+  });
+});
+
+test('betalen in "alleen goud": ook de pacht rekent hij om', () => {
+  metHeerInstelling({ betalenIn: 'alleenGoud' }, () => {
+    const S = gehucht();
+    const eis = T.eisVanDeHeer(S);
+    assert.deepEqual(Object.keys(eis.per), ['goud']);
+    assert.equal(eis.per.goud, 12 + Math.ceil(5 * 0.3));
+  });
+});
+
+test('hij telt precies: elk tekort telt, en veel te weinig is minder dan een derde', () => {
+  metHeerInstelling({
+    straffen: [{ vanaf: 1, straf: null }, { vanaf: 2 / 3, straf: 'boete' }, { vanaf: 1 / 3, straf: 'soldaten' }, { vanaf: 0, straf: 'schandpaal' }],
+    veelTeWeinig: 1 / 3,
+  }, () => {
+    const S = metHeer();
+    assert.equal(T.gevolgVanBetaling(S, geefDeel(S, 0.95)).straf, 'boete', 'ook een klein tekort telt');
+    assert.equal(T.gevolgVanBetaling(S, geefDeel(S, 0.5)).straf, 'soldaten');
+    const weinig = T.gevolgVanBetaling(S, geefDeel(S, 0.2));
+    assert.equal(weinig.straf, 'schandpaal');
+    assert.ok(weinig.veelTeWeinig);
+  });
+});
+
+test('steeds zwaarder: niet hoeveel telt, maar hoe vaak achter elkaar, tot je ambt', () => {
+  metHeerInstelling({ telWijze: 'hoeVaak', ambtKwijtNa: 4 }, () => {
+    const S = gehucht();
+    S.wereld.wezens.push(T.maakMens('boer3', 4, 4));
+    const verwacht = ['boete', 'soldaten', 'schandpaal'];
+    for (let jaar = 0; jaar < 3; jaar++) {
+      S.kalender.dag = dagVan('slachtmaand', 11, jaar);
+      T.heerKomt(S, S.kalender.dag);
+      // Een klein tekort is genoeg: hoeveel doet er niet toe.
+      const g = T.betaalHeer(S, geefDeel(S, 0.95));
+      assert.equal(g.straf, verwacht[jaar], `jaar ${jaar + 1}`);
+      assert.match(g.tekst, new RegExp(['eerste', 'tweede', 'derde'][jaar]));
+      if (g.schandpaal) T.zetAanDeSchandpaal(S, 'boer3');
+    }
+    S.kalender.dag = dagVan('slachtmaand', 11, 3);
+    T.heerKomt(S, S.kalender.dag);
+    const vierde = T.betaalHeer(S, geefDeel(S, 0.95));
+    assert.ok(vierde.ambtKwijt, 'de vierde keer kost je je ambt');
+    assert.ok(S.einde);
+    // Een jaar alles betalen zet de teller terug.
+    const S2 = gehucht();
+    S2.kalender.dag = SINT_MAARTEN;
+    T.heerKomt(S2, SINT_MAARTEN);
+    T.betaalHeer(S2, geefDeel(S2, 0.95));
+    S2.kalender.dag = dagVan('slachtmaand', 11, 1);
+    T.heerKomt(S2, S2.kalender.dag);
+    T.betaalHeer(S2, geefDeel(S2, 1));
+    assert.equal(S2.heer.tekortJaren, 0);
+  });
+});
+
+test('mag de schout zichzelf niet aanwijzen, dan staat hij niet in het lijstje', () => {
+  metHeerInstelling({ schoutMagZelf: false }, () => {
+    const S = metHeer();
+    S.wereld.wezens.push(T.maakMens('boer2', 3, 3));
+    T.betaalHeer(S, geefDeel(S, 0.3));
+    assert.deepEqual(T.schandpaalKeuzes(S).map((k) => k.wie), ['boer2']);
+    assert.equal(T.zetAanDeSchandpaal(S, 'schout').kan, false);
+  });
+});

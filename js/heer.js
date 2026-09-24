@@ -26,6 +26,18 @@
     // wat bij zijn soort staat (T.GEBOUWEN[soort].heer, js/gebouwen.js). Hij rondt naar boven af.
     pachtPerAkkertegel: 0.5,
     hoofdgeldPerMens: 0.2,
+    // Waarin hij betaald wil worden: 'watHijZiet' (wol voor een schaapskooi, eieren voor een
+    // kippenhok, hout voor zijn bos), 'graanEnGoud' (de pacht in graan, de rest omgerekend naar
+    // goud) of 'alleenGoud' (alles omgerekend naar goud, ook de pacht). Omrekenen gaat met
+    // T.waardeVoorDeHeer, en naar boven. Dit en de twee hieronder zijn opties in de Spelregels
+    // (js/opties.js); wat hier staat, is wat Marcel koos (spel.md, "Instelbaar").
+    betalenIn: 'watHijZiet',
+    // Hoe hij een tekort telt: 'hoeveel' (naar het deel dat je gaf, de straffen hieronder) of
+    // 'hoeVaak' (niet hoeveel, maar hoeveel jaar achter elkaar je tekortschoot: de eerste keer een
+    // boete, de tweede ook soldaten, de derde ook de schandpaal, en na ambtKwijtNa keer je ambt).
+    telWijze: 'hoeveel',
+    // Mag de schout zichzelf aan de schandpaal zetten?
+    schoutMagZelf: true,
     // Hij telt slecht (Marcel, 24 sep): wie in waarde minstens zoveel geeft, merkt hij niet.
     // Daaronder van licht naar zwaar; elke straf neemt de lichtere mee.
     straffen: [
@@ -68,6 +80,7 @@
       schuld: 0, // goud dat hij er volgend jaar bij vraagt: een tekort, met de boete
       veelTeWeinig: 0, // hoe vaak achter elkaar je hem veel te weinig gaf
       tekort: 0, // het tekort van het laatste Sint-Maarten, in goud (voor de boete van de schout)
+      tekortJaren: 0, // hoeveel jaar achter elkaar je hem iets tekortdeed (telWijze 'hoeVaak')
       brief: null, // { dag, eis }: zijn brief van dit jaar, tot hij geweest is
       bezoek: null, // zijn bezoek op Sint-Maarten, zie T.heerKomt
       soldaten: null, // { tot, wezens }: ingekwartierd tot de lente
@@ -128,6 +141,16 @@
     }
     const h = S.heer;
     if (h && h.schuld > 0) tel('goud', h.schuld, 'wat u vorig jaar schuldig bleef, met de boete');
+    // Wil hij (een deel) in goud, dan rekent hij om, naar boven: de rest van de pacht, of alles.
+    const wijze = IN().betalenIn;
+    if (wijze === 'graanEnGoud' || wijze === 'alleenGoud') {
+      for (const r of regels) {
+        if (r.wat === 'goud' || (wijze === 'graanEnGoud' && r.wat === 'graan')) continue;
+        r.waarom = `${r.waarom} (in plaats van ${r.aantal} ${r.wat})`;
+        r.aantal = Math.max(1, Math.ceil(r.aantal * T.waardeVoorDeHeer(r.wat) - 1e-9));
+        r.wat = 'goud';
+      }
+    }
     // Per goed opgeteld; graan en goud voorop, de rest in de volgorde waarin hij ze tegenkwam.
     const per = {};
     for (const r of regels) per[r.wat] = (per[r.wat] || 0) + r.aantal;
@@ -186,29 +209,55 @@
     gegeven = Math.min(gevraagd, gegeven + neemt.goud);
 
     const deel = gevraagd > 0 ? gegeven / gevraagd : 1;
-    const band = IN().straffen.find((b) => deel >= b.vanaf - 1e-9) || IN().straffen[IN().straffen.length - 1];
-    const zwaarte = STRAFFEN.indexOf(band.straf) + 1; // 0: niets, 1: boete, 2: soldaten, 3: schandpaal
     const tekort = gevraagd - gegeven;
-    const veelTeWeinig = deel < IN().veelTeWeinig - 1e-9;
-    const eerder = (S.heer && S.heer.veelTeWeinig) || 0;
-    const ambtKwijt = veelTeWeinig && eerder + 1 >= IN().ambtKwijtNa;
+    // zwaarte 0: niets, 1: boete, 2: ook soldaten, 3: ook de schandpaal.
+    let zwaarte;
+    let veelTeWeinig = false;
+    let ambtKwijt;
+    let keer = 0; // hoeveel jaar achter elkaar tekort, dit jaar meegeteld (telWijze 'hoeVaak')
+    if (IN().telWijze === 'hoeVaak') {
+      keer = deel < 1 - 1e-9 ? ((S.heer && S.heer.tekortJaren) || 0) + 1 : 0;
+      zwaarte = Math.min(STRAFFEN.length, keer);
+      ambtKwijt = keer > 0 && keer >= IN().ambtKwijtNa;
+    } else {
+      const band = IN().straffen.find((b) => deel >= b.vanaf - 1e-9) || IN().straffen[IN().straffen.length - 1];
+      zwaarte = STRAFFEN.indexOf(band.straf) + 1;
+      veelTeWeinig = deel < IN().veelTeWeinig - 1e-9;
+      keer = veelTeWeinig ? ((S.heer && S.heer.veelTeWeinig) || 0) + 1 : 0;
+      ambtKwijt = veelTeWeinig && keer >= IN().ambtKwijtNa;
+    }
     const schuld = zwaarte ? Math.ceil(tekort * (1 + IN().boete) - 1e-9) : 0;
     const uit = {
-      kan: T.heerWacht(S), neemt, gevraagd, gegeven, deel, tekort, straf: band.straf,
+      kan: T.heerWacht(S), neemt, gevraagd, gegeven, deel, tekort, straf: zwaarte ? STRAFFEN[zwaarte - 1] : null,
       boete: zwaarte >= 1, soldaten: zwaarte >= 2, schandpaal: zwaarte >= 3,
-      veelTeWeinig, ambtKwijt, schuld,
+      veelTeWeinig, ambtKwijt, schuld, keer,
     };
     if (!uit.kan) uit.reden = 'De heer is er niet.';
     uit.tekst = gevolgTekst(uit);
     return uit;
   };
 
+  const RANG = ['nulde', 'eerste', 'tweede', 'derde', 'vierde', 'vijfde', 'zesde', 'zevende', 'achtste', 'negende', 'tiende'];
+  const rang = (n) => RANG[n] || `${n}e`;
+
   function gevolgTekst(g) {
-    if (g.ambtKwijt) return 'Veel te weinig, voor de tweede keer achter elkaar: dit kost je je ambt.';
-    const nog = g.veelTeWeinig ? ' Veel te weinig: nog een keer zo, en je bent je ambt kwijt.' : '';
-    if (g.schandpaal) return `Een boete (volgend jaar ${g.schuld} goud erbij), twee soldaten tot de lente, én de schandpaal: jij wijst aan wie.${nog}`;
-    if (g.soldaten) return `Een boete (volgend jaar ${g.schuld} goud erbij), en twee soldaten die tot de lente blijven en meeëten.`;
-    if (g.boete) return `Een boete: volgend jaar komt er ${g.schuld} goud bij wat hij vraagt.`;
+    const hoeVaak = IN().telWijze === 'hoeVaak';
+    const nogKeer = IN().ambtKwijtNa - g.keer;
+    if (g.ambtKwijt) {
+      return hoeVaak
+        ? `Te weinig, voor de ${rang(g.keer)} keer achter elkaar: dit kost je je ambt.`
+        : `Veel te weinig, voor de ${rang(g.keer)} keer achter elkaar: dit kost je je ambt.`;
+    }
+    // Hoe dicht je bij het einde zit: bij 'hoeVaak' telt elk tekort, anders alleen veel te weinig.
+    let nog = '';
+    if ((hoeVaak && g.keer) || g.veelTeWeinig) {
+      const wat = hoeVaak ? 'Te weinig' : 'Veel te weinig';
+      nog = nogKeer === 1 ? ` ${wat}: nog een keer zo, en je bent je ambt kwijt.` : ` ${wat}: nog ${nogKeer} keer zo, en je bent je ambt kwijt.`;
+    }
+    const wanneer = hoeVaak && g.keer ? `De ${rang(g.keer)} keer achter elkaar dat je tekortschiet. ` : '';
+    if (g.schandpaal) return `${wanneer}Een boete (volgend jaar ${g.schuld} goud erbij), twee soldaten tot de lente, én de schandpaal: jij wijst aan wie.${nog}`;
+    if (g.soldaten) return `${wanneer}Een boete (volgend jaar ${g.schuld} goud erbij), en twee soldaten die tot de lente blijven en meeëten.${hoeVaak ? nog : ''}`;
+    if (g.boete) return `${wanneer}Een boete: volgend jaar komt er ${g.schuld} goud bij wat hij vraagt.${hoeVaak ? nog : ''}`;
     if (g.deel < 1 - 1e-9) return 'Hij telt slecht: dit merkt hij niet.';
     return 'Hij krijgt alles wat hij vraagt.';
   }
@@ -251,6 +300,7 @@
     h.schuld = g.schuld;
     h.tekort = g.tekort;
     h.veelTeWeinig = g.veelTeWeinig ? h.veelTeWeinig + 1 : 0;
+    h.tekortJaren = g.deel < 1 - 1e-9 ? (h.tekortJaren || 0) + 1 : 0;
     h.brief = null;
     b.betaald = g;
     h.jaren.push({ jaar: T.datumVanDag(dagNu(S)).jaar, deel: g.deel, straf: g.straf });
@@ -340,6 +390,7 @@
       gezien.add(e.wie);
       lijst.push({ wie: e.wie, naam: T.naamVanMens(e.wie), eigenschap: m.eigenschap || '', kost: m.schandpaal, boete: 0 });
     }
+    if (!IN().schoutMagZelf) return lijst;
     const h = S.heer;
     const extra = h ? Math.ceil(h.tekort * (IN().boeteZelf - IN().boete) - 1e-9) : 0;
     lijst.push({ wie: 'schout', naam: 'Jijzelf', eigenschap: 'de schout', kost: 0, boete: Math.max(0, extra) });

@@ -406,3 +406,54 @@ test('de beek ligt \'s winters dicht: zonder zout is de vis dan op, met zout bli
   assert.ok(zonder.voorraad.vis < IN.extraVoedselDrempel, `zonder zout: ${zonder.voorraad.vis}`);
   assert.ok(met.voorraad.vis > 35, `met zout: ${met.voorraad.vis}`);
 });
+
+// ── Honger buiten de winter: een optie in de Spelregels (js/opties.js; Marcel, 24 sep) ──
+
+// Zet de optie zolang de toets loopt, en daarna weer terug.
+function metHonger(wijze, fn) {
+  const was = T.BEHOEFTEN_INSTELLINGEN.hongerBuitenWinter;
+  T.BEHOEFTEN_INSTELLINGEN.hongerBuitenWinter = wijze;
+  try {
+    fn();
+  } finally {
+    T.BEHOEFTEN_INSTELLINGEN.hongerBuitenWinter = was;
+  }
+}
+
+test('honger buiten de winter kost standaard alleen tevredenheid, geen mensen', () => {
+  assert.equal(T.BEHOEFTEN_INSTELLINGEN.hongerBuitenWinter, 'tevredenheid');
+  const S = maakS();
+  S.bevolking = 20;
+  for (let dag = ZOMERDAG; dag < ZOMERDAG + 60; dag++) T.tikBehoeftenDag(S, dag);
+  assert.equal(S.bevolking, 20);
+});
+
+test('honger buiten de winter, "sterven": een tekort aan eten kost het hele jaar mensen', () => {
+  metHonger('sterven', () => {
+    const S = maakS();
+    S.bevolking = 20;
+    for (let dag = ZOMERDAG; dag < ZOMERDAG + 60; dag++) T.tikBehoeftenDag(S, dag);
+    assert.ok(S.bevolking < 20, `nog ${S.bevolking}`);
+    // Met eten genoeg sterft er niemand.
+    const vol = maakS();
+    vol.bevolking = 20;
+    T.zetVoorraad(vol, 'graan', 1000);
+    for (let dag = ZOMERDAG; dag < ZOMERDAG + 60; dag++) T.tikBehoeftenDag(vol, dag);
+    assert.equal(vol.bevolking, 20);
+  });
+});
+
+test('honger buiten de winter, "wegtrekken": op een groeidag trekt een gezin weg zolang er geen eten is', () => {
+  metHonger('wegtrekken', () => {
+    const S = maakS();
+    S.bevolking = 20;
+    T.tikBehoeftenDag(S, 40); // een groeidag in de lente, zonder graan
+    assert.equal(S.bevolking, 20 - T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
+    T.tikBehoeftenDag(S, 41); // geen groeidag: niemand
+    assert.equal(S.bevolking, 20 - T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
+    // Met eten blijft iedereen.
+    T.zetVoorraad(S, 'graan', 1000);
+    T.tikBehoeftenDag(S, 60);
+    assert.equal(S.bevolking, 20 - T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
+  });
+});
