@@ -533,3 +533,89 @@ button.gt-proef-keuze { display: block; width: 100%; text-align: left; margin-bo
 /* Wie het zegt: één regel, hoe lang de naam ook is ("de herbergierster"). */
 .gt-zinrij .gt-wie-merk, .gt-elders-knoop .gt-wie-merk { width: 62px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .gt-controle .gt-vouw { margin-left: 0; margin-top: 8px; }
+
+/* ── Het kaartje: de vorm van het gesprek ──
+   Marcel stuurde een node-editor voor RPG Maker; wat die beter deed was de vorm laten zien. Dit
+   is dat, zonder het canvas: het legt zichzelf neer, het volgt de situatie, en klikken springt
+   naar de tekst eronder. Zie ontwerp/verhaal.md. */
+.gt-kaart { margin: 6px 0 14px; }
+.gt-kaart-kop { display: flex; align-items: center; gap: 8px; }
+.gt-kaart-blad {
+  position: relative; margin-top: 6px;
+  max-height: 46vh; overflow: auto;
+  border: 1px solid var(--rand); border-radius: 8px;
+  background: rgba(255, 255, 255, 0.015);
+}
+.gt-kaart-lijnen { position: absolute; left: 0; top: 0; color: #7a8fa6; pointer-events: none; }
+.gt-kaart-lijn { fill: none; stroke: #7a8fa6; stroke-width: 1.3; opacity: 0.8; }
+.gt-kaart-terug { stroke: #4a5a68; stroke-dasharray: 4 3; }
+.gt-kaart-knoop {
+  position: absolute; width: 176px; height: 52px;
+  display: flex; flex-direction: column; justify-content: space-between; align-items: stretch;
+  text-align: left; padding: 6px 8px; border-radius: 7px;
+  background: rgba(255, 255, 255, 0.045); border: 1px solid rgba(239, 230, 210, 0.22);
+}
+.gt-kaart-knoop:hover { background: rgba(255, 255, 255, 0.11); border-color: var(--gedempt); }
+.gt-kaart-start { background: rgba(226, 182, 74, 0.12); border-color: var(--goud); }
+.gt-kaart-zin {
+  font-size: 11.5px; line-height: 1.3; color: var(--inkt); overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.gt-kaart-merk { font-size: 9.5px; color: var(--gedempt); text-align: right; }
+
+/* Zoeken over alle mensen heen. */
+.gt-zoek-doos { position: relative; }
+#gt-zoek { width: 220px; margin: 0; font-size: 12.5px; padding: 4px 8px; }
+.gt-zoek-uit {
+  position: absolute; left: 0; top: 30px; z-index: 12; width: 620px; max-width: 70vw;
+  max-height: 60vh; overflow: auto; padding: 5px;
+  background: rgba(14, 11, 9, 0.98); border: 1px solid var(--rand); border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+.gt-zoek-uit.verborgen { display: none; }
+.gt-zoek-rij {
+  display: flex; gap: 10px; align-items: baseline; width: 100%; text-align: left;
+  background: none; border: 1px solid transparent; border-radius: 5px; padding: 4px 7px;
+}
+.gt-zoek-rij:hover { background: rgba(255, 255, 255, 0.08); }
+.gt-zoek-wie { flex: none; width: 96px; font-size: 11px; color: var(--gedempt);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gt-zoek-zin { flex: 1; font-size: 12.5px; line-height: 1.4; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; }
+.gt-zoek-antwoord { color: #cfe4f3; }
+.gt-zoek-zin mark { background: rgba(226, 182, 74, 0.3); color: var(--goud); border-radius: 2px; }
+
+/* De kopbalk was z-index 3 en de situatiebalk 6, dus de situatiebalk lag over de zoekuitslag —
+   die hangt aan de kopbalk en kan daar niet bovenuit, hoe hoog zijn eigen z-index ook staat. */
+.gt-kop { z-index: 14; }
+/* Waar een gevonden regel staat: zonder dit zijn Wims twee "Werkt de fontein nog?" niet uit
+   elkaar te houden, want dat zijn twee verschillende plekken in hetzelfde gesprek. */
+.gt-zoek-waar { flex: none; max-width: 30%; font-size: 11px; color: var(--gedempt);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* De kopbalk draagt er nu een zoekveld bij: knoppen en links breken niet meer af over twee
+   regels, en het zoekveld geeft mee als het krap wordt. */
+.gt-kop { flex-wrap: nowrap; gap: 10px; }
+.gt-kop button, .gt-kop .gt-naar, .gt-kop label { white-space: nowrap; }
+.gt-kop .gt-zoek-doos { flex: 0 1 auto; min-width: 0; }
+#gt-zoek { width: 100%; max-width: 220px; min-width: 110px; }
+
+/* ── Het draaiboek van de tutorial ──
+   Geen gesprek: geen keuzes, geen voorwaarden, geen situaties. Alleen momenten met regels, in de
+   volgorde waarin ze vallen. Daarom staat de naam van het moment erboven en niet de vraag die
+   ernaartoe leidt: bij een tutorial is er geen vraag, er is een plek in de scène. */
+.gt-wie-kop { font-family: var(--kop); font-size: 20px; color: var(--goud); }
+.gt-moment { margin-bottom: 18px; }
+.gt-moment-kop { display: flex; align-items: baseline; gap: 10px; padding-top: 12px; border-top: 1px solid var(--rand); margin-bottom: 4px; }
+.gt-moment-naam { font-family: var(--kop); font-size: 13px; color: #cfe4f3; flex: none; }
+.gt-moment-uitleg { font-size: 11.5px; color: var(--gedempt); font-style: italic; }
+.gt-moment > .gt-knoop { border-left: none; padding-left: 0; margin: 0; }
+.gt-draai-leeg { color: var(--gedempt); font-size: 12.5px; font-style: italic; padding: 4px 0 4px 72px; }
+.gt-draai-uitleg { color: var(--gedempt); font-size: 12.5px; line-height: 1.5; max-width: 72ch; margin-bottom: 8px; }
+
+/* "de oude meester" en "de smidsvrouw" pasten niet in tweeënzestig pixels en werden "de oude …";
+   wie iets zegt hoort leesbaar te zijn, dat is de hele kolom. */
+.gt-zinrij .gt-wie-merk, .gt-elders-knoop .gt-wie-merk { width: 92px; }
+.gt-draai-leeg { padding-left: 102px; }
+/* Het draaiboek heeft geen situaties, en dan hoort er ook geen lege balk te staan. */
+.gt-situatiebalk:empty { display: none; }

@@ -396,7 +396,7 @@
     roepen: ['Daar ben je. Kom eens hier, jongen. Ik roep niet meer zo hard als vroeger.'],
     // De meester, bij de oude ton (in het ontwerp een kraai op zijn kool; die is er nog niet).
     tonVoor: [
-      'Zie je die ouwe ton? Daar zitten de hele dag kraaien op, en \'s avonds zitten ze in mijn kool.',
+      "Zie je die ouwe ton? Daar zitten de hele dag kraaien op, en 's avonds zitten ze in mijn kool.",
       'Let op.',
     ],
     // Na de vuurschicht: zevenennegentig werd achtennegentig, en hij lacht erom.

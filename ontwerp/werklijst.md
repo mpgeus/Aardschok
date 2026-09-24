@@ -42,9 +42,6 @@ lijken — het tweede proefje, en de vraag of de kern leuk is.
 - veel nieuwe gebouwen lenen een tekening (hut, schaapskooi, timmerman, brouwerij, tiendschuur,
   wapenmaker, wachthuis, …), en kapel, watermolen en put hebben nog geen bouwfases: tekenwerk.
 
-**Voor als Marcel "push it" zegt:** op GitHub staan twee commits uit de cloudsessie van 22 sep die
-lokaal niet in `main` zitten (`bd0e742`, `b92336a`: een kaartje en zoeken in de gespreksschrijver,
-en het draaiboek van de tutorial erin). Eerst `origin/main` samenvoegen, dan `npm test`, dan pushen.
 
 **Wacht op Marcel:**
 - Spelen, en zeggen hoe het voelt: vooral de winter, en hoe snel een jaar gaat.
