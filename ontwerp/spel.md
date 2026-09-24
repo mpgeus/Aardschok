@@ -475,9 +475,24 @@ Nog open: de voorinstellingen Mild en Streng (wat staat er dan?).
 > Ze moeten random eigenschappen hebben. De ene oogst dan wat sneller dan de ander. Etc
 
 Het antwoord op de vraag of de eigenschappen van de boeren instelbaar moeten worden: ze worden
-geloot, en ze doen iets in het spel. Nog te vragen, vóór het bouwen: welke eigenschappen er als
-eerste komen, of ook hun karakter (Klaas zingt, Aaltje is weduwe, …) geloot wordt, en of je ze
-ziet of zelf moet ontdekken.
+geloot, en ze doen iets in het spel. **Besloten (Marcel, 24 sep, uit een voorstel van Claude):**
+
+- **Vier eigenschappen, per boer geloot:** maaien (snelle of trage maaier), opbrengst (groene
+  vingers of slordig: zijn akker geeft meer of minder graan), zaaien (zuinig of kwistig: minder of
+  meer zaaigraan), en aanzien (geliefd of gehaat: wat de schandpaal het dorp kost). Meestal is een
+  boer gewoon, en dan zie je niets.
+- **Ook het karakter wordt geloot.** Een stapel karakters, elk met eigen zinnen, en elke boer trekt
+  er een. Een weduwe of vroedvrouw wordt altijd een boerin. De vijf die er waren (de zanger, de
+  weduwe, de woekeraar, de vroedvrouw, het heethoofd) komen in die stapel, met nieuwe erbij. De
+  namen horen bij de boer, niet bij het karakter: Klaas blijft Klaas, maar is niet altijd de zanger.
+- **Je ziet het meteen:** bij de muis, boven het gesprek, en bij de schandpaal.
+- Geloot bij elk nieuw spel (en zolang er geen opslaan is: bij elk herladen). Het is een optie in de
+  spelregels: geloot, of vast (de vijf zoals ze geschreven waren, allemaal gewoon). De sterkte en de
+  kansen staan in de werkbank.
+
+Een inzicht van Claude vooraf: sinds het vangnet komt al het graan toch binnen, dus sneller maaien
+bepaalt alleen wánneer het graan er is, niet hoeveel. Dat telt vooral in de hongerweken vlak vóór
+de oogst. Wie meer of minder oplevert, zegt de opbrengst.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
