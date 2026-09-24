@@ -324,6 +324,38 @@ gekozen door Marcel:
   kan de inner ter ore komen. Dat laatste komt bij punt 6, met de argwaan.
 - **Zonder ijzer valt de smidse stil.** Een eigen ertsgraver maakt je minder afhankelijk van hem.
 
+## Sint-Maarten: de heer int (Marcel, 24 sep 2026)
+
+Punt 5 van de werklijst. Marcel koos uit de voorstellen van Claude:
+
+- **Een brief vooraf.** Op 11 wijnmaand, een maand voor Sint-Maarten, komt een brief van de heer,
+  hoogdravend en lachwekkend, met precies wat hij wil: graan (de pacht), wol, eieren (de
+  pachthoenders) en goud. Onder de kalender telt een regel af tot Sint-Maarten, rood waar je nog
+  tekortkomt. Zo kun je plannen: verkopen aan de marskramer, bouwen, en later verstoppen.
+- **Hij vraagt naar wat er te zien is:** de gebouwen (een stenen huis oogt rijker dan een hut), de
+  mensen, en wat je open aan de marskramer verkocht. Wat je stil verkocht, telt niet: zo heeft het
+  helen nu al betekenis. De voorraad telt pas als de inner komt kijken (punt 6).
+- **Straffen naar het tekort.** Klein: hogere eisen volgend jaar, en wat je tekortkwam staat met
+  rente op de volgende brief. Groter: soldaten ingekwartierd, een maand lang; ze eten mee en het
+  dorp morrt. Groot: een straf in het dorp, en jij wijst aan wie aan de schandpaal gaat. Het dorp
+  onthoudt wie je koos.
+- **Het ambt:** drie jaar op rij tekort, of één keer niets betalen, en de heer zet je af. Het spel
+  is dan voorbij, met een scène. Eén goed jaar zet de teller weer op nul.
+
+Uitgewerkt door Claude (voorstel, de getallen staan in `T.HEER_INSTELLINGEN`):
+
+- **Wat hij vraagt:** graan naar de akkers die hij ziet (een kwart van wat een akker opbrengt),
+  wol naar de schaapskooien, eieren naar de kippenhokken, en goud: een hoofdgeld per mens, iets
+  naar hoe rijk het dorp oogt (wat een gebouw aan goud kostte, telt als pronk), en een deel van wat
+  je dit jaar open verkocht. Elk jaar vraagt hij een tiende meer: hij raakt eraan gewend.
+- **Het tekort** telt in goud, tegen de prijzen van de marskramer: klein is minder dan een kwart
+  van wat hij vroeg, groot vanaf drie vijfde.
+- **Wie er aan de schandpaal kan:** een van de vijf boeren, of een keuter zonder land. De boeren
+  kregen daarvoor een naam (voorstel): Gerrit, Aleid, Wouter, Machteld en Jan. Het dorp morrt een
+  tijdje, en wie je koos, staat opgeschreven voor als de groepen komen (punt 9).
+- **Tevredenheid heeft nu stemmingen:** een tijdelijk plus of min met een reden (het pannenbier, de
+  schandpaal, soldaten in het dorp), die bij de muis op de tevredenheid staan.
+
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
 De ruggengraat staat of wordt gebouwd: bouwen, mensen, werk, kalender, voorraad. Wat er nog mist,
