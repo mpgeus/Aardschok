@@ -494,6 +494,10 @@ Waarom: de plaat liet zien dat de bouwplaats breder is dan de voet (stapels, ste
 het spel kent een huis nog als 6×6 terwijl dit er een van 7×5 is. Dat los je op met één type, en
 dan gaan de andere types langs dezelfde weg.
 
+**In het spel: goed (Marcel, 24 sep).** Over het gebint met de bouwers ervoor, in het gehucht: "dat
+laatste plaatje ziet er goed uit". De weg ligt daarmee vast: hetzelfde model met hetzelfde zaad,
+fases zo lang als het werk, en een bouwplaats in een ring rond de voet. De andere types volgen zo.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
