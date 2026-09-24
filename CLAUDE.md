@@ -165,14 +165,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   aanbouw: de ploeg komt uit de bevolking vóór de werkplaatsen, `voortgang` 0..1 uit gedaan werk,
   de vorst, `T.bouwFaseIndex`, het hoogste punt met pannenbier, en de bouwers als poppetjes op de
   bouwplaats), `js/handel.js` (de marskramer: komen en gaan, kopen en verkopen, stil verkopen als
-  heler in `S.handel.boek`), `js/behoeften.js` (tevredenheid uit eten, brandhout en een kerk; de
-  winter; zout voor vis en vlees; een feest; een huis dat doorgroeit), en `js/hud.js` (de balk,
+  heler in `S.handel.boek`), `js/heer.js` (de heer: zijn brief op 11 wijnmaand met wat hij wil naar
+  wat hij ziet, Sint-Maarten, de straf naar het tekort, de schandpaal, afgezet worden),
+  `js/behoeften.js` (tevredenheid uit eten, brandhout en een kerk; de
+  winter; zout voor vis en vlees; stemmingen met een reden; een huis dat doorgroeit), en `js/hud.js` (de balk,
   het bouwmenu onder `B`, een vraag met knoppen via `T.ui.vraag`, en het handelspaneel; alleen met
   `?kaart=gehucht` of `?hud`). Het begin zonder tutorial is `T.beginOpKaart` (`js/gebied.js`); de
   kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de bouwfases uit
   `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen om bij te
   stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
-  `T.BOUWEN_INSTELLINGEN`, `T.HANDEL_INSTELLINGEN`, `T.BEHOEFTEN_INSTELLINGEN`, `T.AKKER_STADIA`,
+  `T.BOUWEN_INSTELLINGEN`, `T.HANDEL_INSTELLINGEN`, `T.HEER_INSTELLINGEN`, `T.BEHOEFTEN_INSTELLINGEN`,
+  `T.AKKER_STADIA`,
   `T.GRAAN_PER_TEGEL`).
 - Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): zijn `gesprek`
   als hij er een heeft, anders zijn soort. Zo delen honderd figuranten één soort (`dorpeling`)
@@ -247,6 +250,9 @@ blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In he
 marskramer komt voor het eerst op dag 6 (`Toren.debug.kalender(6.2)`, dan een paar seconden
 `stap` om hem naar de brink te laten lopen). Let op bij pannenbier en handel: `Toren.S.gebouwen`
 begint met de gebouwen die al op de kaart staan; het huis van de schout is ook een `'huis'`.
+De brief van de heer komt op dag 220 (11 wijnmaand, `Toren.debug.kalender(219.95)`), Sint-Maarten
+is dag 250. Spring je er in één keer heen, dan tikken alle dagen ertussen, en eet het dorp zijn
+graan op zonder dat de boeren maaien: zet de voorraad dan vlak ervoor.
 
 Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken ze de regels uit
 `js/` zelf, nooit een eigen kopie:

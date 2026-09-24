@@ -22,8 +22,10 @@ een balk met kalender, voorraad (en kleine chips voor ijzer, zout, steen, …), 
 tevredenheid; 45 soorten gebouwen met een bouwmenu (`B`); behoeften en de winter. Sinds 24 sep:
 **bouwen kost handen** (een ploeg uit de bevolking, vóór de werkplaatsen; drie keer zo lang; in de
 vorst ligt het stil; bouwers met een klophamer en spaanders op de bouwplaats; pannenbier op het
-hoogste punt), en **de marskramer** (punt 4, af). De schout kon in het gehucht niet lopen
-(snelheid 0); dat is gerepareerd. `npm test`: 329/329.
+hoogste punt), en **de marskramer** (punt 4, af), en **Sint-Maarten** (punt 5, af): de brief van de heer een maand
+vooraf, de aftelregel onder de kalender, betalen, de straf naar het tekort (hogere eisen,
+soldaten, de schandpaal waarbij jij aanwijst), en afgezet worden. De schout kon in het gehucht niet
+lopen (snelheid 0); dat is gerepareerd. `npm test`: 347/347.
 
 **Loopt nu:** een agent die voor één type (het huis: vakwerk met riet) echte bouwfases maakt uit
 de niet-waterpas huizenbouwer `huis-sdf.cjs`, in `gereedschap/pixelart/bouwfasen-sdf.cjs`, met een
@@ -34,14 +36,18 @@ proefplaat in `uit/bouwfasen-sdf/`. Marcel vond de fases op de oude, rechte `dor
 van het gehucht (hut, boerderij als hallehuis, houthakker, schaapskooi, kippenhok, wachthuis,
 kapel) op dezelfde manier, en dan **ronde 4b**: de niet-waterpas huizen als de gebouwen in het spel,
 met hun fases (per type zoveel als het werk vraagt, elk zo lang als het werk duurt, het hoogste punt
-waar de kap staat). Daarna B: Sint-Maarten.
+waar de kap staat). Daarna punt 6: rijk worden en arm lijken (de inner, verstopplekken, twee
+rekenboeken), het tweede proefje.
 
 **Nog ruw, om te onthouden:**
 - de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
   bijstellen als hij speelt;
-- de prijzen en tussenpozen van de marskramer, en de getallen van het bouwen, zijn een eerste gok
-  (`T.HANDEL_INSTELLINGEN`, `T.BOUWEN_INSTELLINGEN`); stil verkopen levert nu alleen minder op, de
-  winst daarvan komt bij punt 6;
+- de prijzen en tussenpozen van de marskramer, de getallen van het bouwen en wat de heer vraagt,
+  zijn een eerste gok (`T.HANDEL_INSTELLINGEN`, `T.BOUWEN_INSTELLINGEN`, `T.HEER_INSTELLINGEN`);
+- het graan is krap: de akkers geven zo'n 420 per jaar, het dorp eet er 450, en het begint met 60,
+  dus voor de eerste oogst is het al op; de heer vraagt er dan nog 53 bij. Samen met Marcel
+  bijstellen als hij speelt;
+- de vijf boeren hebben een naam gekregen (Gerrit, Aleid, Wouter, Machteld, Jan): een voorstel;
 - de huizen in het spel en hun bouwfases komen nog uit de rechte `dorp.cjs` (zie hierboven);
 - de bouwers lopen alleen het laatste stuk van hun weg (acht tegels), want lopen gaat in echte
   seconden en een dag duurt er 2,5; ze dragen nog niets (hout, riet); de slag van de hamer is een
@@ -77,9 +83,11 @@ nog nodig is".
 
 *B. De heer, en de kern (dit is het tweede proefje)*
 
-5. **Sint-Maarten.** Klaar als de heer op 11 slachtmaand zijn deel vraagt, in goederen en goud, zijn
-   eisen meegroeien met hoe rijk het dorp oogt, hij straft als je tekortschiet (in het dorp, jou
-   zelf, hogere eisen, soldaten), en je je ambt kunt verliezen.
+5. **Sint-Maarten** (af, 24 sep 2026). Klaar als de heer op 11 slachtmaand zijn deel vraagt, in
+   goederen en goud, zijn eisen meegroeien met hoe rijk het dorp oogt, hij straft als je
+   tekortschiet (in het dorp, jou zelf, hogere eisen, soldaten), en je je ambt kunt verliezen.
+   Nog niet: een straf voor jou zelf (die wacht op je eigen buidel, punt 12), en de soldaten als
+   poppetjes (nu een regel onder de kalender; er is nog geen vel voor een soldaat).
 6. **Rijk worden en arm lijken.** Klaar als de inner argwaan heeft die stijgt als wat hij ziet niet
    klopt met wat je levert, er verstopplekken zijn met plaats voor zoveel, je twee rekenboeken
    bijhoudt, en zijn bezoek een scène is waarin jij meeloopt, de route kiest, praat, afleidt of
@@ -180,6 +188,10 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 24 sep 2026 — **Sint-Maarten** (punt 5): de brief van de heer op 11 wijnmaand, met wat hij wil
+  naar wat hij ziet (akkers, schapen, kippen, mensen, hoe rijk de gebouwen ogen, open handel);
+  betalen op 11 slachtmaand; straf naar het tekort; afgezet na drie jaar tekort of één keer niets
+  (`js/heer.js`). De tevredenheid kent nu stemmingen met een reden.
 - 24 sep 2026 — **Bouwen kost handen, en de marskramer.** Na onderzoek naar hoe andere spellen een
   gebouw laten groeien (Settlers II, Knights and Merchants, Manor Lords; `beeld.md`) koos Marcel:
   bouwers uit de bevolking vóór de werkplaatsen, voortgang uit gedaan werk (dus geen overgeslagen
