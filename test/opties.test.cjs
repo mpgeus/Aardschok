@@ -15,13 +15,14 @@ require('../js/behoeften.js');
 require('../js/akkers.js');
 require('../js/handel.js');
 require('../js/heer.js');
+require('../js/inner.js');
 require('../js/boeren.js');
 require('../js/gesprekken.js');
 require('../js/gesprek.js');
 const T = globalThis.Toren;
 
 // De blokken zoals de bestanden ze zetten, vóór opties.js er iets mee doet.
-const BLOKKEN = ['GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN', 'BOEREN_INSTELLINGEN'];
+const BLOKKEN = ['GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN', 'INNER_INSTELLINGEN', 'BOEREN_INSTELLINGEN'];
 const LOS = ['GRAAN_PER_TEGEL', 'ZAAIGRAAN_PER_TEGEL', 'DAG_LENGTE'];
 const bestanden = {};
 for (const k of BLOKKEN.concat(LOS)) bestanden[k] = JSON.parse(JSON.stringify(T[k]));
@@ -68,6 +69,18 @@ test('een keuze zet zijn waarden, en terug naar de standaard zet ze terug', () =
   assert.equal(T.HEER_INSTELLINGEN.ambtKwijtNa, 2);
   T.pasOptiesToe({ keuzes: { telt: 'slecht' } });
   assert.deepEqual(T.HEER_INSTELLINGEN, bestanden.HEER_INSTELLINGEN);
+});
+
+test('de rekening en het graan van de heer zijn keuzes (punt 6), en de inner staat in de werkbank', () => {
+  assert.equal(T.HEER_INSTELLINGEN.rekening, 'rapport', 'Marcel koos: wat de inner zag');
+  assert.equal(T.HEER_INSTELLINGEN.graan, 'deel', 'Marcel koos: een deel van wat hij telde');
+  T.pasOptiesToe({ keuzes: { rekening: 'alles', graanVoorDeHeer: 'pacht' } });
+  assert.equal(T.HEER_INSTELLINGEN.rekening, 'alles');
+  assert.equal(T.HEER_INSTELLINGEN.graan, 'pacht');
+  const inner = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'INNER_INSTELLINGEN'));
+  assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.terugNaDagen.van').label, 'terug na dagen · van');
+  assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.geduld').waarde, bestanden.INNER_INSTELLINGEN.geduld);
+  assert.ok(!inner.some((g) => g.pad === 'INNER_INSTELLINGEN.komt.maand'), 'een maand is geen getal');
 });
 
 test('een onbekende keuze valt terug op de standaard', () => {

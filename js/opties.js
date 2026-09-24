@@ -100,6 +100,26 @@
       ],
     },
     {
+      id: 'rekening', naam: 'Waar de heer de rekening op maakt', standaard: 'inner',
+      uitleg: 'Of het uitmaakt wat zijn inner in oogstmaand zag.',
+      keuzes: [
+        { id: 'inner', naam: 'Wat de inner zag', zet: { 'HEER_INSTELLINGEN.rekening': 'rapport' },
+          uitleg: 'Zijn rapport is de rekening: wat hij niet zag, betaal je dat jaar niet. Maar klopt wat hij ziet niet, dan groeit zijn argwaan.' },
+        { id: 'alles', naam: 'Alles, zonder inner', zet: { 'HEER_INSTELLINGEN.rekening': 'alles' },
+          uitleg: 'Er komt geen inner, en de heer ziet alles zelf. Arm lijken kan dan niet.' },
+      ],
+    },
+    {
+      id: 'graanVoorDeHeer', naam: 'Wat de heer van het graan vraagt', standaard: 'deel',
+      uitleg: 'Het graan op zijn rekening.',
+      keuzes: [
+        { id: 'deel', naam: 'Een deel van wat hij telde', zet: { 'HEER_INSTELLINGEN.graan': 'deel' },
+          uitleg: 'Een deel van het graan dat de inner zag, in de schuren en nog op de velden. Wie graan wegzet voor hij komt, betaalt minder.' },
+        { id: 'pacht', naam: 'Pacht per akker', zet: { 'HEER_INSTELLINGEN.graan': 'pacht' },
+          uitleg: 'Een vast deel per akkertegel die hij zag, hoe de oogst ook uitviel.' },
+      ],
+    },
+    {
       id: 'hongerBuitenWinter', naam: 'Honger buiten de winter', standaard: 'tevredenheid',
       uitleg: 'Wat er gebeurt als het graan op is in de lente, de zomer of de herfst. In de winter kost honger altijd mensen.',
       keuzes: [
@@ -131,6 +151,7 @@
     { naam: 'Behoeften en de winter', blok: 'BEHOEFTEN_INSTELLINGEN' },
     { naam: 'De marskramer', blok: 'HANDEL_INSTELLINGEN' },
     { naam: 'De heer', blok: 'HEER_INSTELLINGEN' },
+    { naam: 'De inner', blok: 'INNER_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },
   ];
 
