@@ -182,6 +182,25 @@ gereedschap. **Wat je bouwt, is wat hij ziet.**
 zet een keur, de oogst komt, de inner telt, je verstopt iets of niet, en op Sint-Maarten betaal je.
 Is rijk worden en arm lijken leuk?
 
+## Rijk worden en arm lijken: de inner (Marcel, 24 sep 2026; werklijst punt 6)
+
+Marcel koos uit een voorstel van Claude, vóór het bouwen:
+
+- **De rekening is wat de inner zag.** Hij komt in oogstmaand kijken; zijn rapport is wat de heer
+  vraagt, in de brief en op Sint-Maarten. Wat hij niet zag, betaal je dat jaar niet.
+- **Hij loopt met je mee.** Zolang hij er is, staat de tijd stil: het is een scène. Loop je naast
+  hem, dan volgt hij jou; loop je weg, dan loopt hij zijn eigen ronde. Wat in zijn zicht komt (huizen
+  en schuren houden zijn blik tegen), telt hij. Zijn geduld is een aantal stappen.
+- **Van het graan vraagt de heer een deel van wat de inner telde:** het graan in de schuren en wat nog
+  op de velden staat die hij zag. Wie vóór zijn komst graan verstopt, betaalt minder, maar klopt de
+  schuur niet met de velden, dan groeit zijn argwaan. (De pacht per akker blijft een optie.)
+- **Argwaan doet vier dingen:** de heer vraagt meer, soldaten doorzoeken het dorp (en wat ze vinden,
+  is weg), de inner komt onverwacht terug, en bij heel hoge argwaan telt het rapport niet meer: dan
+  vraagt de heer toch naar alles.
+- Wat nog komt, in stappen zodat Marcel tussendoor kan spelen: eerst het bezoek, het rapport en de
+  argwaan; dan verstopplekken met plaats voor zoveel graan of goud; dan praten (een smoes), afleiden
+  (een kroes bier: dat kost hem geduld) en omkopen, en de twee rekenboeken.
+
 ## Gebouwen (Marcel, 23 sep 2026)
 
 > We hebben types gebouwen nodig. Dus huis, deze zorgen ervoor dat je populatie kan groeien;
