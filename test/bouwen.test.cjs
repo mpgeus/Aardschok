@@ -294,3 +294,37 @@ test('T.naarBouwplaats: alleen naast de voet een richting, verder weg niet', () 
   e.ty = 8;
   assert.deepEqual(T.naarBouwplaats(e), { dx: -1, dy: -1 });
 });
+
+// ── Fases per type (tegels/bouwfasen.json met `vanaf` en `hoogstePunt`) ──
+
+test('T.bouwFaseIndex: met een lijst die zegt waar elke fase begint, zo lang als het werk duurt', () => {
+  const fasen = [{ vanaf: 0 }, { vanaf: 0.1 }, { vanaf: 0.3 }, { vanaf: 0.45 }, { vanaf: 0.55 }, { vanaf: 0.8 }];
+  assert.equal(T.bouwFaseIndex(0.05, fasen), 0);
+  assert.equal(T.bouwFaseIndex(0.1, fasen), 1);
+  assert.equal(T.bouwFaseIndex(0.5, fasen), 3);
+  assert.equal(T.bouwFaseIndex(0.99, fasen), 5);
+});
+
+test('T.bouwFaseIndex: een lijst zonder `vanaf` is in gelijke stukken, zo veel als er fases zijn', () => {
+  const zeven = new Array(7).fill(0).map(() => ({}));
+  assert.equal(T.bouwFaseIndex(0.5, zeven), 3);
+  assert.equal(T.bouwFaseIndex(0.99, zeven), 6);
+});
+
+test('T.hoogstePuntVan: de fase die bij de tekening als hoogste punt staat, anders de instelling', () => {
+  assert.equal(T.hoogstePuntVan('huis'), T.BOUWEN_INSTELLINGEN.hoogstePunt, 'zonder vel: de instelling');
+  const naam = T.GEBOUWEN.huis.tekening.split('/').pop();
+  const was = T.BOUWFASEN;
+  T.BOUWFASEN = { fasen: { [naam]: { hoogstePunt: 3, fasen: [{ vanaf: 0 }, { vanaf: 0.1 }, { vanaf: 0.25 }, { vanaf: 0.4 }, { vanaf: 0.55 }] } } };
+  try {
+    assert.equal(T.hoogstePuntVan('huis'), 0.4);
+    // En de vraag om pannenbier komt dan ook op dat moment.
+    const S = maakS(3);
+    const b = zetNeer(S, 'huis', 2, 2);
+    let dag = 0;
+    while (!b.pannenbier && dag < 50) bouwDag(S, ++dag);
+    assert.ok(b.voortgang >= 0.4 && b.voortgang < 0.4 + 1 / T.GEBOUWEN.huis.bouwtijd + 1e-9, `voortgang ${b.voortgang}`);
+  } finally {
+    T.BOUWFASEN = was;
+  }
+});

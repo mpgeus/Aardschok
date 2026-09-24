@@ -1097,7 +1097,7 @@
       // (kapel, watermolen, put, ...) gewoon bleker tot hij klaar is, zonder er een tweede tekening
       // voor nodig te hebben.
       const fase = v.inAanbouw && v.tekeningNaam && T.bouwFaseIndex && metSprites() && T.sprites.bouwfase
-        && T.sprites.bouwfase(v.tekeningNaam, T.bouwFaseIndex(v.voortgang));
+        && T.sprites.bouwfase(v.tekeningNaam, T.bouwFaseIndex(v.voortgang, T.fasenVan(v.tekeningNaam)));
       const alpha = (isToren ? dof * dekking : dof) * (v.inAanbouw && !fase ? 0.45 : 1);
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;

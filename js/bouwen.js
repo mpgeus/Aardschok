@@ -59,13 +59,40 @@
     return !!(g && g.tekening && g.tekening.startsWith('gebouwen/') && T.ploegVan(soort) >= 2);
   };
 
-  // Welke van de vijf bouwfases (tegels/bouwfasen.json, gereedschap/pixelart/bouwfasen.cjs) een
-  // gebouw met deze voortgang toont: vijf gelijke stukken, en fase 3 begint op het hoogste punt.
-  // Daarna is hij af, en tekent js/tekenen.js de gewone tekening.
+  // Welke bouwfase een gebouw met deze voortgang toont. Elk type bouwt op zijn eigen manier
+  // (ontwerp/beeld.md, "Bouwen: een huis dat groeit"): zoveel fases als het werk vraagt, en elke
+  // fase zo lang als het werk duurt. Die lijst staat bij de tekening in tegels/bouwfasen.json
+  // (`fasen`, elk met `vanaf`: de voortgang waarop hij begint). Zonder `vanaf` zijn het gelijke
+  // stukken, en zonder lijst vijf gelijke stukken (het oude vel). Daarna is hij af, en tekent
+  // js/tekenen.js de gewone tekening.
   T.AANTAL_BOUWFASEN = 5;
-  T.bouwFaseIndex = function (voortgang) {
+  T.bouwFaseIndex = function (voortgang, fasen) {
     const v = Number.isFinite(voortgang) ? voortgang : 0;
-    return Math.max(0, Math.min(T.AANTAL_BOUWFASEN - 1, Math.floor(v * T.AANTAL_BOUWFASEN)));
+    if (fasen && fasen.length && fasen.every((f) => Number.isFinite(f.vanaf))) {
+      let i = 0;
+      while (i + 1 < fasen.length && fasen[i + 1].vanaf <= v) i++;
+      return i;
+    }
+    const n = fasen && fasen.length ? fasen.length : T.AANTAL_BOUWFASEN;
+    return Math.max(0, Math.min(n - 1, Math.floor(v * n)));
+  };
+
+  // De fases van een tekening ("dorpshuis1"), als ze er zijn (tegels/bouwfasen.js is in het spel
+  // geladen, niet in de toetsen die er niet om vragen).
+  T.fasenVan = function (tekeningNaam) {
+    const g = tekeningNaam && T.BOUWFASEN && T.BOUWFASEN.fasen && T.BOUWFASEN.fasen[tekeningNaam];
+    return g && g.fasen && g.fasen.length ? g.fasen : null;
+  };
+
+  // Bij welke voortgang de kap staat en de meiboom op de nok gaat: de fase die bij de tekening als
+  // `hoogstePunt` staat, anders T.BOUWEN_INSTELLINGEN.hoogstePunt.
+  T.hoogstePuntVan = function (soort) {
+    const g = T.GEBOUWEN[soort];
+    const naam = g && g.tekening ? g.tekening.split('/').pop() : null;
+    const lijst = T.fasenVan(naam);
+    const i = lijst && T.BOUWFASEN.fasen[naam].hoogstePunt;
+    if (lijst && Number.isInteger(i) && lijst[i]) return Number.isFinite(lijst[i].vanaf) ? lijst[i].vanaf : i / lijst.length;
+    return T.BOUWEN_INSTELLINGEN.hoogstePunt;
   };
 
   // Vriest het op deze dag? Zacht gekoppeld aan js/tijd.js: zonder kalender (een toets die alleen
@@ -144,7 +171,8 @@
         maakAf(S, b);
         continue;
       }
-      if (voor < IN.hoogstePunt && b.voortgang >= IN.hoogstePunt && !b.pannenbier && T.heeftHoogstePunt(b.soort)) {
+      const hoogste = T.hoogstePuntVan(b.soort);
+      if (voor < hoogste && b.voortgang >= hoogste && !b.pannenbier && T.heeftHoogstePunt(b.soort)) {
         b.pannenbier = 'gevraagd';
         b.pannenbierTot = dag + IN.pannenbierWacht;
         if (T.vraagPannenbier) T.vraagPannenbier(S, b);
