@@ -73,6 +73,12 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   `node naar-spel.cjs --alleen schandpaal`). De hoogte van de nek wordt gemeten op de boer en de
   boerin zelf; komt er een vel bij dat aan de paal kan, zet het dan in `FIGUREN` daar.
 - `bosvijanden.cjs`: wolf, reuzenspin en kobold, met houdingen (`bosvijanden-anim.cjs`).
+- `vee.cjs`: de koe en het schaap (`beeld.md`, "Het vee"), op het tuig van de wolf, met vier
+  houdingen: grazen, staan, lopen en liggen. Elk in drie kleuren, een vel per kleur (`koe0..2`:
+  roodbruin, zwart, zwartbont; `schaap0..2`: vuilwit, bruin, zwartkop). De koe heeft een bredere
+  cel (128×108). `node vee-anim.cjs` rendert ze (met namen erachter alleen die) en maakt de
+  proefplaat `uit/vee-proef.png` (`--proef` alleen die); daarna
+  `node naar-spel.cjs --alleen koe0,koe1,koe2,schaap0,schaap1,schaap2`.
 - `toren.cjs`: de toren van de oude meester in drie staten, met een eigen renderer voor zijn
   hoogte, en `toren-lagen.cjs` dat hem in lagen snijdt voor het spel.
 - `trap.cjs`: de spiraaltrap, in dezelfde drie staten als de toren (ingestort, provisorisch,

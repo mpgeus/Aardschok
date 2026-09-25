@@ -95,6 +95,8 @@
     if (doel.wezen) {
       const e = doel.wezen;
       if (e.kant === 'monster') return { tekst: `De ${e.naam} aanvallen`, doe: () => T.startGevecht(S, e, true) };
+      // Een dier (js/vee.js) praat niet en doet nog niets: bij de muis staat alleen wat het is.
+      if (e.dier) return { tekst: T.hoofdletter(`een ${e.naam}`) };
       // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: Wim, en de meester. Welk
       // gesprek dat is, zegt T.gesprekIdVan — een dorpeling kan er een eigen hebben.
       if (T.gesprekVan && T.gesprekVan(e)) {
@@ -198,11 +200,14 @@
     const basis = datum && T.akkerStadium ? T.akkerStadium(datum.maand, datum.dagVanMaand) : null;
     for (const m of w.wezens) {
       if (m.dood || !m.dwaalt || m.pad.length || m.gelokt || m === S.spreektMet || m.maait) continue;
+      // Een dier dat ligt, blijft liggen tot zijn rust zegt dat het weer opstaat (js/vee.js).
+      if (m.dier && T.rustVanDier && T.rustVanDier(m, S.tijd || 0) === 'liggen') continue;
       m.dwaalTijd -= dt;
       // Staat hij toevallig stil op een tegel waar hij een doorgang blokkeert, dan wacht hij daar
       // niet zijn hele pauze uit maar stapt meteen door.
       if (m.dwaalTijd > 0 && !bijDeur(w, m.tx, m.ty)) continue;
-      m.dwaalTijd = 1.5 + Math.random() * 2.5;
+      // Wie een eigen pauze heeft (vee: dat staat lang te grazen voor het een stap zet), neemt die.
+      m.dwaalTijd = m.pauze ? m.pauze[0] + Math.random() * (m.pauze[1] - m.pauze[0]) : 1.5 + Math.random() * 2.5;
       const thuisNu = (T.wandelAnker && T.wandelAnker(m, basis)) || m.thuis;
       // Ligt hij nu buiten die straal — een boer wiens huis niet naast zijn akker staat, bij het
       // begin van het groeiseizoen — dan is geen van de vier buurtegels ooit dichtbij genoeg, en

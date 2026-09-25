@@ -234,6 +234,16 @@ const FIGUURLIJST = {
   'boerin-nieuwkomer': { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs boerin-nieuwkomer' },
   'boer-drinker': { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs boer-drinker' },
   'boerin-drinker': { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs boerin-drinker' },
+  // Het vee (vee.cjs, ontwerp/beeld.md "Het vee"): een koe en een schaap, elk in drie kleuren, een
+  // vel per kleur. js/vee.js kiest het vel met het zaad van het dier (T.VEE, T.dierKleur), en
+  // js/sprites.js wisselt als het stilstaat tussen grazen, staan en liggen (T.rustVanDier). De koe
+  // heeft een bredere cel (128×108): van opzij is ze ruim twee tegels lang.
+  koe0: { map: ['vee', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'liggen'], bron: 'vee-anim.cjs koe0' },
+  koe1: { map: ['vee', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'liggen'], bron: 'vee-anim.cjs koe1' },
+  koe2: { map: ['vee', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'liggen'], bron: 'vee-anim.cjs koe2' },
+  schaap0: { map: ['vee', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'liggen'], bron: 'vee-anim.cjs schaap0' },
+  schaap1: { map: ['vee', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'liggen'], bron: 'vee-anim.cjs schaap1' },
+  schaap2: { map: ['vee', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'liggen'], bron: 'vee-anim.cjs schaap2' },
 };
 
 // Eén figuur: zijn vellen naar beelden/figuren/ en zijn beschrijving terug (of null als hij er

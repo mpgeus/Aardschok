@@ -177,7 +177,7 @@
   // Hoe hoog een figuur boven zijn tegel uitsteekt: waar zijn hoofd zit, voor de levensbalk,
   // het uitroepteken en het aanwijzen met de muis. De cel is hoger dan de figuur (er moet een
   // zwaard in de lucht in passen), dus dit is gemeten aan het vel zelf, op de houding staan.
-  const HOOG = { tovenaar: 90, wim: 66, skelet: 78, slijm: 28, wolf: 46, bakker: 66, marskramer: 66 };
+  const HOOG = { tovenaar: 90, wim: 66, skelet: 78, slijm: 28, wolf: 46, bakker: 66, marskramer: 66, koe: 48, schaap: 30 };
   S.figuurNaam = (soort) => (soort === 'held' ? 'tovenaar' : soort);
   S.hoogte = (soort) => HOOG[S.figuurNaam(soort)] || 60;
 
@@ -482,7 +482,10 @@
   // beeld (voor de bol op de staf, zie S.bron).
   function stand(e) {
     if (!e.beeldStand) {
-      e.beeldStand = { afgelegd: 0, x: e.x, y: e.y, richting: 'Z', eenmalig: null, tot: 0, begin: 0, flits: 0, laatste: null };
+      // Wie nog geen stap zette, kijkt naar het zuiden, of naar de kant die hij meekreeg (een dier,
+      // js/vee.js: anders begint een kudde allemaal dezelfde kant op te kijken).
+      const richting = e.beginRichting || 'Z';
+      e.beeldStand = { afgelegd: 0, x: e.x, y: e.y, richting, eenmalig: null, tot: 0, begin: 0, flits: 0, laatste: null };
     }
     return e.beeldStand;
   }
@@ -518,7 +521,8 @@
     let naam = e.maait && S.figuurGegevens('maaier') ? 'maaier' : e.soort === 'dorpeling' ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
     // Wie nog geen eigen vel heeft, mag er een lenen (T.WEZENS, vel: 'wim'): zo kan de bakker
     // meedoen voordat hij getekend is. Zie ontwerp/werklijst.md, fase B2b. Een boer met een
-    // karakter draagt dat karakter op zijn lijf (boer-zanger), als dat vel er al is.
+    // karakter draagt dat karakter op zijn lijf (boer-zanger), als dat vel er al is. Een dier
+    // (js/vee.js) heeft geen vel onder zijn soort, maar een per kleur: `vel` is koe0, koe1 of koe2.
     if (!S.figuurGegevens(naam) && e.vel) naam = S.velMetKarakter(e.vel, e.karakter);
     const f = S.figuurGegevens(naam);
     if (!f) return null;
@@ -608,7 +612,10 @@
       if (spel.spreektMet === e) return 'praten'; // in een gesprek of een scène (S.spreektMet)
       return spel.modus === 'regie' ? 'staan' : 'vegen';
     };
-    const rust = naam === 'wim' ? wimRust() : 'staan';
+    // Een dier (js/vee.js) graast, staat te herkauwen of ligt. Wat het nu doet, komt uit de tijd en
+    // zijn zaad (T.rustVanDier), niet uit een worp per beeld: zo flikkert het niet, en gaat niet de
+    // hele kudde tegelijk liggen.
+    const rust = naam === 'wim' ? wimRust() : e.dier && T.rustVanDier ? T.rustVanDier(e, spel.tijd) : 'staan';
     const staan = f.houdingen[rust] ? rust : f.houdingen.staan ? 'staan' : Object.keys(f.houdingen)[0];
     const duur = S.houdingDuur(naam, staan) || 1;
     return { naam, houding: staan, richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };

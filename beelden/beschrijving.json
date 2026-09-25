@@ -1942,6 +1942,318 @@
      "stap": 0.56
     }
    }
+  },
+  "koe0": {
+   "naam": "koe0",
+   "kleur": "roodbruin",
+   "cel": [
+    128,
+    108
+   ],
+   "anker": [
+    64,
+    76
+   ],
+   "snelheid": 0.9,
+   "snelheidEenheid": "tegels per seconde",
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "grazen": {
+     "bestand": "koe0-grazen.png",
+     "beelden": 8,
+     "fps": 5,
+     "herhaal": true
+    },
+    "staan": {
+     "bestand": "koe0-staan.png",
+     "beelden": 8,
+     "fps": 5,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "koe0-lopen.png",
+     "beelden": 8,
+     "fps": 8,
+     "herhaal": true,
+     "snelheid": 0.9,
+     "stap": 0.45
+    },
+    "liggen": {
+     "bestand": "koe0-liggen.png",
+     "beelden": 8,
+     "fps": 4,
+     "herhaal": true
+    }
+   }
+  },
+  "koe1": {
+   "naam": "koe1",
+   "kleur": "zwart",
+   "cel": [
+    128,
+    108
+   ],
+   "anker": [
+    64,
+    76
+   ],
+   "snelheid": 0.9,
+   "snelheidEenheid": "tegels per seconde",
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "grazen": {
+     "bestand": "koe1-grazen.png",
+     "beelden": 8,
+     "fps": 5,
+     "herhaal": true
+    },
+    "staan": {
+     "bestand": "koe1-staan.png",
+     "beelden": 8,
+     "fps": 5,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "koe1-lopen.png",
+     "beelden": 8,
+     "fps": 8,
+     "herhaal": true,
+     "snelheid": 0.9,
+     "stap": 0.45
+    },
+    "liggen": {
+     "bestand": "koe1-liggen.png",
+     "beelden": 8,
+     "fps": 4,
+     "herhaal": true
+    }
+   }
+  },
+  "koe2": {
+   "naam": "koe2",
+   "kleur": "zwartbont",
+   "cel": [
+    128,
+    108
+   ],
+   "anker": [
+    64,
+    76
+   ],
+   "snelheid": 0.9,
+   "snelheidEenheid": "tegels per seconde",
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "grazen": {
+     "bestand": "koe2-grazen.png",
+     "beelden": 8,
+     "fps": 5,
+     "herhaal": true
+    },
+    "staan": {
+     "bestand": "koe2-staan.png",
+     "beelden": 8,
+     "fps": 5,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "koe2-lopen.png",
+     "beelden": 8,
+     "fps": 8,
+     "herhaal": true,
+     "snelheid": 0.9,
+     "stap": 0.45
+    },
+    "liggen": {
+     "bestand": "koe2-liggen.png",
+     "beelden": 8,
+     "fps": 4,
+     "herhaal": true
+    }
+   }
+  },
+  "schaap0": {
+   "naam": "schaap0",
+   "kleur": "vuilwit",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    106
+   ],
+   "snelheid": 1.1,
+   "snelheidEenheid": "tegels per seconde",
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "grazen": {
+     "bestand": "schaap0-grazen.png",
+     "beelden": 8,
+     "fps": 5,
+     "herhaal": true
+    },
+    "staan": {
+     "bestand": "schaap0-staan.png",
+     "beelden": 8,
+     "fps": 5,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "schaap0-lopen.png",
+     "beelden": 8,
+     "fps": 12,
+     "herhaal": true,
+     "snelheid": 1.1,
+     "stap": 0.367
+    },
+    "liggen": {
+     "bestand": "schaap0-liggen.png",
+     "beelden": 8,
+     "fps": 4,
+     "herhaal": true
+    }
+   }
+  },
+  "schaap1": {
+   "naam": "schaap1",
+   "kleur": "bruin",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    106
+   ],
+   "snelheid": 1.1,
+   "snelheidEenheid": "tegels per seconde",
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "grazen": {
+     "bestand": "schaap1-grazen.png",
+     "beelden": 8,
+     "fps": 5,
+     "herhaal": true
+    },
+    "staan": {
+     "bestand": "schaap1-staan.png",
+     "beelden": 8,
+     "fps": 5,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "schaap1-lopen.png",
+     "beelden": 8,
+     "fps": 12,
+     "herhaal": true,
+     "snelheid": 1.1,
+     "stap": 0.367
+    },
+    "liggen": {
+     "bestand": "schaap1-liggen.png",
+     "beelden": 8,
+     "fps": 4,
+     "herhaal": true
+    }
+   }
+  },
+  "schaap2": {
+   "naam": "schaap2",
+   "kleur": "zwartkop",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    106
+   ],
+   "snelheid": 1.1,
+   "snelheidEenheid": "tegels per seconde",
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "grazen": {
+     "bestand": "schaap2-grazen.png",
+     "beelden": 8,
+     "fps": 5,
+     "herhaal": true
+    },
+    "staan": {
+     "bestand": "schaap2-staan.png",
+     "beelden": 8,
+     "fps": 5,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "schaap2-lopen.png",
+     "beelden": 8,
+     "fps": 12,
+     "herhaal": true,
+     "snelheid": 1.1,
+     "stap": 0.367
+    },
+    "liggen": {
+     "bestand": "schaap2-liggen.png",
+     "beelden": 8,
+     "fps": 4,
+     "herhaal": true
+    }
+   }
   }
  },
  "muren": {

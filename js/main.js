@@ -524,6 +524,50 @@
       }
       return { argwaan: I.argwaan, waarom: I.waarom.slice() };
     },
+    // Vee neerzetten om naar te kijken (js/vee.js), nog zonder weide en zonder regels:
+    // Toren.debug.vee('koe', 4) zet vier koeien rond een open plek bij de schout, elk met een eigen
+    // zaad, en dus een eigen kleur en een eigen ritme van grazen, staan en liggen.
+    vee(soort = 'koe', aantal = 1) {
+      if (!T.VEE[soort]) return `Dat dier ken ik niet: ${soort}. Er is: ${Object.keys(T.VEE).join(', ')}.`;
+      const w = S.wereld;
+      const h = S.held;
+      const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true });
+      // Het midden van de kudde: de dichtstbijzijnde tegel, drie of meer stappen van de schout, met
+      // vijf bij vijf vrije tegels eromheen.
+      const open = (x, y) => {
+        for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) if (!vrij(x + dx, y + dy)) return false;
+        return true;
+      };
+      let midden = null;
+      for (let r = 3; r <= 16 && !midden; r++) {
+        for (let dy = -r; dy <= r && !midden; dy++) {
+          for (let dx = -r; dx <= r && !midden; dx++) {
+            if (Math.max(Math.abs(dx), Math.abs(dy)) === r && open(h.tx + dx, h.ty + dy)) midden = { x: h.tx + dx, y: h.ty + dy };
+          }
+        }
+      }
+      if (!midden) return 'Er is geen open stuk grond bij de schout.';
+      // De dieren eromheen, van binnen naar buiten, met een tegel ruimte tussen elk dier (ook tussen
+      // dieren die er al stonden): een koe is ruim twee tegels lang.
+      const dieren = w.wezens.filter((e) => e.dier && !e.dood);
+      const geplaatst = [];
+      for (let r = 0; r <= 8 && geplaatst.length < aantal; r++) {
+        for (let dy = -r; dy <= r && geplaatst.length < aantal; dy++) {
+          for (let dx = -r; dx <= r && geplaatst.length < aantal; dx++) {
+            const x = midden.x + dx;
+            const y = midden.y + dy;
+            if (Math.max(Math.abs(dx), Math.abs(dy)) !== r || !vrij(x, y) || T.afstand(h, { x, y }) < 2) continue;
+            if (dieren.some((d) => T.afstand({ x: d.tx, y: d.ty }, { x, y }) < 2)) continue;
+            S.veeZaad = (S.veeZaad || 0) + 1;
+            const e = T.maakDier(soort, x, y, S.veeZaad);
+            w.wezens.push(e);
+            dieren.push(e);
+            geplaatst.push(e);
+          }
+        }
+      }
+      return geplaatst.map((e) => `${e.naam} ${e.vel} op ${e.tx},${e.ty}`);
+    },
     // Het doek als PNG bewaren: await Toren.debug.schermafdruk('graan-rijp') schrijft
     // gereedschap/pixelart/uit/schermen/graan-rijp.png (via server.cjs; werkt niet vanaf file://).
     // Alleen het doek, dus zonder de html-balken erover. Zo kan een sessie of agent een blik op het

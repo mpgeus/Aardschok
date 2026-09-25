@@ -1535,4 +1535,24 @@ module.exports = {
     koboldBeen,
     KOBOLD_ENKEL,
   },
+  // Het gereedschap van de houdingen zelf, voor andere viervoeters (vee.cjs: de koe en het schaap).
+  // Alleen doorgegeven; de vijanden hierboven veranderen er niet door.
+  beweging: {
+    tfPunt,
+    tfRicht,
+    tfNa,
+    tfKet,
+    tfDraai,
+    tfSchuif,
+    tfInv,
+    vast,
+    tfLid,
+    buig2,
+    pas,
+    omhul,
+    menge,
+    over,
+    uitSleutels,
+    draaiMatrix,
+  },
 };
