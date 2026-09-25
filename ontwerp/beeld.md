@@ -536,6 +536,51 @@ proefplaat is `uit/vee-proef.png`.
   15%; het schaap graast meer. Nooit ligt de hele kudde tegelijk, en dieren slaan niet op
   hetzelfde moment om.
 
+## De heide (25 sep 2026)
+
+Nieuwe grondsoort voor de meent, waar de schapen van het gehucht grazen (Marcel koos dit op 25 sep,
+`spel.md`, "Marcel koos voor stap 2"). Gemaakt in `gereedschap/pixelart/randtegels.cjs`: de
+grondsoort `heide` en de terreinset `Heide over gras` (`a: 'gras', b: 'heide'`), met de acht vlakke
+varianten en de veertien hoekcombinaties × vier varianten, net als de vier bestaande paren.
+
+**Drentse heide het hele jaar door,** dus geen felle paarse bloei — augustus is maar één maand.
+Eén eigen ramp (`heide` in `kern.cjs`-stijl, net als `modderwater` en `veldsteen` ervoor: een eigen
+ramp toevoegen zonder `dorp.cjs` aan te raken), die zelf van donker olijfbruin naar gedempt
+grijsgroen drift, zoals `gras` en `aarde` dat ook binnen één ramp doen. De klontjes van de struik
+komen uit hetzelfde verspringende rooster als de grasplukjes (`plukOp`), maar kleiner en ronder
+(`heideBolOp`/`HEIDE_BOL`): heide is een bos twijgjes, geen los blad. Een deel van de lichte koppen
+valt in de `mos`-ramp (grijsgroen tussen het bruin door) en heel af en toe in de `steen`-ramp
+(gedempt paarsgrijs — die ramp trekt toch al naar paars, en hier is dat voor het eerst precies de
+bedoeling). Verspreid ook een enkele kale plek wit-geel zand of een schapenpaadje, met de lichte
+stappen van de bestaande `zand`-ramp.
+
+**Twee dingen die niet werkten, voor wie hieraan verder bouwt:**
+- Een harde grens tussen twee ramen (bruin/groen) voor de grove kleurzones gaf grote, hard
+  omlijnde vlekken — precies het "flikkeren op een groot vlak" dat juist niet mocht. De oplossing:
+  de kleurdrift IN de ramp laten zitten, en groen/paars alleen als klein accent op een klontkop.
+- Een lagere ruisfrequentie dan `grasToon` (of meer dan drie stappen) liet de ruis zelf als lange
+  diagonale strepen zien: het isometrische aanzicht trekt de rasterrichting van `ruis2` recht bij
+  weinig octaven. Op precies het ritme van `grasToon` (dezelfde twee schalen, dezelfde drie
+  stappen) verdween dat. Wie hier een volgende grondsoort op bouwt, begint dus bij die frequentie.
+
+**Bewijs dat er niets verschoof:** de eerste 262 tegels van `rand.tsx`/`rand.png` (alles van vóór
+25 sep) zijn met een apart controlescript vergeleken op naam, groep, vast-waarde én op pixel, en
+zijn onveranderd; de vier bestaande terreinsets houden dezelfde tegel-ids en wangids. "Heide over
+gras" telt 72 tegels (8 gras-vlak, gedeeld met de bestaande terreinsets + 8 heide-vlak + 56
+hoektegels); de 64 nieuwe daarvan staan pas achteraan, vanaf id 262, ruim binnen de
+`RAND_CAPACITEIT` van 600 in `naar-tiled.cjs`.
+
+**Nog ruw:**
+- Het blijft aan de rustige kant — vooral van dichtbij (zie `uit/heide-proef.png`) oogt het wat
+  uniform, met weinig echt uitgesproken paarse of groene plukken. Dat was bewust: de eerdere,
+  drukkere versies flikkerden over een groot vlak. Een tussenweg (iets meer, iets grotere
+  plukken) is nog niet geprobeerd.
+- Geen apart element voor een schapenpaadje als LIJN (een echt platgelopen spoor); de zandplekjes
+  van nu zijn los en willekeurig, niet een pad dat ergens heen loopt zoals de karrensporen op het
+  zandpad.
+- Nog niet op een echte kaart gelegd of in het spel bekeken op speelschaal (alleen als losse
+  proefplaat) — dat komt zodra de heide bij het gehucht getekend wordt.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

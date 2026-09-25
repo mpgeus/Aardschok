@@ -48,13 +48,24 @@ const rasterY = (X, Y) => Math.floor((X + Y) * 0.5 * SQ);
 // ---------------------------------------------------------------- grondsoorten en paren
 
 // kleur: alleen het vlaggetje waarmee Tiled de terreinsoort in zijn eigen paneel aanduidt.
+// HEIDE is geen soort uit dorp.cjs (die kent alleen GRAS/PAD/KASSEI/AKKER/WATER) maar een eigen
+// getal, lokaal aan dit vel — dezelfde reden als de ramp 'modderwater' verderop: we raken
+// dorp.cjs niet aan. Zonder een eigen grondTex zou D.grondTex zo'n tegel niet herkennen en
+// gewoon als gras tekenen; zie heideGrondTex bij "de heide" hieronder.
+const HEIDE = 5;
 const SOORTEN = {
   gras: { s: D.GRAS, kleur: '#507826' },
   zandpad: { s: D.PAD, kleur: '#9a7856' },
   kasseien: { s: D.KASSEI, kleur: '#8f8290' },
   water: { s: D.WATER, kleur: '#2e76b6' },
+  heide: { s: HEIDE, kleur: '#6e6a3e' },
 };
 const VLAKKEN = ['gras', 'zandpad', 'kasseien', 'water'];
+// Heide kwam er op 25 sep 2026 bij (de meent, ontwerp/spel.md), maar ACHTERAAN in bouw() — na de
+// brug, in een eigen stap — zodat geen bestaand tegelnummer verschuift: kaarten/wereld.tmj wijst
+// er met de hand naar. meetPlekken() meet 'm wel gewoon mee met VLAKKEN, zie daar. Zie
+// ontwerp/beeld.md, "De heide".
+const VLAKKEN_ACHTERAAN = ['heide'];
 const VARIANTEN_VLAK = 8; // losse vlakke tegels per grondsoort, zodat een groot vlak niet herhaalt
 // Vier vormen per hoekcombinatie: dezelfde ribben, een andere golf. Een rechte oever of een recht
 // stuk pad gebruikt telkens dezelfde hoekcombinatie, dus met minder varianten zie je de stenen in
@@ -68,6 +79,9 @@ const PAREN = [
   { naam: 'Zand over kasseien', a: 'kasseien', b: 'zandpad' },
   { naam: 'Gras aan water', a: 'water', b: 'gras' },
 ];
+// Ook achteraan (zie VLAKKEN_ACHTERAAN hierboven): heide komt over gras, zoals een schaapsweide
+// de rand van het dorpsgras opeet.
+const PAREN_ACHTERAAN = [{ naam: 'Heide over gras', a: 'gras', b: 'heide' }];
 
 const WATER_DIEP = 7; // pixels dat het water onder het maaiveld ligt (een beek, net als dorp.cjs)
 // dorp.cjs strooit in stromend water stenen met schuim, en in stilstaand water lelies. Allebei
@@ -121,7 +135,7 @@ function helderheid(plaat) {
 function meetPlekken() {
   KEUS.kand = plekken(KANDIDATEN);
   KEUS.vrij = KEUS.kand.map(() => true);
-  for (const naam of VLAKKEN) {
+  for (const naam of [...VLAKKEN, ...VLAKKEN_ACHTERAAN]) {
     const h = KEUS.kand.map(([gx, gy]) => helderheid(vlakTegel(naam, gx, gy)));
     const op = [...h].sort((a, b) => a - b);
     const mid = op[op.length >> 1];
@@ -312,7 +326,10 @@ function rasterTegel(kaart, gx0, gy0, o = {}) {
 // Een vlakke tegel: alle vier de hoeken dezelfde grondsoort.
 function vlakTegel(naam, gx0, gy0) {
   const kaart = randKaart(naam, naam, [1, 1, 1, 1], gx0, gy0);
-  return rasterTegel(kaart, gx0, gy0, { pollen: naam === 'gras' });
+  return rasterTegel(kaart, gx0, gy0, {
+    grondTex: naam === 'heide' ? heideGrondTex(kaart) : undefined,
+    pollen: naam === 'gras',
+  });
 }
 
 // De kant van het water: een smalle strook natte aarde en nat zand waar de zode ophoudt. De
@@ -431,6 +448,118 @@ function pleinKantTex(kaart) {
       const k = kaart.soort(gx, gy);
       if (k.s === D.KASSEI && -k.d < KANT_BREED) {
         kantsteenPixel(X, Y, rasterX(X, Y), rasterY(X, Y));
+        return;
+      }
+    }
+    basis(vlak, X, Y, Z);
+  };
+}
+
+// ---------------------------------------------------------------- de heide
+//
+// Lage, dichte struikheide, het hele jaar door — dus geen felle paarse bloei, augustus is maar
+// één maand. Eén eigen ramp, olijfbruin in de schaduw en gedempt grijsgroen in het licht (dezelfde
+// truc als 'gras' en 'aarde': de kleurdrift zit IN de ramp, niet in een harde grens tussen twee
+// ramen — dat laatste stond eerst en gaf grote, hard omlijnde bruine en groene vlekken, precies
+// het "flikkeren op een groot vlak" dat we niet willen). Klontjes komen uit hetzelfde
+// verspringende rooster als de grasplukjes (plukOp hierboven), met HEIDE_BOL in plaats van PLUK:
+// kleinere, rondere vormen, want heide is een bos twijgjes, geen los blad. Een deel van de lichte
+// koppen valt zelf al in de 'mos'-ramp (grijsgroen tussen het olijfbruin door, geen aparte grote
+// vlek), en heel af en toe steekt er de 'steen'-ramp doorheen: verspreide, gedempte paarsgrijze
+// toppen — die ramp trekt toch al naar paars (zie "modderig water" hierboven, waar dat meestal
+// niet de bedoeling was; hier is het dat wél). Daarnaast een enkele kale plek wit-geel zand of een
+// schapenpaadje. Alles hangt aan gx/gy of aan het wereldrooster qx/qy, dus de naad met de
+// buurtegel is niet te zien.
+if (K.RAMP.heide === undefined) {
+  const hexen = ['#1a1712', '#2a2417', '#3c3720', '#4c4a2a', '#585c38', '#697048', '#7c8558'];
+  const rgb = hexen.map((h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]);
+  K.RAMPEN.heide = hexen;
+  K.RAMP.heide = K.RAMP_NAMEN.length;
+  K.RAMP_NAMEN.push('heide');
+  K.RAMP_RGB.push(rgb);
+  K.RAMP_LEN.push(hexen.length);
+}
+
+// Vormen voor heideBolOp: net als PLUK bij plukOp, maar kleiner en ronder. toon 0 = geen klontje,
+// 1 = een lichte kop, 2 = een lichte kop die toch al naar grijsgroen neigt (twee van de vijf,
+// heideBolOp hieronder), -1 = een donker holletje ernaast.
+const HEIDE_BOL = [
+  [[0, 0, 1], [0, 1, -1]],
+  [[0, 0, 1], [1, 0, 1], [0, 1, -1]],
+  [[0, 0, -1], [0, -1, 1]],
+  [[0, 0, 1]],
+  [[-1, 0, -1], [0, 0, 1], [1, 0, -1]],
+];
+function heideBolOp(qx, qy) {
+  const rj = Math.floor(qy / 3);
+  for (let j = rj; j <= rj + 1; j++) {
+    const verspring = (j & 1) * 2;
+    const ri = Math.floor((qx - verspring) / 4);
+    for (let i = ri - 1; i <= ri + 1; i++) {
+      const h = hash(i, j, 415);
+      if (h % 5 < 2) continue; // hier en daar geen klontje: blijft rustig
+      const ax = i * 4 + verspring + ((h >>> 4) % 3);
+      const ay = j * 3 + ((h >>> 7) % 2);
+      const vorm = HEIDE_BOL[(h >>> 9) % HEIDE_BOL.length];
+      for (const [dx, dy, toon] of vorm) {
+        if (ax + dx !== qx || ay + dy !== qy) continue;
+        return toon === 1 && (h >>> 13) % 5 < 2 ? 2 : toon;
+      }
+    }
+  }
+  return 0;
+}
+
+// Zelfde ritme als grasToon hierboven (dezelfde twee ruisschalen, dezelfde drie stappen): dat
+// blijkt hier belangrijk, niet alleen mooi — een lagere frequentie of meer stappen liet de ruis
+// zelf als lange diagonale strepen zien (het isometrische aanzicht trekt de rasterrichting van
+// ruis2 recht), en dat verdween met dit ritme, hetzelfde als grasPixel al jaren gebruikt. Om
+// dezelfde reden lopen de plekken hieronder (paars, gras, zand) allemaal op de hogere frequentie
+// van HEIDE_BOL of op een dubbele ruisschaal, nooit op één lage.
+function heideToon(gx, gy) {
+  const v = ruis2(gx * 1.05 + 17, gy * 1.05, 423) * 0.65 + ruis2(gx * 3.1, gy * 3.1, 424) * 0.35;
+  return v < 0.4 ? 3 : v > 0.72 ? 5 : 4;
+}
+
+function heidePixel(gx, gy, qx, qy) {
+  UIT.ramp = RAMP.heide;
+  let s = heideToon(gx, gy);
+  const bol = heideBolOp(qx, qy);
+  if (bol === 1 || bol === 2) {
+    s += 1;
+    if (bol === 2) UIT.ramp = RAMP.mos; // gedempt grijsgroen, op zo'n twee van de vijf koppen
+  } else if (bol === -1) {
+    s -= 1;
+  }
+  // gedempte paarsgrijze plukjes: bloeiende heide, zeldzaam en op een lichte klontkop, nooit fel
+  const plek = ruis2(gx * 1.3 + 91, gy * 1.3, 425) * 0.7 + ruis2(gx * 3.7, gy * 3.7, 430) * 0.3;
+  if (plek > 0.82 && bol === 1) {
+    UIT.ramp = RAMP.steen;
+    UIT.stap = 5;
+    return;
+  }
+  // wit-geel zand of een schapenpaadje: een enkele, zachtomrande kale plek, met de lichte
+  // stappen van de zand-ramp (die begint zelf al bij donkerbruin, zie kern.cjs)
+  const zand = ruis2(gx * 0.9 + 5, gy * 0.9, 427) * 0.7 + ruis2(gx * 2.7, gy * 2.7, 432) * 0.3;
+  if (zand > 0.84) {
+    UIT.ramp = hash(qx, qy, 428) % 4 === 0 ? RAMP.aarde : RAMP.zand;
+    UIT.stap = UIT.ramp === RAMP.aarde ? 4 : 6 + (hash(qx, qy, 429) % 2);
+    return;
+  }
+  UIT.stap = klem(s, 1, 6);
+}
+
+// Zelfde vorm als oeverTex/pleinKantTex hierboven: D.grondTex kent HEIDE niet (het is geen soort
+// uit dorp.cjs) en zou zo'n tegel zonder deze omweg gewoon als gras tekenen.
+function heideGrondTex(kaart) {
+  const basis = D.grondTex(kaart);
+  return (vlak, X, Y, Z) => {
+    if (vlak === 'z') {
+      const gx = X / TEGEL;
+      const gy = Y / TEGEL;
+      const k = kaart.soort(gx, gy);
+      if (k.s === HEIDE) {
+        heidePixel(gx, gy, rasterX(X, Y), rasterY(X, Y));
         return;
       }
     }
@@ -656,7 +785,7 @@ function bouw() {
   const vlakId = {}; // grondsoort -> de tegel-ids van zijn vlakke tegels
 
   // 1. de vlakke tegels, gedeeld door alle terreinsets die deze grondsoort kennen
-  for (const naam of VLAKKEN) {
+  function voegVlakToe(naam) {
     vlakId[naam] = [];
     for (let v = 0; v < VARIANTEN_VLAK; v++) {
       const [gx0, gy0] = neemPlek([naam]);
@@ -665,10 +794,11 @@ function bouw() {
       tiles.push({ naam, vast: naam === 'water', groep: 'vlak' });
     }
   }
+  for (const naam of VLAKKEN) voegVlakToe(naam);
 
   // 2. de randen, per paar veertien hoekcombinaties
   const sets = [];
-  for (const paar of PAREN) {
+  function voegPaarToe(paar) {
     const set = {
       naam: paar.naam,
       kleuren: [
@@ -681,6 +811,7 @@ function bouw() {
     for (const id of vlakId[paar.b]) set.tegels.push({ id, wangid: wangId([1, 1, 1, 1]) });
     const water = paar.a === 'water';
     const kassei = paar.a === 'kasseien' || paar.b === 'kasseien';
+    const heide = paar.a === 'heide' || paar.b === 'heide';
     for (let m = 1; m <= 14; m++) {
       const hoeken = maskerHoeken(m);
       const tel = telBits(m);
@@ -689,7 +820,7 @@ function bouw() {
         const [gx0, gy0] = neemPlek([paar.a, paar.b]);
         const kaart = randKaart(paar.a, paar.b, hoeken, gx0, gy0);
         platen.push(rasterTegel(kaart, gx0, gy0, {
-          grondTex: water ? oeverTex(kaart) : kassei ? pleinKantTex(kaart) : null,
+          grondTex: water ? oeverTex(kaart) : kassei ? pleinKantTex(kaart) : heide ? heideGrondTex(kaart) : null,
           pollen: paar.b === 'gras' || paar.a === 'gras',
         }));
         set.tegels.push({ id: tiles.length, wangid: wangId(hoeken) });
@@ -704,6 +835,7 @@ function bouw() {
     }
     sets.push(set);
   }
+  for (const paar of PAREN) voegPaarToe(paar);
 
   // 3. de brug
   for (const richting of ['x', 'y']) {
@@ -713,7 +845,13 @@ function bouw() {
     }
   }
 
-  // 4. het vel
+  // 4. heide: erbij op 25 sep 2026 (de meent, ontwerp/spel.md — de schapen grazen op de heide).
+  // ACHTERAAN, na de brug: kaarten/wereld.tmj wijst met de hand naar tegelnummers, en die mogen
+  // niet verschuiven. Zie ontwerp/beeld.md, "De heide".
+  for (const naam of VLAKKEN_ACHTERAAN) voegVlakToe(naam);
+  for (const paar of PAREN_ACHTERAAN) voegPaarToe(paar);
+
+  // 5. het vel
   const kolommen = 8;
   const rijen = Math.ceil(platen.length / kolommen);
   const vel = new K.Plaat(64 * kolommen, 32 * rijen);
@@ -725,11 +863,12 @@ function bouw() {
     breedte: vel.b,
     hoogte: vel.h,
     kolommen,
-    notitie: 'Randtegels, oevers en een brug. Kies in het paneel Terreinen een terreinset ("Gras over zand", '
-      + '"Gras over kasseien", "Zand over kasseien" of "Gras aan water") en schilder met de bovenste kleur '
-      + 'over de onderste: Tiled kiest zelf de hoektegel. Vul een vlak met de onderste kleur van dezelfde set, '
-      + 'niet met de stempel uit grond.tsx, dan sluit alles aan. De zes brugtegels staan onderaan en horen '
-      + 'niet bij een terreinset: leg begin, dan zoveel midden als je beek breed is, dan eind.',
+    notitie: 'Randtegels, oevers, een brug en heide. Kies in het paneel Terreinen een terreinset ("Gras over zand", '
+      + '"Gras over kasseien", "Zand over kasseien", "Gras aan water" of "Heide over gras") en schilder met de '
+      + 'bovenste kleur over de onderste: Tiled kiest zelf de hoektegel. Vul een vlak met de onderste kleur van '
+      + 'dezelfde set, niet met de stempel uit grond.tsx, dan sluit alles aan. De zes brugtegels staan na de vier '
+      + 'oudste terreinsets en horen niet bij een terreinset: leg begin, dan zoveel midden als je beek breed is, '
+      + 'dan eind.',
     tiles,
     sets,
   });
@@ -738,6 +877,8 @@ function bouw() {
   console.log(`  vlakken     ${VLAKKEN.length} × ${VARIANTEN_VLAK}`);
   for (const p of PAREN) console.log(`  ${p.naam.padEnd(20)} 14 × ${VARIANTEN_RAND} randen`);
   console.log(`  brug        2 × ${BRUG_STUKKEN.length}`);
+  console.log(`  vlakken erbij ${VLAKKEN_ACHTERAAN.length} × ${VARIANTEN_VLAK}  (achteraan, zie "4. heide")`);
+  for (const p of PAREN_ACHTERAAN) console.log(`  ${p.naam.padEnd(20)} 14 × ${VARIANTEN_RAND} randen  (achteraan)`);
   // tiles en sets gaan mee terug, zodat randtegels-proef.cjs de tegels kan kiezen zoals Tiled dat
   // doet — op wangid uit de terreinset — in plaats van tegelnummers na te rekenen.
   return { vel, kolommen, tiles, sets };

@@ -2,7 +2,7 @@
 <tileset version="1.10" tiledversion="1.11.0" name="rand" tilewidth="64" tileheight="32" tilecount="600" columns="8">
  <grid orientation="isometric" width="64" height="32"/>
  <properties>
-  <property name="notitie" value="Randtegels, oevers en een brug. Kies in het paneel Terreinen een terreinset (&quot;Gras over zand&quot;, &quot;Gras over kasseien&quot;, &quot;Zand over kasseien&quot; of &quot;Gras aan water&quot;) en schilder met de bovenste kleur over de onderste: Tiled kiest zelf de hoektegel. Vul een vlak met de onderste kleur van dezelfde set, niet met de stempel uit grond.tsx, dan sluit alles aan. De zes brugtegels staan onderaan en horen niet bij een terreinset: leg begin, dan zoveel midden als je beek breed is, dan eind."/>
+  <property name="notitie" value="Randtegels, oevers, een brug en heide. Kies in het paneel Terreinen een terreinset (&quot;Gras over zand&quot;, &quot;Gras over kasseien&quot;, &quot;Zand over kasseien&quot;, &quot;Gras aan water&quot; of &quot;Heide over gras&quot;) en schilder met de bovenste kleur over de onderste: Tiled kiest zelf de hoektegel. Vul een vlak met de onderste kleur van dezelfde set, niet met de stempel uit grond.tsx, dan sluit alles aan. De zes brugtegels staan na de vier oudste terreinsets en horen niet bij een terreinset: leg begin, dan zoveel midden als je beek breed is, dan eind."/>
  </properties>
  <image source="rand.png" width="512" height="2400"/>
  <tile id="0">
@@ -1839,70 +1839,454 @@
     <property name="groep" value="brug y eind"/>
   </properties>
  </tile>
- <tile id="262"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="263"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="264"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="265"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="266"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="267"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="268"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="269"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="270"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="271"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="272"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="273"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="274"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="275"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="276"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="277"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="278"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="279"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="280"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="281"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="282"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="283"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="284"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="285"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="286"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="287"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="288"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="289"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="290"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="291"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="292"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="293"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="294"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="295"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="296"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="297"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="298"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="299"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="300"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="301"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="302"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="303"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="304"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="305"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="306"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="307"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="308"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="309"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="310"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="311"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="312"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="313"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="314"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="315"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="316"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="317"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="318"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="319"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="320"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="321"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="322"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="323"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="324"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
- <tile id="325"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
+ <tile id="262">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="vlak"/>
+  </properties>
+ </tile>
+ <tile id="263">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="vlak"/>
+  </properties>
+ </tile>
+ <tile id="264">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="vlak"/>
+  </properties>
+ </tile>
+ <tile id="265">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="vlak"/>
+  </properties>
+ </tile>
+ <tile id="266">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="vlak"/>
+  </properties>
+ </tile>
+ <tile id="267">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="vlak"/>
+  </properties>
+ </tile>
+ <tile id="268">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="vlak"/>
+  </properties>
+ </tile>
+ <tile id="269">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="vlak"/>
+  </properties>
+ </tile>
+ <tile id="270">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven"/>
+  </properties>
+ </tile>
+ <tile id="271">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven"/>
+  </properties>
+ </tile>
+ <tile id="272">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven"/>
+  </properties>
+ </tile>
+ <tile id="273">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven"/>
+  </properties>
+ </tile>
+ <tile id="274">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts"/>
+  </properties>
+ </tile>
+ <tile id="275">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts"/>
+  </properties>
+ </tile>
+ <tile id="276">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts"/>
+  </properties>
+ </tile>
+ <tile id="277">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts"/>
+  </properties>
+ </tile>
+ <tile id="278">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+rechts"/>
+  </properties>
+ </tile>
+ <tile id="279">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+rechts"/>
+  </properties>
+ </tile>
+ <tile id="280">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+rechts"/>
+  </properties>
+ </tile>
+ <tile id="281">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+rechts"/>
+  </properties>
+ </tile>
+ <tile id="282">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: onder"/>
+  </properties>
+ </tile>
+ <tile id="283">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: onder"/>
+  </properties>
+ </tile>
+ <tile id="284">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: onder"/>
+  </properties>
+ </tile>
+ <tile id="285">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: onder"/>
+  </properties>
+ </tile>
+ <tile id="286">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+onder"/>
+  </properties>
+ </tile>
+ <tile id="287">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+onder"/>
+  </properties>
+ </tile>
+ <tile id="288">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+onder"/>
+  </properties>
+ </tile>
+ <tile id="289">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+onder"/>
+  </properties>
+ </tile>
+ <tile id="290">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts+onder"/>
+  </properties>
+ </tile>
+ <tile id="291">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts+onder"/>
+  </properties>
+ </tile>
+ <tile id="292">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts+onder"/>
+  </properties>
+ </tile>
+ <tile id="293">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts+onder"/>
+  </properties>
+ </tile>
+ <tile id="294">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+rechts+onder"/>
+  </properties>
+ </tile>
+ <tile id="295">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+rechts+onder"/>
+  </properties>
+ </tile>
+ <tile id="296">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+rechts+onder"/>
+  </properties>
+ </tile>
+ <tile id="297">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+rechts+onder"/>
+  </properties>
+ </tile>
+ <tile id="298">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: links"/>
+  </properties>
+ </tile>
+ <tile id="299">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: links"/>
+  </properties>
+ </tile>
+ <tile id="300">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: links"/>
+  </properties>
+ </tile>
+ <tile id="301">
+  <properties>
+    <property name="naam" value="gras"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: links"/>
+  </properties>
+ </tile>
+ <tile id="302">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+links"/>
+  </properties>
+ </tile>
+ <tile id="303">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+links"/>
+  </properties>
+ </tile>
+ <tile id="304">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+links"/>
+  </properties>
+ </tile>
+ <tile id="305">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+links"/>
+  </properties>
+ </tile>
+ <tile id="306">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts+links"/>
+  </properties>
+ </tile>
+ <tile id="307">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts+links"/>
+  </properties>
+ </tile>
+ <tile id="308">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts+links"/>
+  </properties>
+ </tile>
+ <tile id="309">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts+links"/>
+  </properties>
+ </tile>
+ <tile id="310">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+rechts+links"/>
+  </properties>
+ </tile>
+ <tile id="311">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+rechts+links"/>
+  </properties>
+ </tile>
+ <tile id="312">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+rechts+links"/>
+  </properties>
+ </tile>
+ <tile id="313">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+rechts+links"/>
+  </properties>
+ </tile>
+ <tile id="314">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: onder+links"/>
+  </properties>
+ </tile>
+ <tile id="315">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: onder+links"/>
+  </properties>
+ </tile>
+ <tile id="316">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: onder+links"/>
+  </properties>
+ </tile>
+ <tile id="317">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: onder+links"/>
+  </properties>
+ </tile>
+ <tile id="318">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+onder+links"/>
+  </properties>
+ </tile>
+ <tile id="319">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+onder+links"/>
+  </properties>
+ </tile>
+ <tile id="320">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+onder+links"/>
+  </properties>
+ </tile>
+ <tile id="321">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: boven+onder+links"/>
+  </properties>
+ </tile>
+ <tile id="322">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts+onder+links"/>
+  </properties>
+ </tile>
+ <tile id="323">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts+onder+links"/>
+  </properties>
+ </tile>
+ <tile id="324">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts+onder+links"/>
+  </properties>
+ </tile>
+ <tile id="325">
+  <properties>
+    <property name="naam" value="heide"/>
+    <property name="vast" type="bool" value="false"/>
+    <property name="groep" value="heide over gras: rechts+onder+links"/>
+  </properties>
+ </tile>
  <tile id="326"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
  <tile id="327"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
  <tile id="328"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>
@@ -2481,6 +2865,82 @@
    <wangtile tileid="253" wangid="0,2,0,2,0,2,0,1"/>
    <wangtile tileid="254" wangid="0,2,0,2,0,2,0,1"/>
    <wangtile tileid="255" wangid="0,2,0,2,0,2,0,1"/>
+  </wangset>
+  <wangset name="Heide over gras" type="corner" tile="-1">
+   <wangcolor name="gras" color="#507826" tile="-1" probability="1"/>
+   <wangcolor name="heide" color="#6e6a3e" tile="-1" probability="1"/>
+   <wangtile tileid="0" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="1" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="2" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="3" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="4" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="5" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="6" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="7" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="262" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="263" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="264" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="265" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="266" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="267" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="268" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="269" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="270" wangid="0,1,0,1,0,1,0,2"/>
+   <wangtile tileid="271" wangid="0,1,0,1,0,1,0,2"/>
+   <wangtile tileid="272" wangid="0,1,0,1,0,1,0,2"/>
+   <wangtile tileid="273" wangid="0,1,0,1,0,1,0,2"/>
+   <wangtile tileid="274" wangid="0,2,0,1,0,1,0,1"/>
+   <wangtile tileid="275" wangid="0,2,0,1,0,1,0,1"/>
+   <wangtile tileid="276" wangid="0,2,0,1,0,1,0,1"/>
+   <wangtile tileid="277" wangid="0,2,0,1,0,1,0,1"/>
+   <wangtile tileid="278" wangid="0,2,0,1,0,1,0,2"/>
+   <wangtile tileid="279" wangid="0,2,0,1,0,1,0,2"/>
+   <wangtile tileid="280" wangid="0,2,0,1,0,1,0,2"/>
+   <wangtile tileid="281" wangid="0,2,0,1,0,1,0,2"/>
+   <wangtile tileid="282" wangid="0,1,0,2,0,1,0,1"/>
+   <wangtile tileid="283" wangid="0,1,0,2,0,1,0,1"/>
+   <wangtile tileid="284" wangid="0,1,0,2,0,1,0,1"/>
+   <wangtile tileid="285" wangid="0,1,0,2,0,1,0,1"/>
+   <wangtile tileid="286" wangid="0,1,0,2,0,1,0,2"/>
+   <wangtile tileid="287" wangid="0,1,0,2,0,1,0,2"/>
+   <wangtile tileid="288" wangid="0,1,0,2,0,1,0,2"/>
+   <wangtile tileid="289" wangid="0,1,0,2,0,1,0,2"/>
+   <wangtile tileid="290" wangid="0,2,0,2,0,1,0,1"/>
+   <wangtile tileid="291" wangid="0,2,0,2,0,1,0,1"/>
+   <wangtile tileid="292" wangid="0,2,0,2,0,1,0,1"/>
+   <wangtile tileid="293" wangid="0,2,0,2,0,1,0,1"/>
+   <wangtile tileid="294" wangid="0,2,0,2,0,1,0,2"/>
+   <wangtile tileid="295" wangid="0,2,0,2,0,1,0,2"/>
+   <wangtile tileid="296" wangid="0,2,0,2,0,1,0,2"/>
+   <wangtile tileid="297" wangid="0,2,0,2,0,1,0,2"/>
+   <wangtile tileid="298" wangid="0,1,0,1,0,2,0,1"/>
+   <wangtile tileid="299" wangid="0,1,0,1,0,2,0,1"/>
+   <wangtile tileid="300" wangid="0,1,0,1,0,2,0,1"/>
+   <wangtile tileid="301" wangid="0,1,0,1,0,2,0,1"/>
+   <wangtile tileid="302" wangid="0,1,0,1,0,2,0,2"/>
+   <wangtile tileid="303" wangid="0,1,0,1,0,2,0,2"/>
+   <wangtile tileid="304" wangid="0,1,0,1,0,2,0,2"/>
+   <wangtile tileid="305" wangid="0,1,0,1,0,2,0,2"/>
+   <wangtile tileid="306" wangid="0,2,0,1,0,2,0,1"/>
+   <wangtile tileid="307" wangid="0,2,0,1,0,2,0,1"/>
+   <wangtile tileid="308" wangid="0,2,0,1,0,2,0,1"/>
+   <wangtile tileid="309" wangid="0,2,0,1,0,2,0,1"/>
+   <wangtile tileid="310" wangid="0,2,0,1,0,2,0,2"/>
+   <wangtile tileid="311" wangid="0,2,0,1,0,2,0,2"/>
+   <wangtile tileid="312" wangid="0,2,0,1,0,2,0,2"/>
+   <wangtile tileid="313" wangid="0,2,0,1,0,2,0,2"/>
+   <wangtile tileid="314" wangid="0,1,0,2,0,2,0,1"/>
+   <wangtile tileid="315" wangid="0,1,0,2,0,2,0,1"/>
+   <wangtile tileid="316" wangid="0,1,0,2,0,2,0,1"/>
+   <wangtile tileid="317" wangid="0,1,0,2,0,2,0,1"/>
+   <wangtile tileid="318" wangid="0,1,0,2,0,2,0,2"/>
+   <wangtile tileid="319" wangid="0,1,0,2,0,2,0,2"/>
+   <wangtile tileid="320" wangid="0,1,0,2,0,2,0,2"/>
+   <wangtile tileid="321" wangid="0,1,0,2,0,2,0,2"/>
+   <wangtile tileid="322" wangid="0,2,0,2,0,2,0,1"/>
+   <wangtile tileid="323" wangid="0,2,0,2,0,2,0,1"/>
+   <wangtile tileid="324" wangid="0,2,0,2,0,2,0,1"/>
+   <wangtile tileid="325" wangid="0,2,0,2,0,2,0,1"/>
   </wangset>
  </wangsets>
 </tileset>
