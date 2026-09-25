@@ -44,8 +44,8 @@ gezaaid kan worden, ligt braak.
 `spel.md`, "Instelbaar"). Onder `O` of de knop naast Bouwen staat één venster met de keuzes
 (graan, waarin de heer betaald wil worden, hoe hij telt, de schout aan de paal, honger buiten
 de winter, en sinds punt 6 waar de heer de rekening op maakt en wat hij van het graan vraagt), de
-namen van de heer en de boeren, en een werkbank met alle 135 getallen uit de regels. Wat je
-verandert, geldt meteen, en de browser onthoudt het.
+namen van de heer en de boeren, en een werkbank met alle getallen uit de regels (186 sinds de
+verstopplekken). Wat je verandert, geldt meteen, en de browser onthoudt het.
 
 **En de boeren worden geloot** (Marcel, 24 sep: "Ze moeten random eigenschappen hebben"). Bij elk
 spel trekt elke boer een karakter uit een stapel van tien (met een eigen gesprek) en vier
@@ -116,31 +116,43 @@ ontginnen; `spel.md`, "Straten en paden").
 **Wat nog ruw is of niet helemaal goed staat,** staat in `opmerkingen.md`: alle opmerkingen bij
 elkaar, om later na te lopen (Marcel, 25 sep). Zet er een bij als je iets ziet.
 
-**Wacht op Marcel:**
-- De vraag uit de proef van verstoppen, hierboven. En proberen: `Toren.debug.verstopt()` zegt wat
-  er waar ligt, `Toren.debug.verstopt('boer1', 30, 5)` zet iets weg zonder te lopen, en
-  `Toren.debug.zoeken()` laat de soldaten nu zoeken. Maar het leukst is lopen: klik een boerderij.
-- Twee vragen uit de proef van stap 2 (`spel.md`, "Nog open na stap 2"): moet vlees ook eten zijn,
-  zodat slachten in slachtmaand de winter helpt (nu maakt het alleen tevredener)? En vullen de
-  schapen de kooi niet te snel (een lam per schaap met kans 0,7: vol in het derde jaar)?
-- De winter van het vee spelen: `Toren.debug.slachten()` opent het slachtvenster, en in het
-  veldenvenster (`V`) staan de mest en wat het hooi van volgend jaar de winter door helpt.
-- Hoe de brink in beeld komt: de plek van de marskramer en de heer verleggen naar een open plek,
-  de huizen ervoor verzetten, of daken doorzichtig maken als er iets belangrijks achter staat (ook
-  voor later, als de speler zelf een huis voor de brink bouwt).
-- Spelen, en zeggen hoe het voelt: vooral de winter, hoe snel een jaar gaat, en nu ook Sint-Maarten
-  (is de honger te veel of te weinig; mag hij harder, of juist zachter).
-- De namen van de heer en de boeren stel je nu zelf in (spelregels). De tien karakters en hun
-  zinnen (de vrome, de roddelaar, de oudste, de nieuwkomer, de drinker zijn nieuw) zijn een voorstel
-  van Claude: lees ze eens in `gereedschap/gesprekken.html`.
-- Het bezoek van de inner spelen (`Toren.debug.inner()`, of wachten tot oogstmaand): voelt
-  meelopen goed, is 90 stappen geduld te veel of te weinig, en mag de heer op Sint-Maarten zelf
-  rondkijken vanaf de brink (een voorstel van Claude, `spel.md`)?
-- De rest van het voorstel voor de kern in `spel.md` ("De kern voor het tweede proefje"): de drie
-  groepen en vijf keuren (vóór punt 9). Wat de heer wil, is voor een deel besloten (`spel.md`,
-  "Sint-Maarten").
-- Of het ijs op de beek ook te zien moet zijn (tekenwerk), en of de jager 's winters minder vangt.
-- Een naam; "Aardschok" past niet meer.
+**Wacht op Marcel** (gesorteerd op 25 sep, zoals op de overzichtspagina "Stand van het gehucht").
+De vragen hebben een nummer, zodat een antwoord kort kan.
+
+*Beslissen:*
+1. **Moet verstoppen ook onder de 40% een risico hebben?** (`spel.md`, "Nog open na deel 1".)
+   Voorstel van Claude: de inner ontdekt zelf een kelder als hij er vlak langs loopt, met de kans van
+   die plek; dan telt de route die je met hem loopt, en de roddelaar ook. Of: de soldaten zoeken
+   altijd een paar plekken (bij de schout altijd). Of: de grens strenger (argwaan onder 80% in plaats
+   van 60%). Of: zo laten.
+2. Moet vlees ook eten zijn, zodat slachten in slachtmaand de winter helpt? Nu maakt het alleen
+   tevredener (`spel.md`, "Nog open na stap 2").
+3. Vullen de schapen de kooi te snel? Een lam per schaap met kans 0,7: vol in het derde jaar.
+4. Hoe komt de brink in beeld: de plek van de marskramer en de heer verleggen naar een open plek, de
+   huizen ervoor verzetten, of daken doorzichtig maken als er iets belangrijks achter staat (ook voor
+   later, als de speler zelf een huis voor de brink bouwt)?
+5. Mag de heer op Sint-Maarten zelf rondkijken vanaf de brink? Het is gebouwd (een voorstel van
+   Claude), maar nog niet gekeurd.
+6. De kern voor het tweede proefje (`spel.md`, "De kern voor het tweede proefje"): de drie groepen en
+   vijf keuren, nodig vóór punt 9.
+7. Moet het ijs op de beek te zien zijn (tekenwerk), en vangt de jager 's winters minder?
+8. Een naam; "Aardschok" past niet meer.
+
+*Spelen, en zeggen hoe het voelt:*
+- Een heel jaar: hoe snel het gaat, de winter, en Sint-Maarten (is de honger te veel of te weinig;
+  mag de heer harder, of juist zachter?).
+- Het bezoek van de inner (`Toren.debug.inner()`, of wachten tot oogstmaand): voelt meelopen goed,
+  en is 90 stappen geduld te veel of te weinig?
+- De winter van het vee: `Toren.debug.slachten()` opent het slachtvenster, en in het veldenvenster
+  (`V`) staan de mest en wat het hooi van volgend jaar de winter door helpt.
+- Verstoppen: klik een boerderij. `Toren.debug.verstopt()` zegt wat er waar ligt,
+  `Toren.debug.verstopt('boer1', 30, 5)` zet iets weg zonder te lopen, en `Toren.debug.zoeken()` laat
+  de soldaten nu zoeken.
+
+*Lezen:*
+- De tien karakters en hun zinnen, in `gereedschap/gesprekken.html`. Ze zijn een voorstel van Claude;
+  de vrome, de roddelaar, de oudste, de nieuwkomer en de drinker zijn nieuw. De namen van de heer en
+  de boeren stel je zelf in (spelregels).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

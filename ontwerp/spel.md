@@ -642,9 +642,10 @@ getal één plek houdt. Wat je in de werkbank zet, gaat vóór wat een optie zet
 
 **Gebouwd op 24 sep** (`js/opties.js`, het venster in `js/hud.js`, `test/opties.test.cjs`). Het
 venster opent met `O` of de knop naast Bouwen, en zolang het open is, staat de tijd stil. De
-werkbank heeft 135 getallen (sinds de inner), elk met een schuif, een getalveld en ↺, een leesbare naam ("koopt ·
-graan · prijs · lente"), en erbij welke keuze het getal zet. Een naam geldt overal tegelijk: bij de
-mens, in zijn gesprek en op zijn poppetje. De heer tekent zijn brief ermee.
+werkbank had toen 135 getallen (186 sinds de verstopplekken, 25 sep), elk met een schuif, een
+getalveld en ↺, een leesbare naam ("koopt · graan · prijs · lente"), en erbij welke keuze het getal
+zet. Een naam geldt overal tegelijk: bij de mens, in zijn gesprek en op zijn poppetje. De heer
+tekent zijn brief ermee.
 
 Nog open: de voorinstellingen Mild en Streng (wat staat er dan?).
 
@@ -894,7 +895,7 @@ met de toetsen in `test/velden.test.cjs`.
   schuif je wie er gaan, het oudste eerst, en het rekent mee of het hooi het dan haalt, en of je
   zout het vlees goed houdt. Het begint op een voorstel: zo weinig als kan. Een koe geeft 20 vlees en
   een huid, een schaap 6, een jong de helft. Je opent het ook onderaan het veldenvenster.
-- **De heide en de kooi.** Het gehucht heeft een meent in het zuidwesten (22 bij 9 tegels) en een
+- **De heide en de kooi.** Het gehucht heeft een meent in het zuidwesten (23 bij 8 tegels) en een
   schaapskooi aan de noordrand, met zijn deur naar de heide. De schapen grazen ervoor; lammeren komen
   alleen als er plaats is in de kooi (20 per kooi). In zomermaand geeft elk schaap 4 wol, en de kooi
   geeft per schaap 2,5 karren mest per jaar, zolang hij zijn herder (een hand) heeft. De kooi maakt
@@ -921,8 +922,8 @@ schout het voorstel):
 - **Mest telt.** Een volle kooi geeft 50 karren per jaar, genoeg voor drie à vier stroken van de es.
   Dat is zo'n 50 graan per jaar meer in het derde jaar, en de es blijft op 80 à 90% in plaats van 70%.
 - **De schapen groeien snel.** Een lam per schaap met kans 0,7: de kooi is in het derde jaar vol (20),
-  en de wol gaat van 32 naar 80. Daarna groeit de kudde alleen met een tweede kooi. De heide (99
-  schapen) is nog lang geen grens.
+  en de wol gaat van 32 naar 80. Daarna groeit de kudde alleen met een tweede kooi. De heide (plaats voor
+  92 schapen) is nog lang geen grens.
 - **De eerste lente is honger**, zoals al na stap 1: het gehucht begint met 60 graan.
 - **Vlees vult geen maag.** Het dorp eet vlees erbij (het maakt tevredener), maar het telt niet als
   eten tegen de honger: dat is zo sinds de behoeften (punt 3). Een geslachte koe is dus geen
