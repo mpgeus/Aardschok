@@ -239,8 +239,9 @@ Marcel koos uit een voorstel van Claude, vóór het bouwen:
   3). Hij heeft sinds 24 sep zijn eigen figuur (`beeld.md`, "Het huis van de heer draagt rood en
   geel").
 
-**Voorstel voor stap 2, de verstopplekken** (Claude, 24 sep; nog niet gekozen). Er is al een soort
-gebouw `verstopplek` in `T.GEBOUWEN`, die de inner niet ziet.
+**Voorstel voor stap 2, de verstopplekken** (Claude, 24 sep; Marcel koos op 25 sep geen kuil maar
+plekken die er al zijn, zie hieronder). Er is al een soort gebouw `verstopplek` in `T.GEBOUWEN`, die
+de inner niet ziet.
 - **Wegzetten doe je ter plekke:** je loopt naar de kuil en zet graan of goud weg of haalt het
   terug, niet vanuit een venster. Je bent een poppetje, geen hand van bovenaf.
 - **Verstopt graan kun je niet eten** tot je het terughaalt. Dat geeft spanning vóór de winter.
@@ -251,6 +252,23 @@ gebouw `verstopplek` in `T.GEBOUWEN`, die de inner niet ziet.
 - Bij het bouwen kwam een fout uit punt 1b boven: de schout kon in het gehucht niet lopen (snelheid
   0, sinds hij het vel van een dorpeling kreeg). Hij loopt nu 2,2 tegels per seconde
   (`T.SCHOUT_SNELHEID`, `js/gebied.js`).
+
+**Marcel koos voor stap 2 (25 sep, een sessie later), uit een voorstel van Claude.** Claude raadde aan
+met verstoppen te beginnen, want de kern heeft nog niets om te verbergen: wat gemaaid is, ligt in de
+schuur, en die telt de inner helemaal. Je kunt hem nu alleen gebouwen laten missen.
+
+- **Geen kuil, en geen los gebouw, maar plekken die er al zijn.** "Een kuil vind ik niks. Liever
+  verbergen in kelders, in de kapel, etc." en "Liever een verstopplek in het bos, kelder van het
+  huis. In de kapel/kerk etc." Je verstopt in de kelder van een huis, in de kapel of kerk, en op een
+  plek in het bos. Het gebouw `verstopplek` uit het bouwmenu gaat weg, of wordt die plek in het bos.
+- **Wat je verstopt, laat sporen na, en dat geldt voor alles.** De argwaan vergelijkt elke bron met
+  zijn sporen: het graan in de schuur met de velden die de inner zag (dat is er al), de kaas met de
+  koeien en de wol met de schapen (bij vee dat telt, stap 3 van de weides), en later het pad naar een
+  plek in het bos (paden slijten vanzelf, punt 6c). Een optie in de spelregels, dus uit te zetten.
+- **De inner telt de kist.** De heer ziet alleen geld, dus de inner telt ook het goud in de
+  dorpskist, en de heer vraagt er een deel van, zoals van het graan. Zo heeft goud verstoppen zin, en
+  krijgt de marskramer een tweede rol: wie kaas en wol vóór oogstmaand aan hem verkoopt, heeft goud,
+  en goud kan weg.
 
 ## Gebouwen (Marcel, 23 sep 2026)
 
