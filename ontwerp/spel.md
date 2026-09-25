@@ -1323,4 +1323,7 @@ besturen, dan de nacht en het verzet, en dan de groei naar vrijheid.
 - Wat van de code blijft. Waarschijnlijk: de kunst en de huizenbouwer, de dorpelingen die lopen,
   pad en raster, de gesprekken en quests, het wereldgereedschap, en het gevecht in beurten. Eruit:
   de toren, de spreuken, de leeftijd en de tutorial.
-  Marcel haalde dit (punt 7) op 25 sep naar voren, vóór de rest van punt 6; zie de werklijst.
+  Marcel haalde dit (punt 7) op 25 sep naar voren, vóór de rest van punt 6, en koos: "Gevecht
+  houden, namen nu hernoemen, oude kaart weg." Het gevecht in beurten blijft dus (met alleen slaan),
+  `Toren` en `held` worden `Spel` en `schout`, en het erf, het bos, het dorp en de toren gaan weg. De
+  stappen staan in de werklijst, bij punt 7.

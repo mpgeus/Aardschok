@@ -10,106 +10,36 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (einde sessie 25 sep 2026)
+## De stand (einde sessie 25 sep 2026): de overdracht
 
-**Het spel is omgegooid** (23 sep). Marcel vond het doel van De laatste klim niet goed genoeg en
-kwam, na vijf rondes ideeën van Claude, zelf met het nieuwe spel: **een bouw- en beheerspel in
-isometrisch beeld, met politiek en avontuur erin.** Jij bent de schout van een gehucht onder een
-verwarde heer die alleen geld ziet; je breidt het uit tot een stad en maakt je aan het eind van de
-heer los. Alles staat in `spel.md`, en `CLAUDE.md` is bijgewerkt. De code van het oude spel (toren,
-spreuken, leeftijd, tutorial) staat er nog; die gaat eruit bij punt 7.
+**Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
+en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
+onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
+Een overzicht met het jaar maand voor maand, de kringlopen en de drempels van de heer en de inner
+staat op de pagina "Stand van het gehucht" (een artifact op claude.ai, 25 sep). Spelen: `npm start`,
+dan `localhost:8123/?kaart=gehucht`. `npm test`: 513/513.
 
-**Wat er nu speelt** (`http://localhost:8123/?kaart=gehucht`): een open kaart met een gehucht en
-een es; graan dat met de kalender groeit, wuift en door de boeren gemaaid wordt (en alleen zo
-binnenkomt); een balk met kalender (oude maandnamen, pauze, 1–3×), voorraad, bevolking en
-tevredenheid; 45 soorten gebouwen met een bouwmenu (`B`) en fases tijdens het bouwen; een
-bevolking die groeit met ruimte, eten en tevredenheid; en een winter die zonder brandhout mensen
-kost. **Sinds 24 sep ook handel:** de marskramer komt drie keer per jaar over de weg naar de brink.
-Je praat met hem en handelt in een venster, en zolang dat open is, staat de tijd stil. De prijzen
-verschillen per bezoek. Een gebouw maakt alleen wat zijn grondstof toelaat (de smidse staat
-zonder ijzer stil en zegt dat bij de muis), gereedschap laat harder werken, en zout houdt vis en
-vlees goed. 's Winters ligt de beek dicht, dus gezouten vis is dan je voorraad.
+**Deze sessie (25 sep)** bouwde verstoppen deel 1 (de kelders, de kapel, de kist die de inner telt,
+en het spoor van goud via de marskramer), bracht het ontwerp op orde (`spel.md` per onderwerp, de
+overzichtspagina), en verwerkte vijf antwoorden van Marcel: vlees vult een maag, de schapen groeien
+langzamer, en de heer kijkt rond naar gelang zijn argwaan; verstoppen deel 1b en het plein staan in
+de rij. Zie "Af" onderaan.
 
-**Sinds 24 sep (later die dag) ook de heer** (punt 5, `spel.md`, "Sint-Maarten"). Op 1 wijnmaand
-komt zijn brief met wat hij wil. Op Sint-Maarten loopt hij met twee soldaten over de weg naar de
-brink, en daar staat de tijd stil tot je bij hem bent geweest. Je betaalt in een venster met
-schuiven, en dat venster rekent vooruit of je graan het haalt. Hij vraagt naar wat hij ziet: een
-half graan pacht per akkertegel, hoofdgeld, en per gebouw zijn prijs, die ook in het bouwmenu
-staat. Hij telt slecht. Wie te weinig geeft, krijgt een boete, soldaten die meeëten, en de
-schandpaal, waarvoor je een van de vijf boeren aanwijst (die hebben nu een naam) of jezelf. Twee
-keer veel te weinig kost je je ambt. Zaaien kost vanaf het tweede jaar graan, en wat niet
-gezaaid kan worden, ligt braak.
-
-**En de spelregels** (Marcel, 24 sep: "Dit moeten allemaal opties worden die instelbaar zijn";
-`spel.md`, "Instelbaar"). Onder `O` of de knop naast Bouwen staat één venster met de keuzes
-(graan, waarin de heer betaald wil worden, hoe hij telt, de schout aan de paal, honger buiten
-de winter, en sinds punt 6 waar de heer de rekening op maakt en wat hij van het graan vraagt), de
-namen van de heer en de boeren, en een werkbank met alle getallen uit de regels (188 op
-25 sep). Wat je verandert, geldt meteen, en de browser onthoudt het.
-
-**En de boeren worden geloot** (Marcel, 24 sep: "Ze moeten random eigenschappen hebben"). Bij elk
-spel trekt elke boer een karakter uit een stapel van tien (met een eigen gesprek) en vier
-eigenschappen: maaien, opbrengst, zaaien en aanzien. Je ziet het bij de muis, boven het gesprek en
-bij de schandpaal. In de spelregels: geloot of vast, de kansen in de werkbank, en opnieuw loten.
-
-**En de inner komt tellen** (punt 6, stap 1 van 3; `spel.md`, "Rijk worden en arm lijken"). Op
-15 oogstmaand komt hij over de weg, en zolang hij er is, staat de tijd stil. Alleen loopt hij naar
-wat hij nog niet zag; sta je naast hem, dan loopt hij met jou mee, tot zijn geduld op is. Wat hij
-ziet (zeven tegels ver, niet door huizen heen), komt in zijn rapport, en dat rapport is de rekening
-van de heer: wat hij niet zag, betaal je dat jaar niet. Klopt het graan niet met zijn velden, dan
-groeit zijn argwaan (een oog in de balk), en die doet vier dingen: de heer vraagt meer, de inner
-komt onverwacht terug, soldaten doorzoeken het dorp, en bij heel veel argwaan telt het rapport niet
-meer. Op Sint-Maarten kijkt de heer zelf rond vanaf de brink; dat is een voorstel van Claude.
-Onderweg bleek dat **de schout in het gehucht niet kon lopen** (sinds punt 1b, 23 sep); dat is
-hersteld. `npm test`: 407/407.
-
-Om te proberen: `Toren.debug.brief()` stuurt zijn brief nu, `Toren.debug.heer()` laat hem nu
-komen, `Toren.debug.inner()` de inner (`(true)`: onverwacht terug), `Toren.debug.argwaan(0.6)` zet
-zijn argwaan, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
-bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
-
-**En vee op de weide** (punt 6a, stap 1 van 3; Marcel, 25 sep, naar Lords of the Realm 2;
-`spel.md`, "Weides met koeien en schapen"). Elk veld is akker, weide of braak, en onder `V` of de
-knop Velden kies je wat het volgend jaar wordt; de wissel gaat in op 1 lentemaand. Een akker put
-het land uit (tot 40%, Marcels keuze), een braak rust, en een weide mest het. Het gehucht begint met
-één weide, met drie koeien en acht schapen die erbinnen grazen. Van grasmaand tot wijnmaand geeft
-een koe melk voor vijf mensen, wat over is wordt kaas, en in grasmaand komen er kalveren en
-lammeren bij zolang er plaats is. `npm test`: 460/460.
-
-**En de winter voor het vee** (punt 6a, stap 2 van 3; Marcel koos op 25 sep, later die dag;
-`spel.md`, "Gebouwd, stap 2"). In hooimaand maaien de boeren eerst het hooi van hun weide, en van
-slachtmaand tot en met lentemaand eet het vee dat hooi: zo beslist het hooi hoeveel koeien je houdt.
-Op 1 slachtmaand opent een venster waarin je kiest wie er naar de slager gaat (vlees en huiden), met
-een voorstel dat net genoeg slacht. Velden naast elkaar die weide zijn, zijn samen één weide. De
-schapen grazen op de heide, een nieuwe meent in het zuidwesten, en slapen in de schaapskooi aan de
-rand ervan; ze worden in zomermaand geschoren, en de mest uit de kooi leg je in het veldenvenster op
-een akker, zodat die niet uitput. Wat Marcel niet koos, zijn opties. Een proef van drie jaar staat in
-`spel.md`. `npm test`: 494/494.
-
-**En verstoppen** (punt 6, stap 2, deel 1; Marcel koos op 25 sep, een sessie later; `spel.md`,
-"Marcel koos voor stap 2"). Geen kuil ("een kuil vind ik niks"), maar plekken die er al zijn: een klik
-op een huis, een boerderij of de kapel, en de schout loopt erheen en zet er graan of goud weg of
-haalt het terug. Elke plek werkt anders. In je eigen kelder vinden de soldaten het vaak, in de kapel
-bijna nooit (maar de kapelaan houdt een tiende), en het karakter van de boer telt: de roddelaar
-vertelt het rond, de vrome weigert, de woekeraar houdt een vijfde, de oudste kent een oude plek. De
-inner telt nu ook de kist, en de marskramer vertelt hem wat hij je betaalde: een lege kist na veel
-verkopen maakt argwanend. Zolang de inner of de heer in het dorp is, sjouw je niets. `npm test`:
-512/512.
-
-**En daarna, dezelfde dag, op orde gebracht** (Marcel: "Laten we even op orde stellen wat we nu
-allemaal hebben en hoe het werkt"). Er is een overzichtspagina, "Stand van het gehucht" (een
-artifact op claude.ai): het jaar maand voor maand, de kringlopen, de heer en de inner, verstoppen, de
-spelregels, en wat niet op orde is. `spel.md` begint nu per onderwerp met **Zo werkt het nu**, en
-kreeg het onderwerp dat ontbrak (het dorp, de behoeften en de winter). Op die pagina beantwoordde
-Marcel vijf vragen; drie zijn meteen gebouwd: **vlees vult een maag** (een optie), **de schapen
-groeien langzamer** (een lam met kans 0,3 in plaats van 0,7), en **de heer kijkt op Sint-Maarten
-rond naar gelang zijn argwaan**. `npm test`: 513/513.
+**Waar het werk staat.** De cloudomgeving geeft elke sessie een eigen branch; deze sessie werkte op
+`claude/werklijst-vervolg-yp9f6m`, die voorloopt op `main`. Staat hij nog niet in `main`, begin de
+volgende sessie dan op die branch, of zet hem eerst in `main` (vooruitspoelen kan: `main` is
+sindsdien niet veranderd). Haal ook eerst de hele geschiedenis op (`git fetch --unshallow`):
+`test/tegelvolgorde.test.cjs` leest een oude commit, en in een ondiepe kloon falen er dan twee toetsen
+die niets met je werk te maken hebben.
 
 **Loopt nu:** niets.
 
-**Daarna** (Marcel, 25 sep: "punt 7 naar voren"):
-- **Punt 7, het oude spel eruit.** Het plan in stappen staat hieronder bij punt 7, met drie vragen
-  voor Marcel. Een groot stuk werk: begin er een nieuwe sessie voor.
+**Volgende: punt 7, het oude spel eruit.** Marcel haalde het op 25 sep naar voren en koos: het gevecht
+in beurten blijft, de namen gaan nu om, en de oude kaart gaat weg. De stappen en de valkuilen staan
+hieronder bij punt 7. Het is een groot stuk werk; begin er een verse sessie voor, en lees eerst die
+stappen.
+
+**Daarna:**
 - **Verstoppen, deel 1b: ook onder de 40% een risico** (Marcel koos op 25 sep; `spel.md`, "Marcel
   koos (25 sep, als opmerking op de overzichtspagina)"). De soldaten zoeken op Sint-Maarten altijd op
   2 of 3 plekken, ook zonder argwaan; wie vlak langs een plek loopt, kan iets vinden; en je bepaalt de
@@ -131,15 +61,11 @@ elkaar, om later na te lopen (Marcel, 25 sep). Zet er een bij als je iets ziet.
 **Wacht op Marcel** (gesorteerd op 25 sep, zoals op de overzichtspagina "Stand van het gehucht").
 De vragen hebben een nummer, zodat een antwoord kort kan.
 
-*Beslissen* (1 tot en met 5 beantwoordde Marcel op 25 sep, zie hierboven):
+*Beslissen* (1 tot en met 5 en 9 beantwoordde Marcel op 25 sep; zie `spel.md` en punt 7):
 6. De kern voor het tweede proefje (`spel.md`, "De kern voor het tweede proefje"): de drie groepen en
    vijf keuren, nodig vóór punt 9.
 7. Moet het ijs op de beek te zien zijn (tekenwerk), en vangt de jager 's winters minder?
 8. Een naam; "Aardschok" past niet meer.
-9. Drie vragen voor punt 7 (het plan staat bij punt 7 hieronder): houden we het gevecht in beurten,
-   met alleen slaan, voor later? Hernoemen we `Toren` en `held` nu (bijvoorbeeld naar `Spel` en
-   `schout`), of pas als het spel een naam heeft? En gaat de oude kaart (het erf, het bos, het dorp,
-   de toren) weg, of bewaren we het dorp als bron?
 
 *Spelen, en zeggen hoe het voelt:*
 - Een heel jaar: hoe snel het gaat, de winter, en Sint-Maarten (is de honger te veel of te weinig;
@@ -208,23 +134,43 @@ nog nodig is".
    wordt, en de keien van een keienraper komen (in plaats van de steengroeve) en van het ontginnen.
    Hier, omdat de keien van het ontginnen komen (6b).
 7. **Het oude spel eruit** (Marcel haalde dit op 25 sep naar voren: het komt nu eerst, vóór de rest
-   van punt 6). Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code zijn, het
-   spel zonder `?kaart=` in het gehucht begint, `npm test` groen is, en `CLAUDE.md` alleen nog het
-   nieuwe spel beschrijft. Waarom nu: van de 17.000 regels zijn er zo'n 1.850 alleen voor het oude
-   spel (spreuken, toveren, tutorial, regie, leeftijd), en er komt steeds meer nieuwe code bovenop.
-   Voorstel van Claude voor de stappen, nog te keuren (vraag 9 hierboven):
-   - **7a.** Het gehucht wordt het begin: `index.html` opent zonder `?kaart=` meteen het gehucht. De
-     tutorial eruit (`js/tutorial.js`, `js/regie.js`, het draaiboek `T.TUTORIAL_TEKST`), en het erf
-     en de toren als gebied.
-   - **7b.** De spreuken, het toveren en de leeftijd eruit (`js/spreuken.js`, `js/toveren.js`,
-     `js/leeftijd.js`, `T.verouder`, meesterschap, de spreukbalk). Het gevecht in beurten blijft, met
-     alleen slaan, voor de rovers, de wolven en de opstand.
-   - **7c.** De mensen van het oude spel en hun gesprekken eruit: Wim, de meester, de bakker, de
-     smidsvrouw, en de quest De koude oven. Het questsysteem en de gespreksschrijver blijven, voor
-     het avontuur; de dorpelingen van het oude dorp blijven als bron in `T.MENSEN`.
-   - **7d.** De kunst die alleen het oude spel tekent (de tovenaar, de toren, de spreukeffecten) uit
-     `beelden/`; de modellen in `gereedschap/pixelart/` blijven.
-   - **7e.** `CLAUDE.md` alleen nog over het nieuwe spel; de oude afspraken staan in `git log`.
+   van punt 6). Klaar als de toren, de spreuken, de leeftijd, de tutorial en de oude kaart uit de code
+   zijn, het spel zonder `?kaart=` in het gehucht begint, de namen om zijn, `npm test` groen is, en
+   `CLAUDE.md` alleen nog het nieuwe spel beschrijft. Waarom nu: van de 17.000 regels zijn er zo'n
+   1.850 alleen voor het oude spel (spreuken, toveren, tutorial, regie, leeftijd), en er komt steeds
+   meer nieuwe code bovenop.
+   **Marcel koos (25 sep):** "Gevecht houden, namen nu hernoemen, oude kaart weg." Het gevecht in
+   beurten blijft, met alleen slaan, voor de rovers, de wolven en de opstand; de namen gaan nu om; en
+   de oude kaart gaat weg (het erf, het bos, het dorp en de toren).
+   In stappen, elk met `npm test` groen en een eigen commit (voorstel van Claude):
+   - **7a. Het gehucht wordt het begin.** `index.html` opent zonder `?kaart=` meteen het gehucht. De
+     tutorial eruit: `js/tutorial.js`, `js/regie.js`, en het draaiboek `T.TUTORIAL_TEKST` met zijn
+     plek in de gespreksschrijver (`gereedschap/gesprekken-tool.js`; `test/bronblok.test.cjs` kijkt
+     op de echte bestanden).
+   - **7b. De spreuken, het toveren en de leeftijd eruit:** `js/spreuken.js`, `js/toveren.js`,
+     `js/leeftijd.js`, `T.verouder`, het meesterschap, de spreukbalk en de toetsen 2 tot 4. Het
+     gevecht blijft (`js/gevecht.js`), met alleen slaan.
+   - **7c. De oude kaart en zijn mensen eruit:** `kaarten/wereld.tmj` (het erf, het bos, het dorp, de
+     toren) met zijn betekenis, `kaarten/oud/`, de gebieden erf en toren, en Wim, de meester, de
+     bakker, de smidsvrouw en de andere dorpelingen van het oude dorp, met hun gesprekken en de quest
+     De koude oven. Het questsysteem, de gespreksschrijver en het wereldgereedschap blijven, voor het
+     avontuur; het wereldgereedschap opent dan het gehucht. De proefkaarten (`proef`, `proefbos`)
+     blijven: de toetsen gebruiken ze. **Let op:** de marskramer, de heer en de inner komen het
+     gehucht binnen over de weg, via de uitgang "De weg de wereld in" (een overgang naar 'wereld',
+     `T.wegInEnUit`), en veel toetsen leggen zo'n overgang aan. Die weg moet blijven, ook als de kaart
+     erachter weg is.
+   - **7d. De kunst die alleen het oude spel tekent** (de tovenaar, de toren, de spreukeffecten) uit
+     `beelden/`; de modellen in `gereedschap/pixelart/` blijven. Het vel van een gewone dorpeling
+     blijft: de schout draagt het.
+   - **7e. De namen om**, als laatste en in een eigen commit, zodat de rest leesbaar blijft:
+     `globalThis.Toren` wordt `globalThis.Spel` (in de code blijft het `T`, en `Toren.debug` wordt
+     `Spel.debug`), en de held wordt de schout (`S.held` wordt `S.schout`, de soort 'held' wordt
+     'schout'). Dat raakt zo'n 160 regels met `Toren` in 96 bestanden en zo'n 550 met `held`, ook in
+     de toetsen, het gereedschap, `server.cjs` en `CLAUDE.md`. De sleutel waaronder de browser de
+     spelregels onthoudt (`aardschok.spelregels`) blijft, anders is wat Marcel instelde weg. `Spel` en
+     `schout` waren het voorstel van Claude; Marcel koos "nu hernoemen".
+   - **7f. `CLAUDE.md` alleen nog over het nieuwe spel;** de oude afspraken staan in `git log`
+     (`git show 0eb8269:CLAUDE.md`).
 
 *C. Verhalen en besturen*
 
