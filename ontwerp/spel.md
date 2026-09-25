@@ -603,7 +603,65 @@ ziet, en de slager wacht op vee dat niemand levert. Marcel koos uit een voorstel
   het is wintervoer. In slachtmaand vlees en huiden, voor de slager en de leerlooier die er al
   zijn. Wat de schapen precies geven (wol, en misschien meer), komt bij de regels.
 - **Eerst de dieren tekenen:** een koe en een schaap die grazen, lopen en gaan liggen
-  (`beeld.md`, "Het vee"). De regels komen daarna.
+  (`beeld.md`, "Het vee"). De regels komen daarna. Dat is gebeurd (25 sep).
+
+**Zoals Lords of the Realm 2** (Marcel, 25 sep: "kijk naar Lords of the Realm 2 hiervoor"). Wat daar
+gebeurt, voor zover Claude het vond:
+- elk veld is graan, vee of braak, en jij verdeelt ze;
+- koeien geven elk seizoen zuivel, en een portie kaas voedt vijf mensen;
+- je kunt vee slachten, of verkopen aan rondtrekkende handelaars;
+- tien zaad op een veld geeft 120 graan, als je er drie seizoenen de handen voor vrijmaakt;
+- met "Advanced Farming" put graan het land uit, en is er één braak per twee graanvelden nodig om het
+  vruchtbaar te houden.
+
+Bronnen: [Steam-gids](https://steamcommunity.com/sharedfiles/filedetails/?id=596781924),
+[Open LotR2](https://openlotr2.readthedocs.io/en/latest/game/part-3/Part-3.html),
+[GameFAQs](https://gamefaqs.gamespot.com/pc/197801-lords-of-the-realm-ii/faqs/51628).
+
+**Marcel koos (25 sep), uit een voorstel van Claude:**
+- **Elk veld wisselt.** Een veld is akker, weide of braak, en jij kiest per jaar. Meer graan of
+  meer vee is zo een echte afweging.
+- **Vee mest het land.** Het drieslagstelsel van toen: een akker put uit, een braak rust, en een
+  weide (een braak waar vee op graast) wordt weer vruchtbaar.
+- **Hooi, anders slachten.** In hooimaand maai je hooi van de weide; wat je 's winters niet kunt
+  voeren, slacht je in slachtmaand. Zo betekenen de oude maandnamen iets.
+- **Klein begin, dan groeien.** Het gehucht begint met een paar koeien en schapen, de kudde groeit in
+  de lente als er plaats is, en de marskramer koopt en verkoopt vee, wol en kaas.
+- Wat Marcel niet koos, wordt een optie in de spelregels: vruchtbaarheid uit, geen winterzorg, vee
+  alleen kopen of alleen laten groeien. Alleen "weides apart" (aparte grond, akkers blijven akkers)
+  is geen optie: dat zou een tweede manier van velden vragen. Wil Marcel het toch, dan komt het
+  erbij.
+
+**Uitwerking in drie stappen** (voorstel van Claude; de getallen zijn een eerste gok, samen in een
+blok `T.VEE_INSTELLINGEN` en in de werkbank):
+1. **Velden en vee op de weide.**
+   - Elk veld krijgt een bestemming (akker, weide of braak) en een vruchtbaarheid.
+   - Een klik op een veld opent een venster: van wie het is, hoe vruchtbaar, wat het nu is, en wat
+     het volgend jaar wordt. De wissel gaat in op 1 lentemaand, bij het zaaien. Staand graan
+     vertrappen of midden in de zomer zaaien kan niet.
+   - Alleen akkers worden gezaaid.
+   - Een akker geeft zijn graan maal zijn vruchtbaarheid. Die zakt per jaar als akker (−0,10),
+     groeit als braak (+0,15) en sneller als weide (+0,20). Zo houdt akker, akker, weide het land
+     vruchtbaar, en akker, akker, braak nét niet.
+   - Het gehucht begint met één weide, het blok van Klaas (akker6), met drie koeien en acht schapen.
+   - Een koe heeft vier tegels weide nodig, een schaap twee. Is het te vol, dan geven ze minder
+     melk en groeien ze niet.
+   - Van grasmaand tot wijnmaand geeft een koe elke dag melk: genoeg voor zo'n vijf mensen, zoals in
+     Lords of the Realm 2. Melk wordt eerst gegeten, dan graan. Wat er over is, wordt kaas, die goed
+     houdt en pas gegeten wordt als het graan op is. Zo helpt vee tegen de honger in het voorjaar.
+   - In grasmaand werpen koeien kalveren en schapen lammeren, zolang er plaats is.
+   - Een weide is groen gras, en een braak kale grond, tot braakland met onkruid getekend is.
+2. **De winter en de wol.**
+   - In hooimaand maaien de boeren hooi van de weides.
+   - 's Winters eet het vee hooi.
+   - Op 1 slachtmaand zegt een venster hoeveel dieren het hooi de winter door kan helpen, en kies jij
+     wie er geslacht wordt: vlees en huiden, voor de slager en de leerlooier.
+   - Schapen worden in zomermaand geschoren: dat geeft de wol. Wat de schaapskooi dan nog doet, is
+     een vraag aan Marcel.
+3. **Vee dat telt.**
+   - De inner telt de kudde die hij ziet, en de heer vraagt een deel.
+   - Voor zijn komst kun je een deel van de kudde het bos in drijven.
+   - De marskramer koopt en verkoopt koeien, schapen, kaas en wol.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
