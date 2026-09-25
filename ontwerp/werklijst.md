@@ -68,9 +68,7 @@ komen, `Toren.debug.inner()` de inner (`(true)`: onverwacht terug), `Toren.debug
 zijn argwaan, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
 bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
 
-**Loopt nu:** tekenwerk, het vee (Marcel, 25 sep: "Wil ook weides hebben met koeien en schapen";
-`spel.md` en `beeld.md`). Een agent maakt een koe en een schaap die grazen, staan, lopen en liggen,
-en laat ze in het gehucht zien. De regels van de weides komen daarna.
+**Loopt nu:** niets. Er draait geen agent.
 
 **Volgende stap: punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud,
 die de inner niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de
@@ -137,7 +135,9 @@ nog nodig is".
 6a. **Weides met vee** (Marcel, 25 sep; `spel.md`, "Weides met koeien en schapen"). Klaar als je
    weides aanlegt zoals akkers, koeien en schapen erop grazen, en ze geven wat bij ze hoort: melk
    en kaas het hele jaar, vlees en huiden in slachtmaand, en wol. En als de inner de kudde telt,
-   zodat wie slim is een deel het bos in drijft voordat hij komt. Eerst de dieren (loopt).
+   zodat wie slim is een deel het bos in drijft voordat hij komt. De dieren zijn er (25 sep): een
+   koe en een schaap in drie kleuren, die grazen, staan, lopen en liggen (`js/vee.js`,
+   `Toren.debug.vee`). Nu de regels; vraag Marcel eerst wat een weide kost en hoe groot hij is.
 7. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
    zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel beschrijft. Hier, omdat
    er daarna veel nieuwe code bovenop komt.
@@ -237,6 +237,9 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 25 sep 2026 — **Het vee.** Een koe en een schaap, elk in drie kleuren, die grazen, staan, lopen
+  en liggen, en rustig om beurten gaan liggen (`gereedschap/pixelart/vee.cjs`, `js/vee.js`,
+  `beeld.md`). De weides zelf komen nog (punt 6a).
 - 25 sep 2026 — **De marskramer loopt.** Zijn eigen figuur (rek vol potten en pannen, lappenjas,
   stok) kan nu staan en lopen, en in het spel leent hij niet meer het vel van Wim (`beeld.md`).
 - 25 sep 2026 — **Een gezicht per karakter.** Alle tien karakters zie je van ver, op het lijf van

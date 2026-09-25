@@ -85,6 +85,19 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   maar het mag misschien meer;
 - zijn naamkaartje staat op 66 px, bij zijn hoofd; het rek steekt tot 72 à 83 px uit.
 
+**Het vee** (25 sep, `beeld.md`; `vee.cjs`, `js/vee.js`):
+- gaan liggen en opstaan hebben nog geen eigen beelden: een dier ligt in één beeld neer, en staat
+  in één beeld weer op;
+- een koe is ruim twee tegels lang maar bezet er één, en wordt getekend in de volgorde van die ene
+  tegel. Staan dieren dicht op elkaar of tegen een huis, dan kan de een verkeerd over de ander
+  vallen. `Toren.debug.vee` houdt daarom een tegel ruimte tussen de dieren;
+- dwalen gaat in vier richtingen (`T.laatDwalen`), dus na een stap kijkt een dier altijd schuin
+  (ZO, ZW, NW of NO). Alleen de eerste kant, uit het zaad, kan elk van de acht zijn;
+- het herkauwen en een oor dat wegdraait zie je op 1× nauwelijks; de zwiepende staart wel;
+- de schaduwvlek onder een wezen (`tekenWezen`) is voor iedereen even groot, en onder een koe valt
+  hij weg;
+- van achteren (N) is een grazende zwarte koe vooral een donkere vlek op vier poten.
+
 **Alle dorpelingen:** bij het neerzetten van een voet wordt de scheen wat uitgerekt, want
 `beenPunten` zet de enkel altijd op het doel.
 

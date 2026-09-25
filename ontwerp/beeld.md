@@ -519,6 +519,23 @@ tekenen, dan de regels. Een koe en een schaap, net als de dorpelingen uit acht r
 Middeleeuws vee was klein. Niet elk dier is hetzelfde ("Niets is gelijk"): een paar kleuren per
 soort, zodat een kudde leeft.
 
+**Gemaakt (25 sep 2026)** in `gereedschap/pixelart/vee.cjs`, op het tuig van de wolf; de
+proefplaat is `uit/vee-proef.png`.
+
+| | kleuren | maat |
+|---|---|---|
+| koe | roodbruin (`koe0`), zwart (`koe1`), zwartbont met witte sokken en een bles (`koe2`) | zo'n 1,05 m in de schoft, met haar rug ter hoogte van de borst van een boer; bijna twee tegels lang; een bredere cel (128×108) |
+| schaap | vuilwit met modder (`schaap0`), bruin (`schaap1`), vuilwit met een zwarte kop en zwarte poten (`schaap2`) | tot de knie of dij van een boer |
+
+- **Vier houdingen, elk een lus van acht beelden.** Grazen, met de kop tot op het gras en twee
+  rukken aan een pluk. Staan, herkauwend, met een zwiepende staart en een oor dat draait. Lopen,
+  in een stapgang van vier tellen: de koe 0,9 tegel per seconde, het schaap 1,1. Liggen, op de
+  borst en een beetje op één zij.
+- **Welke rust een stil dier kiest,** komt uit zijn zaad en de tijd, zonder toeval per beeld
+  (`T.rustVanDier`, `js/vee.js`). Gemiddeld graast een koe 60% van de tijd, staat ze 25% en ligt ze
+  15%; het schaap graast meer. Nooit ligt de hele kudde tegelijk, en dieren slaan niet op
+  hetzelfde moment om.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
