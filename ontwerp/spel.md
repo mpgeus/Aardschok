@@ -1345,3 +1345,5 @@ besturen, dan de nacht en het verzet, en dan de groei naar vrijheid.
   - *In een gevecht heeft de schout voorlopig levenspunten,* zoals de wolf en de kobold, en wie valt
     is het einde. Wat vallen echt betekent (gewond, dagen rust, gevangen), beslissen we bij punt 13,
     als de rovers en de wolven komen; nu vecht er in het gehucht nog niemand.
+  Gebouwd op 25 sep (werklijst punt 7a tot en met 7d): het oude spel is eruit, en de drie keuzes
+  hierboven zitten erin. De namen (7e) en `CLAUDE.md` (7f) volgen.

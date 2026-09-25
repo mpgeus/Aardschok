@@ -10,34 +10,35 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (einde sessie 25 sep 2026): de overdracht
+## De stand (einde tweede sessie 25 sep 2026): de overdracht
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Een overzicht met het jaar maand voor maand, de kringlopen en de drempels van de heer en de inner
 staat op de pagina "Stand van het gehucht" (een artifact op claude.ai, 25 sep). Spelen: `npm start`,
-dan `localhost:8123/?kaart=gehucht`. `npm test`: 513/513.
+dan `localhost:8123/`: het spel begint meteen in het gehucht, met de benoemingsbrief van de heer.
+`npm test`: 444/444.
 
-**Deze sessie (25 sep)** bouwde verstoppen deel 1 (de kelders, de kapel, de kist die de inner telt,
-en het spoor van goud via de marskramer), bracht het ontwerp op orde (`spel.md` per onderwerp, de
-overzichtspagina), en verwerkte vijf antwoorden van Marcel: vlees vult een maag, de schapen groeien
-langzamer, en de heer kijkt rond naar gelang zijn argwaan; verstoppen deel 1b en het plein staan in
-de rij. Zie "Af" onderaan.
+**Deze sessie (25 sep, de tweede)** deed punt 7a tot en met 7d: het oude spel is eruit. De tutorial,
+de spreuken, de leeftijd, de toren, de oude kaart met Wim, de meester, de bakker en De koude oven,
+en de kunst die alleen dat spel tekende; `js/` ging van 17.000 naar 13.200 regels. Nieuw erbij, op
+drie vragen aan Marcel: het spel begint met een benoemingsbrief van de heer, je stuurt altijd zelf
+(geen scènes), en de schout heeft in een gevecht 20 levenspunten. De actiebalk van het gevecht
+staat nu ook in het gehucht. De kamers van de toren bleven als proefkamers voor de toetsen van het
+gevecht. Zie "Af" onderaan, en `opmerkingen.md` voor wat onderweg opviel.
 
-**Waar het werk staat.** De cloudomgeving geeft elke sessie een eigen branch; deze sessie werkte op
-`claude/werklijst-vervolg-yp9f6m`, en alles staat sinds het eind van de sessie ook in `main` (Marcel:
-"push it naar main"). Begin de volgende sessie dus gewoon vanaf `main`. Werkt een sessie weer op een
-eigen branch, zet die dan aan het eind in `main` als Marcel dat vraagt, anders begint de sessie erna
-op een oude stand. Haal ook eerst de hele geschiedenis op (`git fetch --unshallow`):
-`test/tegelvolgorde.test.cjs` leest een oude commit, en in een ondiepe kloon falen er dan twee toetsen
-die niets met je werk te maken hebben.
+**Waar het werk staat.** De cloudomgeving geeft elke sessie een eigen branch. Deze sessie werkte op
+`claude/werklijst-vervolg-ib66vy`, en alles staat daar (gepusht), **maar nog niet in `main`**: dat is
+Marcels stap ("push it naar main"). Begin de volgende sessie vanaf die branch, of vanaf `main` als
+hij er intussen in staat; anders begint de sessie op een oude stand. Haal ook eerst de hele
+geschiedenis op (`git fetch --unshallow`): `test/tegelvolgorde.test.cjs` leest een oude commit, en in
+een ondiepe kloon falen er dan twee toetsen die niets met je werk te maken hebben.
 
-**Loopt nu: punt 7, het oude spel eruit** (tweede sessie van 25 sep, op branch
-`claude/werklijst-vervolg-ib66vy`). Marcel haalde het op 25 sep naar voren en koos: het gevecht in
-beurten blijft, de namen gaan nu om, en de oude kaart gaat weg; in deze sessie ook het begin (een
-benoemingsbrief), geen scènes, en levenspunten voor de schout. De stappen en de valkuilen staan
-hieronder bij punt 7.
+**Loopt nu:** niets.
+
+**Volgende: 7e en 7f, de namen en `CLAUDE.md`** (bij punt 7 hieronder). Afgesproken met Marcel: hij
+opent het gehucht eerst nog eens, dan gaan de namen om (`Toren` wordt `Spel`, de held de schout).
 
 **Daarna:**
 - **Verstoppen, deel 1b: ook onder de 40% een risico** (Marcel koos op 25 sep; `spel.md`, "Marcel
@@ -66,8 +67,15 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
    vijf keuren, nodig vóór punt 9.
 7. Moet het ijs op de beek te zien zijn (tekenwerk), en vangt de jager 's winters minder?
 8. Een naam; "Aardschok" past niet meer.
+10. De monsters van het oude spel: de slijmkruiper, de skeletwacht, de reuzenspin en de kobold passen
+    niet in het nieuwe spel, de wolf wel. Weg ermee, of bewaren tot er rovers zijn om de toetsen van
+    het gevecht op te draaien? (`opmerkingen.md`, "Het gevecht na de leeftijd".)
+11. Komt het leven van de schout terug (elke dag een beetje, of na een nacht rust), of wachten we
+    daarmee tot punt 13, als vallen iets anders gaat betekenen?
 
 *Spelen, en zeggen hoe het voelt:*
+- Het nieuwe begin: open `localhost:8123/` en lees de benoemingsbrief. Klopt de toon van de heer? Een
+  gevecht probeer je op `localhost:8123/?kaart=proef`: klik op de slijmkruiper.
 - Een heel jaar: hoe snel het gaat, de winter, en Sint-Maarten (is de honger te veel of te weinig;
   mag de heer harder, of juist zachter?).
 - Het bezoek van de inner (`Toren.debug.inner()`, of wachten tot oogstmaand): voelt meelopen goed,
@@ -273,6 +281,11 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 25 sep 2026 — **Punt 7a tot en met 7d: het oude spel eruit.** Het spel begint in het gehucht met
+  een benoemingsbrief van de heer (`T.ui.toonBenoeming`, `js/hud.js`); de tutorial, `js/regie.js`,
+  de spreuken, het toveren, de leeftijd, de toren, de oude kaart met zijn mensen, De koude oven, de
+  raakpunten en de kunst van het oude spel zijn weg. De schout heeft levenspunten (`js/wereld.js`,
+  `js/gevecht.js`), de toren leeft voort als proefkamers voor de toetsen (`T.maakProefkamers`).
 - 25 sep 2026 — **Op orde gebracht, en vijf antwoorden van Marcel.** Een overzichtspagina "Stand van
   het gehucht"; `spel.md` per onderwerp met "Zo werkt het nu"; verouderde getallen recht. Van Marcels
   antwoorden meteen gebouwd: vlees vult een maag (`js/behoeften.js`, een optie), de schapen groeien
