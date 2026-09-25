@@ -68,7 +68,9 @@ komen, `Toren.debug.inner()` de inner (`(true)`: onverwacht terug), `Toren.debug
 zijn argwaan, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
 bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
 
-**Loopt nu:** niets. Er draait geen agent.
+**Loopt nu:** tekenwerk, de marskramer (Marcel, 25 sep; `beeld.md`, "De marskramer loopt"). Een
+agent geeft zijn bestaande figuur staan en lopen, en zet hem in het spel in plaats van het vel
+van Wim.
 
 **Volgende stap: punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud,
 die de inner niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de

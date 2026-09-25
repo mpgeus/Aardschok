@@ -490,6 +490,14 @@ zijn van elkaar te onderscheiden. Wat erbij gekozen werd, buiten de tabel:
 De nek van de oudste zit lager (47 en 48 px, tegen 51 bij de rest), omdat zijn lijf krom is. Het
 halsijzer zit bij alle achttien onder de kin.
 
+## De marskramer loopt (Marcel, 25 sep 2026)
+
+Marcels volgende keus voor het tekenwerk. De marskramer komt drie keer per jaar, maar leende het
+vel van Wim, de knecht uit het oude spel. Zijn eigen figuur bestond al in `dorpelingen3.cjs`
+(klein en krom onder een draagrek vol potten en pannen, met een lappenjas, gestreepte kousen, een
+rode hoed met een gele veer en een wandelstok), maar kon nog niet staan en lopen. Dat komt erbij,
+net als bij de andere dorpelingen, zonder dat zijn stilstaande beeld verandert.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
