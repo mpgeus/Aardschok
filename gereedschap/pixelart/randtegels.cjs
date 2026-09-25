@@ -516,9 +516,26 @@ function heideBolOp(qx, qy) {
 // ruis2 recht), en dat verdween met dit ritme, hetzelfde als grasPixel al jaren gebruikt. Om
 // dezelfde reden lopen de plekken hieronder (paars, gras, zand) allemaal op de hogere frequentie
 // van HEIDE_BOL of op een dubbele ruisschaal, nooit op één lage.
+//
+// En gedraaid (25 sep, Claude): op 1,05 lagen de roosterpunten van ruis2 (waarde-ruis op hele
+// getallen) vrijwel op de hoeken van de tegels, en de tegels zijn uit hele wereldplekken gesneden.
+// Elke tegel liet daardoor hetzelfde glooiende vlekje tussen vier roosterpunten zien, en op het
+// scherm werd dat een lichte ruit per tegel: de lappendeken die "waar we in de ruis snijden" juist
+// wil voorkomen. Een draaiing van 37 graden en een schaal die niet op de tegels past, halen het
+// rooster van de ruis los van dat van de tegels, zonder de strepen van een lage frequentie.
+const HEIDE_COS = 0.8;
+const HEIDE_SIN = 0.6;
+function heideRuis(gx, gy, schaal, zaad) {
+  const u = (gx * HEIDE_COS - gy * HEIDE_SIN) * schaal + 17.3;
+  const v = (gx * HEIDE_SIN + gy * HEIDE_COS) * schaal + 5.1;
+  return ruis2(u, v, zaad);
+}
+// En de grove vlekken klein gehouden: elke tegel is uit een andere plek van de ruis gesneden, dus
+// een vlek zo groot als een tegel houdt op aan zijn rand, en dan zie je een dambord van lichte en
+// donkere tegels. De fijne ruis doet het werk; de grove geeft alleen nog een zweem.
 function heideToon(gx, gy) {
-  const v = ruis2(gx * 1.05 + 17, gy * 1.05, 423) * 0.65 + ruis2(gx * 3.1, gy * 3.1, 424) * 0.35;
-  return v < 0.4 ? 3 : v > 0.72 ? 5 : 4;
+  const v = heideRuis(gx, gy, 1.37, 423) * 0.2 + heideRuis(gx, gy, 3.3, 424) * 0.45 + heideRuis(gx, gy, 7.9, 426) * 0.35;
+  return v < 0.43 ? 3 : v > 0.6 ? 5 : 4;
 }
 
 function heidePixel(gx, gy, qx, qy) {
@@ -532,7 +549,7 @@ function heidePixel(gx, gy, qx, qy) {
     s -= 1;
   }
   // gedempte paarsgrijze plukjes: bloeiende heide, zeldzaam en op een lichte klontkop, nooit fel
-  const plek = ruis2(gx * 1.3 + 91, gy * 1.3, 425) * 0.7 + ruis2(gx * 3.7, gy * 3.7, 430) * 0.3;
+  const plek = heideRuis(gx, gy, 1.53, 425) * 0.7 + heideRuis(gx, gy, 3.7, 430) * 0.3;
   if (plek > 0.82 && bol === 1) {
     UIT.ramp = RAMP.steen;
     UIT.stap = 5;
@@ -540,8 +557,8 @@ function heidePixel(gx, gy, qx, qy) {
   }
   // wit-geel zand of een schapenpaadje: een enkele, zachtomrande kale plek, met de lichte
   // stappen van de zand-ramp (die begint zelf al bij donkerbruin, zie kern.cjs)
-  const zand = ruis2(gx * 0.9 + 5, gy * 0.9, 427) * 0.7 + ruis2(gx * 2.7, gy * 2.7, 432) * 0.3;
-  if (zand > 0.84) {
+  const zand = heideRuis(gx, gy, 0.83, 427) * 0.7 + heideRuis(gx, gy, 2.7, 432) * 0.3;
+  if (zand > 0.9) {
     UIT.ramp = hash(qx, qy, 428) % 4 === 0 ? RAMP.aarde : RAMP.zand;
     UIT.stap = UIT.ramp === RAMP.aarde ? 4 : 6 + (hash(qx, qy, 429) % 2);
     return;

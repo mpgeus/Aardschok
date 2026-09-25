@@ -570,6 +570,16 @@ gras" telt 72 tegels (8 gras-vlak, gedeeld met de bestaande terreinsets + 8 heid
 hoektegels); de 64 nieuwe daarvan staan pas achteraan, vanaf id 262, ruim binnen de
 `RAND_CAPACITEIT` van 600 in `naar-tiled.cjs`.
 
+**Op speelschaal (Claude, later op 25 sep):** op de kaart liet elke tegel een lichte ruit zien, en
+daarna een dambord van lichte en donkere tegels. Twee oorzaken, allebei in `heideToon`: de
+roosterpunten van `ruis2` (waarde-ruis op hele getallen) lagen op 1,05 vrijwel op de hoeken van de
+tegels, en een grove toonvlek zo groot als een tegel houdt op aan zijn rand, want elke tegel is uit
+een andere plek van de ruis gesneden. Nu is de ruis 37 graden gedraaid (`heideRuis`), op schalen die
+niet op de tegels passen, en doet de fijne ruis het werk; de grove geeft alleen een zweem. De
+zandplekjes zijn zeldzamer. Het leest nu als lage, gevlekte heide. Wie een volgende grondsoort
+maakt: begin niet bij een lage frequentie, en houd het rooster van de ruis los van dat van de
+tegels.
+
 **Nog ruw:**
 - Het blijft aan de rustige kant — vooral van dichtbij (zie `uit/heide-proef.png`) oogt het wat
   uniform, met weinig echt uitgesproken paarse of groene plukken. Dat was bewust: de eerdere,
