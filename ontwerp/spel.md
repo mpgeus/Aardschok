@@ -666,7 +666,7 @@ blok `T.VEE_INSTELLINGEN` en in de werkbank):
 **Gebouwd, stap 1, de regels (25 sep 2026):** `js/akkers.js` en `js/vee.js`, met 24 toetsen. De
 getallen staan in `T.VELDEN_INSTELLINGEN` en `T.VEE_INSTELLINGEN`.
 - De vruchtbaarheid gaat per jaar 0,10 omlaag als akker, 0,15 omhoog als braak en 0,20 als weide.
-  Ze gaat nu door tot 0: een veld dat tien jaar akker was, geeft niets meer.
+  Ze zakt niet onder 0,4 (Marcels keuze, hieronder).
 - Melk en kaas tellen in graan: een koe geeft per dag wat vijf mensen eten, en de helft van wat over
   is, wordt kaas.
 - Een kalf of lam telt pas na een jaar als volwassen dier, zodat de kudde niet in één keer
@@ -690,6 +690,27 @@ brandhout komt van buiten):
 - De kudde groeit niet: na één lam is de weide vol. Meer vee kan alleen met meer weide.
 - Het eerste voorjaar is altijd honger, met of zonder vee. Dat was er al: het gehucht begint met 60
   graan.
+
+**Marcel koos na de proef (25 sep):**
+- **Uitputten tot 40%.** Een uitgeputte akker geeft nog 40% van een volle oogst: wisselen loont,
+  maar vergeten is niet meteen honger (`laagste` in `T.VELDEN_INSTELLINGEN`). Drie jaar weide
+  brengt zo'n veld terug naar vol.
+- **De melk blijft zoals hij is.** Vee is de uitweg uit de honger. De kudde groeit alleen met meer
+  weide, en in stap 2 en 3 kost vee hooi en ziet de inner het; dat trekt het weer recht.
+- **Een weide en een braak tellen als land.** Bij pacht per akker rekent de heer het land, niet wat
+  erop groeit. In stap 3 vraagt hij er per dier bij.
+
+**Gebouwd, stap 1, het scherm (25 sep 2026):** `js/hud.js`, `js/tekenen.js`, `js/verkennen.js`,
+met de toetsen in `test/velden.test.cjs`.
+- Het veldenvenster opent met `V` of de knop Velden, niet met een klik op het veld: de velden zijn
+  groot, en een klik erop is erheen lopen. Per veld staat erin van wie het is, hoe groot, hoe
+  vruchtbaar, wat het nu is, en knoppen voor wat het volgend jaar wordt. Een keuze die niet kan,
+  zegt waarom (`T.kanBestemming`). De tijd staat stil zolang het open is.
+- Een weide krijgt gewone grastegels, ook op de halve rand die de kaart om een veld legt: hij ziet
+  eruit alsof daar altijd gras lag. Een eigen tekening (kortgegraasd, een hek) komt later.
+- Het vee dwaalt binnen zijn weide, en loopt na een wissel vanzelf naar de nieuwe.
+- De muis op een veld zegt van wie het is, welk vee erop staat en hoe vruchtbaar het is. De kaas
+  staat in de balk, en het venster van de heer telt melk en kaas mee.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 

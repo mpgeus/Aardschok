@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (einde sessie 24 sep 2026)
+## De stand (einde sessie 25 sep 2026)
 
 **Het spel is omgegooid** (23 sep). Marcel vond het doel van De laatste klim niet goed genoeg en
 kwam, na vijf rondes ideeën van Claude, zelf met het nieuwe spel: **een bouw- en beheerspel in
@@ -68,17 +68,26 @@ komen, `Toren.debug.inner()` de inner (`(true)`: onverwacht terug), `Toren.debug
 zijn argwaan, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
 bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
 
-**Loopt nu:** punt 6a, de weides, stap 1 (Marcel koos op 25 sep, naar Lords of the Realm 2;
-`spel.md`, "Weides met koeien en schapen"). De regels zijn er (velden met een bestemming en een
-vruchtbaarheid, vee op de weide, melk en kaas, groei). Nu bouwt een agent het scherm: het
-veldenvenster, gras op de weide, vee dat binnen zijn weide blijft, en kaas in de balk.
+**En vee op de weide** (punt 6a, stap 1 van 3; Marcel, 25 sep, naar Lords of the Realm 2;
+`spel.md`, "Weides met koeien en schapen"). Elk veld is akker, weide of braak, en onder `V` of de
+knop Velden kies je wat het volgend jaar wordt; de wissel gaat in op 1 lentemaand. Een akker put
+het land uit (tot 40%, Marcels keuze), een braak rust, en een weide mest het. Het gehucht begint met
+één weide, met drie koeien en acht schapen die erbinnen grazen. Van grasmaand tot wijnmaand geeft
+een koe melk voor vijf mensen, wat over is wordt kaas, en in grasmaand komen er kalveren en
+lammeren bij zolang er plaats is. `npm test`: 460/460.
 
-**Volgende stap: punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud,
-die de inner niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de
-argwaan om het graan en het doorzoeken door de soldaten (`T.zoekVerstopt`, nu nog leeg) staan al
-klaar. Het voorstel van Claude staat in `spel.md` ("Voorstel voor stap 2"): ter plekke wegzetten,
-verstopt graan niet eten, wie het vindt, en een beetje bederf. Marcel kiest nog; vraag ook hoeveel
-erin past. Daarna stap 3: praten, afleiden, omkopen en de twee rekenboeken.
+**Loopt nu:** niets.
+
+**Volgende stap, Marcel kiest welke eerst:**
+- **De weides, stap 2: de winter en de wol.** Hooi maaien in hooimaand, vee dat 's winters hooi eet,
+  op 1 slachtmaand kiezen wie er geslacht wordt, en schapen scheren in zomermaand. Vraag Marcel
+  eerst wat de schaapskooi dan nog doet (`spel.md`, stap 2).
+- **Punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud, die de inner
+  niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de argwaan om het
+  graan en het doorzoeken door de soldaten (`T.zoekVerstopt`, nu nog leeg) staan al klaar. Het
+  voorstel van Claude staat in `spel.md` ("Voorstel voor stap 2"): ter plekke wegzetten, verstopt
+  graan niet eten, wie het vindt, en een beetje bederf. Marcel kiest nog; vraag ook hoeveel erin
+  past. Daarna stap 3: praten, afleiden, omkopen en de twee rekenboeken.
 
 **Wat nog ruw is of niet helemaal goed staat,** staat in `opmerkingen.md`: alle opmerkingen bij
 elkaar, om later na te lopen (Marcel, 25 sep). Zet er een bij als je iets ziet.
@@ -138,9 +147,8 @@ nog nodig is".
 6a. **Weides met vee** (Marcel, 25 sep; `spel.md`, "Weides met koeien en schapen"). Klaar als je
    weides aanlegt zoals akkers, koeien en schapen erop grazen, en ze geven wat bij ze hoort: melk
    en kaas het hele jaar, vlees en huiden in slachtmaand, en wol. En als de inner de kudde telt,
-   zodat wie slim is een deel het bos in drijft voordat hij komt. De dieren zijn er (25 sep): een
-   koe en een schaap in drie kleuren, die grazen, staan, lopen en liggen (`js/vee.js`,
-   `Toren.debug.vee`). Nu de regels; vraag Marcel eerst wat een weide kost en hoe groot hij is.
+   zodat wie slim is een deel het bos in drijft voordat hij komt. In drie stappen (`spel.md`):
+   velden en vee op de weide (af, 25 sep); de winter en de wol; vee dat telt.
 7. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
    zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel beschrijft. Hier, omdat
    er daarna veel nieuwe code bovenop komt.
@@ -240,6 +248,10 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 25 sep 2026 — **De weides, stap 1 (punt 6a).** Elk veld is akker, weide of braak en wisselt op
+  1 lentemaand; een akker put het land uit tot 40%, een weide mest het. Vee graast binnen zijn
+  weide en geeft melk en kaas, en de kudde groeit in grasmaand als er plaats is. Het veldenvenster
+  onder `V` (`js/akkers.js`, `js/vee.js`, `js/hud.js`). Een proef van drie jaar staat in `spel.md`.
 - 25 sep 2026 — **Het vee.** Een koe en een schaap, elk in drie kleuren, die grazen, staan, lopen
   en liggen, en rustig om beurten gaan liggen (`gereedschap/pixelart/vee.cjs`, `js/vee.js`,
   `beeld.md`). De weides zelf komen nog (punt 6a).
