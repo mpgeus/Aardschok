@@ -26,9 +26,10 @@ langzamer, en de heer kijkt rond naar gelang zijn argwaan; verstoppen deel 1b en
 de rij. Zie "Af" onderaan.
 
 **Waar het werk staat.** De cloudomgeving geeft elke sessie een eigen branch; deze sessie werkte op
-`claude/werklijst-vervolg-yp9f6m`, die voorloopt op `main`. Staat hij nog niet in `main`, begin de
-volgende sessie dan op die branch, of zet hem eerst in `main` (vooruitspoelen kan: `main` is
-sindsdien niet veranderd). Haal ook eerst de hele geschiedenis op (`git fetch --unshallow`):
+`claude/werklijst-vervolg-yp9f6m`, en alles staat sinds het eind van de sessie ook in `main` (Marcel:
+"push it naar main"). Begin de volgende sessie dus gewoon vanaf `main`. Werkt een sessie weer op een
+eigen branch, zet die dan aan het eind in `main` als Marcel dat vraagt, anders begint de sessie erna
+op een oude stand. Haal ook eerst de hele geschiedenis op (`git fetch --unshallow`):
 `test/tegelvolgorde.test.cjs` leest een oude commit, en in een ondiepe kloon falen er dan twee toetsen
 die niets met je werk te maken hebben.
 
