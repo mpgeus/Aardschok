@@ -96,22 +96,34 @@ inner telt nu ook de kist, en de marskramer vertelt hem wat hij je betaalde: een
 verkopen maakt argwanend. Zolang de inner of de heer in het dorp is, sjouw je niets. `npm test`:
 512/512.
 
-**Loopt nu:** niets. Een proef van één jaar (`spel.md`, "Gebouwd, stap 2 van de inner, deel 1")
-liet zien dat verstoppen 30 tot 37 graan op de rekening scheelt, precies het gat van de honger,
-maar dat het tot zo'n 40% van de oogst zonder risico is: dan blijft de argwaan 0 en zoekt niemand.
-Ook nieuw in de rij (Marcel koos het eerder vandaag): **straten en paden** (punt 6c, na het
-ontginnen; `spel.md`, "Straten en paden").
+**En daarna, dezelfde dag, op orde gebracht** (Marcel: "Laten we even op orde stellen wat we nu
+allemaal hebben en hoe het werkt"). Er is een overzichtspagina, "Stand van het gehucht" (een
+artifact op claude.ai): het jaar maand voor maand, de kringlopen, de heer en de inner, verstoppen, de
+spelregels, en wat niet op orde is. `spel.md` begint nu per onderwerp met **Zo werkt het nu**, en
+kreeg het onderwerp dat ontbrak (het dorp, de behoeften en de winter). Op die pagina beantwoordde
+Marcel vijf vragen; drie zijn meteen gebouwd: **vlees vult een maag** (een optie), **de schapen
+groeien langzamer** (een lam met kans 0,3 in plaats van 0,7), en **de heer kijkt op Sint-Maarten
+rond naar gelang zijn argwaan**. `npm test`: 513/513.
 
-**Daarna:**
-- **Eerst een vraag uit de proef:** moet verstoppen ook onder de grens een risico hebben (`spel.md`,
-  "Nog open na deel 1")? Voorstel van Claude: de inner ontdekt zelf een kelder als hij er vlak
-  langs loopt, met de kans van die plek. Dan telt de route die je met hem loopt, en de roddelaar ook.
+**Loopt nu:** niets.
+
+**Daarna** (Marcel, 25 sep: "punt 7 naar voren"):
+- **Punt 7, het oude spel eruit.** Het plan in stappen staat hieronder bij punt 7, met drie vragen
+  voor Marcel. Een groot stuk werk: begin er een nieuwe sessie voor.
+- **Verstoppen, deel 1b: ook onder de 40% een risico** (Marcel koos op 25 sep; `spel.md`, "Marcel
+  koos (25 sep, als opmerking op de overzichtspagina)"). De soldaten zoeken op Sint-Maarten altijd op
+  2 of 3 plekken, ook zonder argwaan; wie vlak langs een plek loopt, kan iets vinden; en je bepaalt de
+  route zelf, maar soms wil de heer kiezen.
 - **Verstoppen, deel 2: het bos, met de kudde** (Marcel koos op 25 sep dat het bos samen met de
   kudde komt). Een plek in het bos voor graan en goud (ver lopen, muizen en vocht), en een deel van
   de kudde het bos in voor de inner komt. De inner telt de kudde en de heer vraagt per dier, met kaas
   en wol als sporen. Dat is ook stap 3 van de weides, zonder de handel.
 - **Deel 3: de marskramer koopt en verkoopt vee, kaas, wol en hooi.** Daarna stap 3 van de inner:
   praten, afleiden, omkopen (ook de marskramer, die nu het spoor van goud is) en de rekenboeken.
+- **Het plein** (Marcel koos op 25 sep; `spel.md`, "Sint-Maarten"): het gehucht rond een plein met
+  het huis van de schout eraan, en daar de schandpaal of het blok; een galg misschien later. Zo komt
+  de brink in beeld. Voorstel van Claude: samen met straten en paden (6c), want op het plein komen
+  de paden samen.
 
 **Wat nog ruw is of niet helemaal goed staat,** staat in `opmerkingen.md`: alle opmerkingen bij
 elkaar, om later na te lopen (Marcel, 25 sep). Zet er een bij als je iets ziet.
@@ -119,24 +131,15 @@ elkaar, om later na te lopen (Marcel, 25 sep). Zet er een bij als je iets ziet.
 **Wacht op Marcel** (gesorteerd op 25 sep, zoals op de overzichtspagina "Stand van het gehucht").
 De vragen hebben een nummer, zodat een antwoord kort kan.
 
-*Beslissen:*
-1. **Moet verstoppen ook onder de 40% een risico hebben?** (`spel.md`, "Nog open na deel 1".)
-   Voorstel van Claude: de inner ontdekt zelf een kelder als hij er vlak langs loopt, met de kans van
-   die plek; dan telt de route die je met hem loopt, en de roddelaar ook. Of: de soldaten zoeken
-   altijd een paar plekken (bij de schout altijd). Of: de grens strenger (argwaan onder 80% in plaats
-   van 60%). Of: zo laten.
-2. Moet vlees ook eten zijn, zodat slachten in slachtmaand de winter helpt? Nu maakt het alleen
-   tevredener (`spel.md`, "Nog open na stap 2").
-3. Vullen de schapen de kooi te snel? Een lam per schaap met kans 0,7: vol in het derde jaar.
-4. Hoe komt de brink in beeld: de plek van de marskramer en de heer verleggen naar een open plek, de
-   huizen ervoor verzetten, of daken doorzichtig maken als er iets belangrijks achter staat (ook voor
-   later, als de speler zelf een huis voor de brink bouwt)?
-5. Mag de heer op Sint-Maarten zelf rondkijken vanaf de brink? Het is gebouwd (een voorstel van
-   Claude), maar nog niet gekeurd.
+*Beslissen* (1 tot en met 5 beantwoordde Marcel op 25 sep, zie hierboven):
 6. De kern voor het tweede proefje (`spel.md`, "De kern voor het tweede proefje"): de drie groepen en
    vijf keuren, nodig vóór punt 9.
 7. Moet het ijs op de beek te zien zijn (tekenwerk), en vangt de jager 's winters minder?
 8. Een naam; "Aardschok" past niet meer.
+9. Drie vragen voor punt 7 (het plan staat bij punt 7 hieronder): houden we het gevecht in beurten,
+   met alleen slaan, voor later? Hernoemen we `Toren` en `held` nu (bijvoorbeeld naar `Spel` en
+   `schout`), of pas als het spel een naam heeft? En gaat de oude kaart (het erf, het bos, het dorp,
+   de toren) weg, of bewaren we het dorp als bron?
 
 *Spelen, en zeggen hoe het voelt:*
 - Een heel jaar: hoe snel het gaat, de winter, en Sint-Maarten (is de honger te veel of te weinig;
@@ -204,9 +207,24 @@ nog nodig is".
    een pad sneller loopt en over kinderkopjes nog sneller, een zandpad in de natte maanden modder
    wordt, en de keien van een keienraper komen (in plaats van de steengroeve) en van het ontginnen.
    Hier, omdat de keien van het ontginnen komen (6b).
-7. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
-   zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel beschrijft. Hier, omdat
-   er daarna veel nieuwe code bovenop komt.
+7. **Het oude spel eruit** (Marcel haalde dit op 25 sep naar voren: het komt nu eerst, vóór de rest
+   van punt 6). Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code zijn, het
+   spel zonder `?kaart=` in het gehucht begint, `npm test` groen is, en `CLAUDE.md` alleen nog het
+   nieuwe spel beschrijft. Waarom nu: van de 17.000 regels zijn er zo'n 1.850 alleen voor het oude
+   spel (spreuken, toveren, tutorial, regie, leeftijd), en er komt steeds meer nieuwe code bovenop.
+   Voorstel van Claude voor de stappen, nog te keuren (vraag 9 hierboven):
+   - **7a.** Het gehucht wordt het begin: `index.html` opent zonder `?kaart=` meteen het gehucht. De
+     tutorial eruit (`js/tutorial.js`, `js/regie.js`, het draaiboek `T.TUTORIAL_TEKST`), en het erf
+     en de toren als gebied.
+   - **7b.** De spreuken, het toveren en de leeftijd eruit (`js/spreuken.js`, `js/toveren.js`,
+     `js/leeftijd.js`, `T.verouder`, meesterschap, de spreukbalk). Het gevecht in beurten blijft, met
+     alleen slaan, voor de rovers, de wolven en de opstand.
+   - **7c.** De mensen van het oude spel en hun gesprekken eruit: Wim, de meester, de bakker, de
+     smidsvrouw, en de quest De koude oven. Het questsysteem en de gespreksschrijver blijven, voor
+     het avontuur; de dorpelingen van het oude dorp blijven als bron in `T.MENSEN`.
+   - **7d.** De kunst die alleen het oude spel tekent (de tovenaar, de toren, de spreukeffecten) uit
+     `beelden/`; de modellen in `gereedschap/pixelart/` blijven.
+   - **7e.** `CLAUDE.md` alleen nog over het nieuwe spel; de oude afspraken staan in `git log`.
 
 *C. Verhalen en besturen*
 
@@ -303,6 +321,10 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 25 sep 2026 — **Op orde gebracht, en vijf antwoorden van Marcel.** Een overzichtspagina "Stand van
+  het gehucht"; `spel.md` per onderwerp met "Zo werkt het nu"; verouderde getallen recht. Van Marcels
+  antwoorden meteen gebouwd: vlees vult een maag (`js/behoeften.js`, een optie), de schapen groeien
+  langzamer (`js/vee.js`), en de heer kijkt rond naar gelang zijn argwaan (`js/inner.js`).
 - 25 sep 2026 — **Verstoppen, deel 1 (punt 6, stap 2).** De kelders van de huizen en boerderijen en
   de kapel, elk met hun eigen kans en prijs; het karakter van wie er woont; de soldaten die plek voor
   plek zoeken; de inner die de kist telt; en de marskramer die vertelt wat hij je betaalde
