@@ -22,7 +22,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
 | Handel: de marskramer | gebouwd (24 sep) | 4 |
 | Sint-Maarten | gebouwd (24 sep) | 5 |
-| Instelbaar, en de boeren | gebouwd (24 sep): 16 keuzes, 186 getallen | |
+| Instelbaar, en de boeren | gebouwd (24 sep): 17 keuzes, 188 getallen | |
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep) | 6a |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | besloten, nog niet gebouwd | 6c |
@@ -810,14 +810,14 @@ een galg misschien later. Dat is werk aan de kaart (`gereedschap/tiled/maak-gehu
 **Zo werkt het nu** (25 sep; `js/opties.js`, het venster in `js/hud.js`):
 - Eén venster Spelregels (`O`, of de knop naast Bouwen), ook midden in een spel. Zolang het open is,
   staat de tijd stil. De browser onthoudt wat je instelt.
-- 16 keuzes, met wat Marcel koos als standaard: het graan, waarin de heer betaald wil worden, hoe
+- 17 keuzes, met wat Marcel koos als standaard: het graan, waarin de heer betaald wil worden, hoe
   hij telt, de schout aan de schandpaal, wie de boeren zijn, waar de heer de rekening op maakt, wat
-  hij van het graan vraagt, honger buiten de winter, de vruchtbaarheid, of het vee groeit, het vee
-  in de winter, wat de schapen 's winters eten, de mest, de sporen, het goud in de kist, en wie er
-  in een kelder woont.
+  hij van het graan vraagt, honger buiten de winter, de vruchtbaarheid, of het vee groeit, het vee in
+  de winter, wat de schapen 's winters eten, de mest, of vlees een maag vult, de sporen, het goud in
+  de kist, en wie er in een kelder woont.
 - De namen van de heer en de vijf boeren.
-- Een werkbank met alle 186 getallen uit de regels, in tien blokken, elk met een schuif. Wat je daar
-  zet, gaat vóór wat een keuze zet.
+- Een werkbank met alle getallen uit de regels (188 op 25 sep), in tien blokken, elk met een
+  schuif. Wat je daar zet, gaat vóór wat een keuze zet.
 - **Nog open:** de voorinstellingen Mild, Zoals bedoeld en Streng, voor Nieuw spel (punt 17).
 
 **Hoe het zo kwam:**
@@ -848,7 +848,7 @@ getal één plek houdt. Wat je in de werkbank zet, gaat vóór wat een optie zet
 
 **Gebouwd op 24 sep** (`js/opties.js`, het venster in `js/hud.js`, `test/opties.test.cjs`). Het
 venster opent met `O` of de knop naast Bouwen, en zolang het open is, staat de tijd stil. De
-werkbank had toen 135 getallen (186 sinds de verstopplekken, 25 sep), elk met een schuif, een
+werkbank had toen 135 getallen (188 op 25 sep, na de verstopplekken), elk met een schuif, een
 getalveld en ↺, een leesbare naam ("koopt · graan · prijs · lente"), en erbij welke keuze het getal
 zet. Een naam geldt overal tegelijk: bij de mens, in zijn gesprek en op zijn poppetje. De heer
 tekent zijn brief ermee.

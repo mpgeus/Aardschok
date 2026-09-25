@@ -44,8 +44,8 @@ gezaaid kan worden, ligt braak.
 `spel.md`, "Instelbaar"). Onder `O` of de knop naast Bouwen staat één venster met de keuzes
 (graan, waarin de heer betaald wil worden, hoe hij telt, de schout aan de paal, honger buiten
 de winter, en sinds punt 6 waar de heer de rekening op maakt en wat hij van het graan vraagt), de
-namen van de heer en de boeren, en een werkbank met alle getallen uit de regels (186 sinds de
-verstopplekken). Wat je verandert, geldt meteen, en de browser onthoudt het.
+namen van de heer en de boeren, en een werkbank met alle getallen uit de regels (188 op
+25 sep). Wat je verandert, geldt meteen, en de browser onthoudt het.
 
 **En de boeren worden geloot** (Marcel, 24 sep: "Ze moeten random eigenschappen hebben"). Bij elk
 spel trekt elke boer een karakter uit een stapel van tien (met een eigen gesprek) en vier
