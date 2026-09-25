@@ -64,6 +64,10 @@
     // argwaan: "Wat is DÁT, schout?"
     heerZicht: 6,
     betrapt: 0.15,
+    // Hoe ver hij rondkijkt, hangt af van zijn argwaan (Marcel, 25 sep: "Mag wel, maar is afhankelijk
+    // van achterdocht"): zonder argwaan kijkt hij niet, en hoe argwanender, hoe verder, tot heerZicht
+    // vanaf deze argwaan (0: altijd heerZicht).
+    heerZichtVol: 0.5,
     // Na Sint-Maarten blijft er zoveel van zijn argwaan over.
     naSintMaarten: 0.5,
   };
@@ -167,17 +171,25 @@
   // rond. Wat hij van daar ziet en niet in het rapport van zijn inner stond (gebouwd na zijn
   // bezoek, of wat de inner miste), komt alsnog op de rekening, en elk ding maakt argwanend. Zo
   // klopt zijn brief ook een beetje: "Wat er tot Sint-Maarten bijkomt, zien Wij ook." Alleen wat
-  // je van de brink ziet. Geeft de namen van wat hij vond.
+  // je van de brink ziet, en hoe ver hangt af van zijn argwaan (T.heerZichtNu). Geeft de namen van
+  // wat hij vond.
+  T.heerZichtNu = function (S) {
+    const argwaan = (S.inner && S.inner.argwaan) || 0;
+    const vol = IN().heerZichtVol;
+    return IN().heerZicht * (vol > 0 ? Math.min(1, argwaan / vol) : 1);
+  };
+
   T.heerKijktRond = function (S) {
     const I = S.inner;
     const w = S.wereld;
     const plek = w && (w.heer || w.marskramer);
     const H = T.HEER_INSTELLINGEN;
-    if (!I || !I.rapport || !plek || !(H && H.rekening === 'rapport') || !(IN().heerZicht > 0)) return [];
+    const zicht = T.heerZichtNu(S);
+    if (!I || !I.rapport || !plek || !(H && H.rekening === 'rapport') || !(zicht >= 1)) return [];
     const r = I.rapport;
     const betrapt = [];
     for (const g of S.gebouwen || []) {
-      if (r.gezien.has(g) || !zichtbaarGebouw(g) || !zietGebouw(w, plek, g, IN().heerZicht)) continue;
+      if (r.gezien.has(g) || !zichtbaarGebouw(g) || !zietGebouw(w, plek, g, zicht)) continue;
       r.gezien.add(g);
       r.gebouwen[g.soort] = (r.gebouwen[g.soort] || 0) + 1;
       r.woonruimte += T.GEBOUWEN[g.soort].woonruimte || 0;

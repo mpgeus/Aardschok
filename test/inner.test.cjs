@@ -281,6 +281,14 @@ test('op Sint-Maarten kijkt de heer rond: wat hij van de brink ziet en niet in h
   T.innerKijkt(S, { x: 5, y: 17 });
   assert.ok(!S.inner.bezoek.gebouwen.has(S.bijDeBrink));
   T.innerVertrekt(S);
+  // Hoe ver hij kijkt, hangt af van zijn argwaan (25 sep): zonder argwaan kijkt hij niet rond.
+  S.inner.argwaan = 0;
+  assert.equal(T.heerZichtNu(S), 0);
+  assert.deepEqual(T.heerKijktRond(S), []);
+  S.inner.argwaan = IN.heerZichtVol / 2;
+  assert.equal(T.heerZichtNu(S), IN.heerZicht / 2, 'bij de helft van de argwaan kijkt hij half zo ver');
+  S.inner.argwaan = IN.heerZichtVol;
+  assert.equal(T.heerZichtNu(S), IN.heerZicht);
   const voor = S.inner.argwaan;
   let gezien;
   const berichten = metBerichten(() => {

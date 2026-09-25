@@ -108,7 +108,7 @@
     kaas: 'Kaas. Van de melk die het dorp niet dezelfde dag drinkt: kaas houdt goed, en wordt pas gegeten als het graan op is.',
     hooi: 'Hooi. In hooimaand van de weides gemaaid: het vee eet het van slachtmaand tot en met lentemaand.',
     mest: 'Mest. Uit de schaapskooi: leg hem in het veldenvenster (V) op een akker, dan wordt die vruchtbaarder.',
-    vlees: 'Vlees. Van het slachten: het dorp eet het erbij, en het bederft, tenzij je het zout.',
+    vlees: 'Vlees. Van het slachten: het vult een maag. Wat je niet zout, bederft, dus dat eet het dorp eerst op; gezouten vlees bewaart het tot het graan op is.',
     huiden: 'Huiden. Van het slachten.',
   };
   // Deze staan pas in de balk als het dorp ze eens gehad heeft (S.gehad, js/voorraad.js): in het
@@ -563,21 +563,27 @@
     // Het vee (js/vee.js; T.heerVooruitzicht): de melk drinkt het dorp vóór het graan, dus die staat
     // al van het eten af; en wie graan tekortkomt, eet daarna de kaas. Honger is dus pas een tekort
     // dat groter is dan de kaas.
+    // Sinds 25 sep vult ook vlees een maag (js/behoeften.js): kaas en vlees samen zijn de achtervang.
     const melk = Math.round(v.melk || 0);
     const kaas = Math.floor(v.kaas || 0);
+    const vlees = Math.floor(v.vlees || 0);
+    const achter = kaas + vlees;
+    const achterNaam = kaas && vlees ? 'de kaas en het vlees' : kaas ? 'de kaas' : 'het vlees';
+    const vangt = kaas && vlees ? 'vangen' : 'vangt';
     const melkTekst = melk > 0 ? `, naast zo'n ${melk} aan melk van de koeien` : '';
     const rest = Math.round(v.over);
-    const kaasOver = Math.round(v.over + kaas);
+    const achterOver = Math.round(v.over + achter);
     const uitkomst = rest >= 0
-      ? `er blijft ${rest} over${kaas ? `, en de kaas houd je achter de hand` : ''}`
-      : kaas && kaasOver >= 0
-        ? `je komt ${-rest} graan tekort, maar de kaas vangt dat op: daarna is er nog ${kaasOver} kaas`
-        : kaas
-          ? `je komt ${-rest} graan tekort, en ook met de kaas erbij nog ${-kaasOver}: dat is honger vóór de oogst`
+      ? `er blijft ${rest} over${achter ? `, en ${achterNaam} houd je achter de hand` : ''}`
+      : achter && achterOver >= 0
+        ? `je komt ${-rest} graan tekort, maar ${achterNaam} ${vangt} dat op: daarna is er nog ${achterOver} over`
+        : achter
+          ? `je komt ${-rest} graan tekort, en ook met ${achterNaam} erbij nog ${-achterOver}: dat is honger vóór de oogst`
           : `je komt ${-rest} graan tekort, en dat is honger vóór de oogst`;
+    const heb = [`${Math.round(v.na)} graan`].concat(kaas ? [`${kaas} kaas`] : [], vlees ? [`${vlees} vlees`] : []);
     return (
       `<p class="heer-deel ${soort}">Je geeft hem ${pct}% van wat hij vraagt. ${g.tekst}${goudExtra}</p>` +
-      `<p class="heer-vooruit">Daarna heb je ${Math.round(v.na)} graan${kaas ? ` en ${kaas} kaas` : ''}. ` +
+      `<p class="heer-vooruit">Daarna heb je ${heb.length > 1 ? `${heb.slice(0, -1).join(', ')} en ${heb[heb.length - 1]}` : heb[0]}. ` +
       `Tot de oogst eet het dorp er zo'n ${Math.round(v.eten)}${melkTekst}${soldaten}, ` +
       `en zaaien in lentemaand kost ${Math.round(v.zaaien)}: ${uitkomst}.</p>` +
       `<div class="heer-knoppen"><button data-actie="alles">Alles wat hij vraagt</button>` +

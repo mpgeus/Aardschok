@@ -406,6 +406,42 @@ test('eten: eerst de melk van vandaag, dan graan, dan kaas; wat er van de melk o
   assert.ok(bijna(T.eetVandaag(S).tekort, nodig));
 });
 
+// Vlees vult een maag (Marcel, 25 sep: "Ja vlees moet ook eten zijn"): wat het zout niet goed houdt,
+// eet het dorp vóór het graan, want dat bederft anders toch; gezouten vlees pas als het graan en de
+// kaas op zijn, en dan gaat het zout mee.
+test('eten: ongezouten vlees vóór het graan, gezouten vlees als laatste; de optie zet het uit', () => {
+  const BH = T.BEHOEFTEN_INSTELLINGEN;
+  const S = { voorraad: T.nieuweVoorraad(), bevolking: 20, vee: T.nieuwVee() };
+  const nodig = 20 * ETEN;
+  const perVlees = BH.vleesAlsGraan;
+  // Geen zout: het vlees gaat voor het graan.
+  T.zetVoorraad(S, 'graan', 10);
+  T.zetVoorraad(S, 'vlees', 100);
+  let r = T.eetVandaag(S);
+  assert.ok(bijna(r.vlees, nodig / perVlees) && r.graan === 0 && r.tekort === 0, JSON.stringify(r));
+  assert.equal(S.voorraad.graan, 10);
+  // Genoeg zout voor al het vlees: dat bewaart het dorp, en het eet graan.
+  T.zetVoorraad(S, 'zout', 100);
+  r = T.eetVandaag(S);
+  assert.ok(r.vlees === 0 && bijna(r.graan, nodig), JSON.stringify(r));
+  // Graan en kaas op: dan het gezouten vlees, en het zout gaat mee.
+  T.zetVoorraad(S, 'graan', 0);
+  const vlees = S.voorraad.vlees;
+  r = T.eetVandaag(S);
+  assert.ok(bijna(r.vlees, nodig / perVlees) && r.tekort === 0, JSON.stringify(r));
+  assert.ok(bijna(S.voorraad.vlees, vlees - nodig / perVlees));
+  assert.ok(bijna(S.voorraad.zout, 100 - nodig / perVlees / BH.zoutHoudtGoed));
+  // Vlees vult geen maag (de optie): honger, en het vlees blijft liggen.
+  const oud = BH.vleesIsEten;
+  BH.vleesIsEten = false;
+  try {
+    r = T.eetVandaag(S);
+    assert.ok(r.vlees === 0 && bijna(r.tekort, nodig));
+  } finally {
+    BH.vleesIsEten = oud;
+  }
+});
+
 test('de tevredenheid ziet de melk van vandaag en de kaas: wie geen graan heeft maar wel melk, eet', () => {
   const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 20, vee: T.nieuwVee() };
   const dag = dagVan('grasmaand', 5);

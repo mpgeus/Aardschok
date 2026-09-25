@@ -42,7 +42,7 @@
     // elk dier van minstens een jaar oud met zijn kans een jong, zolang er op zijn weide plaats is.
     groeit: true,
     werpen: { maand: 'grasmaand', dag: 1 },
-    kansOpJong: { koe: 0.5, schaap: 0.7 },
+    kansOpJong: { koe: 0.5, schaap: 0.3 },
     // Waar het gehucht mee begint, op de weide(s) die de kaart noemt (T.zetBeginKudde).
     beginKudde: { koe: 3, schaap: 8 },
 
@@ -72,8 +72,8 @@
     // Op deze dag opent het slachtvenster vanzelf (js/hud.js): de winter begint, en het hooi zegt
     // hoeveel vee je houdt.
     slachten: { maand: 'slachtmaand', dag: 1 },
-    // Wat een geslacht dier geeft. Een jong geeft de helft van het vlees, en ook een huid. Vlees eet
-    // het dorp erbij, en het bederft tenzij het gezouten is (js/behoeften.js).
+    // Wat een geslacht dier geeft. Een jong geeft de helft van het vlees, en ook een huid. Vlees vult
+    // een maag (sinds 25 sep, een optie), en het bederft tenzij het gezouten is (js/behoeften.js).
     slacht: { koe: { vlees: 20, huiden: 1 }, schaap: { vlees: 6, huiden: 1 } },
 
     // ── De schapen en de kooi (stap 2; Marcel, 25 sep, naar de Drentse esdorpen) ──

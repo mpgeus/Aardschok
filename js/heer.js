@@ -339,7 +339,9 @@
     const zaaien = tegels * (T.ZAAIGRAAN_PER_TEGEL || 0);
     const na = ((S.voorraad && S.voorraad.graan) || 0) - ((g && g.neemt && g.neemt.graan) || 0);
     const kaas = (S.voorraad && S.voorraad.kaas) || 0;
-    return { na, eten, melk, kaas, soldaten, zaaien, over: na - eten - soldaten - zaaien, dagen: oogst - dag };
+    // Vlees vult sinds 25 sep ook een maag (js/behoeften.js): het vangt net als de kaas een tekort op.
+    const vlees = T.vleesAlsEten ? T.vleesAlsEten(S) : 0;
+    return { na, eten, melk, kaas, vlees, soldaten, zaaien, over: na - eten - soldaten - zaaien, dagen: oogst - dag };
   };
 
   // Betalen. Geeft het gevolg terug (T.gevolgVanBetaling), of { kan: false, reden }.

@@ -8,8 +8,9 @@
 // T.tikGebouwenDag (js/gebouwen.js) roept T.tikBehoeftenDag hier als eerste stap aan, één keer
 // per verstreken kalenderdag. Wat hier per dag gebeurt:
 //   1. Eten: graan is de basis (T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag), en sinds het vee
-//      (25 sep) eet het dorp eerst de melk van vandaag, dan graan, en pas als het graan op is kaas
-//      (T.eetVandaag hieronder; gebouwen.js roept het aan in stap 3). Hier kijken of dat samen
+//      (25 sep) eet het dorp eerst de melk van vandaag, dan het vlees dat anders bederft, dan graan,
+//      en pas als het graan op is kaas en gezouten vlees (T.eetVandaag hieronder; gebouwen.js roept
+//      het aan in stap 3). Hier kijken of dat samen
 //      genoeg is, en of er ook groente, vis of vlees is. Meer soorten maakt tevredener, en wordt
 //      ook echt opgegeten. Vis en vlees bederven, tenzij ze gezouten zijn (pasBederfToe; zout komt
 //      van de marskramer).
@@ -73,6 +74,14 @@
     bederfelijk: ['vis', 'vlees'],
     zoutHoudtGoed: 10,
     bederfPerDag: 0.1,
+    // Vlees vult een maag (Marcel, 25 sep: "Ja vlees moet ook eten zijn. Maar dan verlies je dus wel
+    // veel wat duur is."), zodat slachten in slachtmaand de winter helpt. Eén vlees vult zoveel als
+    // vleesAlsGraan graan. Wat het zout niet goed houdt, bederft toch, dus dat eet het dorp eerst,
+    // vóór het graan; gezouten vlees bewaart het, net als kaas, tot het graan en de kaas op zijn. Wie
+    // het liever aan de marskramer verkoopt (het brengt meer op dan graan), moet het dus zouten. Een
+    // optie in de spelregels: vult een maag, of alleen tevredenheid (zoals tot 25 sep).
+    vleesIsEten: true,
+    vleesAlsGraan: 1,
   };
 
   T.nieuweBehoeften = function () {
@@ -289,19 +298,41 @@
   // grasmaand, als het graan van vorig jaar opraakt, en de kaas van vorige zomer is er dan nog.
   // Alles in graan gerekend. T.tikGebouwenDag (js/gebouwen.js, stap 3) roept dit aan.
   // Geeft { nodig, melk, graan, kaas, kaasErbij, tekort }: wat er van elk gegeten is.
+  // Sinds 25 sep telt ook vlees (vleesIsEten): wat het zout niet goed houdt, eet het dorp na de melk en
+  // vóór het graan, want dat bederft anders toch; gezouten vlees pas als het graan en de kaas op zijn.
+  // Geeft ook `vlees`: wat er van het vlees gegeten is (in vlees, niet in graan).
   T.eetVandaag = function (S) {
+    const IN = T.BEHOEFTEN_INSTELLINGEN;
     const nodig = (S.bevolking || 0) * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
     const v = S.voorraad;
     const melkVandaag = (S.vee && S.vee.melk) || 0;
     const melk = Math.min(nodig, melkVandaag);
-    const graan = Math.min(nodig - melk, v.graan || 0);
-    const kaas = Math.min(nodig - melk - graan, v.kaas || 0);
+    const perVlees = IN.vleesIsEten ? IN.vleesAlsGraan || 0 : 0;
+    const vleesNu = perVlees > 0 ? v.vlees || 0 : 0;
+    const d = vleesNu > 0 ? T.zoutDekking(S) : null;
+    const ongezouten = d && d.totaal > 0 ? vleesNu * (d.onbeschermd / d.totaal) : vleesNu;
+    const vers = perVlees > 0 ? Math.max(0, Math.min((nodig - melk) / perVlees, ongezouten)) : 0;
+    const graan = Math.max(0, Math.min(nodig - melk - vers * perVlees, v.graan || 0));
+    const kaas = Math.max(0, Math.min(nodig - melk - vers * perVlees - graan, v.kaas || 0));
+    const rest = nodig - melk - vers * perVlees - graan - kaas;
+    const gezouten = perVlees > 0 ? Math.max(0, Math.min(rest / perVlees, vleesNu - vers)) : 0;
+    const vlees = vers + gezouten;
     if (graan > 0) T.wijzigVoorraad(S, 'graan', -graan);
     if (kaas > 0) T.wijzigVoorraad(S, 'kaas', -kaas);
+    if (vlees > 0) T.wijzigVoorraad(S, 'vlees', -vlees);
+    // Wie gezouten vlees eet, eet het zout mee op, net als in pasBederfToe hieronder.
+    if (gezouten > 0 && (v.zout || 0) > 0) T.wijzigVoorraad(S, 'zout', -Math.min(v.zout, gezouten / IN.zoutHoudtGoed));
     const kaasErbij = (melkVandaag - melk) * (T.VEE_INSTELLINGEN ? T.VEE_INSTELLINGEN.melkNaarKaas : 0);
     if (kaasErbij > 0) T.wijzigVoorraad(S, 'kaas', kaasErbij);
     if (S.vee) S.vee.melk = 0;
-    return { nodig, melk, graan, kaas, kaasErbij, tekort: Math.max(0, nodig - melk - graan - kaas) };
+    return { nodig, melk, vlees, graan, kaas, kaasErbij, tekort: Math.max(0, rest - gezouten * perVlees) };
+  };
+
+  // Hoeveel het vlees in de voorraad het dorp nog voedt, in graan (0 als vlees geen eten is): voor
+  // het venster van de heer (js/heer.js, T.heerVooruitzicht).
+  T.vleesAlsEten = function (S) {
+    const IN = T.BEHOEFTEN_INSTELLINGEN;
+    return IN.vleesIsEten ? ((S.voorraad && S.voorraad.vlees) || 0) * (IN.vleesAlsGraan || 0) : 0;
   };
 
   // Eén dag bijwerken: wordt aangeroepen vanuit T.tikGebouwenDag (js/gebouwen.js, stap 0), dus

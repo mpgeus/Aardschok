@@ -251,7 +251,8 @@ Is rijk worden en arm lijken leuk?
   je verder dan 5 tegels wegloopt. Zijn geduld is 90 stappen.
 - **Zijn rapport is de rekening:** de gebouwen die hij zag (met hun woonruimte, voor het hoofdgeld),
   het graan in de schuur en op de velden die hij zag, en het goud in de kist. Wat hij niet zag,
-  betaal je dat jaar niet. Op Sint-Maarten kijkt de heer zelf nog rond vanaf de brink (6 tegels).
+  betaal je dat jaar niet. Op Sint-Maarten kijkt de heer zelf nog rond vanaf de brink, en hoe
+  verder naarmate hij argwanender is: zonder argwaan niet, vanaf 50% zes tegels ver.
 - **De argwaan** (0 tot 100%, een oog in de balk) groeit als er minder dan 60% ligt van het graan
   dat zijn velden beloven, als de kist minder dan 60% bevat van wat de marskramer je betaalde (vanaf
   10 goud), als de heer op de brink iets ziet wat niet in het rapport stond (15% per ding), en als
@@ -266,10 +267,11 @@ Is rijk worden en arm lijken leuk?
   (een kwart zo vaak). Zolang de inner of de heer in het dorp is, sjouw je niets.
 - In de spelregels: waar de heer de rekening op maakt, wat hij van het graan vraagt, de sporen, de
   kist, en of het karakter van wie er woont telt.
-- **Nog open:** of verstoppen ook onder de 40% een risico moet hebben (een proef liet zien dat het
-  daaronder vrij is); deel 2, het bos, met de kudde die de inner telt; deel 3, de marskramer die
-  vee, kaas, wol en hooi koopt en verkoopt; en stap 3: praten, afleiden, omkopen en de twee
-  rekenboeken.
+- **Nog te bouwen, deel 1b** (Marcel koos op 25 sep, zie onderaan): ook onder de 40% een risico. De
+  soldaten zoeken op Sint-Maarten altijd op 2 of 3 plekken; wie er vlak langs loopt, kan iets
+  vinden; en soms kiest de heer zelf de route.
+- **Nog open:** deel 2, het bos, met de kudde die de inner telt; deel 3, de marskramer die vee, kaas,
+  wol en hooi koopt en verkoopt; en stap 3: praten, afleiden, omkopen en de twee rekenboeken.
 
 **Hoe het zo kwam:**
 
@@ -446,14 +448,28 @@ Nog open na deel 1 (vragen van Claude):
 - De woekeraar houdt zijn deel meteen, net als de kapelaan. Rente die per maand oploopt, past beter bij
   een woekeraar, maar is ingewikkelder.
 
+**Marcel koos (25 sep, als opmerking op de overzichtspagina "Stand van het gehucht"):**
+
+> 1. Ja ook onder de 40% anders is dit altijd veilig. Soldaten laten zoeken op 2 of 3 plekken is een
+>    goed idee. En als ze er vlak langs lopen. Misschien kun je zelf de route bepalen, maar soms wil
+>    de heer zelf kiezen. Het risico is dan dat ze iets vinden.
+> 5. [Mag de heer zelf rondkijken vanaf de brink?] Mag wel, maar is afhankelijk van achterdocht?
+
+- **Verstoppen krijgt ook onder de grens een risico (deel 1b, nog te bouwen):** de soldaten zoeken op
+  Sint-Maarten altijd op 2 of 3 plekken, ook zonder argwaan; wie vlak langs een plek loopt, kan
+  iets vinden; en je bepaalt de route zelf, maar soms wil de heer kiezen.
+- **De heer kijkt rond naar gelang zijn argwaan (gebouwd, 25 sep):** zonder argwaan kijkt hij niet,
+  en hoe argwanender, hoe verder, tot zes tegels vanaf 50% (`heerZichtVol` in de werkbank).
+
 ## Het dorp: mensen, behoeften en de winter (werklijst punt 3, 23 sep 2026)
 
 **Zo werkt het nu** (25 sep; `js/behoeften.js`, `js/gebouwen.js`):
 - **Mensen** zijn een getal in de balk (25 bij het begin), geen poppetjes; alleen de boeren lopen
   rond. Huizen geven woonruimte: een hut 3, een boerderij 4, een huis 5.
-- **Eten:** elk mens eet 0,05 graan per dag. Het dorp eet eerst de melk van vandaag, dan graan, en
-  pas als het graan op is kaas. Groente, vis of vlees erbij maakt tevredener. Zonder zout bederven
-  vis en vlees.
+- **Eten:** elk mens eet 0,05 graan per dag. Het dorp eet eerst de melk van vandaag, dan het vlees
+  dat anders bederft, dan graan, en pas als het graan op is kaas en gezouten vlees (sinds 25 sep
+  vult vlees een maag, een optie). Groente, vis of vlees erbij maakt ook tevredener. Zonder zout
+  bederven vis en vlees.
 - **Brandhout:** in wintermaand, louwmaand en sprokkelmaand stookt elk huishouden hout of turf.
 - **Een kerk:** een kapel die af is, maakt het dorp tevredener.
 - **Tevredenheid** (0 tot 100%, in de balk, met bij de muis wat het dorp mist) bepaalt hoe hard er
@@ -462,8 +478,8 @@ Nog open na deel 1 (vragen van Claude):
 - **De winter:** een tekort aan brandhout of eten kost mensen. Buiten de winter kost honger
   standaard alleen tevredenheid; wegtrekken of sterven zijn keuzes in de spelregels.
 - **Nog open:** de winter is hard (in een proef van 25 naar 2 mensen zonder hout); het eerste
-  voorjaar is krap (60 graan voor 25 mensen); moet vlees ook eten zijn? Brand en ziekte komen bij
-  punt 8.
+  voorjaar is krap (60 graan voor 25 mensen); moet ook vis eten zijn, nu vlees het is? Brand en
+  ziekte komen bij punt 8.
 
 **Hoe het zo kwam:** dit is punt 3 van de werklijst, gebouwd op 23 sep uit "Het dorp in leven
 houden" (onderaan, in "Welke gameplay er nog nodig is"). Er stond geen eigen voorstel voor in dit
@@ -672,6 +688,9 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
 - Zaaien kost vanaf het tweede jaar 1 graan per akkertegel; wat niet gezaaid kan worden, ligt braak.
 - In de spelregels: het graan (ruim, net rond, honger), waarin hij betaald wil worden, hoe hij telt,
   en of de schout zelf aan de paal mag.
+- **Nog te bouwen: een plein** (Marcel koos op 25 sep, zie onderaan): het gehucht rond een plein
+  waar het huis van de schout staat, met daar de schandpaal of het blok. Zo komt de brink ook in
+  beeld.
 - **Nog open:** zijn grillen en de herendienst (punt 8); de koets (tekenwerk).
 
 **Hoe het zo kwam:**
@@ -778,6 +797,13 @@ uit het bouwen kwamen:
   24 sep): het dorp ziet elke dag waar het gebeurde. Hij staat er dus niet vanaf het begin als
   dreigement, en wordt ook niet na elke straf weer weggehaald.
 - Akkers kun je niet bijbouwen, dus het graan groeit niet mee met het dorp. Zie punt 14.
+
+**Marcel koos (25 sep, als opmerking op de overzichtspagina), op de vraag hoe de brink in beeld komt**
+(die ligt vanuit de camera achter twee daken): "Dorpen worden vaak rond een plein gebouwd waar ook
+het huis van de schout staat. Daar de schandpaal of blok zetten. Eventueel later galg toevoegen." Dus
+het gehucht krijgt een plein, met het huis van de schout eraan en de schandpaal (of een blok) erop;
+een galg misschien later. Dat is werk aan de kaart (`gereedschap/tiled/maak-gehucht.cjs`) en tekenwerk
+(het blok), nog niet gedaan.
 
 ## Instelbaar: opties in plaats van één keuze (Marcel, 24 sep 2026)
 
@@ -901,16 +927,18 @@ en meer soorten (sluw, praatziek, sterk) komen bij de punten waar ze iets doen.
 - **Hooi en winter:** in hooimaand maaien de boeren eerst het hooi van hun weide (12,5 per tegel).
   Van slachtmaand tot en met lentemaand (150 dagen) eet een koe 1 hooi per dag. Op 1 slachtmaand
   kies je in een venster wie naar de slager gaat (een koe geeft 20 vlees en een huid, een schaap 6),
-  met een voorstel dat net genoeg slacht.
+  met een voorstel dat net genoeg slacht. Vlees vult een maag (sinds 25 sep): wat je niet zout,
+  eet het dorp eerst op, gezouten vlees bewaart het tot het graan op is.
 - **Schapen:** ze grazen op de heide (de meent, 23 bij 8 tegels, 2 tegels per schaap) en slapen in
-  de schaapskooi (hoogstens 20); in grasmaand komen er lammeren bij als er plaats is in de kooi. In
+  de schaapskooi (hoogstens 20); in grasmaand werpt een schaap met kans 0,3 een lam, als er plaats
+  is in de kooi (sinds 25 sep; was 0,7). In
   zomermaand geeft elk schaap 4 wol, en met een herder geeft de kooi 2,5 karren mest per schaap per
   jaar, die je in het veldenvenster op een akker legt.
 - Het gehucht begint met één weide (het blok van Klaas), drie koeien en acht schapen.
 - In de spelregels: de vruchtbaarheid, of het vee groeit, het vee in de winter, wat de schapen 's
   winters eten, en de mest.
-- **Nog open:** moet vlees ook eten zijn; vullen de lammeren de kooi te snel; en stap 3, de inner
-  die de kudde telt, komt samen met verstoppen deel 2 (het bos) en deel 3 (de marskramer).
+- **Nog open:** stap 3, de inner die de kudde telt, komt samen met verstoppen deel 2 (het bos) en
+  deel 3 (de marskramer).
 
 **Hoe het zo kwam:**
 
@@ -1151,6 +1179,14 @@ Nog open na stap 2 (Claude):
   sterker maken: kalveren in het voorjaar, een volle weide in de zomer, vlees in de winter.
 - Een lam per schaap met kans 0,7 vult de kooi in drie jaar. Te snel?
 - De schapen slapen nog niet echt in de kooi: er is nog geen nacht (punt 11).
+
+**Marcel koos (25 sep, als opmerking op de overzichtspagina):** "Ja vlees moet ook eten zijn. Maar
+dan verlies je dus wel veel wat duur is." En: "Groei van schapen lager zetten." Gebouwd dezelfde dag:
+vlees vult een maag (een vlees zoveel als een graan, `vleesAlsGraan`); wat het zout niet dekt, eet
+het dorp vóór het graan, want dat bederft toch, en gezouten vlees bewaart het tot het graan en de
+kaas op zijn. Wie het liever verkoopt, moet het dus zouten. Een optie in de spelregels: vult een
+maag, of alleen tevredenheid. De kans op een lam is 0,3 in plaats van 0,7: de kooi is dan zo'n vier
+jaar later vol dan eerst in het derde jaar, tenzij je slacht.
 
 ## Ontginnen: nieuwe velden uit bos of heide (Marcel, 25 sep 2026; werklijst punt 6b)
 

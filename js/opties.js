@@ -185,6 +185,17 @@
           uitleg: 'Op 1 lentemaand gaat alle mest naar verhouding over de akkers van dat jaar. Je hoeft niets te doen.' },
       ],
     },
+    // Marcel, 25 sep (een vraag uit de proef van stap 2 van de weides): "Ja vlees moet ook eten zijn."
+    {
+      id: 'vlees', naam: 'Vlees', standaard: 'eten',
+      uitleg: 'Of vlees ook eten is, zodat slachten in slachtmaand de winter helpt.',
+      keuzes: [
+        { id: 'eten', naam: 'Vult een maag', zet: { 'BEHOEFTEN_INSTELLINGEN.vleesIsEten': true },
+          uitleg: 'Wat het zout niet goed houdt, eet het dorp eerst op, want het bederft toch. Gezouten vlees bewaart het tot het graan op is.' },
+        { id: 'tevredenheid', naam: 'Alleen tevredener', zet: { 'BEHOEFTEN_INSTELLINGEN.vleesIsEten': false },
+          uitleg: 'Het dorp eet vlees erbij voor de afwisseling, maar tegen de honger helpt het niet.' },
+      ],
+    },
     // Stap 2 van de inner, de verstopplekken (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
     {
       id: 'sporen', naam: 'Sporen', standaard: 'alles',

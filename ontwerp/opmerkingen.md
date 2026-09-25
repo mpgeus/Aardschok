@@ -11,8 +11,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 - **De brink ligt achter twee daken** (24 sep). Vanuit de camera staan het huis van de schout en de
   boerderij van boer 3 vóór de brink. De heer, de marskramer, de schandpaal en wie eraan staat,
-  vallen daardoor grotendeels achter een dak. De held zie je door een kijkgat, de rest niet. Hoe
-  het op te lossen, wacht op Marcel (werklijst).
+  vallen daardoor grotendeels achter een dak. De held zie je door een kijkgat, de rest niet. Marcel
+  koos op 25 sep een plein met het huis van de schout eraan (`spel.md`, "Sint-Maarten"); nog te doen.
 - **De winter is hard:** zonder hout gaat het gehucht van 25 naar 2 mensen.
   `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel bijstellen als hij speelt.
 - **Honger valt in het voorjaar,** vlak vóór de oogst, want het zaaigraan gaat voor. Buiten de
@@ -60,8 +60,7 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     Vroeger ging het vee eraf tot het hooi binnen was.
   - Twee velden die samen één weide zijn, hebben geen hek om zich heen: je ziet het alleen aan het
     vee dat over de strook loopt, en in het venster.
-  - Vlees vult geen maag: het dorp eet het erbij, voor de tevredenheid, maar het helpt niet tegen de
-    honger. Een vraag voor Marcel (`spel.md`, "Nog open na stap 2").
+  - Vlees vult sinds 25 sep een maag (Marcel koos het); vis nog niet. Moet dat ook?
   - De heer vraagt 20 wol per schaapskooi, ook in het eerste jaar; acht schapen geven er 32. In stap
     3 vraagt hij per dier.
   - Zonder herder (een hand voor de kooi) geeft de kooi geen mest. Het veldenvenster zegt nog niet
