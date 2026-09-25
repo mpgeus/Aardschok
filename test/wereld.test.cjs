@@ -6,7 +6,6 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 
-require('../js/leeftijd.js');
 require('../js/wereld.js');
 require('../tegels/tegels.js');
 require('../kaarten/kaarten.js');
@@ -16,7 +15,6 @@ require('../js/gebied.js');
 require('../js/pad.js');
 require('../js/iso.js');
 require('../js/sprites.js');
-require('../js/spreuken.js');
 require('../js/anim.js');
 require('../js/verkennen.js');
 require('../js/gevecht.js');
@@ -75,7 +73,6 @@ test('de oude meester staat op het erf, vlak bij zijn moestuin, en scharrelt er 
   const meester = w.wezens.find((e) => e.soort === 'meester');
   assert.ok(meester, 'de oude meester hoort op het erf te staan');
   assert.equal(meester.kant, 'neutraal');
-  assert.equal(meester.leeftijd, 97 * 12);
   assert.equal(meester.dwaalt, true);
   assert.ok(meester.straal > 0 && meester.straal <= 3, `een kleine straal om zijn tuin, niet ${meester.straal}`);
   assert.equal(T.isBegaanbaar(w, meester.tx, meester.ty), true);
@@ -148,7 +145,7 @@ test('staatVoorGebouw beslist per tegel welke ervóór liggen en welke erachter,
 // ---------------------------------------------------------------- de overgang
 
 function nieuwSpel() {
-  const S = { tijd: 0, effecten: [], wachters: [], lichten: [], bezocht: new Set(), gebieden: {} };
+  const S = { tijd: 0, effecten: [], wachters: [], inventaris: new Set(), bezocht: new Set(), gebieden: {} };
   S.wereld = T.gebied(S, 'toren');
   S.held = S.wereld.wezens.find((e) => e.soort === 'held');
   S.modus = 'verkennen';
@@ -189,17 +186,17 @@ test('de toren heeft een buitendeur, en die brengt je naar het erf', () => {
 
 test('en weer terug: dezelfde deur, de andere kant op, met dezelfde held', () => {
   const S = nieuwSpel();
-  S.held.leeftijd += 7; // zeven maanden ouder onderweg
-  S.held.meesterschap.vuurschicht = 4;
+  S.held.leven -= 7; // een klap onderweg
+  S.inventaris.add('sleutel');
   T.gaNaarGebied(S, 'wereld');
-  const leeftijd = S.held.leeftijd;
+  const leven = S.held.leven;
   const o = S.wereld.overgangen.find((x) => x.naar === 'toren');
   T.bijAankomst(S, S.held, { x: o.x, y: o.y });
   assert.equal(S.naarGebied, 'toren');
   T.gaNaarGebied(S, S.naarGebied);
   assert.equal(S.wereld.gebied, 'toren');
-  assert.equal(S.held.leeftijd, leeftijd, 'een overgang kost geen tijd van je leven');
-  assert.equal(S.held.meesterschap.vuurschicht, 4, 'wat je kunt, neem je mee');
+  assert.equal(S.held.leven, leven, 'een overgang kost geen leven, en geeft het ook niet terug');
+  assert.ok(S.inventaris.has('sleutel'), 'wat je bij je hebt, neem je mee');
   const deur = S.wereld.overgangen[0];
   assert.equal(T.afstand({ x: S.held.tx, y: S.held.ty }, deur), 1);
   assert.equal(T.kamerVan(S.wereld, S.held.tx, S.held.ty).id, 'hal');

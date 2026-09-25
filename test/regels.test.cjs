@@ -3,11 +3,9 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/leeftijd.js');
 require('../js/wereld.js');
 require('../js/gebied.js');
 require('../js/pad.js');
-require('../js/spreuken.js');
 require('../js/gevecht.js');
 require('../js/verkennen.js');
 const T = globalThis.Toren;
@@ -154,66 +152,52 @@ test('de deurknop hoort bij een open deur naast de held waar niemand in staat', 
   assert.equal(T.deurNaastHeld(S), null); // er staat iemand in de opening
 });
 
-// De laatste klim: je leeftijd is je levensbalk.
-test('de held begint op zijn vierentachtigste en sterft op zijn honderdste', () => {
+// Sinds 25 sep heeft de schout levenspunten, net als een monster (Marcel koos het, voorlopig:
+// ontwerp/spel.md, onder Open). Daarvoor was zijn leeftijd zijn levensbalk.
+test('de schout heeft twintig levenspunten en acht actiepunten, en loopt op zijn eigen vaste maat', () => {
   const w = T.maakWereld();
-  assert.equal(wezen(w, 'held').leeftijd, 84 * 12);
-  assert.equal(T.EINDLEEFTIJD, 100 * 12);
-  assert.equal(wezen(w, 'slijm').leeftijd, null); // monsters hebben levenspunten, geen leeftijd
+  const held = wezen(w, 'held');
+  assert.equal(held.leven, 20);
+  assert.equal(held.maxLeven, 20);
+  assert.equal(held.maxAp, 8);
+  assert.equal(T.snelheidVan(held), T.SCHOUT_SNELHEID);
+  assert.equal(T.snelheidVan(wezen(w, 'slijm')), 1.4); // een monster houdt zijn eigen snelheid
 });
 
-test('het lijf wordt trager met de jaren: 8, vanaf 90 jaar 7, vanaf 95 jaar 6 actiepunten', () => {
-  assert.equal(T.apVoorLeeftijd(89 * 12 + 11), 8);
-  assert.equal(T.apVoorLeeftijd(90 * 12), 7);
-  assert.equal(T.apVoorLeeftijd(94 * 12 + 11), 7);
-  assert.equal(T.apVoorLeeftijd(95 * 12), 6);
+test('geen monster velt de schout in minder dan vier klappen', () => {
+  // De klappen stonden tot 25 sep in maanden; ze zijn gedeeld door twee, zodat de monsters
+  // onderling even sterk bleven. Dit bewaakt dat er niet per ongeluk één uitschiet.
+  const leven = T.WEZENS.held.leven;
+  for (const [soort, s] of Object.entries(T.WEZENS)) {
+    if (!s.aanval) continue;
+    const [min, max] = s.aanval.schade;
+    assert.ok(min >= 1 && min <= max, `${soort}: ${min}–${max}`);
+    assert.ok(max * 4 <= leven, `${soort} slaat tot ${max}, en dan is de schout in ${Math.ceil(leven / max)} klappen neer`);
+  }
 });
 
-test('de magie wordt sterker met de jaren: +1 schade per vijf jaar boven de tachtig', () => {
-  assert.equal(T.magieBonus(84 * 12 + 11), 0);
-  assert.equal(T.magieBonus(85 * 12), 1);
-  assert.equal(T.magieBonus(90 * 12), 2);
-  const held = { leeftijd: 90 * 12 };
-  assert.deepEqual(T.schichtSchade(held), [7, 10]);
-});
-
-test('leeftijd en duur staan er zoals je ze zegt', () => {
-  assert.equal(T.leeftijdTekst(84 * 12), '84 jaar');
-  assert.equal(T.leeftijdTekst(84 * 12 + 1), '84 jaar en 1 maand');
-  assert.equal(T.leeftijdTekst(84 * 12 + 7), '84 jaar en 7 maanden');
-  assert.equal(T.duurTekst(4), '4 maanden');
-  assert.equal(T.duurTekst(12), 'een jaar');
-  assert.equal(T.duurTekst(24), '2 jaar');
-  assert.equal(T.duurKort(4), '+4 mnd');
-  assert.equal(T.duurKort(12), '+1 jaar');
-  assert.equal(T.duurKort(-24), '−2 jaar');
-});
-
-// Hoe ouder, hoe trager de pas: dat moet je aan hem zien lopen.
-test('de held loopt trager naarmate hij ouder wordt, met rechte lijnen tussen de ijkpunten', () => {
-  const bijna = (a, b) => Math.abs(a - b) < 0.0001;
-  assert.equal(T.loopSnelheid(84 * 12), 2.5);
-  assert.equal(T.loopSnelheid(92 * 12), 2.1);
-  assert.equal(T.loopSnelheid(99 * 12), 1.8);
-  assert.equal(bijna(T.loopSnelheid(88 * 12), 2.3), true); // halverwege 84 en 92
-  assert.equal(bijna(T.loopSnelheid(95 * 12 + 6), 1.95), true); // halverwege 92 en 99
-  assert.equal(T.loopSnelheid(80 * 12), 2.5); // jonger dan het eerste ijkpunt
-  assert.equal(T.loopSnelheid(T.EINDLEEFTIJD), 1.8); // ouder dan het laatste
+test('een klap kost levenspunten; op nul is een monster verslagen, en valt de schout', () => {
   const w = T.maakWereld();
-  assert.equal(T.snelheidVan(wezen(w, 'held')), 2.5);
-  assert.equal(T.snelheidVan(wezen(w, 'slijm')), 1.4); // een monster houdt zijn vaste snelheid
-});
-
-test('een wezen met een leeftijd dat niet de held is, loopt toch op zijn eigen snelheid', () => {
-  // De oude meester heeft, net als de held, een leeftijd (T.verouder werkt voor elk wezen) —
-  // maar zijn animatie (gereedschap/pixelart/meester.cjs) is op precies één vaste snelheid
-  // afgestemd. Zou T.snelheidVan hem, omdat hij een leeftijd heeft, over T.loopSnelheid laten
-  // lopen (op zijn 97e zo'n 1,9 tegel/s, de curve van de héld), dan gaan zijn voeten over de
-  // grond glijden. Alleen `soort === 'held'` mag die curve gebruiken.
-  const meester = T.maakWezen('meester', 0, 0);
-  assert.notEqual(meester.leeftijd, null);
-  assert.equal(T.snelheidVan(meester), T.WEZENS.meester.snelheid);
-  assert.notEqual(T.snelheidVan(meester), T.loopSnelheid(meester.leeftijd));
+  const held = wezen(w, 'held');
+  const slijm = wezen(w, 'slijm');
+  const S = { wereld: w, held, gevecht: null, modus: 'verkennen', bezig: false, tijd: 0 };
+  const gemeld = [];
+  T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (t) => gemeld.push(t) : () => {}) });
+  T.anim = { tekst() {}, wacht: () => new Promise(() => {}) };
+  T.raak(S, slijm, 3);
+  assert.equal(slijm.leven, 7);
+  assert.equal(slijm.dood, false);
+  T.raak(S, slijm, 30);
+  assert.equal(slijm.leven, 0, 'nooit onder nul');
+  assert.equal(slijm.dood, true);
+  T.raak(S, held, 5);
+  assert.equal(held.leven, 15);
+  assert.equal(S.modus, 'verkennen', 'een klap is nog geen einde');
+  T.raak(S, held, 30);
+  assert.equal(held.leven, 0);
+  assert.equal(held.dood, true);
+  assert.equal(S.modus, 'dood', 'wie valt, speelt niet verder');
+  assert.ok(gemeld.some((t) => /valt/.test(t)), gemeld.join(' | '));
 });
 
 test('wie sluipt, wordt pas van twee tegels dichterbij opgemerkt', () => {

@@ -36,11 +36,6 @@
 //   nietVlag: 'naam'          — waar als die vlag NIET gezet is (of een lijstje: dan geen ervan)
 //   heeft: 'ding'              — waar als je dat in je inventaris hebt (of een lijstje: allemaal)
 //   nietHeeft: 'ding'          — waar als je dat niet hebt (of een lijstje: geen ervan)
-//   ouderDan: 88               — waar als je ouder bent dan dat, in hele jaren
-//   jongerDan: 88              — waar als je jonger bent dan dat, in hele jaren
-//   ouderGewordenSinds: 12     — waar als je zoveel maanden of meer ouder bent geworden sinds je
-//                                 deze persoon voor het laatst sprak (bij de allereerste keer
-//                                 geldt hij nooit: er is dan nog geen "vorige keer")
 //   quest: 'bakker'            — waar als die quest loopt; met fase: 'zoeken' (of een lijstje
 //                                 fasen) alleen in die fase, met weg: 'marskramer' alleen als je
 //                                 hem zo oploste
@@ -70,7 +65,6 @@
         { naam: 'De beurs gehad', als: { vlag: ['meesterDood', 'beursVanDeMeester'] } },
         { naam: 'Sleutel in de hand', als: { vlag: 'meesterDood', heeft: 'sleutel' } },
         { naam: 'Onderweg naar boven', als: { vlag: ['meesterDood', 'sleutelGebruikt'] } },
-        { naam: 'Een jaar weggeweest', als: { vlag: 'meesterDood', ouderGewordenSinds: 12 } },
         { naam: 'De fontein is leeg', als: { vlag: ['meesterDood', 'fonteinLeeg'] } },
       ],
       knopen: {
@@ -79,9 +73,6 @@
             { als: { nietVlag: 'meesterDood' }, zeg: 'De meester? Die is buiten, bij zijn bonen. Waar anders.' },
             { als: { vlag: 'sleutelGebruikt' }, zeg: 'Ga maar, meester. Ik veeg de trap nog één keer, voor het geval dat.' },
             { als: { heeft: 'sleutel' }, zeg: 'U hebt de sleutel. Wees voorzichtig daarboven, meester. Eén meester begraven is genoeg voor een knecht.' },
-            // Het bewijs dat het dorp je ouder ziet worden (ontwerp/spreuken.md, "Het dorp ziet
-            // je ouder worden"): terughoudend, geen grap over wat er met honderd jaar gebeurt.
-            { als: { ouderGewordenSinds: 12 }, zeg: 'U bent weer terug, meester — en een jaar ouder dan toen u wegging. Ik zal er verder niets over zeggen.' },
             { zeg: 'Meester. Zo moet ik u nu noemen, hè. Het went wel. Denk ik.' },
           ],
           keuzes: [

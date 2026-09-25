@@ -76,6 +76,19 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   - Het gesprek van de inner noemt de kist en de marskramer ook als die opties uit staan.
   - Komt de inner onverwacht terug en ligt er ineens meer goud in de kist, dan telt de heer dat wel
     (het hoogste van zijn twee tellingen), maar de argwaan groeit er niet van, zoals bij het graan.
+- **Het gevecht na de leeftijd** (25 sep, werklijst punt 7b). De schout heeft nu 20 levenspunten
+  en de klappen van de monsters zijn de oude maanden gedeeld door twee. Voorlopig, tot punt 13:
+  - Wat hij verliest, komt niet terug: er is nog geen genezen (vroeger maakte de fontein je jonger).
+  - Vallen is het einde van het spel. Marcel koos "voorlopig"; gewond, dagen rust of gevangen
+    genomen worden, beslissen we als de rovers en de wolven komen.
+  - Van de monsters past alleen de wolf bij het nieuwe spel. De slijmkruiper, de skeletwacht, de
+    reuzenspin en de kobold horen bij de toren en het bos van het oude spel; weg ermee, of bewaren
+    tot er rovers zijn om de gevechtstoetsen op te draaien?
+  - De actiebalk (actiepunten, Slaan, Einde beurt) verschijnt nu ook in het gehucht. De knop Slaan
+    doet zelf niets: slaan doe je door op een monster te klikken; de knop zegt wat het kost.
+- **Een questweg kan nog "jaren" kosten** (`js/quest.js`, KOSTEN, en de toets van drie antwoorden).
+  In het nieuwe spel kost niets meer jaren; misschien wordt het "tijd" of "leven". Beslissen als de
+  quests van het gehucht komen.
 
 ## Het beeld
 

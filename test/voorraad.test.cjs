@@ -1,5 +1,5 @@
 // De voorraad zonder scherm (js/voorraad.js): goud, graan, wol en hout, en de ene plek
-// (T.wijzigVoorraad) waarlangs ze veranderen, zoals T.verouder dat voor jaren doet.
+// (T.wijzigVoorraad) waarlangs ze veranderen, zoals in het oude spel de jaren via T.verouder liepen.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 

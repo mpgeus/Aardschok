@@ -75,9 +75,6 @@
   };
 
   T.sluitDialoog = function (S) {
-    // Onthoud de leeftijd van dit moment: de motor onder "het dorp ziet je ouder worden"
-    // (ontwerp/spreuken.md) is dat de volgende begroeting dit met nu vergelijkt.
-    if (S.spreektMet) T.onthoudAfscheid(S, S.spreektMet.soort);
     T.ui.sluitDialoog();
     S.spreektMet = null;
     if (S.modus === 'dialoog') S.modus = 'verkennen';

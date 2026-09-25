@@ -1,19 +1,15 @@
 // Het gesprekssysteem zonder scherm (js/gesprek.js): welke regel wint, welke keuzes zichtbaar
-// zijn, dat een vlag blijft staan, en dat "ouderGewordenSinds" pas afgaat als de held sinds het
-// afscheid ook echt ouder is geworden. Zie ontwerp/spreuken.md, "Het dorp ziet je ouder worden".
+// zijn, en dat een vlag blijft staan. (Tot 25 sep ook dat "ouderGewordenSinds" pas afging als de
+// held echt ouder was geworden; de leeftijd ging eruit met het oude spel.)
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/leeftijd.js');
 require('../js/gesprek.js');
 require('../js/gesprekken.js');
 const T = globalThis.Toren;
 
-function nieuweS(leeftijd) {
-  return {
-    held: { leeftijd: leeftijd == null ? T.STARTLEEFTIJD : leeftijd },
-    inventaris: new Set(),
-  };
+function nieuweS() {
+  return { held: {}, inventaris: new Set() };
 }
 
 test('de eerste passende regel wint; een regel zonder voorwaarde is het vangnet', () => {
@@ -59,24 +55,6 @@ test('een vlag blijft staan tot hij gewist wordt, en werkt ook via een bestaand 
   assert.equal(T.heeftVlag(S, 'sleutelGebruikt'), true);
 });
 
-test('ouderGewordenSinds geldt pas als de held sinds het afscheid ook echt ouder is geworden', () => {
-  const S = nieuweS(1000);
-  // nog nooit gesproken: er is nog geen "vorige keer" om mee te vergelijken
-  assert.equal(T.voorwaardeGeldt(S, 'wim', { ouderGewordenSinds: 12 }), false);
-
-  T.onthoudAfscheid(S, 'wim');
-  assert.equal(T.voorwaardeGeldt(S, 'wim', { ouderGewordenSinds: 12 }), false); // niets veranderd
-
-  S.held.leeftijd += 6;
-  assert.equal(T.voorwaardeGeldt(S, 'wim', { ouderGewordenSinds: 12 }), false); // nog geen jaar
-
-  S.held.leeftijd += 6;
-  assert.equal(T.voorwaardeGeldt(S, 'wim', { ouderGewordenSinds: 12 }), true); // nu wel
-
-  T.onthoudAfscheid(S, 'wim'); // een nieuw afscheid, op de nieuwe leeftijd
-  assert.equal(T.voorwaardeGeldt(S, 'wim', { ouderGewordenSinds: 12 }), false);
-});
-
 test('zolang de meester leeft, stuurt Wim je naar buiten, naar zijn bonen', () => {
   const S = nieuweS();
   const knoop = T.gesprekKnoop(S, 'wim', 'welkom');
@@ -120,19 +98,6 @@ test('Wim biedt de beurs van de meester aan, en daarna niet meer', () => {
 
   T.zetVlag(S, 'beursVanDeMeester');
   assert.equal(gevraagd(), false);
-});
-
-test('Wim merkt op dat je meer dan een jaar ouder bent geworden sinds jullie elkaar spraken', () => {
-  const S = nieuweS();
-  T.zetVlag(S, 'meesterDood');
-
-  let knoop = T.gesprekKnoop(S, 'wim', 'welkom');
-  assert.ok(!knoop.tekst.includes('een jaar ouder'));
-
-  T.onthoudAfscheid(S, 'wim'); // Wim en de held nemen afscheid
-  S.held.leeftijd += 13; // en de held komt pas een jaar en een maand later terug
-  knoop = T.gesprekKnoop(S, 'wim', 'welkom');
-  assert.ok(knoop.tekst.includes('een jaar ouder'));
 });
 
 test('vanuit de begroeting kun je via "aardschok" bij "monsters" komen en weer terug naar "meer"', () => {

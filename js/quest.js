@@ -37,8 +37,7 @@
   };
 
   // Een quest in een fase zetten. Dat is het enige wat de fase verandert, zodat er één plek is
-  // waar een beloning wordt uitgekeerd en een melding komt — net zoals alle jaren via T.verouder
-  // lopen. Dezelfde fase nog eens doet niets.
+  // waar een beloning wordt uitgekeerd en een melding komt. Dezelfde fase nog eens doet niets.
   T.zetQuest = function (S, naam, fase, weg) {
     const q = T.QUESTS[naam];
     if (!q) return console.warn(`T.zetQuest: onbekende quest "${naam}"`);
@@ -214,9 +213,12 @@
   };
 
   // ── Raakpunten: een spreuk op een ding ──
+  //
+  // Sinds de spreuken eruit gingen (25 sep) vraagt niets hier nog naar. Het gaat weg met De koude
+  // oven, de enige quest die het gebruikt, en de oude kaart (ontwerp/werklijst.md, punt 7c).
 
   // Het raakpunt onder de muis, als deze spreuk erop werkt en het nog te doen is. Zie de uitleg
-  // boven in quests.js; js/toveren.js vraagt het bij elke spreuk, dus dit werkt net zo goed voor
+  // boven in quests.js; js/toveren.js vroeg het bij elke spreuk, dus dit werkte net zo goed voor
   // een windstoot op een molen als voor een vuurschicht in een oven.
   T.raakpuntOp = function (S, doel, spreukId) {
     const w = S.wereld;

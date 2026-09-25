@@ -5,7 +5,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/leeftijd.js');
 require('../js/wereld.js');
 require('../js/gesprek.js');
 require('../js/gesprekken.js');
@@ -19,7 +18,7 @@ T.ui = { bericht: (tekst) => gemeld.push(tekst), toonGoud: () => {} };
 function nieuweS() {
   gemeld.length = 0;
   return {
-    held: { leeftijd: T.STARTLEEFTIJD, tx: 5, ty: 5 },
+    held: { tx: 5, ty: 5 },
     inventaris: new Set(), vlaggen: new Set(),
     goud: 0, quests: {}, questWeg: {}, questBeloond: new Set(),
   };
@@ -400,7 +399,7 @@ test('De koude oven, weg 4: een vuurschicht in de oven, en het dorp merkt het ve
   const rp = T.raakpuntOp(S, { x: 6, y: 5 }, 'vuurschicht');
   assert.ok(rp, 'zolang de bakker erom vraagt, wacht de scheur op een vuurschicht');
 
-  T.zetVlag(S, rp.raak.zetVlag); // wat js/toveren.js doet nadat de schicht is ingeslagen
+  T.zetVlag(S, rp.raak.zetVlag); // wat js/toveren.js deed nadat de schicht was ingeslagen
   T.werkQuestsBij(S);
   assert.equal(T.questFase(S, 'bakker'), 'gebakken');
   assert.equal(T.questWegVan(S, 'bakker'), 'oven');

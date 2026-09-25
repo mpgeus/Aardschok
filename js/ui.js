@@ -8,7 +8,6 @@
   let vorigeAp = '';
   let vorigeTip = '';
   let keuzes = [];
-  const vorigeSpreuk = new Map(); // per spreuk: waaraan te zien is dat er iets veranderd is
 
   const SLEUTEL_ICOON =
     '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">' +
@@ -41,7 +40,7 @@
     ['vuursteen', 'Oude vuurstenen van de smidse', VUURSTEEN_ICOON],
   ];
 
-  // De opdracht van dit moment (een quest), linksboven onder de leeftijd. Het element staat
+  // De opdracht van dit moment (een quest), linksboven. Het element staat
   // niet in index.html maar wordt hier gemaakt, zoals het portret in js/dialoog.js, en de opmaak
   // staat erbij. Alleen als de tekst verandert, wordt hij aangeraakt.
   let opdrachtEl = null;
@@ -63,9 +62,6 @@
     reset(S) {
       $('berichten').innerHTML = '';
       vorigeAp = '';
-      vorigeSpreuk.clear();
-      this.toonSpreuken(S);
-      this.toonLeeftijd(S.held);
       this.toonSluipen(false);
       this.toonInventaris(S);
       this.toonGoud(S);
@@ -79,19 +75,6 @@
       // bestand, dus staan de functies er dan al, maar niet als ui.js ooit alleen gebruikt wordt.
       if (this.toonKalender) this.toonKalender(S);
       if (this.toonVoorraad) this.toonVoorraad(S);
-    },
-
-    // De leeftijd is de levensbalk. De balk loopt van zeventig tot honderd en vult zich: hoe
-    // voller, hoe minder tijd er over is.
-    toonLeeftijd(held) {
-      const m = held.leeftijd;
-      const f = Math.min(1, Math.max(0, (m - 70 * 12) / (30 * 12)));
-      const vul = $('leeftijd-vul');
-      vul.style.width = Math.round(f * 100) + '%';
-      vul.classList.toggle('laat', T.jaren(m) >= 95);
-      $('leeftijd-jaren').textContent = T.leeftijdTekst(m);
-      const rest = T.EINDLEEFTIJD - m;
-      $('leeftijd-rest').textContent = rest > 0 ? `nog ${T.duurTekst(rest)}` : 'geen tijd meer';
     },
 
     toonSluipen(aan) {
@@ -119,7 +102,7 @@
       }
     },
 
-    // Goud, naast de leeftijd. Het vakje komt pas als je ooit goud had: een leeg vakje dat nul
+    // Goud, naast sluipen. Het vakje komt pas als je ooit goud had: een leeg vakje dat nul
     // zegt is alleen maar ruis.
     toonGoud(S) {
       const el = $('goud');
@@ -141,7 +124,8 @@
       $('volgorde').innerHTML =
         g.volgorde
           .map((e, i) => {
-            const stand = e.kant === 'held' ? `${T.jaren(e.leeftijd)} jr` : e.leven;
+            // Het leven dat nog over is, bij de schout net als bij een monster.
+            const stand = e.leven;
             return `<div class="chip ${e.kant}${i === g.beurt ? ' aan' : ''}"><span>${T.hoofdletter(e.naam)}</span><small>${stand}</small></div>`;
           })
           .join('') + `<div class="ronde">Ronde ${g.ronde}</div>`;
@@ -178,38 +162,6 @@
       const b = document.querySelector('#knoppen button[data-actie="deur"]');
       b.classList.toggle('verborgen', !zichtbaar);
       b.disabled = !kan;
-    },
-
-    // De spreukbalk. Die staat er ook buiten een gevecht, want een dwaallicht en een windstoot
-    // horen juist bij het rondlopen. Hij wordt elk beeld nagelopen, maar alleen aangeraakt als
-    // er iets veranderd is: een gekozen spreuk, punten erbij of eraf, een trede hoger.
-    toonSpreuken(S) {
-      const box = $('spreukbalk');
-      if (!box.children.length) bouwSpreuken(box);
-      for (const id of T.SPREUK_VOLGORDE) {
-        const eig = T.spreuk(S.held, id);
-        const v = T.voortgang(S.held, id);
-        const waarom = T.waaromNiet(S, id);
-        const sleutel = [eig.ap, eig.maanden, v.aantal, v.trede, S.spreuk === id, waarom || ''].join('|');
-        const knop = box.querySelector(`[data-spreuk="${id}"]`);
-        const vorig = vorigeSpreuk.get(id);
-        if (vorig && vorig.sleutel === sleutel) continue;
-        vorigeSpreuk.set(id, { sleutel, trede: v.trede });
-        knop.querySelector('.prijs').textContent = `${eig.ap} AP · ${T.duurKort(eig.maanden)}`;
-        knop.querySelector('.tredenaam').textContent = v.naam;
-        knop.querySelector('.stippen').innerHTML = v.volgende
-          ? Array.from({ length: v.nodig }, (_, i) => `<span class="stip${i < v.binnen ? ' vol' : ''}"></span>`).join('')
-          : '<span class="ster">✦</span>';
-        knop.classList.toggle('gekozen', S.spreuk === id);
-        knop.classList.toggle('uit', !!waarom);
-        knop.title = spreukUitleg(eig, v, waarom);
-        // Een trede erbij laat de knop even gloeien.
-        if (vorig && v.trede > vorig.trede) {
-          knop.classList.remove('hoger');
-          void knop.offsetWidth;
-          knop.classList.add('hoger');
-        }
-      }
     },
 
     bericht(tekst, soort) {
@@ -311,29 +263,4 @@
       $('overlay').classList.add('verborgen');
     },
   };
-
-  // De knoppen van de spreukbalk worden één keer gemaakt; daarna verandert alleen hun inhoud.
-  function bouwSpreuken(box) {
-    box.innerHTML = T.SPREUK_VOLGORDE.map((id) => {
-      const s = T.SPREUKEN[id];
-      return (
-        `<button class="spreuk" data-spreuk="${id}" style="--kleur: ${s.kleur}">` +
-        `<span class="kop"><kbd>${s.toets}</kbd><span class="naam">${T.hoofdletter(s.naam)}</span></span>` +
-        '<span class="prijs"></span>' +
-        '<span class="trede"><span class="tredenaam"></span><span class="stippen"></span></span>' +
-        '</button>'
-      );
-    }).join('');
-  }
-
-  // De uitleg bij de muis boven een spreukknop: wat hij doet, hoe goed je hem beheerst, wat de
-  // volgende trede geeft, en waarom hij nu niet kan.
-  function spreukUitleg(eig, v, waarom) {
-    const regels = [`${T.hoofdletter(eig.naam)} · kring ${eig.kring}`, T.SPREUKEN[eig.id].uitleg];
-    regels.push(`${v.naam}: ${v.aantal} keer raak.`);
-    if (v.volgende) regels.push(`Nog ${v.volgende.nog} tot ${v.volgende.naam}: ${v.volgende.tekst}.`);
-    else regels.push('Hoger kan niet.');
-    if (waarom) regels.push(waarom);
-    return regels.join('\n');
-  }
 })(globalThis.Toren = globalThis.Toren || {});

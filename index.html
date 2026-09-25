@@ -10,14 +10,8 @@
   <canvas id="scherm"></canvas>
 
   <div id="hud">
-    <div id="leeftijd" class="paneel">
-      <div class="kop">Leeftijd</div>
-      <div id="leeftijd-jaren"></div>
-      <div class="balk"><div id="leeftijd-vul"></div></div>
-      <div id="leeftijd-rest"></div>
-    </div>
     <button id="sluip-knop" class="paneel" title="Sluipen: trager, maar monsters merken je pas van dichterbij op"><kbd>S</kbd> Sluipen</button>
-    <div id="goud" class="paneel verborgen" title="Goud. Het koopt spullen en gunsten, nooit jaren."><span class="munt">&#9679;</span> <span id="goud-aantal">0</span></div>
+    <div id="goud" class="paneel verborgen" title="Goud. Het koopt spullen en gunsten."><span class="munt">&#9679;</span> <span id="goud-aantal">0</span></div>
     <div id="inventaris"></div>
   </div>
 
@@ -75,8 +69,7 @@
   <div id="plek"></div>
   <div id="volgorde" class="paneel"></div>
 
-  <!-- Onderaan: de spreuken staan er altijd, de actiepunten en knoppen schuiven erbij zodra
-       het gevecht begint. -->
+  <!-- Onderaan: de actiepunten en knoppen schuiven in beeld zodra een gevecht begint. -->
   <div id="onder">
     <div id="actiebalk" class="paneel">
       <div id="ap"></div>
@@ -86,7 +79,6 @@
         <button data-actie="einde"><kbd>spatie</kbd> Einde beurt</button>
       </div>
     </div>
-    <div id="spreukbalk" class="paneel"></div>
   </div>
 
   <div id="berichten"></div>
@@ -109,8 +101,6 @@
 
   <div id="hulp">
     Klik om te lopen, te praten of iets te gebruiken. <kbd>S</kbd> sluipen<br>
-    Spreuken: <kbd>2</kbd> vuurschicht · <kbd>3</kbd> dwaallicht · <kbd>4</kbd> windstoot<br>
-    <kbd>Esc</kbd> of rechtsklik legt een spreuk weer weg<br>
     In een gevecht: <kbd>1</kbd> slaan · <kbd>D</kbd> deur dicht · <kbd>spatie</kbd> einde beurt
   </div>
 
@@ -133,7 +123,6 @@
   <script src="tegels/tegels.js"></script>
   <script src="tegels/bouwfasen.js"></script>
   <script src="kaarten/kaarten.js"></script>
-  <script src="js/leeftijd.js"></script>
   <script src="js/tijd.js"></script>
   <script src="js/voorraad.js"></script>
   <script src="js/wereld.js"></script>
@@ -150,7 +139,6 @@
   <script src="js/pad.js"></script>
   <script src="js/akkers.js"></script>
   <script src="js/boeren.js"></script>
-  <script src="js/spreuken.js"></script>
   <script src="js/iso.js"></script>
   <script src="js/sprites.js"></script>
   <script src="js/anim.js"></script>
@@ -163,7 +151,6 @@
   <script src="js/dialoog.js"></script>
   <script src="js/verkennen.js"></script>
   <script src="js/gevecht.js"></script>
-  <script src="js/toveren.js"></script>
   <script src="js/tekenen.js"></script>
   <!-- Na alle regels en gesprekken: de spelregels nemen hun waarden als standaard. -->
   <script src="js/opties.js"></script>

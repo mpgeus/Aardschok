@@ -67,8 +67,8 @@
     return { dag: 0, snelheid: 1 };
   };
 
-  // Eén plek waarlangs de klok tikt (zoals T.verouder dat voor jaren doet, js/gevecht.js), zodat
-  // het scherm altijd bijblijft. `dt` is echte verstreken seconden, dezelfde dt waarmee de spellus
+  // Eén plek waarlangs de klok tikt (zoals de voorraad via T.wijzigVoorraad), zodat het scherm
+  // altijd bijblijft. `dt` is echte verstreken seconden, dezelfde dt waarmee de spellus
   // S.tijd ophoogt (js/main.js) -- maar de kalender telt op zijn EIGEN klok (S.kalender.dag),
   // nooit op S.tijd zelf, dus pauzeren of versnellen laat geen animatie stilvallen of doorschieten.
   T.tikKalender = function (S, dt) {

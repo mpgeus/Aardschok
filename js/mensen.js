@@ -38,13 +38,13 @@
 // Zonder `wezen` en zonder `zaad` is hij zichzelf: zijn id is de naam van zijn vel. De veertien
 // dorpelingen stonden tot 22 sep als eigen ingang in T.WEZENS, met veertien keer dezelfde regel
 // `kant: 'neutraal', leven: 10, ap: 0, initiatief: 0`. Die tabel gaat over wat een wezen ís — wat
-// vecht, wat een leeftijd draagt — en een dorpeling is dat niet; hier staat hij in één regel.
+// vecht, wat in code wordt neergezet — en een dorpeling is dat niet; hier staat hij in één regel.
 (function (T) {
   'use strict';
 
   T.MENSEN = {
     // Wie in code wordt neergezet en dus een eigen T.WEZENS-ingang houdt: Wim veegt de hal van de
-    // toren (T.maakWereld), de meester draagt een leeftijd en heeft zijn eigen loopmaat.
+    // toren (T.maakWereld), de meester heeft zijn eigen loopmaat.
     meester: { wezen: 'meester' },
     wim: { wezen: 'wim' },
 
@@ -163,9 +163,7 @@
       thuis: { x, y }, straal: straal || 0, dwaalt: straal > 0, aanval: null,
       vel: null,
       dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
-      dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0, leeftijd: null,
-      brandt: 0, apVerlies: 0, afgeleid: null, gelokt: null, vraag: 0, geduwd: false,
-      meesterschap: null, kring: null,
+      dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0,
     };
   };
 

@@ -1,9 +1,9 @@
 // De regels van een gesprek, los van het scherm en dus in Node te toetsen
 // (test/gesprek.test.cjs). De teksten zelf staan in gesprekken.js; hier staat alleen hoe we
 // daaruit kiezen: welke regel van een lijst wint (de eerste die past), welke keuzes je te zien
-// krijgt, en wat een antwoord doet. Zie ontwerp/spreuken.md, "Het dorp ziet je ouder worden": dat
-// is de reden dat een voorwaarde ook naar de klok mag kijken (ouderGewordenSinds), niet alleen
-// naar vlaggen en bezit.
+// krijgt, en wat een antwoord doet. Een voorwaarde kijkt naar vlaggen, bezit en quests. (Tot 25 sep
+// ook naar de leeftijd van de held: ouderDan, jongerDan en ouderGewordenSinds; die gingen eruit
+// met het oude spel.)
 (function (T) {
   'use strict';
 
@@ -17,18 +17,6 @@
   T.zetVlag = (S, naam) => vlaggen(S).add(naam);
   T.wisVlag = (S, naam) => vlaggen(S).delete(naam);
   T.heeftVlag = (S, naam) => vlaggen(S).has(naam) || S[naam] === true;
-
-  // Hoeveel maanden ouder de held is geworden sinds hij <wieId> voor het laatst sprak; null als
-  // ze elkaar nog nooit gesproken hebben (dan geldt de voorwaarde nooit — er is nog geen "vorige
-  // keer" om mee te vergelijken). js/dialoog.js roept onthoudAfscheid aan zodra het gesprek stopt.
-  T.ouderGewordenSinds = function (S, wieId) {
-    const bij = S.gesprekLeeftijd && S.gesprekLeeftijd[wieId];
-    return bij == null ? null : S.held.leeftijd - bij;
-  };
-  T.onthoudAfscheid = function (S, wieId) {
-    if (!S.gesprekLeeftijd) S.gesprekLeeftijd = {};
-    S.gesprekLeeftijd[wieId] = S.held.leeftijd;
-  };
 
   // Wiens gesprek voert dit wezen? Normaal zijn soort ("wim", "bakker"), want daaronder staat het
   // in T.GESPREKKEN. Maar negentien dorpelingen delen één soort ("dorpeling", zie js/kaart.js), en
@@ -54,12 +42,6 @@
     if (elk(als.nietVlag).some((n) => T.heeftVlag(S, n))) return false;
     if (!elk(als.heeft).every((n) => S.inventaris && S.inventaris.has(n))) return false;
     if (elk(als.nietHeeft).some((n) => S.inventaris && S.inventaris.has(n))) return false;
-    if (als.ouderDan != null && T.jaren(S.held.leeftijd) <= als.ouderDan) return false;
-    if (als.jongerDan != null && T.jaren(S.held.leeftijd) >= als.jongerDan) return false;
-    if (als.ouderGewordenSinds != null) {
-      const maanden = T.ouderGewordenSinds(S, wieId);
-      if (maanden == null || maanden < als.ouderGewordenSinds) return false;
-    }
     // Quests en goud wonen in js/quest.js en haken hier in: zonder dat bestand werkt een gesprek
     // gewoon door.
     if (T.questVoorwaarde && !T.questVoorwaarde(S, als)) return false;

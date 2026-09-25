@@ -67,7 +67,6 @@ test('een hek is laag en open: geen terugval naar het dichte staketsel van ronde
 
 // ---------------------------------------------------------------- in het spel
 
-require('../js/leeftijd.js');
 require('../js/wereld.js');
 require('../beelden/beschrijving.js');
 require('../tegels/tegels.js');

@@ -1,8 +1,9 @@
 // Het scherm van het gehuchtspel: de kalender (dag, seizoen, jaar) en de voorraad (goud, graan,
 // wol, hout) -- in de stijl en de plek van js/ui.js, maar in een eigen bestand, want het hoort
 // bij het nieuwe spel en niet bij De laatste klim. Altijd aan (T.NIEUWE_HUD), behalve als je met
-// ?kaart= een kaart van het oude spel opent; ?hud zet het daar toch aan. Het oude scherm gaat weg
-// met de spreuken (ontwerp/werklijst.md, punt 7b).
+// ?kaart= een kaart van het oude spel opent; ?hud zet het daar toch aan. Wat er van het oude
+// scherm over is (sluipen, goud en spullen linksboven), gaat weg met de oude kaart
+// (ontwerp/werklijst.md, punt 7c).
 (function (T) {
   'use strict';
 
@@ -141,8 +142,8 @@
     '<path d="M8 14.6c1.1 1.3 2.5 1.9 4 1.9s2.9-.6 4-1.9" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
     '</svg>';
 
-  // De voorraadbalk wordt één keer gemaakt, zoals de spreukbalk in js/ui.js (bouwSpreuken);
-  // daarna verandert alleen het getal per grondstof, en het getal bij de mensen.
+  // De voorraadbalk wordt één keer gemaakt; daarna verandert alleen het getal per grondstof, en
+  // het getal bij de mensen.
   function bouwVoorraadbalk(box) {
     box.innerHTML = BALK.map(
       (wat) =>

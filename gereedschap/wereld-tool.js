@@ -21,8 +21,8 @@
   const S = (T.S = {
     tijd: 0, wind: 0, zoom: 1, camera: { x: 0, y: 0 },
     wereld: null, held: null, modus: 'verkennen', gevecht: null, overgang: null,
-    bezig: false, spreuk: null, spreukBereik: null, bereik: null, handeling: null, hover: null,
-    lichten: [], effecten: [], wachters: [], grond: null, doorkijkTijd: 0,
+    bezig: false, bereik: null, handeling: null, hover: null,
+    effecten: [], wachters: [], grond: null, doorkijkTijd: 0,
     rasterAlpha: 0, rasterTegels: [], rasterStart: 0, rasterVan: null,
     inventaris: new Set(), vlaggen: new Set(), bezocht: new Set(),
     quests: {}, questWeg: {}, questBeloond: new Set(),

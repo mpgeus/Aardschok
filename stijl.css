@@ -50,16 +50,9 @@ kbd {
   text-align: center;
 }
 
-/* Leeftijd, sluipen en spullen, linksboven. De leeftijd is de levensbalk: hij vult zich
-   van zeventig tot honderd, en wat nog leeg is, is de tijd die je over hebt. */
+/* Sluipen en spullen, linksboven (het scherm van het oude spel; het gehucht heeft er zijn eigen
+   balk, #hud-gehucht). */
 #hud { position: fixed; left: 16px; top: 16px; display: flex; gap: 10px; align-items: flex-start; }
-#leeftijd { padding: 8px 12px 9px; width: 220px; }
-#leeftijd .kop { font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; }
-#leeftijd-jaren { font: 17px var(--kop); color: var(--inkt); margin-top: 1px; }
-.balk { height: 8px; margin: 5px 0 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
-#leeftijd-vul { height: 100%; width: 0; background: #d9bf7e; transition: width 0.6s ease, background 0.3s; }
-#leeftijd-vul.laat { background: var(--rood); }
-#leeftijd-rest { font-size: 12px; color: var(--gedempt); }
 #sluip-knop {
   display: flex;
   gap: 6px;
@@ -72,7 +65,7 @@ kbd {
 #sluip-knop:hover { color: var(--inkt); }
 #sluip-knop.aan { color: var(--inkt); border-color: rgba(226, 182, 74, 0.6); background: rgba(40, 32, 18, 0.9); }
 .in-gevecht #sluip-knop { opacity: 0.35; pointer-events: none; }
-/* Goud: naast de leeftijd, in dezelfde maat als een vakje van de inventaris. Het komt pas in
+/* Goud: naast sluipen, in dezelfde maat als een vakje van de inventaris. Het komt pas in
    beeld als je ooit goud had (js/ui.js, toonGoud). */
 #goud {
   display: flex;
@@ -97,8 +90,9 @@ kbd {
 
 /* Het nieuwe scherm voor het gehuchtspel (js/hud.js): altijd aan, behalve met ?kaart= naar een
    kaart van het oude spel (T.NIEUWE_HUD zet dan de klasse .nieuwe-hud op body). De panelen van het
-   oude spel (leeftijd, spreukbalk, actiepunten, de oude uitleg rechtsboven) gaan dan weg, en de
-   kalender en de voorraad linksboven komen ervoor in de plaats. */
+   oude spel (sluipen, goud en spullen linksboven, en de oude uitleg rechtsboven) gaan dan weg,
+   en de kalender en de voorraad linksboven komen ervoor in de plaats. De actiebalk onderaan
+   blijft: die schuift in beeld als er gevochten wordt, ook in het gehucht. */
 #hud-gehucht,
 #hulp-gehucht { display: none; }
 .nieuwe-hud #hud-gehucht { position: fixed; left: 16px; top: 16px; display: flex; gap: 10px; align-items: flex-start; }
@@ -106,7 +100,6 @@ kbd {
    de balk: kaas, ijzer, zout) liep die rij op 1280 pixels breed al onder de uitleg door. */
 .nieuwe-hud #hulp-gehucht { display: block; top: 118px; }
 .nieuwe-hud #hud,
-.nieuwe-hud #onder,
 .nieuwe-hud #hulp { display: none; }
 
 /* De naam van een kamer als je hem voor het eerst binnenloopt */
@@ -151,8 +144,8 @@ kbd {
 .chip.aan { border-color: var(--goud); color: var(--inkt); background: rgba(226, 182, 74, 0.12); }
 .ronde { padding: 0 6px 0 10px; font: 12px var(--kop); color: var(--gedempt); border-left: 1px solid var(--rand); }
 
-/* Onderaan: de spreuken staan er altijd, en in een gevecht schuiven de actiepunten en de
-   knoppen erboven in beeld, net als het raster op de vloer. De balken vangen de muis, de
+/* Onderaan: in een gevecht schuiven de actiepunten en de knoppen in beeld, net als het raster
+   op de vloer. De balken vangen de muis, de
    ruimte ertussen niet: daar kijk je gewoon de kamer in. */
 #onder {
   position: fixed;
@@ -206,41 +199,6 @@ kbd {
 #knoppen button.gekozen { border-color: var(--goud); background: rgba(226, 182, 74, 0.14); }
 #knoppen button:disabled { opacity: 0.45; cursor: default; }
 #knoppen .kost { font-size: 11px; color: var(--goud); }
-
-/* De spreukbalk: per spreuk de toets, wat hij kost aan punten en aan leven, en hoe goed je hem
-   beheerst. De stippen lopen vol tot de volgende trede. */
-#spreukbalk { display: flex; gap: 6px; padding: 7px; }
-.spreuk {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 126px;
-  padding: 6px 10px 7px 9px;
-  text-align: left;
-  font: 13px system-ui, sans-serif;
-  color: var(--inkt);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--rand);
-  border-left: 3px solid var(--kleur, var(--rand));
-  border-radius: 7px;
-  cursor: pointer;
-}
-.spreuk:hover { background: rgba(255, 255, 255, 0.09); }
-.spreuk.gekozen { border-color: var(--goud); border-left-color: var(--kleur, var(--goud)); background: rgba(226, 182, 74, 0.14); }
-.spreuk.uit { opacity: 0.42; }
-.spreuk .kop { display: flex; gap: 6px; align-items: center; }
-.spreuk .prijs { font-size: 11px; color: var(--goud); }
-.spreuk .trede { display: flex; gap: 6px; align-items: center; font: italic 11.5px var(--kop); color: var(--gedempt); }
-.stippen { display: flex; gap: 2px; align-items: center; }
-.stip { width: 5px; height: 5px; border-radius: 50%; background: rgba(239, 230, 210, 0.2); }
-.stip.vol { background: var(--goud); }
-.ster { font-style: normal; color: var(--goud); }
-/* Een trede erbij: de knop gloeit even op, zoals het getal boven het hoofd van de held. */
-.spreuk.hoger { animation: hoger 1.8s ease; }
-@keyframes hoger {
-  0% { box-shadow: 0 0 0 0 rgba(200, 184, 255, 0.9); }
-  100% { box-shadow: 0 0 0 14px rgba(200, 184, 255, 0); }
-}
 
 /* Berichten, linksonder */
 #berichten {
@@ -365,7 +323,7 @@ kbd {
   text-align: right;
 }
 
-/* De kalender en de voorraad, linksboven waar bij het oude spel de leeftijd stond. */
+/* De kalender en de voorraad, linksboven. */
 #kalenderbalk { padding: 8px 12px 9px; min-width: 210px; }
 #kalender-knoppen { display: flex; gap: 4px; margin-bottom: 7px; }
 #kalender-knoppen button {

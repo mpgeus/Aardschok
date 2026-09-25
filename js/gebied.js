@@ -6,7 +6,7 @@
 // Welke gebieden er zijn, staat nergens opgeschreven: elke kaart is er een (zie T.maakGebieden
 // hieronder). Marcel tekent in Tiled, draait npm run kaarten, en de wereld is groter geworden.
 //
-// De held verhuist mee — met zijn leeftijd, zijn meesterschap en wat hij bij zich heeft — en de
+// De held verhuist mee — met zijn levenspunten en wat hij bij zich heeft — en de
 // wereld die hij achterlaat blijft staan: een gedode wolf blijft dood, en een deur die je liet
 // openstaan staat er nog open als je terugkomt.
 (function (T) {
@@ -153,14 +153,11 @@
     S.netGeland = { x: plek.x, y: plek.y };
 
     S.wereld = nieuw;
-    // Alles wat bij de vorige plek hoorde, blijft daar: dwaallichten, effecten, het bereik, de
-    // spreuk in de hand en een gevecht dat nog liep.
+    // Alles wat bij de vorige plek hoorde, blijft daar: effecten, het bereik en een gevecht dat
+    // nog liep.
     S.gevecht = null;
     S.modus = 'verkennen';
     S.bezig = false;
-    S.spreuk = null;
-    S.spreukBereik = null;
-    S.lichten = [];
     S.effecten = [];
     S.wachters = [];
     S.bereik = null;
@@ -197,11 +194,6 @@
   // (index.html?kaart=<naam>, zie js/main.js). Geeft true terug als het gelukt is; S.wereld en
   // S.held staan dan klaar. Bestaat de kaart niet, dan false — de aanroeper valt dan terug op het
   // gehucht. Staat er geen "held" op, dan zet het er zelf een neer.
-  // Hoe snel de schout loopt, in tegels per seconde: wat vlotter dan een dorpeling (1,2 tot 1,5),
-  // zodat rondlopen niet sleept. Zijn loopbeeld telt de afgelegde weg (js/sprites.js), dus zijn
-  // voeten glijden bij geen enkele snelheid.
-  T.SCHOUT_SNELHEID = 2.2;
-
   T.beginOpKaart = function (S, naam) {
     const w = T.gebied(S, naam);
     if (!w) {
@@ -220,9 +212,9 @@
     // HUD en de beurtvolgorde blijven gewoon op hem letten; alleen T.sprites.houding kijkt naar
     // `soort` om het plaatje te kiezen (js/sprites.js). Zie ontwerp/werklijst.md, punt 1b.
     held.soort = 'dorpeling';
-    // Daarmee loopt hij ook niet meer op de leeftijd van een tovenaar (T.snelheidVan, js/wereld.js,
-    // kijkt alleen bij soort 'held' naar de leeftijd) maar op zijn eigen maat. Die moet hier dus
-    // gezet: een 'held' heeft zelf snelheid 0, en van 23 tot 24 sep stond de schout daardoor stil.
+    // Zijn loopmaat (T.SCHOUT_SNELHEID, js/wereld.js) had hij al: die staat bij de held in
+    // T.WEZENS. Van 23 tot 24 sep stond hij hier stil, omdat een 'held' toen op zijn leeftijd liep
+    // en zelf snelheid 0 had; dit blijft staan als vangnet voor een held uit een oude kaart.
     held.snelheid = T.SCHOUT_SNELHEID;
     if (held.zaad == null) held.zaad = 1;
     S.held = held;

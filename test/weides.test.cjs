@@ -5,7 +5,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/leeftijd.js');
 require('../js/tijd.js');
 require('../js/voorraad.js');
 require('../js/wereld.js');
@@ -21,7 +20,6 @@ require('../js/gebied.js');
 require('../js/pad.js');
 require('../js/akkers.js');
 require('../js/boeren.js');
-require('../js/spreuken.js');
 require('../js/gevecht.js');
 require('../js/verkennen.js');
 require('../js/gesprekken.js');

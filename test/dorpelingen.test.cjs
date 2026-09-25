@@ -9,12 +9,10 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/leeftijd.js');
 require('../js/wereld.js');
 require('../js/mensen.js');
 require('../js/gebied.js');
 require('../js/pad.js');
-require('../js/spreuken.js');
 require('../js/gevecht.js');
 require('../js/verkennen.js');
 require('../js/sprites.js');

@@ -6,7 +6,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/leeftijd.js');
 require('../js/tijd.js');
 require('../js/wereld.js');
 require('../js/voorraad.js');
@@ -215,7 +214,7 @@ test('in het gehucht opent zijn gesprek de handel, en het oude antwoord over de 
   assert.ok(knoop.keuzes.some((k) => k.doe && k.doe.handel), 'er is een antwoord dat de handel opent');
   assert.ok(!knoop.keuzes.some((k) => k.naar === 'waren'), 'het oude "Wat verkoopt u zoal?" hoort bij de toren');
   // Buiten het gehucht (het oude spel) is het gesprek zoals het was.
-  const oud = { inventaris: new Set(), held: { leeftijd: 84 } };
+  const oud = { inventaris: new Set(), held: {} };
   const oudeKnoop = T.gesprekKnoop(oud, 'marskramer', 'welkom');
   assert.ok(oudeKnoop.keuzes.some((k) => k.naar === 'waren'));
   assert.ok(!oudeKnoop.keuzes.some((k) => k.doe && k.doe.handel));

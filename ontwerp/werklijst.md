@@ -152,7 +152,7 @@ nog nodig is".
      het titelscherm, de oude meester, en het draaiboek `T.TUTORIAL_TEKST` met zijn plek in de
      gespreksschrijver (`gereedschap/gesprekken-tool.js`; `test/bronblok.test.cjs` kijkt op de
      echte bestanden).
-   - **7b. De spreuken, het toveren en de leeftijd eruit:** `js/spreuken.js`, `js/toveren.js`,
+   - **7b. De spreuken, het toveren en de leeftijd eruit** (af, 25 sep): `js/spreuken.js`, `js/toveren.js`,
      `js/leeftijd.js`, `T.verouder`, het meesterschap, de spreukbalk en de toetsen 2 tot 4. Het
      gevecht blijft (`js/gevecht.js`), met alleen slaan, en de schout krijgt levenspunten zoals een
      monster: wie valt, is het einde (voorlopig, tot punt 13).

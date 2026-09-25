@@ -11,8 +11,8 @@ Tot 23 sep was het De laatste klim: een tovenaar van 84 met zijn leeftijd als le
 toren. Marcel vond het doel niet goed genoeg. De kunst en de techniek eronder blijven: het
 isometrische beeld (Mystic Towers als voorbeeld), de HD-pixel art uit code, en een naadloze
 overgang van rondlopen naar een gevecht in beurten op tegels (Fallout, Jagged Alliance 2). De code
-van het oude spel (toren, spreuken, leeftijd) staat er nog tot hij eruit gaat; de tutorial ging
-er op 25 sep al uit. Zie de werklijst, punt 7.
+van het oude spel (de toren, de oude kaart en zijn mensen) staat er nog tot hij eruit gaat; de
+tutorial, de spreuken en de leeftijd gingen er op 25 sep al uit. Zie de werklijst, punt 7.
 
 Code, commentaar en spelteksten zijn Nederlands, zoals in Marcels Planner.
 
@@ -114,17 +114,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wereld: `isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`, `isZichtbaar`.
 - `js/pad.js`: A* (`zoekPad`, acht richtingen, schuin kost ook 1, geen hoeken afsnijden) en
   `bereik` (alle tegels binnen N stappen).
-- `js/spreuken.js`: de spreuken als regels, zonder scherm en dus te toetsen: `T.SPREUKEN`
-  (kring, toets, kosten, en per trede wat hij erbij krijgt), de treden van meesterschap
-  (`T.spreuk`, `T.telGebruik`, `T.voortgang`) en de losse rekensommen eromheen: `T.duwPad`,
-  `T.windstootDuwen`, `T.volgendOpLijn` (doorboren), `T.lokt`/`T.lokPad` (dwaallicht).
-- `js/toveren.js`: een spreuk kiezen, richten en uitspreken, in en buiten een gevecht
-  (`T.kiesSpreuk`, `T.handelingSpreuk`), de dwaallichten in de wereld (`T.werkLichtenBij`) en
-  het meesterschap dat meetelt (`T.oefen`).
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
   een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
-  spelstaat zelf (pad, uitval, flits, dood, en de jaren die erbij komen: dat is toveren), en
+  spelstaat zelf (pad, uitval, flits, dood), en
   `T.sprites.teken` legt het anker van de cel op het midden van de tegel. Laadt alles met
   `Image`, nooit `getImageData`: anders werkt `file://` niet meer.
 - `js/anim.js`: beweging en effecten. `T.anim.*` geeft beloftes, zodat een beurt als gewone
@@ -148,7 +141,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   op twee plekken staan zonder dat iets klaagde. `T.naamVanMens`, `T.gesprekVanMens`,
   `T.maakDorpeling` en `T.maakMens` zijn de vragen eromheen.
   **Wie geen naam hoeft te hebben, staat er niet in:** `{ x, y, zaad: 7 }` is menigte.
-  **`T.WEZENS` gaat over wat een wezen ís** — wat vecht, wat een leeftijd draagt, wat in code
+  **`T.WEZENS` gaat over wat een wezen ís** — wat vecht, met hoeveel levenspunten, wat in code
   wordt neergezet — en een dorpeling is dat niet. Daar staan alleen nog de held, Wim, de meester
   en de monsters; de veertien dorpelingen die er met veertien keer dezelfde regel in stonden, zijn
   op 22 sep naar `mensen.js` verhuisd. Een mens met `wezen: 'wim'` leent er nog wel een.
@@ -162,7 +155,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   boer aan zijn akker(s) via `huis`, dezelfde id op de boer als op de akker.
 - **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen, eigen
   klok naast `S.tijd`, snelheid), `js/voorraad.js` (`S.voorraad`; alles verandert via
-  `T.wijzigVoorraad`, zoals vroeger de jaren via `T.verouder`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
+  `T.wijzigVoorraad`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
   soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag,
   `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; een gebouw maakt alleen wat zijn grondstof
   toelaat, en gereedschap laat harder werken), `js/behoeften.js` (tevredenheid uit eten, brandhout
@@ -207,7 +200,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar.
   `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel.
 - Het spel tekent met sprites zodra `beelden/` er is, en anders met vlakken. Wat de kunst niet
-  dekt (raster, bereik, richtlijn, zwevende tekst, spreukeffecten, de pilaar) blijft altijd
+  dekt (raster, bereik, zwevende tekst, de pilaar) blijft altijd
   vlakken. `Toren.debug.vlakken = true` zet alles terug naar vlakken, om te vergelijken.
 
 ## Het spel in het kort
@@ -231,12 +224,14 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   keuze dus als optie, niet als vaste regel.
 
 De regels van het oude spel (de leeftijd als levensbalk, `T.verouder`, meesterschap, de toetsen
-voor spreuken) staan in `git show 0eb8269:CLAUDE.md`, voor wie aan die code komt voordat hij weg is.
+voor spreuken) staan in `git show 0eb8269:CLAUDE.md`. De spreuken en de leeftijd gingen er op 25 sep
+uit; sindsdien heeft de schout in een gevecht levenspunten, net als een monster (voorlopig: wat
+vallen echt betekent, komt bij punt 13 van de werklijst).
 
 ## Afspraken in de code
 
-Uit het oude spel; ze gelden voor de code zoals die er nu staat. Het raster en de overgang naar een
-gevecht gaan mee naar het nieuwe spel, de spreuken niet.
+Uit het oude spel; ze gelden voor de code zoals die er nu staat. Het raster, het gevecht in beurten
+en de overgang ernaartoe gaan mee naar het nieuwe spel.
 
 - Eén raster voor rondlopen én vechten. Een wezen heeft een vloeiende positie (`x`, `y`) en
   een tegel (`tx`, `ty`); bezetting vraag je altijd aan `tx`/`ty`. Bij het begin van een
@@ -248,12 +243,9 @@ gevecht gaan mee naar het nieuwe spel, de spreuken niet.
 - Een klik op een deur is altijd erheen lopen. Dichtgooien is in een gevecht een eigen knop
   (`D`), die alleen verschijnt naast een open deur. Eerst ging een open deur dicht als je er
   naast stond en erop klikte, en dat is precies wat je niet wilt.
-- Toetsen: `1` slaan, `2` vuurschicht, `3` dwaallicht, `4` windstoot, `D` deur dicht, `spatie`
-  einde beurt, `S` sluipen. De spreuktoetsen werken binnen én buiten een gevecht, want een
-  dwaallicht en een windstoot horen juist bij het rondlopen. Een spreuk in de hand verandert wat
-  de muis doet: hij richt, en lopen kan pas als je hem weer weglegt met `Esc`, de rechtermuisknop
-  of dezelfde toets nog eens. De knoppen onderaan staan in één kolom: de spreukbalk altijd, en
-  daarboven schuiven in een gevecht de actiepunten en de knoppen erbij.
+- Toetsen in een gevecht: klik op een monster om te slaan (de knop `1` Slaan zegt wat het kost),
+  `D` deur dicht, `spatie` einde beurt; bij het rondlopen `S` sluipen. De actiepunten en de knoppen
+  schuiven onderaan in beeld zodra een gevecht begint, ook in het gehucht.
 - Monsters openen geen deuren. Kan geen enkel monster de held nog zien of bereiken, dan eindigt
   het gevecht ('kwijt').
 
@@ -264,8 +256,6 @@ gevecht gaan mee naar het nieuwe spel, de spreuken niet.
 wachten. Dat is nodig omdat een verborgen browserpaneel maar af en toe een beeld tekent; ook
 css-overgangen staan dan vrijwel stil. Het testgereedschap stuurt de spatiebalk niet goed door
 (lege `key`), dus test einde beurt met de knop of met een `KeyboardEvent`.
-`Toren.debug.meesterschap('vuurschicht', 15)` zet het meesterschap van een spreuk (hier op
-Meesterlijk), om de treden te proberen zonder ze te verdienen.
 `Toren.debug.quest('bakker', 'terug')` zet een quest in een fase zonder hem te spelen ('uit' haalt
 hem weg, beloning en al); zonder fase zegt hij waar hij staat.
 `await Toren.debug.schermafdruk('naam')` bewaart het doek als PNG in
