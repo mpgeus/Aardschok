@@ -574,8 +574,8 @@ de oogst. Wie meer of minder oplevert, zegt de opbrengst.
 - Vast (de optie) is zoals het eerst was: Klaas zingt, Aaltje is weduwe, Gerrit de woekeraar, Trijn
   de vroedvrouw, Wouter het heethoofd, en allemaal even goed.
 
-Nog open: de boeren zien er nog hetzelfde uit (twee vellen, boer en boerin); een eigen gezicht per
-karakter is tekenwerk. Eigenschappen voor wie geen boer is (de marskramer, straks de ambachtslieden)
+Een eigen gezicht per karakter komt in twee rondes (Marcel, 25 sep; `beeld.md`, "Een gezicht per
+karakter"). Tot dan zien de boeren er hetzelfde uit (twee vellen, boer en boerin). Eigenschappen voor wie geen boer is (de marskramer, straks de ambachtslieden)
 en meer soorten (sluw, praatziek, sterk) komen bij de punten waar ze iets doen.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)

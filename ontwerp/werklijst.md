@@ -68,7 +68,9 @@ komen, `Toren.debug.inner()` de inner (`(true)`: onverwacht terug), `Toren.debug
 zijn argwaan, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
 bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
 
-**Loopt nu:** niets. Er draait geen agent.
+**Loopt nu:** tekenwerk, een gezicht per karakter, ronde 1 van 2 (Marcel, 25 sep; `beeld.md`, "Een
+gezicht per karakter"). Een agent maakt de vijf karakters van de vaste verdeling op het lijf van de
+boer en de boerin: acht vellen, met een proefplaat.
 
 **Volgende stap: punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud,
 die de inner niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de

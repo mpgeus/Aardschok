@@ -431,6 +431,31 @@ Nog niet goed:
 - in het gehucht staat de paal, net als de heer en de marskramer, achter het dak van een huis: zie
   de werklijst.
 
+## Een gezicht per karakter (Marcel, 25 sep 2026)
+
+Elk spel loot iedere boer een karakter (`js/boeren.js`), maar dat zag je alleen bij de muis en
+boven het gesprek: alle boeren waren de boer of de boerin. Marcel koos het voorstel van Claude:
+ieder karakter krijgt iets herkenbaars, zodat je de weduwe of de drinker van ver ziet lopen.
+
+| Karakter | Wat je ziet |
+|---|---|
+| zanger | bonte muts met een veer, luit op de rug |
+| weduwe | zwart, met een kap |
+| woekeraar | nette bruine jas met bont, buidel aan de riem |
+| vroedvrouw | wit schort, hoofddoek, tas |
+| heethoofd | opgestroopte mouwen, rood gezicht |
+| vrome | sober grijs, rozenkrans in de handen |
+| roddelaar | bonte omslagdoek, mand aan de arm |
+| de oudste | grijs haar en baard, stok, wat krom |
+| nieuwkomer | vreemde groene kiel, bundel op de rug |
+| drinker | rode neus, dikke buik, kroes in de hand |
+
+- **Op het lijf van de boer én van de boerin.** Een boer kan elk karakter loten dat bij hem past, dus
+  acht karakters komen er twee keer. De weduwe en de vroedvrouw zijn altijd vrouw: achttien vellen.
+- **In twee rondes.** Eerst de vijf van de vaste verdeling (zanger, weduwe, woekeraar, vroedvrouw,
+  heethoofd) als proef, dan de andere vijf. Wie nog geen eigen vel heeft, blijft de gewone boer of
+  boerin.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
