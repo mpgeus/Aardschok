@@ -64,10 +64,12 @@
     meisje: { naam: 'het meisje', snelheid: 1.25, straal: 3 },
     kleuter: { naam: 'de kleuter', snelheid: 0.85, straal: 3 },
 
-    // De twee die De koude oven nodig heeft. Hun eigen vellen komen bij fase B2b; tot die tijd
-    // lenen ze dat van Wim, en dus ook zijn loopmaat.
+    // De twee die De koude oven nodig heeft. De bakker krijgt zijn eigen vel bij fase B2b; tot die
+    // tijd leent hij dat van Wim, en dus ook zijn loopmaat. De marskramer loopt sinds 25 sep op zijn
+    // eigen vel, klein en krom onder zijn rek (gereedschap/pixelart/dorpelingen3.cjs; ontwerp/beeld.md,
+    // "De marskramer loopt"), en dat is op deze snelheid gemaakt.
     bakker: { naam: 'de bakker', snelheid: 1.4, straal: 2, vel: 'wim' },
-    marskramer: { naam: 'de marskramer', snelheid: 1.4, straal: 2, vel: 'wim' },
+    marskramer: { naam: 'de marskramer', snelheid: 1.4, straal: 2 },
 
     // De heer en zijn soldaten (js/heer.js): ze komen op Sint-Maarten over de weg, en niet op een
     // kaart. Sinds 24 sep hebben ze hun eigen vellen, in rood en geel, het huis van de heer

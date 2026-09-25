@@ -51,7 +51,10 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   bouwt er een uit onderdelen), en de plekken: kapel, kerkhof, watermolen, bakkerij, kruidenhut,
   jagershut, het huis van de dorpsoudste, het bruggetje en de vijver.
 - `dorpelingen.cjs`, `dorpelingen2.cjs` en `dorpelingen3.cjs`: negentien dorpelingen, van de smid
-  tot de kleuter, plus `dorpeling(zaad)` die uit elk zaad een andere gewone dorpeling maakt.
+  tot de kleuter, plus `dorpeling(zaad)` die uit elk zaad een andere gewone dorpeling maakt. De
+  marskramer daarin kan staan en lopen, met zijn rek op de rug en zijn stok als derde voet
+  (`node dorpelingen-anim.cjs marskramer`, dat ook de proefplaat `uit/dorpelingen/marskramer-proef.png`
+  maakt, daarna `node naar-spel.cjs --alleen marskramer`).
 - `heer.cjs`: het huis van de heer, in rood en geel: de heer, de soldaat en de inner, met staan en
   lopen (`node dorpelingen-anim.cjs heer soldaat inner`, daarna
   `node naar-spel.cjs --alleen heer,soldaat,inner`).

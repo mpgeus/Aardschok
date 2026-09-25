@@ -210,6 +210,9 @@ const FIGUURLIJST = {
   heer: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' },
   soldaat: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' },
   inner: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' },
+  // De marskramer (dorpelingen3.cjs, ontwerp/beeld.md "De marskramer loopt"): hij komt drie keer per
+  // jaar over de weg (js/handel.js) en staat in T.MENSEN onder dezelfde naam als hier.
+  marskramer: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs marskramer' },
   // Een gezicht per karakter (karakters.cjs, ontwerp/beeld.md): een boer met zijn karakter, op het
   // lijf van de boer of de boerin. js/sprites.js kiest <vel>-<karakter> als dat vel er is, en anders
   // het gewone boer- of boerinvel. Ronde 1: de vijf van de vaste verdeling; ronde 2: de andere vijf.

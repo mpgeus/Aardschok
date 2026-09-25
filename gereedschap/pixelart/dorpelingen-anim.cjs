@@ -19,6 +19,8 @@
 //                                                    boer en boerin, op 1× (karakters.cjs)
 //   uit/dorpelingen/karakters-ronde2.png            de tien van ronde 2, net zo
 //   uit/dorpelingen/karakters-alle.png              alle achttien op een rij, staand in ZO
+//   uit/dorpelingen/marskramer-proef.png            de marskramer naast de boer, in Z, ZO en NW,
+//                                                    staand en vier loopbeelden, op 1×
 //
 //   node gereedschap/pixelart/dorpelingen-anim.cjs                      (alle figuren)
 //   node gereedschap/pixelart/dorpelingen-anim.cjs heer soldaat inner   (alleen deze)
@@ -34,7 +36,7 @@ const {
   boer, BOER_SNELHEID, BOER_FPS,
   dorpsoudste, DORPSOUDSTE_SNELHEID, DORPSOUDSTE_FPS,
 } = require('./dorpelingen.cjs');
-const { dorpeling, DORPELING_SNELHEID } = require('./dorpelingen3.cjs');
+const { dorpeling, DORPELING_SNELHEID, marskramer, MARSKRAMER_SNELHEID, MARSKRAMER_FPS } = require('./dorpelingen3.cjs');
 const {
   jongen, JONGEN_SNELHEID, JONGEN_FPS,
   meisje, MEISJE_SNELHEID, MEISJE_FPS,
@@ -89,6 +91,9 @@ const FIGUREN = [
   { naam: 'heer', snelheid: HEER_SNELHEID, fps: HEER_FPS, maak: (stand) => heer(stand) },
   { naam: 'soldaat', snelheid: SOLDAAT_SNELHEID, fps: SOLDAAT_FPS, maak: (stand) => soldaat(stand) },
   { naam: 'inner', snelheid: INNER_SNELHEID, fps: INNER_FPS, maak: (stand) => inner(stand) },
+  // de marskramer (dorpelingen3.cjs, ontwerp/beeld.md "De marskramer loopt", 25 sep 2026): hij komt
+  // drie keer per jaar met zijn rek over de weg (js/handel.js); de snelheid is die van T.MENSEN
+  { naam: 'marskramer', snelheid: MARSKRAMER_SNELHEID, fps: MARSKRAMER_FPS, maak: (stand) => marskramer(stand) },
   // Een gezicht per karakter (karakters.cjs, ontwerp/beeld.md, 25 sep 2026): een boer met zijn
   // karakter, op het lijf van de boer of van de boerin, met de snelheid en fps van dat lijf (een
   // boer loopt even hard, welk karakter hij ook loot). Ronde 1: de vijf van de vaste verdeling.
@@ -358,6 +363,60 @@ function proefplaatHuis() {
   console.log(`huis-van-de-heer.png: ${vel.b * schaal}×${vel.h * schaal} (schaal ${schaal})`);
 }
 if (HUIS.every((n) => gerendered[n])) proefplaatHuis();
+
+// ---------------------------------------------------------------- de marskramer: proefplaat
+
+// De marskramer (dorpelingen3.cjs, ontwerp/beeld.md "De marskramer loopt") naast de gewone boer, voor
+// de maat. Een rij per kant: Z, ZO en NW (van achteren, voor het rek). Per rij de boer staand, de
+// marskramer staand, en vier van zijn acht loopbeelden (0, 2, 4, 6: de hele pas, met de stok als
+// derde voet). Elke kolom zo breed als wat erin staat, elke rij zo hoog als wat erin staat, met
+// binnen een rij één voetlijn; op 1× zoals in het spel (hooguit 800×300). Alleen als de marskramer
+// in deze ronde meeging; de boer rendert hier zelf als hij niet meeging.
+function proefplaatMarskramer() {
+  const KANTEN_M = ['Z', 'ZO', 'NW'];
+  const mk = gerendered.marskramer;
+  const boerStaan = (kant) =>
+    gerendered.boer ? gerendered.boer.staan[kant][0] : K.losRenderen(boer({ houding: 'staan', fase: 0 }), { b: CEL, h: HOOG, anker: ANKER, richting: kant });
+  const bronnen = [boerStaan, (kant) => mk.staan[kant][0], ...[0, 2, 4, 6].map((i) => (kant) => mk.lopen[kant][i])];
+  // per kolom de beelden van alle rijen en hoe breed wat erin staat; per rij hoe hoog
+  const rijen = KANTEN_M.map(() => ({ y0: HOOG, y1: -1 }));
+  const kolommen = bronnen.map((bron) => {
+    const kol = { platen: KANTEN_M.map(bron), x0: CEL, x1: -1 };
+    kol.platen.forEach((p, r) => {
+      const k = kader(p);
+      if (k.x1 < 0) return;
+      kol.x0 = Math.min(kol.x0, k.x0);
+      kol.x1 = Math.max(kol.x1, k.x1);
+      rijen[r].y0 = Math.min(rijen[r].y0, k.y0);
+      rijen[r].y1 = Math.max(rijen[r].y1, k.y1);
+    });
+    kol.x0 = Math.max(0, kol.x0 - 2);
+    kol.breed = Math.min(CEL - kol.x0, kol.x1 + 2 - kol.x0 + 1);
+    return kol;
+  });
+  for (const rij of rijen) {
+    rij.y0 = Math.max(0, rij.y0 - 2);
+    rij.hoog = Math.min(HOOG - rij.y0, rij.y1 + 2 - rij.y0 + 1);
+  }
+  const GAT = 8; // na de boer en na de staande marskramer
+  const RIJGAT_M = 4;
+  const breed = kolommen.reduce((som, kol) => som + kol.breed, 0) + 2 * GAT;
+  const plaatHoog = rijen.reduce((som, rij) => som + rij.hoog, 0) + (rijen.length - 1) * RIJGAT_M;
+  const vel = new K.Plaat(breed, plaatHoog);
+  let y = 0;
+  rijen.forEach((rij, r) => {
+    let x = 0;
+    kolommen.forEach((kol, n) => {
+      vel.plak(kol.platen[r].uitsnede(kol.x0, rij.y0, kol.breed, rij.hoog), x, y);
+      x += kol.breed + (n < 2 ? GAT : 0);
+    });
+    y += rij.hoog + RIJGAT_M;
+  });
+  if (breed > 800 || plaatHoog > 300) console.log(`  let op: marskramer-proef.png is ${breed}×${plaatHoog}, groter dan 800×300`);
+  fs.writeFileSync(path.join(UIT, 'marskramer-proef.png'), K.png(vel, 1, '#5e6a44'));
+  console.log(`marskramer-proef.png: ${breed}×${plaatHoog} (schaal 1)`);
+}
+if (gerendered.marskramer) proefplaatMarskramer();
 
 // ---------------------------------------------------------------- een gezicht per karakter: proefplaten
 

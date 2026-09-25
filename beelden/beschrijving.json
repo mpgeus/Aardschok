@@ -1221,6 +1221,44 @@
     }
    }
   },
+  "marskramer": {
+   "naam": "marskramer",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "marskramer-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "marskramer-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56
+    }
+   }
+  },
   "boer-zanger": {
    "naam": "boer-zanger",
    "cel": [
