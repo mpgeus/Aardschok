@@ -473,6 +473,23 @@ Nog niet goed:
 - het rode gezicht van het heethoofd is het hele hoofd, en dat kan op een masker lijken;
 - het gezicht van de woekeraar valt donker onder zijn hoedrand.
 
+**Ronde 2 gemaakt (25 sep 2026):** tien vellen, van `boer-vrome` tot `boerin-drinker`. Daarmee
+heeft elk karakter een eigen vel, achttien in totaal. De proefplaten zijn
+`uit/dorpelingen/karakters-ronde2.png` en `karakters-alle.png`: alle achttien naast elkaar, en ze
+zijn van elkaar te onderscheiden. Wat erbij gekozen werd, buiten de tabel:
+- de vrome houdt de handen gevouwen, met een koperen kruisje aan de rozenkrans. De boer draagt een
+  grijze kap met een schoudermanteltje;
+- de roddelaar draagt een omslagdoek, geruit geel en paars, en houdt een hand bij de mond;
+- de oudste loopt wat krom (13°), met een geschilde stok die als een derde voet meeloopt. De boer is
+  kaal, met grijze plukken en een baard; de boerin draagt een donkere doek;
+- de nieuwkomer draagt een gele zoom met een rode zigzag, en de boer een scheve blauwe baret; de
+  banden van de bundel zijn op de borst geknoopt;
+- de drinker heeft alleen een rode neus, geen rood gezicht zoals het heethoofd, en een hand op
+  zijn buik.
+
+De nek van de oudste zit lager (47 en 48 px, tegen 51 bij de rest), omdat zijn lijf krom is. Het
+halsijzer zit bij alle achttien onder de kin.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

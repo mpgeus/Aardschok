@@ -68,10 +68,7 @@ komen, `Toren.debug.inner()` de inner (`(true)`: onverwacht terug), `Toren.debug
 zijn argwaan, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
 bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
 
-**Loopt nu:** ronde 2 van "een gezicht per karakter" (Marcel, 25 sep: "Ja, start ronde 2";
-`beeld.md`). Een agent maakt de vrome, de roddelaar, de oudste, de nieuwkomer en de drinker, op
-het lijf van de boer en de boerin (tien vellen), op dezelfde manier als ronde 1: een regel per
-karakter in de tabel in `gereedschap/pixelart/karakters.cjs`, en de hulpjes die er al staan.
+**Loopt nu:** niets. Er draait geen agent.
 
 **Volgende stap: punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud,
 die de inner niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de
@@ -234,10 +231,9 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
-- 25 sep 2026 — **Een gezicht per karakter, ronde 1.** De zanger, de weduwe, de woekeraar, de
-  vroedvrouw en het heethoofd zie je nu van ver, op het lijf van de boer en de boerin (acht
-  vellen, `gereedschap/pixelart/karakters.cjs`, `beeld.md`). Een karakter zonder eigen vel blijft
-  de gewone boer of boerin.
+- 25 sep 2026 — **Een gezicht per karakter.** Alle tien karakters zie je van ver, op het lijf van
+  de boer en van de boerin: achttien vellen, in twee rondes (`gereedschap/pixelart/karakters.cjs`,
+  `beeld.md`).
 - 24 sep 2026 — **De schandpaal.** Een eiken paal met een halsijzer en het wapen van de heer. Hij komt
   er de eerste keer dat de heer iemand straft en blijft staan; wie gestraft wordt, staat ervoor met
   de halsband om (`js/heer.js`, `gereedschap/pixelart/schandpaal.cjs`, `beeld.md`).

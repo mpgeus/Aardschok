@@ -67,7 +67,16 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   - het rode gezicht van het heethoofd is zijn hele hoofd, en dat kan op een masker lijken;
   - van voren zie je van de luit van de zanger alleen de kop;
   - het gezicht van de woekeraar valt donker onder zijn hoedrand.
-- Ronde 2: nog aan de gang.
+- Ronde 2:
+  - van voren zie je van de bundel van de nieuwkomer alleen de banden en de knoop;
+  - het grijze haar van de oude boerin leest als een lichte band onder haar donkere doek, dus het
+    kromme lijf en de stok moeten het doen;
+  - de kralen van de rozenkrans zie je op 1× niet, alleen de gevouwen handen en het kruisje;
+  - de drinker-boerin heeft de kleuren van de gewone boerin; alleen haar buik, de kroes en een
+    kleine rode neus onderscheiden haar;
+  - de hand bij de mond van de roddelaar is op 1× klein;
+  - de stok van de oudste zet een kortere pas dan een voet, anders stak hij in één richting
+    (ZW) buiten de cel.
 
 **Nog te tekenen:**
 - braakland met onkruid (nu kale geploegde grond);
