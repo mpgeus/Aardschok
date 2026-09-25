@@ -397,8 +397,10 @@ const betekenis = {
   proef: true,
   uitleg: 'De betekenis van kaarten/gehucht.tmj: de schout, de vijf boeren en hun akkers. Zie ontwerp/kaarten.md, "Tiled tekent alleen nog de grond". "proef": true omdat dit gehucht nog aan geen andere kaart vasthangt (ontwerp/werklijst.md); zodra er een echte aansluiting naar "wereld" komt, mag dat weer weg.',
   // Een klein beginvoorraadje, zodat er meteen iets te bouwen valt (js/gebouwen.js, T.plaatsGebouw
-  // via het bouwmenu) zonder eerst te hoeven wachten op de eerste opbrengst.
-  beginVoorraad: { hout: 40, goud: 20, graan: 60 },
+  // via het bouwmenu) zonder eerst te hoeven wachten op de eerste opbrengst. Het hooi is wat er van
+  // vorige winter over is: het spel begint op 1 lentemaand, en dan eet het vee nog een maand hooi
+  // (js/vee.js, T.voerHooi): drie koeien, dertig dagen.
+  beginVoorraad: { hout: 40, goud: 20, graan: 60, hooi: 100 },
   // Waar de marskramer zijn waar uitstalt (js/handel.js): op de brink, tussen de put en de eik. Hij
   // komt over de weg binnen (de uitgang hieronder) en gaat daar ook weer heen.
   marskramer: { x: 24, y: 18 },

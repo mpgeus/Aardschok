@@ -268,35 +268,99 @@
   }
   T.akkerOnbeslistTegels = onbeslistTegels; // ook voor test/akkers.test.cjs
 
+  // ── Het hooi (de weides, stap 2; Marcel, 25 sep: "het hooi komt van de hele weide") ──
+  //
+  // In hooimaand maait de boer zijn weide, zoals hij in oogstmaand zijn graan maait: tegel voor
+  // tegel, en eerst het hooi, dan het graan (dat is in hooimaand al rijp, maar hooi gaat voor; zo
+  // ging het ook). Elke gemaaide tegel geeft T.VEE_INSTELLINGEN.hooiPerTegel hooi, maal wat de boer
+  // kan (zijn opbrengst, js/boeren.js). Wat er op de eerste dag daarna nog staat, halen de boeren in
+  // één keer binnen (T.haalHooiBinnen), net als het graan. Het vee eet het 's winters (js/vee.js,
+  // T.voerHooi). Zonder winterzorg (een optie in de spelregels) is er geen hooi nodig, en maait
+  // niemand het.
+  const VEE_IN = () => T.VEE_INSTELLINGEN || null;
+  const hooien = () => !!(VEE_IN() && VEE_IN().winterzorg);
+  const hooiMaand = () => maandIdx(VEE_IN() ? VEE_IN().hooien : 'hooimaand');
+  // Is het vandaag hooitijd (de hele maand van het hooien)?
+  T.isHooitijd = (datum) => hooien() && datum.maand === hooiMaand();
+  // Wat één gemaaide tegel weide aan hooi oplevert, met deze boer.
+  T.hooiPerTegel = (veld, boer) => (VEE_IN() ? VEE_IN().hooiPerTegel : 0) * factor(boer, 'opbrengst');
+
+  // De tegels van een weide die dit jaar nog gehooid moeten worden. Een akker of braak heeft er geen.
+  function hooiTegels(veld) {
+    const open = [];
+    if (T.bestemmingVan(veld) !== 'weide') return open;
+    for (const t of T.akkerTegels(veld)) if (!veld.gehooid || !veld.gehooid.has(sleutel(t.x, t.y))) open.push(t);
+    return open;
+  }
+  T.weideHooiTegels = hooiTegels; // ook voor test/hooi.test.cjs
+
+  // De tegel die deze boer nu gaat maaien: in hooitijd eerst de dichtstbijzijnde tegel hooi op een
+  // van zijn weides, waar geen koe staat (die gaat niet opzij voor een zeis); anders, of als al zijn
+  // hooi gemaaid is, de dichtstbijzijnde tegel graan. { x, y, akker, hooi } of null.
+  function maaiDoel(w, e, hooitijd, graantijd) {
+    const van = { x: e.tx, y: e.ty };
+    let doel = null;
+    let beste = Infinity;
+    const kijk = (a, tegels, hooi) => {
+      for (const t of tegels) {
+        if (hooi && T.wezenOp(w, t.x, t.y, e)) continue;
+        const d = T.afstand(van, t);
+        if (d < beste) {
+          beste = d;
+          doel = { x: t.x, y: t.y, akker: a, hooi };
+        }
+      }
+    };
+    if (hooitijd) for (const a of e.werkAkkers) kijk(a, hooiTegels(a), true);
+    if (!doel && graantijd) for (const a of e.werkAkkers) kijk(a, onbeslistTegels(a), false);
+    return doel;
+  }
+
   // Eén stap oogsten, voor elke boer met een akker. Vóór T.laatDwalen aanroepen (js/main.js): wie
   // hier een pad krijgt of aan het maaien is, slaat T.laatDwalen dan vanzelf over (dezelfde
   // voorwaarde `m.pad.length`, plus `m.maait` — zie de aanpassing in js/verkennen.js).
   //
-  // Buiten "rijp" gebeurt hier niets (T.wandelAnker regelt dan het gewone dwalen). Wat er na de
-  // oogsttijd nog staat, halen de boeren in één keer binnen (T.haalOogstBinnen, op de dag zelf via
-  // T.tikAkkersDag); het maaien hier stopt dan vanzelf.
+  // Buiten "rijp" en buiten hooitijd gebeurt hier niets (T.wandelAnker regelt dan het gewone
+  // dwalen). Wat er na de oogsttijd nog staat, halen de boeren in één keer binnen
+  // (T.haalOogstBinnen, op de dag zelf via T.tikAkkersDag); het maaien hier stopt dan vanzelf. Met
+  // het hooi gaat het net zo (T.haalHooiBinnen).
   //
   // Een boer maait al zijn akkers, steeds de tegel die het dichtstbij staat. Tot 24 sep maaide hij
   // alleen de eerste (e.werkAkkers[0]), en rotte het stuk onder de es van boer 1 en boer 3 op het
-  // veld: 55 van de 209 tegels.
+  // veld: 55 van de 209 tegels. In hooitijd maait hij eerst het hooi (maaiDoel hierboven).
   T.werkOogstBij = function (S, dt) {
     const w = S.wereld;
     if (!w.akkers || !w.akkers.length) return;
     const datum = T.datumVanDag(S.kalender.dag);
     const basis = T.akkerStadium(datum.maand, datum.dagVanMaand);
+    const hooitijd = T.isHooitijd(datum);
     for (const e of w.wezens) {
       if (e.dood || !e.werkAkkers || !e.werkAkkers.length) continue;
-      for (const a of e.werkAkkers) if (!a.geoogst) a.geoogst = new Set();
-      if (basis !== 'rijp') {
-        if (basis === 'geploegd') for (const a of e.werkAkkers) a.geoogst.clear(); // nieuw jaar, weer vers
+      for (const a of e.werkAkkers) {
+        if (!a.geoogst) a.geoogst = new Set();
+        if (!a.gehooid) a.gehooid = new Set();
+      }
+      if (basis !== 'rijp' && !hooitijd) {
+        if (basis === 'geploegd') {
+          for (const a of e.werkAkkers) {
+            a.geoogst.clear(); // nieuw jaar, weer vers
+            a.gehooid.clear();
+          }
+        }
         e.maait = null;
         e.oogstDoel = null;
         continue;
       }
       if (e.maait) {
         if (S.tijd >= e.maait.tot) {
-          e.maait.akker.geoogst.add(sleutel(e.maait.x, e.maait.y));
-          if (S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'graan', T.oogstPerTegel(e.maait.akker, e));
+          const a = e.maait.akker;
+          if (e.maait.hooi) {
+            a.gehooid.add(sleutel(e.maait.x, e.maait.y));
+            if (S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'hooi', T.hooiPerTegel(a, e));
+          } else {
+            a.geoogst.add(sleutel(e.maait.x, e.maait.y));
+            if (S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'graan', T.oogstPerTegel(a, e));
+          }
           e.maait = null;
           e.oogstDoel = null;
         }
@@ -304,20 +368,11 @@
       }
       if (e.pad && e.pad.length) continue; // onderweg naar zijn doel
       if (e.oogstDoel && e.tx === e.oogstDoel.x && e.ty === e.oogstDoel.y) {
-        e.maait = { x: e.tx, y: e.ty, tot: S.tijd + T.OOGST_TEGEL_DUUR * factor(e, 'maaien'), akker: e.oogstDoel.akker };
+        const d = e.oogstDoel;
+        e.maait = { x: e.tx, y: e.ty, tot: S.tijd + T.OOGST_TEGEL_DUUR * factor(e, 'maaien'), akker: d.akker, hooi: !!d.hooi };
         continue;
       }
-      let doel = null;
-      let beste = Infinity;
-      for (const a of e.werkAkkers) {
-        for (const t of onbeslistTegels(a)) {
-          const d = T.afstand({ x: e.tx, y: e.ty }, t);
-          if (d < beste) {
-            beste = d;
-            doel = { x: t.x, y: t.y, akker: a };
-          }
-        }
-      }
+      const doel = maaiDoel(w, e, hooitijd, basis === 'rijp');
       if (!doel) {
         e.oogstDoel = null;
         continue;
@@ -328,7 +383,7 @@
       // dwaalde. De proef van de weides (drie jaar zonder dwalen) liep daardoor twee oogsten mis.
       if (doel.x === e.tx && doel.y === e.ty) {
         e.oogstDoel = doel;
-        e.maait = { x: e.tx, y: e.ty, tot: S.tijd + T.OOGST_TEGEL_DUUR * factor(e, 'maaien'), akker: doel.akker };
+        e.maait = { x: e.tx, y: e.ty, tot: S.tijd + T.OOGST_TEGEL_DUUR * factor(e, 'maaien'), akker: doel.akker, hooi: doel.hooi };
         continue;
       }
       const pad = T.zoekPad(
@@ -388,6 +443,45 @@
     return tegels;
   };
 
+  // Het vangnet voor het hooi, op de eerste dag na hooitijd: wat er op een weide met een boer nog
+  // staat, maaien de boeren alsnog in één keer. Zo bepaalt de snelheid van het spel ook hier alleen
+  // wánneer het hooi binnenkomt, niet hoeveel. Geeft het aantal tegels terug.
+  T.haalHooiBinnen = function (S) {
+    const w = S.wereld;
+    if (!w || !w.akkers) return 0;
+    let tegels = 0;
+    let hooi = 0;
+    for (const veld of w.akkers) {
+      const boer = boerVan(w, veld);
+      if (!boer) continue;
+      if (!veld.gehooid) veld.gehooid = new Set();
+      for (const t of hooiTegels(veld)) {
+        veld.gehooid.add(sleutel(t.x, t.y));
+        tegels++;
+        hooi += T.hooiPerTegel(veld, boer);
+      }
+    }
+    for (const e of w.wezens || []) if (e.maait && e.maait.hooi) e.maait = e.oogstDoel = null;
+    if (tegels && S.voorraad && T.wijzigVoorraad) {
+      T.wijzigVoorraad(S, 'hooi', hooi);
+      if (T.ui && T.ui.bericht) T.ui.bericht(`De boeren halen de rest van het hooi binnen: ${Math.round(hooi)} hooi.`, 'goed');
+    }
+    return tegels;
+  };
+
+  // Hoeveel hooi de weides dit jaar nog geven, als alles wat er staat gemaaid wordt: voor het venster
+  // van de velden en het slachten (js/hud.js). Een weide zonder boer geeft niets.
+  T.verwachtHooi = function (S) {
+    const w = S.wereld;
+    if (!w || !w.akkers || !hooien()) return 0;
+    let hooi = 0;
+    for (const veld of w.akkers) {
+      const boer = boerVan(w, veld);
+      if (boer) hooi += hooiTegels(veld).length * T.hooiPerTegel(veld, boer);
+    }
+    return hooi;
+  };
+
   // Zaaien (Marcel, 24 sep: "zaaigoed telt"; ontwerp/spel.md, "Sint-Maarten"): elke akkertegel
   // kost T.ZAAIGRAAN_PER_TEGEL graan uit de voorraad. Wat je de heer gaf, kun je dus niet meer
   // zaaien. Is er te weinig, dan wordt er gezaaid wat kan, naar rato verdeeld over alle akkers
@@ -398,10 +492,11 @@
   T.zaaiAkkers = function (S) {
     const w = S.wereld;
     if (!w || !w.akkers || !w.akkers.length) return null;
-    // Een nieuw jaar, voor elk veld: de oogst van vorig jaar is vergeten.
+    // Een nieuw jaar, voor elk veld: de oogst en het hooi van vorig jaar zijn vergeten.
     for (const a of w.akkers) {
       a.ongezaaid = new Set();
       if (a.geoogst) a.geoogst.clear();
+      if (a.gehooid) a.gehooid.clear();
     }
     const akkers = w.akkers.filter(isAkker);
     // Wat een tegel aan zaaigraan kost, per akker: een zuinige boer zaait met minder, een kwistige
@@ -460,5 +555,13 @@
       T.zaaiAkkers(S);
     }
     if (nu === stadiumBegin('gemaaid')) T.haalOogstBinnen(S);
+    // Het hooi: op de eerste dag van hooitijd een woord vooraf, en op de eerste dag erna het vangnet.
+    if (hooien() && d.dagVanMaand === 1) {
+      const weides = w.akkers.some((v) => T.bestemmingVan(v) === 'weide');
+      if (d.maand === hooiMaand() && weides && T.ui && T.ui.bericht) {
+        T.ui.bericht(`Het is ${T.MAANDEN[d.maand].naam}: de boeren maaien eerst het hooi van de weides, en dan het graan.`);
+      }
+      if (d.maand === (hooiMaand() + 1) % 12) T.haalHooiBinnen(S);
+    }
   };
 })(globalThis.Toren = globalThis.Toren || {});

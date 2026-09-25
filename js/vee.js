@@ -45,6 +45,30 @@
     kansOpJong: { koe: 0.5, schaap: 0.7 },
     // Waar het gehucht mee begint, op de weide(s) die de kaart noemt (T.zetBeginKudde).
     beginKudde: { koe: 3, schaap: 8 },
+
+    // ── De winter (stap 2; spel.md, "Het hooi beslist hoeveel land een koe kost") ──
+    // Of het vee 's winters hooi nodig heeft: een optie in de spelregels ("Winterzorg"). Uit: er is
+    // geen hooi om te maaien of te voeren, er komt geen honger, en een koe kost weer alleen haar
+    // plaats op de weide, zoals in stap 1.
+    winterzorg: true,
+    // In deze maand maaien de boeren het hooi van de weides (js/akkers.js, T.werkOogstBij).
+    hooien: 'hooimaand',
+    // Wat één gemaaide tegel weide aan hooi geeft. Eén hooi is wat een koe op één winterdag eet. Een
+    // winter (hieronder) duurt 150 dagen, en een koe heeft daarvoor het hooi van zo'n 12 tegels nodig:
+    // 150 / 12 = 12,5. De weide van Klaas (30 tegels) brengt zo twee à drie koeien de winter door.
+    hooiPerTegel: 12.5,
+    // De maanden waarin het vee niet graast maar hooi eet: van slachtmaand tot en met lentemaand. In
+    // grasmaand staat het gras er weer.
+    winter: { van: 'slachtmaand', tot: 'lentemaand' },
+    // Wat een dier op een winterdag eet. Een schaap eet 's winters heide (Marcel, 25 sep), dus niets;
+    // de optie "Schapen eten ook hooi" zet het op 0,2. Een jong (nog geen jaar oud) eet de helft.
+    hooiPerDag: { koe: 1, schaap: 0 },
+    jongEet: 0.5,
+    // Zoveel dagen zonder genoeg hooi houdt een dier het vol; dan sterft het. Wie weer genoeg eet,
+    // knapt per dag een dag op.
+    hongerDagen: 10,
+    // Hoeveel dagen vooraf het dorp zegt dat het hooi opraakt.
+    hooiWaarschuwing: 15,
   };
   const IN = () => T.VEE_INSTELLINGEN;
 
@@ -601,12 +625,131 @@
   // (js/gebouwen.js, S.gebouwen).
   T.kooiPlaats = (S) => ((S && S.gebouwen) || []).filter((g) => g.soort === 'schaapskooi' && g.klaar).length * IN().kooiPlaats;
 
+  // ── De winter: hooi (stap 2) ──
+  //
+  // Van slachtmaand tot en met lentemaand graast het vee niet, maar eet het hooi, dat de boeren in
+  // hooimaand van de weides maaiden (js/akkers.js). Zo beslist het hooi hoeveel vee je houdt, en
+  // niet het gras in de zomer (Marcel, 25 sep: "het hooi beslist hoeveel land een koe kost"). Wat het
+  // hooi niet de winter door helpt, slacht je op 1 slachtmaand (T.slacht hieronder), of het sterft.
+
+  // Is het vandaag winter voor het vee?
+  function winterTijd(dag) {
+    const m = T.datumVanDag(dag).maand;
+    const van = maandIdx(IN().winter.van);
+    const tot = maandIdx(IN().winter.tot);
+    return van <= tot ? m >= van && m <= tot : m >= van || m <= tot;
+  }
+  T.isVeeWinter = winterTijd;
+
+  // Wat dit dier op een winterdag aan hooi eet: een jong de helft, en niets zonder winterzorg.
+  T.hooiVanDier = (e, dag) => (IN().winterzorg ? (IN().hooiPerDag[e.dier] || 0) * (volwassen(e, dag) ? 1 : IN().jongEet) : 0);
+  // Wat deze dieren (standaard de hele kudde) samen op één winterdag eten.
+  T.hooiPerWinterdag = (S, dag, dieren) => (dieren || T.veeVan(S)).reduce((n, e) => n + T.hooiVanDier(e, dag), 0);
+
+  // Hoe lang een hele winter duurt, in dagen (150: van slachtmaand tot en met lentemaand).
+  T.winterLengte = function () {
+    const van = maandIdx(IN().winter.van);
+    const tot = maandIdx(IN().winter.tot);
+    return (((tot - van + 12) % 12) + 1) * T.DAGEN_PER_MAAND;
+  };
+
+  // Hoeveel winterdagen er vanaf `dag` (die meegeteld) nog komen voordat het vee weer graast. Is het
+  // nu geen winter, dan de hele volgende winter.
+  T.winterDagen = function (dag) {
+    let d = Math.floor(dag);
+    for (let n = 0; n < T.DAGEN_PER_JAAR && !winterTijd(d); n++) d++;
+    let dagen = 0;
+    while (winterTijd(d) && dagen < T.DAGEN_PER_JAAR) {
+      dagen++;
+      d++;
+    }
+    return dagen;
+  };
+
+  // Het oudste eerst: de beginkudde (zonder geboortedag), dan wie het eerst geboren is. Bij hetzelfde
+  // de volgorde van het zaad, zodat het vast is.
+  const geborenOp = (e) => (e.geboren == null ? -1e9 : e.geboren);
+  const oudsteEerst = (a, b) => geborenOp(a) - geborenOp(b) || (Math.floor(a.zaad) || 0) - (Math.floor(b.zaad) || 0);
+
+  // Hoe een dier heet: een jong is een kalf of een lam.
+  const naamVan = (e, dag, n) => {
+    const v = T.VEE[e.dier];
+    const jong = !volwassen(e, dag);
+    return n === 1 ? (jong ? v.jong : v.naam) : jong ? v.jongen : v.meervoud;
+  };
+  // "een koe en twee kalveren": dieren geteld, met jongen apart.
+  function dierenTekst(dieren, dag) {
+    const delen = [];
+    for (const soort of Object.keys(T.VEE)) {
+      for (const jong of [false, true]) {
+        const hier = dieren.filter((e) => e.dier === soort && !volwassen(e, dag) === jong);
+        if (hier.length) delen.push(`${hier.length === 1 ? 'een' : hier.length} ${naamVan(hier[0], dag, hier.length)}`);
+      }
+    }
+    return delen.length < 2 ? delen.join('') : `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}`;
+  }
+  T.dierenTekst = dierenTekst;
+
+  // Een dier uit de wereld halen: geslacht, of gestorven.
+  function haalWeg(S, e) {
+    const w = S.wereld;
+    const i = w.wezens.indexOf(e);
+    if (i >= 0) w.wezens.splice(i, 1);
+    e.dood = true;
+  }
+
+  // Eén winterdag (T.tikVeeDag): het vee eet hooi uit de voorraad, het oudste eerst (de kern van de
+  // kudde; het jongste eet als laatste). Wie niet genoeg krijgt, krijgt honger (e.honger, in dagen,
+  // naar hoeveel het tekortkwam); na IN().hongerDagen sterft het. Wie weer genoeg eet, knapt per dag
+  // een dag op. Raakt het hooi binnenkort op, dan zegt het dorp dat vooraf. Geeft
+  // { nodig, gegeten, gestorven }.
+  T.voerHooi = function (S, dag) {
+    const V = S.vee || (S.vee = T.nieuwVee());
+    const dieren = T.veeVan(S).filter((e) => T.hooiVanDier(e, dag) > 0).sort(oudsteEerst);
+    let hooi = (S.voorraad && S.voorraad.hooi) || 0;
+    const nodig = T.hooiPerWinterdag(S, dag, dieren);
+    let gegeten = 0;
+    const gestorven = [];
+    for (const e of dieren) {
+      const portie = T.hooiVanDier(e, dag);
+      const krijgt = Math.min(portie, hooi);
+      hooi -= krijgt;
+      gegeten += krijgt;
+      const tekort = 1 - krijgt / portie;
+      e.honger = tekort > 1e-9 ? (e.honger || 0) + tekort : Math.max(0, (e.honger || 0) - 1);
+      if (e.honger >= IN().hongerDagen - 1e-9) gestorven.push(e);
+    }
+    if (gegeten > 0 && S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'hooi', -gegeten);
+    for (const e of gestorven) haalWeg(S, e);
+    if (gestorven.length) {
+      const een = gestorven.length === 1;
+      bericht(`${T.hoofdletter(dierenTekst(gestorven, dag))} ${een ? 'is' : 'zijn'} van honger gestorven: het hooi was op.`, 'gevaar');
+    }
+    // Vooraf zeggen, één keer per winter: het hooi is binnenkort op, of nu al.
+    const over = nodig > 0 ? hooi / nodig : Infinity;
+    const winterNog = T.winterDagen(dag) - 1;
+    if (gegeten < nodig - 1e-9) {
+      if (!V.hongerGemeld) {
+        V.hongerGemeld = true;
+        bericht(`Het hooi is op. Het vee krijgt honger, en wie ${IN().hongerDagen} dagen tekortkomt, sterft. Slacht wat je niet kunt voeren.`, 'gevaar');
+      }
+    } else {
+      V.hongerGemeld = false;
+      if (over < winterNog && over <= IN().hooiWaarschuwing && !V.hooiGewaarschuwd) {
+        V.hooiGewaarschuwd = true;
+        bericht(`Het hooi is over ${Math.max(1, Math.floor(over))} dagen op, en de winter duurt nog ${winterNog} dagen.`, 'gevaar');
+      }
+    }
+    return { nodig, gegeten, gestorven };
+  };
+
   // ── Elke dag ──
 
   // Eén dag, vanuit T.tikGebouwenDag (js/gebouwen.js, stap 0): ná de akkers (op 1 lentemaand
   // verhuist daar het vee naar zijn nieuwe weide) en vóór de behoeften, want het dorp eet de melk
   // van vandaag als eerste (js/behoeften.js, T.eetVandaag). Op 1 grasmaand eerst de jongen, dan de
-  // melk. S.vee.melk is de melk van vandaag; wat er na het eten van over is, wordt kaas.
+  // melk. S.vee.melk is de melk van vandaag; wat er na het eten van over is, wordt kaas. In de
+  // winter eet het vee hooi (T.voerHooi).
   T.tikVeeDag = function (S, dag) {
     const V = S.vee || (S.vee = T.nieuwVee());
     V.melk = 0;
@@ -614,6 +757,8 @@
     const d = T.datumVanDag(dag);
     const werpen = IN().werpen;
     if (IN().groeit && d.maand === maandIdx(werpen.maand) && d.dagVanMaand === werpen.dag) T.werpJongen(S, dag);
+    if (IN().winterzorg && winterTijd(dag)) T.voerHooi(S, dag);
+    else V.hooiGewaarschuwd = V.hongerGemeld = false; // een nieuwe winter mag weer waarschuwen
     V.melk = T.melkVanDag(S, dag);
   };
 })(globalThis.Toren = globalThis.Toren || {});

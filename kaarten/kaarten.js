@@ -29210,7 +29210,8 @@
     "beginVoorraad": {
      "hout": 40,
      "goud": 20,
-     "graan": 60
+     "graan": 60,
+     "hooi": 100
     },
     "marskramer": {
      "x": 24,

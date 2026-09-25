@@ -65,9 +65,37 @@
     '<path d="M15 15l6-6v5l-6 6z" fill="#c9972f" stroke="#e2b64a" stroke-width="1.1" stroke-linejoin="round"/>' +
     '<circle cx="7.4" cy="15.3" r="1" fill="#c9972f"/><circle cx="11.4" cy="17.3" r="1.15" fill="#c9972f"/>' +
     '</svg>';
+  // Het vee in de winter (js/vee.js; spel.md, "Marcel koos voor stap 2"): een hooiopper zoals hij
+  // op de weide te drogen staat, een mesthoop uit de schaapskooi, een stuk vlees aan het bot, en een
+  // gespannen huid.
+  const HOOI_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M3.5 19.5c0-6.5 3.8-11.5 8.5-11.5s8.5 5 8.5 11.5z" fill="#c8b457" stroke="#e0cf7a" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<path d="M8 19c.4-3.5 1.6-6.5 3-8.3M12.5 19c0-3.4.4-6.3 1.2-8.2M16.5 19c-.2-2.8-1-5.2-2-7" fill="none" stroke="#9c8a3a" stroke-width="1" stroke-linecap="round"/>' +
+    '<path d="M12 8V3.5" stroke="#8a5a2c" stroke-width="1.5" stroke-linecap="round"/>' +
+    '</svg>';
+  const MEST_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M2.5 19.5c1.6-4.3 5.2-7 9.5-7s7.9 2.7 9.5 7z" fill="#6b4a2a" stroke="#8a6a44" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<path d="M7 17l2-1.2M13 16.6l2.2.6M10.5 18.6l1.8-.5" stroke="#c8b457" stroke-width="1" stroke-linecap="round"/>' +
+    '<path d="M9 10.5c-1-1.2 1-2 0-3.2M13 10c-1-1.2 1-2 0-3.2" fill="none" stroke="#9a8f80" stroke-width="1" stroke-linecap="round"/>' +
+    '</svg>';
+  const VLEES_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M8.6 13.2c-2.8-3-2-7.3 1.4-8.7 3.5-1.5 8.2.6 9.3 4.1 1 3.3-1.6 6.4-5.1 6.8-2.2.2-4.1-.6-5.6-2.2z" fill="#b8483a" stroke="#d9776a" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<path d="M13 9.5c1.5-.6 3-.2 3.8.8" fill="none" stroke="#efe6d6" stroke-width="1" stroke-linecap="round"/>' +
+    '<path d="M8.8 14.2l-4 4" stroke="#efe6d6" stroke-width="2.3" stroke-linecap="round"/>' +
+    '<circle cx="4.2" cy="17.6" r="1.4" fill="#efe6d6"/><circle cx="5.9" cy="19.6" r="1.4" fill="#efe6d6"/>' +
+    '</svg>';
+  const HUIDEN_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M5 4.5c2.3 1.2 4.5 1.2 7 0s4.7-1.2 7 0c-1.2 3.2-1.2 6.3 0 9.3s1.2 4 0 5.7c-2.3-1.2-4.5-1.2-7 0s-4.7 1.2-7 0c1.2-2.2 1.2-4.4 0-7.2s-1.2-5.4 0-7.8z" fill="#a0784a" stroke="#c89a5a" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<circle cx="10" cy="10" r="1.3" fill="#7d5a34"/><circle cx="14.5" cy="13.5" r="1.1" fill="#7d5a34"/><circle cx="11" cy="15.5" r="0.9" fill="#7d5a34"/>' +
+    '</svg>';
   const GRONDSTOF_ICOON = {
     goud: GOUD_ICOON, graan: GRAAN_ICOON, wol: WOL_ICOON, hout: HOUT_ICOON,
     ijzer: IJZER_ICOON, zout: ZOUT_ICOON, gereedschap: GEREEDSCHAP_ICOON, kaas: KAAS_ICOON,
+    hooi: HOOI_ICOON, mest: MEST_ICOON, vlees: VLEES_ICOON, huiden: HUIDEN_ICOON,
   };
   const GRONDSTOF_UITLEG = {
     goud: 'Goud. Wat de heer het liefst ziet.',
@@ -78,12 +106,18 @@
     zout: 'Zout. Van de marskramer: het houdt vis en vlees goed.',
     gereedschap: 'Gereedschap. Van de smidse: wie het heeft, werkt harder. Het slijt.',
     kaas: 'Kaas. Van de melk die het dorp niet dezelfde dag drinkt: kaas houdt goed, en wordt pas gegeten als het graan op is.',
+    hooi: 'Hooi. In hooimaand van de weides gemaaid: het vee eet het van slachtmaand tot en met lentemaand.',
+    mest: 'Mest. Uit de schaapskooi: leg hem in het veldenvenster (V) op een akker, dan wordt die vruchtbaarder.',
+    vlees: 'Vlees. Van het slachten: het dorp eet het erbij, en het bederft, tenzij je het zout.',
+    huiden: 'Huiden. Van het slachten.',
   };
   // Deze staan pas in de balk als het dorp ze eens gehad heeft (S.gehad, js/voorraad.js): in het
-  // begin blijft de balk kort. Kaas staat naast het graan, want allebei is het eten; de rest achteraan.
-  const BALK_LATER = ['kaas', 'ijzer', 'zout', 'gereedschap'];
-  const BALK = T.GRONDSTOFFEN.flatMap((wat) => (wat === 'graan' ? ['graan', 'kaas'] : [wat]))
-    .concat(BALK_LATER.filter((wat) => wat !== 'kaas'));
+  // begin blijft de balk kort. Kaas en hooi staan naast het graan, want het is allemaal eten, voor
+  // mens of dier; de rest achteraan.
+  const BALK_LATER = ['kaas', 'hooi', 'vlees', 'ijzer', 'zout', 'gereedschap', 'mest', 'huiden'];
+  const NAAST_GRAAN = ['kaas', 'hooi', 'vlees'];
+  const BALK = T.GRONDSTOFFEN.flatMap((wat) => (wat === 'graan' ? ['graan', ...NAAST_GRAAN] : [wat]))
+    .concat(BALK_LATER.filter((wat) => !NAAST_GRAAN.includes(wat)));
   // Het aantal mensen, en hoeveel woonruimte er is (js/gebouwen.js): dezelfde stijl als een
   // grondstof, maar met "/" in plaats van een los getal, dus geen eigen icoon uit GRONDSTOF_ICOON.
   const BEVOLKING_ICOON =
@@ -169,6 +203,29 @@
       const mensen = Math.round(melkNu / perMens);
       const melk = mensen > 0 ? ` De koeien geven nu elke dag melk voor ${mensen} mensen; wat het dorp niet drinkt, wordt kaas.` : '';
       box.querySelector('[data-wat="kaas"]').title = GRONDSTOF_UITLEG.kaas + voor + melk;
+    }
+    // Bij het hooi: hoe lang het de kudde van nu voedt (js/vee.js, T.hooiPerWinterdag), en hoeveel
+    // winter er nog is. Buiten de winter telt ook het hooi dat nog op de weides staat
+    // (js/akkers.js, T.verwachtHooi). Haalt het de winter niet, dan staat het getal in het rood.
+    if (T.hooiPerWinterdag && S.kalender) {
+      const cel = box.querySelector('[data-wat="hooi"]');
+      const dag = Math.floor(S.kalender.dag);
+      const perDag = T.hooiPerWinterdag(S, dag);
+      const winterNu = T.isVeeWinter(dag);
+      const nogTeMaaien = !winterNu && T.verwachtHooi ? T.verwachtHooi(S) : 0;
+      const hooi = (S.voorraad.hooi || 0) + nogTeMaaien;
+      const winter = T.winterDagen(dag);
+      const dagen = perDag > 0 ? Math.floor(hooi / perDag) : Infinity;
+      const perDagTekst = Math.round(perDag * 10) / 10;
+      let over = '';
+      if (perDag > 0) {
+        const erbij = nogTeMaaien >= 1 ? `, met wat er nog op de weides staat (zo'n ${Math.round(nogTeMaaien)})` : '';
+        over = winterNu
+          ? ` De kudde eet ${perDagTekst} per dag: genoeg voor ${dagen} dag${dagen === 1 ? '' : 'en'}, en de winter duurt nog ${winter} dagen.`
+          : ` De kudde van nu eet ${perDagTekst} per winterdag${erbij}: genoeg voor ${Math.min(dagen, winter)} van de ${winter} dagen winter.`;
+      }
+      cel.title = GRONDSTOF_UITLEG.hooi + over;
+      cel.classList.toggle('laag', dagen < winter);
     }
   };
 
@@ -722,6 +779,19 @@
     );
   }
 
+  // Het hooi van de weides van volgend jaar (js/vee.js, "De winter"), en hoeveel koeien dat de
+  // winter door helpt: dat, en niet het gras in de zomer, beslist hoeveel vee je houdt. Leeg zonder
+  // winterzorg.
+  function hooiVooruit(S, weides) {
+    const VI = T.VEE_INSTELLINGEN;
+    if (!VI || !VI.winterzorg || !T.winterLengte || !weides.length) return '';
+    const hooi = weides.reduce((n, v) => n + v.b * v.h, 0) * VI.hooiPerTegel;
+    const koeien = Math.floor(hooi / (T.winterLengte() * (VI.hooiPerDag.koe || 1)));
+    const nu = T.veeVan(S).filter((e) => e.dier === 'koe').length;
+    return ` Die ${weides.length === 1 ? 'weide geeft' : 'weides geven'} in ${VI.hooien} zo'n ${Math.round(hooi)} hooi: ` +
+      `genoeg voor ${koeien} ${koeien === 1 ? 'koe' : 'koeien'} de winter door (een kalf telt half), en je hebt er nu ${nu}.`;
+  }
+
   function veldenInhoud(S) {
     const velden = (S.wereld && S.wereld.akkers) || [];
     const IN = T.VELDEN_INSTELLINGEN;
@@ -742,7 +812,7 @@
     const volgend =
       `Volgend jaar: ${akkers.length} ${akkers.length === 1 ? 'akker' : 'akkers'} (${tegels} tegels: zaaien kost ${zaai} graan, en je hebt er nu ${hebNu(S, 'graan')}), ` +
       `${weides ? `${weides} ${weides === 1 ? 'weide' : 'weides'}` : 'geen weide'} en ` +
-      `${braak ? `${braak} ${braak === 1 ? 'veld' : 'velden'} braak` : 'geen braak'}.`;
+      `${braak ? `${braak} ${braak === 1 ? 'veld' : 'velden'} braak` : 'geen braak'}.` + hooiVooruit(S, tel('weide'));
     return (
       `<div class="venster-kop"><span class="venster-titel">De velden</span><span class="venster-wanneer">de wissel op ${wissel}${over}</span>` +
       `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +

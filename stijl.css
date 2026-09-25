@@ -395,6 +395,8 @@ kbd {
    (T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel). */
 #voorraadbalk .grondstof[data-wat="tevredenheid"] { padding-left: 13px; border-left: 1px solid var(--rand); }
 #voorraadbalk .grondstof[data-wat="tevredenheid"].laag .aantal { color: var(--rood); }
+/* Het hooi (js/vee.js), rood als het de kudde van nu niet de winter door helpt. */
+#voorraadbalk .grondstof[data-wat="hooi"].laag .aantal { color: var(--rood); }
 /* De argwaan van de inner (js/inner.js): rood vanaf de drempel waarop de soldaten gaan zoeken. */
 #voorraadbalk .grondstof[data-wat="argwaan"] { padding-left: 13px; border-left: 1px solid var(--rand); }
 #voorraadbalk .grondstof[data-wat="argwaan"].hoog .aantal { color: var(--rood); }
