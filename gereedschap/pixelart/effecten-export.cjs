@@ -1,6 +1,7 @@
-// De spreukeffecten (effecten.cjs) naar het spel: vellen in beelden/effecten/, en een
-// beschrijving als script (beelden/effecten/effecten.js) die index.html laadt, zodat het ook
-// vanaf file:// werkt. Om te bekijken komen er bewegende PNG's in uit/effecten/.
+// De spreukeffecten (effecten.cjs): vellen, een beschrijving als script (effecten.js), en om te
+// bekijken bewegende PNG's, allemaal in uit/effecten/. Tot 25 sep gingen de vellen en de
+// beschrijving naar beelden/effecten/ en laadde index.html ze; sinds de spreuken met het oude spel
+// uit het spel gingen, blijven ze hier buiten git, als model voor wie ooit weer een effect wil.
 //
 //   node gereedschap/pixelart/effecten-export.cjs
 //
@@ -21,7 +22,7 @@ const E = require('./effecten.cjs');
 const { apng } = require('./apng.cjs');
 
 const WORTEL = path.join(__dirname, '..', '..');
-const DOEL = path.join(WORTEL, 'beelden', 'effecten');
+const DOEL = path.join(__dirname, 'uit', 'effecten', 'spel');
 const UIT = path.join(__dirname, 'uit', 'effecten');
 fs.mkdirSync(DOEL, { recursive: true });
 fs.mkdirSync(UIT, { recursive: true });

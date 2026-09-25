@@ -165,7 +165,7 @@ nog nodig is".
      gehucht binnen over de weg, via de uitgang "De weg de wereld in" (een overgang naar 'wereld',
      `T.wegInEnUit`), en veel toetsen leggen zo'n overgang aan. Die weg moet blijven, ook als de kaart
      erachter weg is.
-   - **7d. De kunst die alleen het oude spel tekent** (de tovenaar, de toren, de spreukeffecten) uit
+   - **7d. De kunst die alleen het oude spel tekent** (af, 25 sep) (de tovenaar, de toren, de spreukeffecten) uit
      `beelden/`; de modellen in `gereedschap/pixelart/` blijven. Het vel van een gewone dorpeling
      blijft: de schout draagt het.
    - **7e. De namen om**, als laatste en in een eigen commit, zodat de rest leesbaar blijft:

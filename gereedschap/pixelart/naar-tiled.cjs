@@ -968,7 +968,8 @@ const velden = [
   wil('bomen') && bouwModelVel('bomen', BOMEN, BOMEN_VAST),
   wil('begroeiing') && bouwModelVel('begroeiing', BEGROEIING, (n) => !!BEGROEIING_VAST[n]),
   wil('gebouwen') && bouwGebouwenVel(),
-  wil('toren') && bouwErfVel('toren', Es.TOREN_TEGELS, 'De toren van de oude meester, zoals je hem erft. Zijn voet beslaat 3×3 tegels; zet hem neer op de tegel linksboven daarvan.'),
+  // Het vel van de toren (tegels/toren.png) ging op 25 sep weg met het oude spel: geen kaart
+  // gebruikte hem nog. Het model staat nog in toren.cjs, en het erf hieronder meet zich eraan.
   wil('erf') && bouwErfVel('erf', Es.ERF_TEGELS, 'Wat er op het erf van de toren staat: het schuurtje, de put, de houtstapel, de waslijn, de moestuin, de bank en de lantaarn. Zet ze neer op de tegel linksboven van hun voet ("beslaat"); kaarten/erf.tmj doet dat al vanzelf uit erf-scene.cjs.'),
   wil('tuin') && bouwTuinVel(),
 ].filter(Boolean);

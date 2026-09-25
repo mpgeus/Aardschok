@@ -146,11 +146,11 @@ test('een bosvijand uit Tiled is een gewoon wezen, met een figuur dat het spel k
 });
 
 test('elk wezen dat Marcel in Tiled kan neerzetten, heeft een figuur in beelden/', () => {
-  // De dorpelingen (het "zaad") vallen hier expres buiten: die hebben nog geen loopanimaties.
-  // Wie nog niet getekend is, mag een vel lenen (T.WEZENS, vel: 'wim'), zoals de bakker tot
-  // fase B2b — dan moet dát vel er wel zijn, anders staat er straks niets op de kaart.
+  // Wie nog niet getekend is, mag een vel lenen (vel: 'boer') — dan moet dát vel er wel zijn,
+  // anders staat er straks niets op de kaart. De held (de schout) draagt het vel van een gewone
+  // dorpeling (js/sprites.js); tot 25 sep was hij de tovenaar van het oude spel.
   for (const [soort, w] of Object.entries(T.WEZENS)) {
-    const eigen = soort === 'held' ? 'tovenaar' : soort;
+    const eigen = soort === 'held' ? 'dorpeling0' : soort;
     const vel = T.BEELDEN.figuren[eigen] ? eigen : w.vel;
     assert.ok(
       vel && T.BEELDEN.figuren[vel],

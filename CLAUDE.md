@@ -11,9 +11,9 @@ Tot 23 sep was het De laatste klim: een tovenaar van 84 met zijn leeftijd als le
 toren. Marcel vond het doel niet goed genoeg. De kunst en de techniek eronder blijven: het
 isometrische beeld (Mystic Towers als voorbeeld), de HD-pixel art uit code, en een naadloze
 overgang van rondlopen naar een gevecht in beurten op tegels (Fallout, Jagged Alliance 2). De code
-van het oude spel ging er op 25 sep uit: de tutorial, de spreuken, de leeftijd, de toren en de
-oude kaart met zijn mensen (zie de werklijst, punt 7). Wat nog volgt: de kunst die alleen het oude
-spel tekende, en de namen (`Toren` wordt `Spel`, de held de schout).
+van het oude spel ging er op 25 sep uit: de tutorial, de spreuken, de leeftijd, de toren, de oude
+kaart met zijn mensen, en de kunst die alleen het oude spel tekende (zie de werklijst, punt 7). Wat
+nog volgt: de namen (`Toren` wordt `Spel`, de held de schout).
 
 Code, commentaar en spelteksten zijn Nederlands, zoals in Marcels Planner.
 

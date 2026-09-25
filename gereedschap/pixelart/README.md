@@ -41,7 +41,8 @@ Dat schrijft alle beelden naar `uit/` (niet in git). Er zijn geen afhankelijkhed
   vuurschicht in zestien richtingen, het opbouwen in de bol, de inslag, het dwaallicht, en de
   grijze zucht in drie maten die van een tovenaar opstijgt als hij betaalt. Het meet ook de bol en
   het gezicht op de vellen van de figuren, zodat een spreuk precies uit de bol komt; draai het
-  dus opnieuw als er een figuur bijkomt. Schrijft naar `beelden/effecten/`.
+  dus opnieuw als er een figuur bijkomt. Schrijft naar `uit/effecten/` (tot 25 sep naar
+  `beelden/effecten/`; sinds de spreuken uit het spel zijn, laadt het spel ze niet meer).
 
 De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
 

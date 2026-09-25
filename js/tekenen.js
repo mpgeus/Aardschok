@@ -6,15 +6,14 @@
 //
 // Er zijn twee manieren van tekenen. Staat de pixel art klaar (`beelden/`, zie js/sprites.js),
 // dan komt alles wat de kunst dekt uit de vellen: vloeren, muren, deuren, voorwerpen, wezens,
-// en de flits van een klap (beelden/effecten/, zie "een laag over een figuur" onderaan). Wat er
-// niet in zit — het raster, het bereik, de zwevende teksten en de pilaar — blijft
+// en de flits van een klap (zie "een laag over een figuur" onderaan). Wat er niet in zit — het
+// raster, het bereik, de zwevende teksten en de pilaar — blijft
 // getekend met vlakken. Met `Toren.debug.vlakken = true` gaat alles terug naar vlakken, om te
 // vergelijken.
 (function (T) {
   'use strict';
 
   const GEDIMD = 0.58;
-  const HOOFD = '#e9c6a0';
 
   const metSprites = () => !!(T.sprites && T.sprites.aan) && !(T.debug && T.debug.vlakken);
 
@@ -1178,59 +1177,10 @@
   }
 
   const TEKENAARS = {
-    // De meester wordt zichtbaar ouder: de baard groeit, de rug buigt, de hoedpunt zakt.
-    // Zo zie je aan de figuur zelf hoeveel tijd er nog is, niet alleen aan de balk.
-    held(ctx, cx, cy, bob, e, S) {
-      const sluip = S.sluipen && !S.gevecht ? 5 : 0; // ineengedoken
-      if (sluip) ctx.globalAlpha *= 0.8;
-      const lijf = 24 + bob - sluip;
-      T.blok(ctx, cx, cy, 0.2, 0.2, lijf, '#3f6fb7'); // gewaad
-      const hx = cx;
-      const hy = cy - lijf - 7;
-      rondje(ctx, hx, hy, 7, HOOFD);
-      rondje(ctx, hx - 2.5, hy - 1, 1.1, '#2b2118');
-      rondje(ctx, hx + 2.5, hy - 1, 1.1, '#2b2118');
-      ctx.fillStyle = '#ece8dd'; // baard
-      ctx.beginPath();
-      ctx.moveTo(hx - 6, hy + 1.5);
-      ctx.lineTo(hx + 6, hy + 1.5);
-      ctx.lineTo(hx + 1, hy + 15);
-      ctx.closePath();
-      ctx.fill();
-      ctx.fillStyle = '#233f7a'; // punthoed
-      ctx.beginPath();
-      ctx.ellipse(hx, hy - 5, 12, 4, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(hx - 8, hy - 5);
-      ctx.lineTo(hx + 8, hy - 5);
-      ctx.lineTo(hx + 4, hy - 28);
-      ctx.closePath();
-      ctx.fill();
-      ctx.strokeStyle = '#8b6b3d'; // staf
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.moveTo(cx + 13, cy + 2);
-      ctx.lineTo(cx + 13, cy - 44);
-      ctx.stroke();
-      return hy - 28;
-    },
-
-    wim(ctx, cx, cy, bob) {
-      ctx.strokeStyle = '#9a7a4a'; // bezem
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.moveTo(cx - 14, cy + 1);
-      ctx.lineTo(cx - 11, cy - 40);
-      ctx.stroke();
-      ctx.fillStyle = '#c9a55a';
-      ctx.beginPath();
-      ctx.moveTo(cx - 20, cy + 4);
-      ctx.lineTo(cx - 8, cy + 4);
-      ctx.lineTo(cx - 13.5, cy - 8);
-      ctx.closePath();
-      ctx.fill();
-      T.blok(ctx, cx, cy, 0.19, 0.19, 22 + bob, '#7a5a3a'); // stofjas
+    // Een mens: iedereen die geen eigen vlaktekening heeft (de schout, een boer, een dorpeling).
+    // Het was tot 25 sep Wim, de knecht uit het oude spel, zonder zijn bezem.
+    mens(ctx, cx, cy, bob) {
+      T.blok(ctx, cx, cy, 0.19, 0.19, 22 + bob, '#7a5a3a'); // jas
       const hy = cy - 22 - bob - 7;
       rondje(ctx, cx, hy, 7, '#e3bf98');
       rondje(ctx, cx - 2.5, hy - 1, 1.1, '#2b2118');
@@ -1361,15 +1311,14 @@
       T.sprites.teken(ctx, deel, cx, cy);
       top = cy - T.sprites.hoogte(e.soort);
       // een klap: een rood dambord over de figuur
-      if (effectenAan() && e.flits > 0) overlaag(ctx, deel, cx, cy, kleur('rood', 7), e.flits > 0.18 ? 0.5 : 0.25);
+      if (e.flits > 0) overlaag(ctx, deel, cx, cy, KLAP_KLEUR, e.flits > 0.18 ? 0.5 : 0.25);
     } else {
-      // Een wezen uit een kaart kan een soort hebben waar nog geen kunst bij is (een dorpeling
-      // heeft nog geen loopvellen). Dan tekenen we Wim: er staat iemand, en één zo'n figuur legt
-      // niet het hele beeld plat.
-      const teken = TEKENAARS[e.soort] || TEKENAARS.wim;
+      // Een wezen uit een kaart kan een soort hebben waar nog geen kunst bij is. Dan tekenen we een
+      // gewone mens: er staat iemand, en één zo'n figuur legt niet het hele beeld plat.
+      const teken = TEKENAARS[e.soort] || TEKENAARS.mens;
       top = teken(ctx, cx, cy - huppel, bob, e, S);
     }
-    if (e.flits > 0 && !(deel && effectenAan())) {
+    if (e.flits > 0 && !deel) {
       ctx.fillStyle = `rgba(255, 70, 50, ${Math.min(0.55, e.flits * 2)})`;
       ctx.beginPath();
       ctx.ellipse(cx, (cy + top) / 2, 15, (cy - top) / 2 + 2, 0, 0, Math.PI * 2);
@@ -1421,11 +1370,10 @@
 
   // ---------------------------------------------------------------- een laag over een figuur
   //
-  // Staan de vellen van de effecten klaar (beelden/effecten/, zie js/sprites.js), dan krijgt een
-  // figuur die een klap krijgt een rood dambord over zich heen, in de kleur uit de rampen van die
-  // vellen. Tot 25 sep stonden hier ook de spreuken als pixel art (de worp, de vlucht, de inslag,
-  // het dwaallicht en de zucht van ouderdom); die gingen eruit met het oude spel.
-  const effectenAan = () => metSprites() && !!T.sprites.effectenAan;
+  // Een figuur die een klap krijgt, krijgt een rood dambord over zich heen. De kleur kwam uit de
+  // rood-ramp van de spreukeffecten (beelden/effecten/, stap 7); die vellen gingen op 25 sep weg met
+  // het oude spel, net als de spreuken zelf, en de kleur staat nu hier.
+  const KLAP_KLEUR = '#ee865e';
 
   // Een vast toevalsgetal (0..1) uit drie gehele getallen, voor deeltjes die elk beeld op
   // dezelfde plek moeten uitkomen.
@@ -1434,10 +1382,6 @@
     h = Math.imul(h ^ (h >>> 13), 1274126177) >>> 0;
     return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
   }
-  const kleur = (ramp, stap) => {
-    const r = T.sprites.effectRamp(ramp);
-    return r ? r[Math.max(0, Math.min(r.length - 1, stap))] : '#ffffff';
-  };
 
   // Een dambord in één kleur, alleen op de pixels van de figuur zelf (en alleen tussen de rijen
   // `van` en `tot` van zijn cel). Het dambord ligt vast op het raster van de wereld, zodat het

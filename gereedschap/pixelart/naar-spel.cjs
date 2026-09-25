@@ -7,7 +7,7 @@
 //
 // Met --alleen werkt het alleen de genoemde figuren bij: het leest de bestaande
 // beelden/beschrijving.json, zet die figuren erin (erbij, of in de plaats van wat er stond),
-// kopieert hun vellen en schrijft .json en .js allebei terug. Muren, trap, graan, vloeren en
+// kopieert hun vellen en schrijft .json en .js allebei terug. Muren, graan, vloeren en
 // voorwerpen blijven zoals ze zijn en worden niet opnieuw gerenderd. Dat is nodig omdat uit/ niet
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
@@ -17,7 +17,7 @@
 // Twee soorten werk:
 //  - kopiëren: de animatievellen van de figuren en hun JSON, de vloeren en de voorwerpen.
 //    Die komen uit `npm run pixelart` en `npm run pixelart:animaties`.
-//  - renderen: de muurstukken en de spiraaltrap. Die van hd-muren.png hebben een strook zandvloer voor zich,
+//  - renderen: de muurstukken. Die van hd-muren.png hebben een strook zandvloer voor zich,
 //    en dat zou over de vloer van het spel heen liggen. Hier komen ze zonder vloer, in beide
 //    richtingen (noord- en westmuur), met een deur open, dicht en op slot, en met een laag
 //    muurtje voor de weggesneden voorrand.
@@ -26,7 +26,6 @@ const fs = require('fs');
 const path = require('path');
 const K = require('./kern.cjs');
 const Kamers = require('./kamers.cjs');
-const Trap = require('./trap.cjs');
 const Graan = require('./graan-vel.cjs');
 const Schandpaal = require('./schandpaal.cjs');
 
@@ -108,28 +107,11 @@ function muren() {
   };
 }
 
-// ---------------------------------------------------------------- de spiraaltrap
-
-// Een rij per soort (de trap omhoog en het gat in de vloer), een kolom per staat. Zie
-// trap.cjs voor de maten: de trap beslaat drie bij drie tegels, met zijn voorste hoek op de
-// tegel waar het voorwerp staat — daar valt ook het anker.
-function trap() {
-  schrijf('trap.png', Trap.vel());
-  return {
-    bestand: 'trap.png',
-    cel: Trap.CEL,
-    anker: Trap.ANKER,
-    tegels: Trap.TEGELS,
-    soorten: Object.keys(Trap.SOORTEN),
-    staten: Trap.STATEN,
-  };
-}
-
 // ---------------------------------------------------------------- het graan
 //
 // Het akkervel zelf komt uit graan-vel.cjs (geploegd/kiemend/gemaaid als losse tegel per variant,
 // groen/rijp als achter/voorlaag per variant en windbeeld); hier alleen wegschrijven, zoals
-// muren() en trap() hierboven. js/akkers.js kiest per tegel het stadium, de variant en het
+// muren() hierboven. js/akkers.js kiest per tegel het stadium, de variant en het
 // windbeeld; js/sprites.js (S.graanTegel/S.graanLaag) zoekt het plaatje er hiermee bij op.
 function graan() {
   const { plaat, stadia } = Graan.vel();
@@ -171,12 +153,8 @@ function schrijf(naam, plaat) {
 // overzichtsstroken blijven in uit/. `map` zegt waar de vellen vandaan komen: de bosvijanden
 // worden door een eigen script gerenderd (bosvijanden-anim.cjs) en staan dus ergens anders.
 const FIGUURLIJST = {
-  tovenaar: { houdingen: ['staan', 'lopen-84', 'lopen-92', 'lopen-99', 'slaan', 'spreuk', 'geraakt', 'sterven'] },
-  wim: { houdingen: ['staan', 'lopen', 'praten', 'vegen'] },
   skelet: { houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'] },
   slijm: { houdingen: ['staan', 'lopen', 'aanval', 'geraakt', 'sterven'] },
-  // De oude meester, bij zijn moestuin op het erf (T.WEZENS.meester, js/wereld.js).
-  meester: { houdingen: ['staan', 'lopen', 'slaan', 'spreuk', 'geraakt', 'sterven'] },
   // Buiten, op het erf en in het bos. Alles wat Marcel in Tiled kan neerzetten, moet het spel ook
   // kunnen tekenen; deze drie staan in T.WEZENS (js/wereld.js) onder dezelfde naam als hier, want
   // js/sprites.js zoekt het figuur op de soort van het wezen op.
@@ -359,7 +337,7 @@ const ALLEEN = alleenGevraagd();
 if (ALLEEN) alleenBijwerken(ALLEEN);
 else alles();
 
-// Alles opnieuw: figuren, muren, trap, graan, vloeren, voorwerpen en de losse vellen.
+// Alles opnieuw: figuren, muren, graan, vloeren, voorwerpen en de losse vellen.
 function alles() {
   const beschrijving = {
     // Alles is gerenderd in dezelfde projectie als het spel: een tegel is 64×32 en het anker
@@ -367,7 +345,6 @@ function alles() {
     tegel: [64, 32],
     figuren: figuren(),
     muren: muren(),
-    trap: trap(),
     graan: graan(),
     vloeren: {
       bestand: 'vloeren.png',

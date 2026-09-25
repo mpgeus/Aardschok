@@ -21,7 +21,6 @@
   const S = {
     aan: false, // staan alle vellen van binnen klaar? Zo niet, tekent het spel zijn vlakken.
     buitenAan: false, // en die van buiten (tegels/, gemaakt door npm run tiled)
-    effectenAan: false, // en de effecten (beelden/effecten/, gemaakt door effecten-export.cjs)
     bouwfasenAan: false, // en het bouwfasenvel (tegels/bouwfasen.png, gemaakt door bouwfasen.cjs)
     mist: [], // wat er niet geladen kon worden, om in de console te zien
   };
@@ -67,7 +66,6 @@
         return false;
       }
       const vellen = [gegevens.muren.bestand, gegevens.vloeren.bestand, gegevens.voorwerpen.bestand];
-      if (gegevens.trap) vellen.push(gegevens.trap.bestand);
       if (gegevens.graan) vellen.push(gegevens.graan.bestand);
       if (gegevens.schandpaal) vellen.push(gegevens.schandpaal.bestand);
       const lijst = vellen.map((f) => MAP + f);
@@ -75,20 +73,18 @@
         for (const h of Object.values(f.houdingen)) lijst.push(MAP + 'figuren/' + h.bestand);
       }
       // De vellen van buiten staan los: gaat daar iets mis, dan tekent het spel buiten vlakken
-      // en binnen nog gewoon zijn pixel art. De effecten ook: zonder die vellen is de flits van een
-      // klap een rode vlek in plaats van een dambord. Het bouwfasenvel (tegels/bouwfasen.png, T.BOUWFASEN uit
-      // tegels/bouwfasen.js — CLAUDE.md "Opbouw", js/gebouwen.js) net zo los: zonder dat vel blijft
-      // een gebouw in aanbouw gewoon bleker tekenen, zoals vóór de fases er waren.
+      // en binnen nog gewoon zijn pixel art. Het bouwfasenvel (tegels/bouwfasen.png, T.BOUWFASEN
+      // uit tegels/bouwfasen.js — CLAUDE.md "Opbouw", js/gebouwen.js) net zo los: zonder dat vel
+      // blijft een gebouw in aanbouw gewoon bleker tekenen, zoals vóór de fases er waren. (Tot
+      // 25 sep laadde hier ook beelden/effecten/, de spreukeffecten van het oude spel.)
       const buiten = [...new Set(Object.values(T.TEGELS || {}).map((v) => v.bestand).filter(Boolean))];
-      const effectVellen = T.EFFECTEN ? [...new Set(Object.values(T.EFFECTEN.vellen).map((v) => MAP + 'effecten/' + v.bestand))] : [];
       const bouwfasenPad = T.BOUWFASEN ? TEGELMAP + T.BOUWFASEN.bestand : null;
-      const [uitslag, uitBuiten, uitEffecten, bouwfasenOk] = await Promise.all([
-        Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld)), Promise.all(effectVellen.map(laadBeeld)),
+      const [uitslag, uitBuiten, bouwfasenOk] = await Promise.all([
+        Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld)),
         bouwfasenPad ? laadBeeld(bouwfasenPad) : Promise.resolve(false),
       ]);
       S.aan = uitslag.every(Boolean);
       S.buitenAan = buiten.length > 0 && uitBuiten.every(Boolean);
-      S.effectenAan = effectVellen.length > 0 && uitEffecten.every(Boolean);
       S.bouwfasenAan = !!bouwfasenOk;
       if (S.aan) snijVloeren();
       if (!S.aan || !S.buitenAan) console.warn('Aardschok: sprites ontbreken, het spel tekent daar vlakken.', S.mist);
@@ -177,8 +173,8 @@
   // Hoe hoog een figuur boven zijn tegel uitsteekt: waar zijn hoofd zit, voor de levensbalk,
   // het uitroepteken en het aanwijzen met de muis. De cel is hoger dan de figuur (er moet een
   // zwaard in de lucht in passen), dus dit is gemeten aan het vel zelf, op de houding staan.
-  const HOOG = { tovenaar: 90, wim: 66, skelet: 78, slijm: 28, wolf: 46, bakker: 66, marskramer: 66, koe: 48, schaap: 30 };
-  S.figuurNaam = (soort) => (soort === 'held' ? 'tovenaar' : soort);
+  const HOOG = { skelet: 78, slijm: 28, wolf: 46, marskramer: 66, koe: 48, schaap: 30 };
+  S.figuurNaam = (soort) => soort;
   S.hoogte = (soort) => HOOG[S.figuurNaam(soort)] || 60;
 
   // Een gewone dorpeling deelt één soort ("dorpeling", zie js/kaart.js) maar heeft meerdere
@@ -350,18 +346,6 @@
     return stuk(MAP + v.bestand, i * v.cel[0], 0, v.cel[0], v.cel[1], v.anker);
   };
 
-  // De spiraaltrap: een rij per soort (`trap` omhoog, `trapgat` in de vloer), een kolom per
-  // staat (ingestort, provisorisch, hersteld). Het anker is de tegel waar het voorwerp op staat;
-  // de trap zelf beslaat drie bij drie tegels en reikt vanaf die tegel naar achteren.
-  S.trap = function (soort, staat) {
-    if (!gegevens || !gegevens.trap) return null;
-    const t = gegevens.trap;
-    const r = t.soorten.indexOf(soort);
-    const k = t.staten.indexOf(staat || 'hersteld');
-    if (r < 0 || k < 0) return null;
-    return stuk(MAP + t.bestand, k * t.cel[0], r * t.cel[1], t.cel[0], t.cel[1], t.anker);
-  };
-
   // De schandpaal (js/heer.js, gereedschap/pixelart/schandpaal.cjs): één rij met drie delen. `leeg`
   // (het halsijzer hangt open tegen de paal) en `bezet` (de ketting loopt naar wie ervoor staat)
   // hebben hun anker op de tegel van de paal; `halsijzer` komt over wie eraan staat heen, en zijn
@@ -513,15 +497,6 @@
     return onthoud(`graan,${stadium},${v},${laag},${f}`, () => stuk(MAP + g.bestand, kol * st.cel[0], st.y0 + v * st.cel[1], st.cel[0], st.cel[1], st.anker));
   };
 
-  // ---------------------------------------------------------------- effecten
-  //
-  // De vellen uit beelden/effecten/ (effecten-export.cjs), beschreven in T.EFFECTEN
-  // (beelden/effecten/effecten.js). Het spel gebruikt er sinds de spreuken eruit gingen (25 sep)
-  // alleen nog de kleurrampen van: de rode flits van een klap (js/tekenen.js).
-  const effecten = () => T.EFFECTEN || null;
-
-  S.effectRamp = (naam) => (effecten() && effecten().rampen[naam]) || null;
-
   // ---------------------------------------------------------------- de houding van een wezen
 
   // Wat doet dit wezen nu? Alles komt uit de spelstaat zelf, zodat er geen tweede boekhouding
@@ -540,23 +515,18 @@
     return e.beeldStand;
   }
 
-  // Hoe dit figuur loopt. Het vel van de tovenaar (de held van het oude spel) heeft geen gewone
-  // loophouding maar drie, naar zijn leeftijd; sinds de leeftijd weg is (25 sep) loopt hij kwiek,
-  // als op zijn 84e. Het vel gaat weg met de kunst van het oude spel (werklijst, punt 7d).
-  function loopHouding(naam) {
-    if (!S.heeftHouding(naam, 'lopen') && S.heeftHouding(naam, 'lopen-84')) return 'lopen-84';
-    return 'lopen';
-  }
-
   // De houding van dit wezen op dit moment: { naam, houding, richting, fase }.
-  // `naam` is het figuur op het vel; de held heet daar tovenaar, een gewone dorpeling zijn zaad.
+  // `naam` is het figuur op het vel. De held (de schout) draagt het vel van een gewone dorpeling,
+  // net als de menigte; welk, kiest zijn zaad. (Tot 25 sep was hij de tovenaar van het oude spel.)
   S.houding = function (spel, e) {
     // Een boer die aan het maaien is (T.werkOogstBij, js/akkers.js) leent zolang het vel van de
     // maaier in plaats van zijn eigen boer/boerin-vel — maar alleen als dat vel er ook echt is,
     // anders blijft hij gewoon zichzelf staan (geen kunst mist dan nooit iemand helemaal).
-    let naam = e.maait && S.figuurGegevens('maaier') ? 'maaier' : e.soort === 'dorpeling' ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
-    // Wie nog geen eigen vel heeft, mag er een lenen (T.WEZENS, vel: 'wim'): zo kan de bakker
-    // meedoen voordat hij getekend is. Zie ontwerp/werklijst.md, fase B2b. Een boer met een
+    const alsDorpeling = e.soort === 'dorpeling' || e.soort === 'held';
+    let naam = e.maait && S.figuurGegevens('maaier') ? 'maaier' : alsDorpeling ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
+    // Wie nog geen eigen vel heeft, mag er een lenen (T.MENSEN, vel: 'boer'): zo lopen de vijf
+    // boeren van het gehucht rond op het vel van de boer en de boerin. Zie ontwerp/werklijst.md,
+    // fase B2b. Een boer met een
     // karakter draagt dat karakter op zijn lijf (boer-zanger), als dat vel er al is. Een dier
     // (js/vee.js) heeft geen vel onder zijn soort, maar een per kleur: `vel` is koe0, koe1 of koe2.
     if (!S.figuurGegevens(naam) && e.vel) naam = S.velMetKarakter(e.vel, e.karakter);
@@ -614,20 +584,18 @@
       return { naam, houding: 'maaien', richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };
     }
     if (e.pad && e.pad.length) {
-      const houding = loopHouding(naam);
+      const houding = 'lopen';
       const h = f.houdingen[houding];
       // Twee passen per cyclus: zo schuift de voet op de grond precies mee met het spel en
       // glijdt hij niet. `stap` staat in het vel beschreven, in tegels per pas.
       const cyclus = 2 * ((h && h.stap) || 0.8);
       return { naam, houding, richting: st.richting, fase: (st.afgelegd / cyclus) % 1 };
     }
-    // Stilstaan: ademen, elk wezen in zijn eigen tempo (e.fase). Wim veegt ondertussen, en in een
-    // gesprek praat hij.
-    const wimRust = () => (spel.spreektMet === e ? 'praten' : 'vegen');
+    // Stilstaan: ademen, elk wezen in zijn eigen tempo (e.fase).
     // Een dier (js/vee.js) graast, staat te herkauwen of ligt. Wat het nu doet, komt uit de tijd en
     // zijn zaad (T.rustVanDier), niet uit een worp per beeld: zo flikkert het niet, en gaat niet de
     // hele kudde tegelijk liggen.
-    const rust = naam === 'wim' ? wimRust() : e.dier && T.rustVanDier ? T.rustVanDier(e, spel.tijd) : 'staan';
+    const rust = e.dier && T.rustVanDier ? T.rustVanDier(e, spel.tijd) : 'staan';
     const staan = f.houdingen[rust] ? rust : f.houdingen.staan ? 'staan' : Object.keys(f.houdingen)[0];
     const duur = S.houdingDuur(naam, staan) || 1;
     return { naam, houding: staan, richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };
