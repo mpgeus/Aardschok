@@ -81,18 +81,20 @@ lammeren bij zolang er plaats is. `npm test`: 460/460.
 **Volgende stap, Marcel kiest welke eerst:**
 - **De weides, stap 2: de winter en de wol.** Hooi maaien in hooimaand, vee dat 's winters hooi eet,
   op 1 slachtmaand kiezen wie er geslacht wordt, en schapen scheren in zomermaand. Marcel koos er op
-  25 sep twee dingen bij: velden naast elkaar worden samen één weide, en de schapen gaan van de
-  weide af, naar de meent en de schaapskooi, die wol en mest geeft (zoals de Drentse esdorpen).
-  Vier vragen staan nog open in `spel.md` ("Wat daaruit volgt"): stel ze Marcel vóór het bouwen.
-  Claude raadt aan dit eerst te doen: zonder hooi kost vee niets, en dan klopt geen proefspel.
+  25 sep drie dingen bij: velden naast elkaar worden samen één weide; de schapen gaan van de weide
+  af, naar de meent en de schaapskooi, die wol en mest geeft (zoals de Drentse esdorpen); en het
+  hooi beslist hoeveel land een koe kost, samen zo'n 12 tegels. De vragen die nog open staan, staan
+  in `spel.md` bij de weides: stel ze Marcel vóór het bouwen. Claude raadt aan dit eerst te doen:
+  zonder hooi kost vee niets, en dan klopt geen proefspel.
 - **Punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud, die de inner
   niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de argwaan om het
   graan en het doorzoeken door de soldaten (`T.zoekVerstopt`, nu nog leeg) staan al klaar. Het
   voorstel van Claude staat in `spel.md` ("Voorstel voor stap 2"): ter plekke wegzetten, verstopt
   graan niet eten, wie het vindt, en een beetje bederf. Marcel kiest nog; vraag ook hoeveel erin
   past. Daarna stap 3: praten, afleiden, omkopen en de twee rekenboeken. Voorstel van Claude
-  (25 sep, nog niet gekozen): bouw dit samen met stap 3 van de weides, de kudde die de inner telt.
-  Graan in een kuil en vee in het bos zijn hetzelfde spel: rijkdom uit zijn zicht halen.
+  (25 sep, nog niet gekozen): bouw dit samen met stap 3 van de weides, de kudde die de inner telt,
+  en de geheime akker uit punt 6b. Graan in een kuil, vee in het bos en een akker achter de bomen
+  zijn hetzelfde spel: rijkdom uit zijn zicht halen.
 
 **Wat nog ruw is of niet helemaal goed staat,** staat in `opmerkingen.md`: alle opmerkingen bij
 elkaar, om later na te lopen (Marcel, 25 sep). Zet er een bij als je iets ziet.
@@ -150,10 +152,14 @@ nog nodig is".
    en arm lijken". In drie stappen: het bezoek, het rapport en de argwaan (af, 24 sep); de
    verstopplekken; praten, afleiden, omkopen en de rekenboeken.
 6a. **Weides met vee** (Marcel, 25 sep; `spel.md`, "Weides met koeien en schapen"). Klaar als je
-   weides aanlegt zoals akkers, koeien en schapen erop grazen, en ze geven wat bij ze hoort: melk
-   en kaas het hele jaar, vlees en huiden in slachtmaand, en wol. En als de inner de kudde telt,
-   zodat wie slim is een deel het bos in drijft voordat hij komt. In drie stappen (`spel.md`):
-   velden en vee op de weide (af, 25 sep); de winter en de wol; vee dat telt.
+   weides aanlegt zoals akkers, koeien erop grazen en schapen op de meent, en ze geven wat bij ze
+   hoort: melk en kaas, vlees en huiden in slachtmaand, wol, en mest voor de akkers. En als de
+   inner de kudde telt, zodat wie slim is een deel het bos in drijft voordat hij komt. In drie
+   stappen (`spel.md`): velden en vee op de weide (af, 25 sep); de winter en de wol; vee dat telt.
+6b. **Ontginnen** (Marcel, 25 sep; `spel.md`, "Ontginnen"). Klaar als je bos of heide tot een nieuw
+   veld kunt maken, de heer er zijn deel van wil en de inner het telt, en een veld diep in het bos
+   buiten zijn zicht blijft: een verstopplek voor land. Hier, omdat vee na stap 2 van de weides land
+   kost, en omdat de geheime akker bij de verstopplekken van punt 6 hoort.
 7. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
    zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel beschrijft. Hier, omdat
    er daarna veel nieuwe code bovenop komt.

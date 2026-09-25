@@ -717,12 +717,26 @@ per koe zou het 3,3 per tegel zijn: dan gaf een weide ongeveer wat een akker gee
   schaapskooi. Hun mest ging met heideplaggen op de es, en zo bleef die eeuwenlang vruchtbaar. De
   kooi geeft dus wol en mest, en de mest maakt de akkers vruchtbaar. De weide is voor de koeien.
 
-**Wat daaruit volgt, en nog open is** (Claude):
-- **Vee wordt nog sterker.** Zonder schapen erop past er op de weide van Klaas (30 tegels) plaats
-  voor zeven koeien in plaats van drie. Dat is 367 graan per jaar aan melk; als akker geeft dat
-  veld 75. De rem komt met het hooi in stap 2, en zo ging het ook toen: niet het gras in de zomer,
-  maar het hooi voor de winter bepaalde hoeveel vee een boer kon houden. Anders is `plaats.koe` in
-  de werkbank de knop.
+**Het hooi beslist hoeveel land een koe kost** (Marcel, 25 sep: "Wat als weides meer land in beslag
+nemen?"; hij koos uit een voorstel van Claude). Zonder schapen op de weide passen er op die van Klaas
+(30 tegels) zeven koeien, en dat is 367 graan per jaar aan melk; als akker geeft dat veld 75. Vee was
+zo altijd de winnaar. Zo loopt het nu:
+- In de zomer is 4 tegels gras per koe genoeg. Voor de winter heeft een koe het hooi van zo'n 8
+  tegels extra nodig: samen zo'n 12 tegels per koe.
+- Wat het hooi niet de winter door helpt, slacht je in slachtmaand. Zo komt het jaar erin: kalveren
+  in het voorjaar, een volle weide in de zomer, slachten in de herfst.
+- Zo ging het ook toen: niet het gras in de zomer, maar het hooi voor de winter bepaalde hoeveel vee
+  een boer kon houden.
+- Bij 12 tegels per koe geeft een weide ongeveer evenveel eten als een akker. De weide van Klaas
+  helpt er twee à drie de winter door, en twee koeien geven 105 graan aan melk; als akker gaf dat
+  veld 105, en 75 na het zaaigraan. De keuze tussen weide en akker hangt dan af van iets anders:
+  melk komt in het voorjaar, als de honger valt, en graan pas in oogstmaand; een weide kost geen
+  zaaigraan en maakt de grond beter; en vee kost hooi en valt de inner op.
+- Een kudde van vijf koeien heeft dan twee velden nodig: daar is "meer velden als één weide" voor.
+- Nog open voor stap 2: of het hooi van een apart stuk weide komt (hooiland), of dat de hele weide
+  in hooimaand één keer gemaaid wordt; en of het gehucht met twee koeien begint in plaats van drie.
+
+**Wat verder volgt, en nog open is** (Claude):
 - **Wat is "naast elkaar"?** Tussen akker6 en akker7 ligt een strook van één tegel breed. Telt dat
   als naast elkaar, of moet een weide echt aansluiten?
 - **Van wie is een weide over twee boeren?** Een gedeelde weide, of blijft elk stuk van zijn boer?
@@ -740,6 +754,29 @@ met de toetsen in `test/velden.test.cjs`.
 - Het vee dwaalt binnen zijn weide, en loopt na een wissel vanzelf naar de nieuwe.
 - De muis op een veld zegt van wie het is, welk vee erop staat en hoe vruchtbaar het is. De kaas
   staat in de balk, en het venster van de heer telt melk en kaas mee.
+
+## Ontginnen: nieuwe velden uit bos of heide (Marcel, 25 sep 2026; werklijst punt 6b)
+
+Nu is het land vast: het gehucht heeft 209 tegels aan velden (zeven stuks), en je kunt er geen bij
+maken, want een akker gaat niet via het bouwmenu. Kost vee land (het hooi, hierboven), dan is elke
+koe graan dat je niet verbouwt, en wil je meer land. Vroeger groeide een dorp zo: bos of heide werd
+akker. Marcel koos uit een voorstel van Claude:
+
+- **Ontginnen, ook in het geheim.** Je kunt bos of heide tot een nieuw veld maken. De heer wil er
+  zijn deel van, en de inner telt het. Behalve als het diep in het bos ligt, waar hij niet komt:
+  dan is het een akker die niet op de rekening staat, een verstopplek voor land.
+
+Nog open (vragen van Claude):
+- Wie ontgint, en hoe lang duurt het? Een ploeg boeren die een winter lang stobben trekt, en dan
+  een eerste jaar met weinig graan?
+- Het bos is van de heer (de keur houtkap, hierboven). Mag je zijn bos openlijk ontginnen, tegen
+  betaling of met zijn goedvinden, en is in het geheim ontginnen dan diefstal met een straf als hij
+  het vindt?
+- Een geheime akker moet uit het zicht van de inner liggen. Nu kijkt hij in een rechte lijn en
+  niet door huizen (`T.innerKijkt`); dan moeten bomen zijn zicht ook breken. Vinden de soldaten
+  hem als ze het dorp doorzoeken (`T.doorzoekDorp`)? En loopt er een pad naartoe dat hem verraadt?
+- Op de kaart van het gehucht is geen heide, alleen bos. Komt er heide bij, waar ook de schapen van
+  de meent kunnen grazen?
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
