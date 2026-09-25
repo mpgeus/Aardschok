@@ -170,6 +170,26 @@ test('zijn rapport: de gebouwen die hij zag, hun woonruimte, en het graan in de 
   assert.equal(S.inner.rapport, r);
 });
 
+test('een weide telt hij als land maar niet als graan, en van een uitgeputte akker verwacht hij minder', () => {
+  // Een akker die half zo vruchtbaar is (js/akkers.js, T.oogstPerTegel): dunner graan, dat ziet hij.
+  const S = maakS();
+  T.zetVoorraad(S, 'graan', 100);
+  S.wereld.akkers[0].vruchtbaarheid = 0.5;
+  let r = bezoekVanafDeBrink(S);
+  assert.equal(r.tegels, 4);
+  assert.equal(r.graanVerwacht, 4 * T.GRAAN_PER_TEGEL * 0.5);
+  assert.equal(r.graanGezien, 4 * T.GRAAN_PER_TEGEL * 0.5 + 100);
+  assert.equal(S.inner.argwaan, 0, 'wat er staat, is wat zo’n akker belooft');
+  // Hetzelfde veld als weide: gezien land (de pacht per akkertegel telt het mee), maar er staat geen graan.
+  const S2 = maakS();
+  T.zetVoorraad(S2, 'graan', 100);
+  S2.wereld.akkers[0].bestemming = 'weide';
+  r = bezoekVanafDeBrink(S2);
+  assert.equal(r.tegels, 4);
+  assert.equal(r.graanVerwacht, 0);
+  assert.equal(r.graanGezien, 100);
+});
+
 test('de heer rekent met het rapport: wat de inner niet zag, betaal je dat jaar niet', () => {
   const S = maakS();
   T.zetVoorraad(S, 'graan', 100);

@@ -170,8 +170,9 @@ const AKKERS = [
   { akker: 'akker3', x: 40, y: 22, b: 3, h: 14, huis: 'boer3' },
   { akker: 'akker4', x: 43, y: 22, b: 2, h: 14, huis: 'boer4' },
   { akker: 'akker5', x: 45, y: 22, b: 2, h: 14, huis: 'boer5' },
-  // de twee kleinere stukken, onder de es, van dezelfde twee boeren
-  { akker: 'akker6', x: 36, y: 37, b: 5, h: 6, huis: 'boer1' },
+  // de twee kleinere stukken, onder de es, van dezelfde twee boeren; het blok van Klaas (boer1)
+  // begint als weide, met de beginkudde erop (ontwerp/spel.md, "Weides met koeien en schapen")
+  { akker: 'akker6', x: 36, y: 37, b: 5, h: 6, huis: 'boer1', bestemming: 'weide' },
   { akker: 'akker7', x: 42, y: 37, b: 5, h: 5, huis: 'boer3' },
 ];
 function inAkker(x, y) {

@@ -254,6 +254,9 @@
     if (T.zetBestaandeGebouwen) T.zetBestaandeGebouwen(S);
     // Wie de boeren zijn en wat ze kunnen, wordt bij elk nieuw spel geloot (js/boeren.js).
     if (T.lootBoeren) T.lootBoeren(S);
+    // De beginkudde op de weide(s) die de kaart noemt (js/vee.js), net als de gebouwen hierboven;
+    // ná het lot, want het zaad van het spel kiest ook de kleuren van het vee.
+    if (T.zetBeginKudde) T.zetBeginKudde(S);
     return true;
   };
 })(globalThis.Toren = globalThis.Toren || {});

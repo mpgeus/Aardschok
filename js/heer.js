@@ -22,8 +22,9 @@
     // dan kun je nog verkopen voor zijn goud. Zelf komt hij op Sint-Maarten (T.SINT_MAARTEN).
     brief: { maand: 'wijnmaand', dag: 1 },
     // Wat hij ziet, en wat hij daarvoor vraagt: per akkertegel de pacht in graan (ook als hij braak
-    // lag: hij telt de akkers, niet wat erop groeide), per mens hoofdgeld in goud, en per gebouw
-    // wat bij zijn soort staat (T.GEBOUWEN[soort].heer, js/gebouwen.js). Hij rondt naar boven af.
+    // lag of weide was: hij telt de akkers, niet wat erop groeide), per mens hoofdgeld in goud, en
+    // per gebouw wat bij zijn soort staat (T.GEBOUWEN[soort].heer, js/gebouwen.js). Hij rondt naar
+    // boven af.
     pachtPerAkkertegel: 0.5,
     hoofdgeldPerMens: 0.2,
     // Waar hij de rekening op maakt (Marcel, 24 sep; js/inner.js): 'rapport' (wat zijn inner in
@@ -309,19 +310,26 @@
   // Wat je na deze betaling overhoudt tot de volgende oogst, voor het venster: zo zie je vóór het
   // betalen of je graan het haalt. Het dorp eet tot de oogst begint (T.AKKER_STADIA "rijp"), de
   // soldaten eten mee tot de lente als ze komen, en zaaien kost een zaaigraan per tegel.
-  // { na, eten, soldaten, zaaien, over, dagen }: `over` onder nul is honger vóór de oogst.
+  // { na, eten, melk, kaas, soldaten, zaaien, over, dagen }: `over` onder nul is graan tekort vóór
+  // de oogst. Sinds het vee (25 sep): `eten` is wat het dorp aan graan eet, want de melk van
+  // grasmaand af (`melk`, js/vee.js) drinkt het eerst; en wie graan tekortkomt, eet daarna nog de
+  // `kaas` op, dus honger is pas een tekort groter dan de kaas. Zaaien kost alleen wat volgend jaar
+  // akker wordt (het plan, js/akkers.js): een weide of braak zaai je niet.
   T.heerVooruitzicht = function (S, g) {
     const dag = dagNu(S);
     const rijp = T.AKKER_STADIA && T.AKKER_STADIA.find((s) => s.stadium === 'rijp');
     const oogst = rijp ? volgendeKeer(dag, { maand: T.MAANDEN[rijp.maand].naam, dag: rijp.dag }) : dag;
     const lente = volgendeKeer(dag, IN().soldatenTot);
     const perMens = T.GEBOUWEN_INSTELLINGEN ? T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag : 0;
-    const eten = (S.bevolking || 0) * perMens * (oogst - dag);
+    const melk = T.verwachteMelk ? T.verwachteMelk(S, dag, oogst) : 0;
+    const eten = Math.max(0, (S.bevolking || 0) * perMens * (oogst - dag) - melk);
     const soldaten = g && g.soldaten ? IN().soldaten * IN().soldaatEetAls * perMens * (lente - dag) : 0;
-    const tegels = ((S.wereld && S.wereld.akkers) || []).reduce((n, a) => n + a.b * a.h, 0);
+    const wordtAkker = (a) => !T.planVan || T.planVan(a) === 'akker';
+    const tegels = ((S.wereld && S.wereld.akkers) || []).filter(wordtAkker).reduce((n, a) => n + a.b * a.h, 0);
     const zaaien = tegels * (T.ZAAIGRAAN_PER_TEGEL || 0);
     const na = ((S.voorraad && S.voorraad.graan) || 0) - ((g && g.neemt && g.neemt.graan) || 0);
-    return { na, eten, soldaten, zaaien, over: na - eten - soldaten - zaaien, dagen: oogst - dag };
+    const kaas = (S.voorraad && S.voorraad.kaas) || 0;
+    return { na, eten, melk, kaas, soldaten, zaaien, over: na - eten - soldaten - zaaien, dagen: oogst - dag };
   };
 
   // Betalen. Geeft het gevolg terug (T.gevolgVanBetaling), of { kan: false, reden }.

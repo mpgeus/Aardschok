@@ -281,10 +281,10 @@ test('een zuinige boer zaait met minder zaaigraan, een kwistige met meer', () =>
   const r = T.zaaiAkkers(S);
   const per = T.ZAAIGRAAN_PER_TEGEL * 4; // elke akker is 2×2
   assert.ok(Math.abs(r.graan - (per * 0.8 + per * 1.2 + 3 * per)) < 1e-9, `${r.graan}`);
-  assert.equal(r.braak, 0);
+  assert.equal(r.ongezaaid, 0);
 });
 
-test('bij te weinig zaaigraan betaalt ieder zijn eigen prijs, en ligt bij ieder een stuk braak', () => {
+test('bij te weinig zaaigraan betaalt ieder zijn eigen prijs, en blijft bij ieder een stuk ongezaaid', () => {
   const S = gehucht();
   T.lootBoeren(S, 3);
   for (const id of BOEREN) boer(S, id).eigenschappen.zaaien = 'gewoon';
@@ -292,8 +292,8 @@ test('bij te weinig zaaigraan betaalt ieder zijn eigen prijs, en ligt bij ieder 
   T.zetVoorraad(S, 'graan', 10);
   const r = T.zaaiAkkers(S);
   assert.ok(r.graan <= 10 + 1e-9, `${r.graan}`);
-  assert.ok(r.gezaaid > 0 && r.braak > 0);
-  for (const a of S.wereld.akkers) assert.ok(a.braak.size < 4, 'geen akker helemaal braak');
+  assert.ok(r.gezaaid > 0 && r.ongezaaid > 0);
+  for (const a of S.wereld.akkers) assert.ok(a.ongezaaid.size < 4, 'geen akker helemaal ongezaaid');
 });
 
 test('het aanzien bepaalt wat de schandpaal kost, en wie aan de paal kan', () => {

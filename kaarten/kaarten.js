@@ -29345,7 +29345,8 @@
       "y": 37,
       "b": 5,
       "h": 6,
-      "huis": "boer1"
+      "huis": "boer1",
+      "bestemming": "weide"
      },
      {
       "akker": "akker7",

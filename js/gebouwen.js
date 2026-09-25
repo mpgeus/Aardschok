@@ -591,6 +591,10 @@
     // 0. De akkers (js/akkers.js): zaaien op 1 lentemaand, en het vangnet na de oogsttijd. Als
     // eerste: de boeren zaaien 's morgens, en daarna eet het dorp van wat er over is.
     if (T.tikAkkersDag) T.tikAkkersDag(S, dag);
+    // Het vee (js/vee.js): jongen op 1 grasmaand, en de melk van vandaag. Ná de akkers, want op 1
+    // lentemaand verhuist het vee daar naar zijn nieuwe weide; vóór de behoeften, want het dorp eet
+    // de melk van vandaag als eerste (stap 3), en de tevredenheid moet hem dus al zien.
+    if (T.tikVeeDag) T.tikVeeDag(S, dag);
     // Behoeften: eten, brandhout en een kerk, en de tevredenheid die daaruit volgt
     // (js/behoeften.js, T.tikBehoeftenDag) — vóór de rest, zodat stap 4 en 6 hieronder de
     // tevredenheid van vandaag gebruiken. Zacht gekoppeld (net als T.ui hieronder): zonder
@@ -615,10 +619,12 @@
     let woonruimte = 0;
     for (const g of S.gebouwen) if (g.klaar) woonruimte += T.GEBOUWEN[g.soort].woonruimte || 0;
     S.woonruimte = woonruimte;
-    // 3. Eten: iedereen eet graan, of er genoeg is of niet (T.wijzigVoorraad zakt nooit onder nul —
-    // een dorp dat te veel monden telt, eet zijn voorraad dus leeg in plaats van dat er iemand
-    // wegkwijnt; dat laatste is een vraag voor later, geen regel nu).
-    if (S.bevolking > 0) T.wijzigVoorraad(S, 'graan', -S.bevolking * IN.etenPerMensPerDag);
+    // 3. Eten: iedereen eet, of er genoeg is of niet (T.wijzigVoorraad zakt nooit onder nul — een
+    // dorp dat te veel monden telt, eet zijn voorraad dus leeg; wat honger doet, staat in
+    // js/behoeften.js). Eerst de melk van vandaag, dan graan, dan kaas, en wat er van de melk over
+    // is, wordt kaas (T.eetVandaag, js/behoeften.js). Zonder dat bestand alleen graan, zoals vroeger.
+    if (T.eetVandaag) T.eetVandaag(S);
+    else if (S.bevolking > 0) T.wijzigVoorraad(S, 'graan', -S.bevolking * IN.etenPerMensPerDag);
     // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als er nog ruimte is, de voorraad
     // een buffer overhoudt (zodat een net geboren gezin niet meteen honger lijdt), en het dorp
     // tevreden genoeg is (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel). Zonder

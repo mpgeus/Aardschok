@@ -59,7 +59,9 @@
 //              "huis" welk huis (een vrije naam, bijvoorbeeld "boer1") hem bewerkt. Zolang er
 //              geen graantegels zijn (gereedschap/pixelart/graan*.cjs) is de grond zelf gewoon
 //              zandpad, getekend in de .tmj; dit ding zegt alleen wát er ligt en van wie. Zie
-//              gereedschap/tiled/maak-gehucht.cjs en ontwerp/werklijst.md, punt 1b.
+//              gereedschap/tiled/maak-gehucht.cjs en ontwerp/werklijst.md, punt 1b. Met
+//              "bestemming" ("akker", "weide" of "braak") begint het veld als iets anders dan
+//              een akker (js/akkers.js, "Velden"): in het gehucht is akker6 een weide.
 //   gebouw     een soort uit T.GEBOUWEN (js/gebouwen.js): dit gebouw staat al op de kaart —
 //              x/y de linkerbovenhoek van zijn voet, b/h de maat in tegels (weer net als
 //              "beslaat"). Zijn tekening staat al in de .tmj zelf, als een gewoon Tiled-object
@@ -79,6 +81,11 @@
   // opzoeken. Bomen en huizen spiegelt Marcel toch niet, maar dit voorkomt een gekke opzoeking
   // mocht hij per ongeluk op de spiegelknop klikken.
   const zonderVlag = (gid) => gid & 0x1fffffff;
+
+  // Wat een veld kan zijn (js/akkers.js, T.BESTEMMINGEN). Hier nog eens, want dit bestand wordt ook
+  // zonder js/akkers.js geladen (test/gehucht.test.cjs), en een verschrijving moet hoe dan ook
+  // opvallen in plaats van stil een akker te worden.
+  const BESTEMMINGEN = ['akker', 'weide', 'braak'];
 
   // "../tegels/grond.tsx" (of met \, of zonder ../) wordt "grond": zo vinden we het vel terug in
   // T.TEGELS zonder dat kaart.js zelf paden hoeft te kennen.
@@ -289,11 +296,19 @@
       if (p.akker !== undefined) {
         // Geen vakje maar een hele strook; de grond zelf staat al in de .tmj (kale zandgrond
         // zolang er geen graantegels zijn), dit is alleen de betekenis erbij. Zie "akker"
-        // hierboven.
+        // hierboven. Het plan voor volgend jaar begint gelijk aan de bestemming, en de
+        // vruchtbaarheid vol (js/akkers.js, T.VELDEN_INSTELLINGEN).
+        let bestemming = p.bestemming !== undefined ? String(p.bestemming) : 'akker';
+        if (!BESTEMMINGEN.includes(bestemming)) {
+          console.warn(`T.laadKaart: akker "${p.akker}" heeft bestemming "${bestemming}"; dat is geen ${BESTEMMINGEN.join(', ')}. Hij wordt een akker.`);
+          bestemming = 'akker';
+        }
         akkers.push({
           naam: String(p.akker), x: gx, y: gy,
           b: Number(p.b) || 1, h: Number(p.h) || 1,
           huis: p.huis !== undefined ? String(p.huis) : null,
+          bestemming, plan: bestemming,
+          vruchtbaarheid: T.VELDEN_INSTELLINGEN ? T.VELDEN_INSTELLINGEN.beginVruchtbaarheid : 1,
         });
         return;
       }

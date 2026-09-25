@@ -7,10 +7,12 @@
 //
 // T.tikGebouwenDag (js/gebouwen.js) roept T.tikBehoeftenDag hier als eerste stap aan, één keer
 // per verstreken kalenderdag. Wat hier per dag gebeurt:
-//   1. Eten: graan is de basis en blijft precies zoals het was (T.GEBOUWEN_INSTELLINGEN.eten-
-//      PerMensPerDag trekt het af, in gebouwen.js) — hier alleen kijken of het genoeg is, en of er
-//      ook groente, vis of vlees is. Meer soorten maakt tevredener, en wordt ook echt opgegeten.
-//      Vis en vlees bederven, tenzij ze gezouten zijn (pasBederfToe; zout komt van de marskramer).
+//   1. Eten: graan is de basis (T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag), en sinds het vee
+//      (25 sep) eet het dorp eerst de melk van vandaag, dan graan, en pas als het graan op is kaas
+//      (T.eetVandaag hieronder; gebouwen.js roept het aan in stap 3). Hier kijken of dat samen
+//      genoeg is, en of er ook groente, vis of vlees is. Meer soorten maakt tevredener, en wordt
+//      ook echt opgegeten. Vis en vlees bederven, tenzij ze gezouten zijn (pasBederfToe; zout komt
+//      van de marskramer).
 //   2. Brandhout: hout of turf, per huishouden per dag, maar alleen gestookt in de winter.
 //   3. Een kerk: heeft het dorp een klare kapel (T.GEBOUWEN.kapel.kerk)?
 //   4. Daaruit volgt S.behoeften.tevredenheid (0..1) en S.behoeften.mist (wat het dorp mist, voor
@@ -102,8 +104,10 @@
     const bevolking = S.bevolking || 0;
     const v = S.voorraad || {};
 
+    // Wat er vandaag te eten is: de melk van vandaag (js/vee.js, T.tikVeeDag), het graan, en de kaas.
     const voedselBenodigd = bevolking * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
-    const voedselDekking = voedselBenodigd > 0 ? Math.min(1, (v.graan || 0) / voedselBenodigd) : 1;
+    const voedsel = ((S.vee && S.vee.melk) || 0) + (v.graan || 0) + (v.kaas || 0);
+    const voedselDekking = voedselBenodigd > 0 ? Math.min(1, voedsel / voedselBenodigd) : 1;
     const extraSoorten = ['groente', 'vis', 'vlees'].filter((wat) => (v[wat] || 0) >= IN.extraVoedselDrempel);
     const voedselFactor = voedselDekking * (0.5 + 0.5 * (extraSoorten.length / 3));
 
@@ -277,6 +281,28 @@
       if (instantie.groeiDagen >= IN.huisGroeiDagen) groeiGebouw(S, instantie, soort);
     }
   }
+
+  // Eten, één dag (Marcel koos op 25 sep; ontwerp/spel.md, "Weides met koeien en schapen"): het
+  // dorp eet eerst de melk van vandaag (js/vee.js, S.vee.melk), dan graan, en pas als het graan op
+  // is kaas. Wat er van de melk over is, wordt kaas (T.VEE_INSTELLINGEN.melkNaarKaas), want melk
+  // houdt niet en kaas wel. Zo helpt het vee tegen de honger in het voorjaar: de melk begint in
+  // grasmaand, als het graan van vorig jaar opraakt, en de kaas van vorige zomer is er dan nog.
+  // Alles in graan gerekend. T.tikGebouwenDag (js/gebouwen.js, stap 3) roept dit aan.
+  // Geeft { nodig, melk, graan, kaas, kaasErbij, tekort }: wat er van elk gegeten is.
+  T.eetVandaag = function (S) {
+    const nodig = (S.bevolking || 0) * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
+    const v = S.voorraad;
+    const melkVandaag = (S.vee && S.vee.melk) || 0;
+    const melk = Math.min(nodig, melkVandaag);
+    const graan = Math.min(nodig - melk, v.graan || 0);
+    const kaas = Math.min(nodig - melk - graan, v.kaas || 0);
+    if (graan > 0) T.wijzigVoorraad(S, 'graan', -graan);
+    if (kaas > 0) T.wijzigVoorraad(S, 'kaas', -kaas);
+    const kaasErbij = (melkVandaag - melk) * (T.VEE_INSTELLINGEN ? T.VEE_INSTELLINGEN.melkNaarKaas : 0);
+    if (kaasErbij > 0) T.wijzigVoorraad(S, 'kaas', kaasErbij);
+    if (S.vee) S.vee.melk = 0;
+    return { nodig, melk, graan, kaas, kaasErbij, tekort: Math.max(0, nodig - melk - graan - kaas) };
+  };
 
   // Eén dag bijwerken: wordt aangeroepen vanuit T.tikGebouwenDag (js/gebouwen.js, stap 0), dus
   // één keer per verstreken kalenderdag, vóór woonruimte/eten/groei/handen/productie van die dag.

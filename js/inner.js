@@ -219,32 +219,35 @@
     }
     // Het graan: wat nog staat op de velden die hij zag (gezaaid en niet gemaaid), en wat er in de
     // schuren ligt (wat je verstopte, ligt daar niet). Hij verwacht van elke gezaaide tegel een
-    // volle oogst.
+    // volle oogst: wat die tegel geeft (T.oogstPerTegel, js/akkers.js), dus op een uitgeputte akker
+    // minder, want dunner graan ziet hij ook staan. Een weide of braak is gezien land (de pacht per
+    // akkertegel telt het mee, zoals een braakliggende tegel), maar daar staat geen graan.
     const tegelsGezien = new Set(b.tegels);
     if (vorig && vorig.tegelsGezien) for (const k of vorig.tegelsGezien) tegelsGezien.add(k);
     let tegels = 0;
-    let gezaaid = 0;
+    let verwacht = 0;
     let staand = 0;
     const datum = T.datumVanDag(dagNu(S));
     const basis = T.akkerStadium ? T.akkerStadium(datum.maand, datum.dagVanMaand) : 'gemaaid';
     for (const akker of (S.wereld && S.wereld.akkers) || []) {
+      const isAkker = !T.bestemmingVan || T.bestemmingVan(akker) === 'akker';
+      const perTegel = T.oogstPerTegel ? T.oogstPerTegel(akker) : T.GRAAN_PER_TEGEL || 0;
       for (const t of T.akkerTegels(akker)) {
         const k = sleutel(t.x, t.y);
         if (!tegelsGezien.has(k)) continue;
         tegels++;
-        if (akker.braak && akker.braak.has(k)) continue;
-        gezaaid++;
+        if (!isAkker || (akker.ongezaaid && akker.ongezaaid.has(k))) continue;
+        verwacht += perTegel;
         const stadium = T.akkerTegelStadium ? T.akkerTegelStadium(akker, t.x, t.y, basis) : basis;
-        if (stadium === 'rijp' || stadium === 'groen' || stadium === 'kiemend') staand++;
+        if (stadium === 'rijp' || stadium === 'groen' || stadium === 'kiemend') staand += perTegel;
       }
     }
-    const perTegel = T.GRAAN_PER_TEGEL || 0;
-    const nuGezien = staand * perTegel + ((S.voorraad && S.voorraad.graan) || 0);
+    const nuGezien = staand + ((S.voorraad && S.voorraad.graan) || 0);
     return {
       jaar: datum.jaar, gebouwen, woonruimte, tegels,
       graanGezien: Math.max(nuGezien, (vorig && vorig.graanGezien) || 0),
       graanNu: nuGezien,
-      graanVerwacht: Math.max(gezaaid * perTegel, (vorig && vorig.graanVerwacht) || 0),
+      graanVerwacht: Math.max(verwacht, (vorig && vorig.graanVerwacht) || 0),
       gezien: alle, tegelsGezien,
     };
   };

@@ -10,6 +10,7 @@ require('../js/tijd.js');
 require('../js/wereld.js');
 require('../js/voorraad.js');
 require('../js/mensen.js');
+require('../js/vee.js');
 require('../js/gebouwen.js');
 require('../js/behoeften.js');
 require('../js/akkers.js');
@@ -22,7 +23,10 @@ require('../js/gesprek.js');
 const T = globalThis.Toren;
 
 // De blokken zoals de bestanden ze zetten, vóór opties.js er iets mee doet.
-const BLOKKEN = ['GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN', 'INNER_INSTELLINGEN', 'BOEREN_INSTELLINGEN'];
+const BLOKKEN = [
+  'GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN', 'INNER_INSTELLINGEN',
+  'BOEREN_INSTELLINGEN', 'VELDEN_INSTELLINGEN', 'VEE_INSTELLINGEN',
+];
 const LOS = ['GRAAN_PER_TEGEL', 'ZAAIGRAAN_PER_TEGEL', 'DAG_LENGTE'];
 const bestanden = {};
 for (const k of BLOKKEN.concat(LOS)) bestanden[k] = JSON.parse(JSON.stringify(T[k]));
@@ -81,6 +85,26 @@ test('de rekening en het graan van de heer zijn keuzes (punt 6), en de inner sta
   assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.terugNaDagen.van').label, 'terug na dagen · van');
   assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.geduld').waarde, bestanden.INNER_INSTELLINGEN.geduld);
   assert.ok(!inner.some((g) => g.pad === 'INNER_INSTELLINGEN.komt.maand'), 'een maand is geen getal');
+});
+
+test('de weides: of het land uitput en of het vee groeit, zijn keuzes; Marcel koos allebei ja', () => {
+  assert.equal(T.VELDEN_INSTELLINGEN.vruchtbaarheid, true);
+  assert.equal(T.VEE_INSTELLINGEN.groeit, true);
+  assert.equal(T.optieKeuze('vruchtbaarheid'), 'putUit');
+  assert.equal(T.optieKeuze('veeGroeit'), 'groeit');
+  T.pasOptiesToe({ keuzes: { vruchtbaarheid: 'blijftGoed', veeGroeit: 'groeitNiet' } });
+  assert.equal(T.VELDEN_INSTELLINGEN.vruchtbaarheid, false);
+  assert.equal(T.VEE_INSTELLINGEN.groeit, false);
+  T.pasOptiesToe(null);
+  assert.deepEqual(T.VELDEN_INSTELLINGEN, bestanden.VELDEN_INSTELLINGEN);
+  assert.deepEqual(T.VEE_INSTELLINGEN, bestanden.VEE_INSTELLINGEN);
+  // En hun getallen staan in de werkbank, elk met een leesbare naam; een maand is geen getal.
+  const vee = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'VEE_INSTELLINGEN'));
+  assert.equal(vee.find((g) => g.pad === 'VEE_INSTELLINGEN.plaats.koe').label, 'plaats · koe');
+  assert.equal(vee.find((g) => g.pad === 'VEE_INSTELLINGEN.melkVoorMensen').waarde, 5);
+  assert.ok(!vee.some((g) => g.pad === 'VEE_INSTELLINGEN.melk.van'));
+  const velden = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'VELDEN_INSTELLINGEN'));
+  assert.equal(velden.find((g) => g.pad === 'VELDEN_INSTELLINGEN.akkerPutUit').label, 'akker put uit');
 });
 
 test('een onbekende keuze valt terug op de standaard', () => {

@@ -131,6 +131,28 @@
           uitleg: 'Net als in de winter kost honger mensen, het hele jaar door.' },
       ],
     },
+    // De weides (Marcel, 25 sep; ontwerp/spel.md, "Weides met koeien en schapen"): wat hij niet
+    // koos, wordt een keuze. "Geen winterzorg" en "vee alleen kopen" komen erbij met stap 2 en 3.
+    {
+      id: 'vruchtbaarheid', naam: 'Vruchtbaarheid', standaard: 'putUit',
+      uitleg: 'Of een akker het land uitput, zodat je velden moet laten rusten.',
+      keuzes: [
+        { id: 'putUit', naam: 'Het land put uit', zet: { 'VELDEN_INSTELLINGEN.vruchtbaarheid': true },
+          uitleg: 'Een akker geeft elk jaar wat minder. Een braak rust, en een weide met vee maakt het land sneller weer vruchtbaar.' },
+        { id: 'blijftGoed', naam: 'Het land blijft goed', zet: { 'VELDEN_INSTELLINGEN.vruchtbaarheid': false },
+          uitleg: 'Een akker geeft elk jaar zijn volle graan, hoe vaak hij ook akker was. Een weide is dan alleen voor het vee.' },
+      ],
+    },
+    {
+      id: 'veeGroeit', naam: 'Het vee', standaard: 'groeit',
+      uitleg: 'Of de kudde vanzelf groter wordt.',
+      keuzes: [
+        { id: 'groeit', naam: 'Groeit in de lente', zet: { 'VEE_INSTELLINGEN.groeit': true },
+          uitleg: 'In grasmaand werpen koeien kalveren en schapen lammeren, zolang er plaats is op hun weide.' },
+        { id: 'groeitNiet', naam: 'Groeit niet', zet: { 'VEE_INSTELLINGEN.groeit': false },
+          uitleg: 'Er komen geen jongen bij: de kudde blijft zo groot als hij begon.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -153,6 +175,8 @@
     { naam: 'De heer', blok: 'HEER_INSTELLINGEN' },
     { naam: 'De inner', blok: 'INNER_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },
+    { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
+    { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
   ];
 
   // ---------------------------------------------------------------------------------------------

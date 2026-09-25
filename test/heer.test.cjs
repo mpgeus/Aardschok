@@ -11,6 +11,7 @@ require('../js/tijd.js');
 require('../js/wereld.js');
 require('../js/voorraad.js');
 require('../js/mensen.js');
+require('../js/vee.js');
 require('../js/gebouwen.js');
 require('../js/behoeften.js');
 require('../js/akkers.js');
@@ -422,6 +423,31 @@ test('waar geen brink is (het oude spel), komt hij nooit', () => {
   S.wereld.marskramer = null;
   for (let dag = 0; dag < T.DAGEN_PER_JAAR; dag++) T.tikHeerDag(S, dag);
   assert.ok(!S.heer);
+});
+
+test('het vooruitzicht: zaaien kost alleen wat volgend jaar akker wordt, en de melk scheelt graan', () => {
+  const S = gehucht();
+  S.kalender.dag = SINT_MAARTEN;
+  const perMens = T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
+  const kaal = T.heerVooruitzicht(S, null);
+  assert.equal(kaal.zaaien, 10 * T.ZAAIGRAAN_PER_TEGEL);
+  assert.equal(kaal.melk, 0);
+  assert.ok(Math.abs(kaal.eten - 25 * perMens * kaal.dagen) < 1e-9);
+  // Het eerste veld (2×3) wordt volgend jaar weide: dat zaai je niet.
+  const [veld] = S.wereld.akkers;
+  veld.plan = 'weide';
+  assert.equal(T.heerVooruitzicht(S, null).zaaien, 4 * T.ZAAIGRAAN_PER_TEGEL);
+  // Staat er nu een koe op een weide, dan drinkt het dorp van grasmaand tot de oogst haar melk: 90
+  // dagen, elke dag melk voor vijf mensen. Dat graan eet het niet, en kaas telt apart.
+  veld.bestemming = 'weide';
+  S.wereld.wezens.push(T.zetOpWeide(T.maakDier('koe', 0, 0, 1), veld));
+  T.zetVoorraad(S, 'kaas', 7);
+  const v = T.heerVooruitzicht(S, null);
+  const melk = 90 * T.VEE_INSTELLINGEN.melkVoorMensen * perMens;
+  assert.ok(Math.abs(v.melk - melk) < 1e-9, `${v.melk}`);
+  assert.ok(Math.abs(v.eten - (25 * perMens * v.dagen - melk)) < 1e-9);
+  assert.equal(v.kaas, 7);
+  assert.ok(Math.abs(v.over - (v.na - v.eten - v.zaaien)) < 1e-9);
 });
 
 test('elk jaar opnieuw: brief, Sint-Maarten, en weer weg', () => {
