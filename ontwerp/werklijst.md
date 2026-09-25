@@ -76,13 +76,22 @@ het land uit (tot 40%, Marcels keuze), een braak rust, en een weide mest het. He
 een koe melk voor vijf mensen, wat over is wordt kaas, en in grasmaand komen er kalveren en
 lammeren bij zolang er plaats is. `npm test`: 460/460.
 
-**Loopt nu: de weides, stap 2: de winter en de wol** (Marcel koos het op 25 sep als eerste, en
-beantwoordde de open vragen; `spel.md`, "Marcel koos voor stap 2"). Hooi van de hele weide in
-hooimaand, vee dat 's winters hooi eet, op 1 slachtmaand kiezen wie er geslacht wordt, velden naast
-elkaar als één weide, de schapen naar de heide (nieuw op de kaart) en de schaapskooi, scheren in
-zomermaand, en mest uit de kooi die je in het veldenvenster op een akker legt.
+**En de winter voor het vee** (punt 6a, stap 2 van 3; Marcel koos op 25 sep, later die dag;
+`spel.md`, "Gebouwd, stap 2"). In hooimaand maaien de boeren eerst het hooi van hun weide, en van
+slachtmaand tot en met lentemaand eet het vee dat hooi: zo beslist het hooi hoeveel koeien je houdt.
+Op 1 slachtmaand opent een venster waarin je kiest wie er naar de slager gaat (vlees en huiden), met
+een voorstel dat net genoeg slacht. Velden naast elkaar die weide zijn, zijn samen één weide. De
+schapen grazen op de heide, een nieuwe meent in het zuidwesten, en slapen in de schaapskooi aan de
+rand ervan; ze worden in zomermaand geschoren, en de mest uit de kooi leg je in het veldenvenster op
+een akker, zodat die niet uitput. Wat Marcel niet koos, zijn opties. Een proef van drie jaar staat in
+`spel.md`. `npm test`: 494/494.
 
-**Daarna:**
+**Loopt nu:** de heide als grondsoort (tegels, door een agent); daarna komt hij op de kaart van het
+gehucht, op de meent die er al ligt.
+
+**Daarna, Marcel kiest:**
+- **De weides, stap 3: vee dat telt.** De inner telt de kudde, de heer vraagt per dier, je drijft een
+  deel het bos in voor hij komt, en de marskramer koopt en verkoopt vee, wol, kaas en hooi.
 - **Punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud, die de inner
   niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de argwaan om het
   graan en het doorzoeken door de soldaten (`T.zoekVerstopt`, nu nog leeg) staan al klaar. Het
@@ -97,6 +106,11 @@ zomermaand, en mest uit de kooi die je in het veldenvenster op een akker legt.
 elkaar, om later na te lopen (Marcel, 25 sep). Zet er een bij als je iets ziet.
 
 **Wacht op Marcel:**
+- Twee vragen uit de proef van stap 2 (`spel.md`, "Nog open na stap 2"): moet vlees ook eten zijn,
+  zodat slachten in slachtmaand de winter helpt (nu maakt het alleen tevredener)? En vullen de
+  schapen de kooi niet te snel (een lam per schaap met kans 0,7: vol in het derde jaar)?
+- De winter van het vee spelen: `Toren.debug.slachten()` opent het slachtvenster, en in het
+  veldenvenster (`V`) staan de mest en wat het hooi van volgend jaar de winter door helpt.
 - Hoe de brink in beeld komt: de plek van de marskramer en de heer verleggen naar een open plek,
   de huizen ervoor verzetten, of daken doorzichtig maken als er iets belangrijks achter staat (ook
   voor later, als de speler zelf een huis voor de brink bouwt).
@@ -152,7 +166,8 @@ nog nodig is".
    weides aanlegt zoals akkers, koeien erop grazen en schapen op de meent, en ze geven wat bij ze
    hoort: melk en kaas, vlees en huiden in slachtmaand, wol, en mest voor de akkers. En als de
    inner de kudde telt, zodat wie slim is een deel het bos in drijft voordat hij komt. In drie
-   stappen (`spel.md`): velden en vee op de weide (af, 25 sep); de winter en de wol; vee dat telt.
+   stappen (`spel.md`): velden en vee op de weide (af, 25 sep); de winter en de wol (af, 25 sep);
+   vee dat telt.
 6b. **Ontginnen** (Marcel, 25 sep; `spel.md`, "Ontginnen"). Klaar als je bos of heide tot een nieuw
    veld kunt maken, de heer er zijn deel van wil en de inner het telt, en een veld diep in het bos
    buiten zijn zicht blijft: een verstopplek voor land. Hier, omdat vee na stap 2 van de weides land
@@ -256,6 +271,11 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 25 sep 2026 — **De weides, stap 2 (punt 6a).** Hooi in hooimaand, vee dat 's winters hooi eet of
+  sterft, het slachtvenster op 1 slachtmaand, velden naast elkaar als één weide, de schapen op de
+  heide met een schaapskooi, scheren en mest per veld, en drie opties (`js/vee.js`, `js/akkers.js`,
+  `js/hud.js`, `test/weides.test.cjs`, `test/hooi.test.cjs`). Een proef van drie jaar staat in
+  `spel.md`.
 - 25 sep 2026 — **De weides, stap 1 (punt 6a).** Elk veld is akker, weide of braak en wisselt op
   1 lentemaand; een akker put het land uit tot 40%, een weide mest het. Vee graast binnen zijn
   weide en geeft melk en kaas, en de kudde groeit in grasmaand als er plaats is. Het veldenvenster

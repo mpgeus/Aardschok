@@ -52,6 +52,21 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   - Het venster van de heer rekent de kaas tegen het hele tekort, ook tegen het zaaigraan, zoals
     `T.heerVooruitzicht` het zegt. Maar kaas zaai je niet, en het dorp eet eerst graan en dan pas
     kaas. Wie in de winter zijn graan opeet, heeft in lentemaand geen zaaigraan, ook met kaas genoeg.
+- **De weides, stap 2** (25 sep, `spel.md`, "Gebouwd, stap 2"):
+  - Een gemaaide weide ziet eruit als een ongemaaide: je ziet het hooien alleen aan de boer met zijn
+    zeis. Hooioppers op de gemaaide tegels, tot het hooi binnen is, zijn tekenwerk.
+  - In hooimaand staat het vee gewoon op de weide die gemaaid wordt; de boer maait om een koe heen.
+    Vroeger ging het vee eraf tot het hooi binnen was.
+  - Twee velden die samen één weide zijn, hebben geen hek om zich heen: je ziet het alleen aan het
+    vee dat over de strook loopt, en in het venster.
+  - Vlees vult geen maag: het dorp eet het erbij, voor de tevredenheid, maar het helpt niet tegen de
+    honger. Een vraag voor Marcel (`spel.md`, "Nog open na stap 2").
+  - De heer vraagt 20 wol per schaapskooi, ook in het eerste jaar; acht schapen geven er 32. In stap
+    3 vraagt hij per dier.
+  - Zonder herder (een hand voor de kooi) geeft de kooi geen mest. Het veldenvenster zegt nog niet
+    waarom er geen mest bijkomt.
+  - Een sprong met `Toren.debug.kalender` loopt door de brief en de inner heen, en dan staat de tijd
+    na het slachten nog stil: dat komt van de inner, niet van het slachtvenster.
 
 ## Het beeld
 
@@ -116,7 +131,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - de koets van de heer;
 - portretten van de heer en de inner boven het gesprek;
 - de gebouwen die een tekening lenen (hut, schaapskooi, timmerman, brouwerij, tiendschuur,
-  wapenmaker, wachthuis en meer);
+  wapenmaker, wachthuis en meer). De schaapskooi staat sinds 25 sep op de kaart van het gehucht, in
+  de blokhutschuur: een Drentse kooi is laag, met een groot rieten dak tot bijna op de grond;
+- hooioppers op een gemaaide weide, en een hek om een weide;
 - bouwfases voor de kapel, de watermolen en de put;
 - misschien ijs op de beek (een vraag aan Marcel).
 

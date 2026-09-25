@@ -178,8 +178,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   spel: een karakter uit `T.KARAKTERS` in `js/mensen.js`, met een eigen gesprek onder dezelfde naam,
   en de eigenschappen maaien, opbrengst, zaaien en aanzien; de regels vragen `T.boerFactor` en
   `T.aanzienVan`, het scherm `T.overBoerTekst`), `js/vee.js` (het vee: `T.VEE` en `T.maakDier`,
-  koeien en schapen die grazen, staan en liggen, `T.rustVanDier`; de regels van de weides komen hier,
-  werklijst punt 6a), `js/opties.js` (de spelregels: `T.OPTIES` op
+  koeien en schapen die grazen, staan en liggen, `T.rustVanDier`; velden naast elkaar als één weide,
+  `T.weideGroepen`; waar een dier graast, op een weide of op de meent (de heide), `T.graaslandVan`;
+  het hooi in de winter, `T.voerHooi`; slachten, `T.slacht` en `T.slachtVoorstel`; en de schaapskooi,
+  met scheren en mest), `js/opties.js` (de spelregels: `T.OPTIES` op
   één plek, zoals `T.GEBOUWEN`; een keuze zet alleen waarden in de instellingenblokken, zodat elk
   getal één plek houdt; de namen; en `T.WERKBANK` met alle getallen, die vóór een keuze gaan. Het
   komt ná alle regels en gesprekken, want het neemt hun waarden als standaard, en het gereedschap
@@ -266,8 +268,10 @@ blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In he
 `Toren.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
 `Toren.debug.brief()` stuurt de brief van de heer nu, `Toren.debug.heer()` laat hem nu komen,
 `Toren.debug.inner()` de inner (`(true)`: onverwacht), en `Toren.debug.argwaan(0.6)` zet zijn argwaan.
-`Toren.debug.vee('koe', 4)` zet vier koeien (of `'schaap'`) op de weide met de meeste plaats, bij de
-kudde: ze blijven binnen de weide en geven melk (`js/vee.js`). Zonder weide rond een open plek bij de schout.
+`Toren.debug.vee('koe', 4)` zet vier koeien op de weide met de meeste plaats, bij de kudde: ze
+blijven binnen de weide en geven melk (`js/vee.js`); een schaap gaat naar de heide. Zonder weide rond
+een open plek bij de schout. `Toren.debug.slachten()` opent het slachtvenster nu (anders op 1
+slachtmaand).
 De spelregels die de browser onthield (`localStorage`, `aardschok.spelregels`) gelden ook voor wie
 test; `Toren.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
 Een sprong met `kalender` tikt alle dagen ertussen af: valt 1 wijnmaand erin, dan staat de brief

@@ -772,6 +772,63 @@ met de toetsen in `test/velden.test.cjs`.
 - De muis op een veld zegt van wie het is, welk vee erop staat en hoe vruchtbaar het is. De kaas
   staat in de balk, en het venster van de heer telt melk en kaas mee.
 
+**Gebouwd, stap 2 (25 sep 2026):** `js/vee.js`, `js/akkers.js`, `js/hud.js`, met de toetsen in
+`test/weides.test.cjs` en `test/hooi.test.cjs`. De getallen staan in `T.VEE_INSTELLINGEN` en
+`T.VELDEN_INSTELLINGEN`, en dus ook in de werkbank.
+- **Eén weide over meer velden** (`T.weideGroepen`). Velden die weide zijn en elkaar raken of één
+  tegel uit elkaar liggen, zijn één weide: de plaats, de melk en de jongen gaan over het geheel, en
+  het vee loopt over de strook ertussen. De muis en het venster zeggen "samen één weide met het veld
+  van Gerrit".
+- **Hooi.** In hooimaand maait een boer eerst zijn weide, tegel voor tegel, dan pas zijn graan. Een
+  tegel geeft 12,5 hooi; een koe eet er één per winterdag, een kalf de helft, een schaap niets. De
+  winter duurt van slachtmaand tot en met lentemaand, 150 dagen. Op 1 oogstmaand komt de rest van het
+  hooi in één keer binnen. Wie tien dagen tekortkomt, sterft, het jongste eerst; het dorp waarschuwt
+  vijftien dagen vooraf. Het spel begint op 1 lentemaand, nog in de winter, dus het gehucht krijgt
+  100 hooi mee. De balk toont het hooi, rood als het de winter niet haalt.
+- **Slachten.** Op 1 slachtmaand opent een venster: per groep (koeien, kalveren, schapen, lammeren)
+  schuif je wie er gaan, het oudste eerst, en het rekent mee of het hooi het dan haalt, en of je
+  zout het vlees goed houdt. Het begint op een voorstel: zo weinig als kan. Een koe geeft 20 vlees en
+  een huid, een schaap 6, een jong de helft. Je opent het ook onderaan het veldenvenster.
+- **De heide en de kooi.** Het gehucht heeft een meent in het zuidwesten (22 bij 9 tegels) en een
+  schaapskooi aan de oostrand, naast de weide van Klaas. De schapen grazen op de heide; lammeren komen
+  alleen als er plaats is in de kooi (20 per kooi). In zomermaand geeft elk schaap 4 wol, en de kooi
+  geeft per schaap 2,5 karren mest per jaar, zolang hij zijn herder (een hand) heeft. De kooi maakt
+  zelf geen wol meer.
+- **Mest.** In het veldenvenster zet je mest op een akker: op 1 lentemaand wordt die 10% vruchtbaarder,
+  voor een halve kar per tegel, elk jaar tot je hem eraf haalt.
+- **Opties:** het vee graast het hele jaar (geen winterzorg), de schapen eten 's winters ook hooi, en
+  de mest gaat vanzelf over alle akkers.
+
+**Wat een proef van drie jaar liet zien** (zes loten, de heer krijgt wat hij vraagt en telt alles,
+brandhout komt van buiten, de boeren maaien zoals in het spel op 1x, en op 1 slachtmaand volgt de
+schout het voorstel):
+
+| spel | honger jaar 1 | jaar 2–3 | koeien eind jaar 3 | graan geoogst jaar 3 | graan over, eind jaar 3 |
+|---|---|---|---|---|---|
+| stap 2, geen mest, nooit wisselen | 44 dagen | 0 | 1–2 koeien + kalveren | 485–536 | 10–217 |
+| stap 2, mest op de minst vruchtbare akkers | 44 dagen | 0 | 1–3 koeien + kalveren | 538–595 | 114–272 |
+| zonder winterzorg (zoals stap 1) | 44 dagen | 0 | 6–7 koeien | 485–536 | 219–376 |
+
+- **Het hooi doet wat het moest doen.** Met één weide blijft de kudde op twee à drie koeien: elk jaar
+  gaat er in slachtmaand een koe (of een kalf) naar de slager. Zonder winterzorg groeit hij tot zeven,
+  en dat is 150 tot 200 graan per jaar aan melk meer. Wie meer koeien wil, maakt meer weide, en
+  daarvoor is "één weide over meer velden".
+- **Mest telt.** Een volle kooi geeft 50 karren per jaar, genoeg voor drie à vier stroken van de es.
+  Dat is zo'n 50 graan per jaar meer in het derde jaar, en de es blijft op 80 à 90% in plaats van 70%.
+- **De schapen groeien snel.** Een lam per schaap met kans 0,7: de kooi is in het derde jaar vol (20),
+  en de wol gaat van 32 naar 80. Daarna groeit de kudde alleen met een tweede kooi. De heide (99
+  schapen) is nog lang geen grens.
+- **De eerste lente is honger**, zoals al na stap 1: het gehucht begint met 60 graan.
+- **Vlees vult geen maag.** Het dorp eet vlees erbij (het maakt tevredener), maar het telt niet als
+  eten tegen de honger: dat is zo sinds de behoeften (punt 3). Een geslachte koe is dus geen
+  wintervoorraad, zoals het toen wel was. Vraag voor Marcel.
+
+Nog open na stap 2 (Claude):
+- Moet vlees ook eten zijn, zodat slachten in slachtmaand de winter helpt? Dat zou het oude ritme
+  sterker maken: kalveren in het voorjaar, een volle weide in de zomer, vlees in de winter.
+- Een lam per schaap met kans 0,7 vult de kooi in drie jaar. Te snel?
+- De schapen slapen nog niet echt in de kooi: er is nog geen nacht (punt 11).
+
 ## Ontginnen: nieuwe velden uit bos of heide (Marcel, 25 sep 2026; werklijst punt 6b)
 
 Nu is het land vast: het gehucht heeft 209 tegels aan velden (zeven stuks), en je kunt er geen bij
