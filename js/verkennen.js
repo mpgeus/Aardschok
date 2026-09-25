@@ -104,13 +104,29 @@
     return delen.join(', ');
   };
 
+  // "Klaas", "Klaas en Gerrit", "Klaas, Jan en Gerrit".
+  T.opsomming = (namen) => (namen.length < 2 ? namen.join('') : `${namen.slice(0, -1).join(', ')} en ${namen[namen.length - 1]}`);
+
+  // Is deze weide samen met velden ernaast één weide (js/vee.js, T.weideGroepen)? Dan
+  // "samen één weide met het veld van Gerrit"; anders ''.
+  T.samenMetTekst = function (S, veld) {
+    const groep = T.weideVan ? T.weideVan(S.wereld, veld) : null;
+    if (!groep || groep.velden.length < 2) return '';
+    const anderen = groep.velden.filter((v) => v !== veld);
+    const namen = [...new Set(anderen.map((v) => T.boerVanVeld(S, v)).filter(Boolean).map((b) => b.naam))];
+    const welke = anderen.length === 1 ? 'het veld' : `${anderen.length} velden`;
+    return `samen één weide met ${welke}${namen.length ? ` van ${T.opsomming(namen)}` : ''}`;
+  };
+
   // De regel bij de muis: "Weide van Klaas · 3 koeien, 9 schapen · vruchtbaar 90%". Staat er meer
-  // vee op dan er plaats is, dan zegt hij dat; en wordt het veld volgend jaar iets anders, dan ook
-  // wat en wanneer.
+  // vee op dan er plaats is, dan zegt hij dat; is de weide samen met een veld ernaast één weide, dan
+  // ook dat; en wordt het veld volgend jaar iets anders, dan ook wat en wanneer.
   T.veldTekst = function (S, veld) {
     const bestemming = T.bestemmingVan(veld);
     const boer = T.boerVanVeld(S, veld);
     const delen = [T.hoofdletter(bestemming) + (boer ? ` van ${boer.naam}` : '')];
+    const samen = bestemming === 'weide' ? T.samenMetTekst(S, veld) : '';
+    if (samen) delen.push(samen);
     const dieren = T.dierenOp ? T.dierenOp(S, veld) : [];
     if (dieren.length) delen.push(T.kuddeTekst(dieren) + (T.weideStand(S, veld).vrij < 0 ? ' (te vol)' : ''));
     else if (bestemming === 'weide') delen.push('nog geen vee');
@@ -230,20 +246,20 @@
 
   // ── Vee op de weide (js/vee.js; spel.md, "Weides met koeien en schapen") ──
   //
-  // Een dier met een weide (e.weide, het veld zelf) blijft binnen die rechthoek, en niet rond een
-  // middelpunt met een straal (e.thuis, e.straal): een strook van twee bij veertien heeft dan maar
-  // vier tegels binnen de straal, en een blok van vijf bij zes laat zijn hoeken leeg. Het stapt ook
-  // niet naar een tegel waar al iemand staat, of waar een ander net heen loopt: twee koeien op één
-  // tegel zie je meteen. Staat het buiten zijn weide (na een wissel op 1 lentemaand, T.verhuisVee),
-  // dan loopt het er eerst heen.
-  const opVeld = (v, x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
+  // Een dier blijft binnen zijn graasland (T.graaslandVan, js/vee.js): de velden van zijn weide, met
+  // de strookjes ertussen als twee velden naast elkaar samen één weide zijn, of de meent. Niet rond
+  // een middelpunt met een straal (e.thuis, e.straal): een strook van twee bij veertien heeft dan
+  // maar vier tegels binnen de straal, en een blok van vijf bij zes laat zijn hoeken leeg. Het stapt
+  // ook niet naar een tegel waar al iemand staat, of waar een ander net heen loopt: twee koeien op
+  // één tegel zie je meteen. Staat het buiten zijn graasland (na een wissel op 1 lentemaand,
+  // T.verhuisVee), dan loopt het er eerst heen.
   const doelVan = (e) => (e.pad && e.pad.length ? e.pad[e.pad.length - 1] : null);
   const vrijVoor = (w, e) => (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e });
 
   // De buurtegels (vier kanten, zoals elke dwaalstap) waar dit dier heen mag.
   T.dwaalTegelsOpWeide = function (w, e) {
-    const v = e.weide;
-    if (!v) return [];
+    const land = T.graaslandVan ? T.graaslandVan(w, e) : null;
+    if (!land) return [];
     const onderweg = new Set();
     for (const o of w.wezens) {
       const d = o !== e && !o.dood && doelVan(o);
@@ -254,26 +270,28 @@
     for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
       const x = e.tx + dx;
       const y = e.ty + dy;
-      if (opVeld(v, x, y) && !onderweg.has(x + ',' + y) && mag(x, y) && !bijDeur(w, x, y)) opties.push({ x, y });
+      if (land.op(x, y) && !onderweg.has(x + ',' + y) && mag(x, y) && !bijDeur(w, x, y)) opties.push({ x, y });
     }
     return opties;
   };
 
-  // De weg naar de dichtstbijzijnde vrije tegel van zijn weide, of null (geen weide, er al op, of
-  // geen weg: dan probeert het de volgende keer opnieuw).
+  // De weg naar de dichtstbijzijnde vrije tegel van zijn graasland, of null (geen weide, er al op,
+  // of geen weg: dan probeert het de volgende keer opnieuw).
   T.wegNaarWeide = function (w, e) {
-    const v = e.weide;
-    if (!v || opVeld(v, e.tx, e.ty)) return null;
+    const land = T.graaslandVan ? T.graaslandVan(w, e) : null;
+    if (!land || land.op(e.tx, e.ty)) return null;
     const mag = vrijVoor(w, e);
     const van = { x: e.tx, y: e.ty };
     let doel = null;
     let afstand = Infinity;
-    for (let y = v.y; y < v.y + v.h; y++) {
-      for (let x = v.x; x < v.x + v.b; x++) {
-        const d = T.afstand(van, { x, y });
-        if (d < afstand && mag(x, y)) {
-          afstand = d;
-          doel = { x, y };
+    for (const v of land.velden) {
+      for (let y = v.y; y < v.y + v.h; y++) {
+        for (let x = v.x; x < v.x + v.b; x++) {
+          const d = T.afstand(van, { x, y });
+          if (d < afstand && mag(x, y)) {
+            afstand = d;
+            doel = { x, y };
+          }
         }
       }
     }

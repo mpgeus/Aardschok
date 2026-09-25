@@ -670,16 +670,19 @@
     const dieren = T.dierenOp ? T.dierenOp(S, veld) : [];
     let over = '';
     let zorg = false;
+    // Samen met een veld ernaast één weide (js/vee.js, T.weideGroepen): dan gaan de kudde en de
+    // plaats over allebei.
+    const samen = bestemming === 'weide' && T.samenMetTekst ? T.samenMetTekst(S, veld) : '';
     if (dieren.length) {
       const st = T.weideStand(S, veld);
       const bezet = `${st.nodig} van de ${st.tegels} tegels`;
       const kleinste = Math.min(...Object.values(T.VEE_INSTELLINGEN.plaats));
       zorg = st.vrij < 0;
-      over = `${T.kuddeTekst(dieren)} · ` + (st.vrij < 0
+      over = `${T.kuddeTekst(dieren)} · ` + (samen ? `${samen} · ` : '') + (st.vrij < 0
         ? `te vol: ze hebben ${st.nodig} tegels nodig en er zijn er ${st.tegels}, dus de koeien geven ${Math.round(st.vol * 100)}% melk en er komen geen jongen`
         : st.vrij < kleinste ? `vol (${bezet}): geen plaats voor jongen` : `${bezet}: plaats voor jongen`);
     } else if (bestemming === 'weide') {
-      over = 'nog geen vee';
+      over = 'nog geen vee' + (samen ? ` · ${samen}` : '');
     } else if (bestemming === 'braak') {
       over = 'het land rust';
     } else {

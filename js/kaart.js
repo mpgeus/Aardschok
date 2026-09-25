@@ -62,6 +62,9 @@
 //              gereedschap/tiled/maak-gehucht.cjs en ontwerp/werklijst.md, punt 1b. Met
 //              "bestemming" ("akker", "weide" of "braak") begint het veld als iets anders dan
 //              een akker (js/akkers.js, "Velden"): in het gehucht is akker6 een weide.
+//   meent      een naam ("heide"): open land van het dorp samen, waar de schapen grazen
+//              (js/vee.js, "Waar een dier graast"). Net als een akker een rechthoek: x/y de
+//              linkerbovenhoek, b/h de maat. De grond zelf (de heide) staat in de .tmj.
 //   gebouw     een soort uit T.GEBOUWEN (js/gebouwen.js): dit gebouw staat al op de kaart —
 //              x/y de linkerbovenhoek van zijn voet, b/h de maat in tegels (weer net als
 //              "beslaat"). Zijn tekening staat al in de .tmj zelf, als een gewoon Tiled-object
@@ -212,6 +215,7 @@
     const wezens = [];
     const overgangen = [];
     const akkers = []; // strokens land, geen vakjes; zie "akker" hierboven
+    const meenten = []; // de meent (de heide), ook een rechthoek; zie "meent" hierboven
     const gebouwenOpKaart = []; // gebouwen die er al staan; zie "gebouw" hierboven
 
     // 2. alles wat op de grond staat: bomen, huizen, deuren, wezens, dorpelingen, overgangen.
@@ -312,6 +316,10 @@
         });
         return;
       }
+      if (p.meent !== undefined) {
+        meenten.push({ naam: String(p.meent), x: gx, y: gy, b: Number(p.b) || 1, h: Number(p.h) || 1, meent: true });
+        return;
+      }
       if (p.gebouw !== undefined) {
         // Zijn tekening staat al in de .tmj (een gewoon Tiled-object, zoals een boom); dit is
         // alleen de betekenis erbij. Zie "gebouw" hierboven en T.zetBestaandeGebouwen.
@@ -401,7 +409,7 @@
       b, h, tegels, grond, deuren, geheimen, kamers: [kamerBuiten],
       voorwerpen, questVoorwerpen, wezens,
       bekend: new Set(['buiten']), huidigeKamer: 'buiten',
-      burenKamers, overgangen, akkers, gebouwenOpKaart,
+      burenKamers, overgangen, akkers, meenten, gebouwenOpKaart,
       buiten: true, // geen kamers met muren: het spel tekent gras en hoge dingen
       naam: typeof eig.naam === 'string' ? eig.naam : null,
       // "proef": true in het betekenisbestand zegt dat deze kaart alleen voor de toetsen bestaat

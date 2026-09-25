@@ -123,7 +123,7 @@
     const w = S.wereld;
     if (!w || !w.akkers) return [];
     const IN = VIN();
-    const vee = T.veeVan ? T.veeVan(S) : [];
+    const vee = T.weideVee ? T.weideVee(S) : []; // de schapen op de meent hebben geen weide nodig
     if (vee.length && !w.akkers.some((v) => T.planVan(v) === 'weide')) {
       for (const v of w.akkers) if (vee.some((e) => e.weide === v)) v.plan = 'weide';
       if (T.ui && T.ui.bericht) T.ui.bericht('Er zou geen weide meer zijn, maar het vee moet ergens grazen: de weide blijft weide.', 'gevaar');
