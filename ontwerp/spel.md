@@ -236,7 +236,18 @@ Marcel koos uit een voorstel van Claude, vóór het bouwen:
   alles (dan komt er geen inner). "Wat de heer van het graan vraagt": een deel van wat hij telde, of
   pacht per akkertegel die hij zag.
 - Nog niet gebouwd: verstopplekken (stap 2), en praten, afleiden, omkopen en de rekenboeken (stap
-  3). Hij heeft nog geen eigen tekening en leent het zondagse pak van de bruidegom.
+  3). Hij heeft sinds 24 sep zijn eigen figuur (`beeld.md`, "Het huis van de heer draagt rood en
+  geel").
+
+**Voorstel voor stap 2, de verstopplekken** (Claude, 24 sep; nog niet gekozen). Er is al een soort
+gebouw `verstopplek` in `T.GEBOUWEN`, die de inner niet ziet.
+- **Wegzetten doe je ter plekke:** je loopt naar de kuil en zet graan of goud weg of haalt het
+  terug, niet vanuit een venster. Je bent een poppetje, geen hand van bovenaf.
+- **Verstopt graan kun je niet eten** tot je het terughaalt. Dat geeft spanning vóór de winter.
+- **Wie het vindt:** de soldaten bij veel argwaan, met een kans per plek (`T.zoekVerstopt`, waar
+  `T.doorzoekDorp` al op wacht). Misschien ook de inner zelf, als hij er vlak langs loopt; dan telt
+  de route die je met hem kiest nog meer.
+- **Een beetje bederf** (ratten), zodat verstoppen iets kost.
 - Bij het bouwen kwam een fout uit punt 1b boven: de schout kon in het gehucht niet lopen (snelheid
   0, sinds hij het vel van een dorpeling kreeg). Hij loopt nu 2,2 tegels per seconde
   (`T.SCHOUT_SNELHEID`, `js/gebied.js`).

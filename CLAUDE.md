@@ -38,6 +38,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   mensen zijn nog bruikbaar.
 - `ontwerp/verpakken.md`: van map met bestanden naar programma op Steam, en wanneer er wél een
   bouwstap komt.
+- `ontwerp/opmerkingen.md`: wat onderweg opviel en nog niet af is, om later na te lopen (Marcel,
+  25 sep). Zie je iets, zet het erbij.
 - Van het oude spel, alleen nog als bron: `ontwerp/verhaal.md` (met de vijf rondes ideeën van
   23 sep die tot het nieuwe spel leidden), `ontwerp/toren.md` en `ontwerp/spreuken.md`.
 

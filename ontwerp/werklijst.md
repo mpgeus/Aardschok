@@ -76,39 +76,12 @@ karakter in de tabel in `gereedschap/pixelart/karakters.cjs`, en de hulpjes die 
 **Volgende stap: punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud,
 die de inner niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de
 argwaan om het graan en het doorzoeken door de soldaten (`T.zoekVerstopt`, nu nog leeg) staan al
-klaar. Leg Marcel eerst een voorstel voor: hoeveel erin past, hoe je iets wegzet (erheen lopen?),
-en wat de soldaten vinden. Daarna stap 3: praten, afleiden, omkopen en de twee rekenboeken.
+klaar. Het voorstel van Claude staat in `spel.md` ("Voorstel voor stap 2"): ter plekke wegzetten,
+verstopt graan niet eten, wie het vindt, en een beetje bederf. Marcel kiest nog; vraag ook hoeveel
+erin past. Daarna stap 3: praten, afleiden, omkopen en de twee rekenboeken.
 
-**Nog ruw, om te onthouden:**
-- **de brink ligt achter twee daken.** Vanuit de camera staan het huis van de schout en de
-  boerderij van boer 3 vóór de brink. De heer, de marskramer, de schandpaal en wie eraan staat,
-  vallen daardoor grotendeels achter een dak. De held zie je door een kijkgat, de rest niet.
-  Dit kwam op 24 sep boven bij de schandpaal, en wacht op Marcel (zie hieronder);
-- de winter is hard (25 naar 2 mensen zonder hout); `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel
-  bijstellen als hij speelt;
-- in een huis in aanbouw branden de ramen al;
-- **honger valt in het voorjaar**, vlak vóór de oogst (het zaaigraan gaat voor), en kost buiten de
-  winter standaard geen mensen, alleen tevredenheid. Wie de heer alles geeft, heeft zo elk jaar
-  een maand honger, en elk jaar iets meer. Of hij meer pijn doet, stel je in de spelregels in;
-- een koets, de schandpaal en braakland met onkruid zijn tekenwerk: braakland blijft kale
-  geploegde grond, en aan de paal zie je alleen wie er staat, op de brink. De heer, zijn soldaten
-  en de inner hebben sinds 24 sep hun eigen figuren (`beeld.md`);
-- het zwad van de maaier staat als paaltjes, en de slag is symmetrisch;
-- de bevolking is een getal, geen poppetjes; van de nieuwe goederen staan alleen ijzer, zout en
-  gereedschap in de balk (steen, klei, riet, vis, … niet); wat de marskramer koopt, zie je wel in
-  zijn venster;
-- **het eerste voorjaar is krap:** het gehucht begint met 60 graan voor 25 mensen, dus half
-  grasmaand is het op, ruim drie maanden vóór de oogst. Bij het eerste bezoek van de marskramer
-  heb je dan ook bijna niets te verkopen (wat hout). Marcel (24 sep): "het graan passen we
-  gaandeweg wel aan na spelen";
-- zout telt sinds 24 sep voor de vis, want de beek vriest 's winters dicht. Het vlees van de jager
-  komt het hele jaar binnen; het slachten in slachtmaand is voor later (`spel.md`, "Handel");
-- de marskramer leent het vel van Wim, en loopt van de weg naar de brink op 1× een week;
-- wat een gebouw zegt, lees je alleen op zijn voet (het dak vangt de muis niet), en alleen bij
-  gebouwen die je zelf neerzette;
-- veel nieuwe gebouwen lenen een tekening (hut, schaapskooi, timmerman, brouwerij, tiendschuur,
-  wapenmaker, wachthuis, …), en kapel, watermolen en put hebben nog geen bouwfases: tekenwerk.
-
+**Wat nog ruw is of niet helemaal goed staat,** staat in `opmerkingen.md`: alle opmerkingen bij
+elkaar, om later na te lopen (Marcel, 25 sep). Zet er een bij als je iets ziet.
 
 **Wacht op Marcel:**
 - Hoe de brink in beeld komt: de plek van de marskramer en de heer verleggen naar een open plek,
