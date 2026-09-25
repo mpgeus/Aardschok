@@ -33,12 +33,11 @@ op een oude stand. Haal ook eerst de hele geschiedenis op (`git fetch --unshallo
 `test/tegelvolgorde.test.cjs` leest een oude commit, en in een ondiepe kloon falen er dan twee toetsen
 die niets met je werk te maken hebben.
 
-**Loopt nu:** niets.
-
-**Volgende: punt 7, het oude spel eruit.** Marcel haalde het op 25 sep naar voren en koos: het gevecht
-in beurten blijft, de namen gaan nu om, en de oude kaart gaat weg. De stappen en de valkuilen staan
-hieronder bij punt 7. Het is een groot stuk werk; begin er een verse sessie voor, en lees eerst die
-stappen.
+**Loopt nu: punt 7, het oude spel eruit** (tweede sessie van 25 sep, op branch
+`claude/werklijst-vervolg-ib66vy`). Marcel haalde het op 25 sep naar voren en koos: het gevecht in
+beurten blijft, de namen gaan nu om, en de oude kaart gaat weg; in deze sessie ook het begin (een
+benoemingsbrief), geen scènes, en levenspunten voor de schout. De stappen en de valkuilen staan
+hieronder bij punt 7.
 
 **Daarna:**
 - **Verstoppen, deel 1b: ook onder de 40% een risico** (Marcel koos op 25 sep; `spel.md`, "Marcel
@@ -143,14 +142,20 @@ nog nodig is".
    **Marcel koos (25 sep):** "Gevecht houden, namen nu hernoemen, oude kaart weg." Het gevecht in
    beurten blijft, met alleen slaan, voor de rovers, de wolven en de opstand; de namen gaan nu om; en
    de oude kaart gaat weg (het erf, het bos, het dorp en de toren).
+   **En in een tweede sessie van 25 sep, op drie vragen van Claude** (`spel.md`, onder Open): het
+   begin is een benoemingsbrief van de heer; `js/regie.js` gaat weg, want je stuurt altijd zelf; en
+   in een gevecht krijgt de schout voorlopig levenspunten. 7a tot en met 7d gaan achter elkaar, met
+   na elke stap een paar regels aan Marcel; voor 7e (de namen) opent hij eerst het gehucht nog eens.
    In stappen, elk met `npm test` groen en een eigen commit (voorstel van Claude):
-   - **7a. Het gehucht wordt het begin.** `index.html` opent zonder `?kaart=` meteen het gehucht. De
-     tutorial eruit: `js/tutorial.js`, `js/regie.js`, en het draaiboek `T.TUTORIAL_TEKST` met zijn
-     plek in de gespreksschrijver (`gereedschap/gesprekken-tool.js`; `test/bronblok.test.cjs` kijkt
-     op de echte bestanden).
+   - **7a. Het gehucht wordt het begin.** `index.html` opent zonder `?kaart=` meteen het gehucht,
+     met eerst de benoemingsbrief van de heer. De tutorial eruit: `js/tutorial.js`, `js/regie.js`,
+     het titelscherm, de oude meester, en het draaiboek `T.TUTORIAL_TEKST` met zijn plek in de
+     gespreksschrijver (`gereedschap/gesprekken-tool.js`; `test/bronblok.test.cjs` kijkt op de
+     echte bestanden).
    - **7b. De spreuken, het toveren en de leeftijd eruit:** `js/spreuken.js`, `js/toveren.js`,
      `js/leeftijd.js`, `T.verouder`, het meesterschap, de spreukbalk en de toetsen 2 tot 4. Het
-     gevecht blijft (`js/gevecht.js`), met alleen slaan.
+     gevecht blijft (`js/gevecht.js`), met alleen slaan, en de schout krijgt levenspunten zoals een
+     monster: wie valt, is het einde (voorlopig, tot punt 13).
    - **7c. De oude kaart en zijn mensen eruit:** `kaarten/wereld.tmj` (het erf, het bos, het dorp, de
      toren) met zijn betekenis, `kaarten/oud/`, de gebieden erf en toren, en Wim, de meester, de
      bakker, de smidsvrouw en de andere dorpelingen van het oude dorp, met hun gesprekken en de quest

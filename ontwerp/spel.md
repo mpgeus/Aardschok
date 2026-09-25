@@ -1327,3 +1327,17 @@ besturen, dan de nacht en het verzet, en dan de groei naar vrijheid.
   houden, namen nu hernoemen, oude kaart weg." Het gevecht in beurten blijft dus (met alleen slaan),
   `Toren` en `held` worden `Spel` en `schout`, en het erf, het bos, het dorp en de toren gaan weg. De
   stappen staan in de werklijst, bij punt 7.
+  **Marcel koos daarna (25 sep, op drie vragen van Claude):**
+  - *Het begin is een benoemingsbrief van de heer.* Wie het spel opent, staat meteen in het gehucht,
+    en eerst ligt er een brief in dezelfde stijl als zijn brief in wijnmaand: hij benoemt je tot
+    schout, je voorganger "is nu elders", en hij zegt wat hij op Sint-Maarten komt halen en dat de
+    inner in oogstmaand komt tellen. Dat doet wat de tutorial deed (je weet waarom je er bent),
+    maar in de wereld zelf, zonder uitlegger. Het titelscherm komt pas bij punt 17, met de naam.
+  - *Je stuurt altijd zelf: geen scènes.* `js/regie.js` speelde scènes waarin de speler niet
+    stuurde (lopen, praten, de camera, overslaan met Esc). Het nieuwe spel doet dat nergens: de
+    inner loopt mee terwijl jij loopt, de heer komt binnen terwijl de tijd doorloopt. Dus ging het
+    weg met de tutorial; wil een moment later toch een scène, dan staat de code in git
+    (`git log -- js/regie.js`).
+  - *In een gevecht heeft de schout voorlopig levenspunten,* zoals de wolf en de kobold, en wie valt
+    is het einde. Wat vallen echt betekent (gewond, dagen rust, gevangen), beslissen we bij punt 13,
+    als de rovers en de wolven komen; nu vecht er in het gehucht nog niemand.
