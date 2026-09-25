@@ -507,6 +507,18 @@ proefplaat is `uit/dorpelingen/marskramer-proef.png`.
   grond.
 - In het spel leent hij niets meer van Wim.
 
+## Het vee: een koe en een schaap (Marcel, 25 sep 2026)
+
+Voor de weides met vee (`spel.md`, "Weides met koeien en schapen"). Marcel koos: eerst de dieren
+tekenen, dan de regels. Een koe en een schaap, net als de dorpelingen uit acht richtingen, met:
+- **grazen**, de kop omlaag, en het meeste van de tijd;
+- **staan**, kauwend, met de staart en de oren;
+- **lopen**;
+- **liggen**.
+
+Middeleeuws vee was klein. Niet elk dier is hetzelfde ("Niets is gelijk"): een paar kleuren per
+soort, zodat een kudde leeft.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

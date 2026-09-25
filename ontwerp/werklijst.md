@@ -68,7 +68,9 @@ komen, `Toren.debug.inner()` de inner (`(true)`: onverwacht terug), `Toren.debug
 zijn argwaan, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
 bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
 
-**Loopt nu:** niets. Er draait geen agent.
+**Loopt nu:** tekenwerk, het vee (Marcel, 25 sep: "Wil ook weides hebben met koeien en schapen";
+`spel.md` en `beeld.md`). Een agent maakt een koe en een schaap die grazen, staan, lopen en liggen,
+en laat ze in het gehucht zien. De regels van de weides komen daarna.
 
 **Volgende stap: punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud,
 die de inner niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de
@@ -132,6 +134,10 @@ nog nodig is".
    omkoopt. De vraag van het proefje: is dit leuk? Besloten op 24 sep, zie `spel.md`, "Rijk worden
    en arm lijken". In drie stappen: het bezoek, het rapport en de argwaan (af, 24 sep); de
    verstopplekken; praten, afleiden, omkopen en de rekenboeken.
+6a. **Weides met vee** (Marcel, 25 sep; `spel.md`, "Weides met koeien en schapen"). Klaar als je
+   weides aanlegt zoals akkers, koeien en schapen erop grazen, en ze geven wat bij ze hoort: melk
+   en kaas het hele jaar, vlees en huiden in slachtmaand, en wol. En als de inner de kudde telt,
+   zodat wie slim is een deel het bos in drijft voordat hij komt. Eerst de dieren (loopt).
 7. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
    zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel beschrijft. Hier, omdat
    er daarna veel nieuwe code bovenop komt.

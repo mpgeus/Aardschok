@@ -594,9 +594,16 @@ en meer soorten (sluw, praatziek, sterk) komen bij de punten waar ze iets doen.
 > Wil ook weides hebben met koeien en schapen.
 
 Nu is er nog geen vee: de schaapskooi maakt wol "van schapen op de meent" zonder dat je een schaap
-ziet, en de slager wacht op vee dat niemand levert. Wat een weide in het spel doet, vraagt Claude
-eerst aan Marcel. Het voorstel sluit aan bij de kern: vee is rijkdom die je ziet, dus de inner telt
-de kudde, en wie slim is, drijft een deel ervan het bos in voordat hij komt.
+ziet, en de slager wacht op vee dat niemand levert. Marcel koos uit een voorstel van Claude:
+
+- **Vee dat telt.** Je legt weides aan, zoals akkers. De dieren grazen er en geven wat bij ze hoort,
+  door het jaar heen. De inner telt de kudde, want vee is rijkdom die je ziet: wie slim is, drijft
+  een deel ervan het bos in voordat hij komt.
+- **Koeien geven melk, kaas en vlees.** Elke dag melk, die je tot kaas maakt; kaas houdt goed, dus
+  het is wintervoer. In slachtmaand vlees en huiden, voor de slager en de leerlooier die er al
+  zijn. Wat de schapen precies geven (wol, en misschien meer), komt bij de regels.
+- **Eerst de dieren tekenen:** een koe en een schaap die grazen, lopen en gaan liggen
+  (`beeld.md`, "Het vee"). De regels komen daarna.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
