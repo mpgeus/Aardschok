@@ -663,6 +663,34 @@ blok `T.VEE_INSTELLINGEN` en in de werkbank):
    - Voor zijn komst kun je een deel van de kudde het bos in drijven.
    - De marskramer koopt en verkoopt koeien, schapen, kaas en wol.
 
+**Gebouwd, stap 1, de regels (25 sep 2026):** `js/akkers.js` en `js/vee.js`, met 24 toetsen. De
+getallen staan in `T.VELDEN_INSTELLINGEN` en `T.VEE_INSTELLINGEN`.
+- De vruchtbaarheid gaat per jaar 0,10 omlaag als akker, 0,15 omhoog als braak en 0,20 als weide.
+  Ze gaat nu door tot 0: een veld dat tien jaar akker was, geeft niets meer.
+- Melk en kaas tellen in graan: een koe geeft per dag wat vijf mensen eten, en de helft van wat over
+  is, wordt kaas.
+- Een kalf of lam telt pas na een jaar als volwassen dier, zodat de kudde niet in één keer
+  omhoogschiet.
+- Een fout die er al zat: een boer die bij het begin van de oogst al op een ongemaaide tegel stond,
+  maaide niet. Nu wel.
+
+**Wat een proef van drie jaar zonder scherm liet zien** (zes loten, de heer krijgt wat hij vraagt,
+brandhout komt van buiten):
+
+| spel | dagen honger in jaar 1 | jaar 2 | jaar 3 | graan geoogst in jaar 3 |
+|---|---|---|---|---|
+| één weide met vee, de rest akker | 44 | 0 | 0 | 536 |
+| alles akker, geen vee, het land put uit | 72 | 0–40 | 24–88 | 620 |
+| zoals vóór deze stap | 72 | 0–40 | 0–40 | 776 |
+
+- Eén weide is sterk: de melk van drie koeien is 158 graan per jaar waard. Als akker gaf dat veld
+  105 graan, en dan kostte het ook nog zaaigraan.
+- Er komt geen kaas: 25 monden drinken alle melk van drie koeien. Kaas komt pas bij meer dan vijf
+  koeien.
+- De kudde groeit niet: na één lam is de weide vol. Meer vee kan alleen met meer weide.
+- Het eerste voorjaar is altijd honger, met of zonder vee. Dat was er al: het gehucht begint met 60
+  graan.
+
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
 De ruggengraat staat of wordt gebouwd: bouwen, mensen, werk, kalender, voorraad. Wat er nog mist,
