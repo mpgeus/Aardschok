@@ -297,6 +297,66 @@ De getallen zijn een eerste gok voor de werkbank:
   soldaten zoeken plek voor plek; (2) het bos, als plek voor graan en voor de kudde, met de inner die
   de kudde telt en kaas en wol als sporen; (3) de marskramer handelt in vee, kaas, wol en hooi.
 
+**Gebouwd, stap 2 van de inner, deel 1: kelders, de kapel en de kist (25 sep 2026)**
+(`js/verstoppen.js`, `test/verstoppen.test.cjs`). Alle getallen staan in de werkbank onder "De
+verstopplekken", "De inner" en "De heer".
+
+- Een klik op een huis, een boerderij of de kapel: de schout loopt erheen, en in een venster zet hij
+  graan of goud weg of haalt het terug (per 10 of 5, de kelder vol, of alles). Zolang het open is,
+  staat de tijd stil. Wat verstopt ligt, staat klein naast het graan en het goud in de balk
+  (`+40`), en bij de muis staat waar.
+- De plekken zoals in de tabel hierboven. Een stenen huis heeft een kelder van 60, een hut geen.
+  Wie er woont, staat in het betekenisbestand: de boerderijen dragen nu `huis`, net als de akkers.
+- Zolang de inner of de heer in het dorp is, sjouw je niets: dat valt op. Wie zijn goud te laat
+  terughaalt, kan de heer niet betalen; het betaalvenster zegt dan wat er nog verstopt ligt.
+- De soldaten zoeken op Sint-Maarten (bij argwaan vanaf 50%) plek voor plek, met de kans van die
+  plek. Wat ze vinden, is weg, en elke vondst kost 15% argwaan (**bedacht door Claude**, uit te
+  zetten in de werkbank).
+- De inner telt de kist, en de heer vraagt er 15% van, net als van het graan. Zonder rapport telt de
+  heer de kist als hij komt en houdt hij dat getal; anders werd zijn eis kleiner terwijl je betaalde.
+- De marskramer houdt een boek bij: wat hij je sinds Sint-Maarten betaalde en wat jij hem. Wat je bij
+  hem overhield, min wat je sindsdien bouwde (dat ziet de inner staan), verwacht de inner in de kist.
+  Ligt er minder dan 60% van, dan groeit zijn argwaan; om minder dan 10 goud maakt hij zich niet
+  druk. Hij zegt het ook in zijn gesprek.
+- Drie keuzes in de spelregels: sporen (alles, of alleen het graan), de kist (telt of niet), en wie
+  er in een kelder woont (het karakter telt, of elke kelder is gelijk).
+
+**Wat een proef van één jaar in de browser liet zien** (vier loten, op 1×, van 1 hooimaand tot na
+Sint-Maarten; de schout loopt niet met de inner mee; met verstoppen zet hij op 14 oogstmaand 38% van
+de oogst weg, zes kelders vol, en de helft van het goud):
+
+| | zonder verstoppen | met verstoppen |
+|---|---|---|
+| op 14 oogstmaand binnen | 408 tot 503 graan, nog 33 tot 43 tegels te maaien | hetzelfde |
+| wat de inner telde | 541 tot 626 graan | 325 tot 426 graan |
+| argwaan | 0 | 0 |
+| de heer vraagt aan graan | 82 tot 94 | 49 tot 64 |
+| graan na Sint-Maarten | 400 tot 473 | 422 tot 504 |
+
+- **Verstoppen scheelt 30 tot 37 graan op de rekening, en dat is precies het gat van de honger**
+  (zie "Sint-Maarten": wie alles betaalt, komt zo'n 30 tekort). Na Sint-Maarten heb je 21 tot 37
+  graan meer; het verschil komt doordat de boeren niet elke keer even snel maaien.
+- **Maar tot zo'n 40% is het zonder risico.** De argwaan blijft 0, dus de soldaten zoeken niet, en dan
+  maakt het niet uit welke kelder je kiest: de roddelaar, de oudste en de kapel tellen pas als je
+  meer verstopt, of als de argwaan al hoog is door iets anders. Het is zelfs ruimer dan 40%, want de
+  inner verwacht alleen de oogst van dit jaar, en graan van vorig jaar in de schuur telt hij mee.
+- Op 14 oogstmaand is zo'n driekwart gemaaid. Wat nog op het veld staat, telt hij als hij het ziet;
+  daar helpt alleen de route die je met hem loopt.
+- Bij één lot kwam er een boete: het goud lag nog verstopt toen de heer kwam. Dat is de spanning die
+  bedoeld is, maar de speler moet het weten; daarom zegt het betaalvenster het nu.
+
+Nog open na deel 1 (vragen van Claude):
+- **Moet verstoppen ook onder de grens een risico hebben?** Anders tellen de keuzes tussen de plekken
+  pas bij hebzucht. Voorstel: de inner kan zelf een kelder ontdekken als hij er vlak langs loopt, met
+  de kans van die plek. Dan telt de route die je met hem loopt meer, en de roddelaar ook. Of: de
+  soldaten zoeken altijd, maar bij weinig argwaan alleen een paar plekken (bij de schout altijd). Of
+  de grens strenger (argwaan al onder 80% in plaats van 60%).
+- De andere zes karakters (zanger, weduwe, vroedvrouw, heethoofd, nieuwkomer, drinker) doen nog niets
+  voor hun kelder. De drinker die het in de herberg vertelt, en het heethoofd dat de soldaten slaat
+  als ze komen zoeken, liggen voor de hand.
+- De woekeraar houdt zijn deel meteen, net als de kapelaan. Rente die per maand oploopt, past beter bij
+  een woekeraar, maar is ingewikkelder.
+
 ## Gebouwen (Marcel, 23 sep 2026)
 
 > We hebben types gebouwen nodig. Dus huis, deze zorgen ervoor dat je populatie kan groeien;

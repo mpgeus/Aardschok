@@ -29,7 +29,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   en gereedschap in de balk, dus steen, klei, riet, vis en de rest niet. Wat de marskramer koopt,
   zie je wel in zijn venster.
 - **Wat een gebouw zegt,** lees je alleen als de muis op zijn voet staat, want het dak vangt de muis
-  niet. En alleen bij gebouwen die je zelf neerzette.
+  niet. Sinds 25 sep ook bij de huizen die al op de kaart stonden (daar verstop je iets), niet alleen
+  bij gebouwen die je zelf neerzette.
 - **De marskramer loopt op 1× een week** van de weg naar de brink.
 - **De inner** (24 sep, `spel.md`):
   - De getallen zijn een eerste gok: 90 stappen geduld, zeven tegels zicht, en een toeslag van
@@ -67,6 +68,15 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     waarom er geen mest bijkomt.
   - Een sprong met `Toren.debug.kalender` loopt door de brief en de inner heen, en dan staat de tijd
     na het slachten nog stil: dat komt van de inner, niet van het slachtvenster.
+- **De verstopplekken, deel 1** (25 sep, `spel.md`, "Gebouwd, stap 2 van de inner, deel 1"):
+  - Tot zo'n 40% van de oogst verstop je zonder risico: de argwaan blijft 0, dus de soldaten zoeken
+    niet, en dan maakt het niet uit welke kelder je kiest. Een vraag voor Marcel (`spel.md`, "Nog
+    open na deel 1").
+  - Van de tien karakters doen er vier iets voor hun kelder (roddelaar, vrome, woekeraar, oudste);
+    boven het venster staat ook het karakter van de andere zes, en dat lijkt dan iets te betekenen.
+  - Het gesprek van de inner noemt de kist en de marskramer ook als die opties uit staan.
+  - Komt de inner onverwacht terug en ligt er ineens meer goud in de kist, dan telt de heer dat wel
+    (het hoogste van zijn twee tellingen), maar de argwaan groeit er niet van, zoals bij het graan.
 
 ## Het beeld
 
@@ -146,9 +156,5 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **De heer kijkt op Sint-Maarten zelf rond vanaf de brink** (24 sep, gebouwd). Wat hij ziet en niet
   in het rapport van de inner staat, komt alsnog op de rekening en kost argwaan. Te keuren; uit te
   zetten met "heer zicht" op 0 in de werkbank.
-- **De verstopplekken, stap 2 van de inner** (24 sep, nog niet gebouwd): zie `spel.md`, "Voorstel
-  voor stap 2". Het gaat om vier punten:
-  - wegzetten doe je ter plekke;
-  - verstopt graan kun je niet eten;
-  - wie het vindt;
-  - een beetje bederf.
+- **Een vondst van de soldaten kost argwaan** (25 sep, gebouwd): 15% per plek waar ze iets vinden.
+  Uit te zetten met "argwaan per vondst" op 0 in de werkbank.

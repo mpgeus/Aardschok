@@ -174,7 +174,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ziet, in een rechte lijn en niet door huizen, `T.innerKijkt`; zijn rapport, `T.maakRapport`, dat
   `T.eisVanDeHeer` als rekening neemt; de argwaan, `T.zetArgwaan`, en wat ze doet; zijn poppetje dat
   zijn eigen ronde loopt of met de schout mee, `T.werkInnerBij`; en `T.heerKijktRond` op
-  Sint-Maarten), `js/boeren.js` (wie de boeren zijn, geloot per
+  Sint-Maarten; sinds 25 sep telt hij ook de kist, en vertelt de marskramer hem wat hij je betaalde,
+  `T.boekMarskramer` in `js/handel.js`), `js/verstoppen.js` (de verstopplekken: de kelder van een
+  huis of boerderij en de kapel, `T.verstopPlekVan`; wegzetten en terughalen, `T.verstop` en
+  `T.haalTerug`; het karakter van wie er woont, via `huis` op de boerderij, dezelfde id als op de
+  boer; en wat de soldaten vinden, `T.zoekVerstopt`), `js/boeren.js` (wie de boeren zijn, geloot per
   spel: een karakter uit `T.KARAKTERS` in `js/mensen.js`, met een eigen gesprek onder dezelfde naam,
   en de eigenschappen maaien, opbrengst, zaaien en aanzien; de regels vragen `T.boerFactor` en
   `T.aanzienVan`, het scherm `T.overBoerTekst`), `js/vee.js` (het vee: `T.VEE` en `T.maakDier`,
@@ -268,6 +272,9 @@ blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In he
 `Toren.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
 `Toren.debug.brief()` stuurt de brief van de heer nu, `Toren.debug.heer()` laat hem nu komen,
 `Toren.debug.inner()` de inner (`(true)`: onverwacht), en `Toren.debug.argwaan(0.6)` zet zijn argwaan.
+`Toren.debug.verstopt()` zegt wat er waar verstopt ligt en hoe vaak de soldaten het er vinden;
+`Toren.debug.verstopt('boer1', 30, 5)` zet 30 graan en 5 goud in die kelder (of `'schout'`, `'kapel'`),
+en `Toren.debug.zoeken()` laat de soldaten nu zoeken, zoals op Sint-Maarten.
 `Toren.debug.vee('koe', 4)` zet vier koeien op de weide met de meeste plaats, bij de kudde: ze
 blijven binnen de weide en geven melk (`js/vee.js`); een schaap gaat naar de heide. Zonder weide rond
 een open plek bij de schout. `Toren.debug.slachten()` opent het slachtvenster nu (anders op 1

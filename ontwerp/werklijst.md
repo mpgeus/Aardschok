@@ -86,27 +86,40 @@ rand ervan; ze worden in zomermaand geschoren, en de mest uit de kooi leg je in 
 een akker, zodat die niet uitput. Wat Marcel niet koos, zijn opties. Een proef van drie jaar staat in
 `spel.md`. `npm test`: 494/494.
 
-**Loopt nu:** niets. De heide is ook getekend (een nieuwe grondsoort, `beeld.md`, "De heide") en
-ligt op de kaart, met de schaapskooi aan de noordrand. Nieuw in de rij: **straten en paden** (punt
-6c, na het ontginnen; Marcel koos op 25 sep, `spel.md`, "Straten en paden").
+**En verstoppen** (punt 6, stap 2, deel 1; Marcel koos op 25 sep, een sessie later; `spel.md`,
+"Marcel koos voor stap 2"). Geen kuil ("een kuil vind ik niks"), maar plekken die er al zijn: een klik
+op een huis, een boerderij of de kapel, en de schout loopt erheen en zet er graan of goud weg of
+haalt het terug. Elke plek werkt anders. In je eigen kelder vinden de soldaten het vaak, in de kapel
+bijna nooit (maar de kapelaan houdt een tiende), en het karakter van de boer telt: de roddelaar
+vertelt het rond, de vrome weigert, de woekeraar houdt een vijfde, de oudste kent een oude plek. De
+inner telt nu ook de kist, en de marskramer vertelt hem wat hij je betaalde: een lege kist na veel
+verkopen maakt argwanend. Zolang de inner of de heer in het dorp is, sjouw je niets. `npm test`:
+512/512.
 
-**Daarna, Marcel kiest:**
-- **De weides, stap 3: vee dat telt.** De inner telt de kudde, de heer vraagt per dier, je drijft een
-  deel het bos in voor hij komt, en de marskramer koopt en verkoopt vee, wol, kaas en hooi.
-- **Punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud, die de inner
-  niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de argwaan om het
-  graan en het doorzoeken door de soldaten (`T.zoekVerstopt`, nu nog leeg) staan al klaar. Het
-  voorstel van Claude staat in `spel.md` ("Voorstel voor stap 2"): ter plekke wegzetten, verstopt
-  graan niet eten, wie het vindt, en een beetje bederf. Marcel kiest nog; vraag ook hoeveel erin
-  past. Daarna stap 3: praten, afleiden, omkopen en de twee rekenboeken. Voorstel van Claude
-  (25 sep, nog niet gekozen): bouw dit samen met stap 3 van de weides, de kudde die de inner telt,
-  en de geheime akker uit punt 6b. Graan in een kuil, vee in het bos en een akker achter de bomen
-  zijn hetzelfde spel: rijkdom uit zijn zicht halen.
+**Loopt nu:** niets. Een proef van één jaar (`spel.md`, "Gebouwd, stap 2 van de inner, deel 1")
+liet zien dat verstoppen 30 tot 37 graan op de rekening scheelt, precies het gat van de honger,
+maar dat het tot zo'n 40% van de oogst zonder risico is: dan blijft de argwaan 0 en zoekt niemand.
+Ook nieuw in de rij (Marcel koos het eerder vandaag): **straten en paden** (punt 6c, na het
+ontginnen; `spel.md`, "Straten en paden").
+
+**Daarna:**
+- **Eerst een vraag uit de proef:** moet verstoppen ook onder de grens een risico hebben (`spel.md`,
+  "Nog open na deel 1")? Voorstel van Claude: de inner ontdekt zelf een kelder als hij er vlak
+  langs loopt, met de kans van die plek. Dan telt de route die je met hem loopt, en de roddelaar ook.
+- **Verstoppen, deel 2: het bos, met de kudde** (Marcel koos op 25 sep dat het bos samen met de
+  kudde komt). Een plek in het bos voor graan en goud (ver lopen, muizen en vocht), en een deel van
+  de kudde het bos in voor de inner komt. De inner telt de kudde en de heer vraagt per dier, met kaas
+  en wol als sporen. Dat is ook stap 3 van de weides, zonder de handel.
+- **Deel 3: de marskramer koopt en verkoopt vee, kaas, wol en hooi.** Daarna stap 3 van de inner:
+  praten, afleiden, omkopen (ook de marskramer, die nu het spoor van goud is) en de rekenboeken.
 
 **Wat nog ruw is of niet helemaal goed staat,** staat in `opmerkingen.md`: alle opmerkingen bij
 elkaar, om later na te lopen (Marcel, 25 sep). Zet er een bij als je iets ziet.
 
 **Wacht op Marcel:**
+- De vraag uit de proef van verstoppen, hierboven. En proberen: `Toren.debug.verstopt()` zegt wat
+  er waar ligt, `Toren.debug.verstopt('boer1', 30, 5)` zet iets weg zonder te lopen, en
+  `Toren.debug.zoeken()` laat de soldaten nu zoeken. Maar het leukst is lopen: klik een boerderij.
 - Twee vragen uit de proef van stap 2 (`spel.md`, "Nog open na stap 2"): moet vlees ook eten zijn,
   zodat slachten in slachtmaand de winter helpt (nu maakt het alleen tevredener)? En vullen de
   schapen de kooi niet te snel (een lam per schaap met kans 0,7: vol in het derde jaar)?
@@ -162,13 +175,14 @@ nog nodig is".
    bijhoudt, en zijn bezoek een scène is waarin jij meeloopt, de route kiest, praat, afleidt of
    omkoopt. De vraag van het proefje: is dit leuk? Besloten op 24 sep, zie `spel.md`, "Rijk worden
    en arm lijken". In drie stappen: het bezoek, het rapport en de argwaan (af, 24 sep); de
-   verstopplekken; praten, afleiden, omkopen en de rekenboeken.
+   verstopplekken (deel 1 af, 25 sep: de kelders, de kapel en de kist; deel 2: het bos, met de
+   kudde; deel 3: de marskramer handelt in vee); praten, afleiden, omkopen en de rekenboeken.
 6a. **Weides met vee** (Marcel, 25 sep; `spel.md`, "Weides met koeien en schapen"). Klaar als je
    weides aanlegt zoals akkers, koeien erop grazen en schapen op de meent, en ze geven wat bij ze
    hoort: melk en kaas, vlees en huiden in slachtmaand, wol, en mest voor de akkers. En als de
    inner de kudde telt, zodat wie slim is een deel het bos in drijft voordat hij komt. In drie
    stappen (`spel.md`): velden en vee op de weide (af, 25 sep); de winter en de wol (af, 25 sep);
-   vee dat telt.
+   vee dat telt (komt samen met deel 2 en 3 van de verstopplekken, punt 6).
 6b. **Ontginnen** (Marcel, 25 sep; `spel.md`, "Ontginnen"). Klaar als je bos of heide tot een nieuw
    veld kunt maken, de heer er zijn deel van wil en de inner het telt, en een veld diep in het bos
    buiten zijn zicht blijft: een verstopplek voor land. Hier, omdat vee na stap 2 van de weides land
@@ -277,6 +291,11 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 25 sep 2026 — **Verstoppen, deel 1 (punt 6, stap 2).** De kelders van de huizen en boerderijen en
+  de kapel, elk met hun eigen kans en prijs; het karakter van wie er woont; de soldaten die plek voor
+  plek zoeken; de inner die de kist telt; en de marskramer die vertelt wat hij je betaalde
+  (`js/verstoppen.js`, `js/inner.js`, `js/handel.js`, `js/hud.js`). Een proef van één jaar staat in
+  `spel.md`.
 - 25 sep 2026 — **De weides, stap 2 (punt 6a).** Hooi in hooimaand, vee dat 's winters hooi eet of
   sterft, het slachtvenster op 1 slachtmaand, velden naast elkaar als één weide, de schapen op de
   heide met een schaapskooi, scheren en mest per veld, en drie opties (`js/vee.js`, `js/akkers.js`,
