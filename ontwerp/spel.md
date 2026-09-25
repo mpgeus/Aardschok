@@ -733,15 +733,32 @@ zo altijd de winnaar. Zo loopt het nu:
   melk komt in het voorjaar, als de honger valt, en graan pas in oogstmaand; een weide kost geen
   zaaigraan en maakt de grond beter; en vee kost hooi en valt de inner op.
 - Een kudde van vijf koeien heeft dan twee velden nodig: daar is "meer velden als één weide" voor.
-- Nog open voor stap 2: of het hooi van een apart stuk weide komt (hooiland), of dat de hele weide
-  in hooimaand één keer gemaaid wordt; en of het gehucht met twee koeien begint in plaats van drie.
 
-**Wat verder volgt, en nog open is** (Claude):
-- **Wat is "naast elkaar"?** Tussen akker6 en akker7 ligt een strook van één tegel breed. Telt dat
-  als naast elkaar, of moet een weide echt aansluiten?
-- **Van wie is een weide over twee boeren?** Een gedeelde weide, of blijft elk stuk van zijn boer?
-- **De kooi en de meent.** Begint het gehucht met een schaapskooi? Hoeveel schapen passen erin, waar
-  op de kaart is de meent, en welke akkers krijgen de mest: die ernaast, of kies jij?
+**Marcel koos voor stap 2 (25 sep, later die dag), uit een voorstel van Claude.** Claude zag dat de
+open vragen bij één landschap horen, het Drentse esdorp: de es voor graan, de weide voor de koeien,
+de maden langs de beek voor hooi, en de heide als meent voor de schapen, van de marke samen.
+- **Het hooi komt van de hele weide.** In hooimaand maait de boer zijn weide, zoals in oogstmaand
+  zijn graan. Er komt geen apart hooiland, en de vuistregel blijft 12 tegels per koe. Maden langs
+  de beek (nat land dat alleen weide of hooiland kan zijn) kunnen later nog, bij het ontginnen.
+- **De schapen gaan naar de heide.** Er komt heide op de kaart, in het zuidwesten tussen het gehucht
+  en de beek, en die is de meent. Het gehucht begint met een schaapskooi aan de rand ervan.
+  Schapen eten 's winters heide, dus ze hebben geen hooi nodig. De heide is ook de grond die je
+  later ontgint (punt 6b): wie heide tot akker maakt, neemt de schapen hun grond af, en daarmee de
+  mest voor de es. Zo ging het ook: met de heide verdwenen de kudden.
+- **De mest kies jij per veld.** De kooi maakt mest, die in de voorraad komt, en in het
+  veldenvenster leg je hem op een akker. Met genoeg schapen draagt een akker zo elk jaar graan,
+  zoals op de Drentse es, waar eeuwenlang elk jaar rogge stond. Dan heeft elk dier zijn rol:
+  koeien geven melk in het voorjaar en vlees in de herfst, schapen wol en een es die niet
+  braak hoeft.
+- **Wat Claude voorstelde en Marcel liet staan.** Velden zijn naast elkaar als ze elkaar raken of
+  als er alleen een strook van één tegel tussen ligt; anders worden de blokken van Klaas en Gerrit
+  nooit één weide. Een weide over twee boeren blijft per stuk van zijn boer, die er zijn eigen hooi
+  maait, en de kudde is één: de weides waren van de boeren, alleen de heide was van iedereen. En
+  het gehucht begint met drie koeien, zodat er in de eerste slachtmaand al één weg moet.
+- Wat Marcel niet koos, wordt een optie in de spelregels: schapen die 's winters ook hooi eten, en
+  mest die vanzelf over alle akkers gaat.
+- Nog open: hoeveel schapen er in een kooi passen, en hoeveel op de heide. Dat wordt een eerste gok
+  in `T.VEE_INSTELLINGEN`, om na een proef bij te stellen.
 
 **Gebouwd, stap 1, het scherm (25 sep 2026):** `js/hud.js`, `js/tekenen.js`, `js/verkennen.js`,
 met de toetsen in `test/velden.test.cjs`.

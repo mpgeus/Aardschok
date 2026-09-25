@@ -76,16 +76,13 @@ het land uit (tot 40%, Marcels keuze), een braak rust, en een weide mest het. He
 een koe melk voor vijf mensen, wat over is wordt kaas, en in grasmaand komen er kalveren en
 lammeren bij zolang er plaats is. `npm test`: 460/460.
 
-**Loopt nu:** niets.
+**Loopt nu: de weides, stap 2: de winter en de wol** (Marcel koos het op 25 sep als eerste, en
+beantwoordde de open vragen; `spel.md`, "Marcel koos voor stap 2"). Hooi van de hele weide in
+hooimaand, vee dat 's winters hooi eet, op 1 slachtmaand kiezen wie er geslacht wordt, velden naast
+elkaar als één weide, de schapen naar de heide (nieuw op de kaart) en de schaapskooi, scheren in
+zomermaand, en mest uit de kooi die je in het veldenvenster op een akker legt.
 
-**Volgende stap, Marcel kiest welke eerst:**
-- **De weides, stap 2: de winter en de wol.** Hooi maaien in hooimaand, vee dat 's winters hooi eet,
-  op 1 slachtmaand kiezen wie er geslacht wordt, en schapen scheren in zomermaand. Marcel koos er op
-  25 sep drie dingen bij: velden naast elkaar worden samen één weide; de schapen gaan van de weide
-  af, naar de meent en de schaapskooi, die wol en mest geeft (zoals de Drentse esdorpen); en het
-  hooi beslist hoeveel land een koe kost, samen zo'n 12 tegels. De vragen die nog open staan, staan
-  in `spel.md` bij de weides: stel ze Marcel vóór het bouwen. Claude raadt aan dit eerst te doen:
-  zonder hooi kost vee niets, en dan klopt geen proefspel.
+**Daarna:**
 - **Punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud, die de inner
   niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de argwaan om het
   graan en het doorzoeken door de soldaten (`T.zoekVerstopt`, nu nog leeg) staan al klaar. Het
