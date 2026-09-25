@@ -184,10 +184,11 @@ function inAkker(x, y) {
 // weide, de schapen op de heide; ontwerp/spel.md, "Marcel koos voor stap 2"). De schaapskooi staat
 // aan de noordrand ervan, naast de boerderij van boer 5, met zijn voorkant naar de heide: zo staan
 // de schapen vóór de kooi en niet erachter (eerst stond hij aan de oostrand, en dan graasde de
-// halve kudde achter zijn dak). De meent is voor het spel een rechthoek (js/kaart.js, "meent"); de
+// halve kudde achter zijn dak). De onderste drie rijen van de kaart blijven gras: daar valt het bos
+// om de kaart heen overheen. De meent is voor het spel een rechthoek (js/kaart.js, "meent"); de
 // grond erop is heide.
-const MEENT = { meent: 'heide', x: 9, y: 40, b: 22, h: 9 };
-const KOOI = { tegel: 'schuurBlokhut', x: 27, y: 33, b: 5, d: 7 };
+const MEENT = { meent: 'heide', x: 9, y: 39, b: 23, h: 8 };
+const KOOI = { tegel: 'schuurBlokhut', x: 27, y: 31, b: 5, d: 7 };
 
 // De weg: een rechte lijn dwars over de kaart (dezelfde "afstand tot lijn"-truc als
 // maak-wereld.cjs en erf-kaart.cjs).
@@ -211,12 +212,25 @@ const opWeg = (x, y) => dWeg(x, y) < 0.62;
 // Eén grondsoort per roosterpunt: water wint van de weg (een brug ligt er overheen, apart
 // neergezet), de weg en een akker zijn allebei kale zandgrond (dezelfde terreinset), de rest is
 // gras. Zo kruist de weg een akker vanzelf goed (ontwerp: "zijn de akkers kale grond").
+// De heide op de meent (MEENT hierboven): op de buitenste rij hoekpunten beslist het lot of het nog
+// heide is, zodat hij niet als een liniaal ophoudt. De schapen grazen op de rechthoek zelf.
+function opHeide(x, y) {
+  const x0 = MEENT.x;
+  const x1 = MEENT.x + MEENT.b;
+  const y0 = MEENT.y;
+  const y1 = MEENT.y + MEENT.h;
+  if (x < x0 || x > x1 || y < y0 || y > y1) return false;
+  const rand = x === x0 || x === x1 || y === y0 || y === y1;
+  return !rand || hash(x, y, 91) < 0.5;
+}
+
 function soortOp(x, y) {
   if (x >= BEEK_X0 && x <= BEEK_X1) return 'water';
   // Vlak naast de beek nooit zandpad: er bestaat geen terreinset "zandpad over water", en het
   // bruggetje (hieronder, apart neergezet) tekent de oversteek toch al zelf.
   if (opWeg(x, y) && (x < BEEK_X0 - 1 || x > BEEK_X1 + 1)) return 'zandpad';
   if (inAkker(x, y) && (x < BEEK_X0 - 1 || x > BEEK_X1 + 1)) return 'zandpad';
+  if (opHeide(x, y)) return 'heide';
   return 'gras';
 }
 

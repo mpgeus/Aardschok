@@ -201,12 +201,6 @@
   const isWeide = (veld) => !!veld && !veld.meent && (T.bestemmingVan ? T.bestemmingVan(veld) : veld.bestemming || 'akker') === 'weide';
   const tegelsVan = (veld) => veld.b * veld.h;
   const opVeld = (v, x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
-  // Alle tegels van een veld (of de meent), rij voor rij vanaf zijn hoek.
-  function tegelLijst(v) {
-    const lijst = [];
-    for (let y = v.y; y < v.y + v.h; y++) for (let x = v.x; x < v.x + v.b; x++) lijst.push({ x, y });
-    return lijst;
-  }
   // Hoeveel plaats een dier (of een soort) nodig heeft.
   const plaatsVan = (e) => IN().plaats[typeof e === 'string' ? e : e.dier] || 0;
   // Een kalf is nog geen koe: wie dit spel geboren is, melkt en werpt pas als het een jaar oud is.
@@ -511,13 +505,22 @@
     return verhuisd;
   };
 
-  // Zet deze soorten neer op deze velden (een weide, of de meent), over al hun tegels verspreid en
-  // niet op een kluitje. Elk dier hoort bij het veld waar het terechtkomt. Geeft de dieren.
+  // Zet deze soorten neer op deze velden (een weide, of de meent), verspreid en niet op een kluitje.
+  // Een Fibonacci-rooster over de rechthoek om de velden heen: elke rij één dier, en de kolom telkens
+  // een gulden snede verder. Tot 25 sep stonden ze rij na rij op volgorde, en pasten er precies
+  // zoveel dieren als de breedte telde, dan stonden ze allemaal in één kolom. Elk dier hoort bij het
+  // veld waar het terechtkomt. Geeft de dieren.
   function spreid(S, velden, soorten) {
-    const tegels = velden.flatMap(tegelLijst);
+    const x0 = Math.min(...velden.map((v) => v.x));
+    const y0 = Math.min(...velden.map((v) => v.y));
+    const b = Math.max(...velden.map((v) => v.x + v.b)) - x0;
+    const h = Math.max(...velden.map((v) => v.y + v.h)) - y0;
     return soorten.map((soort, k) => {
-      const bij = tegels[Math.floor(((k + 0.5) * tegels.length) / soorten.length)];
-      const veld = velden.find((v) => opVeld(v, bij.x, bij.y));
+      const bij = {
+        x: x0 + Math.floor(((k * 0.6180339887 + 0.5) % 1) * b),
+        y: y0 + Math.floor(((k + 0.5) / soorten.length) * h),
+      };
+      const veld = velden.find((v) => opVeld(v, bij.x, bij.y)) || dichtstbij(velden, { tx: bij.x, ty: bij.y });
       const t = vrijeTegel(S, veld, bij);
       const e = T.zetOpWeide(T.maakDier(soort, t.x, t.y, nieuwZaad(S)), veld);
       S.wereld.wezens.push(e);
