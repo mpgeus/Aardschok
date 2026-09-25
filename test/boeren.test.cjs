@@ -155,7 +155,7 @@ test('een boer draagt het vel van zijn karakter als dat er is, en anders gewoon 
   const heeft = (naam) => naam === 'boer-zanger' || naam === 'boerin-weduwe';
   assert.equal(T.sprites.velMetKarakter('boer', 'zanger', heeft), 'boer-zanger');
   assert.equal(T.sprites.velMetKarakter('boerin', 'weduwe', heeft), 'boerin-weduwe');
-  // nog geen eigen vel (de karakters van ronde 2), of geen karakter: het lijf
+  // nog geen eigen vel (hier heeft alleen de zanger er een op de boer), of geen karakter: het lijf
   assert.equal(T.sprites.velMetKarakter('boer', 'drinker', heeft), 'boer');
   assert.equal(T.sprites.velMetKarakter('boerin', 'zanger', heeft), 'boerin');
   assert.equal(T.sprites.velMetKarakter('boer', undefined, heeft), 'boer');
@@ -181,6 +181,30 @@ test('de vijf van de vaste verdeling hebben hun vel, en dat loopt zoals hun lijf
     const g = T.KARAKTERS[karakter].geslacht;
     if (g) assert.equal(lijf, g === 'vrouw' ? 'boerin' : 'boer', naam);
   }
+});
+
+// Ronde 2 (25 sep): nu heeft elk karakter zijn vel, op elk lijf dat erbij kan. Een boer loot zijn
+// karakter elk spel opnieuw, dus elk van de achttien kan in het gehucht rondlopen, en het spel kiest
+// het ook: niemand valt meer terug op het gewone lijf.
+test('alle achttien vellen: elk karakter op elk lijf dat erbij kan, en het loopt zoals dat lijf', () => {
+  require('../beelden/beschrijving.js');
+  require('../js/sprites.js');
+  const F = T.BEELDEN.figuren;
+  const vellen = [];
+  for (const [karakter, k] of Object.entries(T.KARAKTERS)) {
+    for (const lijf of ['boer', 'boerin']) {
+      if (k.geslacht && lijf !== (k.geslacht === 'vrouw' ? 'boerin' : 'boer')) continue;
+      const vel = `${lijf}-${karakter}`;
+      vellen.push(vel);
+      assert.ok(F[vel], `er is geen vel ${vel}: dorpelingen-anim.cjs ${vel}, dan naar-spel.cjs --alleen ${vel}`);
+      assert.deepEqual(Object.keys(F[vel].houdingen), Object.keys(F[lijf].houdingen), vel);
+      assert.equal(F[vel].snelheid, F[lijf].snelheid, `${vel} loopt anders dan ${lijf}`);
+      assert.equal(F[vel].houdingen.lopen.stap, F[lijf].houdingen.lopen.stap, `${vel}: de pas van ${lijf}`);
+      assert.equal(T.sprites.velMetKarakter(lijf, karakter, (n) => !!F[n]), vel);
+    }
+  }
+  assert.equal(vellen.length, 18);
+  assert.equal(Object.keys(F).filter((n) => /^(boer|boerin)-/.test(n)).length, 18);
 });
 
 // ---------------------------------------------------------------------------------------------

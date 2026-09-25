@@ -1527,6 +1527,386 @@
        "stap": 0.56
       }
      }
+    },
+    "boer-vrome": {
+     "naam": "boer-vrome",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-vrome-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "boer-vrome-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6
+      }
+     }
+    },
+    "boerin-vrome": {
+     "naam": "boerin-vrome",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-vrome-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "boerin-vrome-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56
+      }
+     }
+    },
+    "boer-roddelaar": {
+     "naam": "boer-roddelaar",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-roddelaar-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "boer-roddelaar-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6
+      }
+     }
+    },
+    "boerin-roddelaar": {
+     "naam": "boerin-roddelaar",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-roddelaar-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "boerin-roddelaar-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56
+      }
+     }
+    },
+    "boer-grijsaard": {
+     "naam": "boer-grijsaard",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-grijsaard-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "boer-grijsaard-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6
+      }
+     }
+    },
+    "boerin-grijsaard": {
+     "naam": "boerin-grijsaard",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-grijsaard-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "boerin-grijsaard-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56
+      }
+     }
+    },
+    "boer-nieuwkomer": {
+     "naam": "boer-nieuwkomer",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-nieuwkomer-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "boer-nieuwkomer-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6
+      }
+     }
+    },
+    "boerin-nieuwkomer": {
+     "naam": "boerin-nieuwkomer",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-nieuwkomer-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "boerin-nieuwkomer-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56
+      }
+     }
+    },
+    "boer-drinker": {
+     "naam": "boer-drinker",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-drinker-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "boer-drinker-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6
+      }
+     }
+    },
+    "boerin-drinker": {
+     "naam": "boerin-drinker",
+     "cel": [
+      112,
+      124
+     ],
+     "anker": [
+      56,
+      110
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-drinker-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true
+      },
+      "lopen": {
+       "bestand": "boerin-drinker-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56
+      }
+     }
     }
    },
    "muren": {
@@ -1708,7 +2088,17 @@
      "boerin-woekeraar": 51,
      "boerin-vroedvrouw": 51,
      "boer-heethoofd": 51,
-     "boerin-heethoofd": 51
+     "boerin-heethoofd": 51,
+     "boer-vrome": 51,
+     "boerin-vrome": 51,
+     "boer-roddelaar": 51,
+     "boerin-roddelaar": 51,
+     "boer-grijsaard": 47,
+     "boerin-grijsaard": 48,
+     "boer-nieuwkomer": 51,
+     "boerin-nieuwkomer": 51,
+     "boer-drinker": 51,
+     "boerin-drinker": 51
     }
    }
   };

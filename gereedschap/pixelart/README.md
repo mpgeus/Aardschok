@@ -60,8 +60,11 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   nemen de opties (kleuren, hoofddeksel, wat ze dragen en vasthouden, de armen); zonder opties
   blijven ze de gewone boer en boerin, en `KARAKTERS` zegt per karakter welke. Ronde 1: boer-zanger,
   boerin-zanger, boer-woekeraar, boerin-woekeraar, boer-heethoofd, boerin-heethoofd, boerin-weduwe
-  en boerin-vroedvrouw (`node dorpelingen-anim.cjs <namen>` maakt ook `uit/dorpelingen/karakters-ronde1.png`,
-  daarna `node naar-spel.cjs --alleen <namen,met,komma's>` en `--alleen schandpaal` voor hun nek).
+  en boerin-vroedvrouw. Ronde 2: de vrome, de roddelaar, de grijsaard (de oudste), de nieuwkomer en
+  de drinker, elk als boer- en boerin-. `node dorpelingen-anim.cjs <namen>` maakt ook de proefplaten
+  `uit/dorpelingen/karakters-ronde1.png`, `karakters-ronde2.png` en `karakters-alle.png` (alle
+  achttien op een rij), daarna `node naar-spel.cjs --alleen <namen,met,komma's>` en
+  `--alleen schandpaal` voor hun nek.
 - `schandpaal.cjs`: de schandpaal, leeg en bezet, en het halsijzer als eigen laag over wie eraan
   staat (`node schandpaal.cjs` maakt de proefplaat `uit/schandpaal-proef.png`, daarna
   `node naar-spel.cjs --alleen schandpaal`). De hoogte van de nek wordt gemeten op de boer en de

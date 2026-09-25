@@ -533,8 +533,13 @@ for (const [karakter, lijven] of Object.entries(KARAKTERS)) {
   for (const lijf of Object.keys(lijven)) {
     FIGUREN[`${lijf}-${karakter}`] = () => {
       const bouw = lijf === 'boer' ? require('./dorpelingen.cjs').boer : require('./dorpelingen2.cjs').boerin;
-      // een rood gezicht (het heethoofd) is voor kinHoogte geen huid meer; de kin zit even hoog
-      return bouw({ houding: 'staan', fase: 0 }, { ...lijven[lijf], rood: false });
+      // Wat kinHoogte in de war brengt, gaat voor de meting weg; de kin zit even hoog. Een rood
+      // gezicht (het heethoofd) en een rode neus (de drinker, die het gezicht in tweeën snijdt) zijn
+      // geen huid meer, een baard (de oudste) dekt de kin, en een hand bij de mond (de roddelaar)
+      // hangt aan het gezicht vast, met zijn onderarm eronder. Krom blijft: dan zit het hoofd echt lager.
+      const o = { ...lijven[lijf], rood: false, neus: null, baard: false };
+      for (const kant of ['links', 'rechts']) if (o[kant] === 'mond') o[kant] = 'hangt';
+      return bouw({ houding: 'staan', fase: 0 }, o);
     };
   }
 }

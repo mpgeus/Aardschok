@@ -262,13 +262,25 @@ function houdingDorpeling(stand, o = {}) {
 // gaat via beenPunten/voetBot hieronder, want die hebben de ruststandpunten (heup/knie/enkel) van
 // de eigen figuur nodig, niet alleen een scharnierpunt. Zonder houding (hg null, dus geen stand
 // meegegeven aan de bouwfunctie) komt overal `null` uit, en blijft bot() overal een no-op.
+//
+// Krom (de oudste, karakters.cjs): o.krom is hoeveel graden het bovenlijf om de heup naar voren
+// hangt, en o.nekKrom hoeveel het hoofd daarna weer omhoog kijkt. De armen hangen dan mee met het
+// lijf (eerst hun eigen zwaai, dan het lijf voorover); de rok niet. Zonder krom blijft alles precies
+// zoals het was.
 function bottenDorpeling(hg, o) {
-  if (!hg) return { Barm: [null, null] };
+  const Bkrom = o.krom ? HH.beweging({ M: HH.draaiing([1, 0, 0], -o.krom), om: o.heup }) : null;
+  if (!hg) {
+    if (!Bkrom) return { Barm: [null, null] };
+    const BnekKrom = HH.naElkaar(Bkrom, HH.beweging({ M: HH.draaiing([1, 0, 0], o.nekKrom || 0), om: o.nek }));
+    return { Bromp: Bkrom, Bnek: BnekKrom, Barm: [Bkrom, Bkrom] };
+  }
   const draaiM = (buig, om) => HH.maalM(HH.draaiing([0, 0, 1], om), HH.draaiing([1, 0, 0], -buig));
   const Blijf = HH.beweging({ dp: [hg.zij, hg.voor, -hg.zak] });
-  const Bromp = HH.naElkaar(Blijf, HH.beweging({ M: draaiM(hg.romp.buig, hg.romp.draai), om: o.heup, dp: [0, 0, hg.romp.omhoog] }));
-  const Bnek = HH.naElkaar(Bromp, HH.beweging({ M: draaiM(hg.nek.knik, hg.nek.draai), om: o.nek }));
-  const Barm = [0, 1].map((i) => HH.beweging({ as: [1, 0, 0], graden: hg.arm[i].hoek, om: o.schouders[i] }));
+  const buig = Bkrom ? hg.romp.buig + o.krom : hg.romp.buig;
+  const knik = Bkrom ? hg.nek.knik - (o.nekKrom || 0) : hg.nek.knik;
+  const Bromp = HH.naElkaar(Blijf, HH.beweging({ M: draaiM(buig, hg.romp.draai), om: o.heup, dp: [0, 0, hg.romp.omhoog] }));
+  const Bnek = HH.naElkaar(Bromp, HH.beweging({ M: draaiM(knik, hg.nek.draai), om: o.nek }));
+  const Barm = [0, 1].map((i) => HH.naElkaar(Bkrom, HH.beweging({ as: [1, 0, 0], graden: hg.arm[i].hoek, om: o.schouders[i] })));
   // de rok zelf: rokZwaai (van houdingDorpeling) is een ruimere zwaai dan de romp, want stof
   // zwiert verder uit dan het lijf zelf beweegt (alleen van belang voor een figuur met een rok,
   // zie dorpelingen3.cjs — "een rok zwaait mee in plaats van benen te tonen")
@@ -654,6 +666,12 @@ const BOER_FPS = 10;
 // polsen van de jas bont maakt), riem, buidel (aan de riem), luit (op de rug). De armen: links
 // ('vork', 'hangt', 'zij' of 'buidel': de hand op de buidel) en rechts ('hangt' of 'zij'), en mouw
 // ('op': hoog opgestroopt).
+// Ronde 2: haar (materiaal), hoed ook 'kap' (met een schoudermanteltje), 'bloot' (grijs haar, geen
+// hoed) of 'vreemd' (een baret), en hoedScheef (graden dat de strohoed opzij is gezakt); baard, neus
+// ('rood', en groter), buik (een dikke buik onder de kiel), krom (graden: het bovenlijf hangt
+// voorover), omslagdoek, bundel (op de rug), rozenkrans (uit de handen). En de armen, links of rechts: 'bidt' (de handen gevouwen voor de borst), 'mond' (een hand
+// bij de mond), 'hengsel' (een mand aan de arm), 'kroes', 'buik' (de hand op de buik), 'knoop' (aan
+// de knoop van de bundel) en 'stok'.
 function boer(stand = null, o = {}) {
   const M = { huid: 0, kiel: 1, broek: 2, klomp: 3, haar: 4, oog: 5, stro: 6, lint: 7, doek: 8, hout: 9, ijzer: 10, strootje: 11 };
   const D = { benen: 1, kiel: 2, armL: 3, armR: 4, handL: 5, handR: 6, hoofd: 7, hoed: 8, doek: 9, vork: 10 };
@@ -662,10 +680,11 @@ function boer(stand = null, o = {}) {
   const ctx = { M, D, mat }; // voor de hulpjes van de karakters
   mat[M.huid] = { ramp: 'huid', lo: 1.9, hi: 6.4, schaduwKracht: 0.85 };
   if (o.rood) mat[M.huid].patroon = KAR.roodGezicht(H, [1.9, 6.4]);
+  if (o.neus === 'rood') mat[M.huid].patroon = KAR.rodeNeus(plus(H, [0, 8.4, -2.6]), 3.3, [1.9, 6.4], mat[M.huid].patroon);
   mat[M.kiel] = o.kiel || { ramp: 'pet', lo: 1.4, hi: 6.2, patroon: (x, y, z) => (Math.sin(x * 1.3 + 0.4) > 0.82 && z < 50 ? -0.7 : 0) };
   mat[M.broek] = { ramp: 'aarde', lo: 0.8, hi: 4.6 };
   mat[M.klomp] = o.klomp || { ramp: 'zand', lo: 3, hi: 7.4 };
-  mat[M.haar] = { ramp: 'schors', lo: 0.8, hi: 4.4 };
+  mat[M.haar] = o.haar || { ramp: 'schors', lo: 0.8, hi: 4.4 };
   mat[M.oog] = OOG;
   mat[M.stro] = {
     ramp: 'stro',
@@ -695,6 +714,8 @@ function boer(stand = null, o = {}) {
     heup: [0, 0.3, 30],
     nek: [0, 0, 59],
     schouders: [[-10, 0.3, 56], [10, 0.3, 56]],
+    krom: o.krom,
+    nekKrom: o.krom ? o.krom * 0.75 : 0,
   });
 
   // --- benen en klompen: elk been buigt bij de knie (beenPunten, zie de uitleg bovenaan dit
@@ -715,14 +736,23 @@ function boer(stand = null, o = {}) {
     delen.push(bol([s * 4.4, 8.4, 3.9], 1.7, M.klomp, D.benen, 1.8));
     bot(voetBot(hg, i, [s * 4.4, 2.2, 0]));
   }
-  // --- kiel: los en wijd, tot halverwege de dij; schouders erop
-  const kiel = {
-    rx: profiel([[24, 11], [30, 10.2], [38, 9.4], [46, 9.8], [52, 10.4], [58, 10]]),
-    ry: profiel([[24, 8.4], [30, 7.6], [38, 6.8], [46, 7], [52, 7.2], [58, 6.4]]),
-    cy: profiel([[24, 0.8], [40, 0.8], [58, 0.5]]),
-  };
+  // --- kiel: los en wijd, tot halverwege de dij; schouders erop. (De drinker, buik: de kiel spant
+  // om een buik die ver naar voren en wat naar opzij komt.)
+  const kiel = o.buik
+    ? {
+        rx: profiel([[24, 11.4], [30, 12], [36, 12.7], [42, 12.5], [48, 11.2], [53, 10.5], [58, 10]]),
+        ry: profiel([[24, 8.8], [30, 9.8], [36, 10.8], [42, 10.6], [48, 8.6], [53, 7.3], [58, 6.4]]),
+        cy: profiel([[24, 1.2], [30, 2.4], [37, 3.6], [44, 3.2], [50, 1.8], [58, 0.5]]),
+      }
+    : {
+        rx: profiel([[24, 11], [30, 10.2], [38, 9.4], [46, 9.8], [52, 10.4], [58, 10]]),
+        ry: profiel([[24, 8.4], [30, 7.6], [38, 6.8], [46, 7], [52, 7.2], [58, 6.4]]),
+        cy: profiel([[24, 0.8], [40, 0.8], [58, 0.5]]),
+      };
   delen.push(romp(kiel, 24, 58, M.kiel, D.kiel, 2));
   delen.push(ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5));
+  // de afstand tot het bovenlijf, voor wat eromheen ligt (een omslagdoek, een manteltje)
+  const bovenlijf = o.omslagdoek || o.hoed === 'kap' ? bouwSdf([romp(kiel, 24, 58, M.kiel, D.kiel, 2), ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5)]) : null;
   if ((o.kraag || 'doek') === 'doek') {
     // rode halsdoek met een knoop en een puntje voorop
     delen.push({
@@ -743,6 +773,18 @@ function boer(stand = null, o = {}) {
   const buidel = band && o.buidel ? KAR.buidel(delen, ctx, band, -5.6) : null;
   // de luit: de kast rechtsonder op de rug, de hals langs het linkeroor omhoog
   if (o.luit) KAR.luit(delen, ctx, { voet: [5.5, -6.4, 37.5], top: [-11, -9.8, 75], vorm: kiel, z0: 24, z1: 58, schouder: [7.4, 0, 58.6], heup: [-9.6, 0, 31] });
+  // de roddelaar: een bonte omslagdoek, voorop net naast het midden geknoopt
+  if (o.omslagdoek) KAR.omslagdoek(delen, ctx, bovenlijf, { zNek: 61.6, zZij: 50.5, zPunt: 40.5, knoop: [0.9, 9.6, 49.6] });
+  // de nieuwkomer: de bundel op de rug, de banden over de schouders naar een knoop op de borst
+  if (o.bundel) {
+    KAR.bundel(delen, ctx, {
+      rug: [2.4, -13, 54],
+      maat: [11.2, 6.2, 9.6],
+      schouders: [[-5.6, 0.2, 62.2], [5.4, 0.3, 62.3]],
+      borst: [[-4.6, 7.7, 57.6], [4.4, 7.8, 57.2]],
+      knoop: [0.8, 9.1, 51.4],
+    });
+  }
   bot(Bn.Bromp);
 
   // --- armen: mouwen opgestroopt. Links de hooivork, rechts hangt de arm langs het lijf.
@@ -767,9 +809,35 @@ function boer(stand = null, o = {}) {
   };
   // Waar een arm heen gaat, en met welk bot hij beweegt: een hangende arm zwaait (Barm), een vuist
   // in de zij of een hand op de buidel blijft waar hij is en gaat met de romp mee (Bromp).
+  // Ronde 2: van de nieuwe houdingen zwaaien alleen de arm met de mand en die met de stok; de rest
+  // (gevouwen handen, een hand bij de mond, op de buik, aan de knoop, de kroes) gaat met de romp mee.
+  // Ze staan hier voor de rechterarm, en de linker is zijn spiegelbeeld.
+  const spiegel = (punten) => [punten.map(([x, y, z]) => [-x, y, z]), punten];
   const armen = {
     hangt: [[[-10, 0.3, 56], [-12.7, -0.2, 45.3], [-11.9, 2, 36.3]], [[10, 0.3, 56], [12.3, 0.4, 45.5], [11.4, 2.6, 36.2]]],
     zij: [[[-10, 0.3, 56], [-17.3, -0.8, 46.9], [-11.7, 1.2, 36.3]], [[10, 0.3, 56], [16.9, -0.4, 46.2], [11.5, 1.6, 35.8]]],
+    bidt: [[[-10, 0.3, 56], [-11.2, 6.6, 46.2], [-1.4, 10.3, 47.4]], [[10, 0.3, 56], [11.5, 6.9, 45.8], [1.3, 10.4, 47.9]]],
+    mond: spiegel([[10, 0.3, 56], [11.8, 8.4, 55.6], [5.4, 10.6, 63.4]]),
+    hengsel: spiegel([[10, 0.3, 56], [14.3, -0.6, 45.8], [14.8, 8.6, 45.2]]),
+    kroes: spiegel([[10, 0.3, 56], [15.2, 1.4, 46.4], [11.6, 10.4, 48.8]]),
+    buik: spiegel([[10, 0.3, 56], [14.9, 4.6, 45.6], [8.8, 13.4, 40.6]]),
+    knoop: spiegel([[10, 0.3, 56], [11.9, 6.5, 46.6], [2.6, 10.9, 50.2]]),
+    stok: spiegel([[10, 0.3, 56], [13.2, 2.4, 45.6], [13.4, 9.6, 38.8]]),
+  };
+  const ZWAAIT = { hangt: true, hengsel: true, stok: true };
+  const houd = (hoe, i) => {
+    const s = i ? 1 : -1;
+    const [Sch, El, Hand] = (armen[hoe] || armen.hangt)[i];
+    arm(Sch, El, Hand, i ? D.armR : D.armL, i ? D.handR : D.handL);
+    if (hoe === 'hengsel') KAR.hengselmand(delen, ctx, El, Hand, s);
+    if (hoe === 'kroes') KAR.kroes(delen, ctx, Hand, -s);
+    const B = ZWAAIT[hoe] || !armen[hoe] ? Bn.Barm[i] : Bn.Bromp;
+    bot(B);
+    if (hoe === 'stok') {
+      // de punt als een derde voet, met de voet aan de andere kant mee (de rechtervoet heeft verzet 0,5)
+      KAR.stok(delen, ctx, KAR.stokPunt([s * 14, 6.4, 0], stand, BOER_SNELHEID, BOER_FPS, i ? 0 : 0.5), HH.opPunt(B, Hand));
+      bot(null);
+    }
   };
   if ((o.links || 'vork') === 'vork') {
     // hooivork: de steel op de grond links voor hem, drie tanden in een vlak dat schuin staat. Hij
@@ -791,17 +859,20 @@ function boer(stand = null, o = {}) {
   } else if (o.links === 'buidel' && buidel) {
     arm([-10, 0.3, 56], [-12.6, 3.6, 45.6], plus(buidel, [-0.4, 0.6, 1.4]), D.armL, D.handL);
     bot(Bn.Bromp);
-  } else {
-    arm(...(armen[o.links] || armen.hangt)[0], D.armL, D.handL);
-    bot(o.links === 'zij' ? Bn.Bromp : Bn.Barm[0]);
+  } else houd(o.links, 0);
+  houd(o.rechts || 'hangt', 1);
+  // de rozenkrans hangt uit de gevouwen handen
+  if (o.rozenkrans) {
+    KAR.rozenkrans(delen, ctx, langs(armen.bidt[0][2], armen.bidt[1][2], 0.5));
+    bot(Bn.Bromp);
   }
-  arm(...armen[o.rechts || 'hangt'][1], D.armR, D.handR);
-  bot(o.rechts === 'zij' ? Bn.Bromp : Bn.Barm[1]);
 
   // --- hoofd: lang gezicht, grote neus, flaporen; bruin haar onder de hoed uit
   const oy = schedel(delen, H, M, D, { maat: [6.7, 6.7, 7.8], oog: [2.6, 0.8], oor: 1 });
   delen.push(ellips(plus(H, [0, 6.9, -1.4]), [1.7, 2.4, 2.6], M.huid, D.hoofd, 1));
-  delen.push(bol(plus(H, [0, 8.2, -2.8]), 1.7, M.huid, D.hoofd, 1));
+  // (de drinker: een dikke knol van een neus, en rood, zie rodeNeus hierboven)
+  if (o.neus === 'rood') delen.push(bol(plus(H, [0, 8.5, -3]), 2.35, M.huid, D.hoofd, 1));
+  else delen.push(bol(plus(H, [0, 8.2, -2.8]), 1.7, M.huid, D.hoofd, 1));
   if (o.boos) {
     KAR.bozeWenkbrauwen(delen, H, [2.6, 0.8], oy, M.haar, D.hoofd);
     KAR.bozeMond(delen, H, [6.7, 6.7, 7.8], KAR.materiaal(ctx, 'mond', KAR.MOND), D.hoofd, 1.6, -5.5);
@@ -812,6 +883,7 @@ function boer(stand = null, o = {}) {
   const hoed = o.hoed || 'stro';
   if (hoed === 'stro') {
     // strohoed: brede rand, voorop opgewipt zodat de ogen vrij blijven; een bol met een lint
+    const eerst = delen.length;
     const rand = plus(H, [0, -1.2, 6.6]);
     delen.push({
       f: (x, y, z) => {
@@ -831,9 +903,22 @@ function boer(stand = null, o = {}) {
       deel: D.hoed,
       k: 1,
     });
+    // (de drinker, hoedScheef: graden dat de hoed naar één kant is gezakt)
+    if (o.hoedScheef) {
+      const B = HH.beweging({ as: [0, 1, 0], graden: o.hoedScheef, om: plus(H, [0, -1, 5]) });
+      for (let i = eerst; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    }
   } else if (hoed === 'muts') KAR.bonteMuts(delen, ctx, H, [6.7, 6.7], { zij: -1 });
   else if (hoed === 'vilt') KAR.vilthoed(delen, ctx, H);
   else if (hoed === 'geen') KAR.piekhaar(delen, H, M.haar, D.hoofd);
+  else if (hoed === 'kap') KAR.kaproen(delen, ctx, H, [6.7, 6.7, 7.8], bovenlijf);
+  else if (hoed === 'vreemd') KAR.baret(delen, ctx, H, [6.7, 6.7, 7.8]);
+  else if (hoed === 'bloot') {
+    // geen hoed: kaal op de kruin, en een krans haar die boven de oren wat uitstaat
+    delen.push(ellips(plus(H, [-6.4, -1.3, 1.8]), [1.9, 3.3, 2.7], M.haar, D.hoofd, 0.8));
+    delen.push(ellips(plus(H, [6.3, -1.6, 1.5]), [1.8, 3.4, 2.5], M.haar, D.hoofd, 0.8));
+  }
+  if (o.baard) KAR.baard(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd, 12);
   bot(Bn.Bnek);
 
   return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 43], straal: 50 });

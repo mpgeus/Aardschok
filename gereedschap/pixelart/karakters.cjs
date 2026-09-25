@@ -17,6 +17,15 @@
 // een wit schort. En niets is waterpas: een muts valt naar één kant, een buidel hangt scheef, de
 // ene mouw is hoger opgestroopt dan de andere.
 //
+// Ronde 2 (25 sep): de andere vijf, op beide lijven, tien vellen: boer-vrome en boerin-vrome, en zo
+// ook roddelaar, grijsaard (de oudste), nieuwkomer en drinker. Weer het silhouet eerst: gevouwen
+// handen in het grijs, een geruite doek op de schouders met een mand aan de arm, een krom lijf met
+// een stok, een bundel op de rug en een baret, een dikke buik met een kroes. Wat een hand vasthoudt,
+// gaat met die arm mee; een hand die ergens rust (gevouwen, bij de mond, op de buik) met de romp.
+// De stok van de oudste loopt als een derde voet: hij staat op de grond en gaat met de pas mee.
+// Een wandelstok, een kroes en een mand zijn een fractie scheef, en de knoop van een doek zit net
+// naast het midden.
+//
 // Wegschrijven: node gereedschap/pixelart/dorpelingen-anim.cjs boer-zanger boerin-zanger ...,
 // daarna node gereedschap/pixelart/naar-spel.cjs --alleen boer-zanger,boerin-zanger,...
 // Dit bestand leunt alleen op de bouwstenen (kern, figuren, figuren2): dorpelingen.cjs laadt het,
@@ -26,6 +35,7 @@
 const { sdf, klem, mix, ruis3 } = require('./kern.cjs');
 const { kegel, capsule, bol, ellips, plus, naarRamp } = require('./figuren.cjs');
 const { ring, eenheid, langs } = require('./figuren2.cjs');
+const HH = require('./houding.cjs'); // de loopcyclus, voor de punt van de stok
 
 // ---------------------------------------------------------------- welk karakter wat draagt
 
@@ -85,6 +95,70 @@ const KARAKTERS = {
   heethoofd: {
     boer: { hoed: 'geen', kraag: 'geen', mouw: 'op', rood: true, boos: true, links: 'zij', rechts: 'zij', strootje: false },
     boerin: { mouw: 'op', rood: true, boos: true, mand: false, links: 'zij', rechts: 'zij' },
+  },
+
+  // Ronde 2 (25 sep): de andere vijf, weer op beide lijven.
+
+  // sober grijs, de handen gevouwen voor de borst, en daaruit hangt een rozenkrans met een koperen
+  // kruisje. De boer draagt een grijze kap met een schoudermanteltje en geen rode halsdoek; de
+  // boerin houdt haar witte doek en haar blauwe schort. Middengrijs: veel lichter dan het zwart van
+  // de weduwe, en niet zo licht dat het naast het witte schort van de vroedvrouw wit wordt.
+  vrome: {
+    boer: {
+      hoed: 'kap',
+      kiel: { ramp: 'berk', lo: 0.8, hi: 3.4, patroon: (x, y, z) => (Math.sin(x * 1.3 + 0.4) > 0.84 && z < 50 ? -0.5 : 0) },
+      kraag: 'geen',
+      links: 'bidt',
+      rechts: 'bidt',
+      rozenkrans: true,
+      strootje: false,
+    },
+    boerin: { jurk: { ramp: 'berk', lo: 0.6, hi: 3.1 }, mand: false, links: 'bidt', rechts: 'bidt', rozenkrans: true },
+  },
+  // een bonte omslagdoek, geruit in geel en paars, voorop geknoopt; een mand met een doek erover aan
+  // de ene arm, en de andere hand bij de mond, alsof er iets verteld wordt dat niemand mag horen
+  roddelaar: {
+    boer: { omslagdoek: true, kraag: 'geen', links: 'hengsel', rechts: 'mond', strootje: false },
+    boerin: { omslagdoek: true, mand: false, links: 'hengsel', rechts: 'mond' },
+  },
+  // de oudste: grijs haar, wat krom, met een stok die hij bij elke pas voor zich neerzet. De boer
+  // zonder hoed en met een grijze baard over de borst; de boerin met een donkere doek in de nek
+  // geknoopt, zodat haar grijze haar voorop te zien is. Hij loopt even hard als zijn lijf: de
+  // loopsnelheid in het spel hangt aan de boer, niet aan zijn karakter.
+  grijsaard: {
+    boer: {
+      hoed: 'bloot',
+      haar: { ramp: 'baard', lo: 1.8, hi: 5.9, patroon: (x, y, z) => (Math.sin(x * 2.1 + y * 0.9 + z * 0.5) > 0.55 ? 0.6 : 0) },
+      baard: true,
+      krom: 13,
+      kraag: 'geen',
+      links: 'stok',
+      strootje: false,
+    },
+    boerin: {
+      hoofd: 'nekdoek',
+      doek: { ramp: 'schors', lo: 0.9, hi: 3.9, patroon: (x, y, z) => (Math.sin(x * 1.2 - z * 0.8) > 0.8 ? -0.5 : 0) },
+      haar: { ramp: 'baard', lo: 1.2, hi: 4.9, patroon: (x, y, z) => (Math.sin(x * 2.3 + y * 0.8 + z * 0.4) > 0.55 ? 0.7 : 0) },
+      slapen: true,
+      krom: 12,
+      mand: false,
+      links: 'stok',
+      rechts: 'hangt',
+    },
+  },
+  // een groene kiel van een snit die hier niemand draagt, met een gele zoom met een rode zigzag
+  // erin; zijn hele hebben en houden in een doek op de rug, de punten voorop geknoopt, en een hand
+  // aan de knoop. De boer draagt er een blauwe baret bij, scheef op het hoofd, en geen stro.
+  nieuwkomer: {
+    boer: { kiel: vreemd({ ramp: 'den', lo: 1.2, hi: 6 }, 24, 27.6), kraag: 'geen', hoed: 'vreemd', bundel: true, links: 'hangt', rechts: 'knoop', strootje: false },
+    boerin: { jurk: vreemd({ ramp: 'den', lo: 1.2, hi: 5.8 }, 0, 4.2), schort: false, bundel: true, mand: false, links: 'hangt', rechts: 'knoop' },
+  },
+  // een dikke buik, een rode neus (alleen de neus: het heethoofd heeft het rode gezicht), een kroes
+  // bier met schuim in de ene hand, de andere op de buik. De boer zonder rode halsdoek, want die liep
+  // van voren in één vlek over in de neus, en met zijn strohoed scheef.
+  drinker: {
+    boer: { buik: true, neus: 'rood', kraag: 'geen', hoedScheef: 14, links: 'kroes', rechts: 'buik', strootje: false },
+    boerin: { buik: true, neus: 'rood', mand: false, links: 'kroes', rechts: 'buik' },
   },
 };
 
@@ -554,6 +628,346 @@ function tas(delen, ctx, hand, zij = 1) {
   delen.push(bol(plus(c, plus(maal(u, 2.35 * zij), maal(w, 1))), 0.75, mGesp, dTas));
 }
 
+// ================================================================ ronde 2
+
+// ---------------------------------------------------------------- stof en huid
+
+// Een punt op een kwadratische bezier.
+const bezier = (p0, p1, p2, t) => [0, 1, 2].map((i) => (1 - t) * (1 - t) * p0[i] + 2 * (1 - t) * t * p1[i] + t * t * p2[i]);
+
+// Een stof met een zoom van vreemde snit (de nieuwkomer): tussen z0 en z1 een gele band met een rode
+// zigzag erin, met hetzelfde licht als de rest van de stof. De bovenrand van de band golft een fractie.
+function vreemd(m, z0, z1) {
+  const van = [m.lo, m.hi];
+  return {
+    ...m,
+    patroon: (x, y, z, nx, ny, nz, stap) => {
+      if (z > z1 + 0.35 * Math.sin(x * 0.45 + y * 0.3)) return m.patroon ? m.patroon(x, y, z, nx, ny, nz, stap) : 0;
+      // de zigzag loopt rond: tien keer op en neer om het lijf
+      const t = ((Math.atan2(y - 1, x) / Math.PI) * 5 + 10) % 2;
+      const zig = z0 + (z1 - z0) * (0.28 + 0.44 * Math.abs(t - 1));
+      if (Math.abs(z - zig) < 0.62) return naarRamp('rood', stap, van, [2.4, 5.8]);
+      return naarRamp('goud', stap, van, [2.4, 6.3]);
+    },
+  };
+}
+
+// Een rode neus (de drinker): rond N, binnen straal r, neemt rood het over van de huid, met
+// hetzelfde licht; daarbuiten het patroon dat de huid al had (vorig, de blosjes van de boerin).
+function rodeNeus(N, r, van, vorig = null) {
+  return (x, y, z, nx, ny, nz, stap) => {
+    const dx = x - N[0];
+    const dy = y - N[1];
+    const dz = z - N[2];
+    if (dx * dx + dy * dy + dz * dz > r * r) return vorig ? vorig(x, y, z, nx, ny, nz, stap) : 0;
+    return naarRamp('rood', stap, van, [4.4, 7.8]);
+  };
+}
+
+// ---------------------------------------------------------------- op het hoofd
+
+// Een kap met een schoudermanteltje (de vrome): een schil om het hoofd met het gezicht vrij, die
+// onder de kin doorloopt en overgaat in een manteltje over de schouders. lijfAfstand = de afstand
+// tot het bovenlijf (bouwSdf van romp en schouders), zOnder = waar het manteltje ophoudt. Achterop
+// een korte punt die een fractie opzij valt.
+function kaproen(delen, ctx, H, [rx, ry, rz], lijfAfstand, o = {}) {
+  const { los = 1.3, dikte = 0.75, zOnder = 52.5 } = o;
+  const mKap = materiaal(ctx, 'kaproen', { ramp: 'berk', lo: 0.5, hi: 2.7, patroon: (x, y, z) => (Math.sin(x * 1.5 + z * 0.4) > 0.84 ? -0.4 : 0) });
+  const dKap = deel(ctx, 'kaproen');
+  const C = plus(H, [0, -0.6, 0.8]);
+  const a = rx + los;
+  const b = ry + los;
+  const c = rz + los;
+  const kap = (x, y, z) => {
+    const dx = x - C[0];
+    const dy = y - C[1];
+    const dz = z - C[2];
+    const schil = Math.abs(sdf.ellipsoide(dx, dy, dz, a, b, c)) - dikte;
+    // het gezicht vrij: een ovaal voorop, van de wenkbrauwen tot de kin
+    const ovaal = Math.max(Math.hypot(dx / (rx * 0.96), (dz + 1.2) / (rz * 1.02)) - 1, 1.5 - dy);
+    return Math.max(schil, -ovaal * 2.5);
+  };
+  // het manteltje: een schil op vaste afstand van het bovenlijf; de onderrand golft en zakt links wat
+  const mantel = (x, y, z) => {
+    const onder = zOnder - 0.08 * x + 0.5 * Math.sin(x * 0.55 + y * 0.4);
+    return Math.max(Math.abs(lijfAfstand(x, y, z) - 1.6) - 0.85, onder - z, z - (H[2] - 3)) * 0.85;
+  };
+  delen.push({
+    f: (x, y, z) => zacht(kap(x, y, z), mantel(x, y, z), 2.2),
+    g: [0, H[1] - 2, (H[2] + c + zOnder) / 2, Math.hypot(15, (H[2] + c - zOnder) / 2) + 2],
+    m: mKap,
+    deel: dKap,
+  });
+  // de punt: achter op de kruin, naar achteren en een fractie opzij
+  delen.push(kegel(plus(C, [0.2, -b + 1.6, c - 3]), plus(C, [1.4, -b - 2.6, c - 5.6]), 2.4, 0.7, mKap, dKap, 1.2));
+}
+
+// Een baret (de nieuwkomer): een platte, wijde schijf vilt, scheef op het hoofd, met een band om het
+// hoofd en een steeltje bovenop. Zo draagt men hem hier niet.
+function baret(delen, ctx, H, [rx, ry, rz]) {
+  const mBaret = materiaal(ctx, 'baret', { ramp: 'gewaad', lo: 1, hi: 4.4 });
+  const dBaret = deel(ctx, 'baret');
+  const z0 = rz * 0.55;
+  const r0 = Math.min(rx, ry) * Math.sqrt(1 - 0.55 * 0.55);
+  delen.push(ring(plus(H, [0, -0.5, z0]), eenheid([0.08, -0.12, 1]), r0 + 0.5, 1.05, mBaret, dBaret));
+  // de schijf: naar rechts en naar achteren gezakt
+  const c = plus(H, [1.6, -1.4, z0 + 2.2]);
+  delen.push({
+    f: (x, y, z) => {
+      const dx = x - c[0];
+      const dy = y - c[1];
+      const dz = z - c[2] - 0.2 * dx + 0.1 * dy;
+      return sdf.ellipsoide(dx, dy, dz, rx + 3.2, ry + 2.8, 2.5) * 0.8;
+    },
+    g: [c[0], c[1], c[2], rx + 5.5],
+    m: mBaret,
+    deel: dBaret,
+    k: 1.2,
+  });
+  delen.push(kegel(plus(c, [-0.6, 0.2, 2]), plus(c, [-0.2, 0.4, 3.8]), 0.8, 0.5, mBaret, dBaret, 0.4));
+}
+
+// Een grijze baard (de oudste): van de kaken over de kin tot op de borst, naar onderen smaller en met
+// de punt een fractie opzij, en een snor die over de mond hangt. H = het midden van het hoofd, maat
+// = zijn stralen; m = het (grijze) haar, d = het deel van het hoofd. lang = hoe ver onder de kin.
+function baard(delen, H, [rx, ry, rz], m, d, lang = 12) {
+  const kin = plus(H, [0, ry * 0.5, -rz * 0.72]);
+  const punt = plus(H, [0.8, ry * 0.78, -rz - lang]);
+  delen.push(kegel(kin, punt, 4.4, 1.1, m, d, 1.5));
+  delen.push(kegel(plus(H, [0, ry * 0.3, -rz * 0.62]), plus(punt, [-0.2, -1, lang * 0.45]), 4.6, 2.2, m, d, 2));
+  for (const s of [-1, 1]) {
+    // langs de kaken, van onder de oren naar de kin
+    delen.push(kegel(plus(H, [s * (rx - 0.7), 1, -1.8]), plus(H, [s * 3.6, ry * 0.55, -rz * 0.78]), 1.9, 3, m, d, 1.5));
+    // de snor, van onder de neus naar de mondhoeken en dan omlaag
+    delen.push(kegel(plus(H, [s * 0.8, ry + 0.6, -3.7]), plus(H, [s * 3.9, ry - 0.5, -6.2]), 1.4, 0.9, m, d, 0.8));
+  }
+}
+
+// ---------------------------------------------------------------- op de romp
+
+// Geruit, zoals een bonte doek: geel met paarse banen, en rood waar twee banen elkaar kruisen. De
+// banen lopen een fractie schuin, zoals een doek die niet recht is omgeslagen.
+const RUIT = {
+  ramp: 'goud',
+  lo: 2,
+  hi: 5.8,
+  patroon: (x, y, z, nx, ny, nz, stap) => {
+    const a = Math.sin(x * 0.78 + y * 0.35 + 0.2 * z + 0.3) > 0.6;
+    const b = Math.sin(z * 0.78 - y * 0.25 - 0.15 * x + 1.1) > 0.6;
+    if (a && b) return naarRamp('rood', stap, [2, 5.8], [2.2, 5.2]);
+    if (a || b) return naarRamp('magie', stap, [2, 5.8], [1.6, 4.4]);
+    return 0;
+  },
+};
+
+// Een bonte omslagdoek (de roddelaar): een schil om het bovenlijf, over de schouders; achter zakt hij
+// in een punt, opzij tot onder de schouders, en voorop komen de twee slippen in een V naar een knoop
+// op de borst (net naast het midden). lijfAfstand = de afstand tot het bovenlijf; o: zNek (de bovenrand
+// bij de hals), zZij, zPunt, en knoop = [x, y, z] van de knoop.
+function omslagdoek(delen, ctx, lijfAfstand, o) {
+  const { zNek, zZij, zPunt, knoop } = o;
+  const mDoek = materiaal(ctx, 'omslagdoek', RUIT);
+  const dDoek = deel(ctx, 'omslagdoek');
+  const [kx, , kz] = knoop;
+  delen.push({
+    f: (x, y, z) => {
+      const schil = Math.abs(lijfAfstand(x, y, z) - 1.6) - 0.85;
+      const voor = klem((y - 1) / 5, 0, 1); // 0 achter en opzij, 1 voorop
+      const dx = Math.abs(x - kx);
+      const onder = mix(zZij - (zZij - zPunt) * Math.max(0, 1 - Math.abs(x + 0.8) / 8.5), kz - 1.2 + 0.75 * dx, voor);
+      const boven = mix(zNek - 0.3 * y, kz + 1.9 * dx, voor);
+      return Math.max(schil, onder - z, z - boven) * 0.85;
+    },
+    g: [0, 1, (zNek + zPunt) / 2, 22],
+    m: mDoek,
+    deel: dDoek,
+  });
+  // de knoop, en de twee slippen die eronder uit hangen, de ene langer dan de andere
+  delen.push(bol(knoop, 1.7, mDoek, dDoek, 0.6));
+  delen.push(kegel(plus(knoop, [-0.5, 0.3, -0.8]), plus(knoop, [-1.6, 0.9, -6.4]), 1.5, 0.6, mDoek, dDoek, 0.5));
+  delen.push(kegel(plus(knoop, [0.5, 0.3, -0.8]), plus(knoop, [1.9, 0.6, -4.8]), 1.4, 0.6, mDoek, dDoek, 0.5));
+}
+
+// Een bundel op de rug (de nieuwkomer): een doek om zijn spullen, boven dichtgeknoopt met twee oren
+// die rechtop staan, en een band van de bundel over elke schouder naar een knoop op de borst. De
+// bundel hangt een fractie scheef. o: rug (het midden), maat (de stralen), schouders ([links, rechts]:
+// boven op de schouder, waar de band overheen gaat), borst ([links, rechts]: waar de band voorop
+// langs komt) en knoop. Alles gaat met de romp mee.
+function bundel(delen, ctx, o) {
+  const { rug, maat: [a, b, c], schouders, borst, knoop } = o;
+  const mDoek = materiaal(ctx, 'bundel', {
+    ramp: 'perkament',
+    lo: 1.4,
+    hi: 5,
+    patroon: (x, y, z) => (Math.sin(x * 0.9 - z * 0.2) > 0.7 || Math.sin(z * 0.9 + x * 0.15) > 0.8 ? { plus: -0.9 } : 0),
+  });
+  const mBand = materiaal(ctx, 'bundelband', { ramp: 'leer', lo: 0.8, hi: 3.8 });
+  const dBundel = deel(ctx, 'bundel');
+  const dBand = deel(ctx, 'bundelband');
+  // de bundel: een bolle zak met plooien, onderaan platter; hij hangt naar rechts
+  delen.push({
+    f: (x, y, z) => {
+      const dz = z - rug[2];
+      const dx = x - rug[0] - 0.08 * dz;
+      const dy = y - rug[1];
+      const plooi = 0.45 * Math.sin(Math.atan2(dz, dx) * 5 + dy * 0.4) * klem(1 - dz / c, 0, 1);
+      return (sdf.ellipsoide(dx, dy, dz * (dz < 0 ? 1.15 : 1), a, b, c) - plooi) * 0.8;
+    },
+    g: [rug[0], rug[1], rug[2], Math.max(a, b, c) + 2],
+    m: mDoek,
+    deel: dBundel,
+  });
+  // de knoop boven, en de twee oren van de doek die rechtop staan
+  const top = plus(rug, [0.9, 0.4, c - 0.9]);
+  delen.push(bol(top, 2, mDoek, dBundel, 1));
+  delen.push(kegel(plus(top, [-0.6, 0, 0.8]), plus(top, [-3.6, -0.8, 4.2]), 1.5, 0.5, mDoek, dBundel, 0.5));
+  delen.push(kegel(plus(top, [0.7, 0.2, 0.8]), plus(top, [3, 1, 4.8]), 1.4, 0.5, mDoek, dBundel, 0.5));
+  // de banden: van de bundel over de schouder, langs de borst naar de knoop
+  [0, 1].forEach((i) => {
+    const s = i ? 1 : -1;
+    const begin = plus(rug, [s * a * 0.5, b * 0.2, c * 0.45]);
+    delen.push(...buis(begin, plus(schouders[i], [0, -3.4, 0.6]), schouders[i], () => 0.95, 4, mBand, dBand, 0.6));
+    delen.push(...buis(schouders[i], borst[i], plus(knoop, [s * 1.1, 0, 0.6]), () => 0.95, 5, mBand, dBand, 0.6));
+  });
+  delen.push(bol(knoop, 1.5, mBand, dBand, 0.6));
+  delen.push(kegel(plus(knoop, [0.3, 0.3, -0.8]), plus(knoop, [0.9, 0.8, -4.2]), 1, 0.5, mBand, dBand, 0.4));
+}
+
+// ---------------------------------------------------------------- in de hand
+
+// Een rozenkrans die uit gevouwen handen hangt (de vrome): een lus kralen van hout, onderaan twee
+// kralen en een koperen kruisje. hand = tussen de handen; voor = hoeveel verder naar voren het
+// onderste stuk moet (een rok is onderaan wijder dan een lijf). Het kruisje hangt een fractie opzij.
+function rozenkrans(delen, ctx, hand, o = {}) {
+  const { voor = 0, lang = 1 } = o;
+  const mKraal = materiaal(ctx, 'kraal', { ramp: 'hout', lo: 0.6, hi: 2.8, glans: 0.8, detail: true });
+  const mKruis = materiaal(ctx, 'kruisje', { ramp: 'goud', lo: 2.4, hi: 6.4, glans: 1.2, detail: true });
+  const dKrans = deel(ctx, 'rozenkrans');
+  const onder = plus(hand, [0.4, -1 + voor * 0.4, -7.6 * lang]);
+  for (const s of [-1, 1]) {
+    const p0 = plus(hand, [s * 1.3, -0.4, -2]);
+    const p1 = plus(hand, [s * 3.3, -0.7 + voor * 0.2, -5.4 * lang]);
+    for (let i = 1; i <= 4; i++) delen.push(bol(bezier(p0, p1, onder, i / 4.6), 0.8, mKraal, dKrans));
+  }
+  delen.push(bol(onder, 0.85, mKraal, dKrans));
+  const k1 = plus(onder, [0.2, 0.2 + voor * 0.3, -1.8]);
+  const k2 = plus(onder, [0.4, 0.4 + voor * 0.6, -3.5]);
+  delen.push(bol(k1, 0.8, mKraal, dKrans), bol(k2, 0.8, mKraal, dKrans));
+  const kruis = plus(onder, [0.7, 0.6 + voor, -6.6]);
+  delen.push(capsule(plus(kruis, [-0.1, 0, 2.2]), plus(kruis, [0.15, 0, -2]), 0.62, mKruis, dKrans));
+  delen.push(capsule(plus(kruis, [-1.5, 0, 0.8]), plus(kruis, [1.5, 0.05, 0.95]), 0.58, mKruis, dKrans));
+}
+
+// Een mand aan de arm (de roddelaar): het hengsel over de onderarm, dicht bij de elleboog, de mand
+// eronder, lang in de looprichting, met een doek erover. Hij hangt een fractie scheef en zwaait met
+// die arm mee. elleboog en hand: de onderarm; zij = aan welke kant de arm zit.
+function hengselmand(delen, ctx, elleboog, hand, zij = -1) {
+  const mDoek = materiaal(ctx, 'manddoek', { ramp: 'pleister', lo: 2.4, hi: 6.2, patroon: (x, y, z) => (Math.sin(x * 1.4 + y * 1.1) > 0.75 ? -0.7 : 0) });
+  const dMand = deel(ctx, 'hengselmand');
+  const top = langs(elleboog, hand, 0.4); // waar het hengsel over de arm ligt
+  const R = 5.2; // de halve lengte van de mand, en zo hoog staat het hengsel
+  const rand = plus(top, [zij * 1.4, 0, -R - 0.6]);
+  const c = plus(rand, [0, 0, -5.4]); // de bodem
+  // het vlechtwerk: om en om licht en donker
+  const mRiet = materiaal(ctx, 'hengselriet', {
+    ramp: 'riet',
+    lo: 1.2,
+    hi: 5.6,
+    patroon: (x, y, z) => {
+      const s = Math.sin(Math.atan2(x - c[0], y - c[1]) * 9) * Math.sin((z - c[2]) * 1.5);
+      return s > 0.25 ? 0.6 : s < -0.25 ? -0.6 : 0;
+    },
+  });
+  const scheef = 0.06 * zij; // hij hangt een fractie naar buiten
+  const ellipsAfstand = (u, v, ea, eb) => (Math.hypot(u / ea, v / eb) - 1) * Math.min(ea, eb);
+  const bak = {
+    f: (x, y, z) => {
+      const t = klem((z - c[2]) / 5.4, 0, 1);
+      const u = x - c[0] - scheef * (z - c[2]);
+      const v = y - c[1];
+      const ea = mix(4, 4.6, t);
+      const eb = mix(R * 0.8, R, t);
+      const buiten = Math.max(ellipsAfstand(u, v, ea, eb), c[2] - z, z - rand[2]);
+      const binnen = Math.max(ellipsAfstand(u, v, ea - 0.8, eb - 0.8), c[2] + 0.8 - z);
+      return Math.max(buiten, -binnen) * 0.9;
+    },
+    g: [c[0], c[1], c[2] + 2.7, R + 3.5],
+    m: mRiet,
+    deel: dMand,
+  };
+  delen.push(bak);
+  // de doek erover: bol, over de rand gezakt
+  delen.push(ellips(plus(rand, [zij * 0.3, 0.3, 0.3]), [4.4, R - 0.2, 1.7], mDoek, dMand, 0.6));
+  delen.push(ellips(plus(rand, [zij * -2.6, 1.6, -0.9]), [1.8, 2.6, 1.6], mDoek, dMand, 0.8));
+  // het hengsel: een boog over de lengte, door de onderarm
+  const hengsel = ring(rand, [1, 0, 0], R - 0.5, 0.65, mRiet, dMand);
+  delen.push({ ...hengsel, f: (x, y, z) => Math.max(hengsel.f(x, y, z), rand[2] - z) });
+}
+
+// Een kroes bier (de drinker): steengoed met twee donkere banden en een oor, en schuim dat aan één
+// kant over de rand loopt. hand = het midden van de hand die hem aan het oor vasthoudt; naar = de
+// richting van de hand naar de kroes (x), zodat het oor in de hand zit.
+function kroes(delen, ctx, hand, naar = 1) {
+  const c = plus(hand, [naar * 4.1, 0.6, -1.6]); // het midden van de bodem
+  const H = 7;
+  const mKroes = materiaal(ctx, 'kroes', {
+    ramp: 'zand',
+    lo: 1.8,
+    hi: 5.6,
+    glans: 0.8,
+    patroon: (x, y, z) => {
+      const h = z - c[2];
+      return Math.abs(h - 1.2) < 0.5 || Math.abs(h - 4.9) < 0.45 ? -1.6 : 0;
+    },
+  });
+  const mSchuim = materiaal(ctx, 'schuim', { ramp: 'baard', lo: 3.8, hi: 6.9 });
+  const dKroes = deel(ctx, 'kroes');
+  delen.push({
+    f: (x, y, z) => {
+      const h = z - c[2];
+      const r = 2.8 - 0.1 * klem(h, 0, H); // onderaan iets wijder
+      return sdf.cilinder(x - c[0], y - c[1], h, r - 0.5, 0.5, H - 0.5) - 0.5;
+    },
+    g: [c[0], c[1], c[2] + H / 2, H / 2 + 3.5],
+    m: mKroes,
+    deel: dKroes,
+  });
+  // het oor, aan de kant van de hand
+  const oor = ring(plus(c, [-naar * 2.7, 0, H * 0.55]), [0, 1, 0], 1.7, 0.55, mKroes, dKroes);
+  delen.push({ ...oor, f: (x, y, z) => Math.max(oor.f(x, y, z), naar * (x - c[0] + naar * 2.6)) });
+  // het schuim: een bolle kap op de rand, en een slierten die aan de voorkant over de rand loopt
+  const top = plus(c, [0, 0, H - 0.2]);
+  delen.push(ellips(plus(top, [0, 0, 0.5]), [2.9, 2.9, 1.7], mSchuim, dKroes, 0.6));
+  delen.push(ellips(plus(top, [naar * 0.8, 2.5, -1.3]), [1.1, 0.9, 2], mSchuim, dKroes, 0.6));
+}
+
+// Waar de punt van een wandelstok staat. In rust op rust; lopend als een derde voet (HH.loopVoet,
+// zoals de voeten in houdingDorpeling): op de grond schuift hij met precies de loopsnelheid naar
+// achteren, dus hij glijdt niet, en hij gaat naar voren met de voet aan de andere kant (verzet: de
+// fase van die voet). Hij staat korter op de grond dan een voet (STOK_STEUN tegen 0,55), midden in
+// de pas van die voet, dus zijn pas is korter: zo komt de punt niet tegen de onderkant van zijn cel.
+const STOK_STEUN = 0.4;
+function stokPunt(rust, stand, snelheid, fps, verzet) {
+  const naam = typeof stand === 'string' ? stand : stand && stand.houding;
+  if (naam !== 'lopen') return rust;
+  const p = HH.loopVoet((typeof stand === 'object' && stand.fase) || 0, { v: snelheid * HH.PER_TEGEL, T: 8 / fps, steun: STOK_STEUN, til: 2.2, verzet: verzet + (0.55 - STOK_STEUN) / 2 });
+  return [rust[0], rust[1] + p.y, rust[2] + p.z];
+}
+
+// Een wandelstok (de oudste): een krom stuk hout met een knop, van de punt op de grond tot boven de
+// hand (punt: zie stokPunt). hand = het midden van de hand, al op zijn plek (met de arm meegedraaid).
+// Een geschild stuk hazelaar, licht van kleur, want voor een donker schort moet hij te zien zijn.
+function stok(delen, ctx, punt, hand) {
+  const mStok = materiaal(ctx, 'stok', { ramp: 'hout', lo: 2.4, hi: 6.2, patroon: (x, y, z) => (Math.sin(z * 1.9 + x) > 0.85 ? -1.2 : 0) });
+  const dStok = deel(ctx, 'stok');
+  const as = eenheid(min(hand, punt));
+  const top = plus(hand, maal(as, 3.4));
+  // een fractie krom: het midden wijkt opzij en naar voren uit
+  const mid = plus(langs(punt, top, 0.5), [-0.9, 0.7, 0]);
+  delen.push(...buis(plus(punt, [0, 0, 0.4]), mid, top, (t) => mix(1.05, 1.3, t), 5, mStok, dStok, 0.4));
+  delen.push(bol(plus(top, maal(as, 0.6)), 1.8, mStok, dStok, 0.6));
+}
+
 module.exports = {
   KARAKTERS,
   materiaal,
@@ -574,4 +988,16 @@ module.exports = {
   bontZoom,
   bontManchet,
   tas,
+  // ronde 2
+  rodeNeus,
+  kaproen,
+  baret,
+  baard,
+  omslagdoek,
+  bundel,
+  rozenkrans,
+  hengselmand,
+  kroes,
+  stokPunt,
+  stok,
 };

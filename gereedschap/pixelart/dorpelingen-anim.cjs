@@ -17,6 +17,8 @@
 //                                                    in Z en ZO, staand en twee loopbeelden elk
 //   uit/dorpelingen/karakters-ronde1.png            de acht karakters van ronde 1 naast de gewone
 //                                                    boer en boerin, op 1× (karakters.cjs)
+//   uit/dorpelingen/karakters-ronde2.png            de tien van ronde 2, net zo
+//   uit/dorpelingen/karakters-alle.png              alle achttien op een rij, staand in ZO
 //
 //   node gereedschap/pixelart/dorpelingen-anim.cjs                      (alle figuren)
 //   node gereedschap/pixelart/dorpelingen-anim.cjs heer soldaat inner   (alleen deze)
@@ -98,6 +100,12 @@ const FIGUREN = [
   { naam: 'boerin-heethoofd', snelheid: BOERIN_SNELHEID, fps: BOERIN_FPS, maak: (stand) => boerin(stand, KARAKTERS.heethoofd.boerin) },
   { naam: 'boerin-weduwe', snelheid: BOERIN_SNELHEID, fps: BOERIN_FPS, maak: (stand) => boerin(stand, KARAKTERS.weduwe.boerin) },
   { naam: 'boerin-vroedvrouw', snelheid: BOERIN_SNELHEID, fps: BOERIN_FPS, maak: (stand) => boerin(stand, KARAKTERS.vroedvrouw.boerin) },
+  // Ronde 2: de andere vijf, op beide lijven. Ook de oudste loopt zo hard als zijn lijf: de
+  // loopsnelheid in het spel hangt aan de boer, niet aan zijn karakter.
+  ...['vrome', 'roddelaar', 'grijsaard', 'nieuwkomer', 'drinker'].flatMap((k) => [
+    { naam: `boer-${k}`, snelheid: BOER_SNELHEID, fps: BOER_FPS, maak: (stand) => boer(stand, KARAKTERS[k].boer) },
+    { naam: `boerin-${k}`, snelheid: BOERIN_SNELHEID, fps: BOERIN_FPS, maak: (stand) => boerin(stand, KARAKTERS[k].boerin) },
+  ]),
 ];
 // Alleen de figuren die op de opdrachtregel staan, of anders allemaal.
 const GEVRAAGD = process.argv.slice(2);
@@ -351,22 +359,28 @@ function proefplaatHuis() {
 }
 if (HUIS.every((n) => gerendered[n])) proefplaatHuis();
 
-// ---------------------------------------------------------------- een gezicht per karakter: proefplaat
+// ---------------------------------------------------------------- een gezicht per karakter: proefplaten
 
-// De acht karakters van ronde 1 (karakters.cjs, ontwerp/beeld.md, "Een gezicht per karakter") naast
-// de gewone boer en boerin: boven het lijf van de boer, onder dat van de boerin, elk een rij in Z en
-// een in ZO. Per figuur staand en twee loopbeelden (0 en 2, zoals proefplaatHuis), elke kolom zo
-// breed als wat erin staat, en binnen een blok alle rijen op dezelfde voetlijn. Op 1×, zoals in het
-// spel, want daar moet je ze van een eindje weg uit elkaar houden (hooguit 1000×400).
-// Alleen als de acht in deze ronde meegingen; de boer en de boerin renderen hier zelf als ze niet
-// meegingen.
-const KARAKTER_BLOKKEN = [
+// De karakters (karakters.cjs, ontwerp/beeld.md, "Een gezicht per karakter") naast de gewone boer en
+// boerin: boven het lijf van de boer, onder dat van de boerin, elk een rij per kant (Z en ZO). Per
+// figuur staand en twee loopbeelden (0 en 2, zoals proefplaatHuis), elke kolom zo breed als wat erin
+// staat, en binnen een blok alle rijen op dezelfde voetlijn. Op 1x, zoals in het spel, want daar moet
+// je ze van een eindje weg uit elkaar houden (hooguit 1000x400).
+//   karakters-ronde1.png  de acht van ronde 1
+//   karakters-ronde2.png  de tien van ronde 2
+//   karakters-alle.png    alle achttien op een rij, alleen staand in ZO (hooguit 1000x300): eerst
+//                         wie het lijf van de boer heeft, dan de boerin
+// Een plaat komt er als er in deze ronde een van zijn karakters meeging; wat niet meeging (ook de
+// gewone boer en boerin), rendert hier zelf, alleen de beelden die op de plaat komen.
+const KARAKTERS_RONDE1 = [
   ['boer', 'boer-zanger', 'boer-woekeraar', 'boer-heethoofd'],
   ['boerin', 'boerin-zanger', 'boerin-weduwe', 'boerin-woekeraar', 'boerin-vroedvrouw', 'boerin-heethoofd'],
 ];
-function proefplaatKarakters() {
-  const KANTEN_K = ['Z', 'ZO'];
-  const BEELDEN = [['staan', 0], ['lopen', 0], ['lopen', 2]];
+const RONDE2 = ['vrome', 'roddelaar', 'grijsaard', 'nieuwkomer', 'drinker'];
+const KARAKTERS_RONDE2 = [['boer', ...RONDE2.map((k) => `boer-${k}`)], ['boerin', ...RONDE2.map((k) => `boerin-${k}`)]];
+const KARAKTERS_ALLE = [[...KARAKTERS_RONDE1[0], ...KARAKTERS_RONDE2[0], ...KARAKTERS_RONDE1[1], ...KARAKTERS_RONDE2[1]].filter((n) => n !== 'boer' && n !== 'boerin')];
+function proefplaatKarakters(bestand, blokken, o = {}) {
+  const { kanten = ['Z', 'ZO'], beelden = [['staan', 0], ['lopen', 0], ['lopen', 2]], max = [1000, 400] } = o;
   const plaatVan = (naam, houding, i, kant) => {
     if (gerendered[naam]) return gerendered[naam][houding][kant][i];
     const fig = FIGUREN.find((f) => f.naam === naam);
@@ -376,12 +390,12 @@ function proefplaatKarakters() {
   const GROEPGAT = 8;
   const RIJGAT_K = 4;
   const BLOKGAT = 10;
-  const blokken = KARAKTER_BLOKKEN.map((namen) => {
+  const platen = blokken.map((namen) => {
     let y0 = HOOG;
     let y1 = -1;
     const groepen = namen.map((naam) =>
-      BEELDEN.map(([houding, i]) => {
-        const kol = { platen: KANTEN_K.map((kant) => plaatVan(naam, houding, i, kant)), x0: CEL, x1: -1 };
+      beelden.map(([houding, i]) => {
+        const kol = { platen: kanten.map((kant) => plaatVan(naam, houding, i, kant)), x0: CEL, x1: -1 };
         for (const p of kol.platen) {
           const k = kader(p);
           if (k.x1 < 0) continue;
@@ -400,12 +414,12 @@ function proefplaatKarakters() {
     const breed = groepen.reduce((som, g) => som + g.reduce((s, kol) => s + kol.breed, 0), 0) + GROEPGAT * (groepen.length - 1);
     return { groepen, y0, hoog, breed };
   });
-  const breed = Math.max(...blokken.map((b) => b.breed));
-  const hoog = blokken.reduce((som, b) => som + KANTEN_K.length * b.hoog + (KANTEN_K.length - 1) * RIJGAT_K, 0) + BLOKGAT * (blokken.length - 1);
+  const breed = Math.max(...platen.map((b) => b.breed));
+  const hoog = platen.reduce((som, b) => som + kanten.length * b.hoog + (kanten.length - 1) * RIJGAT_K, 0) + BLOKGAT * (platen.length - 1);
   const vel = new K.Plaat(breed, hoog);
   let y = 0;
-  for (const b of blokken) {
-    KANTEN_K.forEach((kant, rij) => {
+  for (const b of platen) {
+    kanten.forEach((kant, rij) => {
       let x = 0;
       for (const groep of b.groepen) {
         for (const kol of groep) {
@@ -418,8 +432,11 @@ function proefplaatKarakters() {
     });
     y += BLOKGAT - RIJGAT_K;
   }
-  if (breed > 1000 || hoog > 400) console.log(`  let op: karakters-ronde1.png is ${breed}×${hoog}, groter dan 1000×400`);
-  fs.writeFileSync(path.join(UIT, 'karakters-ronde1.png'), K.png(vel, 1, '#5e6a44'));
-  console.log(`karakters-ronde1.png: ${breed}×${hoog} (schaal 1)`);
+  if (breed > max[0] || hoog > max[1]) console.log(`  let op: ${bestand} is ${breed}×${hoog}, groter dan ${max[0]}×${max[1]}`);
+  fs.writeFileSync(path.join(UIT, bestand), K.png(vel, 1, '#5e6a44'));
+  console.log(`${bestand}: ${breed}×${hoog} (schaal 1)`);
 }
-if (KARAKTER_BLOKKEN.every((namen) => namen.every((n) => n === 'boer' || n === 'boerin' || gerendered[n]))) proefplaatKarakters();
+const gingMee = (blokken) => blokken.some((namen) => namen.some((n) => n !== 'boer' && n !== 'boerin' && gerendered[n]));
+if (gingMee(KARAKTERS_RONDE1)) proefplaatKarakters('karakters-ronde1.png', KARAKTERS_RONDE1);
+if (gingMee(KARAKTERS_RONDE2)) proefplaatKarakters('karakters-ronde2.png', KARAKTERS_RONDE2);
+if (gingMee(KARAKTERS_ALLE)) proefplaatKarakters('karakters-alle.png', KARAKTERS_ALLE, { kanten: ['ZO'], beelden: [['staan', 0]], max: [1000, 300] });

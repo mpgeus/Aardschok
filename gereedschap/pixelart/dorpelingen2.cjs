@@ -800,6 +800,11 @@ const BOERIN_FPS = 10;
 // (een rood gezicht), boos (boze wenkbrauwen en mond). Op de romp: bont (een bontkraag, en bont om
 // de polsen), riem, buidel (aan de riem), luit (op de rug). De armen: mand (false: geen mandje),
 // dan links ('hangt', 'zij' of 'buidel') en rechts ('hangt', 'zij' of 'tas'), en mouw ('op').
+// Ronde 2: doek en haar (materialen), slapen (bij de nekdoek: haar dat opzij over de slapen komt, en
+// de doek wat verder naar achteren), neus ('rood', en groter), buik (een dikke buik), krom (graden:
+// het bovenlijf hangt voorover, de rok en het schort niet), omslagdoek, bundel (op de rug),
+// rozenkrans (uit de handen). En de armen, links of rechts: 'bidt', 'mond', 'hengsel', 'kroes',
+// 'buik', 'knoop' en 'stok', zoals bij de boer (dorpelingen.cjs).
 function boerin(stand = null, o = {}) {
   const M = { huid: 0, jurk: 1, schort: 2, doek: 3, haar: 4, oog: 5, riet: 6, ei: 7, mond: 8, bruinEi: 9 };
   const D = { rok: 1, lijf: 2, schort: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, doek: 9, mand: 10, ei: 11 };
@@ -810,10 +815,11 @@ function boerin(stand = null, o = {}) {
   const ctx = { M, D, mat }; // voor de hulpjes van de karakters
   mat[M.huid] = { ramp: 'huid', lo: 1.8, hi: 6.6, schaduwKracht: 0.7, patroon: blosjes(3.7, H[2] - 2.6, H[1] + 3, 1.8, 6.6, 1.1) };
   if (o.rood) mat[M.huid].patroon = KAR.roodGezicht(H, [1.8, 6.6]);
+  if (o.neus === 'rood') mat[M.huid].patroon = KAR.rodeNeus(plus(H, [0, 7.4, -1.8]), 3, [1.8, 6.6], mat[M.huid].patroon);
   mat[M.jurk] = o.jurk || { ramp: 'dak', lo: 1, hi: 5.6 };
   mat[M.schort] = o.schort || { ramp: 'pet', lo: 1.2, hi: 5.4, patroon: (x) => (Math.sin(x * 1.1 + 0.6) > 0.8 ? -0.6 : 0) };
-  mat[M.doek] = { ramp: 'pleister', lo: 2.2, hi: 6.4, patroon: (x, y, z) => (Math.sin(x * 1.2 - z * 0.8) > 0.8 ? -0.6 : 0) };
-  mat[M.haar] = { ramp: 'aarde', lo: 1, hi: 4.6 };
+  mat[M.doek] = o.doek || { ramp: 'pleister', lo: 2.2, hi: 6.4, patroon: (x, y, z) => (Math.sin(x * 1.2 - z * 0.8) > 0.8 ? -0.6 : 0) };
+  mat[M.haar] = o.haar || { ramp: 'aarde', lo: 1, hi: 4.6 };
   mat[M.oog] = OOG;
   mat[M.riet] = { ramp: 'riet', lo: 1.4, hi: 6, patroon: rietPatroon(mandC) };
   mat[M.ei] = { ramp: 'berk', lo: 2.4, hi: 5.6, glans: 0.6, detail: true };
@@ -831,28 +837,45 @@ function boerin(stand = null, o = {}) {
     heup: [0, 0.6, 36],
     nek: [0, 0, 56.6],
     schouders: [[-10.6, 0.4, 53.6], [10.6, 0.4, 53.6]],
+    krom: o.krom,
+    nekKrom: o.krom ? o.krom * 0.75 : 0,
   });
 
-  const lijf = {
-    z0: 35,
-    z1: 56,
-    rx: profiel([[35, 10.2], [41, 10.8], [47, 11.2], [52, 11], [56, 9.6]]),
-    ry: profiel([[35, 8], [41, 8.2], [47, 8], [52, 7.2], [56, 6]]),
-    cy: profiel([[35, 1.2], [42, 1.6], [56, 0.6]]),
-  };
+  // (de drinker, buik: het lijf en de bovenkant van de rok om een dikke buik)
+  const lijf = o.buik
+    ? {
+        z0: 35,
+        z1: 56,
+        rx: profiel([[35, 11.6], [40, 12.6], [45, 12.3], [50, 11.3], [56, 9.6]]),
+        ry: profiel([[35, 9.8], [40, 11], [45, 10.3], [50, 8], [56, 6]]),
+        cy: profiel([[35, 2.4], [40, 3.6], [45, 3], [50, 1.6], [56, 0.6]]),
+      }
+    : {
+        z0: 35,
+        z1: 56,
+        rx: profiel([[35, 10.2], [41, 10.8], [47, 11.2], [52, 11], [56, 9.6]]),
+        ry: profiel([[35, 8], [41, 8.2], [47, 8], [52, 7.2], [56, 6]]),
+        cy: profiel([[35, 1.2], [42, 1.6], [56, 0.6]]),
+      };
+  const boezem = [[0, 4, 48.5], [9, 5.6, 4.4]];
+  const schouders = [[0, 0.4, 55], [10.8, 7, 4.2]];
   const rok = vrouwenlijf(delen, {
     rokTop: 37,
-    rokRx: [15.6, 10.6],
-    rokRy: [13.4, 8.8],
+    rokRx: o.buik ? [16.2, 12] : [15.6, 10.6],
+    rokRy: o.buik ? [14.2, 11] : [13.4, 8.8],
     lijf,
-    boezem: [[0, 4, 48.5], [9, 5.6, 4.4]],
-    schouders: [[0, 0.4, 55], [10.8, 7, 4.2]],
+    boezem,
+    schouders,
     mRok: M.jurk,
     mLijf: M.jurk,
     dRok: D.rok,
     dLijf: D.lijf,
     botRok: () => bot(Bn.Brok),
   });
+  // krom: het bovenlijf buigt voorover (Bromp), het schort blijft bij de rok staan (Blijf)
+  if (o.krom) bot(Bn.Bromp);
+  // de afstand tot het bovenlijf, voor een omslagdoek
+  const bovenlijf = o.omslagdoek ? bouwSdf([romp(lijf, lijf.z0, lijf.z1, M.jurk, D.lijf, 2), ellips(...boezem, M.jurk, D.lijf, 2.5), ellips(...schouders, M.jurk, D.lijf, 2.5)]) : null;
   if (o.bef) {
     // een wit schort dat bijna tot de zoom komt, met een borststuk over de boezem
     const boezem = (z) => 4 + 5.6 * Math.sqrt(Math.max(0, 1 - ((z - 48.5) / 4.4) ** 2));
@@ -864,11 +887,24 @@ function boerin(stand = null, o = {}) {
     delen.push(schil(rok, { los: 1.2, d: 0.6, breed: (z) => mix(9.4, 7.4, z / 37), z0: 5, z1: 36.5 }, M.schort, D.schort));
     middelband(delen, lijf, 36.4, M.schort, D.schort);
   }
+  if (o.krom) bot(Bn.Blijf);
   if (o.bont) KAR.bontKraag(delen, ctx, [0, 0.5, 56.2], [8.8, 7], 2.5);
   const band = o.riem ? KAR.riem(delen, ctx, lijf, 37.6) : null;
   const buidel = band && o.buidel ? KAR.buidel(delen, ctx, band, -5.8) : null;
   // de luit: de kast rechtsonder op de rug, de hals langs het linkeroor omhoog
   if (o.luit) KAR.luit(delen, ctx, { voet: [5.2, -7, 38.5], top: [-11, -10, 73], vorm: lijf, z0: 35, z1: 56, schouder: [7.6, 0, 56.6], heup: [-9.8, 0, 37.4] });
+  // de roddelaar: een bonte omslagdoek, voorop net naast het midden geknoopt
+  if (o.omslagdoek) KAR.omslagdoek(delen, ctx, bovenlijf, { zNek: 59.6, zZij: 48.5, zPunt: 39.5, knoop: [0.8, 11.4, 47.6] });
+  // de nieuwkomer: de bundel op de rug, de banden over de schouders naar een knoop op de borst
+  if (o.bundel) {
+    KAR.bundel(delen, ctx, {
+      rug: [2.2, -13.2, 52.4],
+      maat: [11, 6.2, 9.4],
+      schouders: [[-5.6, 0.4, 60.2], [5.4, 0.5, 60.3]],
+      borst: [[-4.8, 7.4, 55.2], [4.6, 7.5, 54.8]],
+      knoop: [0.7, 10.6, 50],
+    });
+  }
 
   const mouw = { mouw: M.jurk, huid: M.huid, r: [3.8, 3.3, 2.6], tot: 1.92, rol: 0.8, hand: [2.5, 2.7, 2.9] };
   if (o.mand !== false) {
@@ -889,27 +925,55 @@ function boerin(stand = null, o = {}) {
     // --- zonder mandje: de armen hangen en zwaaien (Barm), of de vuisten staan in de zij en de hand
     // ligt op de buidel (dan gaan ze met de romp mee, Bromp). De tas zit in de rechterhand en zwaait
     // met die arm mee. Het heethoofd (mouw 'op'): hoog opgestroopt, links nog wat hoger.
+    // Ronde 2: van de nieuwe houdingen zwaaien alleen de arm met de mand en die met de stok; de rest
+    // gaat met de romp mee. Ze staan hier voor de rechterarm, en de linker is zijn spiegelbeeld.
     bot(Bn.Bromp);
     const S = [[-10.6, 0.4, 53.6], [10.6, 0.4, 53.6]];
+    const spiegel = (punten) => [punten.map(([x, y, z]) => [-x, y, z]), punten];
     const plek = {
       hangt: [[[-12.9, 1.1, 44.2], [-12.4, 2.9, 35.5]], [[12.7, 1.6, 44.3], [12.2, 3.4, 35.7]]],
       zij: [[[-17.8, -0.6, 46.7], [-11.9, 1.7, 38.7]], [[17.3, -0.2, 46.1], [11.8, 2.1, 38.3]]],
       tas: [null, [[13, 1.8, 44.3], [12.9, 3.5, 35.4]]],
+      bidt: [[[-11.1, 7.3, 45.6], [-1.3, 12.2, 46.2]], [[11.4, 7.6, 45.1], [1.2, 12.3, 46.7]]],
+      mond: spiegel([[11.8, 8.6, 53.2], [4.8, 10.6, 61.8]]),
+      hengsel: spiegel([[14.9, -0.4, 44.4], [15.3, 8.8, 43.8]]),
+      kroes: spiegel([[15.4, 1.8, 44.8], [11.8, 10.9, 46.8]]),
+      buik: spiegel([[15.2, 5, 45.2], [8.3, 14.1, 41.2]]),
+      knoop: spiegel([[11.8, 7, 45.4], [2.4, 12.6, 48.8]]),
+      stok: spiegel([[13.4, 2.6, 44.2], [13.6, 9.6, 37.8]]),
     };
+    const ZWAAIT = { hangt: true, tas: true, hengsel: true, stok: true };
     ['links', 'rechts'].forEach((kant, i) => {
+      const s = i ? 1 : -1;
       const hoe = o[kant] || 'hangt';
       const [E, Hd] = hoe === 'buidel' ? [[-13.2, 3.6, 44.6], plus(buidel, [-0.3, 0.6, 1.3])] : plek[hoe][i];
       const m = o.mouw === 'op' ? { ...mouw, r: [4, 3.6, 2.8], tot: i ? 0.78 : 0.62, rol: 1.2, hand: [2.8, 3, 3.1] } : mouw;
       const pols = arm(delen, S[i], E, Hd, { ...m, dArm: i ? D.armR : D.armL, dHand: i ? D.handR : D.handL });
       if (o.bont) KAR.bontManchet(delen, ctx, pols, eenheid(min(E, pols)), 2.5);
       if (hoe === 'tas') KAR.tas(delen, ctx, Hd, 1);
-      bot(hoe === 'zij' || hoe === 'buidel' ? Bn.Bromp : Bn.Barm[i]);
+      if (hoe === 'hengsel') KAR.hengselmand(delen, ctx, E, Hd, s);
+      if (hoe === 'kroes') KAR.kroes(delen, ctx, Hd, -s);
+      const B = ZWAAIT[hoe] ? Bn.Barm[i] : Bn.Bromp;
+      bot(B);
+      if (hoe === 'stok') {
+        // de punt als een derde voet, met de voet aan de andere kant mee (de rechtervoet heeft
+        // verzet 0,5), en ver genoeg opzij dat de zoom van de rok er niet overheen komt
+        KAR.stok(delen, ctx, KAR.stokPunt([s * 17.6, 6.6, 0], stand, BOERIN_SNELHEID, BOERIN_FPS, i ? 0 : 0.5), HH.opPunt(B, Hd));
+        bot(null);
+      }
     });
+    // de rozenkrans hangt uit de gevouwen handen, over de rok die onderaan wijder wordt
+    if (o.rozenkrans) {
+      KAR.rozenkrans(delen, ctx, langs(plek.bidt[0][1], plek.bidt[1][1], 0.5), { voor: 1.6 });
+      bot(Bn.Bromp);
+    }
   }
 
   // --- hoofd: rond gezicht in een witte doek, een pluk haar voorop, de knoop onder de kin
   const oy = schedel(delen, H, M, D, { maat, oog: [2.6, 0.6], oor: 0.8 });
-  delen.push(bol(plus(H, [0, 6.9, -1.4]), 1.6, M.huid, D.hoofd, 1));
+  // (de drinker: een dikke, rode knol van een neus, zie rodeNeus hierboven)
+  if (o.neus === 'rood') delen.push(bol(plus(H, [0, 7.3, -1.9]), 2.2, M.huid, D.hoofd, 1));
+  else delen.push(bol(plus(H, [0, 6.9, -1.4]), 1.6, M.huid, D.hoofd, 1));
   if (o.boos) {
     KAR.bozeMond(delen, H, maat, M.mond, D.hoofd, 1.4, -4.2);
     KAR.bozeWenkbrauwen(delen, H, [2.6, 0.6], oy, M.haar, D.hoofd);
@@ -930,7 +994,9 @@ function boerin(stand = null, o = {}) {
   } else if (hoofd === 'nekdoek') {
     // een doek over het haar, in de nek geknoopt; voorop komt het haar eronder vandaan
     for (const x of [-3, -1, 1.2, 3.1]) delen.push(bol(plus(H, [x, 5.4, 4.6 - Math.abs(x) * 0.25]), 1.4, M.haar, D.hoofd, 0.5));
-    delen.push(hoofddoek(H, maat, 'nek', M.doek, D.doek, { los: 1.4, voorhoofd: 5.4 }));
+    // (de oudste, slapen: grijs haar dat opzij onder de doek uit komt, over de slapen)
+    if (o.slapen) for (const s of [-1, 1]) delen.push(ellips(plus(H, [s * 6.1, 2.2, 1.4]), [1.7, 3, 3.2], M.haar, D.hoofd, 0.8));
+    delen.push(hoofddoek(H, maat, 'nek', M.doek, D.doek, { los: 1.4, voorhoofd: o.slapen ? 6.2 : 5.4 }));
     const knoop = plus(H, [0.4, -7.9, -2.6]);
     delen.push(bol(knoop, 1.7, M.doek, D.doek, 0.6));
     delen.push(kegel(plus(knoop, [-0.4, -0.2, -0.6]), plus(knoop, [-1.6, -1.4, -6.2]), 1.3, 0.6, M.doek, D.doek, 0.4));

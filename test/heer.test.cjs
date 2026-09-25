@@ -613,6 +613,22 @@ test('de schandpaal heeft kunst: leeg, bezet en het halsijzer, en een nek voor e
     if (!/^(boer|boerin)-/.test(naam)) continue;
     assert.ok(Number.isFinite(t.nek[naam]), `de nek van het vel ${naam} is niet gemeten: naar-spel.cjs --alleen schandpaal`);
   }
+  // Alle achttien (ronde 1 en 2): elk karakter op elk lijf dat erbij kan. En de meting klopt: een
+  // hand bij de mond, een rode neus of een baard brengt kinHoogte in de war (schandpaal.cjs), en dan
+  // zit het halsijzer ineens een hand te hoog of te laag. Alleen de oudste zit wat lager, want hij
+  // is krom.
+  let n = 0;
+  for (const [karakter, k] of Object.entries(T.KARAKTERS)) {
+    for (const lijf of ['boer', 'boerin']) {
+      if (k.geslacht && lijf !== (k.geslacht === 'vrouw' ? 'boerin' : 'boer')) continue;
+      const naam = `${lijf}-${karakter}`;
+      n++;
+      assert.ok(Number.isFinite(t.nek[naam]), `de nek van het vel ${naam} is niet gemeten: naar-spel.cjs --alleen schandpaal`);
+      assert.ok(Math.abs(t.nek[naam] - t.nek[lijf]) <= 6, `de nek van ${naam} (${t.nek[naam]}) ligt ver van die van ${lijf} (${t.nek[lijf]})`);
+      if (karakter !== 'grijsaard') assert.equal(t.nek[naam], t.nek[lijf], `${naam} heeft zijn hoofd waar ${lijf} het heeft`);
+    }
+  }
+  assert.equal(n, 18);
 });
 
 // ---------------------------------------------------------------------------------------------
