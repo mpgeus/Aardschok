@@ -185,6 +185,37 @@
           uitleg: 'Op 1 lentemaand gaat alle mest naar verhouding over de akkers van dat jaar. Je hoeft niets te doen.' },
       ],
     },
+    // Stap 2 van de inner, de verstopplekken (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
+    {
+      id: 'sporen', naam: 'Sporen', standaard: 'alles',
+      uitleg: 'Wat je verstopt, laat sporen na. Klopt een spoor niet met wat de inner telde, dan groeit zijn argwaan.',
+      keuzes: [
+        { id: 'alles', naam: 'Alles laat sporen na', zet: { 'INNER_INSTELLINGEN.sporen': 'alles' },
+          uitleg: 'Het graan in de schuur tegen de velden die hij zag, en het goud in de kist tegen wat de marskramer hem vertelt dat hij je betaalde.' },
+        { id: 'graan', naam: 'Alleen het graan', zet: { 'INNER_INSTELLINGEN.sporen': 'graan' },
+          uitleg: 'Alleen het graan in de schuur tegen de velden. Goud verstoppen valt niet op.' },
+      ],
+    },
+    {
+      id: 'kist', naam: 'Het goud in de kist', standaard: 'telt',
+      uitleg: 'Of de heer ook een deel wil van het goud dat de inner in de dorpskist telt.',
+      keuzes: [
+        { id: 'telt', naam: 'Hij wil een deel', zet: { 'HEER_INSTELLINGEN.kist': true },
+          uitleg: 'De heer ziet alleen geld. Van wat de inner in de kist telt, vraagt hij een deel: zo heeft goud verstoppen zin.' },
+        { id: 'teltNiet', naam: 'De kist telt niet', zet: { 'HEER_INSTELLINGEN.kist': false },
+          uitleg: 'De heer vraagt naar mensen, gebouwen en graan, niet naar wat er in de kist ligt.' },
+      ],
+    },
+    {
+      id: 'bewoners', naam: 'Wie er in een kelder woont', standaard: 'telt',
+      uitleg: 'Of het karakter van een boer uitmaakt als je iets in zijn kelder verstopt.',
+      keuzes: [
+        { id: 'telt', naam: 'Het karakter telt', zet: { 'VERSTOP_INSTELLINGEN.karakters': true },
+          uitleg: 'De roddelaar vertelt het rond, de vrome weigert, de woekeraar houdt zijn deel, en de oudste kent een oude plek.' },
+        { id: 'teltNiet', naam: 'Elke kelder is gelijk', zet: { 'VERSTOP_INSTELLINGEN.karakters': false },
+          uitleg: 'In de kelder van elke boer past evenveel, en de soldaten vinden het er even vaak.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -206,6 +237,7 @@
     { naam: 'De marskramer', blok: 'HANDEL_INSTELLINGEN' },
     { naam: 'De heer', blok: 'HEER_INSTELLINGEN' },
     { naam: 'De inner', blok: 'INNER_INSTELLINGEN' },
+    { naam: 'De verstopplekken', blok: 'VERSTOP_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },

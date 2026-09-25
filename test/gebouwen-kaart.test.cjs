@@ -19,12 +19,26 @@ const T = globalThis.Toren;
 test('een "gebouw" ding in de betekenis landt in w.gebouwenOpKaart, met zijn maat', () => {
   const betekenis = { dingen: [{ gebouw: 'boerderij', x: 2, y: 2, b: 3, h: 4 }] };
   const w = T.laadKaart(T.KAARTEN.proef, betekenis);
-  assert.deepEqual(w.gebouwenOpKaart, [{ soort: 'boerderij', x: 2, y: 2, b: 3, h: 4 }]);
+  assert.deepEqual(w.gebouwenOpKaart, [{ soort: 'boerderij', x: 2, y: 2, b: 3, h: 4, huis: null }]);
 });
 
 test('zonder "b"/"h" op een gebouw-ding is de voet 1x1', () => {
   const w = T.laadKaart(T.KAARTEN.proef, { dingen: [{ gebouw: 'put', x: 2, y: 2 }] });
-  assert.deepEqual(w.gebouwenOpKaart[0], { soort: 'put', x: 2, y: 2, b: 1, h: 1 });
+  assert.deepEqual(w.gebouwenOpKaart[0], { soort: 'put', x: 2, y: 2, b: 1, h: 1, huis: null });
+});
+
+// Wie er woont, zegt "huis", zoals bij een akker: de boer met dezelfde id, of de schout. Dat telt
+// voor zijn kelder (js/verstoppen.js), en het komt mee tot op het gebouw in S.gebouwen.
+test('"huis" op een gebouw-ding zegt wie er woont, tot op het gebouw zelf', () => {
+  const betekenis = { dingen: [{ gebouw: 'boerderij', x: 2, y: 2, b: 2, h: 2, huis: 'boer1' }, { gebouw: 'huis', x: 6, y: 2, b: 2, h: 2, huis: 'schout' }] };
+  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  S.wereld = T.laadKaart(T.KAARTEN.proef, betekenis);
+  assert.equal(S.wereld.gebouwenOpKaart[0].huis, 'boer1');
+  T.zetBestaandeGebouwen(S);
+  assert.deepEqual(S.gebouwen.map((g) => g.huis), ['boer1', 'schout']);
+  // En een klik op zijn voet vindt hem, ook zonder eigen voorwerp (T.gebouwOp, js/gebouwen.js).
+  assert.equal(T.gebouwOp(S, 3, 3), S.gebouwen[0]);
+  assert.equal(T.gebouwOp(S, 5, 3), null);
 });
 
 test('"beginVoorraad" op het betekenisbestand landt op de wereld', () => {

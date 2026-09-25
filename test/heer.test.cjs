@@ -238,7 +238,10 @@ test('een boete komt het jaar erna terug in wat hij vraagt, en is dan betaald of
   const g = T.betaalHeer(S, geefDeel(S, 0.8));
   assert.equal(S.heer.schuld, g.schuld);
   const volgendJaar = T.eisVanDeHeer(S);
-  assert.equal(volgendJaar.per.goud, 12 + g.schuld);
+  // Wat hij altijd vraagt (12 goud), een deel van wat er nog in de kist ligt (sinds 25 sep telt hij
+  // de kist, js/heer.js), en de schuld met de boete.
+  const kist = Math.ceil(S.voorraad.goud * IN.deelVanGoud - 1e-9);
+  assert.equal(volgendJaar.per.goud, 12 + kist + g.schuld);
   // Een jaar later alles betaald: de schuld is weg.
   S.kalender.dag = dagVan('slachtmaand', 11, 1);
   T.heerKomt(S, S.kalender.dag);

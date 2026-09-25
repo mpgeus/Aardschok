@@ -485,7 +485,7 @@
         welkom: {
           tekst: [
             { als: { vlag: 'innerOnverwacht' }, zeg: 'Schout. Ik was toevallig in de buurt. Dat is niet waar: ik kwam speciaal. Zijne Genade vroeg zich af of ik wel goed geteld had. Ik tel altijd goed. Maar ik tel graag twee keer.' },
-            { zeg: 'Goedendag, schout. Ik ben de inner van Zijne Genade, en ik kom tellen: de huizen, de schuren en de velden. Wat ik zie, schrijf ik op. Wat ik opschrijf, betaalt u op Sint-Maarten.' },
+            { zeg: 'Goedendag, schout. Ik ben de inner van Zijne Genade, en ik kom tellen: de huizen, de schuren, de velden en de kist. Wat ik zie, schrijf ik op. Wat ik opschrijf, betaalt u op Sint-Maarten.' },
           ],
           keuzes: [
             { zeg: 'Loop maar met me mee. Ik laat u alles zien.', sluit: true },
@@ -495,7 +495,7 @@
         },
         wat: {
           tekst: [
-            { zeg: 'Huizen, want daar wonen zielen, en zielen betalen hoofdgeld. Schuren, want daar ligt graan. Velden, want daar staat graan dat straks in de schuren ligt. En ik weet wat een veld geeft, schout. Ligt er minder in de schuur dan er op het veld stond, dan schrijf ik dat ook op.' },
+            { zeg: 'Huizen, want daar wonen zielen, en zielen betalen hoofdgeld. Schuren, want daar ligt graan. Velden, want daar staat graan dat straks in de schuren ligt. En de kist, want Zijne Genade ziet graag goud. Ik weet wat een veld geeft, schout, en de marskramer vertelt me wat hij u betaalde. Ligt er minder in de schuur of in de kist dan ik weet, dan schrijf ik dat ook op.' },
           ],
           keuzes: [
             { zeg: 'En wat u niet ziet?', naar: 'nietGezien' },

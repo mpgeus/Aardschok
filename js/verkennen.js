@@ -197,6 +197,16 @@
     // ijzer staat stil, en zegt dat).
     const gebouw = T.gebouwOp && T.gebouwOp(S, doel.x, doel.y);
     if (gebouw) {
+      // Een huis, een boerderij of de kapel: daar verstop je graan en goud (js/verstoppen.js). Je
+      // loopt erheen, en dan gaat het venster open (js/hud.js). Kan het nu niet (de vrome weigert,
+      // de inner is in het dorp), dan zegt de klik waarom.
+      const plek = T.verstopPlekVan && T.verstopPlekVan(S, gebouw);
+      if (plek && T.ui.openVerstoppen) {
+        const h = T.verstopHandeling(S, plek);
+        const rand = h.kan && T.randVanGebouw(S, gebouw);
+        if (rand) return { tekst: h.tekst, doe: () => loopNaast(S, rand, () => T.ui.openVerstoppen(S, gebouw)) };
+        return { tekst: h.tekst, doe: () => T.ui.bericht(h.reden || 'Daar kun je niet bij.') };
+      }
       const tekst = T.gebouwToestand(S, gebouw);
       return { tekst, doe: () => T.ui.bericht(tekst) };
     }

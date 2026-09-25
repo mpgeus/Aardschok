@@ -322,10 +322,13 @@
       }
       if (p.gebouw !== undefined) {
         // Zijn tekening staat al in de .tmj (een gewoon Tiled-object, zoals een boom); dit is
-        // alleen de betekenis erbij. Zie "gebouw" hierboven en T.zetBestaandeGebouwen.
+        // alleen de betekenis erbij. Zie "gebouw" hierboven en T.zetBestaandeGebouwen. "huis"
+        // zegt wie er woont, zoals bij een akker: de boer met dezelfde id, of "schout" (zijn
+        // kelder, js/verstoppen.js).
         gebouwenOpKaart.push({
           soort: String(p.gebouw), x: gx, y: gy,
           b: Number(p.b) || 1, h: Number(p.h) || 1,
+          huis: p.huis !== undefined ? String(p.huis) : null,
         });
         return;
       }

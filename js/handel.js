@@ -179,6 +179,13 @@
     return { ...uit, kan: true };
   };
 
+  // Het boek van de marskramer: wat hij je sinds Sint-Maarten betaalde, en wat jij hem. Hij vertelt
+  // het de inner, en dat is het spoor van goud (Marcel, 25 sep; spel.md, "Marcel koos voor stap
+  // 2"; js/inner.js): wie veel verkocht en een lege kist heeft, valt op. Na Sint-Maarten begint het
+  // opnieuw (T.innerNaSintMaarten).
+  T.nieuwBoekMarskramer = (dag) => ({ sinds: dag || 0, ontvangen: 0, betaald: 0 });
+  T.boekMarskramer = (S) => S.boekMarskramer || (S.boekMarskramer = T.nieuwBoekMarskramer(0));
+
   T.koop = function (S, wat, aantal) {
     const k = T.kanKopen(S, wat, aantal);
     if (!k.kan) return k;
@@ -187,6 +194,7 @@
     T.wijzigVoorraad(S, wat, aantal);
     m.heeft[wat] -= aantal;
     m.beurs += k.kosten;
+    T.boekMarskramer(S).betaald += k.kosten;
     return k;
   };
 
@@ -213,6 +221,7 @@
     T.wijzigVoorraad(S, 'goud', k.opbrengst);
     m.beurs -= k.opbrengst;
     m.plaats -= pakken;
+    T.boekMarskramer(S).ontvangen += k.opbrengst;
     return k;
   };
 

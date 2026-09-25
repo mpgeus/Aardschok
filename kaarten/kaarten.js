@@ -29275,42 +29275,48 @@
       "x": 14,
       "y": 9,
       "b": 7,
-      "h": 5
+      "h": 5,
+      "huis": "boer1"
      },
      {
       "gebouw": "boerderij",
       "x": 30,
       "y": 9,
       "b": 5,
-      "h": 7
+      "h": 7,
+      "huis": "boer2"
      },
      {
       "gebouw": "boerderij",
       "x": 30,
       "y": 22,
       "b": 5,
-      "h": 7
+      "h": 7,
+      "huis": "boer3"
      },
      {
       "gebouw": "boerderij",
       "x": 11,
       "y": 22,
       "b": 5,
-      "h": 7
+      "h": 7,
+      "huis": "boer4"
      },
      {
       "gebouw": "boerderij",
       "x": 20,
       "y": 30,
       "b": 6,
-      "h": 8
+      "h": 8,
+      "huis": "boer5"
      },
      {
       "gebouw": "huis",
       "x": 21,
       "y": 21,
       "b": 6,
-      "h": 8
+      "h": 8,
+      "huis": "schout"
      },
      {
       "gebouw": "schaapskooi",

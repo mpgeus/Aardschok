@@ -17,6 +17,7 @@ require('../js/akkers.js');
 require('../js/handel.js');
 require('../js/heer.js');
 require('../js/inner.js');
+require('../js/verstoppen.js');
 require('../js/boeren.js');
 require('../js/gesprekken.js');
 require('../js/gesprek.js');
@@ -25,7 +26,7 @@ const T = globalThis.Toren;
 // De blokken zoals de bestanden ze zetten, vóór opties.js er iets mee doet.
 const BLOKKEN = [
   'GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN', 'INNER_INSTELLINGEN',
-  'BOEREN_INSTELLINGEN', 'VELDEN_INSTELLINGEN', 'VEE_INSTELLINGEN',
+  'BOEREN_INSTELLINGEN', 'VELDEN_INSTELLINGEN', 'VEE_INSTELLINGEN', 'VERSTOP_INSTELLINGEN',
 ];
 const LOS = ['GRAAN_PER_TEGEL', 'ZAAIGRAAN_PER_TEGEL', 'DAG_LENGTE'];
 const bestanden = {};

@@ -36,6 +36,11 @@
     // zo gekozen dat wie niets verstopt, ongeveer betaalt wat de pacht was: de honger blijft.
     graan: 'deel',
     deelVanGraan: 0.15,
+    // De kist (Marcel, 25 sep: "hij telt de kist"): de heer ziet alleen geld, dus hij vraagt ook dit
+    // deel van het goud dat de inner in de kist telde (zonder rapport: van wat er op Sint-Maarten
+    // in ligt). Zo heeft goud verstoppen zin (js/verstoppen.js). Aan of uit is een optie.
+    kist: true,
+    deelVanGoud: 0.15,
     // Waarin hij betaald wil worden: 'watHijZiet' (wol voor een schaapskooi, eieren voor een
     // kippenhok, hout voor zijn bos), 'graanEnGoud' (de pacht in graan, de rest omgerekend naar
     // goud) of 'alleenGoud' (alles omgerekend naar goud, ook de pacht). Omrekenen gaat met
@@ -148,6 +153,7 @@
       if (IN().graan === 'deel') tel('graan', rapport.graanGezien * IN().deelVanGraan, `een deel van de ${Math.round(rapport.graanGezien)} graan die Onze inner telde`);
       else if (rapport.tegels) tel('graan', rapport.tegels * IN().pachtPerAkkertegel, `de pacht voor ${rapport.tegels} akkertegels die Onze inner zag`);
       if (rapport.woonruimte) tel('goud', rapport.woonruimte * IN().hoofdgeldPerMens, `hoofdgeld voor ${rapport.woonruimte} zielen in de huizen die hij zag`);
+      if (IN().kist && rapport.goudGezien > 0) tel('goud', rapport.goudGezien * IN().deelVanGoud, `een deel van de ${Math.floor(rapport.goudGezien)} goud die Onze inner in uw kist telde`);
     } else {
       const tegels = akkers.reduce((n, a) => n + a.b * a.h, 0);
       if (IN().graan === 'deel') {
@@ -157,6 +163,10 @@
         tel('graan', tegels * IN().pachtPerAkkertegel, `de pacht voor ${tegels} akkertegels`);
       }
       if (S.bevolking > 0) tel('goud', S.bevolking * IN().hoofdgeldPerMens, `hoofdgeld voor ${S.bevolking} zielen`);
+      // De kist zoals hij hem telde toen hij kwam; vóór zijn komst (de brief) wat er nu in ligt.
+      const b = S.heer && S.heer.bezoek;
+      const kist = b && !b.weg && b.kist != null ? b.kist : (S.voorraad && S.voorraad.goud) || 0;
+      if (IN().kist && kist > 0) tel('goud', kist * IN().deelVanGoud, `een deel van de ${Math.floor(kist)} goud in uw kist`);
     }
     // Per soort gebouw één regel, in de volgorde van T.GEBOUWEN: wat in het rapport staat, of alles.
     const aantal = {};
@@ -593,7 +603,9 @@
 
   T.heerKomt = function (S, dag) {
     const h = S.heer || (S.heer = T.nieuweHeer());
-    h.bezoek = { komtOp: dag, staat: false, wachtTot: null, betaald: null, weg: false, wezens: null, schandpaal: false };
+    // Hij telt de kist als hij komt, en dat getal houdt hij (js/heer.js, T.eisVanDeHeer, zonder
+    // rapport): anders werd zijn eis kleiner terwijl je hem betaalde.
+    h.bezoek = { komtOp: dag, staat: false, wachtTot: null, betaald: null, weg: false, wezens: null, schandpaal: false, kist: (S.voorraad && S.voorraad.goud) || 0 };
     if (T.zetVlag) {
       T.zetVlag(S, 'heerOpBezoek');
       if (h.schuld > 0) T.zetVlag(S, 'heerSchuld');

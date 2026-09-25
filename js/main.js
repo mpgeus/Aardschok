@@ -361,6 +361,11 @@
       if (ev.key === 'Escape') T.ui.sluitSlachten(S);
       return;
     }
+    // Verstoppen (js/hud.js, in een kelder of de kapel): net zo; Esc sluit.
+    if (S.modus === 'verstoppen') {
+      if (ev.key === 'Escape') T.ui.sluitVerstoppen(S);
+      return;
+    }
     if (S.modus === 'einde') return;
     // De spelregels (js/hud.js): daar typ je ook namen, dus alleen Esc doet iets.
     if (S.modus === 'spelregels') {
@@ -530,7 +535,7 @@
       return {
         geduld: b.geduld, volgt: b.volgt, weg: b.weg, gebouwen: b.gebouwen.size, tegels: b.tegels.size,
         nogTeZien: b.weg ? 0 : T.innerNogTeZien(S).length, argwaan: I.argwaan, waarom: I.waarom.slice(),
-        rapport: r && { gebouwen: r.gebouwen, woonruimte: r.woonruimte, tegels: r.tegels, graanGezien: r.graanGezien, graanVerwacht: r.graanVerwacht },
+        rapport: r && { gebouwen: r.gebouwen, woonruimte: r.woonruimte, tegels: r.tegels, graanGezien: r.graanGezien, graanVerwacht: r.graanVerwacht, goudGezien: r.goudGezien, goudVerwacht: r.goudVerwacht },
       };
     },
     // Zijn argwaan zetten (0..1), om te zien wat ze doet: Toren.debug.argwaan(0.6). Zonder getal
@@ -542,6 +547,30 @@
         if (T.ui.toonArgwaan) T.ui.toonArgwaan(S);
       }
       return { argwaan: I.argwaan, waarom: I.waarom.slice() };
+    },
+    // De verstopplekken (js/verstoppen.js): waar je iets kunt verstoppen, wat er ligt, en hoe vaak
+    // de soldaten het er vinden. Toren.debug.verstopt('boer1', 30, 5) zet 30 graan en 5 goud in
+    // de kelder van boer1 (of 'schout', of 'kapel'), zonder te lopen, als het kan.
+    verstopt(huis, graan = 0, goud = 0) {
+      if (!T.verstopPlekken) return 'Verstoppen kan alleen in het gehucht.';
+      const plekken = T.verstopPlekken(S);
+      if (huis) {
+        const p = plekken.find((q) => q.gebouw.huis === huis || q.gebouw.soort === huis);
+        if (!p) return `Geen plek bij "${huis}". Er is: ${plekken.map((q) => q.gebouw.huis || q.gebouw.soort).join(', ')}.`;
+        for (const [wat, n] of [['graan', graan], ['goud', goud]]) {
+          if (!(n > 0)) continue;
+          const r = T.verstop(S, p.gebouw, wat, n);
+          if (!r.kan) return r.reden;
+        }
+      }
+      return plekken.map((p) => ({
+        plek: p.naam, wie: p.gebouw.huis || p.gebouw.soort, karakter: p.karakter, graan: Math.floor((p.gebouw.verstopt || {}).graan || 0),
+        goud: Math.floor((p.gebouw.verstopt || {}).goud || 0), plaats: p.plaats, vinden: p.vinden, houdt: p.houdt, weigert: p.weigert,
+      }));
+    },
+    // De soldaten het dorp nu laten doorzoeken, zoals op Sint-Maarten (js/inner.js): wat ze vinden.
+    zoeken() {
+      return T.doorzoekDorp ? T.doorzoekDorp(S) : 'Hier zoekt niemand.';
     },
     // Het slachtvenster nu openen (js/hud.js, T.ui.openSlachten), zonder op 1 slachtmaand te wachten.
     slachten() {

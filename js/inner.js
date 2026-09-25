@@ -41,6 +41,18 @@
     // Komt hij onverwacht terug en ligt er dan veel meer graan dan de eerste keer (meer dan dit deel
     // van wat hij verwachtte), dan weet hij genoeg.
     graanErbij: 0.2,
+    // Sporen (Marcel, 25 sep: "voor alles"): wat je verstopt, laat sporen na, en klopt een spoor niet
+    // met wat hij telde, dan groeit zijn argwaan. 'alles': het graan tegen de velden en het goud
+    // tegen wat de marskramer hem vertelt; 'graan': alleen het graan, zoals vóór 25 sep. Een optie.
+    sporen: 'alles',
+    // Het goud: de marskramer vertelt hem wat hij je sinds Sint-Maarten betaalde en wat jij hem
+    // (js/handel.js, T.boekMarskramer). Wat je bij hem overhield, min wat je sindsdien bouwde (dat
+    // ziet hij staan), verwacht hij in de kist. Ligt er minder dan dit deel van, dan groeit zijn
+    // argwaan met wat het scheelt, keer goudArgwaan. Pas vanaf goudVanaf goud: om een paar munten
+    // maakt hij zich niet druk.
+    goudVerwacht: 0.6,
+    goudArgwaan: 1,
+    goudVanaf: 10,
     // Wat de argwaan (0..1) doet (Marcel, 24 sep: alle vier):
     terugkomenVanaf: 0.4, // hij komt onverwacht terug, zoveel dagen na zijn bezoek:
     terugNaDagen: { van: 20, tot: 45 },
@@ -243,14 +255,36 @@
       }
     }
     const nuGezien = staand + ((S.voorraad && S.voorraad.graan) || 0);
+    // De kist (Marcel, 25 sep: "hij telt de kist"): het goud dat er nu in ligt. Wat verstopt ligt
+    // (js/verstoppen.js), ligt er niet in.
+    const kist = (S.voorraad && S.voorraad.goud) || 0;
     return {
       jaar: datum.jaar, gebouwen, woonruimte, tegels,
       graanGezien: Math.max(nuGezien, (vorig && vorig.graanGezien) || 0),
       graanNu: nuGezien,
       graanVerwacht: Math.max(verwacht, (vorig && vorig.graanVerwacht) || 0),
+      goudGezien: Math.max(kist, (vorig && vorig.goudGezien) || 0),
+      goudNu: kist,
+      goudVerwacht: goudVerwacht(S, alle),
       gezien: alle, tegelsGezien,
     };
   };
+
+  // Hoeveel goud hij in de kist verwacht: wat de marskramer je sinds Sint-Maarten betaalde, min wat
+  // jij hem betaalde (js/handel.js, T.boekMarskramer), min wat de gebouwen kostten die hij zag en
+  // die sindsdien begonnen zijn: die ziet hij staan, en hij weet wat een huis kost.
+  function goudVerwacht(S, gezien) {
+    const boek = S.boekMarskramer;
+    if (!boek) return 0;
+    let verwacht = boek.ontvangen - boek.betaald;
+    for (const g of gezien) {
+      const soort = T.GEBOUWEN[g.soort];
+      if (!soort || !soort.kosten || !soort.kosten.goud) continue;
+      const begonnen = (g.klaarOp || 0) - (soort.bouwtijd || 0);
+      if (g.voorwerp && begonnen >= boek.sinds) verwacht -= soort.kosten.goud;
+    }
+    return Math.max(0, verwacht);
+  }
 
   // ---------------------------------------------------------------------------------------------
   // De dagen: aankondiging, komst, en onverwacht terug
@@ -296,6 +330,11 @@
         T.zetArgwaan(S, (r.graanNu - eerder.graanNu) / r.graanVerwacht * IN().graanArgwaan, 'er lag ineens meer graan dan de eerste keer');
       }
     }
+    // Het goud (Marcel, 25 sep: sporen voor alles): wat de marskramer hem vertelde, tegen de kist.
+    if (IN().sporen === 'alles' && r.goudVerwacht >= IN().goudVanaf) {
+      const deel = r.goudNu / r.goudVerwacht;
+      if (deel < IN().goudVerwacht) T.zetArgwaan(S, (IN().goudVerwacht - deel) * IN().goudArgwaan, 'de marskramer vertelde hem wat hij je betaalde, en je kist was lichter');
+    }
     // Bij genoeg argwaan komt hij onverwacht terug, één keer per jaar, ergens vóór Sint-Maarten.
     if (!b.onverwacht && !I.teruggeweest && I.argwaan >= IN().terugkomenVanaf) {
       const { van, tot } = IN().terugNaDagen;
@@ -306,7 +345,9 @@
     }
     if (b.onverwacht) I.teruggeweest = true;
     const namen = Object.entries(r.gebouwen).map(([soort, n]) => (n === 1 ? `een ${T.GEBOUWEN[soort].naam}` : `${n} × ${T.GEBOUWEN[soort].naam}`));
-    bericht(`De inner vertrekt. In zijn rapport: ${namen.join(', ') || 'geen gebouwen'}, en ${Math.round(r.graanGezien)} graan.`);
+    const delen = (namen.length ? namen : ['geen gebouwen']).concat(`${Math.round(r.graanGezien)} graan`);
+    if (T.HEER_INSTELLINGEN && T.HEER_INSTELLINGEN.kist) delen.push(`${Math.floor(r.goudGezien)} goud in de kist`);
+    bericht(`De inner vertrekt. In zijn rapport: ${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}.`);
     if (T.wisVlag) T.wisVlag(S, 'innerOnverwacht');
     // De tijd loopt weer zoals vóór zijn komst, tenzij de speler hem zelf al aanzette.
     if (S.kalender && S.kalender.snelheid === 0 && I.snelheidVoorBezoek && T.zetSnelheid && S.modus !== 'dialoog') {
@@ -354,7 +395,8 @@
     const nu = inJaar(d.maand, d.dagVanMaand);
     const aankondiging = ((komt - IN().aankondiging) % T.DAGEN_PER_JAAR + T.DAGEN_PER_JAAR) % T.DAGEN_PER_JAAR;
     if (IN().aankondiging > 0 && nu === aankondiging && !I.bezoek) {
-      bericht(`Over ${IN().aankondiging} dagen komt de inner van de heer tellen: de velden, de schuren en de huizen.`);
+      const kist = T.HEER_INSTELLINGEN && T.HEER_INSTELLINGEN.kist ? ', de huizen en de kist' : ' en de huizen';
+      bericht(`Over ${IN().aankondiging} dagen komt de inner van de heer tellen: de velden, de schuren${kist}. Wat hij niet mag zien, zet je vóór die tijd weg.`);
     }
     if (nu === komt && !I.bezoek) T.innerKomt(S, dag, false);
     if (I.terugOp != null && dag >= I.terugOp && !I.bezoek) {
@@ -371,6 +413,8 @@
     I.terugOp = null;
     I.teruggeweest = false;
     I.argwaan *= IN().naSintMaarten;
+    // Wat de marskramer hem vertelt, telt vanaf nu opnieuw (js/handel.js).
+    if (T.nieuwBoekMarskramer) S.boekMarskramer = T.nieuwBoekMarskramer(dagNu(S));
     if (I.argwaan < 0.01) {
       I.argwaan = 0;
       I.waarom = [];
@@ -379,12 +423,12 @@
   };
 
   // Op Sint-Maarten doorzoeken de soldaten het dorp als de argwaan hoog genoeg is (Marcel, 24 sep).
-  // Wat ze vinden, is weg; zolang er nog geen verstopplekken zijn (werklijst punt 6, stap 2),
-  // vinden ze niets. Geeft wat ze vonden.
+  // Plek voor plek (js/verstoppen.js, T.zoekVerstopt): wat ze vinden, is weg. Geeft wat ze vonden.
   T.doorzoekDorp = function (S) {
     const gevonden = T.zoekVerstopt ? T.zoekVerstopt(S) : [];
+    const lijst = gevonden.length > 1 ? `${gevonden.slice(0, -1).join(', ')} en ${gevonden[gevonden.length - 1]}` : gevonden[0];
     bericht(gevonden.length
-      ? `De soldaten van de heer doorzoeken het dorp, en vinden ${gevonden.join(', ')}.`
+      ? `De soldaten van de heer doorzoeken het dorp, en vinden ${lijst}. Dat is weg.`
       : 'De soldaten van de heer doorzoeken het dorp, van de schuren tot de beerput. Ze vinden niets.', 'gevaar');
     return gevonden;
   };

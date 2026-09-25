@@ -389,6 +389,8 @@ kbd {
 #voorraadbalk .grondstof { display: flex; align-items: center; gap: 5px; }
 #voorraadbalk .grondstof .icoon { display: flex; width: 22px; height: 22px; }
 #voorraadbalk .grondstof .aantal { font: 15px var(--kop), system-ui, sans-serif; color: var(--inkt); min-width: 1.4em; }
+#voorraadbalk .grondstof .verstopt { font: 11px system-ui, sans-serif; color: var(--gedempt); margin-left: -2px; }
+#voorraadbalk .grondstof .verstopt:empty { display: none; }
 /* Het scheidingslijntje voor de mensen, los van de vier grondstoffen ervoor. */
 #voorraadbalk .grondstof[data-wat="bevolking"] { padding-left: 13px; border-left: 1px solid var(--rand); }
 /* De tevredenheid (js/behoeften.js), met haar eigen lijntje, en rood als het dorp wegtrekt
@@ -475,7 +477,7 @@ kbd {
 #handel .handel-staat { margin: 6px 0 10px; font-size: 13px; color: var(--gedempt); }
 #handel .handel-staat b { color: var(--inkt); font-weight: normal; }
 #handel .kop { font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; margin: 10px 0 4px; }
-#handel .handel-rij {
+:is(#handel, #verstoppen) .handel-rij {
   display: grid;
   grid-template-columns: 1.3fr 1fr auto;
   align-items: center;
@@ -486,14 +488,14 @@ kbd {
   border: 1px solid var(--rand);
   border-radius: 6px;
 }
-#handel .handel-naam { font: 14px var(--kop); color: var(--inkt); }
-#handel .handel-naam small, #handel .handel-prijs small { display: block; font: 11px system-ui, sans-serif; color: var(--gedempt); }
-#handel .handel-prijs { font-size: 12px; color: var(--goud); }
+:is(#handel, #verstoppen) .handel-naam { font: 14px var(--kop); color: var(--inkt); }
+:is(#handel, #verstoppen) .handel-naam small, :is(#handel, #verstoppen) .handel-prijs small { display: block; font: 11px system-ui, sans-serif; color: var(--gedempt); }
+:is(#handel, #verstoppen) .handel-prijs { font-size: 12px; color: var(--goud); }
 #handel .handel-merk { display: block; color: var(--inkt); }
 #handel .handel-merk.duur::before { content: '▲ '; }
 #handel .handel-merk.goedkoop::before { content: '▼ '; }
-#handel .handel-knoppen { display: flex; gap: 4px; }
-#handel .handel-knoppen button {
+:is(#handel, #verstoppen) .handel-knoppen { display: flex; gap: 4px; }
+:is(#handel, #verstoppen) .handel-knoppen button {
   padding: 4px 8px;
   font: 12px system-ui, sans-serif;
   color: var(--inkt);
@@ -503,13 +505,13 @@ kbd {
   cursor: pointer;
   white-space: nowrap;
 }
-#handel .handel-knoppen button:hover:not(:disabled) { background: rgba(226, 182, 74, 0.16); border-color: rgba(226, 182, 74, 0.6); }
-#handel .handel-knoppen button:disabled { opacity: 0.35; cursor: default; }
+:is(#handel, #verstoppen) .handel-knoppen button:hover:not(:disabled) { background: rgba(226, 182, 74, 0.16); border-color: rgba(226, 182, 74, 0.6); }
+:is(#handel, #verstoppen) .handel-knoppen button:disabled { opacity: 0.35; cursor: default; }
 #handel .handel-leeg { font-size: 12px; color: var(--gedempt); margin: 2px 0; }
 #handel .handel-voet { margin: 10px 0 0; font-size: 11px; color: var(--gedempt); }
 @media (max-width: 480px) {
-  #handel .handel-rij { grid-template-columns: 1fr auto; }
-  #handel .handel-knoppen { grid-column: 1 / -1; }
+  :is(#handel, #verstoppen) .handel-rij { grid-template-columns: 1fr auto; }
+  :is(#handel, #verstoppen) .handel-knoppen { grid-column: 1 / -1; }
 }
 
 /* De heer (js/hud.js, T.ui.toonBrief en T.ui.openHeer; js/heer.js): zijn brief en het betalen op
@@ -527,7 +529,8 @@ kbd {
 #brief-knop:hover { color: var(--inkt); }
 #brief,
 #heer,
-#slachten {
+#slachten,
+#verstoppen {
   position: fixed;
   left: 50%;
   top: 50%;
@@ -782,3 +785,9 @@ kbd {
   #velden .veld-rij { grid-template-columns: 1fr 1fr; }
   #velden .veld-kop { display: none; }
 }
+
+/* Verstoppen (js/hud.js, T.ui.openVerstoppen; js/verstoppen.js): in de stijl van de marskramer. Wie
+   er woont en wat dat betekent, staat cursief boven de rijen. */
+#verstoppen .verstop-bewoner { margin: 0 0 8px; font: italic 13px var(--kop); color: var(--inkt); }
+#verstoppen .handel-rij { grid-template-columns: 1fr 1fr; row-gap: 6px; }
+#verstoppen .handel-knoppen { grid-column: 1 / -1; flex-wrap: wrap; justify-content: flex-end; }

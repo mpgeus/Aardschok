@@ -130,10 +130,12 @@
     },
     verstopplek: {
       naam: 'verstopplek', trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 6 }, heer: {}, bouwtijd: 2,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: true,
-      tekening: null, beschrijving: 'een kelder of kuil die de inner niet ziet',
+      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: false,
+      tekening: null, beschrijving: 'een plek in het bos die de inner niet ziet',
       opmerking: 'Bewust zonder tekening: een verstopplek die je wél ziet staan is geen verstopplek. '
-        + 'Hij blokkeert zijn voet en telt mee, maar tekent nu nog niets (js/tekenen.js).',
+        + 'Niet meer in het bouwmenu sinds 25 sep: Marcel wil geen kuil maar plekken die er al zijn, de '
+        + 'kelders en de kapel (js/verstoppen.js). In stap 2 wordt dit misschien de plek in het bos '
+        + '(spel.md, "Marcel koos voor stap 2").',
     },
 
     // ── Grondstoffen halen (Marcel, 23 sep: "houthakkers, steengroeve etc moeten we ook hebben";
@@ -427,14 +429,16 @@
     return { handen, heeft, dekking, factor: 1 + IN.gereedschapBonus * dekking };
   };
 
-  // Het gebouw dat de speler neerzette en waarvan deze tegel onder de voet ligt, of null. De
-  // gebouwen die al op de kaart stonden (T.zetBestaandeGebouwen) hebben geen eigen voorwerp en
-  // tellen hier niet mee: dat zijn huizen, die niets maken en dus ook niet stil kunnen staan.
+  // Het gebouw waarvan deze tegel onder de voet ligt, of null. Ook een gebouw dat al op de kaart
+  // stond (T.zetBestaandeGebouwen): dat heeft geen eigen voorwerp, maar wel een voet uit het
+  // betekenisbestand. Die telden hier eerst niet mee (ze maken niets, dus ze staan ook nooit
+  // stil), maar sinds 25 sep kun je er iets in verstoppen (js/verstoppen.js).
   T.gebouwOp = function (S, x, y) {
     for (const g of S.gebouwen || []) {
       const v = g.voorwerp;
-      if (!v || !v.beslaat) continue;
-      if (x >= v.x && x < v.x + v.beslaat[0] && y >= v.y && y < v.y + v.beslaat[1]) return g;
+      const voet = v && v.beslaat ? { x: v.x, y: v.y, b: v.beslaat[0], h: v.beslaat[1] } : g.voet ? { x: g.x, y: g.y, b: g.voet.b, h: g.voet.h } : null;
+      if (!voet) continue;
+      if (x >= voet.x && x < voet.x + voet.b && y >= voet.y && y < voet.y + voet.h) return g;
     }
     return null;
   };
@@ -574,7 +578,9 @@
         continue;
       }
       // Zijn voet uit het betekenisbestand: die heeft de inner nodig om te weten wat hij ziet (js/inner.js).
-      S.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
+      // En wie er woont (`huis`, de boer met dezelfde id of de schout): dat telt voor zijn kelder
+      // (js/verstoppen.js).
+      S.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null, huis: d.huis || null });
       woonruimte += g.woonruimte || 0;
     }
     // Ze staan er al vol: de boeren die je ziet lopen, wonen al in hun huis.

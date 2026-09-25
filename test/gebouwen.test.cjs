@@ -308,11 +308,19 @@ test('T.plaatsGebouw: tekeningNaam blijft leeg voor een soort zonder tekening', 
   const S = maakS();
   T.zetVoorraad(S, 'hout', 6);
   // De verstopplek heeft bewust geen tekening (een tekening zou 'm juist verraden) — precies het
-  // geval waarvoor tekenVoorwerp (js/tekenen.js) terugvalt op gewoon bleker tot hij klaar is.
+  // geval waarvoor tekenVoorwerp (js/tekenen.js) terugvalt op gewoon bleker tot hij klaar is. Sinds
+  // 25 sep staat hij niet meer in het bouwmenu (Marcel wil geen kuil; js/verstoppen.js), dus hier
+  // een proefsoort zoals hij was.
   assert.equal(T.GEBOUWEN.verstopplek.tekening, null);
-  const r = T.plaatsGebouw(S, 'verstopplek', 2, 2);
-  assert.equal(r.gelukt, true);
-  assert.equal(r.instantie.voorwerp.tekeningNaam, null);
+  assert.equal(T.plaatsGebouw(S, 'verstopplek', 2, 2).gelukt, false, 'niet meer via het bouwmenu');
+  T.GEBOUWEN.proefZonderTekening = { ...T.GEBOUWEN.verstopplek, menu: true };
+  try {
+    const r = T.plaatsGebouw(S, 'proefZonderTekening', 2, 2);
+    assert.equal(r.gelukt, true);
+    assert.equal(r.instantie.voorwerp.tekeningNaam, null);
+  } finally {
+    delete T.GEBOUWEN.proefZonderTekening;
+  }
 });
 
 // ---------------------------------------------------------------------------------------------
