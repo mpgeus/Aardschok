@@ -78,11 +78,20 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   - de stok van de oudste zet een kortere pas dan een voet, anders stak hij in één richting
     (ZW) buiten de cel.
 
+**De marskramer** (25 sep, `beeld.md`):
+- in het gehucht komt hij altijd van de oostkant binnen, dus in het spel zie je hem alleen van
+  achteren, met zijn rek. Zijn voorkant staat op de proefplaat;
+- het naschommelen van zijn potten en pannen is op 1× nauwelijks te zien. Dat is rustig bedoeld,
+  maar het mag misschien meer;
+- zijn naamkaartje staat op 66 px, bij zijn hoofd; het rek steekt tot 72 à 83 px uit.
+
+**Alle dorpelingen:** bij het neerzetten van een voet wordt de scheen wat uitgerekt, want
+`beenPunten` zet de enkel altijd op het doel.
+
 **Nog te tekenen:**
 - braakland met onkruid (nu kale geploegde grond);
 - de koets van de heer;
 - portretten van de heer en de inner boven het gesprek;
-- een eigen vel voor de marskramer (hij leent dat van Wim);
 - de gebouwen die een tekening lenen (hut, schaapskooi, timmerman, brouwerij, tiendschuur,
   wapenmaker, wachthuis en meer);
 - bouwfases voor de kapel, de watermolen en de put;

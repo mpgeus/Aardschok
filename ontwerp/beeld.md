@@ -498,6 +498,15 @@ vel van Wim, de knecht uit het oude spel. Zijn eigen figuur bestond al in `dorpe
 rode hoed met een gele veer en een wandelstok), maar kon nog niet staan en lopen. Dat komt erbij,
 net als bij de andere dorpelingen, zonder dat zijn stilstaande beeld verandert.
 
+**Gemaakt (25 sep 2026):** het vel `marskramer`, met staan en lopen in acht richtingen; de
+proefplaat is `uit/dorpelingen/marskramer-proef.png`.
+- Zijn stilstaande platen zijn pixel voor pixel gelijk gebleven.
+- Het rek gaat met zijn romp mee en kantelt lopend iets na. De ketel en de pan schudden bij elke
+  stap, en de linten wapperen, 1 à 2 pixels.
+- Zijn stok loopt als een derde voet met de linkervoet mee, en staat een kwart van de cyclus op de
+  grond.
+- In het spel leent hij niets meer van Wim.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
