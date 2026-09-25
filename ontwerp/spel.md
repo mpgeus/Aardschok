@@ -852,6 +852,35 @@ Nog open (vragen van Claude):
 - Op de kaart van het gehucht is geen heide, alleen bos. Komt er heide bij, waar ook de schapen van
   de meent kunnen grazen?
 
+## Straten en paden (Marcel, 25 sep 2026)
+
+> We hebben denk ik ook straten nodig, dus stenen, verharde weg, of iets van paadjes.
+
+Nu ligt er alleen de zandweg die het gehucht in en uit loopt, getekend in de kaart. Op 21 sep wilde
+Marcel al kinderkopjes in plaats van de platte kasseien (`beeld.md`); dat is nog tekenwerk. In de
+regels maakt de grond niets uit: over gras loop je even snel als over een weg. Stenen zijn er wel:
+een steengroeve in het bouwmenu, die elke dag steen geeft.
+
+**Voorstel van Claude (25 sep, nog niet gekozen):**
+- **Een pad maakt sneller.** Alles in dit spel loopt: de schout, de boeren naar hun veld (Klaas doet
+  elf dagen over de weg naar zijn weide), de heer, de inner en de marskramer. Over een pad gaat dat
+  sneller, over kinderkopjes nog sneller. In de natte maanden wordt een zandpad modder en juist
+  trager; een verharde straat niet.
+- **Paadjes ontstaan vanzelf.** Waar veel gelopen wordt, slijt het gras tot een pad, zoals in
+  Foundation: het dorp tekent zijn eigen stratenplan. Jij hoeft niet elk pad te leggen, maar kiest
+  welke je verhardt.
+- **Verharden kost keien, en dat valt op.** In Drenthe kwamen de stenen van het land zelf: zwerfkeien
+  die de boeren uit hun akkers en van de heide raapten (de hunebedden zijn er ook van). Dat past beter
+  dan een steengroeve, want die had Drenthe niet, en het hangt samen met ontginnen (punt 6b): wie
+  heide ontgint, vindt keien. Een bestraat dorp ziet er rijk uit, en de inner ziet het: een straat is
+  rijkdom die je niet kunt verstoppen.
+- **Later:** klinkers uit de steenbakkerij voor de stad, een verharde brink als voorwaarde voor
+  marktrecht (punt 14), en de voerman met zijn kar, die alleen komt over een weg die niet in de modder
+  ligt.
+- Het kan met wat er al is: de weides leggen al gras over de grond van de kaart terwijl het spel
+  loopt (`js/tekenen.js`, `tekenWeides`), en zo kan een pad ook zand of kinderkopjes over het gras
+  leggen. Het zoeken van een weg (`js/pad.js`) kost nu elke stap even veel; dat wordt per tegel.
+
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
 De ruggengraat staat of wordt gebouwd: bouwen, mensen, werk, kalender, voorraad. Wat er nog mist,
