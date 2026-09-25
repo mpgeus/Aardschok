@@ -5,10 +5,9 @@
 // De verdeling is die uit ontwerp/kaarten.md: Tiled houdt de grond, wij de betekenis. Wat met de
 // tékening te maken heeft — een gid die niet bestaat, een boom in de verkeerde laag, twee
 // gebouwen over elkaar — kijkt `npm run kaarten` na, want dat kent de tegelvellen op schijf.
-// Hier staat alles wat iets betékent: wie er staat, welke quest eraan hangt, welke spreuk erop
-// werkt, en waar je heen kunt. Voor Tiled is wezen="bakker" een stuk tekst; hier is het de vraag
-// of die bakker een gesprek heeft, of hij niet in een boom staat, en of de leem die hij vraagt
-// ergens te vinden is.
+// Hier staat alles wat iets betékent: wie er staat, welke quest eraan hangt, en waar je heen
+// kunt. Voor Tiled is wie="boer1" een stuk tekst; hier is het de vraag of die boer een gesprek
+// heeft, of hij niet in een boom staat, en of wat een quest vraagt ergens te vinden is.
 //
 // Twee vragen, en ze wijzen tegengesteld:
 //   T.keurKaart(naam, kaart)  — staat er iets op de kaart dat het spel niet kan gebruiken?
@@ -24,7 +23,7 @@
   const lijst = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
   const BUREN = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
   // Wat een ding betékent, en dus niet meer in Tiled hoort te staan (ontwerp/kaarten.md).
-  const BETEKENISVELDEN = ['wie', 'wezen', 'zaad', 'staat', 'overgang', 'quest', 'raak'];
+  const BETEKENISVELDEN = ['wie', 'wezen', 'zaad', 'staat', 'overgang', 'quest'];
   const DEURSTANDEN = ['open', 'dicht', 'opslot', 'geheim'];
 
   // Alles wat er op een kaart staat, uit allebei de bronnen: de objecten die Marcel in Tiled
@@ -182,22 +181,15 @@
         }
       }
 
-      // ── wat om een spreuk vraagt ──
-      if (p.raak !== undefined) {
-        const r = T.RAAKPUNTEN && T.RAAKPUNTEN[String(p.raak)];
-        if (!r) fout(o.x, o.y, `raak="${p.raak}" bestaat niet in T.RAAKPUNTEN (js/quests.js)`);
-        if (!voorwerpOp(o.x, o.y).some((v) => v.raak === String(p.raak))) {
-          fout(o.x, o.y, `raak="${p.raak}" staat op een object zonder tegel; alleen een voorwerp uit tegels/ kan een raakpunt zijn`);
-        } else if (!BUREN.some(([dx, dy]) => T.isBegaanbaar(w, o.x + dx, o.y + dy))) {
-          // Een spreuk vraagt vrij zicht, en dwars door de muur die je wilt raken is er geen.
-          fout(o.x, o.y, `raak="${p.raak}" staat nergens naast een begaanbare tegel; je kunt er met geen enkele spreuk bij`);
-        }
-      }
-
       // ── waar je heen kunt ──
       if (p.overgang !== undefined) {
         const naar = String(p.overgang);
-        if (!gebieden[naar]) {
+        if (!gebieden[naar] && betekenis && betekenis.proef) {
+          // Een proefkaart mag een weg hebben die nog nergens heen leidt: het gehucht, waarvan de
+          // weg de wereld in sinds 25 sep bewust nergens uitkomt (js/gebied.js). Wie erop stapt,
+          // blijft staan in de mist.
+          letOp(o.x, o.y, `overgang naar "${naar}": die kaart is er (nog) niet. Op een proefkaart mag dat; wie erop stapt, blijft staan`);
+        } else if (!gebieden[naar]) {
           fout(o.x, o.y, `overgang naar "${naar}", maar dat gebied bestaat niet. Teken kaarten/${naar}.tmj in Tiled en draai npm run kaarten`);
         }
         if (!T.isBegaanbaar(w, o.x, o.y)) fout(o.x, o.y, `de overgang naar "${naar}" ligt op een tegel waar je niet kunt komen`);
@@ -280,12 +272,8 @@
       if (los(e.tx, e.ty)) fout(e.tx, e.ty, `"${e.soort}" staat op een tegel waar je vanaf geen enkele uitgang kunt komen`);
     }
     for (const v of [...w.voorwerpen, ...(w.questVoorwerpen || [])]) {
-      if (!v.raak && !v.grendel) continue;
-      // Een raakpunt hoef je niet te betreden, maar je moet er wel naast kunnen staan.
-      const bij = v.raak
-        ? BUREN.some(([dx, dy]) => kan.has(v.x + dx + ',' + (v.y + dy)))
-        : kan.has(v.x + ',' + v.y);
-      if (!bij) fout(v.x, v.y, `"${v.soort}" hangt aan ${v.raak ? `raakpunt "${v.raak}"` : `quest "${v.grendel.quest}"`} maar ligt buiten alles wat je kunt bereiken`);
+      if (!v.grendel) continue;
+      if (!kan.has(v.x + ',' + v.y)) fout(v.x, v.y, `"${v.soort}" hangt aan quest "${v.grendel.quest}" maar ligt buiten alles wat je kunt bereiken`);
     }
 
     let losseTegels = 0;
@@ -351,7 +339,6 @@
     // Het gaat om gesprek-ids, niet om soorten: negentien dorpelingen delen één soort maar kunnen
     // elk hun eigen gesprek voeren (T.gesprekIdVan in js/gesprek.js).
     const wezens = new Map();
-    const raakpunten = new Map();
     const questVoorwerpen = [];
     for (const [naam, w] of Object.entries(werelden)) {
       for (const e of w.wezens) {
@@ -360,7 +347,6 @@
         if (!wezens.has(e.soort)) wezens.set(e.soort, naam);
       }
       for (const v of [...w.voorwerpen, ...(w.questVoorwerpen || [])]) {
-        if (v.raak && !raakpunten.has(v.raak)) raakpunten.set(v.raak, naam);
         if (v.grendel) questVoorwerpen.push({ v, kaart: naam });
       }
     }
@@ -398,9 +384,6 @@
     const karakter = (id) => !!(T.KARAKTERS && T.KARAKTERS[id]);
     for (const id of Object.keys(T.GESPREKKEN || {})) {
       if (!wezens.has(id) && !bezoeker(id) && !karakter(id)) fout(`"${id}" heeft een gesprek, maar staat nergens in de wereld. Zet hem neer met gereedschap/wereld.html`);
-    }
-    for (const id of Object.keys(T.RAAKPUNTEN || {})) {
-      if (!raakpunten.has(id)) fout(`raakpunt "${id}" wacht op een ${(T.RAAKPUNTEN[id] || {}).spreuk || 'spreuk'}, maar staat nergens. Zet raak="${id}" op het ding dat geraakt moet worden, met gereedschap/wereld.html`);
     }
     for (const [id, q] of Object.entries(T.QUESTS || {})) {
       if (q.gever && !wezens.has(q.gever)) fout(`quest "${q.naam || id}" komt van "${q.gever}", en die staat nergens in de wereld`);

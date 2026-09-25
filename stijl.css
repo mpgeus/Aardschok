@@ -88,10 +88,10 @@ kbd {
   border-radius: 10px;
 }
 
-/* Het nieuwe scherm voor het gehuchtspel (js/hud.js): altijd aan, behalve met ?kaart= naar een
-   kaart van het oude spel (T.NIEUWE_HUD zet dan de klasse .nieuwe-hud op body). De panelen van het
-   oude spel (sluipen, goud en spullen linksboven, en de oude uitleg rechtsboven) gaan dan weg,
-   en de kalender en de voorraad linksboven komen ervoor in de plaats. De actiebalk onderaan
+/* Het nieuwe scherm voor het gehuchtspel (js/hud.js): altijd aan (T.NIEUWE_HUD zet de klasse
+   .nieuwe-hud op body). De panelen van het oude spel (sluipen, goud en spullen linksboven, en de
+   oude uitleg rechtsboven) gaan dan weg, en de kalender en de voorraad linksboven komen ervoor in
+   de plaats. De actiebalk onderaan
    blijft: die schuift in beeld als er gevochten wordt, ook in het gehucht. */
 #hud-gehucht,
 #hulp-gehucht { display: none; }

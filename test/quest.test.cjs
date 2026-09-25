@@ -48,7 +48,7 @@ function metQuest() {
   };
   return T.QUESTS.proef;
 }
-test.afterEach(() => { delete T.QUESTS.proef; delete T.RAAKPUNTEN.proefOven; });
+test.afterEach(() => { delete T.QUESTS.proef; });
 
 // ── De stand ──
 
@@ -117,7 +117,7 @@ test('werkQuestsBij neemt de weg waarvan de voorwaarde klopt, en hoogstens één
   assert.equal(T.questFase(S, 'proef'), 'terug');
 });
 
-test('de toverweg loopt langs dezelfde wegen: een vlag zetten brengt de quest op klaar', () => {
+test('een weg met klaarAls gaat vanzelf: een vlag zetten brengt de quest op klaar', () => {
   metQuest();
   const S = nieuweS();
   T.zetQuest(S, 'proef', 'zoeken');
@@ -219,39 +219,6 @@ test('een voorwerp aan een quest ligt er alleen in die fase, en verdwijnt weer',
   assert.equal(S.wereld.voorwerpen.length, 0, 'en het blijft niet als gat achter');
 });
 
-// ── Raakpunten: een spreuk op een ding ──
-
-test('een raakpunt hoort bij één spreuk, en is op zodra zijn vlag staat', () => {
-  const S = nieuweS();
-  T.RAAKPUNTEN.proefOven = {
-    spreuk: 'vuurschicht', tekst: 'de scheur dichtbakken',
-    melding: 'De klei sist.', zetVlag: 'ovenGebakken',
-  };
-  const oven = { soort: 'oven', x: 6, y: 5, raak: 'proefOven' };
-  S.wereld = { voorwerpen: [oven], questVoorwerpen: [] };
-
-  assert.equal(T.raakpuntOp(S, { x: 6, y: 5 }, 'windstoot'), null, 'de verkeerde spreuk doet niets');
-  assert.equal(T.raakpuntOp(S, { x: 6, y: 5 }, 'vuurschicht').voorwerp, oven);
-  assert.equal(T.raakpuntInBereik(S, 'vuurschicht', 5).voorwerp, oven);
-  assert.equal(T.raakpuntInBereik(S, 'vuurschicht', 0), null, 'buiten bereik telt niet');
-
-  T.zetVlag(S, 'ovenGebakken');
-  assert.equal(T.raakpuntOp(S, { x: 6, y: 5 }, 'vuurschicht'), null, 'gebakken is gebakken');
-});
-
-test('een raakpunt kan aan de stand van een quest hangen', () => {
-  metQuest();
-  const S = nieuweS();
-  T.RAAKPUNTEN.proefOven = {
-    spreuk: 'vuurschicht', tekst: 'de scheur dichtbakken', zetVlag: 'ovenGebakken',
-    als: { quest: 'proef', fase: 'zoeken' },
-  };
-  S.wereld = { voorwerpen: [{ soort: 'oven', x: 6, y: 5, raak: 'proefOven' }], questVoorwerpen: [] };
-  assert.equal(T.raakpuntOp(S, { x: 6, y: 5 }, 'vuurschicht'), null, 'de bakker heeft nog niets gevraagd');
-  T.zetQuest(S, 'proef', 'zoeken');
-  assert.ok(T.raakpuntOp(S, { x: 6, y: 5 }, 'vuurschicht'));
-});
-
 // ── De toets van drie antwoorden ──
 
 test('een quest met vier wegen die verschillend kosten, is goed', () => {
@@ -313,109 +280,4 @@ test('een einde dat je niet kunt bereiken, is geen einde', () => {
   };
   const klachten = T.keurQuests(onbereikbaar).join('\n');
   assert.match(klachten, /het einde is vanaf "a" niet te bereiken/);
-});
-
-// ── De koude oven, van begin tot eind ──
-
-// De eerste echte quest (js/quests.js), langs alle vier de wegen. Dit is de toets die zegt dat
-// de gegevens en de gesprekken bij elkaar passen: een weg die in quests.js staat maar die geen
-// enkel antwoord neemt, is een weg die niet bestaat.
-const keuzeNaar = (S, wie, knoop, naar) =>
-  T.zichtbareKeuzes(S, wie, T.GESPREKKEN[wie].knopen[knoop].keuzes).find((k) => k.naar === naar) || null;
-
-function bijDeBakker() {
-  const S = nieuweS();
-  const kiezen = keuzeNaar(S, 'bakker', 'welkom', 'scheur');
-  assert.ok(kiezen, 'de bakker vertelt over zijn oven zolang de quest niet loopt');
-  const aannemen = keuzeNaar(S, 'bakker', 'scheur', 'waar');
-  T.doeGevolg(S, aannemen.doe);
-  assert.equal(T.questFase(S, 'bakker'), 'zoeken');
-  return S;
-}
-
-function afgeven(S) {
-  const keuze = keuzeNaar(S, 'bakker', 'welkom', 'gedankt');
-  assert.ok(keuze, 'met iets in je handen kun je het bij de bakker afgeven');
-  T.doeGevolg(S, keuze.doe);
-}
-
-test('De koude oven, weg 1: de leem uit de kuil bij de beek', () => {
-  const S = bijDeBakker();
-  assert.equal(keuzeNaar(S, 'bakker', 'welkom', 'gedankt'), null, 'met lege handen valt er niets af te geven');
-
-  S.inventaris.add('leem'); // opgeraapt in de kuil
-  T.werkQuestsBij(S);
-  assert.equal(T.questFase(S, 'bakker'), 'terug');
-  assert.equal(T.questWegVan(S, 'bakker'), 'kuil');
-
-  afgeven(S);
-  assert.equal(T.questAf(S, 'bakker'), true);
-  assert.equal(S.inventaris.has('leem'), false, 'de leem gaat de schoorsteen in');
-  assert.equal(S.goud, 20);
-  assert.equal(T.heeftVlag(S, 'ovenWarm'), true);
-  assert.equal(T.heeftVlag(S, 'ovenMetMagie'), false);
-});
-
-test('De koude oven, weg 2: de vuurklei van de marskramer, en acht munten is te weinig', () => {
-  const S = bijDeBakker();
-  T.geefGoud(S, 8); // de beurs van de meester
-  assert.equal(keuzeNaar(S, 'marskramer', 'vuurklei', 'gekocht'), null, 'met acht kun je vijftien niet betalen');
-  assert.ok(
-    T.eersteDiePast(S, 'marskramer', T.GESPREKKEN.marskramer.knopen.vuurklei.tekst).zeg.includes('alsof u er acht hebt'),
-    'en hij zegt het ook',
-  );
-
-  T.geefGoud(S, 7); // vijftien
-  const kopen = keuzeNaar(S, 'marskramer', 'vuurklei', 'gekocht');
-  assert.ok(kopen);
-  T.doeGevolg(S, kopen.doe);
-  assert.equal(S.goud, 0, 'vijftien eraf');
-  assert.equal(S.inventaris.has('vuurklei'), true);
-  assert.equal(T.questFase(S, 'bakker'), 'terug');
-
-  afgeven(S);
-  assert.equal(S.goud, 20);
-  assert.equal(S.inventaris.has('vuurklei'), false);
-});
-
-test('De koude oven, weg 3: de vuurstenen van de smidsvrouw, tegen een schuld', () => {
-  const S = bijDeBakker();
-  const beloven = keuzeNaar(S, 'smidsvrouw', 'vuurstenen', 'afgesproken');
-  assert.ok(beloven);
-  T.doeGevolg(S, beloven.doe);
-  assert.equal(S.inventaris.has('vuursteen'), true);
-  assert.equal(T.heeftVlag(S, 'schuldSmidsvrouw'), true, 'de eerste grondstof uit de toren is van haar');
-  assert.equal(T.questFase(S, 'bakker'), 'terug');
-  assert.equal(S.goud, 0, 'vandaag kost deze weg niets; straks des te meer');
-
-  afgeven(S);
-  assert.equal(T.questAf(S, 'bakker'), true);
-  assert.equal(T.heeftVlag(S, 'schuldSmidsvrouw'), true, 'de schuld blijft staan als de quest af is');
-});
-
-test('De koude oven, weg 4: een vuurschicht in de oven, en het dorp merkt het verschil', () => {
-  const S = bijDeBakker();
-  S.wereld = { voorwerpen: [{ soort: 'oven', x: 6, y: 5, raak: 'oven' }], questVoorwerpen: [] };
-  const rp = T.raakpuntOp(S, { x: 6, y: 5 }, 'vuurschicht');
-  assert.ok(rp, 'zolang de bakker erom vraagt, wacht de scheur op een vuurschicht');
-
-  T.zetVlag(S, rp.raak.zetVlag); // wat js/toveren.js deed nadat de schicht was ingeslagen
-  T.werkQuestsBij(S);
-  assert.equal(T.questFase(S, 'bakker'), 'gebakken');
-  assert.equal(T.questWegVan(S, 'bakker'), 'oven');
-  assert.equal(S.goud, 20, 'hetzelfde goud als wie hem leem bracht');
-  assert.equal(T.heeftVlag(S, 'ovenMetMagie'), true, 'maar het dorp weet hoe het ging');
-
-  assert.equal(T.raakpuntOp(S, { x: 6, y: 5 }, 'vuurschicht'), null, 'en de scheur is dicht');
-  assert.ok(
-    T.eersteDiePast(S, 'bakker', T.GESPREKKEN.bakker.knopen.welkom.tekst).zeg.includes('de koster'),
-    'de bakker zegt er iets anders over dan wanneer je hem leem bracht',
-  );
-});
-
-test('wie de quest niet heeft, kan de oven niet dichtbakken en niets afgeven', () => {
-  const S = nieuweS();
-  S.wereld = { voorwerpen: [{ soort: 'oven', x: 6, y: 5, raak: 'oven' }], questVoorwerpen: [] };
-  assert.equal(T.raakpuntOp(S, { x: 6, y: 5 }, 'vuurschicht'), null, 'de bakker heeft nog niets gevraagd');
-  assert.equal(keuzeNaar(S, 'marskramer', 'welkom', 'vuurklei'), null, 'en de marskramer heeft er niets over te zeggen');
 });

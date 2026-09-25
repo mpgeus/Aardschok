@@ -11,8 +11,9 @@ Tot 23 sep was het De laatste klim: een tovenaar van 84 met zijn leeftijd als le
 toren. Marcel vond het doel niet goed genoeg. De kunst en de techniek eronder blijven: het
 isometrische beeld (Mystic Towers als voorbeeld), de HD-pixel art uit code, en een naadloze
 overgang van rondlopen naar een gevecht in beurten op tegels (Fallout, Jagged Alliance 2). De code
-van het oude spel (de toren, de oude kaart en zijn mensen) staat er nog tot hij eruit gaat; de
-tutorial, de spreuken en de leeftijd gingen er op 25 sep al uit. Zie de werklijst, punt 7.
+van het oude spel ging er op 25 sep uit: de tutorial, de spreuken, de leeftijd, de toren en de
+oude kaart met zijn mensen (zie de werklijst, punt 7). Wat nog volgt: de kunst die alleen het oude
+spel tekende, en de namen (`Toren` wordt `Spel`, de held de schout).
 
 Code, commentaar en spelteksten zijn Nederlands, zoals in Marcels Planner.
 
@@ -110,8 +111,10 @@ lang hij leeft. Daaruit volgt, van meest naar minst effect:
 Alles hangt aan één naamruimte, `globalThis.Toren` (in de code `T`), zodat hetzelfde bestand in
 de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html` telt.
 
-- `js/wereld.js`: plattegrond, kamers, deuren, voorwerpen en wezens, en de vragen over de
-  wereld: `isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`, `isZichtbaar`.
+- `js/wereld.js`: wat een wezen is (`T.WEZENS`) en wat een voorwerp is (`T.VOORWERPEN`), de
+  vragen over een kaart (`isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`, `isZichtbaar`),
+  en de proefkamers (`T.maakProefkamers`): drie kamers in code voor de toetsen van het gevecht,
+  sinds de toren van het oude spel weg is. Elke kaart van het spel komt uit Tiled (`js/kaart.js`).
 - `js/pad.js`: A* (`zoekPad`, acht richtingen, schuin kost ook 1, geen hoeken afsnijden) en
   `bereik` (alle tegels binnen N stappen).
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
@@ -125,7 +128,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/verkennen.js`: rondlopen, klikhandelingen, dwalende monsters, ontdekt worden.
 - `js/gevecht.js`: de overgang, beurtvolgorde, actiepunten, handelingen, monster-AI
   (`planMonsterBeurt`, los van het scherm en dus te toetsen).
-- `js/quests.js`: de quests en de raakpunten als gegevens (nu nog leeg, met de vorm erboven);
+- `js/quests.js`: de quests als gegevens (nu nog leeg, met de vorm erboven);
   `js/quest.js`: de regels erachter, zonder scherm en dus te toetsen — fasen en wegen
   (`T.zetQuest`, `T.neemWeg`, `T.werkQuestsBij`), goud (`T.geefGoud`), de haken waarmee een
   gesprek erop let (`T.questVoorwaarde`, `T.questGevolg`), voorwerpen die aan een quest hangen,
@@ -134,7 +137,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (spellus, invoer, zoom, camera).
 - `js/mensen.js`: **wie de mensen van het dorp zijn, op één plek.** `T.MENSEN.<id>` zegt hoe hij
   heet, hoe snel hij loopt, hoe ver hij dwaalt, welk gesprek hij voert en welk vel hij krijgt —
-  zijn eigen (zijn id is de naam van het vel), een geleend vel (`vel: 'wim'`) of dat van een
+  zijn eigen (zijn id is de naam van het vel), een geleend vel (`vel: 'boer'`) of dat van een
   gewone dorpeling (`zaad: 14`). De kaart zegt alleen nog wáár hij staat:
   `{ x, y, wie: 'koster' }`. Dat is er gekomen omdat het er honderd kunnen worden (Marcel,
   22 sep): een mens stond over vier plekken verdeeld en niets verbond ze, dus kon dezelfde bakker
@@ -142,9 +145,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.maakDorpeling` en `T.maakMens` zijn de vragen eromheen.
   **Wie geen naam hoeft te hebben, staat er niet in:** `{ x, y, zaad: 7 }` is menigte.
   **`T.WEZENS` gaat over wat een wezen ís** — wat vecht, met hoeveel levenspunten, wat in code
-  wordt neergezet — en een dorpeling is dat niet. Daar staan alleen nog de held, Wim, de meester
-  en de monsters; de veertien dorpelingen die er met veertien keer dezelfde regel in stonden, zijn
-  op 22 sep naar `mensen.js` verhuisd. Een mens met `wezen: 'wim'` leent er nog wel een.
+  wordt neergezet — en een dorpeling is dat niet. Daar staan alleen nog de held en de monsters;
+  de veertien dorpelingen die er met veertien keer dezelfde regel in stonden, zijn op 22 sep naar
+  `mensen.js` verhuisd, en Wim en de meester gingen op 25 sep weg met het oude spel. De mensen van
+  het oude dorp (de smid, de herbergierster, de molenaar, ...) staan er nog, zonder plek op een
+  kaart: voor als het gehucht een dorp wordt. Wie over de weg komt en op geen kaart staat (de heer,
+  de inner, de marskramer), heeft `bezoeker: true`.
 - `js/akkers.js`: **alleen het gehucht** (`ontwerp/spel.md`): welk stadium een
   akker heeft op welke dag (`T.AKKER_STADIA`, één tabel, `T.akkerStadium`), het windbeeld per
   tegel (`T.windBeeld`) en zijn vaste variant (`T.akkerVariant`), waar een boer in het
@@ -256,7 +262,7 @@ en de overgang ernaartoe gaan mee naar het nieuwe spel.
 wachten. Dat is nodig omdat een verborgen browserpaneel maar af en toe een beeld tekent; ook
 css-overgangen staan dan vrijwel stil. Het testgereedschap stuurt de spatiebalk niet goed door
 (lege `key`), dus test einde beurt met de knop of met een `KeyboardEvent`.
-`Toren.debug.quest('bakker', 'terug')` zet een quest in een fase zonder hem te spelen ('uit' haalt
+`Toren.debug.quest('molen', 'terug')` zet een quest in een fase zonder hem te spelen ('uit' haalt
 hem weg, beloning en al); zonder fase zegt hij waar hij staat.
 `await Toren.debug.schermafdruk('naam')` bewaart het doek als PNG in
 `gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
@@ -313,12 +319,12 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
 - `gereedschap/wereld.html` voor de kaarten, en dat is de bladzijde waar het spel gemaakt wordt.
   **Tiled tekent alleen nog de grond; alles wat betekenis heeft ontstaat en verandert hier**
   (Marcel, 22 sep; `ontwerp/kaarten.md`). Het tekent de kaart met `js/tekenen.js` zelf, kent lagen
-  die aan en uit kunnen (begaanbaar, mensen met hun dwaalstraal, quest en raakpunten, uitgangen),
+  die aan en uit kunnen (begaanbaar, mensen met hun dwaalstraal, questvoorwerpen, uitgangen),
   zegt bij een klik wat het spel denkt dat daar is, en keurt de kaart. Ver uitgezoomd tekent het
   zijn eigen plattegrond, want de tekencode van het spel is er niet op gebouwd.
   - Het leest de `.tmj` rechtstreeks van schijf: opslaan in Tiled, verversen, zien.
   - **Het schrijft alleen `kaarten/<naam>.betekenis.json`** — mensen, dorpelingen, deuren,
-    geheime doorgangen, aansluitingen en voorwerpen met hun `raak=` en `quest=`. Eén ding per
+    geheime doorgangen, aansluitingen en voorwerpen met hun `quest=`. Eén ding per
     regel, zodat een verplaatsing ook één regel in `git diff` is. Tiled komt in dat bestand
     nooit, dus er valt niets mee te botsen; tegen een tweede open blad stuurt het mee hoe het
     bestand eruitzag toen het het las. Na het opslaan bundelt het zelf (`npm run kaarten`), zodat

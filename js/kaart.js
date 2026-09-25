@@ -1,8 +1,8 @@
 // Een kaart inlezen als een gewone wereld. T.laadKaart(kaart, betekenis) neemt de grond die
 // Marcel in Tiled tekende én de betekenis die in gereedschap/wereld.html gelegd is, en geeft
-// terug wat js/wereld.js voor de toren met de hand opschrijft: begaanbaar, vast, voorwerpen,
+// terug wat js/wereld.js voor de proefkamers met de hand opschrijft: begaanbaar, vast, voorwerpen,
 // wezens, deuren. wereld.js zelf verandert niet mee: T.isBegaanbaar, T.isVast, T.raakt, T.tegel,
-// T.deurOp en T.voorwerpOp werken op zo'n ingelezen wereld precies als op T.maakWereld().
+// T.deurOp en T.voorwerpOp werken op zo'n ingelezen wereld precies als op T.maakProefkamers().
 //
 // Hoe de keten aan elkaar hangt (zie ontwerp/kaarten.md, "Tiled tekent alleen nog de grond"):
 //   dorp.cjs, dorp2.cjs, bomen.cjs  (de kunst)
@@ -11,7 +11,7 @@
 //   en legt de betekenis in gereedschap/wereld.html     -> kaarten/<naam>.betekenis.json
 //     -> npm run kaarten (naar-kaarten.cjs)              -> kaarten/kaarten.js
 //                                                           (T.KAARTEN en T.BETEKENIS)
-//   T.laadKaart(T.KAARTEN.proef, T.BETEKENIS.proef)      -> een wereld, zoals T.maakWereld()
+//   T.laadKaart(T.KAARTEN.proef, T.BETEKENIS.proef)      -> een wereld, zoals T.maakProefkamers()
 //
 // Eigenschappen die in Tiled op een TEGEL staan (in de .tsx, geldt voor elk exemplaar, zie
 // naar-tiled.cjs): "naam" (de soort), "vast" (of je erdoorheen kunt) en bij een gebouw "beslaat"
@@ -20,11 +20,11 @@
 // WAT EEN DING BETEKENT. Eén ding in kaarten/<naam>.betekenis.json is een gewoon vakje met x en y
 // en daarnaast één van deze velden. Dezelfde namen gelden voor een object dat nog in Tiled staat
 // (als eigenschap), want er is maar één stel regels dat ze uitlegt — deze:
-//   wie        één mens uit T.MENSEN (js/mensen.js): "bakker", "koster". Dat is de gewone manier
+//   wie        één mens uit T.MENSEN (js/mensen.js): "boer1", "koster". Dat is de gewone manier
 //              om iemand neer te zetten die een naam heeft — wie hij is, hoe hij eruitziet en wat
 //              hij zegt staat daar op één plek, en de kaart zegt alleen waar hij staat.
 //   wezen      welk wezen hier staat: een naam die T.maakWezen kent ('held' voor de beginplek
-//              van de tovenaar, 'wim', 'slijm', 'bakker', de bosvijanden). Verkeerd gespeld?
+//              van de schout, 'wolf', 'slijm', de bosvijanden). Verkeerd gespeld?
 //              Dan komt er een waarschuwing op de console en slaan we het ding over.
 //   zaad       in plaats van "wezen": een gewone dorpeling met dit zaad als uiterlijk (zie
 //              gereedschap/pixelart/dorpelingen.cjs). Doet niet mee in een gevecht en staat niet
@@ -52,7 +52,6 @@
 //              nummer, want npm run tiled verschuift de nummers en een naam niet. Het wordt een
 //              voorwerp op zijn eigen tegel plus, bij "beslaat", de tegels eromheen — precies zo
 //              vast als de tegel zelf zegt. In Tiled is dat een object met een gid.
-//   raak       dit ding wacht op een spreuk (T.RAAKPUNTEN, js/quests.js).
 //   quest      "bakker:zoeken": dit ding ligt er alleen zolang die quest in die fase staat.
 //   akker      een naam ("akker1"): dit is geen los vakje maar een hele strook, x/y de
 //              linkerbovenhoek en b/h de maat in tegels (net als "beslaat" bij een gebouw), en
@@ -345,9 +344,6 @@
       // vel en id erbij, zodat js/tekenen.js het plaatje kan opzoeken zonder de kaart opnieuw
       // te hoeven lezen; beslaat, zodat het sorteren weet hoeveel tegels eronder liggen.
       const v = { soort: eig.naam, x: gx, y: gy, vel: t.vel, id: t.id, beslaat };
-      // raak="<naam>": dit ding wacht op een spreuk (js/quests.js, T.RAAKPUNTEN). Het hoort op
-      // een tegel waar je bij kunt, want een spreuk vraagt vrij zicht.
-      if (p.raak !== undefined) v.raak = String(p.raak);
       // quest="bakker:zoeken": dit ding ligt er alleen zolang die quest in die fase is. Vast
       // kan het niet zijn — dan zou er een muur komen en gaan waar net iemand liep.
       const grendel = p.quest !== undefined && T.questGrendel ? T.questGrendel(String(p.quest)) : null;
@@ -379,7 +375,7 @@
       }
     }
 
-    // 3. de deurrichting, net als T.maakWereld in wereld.js: loopt de muur rond de deur van
+    // 3. de deurrichting, net als T.maakProefkamers in wereld.js: loopt de muur rond de deur van
     // noord naar zuid, dan staat het deurpaneel dwars op x.
     const tegelBij = (x, y) => (binnenRaster(x, y) ? tegels[y][x] : 'buiten');
     for (const d of deuren.values()) if (tegelBij(d.x, d.y - 1) === 'muur') d.richting = 'ns';

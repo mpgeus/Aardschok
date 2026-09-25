@@ -154,7 +154,7 @@ test('niet de hele kudde tegelijk: ze liggen nooit allemaal, en slaan niet op he
 });
 
 test('een dier dat ligt, dwaalt niet weg; staat of graast het, dan zet het een stap', () => {
-  const w = T.maakWereld();
+  const w = T.maakProefkamers();
   for (const e of w.wezens) if (e.soort !== 'held') e.dood = true;
   const held = w.wezens.find((e) => e.soort === 'held');
   held.x = held.tx = 2;
@@ -186,7 +186,7 @@ test('een dier dat ligt, dwaalt niet weg; staat of graast het, dan zet het een s
 });
 
 test('de muis op een dier: alleen wat het is, geen gesprek en geen klik', () => {
-  const w = T.maakWereld();
+  const w = T.maakProefkamers();
   const held = w.wezens.find((e) => e.soort === 'held');
   const S = { wereld: w, held, spreuk: null, inventaris: new Set() };
   for (const soort of Object.keys(T.VEE)) {

@@ -1,18 +1,19 @@
-// De wereld: één verdieping van de toren. Plattegrond, kamers, deuren, voorwerpen en
-// wezens, plus de vragen die de rest van het spel erover stelt: kan ik hier staan,
-// zie ik daar iets, in welke kamer ligt dit.
+// De wereld: wat een wezen is (T.WEZENS), wat een voorwerp is (T.VOORWERPEN), en de vragen die de
+// rest van het spel over een kaart stelt: kan ik hier staan, zie ik daar iets, in welke kamer
+// ligt dit. Een kaart komt uit Tiled (js/kaart.js), op één na: de proefkamers hieronder, drie
+// kamers in code voor de toetsen van het gevecht (test/regels.test.cjs). Tot 25 sep was dat één
+// verdieping van de toren van het oude spel; de toren ging eruit, de plattegrond bleef.
 (function (T) {
   'use strict';
 
-  // Legenda: # muur, . vloer, D deur (dicht), L deur (op slot), spatie = buiten de toren.
-  // De deur helemaal links in rij 5 is de buitendeur: daarachter ligt het erf (zie OVERGANGEN).
+  // Legenda: # muur, . vloer, D deur (dicht), L deur (op slot), spatie = buiten.
   const PLATTEGROND = [
     '####################',
     '#........#.........#',
     '#........#.........#',
     '#........#.........#',
     '#........D.........#',
-    'D........#.........#',
+    '#........#.........#',
     '#........#.........#',
     '#........#.........#',
     '####L###############',
@@ -38,10 +39,6 @@
     fontein: { blokkeert: true, zichtDicht: false },
     kist: { blokkeert: true, zichtDicht: true },
     pilaar: { blokkeert: true, zichtDicht: true },
-    trap: { blokkeert: true, zichtDicht: false, voet: { dx: -2, dy: -2, b: 3, h: 3 } },
-    // Het gat in de vloer waar de trap van beneden aankomt. Er staat er nog geen in de wereld —
-    // de verdiepingen bestaan nog niet — maar het beeld ligt klaar (gereedschap/pixelart/trap.cjs).
-    trapgat: { blokkeert: true, zichtDicht: false, voet: { dx: -2, dy: -2, b: 3, h: 3 } },
     sleutel: { blokkeert: false, zichtDicht: false },
     // De schandpaal van de heer op de brink: komt er de eerste keer dat hij iemand straft, en blijft
     // staan (js/heer.js, T.zetSchandpaalNeer).
@@ -64,17 +61,6 @@
   // even sterk bleven. Wat vallen echt betekent, komt bij punt 13 van de werklijst.
   const WEZENS = {
     held: { naam: 'jij', kant: 'held', leven: 20, ap: 8, initiatief: 10, snelheid: T.SCHOUT_SNELHEID },
-    // Wim, de knecht van de meester, veegt de hal: hij schuifelt een paar tegels heen en weer en
-    // staat er dan weer bij stil met zijn bezem (de houding "vegen", zie js/sprites.js). Hij
-    // begint nooit een gevecht — hij is neutraal — en hij blijft nooit naast een deur staan.
-    wim: { naam: 'Wim', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.4, dwaalt: true, straal: 3 },
-    // De oude meester scharrelt bij zijn moestuin, op het erf (ontwerp/verhaal.md, "Hij doet zijn
-    // moestuin, tot hij sterft"): neutraal als Wim. `snelheid` is zijn eigen, tragere loopmaat
-    // (MEESTER_SNELHEID in gereedschap/pixelart/meester.cjs, waar zijn animatie op is afgestemd).
-    meester: {
-      naam: 'de oude meester', kant: 'neutraal', leven: 10, ap: 0, initiatief: 0, snelheid: 1.55,
-      dwaalt: true, straal: 2,
-    },
     // De mensen van het dorp staan niet hier maar in js/mensen.js: wie ze zijn, hoe ze heten, hoe
     // snel ze lopen en welk vel ze krijgen. Deze tabel gaat over wat een wezen ís — wat vecht,
     // wat in code wordt neergezet — en een dorpeling is dat niet. Zie
@@ -87,7 +73,7 @@
       naam: 'skeletwacht', kant: 'monster', leven: 18, ap: 6, initiatief: 6, snelheid: 2.2, zicht: 5, dwaalt: false,
       aanval: { kosten: 3, schade: [3, 5], zin: 'raakt je met zijn zwaard' },
     },
-    // Buiten, in het bos om het erf. Hij loopt harder dan de schout en ziet verder dan wat er
+    // Buiten, in het bos. Hij loopt harder dan de schout en ziet verder dan wat er
     // binnen rondloopt: buiten is er ruimte, en een wolf hoort eerder op te vallen dan een
     // slijmkruiper in een kelder. Sluipen (T.SLUIP_ZICHT) scheelt dan twee tegels, en dat is
     // precies genoeg om hem te ontlopen als je hem op tijd ziet.
@@ -112,16 +98,6 @@
     },
   };
 
-  // Waar je de toren uit loopt. Dezelfde vorm als de overgangen die js/kaart.js uit een .tmj
-  // haalt: `x`/`y` is de tegel die je erheen brengt (hier de buitendeur), `naar` het gebied waar
-  // je heen gaat, en `komt` de tegel waar je landt als je vanaf díe kant terugkomt — één stap van
-  // de deur af, zodat je niet meteen weer terugstapt. Zie js/gebied.js.
-  //
-  // "wereld": sinds "Eén doorlopende wereld" (ontwerp/wereld.md) is buiten niet meer een los erf,
-  // maar kaarten/wereld.tmj — de hele buitenwereld op één doek, met het erf, het dorp en de ruimte
-  // ertussen. Het erf als zelfstandig gebied bestaat niet meer.
-  const OVERGANGEN = [{ x: 0, y: 5, naar: 'wereld', komt: { x: 1, y: 5 }, tekst: 'Naar buiten' }];
-
   const sleutelVan = (x, y) => x + ',' + y;
 
   // Alleen zodat js/kaart.js een wezen uit een ingelezen kaart in precies dezelfde vorm kan
@@ -140,7 +116,10 @@
   // naarmate hij ouder werd; de leeftijd ging eruit met het oude spel.)
   T.snelheidVan = (e) => e.snelheid;
 
-  T.maakWereld = function () {
+  // De proefkamers: een hal, een voorraadkamer en een trappenhuis, met een dichte deur en een deur
+  // op slot, kisten, pilaren, een fontein en twee monsters. Alleen voor de toetsen: in het spel
+  // staan ze op geen enkele kaart.
+  T.maakProefkamers = function () {
     const h = PLATTEGROND.length;
     const b = PLATTEGROND[0].length;
     const tegels = [];
@@ -162,7 +141,7 @@
       b, h, tegels, deuren, kamers: KAMERS,
       voorwerpen: [], wezens: [],
       bekend: new Set(['hal']), huidigeKamer: 'hal',
-      overgangen: OVERGANGEN.map((o) => ({ ...o, komt: { ...o.komt } })),
+      overgangen: [],
       buiten: false,
     };
     // Loopt de muur rond de deur van noord naar zuid, dan staat het deurpaneel dwars op x.
@@ -175,14 +154,9 @@
       { soort: 'sleutel', x: 17, y: 2 },
       { soort: 'pilaar', x: 3, y: 11 },
       { soort: 'pilaar', x: 6, y: 11 },
-      // De trap beslaat drie bij drie tegels (een spiraal waar een man door past is minstens
-      // twee meter breed), met zijn voorste hoek op deze tegel: zo staat hij precies in de
-      // zuidoosthoek van het trappenhuis. `staat` kiest het beeld; herstellen kan nog niet.
-      { soort: 'trap', x: 8, y: 14, staat: 'hersteld' },
     );
     w.wezens.push(
       maakWezen('held', 3, 5),
-      maakWezen('wim', 5, 2),
       maakWezen('slijm', 16, 4),
       maakWezen('skelet', 5, 13),
     );

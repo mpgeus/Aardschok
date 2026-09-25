@@ -207,17 +207,17 @@ test('zijn poppetje komt over de weg, zijn dagen tellen pas op de brink, en daar
 // Zijn gesprek
 // ---------------------------------------------------------------------------------------------
 
-test('in het gehucht opent zijn gesprek de handel, en het oude antwoord over de toren is weg', () => {
+test('in het gehucht opent zijn gesprek de handel, en buiten zijn bezoek niet', () => {
   const S = metMarskramer(2);
   const knoop = T.gesprekKnoop(S, 'marskramer', 'welkom');
   assert.match(knoop.tekst, /winter/);
   assert.ok(knoop.keuzes.some((k) => k.doe && k.doe.handel), 'er is een antwoord dat de handel opent');
-  assert.ok(!knoop.keuzes.some((k) => k.naar === 'waren'), 'het oude "Wat verkoopt u zoal?" hoort bij de toren');
-  // Buiten het gehucht (het oude spel) is het gesprek zoals het was.
-  const oud = { inventaris: new Set(), held: {} };
-  const oudeKnoop = T.gesprekKnoop(oud, 'marskramer', 'welkom');
-  assert.ok(oudeKnoop.keuzes.some((k) => k.naar === 'waren'));
-  assert.ok(!oudeKnoop.keuzes.some((k) => k.doe && k.doe.handel));
+  // Buiten een bezoek (geen vlag marskramerOpBezoek) valt er niets te handelen. Tot 25 sep had hij
+  // daar nog een gesprek uit het oude spel, over een sleutel bij de toren.
+  const buiten = { inventaris: new Set(), held: {} };
+  const buitenKnoop = T.gesprekKnoop(buiten, 'marskramer', 'welkom');
+  assert.ok(!buitenKnoop.keuzes.some((k) => k.doe && k.doe.handel));
+  assert.ok(buitenKnoop.keuzes.some((k) => k.sluit), 'wel een afscheid');
 });
 
 test('doe: { handel: true } in een gesprek opent het venster', () => {

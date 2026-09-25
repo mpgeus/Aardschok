@@ -14,31 +14,7 @@
     '<circle cx="7" cy="12" r="4.2" fill="none" stroke="#e2b64a" stroke-width="2.4"/>' +
     '<path d="M11 12h10M17 12v4M20.5 12v3" stroke="#e2b64a" stroke-width="2.4" stroke-linecap="round" fill="none"/>' +
     '</svg>';
-  // De drie dingen waarmee de scheur in de schoorsteen van de bakker te dichten is (De koude
-  // oven, js/quests.js): natte leem uit de kuil, een zak vuurklei van de marskramer, en oude
-  // vuurstenen van de smidse.
-  const LEEM_ICOON =
-    '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">' +
-    '<path d="M4 16.5c0-3.5 3-6.5 8-6.5s8 2.6 8 5.8c0 2.2-3 3.7-8 3.7s-8-1.2-8-3z" fill="#7d6144" stroke="#a88a63" stroke-width="1.3"/>' +
-    '<path d="M8.5 13.5c1.5-1 4-1.2 6 0" stroke="#a88a63" stroke-width="1.2" fill="none" stroke-linecap="round"/>' +
-    '</svg>';
-  const VUURKLEI_ICOON =
-    '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">' +
-    '<path d="M8 6.5c-3 3-4.5 6.5-4.5 9.5 0 3 3.5 4.5 8.5 4.5s8.5-1.5 8.5-4.5c0-3-1.5-6.5-4.5-9.5z" fill="#a8563a" stroke="#d98a63" stroke-width="1.3"/>' +
-    '<path d="M8.5 6.5h7M9.5 6.5l-1-3M14.5 6.5l1-3" stroke="#d98a63" stroke-width="1.4" stroke-linecap="round" fill="none"/>' +
-    '</svg>';
-  const VUURSTEEN_ICOON =
-    '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">' +
-    '<rect x="3" y="12.5" width="18" height="6" rx="1" fill="#96482c" stroke="#c97a52" stroke-width="1.2"/>' +
-    '<rect x="5.5" y="6" width="13" height="6" rx="1" fill="#a85434" stroke="#c97a52" stroke-width="1.2"/>' +
-    '<path d="M12 12.5v6M12 6v6" stroke="#c97a52" stroke-width="1" fill="none"/>' +
-    '</svg>';
-  const ICONEN = [
-    ['sleutel', 'IJzeren sleutel', SLEUTEL_ICOON],
-    ['leem', 'Natte leem uit de kuil bij de beek', LEEM_ICOON],
-    ['vuurklei', 'Een zak vuurklei van de marskramer', VUURKLEI_ICOON],
-    ['vuursteen', 'Oude vuurstenen van de smidse', VUURSTEEN_ICOON],
-  ];
+  const ICONEN = [['sleutel', 'IJzeren sleutel', SLEUTEL_ICOON]];
 
   // De opdracht van dit moment (een quest), linksboven. Het element staat
   // niet in index.html maar wordt hier gemaakt, zoals het portret in js/dialoog.js, en de opmaak

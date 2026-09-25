@@ -11,7 +11,7 @@ require('../js/mensen.js');
 require('../js/gebouwen.js');
 const T = globalThis.Toren;
 
-// Een kleine, lege wereld om gebouwen op neer te zetten: net als T.maakWereld() maar zonder de
+// Een kleine, lege wereld om gebouwen op neer te zetten: net als T.maakProefkamers() maar zonder de
 // hele toren erbij — alleen wat T.isVast/T.voorwerpOp nodig hebben (js/wereld.js).
 function maakLegeWereld(b, h) {
   const tegels = [];

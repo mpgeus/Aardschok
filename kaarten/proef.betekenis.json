@@ -5,6 +5,6 @@
   "dingen": [
     {"x":4,"y":6,"staat":"dicht"},
     {"x":9,"y":7,"wezen":"slijm"},
-    {"x":0,"y":8,"overgang":"wereld","komt":{"x":1,"y":8}}
+    {"x":0,"y":8,"overgang":"proefbos","komt":{"x":1,"y":8}}
   ]
 }

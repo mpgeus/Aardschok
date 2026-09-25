@@ -156,7 +156,7 @@ nog nodig is".
      `js/leeftijd.js`, `T.verouder`, het meesterschap, de spreukbalk en de toetsen 2 tot 4. Het
      gevecht blijft (`js/gevecht.js`), met alleen slaan, en de schout krijgt levenspunten zoals een
      monster: wie valt, is het einde (voorlopig, tot punt 13).
-   - **7c. De oude kaart en zijn mensen eruit:** `kaarten/wereld.tmj` (het erf, het bos, het dorp, de
+   - **7c. De oude kaart en zijn mensen eruit** (af, 25 sep): `kaarten/wereld.tmj` (het erf, het bos, het dorp, de
      toren) met zijn betekenis, `kaarten/oud/`, de gebieden erf en toren, en Wim, de meester, de
      bakker, de smidsvrouw en de andere dorpelingen van het oude dorp, met hun gesprekken en de quest
      De koude oven. Het questsysteem, de gespreksschrijver en het wereldgereedschap blijven, voor het

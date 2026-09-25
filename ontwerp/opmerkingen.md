@@ -86,6 +86,16 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     tot er rovers zijn om de gevechtstoetsen op te draaien?
   - De actiebalk (actiepunten, Slaan, Einde beurt) verschijnt nu ook in het gehucht. De knop Slaan
     doet zelf niets: slaan doe je door op een monster te klikken; de knop zegt wat het kost.
+- **Na de oude kaart** (25 sep, werklijst punt 7c):
+  - Het gehucht staat nog als proefkaart gemarkeerd (`"proef": true` in zijn betekenisbestand),
+    omdat zijn weg de wereld in nergens heen leidt. Nu het de enige echte kaart is, hoort dat eraf
+    zodra er een tweede kaart is (een bos, het kasteel). Tot dan telt de controle hem niet mee bij
+    "wie staat er nergens".
+  - De mensen van het oude dorp (de smid, de herbergierster, de molenaar, de koster, de jager, de
+    wachter en de anderen) staan nog in `js/mensen.js`, zonder plek op een kaart. De controle zegt
+    het in één regel ("18 van de 26 mensen staan nog nergens"). Voor als het gehucht een dorp wordt.
+  - Sluipen (`S`) en de spullen die je bij je hebt, hebben in het scherm van het gehucht geen plek:
+    het oude scherm linksboven staat nog in `index.html`, maar verborgen.
 - **Een questweg kan nog "jaren" kosten** (`js/quest.js`, KOSTEN, en de toets van drie antwoorden).
   In het nieuwe spel kost niets meer jaren; misschien wordt het "tijd" of "leven". Beslissen als de
   quests van het gehucht komen.

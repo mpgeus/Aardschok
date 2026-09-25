@@ -18,7 +18,7 @@
   T.wisVlag = (S, naam) => vlaggen(S).delete(naam);
   T.heeftVlag = (S, naam) => vlaggen(S).has(naam) || S[naam] === true;
 
-  // Wiens gesprek voert dit wezen? Normaal zijn soort ("wim", "bakker"), want daaronder staat het
+  // Wiens gesprek voert dit wezen? Normaal zijn soort ("heer", "marskramer"), want daaronder staat het
   // in T.GESPREKKEN. Maar negentien dorpelingen delen één soort ("dorpeling", zie js/kaart.js), en
   // die hoeven niet allemaal hetzelfde te zeggen: staat er `gesprek` op, dan telt die. Zo krijgt
   // de vrouw bij de put haar eigen tekst zonder dat er een wezensoort voor bij hoeft.
@@ -30,7 +30,7 @@
 
   // Eén voorwaarde (als); zie de uitleg boven in gesprekken.js voor wat erin mag staan.
   // Eén naam, of een lijstje — net als zetVlag in een gevolg. Een lijstje betekent "allemaal":
-  // { vlag: ['meesterDood', 'sleutelGebruikt'] } geldt pas als ze allebei staan. Dat is er op
+  // { vlag: ['heerOpBezoek', 'heerSchuld'] } geldt pas als ze allebei staan. Dat is er op
   // 22 sep bij gekomen omdat een situatie in de gespreksschrijver een toestand is en er dus twee
   // vlaggen tegelijk in kunnen staan; zonder dit kon je in zo'n situatie geen antwoord toevoegen
   // dat er ook echt stond.

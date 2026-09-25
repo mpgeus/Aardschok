@@ -3,7 +3,7 @@
   "proef": true,
   "uitleg": "De betekenis van kaarten/proefbos.tmj. Zie ontwerp/kaarten.md, 'Tiled tekent alleen nog de grond'. Een proefkaart: hij bestaat voor de toetsen en doet in het spel niet mee.",
   "dingen": [
-    {"x":21,"y":6,"overgang":"wereld","komt":{"x":20,"y":6}},
+    {"x":21,"y":6,"overgang":"proef","komt":{"x":20,"y":6}},
     {"x":4,"y":14,"wezen":"reuzenspin","straal":2}
   ]
 }

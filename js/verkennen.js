@@ -30,7 +30,7 @@
   }
 
   // Loop tot naast het doel en doe daar `actie`. Staat de held er al naast, dan meteen. Is het
-  // doel een wezen, dan telt zijn tegel (tx, ty), niet zijn vloeiende plek: wie op Wim of de meester
+  // doel een wezen, dan telt zijn tegel (tx, ty), niet zijn vloeiende plek: wie op een dorpeling
   // klikt terwijl die net een stap zet, gaf anders een halve tegel aan het padzoeken, en dat liep
   // vast.
   function loopNaast(S, wat, actie) {
@@ -51,15 +51,12 @@
     S.naLopen = { doel: { x: doel.x, y: doel.y }, actie };
   }
 
-  // Wat je opraapt door erop te stappen: de sleutel van het trappenhuis, en de leem voor de
-  // bakker. De tekst bij de muis, en wat er gemeld wordt.
+  // Wat je opraapt door erop te stappen: een sleutel, die een deur op slot opent. De tekst bij de
+  // muis, en wat er gemeld wordt.
   // Ook naar buiten, zodat de keuring (gereedschap/keuring.js) kan zeggen dat een voorwerp
   // dat aan een quest hangt niet op te rapen is — dan ligt het er wel en doet het niets.
   const OPRAPEN = (T.OPRAPEN = {
     sleutel: { tekst: 'De sleutel oppakken', vind: 'Je vindt de ijzeren sleutel.' },
-    // De leemkuil bij de beek (De koude oven, js/quests.js). De leem ligt er alleen zolang de
-    // bakker erom vroeg: in Tiled heeft dat voorwerp quest="bakker:zoeken".
-    leem: { tekst: 'Leem uit de kuil scheppen', vind: 'Je schept een handvol natte leem. Koud, en zwaarder dan je dacht.' },
   });
 
   // ── Wat een veld is (js/akkers.js, "Velden"; spel.md, "Weides met koeien en schapen") ──
@@ -142,7 +139,7 @@
       if (e.kant === 'monster') return { tekst: `De ${e.naam} aanvallen`, doe: () => T.startGevecht(S, e, true) };
       // Een dier (js/vee.js) praat niet en doet nog niets: bij de muis staat alleen wat het is.
       if (e.dier) return { tekst: T.hoofdletter(`een ${e.naam}`) };
-      // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: Wim, en de meester. Welk
+      // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: een boer, de heer. Welk
       // gesprek dat is, zegt T.gesprekIdVan — een dorpeling kan er een eigen hebben.
       if (T.gesprekVan && T.gesprekVan(e)) {
         // Bij een boer ook wie hij is en wat hij kan (js/boeren.js; Marcel wilde het meteen zien).
@@ -154,9 +151,8 @@
     if (doel.voorwerp) {
       const v = doel.voorwerp;
       if (OPRAPEN[v.soort]) return { tekst: OPRAPEN[v.soort].tekst, doe: () => loopNaar(S, v) };
-      if (v.soort === 'trap') return { tekst: 'De trap op', doe: () => loopNaast(S, v, () => T.gewonnen(S)) };
       if (v.soort === 'kist') {
-        return { tekst: 'De kist bekijken', doe: () => loopNaast(S, v, () => T.ui.bericht('Een kist vol versleten bezems. Wim gooit niets weg.')) };
+        return { tekst: 'De kist bekijken', doe: () => loopNaast(S, v, () => T.ui.bericht('Een kist vol oude rommel. Niets wat de heer zou willen.')) };
       }
     }
     // Een gebouw dat de speler neerzette (js/gebouwen.js): de muis op zijn voet zegt hoe het ermee
@@ -180,7 +176,7 @@
     const d = T.deurOp(w, doel.x, doel.y);
     if (d && d.staat === 'opslot') {
       if (S.inventaris.has('sleutel')) return { tekst: 'De deur openen met de sleutel', doe: () => loopNaast(S, d, () => ontsluit(S, d)) };
-      return { tekst: 'Op slot', fout: true, doe: () => T.ui.bericht('De deur zit op slot. Misschien weet Wim waar de sleutel is.') };
+      return { tekst: 'Op slot', fout: true, doe: () => T.ui.bericht('De deur zit op slot.') };
     }
     // Een open deur is gewoon een doorgang: wie erop klikt, wil erdoor. Dichtgooien kan
     // in een gevecht, met een eigen knop.
@@ -223,7 +219,7 @@
   }
 
   // Waar hoort dit wezen rond te blijven? Wie een plek en een straal heeft (`thuis`), blijft daar
-  // in de buurt: de smid bij de smidse, Wim bij zijn trap, de wolf bij zijn stuk bos. Wie die niet
+  // in de buurt: de smid bij de smidse, een boer bij zijn akker, de wolf bij zijn stuk bos. Wie die niet
   // heeft, blijft in zijn eigen kamer — binnen is een kamer vanzelf een stuk wereld, buiten is de
   // hele kaart één kamer en zou een wolf tot de andere kant van het erf wandelen.
   //
@@ -295,7 +291,7 @@
   };
 
   // Wie dwaalt, zet af en toe een stap binnen zijn eigen stukje wereld en staat er daarna weer
-  // even bij stil — dan doet hij wat bij hem past (Wim veegt). Een dorpeling gebruikt hetzelfde
+  // even bij stil — dan doet hij wat bij hem past (een boer maait). Een dorpeling gebruikt hetzelfde
   // loopwerk als een dwalend monster; het verschil is dat hij nooit een gevecht begint (hij is
   // `neutraal`, en T.zoekOntdekking en T.deelnemers kijken alleen naar monsters).
   //
@@ -427,10 +423,9 @@
       // T.gaNaarGebied), staat er al, en dan zou de overgang meteen weer afgaan: heen en weer
       // tussen twee gebieden. Die tegel staat pas weer scherp als hij er een keer af is geweest.
       //
-      // En alleen als je daar je pas beëindigt. Buiten ligt de overgang midden op het erf, vóór
-      // de deur van de toren, en daar loop je aan één stuk door langs; wie naar de moestuin loopt,
-      // wil niet halverwege binnen staan. Wie naar de deur loopt, klikt op de deur (en het scherm
-      // zegt er "Naar de toren" bij).
+      // En alleen als je daar je pas beëindigt. Een overgang kan midden op een pad liggen, en daar
+      // loop je aan één stuk door langs; wie verderop wil zijn, wil niet halverwege weg zijn. Wie
+      // echt weg wil, klikt op de overgang (en het scherm zegt erbij waarheen).
       const zojuist = S.netGeland && S.netGeland.x === t.x && S.netGeland.y === t.y;
       if (!zojuist) S.netGeland = null;
       const o = !zojuist && !e.pad.length && S.modus === 'verkennen' && !S.gevecht ? T.overgangOp(w, t.x, t.y) : null;
@@ -446,17 +441,5 @@
       S.naLopen = null;
       if (T.raakt(w, t, n.doel)) n.actie();
     }
-  };
-
-  // De trap op in de toren van het oude spel: daar eindigde het proefje. Gaat weg met de toren
-  // (ontwerp/werklijst.md, punt 7c).
-  T.gewonnen = function (S) {
-    S.modus = 'einde';
-    T.ui.toonOverlay(
-      'De trap op',
-      `<p>Je klimt naar de volgende verdieping. Boven is het stil, op iets na dat ademt.</p><p>Hier eindigt het proefje.</p>`,
-      'Opnieuw spelen',
-      () => T.nieuwSpel(),
-    );
   };
 })(globalThis.Toren = globalThis.Toren || {});

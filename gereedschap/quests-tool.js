@@ -64,7 +64,6 @@
   let keuze = { soort: 'quest' }; // { soort: 'quest' | 'fase' | 'weg', fase, weg }
   let vuil = false;
   let RUWE_KOP = '';
-  let RUWE_TUSSEN = '';
   let RUWE_STAART = '';
   let BRON_GELEZEN = false;
   let VERLOREN_OPMERKINGEN = [];
@@ -153,20 +152,19 @@
 
   // ---------- kop-commentaar en losse opmerkingen bewaren ----------
   // Alles vóór "(function (T) {" is het kop-commentaar (de uitleg van de vorm) en blijft staan.
-  // Een opmerking vlak boven een quest, een fase, een weg of een raakpunt hoort daarbij en komt
+  // Een opmerking vlak boven een quest, een fase of een weg hoort daarbij en komt
   // bij het opslaan terug als "_opmerking" op dat object. Zonder dit zou één keer opslaan alle
   // uitleg tússen de gegevens opeten, en juist daar staat waaróm een weg is wat hij is.
   function verwerkRuweBron(tekst) {
-    // Alleen de twee blokken die deze bewerker kent worden opnieuw geschreven; alles ervoor,
-    // ertussen en erna gaat letterlijk mee terug (gereedschap/bronblok.js). Dat is niet
-    // netjes-doen maar noodzaak: de gespreksbewerker wiste zo ooit het hele draaiboek van de
-    // tutorial, omdat het onder T.GESPREKKEN in hetzelfde bestand stond.
+    // Alleen het blok dat deze bewerker kent wordt opnieuw geschreven; alles ervoor en erna gaat
+    // letterlijk mee terug (gereedschap/bronblok.js). Dat is niet netjes-doen maar noodzaak: de
+    // gespreksbewerker wiste zo ooit het hele draaiboek van de tutorial, omdat het onder
+    // T.GESPREKKEN in hetzelfde bestand stond. (Tot 25 sep kende deze bewerker er twee: ook
+    // T.RAAKPUNTEN, een spreuk op een ding; die gingen weg met de spreuken.)
     const q = T.bronBlok(tekst, 'T.QUESTS');
-    const r = T.bronBlok(tekst, 'T.RAAKPUNTEN');
-    if (q && r) {
+    if (q) {
       RUWE_KOP = q.kop;
-      RUWE_TUSSEN = tekst.replace(/\r\n/g, '\n').split('\n').slice(q.tot + 1, r.vanaf).join('\n');
-      RUWE_STAART = r.staart;
+      RUWE_STAART = q.staart;
       BRON_GELEZEN = true;
     } else {
       BRON_GELEZEN = false;
@@ -176,7 +174,7 @@
     if (i === -1) return;
     const regels = tekst.slice(i).replace(/\r\n/g, '\n').split('\n');
     let buffer = [];
-    let waar = null; // in welke tabel we zitten: T.QUESTS of T.RAAKPUNTEN
+    let waar = null; // zitten we al in T.QUESTS?
     let qId = null;
     let fId = null;
     const leg = (doel) => {
@@ -187,13 +185,13 @@
     for (const regel of regels) {
       const commentaar = regel.match(/^\s*\/\/ ?(.*)$/);
       if (commentaar) { buffer.push(commentaar[1]); continue; }
-      if (/T\.QUESTS\s*=/.test(regel) || /T\.RAAKPUNTEN\s*=/.test(regel)) {
-        waar = /T\.QUESTS/.test(regel) ? 'quests' : 'raakpunten';
+      if (/T\.QUESTS\s*=/.test(regel)) {
+        waar = 'quests';
         leg(null);
         buffer = [];
         continue;
       }
-      // vier spaties: een quest of een raakpunt; acht: een fase; twaalf: een weg. Dezelfde
+      // vier spaties: een quest; acht: een fase; twaalf: een weg. Dezelfde
       // inspringing als de serialisatie hieronder maakt, dus die twee blijven op elkaar passen.
       const een = regel.match(/^ {4}(\w+): \{/);
       const twee = regel.match(/^ {8}(\w+): \{/);
@@ -201,7 +199,7 @@
       if (een) {
         qId = een[1];
         fId = null;
-        leg(waar === 'quests' ? T.QUESTS[qId] : (T.RAAKPUNTEN || {})[qId]);
+        leg(waar === 'quests' ? T.QUESTS[qId] : null);
       } else if (twee && waar === 'quests' && T.QUESTS[qId]) {
         fId = T.QUESTS[qId].fasen[twee[1]] ? twee[1] : null;
         leg(fId ? T.QUESTS[qId].fasen[fId] : null);
@@ -226,7 +224,7 @@
   const personen = () => Object.keys(T.GESPREKKEN);
 
   // ---------- de wereld erbij: wat hangt er in Tiled aan deze quest? ----------
-  // js/kaart.js leest quest="bakker:zoeken" en raak="oven" van een object. Hier zoeken we
+  // js/kaart.js leest quest="bakker:zoeken" van een object. Hier zoeken we
   // dezelfde eigenschappen op in de ruwe Tiled-gegevens, zodat het gereedschap kan zeggen waar
   // een ding ligt — en kan klagen als het nergens ligt.
   function wereldHaakjes() {
@@ -238,12 +236,11 @@
         for (const obj of laag.objects || []) {
           const eig = {};
           for (const p of obj.properties || []) eig[p.name] = p.value;
-          if (eig.quest === undefined && eig.raak === undefined) continue;
+          if (eig.quest === undefined) continue;
           uit.push({
             kaart: kaartNaam, naam: obj.name || '(naamloos)',
             x: Math.round(obj.x / th), y: Math.round(obj.y / th),
-            grendel: eig.quest !== undefined ? T.questGrendel(String(eig.quest)) : null,
-            raak: eig.raak !== undefined ? String(eig.raak) : null,
+            grendel: T.questGrendel(String(eig.quest)),
           });
         }
       }
@@ -268,7 +265,6 @@
         for (const w of Object.values(f.wegen || {})) pak(w.doe);
       }
     }
-    for (const r of Object.values(T.RAAKPUNTEN || {})) if (soort === 'vlag') lijst(r.zetVlag).forEach((n) => uit.add(n));
     if (soort !== 'vlag') {
       OPRAAPBAAR.forEach((n) => uit.add(n));
       for (const h of wereldHaakjes()) uit.add(h.naam);
@@ -320,14 +316,6 @@
     for (const h of haakjes) {
       if (h.grendel && h.grendel.quest === questId) {
         for (const f of h.grendel.fase || []) if (!q.fasen[f]) fout(`${h.kaart} (${h.x}, ${h.y}): "${h.naam}" hangt aan fase "${f}", en die bestaat niet`);
-      }
-      if (h.raak && !T.RAAKPUNTEN[h.raak]) fout(`${h.kaart} (${h.x}, ${h.y}): "${h.naam}" heeft raak="${h.raak}", en dat raakpunt bestaat niet`);
-    }
-    for (const [rid, r] of Object.entries(T.RAAKPUNTEN || {})) {
-      if (r.als && r.als.quest !== questId) continue;
-      if (!haakjes.some((h) => h.raak === rid)) let_op(`raakpunt "${rid}" staat op geen enkele kaart (raak="${rid}")`);
-      if (r.als && r.als.quest === questId) {
-        for (const f of lijst(r.als.fase)) if (!q.fasen[f]) fout(`raakpunt "${rid}" hangt aan fase "${f}", en die bestaat niet`);
       }
     }
     return uit;
@@ -582,15 +570,14 @@
   // Waar liggen de dingen van deze quest? (ontwerp/verhaal.md: "de wereld erbij")
   function wereldPaneel(wrap) {
     wrap.appendChild(el('h3', null, 'In de wereld'));
-    const mijn = wereldHaakjes().filter((h) => (h.grendel && h.grendel.quest === questId)
-      || (h.raak && T.RAAKPUNTEN[h.raak] && T.RAAKPUNTEN[h.raak].als && T.RAAKPUNTEN[h.raak].als.quest === questId));
+    const mijn = wereldHaakjes().filter((h) => h.grendel && h.grendel.quest === questId);
     if (!mijn.length) {
-      wrap.appendChild(el('p', 'gt-gedempt', 'Nog niets. Leg het neer in gereedschap/wereld.html: zet "Bewerken" aan, kies Voorwerp, en kies daar deze quest en de fase waarin het ding er moet liggen — of het raakpunt waarop een spreuk werkt.'));
+      wrap.appendChild(el('p', 'gt-gedempt', 'Nog niets. Leg het neer in gereedschap/wereld.html: zet "Bewerken" aan, kies Voorwerp, en kies daar deze quest en de fase waarin het ding er moet liggen.'));
       return;
     }
     const ul = el('ul', 'gt-proef-keuzes');
     for (const h of mijn) {
-      const wat = h.grendel ? 'fase ' + (h.grendel.fase || ['(alle)']).join(', ') : 'raakpunt ' + h.raak;
+      const wat = 'fase ' + (h.grendel.fase || ['(alle)']).join(', ');
       ul.appendChild(el('li', null, `${h.naam} — ${h.kaart} (${h.x}, ${h.y}) — ${wat}`));
     }
     wrap.appendChild(ul);
@@ -715,7 +702,7 @@
     $('qt-status').textContent = vuil ? 'niet-opgeslagen wijzigingen' : $('qt-status').dataset.opgeslagen || '';
   }
 
-  // ---------- opslaan: T.QUESTS en T.RAAKPUNTEN terug naar leesbare code ----------
+  // ---------- opslaan: T.QUESTS terug naar leesbare code ----------
   function str(s) {
     s = String(s);
     if (!/['\\\n\r]/.test(s)) return "'" + s + "'";
@@ -760,17 +747,7 @@
     out += `${sp}},\n`;
     return out;
   }
-  function serRaakpunt(id, r, sp) {
-    const sp2 = sp + '  ';
-    let out = opmComment(r._opmerking, sp) + `${sp}${id}: {\n`;
-    for (const sleutel of ['spreuk', 'tekst', 'melding']) if (r[sleutel]) out += `${sp2}${sleutel}: ${str(r[sleutel])},\n`;
-    if (r.zetVlag) out += `${sp2}zetVlag: ${serWaarde(r.zetVlag)},\n`;
-    if (r.als) out += `${sp2}als: ${serPlat(r.als)},\n`;
-    if (r.doe) out += `${sp2}doe: ${serPlat(r.doe)},\n`;
-    out += `${sp}},\n`;
-    return out;
-  }
-  // Alleen de twee blokken die deze bewerker kent; de rest van het bestand gaat letterlijk mee.
+  // Alleen het blok dat deze bewerker kent; de rest van het bestand gaat letterlijk mee.
   // Lukte het lezen niet, dan null en slaan we niet op — beter niets schrijven dan iets
   // kwijtraken wat deze bewerker niet kent.
   function bouwBestandTekst() {
@@ -778,10 +755,6 @@
     let out = RUWE_KOP;
     out += '  T.QUESTS = {\n';
     out += Object.entries(T.QUESTS).map(([id, q]) => serQuest(id, q, '    ')).join('');
-    out += '  };';
-    out += RUWE_TUSSEN ? '\n' + RUWE_TUSSEN + '\n' : '\n\n';
-    out += '  T.RAAKPUNTEN = {\n';
-    out += Object.entries(T.RAAKPUNTEN || {}).map(([id, r]) => serRaakpunt(id, r, '    ')).join('');
     out += '  };';
     out += RUWE_STAART;
     return out;

@@ -222,7 +222,6 @@
       return { tekst: 'Erheen lopen en slaan', kosten: totaal, kan: ap >= totaal, doe: () => slaan(S, m, pad), pad };
     }
 
-    if (doel.voorwerp && doel.voorwerp.soort === 'trap') return { tekst: 'Niet midden in een gevecht', kosten: 0, kan: false };
 
     if (doel.x === h.x && doel.y === h.y) return null;
     if (!T.isZichtbaar(w, doel.x, doel.y) || !T.isBegaanbaar(w, doel.x, doel.y, { deurenOpenen: true, wezensBlokkeren: true, wie: held })) return null;

@@ -1,7 +1,7 @@
-// Gebieden en de overgang ertussen. De toren staat in code (js/wereld.js), want zijn kamers zijn
-// klein en hangen aan het verhaal; alles wat buiten speelt komt uit een kaart die in Tiled
-// getekend is (js/kaart.js). Eén deur, twee kanten op: je loopt de toren uit en staat op je erf,
-// je loopt het erf af en staat weer in je hal.
+// Gebieden en de overgang ertussen. Een gebied is een kaart die in Tiled getekend is
+// (js/kaart.js). Eén aansluiting, twee kanten op: je loopt de ene kaart af en staat op de andere,
+// en langs dezelfde weg weer terug. (Tot 25 sep stond de toren van het oude spel hier nog in code,
+// naast de kaarten; die ging weg met het oude spel.)
 //
 // Welke gebieden er zijn, staat nergens opgeschreven: elke kaart is er een (zie T.maakGebieden
 // hieronder). Marcel tekent in Tiled, draait npm run kaarten, en de wereld is groter geworden.
@@ -12,13 +12,10 @@
 (function (T) {
   'use strict';
 
-  // Alleen de toren staat in code; al het andere is een kaart. Elke kaart in kaarten/kaarten.js
-  // (T.KAARTEN, gemaakt door npm run kaarten) is vanzelf een gebied, met zijn bestandsnaam als
-  // naam. Tekent Marcel kaarten/dorp.tmj, dan werkt `overgang: "dorp"` meteen — er valt niets
-  // te registreren, en er hoeft geen code bij. Dat is de hele bedoeling van de editor.
-  const IN_CODE = {
-    toren: { naam: 'De toren', maak: () => T.maakWereld() },
-  };
+  // Elke kaart in kaarten/kaarten.js (T.KAARTEN, gemaakt door npm run kaarten) is vanzelf een
+  // gebied, met zijn bestandsnaam als naam. Tekent Marcel kaarten/dorp.tmj, dan werkt
+  // `overgang: "dorp"` meteen — er valt niets te registreren, en er hoeft geen code bij. Dat is de
+  // hele bedoeling van de editor.
 
   // De naam die de speler in beeld krijgt, zonder de kaart al in te lezen: de eigenschap "naam"
   // van de map zelf (in Tiled: de eigenschappen van de kaart), anders de bestandsnaam met een
@@ -40,8 +37,7 @@
       // alleen nog de grond". Bestaat dat bestand niet, dan is de kaart gewoon wat Tiled heeft.
       g[naam] = { naam: kaartNaam(naam, T.KAARTEN[naam]), maak: () => T.laadKaart(T.KAARTEN[naam], T.BETEKENIS && T.BETEKENIS[naam]) };
     }
-    // Wat in code staat, wint van een kaart die toevallig zo heet: de toren is de toren.
-    return Object.assign(g, IN_CODE);
+    return g;
   };
 
   T.GEBIEDEN = T.maakGebieden();
@@ -65,9 +61,12 @@
         console.error(`Aardschok: gebied "${naam}" heeft geen enkele overgang — je komt er niet meer uit. Zet in Tiled een object met de eigenschap "overgang" op de kaart en draai npm run kaarten.`);
       }
       // En andersom: een overgang die naar een kaart wijst die niet bestaat. Ook dat hoort hier
-      // al te klagen, bij het inlezen, en niet pas als een speler er per ongeluk op stapt.
+      // al te klagen, bij het inlezen, en niet pas als een speler er per ongeluk op stapt. Behalve
+      // op een proefkaart: het gehucht is er (nog) een, en zijn weg de wereld in leidt sinds de oude
+      // kaart weg is (25 sep) bewust nergens heen; daar lopen alleen de marskramer, de heer en de
+      // inner over (T.wegInEnUit, js/handel.js).
       for (const o of w.overgangen || []) {
-        if (!T.GEBIEDEN[o.naar]) ontbreekt(o.naar, `de kaart "${naam}" wijst er op (${o.x}, ${o.y}) naartoe`);
+        if (!T.GEBIEDEN[o.naar] && !w.proef) ontbreekt(o.naar, `de kaart "${naam}" wijst er op (${o.x}, ${o.y}) naartoe`);
       }
       S.gebieden[naam] = w;
     }

@@ -1,15 +1,13 @@
 // Het scherm van het gehuchtspel: de kalender (dag, seizoen, jaar) en de voorraad (goud, graan,
 // wol, hout) -- in de stijl en de plek van js/ui.js, maar in een eigen bestand, want het hoort
-// bij het nieuwe spel en niet bij De laatste klim. Altijd aan (T.NIEUWE_HUD), behalve als je met
-// ?kaart= een kaart van het oude spel opent; ?hud zet het daar toch aan. Wat er van het oude
-// scherm over is (sluipen, goud en spullen linksboven), gaat weg met de oude kaart
-// (ontwerp/werklijst.md, punt 7c).
+// bij het nieuwe spel en niet bij De laatste klim. Sinds de kaarten van het oude spel weg zijn
+// (25 sep, ontwerp/werklijst.md punt 7c) staat het altijd aan; T.NIEUWE_HUD blijft bestaan omdat
+// een paar plekken er nog naar vragen. Het oude scherm linksboven (sluipen, goud en spullen) staat
+// nog in index.html, maar verborgen: sluipen en de spullen hebben in dit scherm nog geen plek.
 (function (T) {
   'use strict';
 
-  const params = new URLSearchParams(location.search);
-  const kaart = params.get('kaart');
-  T.NIEUWE_HUD = !kaart || kaart === 'gehucht' || params.has('hud');
+  T.NIEUWE_HUD = true;
   document.body.classList.toggle('nieuwe-hud', T.NIEUWE_HUD);
 
   const $ = (id) => document.getElementById(id);

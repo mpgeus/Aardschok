@@ -55,63 +55,49 @@ test('een vlag blijft staan tot hij gewist wordt, en werkt ook via een bestaand 
   assert.equal(T.heeftVlag(S, 'sleutelGebruikt'), true);
 });
 
-test('zolang de meester leeft, stuurt Wim je naar buiten, naar zijn bonen', () => {
-  const S = nieuweS();
-  const knoop = T.gesprekKnoop(S, 'wim', 'welkom');
-  assert.ok(knoop.tekst.includes('bij zijn bonen'));
-  assert.deepEqual(knoop.keuzes.map((k) => k.naar || 'sluit'), ['voorraad', 'sluit']);
-});
+// Een gesprek in de vorm van js/gesprekken.js, alleen voor deze toets: een begroeting die op een
+// vlag let, een antwoord met een gevolg, en een weg heen en terug. (Tot 25 sep toetste dit
+// bestand dat op het gesprek van Wim, uit het oude spel.)
+function metProefGesprek() {
+  T.GESPREKKEN.proef = {
+    naam: 'de proef',
+    start: 'welkom',
+    knopen: {
+      welkom: {
+        tekst: [
+          { als: { vlag: 'geholpen' }, zeg: 'Dank je nog, schout.' },
+          { zeg: 'Goedendag, schout.' },
+        ],
+        keuzes: [
+          { zeg: 'Kan ik helpen?', naar: 'hulp', als: { nietVlag: 'geholpen' } },
+          { zeg: 'Tot ziens.', sluit: true },
+        ],
+      },
+      hulp: {
+        tekst: [{ zeg: 'Graag. Wil je dit brengen?' }],
+        keuzes: [{ zeg: 'Geef maar.', naar: 'welkom', doe: { zetVlag: 'geholpen', geef: 'pakje' } }],
+      },
+    },
+  };
+}
 
-test('Wims begroeting volgt de sleutel: nog niet gevonden, op zak, of al gebruikt', () => {
-  const S = nieuweS();
-  T.zetVlag(S, 'meesterDood'); // na de tutorial: nu ben jij de meester
-  T.zetVlag(S, 'beursVanDeMeester'); // de beurs is al geweest; die vraag heeft zijn eigen toets
-
-  let knoop = T.gesprekKnoop(S, 'wim', 'welkom');
-  assert.ok(knoop.tekst.includes('Zo moet ik u nu noemen'));
-  assert.equal(knoop.keuzes.length, 5);
-
-  S.inventaris.add('sleutel');
-  knoop = T.gesprekKnoop(S, 'wim', 'welkom');
-  assert.ok(knoop.tekst.includes('Wees voorzichtig daarboven'));
-  assert.deepEqual(knoop.keuzes.map((k) => k.naar || 'sluit'), ['monsters', 'sluit']);
-
-  S.inventaris.delete('sleutel');
-  S.sleutelGebruikt = true;
-  knoop = T.gesprekKnoop(S, 'wim', 'welkom');
-  assert.ok(knoop.tekst.includes('Ik veeg de trap nog één keer'));
-  assert.equal(knoop.keuzes.length, 1);
-});
-
-// De beurs van de meester is je eerste goud, en expres te weinig voor de marskramer
-// (ontwerp/toren.md). Je mag er altijd naar vragen tot je hem hebt gehad; weigeren zet geen vlag,
-// dus dan staat het aanbod er morgen nog, precies zoals Wim zegt.
-test('Wim biedt de beurs van de meester aan, en daarna niet meer', () => {
-  const S = nieuweS();
-  T.zetVlag(S, 'meesterDood');
-  const keuzes = () => T.zichtbareKeuzes(S, 'wim', T.GESPREKKEN.wim.knopen.welkom.keuzes);
-  const gevraagd = () => keuzes().some((k) => k.naar === 'beurs');
-
-  assert.equal(gevraagd(), true);
-  S.inventaris.add('sleutel'); // ook met de sleutel op zak mag je er nog naar vragen
-  assert.equal(gevraagd(), true);
-
-  T.zetVlag(S, 'beursVanDeMeester');
-  assert.equal(gevraagd(), false);
-});
-
-test('vanuit de begroeting kun je via "aardschok" bij "monsters" komen en weer terug naar "meer"', () => {
-  const S = nieuweS();
-  T.zetVlag(S, 'meesterDood');
-  const begroeting = T.gesprekKnoop(S, 'wim', 'welkom');
-  const naarAardschok = begroeting.keuzes.find((k) => k.zeg === 'Wat is er vannacht gebeurd?');
-  assert.equal(naarAardschok.naar, 'aardschok');
-
-  const aardschok = T.gesprekKnoop(S, 'wim', 'aardschok');
-  const naarMonsters = aardschok.keuzes.find((k) => k.zeg === 'Wat kwam er de trap af?');
-  assert.equal(naarMonsters.naar, 'monsters');
-
-  const monsters = T.gesprekKnoop(S, 'wim', 'monsters');
-  assert.equal(monsters.keuzes[0].naar, 'meer');
-  assert.ok(T.gesprekKnoop(S, 'wim', 'meer').tekst.includes('Wat wilt u nog weten'));
+test('een gesprek loopt van knoop naar knoop, en een antwoord verandert wat er daarna gezegd wordt', () => {
+  metProefGesprek();
+  try {
+    const S = nieuweS();
+    let welkom = T.gesprekKnoop(S, 'proef', 'welkom');
+    assert.equal(welkom.tekst, 'Goedendag, schout.');
+    const helpen = welkom.keuzes.find((k) => k.naar === 'hulp');
+    assert.ok(helpen, 'wie nog niet hielp, kan het aanbieden');
+    const hulp = T.gesprekKnoop(S, 'proef', helpen.naar);
+    const geven = hulp.keuzes[0];
+    T.doeGevolg(S, geven.doe);
+    assert.ok(T.heeftVlag(S, 'geholpen'));
+    assert.ok(S.inventaris.has('pakje'));
+    welkom = T.gesprekKnoop(S, 'proef', geven.naar);
+    assert.equal(welkom.tekst, 'Dank je nog, schout.');
+    assert.ok(!welkom.keuzes.some((k) => k.naar === 'hulp'), 'en daarna niet meer');
+  } finally {
+    delete T.GESPREKKEN.proef;
+  }
 });

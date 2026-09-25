@@ -1,5 +1,12 @@
 # Wereld: de plekken, het dorp, het bos
 
+**Van het oude spel, alleen nog als bron (25 sep 2026).** De kaart die hier beschreven staat
+(`kaarten/wereld.tmj`: het erf, het bos, het dorp, met de toren) ging weg met het oude spel
+(werklijst, punt 7c), met Wim, de meester, de bakker en De koude oven. Wat bruikbaar blijft: de
+gedachten over een dorp dat leeft, en de mensen van het dorp. Die staan nog in `js/mensen.js`, zonder
+plek op een kaart, voor als het gehucht een dorp wordt (punt 14). Het oude bestand staat in git
+(`git show 6b40e8e:kaarten/wereld.tmj`).
+
 De klim en het herstel van de toren staan in `toren.md`; het tekenen van kaarten in `kaarten.md`.
 
 ## Eén doorlopende wereld, zonder overgangen (Marcel, 21 sep 2026)

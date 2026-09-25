@@ -60,7 +60,7 @@
     { id: 'raster', naam: 'Raster', uitleg: 'De tegelruiten', kleur: 'rgba(245, 230, 190, 0.28)', toets: 'r', aan: false },
     { id: 'begaanbaar', naam: 'Begaanbaar', uitleg: 'Groen waar je kunt lopen, rood waar iets vast staat', kleur: '#86c46f', toets: 'b', aan: false },
     { id: 'mensen', naam: 'Mensen', uitleg: 'Wie waar staat, met de straal waarbinnen hij dwaalt', kleur: '#e2b64a', toets: 'm', aan: true },
-    { id: 'quest', naam: 'Quest', uitleg: 'Wat aan een questfase hangt, en waar een spreuk op werkt', kleur: '#b98ce0', toets: 'q', aan: true },
+    { id: 'quest', naam: 'Quest', uitleg: 'Wat aan een questfase hangt', kleur: '#b98ce0', toets: 'q', aan: true },
     { id: 'uitgangen', naam: 'Uitgangen', uitleg: 'De aansluitingen naar andere kaarten, en waar je aankomt', kleur: '#6fa0e6', toets: 'u', aan: true },
     { id: 'onbereikbaar', naam: 'Onbereikbaar', uitleg: 'Begaanbaar, maar vanaf geen enkele uitgang te bereiken', kleur: '#c86bbd', toets: 'o', aan: false },
     { id: 'klachten', naam: 'Controle', uitleg: 'De plekken waar de controle iets over te zeggen heeft', kleur: '#e0604f', toets: 'c', aan: true },
@@ -266,14 +266,14 @@
 
   // ---------------------------------------------------------------- neerzetten
   //
-  // Wat je neerzet, is een gewoon vakje in het betekenisbestand: { x, y, wezen: 'bakker' } of
+  // Wat je neerzet, is een gewoon vakje in het betekenisbestand: { x, y, wie: 'boer1' } of
   // { x, y, tegel: 'bomen/eik' }. De velden en wat ze betekenen staan boven in js/kaart.js; hier
   // staat alleen hoe je ze met de muis legt.
   const penseel = {
     soort: 'mens',
-    wie: 'bakker', wezen: 'bakker', zaad: 1, straal: 3, gesprek: '',
+    wie: 'boer1', wezen: 'wolf', zaad: 1, straal: 3, gesprek: '',
     staat: 'dicht', vlag: '',
-    naar: '', vel: 'bomen', tegel: 'eik', raak: '', quest: '',
+    naar: '', vel: 'bomen', tegel: 'eik', quest: '',
   };
   const SOORTEN = [
     ['mens', 'Mens'],
@@ -420,8 +420,8 @@
       }
     } else if (penseel.soort === 'aansluiting') {
       const anders = [...el('wt-kaart').options].map((o) => o.value).filter((n) => n !== kaartNaam);
-      if (!penseel.naar || !anders.includes(penseel.naar)) penseel.naar = anders[0] || 'toren';
-      keuzeVeld(doel, 'naar', [...anders, 'toren'], penseel.naar, (v) => (penseel.naar = v));
+      if (!penseel.naar || !anders.includes(penseel.naar)) penseel.naar = anders[0] || '';
+      keuzeVeld(doel, 'naar', anders, penseel.naar, (v) => (penseel.naar = v));
       const uitleg = document.createElement('p');
       uitleg.className = 'gt-leeg';
       uitleg.textContent = 'Klik de tegel waar je hier vertrekt. Daarna springt het gereedschap naar die kaart en klik je waar je aankomt; beide kanten worden in één keer gelegd.';
@@ -433,7 +433,6 @@
         bouwNeerzetten();
       });
       keuzeVeld(doel, 'tegel', tegelOpties(penseel.vel), penseel.tegel, (v) => (penseel.tegel = v));
-      keuzeVeld(doel, 'raak', [['', '— geen —'], ...Object.keys(T.RAAKPUNTEN || {})], penseel.raak, (v) => (penseel.raak = v));
       questVeld(doel, penseel.quest, (v) => {
         penseel.quest = v;
         bouwNeerzetten();
@@ -448,7 +447,7 @@
       .sort((a, b) => a[1].localeCompare(b[1], 'nl'));
   }
 
-  // Welk gesprek voert dit poppetje? Leeg is "zijn soort", en dat klopt voor Wim en de bakker.
+  // Welk gesprek voert dit poppetje? Leeg is "zijn soort" (of het gesprek van zijn karakter).
   // Maar negentien dorpelingen delen één soort, dus daar kies je er een eigen bij — anders zeggen
   // ze alle negentien hetzelfde (T.gesprekIdVan in js/gesprek.js).
   function gesprekVeld(doel, waarde, zet) {
@@ -486,7 +485,6 @@
     }
     if (penseel.soort === 'voorwerp') {
       const d = { x: t.x, y: t.y, tegel: `${penseel.vel}/${penseel.tegel}` };
-      if (penseel.raak) d.raak = penseel.raak;
       if (penseel.quest) d.quest = penseel.quest;
       return d;
     }
@@ -502,13 +500,6 @@
       dingenNu().push({ x: t.x, y: t.y, overgang: penseel.naar, komt });
       aansluiting = { vanKaart: kaartNaam, van: { x: t.x, y: t.y }, naar: penseel.naar };
       veranderd();
-      if (penseel.naar === 'toren') {
-        // De toren staat in code (js/wereld.js) en heeft zijn eigen deur terug; daar valt niets
-        // neer te zetten.
-        aansluiting = null;
-        el('wt-neerzetten-hint').textContent = 'De toren regelt zijn eigen kant.';
-        return;
-      }
       el('wt-kaart').value = penseel.naar;
       await laadKaart(penseel.naar, false);
       return;
@@ -1100,7 +1091,6 @@
         d.tegel = `${vel}/${v}`;
         veranderd();
       });
-      keuzeVeld(doel, 'raak', [['', '— geen —'], ...Object.keys(T.RAAKPUNTEN || {})], d.raak || '', zet('raak'));
       questVeld(doel, d.quest, zet('quest'));
     }
     tekstVeld(doel, 'x', d.x, (v) => { d.x = Math.round(v); veranderd(); }, 'number');
@@ -1157,11 +1147,6 @@
       kop(doel, `Voorwerp · ${v.soort}`);
       rij(doel, 'vel', `${v.vel} #${v.id}`);
       if (v.beslaat && (v.beslaat[0] > 1 || v.beslaat[1] > 1)) rij(doel, 'beslaat', `${v.beslaat[0]}×${v.beslaat[1]} tegels`);
-      if (v.raak) {
-        const r = T.RAAKPUNTEN[v.raak];
-        rij(doel, 'raak', v.raak, r ? 'wt-ja' : 'wt-nee');
-        if (r) rij(doel, 'spreuk', `${r.spreuk} — ${r.tekst}`);
-      }
       if (v.grendel) rij(doel, 'quest', `${v.grendel.quest}${v.grendel.fase ? ':' + v.grendel.fase.join(',') : ''}`);
       if (T.OPRAPEN && T.OPRAPEN[v.soort]) rij(doel, 'oprapen', T.OPRAPEN[v.soort].tekst);
     }
@@ -1357,11 +1342,6 @@
           markeer(v.x, v.y, kleur, 2);
           schrijf(v.x, v.y, `${v.soort} · ${v.grendel.quest}:${(v.grendel.fase || ['altijd']).join(',')}${ligtEr ? '' : ' (weg)'}`, kleur, 22);
         }
-        for (const v of w.voorwerpen) {
-          if (!v.raak) continue;
-          markeer(v.x, v.y, '#d58cc0', 2);
-          schrijf(v.x, v.y, `raak: ${v.raak}`, '#d58cc0', 22);
-        }
       }
 
       if (aan('uitgangen')) {
@@ -1443,8 +1423,8 @@
       o.textContent = naam;
       keuze.appendChild(o);
     }
-    // De grootste kaart is meestal de kaart waaraan gewerkt wordt; anders de eerste.
-    keuze.value = namen.includes('wereld') ? 'wereld' : namen[0];
+    // Het gehucht is de kaart waaraan gewerkt wordt; anders de eerste.
+    keuze.value = namen.includes('gehucht') ? 'gehucht' : namen[0];
     keuze.addEventListener('change', () => laadKaart(keuze.value));
     el('wt-verversen').addEventListener('click', () => laadKaart(keuze.value, true));
     el('wt-passend').addEventListener('click', passend);

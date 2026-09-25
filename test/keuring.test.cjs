@@ -53,7 +53,7 @@ function kaartje(objecten, extraLagen) {
 // nog wel in Tiled staat, is een eigen toets.
 // Een uitgang zit er standaard bij, want een kaart zonder uitgang is op zichzelf al een fout;
 // die toetsen we apart.
-const UITGANG = { x: 0, y: 0, overgang: 'toren', komt: '1,0' };
+const UITGANG = { x: 0, y: 0, overgang: 'proefbos', komt: '1,0' };
 const keur = (dingen, objecten, extraLagen) =>
   T.keurKaart('proefje', kaartje(objecten || [], extraLagen), { betekenis: { dingen } }).klachten;
 const teksten = (klachten) => klachten.map((k) => k.tekst).join(' | ');
@@ -66,13 +66,17 @@ test('de kaarten die er nu zijn, hebben geen enkele fout', () => {
   }
 });
 
-test('wat er op de grote kaart nog "let op" is, staat hier zwart op wit', () => {
-  // Niet elke opmerking is een defect: op wereld.tmj liggen plukjes gras achter de bomen waar je
-  // niet bij kunt. Dat mag, maar het hoort geteld te worden, zodat het opvalt als het ineens
-  // veel meer wordt — dan is er waarschijnlijk een pad dichtgegroeid.
-  const klachten = T.keurKaart('wereld', T.KAARTEN.wereld).klachten;
-  assert.deepEqual(klachten.map((k) => k.soort), ['let op']);
-  assert.match(klachten[0].tekst, /tegel\(s\) zijn begaanbaar maar vanaf geen enkele uitgang te bereiken/);
+test('wat er op het gehucht nog "let op" is, staat hier zwart op wit', () => {
+  // Niet elke opmerking is een defect. De weg de wereld in leidt sinds 25 sep nergens heen (het
+  // gehucht is daarom nog een proefkaart), en achter de bomen liggen plukjes gras waar je niet bij
+  // kunt. Dat mag, maar het hoort hier te staan, zodat het opvalt als er iets bijkomt — dan is er
+  // waarschijnlijk een pad dichtgegroeid. (Tot 25 sep keek deze toets naar kaarten/wereld.tmj.)
+  const klachten = T.keurKaart('gehucht', T.KAARTEN.gehucht).klachten;
+  assert.deepEqual(klachten.map((k) => k.soort), ['let op', 'let op', 'let op']);
+  const tekst = teksten(klachten);
+  assert.match(tekst, /overgang naar "wereld": die kaart is er \(nog\) niet/);
+  assert.match(tekst, /de overgang naar "wereld" heeft geen "komt"/);
+  assert.match(tekst, /tegel\(s\) zijn begaanbaar maar vanaf geen enkele uitgang te bereiken/);
 });
 
 test('een kaart zonder uitgang is een val', () => {
@@ -90,19 +94,34 @@ test('een wezen dat niet bestaat, wordt bij naam genoemd', () => {
   assert.equal(klachten[0].y, 2);
 });
 
-test('een quest die niet bestaat, en een fase die de quest niet heeft', () => {
+// Een quest alleen voor deze toetsen: er staat nog geen echte in js/quests.js (tot 25 sep was dat De
+// koude oven, van de bakker). Hij vraagt om een sleutel, van de heer.
+function metProefQuest(toets) {
+  T.QUESTS.proef = {
+    naam: 'De proef', gever: 'heer', begin: 'zoeken',
+    fasen: {
+      zoeken: { wegen: {
+        vinden: { kost: 'risico', naar: 'klaar', klaarAls: { heeft: 'sleutel' } },
+        kopen: { kost: 'goud', naar: 'klaar' },
+        vragen: { kost: 'gunst', naar: 'klaar' },
+      } },
+      klaar: { eind: true },
+    },
+  };
+  try {
+    toets();
+  } finally {
+    delete T.QUESTS.proef;
+  }
+}
+
+test('een quest die niet bestaat, en een fase die de quest niet heeft', () => metProefQuest(() => {
   const geenQuest = keur([UITGANG, { x: 2, y: 2, quest: 'slager:zoeken' }]);
   assert.match(teksten(geenQuest), /quest "slager", en die bestaat niet/);
 
-  const geenFase = keur([UITGANG, { x: 2, y: 2, quest: 'bakker:bakken' }]);
-  assert.match(teksten(geenFase), /fase "bakken", en die heeft "bakker" niet/);
-});
-
-test('een raakpunt dat nergens op slaat, en een raakpunt zonder tegel', () => {
-  const klachten = keur([UITGANG, { x: 2, y: 2, raak: 'molen' }]);
-  assert.match(teksten(klachten), /raak="molen" bestaat niet/);
-  assert.match(teksten(klachten), /zonder tegel/);
-});
+  const geenFase = keur([UITGANG, { x: 2, y: 2, quest: 'proef:bakken' }]);
+  assert.match(teksten(geenFase), /fase "bakken", en die heeft "proef" niet/);
+}));
 
 test('een overgang naar een gebied dat niet bestaat, en een komt die nergens op slaat', () => {
   const klachten = keur([{ x: 0, y: 0, overgang: 'moeras', komt: '9,9' }]);
@@ -111,14 +130,14 @@ test('een overgang naar een gebied dat niet bestaat, en een komt die nergens op 
 });
 
 test('een overgang zonder komt is geen fout maar wel iets om te weten', () => {
-  const klachten = keur([{ x: 0, y: 0, overgang: 'toren' }]);
+  const klachten = keur([{ x: 0, y: 0, overgang: 'proefbos' }]);
   assert.equal(klachten.length, 1);
   assert.equal(klachten[0].soort, 'let op');
   assert.match(klachten[0].tekst, /geen "komt"/);
 });
 
 test('een komt die naar de overgangstegel zelf wijst, kaatst je heen en weer', () => {
-  const klachten = keur([{ x: 0, y: 0, overgang: 'toren', komt: '0,0' }]);
+  const klachten = keur([{ x: 0, y: 0, overgang: 'proefbos', komt: '0,0' }]);
   assert.match(teksten(klachten), /kaats je heen en weer/);
 });
 
@@ -242,28 +261,17 @@ test('de dekking zegt wat het spel vraagt en nergens staat', () => {
   }
 });
 
-test('de dekking merkt op dat een quest een voorwerp vraagt dat nergens vandaan komt', () => {
-  const klachten = T.keurDekking();
-  // "leem" komt uit de leemkuil, en die ligt nog nergens; de kuil hoort dus genoemd te worden.
-  assert.match(teksten(klachten), /zodra je "leem" hebt, maar dat is nergens te krijgen/);
-});
+test('de dekking merkt op dat een quest een voorwerp vraagt dat nergens vandaan komt', () => metProefQuest(() => {
+  // De proefquest gaat vanzelf verder zodra je een sleutel hebt, en er ligt er op geen enkele kaart
+  // een; dat hoort de dekking te zeggen.
+  assert.match(teksten(T.keurDekking()), /zodra je "sleutel" hebt, maar dat is nergens te krijgen/);
+}));
 
-test('een wereld met de leem erin haalt die klacht weg', () => {
-  const leem = { soort: 'leem', x: 2, y: 2, grendel: { quest: 'bakker', fase: ['zoeken'] } };
-  const werelden = {
-    proefje: {
-      wezens: [{ soort: 'bakker' }, { soort: 'marskramer' }, { soort: 'smidsvrouw' }],
-      voorwerpen: [{ soort: 'oven', x: 4, y: 2, raak: 'oven' }],
-      questVoorwerpen: [leem],
-    },
-  };
-  const tekst = teksten(T.keurDekking({ werelden }));
-  assert.doesNotMatch(tekst, /nergens te krijgen/);
-  assert.doesNotMatch(tekst, /raakpunt "oven"/);
-  for (const wie of ['bakker', 'marskramer', 'smidsvrouw']) assert.doesNotMatch(tekst, new RegExp(`"${wie}" heeft een gesprek`));
-  // wim en de meester staan in dit proefwereldje niet, en dat hoort de dekking dan ook te zeggen.
-  assert.match(tekst, /"wim" heeft een gesprek/);
-});
+test('een wereld met de sleutel erin haalt die klacht weg', () => metProefQuest(() => {
+  const sleutel = { soort: 'sleutel', x: 2, y: 2, grendel: { quest: 'proef', fase: ['zoeken'] } };
+  const werelden = { proefje: { wezens: [{ soort: 'heer' }], voorwerpen: [], questVoorwerpen: [sleutel] } };
+  assert.doesNotMatch(teksten(T.keurDekking({ werelden })), /nergens te krijgen/);
+}));
 
 test('een questvoorwerp dat niet op te rapen is, loopt dood', () => {
   const werelden = {
@@ -277,8 +285,8 @@ test('een questvoorwerp dat niet op te rapen is, loopt dood', () => {
 });
 
 test('één mens kan niet op twee plekken staan', () => {
-  const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'bakker' }, { x: 4, y: 2, wie: 'bakker' }]);
-  assert.match(teksten(klachten), /"de bakker" staat ook al op \(2, 2\)/);
+  const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'smid' }, { x: 4, y: 2, wie: 'smid' }]);
+  assert.match(teksten(klachten), /"de smid" staat ook al op \(2, 2\)/);
 });
 
 test('een mens die niet in de lijst staat, wordt bij naam genoemd', () => {
@@ -286,9 +294,9 @@ test('een mens die niet in de lijst staat, wordt bij naam genoemd', () => {
 });
 
 test('twee monden voor één tekst valt op', () => {
-  // De bakker en een dorpeling die zijn gesprek leent: ze zeggen dan woord voor woord hetzelfde.
-  const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'bakker' }, { x: 4, y: 2, zaad: 3, gesprek: 'bakker' }]);
-  assert.match(teksten(klachten), /voert hetzelfde gesprek "bakker"/);
+  // Een boer en een dorpeling die zijn gesprek leent: ze zeggen dan woord voor woord hetzelfde.
+  const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'boer1' }, { x: 4, y: 2, zaad: 3, gesprek: 'zanger' }]);
+  assert.match(teksten(klachten), /voert hetzelfde gesprek "zanger"/);
 });
 
 test('een mens komt met zijn eigen naam en zijn eigen gesprek uit de kaart', () => {

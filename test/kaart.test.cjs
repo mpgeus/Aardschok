@@ -75,7 +75,7 @@ test('het monster staat op de goede tegel, met zijn gewone spullen uit T.WEZENS'
   assert.equal(monster.tx, 9);
   assert.equal(monster.ty, 7);
   assert.equal(monster.kant, 'monster');
-  assert.equal(monster.leven, 10); // komt uit T.maakWezen, dus uit dezelfde WEZENS-tabel als T.maakWereld()
+  assert.equal(monster.leven, 10); // komt uit T.maakWezen, dus uit dezelfde WEZENS-tabel als T.maakProefkamers()
 });
 
 test('een deur uit de kaart doet mee als een echte deur, met de goede richting', () => {
@@ -85,7 +85,7 @@ test('een deur uit de kaart doet mee als een echte deur, met de goede richting',
   assert.ok(deur);
   assert.equal(deur.staat, 'dicht');
   // ten noorden van de deur ligt de voet van het huis (vast): dan staat het deurpaneel dwars op x,
-  // net als T.maakWereld() dat voor de deuren in de toren uitrekent.
+  // net als T.maakProefkamers() dat voor de deuren in de toren uitrekent.
   assert.equal(deur.richting, 'ns');
   assert.equal(T.isBegaanbaar(w, 4, 6, { deurenOpenen: false }), false);
   assert.equal(T.isBegaanbaar(w, 4, 6, { deurenOpenen: true }), true);

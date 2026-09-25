@@ -15,9 +15,9 @@
 
   // Hoe hoog iets boven zijn tegel uitsteekt, om erop te kunnen klikken. Met sprites zijn de
   // figuren groter dan de vlakken waren, dus vraagt het aanwijzen het aan de sprites zelf.
-  const WEZEN_HOOGTE = { wim: 48, slijm: 28, skelet: 52 };
-  const VOORWERP_HOOGTE = { fontein: 32, kist: 36, trap: 46, sleutel: 28 };
-  const SPRITE_VOORWERP_HOOGTE = { fontein: 46, kist: 40, trap: 46, sleutel: 26 };
+  const WEZEN_HOOGTE = { slijm: 28, skelet: 52 };
+  const VOORWERP_HOOGTE = { fontein: 32, kist: 36, sleutel: 28 };
+  const SPRITE_VOORWERP_HOOGTE = { fontein: 46, kist: 40, sleutel: 26 };
   const hoogteVan = (e) =>
     T.sprites.aan && !T.debug.vlakken ? T.sprites.hoogte(e.soort) : WEZEN_HOOGTE[e.soort] || 48;
   const voorwerpHoogte = (v) =>
@@ -77,7 +77,7 @@
     if (!proefje && T.ui.toonBenoeming) T.ui.toonBenoeming(S);
   };
 
-  // Het beeld zoomt mee met het venster: op een groot scherm wordt de toren groter, op een
+  // Het beeld zoomt mee met het venster: op een groot scherm wordt het gehucht groter, op een
   // klein scherm nooit kleiner dan ware grootte.
   //
   // De buffer is hele css-pixels, niet devicePixelRatio maal zoveel. Op een scherm met ratio 1,5
@@ -249,7 +249,7 @@
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
     // net doorheen.
     if (S.naarGebied) T.gaNaarGebied(S, S.naarGebied);
-    // Quests gaan vanzelf verder (js/quest.js): heb je wat de bakker nodig heeft, dan schuift de
+    // Quests gaan vanzelf verder (js/quest.js): heb je wat een quest vraagt, dan schuift de
     // fase op, nog vóór er iets dwaalt of iemand je ziet. Het vak linksboven is van de quest die
     // je het eerst aannam.
     T.werkQuestsBij(S);
@@ -629,9 +629,9 @@
     // Een quest in een fase zetten zonder hem te spelen. Zo kun je zien wat het dorp in elke
     // fase zegt terwijl je de kaart nog tekent:
     //   Toren.debug.quest()                 → wat er loopt, en wat er te kiezen valt
-    //   Toren.debug.quest('bakker')         → de fasen van die quest, en waar hij nu staat
-    //   Toren.debug.quest('bakker', 'terug') → zet hem daar neer
-    //   Toren.debug.quest('bakker', 'uit')   → helemaal terug naar niet begonnen, beloning en al
+    //   Toren.debug.quest('molen')          → de fasen van die quest, en waar hij nu staat
+    //   Toren.debug.quest('molen', 'terug')  → zet hem daar neer
+    //   Toren.debug.quest('molen', 'uit')    → helemaal terug naar niet begonnen, beloning en al
     quest(naam, fase) {
       if (!naam) {
         return {

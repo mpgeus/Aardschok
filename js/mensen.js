@@ -8,7 +8,7 @@
 //
 // Nu is één mens één regel hier, en zegt de kaart alleen nog wáár hij staat:
 //
-//   kaarten/<naam>.betekenis.json:  { "x": 118, "y": 52, "wie": "bakker", "straal": 3 }
+//   kaarten/<naam>.betekenis.json:  { "x": 17, "y": 14, "wie": "boer1", "straal": 3 }
 //
 // Wie geen naam hoeft te hebben, staat er niet in. Dat is de menigte: `{ x, y, zaad: 7 }` zet een
 // gewone dorpeling neer die niets zegt en nergens bij hoort. Zie ontwerp/wereld.md, "Een flink
@@ -19,14 +19,14 @@
 // ── Vorm van één mens ──
 //
 //   T.MENSEN.<id> = {
-//     naam:     'de bakker',   // wat er boven zijn hoofd staat; mag weg als `wezen` het al zegt
-//     vel:      'wim',         // het vel dat hij leent zolang het zijne nog niet getekend is
+//     naam:     'Klaas',       // wat er boven zijn hoofd staat; mag weg als `wezen` het al zegt
+//     vel:      'boer',        // het vel dat hij leent zolang het zijne nog niet getekend is
 //     zaad:     4,             // óf: hij ís zolang een gewone dorpeling, met dit zaad
-//     wezen:    'wim',         // óf: hij leent een hele ingang uit T.WEZENS (alleen Wim en de
-//                              //     meester, want die worden in code neergezet)
+//     wezen:    'wolf',        // óf: hij leent een hele ingang uit T.WEZENS (tot 25 sep deden Wim
+//                              //     en de meester dat; nu niemand)
 //     straal:   3,             // hoe ver hij van zijn plek af dwaalt (de kaart mag het overrulen)
 //     snelheid: 1.3,           // alleen als hij anders loopt dan zijn wezen of een dorpeling
-//     gesprek:  'bakker',      // welk gesprek hij voert; zonder dit is het zijn eigen id
+//     gesprek:  'heer',        // welk gesprek hij voert; zonder dit is het zijn eigen id
 //     karakter: 'zanger',      // alleen de boeren: wie hij is als er niet geloot wordt (T.KARAKTERS
 //                              // hieronder, js/boeren.js). Zijn gesprek is dan dat van zijn
 //                              // karakter, en alleen wie een karakter heeft, kan aan de schandpaal.
@@ -43,14 +43,11 @@
   'use strict';
 
   T.MENSEN = {
-    // Wie in code wordt neergezet en dus een eigen T.WEZENS-ingang houdt: Wim veegt de hal van de
-    // toren (T.maakWereld), de meester heeft zijn eigen loopmaat.
-    meester: { wezen: 'meester' },
-    wim: { wezen: 'wim' },
-
-    // Het dorp, zoals ontwerp/wereld.md het opschrijft. `snelheid` moet gelijk zijn aan de
-    // SNELHEID-constante van zijn animatie (de dorpelingen*.cjs in gereedschap/pixelart), anders
-    // gaan zijn voeten over de grond glijden.
+    // Het dorp, zoals ontwerp/wereld.md het opschrijft. Ze stonden op de oude kaart
+    // (kaarten/wereld.tmj), die op 25 sep wegging met het oude spel; hun vellen en hun loopmaat
+    // blijven hier, voor als het gehucht een dorp wordt (werklijst punt 14). `snelheid` moet gelijk
+    // zijn aan de SNELHEID-constante van zijn animatie (de dorpelingen*.cjs in gereedschap/pixelart),
+    // anders gaan zijn voeten over de grond glijden.
     smid: { naam: 'de smid', snelheid: 1.5, straal: 3 },
     smidsvrouw: { naam: 'de smidsvrouw', snelheid: 1.45, straal: 3 },
     herbergierster: { naam: 'de herbergierster', snelheid: 1.4, straal: 3 },
@@ -64,12 +61,11 @@
     meisje: { naam: 'het meisje', snelheid: 1.25, straal: 3 },
     kleuter: { naam: 'de kleuter', snelheid: 0.85, straal: 3 },
 
-    // De twee die De koude oven nodig heeft. De bakker krijgt zijn eigen vel bij fase B2b; tot die
-    // tijd leent hij dat van Wim, en dus ook zijn loopmaat. De marskramer loopt sinds 25 sep op zijn
-    // eigen vel, klein en krom onder zijn rek (gereedschap/pixelart/dorpelingen3.cjs; ontwerp/beeld.md,
-    // "De marskramer loopt"), en dat is op deze snelheid gemaakt.
-    bakker: { naam: 'de bakker', snelheid: 1.4, straal: 2, vel: 'wim' },
-    marskramer: { naam: 'de marskramer', snelheid: 1.4, straal: 2 },
+    // De marskramer loopt sinds 25 sep op zijn eigen vel, klein en krom onder zijn rek
+    // (gereedschap/pixelart/dorpelingen3.cjs; ontwerp/beeld.md, "De marskramer loopt"), en dat is
+    // op deze snelheid gemaakt. Hij komt over de weg en staat op geen kaart (`bezoeker`, zie de heer
+    // hieronder): tot 25 sep stond hij ook in het dorp van het oude spel.
+    marskramer: { naam: 'de marskramer', snelheid: 1.4, straal: 2, bezoeker: true },
 
     // De heer en zijn soldaten (js/heer.js): ze komen op Sint-Maarten over de weg, en niet op een
     // kaart. Sinds 24 sep hebben ze hun eigen vellen, in rood en geel, het huis van de heer
@@ -99,8 +95,8 @@
     // "Het eerste proefje"), elk met zijn eigen akker (`huis` op de kaart koppelt hem aan zijn
     // akker(s), js/kaart.js/js/akkers.js). Vijf eigen ingangen in plaats van steeds "boer"/
     // "boerin" hierboven, want één mens kan van T.keurKaart maar op één plek staan (gereedschap/
-    // keuring.js) — dit zijn wél vijf keer hetzelfde geleende vel, en dat mag: net als de bakker
-    // hierboven lenen ze het van wie het al heeft, om en om "boer" en "boerin" voor wat variatie.
+    // keuring.js) — dit zijn wél vijf keer hetzelfde geleende vel, en dat mag: ze lenen het van wie
+    // het al heeft, om en om "boer" en "boerin" voor wat variatie.
     //
     // Sinds Sint-Maarten (24 sep, js/heer.js) hebben ze een naam, want wie de heer te weinig geeft,
     // zet iemand aan de schandpaal, en dan moet je ze uit elkaar kunnen houden. Wie ze zijn en wat
