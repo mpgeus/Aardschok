@@ -270,6 +270,33 @@ schuur, en die telt de inner helemaal. Je kunt hem nu alleen gebouwen laten miss
   krijgt de marskramer een tweede rol: wie kaas en wol vóór oogstmaand aan hem verkoopt, heeft goud,
   en goud kan weg.
 
+**Daarna koos Marcel (25 sep) de plekken, alle vier uit een voorstel van Claude.** Elke plek werkt
+anders, zodat het een afweging wordt waar je iets neerzet, en niet alleen "zo veel mogelijk erin".
+De getallen zijn een eerste gok voor de werkbank:
+
+| plek | wat erin past | de soldaten | wat het kost |
+|---|---|---|---|
+| je eigen kelder | 40 graan | vinden het vaak: bij de schout kijken ze eerst | niets |
+| de kelder van een boer | 40 graan | soms | de familie weet het (hun karakter telt) |
+| de kapel (als je er een bouwt) | 120 graan | bijna nooit: gewijde grond | de kapelaan houdt een tiende |
+| een plek in het bos (stap 2) | zoveel je wilt | nooit: ze zoeken in het dorp | ver lopen, muizen en vocht, en later een pad |
+
+- **Het werkt overal hetzelfde:** je loopt erheen en zet graan of goud weg, of haalt het terug. Goud
+  past overal bij, in een pot onder de vloer. Verstopt graan kun je niet eten tot je het terughaalt.
+- **Het spannende zit in de timing.** De rekening komt van wat de inner op 15 oogstmaand ziet, op
+  Sint-Maarten doorzoeken de soldaten het dorp, en bij veel argwaan komt de inner onverwacht terug.
+  Wanneer haal je het terug, als je het de winter door moet eten?
+- **Het karakter van de familie telt, meteen.** De roddelaar vertelt het rond, de vrome weigert (hij
+  bidt ook voor de heer), de woekeraar wil zijn deel, en de oudste weet nog waar zijn vader het graan
+  verstopte toen de vorige heer kwam.
+- **De kapelaan houdt een tiende** van wat je in de kapel zet: de kerk beschermt je, maar niet voor
+  niets.
+- **Het spoor van goud is de marskramer.** Hij vertelt de inner wat hij je betaalde; wie veel
+  verkocht en een lege kist heeft, valt op. Hem omkopen hoort bij stap 3.
+- **In drie stappen:** (1) kelders en de kapel, voor graan en goud, de inner telt de kist en de
+  soldaten zoeken plek voor plek; (2) het bos, als plek voor graan en voor de kudde, met de inner die
+  de kudde telt en kaas en wol als sporen; (3) de marskramer handelt in vee, kaas, wol en hooi.
+
 ## Gebouwen (Marcel, 23 sep 2026)
 
 > We hebben types gebouwen nodig. Dus huis, deze zorgen ervoor dat je populatie kan groeien;
