@@ -87,7 +87,8 @@ een akker, zodat die niet uitput. Wat Marcel niet koos, zijn opties. Een proef v
 `spel.md`. `npm test`: 494/494.
 
 **Loopt nu:** niets. De heide is ook getekend (een nieuwe grondsoort, `beeld.md`, "De heide") en
-ligt op de kaart, met de schaapskooi aan de noordrand.
+ligt op de kaart, met de schaapskooi aan de noordrand. Nieuw in de rij: **straten en paden** (punt
+6c, na het ontginnen; Marcel koos op 25 sep, `spel.md`, "Straten en paden").
 
 **Daarna, Marcel kiest:**
 - **De weides, stap 3: vee dat telt.** De inner telt de kudde, de heer vraagt per dier, je drijft een
