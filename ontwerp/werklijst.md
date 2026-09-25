@@ -68,12 +68,10 @@ komen, `Toren.debug.inner()` de inner (`(true)`: onverwacht terug), `Toren.debug
 zijn argwaan, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
 bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
 
-**Loopt nu:** niets. Er draait geen agent.
-
-**Volgende tekenwerk:** ronde 2 van "een gezicht per karakter" (`beeld.md`): de vrome, de
-roddelaar, de oudste, de nieuwkomer en de drinker, op het lijf van de boer en de boerin (tien
-vellen). Dat kan op dezelfde manier als ronde 1: een regel in de tabel in
-`gereedschap/pixelart/karakters.cjs` per karakter, en de hulpjes die er al staan.
+**Loopt nu:** ronde 2 van "een gezicht per karakter" (Marcel, 25 sep: "Ja, start ronde 2";
+`beeld.md`). Een agent maakt de vrome, de roddelaar, de oudste, de nieuwkomer en de drinker, op
+het lijf van de boer en de boerin (tien vellen), op dezelfde manier als ronde 1: een regel per
+karakter in de tabel in `gereedschap/pixelart/karakters.cjs`, en de hulpjes die er al staan.
 
 **Volgende stap: punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud,
 die de inner niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de
