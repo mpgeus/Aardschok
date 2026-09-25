@@ -261,10 +261,6 @@
     // Met een spreuk in de hand vraagt elke klik iets anders (zie toveren.js).
     if (S.spreuk) return T.handelingSpreuk(S, doel);
     if (!doel) return null;
-    // Wat de tutorial hier anders laat gaan (js/tutorial.js): het water in de fontein is dan voor
-    // de meester, ook midden in een gevecht.
-    const anders = T.tutorialHandeling && T.tutorialHandeling(S, doel);
-    if (anders) return anders;
     const w = S.wereld;
     const held = S.held;
     const ap = held.ap;
@@ -406,8 +402,7 @@
     else T.ui.toonVolgorde(S);
   }
 
-  // Ook buiten een gevecht: in een scène kan de meester een monster vellen (js/tutorial.js), en
-  // dan is er geen beurtvolgorde om het uit te halen.
+  // Werkt ook zonder gevecht: dan is er geen beurtvolgorde om het uit te halen.
   function sterf(S, e) {
     e.dood = true;
     e.sterfTijd = 0;
@@ -452,7 +447,7 @@
         'Honderd',
         '<p>Je bent honderd jaar geworden. Je gaat zitten waar je staat, net als je meester, en sluit je ogen. Wim zal de trap nog één keer vegen.</p>',
         'Opnieuw proberen',
-        () => T.nieuwSpel(true),
+        () => T.nieuwSpel(),
       );
     });
   };

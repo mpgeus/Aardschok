@@ -674,6 +674,10 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
 ## Sint-Maarten: de heer komt innen (Marcel, 24 sep 2026)
 
 **Zo werkt het nu** (25 sep; `js/heer.js`, de vensters in `js/hud.js`):
+- Een nieuw spel begint met zijn benoemingsbrief (`T.ui.toonBenoeming`): hij benoemt je tot schout,
+  je voorganger "is nu elders", en hij zegt dat hij op Sint-Maarten komt halen wat hem toekomt en
+  dat de inner in oogstmaand komt tellen. De tijd staat stil tot je hem sluit. (Marcel koos hem op
+  25 sep in plaats van een titelscherm; zie onder Open.)
 - Op 1 wijnmaand komt zijn brief, een schatting. Op 11 slachtmaand komt hij zelf met twee soldaten
   naar de brink, en de tijd staat stil tot je bij hem bent geweest. Bij argwaan vanaf 50% doorzoeken
   de soldaten eerst het dorp.

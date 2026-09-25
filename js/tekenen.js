@@ -1208,7 +1208,7 @@
       if (effectenAan() && nk.lijst.length) overlaag(ctx, deel, p.x, p.y, kleur('vuur', 5), flitsOp(S, v.x, v.y));
       if (v.soort === 'fontein' && !S.fonteinLeeg) {
         // Het water blijft bewegen: een rimpel over de kom en een druppel in de straal. Een lege
-        // fontein (de meester dronk de laatste slok, js/tutorial.js) staat stil.
+        // fontein (je nam zelf de laatste slok) staat stil.
         const golf = (Math.sin(S.tijd * 2.2) + 1) / 2;
         ctx.strokeStyle = `rgba(200, 230, 255, ${0.18 + golf * 0.22})`;
         ctx.lineWidth = 1;
@@ -1222,19 +1222,6 @@
     if (v.soort === 'kist') {
       T.blok(ctx, p.x, p.y, 0.34, 0.34, 28, '#8a5a2c', { helder });
       T.blok(ctx, p.x, p.y, 0.36, 0.36, 4, '#6e4622', { helder, basis: 28 });
-      return;
-    }
-    // Wat de tutorial neerzet (js/tutorial.js): een ton, wat er van een ton over is, en een zak.
-    if (v.soort === 'ton') {
-      T.blok(ctx, p.x, p.y, 0.26, 0.26, 30, '#7a5230', { helder });
-      return;
-    }
-    if (v.soort === 'puin') {
-      T.blok(ctx, p.x, p.y, 0.3, 0.3, 3, '#6e4622', { helder });
-      return;
-    }
-    if (v.soort === 'zak') {
-      T.blok(ctx, p.x, p.y, 0.22, 0.22, 16, '#b99a64', { helder });
       return;
     }
     if (v.soort === 'schandpaal') {

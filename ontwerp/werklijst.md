@@ -147,7 +147,7 @@ nog nodig is".
    in een gevecht krijgt de schout voorlopig levenspunten. 7a tot en met 7d gaan achter elkaar, met
    na elke stap een paar regels aan Marcel; voor 7e (de namen) opent hij eerst het gehucht nog eens.
    In stappen, elk met `npm test` groen en een eigen commit (voorstel van Claude):
-   - **7a. Het gehucht wordt het begin.** `index.html` opent zonder `?kaart=` meteen het gehucht,
+   - **7a. Het gehucht wordt het begin** (af, 25 sep). `index.html` opent zonder `?kaart=` meteen het gehucht,
      met eerst de benoemingsbrief van de heer. De tutorial eruit: `js/tutorial.js`, `js/regie.js`,
      het titelscherm, de oude meester, en het draaiboek `T.TUTORIAL_TEKST` met zijn plek in de
      gespreksschrijver (`gereedschap/gesprekken-tool.js`; `test/bronblok.test.cjs` kijkt op de

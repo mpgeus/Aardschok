@@ -11,8 +11,8 @@ Tot 23 sep was het De laatste klim: een tovenaar van 84 met zijn leeftijd als le
 toren. Marcel vond het doel niet goed genoeg. De kunst en de techniek eronder blijven: het
 isometrische beeld (Mystic Towers als voorbeeld), de HD-pixel art uit code, en een naadloze
 overgang van rondlopen naar een gevecht in beurten op tegels (Fallout, Jagged Alliance 2). De code
-van het oude spel (toren, spreuken, leeftijd, tutorial) staat er nog tot hij eruit gaat; zie de
-werklijst.
+van het oude spel (toren, spreuken, leeftijd) staat er nog tot hij eruit gaat; de tutorial ging
+er op 25 sep al uit. Zie de werklijst, punt 7.
 
 Code, commentaar en spelteksten zijn Nederlands, zoals in Marcels Planner.
 
@@ -152,7 +152,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wordt neergezet — en een dorpeling is dat niet. Daar staan alleen nog de held, Wim, de meester
   en de monsters; de veertien dorpelingen die er met veertien keer dezelfde regel in stonden, zijn
   op 22 sep naar `mensen.js` verhuisd. Een mens met `wezen: 'wim'` leent er nog wel een.
-- `js/akkers.js`: **alleen het gehucht** (`?kaart=gehucht`, `ontwerp/spel.md`): welk stadium een
+- `js/akkers.js`: **alleen het gehucht** (`ontwerp/spel.md`): welk stadium een
   akker heeft op welke dag (`T.AKKER_STADIA`, één tabel, `T.akkerStadium`), het windbeeld per
   tegel (`T.windBeeld`) en zijn vaste variant (`T.akkerVariant`), waar een boer in het
   groeiseizoen dwaalt (`T.wandelAnker`, anders gewoon bij zijn huis) en de oogst zelf, tegel voor
@@ -191,9 +191,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   getal één plek houdt; de namen; en `T.WERKBANK` met alle getallen, die vóór een keuze gaan. Het
   komt ná alle regels en gesprekken, want het neemt hun waarden als standaard, en het gereedschap
   laadt het bewust niet), en `js/hud.js` (de balk, het bouwmenu onder
-  `B`, het veldenvenster onder `V`, het handelsvenster, de brief en het betalen aan de heer, alleen
-  met `?kaart=gehucht` of `?hud`). Het begin zonder tutorial is
-  `T.beginOpKaart` (`js/gebied.js`); de kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de
+  `B`, het veldenvenster onder `V`, het handelsvenster, de brief en het betalen aan de heer, en de
+  benoemingsbrief `T.ui.toonBenoeming` waarmee een nieuw spel begint; aan, behalve met `?kaart=`
+  naar een kaart van het oude spel). Een nieuw spel begint in het gehucht met `T.beginOpKaart`
+  (`js/gebied.js`; `?kaart=<naam>` begint op een andere kaart, zonder brief); de kaart komt uit
+  `gereedschap/tiled/maak-gehucht.cjs`, de
   bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen
   om bij te stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
   `T.BEHOEFTEN_INSTELLINGEN`, `T.AKKER_STADIA`, `T.GRAAN_PER_TEGEL`, `T.HANDEL_INSTELLINGEN`,
@@ -304,10 +306,7 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
   het gesprek in deze situatie, vanzelf neergelegd, klikken springt naar de tekst — een kaartje
   erbij en geen canvas in plaats van, want slepen is een tweede baan en een canvas zet alle
   voorwaarden weer tegelijk in beeld. In de kopbalk **zoek je over alle mensen heen**; klikken
-  brengt je naar een situatie waarin die zin ook echt klinkt. Onderaan de personenlijst staat
-  **het draaiboek van de tutorial** (`T.TUTORIAL_TEKST`): geen gesprek maar de momenten van de
-  openingsscène, in de volgorde die uit `js/tutorial.js` zelf gelezen wordt. Zie
-  `ontwerp/verhaal.md`.
+  brengt je naar een situatie waarin die zin ook echt klinkt.
   Allebei starten ze zichzelf niet meer: de bladzijde die ze gebruikt roept
   `T.gesprekkenTool.start()` of `T.questsTool.start()` aan, met `.kies(...)` en `.begin(...)` /
   `.beginVoor(...)` erbij. Zo zet `wereld.html` dezelfde bewerkers in een paneel, zonder een
@@ -316,7 +315,8 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
   bestand in kop, blok en staart (`T.bronBlok(tekst, 'T.GESPREKKEN')`); de bewerker regenereert
   alleen het blok, en kop en staart gaan letterlijk mee terug. Dat is geen netheid maar noodzaak:
   vóór 22 sep schreef de gespreksbewerker `js/gesprekken.js` helemaal opnieuw, kende
-  `T.TUTORIAL_TEKST` niet, en wiste één keer opslaan dus het hele draaiboek van de tutorial. Wie
+  `T.TUTORIAL_TEKST` niet (het draaiboek van de tutorial, dat er tot 25 sep achter stond), en
+  wiste één keer opslaan dus dat hele draaiboek. Wie
   een bewerker bouwt of uitbreidt, houdt zich hieraan; `test/bronblok.test.cjs` bewaakt het op de
   echte bestanden. Commentaar in het bestand hangt aan wat eronder staat — een persoon, een knoop,
   één regel tekst, één antwoord — en komt bij het opslaan terug op zijn plek.

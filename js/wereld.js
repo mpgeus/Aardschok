@@ -43,15 +43,6 @@
     // de verdiepingen bestaan nog niet — maar het beeld ligt klaar (gereedschap/pixelart/trap.cjs).
     trapgat: { blokkeert: true, zichtDicht: false, voet: { dx: -2, dy: -2, b: 3, h: 3 } },
     sleutel: { blokkeert: false, zichtDicht: false },
-    // Een oude ton: breekt in duigen als je hem met je staf slaat (`breekt`: wat er dan van over
-    // is). De meester schiet er in de tutorial een vuurschicht op en mept hem daarna kapot, en
-    // jij doet de tweede (js/tutorial.js). Het beeld, het puin en de zak liggen klaar in
-    // beelden/voorwerpen.png.
-    ton: { blokkeert: true, zichtDicht: false, breekt: 'puin', naam: 'de ton' },
-    puin: { blokkeert: false, zichtDicht: false },
-    // De zak zaaigoed die de meester wil hebben; je raapt hem op door erop te stappen, net als de
-    // sleutel (js/verkennen.js).
-    zak: { blokkeert: false, zichtDicht: false },
     // De schandpaal van de heer op de brink: komt er de eerste keer dat hij iemand straft, en blijft
     // staan (js/heer.js, T.zetSchandpaalNeer).
     schandpaal: { blokkeert: true, zichtDicht: false, naam: 'de schandpaal' },

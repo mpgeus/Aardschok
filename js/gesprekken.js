@@ -58,8 +58,8 @@
 
   T.GESPREKKEN = {
     // Wim is de knecht van de meester (ontwerp/verhaal.md, Personen). Hij heeft zijn hele leven
-    // voor hem gewerkt, en je erft hem samen met de toren. Zolang de meester leeft (de tutorial,
-    // js/tutorial.js), zegt Wim "meester" tegen hém en "u" tegen jou. Na de dood (vlag
+    // voor hem gewerkt, en je erft hem samen met de toren. Zolang de meester leeft (de tutorial van
+    // het oude spel), zegt Wim "meester" tegen hém en "u" tegen jou. Na de dood (vlag
     // meesterDood) zegt hij het, aarzelend, tegen jou.
     wim: {
       naam: 'Wim',
@@ -195,9 +195,9 @@
         },
       },
     },
-    // De oude meester, in de tutorial (js/tutorial.js): wat hij zegt als je hem aanspreekt
-    // tussen de scènes door, namelijk waar hij je voor nodig heeft. De scènes zelf staan hieronder,
-    // in T.TUTORIAL_TEKST.
+    // De oude meester, uit de tutorial van het oude spel: wat hij zegt als je hem aanspreekt,
+    // namelijk waar hij je voor nodig heeft. De tutorial ging er op 25 sep uit; hij gaat weg met de
+    // oude kaart (ontwerp/werklijst.md, punt 7c).
     meester: {
       naam: 'de oude meester',
       start: 'nu',
@@ -758,88 +758,5 @@
         },
       },
     },
-  };
-
-  // De tutorial: wat de meester en Wim zeggen in de scènes van js/tutorial.js, in de volgorde
-  // waarin het gebeurt. Elke regel is één keer "Verder". Wie er praat, staat bij de naam van het
-  // stuk; de meester zegt "jongen" tegen je, al ben je vierentachtig. Eerste, ruwe versie
-  // (22 sep 2026): om te polijsten. De toon: weemoedig met een knipoog, nooit grappig ten koste
-  // van de ernst (ontwerp/verhaal.md).
-  T.TUTORIAL_TEKST = {
-    // De meester, als het spel begint: hij staat in zijn moestuin en ziet je de toren uit komen.
-    roepen: ['Daar ben je. Kom eens hier, jongen. Ik roep niet meer zo hard als vroeger.'],
-    // De meester, bij de oude ton (in het ontwerp een kraai op zijn kool; die is er nog niet).
-    tonVoor: [
-      "Zie je die ouwe ton? Daar zitten de hele dag kraaien op, en 's avonds zitten ze in mijn kool.",
-      'Let op.',
-    ],
-    // Na de vuurschicht: zevenennegentig werd achtennegentig, en hij lacht erom.
-    tonNa: ['Ha! Achtennegentig. Een heel jaar, voor een ton. En hij staat er nog ook.'],
-    boodschap: [
-      'Weet je wat? Haal eens een kom water uit de fontein voor me. En een zak zaaigoed uit de voorraadkamer; de wintergroente moet erin voor het gaat vriezen.',
-      'Wim zegt dat er sinds vannacht iets in de voorraadkamer zit. Loop gebukt, dan ziet het je pas als je er vlak bij bent.',
-      'En ziet het je toch: een stap terug, en de deur dicht. Die beesten doen geen deuren open. Dat heeft niemand ze ooit geleerd.',
-    ],
-    // Wim, als je voor het eerst de hal in komt.
-    wimBinnen: [
-      'O, u bent het. Ik dacht even dat het de meester was.',
-      'Water uit de fontein? Voor hem? Er zit bijna niets meer in, en dat weet hij best.',
-    ],
-    // Wim, als je de kom hebt geschept. Er blijft één slok over: de laatste, en die is van jou.
-    wimSchep: ['Nu zit er nog één slok in. De laatste. Als hij er later om verlegen zit: ik heb het gezegd.'],
-    // Wim, als de slijmkruiper je gezien heeft en jij de deur hebt dichtgegooid.
-    terugkruipen: ['Hij kruipt weer naar achteren, hoor ik. Nu gebukt erin, dan hoort hij u niet.'],
-    // De meester, als je hem zijn water en zaaigoed brengt.
-    drinkenVoor: ['Ah. Water.'],
-    // Na het water: achtennegentig werd zesennegentig.
-    drinkenNa: ['Zie je wel? Zesennegentig. Het is maar een getal.'],
-    // Na de klap met zijn staf.
-    staf: ['En dit kost niets. Een goeie klap met je staf. Het enige in dit vak dat niets kost.'],
-    jij: ['Daar staat er nog een. Jij.'],
-    // Als jij de tweede ton kapot hebt geslagen.
-    goedzo: ['Zo. Niets gekost. Onthoud dat, als je ooit denkt dat je moet toveren.'],
-    bonen: ['Nu de bonen nog.'],
-    // Wim, die de toren uit komt rennen.
-    wimOnraad: ['Meester! Meester! Er komt iets de trap af!'],
-    // De meester, tussen jou en de toren.
-    blijfAchter: ['Blijf achter me, jongen.'],
-    taai: ['Taai ding.'],
-    // Voor de laatste spreuk: hij staat op negenennegentig, en weet wat de volgende kost.
-    laatste: ['Negenennegentig.', 'Had ik die ton maar laten staan.', 'Nog één, jongen. Kijk goed.'],
-    // Wim, bij de meester.
-    rouw: ['Meester?', 'Meester.', 'Hij had zijn bonen nog niet gedaan.'],
-    // Wim, bij de meester, als je te lang weg was en hem dood terugvindt. De eerste regel tegen jou,
-    // de rest tegen hem. Wat er gebeurd is, vertelt hij niet.
-    rouwLaat: ['U was er niet.', 'Hij had zijn bonen nog niet gedaan.'],
-    // Wim, tegen jou.
-    overnemen: ['...Meester?', 'Ik ga de trap vegen. Dat deed ik altijd, als ik niet wist wat ik moest doen.'],
-
-    // ── Als je vastzit ──
-    //
-    // Het vak linksboven dat je vertelde welke knop je moest indrukken, is er op 22 sep uit
-    // gegaan (Marcel: "veel te cringe"). ontwerp/verhaal.md zegt waarom: iemand die stilstaat en
-    // uitlegt is een tutorial. Wat ervoor in de plaats komt is een mens: sta je een poos stil op
-    // hetzelfde moment, dan zegt Wim er iets over als hij in de buurt is, en anders de meester.
-    //
-    // Zolang hieronder niets staat, zegt er ook niemand iets. Dat is met opzet: beter stil dan
-    // een uitlegger. Wat er komt te staan, hoort te klinken als iemand die zich ermee bemoeit —
-    // niet als een aanwijzing. ("Hij staat daar. Bij zijn bonen." zegt hetzelfde als "Loop naar de
-    // meester", maar het is iemand die het zegt.)
-    //
-    // Te bewerken in gereedschap/gesprekken.html, onder "De tutorial".
-
-    // Je bent de toren uit en de meester roept je, maar je blijft staan.
-    vastMeester: [],
-    // Hij vroeg om water uit de fontein, en je hebt de kom nog niet.
-    vastKom: [],
-    // De kom heb je; de zak zaaigoed uit de voorraadkamer nog niet. Daar zit de slijmkruiper.
-    vastZak: [],
-    // Je hebt allebei, maar je brengt ze hem niet.
-    vastBrengen: [],
-    // De slijmkruiper heeft je gezien en je staat stil in het gevecht. (Een stap terug, de deur
-    // dicht — dat zei hij zelf al bij de boodschap, dus dit is de herinnering, niet de uitleg.)
-    vastGezien: [],
-    // Hij heeft één ton kapotgeslagen en wacht tot jij de andere doet.
-    vastSlaan: [],
   };
 })(globalThis.Toren = globalThis.Toren || {});

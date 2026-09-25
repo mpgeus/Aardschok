@@ -34,7 +34,7 @@
 //               in de toets van drie antwoorden.
 //   naar      — de fase waarin je terechtkomt.
 //   klaarAls  — deze weg gaat vanzelf zodra die voorwaarde klopt; T.werkQuestsBij kijkt dat elk
-//               beeld na, net als de tutorial. Zonder klaarAls loopt hij alleen via een gesprek.
+//               beeld na. Zonder klaarAls loopt hij alleen via een gesprek.
 //   doe       — een gevolg bij het nemen van deze weg (goud eraf, een voorwerp weg).
 //
 // Welke weg je nam blijft staan, zodat het dorp erop kan reageren: als: { quest: 'bakker',

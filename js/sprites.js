@@ -690,12 +690,8 @@
       return { naam, houding, richting: st.richting, fase: (st.afgelegd / cyclus) % 1 };
     }
     // Stilstaan: ademen, elk wezen in zijn eigen tempo (e.fase). Wim veegt ondertussen, en in een
-    // gesprek praat hij. In een scène (js/regie.js) praat hij als hij aan het woord is, en staat
-    // hij anders stil: niemand veegt terwijl zijn meester sterft.
-    const wimRust = () => {
-      if (spel.spreektMet === e) return 'praten'; // in een gesprek of een scène (S.spreektMet)
-      return spel.modus === 'regie' ? 'staan' : 'vegen';
-    };
+    // gesprek praat hij.
+    const wimRust = () => (spel.spreektMet === e ? 'praten' : 'vegen');
     // Een dier (js/vee.js) graast, staat te herkauwen of ligt. Wat het nu doet, komt uit de tijd en
     // zijn zaad (T.rustVanDier), niet uit een worp per beeld: zo flikkert het niet, en gaat niet de
     // hele kudde tegelijk liggen.

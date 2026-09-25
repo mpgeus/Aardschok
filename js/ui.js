@@ -15,17 +15,6 @@
     '<circle cx="7" cy="12" r="4.2" fill="none" stroke="#e2b64a" stroke-width="2.4"/>' +
     '<path d="M11 12h10M17 12v4M20.5 12v3" stroke="#e2b64a" stroke-width="2.4" stroke-linecap="round" fill="none"/>' +
     '</svg>';
-  // Wat je in de tutorial voor de meester haalt: een kom water uit de fontein en een zak zaaigoed.
-  const KOM_ICOON =
-    '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">' +
-    '<path d="M3.5 10.5h17c-.6 5-3.9 8-8.5 8s-7.9-3-8.5-8z" fill="#8a5a2c" stroke="#c89a5a" stroke-width="1.4"/>' +
-    '<ellipse cx="12" cy="10.5" rx="8.5" ry="2.2" fill="#6fb4e6"/>' +
-    '</svg>';
-  const ZAK_ICOON =
-    '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">' +
-    '<path d="M8 6.5c-3 3-4.5 6.5-4.5 9.5 0 3 3.5 4.5 8.5 4.5s8.5-1.5 8.5-4.5c0-3-1.5-6.5-4.5-9.5z" fill="#b99a64" stroke="#e0c890" stroke-width="1.3"/>' +
-    '<path d="M8.5 6.5h7M9.5 6.5l-1-3M14.5 6.5l1-3" stroke="#e0c890" stroke-width="1.4" stroke-linecap="round" fill="none"/>' +
-    '</svg>';
   // De drie dingen waarmee de scheur in de schoorsteen van de bakker te dichten is (De koude
   // oven, js/quests.js): natte leem uit de kuil, een zak vuurklei van de marskramer, en oude
   // vuurstenen van de smidse.
@@ -47,14 +36,12 @@
     '</svg>';
   const ICONEN = [
     ['sleutel', 'IJzeren sleutel', SLEUTEL_ICOON],
-    ['kom', 'Een kom water uit de fontein, voor de meester', KOM_ICOON],
-    ['zak', 'Een zak zaaigoed, voor de meester', ZAK_ICOON],
     ['leem', 'Natte leem uit de kuil bij de beek', LEEM_ICOON],
     ['vuurklei', 'Een zak vuurklei van de marskramer', VUURKLEI_ICOON],
     ['vuursteen', 'Oude vuurstenen van de smidse', VUURSTEEN_ICOON],
   ];
 
-  // De opdracht van dit moment (js/tutorial.js of een quest), linksboven onder de leeftijd. Het element staat
+  // De opdracht van dit moment (een quest), linksboven onder de leeftijd. Het element staat
   // niet in index.html maar wordt hier gemaakt, zoals het portret in js/dialoog.js, en de opmaak
   // staat erbij. Alleen als de tekst verandert, wordt hij aangeraakt.
   let opdrachtEl = null;
@@ -118,22 +105,22 @@
     },
 
     // Wat er nu van je gevraagd wordt; null laat het vak verdwijnen. `tekst` mag <kbd> bevatten.
-    // De kop zegt wie het vraagt: de meester in de tutorial, anders de naam van de quest.
+    // De kop zegt wie het vraagt: de naam van de quest.
     opdracht(tekst, kop) {
-      const nu = tekst ? `${kop || 'De meester vraagt'}|${tekst}` : null;
+      const nu = tekst ? `${kop || 'Te doen'}|${tekst}` : null;
       if (nu === vorigeOpdracht) return;
       vorigeOpdracht = nu;
       const el = opdrachtVak();
       el.classList.toggle('verborgen', !tekst);
       if (tekst) {
         el.innerHTML =
-          `<div style="font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em">${kop || 'De meester vraagt'}</div>` +
+          `<div style="font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em">${kop || 'Te doen'}</div>` +
           `<div>${tekst}</div>`;
       }
     },
 
-    // Goud, naast de leeftijd. Het vakje komt pas als je ooit goud had: in de tutorial heeft
-    // niemand het erover, en een leeg vakje dat nul zegt is alleen maar ruis.
+    // Goud, naast de leeftijd. Het vakje komt pas als je ooit goud had: een leeg vakje dat nul
+    // zegt is alleen maar ruis.
     toonGoud(S) {
       const el = $('goud');
       if (!el) return;

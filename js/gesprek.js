@@ -60,8 +60,8 @@
       const maanden = T.ouderGewordenSinds(S, wieId);
       if (maanden == null || maanden < als.ouderGewordenSinds) return false;
     }
-    // Quests en goud wonen in js/quest.js en haken hier in, zoals js/verkennen.js dat met
-    // T.tutorialHandeling doet: zonder dat bestand werkt een gesprek gewoon door.
+    // Quests en goud wonen in js/quest.js en haken hier in: zonder dat bestand werkt een gesprek
+    // gewoon door.
     if (T.questVoorwaarde && !T.questVoorwaarde(S, als)) return false;
     return true;
   };

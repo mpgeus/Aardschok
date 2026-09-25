@@ -1,12 +1,14 @@
 // Het scherm van het gehuchtspel: de kalender (dag, seizoen, jaar) en de voorraad (goud, graan,
 // wol, hout) -- in de stijl en de plek van js/ui.js, maar in een eigen bestand, want het hoort
-// bij het nieuwe spel en niet bij De laatste klim. Aan met ?hud of ?kaart=gehucht in de
-// adresbalk (T.NIEUWE_HUD); zonder een van die twee blijft alles bij het oude (CLAUDE.md).
+// bij het nieuwe spel en niet bij De laatste klim. Altijd aan (T.NIEUWE_HUD), behalve als je met
+// ?kaart= een kaart van het oude spel opent; ?hud zet het daar toch aan. Het oude scherm gaat weg
+// met de spreuken (ontwerp/werklijst.md, punt 7b).
 (function (T) {
   'use strict';
 
   const params = new URLSearchParams(location.search);
-  T.NIEUWE_HUD = params.has('hud') || params.get('kaart') === 'gehucht';
+  const kaart = params.get('kaart');
+  T.NIEUWE_HUD = !kaart || kaart === 'gehucht' || params.has('hud');
   document.body.classList.toggle('nieuwe-hud', T.NIEUWE_HUD);
 
   const $ = (id) => document.getElementById(id);
@@ -518,6 +520,35 @@
   };
 
   T.ui.briefOpen = () => !$('brief').classList.contains('verborgen');
+
+  // De benoeming: de eerste brief van de heer, als een nieuw spel begint (js/main.js). Marcel koos
+  // hem op 25 sep in plaats van een titelscherm (ontwerp/spel.md, onder Open): de tutorial van het
+  // oude spel vertelde je waarom je er was, en nu doet de heer dat zelf, in dezelfde hand als zijn
+  // brief in wijnmaand en in hetzelfde venster. De tijd staat stil zolang je leest; de knop, het
+  // kruisje en Esc sluiten hem (T.ui.sluitBrief), en daarna loopt de tijd zoals hij liep.
+  function benoemingInhoud(S) {
+    const naam = T.naamVanDeHeer && T.naamVanDeHeer();
+    const dag = S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '';
+    return (
+      `<div class="venster-kop"><span class="venster-titel">Een brief van de heer</span><span class="venster-wanneer">${dag}</span>` +
+      `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
+      `<div class="brief-tekst">` +
+      `<p>Aan Onze nieuwe schout,</p>` +
+      `<p>Het heeft Ons behaagd u tot schout te benoemen over dit gehucht. Uw voorganger kon niet tellen, of juist te goed; dat weten Wij niet meer precies. Hij is nu elders.</p>` +
+      `<p>Op Sint-Maarten komen Wij persoonlijk halen wat Ons toekomt. In oogstmaand komt Onze inner kijken hoeveel dat is.</p>` +
+      `<p>Wij vertrouwen u volkomen. Onze inner telt toch even na.</p>` +
+      `<p class="brief-groet">Uw genadige heer${naam ? `,<br>${veilig(naam)}` : ''}</p>` +
+      `</div>` +
+      `<div class="heer-knoppen"><button class="heer-geef-knop" data-actie="sluit">Aan het werk</button></div>`
+    );
+  }
+
+  T.ui.toonBenoeming = function (S) {
+    const box = $('brief');
+    box.innerHTML = benoemingInhoud(S);
+    if (box.classList.contains('verborgen')) zetTijdStil(S, 'briefVoorSnelheid');
+    box.classList.remove('verborgen');
+  };
 
   $('brief').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');

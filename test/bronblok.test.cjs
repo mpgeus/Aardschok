@@ -1,10 +1,10 @@
 // Toetst gereedschap/bronblok.js: één blok uit een spelbestand halen zonder de rest aan te raken.
 //
 // Waarom dit bestaat: de gespreksbewerker schreef js/gesprekken.js helemaal opnieuw en kende
-// T.TUTORIAL_TEKST niet, dus wiste één keer opslaan het hele draaiboek van de tutorial. De regel
-// is nu: kop + blok + staart is weer precies het bestand, en de bewerker raakt alleen het blok
-// aan. Deze toets bewaakt dat op de echte bestanden, zodat het opnieuw opvalt zodra er iets
-// bijkomt wat een bewerker niet kent.
+// T.TUTORIAL_TEKST niet (het draaiboek van de tutorial van het oude spel, dat er tot 25 sep achter
+// stond), dus wiste één keer opslaan dat hele draaiboek. De regel is nu: kop + blok + staart is
+// weer precies het bestand, en de bewerker raakt alleen het blok aan. Deze toets bewaakt dat op de
+// echte bestanden, zodat het opnieuw opvalt zodra er iets bijkomt wat een bewerker niet kent.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -38,13 +38,33 @@ test('het blok begint en eindigt waar het hoort', () => {
 });
 
 test('wat de gespreksbewerker niet kent, zit in de staart', () => {
-  // Dit is de kern: T.TUTORIAL_TEKST staat ná T.GESPREKKEN en hoort dus volledig in de staart.
-  const b = T.bronBlok(lees('js/gesprekken.js'), 'T.GESPREKKEN');
+  // Dit is de kern: wat ná T.GESPREKKEN in het bestand staat, hoort volledig in de staart, ook als
+  // het zelf een blok is. Zo stond T.TUTORIAL_TEKST er tot 25 sep; nu staat er niets meer achter,
+  // dus toetst dit het met een bestand in dezelfde vorm.
+  const bron = [
+    '(function (T) {',
+    "  'use strict';",
+    '  T.GESPREKKEN = {',
+    "    wim: { naam: 'Wim' }, // een opmerking die naar T.DRAAIBOEK verwijst, mag er gewoon zijn",
+    '  };',
+    '',
+    '  T.DRAAIBOEK = {',
+    "    roepen: ['Daar ben je.'],",
+    '  };',
+    '})(globalThis.Toren = globalThis.Toren || {});',
+    '',
+  ].join('\n');
+  const b = T.bronBlok(bron, 'T.GESPREKKEN');
   // Op de definitie letten en niet op de naam: binnen het blok staat een opmerking die naar
-  // T.TUTORIAL_TEKST verwijst, en die mag er gewoon zijn.
-  assert.ok(b.staart.includes('T.TUTORIAL_TEKST = {'), 'het draaiboek van de tutorial hoort in de staart');
-  assert.ok(!b.blok.includes('T.TUTORIAL_TEKST = {'), 'en niet in het blok dat opnieuw geschreven wordt');
+  // T.DRAAIBOEK verwijst, en die mag er gewoon zijn.
+  assert.ok(b.staart.includes('T.DRAAIBOEK = {'), 'wat erachter staat, hoort in de staart');
+  assert.ok(!b.blok.includes('T.DRAAIBOEK = {'), 'en niet in het blok dat opnieuw geschreven wordt');
   assert.ok(b.kop.includes("'use strict'"), 'de kop houdt het begin van het bestand vast');
+  assert.equal(b.kop + b.blok + b.staart, bron);
+  // En op het echte bestand: de kop houdt het begin vast, de staart het einde.
+  const echt = T.bronBlok(lees('js/gesprekken.js').replace(/\r\n/g, '\n'), 'T.GESPREKKEN');
+  assert.ok(echt.kop.includes("'use strict'"), 'de kop van js/gesprekken.js houdt het begin vast');
+  assert.ok(echt.staart.includes('globalThis.Toren'), 'de staart van js/gesprekken.js houdt het einde vast');
 });
 
 test('een accolade in een zin telt niet mee voor de diepte', () => {

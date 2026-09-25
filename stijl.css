@@ -95,11 +95,10 @@ kbd {
   border-radius: 10px;
 }
 
-/* Het nieuwe scherm voor het gehuchtspel (js/hud.js): aan met ?hud of ?kaart=gehucht in de
-   adresbalk (T.NIEUWE_HUD zet dan de klasse .nieuwe-hud op body). De panelen van het oude spel
-   (leeftijd, spreukbalk, actiepunten, de oude uitleg rechtsboven) gaan dan weg, en de kalender en
-   de voorraad linksboven komen ervoor in de plaats. Zonder ?hud of ?kaart=gehucht blijft alles
-   zoals het was (CLAUDE.md). */
+/* Het nieuwe scherm voor het gehuchtspel (js/hud.js): altijd aan, behalve met ?kaart= naar een
+   kaart van het oude spel (T.NIEUWE_HUD zet dan de klasse .nieuwe-hud op body). De panelen van het
+   oude spel (leeftijd, spreukbalk, actiepunten, de oude uitleg rechtsboven) gaan dan weg, en de
+   kalender en de voorraad linksboven komen ervoor in de plaats. */
 #hud-gehucht,
 #hulp-gehucht { display: none; }
 .nieuwe-hud #hud-gehucht { position: fixed; left: 16px; top: 16px; display: flex; gap: 10px; align-items: flex-start; }
@@ -595,8 +594,8 @@ kbd {
 :is(#heer, #slachten) .heer-deel.boete { border-color: rgba(226, 182, 74, 0.6); }
 :is(#heer, #slachten) .heer-deel.zwaar { border-color: rgba(224, 96, 79, 0.7); color: #f1c3bb; }
 :is(#heer, #slachten) .heer-vooruit { margin: 0 0 8px; font-size: 12.5px; color: var(--gedempt); }
-:is(#heer, #slachten) .heer-knoppen { display: flex; gap: 6px; justify-content: flex-end; }
-:is(#heer, #slachten) .heer-knoppen button,
+:is(#heer, #slachten, #brief) .heer-knoppen { display: flex; gap: 6px; justify-content: flex-end; }
+:is(#heer, #slachten, #brief) .heer-knoppen button,
 #heer .paal-keuze {
   padding: 5px 10px;
   font: 13px system-ui, sans-serif;
@@ -606,10 +605,10 @@ kbd {
   border-radius: 6px;
   cursor: pointer;
 }
-:is(#heer, #slachten) .heer-knoppen .heer-geef-knop { color: #1b1510; background: var(--goud); border-color: var(--goud); }
-:is(#heer, #slachten) .heer-knoppen button:hover:not(:disabled),
+:is(#heer, #slachten, #brief) .heer-knoppen .heer-geef-knop { color: #1b1510; background: var(--goud); border-color: var(--goud); }
+:is(#heer, #slachten, #brief) .heer-knoppen button:hover:not(:disabled),
 #heer .paal-keuze:hover { background: rgba(226, 182, 74, 0.16); border-color: rgba(226, 182, 74, 0.6); }
-:is(#heer, #slachten) .heer-knoppen .heer-geef-knop:hover:not(:disabled) { background: var(--goud); filter: brightness(1.08); }
+:is(#heer, #slachten, #brief) .heer-knoppen .heer-geef-knop:hover:not(:disabled) { background: var(--goud); filter: brightness(1.08); }
 :is(#heer, #slachten) .heer-knoppen button:disabled { opacity: 0.35; cursor: default; }
 #heer .paal-keuze { display: flex; flex-direction: column; gap: 1px; width: 100%; margin-bottom: 5px; text-align: left; }
 #heer .paal-naam { font: 15px var(--kop); }

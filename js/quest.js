@@ -4,8 +4,8 @@
 // ontwerp/toren.md, "Quests: waar het goud vandaan komt".
 //
 // Dit bestand hangt zichzelf aan het gesprekssysteem in plaats van andersom: gesprek.js roept
-// T.questVoorwaarde en T.questGevolg alleen aan als ze bestaan, zoals verkennen.js dat met
-// T.tutorialHandeling doet. Zo blijft een gesprek zonder quests gewoon werken.
+// T.questVoorwaarde en T.questGevolg alleen aan als ze bestaan. Zo blijft een gesprek zonder
+// quests gewoon werken.
 //
 // De stand is expres saai: per quest één woord (de fase) en één woord (de weg die je nam), plus
 // een lijstje uitgekeerde beloningen. Alles zijn strings, dus opslaan is later geen kunststuk.
@@ -80,7 +80,7 @@
     return true;
   };
 
-  // Elk beeld (js/main.js), net als de tutorial: gaat een weg vanzelf open? Per quest hoogstens
+  // Elk beeld (js/main.js): gaat een weg vanzelf open? Per quest hoogstens
   // één stap per beeld — zo kan een lus van fasen die elkaar meteen waarmaken het spel niet
   // laten hangen, en zie je elke melding apart voorbijkomen.
   T.werkQuestsBij = function (S) {
@@ -114,8 +114,7 @@
   // ── Goud ──
 
   // Goud koopt nooit jaren terug (ontwerp/toren.md, "Wat de kernregel ervan vraagt"); het koopt
-  // dingen waarmee je jaren kunt vermijden. Het vakje in beeld komt pas als je ooit goud had:
-  // in de tutorial heeft niemand het er nog over.
+  // dingen waarmee je jaren kunt vermijden. Het vakje in beeld komt pas als je ooit goud had.
   // Sinds het gehuchtspel (js/voorraad.js) is goud ook een van de vier grondstoffen. Loopt die
   // mee (S.voorraad bestaat, en T.wijzigVoorraad is geladen), dan gaat de wijziging daarlangs en
   // blijft S.goud gewoon in de pas lopen; zonder S.voorraad (de bestaande toetsen, en het oude

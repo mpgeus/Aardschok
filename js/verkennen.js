@@ -51,34 +51,16 @@
     S.naLopen = { doel: { x: doel.x, y: doel.y }, actie };
   }
 
-  // Voor js/tutorial.js, dat met dezelfde klik iets anders laat gebeuren: erheen lopen gaat
-  // precies zoals hier.
-  T.loopNaar = loopNaar;
-  T.loopNaast = loopNaast;
-
-  // Wat je opraapt door erop te stappen: de sleutel van het trappenhuis, en de zak zaaigoed die
-  // de meester in de tutorial wil hebben. De tekst bij de muis, en wat er gemeld wordt.
+  // Wat je opraapt door erop te stappen: de sleutel van het trappenhuis, en de leem voor de
+  // bakker. De tekst bij de muis, en wat er gemeld wordt.
   // Ook naar buiten, zodat de keuring (gereedschap/keuring.js) kan zeggen dat een voorwerp
   // dat aan een quest hangt niet op te rapen is — dan ligt het er wel en doet het niets.
   const OPRAPEN = (T.OPRAPEN = {
     sleutel: { tekst: 'De sleutel oppakken', vind: 'Je vindt de ijzeren sleutel.' },
-    zak: { tekst: 'De zak zaaigoed oppakken', vind: 'Je tilt de zak zaaigoed op. Zwaarder dan hij eruitziet.' },
     // De leemkuil bij de beek (De koude oven, js/quests.js). De leem ligt er alleen zolang de
     // bakker erom vroeg: in Tiled heeft dat voorwerp quest="bakker:zoeken".
     leem: { tekst: 'Leem uit de kuil scheppen', vind: 'Je schept een handvol natte leem. Koud, en zwaarder dan je dacht.' },
   });
-
-  // Een ton of iets anders dat breekt (T.VOORWERPEN, `breekt`), sla je met je staf in stukken.
-  // Dat kost niets, net als slaan in een gevecht: het is het enige wat niets kost, en de meester
-  // laat het je in de tutorial zelf doen.
-  T.slaKapot = async function (S, v) {
-    const eig = T.VOORWERPEN[v.soort];
-    if (!eig || !eig.breekt) return;
-    await T.anim.uitval(S.held, { x: v.x, y: v.y });
-    if (T.VOORWERPEN[v.soort] !== eig) return; // intussen al gebroken
-    v.soort = eig.breekt;
-    T.ui.bericht(`Je slaat ${eig.naam || 'het'} in duigen. Het kost je niets.`, 'goed');
-  };
 
   // ── Wat een veld is (js/akkers.js, "Velden"; spel.md, "Weides met koeien en schapen") ──
   //
@@ -156,11 +138,6 @@
     // Met een spreuk in de hand richt elke klik die spreuk (zie toveren.js).
     if (S.spreuk) return T.handelingSpreuk(S, doel);
     if (!doel) return null;
-    // Wat de tutorial op dit moment anders laat gaan (js/tutorial.js): de fontein schept water
-    // voor de meester in plaats van dat je hem zelf leegdrinkt, en de meester neemt aan wat je
-    // hem brengt.
-    const anders = T.tutorialHandeling && T.tutorialHandeling(S, doel);
-    if (anders) return anders;
     const w = S.wereld;
     if (doel.wezen) {
       const e = doel.wezen;
@@ -183,10 +160,6 @@
         return { tekst: `De laatste slok drinken (${T.duurTekst(T.FONTEIN.maanden)} jonger)`, doe: () => loopNaast(S, v, () => T.drinkLaatsteSlok(S)) };
       }
       if (OPRAPEN[v.soort]) return { tekst: OPRAPEN[v.soort].tekst, doe: () => loopNaar(S, v) };
-      const eig = T.VOORWERPEN[v.soort];
-      if (eig && eig.breekt) {
-        return { tekst: `${T.hoofdletter(eig.naam || 'het')} kapotslaan met je staf (kost niets)`, doe: () => loopNaast(S, v, () => T.slaKapot(S, v)) };
-      }
       if (v.soort === 'trap') return { tekst: 'De trap op', doe: () => loopNaast(S, v, () => T.gewonnen(S)) };
       if (v.soort === 'kist') {
         return { tekst: 'De kist bekijken', doe: () => loopNaast(S, v, () => T.ui.bericht('Een kist vol versleten bezems. Wim gooit niets weg.')) };
@@ -492,7 +465,7 @@
       `<p>Je klimt naar de volgende verdieping. Boven is het stil, op iets na dat ademt.</p>` +
         `<p>Je bent nu ${T.leeftijdTekst(S.held.leeftijd)}. ${kosten}</p><p>Hier eindigt het proefje.</p>`,
       'Opnieuw spelen',
-      () => T.nieuwSpel(true),
+      () => T.nieuwSpel(),
     );
   };
 })(globalThis.Toren = globalThis.Toren || {});

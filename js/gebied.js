@@ -100,23 +100,6 @@
     }
   }
 
-  // Een wezen naar een ander gebied verhuizen en daar neerzetten: Wim die in de tutorial de toren
-  // uit komt rennen, en weer naar binnen gaat, en de held die bij een nieuw spel op het erf begint
-  // (js/tutorial.js). Geen overgang met alles wat daarbij hoort — dat doet T.gaNaarGebied, voor de
-  // held tijdens het spelen — maar alleen uit de ene lijst wezens en in de andere. Waar hij daar
-  // rondscharrelt (`thuis`), en of het gebied nu S.wereld is, regelt de aanroeper.
-  T.zetInGebied = function (S, e, naar, x, y) {
-    const nieuw = T.gebied(S, naar);
-    if (!nieuw) return false;
-    for (const w of Object.values(S.gebieden)) {
-      const i = w.wezens.indexOf(e);
-      if (i >= 0 && w !== nieuw) w.wezens.splice(i, 1);
-    }
-    if (!nieuw.wezens.includes(e)) nieuw.wezens.push(e);
-    zetNeer(e, x, y);
-    return true;
-  };
-
   // Waar land je als je uit `vanaf` in `w` aankomt? Bij de overgang die terugwijst naar waar je
   // vandaan komt, op de tegel ernaast (`komt`).
   //
@@ -210,18 +193,16 @@
     return nieuw;
   };
 
-  // Een nieuw spel beginnen op een gewone kaart, zonder tutorial: voor een proefje
-  // (index.html?kaart=<naam>, zie js/main.js), niet voor het gewone begin (dat is
-  // T.beginOpHetErf, js/tutorial.js). Geeft true terug als het gelukt is; S.wereld en S.held
-  // staan dan klaar. Bestaat de kaart niet, of staat er geen "held" op en lukt het ook niet er
-  // zelf een neer te zetten, dan false — de aanroeper valt dan terug op het gewone begin.
+  // Een nieuw spel beginnen op een kaart: het gehucht, of een andere voor een proefje
+  // (index.html?kaart=<naam>, zie js/main.js). Geeft true terug als het gelukt is; S.wereld en
+  // S.held staan dan klaar. Bestaat de kaart niet, dan false — de aanroeper valt dan terug op het
+  // gehucht. Staat er geen "held" op, dan zet het er zelf een neer.
   // Hoe snel de schout loopt, in tegels per seconde: wat vlotter dan een dorpeling (1,2 tot 1,5),
   // zodat rondlopen niet sleept. Zijn loopbeeld telt de afgelegde weg (js/sprites.js), dus zijn
   // voeten glijden bij geen enkele snelheid.
   T.SCHOUT_SNELHEID = 2.2;
 
   T.beginOpKaart = function (S, naam) {
-    S.tutorial = null;
     const w = T.gebied(S, naam);
     if (!w) {
       console.warn(`Toren.beginOpKaart: kaart "${naam}" bestaat niet — draai npm run kaarten?`);
