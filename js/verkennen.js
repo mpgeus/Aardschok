@@ -80,6 +80,46 @@
     T.ui.bericht(`Je slaat ${eig.naam || 'het'} in duigen. Het kost je niets.`, 'goed');
   };
 
+  // ── Wat een veld is (js/akkers.js, "Velden"; spel.md, "Weides met koeien en schapen") ──
+  //
+  // De muis op een veld zegt in één regel wat het is, en het veldenvenster (js/hud.js, V) zegt
+  // hetzelfde uitgebreider: daarom staan de stukjes tekst hier, zonder scherm, en te toetsen
+  // (test/velden.test.cjs).
+
+  // Wanneer een plan ingaat: de dag waarop de boeren ploegen (T.AKKER_STADIA, "geploegd"), want
+  // daar valt T.wisselVelden op. "1 lentemaand", zolang niemand die tabel verschuift.
+  T.veldWisselTekst = function () {
+    const g = T.AKKER_STADIA && T.AKKER_STADIA.find((s) => s.stadium === 'geploegd');
+    return g ? `${g.dag} ${T.MAANDEN[g.maand].naam}` : '1 lentemaand';
+  };
+
+  // "3 koeien, 9 schapen", "1 koe", of '' zonder dieren: een lijst dieren (js/vee.js) geteld per
+  // soort, in de volgorde van T.VEE.
+  T.kuddeTekst = function (dieren) {
+    const delen = [];
+    for (const [soort, v] of Object.entries(T.VEE || {})) {
+      const n = dieren.filter((e) => e.dier === soort).length;
+      if (n) delen.push(`${n} ${n === 1 ? v.naam : v.meervoud}`);
+    }
+    return delen.join(', ');
+  };
+
+  // De regel bij de muis: "Weide van Klaas · 3 koeien, 9 schapen · vruchtbaar 90%". Staat er meer
+  // vee op dan er plaats is, dan zegt hij dat; en wordt het veld volgend jaar iets anders, dan ook
+  // wat en wanneer.
+  T.veldTekst = function (S, veld) {
+    const bestemming = T.bestemmingVan(veld);
+    const boer = T.boerVanVeld(S, veld);
+    const delen = [T.hoofdletter(bestemming) + (boer ? ` van ${boer.naam}` : '')];
+    const dieren = T.dierenOp ? T.dierenOp(S, veld) : [];
+    if (dieren.length) delen.push(T.kuddeTekst(dieren) + (T.weideStand(S, veld).vrij < 0 ? ' (te vol)' : ''));
+    else if (bestemming === 'weide') delen.push('nog geen vee');
+    delen.push(`vruchtbaar ${Math.round(T.vruchtbaarheidVan(veld) * 100)}%`);
+    const plan = T.planVan(veld);
+    if (plan !== bestemming) delen.push(`wordt ${plan} op ${T.veldWisselTekst()}`);
+    return delen.join(' · ');
+  };
+
   // Wat gebeurt er als je hierop klikt? Geeft { tekst, doe, fout } terug, of null.
   // De tekst komt bij de muis te staan; het scherm en de klik stellen dus dezelfde vraag.
   T.handelingVerkennen = function (S, doel) {
@@ -145,6 +185,11 @@
       const naam = (T.GEBIEDEN[o.naar] && T.GEBIEDEN[o.naar].naam) || o.naar;
       return { tekst: o.tekst || `Naar ${naam.toLowerCase()}`, doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
     }
+    // Een veld (alleen het nieuwe spel): de muis zegt wat het is, en een klik is gewoon erheen
+    // lopen, want de velden zijn groot en je moet eroverheen kunnen. Wat het volgend jaar wordt,
+    // kies je in het veldenvenster (js/hud.js, V).
+    const veld = T.veldOp && T.veldOp(w, doel.x, doel.y);
+    if (veld) return { tekst: T.veldTekst(S, veld), doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
     return { tekst: null, doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
   };
 
@@ -183,6 +228,60 @@
     return !!k && T.kamerVan(w, x, y) === k;
   }
 
+  // ── Vee op de weide (js/vee.js; spel.md, "Weides met koeien en schapen") ──
+  //
+  // Een dier met een weide (e.weide, het veld zelf) blijft binnen die rechthoek, en niet rond een
+  // middelpunt met een straal (e.thuis, e.straal): een strook van twee bij veertien heeft dan maar
+  // vier tegels binnen de straal, en een blok van vijf bij zes laat zijn hoeken leeg. Het stapt ook
+  // niet naar een tegel waar al iemand staat, of waar een ander net heen loopt: twee koeien op één
+  // tegel zie je meteen. Staat het buiten zijn weide (na een wissel op 1 lentemaand, T.verhuisVee),
+  // dan loopt het er eerst heen.
+  const opVeld = (v, x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
+  const doelVan = (e) => (e.pad && e.pad.length ? e.pad[e.pad.length - 1] : null);
+  const vrijVoor = (w, e) => (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e });
+
+  // De buurtegels (vier kanten, zoals elke dwaalstap) waar dit dier heen mag.
+  T.dwaalTegelsOpWeide = function (w, e) {
+    const v = e.weide;
+    if (!v) return [];
+    const onderweg = new Set();
+    for (const o of w.wezens) {
+      const d = o !== e && !o.dood && doelVan(o);
+      if (d) onderweg.add(d.x + ',' + d.y);
+    }
+    const mag = vrijVoor(w, e);
+    const opties = [];
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const x = e.tx + dx;
+      const y = e.ty + dy;
+      if (opVeld(v, x, y) && !onderweg.has(x + ',' + y) && mag(x, y) && !bijDeur(w, x, y)) opties.push({ x, y });
+    }
+    return opties;
+  };
+
+  // De weg naar de dichtstbijzijnde vrije tegel van zijn weide, of null (geen weide, er al op, of
+  // geen weg: dan probeert het de volgende keer opnieuw).
+  T.wegNaarWeide = function (w, e) {
+    const v = e.weide;
+    if (!v || opVeld(v, e.tx, e.ty)) return null;
+    const mag = vrijVoor(w, e);
+    const van = { x: e.tx, y: e.ty };
+    let doel = null;
+    let afstand = Infinity;
+    for (let y = v.y; y < v.y + v.h; y++) {
+      for (let x = v.x; x < v.x + v.b; x++) {
+        const d = T.afstand(van, { x, y });
+        if (d < afstand && mag(x, y)) {
+          afstand = d;
+          doel = { x, y };
+        }
+      }
+    }
+    if (!doel) return null;
+    const pad = T.zoekPad(van, doel, mag, (x, y) => T.isVast(w, x, y), {});
+    return pad && pad.length ? pad : null;
+  };
+
   // Wie dwaalt, zet af en toe een stap binnen zijn eigen stukje wereld en staat er daarna weer
   // even bij stil — dan doet hij wat bij hem past (Wim veegt). Een dorpeling gebruikt hetzelfde
   // loopwerk als een dwalend monster; het verschil is dat hij nooit een gevecht begint (hij is
@@ -208,6 +307,18 @@
       if (m.dwaalTijd > 0 && !bijDeur(w, m.tx, m.ty)) continue;
       // Wie een eigen pauze heeft (vee: dat staat lang te grazen voor het een stap zet), neemt die.
       m.dwaalTijd = m.pauze ? m.pauze[0] + Math.random() * (m.pauze[1] - m.pauze[0]) : 1.5 + Math.random() * 2.5;
+      // Vee op een weide: binnen die rechthoek, of eerst ernaartoe (T.dwaalTegelsOpWeide hierboven).
+      if (m.weide) {
+        const weg = T.wegNaarWeide(w, m);
+        const opties = weg ? null : T.dwaalTegelsOpWeide(w, m);
+        if (weg) {
+          m.pad = weg;
+          // Onderweg naar zijn weide staat het niet te grazen: loopt het vast op een ander dier,
+          // dan zoekt het na een tel een nieuwe weg, niet pas na een hele graaspauze.
+          m.dwaalTijd = Math.min(m.dwaalTijd, 1);
+        } else if (opties.length) m.pad = [opties[Math.floor(Math.random() * opties.length)]];
+        continue;
+      }
       const thuisNu = (T.wandelAnker && T.wandelAnker(m, basis)) || m.thuis;
       // Ligt hij nu buiten die straal — een boer wiens huis niet naast zijn akker staat, bij het
       // begin van het groeiseizoen — dan is geen van de vier buurtegels ooit dichtbij genoeg, en

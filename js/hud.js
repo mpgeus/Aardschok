@@ -56,9 +56,18 @@
     '<path d="M11 10.5l8.5 8.5" stroke="#8a5a2c" stroke-width="2.4" stroke-linecap="round"/>' +
     '<path d="M4.5 8.5l5-5 2.2 2.2-1.5 1.5 2.6 2.6-2.2 2.2-2.6-2.6-1.3 1.3z" fill="#8f949a" stroke="#c3c7cc" stroke-width="1.1" stroke-linejoin="round"/>' +
     '</svg>';
+  // Van de melk die het dorp niet dezelfde dag drinkt (js/behoeften.js, T.eetVandaag): een punt
+  // kaas, met de korst aan de dikke kant en twee gaatjes in het snijvlak.
+  const KAAS_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M3 12l12 3 6-6z" fill="#f0cc72" stroke="#f5dc93" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<path d="M3 12l12 3v5L3 17z" fill="#e2b64a" stroke="#f0cc72" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<path d="M15 15l6-6v5l-6 6z" fill="#c9972f" stroke="#e2b64a" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<circle cx="7.4" cy="15.3" r="1" fill="#c9972f"/><circle cx="11.4" cy="17.3" r="1.15" fill="#c9972f"/>' +
+    '</svg>';
   const GRONDSTOF_ICOON = {
     goud: GOUD_ICOON, graan: GRAAN_ICOON, wol: WOL_ICOON, hout: HOUT_ICOON,
-    ijzer: IJZER_ICOON, zout: ZOUT_ICOON, gereedschap: GEREEDSCHAP_ICOON,
+    ijzer: IJZER_ICOON, zout: ZOUT_ICOON, gereedschap: GEREEDSCHAP_ICOON, kaas: KAAS_ICOON,
   };
   const GRONDSTOF_UITLEG = {
     goud: 'Goud. Wat de heer het liefst ziet.',
@@ -68,11 +77,13 @@
     ijzer: 'IJzer. Van de marskramer; de smidse maakt er gereedschap van.',
     zout: 'Zout. Van de marskramer: het houdt vis en vlees goed.',
     gereedschap: 'Gereedschap. Van de smidse: wie het heeft, werkt harder. Het slijt.',
+    kaas: 'Kaas. Van de melk die het dorp niet dezelfde dag drinkt: kaas houdt goed, en wordt pas gegeten als het graan op is.',
   };
   // Deze staan pas in de balk als het dorp ze eens gehad heeft (S.gehad, js/voorraad.js): in het
-  // begin blijft de balk kort.
-  const BALK_LATER = ['ijzer', 'zout', 'gereedschap'];
-  const BALK = T.GRONDSTOFFEN.concat(BALK_LATER);
+  // begin blijft de balk kort. Kaas staat naast het graan, want allebei is het eten; de rest achteraan.
+  const BALK_LATER = ['kaas', 'ijzer', 'zout', 'gereedschap'];
+  const BALK = T.GRONDSTOFFEN.flatMap((wat) => (wat === 'graan' ? ['graan', 'kaas'] : [wat]))
+    .concat(BALK_LATER.filter((wat) => wat !== 'kaas'));
   // Het aantal mensen, en hoeveel woonruimte er is (js/gebouwen.js): dezelfde stijl als een
   // grondstof, maar met "/" in plaats van een los getal, dus geen eigen icoon uit GRONDSTOF_ICOON.
   const BEVOLKING_ICOON =
@@ -145,6 +156,19 @@
       box.querySelector('[data-wat="gereedschap"]').title = d.handen
         ? `Gereedschap. Genoeg voor ${Math.min(d.handen, Math.floor(d.heeft))} van de ${d.handen} handen aan het werk: er wordt ${Math.round((d.factor - 1) * 100)}% harder gewerkt. Het slijt.`
         : GRONDSTOF_UITLEG.gereedschap;
+    }
+    // Bij de kaas: voor hoeveel dagen eten hij is, en hoeveel melk de koeien nu geven (js/vee.js,
+    // T.melkVanDag), want daar komt hij van. Beide in graan gerekend, zoals het dorp ze eet.
+    const perMens = T.GEBOUWEN_INSTELLINGEN ? T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag : 0;
+    if (perMens > 0) {
+      const perDag = (S.bevolking || 0) * perMens;
+      const kaas = S.voorraad.kaas || 0;
+      const dagen = perDag > 0 ? Math.floor(kaas / perDag) : 0;
+      const voor = kaas >= 1 && perDag > 0 ? ` Genoeg voor ${dagen} dag${dagen === 1 ? '' : 'en'} eten.` : '';
+      const melkNu = T.melkVanDag && S.kalender ? T.melkVanDag(S, Math.floor(S.kalender.dag)) : 0;
+      const mensen = Math.round(melkNu / perMens);
+      const melk = mensen > 0 ? ` De koeien geven nu elke dag melk voor ${mensen} mensen; wat het dorp niet drinkt, wordt kaas.` : '';
+      box.querySelector('[data-wat="kaas"]').title = GRONDSTOF_UITLEG.kaas + voor + melk;
     }
   };
 
@@ -242,6 +266,9 @@
     ev.currentTarget.blur();
     const S = T.S;
     if (!S) return;
+    // Bouwen en de velden tegelijk kan niet: bouwen richt de muis op de kaart, en die ligt stil
+    // zolang het veldenvenster open is.
+    if (T.ui.veldenOpen && T.ui.veldenOpen()) T.ui.sluitVelden(S);
     if (S.bouwSoort || S.bouwMenuOpen) {
       S.bouwSoort = null;
       S.bouwMenuOpen = false;
@@ -463,11 +490,25 @@
     const soort = g.ambtKwijt || g.schandpaal ? 'zwaar' : g.boete ? 'boete' : 'goed';
     const goudExtra = g.neemt.goud > (eis.per.goud || 0) ? ` Van je goud neemt hij ${g.neemt.goud}, ook in de plaats van wat er verder ontbreekt.` : '';
     const soldaten = v.soldaten ? `, zijn soldaten ${Math.round(v.soldaten)}` : '';
+    // Het vee (js/vee.js; T.heerVooruitzicht): de melk drinkt het dorp vóór het graan, dus die staat
+    // al van het eten af; en wie graan tekortkomt, eet daarna de kaas. Honger is dus pas een tekort
+    // dat groter is dan de kaas.
+    const melk = Math.round(v.melk || 0);
+    const kaas = Math.floor(v.kaas || 0);
+    const melkTekst = melk > 0 ? `, naast zo'n ${melk} aan melk van de koeien` : '';
     const rest = Math.round(v.over);
-    const uitkomst = rest >= 0 ? `er blijft ${rest} over` : `je komt ${-rest} graan tekort, en dat is honger vóór de oogst`;
+    const kaasOver = Math.round(v.over + kaas);
+    const uitkomst = rest >= 0
+      ? `er blijft ${rest} over${kaas ? `, en de kaas houd je achter de hand` : ''}`
+      : kaas && kaasOver >= 0
+        ? `je komt ${-rest} graan tekort, maar de kaas vangt dat op: daarna is er nog ${kaasOver} kaas`
+        : kaas
+          ? `je komt ${-rest} graan tekort, en ook met de kaas erbij nog ${-kaasOver}: dat is honger vóór de oogst`
+          : `je komt ${-rest} graan tekort, en dat is honger vóór de oogst`;
     return (
       `<p class="heer-deel ${soort}">Je geeft hem ${pct}% van wat hij vraagt. ${g.tekst}${goudExtra}</p>` +
-      `<p class="heer-vooruit">Daarna heb je ${Math.round(v.na)} graan. Tot de oogst eet het dorp er zo'n ${Math.round(v.eten)}${soldaten}, ` +
+      `<p class="heer-vooruit">Daarna heb je ${Math.round(v.na)} graan${kaas ? ` en ${kaas} kaas` : ''}. ` +
+      `Tot de oogst eet het dorp er zo'n ${Math.round(v.eten)}${melkTekst}${soldaten}, ` +
       `en zaaien in lentemaand kost ${Math.round(v.zaaien)}: ${uitkomst}.</p>` +
       `<div class="heer-knoppen"><button data-actie="alles">Alles wat hij vraagt</button>` +
       `<button class="heer-geef-knop" data-actie="betaal"${g.kan ? '' : ` disabled title="${g.reden}"`}>Geef het hem</button></div>`
@@ -597,6 +638,181 @@
     );
   };
 
+  // ── De velden (js/akkers.js, "Velden"; spel.md, "Weides met koeien en schapen") ──
+  // Zoals het veldenscherm van Lords of the Realm 2 (Marcel, 25 sep): alle velden onder elkaar, met
+  // van wie ze zijn, hoe groot en hoe vruchtbaar, wat ze nu zijn, en drie knoppen voor wat ze
+  // volgend jaar worden. Elke knop stelt dezelfde vraag als de klik (T.kanBestemming), dus wat niet
+  // kan, staat uit en zegt waarom. Het plan gaat pas in op 1 lentemaand (T.wisselVelden). Zolang het
+  // venster open is, staat de tijd stil en ligt de rest van de invoer stil (S.modus 'velden',
+  // js/main.js), net als bij de spelregels. De regel bij de muis op een veld (T.veldTekst) en de
+  // stukjes tekst die beide delen, staan in js/verkennen.js.
+  const BESTEMMING_NAAM = { akker: 'Akker', weide: 'Weide', braak: 'Braak' };
+  const GRAAN_TAAL = {
+    geploegd: 'net geploegd en gezaaid', kiemend: 'het graan kiemt', groen: 'het graan staat groen',
+    rijp: 'het graan is rijp', gemaaid: 'gemaaid',
+  };
+
+  // Over hoeveel dagen de volgende wissel valt (de dag van "geploegd" in T.AKKER_STADIA), of null.
+  function dagenTotWissel(S) {
+    const g = T.AKKER_STADIA && T.AKKER_STADIA.find((s) => s.stadium === 'geploegd');
+    if (!g || !S.kalender) return null;
+    const nu = Math.floor(S.kalender.dag);
+    for (let d = nu + 1; d <= nu + T.DAGEN_PER_JAAR; d++) {
+      const x = T.datumVanDag(d);
+      if (x.maand === g.maand && x.dagVanMaand === g.dag) return d - nu;
+    }
+    return null;
+  }
+
+  // Wat een veld nu is, met wat erbij hoort: het graan op een akker, de kudde op een weide.
+  function veldNu(S, veld) {
+    const bestemming = T.bestemmingVan(veld);
+    const dieren = T.dierenOp ? T.dierenOp(S, veld) : [];
+    let over = '';
+    let zorg = false;
+    if (dieren.length) {
+      const st = T.weideStand(S, veld);
+      const bezet = `${st.nodig} van de ${st.tegels} tegels`;
+      const kleinste = Math.min(...Object.values(T.VEE_INSTELLINGEN.plaats));
+      zorg = st.vrij < 0;
+      over = `${T.kuddeTekst(dieren)} · ` + (st.vrij < 0
+        ? `te vol: ze hebben ${st.nodig} tegels nodig en er zijn er ${st.tegels}, dus de koeien geven ${Math.round(st.vol * 100)}% melk en er komen geen jongen`
+        : st.vrij < kleinste ? `vol (${bezet}): geen plaats voor jongen` : `${bezet}: plaats voor jongen`);
+    } else if (bestemming === 'weide') {
+      over = 'nog geen vee';
+    } else if (bestemming === 'braak') {
+      over = 'het land rust';
+    } else {
+      const datum = T.datumVanDag(S.kalender.dag);
+      const stadium = T.akkerStadium(datum.maand, datum.dagVanMaand);
+      const zonder = veld.ongezaaid ? veld.ongezaaid.size : 0;
+      over = zonder >= veld.b * veld.h ? 'dit jaar niet gezaaid' : GRAAN_TAAL[stadium] || '';
+      if (zonder && zonder < veld.b * veld.h) over += ` · ${zonder} tegels niet gezaaid`;
+      zorg = zonder > 0;
+    }
+    return `<span class="veld-bestemming ${bestemming}">${BESTEMMING_NAAM[bestemming]}</span> <small${zorg ? ' class="zorg"' : ''}>${over}</small>`;
+  }
+
+  function veldRij(S, veld, i) {
+    const boer = T.boerVanVeld(S, veld);
+    const bestemming = T.bestemmingVan(veld);
+    const plan = T.planVan(veld);
+    const pct = Math.round(T.vruchtbaarheidVan(veld) * 100);
+    const redenen = [];
+    const knoppen = T.BESTEMMINGEN.map((b) => {
+      if (b === plan) return `<button class="veld-keuze gekozen" data-veld="${i}" data-bestemming="${b}" title="Dit wordt het volgend jaar">${BESTEMMING_NAAM[b]}</button>`;
+      const k = T.kanBestemming(S, veld, b);
+      if (!k.kan && !redenen.includes(k.reden)) redenen.push(k.reden);
+      const titel = veilig(k.kan ? `Volgend jaar ${b}` : k.reden);
+      return `<button class="veld-keuze" data-veld="${i}" data-bestemming="${b}" title="${titel}"${k.kan ? '' : ' disabled'}>${BESTEMMING_NAAM[b]}</button>`;
+    }).join('');
+    const wanneer = plan !== bestemming ? `<small class="veld-wanneer">wordt ${plan} op ${T.veldWisselTekst()}</small>` : '';
+    return (
+      `<div class="veld-rij${plan !== bestemming ? ' verandert' : ''}">` +
+      `<div class="veld-wie" title="${veld.b} bij ${veld.h} tegels"><span class="veld-naam">${boer ? veilig(boer.naam) : 'Zonder boer'}</span> ` +
+      `<small>${veld.b * veld.h} tegels</small></div>` +
+      `<div class="veld-vrucht" title="Vruchtbaar: een akker geeft zijn graan maal dit getal."><span class="veld-balk"><i style="width:${pct}%"></i></span> <small>${pct}%</small></div>` +
+      `<div class="veld-nu">${veldNu(S, veld)}</div>` +
+      `<div class="veld-plan"><div class="veld-keuzes">${knoppen}</div>${wanneer}</div>` +
+      (redenen.length ? `<p class="veld-reden">${redenen.map(veilig).join(' ')}</p>` : '') +
+      `</div>`
+    );
+  }
+
+  function veldenInhoud(S) {
+    const velden = (S.wereld && S.wereld.akkers) || [];
+    const IN = T.VELDEN_INSTELLINGEN;
+    const wissel = T.veldWisselTekst();
+    const dagen = dagenTotWissel(S);
+    const over = dagen == null ? '' : ` (over ${dagen} dag${dagen === 1 ? '' : 'en'})`;
+    const pc = (x) => `${Math.round(x * 100)}%`;
+    const land = IN.vruchtbaarheid
+      ? `Een akker put het land uit (−${pc(IN.akkerPutUit)} per jaar), een braak rust (+${pc(IN.braakRust)}) en een weide wordt door het vee gemest (+${pc(IN.weideMest)}).`
+      : 'Het land put niet uit: dat staat uit in de spelregels.';
+    // Wat het volgend jaar wordt, bij elkaar: hoeveel akkers er te zaaien zijn, en wat dat kost.
+    const tel = (b) => velden.filter((v) => T.planVan(v) === b);
+    const akkers = tel('akker');
+    const tegels = akkers.reduce((n, v) => n + v.b * v.h, 0);
+    const zaai = Math.round(tegels * (T.ZAAIGRAAN_PER_TEGEL || 0));
+    const weides = tel('weide').length;
+    const braak = tel('braak').length;
+    const volgend =
+      `Volgend jaar: ${akkers.length} ${akkers.length === 1 ? 'akker' : 'akkers'} (${tegels} tegels: zaaien kost ${zaai} graan, en je hebt er nu ${hebNu(S, 'graan')}), ` +
+      `${weides ? `${weides} ${weides === 1 ? 'weide' : 'weides'}` : 'geen weide'} en ` +
+      `${braak ? `${braak} ${braak === 1 ? 'veld' : 'velden'} braak` : 'geen braak'}.`;
+    return (
+      `<div class="venster-kop"><span class="venster-titel">De velden</span><span class="venster-wanneer">de wissel op ${wissel}${over}</span>` +
+      `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
+      `<p class="venster-staat">Elk veld is akker, weide of braak. Wat je hier kiest, gaat in op <b>${wissel}</b>, als de boeren ploegen: ` +
+      `staand graan vertrap je niet. ${land}</p>` +
+      `<div class="veld-rij veld-kop"><span>Veld</span><span title="Een akker geeft zijn graan maal zijn vruchtbaarheid.">Vruchtbaar</span>` +
+      `<span>Nu</span><span>Volgend jaar</span></div>` +
+      (velden.map((v, i) => veldRij(S, v, i)).join('') || '<p class="venster-staat">Hier zijn geen velden.</p>') +
+      `<p class="veld-samen">${volgend}</p>` +
+      `<p class="venster-voet">Zolang dit open is, staat de tijd stil. <kbd>Esc</kbd> of <kbd>V</kbd> sluit.</p>`
+    );
+  }
+
+  // Opnieuw tekenen, op de plek waar je was.
+  function toonVelden(S) {
+    const box = $('velden');
+    const waar = box.scrollTop;
+    box.innerHTML = veldenInhoud(S);
+    box.scrollTop = waar;
+  }
+
+  T.ui.veldenOpen = () => !$('velden').classList.contains('verborgen');
+
+  T.ui.openVelden = function (S) {
+    if (!S.wereld || !S.wereld.akkers || !T.kanBestemming) return;
+    S.modus = 'velden';
+    S.bouwSoort = null;
+    S.bouwMenuOpen = false;
+    T.ui.toonBouwmenu(S);
+    if (T.ui.briefOpen()) T.ui.sluitBrief(S);
+    T.ui.verbergTooltip();
+    zetTijdStil(S, 'veldenVoorSnelheid');
+    $('velden').classList.remove('verborgen');
+    toonVelden(S);
+    $('velden-knop').classList.add('actief');
+  };
+
+  T.ui.sluitVelden = function (S) {
+    $('velden').classList.add('verborgen');
+    $('velden-knop').classList.remove('actief');
+    if (S.modus === 'velden') S.modus = 'verkennen';
+    laatTijdLopen(S, 'veldenVoorSnelheid');
+  };
+
+  $('velden').addEventListener('click', (ev) => {
+    const b = ev.target.closest('button');
+    const S = T.S;
+    if (!b || !S) return;
+    b.blur();
+    if (b.dataset.actie === 'sluit') {
+      T.ui.sluitVelden(S);
+      return;
+    }
+    const veld = S.wereld.akkers[Number(b.dataset.veld)];
+    if (!veld || !b.dataset.bestemming || T.planVan(veld) === b.dataset.bestemming) return;
+    const r = T.zetPlan(S, veld, b.dataset.bestemming);
+    if (!r.kan) T.ui.bericht(r.reden, 'gevaar');
+    toonVelden(S);
+  });
+
+  $('velden-knop').addEventListener('click', (ev) => {
+    ev.currentTarget.blur();
+    const S = T.S;
+    if (!S) return;
+    if (T.ui.veldenOpen()) {
+      T.ui.sluitVelden(S);
+      return;
+    }
+    // Van de spelregels meteen naar de velden, zonder eerst het ene venster dicht te hoeven doen.
+    if (T.ui.spelregelsOpen()) T.ui.sluitSpelregels(S);
+    if (S.modus === 'verkennen') T.ui.openVelden(S);
+  });
+
   // ── De spelregels (js/opties.js; spel.md, "Instelbaar") ──
   // Eén venster in drie delen: de keuzes, de namen, en de werkbank met alle getallen. Wat je
   // verandert, geldt meteen, en de browser onthoudt het. Zolang het open is, staat de tijd stil.
@@ -694,8 +910,12 @@
     ev.currentTarget.blur();
     const S = T.S;
     if (!S) return;
-    if (T.ui.spelregelsOpen()) T.ui.sluitSpelregels(S);
-    else if (S.modus === 'verkennen') T.ui.openSpelregels(S);
+    if (T.ui.spelregelsOpen()) {
+      T.ui.sluitSpelregels(S);
+      return;
+    }
+    if (T.ui.veldenOpen()) T.ui.sluitVelden(S);
+    if (S.modus === 'verkennen') T.ui.openSpelregels(S);
   });
 
   // Eén getal van de werkbank bijwerken zonder het hele venster opnieuw te tekenen: anders valt
@@ -764,9 +984,10 @@
   // P, - en = botsen nergens mee: de spatie en 1-4 zijn van het oude spel (CLAUDE.md).
   window.addEventListener('keydown', (ev) => {
     if (!T.NIEUWE_HUD || !T.S || !T.S.kalender) return;
-    // Niet terwijl je een naam typt, en niet in de spelregels (daar staat de tijd bewust stil).
+    // Niet terwijl je een naam typt, en niet in de spelregels of de velden (daar staat de tijd
+    // bewust stil).
     if (ev.target && (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA')) return;
-    if (T.S.modus === 'spelregels') return;
+    if (T.S.modus === 'spelregels' || T.S.modus === 'velden') return;
     if (ev.key === 'p' || ev.key === 'P') {
       const k = T.S.kalender;
       T.zetSnelheid(T.S, k.snelheid > 0 ? 0 : k.laatsteSnelheid || 1);

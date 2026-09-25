@@ -36,6 +36,7 @@
     </div>
     <div id="voorraadbalk" class="paneel"></div>
     <button id="bouwmenu-knop" class="paneel" title="Bouwen"><kbd>B</kbd> Bouwen</button>
+    <button id="velden-knop" class="paneel" title="De velden: wat elk veld is, en wat het volgend jaar wordt (V)"><kbd>V</kbd> Velden</button>
     <button id="brief-knop" class="paneel verborgen" title="De brief van de heer: wat hij op Sint-Maarten wil">Brief</button>
     <button id="spelregels-knop" class="paneel" title="Spelregels: wat je zelf instelt (O)"><kbd>O</kbd> Spelregels</button>
   </div>
@@ -53,6 +54,10 @@
        wijnmaand, en het betalen op Sint-Maarten, met de schandpaal als die erbij hoort. -->
   <div id="brief" class="paneel verborgen"></div>
   <div id="heer" class="paneel verborgen"></div>
+
+  <!-- De velden (js/hud.js, T.ui.openVelden; de regels in js/akkers.js en js/vee.js): elk veld met
+       van wie het is, hoe vruchtbaar, wat het nu is, en wat het volgend jaar wordt. -->
+  <div id="velden" class="paneel verborgen"></div>
 
   <!-- De spelregels (js/hud.js, T.ui.openSpelregels; de lijst in js/opties.js): de keuzes, de
        namen, en de werkbank met alle getallen. -->
@@ -104,6 +109,7 @@
     Klik om te lopen, te praten of iets te gebruiken.<br>
     Kalender: <kbd>P</kbd> pauze/hervat · <kbd>-</kbd> <kbd>=</kbd> trager/sneller<br>
     <kbd>B</kbd> bouwen · <kbd>Esc</kbd> of rechtsklik legt een gebouw weer weg<br>
+    <kbd>V</kbd> velden: akker, weide of braak<br>
     <kbd>O</kbd> spelregels: wat je zelf instelt
   </div>
 

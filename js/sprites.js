@@ -403,6 +403,90 @@
     return onthoud(`bouwfase,${tekeningNaam},${faseIndex}`, () => stuk(TEGELMAP + T.BOUWFASEN.bestand, f.x, f.y, f.b, f.h, f.anker));
   };
 
+  // ---------------------------------------------------------------- gras op een weide
+  //
+  // Een weide (js/akkers.js, bestemming 'weide') ligt op de kale akkergrond van de kaart; het spel
+  // legt er gewone grastegels overheen, dezelfde als de kaart zelf voor gras gebruikt: de vlakke
+  // grastegels van het vel "rand" (gereedschap/tiled/maak-gehucht.cjs, VLAK.gras), of anders de
+  // stempel van vier bij vier uit het vel "grond". Welke van de varianten, ligt per tegel vast
+  // (T.akkerVariant), zodat het gras niet flikkert. Een eigen weide met bloemen is later tekenwerk.
+  let grasIds = null;
+  function grasVel() {
+    if (grasIds) return grasIds;
+    for (const velNaam of ['rand', 'grond']) {
+      const v = T.TEGELS && T.TEGELS[velNaam];
+      if (!v || !v.bestand) continue;
+      const ids = [];
+      v.tiles.forEach((t, id) => {
+        if (t && t.naam === 'gras' && (t.groep === 'vlak' || t.groep === 'stempel')) ids.push(id);
+      });
+      if (ids.length) return (grasIds = { velNaam, ids });
+    }
+    return (grasIds = { velNaam: null, ids: [] });
+  }
+
+  S.grasTegel = function (x, y) {
+    const g = grasVel();
+    if (!g.ids.length) return null;
+    return S.buiten(g.velNaam, g.ids[T.akkerVariant ? T.akkerVariant(x, y, g.ids.length) : 0]);
+  };
+
+  // De rand van een weide. De grond van de kaart is een terreinset met hoeken: elke tegel zegt in
+  // zijn groep welke soort er op zijn vier hoeken ligt. "gras over zandpad: boven+rechts" is gras op
+  // de noord- en de oosthoek en zandpad op de andere twee (maak-gehucht.cjs, terreinGid). Zo loopt
+  // de kale grond van een akker een halve tegel door op de tegels eromheen; wordt het veld weide,
+  // dan moet die rand mee gras worden, anders ligt er een zandpad langs twee kanten. js/tekenen.js
+  // zegt welke hoeken nu gras zijn (S.grondHoeken, dan aangepast), en hier komt de tegel bij die
+  // precies die hoeken heeft (S.grondMetHoeken), of null als het vel hem niet heeft.
+  const HOEKEN = ['boven', 'rechts', 'onder', 'links']; // noord, oost, zuid, west: zo staan ze in de groep
+  const hoekenVan = new Map(); // "vel,id" → [n, o, z, w], of null
+  const tegelsMetHoeken = new Map(); // vel → Map("vlak:gras" of de groep zelf → [id])
+
+  S.grondHoeken = function (velNaam, id) {
+    const sleutel = velNaam + ',' + id;
+    if (hoekenVan.has(sleutel)) return hoekenVan.get(sleutel);
+    const v = T.TEGELS && T.TEGELS[velNaam];
+    const t = v && v.tiles[id];
+    let hoeken = null;
+    if (t && t.groep === 'vlak' && t.naam) hoeken = [t.naam, t.naam, t.naam, t.naam];
+    const m = t && /^(\S+) over (\S+): (\S+)$/.exec(t.groep || '');
+    if (m) {
+      const boven = m[3].split('+');
+      hoeken = HOEKEN.map((h) => (boven.includes(h) ? m[1] : m[2]));
+    }
+    hoekenVan.set(sleutel, hoeken);
+    return hoeken;
+  };
+
+  S.grondMetHoeken = function (velNaam, hoeken, x, y) {
+    let index = tegelsMetHoeken.get(velNaam);
+    if (!index) {
+      index = new Map();
+      const v = T.TEGELS && T.TEGELS[velNaam];
+      if (v && v.bestand) {
+        v.tiles.forEach((t, id) => {
+          if (!t || !t.groep) return;
+          const sleutel = t.groep === 'vlak' ? `vlak:${t.naam}` : t.groep;
+          if (!index.has(sleutel)) index.set(sleutel, []);
+          index.get(sleutel).push(id);
+        });
+      }
+      tegelsMetHoeken.set(velNaam, index);
+    }
+    const soorten = [...new Set(hoeken)];
+    let ids = null;
+    if (soorten.length === 1) ids = index.get(`vlak:${soorten[0]}`);
+    else if (soorten.length === 2) {
+      // De set heet naar één van de twee ("gras over zandpad"); probeer beide kanten.
+      for (const [a, b] of [soorten, [soorten[1], soorten[0]]]) {
+        ids = index.get(`${a} over ${b}: ${HOEKEN.filter((h, i) => hoeken[i] === a).join('+')}`);
+        if (ids) break;
+      }
+    }
+    if (!ids || !ids.length) return null;
+    return S.buiten(velNaam, ids[T.akkerVariant ? T.akkerVariant(x, y, ids.length) : 0]);
+  };
+
   // ---------------------------------------------------------------- het graan (gereedschap/pixelart/graan-vel.cjs)
   //
   // Een vel met per stadium een eigen band: geploegd/kiemend/gemaaid hebben alleen varianten

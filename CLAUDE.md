@@ -184,8 +184,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   getal één plek houdt; de namen; en `T.WERKBANK` met alle getallen, die vóór een keuze gaan. Het
   komt ná alle regels en gesprekken, want het neemt hun waarden als standaard, en het gereedschap
   laadt het bewust niet), en `js/hud.js` (de balk, het bouwmenu onder
-  `B`, het handelsvenster, de brief en het betalen aan de heer, alleen met `?kaart=gehucht` of
-  `?hud`). Het begin zonder tutorial is
+  `B`, het veldenvenster onder `V`, het handelsvenster, de brief en het betalen aan de heer, alleen
+  met `?kaart=gehucht` of `?hud`). Het begin zonder tutorial is
   `T.beginOpKaart` (`js/gebied.js`); de kaart komt uit `gereedschap/tiled/maak-gehucht.cjs`, de
   bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen
   om bij te stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
@@ -266,7 +266,8 @@ blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In he
 `Toren.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
 `Toren.debug.brief()` stuurt de brief van de heer nu, `Toren.debug.heer()` laat hem nu komen,
 `Toren.debug.inner()` de inner (`(true)`: onverwacht), en `Toren.debug.argwaan(0.6)` zet zijn argwaan.
-`Toren.debug.vee('koe', 4)` zet vier koeien (of `'schaap'`) rond een open plek bij de schout (`js/vee.js`).
+`Toren.debug.vee('koe', 4)` zet vier koeien (of `'schaap'`) op de weide met de meeste plaats, bij de
+kudde: ze blijven binnen de weide en geven melk (`js/vee.js`). Zonder weide rond een open plek bij de schout.
 De spelregels die de browser onthield (`localStorage`, `aardschok.spelregels`) gelden ook voor wie
 test; `Toren.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
 Een sprong met `kalender` tikt alle dagen ertussen af: valt 1 wijnmaand erin, dan staat de brief

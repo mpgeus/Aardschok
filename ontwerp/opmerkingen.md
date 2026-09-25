@@ -42,6 +42,16 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   een tegel ernaast. Dan draagt hij geen halsijzer, en kijkt hij toch naar voren, niet per se met
   zijn rug naar de paal.
 - **Zolang een boer maait,** leent hij het vel van de maaier: zijn karakter zie je dan niet.
+- **De weides in beeld** (25 sep, stap 1 van `spel.md`, "Weides met koeien en schapen"):
+  - Een weide is gewoon gras, net als het land eromheen: waar hij ophoudt, zie je alleen aan het
+    vee. Een hek, of een eigen tekening (kortgegraasd, bloemen), is tekenwerk.
+  - Het blok van Gerrit (akker7) ligt half achter de bomen aan de zuidkant: maak je het weide, dan
+    staat het vee tussen de boomkruinen.
+  - Een klik op een veld loopt erheen, want de velden zijn groot. Het veldenvenster opent met `V` of
+    de knop Velden, niet met een klik op het veld zoals `spel.md` voorstelde.
+  - Het venster van de heer rekent de kaas tegen het hele tekort, ook tegen het zaaigraan, zoals
+    `T.heerVooruitzicht` het zegt. Maar kaas zaai je niet, en het dorp eet eerst graan en dan pas
+    kaas. Wie in de winter zijn graan opeet, heeft in lentemaand geen zaaigraan, ook met kaas genoeg.
 
 ## Het beeld
 

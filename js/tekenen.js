@@ -152,6 +152,7 @@
 
     const g = werkGrondBij(S, bw, bh, zicht, inBeeld);
     ctx.drawImage(g.canvas, g.vx, g.vy);
+    tekenWeides(ctx, S, vak);
     tekenRaster(ctx, S);
     tekenMarkeringen(ctx, S);
     tekenBouwSpook(ctx, S);
@@ -209,6 +210,7 @@
           for (let x = ax0; x <= ax1; x++) {
             if (!T.isZichtbaar(w, x, y)) continue;
             const stadium = T.akkerTegelStadium(akker, x, y, basis);
+            if (stadium === 'weide') continue; // dat is gras, al getekend (tekenWeides hieronder)
             const variant = T.akkerVariant(x, y, varianten);
             const p = T.naarScherm(x, y);
             if (stadium === 'groen' || stadium === 'rijp') {
@@ -275,6 +277,64 @@
     ctx.restore();
     tekenVignet(ctx, S, bw, bh);
   };
+
+  // Gras op een weide (js/akkers.js: T.akkerTegelStadium geeft 'weide'; spel.md, "Weides met koeien
+  // en schapen"). De kaart heeft onder elk veld kale akkergrond; een weide krijgt daar gewone
+  // grastegels overheen. Dat gebeurt meteen na de grond en vóór alles wat erop staat, en niet in de
+  // tekenlijst zoals het graan: een koe is ruim twee tegels lang, en een grastegel die in de lijst
+  // ná haar kwam, schilderde haar kop weg. Het gras is plat, dus er hoeft niets voor of achter.
+  //
+  // De grond van de kaart legt de soort op de hoeken van de tegels (T.sprites.grondHoeken): hoek
+  // (x, y) is de noordhoek van tegel (x, y), en een veld zet zandpad op zijn hoeken van x tot x+b-1
+  // en y tot y+h-1 (gereedschap/tiled/maak-gehucht.cjs, soortOp en terreinGid). Daardoor loopt de
+  // kale grond een halve tegel door op de rij en de kolom vóór het veld. Hier worden precies die
+  // hoeken weer gras, en krijgt elke tegel die er een raakt de tegel die bij zijn nieuwe hoeken
+  // hoort: zo ziet een weide eruit alsof de kaart daar altijd gras had, ook naast een akker (die
+  // houdt dan zijn eigen rand). Zonder kunst een groene ruit, zoals het gras van de kaart.
+  function tekenWeides(ctx, S, vak) {
+    const w = S.wereld;
+    if (!w.akkers || !w.akkers.length || !T.bestemmingVan) return;
+    const weides = w.akkers.filter((v) => T.bestemmingVan(v) === 'weide');
+    if (!weides.length) return;
+    const sp = metSprites();
+    const opWeide = (x, y) => weides.some((v) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h);
+    const HOEK = [[0, 0], [1, 0], [1, 1], [0, 1]]; // noord, oost, zuid, west, vanaf (x, y)
+    const gehad = new Set();
+    for (const v of weides) {
+      const x0 = Math.max(vak.x0, v.x - 1);
+      const y0 = Math.max(vak.y0, v.y - 1);
+      const x1 = Math.min(vak.x1, v.x + v.b - 1);
+      const y1 = Math.min(vak.y1, v.y + v.h - 1);
+      for (let y = y0; y <= y1; y++) {
+        for (let x = x0; x <= x1; x++) {
+          const sleutel = x + ',' + y;
+          if (gehad.has(sleutel) || !T.isZichtbaar(w, x, y)) continue;
+          gehad.add(sleutel);
+          const zelf = opWeide(x, y);
+          const p = T.naarScherm(x, y);
+          if (!sp) {
+            if (!zelf) continue;
+            T.ruit(ctx, p.x, p.y, 1);
+            ctx.fillStyle = BUITENKLEUR.gras[(x + y) % 2];
+            ctx.fill();
+            continue;
+          }
+          const g = w.grond && w.grond[y] && w.grond[y][x];
+          const oud = g && T.sprites.grondHoeken(g.vel, g.id);
+          let deel = null;
+          if (oud) {
+            const nieuw = oud.map((soort, i) => (opWeide(x + HOEK[i][0], y + HOEK[i][1]) ? 'gras' : soort));
+            if (nieuw.every((soort, i) => soort === oud[i])) continue; // deze tegel verandert niet
+            deel = T.sprites.grondMetHoeken(g.vel, nieuw, x, y);
+          }
+          // Een tegel buiten de terreinset (of een hoek die het vel niet kent): op de weide zelf dan
+          // gewoon gras, en daarbuiten blijft hij zoals de kaart hem legde.
+          if (!deel && zelf) deel = T.sprites.grasTegel(x, y);
+          if (deel) T.sprites.teken(ctx, deel, p.x, p.y, 1);
+        }
+      }
+    }
+  }
 
   // Op welke tegel plant een voorwerp zich in bij het sorteren van achter naar voor? Een boom
   // staat op één tegel, maar een huis of de toren beslaat er meer (`beslaat`, vanaf zijn achterste

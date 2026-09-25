@@ -362,6 +362,14 @@
       if (ev.key === 'Escape') T.ui.sluitSpelregels(S);
       return;
     }
+    // Het veldenvenster (js/hud.js): net als bij de spelregels staat de tijd stil en ligt de rest
+    // stil. Esc of V sluit het; B en O sluiten het ook en gaan dan meteen door naar het bouwmenu of
+    // de spelregels, hieronder.
+    if (S.modus === 'velden') {
+      const k = (ev.key || '').toLowerCase();
+      if (k === 'escape' || k === 'v' || k === 'b' || k === 'o') T.ui.sluitVelden(S);
+      if (k !== 'b' && k !== 'o') return;
+    }
     if (ev.key === 'Escape' && T.ui.briefOpen && T.ui.briefOpen()) {
       T.ui.sluitBrief(S);
       return;
@@ -390,6 +398,12 @@
     // O: de spelregels (js/hud.js, js/opties.js), net als B alleen bij het rondlopen.
     if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'o' || ev.key === 'O')) {
       T.ui.openSpelregels(S);
+      return;
+    }
+    // V: de velden (js/hud.js; wat elk veld is en volgend jaar wordt), ook alleen bij het rondlopen.
+    if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'v' || ev.key === 'V') && S.wereld.akkers) {
+      T.kiesSpreuk(S, null);
+      T.ui.openVelden(S);
       return;
     }
     if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'b' || ev.key === 'B')) {
@@ -524,14 +538,49 @@
       }
       return { argwaan: I.argwaan, waarom: I.waarom.slice() };
     },
-    // Vee neerzetten om naar te kijken (js/vee.js), nog zonder weide en zonder regels:
-    // Toren.debug.vee('koe', 4) zet vier koeien rond een open plek bij de schout, elk met een eigen
-    // zaad, en dus een eigen kleur en een eigen ritme van grazen, staan en liggen.
+    // Vee neerzetten om naar te kijken (js/vee.js): Toren.debug.vee('koe', 4) zet vier koeien op de
+    // weide met de meeste plaats, elk op een vrije tegel en met een eigen zaad (en dus een eigen
+    // kleur en een eigen ritme van grazen, staan en liggen). Daar horen ze bij de kudde: ze blijven
+    // binnen de weide, geven melk en werpen jongen, en verhuizen mee bij een wissel. Is die weide
+    // vol, dan de volgende; te vol mag, dat is ook iets om naar te kijken (minder melk). Zonder
+    // weide, of zonder vrije tegel erop, rond een open plek bij de schout, zoals vóór de weides.
     vee(soort = 'koe', aantal = 1) {
       if (!T.VEE[soort]) return `Dat dier ken ik niet: ${soort}. Er is: ${Object.keys(T.VEE).join(', ')}.`;
       const w = S.wereld;
       const h = S.held;
       const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true });
+      const opWeide = [];
+      const weides = (w.akkers || []).filter((v) => T.bestemmingVan(v) === 'weide');
+      while (opWeide.length < aantal && weides.length) {
+        weides.sort((a, b) => T.weideStand(S, b).vrij - T.weideStand(S, a).vrij);
+        const v = weides[0];
+        // De vrije tegel die het verst van de andere dieren op deze weide ligt: zo spreidt de kudde.
+        const anderen = T.dierenOp(S, v);
+        let plek = null;
+        let ruimte = -1;
+        for (let y = v.y; y < v.y + v.h; y++) {
+          for (let x = v.x; x < v.x + v.b; x++) {
+            if (!vrij(x, y)) continue;
+            const r = anderen.reduce((m, d) => Math.min(m, T.afstand({ x: d.tx, y: d.ty }, { x, y })), 99);
+            if (r > ruimte) {
+              ruimte = r;
+              plek = { x, y };
+            }
+          }
+        }
+        if (!plek) {
+          weides.shift(); // geen vrije tegel meer op deze weide: de volgende
+          continue;
+        }
+        S.veeZaad = (S.veeZaad || 0) + 1;
+        const e = T.zetOpWeide(T.maakDier(soort, plek.x, plek.y, S.veeZaad), v);
+        w.wezens.push(e);
+        opWeide.push(e);
+      }
+      const opWeideTekst = opWeide.map((e) => `${e.naam} ${e.vel} op ${e.tx},${e.ty}, op de weide ${e.weide.naam}`);
+      if (opWeide.length && T.ui.toonVoorraad) T.ui.toonVoorraad(S); // de melk bij de kaas in de balk
+      if (opWeide.length === aantal) return opWeideTekst;
+      aantal -= opWeide.length;
       // Het midden van de kudde: de dichtstbijzijnde tegel, drie of meer stappen van de schout, met
       // vijf bij vijf vrije tegels eromheen.
       const open = (x, y) => {
@@ -546,7 +595,7 @@
           }
         }
       }
-      if (!midden) return 'Er is geen open stuk grond bij de schout.';
+      if (!midden) return opWeide.length ? opWeideTekst : 'Er is geen open stuk grond bij de schout.';
       // De dieren eromheen, van binnen naar buiten, met een tegel ruimte tussen elk dier (ook tussen
       // dieren die er al stonden): een koe is ruim twee tegels lang.
       const dieren = w.wezens.filter((e) => e.dier && !e.dood);
@@ -566,7 +615,7 @@
           }
         }
       }
-      return geplaatst.map((e) => `${e.naam} ${e.vel} op ${e.tx},${e.ty}`);
+      return opWeideTekst.concat(geplaatst.map((e) => `${e.naam} ${e.vel} op ${e.tx},${e.ty}`));
     },
     // Het doek als PNG bewaren: await Toren.debug.schermafdruk('graan-rijp') schrijft
     // gereedschap/pixelart/uit/schermen/graan-rijp.png (via server.cjs; werkt niet vanaf file://).
