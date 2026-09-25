@@ -356,6 +356,11 @@
       if (ev.key === 'Escape') T.ui.sluitHeer(S);
       return;
     }
+    // Het slachten (js/hud.js): de tijd staat stil, en Esc is niemand slachten.
+    if (S.modus === 'slachten') {
+      if (ev.key === 'Escape') T.ui.sluitSlachten(S);
+      return;
+    }
     if (S.modus === 'einde') return;
     // De spelregels (js/hud.js): daar typ je ook namen, dus alleen Esc doet iets.
     if (S.modus === 'spelregels') {
@@ -537,6 +542,12 @@
         if (T.ui.toonArgwaan) T.ui.toonArgwaan(S);
       }
       return { argwaan: I.argwaan, waarom: I.waarom.slice() };
+    },
+    // Het slachtvenster nu openen (js/hud.js, T.ui.openSlachten), zonder op 1 slachtmaand te wachten.
+    slachten() {
+      if (!T.ui.openSlachten) return 'Het slachtvenster is er alleen in het gehucht.';
+      T.ui.openSlachten(S);
+      return T.ui.slachtenOpen() ? 'open' : 'Er is geen vee om te slachten.';
     },
     // Vee neerzetten om naar te kijken (js/vee.js): Toren.debug.vee('koe', 4) zet vier koeien op de
     // weide met de meeste plaats, elk op een vrije tegel en met een eigen zaad (en dus een eigen

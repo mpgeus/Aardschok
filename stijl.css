@@ -526,7 +526,8 @@ kbd {
 }
 #brief-knop:hover { color: var(--inkt); }
 #brief,
-#heer {
+#heer,
+#slachten {
   position: fixed;
   left: 50%;
   top: 50%;
@@ -569,7 +570,7 @@ kbd {
 #brief .brief-samen { font-style: normal; font-size: 13px; }
 #brief .brief-groet { text-align: right; margin-bottom: 0; }
 
-#heer .heer-rij {
+:is(#heer, #slachten) .heer-rij {
   display: grid;
   grid-template-columns: 1.4fr 1fr 3em;
   align-items: center;
@@ -580,19 +581,19 @@ kbd {
   border: 1px solid var(--rand);
   border-radius: 6px;
 }
-#heer .heer-naam { font: 14px var(--kop); color: var(--inkt); }
-#heer .heer-naam small { display: block; font: 11px system-ui, sans-serif; color: var(--gedempt); }
-#heer .heer-naam small.heer-waarom { font-style: italic; opacity: 0.85; }
-#heer input[type='range'] { width: 100%; accent-color: var(--goud); }
-#heer .heer-geef { text-align: right; font: 15px var(--kop); color: var(--goud); }
-#heer .heer-samen { margin-top: 10px; }
-#heer .heer-deel { margin: 0 0 6px; padding: 7px 10px; font-size: 13px; border-radius: 6px; border: 1px solid var(--rand); }
-#heer .heer-deel.goed { border-color: rgba(134, 196, 111, 0.5); }
-#heer .heer-deel.boete { border-color: rgba(226, 182, 74, 0.6); }
-#heer .heer-deel.zwaar { border-color: rgba(224, 96, 79, 0.7); color: #f1c3bb; }
-#heer .heer-vooruit { margin: 0 0 8px; font-size: 12.5px; color: var(--gedempt); }
-#heer .heer-knoppen { display: flex; gap: 6px; justify-content: flex-end; }
-#heer .heer-knoppen button,
+:is(#heer, #slachten) .heer-naam { font: 14px var(--kop); color: var(--inkt); }
+:is(#heer, #slachten) .heer-naam small { display: block; font: 11px system-ui, sans-serif; color: var(--gedempt); }
+:is(#heer, #slachten) .heer-naam small.heer-waarom { font-style: italic; opacity: 0.85; }
+:is(#heer, #slachten) input[type='range'] { width: 100%; accent-color: var(--goud); }
+:is(#heer, #slachten) .heer-geef { text-align: right; font: 15px var(--kop); color: var(--goud); }
+:is(#heer, #slachten) .heer-samen { margin-top: 10px; }
+:is(#heer, #slachten) .heer-deel { margin: 0 0 6px; padding: 7px 10px; font-size: 13px; border-radius: 6px; border: 1px solid var(--rand); }
+:is(#heer, #slachten) .heer-deel.goed { border-color: rgba(134, 196, 111, 0.5); }
+:is(#heer, #slachten) .heer-deel.boete { border-color: rgba(226, 182, 74, 0.6); }
+:is(#heer, #slachten) .heer-deel.zwaar { border-color: rgba(224, 96, 79, 0.7); color: #f1c3bb; }
+:is(#heer, #slachten) .heer-vooruit { margin: 0 0 8px; font-size: 12.5px; color: var(--gedempt); }
+:is(#heer, #slachten) .heer-knoppen { display: flex; gap: 6px; justify-content: flex-end; }
+:is(#heer, #slachten) .heer-knoppen button,
 #heer .paal-keuze {
   padding: 5px 10px;
   font: 13px system-ui, sans-serif;
@@ -602,19 +603,19 @@ kbd {
   border-radius: 6px;
   cursor: pointer;
 }
-#heer .heer-knoppen .heer-geef-knop { color: #1b1510; background: var(--goud); border-color: var(--goud); }
-#heer .heer-knoppen button:hover:not(:disabled),
+:is(#heer, #slachten) .heer-knoppen .heer-geef-knop { color: #1b1510; background: var(--goud); border-color: var(--goud); }
+:is(#heer, #slachten) .heer-knoppen button:hover:not(:disabled),
 #heer .paal-keuze:hover { background: rgba(226, 182, 74, 0.16); border-color: rgba(226, 182, 74, 0.6); }
-#heer .heer-knoppen .heer-geef-knop:hover:not(:disabled) { background: var(--goud); filter: brightness(1.08); }
-#heer .heer-knoppen button:disabled { opacity: 0.35; cursor: default; }
+:is(#heer, #slachten) .heer-knoppen .heer-geef-knop:hover:not(:disabled) { background: var(--goud); filter: brightness(1.08); }
+:is(#heer, #slachten) .heer-knoppen button:disabled { opacity: 0.35; cursor: default; }
 #heer .paal-keuze { display: flex; flex-direction: column; gap: 1px; width: 100%; margin-bottom: 5px; text-align: left; }
 #heer .paal-naam { font: 15px var(--kop); }
 #heer .paal-wie { font-size: 12px; color: var(--gedempt); }
 #heer .paal-prijs { font-size: 11.5px; color: var(--goud); }
 #overlay .einde-jaren { font-size: 13px; color: var(--gedempt); }
 @media (max-width: 480px) {
-  #heer .heer-rij { grid-template-columns: 1fr 3em; }
-  #heer .heer-rij input[type='range'] { grid-column: 1 / -1; grid-row: 2; }
+  :is(#heer, #slachten) .heer-rij { grid-template-columns: 1fr 3em; }
+  :is(#heer, #slachten) .heer-rij input[type='range'] { grid-column: 1 / -1; grid-row: 2; }
 }
 
 /* De spelregels (js/hud.js, T.ui.openSpelregels; js/opties.js): de knop naast Bouwen, en het
@@ -770,6 +771,8 @@ kbd {
 #velden .veld-wanneer { display: block; margin-top: 2px; color: var(--goud) !important; text-align: right; }
 #velden .veld-reden { grid-column: 1 / -1; margin: 0; font-size: 12px; color: var(--rood); }
 #velden .veld-samen { margin: 10px 0 0; font-size: 13px; color: var(--inkt); }
+/* De hele kudde, met de knop naar het slachten (js/hud.js, T.ui.openSlachten). */
+#velden .veld-kudde { margin: 8px 0 0; font-size: 13px; color: var(--inkt); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 @media (max-width: 640px) {
   #velden .veld-rij { grid-template-columns: 1fr 1fr; }
   #velden .veld-kop { display: none; }

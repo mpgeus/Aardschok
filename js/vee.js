@@ -69,6 +69,12 @@
     hongerDagen: 10,
     // Hoeveel dagen vooraf het dorp zegt dat het hooi opraakt.
     hooiWaarschuwing: 15,
+    // Op deze dag opent het slachtvenster vanzelf (js/hud.js): de winter begint, en het hooi zegt
+    // hoeveel vee je houdt.
+    slachten: { maand: 'slachtmaand', dag: 1 },
+    // Wat een geslacht dier geeft. Een jong geeft de helft van het vlees, en ook een huid. Vlees eet
+    // het dorp erbij, en het bederft tenzij het gezouten is (js/behoeften.js).
+    slacht: { koe: { vlees: 20, huiden: 1 }, schaap: { vlees: 6, huiden: 1 } },
   };
   const IN = () => T.VEE_INSTELLINGEN;
 
@@ -698,6 +704,82 @@
     e.dood = true;
   }
 
+  // ── Slachten (stap 2) ──
+  //
+  // Op 1 slachtmaand vraagt het dorp wie er naar de slager gaat (het venster in js/hud.js; je kunt het
+  // ook zelf openen in het veldenvenster). Het vee staat er in groepen: volwassen dieren en jongen,
+  // per soort, het oudste eerst. Uit elke groep gaan de oudste; zo worden de jongen van dit jaar
+  // volgend jaar de melkkoeien.
+
+  // De groepen van de kudde: [{ soort, jong, naam, meervoud, dieren }], met de dieren het oudste eerst.
+  // Een lege groep staat er niet in.
+  T.kuddeGroepen = function (S, dag) {
+    const groepen = [];
+    for (const [soort, v] of Object.entries(T.VEE)) {
+      for (const jong of [false, true]) {
+        const dieren = T.veeVan(S).filter((e) => e.dier === soort && !volwassen(e, dag) === jong).sort(oudsteEerst);
+        if (dieren.length) groepen.push({ soort, jong, naam: jong ? v.jong : v.naam, meervoud: jong ? v.jongen : v.meervoud, dieren });
+      }
+    }
+    return groepen;
+  };
+
+  // Wat deze dieren geslacht opleveren: { vlees, huiden }.
+  T.slachtOpbrengst = function (dieren, dag) {
+    let vlees = 0;
+    let huiden = 0;
+    for (const e of dieren) {
+      const s = IN().slacht[e.dier] || { vlees: 0, huiden: 0 };
+      vlees += s.vlees * (volwassen(e, dag) ? 1 : 0.5);
+      huiden += s.huiden;
+    }
+    return { vlees, huiden };
+  };
+
+  // Het hooi voor de winter: in de winter zelf wat er in de voorraad ligt; daarbuiten ook wat er dit
+  // jaar nog op de weides staat (js/akkers.js, T.verwachtHooi), want dat is voor de volgende winter.
+  T.hooiVoorDeWinter = (S, dag) => ((S.voorraad && S.voorraad.hooi) || 0)
+    + (T.verwachtHooi && !winterTijd(dag) ? T.verwachtHooi(S, dag) : 0);
+
+  // Het voorstel: zo weinig dieren als kan, zodat het hooi de rest van de winter haalt. Is één dier
+  // genoeg, dan het kleinste dat volstaat (een kalf eet de helft); anders het oudste. Alleen wie hooi
+  // eet, komt erin: een schaap op de heide niet. { hooi, winter, perDag, dieren }: `perDag` is wat
+  // de kudde eet zonder de dieren van het voorstel.
+  T.slachtVoorstel = function (S, dag) {
+    const hooi = T.hooiVoorDeWinter(S, dag);
+    const winter = T.winterDagen(dag);
+    const eters = T.veeVan(S).filter((e) => T.hooiVanDier(e, dag) > 0).sort(oudsteEerst);
+    let perDag = T.hooiPerWinterdag(S, dag, eters);
+    const dieren = [];
+    while (perDag * winter > hooi + 1e-9) {
+      const over = eters.filter((e) => !dieren.includes(e));
+      if (!over.length) break;
+      const tekort = perDag - hooi / winter;
+      const genoeg = over.filter((e) => T.hooiVanDier(e, dag) >= tekort - 1e-9)
+        .sort((a, b) => T.hooiVanDier(a, dag) - T.hooiVanDier(b, dag) || oudsteEerst(a, b));
+      const kies = genoeg[0] || over[0];
+      dieren.push(kies);
+      perDag -= T.hooiVanDier(kies, dag);
+    }
+    return { hooi, winter, perDag, dieren };
+  };
+
+  // Slacht deze dieren: weg uit de wereld, en hun vlees en huiden in de voorraad. Geeft
+  // { vlees, huiden }.
+  T.slacht = function (S, dieren, dag) {
+    const o = T.slachtOpbrengst(dieren, dag);
+    for (const e of dieren) haalWeg(S, e);
+    if (S.voorraad && T.wijzigVoorraad) {
+      if (o.vlees > 0) T.wijzigVoorraad(S, 'vlees', o.vlees);
+      if (o.huiden > 0) T.wijzigVoorraad(S, 'huiden', o.huiden);
+    }
+    if (S.vee) S.vee.slachtVraag = false;
+    if (dieren.length) {
+      bericht(`${T.hoofdletter(dierenTekst(dieren, dag))} ${dieren.length === 1 ? 'gaat' : 'gaan'} naar de slager: ${Math.round(o.vlees)} vlees en ${o.huiden} ${o.huiden === 1 ? 'huid' : 'huiden'}.`, 'goed');
+    }
+    return o;
+  };
+
   // Eén winterdag (T.tikVeeDag): het vee eet hooi uit de voorraad, het oudste eerst (de kern van de
   // kudde; het jongste eet als laatste). Wie niet genoeg krijgt, krijgt honger (e.honger, in dagen,
   // naar hoeveel het tekortkwam); na IN().hongerDagen sterft het. Wie weer genoeg eet, knapt per dag
@@ -757,6 +839,11 @@
     const d = T.datumVanDag(dag);
     const werpen = IN().werpen;
     if (IN().groeit && d.maand === maandIdx(werpen.maand) && d.dagVanMaand === werpen.dag) T.werpJongen(S, dag);
+    // Op 1 slachtmaand: wie gaat er naar de slager? Het venster opent zodra je rondloopt (niet midden
+    // in een gesprek of een ander venster), en tot dan blijft de vraag staan.
+    const s = IN().slachten;
+    if (d.maand === maandIdx(s.maand) && d.dagVanMaand === s.dag) V.slachtVraag = true;
+    if (V.slachtVraag && T.ui && T.ui.openSlachten && (!S.modus || S.modus === 'verkennen')) T.ui.openSlachten(S);
     if (IN().winterzorg && winterTijd(dag)) T.voerHooi(S, dag);
     else V.hooiGewaarschuwd = V.hongerGemeld = false; // een nieuwe winter mag weer waarschuwen
     V.melk = T.melkVanDag(S, dag);

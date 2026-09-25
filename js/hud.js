@@ -695,6 +695,151 @@
     );
   };
 
+  // ── Het slachten (js/vee.js, T.slacht; spel.md, "Marcel koos voor stap 2") ──
+  // Op 1 slachtmaand opent dit vanzelf: de winter begint, en het hooi zegt hoeveel vee je houdt. Je
+  // kunt het ook zelf openen, onderaan het veldenvenster. Per groep (koeien, kalveren, schapen,
+  // lammeren) schuif je hoeveel er naar de slager gaan, het oudste eerst. Het venster rekent mee of
+  // het hooi de winter dan haalt, en wat het vlees en de huiden zijn. Het begint op het voorstel
+  // (T.slachtVoorstel): zo weinig als kan, zodat het hooi het haalt. Zolang het open is, staat de
+  // tijd stil (S.modus 'slachten', js/main.js).
+  let slacht = null; // per groep (T.kuddeGroepen): hoeveel er gaan
+
+  const dagNu = (S) => Math.floor((S.kalender && S.kalender.dag) || 0);
+  const gekozen = (groepen) => groepen.flatMap((g, i) => g.dieren.slice(0, (slacht && slacht[i]) || 0));
+
+  function slachtRijen(S, groepen) {
+    const dag = dagNu(S);
+    return groepen.map((g, i) => {
+      const n = g.dieren.length;
+      const eet = T.hooiVanDier(g.dieren[0], dag);
+      const hooi = eet > 0 ? `eet ${eet === 1 ? 'één hooi' : `${String(eet).replace('.', ',')} hooi`} per winterdag` : 'eet geen hooi';
+      return (
+        `<div class="heer-rij">` +
+        `<span class="heer-naam">${T.hoofdletter(n === 1 ? g.naam : g.meervoud)} <small>je hebt er ${n} · ${hooi}</small></span>` +
+        `<input type="range" min="0" max="${n}" step="1" value="${slacht[i] || 0}" data-groep="${i}">` +
+        `<span class="heer-geef" data-slacht="${i}">${slacht[i] || 0}</span>` +
+        `</div>`
+      );
+    }).join('');
+  }
+
+  // Het deel dat met de schuiven meeverandert: haalt het hooi de winter, en wat geeft het slachten.
+  function slachtSamenvatting(S, groepen) {
+    const dag = dagNu(S);
+    const weg = gekozen(groepen);
+    const blijft = T.veeVan(S).filter((e) => !weg.includes(e));
+    const perDag = T.hooiPerWinterdag(S, dag, blijft);
+    const hooi = T.hooiVoorDeWinter(S, dag);
+    const winter = T.winterDagen(dag);
+    const dagen = perDag > 0 ? Math.floor(hooi / perDag) : Infinity;
+    const haalt = dagen >= winter;
+    let winterTekst = '';
+    if (T.VEE_INSTELLINGEN.winterzorg) {
+      winterTekst = perDag <= 0
+        ? 'Wie overblijft, eet geen hooi.'
+        : haalt
+          ? `Wie overblijft, eet ${Math.round(perDag * 10) / 10} hooi per dag: het hooi haalt de winter, met ${Math.floor(hooi - perDag * winter)} over.`
+          : `Wie overblijft, eet ${Math.round(perDag * 10) / 10} hooi per dag: het hooi is na ${dagen} van de ${winter} dagen op, en dan sterft het vee van honger.`;
+    }
+    const o = T.slachtOpbrengst(weg, dag);
+    let opbrengst = weg.length
+      ? `Het slachten geeft ${Math.round(o.vlees)} vlees en ${o.huiden} ${o.huiden === 1 ? 'huid' : 'huiden'}.`
+      : 'Je slacht niemand.';
+    if (o.vlees > 0 && T.zoutDekking) {
+      const z = T.zoutDekking(S);
+      const vrij = Math.max(0, Math.floor((S.voorraad.zout || 0) * T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed - z.totaal));
+      opbrengst += vrij >= o.vlees
+        ? ' Je zout houdt het vlees goed.'
+        : vrij > 0
+          ? ` Vlees bederft zonder zout, en je zout houdt er nog ${vrij} goed: de rest is binnen een paar weken weg.`
+          : ' Vlees bederft zonder zout, en je hebt geen zout over: het is binnen een paar weken weg.';
+    }
+    return (
+      `<p class="heer-deel ${!T.VEE_INSTELLINGEN.winterzorg || haalt ? 'goed' : 'zwaar'}">${winterTekst} ${opbrengst}</p>` +
+      `<div class="heer-knoppen"><button data-actie="voorstel" title="Zo weinig als kan, zodat het hooi de winter haalt">Voorstel</button>` +
+      `<button class="heer-geef-knop" data-actie="slacht"${weg.length ? '' : ' disabled title="Schuif eerst wie er gaan"'}>Slachten</button></div>`
+    );
+  }
+
+  function toonSlachten(S) {
+    const box = $('slachten');
+    const dag = dagNu(S);
+    const groepen = T.kuddeGroepen(S, dag);
+    if (!slacht) {
+      const voorstel = T.slachtVoorstel(S, dag).dieren;
+      slacht = groepen.map((g) => g.dieren.filter((e) => voorstel.includes(e)).length);
+    }
+    const hooi = Math.floor(T.hooiVoorDeWinter(S, dag));
+    const winter = T.winterDagen(dag);
+    const inleiding = T.VEE_INSTELLINGEN.winterzorg
+      ? (T.isVeeWinter(dag)
+        ? `Het is winter: nog ${winter === 1 ? 'één dag' : `${winter} dagen`} tot het gras terug is. Zolang eet het vee hooi, en je hebt er ${hooi}.`
+        : `De volgende winter duurt ${winter} dagen, en dan eet het vee hooi. Je hebt er ${hooi}, met wat er nog op de weides staat.`) +
+        ' Wat het hooi niet de winter door helpt, gaat naar de slager, of het sterft. Uit elke groep gaan de oudste.'
+      : 'Wie gaat er naar de slager? Uit elke groep gaan de oudste.';
+    box.innerHTML =
+      `<div class="venster-kop"><span class="venster-titel">Het slachten</span><span class="venster-wanneer">${T.datumVanDag(dag).tekst}</span>` +
+      `<button class="venster-sluit" data-actie="sluit" title="Niemand slachten (Esc)">✕</button></div>` +
+      `<p class="venster-staat">${inleiding}</p>` +
+      (groepen.length ? slachtRijen(S, groepen) : '<p class="venster-staat">Er is geen vee.</p>') +
+      `<div class="heer-samen">${slachtSamenvatting(S, groepen)}</div>` +
+      `<p class="venster-voet">Zolang dit open is, staat de tijd stil. <kbd>Esc</kbd>: niemand slachten.</p>`;
+    box.classList.remove('verborgen');
+  }
+
+  T.ui.slachtenOpen = () => !$('slachten').classList.contains('verborgen');
+
+  T.ui.openSlachten = function (S) {
+    if (!T.kuddeGroepen || !T.veeVan(S).length) {
+      if (S.vee) S.vee.slachtVraag = false;
+      return;
+    }
+    if (T.ui.veldenOpen()) T.ui.sluitVelden(S);
+    if (T.ui.briefOpen()) T.ui.sluitBrief(S);
+    S.modus = 'slachten';
+    S.bouwSoort = null;
+    S.bouwMenuOpen = false;
+    T.ui.toonBouwmenu(S);
+    T.ui.verbergTooltip();
+    slacht = null;
+    zetTijdStil(S, 'slachtenVoorSnelheid');
+    toonSlachten(S);
+  };
+
+  T.ui.sluitSlachten = function (S) {
+    $('slachten').classList.add('verborgen');
+    if (S.modus === 'slachten') S.modus = 'verkennen';
+    if (S.vee) S.vee.slachtVraag = false;
+    slacht = null;
+    laatTijdLopen(S, 'slachtenVoorSnelheid');
+  };
+
+  $('slachten').addEventListener('input', (ev) => {
+    const r = ev.target.closest('input[type="range"]');
+    const S = T.S;
+    if (!r || !S || !slacht) return;
+    slacht[Number(r.dataset.groep)] = Number(r.value);
+    $('slachten').querySelector(`[data-slacht="${r.dataset.groep}"]`).textContent = r.value;
+    $('slachten').querySelector('.heer-samen').innerHTML = slachtSamenvatting(S, T.kuddeGroepen(S, dagNu(S)));
+  });
+
+  $('slachten').addEventListener('click', (ev) => {
+    const b = ev.target.closest('button');
+    const S = T.S;
+    if (!b || !S) return;
+    b.blur();
+    if (b.dataset.actie === 'sluit') {
+      T.ui.sluitSlachten(S);
+    } else if (b.dataset.actie === 'voorstel') {
+      slacht = null;
+      toonSlachten(S);
+    } else if (b.dataset.actie === 'slacht') {
+      const weg = gekozen(T.kuddeGroepen(S, dagNu(S)));
+      if (weg.length) T.slacht(S, weg, dagNu(S));
+      T.ui.sluitSlachten(S);
+    }
+  });
+
   // ── De velden (js/akkers.js, "Velden"; spel.md, "Weides met koeien en schapen") ──
   // Zoals het veldenscherm van Lords of the Realm 2 (Marcel, 25 sep): alle velden onder elkaar, met
   // van wie ze zijn, hoe groot en hoe vruchtbaar, wat ze nu zijn, en drie knoppen voor wat ze
@@ -785,11 +930,19 @@
   function hooiVooruit(S, weides) {
     const VI = T.VEE_INSTELLINGEN;
     if (!VI || !VI.winterzorg || !T.winterLengte || !weides.length) return '';
-    const hooi = weides.reduce((n, v) => n + v.b * v.h, 0) * VI.hooiPerTegel;
+    const hooi = weides.reduce((n, v) => n + v.b * v.h * (T.hooiPerTegel ? T.hooiPerTegel(v, T.boerVanVeld(S, v)) : VI.hooiPerTegel), 0);
     const koeien = Math.floor(hooi / (T.winterLengte() * (VI.hooiPerDag.koe || 1)));
     const nu = T.veeVan(S).filter((e) => e.dier === 'koe').length;
     return ` Die ${weides.length === 1 ? 'weide geeft' : 'weides geven'} in ${VI.hooien} zo'n ${Math.round(hooi)} hooi: ` +
       `genoeg voor ${koeien} ${koeien === 1 ? 'koe' : 'koeien'} de winter door (een kalf telt half), en je hebt er nu ${nu}.`;
+  }
+
+  // De hele kudde in één regel, met de knop om te slachten (het venster hierboven).
+  function kuddeRegel(S) {
+    const kudde = T.veeVan ? T.veeVan(S) : [];
+    if (!kudde.length || !T.dierenTekst) return '';
+    return `<p class="veld-kudde">De kudde: ${T.dierenTekst(kudde, dagNu(S))}. ` +
+      `<button class="veld-keuze" data-actie="slachten" title="Wie gaat er naar de slager?">Slachten…</button></p>`;
   }
 
   function veldenInhoud(S) {
@@ -821,7 +974,7 @@
       `<div class="veld-rij veld-kop"><span>Veld</span><span title="Een akker geeft zijn graan maal zijn vruchtbaarheid.">Vruchtbaar</span>` +
       `<span>Nu</span><span>Volgend jaar</span></div>` +
       (velden.map((v, i) => veldRij(S, v, i)).join('') || '<p class="venster-staat">Hier zijn geen velden.</p>') +
-      `<p class="veld-samen">${volgend}</p>` +
+      `<p class="veld-samen">${volgend}</p>` + kuddeRegel(S) +
       `<p class="venster-voet">Zolang dit open is, staat de tijd stil. <kbd>Esc</kbd> of <kbd>V</kbd> sluit.</p>`
     );
   }
@@ -864,6 +1017,11 @@
     b.blur();
     if (b.dataset.actie === 'sluit') {
       T.ui.sluitVelden(S);
+      return;
+    }
+    if (b.dataset.actie === 'slachten') {
+      T.ui.sluitVelden(S);
+      T.ui.openSlachten(S);
       return;
     }
     const veld = S.wereld.akkers[Number(b.dataset.veld)];

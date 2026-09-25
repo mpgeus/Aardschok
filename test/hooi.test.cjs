@@ -243,3 +243,79 @@ test('het gehucht begint met hooi voor de rest van de winter: drie koeien, derti
   assert.ok(bijna(S.voorraad.hooi, begin - 30 * koeien()));
   assert.equal(T.isVeeWinter(30), false, 'op 1 grasmaand graast het weer');
 });
+
+// ---------------------------------------------------------------- slachten
+
+test('T.kuddeGroepen: koeien, kalveren, schapen en lammeren, elk het oudste eerst', () => {
+  const { S, velden: [weide] } = boerMet([{ x: 2, y: 2, b: 6, h: 6, bestemming: 'weide' }]);
+  const dag = dagVan('slachtmaand', 1);
+  const oud = zet(S, weide, 'koe', 2);
+  const kalf = zet(S, weide, 'koe', 1, dag - 200);
+  const lam = zet(S, weide, 'schaap', 1, dag - 150);
+  const groepen = T.kuddeGroepen(S, dag);
+  assert.deepEqual(groepen.map((g) => [g.naam, g.meervoud, g.dieren.length]), [['koe', 'koeien', 2], ['kalf', 'kalveren', 1], ['lam', 'lammeren', 1]]);
+  assert.deepEqual(groepen[0].dieren, oud);
+  assert.deepEqual(groepen[1].dieren, kalf);
+  assert.deepEqual(groepen[2].dieren, lam);
+  // Het oudste eerst: wie eerder geboren is, staat vooraan.
+  const nieuwer = zet(S, weide, 'koe', 1, dag - 100)[0];
+  assert.deepEqual(T.kuddeGroepen(S, dag)[1].dieren, [...kalf, nieuwer]);
+});
+
+test('T.slachtVoorstel: zo weinig als kan, zodat het hooi de winter haalt; een kalf als dat volstaat', () => {
+  const { S, velden: [weide] } = boerMet([{ x: 2, y: 2, b: 6, h: 6, bestemming: 'weide' }]);
+  const dag = dagVan('slachtmaand', 1);
+  zet(S, weide, 'koe', 3);
+  const [kalf] = zet(S, weide, 'koe', 1, dag - 200);
+  zet(S, weide, 'schaap', 4); // eten geen hooi, dus komen niet in het voorstel
+  // 3,5 hooi per dag, 150 dagen: 525 nodig.
+  T.zetVoorraad(S, 'hooi', 525);
+  assert.deepEqual(T.slachtVoorstel(S, dag).dieren, [], 'genoeg hooi: niemand');
+  // 460 hooi: 65 te weinig, dat is 0,43 per dag: het kalf (0,5) is genoeg.
+  T.zetVoorraad(S, 'hooi', 460);
+  assert.deepEqual(T.slachtVoorstel(S, dag).dieren, [kalf]);
+  // 300 hooi: 2 per dag. Eerst de oudste koe (1), dan is er 0,5 tekort: het kalf.
+  T.zetVoorraad(S, 'hooi', 300);
+  const v = T.slachtVoorstel(S, dag);
+  assert.equal(v.dieren.length, 2);
+  assert.equal(v.dieren[1], kalf);
+  assert.equal(v.dieren[0].geboren, undefined, 'eerst een koe van de beginkudde');
+  assert.equal(v.perDag, 2);
+  assert.equal(v.winter, 150);
+});
+
+test('T.slacht: weg uit de wereld, en vlees en huiden in de voorraad (een jong de helft van het vlees)', () => {
+  const { S, velden: [weide] } = boerMet([{ x: 2, y: 2, b: 6, h: 6, bestemming: 'weide' }]);
+  const dag = dagVan('slachtmaand', 1);
+  const [koe] = zet(S, weide, 'koe', 1);
+  const [kalf] = zet(S, weide, 'koe', 1, dag - 200);
+  const [schaap] = zet(S, weide, 'schaap', 1);
+  const o = T.slacht(S, [koe, kalf, schaap], dag);
+  const s = IN.slacht;
+  assert.deepEqual(o, { vlees: s.koe.vlees * 1.5 + s.schaap.vlees, huiden: 3 });
+  assert.equal(S.voorraad.vlees, o.vlees);
+  assert.equal(S.voorraad.huiden, 3);
+  assert.equal(T.veeVan(S).length, 0);
+  assert.ok(koe.dood && !S.wereld.wezens.includes(koe));
+});
+
+test('op 1 slachtmaand vraagt het dorp wie er naar de slager gaat; het venster opent als je rondloopt', () => {
+  const { S, velden: [weide] } = boerMet([{ x: 2, y: 2, b: 6, h: 6, bestemming: 'weide' }]);
+  zet(S, weide, 'koe', 2);
+  T.zetVoorraad(S, 'hooi', 1000);
+  T.tikVeeDag(S, dagVan('wijnmaand', 30));
+  assert.ok(!S.vee.slachtVraag);
+  const geopend = [];
+  T.ui = { openSlachten: (s) => geopend.push(s.modus) };
+  try {
+    S.modus = 'dialoog';
+    T.tikVeeDag(S, dagVan('slachtmaand', 1));
+    assert.equal(S.vee.slachtVraag, true);
+    assert.deepEqual(geopend, [], 'niet midden in een gesprek');
+    S.modus = 'verkennen';
+    T.tikVeeDag(S, dagVan('slachtmaand', 2));
+    assert.deepEqual(geopend, ['verkennen'], 'daarna wel');
+  } finally {
+    delete T.ui;
+  }
+});

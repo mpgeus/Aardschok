@@ -470,10 +470,17 @@
   };
 
   // Hoeveel hooi de weides dit jaar nog geven, als alles wat er staat gemaaid wordt: voor het venster
-  // van de velden en het slachten (js/hud.js). Een weide zonder boer geeft niets.
-  T.verwachtHooi = function (S) {
+  // van de velden en het slachten (js/hud.js), op dag `dag` (standaard vandaag). Alleen van de wissel
+  // op 1 lentemaand tot en met hooitijd; daarna komt er dit jaar geen hooi meer bij. Een weide zonder
+  // boer geeft niets.
+  T.verwachtHooi = function (S, dag) {
     const w = S.wereld;
     if (!w || !w.akkers || !hooien()) return 0;
+    const d = T.datumVanDag(dag != null ? dag : (S.kalender && S.kalender.dag) || 0);
+    const nu = dagInJaar(d.maand, d.dagVanMaand);
+    const begin = stadiumBegin('geploegd');
+    const eind = dagInJaar(hooiMaand(), T.DAGEN_PER_MAAND);
+    if (begin <= eind ? nu < begin || nu > eind : nu < begin && nu > eind) return 0;
     let hooi = 0;
     for (const veld of w.akkers) {
       const boer = boerVan(w, veld);
