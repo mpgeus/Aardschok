@@ -86,8 +86,8 @@ rand ervan; ze worden in zomermaand geschoren, en de mest uit de kooi leg je in 
 een akker, zodat die niet uitput. Wat Marcel niet koos, zijn opties. Een proef van drie jaar staat in
 `spel.md`. `npm test`: 494/494.
 
-**Loopt nu:** de heide als grondsoort (tegels, door een agent); daarna komt hij op de kaart van het
-gehucht, op de meent die er al ligt.
+**Loopt nu:** niets. De heide is ook getekend (een nieuwe grondsoort, `beeld.md`, "De heide") en
+ligt op de kaart, met de schaapskooi aan de noordrand.
 
 **Daarna, Marcel kiest:**
 - **De weides, stap 3: vee dat telt.** De inner telt de kudde, de heer vraagt per dier, je drijft een
