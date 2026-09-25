@@ -656,8 +656,9 @@ blok `T.VEE_INSTELLINGEN` en in de werkbank):
    - 's Winters eet het vee hooi.
    - Op 1 slachtmaand zegt een venster hoeveel dieren het hooi de winter door kan helpen, en kies jij
      wie er geslacht wordt: vlees en huiden, voor de slager en de leerlooier.
-   - Schapen worden in zomermaand geschoren: dat geeft de wol. Wat de schaapskooi dan nog doet, is
-     een vraag aan Marcel.
+   - Schapen worden in zomermaand geschoren: dat geeft de wol. Ze grazen op de meent en slapen in
+     de schaapskooi, en de mest uit de kooi maakt de akkers vruchtbaar (Marcel, 25 sep, hieronder).
+   - Velden naast elkaar die weide zijn, worden samen één weide met één kudde (Marcel, 25 sep).
 3. **Vee dat telt.**
    - De inner telt de kudde die hij ziet, en de heer vraagt een deel.
    - Voor zijn komst kun je een deel van de kudde het bos in drijven.
@@ -699,6 +700,34 @@ brandhout komt van buiten):
   weide, en in stap 2 en 3 kost vee hooi en ziet de inner het; dat trekt het weer recht.
 - **Een weide en een braak tellen als land.** Bij pacht per akker rekent de heer het land, niet wat
   erop groeit. In stap 3 vraagt hij er per dier bij.
+
+**Een idee van Marcel (25 sep), na de platen van stap 1:**
+> Misschien moet een weide wel meerdere blokjes zijn? 4x4 ofzo. Dan kunnen ze meer opleveren maar
+> kosten ze meer land.
+
+Claude rekende het na. Een koe geeft 52,5 graan per jaar aan melk (0,25 per dag, 210 dagen). Op 4
+tegels is dat 13 graan per tegel, en een akker geeft er 2,5 (3,5 min 1 zaaigraan). Op 4×4 tegels
+per koe zou het 3,3 per tegel zijn: dan gaf een weide ongeveer wat een akker geeft.
+
+**Marcel koos (25 sep), uit een voorstel van Claude:**
+- **Meer velden als één weide.** Zo bedoelde hij het: velden naast elkaar die allebei weide zijn,
+  vormen samen één weide met één kudde. Een koe heeft nog steeds 4 tegels nodig.
+- **De schapen op de meent, met de kooi.** Zoals in de Drentse esdorpen: de akkers op de es, de
+  koeien op de weide, en de schapen overdag op het open land buiten de velden en 's nachts in de
+  schaapskooi. Hun mest ging met heideplaggen op de es, en zo bleef die eeuwenlang vruchtbaar. De
+  kooi geeft dus wol en mest, en de mest maakt de akkers vruchtbaar. De weide is voor de koeien.
+
+**Wat daaruit volgt, en nog open is** (Claude):
+- **Vee wordt nog sterker.** Zonder schapen erop past er op de weide van Klaas (30 tegels) plaats
+  voor zeven koeien in plaats van drie. Dat is 367 graan per jaar aan melk; als akker geeft dat
+  veld 75. De rem komt met het hooi in stap 2, en zo ging het ook toen: niet het gras in de zomer,
+  maar het hooi voor de winter bepaalde hoeveel vee een boer kon houden. Anders is `plaats.koe` in
+  de werkbank de knop.
+- **Wat is "naast elkaar"?** Tussen akker6 en akker7 ligt een strook van één tegel breed. Telt dat
+  als naast elkaar, of moet een weide echt aansluiten?
+- **Van wie is een weide over twee boeren?** Een gedeelde weide, of blijft elk stuk van zijn boer?
+- **De kooi en de meent.** Begint het gehucht met een schaapskooi? Hoeveel schapen passen erin, waar
+  op de kaart is de meent, en welke akkers krijgen de mest: die ernaast, of kies jij?
 
 **Gebouwd, stap 1, het scherm (25 sep 2026):** `js/hud.js`, `js/tekenen.js`, `js/verkennen.js`,
 met de toetsen in `test/velden.test.cjs`.

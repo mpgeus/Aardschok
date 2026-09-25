@@ -80,14 +80,19 @@ lammeren bij zolang er plaats is. `npm test`: 460/460.
 
 **Volgende stap, Marcel kiest welke eerst:**
 - **De weides, stap 2: de winter en de wol.** Hooi maaien in hooimaand, vee dat 's winters hooi eet,
-  op 1 slachtmaand kiezen wie er geslacht wordt, en schapen scheren in zomermaand. Vraag Marcel
-  eerst wat de schaapskooi dan nog doet (`spel.md`, stap 2).
+  op 1 slachtmaand kiezen wie er geslacht wordt, en schapen scheren in zomermaand. Marcel koos er op
+  25 sep twee dingen bij: velden naast elkaar worden samen één weide, en de schapen gaan van de
+  weide af, naar de meent en de schaapskooi, die wol en mest geeft (zoals de Drentse esdorpen).
+  Vier vragen staan nog open in `spel.md` ("Wat daaruit volgt"): stel ze Marcel vóór het bouwen.
+  Claude raadt aan dit eerst te doen: zonder hooi kost vee niets, en dan klopt geen proefspel.
 - **Punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud, die de inner
   niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de argwaan om het
   graan en het doorzoeken door de soldaten (`T.zoekVerstopt`, nu nog leeg) staan al klaar. Het
   voorstel van Claude staat in `spel.md` ("Voorstel voor stap 2"): ter plekke wegzetten, verstopt
   graan niet eten, wie het vindt, en een beetje bederf. Marcel kiest nog; vraag ook hoeveel erin
-  past. Daarna stap 3: praten, afleiden, omkopen en de twee rekenboeken.
+  past. Daarna stap 3: praten, afleiden, omkopen en de twee rekenboeken. Voorstel van Claude
+  (25 sep, nog niet gekozen): bouw dit samen met stap 3 van de weides, de kudde die de inner telt.
+  Graan in een kuil en vee in het bos zijn hetzelfde spel: rijkdom uit zijn zicht halen.
 
 **Wat nog ruw is of niet helemaal goed staat,** staat in `opmerkingen.md`: alle opmerkingen bij
 elkaar, om later na te lopen (Marcel, 25 sep). Zet er een bij als je iets ziet.
