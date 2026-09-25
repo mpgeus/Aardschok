@@ -26,6 +26,7 @@ const path = require('path');
 const K = require('./kern.cjs');
 const { sdf, klem, rnd, ruis3, TEGEL } = K;
 const { model, bol, kegel } = require('./figuren.cjs');
+const { KARAKTERS } = require('./karakters.cjs');
 
 // ---------------------------------------------------------------- maten
 
@@ -521,14 +522,28 @@ function boerModel(fase = 0) {
 // ---------------------------------------------------------------- de nek van wie eraan kan
 
 // Wie aan de schandpaal kan: de boeren (js/mensen.js, T.MENSEN.boer1..boer5), met het vel boer of
-// boerin. Het halsijzer is op de boer gemaakt; bij een ander komt het even ver onder zijn kin.
+// boerin, of het vel van hun karakter op dat lijf (boer-zanger, boerin-weduwe: karakters.cjs, en
+// js/sprites.js kiest het). Het halsijzer is op de boer gemaakt; bij een ander komt het even ver
+// onder zijn kin. De karakters komen hier vanzelf bij, allemaal uit KARAKTERS.
 const FIGUREN = {
   boer: () => boerModel(),
   boerin: () => require('./dorpelingen2.cjs').boerin({ houding: 'staan', fase: 0 }),
 };
+for (const [karakter, lijven] of Object.entries(KARAKTERS)) {
+  for (const lijf of Object.keys(lijven)) {
+    FIGUREN[`${lijf}-${karakter}`] = () => {
+      const bouw = lijf === 'boer' ? require('./dorpelingen.cjs').boer : require('./dorpelingen2.cjs').boerin;
+      // een rood gezicht (het heethoofd) is voor kinHoogte geen huid meer; de kin zit even hoog
+      return bouw({ houding: 'staan', fase: 0 }, { ...lijven[lijf], rood: false });
+    };
+  }
+}
 
 // Hoe hoog de kin zit, in pixels boven de voeten: de onderste rij huid die aan het gezicht vastzit,
-// van voren gezien (staan, Z, het eerste beeld, zoals het vel het tekent).
+// van voren gezien (staan, Z, het eerste beeld, zoals het vel het tekent). Het gezicht is de bovenste
+// huid in het midden van het beeld die meer is dan een paar losse pixels: zonder hoed (het
+// heethoofd) of onder een kap met een punt (de weduwe) ligt er soms een los stukje huid boven het
+// voorhoofd, en dat is de kin niet.
 function kinHoogte(m) {
   const p = K.losRenderen(m, { b: FIG_CEL[0], h: FIG_CEL[1], anker: FIG_ANKER, richting: 'Z' });
   const huid = K.RAMP.huid;
@@ -536,30 +551,34 @@ function kinHoogte(m) {
     const k = p.lees(x, y);
     return !!k && k[0] === huid;
   };
-  let start = null;
-  for (let y = 0; y < p.h && !start; y++) {
-    for (let x = 0; x < p.b; x++) {
-      if (isHuid(x, y)) {
-        start = [x, y];
-        break;
+  const gezien = new Set();
+  // alle huid die aan (x, y) vastzit: hoeveel pixels, en de onderste rij
+  const vlak = (x0, y0) => {
+    gezien.add(`${x0},${y0}`);
+    const rij = [[x0, y0]];
+    let n = 0;
+    let laagste = y0;
+    while (rij.length) {
+      const [x, y] = rij.pop();
+      n++;
+      laagste = Math.max(laagste, y);
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const s = `${x + dx},${y + dy}`;
+        if (gezien.has(s) || !isHuid(x + dx, y + dy)) continue;
+        gezien.add(s);
+        rij.push([x + dx, y + dy]);
       }
     }
-  }
-  if (!start) return null;
-  const gezien = new Set([start.join()]);
-  const rij = [start];
-  let laagste = start[1];
-  while (rij.length) {
-    const [x, y] = rij.pop();
-    laagste = Math.max(laagste, y);
-    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-      const s = `${x + dx},${y + dy}`;
-      if (gezien.has(s) || !isHuid(x + dx, y + dy)) continue;
-      gezien.add(s);
-      rij.push([x + dx, y + dy]);
+    return { n, laagste };
+  };
+  for (let y = 0; y < p.h; y++) {
+    for (let x = FIG_ANKER[0] - 3; x <= FIG_ANKER[0] + 3; x++) {
+      if (gezien.has(`${x},${y}`) || !isHuid(x, y)) continue;
+      const v = vlak(x, y);
+      if (v.n >= 12) return FIG_ANKER[1] - v.laagste;
     }
   }
-  return FIG_ANKER[1] - laagste;
+  return null;
 }
 
 // Per vel: hoe hoog het midden van de halsband boven de voeten komt; `standaard` (die van de boer)

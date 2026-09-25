@@ -606,6 +606,13 @@ test('de schandpaal heeft kunst: leeg, bezet en het halsijzer, en een nek voor e
     if (!m.karakter) continue;
     assert.ok(Number.isFinite(t.nek[m.vel]), `de nek van ${id} (vel ${m.vel}) is niet gemeten`);
   }
+  // En het vel van hun karakter op dat lijf (boer-zanger; js/sprites.js kiest het), want het
+  // halsijzer zoekt de nek van het vel dat getekend wordt (T.sprites.nekHoogte). Die komen uit
+  // KARAKTERS in gereedschap/pixelart/karakters.cjs en worden vanzelf gemeten.
+  for (const naam of Object.keys(T.BEELDEN.figuren)) {
+    if (!/^(boer|boerin)-/.test(naam)) continue;
+    assert.ok(Number.isFinite(t.nek[naam]), `de nek van het vel ${naam} is niet gemeten: naar-spel.cjs --alleen schandpaal`);
+  }
 });
 
 // ---------------------------------------------------------------------------------------------

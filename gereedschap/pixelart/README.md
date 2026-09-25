@@ -55,6 +55,13 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
 - `heer.cjs`: het huis van de heer, in rood en geel: de heer, de soldaat en de inner, met staan en
   lopen (`node dorpelingen-anim.cjs heer soldaat inner`, daarna
   `node naar-spel.cjs --alleen heer,soldaat,inner`).
+- `karakters.cjs`: een gezicht per karakter (`ontwerp/beeld.md`): wat een boer met een karakter
+  draagt, op het lijf van de boer of de boerin. `boer(stand, opties)` en `boerin(stand, opties)`
+  nemen de opties (kleuren, hoofddeksel, wat ze dragen en vasthouden, de armen); zonder opties
+  blijven ze de gewone boer en boerin, en `KARAKTERS` zegt per karakter welke. Ronde 1: boer-zanger,
+  boerin-zanger, boer-woekeraar, boerin-woekeraar, boer-heethoofd, boerin-heethoofd, boerin-weduwe
+  en boerin-vroedvrouw (`node dorpelingen-anim.cjs <namen>` maakt ook `uit/dorpelingen/karakters-ronde1.png`,
+  daarna `node naar-spel.cjs --alleen <namen,met,komma's>` en `--alleen schandpaal` voor hun nek).
 - `schandpaal.cjs`: de schandpaal, leeg en bezet, en het halsijzer als eigen laag over wie eraan
   staat (`node schandpaal.cjs` maakt de proefplaat `uit/schandpaal-proef.png`, daarna
   `node naar-spel.cjs --alleen schandpaal`). De hoogte van de nek wordt gemeten op de boer en de

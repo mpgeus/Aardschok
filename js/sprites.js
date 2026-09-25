@@ -193,6 +193,16 @@
     return n ? 'dorpeling' + S.dorpelingVariant(zaad, n) : null;
   }
 
+  // Het vel van een boer met een karakter (js/boeren.js zet e.karakter; ontwerp/beeld.md, "Een
+  // gezicht per karakter"): zijn lijf met het karakter erachter (boer-zanger, boerin-weduwe) als
+  // dat vel er is, en anders gewoon zijn lijf. Zo blijft een karakter dat nog geen eigen vel heeft
+  // de gewone boer of boerin. `heeft` vraagt of een vel bestaat (standaard S.figuurGegevens), zodat
+  // dit zonder scherm te toetsen is.
+  S.velMetKarakter = (vel, karakter, heeft = S.figuurGegevens) => {
+    const eigen = karakter ? `${vel}-${karakter}` : null;
+    return eigen && heeft(eigen) ? eigen : vel;
+  };
+
   // ---------------------------------------------------------------- vloeren, muren, voorwerpen
 
   // Een vloer is een lap van twee bij twee tegels, zodat de steen niet elke tegel herhaalt. Er
@@ -365,8 +375,9 @@
   };
 
   // Hoe hoog boven zijn voeten de halsband om de nek van dit wezen komt, in pixels. Gemeten op de
-  // vellen van wie aan de paal kan (de boer en de boerin, schandpaal.cjs); T.EFFECTEN.hoofden (S.hoofd)
-  // kent die vellen niet. Voor een ander vel: die van de boer.
+  // vellen van wie aan de paal kan (de boer en de boerin, en hun karakters zoals boer-zanger:
+  // schandpaal.cjs); T.EFFECTEN.hoofden (S.hoofd) kent die vellen niet. Voor een ander vel: die van
+  // de boer.
   S.nekHoogte = function (e) {
     const t = gegevens && gegevens.schandpaal;
     if (!t) return 0;
@@ -506,8 +517,9 @@
     // anders blijft hij gewoon zichzelf staan (geen kunst mist dan nooit iemand helemaal).
     let naam = e.maait && S.figuurGegevens('maaier') ? 'maaier' : e.soort === 'dorpeling' ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
     // Wie nog geen eigen vel heeft, mag er een lenen (T.WEZENS, vel: 'wim'): zo kan de bakker
-    // meedoen voordat hij getekend is. Zie ontwerp/werklijst.md, fase B2b.
-    if (!S.figuurGegevens(naam) && e.vel) naam = e.vel;
+    // meedoen voordat hij getekend is. Zie ontwerp/werklijst.md, fase B2b. Een boer met een
+    // karakter draagt dat karakter op zijn lijf (boer-zanger), als dat vel er al is.
+    if (!S.figuurGegevens(naam) && e.vel) naam = S.velMetKarakter(e.vel, e.karakter);
     const f = S.figuurGegevens(naam);
     if (!f) return null;
     const st = stand(e);

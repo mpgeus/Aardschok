@@ -210,6 +210,17 @@ const FIGUURLIJST = {
   heer: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' },
   soldaat: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' },
   inner: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' },
+  // Een gezicht per karakter (karakters.cjs, ontwerp/beeld.md): een boer met zijn karakter, op het
+  // lijf van de boer of de boerin. js/sprites.js kiest <vel>-<karakter> als dat vel er is (ronde 1:
+  // de vijf van de vaste verdeling), en anders het gewone boer- of boerinvel.
+  'boer-zanger': { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs boer-zanger' },
+  'boerin-zanger': { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs boerin-zanger' },
+  'boer-woekeraar': { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs boer-woekeraar' },
+  'boerin-woekeraar': { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs boerin-woekeraar' },
+  'boer-heethoofd': { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs boer-heethoofd' },
+  'boerin-heethoofd': { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs boerin-heethoofd' },
+  'boerin-weduwe': { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs boerin-weduwe' },
+  'boerin-vroedvrouw': { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs boerin-vroedvrouw' },
 };
 
 // Eén figuur: zijn vellen naar beelden/figuren/ en zijn beschrijving terug (of null als hij er

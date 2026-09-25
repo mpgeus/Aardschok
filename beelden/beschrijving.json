@@ -1220,6 +1220,310 @@
      "stap": 0.6
     }
    }
+  },
+  "boer-zanger": {
+   "naam": "boer-zanger",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "boer-zanger-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "boer-zanger-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6
+    }
+   }
+  },
+  "boerin-zanger": {
+   "naam": "boerin-zanger",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "boerin-zanger-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "boerin-zanger-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56
+    }
+   }
+  },
+  "boer-woekeraar": {
+   "naam": "boer-woekeraar",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "boer-woekeraar-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "boer-woekeraar-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6
+    }
+   }
+  },
+  "boerin-woekeraar": {
+   "naam": "boerin-woekeraar",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "boerin-woekeraar-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "boerin-woekeraar-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56
+    }
+   }
+  },
+  "boer-heethoofd": {
+   "naam": "boer-heethoofd",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "boer-heethoofd-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "boer-heethoofd-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6
+    }
+   }
+  },
+  "boerin-heethoofd": {
+   "naam": "boerin-heethoofd",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "boerin-heethoofd-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "boerin-heethoofd-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56
+    }
+   }
+  },
+  "boerin-weduwe": {
+   "naam": "boerin-weduwe",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "boerin-weduwe-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "boerin-weduwe-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56
+    }
+   }
+  },
+  "boerin-vroedvrouw": {
+   "naam": "boerin-vroedvrouw",
+   "cel": [
+    112,
+    124
+   ],
+   "anker": [
+    56,
+    110
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "boerin-vroedvrouw-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true
+    },
+    "lopen": {
+     "bestand": "boerin-vroedvrouw-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56
+    }
+   }
   }
  },
  "muren": {
@@ -1393,7 +1697,15 @@
   "nek": {
    "standaard": 51,
    "boer": 51,
-   "boerin": 51
+   "boerin": 51,
+   "boer-zanger": 51,
+   "boerin-zanger": 51,
+   "boerin-weduwe": 51,
+   "boer-woekeraar": 51,
+   "boerin-woekeraar": 51,
+   "boerin-vroedvrouw": 51,
+   "boer-heethoofd": 51,
+   "boerin-heethoofd": 51
   }
  }
 }

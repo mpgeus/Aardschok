@@ -147,6 +147,42 @@ test('wat je ziet: het karakter en wat hij kan, en wat gewoon is, staat er niet 
   assert.equal(T.overBoerTekst(T.maakMens('marskramer', 1, 1)), '');
 });
 
+// Een gezicht per karakter (ontwerp/beeld.md, Marcel 25 sep): wie een karakter heeft, draagt het vel
+// van dat karakter op zijn lijf (boer-zanger, boerin-weduwe) als dat vel er is, en anders gewoon het
+// vel van zijn lijf. js/sprites.js kiest het, in S.houding, met T.sprites.velMetKarakter.
+test('een boer draagt het vel van zijn karakter als dat er is, en anders gewoon zijn lijf', () => {
+  require('../js/sprites.js');
+  const heeft = (naam) => naam === 'boer-zanger' || naam === 'boerin-weduwe';
+  assert.equal(T.sprites.velMetKarakter('boer', 'zanger', heeft), 'boer-zanger');
+  assert.equal(T.sprites.velMetKarakter('boerin', 'weduwe', heeft), 'boerin-weduwe');
+  // nog geen eigen vel (de karakters van ronde 2), of geen karakter: het lijf
+  assert.equal(T.sprites.velMetKarakter('boer', 'drinker', heeft), 'boer');
+  assert.equal(T.sprites.velMetKarakter('boerin', 'zanger', heeft), 'boerin');
+  assert.equal(T.sprites.velMetKarakter('boer', undefined, heeft), 'boer');
+});
+
+test('de vijf van de vaste verdeling hebben hun vel, en dat loopt zoals hun lijf', () => {
+  require('../beelden/beschrijving.js');
+  const F = T.BEELDEN.figuren;
+  for (const id of BOEREN) {
+    const m = T.MENSEN[id];
+    const vel = `${m.vel}-${m.karakter}`;
+    assert.ok(F[vel], `${id} (${m.karakter}) heeft geen vel ${vel}: dorpelingen-anim.cjs, dan naar-spel.cjs --alleen ${vel}`);
+    // dezelfde snelheid en pas als het lijf, anders glijden de voeten
+    assert.deepEqual(Object.keys(F[vel].houdingen), Object.keys(F[m.vel].houdingen));
+    assert.equal(F[vel].snelheid, F[m.vel].snelheid);
+    assert.equal(F[vel].houdingen.lopen.stap, F[m.vel].houdingen.lopen.stap);
+  }
+  // Elk vel van een karakter zit op een lijf dat bij dat karakter kan: een weduwe is een boerin.
+  for (const naam of Object.keys(F)) {
+    const [, lijf, karakter] = /^(boer|boerin)-(.+)$/.exec(naam) || [];
+    if (!lijf) continue;
+    assert.ok(T.KARAKTERS[karakter], `${naam}: er is geen karakter ${karakter}`);
+    const g = T.KARAKTERS[karakter].geslacht;
+    if (g) assert.equal(lijf, g === 'vrouw' ? 'boerin' : 'boer', naam);
+  }
+});
+
 // ---------------------------------------------------------------------------------------------
 // Wat de eigenschappen doen
 // ---------------------------------------------------------------------------------------------
