@@ -132,7 +132,8 @@
       ],
     },
     // De weides (Marcel, 25 sep; ontwerp/spel.md, "Weides met koeien en schapen"): wat hij niet
-    // koos, wordt een keuze. "Geen winterzorg" en "vee alleen kopen" komen erbij met stap 2 en 3.
+    // koos, wordt een keuze. "Vee alleen kopen" komt erbij met stap 3, als de marskramer vee
+    // verkoopt.
     {
       id: 'vruchtbaarheid', naam: 'Vruchtbaarheid', standaard: 'putUit',
       uitleg: 'Of een akker het land uitput, zodat je velden moet laten rusten.',
@@ -151,6 +152,37 @@
           uitleg: 'In grasmaand werpen koeien kalveren en schapen lammeren, zolang er plaats is op hun weide.' },
         { id: 'groeitNiet', naam: 'Groeit niet', zet: { 'VEE_INSTELLINGEN.groeit': false },
           uitleg: 'Er komen geen jongen bij: de kudde blijft zo groot als hij begon.' },
+      ],
+    },
+    // Stap 2 van de weides (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
+    {
+      id: 'winterzorg', naam: 'Het vee in de winter', standaard: 'hooi',
+      uitleg: 'Of het vee in de winter hooi nodig heeft: dat beslist hoeveel vee je houdt.',
+      keuzes: [
+        { id: 'hooi', naam: 'Eet hooi', zet: { 'VEE_INSTELLINGEN.winterzorg': true },
+          uitleg: 'In hooimaand maaien de boeren hun weide. Van slachtmaand tot en met lentemaand eet het vee dat hooi, en wat het hooi niet de winter door helpt, slacht je of sterft.' },
+        { id: 'geenZorg', naam: 'Graast het hele jaar', zet: { 'VEE_INSTELLINGEN.winterzorg': false },
+          uitleg: 'Geen hooi en geen honger: een koe kost alleen haar plaats op de weide, en slachten doe je alleen voor het vlees.' },
+      ],
+    },
+    {
+      id: 'schapenHooi', naam: 'Wat de schapen \'s winters eten', standaard: 'heide',
+      uitleg: 'De schapen grazen op de heide. Eten ze daar ook in de winter, of eten ze hooi?',
+      keuzes: [
+        { id: 'heide', naam: 'Heide', zet: { 'VEE_INSTELLINGEN.hooiPerDag.schaap': 0 },
+          uitleg: 'Ze eten het hele jaar heide, zoals in de Drentse esdorpen: een schaap kost geen hooi.' },
+        { id: 'ookHooi', naam: 'Ook hooi', zet: { 'VEE_INSTELLINGEN.hooiPerDag.schaap': 0.2 },
+          uitleg: 'In de winter eet een schaap een vijfde van wat een koe eet. Het hooi wordt krapper.' },
+      ],
+    },
+    {
+      id: 'mest', naam: 'De mest uit de schaapskooi', standaard: 'perVeld',
+      uitleg: 'Waar de mest heen gaat die de schapen in de kooi maken.',
+      keuzes: [
+        { id: 'perVeld', naam: 'Jij kiest per veld', zet: { 'VELDEN_INSTELLINGEN.mestVanzelf': false },
+          uitleg: 'In het veldenvenster leg je hem op een akker. Een akker met genoeg mest kan elk jaar akker blijven.' },
+        { id: 'vanzelf', naam: 'Vanzelf over alle akkers', zet: { 'VELDEN_INSTELLINGEN.mestVanzelf': true },
+          uitleg: 'Op 1 lentemaand gaat alle mest naar verhouding over de akkers van dat jaar. Je hoeft niets te doen.' },
       ],
     },
   ];
