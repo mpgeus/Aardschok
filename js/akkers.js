@@ -65,9 +65,9 @@
     akkerPutUit: 0.1,
     braakRust: 0.15,
     weideMest: 0.2,
-    // Nooit lager dan dit, en nooit hoger dan 1. Op 0 geeft een veld dat tien jaar achter elkaar
-    // akker was, niets meer.
-    laagste: 0,
+    // Nooit lager dan dit, en nooit hoger dan 1. Marcel (25 sep): tot 40%. Een uitgeputte akker geeft
+    // nog 40% van een volle oogst: wisselen loont, maar vergeten is niet meteen honger.
+    laagste: 0.4,
   };
   const VIN = () => T.VELDEN_INSTELLINGEN;
 

@@ -396,6 +396,9 @@ test('akker, akker, weide houdt het land vruchtbaar; akker, akker, braak nét ni
   const drieslag = draai(['akker', 'akker', 'braak'], 9);
   assert.ok(drieslag < 1 && drieslag > 0.8, `${drieslag}`);
   assert.ok(bijna(draai(['akker'], 3), 1 - 3 * T.VELDEN_INSTELLINGEN.akkerPutUit));
+  // Tien jaar akker zakt tot het laagste en niet verder: vergeten is niet meteen honger.
+  assert.ok(T.VELDEN_INSTELLINGEN.laagste > 0);
+  assert.equal(draai(['akker'], 10), T.VELDEN_INSTELLINGEN.laagste);
 });
 
 test('op 1 lentemaand eerst de wissel, dan het zaaien: wat akker wordt, wordt gezaaid', () => {
