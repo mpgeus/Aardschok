@@ -941,8 +941,10 @@
   function kuddeRegel(S) {
     const kudde = T.veeVan ? T.veeVan(S) : [];
     if (!kudde.length || !T.dierenTekst) return '';
+    const meent = T.meentVan && T.meentVan(S.wereld);
     return `<p class="veld-kudde">De kudde: ${T.dierenTekst(kudde, dagNu(S))}. ` +
-      `<button class="veld-keuze" data-actie="slachten" title="Wie gaat er naar de slager?">Slachten…</button></p>`;
+      `<button class="veld-keuze" data-actie="slachten" title="Wie gaat er naar de slager?">Slachten…</button></p>` +
+      (meent && T.meentTekst ? `<p class="veld-kudde">${veilig(T.meentTekst(S, meent))}.</p>` : '');
   }
 
   function veldenInhoud(S) {

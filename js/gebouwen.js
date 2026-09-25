@@ -102,10 +102,13 @@
       handen: 1, woonruimte: 0, maakt: { uit: { hout: 2 } }, verdacht: false, menu: true,
       tekening: 'gebouwen/houtschuur', beschrijving: 'hout uit het bos van de heer', opmerking: '',
     },
+    // Sinds de weides, stap 2 (25 sep 2026) maakt de kooi zelf niets: de schapen van de heide slapen
+    // erin, en js/vee.js telt de mest die de herder (zijn hand) eruit haalt, en de wol als ze in
+    // zomermaand geschoren worden. Tot dan maakte hij elke dag wol, zonder dat er een schaap was.
     schaapskooi: {
       naam: 'schaapskooi', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10 }, heer: { wol: 20 }, bouwtijd: 3,
-      handen: 1, woonruimte: 0, maakt: { uit: { wol: 1 } }, verdacht: false, menu: true,
-      tekening: 'gebouwen/schuurBlokhut', beschrijving: 'wol, van schapen op de meent',
+      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      tekening: 'gebouwen/schuurBlokhut', beschrijving: 'de schapen van de heide slapen erin: mest voor de akkers',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur.',
     },
     kippenhok: {

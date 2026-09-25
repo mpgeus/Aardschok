@@ -315,7 +315,7 @@ function metInstelling(blok, waarden, fn) {
 
 const binnen = (e, v) => e.tx >= v.x && e.tx < v.x + v.b && e.ty >= v.y && e.ty < v.y + v.h;
 
-test('de beginkudde: drie koeien en acht schapen op het blok van Klaas (akker6), binnen de weide', () => {
+test('de beginkudde: drie koeien op het blok van Klaas (akker6), binnen de weide, en acht schapen op de heide', () => {
   const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   const weide = S.wereld.akkers.find((a) => a.naam === 'akker6');
@@ -326,15 +326,22 @@ test('de beginkudde: drie koeien en acht schapen op het blok van Klaas (akker6),
   const vee = T.veeVan(S);
   assert.equal(vee.filter((e) => e.dier === 'koe').length, IN.beginKudde.koe);
   assert.equal(vee.filter((e) => e.dier === 'schaap').length, IN.beginKudde.schaap);
+  // Sinds stap 2 van de weides staan de schapen op de heide, de meent (spel.md, "Marcel koos voor
+  // stap 2"), en de koeien op de weide.
+  const meent = T.meentVan(S.wereld);
+  assert.ok(meent, 'het gehucht heeft een meent');
   for (const e of vee) {
-    assert.equal(e.weide, weide);
-    assert.ok(binnen(e, weide), `${e.soort} op ${e.tx},${e.ty}`);
+    const plek = e.dier === 'koe' ? weide : meent;
+    assert.equal(e.weide, plek);
+    assert.ok(binnen(e, plek), `${e.soort} op ${e.tx},${e.ty}`);
     assert.ok(T.isBegaanbaar(S.wereld, e.tx, e.ty), 'het staat op begaanbare grond');
   }
   assert.equal(new Set(vee.map((e) => e.tx + ',' + e.ty)).size, vee.length, 'niet twee op één tegel');
-  // Ze passen, net: drie koeien en acht schapen hebben 28 van de 30 tegels nodig.
-  const nodig = IN.beginKudde.koe * IN.plaats.koe + IN.beginKudde.schaap * IN.plaats.schaap;
-  assert.deepEqual(T.weideStand(S, weide), { tegels: 30, nodig, vrij: 30 - nodig, vol: 1, koeien: 3, schapen: 8 });
+  // Drie koeien hebben 12 van de 30 tegels nodig.
+  const nodig = IN.beginKudde.koe * IN.plaats.koe;
+  assert.deepEqual(T.weideStand(S, weide), { tegels: 30, nodig, vrij: 30 - nodig, vol: 1, koeien: 3, schapen: 0 });
+  assert.equal(T.dierenOp(S, meent).length, IN.beginKudde.schaap);
+  assert.equal(T.kooiPlaats(S), IN.kooiPlaats, 'en er staat een schaapskooi');
   // Zonder weide geen vee.
   const { S: kaal } = wereldMet({ x: 0, y: 0, b: 4, h: 4, bestemming: 'akker' });
   assert.deepEqual(T.zetBeginKudde(kaal), []);

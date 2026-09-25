@@ -75,6 +75,15 @@
     // Wat een geslacht dier geeft. Een jong geeft de helft van het vlees, en ook een huid. Vlees eet
     // het dorp erbij, en het bederft tenzij het gezouten is (js/behoeften.js).
     slacht: { koe: { vlees: 20, huiden: 1 }, schaap: { vlees: 6, huiden: 1 } },
+
+    // ── De schapen en de kooi (stap 2; Marcel, 25 sep, naar de Drentse esdorpen) ──
+    // Op deze dag worden de schapen geschoren: elk volwassen schaap geeft zoveel wol. Een lam van
+    // dit voorjaar nog niet. De heer vraagt 20 wol per schaapskooi (js/gebouwen.js).
+    scheren: { maand: 'zomermaand', dag: 1 },
+    wolPerSchaap: 4,
+    // Zoveel karren mest geeft één schaap per jaar in de kooi, als de kooi zijn herder heeft (zijn
+    // hand, js/gebouwen.js). De mest leg je in het veldenvenster op een akker (js/akkers.js).
+    mestPerSchaap: 2.5,
   };
   const IN = () => T.VEE_INSTELLINGEN;
 
@@ -250,6 +259,8 @@
   T.weideVee = (S) => T.veeVan(S).filter((e) => e.weide && !e.weide.meent);
   // De meent van deze wereld (de heide), of null. Eén is genoeg; een kaart met meer komt later.
   T.meentVan = (w) => ((w && w.meenten) || [])[0] || null;
+  // De meent op tegel (x, y), voor de muis (js/verkennen.js), of null.
+  T.meentOp = (w, x, y) => ((w && w.meenten) || []).find((m) => opVeld(m, x, y)) || null;
   // Waar deze soort graast: op de meent als hij daar hoort én de kaart er een heeft, anders op een
   // weide.
   T.graastOp = (w, soort) => (T.VEE[soort] && T.VEE[soort].graast === 'meent' && T.meentVan(w) ? 'meent' : 'weide');
@@ -629,7 +640,43 @@
 
   // Hoeveel schapen de schaapskooien samen bergen: IN().kooiPlaats per kooi die klaar is
   // (js/gebouwen.js, S.gebouwen).
-  T.kooiPlaats = (S) => ((S && S.gebouwen) || []).filter((g) => g.soort === 'schaapskooi' && g.klaar).length * IN().kooiPlaats;
+  const kooienVan = (S) => ((S && S.gebouwen) || []).filter((g) => g.soort === 'schaapskooi' && g.klaar);
+  T.kooiPlaats = (S) => kooienVan(S).length * IN().kooiPlaats;
+
+  // ── De schapen en de kooi (stap 2) ──
+  //
+  // Zoals in de Drentse esdorpen (Marcel, 25 sep): overdag grazen de schapen op de heide, 's nachts
+  // staan ze in de schaapskooi, en de mest uit de kooi maakt de es vruchtbaar. In zomermaand worden
+  // ze geschoren. De kooi maakt dus zelf geen wol meer (js/gebouwen.js): die komt van de schapen.
+
+  // De schapen die in een kooi slapen: alle schapen op de meent, tot de kooien vol zijn.
+  T.schapenInKooi = function (S) {
+    const meent = T.meentVan(S && S.wereld);
+    const schapen = meent ? T.dierenOp(S, meent).filter((e) => e.dier === 'schaap').length : 0;
+    return Math.min(schapen, T.kooiPlaats(S));
+  };
+
+  // De mest van één dag: IN().mestPerSchaap per jaar voor elk schaap in de kooi, naar rato van hoeveel
+  // kooien hun herder hebben (een kooi zonder hand: de mest blijft liggen).
+  T.mestVanDag = function (S) {
+    const kooien = kooienVan(S);
+    if (!kooien.length) return 0;
+    const soort = T.GEBOUWEN && T.GEBOUWEN.schaapskooi;
+    const nodig = (soort && soort.handen) || 0;
+    const herders = nodig ? kooien.reduce((n, g) => n + Math.min(1, (g.handen || 0) / nodig), 0) / kooien.length : 1;
+    return (T.schapenInKooi(S) * IN().mestPerSchaap * herders) / T.DAGEN_PER_JAAR;
+  };
+
+  // Scheren: elk volwassen schaap geeft IN().wolPerSchaap wol. Geeft de wol.
+  T.scheerSchapen = function (S, dag) {
+    const schapen = T.veeVan(S).filter((e) => e.dier === 'schaap' && volwassen(e, dag));
+    const wol = schapen.length * IN().wolPerSchaap;
+    if (wol > 0 && S.voorraad && T.wijzigVoorraad) {
+      T.wijzigVoorraad(S, 'wol', wol);
+      bericht(`Het is ${T.MAANDEN[T.datumVanDag(dag).maand].naam}: ${schapen.length} ${schapen.length === 1 ? 'schaap is' : 'schapen zijn'} geschoren. Dat geeft ${wol} wol.`, 'goed');
+    }
+    return wol;
+  };
 
   // ── De winter: hooi (stap 2) ──
   //
@@ -846,6 +893,11 @@
     if (V.slachtVraag && T.ui && T.ui.openSlachten && (!S.modus || S.modus === 'verkennen')) T.ui.openSlachten(S);
     if (IN().winterzorg && winterTijd(dag)) T.voerHooi(S, dag);
     else V.hooiGewaarschuwd = V.hongerGemeld = false; // een nieuwe winter mag weer waarschuwen
+    // De schapen: scheren in zomermaand, en elke dag de mest uit de kooi.
+    const sch = IN().scheren;
+    if (d.maand === maandIdx(sch.maand) && d.dagVanMaand === sch.dag) T.scheerSchapen(S, dag);
+    const mest = T.mestVanDag(S);
+    if (mest > 0 && S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'mest', mest);
     V.melk = T.melkVanDag(S, dag);
   };
 })(globalThis.Toren = globalThis.Toren || {});

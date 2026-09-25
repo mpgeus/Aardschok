@@ -179,6 +179,14 @@ function inAkker(x, y) {
   return AKKERS.some((a) => x >= a.x && x < a.x + a.b && y >= a.y && y < a.y + a.h);
 }
 
+// De meent: de heide in het zuidwesten, tussen het gehucht en de beek, waar de schapen van het dorp
+// samen grazen (Marcel, 25 sep, naar de Drentse esdorpen: de akkers op de es, de koeien op de
+// weide, de schapen op de heide; ontwerp/spel.md, "Marcel koos voor stap 2"). De schaapskooi staat
+// aan de oostrand, tussen de heide en de es, naast de weide van Klaas: van daar gaat de mest naar
+// de akkers. De meent is voor het spel een rechthoek (js/kaart.js, "meent"); de grond erop is heide.
+const MEENT = { meent: 'heide', x: 9, y: 40, b: 22, h: 9 };
+const KOOI = { tegel: 'schuurBlokhut', x: 31, y: 39, b: 5, d: 7 };
+
 // De weg: een rechte lijn dwars over de kaart (dezelfde "afstand tot lijn"-truc als
 // maak-wereld.cjs en erf-kaart.cjs).
 function totLijn(punten) {
@@ -272,6 +280,10 @@ const SCHOUT_HUIS = { tegel: 'stenenHuis', x: 21, y: 21, b: 6, d: 8 };
 
 for (const [id, h] of Object.entries(HUIZEN)) zetTegel(h.tegel, h.x, h.y);
 zetTegel(SCHOUT_HUIS.tegel, SCHOUT_HUIS.x, SCHOUT_HUIS.y);
+// De schaapskooi aan de rand van de heide (MEENT hierboven): het gehucht begint met één, en dus met
+// de schapen op de heide in plaats van op de weide. Voorlopig in de tekening van de blokhutschuur,
+// net als in het bouwmenu (js/gebouwen.js, T.GEBOUWEN.schaapskooi).
+zetTegel(KOOI.tegel, KOOI.x, KOOI.y);
 
 // ---- het brinkje: een put en een grote eik, met een bankje ----
 zetTegel('put', 22, 16);
@@ -382,9 +394,12 @@ for (const [id, h] of Object.entries(HUIZEN)) {
 // huis van de schout als "huis".
 for (const h of Object.values(HUIZEN)) dingen.push({ gebouw: 'boerderij', x: h.x, y: h.y, b: h.b, h: h.d });
 dingen.push({ gebouw: 'huis', x: SCHOUT_HUIS.x, y: SCHOUT_HUIS.y, b: SCHOUT_HUIS.b, h: SCHOUT_HUIS.d });
+dingen.push({ gebouw: 'schaapskooi', x: KOOI.x, y: KOOI.y, b: KOOI.b, h: KOOI.d });
 // De akkers: wie ze niet nodig heeft (js/tekenen.js tekent nu alleen de kale zandgrond), leest
 // ze straks voor het graan (js/kaart.js, "WAT EEN DING BETEKENT").
 for (const a of AKKERS) dingen.push(a);
+// De meent: de heide, waar de schapen grazen (js/vee.js, "Waar een dier graast").
+dingen.push(MEENT);
 // De enige uitgang: het gehucht hangt nog aan geen andere kaart vast (ontwerp/werklijst.md,
 // "Wacht op Marcel"). Zonder "komt" kiest het spel zelf een tegel (js/kaart.js); "proef": true
 // hieronder laat de keuring met rust dat "wereld" niet terugwijst (gereedschap/keuring.js,
@@ -428,4 +443,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { B, H, AKKERS, HUIZEN, SCHOUT_HUIS, kaart, betekenis };
+module.exports = { B, H, AKKERS, HUIZEN, SCHOUT_HUIS, MEENT, KOOI, kaart, betekenis };

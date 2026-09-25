@@ -550,18 +550,21 @@
       return T.ui.slachtenOpen() ? 'open' : 'Er is geen vee om te slachten.';
     },
     // Vee neerzetten om naar te kijken (js/vee.js): Toren.debug.vee('koe', 4) zet vier koeien op de
-    // weide met de meeste plaats, elk op een vrije tegel en met een eigen zaad (en dus een eigen
-    // kleur en een eigen ritme van grazen, staan en liggen). Daar horen ze bij de kudde: ze blijven
-    // binnen de weide, geven melk en werpen jongen, en verhuizen mee bij een wissel. Is die weide
-    // vol, dan de volgende; te vol mag, dat is ook iets om naar te kijken (minder melk). Zonder
-    // weide, of zonder vrije tegel erop, rond een open plek bij de schout, zoals vóór de weides.
+    // weide met de meeste plaats (een schaap op de heide, als die er is), elk op een vrije tegel en
+    // met een eigen zaad (en dus een eigen kleur en een eigen ritme van grazen, staan en liggen).
+    // Daar horen ze bij de kudde: ze blijven binnen de weide, geven melk en werpen jongen, en
+    // verhuizen mee bij een wissel. Is die weide vol, dan de volgende; te vol mag, dat is ook iets
+    // om naar te kijken (minder melk). Zonder weide, of zonder vrije tegel erop, rond een open plek
+    // bij de schout, zoals vóór de weides.
     vee(soort = 'koe', aantal = 1) {
       if (!T.VEE[soort]) return `Dat dier ken ik niet: ${soort}. Er is: ${Object.keys(T.VEE).join(', ')}.`;
       const w = S.wereld;
       const h = S.held;
       const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true });
       const opWeide = [];
-      const weides = (w.akkers || []).filter((v) => T.bestemmingVan(v) === 'weide');
+      // Een schaap gaat naar de heide als het gehucht er een heeft (js/vee.js, T.graastOp).
+      const meent = T.graastOp && T.graastOp(w, soort) === 'meent' ? T.meentVan(w) : null;
+      const weides = meent ? [meent] : (w.akkers || []).filter((v) => T.bestemmingVan(v) === 'weide');
       while (opWeide.length < aantal && weides.length) {
         weides.sort((a, b) => T.weideStand(S, b).vrij - T.weideStand(S, a).vrij);
         const v = weides[0];
@@ -588,7 +591,7 @@
         w.wezens.push(e);
         opWeide.push(e);
       }
-      const opWeideTekst = opWeide.map((e) => `${e.naam} ${e.vel} op ${e.tx},${e.ty}, op de weide ${e.weide.naam}`);
+      const opWeideTekst = opWeide.map((e) => `${e.naam} ${e.vel} op ${e.tx},${e.ty}, op ${e.weide.meent ? 'de heide' : `de weide ${e.weide.naam}`}`);
       if (opWeide.length && T.ui.toonVoorraad) T.ui.toonVoorraad(S); // de melk bij de kaas in de balk
       if (opWeide.length === aantal) return opWeideTekst;
       aantal -= opWeide.length;

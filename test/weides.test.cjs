@@ -29,6 +29,7 @@ require('../js/gesprek.js');
 const T = globalThis.Toren;
 
 const IN = T.VEE_INSTELLINGEN;
+const bijna = (a, b) => Math.abs(a - b) < 1e-9;
 
 // De dag (vanaf het begin van het spel, 1 lentemaand) van een datum, in het eerste of een later jaar.
 function dagVan(maand, dagVanMaand, jaar) {
@@ -296,4 +297,61 @@ test('de muis en het venster zeggen dat een weide samen met het veld ernaast é�
   assert.equal(T.samenMetTekst(S, klaas), `samen één weide met het veld van ${boerGerrit.naam}`);
   assert.match(T.veldTekst(S, gerrit), new RegExp(`samen één weide met het veld van ${T.boerVanVeld(S, klaas).naam}`));
   assert.equal(T.opsomming(['Klaas', 'Jan', 'Gerrit']), 'Klaas, Jan en Gerrit');
+});
+
+// ---------------------------------------------------------------- de kooi: scheren en mest
+
+test('scheren in zomermaand: elk volwassen schaap geeft wol, een lam nog niet', () => {
+  const { S, meent } = wereldMet([], { x: 0, y: 0, b: 10, h: 10 });
+  const dag = dagVan('zomermaand', 1);
+  zet(S, meent, 'schaap', 5);
+  const [lam] = zet(S, meent, 'schaap', 1);
+  lam.geboren = dagVan('grasmaand', 1);
+  T.tikVeeDag(S, dag - 1);
+  assert.equal(S.voorraad.wol || 0, 0);
+  T.tikVeeDag(S, dag);
+  assert.equal(S.voorraad.wol, 5 * IN.wolPerSchaap);
+  T.tikVeeDag(S, dag + 1);
+  assert.equal(S.voorraad.wol, 5 * IN.wolPerSchaap, 'één keer per jaar');
+});
+
+test('mest uit de kooi: per schaap in de kooi, alleen met een herder, en niet meer dan de kooi bergt', () => {
+  const { S, meent } = wereldMet([], { x: 0, y: 0, b: 10, h: 10 });
+  const dag = dagVan('bloeimaand', 1);
+  zet(S, meent, 'schaap', 8);
+  assert.equal(T.mestVanDag(S), 0, 'zonder kooi geen mest');
+  const kooi = { soort: 'schaapskooi', klaar: true, handen: 1 };
+  S.gebouwen.push(kooi);
+  assert.equal(T.schapenInKooi(S), 8);
+  assert.ok(bijna(T.mestVanDag(S), (8 * IN.mestPerSchaap) / T.DAGEN_PER_JAAR));
+  kooi.handen = 0;
+  assert.equal(T.mestVanDag(S), 0, 'zonder herder blijft de mest liggen');
+  kooi.handen = 1;
+  metInstelling(IN, { kooiPlaats: 5 }, () => {
+    assert.equal(T.schapenInKooi(S), 5, 'een volle kooi');
+    assert.ok(bijna(T.mestVanDag(S), (5 * IN.mestPerSchaap) / T.DAGEN_PER_JAAR));
+  });
+  // Een jaar lang (zonder lammeren, die er in grasmaand bij zouden komen): zoveel karren per schaap.
+  metInstelling(IN, { groeit: false }, () => {
+    for (let i = 0; i < T.DAGEN_PER_JAAR; i++) T.tikVeeDag(S, dag + i);
+  });
+  assert.ok(Math.abs(S.voorraad.mest - 8 * IN.mestPerSchaap) < 1e-6, `${S.voorraad.mest} mest`);
+});
+
+test('de schaapskooi maakt zelf geen wol meer: die komt van de schapen', () => {
+  assert.equal(T.GEBOUWEN.schaapskooi.maakt, null);
+  assert.deepEqual(T.GEBOUWEN.schaapskooi.heer, { wol: 20 }, 'de heer vraagt er nog wel wol voor');
+  // Acht schapen geven genoeg wol voor wat de heer voor één kooi vraagt.
+  assert.ok(IN.beginKudde.schaap * IN.wolPerSchaap >= T.GEBOUWEN.schaapskooi.heer.wol);
+});
+
+test('de muis op de heide: wie er graast, en hoeveel de kooi bergt', () => {
+  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  assert.ok(T.beginOpKaart(S, 'gehucht'));
+  const meent = T.meentVan(S.wereld);
+  assert.equal(T.meentOp(S.wereld, meent.x + 2, meent.y + 3), meent);
+  assert.equal(T.meentOp(S.wereld, meent.x - 1, meent.y), null);
+  assert.equal(T.meentTekst(S, meent), `De heide, de meent van het dorp · ${IN.beginKudde.schaap} schapen · de kooi bergt er ${IN.kooiPlaats}`);
+  const h = T.handelingVerkennen(Object.assign(S, { spreuk: null, inventaris: new Set() }), { x: meent.x + 2, y: meent.y + 3 });
+  assert.equal(h.tekst, T.meentTekst(S, meent));
 });

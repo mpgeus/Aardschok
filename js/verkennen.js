@@ -104,6 +104,19 @@
     return delen.join(', ');
   };
 
+  // De regel bij de muis op de heide (js/vee.js, de meent): "De heide, de meent van het dorp · 8
+  // schapen · de kooi bergt er 20". Het veldenvenster (js/hud.js) zegt het ook.
+  T.meentTekst = function (S, meent) {
+    const schapen = T.dierenOp(S, meent);
+    const plaats = T.kooiPlaats ? T.kooiPlaats(S) : 0;
+    const kooien = plaats && T.VEE_INSTELLINGEN ? Math.round(plaats / T.VEE_INSTELLINGEN.kooiPlaats) : 0;
+    return [
+      `De ${meent.naam}, de meent van het dorp`,
+      schapen.length ? T.kuddeTekst(schapen) : 'geen schapen',
+      !kooien ? 'geen schaapskooi' : kooien === 1 ? `de kooi bergt er ${plaats}` : `de ${kooien} kooien bergen er ${plaats}`,
+    ].join(' · ');
+  };
+
   // "Klaas", "Klaas en Gerrit", "Klaas, Jan en Gerrit".
   T.opsomming = (namen) => (namen.length < 2 ? namen.join('') : `${namen.slice(0, -1).join(', ')} en ${namen[namen.length - 1]}`);
 
@@ -206,6 +219,9 @@
     // kies je in het veldenvenster (js/hud.js, V).
     const veld = T.veldOp && T.veldOp(w, doel.x, doel.y);
     if (veld) return { tekst: T.veldTekst(S, veld), doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
+    // De heide, de meent (js/vee.js): wie er graast, en hoeveel de kooi bergt.
+    const meent = T.meentOp && T.meentOp(w, doel.x, doel.y);
+    if (meent) return { tekst: T.meentTekst(S, meent), doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
     return { tekst: null, doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
   };
 

@@ -82,7 +82,8 @@ test('de muis op een veld: van wie, het vee, en hoe vruchtbaar', () => {
   const weide = veld('akker6');
   const akker = veld('akker2');
   const klaas = T.boerVanVeld(S, weide).naam;
-  assert.equal(T.veldTekst(S, weide), `Weide van ${klaas} · 3 koeien, 8 schapen · vruchtbaar 100%`);
+  // De schapen staan op de heide (de meent), niet op de weide.
+  assert.equal(T.veldTekst(S, weide), `Weide van ${klaas} · 3 koeien · vruchtbaar 100%`);
   assert.equal(T.veldTekst(S, akker), `Akker van ${T.boerVanVeld(S, akker).naam} · vruchtbaar 100%`);
 
   // Wat het volgend jaar wordt, en wanneer.
@@ -91,8 +92,8 @@ test('de muis op een veld: van wie, het vee, en hoe vruchtbaar', () => {
   assert.match(T.veldTekst(S, akker), /^Akker van .* · vruchtbaar 90% · wordt braak op 1 lentemaand$/);
 
   // Te veel vee op te weinig weide, en een weide zonder vee of zonder boer.
-  for (let i = 0; i < 3; i++) S.wereld.wezens.push(T.zetOpWeide(T.maakDier('koe', weide.x, weide.y, 50 + i), weide));
-  assert.equal(T.veldTekst(S, weide), `Weide van ${klaas} · 6 koeien, 8 schapen (te vol) · vruchtbaar 100%`);
+  for (let i = 0; i < 5; i++) S.wereld.wezens.push(T.zetOpWeide(T.maakDier('koe', weide.x, weide.y, 50 + i), weide));
+  assert.equal(T.veldTekst(S, weide), `Weide van ${klaas} · 8 koeien (te vol) · vruchtbaar 100%`);
   const leeg = { naam: 'proef', x: 0, y: 0, b: 2, h: 2, huis: null, bestemming: 'weide', plan: 'weide', vruchtbaarheid: 1 };
   assert.equal(T.veldTekst(S, leeg), 'Weide · nog geen vee · vruchtbaar 100%');
 });
@@ -133,19 +134,20 @@ test('een dier op een weide stapt alleen binnen de rechthoek, niet op een ander 
   assert.deepEqual(opties(koe), []);
 });
 
-test('de beginkudde blijft binnen de weide, en nooit twee dieren op één tegel', () => {
+test('de beginkudde blijft binnen de weide en de schapen op de heide, en nooit twee dieren op één tegel', () => {
   const { S, veld } = gehucht();
   const weide = veld('akker6');
+  const meent = T.meentVan(S.wereld);
   const vee = T.veeVan(S);
   const plekken = new Set();
   dwaal(S, 400, () => {
     for (const e of vee) {
-      assert.ok(binnen(e, weide), `${e.soort} op ${e.tx},${e.ty}`);
-      plekken.add(e.tx + ',' + e.ty);
+      assert.ok(binnen(e, e.dier === 'koe' ? weide : meent), `${e.soort} op ${e.tx},${e.ty}`);
+      if (e.dier === 'koe') plekken.add(e.tx + ',' + e.ty);
     }
     assert.equal(new Set(vee.map((e) => e.tx + ',' + e.ty)).size, vee.length, 'niet twee op één tegel');
   });
-  // en ze staan niet stil: de kudde komt op meer dan de helft van de weide
+  // en ze staan niet stil: drie koeien komen op meer dan de helft van de weide
   assert.ok(plekken.size > (weide.b * weide.h) / 2, `${plekken.size} tegels`);
 });
 
@@ -158,7 +160,7 @@ test('na een wissel loopt het vee vanzelf naar zijn nieuwe weide, en blijft daar
   assert.equal(T.zetPlan(S, blok, 'weide').kan, true);
   assert.equal(T.zetPlan(S, oud, 'akker').kan, true, 'er is elders plaats genoeg');
   T.wisselVelden(S);
-  const vee = T.veeVan(S);
+  const vee = T.veeVan(S).filter((e) => e.dier === 'koe'); // de schapen staan op de heide
   assert.ok(vee.every((e) => e.weide === strook || e.weide === blok), 'iedereen heeft een nieuwe weide');
   assert.ok(vee.every((e) => binnen(e, oud)), 'maar staat nog op de oude');
   // Onderweg lopen ze over de akkers; eenmaal aangekomen blijven ze binnen hun nieuwe weide.
