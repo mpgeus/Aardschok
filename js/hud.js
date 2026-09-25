@@ -911,14 +911,28 @@
       const titel = veilig(k.kan ? `Volgend jaar ${b}` : k.reden);
       return `<button class="veld-keuze" data-veld="${i}" data-bestemming="${b}" title="${titel}"${k.kan ? '' : ' disabled'}>${BESTEMMING_NAAM[b]}</button>`;
     }).join('');
-    const wanneer = plan !== bestemming ? `<small class="veld-wanneer">wordt ${plan} op ${T.veldWisselTekst()}</small>` : '';
+    // Mest erop (js/akkers.js, T.zetMest): een knop die aan en uit gaat, naast de drie keuzes. Alleen
+    // op wat volgend jaar akker is; wat niet kan, staat uit en zegt waarom.
+    let mestKnop = '';
+    if (T.kanMest && !T.VELDEN_INSTELLINGEN.mestVanzelf && T.VELDEN_INSTELLINGEN.vruchtbaarheid) {
+      const km = T.kanMest(S, veld);
+      const karren = Math.round(T.mestVoorVeld(veld) * 10) / 10;
+      const pct = Math.round(T.VELDEN_INSTELLINGEN.mestErbij * 100);
+      const titel = veld.mest
+        ? `Mest erop op ${T.veldWisselTekst()}: ${karren} karren, +${pct}% vruchtbaar. Klik om hem eraf te halen.`
+        : km.kan ? `Mest erop op ${T.veldWisselTekst()}: ${karren} karren, +${pct}% vruchtbaar, elk jaar tot je hem eraf haalt.` : km.reden;
+      mestKnop = `<button class="veld-keuze veld-mest${veld.mest ? ' gekozen' : ''}" data-mest="${i}" title="${veilig(titel)}"${veld.mest || km.kan ? '' : ' disabled'}>Mest</button>`;
+    }
+    const wanneer = plan !== bestemming || veld.mest
+      ? `<small class="veld-wanneer">${plan !== bestemming ? `wordt ${plan}` : 'krijgt mest'}${plan !== bestemming && veld.mest ? ', met mest,' : ''} op ${T.veldWisselTekst()}</small>`
+      : '';
     return (
-      `<div class="veld-rij${plan !== bestemming ? ' verandert' : ''}">` +
+      `<div class="veld-rij${plan !== bestemming || veld.mest ? ' verandert' : ''}">` +
       `<div class="veld-wie" title="${veld.b} bij ${veld.h} tegels"><span class="veld-naam">${boer ? veilig(boer.naam) : 'Zonder boer'}</span> ` +
       `<small>${veld.b * veld.h} tegels</small></div>` +
       `<div class="veld-vrucht" title="Vruchtbaar: een akker geeft zijn graan maal dit getal."><span class="veld-balk"><i style="width:${pct}%"></i></span> <small>${pct}%</small></div>` +
       `<div class="veld-nu">${veldNu(S, veld)}</div>` +
-      `<div class="veld-plan"><div class="veld-keuzes">${knoppen}</div>${wanneer}</div>` +
+      `<div class="veld-plan"><div class="veld-keuzes">${knoppen}${mestKnop}</div>${wanneer}</div>` +
       (redenen.length ? `<p class="veld-reden">${redenen.map(veilig).join(' ')}</p>` : '') +
       `</div>`
     );
@@ -935,6 +949,21 @@
     const nu = T.veeVan(S).filter((e) => e.dier === 'koe').length;
     return ` Die ${weides.length === 1 ? 'weide geeft' : 'weides geven'} in ${VI.hooien} zo'n ${Math.round(hooi)} hooi: ` +
       `genoeg voor ${koeien} ${koeien === 1 ? 'koe' : 'koeien'} de winter door (een kalf telt half), en je hebt er nu ${nu}.`;
+  }
+
+  // De mest van volgend jaar (js/akkers.js, T.mestPlan): wat je hebt, en wat de akkers met mest
+  // vragen. Leeg als er geen mest is en er ook niemand om vraagt.
+  function mestVooruit(S) {
+    if (!T.mestPlan || !T.VELDEN_INSTELLINGEN.vruchtbaarheid) return '';
+    const mp = T.mestPlan(S);
+    const heb = Math.floor((S.voorraad && S.voorraad.mest) || 0);
+    if (!mp.velden.length && !heb) return '';
+    if (T.VELDEN_INSTELLINGEN.mestVanzelf) {
+      return ` De mest gaat vanzelf over alle akkers: je hebt ${heb} karren, en een volle beurt vraagt er ${Math.round(mp.nodig)}.`;
+    }
+    const n = mp.velden.length;
+    return ` Mest: je hebt ${heb} karren` +
+      (n ? `, en ${n === 1 ? 'de akker' : `de ${n} akkers`} met mest ${n === 1 ? 'vraagt' : 'vragen'} er ${Math.round(mp.nodig)}.` : ', en nog geen akker met mest erop.');
   }
 
   // De hele kudde in één regel, met de knop om te slachten (het venster hierboven).
@@ -955,7 +984,8 @@
     const over = dagen == null ? '' : ` (over ${dagen} dag${dagen === 1 ? '' : 'en'})`;
     const pc = (x) => `${Math.round(x * 100)}%`;
     const land = IN.vruchtbaarheid
-      ? `Een akker put het land uit (−${pc(IN.akkerPutUit)} per jaar), een braak rust (+${pc(IN.braakRust)}) en een weide wordt door het vee gemest (+${pc(IN.weideMest)}).`
+      ? `Een akker put het land uit (−${pc(IN.akkerPutUit)} per jaar), een braak rust (+${pc(IN.braakRust)}) en een weide wordt door het vee gemest (+${pc(IN.weideMest)}). ` +
+        `Mest uit de schaapskooi maakt een akker ${pc(IN.mestErbij)} vruchtbaarder.`
       : 'Het land put niet uit: dat staat uit in de spelregels.';
     // Wat het volgend jaar wordt, bij elkaar: hoeveel akkers er te zaaien zijn, en wat dat kost.
     const tel = (b) => velden.filter((v) => T.planVan(v) === b);
@@ -967,7 +997,7 @@
     const volgend =
       `Volgend jaar: ${akkers.length} ${akkers.length === 1 ? 'akker' : 'akkers'} (${tegels} tegels: zaaien kost ${zaai} graan, en je hebt er nu ${hebNu(S, 'graan')}), ` +
       `${weides ? `${weides} ${weides === 1 ? 'weide' : 'weides'}` : 'geen weide'} en ` +
-      `${braak ? `${braak} ${braak === 1 ? 'veld' : 'velden'} braak` : 'geen braak'}.` + hooiVooruit(S, tel('weide'));
+      `${braak ? `${braak} ${braak === 1 ? 'veld' : 'velden'} braak` : 'geen braak'}.` + hooiVooruit(S, tel('weide')) + mestVooruit(S);
     return (
       `<div class="venster-kop"><span class="venster-titel">De velden</span><span class="venster-wanneer">de wissel op ${wissel}${over}</span>` +
       `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
@@ -1024,6 +1054,13 @@
     if (b.dataset.actie === 'slachten') {
       T.ui.sluitVelden(S);
       T.ui.openSlachten(S);
+      return;
+    }
+    if (b.dataset.mest !== undefined) {
+      const v = S.wereld.akkers[Number(b.dataset.mest)];
+      const r = T.zetMest(S, v, !v.mest);
+      if (!r.kan) T.ui.bericht(r.reden, 'gevaar');
+      toonVelden(S);
       return;
     }
     const veld = S.wereld.akkers[Number(b.dataset.veld)];

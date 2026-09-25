@@ -768,6 +768,11 @@ kbd {
 #velden .veld-keuze:hover:not(:disabled):not(.gekozen) { background: rgba(226, 182, 74, 0.16); border-color: rgba(226, 182, 74, 0.6); }
 #velden .veld-keuze.gekozen { color: #1b1510; background: var(--goud); border-color: var(--goud); cursor: default; }
 #velden .veld-keuze:disabled { opacity: 0.35; cursor: default; }
+/* De mest (js/akkers.js, T.zetMest) is geen vierde bestemming maar een knop die aan en uit gaat: iets
+   apart, en aan in de kleur van de mesthoop in de balk. */
+#velden .veld-mest { margin-left: 8px; }
+#velden .veld-mest.gekozen { color: var(--inkt); background: #6b4a2a; border-color: #8a6a44; cursor: pointer; }
+#velden .veld-mest.gekozen:hover { filter: brightness(1.12); }
 #velden .veld-wanneer { display: block; margin-top: 2px; color: var(--goud) !important; text-align: right; }
 #velden .veld-reden { grid-column: 1 / -1; margin: 0; font-size: 12px; color: var(--rood); }
 #velden .veld-samen { margin: 10px 0 0; font-size: 13px; color: var(--inkt); }

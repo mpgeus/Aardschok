@@ -133,7 +133,7 @@
 
   // De regel bij de muis: "Weide van Klaas · 3 koeien, 9 schapen · vruchtbaar 90%". Staat er meer
   // vee op dan er plaats is, dan zegt hij dat; is de weide samen met een veld ernaast één weide, dan
-  // ook dat; en wordt het veld volgend jaar iets anders, dan ook wat en wanneer.
+  // ook dat; en wordt het veld volgend jaar iets anders, of krijgt het mest, dan ook wat en wanneer.
   T.veldTekst = function (S, veld) {
     const bestemming = T.bestemmingVan(veld);
     const boer = T.boerVanVeld(S, veld);
@@ -145,7 +145,8 @@
     else if (bestemming === 'weide') delen.push('nog geen vee');
     delen.push(`vruchtbaar ${Math.round(T.vruchtbaarheidVan(veld) * 100)}%`);
     const plan = T.planVan(veld);
-    if (plan !== bestemming) delen.push(`wordt ${plan} op ${T.veldWisselTekst()}`);
+    if (plan !== bestemming) delen.push(`wordt ${plan}${veld.mest ? ', met mest,' : ''} op ${T.veldWisselTekst()}`);
+    else if (veld.mest) delen.push(`krijgt mest op ${T.veldWisselTekst()}`);
     return delen.join(' · ');
   };
 

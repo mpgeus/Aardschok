@@ -68,6 +68,15 @@
     // Nooit lager dan dit, en nooit hoger dan 1. Marcel (25 sep): tot 40%. Een uitgeputte akker geeft
     // nog 40% van een volle oogst: wisselen loont, maar vergeten is niet meteen honger.
     laagste: 0.4,
+    // Mest (de weides, stap 2; Marcel, 25 sep: "de mest kies jij per veld"). Een akker met mest erop
+    // (T.zetMest) wordt op 1 lentemaand zoveel vruchtbaarder, bovenop wat het jaar ervoor deed, en dat
+    // kost zoveel karren mest per tegel (js/vee.js: de schaapskooi maakt ze). Een akker die elk jaar
+    // akker blijft en elk jaar mest krijgt, put zo niet uit: de eeuwige rogge van de Drentse es.
+    mestPerTegel: 0.5,
+    mestErbij: 0.1,
+    // Of de mest vanzelf over alle akkers gaat in plaats van dat jij per veld kiest: een optie in de
+    // spelregels ("De mest"). Dan krijgt elke akker een deel, naar wat er is.
+    mestVanzelf: false,
   };
   const VIN = () => T.VELDEN_INSTELLINGEN;
 
@@ -104,12 +113,91 @@
     return { kan: true, reden: null };
   };
 
-  // Het plan zetten, na dezelfde vraag. Geeft hetzelfde antwoord als T.kanBestemming.
+  // Het plan zetten, na dezelfde vraag. Geeft hetzelfde antwoord als T.kanBestemming. Wordt het veld
+  // iets anders dan een akker, dan gaat de mest er weer af (T.kanMest).
   T.zetPlan = function (S, veld, bestemming) {
     const r = T.kanBestemming(S, veld, bestemming);
-    if (r.kan) veld.plan = bestemming;
+    if (r.kan) {
+      veld.plan = bestemming;
+      if (bestemming !== 'akker') veld.mest = false;
+    }
     return r;
   };
+
+  // ── Mest ──
+
+  // Wat mest op dit veld kost, in karren.
+  T.mestVoorVeld = (veld) => veld.b * veld.h * VIN().mestPerTegel;
+
+  // Mag er mest op dit veld? Alleen op wat volgend jaar akker is: een weide mest zichzelf, en een
+  // braak rust. En niet als de mest vanzelf gaat, of het land niet uitput (allebei de spelregels).
+  // { kan, reden }, zoals T.kanBestemming.
+  T.kanMest = function (S, veld) {
+    if (!veld) return { kan: false, reden: 'Daar ligt geen veld.' };
+    if (!VIN().vruchtbaarheid) return { kan: false, reden: 'Het land put niet uit: dat staat uit in de spelregels.' };
+    if (VIN().mestVanzelf) return { kan: false, reden: 'De mest gaat vanzelf over alle akkers: zo staat het in de spelregels.' };
+    if (T.planVan(veld) !== 'akker') return { kan: false, reden: 'Mest gaat op een akker: een weide mest zichzelf, en een braak rust.' };
+    return { kan: true, reden: null };
+  };
+
+  // Mest op dit veld (aan) of eraf (uit). Hij gaat mee met de wissel op 1 lentemaand, elk jaar
+  // opnieuw, tot je hem eraf haalt; is er dan te weinig, dan krijgt het laatste veld een deel.
+  // Uitzetten kan altijd. Geeft { kan, reden }.
+  T.zetMest = function (S, veld, aan) {
+    if (!aan) {
+      if (veld) veld.mest = false;
+      return { kan: true, reden: null };
+    }
+    const r = T.kanMest(S, veld);
+    if (r.kan) veld.mest = true;
+    return r;
+  };
+
+  // Hoeveel mest de wissel vraagt: de velden met mest erop (of met de optie: alle akkers van
+  // volgend jaar), en wat dat samen kost. { velden, nodig }.
+  T.mestPlan = function (S) {
+    const w = S && S.wereld;
+    const akkers = ((w && w.akkers) || []).filter((v) => T.planVan(v) === 'akker');
+    const velden = !VIN().vruchtbaarheid ? [] : VIN().mestVanzelf ? akkers : akkers.filter((v) => v.mest);
+    return { velden, nodig: velden.reduce((n, v) => n + T.mestVoorVeld(v), 0) };
+  };
+
+  // De mest van de wissel (T.wisselVelden): uit de voorraad op de velden van T.mestPlan. Per veld
+  // in hun volgorde, zolang er is; het laatste krijgt wat er over is. Met de optie krijgt elke akker
+  // hetzelfde deel. Geeft een Map veld → deel (0..1) van een volle mestbeurt.
+  function strooiMest(S) {
+    const deel = new Map();
+    const { velden, nodig } = T.mestPlan(S);
+    let heb = (S.voorraad && S.voorraad.mest) || 0;
+    if (!velden.length || heb <= 0) {
+      if (velden.length && T.ui && T.ui.bericht) T.ui.bericht('Er was geen mest voor de akkers die je koos.', 'gevaar');
+      return deel;
+    }
+    let gebruikt = 0;
+    if (VIN().mestVanzelf) {
+      const f = Math.min(1, heb / nodig);
+      for (const v of velden) deel.set(v, f);
+      gebruikt = nodig * f;
+    } else {
+      for (const v of velden) {
+        const kost = T.mestVoorVeld(v);
+        const f = Math.max(0, Math.min(1, heb / kost));
+        if (f <= 0) break;
+        deel.set(v, f);
+        heb -= kost * f;
+        gebruikt += kost * f;
+      }
+    }
+    if (gebruikt > 0 && T.wijzigVoorraad) T.wijzigVoorraad(S, 'mest', -gebruikt);
+    if (T.ui && T.ui.bericht) {
+      const vol = velden.filter((v) => (deel.get(v) || 0) >= 1 - 1e-9).length;
+      T.ui.bericht(vol === velden.length
+        ? `De mest gaat op de akkers: ${Math.round(gebruikt)} karren, op ${velden.length === 1 ? 'één veld' : `${velden.length} velden`}.`
+        : `Er was te weinig mest: ${Math.round(gebruikt)} karren, en ${velden.length - vol} van de ${velden.length} velden kregen minder dan ze vroegen.`,
+      vol === velden.length ? 'goed' : 'gevaar');
+    }
+    return deel;
+  }
 
   // De jaarwissel van de velden, op 1 lentemaand vóór het zaaien (T.tikAkkersDag onderaan): eerst
   // verandert de vruchtbaarheid naar wat elk veld het afgelopen jaar was, dan wordt het plan de
@@ -129,10 +217,12 @@
       if (T.ui && T.ui.bericht) T.ui.bericht('Er zou geen weide meer zijn, maar het vee moet ergens grazen: de weide blijft weide.', 'gevaar');
     }
     const verslag = [];
+    // De mest gaat op wat volgend jaar akker is, bovenop wat het veld het afgelopen jaar deed.
+    const mest = IN.vruchtbaarheid ? strooiMest(S) : new Map();
     for (const v of w.akkers) {
       const was = T.bestemmingVan(v);
       if (IN.vruchtbaarheid) {
-        const erbij = was === 'akker' ? -IN.akkerPutUit : was === 'braak' ? IN.braakRust : IN.weideMest;
+        const erbij = (was === 'akker' ? -IN.akkerPutUit : was === 'braak' ? IN.braakRust : IN.weideMest) + (mest.get(v) || 0) * IN.mestErbij;
         const nu = typeof v.vruchtbaarheid === 'number' ? v.vruchtbaarheid : IN.beginVruchtbaarheid;
         // Afgerond, zodat 0,8 geen 0,7999999 wordt in het venster.
         v.vruchtbaarheid = Math.round(Math.min(1, Math.max(IN.laagste, nu + erbij)) * 1e6) / 1e6;

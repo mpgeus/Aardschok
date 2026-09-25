@@ -355,3 +355,72 @@ test('de muis op de heide: wie er graast, en hoeveel de kooi bergt', () => {
   const h = T.handelingVerkennen(Object.assign(S, { spreuk: null, inventaris: new Set() }), { x: meent.x + 2, y: meent.y + 3 });
   assert.equal(h.tekst, T.meentTekst(S, meent));
 });
+
+// ---------------------------------------------------------------- mest per veld
+
+const VI = T.VELDEN_INSTELLINGEN;
+
+test('T.zetMest: alleen op wat volgend jaar akker is, en weer eraf als het iets anders wordt', () => {
+  const { S, velden: [akker, weide] } = wereldMet([
+    { x: 0, y: 0, b: 2, h: 5, bestemming: 'akker' },
+    { x: 5, y: 0, b: 2, h: 5, bestemming: 'weide' },
+  ]);
+  assert.equal(T.mestVoorVeld(akker), 10 * VI.mestPerTegel);
+  assert.equal(T.zetMest(S, akker, true).kan, true);
+  assert.equal(akker.mest, true);
+  const r = T.zetMest(S, weide, true);
+  assert.equal(r.kan, false);
+  assert.match(r.reden, /een weide mest zichzelf/);
+  // Wordt de akker volgend jaar braak, dan gaat de mest eraf.
+  assert.equal(T.zetPlan(S, akker, 'braak').kan, true);
+  assert.equal(akker.mest, false);
+  // En met de optie "vanzelf" kies je niet per veld.
+  T.zetPlan(S, akker, 'akker');
+  metInstelling(VI, { mestVanzelf: true }, () => assert.match(T.kanMest(S, akker).reden, /vanzelf/));
+});
+
+test('op 1 lentemaand: mest maakt een akker vruchtbaarder, zodat elk jaar akker niet uitput', () => {
+  const { S, velden: [a, b, c] } = wereldMet([
+    { x: 0, y: 0, b: 2, h: 5, bestemming: 'akker' },  // 10 tegels, met mest
+    { x: 5, y: 0, b: 2, h: 5, bestemming: 'akker' },  // 10 tegels, zonder
+    { x: 10, y: 0, b: 2, h: 5, bestemming: 'akker' }, // 10 tegels, met mest, maar die is op
+  ]);
+  for (const v of [a, b, c]) v.vruchtbaarheid = 0.8;
+  T.zetMest(S, a, true);
+  T.zetMest(S, c, true);
+  const kost = T.mestVoorVeld(a);
+  T.zetVoorraad(S, 'mest', kost * 1.5); // genoeg voor a, en de helft voor c
+  assert.deepEqual(T.mestPlan(S), { velden: [a, c], nodig: 2 * kost });
+  T.wisselVelden(S);
+  const rond = (x) => Math.round(x * 1e6) / 1e6;
+  assert.equal(rond(a.vruchtbaarheid), rond(0.8 - VI.akkerPutUit + VI.mestErbij), 'met mest put hij niet uit');
+  assert.equal(rond(b.vruchtbaarheid), rond(0.8 - VI.akkerPutUit));
+  assert.equal(rond(c.vruchtbaarheid), rond(0.8 - VI.akkerPutUit + VI.mestErbij / 2), 'de rest van de mest');
+  assert.ok(S.voorraad.mest < 1e-9, 'de mest is op');
+  assert.equal(a.mest, true, 'de mest blijft erop staan, voor volgend jaar');
+});
+
+test('met de optie "vanzelf" gaat de mest naar verhouding over alle akkers van volgend jaar', () => {
+  const { S, velden: [a, b, weide] } = wereldMet([
+    { x: 0, y: 0, b: 2, h: 5, bestemming: 'akker' },
+    { x: 5, y: 0, b: 2, h: 5, bestemming: 'akker' },
+    { x: 10, y: 0, b: 2, h: 5, bestemming: 'weide' },
+  ]);
+  for (const v of [a, b, weide]) v.vruchtbaarheid = 0.8;
+  metInstelling(VI, { mestVanzelf: true }, () => {
+    T.zetVoorraad(S, 'mest', T.mestVoorVeld(a)); // genoeg voor de helft van de twee akkers
+    assert.deepEqual(T.mestPlan(S).velden, [a, b]);
+    T.wisselVelden(S);
+  });
+  const rond = (x) => Math.round(x * 1e6) / 1e6;
+  for (const v of [a, b]) assert.equal(rond(v.vruchtbaarheid), rond(0.8 - VI.akkerPutUit + VI.mestErbij / 2));
+  assert.equal(rond(weide.vruchtbaarheid), rond(0.8 + VI.weideMest), 'een weide krijgt geen mest');
+});
+
+test('de muis op een akker met mest zegt het', () => {
+  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  assert.ok(T.beginOpKaart(S, 'gehucht'));
+  const akker = S.wereld.akkers.find((a) => a.naam === 'akker2');
+  T.zetMest(S, akker, true);
+  assert.match(T.veldTekst(S, akker), / · krijgt mest op 1 lentemaand$/);
+});
