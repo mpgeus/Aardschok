@@ -456,6 +456,23 @@ ieder karakter krijgt iets herkenbaars, zodat je de weduwe of de drinker van ver
   heethoofd) als proef, dan de andere vijf. Wie nog geen eigen vel heeft, blijft de gewone boer of
   boerin.
 
+**Ronde 1 gemaakt (25 sep 2026):** acht vellen, van `boer-zanger` tot `boerin-vroedvrouw`. De
+karakters zijn opties op `boer()` en `boerin()`; de tabel met die opties staat in
+`gereedschap/pixelart/karakters.cjs`. De proefplaat is `uit/dorpelingen/karakters-ronde1.png`.
+Zonder opties komen de gewone boer en boerin er pixel voor pixel hetzelfde uit. Wat erbij gekozen
+werd, buiten de tabel:
+- de zanger heeft geen hooivork of mand meer: zijn armen hangen, de luit hangt aan een band;
+- de weduwe houdt haar mandje eieren;
+- het bont van de woekeraar is grijs (grauwerk), want licht bont viel samen met de witte doek, en de
+  woekeraar-boer draagt een vilten hoed en leren schoenen in plaats van stro en klompen;
+- het heethoofd staat met de vuisten in de zij, en de boer heeft geen hoed maar haar dat rechtop
+  staat.
+
+Nog niet goed:
+- van voren zie je van de luit alleen de kop boven de schouder;
+- het rode gezicht van het heethoofd is het hele hoofd, en dat kan op een masker lijken;
+- het gezicht van de woekeraar valt donker onder zijn hoedrand.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
