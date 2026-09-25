@@ -2654,8 +2654,8 @@
         "rotation": 0,
         "name": "schuurBlokhut",
         "gid": 689,
-        "x": 992,
-        "y": 1248,
+        "x": 864,
+        "y": 1056,
         "width": 648,
         "height": 632,
         "properties": []
@@ -29314,8 +29314,8 @@
      },
      {
       "gebouw": "schaapskooi",
-      "x": 31,
-      "y": 39,
+      "x": 27,
+      "y": 33,
       "b": 5,
       "h": 7
      },

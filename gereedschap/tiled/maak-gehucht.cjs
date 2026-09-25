@@ -182,10 +182,12 @@ function inAkker(x, y) {
 // De meent: de heide in het zuidwesten, tussen het gehucht en de beek, waar de schapen van het dorp
 // samen grazen (Marcel, 25 sep, naar de Drentse esdorpen: de akkers op de es, de koeien op de
 // weide, de schapen op de heide; ontwerp/spel.md, "Marcel koos voor stap 2"). De schaapskooi staat
-// aan de oostrand, tussen de heide en de es, naast de weide van Klaas: van daar gaat de mest naar
-// de akkers. De meent is voor het spel een rechthoek (js/kaart.js, "meent"); de grond erop is heide.
+// aan de noordrand ervan, naast de boerderij van boer 5, met zijn voorkant naar de heide: zo staan
+// de schapen vóór de kooi en niet erachter (eerst stond hij aan de oostrand, en dan graasde de
+// halve kudde achter zijn dak). De meent is voor het spel een rechthoek (js/kaart.js, "meent"); de
+// grond erop is heide.
 const MEENT = { meent: 'heide', x: 9, y: 40, b: 22, h: 9 };
-const KOOI = { tegel: 'schuurBlokhut', x: 31, y: 39, b: 5, d: 7 };
+const KOOI = { tegel: 'schuurBlokhut', x: 27, y: 33, b: 5, d: 7 };
 
 // De weg: een rechte lijn dwars over de kaart (dezelfde "afstand tot lijn"-truc als
 // maak-wereld.cjs en erf-kaart.cjs).

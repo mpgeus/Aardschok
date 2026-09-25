@@ -790,7 +790,7 @@ met de toetsen in `test/velden.test.cjs`.
   zout het vlees goed houdt. Het begint op een voorstel: zo weinig als kan. Een koe geeft 20 vlees en
   een huid, een schaap 6, een jong de helft. Je opent het ook onderaan het veldenvenster.
 - **De heide en de kooi.** Het gehucht heeft een meent in het zuidwesten (22 bij 9 tegels) en een
-  schaapskooi aan de oostrand, naast de weide van Klaas. De schapen grazen op de heide; lammeren komen
+  schaapskooi aan de noordrand, met zijn deur naar de heide. De schapen grazen ervoor; lammeren komen
   alleen als er plaats is in de kooi (20 per kooi). In zomermaand geeft elk schaap 4 wol, en de kooi
   geeft per schaap 2,5 karren mest per jaar, zolang hij zijn herder (een hand) heeft. De kooi maakt
   zelf geen wol meer.
