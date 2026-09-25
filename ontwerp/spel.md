@@ -4,7 +4,40 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
+## Waar staat wat (bijgewerkt 25 sep 2026)
+
+Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
+wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
+werd, en wat een proef liet zien. Die geschiedenis blijft staan, want die zegt waarom. Wie iets
+bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stellen").
+
+| Onderwerp | Stand | Werklijst |
+|---|---|---|
+| Besloten | het spel zelf (23 sep); geldt nog | |
+| Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
+| Het eerste proefje | gebouwd (23 sep) | 1 |
+| De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
+| Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd | 6 |
+| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep) | 3 |
+| Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
+| Handel: de marskramer | gebouwd (24 sep) | 4 |
+| Sint-Maarten | gebouwd (24 sep) | 5 |
+| Instelbaar, en de boeren | gebouwd (24 sep): 16 keuzes, 186 getallen | |
+| Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep) | 6a |
+| Ontginnen | besloten, nog niet gebouwd | 6b |
+| Straten en paden | besloten, nog niet gebouwd | 6c |
+| Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
+| Open | de grote vragen | |
+
 ## Besloten (Marcel, 23 sep 2026)
+
+**Zo staat het nu** (25 sep): dit geldt nog allemaal. Gebouwd is het begin ervan: het gehucht, de
+schout als poppetje, de heer die alleen geld ziet met vier straffen (een boete en hogere eisen,
+soldaten die inkwartieren, de schandpaal, je ambt kwijt), en de inner die komt kijken, met
+verstopplekken. Nog niet gebouwd: keuren en politiek, een huis in brand en de galg als straf, het
+dorp dat een stad wordt, en de twee wegen naar vrijheid.
+
+**Het besluit, zoals het genomen werd:**
 
 > Ja, het wordt een mix van stadsontwikkeling, wel in isometrisch perspectief. Management sim met
 > groeiende aantallen van mensen. In een koninkrijk waar je afhankelijk bent van een verwarde heer
@@ -43,6 +76,14 @@ Hoe Marcel het eerst beschreef:
 > aan. Uiteindelijk kun je, als je over voldoende middelen beschikt, de strijd aan met de landheer.
 
 ## Hoe het zou kunnen spelen (Claude, 23 sep; voorstel, niet besloten)
+
+**Zo staat het nu** (25 sep): een voorstel van Claude, waarvan de kern ("rijk worden en arm lijken")
+de richting van het spel werd. Gebouwd: het jaar als ritme met Sint-Maarten, de heer die slecht
+telt, en de inner die nuchter is. Nog niet: de treden (punt 14), de grillen van de heer (punt 8),
+keuren, schepenen en groepen (punt 9), en het avontuur (de mensen met een verhaal, het kasteel,
+gevechten; de punten 8 tot 16).
+
+**Het voorstel, zoals het er stond:**
 
 **De kern in één zin: je moet rijk worden en arm lijken.** De heer vraagt meer naarmate het beter
 gaat, stadsrechten worden duurder als hij ziet hoe rijk je bent, en een opstand vraagt een kist
@@ -108,6 +149,13 @@ antwoorden, en het wereldgereedschap.
 
 ## Het eerste proefje: een dorp met akkers, en de sfeer (Marcel, 23 sep 2026)
 
+**Zo staat het nu** (25 sep): gebouwd op 23 sep. Het gehucht (`?kaart=gehucht`) met vijf boerderijen
+en hun velden, en graan in vijf stadia (geploegd, kiemend, groen, rijp, gemaaid) dat met de kalender
+groeit, in de wind wuift, en tegel voor tegel door de boeren gemaaid wordt. Een boer staat tot zijn
+middel in het graan.
+
+**Wat Marcel vroeg:**
+
 > We moeten een dorp hebben, met wat akkers. Ik wil iets van graan zien. — We moeten de eerste
 > proef simpel houden. — De sfeer is belangrijk.
 
@@ -121,6 +169,18 @@ groeien en wuiven. De kern hieronder komt in het tweede proefje. Volgorde:
    zodat je het graan ziet opkomen, rijpen en gemaaid worden, en boeren die op hun akker werken.
 
 ## De kern voor het tweede proefje (Claude, 23 sep; voorstel om te schrappen en aan te vullen)
+
+**Zo staat het nu** (25 sep): een voorstel, waarvan een deel anders gebouwd is.
+- De heer vraagt 15% van het graan dat de inner telde, in de schuur en op de velden die hij zag
+  (niet de schoven op het veld), met hoofdgeld, een prijs per gebouw en 15% van de kist. In goud,
+  niet in stuivers.
+- Verstoppen gaat in kelders en de kapel (Marcel wilde geen kuil), en wat je verstopt, laat sporen
+  na: het graan tegen de velden, het goud tegen wat de marskramer vertelt.
+- De meent met schapen, het bos van de heer en de beek zijn er.
+- Nog niet: de drie groepen (boeren, keuters, de kerk), de vijf keuren, de herendienst en de grillen
+  van de heer. Die wachten op Marcel, vóór punt 9.
+
+**Het voorstel, zoals het er stond:**
 
 Marcel: "ja graag, laten we daarmee starten." Genoeg voor één jaar in een gehucht, niet meer.
 
@@ -183,6 +243,35 @@ zet een keur, de oogst komt, de inner telt, je verstopt iets of niet, en op Sint
 Is rijk worden en arm lijken leuk?
 
 ## Rijk worden en arm lijken: de inner (Marcel, 24 sep 2026; werklijst punt 6)
+
+**Zo werkt het nu** (25 sep; `js/inner.js`, `js/verstoppen.js`, `js/heer.js`):
+- **De inner** komt op 15 oogstmaand, tien dagen vooraf aangekondigd, en zolang hij er is, staat de
+  tijd stil. Hij kijkt 7 tegels ver in een rechte lijn; huizen en schuren houden zijn blik tegen.
+  Alleen loopt hij naar wat hij nog niet zag. Sta je binnen 2 tegels, dan loopt hij met je mee, tot
+  je verder dan 5 tegels wegloopt. Zijn geduld is 90 stappen.
+- **Zijn rapport is de rekening:** de gebouwen die hij zag (met hun woonruimte, voor het hoofdgeld),
+  het graan in de schuur en op de velden die hij zag, en het goud in de kist. Wat hij niet zag,
+  betaal je dat jaar niet. Op Sint-Maarten kijkt de heer zelf nog rond vanaf de brink (6 tegels).
+- **De argwaan** (0 tot 100%, een oog in de balk) groeit als er minder dan 60% ligt van het graan
+  dat zijn velden beloven, als de kist minder dan 60% bevat van wat de marskramer je betaalde (vanaf
+  10 goud), als de heer op de brink iets ziet wat niet in het rapport stond (15% per ding), en als
+  de soldaten iets vinden (15% per plek). Ze doet vier dingen: een toeslag (de argwaan maal de helft
+  van de rekening); vanaf 40% komt hij onverwacht terug; vanaf 50% doorzoeken de soldaten op
+  Sint-Maarten het dorp; vanaf 80% telt het rapport niet meer. Na Sint-Maarten zakt ze tot de helft.
+- **Verstoppen:** klik een huis, een boerderij of de kapel, en de schout zet er graan of goud weg of
+  haalt het terug. Wat verstopt ligt, telt de inner niet en eet het dorp niet. Je eigen kelder
+  vinden de soldaten vaak (60%), die van een boer soms (30%), de kapel bijna nooit (5%, maar de
+  kapelaan houdt een tiende). Het karakter van de boer telt: de roddelaar (twee keer zo vaak
+  gevonden), de vrome (weigert), de woekeraar (half zo vaak, maar hij houdt een vijfde), de oudste
+  (een kwart zo vaak). Zolang de inner of de heer in het dorp is, sjouw je niets.
+- In de spelregels: waar de heer de rekening op maakt, wat hij van het graan vraagt, de sporen, de
+  kist, en of het karakter van wie er woont telt.
+- **Nog open:** of verstoppen ook onder de 40% een risico moet hebben (een proef liet zien dat het
+  daaronder vrij is); deel 2, het bos, met de kudde die de inner telt; deel 3, de marskramer die
+  vee, kaas, wol en hooi koopt en verkoopt; en stap 3: praten, afleiden, omkopen en de twee
+  rekenboeken.
+
+**Hoe het zo kwam:**
 
 Marcel koos uit een voorstel van Claude, vóór het bouwen:
 
@@ -357,7 +446,50 @@ Nog open na deel 1 (vragen van Claude):
 - De woekeraar houdt zijn deel meteen, net als de kapelaan. Rente die per maand oploopt, past beter bij
   een woekeraar, maar is ingewikkelder.
 
+## Het dorp: mensen, behoeften en de winter (werklijst punt 3, 23 sep 2026)
+
+**Zo werkt het nu** (25 sep; `js/behoeften.js`, `js/gebouwen.js`):
+- **Mensen** zijn een getal in de balk (25 bij het begin), geen poppetjes; alleen de boeren lopen
+  rond. Huizen geven woonruimte: een hut 3, een boerderij 4, een huis 5.
+- **Eten:** elk mens eet 0,05 graan per dag. Het dorp eet eerst de melk van vandaag, dan graan, en
+  pas als het graan op is kaas. Groente, vis of vlees erbij maakt tevredener. Zonder zout bederven
+  vis en vlees.
+- **Brandhout:** in wintermaand, louwmaand en sprokkelmaand stookt elk huishouden hout of turf.
+- **Een kerk:** een kapel die af is, maakt het dorp tevredener.
+- **Tevredenheid** (0 tot 100%, in de balk, met bij de muis wat het dorp mist) bepaalt hoe hard er
+  gewerkt wordt, of er elke 20 dagen een gezin van vier bijkomt (als er ook plaats is en minstens 20
+  graan) of juist wegtrekt, en of een huis doorgroeit (hut, huis, stenen huis).
+- **De winter:** een tekort aan brandhout of eten kost mensen. Buiten de winter kost honger
+  standaard alleen tevredenheid; wegtrekken of sterven zijn keuzes in de spelregels.
+- **Nog open:** de winter is hard (in een proef van 25 naar 2 mensen zonder hout); het eerste
+  voorjaar is krap (60 graan voor 25 mensen); moet vlees ook eten zijn? Brand en ziekte komen bij
+  punt 8.
+
+**Hoe het zo kwam:** dit is punt 3 van de werklijst, gebouwd op 23 sep uit "Het dorp in leven
+houden" (onderaan, in "Welke gameplay er nog nodig is"). Er stond geen eigen voorstel voor in dit
+bestand; de details staan in `git log` en in de uitleg bovenin `js/behoeften.js`.
+
 ## Gebouwen (Marcel, 23 sep 2026)
+
+**Zo werkt het nu** (25 sep; `js/gebouwen.js`, `T.GEBOUWEN`):
+- 45 soorten op één plek, in vier treden: 18 voor het gehucht, 14 voor het dorp, 9 bij marktrecht en
+  4 voor de stad. Alleen het gehucht is speelbaar; de treden komen bij punt 14.
+- In het bouwmenu (`B`) van het gehucht staan er 16: hut, huis, boerderij, houthakker, schaapskooi,
+  kippenhok, moestuin, put, steengroeve, kleiput, rietsnijder, jager, visser, wachthuis, smidse en
+  kapel, elk met zijn kosten, wat het doet, en zijn prijs voor de heer.
+- Bouwen kost grondstof en tijd, en je ziet een gebouw in vijf fases oprijzen.
+- Een gebouw dat iets maakt, vraagt handen en maakt alleen wat zijn grondstof toelaat: de smidse
+  staat zonder ijzer stil, en zegt dat bij de muis. Gereedschap laat 25% harder werken en slijt in
+  180 dagen.
+- Wat de heer ervoor vraagt, staat bij elk gebouw: een huis 2 goud, een boerderij 1, een schaapskooi
+  20 wol, een hut niets.
+- De losse verstopplek staat sinds 25 sep niet meer in het bouwmenu: je verstopt in kelders en de
+  kapel ("Rijk worden en arm lijken").
+- **Nog open:** veel gebouwen lenen nog een tekening; de nieuwe huizen van de huizenbouwer (ronde
+  4b) zijn nog niet in het spel; de steengroeve maakt plaats voor de keienraper ("Straten en
+  paden"); ordebewaarders en een leger komen later.
+
+**Hoe het zo kwam:**
 
 > We hebben types gebouwen nodig. Dus huis, deze zorgen ervoor dat je populatie kan groeien;
 > boerderij, meer mensen op de akker. Smidse, timmerman, wapenmaker. En alle anderen.
@@ -472,6 +604,20 @@ ziet de inner, behalve wat verstopt is.
 
 ## Handel: de marskramer (Marcel, 24 sep 2026)
 
+**Zo werkt het nu** (25 sep; `js/handel.js`, het venster in `js/hud.js`):
+- De marskramer komt drie keer per jaar: op 5 grasmaand, 5 hooimaand en 5 wijnmaand, telkens zo'n
+  tien dagen. In de winter niet.
+- Je praat met hem op de brink en handelt in een venster; zolang dat open is, staat de tijd stil.
+  Hij heeft maar zoveel goud bij zich en zoveel plaats in zijn mars.
+- Hij verkoopt ijzer en zout, en koopt graan, wol, hout, eieren, groente, vis, vlees en huiden. De
+  prijzen verschillen per bezoek: voor graan betaalt hij in de lente goed en na de oogst weinig.
+- Sinds 25 sep houdt hij bij wat hij je betaalde en wat jij hem, en vertelt hij dat de inner: het
+  spoor van goud ("Rijk worden en arm lijken").
+- **Nog open:** vee, kaas en hooi kopen en verkopen (verstoppen, deel 3); hem omkopen (stap 3 van de
+  inner); de voerman met zijn kar bij de trede dorp.
+
+**Hoe het zo kwam:**
+
 Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
 
 - **Hij komt drie keer per jaar,** op vaste tijden: in grasmaand, hooimaand en wijnmaand, telkens
@@ -510,6 +656,25 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
 - Met gereedschap zou ook de oogst sneller kunnen gaan: ijzeren sikkels en zeisen.
 
 ## Sint-Maarten: de heer komt innen (Marcel, 24 sep 2026)
+
+**Zo werkt het nu** (25 sep; `js/heer.js`, de vensters in `js/hud.js`):
+- Op 1 wijnmaand komt zijn brief, een schatting. Op 11 slachtmaand komt hij zelf met twee soldaten
+  naar de brink, en de tijd staat stil tot je bij hem bent geweest. Bij argwaan vanaf 50% doorzoeken
+  de soldaten eerst het dorp.
+- Hij vraagt naar wat de inner zag: 15% van het graan, hoofdgeld (0,2 goud per mens), per gebouw
+  zijn prijs, 15% van de kist, de schuld van vorig jaar, en een toeslag voor de argwaan. Goud neemt
+  hij altijd, ook in de plaats van iets anders.
+- Je betaalt in een venster met schuiven, dat vooruitrekent of je graan het haalt tot de oogst.
+- Hij telt slecht: vanaf 90% merkt hij niets. Daaronder een boete (het tekort komt volgend jaar
+  terug, met de helft erbij); onder twee derde ook twee soldaten, die elk eten voor drie tot 1
+  lentemaand; onder de helft ook de schandpaal (jij wijst aan wie, ook jezelf; drie dagen). Twee
+  keer minder dan de helft, en je bent je ambt kwijt.
+- Zaaien kost vanaf het tweede jaar 1 graan per akkertegel; wat niet gezaaid kan worden, ligt braak.
+- In de spelregels: het graan (ruim, net rond, honger), waarin hij betaald wil worden, hoe hij telt,
+  en of de schout zelf aan de paal mag.
+- **Nog open:** zijn grillen en de herendienst (punt 8); de koets (tekenwerk).
+
+**Hoe het zo kwam:**
 
 Besloten op een voorstel van Claude (`werklijst.md`, punt 5):
 
@@ -616,6 +781,21 @@ uit het bouwen kwamen:
 
 ## Instelbaar: opties in plaats van één keuze (Marcel, 24 sep 2026)
 
+**Zo werkt het nu** (25 sep; `js/opties.js`, het venster in `js/hud.js`):
+- Eén venster Spelregels (`O`, of de knop naast Bouwen), ook midden in een spel. Zolang het open is,
+  staat de tijd stil. De browser onthoudt wat je instelt.
+- 16 keuzes, met wat Marcel koos als standaard: het graan, waarin de heer betaald wil worden, hoe
+  hij telt, de schout aan de schandpaal, wie de boeren zijn, waar de heer de rekening op maakt, wat
+  hij van het graan vraagt, honger buiten de winter, de vruchtbaarheid, of het vee groeit, het vee
+  in de winter, wat de schapen 's winters eten, de mest, de sporen, het goud in de kist, en wie er
+  in een kelder woont.
+- De namen van de heer en de vijf boeren.
+- Een werkbank met alle 186 getallen uit de regels, in tien blokken, elk met een schuif. Wat je daar
+  zet, gaat vóór wat een keuze zet.
+- **Nog open:** de voorinstellingen Mild, Zoals bedoeld en Streng, voor Nieuw spel (punt 17).
+
+**Hoe het zo kwam:**
+
 > Dit moeten allemaal opties worden die instelbaar zijn.
 
 Gezegd na Sint-Maarten, over wat nog openstond: de namen van de boeren en de heer, of honger buiten
@@ -650,6 +830,19 @@ tekent zijn brief ermee.
 Nog open: de voorinstellingen Mild en Streng (wat staat er dan?).
 
 ### De boeren krijgen willekeurige eigenschappen (Marcel, 24 sep 2026)
+
+**Zo werkt het nu** (25 sep; `js/boeren.js`, `T.KARAKTERS` in `js/mensen.js`):
+- Elk spel trekt elke boer een karakter uit tien (de zanger, de weduwe, de woekeraar, de vroedvrouw,
+  het heethoofd, de vrome, de roddelaar, de oudste, de nieuwkomer, de drinker), elk met een eigen
+  gesprek en sinds 25 sep een eigen gezicht. Een weduwe of vroedvrouw is altijd een boerin.
+- En vier eigenschappen: maaien (30% sneller of trager), opbrengst (15% meer of minder), zaaien
+  (zuinig of kwistig) en aanzien (wat de schandpaal het dorp kost). Meestal is een boer gewoon.
+- Je ziet het bij de muis, boven het gesprek en bij de schandpaal. Geloot of vast is een keuze in de
+  spelregels.
+- Sinds 25 sep telt het karakter ook voor de kelder: de roddelaar, de vrome, de woekeraar en de
+  oudste doen daar iets ("Rijk worden en arm lijken"); de andere zes nog niet.
+
+**Hoe het zo kwam:**
 
 > Ze moeten random eigenschappen hebben. De ene oogst dan wat sneller dan de ander. Etc
 
@@ -696,6 +889,30 @@ karakter"). Tot dan zien de boeren er hetzelfde uit (twee vellen, boer en boerin
 en meer soorten (sluw, praatziek, sterk) komen bij de punten waar ze iets doen.
 
 ## Weides met koeien en schapen (Marcel, 25 sep 2026)
+
+**Zo werkt het nu** (25 sep; `js/akkers.js`, `js/vee.js`, het veldenvenster in `js/hud.js`):
+- **Velden:** elk veld is akker, weide of braak. In het veldenvenster (`V`) kies je wat het volgend
+  jaar wordt; de wissel gaat in op 1 lentemaand. Een akker put het land uit (elk jaar 10% minder,
+  tot 40%), een braak geeft 15% terug, een weide 20%. Velden naast elkaar die weide zijn, zijn samen
+  één weide.
+- **Koeien:** 4 tegels weide per koe. Van grasmaand tot en met wijnmaand geeft een koe elke dag melk
+  voor vijf mensen; wat over is, wordt kaas. In grasmaand komen er kalveren bij, zolang er plaats
+  is.
+- **Hooi en winter:** in hooimaand maaien de boeren eerst het hooi van hun weide (12,5 per tegel).
+  Van slachtmaand tot en met lentemaand (150 dagen) eet een koe 1 hooi per dag. Op 1 slachtmaand
+  kies je in een venster wie naar de slager gaat (een koe geeft 20 vlees en een huid, een schaap 6),
+  met een voorstel dat net genoeg slacht.
+- **Schapen:** ze grazen op de heide (de meent, 23 bij 8 tegels, 2 tegels per schaap) en slapen in
+  de schaapskooi (hoogstens 20); in grasmaand komen er lammeren bij als er plaats is in de kooi. In
+  zomermaand geeft elk schaap 4 wol, en met een herder geeft de kooi 2,5 karren mest per schaap per
+  jaar, die je in het veldenvenster op een akker legt.
+- Het gehucht begint met één weide (het blok van Klaas), drie koeien en acht schapen.
+- In de spelregels: de vruchtbaarheid, of het vee groeit, het vee in de winter, wat de schapen 's
+  winters eten, en de mest.
+- **Nog open:** moet vlees ook eten zijn; vullen de lammeren de kooi te snel; en stap 3, de inner
+  die de kudde telt, komt samen met verstoppen deel 2 (het bos) en deel 3 (de marskramer).
+
+**Hoe het zo kwam:**
 
 > Wil ook weides hebben met koeien en schapen.
 
@@ -937,6 +1154,12 @@ Nog open na stap 2 (Claude):
 
 ## Ontginnen: nieuwe velden uit bos of heide (Marcel, 25 sep 2026; werklijst punt 6b)
 
+**Zo staat het nu** (25 sep): besloten, nog niet gebouwd (punt 6b). De velden van het gehucht liggen
+vast op 209 tegels, en een veld maken kan nog niet. De vraag onderaan of er heide komt, is
+beantwoord: de heide ligt er sinds 25 sep (23 bij 8 tegels, met de schaapskooi aan de noordrand).
+
+**Hoe het zo kwam:**
+
 Nu is het land vast: het gehucht heeft 209 tegels aan velden (zeven stuks), en je kunt er geen bij
 maken, want een akker gaat niet via het bouwmenu. Kost vee land (het hooi, hierboven), dan is elke
 koe graan dat je niet verbouwt, en wil je meer land. Vroeger groeide een dorp zo: bos of heide werd
@@ -959,6 +1182,11 @@ Nog open (vragen van Claude):
   de meent kunnen grazen?
 
 ## Straten en paden (Marcel, 25 sep 2026)
+
+**Zo staat het nu** (25 sep): besloten, nog niet gebouwd (punt 6c). Nu loop je over gras even snel
+als over de weg, en de steengroeve staat nog in het bouwmenu.
+
+**Hoe het zo kwam:**
 
 > We hebben denk ik ook straten nodig, dus stenen, verharde weg, of iets van paadjes.
 
@@ -1001,6 +1229,13 @@ Nog open, voor als punt 6c gebouwd wordt (vragen van Claude):
 - Tekenwerk: de kinderkopjes (Marcel, 21 sep, `beeld.md`), een platgelopen paadje, en modder.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
+
+**Zo staat het nu** (25 sep): het plan voor alles, besloten op 23 sep ("Ik wil het allemaal"). Van
+laag 1 zijn de behoeften, de winter en de handel gebouwd, brand en ziekte nog niet. Van laag 2 de
+argwaan, het bezoek van de inner en de eerste verstopplekken; het rekenboek en de grillen van de
+heer nog niet. Laag 3 en 4 komen bij de punten 8 tot 16.
+
+**Het plan, zoals het er stond:**
 
 De ruggengraat staat of wordt gebouwd: bouwen, mensen, werk, kalender, voorraad. Wat er nog mist,
 in vier lagen:
@@ -1052,3 +1287,4 @@ besturen, dan de nacht en het verzet, en dan de groei naar vrijheid.
 - Wat van de code blijft. Waarschijnlijk: de kunst en de huizenbouwer, de dorpelingen die lopen,
   pad en raster, de gesprekken en quests, het wereldgereedschap, en het gevecht in beurten. Eruit:
   de toren, de spreuken, de leeftijd en de tutorial.
+  Marcel haalde dit (punt 7) op 25 sep naar voren, vóór de rest van punt 6; zie de werklijst.

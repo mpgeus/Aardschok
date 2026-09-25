@@ -31,7 +31,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   bovenaan en zeg Marcel in een paar regels waar we zijn. Werk de stand bij aan het eind van de
   sessie.
 - **`ontwerp/spel.md`: het spel.** De schout, de heer en de inner, keuren en politiek, avontuur,
-  en wat nog open is.
+  en wat nog open is. Bovenaan staat per onderwerp de stand, en elk onderwerp begint met **Zo werkt
+  het nu**; wie iets bouwt of verandert, werkt dat blok bij (Marcel, 25 sep).
 - `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
 - `ontwerp/kaarten.md`: van Tiled naar het spel, en hoe hoogte gaat werken.
 - `ontwerp/wereld.md`: de plekken en mensen van het oude spel (erf, bos, dorp); het dorp en zijn
