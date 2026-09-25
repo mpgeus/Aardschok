@@ -25,6 +25,10 @@ overzichtspagina), en verwerkte vijf antwoorden van Marcel: vlees vult een maag,
 langzamer, en de heer kijkt rond naar gelang zijn argwaan; verstoppen deel 1b en het plein staan in
 de rij. Zie "Af" onderaan.
 
+**Een korte sessie daarna (25 sep)** ontleedde Lords of the Realm 2, op Marcels vraag: wat erin zit,
+wat wij al hebben, zes ideeën en twee voor later. Marcel wil ze als ideeën bewaren; ze staan in
+`spel.md`, "Lords of the Realm 2 als voorbeeld". Er is niets gebouwd.
+
 **Waar het werk staat.** De cloudomgeving geeft elke sessie een eigen branch; deze sessie werkte op
 `claude/werklijst-vervolg-yp9f6m`, en alles staat sinds het eind van de sessie ook in `main` (Marcel:
 "push it naar main"). Begin de volgende sessie dus gewoon vanaf `main`. Werkt een sessie weer op een
@@ -83,6 +87,8 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 - De tien karakters en hun zinnen, in `gereedschap/gesprekken.html`. Ze zijn een voorstel van Claude;
   de vrome, de roddelaar, de oudste, de nieuwkomer en de drinker zijn nieuw. De namen van de heer en
   de boeren stel je zelf in (spelregels).
+- De ideeën uit Lords of the Realm 2, in `spel.md`, "Lords of the Realm 2 als voorbeeld": welke wil
+  je, en wanneer? Geen haast; ze horen bij de punten 8 tot 16.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
