@@ -68,7 +68,10 @@ komen, `Toren.debug.inner()` de inner (`(true)`: onverwacht terug), `Toren.debug
 zijn argwaan, `Toren.debug.marskramer()` de marskramer, en `await Toren.debug.schermafdruk('naam')`
 bewaart een blik op het spel. `Toren.optiesTerug()` zet alle spelregels terug op de standaard.
 
-**Loopt nu:** niets. Er draait geen agent.
+**Loopt nu:** punt 6a, de weides, stap 1 (Marcel koos op 25 sep, naar Lords of the Realm 2;
+`spel.md`, "Weides met koeien en schapen"). Een agent bouwt eerst de regels zonder scherm:
+velden met een bestemming en een vruchtbaarheid, het vee op de weide, melk en kaas, en groei.
+Daarna volgt het scherm: het veldenvenster, het gras en het dwalen binnen de weide.
 
 **Volgende stap: punt 6, stap 2: verstopplekken.** Plekken met plaats voor zoveel graan of goud,
 die de inner niet ziet, zodat wie vóór zijn komst graan wegzet, minder betaalt. Het rapport, de
