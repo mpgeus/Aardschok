@@ -861,11 +861,15 @@ Marcel al kinderkopjes in plaats van de platte kasseien (`beeld.md`); dat is nog
 regels maakt de grond niets uit: over gras loop je even snel als over een weg. Stenen zijn er wel:
 een steengroeve in het bouwmenu, die elke dag steen geeft.
 
-**Voorstel van Claude (25 sep, nog niet gekozen):**
+**Marcel koos (25 sep), uit een voorstel van Claude:** alle vier de aanbevelingen hieronder. Een pad
+maakt sneller en een zandpad wordt in de natte maanden modder; paden ontstaan vanzelf en jij
+verhardt; de stenen zijn keien die je raapt, met een keienraper in plaats van de steengroeve; en het
+komt als punt 6c, na het ontginnen (werklijst), omdat de keien daar vandaan komen.
+
 - **Een pad maakt sneller.** Alles in dit spel loopt: de schout, de boeren naar hun veld (Klaas doet
   elf dagen over de weg naar zijn weide), de heer, de inner en de marskramer. Over een pad gaat dat
   sneller, over kinderkopjes nog sneller. In de natte maanden wordt een zandpad modder en juist
-  trager; een verharde straat niet.
+  trager; een verharde straat niet. De natte maanden zijn lentemaand, slachtmaand en wintermaand.
 - **Paadjes ontstaan vanzelf.** Waar veel gelopen wordt, slijt het gras tot een pad, zoals in
   Foundation: het dorp tekent zijn eigen stratenplan. Jij hoeft niet elk pad te leggen, maar kiest
   welke je verhardt.
@@ -880,6 +884,15 @@ een steengroeve in het bouwmenu, die elke dag steen geeft.
 - Het kan met wat er al is: de weides leggen al gras over de grond van de kaart terwijl het spel
   loopt (`js/tekenen.js`, `tekenWeides`), en zo kan een pad ook zand of kinderkopjes over het gras
   leggen. Het zoeken van een weg (`js/pad.js`) kost nu elke stap even veel; dat wordt per tegel.
+
+Nog open, voor als punt 6c gebouwd wordt (vragen van Claude):
+- Hoeveel sneller? Een eerste gok voor de werkbank: een pad 1,3 keer, kinderkopjes 1,6 keer, modder
+  0,6 keer zo snel als gras.
+- Hoeveel voetstappen maken een pad, en groeit een pad weer dicht als er niemand meer loopt?
+- Wat kost verharden behalve keien: handen en tijd, een tegel per dag, zoals een gebouw in fases?
+- Ziet de inner een straat, en vraagt de heer ervoor (een voorstel, nog niet gekozen)?
+- De keienraper: een gebouw aan de rand van de heide of de akkers, en hoeveel keien levert ontginnen?
+- Tekenwerk: de kinderkopjes (Marcel, 21 sep, `beeld.md`), een platgelopen paadje, en modder.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 

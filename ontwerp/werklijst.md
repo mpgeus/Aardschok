@@ -172,6 +172,11 @@ nog nodig is".
    veld kunt maken, de heer er zijn deel van wil en de inner het telt, en een veld diep in het bos
    buiten zijn zicht blijft: een verstopplek voor land. Hier, omdat vee na stap 2 van de weides land
    kost, en omdat de geheime akker bij de verstopplekken van punt 6 hoort.
+6c. **Straten en paden** (Marcel, 25 sep; `spel.md`, "Straten en paden"). Klaar als er vanzelf een
+   pad slijt waar veel gelopen wordt, je een pad met keien verhardt tot kinderkopjes, iedereen over
+   een pad sneller loopt en over kinderkopjes nog sneller, een zandpad in de natte maanden modder
+   wordt, en de keien van een keienraper komen (in plaats van de steengroeve) en van het ontginnen.
+   Hier, omdat de keien van het ontginnen komen (6b).
 7. **Het oude spel eruit.** Klaar als de toren, de spreuken, de leeftijd en de tutorial uit de code
    zijn, `npm test` groen is, en `CLAUDE.md` alleen nog het nieuwe spel beschrijft. Hier, omdat
    er daarna veel nieuwe code bovenop komt.
