@@ -192,8 +192,19 @@ nog nodig is".
      de toetsen, het gereedschap, `server.cjs` en `CLAUDE.md`. De sleutel waaronder de browser de
      spelregels onthoudt (`aardschok.spelregels`) blijft, anders is wat Marcel instelde weg. `Spel` en
      `schout` waren het voorstel van Claude; Marcel koos "nu hernoemen".
+     **Marcel koos (26 sep), op drie vragen van Claude:** beginnen zonder eerst het gehucht te openen
+     (hernoemen verandert niets aan hoe het spel werkt; hij kijkt daarna); de soort 'held' wordt
+     'schout', maar de kant in een gevecht wordt `'speler'`, want soort en kant zijn twee dingen: een
+     man van de militie (punt 13) vecht aan jouw kant zonder de schout te zijn; en de README gaat mee
+     in 7f. Gemeten op 26 sep: 144 regels met `Toren` in 84 bestanden, 328 met `held` in 47. Niet
+     blind vervangen: de herberg De Scheve Toren, de torenmodellen (`bouwToren`) en "helder" blijven,
+     en de makers van de vier gegenereerde bestanden (`kaarten/kaarten.js`, `tegels/tegels.js`,
+     `tegels/bouwfasen.js`, `beelden/beschrijving.js`) gaan mee, anders zet de volgende render de oude
+     naam terug. De oude ontwerpbestanden (`verhaal.md`, `toren.md`, `spreuken.md`) blijven zoals ze
+     zijn: daar wás de held een tovenaar.
    - **7f. `CLAUDE.md` alleen nog over het nieuwe spel;** de oude afspraken staan in `git log`
-     (`git show 0eb8269:CLAUDE.md`).
+     (`git show 0eb8269:CLAUDE.md`). Met de README, die nog helemaal De laatste klim beschreef, en de
+     voorbeelden die naar iets wijzen wat weg is (`debug.gaNaar('erf')`, `debug.quest('molen')`).
 
 *C. Verhalen en besturen*
 
