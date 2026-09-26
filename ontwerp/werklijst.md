@@ -45,12 +45,15 @@ staat in `CLAUDE.md`, onder Git.
   daar weer omheen, en het Drentse gaat eruit (een aanname van Claude). Daarna een tweede en een
   derde schets, met gewone huizen naast de boerderijen (vraag 31).
 
-**Loopt nu: de derde schets voor het plein** (26 sep, vijfde sessie). De pagina "Het plein als hart"
-(https://claude.ai/artifact/NnMfi4QPWV8ct2ZtNjewud) laat de vierde versie van het gehucht zien, met
-Marcels antwoorden (vraag 30 en zijn opmerking bij vraag 31): het plein in het midden, waar niet
-gebouwd wordt; gewone huizen eromheen, en de boerderijen verder naar buiten bij hun velden, de voorste
-op de hoeken, zodat er maar 6 van de 219 tegels achter een dak vallen; en de velden om het dorp. Er is
-nog niets gebouwd; het wacht op Marcel (vraag 31). De
+**Loopt nu: de schets voor het plein is goedgekeurd** (26 sep, vijfde sessie). De pagina "Het plein
+als hart" (https://claude.ai/artifact/NnMfi4QPWV8ct2ZtNjewud) laat de vierde versie van het gehucht
+zien, en Marcel zei "Indeling klopt" (vraag 31): het plein in het midden, waar niet gebouwd wordt;
+gewone huizen eromheen, en de boerderijen verder naar buiten bij hun velden, de voorste op de hoeken,
+zodat er maar 6 van de 219 tegels achter een dak vallen; en de velden om het dorp. In de gewone huizen
+wonen dezelfde 25 mensen, maar niet allemaal op een boerderij (C). Op de pagina staat ook hoe het dorp
+per trede een stad wordt (vraag 32, nog open). **Het volgende:** de kaart bouwen zoals de schets, met
+C; dan de doorkijk als keuze in de spelregels (het kijkvenster ook voor anderen, en het raster); dan
+ronde 4b van de huizenbouwer, en dan de herberg. De
 indeling staat in `gereedschap/tiled/gehucht-v4-schets.json`, want de schets kwam uit een los
 tekenscript. **Daarna** (Marcel koos het, vraag 29): het plein bouwen, dan ronde 4b van de
 huizenbouwer, en dan de herberg. Stap 2 van 3b, mensen worden poppetjes, is af (26 sep; `spel.md`,
@@ -64,9 +67,13 @@ voorstel van Claude, en daar gaat vraag 26 over.
    bomen, onregelmatig van vorm, waar niet gebouwd wordt; de huizen eromheen, ook aan de kant van de
    camera, op verschillende afstanden en niet in rijen; de velden daar weer omheen; en wegen die
    slingeren (`beeld.md`, "Ook de kaart is niet waterpas"; `spel.md`, bij het plein). Begin met een
-   schets voor Marcel, zoals bij de derde versie (vraag 30 en 31). Klaar als: het plein is de grootste
-   open plek van het gehucht, er staat geen rechte rij huizen meer, en de akkers, de weide en de heide
-   zijn even groot gebleven, zodat de oogst en de balans niet verschuiven.
+   schets voor Marcel, zoals bij de derde versie; die is goedgekeurd (vraag 31), met de indeling in
+   `gereedschap/tiled/gehucht-v4-schets.json`, en in de gewone huizen wonen dezelfde 25 mensen (C).
+   Klaar als: het plein is de grootste open plek van het gehucht, er staat geen rechte rij huizen meer,
+   en de akkers, de weide en de heide zijn even groot gebleven, zodat de oogst en de balans niet
+   verschuiven. **Direct daarna: de doorkijk** (vraag 31, "Zoals jij voorstelt"): het kijkvenster ook
+   voor de heer, de marskramer en wie je spreekt, en een huis dat in een raster doorzichtig wordt,
+   allebei als keuze in de spelregels (`beeld.md`, "Doorkijk").
 2. **Dan: ronde 4b van de huizenbouwer** (3b, stap 4; naar voren gehaald, vraag 29): elk huis in elk
    materiaal en elke vorm, niet waterpas (`beeld.md`, "De huizenbouwer op ronde vormen"), en ook een
    kwartslag gedraaid of gespiegeld, zodat een boerderij met de zijkant naar het plein kan staan. Zwaar
@@ -185,7 +192,8 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     gekomen is een aanname ergens eerder." Dat klopt: het kwam van Claude (25 sep, "het Drentse
     esdorp" als kader voor het vee) en stond daarna in de code op Marcels naam. Rechtgezet op 26 sep,
     ook in de code en de spelteksten; zie `spel.md`, bij het plein.
-31. **Het plein als hart: de derde schets** (26 sep; dezelfde pagina). Op de tweede schets zei Marcel:
+31. ~~Het plein als hart: de derde schets~~ (26 sep; dezelfde pagina). **Beantwoord (Marcel, 26 sep):
+    "Indeling klopt"; wie er woont: "Wordt C"; de doorkijk: "Zoals jij voorstelt."** Op de tweede schets zei Marcel:
     "Naast boerderijen zijn er ook 'gewone' huizen." Nu staan er twee hutten en een huis om het plein,
     en de boerderijen verder naar buiten, bij hun velden. Drie vragen. (1) Is dit het? (2) Wie woont
     er in de gewone huizen? Het spel telt de mensen bij het begin uit de woonruimte, dus: A, bewoond

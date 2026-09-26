@@ -739,8 +739,13 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
   - **Naast boerderijen zijn er ook gewone huizen** (Marcel, 26 sep, bij de tweede schets). In de
     derde schets staan er twee hutten en een huis om het plein, bij het huis van de schout, en de
     boerderijen verder naar buiten, bij hun velden (voorstel van Claude: groeit het dorp, dan groeit
-    het midden met gewone huizen en schuiven de boerderijen met hun velden naar buiten). Wie er
-    woont, is vraag 31 in de werklijst.
+    het midden met gewone huizen en schuiven de boerderijen met hun velden naar buiten).
+  - **De indeling van de derde schets klopt** (Marcel, 26 sep: "Indeling klopt"). Ze staat in
+    `gereedschap/tiled/gehucht-v4-schets.json`.
+  - **In de gewone huizen wonen dezelfde 25 mensen, maar niet allemaal op een boerderij** (Marcel koos
+    C, 26 sep): de boerderijen houden hun twee werkers, en in de hutten en het huis wonen bijvoorbeeld de
+    herder met zijn gezin, een oud stel en een weduwe. Het aantal mensen bij het begin wordt daarvoor
+    een eigen getal, zoals de beginvoorraad, in plaats van alle woonruimte bij elkaar.
 - **Nog open:** zijn grillen en de herendienst (punt 8); de koets (tekenwerk).
 
 **Hoe het zo kwam:**

@@ -319,7 +319,8 @@ gelden.
   als optie in de spelregels te proberen: (1) het kijkvenster zoals nu, maar ook voor de heer, de
   marskramer en wie je spreekt; (2) van het huis blijft alleen de omtrek staan, als een dunne lijn;
   (3) het huis wordt in een raster doorzichtig, om de andere pixel, zoals oude spellen dat deden: dan
-  mengt er geen kleur. Nog niet gekozen.
+  mengt er geen kleur. **Marcel koos (26 sep): "Zoals jij voorstelt"**: de eerste en de derde, allebei
+  als keuze in de spelregels, na de kaart; wat hij in het spel kiest, wordt de standaard.
 - **Niets valt je aan van buiten beeld.** Een wezen dat jou kan zien, moet jij kunnen zien. Als
   het je ontdekt, gaat de camera ernaartoe en komt de melding.
 - **Waar je loopt, staat niets.** Dichte begroeiing hoort aan de rand, waar je niet komt. Wat er
