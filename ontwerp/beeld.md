@@ -328,6 +328,17 @@ gelden.
   (3) het huis wordt in een raster doorzichtig, om de andere pixel, zoals oude spellen dat deden: dan
   mengt er geen kleur. **Marcel koos (26 sep): "Zoals jij voorstelt"**: de eerste en de derde, allebei
   als keuze in de spelregels, na de kaart; wat hij in het spel kiest, wordt de standaard.
+  **De proef** (26 sep, zevende sessie): een huis vóór het plein, met de schout en drie mensen erachter,
+  in vier beelden naast elkaar. Het raster mengt toch: om de andere pixel is op ons scherm één of twee
+  schermpixels per vakje, en dan mengt het oog de kleuren alsnog. Het rieten dak over het gras werd weer
+  geelgroen, het spook van 23 sep, alleen scherper. Oude spellen rasterden juist omdat het er half
+  doorzichtig uitziet. Een grover raster (vier schermpixels) mengt niet meer, maar legt een dambord
+  over het hele huis en hakt de mensen erachter in blokjes. Het kijkvenster houdt het huis heel en de
+  mensen scherp, ook met vier vensters naast elkaar. Twee dingen vielen verder op: vóór het plein staat
+  nog geen huis (alleen de boerderij op de oosthoek dekt een strook af), dus het venster is vooral
+  nodig voor wat nog komt; en als iedereen op het plein meetelt, krijgen de vijf eiken er gaten van
+  zolang de kinderen spelen. Voorstel van Claude (vraag 34 in de werklijst): alleen het kijkvenster,
+  voor meer mensen; het plein telt alleen achter een huis, niet achter een boom.
 - **Niets valt je aan van buiten beeld.** Een wezen dat jou kan zien, moet jij kunnen zien. Als
   het je ontdekt, gaat de camera ernaartoe en komt de melding.
 - **Waar je loopt, staat niets.** Dichte begroeiing hoort aan de rand, waar je niet komt. Wat er

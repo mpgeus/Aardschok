@@ -55,11 +55,12 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   wordt niet gebouwd, en de kinderen spelen er verspreid over. Marcel kreeg schermafdrukken (de deur van
   de schout, het midden van het plein, het hele gehucht, de brug).
 
-**Loopt nu:** niets. **Het volgende: de doorkijk** (punt 1 hieronder; vraag 31, "Zoals jij
-voorstelt"): het kijkvenster ook voor de heer, de marskramer en wie je spreekt, en een huis dat in een
-raster doorzichtig wordt, om de andere pixel; allebei als keuze in de spelregels (`js/opties.js`), en
-wat Marcel in het spel kiest, wordt de standaard (`beeld.md`, "Doorkijk"). Het kijkvenster zit in
-`tekenKijkgat` (`js/tekenen.js`). Begin met een kort voorstel voor Marcel. Daarna: ronde 4b van de
+**Loopt nu: de doorkijk** (punt 1 hieronder; vraag 31, "Zoals jij voorstelt"): het kijkvenster ook
+voor de heer, de marskramer en wie je spreekt, en een huis dat in een raster doorzichtig wordt, om de
+andere pixel; allebei als keuze in de spelregels (`js/opties.js`), en wat Marcel in het spel kiest,
+wordt de standaard (`beeld.md`, "Doorkijk"). Het kijkvenster zit in `tekenKijkgat` (`js/tekenen.js`).
+In de zevende sessie (26 sep) liet een proef zien dat het raster in het oog toch mengt (het spook van
+23 sep, alleen scherper); het voorstel ligt bij Marcel (vraag 34). Daarna: ronde 4b van de
 huizenbouwer, dan de herberg.
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
@@ -216,6 +217,15 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     Sint-Maarten, met de kern (rijk worden en arm lijken: verstoppen, de inner, de heer), opslaan en een
     titelscherm. Dan wordt duidelijk welke punten van de volgorde daarvoor nodig zijn, en welke kunnen
     wachten tot daarna.
+34. **De doorkijk: alleen het kijkvenster, of ook het raster?** (Claude, 26 sep, zevende sessie, na
+    een proef met een huis vóór het plein; `beeld.md`, "Doorkijk".) Het raster mengt in het oog toch:
+    het rieten dak werd weer geelgroen, en grover wordt het een dambord. Voorstel: (1) alleen het
+    kijkvenster, voor de schout, wie je spreekt, wie vecht, de bezoekers (heer, marskramer, inner,
+    soldaten), en achter een huis ook iedereen op het plein, maar niet achter een boom, anders zitten
+    de vijf eiken vol gaten; (2) in de spelregels in plaats van het raster de keuze of je door een huis
+    ook iedereen op het plein ziet, of alleen wie ertoe doet; (3) de doorkijk naar een eigen bestand,
+    `js/doorkijk.js`, met zijn getallen in één blok: een eerste stuk van vraag 25, D. Of wil Marcel
+    het raster toch in het spel zien bewegen? Als proef is het er al; als keuze erbij is het klein.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
