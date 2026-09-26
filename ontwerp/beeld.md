@@ -152,6 +152,27 @@ verschillend. Wat de nieuwe bouwer moet kunnen, in Marcels woorden en daarna uit
 - **De bouwfasen** (een huis dat in vijf stappen oprijst, `bouwfasen.cjs`) werkten alleen voor de oude
   bouwer. Zonder fasen zou een nieuw huis alleen invloeien, een stap terug; ze moeten dus mee.
 
+**Zo is het gebouwd** (26 sep, achtste sessie; `gereedschap/pixelart/README.md`):
+- `gereedschap/pixelart/huizen.cjs` houdt de huizen van het spel bij, elk met een vaste opgave, ook
+  de uitbouwen en de schoor: 4 hutten, 6 huizen, 5 boerderijen en het huis van de schout. Ze staan op
+  een eigen vel, `tegels/huizen.png`, en het gehucht gebruikt ze (`maak-gehucht.cjs`), elk in het vak
+  van het huis dat er stond.
+- **Voet en deur worden gemeten aan het huis zelf:** welke tegels het net boven de grond beslaat
+  (muren, een aanbouw, een trap, een schoor), en de tegel voor de deur. Die deur staat bij de tekening
+  (`deur` in de .tsx), en het spel stuurt de bewoners daarheen. Bij een aanbouw neemt de boer de
+  staldeur: de bouwer zet een aanbouw altijd naast de voordeur, en de voet (een rechthoek) liep dan
+  voor de voordeur langs.
+- **Echte hutten:** de bouwer kreeg lage muren (`laag`), een lage plint (`plint`) en een schoorsteen
+  van leem of geen (`schoorsteen`). Op de eerste plaat waren de hutten nog kleine huizen, met een
+  stenen plint tot halverwege de muur en een stenen schoorsteen; dat hoort volgens de ladder bij half
+  steen.
+- **De bouwfasen worden uit het huis zelf gesneden:** de muren als schil tot een hoogte, een geraamte
+  en steigers erbij, het dak in latten boven een donkere zolder. Zo past elke fase, ook bij een L of
+  een T. Een ronde voor alle gebouwen duurt een kwartier; met een naam maakt `bouwfasen.cjs` alleen
+  een proefplaat, en laat het spelvel staan (tot nu toe schreef het dan een vel met alleen dat gebouw).
+- **De ladder** staat op `uit/proefhuis/ladder.png` (`node huis-sdf-export.cjs ladder`): een hut en
+  een huis, elk in de vijf treden. Baksteen kent de bouwer nog niet; de vijfde trede is daar veldsteen.
+
 ## Ontwerpcanvas
 
 https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:

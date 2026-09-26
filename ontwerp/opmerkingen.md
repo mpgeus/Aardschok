@@ -36,6 +36,18 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   stenen huis bij de trede stad hoort. Het wordt een andere tekening met een andere voet (5×7, 7×5,
   6×8); past die niet, dan wacht het huis voor altijd. Een voorstel om het anders te doen staat in
   `spel.md`, "Een dorp dat leeft en groeit".
+- **De huizen van ronde 4b, wat opviel** (26 sep, achtste sessie; `beeld.md`, "Ronde 4b"):
+  - Een huis beslaat een rechthoek, en die zet het spel helemaal vast: ook de lege hoek van een L, en
+    een hele rij langs een gevel voor één schoor. Een huis met een aanbouw en een schoor (`huis3`) is
+    daardoor 10×7 voor een huis van 8×5. Een voet per tegel zou kloppen, maar dan tekent het spel
+    wie in de hoek van een L staat achter het huis in plaats van ervoor; dat moet eerst.
+  - Een hut die doorgroeit, wordt nog steeds een ander huis met een andere voet, en een huis in het
+    gehucht wordt een stenen huis uit de oude bouwer. "Hetzelfde huis in duurder materiaal" komt bij
+    punt 5 van de werklijst.
+  - Onder de lage goot van een hut past geen aanbouw: de bouwer slaat hem dan over.
+  - De deur van de blokhut (`boerderij5`) ligt een tegel van de muur, want de koppen van de stammen
+    steken uit.
+
 - **De dag, wat nog ruw is** (26 sep, na stap 1 van punt 3b; `spel.md`, "De dag, gebouwd"):
   - Het vee gaat liggen en staat op op de klok van het scherm (`T.rustVanDier`, `S.tijd`), niet op
     de tijd van de wereld: bij 30× ligt een koe even lang als bij 1×, dus relatief kort.
@@ -83,7 +95,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     naar de heide, soms drie. Dan is hij om half tien 's avonds nog onderweg. Voor het spel maakt dat
     niets uit; wordt het ooit wel belangrijk, dan kan een dorpsherder bij de heide wonen (het tweede
     voorstel van Claude, niet gekozen).
-  - Alle huizen staan nog met hun voorkant naar het zuiden; gedraaid en gespiegeld komt met ronde 4b.
+  - ~~Alle huizen staan nog met hun voorkant naar het zuiden; gedraaid en gespiegeld komt met ronde
+    4b.~~ Sinds ronde 4b (26 sep, achtste sessie) wijzen de deuren vier kanten op.
 - **De winter is hard:** zonder hout gaat het gehucht van 25 naar 2 mensen.
   `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel bijstellen als hij speelt.
 - **Honger valt in het voorjaar,** vlak vóór de oogst, want het zaaigraan gaat voor. Buiten de
@@ -179,6 +192,14 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   quests van het gehucht komen.
 
 ## Het beeld
+
+**De tegelvellen worden groot** (26 sep, achtste sessie, bij ronde 4b). Een vel heeft vakken van
+gelijke maat, zo groot als de grootste tekening, en een vast aantal (zodat de tegelnummers blijven).
+De browser pakt een vel helemaal uit in het geheugen: `gebouwen.png` (5184×7584, met 27 van de 96
+vakken gevuld) kost zo'n 157 MB, `huizen.png` (5296×3028) zo'n 64 MB, en `bouwfasen.png` groeit met
+vijf fases per huis. Voor een stad met honderden huizen is dat te veel. Voorstel: de vellen inpakken,
+met per tekening een eigen uitsnede en een eigen anker, zoals `bouwfasen.json` dat al doet. Dat raakt
+de vorm van `tegels.json`, `js/sprites.js` en hoe Tiled een vel leest; vóór het verpakken (punt 18).
 
 **De doorkijk** (26 sep, zevende sessie; `beeld.md`, "Doorkijk"):
 - Het raster kost tijd: in de proef, in een browser zonder videokaart, duurde een beeld met één groot

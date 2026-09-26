@@ -10,25 +10,25 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (26 sep 2026, zevende sessie): de doorkijk is af
+## De stand (26 sep 2026, achtste sessie): ronde 4b van de huizenbouwer is af
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 491/491.
+`npm test`: 498/498.
 
-**Waar het werk staat:** alles staat in `main`, ook de zevende sessie van 26 sep (Marcel: "push it").
-Begin de volgende sessie dus gewoon vanaf `main`; hoe een eigen branch en `main` samengaan, staat in
-`CLAUDE.md`, onder Git.
+**Waar het werk staat:** tot en met de zevende sessie staat alles in `main`. De achtste sessie staat
+op de branch `claude/werklijst-doorzetten-jto6cn`, en gaat in `main` als Marcel dat vraagt ("push it");
+hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
 toevoegen voor we bij een speelbaar product komen." Houd je aan de volgorde hieronder. Een nieuw idee,
 ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in de stap die loopt
 (`CLAUDE.md`, "Het spel in het kort"). Wat het eerste speelbare product is, is vraag 33.
 
-**Wat er op 26 sep gebeurde** (zeven sessies; de details staan onder Af en in `spel.md`):
+**Wat er op 26 sep gebeurde** (acht sessies; de details staan onder Af en in `spel.md`):
 - Punt 7 is af: het oude spel is eruit, ook uit de namen (`Spel`, `S.schout`, kant 'speler').
 - Marcel kwam met een nieuwe wens: een dorp dat leeft en groeit (punt 3b). Claude schreef een voorstel
   op een pagina, "Een dorp dat leeft" (https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE), en Marcel
@@ -58,15 +58,19 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   toch mengt; Marcel wilde het toch als keuze. Nu zie je door een huis heen ook de bezoekers en wie op
   het plein staat, en staan het kijkvenster en het raster als keuze in de spelregels. De doorkijk staat
   in een eigen bestand, `js/doorkijk.js`: het eerste stuk dat uit `tekenen.js` ging (vraag 25, D).
+- In de achtste sessie: **ronde 4b van de huizenbouwer is af** (punt 1). Marcel koos het plan: in het
+  spel stap 1 en 2 van de ladder, de rest op een plaat, en de schout in vakwerk op een stenen voet. Het
+  gehucht heeft nu echte hutten, huizen van vakwerk, vijf boerderijen die niet allemaal dezelfde kant
+  op staan, en elk huis weet waar zijn deur is. Marcel kreeg schermafdrukken en de plaat van de ladder.
 
-**Loopt nu (achtste sessie): ronde 4b van de huizenbouwer** (punt 1 hieronder), in drie stukken; dan
-de herberg. De doorkijk is af (zevende sessie, zie onder Af): welke manier de standaard wordt, kiest
-Marcel in het spel (zie "Spelen, en zeggen hoe het voelt").
+**Loopt nu:** niets. **Het volgende: de herberg en de kleine zaken** (punt 2 hieronder). Ronde 4b is af
+(achtste sessie, zie onder Af): wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
 
-1. **Nu: ronde 4b van de huizenbouwer** (3b, stap 4; naar voren gehaald, vraag 29): elk huis in elk
+1. **Af (achtste sessie): ronde 4b van de huizenbouwer** (3b, stap 4; naar voren gehaald, vraag 29;
+   zie onder Af). Wat hieronder staat, was het plan: elk huis in elk
    materiaal en elke vorm, niet waterpas (`beeld.md`, "De huizenbouwer op ronde vormen"), en ook een
    kwartslag gedraaid of gespiegeld, zodat een boerderij met de zijkant naar het plein kan staan. Zwaar
    tekenwerk met agents: vraag vooraf het verbruik op (`CLAUDE.md`, "Zuinig werken met agents").
@@ -82,7 +86,7 @@ voorstel van Claude, en daar gaat vraag 26 over.
    - **Stuk 3, de rest van de ladder:** in het spel alleen stap 1 en 2; de hele ladder (half steen, twee
      lagen, baksteen onder pannen) komt voor twee huizen op een plaat, zodat Marcel ziet waar het heen
      gaat (Marcel: "1 en 2 in spel, rest op plaat"). In het spel komt hij bij punt 5, Bouwen.
-2. **Dan: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel. Begin met een kort
+2. **Nu: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel. Begin met een kort
    plan voor Marcel (`spel.md`, "Zaken waar de mensen zelf heen gaan").
 3. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
    steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
@@ -272,6 +276,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vóór je veel bouwt.
 
 *Spelen, en zeggen hoe het voelt:*
+- **De nieuwe huizen** (26 sep, achtste sessie; ronde 4b): loop door het gehucht en om de boerderijen.
+  Staan ze goed zo, ook de twee (van Gerrit en Trijn) met hun achterkant naar je toe en hun deur naar
+  het plein? Bouw een hut en een huis (`B`) en kijk hoe ze in vijf fases oprijzen. En de plaat van de
+  ladder (`gereedschap/pixelart/uit/proefhuis/ladder.png`): is dat de weg van hut tot stenen huis?
 - **De doorkijk** (26 sep, zevende sessie): loop achter een huis langs, bijvoorbeeld achter de
   boerderij aan de oostkant van het plein, en kies in de spelregels (`O`) bij "Door een huis heen
   kijken" het kijkvenster of het raster. **Wat je kiest, wordt de standaard** (vraag 31). Vóór het plein
@@ -474,9 +482,10 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
    tuinstukken in `tuin-sdf.cjs`. Plaat: `uit/proefhuis/uitbouwen.png`. Wat nog wringt: een bult
    in het riet past niet naast een aanbouw of op een L, het erkerkapje raakt bij twee lagen de rand
    van het grote dak, en het hek leest op ware grootte als een dicht staketsel.
-4. **In gebruik.** Klaar als de nieuwe huizen in `gebouwen.tsx` staan met de goede voet en het goede
-   anker, achteraan in de volgorde, en het dorp ermee getekend kan worden. Wat ronde 3 hiervoor
-   opschreef:
+4. **In gebruik** (4a af, 22 sep; 4b af, 26 sep, achtste sessie: de huizen staan op een eigen vel,
+   `tegels/huizen.png`, zie onder Af). Klaar als de nieuwe huizen in `gebouwen.tsx` staan met de goede
+   voet en het goede anker, achteraan in de volgorde, en het dorp ermee getekend kan worden. Wat ronde
+   3 hiervoor opschreef:
    - Een aanbouw, trap of galerij steekt 1 tot 2,5 tegels voor de muur uit. Er is een `voetVan(H)`
      nodig (of opmeten zoals `meetVoet` in `naar-tiled.cjs`), met het anker op de achterste
      voethoek (+16), anders slaat `test/tegelanker.test.cjs` uit.
@@ -514,6 +523,17 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 26 sep 2026 — **Ronde 4b van de huizenbouwer** (achtste sessie; punt 1, en ronde 4 van "Tegelijk: de
+  huizenbouwer"). Marcel koos het plan ("1 en 2 in spel, rest op plaat"; de schout "Vakwerk op stenen
+  voet"). De huizen van de huizenbouwer staan op een eigen vel, `tegels/huizen.png`, elk met een vaste
+  opgave in `gereedschap/pixelart/huizen.cjs`: vier echte hutten (laag, vlechtwerk en leem, zonder
+  schoorsteen), zes huizen van vakwerk onder riet (met een schoorsteen van leem), vijf boerderijen en
+  het huis van de schout. Wat het plan liet zien: draaien hoefde niet (de bouwer kan alle acht standen),
+  maar een deur aan de kant die je niet ziet ontbrak, en het spel wist niet waar een deur zit. Nu meet
+  elke tekening haar voet en de tegel voor haar deur, en daar gaan de bewoners heen (`T.deurVan`). De
+  bouwfasen worden uit het huis zelf gesneden. Het gehucht gebruikt de nieuwe huizen, elk in het vak van
+  het vorige: Gerrit en Trijn staan met hun achterkant naar je toe en hun deur naar het plein. De ladder
+  staat op een plaat (`node huis-sdf-export.cjs ladder`). `npm test`: 498/498.
 - 26 sep 2026 — **De doorkijk** (zevende sessie; vraag 31 en 34). Wie je hoort te zien, zie je door een
   boom of een huis heen: de schout, wie je spreekt, wie vecht, en nu ook de bezoekers (de heer, de
   marskramer, de inner, de soldaten); door een huis ook iedereen op het plein, door een boom niet (anders

@@ -517,11 +517,17 @@ bestand; de details staan in `git log` en in de uitleg bovenin `js/behoeften.js`
   kapel, elk met zijn kosten, wat het doet, en zijn prijs voor de heer.
 - Bouwen kost grondstof en tijd, en je ziet een gebouw in vijf fases oprijzen.
 - **Een hut is niet elke hut** (26 sep; Marcel: "We hebben meer afwisseling nodig in de huizen en
-  hutten"): een hut krijgt een van drie kleine huizen, een huis een van vier huizen onder riet, en
-  nooit twee keer achter elkaar dezelfde (`tekeningen` in `T.GEBOUWEN`, `T.volgendeTekening`). Het
-  spookbeeld van het bouwmenu toont de voet van het huis dat er echt komt. Een hut die doorgroeit,
-  krijgt ook een van de huizen. Echte hutten (vlechtwerk en leem) en veel meer afwisseling komen met
-  ronde 4b van de huizenbouwer.
+  hutten"): een gebouw krijgt een van zijn tekeningen, en nooit twee keer achter elkaar dezelfde
+  (`tekeningen` in `T.GEBOUWEN`, `T.volgendeTekening`). Het spookbeeld van het bouwmenu toont de voet
+  van het huis dat er echt komt. Een hut die doorgroeit, krijgt een van de huizen.
+- **De huizen komen van de huizenbouwer** (26 sep, achtste sessie; ronde 4b, `beeld.md`): vier echte
+  hutten van vlechtwerk en leem onder riet (laag, zonder schoorsteen: de rook trekt door het riet),
+  zes huizen van vakwerk onder riet (met een schoorsteen van leem), en vijf boerderijen (een L, een T,
+  een blokhut onder spanen, en twee die met hun achterkant naar je toe staan en hun deur naar het
+  plein). De schout woont in steen beneden en vakwerk erboven, het enige huis dat half steen is. Elk
+  huis rijst in vijf fases op, en weet waar zijn deur is: daar gaan de bewoners heen (`T.deurVan`),
+  ook als die opzij of achter het huis zit. De werkplaatsen (smidse, houthakker, ...) lenen nog de
+  tekeningen van de oude bouwer.
 - Een gebouw dat iets maakt, vraagt handen en maakt alleen wat zijn grondstof toelaat: de smidse
   staat zonder ijzer stil, en zegt dat bij de muis. Gereedschap laat 25% harder werken en slijt in
   180 dagen.
@@ -532,8 +538,9 @@ bestand; de details staan in `git log` en in de uitleg bovenin `js/behoeften.js`
   20 wol, een hut niets.
 - De losse verstopplek staat sinds 25 sep niet meer in het bouwmenu: je verstopt in kelders en de
   kapel ("Rijk worden en arm lijken").
-- **Nog open:** veel gebouwen lenen nog een tekening; de nieuwe huizen van de huizenbouwer (ronde
-  4b) zijn nog niet in het spel; de steengroeve maakt plaats voor de keienraper ("Straten en
+- **Nog open:** veel gebouwen lenen nog een tekening, en de werkplaatsen komen nog van de oude
+  bouwer; de treden 3 tot 5 van de ladder staan alleen op een plaat (`beeld.md`, "Ronde 4b"), en in
+  het spel bij punt 5 van de werklijst; de steengroeve maakt plaats voor de keienraper ("Straten en
   paden"); ordebewaarders en een leger komen later.
 
 **Hoe het zo kwam:**

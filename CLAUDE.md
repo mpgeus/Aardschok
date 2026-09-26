@@ -230,7 +230,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zonder alle honderd hetzelfde te zeggen.
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar.
-  `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel.
+  `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel. De huizen komen van de huizenbouwer
+  (`huis-sdf.cjs`); welke het spel heeft, staat in `huizen.cjs` (vel `tegels/huizen.png`), elk met
+  zijn voet en de tegel voor zijn deur, waar `T.deurVan` (`js/bewoners.js`) de bewoners heen stuurt.
 - Het spel tekent met sprites zodra `beelden/` er is, en anders met vlakken. Wat de kunst niet
   dekt (raster, bereik, zwevende tekst, de pilaar) blijft altijd
   vlakken. `Spel.debug.vlakken = true` zet alles terug naar vlakken, om te vergelijken.
