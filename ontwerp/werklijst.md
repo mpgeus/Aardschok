@@ -40,7 +40,9 @@ en kleine zaken waar de mensen zelf heen gaan, huizen die het dorp zelf bouwt en
 tot steen, een paardenstal en een wapenmaker. Claude schreef er een voorstel voor, zonder te bouwen
 (`spel.md`, "Een dorp dat leeft en groeit"). Het belangrijkste: een dag duurt nu 2,5 seconde, te kort
 om in te leven, dus eerst moet de dag langer. De keuzes staan hieronder als vraag 14 tot en met 19.
-Of "Volgende" hieronder blijft, hangt af van vraag 15.
+Of "Volgende" hieronder blijft, hangt af van vraag 15. Het voorstel staat ook op een pagina, "Een
+dorp dat leeft" (https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE), met de dag en de afstand op
+schaal, zodat Marcel er opmerkingen bij kan zetten, zoals bij "Stand van het gehucht".
 
 **Loopt nu:** niets.
 

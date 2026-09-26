@@ -1276,7 +1276,9 @@ Nog open, voor als punt 6c gebouwd wordt (vragen van Claude):
 
 **Zo staat het nu** (26 sep): een voorstel van Claude. Er is niets besloten en niets gebouwd. Het raakt
 punt 11 (de nacht), 13 (de militie) en 14 (de treden), en de huizenbouwer (ronde 4b). De vragen
-staan onderaan, en met een nummer in de werklijst (14 tot en met 19).
+staan onderaan, en met een nummer in de werklijst (14 tot en met 19). Hetzelfde voorstel staat op
+een pagina om opmerkingen bij te zetten: "Een dorp dat leeft",
+https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE (Marcel vroeg erom, 26 sep).
 
 **Hoe het zo kwam:**
 
