@@ -135,6 +135,26 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 24. Wat nu, na de dag: de poppetjes (3b, stap 2), of eerst verstoppen deel 1b? Voorstel: de
     poppetjes, en dan het zichtveld (vraag 23), waarin "wie vlak langs loopt, kan iets vinden" opgaat.
 
+*De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
+blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
+25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
+    waarde:
+    - **A. De tijd op één plek.** Zeven vensters zetten de tijd stil, elk met een eigen sleutel
+      (`briefVoorSnelheid`, `heerVoorSnelheid`, ...; het handelsvenster met een eigen kopie), en de
+      heer, de inner en het slapen zetten de snelheid ook. Voorstel: `T.houdTijdStil(S, reden)` en
+      `T.laatTijdGaan(S, reden)` in `js/tijd.js`: de tijd staat stil zolang er een reden is, en loopt
+      daarna op de snelheid die de speler koos. Twee vensters tegelijk kunnen dan niet meer mis gaan.
+    - **B. De bezoekers op één manier laten komen.** Bij de dag kregen de marskramer, de heer en de
+      inner elk een eigen variant van "overdag komen, met een bericht en naar 1×" (drie manieren
+      voor één ding, gebouwd door Claude). Voorstel: één hulp in `js/dag.js`.
+    - **C. `js/hud.js` (1.462 regels) in vensters splitsen:** de balk, handel, de heer, de velden,
+      verstoppen, slachten en de spelregels elk in een eigen bestand.
+    - **D. `js/tekenen.js` (1.499 regels) net zo:** de grond, de wezens, de weides, de nacht.
+    - **E. Eén laadlijst voor de toetsen,** in de volgorde van `index.html`. Dan zijn de 24 bewakers
+      van de vorm `T.x && T.x(...)` niet meer nodig, en toetsen de toetsen het spel zoals het draait.
+    Voorstel: A en B nu, zolang de dag vers is; C en D als die bestanden toch open moeten (de
+    poppetjes raken ze allebei); E later.
+
 *Spelen, en zeggen hoe het voelt:*
 - Het gehucht na de namen (26 sep): Marcel zou het na 7e nog eens openen. Het hernoemen veranderde
   niets aan hoe het speelt, dus alles hoort te zijn zoals je het kende.

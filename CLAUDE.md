@@ -241,6 +241,12 @@ betekent, komt bij punt 13 van de werklijst).
 
 ## Afspraken in de code
 
+**Begrijpelijk en aan te passen houden** (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te
+begrijpen blijft en te onderhouden / aan te passen"). Dus: één manier per ding (kijk eerst of het er
+al is, en maak geen tweede variant ernaast); getallen in één blok bovenaan; regels zonder scherm, met
+toetsen; en na een groot stuk werk een opruimronde vóór het volgende. Wat daar concreet nog voor
+moet, staat in de werklijst (vraag 25).
+
 Over het raster, het gevecht in beurten en de overgang ernaartoe.
 
 - Eén raster voor rondlopen én vechten. Een wezen heeft een vloeiende positie (`x`, `y`) en
