@@ -706,7 +706,8 @@
   // als tekenMarkeringen voor het looppad gebruikt (licht/rood hieronder).
   function tekenBouwSpook(ctx, S) {
     if (!S.bouwSoort || !S.bouwHover) return;
-    const voet = T.gebouwVoet(S.bouwSoort);
+    // De voet van de tekening die dit gebouw echt krijgt (T.volgendeTekening, js/gebouwen.js).
+    const voet = T.gebouwVoet(S.bouwSoort, T.volgendeTekening(S, S.bouwSoort));
     if (!voet) return;
     ctx.fillStyle = S.bouwHover.ok ? 'rgba(134, 196, 111, 0.45)' : 'rgba(224, 96, 79, 0.45)';
     for (let dy = 0; dy < voet.h; dy++) {

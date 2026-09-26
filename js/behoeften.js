@@ -234,8 +234,11 @@
     const nieuweSoort = T.GEBOUWEN[soort.wordt];
     if (!nieuweSoort) return false;
     const w = S.wereld;
-    const oudeVoet = T.gebouwVoet(instantie.soort) || { b: 1, h: 1 };
-    const nieuweVoet = T.gebouwVoet(soort.wordt) || oudeVoet;
+    // Ook een huis dat doorgroeit, krijgt een van de tekeningen van zijn nieuwe soort
+    // (T.volgendeTekening, js/gebouwen.js).
+    const tekening = T.volgendeTekening(S, soort.wordt);
+    const oudeVoet = instantie.voet || T.gebouwVoet(instantie.soort, instantie.tekening) || { b: 1, h: 1 };
+    const nieuweVoet = T.gebouwVoet(soort.wordt, tekening) || oudeVoet;
     const inOud = (dx, dy) => dx < oudeVoet.b && dy < oudeVoet.h;
     const inNieuw = (dx, dy) => dx < nieuweVoet.b && dy < nieuweVoet.h;
     for (let dy = 0; dy < nieuweVoet.h; dy++) {
@@ -245,15 +248,19 @@
       }
     }
     const oudeNaam = soort.naam;
+    T.neemTekening(S, soort.wordt);
     instantie.soort = soort.wordt;
+    instantie.tekening = tekening;
+    instantie.voet = nieuweVoet;
     instantie.groeiDagen = 0;
-    const opz = nieuweSoort.tekening && T.opzoekTegelNaam ? T.opzoekTegelNaam(nieuweSoort.tekening) : null;
+    const opz = tekening && T.opzoekTegelNaam ? T.opzoekTegelNaam(tekening) : null;
     const naam = 'gebouw:' + soort.wordt;
     T.registreerGebouwSoort(naam);
     instantie.voorwerp.soort = naam;
     instantie.voorwerp.vel = opz ? opz.vel : null;
     instantie.voorwerp.id = opz ? opz.id : null;
     instantie.voorwerp.beslaat = [nieuweVoet.b, nieuweVoet.h];
+    instantie.voorwerp.tekeningNaam = tekening ? tekening.split('/').pop() : null;
     for (let dy = 0; dy < nieuweVoet.h; dy++) {
       for (let dx = 0; dx < nieuweVoet.b; dx++) {
         const yy = instantie.y + dy;

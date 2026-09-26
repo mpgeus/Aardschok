@@ -296,11 +296,32 @@ test('T.plaatsGebouw: zet tekeningNaam, klaarOp en bouwtijd op het voorwerp, voo
   const r = T.plaatsGebouw(S, 'hut', 2, 2);
   assert.equal(r.gelukt, true);
   const v = r.instantie.voorwerp;
-  // T.GEBOUWEN.hut.tekening is 'gebouwen/dorpKlein2' — hier hoort alleen het laatste deel te
-  // staan, dezelfde sleutel als tegels/bouwfasen.json.
-  assert.equal(v.tekeningNaam, 'dorpKlein2');
+  // Een van T.GEBOUWEN.hut.tekeningen, zoals 'gebouwen/dorpKlein2' — hier hoort alleen het laatste
+  // deel te staan, dezelfde sleutel als tegels/bouwfasen.json.
+  assert.ok(T.GEBOUWEN.hut.tekeningen.map((t) => t.split('/').pop()).includes(v.tekeningNaam), v.tekeningNaam);
+  assert.equal(r.instantie.tekening.split('/').pop(), v.tekeningNaam, 'het gebouw onthoudt zijn tekening');
   assert.equal(v.klaarOp, T.GEBOUWEN.hut.bouwtijd);
   assert.equal(v.bouwtijd, T.GEBOUWEN.hut.bouwtijd);
+});
+
+test('T.volgendeTekening: elke hut een van zijn tekeningen, nooit twee keer achter elkaar dezelfde', () => {
+  const S = maakS(60, 60);
+  T.zetVoorraad(S, 'hout', 1000);
+  const gezien = new Set();
+  let vorige = null;
+  for (let i = 0; i < 12; i++) {
+    const volgende = T.volgendeTekening(S, 'hut');
+    assert.equal(T.volgendeTekening(S, 'hut'), volgende, 'de keuze ligt vast tot hij gebouwd is (het spookbeeld)');
+    const r = T.plaatsGebouw(S, 'hut', 2 + (i % 4) * 12, 2 + Math.floor(i / 4) * 12);
+    assert.equal(r.gelukt, true);
+    assert.equal(r.instantie.tekening, volgende, 'hij krijgt de tekening die het spookbeeld liet zien');
+    assert.ok(T.GEBOUWEN.hut.tekeningen.includes(volgende));
+    assert.notEqual(volgende, vorige, 'niet twee keer achter elkaar dezelfde');
+    vorige = volgende;
+    gezien.add(volgende);
+  }
+  assert.ok(gezien.size >= 2, 'er komt afwisseling');
+  assert.equal(T.volgendeTekening(S, 'put'), T.GEBOUWEN.put.tekening, 'een soort met één tekening houdt die');
 });
 
 test('T.plaatsGebouw: tekeningNaam blijft leeg voor een soort zonder tekening', () => {

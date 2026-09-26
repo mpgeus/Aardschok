@@ -499,6 +499,12 @@ bestand; de details staan in `git log` en in de uitleg bovenin `js/behoeften.js`
   kippenhok, moestuin, put, steengroeve, kleiput, rietsnijder, jager, visser, wachthuis, smidse en
   kapel, elk met zijn kosten, wat het doet, en zijn prijs voor de heer.
 - Bouwen kost grondstof en tijd, en je ziet een gebouw in vijf fases oprijzen.
+- **Een hut is niet elke hut** (26 sep; Marcel: "We hebben meer afwisseling nodig in de huizen en
+  hutten"): een hut krijgt een van drie kleine huizen, een huis een van vier huizen onder riet, en
+  nooit twee keer achter elkaar dezelfde (`tekeningen` in `T.GEBOUWEN`, `T.volgendeTekening`). Het
+  spookbeeld van het bouwmenu toont de voet van het huis dat er echt komt. Een hut die doorgroeit,
+  krijgt ook een van de huizen. Echte hutten (vlechtwerk en leem) en veel meer afwisseling komen met
+  ronde 4b van de huizenbouwer.
 - Een gebouw dat iets maakt, vraagt handen en maakt alleen wat zijn grondstof toelaat: de smidse
   staat zonder ijzer stil, en zegt dat bij de muis. Gereedschap laat 25% harder werken en slijt in
   180 dagen.

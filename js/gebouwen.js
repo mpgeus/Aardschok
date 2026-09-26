@@ -39,6 +39,10 @@
 //                                    // die hebben een eigen manier van neerzetten, geen enkele voet)
 //     tekening:    'gebouwen/dorpshuis1',  // "vel/naam" uit tegels/, zoals T.laadKaart "tegel" leest
 //                                    // (js/kaart.js). null: (nog) geen tekening, zie "opmerking".
+//     tekeningen:  ['gebouwen/dorpshuis1', 'gebouwen/vakwerkhuis'],  // of meer dan één: dan krijgt
+//                                    // elk nieuw gebouw van deze soort er een, nooit twee keer
+//                                    // achter elkaar dezelfde (T.volgendeTekening). Alleen
+//                                    // tekeningen met bouwfasen (tegels/bouwfasen.json).
 //     beschrijving:'ruimte voor meer mensen',  // wat hij doet, voor het bouwmenu — letterlijk de
 //                                    // tekst uit spel.md, "Gebouwen"
 //     opmerking:   '',               // waarom hij een geleende tekening heeft, of wat er nog wringt
@@ -77,12 +81,19 @@
       naam: 'hut', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, heer: {}, bouwtijd: 2,
       handen: 0, woonruimte: 3, wordt: 'huis', maakt: null, verdacht: false, menu: true,
       tekening: 'gebouwen/dorpKlein2', beschrijving: 'ruimte voor een gezin; goedkoop, en arm om te zien',
-      opmerking: 'nieuw (plaggenhut): nog niet getekend, leent voorlopig het kleinste bestaande huis.',
+      // Drie kleine huizen, zodat een rij hutten niet uit één stempel komt (Marcel, 26 sep: "We hebben
+      // meer afwisseling nodig in de huizen en hutten"). Arm genoeg zijn ze niet: echte hutten van
+      // vlechtwerk en leem komen met ronde 4b van de huizenbouwer.
+      tekeningen: ['gebouwen/dorpKlein2', 'gebouwen/dorpKlein3', 'gebouwen/dorpKlein1'],
+      opmerking: 'nieuw (plaggenhut): nog niet getekend, leent voorlopig de kleinste bestaande huizen.',
     },
     huis: {
       naam: 'huis', trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
       handen: 0, woonruimte: 5, wordt: 'stenenHuis', maakt: null, verdacht: false, menu: true,
       tekening: 'gebouwen/dorpshuis1', beschrijving: 'ruimte voor meer mensen', opmerking: '',
+      // Vier huizen onder riet, want steen hoort pas bij een dorp (Marcel, 26 sep; spel.md, "Beter
+      // bouwen").
+      tekeningen: ['gebouwen/dorpshuis1', 'gebouwen/vakwerkhuis', 'gebouwen/dorpshuis5', 'gebouwen/dorpGewoon4'],
     },
     boerderij: {
       naam: 'boerderij', trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, heer: { goud: 1 }, bouwtijd: 5,
@@ -380,14 +391,43 @@
   // js/kaart.js — precies zo vast als de tegel zelf zegt, net als bij een gebouw dat Marcel in
   // Tiled neerzet) dan de geschatte T.GEBOUWEN[soort].voet hierboven. Geeft null als er geen van
   // beide is (akker, stadsmuur, palissade — die gaan sowieso niet via T.plaatsGebouw).
-  T.gebouwVoet = function (soort) {
+  // De voet van een soort, of van één van zijn tekeningen (`tekening`, uit T.GEBOUWEN[soort].tekeningen):
+  // wat de tekening in tegels/gebouwen.tsx beslaat, en anders de schatting in T.GEBOUWEN[soort].voet.
+  T.gebouwVoet = function (soort, tekening) {
     const g = T.GEBOUWEN[soort];
     if (!g) return null;
-    if (g.tekening && T.opzoekTegelNaam) {
-      const opz = T.opzoekTegelNaam(g.tekening);
+    const t = tekening || g.tekening;
+    if (t && T.opzoekTegelNaam) {
+      const opz = T.opzoekTegelNaam(t);
       if (opz && opz.eig && opz.eig.beslaat) return { b: opz.eig.beslaat[0], h: opz.eig.beslaat[1] };
     }
     return g.voet;
+  };
+
+  // Welke tekening krijgt het volgende gebouw van deze soort? Een soort met `tekeningen` (de hut, het
+  // huis) krijgt er steeds een, nooit twee keer achter elkaar dezelfde, zodat een rij hutten niet uit
+  // één stempel komt (Marcel, 26 sep: "We hebben meer afwisseling nodig in de huizen en hutten"). De
+  // keuze ligt vast tot hij gebouwd is (S.volgendeTekening), zodat het spookbeeld van het bouwmenu de
+  // voet laat zien die er echt komt. T.neemTekening zegt dat hij gebouwd is: de volgende wordt een
+  // andere.
+  T.volgendeTekening = function (S, soort) {
+    const g = T.GEBOUWEN[soort];
+    if (!g) return null;
+    const lijst = g.tekeningen && g.tekeningen.length ? g.tekeningen : null;
+    if (!lijst) return g.tekening || null;
+    const volgende = S.volgendeTekening || (S.volgendeTekening = {});
+    if (!lijst.includes(volgende[soort])) {
+      const vorige = S.vorigeTekening && S.vorigeTekening[soort];
+      const kan = lijst.length > 1 ? lijst.filter((t) => t !== vorige) : lijst;
+      volgende[soort] = kan[Math.floor(Math.random() * kan.length)];
+    }
+    return volgende[soort];
+  };
+  T.neemTekening = function (S, soort) {
+    const t = T.volgendeTekening(S, soort);
+    (S.vorigeTekening || (S.vorigeTekening = {}))[soort] = t;
+    if (S.volgendeTekening) delete S.volgendeTekening[soort];
+    return t;
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -475,7 +515,7 @@
   // voorwerp)? Binnen de kaart, en nergens al vast — dat dekt zowel de rand van de wereld als een
   // ander gebouw, een boom, of muur (T.isVast, js/wereld.js).
   T.gebouwPast = function (S, soort, x, y) {
-    const voet = T.gebouwVoet(soort);
+    const voet = T.gebouwVoet(soort, T.volgendeTekening(S, soort));
     const w = S.wereld;
     if (!voet || !w) return false;
     for (let dy = 0; dy < voet.h; dy++) {
@@ -517,8 +557,9 @@
   function zetGebouwVoorwerp(S, instantie) {
     const g = T.GEBOUWEN[instantie.soort];
     const w = S.wereld;
-    const opz = g.tekening && T.opzoekTegelNaam ? T.opzoekTegelNaam(g.tekening) : null;
-    const voet = T.gebouwVoet(instantie.soort) || { b: 1, h: 1 };
+    const tekening = instantie.tekening || g.tekening;
+    const opz = tekening && T.opzoekTegelNaam ? T.opzoekTegelNaam(tekening) : null;
+    const voet = instantie.voet || T.gebouwVoet(instantie.soort, tekening) || { b: 1, h: 1 };
     const naam = 'gebouw:' + instantie.soort;
     T.registreerGebouwSoort(naam);
     const v = {
@@ -529,7 +570,7 @@
       // ("dorpKlein2", niet "gebouwen/dorpKlein2" — dezelfde sleutel als in
       // tegels/bouwfasen.json), en wanneer hij klaar is en hoelang hij duurt. Zonder tekening
       // (g.tekening null) blijft tekeningNaam ook null: gewoon geen fases, net als voorheen.
-      tekeningNaam: g.tekening ? g.tekening.split('/').pop() : null,
+      tekeningNaam: tekening ? tekening.split('/').pop() : null,
       klaarOp: instantie.klaarOp, bouwtijd: g.bouwtijd,
     };
     w.voorwerpen.push(v);
@@ -556,7 +597,10 @@
     if (!T.kanBetalen(S, g.kosten)) return { gelukt: false, reden: 'Daar is de voorraad niet groot genoeg voor.' };
     T.betaalKosten(S, g.kosten);
     const dagNu = S.kalender ? Math.floor(S.kalender.dag) : 0;
-    const instantie = { soort, x, y, klaar: g.bouwtijd <= 0, klaarOp: dagNu + g.bouwtijd, handen: 0, voorwerp: null };
+    // Zijn eigen tekening en de voet die daarbij hoort (T.volgendeTekening): een hut is niet elke hut.
+    const tekening = T.neemTekening(S, soort);
+    const voet = T.gebouwVoet(soort, tekening);
+    const instantie = { soort, x, y, tekening, voet, klaar: g.bouwtijd <= 0, klaarOp: dagNu + g.bouwtijd, handen: 0, voorwerp: null };
     S.gebouwen.push(instantie);
     zetGebouwVoorwerp(S, instantie);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
