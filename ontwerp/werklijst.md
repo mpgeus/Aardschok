@@ -197,6 +197,14 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     kijkvenster ook voor de heer, de marskramer en wie je spreekt; alleen de omtrek van het huis; of
     het huis in een raster doorzichtig, om de andere pixel? Voorstel: de eerste en de derde als keuze
     in de spelregels, na de kaart (`beeld.md`, "Doorkijk").
+32. **Hoe het dorp een stad wordt** (Marcel vroeg het, 26 sep: "Verstedelijking in de binnenring?";
+    het voorstel staat in `spel.md`, "Van dorp tot stad"). Ja: de binnenring groeit eerst, omhoog en in
+    steen, en schuift dan over de dichtste velden naar buiten. Twee vragen. (1) Verhuist een
+    boerderij mee naar buiten als haar velden bouwgrond worden, en wordt de oude een huis voor een nieuw
+    gezin? Of blijft de boer wonen en loopt hij verder? Voorstel: ze verhuist mee, zodat de binnenring
+    voor gewone huizen en zaken blijft. (2) Brengen boeren van buiten vanaf marktrecht graan naar de
+    markt, zodat de stad voorbij haar eigen velden kan groeien? Een stad van 300 mensen zou anders
+    zo'n 2.100 tegels akker nodig hebben. Voorstel: ja, en de heer wil er zijn deel van.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

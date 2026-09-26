@@ -1851,6 +1851,39 @@ het dichtst bij de huizen bouwgrond, en komen er verderop nieuwe bij (ontginnen,
 (vragen van Claude): gaat dat vanzelf of wijs jij het aan, en krijgt een boer die zijn akker kwijtraakt
 er verderop een terug, zodat de oogst niet krimpt?
 
+**Hoe het dorp een stad wordt, in ringen** (voorstel van Claude, 26 sep, op Marcels vraag: "En stel
+dat het zich ontwikkelt naar een stad, hoe werkt dat? Verstedelijking in de binnenring?"; nog niet
+gekozen, werklijst vraag 32). Ja: de stad begint in de binnenring, en schuift als een olievlek naar
+buiten.
+- **Het plein** blijft open. Het wordt verhard (keien, later klinkers; "Straten en paden"), en daar
+  komt de markt met kramen en troggen. Bij de stad komt het raadhuis aan de rand.
+- **De binnenring**, om het plein: de schout, de gewone huizen en de zaken (herberg, kapel, smidse,
+  bakker, de winkel van de kramer). Hier groeien de huizen het eerst, want hun bewoners hebben alles
+  dichtbij ("Een huis groeit door wat zijn bewoners kunnen bereiken"). Hut, vakwerk, een stenen voet,
+  twee lagen, en in de stad baksteen onder pannen. De stad groeit dus eerst omhoog en in steen.
+- **De boerderijen en hun velden** daaromheen. Moet het dorp ruimer, dan wijs jij de velden het
+  dichtst bij de huizen aan als bouwgrond, en ontgint de boer verderop nieuw land.
+- **De heide en het bos** daar weer omheen: wat ontgonnen wordt. De heide krimpt, dus er zijn minder
+  schapen en minder mest.
+- **Per trede:** in het dorp raakt de binnenring vol (herberg, kapel en smidse aan het plein) en komen
+  aan de rand hutten van nieuwkomers; bij marktrecht wordt het plein verhard en komt de markt; in de
+  stad staat er een muur met een poort, die alleen mag met stadsrechten. Binnen de muur is het stad,
+  buiten de muur liggen de velden.
+- **Een stad voedt zich niet zelf.** Een mens eet 18 graan per jaar, en een akkertegel geeft er netto
+  2,5: dat is ruim 7 tegels akker per mens. Nu klopt dat (25 mensen, 179 tegels), maar een stad van
+  300 mensen zou zo'n 2.100 tegels akker nodig hebben, twaalf keer zoveel, en dat past niet op de
+  kaart. Steden kochten hun graan op de markt. Voorstel: vanaf marktrecht brengen boeren van buiten
+  graan naar de markt, en de heer wil daar zijn deel van. Dan kan de stad voorbij haar eigen velden
+  groeien, en is de markt het hart van de stad.
+- **De muur maakt de ringen hard.** Na de muur groeit de stad binnen omhoog, of buiten de poort, als
+  een arme voorstad van hutten.
+- **De kaart moet de stad kunnen bevatten.** 76 bij 76 is genoeg voor een dorp. Voor een stad met
+  velden eromheen is ongeveer 120 bij 120 nodig, of een kaart die meegroeit. Dat beslissen we bij
+  punt 14, maar het gehucht moet in het midden liggen, met wild land rondom om te ontginnen.
+- Nog open (vraag 32): verhuist een boerderij mee naar buiten als haar velden bouwgrond worden (en
+  wordt de oude boerderij een huis voor een nieuw gezin), of blijft de boer wonen en loopt hij verder,
+  later door de poort (zoals de akkerburgers van kleine steden)?
+
 ### In welke volgorde (voorstel)
 
 1. **De dag** (af, 26 sep): een maand van dertig dagen en een dag van vijf minuten, met licht, een
