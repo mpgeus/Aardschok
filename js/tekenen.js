@@ -16,6 +16,7 @@
   const GEDIMD = 0.58;
 
   const metSprites = () => !!(T.sprites && T.sprites.aan) && !(T.debug && T.debug.vlakken);
+  T.metSprites = metSprites; // ook voor js/doorkijk.js
 
   // Welke vloer ligt er in welke kamer? De hal en het trappenhuis hebben de zandvloer uit
   // kamers.cjs, de voorraadkamer de houten. Een deur krijgt de vloer van een kamer ernaast.
@@ -227,8 +228,8 @@
     // Het bos om de kaart heen (zie "het bos om de kaart heen" hieronder): dezelfde uitgebreide
     // vak-berekening als tegelsIn, maar met ringen vóórbij de rand in plaats van eraan afgeknipt.
     // Doet mee in `zichtbaar`, zodat een boom die de schout bedekt net als elk ander hoog voorwerp
-    // wegdooft (werkDoorkijkBij hieronder), en in `lijst`, zodat de gewone dieptesortering hem
-    // netjes voor of achter de schout zet.
+    // wegdooft (T.werkDoorkijkBij, js/doorkijk.js), en in `lijst`, zodat de gewone dieptesortering
+    // hem netjes voor of achter de schout zet.
     if (w.buiten) {
       const randVak = tegelsIn(w, zicht, BOSRAND_DIEP);
       for (let y = randVak.y0; y <= randVak.y1; y++) {
@@ -250,7 +251,7 @@
     // spelklok, zodat het ook klopt als het spel even stilstaat of vooruitgespoeld wordt.
     const dt = Math.max(0, Math.min(0.1, S.tijd - (S.doorkijkTijd || 0)));
     S.doorkijkTijd = S.tijd;
-    werkDoorkijkBij(S, dt, zichtbaar);
+    T.werkDoorkijkBij(S, dt, zichtbaar);
     // Wie aan de schandpaal staat, krijgt het halsijzer om: een eigen laag ná zijn beeld (l 2,5,
     // zoals de voorlaag van het graan), zodat de band vóór zijn nek komt.
     const aanDePaal = metSprites() && T.aanDePaal ? T.aanDePaal(S) : null;
@@ -378,8 +379,8 @@
   // van een brede voet staat, kan een lagere som hebben dan die hoek en toch vóór het hele gebouw
   // staan. Daarom hier de vraag die wél voor elke tegel klopt: staat (x, y) ten zuiden of ten
   // oosten van de rechthoek die v beslaat (van v.x, v.y naar rechtsonder)? Dan staat hij ervóór,
-  // anders erachter. Dezelfde vraag stelt werkDoorkijkBij hieronder — dat was eerst een tweede,
-  // net iets andere som, en dat was precies de fout.
+  // anders erachter. Dezelfde vraag stelt T.werkDoorkijkBij (js/doorkijk.js) — dat was eerst een
+  // tweede, net iets andere som, en dat was precies de fout.
   T.staatVoorGebouw = staatVoorGebouw;
   function staatVoorGebouw(x, y, v) {
     const b = v.beslaat || [1, 1];
@@ -420,173 +421,6 @@
       volgorde.splice(Math.min(laatsteErachter + 1, eersteErvoor), 0, g);
     }
     return volgorde;
-  }
-
-  // ---------------------------------------------------------------- doorkijk
-  //
-  // Buiten staan er dingen die hoger zijn dan een muur binnen: een eik is driehonderd pixels,
-  // een huis met twee lagen nog meer. Wie erachter loopt, is weg — en wat erger is: een wolf die jou
-  // wél ziet, zie jij dan niet. Dus wordt alles wat de schout of een wezen bedekt zolang
-  // doorzichtig.
-  //
-  // Waarom doorzichtig en niet het silhouet van de figuur eroverheen: onze pixel art heeft zijn
-  // eigen omlijning van één pixel en leeft van textuur (ontwerp/beeld.md). Een egale vlek over
-  // een boom heen is een tweede beeldtaal, en je ziet er niet aan wáár je staat. Een boom die
-  // half wegvalt laat de tovenaar én de boom zien, en dat is ook wat Fallout en Baldur's Gate
-  // doen.
-  const DOORKIJK = 0.4;
-  // De bosrand (zie "het bos om de kaart heen" verderop) staat op een hoek van de kaart soms met
-  // twee dichte randen tegelijk om de schout heen, en dan bedekken tien, twintig bomen hem
-  // allemaal tegelijk. Doorzichtigheid stapelt vermenigvuldigend (twee bomen op 0.4 laten samen
-  // nog maar 0.16 van de schout zien, bij twintig is dat allang niets meer), dus een kleine waarde
-  // lost dat niet op — hoe laag ook, met genoeg bomen erbovenop verdwijnt hij toch. Eén los ding
-  // mag zichtbaar blijven doorschemeren; een heel woud aan
-  // verwisselbare achtergrondbomen niet: die vallen daarom helemaal weg zolang ze de schout
-  // bedekken, in plaats van te vervagen.
-  const BOSRAND_DOORKIJK = 0;
-  const DOORKIJK_TIJD = 0.18; // seconden om op en af te lopen, zodat het niet klappert
-  const HOOG_GENOEG = 40; // hoger dan dit boven zijn voet: dan kan er iemand achter verdwijnen
-  // Een gebouw (geen bosrand) vervaagt niet meer als geheel: dat zag er bij een
-  // rieten dak uit als een doorzichtig geelgroen spook (Marcel, 23 sep 2026). In plaats daarvan
-  // blijft het huis gewoon staan en tekenen we wie erachter loopt nog eens overheen, door een
-  // zachte cirkel — een kijkgat. KIJKGAT_OMHOOG tilt het midden van die cirkel van zijn voeten naar
-  // zijn romp, zodat een heel figuur er ongeveer in past.
-  const KIJKGAT_STRAAL = 58;
-  const KIJKGAT_OMHOOG = 28;
-
-  // De doos die een wezen op het scherm inneemt, ruim genomen: zijn lijf plus wat lucht.
-  function wezenDoos(e) {
-    const p = T.naarScherm(e.x, e.y);
-    const h = metSprites() ? T.sprites.hoogte(e.soort) : 52;
-    return { x0: p.x - 15, x1: p.x + 15, y0: p.y - h - 6, y1: p.y + 6 };
-  }
-
-  // De doos die het beeld van een voorwerp inneemt, rond het midden van zijn eigen tegel. Elke
-  // tegel draagt zijn eigen maat (`doos`: links, boven, rechts, onder vanaf het ankerpunt), want
-  // een cel is voor alle tegels van een vel even groot maar een bank is geen waslijn. Zonder die
-  // maat valt het terug op de cel. Dit gaat op de voettegel en de maat van het beeld, niet op
-  // pixels: genoeg om te weten of er iemand achter kan staan.
-  function voorwerpDoos(v) {
-    const vel = T.TEGELS && T.TEGELS[v.vel];
-    const tegel = vel && vel.tiles[v.id];
-    if (!vel) return null;
-    const a = vel.anker || [Math.round(vel.tegelB / 2), Math.round(vel.tegelH / 2)];
-    const d = (tegel && tegel.doos) || [a[0], a[1], vel.tegelB - a[0], vel.tegelH - a[1]];
-    if (d[1] < HOOG_GENOEG) return null; // laag spul verbergt niemand
-    const p = T.naarScherm(v.x, v.y);
-    return { x0: p.x - d[0], x1: p.x + d[2], y0: p.y - d[1], y1: p.y + d[3] };
-  }
-
-  const raakt = (a, b) => a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
-
-  // Per beeld: welk hoog voorwerp bedekt iemand die je hoort te zien? Alleen voorwerpen die ná
-  // dat wezen getekend worden kunnen hem verbergen, en dat weten we al uit de diepte.
-  // Wie moet er door een boom of een huis heen te zien zijn? De schout altijd. Verder alleen wie er
-  // toe doet op dit moment: wat meevecht, wat je net ontdekt heeft (het uitroepteken), en wie je
-  // aanspreekt. Een wolf die in zijn eentje achter een huis rondscharrelt hoeft het huis niet
-  // doorzichtig te maken — dan sta je ervoor en zie je hem wegvallen zonder te weten waarom.
-  function teltMee(S, e) {
-    if (e.binnen) return false; // wie slaapt of binnen is, zie je niet door een dak heen
-    if (e === S.schout) return true;
-    if (e.dood) return false;
-    if (e.alarm > 0) return true;
-    if (S.gevecht && S.gevecht.volgorde.includes(e)) return true;
-    if (S.overgang && S.overgang.aanleiding === e) return true;
-    return S.spreektMet === e;
-  }
-
-  function werkDoorkijkBij(S, dt, voorwerpen) {
-    const w = S.wereld;
-    const wezens = [];
-    for (const e of w.wezens) {
-      if (!teltMee(S, e)) continue;
-      wezens.push({ e, tx: e.tx, ty: e.ty, doos: wezenDoos(e) });
-    }
-    for (const v of voorwerpen) {
-      const doos = voorwerpDoos(v);
-      let bedekt = false;
-      const dekkers = [];
-      if (doos) {
-        // Bedekken kan alleen als dít voorwerp ná het wezen getekend wordt, dus als het wezen niet
-        // vóór het gebouw staat — staatVoorGebouw hierboven, dezelfde vraag als de tekenvolgorde.
-        for (const kandidaat of wezens) {
-          if (staatVoorGebouw(kandidaat.tx, kandidaat.ty, v)) continue; // staat ervóór, verdwijnt niet
-          if (raakt(doos, kandidaat.doos)) {
-            bedekt = true;
-            dekkers.push(kandidaat.e);
-          }
-        }
-      }
-      // Alleen overschrijven als er nu iemand bedekt wordt: tijdens het wegdoezelen (v.doorkijk
-      // loopt terug naar 1) blijft tekenKijkgat zo de laatst bekende dekker nog even overtekenen,
-      // dezelfde afweging als bosrandOp hierboven ("kan alleen vloeiend als het dezelfde blijft").
-      if (dekkers.length) v.kijkgat = dekkers;
-      const doel = bedekt ? (v.bosrand ? BOSRAND_DOORKIJK : DOORKIJK) : 1;
-      const nu = v.doorkijk == null ? 1 : v.doorkijk;
-      const stap = dt / DOORKIJK_TIJD;
-      v.doorkijk = doel > nu ? Math.min(doel, nu + stap) : Math.max(doel, nu - stap);
-    }
-  }
-
-  // Eén klein vlak, hergebruikt over alle kijkgaten en alle beelden heen (net als de grondbuffer
-  // hierboven): er staat maar zelden meer dan één figuur tegelijk in een kijkgat, dus volstaat één
-  // canvas dat per figuur opnieuw beschreven en meteen overgeplakt wordt.
-  let kijkgatCv = null;
-  let kijkgatCx = null;
-  function kijkgatBuffer(maat) {
-    if (!kijkgatCv) {
-      kijkgatCv = document.createElement('canvas');
-      kijkgatCx = kijkgatCv.getContext('2d');
-    }
-    if (kijkgatCv.width !== maat || kijkgatCv.height !== maat) {
-      kijkgatCv.width = maat;
-      kijkgatCv.height = maat;
-    }
-    return kijkgatCx;
-  }
-
-  // Het "kijkgat": een venster in gebouw v, dat e bedekt (tekenVoorwerp hieronder). Binnen een zachte
-  // cirkel rond zijn romp komt opnieuw wat achter het gebouw ligt: de grond (de grondbuffer,
-  // werkGrondBij), en wie daar staat, van achter naar voor. Zo kijk je door het dak heen de straat
-  // in. Tot 26 sep kwam alleen de figuur zelf terug, met het dak eromheen, en dan leek hij óp het
-  // dak te staan (Marcel: "In al je plaatjes staan er mensen op het dak van huizen").
-  // sterkte (0..1) is hoever v.doorkijk al opgelopen is naar zijn doel, zodat het kijkgat net zo
-  // vloeiend in- en uitfaadt als de oude doorzichtigheid deed.
-  function tekenKijkgat(ctx, S, e, sterkte, v) {
-    if (typeof document === 'undefined') return;
-    const p = T.naarScherm(e.x, e.y);
-    const mx = p.x;
-    const my = p.y - KIJKGAT_OMHOOG;
-    const pad = 12;
-    const maat = (KIJKGAT_STRAAL + pad) * 2;
-    const ox = Math.round(mx - maat / 2);
-    const oy = Math.round(my - maat / 2);
-    const bx = kijkgatBuffer(maat);
-    bx.setTransform(1, 0, 0, 1, 0, 0);
-    bx.clearRect(0, 0, maat, maat);
-    bx.imageSmoothingEnabled = false;
-    bx.setTransform(1, 0, 0, 1, -ox, -oy);
-    const grond = S.grond;
-    if (grond && grond.canvas) bx.drawImage(grond.canvas, grond.vx, grond.vy);
-    const ver = KIJKGAT_STRAAL + 20;
-    const erin = S.wereld.wezens.filter((o) => {
-      if (o.dood || (o.binnen && !deurStap(S, o))) return false;
-      if (o !== e && v && staatVoorGebouw(o.tx, o.ty, v)) return false;
-      const q = T.naarScherm(o.x, o.y);
-      return Math.hypot(q.x - mx, q.y - KIJKGAT_OMHOOG - my) < ver;
-    });
-    erin.sort((a, b) => a.x + a.y - (b.x + b.y));
-    for (const o of erin) tekenWezen(bx, S, o);
-    bx.setTransform(1, 0, 0, 1, 0, 0);
-    bx.globalCompositeOperation = 'destination-in';
-    const g = bx.createRadialGradient(mx - ox, my - oy, 0, mx - ox, my - oy, KIJKGAT_STRAAL);
-    g.addColorStop(0, `rgba(0,0,0,${sterkte})`);
-    g.addColorStop(0.65, `rgba(0,0,0,${sterkte})`);
-    g.addColorStop(1, 'rgba(0,0,0,0)');
-    bx.fillStyle = g;
-    bx.fillRect(0, 0, maat, maat);
-    bx.globalCompositeOperation = 'source-over';
-    ctx.drawImage(kijkgatCv, 0, 0, maat, maat, ox, oy, maat, maat);
   }
 
   // Ligt deze tegel aan de voorkant (zuid- of oostkant) van een van deze kamers?
@@ -1051,8 +885,9 @@
 
   // Eén tegel in de bosrand: welke boom of struik er staat (of niets, als de dichtheid op deze
   // plek een gat dithert), voor eens en altijd berekend en bewaard op de wereld zelf. Dat bewaren
-  // is niet (alleen) voor de snelheid: werkDoorkijkBij hieronder laat een boom vervagen als hij de
-  // schout bedekt, en dat kan alleen vloeiend als het van beeld op beeld hetzelfde object blijft.
+  // is niet (alleen) voor de snelheid: T.werkDoorkijkBij (js/doorkijk.js) laat een boom vervagen
+  // als hij de schout bedekt, en dat kan alleen vloeiend als het van beeld op beeld hetzelfde object
+  // blijft.
   const bosrandPerWereld = new WeakMap();
   function bosrandOp(w, x, y) {
     let cache = bosrandPerWereld.get(w);
@@ -1144,7 +979,7 @@
     if (v.vel) {
       // dof: hoe ver van de rand van de kaart — dat vervaagt nog altijd het hele voorwerp.
       // dekking: staat er iemand achter? Een gebouw blijft gewoon staan en krijgt na het tekenen
-      // een kijkgat overheen (tekenKijkgat hierboven) op wie erachter loopt.
+      // een kijkgat overheen (T.tekenKijkgat, js/doorkijk.js) op wie erachter loopt.
       const dof = randDof(S.wereld, v.x, v.y);
       const dekking = v.doorkijk == null ? 1 : v.doorkijk;
       // In aanbouw (js/gebouwen.js, T.plaatsGebouw): heeft dit gebouw fases in tegels/bouwfasen.png
@@ -1162,8 +997,8 @@
       } else tekenBuitenVlak(ctx, v, helder);
       if (alpha < 1) ctx.globalAlpha = 1;
       if (dekking < 1 && v.kijkgat && v.kijkgat.length) {
-        const sterkte = Math.max(0, Math.min(1, (1 - dekking) / (1 - DOORKIJK)));
-        if (sterkte > 0.02) for (const e of v.kijkgat) tekenKijkgat(ctx, S, e, sterkte, v);
+        const sterkte = Math.max(0, Math.min(1, (1 - dekking) / (1 - T.DOORKIJK_INSTELLINGEN.dekking)));
+        if (sterkte > 0.02) for (const e of v.kijkgat) T.tekenKijkgat(ctx, S, e, sterkte, v);
       }
       return;
     }
@@ -1361,6 +1196,7 @@
   // ligt een halve tegel achter de tegel ervoor, in de gevel. Zonder deur (de schout die gaat slapen)
   // vervaagt hij waar hij staat. Alleen voor het scherm: in de regels is hij meteen binnen.
   const DEUR_TIJD = 0.6;
+  T.deurStap = deurStap; // ook voor het kijkgat (js/doorkijk.js)
   function deurStap(S, e) {
     if (e.deurSinds == null) return null;
     const t = (S.tijd - e.deurSinds) / DEUR_TIJD;
@@ -1374,6 +1210,7 @@
     };
   }
 
+  T.tekenWezen = tekenWezen; // ook voor het kijkgat (js/doorkijk.js)
   function tekenWezen(ctx, S, e) {
     const stap = deurStap(S, e);
     const p = stap ? T.naarScherm(stap.x, stap.y) : T.naarScherm(e.x, e.y);

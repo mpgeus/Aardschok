@@ -143,6 +143,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en `T.keurQuests`, dat de toets van drie antwoorden nakijkt.
 - `js/dialoog.js`, `js/ui.js` (alle html over het beeld), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera).
+- `js/doorkijk.js`: wie je door een boom of een huis heen ziet, en het kijkgat
+  (`T.werkDoorkijkBij`, `T.tekenKijkgat`; `beeld.md`, "Doorkijk"). `js/tekenen.js` vraagt het aan. Het
+  eerste stuk dat uit `tekenen.js` ging (vraag 25, D, 26 sep).
 - `js/mensen.js`: **wie de mensen van het dorp zijn, op één plek.** `T.MENSEN.<id>` zegt hoe hij
   heet, hoe snel hij loopt, hoe ver hij dwaalt, welk gesprek hij voert en welk vel hij krijgt —
   zijn eigen (zijn id is de naam van het vel), een geleend vel (`vel: 'boer'`) of dat van een
