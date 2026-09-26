@@ -80,25 +80,28 @@
     hut: {
       naam: 'hut', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, heer: {}, bouwtijd: 2,
       handen: 0, woonruimte: 3, wordt: 'huis', maakt: null, verdacht: false, menu: true,
-      tekening: 'gebouwen/dorpKlein2', beschrijving: 'ruimte voor een gezin; goedkoop, en arm om te zien',
-      // Drie kleine huizen, zodat een rij hutten niet uit één stempel komt (Marcel, 26 sep: "We hebben
-      // meer afwisseling nodig in de huizen en hutten"). Arm genoeg zijn ze niet: echte hutten van
-      // vlechtwerk en leem komen met ronde 4b van de huizenbouwer.
-      tekeningen: ['gebouwen/dorpKlein2', 'gebouwen/dorpKlein3', 'gebouwen/dorpKlein1'],
-      opmerking: 'nieuw (plaggenhut): nog niet getekend, leent voorlopig de kleinste bestaande huizen.',
+      tekening: 'huizen/hut1', beschrijving: 'ruimte voor een gezin; goedkoop, en arm om te zien',
+      // Vier echte hutten van vlechtwerk en leem onder riet, laag, zonder schoorsteen (ronde 4b van de
+      // huizenbouwer, gereedschap/pixelart/huizen.cjs), zodat een rij hutten niet uit één stempel komt
+      // (Marcel, 26 sep: "We hebben meer afwisseling nodig in de huizen en hutten").
+      tekeningen: ['huizen/hut1', 'huizen/hut2', 'huizen/hut3', 'huizen/hut4'],
+      opmerking: '',
     },
     huis: {
       naam: 'huis', trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
       handen: 0, woonruimte: 5, wordt: 'stenenHuis', maakt: null, verdacht: false, menu: true,
-      tekening: 'gebouwen/dorpshuis1', beschrijving: 'ruimte voor meer mensen', opmerking: '',
-      // Vier huizen onder riet, want steen hoort pas bij een dorp (Marcel, 26 sep; spel.md, "Beter
-      // bouwen").
-      tekeningen: ['gebouwen/dorpshuis1', 'gebouwen/vakwerkhuis', 'gebouwen/dorpshuis5', 'gebouwen/dorpGewoon4'],
+      tekening: 'huizen/huis1', beschrijving: 'ruimte voor meer mensen', opmerking: '',
+      // Zes huizen van vakwerk onder riet, met een schoorsteen van leem, want steen hoort pas bij een
+      // dorp (Marcel, 26 sep; spel.md, "Beter bouwen"; ronde 4b van de huizenbouwer).
+      tekeningen: ['huizen/huis1', 'huizen/huis2', 'huizen/huis3', 'huizen/huis4', 'huizen/huis5', 'huizen/huis6'],
     },
     boerderij: {
       naam: 'boerderij', trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, heer: { goud: 1 }, bouwtijd: 5,
       handen: 2, woonruimte: 4, maakt: null, verdacht: false, menu: true,
-      tekening: 'gebouwen/schuur', beschrijving: 'boeren voor de akkers, en een schuur voor de oogst',
+      tekening: 'huizen/boerderij1', beschrijving: 'boeren voor de akkers, en een schuur voor de oogst',
+      // De vijf boerderijen van het gehucht (ronde 4b): een L, een T, twee met hun deur achter, en een
+      // blokhut onder spanen. Die met de deur achter staat met zijn achterkant naar je toe.
+      tekeningen: ['huizen/boerderij1', 'huizen/boerderij2', 'huizen/boerderij3', 'huizen/boerderij4', 'huizen/boerderij5'],
       opmerking: 'Maakt zelf geen graan: dat komt binnen als de boeren een akkertegel maaien '
         + '(T.GRAAN_PER_TEGEL in js/akkers.js). Eerst stond hier een abstracte opbrengst, en dan '
         + 'telde het dubbel.',

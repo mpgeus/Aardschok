@@ -48,7 +48,7 @@ const UIT_BETEKENIS = path.join(KAARTEN, 'gehucht.betekenis.json');
 const vellen = JSON.parse(fs.readFileSync(path.join(TEGELS_DIR, 'tegels.json'), 'utf8'));
 
 // ---------------------------------------------------------------- de tegelvellen en hun gids
-const VOLGORDE = ['rand', 'bomen', 'begroeiing', 'gebouwen', 'erf', 'tuin'];
+const VOLGORDE = ['rand', 'bomen', 'begroeiing', 'gebouwen', 'erf', 'tuin', 'huizen'];
 const gebruikt = VOLGORDE.filter((n) => vellen[n]);
 const firstgid = {};
 {
@@ -367,30 +367,47 @@ function zetTegel(naam, mx, my, moet) {
 // ---- de vijf boerderijen, het huis van de schout, de gewone huizen en de schaapskooi ----
 // De boerderijen staan verder naar buiten, elk bij zijn velden, en elk in een andere tekening, groter
 // dan een gewoon huis. Trijn (boer4) en Wouter (boer5) staan vóór het plein, op de hoeken: tussen hen
-// door kijk je het plein op. x, y is de linkerbovenhoek, b en d de maat van de tekening; de deur is het
-// midden van de zuidkant (x + b/2, y + d), daar staat de boer bij het begin.
+// door kijk je het plein op. x, y is de linkerbovenhoek, b en d de maat van de tekening (nagekeken
+// tegen tegels/huizen.tsx, onder "nakijken"). De tekeningen komen van de huizenbouwer (ronde 4b,
+// gereedschap/pixelart/huizen.cjs), elk in het vak van de vorige, en ze staan niet allemaal dezelfde
+// kant op: Klaas (een L) met zijn deur naar het plein, Aaltje (een T) naar het zuiden, Gerrit en Trijn
+// met hun achterkant naar je toe en hun deur naar het plein, Wouter (een blokhut) naar zijn akker. Waar
+// de deur zit, zegt de tekening zelf ("deur" in de .tsx); daar staat de boer bij het begin.
 const HUIZEN = {
-  boer1: { tegel: 'dorpGroot1', x: 10, y: 25, b: 7, d: 9 },
-  boer2: { tegel: 'dorpGewoonVleugel', x: 43, y: 11, b: 9, d: 8 },
-  boer3: { tegel: 'dorpGewoonAanbouw', x: 53, y: 24, b: 6, d: 9 },
-  boer4: { tegel: 'dorpGewoon4', x: 56, y: 38, b: 6, d: 8 },
-  boer5: { tegel: 'schuur', x: 29, y: 56, b: 6, d: 9 },
+  boer1: { tegel: 'boerderij1', x: 10, y: 25, b: 7, d: 9 },
+  boer2: { tegel: 'boerderij2', x: 43, y: 11, b: 9, d: 8 },
+  boer3: { tegel: 'boerderij3', x: 53, y: 24, b: 6, d: 9 },
+  boer4: { tegel: 'boerderij4', x: 56, y: 38, b: 6, d: 8 },
+  boer5: { tegel: 'boerderij5', x: 29, y: 56, b: 6, d: 9 },
 };
-// Het stenen huis van de schout staat aan de noordkant van het plein, met zijn deur op het zand.
-const SCHOUT_HUIS = { tegel: 'stenenHuis', x: 30, y: 26, b: 6, d: 8 };
+// Het huis van de schout staat aan de noordkant van het plein, met zijn deur op het zand, op dezelfde
+// plek als het stenen huis van vóór ronde 4b (zijn deur een tegel hoger, anders raakt het plein zijn
+// hoek). Steen beneden en vakwerk erboven: het enige huis dat half steen is (Marcel, 26 sep:
+// "Vakwerk op stenen voet").
+const SCHOUT_HUIS = { tegel: 'schoutshuis', x: 29, y: 27, b: 8, d: 6 };
 // De gewone huizen om het plein (Marcel, 26 sep: "Naast boerderijen zijn er ook 'gewone' huizen"),
 // met wie er bij het begin woont (Marcel koos het in de zesde sessie van 26 sep; js/bewoners.js,
 // T.zetBeginBewoners): in het huis een jong gezin van dagloners, in de hut bij het plein een oud stel,
 // en de hut verderop is leeg, voor het eerste gezin dat komt.
 const GEWONE_HUIZEN = [
-  { gebouw: 'huis', tegel: 'vakwerkhuis', x: 40, y: 25, b: 7, d: 5, bewoners: 'jongGezin' },
-  { gebouw: 'hut', tegel: 'dorpKlein3', x: 21, y: 33, b: 5, d: 7, bewoners: 'oudStel' },
-  { gebouw: 'hut', tegel: 'dorpKlein1', x: 24, y: 45, b: 5, d: 7 },
+  { gebouw: 'huis', tegel: 'huis1', x: 40, y: 25, b: 7, d: 5, bewoners: 'jongGezin' },
+  { gebouw: 'hut', tegel: 'hut1', x: 21, y: 36, b: 5, d: 4, bewoners: 'oudStel' },
+  { gebouw: 'hut', tegel: 'hut4', x: 24, y: 45, b: 6, d: 6 },
 ];
 // De schaapskooi aan de rand van de heide: het gehucht begint met één, en dus met de schapen op de
 // heide in plaats van op de weide. Voorlopig in de tekening van de blokhutschuur, net als in het
 // bouwmenu (js/gebouwen.js, T.GEBOUWEN.schaapskooi).
 const KOOI = { tegel: 'schuurBlokhut', x: 18, y: 56, b: 5, d: 7 };
+
+// De tegel voor de deur: wat de tekening zegt (een huis van de huizenbouwer), anders het midden van
+// de zuidkant. Dezelfde regel als T.deurVan in het spel (js/bewoners.js).
+const deurVan = (h) => {
+  const t = gidVan(h.tegel);
+  const d = t && t.tegel.deur;
+  return d ? { x: h.x + d[0], y: h.y + d[1] } : { x: h.x + Math.floor(h.b / 2), y: h.y + h.d };
+};
+// "vel/naam", zoals het spel een tekening opzoekt (js/kaart.js, T.opzoekTegelNaam)
+const tekeningVan = (naam) => `${velVan.get(naam).vel}/${naam}`;
 
 for (const h of Object.values(HUIZEN)) zetTegel(h.tegel, h.x, h.y, true);
 zetTegel(SCHOUT_HUIS.tegel, SCHOUT_HUIS.x, SCHOUT_HUIS.y, true);
@@ -458,8 +475,11 @@ const TUIN_LOS = ['kruidenbed', 'kool', 'prei', 'bonen', 'regenton'];
 for (const h of Object.values(HUIZEN)) {
   const stuk1 = TUIN_LOS[Math.floor(hash(h.x, h.y, 22) * TUIN_LOS.length)];
   const stuk2 = TUIN_LOS[Math.floor(hash(h.x + 3, h.y + 1, 23) * TUIN_LOS.length)];
-  if (opGras(h.x - 1, h.y + h.d - 1)) zetTegel(stuk1, h.x - 1, h.y + h.d - 1);
-  if (opGras(h.x + h.b, h.y + 1)) zetTegel(stuk2, h.x + h.b, h.y + 1);
+  // niet voor de deur: die zit sinds ronde 4b ook weleens opzij
+  const deur = deurVan(h);
+  const vrij = (x, y) => opGras(x, y) && !(x === deur.x && y === deur.y);
+  if (vrij(h.x - 1, h.y + h.d - 1)) zetTegel(stuk1, h.x - 1, h.y + h.d - 1);
+  if (vrij(h.x + h.b, h.y + 1)) zetTegel(stuk2, h.x + h.b, h.y + 1);
 }
 // Bij de schout een regenton naast zijn huis. Zijn hekje van planken stond in de derde versie voor
 // zijn huis, maar daar begint nu het pad naar de hut.
@@ -477,6 +497,13 @@ for (let y = 0; y < H; y++) {
 {
   const vrij = (x, y) => x >= 0 && y >= 0 && x < B && y < H && !!grondLaag[y * B + x] && soortOp(x, y) !== 'water';
   if (!vrij(UITGANG.x, UITGANG.y)) fouten.push('de tegel bij de uitgang (rechts) is niet begaanbaar');
+  // De maat in de tabellen hierboven is die van de tekening: anders staat de boer naast zijn deur,
+  // en zet het spel een andere voet vast dan er te zien is.
+  for (const h of [...Object.values(HUIZEN), SCHOUT_HUIS, ...GEWONE_HUIZEN, KOOI]) {
+    const t = gidVan(h.tegel);
+    const [vb, vd] = (t && t.tegel.beslaat) || [];
+    if (t && (vb !== h.b || vd !== h.d)) fouten.push(`"${h.tegel}" is ${vb}×${vd} tegels, niet ${h.b}×${h.d}`);
+  }
   const akkerTegels = AKKERS.reduce((n, a) => n + a.b * a.h, 0);
   if (akkerTegels !== AKKER_TEGELS) fouten.push(`de akkers zijn samen ${akkerTegels} tegels in plaats van ${AKKER_TEGELS}: de oogst verschuift`);
   // Op het plein staat niets dan de put, de eiken en de bank, en geen akker.
@@ -530,7 +557,6 @@ const kaart = {
 // ==================================================================================================
 // DE BETEKENIS: de schout, de vijf boeren, de huizen, de akkers, het plein en de enige uitgang
 // ==================================================================================================
-const deurVan = (h) => ({ x: h.x + Math.floor(h.b / 2), y: h.y + h.d });
 const dingen = [];
 // De schout begint voor zijn eigen deur (js/gebied.js, T.beginOpKaart zet hem daarna in het vel
 // van een gewone dorpeling).
@@ -546,10 +572,11 @@ for (const [id, h] of Object.entries(HUIZEN)) dingen.push({ ...deurVan(h), wie: 
 // De vijf boerenhuizen tellen als "boerderij", het stenen huis van de schout als "huis". "huis" zegt
 // wie er woont, net als bij een akker: de boer met dezelfde id, of de schout. Dat telt voor zijn
 // kelder (js/verstoppen.js). Bij een gewoon huis zegt "bewoners" wie er bij het begin woont.
-for (const [id, h] of Object.entries(HUIZEN)) dingen.push({ gebouw: 'boerderij', x: h.x, y: h.y, b: h.b, h: h.d, huis: id });
-dingen.push({ gebouw: 'huis', x: SCHOUT_HUIS.x, y: SCHOUT_HUIS.y, b: SCHOUT_HUIS.b, h: SCHOUT_HUIS.d, huis: 'schout' });
+// "tekening" zegt welke tekening er staat: die weet waar de deur is (T.deurVan).
+for (const [id, h] of Object.entries(HUIZEN)) dingen.push({ gebouw: 'boerderij', x: h.x, y: h.y, b: h.b, h: h.d, huis: id, tekening: tekeningVan(h.tegel) });
+dingen.push({ gebouw: 'huis', x: SCHOUT_HUIS.x, y: SCHOUT_HUIS.y, b: SCHOUT_HUIS.b, h: SCHOUT_HUIS.d, huis: 'schout', tekening: tekeningVan(SCHOUT_HUIS.tegel) });
 for (const g of GEWONE_HUIZEN) {
-  const d = { gebouw: g.gebouw, x: g.x, y: g.y, b: g.b, h: g.d };
+  const d = { gebouw: g.gebouw, x: g.x, y: g.y, b: g.b, h: g.d, tekening: tekeningVan(g.tegel) };
   if (g.bewoners) d.bewoners = g.bewoners;
   dingen.push(d);
 }

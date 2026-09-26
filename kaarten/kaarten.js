@@ -52,6 +52,10 @@
      {
       "firstgid": 793,
       "source": "../tegels/tuin.tsx"
+     },
+     {
+      "firstgid": 841,
+      "source": "../tegels/huizen.tsx"
      }
     ],
     "layers": [
@@ -5856,108 +5860,108 @@
         "id": 1,
         "visible": true,
         "rotation": 0,
-        "name": "dorpGroot1",
-        "gid": 687,
+        "name": "boerderij1",
+        "gid": 851,
         "x": 320,
         "y": 800,
-        "width": 648,
-        "height": 632,
+        "width": 662,
+        "height": 757,
         "properties": []
        },
        {
         "id": 2,
         "visible": true,
         "rotation": 0,
-        "name": "dorpGewoonVleugel",
-        "gid": 684,
+        "name": "boerderij2",
+        "gid": 852,
         "x": 1376,
         "y": 352,
-        "width": 648,
-        "height": 632,
+        "width": 662,
+        "height": 757,
         "properties": []
        },
        {
         "id": 3,
         "visible": true,
         "rotation": 0,
-        "name": "dorpGewoonAanbouw",
-        "gid": 683,
+        "name": "boerderij3",
+        "gid": 853,
         "x": 1696,
         "y": 768,
-        "width": 648,
-        "height": 632,
+        "width": 662,
+        "height": 757,
         "properties": []
        },
        {
         "id": 4,
         "visible": true,
         "rotation": 0,
-        "name": "dorpGewoon4",
-        "gid": 686,
+        "name": "boerderij4",
+        "gid": 854,
         "x": 1792,
         "y": 1216,
-        "width": 648,
-        "height": 632,
+        "width": 662,
+        "height": 757,
         "properties": []
        },
        {
         "id": 5,
         "visible": true,
         "rotation": 0,
-        "name": "schuur",
-        "gid": 699,
+        "name": "boerderij5",
+        "gid": 855,
         "x": 928,
         "y": 1792,
-        "width": 648,
-        "height": 632,
+        "width": 662,
+        "height": 757,
         "properties": []
        },
        {
         "id": 6,
         "visible": true,
         "rotation": 0,
-        "name": "stenenHuis",
-        "gid": 674,
-        "x": 960,
-        "y": 832,
-        "width": 648,
-        "height": 632,
+        "name": "schoutshuis",
+        "gid": 856,
+        "x": 928,
+        "y": 864,
+        "width": 662,
+        "height": 757,
         "properties": []
        },
        {
         "id": 7,
         "visible": true,
         "rotation": 0,
-        "name": "vakwerkhuis",
-        "gid": 673,
+        "name": "huis1",
+        "gid": 845,
         "x": 1280,
         "y": 800,
-        "width": 648,
-        "height": 632,
+        "width": 662,
+        "height": 757,
         "properties": []
        },
        {
         "id": 8,
         "visible": true,
         "rotation": 0,
-        "name": "dorpKlein3",
-        "gid": 682,
+        "name": "hut1",
+        "gid": 841,
         "x": 672,
-        "y": 1056,
-        "width": 648,
-        "height": 632,
+        "y": 1152,
+        "width": 662,
+        "height": 757,
         "properties": []
        },
        {
         "id": 9,
         "visible": true,
         "rotation": 0,
-        "name": "dorpKlein1",
-        "gid": 680,
+        "name": "hut4",
+        "gid": 844,
         "x": 768,
         "y": 1440,
-        "width": 648,
-        "height": 632,
+        "width": 662,
+        "height": 757,
         "properties": []
        },
        {
@@ -9722,8 +9726,8 @@
         "rotation": 0,
         "name": "regenton",
         "gid": 825,
-        "x": 928,
-        "y": 1056,
+        "x": 896,
+        "y": 1024,
         "width": 72,
         "height": 97,
         "properties": []
@@ -10688,40 +10692,40 @@
     "dingen": [
      {
       "x": 33,
-      "y": 34,
+      "y": 33,
       "wezen": "schout"
      },
      {
-      "x": 13,
-      "y": 34,
+      "x": 17,
+      "y": 28,
       "wie": "boer1",
       "straal": 3,
       "huis": "boer1"
      },
      {
-      "x": 47,
+      "x": 48,
       "y": 19,
       "wie": "boer2",
       "straal": 3,
       "huis": "boer2"
      },
      {
-      "x": 56,
-      "y": 33,
+      "x": 52,
+      "y": 28,
       "wie": "boer3",
       "straal": 3,
       "huis": "boer3"
      },
      {
-      "x": 59,
-      "y": 46,
+      "x": 55,
+      "y": 42,
       "wie": "boer4",
       "straal": 3,
       "huis": "boer4"
      },
      {
-      "x": 32,
-      "y": 65,
+      "x": 35,
+      "y": 60,
       "wie": "boer5",
       "straal": 3,
       "huis": "boer5"
@@ -10732,7 +10736,8 @@
       "y": 25,
       "b": 7,
       "h": 9,
-      "huis": "boer1"
+      "huis": "boer1",
+      "tekening": "huizen/boerderij1"
      },
      {
       "gebouw": "boerderij",
@@ -10740,7 +10745,8 @@
       "y": 11,
       "b": 9,
       "h": 8,
-      "huis": "boer2"
+      "huis": "boer2",
+      "tekening": "huizen/boerderij2"
      },
      {
       "gebouw": "boerderij",
@@ -10748,7 +10754,8 @@
       "y": 24,
       "b": 6,
       "h": 9,
-      "huis": "boer3"
+      "huis": "boer3",
+      "tekening": "huizen/boerderij3"
      },
      {
       "gebouw": "boerderij",
@@ -10756,7 +10763,8 @@
       "y": 38,
       "b": 6,
       "h": 8,
-      "huis": "boer4"
+      "huis": "boer4",
+      "tekening": "huizen/boerderij4"
      },
      {
       "gebouw": "boerderij",
@@ -10764,15 +10772,17 @@
       "y": 56,
       "b": 6,
       "h": 9,
-      "huis": "boer5"
+      "huis": "boer5",
+      "tekening": "huizen/boerderij5"
      },
      {
       "gebouw": "huis",
-      "x": 30,
-      "y": 26,
-      "b": 6,
-      "h": 8,
-      "huis": "schout"
+      "x": 29,
+      "y": 27,
+      "b": 8,
+      "h": 6,
+      "huis": "schout",
+      "tekening": "huizen/schoutshuis"
      },
      {
       "gebouw": "huis",
@@ -10780,22 +10790,25 @@
       "y": 25,
       "b": 7,
       "h": 5,
+      "tekening": "huizen/huis1",
       "bewoners": "jongGezin"
      },
      {
       "gebouw": "hut",
       "x": 21,
-      "y": 33,
+      "y": 36,
       "b": 5,
-      "h": 7,
+      "h": 4,
+      "tekening": "huizen/hut1",
       "bewoners": "oudStel"
      },
      {
       "gebouw": "hut",
       "x": 24,
       "y": 45,
-      "b": 5,
-      "h": 7
+      "b": 6,
+      "h": 6,
+      "tekening": "huizen/hut4"
      },
      {
       "gebouw": "schaapskooi",

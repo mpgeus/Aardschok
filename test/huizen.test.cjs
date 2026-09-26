@@ -59,3 +59,26 @@ test('T.deurVan neemt de deur van de tekening, en anders het midden van de zuidk
   assert.deepEqual(T.deurVan(null, zonder), { x: 12, y: 24 });
 });
 
+// Ronde 4b van de huizenbouwer (26 sep, achtste sessie; ontwerp/beeld.md, "Ronde 4b: de huizen in het
+// spel"): de huizen van het gehucht komen van de huizenbouwer, elk met zijn eigen deur, en niet allemaal
+// dezelfde kant op. Voor elke deur moet je kunnen staan: daar gaan de bewoners heen (T.deurVan).
+test('de huizen van het gehucht komen van de huizenbouwer, en voor elke deur kun je staan', () => {
+  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const waarschuw = console.warn;
+  console.warn = () => {};
+  assert.ok(T.beginOpKaart(S, 'gehucht'));
+  console.warn = waarschuw;
+  const w = S.wereld;
+  const huizen = S.gebouwen.filter((g) => g.tekening && g.tekening.startsWith('huizen/'));
+  assert.equal(huizen.length, 9, 'vijf boerderijen, de schout, een huis en twee hutten');
+  const kanten = new Set();
+  for (const g of huizen) {
+    const eig = T.opzoekTegelNaam(g.tekening).eig;
+    assert.deepEqual([g.voet.b, g.voet.h], eig.beslaat, `${g.tekening}: de voet van de tekening`);
+    const deur = T.deurVan(w, g);
+    assert.deepEqual(deur, { x: g.x + eig.deur[0], y: g.y + eig.deur[1] }, `${g.tekening}: de deur van de tekening`);
+    assert.ok(T.isBegaanbaar(w, deur.x, deur.y), `${g.tekening}: voor de deur kun je staan`);
+    kanten.add(eig.deur[0] < 0 ? 'west' : eig.deur[1] < 0 ? 'noord' : eig.deur[0] >= eig.beslaat[0] ? 'oost' : 'zuid');
+  }
+  assert.ok(kanten.size >= 3, `de deuren wijzen verschillende kanten op (${[...kanten].join(', ')})`);
+});
