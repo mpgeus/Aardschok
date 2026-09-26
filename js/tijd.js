@@ -93,7 +93,7 @@
   // zijn eigen maat. Op pauze 0: dan staat alles stil, ook wie loopt.
   T.wereldFactor = function (S) {
     if (!S || !S.kalender || S.gevecht || S.modus === 'gevecht' || S.modus === 'overgang') return 1;
-    return S.kalender.snelheid || 0;
+    return T.snelheidNu(S);
   };
 
   // Eén plek waarlangs de klok tikt (zoals de voorraad via T.wijzigVoorraad), zodat het scherm
@@ -102,19 +102,63 @@
   // nooit op S.tijd zelf, dus pauzeren of versnellen laat geen animatie stilvallen of doorschieten.
   T.tikKalender = function (S, dt) {
     const k = S.kalender;
-    if (!k || !k.snelheid) return;
+    const snelheid = T.snelheidNu(S);
+    if (!snelheid) return;
     // Elk half uur ververst de balk (de datum en het uur, js/dag.js); bij 1× is dat elke 6,25 seconde.
     const vorig = Math.floor(k.dag * 48);
-    k.dag += (dt * k.snelheid) / T.DAG_LENGTE;
+    k.dag += (dt * snelheid) / T.DAG_LENGTE;
     if (Math.floor(k.dag * 48) !== vorig && T.ui && T.ui.toonKalender) T.ui.toonKalender(S);
   };
 
-  // Pauze is snelheid 0; de laatste snelheid ervoor blijft staan, zodat pauze-en-hervat (de P
-  // van js/hud.js) weer bij dezelfde snelheid uitkomt.
+  // ---------------------------------------------------------------------------------------------
+  // Wie de tijd bepaalt: de speler kiest een snelheid, en een venster of een scène zet hem stil
+  // ---------------------------------------------------------------------------------------------
+  //
+  // Eén plek (Marcel, 26 sep: de code moet te begrijpen blijven). De kalender onthoudt twee dingen:
+  //   - k.snelheid: wat de speler koos (de knoppen, P, - en =), met 0 voor pauze;
+  //   - k.stil: waarom de tijd nu toch stilstaat, als namen ('brief', 'handel', 'verstoppen', ...).
+  // Zolang er een reden in k.stil staat, loopt de tijd niet (T.snelheidNu is 0); is de laatste weg,
+  // dan loopt hij weer op wat de speler koos. Tot 26 sep onthield elk venster zelf hoe snel de tijd
+  // liep, onder een eigen sleutel, en zette die bij het sluiten terug; twee vensters na elkaar
+  // konden zo de verkeerde snelheid terugzetten.
+
+  // De speler kiest een snelheid. Pauze is 0; de laatste snelheid ervoor blijft staan, zodat
+  // pauze-en-hervat (de P van js/hud.js) weer bij dezelfde snelheid uitkomt.
   T.zetSnelheid = function (S, snelheid) {
     const k = S.kalender;
     if (snelheid === 0 && k.snelheid > 0) k.laatsteSnelheid = k.snelheid;
     k.snelheid = snelheid;
     if (T.ui && T.ui.toonKalender) T.ui.toonKalender(S);
+  };
+
+  // Iets zet de tijd stil, onder een naam: een venster ('brief', 'handel', ...) of het einde van het
+  // spel ('einde'). Twee keer dezelfde naam telt één keer.
+  T.houdTijdStil = function (S, reden) {
+    const k = S && S.kalender;
+    if (!k) return;
+    if (!k.stil) k.stil = [];
+    if (!k.stil.includes(reden)) k.stil.push(reden);
+    if (T.ui && T.ui.toonKalender) T.ui.toonKalender(S);
+  };
+
+  // Die reden is er niet meer; staat er geen andere meer, dan loopt de tijd weer zoals gekozen.
+  T.laatTijdGaan = function (S, reden) {
+    const k = S && S.kalender;
+    if (!k || !k.stil) return;
+    k.stil = k.stil.filter((r) => r !== reden);
+    if (T.ui && T.ui.toonKalender) T.ui.toonKalender(S);
+  };
+
+  // Hoe snel de kalender nu echt loopt: wat de speler koos, of 0 zolang iets de tijd stilzet.
+  T.snelheidNu = function (S) {
+    const k = S && S.kalender;
+    if (!k) return 0;
+    return k.stil && k.stil.length ? 0 : k.snelheid || 0;
+  };
+
+  // Voor wie ertoe doet als hij komt (de heer, de inner, js/dag.js T.bezoekerKomtAan): wie sneller
+  // dan 1× speelt, gaat naar 1×, anders zie je hem nauwelijks komen.
+  T.naarGewoneSnelheid = function (S) {
+    if (S && S.kalender && S.kalender.snelheid > 1) T.zetSnelheid(S, 1);
   };
 })(globalThis.Spel = globalThis.Spel || {});

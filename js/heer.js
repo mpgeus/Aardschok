@@ -586,7 +586,7 @@
   T.ambtKwijt = function (S) {
     S.einde = { reden: 'ambt', dag: dagNu(S) };
     bericht('"Twee keer, schout." De heer schudt zijn hoofd. "U bent ontslagen."', 'gevaar');
-    if (S.kalender && T.zetSnelheid) T.zetSnelheid(S, 0);
+    T.houdTijdStil(S, 'einde');
     if (T.ui && T.ui.toonEinde) T.ui.toonEinde(S);
     else S.modus = 'einde';
   };
@@ -642,7 +642,7 @@
     const INN = T.INNER_INSTELLINGEN;
     if (INN && S.inner && S.inner.argwaan >= INN.doorzoekenVanaf && T.doorzoekDorp) T.doorzoekDorp(S);
     b.wachtTot = dagNu(S) + IN().wachtDagen;
-    if (S.kalender && S.kalender.snelheid > 1 && T.zetSnelheid) T.zetSnelheid(S, 1);
+    T.naarGewoneSnelheid(S);
     bericht('De heer staat op de brink en wacht op je.');
   };
 

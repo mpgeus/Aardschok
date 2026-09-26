@@ -124,3 +124,50 @@ test('pauzeren en hervatten onthoudt de laatste snelheid', () => {
   T.zetSnelheid(S, S.kalender.laatsteSnelheid);
   assert.equal(S.kalender.snelheid, 3);
 });
+
+// ---------------------------------------------------------------------------------------------
+// Wie de tijd stilzet: een reden per venster, en daarna de snelheid die de speler koos
+// ---------------------------------------------------------------------------------------------
+
+test('een venster zet de tijd stil, en daarna loopt hij weer op de snelheid die de speler koos', () => {
+  const S = { kalender: T.nieuweKalender() };
+  T.zetSnelheid(S, 10);
+  T.houdTijdStil(S, 'handel');
+  assert.equal(T.snelheidNu(S), 0);
+  assert.equal(S.kalender.snelheid, 10, 'wat de speler koos, blijft staan');
+  const dag = S.kalender.dag;
+  T.tikKalender(S, 60);
+  assert.equal(S.kalender.dag, dag, 'de kalender staat stil');
+  assert.equal(T.wereldFactor(S), 0, 'en de wereld ook');
+  T.laatTijdGaan(S, 'handel');
+  assert.equal(T.snelheidNu(S), 10);
+});
+
+test('twee redenen tegelijk: de tijd loopt pas weer als ze allebei weg zijn', () => {
+  const S = { kalender: T.nieuweKalender() };
+  T.zetSnelheid(S, 3);
+  T.houdTijdStil(S, 'brief');
+  T.houdTijdStil(S, 'handel');
+  T.houdTijdStil(S, 'handel'); // twee keer dezelfde reden telt één keer
+  T.laatTijdGaan(S, 'brief');
+  assert.equal(T.snelheidNu(S), 0, 'het handelsvenster staat nog open');
+  T.laatTijdGaan(S, 'handel');
+  assert.equal(T.snelheidNu(S), 3);
+});
+
+test('wie zelf op pauze zette, houdt pauze als een venster sluit', () => {
+  const S = { kalender: T.nieuweKalender() };
+  T.zetSnelheid(S, 0);
+  T.houdTijdStil(S, 'velden');
+  T.laatTijdGaan(S, 'velden');
+  assert.equal(T.snelheidNu(S), 0);
+});
+
+test('naar gewone snelheid: wie sneller speelt, gaat naar 1×; 1× en pauze blijven', () => {
+  for (const [voor, na] of [[30, 1], [10, 1], [3, 1], [1, 1], [0, 0]]) {
+    const S = { kalender: T.nieuweKalender() };
+    T.zetSnelheid(S, voor);
+    T.naarGewoneSnelheid(S);
+    assert.equal(S.kalender.snelheid, na, `${voor}×`);
+  }
+});

@@ -168,7 +168,7 @@
     const uur = T.uurTekst ? T.uurTekst(S.kalender.dag) + (T.dagdeelVan ? ', ' + T.dagdeelVan(S.kalender.dag) : '') : '';
     $('kalender-seizoen').textContent = T.hoofdletter(d.seizoen) + (uur ? ' · ' + uur : '') + (d.sintMaarten ? ' · Sint-Maarten: de heer int' : '');
     for (const b of document.querySelectorAll('#kalender-knoppen button')) {
-      b.classList.toggle('actief', Number(b.dataset.snelheid) === S.kalender.snelheid);
+      b.classList.toggle('actief', Number(b.dataset.snelheid) === T.snelheidNu(S));
     }
     werkBriefKnopBij(S);
     werkSlaapKnopBij(S);
@@ -431,20 +431,15 @@
     S.bouwSoort = null;
     S.bouwMenuOpen = false;
     T.ui.toonBouwmenu(S);
-    // De kalender stil, en onthouden hoe hij liep: bij het sluiten loopt hij zo weer verder.
-    if (S.kalender) {
-      S.handelVoorSnelheid = S.kalender.snelheid;
-      if (S.kalender.snelheid) T.zetSnelheid(S, 0);
-    }
+    // Zolang je handelt, staat de tijd stil (js/tijd.js); bij het sluiten loopt hij weer zoals je koos.
+    T.houdTijdStil(S, 'handel');
     toonHandel(S);
   };
 
   T.ui.sluitHandel = function (S) {
     $('handel').classList.add('verborgen');
     if (S.modus === 'handel') S.modus = 'verkennen';
-    // Heeft de speler de tijd zelf weer aangezet, dan laten we die snelheid staan.
-    if (S.kalender && S.kalender.snelheid === 0 && S.handelVoorSnelheid) T.zetSnelheid(S, S.handelVoorSnelheid);
-    S.handelVoorSnelheid = null;
+    T.laatTijdGaan(S, 'handel');
   };
 
   $('handel').addEventListener('click', (ev) => {
@@ -473,18 +468,6 @@
   const veilig = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || 'niets');
   const eisInTaal = (eis) => opsomming(eis.volgorde.map((wat) => `${eis.per[wat]} ${wat}`));
-
-  // De tijd stil zolang een venster open is, en daarna weer zoals hij liep (tenzij de speler hem
-  // intussen zelf weer aanzette). Elk venster onthoudt dat onder zijn eigen sleutel in S.
-  function zetTijdStil(S, sleutel) {
-    if (!S.kalender) return;
-    S[sleutel] = S.kalender.snelheid;
-    if (S.kalender.snelheid) T.zetSnelheid(S, 0);
-  }
-  function laatTijdLopen(S, sleutel) {
-    if (S.kalender && S.kalender.snelheid === 0 && S[sleutel]) T.zetSnelheid(S, S[sleutel]);
-    S[sleutel] = null;
-  }
 
   // De knop Brief naast Bouwen: alleen zolang er een brief is.
   function werkBriefKnopBij(S) {
@@ -520,14 +503,14 @@
     if (!S.heer || !S.heer.brief) return;
     const box = $('brief');
     box.innerHTML = briefInhoud(S);
-    if (box.classList.contains('verborgen')) zetTijdStil(S, 'briefVoorSnelheid');
+    T.houdTijdStil(S, 'brief');
     box.classList.remove('verborgen');
     werkBriefKnopBij(S);
   };
 
   T.ui.sluitBrief = function (S) {
     $('brief').classList.add('verborgen');
-    laatTijdLopen(S, 'briefVoorSnelheid');
+    T.laatTijdGaan(S, 'brief');
   };
 
   T.ui.briefOpen = () => !$('brief').classList.contains('verborgen');
@@ -557,7 +540,7 @@
   T.ui.toonBenoeming = function (S) {
     const box = $('brief');
     box.innerHTML = benoemingInhoud(S);
-    if (box.classList.contains('verborgen')) zetTijdStil(S, 'briefVoorSnelheid');
+    T.houdTijdStil(S, 'brief');
     box.classList.remove('verborgen');
   };
 
@@ -690,19 +673,19 @@
     T.ui.toonBouwmenu(S);
     if (T.ui.briefOpen()) T.ui.sluitBrief(S);
     geef = null;
-    zetTijdStil(S, 'heerVoorSnelheid');
+    T.houdTijdStil(S, 'heer');
     toonHeer(S);
   };
 
-  // Dicht. Bij de schandpaal kan dat niet: daar moet je kiezen. De tijd loopt weer zoals toen je
-  // het venster opende (sinds de dag, 26 sep, zet de heer hem zelf niet meer stil, js/heer.js).
+  // Dicht. Bij de schandpaal kan dat niet: daar moet je kiezen. De tijd loopt weer op de snelheid
+  // die de speler koos (js/tijd.js, T.laatTijdGaan).
   T.ui.sluitHeer = function (S) {
     const b = S.heer && S.heer.bezoek;
     if (b && b.schandpaal) return;
     $('heer').classList.add('verborgen');
     if (S.modus === 'heer') S.modus = 'verkennen';
     geef = null;
-    laatTijdLopen(S, 'heerVoorSnelheid');
+    T.laatTijdGaan(S, 'heer');
     werkBriefKnopBij(S);
   };
 
@@ -764,7 +747,7 @@
   // lammeren) schuif je hoeveel er naar de slager gaan, het oudste eerst. Het venster rekent mee of
   // het hooi de winter dan haalt, en wat het vlees en de huiden zijn. Het begint op het voorstel
   // (T.slachtVoorstel): zo weinig als kan, zodat het hooi het haalt. Zolang het open is, staat de
-  // tijd stil (S.modus 'slachten', js/main.js).
+  // tijd stil (T.houdTijdStil) en is Esc niemand slachten (S.modus 'slachten', js/main.js).
   let slacht = null; // per groep (T.kuddeGroepen): hoeveel er gaan
 
   const dagNu = (S) => Math.floor((S.kalender && S.kalender.dag) || 0);
@@ -865,7 +848,7 @@
     T.ui.toonBouwmenu(S);
     T.ui.verbergTooltip();
     slacht = null;
-    zetTijdStil(S, 'slachtenVoorSnelheid');
+    T.houdTijdStil(S, 'slachten');
     toonSlachten(S);
   };
 
@@ -874,7 +857,7 @@
     if (S.modus === 'slachten') S.modus = 'verkennen';
     if (S.vee) S.vee.slachtVraag = false;
     slacht = null;
-    laatTijdLopen(S, 'slachtenVoorSnelheid');
+    T.laatTijdGaan(S, 'slachten');
   };
 
   $('slachten').addEventListener('input', (ev) => {
@@ -908,7 +891,8 @@
   // (js/verkennen.js), en dan gaat dit venster open. Per goed (graan, goud) zie je wat je hebt, wat
   // hier ligt en wat er nog past, en zet je iets weg of haal je het terug. Elke knop stelt dezelfde
   // vraag als de regels (T.kanVerstoppen, T.kanTerughalen), dus een knop die niet kan, zegt bij de
-  // muis waarom. Zolang het open is, staat de tijd stil (S.modus 'verstoppen', js/main.js).
+  // muis waarom. Zolang het open is, staat de tijd stil (T.houdTijdStil) en sluit Esc het
+  // (S.modus 'verstoppen', js/main.js).
   let verstopGebouw = null;
   const VERSTOP_WAAR = { graan: 'in de schuur', goud: 'in de kist' };
 
@@ -989,7 +973,7 @@
     T.ui.toonBouwmenu(S);
     T.ui.verbergTooltip();
     verstopGebouw = g;
-    zetTijdStil(S, 'verstoppenVoorSnelheid');
+    T.houdTijdStil(S, 'verstoppen');
     toonVerstoppen(S);
   };
 
@@ -997,7 +981,7 @@
     $('verstoppen').classList.add('verborgen');
     if (S.modus === 'verstoppen') S.modus = 'verkennen';
     verstopGebouw = null;
-    laatTijdLopen(S, 'verstoppenVoorSnelheid');
+    T.laatTijdGaan(S, 'verstoppen');
   };
 
   $('verstoppen').addEventListener('click', (ev) => {
@@ -1020,9 +1004,9 @@
   // van wie ze zijn, hoe groot en hoe vruchtbaar, wat ze nu zijn, en drie knoppen voor wat ze
   // volgend jaar worden. Elke knop stelt dezelfde vraag als de klik (T.kanBestemming), dus wat niet
   // kan, staat uit en zegt waarom. Het plan gaat pas in op 1 lentemaand (T.wisselVelden). Zolang het
-  // venster open is, staat de tijd stil en ligt de rest van de invoer stil (S.modus 'velden',
-  // js/main.js), net als bij de spelregels. De regel bij de muis op een veld (T.veldTekst) en de
-  // stukjes tekst die beide delen, staan in js/verkennen.js.
+  // venster open is, staat de tijd stil (T.houdTijdStil) en ligt de rest van de invoer stil
+  // (S.modus 'velden', js/main.js), net als bij de spelregels. De regel bij de muis op een veld
+  // (T.veldTekst) en de stukjes tekst die beide delen, staan in js/verkennen.js.
   const BESTEMMING_NAAM = { akker: 'Akker', weide: 'Weide', braak: 'Braak' };
   const GRAAN_TAAL = {
     geploegd: 'net geploegd en gezaaid', kiemend: 'het graan kiemt', groen: 'het graan staat groen',
@@ -1204,7 +1188,7 @@
     T.ui.toonBouwmenu(S);
     if (T.ui.briefOpen()) T.ui.sluitBrief(S);
     T.ui.verbergTooltip();
-    zetTijdStil(S, 'veldenVoorSnelheid');
+    T.houdTijdStil(S, 'velden');
     $('velden').classList.remove('verborgen');
     toonVelden(S);
     $('velden-knop').classList.add('actief');
@@ -1214,7 +1198,7 @@
     $('velden').classList.add('verborgen');
     $('velden-knop').classList.remove('actief');
     if (S.modus === 'velden') S.modus = 'verkennen';
-    laatTijdLopen(S, 'veldenVoorSnelheid');
+    T.laatTijdGaan(S, 'velden');
   };
 
   $('velden').addEventListener('click', (ev) => {
@@ -1335,7 +1319,7 @@
     S.bouwMenuOpen = false;
     T.ui.toonBouwmenu(S);
     if (T.ui.briefOpen()) T.ui.sluitBrief(S);
-    zetTijdStil(S, 'regelsVoorSnelheid');
+    T.houdTijdStil(S, 'spelregels');
     $('spelregels').classList.remove('verborgen');
     toonSpelregels();
     $('spelregels-knop').classList.add('actief');
@@ -1345,7 +1329,7 @@
     $('spelregels').classList.add('verborgen');
     $('spelregels-knop').classList.remove('actief');
     if (S.modus === 'spelregels') S.modus = 'verkennen';
-    laatTijdLopen(S, 'regelsVoorSnelheid');
+    T.laatTijdGaan(S, 'spelregels');
     // Wat een regel verandert, kan de balk raken (de snelheid van een dag, wat de heer vraagt).
     T.ui.toonVoorraad(S);
     T.ui.toonKalender(S);
