@@ -80,10 +80,13 @@ om negen uur. `npm test`: 462/462. C, D en E wachten (vraag 25).
 
 **Loopt nu:** niets.
 
-**Volgende: Marcel kiest (vraag 24).** Stap 2 van 3b (mensen worden poppetjes), of eerst verstoppen
-deel 1b. Voorstel van Claude: de poppetjes, en dan het zichtveld met de getuigen (vraag 23). "Wie
-vlak langs een plek loopt, kan iets vinden" uit deel 1b is dan een getuige, en hoeft niet apart. Laat
-Marcel eerst de dag spelen: `localhost:8123/`, en `Z` om te slapen bij je huis.
+**Volgende: stap 2 van 3b, mensen worden poppetjes** (Marcel koos, 26 sep: "Ja, begin met de
+poppetjes"; vraag 24), in een nieuwe sessie. Begin met een kort plan voor Marcel, vóór het bouwen: wie
+een poppetje wordt, met welk ritme, en waar ze heen gaan. Het ontwerp staat in `spel.md`, "Wie wanneer
+waar is" en "Mensen worden poppetjes"; de dagindeling en het ritme van de boeren zijn er al
+(`js/dag.js`, `T.dagAnker`). C en D van vraag 25 (`hud.js` en `tekenen.js` splitsen) gaan mee als
+die bestanden open moeten. Daarna vraag 23: het zichtveld met de getuigen, waarin "wie vlak langs een
+plek loopt, kan iets vinden" uit verstoppen deel 1b opgaat.
 
 **Daarna:**
 - **Verstoppen, deel 1b: ook onder de 40% een risico** (Marcel koos op 25 sep; `spel.md`, "Marcel
@@ -140,6 +143,7 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     spannender door.
 24. Wat nu, na de dag: de poppetjes (3b, stap 2), of eerst verstoppen deel 1b? Voorstel: de
     poppetjes, en dan het zichtveld (vraag 23), waarin "wie vlak langs loopt, kan iets vinden" opgaat.
+    **Beantwoord (Marcel, 26 sep): de poppetjes.**
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
