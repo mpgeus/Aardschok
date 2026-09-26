@@ -42,14 +42,15 @@ staat in `CLAUDE.md`, onder Git.
   dat de kaart nog te strak en waterpas is; hij koos wat de volgende sessie eerst doet (vraag 29).
 - In de vijfde sessie: een schets voor het plein, op een pagina voor Marcel (vraag 30). Marcel
   antwoordde: het heet gewoon plein, er wordt niet op gebouwd, de huizen staan rondom en de velden
-  daar weer omheen, en het Drentse gaat eruit (een aanname van Claude). Daarna een tweede schets
-  (vraag 31).
+  daar weer omheen, en het Drentse gaat eruit (een aanname van Claude). Daarna een tweede en een
+  derde schets, met gewone huizen naast de boerderijen (vraag 31).
 
-**Loopt nu: de tweede schets voor het plein** (26 sep, vijfde sessie). De pagina "Het plein als hart"
+**Loopt nu: de derde schets voor het plein** (26 sep, vijfde sessie). De pagina "Het plein als hart"
 (https://claude.ai/artifact/NnMfi4QPWV8ct2ZtNjewud) laat de vierde versie van het gehucht zien, met
-Marcels antwoorden op de eerste schets (vraag 30): het plein in het midden, waar niet gebouwd wordt;
-de huizen rondom, de voorste op de hoeken, zodat er maar 9 van de 221 tegels achter een dak vallen;
-en de velden in blokken om het dorp. Er is nog niets gebouwd; het wacht op Marcel (vraag 31). De
+Marcels antwoorden (vraag 30 en zijn opmerking bij vraag 31): het plein in het midden, waar niet
+gebouwd wordt; gewone huizen eromheen, en de boerderijen verder naar buiten bij hun velden, de voorste
+op de hoeken, zodat er maar 6 van de 219 tegels achter een dak vallen; en de velden om het dorp. Er is
+nog niets gebouwd; het wacht op Marcel (vraag 31). De
 indeling staat in `gereedschap/tiled/gehucht-v4-schets.json`, want de schets kwam uit een los
 tekenscript. **Daarna** (Marcel koos het, vraag 29): het plein bouwen, dan ronde 4b van de
 huizenbouwer, en dan de herberg. Stap 2 van 3b, mensen worden poppetjes, is af (26 sep; `spel.md`,
@@ -184,12 +185,18 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     gekomen is een aanname ergens eerder." Dat klopt: het kwam van Claude (25 sep, "het Drentse
     esdorp" als kader voor het vee) en stond daarna in de code op Marcels naam. Rechtgezet op 26 sep,
     ook in de code en de spelteksten; zie `spel.md`, bij het plein.
-31. **Het plein als hart: de tweede schets** (26 sep; dezelfde pagina). Twee vragen. (1) Is dit het:
-    het plein in het midden, de huizen rondom met de voorste op de hoeken, en de velden in blokken om
-    het dorp? (2) Welke doorkijk wil je proberen, nu er huizen vóór het plein staan: het kijkvenster
-    ook voor de heer, de marskramer en wie je spreekt; alleen de omtrek van het huis; of het huis in
-    een raster doorzichtig, om de andere pixel? Voorstel: de eerste en de derde als keuze in de
-    spelregels, na de kaart (`beeld.md`, "Doorkijk").
+31. **Het plein als hart: de derde schets** (26 sep; dezelfde pagina). Op de tweede schets zei Marcel:
+    "Naast boerderijen zijn er ook 'gewone' huizen." Nu staan er twee hutten en een huis om het plein,
+    en de boerderijen verder naar buiten, bij hun velden. Drie vragen. (1) Is dit het? (2) Wie woont
+    er in de gewone huizen? Het spel telt de mensen bij het begin uit de woonruimte, dus: A, bewoond
+    door nieuwe gezinnen (36 mensen in plaats van 25, en 44 procent meer monden: de balans moet
+    opnieuw); B, leeg, en ze vullen zich zodra er eten en tevredenheid is; of C, dezelfde 25 mensen,
+    maar niet allemaal op een boerderij (de herder met zijn gezin, een oud stel, een weduwe).
+    Voorstel: C; dan moet het aantal mensen bij het begin los van de woonruimte kunnen, zoals de
+    beginvoorraad. (3) Welke doorkijk wil je proberen, nu er huizen vóór het plein staan: het
+    kijkvenster ook voor de heer, de marskramer en wie je spreekt; alleen de omtrek van het huis; of
+    het huis in een raster doorzichtig, om de andere pixel? Voorstel: de eerste en de derde als keuze
+    in de spelregels, na de kaart (`beeld.md`, "Doorkijk").
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

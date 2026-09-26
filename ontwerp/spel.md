@@ -736,6 +736,11 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
   - **De velden liggen rondom het dorp,** en bij verstedelijking verhuizen ze mee naar buiten ("Van
     dorp tot stad").
   - Geen drinkpoel op het plein. Op marktdagen kunnen er **troggen voor het vee** staan.
+  - **Naast boerderijen zijn er ook gewone huizen** (Marcel, 26 sep, bij de tweede schets). In de
+    derde schets staan er twee hutten en een huis om het plein, bij het huis van de schout, en de
+    boerderijen verder naar buiten, bij hun velden (voorstel van Claude: groeit het dorp, dan groeit
+    het midden met gewone huizen en schuiven de boerderijen met hun velden naar buiten). Wie er
+    woont, is vraag 31 in de werklijst.
 - **Nog open:** zijn grillen en de herendienst (punt 8); de koets (tekenwerk).
 
 **Hoe het zo kwam:**
