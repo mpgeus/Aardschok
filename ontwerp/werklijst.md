@@ -49,6 +49,10 @@ treden (geen steen in het gehucht, half steen in een dorp, grotendeels steen pas
 paardenstal komt erbij; en ronde 4b van de huizenbouwer moet uitgevoerd worden. Hij vroeg wat de
 omrekening is; het antwoord staat op de pagina en in `spel.md`. Nog open: wanneer (vraag 15), en
 vraag 20 en 21 over de lengte van een dag en over bouwtijd en straffen.
+**Marcel reageert in etappes** ("het is best veel"). Op de pagina staat daarom bij elk hoofdstuk of
+hij het al besprak (besproken, deels besproken, nog niet besproken), en bovenaan staat wat nog open is
+in vier etappes: de dag en het ritme; poppetjes en zaken; zelf en beter bouwen; paarden, wapens en de
+volgorde. Werk die markeringen bij na elke opmerking, en zet zijn keuzes in `spel.md`.
 
 **Loopt nu:** niets.
 
