@@ -22,12 +22,22 @@ function begin() {
   return S;
 }
 
-test('de schout is een dorpeling, en hij kan lopen', () => {
+test('de schout draagt het vel van een dorpeling, en hij kan lopen', () => {
   const S = begin();
-  assert.equal(S.schout.soort, 'dorpeling');
+  assert.equal(S.schout.soort, 'schout');
   assert.equal(S.schout.kant, 'speler');
-  // Van 23 tot 24 sep stond hij stil: een 'schout' heeft zelf snelheid 0, en als dorpeling liep hij
-  // niet meer op de leeftijd.
+  // Welk vel hij draagt: in Node laadt js/sprites.js geen plaatjes, dus kijkt het hier in de
+  // beschrijving zelf (T.BEELDEN, beelden/beschrijving.js), waar het spel ook uit leest.
+  require('../js/sprites.js');
+  const echt = T.sprites.figuurGegevens;
+  T.sprites.figuurGegevens = (naam) => T.BEELDEN.figuren[naam] || null;
+  try {
+    assert.match(T.sprites.houding(S, S.schout).naam, /^dorpeling\d+$/);
+  } finally {
+    T.sprites.figuurGegevens = echt;
+  }
+  // Van 23 tot 24 sep stond hij stil: de held (toen nog een tovenaar) had zelf snelheid 0 en liep
+  // op zijn leeftijd.
   assert.equal(T.snelheidVan(S.schout), T.SCHOUT_SNELHEID);
   assert.ok(T.SCHOUT_SNELHEID > 0);
 });

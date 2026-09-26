@@ -1,6 +1,6 @@
 // Het gesprekssysteem zonder scherm (js/gesprek.js): welke regel wint, welke keuzes zichtbaar
 // zijn, en dat een vlag blijft staan. (Tot 25 sep ook dat "ouderGewordenSinds" pas afging als de
-// schout echt ouder was geworden; de leeftijd ging eruit met het oude spel.)
+// tovenaar echt ouder was geworden; de leeftijd ging eruit met het oude spel.)
 const test = require('node:test');
 const assert = require('node:assert/strict');
 

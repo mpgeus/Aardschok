@@ -206,11 +206,10 @@
       schout = T.maakWezen('schout', 0, 0);
       w.wezens.push(schout);
     }
-    // Een schout is geen tovenaar: hij krijgt hier het vel van een gewone dorpeling. `kant`
-    // blijft 'speler' (die staat al vast sinds T.maakWezen, zie T.WEZENS in js/wereld.js), dus de
-    // HUD en de beurtvolgorde blijven gewoon op hem letten; alleen T.sprites.houding kijkt naar
-    // `soort` om het plaatje te kiezen (js/sprites.js). Zie ontwerp/werklijst.md, punt 1b.
-    schout.soort = 'dorpeling';
+    // Zijn soort is 'schout' en zijn kant 'speler' (T.WEZENS, js/wereld.js). Hij draagt het vel van
+    // een gewone dorpeling, en welk, kiest zijn zaad hieronder; dat regelt T.sprites.houding
+    // (js/sprites.js). Tot 26 sep kreeg hij hier de soort 'dorpeling' om aan dat vel te komen: een
+    // overblijfsel van de tovenaar, die een eigen vel had (ontwerp/werklijst.md, punt 1b en 7e).
     // Zijn loopmaat (T.SCHOUT_SNELHEID, js/wereld.js) had hij al: die staat bij de schout in
     // T.WEZENS. Van 23 tot 24 sep stond hij hier stil, omdat de held (toen nog een tovenaar) op
     // zijn leeftijd liep en zelf snelheid 0 had; dit blijft staan als vangnet voor een oude kaart.

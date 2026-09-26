@@ -147,7 +147,7 @@ test('een bosvijand uit Tiled is een gewoon wezen, met een figuur dat het spel k
 
 test('elk wezen dat Marcel in Tiled kan neerzetten, heeft een figuur in beelden/', () => {
   // Wie nog niet getekend is, mag een vel lenen (vel: 'boer') — dan moet dát vel er wel zijn,
-  // anders staat er straks niets op de kaart. De schout (de schout) draagt het vel van een gewone
+  // anders staat er straks niets op de kaart. De schout draagt het vel van een gewone
   // dorpeling (js/sprites.js); tot 25 sep was hij de tovenaar van het oude spel.
   for (const [soort, w] of Object.entries(T.WEZENS)) {
     const eigen = soort === 'schout' ? 'dorpeling0' : soort;
