@@ -15,94 +15,61 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
-Een overzicht met het jaar maand voor maand, de kringlopen en de drempels van de heer en de inner
-staat op de pagina "Stand van het gehucht" (een artifact op claude.ai, 25 sep). Spelen: `npm start`,
-dan `localhost:8123/`: het spel begint meteen in het gehucht, met de benoemingsbrief van de heer.
-`npm test`: 444/444.
+Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
+de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
+`npm test`: 462/462.
 
-**Deze sessie (26 sep)** deed punt 7e en 7f, en daarmee is punt 7 af: het oude spel is eruit, ook
-uit de namen. `Toren` heet nu `Spel` (`Spel.debug`), de held is de schout (`S.schout`, soort
-'schout'), en zijn kant in een gevecht heet 'speler' (Marcel koos het: een man van de militie vecht
-straks aan jouw kant zonder de schout te zijn). Onderweg bleek dat de schout in het spel stilletjes
-de soort 'dorpeling' kreeg, een overblijfsel van de tovenaar; nu heet hij overal 'schout'.
-`CLAUDE.md` en de README gaan alleen nog over het nieuwe spel. Nagekeken in de browser: het gehucht
-begint, de schout loopt, en een gevecht op `?kaart=proef` werkt. Drie kleine resten en een voorstel
-(een eigen figuur voor de schout) staan in `opmerkingen.md`, "Na de namen" en de voorstellen.
-
-**Waar het werk staat.** Deze sessie werkte op `claude/werklijst-vervolg-aplhf0`, en alles staat
-sinds het eind van de sessie ook in `main` (Marcel: "Push"). Begin de volgende sessie dus gewoon
-vanaf `main`. Hoe een eigen branch en `main` samengaan, staat sinds 26 sep in `CLAUDE.md`, onder
+**Waar het werk staat:** alles staat in `main` (Marcel, 26 sep: "zet hem in main"). Begin de volgende
+sessie dus gewoon vanaf `main`; hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder
 Git.
 
-**Een tweede sessie van 26 sep** (branch `claude/village-growth-routines-vlr0gq`, nog niet in
-`main`): Marcel kwam met een nieuwe wens. Het dorp moet leven en groeien: een dagritme, een herberg
-en kleine zaken waar de mensen zelf heen gaan, huizen die het dorp zelf bouwt en die beter worden
-tot steen, een paardenstal en een wapenmaker. Claude schreef er een voorstel voor, zonder te bouwen
-(`spel.md`, "Een dorp dat leeft en groeit"). Het belangrijkste: een dag duurt nu 2,5 seconde, te kort
-om in te leven, dus eerst moet de dag langer. De keuzes staan hieronder als vraag 14 tot en met 19.
-Of "Volgende" hieronder blijft, hangt af van vraag 15. Het voorstel staat ook op een pagina, "Een
-dorp dat leeft" (https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE), met de dag en de afstand op
-schaal, zodat Marcel er opmerkingen bij kan zetten, zoals bij "Stand van het gehucht".
-**Marcel koos daar (26 sep, als opmerking op de pagina):** A, de dag wordt een echte dag; beter
-bouwen kost materiaal én goud, en levert tevredenheid en meer plaats per huis op; steen hangt aan de
-treden (geen steen in het gehucht, half steen in een dorp, grotendeels steen pas in een stad); de
-paardenstal komt erbij; en ronde 4b van de huizenbouwer moet uitgevoerd worden. Hij vroeg wat de
-omrekening is; het antwoord staat op de pagina en in `spel.md`. Nog open: wanneer (vraag 15), en
-vraag 20 en 21 over de lengte van een dag en over bouwtijd en straffen.
-**Marcel reageert in etappes** ("het is best veel"). Op de pagina staat daarom bij elk hoofdstuk of
-hij het al besprak (besproken, deels besproken, nog niet besproken), en bovenaan staat wat nog open is
-in vier etappes: de dag en het ritme; poppetjes en zaken; zelf en beter bouwen; paarden, wapens en de
-volgorde. Werk die markeringen bij na elke opmerking, en zet zijn keuzes in `spel.md`.
-**In een tweede opmerking (26 sep)** beantwoordde Marcel vraag 15 tot en met 21: de dag komt als
-eerste, met een maand van dertig dagen en een dag van vijf minuten (zijn voorstel; Claude is het
-ermee eens, want dan hoeft niets omgerekend te worden en past lopen in de dag); de bouwtijd blijft in
-dagen; hij wijst bouwgrond aan; groei mag, want de heer verdient eraan; huizen groeien mee en
-werkplaatsen worden groter, met personeel; ridders zijn van de koning; en bij de wapens horen bogen,
-zwaarden en schilden. Nog open: vraag 22 (de standen van de versneller), en wat hij nog niet besprak:
-"Wie wanneer waar is", "Mensen worden poppetjes", de rest van "Zaken" en de volgorde.
-**In een derde opmerking (26 sep)** zei Marcel ja tegen de poppetjes, en kwam hij met een eigen idee:
-iedereen heeft een zichtveld, en 's nachts kun je in een donker steegje iets verstoppen zonder dat
-iemand het weet. Claude werkte het uit (`spel.md`, "Marcel daarna"): een zichtveld dat met het licht
-meegaat, getuigen die naar hun karakter doorvertellen, en een lantaarn voor de schout. Het bestaat al
-half (`T.zicht`, `T.innerKijkt`, sluipen). Vraag 23: komt het als stap in 3b, na de poppetjes?
-**Daarna bouwde deze sessie de dag** (punt 3b, stap 1; Marcel: "Je mag verder met de dag"): een dag van
-vijf minuten in een maand van dertig, het uur in de balk, de versneller tot 30×, licht en nacht, de
-boeren die 's nachts binnen zijn, maaien in de werkuren, de inner en de heer die overdag komen zonder
-de tijd stil te zetten, en slapen tot de ochtend (`Z`). Wat er precies is, staat in `spel.md`, "De dag,
-gebouwd"; wat nog ruw is in `opmerkingen.md`. Nagekeken in de browser: de balk, de avond, de nacht (de
-vijf boeren binnen), slapen en wakker worden, en de inner die om negen uur komt. `npm test`: 457/457.
-**En toen ruimde ze op** (Marcel: "Laten we wel zorgen dat de code goed te begrijpen blijft", en op het
-voorstel van vraag 25: "Ja, begin met A en B"). A: de tijd staat op één plek stil, met een reden per
-venster (`T.houdTijdStil` en `T.laatTijdGaan`, `js/tijd.js`). B: de marskramer, de heer en de inner
-komen op één manier aan (`T.bezoekerKomtAan`, `js/dag.js`). Nagekeken in de browser: een venster zet
-de tijd stil en laat hem op de gekozen snelheid weer lopen, ook met twee vensters open; de inner komt
-om negen uur. `npm test`: 462/462. C, D en E wachten (vraag 25).
+**Wat er op 26 sep gebeurde** (twee sessies; de details staan onder Af en in `spel.md`):
+- Punt 7 is af: het oude spel is eruit, ook uit de namen (`Spel`, `S.schout`, kant 'speler').
+- Marcel kwam met een nieuwe wens: een dorp dat leeft en groeit (punt 3b). Claude schreef een voorstel
+  op een pagina, "Een dorp dat leeft" (https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE), en Marcel
+  koos daar in drie opmerkingen het meeste (`spel.md`, "Een dorp dat leeft en groeit"). Hij reageert
+  in etappes ("het is best veel"): op de pagina staat bij elk hoofdstuk of hij het al besprak. Werk
+  die markeringen bij na elke opmerking, en zet zijn keuzes in `spel.md`.
+- De dag is gebouwd (3b, stap 1): vijf minuten bij 1× in een maand van dertig dagen, licht en nacht,
+  de boeren 's nachts binnen, maaien in de werkuren, bezoekers overdag, en slapen tot de ochtend.
+- Opgeruimd (vraag 25, A en B): de tijd staat op één plek stil, en de bezoekers komen op één manier
+  aan. De afspraken staan in `CLAUDE.md`, "Afspraken in de code".
 
 **Loopt nu:** niets.
 
-**Volgende: stap 2 van 3b, mensen worden poppetjes** (Marcel koos, 26 sep: "Ja, begin met de
-poppetjes"; vraag 24), in een nieuwe sessie. Begin met een kort plan voor Marcel, vóór het bouwen: wie
-een poppetje wordt, met welk ritme, en waar ze heen gaan. Het ontwerp staat in `spel.md`, "Wie wanneer
-waar is" en "Mensen worden poppetjes"; de dagindeling en het ritme van de boeren zijn er al
-(`js/dag.js`, `T.dagAnker`). C en D van vraag 25 (`hud.js` en `tekenen.js` splitsen) gaan mee als
-die bestanden open moeten. Daarna vraag 23: het zichtveld met de getuigen, waarin "wie vlak langs een
-plek loopt, kan iets vinden" uit verstoppen deel 1b opgaat.
+**De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
+voorstel van Claude, en daar gaat vraag 26 over.
 
-**Daarna:**
-- **Verstoppen, deel 1b: ook onder de 40% een risico** (Marcel koos op 25 sep; `spel.md`, "Marcel
-  koos (25 sep, als opmerking op de overzichtspagina)"). De soldaten zoeken op Sint-Maarten altijd op
-  2 of 3 plekken, ook zonder argwaan; wie vlak langs een plek loopt, kan iets vinden; en je bepaalt
-  de route zelf, maar soms wil de heer kiezen.
-- **Verstoppen, deel 2: het bos, met de kudde** (Marcel koos op 25 sep dat het bos samen met de
-  kudde komt). Een plek in het bos voor graan en goud (ver lopen, muizen en vocht), en een deel van
-  de kudde het bos in voor de inner komt. De inner telt de kudde en de heer vraagt per dier, met kaas
-  en wol als sporen. Dat is ook stap 3 van de weides, zonder de handel.
-- **Deel 3: de marskramer koopt en verkoopt vee, kaas, wol en hooi.** Daarna stap 3 van de inner:
-  praten, afleiden, omkopen (ook de marskramer, die nu het spoor van goud is) en de rekenboeken.
-- **Het plein** (Marcel koos op 25 sep; `spel.md`, "Sint-Maarten"): het gehucht rond een plein met
-  het huis van de schout eraan, en daar de schandpaal of het blok; een galg misschien later. Zo komt
-  de brink in beeld. Voorstel van Claude: samen met straten en paden (6c), want op het plein komen
-  de paden samen.
+1. **Nu: mensen worden poppetjes** (3b, stap 2; Marcel koos het op 26 sep, vraag 24). Begin met een
+   kort plan voor Marcel, vóór het bouwen: wie een poppetje wordt, met welk ritme, en waar ze heen
+   gaan. Het ontwerp staat in `spel.md`, "Wie wanneer waar is" en "Mensen worden poppetjes"; de
+   dagindeling en het ritme van de boeren zijn er al (`js/dag.js`, `T.dagAnker`).
+2. **De herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel.
+3. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
+   steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
+   uit verstoppen deel 1b op.
+4. **De kern afmaken** (punt 6 en 6a), en daarmee de vraag van het tweede proefje: is dit leuk?
+   - verstoppen deel 1b, de rest (Marcel koos het op 25 sep): de soldaten zoeken op Sint-Maarten
+     altijd op 2 of 3 plekken, ook zonder argwaan, en je bepaalt de route zelf, maar soms wil de heer
+     kiezen;
+   - deel 2, het bos met de kudde (Marcel, 25 sep): een plek in het bos voor graan en goud (ver lopen,
+     muizen en vocht), en een deel van de kudde het bos in voor de inner komt; hij telt de kudde, de
+     heer vraagt per dier, en kaas en wol zijn sporen (dat is ook stap 3 van de weides);
+   - deel 3: de marskramer koopt en verkoopt vee, kaas, wol en hooi;
+   - stap 3 van de inner: praten, afleiden, omkopen (ook de marskramer, het spoor van het goud) en de
+     rekenboeken.
+5. **Bouwen:** ronde 4b van de huizenbouwer (3b, stap 4; Marcel: "moeten we dus uitvoeren"), en het
+   dorp bouwt zelf, en beter (3b, stap 5): op bouwgrond die jij aanwijst, voor materiaal en goud, met
+   steen per trede.
+6. **Daarna zoals onder "Daarna, in deze volgorde":** het plein, samen met straten en paden (6c), en
+   ontginnen (6b); dan deel C, verhalen en besturen (voorvallen, groepen en keuren, rechtspraak); deel
+   D, de nacht en het verzet (de nacht, de eigen buidel, de militie, en daarbij de stal, de hoefsmid
+   en de wapenmaker uit 3b); deel E, groeien naar vrijheid (de treden, stadsrechten, de opstand); en
+   deel F, de afwerking en het verpakken.
+
+Tussendoor: C en D van vraag 25 (`hud.js` en `tekenen.js` splitsen) als die bestanden toch open moeten,
+en E van vraag 25 als er ruimte is. Wat Marcel kan spelen en zeggen hoe het voelt, staat onder "Spelen,
+en zeggen hoe het voelt".
 
 **Wat nog ruw is of niet helemaal goed staat,** staat in `opmerkingen.md`: alle opmerkingen bij
 elkaar, om later na te lopen (Marcel, 25 sep). Zet er een bij als je iets ziet.
@@ -169,6 +136,13 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
       en `weides`: daar maaien de boeren dus ook 's nachts).
     Voorstel: A en B nu, zolang de dag vers is; C en D als die bestanden toch open moeten (de
     poppetjes raken ze allebei); E later.
+
+*De volgorde* (26 sep; de volgorde van het werk staat bovenaan, in de stand):
+26. Klopt de volgorde na de poppetjes? Voorstel van Claude, met twee verschuivingen tegenover het plan
+    in `spel.md`: de herberg vóór het zichtveld, want in de herberg vertelt een getuige straks door wat
+    hij zag, en dan komt dat er meteen bij; en de kern (verstoppen, de inner) vóór het bouwen, want
+    bouwen is het grootste werk, en of de kern leuk is (de vraag van het tweede proefje), wil je weten
+    vóór je veel bouwt.
 
 *Spelen, en zeggen hoe het voelt:*
 - Het gehucht na de namen (26 sep): Marcel zou het na 7e nog eens openen. Het hernoemen veranderde

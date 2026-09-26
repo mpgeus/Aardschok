@@ -1698,6 +1698,9 @@ wordt, en de markt op de brink.
 6. **De stal, de hoefsmid en de wapenmaker,** samen met de militie (punt 13).
 
 Vraag 23: komen het zichtveld en de getuigen (Marcels idee van 26 sep) als stap 3, na de poppetjes?
+Vraag 26 (26 sep): Claude stelt voor de herberg vóór het zichtveld te doen (in de herberg vertelt een
+getuige door wat hij zag), en de kern af te maken vóór het bouwen (stap 4 en 5); zie de werklijst, "De
+volgorde van het werk".
 
 ### Vragen aan Marcel (in de werklijst 14 tot en met 23)
 
