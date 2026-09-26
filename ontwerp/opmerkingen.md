@@ -237,6 +237,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   zetten met "heer zicht" op 0 in de werkbank.
 - **Een vondst van de soldaten kost argwaan** (25 sep, gebouwd): 15% per plek waar ze iets vinden.
   Uit te zetten met "argwaan per vondst" op 0 in de werkbank.
+- **Uitzoomen** (26 sep, bij de schets van de brink). Het spel toont op de meeste schermen ongeveer
+  960 bij 540 beeldpunten van de wereld: de zoom volgt alleen het venster, van 1× tot 2× (`formaat`
+  in `js/main.js`). Een boerderij beslaat 7 bij 9 tegels, dus een brink van zo'n 200 tegels vult al
+  een scherm, en het hele dorp zie je nooit. Een bouw- en beheerspel laat je meestal uitzoomen om het
+  geheel te overzien. Nog niet gekozen.
 - **Een eigen figuur voor de schout** (26 sep). Hij draagt het vel van een gewone dorpeling, dus
   zodra er meer dorpelingen rondlopen, zoek je jezelf in de menigte. Iets van zijn ambt (een
   ketting, een staf, een hoed) maakt hem vindbaar, en past bij een spel waarin de heer, de inner en

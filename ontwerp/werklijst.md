@@ -40,16 +40,16 @@ staat in `CLAUDE.md`, onder Git.
   in wat je bouwt en een nieuw gehucht rond een plein (vraag 28); en stuk 2 van de poppetjes is af.
   Daarmee is stap 2 van 3b klaar. Op de beelden zag Marcel dat de brink een open hart moet zijn en
   dat de kaart nog te strak en waterpas is; hij koos wat de volgende sessie eerst doet (vraag 29).
+- In de vijfde sessie: de schets voor de brink, op een pagina voor Marcel (vraag 30).
 
-**Loopt nu:** niets. Stap 2 van 3b, mensen worden poppetjes, is af (26 sep): iedereen die in de balk
-telt, is een poppetje met een naam, een huis en een gezin; wie werkt, loopt naar zijn werk; iedereen
-volgt het ritme van de dag; een nieuw gezin komt over de weg binnen, wie wegtrekt loopt de weg af, en
-wie sterft heeft een naam; en werk telt in uren, met de weg erheen eraf (`spel.md`, "Mensen worden
-poppetjes", Zo werkt het nu). Onderweg is hersteld wat Marcel op de eerste beelden zag (mensen
-verdwenen in één klap bij de deur, en leken op de daken te staan), en kwamen er afwisseling in wat je
-bouwt en een nieuw gehucht rond het plein (vraag 28). **Het volgende** (Marcel koos het, vraag 29):
-**eerst de brink als open hart,** een vierde versie van het gehucht (begin met een schets voor Marcel),
-**dan ronde 4b van de huizenbouwer,** naar voren gehaald, **en dan de herberg.** `npm test`: 482/482.
+**Loopt nu: de schets voor de brink** (26 sep, vijfde sessie). De pagina "De brink als hart"
+(https://claude.ai/artifact/NnMfi4QPWV8ct2ZtNjewud) laat de vierde versie van het gehucht zien: een
+open brink van gras in het midden, de dorpsstraat met de huizen erachter, en de es, de weide en de
+heide ervoor, zodat geen dak de brink afdekt. Er is nog niets gebouwd; het wacht op Marcel (vraag 30).
+De indeling staat in `gereedschap/tiled/gehucht-v4-schets.json`, want de schets kwam uit een los
+tekenscript. **Daarna** (Marcel koos het, vraag 29): de brink bouwen, dan ronde 4b van de
+huizenbouwer, en dan de herberg. Stap 2 van 3b, mensen worden poppetjes, is af (26 sep; `spel.md`,
+"Mensen worden poppetjes", Zo werkt het nu). `npm test`: 482/482.
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -58,9 +58,9 @@ voorstel van Claude, en daar gaat vraag 26 over.
    versie van het gehucht (`gereedschap/tiled/maak-gehucht.cjs`). Een open brink van gras met oude
    eiken, onregelmatig van vorm, met de huizen eromheen op verschillende afstanden en niet in rijen, en
    wegen die slingeren (`beeld.md`, "Ook de kaart is niet waterpas"; `spel.md`, bij het plein). Begin
-   met een schets voor Marcel, zoals bij de derde versie. Klaar als: de brink is de grootste open plek
-   van het gehucht, er staat geen rechte rij huizen meer, en de akkers, de weide en de heide zijn even
-   groot gebleven, zodat de oogst en de balans niet verschuiven.
+   met een schets voor Marcel, zoals bij de derde versie; die staat er (vraag 30). Klaar als: de brink
+   is de grootste open plek van het gehucht, er staat geen rechte rij huizen meer, en de akkers, de
+   weide en de heide zijn even groot gebleven, zodat de oogst en de balans niet verschuiven.
 2. **Dan: ronde 4b van de huizenbouwer** (3b, stap 4; naar voren gehaald, vraag 29): elk huis in elk
    materiaal en elke vorm, niet waterpas (`beeld.md`, "De huizenbouwer op ronde vormen"), en ook een
    kwartslag gedraaid of gespiegeld, zodat een boerderij met de zijkant naar de brink kan staan. Zwaar
@@ -168,6 +168,12 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     kaart; dat staat er nu bij ("Ook de kaart is niet waterpas"). Voorstel van Claude: eerst de brink
     (een vierde versie van het gehucht), dan ronde 4b van de huizenbouwer naar voren, dan de herberg.
     **Beantwoord (Marcel, 26 sep): "Brink, dan huizen".** En daarvoor een nieuwe sessie.
+30. **De brink als hart: de schets** (26 sep; https://claude.ai/artifact/NnMfi4QPWV8ct2ZtNjewud). Drie
+    vragen. (1) Is dit de richting: de brink in het midden, de dorpsstraat met de huizen erachter, en
+    de akkers, de weide en de heide ervoor? (2) Een dobbe, een drinkpoel voor het vee, op de brink?
+    Voorstel: ja, klein en aan de voorkant. (3) Mag er op de brink gebouwd worden? Nu kan het overal.
+    Voorstel: nee, de brink is van het dorp (in Drenthe van de marke); het bouwmenu zegt het, en later
+    kan het een keur worden.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
