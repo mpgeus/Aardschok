@@ -60,9 +60,42 @@ test('staatVoorGebouw beslist per tegel welke ervóór liggen en welke erachter,
   // Marcels geval: recht ten zuiden staat een wezen ervóór, terwijl zijn eigen som (11 + 18 = 29)
   // onder de vóórste hoek van diepteVan blijft (34) — precies de tegenstrijdigheid die de fout
   // was: de tekenvolgorde zei "erachter" (lagere som) en de doorkijk zei "ervóór". Vandaar dat de
-  // tekenvolgorde nu ook staatVoorGebouw vraagt (vergelijkDiepte in js/tekenen.js), niet meer de
+  // tekenvolgorde nu ook staatVoorGebouw vraagt (T.tekenVolgorde in js/tekenen.js), niet meer de
   // som van diepteVan tegen een los wezen.
   assert.ok(11 + 18 < T.diepteVan(gebouw), 'de som van het wezen ligt onder diepteVan(gebouw)');
+});
+
+test('T.tekenVolgorde: wie achter een huis loopt, komt ervóór; wie ervoor loopt, erna; ook in een drukke straat', () => {
+  // Twee huizen zoals in het gehucht: dat van de schout (x 21..26, y 21..28) en daarachter, aan de
+  // overkant van een steegje van één tegel, een boerderij (x 20..25, y 30..37).
+  const schout = { x: 21, y: 21, beslaat: [6, 8] };
+  const boerderij = { x: 20, y: 30, beslaat: [6, 8] };
+  const item = (v) => ({ d: T.diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: v, naam: 'huis' + v.x });
+  const los = (x, y, l, naam) => ({ d: x + y, l, punt: { x, y }, naam });
+  // Veel dingen door elkaar: tot 26 sep zette een vergelijking per paar hier iemand op het dak. Niets
+  // staat in een huis: daar kan in het spel ook niets staan.
+  const binnen = (x, y) => [schout, boerderij].some((v) => x >= v.x && x < v.x + v.beslaat[0] && y >= v.y && y < v.y + v.beslaat[1]);
+  const lijst = [item(boerderij), item(schout)];
+  for (let x = 14; x <= 34; x++) for (const y of [18, 29, 38]) lijst.push(los(x, y, 2, `wezen ${x},${y}`));
+  for (let i = 0; i < 60; i++) {
+    const x = 10 + (i * 7) % 30;
+    const y = 12 + (i * 11) % 30;
+    if (!binnen(x, y)) lijst.push(los(x, y, 1, `boom ${i}`));
+  }
+  const volgorde = T.tekenVolgorde(lijst.slice().reverse());
+  const plek = (naam) => volgorde.findIndex((it) => it.naam === naam);
+  // Wat op dezelfde schuine rijen staat als het huis, en het dus op het scherm kan overlappen.
+  const rij = (it, v) => it.punt.x - it.punt.y >= v.x - (v.y + v.beslaat[1] - 1) && it.punt.x - it.punt.y <= v.x + v.beslaat[0] - 1 - v.y;
+  for (const v of [schout, boerderij]) {
+    for (const it of volgorde) {
+      if (it.gebouw || !rij(it, v)) continue;
+      const voor = T.staatVoorGebouw(it.punt.x, it.punt.y, v);
+      assert.equal(plek(it.naam) > plek('huis' + v.x), voor, `${it.naam} ${voor ? 'na' : 'vóór'} het huis op ${v.x},${v.y}`);
+    }
+  }
+  assert.ok(plek('huis21') < plek('huis20'), 'het huis van de schout ligt achter de boerderij');
+  assert.ok(plek('wezen 24,29') < plek('huis20'), 'wie in het steegje staat, verdwijnt achter de boerderij');
+  assert.ok(plek('wezen 24,29') > plek('huis21'), 'en staat vóór het huis van de schout');
 });
 
 // ---------------------------------------------------------------- de overgang

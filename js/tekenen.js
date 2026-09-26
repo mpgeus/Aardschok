@@ -181,7 +181,7 @@
       const k = T.kamerVan(w, v.x, v.y);
       const helder = k && inBeeld(k.id) ? 1 : GEDIMD;
       // Een gebouw (breder of dieper dan één tegel) krijgt `gebouw` mee: alleen dan is één
-      // scalair dieptegetal niet genoeg en beslist vergelijkDiepte per paar (zie hieronder).
+      // scalair dieptegetal niet genoeg, en zoekt tekenVolgorde zijn plek (zie hieronder).
       const groot = v.beslaat && (v.beslaat[0] > 1 || v.beslaat[1] > 1);
       lijst.push({ d: diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: groot ? v : undefined, f: () => tekenVoorwerp(ctx, S, v, helder) });
     }
@@ -262,8 +262,7 @@
       lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, punt: { x: e.tx, y: e.ty }, f: () => tekenWezen(ctx, S, e) });
       if (e === aanDePaal) lijst.push({ d: e.x + e.y, l: 2.5, punt: { x: e.tx, y: e.ty }, f: () => tekenHalsijzer(ctx, e) });
     }
-    lijst.sort((a, b) => vergelijkDiepte(a, b) || a.l - b.l);
-    for (const item of lijst) item.f();
+    for (const item of tekenVolgorde(lijst)) item.f();
     ctx.restore();
 
     // De nacht valt over de wereld, maar niet over de zwevende teksten: die komen erna, met dezelfde
@@ -387,15 +386,40 @@
     return x > v.x + b[0] - 1 || y > v.y + b[1] - 1;
   }
 
-  // De sortering van de tekenlijst: voor twee gewone dingen (twee wezens, twee losse voorwerpen)
-  // blijft de oude som `x + y` de maat, precies als voorheen. Draagt precies één kant `gebouw`
-  // (een voet groter dan één tegel), dan beslist staatVoorGebouw per paar in plaats van twee
-  // sommen tegen elkaar te leggen — twee gebouwen tegen elkaar (zeldzaam, komt in dit spel niet
-  // voor) vallen terug op de oude som.
-  function vergelijkDiepte(a, b) {
-    if (a.gebouw && !b.gebouw) return staatVoorGebouw(b.punt.x, b.punt.y, a.gebouw) ? -1 : 1;
-    if (b.gebouw && !a.gebouw) return staatVoorGebouw(a.punt.x, a.punt.y, b.gebouw) ? 1 : -1;
-    return a.d - b.d;
+  // De tekenlijst op volgorde, van achter naar voor. Gewone dingen (wezens, bomen, het graan) gaan
+  // op de oude som `x + y`, en bij gelijke som op hun laag `l`. Een gebouw (`gebouw`: een voet
+  // groter dan één tegel) komt daartussen op de plek die klopt voor alles wat er op het scherm mee
+  // overlapt, dus op dezelfde schuine rijen x − y: ná wat erachter staat, vóór wat ervóór staat
+  // (staatVoorGebouw). Wat er niet mee overlapt, kan het niet bedekken, en telt dus niet mee.
+  //
+  // Tot 26 sep deed één sort dat met een vergelijking per paar (een huis tegen een wezen per paar,
+  // twee wezens op de som), maar zo'n vergelijking is niet eenduidig, en dan zet het sorteren soms
+  // iets verkeerd: iemand die achter een huis liep, stond dan bovenop het dak. Met vijf boeren zag je
+  // dat bijna nooit; met het hele dorp op straat (js/bewoners.js) steeds. Twee gebouwen die elkaar
+  // overlappen, gaan op hun som: het achterste eerst.
+  T.tekenVolgorde = tekenVolgorde;
+  function tekenVolgorde(lijst) {
+    const volgorde = lijst.filter((it) => !it.gebouw).sort((a, b) => a.d - b.d || a.l - b.l);
+    const gebouwen = lijst.filter((it) => it.gebouw).sort((a, b) => a.d - b.d);
+    for (const g of gebouwen) {
+      const v = g.gebouw;
+      const b = v.beslaat || [1, 1];
+      // De schuine rijen die het gebouw beslaat, met één erbij aan elke kant voor de breedte van een
+      // figuur.
+      const links = v.x - (v.y + b[1] - 1) - 1;
+      const rechts = v.x + b[0] - 1 - v.y + 1;
+      let laatsteErachter = -1;
+      let eersteErvoor = volgorde.length;
+      for (let i = 0; i < volgorde.length; i++) {
+        const it = volgorde[i];
+        const rij = it.punt.x - it.punt.y;
+        if (rij < links || rij > rechts) continue;
+        if (!it.gebouw && staatVoorGebouw(it.punt.x, it.punt.y, v)) eersteErvoor = Math.min(eersteErvoor, i);
+        else laatsteErachter = i;
+      }
+      volgorde.splice(Math.min(laatsteErachter + 1, eersteErvoor), 0, g);
+    }
+    return volgorde;
   }
 
   // ---------------------------------------------------------------- doorkijk
