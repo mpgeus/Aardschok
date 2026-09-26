@@ -9,6 +9,14 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een huis groeit gratis, en tot steen** (26 sep). Na 30 tevreden dagen wordt een hut een huis en
+  een huis een stenen huis (`js/behoeften.js`), zonder materiaal, ook in het gehucht, terwijl het
+  stenen huis bij de trede stad hoort. Het wordt een andere tekening met een andere voet (5×7, 7×5,
+  6×8); past die niet, dan wacht het huis voor altijd. Een voorstel om het anders te doen staat in
+  `spel.md`, "Een dorp dat leeft en groeit".
+- **Zolang de inner of de heer er is, staat de kalender stil** (26 sep), omdat meelopen anders weken
+  kost: een dag duurt 2,5 seconde. Dat wringt met een dagritme en met de nacht (punt 11); zie
+  hetzelfde voorstel, vraag 14.
 - **De brink ligt achter twee daken** (24 sep). Vanuit de camera staan het huis van de schout en de
   boerderij van boer 3 vóór de brink. De heer, de marskramer, de schandpaal en wie eraan staat,
   vallen daardoor grotendeels achter een dak. De schout zie je door een kijkgat, de rest niet. Marcel

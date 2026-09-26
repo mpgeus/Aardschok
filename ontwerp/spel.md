@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 25 sep 2026)
+## Waar staat wat (bijgewerkt 26 sep 2026)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -26,6 +26,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep) | 6a |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | besloten, nog niet gebouwd | 6c |
+| Een dorp dat leeft en groeit | voorstel (26 sep): de dag, poppetjes, zelf bouwen, paarden; wacht op Marcel | 11, 13, 14 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
@@ -1271,6 +1272,227 @@ Nog open, voor als punt 6c gebouwd wordt (vragen van Claude):
 - De keienraper: een gebouw aan de rand van de heide of de akkers, en hoeveel keien levert ontginnen?
 - Tekenwerk: de kinderkopjes (Marcel, 21 sep, `beeld.md`), een platgelopen paadje, en modder.
 
+## Een dorp dat leeft en groeit (Marcel, 26 sep 2026)
+
+**Zo staat het nu** (26 sep): een voorstel van Claude. Er is niets besloten en niets gebouwd. Het raakt
+punt 11 (de nacht), 13 (de militie) en 14 (de treden), en de huizenbouwer (ronde 4b). De vragen
+staan onderaan, en met een nummer in de werklijst (14 tot en met 19).
+
+**Hoe het zo kwam:**
+
+> Een dorp moet groeien en huizen moeten er organisch bijgebouwd worden. Maar ook tavernes, kleine
+> zaken waar de [lokale] mensen zelf langs gaan. Het dorp moet echt leven, mensen hebben een
+> dagelijkse routine. Ze zijn niet 24/7 aan het maaien of hun werk aan het doen. We hebben ook nog
+> een paardenstal nodig, of meester. Voor ruiters, ridders uiteindelijk etc. Ook een wapenmaker dat
+> soort dingen. Een dorp groeit uiteindelijk naar stad. De gebouwen worden dan 'geupgraded' naar
+> stenen varianten, of combinaties van materialen die hoogwaardiger / duurder zijn.
+
+**Wat er al is:**
+- Mensen zijn een getal in de balk (25 bij het begin). Alleen de vijf boeren lopen rond. Een gebouw
+  vraagt handen, maar die zie je niet.
+- Een huis groeit al door, van hut via huis tot stenen huis, als het hele dorp 30 dagen op rij 70%
+  tevreden is (`js/behoeften.js`). Dat kost niets, en het huis wordt een andere tekening met een
+  andere voet: een hut van 5×7 tegels wordt een huis van 7×5, en dan een stenen huis van 6×8. Past
+  dat niet, dan wacht het huis voor altijd. Zo kan een huis in het eerste jaar al een stenen huis
+  worden, zonder één steen, terwijl het stenen huis bij de trede stad hoort.
+- De herberg, de bakkerij, de brouwerij, de markt en de wapenmaker (verdacht) staan al in
+  `T.GEBOUWEN`, maar alleen het gehucht is te bouwen. Een paard of een stal staat nergens.
+- De huizenbouwer maakt elk huis in elk materiaal: vlechtwerk, planken, blokhut, vakwerk en veldsteen,
+  onder riet, spanen, leien of pannen (`beeld.md`). In het spel staan die huizen nog niet (ronde 4b).
+
+### Eerst: een dag waarin je kunt leven
+
+Een dag duurt nu 2,5 seconde bij 1x: een jaar duurt een kwartier, en bij 3x vijf minuten. Een mens
+loopt zo'n anderhalve tegel per seconde, dus nog geen vier tegels per dag. Klaas doet elf dagen over
+de weg naar zijn weide ("Straten en paden"). Naar de herberg en terug zou een week kosten, en een
+nacht zou een seconde duren.
+
+Het spel liep hier al twee keer tegenaan: zolang de inner rondloopt en zolang de heer op de brink
+wacht, staat de kalender stil (`js/inner.js`, `js/heer.js`), omdat meelopen anders weken kost. Voor
+een dagritme helpt stilzetten niet. Dan moet de tijd juist lopen, in een tempo waarin je kunt lopen.
+De nacht (punt 11) vraagt hetzelfde: een nacht die lang genoeg is om iets te verstoppen.
+
+Drie manieren:
+
+- **A. De dag wordt een echte dag** (voorstel van Claude). Een dag duurt bijvoorbeeld een minuut bij
+  1x, met ochtend, werk, avond en nacht. Om het jaar speelbaar te houden, krijgt een maand minder
+  dagen, bijvoorbeeld vijf in plaats van dertig. Een jaar duurt dan een uur bij 1x, twintig minuten
+  bij 3x, en zes minuten in een nieuwe snelste stand (10x): even snel als nu bij 3x.
+  - Wat nu per dag gaat (eten, werk, groei, bouwtijd), gaat mee met één omrekening, zodat een maand
+    evenveel oplevert als nu.
+  - De inner en de heer hoeven de tijd niet meer stil te zetten: het bezoek van de inner duurt een
+    dag, en Sint-Maarten is een dag.
+  - Alles loopt mee met de snelheid: bij 3x loopt iedereen drie keer zo snel, ook de schout. Zo doen
+    de meeste bouwspellen het. Nu loopt de schout los van de kalender.
+  - Wat het kost: één grote maar rechttoe-rechtaan omzetting door alle regels en toetsen. Die wordt
+    elke week duurder, want elk nieuw onderdeel brengt eigen getallen per dag mee.
+- **B. Een eigen klok voor de zon,** zoals in Cities: Skylines. De kalender blijft zoals hij is, en
+  het licht en de mensen volgen een eigen, tragere klok van bijvoorbeeld anderhalve minuut. Dat is
+  goedkoop, en er verandert niets aan de getallen. Maar dan gaat de zon één keer per maand op, en de
+  inner en de heer zetten de tijd nog steeds stil.
+- **C. Een ritme zonder zon.** Geen dag en nacht: iedereen wisselt werk, rust, herberg en huis af naar
+  eigen behoefte. Dat is het goedkoopst, en het dorp leeft. Maar er is geen nacht, en die heeft punt
+  11 toch nodig.
+
+**Waarom A:** het lost drie dingen in één keer op: het dagritme, de nacht, en het stilzetten bij de
+inner en de heer. En de schout krijgt een maat: een tocht door het dorp kost een uur, geen week. Hoe
+lang een dag duurt en hoeveel dagen een maand heeft, komt in de werkbank, zodat het te voelen is.
+
+### Wie wanneer waar is
+
+Een voorstel voor de dag:
+- **Nacht:** iedereen binnen, en de straten leeg. Alleen de nachtwacht loopt (als er een wachthuis
+  is), en wie iets te verbergen heeft. Hier speelt punt 11.
+- **Ochtend:** op, water halen bij de put, het vee, en naar het werk.
+- **Overdag:** werken, met om twaalf uur een schaft: brood op de akker, of thuis.
+- **Avond:** naar huis om te eten, of naar de herberg. Kinderen spelen op de brink.
+- **Een rustdag:** niemand werkt, en wie vroom is, gaat naar de kapel.
+- **Het seizoen schuift mee:** in de zomer lange dagen (in de oogst werkt iedereen tot het donker),
+  in de winter korte, met meer tijd bij het vuur en in de herberg. De winternacht is lang, en dan is
+  smokkelen het makkelijkst.
+- Is de schout thuis en valt er niets te doen, dan gaat de nacht vanzelf sneller.
+
+**Het karakter zie je aan het ritme.** De tien karakters (`js/mensen.js`) staan nu alleen in een
+gesprek en een getal. In een dagritme zie je ze: de drinker zit elke avond in de herberg en begint 's
+ochtends later, de vrome gaat drie keer per dag naar de kapel, de roddelaar staat bij de put, en de
+zanger zingt 's avonds in de schuur terwijl de buurt komt luisteren. De nieuwkomer loopt 's avonds
+het bos in, en niemand weet waarom.
+
+**Een ritme is informatie** (inzicht van Claude). Als iedereen een vast ritme heeft, valt afwijken
+op: de smidse die om middernacht gloeit, een boer die bij het eerste licht met een zak naar het bos
+loopt, de roddelaar die 's avonds bij de inner aanklopt. Dan speelt de kern van het spel twee kanten
+op: de inner kijkt naar het dorp, en jij kijkt ook. Een verklikker (punt 10) vind je door te kijken
+wie waar heen loopt, en wie jou 's nachts ziet lopen, is een getuige; daar is de avondklok voor (een
+keur uit "De kern voor het tweede proefje"). Het idee "Eén dag" uit de rondes van 23 sep
+(`verhaal.md`: "tachtig mensen met een dagindeling, en je houdt alleen wat je weet") komt zo terug,
+als een laag van dit spel.
+
+**Het ritme tekent de straten.** Paadjes ontstaan waar veel gelopen wordt ("Straten en paden",
+punt 6c). Met vijf boeren slijt er weinig. Als iedereen elke dag naar zijn werk, de put en de
+herberg loopt, tekent het dorp zijn eigen stratenplan, en de huizen groeien er vanzelf langs (zie
+hieronder).
+
+### Mensen worden poppetjes
+
+- Wie werkt, is een poppetje met een huis en een werkplek: de handen van een gebouw lopen er 's
+  ochtends heen en 's avonds terug. Kinderen en ouden lopen overdag rond als menigte.
+- Het getal in de balk blijft de waarheid; de poppetjes zijn wie het zijn. Een gezin van vier heeft
+  één of twee werkers.
+- Wat een gebouw maakt, telt in de uren dat er echt gewerkt wordt. Wie ver van zijn werk woont, is
+  langer onderweg, en de drinker begint laat. Zo telt waar een huis staat.
+- Honderden poppetjes kan: de kaart is 50 bij 50 tegels, en een pad zoeken kost weinig. Bij een stad
+  kijken we of alleen wie in beeld is, echt hoeft te lopen.
+
+### Zaken waar de mensen zelf heen gaan
+
+- De herberg, de bakker, de smid (voor gereedschap), de kapel, en later de markt. De mensen gaan er in
+  hun vrije tijd heen, en dat bezoek is wat de zaak doet: in de herberg gaat bier op, bij de bakker
+  brood.
+- **Een huis groeit door wat zijn bewoners kunnen bereiken,** niet door de tevredenheid van het hele
+  dorp. Wie dicht bij de put, de kapel en de herberg woont, krijgt een beter huis; wie aan de rand
+  woont, blijft in zijn hut. Zo krijgt het dorp vanzelf een rijk midden en een arme rand, en doet het
+  ertoe waar je de herberg zet. Bereiken gaat in looptijd, dus een pad brengt de herberg dichterbij.
+  Caesar III en Anno doen het zo; bij ons lopen de mensen er zelf heen.
+- **De marskramer blijft:** is het dorp groot genoeg, dan zet hij een winkel aan de brink, en dan is
+  hij de kramer. Zo komt de eerste winkel vanzelf, uit wat er al is. Hij vertelt de inner nu al wat
+  hij je betaalde; als hij blijft, woont die bron in het dorp.
+- **De herberg is ook voor de schout:** nieuws, de marskramer die er slaapt, en wie met de inner
+  praat. De herbergierster staat al in `js/mensen.js`. Achter de herberg komt de eerste stal (zie
+  "Paarden").
+- De heer heft op bier (dat staat al bij de brouwerij), en een volle herberg ziet de inner ook.
+
+### Het dorp bouwt zelf
+
+- **Een nieuw gezin bouwt zijn eigen huis.** Jij zet geen huizen meer neer, maar wijst **bouwgrond**
+  aan: land waar gebouwd mag worden, zoals de erven in Manor Lords. Het gezin kiest er een erf, dicht
+  bij zijn werk en aan een pad, en zet er eerst een hut op. Werkplaatsen en wat van het hele dorp is
+  (de put, de kapel, de herberg), zet jij neer, zoals nu.
+- **Een erf is meteen zo groot als het huis ooit wordt,** met plaats voor een moestuin. Dan kan een
+  huis groeien zonder dat er toevallig ruimte omheen moet zijn.
+- **Het materiaal komt uit de voorraad.** Ligt er geen hout, dan blijft het bij een bouwplaats. Wat je
+  verstopt hebt, kan niemand gebruiken.
+- **In Drenthe besliste de marke** (de boeren met land, samen) of een nieuwkomer een hut op de
+  gemeenschappelijke grond mocht zetten, meestal aan de rand van de heide. Die nieuwkomers zijn de
+  keuters, de tweede groep uit "De kern voor het tweede proefje", en de keur "Vreemden" hoort erbij.
+  Als de groepen komen (punt 9), mopperen de boeren als jij hun meent tot bouwgrond maakt.
+
+### Beter bouwen: hetzelfde huis in duurder materiaal
+
+- Nu wordt een groeiend huis een andere tekening. Voorstel: het blijft hetzelfde huis, met dezelfde
+  vorm op dezelfde plek, en krijgt stap voor stap beter materiaal. Je herkent het huis van Klaas, nu
+  met pannen. De huizenbouwer kan dat al, want bij hem is materiaal een keuze naast de vorm.
+- Een ladder, bijvoorbeeld:
+  1. vlechtwerk met leem, onder riet: de hut van een keuter;
+  2. vakwerk onder riet;
+  3. vakwerk op een voet van veldsteen, met een stenen schoorsteen;
+  4. een tweede laag die overkraagt, of spanen of leien op het dak;
+  5. baksteen onder pannen: de stad.
+- Elke stap kost materiaal (planken, keien, bakstenen, pannen), en dus het werk van wie het maakt: de
+  timmerman, de keienraper, de steenbakkerij. De trede zet de stappen vrij: baksteen en pannen pas als
+  er een steenbakkerij is, en die komt met het marktrecht (punt 14).
+- Werkplaatsen groeien ook: de smidse, de herberg, en de kapel die een kerk met een toren wordt.
+
+**Groeien werkt tegen arm lijken** (inzicht van Claude). De inner kijkt naar "pannen in plaats van
+riet" ("De kern voor het tweede proefje"), en de heer vraagt per huis. Een dorp dat vanzelf rijker
+wordt, wordt dus vanzelf duurder. De schout moet kiezen:
+- laten groeien, en betalen;
+- een keur tegen pannen en steen (punt 9): het dorp blijft arm om te zien, en de mensen mopperen;
+- of wachten op een brand. Riet brandt (punt 8), en na grote branden verplichtten steden harde daken
+  van pannen of leien, zoals Amsterdam na de brand van 1452. Na een brand heb je een smoes voor de
+  inner: pannen moesten wel.
+
+### Paarden: de stal en de stalmeester
+
+- Een paardenstal met een stalmeester (een nieuwe persoon in `js/mensen.js`), en een hoefsmid bij de
+  smidse. Paarden eten haver, dus er komt een gewas bij.
+- Wat paarden geven:
+  - **De schout rijdt.** In een dorp dat een stad wordt, is lopen te traag; te paard ga je drie keer
+    zo snel. Dat beantwoordt een deel van "Een poppetje en honderden mensen" (onder Open).
+  - Een ploegpaard: een boer met een paard bewerkt meer land.
+  - Een kar: de voerman met stenen (punt 14), en je eigen handel.
+  - Ruiters voor de militie (punt 13) en de opstand (punt 16).
+- Wat de heer ervan vindt: een paard is rijkdom die niet in een kelder past. En hij neemt het beste:
+  de keurmede was het recht van de heer op het beste stuk vee als er iemand stierf. Voor de heervaart
+  ("Lords of the Realm 2 als voorbeeld", idee 1) wil hij mannen én paarden.
+- **Ridders:** in 1323 was een ridder een edelman, geen dorpeling. Ridders kunnen de mannen van de heer
+  zijn (die komen als je opstaat), roofridders (een reden voor een militie), of later je eigen
+  ruiters, als de stad vrij is. Dat is een vraag aan Marcel.
+
+### De wapenmaker, en wat erbij hoort
+
+- De wapenmaker staat al in `T.GEBOUWEN`: verdacht, trede dorp, hout en ijzer tot wapens. Erbij,
+  voorstel: een boogmaker (bogen en pijlen "voor de jacht": een goede smoes), een zadelmaker bij de
+  stal, en later een harnasmaker.
+- Het dagritme maakt hem spannend: overdag maakt de smid hoefijzers en ploegijzers, 's nachts wapens.
+  En een smidse die om middernacht gloeit, ziet iedereen die wakker is.
+
+### Van dorp tot stad
+
+Dat is punt 14 (de treden). Met het bovenstaande zie je de stad groeien, in plaats van dat hij
+vrijkomt: een rijk midden van baksteen en pannen, een arme rand van hutten, straten waar gelopen
+wordt, en de markt op de brink.
+
+### In welke volgorde (voorstel)
+
+1. **De dag** (A, B of C), met licht: ochtend, avond en nacht in beeld, en de boeren die 's avonds
+   naar huis gaan en 's nachts binnen zijn.
+2. **Mensen worden poppetjes:** de handen lopen naar hun werk en terug, en overdag is er menigte.
+3. **De herberg en de kleine zaken,** en een huis dat groeit door wat zijn bewoners bereiken.
+4. **Het dorp bouwt zelf:** bouwgrond, erven, en materiaal uit de voorraad. Daarvoor moeten de huizen
+   van de huizenbouwer in het spel staan (ronde 4b), elk in elke stap van de ladder gerenderd.
+5. **De stal, de hoefsmid en de wapenmaker,** samen met de militie (punt 13).
+
+### Vragen aan Marcel (in de werklijst 14 tot en met 19)
+
+14. De dag: A, B of C? En hoe lang mag een jaar duren, bij 1x en in de snelste stand?
+15. Wanneer: nu, vóór verstoppen deel 1b (de dag raakt alle getallen, en dat worden er elke week
+    meer), of na punt 6?
+16. Het dorp bouwt zelf: wijs jij alleen bouwgrond aan, of zet je ook nog zelf huizen neer?
+17. Groeien tegen arm lijken: mag het dorp vanzelf rijker worden (en duurder bij de heer), met een keur
+    om het tegen te houden?
+18. Wie zijn de ridders: de mannen van de heer, roofridders, of later je eigen ruiters?
+19. Wat hoort bij de wapenmaker: een boogmaker, een zadelmaker, een harnasmaker, of iets anders?
+
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
 **Zo staat het nu** (25 sep): het plan voor alles, besloten op 23 sep ("Ik wil het allemaal"). Van
@@ -1480,7 +1702,9 @@ en over de heervaart [Wikipedia](https://nl.wikipedia.org/wiki/Heervaart).
   gebouwen, en jij loopt rond voor wat persoonlijk is (ruzies, straffen, nieuwkomers, de inner
   rondleiden, 's nachts iets verstoppen). Misschien ook: waar de schout loopt, wordt harder gewerkt.
   De politiek beantwoordt de vraag half: met vijf boeren praat je met ieder, met vijfhonderd praat
-  je met wie voor hen spreekt, en bestuur je met keuren.
+  je met wie voor hen spreekt, en bestuur je met keuren. Op 26 sep kwamen er twee halve antwoorden
+  bij ("Een dorp dat leeft en groeit"): het dorp bouwt zijn eigen huizen, en de schout rijdt te
+  paard.
 - Hoe ver gaat de politiek: keuren, schepenen en groepen zoals hierboven, of ook verkiezingen,
   partijen en intriges aan het hof van de heer?
 - Goederen, groepen en keuren: een eerste voorstel staat hierboven ("De kern voor het tweede proefje"),

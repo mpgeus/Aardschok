@@ -34,6 +34,14 @@ sinds het eind van de sessie ook in `main` (Marcel: "Push"). Begin de volgende s
 vanaf `main`. Hoe een eigen branch en `main` samengaan, staat sinds 26 sep in `CLAUDE.md`, onder
 Git.
 
+**Een tweede sessie van 26 sep** (branch `claude/village-growth-routines-vlr0gq`, nog niet in
+`main`): Marcel kwam met een nieuwe wens. Het dorp moet leven en groeien: een dagritme, een herberg
+en kleine zaken waar de mensen zelf heen gaan, huizen die het dorp zelf bouwt en die beter worden
+tot steen, een paardenstal en een wapenmaker. Claude schreef er een voorstel voor, zonder te bouwen
+(`spel.md`, "Een dorp dat leeft en groeit"). Het belangrijkste: een dag duurt nu 2,5 seconde, te kort
+om in te leven, dus eerst moet de dag langer. De keuzes staan hieronder als vraag 14 tot en met 19.
+Of "Volgende" hieronder blijft, hangt af van vraag 15.
+
 **Loopt nu:** niets.
 
 **Volgende: Verstoppen, deel 1b: ook onder de 40% een risico** (Marcel koos op 25 sep; `spel.md`,
@@ -73,6 +81,18 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     monster slaan dat het dichtst bij staat? (`opmerkingen.md`, "Het gevecht na de leeftijd".)
 13. Een eigen figuur voor de schout, zodat je jezelf in een menigte terugvindt? (Voorstel van
     Claude, 26 sep; `opmerkingen.md`, onder de voorstellen.)
+
+*Een dorp dat leeft en groeit* (26 sep; `spel.md`, "Een dorp dat leeft en groeit"):
+14. De dag: A (een dag van een minuut, vijf dagen per maand; een jaar een uur bij 1x en zes minuten
+    bij 10x), B (een eigen klok voor de zon) of C (een ritme zonder zon)? En hoe lang mag een jaar
+    duren? Claude raadt A aan.
+15. Wanneer: nu, vóór verstoppen deel 1b (de dag raakt alle getallen, en dat worden er elke week
+    meer), of na punt 6?
+16. Het dorp bouwt zelf: wijs jij alleen bouwgrond aan, of zet je ook nog zelf huizen neer?
+17. Groeien tegen arm lijken: mag het dorp vanzelf rijker worden (en duurder bij de heer), met een keur
+    om het tegen te houden?
+18. Wie zijn de ridders: de mannen van de heer, roofridders, of later je eigen ruiters?
+19. Wat hoort bij de wapenmaker: een boogmaker, een zadelmaker, een harnasmaker, of iets anders?
 
 *Spelen, en zeggen hoe het voelt:*
 - Het gehucht na de namen (26 sep): Marcel zou het na 7e nog eens openen. Het hernoemen veranderde
