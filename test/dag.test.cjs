@@ -145,14 +145,39 @@ test('in het gehucht gaan de vijf boeren \'s avonds naar huis en \'s nachts naar
   for (const e of boeren(S)) assert.ok(!e.binnen, `${e.wie} is weer buiten`);
 });
 
-test('maaien gaat op de tijd van de wereld: op 1× en op 10× even veel tegels per dag', () => {
-  const tel = (S) => S.wereld.akkers.reduce((n, a) => n + (a.geoogst ? a.geoogst.size : 0) + (a.gehooid ? a.gehooid.size : 0), 0);
-  const traag = gehucht(bijUur(HOOI, 5), 1);
-  loopTot(traag, bijUur(HOOI + 2, 5));
-  const snel = gehucht(bijUur(HOOI, 5), 10);
-  loopTot(snel, bijUur(HOOI + 2, 5));
-  assert.ok(tel(traag) > 0, 'er is gemaaid');
-  assert.ok(Math.abs(tel(traag) - tel(snel)) <= 3, `1×: ${tel(traag)} tegels, 10×: ${tel(snel)}`);
+// Zonder dwalen en zonder lopen (hij staat op zijn akker, en een pad is meteen gelopen), zodat alleen
+// de klok telt. Tot 26 sep stond hier het hele gehucht, en dan scheelde het soms meer dan drie
+// tegels, omdat de boeren willekeurig dwalen: één keer op zo'n 35 rondes faalde de toets.
+function maaiDagen(snelheid, dagen) {
+  const akker = { x: 0, y: 0, b: 3, h: 3, huis: 'boer1', geoogst: new Set() };
+  const boer = { tx: 0, ty: 0, x: 0, y: 0, dood: false, pad: [], werkAkkers: [akker] };
+  const S = { wereld: { wezens: [boer], akkers: [akker] }, wereldTijd: 0, kalender: { dag: bijUur(HOOI, 0), snelheid }, voorraad: { graan: 0 } };
+  const echtPad = T.zoekPad;
+  T.zoekPad = (van, doel) => (van.x === doel.x && van.y === doel.y ? [] : [{ x: doel.x, y: doel.y }]);
+  try {
+    const dt = 0.1;
+    while (S.kalender.dag < HOOI + dagen) {
+      const dtW = dt * T.wereldFactor(S);
+      S.wereldTijd += dtW;
+      T.tikKalender(S, dt);
+      T.werkOogstBij(S, dtW);
+      if (boer.pad.length) {
+        boer.tx = boer.x = boer.pad[0].x;
+        boer.ty = boer.y = boer.pad[0].y;
+        boer.pad = [];
+      }
+    }
+  } finally {
+    T.zoekPad = echtPad;
+  }
+  return akker.geoogst.size;
+}
+
+test('maaien gaat op de tijd van de wereld: op 1× en op 10× precies even veel tegels', () => {
+  const traag = maaiDagen(1, 3);
+  assert.ok(traag >= 2, `in drie dagen maait hij een paar tegels (${traag})`);
+  assert.ok(traag <= 4, `maar niet veel meer dan één per werkdag (${traag})`);
+  assert.equal(maaiDagen(10, 3), traag, 'op 10× precies even veel');
 });
 
 test('\'s avonds stopt het maaien, en wat hij van een tegel al deed, blijft liggen tot de ochtend', () => {
