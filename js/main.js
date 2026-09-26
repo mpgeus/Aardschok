@@ -168,9 +168,12 @@
     const f = T.naarWereld(sx, sy);
     const x = Math.round(f.x);
     const y = Math.round(f.y);
-    S.bouwHover = { x, y, ok: T.gebouwPast(S, S.bouwSoort, x, y) };
+    // Past hij niet, dan zegt de muis waarom (op het plein wordt niet gebouwd), net als de klik.
+    const reden = T.waaromPastHetNiet(S, S.bouwSoort, x, y);
+    S.bouwHover = { x, y, ok: !reden, reden };
     canvas.style.cursor = 'crosshair';
-    T.ui.verbergTooltip();
+    if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
+    else T.ui.verbergTooltip();
     S.hover = null;
     S.handeling = null;
   }
@@ -306,7 +309,7 @@
       const soort = S.bouwSoort;
       const hover = S.bouwHover;
       if (!hover || !hover.ok) {
-        T.ui.bericht('Daar past het niet.', 'gevaar');
+        T.ui.bericht((hover && hover.reden) || 'Daar past het niet.', 'gevaar');
         return;
       }
       const r = T.plaatsGebouw(S, soort, hover.x, hover.y);

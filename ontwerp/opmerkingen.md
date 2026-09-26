@@ -56,12 +56,30 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     tijd staat stil, maar het lijkt of de knop niets doet. Misschien de gekozen knop anders laten
     oplichten zolang een venster openstaat.
 - **Het nieuwe gehucht, wat nog ruw is** (26 sep, na de derde versie van de kaart). Het grootste zag
-  Marcel zelf: het plein is een kleine rechthoek van zand, de gebouwen staan er te dicht omheen, en de
-  kaart is te strak en waterpas; het plein hoort een open hart te zijn (vraag 29 en 30, en punt 1 van
-  de volgorde in de werklijst). Verder: er lopen nog geen paden van de boerderijen naar het plein (die
-  komen met "Straten en paden", punt 6c: ze slijten waar gelopen wordt). Wat de speler zelf bouwt, kan
-  het plein afdekken; dat mag (Marcel, 26 sep: "Ik wil wel dat er huizen voor kunnen staan"), en het
-  kijkvenster laat zien wat erachter valt.
+  Marcel zelf: het plein was een kleine rechthoek van zand, met de gebouwen er te dicht omheen, en de
+  kaart was te strak en waterpas. Dat is sinds de vierde versie anders (werklijst, punt 1). Nog wel:
+  er lopen maar drie paden (van het plein naar de akker van Wouter, naar de hut en naar de deur van
+  Gerrit); de rest komt met "Straten en paden", punt 6c: ze slijten waar gelopen wordt. Wat de speler
+  zelf bouwt, kan het plein afdekken; dat mag (Marcel, 26 sep: "Ik wil wel dat er huizen voor kunnen
+  staan"), en het kijkvenster laat zien wat erachter valt.
+- **De vierde versie van het gehucht, wat opviel** (26 sep, bij het bouwen):
+  - Het nieuwe huis om het plein staat in de rekening van de heer: "2 × huis" in plaats van één, dus 2
+    goud per jaar meer (`T.GEBOUWEN.huis.heer`); de hutten tellen niet. En het heeft een kelder om in
+    te verstoppen, een zevende plek (een hut heeft er geen).
+  - Er is vanaf het begin plaats voor 11 mensen meer (36 plaatsen, 25 mensen), dus met genoeg graan
+    komt er op dag 20 al een gezin bij, en is het graan in het voorjaar wat eerder op. Zo gelaten
+    (`spel.md`, bij het plein); bijstellen na spelen.
+  - De vijf eiken op het plein zijn groot: ze dekken een deel van het plein af, en wie erachter speelt.
+    Misschien minder of kleinere bomen, of de doorkijk (die komt nu) ook voor bomen.
+  - De weg houdt een tegel vóór de brug op, want zand mag niet naast water liggen (er is geen
+    terreinset "zandpad over water"). Dat was in de derde versie ook zo.
+  - De brug was in de derde versie te kort: drie tegels over vier tegels water, en de oevertegel die
+    half in het water ligt, is vast. Je kon dus niet over de beek, en de strook erachter was niet te
+    bereiken (de keuring in `wereld.html` telde 357 tegels). Nu ligt de brug over het hele water; wat
+    overblijft (46 tegels), is gras achter de bomen van het bos.
+  - De herder loopt naar de heide een half uur (de zoon van Wouter, meestal) tot tweeënhalf uur (de zoon
+    van Gerrit, in één op de tien spellen). Dan is hij om half tien 's avonds nog onderweg.
+  - Alle huizen staan nog met hun voorkant naar het zuiden; gedraaid en gespiegeld komt met ronde 4b.
 - **De winter is hard:** zonder hout gaat het gehucht van 25 naar 2 mensen.
   `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel bijstellen als hij speelt.
 - **Honger valt in het voorjaar,** vlak vóór de oogst, want het zaaigraan gaat voor. Buiten de

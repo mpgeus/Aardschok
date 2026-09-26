@@ -111,9 +111,9 @@ test('een dier op een weide stapt alleen binnen de rechthoek, niet op een ander 
   const { S, veld } = gehucht();
   const w = S.wereld;
   for (const e of T.veeVan(S)) e.dood = true; // een lege weide om in te proeven
-  // Een smalle strook, twee bij veertien: met de oude straal rond het midden kon een dier maar vier
-  // tegels op; nu de hele strook.
-  const strook = veld('akker1');
+  // Een smalle strook, twee bij veertien (die van Wouter): met de oude straal rond het midden kon een
+  // dier maar vier tegels op; nu de hele strook.
+  const strook = veld('akker5');
   strook.bestemming = strook.plan = 'weide';
   const koe = T.zetOpWeide(T.maakDier('koe', strook.x, strook.y + 9, 3), strook);
   w.wezens.push(koe);
@@ -174,13 +174,14 @@ test('T.wegNaarWeide: de weg naar de dichtstbijzijnde vrije tegel, of null als h
   const w = S.wereld;
   const koe = T.veeVan(S).find((e) => e.dier === 'koe');
   assert.equal(T.wegNaarWeide(w, koe), null, 'het staat al op zijn weide');
-  const blok = veld('akker7');
-  T.zetOpWeide(koe, blok);
+  // De strook van Wouter, één tegel naast de weide: er staat niets tussen, dus de weg is recht.
+  const strook = veld('akker5');
+  T.zetOpWeide(koe, strook);
   const weg = T.wegNaarWeide(w, koe);
   assert.ok(weg && weg.length, 'een weg erheen');
   const eind = weg[weg.length - 1];
-  assert.ok(binnen({ tx: eind.x, ty: eind.y }, blok), `eindigt op ${eind.x},${eind.y}`);
-  // de dichtstbijzijnde: zo ver als de kortste afstand tot het blok
-  const afstanden = T.akkerTegels(blok).map((t) => T.afstand({ x: koe.tx, y: koe.ty }, t));
+  assert.ok(binnen({ tx: eind.x, ty: eind.y }, strook), `eindigt op ${eind.x},${eind.y}`);
+  // de dichtstbijzijnde: zo ver als de kortste afstand tot de strook
+  const afstanden = T.akkerTegels(strook).map((t) => T.afstand({ x: koe.tx, y: koe.ty }, t));
   assert.equal(weg.length, Math.min(...afstanden));
 });

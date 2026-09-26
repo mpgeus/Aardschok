@@ -1,180 +1,266 @@
 {
  "versie": 1,
  "proef": true,
- "uitleg": "De betekenis van kaarten/gehucht.tmj: de schout, de vijf boeren en hun akkers. Zie ontwerp/kaarten.md, \"Tiled tekent alleen nog de grond\". \"proef\": true omdat dit gehucht nog aan geen andere kaart vasthangt (ontwerp/werklijst.md); zodra er een echte aansluiting naar \"wereld\" komt, mag dat weer weg.",
+ "uitleg": "De betekenis van kaarten/gehucht.tmj: de schout, de vijf boeren en hun akkers, de huizen en wie erin woont, en het plein. Zie ontwerp/kaarten.md, \"Tiled tekent alleen nog de grond\". \"proef\": true omdat dit gehucht nog aan geen andere kaart vasthangt (ontwerp/werklijst.md); zodra er een echte aansluiting naar \"wereld\" komt, mag dat weer weg.",
  "beginVoorraad": {
   "hout": 40,
   "goud": 20,
   "graan": 60,
   "hooi": 100
  },
+ "beginBevolking": 25,
  "marskramer": {
-  "x": 31,
-  "y": 28
+  "x": 35,
+  "y": 37
  },
+ "plein": [
+  [
+   30.9,
+   47.8
+  ],
+  [
+   29.3,
+   44.7
+  ],
+  [
+   29.8,
+   41.7
+  ],
+  [
+   31.6,
+   38.5
+  ],
+  [
+   34.3,
+   35.5
+  ],
+  [
+   36.6,
+   32.6
+  ],
+  [
+   40.3,
+   30.9
+  ],
+  [
+   43.9,
+   31.2
+  ],
+  [
+   46.5,
+   32.9
+  ],
+  [
+   47.3,
+   36.3
+  ],
+  [
+   45.8,
+   40.4
+  ],
+  [
+   43.4,
+   44
+  ],
+  [
+   40,
+   46.5
+  ],
+  [
+   36.2,
+   48.6
+  ],
+  [
+   33.1,
+   49.2
+  ]
+ ],
  "dingen": [
   {
-   "x": 29,
-   "y": 23,
+   "x": 33,
+   "y": 34,
    "wezen": "schout"
   },
   {
-   "x": 17,
-   "y": 20,
+   "x": 13,
+   "y": 34,
    "wie": "boer1",
    "straal": 3,
    "huis": "boer1"
   },
   {
-   "x": 38,
-   "y": 16,
+   "x": 47,
+   "y": 19,
    "wie": "boer2",
    "straal": 3,
    "huis": "boer2"
   },
   {
-   "x": 48,
-   "y": 23,
+   "x": 56,
+   "y": 33,
    "wie": "boer3",
    "straal": 3,
    "huis": "boer3"
   },
   {
-   "x": 13,
-   "y": 32,
+   "x": 59,
+   "y": 46,
    "wie": "boer4",
    "straal": 3,
    "huis": "boer4"
   },
   {
-   "x": 20,
-   "y": 44,
+   "x": 32,
+   "y": 65,
    "wie": "boer5",
    "straal": 3,
    "huis": "boer5"
   },
   {
    "gebouw": "boerderij",
-   "x": 14,
-   "y": 11,
+   "x": 10,
+   "y": 25,
    "b": 7,
    "h": 9,
    "huis": "boer1"
   },
   {
    "gebouw": "boerderij",
-   "x": 34,
-   "y": 8,
+   "x": 43,
+   "y": 11,
    "b": 9,
    "h": 8,
    "huis": "boer2"
   },
   {
    "gebouw": "boerderij",
-   "x": 45,
-   "y": 14,
+   "x": 53,
+   "y": 24,
    "b": 6,
    "h": 9,
    "huis": "boer3"
   },
   {
    "gebouw": "boerderij",
-   "x": 10,
-   "y": 24,
+   "x": 56,
+   "y": 38,
    "b": 6,
    "h": 8,
    "huis": "boer4"
   },
   {
    "gebouw": "boerderij",
-   "x": 17,
-   "y": 35,
+   "x": 29,
+   "y": 56,
    "b": 6,
    "h": 9,
    "huis": "boer5"
   },
   {
    "gebouw": "huis",
-   "x": 26,
-   "y": 15,
+   "x": 30,
+   "y": 26,
    "b": 6,
    "h": 8,
    "huis": "schout"
   },
   {
+   "gebouw": "huis",
+   "x": 40,
+   "y": 25,
+   "b": 7,
+   "h": 5,
+   "bewoners": "jongGezin"
+  },
+  {
+   "gebouw": "hut",
+   "x": 21,
+   "y": 33,
+   "b": 5,
+   "h": 7,
+   "bewoners": "oudStel"
+  },
+  {
+   "gebouw": "hut",
+   "x": 24,
+   "y": 45,
+   "b": 5,
+   "h": 7
+  },
+  {
    "gebouw": "schaapskooi",
-   "x": 26,
-   "y": 37,
+   "x": 18,
+   "y": 56,
    "b": 5,
    "h": 7
   },
   {
    "akker": "akker1",
-   "x": 36,
-   "y": 34,
-   "b": 2,
-   "h": 14,
+   "x": 10,
+   "y": 21,
+   "b": 14,
+   "h": 2,
    "huis": "boer1"
   },
   {
    "akker": "akker2",
-   "x": 38,
-   "y": 34,
-   "b": 2,
-   "h": 14,
+   "x": 40,
+   "y": 8,
+   "b": 14,
+   "h": 2,
    "huis": "boer2"
   },
   {
    "akker": "akker3",
-   "x": 40,
-   "y": 34,
+   "x": 63,
+   "y": 21,
    "b": 3,
    "h": 14,
    "huis": "boer3"
   },
   {
    "akker": "akker4",
-   "x": 43,
-   "y": 34,
+   "x": 66,
+   "y": 21,
    "b": 2,
    "h": 14,
    "huis": "boer4"
   },
   {
+   "akker": "akker7",
+   "x": 64,
+   "y": 37,
+   "b": 5,
+   "h": 5,
+   "huis": "boer3"
+  },
+  {
    "akker": "akker5",
-   "x": 45,
-   "y": 34,
+   "x": 40,
+   "y": 50,
    "b": 2,
    "h": 14,
    "huis": "boer5"
   },
   {
    "akker": "akker6",
-   "x": 36,
-   "y": 49,
+   "x": 43,
+   "y": 52,
    "b": 5,
    "h": 6,
    "huis": "boer1",
    "bestemming": "weide"
   },
   {
-   "akker": "akker7",
-   "x": 42,
-   "y": 49,
-   "b": 5,
-   "h": 5,
-   "huis": "boer3"
-  },
-  {
    "meent": "heide",
-   "x": 9,
-   "y": 45,
+   "x": 8,
+   "y": 65,
    "b": 23,
    "h": 8
   },
   {
-   "x": 59,
-   "y": 32,
+   "x": 75,
+   "y": 49,
    "overgang": "wereld",
    "tekst": "De weg de wereld in"
   }

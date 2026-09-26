@@ -257,6 +257,27 @@
     return !!(v && T.VOORWERPEN[v.soort].blokkeert);
   };
 
+  // Ligt het punt (px, py) binnen een rand, een lijst hoekpunten [[x, y], ...]? Een straal naar rechts
+  // telt hoe vaak hij de rand kruist. Ook voor gereedschap/tiled/maak-gehucht.cjs, dat er het plein
+  // en het zand mee tekent.
+  T.binnenRand = function (rand, px, py) {
+    let binnen = false;
+    for (let i = 0, k = rand.length - 1; i < rand.length; k = i++) {
+      const [xi, yi] = rand[i];
+      const [xk, yk] = rand[k];
+      if (yi > py !== yk > py && px < ((xk - xi) * (py - yi)) / (yk - yi) + xi) binnen = !binnen;
+    }
+    return binnen;
+  };
+
+  // Ligt deze tegel op het plein? Een kaart kan een plein hebben (kaarten/<naam>.betekenis.json,
+  // "plein": zijn rand, in tegels, via js/kaart.js in w.plein); een tegel ligt erop als zijn midden
+  // binnen die rand valt. Op het plein wordt niet gebouwd (js/gebouwen.js, T.gebouwPast), en daar
+  // spelen de kinderen (js/bewoners.js, T.pleinVan).
+  T.opHetPlein = function (w, x, y) {
+    return !!(w && w.plein && w.plein.length >= 3 && T.binnenRand(w.plein, x + 0.5, y + 0.5));
+  };
+
   // Twee tegels raken elkaar als ze naast elkaar liggen, ook schuin, maar niet schuin
   // om een muurhoek heen. Dat geldt voor slaan, praten en iets gebruiken.
   T.raakt = function (w, a, b) {

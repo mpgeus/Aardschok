@@ -10,25 +10,26 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (26 sep 2026): de overdracht
+## De stand (26 sep 2026, zesde sessie): het gehucht rond het plein staat
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 482/482.
+`npm test`: 487/487.
 
-**Waar het werk staat:** alles staat in `main`, ook de vijfde sessie van 26 sep (Marcel vroeg om een
-overdracht voor een nieuwe sessie). Begin de volgende sessie dus gewoon vanaf `main`; hoe een eigen
-branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** de zesde sessie van 26 sep staat in de branch van die sessie
+(`claude/werklijst-vervolg-wriko0`) en gaat naar `main` zodra Marcel dat vraagt ("push it"); alles
+daarvóór staat al in `main`. Kijk dus vóór je begint of `main` die sessie al heeft (`git log`); hoe een
+eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
 toevoegen voor we bij een speelbaar product komen." Houd je aan de volgorde hieronder. Een nieuw idee,
 ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in de stap die loopt
 (`CLAUDE.md`, "Het spel in het kort"). Wat het eerste speelbare product is, is vraag 33.
 
-**Wat er op 26 sep gebeurde** (vijf sessies; de details staan onder Af en in `spel.md`):
+**Wat er op 26 sep gebeurde** (zes sessies; de details staan onder Af en in `spel.md`):
 - Punt 7 is af: het oude spel is eruit, ook uit de namen (`Spel`, `S.schout`, kant 'speler').
 - Marcel kwam met een nieuwe wens: een dorp dat leeft en groeit (punt 3b). Claude schreef een voorstel
   op een pagina, "Een dorp dat leeft" (https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE), en Marcel
@@ -48,41 +49,28 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   code en de spelteksten: dat was een aanname van Claude. Op de pagina staat ook hoe het dorp per trede
   een stad wordt; Marcel koos daarbij (vraag 32) dat de boerderij mee naar buiten verhuist, dat graan
   van buiten naar de markt komt, en dat de kaart meegroeit, zonder grens aan de stad.
+- In de zesde sessie: **punt 1 is af, het gehucht rond het plein** (de vierde versie van de kaart,
+  zoals de goedgekeurde schets). Wie er in de gewone huizen woont, koos Marcel: een jong gezin in het
+  huis, een oud stel in een hut, en de andere hut leeg; de herder blijft een boerenzoon. Op het plein
+  wordt niet gebouwd, en de kinderen spelen er verspreid over. Marcel kreeg schermafdrukken (de deur van
+  de schout, het midden van het plein, het hele gehucht, de brug).
 
-**Loopt nu:** niets. **Het volgende: de kaart bouwen zoals de schets** (punt 1 hieronder). Wat de
-nieuwe sessie daarvoor nodig heeft:
-- De indeling staat in `gereedschap/tiled/gehucht-v4-schets.json` (76 bij 76; de `uitleg` zegt hoe je
-  hem leest). Die gaat in `maak-gehucht.cjs` (de vierde versie), en daarna gaat het json-bestand weg.
-  Het plein wordt een vlak in het betekenisbestand, zodat de kinderen over het hele plein spelen
-  (`T.pleinVan` en `straalPlein` in `js/bewoners.js`); de marskramer, de heer en de schandpaal staan op
-  het zand voor de deur van de schout.
-- Wie er woont (C): dezelfde 25 mensen, maar niet allemaal op een boerderij. Het aantal mensen bij het
-  begin wordt een eigen getal in het betekenisbestand, zoals `beginVoorraad`, in plaats van alle
-  woonruimte bij elkaar (`T.zetBestaandeGebouwen` in `js/gebouwen.js`). In de gewone huizen wonen
-  bijvoorbeeld de herder met zijn gezin, een oud stel en een weduwe.
-- Op het plein wordt niet gebouwd: `T.gebouwPast` (`js/gebouwen.js`) weigert het, en het bouwmenu zegt
-  waarom.
-- De toetsen die de ligging van de oude velden kennen, gaan mee, zoals `test/weides.test.cjs` ("de
-  blokken van Klaas en Gerrit onder de es"). Het woord "es" gaat uit het commentaar.
-- Laat Marcel daarna schermafdrukken uit het spel zien, vanaf dezelfde plekken als de schets.
-Daarna: de doorkijk als keuze in de spelregels, dan ronde 4b van de huizenbouwer, dan de herberg.
-`npm test`: 482/482.
+**Loopt nu:** niets. **Het volgende: de doorkijk** (punt 1 hieronder; vraag 31, "Zoals jij
+voorstelt"): het kijkvenster ook voor de heer, de marskramer en wie je spreekt, en een huis dat in een
+raster doorzichtig wordt, om de andere pixel; allebei als keuze in de spelregels (`js/opties.js`), en
+wat Marcel in het spel kiest, wordt de standaard (`beeld.md`, "Doorkijk"). Het kijkvenster zit in
+`tekenKijkgat` (`js/tekenen.js`). Begin met een kort voorstel voor Marcel. Daarna: ronde 4b van de
+huizenbouwer, dan de herberg.
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
 
-1. **Nu: het plein als hart, en een kaart die niet waterpas is** (vraag 29 en 30; Marcel, 26 sep): een
-   vierde versie van het gehucht (`gereedschap/tiled/maak-gehucht.cjs`). Een groot open plein met oude
-   bomen, onregelmatig van vorm, waar niet gebouwd wordt; de huizen eromheen, ook aan de kant van de
-   camera, op verschillende afstanden en niet in rijen; de velden daar weer omheen; en wegen die
-   slingeren (`beeld.md`, "Ook de kaart is niet waterpas"; `spel.md`, bij het plein). Begin met een
-   schets voor Marcel, zoals bij de derde versie; die is goedgekeurd (vraag 31), met de indeling in
-   `gereedschap/tiled/gehucht-v4-schets.json`, en in de gewone huizen wonen dezelfde 25 mensen (C).
-   Klaar als: het plein is de grootste open plek van het gehucht, er staat geen rechte rij huizen meer,
-   en de akkers, de weide en de heide zijn even groot gebleven, zodat de oogst en de balans niet
-   verschuiven. **Direct daarna: de doorkijk** (vraag 31, "Zoals jij voorstelt"): het kijkvenster ook
-   voor de heer, de marskramer en wie je spreekt, en een huis dat in een raster doorzichtig wordt,
-   allebei als keuze in de spelregels (`beeld.md`, "Doorkijk").
+1. **Nu: de doorkijk** (vraag 31, "Zoals jij voorstelt"): het kijkvenster ook voor de heer, de
+   marskramer en wie je spreekt, en een huis dat in een raster doorzichtig wordt, allebei als keuze in
+   de spelregels (`beeld.md`, "Doorkijk"). Nu er huizen om het plein staan, ook aan de kant van de
+   camera, is dat nodig. Klaar als: wie je spreekt of wie op het plein staat, is ook achter een huis te
+   zien, en in de spelregels staan de twee manieren. (Het plein als hart, de vierde versie van het
+   gehucht, is af: zie onder Af.)
 2. **Dan: ronde 4b van de huizenbouwer** (3b, stap 4; naar voren gehaald, vraag 29): elk huis in elk
    materiaal en elke vorm, niet waterpas (`beeld.md`, "De huizenbouwer op ronde vormen"), en ook een
    kwartslag gedraaid of gespiegeld, zodat een boerderij met de zijkant naar het plein kan staan. Zwaar
@@ -202,7 +190,9 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     esdorp" als kader voor het vee) en stond daarna in de code op Marcels naam. Rechtgezet op 26 sep,
     ook in de code en de spelteksten; zie `spel.md`, bij het plein.
 31. ~~Het plein als hart: de derde schets~~ (26 sep; dezelfde pagina). **Beantwoord (Marcel, 26 sep):
-    "Indeling klopt"; wie er woont: "Wordt C"; de doorkijk: "Zoals jij voorstelt."** Op de tweede schets zei Marcel:
+    "Indeling klopt"; wie er woont: "Wordt C"; de doorkijk: "Zoals jij voorstelt."** Wie precies in de
+    gewone huizen woont, koos Marcel in de zesde sessie: een jong gezin in het huis, een oud stel in een
+    hut, de andere hut leeg, en de herder blijft een boerenzoon (`spel.md`, bij het plein). Op de tweede schets zei Marcel:
     "Naast boerderijen zijn er ook 'gewone' huizen." Nu staan er twee hutten en een huis om het plein,
     en de boerderijen verder naar buiten, bij hun velden. Drie vragen. (1) Is dit het? (2) Wie woont
     er in de gewone huizen? Het spel telt de mensen bij het begin uit de woonruimte, dus: A, bewoond
@@ -258,6 +248,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vóór je veel bouwt.
 
 *Spelen, en zeggen hoe het voelt:*
+- Het gehucht rond het plein (26 sep, zesde sessie): loop over het plein en om de huizen, kijk bij de
+  brug, de heide en de weide, en probeer met `B` iets op het plein te bouwen. Voelt het plein als het
+  hart? Staan de vijf eiken te dicht, of zijn ze goed zo?
 - Het gehucht na de namen (26 sep): Marcel zou het na 7e nog eens openen. Het hernoemen veranderde
   niets aan hoe het speelt, dus alles hoort te zijn zoals je het kende.
 - Het nieuwe begin: open `localhost:8123/` en lees de benoemingsbrief. Klopt de toon van de heer? Een
@@ -492,10 +485,23 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 26 sep 2026 — **Punt 1: het gehucht rond het plein, de vierde versie** (zesde sessie; vraag 29 tot en
+  met 31). De kaart zoals de goedgekeurde schets (`maak-gehucht.cjs`; het schetsbestand is erin
+  opgegaan): 76 bij 76, een open plein van zo'n 214 tegels met vijf oude eiken en uitgesleten zand met de
+  put voor de deur van de schout, een huis en twee hutten eromheen, de boerderijen bij hun velden, een
+  slingerende weg en een kronkelende beek. Akkers, weide en heide even groot (209 en 184 tegels). Op het
+  plein wordt niet gebouwd (`T.opHetPlein` in `js/wereld.js`, `T.waaromPastHetNiet` in
+  `js/gebouwen.js`: de muis en het bouwmenu zeggen het). Het aantal mensen bij het begin is een eigen
+  getal (`beginBevolking`: 25), en Marcel koos wie er in de gewone huizen woont (een jong gezin, een oud
+  stel, een hut leeg); op een boerderij wonen er nu drie, en de knapen eerst dicht bij de kooi, zodat
+  de herder meestal de zoon van Wouter is. De kinderen spelen elk op een eigen plek op het plein
+  (`T.plekOpHetPlein`). Onderweg hersteld: de brug over de beek was te kort, zodat je er niet overheen
+  kon. Wat opviel (het nieuwe huis kost 2 goud bij de heer, en er is plaats om meteen te groeien) staat
+  in `opmerkingen.md`. `npm test`: 487/487.
 - 26 sep 2026 — **De schets voor het plein, goedgekeurd (vraag 30 tot en met 32).** Drie versies op de
   pagina "Het plein als hart": het plein in het midden, waar niet gebouwd wordt, gewone huizen eromheen,
   de boerderijen bij hun velden, en de velden om het dorp; met 6 van de 219 tegels achter een dak. De
-  indeling staat in `gereedschap/tiled/gehucht-v4-schets.json`. Op dezelfde pagina: hoe het dorp per
+  indeling staat nu in `gereedschap/tiled/maak-gehucht.cjs`. Op dezelfde pagina: hoe het dorp per
   trede een stad wordt.
 - 26 sep 2026 — **"Brink" heet plein, en het Drentse is eruit.** In de code, de spelteksten, de
   toetsen en de ontwerpstukken (`T.pleinVan`, `straalPlein`; "De heer staat op het plein en wacht op

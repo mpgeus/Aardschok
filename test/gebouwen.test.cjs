@@ -65,6 +65,24 @@ test('T.gebouwPast: de hele voet moet vrij zijn, niet alleen de linkerbovenhoek'
   assert.equal(T.gebouwPast(S, 'huis', 2, 2), false);
 });
 
+// Marcel, 26 sep: "Op het Plein wordt niet gebouwd." Ook niet met een hoek van de voet, en het spel
+// zegt waarom, bij de muis en na een klik (T.waaromPastHetNiet, js/main.js).
+test('op het plein wordt niet gebouwd, en het bouwmenu zegt waarom', () => {
+  const S = maakS();
+  S.wereld.plein = [[8, 8], [14, 8], [14, 14], [8, 14]];
+  T.zetVoorraad(S, 'hout', 50);
+  assert.equal(T.waaromPastHetNiet(S, 'put', 10, 10), 'Op het plein wordt niet gebouwd.');
+  assert.equal(T.gebouwPast(S, 'put', 10, 10), false);
+  assert.equal(T.gebouwPast(S, 'hut', 6, 6), false, 'een hoek van de voet op het plein is ook op het plein');
+  assert.equal(T.gebouwPast(S, 'put', 3, 3), true, 'ernaast mag het');
+  assert.equal(T.waaromPastHetNiet(S, 'put', 3, 3), null);
+  S.wereld.tegels[3][3] = 'muur';
+  assert.equal(T.waaromPastHetNiet(S, 'put', 3, 3), 'Daar past het niet.');
+  const r = T.plaatsGebouw(S, 'put', 10, 10);
+  assert.deepEqual(r, { gelukt: false, reden: 'Op het plein wordt niet gebouwd.' });
+  assert.equal(S.voorraad.hout, 50, 'en het kost niets');
+});
+
 test('T.plaatsGebouw: betaalt de kosten en zet hem in aanbouw neer', () => {
   const S = maakS();
   T.zetVoorraad(S, 'hout', 6);

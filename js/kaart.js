@@ -69,13 +69,18 @@
 //              "beslaat"). Zijn tekening staat al in de .tmj zelf, als een gewoon Tiled-object
 //              (precies zoals een boom); dit ding voegt er alleen de betekenis aan toe, zodat
 //              T.zetBestaandeGebouwen hem als klaar gebouw meetelt (woonruimte, handen) zonder
-//              dat het spel leeg begint. Zie gereedschap/tiled/maak-gehucht.cjs, "HUIZEN".
+//              dat het spel leeg begint. Zie gereedschap/tiled/maak-gehucht.cjs, "HUIZEN". Met
+//              "bewoners" ("jongGezin", "oudStel") woont er bij het begin een vast gezin in een
+//              gewoon huis (js/bewoners.js, T.zetBeginBewoners).
 //
 // En op het betekenisbestand zelf: "proef": true zegt dat de kaart alleen voor de toetsen bestaat
 // en in het spel niet meetelt; "beginVoorraad": { hout: 40, ... } geeft S.voorraad die waarden
 // mee zodra het spel op deze kaart begint (T.beginOpKaart, js/gebied.js), zodat een dorp niet met
-// lege handen begint; "marskramer": { x, y } is de plek waar de marskramer zijn waar uitstalt
-// (js/handel.js), met "komt": { x, y } erbij als hij niet over de eerste uitgang binnenkomt.
+// lege handen begint; "beginBevolking": 25 zegt hoeveel mensen er dan wonen (zonder: zoveel als er
+// woonruimte is; T.zetBestaandeGebouwen, js/gebouwen.js); "marskramer": { x, y } is de plek waar de
+// marskramer zijn waar uitstalt (js/handel.js), met "komt": { x, y } erbij als hij niet over de
+// eerste uitgang binnenkomt; en "plein": [[x, y], ...] is de rand van het plein, in tegels, waar
+// niet gebouwd wordt (T.opHetPlein, js/wereld.js).
 (function (T) {
   'use strict';
 
@@ -323,11 +328,13 @@
         // Zijn tekening staat al in de .tmj (een gewoon Tiled-object, zoals een boom); dit is
         // alleen de betekenis erbij. Zie "gebouw" hierboven en T.zetBestaandeGebouwen. "huis"
         // zegt wie er woont, zoals bij een akker: de boer met dezelfde id, of "schout" (zijn
-        // kelder, js/verstoppen.js).
+        // kelder, js/verstoppen.js). "bewoners" zegt bij een gewoon huis wie er bij het begin woont
+        // ("jongGezin", "oudStel"; js/bewoners.js, T.zetBeginBewoners); zonder staat het leeg.
         gebouwenOpKaart.push({
           soort: String(p.gebouw), x: gx, y: gy,
           b: Number(p.b) || 1, h: Number(p.h) || 1,
           huis: p.huis !== undefined ? String(p.huis) : null,
+          bewoners: p.bewoners !== undefined ? String(p.bewoners) : null,
         });
         return;
       }
@@ -367,7 +374,7 @@
       zetNeer(ding, Math.round(ding.x), Math.round(ding.y), ding.tegel ? opzoekNaam(ding.tegel) : null, `"${ding.tegel || ding.wezen || ding.overgang || ding.staat || 'ding'}" uit het betekenisbestand`);
     }
     // Wie een "huis" draagt (een boer), krijgt de akkers met datzelfde "huis" erbij: meestal één,
-    // soms twee (boer1 en boer3 hebben ook nog een klein stuk onder de es). js/akkers.js gebruikt
+    // soms twee (boer1 en boer3 hebben er twee: een strook en een blok). js/akkers.js gebruikt
     // dit om te bepalen waar hij in het groeiseizoen dwaalt en wat hij oogst.
     if (akkers.length) {
       for (const e of wezens) {
@@ -419,6 +426,12 @@
       // Een klein beginvoorraadje, zodat een dorp niet met lege handen begint (T.beginOpKaart,
       // js/gebied.js zet het over naar S.voorraad); zonder "beginVoorraad" gebeurt er niets.
       beginVoorraad: betekenis && betekenis.beginVoorraad ? { ...betekenis.beginVoorraad } : null,
+      // Hoeveel mensen er bij het begin wonen (T.zetBestaandeGebouwen, js/gebouwen.js); zonder
+      // "beginBevolking" zoveel als er woonruimte is.
+      beginBevolking: betekenis && Number.isFinite(betekenis.beginBevolking) ? betekenis.beginBevolking : null,
+      // De rand van het plein, in tegels (T.opHetPlein, js/wereld.js); zonder "plein" heeft de kaart
+      // er geen, en is de plek van de marskramer het plein (T.pleinVan, js/bewoners.js).
+      plein: betekenis && Array.isArray(betekenis.plein) ? betekenis.plein.map(([x, y]) => [x, y]) : null,
       // Waar de marskramer zijn waar uitstalt (js/handel.js), en eventueel waar hij de kaart op
       // komt ("komt"; anders de eerste uitgang). Zonder "marskramer" komt hij hier nooit.
       marskramer: betekenis && betekenis.marskramer ? { ...betekenis.marskramer } : null,

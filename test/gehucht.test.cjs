@@ -47,3 +47,25 @@ test('de gebouwen die er al staan, tellen mee, met hun voet', () => {
   assert.ok(S.gebouwen.length > 0);
   for (const g of S.gebouwen) assert.ok(g.voet && g.voet.b >= 1 && g.voet.h >= 1, g.soort);
 });
+
+// De vierde versie van het gehucht (26 sep, vraag 29 tot en met 31; gereedschap/tiled/maak-gehucht.cjs):
+// het plein als open hart, en de velden even groot als vroeger, zodat de oogst en de balans niet
+// verschuiven.
+test('het plein is het open hart, en de akkers, de weide en de heide zijn even groot gebleven', () => {
+  const S = begin();
+  const w = S.wereld;
+  let plein = 0;
+  for (let y = 0; y < w.h; y++) for (let x = 0; x < w.b; x++) if (T.opHetPlein(w, x, y)) plein++;
+  assert.ok(plein >= 200, `het plein is groot (${plein} tegels)`);
+  const opPlein = (r) => {
+    for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.b; x++) if (T.opHetPlein(w, x, y)) return true;
+    return false;
+  };
+  for (const g of S.gebouwen) assert.ok(!opPlein({ x: g.x, y: g.y, b: g.voet.b, h: g.voet.h }), `${g.soort} ${g.huis || ''} staat niet op het plein`);
+  for (const a of w.akkers) assert.ok(!opPlein(a), `${a.naam} ligt niet op het plein`);
+  assert.equal(w.akkers.reduce((n, a) => n + a.b * a.h, 0), 209, 'de akkers en de weide samen');
+  assert.equal(w.meenten.reduce((n, m) => n + m.b * m.h, 0), 23 * 8, 'de heide');
+  assert.ok(T.opHetPlein(w, w.marskramer.x, w.marskramer.y), 'de marskramer en de heer staan op het plein');
+  assert.equal(S.bevolking, 25, 'dezelfde 25 mensen, ook al is er plaats voor meer');
+  assert.ok(S.woonruimte > S.bevolking);
+});

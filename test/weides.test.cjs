@@ -128,34 +128,25 @@ test('alleen weides doen mee: een akker ertussen of ernaast is geen weide, en de
   assert.deepEqual(volgend.velden, [a, akker, b]);
 });
 
-test('in het gehucht: de blokken van Klaas en Gerrit onder de es worden samen één weide, met de strook ertussen', () => {
+test('in het gehucht: de weide van Klaas en de strook van Wouter ernaast worden samen één weide, met de strook ertussen', () => {
   const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   const veld = (naam) => S.wereld.akkers.find((a) => a.naam === naam);
   const klaas = veld('akker6');
-  const gerrit = veld('akker7');
+  const wouter = veld('akker5');
   assert.equal(T.weideGroepen(S.wereld).length, 1);
-  gerrit.bestemming = gerrit.plan = 'weide';
+  wouter.bestemming = wouter.plan = 'weide';
   const [groep] = T.weideGroepen(S.wereld);
-  assert.deepEqual(groep.velden, [klaas, gerrit]);
-  assert.equal(groep.tegels, 30 + 25);
-  // De strook tussen de twee blokken, zo lang als ze naast elkaar liggen (Gerrits blok is één rij
-  // korter). Uit de akkers zelf, zodat een nieuwe indeling van het gehucht (26 sep: een plein, meer
-  // ruimte) de toets niet breekt zolang de blokken zo naast elkaar liggen.
-  const x = klaas.x + klaas.b;
-  assert.equal(gerrit.x, x + 1, 'één tegel tussen de blokken van Klaas en Gerrit');
+  assert.deepEqual(groep.velden, [wouter, klaas]);
+  assert.equal(groep.tegels, 28 + 30);
+  // De strook gras tussen de twee, zo lang als ze naast elkaar liggen (de weide is korter dan de
+  // strook van Wouter). Uit de akkers zelf, zodat een nieuwe indeling van het gehucht de toets niet
+  // breekt zolang ze zo naast elkaar liggen.
+  const x = wouter.x + wouter.b;
+  assert.equal(klaas.x, x + 1, 'één tegel tussen de strook van Wouter en de weide van Klaas');
   const strook = [];
-  for (let y = klaas.y; y < gerrit.y + gerrit.h; y++) strook.push(`${x},${y}`);
+  for (let y = klaas.y; y < klaas.y + klaas.h; y++) strook.push(`${x},${y}`);
   assert.deepEqual(sleutels(groep.tussen), strook);
-  // Een strook van de es erboven, akker1, ligt ook één tegel van het blok van Klaas: weide maken
-  // voegt hem erbij.
-  const es = veld('akker1');
-  assert.equal(es.y + es.h + 1, klaas.y, 'één rij tussen de es en het blok van Klaas');
-  es.bestemming = es.plan = 'weide';
-  const [groter] = T.weideGroepen(S.wereld);
-  assert.deepEqual(groter.velden, [es, klaas, gerrit]);
-  const rij = es.y + es.h;
-  assert.ok(groter.tussen.has(`${es.x},${rij}`) && groter.tussen.has(`${es.x + 1},${rij}`));
 });
 
 test('één weide, één kudde: de stand en het vee gaan over de hele groep, van welk veld je ook vraagt', () => {
@@ -296,12 +287,12 @@ test('de muis en het venster zeggen dat een weide samen met het veld ernaast é�
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   const veld = (naam) => S.wereld.akkers.find((a) => a.naam === naam);
   const klaas = veld('akker6');
-  const gerrit = veld('akker7');
+  const wouter = veld('akker5');
   assert.equal(T.samenMetTekst(S, klaas), '');
-  gerrit.bestemming = gerrit.plan = 'weide';
-  const boerGerrit = T.boerVanVeld(S, gerrit);
-  assert.equal(T.samenMetTekst(S, klaas), `samen één weide met het veld van ${boerGerrit.naam}`);
-  assert.match(T.veldTekst(S, gerrit), new RegExp(`samen één weide met het veld van ${T.boerVanVeld(S, klaas).naam}`));
+  wouter.bestemming = wouter.plan = 'weide';
+  const boerWouter = T.boerVanVeld(S, wouter);
+  assert.equal(T.samenMetTekst(S, klaas), `samen één weide met het veld van ${boerWouter.naam}`);
+  assert.match(T.veldTekst(S, wouter), new RegExp(`samen één weide met het veld van ${T.boerVanVeld(S, klaas).naam}`));
   assert.equal(T.opsomming(['Klaas', 'Jan', 'Gerrit']), 'Klaas, Jan en Gerrit');
 });
 

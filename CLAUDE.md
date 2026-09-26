@@ -117,7 +117,8 @@ Alles hangt aan één naamruimte, `globalThis.Spel` (in de code `T`), zodat hetz
 de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html` telt.
 
 - `js/wereld.js`: wat een wezen is (`T.WEZENS`) en wat een voorwerp is (`T.VOORWERPEN`), de
-  vragen over een kaart (`isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`, `isZichtbaar`),
+  vragen over een kaart (`isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`, `isZichtbaar`,
+  `opHetPlein`: op het plein wordt niet gebouwd),
   en de proefkamers (`T.maakProefkamers`): drie kamers in code voor de toetsen van het gevecht.
   Elke kaart van het spel komt uit Tiled (`js/kaart.js`). De speler is `S.schout`, met soort
   'schout' en kant 'speler' (Marcel, 26 sep: een man van de militie vecht later ook aan kant

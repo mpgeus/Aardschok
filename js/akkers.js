@@ -273,7 +273,7 @@
   // eigen akker (ontwerp/werklijst.md punt 1b, punt 5); anders (geploegd, of het veld is al
   // gemaaid) gewoon bij zijn huis, zoals elke dwalende dorpeling. `e.werkAkkers` komt van
   // T.laadKaart (js/kaart.js): de akkers waarvan `huis` gelijk is aan het `huis` van deze mens.
-  // Heeft hij er meer dan één (boer1 en boer3 hebben ook nog een klein stuk onder de es), dan
+  // Heeft hij er meer dan één (boer1 en boer3 hebben er twee: een strook en een blok), dan
   // telt voorlopig alleen de eerste mee voor het dwalen — de tweede telt wel gewoon mee voor de
   // groei en de oogst hieronder, hij loopt er alleen niet expliciet naartoe om te dwalen.
   //
@@ -425,8 +425,8 @@
   // het hooi gaat het net zo (T.haalHooiBinnen).
   //
   // Een boer maait al zijn akkers, steeds de tegel die het dichtstbij staat. Tot 24 sep maaide hij
-  // alleen de eerste (e.werkAkkers[0]), en rotte het stuk onder de es van boer 1 en boer 3 op het
-  // veld: 55 van de 209 tegels. In hooitijd maait hij eerst het hooi (maaiDoel hierboven).
+  // alleen de eerste (e.werkAkkers[0]), en rotte het tweede stuk van boer 1 en boer 3 op het veld:
+  // 55 van de 209 tegels. In hooitijd maait hij eerst het hooi (maaiDoel hierboven).
   // Een slag beginnen op de tegel waar hij staat: zo lang als een tegel duurt (met zijn eigen maat,
   // js/boeren.js), min wat hij er eerder al maaide.
   function begin(e, doel, nu) {

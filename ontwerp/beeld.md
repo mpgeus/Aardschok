@@ -77,6 +77,13 @@ en alle huizen staan in rijen met hun voorkant naar het zuiden. Dus ook voor de 
   kan elk huis een kwartslag gedraaid of gespiegeld renderen, zodat een boerderij met de zijkant of de
   achterkant naar het plein kan staan (voorstel van Claude).
 
+**Zo is het gebouwd** (26 sep, de vierde versie van het gehucht): het plein, de slingerende weg en de
+paden, en een beek die kronkelt, maar recht onder de brug door loopt. De weg is een vloeiende lijn door
+steunpunten (Catmull-Rom); de rand van het plein en het uitgesleten zand zijn een veelhoek. De huizen
+staan nog wel allemaal met hun voorkant naar het zuiden: gedraaid of gespiegeld komt met ronde 4b van
+de huizenbouwer. Wat bleek: een geknotte wilg is hoog, en een rij wilgen vóór de beek verstopte hem
+helemaal; nu staan er minder, en bij de brug geen.
+
 ### De huizenbouwer op ronde vormen (Marcel, 21 sep 2026)
 
 Het proefhuis (`gereedschap/pixelart/huis-sdf.cjs`, plaat in `uit/proefhuis/vergelijk.png`)

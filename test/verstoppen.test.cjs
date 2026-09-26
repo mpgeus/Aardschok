@@ -102,10 +102,13 @@ function metBerichten(fn) {
 // De plekken
 // ---------------------------------------------------------------------------------------------
 
-test('de plekken in het gehucht: vijf kelders van boeren en die van de schout', () => {
+test('de plekken in het gehucht: vijf kelders van boeren, die van de schout en die van het huis', () => {
   const S = gehucht();
   const plekken = T.verstopPlekken(S);
-  assert.equal(plekken.length, 6);
+  // Het huis om het plein (26 sep, de vierde versie van het gehucht) heeft ook een kelder; een hut
+  // niet (hieronder).
+  assert.equal(plekken.length, 7);
+  assert.equal(plekken.filter((p) => p.naam === 'de kelder van dit huis').length, 1);
   const schout = plekken.find((p) => p.vanSchout);
   assert.equal(schout.naam, 'je eigen kelder');
   assert.equal(schout.vinden, V.vindenBijSchout, 'bij de schout kijken ze eerst');

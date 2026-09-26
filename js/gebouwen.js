@@ -520,20 +520,25 @@
   // gebouwen die al op de kaart staan (js/gebied.js, T.zetBestaandeGebouwen)
   // ---------------------------------------------------------------------------------------------
 
-  // Past soort op (x, y) (de linkerbovenhoek van zijn voet, net als "beslaat" bij een gewoon
-  // voorwerp)? Binnen de kaart, en nergens al vast — dat dekt zowel de rand van de wereld als een
-  // ander gebouw, een boom, of muur (T.isVast, js/wereld.js).
-  T.gebouwPast = function (S, soort, x, y) {
+  // Waarom past soort niet op (x, y) (de linkerbovenhoek van zijn voet, net als "beslaat" bij een
+  // gewoon voorwerp)? Geeft de reden, voor de speler, of null als hij past. Niet op het plein
+  // (T.opHetPlein, js/wereld.js; Marcel, 26 sep: "Op het Plein wordt niet gebouwd"), en binnen de
+  // kaart nergens al vast: dat dekt zowel de rand van de wereld als een ander gebouw, een boom, of
+  // muur (T.isVast). Het bouwmenu laat de reden zien bij de muis en na een klik (js/main.js).
+  T.waaromPastHetNiet = function (S, soort, x, y) {
     const voet = T.gebouwVoet(soort, T.volgendeTekening(S, soort));
     const w = S.wereld;
-    if (!voet || !w) return false;
+    if (!voet || !w) return 'Daar past het niet.';
+    let vast = false;
     for (let dy = 0; dy < voet.h; dy++) {
       for (let dx = 0; dx < voet.b; dx++) {
-        if (T.isVast(w, x + dx, y + dy)) return false;
+        if (T.opHetPlein(w, x + dx, y + dy)) return 'Op het plein wordt niet gebouwd.';
+        if (T.isVast(w, x + dx, y + dy)) vast = true;
       }
     }
-    return true;
+    return vast ? 'Daar past het niet.' : null;
   };
+  T.gebouwPast = (S, soort, x, y) => !T.waaromPastHetNiet(S, soort, x, y);
 
   // Eén keer aan T.VOORWERPEN toevoegen, zoals kaart.js dat doet voor een tegel uit Tiled: hij
   // blokkeert altijd zijn voet (dat ís zijn voet immers al in de tegelslaag hieronder), en het
@@ -602,7 +607,8 @@
   T.plaatsGebouw = function (S, soort, x, y) {
     const g = T.GEBOUWEN[soort];
     if (!g || g.menu === false) return { gelukt: false, reden: 'Dat kan niet via het bouwmenu.' };
-    if (!T.gebouwPast(S, soort, x, y)) return { gelukt: false, reden: 'Daar past het niet.' };
+    const past = T.waaromPastHetNiet(S, soort, x, y);
+    if (past) return { gelukt: false, reden: past };
     if (!T.kanBetalen(S, g.kosten)) return { gelukt: false, reden: 'Daar is de voorraad niet groot genoeg voor.' };
     T.betaalKosten(S, g.kosten);
     const dagNu = S.kalender ? Math.floor(S.kalender.dag) : 0;
@@ -620,8 +626,9 @@
   // boerderijen en het huis van de schout op het gehucht) meteen als klaar registreren, zodat het
   // dorp niet leeg begint (ontwerp/werklijst.md, punt 2). Hun tekening staat al op de kaart zelf
   // (ze zijn in Tiled neergezet, net als een boom), dus hier komt geen nieuw voorwerp bij — alleen
-  // de boekhouding: woonruimte, en straks handen. De bevolking begint meteen op de woonruimte die
-  // ze samen geven, want die huizen staan al vol (de boeren die je ziet lopen, wonen er al).
+  // de boekhouding: woonruimte, en straks handen. Hoeveel mensen er wonen, zegt de kaart
+  // ("beginBevolking": in het gehucht 25, ook al is er plaats voor meer; Marcel koos het op 26 sep,
+  // vraag 31); zegt hij niets, dan staan de huizen vol.
   T.zetBestaandeGebouwen = function (S) {
     const w = S.wereld;
     if (!w || !w.gebouwenOpKaart || !w.gebouwenOpKaart.length) return;
@@ -634,13 +641,14 @@
       }
       // Zijn voet uit het betekenisbestand: die heeft de inner nodig om te weten wat hij ziet (js/inner.js).
       // En wie er woont (`huis`, de boer met dezelfde id of de schout): dat telt voor zijn kelder
-      // (js/verstoppen.js).
-      S.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null, huis: d.huis || null });
+      // (js/verstoppen.js). In een gewoon huis zegt `bewoners` wie er bij het begin woont
+      // (T.zetBeginBewoners, js/bewoners.js).
+      S.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null, huis: d.huis || null, bewoners: d.bewoners || null });
       woonruimte += g.woonruimte || 0;
     }
-    // Ze staan er al vol: de boeren die je ziet lopen, wonen al in hun huis. Wie dat zijn, zet
-    // T.zetBeginBewoners (js/bewoners.js) straks, als de boeren hun karakter hebben.
-    T.wijzigBevolking(S, woonruimte, 'begin');
+    // De boeren die je ziet lopen, wonen al in hun huis. Wie er verder woont, zet T.zetBeginBewoners
+    // (js/bewoners.js) straks, als de boeren hun karakter hebben.
+    T.wijzigBevolking(S, w.beginBevolking != null ? Math.min(w.beginBevolking, woonruimte) : woonruimte, 'begin');
     S.woonruimte = woonruimte;
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
   };

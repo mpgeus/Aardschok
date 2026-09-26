@@ -15,7 +15,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 |---|---|---|
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
-| Het eerste proefje | gebouwd (23 sep) | 1 |
+| Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
 | Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd | 6 |
 | Het dorp: mensen, behoeften en de winter | gebouwd (23 sep) | 3 |
@@ -154,11 +154,17 @@ antwoorden, en het wereldgereedschap.
 **Zo staat het nu** (25 sep): gebouwd op 23 sep. Het gehucht (`?kaart=gehucht`) met vijf boerderijen
 en hun velden, en graan in vijf stadia (geploegd, kiemend, groen, rijp, gemaaid) dat met de kalender
 groeit, in de wind wuift, en tegel voor tegel door de boeren gemaaid wordt. Een boer staat tot zijn
-middel in het graan. **Sinds 26 sep een nieuwe kaart** (Marcel: "Ze staan ook te dicht op elkaar"):
-60 bij 60 tegels, een plein vóór het huis van de schout, vijf boerderijtekeningen onder riet drie tot
-vijf tegels uit elkaar, en de es vóór het plein. Akkers, weide en heide bleven even groot. De regel
-erachter: een dak dekt in ons beeld tot zo'n acht tegels erachter af, dus wat je wilt zien, ligt aan
-de kant van de camera.
+middel in het graan. **Sinds 26 sep de vierde versie van de kaart** (vraag 29 tot en met 31; de
+schets "Het plein als hart", die Marcel goedkeurde): 76 bij 76 tegels, met in het midden een open,
+onregelmatig plein van zo'n 214 tegels, gras met vijf oude eiken en uitgesleten zand met de put voor
+de deur van de schout. Om het plein staan het stenen huis van de schout, een huis en twee hutten;
+verder naar buiten de vijf boerderijen, elk bij zijn velden, en de velden liggen om het dorp. De weg
+slingert en de beek kronkelt, maar loopt recht onder de brug door. Akkers, weide en heide bleven even
+groot (209 en 184 tegels), zodat de oogst niet verschuift. Op het plein wordt niet gebouwd, en er
+wonen nog altijd 25 mensen (hieronder, bij het plein). De derde versie (ook 26 sep) had een plein van
+10 bij 8 tegels vóór het huis van de schout; de regel erachter blijft: een dak dekt in ons beeld tot
+zo'n acht tegels erachter af, dus wat je wilt zien, ligt aan de kant van de camera, of je kijkt er
+door het kijkvenster.
 
 **Wat Marcel vroeg:**
 
@@ -718,14 +724,18 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
 - Zaaien kost vanaf het tweede jaar 1 graan per akkertegel; wat niet gezaaid kan worden, ligt braak.
 - In de spelregels: het graan (ruim, net rond, honger), waarin hij betaald wil worden, hoe hij telt,
   en of de schout zelf aan de paal mag.
-- **Het plein** (Marcel koos het op 25 sep, zie onderaan; gebouwd op 26 sep): het gehucht ligt rond
-  een plein met het huis van de schout eraan. Daar staan de heer, de marskramer en de schandpaal, en
-  daar spelen de kinderen. Het ligt vóór de huizen, aan de kant van de camera, dus er dekt geen dak
-  meer iets af (`gereedschap/tiled/maak-gehucht.cjs`, derde versie). Het blok en een galg zijn nog
-  tekenwerk. **Nog niet goed** (Marcel, 26 sep, na de beelden): het plein is een kleine rechthoek
-  van zand, en de gebouwen staan er te dicht omheen. "De brink is vaak het hart van een dorp. Zou een
-  redelijk open ruimte zijn lijkt mij", en de vorm mag niet strak en waterpas zijn (`beeld.md`, "Ook
-  de kaart is niet waterpas").
+- **Het plein** (Marcel koos het op 25 sep, zie onderaan; zoals het nu is gebouwd op 26 sep, in de
+  vierde versie van het gehucht, `gereedschap/tiled/maak-gehucht.cjs`): het open hart van het dorp,
+  onregelmatig van vorm, gras met vijf oude eiken en een bank onder de grootste. Voor de deur van de
+  schout ligt uitgesleten zand met de put; daar staan de marskramer, de heer en de schandpaal. Om het
+  plein staan het huis van de schout, een huis en twee hutten. De kinderen spelen er, elk op een eigen
+  plek, verspreid over het hele plein (`T.plekOpHetPlein`), en daar hangt ook rond wie geen werk heeft.
+  **Op het plein wordt niet gebouwd:** `T.gebouwPast` weigert het (de rand staat in het
+  betekenisbestand, `T.opHetPlein` in `js/wereld.js`), en de muis en het bouwmenu zeggen "Op het plein
+  wordt niet gebouwd." Het blok en een galg zijn nog tekenwerk. Tot de vierde versie was het plein een
+  rechthoek van zand van 10 bij 8 tegels, met de gebouwen er te dicht omheen (Marcel, 26 sep, na de
+  beelden: "De brink is vaak het hart van een dorp. Zou een redelijk open ruimte zijn lijkt mij", en de
+  vorm mag niet strak en waterpas zijn; `beeld.md`, "Ook de kaart is niet waterpas").
   **Besloten voor de vierde versie** (Marcel, 26 sep, bij de schets "De brink als hart", vraag 30):
   - Het heet gewoon **het plein**: "De brink heet vanaf nu ook gewoon plein." Brink was een woord
     van Claude.
@@ -740,12 +750,24 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
     derde schets staan er twee hutten en een huis om het plein, bij het huis van de schout, en de
     boerderijen verder naar buiten, bij hun velden (voorstel van Claude: groeit het dorp, dan groeit
     het midden met gewone huizen en schuiven de boerderijen met hun velden naar buiten).
-  - **De indeling van de derde schets klopt** (Marcel, 26 sep: "Indeling klopt"). Ze staat in
-    `gereedschap/tiled/gehucht-v4-schets.json`.
+  - **De indeling van de derde schets klopt** (Marcel, 26 sep: "Indeling klopt"). Ze staat nu in
+    `gereedschap/tiled/maak-gehucht.cjs`. Een paar kleine dingen wijken af, omdat ze in de schets
+    botsten: de heide ligt vijf tegels verder (de beek liep erdoor), twee rijtjes kool en een appelboom
+    stonden in een boerderij, het hekje van de schout stond op het pad naar de hut, en de weide ligt één
+    tegel dichter bij de strook van Wouter, zodat die twee samen één weide kunnen worden (de regel van
+    25 sep: velden tot één tegel uit elkaar zijn één weide). Bij de brug staan minder wilgen, anders
+    zag je de beek niet.
   - **In de gewone huizen wonen dezelfde 25 mensen, maar niet allemaal op een boerderij** (Marcel koos
     C, 26 sep): de boerderijen houden hun twee werkers, en in de hutten en het huis wonen bijvoorbeeld de
     herder met zijn gezin, een oud stel en een weduwe. Het aantal mensen bij het begin wordt daarvoor
     een eigen getal, zoals de beginvoorraad, in plaats van alle woonruimte bij elkaar.
+    **Wie precies** (Marcel koos het in de zesde sessie van 26 sep, uit twee voorstellen van Claude):
+    op een boerderij de boer, zijn vrouw en één kind of ouder (de weduwe houdt haar drie kinderen, zoals
+    haar karakter zegt); in het huis een jong gezin van dagloners, die werken waar de schout een
+    werkplaats neerzet; in een hut een oud stel; en de andere hut leeg, voor het eerste gezin dat komt.
+    De herder blijft een boerenzoon (vraag 27). Samen 25, met de vijf van de schout. Een gevolg: de
+    huizen hebben samen 36 plaatsen, dus er is vanaf het begin ruimte om te groeien, en met genoeg graan
+    komt er op dag 20 al een gezin bij. Zo gelaten; het graan wordt bijgesteld als Marcel gespeeld heeft.
 - **Nog open:** zijn grillen en de herendienst (punt 8); de koets (tekenwerk).
 
 **Hoe het zo kwam:**
@@ -1627,11 +1649,16 @@ hieronder).
 **Zo werkt het nu** (26 sep, het hele plan hieronder gebouwd: stuk 1, punt 1 tot en met 3, en stuk 2,
 punt 4 en 5; `js/bewoners.js`, `T.dagAnker` in `js/dag.js`, toetsen in `test/bewoners.test.cjs`):
 - **Iedereen die in de balk telt, is een poppetje,** met een naam, een leeftijd (volwassen, knaap of
-  meid, kind, kleuter, oud), een huis en een gezin. Op elke boerderij woont een gezin van vier: de
-  boer, zijn vrouw of haar man, en twee kinderen of een oude, geloot. Het karakter legt soms vast wie:
-  de weduwe heeft drie kleine kinderen, de oudste woont bij zijn zoon en schoondochter, de
-  nieuwkomer heeft kleine kinderen. Bij de schout wonen zijn vrouw en drie kinderen (vraag 27). Elk
-  draagt het vel van zijn leeftijd; er is niets nieuws getekend.
+  meid, kind, kleuter, oud), een huis en een gezin. Op elke boerderij woont een gezin van drie: de
+  boer, zijn vrouw of haar man, en één kind of ouder, geloot. Het karakter legt soms vast wie: de
+  weduwe heeft drie kleine kinderen, de oudste woont bij zijn zoon en schoondochter, de nieuwkomer
+  heeft een klein kind. Bij de schout wonen zijn vrouw en drie kinderen (vraag 27). In de gewone
+  huizen om het plein (sinds de vierde versie van het gehucht, vraag 31) woont een oud stel in een hut
+  en een jong gezin van dagloners in het huis, zo groot als er nog over is (drie, of twee als de weduwe
+  meedoet); de andere hut is leeg. Samen 25 (`beginBevolking` in het betekenisbestand), terwijl er
+  plaats is voor 36. Zijn er te weinig knapen voor het werk, dan wordt op een boerderij een kind of
+  een oude ouder een knaap, zodat de herder altijd een boerenzoon is. Elk draagt het vel van zijn
+  leeftijd; er is niets nieuws getekend.
 - **Het getal in de balk blijft de waarheid,** en verandert op één manier (`T.wijzigBevolking`). Komt
   er een gezin bij, dan krijgt het een huis met plaats en poppetjes bij de deur. Wie in de winter
   sterft, is eerst een oude, dan een kleine; wie wegtrekt, is eerst een gezin dat later kwam, en dan
@@ -1652,8 +1679,10 @@ punt 4 en 5; `js/bewoners.js`, `T.dagAnker` in `js/dag.js`, toetsen in `test/bew
   volwassene 17 tegels per uur); hij vertrekt als het werk begint, en de weg terug gaat van zijn avond
   af. Wie vandaag pas aankomt, werkt nog niet. Bij de muis zegt een werkplaats hoeveel uur er gewerkt
   is en hoeveel de handen onderweg waren. In het gehucht van het begin verandert het niets, want wie
-  werkt, werkt op een boerderij, en die maakt zelf niets (de herder loopt bijna twee uur naar de
-  heide, maar de schaapskooi maakt niets per dag). Het telt zodra je een werkplaats bouwt. In de
+  werkt, werkt op een boerderij, en die maakt zelf niets (de herder loopt naar de heide een half uur
+  tot tweeënhalf uur, naar gelang van wiens zoon hij is, maar de schaapskooi maakt niets per dag).
+  Meestal is hij de zoon van Wouter, wiens boerderij het dichtst bij de kooi ligt: de knapen komen
+  eerst op de boerderijen dicht bij de kooi. Het telt zodra je een werkplaats bouwt. In de
   spelregels: "Werk telt in uren", de weg telt (standaard) of een hand werkt een hele dag.
 - **Wie werkt, heeft een werkplek en gaat erheen.** Een gebouw krijgt zijn handen zoals voorheen
   (`T.verdeelHanden`), en nu zijn dat mensen (`T.wijsWerkToe`): eerst werkt een gezin op zijn eigen
@@ -1662,13 +1691,13 @@ punt 4 en 5; `js/bewoners.js`, `T.dagAnker` in `js/dag.js`, toetsen in `test/bew
   (`liefst` in `T.GEBOUWEN`), en het gezin van de schout werkt alleen als er niemand anders is. Wie
   werk heeft, houdt het.
 - **Hoeveel handen het dorp heeft, verandert een beetje:** een kleuter en de schout zelf werken niet.
-  Aan het begin zijn dat 19 tot 23 handen in plaats van 25 (meestal 20 of 21, gemeten over 400
+  Aan het begin zijn dat 19 tot 23 handen in plaats van 25 (meestal 21 of 22, gemeten over 400
   spellen); het gehucht gebruikt er 11.
 - **Het ritme van de dag, voor iedereen** (`T.dagAnker`): 's nachts binnen; 's ochtends op het erf, en
   wie van het gezin water haalt (de vrouw, anders een dochter) bij de put op het plein; overdag bij het
   werk (de herder op de heide, de tweede hand op het erf van de boerderij), en wie geen werk heeft:
-  een kind of knaap op het plein, een volwassene zonder werk ook, een oude en een kleuter bij huis, de
-  vrouw van de schout op haar erf; 's avonds thuis op het erf.
+  een kind of knaap op het plein, elk op een eigen plek, een volwassene zonder werk ook, een oude en
+  een kleuter bij huis, de vrouw van de schout op haar erf; 's avonds thuis op het erf.
 - **Naar binnen gaan zie je** (Marcel, 26 sep: "Zodra mensen bij de deur komen 'verdwijnen' ze naar
   binnen"): wie naar binnen gaat, stapt in een halve seconde de deur in en vervaagt, en 's ochtends
   komt hij er zo ook weer uit (`js/tekenen.js`, alleen voor het scherm). Staat er iemand in de deur,

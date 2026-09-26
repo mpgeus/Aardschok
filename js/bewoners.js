@@ -5,9 +5,10 @@
 // Het getal in de balk (S.bevolking) blijft de waarheid: eten, groei, de winter en het hoofdgeld
 // rekenen ermee, en het verandert alleen via T.wijzigBevolking (js/gebouwen.js). De bewoners zijn wie
 // het zijn: één per mond, elk met een naam, een leeftijd, een huis en een poppetje. Wat hier staat:
-//   - wie er bij een nieuw spel woont (T.zetBeginBewoners): op elke boerderij een gezin van vier dat
-//     bij het karakter van de boer past, en bij de schout zijn vrouw en drie kinderen (Marcel koos het,
-//     26 sep, vraag 27);
+//   - wie er bij een nieuw spel woont (T.zetBeginBewoners): op elke boerderij een gezin van drie dat
+//     bij het karakter van de boer past, bij de schout zijn vrouw en drie kinderen (Marcel koos het,
+//     26 sep, vraag 27), en in een gewoon huis wie de kaart zegt: een oud stel, of een jong gezin
+//     (Marcel koos het, 26 sep, vraag 31);
 //   - wie erbij komt of weggaat als het getal verandert (T.bewonersVolgen, vanuit T.wijzigBevolking):
 //     een nieuw gezin in een huis met plaats, of wie sterft of wegtrekt;
 //   - dat je ze ziet komen en gaan (T.werkBewonersBij, elk beeld; stuk 2): een nieuw gezin komt overdag
@@ -78,30 +79,39 @@
   // het hoofd is ("zoon van Klaas"). Het hoofd is de boer (T.MENSEN, met zijn karakter), de schout,
   // of bij een nieuw gezin een man.
   //
-  // Op een boerderij woont een gezin van vier (T.GEBOUWEN.boerderij.woonruimte): de boer, zijn vrouw
-  // of haar man, en twee uit een van deze gezinnen, geloot. Een knaap is altijd een zoon: hij neemt
-  // het werk dat over is, zoals de schapen hoeden (Marcel koos op 26 sep: de herder is een
-  // boerenzoon).
+  // Op een boerderij woont een gezin van drie: de boer, zijn vrouw of haar man, en één kind of ouder,
+  // geloot uit deze. Zo blijven de twee werkers van de boerderij (T.GEBOUWEN.boerderij.handen), en
+  // is er plaats voor de gewone huizen om het plein (Marcel koos het op 26 sep, vraag 31: dezelfde 25
+  // mensen, niet allemaal op een boerderij; tot dan woonde er een gezin van vier). Een knaap is altijd
+  // een zoon: hij neemt het werk dat over is, zoals de schapen hoeden (Marcel koos op 26 sep: de
+  // herder is een boerenzoon).
   const BOERENGEZINNEN = [
-    [['zoon', 'jong', 'man'], ['dochter', 'kind', 'vrouw']],
-    [['zoon', 'jong', 'man'], ['moeder', 'oud', 'vrouw']],
-    [['zoon', 'jong', 'man'], ['zoon', 'kind', 'man']],
-    [['zoon', 'jong', 'man'], ['vader', 'oud', 'man']],
-    [['dochter', 'kind', 'vrouw'], ['zoon', 'kleuter', 'man']],
+    [['zoon', 'jong', 'man']],
+    [['dochter', 'kind', 'vrouw']],
+    [['zoon', 'kind', 'man']],
+    [['zoon', 'kleuter', 'man']],
+    [['moeder', 'oud', 'vrouw']],
+    [['vader', 'oud', 'man']],
   ];
   // Sommige karakters leggen het gezin vast (T.KARAKTERS in js/mensen.js): de weduwe heeft geen man
-  // maar drie kleine kinderen, zoals haar karakter zegt; de oudste woont bij zijn zoon en
-  // schoondochter; de nieuwkomer is jong en heeft kleine kinderen.
+  // maar drie kleine kinderen, zoals haar karakter zegt (haar gezin is dus vier); de oudste woont bij
+  // zijn zoon en schoondochter; de nieuwkomer is jong en heeft een klein kind.
   const GEZIN_VAN_KARAKTER = {
     weduwe: { partner: false, anderen: [['dochter', 'kind', 'vrouw'], ['zoon', 'kind', 'man'], ['zoon', 'kleuter', 'man']] },
-    grijsaard: { hoofd: 'oud', partner: false, anderen: [['zoon', 'volwassen', 'man'], ['schoondochter', 'volwassen', 'vrouw'], ['kleinzoon', 'kind', 'man']] },
-    nieuwkomer: { anderen: [['dochter', 'kleuter', 'vrouw'], ['zoon', 'kleuter', 'man']] },
+    grijsaard: { hoofd: 'oud', partner: false, anderen: [['zoon', 'volwassen', 'man'], ['schoondochter', 'volwassen', 'vrouw']] },
+    nieuwkomer: { anderen: [['dochter', 'kleuter', 'vrouw']] },
   };
   // Zoveel knapen wonen er ten minste op de boerderijen samen: de weduwe heeft een hand van de buren
   // nodig, en de schaapskooi een herder.
   const KNAPEN_BIJ_BEGIN = 2;
   // Het gezin van de schout: zijn vrouw en drie kinderen (Marcel, 26 sep, vraag 27).
   const SCHOUTSGEZIN = [['vrouw', 'volwassen', 'vrouw'], ['zoon', 'kind', 'man'], ['dochter', 'kind', 'vrouw'], ['zoon', 'kleuter', 'man']];
+  // Wie er bij het begin in een gewoon huis woont (kaarten/<naam>.betekenis.json, "bewoners" op het
+  // gebouw; Marcel koos het, 26 sep, vraag 31): een oud stel, of een jong gezin van dagloners, die
+  // werken waar de schout een werkplaats neerzet. Het jonge gezin is zo groot als er nog mensen over
+  // zijn, zodat het dorp begint met zoveel als de kaart zegt ("beginBevolking"): een man en een vrouw,
+  // en de rest kinderen (nieuwGezin hieronder).
+  const OUD_STEL = { hoofd: 'oud', anderen: [['vrouw', 'oud', 'vrouw']] };
   // Een nieuw gezin (js/gebouwen.js, T.GEBOUWEN_INSTELLINGEN.gezinGrootte): een man, een vrouw, en de
   // rest kinderen, geloot uit deze.
   const NIEUWE_KINDEREN = [['zoon', 'kind', 'man'], ['dochter', 'kind', 'vrouw'], ['zoon', 'kleuter', 'man'], ['dochter', 'kleuter', 'vrouw']];
@@ -203,12 +213,28 @@
     return tegelRond(w, v, voor) || voor;
   };
 
-  // Het plein: waar de marskramer zijn waar uitstalt en de heer op Sint-Maarten staat
-  // (kaarten/<naam>.betekenis.json, "marskramer"). Daar spelen de kinderen, en daar hangt rond wie
-  // geen werk heeft.
+  // Het plein, als één plek: waar de marskramer zijn waar uitstalt en de heer op Sint-Maarten staat
+  // (kaarten/<naam>.betekenis.json, "marskramer"; in het gehucht op het zand voor de deur van de
+  // schout).
   T.pleinVan = function (w) {
-    const b = w && (w.plein || w.marskramer);
+    const b = w && w.marskramer;
     return b ? { x: b.x, y: b.y } : null;
+  };
+
+  // Een plek óp het plein, voor wie daar speelt of rondhangt: de kinderen, en wie geen werk heeft. Elk
+  // krijgt zijn eigen plek (n: zijn nummer), zodat ze over het hele plein verspreid zijn en niet
+  // allemaal bij de marskramer staan. Heeft de kaart geen plein (T.opHetPlein, js/wereld.js), dan null.
+  T.plekOpHetPlein = function (w, n) {
+    if (!w || !w.plein || w.plein.length < 3) return null;
+    const xs = w.plein.map((p) => p[0]);
+    const ys = w.plein.map((p) => p[1]);
+    const tegels = [];
+    for (let y = Math.floor(Math.min(...ys)); y <= Math.ceil(Math.max(...ys)); y++) {
+      for (let x = Math.floor(Math.min(...xs)); x <= Math.ceil(Math.max(...xs)); x++) {
+        if (T.opHetPlein(w, x, y) && T.isBegaanbaar(w, x, y)) tegels.push({ x, y });
+      }
+    }
+    return tegels.length ? tegels[(Math.imul(n | 0, 2654435761) >>> 0) % tegels.length] : null;
   };
 
   // De put het dichtst bij deze tegel, als plek om te staan: een begaanbare tegel ernaast. Een put
@@ -254,7 +280,7 @@
     const bijHuis = { x: deur.x, y: deur.y, straal: IN().straalBijHuis };
     if (p.leeftijd === 'oud' || p.leeftijd === 'kleuter') return bijHuis;
     if (p.leeftijd === 'volwassen' && vanSchout(p)) return { x: deur.x, y: deur.y, straal: erfStraal() };
-    const plein = T.pleinVan(w);
+    const plein = T.plekOpHetPlein(w, p.id) || T.pleinVan(w);
     const t = plein && tegelBij(w, plein);
     return t ? { x: t.x, y: t.y, straal: IN().straalPlein } : bijHuis;
   }
@@ -349,6 +375,13 @@
     return zetGezin(S, hoofd, anderen, r);
   }
 
+  // Een gezin dat vastligt (OUD_STEL) in huis g: een man als hoofd, van de leeftijd die erbij staat,
+  // en de anderen.
+  function vastGezin(S, g, vast, r) {
+    const hoofd = nieuweBewoner(S, { naam: kiesNaam(S, 'man', r), geslacht: 'man', leeftijd: vast.hoofd || 'volwassen', gezin: S.bewoners.gezinnen++, huis: g });
+    return zetGezin(S, hoofd, vast.anderen, r);
+  }
+
   // Een nieuw gezin van `n` mensen in huis g: een man, een vrouw, en de rest kinderen.
   function nieuwGezin(S, g, n, r) {
     const hoofd = nieuweBewoner(S, { naam: kiesNaam(S, 'man', r), geslacht: 'man', leeftijd: 'volwassen', gezin: S.bewoners.gezinnen++, huis: g });
@@ -403,11 +436,14 @@
     return T.dobbelsteen ? T.dobbelsteen(zaad) : Math.random;
   }
 
+  // Hoeveel mensen er in huis g wonen.
+  const inHetHuis = (S, g) => S.bewoners.mensen.filter((p) => p.huis === g).length;
+
   // De huizen van het dorp: wat klaar is en mensen een plek geeft, met hoeveel er nog bij kunnen.
   function huizenMetPlaats(S) {
     return (S.gebouwen || [])
       .filter((g) => g.klaar && T.GEBOUWEN[g.soort] && (T.GEBOUWEN[g.soort].woonruimte || 0) > 0)
-      .map((g) => ({ g, vrij: T.GEBOUWEN[g.soort].woonruimte - S.bewoners.mensen.filter((p) => p.huis === g).length }));
+      .map((g) => ({ g, vrij: T.GEBOUWEN[g.soort].woonruimte - inHetHuis(S, g) }));
   }
 
   // `n` mensen erbij, als gezin: zoveel mogelijk samen in het huis met de meeste plaats. Bij het begin
@@ -595,15 +631,30 @@
       if (boer) boerderijen.push(gezinVanBoer(S, g, boer, r));
     }
     // Genoeg knapen voor het werk dat over is: wie te weinig heeft, krijgt in een gezin zonder vast
-    // karakter een zoon van twaalf in plaats van een kleiner kind.
+    // karakter en zonder knaap een zoon van twaalf in plaats van een kleiner kind, en als dat niet
+    // genoeg is, in plaats van een oude vader of moeder. Zo is de herder altijd een boerenzoon, en
+    // blijft een boerderij drie. Eerst op de boerderijen die het dichtst bij de schaapskooi liggen:
+    // anders liep de herder in het grote gehucht van 26 sep soms elke dag de hele kaart over.
     let knapen = S.bewoners.mensen.filter((p) => p.leeftijd === 'jong' && p.hoofd && p.hoofd.wie).length;
-    for (const leden of boerderijen) {
-      if (knapen >= KNAPEN_BIJ_BEGIN) break;
-      if (GEZIN_VAN_KARAKTER[karakterVan(leden[0].wezen)]) continue;
-      const kind = leden.find((p) => p.leeftijd === 'kind' || p.leeftijd === 'kleuter');
-      if (!kind) continue;
-      Object.assign(kind, { band: 'zoon', leeftijd: 'jong', geslacht: 'man', naam: kiesNaam(S, 'man', r) });
-      knapen++;
+    const kooi = S.gebouwen.find((g) => g.klaar && g.soort === 'schaapskooi');
+    const naarKooi = (leden) => (kooi ? T.afstand(T.deurVan(w, leden[0].huis), T.deurVan(w, kooi)) : 0);
+    const nietVast = boerderijen.filter((leden) => !GEZIN_VAN_KARAKTER[karakterVan(leden[0].wezen)]).sort((a, b) => naarKooi(a) - naarKooi(b));
+    const wordtKnaap = [(p) => p.leeftijd === 'kind' || p.leeftijd === 'kleuter', (p) => p.leeftijd === 'oud' && p.hoofd];
+    for (const past of wordtKnaap) {
+      for (const leden of nietVast) {
+        if (knapen >= KNAPEN_BIJ_BEGIN || leden.some((p) => p.leeftijd === 'jong')) continue;
+        const wie = leden.find(past);
+        if (!wie) continue;
+        Object.assign(wie, { band: 'zoon', leeftijd: 'jong', geslacht: 'man', naam: kiesNaam(S, 'man', r) });
+        knapen++;
+      }
+    }
+    // De gewone huizen, zoals de kaart zegt: eerst een oud stel, dan een jong gezin van wie er nog
+    // over is. Een huis zonder "bewoners" blijft leeg, voor wie later komt.
+    for (const g of S.gebouwen) if (g.klaar && g.bewoners === 'oudStel') vastGezin(S, g, OUD_STEL, r);
+    for (const g of S.gebouwen) {
+      const over = (S.bevolking || 0) - S.bewoners.mensen.length;
+      if (g.klaar && g.bewoners === 'jongGezin' && over > 0) nieuwGezin(S, g, Math.min(over, T.GEBOUWEN[g.soort].woonruimte), r);
     }
     // Evenveel bewoners als het getal: wie er nog bij moet, komt als gezin in een huis met plaats.
     const verschil = (S.bevolking || 0) - S.bewoners.mensen.length;

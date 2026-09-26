@@ -18,12 +18,12 @@ const T = globalThis.Spel;
 test('een "gebouw" ding in de betekenis landt in w.gebouwenOpKaart, met zijn maat', () => {
   const betekenis = { dingen: [{ gebouw: 'boerderij', x: 2, y: 2, b: 3, h: 4 }] };
   const w = T.laadKaart(T.KAARTEN.proef, betekenis);
-  assert.deepEqual(w.gebouwenOpKaart, [{ soort: 'boerderij', x: 2, y: 2, b: 3, h: 4, huis: null }]);
+  assert.deepEqual(w.gebouwenOpKaart, [{ soort: 'boerderij', x: 2, y: 2, b: 3, h: 4, huis: null, bewoners: null }]);
 });
 
 test('zonder "b"/"h" op een gebouw-ding is de voet 1x1', () => {
   const w = T.laadKaart(T.KAARTEN.proef, { dingen: [{ gebouw: 'put', x: 2, y: 2 }] });
-  assert.deepEqual(w.gebouwenOpKaart[0], { soort: 'put', x: 2, y: 2, b: 1, h: 1, huis: null });
+  assert.deepEqual(w.gebouwenOpKaart[0], { soort: 'put', x: 2, y: 2, b: 1, h: 1, huis: null, bewoners: null });
 });
 
 // Wie er woont, zegt "huis", zoals bij een akker: de boer met dezelfde id, of de schout. Dat telt
@@ -38,6 +38,37 @@ test('"huis" op een gebouw-ding zegt wie er woont, tot op het gebouw zelf', () =
   // En een klik op zijn voet vindt hem, ook zonder eigen voorwerp (T.gebouwOp, js/gebouwen.js).
   assert.equal(T.gebouwOp(S, 3, 3), S.gebouwen[0]);
   assert.equal(T.gebouwOp(S, 5, 3), null);
+});
+
+// Hoeveel mensen er bij het begin wonen, zegt de kaart ("beginBevolking"; Marcel koos 26 sep voor 25
+// in het gehucht, ook al is er plaats voor meer), en "bewoners" wie er in een gewoon huis woont.
+test('"beginBevolking" zegt hoeveel mensen er wonen, en "bewoners" komt mee tot op het gebouw', () => {
+  const betekenis = {
+    beginBevolking: 4,
+    dingen: [{ gebouw: 'huis', x: 2, y: 2, b: 2, h: 2, bewoners: 'jongGezin' }, { gebouw: 'hut', x: 6, y: 2, b: 2, h: 2 }],
+  };
+  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  S.wereld = T.laadKaart(T.KAARTEN.proef, betekenis);
+  assert.equal(S.wereld.beginBevolking, 4);
+  T.zetBestaandeGebouwen(S);
+  assert.equal(S.woonruimte, T.GEBOUWEN.huis.woonruimte + T.GEBOUWEN.hut.woonruimte);
+  assert.equal(S.bevolking, 4, 'niet zoveel als er plaats is');
+  assert.deepEqual(S.gebouwen.map((g) => g.bewoners), ['jongGezin', null]);
+  // Zonder "beginBevolking" staan de huizen vol, zoals vroeger.
+  const vol = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  vol.wereld = T.laadKaart(T.KAARTEN.proef, { dingen: betekenis.dingen });
+  T.zetBestaandeGebouwen(vol);
+  assert.equal(vol.bevolking, vol.woonruimte);
+});
+
+// Het plein ("plein": zijn rand, in tegels): een tegel ligt erop als zijn midden binnen de rand valt.
+test('"plein" op het betekenisbestand: T.opHetPlein zegt welke tegels erop liggen', () => {
+  const w = T.laadKaart(T.KAARTEN.proef, { plein: [[2, 2], [6, 2], [6, 5], [2, 5]] });
+  assert.equal(T.opHetPlein(w, 2, 2), true);
+  assert.equal(T.opHetPlein(w, 5, 4), true);
+  assert.equal(T.opHetPlein(w, 6, 3), false, 'de rand zelf loopt over de rand van de tegel');
+  assert.equal(T.opHetPlein(w, 1, 3), false);
+  assert.equal(T.opHetPlein(T.laadKaart(T.KAARTEN.proef, {}), 3, 3), false, 'zonder plein ligt er niets op');
 });
 
 test('"beginVoorraad" op het betekenisbestand landt op de wereld', () => {

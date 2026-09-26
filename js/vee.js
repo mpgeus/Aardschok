@@ -23,8 +23,8 @@
     // de meent (de heide) evenveel nodig als op een weide.
     plaats: { koe: 4, schaap: 2 },
     // Velden die weide zijn en hooguit zoveel tegels uit elkaar liggen, zijn samen één weide met één
-    // kudde (Marcel, 25 sep). Eén, omdat er onder de es een strook van één tegel tussen de blokken
-    // van Klaas en Gerrit ligt; nul is: alleen velden die elkaar raken.
+    // kudde (Marcel, 25 sep). Eén, omdat er in het gehucht een strook van één tegel tussen de weide van
+    // Klaas en de strook van Wouter ligt; nul is: alleen velden die elkaar raken.
     weideTussen: 1,
     // Zoveel schapen slapen er in één schaapskooi. Op de meent grazen er niet meer dan de kooien
     // samen kunnen bergen: wie geen plaats in de kooi heeft, werpt geen lam.
@@ -649,7 +649,7 @@
   // ── De schapen en de kooi (stap 2) ──
   //
   // Marcel koos het op 25 sep, uit een voorstel van Claude: overdag grazen de schapen op de heide,
-  // 's nachts staan ze in de schaapskooi, en de mest uit de kooi maakt de es vruchtbaar. In
+  // 's nachts staan ze in de schaapskooi, en de mest uit de kooi maakt de akkers vruchtbaar. In
   // zomermaand worden ze geschoren. De kooi maakt dus zelf geen wol meer (js/gebouwen.js): die komt
   // van de schapen.
 
