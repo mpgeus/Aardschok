@@ -107,7 +107,7 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     andere standen zijn één regel (`T.SNELHEDEN`, `js/tijd.js`).
 23. Komen het zichtveld voor iedereen en de getuigen (Marcels idee, 26 sep) als stap in 3b, na de
     poppetjes, of later bij punt 11 (de nacht)? Voorstel: in 3b, want verstoppen wordt er meteen
-    spannender door.
+    spannender door. Waar precies in 3b, is vraag 26: Claude stelt voor de herberg ervoor te doen.
 24. Wat nu, na de dag: de poppetjes (3b, stap 2), of eerst verstoppen deel 1b? Voorstel: de
     poppetjes, en dan het zichtveld (vraag 23), waarin "wie vlak langs loopt, kan iets vinden" opgaat.
     **Beantwoord (Marcel, 26 sep): de poppetjes.**
