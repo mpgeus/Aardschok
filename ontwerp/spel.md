@@ -280,6 +280,13 @@ Is rijk worden en arm lijken leuk?
   vinden; en soms kiest de heer zelf de route.
 - **Nog open:** deel 2, het bos, met de kudde die de inner telt; deel 3, de marskramer die vee, kaas,
   wol en hooi koopt en verkoopt; en stap 3: praten, afleiden, omkopen en de twee rekenboeken.
+- **Voorstel voor later: de inner telt de mensen die hij ziet** (Claude, 26 sep; Marcel: "Ja, als
+  voorstel", nog niet te bouwen). Nu rekent hij het hoofdgeld naar de woonruimte van de huizen die hij
+  zag. Sinds iedereen een poppetje is (`js/bewoners.js`), kan hij de mensen zelf tellen: wie op het
+  plein, op de akker of op het erf in zijn zicht komt. Dan stuur je de knapen de heide op als hij
+  komt, en houd je de kinderen binnen. Rijk worden en arm lijken, maar dan met monden. Nog uit te
+  werken: of wie binnen is ook telt (een huis met rook uit de schoorsteen?), wat de soldaten op
+  Sint-Maarten tellen, en of een lege hut argwaan wekt.
 
 **Hoe het zo kwam:**
 
@@ -1660,6 +1667,24 @@ veertien zijn alleen een getal.
    aan.
 
 Het wordt gebouwd in twee stukken: eerst 1 tot en met 3, dan een schermafdruk voor Marcel, dan 4 en 5.
+
+**Stuk 2 uitgewerkt** (Claude, 26 sep, na het nieuwe gehucht; Marcel koos de looptijd):
+- **Een nieuw gezin komt overdag over de weg binnen,** op dezelfde manier als de marskramer en de heer
+  (`T.bezoekerKomtAan`), met een bericht op naam, en loopt naar zijn huis. Het getal in de balk gaat
+  omhoog op de dag dat het besloten wordt, zoals nu; tot ze er zijn, zijn ze onderweg.
+- **Een gezin dat wegtrekt, loopt de weg af,** en telt vanaf dat moment niet meer mee.
+- **Wie in de winter sterft, heeft een naam** in het bericht: "de oude Jan, vader van Klaas".
+- **Werk telt in uren, uit de looptijd** (Marcel, 26 sep: "Uit de looptijd"; de andere twee keuzes
+  waren de uren echt meten, of een lange weg laten kosten aan tevredenheid in plaats van aan werk).
+  De regel rekent de weg van de deur naar het werk uit, met de snelheid van wie hem loopt. Hij
+  vertrekt als het werk begint, dus de weg heen gaat van de werkuren af; de weg terug gaat van zijn
+  avond af. Zo werkt het ook als je slaapt, door de kalender springt of op 30× speelt, en het is te
+  toetsen zonder scherm; wat je ziet, klopt, want het poppetje loopt hetzelfde pad even snel. Een
+  volwassene loopt zo'n 17 tegels per speluur (1,35 tegel per seconde, een uur is 12,5 seconden): 30
+  tegels ver kost in de zomer bijna 2 van de 12 werkuren (15%), in de winter, met 6 werkuren, meer
+  dan een kwart. Wijs je een werkplaats aan, dan zie je hoeveel uur er gewerkt is en hoeveel uur de
+  mensen onderweg waren; anders is het een verborgen straf. Een optie in de spelregels, standaard
+  aan.
 
 Drie dingen die Claude zag:
 - **Je ziet wie geen werk heeft.** Wie geen werk heeft, hangt overdag rond op de brink. Staan er tien

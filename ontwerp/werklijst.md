@@ -55,7 +55,10 @@ voorstel van Claude, en daar gaat vraag 26 over.
    loopt naar zijn werk, en iedereen volgt het ritme van de dag; `js/bewoners.js`), dan een
    schermafdruk voor Marcel, dan 4 en 5: **komen en gaan zie je** (een nieuw gezin komt over de weg
    binnen, wie wegtrekt loopt de weg af, wie sterft heeft een naam) en **werk telt in uren** (een optie
-   in de spelregels, standaard aan).
+   in de spelregels, standaard aan). Voor dat laatste koos Marcel op 26 sep **de looptijd**: de regel
+   rekent de weg van de deur naar het werk uit, en de weg heen gaat van de werkuren af (`spel.md`,
+   "Stuk 2 uitgewerkt"). En hij liet noteren, voor later: de inner telt de mensen die hij ziet
+   (`spel.md`, bij de inner).
 2. **De herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel.
 3. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
    steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
