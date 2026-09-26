@@ -284,6 +284,12 @@ gelden.
   Baldur's Gate het ook. Bepalen wat wat bedekt gaat op tegels en hoogte, niet op pixels, want
   het moet elk beeld kunnen. De overgang loopt in een paar tienden van een seconde op en af,
   anders klappert het.
+  **Zo werkt het nu** (26 sep): een boom wordt doorzichtig. Een gebouw niet, want een doorzichtig
+  rieten dak werd een geelgroen spook (Marcel, 23 sep); het krijgt een **kijkgat**, een zacht rond
+  venster rond de schout, waarin de grond achter het huis en wie daar staat opnieuw getekend worden
+  (`tekenKijkgat` in `js/tekenen.js`). Tot 26 sep kwam in dat gat alleen de schout zelf terug, met het
+  dak eromheen, en dan leek hij óp het dak te staan (Marcel: "In al je plaatjes staan er mensen op het
+  dak van huizen").
 - **Niets valt je aan van buiten beeld.** Een wezen dat jou kan zien, moet jij kunnen zien. Als
   het je ontdekt, gaat de camera ernaartoe en komt de melding.
 - **Waar je loopt, staat niets.** Dichte begroeiing hoort aan de rand, waar je niet komt. Wat er

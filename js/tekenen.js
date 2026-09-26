@@ -545,11 +545,14 @@
     return kijkgatCx;
   }
 
-  // Tekent e nog eens overheen, maar dan alleen binnen een zachte cirkel rond zijn romp: het
-  // "kijkgat" waarmee een gebouw dat hem bedekt (tekenVoorwerp hieronder) hem toch laat zien.
+  // Het "kijkgat": een venster in gebouw v, dat e bedekt (tekenVoorwerp hieronder). Binnen een zachte
+  // cirkel rond zijn romp komt opnieuw wat achter het gebouw ligt: de grond (de grondbuffer,
+  // werkGrondBij), en wie daar staat, van achter naar voor. Zo kijk je door het dak heen de straat
+  // in. Tot 26 sep kwam alleen de figuur zelf terug, met het dak eromheen, en dan leek hij óp het
+  // dak te staan (Marcel: "In al je plaatjes staan er mensen op het dak van huizen").
   // sterkte (0..1) is hoever v.doorkijk al opgelopen is naar zijn doel, zodat het kijkgat net zo
   // vloeiend in- en uitfaadt als de oude doorzichtigheid deed.
-  function tekenKijkgat(ctx, S, e, sterkte) {
+  function tekenKijkgat(ctx, S, e, sterkte, v) {
     if (typeof document === 'undefined') return;
     const p = T.naarScherm(e.x, e.y);
     const mx = p.x;
@@ -563,7 +566,17 @@
     bx.clearRect(0, 0, maat, maat);
     bx.imageSmoothingEnabled = false;
     bx.setTransform(1, 0, 0, 1, -ox, -oy);
-    tekenWezen(bx, S, e);
+    const grond = S.grond;
+    if (grond && grond.canvas) bx.drawImage(grond.canvas, grond.vx, grond.vy);
+    const ver = KIJKGAT_STRAAL + 20;
+    const erin = S.wereld.wezens.filter((o) => {
+      if (o.dood || (o.binnen && !deurStap(S, o))) return false;
+      if (o !== e && v && staatVoorGebouw(o.tx, o.ty, v)) return false;
+      const q = T.naarScherm(o.x, o.y);
+      return Math.hypot(q.x - mx, q.y - KIJKGAT_OMHOOG - my) < ver;
+    });
+    erin.sort((a, b) => a.x + a.y - (b.x + b.y));
+    for (const o of erin) tekenWezen(bx, S, o);
     bx.setTransform(1, 0, 0, 1, 0, 0);
     bx.globalCompositeOperation = 'destination-in';
     const g = bx.createRadialGradient(mx - ox, my - oy, 0, mx - ox, my - oy, KIJKGAT_STRAAL);
@@ -1149,7 +1162,7 @@
       if (alpha < 1) ctx.globalAlpha = 1;
       if (dekking < 1 && v.kijkgat && v.kijkgat.length) {
         const sterkte = Math.max(0, Math.min(1, (1 - dekking) / (1 - DOORKIJK)));
-        if (sterkte > 0.02) for (const e of v.kijkgat) tekenKijkgat(ctx, S, e, sterkte);
+        if (sterkte > 0.02) for (const e of v.kijkgat) tekenKijkgat(ctx, S, e, sterkte, v);
       }
       return;
     }
