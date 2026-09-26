@@ -9,14 +9,19 @@
   // A* van start naar doel. magBetreden(x, y): mag er een stap naar deze tegel?
   // isVast(x, y): houdt deze tegel een schuine stap om de hoek tegen?
   // opties.naast: eindig op een tegel die het doel raakt (om te slaan of iets te gebruiken).
+  // opties.tot: eindig op een tegel die hoogstens zoveel tegels van het doel af ligt: om ergens rond
+  // te lopen (een plek met een straal, T.laatDwalen in js/verkennen.js). Het doel zelf mag dan bezet
+  // zijn; zonder dit bleef wie naar het erf liep staan zolang er iemand voor de deur stond.
   // Geeft de stappen terug zonder de starttegel, of null als er geen weg is.
   T.zoekPad = function (start, doel, magBetreden, isVast, opties) {
     const naast = !!(opties && opties.naast);
+    const tot = opties && opties.tot >= 1 ? Math.floor(opties.tot) : 0;
     const schatting = (x, y) => {
       const d = Math.max(Math.abs(x - doel.x), Math.abs(y - doel.y));
-      return naast ? Math.max(0, d - 1) : d;
+      return naast ? Math.max(0, d - 1) : Math.max(0, d - tot);
     };
     const isKlaar = (x, y) => {
+      if (tot) return Math.max(Math.abs(x - doel.x), Math.abs(y - doel.y)) <= tot;
       if (!naast) return x === doel.x && y === doel.y;
       const dx = doel.x - x;
       const dy = doel.y - y;

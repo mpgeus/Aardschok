@@ -524,6 +524,23 @@
         goud: Math.floor((p.gebouw.verstopt || {}).goud || 0), plaats: p.plaats, vinden: p.vinden, houdt: p.houdt, weigert: p.weigert,
       }));
     },
+    // Wie er woont (js/bewoners.js): per bewoner wie hij is, zijn huis, zijn werk, waar hij staat en
+    // waar hij nu hoort. Spel.debug.bewoners('herder') zoekt in de tekst, zodat je er één vindt.
+    bewoners(zoek) {
+      if (!S.bewoners) return 'Er wonen hier geen bewoners.';
+      const lijst = S.bewoners.mensen.map((p) => {
+        const e = p.wezen;
+        const a = e && T.dagAnker ? T.dagAnker(S, e) : null;
+        return {
+          wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)} (boer)` : T.overBewonerTekst(S, e),
+          leeftijd: p.leeftijd, huis: p.huis ? p.huis.huis || `${p.huis.soort} ${p.huis.x},${p.huis.y}` : '-',
+          werk: p.werk ? `${p.werk.soort} ${p.werk.x},${p.werk.y}` : '-',
+          staat: e ? (e.binnen ? 'binnen' : `${e.tx},${e.ty}`) : '-',
+          hoort: a ? `${a.x},${a.y} (${a.binnen ? 'binnen' : 'straal ' + a.straal})` : '-',
+        };
+      });
+      return zoek ? lijst.filter((r) => JSON.stringify(r).includes(zoek)) : lijst;
+    },
     // De soldaten het dorp nu laten doorzoeken, zoals op Sint-Maarten (js/inner.js): wat ze vinden.
     zoeken() {
       return T.doorzoekDorp ? T.doorzoekDorp(S) : 'Hier zoekt niemand.';

@@ -9,9 +9,9 @@
 //   - de dagindeling: wanneer men opstaat, werkt, schaft, naar huis gaat en slaapt (T.dagindeling),
 //     en welk deel van de dag het nu is (T.dagdeelVan);
 //   - het licht: hoe donker het is (T.lichtVan), voor js/tekenen.js;
-//   - het ritme van de boeren: waar ze 's ochtends, 's avonds en 's nachts zijn (T.dagAnker, voor
-//     T.laatDwalen in js/verkennen.js), en of ze nu werken (T.isWerktijd, voor T.werkOogstBij in
-//     js/akkers.js);
+//   - het ritme van de dag, voor de boeren en de bewoners (js/bewoners.js): waar ze 's ochtends,
+//     overdag, 's avonds en 's nachts zijn (T.dagAnker, voor T.laatDwalen in js/verkennen.js), en of
+//     ze nu werken (T.isWerktijd, voor T.werkOogstBij in js/akkers.js);
 //   - slapen tot de ochtend, bij je eigen huis (T.magSlapen, T.gaSlapen, T.wordWakker, T.werkDagBij).
 //
 // Het uur is het deel achter de komma van de dagteller (T.uurVanDag, js/tijd.js), en de zon staat
@@ -141,20 +141,31 @@
   // Het ritme van de boeren
   // ---------------------------------------------------------------------------------------------
 
-  // Waar een boer nu hoort, als het deel van de dag het zegt: 's ochtends en 's avonds op zijn erf,
-  // 's nachts binnen (binnen: true; T.laatDwalen zet hem naar binnen als hij voor zijn deur staat).
-  // Overdag, bij het werk en de schaft, geeft dit null: dan geldt het gewone anker (T.wandelAnker in
-  // js/akkers.js, zijn akker in het groeiseizoen), en in de oogst maait hij (T.werkOogstBij).
+  // Waar iemand nu hoort, als het deel van de dag het zegt ("Wie wanneer waar is" in ontwerp/spel.md):
+  //   - 's nachts binnen (binnen: true; T.laatDwalen zet hem naar binnen als hij voor zijn deur staat);
+  //   - 's ochtends op zijn erf, en wie van het gezin water haalt, bij de put;
+  //   - overdag, bij het werk en de schaft, bij zijn werk. Wie geen werk heeft: een kind op de brink,
+  //     een oude en een kleuter bij huis (de plekken zet js/bewoners.js, per bewoner);
+  //   - 's avonds op zijn erf. De herberg komt in stap 3 van punt 3b.
+  // Een boer volgt hetzelfde, maar overdag geeft dit voor hem null: dan geldt zijn eigen anker
+  // (T.wandelAnker in js/akkers.js, zijn akker in het groeiseizoen), en in de oogst maait hij
+  // (T.werkOogstBij).
   //
-  // Alleen voor wie een huis en een akker heeft: de boeren. De rest van het dorp krijgt een ritme als
-  // de mensen poppetjes worden (werklijst punt 3b, stap 2). Wie ergens anders moet zijn (moetNaar: de
-  // schandpaal, js/heer.js), volgt dat en niet de dag.
+  // Voor de boeren (een huis en een akker) en de bewoners (e.bewoner, js/bewoners.js); de schout, het
+  // vee en een bezoeker volgen hun eigen weg. Wie ergens anders moet zijn (moetNaar: de schandpaal,
+  // js/heer.js), volgt dat en niet de dag.
   T.dagAnker = function (S, e, oogst) {
-    if (!S || !S.kalender || !e || !e.thuis || !e.werkAkkers || e.moetNaar) return null;
+    if (!S || !S.kalender || !e || !e.thuis || e.moetNaar) return null;
+    const p = e.bewoner;
+    if (!p && !e.werkAkkers) return null;
     const deel = T.dagdeelVan(S.kalender.dag, oogst);
     if (deel === 'nacht') return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };
-    if (deel === 'ochtend' || deel === 'avond') return { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
-    return null;
+    const erf = { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
+    if (!p) return deel === 'ochtend' || deel === 'avond' ? erf : null;
+    const plek = p.plek || {};
+    if (deel === 'ochtend') return (p.haaltWater && plek.put) || erf;
+    if (deel === 'avond') return erf;
+    return plek.werk || plek.vrij || erf;
   };
 
   // Komen de marskramer, de heer en de inner al? Overdag, vanaf het bezoekuur. Zonder kalender (een

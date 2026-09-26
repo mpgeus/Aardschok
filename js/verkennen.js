@@ -139,6 +139,8 @@
       if (e.kant === 'monster') return { tekst: `De ${e.naam} aanvallen`, doe: () => T.startGevecht(S, e, true) };
       // Een dier (js/vee.js) praat niet en doet nog niets: bij de muis staat alleen wat het is.
       if (e.dier) return { tekst: T.hoofdletter(`een ${e.naam}`) };
+      // Een bewoner (js/bewoners.js) heeft nog geen gesprek: bij de muis staat wie hij is.
+      if (e.bewoner && T.overBewonerTekst) return { tekst: T.overBewonerTekst(S, e) };
       // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: een boer, de heer. Welk
       // gesprek dat is, zegt T.gesprekIdVan — een dorpeling kan er een eigen hebben.
       if (T.gesprekVan && T.gesprekVan(e)) {
@@ -314,12 +316,18 @@
       // voor zijn deur staat als het nacht is, gaat naar binnen; 's ochtends komt hij weer naar
       // buiten, zodra er niemand voor de deur staat. Overdag geeft T.dagAnker niets, en geldt het
       // gewone anker hieronder.
+      // Staat er iemand anders in zijn voordeur (de schout voor zijn eigen huis, terwijl zijn gezin
+      // naar binnen wil), dan gaat hij door de achterdeur: overal op zijn erf. Voor een huis in een
+      // smal steegje moest hij anders om het hele huis heen, want wie in de deur staat, zet het
+      // steegje dicht.
       const dagAnker = T.dagAnker ? T.dagAnker(S, m, oogst) : null;
+      const deurBezet = !!(dagAnker && dagAnker.binnen && T.wezenOp(w, dagAnker.x, dagAnker.y, m));
+      const achterdeur = deurBezet ? (T.DAG_INSTELLINGEN && T.DAG_INSTELLINGEN.erfStraal) || 2 : 0;
       if (m.binnen) {
         if (dagAnker && dagAnker.binnen) continue;
         if (T.wezenOp(w, m.tx, m.ty, m)) continue;
         m.binnen = false;
-      } else if (dagAnker && dagAnker.binnen && m.tx === dagAnker.x && m.ty === dagAnker.y && !m.onderweg) {
+      } else if (dagAnker && dagAnker.binnen && !m.onderweg && T.afstand(dagAnker, { x: m.tx, y: m.ty }) <= achterdeur) {
         m.binnen = true;
         continue;
       }
@@ -345,7 +353,9 @@
       // Ligt hij nu buiten die straal — een boer wiens huis niet naast zijn akker staat, bij het
       // begin van het groeiseizoen — dan is geen van de vier buurtegels ooit dichtbij genoeg, en
       // zou hij voor eeuwig blijven staan. Dan eerst een heus pad ernaartoe (T.zoekPad, net als
-      // T.werkOogstBij dat doet); eenmaal aangekomen pakt de gewone dwaalstap het weer over.
+      // T.werkOogstBij dat doet); eenmaal aangekomen pakt de gewone dwaalstap het weer over. Het pad
+      // eindigt binnen de straal (`tot`), niet per se op het midden: daar staat vaak al iemand, zeker
+      // voor een deur waar een heel gezin woont (js/bewoners.js).
       const straalNu = thuisNu && (thuisNu.straal != null ? thuisNu.straal : (m.straal || 3));
       if (thuisNu && T.afstand(thuisNu, { x: m.tx, y: m.ty }) > straalNu) {
         const doel = { x: Math.round(thuisNu.x), y: Math.round(thuisNu.y) };
@@ -354,12 +364,20 @@
           doel,
           (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: m }),
           (x, y) => T.isVast(w, x, y),
-          {},
+          { tot: Math.max(straalNu, achterdeur) },
         );
         if (pad && pad.length) {
           m.pad = pad;
           continue;
         }
+        // Geen weg, omdat anderen in de weg staan: in een steegje van één tegel breed willen er soms
+        // twee langs elkaar, en dan wachten ze voor altijd op elkaar. Een stap opzij, waar niemand
+        // staat, en de volgende keer opnieuw proberen; zo raakt zo'n knoop vanzelf los.
+        const opzij = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+          .map(([dx, dy]) => ({ x: m.tx + dx, y: m.ty + dy }))
+          .filter((t) => T.isBegaanbaar(w, t.x, t.y, { wezensBlokkeren: true, wie: m }) && !bijDeur(w, t.x, t.y));
+        if (opzij.length) m.pad = [opzij[Math.floor(Math.random() * opzij.length)]];
+        continue;
       }
       const opties = [];
       for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {

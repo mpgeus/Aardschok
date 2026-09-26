@@ -26,7 +26,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep) | 6a |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | besloten, nog niet gebouwd | 6c |
-| Een dorp dat leeft en groeit | de dag gebouwd (26 sep); de rest een voorstel, grotendeels gekozen | 3b, 11, 13, 14 |
+| Een dorp dat leeft en groeit | de dag en de bewoners (stap 2, stuk 1) gebouwd (26 sep); de rest een voorstel, grotendeels gekozen | 3b, 11, 13, 14 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
@@ -1280,7 +1280,9 @@ Nog open, voor als punt 6c gebouwd wordt (vragen van Claude):
 ## Een dorp dat leeft en groeit (Marcel, 26 sep 2026)
 
 **Zo werkt het nu** (26 sep): stap 1 van punt 3b, **de dag, is gebouwd** (`js/dag.js`, `js/tijd.js`;
-hieronder). De rest is een voorstel van Claude, waarvan Marcel het meeste koos, in drie opmerkingen op
+hieronder), en van stap 2 **het eerste stuk: iedereen een poppetje met een huis, werk en een dagritme**
+(`js/bewoners.js`; "Mensen worden poppetjes").
+De rest is een voorstel van Claude, waarvan Marcel het meeste koos, in drie opmerkingen op
 de pagina. Het raakt punt 11 (de nacht), 13 (de militie) en 14 (de treden), en de huizenbouwer (ronde
 4b). Wat nog open is, staat onderaan, en met een nummer in de werklijst.
 
@@ -1576,6 +1578,41 @@ hieronder).
 
 ### Mensen worden poppetjes
 
+**Zo werkt het nu** (26 sep, stuk 1 van het plan hieronder gebouwd: punt 1 tot en met 3; `js/bewoners.js`,
+`T.dagAnker` in `js/dag.js`, toetsen in `test/bewoners.test.cjs`):
+- **Iedereen die in de balk telt, is een poppetje,** met een naam, een leeftijd (volwassen, knaap of
+  meid, kind, kleuter, oud), een huis en een gezin. Op elke boerderij woont een gezin van vier: de
+  boer, zijn vrouw of haar man, en twee kinderen of een oude, geloot. Het karakter legt soms vast wie:
+  de weduwe heeft drie kleine kinderen, de oudste woont bij zijn zoon en schoondochter, de
+  nieuwkomer heeft kleine kinderen. Bij de schout wonen zijn vrouw en drie kinderen (vraag 27). Elk
+  draagt het vel van zijn leeftijd; er is niets nieuws getekend.
+- **Het getal in de balk blijft de waarheid,** en verandert op één manier (`T.wijzigBevolking`). Komt
+  er een gezin bij, dan krijgt het een huis met plaats en poppetjes bij de deur. Wie in de winter
+  sterft, is eerst een oude, dan een kleine; wie wegtrekt, is eerst een gezin dat later kwam, en dan
+  een knaap van een boerderij. De schout, zijn gezin en de boeren zelf blijven. (Dat je ze ziet komen en
+  gaan, en wie het is, is stuk 2.)
+- **Wie werkt, heeft een werkplek en gaat erheen.** Een gebouw krijgt zijn handen zoals voorheen
+  (`T.verdeelHanden`), en nu zijn dat mensen (`T.wijsWerkToe`): eerst werkt een gezin op zijn eigen
+  boerderij, dan krijgt een plek de vrije hand die het best past: eerst volwassenen, dan knapen,
+  kinderen en ouden, en wie het dichtstbij woont; de schaapskooi neemt het liefst een knaap
+  (`liefst` in `T.GEBOUWEN`), en het gezin van de schout werkt alleen als er niemand anders is. Wie
+  werk heeft, houdt het.
+- **Hoeveel handen het dorp heeft, verandert een beetje:** een kleuter en de schout zelf werken niet.
+  Aan het begin zijn dat 19 tot 23 handen in plaats van 25 (meestal 20 of 21, gemeten over 400
+  spellen); het gehucht gebruikt er 11.
+- **Het ritme van de dag, voor iedereen** (`T.dagAnker`): 's nachts binnen; 's ochtends op het erf, en
+  wie van het gezin water haalt (de vrouw, anders een dochter) bij de put op de brink; overdag bij het
+  werk (de herder op de heide, de tweede hand op het erf van de boerderij), en wie geen werk heeft:
+  een kind of knaap op de brink, een volwassene zonder werk ook, een oude en een kleuter bij huis, de
+  vrouw van de schout op haar erf; 's avonds thuis op het erf. Staat er iemand in de voordeur, dan gaat
+  men door de achterdeur: ergens op het eigen erf.
+- **Bij de muis staat wie het is:** "Geert, zoon van Klaas · herder", "Tette, schoondochter van Aaltje
+  · helpt op de boerderij van Trijn", "Albert · zonder werk".
+- `Spel.debug.bewoners()` zegt per bewoner wie het is, waar hij woont en werkt, en waar hij nu hoort.
+- Onderweg hersteld: wie achter een huis liep, werd soms op het dak getekend (de tekenvolgorde,
+  `T.tekenVolgorde` in `js/tekenen.js`), en twee mensen in een steegje van één tegel breed konden
+  voor altijd op elkaar wachten (nu zet er een een stap opzij).
+
 - Wie werkt, is een poppetje met een huis en een werkplek: de handen van een gebouw lopen er 's
   ochtends heen en 's avonds terug. Kinderen en ouden lopen overdag rond als menigte.
 - Het getal in de balk blijft de waarheid; de poppetjes zijn wie het zijn. Een gezin van vier heeft
@@ -1612,9 +1649,12 @@ Drie dingen die Claude zag:
 - **Je ziet wie geen werk heeft.** Wie geen werk heeft, hangt overdag rond op de brink. Staan er tien
   mensen bij de put te niksen, dan weet je zonder een getal te lezen dat er een werkplaats bij moet.
 - **Het gezin past bij het karakter.** Trekt een boerin het karakter weduwe, dan woont er op haar
-  boerderij geen man, maar een volwassen zoon.
-- **Het gehucht heeft geen put.** Er komt er een op de brink (de tekening is er al): daar halen ze 's
-  ochtends water, en daar staat straks de roddelaar.
+  boerderij geen man. Bij het bouwen bleek dat haar karakter al zegt wie er wél woont: "weduwe, met
+  drie kleine kinderen" (`T.KARAKTERS`). Zo is het ook gebouwd; de tweede hand op haar land komt van
+  de buren.
+- ~~Het gehucht heeft geen put.~~ Dat klopte niet (Claude zag het bij het bouwen): de put staat al op
+  de brink, naast de eik, alleen als voorwerp op de kaart en niet als gebouw. Daar halen ze 's
+  ochtends water.
 
 **Marcel koos (26 sep), vraag 27: wie woont er bij de schout?** Zijn huis telt vijf mensen. Claude
 stelde het personeel van zijn voorganger voor (een knecht en een meid, en de eerste verdachte voor

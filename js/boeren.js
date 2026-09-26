@@ -53,7 +53,9 @@
   T.BOER_EIGENSCHAPPEN = ['maaien', 'opbrengst', 'zaaien', 'aanzien'];
   const trede = (soort, id) => (IN()[soort] || []).find((t) => t.id === id) || null;
 
-  // Een eenvoudige dobbelsteen met een zaad (mulberry32): hetzelfde zaad geeft hetzelfde lot.
+  // Een eenvoudige dobbelsteen met een zaad (mulberry32): hetzelfde zaad geeft hetzelfde lot. Ook voor
+  // wie er verder in het dorp woont (js/bewoners.js), zodat er één dobbelsteen is.
+  T.dobbelsteen = dobbelsteen;
   function dobbelsteen(zaad) {
     let a = zaad >>> 0;
     return function () {

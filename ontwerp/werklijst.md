@@ -17,13 +17,14 @@ en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het 
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 462/462.
+`npm test`: 475/475.
 
-**Waar het werk staat:** alles staat in `main` (Marcel, 26 sep: "zet hem in main"). Begin de volgende
-sessie dus gewoon vanaf `main`; hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder
-Git.
+**Waar het werk staat:** alles tot en met de dag staat in `main` (Marcel, 26 sep: "zet hem in main").
+Stuk 1 van de poppetjes staat op de branch `claude/werklijst-begin-wrw3vm`, tot Marcel zegt dat het
+in `main` mag. Kijk bij het begin van een sessie dus of die branch al in `main` is; hoe een eigen
+branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Wat er op 26 sep gebeurde** (twee sessies; de details staan onder Af en in `spel.md`):
+**Wat er op 26 sep gebeurde** (drie sessies; de details staan onder Af en in `spel.md`):
 - Punt 7 is af: het oude spel is eruit, ook uit de namen (`Spel`, `S.schout`, kant 'speler').
 - Marcel kwam met een nieuwe wens: een dorp dat leeft en groeit (punt 3b). Claude schreef een voorstel
   op een pagina, "Een dorp dat leeft" (https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE), en Marcel
@@ -34,20 +35,25 @@ Git.
   de boeren 's nachts binnen, maaien in de werkuren, bezoekers overdag, en slapen tot de ochtend.
 - Opgeruimd (vraag 25, A en B): de tijd staat op één plek stil, en de bezoekers komen op één manier
   aan. De afspraken staan in `CLAUDE.md`, "Afspraken in de code".
+- De mensen worden poppetjes (3b, stap 2): Marcel zei "Ja, zo" tegen het plan, koos voor de schout
+  een eigen gezin (vraag 27), en stuk 1 is gebouwd.
 
-**Loopt nu:** mensen worden poppetjes (3b, stap 2), stuk 1: wie waar woont, werkt en wanneer. Het
-plan staat in `spel.md`, "Mensen worden poppetjes"; Marcel zei "Ja, zo" (26 sep), en koos voor de
-schout een eigen gezin (vraag 27).
+**Loopt nu:** mensen worden poppetjes (3b, stap 2). Stuk 1 is af (26 sep): iedereen die in de balk
+telt, is een poppetje met een naam, een huis en een gezin, wie werkt loopt naar zijn werk, en
+iedereen volgt het ritme van de dag (`spel.md`, "Mensen worden poppetjes", Zo werkt het nu). Marcel
+kreeg schermafdrukken; stuk 2 (komen en gaan zie je, en werk telt in uren) wacht op zijn blik, en op
+vraag 28 (de brink ligt achter het huis van de schout). `npm test`: 475/475.
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
 
 1. **Nu: mensen worden poppetjes** (3b, stap 2; Marcel koos het op 26 sep, vraag 24). Het plan staat
    in `spel.md`, "Mensen worden poppetjes", in vijf punten, en Marcel zei "Ja, zo". In twee stukken:
-   eerst 1 tot en met 3 (iedereen een poppetje met een naam en een huis, wie werkt loopt naar zijn
-   werk, en iedereen volgt het ritme van de dag), dan een schermafdruk voor Marcel, dan 4 en 5 (komen
-   en gaan zie je, en werk telt in uren). De dagindeling en het ritme van de boeren zijn er al
-   (`js/dag.js`, `T.dagAnker`).
+   eerst 1 tot en met 3 (**af, 26 sep**: iedereen een poppetje met een naam en een huis, wie werkt
+   loopt naar zijn werk, en iedereen volgt het ritme van de dag; `js/bewoners.js`), dan een
+   schermafdruk voor Marcel, dan 4 en 5: **komen en gaan zie je** (een nieuw gezin komt over de weg
+   binnen, wie wegtrekt loopt de weg af, wie sterft heeft een naam) en **werk telt in uren** (een optie
+   in de spelregels, standaard aan).
 2. **De herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel.
 3. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
    steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
@@ -118,6 +124,18 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 27. ~~Wie woont er bij de schout?~~ Zijn huis telt vijf mensen. Marcel koos zijn eigen gezin: een vrouw
     en drie kinderen (26 sep). Wat de heer de schout aandoet, raakt hen ook. De herder is een
     boerenzoon.
+28. **De brink ligt achter het huis van de schout** (Claude zag het bij het nakijken van de poppetjes,
+    26 sep). De camera kijkt van het zuiden, en het hoge stenen huis staat recht voor de brink. Wie
+    daar staat, zie je grotendeels niet: de kinderen die er spelen, de marskramer, de heer op
+    Sint-Maarten, en de schandpaal, die ook op de brink komt. Alleen de schout zelf krijgt een kijkgat
+    door het dak. Drie manieren:
+    - A. De brink verplaatsen naar open grond vóór de huizen, met de put, de eik en de bank (de kaart:
+      `gereedschap/tiled/maak-gehucht.cjs` of in Tiled, en `"marskramer"` in het betekenisbestand).
+    - B. Een kijkgat voor iedereen op de brink, zolang de schout er in de buurt is. Met tien kinderen
+      worden dat tien gaten in het dak.
+    - C. Zo laten: wie wil zien, loopt om het huis heen.
+    Voorstel: A. Het hart van het dorp hoort in het zicht, zeker de scènes van de heer en de
+    schandpaal, en straks de markt.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -386,6 +404,14 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 26 sep 2026 — **Punt 3b, stap 2, stuk 1: mensen worden poppetjes.** Iedereen die in de balk telt,
+  is een poppetje met een naam, een leeftijd, een huis en een gezin dat bij het karakter van de boer
+  past; bij de schout zijn vrouw en drie kinderen (vraag 27). De handen van een gebouw zijn mensen, en
+  wie werk heeft, houdt het; de herder is een boerenzoon. Iedereen volgt het ritme van de dag (de put,
+  het werk, de brink, het erf, binnen). Het getal in de balk verandert op één manier
+  (`T.wijzigBevolking`). Onderweg hersteld: de tekenvolgorde (wie achter een huis liep, stond soms op
+  het dak) en twee mensen die in een smal steegje voor altijd op elkaar wachtten (`js/bewoners.js`,
+  `js/dag.js`, `js/gebouwen.js`, `js/verkennen.js`, `js/tekenen.js`, `test/bewoners.test.cjs`).
 - 26 sep 2026 — **Opruimen, A en B (vraag 25).** De tijd staat op één plek stil, met een reden per
   venster (`T.houdTijdStil`, `T.laatTijdGaan`, `T.snelheidNu` in `js/tijd.js`); de zeven sleutels
   waarmee elk venster zelf de snelheid onthield, zijn weg. De drie bezoekers komen op één manier aan

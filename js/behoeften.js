@@ -193,7 +193,7 @@
     const verlies = Math.floor(S.behoeften.winterVerliesRest);
     if (verlies <= 0) return;
     S.behoeften.winterVerliesRest -= verlies;
-    S.bevolking = Math.max(0, S.bevolking - verlies);
+    T.wijzigBevolking(S, -verlies, 'winter');
     if (T.ui && T.ui.bericht) {
       const wat = b.inWinter ? 'De winter is hard' : 'De honger is hard';
       T.ui.bericht(
@@ -213,7 +213,7 @@
     const honger = IN.hongerBuitenWinter === 'wegtrekken' && !b.inWinter && b.voedselDekking < 1;
     if (b.tevredenheid >= IN.vertrekDrempel && !honger) return;
     const verlies = Math.min(S.bevolking, T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
-    S.bevolking -= verlies;
+    T.wijzigBevolking(S, -verlies, 'vertrek');
     if (T.ui && T.ui.bericht) {
       T.ui.bericht(honger ? `Een gezin trekt weg: er is geen eten. (-${verlies})` : `Een gezin trekt weg: het dorp is niet tevreden genoeg. (-${verlies})`, 'gevaar');
     }

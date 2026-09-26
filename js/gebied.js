@@ -228,6 +228,9 @@
     // De beginkudde op de weide(s) die de kaart noemt (js/vee.js), net als de gebouwen hierboven;
     // ná het lot, want het zaad van het spel kiest ook de kleuren van het vee.
     if (T.zetBeginKudde) T.zetBeginKudde(S);
+    // Wie er verder woont, en wie waar werkt (js/bewoners.js): ná het lot, want het karakter van een
+    // boer zegt wie er bij hem woont (de weduwe heeft drie kleine kinderen).
+    if (T.zetBeginBewoners) T.zetBeginBewoners(S);
     return true;
   };
 })(globalThis.Spel = globalThis.Spel || {});

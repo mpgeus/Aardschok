@@ -20,6 +20,8 @@
 //                                    // laat het zien (js/hud.js).
 //     bouwtijd:    4,                // dagen tot hij klaar is
 //     handen:      0,                // hoeveel mensen hij als werkplaats vraagt
+//     liefst:      'jong',           // wie hij het liefst neemt (T.LEEFTIJDEN, js/bewoners.js): de
+//                                    // schaapskooi een knaap. Ontbreekt hij, dan eerst volwassenen.
 //     woonruimte:  5,                // hoeveel mensen erbij kunnen als hij klaar is
 //     wordt:       'huis',           // waar hij in doorgroeit als zijn bewoners lang genoeg
 //                                    // tevreden zijn (js/behoeften.js, T.tikBehoeftenDag); alleen
@@ -107,7 +109,7 @@
     // zomermaand geschoren worden. Tot dan maakte hij elke dag wol, zonder dat er een schaap was.
     schaapskooi: {
       naam: 'schaapskooi', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10 }, heer: { wol: 20 }, bouwtijd: 3,
-      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 1, liefst: 'jong', woonruimte: 0, maakt: null, verdacht: false, menu: true,
       tekening: 'gebouwen/schuurBlokhut', beschrijving: 'de schapen van de heide slapen erin: mest voor de akkers',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur.',
     },
@@ -583,10 +585,42 @@
       S.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null, huis: d.huis || null });
       woonruimte += g.woonruimte || 0;
     }
-    // Ze staan er al vol: de boeren die je ziet lopen, wonen al in hun huis.
-    S.bevolking += woonruimte;
+    // Ze staan er al vol: de boeren die je ziet lopen, wonen al in hun huis. Wie dat zijn, zet
+    // T.zetBeginBewoners (js/bewoners.js) straks, als de boeren hun karakter hebben.
+    T.wijzigBevolking(S, woonruimte, 'begin');
     S.woonruimte = woonruimte;
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
+  };
+
+  // Het getal in de balk veranderen: de enige manier, zoals T.wijzigVoorraad voor de voorraad. Het
+  // zakt nooit onder nul. De bewoners gaan mee (T.bewonersVolgen, js/bewoners.js): een nieuw gezin
+  // in een huis met plaats, of wie sterft of wegtrekt. `reden`: 'begin', 'groei', 'winter' of
+  // 'vertrek'. Geeft terug hoeveel het echt veranderde.
+  T.wijzigBevolking = function (S, verschil, reden) {
+    const voor = S.bevolking || 0;
+    S.bevolking = Math.max(0, voor + verschil);
+    const echt = S.bevolking - voor;
+    if (echt && T.bewonersVolgen) T.bewonersVolgen(S, echt, reden);
+    return echt;
+  };
+
+  // De handen verdelen over de werkplaatsen, op volgorde van S.gebouwen: eerst de gebouwen die er al
+  // stonden, dan wie het eerst gebouwd is ("op volgorde", ontwerp/werklijst.md punt 2). Hoeveel
+  // handen er zijn: wie kan werken (T.werkendeHanden, js/bewoners.js: geen kleuter, en de schout
+  // niet), en zonder bewoners (een toets die alleen de regels laadt) het hele getal. Wíé er werkt,
+  // zegt daarna T.wijsWerkToe.
+  T.verdeelHanden = function (S) {
+    let vrij = T.werkendeHanden ? T.werkendeHanden(S) : S.bevolking;
+    for (const g of S.gebouwen) {
+      const soort = T.GEBOUWEN[g.soort];
+      if (!g.klaar || !soort.handen) {
+        g.handen = 0;
+        continue;
+      }
+      g.handen = Math.min(soort.handen, vrij);
+      vrij -= g.handen;
+    }
+    if (T.wijsWerkToe) T.wijsWerkToe(S);
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -641,20 +675,10 @@
     // niets — zie de opmerking bij stap 0 hierboven.
     const tevredenGenoeg = !S.behoeften || S.behoeften.tevredenheid >= T.BEHOEFTEN_INSTELLINGEN.groeiDrempel;
     if (dag > 0 && dag % IN.gezinDagen === 0 && S.bevolking < woonruimte && S.voorraad.graan >= IN.graanBufferVoorGroei && tevredenGenoeg) {
-      S.bevolking = Math.min(woonruimte, S.bevolking + IN.gezinGrootte);
+      T.wijzigBevolking(S, Math.min(woonruimte, S.bevolking + IN.gezinGrootte) - S.bevolking, 'groei');
     }
-    // 5. Handen: verdeeld over de werkplaatsen op volgorde van S.gebouwen (eerst de gebouwen die
-    // er al stonden, dan wie het eerst gebouwd is — "op volgorde", ontwerp/werklijst.md punt 2).
-    let vrij = S.bevolking;
-    for (const g of S.gebouwen) {
-      const soort = T.GEBOUWEN[g.soort];
-      if (!g.klaar || !soort.handen) {
-        g.handen = 0;
-        continue;
-      }
-      g.handen = Math.min(soort.handen, vrij);
-      vrij -= g.handen;
-    }
+    // 5. Handen: verdeeld over de werkplaatsen, en wie waar werkt (T.verdeelHanden hierboven).
+    T.verdeelHanden(S);
     // 6. Productie: wat een gebouw maakt, gaat per dag naar de voorraad — naar rato van hoe bezet
     // hij is (de helft van zijn handen geeft de helft van zijn opbrengst), en van de tevredenheid
     // (js/behoeften.js: "hoe hard er gewerkt wordt"; T.BEHOEFTEN_INSTELLINGEN.werkBasis is de

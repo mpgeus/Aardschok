@@ -8,7 +8,7 @@ for (const f of [
   'js/tijd.js', 'js/dag.js', 'js/voorraad.js', 'js/wereld.js', 'beelden/beschrijving.js', 'tegels/tegels.js',
   'kaarten/kaarten.js', 'js/mensen.js', 'js/vee.js', 'js/gebouwen.js', 'js/behoeften.js', 'js/handel.js',
   'js/heer.js', 'js/inner.js', 'js/verstoppen.js', 'js/kaart.js', 'js/gebied.js', 'js/pad.js', 'js/akkers.js',
-  'js/boeren.js', 'js/anim.js', 'js/verkennen.js',
+  'js/boeren.js', 'js/bewoners.js', 'js/anim.js', 'js/verkennen.js',
 ]) require('../' + f);
 const T = globalThis.Spel;
 const IN = T.DAG_INSTELLINGEN;
@@ -136,9 +136,11 @@ test('T.dagAnker: een boer is \'s nachts binnen, \'s ochtends en \'s avonds op z
 test('in het gehucht gaan de vijf boeren \'s avonds naar huis en \'s nachts naar binnen, en komen ze \'s ochtends weer naar buiten', () => {
   const S = gehucht(bijUur(GROEI, 17), 10);
   loopTot(S, bijUur(GROEI, 23.5));
+  // Met zijn gezin erbij (js/bewoners.js) staat er soms iemand in zijn deur, en dan gaat hij door de
+  // achterdeur: ergens op zijn eigen erf (T.laatDwalen, js/verkennen.js).
   for (const e of boeren(S)) {
     assert.ok(e.binnen, `${e.wie} is binnen`);
-    assert.deepEqual([e.tx, e.ty], [e.thuis.x, e.thuis.y], `${e.wie} ging bij zijn eigen deur naar binnen`);
+    assert.ok(T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= IN.erfStraal, `${e.wie} ging bij zijn eigen huis naar binnen`);
   }
   assert.equal(T.wezenOp(S.wereld, boeren(S)[0].thuis.x, boeren(S)[0].thuis.y), null, 'wie binnen is, staat niemand in de weg');
   loopTot(S, bijUur(GROEI + 1, 9));

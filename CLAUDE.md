@@ -156,6 +156,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   Er staan ook mensen in `mensen.js` zonder plek op een kaart (de smid, de herbergierster, de
   molenaar, ...): voor als het gehucht een dorp wordt. Wie over de weg komt en op geen kaart staat
   (de heer, de inner, de marskramer), heeft `bezoeker: true`.
+- `js/bewoners.js`: **wie er in het dorp woont, met wie, in welk huis, en wie waar werkt** (3b,
+  stap 2; `ontwerp/spel.md`, "Mensen worden poppetjes"). Het getal in de balk (`S.bevolking`) blijft
+  de waarheid; de bewoners (`S.bewoners.mensen`) volgen het, één per mond, elk met een naam, een
+  leeftijd (`T.LEEFTIJDEN`, die ook zijn vel kiest), een huis, een gezin en een poppetje
+  (`e.bewoner`). De schout en de boeren zijn ook bewoners, met het wezen dat de kaart al neerzette.
+  Hoeveel handen een gebouw krijgt, zegt `T.verdeelHanden` (`js/gebouwen.js`); wíé dat zijn,
+  `T.wijsWerkToe`, en wie werk heeft, houdt het. Waar iemand op welk uur hoort, zegt `T.dagAnker`
+  (`js/dag.js`) voor iedereen; de plekken daarvoor (zijn deur, de put, zijn werk, waar hij vrij is)
+  zet dit bestand.
 - `js/akkers.js`: **alleen het gehucht** (`ontwerp/spel.md`): welk stadium een
   akker heeft op welke dag (`T.AKKER_STADIA`, één tabel, `T.akkerStadium`), het windbeeld per
   tegel (`T.windBeeld`) en zijn vaste variant (`T.akkerVariant`), waar een boer in het
@@ -270,6 +279,9 @@ Over het raster, het gevecht in beurten en de overgang ernaartoe.
   loopt op de tijd van de wereld, de schermtijd maal de snelheid (`dtWereld` in `js/main.js`,
   opgeteld in `S.wereldTijd`); wat alleen op het scherm beweegt (de wind, een flits, zwevende tekst),
   op `S.tijd`. Zo kost een tocht op elke snelheid even veel uren. Een gevecht loopt altijd op 1×.
+- Het getal in de balk verandert op één manier (26 sep): `T.wijzigBevolking(S, verschil, reden)`
+  (`js/gebouwen.js`), zoals de voorraad via `T.wijzigVoorraad`. Zo gaan de bewoners mee
+  (`js/bewoners.js`): een nieuw gezin krijgt een huis, en wie sterft of wegtrekt, verdwijnt.
 - De tijd stilzetten gaat op één manier (26 sep): `T.houdTijdStil(S, reden)` en
   `T.laatTijdGaan(S, reden)` (`js/tijd.js`), met een naam per venster ('brief', 'handel', ...).
   `S.kalender.snelheid` is alleen wat de speler koos; hoe snel het nu echt gaat, zegt
@@ -302,7 +314,8 @@ tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.b
 en `Spel.debug.zoeken()` laat de soldaten nu zoeken, zoals op Sint-Maarten.
 `Spel.debug.vee('koe', 4)` zet vier koeien op de weide met de meeste plaats, bij de kudde: ze
 blijven binnen de weide en geven melk (`js/vee.js`); een schaap gaat naar de heide. Zonder weide rond
-een open plek bij de schout. `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1
+een open plek bij de schout. `Spel.debug.bewoners()` zegt per bewoner wie het is, zijn huis, zijn werk,
+waar hij staat en waar hij nu hoort (`('herder')` zoekt er een). `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1
 slachtmaand).
 De spelregels die de browser onthield (`localStorage`, `aardschok.spelregels`) gelden ook voor wie
 test; `Spel.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.

@@ -9,6 +9,25 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De poppetjes, wat nog ruw is** (26 sep, na stuk 1 van stap 2; `spel.md`, "Mensen worden
+  poppetjes"):
+  - **De brink ligt achter het huis van de schout.** De camera kijkt van het zuiden, en het hoge
+    stenen huis (x 21 tot 26, y 21 tot 28) staat recht voor de brink (24, 18). Wie daar speelt of
+    staat, de kinderen, de marskramer en op Sint-Maarten de heer, zie je dus grotendeels niet; alleen
+    de schout zelf krijgt een kijkgat. De boerderij van boer 3 dekt de oostkant af. Een vraag aan
+    Marcel (werklijst, vraag 28).
+  - Een knaap of meid draagt het vel van een jongen of meisje, en een oude vrouw dat van de boerin
+    met het karakter "de oudste". Eigen vellen (een knaap, een oude vrouw, een kind in werkkleren)
+    zijn tekenwerk.
+  - Iedereen werkt bij de deur van zijn werkplaats. Een eigen plek per soort werk (de houthakker bij
+    de bomen, de visser aan het water, de tweede hand bij de koeien) komt later; alleen de herder
+    gaat al naar de heide.
+  - Wie erbij komt, verschijnt bij de deur van zijn huis, en wie sterft of wegtrekt, is meteen weg,
+    zonder bericht met zijn naam. Dat is stuk 2: komen en gaan zie je.
+  - Een bewoner heeft nog geen gesprek (klikken doet niets), en zijn karakter speelt nog niet mee:
+    alleen de boeren hebben er een. Dat komt als de getuigen komen (het zichtveld, vraag 23).
+  - Kinderen tellen als hand als er geen volwassene of knaap meer vrij is, net als vroeger iedereen.
+    Alleen een kleuter en de schout werken niet.
 - **Een huis groeit gratis, en tot steen** (26 sep). Na 30 tevreden dagen wordt een hut een huis en
   een huis een stenen huis (`js/behoeften.js`), zonder materiaal, ook in het gehucht, terwijl het
   stenen huis bij de trede stad hoort. Het wordt een andere tekening met een andere voet (5×7, 7×5,
@@ -19,8 +38,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     de tijd van de wereld: bij 30× ligt een koe even lang als bij 1×, dus relatief kort.
   - De brief van de heer (1 wijnmaand) en het slachtvenster (1 slachtmaand) gaan om middernacht open,
     niet 's ochtends zoals de bezoekers.
-  - Alleen de boeren hebben een dagritme. De rest van het dorp komt met de poppetjes (stap 2), en
-    het vee blijft 's nachts buiten.
+  - Het vee blijft 's nachts buiten. (Dat alleen de boeren een dagritme hadden, is sinds stuk 1 van
+    de poppetjes voorbij.)
   - De nacht is een donkere laag met licht rond de schout. Echte lichten (lantaarns, vuur, een
     verlicht raam dat aan en uit gaat) horen bij punt 11; de ramen van de huizen zijn nu altijd geel,
     en dat leest 's nachts vanzelf als licht.
