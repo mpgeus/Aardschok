@@ -1585,6 +1585,42 @@ hieronder).
 - Honderden poppetjes kan: de kaart is 50 bij 50 tegels, en een pad zoeken kost weinig. Bij een stad
   kijken we of alleen wie in beeld is, echt hoeft te lopen.
 
+**Het plan voor stap 2** (Claude, 26 sep; Marcel: "Ja, zo"). Het gehucht telt 25 mensen, maar je ziet
+er vijf, de boeren. Elf hebben werk: twee per boerderij, en een herder bij de schaapskooi. De andere
+veertien zijn alleen een getal.
+1. **Iedereen wordt een poppetje, met een naam en een huis.** Op elke boerderij woont een gezin van
+   vier: de boer, zijn vrouw, en twee kinderen of een oude. Wijs je iemand aan, dan zie je wie het is
+   ("Geert, zoon van Klaas, herder"). Het getal in de balk blijft de waarheid; de poppetjes volgen het.
+   Er hoeft niets getekend te worden: er zijn vellen voor boer en boerin (met de tien karakters),
+   jongen, meisje, kleuter, oude man en oude vrouw.
+2. **Wie werkt, loopt naar zijn werk.** De boer naar zijn akker, zoals nu; de tweede hand van een
+   boerderij op het erf en bij het vee; de herder met de schapen de heide op. Zet je een werkplaats
+   neer, dan krijgt de vrije hand die het dichtstbij woont het werk, en die houdt het.
+3. **Iedereen volgt het ritme van de dag** (de dagindeling die er al is): 's nachts binnen, 's ochtends
+   naar de put, overdag werk met een schaft, 's avonds thuis op het erf; de herberg komt in stap 3.
+   Kinderen spelen overdag op de brink, ouden zitten bij hun huis.
+4. **Komen en gaan zie je.** Een nieuw gezin komt over de weg binnen en loopt naar zijn huis, een gezin
+   dat wegtrekt, loopt de weg af, en wie in de winter sterft, heeft een naam.
+5. **Werk telt in uren:** een werkplaats maakt naar de uren dat zijn mensen er echt zijn, dus wie ver
+   weg woont, is langer onderweg. In het begin verandert dat niets, want de boerderijen maken zelf
+   niets (het graan komt van de akker, en dat telt al per uur). Een optie in de spelregels, standaard
+   aan.
+
+Het wordt gebouwd in twee stukken: eerst 1 tot en met 3, dan een schermafdruk voor Marcel, dan 4 en 5.
+
+Drie dingen die Claude zag:
+- **Je ziet wie geen werk heeft.** Wie geen werk heeft, hangt overdag rond op de brink. Staan er tien
+  mensen bij de put te niksen, dan weet je zonder een getal te lezen dat er een werkplaats bij moet.
+- **Het gezin past bij het karakter.** Trekt een boerin het karakter weduwe, dan woont er op haar
+  boerderij geen man, maar een volwassen zoon.
+- **Het gehucht heeft geen put.** Er komt er een op de brink (de tekening is er al): daar halen ze 's
+  ochtends water, en daar staat straks de roddelaar.
+
+**Marcel koos (26 sep), vraag 27: wie woont er bij de schout?** Zijn huis telt vijf mensen. Claude
+stelde het personeel van zijn voorganger voor (een knecht en een meid, en de eerste verdachte voor
+punt 10 in je eigen huis); Marcel koos **zijn eigen gezin: een vrouw en drie kinderen.** Wat de heer
+de schout aandoet, raakt hen ook. De herder is daarom een boerenzoon.
+
 ### Zaken waar de mensen zelf heen gaan
 
 - De herberg, de bakker, de smid (voor gereedschap), de kapel, en later de markt. De mensen gaan er in
@@ -1722,6 +1758,7 @@ volgorde van het werk".
 24. Wat nu, na de dag: stap 2 van 3b (mensen worden poppetjes), of eerst verstoppen deel 1b? Voorstel
     van Claude: de poppetjes, en dan het zichtveld (vraag 23). "Wie vlak langs een plek loopt, kan iets
     vinden" uit deel 1b is dan een getuige, en hoeft niet apart.
+27. Wie woont er bij de schout? **Zijn eigen gezin: een vrouw en drie kinderen (Marcel, 26 sep).**
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 

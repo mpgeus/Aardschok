@@ -35,15 +35,19 @@ Git.
 - Opgeruimd (vraag 25, A en B): de tijd staat op één plek stil, en de bezoekers komen op één manier
   aan. De afspraken staan in `CLAUDE.md`, "Afspraken in de code".
 
-**Loopt nu:** niets.
+**Loopt nu:** mensen worden poppetjes (3b, stap 2), stuk 1: wie waar woont, werkt en wanneer. Het
+plan staat in `spel.md`, "Mensen worden poppetjes"; Marcel zei "Ja, zo" (26 sep), en koos voor de
+schout een eigen gezin (vraag 27).
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
 
-1. **Nu: mensen worden poppetjes** (3b, stap 2; Marcel koos het op 26 sep, vraag 24). Begin met een
-   kort plan voor Marcel, vóór het bouwen: wie een poppetje wordt, met welk ritme, en waar ze heen
-   gaan. Het ontwerp staat in `spel.md`, "Wie wanneer waar is" en "Mensen worden poppetjes"; de
-   dagindeling en het ritme van de boeren zijn er al (`js/dag.js`, `T.dagAnker`).
+1. **Nu: mensen worden poppetjes** (3b, stap 2; Marcel koos het op 26 sep, vraag 24). Het plan staat
+   in `spel.md`, "Mensen worden poppetjes", in vijf punten, en Marcel zei "Ja, zo". In twee stukken:
+   eerst 1 tot en met 3 (iedereen een poppetje met een naam en een huis, wie werkt loopt naar zijn
+   werk, en iedereen volgt het ritme van de dag), dan een schermafdruk voor Marcel, dan 4 en 5 (komen
+   en gaan zie je, en werk telt in uren). De dagindeling en het ritme van de boeren zijn er al
+   (`js/dag.js`, `T.dagAnker`).
 2. **De herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel.
 3. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
    steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
@@ -111,6 +115,9 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 24. Wat nu, na de dag: de poppetjes (3b, stap 2), of eerst verstoppen deel 1b? Voorstel: de
     poppetjes, en dan het zichtveld (vraag 23), waarin "wie vlak langs loopt, kan iets vinden" opgaat.
     **Beantwoord (Marcel, 26 sep): de poppetjes.**
+27. ~~Wie woont er bij de schout?~~ Zijn huis telt vijf mensen. Marcel koos zijn eigen gezin: een vrouw
+    en drie kinderen (26 sep). Wat de heer de schout aandoet, raakt hen ook. De herder is een
+    boerenzoon.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
