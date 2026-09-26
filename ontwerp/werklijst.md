@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (einde tweede sessie 25 sep 2026): de overdracht
+## De stand (26 sep 2026): de overdracht
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
@@ -20,38 +20,27 @@ staat op de pagina "Stand van het gehucht" (een artifact op claude.ai, 25 sep). 
 dan `localhost:8123/`: het spel begint meteen in het gehucht, met de benoemingsbrief van de heer.
 `npm test`: 444/444.
 
-**Deze sessie (25 sep, de tweede)** deed punt 7a tot en met 7d: het oude spel is eruit. De tutorial,
-de spreuken, de leeftijd, de toren, de oude kaart met Wim, de meester, de bakker en De koude oven,
-en de kunst die alleen dat spel tekende; `js/` ging van 17.000 naar 13.200 regels. Nieuw erbij, op
-drie vragen aan Marcel: het spel begint met een benoemingsbrief van de heer, je stuurt altijd zelf
-(geen scènes), en de schout heeft in een gevecht 20 levenspunten. De actiebalk van het gevecht
-staat nu ook in het gehucht. De kamers van de toren bleven als proefkamers voor de toetsen van het
-gevecht. Zie "Af" onderaan, en `opmerkingen.md` voor wat onderweg opviel.
+**Deze sessie (26 sep)** deed punt 7e en 7f, en daarmee is punt 7 af: het oude spel is eruit, ook
+uit de namen. `Toren` heet nu `Spel` (`Spel.debug`), de held is de schout (`S.schout`, soort
+'schout'), en zijn kant in een gevecht heet 'speler' (Marcel koos het: een man van de militie vecht
+straks aan jouw kant zonder de schout te zijn). Onderweg bleek dat de schout in het spel stilletjes
+de soort 'dorpeling' kreeg, een overblijfsel van de tovenaar; nu heet hij overal 'schout'.
+`CLAUDE.md` en de README gaan alleen nog over het nieuwe spel. Nagekeken in de browser: het gehucht
+begint, de schout loopt, en een gevecht op `?kaart=proef` werkt. Drie kleine resten en een voorstel
+(een eigen figuur voor de schout) staan in `opmerkingen.md`, "Na de namen" en de voorstellen.
 
-**Tegelijk liep er een korte sessie (25 sep)** die Lords of the Realm 2 ontleedde, op Marcels
-vraag: wat erin zit, wat wij al hebben, zes ideeën en twee voor later. Marcel wil ze als ideeën
-bewaren; ze staan in `spel.md`, "Lords of the Realm 2 als voorbeeld". Er is niets gebouwd.
-
-**Waar het werk staat.** De cloudomgeving geeft elke sessie een eigen branch. Deze sessie werkte op
-`claude/werklijst-vervolg-ib66vy`, en alles staat sinds het eind van de sessie ook in `main`, samen
-met de korte sessie ernaast (Marcel: "Push"). Begin de volgende sessie dus gewoon vanaf `main`.
-Werkt een sessie weer op een eigen branch, zet die dan aan het eind in `main` als Marcel dat vraagt,
-anders begint de sessie erna op een oude stand. Kijk vóór het pushen of `main` intussen verder is:
-liep er een sessie tegelijk, voeg die dan eerst samen (`git fetch origin main`, dan
-`git merge origin/main`), want twee sessies schrijven allebei in deze stand. Haal ook eerst de hele
-geschiedenis op (`git fetch --unshallow`): `test/tegelvolgorde.test.cjs` leest een oude commit, en in
-een ondiepe kloon falen er dan twee toetsen die niets met je werk te maken hebben.
+**Waar het werk staat.** Deze sessie werkt op `claude/werklijst-vervolg-aplhf0`, en dat gaat pas
+naar `main` als Marcel "push" zegt. Hoe een eigen branch en `main` samengaan, staat sinds 26 sep in
+`CLAUDE.md`, onder Git.
 
 **Loopt nu:** niets.
 
-**Volgende: 7e en 7f, de namen en `CLAUDE.md`** (bij punt 7 hieronder). Afgesproken met Marcel: hij
-opent het gehucht eerst nog eens, dan gaan de namen om (`Toren` wordt `Spel`, de held de schout).
+**Volgende: Verstoppen, deel 1b: ook onder de 40% een risico** (Marcel koos op 25 sep; `spel.md`,
+"Marcel koos (25 sep, als opmerking op de overzichtspagina)"). De soldaten zoeken op Sint-Maarten
+altijd op 2 of 3 plekken, ook zonder argwaan; wie vlak langs een plek loopt, kan iets vinden; en je
+bepaalt de route zelf, maar soms wil de heer kiezen.
 
 **Daarna:**
-- **Verstoppen, deel 1b: ook onder de 40% een risico** (Marcel koos op 25 sep; `spel.md`, "Marcel
-  koos (25 sep, als opmerking op de overzichtspagina)"). De soldaten zoeken op Sint-Maarten altijd op
-  2 of 3 plekken, ook zonder argwaan; wie vlak langs een plek loopt, kan iets vinden; en je bepaalt de
-  route zelf, maar soms wil de heer kiezen.
 - **Verstoppen, deel 2: het bos, met de kudde** (Marcel koos op 25 sep dat het bos samen met de
   kudde komt). Een plek in het bos voor graan en goud (ver lopen, muizen en vocht), en een deel van
   de kudde het bos in voor de inner komt. De inner telt de kudde en de heer vraagt per dier, met kaas
@@ -79,8 +68,14 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     het gevecht op te draaien? (`opmerkingen.md`, "Het gevecht na de leeftijd".)
 11. Komt het leven van de schout terug (elke dag een beetje, of na een nacht rust), of wachten we
     daarmee tot punt 13, als vallen iets anders gaat betekenen?
+12. De knop Slaan draagt nog het toetsje `1`, dat sinds 7b niets doet: weg ermee, of laat 1 het
+    monster slaan dat het dichtst bij staat? (`opmerkingen.md`, "Het gevecht na de leeftijd".)
+13. Een eigen figuur voor de schout, zodat je jezelf in een menigte terugvindt? (Voorstel van
+    Claude, 26 sep; `opmerkingen.md`, onder de voorstellen.)
 
 *Spelen, en zeggen hoe het voelt:*
+- Het gehucht na de namen (26 sep): Marcel zou het na 7e nog eens openen. Het hernoemen veranderde
+  niets aan hoe het speelt, dus alles hoort te zijn zoals je het kende.
 - Het nieuwe begin: open `localhost:8123/` en lees de benoemingsbrief. Klopt de toon van de heer? Een
   gevecht probeer je op `localhost:8123/?kaart=proef`: klik op de slijmkruiper.
 - Een heel jaar: hoe snel het gaat, de winter, en Sint-Maarten (is de honger te veel of te weinig;
@@ -150,7 +145,7 @@ nog nodig is".
    een pad sneller loopt en over kinderkopjes nog sneller, een zandpad in de natte maanden modder
    wordt, en de keien van een keienraper komen (in plaats van de steengroeve) en van het ontginnen.
    Hier, omdat de keien van het ontginnen komen (6b).
-7. **Het oude spel eruit** (Marcel haalde dit op 25 sep naar voren: het komt nu eerst, vóór de rest
+7. **Het oude spel eruit** (af, 26 sep 2026; Marcel haalde dit op 25 sep naar voren, vóór de rest
    van punt 6). Klaar als de toren, de spreuken, de leeftijd, de tutorial en de oude kaart uit de code
    zijn, het spel zonder `?kaart=` in het gehucht begint, de namen om zijn, `npm test` groen is, en
    `CLAUDE.md` alleen nog het nieuwe spel beschrijft. Waarom nu: van de 17.000 regels zijn er zo'n
@@ -185,7 +180,7 @@ nog nodig is".
    - **7d. De kunst die alleen het oude spel tekent** (af, 25 sep) (de tovenaar, de toren, de spreukeffecten) uit
      `beelden/`; de modellen in `gereedschap/pixelart/` blijven. Het vel van een gewone dorpeling
      blijft: de schout draagt het.
-   - **7e. De namen om**, als laatste en in een eigen commit, zodat de rest leesbaar blijft:
+   - **7e. De namen om** (af, 26 sep), als laatste en in een eigen commit, zodat de rest leesbaar blijft:
      `globalThis.Toren` wordt `globalThis.Spel` (in de code blijft het `T`, en `Toren.debug` wordt
      `Spel.debug`), en de held wordt de schout (`S.held` wordt `S.schout`, de soort 'held' wordt
      'schout'). Dat raakt zo'n 160 regels met `Toren` in 96 bestanden en zo'n 550 met `held`, ook in
@@ -202,7 +197,7 @@ nog nodig is".
      `tegels/bouwfasen.js`, `beelden/beschrijving.js`) gaan mee, anders zet de volgende render de oude
      naam terug. De oude ontwerpbestanden (`verhaal.md`, `toren.md`, `spreuken.md`) blijven zoals ze
      zijn: daar wás de held een tovenaar.
-   - **7f. `CLAUDE.md` alleen nog over het nieuwe spel;** de oude afspraken staan in `git log`
+   - **7f. `CLAUDE.md` alleen nog over het nieuwe spel** (af, 26 sep); de oude afspraken staan in `git log`
      (`git show 0eb8269:CLAUDE.md`). Met de README, die nog helemaal De laatste klim beschreef, en de
      voorbeelden die naar iets wijzen wat weg is (`debug.gaNaar('erf')`, `debug.quest('molen')`).
 
@@ -301,6 +296,11 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 26 sep 2026 — **Punt 7e en 7f: de namen om, en punt 7 is af.** `Toren` werd `Spel` en de held
+  de schout: `S.schout`, soort 'schout', kant 'speler' (Marcel koos het). De makers van de
+  gegenereerde bestanden gingen mee, en de schout houdt nu ook in het spel zijn soort in plaats van
+  'dorpeling'. `CLAUDE.md` en de README gaan alleen nog over het nieuwe spel, met de gewoonten van
+  de cloudsessies onder Git.
 - 25 sep 2026 — **Punt 7a tot en met 7d: het oude spel eruit.** Het spel begint in het gehucht met
   een benoemingsbrief van de heer (`T.ui.toonBenoeming`, `js/hud.js`); de tutorial, `js/regie.js`,
   de spreuken, het toveren, de leeftijd, de toren, de oude kaart met zijn mensen, De koude oven, de

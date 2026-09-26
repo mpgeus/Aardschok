@@ -1511,4 +1511,7 @@ en over de heervaart [Wikipedia](https://nl.wikipedia.org/wiki/Heervaart).
     is het einde. Wat vallen echt betekent (gewond, dagen rust, gevangen), beslissen we bij punt 13,
     als de rovers en de wolven komen; nu vecht er in het gehucht nog niemand.
   Gebouwd op 25 sep (werklijst punt 7a tot en met 7d): het oude spel is eruit, en de drie keuzes
-  hierboven zitten erin. De namen (7e) en `CLAUDE.md` (7f) volgen.
+  hierboven zitten erin. Op 26 sep volgden de namen (7e) en `CLAUDE.md` met de README (7f): de
+  naamruimte heet `Spel`, de speler `S.schout` met de soort 'schout', en zijn kant in een gevecht
+  'speler' (Marcel koos het: soort en kant zijn twee dingen, en een man van de militie vecht straks
+  aan jouw kant zonder de schout te zijn). Punt 7 is daarmee af.
