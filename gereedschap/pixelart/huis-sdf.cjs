@@ -61,6 +61,19 @@
 //
 // De losse tuinstukken staan in tuin-sdf.cjs, en delen het hout met dit bestand.
 //
+// Ronde 4b, de huizen in het spel (huizen.cjs; ontwerp/beeld.md, "Ronde 4b"):
+//
+//   deur        'voor' (standaard: op een muur die je ziet) of 'achter': de voordeur aan de kant die
+//               je niet ziet, zodat een huis met zijn achterkant naar de kijker staat. Hij wordt dan
+//               niet getekend; voorDeDeur zegt waar hij is.
+//   laag        true: een hut, met lagere muren. Het riet hangt tot vlak boven de deur.
+//   plint       hoe hoog de stenen plint is, in px (standaard 60): laag in het gehucht.
+//   schoorsteen 'steen' (standaard), 'leem' (gevlochten en besmeerd) of false (geen: de rook trekt
+//               door het riet). Een stenen schoorsteen hoort bij half steen (ontwerp/spel.md,
+//               "Beter bouwen").
+//   schoor      true of false: een schoor tegen een kopgevel, bij een oud huis. Zonder beslist het
+//               zaad; hij steekt een tegel voor de gevel uit.
+//
 // Assen als in kern.cjs: +x rechtsonder in beeld, +y linksonder, z omhoog, in eenheden (een tegel
 // is 45,25; één eenheid hoog is 0,866 pixel). De oorsprong is het midden van het plan. Hoogtes die
 // "px" of h heten zijn schermpixels boven de grond.
@@ -314,6 +327,8 @@ function maten(zaad = 1, o = {}) {
   H.vorm = o.vorm || 'rechthoek';
   H.lagen = o.lagen ?? 1;
   H.nok = o.nok || 'x';
+  // de voordeur op een muur die je ziet, of aan de kant die je niet ziet (ronde 4b; zie "deur" bovenaan)
+  H.deurKant = o.deur === 'achter' ? 'achter' : 'voor';
 
   // --- het materiaal: eerst het dak, dan per vleugel een wand die erbij past. Een zijvleugel is
   // meestal van hetzelfde, maar soms is hij later aangezet in iets anders.
@@ -339,7 +354,9 @@ function maten(zaad = 1, o = {}) {
   // --- de hoogtes, in px. plaatH is de bovenregel van een lange muur. voetPx is de voet van het
   // dak (de middellijn van het pak): het riet hangt vóór de muur tot zo'n 36 px lager, en een dun
   // dak ligt hoger, zodat zijn rand in beeld op dezelfde lijn valt als die van het riet.
-  const plaatH = (H.lagen === 2 ? 306 : H.lagen === 1.5 ? 222 : 166) - 36;
+  // Een hut (o.laag, ronde 4b) heeft lagere muren: het riet hangt tot vlak boven de deur.
+  H.laag = !!o.laag && H.lagen === 1;
+  const plaatH = (H.lagen === 2 ? 306 : H.lagen === 1.5 ? 222 : H.laag ? 136 : 166) - 36;
   const voetPx = plaatH + (H.dun ? 16 : 36);
   H.voetPx = voetPx;
   H.voetZ = E(voetPx);
@@ -360,11 +377,14 @@ function maten(zaad = 1, o = {}) {
   H.hellY = sch * (0.016 + 0.014 * r(2)) * (r(3) < 0.7 ? 1 : -1);
   H.hellX = sch * (0.013 + 0.013 * r(4)) * (r(5) < 0.5 ? 1 : -1);
   // steen onder, hout boven; de lijn ertussen ligt niet waterpas
-  H.hS = 60 + Math.round(sch * rs(8) * 8);
+  // o.plint: hoe hoog de stenen plint is, in px (standaard 60). Laag voor een hut en een huis in het
+  // gehucht, waar geen steen is (ontwerp/spel.md, "Beter bouwen"): een paar stenen onder de balk.
+  H.hS = (o.plint ?? 60) + Math.round(sch * rs(8) * 8);
   H.gSx = (sch * rs(9) * 6) / 181;
   H.gSy = (sch * rs(10) * 4) / 136;
-  // het hout: warm eiken of grijs verweerd
-  H.hout = sch && r(35) < 0.34 ? 'schors' : 'hout';
+  // het hout: warm eiken of grijs verweerd (dit overschrijft de keuze hierboven, zoals sinds ronde 1;
+  // alleen een gevraagd o.hout gaat voor, anders viel die vraag hier weg)
+  H.hout = o.hout || (sch && r(35) < 0.34 ? 'schors' : 'hout');
 
   // --- het dak
   if (H.dun) {
@@ -489,6 +509,11 @@ function maten(zaad = 1, o = {}) {
       hoog: E(36 + 14 * r(33)),
     };
   }
+  // o.schoorsteen: 'steen' (standaard), 'leem' (gevlochten en met leem besmeerd, zoals in het gehucht:
+  // een stenen schoorsteen hoort bij half steen, trede 3 van de ladder) of false (de rook trekt door
+  // het riet, zoals in een hut)
+  H.schoorsteenSoort = o.schoorsteen === 'leem' ? 'leem' : 'steen';
+  if (o.schoorsteen === false) H.schoorsteen = null;
 
   // --- de uitbouwen (ronde 3): wat het zaad kiest, of wat o.uit vraagt. Wat op het dak zit en de
   // aanbouw eerst, want die veranderen het dak en welke muren je ziet.
@@ -508,10 +533,13 @@ function maten(zaad = 1, o = {}) {
   verdeel(H);
   verdeelUitbouwen(H);
   luikenEnBakken(H);
+  if (H.deurKant === 'achter') H.achterDeur = achterDeurVan(H);
   // een schoor tegen een kopgevel, bij een oud huis (niet waar al een trap of schoorsteen staat)
   const gevels = H.stukken.filter((S) => !S.U && !S.bezet.length && S.zijde === 'a' && S.s === 0 && S.Lu > 120 && S.zicht > 0.5 && S.wand !== 'veldsteen');
   const schoorH = Math.min(118 + 20 * r(71), H.lagen === 2 ? H.h1 - 26 : 140);
-  H.schoor = sch && gevels.length && r(68) < 0.5 ? { P: gevels[Math.floor(r(67) * gevels.length)], f: 0.72 + 0.12 * r(69), uit: 44 + 16 * r(70), h: schoorH } : null;
+  // o.schoor: true of false; zonder beslist het zaad (ronde 4b: de huizen van het spel leggen het vast)
+  const wilSchoor = o.schoor ?? r(68) < 0.5;
+  H.schoor = sch && gevels.length && wilSchoor ? { P: gevels[Math.floor(r(67) * gevels.length)], f: 0.72 + 0.12 * r(69), uit: 44 + 16 * r(70), h: schoorH } : null;
   return H;
 }
 
@@ -1055,7 +1083,7 @@ function verdeel(H) {
   const raamB = sp ? 36 : 24;
   const raamH = sp ? 42 : 30;
   const deurB = sp ? 50 : 42;
-  const deurH = sp ? 102 : 94;
+  const deurH = Math.min(sp ? 102 : 94, H.plaatH - 6); // onder de lage goot van een hut past hij net
   const jamb = sp ? 12 : 7;
 
   // Wat een uitbouw al van een muur inneemt (een buitentrap, een erker, een gevelschoorsteen, of
@@ -1074,8 +1102,9 @@ function verdeel(H) {
   let deurStuk = null;
   let beste = -1;
   // een huis heeft altijd een voordeur: past hij nergens naast wat er al staat, dan toch op de
-  // beste muur
-  for (const streng of [true, false]) {
+  // beste muur. Behalve als hij aan de kant zit die je niet ziet (o.deur: 'achter'): dan krijgen de
+  // muren die je ziet alleen ramen, en zet achterDeurVan hem achter het huis.
+  for (const streng of H.deurKant === 'achter' ? [] : [true, false]) {
     for (const P of H.stukken) {
       if (P.U || P.s !== 0 || P.Lu < 120 || P.zicht < 0.6) continue;
       if (streng && (P.bezet.length || P.openingen.length) && !deurZones(P).length) continue;
@@ -1919,6 +1948,15 @@ function plankPatroon(H, C) {
 // Vlechtwerk met leem: tussen het vakwerk het vlechtwerk van twijgen om staken, en daarop leem, met
 // de vingers aangesmeerd maar nooit overal: in de eerste proef lag het leem bijna overal en las de
 // muur als vuil pleister. Nu ligt het vlechtwerk op zo'n derde bloot, zodat je ziet wat het is.
+// Een schoorsteen van leem: vlekkerig aangesmeerd, en naar boven toe zwart van het roet.
+function schouwPatroon(H, C) {
+  const n = ruis2(C.x * 0.09, C.z * 0.09, H.zaad * 5 + 91);
+  let s = n > 0.68 ? -0.7 : n < 0.28 ? 0.5 : 0;
+  const S = H.schoorsteen;
+  if (S) s -= klem((C.z - (S.V.nokZ(S.a) + H.dik)) / (S.hoog * 0.9), 0, 1) * 2.2;
+  return s;
+}
+
 function leemPatroon(H, C) {
   const m = opMuur(H, C.x, C.y, C.z);
   const u = m ? m.u : (C.x - C.y) * SQ;
@@ -3661,7 +3699,9 @@ function huis(zaad = 1, o = {}) {
     riet: { ramp: 'stro', lo: sp ? 0.2 : 1.2, hi: sp ? 4.9 : 5.3, schaduwKracht: sp ? 0.18 : 0.35, patroon: (C) => rietPatroon(H, C) },
     nok: { ramp: 'stro', lo: 0.2, hi: sp ? 4.3 : 4.8, schaduwKracht: diepe, patroon: (C) => nokPatroon(H, C) },
     steen: { ramp: 'veldsteen', lo: sp ? 0.8 : 1.6, hi: sp ? 7.8 : 7, schaduwKracht: diepe, patroon: metRand(H, (C) => steenPatroon(H, C, sp ? [13, 22, 16] : [9, 13, 9])) },
-    schoorsteen: { ramp: 'veldsteen', lo: 1, hi: sp ? 7.6 : 7, schaduwKracht: diepe, patroon: (C) => steenPatroon(H, C, sp ? [9, 14, 8] : [7, 10, 6]) },
+    schoorsteen: H.schoorsteenSoort === 'leem'
+      ? { ramp: 'perkament', lo: sp ? 0.9 : 1.3, hi: sp ? 5.2 : 4.8, schaduwKracht: diepe, patroon: (C) => schouwPatroon(H, C) }
+      : { ramp: 'veldsteen', lo: 1, hi: sp ? 7.6 : 7, schaduwKracht: diepe, patroon: (C) => steenPatroon(H, C, sp ? [9, 14, 8] : [7, 10, 6]) },
     drempel: { ramp: 'veldsteen', lo: 1.4, hi: 7, schaduwKracht: diepe },
     pleister: { ramp: 'pleister', lo: sp ? 0.7 : 1.5, hi: sp ? 6.2 : 5.8, schaduwKracht: diepe, patroon: metRand(H, (C) => pleisterPatroon(H, C)) },
     hout: { ramp: H.hout, lo: 0.5, hi: houtHi, schaduwKracht: diepe, patroon: metRand(H, (C) => balkPatroon(C, false)) },
@@ -4505,13 +4545,88 @@ function kiesHuis(zaad) {
 }
 
 // Waar de tovenaar kan staan: een eind voor de deur, in tegels.
+// Waar je voor de deur staat, in tegels vanaf het midden van het plan: `afstand` tegels voor de muur.
+// Ook voor een deur aan de kant die je niet ziet (H.achterDeur); zonder deur het midden.
 function voorDeDeur(H, afstand = 1.3) {
   const d = H.deur;
-  if (!d) return [0, 0];
-  const [x, y] = d.P.pos(d.u, 0, afstand * TEGEL);
-  return [x / TEGEL, y / TEGEL];
+  if (d) {
+    const [x, y] = d.P.pos(d.u, 0, afstand * TEGEL);
+    return [x / TEGEL, y / TEGEL];
+  }
+  const A = H.achterDeur;
+  if (A) {
+    const [x, y] = A.V.wereld(A.a, -(A.V.hq + afstand * TEGEL));
+    return [x / TEGEL, y / TEGEL];
+  }
+  return [0, 0];
 }
+
+// De deur aan de kant die je niet ziet (o.deur: 'achter', ronde 4b): een huis dat met zijn
+// achterkant naar de kijker staat, en met zijn voordeur naar het plein. De bouwer tekent hem niet,
+// want hij bouwt alleen wat de camera ziet (zie "Elke vleugel heeft een eigen stelsel" bovenaan),
+// maar het spel moet weten waar hij zit. Hij komt in de achtermuur van de hoofdvleugel (de -q-kant),
+// in het midden van het langste stuk dat de andere vleugel vrijlaat.
+function achterDeurVan(H) {
+  const V = H.vleugels[0];
+  let vrij = [[-V.ha + 40, V.ha - 40]];
+  for (const W of H.vleugels.slice(1)) {
+    const hoeken = [];
+    for (const sa of [-1, 1]) for (const sq of [-1, 1]) hoeken.push(V.lok(...W.wereld(sa * W.ha, sq * W.hq)));
+    if (Math.min(...hoeken.map(([, q]) => q)) > -V.hq + TEGEL / 4) continue; // raakt de achtermuur niet
+    const a0 = Math.min(...hoeken.map(([a]) => a));
+    const a1 = Math.max(...hoeken.map(([a]) => a));
+    vrij = aftrekken(vrij, [a0 - 40, a1 + 40]);
+  }
+  const zone = vrij.filter(([a, b]) => b >= a).sort((p, q) => q[1] - q[0] - (p[1] - p[0]))[0];
+  return { V, a: zone ? (zone[0] + zone[1]) / 2 : 0 };
+}
+
+// Het kader van een huis op het scherm (pixels, met de oorsprong van de wereld op 0, 0): de voet
+// van de muren, de rand van het dak en de nok, de schoorsteen, en wat er uitsteekt. `extra`: nog
+// meer wereldpunten [x, y, z] die erin moeten (de tovenaar voor de deur op een proefplaat).
+function kaderVan(H, extra = []) {
+  const [e0, e1, e2] = K.EX;
+  const [f0, f1, f2] = K.EY;
+  let x0 = Infinity;
+  let x1 = -Infinity;
+  let y0 = Infinity;
+  let y1 = -Infinity;
+  const zie = (x, y, z) => {
+    const sx = x * e0 + y * e1 + z * e2;
+    const sy = x * f0 + y * f1 + z * f2;
+    x0 = Math.min(x0, sx);
+    x1 = Math.max(x1, sx);
+    y0 = Math.min(y0, sy);
+    y1 = Math.max(y1, sy);
+  };
+  const top = (V) => V.zN + H.dik + H.worstR + 4;
+  for (const V of H.vleugels) {
+    for (const sa of [-1, 1]) {
+      for (const sq of [-1, 1]) {
+        zie(...V.wereld(sa * V.ha, sq * V.hq), 0);
+        if (H.plat) zie(...V.wereld(sa * (V.ha + H.uitB + 2), sq * (V.hq + H.uitB + 2)), H.zTop + 6);
+        else zie(...V.wereld(sa * V.XR, sq * (V.Qe0 + 10)), H.voetZ - 2 * H.dik);
+      }
+      if (!H.plat) zie(...V.wereld(sa * V.XR, 0), top(V));
+    }
+  }
+  const S = H.schoorsteen;
+  if (S) zie(...S.V.wereld(S.a, S.q), S.V.nokZ(S.a) + H.dik + S.hoog + 12);
+  // en wat er uitsteekt: een aanbouw, een erker, een galerij, een trap, een gevelschoorsteen
+  for (const p of H.uitPunten || []) zie(...p);
+  for (const p of extra) zie(...p);
+  return { x0, x1, y0, y1, b: x1 - x0, h: y1 - y0 };
+}
+
+// Avondlicht zoals in dorp.cjs (die tabel wordt niet geëxporteerd), maar de veldsteen blijft koel:
+// op de referentie is de steen grijsblauw en het hout warm, twee temperaturen per huis. En riet
+// blijft riet: een oude lap mag in de zon grauw blijven naast het goudstro. Voor de proefplaten
+// (huis-sdf-export.cjs) en het huizenvel van het spel (huizen.cjs).
+const WARM = {
+  mos: ['mos', [1, 2, 3, 4, 5, 5]],
+  aarde: ['zand', [0, 0, 1, 2, 3, 4, 5]],
+};
 
 // Wat de losse tuinstukken (tuin-sdf.cjs) met de huizen delen: het hout (balkPatroon voor balken
 // en planken, stamHuid voor stammen, vlechtwerk voor twijgen), de knoppen en het zaad.
-module.exports = { huis, proefhuis, maten, dakPlek, voorDeDeur, kiesHuis, DAKEN, WANDEN, balkPatroon, stamHuid, vlechtwerk, knoppenVan, meng, kiesUit };
+module.exports = { huis, proefhuis, maten, dakPlek, voorDeDeur, kaderVan, WARM, kiesHuis, DAKEN, WANDEN, balkPatroon, stamHuid, vlechtwerk, knoppenVan, meng, kiesUit };

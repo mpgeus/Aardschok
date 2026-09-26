@@ -8,6 +8,7 @@
 //   node gereedschap/pixelart/huis-sdf-export.cjs           uit/proefhuis/vergelijk.png
 //   node gereedschap/pixelart/huis-sdf-export.cjs knoppen   ook uit/proefhuis/knoppen.png
 //   node gereedschap/pixelart/huis-sdf-export.cjs uitbouwen uit/proefhuis/uitbouwen.png
+//   node gereedschap/pixelart/huis-sdf-export.cjs ladder    uit/proefhuis/ladder.png (ronde 4b)
 //
 // uitbouwen.png (ronde 3): de uitbouwen elk op een huis, de losse tuinstukken (tuin-sdf.cjs) naast
 // elkaar met een tuintje daaruit, en zes huizen met willekeurige zaden, los van elkaar. De platen
@@ -125,13 +126,8 @@ function grondZon(B, R, o = {}) {
   B.schaduw = schaduw;
 }
 
-// avondlicht zoals in dorp.cjs (die tabel wordt niet geëxporteerd), maar de veldsteen blijft koel:
-// op de referentie is de steen grijsblauw en het hout warm, twee temperaturen per huis. En riet
-// blijft riet: een oude lap mag in de zon grauw blijven naast het goudstro.
-const WARM = {
-  mos: ['mos', [1, 2, 3, 4, 5, 5]],
-  aarde: ['zand', [0, 0, 1, 2, 3, 4, 5]],
-};
+// avondlicht zoals in dorp.cjs, maar de veldsteen blijft koel (HS.WARM, huis-sdf.cjs)
+const WARM = HS.WARM;
 
 function paneelProef(zaad, knoppen = {}) {
   const B = new K.Beeld(PB, PH, OX, OY);
@@ -153,44 +149,13 @@ function paneelProef(zaad, knoppen = {}) {
 
 // ---------------------------------------------------------------- een huis naar keuze
 
-// Het kader van een huis op het scherm (pixels, met de oorsprong van de wereld op 0, 0): de voet
-// van de muren, de rand van het riet en de nok.
+// Het kader van een huis op het scherm (HS.kaderVan, ook voor het huizenvel van het spel), met de
+// tovenaar voor de deur erbij.
 function kaderVan(H) {
-  const [e0, e1, e2] = K.EX;
-  const [f0, f1, f2] = K.EY;
-  let x0 = Infinity;
-  let x1 = -Infinity;
-  let y0 = Infinity;
-  let y1 = -Infinity;
-  const zie = (x, y, z) => {
-    const sx = x * e0 + y * e1 + z * e2;
-    const sy = x * f0 + y * f1 + z * f2;
-    x0 = Math.min(x0, sx);
-    x1 = Math.max(x1, sx);
-    y0 = Math.min(y0, sy);
-    y1 = Math.max(y1, sy);
-  };
-  const top = (V) => V.zN + H.dik + H.worstR + 4;
-  for (const V of H.vleugels) {
-    for (const sa of [-1, 1]) {
-      for (const sq of [-1, 1]) {
-        zie(...V.wereld(sa * V.ha, sq * V.hq), 0);
-        if (H.plat) zie(...V.wereld(sa * (V.ha + H.uitB + 2), sq * (V.hq + H.uitB + 2)), H.zTop + 6);
-        else zie(...V.wereld(sa * V.XR, sq * (V.Qe0 + 10)), H.voetZ - 2 * H.dik);
-      }
-      if (!H.plat) zie(...V.wereld(sa * V.XR, 0), top(V));
-    }
-  }
-  const S = H.schoorsteen;
-  if (S) zie(...S.V.wereld(S.a, S.q), S.V.nokZ(S.a) + H.dik + S.hoog + 12);
-  // en wat er uitsteekt: een aanbouw, een erker, een galerij, een trap, een gevelschoorsteen
-  for (const p of H.uitPunten || []) zie(...p);
-  // en de tovenaar voor de deur
   const [tx, ty] = HS.voorDeDeur(H, 1.25);
   const X = tx * K.TEGEL;
   const Y = ty * K.TEGEL;
-  for (const [dx, dz] of [[-34, 0], [34, 0], [0, 110]]) zie(X + dx * K.EX[0], Y + dx * K.EX[1], dz);
-  return { x0, x1, y0, y1, b: x1 - x0, h: y1 - y0 };
+  return HS.kaderVan(H, [[-34, 0], [34, 0], [0, 110]].map(([dx, dz]) => [X + dx * K.EX[0], Y + dx * K.EX[1], dz]));
 }
 
 // Een huis op een stuk grond, met de tovenaar voor de deur. o.b, o.h: de maat van het paneel,
@@ -872,6 +837,44 @@ function knoppen() {
   log(`knoppen.png  ${plaat.b}×${plaat.h}`);
 }
 
+// ladder.png (ronde 4b): twee huizen, elk in de vijf treden van beter bouwen (ontwerp/spel.md,
+// "Beter bouwen"): hetzelfde huis, met dezelfde vorm op dezelfde plek, in steeds duurder materiaal.
+// In het spel komen nu alleen de eerste twee (en de schout in de derde; Marcel, 26 sep: "1 en 2 in
+// spel, rest op plaat"); de rest is om te zien waar het heen gaat. Baksteen kent de bouwer nog niet:
+// de vijfde trede is hier veldsteen.
+const LADDER = [
+  ['1 vlechtwerk, riet', { lagen: 1, laag: true, plint: 30, schoorsteen: false, wand: 'vlecht', dak: 'riet', hout: 'schors', uit: false }],
+  ['2 vakwerk, riet', { lagen: 1, plint: 36, schoorsteen: 'leem', wand: 'vakwerk', dak: 'riet', uit: false }],
+  ['3 half steen', { lagen: 1, wand: 'vakwerk', dak: 'riet', uit: { luiken: true } }],
+  ['4 twee lagen, leien', { lagen: 2, wand: 'vakwerk', dak: 'leien', uit: { luiken: true, bakken: 2 } }],
+  ['5 steen, pannen', { lagen: 2, wand: 'veldsteen', boven: 'veldsteen', dak: 'pannen', uit: { luiken: true, bakken: 2 } }],
+];
+const LADDER_HUIZEN = [
+  { naam: 'een hut die groeit', zaad: 11, vorm: 'rechthoek', b: 5, d: 4, nok: 'x', schoor: false },
+  { naam: 'een huis dat groeit', zaad: 21, vorm: 'rechthoek', b: 7, d: 5, nok: 'x', schoor: false },
+];
+async function ladder() {
+  const taken = [];
+  for (const h of LADDER_HUIZEN) for (const [naam, trede] of LADDER) taken.push({ naam: `${h.naam}: ${naam}`, spec: { ...h, ...trede } });
+  const kd = taken.map((t) => kaderVan(HS.maten(t.spec.zaad, t.spec)));
+  const cb = Math.ceil(Math.max(...kd.map((k) => k.b)) + 24);
+  const ch = Math.ceil(Math.max(...kd.map((k) => k.h)) + 60);
+  const draden = Math.max(2, Math.min(13, os.cpus().length - 1));
+  const r = await renderAlle(taken.map((t) => ({ ...t, o: { b: cb, h: ch, onder: 44 } })), draden);
+  const S = STROOK;
+  const plaat = new K.Plaat(cb * LADDER.length, (2 * S + ch) * LADDER_HUIZEN.length);
+  LADDER_HUIZEN.forEach((h, rij) => {
+    const y = rij * (2 * S + ch);
+    schrijf(plaat, h.naam, 8, y + 6);
+    LADDER.forEach(([naam], kol) => {
+      plaat.plak(r[rij * LADDER.length + kol].p, kol * cb, y + 2 * S);
+      schrijf(plaat, naam, kol * cb + 8, y + S + 6);
+    });
+  });
+  fs.writeFileSync(path.join(UIT, 'ladder.png'), K.png(plaat, 1, '#0e0a14'));
+  log(`ladder.png  ${plaat.b}×${plaat.h}`);
+}
+
 if (isMainThread && require.main === module) {
   const t0 = Date.now();
   const wat = process.argv[2];
@@ -881,6 +884,8 @@ if (isMainThread && require.main === module) {
     materiaal().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'uitbouwen') {
     uitbouwen().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
+  } else if (wat === 'ladder') {
+    ladder().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'een') {
     // één huis naar keuze: een <vorm> <lagen> <zaad> [nok] [sleutel=waarde ...]; schrijft het
     // paneel en het huis twee keer vergroot. snede=x,y,b,h kiest een uitsnede voor het vergrote.
@@ -915,7 +920,7 @@ if (isMainThread && require.main === module) {
     vergelijk();
     if (wat === 'knoppen') knoppen();
   }
-  if (wat !== 'vormen' && wat !== 'materiaal' && wat !== 'uitbouwen') log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  if (wat !== 'vormen' && wat !== 'materiaal' && wat !== 'uitbouwen' && wat !== 'ladder') log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 }
 
 module.exports = { paneelNu, paneelProef, paneelHuis, paneelTuin, paneelTuintje, paneelZes, kaderVan, grondZon };
