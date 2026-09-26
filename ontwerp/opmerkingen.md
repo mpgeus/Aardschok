@@ -196,8 +196,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 **De tegelvellen worden groot** (26 sep, achtste sessie, bij ronde 4b). Een vel heeft vakken van
 gelijke maat, zo groot als de grootste tekening, en een vast aantal (zodat de tegelnummers blijven).
 De browser pakt een vel helemaal uit in het geheugen: `gebouwen.png` (5184×7584, met 27 van de 96
-vakken gevuld) kost zo'n 157 MB, `huizen.png` (5296×3028) zo'n 64 MB, en `bouwfasen.png` groeit met
-vijf fases per huis. Voor een stad met honderden huizen is dat te veel. Voorstel: de vellen inpakken,
+vakken gevuld) kost zo'n 157 MB, `huizen.png` (5296×3028) zo'n 64 MB, en `bouwfasen.png` (8170×7187,
+vijf fases per gebouw, sinds ronde 4b in rijen, want één rij per gebouw werd 15.593 pixels hoog) zo'n
+235 MB. Voor een stad met honderden huizen is dat te veel. Voorstel: de vellen inpakken,
 met per tekening een eigen uitsnede en een eigen anker, zoals `bouwfasen.json` dat al doet. Dat raakt
 de vorm van `tegels.json`, `js/sprites.js` en hoe Tiled een vel leest; vóór het verpakken (punt 18).
 
