@@ -57,12 +57,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     oplichten zolang een venster openstaat.
 - **Het nieuwe gehucht, wat nog ruw is** (26 sep, na de derde versie van de kaart). Het grootste zag
   Marcel zelf: het plein is een kleine rechthoek van zand, de gebouwen staan er te dicht omheen, en de
-  kaart is te strak en waterpas; de brink hoort een open hart te zijn (vraag 29, en punt 1 van de
-  volgorde in de werklijst). Verder: er lopen nog geen
-  paden van de boerderijen naar het plein (die komen met "Straten en paden", punt 6c: ze slijten waar
-  gelopen wordt); het plein is kale zandgrond, geen gras zoals een Drentse brink; en de teksten zeggen
-  nog "op de brink" waar het plein bedoeld is. Wat de speler zelf bouwt, kan het plein nog wel
-  afdekken: een hoog huis vóór het plein (het bouwmenu zou daar kunnen waarschuwen).
+  kaart is te strak en waterpas; het plein hoort een open hart te zijn (vraag 29 en 30, en punt 1 van
+  de volgorde in de werklijst). Verder: er lopen nog geen paden van de boerderijen naar het plein (die
+  komen met "Straten en paden", punt 6c: ze slijten waar gelopen wordt). Wat de speler zelf bouwt, kan
+  het plein afdekken; dat mag (Marcel, 26 sep: "Ik wil wel dat er huizen voor kunnen staan"), en het
+  kijkvenster laat zien wat erachter valt.
 - **De winter is hard:** zonder hout gaat het gehucht van 25 naar 2 mensen.
   `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel bijstellen als hij speelt.
 - **Honger valt in het voorjaar,** vlak vóór de oogst, want het zaaigraan gaat voor. Buiten de
@@ -81,7 +80,7 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Wat een gebouw zegt,** lees je alleen als de muis op zijn voet staat, want het dak vangt de muis
   niet. Sinds 25 sep ook bij de huizen die al op de kaart stonden (daar verstop je iets), niet alleen
   bij gebouwen die je zelf neerzette.
-- **De marskramer loopt op 1× een week** van de weg naar de brink.
+- **De marskramer loopt op 1× een week** van de weg naar het plein.
 - **De inner** (24 sep, `spel.md`):
   - De getallen zijn een eerste gok: 90 stappen geduld, zeven tegels zicht, en een toeslag van
     argwaan × 50%.
@@ -221,7 +220,7 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - portretten van de heer en de inner boven het gesprek;
 - de gebouwen die een tekening lenen (hut, schaapskooi, timmerman, brouwerij, tiendschuur,
   wapenmaker, wachthuis en meer). De schaapskooi staat sinds 25 sep op de kaart van het gehucht, in
-  de blokhutschuur: een Drentse kooi is laag, met een groot rieten dak tot bijna op de grond;
+  de blokhutschuur: een schaapskooi is laag, met een groot rieten dak tot bijna op de grond;
 - hooioppers op een gemaaide weide, en een hek om een weide;
 - bouwfases voor de kapel, de watermolen en de put;
 - misschien ijs op de beek (een vraag aan Marcel).
@@ -232,16 +231,19 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Voorstellen van Claude die nog niet gekozen zijn
 
-- **De heer kijkt op Sint-Maarten zelf rond vanaf de brink** (24 sep, gebouwd). Wat hij ziet en niet
+- **De heer kijkt op Sint-Maarten zelf rond vanaf het plein** (24 sep, gebouwd). Wat hij ziet en niet
   in het rapport van de inner staat, komt alsnog op de rekening en kost argwaan. Te keuren; uit te
   zetten met "heer zicht" op 0 in de werkbank.
 - **Een vondst van de soldaten kost argwaan** (25 sep, gebouwd): 15% per plek waar ze iets vinden.
   Uit te zetten met "argwaan per vondst" op 0 in de werkbank.
-- **Uitzoomen** (26 sep, bij de schets van de brink). Het spel toont op de meeste schermen ongeveer
+- **Uitzoomen** (26 sep, bij de schets van het plein). Het spel toont op de meeste schermen ongeveer
   960 bij 540 beeldpunten van de wereld: de zoom volgt alleen het venster, van 1× tot 2× (`formaat`
-  in `js/main.js`). Een boerderij beslaat 7 bij 9 tegels, dus een brink van zo'n 200 tegels vult al
+  in `js/main.js`). Een boerderij beslaat 7 bij 9 tegels, dus een plein van zo'n 200 tegels vult al
   een scherm, en het hele dorp zie je nooit. Een bouw- en beheerspel laat je meestal uitzoomen om het
   geheel te overzien. Nog niet gekozen.
+- **Rechtspraak onder de boom op het plein** (26 sep). Een schout zat de schepenbank voor, en in veel
+  dorpen werd buiten recht gesproken, onder een boom. De grote eik midden op het plein kan die plek
+  worden als de rechtspraak komt (deel C).
 - **Een eigen figuur voor de schout** (26 sep). Hij draagt het vel van een gewone dorpeling, dus
   zodra er meer dorpelingen rondlopen, zoek je jezelf in de menigte. Iets van zijn ambt (een
   ketting, een staf, een hoed) maakt hem vindbaar, en past bij een spel waarin de heer, de inner en

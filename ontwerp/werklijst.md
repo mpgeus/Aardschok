@@ -40,30 +40,35 @@ staat in `CLAUDE.md`, onder Git.
   in wat je bouwt en een nieuw gehucht rond een plein (vraag 28); en stuk 2 van de poppetjes is af.
   Daarmee is stap 2 van 3b klaar. Op de beelden zag Marcel dat de brink een open hart moet zijn en
   dat de kaart nog te strak en waterpas is; hij koos wat de volgende sessie eerst doet (vraag 29).
-- In de vijfde sessie: de schets voor de brink, op een pagina voor Marcel (vraag 30).
+- In de vijfde sessie: een schets voor het plein, op een pagina voor Marcel (vraag 30). Marcel
+  antwoordde: het heet gewoon plein, er wordt niet op gebouwd, de huizen staan rondom en de velden
+  daar weer omheen, en het Drentse gaat eruit (een aanname van Claude). Daarna een tweede schets
+  (vraag 31).
 
-**Loopt nu: de schets voor de brink** (26 sep, vijfde sessie). De pagina "De brink als hart"
-(https://claude.ai/artifact/NnMfi4QPWV8ct2ZtNjewud) laat de vierde versie van het gehucht zien: een
-open brink van gras in het midden, de dorpsstraat met de huizen erachter, en de es, de weide en de
-heide ervoor, zodat geen dak de brink afdekt. Er is nog niets gebouwd; het wacht op Marcel (vraag 30).
-De indeling staat in `gereedschap/tiled/gehucht-v4-schets.json`, want de schets kwam uit een los
-tekenscript. **Daarna** (Marcel koos het, vraag 29): de brink bouwen, dan ronde 4b van de
+**Loopt nu: de tweede schets voor het plein** (26 sep, vijfde sessie). De pagina "Het plein als hart"
+(https://claude.ai/artifact/NnMfi4QPWV8ct2ZtNjewud) laat de vierde versie van het gehucht zien, met
+Marcels antwoorden op de eerste schets (vraag 30): het plein in het midden, waar niet gebouwd wordt;
+de huizen rondom, de voorste op de hoeken, zodat er maar 9 van de 221 tegels achter een dak vallen;
+en de velden in blokken om het dorp. Er is nog niets gebouwd; het wacht op Marcel (vraag 31). De
+indeling staat in `gereedschap/tiled/gehucht-v4-schets.json`, want de schets kwam uit een los
+tekenscript. **Daarna** (Marcel koos het, vraag 29): het plein bouwen, dan ronde 4b van de
 huizenbouwer, en dan de herberg. Stap 2 van 3b, mensen worden poppetjes, is af (26 sep; `spel.md`,
 "Mensen worden poppetjes", Zo werkt het nu). `npm test`: 482/482.
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
 
-1. **Nu: de brink als hart, en een kaart die niet waterpas is** (vraag 29; Marcel, 26 sep): een vierde
-   versie van het gehucht (`gereedschap/tiled/maak-gehucht.cjs`). Een open brink van gras met oude
-   eiken, onregelmatig van vorm, met de huizen eromheen op verschillende afstanden en niet in rijen, en
-   wegen die slingeren (`beeld.md`, "Ook de kaart is niet waterpas"; `spel.md`, bij het plein). Begin
-   met een schets voor Marcel, zoals bij de derde versie; die staat er (vraag 30). Klaar als: de brink
-   is de grootste open plek van het gehucht, er staat geen rechte rij huizen meer, en de akkers, de
-   weide en de heide zijn even groot gebleven, zodat de oogst en de balans niet verschuiven.
+1. **Nu: het plein als hart, en een kaart die niet waterpas is** (vraag 29 en 30; Marcel, 26 sep): een
+   vierde versie van het gehucht (`gereedschap/tiled/maak-gehucht.cjs`). Een groot open plein met oude
+   bomen, onregelmatig van vorm, waar niet gebouwd wordt; de huizen eromheen, ook aan de kant van de
+   camera, op verschillende afstanden en niet in rijen; de velden daar weer omheen; en wegen die
+   slingeren (`beeld.md`, "Ook de kaart is niet waterpas"; `spel.md`, bij het plein). Begin met een
+   schets voor Marcel, zoals bij de derde versie (vraag 30 en 31). Klaar als: het plein is de grootste
+   open plek van het gehucht, er staat geen rechte rij huizen meer, en de akkers, de weide en de heide
+   zijn even groot gebleven, zodat de oogst en de balans niet verschuiven.
 2. **Dan: ronde 4b van de huizenbouwer** (3b, stap 4; naar voren gehaald, vraag 29): elk huis in elk
    materiaal en elke vorm, niet waterpas (`beeld.md`, "De huizenbouwer op ronde vormen"), en ook een
-   kwartslag gedraaid of gespiegeld, zodat een boerderij met de zijkant naar de brink kan staan. Zwaar
+   kwartslag gedraaid of gespiegeld, zodat een boerderij met de zijkant naar het plein kan staan. Zwaar
    tekenwerk met agents: vraag vooraf het verbruik op (`CLAUDE.md`, "Zuinig werken met agents").
 3. **Dan: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel. Begin met een kort
    plan voor Marcel (`spel.md`, "Zaken waar de mensen zelf heen gaan").
@@ -168,12 +173,23 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     kaart; dat staat er nu bij ("Ook de kaart is niet waterpas"). Voorstel van Claude: eerst de brink
     (een vierde versie van het gehucht), dan ronde 4b van de huizenbouwer naar voren, dan de herberg.
     **Beantwoord (Marcel, 26 sep): "Brink, dan huizen".** En daarvoor een nieuwe sessie.
-30. **De brink als hart: de schets** (26 sep; https://claude.ai/artifact/NnMfi4QPWV8ct2ZtNjewud). Drie
-    vragen. (1) Is dit de richting: de brink in het midden, de dorpsstraat met de huizen erachter, en
-    de akkers, de weide en de heide ervoor? (2) Een dobbe, een drinkpoel voor het vee, op de brink?
-    Voorstel: ja, klein en aan de voorkant. (3) Mag er op de brink gebouwd worden? Nu kan het overal.
-    Voorstel: nee, de brink is van het dorp (in Drenthe van de marke); het bouwmenu zegt het, en later
-    kan het een keur worden.
+30. ~~De brink als hart: de schets~~ (26 sep; https://claude.ai/artifact/NnMfi4QPWV8ct2ZtNjewud).
+    Claude vroeg of de richting klopte (de huizen alleen achter en naast het plein, de velden ervoor),
+    of er een drinkpoel op kwam, en of er op gebouwd mocht worden. **Beantwoord (Marcel, 26 sep):**
+    "De velden etc moeten rondom het dorp liggen. Bij verstedelijking moeten deze mee verhuizen naar
+    buiten. Ik wil wel dat er huizen voor kunnen staan. We hebben daar het kijkvenster voor. Misschien
+    huizen volledig transparant maken." — "Laat dat Drentse los aub. Dit is niet daarop gebaseerd. Er
+    kunnen troggen geplaatst worden op dagen van markt voor het vee." — "Op het Plein wordt niet
+    gebouwd. De brink heet vanaf nu ook gewoon plein. Klaar met dat Drentse. Waar dat vandaan is
+    gekomen is een aanname ergens eerder." Dat klopt: het kwam van Claude (25 sep, "het Drentse
+    esdorp" als kader voor het vee) en stond daarna in de code op Marcels naam. Rechtgezet op 26 sep,
+    ook in de code en de spelteksten; zie `spel.md`, bij het plein.
+31. **Het plein als hart: de tweede schets** (26 sep; dezelfde pagina). Twee vragen. (1) Is dit het:
+    het plein in het midden, de huizen rondom met de voorste op de hoeken, en de velden in blokken om
+    het dorp? (2) Welke doorkijk wil je proberen, nu er huizen vóór het plein staan: het kijkvenster
+    ook voor de heer, de marskramer en wie je spreekt; alleen de omtrek van het huis; of het huis in
+    een raster doorzichtig, om de andere pixel? Voorstel: de eerste en de derde als keuze in de
+    spelregels, na de kaart (`beeld.md`, "Doorkijk").
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

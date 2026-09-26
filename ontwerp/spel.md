@@ -259,11 +259,11 @@ Is rijk worden en arm lijken leuk?
   je verder dan 5 tegels wegloopt. Zijn geduld is 90 stappen.
 - **Zijn rapport is de rekening:** de gebouwen die hij zag (met hun woonruimte, voor het hoofdgeld),
   het graan in de schuur en op de velden die hij zag, en het goud in de kist. Wat hij niet zag,
-  betaal je dat jaar niet. Op Sint-Maarten kijkt de heer zelf nog rond vanaf de brink, en hoe
+  betaal je dat jaar niet. Op Sint-Maarten kijkt de heer zelf nog rond vanaf het plein, en hoe
   verder naarmate hij argwanender is: zonder argwaan niet, vanaf 50% zes tegels ver.
 - **De argwaan** (0 tot 100%, een oog in de balk) groeit als er minder dan 60% ligt van het graan
   dat zijn velden beloven, als de kist minder dan 60% bevat van wat de marskramer je betaalde (vanaf
-  10 goud), als de heer op de brink iets ziet wat niet in het rapport stond (15% per ding), en als
+  10 goud), als de heer op het plein iets ziet wat niet in het rapport stond (15% per ding), en als
   de soldaten iets vinden (15% per plek). Ze doet vier dingen: een toeslag (de argwaan maal de helft
   van de rekening); vanaf 40% komt hij onverwacht terug; vanaf 50% doorzoeken de soldaten op
   Sint-Maarten het dorp; vanaf 80% telt het rapport niet meer. Na Sint-Maarten zakt ze tot de helft.
@@ -334,10 +334,10 @@ Marcel koos uit een voorstel van Claude, vóór het bouwen:
   gelooft de heer het rapport niet meer en vraagt hij naar alles. Daarnaast vraagt de heer een
   toeslag in goud van argwaan × 50% van zijn rekening. Na Sint-Maarten zakt ze tot de helft.
 - **Bedacht door Claude, nog te keuren door Marcel:** op Sint-Maarten kijkt de heer zelf rond
-  vanaf de brink, zes tegels ver. Wat hij daar ziet en wat niet in het rapport staat (omdat je het
+  vanaf het plein, zes tegels ver. Wat hij daar ziet en wat niet in het rapport staat (omdat je het
   na het bezoek bouwde, of omdat de inner het miste), komt alsnog op de rekening, en elk ding kost
   15% argwaan: "Wat is DÁT, schout?" Zo is bouwen na zijn bezoek niet vanzelf gratis, maar bouwen
-  uit het zicht van de brink wel. Het klopt ook met zijn brief: "Wat er tot Sint-Maarten bijkomt,
+  uit het zicht van het plein wel. Het klopt ook met zijn brief: "Wat er tot Sint-Maarten bijkomt,
   zien Wij ook." Uit te zetten in de werkbank (heer zicht op 0).
 - In de spelregels staan twee keuzes. "Waar de heer de rekening op maakt": wat de inner zag, of
   alles (dan komt er geen inner). "Wat de heer van het graan vraagt": een deel van wat hij telde, of
@@ -648,7 +648,7 @@ ziet de inner, behalve wat verstopt is.
 **Zo werkt het nu** (25 sep; `js/handel.js`, het venster in `js/hud.js`):
 - De marskramer komt drie keer per jaar: op 5 grasmaand, 5 hooimaand en 5 wijnmaand, telkens zo'n
   tien dagen. In de winter niet.
-- Je praat met hem op de brink en handelt in een venster; zolang dat open is, staat de tijd stil.
+- Je praat met hem op het plein en handelt in een venster; zolang dat open is, staat de tijd stil.
   Hij heeft maar zoveel goud bij zich en zoveel plaats in zijn mars.
 - Hij verkoopt ijzer en zout, en koopt graan, wol, hout, eieren, groente, vis, vlees en huiden. De
   prijzen verschillen per bezoek: voor graan betaalt hij in de lente goed en na de oogst weinig.
@@ -662,7 +662,7 @@ ziet de inner, behalve wat verstopt is.
 Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
 
 - **Hij komt drie keer per jaar,** op vaste tijden: in grasmaand, hooimaand en wijnmaand, telkens
-  zo'n tien dagen. Hij komt over de weg binnen, staat op de brink en loopt dan weer weg. **In de
+  zo'n tien dagen. Hij komt over de weg binnen, staat op het plein en loopt dan weer weg. **In de
   winter komt hij niet,** want dan zijn de wegen slecht. Zout en ijzer voor de winter koop je dus
   in wijnmaand.
 - **Je loopt naar hem toe en praat met hem.** Vanuit het gesprek open je het handelsvenster, en
@@ -704,7 +704,7 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
   dat de inner in oogstmaand komt tellen. De tijd staat stil tot je hem sluit. (Marcel koos hem op
   25 sep in plaats van een titelscherm; zie onder Open.)
 - Op 1 wijnmaand komt zijn brief, een schatting. Op 11 slachtmaand komt hij zelf met twee soldaten
-  naar de brink, overdag vanaf negen uur, en wacht daar drie dagen op je. Sinds de dag (26 sep) loopt
+  naar het plein, overdag vanaf negen uur, en wacht daar drie dagen op je. Sinds de dag (26 sep) loopt
   de tijd dan door, op 1× (daarvoor stond hij stil). Bij argwaan vanaf 50% doorzoeken de soldaten
   eerst het dorp.
 - Hij vraagt naar wat de inner zag: 15% van het graan, hoofdgeld (0,2 goud per mens), per gebouw
@@ -726,6 +726,16 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
   van zand, en de gebouwen staan er te dicht omheen. "De brink is vaak het hart van een dorp. Zou een
   redelijk open ruimte zijn lijkt mij", en de vorm mag niet strak en waterpas zijn (`beeld.md`, "Ook
   de kaart is niet waterpas").
+  **Besloten voor de vierde versie** (Marcel, 26 sep, bij de schets "De brink als hart", vraag 30):
+  - Het heet gewoon **het plein**: "De brink heet vanaf nu ook gewoon plein." Brink was een woord
+    van Claude.
+  - Het plein is het open hart van het dorp, en **op het plein wordt niet gebouwd**.
+  - **De huizen staan er rondom, ook aan de kant van de camera:** "Ik wil wel dat er huizen voor
+    kunnen staan. We hebben daar het kijkvenster voor. Misschien huizen volledig transparant maken"
+    (`beeld.md`, "Doorkijk").
+  - **De velden liggen rondom het dorp,** en bij verstedelijking verhuizen ze mee naar buiten ("Van
+    dorp tot stad").
+  - Geen drinkpoel op het plein. Op marktdagen kunnen er **troggen voor het vee** staan.
 - **Nog open:** zijn grillen en de herendienst (punt 8); de koets (tekenwerk).
 
 **Hoe het zo kwam:**
@@ -738,7 +748,7 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 5):
 - **In wijnmaand komt zijn brief** met wat hij dit jaar wil. Dan heb je tijd om te bewaren, te
   verkopen of te verstoppen.
 - **Je betaalt in een venster,** zoals bij de marskramer: wat hij vraagt, wat je hebt, en wat je
-  geeft. Hij loopt net zo naar de brink als de marskramer (`js/handel.js`).
+  geeft. Hij loopt net zo naar het plein als de marskramer (`js/handel.js`).
 - **Wat hij vraagt, groeit met wat hij ziet:** akkers, huizen, gebouwen en mensen. Elk gebouw
   krijgt zo een prijs op Sint-Maarten: een stenen huis is mooi, maar het maakt hem hebberig. In
   punt 6 kun je dingen voor hem verbergen.
@@ -778,7 +788,7 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 5):
   achter elkaar veel te weinig, en je bent je ambt kwijt.
 - **De schout mag zichzelf aanwijzen voor de schandpaal.** Dan neemt het dorp het je niet
   kwalijk, maar de heer vindt het lachwekkend en verhoogt de boete. Kies je een ander, dan staat
-  die drie dagen op de brink, en onthouden hij en het dorp het. Daarom hebben de vijf boeren een
+  die drie dagen op het plein, en onthouden hij en het dorp het. Daarom hebben de vijf boeren een
   naam en een eigenschap gekregen, en weegt het ene aanwijzen zwaarder dan het andere.
 - **De brief komt op 1 wijnmaand,** vóór het laatste bezoek van de marskramer (5 wijnmaand),
   zodat je nog kunt verkopen voor zijn goud. De brief is een schatting. Op Sint-Maarten vraagt
@@ -796,7 +806,7 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 5):
 **Gebouwd op 24 sep** (`js/heer.js`, de vensters in `js/hud.js`, `test/heer.test.cjs`). Dingen die
 uit het bouwen kwamen:
 
-- **De tijd staat stil als hij op de brink staat,** tot je bij hem bent geweest. Anders zijn zijn
+- **De tijd staat stil als hij op het plein staat,** tot je bij hem bent geweest. Anders zijn zijn
   drie wachtdagen op 3× nog geen drie seconden, en haal je hem nooit. Zet je de tijd zelf weer
   aan, dan tellen ze wel, en neemt hij het daarna zelf mee. (Tot 26 sep: met een dag van vijf
   minuten zijn drie dagen lang genoeg, en gaat de tijd naar 1× als hij komt.)
@@ -1101,10 +1111,10 @@ per koe zou het 3,3 per tegel zijn: dan gaf een weide ongeveer wat een akker gee
 **Marcel koos (25 sep), uit een voorstel van Claude:**
 - **Meer velden als één weide.** Zo bedoelde hij het: velden naast elkaar die allebei weide zijn,
   vormen samen één weide met één kudde. Een koe heeft nog steeds 4 tegels nodig.
-- **De schapen op de meent, met de kooi.** Zoals in de Drentse esdorpen: de akkers op de es, de
-  koeien op de weide, en de schapen overdag op het open land buiten de velden en 's nachts in de
-  schaapskooi. Hun mest ging met heideplaggen op de es, en zo bleef die eeuwenlang vruchtbaar. De
-  kooi geeft dus wol en mest, en de mest maakt de akkers vruchtbaar. De weide is voor de koeien.
+- **De schapen op de meent, met de kooi.** De akkers voor het graan, de koeien op de weide, en de
+  schapen overdag op het open land buiten de velden en 's nachts in de schaapskooi. Vroeger ging hun
+  mest met heideplaggen op de akkers, en zo bleven die eeuwenlang vruchtbaar. De kooi geeft dus wol
+  en mest, en de mest maakt de akkers vruchtbaar. De weide is voor de koeien.
 
 **Het hooi beslist hoeveel land een koe kost** (Marcel, 25 sep: "Wat als weides meer land in beslag
 nemen?"; hij koos uit een voorstel van Claude). Zonder schapen op de weide passen er op die van Klaas
@@ -1123,9 +1133,11 @@ zo altijd de winnaar. Zo loopt het nu:
   zaaigraan en maakt de grond beter; en vee kost hooi en valt de inner op.
 - Een kudde van vijf koeien heeft dan twee velden nodig: daar is "meer velden als één weide" voor.
 
-**Marcel koos voor stap 2 (25 sep, later die dag), uit een voorstel van Claude.** Claude zag dat de
-open vragen bij één landschap horen, het Drentse esdorp: de es voor graan, de weide voor de koeien,
-de maden langs de beek voor hooi, en de heide als meent voor de schapen, van de marke samen.
+**Marcel koos voor stap 2 (25 sep, later die dag), uit een voorstel van Claude.** Claude bracht de
+open vragen samen in één landschap: de akkers voor graan, de weide voor de koeien, de maden langs de
+beek voor hooi, en de heide als meent voor de schapen. Claude noemde dat toen "het Drentse esdorp".
+Dat was een aanname van Claude, en daarna stond het in de code op Marcels naam; het spel is niet op
+Drenthe gebaseerd (Marcel, 26 sep: "Laat dat Drentse los aub. Dit is niet daarop gebaseerd.").
 - **Het hooi komt van de hele weide.** In hooimaand maait de boer zijn weide, zoals in oogstmaand
   zijn graan. Er komt geen apart hooiland, en de vuistregel blijft 12 tegels per koe. Maden langs
   de beek (nat land dat alleen weide of hooiland kan zijn) kunnen later nog, bij het ontginnen.
@@ -1133,11 +1145,11 @@ de maden langs de beek voor hooi, en de heide als meent voor de schapen, van de 
   en de beek, en die is de meent. Het gehucht begint met een schaapskooi aan de rand ervan.
   Schapen eten 's winters heide, dus ze hebben geen hooi nodig. De heide is ook de grond die je
   later ontgint (punt 6b): wie heide tot akker maakt, neemt de schapen hun grond af, en daarmee de
-  mest voor de es. Zo ging het ook: met de heide verdwenen de kudden.
+  mest voor de akkers. Zo ging het ook: met de heide verdwenen de kudden.
 - **De mest kies jij per veld.** De kooi maakt mest, die in de voorraad komt, en in het
   veldenvenster leg je hem op een akker. Met genoeg schapen draagt een akker zo elk jaar graan,
-  zoals op de Drentse es, waar eeuwenlang elk jaar rogge stond. Dan heeft elk dier zijn rol:
-  koeien geven melk in het voorjaar en vlees in de herfst, schapen wol en een es die niet
+  zoals op akkers die eeuwenlang elk jaar rogge droegen. Dan heeft elk dier zijn rol:
+  koeien geven melk in het voorjaar en vlees in de herfst, schapen wol en een akker die niet
   braak hoeft.
 - **Wat Claude voorstelde en Marcel liet staan.** Velden zijn naast elkaar als ze elkaar raken of
   als er alleen een strook van één tegel tussen ligt; anders worden de blokken van Klaas en Gerrit
@@ -1202,8 +1214,8 @@ schout het voorstel):
   gaat er in slachtmaand een koe (of een kalf) naar de slager. Zonder winterzorg groeit hij tot zeven,
   en dat is 150 tot 200 graan per jaar aan melk meer. Wie meer koeien wil, maakt meer weide, en
   daarvoor is "één weide over meer velden".
-- **Mest telt.** Een volle kooi geeft 50 karren per jaar, genoeg voor drie à vier stroken van de es.
-  Dat is zo'n 50 graan per jaar meer in het derde jaar, en de es blijft op 80 à 90% in plaats van 70%.
+- **Mest telt.** Een volle kooi geeft 50 karren per jaar, genoeg voor drie à vier akkerstroken.
+  Dat is zo'n 50 graan per jaar meer in het derde jaar, en de akkers blijven op 80 à 90% in plaats van 70%.
 - **De schapen groeien snel.** Een lam per schaap met kans 0,7: de kooi is in het derde jaar vol (20),
   en de wol gaat van 32 naar 80. Daarna groeit de kudde alleen met een tweede kooi. De heide (plaats voor
   92 schapen) is nog lang geen grens.
@@ -1281,12 +1293,11 @@ komt als punt 6c, na het ontginnen (werklijst), omdat de keien daar vandaan kome
 - **Paadjes ontstaan vanzelf.** Waar veel gelopen wordt, slijt het gras tot een pad, zoals in
   Foundation: het dorp tekent zijn eigen stratenplan. Jij hoeft niet elk pad te leggen, maar kiest
   welke je verhardt.
-- **Verharden kost keien, en dat valt op.** In Drenthe kwamen de stenen van het land zelf: zwerfkeien
-  die de boeren uit hun akkers en van de heide raapten (de hunebedden zijn er ook van). Dat past beter
-  dan een steengroeve, want die had Drenthe niet, en het hangt samen met ontginnen (punt 6b): wie
-  heide ontgint, vindt keien. Een bestraat dorp ziet er rijk uit, en de inner ziet het: een straat is
+- **Verharden kost keien, en dat valt op.** De stenen komen van het land zelf: zwerfkeien die de
+  boeren uit hun akkers en van de heide rapen. Dat past beter dan een steengroeve, want het hangt
+  samen met ontginnen (punt 6b): wie heide ontgint, vindt keien. Een bestraat dorp ziet er rijk uit, en de inner ziet het: een straat is
   rijkdom die je niet kunt verstoppen.
-- **Later:** klinkers uit de steenbakkerij voor de stad, een verharde brink als voorwaarde voor
+- **Later:** klinkers uit de steenbakkerij voor de stad, een verhard plein als voorwaarde voor
   marktrecht (punt 14), en de voerman met zijn kar, die alleen komt over een weg die niet in de modder
   ligt.
 - Het kan met wat er al is: de weides leggen al gras over de grond van de kaart terwijl het spel
@@ -1536,7 +1547,7 @@ loopt zo'n anderhalve tegel per seconde, dus nog geen vier tegels per dag. Klaas
 de weg naar zijn weide ("Straten en paden"). Naar de herberg en terug zou een week kosten, en een
 nacht zou een seconde duren.
 
-Het spel liep hier al twee keer tegenaan: zolang de inner rondloopt en zolang de heer op de brink
+Het spel liep hier al twee keer tegenaan: zolang de inner rondloopt en zolang de heer op het plein
 wacht, staat de kalender stil (`js/inner.js`, `js/heer.js`), omdat meelopen anders weken kost. Voor
 een dagritme helpt stilzetten niet. Dan moet de tijd juist lopen, in een tempo waarin je kunt lopen.
 De nacht (punt 11) vraagt hetzelfde: een nacht die lang genoeg is om iets te verstoppen.
@@ -1574,7 +1585,7 @@ Een voorstel voor de dag:
   is), en wie iets te verbergen heeft. Hier speelt punt 11.
 - **Ochtend:** op, water halen bij de put, het vee, en naar het werk.
 - **Overdag:** werken, met om twaalf uur een schaft: brood op de akker, of thuis.
-- **Avond:** naar huis om te eten, of naar de herberg. Kinderen spelen op de brink.
+- **Avond:** naar huis om te eten, of naar de herberg. Kinderen spelen op het plein.
 - **Een rustdag:** niemand werkt, en wie vroom is, gaat naar de kapel.
 - **Het seizoen schuift mee:** in de zomer lange dagen (in de oogst werkt iedereen tot het donker),
   in de winter korte, met meer tijd bij het vuur en in de herberg. De winternacht is lang, en dan is
@@ -1644,9 +1655,9 @@ punt 4 en 5; `js/bewoners.js`, `T.dagAnker` in `js/dag.js`, toetsen in `test/bew
   Aan het begin zijn dat 19 tot 23 handen in plaats van 25 (meestal 20 of 21, gemeten over 400
   spellen); het gehucht gebruikt er 11.
 - **Het ritme van de dag, voor iedereen** (`T.dagAnker`): 's nachts binnen; 's ochtends op het erf, en
-  wie van het gezin water haalt (de vrouw, anders een dochter) bij de put op de brink; overdag bij het
+  wie van het gezin water haalt (de vrouw, anders een dochter) bij de put op het plein; overdag bij het
   werk (de herder op de heide, de tweede hand op het erf van de boerderij), en wie geen werk heeft:
-  een kind of knaap op de brink, een volwassene zonder werk ook, een oude en een kleuter bij huis, de
+  een kind of knaap op het plein, een volwassene zonder werk ook, een oude en een kleuter bij huis, de
   vrouw van de schout op haar erf; 's avonds thuis op het erf.
 - **Naar binnen gaan zie je** (Marcel, 26 sep: "Zodra mensen bij de deur komen 'verdwijnen' ze naar
   binnen"): wie naar binnen gaat, stapt in een halve seconde de deur in en vervaagt, en 's ochtends
@@ -1682,7 +1693,7 @@ veertien zijn alleen een getal.
    neer, dan krijgt de vrije hand die het dichtstbij woont het werk, en die houdt het.
 3. **Iedereen volgt het ritme van de dag** (de dagindeling die er al is): 's nachts binnen, 's ochtends
    naar de put, overdag werk met een schaft, 's avonds thuis op het erf; de herberg komt in stap 3.
-   Kinderen spelen overdag op de brink, ouden zitten bij hun huis.
+   Kinderen spelen overdag op het plein, ouden zitten bij hun huis.
 4. **Komen en gaan zie je.** Een nieuw gezin komt over de weg binnen en loopt naar zijn huis, een gezin
    dat wegtrekt, loopt de weg af, en wie in de winter sterft, heeft een naam.
 5. **Werk telt in uren:** een werkplaats maakt naar de uren dat zijn mensen er echt zijn, dus wie ver
@@ -1711,14 +1722,14 @@ Het wordt gebouwd in twee stukken: eerst 1 tot en met 3, dan een schermafdruk vo
   aan.
 
 Drie dingen die Claude zag:
-- **Je ziet wie geen werk heeft.** Wie geen werk heeft, hangt overdag rond op de brink. Staan er tien
+- **Je ziet wie geen werk heeft.** Wie geen werk heeft, hangt overdag rond op het plein. Staan er tien
   mensen bij de put te niksen, dan weet je zonder een getal te lezen dat er een werkplaats bij moet.
 - **Het gezin past bij het karakter.** Trekt een boerin het karakter weduwe, dan woont er op haar
   boerderij geen man. Bij het bouwen bleek dat haar karakter al zegt wie er wél woont: "weduwe, met
   drie kleine kinderen" (`T.KARAKTERS`). Zo is het ook gebouwd; de tweede hand op haar land komt van
   de buren.
 - ~~Het gehucht heeft geen put.~~ Dat klopte niet (Claude zag het bij het bouwen): de put staat al op
-  de brink, naast de eik, alleen als voorwerp op de kaart en niet als gebouw. Daar halen ze 's
+  het plein, naast de eik, alleen als voorwerp op de kaart en niet als gebouw. Daar halen ze 's
   ochtends water.
 
 **Marcel koos (26 sep), vraag 27: wie woont er bij de schout?** Zijn huis telt vijf mensen. Claude
@@ -1736,7 +1747,7 @@ de schout aandoet, raakt hen ook. De herder is daarom een boerenzoon.
   woont, blijft in zijn hut. Zo krijgt het dorp vanzelf een rijk midden en een arme rand, en doet het
   ertoe waar je de herberg zet. Bereiken gaat in looptijd, dus een pad brengt de herberg dichterbij.
   Caesar III en Anno doen het zo; bij ons lopen de mensen er zelf heen.
-- **De marskramer blijft:** is het dorp groot genoeg, dan zet hij een winkel aan de brink, en dan is
+- **De marskramer blijft:** is het dorp groot genoeg, dan zet hij een winkel aan het plein, en dan is
   hij de kramer. Zo komt de eerste winkel vanzelf, uit wat er al is. Hij vertelt de inner nu al wat
   hij je betaalde; als hij blijft, woont die bron in het dorp.
 - **De herberg is ook voor de schout:** nieuws, de marskramer die er slaapt, en wie met de inner
@@ -1754,8 +1765,9 @@ de schout aandoet, raakt hen ook. De herder is daarom een boerenzoon.
   huis groeien zonder dat er toevallig ruimte omheen moet zijn.
 - **Het materiaal komt uit de voorraad.** Ligt er geen hout, dan blijft het bij een bouwplaats. Wat je
   verstopt hebt, kan niemand gebruiken.
-- **In Drenthe besliste de marke** (de boeren met land, samen) of een nieuwkomer een hut op de
-  gemeenschappelijke grond mocht zetten, meestal aan de rand van de heide. Die nieuwkomers zijn de
+- **Op het plein wordt niet gebouwd** (Marcel, 26 sep). Dat geldt ook voor wat jij zelf neerzet.
+- **De boeren met land beslisten samen** of een nieuwkomer een hut op de gemeenschappelijke grond
+  mocht zetten, meestal aan de rand van de heide (voorstel van Claude). Die nieuwkomers zijn de
   keuters, de tweede groep uit "De kern voor het tweede proefje", en de keur "Vreemden" hoort erbij.
   Als de groepen komen (punt 9), mopperen de boeren als jij hun meent tot bouwgrond maakt.
 - Marcel (26 sep): "Ik wijs bouwgrond, misschien kunnen we later iets doen dat iemand een aanvraag
@@ -1825,7 +1837,14 @@ wordt, wordt dus vanzelf duurder. De schout moet kiezen:
 
 Dat is punt 14 (de treden). Met het bovenstaande zie je de stad groeien, in plaats van dat hij
 vrijkomt: een rijk midden van baksteen en pannen, een arme rand van hutten, straten waar gelopen
-wordt, en de markt op de brink.
+wordt, en de markt op het plein, met troggen voor het vee op marktdagen.
+
+**De velden gaan mee naar buiten** (Marcel, 26 sep): "De velden etc moeten rondom het dorp liggen. Bij
+verstedelijking moeten deze mee verhuizen naar buiten." Het dorp ligt dus in ringen: het plein, de
+huizen eromheen, en daaromheen de akkers, de weides en de heide. Groeit het dorp, dan worden de velden
+het dichtst bij de huizen bouwgrond, en komen er verderop nieuwe bij (ontginnen, punt 6b). Nog open
+(vragen van Claude): gaat dat vanzelf of wijs jij het aan, en krijgt een boer die zijn akker kwijtraakt
+er verderop een terug, zodat de oogst niet krimpt?
 
 ### In welke volgorde (voorstel)
 

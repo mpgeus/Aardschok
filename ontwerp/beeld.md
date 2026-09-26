@@ -65,14 +65,17 @@ Wat Claude daarin zag: de regel van 21 sep gold tot nu toe alleen voor wat de hu
 nooit voor de kaart zelf (`gereedschap/tiled/maak-gehucht.cjs`). Die is wél strak: het plein is een
 rechthoek met rechte randen, de weg een rechte lijn, de akkers liggen als gelijke stroken op een rij,
 en alle huizen staan in rijen met hun voorkant naar het zuiden. Dus ook voor de kaart:
-- **De brink is het hart, en open:** groot, met gras en een paar oude eiken, en niet volgebouwd. De
-  huizen staan eromheen, niet erop.
-- **Geen rechthoek:** de rand van de brink golft, een weg slingert (en wordt later een pad dat slijt
+- **Het plein is het hart, en open:** groot, met een paar oude bomen, en niet volgebouwd; op het
+  plein wordt niet gebouwd. (Sinds 26 sep heet de brink gewoon het plein.) De huizen staan eromheen,
+  ook aan de kant van de camera: "Ik wil wel dat er huizen voor kunnen staan. We hebben daar het
+  kijkvenster voor. Misschien huizen volledig transparant maken" (Marcel, 26 sep; "Doorkijk"
+  hieronder). En de velden liggen daar weer omheen.
+- **Geen rechthoek:** de rand van het plein golft, een weg slingert (en wordt later een pad dat slijt
   waar gelopen wordt, "Straten en paden" in `spel.md`), en een erf staat een eindje verder of dichterbij
   dan dat van de buren.
 - **Niet alles dezelfde kant op:** een huis kan in ons beeld niet vrij draaien, maar de huizenbouwer
   kan elk huis een kwartslag gedraaid of gespiegeld renderen, zodat een boerderij met de zijkant of de
-  achterkant naar de brink kan staan (voorstel van Claude).
+  achterkant naar het plein kan staan (voorstel van Claude).
 
 ### De huizenbouwer op ronde vormen (Marcel, 21 sep 2026)
 
@@ -310,6 +313,13 @@ gelden.
   (`tekenKijkgat` in `js/tekenen.js`). Tot 26 sep kwam in dat gat alleen de schout zelf terug, met het
   dak eromheen, en dan leek hij óp het dak te staan (Marcel: "In al je plaatjes staan er mensen op het
   dak van huizen").
+  **Misschien helemaal doorzichtig** (Marcel, 26 sep): nu er ook huizen vóór het plein komen, stelde
+  Marcel voor huizen misschien volledig transparant te maken. Het geelgroene spook van 23 sep kwam
+  doordat een half doorzichtig rieten dak zich mengde met het gras erachter. Voorstel van Claude, om
+  als optie in de spelregels te proberen: (1) het kijkvenster zoals nu, maar ook voor de heer, de
+  marskramer en wie je spreekt; (2) van het huis blijft alleen de omtrek staan, als een dunne lijn;
+  (3) het huis wordt in een raster doorzichtig, om de andere pixel, zoals oude spellen dat deden: dan
+  mengt er geen kleur. Nog niet gekozen.
 - **Niets valt je aan van buiten beeld.** Een wezen dat jou kan zien, moet jij kunnen zien. Als
   het je ontdekt, gaat de camera ernaartoe en komt de melding.
 - **Waar je loopt, staat niets.** Dichte begroeiing hoort aan de rand, waar je niet komt. Wat er
@@ -569,7 +579,7 @@ Nieuwe grondsoort voor de meent, waar de schapen van het gehucht grazen (Marcel 
 grondsoort `heide` en de terreinset `Heide over gras` (`a: 'gras', b: 'heide'`), met de acht vlakke
 varianten en de veertien hoekcombinaties × vier varianten, net als de vier bestaande paren.
 
-**Drentse heide het hele jaar door,** dus geen felle paarse bloei — augustus is maar één maand.
+**Heide het hele jaar door,** dus geen felle paarse bloei — augustus is maar één maand.
 Eén eigen ramp (`heide` in `kern.cjs`-stijl, net als `modderwater` en `veldsteen` ervoor: een eigen
 ramp toevoegen zonder `dorp.cjs` aan te raken), die zelf van donker olijfbruin naar gedempt
 grijsgroen drift, zoals `gras` en `aarde` dat ook binnen één ramp doen. De klontjes van de struik
