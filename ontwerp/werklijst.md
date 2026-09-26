@@ -19,10 +19,9 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met 
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
 `npm test`: 487/487.
 
-**Waar het werk staat:** de zesde sessie van 26 sep staat in de branch van die sessie
-(`claude/werklijst-vervolg-wriko0`) en gaat naar `main` zodra Marcel dat vraagt ("push it"); alles
-daarvóór staat al in `main`. Kijk dus vóór je begint of `main` die sessie al heeft (`git log`); hoe een
-eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook de zesde sessie van 26 sep (Marcel: "push it").
+Begin de volgende sessie dus gewoon vanaf `main`; hoe een eigen branch en `main` samengaan, staat in
+`CLAUDE.md`, onder Git.
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
 toevoegen voor we bij een speelbaar product komen." Houd je aan de volgorde hieronder. Een nieuw idee,
