@@ -339,6 +339,10 @@ gelden.
   nodig voor wat nog komt; en als iedereen op het plein meetelt, krijgen de vijf eiken er gaten van
   zolang de kinderen spelen. Voorstel van Claude (vraag 34 in de werklijst): alleen het kijkvenster,
   voor meer mensen; het plein telt alleen achter een huis, niet achter een boom.
+  **Marcel koos (26 sep, zevende sessie):** "Ja dit is een goede optie", en daarna "Raster ook als
+  keuze". In de spelregels komen dus twee keuzes: hoe je door iets heen kijkt (het kijkvenster, de
+  standaard, of het raster om de andere pixel) en wie je door een huis ziet (ook iedereen op het plein,
+  de standaard, of alleen wie ertoe doet). De doorkijk krijgt een eigen bestand, `js/doorkijk.js`.
 - **Niets valt je aan van buiten beeld.** Een wezen dat jou kan zien, moet jij kunnen zien. Als
   het je ontdekt, gaat de camera ernaartoe en komt de melding.
 - **Waar je loopt, staat niets.** Dichte begroeiing hoort aan de rand, waar je niet komt. Wat er

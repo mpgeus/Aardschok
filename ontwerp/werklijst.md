@@ -226,6 +226,10 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     ook iedereen op het plein ziet, of alleen wie ertoe doet; (3) de doorkijk naar een eigen bestand,
     `js/doorkijk.js`, met zijn getallen in één blok: een eerste stuk van vraag 25, D. Of wil Marcel
     het raster toch in het spel zien bewegen? Als proef is het er al; als keuze erbij is het klein.
+    **Beantwoord (Marcel, 26 sep): "Ja dit is een goede optie", en daarna "Raster ook als keuze".**
+    Dus in de spelregels twee keuzes: hoe je door iets heen kijkt (het kijkvenster, standaard, of het
+    raster) en wie je door een huis ziet (ook iedereen op het plein, standaard, of alleen wie ertoe
+    doet).
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
