@@ -1,45 +1,32 @@
 # Aardschok (werktitel)
 
-Een spel van Marcel en Claude. Wat hier nu staat, is een proefje: één torenverdieping om
-de kern te testen.
+Een spel van Marcel en Claude, in de maak: een bouw- en beheerspel in isometrisch beeld, met
+politiek en avontuur erin.
 
-Een isometrisch avontuur in de browser. Je loopt vrij rond, praat met mensen, pakt dingen op
-en opent deuren. Zodra een monster je ziet, bevriest de wereld en gaat het gevecht verder in
-beurten, op dezelfde vloer: er is geen apart gevechtsscherm. Na het gevecht loop je gewoon door.
+Je bent de schout van een gehucht onder een heer die alleen geld ziet. Je laat het gehucht groeien
+(akkers, weides met vee, huizen, een smidse), je handelt met de marskramer, en elk jaar komt de heer
+op Sint-Maarten halen wat hem toekomt. In oogstmaand komt zijn inner eerst tellen. Wat hij niet
+ziet, hoeft de heer niet te krijgen: de kern is rijk worden en arm lijken. Later groeit het gehucht
+tot een stad, en maak je je van de heer los, met stadsrechten of met een opstand.
 
-## De laatste klim
-
-Je speelt een tovenaar van 84. Je leeftijd is je levensbalk: elke vuurschicht kost je een jaar
-van je leven, elke klap van een monster een paar maanden, en op je honderdste is het voorbij.
-Genezen bestaat niet; de fontein heeft nog één slok, die je twee jaar jonger maakt. Hoe ouder je
-wordt, hoe trager je lijf (minder actiepunten) en hoe sterker je magie. Slaan met je staf kost
-geen jaren, maar dan sta je wel binnen bereik. Een gevecht dat je vermijdt, kost niets. Aan het
-eind telt hoe oud je boven aankomt.
+Rondlopen en vechten gebeurt op dezelfde tegels. Begint er een gevecht, dan gaat de wereld verder
+in beurten, zonder apart gevechtsscherm.
 
 ## Spelen
 
 - Dubbelklik `index.html`, of draai `npm start` en ga naar http://localhost:8123.
-- Klik om te lopen, te praten of iets te gebruiken.
-- `S` (of de knop linksboven) laat je sluipen: je loopt half zo snel, maar monsters merken je pas
-  twee tegels later op. Zo ontloop je een gevecht, en dat kost geen enkel jaar.
-- In een gevecht heb je 8 actiepunten per beurt (vanaf je negentigste 7, vanaf je
-  vijfennegentigste 6). Lopen kost 1 per stap (ook schuin), slaan met je staf 3, een vuurschicht
-  5 (en een jaar), de laatste slok uit de fontein 3, een deur dichtgooien 1.
-- Je kent drie spreuken, en ze worden beter naarmate je ze gebruikt (vijf treden, van Roestig
-  tot Legendarisch; alleen raak gebruik telt). Ze kosten geen levenspunten maar tijd:
-  - `2` **vuurschicht** (5 AP, een jaar): vuur op een monster dat je ziet, alleen in een gevecht;
-  - `3` **dwaallicht** (een maand): een lichtje dat je ergens heen stuurt. Een dwalend monster dat
-    het ziet, gaat kijken en blijft er even staan. Zo ontloop je een gevecht;
-  - `4` **windstoot** (3 AP, drie maanden): duwt in een gevecht een monster van je af, of gooit
-    van een afstand een open deur dicht — en monsters openen geen deuren.
-- Toetsen: `1` slaan · `2` `3` `4` je spreuken · `D` deur dicht · `spatie` einde beurt ·
-  `S` sluipen. `Esc` of de rechtermuisknop legt een spreuk weer weg.
+- Een nieuw spel begint met een brief van de heer; "Aan het werk" sluit hem.
+- Klik om te lopen, te praten of iets te gebruiken. Klik een boerderij om er iets te verstoppen.
+- `B` bouwen · `V` de velden · `O` de spelregels · `P` pauze · `-` en `+` de snelheid ·
+  `S` sluipen · `Esc` sluit een venster.
+- In een gevecht klik je op een monster om te slaan, gooit `D` een deur dicht en eindigt `spatie`
+  je beurt. Een gevecht proberen kan op http://localhost:8123/?kaart=proef.
 
-Het proefje is één verdieping met drie kamers: de hal (Wim, de conciërge, en een fontein), de
-voorraadkamer (de sleutel en een slijmkruiper) en het trappenhuis (een skelet en de trap naar
-boven).
+## Maken
 
-## Testen
-
-`npm test` draait de spelregels in Node: padzoeken, zicht, deuren, wie er meevecht en wat een
-monster in zijn beurt doet. Daar is geen browser voor nodig.
+- `npm test` draait de regels van het spel in Node, zonder browser.
+- http://localhost:8123/gereedschap/ is het gereedschap: de kaarten, de gesprekken en de quests.
+- De pixel art komt uit code (`gereedschap/pixelart/`): `npm run pixelart` rendert alles,
+  `npm run pixelart:spel` zet klaar wat het spel tekent.
+- Het ontwerp staat in `ontwerp/`, en `ontwerp/werklijst.md` zegt waar we zijn. Hoe de code in
+  elkaar zit, staat in `CLAUDE.md`.

@@ -627,11 +627,11 @@
       };
     },
     // Een quest in een fase zetten zonder hem te spelen. Zo kun je zien wat het dorp in elke
-    // fase zegt terwijl je de kaart nog tekent:
-    //   Spel.debug.quest()                 → wat er loopt, en wat er te kiezen valt
-    //   Spel.debug.quest('molen')          → de fasen van die quest, en waar hij nu staat
-    //   Spel.debug.quest('molen', 'terug')  → zet hem daar neer
-    //   Spel.debug.quest('molen', 'uit')    → helemaal terug naar niet begonnen, beloning en al
+    // fase zegt terwijl je de kaart nog tekent (er zijn nog geen quests: js/quests.js is leeg):
+    //   Spel.debug.quest()                   → wat er loopt, en wat er te kiezen valt
+    //   Spel.debug.quest('<quest>')          → de fasen van die quest, en waar hij nu staat
+    //   Spel.debug.quest('<quest>', '<fase>') → zet hem daar neer
+    //   Spel.debug.quest('<quest>', 'uit')    → helemaal terug naar niet begonnen, beloning en al
     quest(naam, fase) {
       if (!naam) {
         return {
@@ -655,7 +655,7 @@
       const f = q.fasen[fase];
       return { quest: q.naam, fase, doel: f.doel || null, goud: S.goud, tas: [...S.inventaris] };
     },
-    // Naar een ander gebied springen zonder ernaartoe te lopen: Spel.debug.gaNaar('erf').
+    // Naar een ander gebied springen zonder ernaartoe te lopen: Spel.debug.gaNaar('proefbos').
     gaNaar(naam) {
       T.gaNaarGebied(S, naam);
       return S.wereld.gebied;

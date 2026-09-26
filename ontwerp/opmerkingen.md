@@ -85,7 +85,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     reuzenspin en de kobold horen bij de toren en het bos van het oude spel; weg ermee, of bewaren
     tot er rovers zijn om de gevechtstoetsen op te draaien?
   - De actiebalk (actiepunten, Slaan, Einde beurt) verschijnt nu ook in het gehucht. De knop Slaan
-    doet zelf niets: slaan doe je door op een monster te klikken; de knop zegt wat het kost.
+    doet zelf niets: slaan doe je door op een monster te klikken; de knop zegt wat het kost. Hij
+    draagt nog het toetsje `1` uit de tijd van de spreuken (toen legde 1 een spreuk weg), maar 1
+    doet sinds 7b niets meer (26 sep). Weg ermee, of laat 1 het monster slaan dat het dichtst bij
+    staat?
 - **Na de oude kaart** (25 sep, werklijst punt 7c):
   - Het gehucht staat nog als proefkaart gemarkeerd (`"proef": true` in zijn betekenisbestand),
     omdat zijn weg de wereld in nergens heen leidt. Nu het de enige echte kaart is, hoort dat eraf
@@ -96,6 +99,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     het in één regel ("18 van de 26 mensen staan nog nergens"). Voor als het gehucht een dorp wordt.
   - Sluipen (`S`) en de spullen die je bij je hebt, hebben in het scherm van het gehucht geen plek:
     het oude scherm linksboven staat nog in `index.html`, maar verborgen.
+- **Na de namen** (26 sep, werklijst punt 7e en 7f):
+  - `T.NIEUWE_HUD` staat altijd aan (`js/hud.js`). De schakelaar was er voor de kaarten van het oude
+    spel, en er vragen nog acht regels in `js/main.js` en `js/hud.js` naar. Hij kan eruit.
+  - Elke start zegt in de console dat de weg de wereld in (op 49, 19) geen `komt` heeft: er ligt
+    geen kaart achter. Onschuldig, maar het is ruis tussen echte meldingen. Weg zodra er een kaart
+    achter de weg ligt, of eerder door die melding voor 'wereld' over te slaan.
 - **Een questweg kan nog "jaren" kosten** (`js/quest.js`, KOSTEN, en de toets van drie antwoorden).
   In het nieuwe spel kost niets meer jaren; misschien wordt het "tijd" of "leven". Beslissen als de
   quests van het gehucht komen.
@@ -180,3 +189,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   zetten met "heer zicht" op 0 in de werkbank.
 - **Een vondst van de soldaten kost argwaan** (25 sep, gebouwd): 15% per plek waar ze iets vinden.
   Uit te zetten met "argwaan per vondst" op 0 in de werkbank.
+- **Een eigen figuur voor de schout** (26 sep). Hij draagt het vel van een gewone dorpeling, dus
+  zodra er meer dorpelingen rondlopen, zoek je jezelf in de menigte. Iets van zijn ambt (een
+  ketting, een staf, een hoed) maakt hem vindbaar, en past bij een spel waarin de heer, de inner en
+  de soldaten ook hun eigen figuur hebben. In `js/sprites.js` is dat daarna één regel: nu krijgt
+  de soort 'schout' altijd een dorpelingvel, ook als er een vel 'schout' zou zijn.

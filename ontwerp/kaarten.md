@@ -76,10 +76,9 @@ het plusje *Eigenschap toevoegen*, soort *string*):
 
 Het beginbestand heeft er al een als voorbeeld: *pad terug naar het erf*.
 
-**Proberen in het spel.** Sla op in Tiled, draai `npm run kaarten`, en open het spel. Een nieuwe
-kaart is vanzelf een gebied, maar het erf heeft nog geen weg ernaartoe: zeg welke kaart het is,
-dan komt er een pad vanaf het erf. Tot die tijd kun je er in de browserconsole heen springen met
-`Spel.debug.gaNaar('dorp')`.
+**Proberen in het spel.** Sla op in Tiled, draai `npm run kaarten`, en open het spel met
+`?kaart=<naam>`: een nieuwe kaart is vanzelf een gebied. Vanuit een lopend spel spring je er in de
+browserconsole heen met `Spel.debug.gaNaar('<naam>')`.
 
 ## Buiten is één grote kaart (21 sep 2026)
 

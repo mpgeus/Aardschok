@@ -1,19 +1,17 @@
 # CLAUDE.md
 
 Aardschok (werktitel, past niet meer): een spel dat Marcel en Claude samen bouwen, met als doel het
-uiteindelijk te verkopen (Steam eerst, als los programma verpakt). **Sinds 23 sep 2026 een ander
-spel:** een bouw- en beheerspel in isometrisch beeld, met politiek en avontuur erin. Je bent de
-schout van een dorp onder een verwarde heer die alleen geld ziet. Je breidt het dorp uit tot een
-stad, bestuurt het met keuren, en maakt je aan het eind van de heer los, met stadsrechten of een
-opstand. Zie "Het spel in het kort" hieronder, en `ontwerp/spel.md`.
+uiteindelijk te verkopen (Steam eerst, als los programma verpakt). Een bouw- en beheerspel in
+isometrisch beeld, met politiek en avontuur erin. Je bent de schout van een dorp onder een verwarde
+heer die alleen geld ziet. Je breidt het dorp uit tot een stad, bestuurt het met keuren, en maakt
+je aan het eind van de heer los, met stadsrechten of een opstand. Zie "Het spel in het kort"
+hieronder, en `ontwerp/spel.md`.
 
-Tot 23 sep was het De laatste klim: een tovenaar van 84 met zijn leeftijd als levensbalk, in een
-toren. Marcel vond het doel niet goed genoeg. De kunst en de techniek eronder blijven: het
-isometrische beeld (Mystic Towers als voorbeeld), de HD-pixel art uit code, en een naadloze
-overgang van rondlopen naar een gevecht in beurten op tegels (Fallout, Jagged Alliance 2). De code
-van het oude spel ging er op 25 sep uit: de tutorial, de spreuken, de leeftijd, de toren, de oude
-kaart met zijn mensen, en de kunst die alleen het oude spel tekende (zie de werklijst, punt 7). Wat
-nog volgt: de namen (`Toren` wordt `Spel`, de held de schout).
+Het beeld is isometrisch (Mystic Towers als voorbeeld), de HD-pixel art komt uit code, en
+rondlopen gaat naadloos over in een gevecht in beurten op dezelfde tegels (Fallout, Jagged
+Alliance 2). Dat bleef over van het spel dat het tot 23 sep was, De laatste klim (een tovenaar in
+een toren); de rest ervan ging er op 25 en 26 sep uit (werklijst, punt 7). De afspraken van dat
+spel staan in `git show 0eb8269:CLAUDE.md`.
 
 Code, commentaar en spelteksten zijn Nederlands, zoals in Marcels Planner.
 
@@ -52,6 +50,13 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - Pushen alleen als Marcel erom vraagt ("push it"); dat is voor hem een aparte stap. En alleen als
   `npm test` groen is: op 22 sep ging er een falende toets mee omdat de opdracht de uitslag wel
   toonde maar de push niet tegenhield (`npm test && git push`).
+- In de cloud krijgt elke sessie een eigen branch. Zet die aan het eind in `main` als Marcel dat
+  vraagt, anders begint de sessie erna op een oude stand. Kijk vóór het pushen of `main` intussen
+  verder is (`git fetch origin main`, dan `git merge origin/main`): twee sessies tegelijk schrijven
+  allebei in de stand van de werklijst.
+- Haal in een verse kloon eerst de hele geschiedenis op (`git fetch --unshallow`):
+  `test/tegelvolgorde.test.cjs` leest een oude commit, en in een ondiepe kloon falen er dan twee
+  toetsen die niets met je werk te maken hebben.
 
 ## Draaien en testen
 
@@ -113,8 +118,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - `js/wereld.js`: wat een wezen is (`T.WEZENS`) en wat een voorwerp is (`T.VOORWERPEN`), de
   vragen over een kaart (`isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`, `isZichtbaar`),
-  en de proefkamers (`T.maakProefkamers`): drie kamers in code voor de toetsen van het gevecht,
-  sinds de toren van het oude spel weg is. Elke kaart van het spel komt uit Tiled (`js/kaart.js`).
+  en de proefkamers (`T.maakProefkamers`): drie kamers in code voor de toetsen van het gevecht.
+  Elke kaart van het spel komt uit Tiled (`js/kaart.js`). De speler is `S.schout`, met soort
+  'schout' en kant 'speler' (Marcel, 26 sep: een man van de militie vecht later ook aan kant
+  'speler' zonder de schout te zijn); hij draagt het vel van een gewone dorpeling (`js/sprites.js`).
 - `js/pad.js`: A* (`zoekPad`, acht richtingen, schuin kost ook 1, geen hoeken afsnijden) en
   `bereik` (alle tegels binnen N stappen).
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
@@ -140,17 +147,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zijn eigen (zijn id is de naam van het vel), een geleend vel (`vel: 'boer'`) of dat van een
   gewone dorpeling (`zaad: 14`). De kaart zegt alleen nog wáár hij staat:
   `{ x, y, wie: 'koster' }`. Dat is er gekomen omdat het er honderd kunnen worden (Marcel,
-  22 sep): een mens stond over vier plekken verdeeld en niets verbond ze, dus kon dezelfde bakker
+  22 sep): een mens stond over vier plekken verdeeld en niets verbond ze, dus kon dezelfde persoon
   op twee plekken staan zonder dat iets klaagde. `T.naamVanMens`, `T.gesprekVanMens`,
   `T.maakDorpeling` en `T.maakMens` zijn de vragen eromheen.
   **Wie geen naam hoeft te hebben, staat er niet in:** `{ x, y, zaad: 7 }` is menigte.
   **`T.WEZENS` gaat over wat een wezen ís** — wat vecht, met hoeveel levenspunten, wat in code
-  wordt neergezet — en een dorpeling is dat niet. Daar staan alleen nog de schout en de monsters;
-  de veertien dorpelingen die er met veertien keer dezelfde regel in stonden, zijn op 22 sep naar
-  `mensen.js` verhuisd, en Wim en de meester gingen op 25 sep weg met het oude spel. De mensen van
-  het oude dorp (de smid, de herbergierster, de molenaar, ...) staan er nog, zonder plek op een
-  kaart: voor als het gehucht een dorp wordt. Wie over de weg komt en op geen kaart staat (de heer,
-  de inner, de marskramer), heeft `bezoeker: true`.
+  wordt neergezet — en een dorpeling is dat niet. Daar staan alleen de schout en de monsters.
+  Er staan ook mensen in `mensen.js` zonder plek op een kaart (de smid, de herbergierster, de
+  molenaar, ...): voor als het gehucht een dorp wordt. Wie over de weg komt en op geen kaart staat
+  (de heer, de inner, de marskramer), heeft `bezoeker: true`.
 - `js/akkers.js`: **alleen het gehucht** (`ontwerp/spel.md`): welk stadium een
   akker heeft op welke dag (`T.AKKER_STADIA`, één tabel, `T.akkerStadium`), het windbeeld per
   tegel (`T.windBeeld`) en zijn vaste variant (`T.akkerVariant`), waar een boer in het
@@ -191,8 +196,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   komt ná alle regels en gesprekken, want het neemt hun waarden als standaard, en het gereedschap
   laadt het bewust niet), en `js/hud.js` (de balk, het bouwmenu onder
   `B`, het veldenvenster onder `V`, het handelsvenster, de brief en het betalen aan de heer, en de
-  benoemingsbrief `T.ui.toonBenoeming` waarmee een nieuw spel begint; aan, behalve met `?kaart=`
-  naar een kaart van het oude spel). Een nieuw spel begint in het gehucht met `T.beginOpKaart`
+  benoemingsbrief `T.ui.toonBenoeming` waarmee een nieuw spel begint). Een nieuw spel begint in
+  het gehucht met `T.beginOpKaart`
   (`js/gebied.js`; `?kaart=<naam>` begint op een andere kaart, zonder brief); de kaart komt uit
   `gereedschap/tiled/maak-gehucht.cjs`, de
   bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen
@@ -229,15 +234,12 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   een optie in de spelregels (`js/opties.js`), en wat Marcel koos, is de standaard. Bouw een nieuwe
   keuze dus als optie, niet als vaste regel.
 
-De regels van het oude spel (de leeftijd als levensbalk, `T.verouder`, meesterschap, de toetsen
-voor spreuken) staan in `git show 0eb8269:CLAUDE.md`. De spreuken en de leeftijd gingen er op 25 sep
-uit; sindsdien heeft de schout in een gevecht levenspunten, net als een monster (voorlopig: wat
-vallen echt betekent, komt bij punt 13 van de werklijst).
+In een gevecht heeft de schout levenspunten, net als een monster (voorlopig: wat vallen echt
+betekent, komt bij punt 13 van de werklijst).
 
 ## Afspraken in de code
 
-Uit het oude spel; ze gelden voor de code zoals die er nu staat. Het raster, het gevecht in beurten
-en de overgang ernaartoe gaan mee naar het nieuwe spel.
+Over het raster, het gevecht in beurten en de overgang ernaartoe.
 
 - Eén raster voor rondlopen én vechten. Een wezen heeft een vloeiende positie (`x`, `y`) en
   een tegel (`tx`, `ty`); bezetting vraag je altijd aan `tx`/`ty`. Bij het begin van een
@@ -262,8 +264,9 @@ en de overgang ernaartoe gaan mee naar het nieuwe spel.
 wachten. Dat is nodig omdat een verborgen browserpaneel maar af en toe een beeld tekent; ook
 css-overgangen staan dan vrijwel stil. Het testgereedschap stuurt de spatiebalk niet goed door
 (lege `key`), dus test einde beurt met de knop of met een `KeyboardEvent`.
-`Spel.debug.quest('molen', 'terug')` zet een quest in een fase zonder hem te spelen ('uit' haalt
-hem weg, beloning en al); zonder fase zegt hij waar hij staat.
+`Spel.debug.quest('<quest>', '<fase>')` zet een quest in een fase zonder hem te spelen ('uit'
+haalt hem weg, beloning en al); zonder fase zegt hij waar hij staat. Er zijn nog geen quests
+(`js/quests.js` is leeg). `Spel.debug.gaNaar('proefbos')` springt naar een ander gebied.
 `await Spel.debug.schermafdruk('naam')` bewaart het doek als PNG in
 `gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
 blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In het gehucht:
@@ -292,8 +295,8 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
   situaties, je klikt er een, en het gesprek wordt getekend zoals het dán loopt — één zin per
   knoop, alleen de antwoorden die je dan kunt geven, ingesprongen zoals een gesprek loopt. Wat in
   die situatie niet klinkt, zakt naar onderen met de situatie erachter waarin het wél klinkt. Dat
-  is er gekomen omdat het scherm de gegevens liet zien en niet het gesprek: Wims vijf versies van
-  één zin stonden alle vijf onder elkaar, alsof hij ze achter elkaar zei.
+  is er gekomen omdat het scherm de gegevens liet zien en niet het gesprek: vijf versies van één
+  zin stonden onder elkaar, alsof iemand ze achter elkaar zei.
   Een situatie staat bij de persoon (`situaties` in `js/gesprekken.js`), is geschreven in dezelfde
   woorden als een voorwaarde, en het spel leest hem nooit. **De fasen van een quest zíjn
   situaties** en staan er vanzelf bij bij wie hem geeft; de quest staat daarom op dezelfde
@@ -310,9 +313,8 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
 - **Een bewerker schrijft alleen het blok dat hij kent.** `gereedschap/bronblok.js` knipt een
   bestand in kop, blok en staart (`T.bronBlok(tekst, 'T.GESPREKKEN')`); de bewerker regenereert
   alleen het blok, en kop en staart gaan letterlijk mee terug. Dat is geen netheid maar noodzaak:
-  vóór 22 sep schreef de gespreksbewerker `js/gesprekken.js` helemaal opnieuw, kende
-  `T.TUTORIAL_TEKST` niet (het draaiboek van de tutorial, dat er tot 25 sep achter stond), en
-  wiste één keer opslaan dus dat hele draaiboek. Wie
+  vóór 22 sep schreef de gespreksbewerker `js/gesprekken.js` helemaal opnieuw, kende het draaiboek
+  niet dat achter het blok stond, en wiste één keer opslaan dus dat hele draaiboek. Wie
   een bewerker bouwt of uitbreidt, houdt zich hieraan; `test/bronblok.test.cjs` bewaakt het op de
   echte bestanden. Commentaar in het bestand hangt aan wat eronder staat — een persoon, een knoop,
   één regel tekst, één antwoord — en komt bij het opslaan terug op zijn plek.
@@ -339,13 +341,16 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
     lijf van een wezen, niet op zijn voeten, met dezelfde maten als `zoekDoel` in `js/main.js`.
     Esc sluit het paneel.
   - Een questvoorwerp hang je aan een fase met twee keuzelijsten (quest en fase), niet door
-    `bakker:zoeken` te typen; de kaart springt meteen naar die fase, zodat je ziet wat je legt.
+    `quest:fase` te typen; de kaart springt meteen naar die fase, zodat je ziet wat je legt.
   - De controle staat in `gereedschap/keuring.js` (`T.keurKaart` en `T.keurDekking`, zonder scherm
     en dus getoetst): wat op de kaart staat en niet kan, en omgekeerd wat het spel vraagt en
     nergens staat. Die tweede zegt precies wat er nog neergezet moet worden.
 
-Twee dingen die bij het mikken misgaan:
+Drie dingen die bij het mikken misgaan:
 
+- een open venster vangt de klik. Een nieuw spel begint met de benoemingsbrief, en zolang die
+  openstaat, staat de tijd stil en valt elke klik op de brief: sluit hem eerst (de knop "Aan het
+  werk", `.heer-geef-knop`, of Esc). Op `?kaart=proef` komt er geen brief;
 - de camera glijdt mee, dus reken de schermpositie pas uit als hij stilstaat (een seconde
   `stap` na elke verplaatsing), anders klik je een tegel ernaast;
 - wat vooraan staat, vangt de muis. Mik op het lijf van een wezen (zo'n 16 pixels boven zijn
