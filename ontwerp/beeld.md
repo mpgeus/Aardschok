@@ -314,12 +314,18 @@ gelden.
   Baldur's Gate het ook. Bepalen wat wat bedekt gaat op tegels en hoogte, niet op pixels, want
   het moet elk beeld kunnen. De overgang loopt in een paar tienden van een seconde op en af,
   anders klappert het.
-  **Zo werkt het nu** (26 sep): een boom wordt doorzichtig. Een gebouw niet, want een doorzichtig
-  rieten dak werd een geelgroen spook (Marcel, 23 sep); het krijgt een **kijkgat**, een zacht rond
-  venster rond de schout, waarin de grond achter het huis en wie daar staat opnieuw getekend worden
-  (`tekenKijkgat` in `js/tekenen.js`). Tot 26 sep kwam in dat gat alleen de schout zelf terug, met het
-  dak eromheen, en dan leek hij óp het dak te staan (Marcel: "In al je plaatjes staan er mensen op het
-  dak van huizen").
+  **Zo werkt het nu** (26 sep, zevende sessie; `js/doorkijk.js`): wie je hoort te zien, zie je door
+  een boom of een huis heen. Dat zijn de schout, wie je spreekt, wie vecht of je net ontdekte, en de
+  bezoekers (de heer, de marskramer, de inner en de soldaten); door een huis heen ook iedereen op het
+  plein (`T.zichtbaarDoor`). Hoe je erdoorheen kijkt, is een keuze in de spelregels ("Door een huis
+  heen kijken"): het **kijkvenster** (de standaard), een zacht rond venster rond wie erachter staat,
+  waarin de grond achter het huis en wie daar staat opnieuw getekend worden (`T.tekenKijkgat`); of het
+  **raster**, waarin het hele huis of de hele boom om de andere pixel opengaat (`T.tekenGerasterd`).
+  Of het plein meetelt, is de tweede keuze ("Wie je door een huis heen ziet"). Een boom van de bosrand
+  valt helemaal weg. Een gebouw vervaagt nooit als geheel, want een half doorzichtig rieten dak werd
+  een geelgroen spook (Marcel, 23 sep). Tot 26 sep kwam in het venster alleen de schout zelf terug, met
+  het dak eromheen, en dan leek hij óp het dak te staan (Marcel: "In al je plaatjes staan er mensen op
+  het dak van huizen").
   **Misschien helemaal doorzichtig** (Marcel, 26 sep): nu er ook huizen vóór het plein komen, stelde
   Marcel voor huizen misschien volledig transparant te maken. Het geelgroene spook van 23 sep kwam
   doordat een half doorzichtig rieten dak zich mengde met het gras erachter. Voorstel van Claude, om

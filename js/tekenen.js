@@ -181,10 +181,9 @@
       zichtbaar.push(v);
       const k = T.kamerVan(w, v.x, v.y);
       const helder = k && inBeeld(k.id) ? 1 : GEDIMD;
-      // Een gebouw (breder of dieper dan één tegel) krijgt `gebouw` mee: alleen dan is één
-      // scalair dieptegetal niet genoeg, en zoekt tekenVolgorde zijn plek (zie hieronder).
-      const groot = v.beslaat && (v.beslaat[0] > 1 || v.beslaat[1] > 1);
-      lijst.push({ d: diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: groot ? v : undefined, f: () => tekenVoorwerp(ctx, S, v, helder) });
+      // Een gebouw (T.isGebouw: breder of dieper dan één tegel) krijgt `gebouw` mee: alleen dan is
+      // één scalair dieptegetal niet genoeg, en zoekt tekenVolgorde zijn plek (zie hieronder).
+      lijst.push({ d: diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: T.isGebouw(v) ? v : undefined, f: () => tekenVoorwerp(ctx, S, v, helder) });
     }
     // De akkers (alleen het nieuwe spel, ?kaart=gehucht — ontwerp/werklijst.md punt 1b): welk
     // stadium en welke variant een tegel heeft, weet js/akkers.js (T.akkerStadium e.a.); hier
@@ -386,6 +385,11 @@
     const b = v.beslaat || [1, 1];
     return x > v.x + b[0] - 1 || y > v.y + b[1] - 1;
   }
+
+  // Is dit voorwerp een gebouw (een huis, een boerderij, een hut)? Dan beslaat het meer dan één tegel;
+  // een boom staat op één. De tekenvolgorde vraagt het, en de doorkijk (js/doorkijk.js): door een huis
+  // zie je meer mensen dan door een boom.
+  T.isGebouw = (v) => !!(v.beslaat && (v.beslaat[0] > 1 || v.beslaat[1] > 1));
 
   // De tekenlijst op volgorde, van achter naar voor. Gewone dingen (wezens, bomen, het graan) gaan
   // op de oude som `x + y`, en bij gelijke som op hun laag `l`. Een gebouw (`gebouw`: een voet
@@ -947,18 +951,25 @@
   // gewone buitenversiering (tekenVoorwerp hieronder), maar met bosrandHelder in plaats van
   // randDof — dat laatste is voor het verbleken van bestaande kaartversiering vlak bij háár eigen
   // rand (w.doof, door Marcel per kaart gezet) en is hier niet aan de orde.
+  //
+  // Bedekt hij de schout (T.werkDoorkijkBij, js/doorkijk.js), dan valt hij helemaal weg, in plaats van
+  // een kijkgat te krijgen of te vervagen. De bosrand staat op een hoek van de kaart soms met twee dichte
+  // randen tegelijk om de schout heen, en dan bedekken tien, twintig bomen hem allemaal tegelijk.
+  // Doorzichtigheid stapelt vermenigvuldigend (twee bomen op 0.4 laten samen nog maar 0.16 van de
+  // schout zien, bij twintig is dat allang niets meer), dus een kleine waarde lost dat niet op. Eén los
+  // ding mag doorschemeren; een heel woud aan verwisselbare achtergrondbomen niet.
   function tekenBosrandBoom(ctx, S, v) {
-    const doorkijk = v.doorkijk == null ? 1 : v.doorkijk;
-    if (doorkijk <= 0.02) return; // helemaal weggevallen: dan is er niets te tekenen
+    const zicht = 1 - (v.doorkijk || 0);
+    if (zicht <= 0.02) return; // helemaal weggevallen: dan is er niets te tekenen
     const p = T.naarScherm(v.x, v.y);
-    if (doorkijk < 1) ctx.globalAlpha = doorkijk;
+    if (zicht < 1) ctx.globalAlpha = zicht;
     const helder = bosrandHelder(v.r);
     const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v));
     // Het donkerder maken zit al in het plaatje (bosrandGedimd); T.sprites.teken hoeft dus geen
     // ctx.filter meer aan te zetten, vandaar de 1 hier.
     if (ruw) T.sprites.teken(ctx, bosrandGedimd(ruw, helder), p.x, p.y, 1);
     else tekenBuitenVlak(ctx, v, helder);
-    if (doorkijk < 1) ctx.globalAlpha = 1;
+    if (zicht < 1) ctx.globalAlpha = 1;
   }
 
   // Het halsijzer om de nek van wie aan de schandpaal staat (js/heer.js, T.aanDePaal): het anker van
@@ -978,10 +989,11 @@
     // midden van zijn eigen tegel.
     if (v.vel) {
       // dof: hoe ver van de rand van de kaart — dat vervaagt nog altijd het hele voorwerp.
-      // dekking: staat er iemand achter? Een gebouw blijft gewoon staan en krijgt na het tekenen
-      // een kijkgat overheen (T.tekenKijkgat, js/doorkijk.js) op wie erachter loopt.
+      // doorkijk: staat er iemand achter die je hoort te zien (js/doorkijk.js)? Dan gaat het voorwerp
+      // om de andere pixel open (het raster), of het blijft staan en krijgt na het tekenen een
+      // kijkgat op wie erachter staat (het venster): wat de spelregels zeggen.
       const dof = randDof(S.wereld, v.x, v.y);
-      const dekking = v.doorkijk == null ? 1 : v.doorkijk;
+      const doorkijk = v.doorkijk || 0;
       // In aanbouw (js/gebouwen.js, T.plaatsGebouw): heeft dit gebouw fases in tegels/bouwfasen.png
       // (T.bouwFaseIndex kiest welke, op hoe ver de bouwtijd is), dan die — anders (kapel,
       // watermolen, put, ...) net als voorheen gewoon bleker tot hij klaar is, zonder er een
@@ -992,14 +1004,12 @@
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;
       const stuk = fase || (metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v)));
-      if (stuk) {
-        T.sprites.teken(ctx, stuk, p.x, p.y, helder);
-      } else tekenBuitenVlak(ctx, v, helder);
+      const raster = stuk && doorkijk > 0.02 && T.DOORKIJK_INSTELLINGEN.manier === 'raster';
+      if (raster) T.tekenGerasterd(ctx, stuk, p.x, p.y, helder, doorkijk);
+      else if (stuk) T.sprites.teken(ctx, stuk, p.x, p.y, helder);
+      else tekenBuitenVlak(ctx, v, helder);
       if (alpha < 1) ctx.globalAlpha = 1;
-      if (dekking < 1 && v.kijkgat && v.kijkgat.length) {
-        const sterkte = Math.max(0, Math.min(1, (1 - dekking) / (1 - T.DOORKIJK_INSTELLINGEN.dekking)));
-        if (sterkte > 0.02) for (const e of v.kijkgat) T.tekenKijkgat(ctx, S, e, sterkte, v);
-      }
+      if (!raster && doorkijk > 0.02 && v.kijkgat) for (const e of v.kijkgat) T.tekenKijkgat(ctx, S, e, doorkijk, v);
       return;
     }
     // De pilaar staat nog niet in de kunst; die blijft vlakken.

@@ -238,6 +238,28 @@
           uitleg: 'Een hand werkt een hele dag, waar hij ook woont.' },
       ],
     },
+    // De doorkijk (Marcel, 26 sep, vraag 34: "Ja dit is een goede optie" en "Raster ook als keuze";
+    // ontwerp/beeld.md, "Doorkijk"; js/doorkijk.js).
+    {
+      id: 'doorkijk', naam: 'Door een huis heen kijken', standaard: 'venster',
+      uitleg: 'Hoe je iemand ziet die achter een huis of een boom staat.',
+      keuzes: [
+        { id: 'venster', naam: 'Kijkvenster', zet: { 'DOORKIJK_INSTELLINGEN.manier': 'venster' },
+          uitleg: 'Het huis blijft staan, en rond wie erachter staat gaat een zacht rond venster open, waarin je hem en de grond achter het huis ziet.' },
+        { id: 'raster', naam: 'Raster', zet: { 'DOORKIJK_INSTELLINGEN.manier': 'raster' },
+          uitleg: 'Het hele huis gaat om de andere pixel open, zoals in oude spellen: je ziet het huis en wat erachter staat door elkaar.' },
+      ],
+    },
+    {
+      id: 'doorkijkPlein', naam: 'Wie je door een huis heen ziet', standaard: 'ookHetPlein',
+      uitleg: 'Altijd de schout, wie je spreekt, wie vecht, en de heer, de marskramer, de inner en de soldaten.',
+      keuzes: [
+        { id: 'ookHetPlein', naam: 'Ook het plein', zet: { 'DOORKIJK_INSTELLINGEN.plein': true },
+          uitleg: 'Ook iedereen die op het plein staat, zodat je het plein altijd ziet. Door een boom heen niet, anders zitten de eiken vol gaten zolang de kinderen spelen.' },
+        { id: 'wieErToeDoet', naam: 'Alleen wie ertoe doet', zet: { 'DOORKIJK_INSTELLINGEN.plein': false },
+          uitleg: 'Wie op het plein speelt, verdwijnt achter een huis, net als overal in het dorp.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -266,6 +288,7 @@
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
+    { naam: 'De doorkijk', blok: 'DOORKIJK_INSTELLINGEN' },
   ];
 
   // ---------------------------------------------------------------------------------------------

@@ -70,7 +70,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     komt er op dag 20 al een gezin bij, en is het graan in het voorjaar wat eerder op. Zo gelaten
     (`spel.md`, bij het plein); bijstellen na spelen.
   - De vijf eiken op het plein zijn groot: ze dekken een deel van het plein af, en wie erachter speelt.
-    Misschien minder of kleinere bomen, of de doorkijk (die komt nu) ook voor bomen.
+    Misschien minder of kleinere bomen. De doorkijk (26 sep, zevende sessie) laat door een boom heen
+    alleen wie ertoe doet zien, niet wie er speelt: anders zaten de eiken vol gaten (`beeld.md`,
+    "Doorkijk").
   - De weg houdt een tegel vóór de brug op, want zand mag niet naast water liggen (er is geen
     terreinset "zandpad over water"). Dat was in de derde versie ook zo.
   - De brug was in de derde versie te kort: drie tegels over vier tegels water, en de oevertegel die
@@ -177,6 +179,17 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   quests van het gehucht komen.
 
 ## Het beeld
+
+**De doorkijk** (26 sep, zevende sessie; `beeld.md`, "Doorkijk"):
+- Het raster kost tijd: in de proef, in een browser zonder videokaart, duurde een beeld met één groot
+  huis in het raster 15 ms tegen 12 ms met het kijkvenster. Een echte browser met videokaart doet het
+  sneller, maar nameten als Marcel het raster kiest (`Spel.debug.meet()`). Wordt het te traag, dan kan
+  het gerasterde huis bewaard worden zolang de camera stilstaat.
+- In een kijkvenster komt iedereen terug die erin staat, ook wie zelf niet meetelt: in de proef stond
+  een bewoner naast de marskramer, in diens venster. Zo is het bedoeld (je kijkt door het dak de straat
+  in), maar zo zie je soms iemand die zonder venster achter het huis was verdwenen.
+- Vóór het plein staat nog geen huis; de keuze "Wie je door een huis heen ziet" zie je pas als er een
+  staat (wat je zelf bouwt, of de stad die om het plein groeit).
 
 **Het huis van de heer** (24 sep, `beeld.md`):
 - In één richting (ZO) zie je de korte beentjes van de heer nauwelijks onder zijn mantel.

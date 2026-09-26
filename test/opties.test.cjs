@@ -22,13 +22,14 @@ require('../js/boeren.js');
 require('../js/bewoners.js');
 require('../js/gesprekken.js');
 require('../js/gesprek.js');
+require('../js/doorkijk.js');
 const T = globalThis.Spel;
 
 // De blokken zoals de bestanden ze zetten, vóór opties.js er iets mee doet.
 const BLOKKEN = [
   'GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN', 'INNER_INSTELLINGEN',
   'BOEREN_INSTELLINGEN', 'VELDEN_INSTELLINGEN', 'VEE_INSTELLINGEN', 'VERSTOP_INSTELLINGEN', 'DAG_INSTELLINGEN',
-  'BEWONERS_INSTELLINGEN',
+  'BEWONERS_INSTELLINGEN', 'DOORKIJK_INSTELLINGEN',
 ];
 const LOS = ['GRAAN_PER_TEGEL', 'ZAAIGRAAN_PER_TEGEL', 'DAG_LENGTE', 'OOGST_UREN_PER_TEGEL'];
 const bestanden = {};
@@ -108,6 +109,24 @@ test('de weides: of het land uitput en of het vee groeit, zijn keuzes; Marcel ko
   assert.ok(!vee.some((g) => g.pad === 'VEE_INSTELLINGEN.melk.van'));
   const velden = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'VELDEN_INSTELLINGEN'));
   assert.equal(velden.find((g) => g.pad === 'VELDEN_INSTELLINGEN.akkerPutUit').label, 'akker put uit');
+});
+
+test('de doorkijk: het kijkvenster en het plein zijn de standaard, het raster is een keuze (vraag 34)', () => {
+  // Marcel, 26 sep: "Ja dit is een goede optie" en "Raster ook als keuze" (ontwerp/beeld.md, "Doorkijk").
+  assert.equal(T.optieKeuze('doorkijk'), 'venster');
+  assert.equal(T.optieKeuze('doorkijkPlein'), 'ookHetPlein');
+  assert.equal(T.DOORKIJK_INSTELLINGEN.manier, 'venster');
+  assert.equal(T.DOORKIJK_INSTELLINGEN.plein, true);
+  T.pasOptiesToe({ keuzes: { doorkijk: 'raster', doorkijkPlein: 'wieErToeDoet' } });
+  assert.equal(T.DOORKIJK_INSTELLINGEN.manier, 'raster');
+  assert.equal(T.DOORKIJK_INSTELLINGEN.plein, false);
+  T.pasOptiesToe(null);
+  assert.deepEqual(T.DOORKIJK_INSTELLINGEN, bestanden.DOORKIJK_INSTELLINGEN);
+  // De getallen staan in de werkbank; het raster zelf is een keuze, geen getal.
+  const doorkijk = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'DOORKIJK_INSTELLINGEN'));
+  assert.equal(doorkijk.find((g) => g.pad === 'DOORKIJK_INSTELLINGEN.kijkgatStraal').label, 'kijkgat straal');
+  assert.equal(doorkijk.find((g) => g.pad === 'DOORKIJK_INSTELLINGEN.rasterCel').waarde, 1);
+  assert.ok(!doorkijk.some((g) => g.pad === 'DOORKIJK_INSTELLINGEN.manier'));
 });
 
 test('een onbekende keuze valt terug op de standaard', () => {
