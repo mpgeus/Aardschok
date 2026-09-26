@@ -10,17 +10,18 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (26 sep 2026, zesde sessie): het gehucht rond het plein staat
+## De stand (26 sep 2026, zevende sessie): de doorkijk is af
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 487/487.
+`npm test`: 491/491.
 
-**Waar het werk staat:** alles staat in `main`, ook de zesde sessie van 26 sep (Marcel: "push it").
-Begin de volgende sessie dus gewoon vanaf `main`; hoe een eigen branch en `main` samengaan, staat in
+**Waar het werk staat:** de zesde sessie staat in `main`. De zevende sessie (de doorkijk) staat op haar
+eigen branch, `claude/werklijst-doorzetten-lipt3f`, en gaat naar `main` zodra Marcel "push it" zegt.
+Staat ze er nog niet in, begin dan vanaf die branch; hoe een eigen branch en `main` samengaan, staat in
 `CLAUDE.md`, onder Git.
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
@@ -28,7 +29,7 @@ toevoegen voor we bij een speelbaar product komen." Houd je aan de volgorde hier
 ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in de stap die loopt
 (`CLAUDE.md`, "Het spel in het kort"). Wat het eerste speelbare product is, is vraag 33.
 
-**Wat er op 26 sep gebeurde** (zes sessies; de details staan onder Af en in `spel.md`):
+**Wat er op 26 sep gebeurde** (zeven sessies; de details staan onder Af en in `spel.md`):
 - Punt 7 is af: het oude spel is eruit, ook uit de namen (`Spel`, `S.schout`, kant 'speler').
 - Marcel kwam met een nieuwe wens: een dorp dat leeft en groeit (punt 3b). Claude schreef een voorstel
   op een pagina, "Een dorp dat leeft" (https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE), en Marcel
@@ -54,34 +55,28 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   hoeft geen boerenzoon te zijn; dat was een afleiding van Claude, geen keuze van Marcel). Op het plein
   wordt niet gebouwd, en de kinderen spelen er verspreid over. Marcel kreeg schermafdrukken (de deur van
   de schout, het midden van het plein, het hele gehucht, de brug).
+- In de zevende sessie: **de doorkijk is af** (vraag 34). Een proef liet zien dat het raster in het oog
+  toch mengt; Marcel wilde het toch als keuze. Nu zie je door een huis heen ook de bezoekers en wie op
+  het plein staat, en staan het kijkvenster en het raster als keuze in de spelregels. De doorkijk staat
+  in een eigen bestand, `js/doorkijk.js`: het eerste stuk dat uit `tekenen.js` ging (vraag 25, D).
 
-**Loopt nu: de doorkijk** (punt 1 hieronder; vraag 31, "Zoals jij voorstelt"): het kijkvenster ook
-voor de heer, de marskramer en wie je spreekt, en een huis dat in een raster doorzichtig wordt, om de
-andere pixel; allebei als keuze in de spelregels (`js/opties.js`), en wat Marcel in het spel kiest,
-wordt de standaard (`beeld.md`, "Doorkijk"). Het kijkvenster zit in `tekenKijkgat` (`js/tekenen.js`).
-In de zevende sessie (26 sep) liet een proef zien dat het raster in het oog toch mengt (het spook van
-23 sep, alleen scherper); het voorstel ligt bij Marcel (vraag 34). Daarna: ronde 4b van de
-huizenbouwer, dan de herberg.
+**Loopt nu:** niets. **Het volgende: ronde 4b van de huizenbouwer** (punt 1 hieronder), dan de herberg.
+De doorkijk is af (zevende sessie, zie onder Af): welke manier de standaard wordt, kiest Marcel in het
+spel (zie "Spelen, en zeggen hoe het voelt").
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
 
-1. **Nu: de doorkijk** (vraag 31, "Zoals jij voorstelt"): het kijkvenster ook voor de heer, de
-   marskramer en wie je spreekt, en een huis dat in een raster doorzichtig wordt, allebei als keuze in
-   de spelregels (`beeld.md`, "Doorkijk"). Nu er huizen om het plein staan, ook aan de kant van de
-   camera, is dat nodig. Klaar als: wie je spreekt of wie op het plein staat, is ook achter een huis te
-   zien, en in de spelregels staan de twee manieren. (Het plein als hart, de vierde versie van het
-   gehucht, is af: zie onder Af.)
-2. **Dan: ronde 4b van de huizenbouwer** (3b, stap 4; naar voren gehaald, vraag 29): elk huis in elk
+1. **Nu: ronde 4b van de huizenbouwer** (3b, stap 4; naar voren gehaald, vraag 29): elk huis in elk
    materiaal en elke vorm, niet waterpas (`beeld.md`, "De huizenbouwer op ronde vormen"), en ook een
    kwartslag gedraaid of gespiegeld, zodat een boerderij met de zijkant naar het plein kan staan. Zwaar
    tekenwerk met agents: vraag vooraf het verbruik op (`CLAUDE.md`, "Zuinig werken met agents").
-3. **Dan: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel. Begin met een kort
+2. **Dan: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel. Begin met een kort
    plan voor Marcel (`spel.md`, "Zaken waar de mensen zelf heen gaan").
-4. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
+3. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
    steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
    uit verstoppen deel 1b op.
-5. **De kern afmaken** (punt 6 en 6a), en daarmee de vraag van het tweede proefje: is dit leuk?
+4. **De kern afmaken** (punt 6 en 6a), en daarmee de vraag van het tweede proefje: is dit leuk?
    - verstoppen deel 1b, de rest (Marcel koos het op 25 sep): de soldaten zoeken op Sint-Maarten
      altijd op 2 of 3 plekken, ook zonder argwaan, en je bepaalt de route zelf, maar soms wil de heer
      kiezen;
@@ -91,10 +86,10 @@ voorstel van Claude, en daar gaat vraag 26 over.
    - deel 3: de marskramer koopt en verkoopt vee, kaas, wol en hooi;
    - stap 3 van de inner: praten, afleiden, omkopen (ook de marskramer, het spoor van het goud) en de
      rekenboeken.
-6. **Bouwen:** het dorp bouwt zelf, en beter (3b, stap 5): op bouwgrond die jij aanwijst, voor
+5. **Bouwen:** het dorp bouwt zelf, en beter (3b, stap 5): op bouwgrond die jij aanwijst, voor
    materiaal en goud, met steen per trede. (Ronde 4b van de huizenbouwer staat sinds vraag 29 hierboven,
-   bij 2.)
-7. **Daarna zoals onder "Daarna, in deze volgorde":** straten en paden (6c; het plein is er sinds 26
+   bij 1.)
+6. **Daarna zoals onder "Daarna, in deze volgorde":** straten en paden (6c; het plein is er sinds 26
    sep), en ontginnen (6b); dan deel C, verhalen en besturen (voorvallen, groepen en keuren, rechtspraak); deel
    D, de nacht en het verzet (de nacht, de eigen buidel, de militie, en daarbij de stal, de hoefsmid
    en de wapenmaker uit 3b); deel E, groeien naar vrijheid (de treden, stadsrechten, de opstand); en
@@ -248,6 +243,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     - **C. `js/hud.js` (1.462 regels) in vensters splitsen:** de balk, handel, de heer, de velden,
       verstoppen, slachten en de spelregels elk in een eigen bestand.
     - **D. `js/tekenen.js` (1.499 regels) net zo:** de grond, de wezens, de weides, de nacht.
+      Begonnen op 26 sep (zevende sessie): de doorkijk staat nu in `js/doorkijk.js`, en `tekenen.js`
+      heeft 1.404 regels.
     - **E. Eén laadlijst voor de toetsen,** in de volgorde van `index.html`. Dan zijn de 24 bewakers
       van de vorm `T.x && T.x(...)` niet meer nodig, en toetsen de toetsen het spel zoals het draait.
       B liet zien waarom: vijf toetsen laadden `js/dag.js` niet, en draaiden dus zonder werkuren en
@@ -264,6 +261,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vóór je veel bouwt.
 
 *Spelen, en zeggen hoe het voelt:*
+- **De doorkijk** (26 sep, zevende sessie): loop achter een huis langs, bijvoorbeeld achter de
+  boerderij aan de oostkant van het plein, en kies in de spelregels (`O`) bij "Door een huis heen
+  kijken" het kijkvenster of het raster. **Wat je kiest, wordt de standaard** (vraag 31). Vóór het plein
+  staat nog geen huis; bouw er een (`B`) om ook de tweede keuze te zien, "Wie je door een huis heen
+  ziet".
 - Het gehucht rond het plein (26 sep, zesde sessie): loop over het plein en om de huizen, kijk bij de
   brug, de heide en de weide, en probeer met `B` iets op het plein te bouwen. Voelt het plein als het
   hart? Staan de vijf eiken te dicht, of zijn ze goed zo?
@@ -501,6 +503,15 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 26 sep 2026 — **De doorkijk** (zevende sessie; vraag 31 en 34). Wie je hoort te zien, zie je door een
+  boom of een huis heen: de schout, wie je spreekt, wie vecht, en nu ook de bezoekers (de heer, de
+  marskramer, de inner, de soldaten); door een huis ook iedereen op het plein, door een boom niet (anders
+  zitten de eiken vol gaten). In de spelregels twee keuzes: het kijkvenster (standaard) of het raster, om
+  de andere pixel; en of het plein meetelt (standaard wel). Een proef met een huis vóór het plein liet
+  eerst zien dat het raster in het oog toch mengt; Marcel wilde het toch als keuze ("Raster ook als
+  keuze"). De doorkijk staat in een eigen bestand, `js/doorkijk.js`, met zijn getallen in één blok en in
+  de werkbank; het eerste stuk dat uit `tekenen.js` ging (vraag 25, D). Welke manier de standaard wordt,
+  kiest Marcel in het spel. `npm test`: 491/491.
 - 26 sep 2026 — **Punt 1: het gehucht rond het plein, de vierde versie** (zesde sessie; vraag 29 tot en
   met 31). De kaart zoals de goedgekeurde schets (`maak-gehucht.cjs`; het schetsbestand is erin
   opgegaan): 76 bij 76, een open plein van zo'n 214 tegels met vijf oude eiken en uitgesleten zand met de
