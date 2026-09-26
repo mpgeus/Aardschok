@@ -66,4 +66,4 @@
     }
     return null; // niet afgesloten
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

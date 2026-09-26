@@ -1437,4 +1437,4 @@
       stapSnelheid(1);
     }
   });
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

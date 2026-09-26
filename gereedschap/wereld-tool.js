@@ -1466,4 +1466,4 @@
     status('Er ging iets mis: ' + e.message);
     console.error(e);
   });
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

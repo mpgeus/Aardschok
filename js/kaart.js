@@ -438,4 +438,4 @@
     if (!r.ok) throw new Error(`T.haalKaart: kaart "${naam}" niet gevonden`);
     return r.json();
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

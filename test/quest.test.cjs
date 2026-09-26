@@ -10,7 +10,7 @@ require('../js/gesprek.js');
 require('../js/gesprekken.js');
 require('../js/quests.js');
 require('../js/quest.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 const gemeld = [];
 T.ui = { bericht: (tekst) => gemeld.push(tekst), toonGoud: () => {} };

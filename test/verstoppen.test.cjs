@@ -22,7 +22,7 @@ require('../js/inner.js');
 require('../js/verstoppen.js');
 require('../js/kaart.js');
 require('../js/gebied.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 const V = T.VERSTOP_INSTELLINGEN;
 const IN = T.INNER_INSTELLINGEN;
 const HEER = T.HEER_INSTELLINGEN;

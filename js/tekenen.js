@@ -8,7 +8,7 @@
 // dan komt alles wat de kunst dekt uit de vellen: vloeren, muren, deuren, voorwerpen, wezens,
 // en de flits van een klap (zie "een laag over een figuur" onderaan). Wat er niet in zit — het
 // raster, het bereik, de zwevende teksten en de pilaar — blijft
-// getekend met vlakken. Met `Toren.debug.vlakken = true` gaat alles terug naar vlakken, om te
+// getekend met vlakken. Met `Spel.debug.vlakken = true` gaat alles terug naar vlakken, om te
 // vergelijken.
 (function (T) {
   'use strict';
@@ -521,7 +521,7 @@
     );
   }
 
-  // De kleuren van de grond buiten, voor als de kunst er niet is (of Toren.debug.vlakken aan
+  // De kleuren van de grond buiten, voor als de kunst er niet is (of Spel.debug.vlakken aan
   // staat): gras, een zandpad, kasseien, water.
   const BUITENKLEUR = {
     gras: ['#3f6323', '#395d20'],
@@ -844,7 +844,7 @@
 
   // Wat buiten op de grond staat en geen eigen tekening met vlakken heeft: een boom is een stam
   // met een kruin, een gebouw een blok zo groot als zijn voet. Genoeg om te zien waar je niet
-  // langs kunt, en om met Toren.debug.vlakken te kunnen vergelijken.
+  // langs kunt, en om met Spel.debug.vlakken te kunnen vergelijken.
   const BUITENVLAK = {
     eik: ['#4a7030', 46, 0.30], herfstEik: ['#a9632a', 46, 0.30], den: ['#2f5734', 54, 0.26],
     berk: ['#6f9a45', 40, 0.22], dodeBoom: ['#6b5a44', 44, 0.20], wilg: ['#5d7f3c', 42, 0.32],
@@ -1007,7 +1007,7 @@
   // beeld staan: canvasfilter is op wisselende beelden een van de duurste dingen die een browser
   // per tekening kan doen, en bij drie-, vierhonderd keer per beeld op zoveel verschillende
   // plaatjes tegelijk kwam daar op sommige beelden een piek van een halve seconde uit — gemeten
-  // met Toren.debug.meet op een hoek van het dorp, ruim boven de 16 ms die één beeld hoort te
+  // met Spel.debug.meet op een hoek van het dorp, ruim boven de 16 ms die één beeld hoort te
   // kosten. Dus wordt hier, net als bij de windbuiging hierboven, één keer per plaatje-en-stap
   // gebakken (BOSRAND_HELDER_STAPPEN stuks) in plaats van elke tekening opnieuw gefilterd: de
   // stap wordt op het plaatje zelf donkerder gemaakt en daarna is tekenen weer gewoon drawImage.
@@ -1458,4 +1458,4 @@
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
   }
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 
 require('../js/gesprek.js');
 require('../js/gesprekken.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 function nieuweS() {
   return { held: {}, inventaris: new Set() };

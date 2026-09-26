@@ -684,7 +684,7 @@ function schrijfSpelVel(resultaten) {
       + '// Dezelfde inhoud als bouwfasen.json, als script, zodat file:// het ook kan lezen (zie js/sprites.js).\n'
       + '(function (T) {\n  T.BOUWFASEN = '
       + json.replace(/\n/g, '\n  ')
-      + ';\n})(globalThis.Toren = globalThis.Toren || {});\n',
+      + ';\n})(globalThis.Spel = globalThis.Spel || {});\n',
   );
   return { breedte: vel.b, hoogte: vel.h };
 }

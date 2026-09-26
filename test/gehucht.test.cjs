@@ -14,7 +14,7 @@ require('../js/mensen.js');
 require('../js/gebouwen.js');
 require('../js/kaart.js');
 require('../js/gebied.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 function begin() {
   const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };

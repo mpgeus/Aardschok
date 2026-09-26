@@ -775,4 +775,4 @@
       if (!nog.length) h.soldaten = null;
     }
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

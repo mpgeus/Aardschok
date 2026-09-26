@@ -13,7 +13,7 @@ require('../js/mensen.js');
 require('../js/gesprek.js');
 require('../js/gesprekken.js');
 require('../js/handel.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 // De dag (vanaf het begin van het spel, 1 lentemaand) van een datum in het eerste jaar.
 function dagVan(maand, dagVanMaand) {

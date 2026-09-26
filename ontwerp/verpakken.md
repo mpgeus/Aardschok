@@ -34,7 +34,7 @@ Drie treden, en we staan op de eerste:
 1. **Zoals nu:** gewone scripts, nul afhankelijkheden, `index.html` opent los. Dit project bouwt
    over vijf jaar nog steeds, want er is niets dat kan verouderen.
 2. **Echte modules, zonder bouwstap.** Browsers kunnen `import`/`export` zonder dat er iets
-   gebouwd wordt. Dan zijn we van de ene grote naamruimte `Toren` af en doet de scriptvolgorde er
+   gebouwd wordt. Dan zijn we van de ene grote naamruimte `Spel` af en doet de scriptvolgorde er
    niet meer toe. Prijs: `index.html` los openen werkt niet meer (modules mogen niet vanaf
    `file://`), en de tests moeten anders geladen worden — een middag werk.
 3. **Bundelaar en TypeScript.** Typecontrole is echt wat waard zodra de systemen in elkaar grijpen.

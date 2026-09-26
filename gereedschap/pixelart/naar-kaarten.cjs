@@ -45,7 +45,7 @@ fs.writeFileSync(
     alsScript(kaarten) +
     ';\n  T.BETEKENIS = ' +
     alsScript(betekenis) +
-    ';\n})(globalThis.Toren = globalThis.Toren || {});\n',
+    ';\n})(globalThis.Spel = globalThis.Spel || {});\n',
 );
 
 const namen = Object.keys(kaarten);

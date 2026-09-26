@@ -200,9 +200,9 @@ function meet(figuur, houding, kleuren, strook) {
   return gevonden ? uit : null;
 }
 
-globalThis.Toren = globalThis.Toren || {};
+globalThis.Spel = globalThis.Spel || {};
 require(path.join(WORTEL, 'beelden', 'beschrijving.js'));
-const figuren = (globalThis.Toren.BEELDEN && globalThis.Toren.BEELDEN.figuren) || {};
+const figuren = (globalThis.Spel.BEELDEN && globalThis.Spel.BEELDEN.figuren) || {};
 for (const [naam, gegevens] of Object.entries(figuren)) {
   const figuur = { naam, gegevens };
   // Een bol op de staf heeft alleen wie tovert: een figuur met de houding spreuk.
@@ -236,7 +236,7 @@ const kop = '// Gemaakt door gereedschap/pixelart/effecten-export.cjs — niet m
   '// De vellen van de spreukeffecten, en waar op een figuur de bol van zijn staf en zijn hoofd zitten.\n';
 fs.writeFileSync(
   path.join(DOEL, 'effecten.js'),
-  `${kop}(function (T) {\n  T.EFFECTEN = ${JSON.stringify(beschrijving)};\n})(globalThis.Toren = globalThis.Toren || {});\n`,
+  `${kop}(function (T) {\n  T.EFFECTEN = ${JSON.stringify(beschrijving)};\n})(globalThis.Spel = globalThis.Spel || {});\n`,
 );
 
 for (const [naam, platen, fps] of bekijk) {

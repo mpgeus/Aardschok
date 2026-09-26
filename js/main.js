@@ -418,7 +418,7 @@
 
   // Voor het testen.
   T.debug = {
-    // Toren.debug.vlakken = true tekent weer met vlakken in plaats van met de pixel art,
+    // Spel.debug.vlakken = true tekent weer met vlakken in plaats van met de pixel art,
     // om te vergelijken en om te zien of er niets verdwenen is.
     vlakken: false,
     // Waar staat tegel (x, y) nu op het scherm, in css-pixels? Voor echte klikken.
@@ -426,8 +426,8 @@
       const p = T.naarScherm(x, y);
       return vanVlak(p.x, p.y);
     },
-    // De kalender een dag of een snelheid geven zonder te wachten: Toren.debug.kalender(310) →
-    // naar dag 310, Toren.debug.kalender(null, 3) → 3x. Zonder argumenten zegt het waar de
+    // De kalender een dag of een snelheid geven zonder te wachten: Spel.debug.kalender(310) →
+    // naar dag 310, Spel.debug.kalender(null, 3) → 3x. Zonder argumenten zegt het waar de
     // kalender nu staat.
     kalender(dag, snelheid) {
       if (dag != null) S.kalender.dag = dag;
@@ -435,12 +435,12 @@
       T.ui.toonKalender(S); // ook bijwerken als alleen de dag rechtstreeks gezet is
       return { ...T.datumVanDag(S.kalender.dag), snelheid: S.kalender.snelheid };
     },
-    // Een gebouw rechtstreeks neerzetten, zonder het bouwmenu: Toren.debug.bouw('huis', 10, 10).
+    // Een gebouw rechtstreeks neerzetten, zonder het bouwmenu: Spel.debug.bouw('huis', 10, 10).
     // Zelfde antwoord als een klik in het bouwmenu (js/gebouwen.js, T.plaatsGebouw).
     bouw(soort, x, y) {
       return T.plaatsGebouw(S, soort, x, y);
     },
-    // De marskramer nu laten komen, zonder op grasmaand te wachten: Toren.debug.marskramer() voor
+    // De marskramer nu laten komen, zonder op grasmaand te wachten: Spel.debug.marskramer() voor
     // het bezoek van de lente, (1) voor de zomer, (2) voor de herfst (js/handel.js). Is hij er al,
     // dan zegt het hoe het met hem staat.
     marskramer(bezoek) {
@@ -448,8 +448,8 @@
       const m = S.marskramer;
       return m && { bezoek: m.bezoek, beurs: m.beurs, plaats: m.plaats, heeft: { ...m.heeft }, staat: m.staat, weg: m.weg, gaatOp: m.gaatOp };
     },
-    // De heer nu laten komen, zonder op Sint-Maarten te wachten (js/heer.js): Toren.debug.heer().
-    // Is hij er al, dan zegt het wat hij vraagt en hoe het met hem staat. Toren.debug.brief()
+    // De heer nu laten komen, zonder op Sint-Maarten te wachten (js/heer.js): Spel.debug.heer().
+    // Is hij er al, dan zegt het wat hij vraagt en hoe het met hem staat. Spel.debug.brief()
     // stuurt zijn brief van wijnmaand nu.
     heer() {
       if (!S.heer || !S.heer.bezoek) T.heerKomt(S, Math.floor(S.kalender.dag));
@@ -460,8 +460,8 @@
       T.stuurBrief(S, Math.floor(S.kalender.dag));
       return T.eisVanDeHeer(S).per;
     },
-    // De inner nu laten komen, zonder op oogstmaand te wachten (js/inner.js): Toren.debug.inner(),
-    // of Toren.debug.inner(true) voor zijn onverwachte tweede bezoek. Is hij er al, dan zegt het
+    // De inner nu laten komen, zonder op oogstmaand te wachten (js/inner.js): Spel.debug.inner(),
+    // of Spel.debug.inner(true) voor zijn onverwachte tweede bezoek. Is hij er al, dan zegt het
     // wat hij zag, hoeveel geduld hij nog heeft, en wat er in zijn rapport staat.
     inner(onverwacht) {
       const I = S.inner || (S.inner = T.nieuweInner());
@@ -474,7 +474,7 @@
         rapport: r && { gebouwen: r.gebouwen, woonruimte: r.woonruimte, tegels: r.tegels, graanGezien: r.graanGezien, graanVerwacht: r.graanVerwacht, goudGezien: r.goudGezien, goudVerwacht: r.goudVerwacht },
       };
     },
-    // Zijn argwaan zetten (0..1), om te zien wat ze doet: Toren.debug.argwaan(0.6). Zonder getal
+    // Zijn argwaan zetten (0..1), om te zien wat ze doet: Spel.debug.argwaan(0.6). Zonder getal
     // zegt het hoe hoog ze is, en waarom.
     argwaan(n) {
       const I = S.inner || (S.inner = T.nieuweInner());
@@ -485,7 +485,7 @@
       return { argwaan: I.argwaan, waarom: I.waarom.slice() };
     },
     // De verstopplekken (js/verstoppen.js): waar je iets kunt verstoppen, wat er ligt, en hoe vaak
-    // de soldaten het er vinden. Toren.debug.verstopt('boer1', 30, 5) zet 30 graan en 5 goud in
+    // de soldaten het er vinden. Spel.debug.verstopt('boer1', 30, 5) zet 30 graan en 5 goud in
     // de kelder van boer1 (of 'schout', of 'kapel'), zonder te lopen, als het kan.
     verstopt(huis, graan = 0, goud = 0) {
       if (!T.verstopPlekken) return 'Verstoppen kan alleen in het gehucht.';
@@ -514,7 +514,7 @@
       T.ui.openSlachten(S);
       return T.ui.slachtenOpen() ? 'open' : 'Er is geen vee om te slachten.';
     },
-    // Vee neerzetten om naar te kijken (js/vee.js): Toren.debug.vee('koe', 4) zet vier koeien op de
+    // Vee neerzetten om naar te kijken (js/vee.js): Spel.debug.vee('koe', 4) zet vier koeien op de
     // weide met de meeste plaats (een schaap op de heide, als die er is), elk op een vrije tegel en
     // met een eigen zaad (en dus een eigen kleur en een eigen ritme van grazen, staan en liggen).
     // Daar horen ze bij de kudde: ze blijven binnen de weide, geven melk en werpen jongen, en
@@ -596,7 +596,7 @@
       }
       return opWeideTekst.concat(geplaatst.map((e) => `${e.naam} ${e.vel} op ${e.tx},${e.ty}`));
     },
-    // Het doek als PNG bewaren: await Toren.debug.schermafdruk('graan-rijp') schrijft
+    // Het doek als PNG bewaren: await Spel.debug.schermafdruk('graan-rijp') schrijft
     // gereedschap/pixelart/uit/schermen/graan-rijp.png (via server.cjs; werkt niet vanaf file://).
     // Alleen het doek, dus zonder de html-balken erover. Zo kan een sessie of agent een blik op het
     // spel laten zien zonder de hele afbeelding als tekst door zijn gesprek te halen.
@@ -606,7 +606,7 @@
       const r = await fetch('/gereedschap/api/schermafdruk/' + encodeURIComponent(naam), { method: 'POST', body: blob });
       return r.json();
     },
-    // Hoeveel milliseconden kost één beeld? Toren.debug.meet() tekent n beelden achter elkaar en
+    // Hoeveel milliseconden kost één beeld? Spel.debug.meet() tekent n beelden achter elkaar en
     // geeft het gemiddelde, de mediaan en de slechtste terug. Een beeld hoort ruim onder de 16 ms
     // te blijven (zestig beelden per seconde), het liefst onder de 5, zodat er ruimte overblijft
     // voor een tragere machine.
@@ -628,10 +628,10 @@
     },
     // Een quest in een fase zetten zonder hem te spelen. Zo kun je zien wat het dorp in elke
     // fase zegt terwijl je de kaart nog tekent:
-    //   Toren.debug.quest()                 → wat er loopt, en wat er te kiezen valt
-    //   Toren.debug.quest('molen')          → de fasen van die quest, en waar hij nu staat
-    //   Toren.debug.quest('molen', 'terug')  → zet hem daar neer
-    //   Toren.debug.quest('molen', 'uit')    → helemaal terug naar niet begonnen, beloning en al
+    //   Spel.debug.quest()                 → wat er loopt, en wat er te kiezen valt
+    //   Spel.debug.quest('molen')          → de fasen van die quest, en waar hij nu staat
+    //   Spel.debug.quest('molen', 'terug')  → zet hem daar neer
+    //   Spel.debug.quest('molen', 'uit')    → helemaal terug naar niet begonnen, beloning en al
     quest(naam, fase) {
       if (!naam) {
         return {
@@ -655,7 +655,7 @@
       const f = q.fasen[fase];
       return { quest: q.naam, fase, doel: f.doel || null, goud: S.goud, tas: [...S.inventaris] };
     },
-    // Naar een ander gebied springen zonder ernaartoe te lopen: Toren.debug.gaNaar('erf').
+    // Naar een ander gebied springen zonder ernaartoe te lopen: Spel.debug.gaNaar('erf').
     gaNaar(naam) {
       T.gaNaarGebied(S, naam);
       return S.wereld.gebied;
@@ -679,4 +679,4 @@
   T.sprites.laad();
   T.nieuwSpel();
   requestAnimationFrame(lus);
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

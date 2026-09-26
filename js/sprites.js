@@ -616,4 +616,4 @@
     l.beeld = hd ? Math.floor(fase * hd.beelden) : 0;
     return S.figuur(h.naam, h.houding, h.richting, h.fase);
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

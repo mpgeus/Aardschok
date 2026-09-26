@@ -1,5 +1,5 @@
 // De regels die zonder scherm te toetsen zijn: padzoeken, zicht, deuren en wat een monster
-// in zijn beurt doet. De bestanden hangen zich aan globalThis.Toren, net als in de browser.
+// in zijn beurt doet. De bestanden hangen zich aan globalThis.Spel, net als in de browser.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -8,7 +8,7 @@ require('../js/gebied.js');
 require('../js/pad.js');
 require('../js/gevecht.js');
 require('../js/verkennen.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 const heldMag = (w, held) => (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: true, wezensBlokkeren: true, wie: held });
 const monsterMag = (w, m) => (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: false, wezensBlokkeren: true, wie: m });

@@ -239,4 +239,4 @@
       $('overlay').classList.add('verborgen');
     },
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

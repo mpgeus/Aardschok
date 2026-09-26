@@ -16,7 +16,7 @@ require('../js/gevecht.js');
 require('../js/verkennen.js');
 require('../js/sprites.js');
 require('../beelden/beschrijving.js'); // T.BEELDEN, voor "heeft een vel" hieronder
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 const wezen = (w, soort) => w.wezens.find((e) => e.soort === soort);
 function zet(e, x, y) {

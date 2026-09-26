@@ -28,7 +28,7 @@
   }
 
   // De lijst opnieuw opbouwen uit T.KAARTEN. Dat gebeurt één keer bij het laden; wie tijdens het
-  // spelen een kaart bijzet (Toren.KAARTEN.bos = ...), roept dit daarna zelf nog eens aan.
+  // spelen een kaart bijzet (Spel.KAARTEN.bos = ...), roept dit daarna zelf nog eens aan.
   T.maakGebieden = function () {
     const g = {};
     for (const naam of Object.keys(T.KAARTEN || {})) {
@@ -196,13 +196,13 @@
   T.beginOpKaart = function (S, naam) {
     const w = T.gebied(S, naam);
     if (!w) {
-      console.warn(`Toren.beginOpKaart: kaart "${naam}" bestaat niet — draai npm run kaarten?`);
+      console.warn(`Spel.beginOpKaart: kaart "${naam}" bestaat niet — draai npm run kaarten?`);
       return false;
     }
     S.wereld = w;
     let held = w.wezens.find((e) => e.soort === 'held');
     if (!held) {
-      console.warn(`Toren.beginOpKaart: geen "held" op kaart "${naam}", hij begint op (0, 0)`);
+      console.warn(`Spel.beginOpKaart: geen "held" op kaart "${naam}", hij begint op (0, 0)`);
       held = T.maakWezen('held', 0, 0);
       w.wezens.push(held);
     }
@@ -231,4 +231,4 @@
     if (T.zetBeginKudde) T.zetBeginKudde(S);
     return true;
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

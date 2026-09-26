@@ -2233,4 +2233,4 @@
     }
    }
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

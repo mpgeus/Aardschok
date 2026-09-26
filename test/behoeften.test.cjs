@@ -11,7 +11,7 @@ require('../js/voorraad.js');
 require('../js/mensen.js');
 require('../js/gebouwen.js');
 require('../js/behoeften.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 // Dezelfde lege wereld als test/gebouwen.test.cjs (alleen wat T.isVast/T.voorwerpOp nodig hebben).
 function maakLegeWereld(b, h) {

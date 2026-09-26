@@ -16,7 +16,7 @@ require('../js/gesprek.js');
 require('../js/quests.js');
 require('../js/quest.js');
 require('../gereedschap/gesprekken-tool.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 const { situatiesVan, staatVanSituatie } = T.gesprekkenTool;
 
 // Alle toestanden waarin we deze persoon bekijken: wat hij zelf aan situaties heeft, plus de

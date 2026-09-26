@@ -31,4 +31,4 @@
   T.zetVoorraad = function (S, wat, aantal) {
     return T.wijzigVoorraad(S, wat, Math.max(0, aantal) - (S.voorraad[wat] || 0));
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

@@ -19,7 +19,7 @@ require('../js/anim.js');
 require('../js/verkennen.js');
 require('../js/gevecht.js');
 require('../js/tekenen.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 // Zonder scherm doet elke aanroep naar T.ui niets.
 T.ui = new Proxy({}, { get: () => () => {} });

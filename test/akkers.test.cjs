@@ -7,7 +7,7 @@ const assert = require('node:assert/strict');
 require('../js/tijd.js');
 require('../js/akkers.js');
 require('../js/voorraad.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 function stadiumOp(naam, dag) {
   const maand = T.MAANDEN.findIndex((m) => m.naam === naam);

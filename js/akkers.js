@@ -661,4 +661,4 @@
       if (d.maand === (hooiMaand() + 1) % 12) T.haalHooiBinnen(S);
     }
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

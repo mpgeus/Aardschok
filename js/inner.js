@@ -582,4 +582,4 @@
     // Niet te bereiken (ingesloten, of de weg staat vol): dan slaat hij het over.
     if (!plek || !loopNaar(S, e, plek)) b.overslaan.add(beste.gebouw || beste.akker);
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

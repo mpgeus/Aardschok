@@ -19,7 +19,7 @@ require('../js/gesprek.js');
 require('../js/gesprekken.js');
 require('../js/handel.js');
 require('../js/heer.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 const IN = T.HEER_INSTELLINGEN;
 // Deze toetsen rekenen met de pacht per akkertegel: vast en makkelijk na te tellen. Een deel van
 // wat de inner telde (de standaard sinds punt 6) staat in test/inner.test.cjs.

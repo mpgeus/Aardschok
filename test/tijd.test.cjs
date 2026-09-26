@@ -5,7 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 require('../js/tijd.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 test('dag 0 is de eerste dag van de lente, in het startjaar', () => {
   const d = T.datumVanDag(0);

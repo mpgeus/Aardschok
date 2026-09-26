@@ -725,4 +725,4 @@
       T.tikGebouwenDag(S, S.gebouwenDag);
     }
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

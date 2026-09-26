@@ -18,7 +18,7 @@ require('../js/gesprekken.js');
 require('../js/handel.js');
 require('../js/heer.js');
 require('../js/inner.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 const IN = T.INNER_INSTELLINGEN;
 const HEER = T.HEER_INSTELLINGEN;
 

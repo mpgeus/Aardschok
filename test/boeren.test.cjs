@@ -13,7 +13,7 @@ require('../js/gesprek.js');
 require('../js/akkers.js');
 require('../js/boeren.js');
 require('../js/heer.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 const BOEREN = ['boer1', 'boer2', 'boer3', 'boer4', 'boer5'];
 
 // Een gehucht met de vijf boeren, elk met een akker van 2×2.

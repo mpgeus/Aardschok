@@ -1012,7 +1012,7 @@ fs.writeFileSync(
     '// Dezelfde inhoud als tegels.json, als script, zodat file:// het ook kan lezen (zie js/kaart.js).\n' +
     '(function (T) {\n  T.TEGELS = ' +
     json.replace(/\n/g, '\n  ') +
-    ';\n})(globalThis.Toren = globalThis.Toren || {});\n',
+    ';\n})(globalThis.Spel = globalThis.Spel || {});\n',
 );
 
 let totaal = 0;

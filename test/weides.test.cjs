@@ -24,7 +24,7 @@ require('../js/gevecht.js');
 require('../js/verkennen.js');
 require('../js/gesprekken.js');
 require('../js/gesprek.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 const IN = T.VEE_INSTELLINGEN;
 const bijna = (a, b) => Math.abs(a - b) < 1e-9;

@@ -169,4 +169,4 @@
     if (!o) return '';
     return [kort ? o.kort : o.lang].concat(o.eigenschappen).filter(Boolean).join(' · ');
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

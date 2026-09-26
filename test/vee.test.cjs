@@ -26,7 +26,7 @@ require('../js/gevecht.js');
 require('../js/verkennen.js');
 require('../js/gesprekken.js');
 require('../js/gesprek.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 const Vee = require('../gereedschap/pixelart/vee.cjs');
 
 const HOUDINGEN = ['grazen', 'staan', 'lopen', 'liggen'];
@@ -360,7 +360,7 @@ test('melk: van grasmaand tot en met wijnmaand, elke koe voor vijf mensen, en mi
   assert.equal(stand.vrij, -4);
   assert.equal(stand.vol, 12 / 16);
   assert.ok(bijna(T.melkVanDag(S, dagVan('grasmaand', 1)), 3 * MELK * (12 / 16)));
-  // Een koe die bij geen weide hoort (Toren.debug.vee zet ze los neer), geeft niets.
+  // Een koe die bij geen weide hoort (Spel.debug.vee zet ze los neer), geeft niets.
   S.wereld.wezens.push(T.maakDier('koe', 20, 20, 5));
   assert.ok(bijna(T.melkVanDag(S, dagVan('grasmaand', 1)), 3 * MELK * (12 / 16)));
 });

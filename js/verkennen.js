@@ -442,4 +442,4 @@
       if (T.raakt(w, t, n.doel)) n.actie();
     }
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

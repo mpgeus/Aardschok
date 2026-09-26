@@ -9,7 +9,7 @@ require('../js/wereld.js');
 require('../js/voorraad.js');
 require('../js/mensen.js');
 require('../js/gebouwen.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 // Een kleine, lege wereld om gebouwen op neer te zetten: net als T.maakProefkamers() maar zonder de
 // hele toren erbij — alleen wat T.isVast/T.voorwerpOp nodig hebben (js/wereld.js).
@@ -230,7 +230,7 @@ test('T.werkGebouwenBij: verwerkt elke verstreken dag apart, ook als de kalender
   S.bevolking = 10;
   T.zetVoorraad(S, 'graan', 1000);
   T.werkGebouwenBij(S); // start op dag 0
-  S.kalender.dag = 3.4; // een grote stap in één beeld (bijvoorbeeld na Toren.debug.kalender)
+  S.kalender.dag = 3.4; // een grote stap in één beeld (bijvoorbeeld na Spel.debug.kalender)
   T.werkGebouwenBij(S);
   assert.equal(S.gebouwenDag, 3);
   const verwacht = 1000 - 3 * 10 * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;

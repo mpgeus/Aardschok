@@ -86,4 +86,4 @@
     // De heer betalen op Sint-Maarten (js/heer.js): net zo, het venster staat in js/hud.js.
     if (doe.heer && T.ui && T.ui.openHeer) T.ui.openHeer(S);
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

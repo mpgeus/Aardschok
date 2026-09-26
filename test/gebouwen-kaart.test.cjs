@@ -13,7 +13,7 @@ require('../kaarten/kaarten.js');
 require('../js/mensen.js');
 require('../js/gebouwen.js');
 require('../js/kaart.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 test('een "gebouw" ding in de betekenis landt in w.gebouwenOpKaart, met zijn maat', () => {
   const betekenis = { dingen: [{ gebouw: 'boerderij', x: 2, y: 2, b: 3, h: 4 }] };

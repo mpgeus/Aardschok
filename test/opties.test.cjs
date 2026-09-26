@@ -20,7 +20,7 @@ require('../js/verstoppen.js');
 require('../js/boeren.js');
 require('../js/gesprekken.js');
 require('../js/gesprek.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 // De blokken zoals de bestanden ze zetten, vóór opties.js er iets mee doet.
 const BLOKKEN = [

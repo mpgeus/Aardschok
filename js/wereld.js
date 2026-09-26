@@ -309,4 +309,4 @@
       if (k) w.bekend.add(k.id);
     }
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

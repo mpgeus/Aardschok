@@ -275,7 +275,7 @@ function schrijfBeschrijving(beschrijving) {
       '// Dezelfde inhoud als beschrijving.json, als script, zodat file:// het ook kan lezen.\n' +
       '(function (T) {\n  T.BEELDEN = ' +
       json.replace(/\n/g, '\n  ') +
-      ';\n})(globalThis.Toren = globalThis.Toren || {});\n',
+      ';\n})(globalThis.Spel = globalThis.Spel || {});\n',
   );
 }
 

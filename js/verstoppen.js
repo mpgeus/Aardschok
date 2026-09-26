@@ -311,4 +311,4 @@
     if (gevonden.length && T.ui && T.ui.toonVoorraad) T.ui.toonVoorraad(S);
     return gevonden;
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

@@ -365,4 +365,4 @@
 
     if (T.ui && T.ui.toonTevredenheid) T.ui.toonTevredenheid(S);
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

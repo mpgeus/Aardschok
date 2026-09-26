@@ -79,7 +79,7 @@ Het beginbestand heeft er al een als voorbeeld: *pad terug naar het erf*.
 **Proberen in het spel.** Sla op in Tiled, draai `npm run kaarten`, en open het spel. Een nieuwe
 kaart is vanzelf een gebied, maar het erf heeft nog geen weg ernaartoe: zeg welke kaart het is,
 dan komt er een pad vanaf het erf. Tot die tijd kun je er in de browserconsole heen springen met
-`Toren.debug.gaNaar('dorp')`.
+`Spel.debug.gaNaar('dorp')`.
 
 ## Buiten is één grote kaart (21 sep 2026)
 

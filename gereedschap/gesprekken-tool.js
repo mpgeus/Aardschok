@@ -30,7 +30,7 @@
 //     Zo wordt het nooit acht niveaus diep.
 (function () {
   'use strict';
-  const T = globalThis.Toren;
+  const T = globalThis.Spel;
   const $ = (id) => document.getElementById(id);
 
   // ---------- kleine hulpjes ----------

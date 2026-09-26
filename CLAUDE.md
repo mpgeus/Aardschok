@@ -108,7 +108,7 @@ lang hij leeft. Daaruit volgt, van meest naar minst effect:
 
 ## Opbouw
 
-Alles hangt aan één naamruimte, `globalThis.Toren` (in de code `T`), zodat hetzelfde bestand in
+Alles hangt aan één naamruimte, `globalThis.Spel` (in de code `T`), zodat hetzelfde bestand in
 de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html` telt.
 
 - `js/wereld.js`: wat een wezen is (`T.WEZENS`) en wat een voorwerp is (`T.VOORWERPEN`), de
@@ -207,7 +207,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel.
 - Het spel tekent met sprites zodra `beelden/` er is, en anders met vlakken. Wat de kunst niet
   dekt (raster, bereik, zwevende tekst, de pilaar) blijft altijd
-  vlakken. `Toren.debug.vlakken = true` zet alles terug naar vlakken, om te vergelijken.
+  vlakken. `Spel.debug.vlakken = true` zet alles terug naar vlakken, om te vergelijken.
 
 ## Het spel in het kort
 
@@ -257,29 +257,29 @@ en de overgang ernaartoe gaan mee naar het nieuwe spel.
 
 ## Testen in de browser
 
-`Toren.S` is de spelstaat. `Toren.debug.naarBeeld(x, y)` geeft de schermpositie van een tegel
-(css-pixels), `await Toren.debug.stap(seconden)` laat het spel vooruitlopen zonder op beelden te
+`Spel.S` is de spelstaat. `Spel.debug.naarBeeld(x, y)` geeft de schermpositie van een tegel
+(css-pixels), `await Spel.debug.stap(seconden)` laat het spel vooruitlopen zonder op beelden te
 wachten. Dat is nodig omdat een verborgen browserpaneel maar af en toe een beeld tekent; ook
 css-overgangen staan dan vrijwel stil. Het testgereedschap stuurt de spatiebalk niet goed door
 (lege `key`), dus test einde beurt met de knop of met een `KeyboardEvent`.
-`Toren.debug.quest('molen', 'terug')` zet een quest in een fase zonder hem te spelen ('uit' haalt
+`Spel.debug.quest('molen', 'terug')` zet een quest in een fase zonder hem te spelen ('uit' haalt
 hem weg, beloning en al); zonder fase zegt hij waar hij staat.
-`await Toren.debug.schermafdruk('naam')` bewaart het doek als PNG in
+`await Spel.debug.schermafdruk('naam')` bewaart het doek als PNG in
 `gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
 blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In het gehucht:
-`Toren.debug.kalender(dag, snelheid)` springt door het jaar, `Toren.debug.bouw('huis', x, y)` bouwt,
-`Toren.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
-`Toren.debug.brief()` stuurt de brief van de heer nu, `Toren.debug.heer()` laat hem nu komen,
-`Toren.debug.inner()` de inner (`(true)`: onverwacht), en `Toren.debug.argwaan(0.6)` zet zijn argwaan.
-`Toren.debug.verstopt()` zegt wat er waar verstopt ligt en hoe vaak de soldaten het er vinden;
-`Toren.debug.verstopt('boer1', 30, 5)` zet 30 graan en 5 goud in die kelder (of `'schout'`, `'kapel'`),
-en `Toren.debug.zoeken()` laat de soldaten nu zoeken, zoals op Sint-Maarten.
-`Toren.debug.vee('koe', 4)` zet vier koeien op de weide met de meeste plaats, bij de kudde: ze
+`Spel.debug.kalender(dag, snelheid)` springt door het jaar, `Spel.debug.bouw('huis', x, y)` bouwt,
+`Spel.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
+`Spel.debug.brief()` stuurt de brief van de heer nu, `Spel.debug.heer()` laat hem nu komen,
+`Spel.debug.inner()` de inner (`(true)`: onverwacht), en `Spel.debug.argwaan(0.6)` zet zijn argwaan.
+`Spel.debug.verstopt()` zegt wat er waar verstopt ligt en hoe vaak de soldaten het er vinden;
+`Spel.debug.verstopt('boer1', 30, 5)` zet 30 graan en 5 goud in die kelder (of `'schout'`, `'kapel'`),
+en `Spel.debug.zoeken()` laat de soldaten nu zoeken, zoals op Sint-Maarten.
+`Spel.debug.vee('koe', 4)` zet vier koeien op de weide met de meeste plaats, bij de kudde: ze
 blijven binnen de weide en geven melk (`js/vee.js`); een schaap gaat naar de heide. Zonder weide rond
-een open plek bij de schout. `Toren.debug.slachten()` opent het slachtvenster nu (anders op 1
+een open plek bij de schout. `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1
 slachtmaand).
 De spelregels die de browser onthield (`localStorage`, `aardschok.spelregels`) gelden ook voor wie
-test; `Toren.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
+test; `Spel.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
 Een sprong met `kalender` tikt alle dagen ertussen af: valt 1 wijnmaand erin, dan staat de brief
 open en de tijd stil tot je hem sluit.
 

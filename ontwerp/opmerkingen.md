@@ -65,7 +65,7 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     3 vraagt hij per dier.
   - Zonder herder (een hand voor de kooi) geeft de kooi geen mest. Het veldenvenster zegt nog niet
     waarom er geen mest bijkomt.
-  - Een sprong met `Toren.debug.kalender` loopt door de brief en de inner heen, en dan staat de tijd
+  - Een sprong met `Spel.debug.kalender` loopt door de brief en de inner heen, en dan staat de tijd
     na het slachten nog stil: dat komt van de inner, niet van het slachtvenster.
 - **De verstopplekken, deel 1** (25 sep, `spel.md`, "Gebouwd, stap 2 van de inner, deel 1"):
   - Tot zo'n 40% van de oogst verstop je zonder risico: de argwaan blijft 0, dus de soldaten zoeken
@@ -147,7 +147,7 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   in één beeld weer op;
 - een koe is ruim twee tegels lang maar bezet er één, en wordt getekend in de volgorde van die ene
   tegel. Staan dieren dicht op elkaar of tegen een huis, dan kan de een verkeerd over de ander
-  vallen. `Toren.debug.vee` houdt daarom een tegel ruimte tussen de dieren;
+  vallen. `Spel.debug.vee` houdt daarom een tegel ruimte tussen de dieren;
 - dwalen gaat in vier richtingen (`T.laatDwalen`), dus na een stap kijkt een dier altijd schuin
   (ZO, ZW, NW of NO). Alleen de eerste kant, uit het zaad, kan elk van de acht zijn;
 - het herkauwen en een oor dat wegdraait zie je op 1× nauwelijks; de zwiepende staart wel;

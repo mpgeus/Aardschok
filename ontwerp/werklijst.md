@@ -85,12 +85,12 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
   gevecht probeer je op `localhost:8123/?kaart=proef`: klik op de slijmkruiper.
 - Een heel jaar: hoe snel het gaat, de winter, en Sint-Maarten (is de honger te veel of te weinig;
   mag de heer harder, of juist zachter?).
-- Het bezoek van de inner (`Toren.debug.inner()`, of wachten tot oogstmaand): voelt meelopen goed,
+- Het bezoek van de inner (`Spel.debug.inner()`, of wachten tot oogstmaand): voelt meelopen goed,
   en is 90 stappen geduld te veel of te weinig?
-- De winter van het vee: `Toren.debug.slachten()` opent het slachtvenster, en in het veldenvenster
+- De winter van het vee: `Spel.debug.slachten()` opent het slachtvenster, en in het veldenvenster
   (`V`) staan de mest en wat het hooi van volgend jaar de winter door helpt.
-- Verstoppen: klik een boerderij. `Toren.debug.verstopt()` zegt wat er waar ligt,
-  `Toren.debug.verstopt('boer1', 30, 5)` zet iets weg zonder te lopen, en `Toren.debug.zoeken()` laat
+- Verstoppen: klik een boerderij. `Spel.debug.verstopt()` zegt wat er waar ligt,
+  `Spel.debug.verstopt('boer1', 30, 5)` zet iets weg zonder te lopen, en `Spel.debug.zoeken()` laat
   de soldaten nu zoeken.
 
 *Lezen:*

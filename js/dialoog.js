@@ -79,4 +79,4 @@
     S.spreektMet = null;
     if (S.modus === 'dialoog') S.modus = 'verkennen';
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

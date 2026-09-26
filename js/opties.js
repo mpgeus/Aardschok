@@ -497,4 +497,4 @@
   // wereld en de poppetjes al met de juiste namen en getallen beginnen.
   neemStandaard();
   T.pasOptiesToe(T.laadOpties());
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});

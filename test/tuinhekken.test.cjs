@@ -72,7 +72,7 @@ require('../beelden/beschrijving.js');
 require('../tegels/tegels.js');
 require('../js/mensen.js');
 require('../js/kaart.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 // Een kleine kaart in het geheugen: gras overal, en twee tuinstukken op de objectlaag, net zoals
 // Marcel ze met "Tegel invoegen" in Tiled zou neerzetten. th=32 (tileheight), obj.x/y in die

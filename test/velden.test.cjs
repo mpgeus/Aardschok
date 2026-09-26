@@ -25,7 +25,7 @@ require('../js/gevecht.js');
 require('../js/verkennen.js');
 require('../js/gesprekken.js');
 require('../js/gesprek.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 // Het gehucht zoals het begint: de beginkudde op het blok van Klaas (akker6).
 function gehucht() {

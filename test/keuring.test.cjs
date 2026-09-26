@@ -22,7 +22,7 @@ require('../js/quests.js');
 require('../js/quest.js');
 require('../js/verkennen.js');
 require('../gereedschap/keuring.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 // Een kaartje van 6×4 gras met één object erop, om een enkele fout te kunnen laten zien. De
 // vorm is die van een .tmj zoals Tiled hem opslaat; grond.tsx begint bij gid 1.

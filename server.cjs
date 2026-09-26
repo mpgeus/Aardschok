@@ -122,7 +122,7 @@ function slaBetekenisOp(req, res, naam) {
 
 // Een schermafdruk van het spel als PNG bewaren in gereedschap/pixelart/uit/schermen/<naam>.png
 // (niet in git), zodat een sessie of agent een blik op het spel kan laten zien zonder de hele
-// afbeelding als tekst door zijn eigen gesprek te halen. Toren.debug.schermafdruk('naam') in
+// afbeelding als tekst door zijn eigen gesprek te halen. Spel.debug.schermafdruk('naam') in
 // js/main.js stuurt het doek hierheen. Alleen letters, cijfers en streepjes in de naam.
 function slaSchermafdrukOp(req, res, naam) {
   if (!/^[a-z0-9-]{1,60}$/i.test(naam)) {

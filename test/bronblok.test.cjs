@@ -11,7 +11,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 require('../gereedschap/bronblok.js');
-const T = globalThis.Toren;
+const T = globalThis.Spel;
 
 const lees = (p) => fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
 
@@ -50,7 +50,7 @@ test('wat de gespreksbewerker niet kent, zit in de staart', () => {
     '  T.DRAAIBOEK = {',
     "    roepen: ['Daar ben je.'],",
     '  };',
-    '})(globalThis.Toren = globalThis.Toren || {});',
+    '})(globalThis.Spel = globalThis.Spel || {});',
     '',
   ].join('\n');
   const b = T.bronBlok(bron, 'T.GESPREKKEN');
@@ -63,7 +63,7 @@ test('wat de gespreksbewerker niet kent, zit in de staart', () => {
   // En op het echte bestand: de kop houdt het begin vast, de staart het einde.
   const echt = T.bronBlok(lees('js/gesprekken.js').replace(/\r\n/g, '\n'), 'T.GESPREKKEN');
   assert.ok(echt.kop.includes("'use strict'"), 'de kop van js/gesprekken.js houdt het begin vast');
-  assert.ok(echt.staart.includes('globalThis.Toren'), 'de staart van js/gesprekken.js houdt het einde vast');
+  assert.ok(echt.staart.includes('globalThis.Spel'), 'de staart van js/gesprekken.js houdt het einde vast');
 });
 
 test('een accolade in een zin telt niet mee voor de diepte', () => {

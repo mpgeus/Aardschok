@@ -92,4 +92,4 @@
     }
     vlak([p(-fx, -fy, z1), p(fx, -fy, z1), p(fx, fy, z1), p(-fx, fy, z1)], 1.1);
   };
-})(globalThis.Toren = globalThis.Toren || {});
+})(globalThis.Spel = globalThis.Spel || {});
