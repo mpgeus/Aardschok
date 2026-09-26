@@ -65,15 +65,19 @@ iedereen heeft een zichtveld, en 's nachts kun je in een donker steegje iets ver
 iemand het weet. Claude werkte het uit (`spel.md`, "Marcel daarna"): een zichtveld dat met het licht
 meegaat, getuigen die naar hun karakter doorvertellen, en een lantaarn voor de schout. Het bestaat al
 half (`T.zicht`, `T.innerKijkt`, sluipen). Vraag 23: komt het als stap in 3b, na de poppetjes?
+**Daarna bouwde deze sessie de dag** (punt 3b, stap 1; Marcel: "Je mag verder met de dag"): een dag van
+vijf minuten in een maand van dertig, het uur in de balk, de versneller tot 30×, licht en nacht, de
+boeren die 's nachts binnen zijn, maaien in de werkuren, de inner en de heer die overdag komen zonder
+de tijd stil te zetten, en slapen tot de ochtend (`Z`). Wat er precies is, staat in `spel.md`, "De dag,
+gebouwd"; wat nog ruw is in `opmerkingen.md`. Nagekeken in de browser: de balk, de avond, de nacht (de
+vijf boeren binnen), slapen en wakker worden, en de inner die om negen uur komt. `npm test`: 457/457.
 
 **Loopt nu:** niets.
 
-**Volgende: De dag** (punt 3b, stap 1; Marcel, 26 sep: "De dag nu maar doen als eerste dan"). Een
-maand blijft dertig dagen, een dag duurt vijf minuten bij 1×, met een tijdsversneller. Klaar als staat
-in `spel.md`, "Het plan voor de dag": het uur in de balk, licht per uur en seizoen, de versneller
-(vraag 22), lopen dat meegaat met de snelheid, maaien met een tempo per uur, de boeren met een
-dagritme, en de inner en de heer die de tijd niet meer stilzetten. Wacht op Marcels "ga je gang", en
-op zijn blik op de dagindeling ("Wie wanneer waar is"), die het ritme van de boeren bepaalt.
+**Volgende: Marcel kiest (vraag 24).** Stap 2 van 3b (mensen worden poppetjes), of eerst verstoppen
+deel 1b. Voorstel van Claude: de poppetjes, en dan het zichtveld met de getuigen (vraag 23). "Wie
+vlak langs een plek loopt, kan iets vinden" uit deel 1b is dan een getuige, en hoeft niet apart. Laat
+Marcel eerst de dag spelen: `localhost:8123/`, en `Z` om te slapen bij je huis.
 
 **Daarna:**
 - **Verstoppen, deel 1b: ook onder de 40% een risico** (Marcel koos op 25 sep; `spel.md`, "Marcel
@@ -123,10 +127,13 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 20. ~~Hoe lang een dag?~~ Een maand dertig dagen, een dag vijf minuten (Marcels voorstel).
 21. ~~Bouwtijd en straffen?~~ Blijven in dagen; de tijden stellen we later bij.
 22. Welke standen krijgt de tijdsversneller? Voorstel: 1×, 3×, 10× en 30×, en slapen tot de ochtend
-    als de schout thuis is. Een jaar duurt dan 30 uur, 10 uur, 3 uur of 1 uur.
+    als de schout thuis is. Een jaar duurt dan 30 uur, 10 uur, 3 uur of 1 uur. Zo gebouwd (26 sep);
+    andere standen zijn één regel (`T.SNELHEDEN`, `js/tijd.js`).
 23. Komen het zichtveld voor iedereen en de getuigen (Marcels idee, 26 sep) als stap in 3b, na de
     poppetjes, of later bij punt 11 (de nacht)? Voorstel: in 3b, want verstoppen wordt er meteen
     spannender door.
+24. Wat nu, na de dag: de poppetjes (3b, stap 2), of eerst verstoppen deel 1b? Voorstel: de
+    poppetjes, en dan het zichtveld (vraag 23), waarin "wie vlak langs loopt, kan iets vinden" opgaat.
 
 *Spelen, en zeggen hoe het voelt:*
 - Het gehucht na de namen (26 sep): Marcel zou het na 7e nog eens openen. Het hernoemen veranderde
@@ -173,7 +180,7 @@ nog nodig is".
    de dag een echte dag is, de mensen poppetjes met een dagritme zijn, ze zelf naar de herberg en de
    kleine zaken gaan, het dorp zelf bouwt op bouwgrond die jij aanwijst, huizen en werkplaatsen
    meegroeien voor materiaal en goud (steen per trede), en er een paardenstal is. Hier, omdat de dag
-   onder alles ligt wat erna komt. In zes stappen: de dag (Volgende); mensen worden poppetjes; de
+   onder alles ligt wat erna komt. In zes stappen: de dag (af, 26 sep); mensen worden poppetjes; de
    herberg en de kleine zaken; ronde 4b van de huizenbouwer; het dorp bouwt zelf, en beter; de stal,
    de hoefsmid en de wapenmaker, samen met de militie (punt 13).
 
@@ -363,6 +370,15 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 26 sep 2026 — **Punt 3b, stap 1: de dag.** Een dag duurt vijf minuten bij 1× in een maand van
+  dertig dagen (Marcels keuze), met het uur in de balk, een versneller tot 30× en slapen tot de
+  ochtend (`Z`). Lopen, maaien en dwalen gaan mee met de snelheid (`S.wereldTijd`); de zon volgt het
+  seizoen, de nacht is donker met licht rond de schout, de boeren gaan 's nachts naar binnen en
+  maaien in de werkuren (twaalf uur per tegel, gemeten op het oude tempo), en de inner, de heer en de
+  marskramer komen overdag zonder de tijd stil te zetten (`js/dag.js`, `js/tijd.js`, `js/anim.js`,
+  `test/dag.test.cjs`).
+- 26 sep 2026 — **Een dorp dat leeft: het voorstel, en Marcels keuzes.** Een pagina om opmerkingen bij
+  te zetten ("Een dorp dat leeft"), drie opmerkingen van Marcel, en alles in `spel.md`.
 - 26 sep 2026 — **Punt 7e en 7f: de namen om, en punt 7 is af.** `Toren` werd `Spel` en de held
   de schout: `S.schout`, soort 'schout', kant 'speler' (Marcel koos het). De makers van de
   gegenereerde bestanden gingen mee, en de schout houdt nu ook in het spel zijn soort in plaats van

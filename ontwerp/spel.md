@@ -26,7 +26,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep) | 6a |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | besloten, nog niet gebouwd | 6c |
-| Een dorp dat leeft en groeit | voorstel (26 sep), grotendeels gekozen; eerst de dag: 30 dagen per maand, 5 minuten per dag | 3b, 11, 13, 14 |
+| Een dorp dat leeft en groeit | de dag gebouwd (26 sep); de rest een voorstel, grotendeels gekozen | 3b, 11, 13, 14 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
@@ -247,8 +247,10 @@ Is rijk worden en arm lijken leuk?
 ## Rijk worden en arm lijken: de inner (Marcel, 24 sep 2026; werklijst punt 6)
 
 **Zo werkt het nu** (25 sep; `js/inner.js`, `js/verstoppen.js`, `js/heer.js`):
-- **De inner** komt op 15 oogstmaand, tien dagen vooraf aangekondigd, en zolang hij er is, staat de
-  tijd stil. Hij kijkt 7 tegels ver in een rechte lijn; huizen en schuren houden zijn blik tegen.
+- **De inner** komt op 15 oogstmaand, tien dagen vooraf aangekondigd, overdag vanaf negen uur. Sinds
+  de dag (26 sep) loopt de tijd dan door, op 1× (daarvoor stond hij stil zolang de inner er was): zijn
+  bezoek duurt een dag. Hij kijkt 7 tegels ver in een rechte lijn; huizen en schuren houden zijn blik
+  tegen.
   Alleen loopt hij naar wat hij nog niet zag. Sta je binnen 2 tegels, dan loopt hij met je mee, tot
   je verder dan 5 tegels wegloopt. Zijn geduld is 90 stappen.
 - **Zijn rapport is de rekening:** de gebouwen die hij zag (met hun woonruimte, voor het hoofdgeld),
@@ -681,8 +683,9 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
   dat de inner in oogstmaand komt tellen. De tijd staat stil tot je hem sluit. (Marcel koos hem op
   25 sep in plaats van een titelscherm; zie onder Open.)
 - Op 1 wijnmaand komt zijn brief, een schatting. Op 11 slachtmaand komt hij zelf met twee soldaten
-  naar de brink, en de tijd staat stil tot je bij hem bent geweest. Bij argwaan vanaf 50% doorzoeken
-  de soldaten eerst het dorp.
+  naar de brink, overdag vanaf negen uur, en wacht daar drie dagen op je. Sinds de dag (26 sep) loopt
+  de tijd dan door, op 1× (daarvoor stond hij stil). Bij argwaan vanaf 50% doorzoeken de soldaten
+  eerst het dorp.
 - Hij vraagt naar wat de inner zag: 15% van het graan, hoofdgeld (0,2 goud per mens), per gebouw
   zijn prijs, 15% van de kist, de schuld van vorig jaar, en een toeslag voor de argwaan. Goud neemt
   hij altijd, ook in de plaats van iets anders.
@@ -1274,11 +1277,36 @@ Nog open, voor als punt 6c gebouwd wordt (vragen van Claude):
 
 ## Een dorp dat leeft en groeit (Marcel, 26 sep 2026)
 
-**Zo staat het nu** (26 sep): een voorstel van Claude, waarvan Marcel het meeste koos, in twee
-opmerkingen op de pagina (hieronder). Er is nog niets gebouwd; als eerste komt de dag: een maand van
-dertig dagen en een dag van vijf minuten, met een tijdsversneller. Het raakt punt 11 (de nacht), 13
-(de militie) en 14 (de treden), en de huizenbouwer (ronde 4b). Wat nog open is, staat onderaan, en
-met een nummer in de werklijst.
+**Zo werkt het nu** (26 sep): stap 1 van punt 3b, **de dag, is gebouwd** (`js/dag.js`, `js/tijd.js`;
+hieronder). De rest is een voorstel van Claude, waarvan Marcel het meeste koos, in drie opmerkingen op
+de pagina. Het raakt punt 11 (de nacht), 13 (de militie) en 14 (de treden), en de huizenbouwer (ronde
+4b). Wat nog open is, staat onderaan, en met een nummer in de werklijst.
+
+**De dag, gebouwd** (26 sep; toetsen in `test/dag.test.cjs`):
+- **Een dag duurt vijf minuten bij 1×, een maand dertig dagen.** Een jaar duurt 30 uur bij 1×, 10 bij
+  3×, 3 bij 10× en 1 bij 30×. Een nieuw spel begint om zeven uur. De balk zegt het uur in woorden,
+  met het deel van de dag ("Lente · half acht, ochtend").
+- **De versneller:** pauze, 1×, 3×, 10× en 30× (`P`, `-` en `=`), het voorstel van vraag 22.
+- **Alles wat loopt, gaat mee met de snelheid** (`T.wereldFactor`, `S.wereldTijd`): een tocht kost op
+  elke snelheid even veel uren, en op pauze staat alles stil, ook de schout. Wie in één beeld verder
+  komt dan één tegel, loopt door naar de volgende.
+- **De zon volgt het seizoen:** 16,4 uur licht rond 21 zomermaand, 7,6 rond de kortste dag. **Het
+  licht:** 's nachts een donkerblauwe laag, lichter rond de schout, met schemering en een warme gloed
+  bij zonsopgang en zonsondergang.
+- **De dagindeling** (`T.dagindeling`): op met de zon, maar niet vóór vijf en niet na half acht; een uur
+  later aan het werk; schaft van twaalf tot één; werk tot zeven uur of tot het donker (in de oogst
+  altijd tot het donker); naar bed drie uur na zonsondergang, tussen half negen en tien.
+- **De boeren volgen die dag:** overdag op hun akker, 's avonds op hun erf, 's nachts binnen, en dan
+  zijn ze onzichtbaar en staan ze niemand in de weg; 's ochtends komen ze weer naar buiten. Ze maaien
+  alleen in de werkuren, twaalf uur per tegel, en een halve tegel blijft liggen tot de ochtend. Rond
+  14 oogstmaand is zo'n vier vijfde van het graan binnen, net als vóór de dag.
+- **De inner, de heer en de marskramer komen overdag,** vanaf negen uur. De inner en de heer zetten
+  de tijd niet meer stil; als ze komen, gaat hij naar 1×.
+- **Slapen tot de ochtend:** 's avonds en 's nachts, bij je eigen huis (`Z`, of de knop Slapen). De
+  nacht gaat dan op 60× voorbij, en bij het eerste licht word je wakker, op de snelheid van ervoor.
+  Een klik of een snelheidsknop maakt je eerder wakker.
+- Alle getallen van de dag staan in de werkbank (`O`), onder "De dag"; de uren per tegel staan onder
+  "Graan en tijd". Wat nog ruw is, staat in `opmerkingen.md`, "De dag, wat nog ruw is".
 Hetzelfde voorstel staat op een pagina om opmerkingen bij te zetten: "Een dorp dat leeft",
 https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE (Marcel vroeg erom, 26 sep).
 
@@ -1366,10 +1394,10 @@ nu), en een maand levert precies op wat hij nu oplevert.
   de schout past de regels aan zoals hij het ziet, en later beslist een raad mee als de stad groot
   genoeg is (de schepenen van punt 14).
 - **Paarden: goed,** ze zijn op meerdere fronten inzetbaar. Wat de heer ervan vindt (de keurmede en
-  de heervaart) komt later; zo leest Claude "Dit mag er later bij", en dat is aan Marcel gevraagd.
+  de heervaart) komt later: zo las Claude "Dit mag er later bij", en Marcel bevestigde het.
 - **Ridders zijn van de koning** (vraag 18); later komen er misschien je eigen ruiters.
-- **Bij de wapens horen bogen, zwaarden en schilden** (vraag 19; er stond "schulden", Claude leest
-  "schilden"). Een zwaard maakt de smid. Een schild is vooral hout en leer met wat ijzeren beslag:
+- **Bij de wapens horen bogen, zwaarden en schilden** (vraag 19; er stond "schulden", en Marcel
+  bevestigde "schilden"). Een zwaard maakt de smid. Een schild is vooral hout en leer met wat ijzeren beslag:
   werk voor de timmerman en de leerlooier, met ijzer van de smid.
 
 **Een dag van vijf minuten** (Claude, over vraag 20, als antwoord op de pagina). Marcels voorstel is
@@ -1397,7 +1425,7 @@ Wat het vraagt:
 - **Een versneller die ver gaat:** een jaar duurt 30 uur bij 1×, 3 uur bij 10× en 1 uur bij 30×. Het
   dagritme zie je bij 1× tot 3×; daarboven is het doorspoelen (vraag 22).
 - **Wat nu op de klok van het scherm loopt, moet mee met de dag.** Een boer maait een tegel in 1,6
-  seconde (`T.OOGST_TEGEL_DUUR`, in `S.tijd`). Nu is dat anderhalve tegel per dag; bij een dag van
+  seconde (tot 26 sep `T.OOGST_TEGEL_DUUR`, in `S.tijd`). Toen was dat anderhalve tegel per dag; bij een dag van
   vijf minuten bijna tweehonderd, en dan is de oogst in een middag binnen. Maaien krijgt dus een tempo
   per uur.
 - **Lopen gaat mee met de snelheid:** bij 10× loopt iedereen tien keer zo snel, ook de schout. Een
@@ -1653,9 +1681,8 @@ wordt, en de markt op de brink.
 
 ### In welke volgorde (voorstel)
 
-1. **De dag** (A, met een maand van dertig dagen en een dag van vijf minuten; Marcel koos op 26 sep
-   dat hij als eerste komt), met licht: ochtend, avond en nacht in beeld, en de boeren die 's avonds
-   naar huis gaan en 's nachts binnen zijn.
+1. **De dag** (af, 26 sep): een maand van dertig dagen en een dag van vijf minuten, met licht, een
+   versneller, en de boeren die 's avonds naar huis gaan en 's nachts binnen zijn.
 2. **Mensen worden poppetjes:** de handen lopen naar hun werk en terug, en overdag is er menigte.
 3. **De herberg en de kleine zaken,** en een huis dat groeit door wat zijn bewoners bereiken.
 4. **Ronde 4b van de huizenbouwer** (Marcel, 26 sep: "moeten we dus uitvoeren"): de huizen in het
@@ -1678,9 +1705,13 @@ Vraag 23: komen het zichtveld en de getuigen (Marcels idee van 26 sep) als stap 
     voorstel; Claude is het ermee eens).**
 21. Blijven bouwtijd en straffen in dagen? **Ja; de tijden stellen we later bij.**
 22. Welke standen krijgt de tijdsversneller? Voorstel: 1×, 3×, 10× en 30×, en slapen tot de ochtend
-    als de schout thuis is. Een jaar duurt dan 30 uur, 10 uur, 3 uur of 1 uur.
+    als de schout thuis is. Een jaar duurt dan 30 uur, 10 uur, 3 uur of 1 uur. **Zo gebouwd (26 sep);
+    andere standen zijn één regel (`T.SNELHEDEN` in `js/tijd.js`).**
 23. Komen het zichtveld voor iedereen en de getuigen als stap in 3b, na de poppetjes, of later bij
     punt 11 (de nacht)? Voorstel: in 3b, want verstoppen wordt er meteen spannender door.
+24. Wat nu, na de dag: stap 2 van 3b (mensen worden poppetjes), of eerst verstoppen deel 1b? Voorstel
+    van Claude: de poppetjes, en dan het zichtveld (vraag 23). "Wie vlak langs een plek loopt, kan iets
+    vinden" uit deel 1b is dan een getuige, en hoeft niet apart.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 

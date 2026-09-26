@@ -257,17 +257,54 @@
     for (const e of w.wezens) {
       // Met sprites blijft het laatste beeld van het sterven liggen; met vlakken vervaagt het.
       if (e.dood && e.sterfTijd > 0.8 && !metSprites()) continue;
+      if (e.binnen) continue; // 's nachts in zijn huis (js/dag.js)
       if (!inVak(vak, e.tx, e.ty) || !T.isZichtbaar(w, e.tx, e.ty)) continue;
       lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, punt: { x: e.tx, y: e.ty }, f: () => tekenWezen(ctx, S, e) });
       if (e === aanDePaal) lijst.push({ d: e.x + e.y, l: 2.5, punt: { x: e.tx, y: e.ty }, f: () => tekenHalsijzer(ctx, e) });
     }
     lijst.sort((a, b) => vergelijkDiepte(a, b) || a.l - b.l);
     for (const item of lijst) item.f();
+    ctx.restore();
 
+    // De nacht valt over de wereld, maar niet over de zwevende teksten: die komen erna, met dezelfde
+    // camera als hierboven.
+    tekenNacht(ctx, S, bw, bh);
+    ctx.save();
+    ctx.translate(Math.round(bw / 2), Math.round(bh / 2));
+    ctx.scale(S.zoom, S.zoom);
+    ctx.translate(-Math.round(S.camera.x), -Math.round(S.camera.y));
     tekenEffecten(ctx, S);
     ctx.restore();
     tekenVignet(ctx, S, bw, bh);
   };
+
+  // De nacht en de schemering (js/dag.js, T.lichtVan): een donkerblauwe laag over de wereld, lichter
+  // rond de schout. Zo zie je 's nachts wat vlak bij je is, en niet wat verder weg gebeurt (Marcel,
+  // 26 sep: "Omdat de camera de schout volgt, 'zie' je ook niet alles"). Rond zonsopgang en
+  // zonsondergang een warme gloed. Alleen waar een kalender is (het gehucht). Spel.debug.geenNacht =
+  // true zet hem uit, om te vergelijken.
+  function tekenNacht(ctx, S, bw, bh) {
+    if (!S.kalender || !T.lichtVan || (T.debug && T.debug.geenNacht)) return;
+    const l = T.lichtVan(S.kalender.dag);
+    if (l.gloed > 0.01) {
+      ctx.fillStyle = `rgba(255, 150, 70, ${(0.1 * l.gloed).toFixed(3)})`;
+      ctx.fillRect(0, 0, bw, bh);
+    }
+    if (l.donker < 0.01) return;
+    // De schout op het scherm, met dezelfde omrekening als de camera in T.tekenScene; het licht
+    // valt om zijn lijf, niet om zijn voeten.
+    const h = S.schout;
+    const p = h ? T.naarScherm(h.x, h.y) : null;
+    const sx = p ? Math.round(bw / 2) + (p.x - Math.round(S.camera.x)) * S.zoom : bw / 2;
+    const sy = p ? Math.round(bh / 2) + (p.y - 20 - Math.round(S.camera.y)) * S.zoom : bh / 2;
+    const tegels = T.DAG_INSTELLINGEN ? T.DAG_INSTELLINGEN.lichtStraal : 5;
+    const straal = Math.max(1, tegels * 32 * S.zoom);
+    const verloop = ctx.createRadialGradient(sx, sy, straal * 0.25, sx, sy, straal * 1.4);
+    verloop.addColorStop(0, `rgba(12, 18, 40, ${(l.donker * 0.35).toFixed(3)})`);
+    verloop.addColorStop(1, `rgba(12, 18, 40, ${l.donker.toFixed(3)})`);
+    ctx.fillStyle = verloop;
+    ctx.fillRect(0, 0, bw, bh);
+  }
 
   // Gras op een weide (js/akkers.js: T.akkerTegelStadium geeft 'weide'; spel.md, "Weides met koeien
   // en schapen"). De kaart heeft onder elk veld kale akkergrond; een weide krijgt daar gewone
@@ -425,6 +462,7 @@
   // aanspreekt. Een wolf die in zijn eentje achter een huis rondscharrelt hoeft het huis niet
   // doorzichtig te maken — dan sta je ervoor en zie je hem wegvallen zonder te weten waarom.
   function teltMee(S, e) {
+    if (e.binnen) return false; // wie slaapt of binnen is, zie je niet door een dak heen
     if (e === S.schout) return true;
     if (e.dood) return false;
     if (e.alarm > 0) return true;

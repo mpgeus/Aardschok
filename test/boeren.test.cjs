@@ -240,7 +240,7 @@ test('een snelle maaier doet korter over een tegel, een trage langer', () => {
         T.werkOogstBij(S, 0.1);
       }
       assert.ok(e.maait, `${id}: hij maait niet`);
-      assert.ok(Math.abs(e.maait.tot - T.OOGST_TEGEL_DUUR * verwacht) < 1e-9, `${id}: ${e.maait.tot}`);
+      assert.ok(Math.abs(e.maait.tot - T.oogstTegelDuur() * verwacht) < 1e-9, `${id}: ${e.maait.tot}`);
     } finally {
       klaar();
     }
@@ -256,7 +256,7 @@ test('groene vingers geven meer graan per tegel, slordig minder, ook bij het van
         e.pad = [];
         T.werkOogstBij(S, 0.1);
       }
-      S.tijd = e.maait.tot;
+      S.wereldTijd = e.maait.tot;
       T.werkOogstBij(S, 0.1);
       assert.ok(Math.abs(S.voorraad.graan - T.GRAAN_PER_TEGEL * verwacht) < 1e-9, `${id}: ${S.voorraad.graan}`);
     } finally {

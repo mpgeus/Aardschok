@@ -107,8 +107,9 @@ function laatLopen(S, rondes, tot) {
 // Wanneer hij komt
 // ---------------------------------------------------------------------------------------------
 
-test('hij wordt aangekondigd, komt in oogstmaand tellen, en zolang hij er is staat de tijd stil', () => {
+test('hij wordt aangekondigd, komt in oogstmaand tellen, en de tijd loopt door op 1× (sinds de dag, 26 sep)', () => {
   const S = maakS();
+  S.kalender.snelheid = 10;
   const berichten = metBerichten(() => {
     T.tikInnerDag(S, KOMT - IN.aankondiging);
     assert.equal(S.inner.bezoek, null);
@@ -118,9 +119,9 @@ test('hij wordt aangekondigd, komt in oogstmaand tellen, en zolang hij er is sta
   assert.ok(S.inner.bezoek);
   assert.equal(S.inner.bezoek.geduld, IN.geduld);
   assert.ok(T.heeftVlag(S, 'innerOpBezoek'));
-  assert.equal(S.kalender.snelheid, 0, 'een scène: de tijd staat stil');
+  assert.equal(S.kalender.snelheid, 1, 'wie op 10× speelde, ziet hem op 1× komen; de tijd staat niet stil');
   T.innerVertrekt(S);
-  assert.equal(S.kalender.snelheid, 1, 'en loopt weer zoals ervoor');
+  assert.equal(S.kalender.snelheid, 1, 'en zo blijft hij; sneller zet je zelf');
   assert.ok(!T.heeftVlag(S, 'innerOpBezoek'), 'zonder poppetje is hij meteen weg');
 });
 
@@ -383,7 +384,7 @@ test('loopt de schout naast hem, dan volgt hij de schout; loopt die ver weg, dan
 
 test('stilstaan kost ook geduld: naast een schout die niet verder loopt, wacht hij niet eeuwig', () => {
   const S = maakS();
-  S.tijd = 0;
+  S.wereldTijd = 0;
   S.wereld.overgangen = [{ x: 0, y: 10, naar: 'wereld' }];
   const schout = T.maakMens('boer1', 1, 10);
   S.schout = schout;
@@ -395,7 +396,7 @@ test('stilstaan kost ook geduld: naast een schout die niet verder loopt, wacht h
   assert.ok(b.volgt);
   const voor = b.geduld;
   for (let i = 0; i < 8; i++) {
-    S.tijd += IN.stilPerStap / 2;
+    S.wereldTijd += IN.stilPerStap / 2; // de tijd van de wereld (js/main.js), niet die van het scherm
     T.werkInnerBij(S);
   }
   assert.equal(b.geduld, voor - 3, 'twee seconden stilstaan: drie stappen (de eerste halve seconde begint het wachten)');
@@ -411,14 +412,13 @@ test('is zijn geduld op, dan gaat hij met wat hij tot dan toe zag', () => {
   assert.ok(!S.inner.rapport.gezien.has(S.verWeg), 'zo ver kwam hij niet');
 });
 
-test('zonder weg de kaart op kijkt hij vanaf de brink en gaat hij meteen: de tijd blijft niet stilstaan', () => {
+test('zonder weg de kaart op kijkt hij vanaf de brink en gaat hij meteen', () => {
   const S = maakS();
   T.innerKomt(S, KOMT, false);
-  assert.equal(S.kalender.snelheid, 0);
   T.werkInnerBij(S);
   assert.equal(S.inner.bezoek, null);
   assert.deepEqual(S.inner.rapport.gebouwen, { huis: 1 }, 'wat hij vanaf de brink zag');
-  assert.equal(S.kalender.snelheid, 1);
+  assert.equal(S.kalender.snelheid, 1, 'de tijd liep gewoon door');
 });
 
 test('de toeslag gaat over wat hij dit jaar vraagt, niet over de oude schuld', () => {

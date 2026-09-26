@@ -76,7 +76,7 @@ function maaiTot(S, boer, klaar, max = 400) {
       boer.pad = [];
     } else if (boer.maait) {
       volgorde.push(boer.maait.hooi ? 'hooi' : 'graan');
-      S.tijd = boer.maait.tot;
+      S.wereldTijd = boer.maait.tot;
     }
   }
   return volgorde;

@@ -118,7 +118,7 @@
     const { x: sx, y: sy } = naarVlak(mx, my);
     const kandidaten = [];
     for (const e of w.wezens) {
-      if (e.dood || e === S.schout || !T.isZichtbaar(w, e.tx, e.ty)) continue;
+      if (e.dood || e.binnen || e === S.schout || !T.isZichtbaar(w, e.tx, e.ty)) continue;
       const p = T.naarScherm(e.x, e.y);
       const hoog = hoogteVan(e);
       if (sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoog && sy < p.y + 9) {
@@ -237,14 +237,21 @@
     if (window.innerWidth !== bw || window.innerHeight !== bh) formaat();
     S.tijd += dt;
     S.wind = T.windWaarde(S.tijd);
+    // De tijd van de wereld: de schermtijd maal de snelheid van de kalender (T.wereldFactor,
+    // js/tijd.js). Lopen, maaien en dwalen gaan daarop, zodat een tocht of een tegel graan op elke
+    // snelheid even veel uren kost; op pauze staat alles stil. S.wereldTijd telt hem op, voor wie
+    // een duur moet afwachten (het maaien, het geduld van de inner).
+    const dtWereld = dt * T.wereldFactor(S);
+    S.wereldTijd = (S.wereldTijd || 0) + dtWereld;
     // De kalender loopt op haar eigen klok, niet op S.tijd (CLAUDE.md, "Testen in de browser"):
     // zo laat pauzeren of versnellen nooit een animatie stilvallen of doorschieten.
     T.tikKalender(S, dt);
+    if (T.werkDagBij) T.werkDagBij(S); // wakker worden na het slapen (js/dag.js)
     T.werkGebouwenBij(S); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
     T.werkMarskramerBij(S); // zijn poppetje: over de weg binnen, naar de brink, en weer weg (js/handel.js)
     T.werkHeerBij(S); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)
     T.werkInnerBij(S); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
-    T.werkAnimatiesBij(S, dt);
+    T.werkAnimatiesBij(S, dt, dtWereld);
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
     // net doorheen.
@@ -259,8 +266,8 @@
       // Vóór T.laatDwalen: wie hier een pad krijgt of aan het maaien slaat (T.werkOogstBij,
       // js/akkers.js, alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
       // T.laatDwalen al "bezig" (m.pad.length of m.maait) en dwaalt deze beurt niet ook nog weg.
-      if (T.werkOogstBij) T.werkOogstBij(S, dt);
-      T.laatDwalen(S, dt);
+      if (T.werkOogstBij) T.werkOogstBij(S, dtWereld);
+      T.laatDwalen(S, dtWereld);
       const m = T.zoekOntdekking(S);
       if (m) T.startGevecht(S, m, false);
     }
@@ -291,6 +298,8 @@
   });
   canvas.addEventListener('click', (ev) => {
     S.muis = { x: ev.clientX, y: ev.clientY };
+    // Wie slaapt en ergens heen wil, is wakker (js/dag.js).
+    if (S.slaap && T.wordWakker) T.wordWakker(S);
     werkHoverBij();
     if (S.bouwSoort) {
       const soort = S.bouwSoort;
@@ -435,6 +444,14 @@
       T.ui.toonKalender(S); // ook bijwerken als alleen de dag rechtstreeks gezet is
       return { ...T.datumVanDag(S.kalender.dag), snelheid: S.kalender.snelheid };
     },
+    // Naar een uur van deze dag springen (js/dag.js): Spel.debug.uur(21) voor de avond, (2) voor de
+    // nacht. Zonder getal zegt het hoe laat het is en welk deel van de dag.
+    uur(u) {
+      if (typeof u === 'number') S.kalender.dag = Math.floor(S.kalender.dag) + Math.max(0, Math.min(23.99, u)) / 24;
+      T.ui.toonKalender(S);
+      const dag = S.kalender.dag;
+      return { uur: T.uurTekst(dag), deel: T.dagdeelVan(dag), licht: T.lichtVan(dag), dagindeling: T.dagindeling(dag) };
+    },
     // Een gebouw rechtstreeks neerzetten, zonder het bouwmenu: Spel.debug.bouw('huis', 10, 10).
     // Zelfde antwoord als een klik in het bouwmenu (js/gebouwen.js, T.plaatsGebouw).
     bouw(soort, x, y) {
@@ -446,6 +463,7 @@
     marskramer(bezoek) {
       if (!S.marskramer) T.marskramerKomt(S, bezoek || 0, Math.floor(S.kalender.dag));
       const m = S.marskramer;
+      if (m) m.nu = true; // ook 's nachts: hij hoeft niet op het bezoekuur te wachten (js/dag.js)
       return m && { bezoek: m.bezoek, beurs: m.beurs, plaats: m.plaats, heeft: { ...m.heeft }, staat: m.staat, weg: m.weg, gaatOp: m.gaatOp };
     },
     // De heer nu laten komen, zonder op Sint-Maarten te wachten (js/heer.js): Spel.debug.heer().
@@ -454,6 +472,7 @@
     heer() {
       if (!S.heer || !S.heer.bezoek) T.heerKomt(S, Math.floor(S.kalender.dag));
       const b = S.heer.bezoek;
+      b.nu = true; // ook 's nachts: hij hoeft niet op het bezoekuur te wachten (js/dag.js)
       return { vraagt: T.eisVanDeHeer(S).per, staat: b.staat, betaald: !!b.betaald, schuld: S.heer.schuld };
     },
     brief() {
@@ -467,6 +486,7 @@
       const I = S.inner || (S.inner = T.nieuweInner());
       if (!I.bezoek) T.innerKomt(S, Math.floor(S.kalender.dag), !!onverwacht);
       const b = I.bezoek;
+      b.nu = true; // ook 's nachts: hij hoeft niet op het bezoekuur te wachten (js/dag.js)
       const r = I.rapport;
       return {
         geduld: b.geduld, volgt: b.volgt, weg: b.weg, gebouwen: b.gebouwen.size, tegels: b.tegels.size,

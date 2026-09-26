@@ -65,27 +65,48 @@ test('de tekst leest als "3 oogstmaand 1323"', () => {
   assert.equal(T.datumVanDag(dag).tekst, `3 oogstmaand ${T.TIJD_START_JAAR}`);
 });
 
-test('een nieuwe kalender begint op dag 0, op gewone snelheid', () => {
-  assert.deepEqual(T.nieuweKalender(), { dag: 0, snelheid: 1 });
+test('een nieuwe kalender begint op dag 0, om zeven uur, op gewone snelheid', () => {
+  const k = T.nieuweKalender();
+  assert.deepEqual(k, { dag: T.TIJD_START_UUR / 24, snelheid: 1 });
+  assert.equal(Math.floor(k.dag), 0, 'nog steeds 1 lentemaand');
+  assert.ok(Math.abs(T.uurVanDag(k.dag) - 7) < 1e-9);
+});
+
+test('het uur is wat er achter de komma van de dagteller staat', () => {
+  assert.equal(T.uurVanDag(0), 0);
+  assert.ok(Math.abs(T.uurVanDag(12.5) - 12) < 1e-9);
+  assert.ok(Math.abs(T.uurVanDag(3 + 21 / 24) - 21) < 1e-9);
 });
 
 test('tikKalender staat stil op pauze (snelheid 0)', () => {
   const S = { kalender: T.nieuweKalender() };
+  const begin = S.kalender.dag;
   T.zetSnelheid(S, 0);
   T.tikKalender(S, 5);
-  assert.equal(S.kalender.dag, 0);
+  assert.equal(S.kalender.dag, begin);
 });
 
 test('tikKalender telt mee met de snelheid, in dagen per T.DAG_LENGTE seconden', () => {
   const S = { kalender: T.nieuweKalender() };
-  T.zetSnelheid(S, 2);
+  const begin = S.kalender.dag;
+  T.zetSnelheid(S, 3);
   T.tikKalender(S, T.DAG_LENGTE);
-  assert.ok(Math.abs(S.kalender.dag - 2) < 1e-9);
+  assert.ok(Math.abs(S.kalender.dag - begin - 3) < 1e-9);
 });
 
-test('een jaar duurt op 3x een minuut of vijf', () => {
-  const secondenPerJaar = T.DAGEN_PER_JAAR * (T.DAG_LENGTE / 3);
-  assert.ok(secondenPerJaar >= 60 && secondenPerJaar <= 5 * 60 + 30, `was ${secondenPerJaar}s`);
+test('een dag duurt bij 1× vijf minuten, en een jaar bij 30× een uur (Marcel, 26 sep)', () => {
+  assert.equal(T.DAG_LENGTE, 5 * 60);
+  assert.equal(T.DAGEN_PER_MAAND, 30, 'een maand blijft dertig dagen');
+  assert.deepEqual(T.SNELHEDEN, [0, 1, 3, 10, 30]);
+  assert.equal((T.DAGEN_PER_JAAR * T.DAG_LENGTE) / 30, 60 * 60);
+});
+
+test('de wereld loopt met de kalender mee: op pauze staat ze stil, zonder kalender of in een gevecht op 1×', () => {
+  assert.equal(T.wereldFactor({ kalender: { snelheid: 10 } }), 10);
+  assert.equal(T.wereldFactor({ kalender: { snelheid: 0 } }), 0);
+  assert.equal(T.wereldFactor({}), 1, 'de proefkaarten hebben geen kalender');
+  assert.equal(T.wereldFactor({ kalender: { snelheid: 30 }, gevecht: {} }), 1, 'een gevecht loopt op zijn eigen maat');
+  assert.equal(T.wereldFactor({ kalender: { snelheid: 30 }, modus: 'overgang' }), 1);
 });
 
 test('tikKalender raakt nooit S.tijd aan: de kalender loopt op haar eigen klok', () => {

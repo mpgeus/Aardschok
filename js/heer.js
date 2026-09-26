@@ -612,16 +612,24 @@
       T.zetVlag(S, 'heerOpBezoek');
       if (h.schuld > 0) T.zetVlag(S, 'heerSchuld');
     }
-    bericht('Sint-Maarten. De heer komt over de weg, met twee soldaten.', 'gevaar');
-    // Wie op 2× of 3× speelt, ziet hem anders nauwelijks komen.
-    if (S.kalender && S.kalender.snelheid > 1 && T.zetSnelheid) T.zetSnelheid(S, 1);
-    // Zonder poppetje (een toets zonder wereld om in te lopen) staat hij er meteen.
-    if (!kanLopen(S)) T.heerStaatErOp(S);
+    // Zonder poppetje (een toets zonder wereld om in te lopen) staat hij er meteen. Anders komt hij
+    // overdag, vanaf het bezoekuur (js/dag.js): dan pas het bericht, bij T.werkHeerBij.
+    if (!kanLopen(S)) {
+      heerKomtAan(S);
+      T.heerStaatErOp(S);
+    }
   };
 
-  // Hij staat op de brink. Dan staat de tijd stil tot je bij hem bent geweest: je loopt naar hem
-  // toe (je bent een poppetje, geen hand van bovenaf), en dat mag niet op de klok. Zet de speler
-  // de tijd zelf weer aan, dan tellen zijn wachtdagen.
+  // Hij komt de kaart op: het bericht, en wie sneller dan 1× speelt, gaat terug naar 1×, anders zie
+  // je hem nauwelijks komen.
+  function heerKomtAan(S) {
+    bericht('Sint-Maarten. De heer komt over de weg, met twee soldaten.', 'gevaar');
+    if (S.kalender && S.kalender.snelheid > 1 && T.zetSnelheid) T.zetSnelheid(S, 1);
+  }
+
+  // Hij staat op de brink en wacht op je, en zijn wachtdagen tellen. Tot 26 sep stond de tijd dan
+  // stil, omdat naar hem toe lopen bij een dag van 2,5 seconde dagen kostte; sinds de dag (js/dag.js)
+  // kost het een uur of twee, en loopt de tijd gewoon door, op 1×.
   T.heerStaatErOp = function (S) {
     const h = S.heer;
     const b = h.bezoek;
@@ -634,11 +642,8 @@
     const INN = T.INNER_INSTELLINGEN;
     if (INN && S.inner && S.inner.argwaan >= INN.doorzoekenVanaf && T.doorzoekDorp) T.doorzoekDorp(S);
     b.wachtTot = dagNu(S) + IN().wachtDagen;
-    if (S.kalender && S.kalender.snelheid > 0 && T.zetSnelheid) {
-      h.snelheidVoorWachten = S.kalender.snelheid;
-      T.zetSnelheid(S, 0);
-    }
-    bericht('De heer staat op de brink en wacht op je. De tijd staat stil tot je bij hem bent geweest.');
+    if (S.kalender && S.kalender.snelheid > 1 && T.zetSnelheid) T.zetSnelheid(S, 1);
+    bericht('De heer staat op de brink en wacht op je.');
   };
 
   T.heerVertrekt = function (S) {
@@ -646,11 +651,6 @@
     const b = h.bezoek;
     b.weg = true;
     if (T.zetVlag) T.zetVlag(S, 'heerVertrekt');
-    // Stond de tijd stil voor hem, dan loopt hij weer zoals hij liep.
-    if (S.kalender && S.kalender.snelheid === 0 && h.snelheidVoorWachten && T.zetSnelheid && S.modus !== 'heer') {
-      T.zetSnelheid(S, h.snelheidVoorWachten);
-    }
-    if (S.modus !== 'heer') h.snelheidVoorWachten = null;
     if (b.wezens && b.wezens.length) for (const e of b.wezens) naarDeWeg(S, e);
     else haalHeerWeg(S);
   };
@@ -734,6 +734,9 @@
     const plek = brinkVan(w);
     const b = h.bezoek;
     if (b && !b.wezens && !b.weg) {
+      // Overdag, vanaf het bezoekuur (js/dag.js); Spel.debug.heer() mag ook 's nachts (b.nu).
+      if (!b.nu && T.isBezoektijd && !T.isBezoektijd(S)) return;
+      heerKomtAan(S);
       // Hij komt de kaart op, met zijn twee soldaten vlak achter zich.
       const heer = T.maakMens('heer', uitgang.x, uitgang.y, 1);
       heer.thuis = { x: plek.x, y: plek.y };

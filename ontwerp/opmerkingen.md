@@ -14,9 +14,21 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   stenen huis bij de trede stad hoort. Het wordt een andere tekening met een andere voet (5×7, 7×5,
   6×8); past die niet, dan wacht het huis voor altijd. Een voorstel om het anders te doen staat in
   `spel.md`, "Een dorp dat leeft en groeit".
-- **Zolang de inner of de heer er is, staat de kalender stil** (26 sep), omdat meelopen anders weken
-  kost: een dag duurt 2,5 seconde. Dat wringt met een dagritme en met de nacht (punt 11); zie
-  hetzelfde voorstel, vraag 14.
+- **De dag, wat nog ruw is** (26 sep, na stap 1 van punt 3b; `spel.md`, "De dag, gebouwd"):
+  - Het vee gaat liggen en staat op op de klok van het scherm (`T.rustVanDier`, `S.tijd`), niet op
+    de tijd van de wereld: bij 30× ligt een koe even lang als bij 1×, dus relatief kort.
+  - De brief van de heer (1 wijnmaand) en het slachtvenster (1 slachtmaand) gaan om middernacht open,
+    niet 's ochtends zoals de bezoekers.
+  - Alleen de boeren hebben een dagritme. De rest van het dorp komt met de poppetjes (stap 2), en
+    het vee blijft 's nachts buiten.
+  - De nacht is een donkere laag met licht rond de schout. Echte lichten (lantaarns, vuur, een
+    verlicht raam dat aan en uit gaat) horen bij punt 11; de ramen van de huizen zijn nu altijd geel,
+    en dat leest 's nachts vanzelf als licht.
+  - De getallen per dag zijn niet veranderd, maar alles wat loopt en maait, gebeurt nu in uren van
+    de dag. Het maaien is met een simulatie van het seizoen op het oude tempo gezet (80% binnen rond
+    14 oogstmaand); de rest van het jaar is nog niet op die manier nagelopen.
+  - De pagina "Stand van het gehucht" zegt nog dat een dag 2,5 seconde duurt, en dat de tijd stilstaat
+    bij de inner en de heer.
 - **De brink ligt achter twee daken** (24 sep). Vanuit de camera staan het huis van de schout en de
   boerderij van boer 3 vóór de brink. De heer, de marskramer, de schandpaal en wie eraan staat,
   vallen daardoor grotendeels achter een dak. De schout zie je door een kijkgat, de rest niet. Marcel
@@ -73,8 +85,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     3 vraagt hij per dier.
   - Zonder herder (een hand voor de kooi) geeft de kooi geen mest. Het veldenvenster zegt nog niet
     waarom er geen mest bijkomt.
-  - Een sprong met `Spel.debug.kalender` loopt door de brief en de inner heen, en dan staat de tijd
-    na het slachten nog stil: dat komt van de inner, niet van het slachtvenster.
 - **De verstopplekken, deel 1** (25 sep, `spel.md`, "Gebouwd, stap 2 van de inner, deel 1"):
   - Tot zo'n 40% van de oogst verstop je zonder risico: de argwaan blijft 0, dus de soldaten zoeken
     niet, en dan maakt het niet uit welke kelder je kiest. Een vraag voor Marcel (`spel.md`, "Nog

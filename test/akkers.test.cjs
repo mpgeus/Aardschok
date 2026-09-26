@@ -153,7 +153,7 @@ test('T.werkOogstBij: loopt naar een tegel, maait hem, en gaat door tot de hele 
       boer.ty = boer.pad[0].y;
       boer.pad = [];
     } else if (boer.maait) {
-      S.tijd = boer.maait.tot; // spring naar het eind van deze slag
+      S.wereldTijd = boer.maait.tot; // spring naar het eind van deze slag
     }
   }
   assert.equal(akker.geoogst.size, 4, 'niet alle vier de tegels van de akker zijn gemaaid geraakt');
@@ -182,7 +182,7 @@ function maaiTotKlaar(S, boer, klaar) {
       boer.ty = boer.pad[0].y;
       boer.pad = [];
     } else if (boer.maait) {
-      S.tijd = boer.maait.tot;
+      S.wereldTijd = boer.maait.tot;
     }
   }
 }

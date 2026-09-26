@@ -227,7 +227,8 @@
       return x >= f.x1 && x <= f.x2 && y >= f.y1 && y <= f.y2;
     }) || null;
   };
-  T.wezenOp = (w, x, y, behalve) => w.wezens.find((e) => !e.dood && e !== behalve && e.tx === x && e.ty === y) || null;
+  // Wie binnen is (een boer 's nachts in zijn huis, js/dag.js), staat niemand in de weg.
+  T.wezenOp = (w, x, y, behalve) => w.wezens.find((e) => !e.dood && !e.binnen && e !== behalve && e.tx === x && e.ty === y) || null;
 
   // Mag je deze tegel op? deurenOpenen: een dichte deur telt als doorgang (de schout duwt
   // hem open, een monster niet). wezensBlokkeren: andere wezens staan in de weg.

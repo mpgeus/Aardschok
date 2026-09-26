@@ -164,8 +164,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ploegtijd toch de hele akker in één keer "gemaaid"). `js/tekenen.js` tekent ermee (achterlaag,
   wezen, voorlaag, zodat iemand tot zijn middel in het graan staat); `js/kaart.js` koppelt een
   boer aan zijn akker(s) via `huis`, dezelfde id op de boer als op de akker.
-- **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen, eigen
-  klok naast `S.tijd`, snelheid), `js/voorraad.js` (`S.voorraad`; alles verandert via
+- **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen en het
+  uur: een dag duurt vijf minuten bij 1×, een maand dertig dagen; eigen klok naast `S.tijd`; de
+  versneller `T.SNELHEDEN`; `T.wereldFactor` en `S.wereldTijd`), `js/dag.js` (de zon per seizoen,
+  de dagindeling, het licht, het ritme van de boeren en slapen tot de ochtend), `js/voorraad.js` (`S.voorraad`; alles verandert via
   `T.wijzigVoorraad`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
   soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag,
   `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; een gebouw maakt alleen wat zijn grondstof
@@ -256,6 +258,10 @@ Over het raster, het gevecht in beurten en de overgang ernaartoe.
   schuiven onderaan in beeld zodra een gevecht begint, ook in het gehucht.
 - Monsters openen geen deuren. Kan geen enkel monster de schout nog zien of bereiken, dan eindigt
   het gevecht ('kwijt').
+- Twee klokken (26 sep): wat in de wereld gebeurt (lopen, maaien, dwalen, het geduld van de inner),
+  loopt op de tijd van de wereld, de schermtijd maal de snelheid (`dtWereld` in `js/main.js`,
+  opgeteld in `S.wereldTijd`); wat alleen op het scherm beweegt (de wind, een flits, zwevende tekst),
+  op `S.tijd`. Zo kost een tocht op elke snelheid even veel uren. Een gevecht loopt altijd op 1×.
 
 ## Testen in de browser
 
@@ -270,7 +276,9 @@ haalt hem weg, beloning en al); zonder fase zegt hij waar hij staat. Er zijn nog
 `await Spel.debug.schermafdruk('naam')` bewaart het doek als PNG in
 `gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
 blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In het gehucht:
-`Spel.debug.kalender(dag, snelheid)` springt door het jaar, `Spel.debug.bouw('huis', x, y)` bouwt,
+`Spel.debug.kalender(dag, snelheid)` springt door het jaar, `Spel.debug.uur(21)` naar een uur van deze
+dag (zonder getal zegt het hoe laat het is; een dag duurt vijf minuten bij 1×, dus `stap` gaat op 10×
+tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.bouw('huis', x, y)` bouwt,
 `Spel.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
 `Spel.debug.brief()` stuurt de brief van de heer nu, `Spel.debug.heer()` laat hem nu komen,
 `Spel.debug.inner()` de inner (`(true)`: onverwacht), en `Spel.debug.argwaan(0.6)` zet zijn argwaan.

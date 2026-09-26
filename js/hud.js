@@ -158,17 +158,29 @@
 
   T.ui = T.ui || {};
 
+  // De datum, en eronder het seizoen met het uur en het deel van de dag ("Lente · half acht,
+  // ochtend"; js/dag.js). Ververst elk half uur (T.tikKalender).
   T.ui.toonKalender = function (S) {
     const d = T.datumVanDag(S.kalender.dag);
     const datumEl = $('kalender-datum');
     datumEl.textContent = d.tekst;
     datumEl.classList.toggle('sint-maarten', d.sintMaarten);
-    $('kalender-seizoen').textContent = T.hoofdletter(d.seizoen) + (d.sintMaarten ? ' · Sint-Maarten: de heer int' : '');
+    const uur = T.uurTekst ? T.uurTekst(S.kalender.dag) + (T.dagdeelVan ? ', ' + T.dagdeelVan(S.kalender.dag) : '') : '';
+    $('kalender-seizoen').textContent = T.hoofdletter(d.seizoen) + (uur ? ' · ' + uur : '') + (d.sintMaarten ? ' · Sint-Maarten: de heer int' : '');
     for (const b of document.querySelectorAll('#kalender-knoppen button')) {
       b.classList.toggle('actief', Number(b.dataset.snelheid) === S.kalender.snelheid);
     }
     werkBriefKnopBij(S);
+    werkSlaapKnopBij(S);
   };
+
+  // Slapen kan 's avonds en 's nachts, bij je eigen huis (js/dag.js, T.magSlapen). De knop staat er
+  // alleen dan; wie slaapt, ziet hem niet (hij wordt vanzelf wakker, of door een klik of een toets).
+  function werkSlaapKnopBij(S) {
+    const knop = $('slaap-knop');
+    if (knop) knop.classList.toggle('verborgen', !(T.magSlapen && T.magSlapen(S)));
+  }
+  T.ui.werkSlaapKnopBij = werkSlaapKnopBij;
 
   T.ui.toonVoorraad = function (S) {
     const box = $('voorraadbalk');
@@ -682,21 +694,14 @@
     toonHeer(S);
   };
 
-  // Dicht. Bij de schandpaal kan dat niet: daar moet je kiezen. Is de heer weg, dan loopt de tijd
-  // weer zoals vóór zijn komst (hij zette hem stil toen hij op de brink stond, js/heer.js).
+  // Dicht. Bij de schandpaal kan dat niet: daar moet je kiezen. De tijd loopt weer zoals toen je
+  // het venster opende (sinds de dag, 26 sep, zet de heer hem zelf niet meer stil, js/heer.js).
   T.ui.sluitHeer = function (S) {
     const b = S.heer && S.heer.bezoek;
     if (b && b.schandpaal) return;
     $('heer').classList.add('verborgen');
     if (S.modus === 'heer') S.modus = 'verkennen';
     geef = null;
-    const h = S.heer;
-    if (h && (!h.bezoek || h.bezoek.weg) && h.snelheidVoorWachten) {
-      // Stond de tijd al stil voor hem toen je het venster opende, dan loopt hij weer zoals vóór
-      // zijn komst; had je hem zelf weer aangezet, dan zoals jij hem zette.
-      if (!S.heerVoorSnelheid) S.heerVoorSnelheid = h.snelheidVoorWachten;
-      h.snelheidVoorWachten = null;
-    }
     laatTijdLopen(S, 'heerVoorSnelheid');
     werkBriefKnopBij(S);
   };
@@ -1406,22 +1411,35 @@
     }
   });
 
-  // Eén stap trager of sneller, van pauze tot 3x. T.zetSnelheid (js/tijd.js) onthoudt de laatste
-  // snelheid, zodat P na een stapje terug weer daar hervat.
+  // Eén stand trager of sneller, langs T.SNELHEDEN (js/tijd.js: pauze, 1×, 3×, 10×, 30×).
+  // T.zetSnelheid onthoudt de laatste snelheid, zodat P na een stapje terug weer daar hervat. Wie
+  // slaapt en zelf aan de tijd komt, is wakker (js/dag.js).
   function stapSnelheid(delta) {
     const S = T.S;
     if (!S || !S.kalender) return;
-    T.zetSnelheid(S, Math.max(0, Math.min(3, S.kalender.snelheid + delta)));
+    if (S.slaap && T.wordWakker) T.wordWakker(S);
+    const standen = T.SNELHEDEN || [0, 1, 3];
+    let i = standen.indexOf(S.kalender.snelheid);
+    if (i < 0) i = standen.findIndex((v) => v > S.kalender.snelheid) - 1;
+    if (i < 0) i = standen.length - 1;
+    T.zetSnelheid(S, standen[Math.max(0, Math.min(standen.length - 1, i + delta))]);
   }
 
   $('kalender-knoppen').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
     if (!b || !T.S) return;
     b.blur();
+    if (T.S.slaap && T.wordWakker) T.wordWakker(T.S);
     T.zetSnelheid(T.S, Number(b.dataset.snelheid));
   });
 
-  // P, - en = botsen nergens mee: de spatie en 1-4 zijn van het oude spel (CLAUDE.md).
+  $('slaap-knop').addEventListener('click', (ev) => {
+    ev.currentTarget.blur();
+    if (T.S && T.gaSlapen) T.gaSlapen(T.S);
+  });
+
+  // P, Z, - en = botsen nergens mee: de spatie en 1-4 zijn van het gevecht (CLAUDE.md). Z is slapen
+  // tot de ochtend, of wakker worden (js/dag.js).
   window.addEventListener('keydown', (ev) => {
     if (!T.NIEUWE_HUD || !T.S || !T.S.kalender) return;
     // Niet terwijl je een naam typt, en niet in de spelregels of de velden (daar staat de tijd
@@ -1430,7 +1448,11 @@
     if (T.S.modus === 'spelregels' || T.S.modus === 'velden') return;
     if (ev.key === 'p' || ev.key === 'P') {
       const k = T.S.kalender;
+      if (T.S.slaap && T.wordWakker) T.wordWakker(T.S);
       T.zetSnelheid(T.S, k.snelheid > 0 ? 0 : k.laatsteSnelheid || 1);
+    } else if ((ev.key === 'z' || ev.key === 'Z') && T.gaSlapen) {
+      if (T.S.slaap) T.wordWakker(T.S);
+      else T.gaSlapen(T.S);
     } else if (ev.key === '-' || ev.key === '_') {
       stapSnelheid(-1);
     } else if (ev.key === '=' || ev.key === '+') {

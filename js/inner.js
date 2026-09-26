@@ -313,16 +313,24 @@
       T.zetVlag(S, 'innerOpBezoek');
       if (onverwacht) T.zetVlag(S, 'innerOnverwacht');
     }
-    bericht(onverwacht
-      ? 'De inner komt onverwacht terug. Hij wil nog eens kijken.'
-      : 'De inner van de heer komt tellen. Loop met hem mee: wat hij ziet, komt in zijn rapport.', 'gevaar');
-    // Een scène: de tijd staat stil zolang hij er is. Lopen kan wel; dat is de scène.
-    if (S.kalender && S.kalender.snelheid > 0 && T.zetSnelheid) {
-      I.snelheidVoorBezoek = S.kalender.snelheid;
-      T.zetSnelheid(S, 0);
-    }
+    // Hij komt overdag (js/dag.js): valt zijn dag 's nachts in, dan zegt het bericht het pas als hij
+    // de kaart op loopt (T.werkInnerBij). Zonder wereld om in te lopen (een toets) meteen.
+    if (!T.isBezoektijd || T.isBezoektijd(S) || !kanLopen(S)) innerKomtAan(S);
     if (T.ui && T.ui.toonArgwaan) T.ui.toonArgwaan(S);
   };
+
+  // Hij komt de kaart op: het bericht, en de tijd naar 1× (wie sneller speelt, ziet hem anders niet
+  // komen). Tot 26 sep stond de tijd stil zolang hij er was, omdat meelopen bij een dag van 2,5
+  // seconde weken kostte; sinds de dag duurt zijn bezoek een dag, en loopt de tijd door.
+  function innerKomtAan(S) {
+    const b = S.inner && S.inner.bezoek;
+    if (!b || b.aangekomen) return;
+    b.aangekomen = true;
+    bericht(b.onverwacht
+      ? 'De inner komt onverwacht terug. Hij wil nog eens kijken.'
+      : 'De inner van de heer komt tellen. Loop met hem mee: wat hij ziet, komt in zijn rapport.', 'gevaar');
+    if (S.kalender && S.kalender.snelheid > 1 && T.zetSnelheid) T.zetSnelheid(S, 1);
+  }
 
   // Hij gaat, met zijn rapport: de argwaan om het graan, een melding, en de tijd loopt weer.
   T.innerVertrekt = function (S) {
@@ -361,11 +369,6 @@
     if (T.HEER_INSTELLINGEN && T.HEER_INSTELLINGEN.kist) delen.push(`${Math.floor(r.goudGezien)} goud in de kist`);
     bericht(`De inner vertrekt. In zijn rapport: ${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}.`);
     if (T.wisVlag) T.wisVlag(S, 'innerOnverwacht');
-    // De tijd loopt weer zoals vóór zijn komst, tenzij de speler hem zelf al aanzette.
-    if (S.kalender && S.kalender.snelheid === 0 && I.snelheidVoorBezoek && T.zetSnelheid && S.modus !== 'dialoog') {
-      T.zetSnelheid(S, I.snelheidVoorBezoek);
-    }
-    I.snelheidVoorBezoek = null;
     if (!b.wezen) haalWeg(S);
     if (T.ui && T.ui.toonArgwaan) T.ui.toonArgwaan(S);
     return r;
@@ -507,6 +510,9 @@
     const uitgang = T.wegInEnUit(w);
     if (!b.wezen) {
       if (b.weg) return;
+      // Overdag, vanaf het bezoekuur (js/dag.js); Spel.debug.inner() mag ook 's nachts (b.nu).
+      if (!b.nu && T.isBezoektijd && !T.isBezoektijd(S)) return;
+      innerKomtAan(S);
       const e = T.maakMens('inner', uitgang.x, uitgang.y, 0);
       e.dwaalt = false; // hij loopt waar hij heen wil, niet waar het dwalen hem brengt
       b.wezen = e;
@@ -533,11 +539,13 @@
       b.stilSinds = null;
       const nieuw = T.innerKijkt(S, { x: e.tx, y: e.ty });
       if (nieuw.length) bericht(`De inner noteert: ${nieuw.join(', ')}.`);
-    } else if (!e.onderweg && !e.pad.length && typeof S.tijd === 'number') {
-      if (b.stilSinds == null) b.stilSinds = S.tijd;
-      else if (S.tijd - b.stilSinds >= IN().stilPerStap) {
+    } else if (!e.onderweg && !e.pad.length) {
+      // Op de tijd van de wereld (js/main.js), zodat stilstaan op elke snelheid even veel kost.
+      const nu = S.wereldTijd || 0;
+      if (b.stilSinds == null) b.stilSinds = nu;
+      else if (nu - b.stilSinds >= IN().stilPerStap) {
         b.geduld--;
-        b.stilSinds = S.tijd;
+        b.stilSinds = nu;
       }
     }
     const doelen = nogTeZien(S);

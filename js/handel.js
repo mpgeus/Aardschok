@@ -106,11 +106,13 @@
       T.zetVlag(S, 'marskramerOpBezoek');
       T.zetVlag(S, bezoek.vlag);
     }
-    if (T.ui && T.ui.bericht) {
-      T.ui.bericht(i === IN().bezoeken.length - 1
-        ? 'De marskramer komt over de weg: zijn laatste ronde vóór de winter.'
-        : 'De marskramer komt over de weg. Hij blijft een paar dagen op de brink.', 'goed');
-    }
+    const tekst = i === IN().bezoeken.length - 1
+      ? 'De marskramer komt over de weg: zijn laatste ronde vóór de winter.'
+      : 'De marskramer komt over de weg. Hij blijft een paar dagen op de brink.';
+    // Hij komt overdag (js/dag.js, T.isBezoektijd): valt zijn dag 's nachts in, dan zegt het bericht
+    // het pas als hij de kaart op loopt (T.werkMarskramerBij).
+    if (T.isBezoektijd && !T.isBezoektijd(S) && T.maakMens) S.marskramer.bericht = tekst;
+    else if (T.ui && T.ui.bericht) T.ui.bericht(tekst, 'goed');
   };
 
   // Hij gaat, op deze dag: vanaf nu handelt hij niet meer. Heeft hij een poppetje, dan loopt dat
@@ -263,6 +265,12 @@
     const uitgang = deWeg(w);
     if (!m.wezen) {
       if (m.weg || !uitgang) return;
+      // Overdag, vanaf het bezoekuur (js/dag.js); Spel.debug.marskramer() mag ook 's nachts (m.nu).
+      if (!m.nu && T.isBezoektijd && !T.isBezoektijd(S)) return;
+      if (m.bericht) {
+        if (T.ui && T.ui.bericht) T.ui.bericht(m.bericht, 'goed');
+        m.bericht = null;
+      }
       const e = T.maakMens('marskramer', uitgang.x, uitgang.y, 1);
       // Zijn thuis is zijn plek op de brink, met een straal van één: daar scharrelt hij bij zijn
       // uitgestalde waar.

@@ -304,10 +304,25 @@
     // stadium nodig (kiemend/groen/rijp), niet de datum zelf.
     const datum = T.datumVanDag && S.kalender ? T.datumVanDag(S.kalender.dag) : null;
     const basis = datum && T.akkerStadium ? T.akkerStadium(datum.maand, datum.dagVanMaand) : null;
+    // In de oogst (graan of hooi) werkt men tot het donker (js/dag.js).
+    const oogst = basis === 'rijp' || !!(datum && T.isHooitijd && T.isHooitijd(datum));
     for (const m of w.wezens) {
       if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait) continue;
       // Een dier dat ligt, blijft liggen tot zijn rust zegt dat het weer opstaat (js/vee.js).
       if (m.dier && T.rustVanDier && T.rustVanDier(m, S.tijd || 0) === 'liggen') continue;
+      // Het ritme van de dag (js/dag.js): 's ochtends en 's avonds op zijn erf, 's nachts binnen. Wie
+      // voor zijn deur staat als het nacht is, gaat naar binnen; 's ochtends komt hij weer naar
+      // buiten, zodra er niemand voor de deur staat. Overdag geeft T.dagAnker niets, en geldt het
+      // gewone anker hieronder.
+      const dagAnker = T.dagAnker ? T.dagAnker(S, m, oogst) : null;
+      if (m.binnen) {
+        if (dagAnker && dagAnker.binnen) continue;
+        if (T.wezenOp(w, m.tx, m.ty, m)) continue;
+        m.binnen = false;
+      } else if (dagAnker && dagAnker.binnen && m.tx === dagAnker.x && m.ty === dagAnker.y && !m.onderweg) {
+        m.binnen = true;
+        continue;
+      }
       m.dwaalTijd -= dt;
       // Staat hij toevallig stil op een tegel waar hij een doorgang blokkeert, dan wacht hij daar
       // niet zijn hele pauze uit maar stapt meteen door.
@@ -326,7 +341,7 @@
         } else if (opties.length) m.pad = [opties[Math.floor(Math.random() * opties.length)]];
         continue;
       }
-      const thuisNu = (T.wandelAnker && T.wandelAnker(m, basis)) || m.thuis;
+      const thuisNu = dagAnker || (T.wandelAnker && T.wandelAnker(m, basis)) || m.thuis;
       // Ligt hij nu buiten die straal — een boer wiens huis niet naast zijn akker staat, bij het
       // begin van het groeiseizoen — dan is geen van de vier buurtegels ooit dichtbij genoeg, en
       // zou hij voor eeuwig blijven staan. Dan eerst een heus pad ernaartoe (T.zoekPad, net als

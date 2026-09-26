@@ -316,10 +316,19 @@
     return lijst;
   };
 
-  // Hoelang een boer over één tegel doet: iets langer dan één zwaai van de zeis (maaier.cjs:
-  // MAAIER_BEELDEN/MAAIER_FPS = 12/8 = 1,5s), zodat de hele slag minstens één keer te zien is.
-  // In speeltijd (S.tijd, wall-clock), niet in kalenderdagen — zie ook de opmerking bij T.windBeeld.
-  T.OOGST_TEGEL_DUUR = 1.6;
+  // Hoelang een boer over één tegel doet, in uren van de dag. Tot 26 sep was dat 1,6 seconde op de
+  // klok van het scherm: bij een dag van 2,5 seconde zo'n anderhalve tegel per dag (maar op 3× een
+  // halve), en bij een dag van vijf minuten zou hij er bijna tweehonderd per dag maaien. Nu loopt het
+  // op de tijd van de wereld (S.wereldTijd, js/main.js), dus op elke snelheid even veel tegels per
+  // dag, en alleen in de werkuren, in de oogst tot het donker (js/dag.js).
+  //
+  // Twaalf uur: een boer maait zo'n tegel per werkdag. Vroeger kostte lopen dagen, nu een uur, dus
+  // moest het maaien zelf langer. Een simulatie van het seizoen (26 sep, bij 1×) gaf zo rond 14
+  // oogstmaand zo'n vier vijfde van het graan binnen, net als vóór de dag (80%), met wat spreiding
+  // omdat het dwalen willekeurig is. Dat telt, want op 15 oogstmaand komt de inner tellen.
+  T.OOGST_UREN_PER_TEGEL = 12;
+  // Diezelfde duur in seconden van de wereld (een uur is T.DAG_LENGTE / 24 seconde bij 1×).
+  T.oogstTegelDuur = () => (T.OOGST_UREN_PER_TEGEL * (T.DAG_LENGTE || 300)) / 24;
 
   // Wat één gemaaide tegel oplevert, in S.voorraad.graan, en wat hij aan zaaigraan kost (op 1
   // lentemaand, T.zaaiAkkers hieronder). Maaien is de enige weg waarlangs graan binnenkomt: de
@@ -418,32 +427,57 @@
   // Een boer maait al zijn akkers, steeds de tegel die het dichtstbij staat. Tot 24 sep maaide hij
   // alleen de eerste (e.werkAkkers[0]), en rotte het stuk onder de es van boer 1 en boer 3 op het
   // veld: 55 van de 209 tegels. In hooitijd maait hij eerst het hooi (maaiDoel hierboven).
+  // Een slag beginnen op de tegel waar hij staat: zo lang als een tegel duurt (met zijn eigen maat,
+  // js/boeren.js), min wat hij er eerder al maaide.
+  function begin(e, doel, nu) {
+    const al = (doel.akker.half && doel.akker.half.get(sleutel(e.tx, e.ty))) || 0;
+    const duur = T.oogstTegelDuur() * factor(e, 'maaien');
+    return { x: e.tx, y: e.ty, sinds: nu, tot: nu + Math.max(0, duur - al), akker: doel.akker, hooi: !!doel.hooi };
+  }
+
   T.werkOogstBij = function (S, dt) {
     const w = S.wereld;
     if (!w.akkers || !w.akkers.length) return;
     const datum = T.datumVanDag(S.kalender.dag);
     const basis = T.akkerStadium(datum.maand, datum.dagVanMaand);
     const hooitijd = T.isHooitijd(datum);
+    // Gemaaid wordt in de werkuren, in de oogst tot het donker (js/dag.js); zonder de dag (een
+    // toets die js/dag.js niet laadt) altijd.
+    const werktijd = !T.isWerktijd || T.isWerktijd(S.kalender.dag, true);
+    const nu = S.wereldTijd || 0;
     for (const e of w.wezens) {
       if (e.dood || !e.werkAkkers || !e.werkAkkers.length) continue;
       for (const a of e.werkAkkers) {
         if (!a.geoogst) a.geoogst = new Set();
         if (!a.gehooid) a.gehooid = new Set();
+        if (!a.half) a.half = new Map();
       }
       if (basis !== 'rijp' && !hooitijd) {
         if (basis === 'geploegd') {
           for (const a of e.werkAkkers) {
             a.geoogst.clear(); // nieuw jaar, weer vers
             a.gehooid.clear();
+            a.half.clear();
           }
         }
         e.maait = null;
         e.oogstDoel = null;
         continue;
       }
+      if (e.binnen) continue; // 's nachts in zijn huis
       if (e.maait) {
-        if (S.tijd >= e.maait.tot) {
+        // Schaft of avond: hij stopt, en wat hij van deze tegel al maaide, blijft liggen voor morgen.
+        if (!werktijd) {
+          const m = e.maait;
+          const k = sleutel(m.x, m.y);
+          m.akker.half.set(k, (m.akker.half.get(k) || 0) + Math.max(0, nu - m.sinds));
+          e.maait = null;
+          e.oogstDoel = null;
+          continue;
+        }
+        if (nu >= e.maait.tot) {
           const a = e.maait.akker;
+          a.half.delete(sleutel(e.maait.x, e.maait.y));
           if (e.maait.hooi) {
             a.gehooid.add(sleutel(e.maait.x, e.maait.y));
             if (S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'hooi', T.hooiPerTegel(a, e));
@@ -456,10 +490,18 @@
         }
         continue;
       }
+      // Buiten de werkuren begint hij aan niets nieuws; was hij op weg naar een tegel, dan maakt hij
+      // alleen zijn stap af, en neemt het ritme van de dag het over (T.laatDwalen, js/verkennen.js).
+      if (!werktijd) {
+        if (e.oogstDoel) {
+          e.oogstDoel = null;
+          if (e.pad && e.pad.length) e.pad = e.onderweg ? [e.pad[0]] : [];
+        }
+        continue;
+      }
       if (e.pad && e.pad.length) continue; // onderweg naar zijn doel
       if (e.oogstDoel && e.tx === e.oogstDoel.x && e.ty === e.oogstDoel.y) {
-        const d = e.oogstDoel;
-        e.maait = { x: e.tx, y: e.ty, tot: S.tijd + T.OOGST_TEGEL_DUUR * factor(e, 'maaien'), akker: d.akker, hooi: !!d.hooi };
+        e.maait = begin(e, e.oogstDoel, nu);
         continue;
       }
       const doel = maaiDoel(w, e, hooitijd, basis === 'rijp');
@@ -473,7 +515,7 @@
       // dwaalde. De proef van de weides (drie jaar zonder dwalen) liep daardoor twee oogsten mis.
       if (doel.x === e.tx && doel.y === e.ty) {
         e.oogstDoel = doel;
-        e.maait = { x: e.tx, y: e.ty, tot: S.tijd + T.OOGST_TEGEL_DUUR * factor(e, 'maaien'), akker: doel.akker, hooi: doel.hooi };
+        e.maait = begin(e, doel, nu);
         continue;
       }
       const pad = T.zoekPad(
@@ -507,9 +549,9 @@
 
   // Het vangnet (Marcel, 24 sep; ontwerp/spel.md, "Sint-Maarten"): wat op de eerste dag na de
   // oogsttijd nog op het veld staat, halen de boeren alsnog in één keer binnen. Tot 24 sep rotte
-  // dat. Omdat het maaien op de klok van het scherm loopt (T.OOGST_TEGEL_DUUR, S.tijd) en de
-  // kalender niet, rotte er op 3× veel meer: wie snel speelde, verloor graan zonder het te weten.
-  // Nu bepaalt de snelheid alleen nog wánneer het graan binnenkomt, niet hoeveel. Een akker zonder
+  // dat. Tot 26 sep liep het maaien op de klok van het scherm en de kalender niet, zodat er op 3× veel
+  // meer bleef staan: wie snel speelde, verloor graan zonder het te weten. Sinds de dag (26 sep)
+  // loopt het maaien op de tijd van de wereld, en maakt de snelheid niets meer uit. Een akker zonder
   // boer rot nog wel: er is niemand om hem binnen te halen. Geeft het aantal tegels terug.
   T.haalOogstBinnen = function (S) {
     const w = S.wereld;

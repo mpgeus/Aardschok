@@ -21,9 +21,10 @@
     <div id="kalenderbalk" class="paneel">
       <div id="kalender-knoppen">
         <button data-snelheid="0" title="Pauzeer de tijd (P)"><kbd>P</kbd> Pauze</button>
-        <button data-snelheid="1" title="Gewone snelheid">1×</button>
-        <button data-snelheid="2" title="Twee keer zo snel">2×</button>
-        <button data-snelheid="3" title="Drie keer zo snel: een jaar duurt dan een minuut of vijf">3×</button>
+        <button data-snelheid="1" title="Gewone snelheid: een dag duurt vijf minuten">1×</button>
+        <button data-snelheid="3" title="Drie keer zo snel: een jaar duurt tien uur">3×</button>
+        <button data-snelheid="10" title="Tien keer zo snel: een jaar duurt drie uur">10×</button>
+        <button data-snelheid="30" title="Dertig keer zo snel: een jaar duurt een uur">30×</button>
       </div>
       <div id="kalender-datum"></div>
       <div id="kalender-seizoen"></div>
@@ -32,6 +33,7 @@
     <button id="bouwmenu-knop" class="paneel" title="Bouwen"><kbd>B</kbd> Bouwen</button>
     <button id="velden-knop" class="paneel" title="De velden: wat elk veld is, en wat het volgend jaar wordt (V)"><kbd>V</kbd> Velden</button>
     <button id="brief-knop" class="paneel verborgen" title="De brief van de heer: wat hij op Sint-Maarten wil">Brief</button>
+    <button id="slaap-knop" class="paneel verborgen" title="Slapen tot de ochtend (Z): kan 's avonds en 's nachts, bij je eigen huis"><kbd>Z</kbd> Slapen</button>
     <button id="spelregels-knop" class="paneel" title="Spelregels: wat je zelf instelt (O)"><kbd>O</kbd> Spelregels</button>
   </div>
 
@@ -106,7 +108,7 @@
 
   <div id="hulp-gehucht">
     Klik om te lopen, te praten of iets te gebruiken.<br>
-    Kalender: <kbd>P</kbd> pauze/hervat · <kbd>-</kbd> <kbd>=</kbd> trager/sneller<br>
+    Kalender: <kbd>P</kbd> pauze/hervat · <kbd>-</kbd> <kbd>=</kbd> trager/sneller · <kbd>Z</kbd> slapen, bij je huis<br>
     <kbd>B</kbd> bouwen · <kbd>Esc</kbd> of rechtsklik legt een gebouw weer weg<br>
     <kbd>V</kbd> velden: akker, weide of braak<br>
     <kbd>O</kbd> spelregels: wat je zelf instelt
@@ -122,6 +124,7 @@
   <script src="tegels/bouwfasen.js"></script>
   <script src="kaarten/kaarten.js"></script>
   <script src="js/tijd.js"></script>
+  <script src="js/dag.js"></script>
   <script src="js/voorraad.js"></script>
   <script src="js/wereld.js"></script>
   <script src="js/mensen.js"></script>

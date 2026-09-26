@@ -19,7 +19,7 @@
     // en allemaal gewoon. Een optie in de spelregels.
     loten: true,
     // Per eigenschap de treden: hoe je hem ziet ("gewoon" zie je niet), de kans, en wat hij doet.
-    //   maaien:    factor op hoe lang een tegel duurt (T.OOGST_TEGEL_DUUR): kleiner is sneller.
+    //   maaien:    factor op hoe lang een tegel duurt (T.OOGST_UREN_PER_TEGEL): kleiner is sneller.
     //              Het vangnet haalt toch alles binnen (js/akkers.js), dus dit zegt wánneer het
     //              graan er is, niet hoeveel: het telt vooral in de hongerweken vóór de oogst.
     //   opbrengst: factor op het graan per tegel (T.GRAAN_PER_TEGEL), ook bij het vangnet.

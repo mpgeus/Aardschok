@@ -372,17 +372,17 @@ test('op 1 wijnmaand komt zijn brief, met wat hij dan zou vragen', () => {
   assert.ok(dagVan('wijnmaand', 1) < dagVan(marskramer.maand, marskramer.dag));
 });
 
-test('op Sint-Maarten komt hij zelf, en staat de tijd stil tot je bij hem bent geweest', () => {
+test('op Sint-Maarten komt hij zelf, en wacht hij op je terwijl de tijd op 1× doorloopt (sinds de dag, 26 sep)', () => {
   const S = gehucht();
-  S.kalender.snelheid = 3;
+  S.kalender.snelheid = 30;
   S.kalender.dag = SINT_MAARTEN;
   T.tikHeerDag(S, SINT_MAARTEN);
   assert.ok(T.heerWacht(S));
   assert.ok(T.heeftVlag(S, 'heerOpBezoek'));
-  assert.equal(S.kalender.snelheid, 0, 'de tijd staat stil');
-  assert.equal(S.heer.snelheidVoorWachten, 1, 'hij kwam op 1× (van 3× teruggezet), en zo gaat het straks verder');
+  assert.equal(S.kalender.snelheid, 1, 'wie op 30× speelde, ziet hem op 1× komen; de tijd staat niet stil');
+  assert.equal(S.heer.bezoek.wachtTot, SINT_MAARTEN + T.HEER_INSTELLINGEN.wachtDagen, 'zijn wachtdagen tellen');
   T.betaalHeer(S, geefDeel(S, 1));
-  assert.equal(S.kalender.snelheid, 1, 'na het betalen loopt de tijd weer');
+  assert.equal(S.kalender.snelheid, 1, 'na het betalen loopt de tijd door zoals hij liep');
 });
 
 test('wie hem vorig jaar wat schuldig bleef, hoort het van hem (vlag voor zijn gesprek)', () => {
