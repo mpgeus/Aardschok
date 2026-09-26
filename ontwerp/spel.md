@@ -27,6 +27,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | besloten, nog niet gebouwd | 6c |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
+| Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
 
 ## Besloten (Marcel, 23 sep 2026)
@@ -972,6 +973,8 @@ gebeurt, voor zover Claude het vond:
 Bronnen: [Steam-gids](https://steamcommunity.com/sharedfiles/filedetails/?id=596781924),
 [Open LotR2](https://openlotr2.readthedocs.io/en/latest/game/part-3/Part-3.html),
 [GameFAQs](https://gamefaqs.gamespot.com/pc/197801-lords-of-the-realm-ii/faqs/51628).
+Wat er verder in Lords of the Realm 2 zit, met ideeën voor ons spel, staat onder "Lords of the Realm
+2 als voorbeeld".
 
 **Marcel koos (25 sep), uit een voorstel van Claude:**
 - **Elk veld wisselt.** Een veld is akker, weide of braak, en jij kiest per jaar. Meer graan of
@@ -1309,6 +1312,167 @@ heeft geen ander bouwspel.
 staat in `werklijst.md`: eerst een dorp dat draait, dan de heer en de kern, dan verhalen en
 besturen, dan de nacht en het verzet, en dan de groei naar vrijheid.
 
+## Lords of the Realm 2 als voorbeeld (Marcel vroeg het, 25 sep 2026; ideeën van Claude)
+
+**Zo staat het nu** (25 sep): wat er in Lords of the Realm 2 zit, wat wij al hebben, en ideeën voor
+ons spel. Marcel wil ze als ideeën bewaren: niets is besloten of gebouwd. Wat er eerder over de
+velden en het vee uit kwam, staat bij "Weides met koeien en schapen".
+
+**Hoe het zo kwam:** Marcel vroeg "Analyseer eens Lords of the Realm 2, welke spelelementen zijn er
+allemaal?", en na het antwoord: "Graag als ideeën." De handleiding en Wikipedia waren vanuit de
+cloudomgeving geblokkeerd. Wat hier staat, komt uit gidsen, FAQ's en recensies die via de
+zoekmachine te vinden waren (bronnen onderaan).
+
+**Wat erin zit.** Lords of the Realm 2 kwam in 1996 uit, van Impressions. De koning is dood, en vijf
+edelen vechten om de kroon: jij en vier rivalen. Het landbeheer gaat in beurten op een kaart van
+graafschappen, één beurt per seizoen. Veldslagen en belegeringen gaan in real time.
+
+- **Het kader.** Je wint door je rivalen te verslaan en koning te worden. De vier rivalen hebben elk
+  één trek die je snel doorhebt:
+  - de baron bouwt eerst een sterke basis en breidt pas daarna uit;
+  - de gravin wil groeien en neemt te veel hooi op haar vork; ook een bondgenoot valt ze aan;
+  - de bisschop voert grote legers van boeren en boogschutters, heeft daardoor ontevreden
+    onderdanen, bouwt dure kastelen, en liegt ("mijn leger is op verkenning");
+  - de ridder is jong en driest, en valt aan.
+- **Bevolking** is één getal per graafschap. Ze groeit met tevredenheid, gezondheid en eten. Gaat
+  het slecht, dan trekken mensen naar een graafschap waar het beter gaat.
+- **Velden:** 8 tot 16 per graafschap, voor graan, vee of braak. Een dor veld ontgin je eerst, met
+  veel handen en een paar seizoenen.
+- **Graan** zaai je uit je eigen voorraad, tussen winter en lente. Voor de oogst in de herfst is
+  bijna iedereen nodig, zo'n 95%. Met de regel "Advanced Farming" put graan het land uit, en is er
+  één braak per twee graanvelden nodig.
+- **Vee** geeft zuivel, die vanzelf eerst gegeten wordt en niet te bewaren is. Wat daarna nog nodig
+  is, verdeel je met een schuif tussen graan en rundvlees: wie vlees eet, eet zijn kudde op.
+  Schapen zaten in deel 1, in deel 2 niet meer.
+- **Het rantsoen** loopt van niets tot driedubbel. Meer eten maakt tevredener en gezonder; een half
+  of kwart rantsoen maakt ziek.
+- **Belasting** zet je per graafschap als percentage, en alles gaat naar één schatkist. Tot 5% maakt
+  ze mensen zelfs tevredener, daarboven kost ze tevredenheid, en vanaf zo'n 20% worden ook je
+  andere graafschappen onrustig. Naast de schuif staat vooraf wat het graafschap volgende beurt
+  betaalt.
+- **Tevredenheid** hangt af van belasting, gezondheid, rantsoen, dienstplicht en voorvallen. Onder
+  de 25 komen er rellen. Blijft het een paar beurten zo, dan volgt een opstand: het graafschap is
+  weg, en de opstandelingen trekken als rovers rond. Waar ze komen, eten ze alles op en stoken ze de
+  mensen op.
+- **Gezondheid** is een eigen meter, los van tevredenheid.
+- **Het werk** verdeel je met één schuif tussen eten en nijverheid, of per taak. Elk seizoen vraagt
+  iets anders, dus je stelt steeds bij.
+- **Nijverheid:** hout, steen en ijzer, en een smid die er wapens van maakt. Niet elk graafschap
+  heeft een groeve of een mijn. Wat de nijverheid maakt, kun je meteen overal in het rijk
+  gebruiken; eten blijft in zijn graafschap, en gaat alleen met een kar ergens anders heen.
+- **Kastelen** zijn er in vijf maten, van een houten palissade (400 hout, 40 steen, 200 bouwers)
+  tot een koninklijk kasteel (3000 steen, 800 hout, 2500 bouwers). Een kasteel verdedigt, maar
+  brengt ook 50% tot 150% meer belasting op, en er past een garnizoen in van 150 tot 600 man.
+- **Handel:** kooplieden trekken rond, en je handelt alleen als er een in je graafschap is, in
+  wapens, vee, graan, hout, ijzer en steen. Verkopen levert veel minder op dan kopen kost.
+- **Oorlog:**
+  - Soldaten licht je uit je eigen bevolking. Dat kost handen en tevredenheid, en elke soldaat heeft
+    een wapen nodig. Er zijn zeven soorten: boeren, boogschutters, kruisboogschutters, piekeniers,
+    knotsdragers, zwaardvechters en ridders.
+  - Soldij is ongeveer een kroon per vier man per seizoen. Huurlingen zijn duur, maar kosten geen
+    tevredenheid; betaal je ze één keer niet, dan vertrekken ze.
+  - Een leger eet in het graafschap waar het staat, vóór de mensen die er wonen. Het kan velden,
+    werkplaatsen en gehuchten platbranden.
+  - Veldslagen speel je in real time, of je laat de computer de uitslag bepalen. Een kasteel met
+    een garnizoen neem je alleen met een belegering, en die duurt seizoenen: eerst bouw je
+    stormrammen, katapulten en belegeringstorens.
+- **Diplomatie:** complimenten, beledigingen, geld en verbonden. Elke rivaal heeft een mening over
+  je, en die bepaalt of hij aanvalt en of hij een verbond aanneemt. Meer dan twee complimenten, of
+  een gierig geschenk, ergeren hem.
+- **Voorvallen:** de pest (een graafschap is er jaren ziek van), droogte in de zomer, overstroming
+  in winter en lente (een graanveld verliest dan veel van zijn oogst), goed weer, en rovers na een
+  opstand.
+- **Wat men ervan vond:** PC Gamer gaf het 92/100, en het verkocht jaren goed. Recensenten prezen
+  de middeleeuwen en de mix van beurten en real time. Ze waren verdeeld over de AI, de troepen
+  waren lastig te besturen, laat in het spel werd het eindeloos schuiven zetten in elk graafschap,
+  en wie al gewonnen had, moest de laatste graafschappen nog één voor één veroveren. De Siege Pack
+  (1997) bracht twintig kaarten, tien kastelen, losse gevechten en een kaartenmaker.
+
+**Wat we al hebben,** soms verder uitgewerkt:
+
+| Lords of the Realm 2 | Het gehucht |
+|---|---|
+| Graan, vee of braak per veld | Hetzelfde, met vruchtbaarheid, en een weide die het land mest |
+| Zuivel eerst, niet te bewaren | Melk eerst, en wat overblijft, wordt kaas die wél houdt |
+| Rundvlees eten is je kudde opeten | Hooi maaien, en slachten in slachtmaand |
+| Zaaigraan uit de voorraad | Zaaien kost graan |
+| Dorre velden ontginnen | Ontginnen is besloten (6b) |
+| Tevredenheid, wegtrekken | Tevredenheid, een gezin dat wegtrekt |
+| Rondtrekkende koopman | De marskramer, drie keer per jaar |
+| Een leger eet vóór de bevolking | Ingekwartierde soldaten eten mee van je graan |
+| Pest, droogte, overstroming | Brand, ziekte en weer staan gepland (punt 8) |
+| Rantsoen en belasting als schuif | Nog niet: de heer eist, maar jij hebt geen knop naar het dorp |
+| Leger, soldij, belegering | Nog niet; hoe de opstand eruitziet, is nog open |
+
+**Het grote verschil: wij spelen Lords of the Realm 2 van onderaf.** Daar ben jij de heer: jij zet
+de belasting, het rantsoen en de dienstplicht, en jij kwartiert soldaten in. Bij ons gebeurt dat
+met jou, en tegelijk doe jij het met het dorp. De druk loopt door de schout heen, van boven en van
+onder. Daar volgen twee dingen uit:
+- Elke knop uit Lords of the Realm 2 kan bij ons twee keer bestaan: als eis van de heer, en als keur
+  van de schout. Dat is ook stof voor de keuren (punt 9).
+- In Lords of the Realm 2 valt niets te verbergen: wie zelf heer is, hoeft niet arm te lijken. Rijk
+  worden en arm lijken is dus iets wat alleen ons spel heeft.
+
+**Zes ideeën** (Claude, 25 sep; niet besloten):
+
+1. **De heer vraagt mannen voor zijn oorlog: de heervaart** (punt 8, 13 en 15). Dat is de
+   dienstplicht uit Lords of the Realm 2, van onderaf gezien.
+   - De heer vraagt vier man, midden in de oogst. Stuur je ze, dan mis je hun handen, zijn hun
+     gezinnen boos, en komt misschien niet iedereen terug.
+   - Je kunt ze ook vrijkopen. Dat bestond echt: de heervaart kocht je af met heervaartgeld. Maar
+     wie kan betalen, is niet arm, dus de argwaan stijgt.
+   - Wie wel meegaat en terugkomt, heeft leren vechten. Hij is de eerste man van je militie.
+   - Stadsrechten legden vaak vast hoeveel heervaart een stad moest leveren; bij Rotterdam was dat
+     een kogge (een schip) met 25 man. Zo raakt het idee ook het einde.
+2. **Wie wegtrekt, wordt rover** (punt 3 en 13). In Lords of the Realm 2 worden opstandige boeren
+   rovers; bij ons verdwijnt een ontevreden gezin nu gewoon.
+   - Laat het gezin het bos in gaan. Het steelt, het geeft je een reden voor een militie (rovers en
+     wolven), en later vecht het mee in de opstand.
+   - Zo maakt de hebzucht van de heer zelf de rovers die jouw militie een smoes geven.
+3. **Sint-Maarten wordt de dag van de opstand** (punt 16, en "Open"). In Lords of the Realm 2 heb je
+   bij de oogst iedereen nodig.
+   - Bij ons is na de oogst het graan binnen, en op Sint-Maarten komt de heer het halen. Dat is het
+     moment om te weigeren: je hebt de voorraad, en de soldaten komen toch.
+   - Dat beantwoordt de open vraag over de opstand half: je verdedigt je eigen dorp, op
+     Sint-Maarten, achter een palissade die je "tegen de wolven" bouwde. De goedkoopste vesting uit
+     Lords of the Realm 2 wordt bij ons een smoes.
+4. **Wat het dorp eet, is ook bewijs** (punt 6 en 8). In Lords of the Realm 2 maakt een dubbel
+   rantsoen alleen tevredener.
+   - Bij ons kan de inner zien dat het dorp er doorvoed uitziet, en dat past niet bij een arm dorp.
+   - Andersom laat een kermis of een bruiloft vlak voor zijn komst een overschot verdwijnen. Wat op
+     is, kan hij niet tellen. Dat past bij de bruiloft uit punt 8 en het feest uit punt 13.
+5. **Laat elke keuze vooraf zeggen wat ze doet.** De economie van Lords of the Realm 2 is eenvoudig,
+   maar je ziet altijd vooraf wat een knop doet: wat een graafschap gaat betalen, hoeveel koeien er
+   deze beurt opgaan.
+   - Ons slachtvenster doet dat al.
+   - Doe het ook in de brief van de heer ("betaal je dit, dan heb je graan tot sprokkelmaand"), in
+     het veldenvenster, en straks bij de keuren.
+6. **Keuren in plaats van schuiven, en een kort einde.** Lords of the Realm 2 werd laat in het spel
+   een klus.
+   - Dat steunt het voorstel onder "Open": bij honderden mensen bestuur je met keuren, en zoeken de
+     mensen zelf werk.
+   - Onze twee eindes zijn elk één moment, en dat moet zo blijven.
+
+**Voor later:**
+- **Buurdorpen als de rivalen uit Lords of the Realm 2:** andere schouten onder dezelfde heer. De
+  heer vergelijkt ("Zevenhuizen bracht dubbel"), en hun mensen trekken naar jou als jij milder bent.
+- **Ziekte als smoes** (punt 8): in een dorp met de pest komt de inner liever niet, maar wie erover
+  liegt en betrapt wordt, heeft een probleem.
+
+**Bronnen:**
+[GameFAQs, FAQ van TheOneCow](https://gamefaqs.gamespot.com/pc/197801-lords-of-the-realm-ii/faqs/51628),
+[GameFAQs, gids van brian_sulpher](https://gamefaqs.gamespot.com/pc/197801-lords-of-the-realm-ii/faqs/33216),
+[Steam-gids "How to Play"](https://steamcommunity.com/sharedfiles/filedetails/?id=596781924),
+Open LotR2 over [het graafschap](https://openlotr2.readthedocs.io/en/latest/game/part-3/Part-3.html),
+[legers](https://openlotr2.readthedocs.io/en/latest/game/Part-4.html),
+[belegeringen](https://openlotr2.readthedocs.io/en/latest/game/Part-6.html) en
+[diplomatie](https://openlotr2.readthedocs.io/en/latest/game/Part-7.html),
+[TV Tropes](https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/LordsOfTheRealm2),
+[GameSpot](https://www.gamespot.com/reviews/lords-of-the-realm-ii-review/1900-2535763/),
+[Wikipedia](https://en.wikipedia.org/wiki/Lords_of_the_Realm_II),
+[MobyGames over de Siege Pack](https://www.mobygames.com/game/2941/lords-of-the-realm-ii-siege-pack/),
+en over de heervaart [Wikipedia](https://nl.wikipedia.org/wiki/Heervaart).
+
 ## Open
 
 - **Een poppetje en honderden mensen.** Met vijf boeren kun je ieder aanspreken, met vijfhonderd
@@ -1322,7 +1486,8 @@ besturen, dan de nacht en het verzet, en dan de groei naar vrijheid.
 - Goederen, groepen en keuren: een eerste voorstel staat hierboven ("De kern voor het tweede proefje"),
   en wacht op Marcel.
 - De koning: kan hij stadsrechten geven buiten de heer om?
-- Hoe ziet de opstand eruit: het eigen dorp verdedigen, of het kasteel bestormen?
+- Hoe ziet de opstand eruit: het eigen dorp verdedigen, of het kasteel bestormen? (Een idee: op
+  Sint-Maarten je eigen dorp verdedigen; zie "Lords of the Realm 2 als voorbeeld", idee 3.)
 - De naam van het spel.
 - Wat van de code blijft. Waarschijnlijk: de kunst en de huizenbouwer, de dorpelingen die lopen,
   pad en raster, de gesprekken en quests, het wereldgereedschap, en het gevecht in beurten. Eruit:

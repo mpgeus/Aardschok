@@ -28,10 +28,17 @@ drie vragen aan Marcel: het spel begint met een benoemingsbrief van de heer, je 
 staat nu ook in het gehucht. De kamers van de toren bleven als proefkamers voor de toetsen van het
 gevecht. Zie "Af" onderaan, en `opmerkingen.md` voor wat onderweg opviel.
 
+**Tegelijk liep er een korte sessie (25 sep)** die Lords of the Realm 2 ontleedde, op Marcels
+vraag: wat erin zit, wat wij al hebben, zes ideeën en twee voor later. Marcel wil ze als ideeën
+bewaren; ze staan in `spel.md`, "Lords of the Realm 2 als voorbeeld". Er is niets gebouwd.
+
 **Waar het werk staat.** De cloudomgeving geeft elke sessie een eigen branch. Deze sessie werkte op
-`claude/werklijst-vervolg-ib66vy`, en alles staat daar (gepusht), **maar nog niet in `main`**: dat is
-Marcels stap ("push it naar main"). Begin de volgende sessie vanaf die branch, of vanaf `main` als
-hij er intussen in staat; anders begint de sessie op een oude stand. Haal ook eerst de hele
+`claude/werklijst-vervolg-ib66vy`, en alles staat sinds het eind van de sessie ook in `main`, samen
+met de korte sessie ernaast (Marcel: "Push"). Begin de volgende sessie dus gewoon vanaf `main`.
+Werkt een sessie weer op een eigen branch, zet die dan aan het eind in `main` als Marcel dat vraagt,
+anders begint de sessie erna op een oude stand. Kijk vóór het pushen of `main` intussen verder is:
+liep er een sessie tegelijk, voeg die dan eerst samen (`git fetch origin main`, dan
+`git merge origin/main`), want twee sessies schrijven allebei in deze stand. Haal ook eerst de hele
 geschiedenis op (`git fetch --unshallow`): `test/tegelvolgorde.test.cjs` leest een oude commit, en in
 een ondiepe kloon falen er dan twee toetsen die niets met je werk te maken hebben.
 
@@ -90,6 +97,8 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 - De tien karakters en hun zinnen, in `gereedschap/gesprekken.html`. Ze zijn een voorstel van Claude;
   de vrome, de roddelaar, de oudste, de nieuwkomer en de drinker zijn nieuw. De namen van de heer en
   de boeren stel je zelf in (spelregels).
+- De ideeën uit Lords of the Realm 2, in `spel.md`, "Lords of the Realm 2 als voorbeeld": welke wil
+  je, en wanneer? Geen haast; ze horen bij de punten 8 tot 16.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
