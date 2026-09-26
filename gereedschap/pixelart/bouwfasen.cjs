@@ -54,6 +54,10 @@
 // van muur en nok, niet van het huismodel zelf. Zie `funderingRing`, `geraamteVormen`,
 // `muurSchilVormen`, `steigerVormen` en `dakgebinteVormen` verderop.
 //
+// De huizen van de huizenbouwer (huizen.cjs, ronde 4b) staan onderaan BUILDINGEN, maar hun fases
+// komen niet uit dit zeven en snijden: die bouwer tekent met afstandsvelden, en renderHuisFasen in
+// huizen.cjs snijdt ze uit het huis zelf (een schil van de muren, het dak in latten).
+//
 // Waarom niet gewoon `huis()` met een lagere `muurH` aanroepen? Omdat elk gebouw hier zijn EIGEN
 // voet (`g.voet`) en achterste voethoek (`hoek`, hieronder net als in naar-tiled.cjs "meetGebouw")
 // gebruikt om zijn anker vast te leggen. Dat anker mag nooit verschuiven tussen de vijf fases —
@@ -62,7 +66,8 @@
 // zeven, blijft `g.voet` exact gelijk, en dus ook het anker.
 //
 //   node gereedschap/pixelart/bouwfasen.cjs            alle gebouwen hieronder (BUILDINGEN)
-//   node gereedschap/pixelart/bouwfasen.cjs kippenhok   alleen kippenhok (snel proberen)
+//   node gereedschap/pixelart/bouwfasen.cjs kippenhok   alleen kippenhok (snel proberen: alleen de
+//                                                        proefplaat, het spelvel blijft staan)
 //
 // Uitvoer:
 //   gereedschap/pixelart/uit/bouwfasen/<tekening>.png   per gebouw, de vijf fases naast elkaar
@@ -81,6 +86,7 @@ const D = require('./dorp.cjs');
 const P = require('./dorp2.cjs');
 const VW = require('./voorwerpen.cjs');
 const F = require('./figuren.cjs');
+const HZ = require('./huizen.cjs');
 const { RAMP, UIT, PXH, TEGEL } = K;
 
 const PIXELART = __dirname;
@@ -125,6 +131,10 @@ const BUILDINGEN = [
   { id: 'dorpGewoon4', tekening: 'dorpGewoon4', maak: () => D.dorpshuis(0, 0, 107, { maat: [6, 8], muur: 'planken', dak: 'riet', rook: false }) },
   { id: 'dorpGroot1', tekening: 'dorpGroot1', maak: () => D.dorpshuis(0, 0, 108, { maat: [7, 9], muur: 'vlecht', dak: 'riet', rook: false }) },
   { id: 'dorpGroot2', tekening: 'dorpGroot2', maak: () => D.dorpshuis(0, 0, 109, { maat: [7, 9], muur: 'planken', dak: 'pannen', rook: false }) },
+  // ── de huizen van de huizenbouwer (huizen.cjs, ronde 4b): die snijden hun fases uit het huis zelf
+  // (renderHuisFasen), niet uit de vormen van dorp.cjs. Niet voor een huis dat niemand bouwt (fasen:
+  // false, het huis van de schout) ──
+  ...Object.keys(HZ.HUIZEN).filter((n) => HZ.HUIZEN[n].fasen !== false).map((n) => ({ id: HZ.HUIZEN[n].gebouw, tekening: n, huis: n })),
 ];
 
 // ---------------------------------------------------------------- vormen zeven en snijden
@@ -513,6 +523,7 @@ function gebouwLos(g, cb, ch, ankerX, ankerY, hoek) {
 // zie BUILDINGEN), bepaalt de gedeelde cel/anker, en rendert. Zwaar (5×meetGebouw + 5×renderen) —
 // dit is het werk dat elke werker hieronder per taak (één gebouw) uitvoert.
 function renderGebouw(spec) {
+  if (spec.huis) return HZ.renderHuisFasen(spec.huis);
   const g0 = spec.maak();
   const fasen = fasesVan(g0);
   // extraModellen (de bouwstapel) hoort er al bij VOOR het meten: meetGebouw scant de getekende
@@ -641,34 +652,52 @@ function schrijfOverzicht(resultaten) {
 // tegels/gebouwen.tsx zelf), teken `bouwfasen.png` uitgesneden op (x, y, b, h), met (ankerX, ankerY)
 // van die cel op dezelfde schermplek als anders het anker van gebouwen.tsx (T.sprites.teken doet
 // dat al zo voor de vlakken/losse sprites, zie CLAUDE.md "js/sprites.js").
+// Een gebouw is een strook van vijf cellen naast elkaar; de stroken liggen in rijen naast elkaar, tot
+// MAX_BREED (geen gedeeld Tiled-raster nodig, zie hierboven). Eerst stond elk gebouw op een eigen rij,
+// en met de huizen van ronde 4b werd het vel 15.593 pixels hoog: boven 16.384 laadt een videokaart
+// een beeld niet meer als één geheel.
+const MAX_BREED = 8192;
 function schrijfSpelVel(resultaten) {
-  // eenvoudig stapelen: rij per gebouw, cellen van dat gebouw naast elkaar (geen gedeeld
-  // Tiled-raster nodig, zie hierboven) — dus geen ingewikkelde bin-packing nodig.
-  const breedte = Math.max(...resultaten.map((r) => r.cb * r.platen.length));
-  const hoogte = resultaten.reduce((som, r) => som + r.ch, 0);
+  const plek = [];
+  let x = 0;
+  let y = 0;
+  let rijH = 0;
+  let breedte = 0;
+  for (const r of resultaten) {
+    const b = r.cb * r.platen.length;
+    if (x > 0 && x + b > MAX_BREED) {
+      y += rijH;
+      x = 0;
+      rijH = 0;
+    }
+    plek.push([x, y]);
+    x += b;
+    rijH = Math.max(rijH, r.ch);
+    breedte = Math.max(breedte, x);
+  }
+  const hoogte = y + rijH;
   const vel = new K.Plaat(breedte, hoogte);
   const fasenJson = {};
-  let y = 0;
-  for (const r of resultaten) {
+  resultaten.forEach((r, k) => {
+    const [x0, y0] = plek[k];
     const lijst = [];
     r.platen.forEach((p, i) => {
-      vel.plak(p, i * r.cb, y);
-      lijst.push({ x: i * r.cb, y, b: r.cb, h: r.ch, anker: [r.ankerX, r.ankerY + 16], naam: r.fasenNamen[i] });
+      vel.plak(p, x0 + i * r.cb, y0);
+      lijst.push({ x: x0 + i * r.cb, y: y0, b: r.cb, h: r.ch, anker: [r.ankerX, r.ankerY + 16], naam: r.fasenNamen[i] });
     });
     fasenJson[r.tekening] = { gebouw: r.id, beslaat: r.beslaat, fasen: lijst };
-    y += r.ch;
-  }
+  });
   fs.mkdirSync(TEGELS, { recursive: true });
   schrijfPng(path.join(TEGELS, 'bouwfasen.png'), vel, null);
   const data = {
-    _lees_dit: 'Vijf bouwfases per gebouw uit tegels/gebouwen.tsx, gemaakt door '
+    _lees_dit: 'Vijf bouwfases per gebouw uit tegels/gebouwen.tsx en tegels/huizen.tsx, gemaakt door '
       + 'gereedschap/pixelart/bouwfasen.cjs — niet met de hand bijwerken. Sleutel is de '
-      + 'tekeningnaam (T.GEBOUWEN.<soort>.tekening, na "gebouwen/"). Per fase (0..4, oplopend '
+      + 'tekeningnaam (T.GEBOUWEN.<soort>.tekening, na "gebouwen/" of "huizen/"). Per fase (0..4, oplopend '
       + 'in afbouw): x/y/b/h snijdt de cel uit bouwfasen.png, anker is het punt in die cel dat op '
       + 'T.naarScherm(x, y) van de aangeklikte tegel komt — dezelfde achterste-voethoek-afspraak '
       + 'als tegels.json ("anker" bij de tsx-vellen), en beslaat is dezelfde tegelmaat als in '
-      + 'gebouwen.tsx voor dezelfde tekening. Fase 5 (klaar) staat niet hier: dat is gewoon de '
-      + 'bestaande tegel in tegels/gebouwen.png.',
+      + 'gebouwen.tsx of huizen.tsx voor dezelfde tekening. Fase 5 (klaar) staat niet hier: dat is gewoon de '
+      + 'bestaande tegel in tegels/gebouwen.png of tegels/huizen.png.',
     breedte: vel.b, hoogte: vel.h, bestand: 'bouwfasen.png',
     fasen: fasenJson,
   };
@@ -697,15 +726,21 @@ async function main() {
     .map((b, i) => i)
     .filter((i) => !GEVRAAGD.length || GEVRAAGD.includes(BUILDINGEN[i].id) || GEVRAAGD.includes(BUILDINGEN[i].tekening));
   if (!indices.length) { console.error('geen gebouw gevonden voor:', GEVRAAGD.join(' ')); process.exit(1); }
-  const draden = Math.max(1, Math.min(6, os.cpus().length - 2, indices.length));
+  const draden = Math.max(1, Math.min(6, os.cpus().length - 1, indices.length));
   console.log(`bouwfasen: ${indices.length} gebouw(en), ${draden} draad/draden`);
   const t0 = Date.now();
   const resultaten = await renderAlleGebouwen(indices, draden);
   for (const r of resultaten) schrijfProefPlaat(r);
   schrijfOverzicht(resultaten);
-  const { breedte, hoogte } = schrijfSpelVel(resultaten);
   console.log(`klaar in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   console.log(`  proefplaten: gereedschap/pixelart/uit/bouwfasen/ (${resultaten.length} + overzicht.png, niet in git)`);
+  // Het spelvel alleen met alle gebouwen: het vel wordt in zijn geheel opnieuw geschreven, en met één
+  // gebouw erop zouden de fases van alle andere uit het spel verdwijnen.
+  if (GEVRAAGD.length) {
+    console.log('  spelvel niet geschreven: dat gebeurt alleen als alle gebouwen gerenderd zijn (zonder namen)');
+    return;
+  }
+  const { breedte, hoogte } = schrijfSpelVel(resultaten);
   console.log(`  spelvel: tegels/bouwfasen.png (${breedte}×${hoogte}) + tegels/bouwfasen.json + .js`);
 }
 
