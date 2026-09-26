@@ -53,15 +53,28 @@ vraag 20 en 21 over de lengte van een dag en over bouwtijd en straffen.
 hij het al besprak (besproken, deels besproken, nog niet besproken), en bovenaan staat wat nog open is
 in vier etappes: de dag en het ritme; poppetjes en zaken; zelf en beter bouwen; paarden, wapens en de
 volgorde. Werk die markeringen bij na elke opmerking, en zet zijn keuzes in `spel.md`.
+**In een tweede opmerking (26 sep)** beantwoordde Marcel vraag 15 tot en met 21: de dag komt als
+eerste, met een maand van dertig dagen en een dag van vijf minuten (zijn voorstel; Claude is het
+ermee eens, want dan hoeft niets omgerekend te worden en past lopen in de dag); de bouwtijd blijft in
+dagen; hij wijst bouwgrond aan; groei mag, want de heer verdient eraan; huizen groeien mee en
+werkplaatsen worden groter, met personeel; ridders zijn van de koning; en bij de wapens horen bogen,
+zwaarden en schilden. Nog open: vraag 22 (de standen van de versneller), en wat hij nog niet besprak:
+"Wie wanneer waar is", "Mensen worden poppetjes", de rest van "Zaken" en de volgorde.
 
 **Loopt nu:** niets.
 
-**Volgende: Verstoppen, deel 1b: ook onder de 40% een risico** (Marcel koos op 25 sep; `spel.md`,
-"Marcel koos (25 sep, als opmerking op de overzichtspagina)"). De soldaten zoeken op Sint-Maarten
-altijd op 2 of 3 plekken, ook zonder argwaan; wie vlak langs een plek loopt, kan iets vinden; en je
-bepaalt de route zelf, maar soms wil de heer kiezen.
+**Volgende: De dag** (punt 3b, stap 1; Marcel, 26 sep: "De dag nu maar doen als eerste dan"). Een
+maand blijft dertig dagen, een dag duurt vijf minuten bij 1×, met een tijdsversneller. Klaar als staat
+in `spel.md`, "Het plan voor de dag": het uur in de balk, licht per uur en seizoen, de versneller
+(vraag 22), lopen dat meegaat met de snelheid, maaien met een tempo per uur, de boeren met een
+dagritme, en de inner en de heer die de tijd niet meer stilzetten. Wacht op Marcels "ga je gang", en
+op zijn blik op de dagindeling ("Wie wanneer waar is"), die het ritme van de boeren bepaalt.
 
 **Daarna:**
+- **Verstoppen, deel 1b: ook onder de 40% een risico** (Marcel koos op 25 sep; `spel.md`, "Marcel
+  koos (25 sep, als opmerking op de overzichtspagina)"). De soldaten zoeken op Sint-Maarten altijd op
+  2 of 3 plekken, ook zonder argwaan; wie vlak langs een plek loopt, kan iets vinden; en je bepaalt
+  de route zelf, maar soms wil de heer kiezen.
 - **Verstoppen, deel 2: het bos, met de kudde** (Marcel koos op 25 sep dat het bos samen met de
   kudde komt). Een plek in het bos voor graan en goud (ver lopen, muizen en vocht), en een deel van
   de kudde het bos in voor de inner komt. De inner telt de kudde en de heer vraagt per dier, met kaas
@@ -96,17 +109,16 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 
 *Een dorp dat leeft en groeit* (26 sep; `spel.md`, "Een dorp dat leeft en groeit"):
 14. ~~De dag: A, B of C?~~ Marcel koos A (26 sep): de dag wordt een echte dag.
-15. Wanneer: nu, vóór verstoppen deel 1b (de dag raakt alle getallen, en dat worden er elke week
-    meer), of na punt 6?
-16. Het dorp bouwt zelf: wijs jij alleen bouwgrond aan, of zet je ook nog zelf huizen neer?
-17. Groeien tegen arm lijken: mag het dorp vanzelf rijker worden (en duurder bij de heer), met een keur
-    om het tegen te houden?
-18. Wie zijn de ridders: de mannen van de heer, roofridders, of later je eigen ruiters?
-19. Wat hoort bij de wapenmaker: een boogmaker, een zadelmaker, een harnasmaker, of iets anders?
-20. Hoe lang duurt een dag, en hoeveel dagen heeft een maand? Voorstel: een minuut bij 1x, en vijf
-    dagen. Een jaar duurt dan een uur bij 1x en zes minuten bij 10x.
-21. Blijven de bouwtijd en de straffen echte dagen (een hut in twee dagen), of gaan ze mee per maand
-    (een hut in acht uur)? Voorstel: echte dagen.
+15. ~~Wanneer?~~ De dag komt als eerste (26 sep).
+16. ~~Bouwgrond?~~ Marcel wijst bouwgrond aan; later misschien een aanvraag om te bouwen.
+17. ~~Vanzelf rijker?~~ Ja: groei hoort bij een dorp, en de heer verdient eraan. Een keur ertegen kan
+    altijd; later beslist een raad mee.
+18. ~~Ridders?~~ Die van de koning; later misschien je eigen ruiters.
+19. ~~De wapenmaker?~~ Bogen, zwaarden en schilden.
+20. ~~Hoe lang een dag?~~ Een maand dertig dagen, een dag vijf minuten (Marcels voorstel).
+21. ~~Bouwtijd en straffen?~~ Blijven in dagen; de tijden stellen we later bij.
+22. Welke standen krijgt de tijdsversneller? Voorstel: 1×, 3×, 10× en 30×, en slapen tot de ochtend
+    als de schout thuis is. Een jaar duurt dan 30 uur, 10 uur, 3 uur of 1 uur.
 
 *Spelen, en zeggen hoe het voelt:*
 - Het gehucht na de namen (26 sep): Marcel zou het na 7e nog eens openen. Het hernoemen veranderde
@@ -149,6 +161,13 @@ nog nodig is".
    stilvalt; gereedschap sneller werk geeft en slijt; en zout vis en vlees bewaart. Besloten op
    24 sep, zie `spel.md`, "Handel". Stenen komen niet van hem maar bij punt 14, met een voerman
    met een kar.
+3b. **Een dorp dat leeft** (Marcel, 26 sep; `spel.md`, "Een dorp dat leeft en groeit"). Klaar als
+   de dag een echte dag is, de mensen poppetjes met een dagritme zijn, ze zelf naar de herberg en de
+   kleine zaken gaan, het dorp zelf bouwt op bouwgrond die jij aanwijst, huizen en werkplaatsen
+   meegroeien voor materiaal en goud (steen per trede), en er een paardenstal is. Hier, omdat de dag
+   onder alles ligt wat erna komt. In zes stappen: de dag (Volgende); mensen worden poppetjes; de
+   herberg en de kleine zaken; ronde 4b van de huizenbouwer; het dorp bouwt zelf, en beter; de stal,
+   de hoefsmid en de wapenmaker, samen met de militie (punt 13).
 
 *B. De heer, en de kern (dit is het tweede proefje)*
 
@@ -251,7 +270,8 @@ nog nodig is".
 *D. De nacht en het verzet*
 
 11. **De nacht.** Klaar als er dag en nacht is (ook voor de sfeer), met een avondklok, wachters en
-    lantaarns, en verstoppen en smokkelen 's nachts veiliger is.
+    lantaarns, en verstoppen en smokkelen 's nachts veiliger is. De klok en het licht komen al met de
+    dag (punt 3b, 26 sep); hier blijven de avondklok, de wachters, de lantaarns en het smokkelen.
 12. **Eigen buidel en dorpskas.** Klaar als jij zelf iets overhoudt, en wie te veel in eigen zak
     steekt, het dorp verliest.
 13. **Een militie in het geheim.** Klaar als je mensen kunt laten oefenen (een feest als de inner

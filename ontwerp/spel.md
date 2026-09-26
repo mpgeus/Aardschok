@@ -26,7 +26,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep) | 6a |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | besloten, nog niet gebouwd | 6c |
-| Een dorp dat leeft en groeit | voorstel (26 sep); Marcel koos A (een echte dag), en dat beter bouwen materiaal en goud kost | 11, 13, 14 |
+| Een dorp dat leeft en groeit | voorstel (26 sep), grotendeels gekozen; eerst de dag: 30 dagen per maand, 5 minuten per dag | 3b, 11, 13, 14 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
@@ -1274,9 +1274,11 @@ Nog open, voor als punt 6c gebouwd wordt (vragen van Claude):
 
 ## Een dorp dat leeft en groeit (Marcel, 26 sep 2026)
 
-**Zo staat het nu** (26 sep): een voorstel van Claude, waarvan Marcel het begin koos (hieronder).
-Er is nog niets gebouwd. Het raakt punt 11 (de nacht), 13 (de militie) en 14 (de treden), en de
-huizenbouwer (ronde 4b). Wat nog open is, staat onderaan, en met een nummer in de werklijst.
+**Zo staat het nu** (26 sep): een voorstel van Claude, waarvan Marcel het meeste koos, in twee
+opmerkingen op de pagina (hieronder). Er is nog niets gebouwd; als eerste komt de dag: een maand van
+dertig dagen en een dag van vijf minuten, met een tijdsversneller. Het raakt punt 11 (de nacht), 13
+(de militie) en 14 (de treden), en de huizenbouwer (ronde 4b). Wat nog open is, staat onderaan, en
+met een nummer in de werklijst.
 Hetzelfde voorstel staat op een pagina om opmerkingen bij te zetten: "Een dorp dat leeft",
 https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE (Marcel vroeg erom, 26 sep).
 
@@ -1306,7 +1308,8 @@ https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE (Marcel vroeg erom, 26 sep).
 - **De paardenstal komt erbij.** De rest staat grotendeels al in `T.GEBOUWEN`.
 - **Ronde 4b van de huizenbouwer moet eerst,** want beter bouwen heeft die huizen nodig.
 
-**Wat de omrekening is** (Claude, 26 sep, als antwoord op de pagina). Veel getallen staan nu per
+**Wat de omrekening was** (Claude, 26 sep, als antwoord op de pagina; niet meer nodig sinds Marcels
+tweede opmerking hieronder, want een maand blijft dertig dagen). Veel getallen staan nu per
 dag: een mens eet 0,05 graan per dag, een houthakker maakt 2 hout per dag, elke 20 dagen komt er een
 gezin bij, en gereedschap slijt in 180 dagen. Met A heeft een maand 5 dagen in plaats van 30, dus
 één dag telt voor zes. Om het spel even zwaar te houden, gaat alles wat per dag gaat keer zes, en
@@ -1321,6 +1324,99 @@ nu), en een maand levert precies op wat hij nu oplevert.
   en straffen blijven echte dagen, en al het andere gaat per maand (vraag 21).
 - **De data schuiven:** de inner komt op 3 oogstmaand in plaats van 15, en Sint-Maarten valt op 2
   slachtmaand in plaats van 11.
+
+**Marcel koos daarna (26 sep, tweede opmerking op de pagina):**
+
+> Het mooiste zou zijn als huizen ook meegroeien. Werkplaatsen die groter worden. Eventueel personeel
+> in dienst etc.
+>
+> Goed idee, paarden zijn zo op meerdere fronten inzetbaar.
+>
+> Dit mag er later bij
+>
+> De dag nu maar doen als eerste dan
+>
+> Ik wijs bouwgrond, misschien kunnen we later iets doen dat iemand een aanvraag komt doen om iets te
+> bouwen
+>
+> Groei hoort bij een dorp, dit is ook gunstig voor de heer. Die krijgt meer inkomsten
+>
+> Ridders van de koning, later misschien ook ruiters, dat is wellicht wat beter past bij het idee
+>
+> Zeker, bogen etc. Ook zwaarden en [schilden] bij een smederij denk ik?
+>
+> Het spel krijgt een tijdsversneller dus we hebben geen haast, misschien een maand gewoon op 30
+> dagen houden en een dag op 5 min? Hier hoor ik graag jou mening over.
+>
+> De keur kan altijd, regels kunnen worden aangepast naar hoe de schout het ziet. Eventueel later met
+> een raad als de stad groot genoeg is.
+>
+> Bouwtijd blijven dagen, we passen later de tijden aan op basis van speelbaar heid. Nu zeggen we
+> bijv x duurt 3 dagen. Later kan dit worden aangepast
+
+- **De dag komt als eerste** (vraag 15), met **een maand van dertig dagen en een dag van vijf
+  minuten** (vraag 20; Marcels voorstel, en Claude is het ermee eens, zie hieronder) en een
+  tijdsversneller. **De bouwtijd blijft in dagen** (vraag 21); de tijden stellen we later bij.
+- **Huizen groeien ook mee,** niet alleen in materiaal. **Werkplaatsen worden groter,** met personeel
+  in dienst: een knecht, een gezel. In een stad vormen de meesters samen een gilde, een groep met
+  eigen belangen voor punt 9 (idee van Claude).
+- **Jij wijst bouwgrond aan** (vraag 16). Later komt er misschien iemand een aanvraag doen om iets te
+  bouwen: een voorval voor punt 8.
+- **Groei hoort bij een dorp,** en de heer verdient eraan (vraag 17). Een keur ertegen kan altijd:
+  de schout past de regels aan zoals hij het ziet, en later beslist een raad mee als de stad groot
+  genoeg is (de schepenen van punt 14).
+- **Paarden: goed,** ze zijn op meerdere fronten inzetbaar. Wat de heer ervan vindt (de keurmede en
+  de heervaart) komt later; zo leest Claude "Dit mag er later bij", en dat is aan Marcel gevraagd.
+- **Ridders zijn van de koning** (vraag 18); later komen er misschien je eigen ruiters.
+- **Bij de wapens horen bogen, zwaarden en schilden** (vraag 19; er stond "schulden", Claude leest
+  "schilden"). Een zwaard maakt de smid. Een schild is vooral hout en leer met wat ijzeren beslag:
+  werk voor de timmerman en de leerlooier, met ijzer van de smid.
+
+**Een dag van vijf minuten** (Claude, over vraag 20, als antwoord op de pagina). Marcels voorstel is
+beter dan het eerste van Claude (een dag van een minuut en vijf dagen per maand), om twee redenen:
+- **Er hoeft niets omgerekend te worden.** Met dertig dagen per maand blijven alle getallen per dag en
+  alle data zoals ze zijn; Sint-Maarten blijft op 11 slachtmaand.
+- **Lopen past in de dag.** Bij een dag van vijf minuten duurt een uur 12,5 seconde. Naar de herberg
+  (20 tegels) kost dan ruim een uur, en het gehucht oversteken (50 tegels) bijna drie. Bij een dag van
+  een minuut kost dezelfde tocht vijf uur, en is een werkdag vooral lopen. Dat zag Claude eerst over
+  het hoofd.
+
+Wat een dag van vijf minuten betekent, bij 1× en bij 10×:
+
+| Wat | In het spel | Bij 1× | Bij 10× |
+|---|---|---|---|
+| Een uur | 1 uur | 12,5 seconde | 1,25 seconde |
+| Naar de herberg (20 tegels) | ruim een uur | 13 seconden | 1,3 seconde |
+| Het gehucht over (50 tegels) | bijna 3 uur | 33 seconden | 3,3 seconde |
+| Een werkdag | 10 uur | ruim 2 minuten | 12,5 seconde |
+| Een zomernacht | 7 uur | anderhalve minuut | 9 seconden |
+| Een winternacht | 10 uur | ruim 2 minuten | 12,5 seconde |
+| Een jaar | 360 dagen | 30 uur | 3 uur |
+
+Wat het vraagt:
+- **Een versneller die ver gaat:** een jaar duurt 30 uur bij 1×, 3 uur bij 10× en 1 uur bij 30×. Het
+  dagritme zie je bij 1× tot 3×; daarboven is het doorspoelen (vraag 22).
+- **Wat nu op de klok van het scherm loopt, moet mee met de dag.** Een boer maait een tegel in 1,6
+  seconde (`T.OOGST_TEGEL_DUUR`, in `S.tijd`). Nu is dat anderhalve tegel per dag; bij een dag van
+  vijf minuten bijna tweehonderd, en dan is de oogst in een middag binnen. Maaien krijgt dus een tempo
+  per uur.
+- **Lopen gaat mee met de snelheid:** bij 10× loopt iedereen tien keer zo snel, ook de schout. Een
+  tocht kost in het spel dan altijd even lang, op elke snelheid.
+- **De nacht is lang genoeg** om iets te verstoppen (anderhalve tot ruim twee minuten bij 1×); wie wil,
+  slaapt door tot de ochtend.
+- `T.DAG_LENGTE` staat al in de werkbank ("seconden per dag, op 1×"). Zet je hem op 300, dan voel je
+  de dag al, maar dan gaat het maaien nog op de klok van het scherm.
+
+**Het plan voor de dag** (voorstel van Claude, 26 sep; in de werklijst als "Volgende"). Klaar als:
+- een dag vijf minuten duurt bij 1× en een maand dertig dagen, met het uur in de balk;
+- het licht meegaat met het uur en het seizoen: ochtend, dag, avond en nacht;
+- de versneller de standen heeft die Marcel kiest (vraag 22), met slapen tot de ochtend;
+- alles wat loopt meegaat met de snelheid, en het maaien een tempo per uur heeft;
+- de boeren een dagritme hebben: 's nachts binnen, 's ochtends naar hun land, een schaft, 's avonds
+  naar huis, en in de oogst tot het donker. Dat volgt de dagindeling uit "Wie wanneer waar is", die
+  Marcel nog niet besprak;
+- de inner en de heer de tijd niet meer stilzetten; als ze komen, gaat de tijd naar 1×;
+- `npm test` groen is, en het in de browser is nagekeken.
 
 **Hoe het zo kwam:**
 
@@ -1459,6 +1555,8 @@ hieronder).
   gemeenschappelijke grond mocht zetten, meestal aan de rand van de heide. Die nieuwkomers zijn de
   keuters, de tweede groep uit "De kern voor het tweede proefje", en de keur "Vreemden" hoort erbij.
   Als de groepen komen (punt 9), mopperen de boeren als jij hun meent tot bouwgrond maakt.
+- Marcel (26 sep): "Ik wijs bouwgrond, misschien kunnen we later iets doen dat iemand een aanvraag
+  komt doen om iets te bouwen."
 
 ### Beter bouwen: hetzelfde huis in duurder materiaal
 
@@ -1476,6 +1574,9 @@ hieronder).
   het te makkelijk"), en dus ook het werk van wie het materiaal maakt: de timmerman, de keienraper,
   de steenbakkerij. Wat het oplevert: tevredenere bewoners, en meer plaats per huis.
 - Werkplaatsen groeien ook: de smidse, de herberg, en de kapel die een kerk met een toren wordt.
+- Marcel (26 sep): huizen groeien ook mee, niet alleen in materiaal, en werkplaatsen worden groter,
+  met personeel in dienst. En groei mag: "Groei hoort bij een dorp, dit is ook gunstig voor de heer."
+  Een keur ertegen kan altijd, en later beslist een raad mee.
 
 **Groeien werkt tegen arm lijken** (inzicht van Claude). De inner kijkt naar "pannen in plaats van
 riet" ("De kern voor het tweede proefje"), en de heer vraagt per huis. Een dorp dat vanzelf rijker
@@ -1503,7 +1604,9 @@ wordt, wordt dus vanzelf duurder. De schout moet kiezen:
   zijn (die komen als je opstaat), roofridders (een reden voor een militie), of later je eigen
   ruiters, als de stad vrij is. Dat is een vraag aan Marcel.
 - Marcel (26 sep): de paardenstal "moeten we dus nog maken". Hij komt in `T.GEBOUWEN`, met een
-  tekening; de andere gebouwen staan er grotendeels al.
+  tekening; de andere gebouwen staan er grotendeels al. Paarden zijn "op meerdere fronten
+  inzetbaar"; wat de heer ervan vindt, komt later. Ridders zijn van de koning; later misschien je
+  eigen ruiters.
 
 ### De wapenmaker, en wat erbij hoort
 
@@ -1512,6 +1615,8 @@ wordt, wordt dus vanzelf duurder. De schout moet kiezen:
   stal, en later een harnasmaker.
 - Het dagritme maakt hem spannend: overdag maakt de smid hoefijzers en ploegijzers, 's nachts wapens.
   En een smidse die om middernacht gloeit, ziet iedereen die wakker is.
+- Marcel (26 sep): bogen, zwaarden en schilden. Een schild is vooral hout en leer met wat ijzeren
+  beslag, dus de timmerman en de leerlooier doen mee, met ijzer van de smid.
 
 ### Van dorp tot stad
 
@@ -1521,8 +1626,9 @@ wordt, en de markt op de brink.
 
 ### In welke volgorde (voorstel)
 
-1. **De dag** (A, gekozen op 26 sep), met de omrekening en licht: ochtend, avond en nacht in beeld,
-   en de boeren die 's avonds naar huis gaan en 's nachts binnen zijn.
+1. **De dag** (A, met een maand van dertig dagen en een dag van vijf minuten; Marcel koos op 26 sep
+   dat hij als eerste komt), met licht: ochtend, avond en nacht in beeld, en de boeren die 's avonds
+   naar huis gaan en 's nachts binnen zijn.
 2. **Mensen worden poppetjes:** de handen lopen naar hun werk en terug, en overdag is er menigte.
 3. **De herberg en de kleine zaken,** en een huis dat groeit door wat zijn bewoners bereiken.
 4. **Ronde 4b van de huizenbouwer** (Marcel, 26 sep: "moeten we dus uitvoeren"): de huizen in het
@@ -1530,20 +1636,20 @@ wordt, en de markt op de brink.
 5. **Het dorp bouwt zelf,** en beter: bouwgrond, erven, en materiaal en goud uit de voorraad.
 6. **De stal, de hoefsmid en de wapenmaker,** samen met de militie (punt 13).
 
-### Vragen aan Marcel (in de werklijst 14 tot en met 21)
+### Vragen aan Marcel (in de werklijst 14 tot en met 22)
 
-14. De dag: A, B of C? **Marcel koos A (26 sep).** Hoe lang een dag en een maand duren, is nu vraag 20.
-15. Wanneer: nu, vóór verstoppen deel 1b (de dag raakt alle getallen, en dat worden er elke week
-    meer), of na punt 6?
-16. Het dorp bouwt zelf: wijs jij alleen bouwgrond aan, of zet je ook nog zelf huizen neer?
-17. Groeien tegen arm lijken: mag het dorp vanzelf rijker worden (en duurder bij de heer), met een keur
-    om het tegen te houden?
-18. Wie zijn de ridders: de mannen van de heer, roofridders, of later je eigen ruiters?
-19. Wat hoort bij de wapenmaker: een boogmaker, een zadelmaker, een harnasmaker, of iets anders?
-20. Hoe lang duurt een dag, en hoeveel dagen heeft een maand? Voorstel: een minuut bij 1x, en vijf
-    dagen. Een jaar duurt dan een uur bij 1x en zes minuten bij 10x.
-21. Blijven de bouwtijd en de straffen echte dagen (een hut in twee dagen), of gaan ze mee per maand
-    (een hut in acht uur)? Voorstel: echte dagen.
+14. De dag: A, B of C? **Marcel koos A.**
+15. Wanneer? **De dag komt als eerste.**
+16. Wijs jij alleen bouwgrond aan? **Ja; later misschien een aanvraag om te bouwen.**
+17. Mag het dorp vanzelf rijker worden? **Ja, groei hoort bij een dorp, en de heer verdient eraan. Een
+    keur ertegen kan altijd; later beslist een raad mee.**
+18. Wie zijn de ridders? **Die van de koning; later misschien je eigen ruiters.**
+19. Wat hoort bij de wapenmaker? **Bogen, zwaarden en schilden.**
+20. Hoe lang duurt een dag, en een maand? **Een maand dertig dagen, een dag vijf minuten (Marcels
+    voorstel; Claude is het ermee eens).**
+21. Blijven bouwtijd en straffen in dagen? **Ja; de tijden stellen we later bij.**
+22. Welke standen krijgt de tijdsversneller? Voorstel: 1×, 3×, 10× en 30×, en slapen tot de ochtend
+    als de schout thuis is. Een jaar duurt dan 30 uur, 10 uur, 3 uur of 1 uur.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 
