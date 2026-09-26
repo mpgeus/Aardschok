@@ -19,9 +19,8 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met 
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
 `npm test`: 491/491.
 
-**Waar het werk staat:** de zesde sessie staat in `main`. De zevende sessie (de doorkijk) staat op haar
-eigen branch, `claude/werklijst-doorzetten-lipt3f`, en gaat naar `main` zodra Marcel "push it" zegt.
-Staat ze er nog niet in, begin dan vanaf die branch; hoe een eigen branch en `main` samengaan, staat in
+**Waar het werk staat:** alles staat in `main`, ook de zevende sessie van 26 sep (Marcel: "push it").
+Begin de volgende sessie dus gewoon vanaf `main`; hoe een eigen branch en `main` samengaan, staat in
 `CLAUDE.md`, onder Git.
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
