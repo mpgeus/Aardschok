@@ -16,14 +16,15 @@ require('../js/kaart.js');
 const T = globalThis.Spel;
 
 test('een "gebouw" ding in de betekenis landt in w.gebouwenOpKaart, met zijn maat', () => {
-  const betekenis = { dingen: [{ gebouw: 'boerderij', x: 2, y: 2, b: 3, h: 4 }] };
+  const betekenis = { dingen: [{ gebouw: 'boerderij', x: 2, y: 2, b: 3, h: 4, tekening: 'huizen/boerderij1' }] };
   const w = T.laadKaart(T.KAARTEN.proef, betekenis);
-  assert.deepEqual(w.gebouwenOpKaart, [{ soort: 'boerderij', x: 2, y: 2, b: 3, h: 4, huis: null, bewoners: null }]);
+  // "tekening": welke tekening er op de kaart staat; die weet waar de deur is (T.deurVan)
+  assert.deepEqual(w.gebouwenOpKaart, [{ soort: 'boerderij', x: 2, y: 2, b: 3, h: 4, huis: null, bewoners: null, tekening: 'huizen/boerderij1' }]);
 });
 
 test('zonder "b"/"h" op een gebouw-ding is de voet 1x1', () => {
   const w = T.laadKaart(T.KAARTEN.proef, { dingen: [{ gebouw: 'put', x: 2, y: 2 }] });
-  assert.deepEqual(w.gebouwenOpKaart[0], { soort: 'put', x: 2, y: 2, b: 1, h: 1, huis: null, bewoners: null });
+  assert.deepEqual(w.gebouwenOpKaart[0], { soort: 'put', x: 2, y: 2, b: 1, h: 1, huis: null, bewoners: null, tekening: null });
 });
 
 // Wie er woont, zegt "huis", zoals bij een akker: de boer met dezelfde id, of de schout. Dat telt

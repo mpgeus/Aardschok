@@ -330,11 +330,14 @@
         // zegt wie er woont, zoals bij een akker: de boer met dezelfde id, of "schout" (zijn
         // kelder, js/verstoppen.js). "bewoners" zegt bij een gewoon huis wie er bij het begin woont
         // ("jongGezin", "oudStel"; js/bewoners.js, T.zetBeginBewoners); zonder staat het leeg.
+        // "tekening" is de tekening die er op de kaart staat ("huizen/hut1"): die weet waar zijn
+        // deur is (T.deurVan, js/bewoners.js).
         gebouwenOpKaart.push({
           soort: String(p.gebouw), x: gx, y: gy,
           b: Number(p.b) || 1, h: Number(p.h) || 1,
           huis: p.huis !== undefined ? String(p.huis) : null,
           bewoners: p.bewoners !== undefined ? String(p.bewoners) : null,
+          tekening: p.tekening !== undefined ? String(p.tekening) : null,
         });
         return;
       }

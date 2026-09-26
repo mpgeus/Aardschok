@@ -201,15 +201,26 @@
     return null;
   }
 
-  // De deur van een gebouw: de tegel midden voor zijn voorkant, aan de kant van het zuiden, waar ook
-  // de boeren en de schout op de kaart voor hun huis staan. Kan dat niet, dan de begaanbare tegel
-  // rond zijn voet die daar het dichtst bij ligt.
+  // De deur van een gebouw: de tegel voor zijn deur. Een huis van de huizenbouwer weet zelf waar die
+  // is (`deur` bij zijn tekening, tegels/huizen.tsx: links- of rechtsvoor, of achter het huis, naar
+  // het plein); een oudere tekening niet, en dan is het de tegel midden voor zijn voorkant, aan de
+  // kant van het zuiden. Kan dat niet, dan de begaanbare tegel rond zijn voet die daar het dichtst
+  // bij ligt.
   T.deurVan = function (w, g) {
     const v = voetVan(g);
-    const voor = { x: v.x + Math.floor(v.b / 2), y: v.y + v.h };
+    const eigen = deurVanTekening(g);
+    const voor = eigen ? { x: v.x + eigen[0], y: v.y + eigen[1] } : { x: v.x + Math.floor(v.b / 2), y: v.y + v.h };
     if (!w || T.isBegaanbaar(w, voor.x, voor.y)) return voor;
     return tegelRond(w, v, voor) || voor;
   };
+
+  // [dx, dy] vanaf de achterste tegel van de voet, of null: wat de tekening van dit gebouw zegt
+  // (een gebouw dat je bouwt en een gebouw op de kaart kennen allebei hun `tekening`).
+  function deurVanTekening(g) {
+    if (!g.tekening || !T.opzoekTegelNaam) return null;
+    const opz = T.opzoekTegelNaam(g.tekening);
+    return opz && opz.eig && opz.eig.deur ? opz.eig.deur : null;
+  }
 
   // Het plein, als één plek: waar de marskramer zijn waar uitstalt en de heer op Sint-Maarten staat
   // (kaarten/<naam>.betekenis.json, "marskramer"; in het gehucht op het zand voor de deur van de

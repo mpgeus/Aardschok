@@ -26,6 +26,7 @@ const D = require('./dorp.cjs');
 const P = require('./dorp2.cjs');
 const Bm = require('./bomen.cjs');
 const Tn = require('./tuin-sdf.cjs');
+const HZ = require('./huizen.cjs');
 
 const TEGELS = path.join(__dirname, '..', '..', 'tegels');
 fs.mkdirSync(TEGELS, { recursive: true });
@@ -79,6 +80,7 @@ const VELCONFIG = {
   toren: { capaciteit: 8, kolommen: 4 }, // nu 1 (er is er maar één); een beetje lucht is vrijwel gratis
   erf: { capaciteit: 24, kolommen: 8 }, // nu 7: nog een stuk of zeventien erfstukken erbij kan
   tuin: { capaciteit: 48, kolommen: 8 }, // nu 33 (tuin-sdf.cjs se STUKKEN): ruim voor een derde hek of meer groente
+  huizen: { capaciteit: 32, kolommen: 8 }, // nu 16 (huizen.cjs, ronde 4b): het gehucht. Niet ruimer: elk leeg vak kost geheugen in de browser (opmerkingen.md)
 };
 
 // items: [{ key, ...eigen velden zoals `plaat` }]. `key` is de identiteit die nooit meer
@@ -145,6 +147,8 @@ function schrijfTsx(vel) {
     if (t.beslaat) x += eigenschapXml('beslaat', `${t.beslaat[0]}x${t.beslaat[1]}`);
     if (t.groep) x += eigenschapXml('groep', t.groep);
     if (t.staat) x += eigenschapXml('staat_op_erf', t.staat);
+    // de tegel voor de deur, vanaf de achterste tegel van de voet (huizen.cjs): "dx,dy"
+    if (t.deur) x += eigenschapXml('deur', t.deur.join(','));
     x += '  </properties>\n </tile>\n';
   });
   x += '</tileset>\n';
@@ -672,15 +676,25 @@ function erfDingLos(naam, opgegeven, bouw, vlak) {
 }
 
 function bouwErfVel(veldNaam, dingen, notitie) {
-  const { capaciteit, kolommen } = VELCONFIG[veldNaam];
   const items = [];
   for (const { naam, voet, vast, bouw, vlak } of dingen) {
     const t0 = Date.now();
     const gelukt = veilig(naam, () => erfDingLos(naam, voet, bouw, vlak));
     if (!gelukt) continue;
-    items.push({ key: naam, naam, vast, ...gelukt });
+    // `staat`: op welke tegel dit ding hoort te staan, in tegels vanaf de voet van de toren. Zo
+    // hoeft erf-kaart.cjs de plaatsing niet nog eens uit te rekenen, en klopt hij ook als de voet
+    // van de toren opgemeten wordt in plaats van opgeschreven.
+    items.push({ naam, vast, plaat: gelukt.plaat, anker: gelukt.anker, beslaat: [gelukt.voet[2], gelukt.voet[3]], staat: `${gelukt.voet[0]},${gelukt.voet[1]}` });
     console.log(`  ${naam.padEnd(12)} ${gelukt.plaat.b}×${gelukt.plaat.h}  anker ${gelukt.anker.join(',')}  voet ${gelukt.voet.join(',')}  ${Date.now() - t0} ms`);
   }
+  return bouwLosVel(veldNaam, items, notitie);
+}
+
+// Een vel uit losse, al gerenderde tekeningen, elk met zijn eigen maat en zijn eigen anker: het erf
+// en de huizen (huizen.cjs). items: [{ naam, vast, plaat, anker, beslaat, staat?, deur? }], met
+// `anker` de achterste voethoek in de plaat.
+function bouwLosVel(veldNaam, items, notitie) {
+  const { capaciteit, kolommen } = VELCONFIG[veldNaam];
   if (!items.length) return null;
   // Eén cel die om alles heen past: het anker op dezelfde plek in elke cel, zoals bij de andere
   // vellen, zodat Tiled er met één tileoffset mee uit de voeten kan.
@@ -690,7 +704,7 @@ function bouwErfVel(veldNaam, dingen, notitie) {
   const onder = Math.max(...items.map((i) => i.plaat.h - i.anker[1]));
   const cb = links + rechts;
   const ch = boven + onder;
-  const geordend = vasteVolgordeEnCapaciteit(veldNaam, items, capaciteit, kolommen);
+  const geordend = vasteVolgordeEnCapaciteit(veldNaam, items.map((i) => ({ key: i.naam, ...i })), capaciteit, kolommen);
   const rijen = Math.ceil(capaciteit / kolommen);
   const vel = new K.Plaat(cb * kolommen, ch * rijen);
   geordend.forEach((it, i) => { if (it) vel.plak(it.plaat, (i % kolommen) * cb + links - it.anker[0], Math.floor(i / kolommen) * ch + boven - it.anker[1]); });
@@ -699,31 +713,41 @@ function bouwErfVel(veldNaam, dingen, notitie) {
     naam: veldNaam, bestand: `${veldNaam}.png`, breedte: vel.b, hoogte: vel.h,
     tegelB: cb, tegelH: ch, aantal: geordend.length, kolommen,
     // Tiled se "bottom" zet het onderste midden van de cel op de tegel; (links, boven) is het punt
-    // waarop erfDingLos elk ding heeft opgehangen (zie voet[0], voet[1] daar), dus dat corrigeren
-    // we daarheen terug — net als bij de bomen en de gebouwen.
+    // waarop elke tekening is opgehangen (haar achterste voethoek), dus dat corrigeren we daarheen
+    // terug, net als bij de bomen en de gebouwen.
     tileoffset: [Math.round(cb / 2) - links, ch - boven],
     objectalignment: true,
     // Het anker dat het spel gebruikt is de achterste voethoek, niet (links, boven) zelf: die hoek
     // ligt een halve tegel (16 px) boven het midden van de tegel waarop het spel tekent (dezelfde
-    // afspraak als bij de gebouwen, zie de toelichting bij `bouwGebouwenVel`). `voet[0], voet[1]`
-    // is en blijft de tegel die je in Tiled aanklikt; alleen het ankerpunt in de cel schuift.
+    // afspraak als bij de gebouwen, zie de toelichting bij `bouwGebouwenVel`).
     anker: [links, boven + 16],
     notitie,
-    // `staat`: op welke tegel dit ding hoort te staan, in tegels vanaf de voet van de toren. Zo
-    // hoeft erf-kaart.cjs de plaatsing niet nog eens uit te rekenen, en klopt hij ook als de voet
-    // van de toren opgemeten wordt in plaats van opgeschreven.
     // `doos`: hoe ver het beeld links, boven, rechts en onder het ankerpunt reikt (dezelfde +16 als
     // hierboven). De cel is voor alle tegels van een vel even groot (Tiled wil dat zo), maar een
     // bank is geen waslijn; het spel heeft de echte maat nodig om te weten of dit ding iemand
     // verbergt (doorkijk).
     tiles: geordend.map((it) => (it ? {
-      naam: it.naam, vast: it.vast, beslaat: [it.voet[2], it.voet[3]], staat: `${it.voet[0]},${it.voet[1]}`,
+      naam: it.naam, vast: it.vast, beslaat: it.beslaat, staat: it.staat || null, deur: it.deur || null,
       doos: [it.anker[0], it.anker[1] + 16, it.plaat.b - it.anker[0], it.plaat.h - it.anker[1] - 16],
     } : { naam: null, vast: false })),
   };
   schrijfTsx(beschrijving);
-  console.log(`${veldNaam}.png  ${vel.b}×${vel.h}  (${items.length} echte tegels van ${capaciteit})`);
+  console.log(`${veldNaam}.png  ${vel.b}×${vel.h}  (${items.length} echte tegels van ${capaciteit}, cel ${cb}×${ch})`);
   return beschrijving;
+}
+
+// ---------------------------------------------------------------- de huizen (huizen.cjs, ronde 4b)
+//
+// De huizen van de huizenbouwer, elk met een vaste opgave in huizen.cjs. Een huis kost zo'n halve
+// minuut, dus ze gaan in draden tegelijk; daarom is dit het enige vel dat op zich laat wachten.
+// Elk huis beslaat een rechthoek (die js/kaart.js helemaal vastzet) en draagt `deur`: de tegel voor
+// zijn deur, vanaf de achterste tegel van de voet. Daar gaan de bewoners heen (T.deurVan).
+async function bouwHuizenVel() {
+  const t0 = Date.now();
+  const lijst = await HZ.renderHuizen();
+  const items = lijst.map((r) => ({ naam: r.naam, vast: true, plaat: r.plaat, anker: r.anker, beslaat: r.voet, deur: r.deur }));
+  console.log(`  huizen: ${lijst.length} in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  return bouwLosVel('huizen', items, 'De huizen van de huizenbouwer (huizen.cjs, ronde 4b): hutten van vlechtwerk en huizen van vakwerk onder riet, de boerderijen en het huis van de schout. Zet ze neer op de tegel linksboven van hun voet ("beslaat"); "deur" is de tegel voor de deur, gerekend vanaf die tegel.');
 }
 
 // ---------------------------------------------------------------- een vel dat elders gemaakt is
@@ -962,63 +986,69 @@ const wil = (naam) => !GEVRAAGD.length || GEVRAAGD.includes(naam);
 // hierboven) en lezen we daarna pas zijn .tsx in, zodat tegels.json de aangevulde staat krijgt.
 if (wil('rand')) padRandTegels();
 
-const velden = [
-  wil('grond') && bouwGrondVel(),
-  wil('rand') && leesVelUitTsx('rand'),
-  wil('bomen') && bouwModelVel('bomen', BOMEN, BOMEN_VAST),
-  wil('begroeiing') && bouwModelVel('begroeiing', BEGROEIING, (n) => !!BEGROEIING_VAST[n]),
-  wil('gebouwen') && bouwGebouwenVel(),
-  // Het vel van de toren (tegels/toren.png) ging op 25 sep weg met het oude spel: geen kaart
-  // gebruikte hem nog. Het model staat nog in toren.cjs, en het erf hieronder meet zich eraan.
-  wil('erf') && bouwErfVel('erf', Es.ERF_TEGELS, 'Wat er op het erf van de toren staat: het schuurtje, de put, de houtstapel, de waslijn, de moestuin, de bank en de lantaarn. Zet ze neer op de tegel linksboven van hun voet ("beslaat"); kaarten/erf.tmj doet dat al vanzelf uit erf-scene.cjs.'),
-  wil('tuin') && bouwTuinVel(),
-].filter(Boolean);
+(async () => {
+  const velden = [
+    wil('grond') && bouwGrondVel(),
+    wil('rand') && leesVelUitTsx('rand'),
+    wil('bomen') && bouwModelVel('bomen', BOMEN, BOMEN_VAST),
+    wil('begroeiing') && bouwModelVel('begroeiing', BEGROEIING, (n) => !!BEGROEIING_VAST[n]),
+    wil('gebouwen') && bouwGebouwenVel(),
+    // Het vel van de toren (tegels/toren.png) ging op 25 sep weg met het oude spel: geen kaart
+    // gebruikte hem nog. Het model staat nog in toren.cjs, en het erf hieronder meet zich eraan.
+    wil('erf') && bouwErfVel('erf', Es.ERF_TEGELS, 'Wat er op het erf van de toren staat: het schuurtje, de put, de houtstapel, de waslijn, de moestuin, de bank en de lantaarn. Zet ze neer op de tegel linksboven van hun voet ("beslaat"); kaarten/erf.tmj doet dat al vanzelf uit erf-scene.cjs.'),
+    wil('tuin') && bouwTuinVel(),
+    wil('huizen') && (await bouwHuizenVel()),
+  ].filter(Boolean);
 
-// Het bestaande tegels.json blijft staan voor de vellen die deze keer niet aan de beurt waren.
-let TEGELS_JSON = {};
-try {
-  TEGELS_JSON = JSON.parse(fs.readFileSync(path.join(TEGELS, 'tegels.json'), 'utf8'));
-} catch (e) {
-  /* nog niets: dan bouwen we hem van voren af aan op */
-}
-for (const v of velden) {
-  // Een vel met een eigen voetpunt- of hoekafspraak (bomen, begroeiing, gebouwen, toren, erf) zet
-  // `anker` zelf op de bouwfunctie hierboven; hier valt het alleen terug op het midden van de cel
-  // (grond) of op tileoffset zonder verdere correctie (voetpunt: het model hangt al op het midden
-  // van zijn tegel, dat is geen achterste hoek en heeft dus ook geen +16 nodig, zie bouwModelVel).
-  const anker = v.anker || (v.tileoffset
-    ? [Math.round(v.tegelB / 2) - v.tileoffset[0], v.tegelH - v.tileoffset[1]]
-    : [Math.round(v.tegelB / 2), Math.round(v.tegelH / 2)]);
-  TEGELS_JSON[v.naam] = {
-    tsx: `tegels/${v.naam}.tsx`,
-    bestand: `tegels/${v.bestand}`,
-    breedte: v.breedte,
-    hoogte: v.hoogte,
-    tegelB: v.tegelB,
-    tegelH: v.tegelH,
-    kolommen: v.kolommen || v.aantal,
-    tileoffset: v.tileoffset,
-    objectalignment: v.objectalignment,
-    anker,
-    // per lokaal tegel-id (0, 1, 2, …, zoals in de .tsx) dezelfde eigenschappen als daar.
-    tiles: v.tiles.map((t) => ({ naam: t.naam, vast: t.vast, beslaat: t.beslaat || null, groep: t.groep || null, staat: t.staat || null, doos: t.doos || null })),
-  };
-}
-const json = JSON.stringify(TEGELS_JSON, null, 1);
-fs.writeFileSync(path.join(TEGELS, 'tegels.json'), json + '\n');
-fs.writeFileSync(
-  path.join(TEGELS, 'tegels.js'),
-  '// Gemaakt door gereedschap/pixelart/naar-tiled.cjs — niet met de hand bijwerken.\n' +
-    '// Dezelfde inhoud als tegels.json, als script, zodat file:// het ook kan lezen (zie js/kaart.js).\n' +
-    '(function (T) {\n  T.TEGELS = ' +
-    json.replace(/\n/g, '\n  ') +
-    ';\n})(globalThis.Spel = globalThis.Spel || {});\n',
-);
+  // Het bestaande tegels.json blijft staan voor de vellen die deze keer niet aan de beurt waren.
+  let TEGELS_JSON = {};
+  try {
+    TEGELS_JSON = JSON.parse(fs.readFileSync(path.join(TEGELS, 'tegels.json'), 'utf8'));
+  } catch (e) {
+    /* nog niets: dan bouwen we hem van voren af aan op */
+  }
+  for (const v of velden) {
+    // Een vel met een eigen voetpunt- of hoekafspraak (bomen, begroeiing, gebouwen, toren, erf) zet
+    // `anker` zelf op de bouwfunctie hierboven; hier valt het alleen terug op het midden van de cel
+    // (grond) of op tileoffset zonder verdere correctie (voetpunt: het model hangt al op het midden
+    // van zijn tegel, dat is geen achterste hoek en heeft dus ook geen +16 nodig, zie bouwModelVel).
+    const anker = v.anker || (v.tileoffset
+      ? [Math.round(v.tegelB / 2) - v.tileoffset[0], v.tegelH - v.tileoffset[1]]
+      : [Math.round(v.tegelB / 2), Math.round(v.tegelH / 2)]);
+    TEGELS_JSON[v.naam] = {
+      tsx: `tegels/${v.naam}.tsx`,
+      bestand: `tegels/${v.bestand}`,
+      breedte: v.breedte,
+      hoogte: v.hoogte,
+      tegelB: v.tegelB,
+      tegelH: v.tegelH,
+      kolommen: v.kolommen || v.aantal,
+      tileoffset: v.tileoffset,
+      objectalignment: v.objectalignment,
+      anker,
+      // per lokaal tegel-id (0, 1, 2, …, zoals in de .tsx) dezelfde eigenschappen als daar.
+      tiles: v.tiles.map((t) => ({ naam: t.naam, vast: t.vast, beslaat: t.beslaat || null, groep: t.groep || null, staat: t.staat || null, deur: t.deur || null, doos: t.doos || null })),
+    };
+  }
+  const json = JSON.stringify(TEGELS_JSON, null, 1);
+  fs.writeFileSync(path.join(TEGELS, 'tegels.json'), json + '\n');
+  fs.writeFileSync(
+    path.join(TEGELS, 'tegels.js'),
+    '// Gemaakt door gereedschap/pixelart/naar-tiled.cjs — niet met de hand bijwerken.\n' +
+      '// Dezelfde inhoud als tegels.json, als script, zodat file:// het ook kan lezen (zie js/kaart.js).\n' +
+      '(function (T) {\n  T.TEGELS = ' +
+      json.replace(/\n/g, '\n  ') +
+      ';\n})(globalThis.Spel = globalThis.Spel || {});\n',
+  );
 
-let totaal = 0;
-for (const f of fs.readdirSync(TEGELS)) {
-  const p = path.join(TEGELS, f);
-  if (fs.statSync(p).isDirectory()) continue;
-  totaal += fs.statSync(p).size;
-}
-console.log(`tegels/ klaar: ${velden.length} vel(len) opnieuw, ${Math.round(totaal / 1024)} kB`);
+  let totaal = 0;
+  for (const f of fs.readdirSync(TEGELS)) {
+    const p = path.join(TEGELS, f);
+    if (fs.statSync(p).isDirectory()) continue;
+    totaal += fs.statSync(p).size;
+  }
+  console.log(`tegels/ klaar: ${velden.length} vel(len) opnieuw, ${Math.round(totaal / 1024)} kB`);
+})().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

@@ -8654,5 +8654,489 @@
     "doos": null
    }
   ]
+ },
+ "huizen": {
+  "tsx": "tegels/huizen.tsx",
+  "bestand": "tegels/huizen.png",
+  "breedte": 5296,
+  "hoogte": 3028,
+  "tegelB": 662,
+  "tegelH": 757,
+  "kolommen": 8,
+  "tileoffset": [
+   -6,
+   275
+  ],
+  "objectalignment": true,
+  "anker": [
+   337,
+   498
+  ],
+  "tiles": [
+   {
+    "naam": "hut1",
+    "vast": true,
+    "beslaat": [
+     5,
+     4
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     2,
+     4
+    ],
+    "doos": [
+     167,
+     280,
+     209,
+     131
+    ]
+   },
+   {
+    "naam": "hut2",
+    "vast": true,
+    "beslaat": [
+     4,
+     5
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     4,
+     2
+    ],
+    "doos": [
+     209,
+     269,
+     167,
+     131
+    ]
+   },
+   {
+    "naam": "hut3",
+    "vast": true,
+    "beslaat": [
+     6,
+     4
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     2,
+     4
+    ],
+    "doos": [
+     167,
+     277,
+     241,
+     147
+    ]
+   },
+   {
+    "naam": "hut4",
+    "vast": true,
+    "beslaat": [
+     6,
+     6
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     2,
+     6
+    ],
+    "doos": [
+     241,
+     268,
+     167,
+     178
+    ]
+   },
+   {
+    "naam": "huis1",
+    "vast": true,
+    "beslaat": [
+     7,
+     5
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     2,
+     5
+    ],
+    "doos": [
+     199,
+     329,
+     273,
+     179
+    ]
+   },
+   {
+    "naam": "huis2",
+    "vast": true,
+    "beslaat": [
+     5,
+     7
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     5,
+     2
+    ],
+    "doos": [
+     273,
+     385,
+     201,
+     179
+    ]
+   },
+   {
+    "naam": "huis3",
+    "vast": true,
+    "beslaat": [
+     10,
+     7
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     6,
+     7
+    ],
+    "doos": [
+     199,
+     308,
+     305,
+     221
+    ]
+   },
+   {
+    "naam": "huis4",
+    "vast": true,
+    "beslaat": [
+     8,
+     8
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     3,
+     8
+    ],
+    "doos": [
+     305,
+     324,
+     209,
+     243
+    ]
+   },
+   {
+    "naam": "huis5",
+    "vast": true,
+    "beslaat": [
+     7,
+     5
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     3,
+     5
+    ],
+    "doos": [
+     199,
+     370,
+     241,
+     163
+    ]
+   },
+   {
+    "naam": "huis6",
+    "vast": true,
+    "beslaat": [
+     8,
+     9
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     2,
+     9
+    ],
+    "doos": [
+     337,
+     315,
+     213,
+     225
+    ]
+   },
+   {
+    "naam": "boerderij1",
+    "vast": true,
+    "beslaat": [
+     7,
+     9
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     7,
+     3
+    ],
+    "doos": [
+     330,
+     291,
+     265,
+     243
+    ]
+   },
+   {
+    "naam": "boerderij2",
+    "vast": true,
+    "beslaat": [
+     9,
+     8
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     5,
+     8
+    ],
+    "doos": [
+     295,
+     273,
+     241,
+     259
+    ]
+   },
+   {
+    "naam": "boerderij3",
+    "vast": true,
+    "beslaat": [
+     6,
+     9
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     -1,
+     4
+    ],
+    "doos": [
+     337,
+     404,
+     232,
+     227
+    ]
+   },
+   {
+    "naam": "boerderij4",
+    "vast": true,
+    "beslaat": [
+     6,
+     8
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     -1,
+     4
+    ],
+    "doos": [
+     305,
+     341,
+     235,
+     211
+    ]
+   },
+   {
+    "naam": "boerderij5",
+    "vast": true,
+    "beslaat": [
+     6,
+     9
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     6,
+     4
+    ],
+    "doos": [
+     319,
+     266,
+     189,
+     211
+    ]
+   },
+   {
+    "naam": "schoutshuis",
+    "vast": true,
+    "beslaat": [
+     8,
+     6
+    ],
+    "groep": null,
+    "staat": null,
+    "deur": [
+     4,
+     6
+    ],
+    "doos": [
+     252,
+     498,
+     325,
+     211
+    ]
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   },
+   {
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
+    "groep": null,
+    "staat": null,
+    "deur": null,
+    "doos": null
+   }
+  ]
  }
 }

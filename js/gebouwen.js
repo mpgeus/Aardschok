@@ -642,8 +642,8 @@
       // Zijn voet uit het betekenisbestand: die heeft de inner nodig om te weten wat hij ziet (js/inner.js).
       // En wie er woont (`huis`, de boer met dezelfde id of de schout): dat telt voor zijn kelder
       // (js/verstoppen.js). In een gewoon huis zegt `bewoners` wie er bij het begin woont
-      // (T.zetBeginBewoners, js/bewoners.js).
-      S.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null, huis: d.huis || null, bewoners: d.bewoners || null });
+      // (T.zetBeginBewoners, js/bewoners.js). En `tekening` weet waar de deur is (T.deurVan).
+      S.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, tekening: d.tekening || null, klaar: true, klaarOp: 0, handen: 0, voorwerp: null, huis: d.huis || null, bewoners: d.bewoners || null });
       woonruimte += g.woonruimte || 0;
     }
     // De boeren die je ziet lopen, wonen al in hun huis. Wie er verder woont, zet T.zetBeginBewoners

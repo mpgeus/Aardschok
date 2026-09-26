@@ -50,7 +50,18 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   varens, gras, bloemen, paddenstoelen, stronken en rotsen, en een grasvloer.
 - `dorp.cjs` en `dorp2.cjs`: de grond (gras, zandpad, kasseien, water), de huizen (`huis(o)`
   bouwt er een uit onderdelen), en de plekken: kapel, kerkhof, watermolen, bakkerij, kruidenhut,
-  jagershut, het huis van de dorpsoudste, het bruggetje en de vijver.
+  jagershut, het huis van de dorpsoudste, het bruggetje en de vijver. De werkplaatsen van het spel
+  komen nog hiervandaan (`tegels/gebouwen.png`); de huizen niet meer (zie hieronder).
+- `huis-sdf.cjs`: de huizenbouwer op ronde vormen (`ontwerp/beeld.md`, "De huizenbouwer op ronde
+  vormen"): elk huis in elke vorm en elk materiaal, niet waterpas, met uitbouwen. Bovenaan staat wat
+  een opgave kan. `huis-sdf-export.cjs` maakt er proefplaten van (`uit/proefhuis/`), en
+  `tuin-sdf.cjs` de losse tuinstukken.
+- `huizen.cjs`: de huizen van het spel (ronde 4b): een vaste lijst opgaven (`HUIZEN`), en hoe er een
+  voor het vel gerenderd wordt, met zijn voet en de tegel voor zijn deur. `node naar-tiled.cjs huizen`
+  zet ze op `tegels/huizen.png` (twee minuten, in vier draden), `node bouwfasen.cjs` maakt hun vijf
+  bouwfasen (uit het huis zelf gesneden; een kwartier voor alle gebouwen samen), en
+  `node huizen.cjs [namen]` een proefplaat met voet en deur erop (`uit/huizen/proef.png`). Een nieuw
+  huis: een regel in `HUIZEN`, dan die drie stappen, en `T.GEBOUWEN` in `js/gebouwen.js`.
 - `dorpelingen.cjs`, `dorpelingen2.cjs` en `dorpelingen3.cjs`: negentien dorpelingen, van de smid
   tot de kleuter, plus `dorpeling(zaad)` die uit elk zaad een andere gewone dorpeling maakt. De
   marskramer daarin kan staan en lopen, met zijn rek op de rug en zijn stok als derde voet
