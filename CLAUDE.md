@@ -166,8 +166,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   boer aan zijn akker(s) via `huis`, dezelfde id op de boer als op de akker.
 - **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen en het
   uur: een dag duurt vijf minuten bij 1×, een maand dertig dagen; eigen klok naast `S.tijd`; de
-  versneller `T.SNELHEDEN`; `T.wereldFactor` en `S.wereldTijd`), `js/dag.js` (de zon per seizoen,
-  de dagindeling, het licht, het ritme van de boeren en slapen tot de ochtend), `js/voorraad.js` (`S.voorraad`; alles verandert via
+  versneller `T.SNELHEDEN`; `T.wereldFactor` en `S.wereldTijd`; wie de tijd stilzet,
+  `T.houdTijdStil`), `js/dag.js` (de zon per seizoen, de dagindeling, het licht, het ritme van de
+  boeren, slapen tot de ochtend, en bezoekers die overdag komen, `T.bezoekerKomtAan`),
+  `js/voorraad.js` (`S.voorraad`; alles verandert via
   `T.wijzigVoorraad`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
   soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag,
   `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; een gebouw maakt alleen wat zijn grondstof
@@ -268,6 +270,13 @@ Over het raster, het gevecht in beurten en de overgang ernaartoe.
   loopt op de tijd van de wereld, de schermtijd maal de snelheid (`dtWereld` in `js/main.js`,
   opgeteld in `S.wereldTijd`); wat alleen op het scherm beweegt (de wind, een flits, zwevende tekst),
   op `S.tijd`. Zo kost een tocht op elke snelheid even veel uren. Een gevecht loopt altijd op 1×.
+- De tijd stilzetten gaat op één manier (26 sep): `T.houdTijdStil(S, reden)` en
+  `T.laatTijdGaan(S, reden)` (`js/tijd.js`), met een naam per venster ('brief', 'handel', ...).
+  `S.kalender.snelheid` is alleen wat de speler koos; hoe snel het nu echt gaat, zegt
+  `T.snelheidNu(S)`. Een venster zet dus nooit zelf `snelheid` en onthoudt ook niets.
+- Een bezoeker (de marskramer, de heer, de inner, en wie er nog bij komt) komt aan via
+  `T.bezoekerKomtAan(S, bezoek)` (`js/dag.js`), met zijn bericht in `bezoek.aankomst`: overdag,
+  het bericht één keer, en naar 1× als hij ertoe doet.
 
 ## Testen in de browser
 

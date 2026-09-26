@@ -71,6 +71,12 @@ boeren die 's nachts binnen zijn, maaien in de werkuren, de inner en de heer die
 de tijd stil te zetten, en slapen tot de ochtend (`Z`). Wat er precies is, staat in `spel.md`, "De dag,
 gebouwd"; wat nog ruw is in `opmerkingen.md`. Nagekeken in de browser: de balk, de avond, de nacht (de
 vijf boeren binnen), slapen en wakker worden, en de inner die om negen uur komt. `npm test`: 457/457.
+**En toen ruimde ze op** (Marcel: "Laten we wel zorgen dat de code goed te begrijpen blijft", en op het
+voorstel van vraag 25: "Ja, begin met A en B"). A: de tijd staat op één plek stil, met een reden per
+venster (`T.houdTijdStil` en `T.laatTijdGaan`, `js/tijd.js`). B: de marskramer, de heer en de inner
+komen op één manier aan (`T.bezoekerKomtAan`, `js/dag.js`). Nagekeken in de browser: een venster zet
+de tijd stil en laat hem op de gekozen snelheid weer lopen, ook met twee vensters open; de inner komt
+om negen uur. `npm test`: 462/462. C, D en E wachten (vraag 25).
 
 **Loopt nu:** niets.
 
@@ -138,20 +144,25 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
-    waarde:
-    - **A. De tijd op één plek.** Zeven vensters zetten de tijd stil, elk met een eigen sleutel
+    waarde. **A en B zijn af** (26 sep; Marcel: "Ja, begin met A en B"):
+    - **A. De tijd op één plek (af).** Zeven vensters zetten de tijd stil, elk met een eigen sleutel
       (`briefVoorSnelheid`, `heerVoorSnelheid`, ...; het handelsvenster met een eigen kopie), en de
-      heer, de inner en het slapen zetten de snelheid ook. Voorstel: `T.houdTijdStil(S, reden)` en
+      heer, de inner en het slapen zetten de snelheid ook. Nu: `T.houdTijdStil(S, reden)` en
       `T.laatTijdGaan(S, reden)` in `js/tijd.js`: de tijd staat stil zolang er een reden is, en loopt
-      daarna op de snelheid die de speler koos. Twee vensters tegelijk kunnen dan niet meer mis gaan.
-    - **B. De bezoekers op één manier laten komen.** Bij de dag kregen de marskramer, de heer en de
-      inner elk een eigen variant van "overdag komen, met een bericht en naar 1×" (drie manieren
-      voor één ding, gebouwd door Claude). Voorstel: één hulp in `js/dag.js`.
+      daarna op de snelheid die de speler koos (`S.kalender.snelheid`; wat er nu loopt, zegt
+      `T.snelheidNu`). Twee vensters tegelijk gaan niet meer mis.
+    - **B. De bezoekers op één manier laten komen (af).** Bij de dag kregen de marskramer, de heer en
+      de inner elk een eigen variant van "overdag komen, met een bericht en naar 1×" (drie manieren
+      voor één ding, gebouwd door Claude). Nu: `T.bezoekerKomtAan(S, bezoek)` in `js/dag.js`, met het
+      bericht in `bezoek.aankomst`.
     - **C. `js/hud.js` (1.462 regels) in vensters splitsen:** de balk, handel, de heer, de velden,
       verstoppen, slachten en de spelregels elk in een eigen bestand.
     - **D. `js/tekenen.js` (1.499 regels) net zo:** de grond, de wezens, de weides, de nacht.
     - **E. Eén laadlijst voor de toetsen,** in de volgorde van `index.html`. Dan zijn de 24 bewakers
       van de vorm `T.x && T.x(...)` niet meer nodig, en toetsen de toetsen het spel zoals het draait.
+      B liet zien waarom: vijf toetsen laadden `js/dag.js` niet, en draaiden dus zonder werkuren en
+      zonder bezoekuur, zonder dat iets klaagde. Vijf doen dat nog (`akkers`, `hooi`, `vee`, `velden`
+      en `weides`: daar maaien de boeren dus ook 's nachts).
     Voorstel: A en B nu, zolang de dag vers is; C en D als die bestanden toch open moeten (de
     poppetjes raken ze allebei); E later.
 
@@ -390,6 +401,10 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 26 sep 2026 — **Opruimen, A en B (vraag 25).** De tijd staat op één plek stil, met een reden per
+  venster (`T.houdTijdStil`, `T.laatTijdGaan`, `T.snelheidNu` in `js/tijd.js`); de zeven sleutels
+  waarmee elk venster zelf de snelheid onthield, zijn weg. De drie bezoekers komen op één manier aan
+  (`T.bezoekerKomtAan` in `js/dag.js`). Toetsen erbij in `test/tijd.test.cjs` en `test/dag.test.cjs`.
 - 26 sep 2026 — **Punt 3b, stap 1: de dag.** Een dag duurt vijf minuten bij 1× in een maand van
   dertig dagen (Marcels keuze), met het uur in de balk, een versneller tot 30× en slapen tot de
   ochtend (`Z`). Lopen, maaien en dwalen gaan mee met de snelheid (`S.wereldTijd`); de zon volgt het

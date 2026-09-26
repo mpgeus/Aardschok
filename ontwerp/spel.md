@@ -283,7 +283,8 @@ Marcel koos uit een voorstel van Claude, vóór het bouwen:
 
 - **De rekening is wat de inner zag.** Hij komt in oogstmaand kijken; zijn rapport is wat de heer
   vraagt, in de brief en op Sint-Maarten. Wat hij niet zag, betaal je dat jaar niet.
-- **Hij loopt met je mee.** Zolang hij er is, staat de tijd stil: het is een scène. Loop je naast
+- **Hij loopt met je mee.** Zolang hij er is, staat de tijd stil: het is een scène (tot 26 sep; sinds
+  de dag van vijf minuten past meelopen erin, en gaat de tijd naar 1× als hij komt). Loop je naast
   hem, dan volgt hij jou; loop je weg, dan loopt hij zijn eigen ronde. Wat in zijn zicht komt (huizen
   en schuren houden zijn blik tegen), telt hij. Zijn geduld is een aantal stappen.
 - **Van het graan vraagt de heer een deel van wat de inner telde:** het graan in de schuren en wat nog
@@ -772,7 +773,8 @@ uit het bouwen kwamen:
 
 - **De tijd staat stil als hij op de brink staat,** tot je bij hem bent geweest. Anders zijn zijn
   drie wachtdagen op 3× nog geen drie seconden, en haal je hem nooit. Zet je de tijd zelf weer
-  aan, dan tellen ze wel, en neemt hij het daarna zelf mee.
+  aan, dan tellen ze wel, en neemt hij het daarna zelf mee. (Tot 26 sep: met een dag van vijf
+  minuten zijn drie dagen lang genoeg, en gaat de tijd naar 1× als hij komt.)
 - **Het venster rekent vooruit:** vóór je bevestigt, zie je of je graan het haalt tot de oogst,
   met het zaaigraan en de soldaten meegerekend. Zo zie je de keus die Marcel bedoelde: wat je hem
   geeft, kun je niet zaaien.
@@ -1300,8 +1302,13 @@ de pagina. Het raakt punt 11 (de nacht), 13 (de militie) en 14 (de treden), en d
   zijn ze onzichtbaar en staan ze niemand in de weg; 's ochtends komen ze weer naar buiten. Ze maaien
   alleen in de werkuren, twaalf uur per tegel, en een halve tegel blijft liggen tot de ochtend. Rond
   14 oogstmaand is zo'n vier vijfde van het graan binnen, net als vóór de dag.
-- **De inner, de heer en de marskramer komen overdag,** vanaf negen uur. De inner en de heer zetten
-  de tijd niet meer stil; als ze komen, gaat hij naar 1×.
+- **De inner, de heer en de marskramer komen overdag,** vanaf negen uur, alle drie op dezelfde manier
+  (`T.bezoekerKomtAan`). De inner en de heer zetten de tijd niet meer stil; als ze komen, gaat hij
+  naar 1×.
+- **Een venster zet de tijd stil** (de brief, de handel, de heer, slachten, verstoppen, de velden,
+  de spelregels), en als het dichtgaat, loopt hij weer op de snelheid die je koos. Staan er twee
+  open, dan pas als ze allebei dicht zijn (`T.houdTijdStil`, met een reden per venster; vóór de
+  opruimronde van 26 sep kon het tweede venster de verkeerde snelheid terugzetten).
 - **Slapen tot de ochtend:** 's avonds en 's nachts, bij je eigen huis (`Z`, of de knop Slapen). De
   nacht gaat dan op 60× voorbij, en bij het eerste licht word je wakker, op de snelheid van ervoor.
   Een klik of een snelheidsknop maakt je eerder wakker.

@@ -29,6 +29,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     14 oogstmaand); de rest van het jaar is nog niet op die manier nagelopen.
   - De pagina "Stand van het gehucht" zegt nog dat een dag 2,5 seconde duurt, en dat de tijd stilstaat
     bij de inner en de heer.
+  - Kies je een snelheid terwijl een venster de tijd stilzet, dan onthoudt het spel die keus, maar
+    blijft Pauze in de balk oplichten tot het venster dicht is (sinds A, vraag 25). Dat klopt, want de
+    tijd staat stil, maar het lijkt of de knop niets doet. Misschien de gekozen knop anders laten
+    oplichten zolang een venster openstaat.
 - **De brink ligt achter twee daken** (24 sep). Vanuit de camera staan het huis van de schout en de
   boerderij van boer 3 vóór de brink. De heer, de marskramer, de schandpaal en wie eraan staat,
   vallen daardoor grotendeels achter een dak. De schout zie je door een kijkgat, de rest niet. Marcel
