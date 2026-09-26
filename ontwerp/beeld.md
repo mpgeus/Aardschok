@@ -54,6 +54,26 @@ Technisch betekent dit dat de huizen uit **ronde vormen** moeten komen (afstands
 figuren en de toren al doen), niet uit dozen en vlakken. Een doos is per definitie recht; een
 afstandsfunctie kun je laten doorbuigen, uitpuilen en golven.
 
+### Ook de kaart is niet waterpas (Marcel, 26 sep 2026)
+
+Na de beelden van het nieuwe gehucht (een plein van 10 bij 8 tegels vóór het huis van de schout):
+"Let ook op de gebouwen, [ze staan] te dicht op elkaar. De brink is vaak het hart van een dorp. Zou
+een redelijk open ruimte zijn lijkt mij." En: "Ook de vorm moet variëren, he? En niet alles dus strak
+en waterpas."
+
+Wat Claude daarin zag: de regel van 21 sep gold tot nu toe alleen voor wat de huizenbouwer rendert,
+nooit voor de kaart zelf (`gereedschap/tiled/maak-gehucht.cjs`). Die is wél strak: het plein is een
+rechthoek met rechte randen, de weg een rechte lijn, de akkers liggen als gelijke stroken op een rij,
+en alle huizen staan in rijen met hun voorkant naar het zuiden. Dus ook voor de kaart:
+- **De brink is het hart, en open:** groot, met gras en een paar oude eiken, en niet volgebouwd. De
+  huizen staan eromheen, niet erop.
+- **Geen rechthoek:** de rand van de brink golft, een weg slingert (en wordt later een pad dat slijt
+  waar gelopen wordt, "Straten en paden" in `spel.md`), en een erf staat een eindje verder of dichterbij
+  dan dat van de buren.
+- **Niet alles dezelfde kant op:** een huis kan in ons beeld niet vrij draaien, maar de huizenbouwer
+  kan elk huis een kwartslag gedraaid of gespiegeld renderen, zodat een boerderij met de zijkant of de
+  achterkant naar de brink kan staan (voorstel van Claude).
+
 ### De huizenbouwer op ronde vormen (Marcel, 21 sep 2026)
 
 Het proefhuis (`gereedschap/pixelart/huis-sdf.cjs`, plaat in `uit/proefhuis/vergelijk.png`)

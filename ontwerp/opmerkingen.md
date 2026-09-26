@@ -55,7 +55,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     blijft Pauze in de balk oplichten tot het venster dicht is (sinds A, vraag 25). Dat klopt, want de
     tijd staat stil, maar het lijkt of de knop niets doet. Misschien de gekozen knop anders laten
     oplichten zolang een venster openstaat.
-- **Het nieuwe gehucht, wat nog ruw is** (26 sep, na de derde versie van de kaart): er lopen nog geen
+- **Het nieuwe gehucht, wat nog ruw is** (26 sep, na de derde versie van de kaart). Het grootste zag
+  Marcel zelf: het plein is een kleine rechthoek van zand, de gebouwen staan er te dicht omheen, en de
+  kaart is te strak en waterpas; de brink hoort een open hart te zijn (vraag 29, en punt 1 van de
+  volgorde in de werklijst). Verder: er lopen nog geen
   paden van de boerderijen naar het plein (die komen met "Straten en paden", punt 6c: ze slijten waar
   gelopen wordt); het plein is kale zandgrond, geen gras zoals een Drentse brink; en de teksten zeggen
   nog "op de brink" waar het plein bedoeld is. Wat de speler zelf bouwt, kan het plein nog wel

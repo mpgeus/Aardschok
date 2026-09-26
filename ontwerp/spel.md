@@ -722,7 +722,10 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
   een plein met het huis van de schout eraan. Daar staan de heer, de marskramer en de schandpaal, en
   daar spelen de kinderen. Het ligt vóór de huizen, aan de kant van de camera, dus er dekt geen dak
   meer iets af (`gereedschap/tiled/maak-gehucht.cjs`, derde versie). Het blok en een galg zijn nog
-  tekenwerk.
+  tekenwerk. **Nog niet goed** (Marcel, 26 sep, na de beelden): het plein is een kleine rechthoek
+  van zand, en de gebouwen staan er te dicht omheen. "De brink is vaak het hart van een dorp. Zou een
+  redelijk open ruimte zijn lijkt mij", en de vorm mag niet strak en waterpas zijn (`beeld.md`, "Ook
+  de kaart is niet waterpas").
 - **Nog open:** zijn grillen en de herendienst (punt 8); de koets (tekenwerk).
 
 **Hoe het zo kwam:**

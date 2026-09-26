@@ -38,7 +38,8 @@ staat in `CLAUDE.md`, onder Git.
   een eigen gezin (vraag 27), en stuk 1 is gebouwd.
 - Daarna, in de vierde sessie: wat Marcel op de eerste beelden zag, is hersteld; er kwam afwisseling
   in wat je bouwt en een nieuw gehucht rond een plein (vraag 28); en stuk 2 van de poppetjes is af.
-  Daarmee is stap 2 van 3b klaar.
+  Daarmee is stap 2 van 3b klaar. Op de beelden zag Marcel dat de brink een open hart moet zijn en
+  dat de kaart nog te strak en waterpas is; hij koos wat de volgende sessie eerst doet (vraag 29).
 
 **Loopt nu:** niets. Stap 2 van 3b, mensen worden poppetjes, is af (26 sep): iedereen die in de balk
 telt, is een poppetje met een naam, een huis en een gezin; wie werkt, loopt naar zijn werk; iedereen
@@ -46,18 +47,30 @@ volgt het ritme van de dag; een nieuw gezin komt over de weg binnen, wie wegtrek
 wie sterft heeft een naam; en werk telt in uren, met de weg erheen eraf (`spel.md`, "Mensen worden
 poppetjes", Zo werkt het nu). Onderweg is hersteld wat Marcel op de eerste beelden zag (mensen
 verdwenen in één klap bij de deur, en leken op de daken te staan), en kwamen er afwisseling in wat je
-bouwt en een nieuw gehucht rond het plein (vraag 28). **Het volgende is de herberg en de kleine zaken
-(3b, stap 3):** begin met een kort plan voor Marcel, zoals bij stap 2. `npm test`: 482/482.
+bouwt en een nieuw gehucht rond het plein (vraag 28). **Het volgende** (Marcel koos het, vraag 29):
+**eerst de brink als open hart,** een vierde versie van het gehucht (begin met een schets voor Marcel),
+**dan ronde 4b van de huizenbouwer,** naar voren gehaald, **en dan de herberg.** `npm test`: 482/482.
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
 
-1. **Nu: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel. Begin met een kort
+1. **Nu: de brink als hart, en een kaart die niet waterpas is** (vraag 29; Marcel, 26 sep): een vierde
+   versie van het gehucht (`gereedschap/tiled/maak-gehucht.cjs`). Een open brink van gras met oude
+   eiken, onregelmatig van vorm, met de huizen eromheen op verschillende afstanden en niet in rijen, en
+   wegen die slingeren (`beeld.md`, "Ook de kaart is niet waterpas"; `spel.md`, bij het plein). Begin
+   met een schets voor Marcel, zoals bij de derde versie. Klaar als: de brink is de grootste open plek
+   van het gehucht, er staat geen rechte rij huizen meer, en de akkers, de weide en de heide zijn even
+   groot gebleven, zodat de oogst en de balans niet verschuiven.
+2. **Dan: ronde 4b van de huizenbouwer** (3b, stap 4; naar voren gehaald, vraag 29): elk huis in elk
+   materiaal en elke vorm, niet waterpas (`beeld.md`, "De huizenbouwer op ronde vormen"), en ook een
+   kwartslag gedraaid of gespiegeld, zodat een boerderij met de zijkant naar de brink kan staan. Zwaar
+   tekenwerk met agents: vraag vooraf het verbruik op (`CLAUDE.md`, "Zuinig werken met agents").
+3. **Dan: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel. Begin met een kort
    plan voor Marcel (`spel.md`, "Zaken waar de mensen zelf heen gaan").
-2. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
+4. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
    steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
    uit verstoppen deel 1b op.
-3. **De kern afmaken** (punt 6 en 6a), en daarmee de vraag van het tweede proefje: is dit leuk?
+5. **De kern afmaken** (punt 6 en 6a), en daarmee de vraag van het tweede proefje: is dit leuk?
    - verstoppen deel 1b, de rest (Marcel koos het op 25 sep): de soldaten zoeken op Sint-Maarten
      altijd op 2 of 3 plekken, ook zonder argwaan, en je bepaalt de route zelf, maar soms wil de heer
      kiezen;
@@ -67,10 +80,10 @@ voorstel van Claude, en daar gaat vraag 26 over.
    - deel 3: de marskramer koopt en verkoopt vee, kaas, wol en hooi;
    - stap 3 van de inner: praten, afleiden, omkopen (ook de marskramer, het spoor van het goud) en de
      rekenboeken.
-4. **Bouwen:** ronde 4b van de huizenbouwer (3b, stap 4; Marcel: "moeten we dus uitvoeren"), en het
-   dorp bouwt zelf, en beter (3b, stap 5): op bouwgrond die jij aanwijst, voor materiaal en goud, met
-   steen per trede.
-5. **Daarna zoals onder "Daarna, in deze volgorde":** straten en paden (6c; het plein is er sinds 26
+6. **Bouwen:** het dorp bouwt zelf, en beter (3b, stap 5): op bouwgrond die jij aanwijst, voor
+   materiaal en goud, met steen per trede. (Ronde 4b van de huizenbouwer staat sinds vraag 29 hierboven,
+   bij 2.)
+7. **Daarna zoals onder "Daarna, in deze volgorde":** straten en paden (6c; het plein is er sinds 26
    sep), en ontginnen (6b); dan deel C, verhalen en besturen (voorvallen, groepen en keuren, rechtspraak); deel
    D, de nacht en het verzet (de nacht, de eigen buidel, de militie, en daarbij de stal, de hoefsmid
    en de wapenmaker uit 3b); deel E, groeien naar vrijheid (de treden, stadsrechten, de opstand); en
@@ -147,6 +160,14 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     dat het venster van 26 sep precies dat doet voor wie achter een huis langsloopt (een heel gebouw
     doorzichtig vond Marcel op 23 sep "een doorzichtig geelgroen spook"), maar dat het plein ook
     zichtbaar moet zijn als de schout er niet staat: daarom vóór de huizen.
+29. **Wat komt eerst, na "de brink is het hart" en "niet alles strak en waterpas"?** Marcel, 26 sep, na
+    de beelden van het nieuwe gehucht: de gebouwen staan te dicht op elkaar; "de brink is vaak het hart
+    van een dorp. Zou een redelijk open ruimte zijn lijkt mij"; de vorm moet variëren, en niet alles
+    strak en waterpas; en of zijn opmerking over variatie in huizen en "niet waterpas" (21 sep) er nog
+    was. Die stond in `beeld.md`, "Niets is waterpas", maar gold alleen voor de huizen, nooit voor de
+    kaart; dat staat er nu bij ("Ook de kaart is niet waterpas"). Voorstel van Claude: eerst de brink
+    (een vierde versie van het gehucht), dan ronde 4b van de huizenbouwer naar voren, dan de herberg.
+    **Beantwoord (Marcel, 26 sep): "Brink, dan huizen".** En daarvoor een nieuwe sessie.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
