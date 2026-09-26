@@ -1418,6 +1418,33 @@ Wat het vraagt:
 - de inner en de heer de tijd niet meer stilzetten; als ze komen, gaat de tijd naar 1×;
 - `npm test` groen is, en het in de browser is nagekeken.
 
+**Marcel daarna (26 sep, derde opmerking op de pagina, bij "Mensen worden poppetjes"):**
+
+> Ja dit is een goed idee
+>
+> In de nacht kun je dus ook activiteiten organiseren om te verstoppen. Omdat de camera de schout
+> volgt, 'zie' je ook niet alles. Dat geldt voor iedereen. Ze hebben een zichtveld. Dan kun je dus in
+> een donker steegje iets doen zonder dat iemand het weet.
+
+- **Mensen worden poppetjes: ja.**
+- **Een zichtveld voor iedereen** (Marcels idee). Wat de schout doet, weet alleen wie het ziet, en 's
+  nachts ziet niemand ver. Zo kun je in een donker steegje iets verstoppen zonder dat iemand het weet.
+  De camera volgt de schout, dus ook de speler ziet niet alles.
+- **Het bestaat al half** (Claude): zien langs een lijn waarbij huizen de blik tegenhouden
+  (`T.zicht`, `T.zichtTussen` in `js/wereld.js`); de inner die zo 7 tegels ver kijkt
+  (`T.innerKijkt`); en uit het oude spel sluipen (`S`) en ontdekt worden (`T.zoekOntdekking` en
+  `T.SLUIP_ZICHT` in `js/verkennen.js`: wie sluipt, wordt pas twee tegels dichterbij opgemerkt).
+- **Wat erbij moet** (uitwerking van Claude):
+  - een zichtveld voor iedereen, dat 's nachts kleiner is: het licht bepaalt hoe ver iemand kijkt, en
+    een lantaarn, een verlicht raam of een vuur maakt het groter;
+  - een getuige, en wat hij doet met wat hij zag, naar zijn karakter: de roddelaar vertelt het rond,
+    de vrome biecht het op bij de kapelaan, en een verklikker (punt 10) gaat naar de inner;
+  - een lantaarn voor de schout: met een lantaarn zie jij verder in het donker, maar ziet iedereen
+    jou ook; zonder lantaarn zie je weinig, en loop je zo tegen de nachtwacht aan.
+- **Wanneer** (vraag 23): een getuige kan pas iets zien als de mensen poppetjes zijn. Voorstel van
+  Claude: als stap in 3b, na de poppetjes, in plaats van later bij punt 11 (de nacht), omdat
+  verstoppen er meteen spannender door wordt.
+
 **Hoe het zo kwam:**
 
 > Een dorp moet groeien en huizen moeten er organisch bijgebouwd worden. Maar ook tavernes, kleine
@@ -1636,7 +1663,9 @@ wordt, en de markt op de brink.
 5. **Het dorp bouwt zelf,** en beter: bouwgrond, erven, en materiaal en goud uit de voorraad.
 6. **De stal, de hoefsmid en de wapenmaker,** samen met de militie (punt 13).
 
-### Vragen aan Marcel (in de werklijst 14 tot en met 22)
+Vraag 23: komen het zichtveld en de getuigen (Marcels idee van 26 sep) als stap 3, na de poppetjes?
+
+### Vragen aan Marcel (in de werklijst 14 tot en met 23)
 
 14. De dag: A, B of C? **Marcel koos A.**
 15. Wanneer? **De dag komt als eerste.**
@@ -1650,6 +1679,8 @@ wordt, en de markt op de brink.
 21. Blijven bouwtijd en straffen in dagen? **Ja; de tijden stellen we later bij.**
 22. Welke standen krijgt de tijdsversneller? Voorstel: 1×, 3×, 10× en 30×, en slapen tot de ochtend
     als de schout thuis is. Een jaar duurt dan 30 uur, 10 uur, 3 uur of 1 uur.
+23. Komen het zichtveld voor iedereen en de getuigen als stap in 3b, na de poppetjes, of later bij
+    punt 11 (de nacht)? Voorstel: in 3b, want verstoppen wordt er meteen spannender door.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 

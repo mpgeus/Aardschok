@@ -60,6 +60,11 @@ dagen; hij wijst bouwgrond aan; groei mag, want de heer verdient eraan; huizen g
 werkplaatsen worden groter, met personeel; ridders zijn van de koning; en bij de wapens horen bogen,
 zwaarden en schilden. Nog open: vraag 22 (de standen van de versneller), en wat hij nog niet besprak:
 "Wie wanneer waar is", "Mensen worden poppetjes", de rest van "Zaken" en de volgorde.
+**In een derde opmerking (26 sep)** zei Marcel ja tegen de poppetjes, en kwam hij met een eigen idee:
+iedereen heeft een zichtveld, en 's nachts kun je in een donker steegje iets verstoppen zonder dat
+iemand het weet. Claude werkte het uit (`spel.md`, "Marcel daarna"): een zichtveld dat met het licht
+meegaat, getuigen die naar hun karakter doorvertellen, en een lantaarn voor de schout. Het bestaat al
+half (`T.zicht`, `T.innerKijkt`, sluipen). Vraag 23: komt het als stap in 3b, na de poppetjes?
 
 **Loopt nu:** niets.
 
@@ -119,6 +124,9 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 21. ~~Bouwtijd en straffen?~~ Blijven in dagen; de tijden stellen we later bij.
 22. Welke standen krijgt de tijdsversneller? Voorstel: 1×, 3×, 10× en 30×, en slapen tot de ochtend
     als de schout thuis is. Een jaar duurt dan 30 uur, 10 uur, 3 uur of 1 uur.
+23. Komen het zichtveld voor iedereen en de getuigen (Marcels idee, 26 sep) als stap in 3b, na de
+    poppetjes, of later bij punt 11 (de nacht)? Voorstel: in 3b, want verstoppen wordt er meteen
+    spannender door.
 
 *Spelen, en zeggen hoe het voelt:*
 - Het gehucht na de namen (26 sep): Marcel zou het na 7e nog eens openen. Het hernoemen veranderde
@@ -271,7 +279,9 @@ nog nodig is".
 
 11. **De nacht.** Klaar als er dag en nacht is (ook voor de sfeer), met een avondklok, wachters en
     lantaarns, en verstoppen en smokkelen 's nachts veiliger is. De klok en het licht komen al met de
-    dag (punt 3b, 26 sep); hier blijven de avondklok, de wachters, de lantaarns en het smokkelen.
+    dag (punt 3b, 26 sep); hier blijven de avondklok, de wachters, de lantaarns en het smokkelen. Het
+    zichtveld voor iedereen en de getuigen (Marcel, 26 sep) horen hier ook, tenzij ze in 3b komen
+    (vraag 23).
 12. **Eigen buidel en dorpskas.** Klaar als jij zelf iets overhoudt, en wie te veel in eigen zak
     steekt, het dorp verliest.
 13. **Een militie in het geheim.** Klaar als je mensen kunt laten oefenen (een feest als de inner
