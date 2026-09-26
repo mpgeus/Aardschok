@@ -26,7 +26,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep) | 6a |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | besloten, nog niet gebouwd | 6c |
-| Een dorp dat leeft en groeit | voorstel (26 sep): de dag, poppetjes, zelf bouwen, paarden; wacht op Marcel | 11, 13, 14 |
+| Een dorp dat leeft en groeit | voorstel (26 sep); Marcel koos A (een echte dag), en dat beter bouwen materiaal en goud kost | 11, 13, 14 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
@@ -1274,11 +1274,53 @@ Nog open, voor als punt 6c gebouwd wordt (vragen van Claude):
 
 ## Een dorp dat leeft en groeit (Marcel, 26 sep 2026)
 
-**Zo staat het nu** (26 sep): een voorstel van Claude. Er is niets besloten en niets gebouwd. Het raakt
-punt 11 (de nacht), 13 (de militie) en 14 (de treden), en de huizenbouwer (ronde 4b). De vragen
-staan onderaan, en met een nummer in de werklijst (14 tot en met 19). Hetzelfde voorstel staat op
-een pagina om opmerkingen bij te zetten: "Een dorp dat leeft",
+**Zo staat het nu** (26 sep): een voorstel van Claude, waarvan Marcel het begin koos (hieronder).
+Er is nog niets gebouwd. Het raakt punt 11 (de nacht), 13 (de militie) en 14 (de treden), en de
+huizenbouwer (ronde 4b). Wat nog open is, staat onderaan, en met een nummer in de werklijst.
+Hetzelfde voorstel staat op een pagina om opmerkingen bij te zetten: "Een dorp dat leeft",
 https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE (Marcel vroeg erom, 26 sep).
+
+**Marcel koos (26 sep, als opmerking op de pagina):**
+
+> Dit moet dus wel materiaal en goud kosten anders is het te makkelijk. Een upgrade kost nu eenmaal
+> geld/grondstoffen. Maar mensen zijn gelukkiger en er passen misschien meer mensen in 1 huis.
+>
+> In het eerste jaar een stenen huis kan alleen als het gehucht een dorp is, dan kunnen er misschien
+> half stenen huizen zijn. Pas in een stad is het grotendeels steen.
+>
+> De gebouwen zijn er dus grotendeels, paardenstal moeten we dus nog maken.
+>
+> 4b moeten we dus uitvoeren
+>
+> Het wordt dus op A wordt een echte dag.
+>
+> Wat bedoel je met omrekening
+
+- **De dag wordt een echte dag (A).** Vraag 14 is daarmee beantwoord. Hoe lang een dag en een maand
+  duren, is vraag 20.
+- **Beter bouwen kost materiaal én goud,** uit de voorraad en de kist. Het levert tevredenere
+  bewoners op, en meer plaats per huis. Voorstel van Claude voor de plaats, in lijn met wat er nu is
+  (een hut 3, een huis 5, een stenen huis 8): 3, 4, 5, 7 en 8 mensen voor de vijf stappen hieronder.
+- **Steen hangt aan de treden.** In het gehucht geen steen. In een dorp half steen: een stenen voet en
+  een stenen schoorsteen (stap 3 en 4). Pas in een stad is het grotendeels steen (stap 5).
+- **De paardenstal komt erbij.** De rest staat grotendeels al in `T.GEBOUWEN`.
+- **Ronde 4b van de huizenbouwer moet eerst,** want beter bouwen heeft die huizen nodig.
+
+**Wat de omrekening is** (Claude, 26 sep, als antwoord op de pagina). Veel getallen staan nu per
+dag: een mens eet 0,05 graan per dag, een houthakker maakt 2 hout per dag, elke 20 dagen komt er een
+gezin bij, en gereedschap slijt in 180 dagen. Met A heeft een maand 5 dagen in plaats van 30, dus
+één dag telt voor zes. Om het spel even zwaar te houden, gaat alles wat per dag gaat keer zes, en
+alles wat in dagen telt gedeeld door zes. Een mens eet dan 0,3 graan per dag (1,5 per maand, net als
+nu), en een maand levert precies op wat hij nu oplevert.
+- **Eén keer goed:** de getallen gaan naar "per maand", en het spel deelt zelf door het aantal dagen
+  in een maand. Dan is dagen per maand een knop in de werkbank, en blijft de balans gelijk als je hem
+  verzet. Het gaat om zo'n honderd getallen, waaronder 45 bouwtijden en 20 gebouwen die per dag iets
+  maken, en om de toetsen die ze nakijken.
+- **Echte duren** zijn geen tempo: de bouwtijd (een hut kost nu 2 dagen), drie dagen aan de
+  schandpaal, de heer die drie dagen wacht. Omgerekend bouw je een hut in 8 uur. Voorstel: bouwtijd
+  en straffen blijven echte dagen, en al het andere gaat per maand (vraag 21).
+- **De data schuiven:** de inner komt op 3 oogstmaand in plaats van 15, en Sint-Maarten valt op 2
+  slachtmaand in plaats van 11.
 
 **Hoe het zo kwam:**
 
@@ -1423,15 +1465,16 @@ hieronder).
 - Nu wordt een groeiend huis een andere tekening. Voorstel: het blijft hetzelfde huis, met dezelfde
   vorm op dezelfde plek, en krijgt stap voor stap beter materiaal. Je herkent het huis van Klaas, nu
   met pannen. De huizenbouwer kan dat al, want bij hem is materiaal een keuze naast de vorm.
-- Een ladder, bijvoorbeeld:
-  1. vlechtwerk met leem, onder riet: de hut van een keuter;
-  2. vakwerk onder riet;
-  3. vakwerk op een voet van veldsteen, met een stenen schoorsteen;
-  4. een tweede laag die overkraagt, of spanen of leien op het dak;
-  5. baksteen onder pannen: de stad.
-- Elke stap kost materiaal (planken, keien, bakstenen, pannen), en dus het werk van wie het maakt: de
-  timmerman, de keienraper, de steenbakkerij. De trede zet de stappen vrij: baksteen en pannen pas als
-  er een steenbakkerij is, en die komt met het marktrecht (punt 14).
+- Een ladder, met de trede die hem vrijzet (Marcel koos op 26 sep: steen hangt aan de treden) en de
+  plaats per huis (voorstel van Claude):
+  1. vlechtwerk met leem, onder riet: de hut van een keuter (gehucht; 3 mensen);
+  2. vakwerk onder riet (gehucht; 4);
+  3. vakwerk op een voet van veldsteen, met een stenen schoorsteen: half steen (dorp; 5);
+  4. een tweede laag die overkraagt, spanen of leien op het dak (dorp; 7);
+  5. baksteen onder pannen (stad; 8). Pas in een stad is het grotendeels steen.
+- Elke stap kost materiaal (planken, keien, bakstenen, pannen) en goud (Marcel, 26 sep: "anders is
+  het te makkelijk"), en dus ook het werk van wie het materiaal maakt: de timmerman, de keienraper,
+  de steenbakkerij. Wat het oplevert: tevredenere bewoners, en meer plaats per huis.
 - Werkplaatsen groeien ook: de smidse, de herberg, en de kapel die een kerk met een toren wordt.
 
 **Groeien werkt tegen arm lijken** (inzicht van Claude). De inner kijkt naar "pannen in plaats van
@@ -1459,6 +1502,8 @@ wordt, wordt dus vanzelf duurder. De schout moet kiezen:
 - **Ridders:** in 1323 was een ridder een edelman, geen dorpeling. Ridders kunnen de mannen van de heer
   zijn (die komen als je opstaat), roofridders (een reden voor een militie), of later je eigen
   ruiters, als de stad vrij is. Dat is een vraag aan Marcel.
+- Marcel (26 sep): de paardenstal "moeten we dus nog maken". Hij komt in `T.GEBOUWEN`, met een
+  tekening; de andere gebouwen staan er grotendeels al.
 
 ### De wapenmaker, en wat erbij hoort
 
@@ -1476,17 +1521,18 @@ wordt, en de markt op de brink.
 
 ### In welke volgorde (voorstel)
 
-1. **De dag** (A, B of C), met licht: ochtend, avond en nacht in beeld, en de boeren die 's avonds
-   naar huis gaan en 's nachts binnen zijn.
+1. **De dag** (A, gekozen op 26 sep), met de omrekening en licht: ochtend, avond en nacht in beeld,
+   en de boeren die 's avonds naar huis gaan en 's nachts binnen zijn.
 2. **Mensen worden poppetjes:** de handen lopen naar hun werk en terug, en overdag is er menigte.
 3. **De herberg en de kleine zaken,** en een huis dat groeit door wat zijn bewoners bereiken.
-4. **Het dorp bouwt zelf:** bouwgrond, erven, en materiaal uit de voorraad. Daarvoor moeten de huizen
-   van de huizenbouwer in het spel staan (ronde 4b), elk in elke stap van de ladder gerenderd.
-5. **De stal, de hoefsmid en de wapenmaker,** samen met de militie (punt 13).
+4. **Ronde 4b van de huizenbouwer** (Marcel, 26 sep: "moeten we dus uitvoeren"): de huizen in het
+   spel, elk in elke stap van de ladder gerenderd.
+5. **Het dorp bouwt zelf,** en beter: bouwgrond, erven, en materiaal en goud uit de voorraad.
+6. **De stal, de hoefsmid en de wapenmaker,** samen met de militie (punt 13).
 
-### Vragen aan Marcel (in de werklijst 14 tot en met 19)
+### Vragen aan Marcel (in de werklijst 14 tot en met 21)
 
-14. De dag: A, B of C? En hoe lang mag een jaar duren, bij 1x en in de snelste stand?
+14. De dag: A, B of C? **Marcel koos A (26 sep).** Hoe lang een dag en een maand duren, is nu vraag 20.
 15. Wanneer: nu, vóór verstoppen deel 1b (de dag raakt alle getallen, en dat worden er elke week
     meer), of na punt 6?
 16. Het dorp bouwt zelf: wijs jij alleen bouwgrond aan, of zet je ook nog zelf huizen neer?
@@ -1494,6 +1540,10 @@ wordt, en de markt op de brink.
     om het tegen te houden?
 18. Wie zijn de ridders: de mannen van de heer, roofridders, of later je eigen ruiters?
 19. Wat hoort bij de wapenmaker: een boogmaker, een zadelmaker, een harnasmaker, of iets anders?
+20. Hoe lang duurt een dag, en hoeveel dagen heeft een maand? Voorstel: een minuut bij 1x, en vijf
+    dagen. Een jaar duurt dan een uur bij 1x en zes minuten bij 10x.
+21. Blijven de bouwtijd en de straffen echte dagen (een hut in twee dagen), of gaan ze mee per maand
+    (een hut in acht uur)? Voorstel: echte dagen.
 
 ## Welke gameplay er nog nodig is (Marcel vroeg het, 23 sep; voorstel van Claude)
 

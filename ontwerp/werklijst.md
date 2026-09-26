@@ -43,6 +43,12 @@ om in te leven, dus eerst moet de dag langer. De keuzes staan hieronder als vraa
 Of "Volgende" hieronder blijft, hangt af van vraag 15. Het voorstel staat ook op een pagina, "Een
 dorp dat leeft" (https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE), met de dag en de afstand op
 schaal, zodat Marcel er opmerkingen bij kan zetten, zoals bij "Stand van het gehucht".
+**Marcel koos daar (26 sep, als opmerking op de pagina):** A, de dag wordt een echte dag; beter
+bouwen kost materiaal én goud, en levert tevredenheid en meer plaats per huis op; steen hangt aan de
+treden (geen steen in het gehucht, half steen in een dorp, grotendeels steen pas in een stad); de
+paardenstal komt erbij; en ronde 4b van de huizenbouwer moet uitgevoerd worden. Hij vroeg wat de
+omrekening is; het antwoord staat op de pagina en in `spel.md`. Nog open: wanneer (vraag 15), en
+vraag 20 en 21 over de lengte van een dag en over bouwtijd en straffen.
 
 **Loopt nu:** niets.
 
@@ -85,9 +91,7 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     Claude, 26 sep; `opmerkingen.md`, onder de voorstellen.)
 
 *Een dorp dat leeft en groeit* (26 sep; `spel.md`, "Een dorp dat leeft en groeit"):
-14. De dag: A (een dag van een minuut, vijf dagen per maand; een jaar een uur bij 1x en zes minuten
-    bij 10x), B (een eigen klok voor de zon) of C (een ritme zonder zon)? En hoe lang mag een jaar
-    duren? Claude raadt A aan.
+14. ~~De dag: A, B of C?~~ Marcel koos A (26 sep): de dag wordt een echte dag.
 15. Wanneer: nu, vóór verstoppen deel 1b (de dag raakt alle getallen, en dat worden er elke week
     meer), of na punt 6?
 16. Het dorp bouwt zelf: wijs jij alleen bouwgrond aan, of zet je ook nog zelf huizen neer?
@@ -95,6 +99,10 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     om het tegen te houden?
 18. Wie zijn de ridders: de mannen van de heer, roofridders, of later je eigen ruiters?
 19. Wat hoort bij de wapenmaker: een boogmaker, een zadelmaker, een harnasmaker, of iets anders?
+20. Hoe lang duurt een dag, en hoeveel dagen heeft een maand? Voorstel: een minuut bij 1x, en vijf
+    dagen. Een jaar duurt dan een uur bij 1x en zes minuten bij 10x.
+21. Blijven de bouwtijd en de straffen echte dagen (een hut in twee dagen), of gaan ze mee per maand
+    (een hut in acht uur)? Voorstel: echte dagen.
 
 *Spelen, en zeggen hoe het voelt:*
 - Het gehucht na de namen (26 sep): Marcel zou het na 7e nog eens openen. Het hernoemen veranderde
@@ -298,7 +306,9 @@ Vier rondes, elk een eigen agent, en na elke ronde een plaat om te beoordelen. Z
      hek, de bank en de regenton; het hekje en de bedden niet (Marcel, 22 sep).
    Ronde 3 was één lange agent (235 stappen), dus ronde 4 gaat in twee stukken: **4a** (af, 22 sep)
    de hekjes van wilgentenen en latten (`beeld.md`) en de tuinstukken als eigen vel in Tiled; **4b**
-   de huizen in `gebouwen.tsx`.
+   de huizen in `gebouwen.tsx`. **Marcel (26 sep): "4b moeten we dus uitvoeren."** Het dorp dat
+   zelf en beter bouwt (`spel.md`, "Een dorp dat leeft en groeit") heeft die huizen nodig, elk in
+   elke stap van de ladder: van vlechtwerk onder riet tot baksteen onder pannen.
 
 **Meer mensen:** fase B2b, de zeven vaklieden uit `dorpelingen3.cjs` (daar neemt `been()` de knie
 al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`). Renderwerk.
