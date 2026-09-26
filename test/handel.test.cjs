@@ -7,6 +7,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 require('../js/tijd.js');
+require('../js/dag.js');
 require('../js/wereld.js');
 require('../js/voorraad.js');
 require('../js/mensen.js');
@@ -173,15 +174,19 @@ test('verkopen kan niet wat je niet hebt, en niet meer als hij vertrekt', () => 
 
 test('zijn poppetje komt over de weg, zijn dagen tellen pas op de brink, en daarna loopt hij weer weg', () => {
   const S = maakS();
-  S.kalender.dag = dagVan('grasmaand', 5);
-  T.tikHandelDag(S, S.kalender.dag);
+  const komt = dagVan('grasmaand', 5);
+  S.kalender.dag = komt;
+  T.tikHandelDag(S, komt);
+  T.werkMarskramerBij(S);
+  assert.equal(S.marskramer.wezen, null, 'om middernacht wacht hij nog: hij komt overdag (js/dag.js)');
+  S.kalender.dag = komt + 10 / 24;
   T.werkMarskramerBij(S);
   const e = S.marskramer.wezen;
   assert.ok(e, 'er staat een marskramer in de wereld');
   assert.deepEqual([e.tx, e.ty], [9, 5], 'hij komt binnen over de weg (de uitgang)');
   assert.deepEqual([e.thuis.x, e.thuis.y], [5, 5], 'en loopt naar zijn plek op de brink');
   // Onderweg telt zijn tijd niet: ook na tien dagen gaat hij nog niet weg.
-  const tienLater = S.kalender.dag + T.HANDEL_INSTELLINGEN.blijftDagen;
+  const tienLater = komt + T.HANDEL_INSTELLINGEN.blijftDagen;
   T.tikHandelDag(S, tienLater);
   assert.ok(T.kanHandelen(S), 'wie nog onderweg is, vertrekt niet');
   // Hij staat er: nu beginnen zijn dagen.

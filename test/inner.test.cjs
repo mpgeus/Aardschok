@@ -6,6 +6,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 require('../js/tijd.js');
+require('../js/dag.js');
 require('../js/wereld.js');
 require('../js/pad.js');
 require('../js/voorraad.js');
@@ -41,7 +42,8 @@ function maakS() {
   for (let x = 2; x <= 8; x++) tegels[13][x] = 'muur';
   const S = {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 13, woonruimte: 15,
-    kalender: { dag: KOMT, snelheid: 1 }, inventaris: new Set(), modus: 'verkennen',
+    // Om tien uur 's ochtends: een bezoeker komt overdag (js/dag.js, T.bezoekerKomtAan).
+    kalender: { dag: KOMT + 10 / 24, snelheid: 1 }, inventaris: new Set(), modus: 'verkennen',
     wereld: {
       b, h, tegels, voorwerpen: [], wezens: [], deuren: [],
       marskramer: { x: 5, y: 10 }, overgangen: [],

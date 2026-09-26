@@ -5,6 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 require('../js/tijd.js');
+require('../js/dag.js');
 require('../js/wereld.js');
 require('../js/voorraad.js');
 require('../js/mensen.js');
@@ -224,7 +225,8 @@ function eenBoerOpZijnAkker(eigenschappen) {
   const e = T.maakMens('boer1', 0, 0);
   e.werkAkkers = [akker];
   e.eigenschappen = eigenschappen;
-  const S = { wereld: { wezens: [e], akkers: [akker], tegels: [['vloer']] }, tijd: 0, kalender: { dag: RIJP_DAG }, voorraad: T.nieuweVoorraad() };
+  // Om tien uur 's ochtends: een boer maait alleen onder werktijd (js/dag.js).
+  const S = { wereld: { wezens: [e], akkers: [akker], tegels: [['vloer']] }, tijd: 0, kalender: { dag: RIJP_DAG + 10 / 24 }, voorraad: T.nieuweVoorraad() };
   const zoek = T.zoekPad;
   T.zoekPad = (van, doel) => [{ x: doel.x, y: doel.y }];
   return { S, e, akker, klaar: () => { T.zoekPad = zoek; } };

@@ -224,6 +224,25 @@ test('slapen kan \'s avonds bij je eigen huis, en bij het eerste licht word je w
   assert.ok(berichten.includes('Het is ochtend.'));
 });
 
+test('een bezoeker komt op één manier: overdag, met zijn bericht één keer, en de heer en de inner zetten de tijd op 1×', () => {
+  const S = { kalender: { dag: bijUur(GROEI, 3), snelheid: 10 } };
+  berichten.length = 0;
+  const bezoek = { aankomst: { tekst: 'Er komt iemand over de weg.', soort: 'gevaar', naarGewoon: true } };
+  assert.equal(T.bezoekerKomtAan(S, bezoek), false, 'om drie uur \'s nachts nog niet');
+  assert.deepEqual(berichten, []);
+  S.kalender.dag = bijUur(GROEI, IN.bezoekUur + 0.25);
+  assert.equal(T.bezoekerKomtAan(S, bezoek), true, 'vanaf het bezoekuur wel');
+  assert.equal(T.bezoekerKomtAan(S, bezoek), true, 'en daarna blijft hij er');
+  assert.deepEqual(berichten, ['Er komt iemand over de weg.'], 'het bericht één keer');
+  assert.equal(S.kalender.snelheid, 1, 'van 10× naar 1×');
+  // Wie meteen komt (Spel.debug, of er is geen weg de kaart op), wacht niet op de ochtend; en
+  // zonder naarGewoon (de marskramer) blijft de snelheid zoals de speler hem zette.
+  const nacht = { kalender: { dag: bijUur(GROEI, 3), snelheid: 10 } };
+  assert.equal(T.bezoekerKomtAan(nacht, { meteen: true, aankomst: { tekst: 'De marskramer.', soort: 'goed' } }), true);
+  assert.equal(nacht.kalender.snelheid, 10);
+  assert.equal(T.bezoekerKomtAan(nacht, null), false, 'geen bezoek, niemand die komt');
+});
+
 test('de inner komt overdag: valt zijn dag \'s nachts in, dan loopt hij pas om negen uur de kaart op, en gaat de tijd naar 1×', () => {
   const S = gehucht(bijUur(dagVan('oogstmaand', 15), 0.5), 10);
   S.schout = S.schout || null;

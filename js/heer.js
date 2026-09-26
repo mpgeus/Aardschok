@@ -607,25 +607,22 @@
     const h = S.heer || (S.heer = T.nieuweHeer());
     // Hij telt de kist als hij komt, en dat getal houdt hij (js/heer.js, T.eisVanDeHeer, zonder
     // rapport): anders werd zijn eis kleiner terwijl je hem betaalde.
-    h.bezoek = { komtOp: dag, staat: false, wachtTot: null, betaald: null, weg: false, wezens: null, schandpaal: false, kist: (S.voorraad && S.voorraad.goud) || 0 };
+    h.bezoek = {
+      komtOp: dag, staat: false, wachtTot: null, betaald: null, weg: false, wezens: null, schandpaal: false,
+      kist: (S.voorraad && S.voorraad.goud) || 0,
+      aankomst: { tekst: 'Sint-Maarten. De heer komt over de weg, met twee soldaten.', soort: 'gevaar', naarGewoon: true },
+    };
     if (T.zetVlag) {
       T.zetVlag(S, 'heerOpBezoek');
       if (h.schuld > 0) T.zetVlag(S, 'heerSchuld');
     }
-    // Zonder poppetje (een toets zonder wereld om in te lopen) staat hij er meteen. Anders komt hij
-    // overdag, vanaf het bezoekuur (js/dag.js): dan pas het bericht, bij T.werkHeerBij.
-    if (!kanLopen(S)) {
-      heerKomtAan(S);
-      T.heerStaatErOp(S);
-    }
+    // Hij komt overdag (js/dag.js, T.bezoekerKomtAan): valt zijn dag 's nachts in, dan zegt het
+    // bericht het pas als hij de kaart op loopt (T.werkHeerBij). Zonder poppetje (een toets zonder
+    // wereld om in te lopen) is hij er meteen, en staat hij meteen op de brink.
+    if (!kanLopen(S)) h.bezoek.meteen = true;
+    T.bezoekerKomtAan(S, h.bezoek);
+    if (!kanLopen(S)) T.heerStaatErOp(S);
   };
-
-  // Hij komt de kaart op: het bericht, en wie sneller dan 1× speelt, gaat terug naar 1×, anders zie
-  // je hem nauwelijks komen.
-  function heerKomtAan(S) {
-    bericht('Sint-Maarten. De heer komt over de weg, met twee soldaten.', 'gevaar');
-    if (S.kalender && S.kalender.snelheid > 1 && T.zetSnelheid) T.zetSnelheid(S, 1);
-  }
 
   // Hij staat op de brink en wacht op je, en zijn wachtdagen tellen. Tot 26 sep stond de tijd dan
   // stil, omdat naar hem toe lopen bij een dag van 2,5 seconde dagen kostte; sinds de dag (js/dag.js)
@@ -734,9 +731,8 @@
     const plek = brinkVan(w);
     const b = h.bezoek;
     if (b && !b.wezens && !b.weg) {
-      // Overdag, vanaf het bezoekuur (js/dag.js); Spel.debug.heer() mag ook 's nachts (b.nu).
-      if (!b.nu && T.isBezoektijd && !T.isBezoektijd(S)) return;
-      heerKomtAan(S);
+      // Overdag, vanaf het bezoekuur, met zijn bericht (js/dag.js).
+      if (!T.bezoekerKomtAan(S, b)) return;
       // Hij komt de kaart op, met zijn twee soldaten vlak achter zich.
       const heer = T.maakMens('heer', uitgang.x, uitgang.y, 1);
       heer.thuis = { x: plek.x, y: plek.y };

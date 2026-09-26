@@ -101,19 +101,28 @@
       beurs: IN().beurs, plaats: IN().plaats, heeft,
       weg: false, // true zodra hij vertrekt: dan handelt hij niet meer, hij loopt naar de weg
       wezen: null, staat: false, // zijn poppetje, en of hij al op de brink staat
+      aankomst: {
+        tekst: i === IN().bezoeken.length - 1
+          ? 'De marskramer komt over de weg: zijn laatste ronde vóór de winter.'
+          : 'De marskramer komt over de weg. Hij blijft een paar dagen op de brink.',
+        soort: 'goed',
+      },
     };
     if (T.zetVlag) {
       T.zetVlag(S, 'marskramerOpBezoek');
       T.zetVlag(S, bezoek.vlag);
     }
-    const tekst = i === IN().bezoeken.length - 1
-      ? 'De marskramer komt over de weg: zijn laatste ronde vóór de winter.'
-      : 'De marskramer komt over de weg. Hij blijft een paar dagen op de brink.';
-    // Hij komt overdag (js/dag.js, T.isBezoektijd): valt zijn dag 's nachts in, dan zegt het bericht
-    // het pas als hij de kaart op loopt (T.werkMarskramerBij).
-    if (T.isBezoektijd && !T.isBezoektijd(S) && T.maakMens) S.marskramer.bericht = tekst;
-    else if (T.ui && T.ui.bericht) T.ui.bericht(tekst, 'goed');
+    // Hij komt overdag (js/dag.js, T.bezoekerKomtAan): valt zijn dag 's nachts in, dan zegt het
+    // bericht het pas als hij de kaart op loopt (T.werkMarskramerBij). Zonder wereld om in te lopen
+    // (een toets) meteen.
+    if (!kanLopen(S)) S.marskramer.meteen = true;
+    T.bezoekerKomtAan(S, S.marskramer);
   };
+
+  // Kan hij over de weg de kaart op? Dan heeft hij een poppetje (T.werkMarskramerBij).
+  function kanLopen(S) {
+    return !!(magKomen(S) && T.maakMens && deWeg(S.wereld));
+  }
 
   // Hij gaat, op deze dag: vanaf nu handelt hij niet meer. Heeft hij een poppetje, dan loopt dat
   // eerst de weg op (T.werkMarskramerBij haalt hem daar weg); zonder poppetje is hij meteen weg.
@@ -265,12 +274,8 @@
     const uitgang = deWeg(w);
     if (!m.wezen) {
       if (m.weg || !uitgang) return;
-      // Overdag, vanaf het bezoekuur (js/dag.js); Spel.debug.marskramer() mag ook 's nachts (m.nu).
-      if (!m.nu && T.isBezoektijd && !T.isBezoektijd(S)) return;
-      if (m.bericht) {
-        if (T.ui && T.ui.bericht) T.ui.bericht(m.bericht, 'goed');
-        m.bericht = null;
-      }
+      // Overdag, vanaf het bezoekuur, met zijn bericht (js/dag.js).
+      if (!T.bezoekerKomtAan(S, m)) return;
       const e = T.maakMens('marskramer', uitgang.x, uitgang.y, 1);
       // Zijn thuis is zijn plek op de brink, met een straal van één: daar scharrelt hij bij zijn
       // uitgestalde waar.

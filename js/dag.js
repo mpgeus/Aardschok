@@ -164,6 +164,26 @@
     return T.uurVanDag(S.kalender.dag) >= IN().bezoekUur;
   };
 
+  // Een bezoeker komt aan: de marskramer (S.marskramer), de heer (S.heer.bezoek) of de inner
+  // (S.inner.bezoek). Eén manier voor alle drie; tot 26 sep had elk zijn eigen variant. Elk bezoek
+  // draagt zijn eigen aankomst mee:
+  //   bezoek.aankomst = { tekst, soort, naarGewoon }  // het bericht, en of de tijd naar 1× gaat
+  //   bezoek.meteen = true                            // niet op het bezoekuur wachten: Spel.debug
+  //                                                   // riep hem, of er is geen wereld om in te lopen
+  // Hij komt overdag, vanaf het bezoekuur. De eerste keer dat hij er mag zijn, zegt het bericht dat
+  // hij komt, en met naarGewoon gaat de tijd naar 1× (de heer en de inner: wie sneller speelt, ziet
+  // hen anders nauwelijks komen). Geeft true zodra hij er mag zijn; zijn poppetje zet de module zelf.
+  T.bezoekerKomtAan = function (S, bezoek) {
+    if (!bezoek) return false;
+    if (bezoek.aangekomen) return true;
+    if (!bezoek.meteen && !T.isBezoektijd(S)) return false;
+    bezoek.aangekomen = true;
+    const a = bezoek.aankomst || {};
+    if (a.tekst) bericht(a.tekst, a.soort);
+    if (a.naarGewoon) T.naarGewoneSnelheid(S);
+    return true;
+  };
+
   // ---------------------------------------------------------------------------------------------
   // Slapen tot de ochtend
   // ---------------------------------------------------------------------------------------------

@@ -7,6 +7,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 require('../js/tijd.js');
+require('../js/dag.js');
 require('../js/wereld.js');
 require('../js/voorraad.js');
 require('../js/mensen.js');
@@ -472,6 +473,9 @@ test('zijn poppetje komt over de weg met twee soldaten, en op de brink wacht hij
   S.kalender.dag = SINT_MAARTEN;
   T.tikHeerDag(S, SINT_MAARTEN);
   assert.ok(!S.heer.bezoek.staat, 'hij moet nog lopen');
+  T.werkHeerBij(S);
+  assert.ok(!S.heer.bezoek.wezens, 'om middernacht wacht hij nog: hij komt overdag (js/dag.js)');
+  S.kalender.dag += 10 / 24;
   T.werkHeerBij(S);
   const [heer, s1, s2] = S.heer.bezoek.wezens;
   assert.equal(heer.wie, 'heer');

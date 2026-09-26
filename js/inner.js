@@ -308,31 +308,28 @@
       komtOp: dag, onverwacht: !!onverwacht, geduld: IN().geduld,
       gebouwen: new Set(), tegels: new Set(), wezen: null, weg: false, laatste: null, volgt: false,
       overslaan: new Set(), // wat hij niet kon bereiken
+      aankomst: {
+        tekst: onverwacht
+          ? 'De inner komt onverwacht terug. Hij wil nog eens kijken.'
+          : 'De inner van de heer komt tellen. Loop met hem mee: wat hij ziet, komt in zijn rapport.',
+        soort: 'gevaar',
+        naarGewoon: true,
+      },
     };
     if (T.zetVlag) {
       T.zetVlag(S, 'innerOpBezoek');
       if (onverwacht) T.zetVlag(S, 'innerOnverwacht');
     }
-    // Hij komt overdag (js/dag.js): valt zijn dag 's nachts in, dan zegt het bericht het pas als hij
-    // de kaart op loopt (T.werkInnerBij). Zonder wereld om in te lopen (een toets) meteen.
-    if (!T.isBezoektijd || T.isBezoektijd(S) || !kanLopen(S)) innerKomtAan(S);
+    // Hij komt overdag (js/dag.js, T.bezoekerKomtAan): valt zijn dag 's nachts in, dan zegt het
+    // bericht het pas als hij de kaart op loopt (T.werkInnerBij). Zonder wereld om in te lopen (een
+    // toets) meteen. Tot 26 sep stond de tijd stil zolang hij er was, omdat meelopen bij een dag van
+    // 2,5 seconde weken kostte; sinds de dag duurt zijn bezoek een dag, en loopt de tijd door.
+    if (!kanLopen(S)) I.bezoek.meteen = true;
+    T.bezoekerKomtAan(S, I.bezoek);
     if (T.ui && T.ui.toonArgwaan) T.ui.toonArgwaan(S);
   };
 
-  // Hij komt de kaart op: het bericht, en de tijd naar 1× (wie sneller speelt, ziet hem anders niet
-  // komen). Tot 26 sep stond de tijd stil zolang hij er was, omdat meelopen bij een dag van 2,5
-  // seconde weken kostte; sinds de dag duurt zijn bezoek een dag, en loopt de tijd door.
-  function innerKomtAan(S) {
-    const b = S.inner && S.inner.bezoek;
-    if (!b || b.aangekomen) return;
-    b.aangekomen = true;
-    bericht(b.onverwacht
-      ? 'De inner komt onverwacht terug. Hij wil nog eens kijken.'
-      : 'De inner van de heer komt tellen. Loop met hem mee: wat hij ziet, komt in zijn rapport.', 'gevaar');
-    if (S.kalender && S.kalender.snelheid > 1 && T.zetSnelheid) T.zetSnelheid(S, 1);
-  }
-
-  // Hij gaat, met zijn rapport: de argwaan om het graan, een melding, en de tijd loopt weer.
+  // Hij gaat, met zijn rapport: de argwaan om het graan, en een melding.
   T.innerVertrekt = function (S) {
     const I = S.inner;
     const b = I && I.bezoek;
@@ -510,9 +507,8 @@
     const uitgang = T.wegInEnUit(w);
     if (!b.wezen) {
       if (b.weg) return;
-      // Overdag, vanaf het bezoekuur (js/dag.js); Spel.debug.inner() mag ook 's nachts (b.nu).
-      if (!b.nu && T.isBezoektijd && !T.isBezoektijd(S)) return;
-      innerKomtAan(S);
+      // Overdag, vanaf het bezoekuur, met zijn bericht (js/dag.js).
+      if (!T.bezoekerKomtAan(S, b)) return;
       const e = T.maakMens('inner', uitgang.x, uitgang.y, 0);
       e.dwaalt = false; // hij loopt waar hij heen wil, niet waar het dwalen hem brengt
       b.wezen = e;

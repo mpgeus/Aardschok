@@ -463,7 +463,7 @@
     marskramer(bezoek) {
       if (!S.marskramer) T.marskramerKomt(S, bezoek || 0, Math.floor(S.kalender.dag));
       const m = S.marskramer;
-      if (m) m.nu = true; // ook 's nachts: hij hoeft niet op het bezoekuur te wachten (js/dag.js)
+      if (m) m.meteen = true; // ook 's nachts: niet op het bezoekuur wachten (js/dag.js, T.bezoekerKomtAan)
       return m && { bezoek: m.bezoek, beurs: m.beurs, plaats: m.plaats, heeft: { ...m.heeft }, staat: m.staat, weg: m.weg, gaatOp: m.gaatOp };
     },
     // De heer nu laten komen, zonder op Sint-Maarten te wachten (js/heer.js): Spel.debug.heer().
@@ -472,7 +472,7 @@
     heer() {
       if (!S.heer || !S.heer.bezoek) T.heerKomt(S, Math.floor(S.kalender.dag));
       const b = S.heer.bezoek;
-      b.nu = true; // ook 's nachts: hij hoeft niet op het bezoekuur te wachten (js/dag.js)
+      b.meteen = true; // ook 's nachts: niet op het bezoekuur wachten (js/dag.js, T.bezoekerKomtAan)
       return { vraagt: T.eisVanDeHeer(S).per, staat: b.staat, betaald: !!b.betaald, schuld: S.heer.schuld };
     },
     brief() {
@@ -486,7 +486,7 @@
       const I = S.inner || (S.inner = T.nieuweInner());
       if (!I.bezoek) T.innerKomt(S, Math.floor(S.kalender.dag), !!onverwacht);
       const b = I.bezoek;
-      b.nu = true; // ook 's nachts: hij hoeft niet op het bezoekuur te wachten (js/dag.js)
+      b.meteen = true; // ook 's nachts: niet op het bezoekuur wachten (js/dag.js, T.bezoekerKomtAan)
       const r = I.rapport;
       return {
         geduld: b.geduld, volgt: b.volgt, weg: b.weg, gebouwen: b.gebouwen.size, tegels: b.tegels.size,
