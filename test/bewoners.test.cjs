@@ -241,7 +241,7 @@ test('in het gehucht is iedereen \'s nachts binnen, overdag waar hij hoort, en \
   assert.equal(buiten.length, 0, `'s nachts is iedereen binnen; niet: ${buiten.map((p) => p.naam).join(', ')}`);
 });
 
-test('staat de schout in zijn deur, dan gaat zijn gezin door de achterdeur naar binnen', () => {
+test('staat de schout in zijn deur, dan gaat zijn gezin vanaf de tegel ernaast naar binnen', () => {
   const S = gehucht({ dag: bijUur(GROEI, 20), snelheid: 10 });
   const huis = S.gebouwen.find((g) => g.huis === 'schout');
   const deur = T.deurVan(S.wereld, huis);

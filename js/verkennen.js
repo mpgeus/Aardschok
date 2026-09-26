@@ -316,19 +316,23 @@
       // voor zijn deur staat als het nacht is, gaat naar binnen; 's ochtends komt hij weer naar
       // buiten, zodra er niemand voor de deur staat. Overdag geeft T.dagAnker niets, en geldt het
       // gewone anker hieronder.
-      // Staat er iemand anders in zijn voordeur (de schout voor zijn eigen huis, terwijl zijn gezin
-      // naar binnen wil), dan gaat hij door de achterdeur: overal op zijn erf. Voor een huis in een
-      // smal steegje moest hij anders om het hele huis heen, want wie in de deur staat, zet het
-      // steegje dicht.
+      // Staat er iemand anders in zijn deur (de schout voor zijn eigen huis, terwijl zijn gezin naar
+      // binnen wil), dan gaat hij naar binnen vanaf de tegel ernaast. Wanneer hij binnen of buiten
+      // kwam, en waar zijn deur is, onthoudt hij voor het scherm: js/tekenen.js laat hem de deur in
+      // stappen en vervagen, of eruit komen, in plaats van in één klap te verdwijnen (Marcel, 26 sep:
+      // "Zodra mensen bij de deur komen 'verdwijnen' ze naar binnen").
       const dagAnker = T.dagAnker ? T.dagAnker(S, m, oogst) : null;
       const deurBezet = !!(dagAnker && dagAnker.binnen && T.wezenOp(w, dagAnker.x, dagAnker.y, m));
-      const achterdeur = deurBezet ? (T.DAG_INSTELLINGEN && T.DAG_INSTELLINGEN.erfStraal) || 2 : 0;
+      const naastDeur = deurBezet ? 1 : 0;
       if (m.binnen) {
         if (dagAnker && dagAnker.binnen) continue;
         if (T.wezenOp(w, m.tx, m.ty, m)) continue;
         m.binnen = false;
-      } else if (dagAnker && dagAnker.binnen && !m.onderweg && T.afstand(dagAnker, { x: m.tx, y: m.ty }) <= achterdeur) {
+        m.deurSinds = S.tijd;
+      } else if (dagAnker && dagAnker.binnen && !m.onderweg && T.afstand(dagAnker, { x: m.tx, y: m.ty }) <= naastDeur) {
         m.binnen = true;
+        m.deurSinds = S.tijd;
+        m.deur = { x: dagAnker.x, y: dagAnker.y };
         continue;
       }
       m.dwaalTijd -= dt;
@@ -359,13 +363,18 @@
       const straalNu = thuisNu && (thuisNu.straal != null ? thuisNu.straal : (m.straal || 3));
       if (thuisNu && T.afstand(thuisNu, { x: m.tx, y: m.ty }) > straalNu) {
         const doel = { x: Math.round(thuisNu.x), y: Math.round(thuisNu.y) };
-        const pad = T.zoekPad(
-          { x: m.tx, y: m.ty },
-          doel,
-          (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: m }),
-          (x, y) => T.isVast(w, x, y),
-          { tot: Math.max(straalNu, achterdeur) },
-        );
+        const van = { x: m.tx, y: m.ty };
+        const vast = (x, y) => T.isVast(w, x, y);
+        const padOpties = { tot: Math.max(straalNu, naastDeur) };
+        let pad = T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: m }), vast, padOpties);
+        // Een lange omweg, alleen omdat er iemand in de weg staat, neemt hij niet: een kleuter vlak
+        // naast zijn deur liep anders om het hele huis heen, omdat de schout in de deur stond en een
+        // broertje op de tegel ernaast. Dan wacht hij liever even. Een omweg door de muren is wél
+        // nodig; daarom de vergelijking met de weg zonder anderen.
+        if (pad && pad.length > 3 * T.afstand(van, doel) + 6) {
+          const zonderAnderen = T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y), vast, padOpties);
+          if (zonderAnderen && zonderAnderen.length * 2 < pad.length) pad = null;
+        }
         if (pad && pad.length) {
           m.pad = pad;
           continue;

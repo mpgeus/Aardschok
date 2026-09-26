@@ -1604,8 +1604,12 @@ hieronder).
   wie van het gezin water haalt (de vrouw, anders een dochter) bij de put op de brink; overdag bij het
   werk (de herder op de heide, de tweede hand op het erf van de boerderij), en wie geen werk heeft:
   een kind of knaap op de brink, een volwassene zonder werk ook, een oude en een kleuter bij huis, de
-  vrouw van de schout op haar erf; 's avonds thuis op het erf. Staat er iemand in de voordeur, dan gaat
-  men door de achterdeur: ergens op het eigen erf.
+  vrouw van de schout op haar erf; 's avonds thuis op het erf.
+- **Naar binnen gaan zie je** (Marcel, 26 sep: "Zodra mensen bij de deur komen 'verdwijnen' ze naar
+  binnen"): wie naar binnen gaat, stapt in een halve seconde de deur in en vervaagt, en 's ochtends
+  komt hij er zo ook weer uit (`js/tekenen.js`, alleen voor het scherm). Staat er iemand in de deur,
+  dan gaat men naar binnen vanaf de tegel ernaast. Een lange omweg om het huis, alleen omdat er
+  iemand in de weg staat, neemt niemand: dan wacht men even.
 - **Bij de muis staat wie het is:** "Geert, zoon van Klaas · herder", "Tette, schoondochter van Aaltje
   · helpt op de boerderij van Trijn", "Albert · zonder werk".
 - `Spel.debug.bewoners()` zegt per bewoner wie het is, waar hij woont en werkt, en waar hij nu hoort.

@@ -136,11 +136,11 @@ test('T.dagAnker: een boer is \'s nachts binnen, \'s ochtends en \'s avonds op z
 test('in het gehucht gaan de vijf boeren \'s avonds naar huis en \'s nachts naar binnen, en komen ze \'s ochtends weer naar buiten', () => {
   const S = gehucht(bijUur(GROEI, 17), 10);
   loopTot(S, bijUur(GROEI, 23.5));
-  // Met zijn gezin erbij (js/bewoners.js) staat er soms iemand in zijn deur, en dan gaat hij door de
-  // achterdeur: ergens op zijn eigen erf (T.laatDwalen, js/verkennen.js).
+  // Met zijn gezin erbij (js/bewoners.js) staat er soms iemand in zijn deur, en dan gaat hij naar
+  // binnen vanaf de tegel ernaast (T.laatDwalen, js/verkennen.js).
   for (const e of boeren(S)) {
     assert.ok(e.binnen, `${e.wie} is binnen`);
-    assert.ok(T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= IN.erfStraal, `${e.wie} ging bij zijn eigen huis naar binnen`);
+    assert.ok(T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1, `${e.wie} ging bij zijn eigen deur naar binnen`);
   }
   assert.equal(T.wezenOp(S.wereld, boeren(S)[0].thuis.x, boeren(S)[0].thuis.y), null, 'wie binnen is, staat niemand in de weg');
   loopTot(S, bijUur(GROEI + 1, 9));

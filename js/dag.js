@@ -231,6 +231,7 @@
     if (h) {
       h.pad = h.onderweg && h.pad.length ? [h.pad[0]] : [];
       h.binnen = true;
+      h.deurSinds = S.tijd; // hij vervaagt, en verdwijnt niet in één klap (js/tekenen.js)
     }
     S.naLopen = null;
     T.zetSnelheid(S, T.SLAAP_SNELHEID);
@@ -244,7 +245,10 @@
     if (!S || !S.slaap) return;
     const vorige = S.slaap.vorige;
     S.slaap = null;
-    if (S.schout) S.schout.binnen = false;
+    if (S.schout) {
+      S.schout.binnen = false;
+      S.schout.deurSinds = S.tijd;
+    }
     if (S.kalender && S.kalender.snelheid === T.SLAAP_SNELHEID) T.zetSnelheid(S, vorige || 1);
     if (T.ui && T.ui.werkSlaapKnopBij) T.ui.werkSlaapKnopBij(S);
   };

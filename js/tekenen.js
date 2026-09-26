@@ -257,7 +257,7 @@
     for (const e of w.wezens) {
       // Met sprites blijft het laatste beeld van het sterven liggen; met vlakken vervaagt het.
       if (e.dood && e.sterfTijd > 0.8 && !metSprites()) continue;
-      if (e.binnen) continue; // 's nachts in zijn huis (js/dag.js)
+      if (e.binnen && !deurStap(S, e)) continue; // 's nachts in zijn huis (js/dag.js); net binnen: hij stapt nog de deur in
       if (!inVak(vak, e.tx, e.ty) || !T.isZichtbaar(w, e.tx, e.ty)) continue;
       lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, punt: { x: e.tx, y: e.ty }, f: () => tekenWezen(ctx, S, e) });
       if (e === aanDePaal) lijst.push({ d: e.x + e.y, l: 2.5, punt: { x: e.tx, y: e.ty }, f: () => tekenHalsijzer(ctx, e) });
@@ -1342,8 +1342,27 @@
     },
   };
 
+  // Naar binnen en naar buiten (js/verkennen.js zet e.deurSinds en e.deur): in DEUR_TIJD seconden
+  // stapt hij de deur in en vervaagt hij, of komt hij eruit en wordt hij weer helder. De deur zelf
+  // ligt een halve tegel achter de tegel ervoor, in de gevel. Zonder deur (de schout die gaat slapen)
+  // vervaagt hij waar hij staat. Alleen voor het scherm: in de regels is hij meteen binnen.
+  const DEUR_TIJD = 0.6;
+  function deurStap(S, e) {
+    if (e.deurSinds == null) return null;
+    const t = (S.tijd - e.deurSinds) / DEUR_TIJD;
+    if (!(t >= 0 && t < 1)) return null;
+    const erin = e.binnen ? t : 1 - t; // hoe ver hij de deur in is: 0 buiten, 1 binnen
+    const d = e.deur;
+    return {
+      x: d ? e.x + (d.x - e.x) * erin : e.x,
+      y: d ? e.y + (d.y - 0.5 - e.y) * erin : e.y,
+      alpha: 1 - erin,
+    };
+  }
+
   function tekenWezen(ctx, S, e) {
-    const p = T.naarScherm(e.x, e.y);
+    const stap = deurStap(S, e);
+    const p = stap ? T.naarScherm(stap.x, stap.y) : T.naarScherm(e.x, e.y);
     let cx = p.x;
     let cy = p.y;
     if (e.uitval) {
@@ -1356,6 +1375,7 @@
     // met vlakken blijft het bij een huppelpas en een vervagend lijk.
     const deel = metSprites() ? T.sprites.wezen(S, e) : null;
     ctx.save();
+    if (stap) ctx.globalAlpha *= stap.alpha;
     if (e.dood && !deel) {
       ctx.globalAlpha = Math.max(0, 1 - e.sterfTijd / 0.8);
       cy += e.sterfTijd * 10;
