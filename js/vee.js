@@ -76,7 +76,7 @@
     // een maag (sinds 25 sep, een optie), en het bederft tenzij het gezouten is (js/behoeften.js).
     slacht: { koe: { vlees: 20, huiden: 1 }, schaap: { vlees: 6, huiden: 1 } },
 
-    // ── De schapen en de kooi (stap 2; Marcel, 25 sep, naar de Drentse esdorpen) ──
+    // ── De schapen en de kooi (stap 2; Marcel koos het op 25 sep, uit een voorstel van Claude) ──
     // Op deze dag worden de schapen geschoren: elk volwassen schaap geeft zoveel wol. Een lam van
     // dit voorjaar nog niet. De heer vraagt 20 wol per schaapskooi (js/gebouwen.js).
     scheren: { maand: 'zomermaand', dag: 1 },
@@ -238,9 +238,9 @@
   // gras. Elk stuk blijft van zijn eigen boer, die er zijn eigen hooi maait (js/akkers.js).
   //
   // Een schaap graast op de meent: de heide buiten de velden, van het dorp samen (js/kaart.js,
-  // w.meenten), en het slaapt in de schaapskooi (Marcel, 25 sep, naar de Drentse esdorpen: de
-  // koeien op de weide, de schapen op de heide). Heeft een kaart geen meent, dan graast het op de
-  // weide, zoals in stap 1.
+  // w.meenten), en het slaapt in de schaapskooi (Marcel koos het op 25 sep, uit een voorstel van
+  // Claude: de koeien op de weide, de schapen op de heide). Heeft een kaart geen meent, dan graast
+  // het op de weide, zoals in stap 1.
   //
   // Een dier onthoudt één plek, e.weide: een veld, of de meent. Dat is genoeg: de weide waar het
   // bij hoort, is de groep van dat veld. Zo hoeft er niets om te zetten als twee velden samen weide
@@ -648,9 +648,10 @@
 
   // ── De schapen en de kooi (stap 2) ──
   //
-  // Zoals in de Drentse esdorpen (Marcel, 25 sep): overdag grazen de schapen op de heide, 's nachts
-  // staan ze in de schaapskooi, en de mest uit de kooi maakt de es vruchtbaar. In zomermaand worden
-  // ze geschoren. De kooi maakt dus zelf geen wol meer (js/gebouwen.js): die komt van de schapen.
+  // Marcel koos het op 25 sep, uit een voorstel van Claude: overdag grazen de schapen op de heide,
+  // 's nachts staan ze in de schaapskooi, en de mest uit de kooi maakt de es vruchtbaar. In
+  // zomermaand worden ze geschoren. De kooi maakt dus zelf geen wol meer (js/gebouwen.js): die komt
+  // van de schapen.
 
   // De schapen die in een kooi slapen: alle schapen op de meent, tot de kooien vol zijn.
   T.schapenInKooi = function (S) {

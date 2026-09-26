@@ -423,7 +423,7 @@
       // komt ("komt"; anders de eerste uitgang). Zonder "marskramer" komt hij hier nooit.
       marskramer: betekenis && betekenis.marskramer ? { ...betekenis.marskramer } : null,
       // Waar de heer op Sint-Maarten staat (js/heer.js); zonder "heer" staat hij waar de
-      // marskramer staat, op de brink.
+      // marskramer staat, op het plein.
       heer: betekenis && betekenis.heer ? { ...betekenis.heer } : null,
     };
   };

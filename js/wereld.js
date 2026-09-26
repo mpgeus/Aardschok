@@ -40,7 +40,7 @@
     kist: { blokkeert: true, zichtDicht: true },
     pilaar: { blokkeert: true, zichtDicht: true },
     sleutel: { blokkeert: false, zichtDicht: false },
-    // De schandpaal van de heer op de brink: komt er de eerste keer dat hij iemand straft, en blijft
+    // De schandpaal van de heer op het plein: komt er de eerste keer dat hij iemand straft, en blijft
     // staan (js/heer.js, T.zetSchandpaalNeer).
     schandpaal: { blokkeert: true, zichtDicht: false, naam: 'de schandpaal' },
   };

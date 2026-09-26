@@ -628,7 +628,7 @@
     }).join('');
     return (
       `<div class="venster-kop"><span class="venster-titel">De schandpaal</span><span class="venster-wanneer">Sint-Maarten</span></div>` +
-      `<p class="venster-staat">"Iemand moet dit voelen, schout. U mag kiezen wie." Wie staat er drie dagen aan de paal op de brink?</p>` +
+      `<p class="venster-staat">"Iemand moet dit voelen, schout. U mag kiezen wie." Wie staat er drie dagen aan de paal op het plein?</p>` +
       rijen
     );
   }

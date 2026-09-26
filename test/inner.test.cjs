@@ -31,9 +31,9 @@ function dagVan(maand, dagVanMaand, jaar) {
 const KOMT = dagVan(IN.komt.maand, IN.komt.dag);
 const SINT_MAARTEN = dagVan('slachtmaand', 11);
 
-// Een gehucht van 30 bij 20 tegels gras. De brink (de plek van de marskramer) op (5, 10), de weg de
+// Een gehucht van 30 bij 20 tegels gras. Het plein (de plek van de marskramer) op (5, 10), de weg de
 // kaart op links daarvan. Een muur van (2, 13) tot (8, 13): daarachter ziet hij niet. Drie huizen
-// van 2 bij 2: vlak bij de brink, achter de muur, en ver weg. Eén akker van 2 bij 2 bij de brink.
+// van 2 bij 2: vlak bij het plein, achter de muur, en ver weg. Eén akker van 2 bij 2 bij het plein.
 function maakS() {
   const b = 30;
   const h = 20;
@@ -51,10 +51,10 @@ function maakS() {
     },
   };
   const huis = (x, y) => ({ soort: 'huis', x, y, voet: { b: 2, h: 2 }, klaar: true });
-  S.bijDeBrink = huis(8, 9);
+  S.bijHetPlein = huis(8, 9);
   S.achterDeMuur = huis(4, 15);
   S.verWeg = huis(24, 9);
-  S.gebouwen.push(S.bijDeBrink, S.achterDeMuur, S.verWeg);
+  S.gebouwen.push(S.bijHetPlein, S.achterDeMuur, S.verWeg);
   return S;
 }
 
@@ -83,8 +83,8 @@ function metBerichten(fn) {
   return berichten;
 }
 
-// Een bezoek waarin hij van de brink rondkeek en daarna vertrok: zijn rapport.
-function bezoekVanafDeBrink(S) {
+// Een bezoek waarin hij van het plein rondkeek en daarna vertrok: zijn rapport.
+function bezoekVanafHetPlein(S) {
   T.innerKomt(S, KOMT, false);
   T.innerKijkt(S, { x: 5, y: 10 });
   return T.innerVertrekt(S);
@@ -145,11 +145,11 @@ test('hij ziet wat binnen zijn zicht ligt, niet door een muur, en geen verstoppl
   const nieuw = T.innerKijkt(S, { x: 5, y: 10 });
   const b = S.inner.bezoek;
   assert.deepEqual(nieuw, [T.GEBOUWEN.huis.naam]);
-  assert.ok(b.gebouwen.has(S.bijDeBrink));
+  assert.ok(b.gebouwen.has(S.bijHetPlein));
   assert.ok(!b.gebouwen.has(S.achterDeMuur), 'achter de muur');
   assert.ok(!b.gebouwen.has(S.verWeg), 'te ver');
   assert.ok(!b.gebouwen.has(kelder), 'een verstopplek ziet hij niet');
-  assert.equal(b.tegels.size, 4, 'de hele akker bij de brink');
+  assert.equal(b.tegels.size, 4, 'de hele akker bij het plein');
   // Van de andere kant van de muur ziet hij het huis daar wel.
   T.innerKijkt(S, { x: 5, y: 16 });
   assert.ok(b.gebouwen.has(S.achterDeMuur));
@@ -163,7 +163,7 @@ test('zijn rapport: de gebouwen die hij zag, hun woonruimte, en het graan in de 
   T.zetVoorraad(S, 'graan', 100);
   // Eén tegel van de akker is al gemaaid (dat graan ligt in de schuur), drie staan nog.
   S.wereld.akkers[0].geoogst = new Set(['2,8']);
-  const r = bezoekVanafDeBrink(S);
+  const r = bezoekVanafHetPlein(S);
   assert.deepEqual(r.gebouwen, { huis: 1 });
   assert.equal(r.woonruimte, T.GEBOUWEN.huis.woonruimte);
   assert.equal(r.tegels, 4);
@@ -177,7 +177,7 @@ test('een weide telt hij als land maar niet als graan, en van een uitgeputte akk
   const S = maakS();
   T.zetVoorraad(S, 'graan', 100);
   S.wereld.akkers[0].vruchtbaarheid = 0.5;
-  let r = bezoekVanafDeBrink(S);
+  let r = bezoekVanafHetPlein(S);
   assert.equal(r.tegels, 4);
   assert.equal(r.graanVerwacht, 4 * T.GRAAN_PER_TEGEL * 0.5);
   assert.equal(r.graanGezien, 4 * T.GRAAN_PER_TEGEL * 0.5 + 100);
@@ -186,7 +186,7 @@ test('een weide telt hij als land maar niet als graan, en van een uitgeputte akk
   const S2 = maakS();
   T.zetVoorraad(S2, 'graan', 100);
   S2.wereld.akkers[0].bestemming = 'weide';
-  r = bezoekVanafDeBrink(S2);
+  r = bezoekVanafHetPlein(S2);
   assert.equal(r.tegels, 4);
   assert.equal(r.graanVerwacht, 0);
   assert.equal(r.graanGezien, 100);
@@ -197,7 +197,7 @@ test('de heer rekent met het rapport: wat de inner niet zag, betaal je dat jaar 
   T.zetVoorraad(S, 'graan', 100);
   const alles = T.eisVanDeHeer(S);
   assert.ok(!alles.rapport);
-  const r = bezoekVanafDeBrink(S);
+  const r = bezoekVanafHetPlein(S);
   const eis = T.eisVanDeHeer(S);
   assert.ok(eis.rapport);
   assert.equal(eis.per.graan, Math.ceil(r.graanGezien * HEER.deelVanGraan - 1e-9));
@@ -223,7 +223,7 @@ test('minder graan dan zijn velden beloven: zijn argwaan groeit, en de heer vraa
   // Alles gemaaid, en er ligt niets in de schuur: hij verwachtte 14.
   S.wereld.akkers[0].geoogst = new Set(['2,8', '3,8', '2,9', '3,9']);
   const zonder = T.eisVanDeHeer(S);
-  bezoekVanafDeBrink(S);
+  bezoekVanafHetPlein(S);
   assert.ok(Math.abs(S.inner.argwaan - IN.graanVerwacht * IN.graanArgwaan) < 1e-9);
   assert.deepEqual(S.inner.waarom, ['hij zag minder graan dan zijn velden beloven']);
   const eis = T.eisVanDeHeer(S);
@@ -234,7 +234,7 @@ test('minder graan dan zijn velden beloven: zijn argwaan groeit, en de heer vraa
   const S2 = maakS();
   T.zetVoorraad(S2, 'graan', 14);
   S2.wereld.akkers[0].geoogst = new Set(['2,8', '3,8', '2,9', '3,9']);
-  bezoekVanafDeBrink(S2);
+  bezoekVanafHetPlein(S2);
   assert.equal(S2.inner.argwaan, 0);
   assert.ok(!T.eisVanDeHeer(S2).regels.some((x) => /toeslag/.test(x.waarom)));
 });
@@ -242,7 +242,7 @@ test('minder graan dan zijn velden beloven: zijn argwaan groeit, en de heer vraa
 test('bij genoeg argwaan komt hij onverwacht terug, één keer, ruim vóór Sint-Maarten', () => {
   const S = maakS();
   S.wereld.akkers[0].geoogst = new Set(['2,8', '3,8', '2,9', '3,9']);
-  bezoekVanafDeBrink(S);
+  bezoekVanafHetPlein(S);
   assert.ok(S.inner.argwaan >= IN.terugkomenVanaf);
   const op = S.inner.terugOp;
   assert.ok(op >= KOMT + IN.terugNaDagen.van && op <= KOMT + IN.terugNaDagen.tot, `terug op dag ${op}`);
@@ -265,7 +265,7 @@ test('bij genoeg argwaan komt hij onverwacht terug, één keer, ruim vóór Sint
 
 test('bij heel hoge argwaan telt het rapport niet meer: dan vraagt de heer naar alles', () => {
   const S = maakS();
-  bezoekVanafDeBrink(S);
+  bezoekVanafHetPlein(S);
   assert.ok(T.eisVanDeHeer(S).rapport);
   const huizen = (eis) => eis.regels.find((x) => x.waarom.endsWith(T.GEBOUWEN.huis.naam));
   assert.equal(huizen(T.eisVanDeHeer(S)).waarom, `een ${T.GEBOUWEN.huis.naam}`);
@@ -276,12 +276,12 @@ test('bij heel hoge argwaan telt het rapport niet meer: dan vraagt de heer naar 
   assert.equal(huizen(eis).aantal, 3 * T.GEBOUWEN.huis.heer.goud);
 });
 
-test('op Sint-Maarten kijkt de heer rond: wat hij van de brink ziet en niet in het rapport staat, komt erbij', () => {
+test('op Sint-Maarten kijkt de heer rond: wat hij van het plein ziet en niet in het rapport staat, komt erbij', () => {
   const S = maakS();
-  // De inner zag alleen het huis achter de muur; dat bij de brink kwam er later bij.
+  // De inner zag alleen het huis achter de muur; dat bij het plein kwam er later bij.
   T.innerKomt(S, KOMT, false);
   T.innerKijkt(S, { x: 5, y: 17 });
-  assert.ok(!S.inner.bezoek.gebouwen.has(S.bijDeBrink));
+  assert.ok(!S.inner.bezoek.gebouwen.has(S.bijHetPlein));
   T.innerVertrekt(S);
   // Hoe ver hij kijkt, hangt af van zijn argwaan (25 sep): zonder argwaan kijkt hij niet rond.
   S.inner.argwaan = 0;
@@ -308,7 +308,7 @@ test('op Sint-Maarten kijkt de heer rond: wat hij van de brink ziet en niet in h
 test('is de argwaan hoog genoeg, dan doorzoeken zijn soldaten op Sint-Maarten het dorp', () => {
   for (const [argwaan, zoeken] of [[IN.doorzoekenVanaf - 0.01, false], [IN.doorzoekenVanaf, true]]) {
     const S = maakS();
-    bezoekVanafDeBrink(S);
+    bezoekVanafHetPlein(S);
     S.inner.argwaan = argwaan;
     S.kalender.dag = SINT_MAARTEN;
     const berichten = metBerichten(() => T.heerKomt(S, SINT_MAARTEN));
@@ -318,7 +318,7 @@ test('is de argwaan hoog genoeg, dan doorzoeken zijn soldaten op Sint-Maarten he
 
 test('na Sint-Maarten is zijn rapport betaald, en zakt zijn argwaan', () => {
   const S = maakS();
-  bezoekVanafDeBrink(S);
+  bezoekVanafHetPlein(S);
   S.inner.argwaan = 0.6;
   S.kalender.dag = SINT_MAARTEN;
   T.heerKomt(S, SINT_MAARTEN);
@@ -414,18 +414,18 @@ test('is zijn geduld op, dan gaat hij met wat hij tot dan toe zag', () => {
   assert.ok(!S.inner.rapport.gezien.has(S.verWeg), 'zo ver kwam hij niet');
 });
 
-test('zonder weg de kaart op kijkt hij vanaf de brink en gaat hij meteen', () => {
+test('zonder weg de kaart op kijkt hij vanaf het plein en gaat hij meteen', () => {
   const S = maakS();
   T.innerKomt(S, KOMT, false);
   T.werkInnerBij(S);
   assert.equal(S.inner.bezoek, null);
-  assert.deepEqual(S.inner.rapport.gebouwen, { huis: 1 }, 'wat hij vanaf de brink zag');
+  assert.deepEqual(S.inner.rapport.gebouwen, { huis: 1 }, 'wat hij vanaf het plein zag');
   assert.equal(S.kalender.snelheid, 1, 'de tijd liep gewoon door');
 });
 
 test('de toeslag gaat over wat hij dit jaar vraagt, niet over de oude schuld', () => {
   const S = maakS();
-  bezoekVanafDeBrink(S);
+  bezoekVanafHetPlein(S);
   S.inner.argwaan = 0.5;
   const toeslag = (eis) => (eis.regels.find((x) => /toeslag/.test(x.waarom)) || {}).aantal;
   const zonder = toeslag(T.eisVanDeHeer(S));

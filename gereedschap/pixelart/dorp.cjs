@@ -3943,7 +3943,7 @@ function heg(zaad = 1) {
   return F.model(d, mat, { midden: [0, 0, 11], straal: 27 });
 }
 
-// Het dorp: twee lanen met huizen eromheen, een brink met de put en de kraam, moestuinen achter
+// Het dorp: twee lanen met huizen eromheen, een plein met de put en de kraam, moestuinen achter
 // de huizen, en de kapel met het kerkhof een eindje apart. Alles op schermtegels (u, d): u telt
 // naar rechts (32 pixels per stap), d naar beneden de diepte in (16 pixels per stap), zodat de
 // plattegrond te lezen is als een tekening. tg() rekent dat om naar wereldtegels.
@@ -3964,7 +3964,7 @@ function dorpsplein(o = {}) {
   const LAAG = o.laag ?? 54; // hoeveel de beemd lager ligt, in eenheden
   const zLaag = -LAAG / PXH; // dezelfde hoogte, maar in de maat van zetModel
 
-  // --- de grond: gras, twee lanen, de brink van kasseien en de moestuinen
+  // --- de grond: gras, twee lanen, het plein van kasseien en de moestuinen
   // De lanen slingeren en wisselen van breedte: elk stuk is een eigen pad, zodat de ene kant
   // van het dorp een brede karweg heeft en de andere een smal steegje.
   const laan1 = [tg(-46, 1), tg(-31, 6), tg(-16, 2), tg(-2, 7), tg(12, 4)];
@@ -4031,7 +4031,7 @@ function dorpsplein(o = {}) {
   zetH(15, 37, 6, [7, 5], { dak: 'riet' });
   zet(P2.kruidenhut(...ank(30, 39, 6, 5)));
 
-  // --- de brink en wat er verder rondslingert
+  // --- het plein en wat er verder rondslingert
   const zetM = (model, u, d, richting = 'ZO', opt) => zetModel(B, model, ...tg(u, d), richting, opt);
   zetM(waterput(), -16, 28, 'ZO');
   zetM(marktkraam(), -22, 26.5, 'ZW');

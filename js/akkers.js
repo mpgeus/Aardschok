@@ -71,7 +71,7 @@
     // Mest (de weides, stap 2; Marcel, 25 sep: "de mest kies jij per veld"). Een akker met mest erop
     // (T.zetMest) wordt op 1 lentemaand zoveel vruchtbaarder, bovenop wat het jaar ervoor deed, en dat
     // kost zoveel karren mest per tegel (js/vee.js: de schaapskooi maakt ze). Een akker die elk jaar
-    // akker blijft en elk jaar mest krijgt, put zo niet uit: de eeuwige rogge van de Drentse es.
+    // akker blijft en elk jaar mest krijgt, put zo niet uit, zoals akkers die eeuwenlang elk jaar rogge droegen.
     mestPerTegel: 0.5,
     mestErbij: 0.1,
     // Of de mest vanzelf over alle akkers gaat in plaats van dat jij per veld kiest: een optie in de
@@ -277,7 +277,7 @@
   // telt voorlopig alleen de eerste mee voor het dwalen — de tweede telt wel gewoon mee voor de
   // groei en de oogst hieronder, hij loopt er alleen niet expliciet naartoe om te dwalen.
   //
-  // Moet hij even ergens anders zijn (`moetNaar`: aan de schandpaal op de brink, js/heer.js), dan
+  // Moet hij even ergens anders zijn (`moetNaar`: aan de schandpaal op het plein, js/heer.js), dan
   // gaat dat voor alles. Een weide of braak is geen akker om bij te staan: hij neemt de eerste van
   // zijn velden die dit jaar akker is.
   T.wandelAnker = function (e, stadium) {

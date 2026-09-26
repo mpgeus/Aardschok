@@ -6,7 +6,7 @@
 //     T.kanKopen en T.kanVerkopen geven het antwoord waar het scherm en de klik allebei op lezen
 //     (CLAUDE.md, "Scherm en klik stellen dezelfde vraag"); T.koop en T.verkoop doen het dan ook.
 //   - zijn komen en gaan als poppetje (T.werkMarskramerBij): over de weg binnen, naar zijn plek op
-//     de brink, tien dagen daar, en dan weer de weg op.
+//     het plein, tien dagen daar, en dan weer de weg op.
 // Het venster waarin je handelt, staat in js/hud.js (T.ui.openHandel). Je opent het vanuit zijn
 // gesprek (js/gesprekken.js, een antwoord met doe: { handel: true }), want je bent de schout, een
 // poppetje in het dorp: je loopt naar hem toe.
@@ -27,7 +27,7 @@
       { maand: 'hooimaand', dag: 5, naam: 'zomer', vlag: 'marskramerZomer' },
       { maand: 'wijnmaand', dag: 5, naam: 'herfst', vlag: 'marskramerHerfst' },
     ],
-    // Zo lang staat hij op de brink. De dagen tellen pas vanaf dat hij er staat: de weg in kost op
+    // Zo lang staat hij op het plein. De dagen tellen pas vanaf dat hij er staat: de weg in kost op
     // 3× al gauw een week, en dan zou hij in het donker weer vertrekken.
     blijftDagen: 10,
     // Het goud dat hij bij zich heeft om van jou te kopen (wat jij hem betaalt, komt erbij), en
@@ -91,7 +91,7 @@
   };
 
   // Hij komt: een vers bezoek met een volle mars en een volle beurs. `dag` is de dag dat hij het
-  // gehucht in loopt; T.werkMarskramerBij zet de klok pas echt aan als hij op de brink staat.
+  // gehucht in loopt; T.werkMarskramerBij zet de klok pas echt aan als hij op het plein staat.
   T.marskramerKomt = function (S, i, dag) {
     const bezoek = IN().bezoeken[i];
     const heeft = {};
@@ -100,11 +100,11 @@
       bezoek: i, komtOp: dag, gaatOp: dag + IN().blijftDagen,
       beurs: IN().beurs, plaats: IN().plaats, heeft,
       weg: false, // true zodra hij vertrekt: dan handelt hij niet meer, hij loopt naar de weg
-      wezen: null, staat: false, // zijn poppetje, en of hij al op de brink staat
+      wezen: null, staat: false, // zijn poppetje, en of hij al op het plein staat
       aankomst: {
         tekst: i === IN().bezoeken.length - 1
           ? 'De marskramer komt over de weg: zijn laatste ronde vóór de winter.'
-          : 'De marskramer komt over de weg. Hij blijft een paar dagen op de brink.',
+          : 'De marskramer komt over de weg. Hij blijft een paar dagen op het plein.',
         soort: 'goed',
       },
     };
@@ -277,7 +277,7 @@
       // Overdag, vanaf het bezoekuur, met zijn bericht (js/dag.js).
       if (!T.bezoekerKomtAan(S, m)) return;
       const e = T.maakMens('marskramer', uitgang.x, uitgang.y, 1);
-      // Zijn thuis is zijn plek op de brink, met een straal van één: daar scharrelt hij bij zijn
+      // Zijn thuis is zijn plek op het plein, met een straal van één: daar scharrelt hij bij zijn
       // uitgestalde waar.
       e.thuis = { x: w.marskramer.x, y: w.marskramer.y, straal: 1 };
       w.wezens.push(e);

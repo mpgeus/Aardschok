@@ -169,10 +169,10 @@ test('verkopen kan niet wat je niet hebt, en niet meer als hij vertrekt', () => 
 });
 
 // ---------------------------------------------------------------------------------------------
-// Zijn poppetje: over de weg binnen, naar de brink, en weer weg
+// Zijn poppetje: over de weg binnen, naar het plein, en weer weg
 // ---------------------------------------------------------------------------------------------
 
-test('zijn poppetje komt over de weg, zijn dagen tellen pas op de brink, en daarna loopt hij weer weg', () => {
+test('zijn poppetje komt over de weg, zijn dagen tellen pas op het plein, en daarna loopt hij weer weg', () => {
   const S = maakS();
   const komt = dagVan('grasmaand', 5);
   S.kalender.dag = komt;
@@ -184,7 +184,7 @@ test('zijn poppetje komt over de weg, zijn dagen tellen pas op de brink, en daar
   const e = S.marskramer.wezen;
   assert.ok(e, 'er staat een marskramer in de wereld');
   assert.deepEqual([e.tx, e.ty], [9, 5], 'hij komt binnen over de weg (de uitgang)');
-  assert.deepEqual([e.thuis.x, e.thuis.y], [5, 5], 'en loopt naar zijn plek op de brink');
+  assert.deepEqual([e.thuis.x, e.thuis.y], [5, 5], 'en loopt naar zijn plek op het plein');
   // Onderweg telt zijn tijd niet: ook na tien dagen gaat hij nog niet weg.
   const tienLater = komt + T.HANDEL_INSTELLINGEN.blijftDagen;
   T.tikHandelDag(S, tienLater);

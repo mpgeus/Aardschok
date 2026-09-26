@@ -36,7 +36,7 @@
     straalBijHuis: 1,
     straalWerk: 2,
     straalPut: 1,
-    straalBrink: 3,
+    straalPlein: 3,
     straalHeide: 4,
     // Werk telt in uren (stuk 2; Marcel koos op 26 sep de looptijd): een werkplaats maakt naar de uren
     // dat zijn mensen er echt zijn, en de weg heen gaat eraf (T.werkUrenVan). Een optie in de
@@ -58,7 +58,7 @@
     kleuter: { man: 'kleuter', vrouw: 'kleuter', snelheid: 'snelheidKind', werkt: null },
   };
 
-  // Voornamen, zoals ze in Drenthe klonken (een voorstel van Claude). De namen van de boeren staan in
+  // Oude Nederlandse voornamen (een voorstel van Claude). De namen van de boeren staan in
   // T.MENSEN en in de spelregels. Niemand krijgt een naam die al in het dorp is, zolang er nog een
   // vrije is.
   T.VOORNAMEN = {
@@ -142,7 +142,7 @@
   };
 
   // ---------------------------------------------------------------------------------------------
-  // Plekken: een deur, de put, de brink, en waar iemand werkt
+  // Plekken: een deur, de put, het plein, en waar iemand werkt
   // ---------------------------------------------------------------------------------------------
 
   // De rechthoek die een gebouw beslaat: zijn tekening als die groter is (net als T.randVanGebouw in
@@ -203,16 +203,16 @@
     return tegelRond(w, v, voor) || voor;
   };
 
-  // De brink: waar de marskramer zijn waar uitstalt en de heer op Sint-Maarten staat
+  // Het plein: waar de marskramer zijn waar uitstalt en de heer op Sint-Maarten staat
   // (kaarten/<naam>.betekenis.json, "marskramer"). Daar spelen de kinderen, en daar hangt rond wie
   // geen werk heeft.
-  T.brinkVan = function (w) {
-    const b = w && (w.brink || w.marskramer);
+  T.pleinVan = function (w) {
+    const b = w && (w.plein || w.marskramer);
     return b ? { x: b.x, y: b.y } : null;
   };
 
   // De put het dichtst bij deze tegel, als plek om te staan: een begaanbare tegel ernaast. Een put
-  // staat op de kaart als voorwerp (in het gehucht op de brink), of is gebouwd (T.GEBOUWEN.put).
+  // staat op de kaart als voorwerp (in het gehucht op het plein), of is gebouwd (T.GEBOUWEN.put).
   function putBij(S, w, van) {
     const putten = [];
     for (const v of w.voorwerpen || []) {
@@ -247,16 +247,16 @@
     return { x: d.x, y: d.y, straal: g.soort === 'boerderij' ? erfStraal() : IN().straalWerk };
   }
 
-  // Waar iemand is als hij vrij is, overdag: een kind of een jongere speelt op de brink, en daar hangt
+  // Waar iemand is als hij vrij is, overdag: een kind of een jongere speelt op het plein, en daar hangt
   // ook rond wie volwassen is en geen werk heeft (zo zie je dat er een werkplaats bij moet). Een oude
   // en een kleuter blijven bij huis, en de vrouw van de schout doet zijn huishouden.
   function vrijePlekVan(S, w, p, deur) {
     const bijHuis = { x: deur.x, y: deur.y, straal: IN().straalBijHuis };
     if (p.leeftijd === 'oud' || p.leeftijd === 'kleuter') return bijHuis;
     if (p.leeftijd === 'volwassen' && vanSchout(p)) return { x: deur.x, y: deur.y, straal: erfStraal() };
-    const brink = T.brinkVan(w);
-    const t = brink && tegelBij(w, brink);
-    return t ? { x: t.x, y: t.y, straal: IN().straalBrink } : bijHuis;
+    const plein = T.pleinVan(w);
+    const t = plein && tegelBij(w, plein);
+    return t ? { x: t.x, y: t.y, straal: IN().straalPlein } : bijHuis;
   }
 
   // Hoe lang iemand onderweg is van zijn deur naar zijn werk, in uren (stuk 2; Marcel koos op 26 sep

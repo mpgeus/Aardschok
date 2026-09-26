@@ -170,7 +170,7 @@
       uitleg: 'De schapen grazen op de heide. Eten ze daar ook in de winter, of eten ze hooi?',
       keuzes: [
         { id: 'heide', naam: 'Heide', zet: { 'VEE_INSTELLINGEN.hooiPerDag.schaap': 0 },
-          uitleg: 'Ze eten het hele jaar heide, zoals in de Drentse esdorpen: een schaap kost geen hooi.' },
+          uitleg: 'Ze eten het hele jaar heide: een schaap kost geen hooi.' },
         { id: 'ookHooi', naam: 'Ook hooi', zet: { 'VEE_INSTELLINGEN.hooiPerDag.schaap': 0.2 },
           uitleg: 'In de winter eet een schaap een vijfde van wat een koe eet. Het hooi wordt krapper.' },
       ],

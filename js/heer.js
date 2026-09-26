@@ -10,7 +10,7 @@
 //   - zijn komen en gaan als poppetje, met twee soldaten (T.werkHeerBij), net als de marskramer.
 // De vensters (de brief, het betalen, de schandpaal en het einde) staan in js/hud.js.
 //
-// Alleen waar de marskramer ook komt: een wereld met een brink (js/kaart.js leest "heer" uit het
+// Alleen waar de marskramer ook komt: een wereld met een plein (js/kaart.js leest "heer" uit het
 // betekenisbestand, en anders de plek van de marskramer). Daarbuiten blijft dit bestand stil.
 (function (T) {
   'use strict';
@@ -79,7 +79,7 @@
     schandpaalDagen: 3,
     wrokDagen: 120,
     // Komt de schout niet naar hem toe, dan neemt hij het na zoveel dagen zelf. Die dagen tellen
-    // pas als hij op de brink staat en de tijd weer loopt: bij zijn komst staat hij stil.
+    // pas als hij op het plein staat en de tijd weer loopt: bij zijn komst staat hij stil.
     wachtDagen: 3,
     // Wat iets voor hem waard is, in goud per stuk. Wat de marskramer koopt, is waard wat die er
     // gemiddeld voor betaalt (T.waardeVoorDeHeer); hier alleen wat hij niet koopt.
@@ -105,12 +105,12 @@
     };
   };
 
-  // Waar hij kan komen: een wereld met een brink (zie bovenaan), en een uitgang om binnen te komen.
-  function brinkVan(w) {
+  // Waar hij kan komen: een wereld met een plein (zie bovenaan), en een uitgang om binnen te komen.
+  function pleinVan(w) {
     return (w && (w.heer || w.marskramer)) || null;
   }
   function magKomen(S) {
-    return !!brinkVan(S.wereld);
+    return !!pleinVan(S.wereld);
   }
 
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
@@ -409,11 +409,11 @@
     const h = S.heer;
     const b = h.bezoek;
     h.soldaten = { tot: volgendeKeer(dagNu(S), IN().soldatenTot), wezens: [] };
-    // Zijn soldaten liepen met hem mee; die blijven nu hier, en lopen rond op de brink.
+    // Zijn soldaten liepen met hem mee; die blijven nu hier, en lopen rond op het plein.
     if (b && b.wezens) {
       h.soldaten.wezens = b.wezens.filter((e) => e.wie === 'soldaat');
       b.wezens = b.wezens.filter((e) => e.wie !== 'soldaat');
-      const plek = brinkVan(S.wereld);
+      const plek = pleinVan(S.wereld);
       for (const e of h.soldaten.wezens) {
         e.thuis = { x: plek.x, y: plek.y };
         e.straal = 5;
@@ -457,12 +457,12 @@
 
   // De schandpaal: een paal met een halsijzer, die er komt de eerste keer dat de heer iemand straft,
   // en dan blijft staan (Marcel, 24 sep; ontwerp/spel.md, "Sint-Maarten"). Hij staat een eindje
-  // naast de heer op de brink. Wie gestraft wordt, staat op de tegel ervóór (x+1, y+1: in beeld
+  // naast de heer op het plein. Wie gestraft wordt, staat op de tegel ervóór (x+1, y+1: in beeld
   // recht eronder), met zijn rug tegen de paal.
   const VOOR_DE_PAAL = { dx: 1, dy: 1 };
 
   // Mag hier de paal, of iemand die eraan staat? Begaanbaar, en niet in een akker.
-  function vrijOpDeBrink(w, x, y) {
+  function vrijOpHetPlein(w, x, y) {
     if (!w.tegels || !T.isBegaanbaar) return true;
     if (!T.isBegaanbaar(w, x, y)) return false;
     return !(w.akkers || []).some((a) => x >= a.x && x < a.x + a.b && y >= a.y && y < a.y + a.h);
@@ -484,10 +484,10 @@
   // tegel ervoor vrij zijn. Puur: zet nog niets neer.
   T.plekVoorDeSchandpaal = function (S) {
     const w = S.wereld;
-    const plek = brinkVan(w);
+    const plek = pleinVan(w);
     const doel = { x: plek.x + 2, y: plek.y };
     return eersteRond(doel, 4, (x, y) => !(x === plek.x && y === plek.y)
-      && vrijOpDeBrink(w, x, y) && vrijOpDeBrink(w, x + VOOR_DE_PAAL.dx, y + VOOR_DE_PAAL.dy)) || doel;
+      && vrijOpHetPlein(w, x, y) && vrijOpHetPlein(w, x + VOOR_DE_PAAL.dx, y + VOOR_DE_PAAL.dy)) || doel;
   };
 
   // De paal neerzetten, als hij er nog niet staat: een voorwerp dat zijn tegel beslaat
@@ -506,7 +506,7 @@
   function voorDePaal(S) {
     const paal = T.zetSchandpaalNeer(S);
     const doel = { x: paal.x + VOOR_DE_PAAL.dx, y: paal.y + VOOR_DE_PAAL.dy };
-    return eersteRond(doel, 3, (x, y) => vrijOpDeBrink(S.wereld, x, y)) || doel;
+    return eersteRond(doel, 3, (x, y) => vrijOpHetPlein(S.wereld, x, y)) || doel;
   }
 
   // Wie staat er nu aan de paal? Wie voor zijn straf op de tegel ervóór moet (h.wrok, moetNaar),
@@ -546,7 +546,7 @@
       if (T.zetVlag) T.zetVlag(S, 'schoutAanDeSchandpaal');
       bericht(`Je zet jezelf aan de schandpaal. Het dorp kijkt zwijgend toe. De heer lacht tot hij hikt, en zet er ${keuze.boete} goud bij.`, 'gevaar');
     } else {
-      // Zijn poppetje loopt naar de brink en staat daar (T.wandelAnker, js/akkers.js, kijkt naar
+      // Zijn poppetje loopt naar het plein en staat daar (T.wandelAnker, js/akkers.js, kijkt naar
       // moetNaar). Zijn dagen aan de paal tellen pas als hij er staat (T.werkHeerBij), net als bij
       // de marskramer: drie dagen zijn op 1× maar zeven seconden, en anders mocht hij al naar huis
       // voor hij er was. Zonder poppetje of zonder wereld om in te lopen staat hij er meteen.
@@ -555,7 +555,7 @@
       h.wrok.push({ wie, dag: dagNu(S), kost: keuze.kost, staat: true, vanaf: lopen ? null : dagNu(S) });
       if (T.zetVlag) T.zetVlag(S, T.schandpaalVlag(e && T.gesprekIdVan ? T.gesprekIdVan(e) : wie));
       if (e) e.moetNaar = { ...voorDePaal(S), straal: 0 };
-      bericht(`${keuze.naam} moet ${IN().schandpaalDagen} dagen aan de schandpaal op de brink. Het dorp zal het onthouden.`, 'gevaar');
+      bericht(`${keuze.naam} moet ${IN().schandpaalDagen} dagen aan de schandpaal op het plein. Het dorp zal het onthouden.`, 'gevaar');
     }
     b.schandpaal = false;
     T.heerVertrekt(S);
@@ -618,13 +618,13 @@
     }
     // Hij komt overdag (js/dag.js, T.bezoekerKomtAan): valt zijn dag 's nachts in, dan zegt het
     // bericht het pas als hij de kaart op loopt (T.werkHeerBij). Zonder poppetje (een toets zonder
-    // wereld om in te lopen) is hij er meteen, en staat hij meteen op de brink.
+    // wereld om in te lopen) is hij er meteen, en staat hij meteen op het plein.
     if (!kanLopen(S)) h.bezoek.meteen = true;
     T.bezoekerKomtAan(S, h.bezoek);
     if (!kanLopen(S)) T.heerStaatErOp(S);
   };
 
-  // Hij staat op de brink en wacht op je, en zijn wachtdagen tellen. Tot 26 sep stond de tijd dan
+  // Hij staat op het plein en wacht op je, en zijn wachtdagen tellen. Tot 26 sep stond de tijd dan
   // stil, omdat naar hem toe lopen bij een dag van 2,5 seconde dagen kostte; sinds de dag (js/dag.js)
   // kost het een uur of twee, en loopt de tijd gewoon door, op 1×.
   T.heerStaatErOp = function (S) {
@@ -632,7 +632,7 @@
     const b = h.bezoek;
     if (!b || b.staat) return;
     b.staat = true;
-    // Op de brink kijkt hij rond: wat hij ziet en niet in het rapport van zijn inner staat, komt
+    // Op het plein kijkt hij rond: wat hij ziet en niet in het rapport van zijn inner staat, komt
     // alsnog op de rekening, en dat maakt argwanend (js/inner.js). En is de argwaan hoog genoeg,
     // dan doorzoeken zijn soldaten het dorp.
     if (T.heerKijktRond) T.heerKijktRond(S);
@@ -640,7 +640,7 @@
     if (INN && S.inner && S.inner.argwaan >= INN.doorzoekenVanaf && T.doorzoekDorp) T.doorzoekDorp(S);
     b.wachtTot = dagNu(S) + IN().wachtDagen;
     T.naarGewoneSnelheid(S);
-    bericht('De heer staat op de brink en wacht op je.');
+    bericht('De heer staat op het plein en wacht op je.');
   };
 
   T.heerVertrekt = function (S) {
@@ -728,7 +728,7 @@
     if (!h || !magKomen(S) || !kanLopen(S)) return;
     const w = S.wereld;
     const uitgang = T.wegInEnUit(w);
-    const plek = brinkVan(w);
+    const plek = pleinVan(w);
     const b = h.bezoek;
     if (b && !b.wezens && !b.weg) {
       // Overdag, vanaf het bezoekuur, met zijn bericht (js/dag.js).

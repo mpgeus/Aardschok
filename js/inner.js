@@ -10,7 +10,7 @@
 // dat jaar niet. Zijn argwaan doet vier dingen: de heer vraagt meer, soldaten doorzoeken het dorp,
 // hij komt onverwacht terug, en bij heel hoge argwaan telt het rapport niet meer.
 //
-// Alleen waar ook de heer komt: een wereld met een brink (js/heer.js). Daarbuiten blijft dit stil.
+// Alleen waar ook de heer komt: een wereld met een plein (js/heer.js). Daarbuiten blijft dit stil.
 (function (T) {
   'use strict';
 
@@ -59,7 +59,7 @@
     doorzoekenVanaf: 0.5, // op Sint-Maarten doorzoeken de soldaten het dorp
     rapportTeltNietVanaf: 0.8, // de heer vraagt toch naar alles
     toeslag: 0.5, // de heer vraagt zoveel meer bij volle argwaan, en naar rato bij minder
-    // Op Sint-Maarten kijkt de heer zelf rond van de brink, zo ver (0: hij kijkt niet). Een gebouw
+    // Op Sint-Maarten kijkt de heer zelf rond van het plein, zo ver (0: hij kijkt niet). Een gebouw
     // dat hij dan ziet en dat niet in het rapport stond, komt alsnog op de rekening en kost zoveel
     // argwaan: "Wat is DÁT, schout?"
     heerZicht: 6,
@@ -93,7 +93,7 @@
     };
   };
 
-  // Waar hij kan komen: een wereld met een brink, net als de heer (js/heer.js). En alleen als de
+  // Waar hij kan komen: een wereld met een plein, net als de heer (js/heer.js). En alleen als de
   // heer de rekening op zijn rapport maakt: ziet de heer alles zelf (de optie in de spelregels,
   // js/opties.js), dan komt er geen inner.
   function magKomen(S) {
@@ -167,11 +167,11 @@
     return nieuw;
   };
 
-  // Op Sint-Maarten, als de heer op de brink staat (js/heer.js, T.heerStaatErOp), kijkt hij zelf
+  // Op Sint-Maarten, als de heer op het plein staat (js/heer.js, T.heerStaatErOp), kijkt hij zelf
   // rond. Wat hij van daar ziet en niet in het rapport van zijn inner stond (gebouwd na zijn
   // bezoek, of wat de inner miste), komt alsnog op de rekening, en elk ding maakt argwanend. Zo
   // klopt zijn brief ook een beetje: "Wat er tot Sint-Maarten bijkomt, zien Wij ook." Alleen wat
-  // je van de brink ziet, en hoe ver hangt af van zijn argwaan (T.heerZichtNu). Geeft de namen van
+  // je van het plein ziet, en hoe ver hangt af van zijn argwaan (T.heerZichtNu). Geeft de namen van
   // wat hij vond.
   T.heerZichtNu = function (S) {
     const argwaan = (S.inner && S.inner.argwaan) || 0;
@@ -196,7 +196,7 @@
       betrapt.push(T.GEBOUWEN[g.soort].naam);
     }
     if (betrapt.length) {
-      T.zetArgwaan(S, betrapt.length * IN().betrapt, 'de heer zag op de brink wat niet in het rapport stond');
+      T.zetArgwaan(S, betrapt.length * IN().betrapt, 'de heer zag op het plein wat niet in het rapport stond');
       bericht(`"Wat is DÁT, schout?" De heer wijst: ${betrapt.join(', ')}. "Dat staat niet in het rapport van Onze inner. Nu wel."`, 'gevaar');
     }
     return betrapt;
@@ -495,7 +495,7 @@
     const b = I && I.bezoek;
     if (!b || !magKomen(S)) return;
     const w = S.wereld;
-    // Geen weg de kaart op (of niets om mee te lopen): dan kijkt hij één keer rond vanaf de brink en
+    // Geen weg de kaart op (of niets om mee te lopen): dan kijkt hij één keer rond vanaf het plein en
     // gaat hij. Anders bleef hij er, en stond de tijd voorgoed stil.
     if (!kanLopen(S)) {
       if (!b.weg) {

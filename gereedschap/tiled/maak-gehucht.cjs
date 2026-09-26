@@ -192,7 +192,7 @@ function inAkker(x, y) {
 }
 
 // De meent: de heide in het zuidwesten, tussen het gehucht en de beek, waar de schapen van het dorp
-// samen grazen (Marcel, 25 sep, naar de Drentse esdorpen: de akkers op de es, de koeien op de
+// samen grazen (Marcel koos het op 25 sep, uit een voorstel van Claude: de akkers op de es, de
 // weide, de schapen op de heide; ontwerp/spel.md, "Marcel koos voor stap 2"). De schaapskooi staat
 // aan de noordrand ervan, naast de boerderij van boer 5, met zijn voorkant naar de heide: zo staan
 // de schapen vóór de kooi en niet erachter (eerst stond hij aan de oostrand, en dan graasde de
@@ -206,7 +206,7 @@ const KOOI = { tegel: 'schuurBlokhut', x: 26, y: 37, b: 5, d: 7 };
 // schout staat. Daar de schandpaal of blok zetten."): kale zandgrond, met de put, en daarop staan
 // de marskramer, de heer op Sint-Maarten en de schandpaal. Het ligt vóór het huis van de schout, aan
 // de kant van de camera, en er staat niets hoogs vóór: een dak dekt in ons beeld tot zo'n acht
-// tegels erachter af (ontwerp/beeld.md, "Doorkijk"), en tot 26 sep lag de brink achter twee daken.
+// tegels erachter af (ontwerp/beeld.md, "Doorkijk"), en tot 26 sep lag het plein achter twee daken.
 const PLEIN = { x: 26, y: 24, b: 10, h: 8 };
 const inPlein = (x, y) => x >= PLEIN.x && x < PLEIN.x + PLEIN.b && y >= PLEIN.y && y < PLEIN.y + PLEIN.h;
 const PLEIN_MIDDEN = { x: PLEIN.x + 5, y: PLEIN.y + 4 };

@@ -48,8 +48,8 @@ function gehucht() {
 const kelderVan = (S, huis) => S.gebouwen.find((g) => g.huis === huis);
 const boer = (S, id) => S.wereld.wezens.find((e) => e.wie === id);
 
-// Een kleine wereld voor de inner, zoals in test/inner.test.cjs: gras, de brink op (5, 10), een akker
-// van 2 bij 2 ernaast, en een huis vlak bij de brink (met een kelder, zonder bewoner met een naam).
+// Een kleine wereld voor de inner, zoals in test/inner.test.cjs: gras, het plein op (5, 10), een akker
+// van 2 bij 2 ernaast, en een huis vlak bij het plein (met een kelder, zonder bewoner met een naam).
 function maakS() {
   const b = 30;
   const h = 20;
@@ -64,12 +64,12 @@ function maakS() {
       akkers: [{ x: 2, y: 8, b: 2, h: 2 }],
     },
   };
-  S.bijDeBrink = { soort: 'huis', x: 8, y: 9, voet: { b: 2, h: 2 }, klaar: true };
-  S.gebouwen.push(S.bijDeBrink);
+  S.bijHetPlein = { soort: 'huis', x: 8, y: 9, voet: { b: 2, h: 2 }, klaar: true };
+  S.gebouwen.push(S.bijHetPlein);
   return S;
 }
 
-function bezoekVanafDeBrink(S) {
+function bezoekVanafHetPlein(S) {
   T.innerKomt(S, KOMT, false);
   T.innerKijkt(S, { x: 5, y: 10 });
   return T.innerVertrekt(S);
@@ -312,9 +312,9 @@ test('wat verstopt ligt, telt de inner niet', () => {
   T.zetVoorraad(zonder, 'graan', 50);
   const met = maakS();
   T.zetVoorraad(met, 'graan', 50);
-  assert.ok(T.verstop(met, met.bijDeBrink, 'graan', 20).kan);
-  const a = bezoekVanafDeBrink(zonder);
-  const b = bezoekVanafDeBrink(met);
+  assert.ok(T.verstop(met, met.bijHetPlein, 'graan', 20).kan);
+  const a = bezoekVanafHetPlein(zonder);
+  const b = bezoekVanafHetPlein(met);
   assert.equal(a.graanGezien - b.graanGezien, 20);
   assert.ok(T.eisVanDeHeer(met).per.graan < T.eisVanDeHeer(zonder).per.graan);
 });
@@ -322,15 +322,15 @@ test('wat verstopt ligt, telt de inner niet', () => {
 test('de inner telt de kist, en de heer vraagt er een deel van; wat verstopt ligt, telt niet', () => {
   const S = maakS();
   T.zetVoorraad(S, 'goud', 40);
-  assert.equal(bezoekVanafDeBrink(S).goudGezien, 40);
+  assert.equal(bezoekVanafHetPlein(S).goudGezien, 40);
   const regel = T.eisVanDeHeer(S).regels.find((x) => /in uw kist/.test(x.waarom));
   assert.ok(regel && regel.wat === 'goud');
   assert.equal(regel.aantal, Math.ceil(40 * HEER.deelVanGoud));
   // Met 30 goud in de kelder ziet hij er 10.
   const S2 = maakS();
   T.zetVoorraad(S2, 'goud', 40);
-  T.verstop(S2, S2.bijDeBrink, 'goud', 30);
-  assert.equal(bezoekVanafDeBrink(S2).goudGezien, 10);
+  T.verstop(S2, S2.bijHetPlein, 'goud', 30);
+  assert.equal(bezoekVanafHetPlein(S2).goudGezien, 10);
   assert.equal(T.eisVanDeHeer(S2).regels.find((x) => /in uw kist/.test(x.waarom)).aantal, Math.ceil(10 * HEER.deelVanGoud));
   // De optie: de kist telt niet.
   metInstelling(HEER, { kist: false }, () => {
@@ -375,8 +375,8 @@ test('een lege kist na veel verkopen: zijn argwaan groeit', () => {
   const S = maakS();
   S.boekMarskramer = { sinds: 0, ontvangen: 50, betaald: 10 };
   T.zetVoorraad(S, 'goud', 40);
-  T.verstop(S, S.bijDeBrink, 'goud', 36);
-  const r = bezoekVanafDeBrink(S);
+  T.verstop(S, S.bijHetPlein, 'goud', 36);
+  const r = bezoekVanafHetPlein(S);
   assert.equal(r.goudVerwacht, 40);
   assert.ok(Math.abs(S.inner.argwaan - (IN.goudVerwacht - 4 / 40) * IN.goudArgwaan) < 1e-9);
   assert.ok(S.inner.waarom.some((w) => /marskramer/.test(w)));
@@ -387,7 +387,7 @@ test('geen argwaan om het goud: genoeg in de kist, alleen graansporen, of maar e
     const S = maakS();
     S.boekMarskramer = { sinds: 0, ontvangen, betaald: 0 };
     T.zetVoorraad(S, 'goud', kist);
-    bezoekVanafDeBrink(S);
+    bezoekVanafHetPlein(S);
     return S.inner.argwaan;
   });
   assert.equal(geval(24, 40, 'alles'), 0, 'zes tiende van wat hij verwacht is genoeg');
@@ -400,5 +400,5 @@ test('wat je sindsdien bouwde en hij ziet staan, trekt hij van het verwachte gou
   const S = maakS();
   S.boekMarskramer = { sinds: 0, ontvangen: 20, betaald: 0 };
   S.gebouwen.push({ soort: 'huis', x: 8, y: 6, voet: { b: 2, h: 2 }, klaar: true, klaarOp: KOMT - 5, voorwerp: { x: 8, y: 6, beslaat: [2, 2] } });
-  assert.equal(bezoekVanafDeBrink(S).goudVerwacht, 20 - T.GEBOUWEN.huis.kosten.goud);
+  assert.equal(bezoekVanafHetPlein(S).goudVerwacht, 20 - T.GEBOUWEN.huis.kosten.goud);
 });

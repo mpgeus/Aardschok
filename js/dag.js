@@ -4,8 +4,8 @@
 // Toetsen: test/dag.test.cjs.
 //
 // Wat hier staat:
-//   - de zon: hoeveel uur licht een dag heeft, per dag van het jaar (T.zonVan), zoals in Drenthe:
-//     zo'n zestien uur rond 21 zomermaand, en acht rond de kortste dag;
+//   - de zon: hoeveel uur licht een dag heeft, per dag van het jaar (T.zonVan), op zo'n 53 graden
+//     noorderbreedte: zo'n zestien uur rond 21 zomermaand, en acht rond de kortste dag;
 //   - de dagindeling: wanneer men opstaat, werkt, schaft, naar huis gaat en slaapt (T.dagindeling),
 //     en welk deel van de dag het nu is (T.dagdeelVan);
 //   - het licht: hoe donker het is (T.lichtVan), voor js/tekenen.js;
@@ -24,7 +24,7 @@
   T.DAG_INSTELLINGEN = {
     // De zon, in uren licht: gemiddeld over het jaar, hoeveel langer in de zomer en korter in de
     // winter, en de dag van het jaar (vanaf 1 louwmaand) met het meeste licht (21 zomermaand). Zo
-    // heeft de langste dag 16,4 uur licht en de kortste 7,6, zoals in Drenthe.
+    // heeft de langste dag 16,4 uur licht en de kortste 7,6, op zo'n 53 graden noorderbreedte.
     daglichtGemiddeld: 12,
     daglichtSchommeling: 4.4,
     langsteDag: 170,
@@ -144,7 +144,7 @@
   // Waar iemand nu hoort, als het deel van de dag het zegt ("Wie wanneer waar is" in ontwerp/spel.md):
   //   - 's nachts binnen (binnen: true; T.laatDwalen zet hem naar binnen als hij voor zijn deur staat);
   //   - 's ochtends op zijn erf, en wie van het gezin water haalt, bij de put;
-  //   - overdag, bij het werk en de schaft, bij zijn werk. Wie geen werk heeft: een kind op de brink,
+  //   - overdag, bij het werk en de schaft, bij zijn werk. Wie geen werk heeft: een kind op het plein,
   //     een oude en een kleuter bij huis (de plekken zet js/bewoners.js, per bewoner);
   //   - 's avonds op zijn erf. De herberg komt in stap 3 van punt 3b;
   //   - wie net in het gehucht komt, eerst naar zijn huis, en wie wegtrekt, overdag naar de uitgang

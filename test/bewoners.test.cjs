@@ -99,10 +99,10 @@ function vrijePlek(S, voet, bij) {
   }
   return beste;
 }
-// Een huis erbij, op een vrije plek bij de brink, klaar om in te wonen.
+// Een huis erbij, op een vrije plek bij het plein, klaar om in te wonen.
 function bouwHuis(S) {
   const voet = T.gebouwVoet('huis');
-  const plek = vrijePlek(S, voet, T.brinkVan(S.wereld));
+  const plek = vrijePlek(S, voet, T.pleinVan(S.wereld));
   const huis = { soort: 'huis', x: plek.x, y: plek.y, voet, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
   S.gebouwen.push(huis);
   return huis;
@@ -341,7 +341,7 @@ test('T.dagAnker voor een bewoner: \'s nachts binnen, \'s ochtends de put of het
   const a = herder.plek.werk;
   assert.ok(a.x >= meent.x && a.x < meent.x + meent.b && a.y >= meent.y && a.y < meent.y + meent.h, 'de herder is overdag op de heide');
   const kind = nieuwe(S).find((p) => (p.leeftijd === 'kind' || p.leeftijd === 'jong') && !p.werk);
-  assert.ok(T.afstand(T.dagAnker(S, kind.wezen), T.brinkVan(S.wereld)) <= 1, 'een kind speelt op de brink');
+  assert.ok(T.afstand(T.dagAnker(S, kind.wezen), T.pleinVan(S.wereld)) <= 1, 'een kind speelt op het plein');
   const oud = nieuwe(S).find((p) => p.leeftijd === 'oud' || p.leeftijd === 'kleuter');
   assert.equal(T.dagAnker(S, oud.wezen).straal, IN.straalBijHuis, 'een oude of een kleuter blijft bij huis');
   zet(20.5);

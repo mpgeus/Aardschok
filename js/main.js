@@ -248,7 +248,7 @@
     T.tikKalender(S, dt);
     if (T.werkDagBij) T.werkDagBij(S); // wakker worden na het slapen (js/dag.js)
     T.werkGebouwenBij(S); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
-    T.werkMarskramerBij(S); // zijn poppetje: over de weg binnen, naar de brink, en weer weg (js/handel.js)
+    T.werkMarskramerBij(S); // zijn poppetje: over de weg binnen, naar het plein, en weer weg (js/handel.js)
     T.werkHeerBij(S); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)
     T.werkInnerBij(S); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
     if (T.werkBewonersBij) T.werkBewonersBij(S); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)

@@ -33,7 +33,7 @@ function dagVan(maand, dagVanMaand, jaar) {
 }
 const SINT_MAARTEN = dagVan('slachtmaand', 11);
 
-// Een gehucht zonder kaart: een brink (de plek van de marskramer), twee akkers van samen tien
+// Een gehucht zonder kaart: een plein (de plek van de marskramer), twee akkers van samen tien
 // tegels, en geen weg de kaart op. Zonder weg is er geen poppetje, en staat de heer er meteen.
 function maakS() {
   const S = {
@@ -284,7 +284,7 @@ test('de schandpaal: jij wijst aan wie, en het dorp onthoudt het een tijd', () =
   // Ze voert het gesprek van haar karakter (hier het vaste: de weduwe), en dat weet het.
   assert.ok(T.heeftVlag(S, 'schandpaalWeduwe'), 'haar gesprek weet het');
   assert.equal(S.heer.bezoek, null, 'daarna gaat de heer');
-  // Ze staat op de brink, en na haar dagen mag ze weer naar huis.
+  // Ze staat op het plein, en na haar dagen mag ze weer naar huis.
   const aaltje = S.wereld.wezens.find((e) => e.wie === 'boer2');
   assert.ok(aaltje.moetNaar);
   assert.deepEqual(T.wandelAnker(aaltje, 'gemaaid'), aaltje.moetNaar);
@@ -421,7 +421,7 @@ test('komt hij zelf halen en moet er iemand aan de schandpaal, dan wijst hij zel
   assert.equal(S.heer.bezoek, null);
 });
 
-test('waar geen brink is (het oude spel), komt hij nooit', () => {
+test('waar geen plein is (het oude spel), komt hij nooit', () => {
   const S = gehucht();
   S.wereld.marskramer = null;
   for (let dag = 0; dag < T.DAGEN_PER_JAAR; dag++) T.tikHeerDag(S, dag);
@@ -467,7 +467,7 @@ test('elk jaar opnieuw: brief, Sint-Maarten, en weer weg', () => {
 // Zijn poppetje, en zijn gesprek
 // ---------------------------------------------------------------------------------------------
 
-test('zijn poppetje komt over de weg met twee soldaten, en op de brink wacht hij', () => {
+test('zijn poppetje komt over de weg met twee soldaten, en op het plein wacht hij', () => {
   const S = gehucht();
   S.wereld.overgangen = [{ x: 9, y: 5, naar: 'wereld' }];
   S.kalender.dag = SINT_MAARTEN;
@@ -482,7 +482,7 @@ test('zijn poppetje komt over de weg met twee soldaten, en op de brink wacht hij
   assert.equal(s1.wie, 'soldaat');
   assert.equal(s2.wie, 'soldaat');
   assert.deepEqual([heer.tx, heer.ty], [9, 5], 'hij komt binnen over de weg');
-  assert.deepEqual([heer.thuis.x, heer.thuis.y], [5, 5], 'en loopt naar de brink');
+  assert.deepEqual([heer.thuis.x, heer.thuis.y], [5, 5], 'en loopt naar het plein');
   heer.tx = heer.x = 5;
   heer.ty = heer.y = 5;
   T.werkHeerBij(S);
@@ -534,7 +534,7 @@ test('de schandpaal komt er de eerste keer, blijft staan, en wie gestraft wordt,
   T.betaalHeer(S, geefDeel(S, 0.3));
   T.zetAanDeSchandpaal(S, 'boer2');
   const palen = () => (S.wereld.voorwerpen || []).filter((v) => v.soort === 'schandpaal');
-  assert.deepEqual(S.heer.paal, { x: 7, y: 5 }, 'twee tegels rechts van de brink');
+  assert.deepEqual(S.heer.paal, { x: 7, y: 5 }, 'twee tegels rechts van het plein');
   assert.deepEqual(palen(), [{ soort: 'schandpaal', x: 7, y: 5 }]);
   assert.deepEqual(aaltje.moetNaar, { x: 8, y: 6, straal: 0 }, 'vóór de paal, in beeld recht eronder');
   // Haar straf is voorbij: zij mag naar huis, de paal blijft.
@@ -563,7 +563,7 @@ test('de schandpaal komt niet in een akker of waar de heer staat, en beslaat zij
   w.h = 12;
   w.tegels = Array.from({ length: w.h }, () => new Array(w.b).fill('gras'));
   w.voorwerpen = [];
-  // Een akker precies op de plek die hij het liefst neemt (twee tegels rechts van de brink).
+  // Een akker precies op de plek die hij het liefst neemt (twee tegels rechts van het plein).
   w.akkers = [{ x: 6, y: 4, b: 3, h: 3 }];
   const inAkker = (x, y) => x >= 6 && x < 9 && y >= 4 && y < 7;
   const p = T.plekVoorDeSchandpaal(S);
