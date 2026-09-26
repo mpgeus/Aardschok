@@ -139,7 +139,7 @@ kbd {
 .in-gevecht #volgorde { transform: translate(-50%, 0); opacity: 1; }
 .chip { display: flex; gap: 6px; align-items: baseline; padding: 4px 10px; border-radius: 6px; border: 1px solid transparent; color: var(--gedempt); }
 .chip small { font-size: 11px; opacity: 0.8; }
-.chip.held { color: #b9d0f5; }
+.chip.speler { color: #b9d0f5; }
 .chip.monster { color: #f0b3a8; }
 .chip.aan { border-color: var(--goud); color: var(--inkt); background: rgba(226, 182, 74, 0.12); }
 .ronde { padding: 0 6px 0 10px; font: 12px var(--kop); color: var(--gedempt); border-left: 1px solid var(--rand); }

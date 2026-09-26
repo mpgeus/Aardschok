@@ -145,7 +145,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.maakDorpeling` en `T.maakMens` zijn de vragen eromheen.
   **Wie geen naam hoeft te hebben, staat er niet in:** `{ x, y, zaad: 7 }` is menigte.
   **`T.WEZENS` gaat over wat een wezen ís** — wat vecht, met hoeveel levenspunten, wat in code
-  wordt neergezet — en een dorpeling is dat niet. Daar staan alleen nog de held en de monsters;
+  wordt neergezet — en een dorpeling is dat niet. Daar staan alleen nog de schout en de monsters;
   de veertien dorpelingen die er met veertien keer dezelfde regel in stonden, zijn op 22 sep naar
   `mensen.js` verhuisd, en Wim en de meester gingen op 25 sep weg met het oude spel. De mensen van
   het oude dorp (de smid, de herbergierster, de molenaar, ...) staan er nog, zonder plek op een
@@ -252,7 +252,7 @@ en de overgang ernaartoe gaan mee naar het nieuwe spel.
 - Toetsen in een gevecht: klik op een monster om te slaan (de knop `1` Slaan zegt wat het kost),
   `D` deur dicht, `spatie` einde beurt; bij het rondlopen `S` sluipen. De actiepunten en de knoppen
   schuiven onderaan in beeld zodra een gevecht begint, ook in het gehucht.
-- Monsters openen geen deuren. Kan geen enkel monster de held nog zien of bereiken, dan eindigt
+- Monsters openen geen deuren. Kan geen enkel monster de schout nog zien of bereiken, dan eindigt
   het gevecht ('kwijt').
 
 ## Testen in de browser

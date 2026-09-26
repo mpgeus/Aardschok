@@ -24,11 +24,11 @@ function begin() {
 
 test('de schout is een dorpeling, en hij kan lopen', () => {
   const S = begin();
-  assert.equal(S.held.soort, 'dorpeling');
-  assert.equal(S.held.kant, 'held');
-  // Van 23 tot 24 sep stond hij stil: een 'held' heeft zelf snelheid 0, en als dorpeling liep hij
+  assert.equal(S.schout.soort, 'dorpeling');
+  assert.equal(S.schout.kant, 'speler');
+  // Van 23 tot 24 sep stond hij stil: een 'schout' heeft zelf snelheid 0, en als dorpeling liep hij
   // niet meer op de leeftijd.
-  assert.equal(T.snelheidVan(S.held), T.SCHOUT_SNELHEID);
+  assert.equal(T.snelheidVan(S.schout), T.SCHOUT_SNELHEID);
   assert.ok(T.SCHOUT_SNELHEID > 0);
 });
 

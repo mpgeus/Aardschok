@@ -133,7 +133,7 @@
       }
     },
 
-    // De deurknop staat er alleen als de held naast een open deur staat.
+    // De deurknop staat er alleen als de schout naast een open deur staat.
     toonDeurKnop(zichtbaar, kan) {
       const b = document.querySelector('#knoppen button[data-actie="deur"]');
       b.classList.toggle('verborgen', !zichtbaar);

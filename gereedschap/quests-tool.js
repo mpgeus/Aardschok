@@ -326,7 +326,7 @@
     // Met de hand neergezet en niet via T.zetQuest: dat zou een beloning uitkeren, en een proef
     // hoort niets te veranderen.
     const S = {
-      held: {},
+      schout: {},
       inventaris: new Set(proef.tas), vlaggen: new Set(proef.vlaggen),
       goud: proef.goud, quests: {}, questWeg: {}, questBeloond: new Set(),
     };

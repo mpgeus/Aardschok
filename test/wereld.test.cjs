@@ -67,13 +67,13 @@ test('staatVoorGebouw beslist per tegel welke ervóór liggen en welke erachter,
 
 // ---------------------------------------------------------------- de overgang
 
-// Een spel op de proefkaart, met de held naast de uitgang naar het proefbos.
+// Een spel op de proefkaart, met de schout naast de uitgang naar het proefbos.
 function nieuwSpel() {
   const S = { tijd: 0, effecten: [], wachters: [], inventaris: new Set(), bezocht: new Set(), gebieden: {} };
   S.wereld = T.gebied(S, 'proef');
   const o = S.wereld.overgangen[0];
-  S.held = T.maakWezen('held', o.komt.x, o.komt.y);
-  S.wereld.wezens.push(S.held);
+  S.schout = T.maakWezen('schout', o.komt.x, o.komt.y);
+  S.wereld.wezens.push(S.schout);
   S.modus = 'verkennen';
   return S;
 }
@@ -83,34 +83,34 @@ test('een overgang brengt je naar de andere kaart, naast de uitgang daar', () =>
   const o = S.wereld.overgangen[0];
   assert.equal(o.naar, 'proefbos');
   // erop stappen zet de overgang klaar; de spellus voert hem uit (js/main.js)
-  T.bijAankomst(S, S.held, { x: o.x, y: o.y });
+  T.bijAankomst(S, S.schout, { x: o.x, y: o.y });
   assert.equal(S.naarGebied, 'proefbos');
   T.gaNaarGebied(S, S.naarGebied);
   assert.equal(S.wereld.gebied, 'proefbos');
   // hij staat náást de uitgang, niet erop, en kan daar staan
   const terug = S.wereld.overgangen.find((x) => x.naar === 'proef');
-  assert.notDeepEqual([S.held.tx, S.held.ty], [terug.x, terug.y]);
-  assert.equal(T.afstand({ x: S.held.tx, y: S.held.ty }, terug), 1);
-  assert.equal(T.isBegaanbaar(S.wereld, S.held.tx, S.held.ty), true);
-  assert.ok(S.wereld.wezens.includes(S.held), 'de held hoort nu bij het proefbos');
-  assert.ok(!T.gebied(S, 'proef').wezens.includes(S.held), 'en niet meer bij de proefkaart');
+  assert.notDeepEqual([S.schout.tx, S.schout.ty], [terug.x, terug.y]);
+  assert.equal(T.afstand({ x: S.schout.tx, y: S.schout.ty }, terug), 1);
+  assert.equal(T.isBegaanbaar(S.wereld, S.schout.tx, S.schout.ty), true);
+  assert.ok(S.wereld.wezens.includes(S.schout), 'de schout hoort nu bij het proefbos');
+  assert.ok(!T.gebied(S, 'proef').wezens.includes(S.schout), 'en niet meer bij de proefkaart');
 });
 
-test('en weer terug: dezelfde weg, de andere kant op, met dezelfde held', () => {
+test('en weer terug: dezelfde weg, de andere kant op, met dezelfde schout', () => {
   const S = nieuwSpel();
-  S.held.leven -= 7; // een klap onderweg
+  S.schout.leven -= 7; // een klap onderweg
   S.inventaris.add('sleutel');
   T.gaNaarGebied(S, 'proefbos');
-  const leven = S.held.leven;
+  const leven = S.schout.leven;
   const o = S.wereld.overgangen.find((x) => x.naar === 'proef');
-  T.bijAankomst(S, S.held, { x: o.x, y: o.y });
+  T.bijAankomst(S, S.schout, { x: o.x, y: o.y });
   assert.equal(S.naarGebied, 'proef');
   T.gaNaarGebied(S, S.naarGebied);
   assert.equal(S.wereld.gebied, 'proef');
-  assert.equal(S.held.leven, leven, 'een overgang kost geen leven, en geeft het ook niet terug');
+  assert.equal(S.schout.leven, leven, 'een overgang kost geen leven, en geeft het ook niet terug');
   assert.ok(S.inventaris.has('sleutel'), 'wat je bij je hebt, neem je mee');
   const uitgang = S.wereld.overgangen[0];
-  assert.equal(T.afstand({ x: S.held.tx, y: S.held.ty }, uitgang), 1);
+  assert.equal(T.afstand({ x: S.schout.tx, y: S.schout.ty }, uitgang), 1);
 });
 
 test('heen en terug kaatst niet: je landt nooit op een overgangstegel', () => {
@@ -123,11 +123,11 @@ test('heen en terug kaatst niet: je landt nooit op een overgangstegel', () => {
       T.gaNaarGebied(S, naar);
       const w = S.wereld;
       assert.equal(w.gebied, naar);
-      assert.equal(T.overgangOp(w, S.held.tx, S.held.ty), null, `je landt in ${naar} niet op een overgangstegel`);
-      assert.equal(T.isBegaanbaar(w, S.held.tx, S.held.ty, { deurenOpenen: true }), true);
+      assert.equal(T.overgangOp(w, S.schout.tx, S.schout.ty), null, `je landt in ${naar} niet op een overgangstegel`);
+      assert.equal(T.isBegaanbaar(w, S.schout.tx, S.schout.ty, { deurenOpenen: true }), true);
       assert.equal(S.naarGebied, null, 'er staat geen tweede overgang klaar');
       // en de spellus laten draaien verandert daar niets aan
-      T.bijAankomst(S, S.held, { x: S.held.tx, y: S.held.ty });
+      T.bijAankomst(S, S.schout, { x: S.schout.tx, y: S.schout.ty });
       assert.equal(S.naarGebied, null, 'stilstaan op de landingstegel vuurt niets af');
     }
   }
@@ -140,12 +140,12 @@ test('een overgang gaat pas af als je er je pas beëindigt, niet als je erlangs 
   const o = S.wereld.overgangen.find((x) => x.naar === 'proef');
   S.netGeland = null;
   // er doorheen lopen: er staat nog een stap in het pad
-  S.held.pad = [{ x: o.x - 1, y: o.y }];
-  T.bijAankomst(S, S.held, { x: o.x, y: o.y });
+  S.schout.pad = [{ x: o.x - 1, y: o.y }];
+  T.bijAankomst(S, S.schout, { x: o.x, y: o.y });
   assert.equal(S.naarGebied, null, 'erlangs lopen brengt je niet weg');
   // er je pas beëindigen: dan wel
-  S.held.pad = [];
-  T.bijAankomst(S, S.held, { x: o.x, y: o.y });
+  S.schout.pad = [];
+  T.bijAankomst(S, S.schout, { x: o.x, y: o.y });
   assert.equal(S.naarGebied, 'proef');
 });
 
@@ -178,7 +178,7 @@ test('een gebied blijft staan zoals je het achterliet', () => {
   assert.equal(S.wereld.wezens.find((e) => e.soort === 'reuzenspin').dood, true, 'een gedode spin blijft dood');
 });
 
-test('buiten bakent de kamer het slagveld niet af: alleen wie de held echt ziet, doet mee', () => {
+test('buiten bakent de kamer het slagveld niet af: alleen wie de schout echt ziet, doet mee', () => {
   const S = nieuwSpel();
   T.gaNaarGebied(S, 'proefbos');
   const w = S.wereld;
@@ -187,7 +187,7 @@ test('buiten bakent de kamer het slagveld niet af: alleen wie de held echt ziet,
   // de spin ver weg zetten: hij staat in dezelfde (enige) kamer, maar hoort niet mee te doen
   spin.x = spin.tx = 1;
   spin.y = spin.ty = w.h - 2;
-  const mee = T.deelnemers(w, S.held, null);
+  const mee = T.deelnemers(w, S.schout, null);
   assert.equal(mee.includes(spin), false, 'een spin aan de andere kant van het bos doet niet mee');
 });
 
@@ -210,7 +210,7 @@ test('een overgang naar een kaart die niet bestaat, laat de speler niet vastlope
   // Marcel typt "dorp" in Tiled en tekent kaarten/dorp.tmj pas morgen. Dan hoort het spel te
   // klagen op de console, maar gewoon door te spelen: je blijft staan waar je staat.
   const S = nieuwSpel();
-  const waar = { x: S.held.tx, y: S.held.ty };
+  const waar = { x: S.schout.tx, y: S.schout.ty };
   const wereld = S.wereld;
   const fouten = [];
   const oud = console.error;
@@ -221,8 +221,8 @@ test('een overgang naar een kaart die niet bestaat, laat de speler niet vastlope
     console.error = oud;
   }
   assert.equal(S.wereld, wereld, 'je blijft in hetzelfde gebied');
-  assert.deepEqual({ x: S.held.tx, y: S.held.ty }, waar, 'en op dezelfde tegel');
+  assert.deepEqual({ x: S.schout.tx, y: S.schout.ty }, waar, 'en op dezelfde tegel');
   assert.equal(S.naarGebied, null, 'de overgang wordt niet elke tel opnieuw geprobeerd');
-  assert.equal(S.wereld.wezens.includes(S.held), true, 'de held staat nog in zijn eigen wereld');
+  assert.equal(S.wereld.wezens.includes(S.schout), true, 'de schout staat nog in zijn eigen wereld');
   assert.ok(fouten.some((m) => String(m).includes('ditbestaatniet')), 'en het klaagt hoorbaar');
 });

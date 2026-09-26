@@ -6006,7 +6006,7 @@
      {
       "x": 24,
       "y": 29,
-      "wezen": "held"
+      "wezen": "schout"
      },
      {
       "x": 17,

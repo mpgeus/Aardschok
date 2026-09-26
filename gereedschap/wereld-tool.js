@@ -20,7 +20,7 @@
   // maar leeg: er wordt hier niet gespeeld, alleen gekeken. T.S, zodat je er in de console bij kunt.
   const S = (T.S = {
     tijd: 0, wind: 0, zoom: 1, camera: { x: 0, y: 0 },
-    wereld: null, held: null, modus: 'verkennen', gevecht: null, overgang: null,
+    wereld: null, schout: null, modus: 'verkennen', gevecht: null, overgang: null,
     bezig: false, bereik: null, handeling: null, hover: null,
     effecten: [], wachters: [], grond: null, doorkijkTijd: 0,
     rasterAlpha: 0, rasterTegels: [], rasterStart: 0, rasterVan: null,
@@ -703,11 +703,11 @@
   }
   const ROLKLEUR = { quest: '#e2b64a', gesprek: '#efe6d2', menigte: 'rgba(239, 230, 210, 0.45)' };
 
-  // De kleur van een poppetje op de kaart: rood als hij vecht, groen voor de held, en anders
+  // De kleur van een poppetje op de kaart: rood als hij vecht, groen voor de schout, en anders
   // naar wat hij te bieden heeft — zo zie je in één oogopslag waar in het dorp iets te doen is.
   function kleurVanWezen(e) {
     if (e.kant === 'monster') return '#e0604f';
-    if (e.soort === 'held') return '#86c46f';
+    if (e.soort === 'schout') return '#86c46f';
     return ROLKLEUR[rolVan(T.gesprekIdVan(e) || e.soort)] || ROLKLEUR.menigte;
   }
 

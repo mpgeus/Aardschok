@@ -395,7 +395,7 @@ const kaart = {
 const dingen = [];
 // De schout begint bij zijn eigen huis (js/gebied.js, T.beginOpKaart zet hem daarna in het vel
 // van een gewone dorpeling, want de schout is geen tovenaar — zie ontwerp/werklijst.md).
-dingen.push({ x: SCHOUT_HUIS.x + Math.floor(SCHOUT_HUIS.b / 2), y: SCHOUT_HUIS.y + SCHOUT_HUIS.d, wezen: 'held' });
+dingen.push({ x: SCHOUT_HUIS.x + Math.floor(SCHOUT_HUIS.b / 2), y: SCHOUT_HUIS.y + SCHOUT_HUIS.d, wezen: 'schout' });
 // De vijf boeren, elk bij zijn eigen huis, dwalend (T.laatDwalen, js/verkennen.js) en in het
 // groeiseizoen op en rond hun eigen akker (T.wandelAnker, js/akkers.js). "wie" is hier gelijk aan
 // "huis" (T.MENSEN.boer1..boer5, js/mensen.js, lenen om en om het boer/boerin-vel): vijf eigen

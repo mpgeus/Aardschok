@@ -1,6 +1,6 @@
 // Het beeld. Eerst alle vloeren, dan het gevechtsraster en de markeringen daarop, dan muren,
 // deuren, voorwerpen en wezens van achter naar voor, en als laatste de effecten. De muren aan
-// de voorkant van de kamer waar de held staat, worden laag getekend: zo kijk je de kamer in,
+// de voorkant van de kamer waar de schout staat, worden laag getekend: zo kijk je de kamer in,
 // zoals bij een poppenhuis. Kamers waar je niet bent, staan gedimd; kamers waar je nooit
 // geweest bent, blijven donker.
 //
@@ -143,7 +143,7 @@
     ctx.imageSmoothingEnabled = false;
 
     const inBeeld = (id) => id === w.huidigeKamer || (!!S.gevecht && S.gevecht.kamers.has(id));
-    // Opengewerkt: de kamer van de held, en in een gevecht elke kamer waarin gevochten wordt.
+    // Opengewerkt: de kamer van de schout, en in een gevecht elke kamer waarin gevochten wordt.
     const open = w.kamers.filter((k) => inBeeld(k.id));
     const zicht = zichtVlak(S, bw, bh);
     const vak = tegelsIn(w, zicht);
@@ -226,9 +226,9 @@
     }
     // Het bos om de kaart heen (zie "het bos om de kaart heen" hieronder): dezelfde uitgebreide
     // vak-berekening als tegelsIn, maar met ringen vóórbij de rand in plaats van eraan afgeknipt.
-    // Doet mee in `zichtbaar`, zodat een boom die de held bedekt net als elk ander hoog voorwerp
+    // Doet mee in `zichtbaar`, zodat een boom die de schout bedekt net als elk ander hoog voorwerp
     // wegdooft (werkDoorkijkBij hieronder), en in `lijst`, zodat de gewone dieptesortering hem
-    // netjes voor of achter de held zet.
+    // netjes voor of achter de schout zet.
     if (w.buiten) {
       const randVak = tegelsIn(w, zicht, BOSRAND_DIEP);
       for (let y = randVak.y0; y <= randVak.y1; y++) {
@@ -246,7 +246,7 @@
         }
       }
     }
-    // Doorkijk: wat de held of een wezen bedekt, wordt zolang doorzichtig. De tijd komt uit de
+    // Doorkijk: wat de schout of een wezen bedekt, wordt zolang doorzichtig. De tijd komt uit de
     // spelklok, zodat het ook klopt als het spel even stilstaat of vooruitgespoeld wordt.
     const dt = Math.max(0, Math.min(0.1, S.tijd - (S.doorkijkTijd || 0)));
     S.doorkijkTijd = S.tijd;
@@ -365,7 +365,7 @@
   //
   // Buiten staan er dingen die hoger zijn dan een muur binnen: een eik is driehonderd pixels,
   // een huis met twee lagen nog meer. Wie erachter loopt, is weg — en wat erger is: een wolf die jou
-  // wél ziet, zie jij dan niet. Dus wordt alles wat de held of een wezen bedekt zolang
+  // wél ziet, zie jij dan niet. Dus wordt alles wat de schout of een wezen bedekt zolang
   // doorzichtig.
   //
   // Waarom doorzichtig en niet het silhouet van de figuur eroverheen: onze pixel art heeft zijn
@@ -375,12 +375,12 @@
   // doen.
   const DOORKIJK = 0.4;
   // De bosrand (zie "het bos om de kaart heen" verderop) staat op een hoek van de kaart soms met
-  // twee dichte randen tegelijk om de held heen, en dan bedekken tien, twintig bomen hem
+  // twee dichte randen tegelijk om de schout heen, en dan bedekken tien, twintig bomen hem
   // allemaal tegelijk. Doorzichtigheid stapelt vermenigvuldigend (twee bomen op 0.4 laten samen
-  // nog maar 0.16 van de held zien, bij twintig is dat allang niets meer), dus een kleine waarde
+  // nog maar 0.16 van de schout zien, bij twintig is dat allang niets meer), dus een kleine waarde
   // lost dat niet op — hoe laag ook, met genoeg bomen erbovenop verdwijnt hij toch. Eén los ding
   // mag zichtbaar blijven doorschemeren; een heel woud aan
-  // verwisselbare achtergrondbomen niet: die vallen daarom helemaal weg zolang ze de held
+  // verwisselbare achtergrondbomen niet: die vallen daarom helemaal weg zolang ze de schout
   // bedekken, in plaats van te vervagen.
   const BOSRAND_DOORKIJK = 0;
   const DOORKIJK_TIJD = 0.18; // seconden om op en af te lopen, zodat het niet klappert
@@ -420,12 +420,12 @@
 
   // Per beeld: welk hoog voorwerp bedekt iemand die je hoort te zien? Alleen voorwerpen die ná
   // dat wezen getekend worden kunnen hem verbergen, en dat weten we al uit de diepte.
-  // Wie moet er door een boom of een huis heen te zien zijn? De held altijd. Verder alleen wie er
+  // Wie moet er door een boom of een huis heen te zien zijn? De schout altijd. Verder alleen wie er
   // toe doet op dit moment: wat meevecht, wat je net ontdekt heeft (het uitroepteken), en wie je
   // aanspreekt. Een wolf die in zijn eentje achter een huis rondscharrelt hoeft het huis niet
   // doorzichtig te maken — dan sta je ervoor en zie je hem wegvallen zonder te weten waarom.
   function teltMee(S, e) {
-    if (e === S.held) return true;
+    if (e === S.schout) return true;
     if (e.dood) return false;
     if (e.alarm > 0) return true;
     if (S.gevecht && S.gevecht.volgorde.includes(e)) return true;
@@ -605,11 +605,11 @@
     }
   }
 
-  // Het raster rolt uit vanaf de plek van de held, als een rimpeling over de vloer, en
+  // Het raster rolt uit vanaf de plek van de schout, als een rimpeling over de vloer, en
   // vervaagt weer als het gevecht voorbij is.
   function tekenRaster(ctx, S) {
     if (S.rasterAlpha < 0.01 || !S.rasterTegels.length) return;
-    const van = S.rasterVan || T.tegelVan(S.held);
+    const van = S.rasterVan || T.tegelVan(S.schout);
     const verstreken = S.tijd - S.rasterStart;
     ctx.save();
     ctx.strokeStyle = 'rgba(245, 230, 190, 0.42)';
@@ -648,7 +648,7 @@
     const licht = 'rgba(250, 240, 210, 0.9)';
     const rood = 'rgba(224, 96, 79, 0.9)';
 
-    // Bereik: waar de held deze beurt nog kan komen.
+    // Bereik: waar de schout deze beurt nog kan komen.
     if (S.bereik && S.modus === 'gevecht' && !S.bezig) {
       ctx.fillStyle = 'rgba(111, 160, 230, 0.17)';
       for (const k of S.bereik.keys()) {
@@ -895,8 +895,8 @@
   // ---------------------------------------------------------------- het bos om de kaart heen
   //
   // Buiten de kaart stond tot nu toe niets: de camera hield daarom een marge aan tot de rand (de
-  // oude begrensCamera in js/main.js), en op een kleine kaart liep de held zo ver uit het midden
-  // dat hij onder het paneel verdween (Marcel, 21 sep 2026). De camera volgt de held nu altijd
+  // oude begrensCamera in js/main.js), en op een kleine kaart liep de schout zo ver uit het midden
+  // dat hij onder het paneel verdween (Marcel, 21 sep 2026). De camera volgt de schout nu altijd
   // (js/main.js); in de plaats van die marge staat hier een bosrand, zodat er nooit leegte te
   // zien is. Het dorp ligt toch al aan het bos (ontwerp/wereld.md), dus dat klopt ook verhalend.
   //
@@ -976,7 +976,7 @@
   // Eén tegel in de bosrand: welke boom of struik er staat (of niets, als de dichtheid op deze
   // plek een gat dithert), voor eens en altijd berekend en bewaard op de wereld zelf. Dat bewaren
   // is niet (alleen) voor de snelheid: werkDoorkijkBij hieronder laat een boom vervagen als hij de
-  // held bedekt, en dat kan alleen vloeiend als het van beeld op beeld hetzelfde object blijft.
+  // schout bedekt, en dat kan alleen vloeiend als het van beeld op beeld hetzelfde object blijft.
   const bosrandPerWereld = new WeakMap();
   function bosrandOp(w, x, y) {
     let cache = bosrandPerWereld.get(w);
@@ -1306,8 +1306,8 @@
     const huppel = !deel && e.onderweg ? Math.abs(Math.sin(S.tijd * 14)) * 2.5 : 0;
     let top;
     if (deel) {
-      // Sluipen heeft nog geen eigen houding: de held doet het in het halfdonker.
-      if (e === S.held && S.sluipen && !S.gevecht) ctx.globalAlpha *= 0.8;
+      // Sluipen heeft nog geen eigen houding: de schout doet het in het halfdonker.
+      if (e === S.schout && S.sluipen && !S.gevecht) ctx.globalAlpha *= 0.8;
       T.sprites.teken(ctx, deel, cx, cy);
       top = cy - T.sprites.hoogte(e.soort);
       // een klap: een rood dambord over de figuur

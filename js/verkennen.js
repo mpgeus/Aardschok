@@ -1,53 +1,53 @@
 // Rondlopen buiten een gevecht: klikken om te lopen, praten, oppakken en deuren. De monsters
-// dwalen intussen door hun eigen kamer, en zodra er één de held ziet, begint het gevecht op
+// dwalen intussen door hun eigen kamer, en zodra er één de schout ziet, begint het gevecht op
 // de plek waar iedereen op dat moment staat.
 (function (T) {
   'use strict';
 
-  const heldMag = (S) => (x, y) => T.isBegaanbaar(S.wereld, x, y, { deurenOpenen: true, wezensBlokkeren: true, wie: S.held });
+  const schoutMag = (S) => (x, y) => T.isBegaanbaar(S.wereld, x, y, { deurenOpenen: true, wezensBlokkeren: true, wie: S.schout });
   const vast = (S) => (x, y) => T.isVast(S.wereld, x, y);
 
-  // Is de held midden in een stap, dan maakt hij die eerst af en rekent het nieuwe pad
+  // Is de schout midden in een stap, dan maakt hij die eerst af en rekent het nieuwe pad
   // vanaf de tegel waar hij naartoe stapt.
-  function heldPad(S, doel, naast) {
-    const held = S.held;
-    const pad = T.zoekPad(T.tegelVan(held), doel, heldMag(S), vast(S), { naast });
+  function schoutPad(S, doel, naast) {
+    const schout = S.schout;
+    const pad = T.zoekPad(T.tegelVan(schout), doel, schoutMag(S), vast(S), { naast });
     if (pad === null) return null;
     // `onderweg` zonder een tegel om heen te stappen kan niet, maar als het toch gebeurt (iets
-    // dat de held verzette zonder het af te maken) zou er een leeg vakje voorin het pad komen, en
+    // dat de schout verzette zonder het af te maken) zou er een leeg vakje voorin het pad komen, en
     // daar loopt de beweging op stuk.
-    return held.onderweg && held.pad[0] ? [held.pad[0], ...pad] : pad;
+    return schout.onderweg && schout.pad[0] ? [schout.pad[0], ...pad] : pad;
   }
 
   function loopNaar(S, doel) {
-    const pad = heldPad(S, doel, false);
+    const pad = schoutPad(S, doel, false);
     if (!pad) {
       T.ui.bericht('Daar kun je niet komen.');
       return;
     }
-    S.held.pad = pad;
+    S.schout.pad = pad;
     S.naLopen = null;
   }
 
-  // Loop tot naast het doel en doe daar `actie`. Staat de held er al naast, dan meteen. Is het
+  // Loop tot naast het doel en doe daar `actie`. Staat de schout er al naast, dan meteen. Is het
   // doel een wezen, dan telt zijn tegel (tx, ty), niet zijn vloeiende plek: wie op een dorpeling
   // klikt terwijl die net een stap zet, gaf anders een halve tegel aan het padzoeken, en dat liep
   // vast.
   function loopNaast(S, wat, actie) {
     const doel = wat.tx != null ? { x: wat.tx, y: wat.ty } : wat;
-    const held = S.held;
-    if (!held.onderweg && T.raakt(S.wereld, T.tegelVan(held), doel)) {
-      held.pad = [];
+    const schout = S.schout;
+    if (!schout.onderweg && T.raakt(S.wereld, T.tegelVan(schout), doel)) {
+      schout.pad = [];
       S.naLopen = null;
       actie();
       return;
     }
-    const pad = heldPad(S, doel, true);
+    const pad = schoutPad(S, doel, true);
     if (!pad) {
       T.ui.bericht('Daar kun je niet bij.');
       return;
     }
-    held.pad = pad;
+    schout.pad = pad;
     S.naLopen = { doel: { x: doel.x, y: doel.y }, actie };
   }
 
@@ -358,10 +358,10 @@
   // Een gevecht dat je zo ontloopt, kost je geen enkel jaar.
   T.SLUIP_ZICHT = 2;
 
-  // Ziet een monster de held? Dan geeft dit het monster terug.
+  // Ziet een monster de schout? Dan geeft dit het monster terug.
   T.zoekOntdekking = function (S) {
     const w = S.wereld;
-    const h = T.tegelVan(S.held);
+    const h = T.tegelVan(S.schout);
     const minder = S.sluipen ? T.SLUIP_ZICHT : 0;
     for (const m of w.wezens) {
       if (m.dood || m.kant !== 'monster') continue;
@@ -380,13 +380,13 @@
 
   // Mag deze stap nog? Tijdens het rondlopen kan er intussen een monster in de weg staan.
   T.magStappen = function (S, e, t) {
-    return T.isBegaanbaar(S.wereld, t.x, t.y, { deurenOpenen: e === S.held, wezensBlokkeren: true, wie: e });
+    return T.isBegaanbaar(S.wereld, t.x, t.y, { deurenOpenen: e === S.schout, wezensBlokkeren: true, wie: e });
   };
 
-  // Een dichte deur gaat open op het moment dat de held erdoor stapt, niet pas als hij er
+  // Een dichte deur gaat open op het moment dat de schout erdoor stapt, niet pas als hij er
   // al half doorheen is.
   T.bijStapBegin = function (S, e, t) {
-    if (e !== S.held) return;
+    if (e !== S.schout) return;
     const d = T.deurOp(S.wereld, t.x, t.y);
     if (d && d.staat === 'dicht') {
       d.staat = 'open';
@@ -396,7 +396,7 @@
 
   T.bijAankomst = function (S, e, t) {
     const w = S.wereld;
-    if (e === S.held) {
+    if (e === S.schout) {
       const k = T.kamerVan(w, t.x, t.y);
       if (k) {
         w.bekend.add(k.id);
@@ -436,7 +436,7 @@
       }
     }
     if (S.gevecht) T.gevechtBijAankomst(S, e, t);
-    if (e === S.held && S.modus === 'verkennen' && !e.pad.length && S.naLopen) {
+    if (e === S.schout && S.modus === 'verkennen' && !e.pad.length && S.naLopen) {
       const n = S.naLopen;
       S.naLopen = null;
       if (T.raakt(w, t, n.doel)) n.actie();

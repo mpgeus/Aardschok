@@ -6,7 +6,7 @@
 // Welke gebieden er zijn, staat nergens opgeschreven: elke kaart is er een (zie T.maakGebieden
 // hieronder). Marcel tekent in Tiled, draait npm run kaarten, en de wereld is groter geworden.
 //
-// De held verhuist mee — met zijn levenspunten en wat hij bij zich heeft — en de
+// De schout verhuist mee — met zijn levenspunten en wat hij bij zich heeft — en de
 // wereld die hij achterlaat blijft staan: een gedode wolf blijft dood, en een deur die je liet
 // openstaan staat er nog open als je terugkomt.
 (function (T) {
@@ -139,14 +139,14 @@
       return;
     }
 
-    // De held verhuist: uit de ene lijst wezens, in de andere.
+    // De schout verhuist: uit de ene lijst wezens, in de andere.
     if (oud) {
-      const i = oud.wezens.indexOf(S.held);
+      const i = oud.wezens.indexOf(S.schout);
       if (i >= 0) oud.wezens.splice(i, 1);
     }
-    if (!nieuw.wezens.includes(S.held)) nieuw.wezens.push(S.held);
+    if (!nieuw.wezens.includes(S.schout)) nieuw.wezens.push(S.schout);
     const plek = T.landingIn(nieuw, vanaf);
-    zetNeer(S.held, plek.x, plek.y);
+    zetNeer(S.schout, plek.x, plek.y);
     // Hij is hier neergezet, niet naartoe gelopen. Een overgang gaat pas weer af als hij er een
     // keer af is geweest; dat is het tweede slot op de lus (het eerste is landingIn hierboven).
     S.netGeland = { x: plek.x, y: plek.y };
@@ -175,9 +175,9 @@
     const d = T.deurOp(nieuw, plek.x, plek.y);
     if (d) T.ontdekBijDeur(nieuw, d);
 
-    // De camera springt mee: hij glijdt normaal achter de held aan, maar over een gebied heen
+    // De camera springt mee: hij glijdt normaal achter de schout aan, maar over een gebied heen
     // glijden zou een reis door het niets zijn.
-    const p = T.naarScherm(S.held.x, S.held.y);
+    const p = T.naarScherm(S.schout.x, S.schout.y);
     S.camera = { x: p.x, y: p.y - 24 };
     if (S.grond) S.grond.sleutel = ''; // de grondbuffer opnieuw tekenen (js/tekenen.js)
 
@@ -191,8 +191,8 @@
 
   // Een nieuw spel beginnen op een kaart: het gehucht, of een andere voor een proefje
   // (index.html?kaart=<naam>, zie js/main.js). Geeft true terug als het gelukt is; S.wereld en
-  // S.held staan dan klaar. Bestaat de kaart niet, dan false — de aanroeper valt dan terug op het
-  // gehucht. Staat er geen "held" op, dan zet het er zelf een neer.
+  // S.schout staan dan klaar. Bestaat de kaart niet, dan false — de aanroeper valt dan terug op het
+  // gehucht. Staat er geen "schout" op, dan zet het er zelf een neer.
   T.beginOpKaart = function (S, naam) {
     const w = T.gebied(S, naam);
     if (!w) {
@@ -200,24 +200,24 @@
       return false;
     }
     S.wereld = w;
-    let held = w.wezens.find((e) => e.soort === 'held');
-    if (!held) {
-      console.warn(`Spel.beginOpKaart: geen "held" op kaart "${naam}", hij begint op (0, 0)`);
-      held = T.maakWezen('held', 0, 0);
-      w.wezens.push(held);
+    let schout = w.wezens.find((e) => e.soort === 'schout');
+    if (!schout) {
+      console.warn(`Spel.beginOpKaart: geen "schout" op kaart "${naam}", hij begint op (0, 0)`);
+      schout = T.maakWezen('schout', 0, 0);
+      w.wezens.push(schout);
     }
     // Een schout is geen tovenaar: hij krijgt hier het vel van een gewone dorpeling. `kant`
-    // blijft 'held' (die staat al vast sinds T.maakWezen, zie T.WEZENS in js/wereld.js), dus de
+    // blijft 'speler' (die staat al vast sinds T.maakWezen, zie T.WEZENS in js/wereld.js), dus de
     // HUD en de beurtvolgorde blijven gewoon op hem letten; alleen T.sprites.houding kijkt naar
     // `soort` om het plaatje te kiezen (js/sprites.js). Zie ontwerp/werklijst.md, punt 1b.
-    held.soort = 'dorpeling';
-    // Zijn loopmaat (T.SCHOUT_SNELHEID, js/wereld.js) had hij al: die staat bij de held in
-    // T.WEZENS. Van 23 tot 24 sep stond hij hier stil, omdat een 'held' toen op zijn leeftijd liep
-    // en zelf snelheid 0 had; dit blijft staan als vangnet voor een held uit een oude kaart.
-    held.snelheid = T.SCHOUT_SNELHEID;
-    if (held.zaad == null) held.zaad = 1;
-    S.held = held;
-    zetNeer(held, held.x, held.y);
+    schout.soort = 'dorpeling';
+    // Zijn loopmaat (T.SCHOUT_SNELHEID, js/wereld.js) had hij al: die staat bij de schout in
+    // T.WEZENS. Van 23 tot 24 sep stond hij hier stil, omdat de held (toen nog een tovenaar) op
+    // zijn leeftijd liep en zelf snelheid 0 had; dit blijft staan als vangnet voor een oude kaart.
+    schout.snelheid = T.SCHOUT_SNELHEID;
+    if (schout.zaad == null) schout.zaad = 1;
+    S.schout = schout;
+    zetNeer(schout, schout.x, schout.y);
     // Een klein beginvoorraadje (kaarten/<naam>.betekenis.json, "beginVoorraad") en de gebouwen
     // die al op de kaart staan (js/gebouwen.js) — zodat een dorp niet leeg begint.
     if (w.beginVoorraad && T.zetVoorraad) {

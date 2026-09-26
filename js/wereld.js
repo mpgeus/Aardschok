@@ -55,12 +55,14 @@
   // wat een klap kost aan levenspunten. Namen staan met een kleine letter, omdat ze bijna altijd
   // midden in een zin staan.
   //
-  // De held (de schout) heeft sinds 25 sep levenspunten, net als een monster (Marcel koos het,
-  // voorlopig: ontwerp/spel.md, onder Open). Daarvoor was zijn leeftijd zijn levensbalk, en kostte
-  // een klap maanden; die maanden zijn hieronder gedeeld door twee, zodat de monsters onderling
-  // even sterk bleven. Wat vallen echt betekent, komt bij punt 13 van de werklijst.
+  // De schout heeft sinds 25 sep levenspunten, net als een monster (Marcel koos het, voorlopig:
+  // ontwerp/spel.md, onder Open). Daarvoor was de leeftijd van de tovenaar zijn levensbalk, en
+  // kostte een klap maanden; die maanden zijn hieronder gedeeld door twee, zodat de monsters
+  // onderling even sterk bleven. Wat vallen echt betekent, komt bij punt 13 van de werklijst.
+  // Zijn kant heet 'speler' en niet 'schout' (Marcel, 26 sep): soort en kant zijn twee dingen, en
+  // een man van de militie (punt 13) vecht straks aan jouw kant zonder de schout te zijn.
   const WEZENS = {
-    held: { naam: 'jij', kant: 'held', leven: 20, ap: 8, initiatief: 10, snelheid: T.SCHOUT_SNELHEID },
+    schout: { naam: 'jij', kant: 'speler', leven: 20, ap: 8, initiatief: 10, snelheid: T.SCHOUT_SNELHEID },
     // De mensen van het dorp staan niet hier maar in js/mensen.js: wie ze zijn, hoe ze heten, hoe
     // snel ze lopen en welk vel ze krijgen. Deze tabel gaat over wat een wezen ís — wat vecht,
     // wat in code wordt neergezet — en een dorpeling is dat niet. Zie
@@ -112,7 +114,7 @@
   T.tegelVan = (e) => ({ x: e.tx, y: e.ty });
   // Afstand in stappen: schuin telt als één stap, net als bij het lopen.
   T.afstand = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
-  // Hoe snel loopt dit wezen? Ieder op zijn eigen vaste maat. (Tot 25 sep liep de held trager
+  // Hoe snel loopt dit wezen? Ieder op zijn eigen vaste maat. (Tot 25 sep liep de tovenaar trager
   // naarmate hij ouder werd; de leeftijd ging eruit met het oude spel.)
   T.snelheidVan = (e) => e.snelheid;
 
@@ -156,7 +158,7 @@
       { soort: 'pilaar', x: 6, y: 11 },
     );
     w.wezens.push(
-      maakWezen('held', 3, 5),
+      maakWezen('schout', 3, 5),
       maakWezen('slijm', 16, 4),
       maakWezen('skelet', 5, 13),
     );
@@ -227,7 +229,7 @@
   };
   T.wezenOp = (w, x, y, behalve) => w.wezens.find((e) => !e.dood && e !== behalve && e.tx === x && e.ty === y) || null;
 
-  // Mag je deze tegel op? deurenOpenen: een dichte deur telt als doorgang (de held duwt
+  // Mag je deze tegel op? deurenOpenen: een dichte deur telt als doorgang (de schout duwt
   // hem open, een monster niet). wezensBlokkeren: andere wezens staan in de weg.
   T.isBegaanbaar = function (w, x, y, opties) {
     const o = opties || {};

@@ -118,7 +118,7 @@ test('een kaart met randtegels krijgt zijn grondsoorten uit rand.tsx, op naam en
 
 test('water is vast, de brug niet — ook waar hij over het water ligt', () => {
   // De kern van de brug: de beek loopt van noord naar zuid dwars over de kaart en is overal vast,
-  // behalve op de drie tegels waar de brug ligt. Kan de held daar niet overheen, dan is het bos
+  // behalve op de drie tegels waar de brug ligt. Kan de schout daar niet overheen, dan is het bos
   // aan de overkant onbereikbaar.
   const w = T.laadKaart(T.KAARTEN.proefbos, T.BETEKENIS.proefbos);
   assert.equal(T.isVast(w, 10, 3), true, 'de beek stroomt en daar loop je niet doorheen');
@@ -147,10 +147,10 @@ test('een bosvijand uit Tiled is een gewoon wezen, met een figuur dat het spel k
 
 test('elk wezen dat Marcel in Tiled kan neerzetten, heeft een figuur in beelden/', () => {
   // Wie nog niet getekend is, mag een vel lenen (vel: 'boer') — dan moet dát vel er wel zijn,
-  // anders staat er straks niets op de kaart. De held (de schout) draagt het vel van een gewone
+  // anders staat er straks niets op de kaart. De schout (de schout) draagt het vel van een gewone
   // dorpeling (js/sprites.js); tot 25 sep was hij de tovenaar van het oude spel.
   for (const [soort, w] of Object.entries(T.WEZENS)) {
-    const eigen = soort === 'held' ? 'dorpeling0' : soort;
+    const eigen = soort === 'schout' ? 'dorpeling0' : soort;
     const vel = T.BEELDEN.figuren[eigen] ? eigen : w.vel;
     assert.ok(
       vel && T.BEELDEN.figuren[vel],

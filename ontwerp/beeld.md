@@ -279,7 +279,7 @@ Bij het eerste rondlopen buiten: "je kunt niets zien achter de toren" en "ik wor
 door een wolf die ik niet kan zien". Daar volgen drie regels uit, die voor alle buitengebieden
 gelden.
 
-- **Doorkijk.** Een hoog voorwerp dat de held of een wezen bedekt, wordt doorzichtig zolang dat
+- **Doorkijk.** Een hoog voorwerp dat de schout of een wezen bedekt, wordt doorzichtig zolang dat
   zo is, of het silhouet van de figuur wordt eroverheen getekend. Zo doen Fallout, Diablo en
   Baldur's Gate het ook. Bepalen wat wat bedekt gaat op tegels en hoogte, niet op pixels, want
   het moet elk beeld kunnen. De overgang loopt in een paar tienden van een seconde op en af,

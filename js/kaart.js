@@ -23,7 +23,7 @@
 //   wie        één mens uit T.MENSEN (js/mensen.js): "boer1", "koster". Dat is de gewone manier
 //              om iemand neer te zetten die een naam heeft — wie hij is, hoe hij eruitziet en wat
 //              hij zegt staat daar op één plek, en de kaart zegt alleen waar hij staat.
-//   wezen      welk wezen hier staat: een naam die T.maakWezen kent ('held' voor de beginplek
+//   wezen      welk wezen hier staat: een naam die T.maakWezen kent ('schout' voor de beginplek
 //              van de schout, 'wolf', 'slijm', de bosvijanden). Verkeerd gespeld?
 //              Dan komt er een waarschuwing op de console en slaan we het ding over.
 //   zaad       in plaats van "wezen": een gewone dorpeling met dit zaad als uiterlijk (zie

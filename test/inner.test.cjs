@@ -356,9 +356,9 @@ test('zijn poppetje komt over de weg, loopt zijn eigen ronde tot hij alles zag, 
 test('loopt de schout naast hem, dan volgt hij de schout; loopt die ver weg, dan gaat hij zijn eigen gang', () => {
   const S = maakS();
   S.wereld.overgangen = [{ x: 0, y: 10, naar: 'wereld' }];
-  const held = T.maakMens('boer1', 1, 11);
-  S.held = held;
-  S.wereld.wezens.push(held);
+  const schout = T.maakMens('boer1', 1, 11);
+  S.schout = schout;
+  S.wereld.wezens.push(schout);
   T.innerKomt(S, KOMT, false);
   T.werkInnerBij(S);
   T.werkInnerBij(S);
@@ -366,17 +366,17 @@ test('loopt de schout naast hem, dan volgt hij de schout; loopt die ver weg, dan
   assert.ok(b.volgt, 'de schout staat naast hem');
   // De schout loopt naar boven, weg van alles; hij loopt mee en blijft naast hem.
   for (const y of [9, 7, 5, 3, 1]) {
-    held.tx = held.x = 1;
-    held.ty = held.y = y;
+    schout.tx = schout.x = 1;
+    schout.ty = schout.y = y;
     laatLopen(S, 6);
     assert.ok(b.volgt);
-    assert.ok(T.afstand({ x: b.wezen.tx, y: b.wezen.ty }, { x: held.tx, y: held.ty }) <= 1, `naast de schout bij y=${y}`);
+    assert.ok(T.afstand({ x: b.wezen.tx, y: b.wezen.ty }, { x: schout.tx, y: schout.ty }) <= 1, `naast de schout bij y=${y}`);
   }
   // Zijn geduld slinkt met elke stap.
   assert.ok(b.geduld < IN.geduld);
   // De schout loopt ver weg: dan loopt hij zijn eigen ronde.
-  held.tx = held.x = 28;
-  held.ty = held.y = 1;
+  schout.tx = schout.x = 28;
+  schout.ty = schout.y = 1;
   laatLopen(S, 2);
   assert.ok(!b.volgt);
 });
@@ -385,9 +385,9 @@ test('stilstaan kost ook geduld: naast een schout die niet verder loopt, wacht h
   const S = maakS();
   S.tijd = 0;
   S.wereld.overgangen = [{ x: 0, y: 10, naar: 'wereld' }];
-  const held = T.maakMens('boer1', 1, 10);
-  S.held = held;
-  S.wereld.wezens.push(held);
+  const schout = T.maakMens('boer1', 1, 10);
+  S.schout = schout;
+  S.wereld.wezens.push(schout);
   T.innerKomt(S, KOMT, false);
   T.werkInnerBij(S);
   T.werkInnerBij(S);

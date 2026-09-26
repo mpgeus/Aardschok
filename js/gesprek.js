@@ -2,8 +2,8 @@
 // (test/gesprek.test.cjs). De teksten zelf staan in gesprekken.js; hier staat alleen hoe we
 // daaruit kiezen: welke regel van een lijst wint (de eerste die past), welke keuzes je te zien
 // krijgt, en wat een antwoord doet. Een voorwaarde kijkt naar vlaggen, bezit en quests. (Tot 25 sep
-// ook naar de leeftijd van de held: ouderDan, jongerDan en ouderGewordenSinds; die gingen eruit
-// met het oude spel.)
+// ook naar de leeftijd van de held, de tovenaar van het oude spel: ouderDan, jongerDan en
+// ouderGewordenSinds; die gingen eruit met dat spel.)
 (function (T) {
   'use strict';
 

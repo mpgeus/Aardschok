@@ -74,7 +74,7 @@
     const alleVoorwerpen = [...w.voorwerpen, ...(w.questVoorwerpen || [])];
     const voorwerpOp = (x, y) => alleVoorwerpen.filter((v) => v.x === x && v.y === y);
 
-    let helden = 0;
+    let schouten = 0;
     const bezet = new Map(); // tegel -> wie er al staat, voor twee mensen op dezelfde plek
     const mensenHier = new Map(); // welke mens waar: dezelfde twee keer neerzetten kan niet
     const gesprekkenHier = new Map(); // welk gesprek waar: twee monden voor één tekst
@@ -125,7 +125,7 @@
         if (!T.WEZENS || !T.WEZENS[p.wezen]) {
           fout(o.x, o.y, `onbekend wezen "${p.wezen}"; het spel slaat het over. Kijk de spelling na tegen T.WEZENS in js/wereld.js`);
         } else {
-          if (p.wezen === 'held') helden++;
+          if (p.wezen === 'schout') schouten++;
           if (p.zaad !== undefined) letOp(o.x, o.y, `"${p.wezen}" heeft ook een zaad; het spel neemt het wezen en laat het zaad liggen`);
         }
       }
@@ -209,7 +209,7 @@
     // gereedschap om een snelle keuring en komt deze er bij het loslaten achteraan.
     if (!(opties && opties.snel)) keurBereik(w, fout, letOp);
 
-    if (helden > 1) fout(null, null, `er staan ${helden} objecten met wezen="held" op deze kaart; het spel weet dan niet waar je begint`);
+    if (schouten > 1) fout(null, null, `er staan ${schouten} objecten met wezen="schout" op deze kaart; het spel weet dan niet waar je begint`);
     // Een gebied zonder uitgang is een val: daar kom je nooit meer weg. js/gebied.js roept dat
     // ook, maar pas als een speler er staat.
     if (!(w.overgangen || []).length) {

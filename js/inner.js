@@ -547,7 +547,7 @@
     }
     if (e.onderweg) return;
     // Loopt de schout naast hem, dan volgt hij de schout; loopt die weg, dan gaat hij zijn eigen gang.
-    const h = S.held;
+    const h = S.schout;
     const afstand = h ? T.afstand({ x: h.tx, y: h.ty }, { x: e.tx, y: e.ty }) : Infinity;
     const volgde = b.volgt;
     if (afstand <= IN().volgAfstand) b.volgt = true;

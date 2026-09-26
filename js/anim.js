@@ -91,7 +91,7 @@
     // In een gevecht lopen ook de trage monsters wat vlotter, anders duurt hun beurt te lang.
     // Wie sluipt, gaat half zo snel.
     let snelheid = S.gevecht ? Math.max(3.2, T.snelheidVan(e) * 1.4) : T.snelheidVan(e);
-    if (e === S.held && S.sluipen && !S.gevecht) snelheid *= 0.5;
+    if (e === S.schout && S.sluipen && !S.gevecht) snelheid *= 0.5;
     const stap = snelheid * dt;
     if (stap >= afstand) {
       e.x = volgende.x;

@@ -516,13 +516,13 @@
   }
 
   // De houding van dit wezen op dit moment: { naam, houding, richting, fase }.
-  // `naam` is het figuur op het vel. De held (de schout) draagt het vel van een gewone dorpeling,
+  // `naam` is het figuur op het vel. De schout draagt het vel van een gewone dorpeling,
   // net als de menigte; welk, kiest zijn zaad. (Tot 25 sep was hij de tovenaar van het oude spel.)
   S.houding = function (spel, e) {
     // Een boer die aan het maaien is (T.werkOogstBij, js/akkers.js) leent zolang het vel van de
     // maaier in plaats van zijn eigen boer/boerin-vel — maar alleen als dat vel er ook echt is,
     // anders blijft hij gewoon zichzelf staan (geen kunst mist dan nooit iemand helemaal).
-    const alsDorpeling = e.soort === 'dorpeling' || e.soort === 'held';
+    const alsDorpeling = e.soort === 'dorpeling' || e.soort === 'schout';
     let naam = e.maait && S.figuurGegevens('maaier') ? 'maaier' : alsDorpeling ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
     // Wie nog geen eigen vel heeft, mag er een lenen (T.MENSEN, vel: 'boer'): zo lopen de vijf
     // boeren van het gehucht rond op het vel van de boer en de boerin. Zie ontwerp/werklijst.md,

@@ -2,7 +2,7 @@
 // van hun voet in plaats van op de achterste hoek (ontwerp/kaarten.md, "Een tegelnummer verandert
 // nooit" is de vorige zo'n wachter; dit is er een voor het ankerpunt). tegels/erf.tsx en
 // tegels/toren.tsx volgden hun eigen rekensom in plaats van de afspraak die gereedschap/pixelart/
-// naar-tiled.cjs bij de gebouwen al goed had, en pas in het spel — met de held half in de put en
+// naar-tiled.cjs bij de gebouwen al goed had, en pas in het spel — met de schout half in de put en
 // tegen de wand van de schuur — viel het op.
 //
 // Deze toets meet het na op het vel zelf, zonder scherm: voor elke tegel met een "beslaat" groter

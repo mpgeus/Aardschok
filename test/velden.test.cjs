@@ -57,7 +57,7 @@ function stap(S) {
 // Laat het vee `n` keer dwalen, zonder te wachten op zijn pauze. Alleen het vee en de schout: de
 // boeren gaan hier opzij (dood, dus nergens meer in de weg), anders toetst dit hun dwalen mee.
 function dwaal(S, n, bijElkeStap) {
-  for (const e of S.wereld.wezens) if (!e.dier && e !== S.held) e.dood = true;
+  for (const e of S.wereld.wezens) if (!e.dier && e !== S.schout) e.dood = true;
   for (let i = 0; i < n; i++) {
     S.tijd += 7.3; // telkens een ander moment, zodat een dier niet de hele toets blijft liggen
     for (const e of T.veeVan(S)) e.dwaalTijd = 0;
@@ -103,7 +103,7 @@ test('de muis op een veldtegel: die tekst, en een klik is gewoon erheen lopen', 
   assert.equal(h.tekst, T.veldTekst(S, akker));
   assert.equal(typeof h.doe, 'function', 'erheen lopen');
   // en naast de velden verandert er niets
-  const buiten = T.handelingVerkennen(S, { x: S.held.tx + 1, y: S.held.ty });
+  const buiten = T.handelingVerkennen(S, { x: S.schout.tx + 1, y: S.schout.ty });
   assert.equal(buiten.tekst, null);
 });
 

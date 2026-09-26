@@ -1,6 +1,6 @@
 // Het gesprekssysteem zonder scherm (js/gesprek.js): welke regel wint, welke keuzes zichtbaar
 // zijn, en dat een vlag blijft staan. (Tot 25 sep ook dat "ouderGewordenSinds" pas afging als de
-// held echt ouder was geworden; de leeftijd ging eruit met het oude spel.)
+// schout echt ouder was geworden; de leeftijd ging eruit met het oude spel.)
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -9,7 +9,7 @@ require('../js/gesprekken.js');
 const T = globalThis.Spel;
 
 function nieuweS() {
-  return { held: {}, inventaris: new Set() };
+  return { schout: {}, inventaris: new Set() };
 }
 
 test('de eerste passende regel wint; een regel zonder voorwaarde is het vangnet', () => {

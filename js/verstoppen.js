@@ -264,7 +264,7 @@
       ? { x: g.x, y: g.y, b: g.voorwerp.beslaat[0], h: g.voorwerp.beslaat[1] }
       : { x: g.x, y: g.y, ...(g.voet || (T.gebouwVoet && T.gebouwVoet(g.soort)) || { b: 1, h: 1 }) };
     const binnen = (x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
-    const van = S.held ? { x: S.held.tx != null ? S.held.tx : Math.round(S.held.x), y: S.held.ty != null ? S.held.ty : Math.round(S.held.y) } : { x: v.x, y: v.y };
+    const van = S.schout ? { x: S.schout.tx != null ? S.schout.tx : Math.round(S.schout.x), y: S.schout.ty != null ? S.schout.ty : Math.round(S.schout.y) } : { x: v.x, y: v.y };
     let beste = null;
     let bij = Infinity;
     for (let y = v.y; y < v.y + v.h; y++) {

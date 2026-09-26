@@ -239,7 +239,7 @@
   // is al leeg.
   function staatVanSituatie(als, persoonId) {
     const S = {
-      held: {},
+      schout: {},
       inventaris: new Set(), vlaggen: new Set(),
       quests: {}, questWeg: {}, questBeloond: new Set(), goud: 0,
     };

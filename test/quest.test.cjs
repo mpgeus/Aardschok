@@ -18,7 +18,7 @@ T.ui = { bericht: (tekst) => gemeld.push(tekst), toonGoud: () => {} };
 function nieuweS() {
   gemeld.length = 0;
   return {
-    held: { tx: 5, ty: 5 },
+    schout: { tx: 5, ty: 5 },
     inventaris: new Set(), vlaggen: new Set(),
     goud: 0, quests: {}, questWeg: {}, questBeloond: new Set(),
   };

@@ -1,6 +1,6 @@
 // Dorpelingen die rondlopen (ontwerp/wereld.md, "Dorpelingen lopen rond"): ze gebruiken hetzelfde
 // dwalen als een monster (T.laatDwalen, js/verkennen.js). Deze toetsen gaan over wat een
-// dorpeling juist anders maakt: hij ontdekt de held nooit en telt nooit mee als deelnemer, hij
+// dorpeling juist anders maakt: hij ontdekt de schout nooit en telt nooit mee als deelnemer, hij
 // blijft niet op een tegel naast een deur staan, hij houdt zich aan zijn straal, en een gesprek
 // onderbreekt het dwalen. Een losse dorpeling in de vorm die js/kaart.js voor een "zaad" op de
 // kaart maakt, en elke mens uit T.MENSEN, laten zien dat dat de gewone regel is voor elk neutraal
@@ -37,18 +37,18 @@ function maakDorpeling(x, y, straal) {
 
 test('een dorpeling wordt nooit ontdekt en telt nooit mee als deelnemer, ook niet als aanleiding', () => {
   const w = T.maakProefkamers();
-  const held = wezen(w, 'held');
+  const schout = wezen(w, 'schout');
   wezen(w, 'slijm').dood = true;
   wezen(w, 'skelet').dood = true;
   const wim = wezen(w, 'wim');
   const dorpeling = maakDorpeling(6, 3, 3);
   w.wezens.push(dorpeling);
-  zet(held, 5, 3); // vlak naast allebei
-  const S = { wereld: w, held, sluipen: false };
+  zet(schout, 5, 3); // vlak naast allebei
+  const S = { wereld: w, schout, sluipen: false };
 
   assert.equal(T.zoekOntdekking(S), null);
-  assert.deepEqual(T.deelnemers(w, held, wim), []);
-  assert.deepEqual(T.deelnemers(w, held, dorpeling), []);
+  assert.deepEqual(T.deelnemers(w, schout, wim), []);
+  assert.deepEqual(T.deelnemers(w, schout, dorpeling), []);
 });
 
 // De mensen van het dorp staan sinds 22 sep in js/mensen.js en niet meer als eigen ingang in
@@ -59,16 +59,16 @@ test('een dorpeling wordt nooit ontdekt en telt nooit mee als deelnemer, ook nie
 test('elke mens is neutraal, wordt nooit ontdekt en telt nooit mee als deelnemer', () => {
   for (const id of Object.keys(T.MENSEN)) {
     const w = T.maakProefkamers();
-    const held = wezen(w, 'held');
+    const schout = wezen(w, 'schout');
     const e = T.maakMens(id, 6, 3);
     w.wezens.push(e);
-    zet(held, 5, 3); // vlak naast hem
-    const S = { wereld: w, held, sluipen: false };
+    zet(schout, 5, 3); // vlak naast hem
+    const S = { wereld: w, schout, sluipen: false };
 
     assert.equal(e.kant, 'neutraal', `${id} is neutraal`);
     assert.notEqual(e.kant, 'monster'); // alleen 'monster' laat T.startGevecht/de klik aanvallen
     assert.equal(T.zoekOntdekking(S), null, `${id} wordt niet ontdekt`);
-    assert.deepEqual(T.deelnemers(w, held, e), [], `${id} telt niet mee als deelnemer`);
+    assert.deepEqual(T.deelnemers(w, schout, e), [], `${id} telt niet mee als deelnemer`);
     assert.equal(e.naam, T.naamVanMens(id), `${id} draagt zijn eigen naam`);
     assert.equal(e.wie, id);
   }

@@ -46,7 +46,7 @@
     const wieId = T.gesprekIdVan(wie);
     const gesprek = T.GESPREKKEN[wieId];
     S.modus = 'dialoog';
-    staStil(S.held);
+    staStil(S.schout);
     // Met wie je praat, staat stil en blijft zichtbaar: hij komt door een boom of een huis heen
     // (js/tekenen.js, doorkijk) en hij dwaalt niet weg midden in het gesprek.
     S.spreektMet = wie || null;

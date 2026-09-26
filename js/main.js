@@ -52,7 +52,7 @@
       sluipen: false,
       bezocht: new Set(['hal']),
       naarGebied: null,
-      netGeland: null, // de tegel waar de held zojuist is neergezet (js/gebied.js)
+      netGeland: null, // de tegel waar de schout zojuist is neergezet (js/gebied.js)
       grond: null, // de buffer waar de grond op staat (js/tekenen.js)
       effecten: [],
       wachters: [],
@@ -70,8 +70,8 @@
     // bestaat niet), dan valt het terug op het gehucht — een half aangelegde wereld mag nooit het
     // spel breken.
     const proefje = !!BEGIN_KAART && T.beginOpKaart(S, BEGIN_KAART);
-    if (!proefje) T.beginOpKaart(S, 'gehucht'); // zet S.wereld en S.held
-    const p = T.naarScherm(S.held.x, S.held.y);
+    if (!proefje) T.beginOpKaart(S, 'gehucht'); // zet S.wereld en S.schout
+    const p = T.naarScherm(S.schout.x, S.schout.y);
     S.camera = { x: p.x, y: p.y - 24 };
     T.ui.reset(S);
     if (!proefje && T.ui.toonBenoeming) T.ui.toonBenoeming(S);
@@ -109,7 +109,7 @@
     y: (sy - Math.round(S.camera.y)) * S.zoom + Math.round(bh / 2),
   });
 
-  const heldAanDeBeurt = () => !!S.gevecht && S.gevecht.volgorde[S.gevecht.beurt] === S.held;
+  const schoutAanDeBeurt = () => !!S.gevecht && S.gevecht.volgorde[S.gevecht.beurt] === S.schout;
 
   // Wat ligt er onder de muis? Wezens en voorwerpen steken boven hun tegel uit, dus die
   // worden eerst gezocht, van voor naar achter. Anders is het de tegel zelf.
@@ -118,7 +118,7 @@
     const { x: sx, y: sy } = naarVlak(mx, my);
     const kandidaten = [];
     for (const e of w.wezens) {
-      if (e.dood || e === S.held || !T.isZichtbaar(w, e.tx, e.ty)) continue;
+      if (e.dood || e === S.schout || !T.isZichtbaar(w, e.tx, e.ty)) continue;
       const p = T.naarScherm(e.x, e.y);
       const hoog = hoogteVan(e);
       if (sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoog && sy < p.y + 9) {
@@ -180,25 +180,25 @@
       werkBouwHoverBij();
       return;
     }
-    const actief = S.modus === 'verkennen' || (S.modus === 'gevecht' && !S.bezig && heldAanDeBeurt());
+    const actief = S.modus === 'verkennen' || (S.modus === 'gevecht' && !S.bezig && schoutAanDeBeurt());
     if (!S.muis || !actief) {
       S.hover = null;
       S.handeling = null;
       T.ui.verbergTooltip();
       canvas.style.cursor = 'default';
-      if (S.modus === 'gevecht' && heldAanDeBeurt()) T.ui.toonAp(S.held.ap, S.held.maxAp, 0, true);
+      if (S.modus === 'gevecht' && schoutAanDeBeurt()) T.ui.toonAp(S.schout.ap, S.schout.maxAp, 0, true);
       return;
     }
     S.hover = zoekDoel(S.muis.x, S.muis.y);
     const h = S.modus === 'verkennen' ? T.handelingVerkennen(S, S.hover) : T.handelingGevecht(S, S.hover);
     S.handeling = h;
-    if (S.modus === 'gevecht') T.ui.toonAp(S.held.ap, S.held.maxAp, h ? h.kosten || 0 : 0, !h || h.kan !== false);
+    if (S.modus === 'gevecht') T.ui.toonAp(S.schout.ap, S.schout.maxAp, h ? h.kosten || 0 : 0, !h || h.kan !== false);
     if (h && h.tekst) T.ui.tooltip(tipTekst(h), S.muis.x, S.muis.y, !!h.fout || h.kan === false);
     else T.ui.verbergTooltip();
     canvas.style.cursor = h ? 'pointer' : 'default';
   }
 
-  // Bij het rondlopen volgt de camera de held; in een gevecht zoekt hij het midden tussen
+  // Bij het rondlopen volgt de camera de schout; in een gevecht zoekt hij het midden tussen
   // iedereen die meedoet, zodat het hele slagveld in beeld schuift.
   //
   // Dat begint al bij de overgang, vóór het gevecht: het monster dat je ziet, komt meteen in
@@ -206,21 +206,21 @@
   // aangevallen worden door iets wat je niet kunt zien.
   // Vroeger hield de camera hier een marge aan tot de rand van de kaart (begrensCamera), zodat
   // je nooit de lege ruimte erachter zag: de camera stopte al een halve schermmaat van de rand.
-  // Op een kleine kaart (het dorp, 48×40) liep de held daardoor ver uit het midden door en
+  // Op een kleine kaart (het dorp, 48×40) liep de schout daardoor ver uit het midden door en
   // verdween in de hoek, tot onder het paneel linksboven (Marcel, 21 sep 2026) — de camera volgde
-  // niet meer mee terwijl de held nog een heel eind verder kon lopen. Nu js/tekenen.js voorbij de
+  // niet meer mee terwijl de schout nog een heel eind verder kon lopen. Nu js/tekenen.js voorbij de
   // rand een bosrand tekent (zie daar "het bos om de kaart heen") is die marge niet meer nodig:
-  // wat er te zien komt voorbij de kaart is bos, geen leegte, dus de camera volgt de held gewoon
+  // wat er te zien komt voorbij de kaart is bos, geen leegte, dus de camera volgt de schout gewoon
   // altijd. Dat houdt hem ook vanzelf uit de buurt van het paneel en de knoppen onderaan, want
   // zijn plek op het scherm staat dan vast in plaats van dat hij naar een bevroren camera toe kan
   // weglopen.
   function cameraDoel() {
     const aanleiding = S.overgang && S.overgang.aanleiding;
     const lijst = S.gevecht
-      ? [S.held, ...S.gevecht.monsters.filter((m) => !m.dood)]
+      ? [S.schout, ...S.gevecht.monsters.filter((m) => !m.dood)]
       : aanleiding && !aanleiding.dood
-        ? [S.held, aanleiding]
-        : [S.held];
+        ? [S.schout, aanleiding]
+        : [S.schout];
     let x = 0;
     let y = 0;
     for (const e of lijst) {
@@ -524,7 +524,7 @@
     vee(soort = 'koe', aantal = 1) {
       if (!T.VEE[soort]) return `Dat dier ken ik niet: ${soort}. Er is: ${Object.keys(T.VEE).join(', ')}.`;
       const w = S.wereld;
-      const h = S.held;
+      const h = S.schout;
       const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true });
       const opWeide = [];
       // Een schaap gaat naar de heide als het gehucht er een heeft (js/vee.js, T.graastOp).
