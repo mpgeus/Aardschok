@@ -11,11 +11,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 - **De poppetjes, wat nog ruw is** (26 sep, na stuk 1 van stap 2; `spel.md`, "Mensen worden
   poppetjes"):
-  - **De brink ligt achter het huis van de schout.** De camera kijkt van het zuiden, en het hoge
-    stenen huis (x 21 tot 26, y 21 tot 28) staat recht voor de brink (24, 18). Wie daar speelt of
-    staat, de kinderen, de marskramer en op Sint-Maarten de heer, zie je dus grotendeels niet; alleen
-    de schout zelf krijgt een kijkgat. De boerderij van boer 3 dekt de oostkant af. Een vraag aan
-    Marcel (werklijst, vraag 28).
+  - De kinderen spelen op de brink, en die ligt achter twee daken (hieronder, "De brink ligt achter
+    twee daken"). Het plein dat Marcel op 25 sep koos, lost het op; wanneer, is vraag 28.
   - Een knaap of meid draagt het vel van een jongen of meisje, en een oude vrouw dat van de boerin
     met het karakter "de oudste". Eigen vellen (een knaap, een oude vrouw, een kind in werkkleren)
     zijn tekenwerk.

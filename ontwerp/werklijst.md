@@ -41,8 +41,10 @@ branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 **Loopt nu:** mensen worden poppetjes (3b, stap 2). Stuk 1 is af (26 sep): iedereen die in de balk
 telt, is een poppetje met een naam, een huis en een gezin, wie werkt loopt naar zijn werk, en
 iedereen volgt het ritme van de dag (`spel.md`, "Mensen worden poppetjes", Zo werkt het nu). Marcel
-kreeg schermafdrukken; stuk 2 (komen en gaan zie je, en werk telt in uren) wacht op zijn blik, en op
-vraag 28 (de brink ligt achter het huis van de schout). `npm test`: 475/475.
+kreeg schermafdrukken, en zag drie dingen: mensen verdwenen in één klap bij de deur, er leken mensen
+op de daken te staan (dat was het kijkgat van de schout), en de huizen staan te dicht op elkaar en
+lijken te veel op elkaar. De eerste twee zijn hersteld (26 sep); het derde is vraag 28, en stuk 2
+(komen en gaan zie je, en werk telt in uren) wacht daarop. `npm test`: 475/475.
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -124,18 +126,22 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 27. ~~Wie woont er bij de schout?~~ Zijn huis telt vijf mensen. Marcel koos zijn eigen gezin: een vrouw
     en drie kinderen (26 sep). Wat de heer de schout aandoet, raakt hen ook. De herder is een
     boerenzoon.
-28. **De brink ligt achter het huis van de schout** (Claude zag het bij het nakijken van de poppetjes,
-    26 sep). De camera kijkt van het zuiden, en het hoge stenen huis staat recht voor de brink. Wie
-    daar staat, zie je grotendeels niet: de kinderen die er spelen, de marskramer, de heer op
-    Sint-Maarten, en de schandpaal, die ook op de brink komt. Alleen de schout zelf krijgt een kijkgat
-    door het dak. Drie manieren:
-    - A. De brink verplaatsen naar open grond vóór de huizen, met de put, de eik en de bank (de kaart:
-      `gereedschap/tiled/maak-gehucht.cjs` of in Tiled, en `"marskramer"` in het betekenisbestand).
-    - B. Een kijkgat voor iedereen op de brink, zolang de schout er in de buurt is. Met tien kinderen
-      worden dat tien gaten in het dak.
-    - C. Zo laten: wie wil zien, loopt om het huis heen.
-    Voorstel: A. Het hart van het dorp hoort in het zicht, zeker de scènes van de heer en de
-    schandpaal, en straks de markt.
+28. **Een nieuw gehucht: een plein, meer ruimte en meer afwisseling. Wanneer?** Marcel, 26 sep, na de
+    eerste beelden van de poppetjes: "We hebben meer afwisseling nodig in de huizen en hutten. Ze staan
+    ook te dicht op elkaar al begrijp ik dat dit een test is." Het plein koos hij al op 25 sep, omdat
+    de brink vanuit de camera achter twee daken ligt: "Dorpen worden vaak rond een plein gebouwd waar
+    ook het huis van de schout staat. Daar de schandpaal of blok zetten." (`spel.md`, "Sint-Maarten";
+    Claude zag dat eerst over het hoofd en stelde dezelfde vraag nog eens.) Voorstel van Claude, in
+    drie delen:
+    - A. **Afwisseling, meteen:** een hut of huis dat je bouwt, krijgt een van de tekeningen die er al
+      zijn. Er zijn er zo'n 25, maar nu krijgt elke hut `dorpKlein2` en elk huis `dorpshuis1`.
+    - B. **Een nieuw gehucht** (`maak-gehucht.cjs`; de kaart van 23 sep was een proef): rond een plein
+      met het huis van de schout eraan, de put en de schandpaal, meer ruimte tussen de huizen en
+      bredere straten, en de vijf boerderijen elk in een andere tekening.
+    - C. **Ronde 4b van de huizenbouwer**: elk huis in elk materiaal en elke vorm. Renderwerk, gepland
+      als stap 4 van punt 3b.
+    Voorstel: A en B nu, vóór stuk 2 van de poppetjes, want in een dorp met ruimte zie je ze pas echt;
+    C blijft waar hij staat.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -404,6 +410,10 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 26 sep 2026 — **Wat Marcel zag bij de eerste beelden van de poppetjes.** Wie naar binnen gaat,
+  stapt nu de deur in en vervaagt, in plaats van in één klap te verdwijnen (`js/tekenen.js`,
+  `deurStap`). En het kijkgat van de schout is een venster in het dak geworden, waarin je de grond
+  en wie erachter staat ziet: eerst leek de schout óp het dak te staan (`tekenKijkgat`, `beeld.md`).
 - 26 sep 2026 — **Punt 3b, stap 2, stuk 1: mensen worden poppetjes.** Iedereen die in de balk telt,
   is een poppetje met een naam, een leeftijd, een huis en een gezin dat bij het karakter van de boer
   past; bij de schout zijn vrouw en drie kinderen (vraag 27). De handen van een gebouw zijn mensen, en
