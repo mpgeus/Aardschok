@@ -227,6 +227,17 @@
           uitleg: 'In de kelder van elke boer past evenveel, en de soldaten vinden het er even vaak.' },
       ],
     },
+    // Stuk 2 van de poppetjes (Marcel, 26 sep: "Uit de looptijd"; spel.md, "Stuk 2 uitgewerkt").
+    {
+      id: 'werkUren', naam: 'Werk telt in uren', standaard: 'deWegTelt',
+      uitleg: 'Of de weg naar het werk telt: een werkplaats maakt naar de uren dat zijn mensen er echt zijn.',
+      keuzes: [
+        { id: 'deWegTelt', naam: 'De weg telt', zet: { 'BEWONERS_INSTELLINGEN.werkInUren': true },
+          uitleg: 'Wie ver van zijn werk woont, is langer onderweg: de weg heen gaat van de werkuren af. Zo doet het ertoe waar een huis staat.' },
+        { id: 'heleDag', naam: 'Een hele dag', zet: { 'BEWONERS_INSTELLINGEN.werkInUren': false },
+          uitleg: 'Een hand werkt een hele dag, waar hij ook woont.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij

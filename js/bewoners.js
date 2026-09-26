@@ -38,6 +38,10 @@
     straalPut: 1,
     straalBrink: 3,
     straalHeide: 4,
+    // Werk telt in uren (stuk 2; Marcel koos op 26 sep de looptijd): een werkplaats maakt naar de uren
+    // dat zijn mensen er echt zijn, en de weg heen gaat eraf (T.werkUrenVan). Een optie in de
+    // spelregels (js/opties.js, "Werk telt in uren"); uit is een hand een hele dag, waar hij ook woont.
+    werkInUren: true,
   };
   const IN = () => T.BEWONERS_INSTELLINGEN;
   const erfStraal = () => (T.DAG_INSTELLINGEN ? T.DAG_INSTELLINGEN.erfStraal : 2);
@@ -113,7 +117,8 @@
   //     gezin: 3, hoofd: <het hoofd van zijn gezin, of null>, band: 'zoon',
   //     huis: <gebouw in S.gebouwen>, werk: <gebouw, of null>, wezen: <zijn poppetje>,
   //     haaltWater: true,          // hij gaat 's ochtends naar de put
-  //     plek: { put, werk, vrij }, // waar hij heen gaat (zetPlekken hieronder); T.dagAnker kiest
+  //     plek: { put, werk, vrij,   // waar hij heen gaat (zetPlekken hieronder); T.dagAnker kiest
+  //             heen },            // en hoeveel uur hij onderweg is naar zijn werk (T.werkUrenVan)
   //     komt: true,                // hij is nieuw en nog niet bij zijn huis (T.werkBewonersBij)
   //     wie: 'boer1',              // alleen een boer: zijn id in T.MENSEN, waar zijn naam vandaan komt
   //     schout: true }             // alleen de schout zelf
@@ -254,6 +259,34 @@
     return t ? { x: t.x, y: t.y, straal: IN().straalBrink } : bijHuis;
   }
 
+  // Hoe lang iemand onderweg is van zijn deur naar zijn werk, in uren (stuk 2; Marcel koos op 26 sep
+  // de looptijd): langs de weg die zijn poppetje ook loopt (T.zoekPad tot binnen de straal van zijn
+  // werkplek, zonder anderen in de weg), met zijn eigen snelheid, en schuin telt als √2, zoals bij het
+  // lopen zelf (js/anim.js). Een uur is T.DAG_LENGTE / 24 seconden van de wereld. Een pad zoeken kost
+  // een paar milliseconden, en dit gebeurt elke dag voor iedereen die werkt; daarom bewaart hij zijn
+  // weg (p.wegNaarWerk), zolang zijn deur en zijn werkplek dezelfde zijn en er niets op staat.
+  function looptijd(w, p, deur) {
+    const doel = p.plek.werk;
+    if (!doel) return 0;
+    const straal = doel.straal || 0;
+    let o = p.wegNaarWerk;
+    const zelfde = o && o.van.x === deur.x && o.van.y === deur.y && o.doel.x === doel.x && o.doel.y === doel.y && o.straal === straal;
+    if (!zelfde || !o.pad.every((t) => T.isBegaanbaar(w, t.x, t.y))) {
+      const pad = T.zoekPad(deur, doel, (x, y) => T.isBegaanbaar(w, x, y), (x, y) => T.isVast(w, x, y), { tot: straal });
+      let lengte = 0;
+      let vorig = deur;
+      for (const t of pad || []) {
+        lengte += Math.hypot(t.x - vorig.x, t.y - vorig.y);
+        vorig = t;
+      }
+      // Geen weg (een kaart die niet overal aansluit): hemelsbreed.
+      if (!pad) lengte = Math.max(0, T.afstand(deur, doel) - straal);
+      o = p.wegNaarWerk = { van: { x: deur.x, y: deur.y }, doel: { x: doel.x, y: doel.y }, straal, pad: pad || [], lengte };
+    }
+    const snelheid = IN()[T.LEEFTIJDEN[p.leeftijd].snelheid] || 1;
+    return o.lengte / snelheid / (T.DAG_LENGTE / 24);
+  }
+
   // Zijn plekken opnieuw uitrekenen: bij een nieuw poppetje, en elke dag na het verdelen van het werk
   // (zijn werk kan veranderd zijn). T.dagAnker (js/dag.js) kiest er per deel van de dag een uit.
   function zetPlekken(S, p) {
@@ -261,6 +294,7 @@
     if (!w || !p.huis || p.schout || p.wie) return;
     const deur = T.deurVan(w, p.huis);
     p.plek = { put: putBij(S, w, deur), werk: werkplekVan(S, w, p), vrij: vrijePlekVan(S, w, p, deur) };
+    p.plek.heen = looptijd(w, p, deur);
   }
 
   // ---------------------------------------------------------------------------------------------
@@ -663,6 +697,29 @@
     for (const g of S.gebouwen) vul(g, (p) => p.huis === g && (p.wie || T.LEEFTIJDEN[p.leeftijd].werkt <= 1));
     for (const g of S.gebouwen) vul(g, () => true);
     for (const p of B.mensen) zetPlekken(S, p);
+  };
+
+  // Hoeveel uur er op dag `dag` gewerkt wordt bij gebouw g (stuk 2; js/gebouwen.js, stap 6 van
+  // T.tikGebouwenDag, maakt ernaar): per hand de werkuren van die dag (T.dagindeling in js/dag.js: van
+  // het begin van het werk tot het eind, zonder de schaft), min zijn weg heen (p.plek.heen). Hij
+  // vertrekt als het werk begint; de weg terug gaat van zijn avond af. Wie vandaag pas komt (p.komt),
+  // werkt nog niet. Geeft { gewerkt, onderweg, nodig } in uren, nodig voor alle handen die het gebouw
+  // vraagt; zonder bewoners (een toets die alleen de regels laadt) null.
+  T.werkUrenVan = function (S, g, dag) {
+    const B = S.bewoners;
+    const soort = T.GEBOUWEN[g.soort];
+    if (!B || !soort || !T.dagindeling) return null;
+    const d = T.dagindeling(dag);
+    const perHand = Math.max(0, d.werkEind - d.werkBegin - (d.schaftEind - d.schaftBegin));
+    let gewerkt = 0;
+    let onderweg = 0;
+    for (const p of B.mensen) {
+      if (p.werk !== g) continue;
+      const heen = p.komt ? perHand : Math.min(perHand, (p.plek && p.plek.heen) || 0);
+      gewerkt += perHand - heen;
+      onderweg += heen;
+    }
+    return { gewerkt, onderweg, nodig: (soort.handen || 0) * perHand };
   };
 
   // ---------------------------------------------------------------------------------------------

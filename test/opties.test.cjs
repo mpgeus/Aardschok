@@ -19,6 +19,7 @@ require('../js/heer.js');
 require('../js/inner.js');
 require('../js/verstoppen.js');
 require('../js/boeren.js');
+require('../js/bewoners.js');
 require('../js/gesprekken.js');
 require('../js/gesprek.js');
 const T = globalThis.Spel;
@@ -27,6 +28,7 @@ const T = globalThis.Spel;
 const BLOKKEN = [
   'GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN', 'INNER_INSTELLINGEN',
   'BOEREN_INSTELLINGEN', 'VELDEN_INSTELLINGEN', 'VEE_INSTELLINGEN', 'VERSTOP_INSTELLINGEN', 'DAG_INSTELLINGEN',
+  'BEWONERS_INSTELLINGEN',
 ];
 const LOS = ['GRAAN_PER_TEGEL', 'ZAAIGRAAN_PER_TEGEL', 'DAG_LENGTE', 'OOGST_UREN_PER_TEGEL'];
 const bestanden = {};

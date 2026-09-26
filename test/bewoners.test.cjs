@@ -389,6 +389,101 @@ test('T.zoekPad met tot: het pad eindigt binnen de straal, ook als het doel zelf
   assert.equal(pad.length, 3, 'en niet verder dan nodig');
 });
 
+// ---------------------------------------------------------------------------------------------
+// Werk telt in uren (stuk 2; Marcel koos op 26 sep de looptijd)
+// ---------------------------------------------------------------------------------------------
+
+// Het gehucht met een houthakker zo ver mogelijk van alle huizen (op een plek die je wel kunt
+// bereiken), en wie er werkt.
+function houthakkerVerWeg(opties) {
+  const S = gehucht(opties);
+  const w = S.wereld;
+  const deuren = S.gebouwen.filter((g) => T.GEBOUWEN[g.soort].woonruimte > 0).map((g) => T.deurVan(w, g));
+  let plek = null;
+  let ver = -1;
+  for (let y = 1; y < w.h - 1; y++) {
+    for (let x = 1; x < w.b - 1; x++) {
+      let vrij = true;
+      for (let dy = -1; dy <= 1 && vrij; dy++) for (let dx = -1; dx <= 1 && vrij; dx++) if (T.isVast(w, x + dx, y + dy)) vrij = false;
+      const a = vrij ? Math.min(...deuren.map((d) => T.afstand(d, { x, y }))) : -1;
+      if (a > ver && T.zoekPad(deuren[0], { x, y }, (px, py) => T.isBegaanbaar(w, px, py), (px, py) => T.isVast(w, px, py), {})) {
+        ver = a;
+        plek = { x, y };
+      }
+    }
+  }
+  const g = { soort: 'houthakker', x: plek.x, y: plek.y, voet: { b: 1, h: 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
+  S.gebouwen.push(g);
+  T.verdeelHanden(S);
+  return { S, g, p: mensen(S).find((x) => x.werk === g) };
+}
+
+test('werk in uren: de weg heen is de weg die zijn poppetje loopt, met zijn eigen snelheid', () => {
+  const { S, g, p } = houthakkerVerWeg();
+  assert.ok(p, 'de houthakker heeft een hand');
+  const w = S.wereld;
+  const deur = T.deurVan(w, p.huis);
+  const doel = p.plek.werk;
+  const pad = T.zoekPad(deur, doel, (x, y) => T.isBegaanbaar(w, x, y), (x, y) => T.isVast(w, x, y), { tot: doel.straal });
+  let lengte = 0;
+  let vorig = deur;
+  for (const t of pad) {
+    lengte += Math.hypot(t.x - vorig.x, t.y - vorig.y);
+    vorig = t;
+  }
+  const uur = T.DAG_LENGTE / 24;
+  assert.ok(Math.abs(p.plek.heen - lengte / p.wezen.snelheid / uur) < 1e-9, `${p.plek.heen} uur onderweg`);
+  assert.ok(p.plek.heen > 1, 'zo ver weg is hij meer dan een uur onderweg');
+  // Wie op zijn eigen boerderij werkt, is niet onderweg.
+  const thuis = mensen(S).find((x) => x.werk && x.werk === x.huis && x.plek);
+  assert.ok(thuis && thuis.plek.heen < 0.2, 'op het eigen erf: nauwelijks onderweg');
+
+  const dag = Math.floor(S.kalender.dag);
+  const d = T.dagindeling(dag);
+  const perHand = d.werkEind - d.werkBegin - (d.schaftEind - d.schaftBegin);
+  const u = T.werkUrenVan(S, g, dag);
+  assert.equal(u.nodig, perHand);
+  assert.ok(Math.abs(u.onderweg - p.plek.heen) < 1e-9 && Math.abs(u.gewerkt - (perHand - p.plek.heen)) < 1e-9);
+  // In de winter zijn de werkdagen korter, en telt dezelfde weg zwaarder.
+  const winter = dagVan('louwmaand', 15);
+  const uw = T.werkUrenVan(S, g, winter);
+  assert.ok(uw.onderweg / uw.nodig > u.onderweg / u.nodig, 'in de winter weegt de weg zwaarder');
+  // Wie vandaag pas komt, werkt nog niet.
+  p.komt = true;
+  assert.equal(T.werkUrenVan(S, g, dag).gewerkt, 0);
+});
+
+test('werk in uren: de werkplaats maakt naar de uren dat er gewerkt wordt, en zegt het bij de muis; uit is een hele dag', () => {
+  // Twee keer hetzelfde gehucht (hetzelfde lot, dus dezelfde mensen), één keer met de weg die telt en
+  // één keer zonder.
+  const echt = T.lootBoeren;
+  T.lootBoeren = (S) => echt(S, 12345);
+  let met;
+  let zonder;
+  try {
+    met = houthakkerVerWeg();
+    zonder = houthakkerVerWeg();
+  } finally {
+    T.lootBoeren = echt;
+  }
+  assert.equal(met.p.naam, zonder.p.naam, 'hetzelfde gehucht');
+  const dag = Math.floor(met.S.kalender.dag) + 1;
+  try {
+    T.BEWONERS_INSTELLINGEN.werkInUren = false;
+    T.tikGebouwenDag(zonder.S, dag);
+  } finally {
+    T.BEWONERS_INSTELLINGEN.werkInUren = true;
+  }
+  T.tikGebouwenDag(met.S, dag);
+  assert.equal(zonder.g.uren, null);
+  const u = met.g.uren;
+  assert.ok(u && u.onderweg > 0.5);
+  assert.ok(zonder.g.werkte > 0);
+  assert.ok(Math.abs(met.g.werkte / zonder.g.werkte - u.gewerkt / u.nodig) < 1e-9, 'minder, naar de uren onderweg');
+  assert.match(T.gebouwToestand(met.S, met.g), /aan het werk \(1 van 1 handen\), \d+ van de \d+ uur; \d+ uur onderweg\.$/);
+  assert.doesNotMatch(T.gebouwToestand(zonder.S, zonder.g), /onderweg/);
+});
+
 test('bij de muis staat wie het is', () => {
   const S = gehucht();
   const herder = nieuwe(S).find((p) => p.werk && p.werk.soort === 'schaapskooi');

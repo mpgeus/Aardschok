@@ -166,7 +166,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`js/dag.js`) voor iedereen; de plekken daarvoor (zijn deur, de put, zijn werk, waar hij vrij is)
   zet dit bestand. Komen en gaan zie je (`T.werkBewonersBij`, elk beeld): een nieuw gezin komt overdag
   over de weg binnen, op dezelfde manier als een bezoeker (`T.bezoekerKomtAan`), en wie wegtrekt,
-  loopt de weg af; het bericht zegt wie het zijn.
+  loopt de weg af; het bericht zegt wie het zijn. Werk telt in uren (`T.werkUrenVan`, een optie): een
+  werkplaats maakt naar de uren dat zijn mensen er echt zijn, min de weg van hun deur erheen.
 - `js/akkers.js`: **alleen het gehucht** (`ontwerp/spel.md`): welk stadium een
   akker heeft op welke dag (`T.AKKER_STADIA`, één tabel, `T.akkerStadium`), het windbeeld per
   tegel (`T.windBeeld`) en zijn vaste variant (`T.akkerVariant`), waar een boer in het

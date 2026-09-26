@@ -503,6 +503,15 @@
     if (g.tekort && !(g.werkte > 0)) return `${naam}: staat stil, er is geen ${g.tekort}.`;
     if (g.tekort) return `${naam}: werkt maar half, er is te weinig ${g.tekort}.`;
     const handen = soort.handen > 0 ? ` (${g.handen} van ${soort.handen} handen)` : '';
+    // Werk in uren (js/bewoners.js, T.werkUrenVan): hoeveel er echt gewerkt werd, en hoe lang de
+    // handen onderweg waren; anders is het een straf die je niet ziet.
+    // Afgerond zo dat gewerkt en onderweg samen de uren van wie er is geven, zoals je zou narekenen.
+    const u = g.uren;
+    if (u && u.onderweg >= 0.5) {
+      const onderweg = Math.round(u.onderweg);
+      const gewerkt = Math.round(u.gewerkt + u.onderweg) - onderweg;
+      return `${naam}: aan het werk${handen}, ${gewerkt} van de ${Math.round(u.nodig)} uur; ${onderweg} uur onderweg.`;
+    }
     return `${naam}: aan het werk${handen}.`;
   };
 
@@ -743,6 +752,7 @@
       g.tekort = null;
       g.werkte = 0;
       g.stilWant = null;
+      g.uren = null;
       if (!g.klaar || !soort.maakt) continue;
       const stil = soort.stilIn && seizoen && soort.stilIn[seizoen];
       if (stil) {
@@ -750,7 +760,13 @@
         if (!wasStil && T.ui && T.ui.bericht) T.ui.bericht(`${T.hoofdletter(soort.naam)} staat stil: ${stil}.`);
         continue;
       }
-      let factor = soort.handen > 0 ? (g.handen / soort.handen) * werkFactor * gereedschap.factor : werkFactor;
+      // Werk telt in uren (js/bewoners.js, T.werkUrenVan; een optie, standaard aan): wie ver van zijn
+      // werk woont, is langer onderweg, en de werkplaats maakt naar de uren dat hij er echt is. Zonder
+      // die optie, of zonder bewoners, naar het aantal handen, zoals vroeger.
+      const metUren = soort.handen > 0 && T.werkUrenVan && T.BEWONERS_INSTELLINGEN && T.BEWONERS_INSTELLINGEN.werkInUren;
+      g.uren = metUren ? T.werkUrenVan(S, g, dag) : null;
+      const bezet = g.uren ? (g.uren.nodig > 0 ? g.uren.gewerkt / g.uren.nodig : 0) : g.handen / soort.handen;
+      let factor = soort.handen > 0 ? bezet * werkFactor * gereedschap.factor : werkFactor;
       if (factor <= 0) continue;
       // Wat hij nodig heeft, bepaalt hoeveel hij kan: een smidse zonder ijzer staat stil, met ijzer
       // voor een halve dag werkt hij een halve dag. Tot 24 sep maakte hij toch gereedschap, uit

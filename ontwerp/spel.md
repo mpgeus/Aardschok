@@ -519,6 +519,9 @@ bestand; de details staan in `git log` en in de uitleg bovenin `js/behoeften.js`
 - Een gebouw dat iets maakt, vraagt handen en maakt alleen wat zijn grondstof toelaat: de smidse
   staat zonder ijzer stil, en zegt dat bij de muis. Gereedschap laat 25% harder werken en slijt in
   180 dagen.
+- **Werk telt in uren** (26 sep; "Mensen worden poppetjes", stuk 2): een gebouw maakt naar de uren
+  dat zijn handen er echt zijn, en de weg van hun huis erheen gaat eraf. Bij de muis: "Houthakker:
+  aan het werk (1 van 1 handen), 10 van de 12 uur; 2 uur onderweg." Een optie in de spelregels.
 - Wat de heer ervoor vraagt, staat bij elk gebouw: een huis 2 goud, een boerderij 1, een schaapskooi
   20 wol, een hut niets.
 - De losse verstopplek staat sinds 25 sep niet meer in het bouwmenu: je verstopt in kelders en de
@@ -1597,8 +1600,8 @@ hieronder).
 
 ### Mensen worden poppetjes
 
-**Zo werkt het nu** (26 sep, stuk 1 van het plan hieronder gebouwd: punt 1 tot en met 3, en van stuk 2
-punt 4; `js/bewoners.js`, `T.dagAnker` in `js/dag.js`, toetsen in `test/bewoners.test.cjs`):
+**Zo werkt het nu** (26 sep, het hele plan hieronder gebouwd: stuk 1, punt 1 tot en met 3, en stuk 2,
+punt 4 en 5; `js/bewoners.js`, `T.dagAnker` in `js/dag.js`, toetsen in `test/bewoners.test.cjs`):
 - **Iedereen die in de balk telt, is een poppetje,** met een naam, een leeftijd (volwassen, knaap of
   meid, kind, kleuter, oud), een huis en een gezin. Op elke boerderij woont een gezin van vier: de
   boer, zijn vrouw of haar man, en twee kinderen of een oude, geloot. Het karakter legt soms vast wie:
@@ -1618,6 +1621,16 @@ punt 4; `js/bewoners.js`, `T.dagAnker` in `js/dag.js`, toetsen in `test/bewoners
   twee kinderen, trekken weg: het dorp is niet tevreden genoeg. (-4)"). Wie sterft, heeft een naam:
   "De winter is hard: de oude Geesje, moeder van Wouter, is gestorven." Bij de muis staat "nieuw in
   het gehucht" of "trekt weg". `Spel.debug.gezin()` laat nu een gezin komen, `(-4)` er een gaan.
+- **Werk telt in uren** (stuk 2, 26 sep; Marcel koos de looptijd; `T.werkUrenVan`). Een werkplaats
+  maakt naar de uren dat zijn mensen er echt zijn: per hand de werkuren van de dag (van het begin van
+  het werk tot het eind, zonder de schaft: 12 in de zomer, zo'n 6 in de winter), min de weg van zijn
+  deur naar zijn werk. Die weg is het pad dat zijn poppetje ook loopt, met zijn eigen snelheid (een
+  volwassene 17 tegels per uur); hij vertrekt als het werk begint, en de weg terug gaat van zijn avond
+  af. Wie vandaag pas aankomt, werkt nog niet. Bij de muis zegt een werkplaats hoeveel uur er gewerkt
+  is en hoeveel de handen onderweg waren. In het gehucht van het begin verandert het niets, want wie
+  werkt, werkt op een boerderij, en die maakt zelf niets (de herder loopt bijna twee uur naar de
+  heide, maar de schaapskooi maakt niets per dag). Het telt zodra je een werkplaats bouwt. In de
+  spelregels: "Werk telt in uren", de weg telt (standaard) of een hand werkt een hele dag.
 - **Wie werkt, heeft een werkplek en gaat erheen.** Een gebouw krijgt zijn handen zoals voorheen
   (`T.verdeelHanden`), en nu zijn dat mensen (`T.wijsWerkToe`): eerst werkt een gezin op zijn eigen
   boerderij, dan krijgt een plek de vrije hand die het best past: eerst volwassenen, dan knapen,
