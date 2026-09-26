@@ -100,6 +100,13 @@ keer opnieuw uit de scène van de toren; in één grote kaart zet het het erf er
 randtegels in plaats van de oude vierkante grond), en daarna tekent Marcel alles buiten zelf. De
 meester en de wolf zijn dan objecten die hij kan verplaatsen, zoals elk ander wezen.
 
+## De kaart groeit mee (Marcel, 26 sep 2026)
+
+"De kaart blijft wel groeien. Er is geen grens voor een max afmeting stad." Het gehucht ligt daarom
+in het midden van zijn kaart, met wild land rondom om te ontginnen (`spel.md`, "Van dorp tot stad").
+De kaart komt nu uit Tiled, met een vaste maat; hoe hij groeit, komt bij punt 14 van de werklijst
+(de treden). Het spel tekent al alleen wat in beeld is, dus de grootte zelf is geen probleem.
+
 ## De kaarten tekenen we in een editor (Marcel, 20 sep 2026)
 
 Claude elke boom laten neerzetten kost te veel. De wereld wordt dus in een kaarteditor getekend.

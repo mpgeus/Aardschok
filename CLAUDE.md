@@ -249,6 +249,10 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 - **Instelbaar** (Marcel, 24 sep): waar een ontwerpvraag meer dan één goed antwoord heeft, wordt het
   een optie in de spelregels (`js/opties.js`), en wat Marcel koos, is de standaard. Bouw een nieuwe
   keuze dus als optie, niet als vaste regel.
+- **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
+  toevoegen voor we bij een speelbaar product komen." Een nieuw idee, ook een goed idee van Claude,
+  gaat naar `ontwerp/opmerkingen.md` of achteraan de werklijst, niet in de stap die loopt. Wie iets
+  nieuws wil beginnen, vraagt eerst: brengt dit een speelbaar product dichterbij?
 
 In een gevecht heeft de schout levenspunten, net als een monster (voorlopig: wat vallen echt
 betekent, komt bij punt 13 van de werklijst).

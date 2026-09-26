@@ -19,45 +19,54 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met 
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
 `npm test`: 482/482.
 
-**Waar het werk staat:** alles staat in `main`, ook stuk 2 van de poppetjes (Marcel, 26 sep: "Ja, in
-main"). Begin de volgende sessie dus gewoon vanaf `main`; hoe een eigen branch en `main` samengaan,
-staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook de vijfde sessie van 26 sep (Marcel vroeg om een
+overdracht voor een nieuwe sessie). Begin de volgende sessie dus gewoon vanaf `main`; hoe een eigen
+branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Wat er op 26 sep gebeurde** (drie sessies; de details staan onder Af en in `spel.md`):
+**Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
+toevoegen voor we bij een speelbaar product komen." Houd je aan de volgorde hieronder. Een nieuw idee,
+ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in de stap die loopt
+(`CLAUDE.md`, "Het spel in het kort"). Wat het eerste speelbare product is, is vraag 33.
+
+**Wat er op 26 sep gebeurde** (vijf sessies; de details staan onder Af en in `spel.md`):
 - Punt 7 is af: het oude spel is eruit, ook uit de namen (`Spel`, `S.schout`, kant 'speler').
 - Marcel kwam met een nieuwe wens: een dorp dat leeft en groeit (punt 3b). Claude schreef een voorstel
   op een pagina, "Een dorp dat leeft" (https://claude.ai/artifact/3cozedxQDPkjvFnAcmnKFE), en Marcel
   koos daar in drie opmerkingen het meeste (`spel.md`, "Een dorp dat leeft en groeit"). Hij reageert
   in etappes ("het is best veel"): op de pagina staat bij elk hoofdstuk of hij het al besprak. Werk
   die markeringen bij na elke opmerking, en zet zijn keuzes in `spel.md`.
-- De dag is gebouwd (3b, stap 1): vijf minuten bij 1× in een maand van dertig dagen, licht en nacht,
-  de boeren 's nachts binnen, maaien in de werkuren, bezoekers overdag, en slapen tot de ochtend.
-- Opgeruimd (vraag 25, A en B): de tijd staat op één plek stil, en de bezoekers komen op één manier
-  aan. De afspraken staan in `CLAUDE.md`, "Afspraken in de code".
-- De mensen worden poppetjes (3b, stap 2): Marcel zei "Ja, zo" tegen het plan, koos voor de schout
-  een eigen gezin (vraag 27), en stuk 1 is gebouwd.
-- Daarna, in de vierde sessie: wat Marcel op de eerste beelden zag, is hersteld; er kwam afwisseling
-  in wat je bouwt en een nieuw gehucht rond een plein (vraag 28); en stuk 2 van de poppetjes is af.
-  Daarmee is stap 2 van 3b klaar. Op de beelden zag Marcel dat de brink een open hart moet zijn en
-  dat de kaart nog te strak en waterpas is; hij koos wat de volgende sessie eerst doet (vraag 29).
-- In de vijfde sessie: een schets voor het plein, op een pagina voor Marcel (vraag 30). Marcel
-  antwoordde: het heet gewoon plein, er wordt niet op gebouwd, de huizen staan rondom en de velden
-  daar weer omheen, en het Drentse gaat eruit (een aanname van Claude). Daarna een tweede en een
-  derde schets, met gewone huizen naast de boerderijen (vraag 31).
+- De dag is gebouwd (3b, stap 1), en de mensen zijn poppetjes geworden (3b, stap 2): iedereen die in de
+  balk telt, heeft een naam, een huis, een gezin en werk, en volgt het ritme van de dag. Opgeruimd:
+  de tijd staat op één plek stil, en bezoekers komen op één manier aan (vraag 25, A en B).
+- In de vierde sessie kwamen afwisseling in wat je bouwt en een nieuw gehucht rond een plein
+  (vraag 28). Op de beelden zag Marcel dat het plein een open hart moet zijn en de kaart niet waterpas
+  (vraag 29).
+- In de vijfde sessie: de schets voor het plein, in drie versies op de pagina "Het plein als hart"
+  (https://claude.ai/artifact/NnMfi4QPWV8ct2ZtNjewud). Marcel keurde de derde goed (vraag 30 en 31):
+  het heet gewoon plein, er wordt niet op gebouwd, gewone huizen staan eromheen, de boerderijen verder
+  naar buiten bij hun velden, en de velden om het dorp. "Brink" en het Drentse zijn eruit, ook uit de
+  code en de spelteksten: dat was een aanname van Claude. Op de pagina staat ook hoe het dorp per trede
+  een stad wordt; Marcel koos daarbij (vraag 32) dat de boerderij mee naar buiten verhuist, dat graan
+  van buiten naar de markt komt, en dat de kaart meegroeit, zonder grens aan de stad.
 
-**Loopt nu: de schets voor het plein is goedgekeurd** (26 sep, vijfde sessie). De pagina "Het plein
-als hart" (https://claude.ai/artifact/NnMfi4QPWV8ct2ZtNjewud) laat de vierde versie van het gehucht
-zien, en Marcel zei "Indeling klopt" (vraag 31): het plein in het midden, waar niet gebouwd wordt;
-gewone huizen eromheen, en de boerderijen verder naar buiten bij hun velden, de voorste op de hoeken,
-zodat er maar 6 van de 219 tegels achter een dak vallen; en de velden om het dorp. In de gewone huizen
-wonen dezelfde 25 mensen, maar niet allemaal op een boerderij (C). Op de pagina staat ook hoe het dorp
-per trede een stad wordt (vraag 32, nog open). **Het volgende:** de kaart bouwen zoals de schets, met
-C; dan de doorkijk als keuze in de spelregels (het kijkvenster ook voor anderen, en het raster); dan
-ronde 4b van de huizenbouwer, en dan de herberg. De
-indeling staat in `gereedschap/tiled/gehucht-v4-schets.json`, want de schets kwam uit een los
-tekenscript. **Daarna** (Marcel koos het, vraag 29): het plein bouwen, dan ronde 4b van de
-huizenbouwer, en dan de herberg. Stap 2 van 3b, mensen worden poppetjes, is af (26 sep; `spel.md`,
-"Mensen worden poppetjes", Zo werkt het nu). `npm test`: 482/482.
+**Loopt nu:** niets. **Het volgende: de kaart bouwen zoals de schets** (punt 1 hieronder). Wat de
+nieuwe sessie daarvoor nodig heeft:
+- De indeling staat in `gereedschap/tiled/gehucht-v4-schets.json` (76 bij 76; de `uitleg` zegt hoe je
+  hem leest). Die gaat in `maak-gehucht.cjs` (de vierde versie), en daarna gaat het json-bestand weg.
+  Het plein wordt een vlak in het betekenisbestand, zodat de kinderen over het hele plein spelen
+  (`T.pleinVan` en `straalPlein` in `js/bewoners.js`); de marskramer, de heer en de schandpaal staan op
+  het zand voor de deur van de schout.
+- Wie er woont (C): dezelfde 25 mensen, maar niet allemaal op een boerderij. Het aantal mensen bij het
+  begin wordt een eigen getal in het betekenisbestand, zoals `beginVoorraad`, in plaats van alle
+  woonruimte bij elkaar (`T.zetBestaandeGebouwen` in `js/gebouwen.js`). In de gewone huizen wonen
+  bijvoorbeeld de herder met zijn gezin, een oud stel en een weduwe.
+- Op het plein wordt niet gebouwd: `T.gebouwPast` (`js/gebouwen.js`) weigert het, en het bouwmenu zegt
+  waarom.
+- De toetsen die de ligging van de oude velden kennen, gaan mee, zoals `test/weides.test.cjs` ("de
+  blokken van Klaas en Gerrit onder de es"). Het woord "es" gaat uit het commentaar.
+- Laat Marcel daarna schermafdrukken uit het spel zien, vanaf dezelfde plekken als de schets.
+Daarna: de doorkijk als keuze in de spelregels, dan ronde 4b van de huizenbouwer, dan de herberg.
+`npm test`: 482/482.
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -205,14 +214,16 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     kijkvenster ook voor de heer, de marskramer en wie je spreekt; alleen de omtrek van het huis; of
     het huis in een raster doorzichtig, om de andere pixel? Voorstel: de eerste en de derde als keuze
     in de spelregels, na de kaart (`beeld.md`, "Doorkijk").
-32. **Hoe het dorp een stad wordt** (Marcel vroeg het, 26 sep: "Verstedelijking in de binnenring?";
-    het voorstel staat in `spel.md`, "Van dorp tot stad"). Ja: de binnenring groeit eerst, omhoog en in
-    steen, en schuift dan over de dichtste velden naar buiten. Twee vragen. (1) Verhuist een
-    boerderij mee naar buiten als haar velden bouwgrond worden, en wordt de oude een huis voor een nieuw
-    gezin? Of blijft de boer wonen en loopt hij verder? Voorstel: ze verhuist mee, zodat de binnenring
-    voor gewone huizen en zaken blijft. (2) Brengen boeren van buiten vanaf marktrecht graan naar de
-    markt, zodat de stad voorbij haar eigen velden kan groeien? Een stad van 300 mensen zou anders
-    zo'n 2.100 tegels akker nodig hebben. Voorstel: ja, en de heer wil er zijn deel van.
+32. ~~Hoe het dorp een stad wordt~~ (Marcel vroeg het, 26 sep: "Verstedelijking in de binnenring?";
+    het staat in `spel.md`, "Van dorp tot stad", en per trede getekend op de pagina van het plein).
+    **Beantwoord (Marcel, 26 sep):** "Ja verhuist mee" (de boerderij, als haar velden bouwgrond
+    worden); "Ja er wordt graan van buiten gebracht naar de markt"; en "De kaart blijft wel groeien.
+    Er is geen grens voor een max afmeting stad."
+33. **Wat is het eerste speelbare product?** (Claude, 26 sep, na Marcels waarschuwing voor functie
+    creep.) Voorstel: een proefversie van één jaar in het gehucht, van de benoemingsbrief tot
+    Sint-Maarten, met de kern (rijk worden en arm lijken: verstoppen, de inner, de heer), opslaan en een
+    titelscherm. Dan wordt duidelijk welke punten van de volgorde daarvoor nodig zijn, en welke kunnen
+    wachten tot daarna.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -481,6 +492,14 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 26 sep 2026 — **De schets voor het plein, goedgekeurd (vraag 30 tot en met 32).** Drie versies op de
+  pagina "Het plein als hart": het plein in het midden, waar niet gebouwd wordt, gewone huizen eromheen,
+  de boerderijen bij hun velden, en de velden om het dorp; met 6 van de 219 tegels achter een dak. De
+  indeling staat in `gereedschap/tiled/gehucht-v4-schets.json`. Op dezelfde pagina: hoe het dorp per
+  trede een stad wordt.
+- 26 sep 2026 — **"Brink" heet plein, en het Drentse is eruit.** In de code, de spelteksten, de
+  toetsen en de ontwerpstukken (`T.pleinVan`, `straalPlein`; "De heer staat op het plein en wacht op
+  je"). Het Drentse kader was een aanname van Claude en stond op Marcels naam; dat is rechtgezet.
 - 26 sep 2026 — **Mensen worden poppetjes, stuk 2; daarmee is stap 2 van 3b af.** Komen en gaan zie
   je: een nieuw gezin komt overdag over de weg binnen (op dezelfde manier als een bezoeker) en loopt
   naar zijn huis, wie wegtrekt loopt de weg af, en het bericht zegt wie het zijn, ook wie sterft ("de
