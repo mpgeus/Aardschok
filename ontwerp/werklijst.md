@@ -19,10 +19,9 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met 
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
 `npm test`: 475/475.
 
-**Waar het werk staat:** alles tot en met de dag staat in `main` (Marcel, 26 sep: "zet hem in main").
-Stuk 1 van de poppetjes staat op de branch `claude/werklijst-begin-wrw3vm`, tot Marcel zegt dat het
-in `main` mag. Kijk bij het begin van een sessie dus of die branch al in `main` is; hoe een eigen
-branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook stuk 1 van de poppetjes (Marcel, 26 sep: "Ja, in
+main"). Begin de volgende sessie dus gewoon vanaf `main`; hoe een eigen branch en `main` samengaan,
+staat in `CLAUDE.md`, onder Git.
 
 **Wat er op 26 sep gebeurde** (drie sessies; de details staan onder Af en in `spel.md`):
 - Punt 7 is af: het oude spel is eruit, ook uit de namen (`Spel`, `S.schout`, kant 'speler').
@@ -43,13 +42,19 @@ telt, is een poppetje met een naam, een huis en een gezin, wie werkt loopt naar 
 iedereen volgt het ritme van de dag (`spel.md`, "Mensen worden poppetjes", Zo werkt het nu). Marcel
 kreeg schermafdrukken, en zag drie dingen: mensen verdwenen in één klap bij de deur, er leken mensen
 op de daken te staan (dat was het kijkgat van de schout), en de huizen staan te dicht op elkaar en
-lijken te veel op elkaar. De eerste twee zijn hersteld (26 sep); het derde is vraag 28, en stuk 2
-(komen en gaan zie je, en werk telt in uren) wacht daarop. `npm test`: 475/475.
+lijken te veel op elkaar. De eerste twee zijn hersteld (26 sep). Voor het derde koos Marcel (vraag
+28): **nu eerst afwisseling in wat je bouwt (A) en een nieuw gehucht rond het plein (B)**, en daarna
+stuk 2 van de poppetjes (komen en gaan zie je, en werk telt in uren). `npm test`: 475/475.
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
 
-1. **Nu: mensen worden poppetjes** (3b, stap 2; Marcel koos het op 26 sep, vraag 24). Het plan staat
+0. **Nu: afwisseling en een nieuw gehucht** (vraag 28; Marcel koos het op 26 sep, vóór stuk 2 hieronder).
+   A: een hut of huis dat je bouwt, krijgt een van de tekeningen die er al zijn, in plaats van steeds
+   dezelfde. B: een nieuw gehucht rond een plein met het huis van de schout eraan, de put en de
+   schandpaal (Marcels keuze van 25 sep, `spel.md`, "Sint-Maarten"), met meer ruimte tussen de huizen,
+   bredere straten, en elke boerderij in een andere tekening. Begin B met een schets voor Marcel.
+1. **Daarna: mensen worden poppetjes, stuk 2** (3b, stap 2; Marcel koos het op 26 sep, vraag 24). Het plan staat
    in `spel.md`, "Mensen worden poppetjes", in vijf punten, en Marcel zei "Ja, zo". In twee stukken:
    eerst 1 tot en met 3 (**af, 26 sep**: iedereen een poppetje met een naam en een huis, wie werkt
    loopt naar zijn werk, en iedereen volgt het ritme van de dag; `js/bewoners.js`), dan een
@@ -141,7 +146,8 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     - C. **Ronde 4b van de huizenbouwer**: elk huis in elk materiaal en elke vorm. Renderwerk, gepland
       als stap 4 van punt 3b.
     Voorstel: A en B nu, vóór stuk 2 van de poppetjes, want in een dorp met ruimte zie je ze pas echt;
-    C blijft waar hij staat.
+    C blijft waar hij staat. **Beantwoord (Marcel, 26 sep): A en B nu.** En het kijkgat als venster in
+    het dak: "Ja, zo".
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
