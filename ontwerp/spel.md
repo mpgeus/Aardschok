@@ -154,7 +154,11 @@ antwoorden, en het wereldgereedschap.
 **Zo staat het nu** (25 sep): gebouwd op 23 sep. Het gehucht (`?kaart=gehucht`) met vijf boerderijen
 en hun velden, en graan in vijf stadia (geploegd, kiemend, groen, rijp, gemaaid) dat met de kalender
 groeit, in de wind wuift, en tegel voor tegel door de boeren gemaaid wordt. Een boer staat tot zijn
-middel in het graan.
+middel in het graan. **Sinds 26 sep een nieuwe kaart** (Marcel: "Ze staan ook te dicht op elkaar"):
+60 bij 60 tegels, een plein vóór het huis van de schout, vijf boerderijtekeningen onder riet drie tot
+vijf tegels uit elkaar, en de es vóór het plein. Akkers, weide en heide bleven even groot. De regel
+erachter: een dak dekt in ons beeld tot zo'n acht tegels erachter af, dus wat je wilt zien, ligt aan
+de kant van de camera.
 
 **Wat Marcel vroeg:**
 
@@ -704,9 +708,11 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
 - Zaaien kost vanaf het tweede jaar 1 graan per akkertegel; wat niet gezaaid kan worden, ligt braak.
 - In de spelregels: het graan (ruim, net rond, honger), waarin hij betaald wil worden, hoe hij telt,
   en of de schout zelf aan de paal mag.
-- **Nog te bouwen: een plein** (Marcel koos op 25 sep, zie onderaan): het gehucht rond een plein
-  waar het huis van de schout staat, met daar de schandpaal of het blok. Zo komt de brink ook in
-  beeld.
+- **Het plein** (Marcel koos het op 25 sep, zie onderaan; gebouwd op 26 sep): het gehucht ligt rond
+  een plein met het huis van de schout eraan. Daar staan de heer, de marskramer en de schandpaal, en
+  daar spelen de kinderen. Het ligt vóór de huizen, aan de kant van de camera, dus er dekt geen dak
+  meer iets af (`gereedschap/tiled/maak-gehucht.cjs`, derde versie). Het blok en een galg zijn nog
+  tekenwerk.
 - **Nog open:** zijn grillen en de herendienst (punt 8); de koets (tekenwerk).
 
 **Hoe het zo kwam:**

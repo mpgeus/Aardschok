@@ -139,15 +139,23 @@ test('in het gehucht: de blokken van Klaas en Gerrit onder de es worden samen é
   const [groep] = T.weideGroepen(S.wereld);
   assert.deepEqual(groep.velden, [klaas, gerrit]);
   assert.equal(groep.tegels, 30 + 25);
-  // De strook op x = 41, zo lang als de blokken naast elkaar liggen (Gerrits blok is één rij korter).
-  assert.deepEqual(sleutels(groep.tussen), ['41,37', '41,38', '41,39', '41,40', '41,41']);
+  // De strook tussen de twee blokken, zo lang als ze naast elkaar liggen (Gerrits blok is één rij
+  // korter). Uit de akkers zelf, zodat een nieuwe indeling van het gehucht (26 sep: een plein, meer
+  // ruimte) de toets niet breekt zolang de blokken zo naast elkaar liggen.
+  const x = klaas.x + klaas.b;
+  assert.equal(gerrit.x, x + 1, 'één tegel tussen de blokken van Klaas en Gerrit');
+  const strook = [];
+  for (let y = klaas.y; y < gerrit.y + gerrit.h; y++) strook.push(`${x},${y}`);
+  assert.deepEqual(sleutels(groep.tussen), strook);
   // Een strook van de es erboven, akker1, ligt ook één tegel van het blok van Klaas: weide maken
   // voegt hem erbij.
   const es = veld('akker1');
+  assert.equal(es.y + es.h + 1, klaas.y, 'één rij tussen de es en het blok van Klaas');
   es.bestemming = es.plan = 'weide';
   const [groter] = T.weideGroepen(S.wereld);
   assert.deepEqual(groter.velden, [es, klaas, gerrit]);
-  assert.ok(groter.tussen.has('36,36') && groter.tussen.has('37,36'));
+  const rij = es.y + es.h;
+  assert.ok(groter.tussen.has(`${es.x},${rij}`) && groter.tussen.has(`${es.x + 1},${rij}`));
 });
 
 test('één weide, één kudde: de stand en het vee gaan over de hele groep, van welk veld je ook vraagt', () => {

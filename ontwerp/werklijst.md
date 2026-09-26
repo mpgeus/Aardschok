@@ -17,7 +17,7 @@ en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het 
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 475/475.
+`npm test`: 477/477.
 
 **Waar het werk staat:** alles staat in `main`, ook stuk 1 van de poppetjes (Marcel, 26 sep: "Ja, in
 main"). Begin de volgende sessie dus gewoon vanaf `main`; hoe een eigen branch en `main` samengaan,
@@ -43,18 +43,13 @@ iedereen volgt het ritme van de dag (`spel.md`, "Mensen worden poppetjes", Zo we
 kreeg schermafdrukken, en zag drie dingen: mensen verdwenen in één klap bij de deur, er leken mensen
 op de daken te staan (dat was het kijkgat van de schout), en de huizen staan te dicht op elkaar en
 lijken te veel op elkaar. De eerste twee zijn hersteld (26 sep). Voor het derde koos Marcel (vraag
-28): **nu eerst afwisseling in wat je bouwt (A) en een nieuw gehucht rond het plein (B)**, en daarna
-stuk 2 van de poppetjes (komen en gaan zie je, en werk telt in uren). `npm test`: 475/475.
+28): eerst afwisseling in wat je bouwt (A) en een nieuw gehucht rond het plein (B); **allebei af (26
+sep)**. Nu stuk 2 van de poppetjes (komen en gaan zie je, en werk telt in uren). `npm test`: 477/477.
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
 
-0. **Nu: afwisseling en een nieuw gehucht** (vraag 28; Marcel koos het op 26 sep, vóór stuk 2 hieronder).
-   A: een hut of huis dat je bouwt, krijgt een van de tekeningen die er al zijn, in plaats van steeds
-   dezelfde. B: een nieuw gehucht rond een plein met het huis van de schout eraan, de put en de
-   schandpaal (Marcels keuze van 25 sep, `spel.md`, "Sint-Maarten"), met meer ruimte tussen de huizen,
-   bredere straten, en elke boerderij in een andere tekening. Begin B met een schets voor Marcel.
-1. **Daarna: mensen worden poppetjes, stuk 2** (3b, stap 2; Marcel koos het op 26 sep, vraag 24). Het plan staat
+1. **Nu: mensen worden poppetjes, stuk 2** (3b, stap 2; Marcel koos het op 26 sep, vraag 24). Het plan staat
    in `spel.md`, "Mensen worden poppetjes", in vijf punten, en Marcel zei "Ja, zo". In twee stukken:
    eerst 1 tot en met 3 (**af, 26 sep**: iedereen een poppetje met een naam en een huis, wie werkt
    loopt naar zijn werk, en iedereen volgt het ritme van de dag; `js/bewoners.js`), dan een
@@ -147,7 +142,14 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
       als stap 4 van punt 3b.
     Voorstel: A en B nu, vóór stuk 2 van de poppetjes, want in een dorp met ruimte zie je ze pas echt;
     C blijft waar hij staat. **Beantwoord (Marcel, 26 sep): A en B nu.** En het kijkgat als venster in
-    het dak: "Ja, zo".
+    het dak: "Ja, zo". A is af (26 sep). Voor B liet Claude een schets zien (het plein vóór het huis
+    van de schout, aan de kant van de camera; de boerderijen drie tot vijf tegels uit elkaar, in vijf
+    boerderijtekeningen onder riet; de es vóór het plein; akkers, weide en heide even groot; een kaart
+    van 56 bij 56), en Marcel zei: "Ja zo, maar kunnen we niet gewoon het gebouw doorzichtig maken
+    wanneer je er achter langs loopt? En de kaart mag ook groter zijn, geen probleem." Claude antwoordde
+    dat het venster van 26 sep precies dat doet voor wie achter een huis langsloopt (een heel gebouw
+    doorzichtig vond Marcel op 23 sep "een doorzichtig geelgroen spook"), maar dat het plein ook
+    zichtbaar moet zijn als de schout er niet staat: daarom vóór de huizen.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -416,6 +418,12 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 26 sep 2026 — **Vraag 28: afwisseling en een nieuw gehucht.** A: een hut of huis dat je bouwt,
+  krijgt een van drie of vier tekeningen, nooit twee keer achter elkaar dezelfde (`tekeningen` in
+  `T.GEBOUWEN`, `T.volgendeTekening`). B: een nieuwe kaart van 60 bij 60 (`maak-gehucht.cjs`, derde
+  versie) met een plein vóór het huis van de schout, vijf boerderijtekeningen ruim uit elkaar, en de
+  es vóór het plein; het plein ligt nu in beeld, ook als de heer er staat. Eerst liet Claude Marcel
+  een schets zien, en hij zei "Ja zo".
 - 26 sep 2026 — **Wat Marcel zag bij de eerste beelden van de poppetjes.** Wie naar binnen gaat,
   stapt nu de deur in en vervaagt, in plaats van in één klap te verdwijnen (`js/tekenen.js`,
   `deurStap`). En het kijkgat van de schout is een venster in het dak geworden, waarin je de grond

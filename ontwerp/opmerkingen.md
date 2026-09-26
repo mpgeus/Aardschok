@@ -11,8 +11,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 - **De poppetjes, wat nog ruw is** (26 sep, na stuk 1 van stap 2; `spel.md`, "Mensen worden
   poppetjes"):
-  - De kinderen spelen op de brink, en die ligt achter twee daken (hieronder, "De brink ligt achter
-    twee daken"). Het plein dat Marcel op 25 sep koos, lost het op; wanneer, is vraag 28.
   - Een knaap of meid draagt het vel van een jongen of meisje, en een oude vrouw dat van de boerin
     met het karakter "de oudste". Eigen vellen (een knaap, een oude vrouw, een kind in werkkleren)
     zijn tekenwerk.
@@ -49,10 +47,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     blijft Pauze in de balk oplichten tot het venster dicht is (sinds A, vraag 25). Dat klopt, want de
     tijd staat stil, maar het lijkt of de knop niets doet. Misschien de gekozen knop anders laten
     oplichten zolang een venster openstaat.
-- **De brink ligt achter twee daken** (24 sep). Vanuit de camera staan het huis van de schout en de
-  boerderij van boer 3 vóór de brink. De heer, de marskramer, de schandpaal en wie eraan staat,
-  vallen daardoor grotendeels achter een dak. De schout zie je door een kijkgat, de rest niet. Marcel
-  koos op 25 sep een plein met het huis van de schout eraan (`spel.md`, "Sint-Maarten"); nog te doen.
+- **Het nieuwe gehucht, wat nog ruw is** (26 sep, na de derde versie van de kaart): er lopen nog geen
+  paden van de boerderijen naar het plein (die komen met "Straten en paden", punt 6c: ze slijten waar
+  gelopen wordt); het plein is kale zandgrond, geen gras zoals een Drentse brink; en de teksten zeggen
+  nog "op de brink" waar het plein bedoeld is. Wat de speler zelf bouwt, kan het plein nog wel
+  afdekken: een hoog huis vóór het plein (het bouwmenu zou daar kunnen waarschuwen).
 - **De winter is hard:** zonder hout gaat het gehucht van 25 naar 2 mensen.
   `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel bijstellen als hij speelt.
 - **Honger valt in het voorjaar,** vlak vóór de oogst, want het zaaigraan gaat voor. Buiten de

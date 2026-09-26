@@ -68,6 +68,25 @@ const nieuwe = (S) => mensen(S).filter((p) => !p.schout && !p.wie); // wie hier 
 const vanSchout = (p) => !!(p.schout || (p.hoofd && p.hoofd.schout));
 const inHuis = (S, g) => mensen(S).filter((p) => p.huis === g);
 const opTegel = (e) => ({ x: e.tx, y: e.ty });
+// Een vrije plek op de kaart voor een voet, met een rand eromheen, zo dicht mogelijk bij `bij`: zo
+// breekt een nieuwe indeling van het gehucht de toetsen niet (26 sep: een plein, meer ruimte).
+function vrijePlek(S, voet, bij) {
+  const w = S.wereld;
+  let beste = null;
+  let afstand = Infinity;
+  for (let y = 1; y + voet.h < w.h; y++) {
+    for (let x = 1; x + voet.b < w.b; x++) {
+      let vrij = true;
+      for (let dy = -1; dy <= voet.h && vrij; dy++) for (let dx = -1; dx <= voet.b && vrij; dx++) if (T.isVast(w, x + dx, y + dy)) vrij = false;
+      const a = Math.hypot(x - bij.x, y - bij.y);
+      if (vrij && a < afstand) {
+        afstand = a;
+        beste = { x, y };
+      }
+    }
+  }
+  return beste;
+}
 
 // ---------------------------------------------------------------------------------------------
 // Wie er woont
@@ -154,7 +173,8 @@ test('wie werk heeft, houdt het, en een nieuwe werkplaats krijgt de vrije hand d
   T.verdeelHanden(S);
   for (const p of mensen(S)) assert.equal(p.werk, voor.get(p), `${p.naam || p.wie} houdt zijn werk`);
   // Een houthakker bij de boerderij van boer 1.
-  const g = { soort: 'houthakker', x: 20, y: 17, voet: { b: 1, h: 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
+  const plek = vrijePlek(S, { b: 1, h: 1 }, T.deurVan(S.wereld, S.gebouwen.find((x) => x.huis === 'boer1')));
+  const g = { soort: 'houthakker', x: plek.x, y: plek.y, voet: { b: 1, h: 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
   S.gebouwen.push(g);
   const vrij = mensen(S).filter((p) => !p.werk && p.leeftijd !== 'kleuter' && !vanSchout(p));
   T.verdeelHanden(S);
@@ -171,7 +191,9 @@ test('wie werk heeft, houdt het, en een nieuwe werkplaats krijgt de vrije hand d
 
 test('T.wijzigBevolking: een nieuw gezin in een huis met plaats; wie sterft is eerst oud; wie wegtrekt kwam het laatst', () => {
   const S = gehucht();
-  const huis = { soort: 'huis', x: 36, y: 12, voet: T.gebouwVoet('huis'), klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
+  const voet = T.gebouwVoet('huis');
+  const plek = vrijePlek(S, voet, T.brinkVan(S.wereld));
+  const huis = { soort: 'huis', x: plek.x, y: plek.y, voet, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
   S.gebouwen.push(huis);
   assert.equal(T.wijzigBevolking(S, 4, 'groei'), 4);
   assert.equal(mensen(S).length, S.bevolking);

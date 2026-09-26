@@ -13,14 +13,22 @@
 // - alleen groene bomen (zie BOSBOMEN hieronder): geen herfstEik in een kaart waar de kalender
 //   lente zegt (ontwerp/werklijst.md).
 //
+// Derde versie (Marcel, 26 sep 2026, toen de mensen poppetjes werden: "We hebben meer afwisseling
+// nodig in de huizen en hutten. Ze staan ook te dicht op elkaar"; en al op 25 sep: een plein met het
+// huis van de schout eraan). 60 bij 60 in plaats van 50 bij 50, een plein vóór het huis van de
+// schout, vijf boerderijtekeningen drie tot vijf tegels uit elkaar, en de es vóór het plein. De regel
+// erachter: een dak dekt in ons beeld tot zo'n acht tegels erachter af, dus wat je wilt zien (het
+// plein, de erven, de weg) ligt aan de kant van de camera, vóór de huizen. Akkers, weide en heide
+// bleven even groot.
+//
 // Naar het voorbeeld van maak-wereld.cjs (de grond via de terreinsets van tegels/rand.tsx, de
 // tegelnummers op naam opgezocht in plaats van hard gecodeerd), maar zelfstandig: dit gehucht
 // hangt nog aan geen enkele andere kaart vast.
 //
 //   node gereedschap/tiled/maak-gehucht.cjs [--overschrijf]
 //
-// Wat erin komt: vijf boerenhuizen (riet) rond een brinkje met een put en een grote eik, het
-// iets betere stenen huis van de schout, een zandweg die het gehucht in en uit loopt, een beek
+// Wat erin komt (derde versie, 26 sep): vijf boerderijen (riet) rond een plein met een put, een
+// grote eik en het iets betere stenen huis van de schout, een zandweg die het gehucht in en uit loopt, een beek
 // met een bruggetje en wilgen op de oevers, een bosrand aan de noordkant, wat tuintjes, en de
 // akkers als één es met vijf lange stroken plus twee kleinere stukken — zolang er nog geen
 // graantegels zijn (een andere agent maakt die in gereedschap/pixelart/graan*.cjs) is een akker
@@ -150,30 +158,34 @@ for (const k of ['x-begin', 'x-midden', 'x-eind', 'y-begin', 'y-midden', 'y-eind
 // ==================================================================================================
 // DE MAAT EN DE ZONES
 // ==================================================================================================
-const B = 50;
-const H = 50;
+const B = 60;
+const H = 60;
 const BOS_DIEP = 7; // y < BOS_DIEP: de bosrand aan de noordkant
 const BOSDICHT = [0.85, 0.7, 0.55, 0.4, 0.28, 0.16, 0.08]; // per rij, dunner naar het gehucht toe
 const BEEK_X0 = 5;
 const BEEK_X1 = 7; // de beek, drie tegels breed, ruim ten westen van het dorp
-const WEG_Y = 19; // de zandweg, oost-west, het gehucht in en uit
+const WEG_Y = 32; // de zandweg, oost-west, langs het plein, het gehucht in en uit
 
-// De es: één blok naast het dorp (ten oosten), lange smalle stroken naast elkaar — "zo lagen
+// De es: één blok naast het dorp (ten zuidoosten), lange smalle stroken naast elkaar — "zo lagen
 // middeleeuwse akkers" (ontwerp/wereld.md) — met daaronder nog twee kleinere stukken. x, y is de
 // linkerbovenhoek (net als een gebouw), b/h de maat in tegels: b (breed, 2-3) staat dwars op de
 // stroken, h (lang, hier 14) is hun lengte. Rondom blijft ruim marge gras over tot de rand van de
-// kaart (B-1 hier is 49, de verste strook eindigt op 46) en tot de bosrand (die stopt bij
-// BOS_DIEP=7, de es begint pas op y=22).
+// kaart (B-1 hier is 59, de verste strook eindigt op 46, de onderste rij velden op 54).
+//
+// Sinds 26 sep (derde versie, Marcel: "Ze staan ook te dicht op elkaar") ligt de es vóór het plein,
+// aan de kant van de camera: akkers zijn plat, dus ze dekken het plein niet af. Maten en onderlinge
+// ligging zijn dezelfde als in de tweede versie, alleen twaalf rijen lager, zodat de oogst gelijk
+// blijft en de twee blokken onder de es nog altijd samen één weide kunnen zijn.
 const AKKERS = [
-  { akker: 'akker1', x: 36, y: 22, b: 2, h: 14, huis: 'boer1' },
-  { akker: 'akker2', x: 38, y: 22, b: 2, h: 14, huis: 'boer2' },
-  { akker: 'akker3', x: 40, y: 22, b: 3, h: 14, huis: 'boer3' },
-  { akker: 'akker4', x: 43, y: 22, b: 2, h: 14, huis: 'boer4' },
-  { akker: 'akker5', x: 45, y: 22, b: 2, h: 14, huis: 'boer5' },
+  { akker: 'akker1', x: 36, y: 34, b: 2, h: 14, huis: 'boer1' },
+  { akker: 'akker2', x: 38, y: 34, b: 2, h: 14, huis: 'boer2' },
+  { akker: 'akker3', x: 40, y: 34, b: 3, h: 14, huis: 'boer3' },
+  { akker: 'akker4', x: 43, y: 34, b: 2, h: 14, huis: 'boer4' },
+  { akker: 'akker5', x: 45, y: 34, b: 2, h: 14, huis: 'boer5' },
   // de twee kleinere stukken, onder de es, van dezelfde twee boeren; het blok van Klaas (boer1)
   // begint als weide, met de beginkudde erop (ontwerp/spel.md, "Weides met koeien en schapen")
-  { akker: 'akker6', x: 36, y: 37, b: 5, h: 6, huis: 'boer1', bestemming: 'weide' },
-  { akker: 'akker7', x: 42, y: 37, b: 5, h: 5, huis: 'boer3' },
+  { akker: 'akker6', x: 36, y: 49, b: 5, h: 6, huis: 'boer1', bestemming: 'weide' },
+  { akker: 'akker7', x: 42, y: 49, b: 5, h: 5, huis: 'boer3' },
 ];
 function inAkker(x, y) {
   return AKKERS.some((a) => x >= a.x && x < a.x + a.b && y >= a.y && y < a.y + a.h);
@@ -187,8 +199,17 @@ function inAkker(x, y) {
 // halve kudde achter zijn dak). De onderste drie rijen van de kaart blijven gras: daar valt het bos
 // om de kaart heen overheen. De meent is voor het spel een rechthoek (js/kaart.js, "meent"); de
 // grond erop is heide.
-const MEENT = { meent: 'heide', x: 9, y: 39, b: 23, h: 8 };
-const KOOI = { tegel: 'schuurBlokhut', x: 27, y: 31, b: 5, d: 7 };
+const MEENT = { meent: 'heide', x: 9, y: 45, b: 23, h: 8 };
+const KOOI = { tegel: 'schuurBlokhut', x: 26, y: 37, b: 5, d: 7 };
+
+// Het plein (Marcel, 25 sep: "Dorpen worden vaak rond een plein gebouwd waar ook het huis van de
+// schout staat. Daar de schandpaal of blok zetten."): kale zandgrond, met de put, en daarop staan
+// de marskramer, de heer op Sint-Maarten en de schandpaal. Het ligt vóór het huis van de schout, aan
+// de kant van de camera, en er staat niets hoogs vóór: een dak dekt in ons beeld tot zo'n acht
+// tegels erachter af (ontwerp/beeld.md, "Doorkijk"), en tot 26 sep lag de brink achter twee daken.
+const PLEIN = { x: 26, y: 24, b: 10, h: 8 };
+const inPlein = (x, y) => x >= PLEIN.x && x < PLEIN.x + PLEIN.b && y >= PLEIN.y && y < PLEIN.y + PLEIN.h;
+const PLEIN_MIDDEN = { x: PLEIN.x + 5, y: PLEIN.y + 4 };
 
 // De weg: een rechte lijn dwars over de kaart (dezelfde "afstand tot lijn"-truc als
 // maak-wereld.cjs en erf-kaart.cjs).
@@ -230,6 +251,7 @@ function soortOp(x, y) {
   // bruggetje (hieronder, apart neergezet) tekent de oversteek toch al zelf.
   if (opWeg(x, y) && (x < BEEK_X0 - 1 || x > BEEK_X1 + 1)) return 'zandpad';
   if (inAkker(x, y) && (x < BEEK_X0 - 1 || x > BEEK_X1 + 1)) return 'zandpad';
+  if (inPlein(x, y)) return 'zandpad';
   if (opHeide(x, y)) return 'heide';
   return 'gras';
 }
@@ -284,15 +306,20 @@ function zetTegel(naam, mx, my) {
   return true;
 }
 
-// ---- de vijf boerenhuizen (riet) en het stenen huis van de schout ----
+// ---- de vijf boerderijen (riet) en het stenen huis van de schout ----
+// Sinds 26 sep (Marcel: "We hebben meer afwisseling nodig in de huizen en hutten. Ze staan ook te
+// dicht op elkaar"): vijf tekeningen van een echte boerderij, groter dan een gewoon huis, zodat je ze
+// ook niet verwart met wat je zelf bouwt; drie tot vijf tegels uit elkaar, elk met zijn voorkant (de
+// deur, midden aan de zuidkant) naar de camera, zodat het erf in zicht ligt. Het huis van de schout
+// staat aan de noordkant van het plein, met zijn deur erop.
 const HUIZEN = {
-  boer1: { tegel: 'dorpshuis1', x: 14, y: 9, b: 7, d: 5, zaad: 21 },
-  boer2: { tegel: 'dorpshuis5', x: 30, y: 9, b: 5, d: 7, zaad: 22 },
-  boer3: { tegel: 'dorpKlein1', x: 30, y: 22, b: 5, d: 7, zaad: 23 },
-  boer4: { tegel: 'dorpKlein3', x: 11, y: 22, b: 5, d: 7, zaad: 24 },
-  boer5: { tegel: 'dorpGewoon4', x: 20, y: 30, b: 6, d: 8, zaad: 25 },
+  boer1: { tegel: 'dorpGroot1', x: 14, y: 11, b: 7, d: 9, zaad: 21 },
+  boer2: { tegel: 'dorpGewoonVleugel', x: 34, y: 8, b: 9, d: 8, zaad: 22 },
+  boer3: { tegel: 'dorpGewoonAanbouw', x: 45, y: 14, b: 6, d: 9, zaad: 23 },
+  boer4: { tegel: 'dorpGewoon4', x: 10, y: 24, b: 6, d: 8, zaad: 24 },
+  boer5: { tegel: 'schuur', x: 17, y: 35, b: 6, d: 9, zaad: 25 },
 };
-const SCHOUT_HUIS = { tegel: 'stenenHuis', x: 21, y: 21, b: 6, d: 8 };
+const SCHOUT_HUIS = { tegel: 'stenenHuis', x: 26, y: 15, b: 6, d: 8 };
 
 for (const [id, h] of Object.entries(HUIZEN)) zetTegel(h.tegel, h.x, h.y);
 zetTegel(SCHOUT_HUIS.tegel, SCHOUT_HUIS.x, SCHOUT_HUIS.y);
@@ -301,10 +328,11 @@ zetTegel(SCHOUT_HUIS.tegel, SCHOUT_HUIS.x, SCHOUT_HUIS.y);
 // net als in het bouwmenu (js/gebouwen.js, T.GEBOUWEN.schaapskooi).
 zetTegel(KOOI.tegel, KOOI.x, KOOI.y);
 
-// ---- het brinkje: een put en een grote eik, met een bankje ----
-zetTegel('put', 22, 16);
-zetTegel('eik', 26, 16);
-zetTegel('bank', 27, 16);
+// ---- het plein: de put erop, achteraan (aan de kant van het huis van de schout, zodat hij niets
+// afdekt), en een grote eik met een bankje ernaast, aan de westkant ----
+zetTegel('put', PLEIN.x + 1, PLEIN.y + 1);
+zetTegel('eik', PLEIN.x - 2, PLEIN.y + 2);
+zetTegel('bank', PLEIN.x - 1, PLEIN.y + 3);
 
 // ---- de bosrand aan de noordkant ----
 // Alleen groene bomen: geen herfstEik (de oranje-rode variant van de eik, zie
@@ -331,8 +359,8 @@ for (let y = BOS_DIEP; y < H; y++) {
 }
 
 // ---- tuintjes: een paar losse stukken bij elk huis (kaarten.md: "los rond een huis"), en bij
-// de schout — er is daar ruimte tussen zijn huis en de brink — een klein stukje hek met een
-// hekje erin, in plankenstijl (iets beter dan het vlechtwerk van de boeren).
+// de schout een klein stukje hek met een hekje erin voor zijn huis, naast de deur, in plankenstijl
+// (iets beter dan het vlechtwerk van de boeren).
 const TUIN_LOS = ['kruidenbed', 'kool', 'prei', 'bonen', 'regenton'];
 let tuinZaad = 51;
 for (const [id, h] of Object.entries(HUIZEN)) {
@@ -344,15 +372,15 @@ for (const [id, h] of Object.entries(HUIZEN)) {
   zetTegel(stuk1, h.x - 1, h.y + h.d - 1);
   zetTegel(stuk2, h.x + h.b, h.y + 1);
 }
-// het hekje van de schout: drie stukken plankenhek met een opening in het midden, op de rij
-// tussen zijn huis en de brink.
+// het hekje van de schout: drie stukken plankenhek met een opening in het midden, op de rij voor
+// zijn huis, links van zijn deur (die blijft vrij: x + b/2).
 {
-  const y = SCHOUT_HUIS.y - 1;
-  const x0 = SCHOUT_HUIS.x + 1;
+  const y = SCHOUT_HUIS.y + SCHOUT_HUIS.d;
+  const x0 = SCHOUT_HUIS.x;
   zetTegel('hek-lat-x', x0, y);
   zetTegel('hekje-lat-x', x0 + 1, y);
   zetTegel('hek-lat-x', x0 + 2, y);
-  zetTegel('regenton', SCHOUT_HUIS.x, SCHOUT_HUIS.y - 1);
+  zetTegel('regenton', SCHOUT_HUIS.x - 1, SCHOUT_HUIS.y + SCHOUT_HUIS.d - 1);
 }
 
 // ---------------------------------------------------------------- nakijken vóór we schrijven
@@ -433,9 +461,10 @@ const betekenis = {
   // vorige winter over is: het spel begint op 1 lentemaand, en dan eet het vee nog een maand hooi
   // (js/vee.js, T.voerHooi): drie koeien, dertig dagen.
   beginVoorraad: { hout: 40, goud: 20, graan: 60, hooi: 100 },
-  // Waar de marskramer zijn waar uitstalt (js/handel.js): op de brink, tussen de put en de eik. Hij
-  // komt over de weg binnen (de uitgang hieronder) en gaat daar ook weer heen.
-  marskramer: { x: 24, y: 18 },
+  // Waar de marskramer zijn waar uitstalt (js/handel.js): midden op het plein, waar ook de heer op
+  // Sint-Maarten staat (js/heer.js). Hij komt over de weg binnen (de uitgang hieronder) en gaat daar
+  // ook weer heen.
+  marskramer: { x: PLEIN_MIDDEN.x, y: PLEIN_MIDDEN.y },
   dingen,
 };
 

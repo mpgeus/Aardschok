@@ -66,8 +66,9 @@ test('staatVoorGebouw beslist per tegel welke ervóór liggen en welke erachter,
 });
 
 test('T.tekenVolgorde: wie achter een huis loopt, komt ervóór; wie ervoor loopt, erna; ook in een drukke straat', () => {
-  // Twee huizen zoals in het gehucht: dat van de schout (x 21..26, y 21..28) en daarachter, aan de
-  // overkant van een steegje van één tegel, een boerderij (x 20..25, y 30..37).
+  // Twee huizen zoals in het gehucht tot 26 sep (toen het een plein kreeg): dat van de schout (x 21..26,
+  // y 21..28) en daarachter, aan de overkant van een steegje van één tegel, een boerderij (x 20..25,
+  // y 30..37). Een krappe plek, en daarom een goede proef voor de volgorde.
   const schout = { x: 21, y: 21, beslaat: [6, 8] };
   const boerderij = { x: 20, y: 30, beslaat: [6, 8] };
   const item = (v) => ({ d: T.diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: v, naam: 'huis' + v.x });

@@ -9,46 +9,46 @@
   "hooi": 100
  },
  "marskramer": {
-  "x": 24,
-  "y": 18
+  "x": 31,
+  "y": 28
  },
  "dingen": [
   {
-   "x": 24,
-   "y": 29,
+   "x": 29,
+   "y": 23,
    "wezen": "schout"
   },
   {
    "x": 17,
-   "y": 14,
+   "y": 20,
    "wie": "boer1",
    "straal": 3,
    "huis": "boer1"
   },
   {
-   "x": 32,
+   "x": 38,
    "y": 16,
    "wie": "boer2",
    "straal": 3,
    "huis": "boer2"
   },
   {
-   "x": 32,
-   "y": 29,
+   "x": 48,
+   "y": 23,
    "wie": "boer3",
    "straal": 3,
    "huis": "boer3"
   },
   {
    "x": 13,
-   "y": 29,
+   "y": 32,
    "wie": "boer4",
    "straal": 3,
    "huis": "boer4"
   },
   {
-   "x": 23,
-   "y": 38,
+   "x": 20,
+   "y": 44,
    "wie": "boer5",
    "straal": 3,
    "huis": "boer5"
@@ -56,62 +56,62 @@
   {
    "gebouw": "boerderij",
    "x": 14,
-   "y": 9,
+   "y": 11,
    "b": 7,
-   "h": 5,
+   "h": 9,
    "huis": "boer1"
   },
   {
    "gebouw": "boerderij",
-   "x": 30,
-   "y": 9,
-   "b": 5,
-   "h": 7,
+   "x": 34,
+   "y": 8,
+   "b": 9,
+   "h": 8,
    "huis": "boer2"
   },
   {
    "gebouw": "boerderij",
-   "x": 30,
-   "y": 22,
-   "b": 5,
-   "h": 7,
+   "x": 45,
+   "y": 14,
+   "b": 6,
+   "h": 9,
    "huis": "boer3"
   },
   {
    "gebouw": "boerderij",
-   "x": 11,
-   "y": 22,
-   "b": 5,
-   "h": 7,
+   "x": 10,
+   "y": 24,
+   "b": 6,
+   "h": 8,
    "huis": "boer4"
   },
   {
    "gebouw": "boerderij",
-   "x": 20,
-   "y": 30,
+   "x": 17,
+   "y": 35,
    "b": 6,
-   "h": 8,
+   "h": 9,
    "huis": "boer5"
   },
   {
    "gebouw": "huis",
-   "x": 21,
-   "y": 21,
+   "x": 26,
+   "y": 15,
    "b": 6,
    "h": 8,
    "huis": "schout"
   },
   {
    "gebouw": "schaapskooi",
-   "x": 27,
-   "y": 31,
+   "x": 26,
+   "y": 37,
    "b": 5,
    "h": 7
   },
   {
    "akker": "akker1",
    "x": 36,
-   "y": 22,
+   "y": 34,
    "b": 2,
    "h": 14,
    "huis": "boer1"
@@ -119,7 +119,7 @@
   {
    "akker": "akker2",
    "x": 38,
-   "y": 22,
+   "y": 34,
    "b": 2,
    "h": 14,
    "huis": "boer2"
@@ -127,7 +127,7 @@
   {
    "akker": "akker3",
    "x": 40,
-   "y": 22,
+   "y": 34,
    "b": 3,
    "h": 14,
    "huis": "boer3"
@@ -135,7 +135,7 @@
   {
    "akker": "akker4",
    "x": 43,
-   "y": 22,
+   "y": 34,
    "b": 2,
    "h": 14,
    "huis": "boer4"
@@ -143,7 +143,7 @@
   {
    "akker": "akker5",
    "x": 45,
-   "y": 22,
+   "y": 34,
    "b": 2,
    "h": 14,
    "huis": "boer5"
@@ -151,7 +151,7 @@
   {
    "akker": "akker6",
    "x": 36,
-   "y": 37,
+   "y": 49,
    "b": 5,
    "h": 6,
    "huis": "boer1",
@@ -160,7 +160,7 @@
   {
    "akker": "akker7",
    "x": 42,
-   "y": 37,
+   "y": 49,
    "b": 5,
    "h": 5,
    "huis": "boer3"
@@ -168,13 +168,13 @@
   {
    "meent": "heide",
    "x": 9,
-   "y": 39,
+   "y": 45,
    "b": 23,
    "h": 8
   },
   {
-   "x": 49,
-   "y": 19,
+   "x": 59,
+   "y": 32,
    "overgang": "wereld",
    "tekst": "De weg de wereld in"
   }
