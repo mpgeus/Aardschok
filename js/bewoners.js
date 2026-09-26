@@ -83,8 +83,9 @@
   // geloot uit deze. Zo blijven de twee werkers van de boerderij (T.GEBOUWEN.boerderij.handen), en
   // is er plaats voor de gewone huizen om het plein (Marcel koos het op 26 sep, vraag 31: dezelfde 25
   // mensen, niet allemaal op een boerderij; tot dan woonde er een gezin van vier). Een knaap is altijd
-  // een zoon: hij neemt het werk dat over is, zoals de schapen hoeden (Marcel koos op 26 sep: de
-  // herder is een boerenzoon).
+  // een zoon: hij neemt het werk dat over is, en het liefst de schapen (`liefst` bij de schaapskooi in
+  // T.GEBOUWEN). Wie de schapen hoedt, is wie het best past, zoals bij elk werk (Marcel, 26 sep: de
+  // herder hoeft geen boerenzoon te zijn).
   const BOERENGEZINNEN = [
     [['zoon', 'jong', 'man']],
     [['dochter', 'kind', 'vrouw']],
@@ -101,9 +102,6 @@
     grijsaard: { hoofd: 'oud', partner: false, anderen: [['zoon', 'volwassen', 'man'], ['schoondochter', 'volwassen', 'vrouw']] },
     nieuwkomer: { anderen: [['dochter', 'kleuter', 'vrouw']] },
   };
-  // Zoveel knapen wonen er ten minste op de boerderijen samen: de weduwe heeft een hand van de buren
-  // nodig, en de schaapskooi een herder.
-  const KNAPEN_BIJ_BEGIN = 2;
   // Het gezin van de schout: zijn vrouw en drie kinderen (Marcel, 26 sep, vraag 27).
   const SCHOUTSGEZIN = [['vrouw', 'volwassen', 'vrouw'], ['zoon', 'kind', 'man'], ['dochter', 'kind', 'vrouw'], ['zoon', 'kleuter', 'man']];
   // Wie er bij het begin in een gewoon huis woont (kaarten/<naam>.betekenis.json, "bewoners" op het
@@ -619,7 +617,6 @@
     // komen: wie onderweg is hierheen, per gezin; vertrekken: de poppetjes van wie wegtrekt.
     S.bewoners = { wereld: w, mensen: [], volgende: 1, gezinnen: 1, zaad, worpen: 0, komen: [], vertrekken: [] };
     const r = worp(S);
-    const boerderijen = [];
     for (const g of S.gebouwen) {
       if (!g.klaar || !(T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].woonruimte > 0)) continue;
       if (g.huis === 'schout' && S.schout) {
@@ -628,26 +625,7 @@
         continue;
       }
       const boer = g.huis && w.wezens.find((e) => e.wie === g.huis && !e.dood);
-      if (boer) boerderijen.push(gezinVanBoer(S, g, boer, r));
-    }
-    // Genoeg knapen voor het werk dat over is: wie te weinig heeft, krijgt in een gezin zonder vast
-    // karakter en zonder knaap een zoon van twaalf in plaats van een kleiner kind, en als dat niet
-    // genoeg is, in plaats van een oude vader of moeder. Zo is de herder altijd een boerenzoon, en
-    // blijft een boerderij drie. Eerst op de boerderijen die het dichtst bij de schaapskooi liggen:
-    // anders liep de herder in het grote gehucht van 26 sep soms elke dag de hele kaart over.
-    let knapen = S.bewoners.mensen.filter((p) => p.leeftijd === 'jong' && p.hoofd && p.hoofd.wie).length;
-    const kooi = S.gebouwen.find((g) => g.klaar && g.soort === 'schaapskooi');
-    const naarKooi = (leden) => (kooi ? T.afstand(T.deurVan(w, leden[0].huis), T.deurVan(w, kooi)) : 0);
-    const nietVast = boerderijen.filter((leden) => !GEZIN_VAN_KARAKTER[karakterVan(leden[0].wezen)]).sort((a, b) => naarKooi(a) - naarKooi(b));
-    const wordtKnaap = [(p) => p.leeftijd === 'kind' || p.leeftijd === 'kleuter', (p) => p.leeftijd === 'oud' && p.hoofd];
-    for (const past of wordtKnaap) {
-      for (const leden of nietVast) {
-        if (knapen >= KNAPEN_BIJ_BEGIN || leden.some((p) => p.leeftijd === 'jong')) continue;
-        const wie = leden.find(past);
-        if (!wie) continue;
-        Object.assign(wie, { band: 'zoon', leeftijd: 'jong', geslacht: 'man', naam: kiesNaam(S, 'man', r) });
-        knapen++;
-      }
+      if (boer) gezinVanBoer(S, g, boer, r);
     }
     // De gewone huizen, zoals de kaart zegt: eerst een oud stel, dan een jong gezin van wie er nog
     // over is. Een huis zonder "bewoners" blijft leeg, voor wie later komt.

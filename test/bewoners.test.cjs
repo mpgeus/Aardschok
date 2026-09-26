@@ -189,7 +189,9 @@ test('het gezin past bij het karakter: de weduwe heeft drie kleine kinderen, de 
 // Wie werkt
 // ---------------------------------------------------------------------------------------------
 
-test('wie werkt: elke hand is een mens, de boer op zijn eigen land, en de herder is een boerenzoon', () => {
+// De herder is wie het best past, zoals bij elk werk (Marcel, 26 sep: hij hoeft geen boerenzoon te
+// zijn): het liefst een knaap (`liefst` bij de schaapskooi), anders een volwassene zonder werk.
+test('wie werkt: elke hand is een mens, de boer op zijn eigen land, en de herder is wie het best past', () => {
   for (let ronde = 0; ronde < 8; ronde++) {
     const S = gehucht();
     const handen = S.gebouwen.reduce((n, g) => n + (g.handen || 0), 0);
@@ -199,7 +201,9 @@ test('wie werkt: elke hand is een mens, de boer op zijn eigen land, en de herder
     for (const g of S.gebouwen) assert.equal(werkers.filter((p) => p.werk === g).length, g.handen || 0, `${g.soort} ${g.huis}`);
     for (const p of mensen(S).filter((x) => x.wie)) assert.equal(p.werk, p.huis, `${p.wie} werkt op zijn eigen boerderij`);
     const herder = werkers.find((p) => p.werk.soort === 'schaapskooi');
-    assert.ok(herder.leeftijd === 'jong' && herder.band === 'zoon' && herder.hoofd.wie, `de herder is een boerenzoon (${herder.naam})`);
+    const knaap = mensen(S).some((p) => p.leeftijd === 'jong' && !vanSchout(p));
+    if (knaap) assert.equal(herder.leeftijd, 'jong', `is er een knaap, dan hoedt een knaap (${herder.naam})`);
+    else assert.equal(herder.leeftijd, 'volwassen', `anders een volwassene (${herder.naam})`);
     assert.ok(!werkers.some((p) => p.leeftijd === 'kleuter'), 'geen kleuter');
     assert.ok(!werkers.some(vanSchout), 'het gezin van de schout werkt niet voor het dorp zolang er anderen zijn');
   }
@@ -388,9 +392,9 @@ test('in het gehucht is iedereen \'s nachts binnen, overdag waar hij hoort, en \
   const verkeerd = nieuwe(S).filter((p) => !binnenStraal(p));
   assert.ok(verkeerd.length <= 1, `om elf uur is (bijna) iedereen waar hij hoort; niet: ${verkeerd.map((p) => p.naam).join(', ')}`);
   loopTot(S, bijUur(GROEI, 21.5));
-  // De herder mag dan nog onderweg zijn: in het gehucht van 26 sep ligt de heide ver van de
-  // boerderijen aan de oostkant, en is hij de zoon van Gerrit, dan loopt hij bijna de hele kaart over.
-  // Om half twaalf is ook hij binnen (hieronder).
+  // De herder mag dan nog onderweg zijn: in het gehucht van 26 sep ligt de heide ver van het plein en
+  // van de boerderijen aan de oostkant, en woont hij daar, dan loopt hij bijna de hele kaart over. Om
+  // half twaalf is ook hij binnen (hieronder).
   const nietThuis = nieuwe(S).filter((p) => !binnenStraal(p) && !(p.werk && p.werk.soort === 'schaapskooi'));
   assert.ok(nietThuis.length <= 1, `'s avonds is (bijna) iedereen op zijn erf; niet: ${nietThuis.map((p) => p.naam).join(', ')}`);
   loopTot(S, bijUur(GROEI, 23.5));
@@ -521,8 +525,11 @@ test('bij de muis staat wie het is', () => {
   const S = gehucht();
   const herder = nieuwe(S).find((p) => p.werk && p.werk.soort === 'schaapskooi');
   const tekst = T.overBewonerTekst(S, herder.wezen);
-  assert.match(tekst, new RegExp(`^${herder.naam}, zoon van ${T.naamVanMens(herder.hoofd.wie)} · herder$`));
-  const vrouw = nieuwe(S).find((p) => p.hoofd.schout && p.band === 'vrouw');
+  assert.match(tekst, new RegExp(`^${herder.naam}(, .+)? · herder(in)?$`), 'de naam, en wat hij of zij doet');
+  // Wie bij een boer hoort, heet naar de boer: "Geert, zoon van Klaas".
+  const bijBoer = nieuwe(S).find((p) => p.hoofd && p.hoofd.wie);
+  assert.match(T.overBewonerTekst(S, bijBoer.wezen), new RegExp(`^${bijBoer.naam}, ${bijBoer.band} van ${T.naamVanMens(bijBoer.hoofd.wie)}`));
+  const vrouw = nieuwe(S).find((p) => p.hoofd && p.hoofd.schout && p.band === 'vrouw');
   assert.equal(T.overBewonerTekst(S, vrouw.wezen), `${vrouw.naam}, vrouw van de schout`);
   const h = T.handelingVerkennen(S, { wezen: herder.wezen });
   assert.equal(h.tekst, tekst);

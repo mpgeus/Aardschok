@@ -765,9 +765,18 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
     op een boerderij de boer, zijn vrouw en één kind of ouder (de weduwe houdt haar drie kinderen, zoals
     haar karakter zegt); in het huis een jong gezin van dagloners, die werken waar de schout een
     werkplaats neerzet; in een hut een oud stel; en de andere hut leeg, voor het eerste gezin dat komt.
-    De herder blijft een boerenzoon (vraag 27). Samen 25, met de vijf van de schout. Een gevolg: de
+    Samen 25, met de vijf van de schout. Een gevolg: de
     huizen hebben samen 36 plaatsen, dus er is vanaf het begin ruimte om te groeien, en met genoeg graan
     komt er op dag 20 al een gezin bij. Zo gelaten; het graan wordt bijgesteld als Marcel gespeeld heeft.
+  - **De schapen hoedt wie het best past** (Marcel, 26 sep, zesde sessie: "Moet de herder perse een
+    boerenzoon zijn?"). Dat hoefde niet: het was een afleiding van Claude uit vraag 27 (geen knecht bij
+    de schout, dus een boerenzoon), die daarna als Marcels keuze in de code en de werklijst stond.
+    Claude stelde drie dingen voor: wie het best past, een dorpsherder (het jonge gezin in de hut bij de
+    heide), of zo laten; Marcel koos het eerste. De kooi krijgt dus de vrije hand die het best past,
+    zoals elk ander werk: het liefst een knaap (`liefst` in `T.GEBOUWEN`), anders wie het dichtst
+    bijwoont. Over 300 spellen: de helft van de keren een boerenzoon, anders de man of de vrouw van het
+    jonge gezin, of een schoondochter. De herder loopt daardoor vaker ver, meestal tweeënhalf uur naar
+    de heide; voor het spel maakt dat niets uit.
 - **Nog open:** zijn grillen en de herendienst (punt 8); de koets (tekenwerk).
 
 **Hoe het zo kwam:**
@@ -1656,9 +1665,9 @@ punt 4 en 5; `js/bewoners.js`, `T.dagAnker` in `js/dag.js`, toetsen in `test/bew
   huizen om het plein (sinds de vierde versie van het gehucht, vraag 31) woont een oud stel in een hut
   en een jong gezin van dagloners in het huis, zo groot als er nog over is (drie, of twee als de weduwe
   meedoet); de andere hut is leeg. Samen 25 (`beginBevolking` in het betekenisbestand), terwijl er
-  plaats is voor 36. Zijn er te weinig knapen voor het werk, dan wordt op een boerderij een kind of
-  een oude ouder een knaap, zodat de herder altijd een boerenzoon is. Elk draagt het vel van zijn
-  leeftijd; er is niets nieuws getekend.
+  plaats is voor 36. Wie de schapen hoedt, is wie het best past (hieronder, bij "Wie werkt"; Marcel,
+  26 sep: de herder hoeft geen boerenzoon te zijn). Elk draagt het vel van zijn leeftijd; er is niets
+  nieuws getekend.
 - **Het getal in de balk blijft de waarheid,** en verandert op één manier (`T.wijzigBevolking`). Komt
   er een gezin bij, dan krijgt het een huis met plaats en poppetjes bij de deur. Wie in de winter
   sterft, is eerst een oude, dan een kleine; wie wegtrekt, is eerst een gezin dat later kwam, en dan
@@ -1680,9 +1689,8 @@ punt 4 en 5; `js/bewoners.js`, `T.dagAnker` in `js/dag.js`, toetsen in `test/bew
   af. Wie vandaag pas aankomt, werkt nog niet. Bij de muis zegt een werkplaats hoeveel uur er gewerkt
   is en hoeveel de handen onderweg waren. In het gehucht van het begin verandert het niets, want wie
   werkt, werkt op een boerderij, en die maakt zelf niets (de herder loopt naar de heide een half uur
-  tot tweeënhalf uur, naar gelang van wiens zoon hij is, maar de schaapskooi maakt niets per dag).
-  Meestal is hij de zoon van Wouter, wiens boerderij het dichtst bij de kooi ligt: de knapen komen
-  eerst op de boerderijen dicht bij de kooi. Het telt zodra je een werkplaats bouwt. In de
+  tot drie uur, meestal tweeënhalf, naar gelang van waar hij woont, maar de schaapskooi maakt niets
+  per dag). Het telt zodra je een werkplaats bouwt. In de
   spelregels: "Werk telt in uren", de weg telt (standaard) of een hand werkt een hele dag.
 - **Wie werkt, heeft een werkplek en gaat erheen.** Een gebouw krijgt zijn handen zoals voorheen
   (`T.verdeelHanden`), en nu zijn dat mensen (`T.wijsWerkToe`): eerst werkt een gezin op zijn eigen
@@ -1774,7 +1782,9 @@ Drie dingen die Claude zag:
 **Marcel koos (26 sep), vraag 27: wie woont er bij de schout?** Zijn huis telt vijf mensen. Claude
 stelde het personeel van zijn voorganger voor (een knecht en een meid, en de eerste verdachte voor
 punt 10 in je eigen huis); Marcel koos **zijn eigen gezin: een vrouw en drie kinderen.** Wat de heer
-de schout aandoet, raakt hen ook. De herder is daarom een boerenzoon.
+de schout aandoet, raakt hen ook. Claude leidde daar toen uit af dat de herder een boerenzoon moest
+zijn; dat stond daarna als Marcels keuze in de code. Sinds 26 sep (zesde sessie) hoedt wie het best
+past (hierboven, bij het plein).
 
 ### Zaken waar de mensen zelf heen gaan
 

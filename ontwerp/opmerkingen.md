@@ -77,8 +77,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     half in het water ligt, is vast. Je kon dus niet over de beek, en de strook erachter was niet te
     bereiken (de keuring in `wereld.html` telde 357 tegels). Nu ligt de brug over het hele water; wat
     overblijft (46 tegels), is gras achter de bomen van het bos.
-  - De herder loopt naar de heide een half uur (de zoon van Wouter, meestal) tot tweeënhalf uur (de zoon
-    van Gerrit, in één op de tien spellen). Dan is hij om half tien 's avonds nog onderweg.
+  - De herder is wie het best past (Marcel, 26 sep), en loopt daardoor vaak ver: meestal tweeënhalf uur
+    naar de heide, soms drie. Dan is hij om half tien 's avonds nog onderweg. Voor het spel maakt dat
+    niets uit; wordt het ooit wel belangrijk, dan kan een dorpsherder bij de heide wonen (het tweede
+    voorstel van Claude, niet gekozen).
   - Alle huizen staan nog met hun voorkant naar het zuiden; gedraaid en gespiegeld komt met ronde 4b.
 - **De winter is hard:** zonder hout gaat het gehucht van 25 naar 2 mensen.
   `T.BEHOEFTEN_INSTELLINGEN` samen met Marcel bijstellen als hij speelt.

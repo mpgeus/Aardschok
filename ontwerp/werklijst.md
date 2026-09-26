@@ -51,7 +51,8 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   van buiten naar de markt komt, en dat de kaart meegroeit, zonder grens aan de stad.
 - In de zesde sessie: **punt 1 is af, het gehucht rond het plein** (de vierde versie van de kaart,
   zoals de goedgekeurde schets). Wie er in de gewone huizen woont, koos Marcel: een jong gezin in het
-  huis, een oud stel in een hut, en de andere hut leeg; de herder blijft een boerenzoon. Op het plein
+  huis, een oud stel in een hut, en de andere hut leeg; de schapen hoedt wie het best past (de herder
+  hoeft geen boerenzoon te zijn; dat was een afleiding van Claude, geen keuze van Marcel). Op het plein
   wordt niet gebouwd, en de kinderen spelen er verspreid over. Marcel kreeg schermafdrukken (de deur van
   de schout, het midden van het plein, het hele gehucht, de brug).
 
@@ -144,8 +145,9 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     poppetjes, en dan het zichtveld (vraag 23), waarin "wie vlak langs loopt, kan iets vinden" opgaat.
     **Beantwoord (Marcel, 26 sep): de poppetjes.**
 27. ~~Wie woont er bij de schout?~~ Zijn huis telt vijf mensen. Marcel koos zijn eigen gezin: een vrouw
-    en drie kinderen (26 sep). Wat de heer de schout aandoet, raakt hen ook. De herder is een
-    boerenzoon.
+    en drie kinderen (26 sep). Wat de heer de schout aandoet, raakt hen ook. Claude leidde daaruit af
+    dat de herder een boerenzoon moest zijn; dat stond daarna als Marcels keuze in de code. Sinds 26 sep
+    (zesde sessie) hoedt wie het best past (Marcel: "Moet de herder perse een boerenzoon zijn?").
 28. **Een nieuw gehucht: een plein, meer ruimte en meer afwisseling. Wanneer?** Marcel, 26 sep, na de
     eerste beelden van de poppetjes: "We hebben meer afwisseling nodig in de huizen en hutten. Ze staan
     ook te dicht op elkaar al begrijp ik dat dit een test is." Het plein koos hij al op 25 sep, omdat
@@ -192,7 +194,8 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 31. ~~Het plein als hart: de derde schets~~ (26 sep; dezelfde pagina). **Beantwoord (Marcel, 26 sep):
     "Indeling klopt"; wie er woont: "Wordt C"; de doorkijk: "Zoals jij voorstelt."** Wie precies in de
     gewone huizen woont, koos Marcel in de zesde sessie: een jong gezin in het huis, een oud stel in een
-    hut, de andere hut leeg, en de herder blijft een boerenzoon (`spel.md`, bij het plein). Op de tweede schets zei Marcel:
+    hut, de andere hut leeg; en de schapen hoedt wie het best past, want de herder hoeft geen boerenzoon te
+    zijn (`spel.md`, bij het plein). Op de tweede schets zei Marcel:
     "Naast boerderijen zijn er ook 'gewone' huizen." Nu staan er twee hutten en een huis om het plein,
     en de boerderijen verder naar buiten, bij hun velden. Drie vragen. (1) Is dit het? (2) Wie woont
     er in de gewone huizen? Het spel telt de mensen bij het begin uit de woonruimte, dus: A, bewoond
@@ -493,8 +496,8 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   plein wordt niet gebouwd (`T.opHetPlein` in `js/wereld.js`, `T.waaromPastHetNiet` in
   `js/gebouwen.js`: de muis en het bouwmenu zeggen het). Het aantal mensen bij het begin is een eigen
   getal (`beginBevolking`: 25), en Marcel koos wie er in de gewone huizen woont (een jong gezin, een oud
-  stel, een hut leeg); op een boerderij wonen er nu drie, en de knapen eerst dicht bij de kooi, zodat
-  de herder meestal de zoon van Wouter is. De kinderen spelen elk op een eigen plek op het plein
+  stel, een hut leeg); op een boerderij wonen er nu drie, en de schapen hoedt wie het best past (Marcel
+  vroeg: "Moet de herder perse een boerenzoon zijn?"). De kinderen spelen elk op een eigen plek op het plein
   (`T.plekOpHetPlein`). Onderweg hersteld: de brug over de beek was te kort, zodat je er niet overheen
   kon. Wat opviel (het nieuwe huis kost 2 goud bij de heer, en er is plaats om meteen te groeien) staat
   in `opmerkingen.md`. `npm test`: 487/487.
@@ -525,7 +528,7 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 - 26 sep 2026 — **Punt 3b, stap 2, stuk 1: mensen worden poppetjes.** Iedereen die in de balk telt,
   is een poppetje met een naam, een leeftijd, een huis en een gezin dat bij het karakter van de boer
   past; bij de schout zijn vrouw en drie kinderen (vraag 27). De handen van een gebouw zijn mensen, en
-  wie werk heeft, houdt het; de herder is een boerenzoon. Iedereen volgt het ritme van de dag (de put,
+  wie werk heeft, houdt het; de herder was toen een boerenzoon. Iedereen volgt het ritme van de dag (de put,
   het werk, de brink, het erf, binnen). Het getal in de balk verandert op één manier
   (`T.wijzigBevolking`). Onderweg hersteld: de tekenvolgorde (wie achter een huis liep, stond soms op
   het dak) en twee mensen die in een smal steegje voor altijd op elkaar wachtten (`js/bewoners.js`,
