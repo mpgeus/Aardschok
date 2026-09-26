@@ -1834,6 +1834,11 @@ past (hierboven, bij het plein).
   3. vakwerk op een voet van veldsteen, met een stenen schoorsteen: half steen (dorp; 5);
   4. een tweede laag die overkraagt, spanen of leien op het dak (dorp; 7);
   5. baksteen onder pannen (stad; 8). Pas in een stad is het grotendeels steen.
+- **In het spel eerst stap 1 en 2** (Marcel, 26 sep, achtste sessie: "1 en 2 in spel, rest op plaat"):
+  ronde 4b van de huizenbouwer zet de hutten en huizen van het gehucht in het spel; de hele ladder komt
+  voor twee huizen op een plaat, en in het spel bij punt 5 van de werklijst. Eén uitzondering: **de
+  schout woont al in stap 3,** vakwerk op een stenen voet ("Vakwerk op stenen voet"), het enige huis in
+  het gehucht dat half steen is (`beeld.md`, "Ronde 4b: de huizen in het spel").
 - Elke stap kost materiaal (planken, keien, bakstenen, pannen) en goud (Marcel, 26 sep: "anders is
   het te makkelijk"), en dus ook het werk van wie het materiaal maakt: de timmerman, de keienraper,
   de steenbakkerij. Wat het oplevert: tevredenere bewoners, en meer plaats per huis.

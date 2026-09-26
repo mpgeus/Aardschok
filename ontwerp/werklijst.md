@@ -59,9 +59,9 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   het plein staat, en staan het kijkvenster en het raster als keuze in de spelregels. De doorkijk staat
   in een eigen bestand, `js/doorkijk.js`: het eerste stuk dat uit `tekenen.js` ging (vraag 25, D).
 
-**Loopt nu:** niets. **Het volgende: ronde 4b van de huizenbouwer** (punt 1 hieronder), dan de herberg.
-De doorkijk is af (zevende sessie, zie onder Af): welke manier de standaard wordt, kiest Marcel in het
-spel (zie "Spelen, en zeggen hoe het voelt").
+**Loopt nu (achtste sessie): ronde 4b van de huizenbouwer** (punt 1 hieronder), in drie stukken; dan
+de herberg. De doorkijk is af (zevende sessie, zie onder Af): welke manier de standaard wordt, kiest
+Marcel in het spel (zie "Spelen, en zeggen hoe het voelt").
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -70,6 +70,18 @@ voorstel van Claude, en daar gaat vraag 26 over.
    materiaal en elke vorm, niet waterpas (`beeld.md`, "De huizenbouwer op ronde vormen"), en ook een
    kwartslag gedraaid of gespiegeld, zodat een boerderij met de zijkant naar het plein kan staan. Zwaar
    tekenwerk met agents: vraag vooraf het verbruik op (`CLAUDE.md`, "Zuinig werken met agents").
+   **Het plan, met Marcels keuzes (26 sep, achtste sessie; `beeld.md`, "Ronde 4b: de huizen in het
+   spel"),** in drie stukken, met na elk een plaat:
+   - **Stuk 1, de weg erheen:** de huizen van de bouwer naar een eigen vel (`tegels/huizen`), met voet,
+     anker, een eigen deur per tekening (het spel nam altijd het midden van de zuidkant) en bouwfasen,
+     gerenderd in vier draden.
+   - **Stuk 2, het gehucht:** echte hutten (vlechtwerk onder riet) en huizen (vakwerk onder riet) in
+     het bouwmenu, de vijf boerderijen elk een eigen, niet allemaal dezelfde kant op, en de schout in
+     vakwerk op een stenen voet (Marcel: "Vakwerk op stenen voet"; het enige huis dat half steen is).
+     De werkplaatsen houden voorlopig hun oude tekening.
+   - **Stuk 3, de rest van de ladder:** in het spel alleen stap 1 en 2; de hele ladder (half steen, twee
+     lagen, baksteen onder pannen) komt voor twee huizen op een plaat, zodat Marcel ziet waar het heen
+     gaat (Marcel: "1 en 2 in spel, rest op plaat"). In het spel komt hij bij punt 5, Bouwen.
 2. **Dan: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel. Begin met een kort
    plan voor Marcel (`spel.md`, "Zaken waar de mensen zelf heen gaan").
 3. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker

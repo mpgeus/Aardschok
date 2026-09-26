@@ -126,6 +126,32 @@ verschillend. Wat de nieuwe bouwer moet kunnen, in Marcels woorden en daarna uit
   goede anker (`test/tegelanker.test.cjs` moet slagen), en nieuwe huizen komen **achteraan** in de
   volgorde (`ontwerp/kaarten.md`, "Een tegelnummer verandert nooit").
 
+### Ronde 4b: de huizen in het spel (Marcel, 26 sep 2026)
+
+**Marcels keuzes** (achtste sessie, op het plan van Claude):
+- **In het spel stap 1 en 2 van de ladder, de rest op een plaat** ("1 en 2 in spel, rest op plaat"):
+  echte hutten van vlechtwerk onder riet en huizen van vakwerk onder riet. De hele ladder (half steen,
+  twee lagen, baksteen onder pannen; `spel.md`, "Beter bouwen") komt voor twee huizen op een plaat, zodat
+  je ziet waar het heen gaat. In het spel komt hij bij punt 5 van de werklijst, Bouwen, want in het
+  gehucht is geen steen.
+- **De schout woont in vakwerk op een stenen voet** ("Vakwerk op stenen voet"): het enige huis in het
+  gehucht dat half steen is (stap 3 van de ladder). Zo zie je dat hij de schout is, en de inner ziet
+  het ook. Tot nu toe stond hij in een helemaal stenen huis uit de oude bouwer.
+
+**Wat Claude vond** (bij het plan, 26 sep):
+- Er stond nog geen enkel huis van de huizenbouwer in het spel: alle gebouwen kwamen uit de oude
+  bouwer van dozen (`dorp.cjs`, `dorp2.cjs`, via `naar-tiled.cjs`).
+- **Draaien is bijna gratis.** De bouwer bouwt altijd de kant die de camera ziet (de muren aan de +x- en
+  de +y-kant; wat je niet ziet, krijgt geen deur, ramen of vakwerk). Hij kan al spiegelen (`nok: 'y'`,
+  in de diagonaal, zodat het licht van linksboven blijft komen) en een vleugel naar voren of naar
+  achteren laten steken: samen alle acht standen van een huis. Wat ontbrak: een deur aan de kant die je
+  níet ziet. Dan staat een huis met zijn achterkant naar de camera, en met zijn deur naar het plein.
+- **Het spel wist niet waar een deur zit:** `T.deurVan` nam altijd het midden van de zuidkant. Bij de
+  nieuwe huizen zit de deur links- of rechtsvoor, of achter, dus krijgt elke tekening haar eigen deur,
+  en die komt uit de bouwer zelf.
+- **De bouwfasen** (een huis dat in vijf stappen oprijst, `bouwfasen.cjs`) werkten alleen voor de oude
+  bouwer. Zonder fasen zou een nieuw huis alleen invloeien, een stap terug; ze moeten dus mee.
+
 ## Ontwerpcanvas
 
 https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:
