@@ -9,16 +9,24 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
-- **De poppetjes, wat nog ruw is** (26 sep, na stuk 1 van stap 2; `spel.md`, "Mensen worden
-  poppetjes"):
+- **De poppetjes, wat nog ruw is** (26 sep, na stap 2; `spel.md`, "Mensen worden poppetjes"):
   - Een knaap of meid draagt het vel van een jongen of meisje, en een oude vrouw dat van de boerin
     met het karakter "de oudste". Eigen vellen (een knaap, een oude vrouw, een kind in werkkleren)
     zijn tekenwerk.
   - Iedereen werkt bij de deur van zijn werkplaats. Een eigen plek per soort werk (de houthakker bij
     de bomen, de visser aan het water, de tweede hand bij de koeien) komt later; alleen de herder
     gaat al naar de heide.
-  - Wie erbij komt, verschijnt bij de deur van zijn huis, en wie sterft of wegtrekt, is meteen weg,
-    zonder bericht met zijn naam. Dat is stuk 2: komen en gaan zie je.
+  - Een nieuw gezin doet er ruim twee uur over van de rand van de kaart naar zijn huis (zo'n 26
+    tegels): tussen de stappen staat het even stil, zoals bij het dwalen, en op de smalle weg wachten
+    ze op elkaar. Doelgericht lopen, zonder pauzes, zou vlotter ogen.
+  - Een nieuw gezin telt in de balk vanaf middernacht mee, maar komt pas om negen uur de kaart op.
+    Tot dan ziet de balk er meer dan je ziet lopen.
+  - Wie sterft, is meteen weg (meestal 's nachts, binnen). Een begrafenis of een graf bij de kapel
+    ontbreekt nog.
+  - Een nieuw gezin heeft nog geen karakter of verhaal, zoals de boeren. Een nieuwkomer met een
+    geheim zou een haak zijn voor het avontuur (idee van Claude, niet besproken).
+  - De herder loopt bijna twee uur naar de heide. Dat kost nu niets, want de schaapskooi maakt niets
+    per dag; gaat hij ooit per dag iets maken, dan telt die weg.
   - Een bewoner heeft nog geen gesprek (klikken doet niets), en zijn karakter speelt nog niet mee:
     alleen de boeren hebben er een. Dat komt als de getuigen komen (het zichtveld, vraag 23).
   - Kinderen tellen als hand als er geen volwassene of knaap meer vrij is, net als vroeger iedereen.

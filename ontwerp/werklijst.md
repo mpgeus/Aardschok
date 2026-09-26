@@ -17,9 +17,9 @@ en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het 
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 477/477.
+`npm test`: 482/482.
 
-**Waar het werk staat:** alles staat in `main`, ook stuk 1 van de poppetjes (Marcel, 26 sep: "Ja, in
+**Waar het werk staat:** alles staat in `main`, ook stuk 2 van de poppetjes (Marcel, 26 sep: "Ja, in
 main"). Begin de volgende sessie dus gewoon vanaf `main`; hoe een eigen branch en `main` samengaan,
 staat in `CLAUDE.md`, onder Git.
 
@@ -36,34 +36,28 @@ staat in `CLAUDE.md`, onder Git.
   aan. De afspraken staan in `CLAUDE.md`, "Afspraken in de code".
 - De mensen worden poppetjes (3b, stap 2): Marcel zei "Ja, zo" tegen het plan, koos voor de schout
   een eigen gezin (vraag 27), en stuk 1 is gebouwd.
+- Daarna, in de vierde sessie: wat Marcel op de eerste beelden zag, is hersteld; er kwam afwisseling
+  in wat je bouwt en een nieuw gehucht rond een plein (vraag 28); en stuk 2 van de poppetjes is af.
+  Daarmee is stap 2 van 3b klaar.
 
-**Loopt nu:** mensen worden poppetjes (3b, stap 2). Stuk 1 is af (26 sep): iedereen die in de balk
-telt, is een poppetje met een naam, een huis en een gezin, wie werkt loopt naar zijn werk, en
-iedereen volgt het ritme van de dag (`spel.md`, "Mensen worden poppetjes", Zo werkt het nu). Marcel
-kreeg schermafdrukken, en zag drie dingen: mensen verdwenen in één klap bij de deur, er leken mensen
-op de daken te staan (dat was het kijkgat van de schout), en de huizen staan te dicht op elkaar en
-lijken te veel op elkaar. De eerste twee zijn hersteld (26 sep). Voor het derde koos Marcel (vraag
-28): eerst afwisseling in wat je bouwt (A) en een nieuw gehucht rond het plein (B); **allebei af (26
-sep)**. Nu stuk 2 van de poppetjes (komen en gaan zie je, en werk telt in uren). `npm test`: 477/477.
+**Loopt nu:** niets. Stap 2 van 3b, mensen worden poppetjes, is af (26 sep): iedereen die in de balk
+telt, is een poppetje met een naam, een huis en een gezin; wie werkt, loopt naar zijn werk; iedereen
+volgt het ritme van de dag; een nieuw gezin komt over de weg binnen, wie wegtrekt loopt de weg af, en
+wie sterft heeft een naam; en werk telt in uren, met de weg erheen eraf (`spel.md`, "Mensen worden
+poppetjes", Zo werkt het nu). Onderweg is hersteld wat Marcel op de eerste beelden zag (mensen
+verdwenen in één klap bij de deur, en leken op de daken te staan), en kwamen er afwisseling in wat je
+bouwt en een nieuw gehucht rond het plein (vraag 28). **Het volgende is de herberg en de kleine zaken
+(3b, stap 3):** begin met een kort plan voor Marcel, zoals bij stap 2. `npm test`: 482/482.
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
 
-1. **Nu: mensen worden poppetjes, stuk 2** (3b, stap 2; Marcel koos het op 26 sep, vraag 24). Het plan staat
-   in `spel.md`, "Mensen worden poppetjes", in vijf punten, en Marcel zei "Ja, zo". In twee stukken:
-   eerst 1 tot en met 3 (**af, 26 sep**: iedereen een poppetje met een naam en een huis, wie werkt
-   loopt naar zijn werk, en iedereen volgt het ritme van de dag; `js/bewoners.js`), dan een
-   schermafdruk voor Marcel, dan 4 en 5: **komen en gaan zie je** (een nieuw gezin komt over de weg
-   binnen, wie wegtrekt loopt de weg af, wie sterft heeft een naam) en **werk telt in uren** (een optie
-   in de spelregels, standaard aan). Voor dat laatste koos Marcel op 26 sep **de looptijd**: de regel
-   rekent de weg van de deur naar het werk uit, en de weg heen gaat van de werkuren af (`spel.md`,
-   "Stuk 2 uitgewerkt"). En hij liet noteren, voor later: de inner telt de mensen die hij ziet
-   (`spel.md`, bij de inner).
-2. **De herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel.
-3. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
+1. **Nu: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel. Begin met een kort
+   plan voor Marcel (`spel.md`, "Zaken waar de mensen zelf heen gaan").
+2. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
    steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
    uit verstoppen deel 1b op.
-4. **De kern afmaken** (punt 6 en 6a), en daarmee de vraag van het tweede proefje: is dit leuk?
+3. **De kern afmaken** (punt 6 en 6a), en daarmee de vraag van het tweede proefje: is dit leuk?
    - verstoppen deel 1b, de rest (Marcel koos het op 25 sep): de soldaten zoeken op Sint-Maarten
      altijd op 2 of 3 plekken, ook zonder argwaan, en je bepaalt de route zelf, maar soms wil de heer
      kiezen;
@@ -73,11 +67,11 @@ voorstel van Claude, en daar gaat vraag 26 over.
    - deel 3: de marskramer koopt en verkoopt vee, kaas, wol en hooi;
    - stap 3 van de inner: praten, afleiden, omkopen (ook de marskramer, het spoor van het goud) en de
      rekenboeken.
-5. **Bouwen:** ronde 4b van de huizenbouwer (3b, stap 4; Marcel: "moeten we dus uitvoeren"), en het
+4. **Bouwen:** ronde 4b van de huizenbouwer (3b, stap 4; Marcel: "moeten we dus uitvoeren"), en het
    dorp bouwt zelf, en beter (3b, stap 5): op bouwgrond die jij aanwijst, voor materiaal en goud, met
    steen per trede.
-6. **Daarna zoals onder "Daarna, in deze volgorde":** het plein, samen met straten en paden (6c), en
-   ontginnen (6b); dan deel C, verhalen en besturen (voorvallen, groepen en keuren, rechtspraak); deel
+5. **Daarna zoals onder "Daarna, in deze volgorde":** straten en paden (6c; het plein is er sinds 26
+   sep), en ontginnen (6b); dan deel C, verhalen en besturen (voorvallen, groepen en keuren, rechtspraak); deel
    D, de nacht en het verzet (de nacht, de eigen buidel, de militie, en daarbij de stal, de hoefsmid
    en de wapenmaker uit 3b); deel E, groeien naar vrijheid (de treden, stadsrechten, de opstand); en
    deel F, de afwerking en het verpakken.
@@ -421,6 +415,12 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 26 sep 2026 — **Mensen worden poppetjes, stuk 2; daarmee is stap 2 van 3b af.** Komen en gaan zie
+  je: een nieuw gezin komt overdag over de weg binnen (op dezelfde manier als een bezoeker) en loopt
+  naar zijn huis, wie wegtrekt loopt de weg af, en het bericht zegt wie het zijn, ook wie sterft ("de
+  oude Geesje, moeder van Wouter"). Werk telt in uren: Marcel koos de looptijd, dus een werkplaats maakt
+  naar de uren dat zijn mensen er echt zijn, min de weg van hun deur erheen, en zegt dat bij de muis
+  (een optie in de spelregels, standaard aan). `Spel.debug.gezin()` laat een gezin komen of gaan.
 - 26 sep 2026 — **Vraag 28: afwisseling en een nieuw gehucht.** A: een hut of huis dat je bouwt,
   krijgt een van drie of vier tekeningen, nooit twee keer achter elkaar dezelfde (`tekeningen` in
   `T.GEBOUWEN`, `T.volgendeTekening`). B: een nieuwe kaart van 60 bij 60 (`maak-gehucht.cjs`, derde
