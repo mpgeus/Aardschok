@@ -29,9 +29,10 @@ de soort 'dorpeling' kreeg, een overblijfsel van de tovenaar; nu heet hij overal
 begint, de schout loopt, en een gevecht op `?kaart=proef` werkt. Drie kleine resten en een voorstel
 (een eigen figuur voor de schout) staan in `opmerkingen.md`, "Na de namen" en de voorstellen.
 
-**Waar het werk staat.** Deze sessie werkt op `claude/werklijst-vervolg-aplhf0`, en dat gaat pas
-naar `main` als Marcel "push" zegt. Hoe een eigen branch en `main` samengaan, staat sinds 26 sep in
-`CLAUDE.md`, onder Git.
+**Waar het werk staat.** Deze sessie werkte op `claude/werklijst-vervolg-aplhf0`, en alles staat
+sinds het eind van de sessie ook in `main` (Marcel: "Push"). Begin de volgende sessie dus gewoon
+vanaf `main`. Hoe een eigen branch en `main` samengaan, staat sinds 26 sep in `CLAUDE.md`, onder
+Git.
 
 **Loopt nu:** niets.
 
