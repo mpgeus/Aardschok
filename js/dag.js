@@ -146,7 +146,9 @@
   //   - 's ochtends op zijn erf, en wie van het gezin water haalt, bij de put;
   //   - overdag, bij het werk en de schaft, bij zijn werk. Wie geen werk heeft: een kind op de brink,
   //     een oude en een kleuter bij huis (de plekken zet js/bewoners.js, per bewoner);
-  //   - 's avonds op zijn erf. De herberg komt in stap 3 van punt 3b.
+  //   - 's avonds op zijn erf. De herberg komt in stap 3 van punt 3b;
+  //   - wie net in het gehucht komt, eerst naar zijn huis, en wie wegtrekt, overdag naar de uitgang
+  //     van de kaart (js/bewoners.js, T.werkBewonersBij).
   // Een boer volgt hetzelfde, maar overdag geeft dit voor hem null: dan geldt zijn eigen anker
   // (T.wandelAnker in js/akkers.js, zijn akker in het groeiseizoen), en in de oogst maait hij
   // (T.werkOogstBij).
@@ -160,8 +162,12 @@
     if (!p && !e.werkAkkers) return null;
     const deel = T.dagdeelVan(S.kalender.dag, oogst);
     if (deel === 'nacht') return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };
+    // Wie wegtrekt, loopt overdag de weg af; wie nieuw is, loopt eerst naar zijn huis (js/bewoners.js,
+    // T.werkBewonersBij).
+    if (e.vertrekt) return { x: e.vertrekt.x, y: e.vertrekt.y, straal: 1 };
     const erf = { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
     if (!p) return deel === 'ochtend' || deel === 'avond' ? erf : null;
+    if (p.komt) return erf;
     const plek = p.plek || {};
     if (deel === 'ochtend') return (p.haaltWater && plek.put) || erf;
     if (deel === 'avond') return erf;

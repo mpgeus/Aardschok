@@ -639,12 +639,13 @@
   // Het getal in de balk veranderen: de enige manier, zoals T.wijzigVoorraad voor de voorraad. Het
   // zakt nooit onder nul. De bewoners gaan mee (T.bewonersVolgen, js/bewoners.js): een nieuw gezin
   // in een huis met plaats, of wie sterft of wegtrekt. `reden`: 'begin', 'groei', 'winter' of
-  // 'vertrek'. Geeft terug hoeveel het echt veranderde.
-  T.wijzigBevolking = function (S, verschil, reden) {
+  // 'vertrek'; `waarom` is het begin van het bericht dat zegt wie het zijn ("De winter is hard").
+  // Geeft terug hoeveel het echt veranderde.
+  T.wijzigBevolking = function (S, verschil, reden, waarom) {
     const voor = S.bevolking || 0;
     S.bevolking = Math.max(0, voor + verschil);
     const echt = S.bevolking - voor;
-    if (echt && T.bewonersVolgen) T.bewonersVolgen(S, echt, reden);
+    if (echt && T.bewonersVolgen) T.bewonersVolgen(S, echt, reden, waarom);
     return echt;
   };
 

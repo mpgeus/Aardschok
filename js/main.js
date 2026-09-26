@@ -251,6 +251,7 @@
     T.werkMarskramerBij(S); // zijn poppetje: over de weg binnen, naar de brink, en weer weg (js/handel.js)
     T.werkHeerBij(S); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)
     T.werkInnerBij(S); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
+    if (T.werkBewonersBij) T.werkBewonersBij(S); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
     T.werkAnimatiesBij(S, dt, dtWereld);
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
@@ -532,14 +533,24 @@
         const e = p.wezen;
         const a = e && T.dagAnker ? T.dagAnker(S, e) : null;
         return {
-          wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)} (boer)` : T.overBewonerTekst(S, e),
+          wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)} (boer)` : T.overBewonerTekst(S, e, p),
           leeftijd: p.leeftijd, huis: p.huis ? p.huis.huis || `${p.huis.soort} ${p.huis.x},${p.huis.y}` : '-',
           werk: p.werk ? `${p.werk.soort} ${p.werk.x},${p.werk.y}` : '-',
-          staat: e ? (e.binnen ? 'binnen' : `${e.tx},${e.ty}`) : '-',
+          staat: e ? (e.binnen ? 'binnen' : `${e.tx},${e.ty}`) : p.komt ? 'onderweg hierheen' : '-',
           hoort: a ? `${a.x},${a.y} (${a.binnen ? 'binnen' : 'straal ' + a.straal})` : '-',
         };
       });
       return zoek ? lijst.filter((r) => JSON.stringify(r).includes(zoek)) : lijst;
+    },
+    // Een nieuw gezin laten komen, zonder op een groeidag te wachten: het komt overdag over de weg
+    // (js/bewoners.js). Spel.debug.gezin(-4) laat er een wegtrekken, zoals als het dorp ontevreden is.
+    gezin(n = 4) {
+      if (!S.bewoners) return 'Er wonen hier geen bewoners.';
+      const plaats = n < 0 ? n : Math.max(0, Math.min(n, (S.woonruimte || 0) - S.bevolking));
+      if (plaats === 0) return 'Er is geen plaats: bouw eerst een hut of een huis (Spel.debug.bouw).';
+      const echt = plaats < 0 ? T.wijzigBevolking(S, plaats, 'vertrek', 'het dorp is niet tevreden genoeg') : T.wijzigBevolking(S, plaats, 'groei');
+      T.ui.toonBevolking(S);
+      return echt < 0 ? `${-echt} trekken weg.` : `${echt} komen over de weg, overdag vanaf ${T.DAG_INSTELLINGEN.bezoekUur} uur.`;
     },
     // De soldaten het dorp nu laten doorzoeken, zoals op Sint-Maarten (js/inner.js): wat ze vinden.
     zoeken() {

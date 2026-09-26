@@ -1597,8 +1597,8 @@ hieronder).
 
 ### Mensen worden poppetjes
 
-**Zo werkt het nu** (26 sep, stuk 1 van het plan hieronder gebouwd: punt 1 tot en met 3; `js/bewoners.js`,
-`T.dagAnker` in `js/dag.js`, toetsen in `test/bewoners.test.cjs`):
+**Zo werkt het nu** (26 sep, stuk 1 van het plan hieronder gebouwd: punt 1 tot en met 3, en van stuk 2
+punt 4; `js/bewoners.js`, `T.dagAnker` in `js/dag.js`, toetsen in `test/bewoners.test.cjs`):
 - **Iedereen die in de balk telt, is een poppetje,** met een naam, een leeftijd (volwassen, knaap of
   meid, kind, kleuter, oud), een huis en een gezin. Op elke boerderij woont een gezin van vier: de
   boer, zijn vrouw of haar man, en twee kinderen of een oude, geloot. Het karakter legt soms vast wie:
@@ -1608,8 +1608,16 @@ hieronder).
 - **Het getal in de balk blijft de waarheid,** en verandert op één manier (`T.wijzigBevolking`). Komt
   er een gezin bij, dan krijgt het een huis met plaats en poppetjes bij de deur. Wie in de winter
   sterft, is eerst een oude, dan een kleine; wie wegtrekt, is eerst een gezin dat later kwam, en dan
-  een knaap van een boerderij. De schout, zijn gezin en de boeren zelf blijven. (Dat je ze ziet komen en
-  gaan, en wie het is, is stuk 2.)
+  een knaap van een boerderij. De schout, zijn gezin en de boeren zelf blijven.
+- **Komen en gaan zie je** (stuk 2, 26 sep; `T.werkBewonersBij`). Een nieuw gezin telt mee vanaf de
+  dag dat het komt, en verschijnt vanaf negen uur op de weg aan de rand van de kaart, op dezelfde
+  manier als de marskramer en de heer (`T.bezoekerKomtAan`), met een bericht: "Er komt een nieuw gezin
+  over de weg: Swier en Jeltje, met twee kinderen. (+4)". Het loopt eerst naar zijn huis, en volgt
+  daarna de dag. Een gezin dat wegtrekt, telt meteen niet meer mee en werkt nergens meer, maar gaat
+  pas als het licht is: het loopt de weg af en verlaat bij de uitgang de kaart ("Swier en Jeltje, met
+  twee kinderen, trekken weg: het dorp is niet tevreden genoeg. (-4)"). Wie sterft, heeft een naam:
+  "De winter is hard: de oude Geesje, moeder van Wouter, is gestorven." Bij de muis staat "nieuw in
+  het gehucht" of "trekt weg". `Spel.debug.gezin()` laat nu een gezin komen, `(-4)` er een gaan.
 - **Wie werkt, heeft een werkplek en gaat erheen.** Een gebouw krijgt zijn handen zoals voorheen
   (`T.verdeelHanden`), en nu zijn dat mensen (`T.wijsWerkToe`): eerst werkt een gezin op zijn eigen
   boerderij, dan krijgt een plek de vrije hand die het best past: eerst volwassenen, dan knapen,

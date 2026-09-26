@@ -56,12 +56,24 @@ function stap(S, dt) {
   S.wereldTijd += dtW;
   T.tikKalender(S, dt);
   T.werkDagBij(S);
+  T.werkBewonersBij(S);
   T.werkAnimatiesBij(S, dt, dtW);
   T.werkOogstBij(S, dtW);
   T.laatDwalen(S, dtW);
 }
 function loopTot(S, dag) {
   for (let i = 0; S.kalender.dag < dag && i < 200000; i++) stap(S, 0.05);
+}
+// Doorlopen tot `klaar()` waar is, of tot er `uren` voorbij zijn (een uur is 12,5 seconden bij 1×).
+function loopTotDat(S, klaar, uren) {
+  const tot = S.wereldTijd + (uren * T.DAG_LENGTE) / 24;
+  while (!klaar() && S.wereldTijd < tot) stap(S, 0.05);
+}
+// Wat er in de berichten komt, vanaf nu.
+function vangBerichten() {
+  const lijst = [];
+  T.ui.bericht = (t) => lijst.push(t);
+  return lijst;
 }
 const mensen = (S) => S.bewoners.mensen;
 const nieuwe = (S) => mensen(S).filter((p) => !p.schout && !p.wie); // wie hier een poppetje kreeg
@@ -86,6 +98,14 @@ function vrijePlek(S, voet, bij) {
     }
   }
   return beste;
+}
+// Een huis erbij, op een vrije plek bij de brink, klaar om in te wonen.
+function bouwHuis(S) {
+  const voet = T.gebouwVoet('huis');
+  const plek = vrijePlek(S, voet, T.brinkVan(S.wereld));
+  const huis = { soort: 'huis', x: plek.x, y: plek.y, voet, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
+  S.gebouwen.push(huis);
+  return huis;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -191,15 +211,13 @@ test('wie werk heeft, houdt het, en een nieuwe werkplaats krijgt de vrije hand d
 
 test('T.wijzigBevolking: een nieuw gezin in een huis met plaats; wie sterft is eerst oud; wie wegtrekt kwam het laatst', () => {
   const S = gehucht();
-  const voet = T.gebouwVoet('huis');
-  const plek = vrijePlek(S, voet, T.brinkVan(S.wereld));
-  const huis = { soort: 'huis', x: plek.x, y: plek.y, voet, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
-  S.gebouwen.push(huis);
+  const huis = bouwHuis(S);
   assert.equal(T.wijzigBevolking(S, 4, 'groei'), 4);
   assert.equal(mensen(S).length, S.bevolking);
   const gezin = inHuis(S, huis);
   assert.equal(gezin.length, 4, 'het nieuwe gezin woont samen in het nieuwe huis');
-  assert.ok(gezin.every((p) => p.wezen && S.wereld.wezens.includes(p.wezen)), 'met een poppetje');
+  // Het komt overdag over de weg binnen (hieronder, "Komen en gaan"); tot dan is het onderweg.
+  assert.ok(gezin.every((p) => p.komt && !p.wezen), 'nog onderweg hierheen');
   const hoofd = gezin.find((p) => !p.hoofd);
   assert.ok(hoofd && gezin.some((p) => p.band === 'vrouw'), 'een man en zijn vrouw, met kinderen');
 
@@ -215,6 +233,90 @@ test('T.wijzigBevolking: een nieuw gezin in een huis met plaats; wie sterft is e
   assert.equal(mensen(S).length, S.bevolking);
   assert.ok(mensen(S).find((p) => p.schout), 'de schout blijft');
   assert.equal(mensen(S).filter((p) => p.wie).length, 5, 'de boeren blijven');
+});
+
+// ---------------------------------------------------------------------------------------------
+// Komen en gaan (stuk 2): je ziet het, en het bericht zegt wie het zijn
+// ---------------------------------------------------------------------------------------------
+
+test('komen: een nieuw gezin komt overdag over de weg binnen, met een bericht op naam, en loopt naar zijn huis', () => {
+  const S = gehucht(); // om zeven uur
+  const berichten = vangBerichten();
+  const huis = bouwHuis(S);
+  T.wijzigBevolking(S, 4, 'groei');
+  const gezin = inHuis(S, huis);
+  T.werkBewonersBij(S);
+  assert.ok(gezin.every((p) => !p.wezen), 'vóór het bezoekuur is er nog niemand');
+  assert.equal(berichten.length, 0);
+  S.kalender.dag = bijUur(GROEI, T.DAG_INSTELLINGEN.bezoekUur + 0.1);
+  T.werkBewonersBij(S);
+  const weg = T.wegInEnUit(S.wereld);
+  for (const p of gezin) {
+    assert.ok(p.wezen && S.wereld.wezens.includes(p.wezen), 'nu met een poppetje');
+    assert.ok(T.afstand(weg, opTegel(p.wezen)) <= 3, 'op de weg, aan de rand van de kaart');
+    const erf = { x: p.wezen.thuis.x, y: p.wezen.thuis.y, straal: T.DAG_INSTELLINGEN.erfStraal };
+    assert.deepEqual(T.dagAnker(S, p.wezen), erf, 'eerst naar zijn huis, ook met werk');
+  }
+  assert.equal(berichten.length, 1);
+  assert.match(berichten[0], /nieuw gezin over de weg/);
+  assert.ok(berichten[0].includes(gezin.find((p) => !p.hoofd).naam), 'het bericht zegt wie het zijn');
+  assert.match(T.overBewonerTekst(S, gezin[0].wezen), /nieuw in het gehucht/);
+  T.werkBewonersBij(S);
+  assert.equal(berichten.length, 1, 'het bericht komt één keer');
+  loopTotDat(S, () => gezin.every((p) => !p.komt), 5);
+  assert.ok(gezin.every((p) => !p.komt), 'binnen vijf uur zijn ze allemaal thuis');
+  // Daarna volgen ze de dag, zoals iedereen: wie het eerst thuis was, is al naar zijn plek voor overdag.
+  for (const p of gezin) assert.equal(T.dagAnker(S, p.wezen), p.plek.werk || p.plek.vrij);
+});
+
+test('gaan: wie wegtrekt, telt meteen niet meer mee, gaat bij het licht, loopt de weg af en verlaat de kaart', () => {
+  const S = gehucht();
+  const huis = bouwHuis(S);
+  T.wijzigBevolking(S, 4, 'groei');
+  const gezin = inHuis(S, huis);
+  S.kalender.dag = bijUur(GROEI, 10);
+  loopTotDat(S, () => gezin.every((p) => !p.komt), 5);
+  // 's Nachts besloten: ze gaan pas als het licht is.
+  S.kalender.dag = bijUur(GROEI + 1, 23);
+  const berichten = vangBerichten();
+  T.wijzigBevolking(S, -4, 'vertrek', 'het dorp is niet tevreden genoeg');
+  assert.equal(inHuis(S, huis).length, 0, 'ze wonen er niet meer');
+  assert.equal(mensen(S).length, S.bevolking);
+  assert.equal(berichten.length, 1);
+  assert.match(berichten[0], /, trekken weg: het dorp is niet tevreden genoeg\. \(-4\)$/);
+  assert.ok(berichten[0].startsWith(`${gezin.find((p) => !p.hoofd).naam} en `), 'het gezin bij naam');
+  for (const p of gezin) {
+    assert.ok(S.wereld.wezens.includes(p.wezen), 'zijn poppetje is er nog');
+    assert.equal(p.werk, null, 'hij werkt nergens meer');
+    assert.ok(T.dagAnker(S, p.wezen).binnen, "'s nachts nog binnen");
+  }
+  S.kalender.dag = bijUur(GROEI + 2, 10);
+  const uitgang = T.wegInEnUit(S.wereld);
+  for (const p of gezin) assert.deepEqual(T.dagAnker(S, p.wezen), { x: uitgang.x, y: uitgang.y, straal: 1 }, 'overdag naar de uitgang');
+  assert.match(T.overBewonerTekst(S, gezin[0].wezen), /trekt weg$/);
+  loopTotDat(S, () => !S.bewoners.vertrekken.length, 5);
+  assert.ok(gezin.every((p) => !S.wereld.wezens.includes(p.wezen)), 'bij de uitgang gaan ze van de kaart');
+});
+
+test('sterven: het bericht zegt wie het is, en wie hij voor iemand was', () => {
+  const S = gehucht();
+  const berichten = vangBerichten();
+  const voor = mensen(S).slice();
+  T.wijzigBevolking(S, -1, 'winter', 'De winter is hard');
+  const dood = voor.find((p) => !mensen(S).includes(p));
+  assert.equal(berichten.length, 1);
+  assert.ok(berichten[0].startsWith('De winter is hard: '), berichten[0]);
+  assert.ok(berichten[0].includes(dood.naam) && berichten[0].endsWith(' is gestorven.'), berichten[0]);
+  if (dood.hoofd) assert.ok(berichten[0].includes(`${dood.band} van `), 'met wie hij voor iemand was');
+  if (dood.leeftijd === 'oud') assert.ok(berichten[0].includes(`de oude ${dood.naam}`));
+  T.wijzigBevolking(S, -2, 'winter', 'De honger is hard');
+  assert.ok(berichten[1].startsWith('De honger is hard: ') && berichten[1].endsWith(' zijn gestorven.'), berichten[1]);
+  // "de oude Geesje, moeder van Wouter, en de oude Swaantje, ...": een bijstelling sluit met een komma.
+  const [eerste] = berichten[1].slice('De honger is hard: '.length).split(' en ');
+  if (eerste.includes(',')) assert.ok(eerste.endsWith(','), berichten[1]);
+  // Zonder `waarom` (het begin, een toets) geen bericht.
+  T.wijzigBevolking(S, -1, 'winter');
+  assert.equal(berichten.length, 2);
 });
 
 // ---------------------------------------------------------------------------------------------

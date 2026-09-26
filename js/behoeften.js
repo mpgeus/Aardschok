@@ -193,9 +193,11 @@
     const verlies = Math.floor(S.behoeften.winterVerliesRest);
     if (verlies <= 0) return;
     S.behoeften.winterVerliesRest -= verlies;
-    T.wijzigBevolking(S, -verlies, 'winter');
-    if (T.ui && T.ui.bericht) {
-      const wat = b.inWinter ? 'De winter is hard' : 'De honger is hard';
+    const wat = b.inWinter ? 'De winter is hard' : 'De honger is hard';
+    // Met bewoners zegt het bericht wie het zijn (T.bewonersVolgen, js/bewoners.js); zonder (een toets
+    // die alleen de regels laadt) alleen hoeveel.
+    T.wijzigBevolking(S, -verlies, 'winter', wat);
+    if (!S.bewoners && T.ui && T.ui.bericht) {
       T.ui.bericht(
         verlies === 1 ? `${wat}: het dorp verliest een dorpeling.` : `${wat}: het dorp verliest ${verlies} dorpelingen.`,
         'gevaar',
@@ -213,10 +215,10 @@
     const honger = IN.hongerBuitenWinter === 'wegtrekken' && !b.inWinter && b.voedselDekking < 1;
     if (b.tevredenheid >= IN.vertrekDrempel && !honger) return;
     const verlies = Math.min(S.bevolking, T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
-    T.wijzigBevolking(S, -verlies, 'vertrek');
-    if (T.ui && T.ui.bericht) {
-      T.ui.bericht(honger ? `Een gezin trekt weg: er is geen eten. (-${verlies})` : `Een gezin trekt weg: het dorp is niet tevreden genoeg. (-${verlies})`, 'gevaar');
-    }
+    const waarom = honger ? 'er is geen eten' : 'het dorp is niet tevreden genoeg';
+    // Met bewoners zegt het bericht wie het zijn en lopen ze de weg af (js/bewoners.js).
+    T.wijzigBevolking(S, -verlies, 'vertrek', waarom);
+    if (!S.bewoners && T.ui && T.ui.bericht) T.ui.bericht(`Een gezin trekt weg: ${waarom}. (-${verlies})`, 'gevaar');
   }
 
   // Ruilt het voorwerp van een gebouw voor zijn "wordt"-soort: dezelfde tekening-ingang als
