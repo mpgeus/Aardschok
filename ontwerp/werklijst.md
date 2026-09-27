@@ -346,7 +346,26 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     branden van de avond tot bedtijd: daar zie je verder, en word je eerder gezien, dus zoek je voor je
     nachtwerk de donkere hoeken op. Wie ze aansteekt, komt later: de koster (als er een kapel is), de
     keur "een lantaarn aan elke deur" (deel C) en de nachtwacht (punt 11).
-    **Beantwoord (Marcel, 27 sep): "A ja B ja C ja D ja".** Stuk 1 loopt.
+    **Beantwoord (Marcel, 27 sep): "A ja B ja C ja D ja".** Stuk 1 en 2 zijn af.
+41. **Punt 4, de kern afmaken: het plan** (Claude, 27 sep, na het zichtveld; wacht op Marcel). Punt 4 heeft
+    vier delen; voorstel: eerst wat verstoppen spannend maakt, dan het tweede proefje (is dit leuk?), en
+    de rest daarna.
+    - **Stuk 1, deel 1b: de soldaten zoeken altijd** (Marcel koos het op 25 sep). Nu doorzoeken ze het
+      dorp pas vanaf 50% argwaan, en daaronder is verstoppen dus altijd veilig. Voortaan zoeken ze op
+      Sint-Maarten altijd op twee of drie plekken, en wie vlak langs een plek loopt, kan iets vinden.
+    - **Stuk 2, de inner bespelen** (stap 3, het eerste deel): als hij komt, kun je met hem praten: zolang
+      je praat, kijkt hij niet rond (afleiden), en voor goud kijkt hij de andere kant op (omkopen), maar
+      wat je hem geeft, telt de heer als hij het hoort. De twee rekenboeken komen later.
+    - **Dan het tweede proefje:** een heel jaar spelen, van het voorjaar tot Sint-Maarten, en kijken of
+      rijk worden en arm lijken leuk is. Marcel speelt het ook.
+    - **Daarna:** deel 2 (het bos met de kudde), deel 3 (de marskramer koopt en verkoopt vee, kaas, wol
+      en hooi) en de rekenboeken.
+    Vragen: **A**, de route van de soldaten. Voorstel: de schout loopt voor, de soldaten lopen mee (zoals
+    de inner nu met je meeloopt), en doorzoeken elke plek die ze vlak passeren; passeren ze er minder dan
+    twee, dan kiezen ze er zelf bij, en je eigen kelder eerst. Of: je wijst de plekken aan in een lijst.
+    **B**, hoe vaak de heer zelf kiest. Voorstel: zo vaak als zijn argwaan (bij 30% argwaan een op de
+    drie keer), en dan kiest hij de plekken die het rijkst ogen. **C**, de volgorde hierboven: eerst
+    stuk 1 en 2, dan het proefje, dan de rest?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
