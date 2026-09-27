@@ -10,14 +10,14 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (27 sep 2026, negende sessie): de herberg, stuk 1 en 2 zijn af
+## De stand (27 sep 2026, negende sessie): de herberg is af (punt 2)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 512/512.
+`npm test`: 513/513.
 
 **Waar het werk staat:** de achtste sessie staat in `main`. De negende (27 sep) staat op de branch
 `claude/werklijst-doorzetten-ikazjp`, nog niet in `main` en nog niet gepusht: dat doet Claude als Marcel
@@ -72,13 +72,18 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
 - **De herberg, stuk 2** (Marcel koos B, vraag 38): in de herberg wordt gepraat. De roddelaar vertelt er
   wat er in zijn kelder ligt (pas dan vinden de soldaten het makkelijker), de herbergierster vertelt je de
   volgende dag wie er zat en wat er gezegd werd, en de marskramer logeert er.
+- **De herberg, stuk 3** (vraag 39, Marcel: "Prima", en "Ja idd" op de schimmen): de herberg is groter,
+  een T van acht bij elf tegels, en staat aan de westkant van het plein, waar de lege hut stond (die
+  staat nu in de oude hoek). 's Avonds branden zijn ramen, met de gasten erachter als schimmen, en wat
+  ervoor staat, dekt ze af. Omdat de meeste boeren oost en noord wonen, lopen ze nu verder en komen er
+  iets minder gasten (in de herfst 2,0 per avond in plaats van 2,2). Marcel kreeg schermafdrukken.
 - **Een fout gevonden en gerepareerd:** in het spel telde het karakter van wie er woont bij de kelders
   niet (de vrome weigerde niet, de woekeraar hield niets). Twee bestanden hadden twee namen gemeen, en
   het laatste won; de toetsen laadden dat bestand niet. Dat is precies waar vraag 25, E voor is.
 
-**Loopt nu: de herberg** (punt 2 hieronder). Stuk 1 en 2 zijn af (27 sep). **Wacht op Marcel: vraag 39**,
-een grotere herberg (en waar). Daarna is punt 2 af, en komt punt 3, het zichtveld en de getuigen. Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het
-voelt".
+**Punt 2, de herberg, is af** (27 sep, drie stukken). **Nu komt punt 3, het zichtveld en de getuigen:**
+het plan staat bij vraag 40 en **wacht op Marcel**; Claude bouwt pas als hij het goed vindt. Wat Marcel
+kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -100,12 +105,13 @@ voorstel van Claude, en daar gaat vraag 26 over.
    - **Stuk 3, de rest van de ladder:** in het spel alleen stap 1 en 2; de hele ladder (half steen, twee
      lagen, baksteen onder pannen) komt voor twee huizen op een plaat, zodat Marcel ziet waar het heen
      gaat (Marcel: "1 en 2 in spel, rest op plaat"). In het spel komt hij bij punt 5, Bouwen.
-2. **Nu: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel (`spel.md`, "Zaken
-   waar de mensen zelf heen gaan"). Stuk 1 en 2 zijn af (27 sep): de herberg staat er, de avond gaat
-   erheen, en er wordt gepraat. Een grotere herberg wacht op vraag 39.
-3. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
+2. **Af (negende sessie): de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel
+   (`spel.md`, "Zaken waar de mensen zelf heen gaan"). In drie stukken (27 sep): de herberg staat er en de
+   avond gaat erheen; er wordt gepraat; en hij is groter, aan de westkant van het plein, met ramen die
+   branden. Zie onder Af.
+3. **Nu: het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
    steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
-   uit verstoppen deel 1b op.
+   uit verstoppen deel 1b op. Het plan, in twee stukken, staat bij vraag 40.
 4. **De kern afmaken** (punt 6 en 6a), en daarmee de vraag van het tweede proefje: is dit leuk?
    - verstoppen deel 1b, de rest (Marcel koos het op 25 sep): de soldaten zoeken op Sint-Maarten
      altijd op 2 of 3 plekken, ook zonder argwaan, en je bepaalt de route zelf, maar soms wil de heer
@@ -299,6 +305,27 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     helpt punt 3, want een verlicht raam is een getuige. Goedkoper: 's zomers blijven de gasten buiten op
     het bankje zitten, 's winters gaan ze naar binnen. Een doorkijk in de herberg zelf (tafels, een
     tapkast) is veel tekenwerk en hoort er nu niet bij.
+    **Beantwoord (Marcel, 27 sep): de schimmen achter een verlicht raam, "Ja idd"; en B aan de westkant
+    van het plein, "Prima".**
+40. **Punt 3, het zichtveld en de getuigen: het plan** (Claude, 27 sep, na de herberg; wacht op Marcel).
+    Wat er al is: zien langs een lijn waar huizen de blik tegenhouden (`T.zichtTussen`, `js/wereld.js`),
+    de inner die zo kijkt (`T.innerKijkt`), en de plekken waar je iets wegzet of terughaalt (`T.verstop`,
+    `T.haalTerug`, `js/verstoppen.js`), op het moment dat je bij de deur staat. Voorstel, in twee stukken:
+    - **Stuk 1, iedereen ziet, en 's nachts minder ver:** wie buiten is, ziet de schout als hij dichtbij
+      genoeg is en er niets tussen staat: overdag acht tegels, in de schemering vijf, 's nachts twee, en
+      bij een brandende lantaarn of een verlicht raam (de herberg) verder. Wie binnen is of slaapt, ziet
+      niets. Zet je iets weg of haal je iets terug terwijl iemand je ziet, dan is hij getuige: een oogje
+      boven zijn hoofd en een bericht ("Trijn zag je graan in de kelder van Gerrit zetten"); zag
+      niemand het, dan zegt het bericht dat ook.
+    - **Stuk 2, wat een getuige doet, naar zijn karakter:** de roddelaar vertelt het die avond in de
+      herberg; dan vinden de soldaten die plek twee keer zo makkelijk (zoals nu zijn eigen kelder), en de
+      herbergierster vertelt het je de volgende dag. De vrome zwijgt, of biecht het later (de kapelaan
+      komt nog); de verklikker (punt 10) komt later. De rest zwijgt, tot de inner het vraagt (punt 4).
+    Vragen: **A**, zie je meteen dat iemand je zag (het oogje), of pas later (de herbergierster, de
+    soldaten)? Voorstel: meteen, en later als keuze in de spelregels. **B**, telt alleen de handeling bij
+    de plek, of ook met een zak graan door het dorp lopen? Voorstel: alleen de handeling; sjouwen komt
+    pas als goederen echt gedragen worden. **C**, een lantaarn voor de schout (je ziet verder, maar wordt
+    ook eerder gezien): nu of later? Voorstel: later, bij punt 11, de nacht.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -588,6 +615,14 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 27 sep 2026 — **De herberg, stuk 3: groter, aan het plein, en de ramen branden** (negende sessie;
+  vraag 39, Marcel: "Prima" en "Ja idd"). De herberg is een T van vakwerk onder riet, acht bij elf tegels,
+  met de deur midden op de lange kant, naar het plein; hij staat aan de westkant ervan, en de lege hut
+  staat nu in de oude hoek. De huizenbouwer geeft van elk huis door waar zijn ramen zitten (`ramen` in
+  `tegels.json`, per raam zijn ruitjes); 's avonds branden die van de herberg, met in zoveel ramen als er
+  gasten zijn een schim. Wat ervoor staat, dekt ze af: na de herberg gaat er een gat in het doek, en dat
+  wordt na de nacht licht (`brandendeRamen` in `js/tekenen.js`). Daarmee is punt 2 af. `npm test`:
+  513/513.
 - 27 sep 2026 — **De herberg, stuk 2: er wordt gepraat** (negende sessie; vraag 38, Marcel koos B). De
   roddelaar vertelt in de herberg wat er in zijn kelder ligt: pas dan vinden de soldaten het met
   Sint-Maarten twee keer zo makkelijk (`g.verteld`, `js/verstoppen.js`). De herbergierster vertelt de
