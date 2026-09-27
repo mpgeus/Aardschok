@@ -33,7 +33,7 @@ al van af). Elk stuk begint met een plan voor Marcel.
 1. **De winter zichtbaar maken.** Een waarschuwing als het hout of het eten de winter niet haalt, en in het
    bericht waaraan iemand stierf. In de speeltest stierf bijna de helft van het dorp aan de kou, en de
    speler wist niet waarom. Het grootste gat, en klein om te bouwen. **Loopt:** het plan staat bij vraag
-   44 en wacht op Marcel (Marcel, 27 sep: "Goed zo, begin met de winter").
+   44, en Marcel keurde het goed ("A ja B ja C ja"): nu bouwen.
 2. **Een speeltest op de stand van nu.** De vorige liep op `main` van vóór de soldaten die altijd zoeken en
    de inner die je kunt bespelen: hoe de kern nu speelt, weet nog niemand. Een agent kan het, zoals de
    vorige keer, en Marcel speelt ook. De getallen bijstellen (het goud, de kelders, de honger, de inner)
@@ -58,7 +58,8 @@ al van af). Elk stuk begint met een plan voor Marcel.
 - straten en paden (6c), en ontginnen (6b);
 - deel C tot en met E: voorvallen, groepen en keuren, rechtspraak; de nacht, de eigen buidel, de militie;
   de treden, stadsrechten, de opstand;
-- deel F: geluid, en verpakken voor Steam als de proef goed is.
+- deel F: geluid, en verpakken voor Steam als de proef goed is;
+- sneeuw of rijp in het beeld in de winter (vraag 44, C).
 
 *4. Opruimen, als die bestanden toch open moeten:* `hud.js` en `tekenen.js` splitsen (vraag 25, C en D).
 
@@ -489,6 +490,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     het rode cijfer in de balk ook? **C**, sneeuw of rijp in het beeld, zodat je de winter ook ziet (nu is
     het gehucht in de winter alleen donkerder)? Voorstel: niet nu, want dat is tekenwerk voor elke tegel,
     boom en elk dak; wel op de lijst, na de proefversie.
+    **Beantwoord (Marcel, 27 sep): "A ja B ja C ja, push it".** A: drie maanden en een maand vooraf, en in
+    de winter zelf; B: het rode cijfer in de balk; C: geen sneeuw nu, wel op de lijst na de proefversie
+    (Claude las "ja" als ja op het voorstel; zeg het als het anders bedoeld was). Het besluit staat in
+    `spel.md`, "Het dorp: mensen, behoeften en de winter". Nu bouwen.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

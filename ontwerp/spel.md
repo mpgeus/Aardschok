@@ -531,6 +531,12 @@ Nog open na deel 1 (vragen van Claude):
 - **Nog open:** de winter is hard (in een proef van 25 naar 2 mensen zonder hout); het eerste
   voorjaar is krap (60 graan voor 25 mensen); moet ook vis eten zijn, nu vlees het is? Brand en
   ziekte komen bij punt 8.
+- **Besloten: de winter zichtbaar maken** (Marcel, 27 sep, vraag 44: "A ja B ja C ja"; nog te bouwen).
+  Op 1 herfstmaand en 1 slachtmaand zegt een bericht of het hout en het eten de winter halen, naar wat
+  er ligt en wat er per dag bijkomt, en wat helpt (een houthakker). In de winter zegt het, zoals bij het
+  hooi, wanneer het op is. In de balk staat bij het hout voor hoeveel winterdagen het genoeg is, rood als
+  dat de winter niet haalt. Wie sterft, sterft van de kou of de honger, en het bericht zegt het. Sneeuw
+  of rijp in het beeld komt later, na de proefversie.
 
 **Hoe het zo kwam:** dit is punt 3 van de werklijst, gebouwd op 23 sep uit "Het dorp in leven
 houden" (onderaan, in "Welke gameplay er nog nodig is"). Er stond geen eigen voorstel voor in dit
