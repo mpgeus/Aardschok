@@ -32,6 +32,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - **`ontwerp/spel.md`: het spel.** De schout, de heer en de inner, keuren en politiek, avontuur,
   en wat nog open is. Bovenaan staat per onderwerp de stand, en elk onderwerp begint met **Zo werkt
   het nu**; wie iets bouwt of verandert, werkt dat blok bij (Marcel, 25 sep).
+- `ontwerp/speelbaar.md`: wat er nog ontbreekt voor een eerste speelbaar product (vraag 33), en wat er
+  in een speeltest van een heel jaar gebeurde.
 - `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
 - `ontwerp/kaarten.md`: van Tiled naar het spel, en hoe hoogte gaat werken.
 - `ontwerp/wereld.md`: de plekken en mensen van het oude spel (erf, bos, dorp); het dorp en zijn

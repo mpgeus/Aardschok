@@ -255,7 +255,8 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     worden); "Ja er wordt graan van buiten gebracht naar de markt"; en "De kaart blijft wel groeien.
     Er is geen grens voor een max afmeting stad."
 33. **Wat is het eerste speelbare product?** (Claude, 26 sep, na Marcels waarschuwing voor functie
-    creep.) Voorstel: een proefversie van één jaar in het gehucht, van de benoemingsbrief tot
+    creep. Uitgewerkt op 27 sep, tiende sessie, in `speelbaar.md`: wat er is, wat ontbreekt, de kortste
+    weg, en vier vragen, 33a tot en met 33d.) Voorstel: een proefversie van één jaar in het gehucht, van de benoemingsbrief tot
     Sint-Maarten, met de kern (rijk worden en arm lijken: verstoppen, de inner, de heer), opslaan en een
     titelscherm. Dan wordt duidelijk welke punten van de volgorde daarvoor nodig zijn, en welke kunnen
     wachten tot daarna.
@@ -366,11 +367,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     - **D. `js/tekenen.js` (1.499 regels) net zo:** de grond, de wezens, de weides, de nacht.
       Begonnen op 26 sep (zevende sessie): de doorkijk staat nu in `js/doorkijk.js`, en `tekenen.js`
       heeft 1.404 regels.
-    - **E. Eén laadlijst voor de toetsen,** in de volgorde van `index.html`. Dan zijn de 24 bewakers
-      van de vorm `T.x && T.x(...)` niet meer nodig, en toetsen de toetsen het spel zoals het draait.
-      B liet zien waarom: vijf toetsen laadden `js/dag.js` niet, en draaiden dus zonder werkuren en
-      zonder bezoekuur, zonder dat iets klaagde. Vijf doen dat nog (`akkers`, `hooi`, `vee`, `velden`
-      en `weides`: daar maaien de boeren dus ook 's nachts).
+    - **E. Eén laadlijst voor de toetsen (af, 27 sep, tiende sessie; zie onder Af),** in de volgorde van
+      `index.html`. Dan zijn de bewakers van de vorm `T.x && T.x(...)` niet meer nodig, en toetsen de
+      toetsen het spel zoals het draait. B liet zien waarom: vijf toetsen laadden `js/dag.js` niet, en
+      draaiden dus zonder werkuren en zonder bezoekuur, zonder dat iets klaagde.
     Voorstel: A en B nu, zolang de dag vers is; C en D als die bestanden toch open moeten (de
     poppetjes raken ze allebei); E later.
 
@@ -636,6 +636,16 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 27 sep 2026 — **Eén laadlijst voor de toetsen** (tiende sessie; vraag 25, E, Marcel koos het vóór zijn
+  vlucht). Elke toets laadt het spel zoals het draait: de scripts uit `index.html`, in die volgorde,
+  zonder wat alleen scherm is (`test/laad.cjs`); een toets van het gereedschap laadt wat zijn bladzijde
+  laadt. Twaalf toetsen vielen om en lieten zien dat ze een ander spel toetsten dan er draait: de boeren
+  maaiden er om middernacht, de kelder van de roddelaar was riskant zonder dat ze iets verteld had, twee
+  spellen hadden dezelfde boeren, een huis groeide naar een geschatte voet, en een werkplaats werkte op
+  volle kracht zonder eten. Aan het spel veranderde niets. Daarna gingen ruim honderd bewakers weg die er
+  alleen voor de toetsen waren (`T.x && T.x(...)` en dergelijke), met hun commentaar; 23 blijven, want
+  `gereedschap/wereld.html` laadt een deel van het spel. `npm test`: 523/523, met de controle op de
+  bosvijanden en de laadlijst zelf.
 - 27 sep 2026 — **Het zichtveld, stuk 1** (negende sessie; punt 3, vraag 40, Marcel: "A ja B ja C ja D
   ja"). Wie buiten is, ziet de schout als hij dichtbij genoeg is en er niets tussen staat: overdag acht
   tegels, 's nachts twee, in het licht van een lantaarn of de herberg zes (`js/zien.js`, `T.zichtOp`,
