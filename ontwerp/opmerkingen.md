@@ -9,6 +9,20 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Het zichtveld, wat nog ruw is** (27 sep, na stuk 1 van punt 3; `spel.md`, "Zo werkt het nu: het
+  zichtveld, stuk 1"):
+  - De gloed van een lantaarn wordt over alles heen getekend, ook over wat ervóór staat: staat er een
+    huis tussen de camera en de lantaarn, dan lijkt zijn dak verlicht. Daarom kwam er geen tweede
+    lantaarn bij de bank (achter de hut aan de zuidoosthoek). Netjes zou het licht op de grond liggen,
+    onder wat ervoor staat, zoals nu de ramen van de herberg.
+  - Iedereen kijkt rondom, niet de kant op die hij loopt, en wie in de herberg zit, kijkt niet naar
+    buiten. Wie je in het donker van dichtbij ziet, ziet je ook als hij met zijn rug naar je toe staat.
+  - Een oogje staat vijf seconden. Op een smal scherm staat het venster van de plek nog midden in beeld,
+    over de schout heen, en dan zie je het oogje pas als je het sluit.
+  - Het gezin van de schout staat 's avonds vaak bij zijn deur, in het licht van de lantaarn bij de
+    put: het telt niet (het is hun kelder), maar in stuk 2 is de vraag of een huisgenoot het ooit
+    doorvertelt.
+
 - **De herberg, wat nog ruw is** (27 sep, na stuk 1; `spel.md`, "Zaken waar de mensen zelf heen gaan"):
   - Er hangt nog geen uithangbord: je herkent de herberg aan de lantaarn en het bankje bij de deur, en
     aan zijn zolder met dakkapellen. Een bord is tekenwerk voor de huizenbouwer.

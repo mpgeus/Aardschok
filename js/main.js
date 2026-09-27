@@ -508,6 +508,20 @@
       }
       return { argwaan: I.argwaan, waarom: I.waarom.slice() };
     },
+    // Wie de schout nu ziet (js/zien.js): hoe ver je hem ziet waar hij staat, wie er kijkt en hoe ver
+    // die staat, en welk licht er brandt.
+    getuigen() {
+      if (!T.getuigenVan) return 'Zien kan alleen in het gehucht.';
+      const h = T.tegelVan(S.schout);
+      return {
+        zicht: Math.round(T.zichtOp(S, h) * 10) / 10,
+        kijkers: T.getuigenVan(S, null).map((e) => {
+          const p = T.bewonerVan(S, e);
+          return { wie: p ? T.naamVanBewoner(p) : e.wie || e.soort, tegel: `${e.tx},${e.ty}`, afstand: Math.round(Math.hypot(e.tx - h.x, e.ty - h.y) * 10) / 10 };
+        }),
+        licht: T.lichtBronnen(S).map((b) => `${b.x},${b.y} (${b.straal})`),
+      };
+    },
     // De verstopplekken (js/verstoppen.js): waar je iets kunt verstoppen, wat er ligt, en hoe vaak
     // de soldaten het er vinden. Spel.debug.verstopt('boer1', 30, 5) zet 30 graan en 5 goud in
     // de kelder van boer1 (of 'schout', of 'kapel'), zonder te lopen, als het kan.

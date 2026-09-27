@@ -279,6 +279,7 @@
     ctx.scale(S.zoom, S.zoom);
     ctx.translate(-Math.round(S.camera.x), -Math.round(S.camera.y));
     for (const r of ramen) vulRamen(ctx, S, r);
+    tekenOogjes(ctx, S);
     tekenEffecten(ctx, S);
     ctx.restore();
     tekenVignet(ctx, S, bw, bh);
@@ -318,11 +319,12 @@
     verloop.addColorStop(1, `rgba(12, 18, 40, ${l.donker.toFixed(3)})`);
     ctx.fillStyle = verloop;
     ctx.fillRect(0, 0, bw, bh);
-    // Warm licht in het donker: de lantaarn van de herberg, 's avonds, warmer naarmate er meer gasten
-    // binnen zitten (js/herberg.js, T.herbergLicht). Zo zie je van ver waar het dorp 's avonds is. De
-    // ramen branden ook (brandendeRamen hieronder).
+    // Warm licht in het donker (js/zien.js, T.lichtBronnen): de lantaarns op de kaart, 's avonds, en de
+    // herberg, warmer naarmate er meer gasten binnen zitten (js/herberg.js, T.herbergLicht). Zo zie je
+    // van ver waar het dorp 's avonds is, en waar je gezien wordt. De ramen van de herberg branden ook
+    // (brandendeRamen hieronder).
     const nacht = nachtVan(S); // vol als het nacht is, zwakker in de schemering
-    for (const b of T.herbergLicht ? T.herbergLicht(S) : []) {
+    for (const b of T.lichtBronnen ? T.lichtBronnen(S) : []) {
       const q = T.naarScherm(b.x, b.y);
       const lx = Math.round(bw / 2) + (q.x - Math.round(S.camera.x)) * S.zoom;
       const ly = Math.round(bh / 2) + (q.y - 24 - Math.round(S.camera.y)) * S.zoom;
@@ -335,11 +337,11 @@
     }
   }
 
-  // Hoe donker het is, van 0 (dag) tot 1 (volle nacht); 0 zonder kalender, of als de nacht uit staat.
+  // Hoe donker het is, van 0 (dag) tot 1 (volle nacht; T.lichtVan in js/dag.js); 0 zonder kalender, of
+  // als de nacht uit staat.
   function nachtVan(S) {
     if (!S.kalender || !T.lichtVan || (T.debug && T.debug.geenNacht)) return 0;
-    const vol = (T.DAG_INSTELLINGEN && T.DAG_INSTELLINGEN.nachtDonker) || 0.68;
-    return Math.min(1, T.lichtVan(S.kalender.dag).donker / vol);
+    return T.lichtVan(S.kalender.dag).nacht;
   }
 
   // Ramen die 's avonds branden (js/herberg.js, T.herbergLicht; Marcel, 27 sep: "Misschien een raam
@@ -356,9 +358,9 @@
   // Hoe fel: in de schemering nog zwak, 's nachts bijna vol, en dan zie je nog net het glas.
   function brandendeRamen(S) {
     const nacht = nachtVan(S);
-    if (nacht <= 0.02 || !T.herbergLicht || !metSprites()) return [];
+    if (nacht <= 0.02 || !T.lichtBronnen || !metSprites()) return [];
     const uit = [];
-    for (const b of T.herbergLicht(S)) {
+    for (const b of T.lichtBronnen(S)) {
       const g = b.ramenVan;
       const opz = g && g.tekening && T.opzoekTegelNaam ? T.opzoekTegelNaam(g.tekening) : null;
       const ramen = opz && opz.eig && opz.eig.ramen;
@@ -1408,6 +1410,40 @@
     ctx.restore();
     if (!e.dood && e.kant === 'monster' && (S.gevecht || e.leven < e.maxLeven)) levensbalk(ctx, cx, top - 9, e);
     if (e.alarm > 0) roep(ctx, '!', cx, top - 14 - Math.abs(Math.sin(e.alarm * 9)) * 4, '#ffd24a');
+  }
+
+  // Het oogje boven een getuige (js/zien.js, T.werdGezien): hij zag je iets wegzetten of terughalen
+  // (Marcel, vraag 40, A: je ziet het meteen). Na de nacht getekend, zodat je het ook in het donker
+  // ziet, en het vervaagt in zijn laatste seconde.
+  function tekenOogjes(ctx, S) {
+    for (const e of S.wereld.wezens) {
+      const over = (e.oogje || 0) - S.tijd;
+      if (over <= 0 || e.binnen) continue;
+      const p = T.naarScherm(e.x, e.y);
+      const hoogte = metSprites() ? T.sprites.hoogte(e.soort) : 52;
+      const cx = p.x;
+      const cy = p.y - hoogte - 16 - Math.abs(Math.sin(S.tijd * 3)) * 2;
+      ctx.save();
+      ctx.globalAlpha = Math.min(1, over);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+      const amandel = () => {
+        ctx.beginPath();
+        ctx.moveTo(cx - 10, cy);
+        ctx.quadraticCurveTo(cx, cy - 9, cx + 10, cy);
+        ctx.quadraticCurveTo(cx, cy + 9, cx - 10, cy);
+        ctx.closePath();
+      };
+      amandel();
+      ctx.stroke();
+      ctx.fillStyle = '#f4ecd6';
+      ctx.fill();
+      ctx.fillStyle = '#3a2a1a';
+      ctx.beginPath();
+      ctx.arc(cx, cy, 3.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
   }
 
   function roep(ctx, teken, cx, y, kleur) {

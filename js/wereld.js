@@ -319,6 +319,16 @@
   // Een lijn is niet altijd heen en terug dezelfde; zien werkt hier twee kanten op.
   T.zichtTussen = (w, a, b) => T.zicht(w, a, b) || T.zicht(w, b, a);
 
+  // Ziet wie op `van` staat de tegel `naar`, als hij `ver` tegels ver kijkt? Hemelsbreed (een cirkel,
+  // geen vierkant) en met niets ertussen. Zo kijken de inner (js/inner.js) en de getuigen (js/zien.js);
+  // een monster kijkt nog in een vierkant (T.zoekOntdekking, js/verkennen.js).
+  T.zietTegel = function (w, van, naar, ver) {
+    const dx = naar.x - van.x;
+    const dy = naar.y - van.y;
+    if (dx * dx + dy * dy > ver * ver) return false;
+    return !w.tegels || T.zichtTussen(w, van, naar);
+  };
+
   T.isZichtbaar = function (w, x, y) {
     const t = T.tegel(w, x, y);
     if (t === 'buiten') return false;

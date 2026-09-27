@@ -144,8 +144,6 @@
     return p.huis !== g && T.herbergGasten(S, S.kalender.dag).includes(p);
   };
 
-  // De naam van een bewoner, zoals de herbergierster hem noemt.
-  const naamVan = (p) => (p.wie ? (T.naamVanMens ? T.naamVanMens(p.wie) : p.wie) : p.naam);
   const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || '');
 
   // Vertelt p in de herberg wat er in zijn kelder ligt? Wie het karakter heeft dat het in de herberg
@@ -171,7 +169,7 @@
     const gasten = T.herbergGasten(S, gisteren);
     const roddel = gasten.find(vertelt) || null;
     const H = S.herberg || (S.herberg = {});
-    H.gisteravond = { dag: gisteren, gasten: gasten.length, namen: gasten.map(naamVan), roddel: roddel ? naamVan(roddel) : null };
+    H.gisteravond = { dag: gisteren, gasten: gasten.length, namen: gasten.map(T.naamVanBewoner), roddel: roddel ? T.naamVanBewoner(roddel) : null };
     if (T.zetVlag) {
       for (const v of ['herbergGasten', 'herbergRoddel', 'herbergDroog']) T.wisVlag(S, v);
       if (gasten.length) T.zetVlag(S, 'herbergGasten');

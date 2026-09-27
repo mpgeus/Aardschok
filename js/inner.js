@@ -128,14 +128,9 @@
     return !!(soort && soort.tekening);
   }
 
-  // Ziet hij deze tegel van waar hij staat? Binnen zijn zicht, en niets ertussen (T.zichtTussen,
+  // Ziet hij deze tegel van waar hij staat? Binnen zijn zicht, en niets ertussen (T.zietTegel,
   // js/wereld.js: de begin- en eindtegel tellen niet mee, dus een muur zelf zie je wel).
-  function ziet(w, van, x, y, zicht) {
-    const dx = x - van.x;
-    const dy = y - van.y;
-    if (dx * dx + dy * dy > zicht * zicht) return false;
-    return !w.tegels || T.zichtTussen(w, van, { x, y });
-  }
+  const ziet = (w, van, x, y, zicht) => T.zietTegel(w, van, { x, y }, zicht);
 
   // Ziet hij een tegel van dit gebouw? Dan ziet hij het gebouw.
   function zietGebouw(w, van, g, zicht) {

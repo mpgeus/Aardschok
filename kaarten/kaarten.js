@@ -15,7 +15,7 @@
     "tileheight": 32,
     "infinite": false,
     "nextlayerid": 3,
-    "nextobjectid": 325,
+    "nextobjectid": 326,
     "properties": [
      {
       "name": "naam",
@@ -6100,6 +6100,18 @@
         "id": 21,
         "visible": true,
         "rotation": 0,
+        "name": "lantaarn",
+        "gid": 775,
+        "x": 1088,
+        "y": 1088,
+        "width": 460,
+        "height": 285,
+        "properties": []
+       },
+       {
+        "id": 22,
+        "visible": true,
+        "rotation": 0,
         "name": "appelboom",
         "gid": 607,
         "x": 544,
@@ -6109,7 +6121,7 @@
         "properties": []
        },
        {
-        "id": 22,
+        "id": 23,
         "visible": true,
         "rotation": 0,
         "name": "appelboom",
@@ -6121,7 +6133,7 @@
         "properties": []
        },
        {
-        "id": 23,
+        "id": 24,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -6133,7 +6145,7 @@
         "properties": []
        },
        {
-        "id": 24,
+        "id": 25,
         "visible": true,
         "rotation": 0,
         "name": "appelboom",
@@ -6145,7 +6157,7 @@
         "properties": []
        },
        {
-        "id": 25,
+        "id": 26,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -6157,7 +6169,7 @@
         "properties": []
        },
        {
-        "id": 26,
+        "id": 27,
         "visible": true,
         "rotation": 0,
         "name": "appelboom",
@@ -6169,7 +6181,7 @@
         "properties": []
        },
        {
-        "id": 27,
+        "id": 28,
         "visible": true,
         "rotation": 0,
         "name": "appelboom",
@@ -6181,7 +6193,7 @@
         "properties": []
        },
        {
-        "id": 28,
+        "id": 29,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -6193,7 +6205,7 @@
         "properties": []
        },
        {
-        "id": 29,
+        "id": 30,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -6205,7 +6217,7 @@
         "properties": []
        },
        {
-        "id": 30,
+        "id": 31,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -6217,7 +6229,7 @@
         "properties": []
        },
        {
-        "id": 31,
+        "id": 32,
         "visible": true,
         "rotation": 0,
         "name": "kool",
@@ -6229,7 +6241,7 @@
         "properties": []
        },
        {
-        "id": 32,
+        "id": 33,
         "visible": true,
         "rotation": 0,
         "name": "kool",
@@ -6241,7 +6253,7 @@
         "properties": []
        },
        {
-        "id": 33,
+        "id": 34,
         "visible": true,
         "rotation": 0,
         "name": "kool",
@@ -6253,24 +6265,12 @@
         "properties": []
        },
        {
-        "id": 34,
-        "visible": true,
-        "rotation": 0,
-        "name": "kool",
-        "gid": 817,
-        "x": 1408,
-        "y": 960,
-        "width": 72,
-        "height": 97,
-        "properties": []
-       },
-       {
         "id": 35,
         "visible": true,
         "rotation": 0,
         "name": "kool",
         "gid": 817,
-        "x": 1440,
+        "x": 1408,
         "y": 960,
         "width": 72,
         "height": 97,
@@ -6282,7 +6282,7 @@
         "rotation": 0,
         "name": "kool",
         "gid": 817,
-        "x": 1472,
+        "x": 1440,
         "y": 960,
         "width": 72,
         "height": 97,
@@ -6294,8 +6294,8 @@
         "rotation": 0,
         "name": "kool",
         "gid": 817,
-        "x": 1984,
-        "y": 1280,
+        "x": 1472,
+        "y": 960,
         "width": 72,
         "height": 97,
         "properties": []
@@ -6307,7 +6307,7 @@
         "name": "kool",
         "gid": 817,
         "x": 1984,
-        "y": 1312,
+        "y": 1280,
         "width": 72,
         "height": 97,
         "properties": []
@@ -6319,7 +6319,7 @@
         "name": "kool",
         "gid": 817,
         "x": 1984,
-        "y": 1344,
+        "y": 1312,
         "width": 72,
         "height": 97,
         "properties": []
@@ -6330,8 +6330,8 @@
         "rotation": 0,
         "name": "kool",
         "gid": 817,
-        "x": 1152,
-        "y": 2048,
+        "x": 1984,
+        "y": 1344,
         "width": 72,
         "height": 97,
         "properties": []
@@ -6342,7 +6342,7 @@
         "rotation": 0,
         "name": "kool",
         "gid": 817,
-        "x": 1184,
+        "x": 1152,
         "y": 2048,
         "width": 72,
         "height": 97,
@@ -6354,7 +6354,7 @@
         "rotation": 0,
         "name": "kool",
         "gid": 817,
-        "x": 1216,
+        "x": 1184,
         "y": 2048,
         "width": 72,
         "height": 97,
@@ -6364,10 +6364,10 @@
         "id": 43,
         "visible": true,
         "rotation": 0,
-        "name": "kruidenbed",
-        "gid": 820,
-        "x": 1600,
-        "y": 704,
+        "name": "kool",
+        "gid": 817,
+        "x": 1216,
+        "y": 2048,
         "width": 72,
         "height": 97,
         "properties": []
@@ -6378,7 +6378,7 @@
         "rotation": 0,
         "name": "kruidenbed",
         "gid": 820,
-        "x": 1632,
+        "x": 1600,
         "y": 704,
         "width": 72,
         "height": 97,
@@ -6390,7 +6390,7 @@
         "rotation": 0,
         "name": "kruidenbed",
         "gid": 820,
-        "x": 1664,
+        "x": 1632,
         "y": 704,
         "width": 72,
         "height": 97,
@@ -6402,8 +6402,8 @@
         "rotation": 0,
         "name": "kruidenbed",
         "gid": 820,
-        "x": 1600,
-        "y": 736,
+        "x": 1664,
+        "y": 704,
         "width": 72,
         "height": 97,
         "properties": []
@@ -6414,7 +6414,7 @@
         "rotation": 0,
         "name": "kruidenbed",
         "gid": 820,
-        "x": 1632,
+        "x": 1600,
         "y": 736,
         "width": 72,
         "height": 97,
@@ -6426,7 +6426,7 @@
         "rotation": 0,
         "name": "kruidenbed",
         "gid": 820,
-        "x": 1664,
+        "x": 1632,
         "y": 736,
         "width": 72,
         "height": 97,
@@ -6436,10 +6436,10 @@
         "id": 49,
         "visible": true,
         "rotation": 0,
-        "name": "prei",
-        "gid": 818,
-        "x": 1600,
-        "y": 768,
+        "name": "kruidenbed",
+        "gid": 820,
+        "x": 1664,
+        "y": 736,
         "width": 72,
         "height": 97,
         "properties": []
@@ -6450,7 +6450,7 @@
         "rotation": 0,
         "name": "prei",
         "gid": 818,
-        "x": 1632,
+        "x": 1600,
         "y": 768,
         "width": 72,
         "height": 97,
@@ -6462,7 +6462,7 @@
         "rotation": 0,
         "name": "prei",
         "gid": 818,
-        "x": 1664,
+        "x": 1632,
         "y": 768,
         "width": 72,
         "height": 97,
@@ -6470,6 +6470,18 @@
        },
        {
         "id": 52,
+        "visible": true,
+        "rotation": 0,
+        "name": "prei",
+        "gid": 818,
+        "x": 1664,
+        "y": 768,
+        "width": 72,
+        "height": 97,
+        "properties": []
+       },
+       {
+        "id": 53,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -6481,7 +6493,7 @@
         "properties": []
        },
        {
-        "id": 53,
+        "id": 54,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -6493,24 +6505,12 @@
         "properties": []
        },
        {
-        "id": 54,
+        "id": 55,
         "visible": true,
         "rotation": 0,
         "name": "berk",
         "gid": 604,
         "x": 64,
-        "y": 0,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 55,
-        "visible": true,
-        "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 128,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6522,7 +6522,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 288,
+        "x": 128,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6530,6 +6530,18 @@
        },
        {
         "id": 57,
+        "visible": true,
+        "rotation": 0,
+        "name": "den",
+        "gid": 603,
+        "x": 288,
+        "y": 0,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 58,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -6541,24 +6553,12 @@
         "properties": []
        },
        {
-        "id": 58,
+        "id": 59,
         "visible": true,
         "rotation": 0,
         "name": "den",
         "gid": 603,
         "x": 352,
-        "y": 0,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 59,
-        "visible": true,
-        "rotation": 0,
-        "name": "berk",
-        "gid": 604,
-        "x": 416,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6570,7 +6570,7 @@
         "rotation": 0,
         "name": "berk",
         "gid": 604,
-        "x": 448,
+        "x": 416,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6580,9 +6580,9 @@
         "id": 61,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 480,
+        "name": "berk",
+        "gid": 604,
+        "x": 448,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6592,9 +6592,9 @@
         "id": 62,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 512,
+        "name": "den",
+        "gid": 603,
+        "x": 480,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6606,7 +6606,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 544,
+        "x": 512,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6614,6 +6614,18 @@
        },
        {
         "id": 64,
+        "visible": true,
+        "rotation": 0,
+        "name": "eik",
+        "gid": 601,
+        "x": 544,
+        "y": 0,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 65,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -6625,7 +6637,7 @@
         "properties": []
        },
        {
-        "id": 65,
+        "id": 66,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -6637,7 +6649,7 @@
         "properties": []
        },
        {
-        "id": 66,
+        "id": 67,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -6649,24 +6661,12 @@
         "properties": []
        },
        {
-        "id": 67,
+        "id": 68,
         "visible": true,
         "rotation": 0,
         "name": "eik",
         "gid": 601,
         "x": 704,
-        "y": 0,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 68,
-        "visible": true,
-        "rotation": 0,
-        "name": "berk",
-        "gid": 604,
-        "x": 736,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6678,7 +6678,7 @@
         "rotation": 0,
         "name": "berk",
         "gid": 604,
-        "x": 768,
+        "x": 736,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6688,9 +6688,9 @@
         "id": 70,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 800,
+        "name": "berk",
+        "gid": 604,
+        "x": 768,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6702,7 +6702,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 832,
+        "x": 800,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6714,7 +6714,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 896,
+        "x": 832,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6726,7 +6726,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 960,
+        "x": 896,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6738,7 +6738,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 992,
+        "x": 960,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6746,6 +6746,18 @@
        },
        {
         "id": 75,
+        "visible": true,
+        "rotation": 0,
+        "name": "den",
+        "gid": 603,
+        "x": 992,
+        "y": 0,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 76,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -6757,24 +6769,12 @@
         "properties": []
        },
        {
-        "id": 76,
+        "id": 77,
         "visible": true,
         "rotation": 0,
         "name": "den",
         "gid": 603,
         "x": 1088,
-        "y": 0,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 77,
-        "visible": true,
-        "rotation": 0,
-        "name": "berk",
-        "gid": 604,
-        "x": 1120,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6786,7 +6786,7 @@
         "rotation": 0,
         "name": "berk",
         "gid": 604,
-        "x": 1152,
+        "x": 1120,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6798,7 +6798,7 @@
         "rotation": 0,
         "name": "berk",
         "gid": 604,
-        "x": 1184,
+        "x": 1152,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6808,9 +6808,9 @@
         "id": 80,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 1216,
+        "name": "berk",
+        "gid": 604,
+        "x": 1184,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6820,9 +6820,9 @@
         "id": 81,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 1248,
+        "name": "eik",
+        "gid": 601,
+        "x": 1216,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6834,7 +6834,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1280,
+        "x": 1248,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6846,7 +6846,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1312,
+        "x": 1280,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6856,9 +6856,9 @@
         "id": 84,
         "visible": true,
         "rotation": 0,
-        "name": "berk",
-        "gid": 604,
-        "x": 1344,
+        "name": "den",
+        "gid": 603,
+        "x": 1312,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6870,7 +6870,7 @@
         "rotation": 0,
         "name": "berk",
         "gid": 604,
-        "x": 1376,
+        "x": 1344,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6880,9 +6880,9 @@
         "id": 86,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 1408,
+        "name": "berk",
+        "gid": 604,
+        "x": 1376,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6892,9 +6892,9 @@
         "id": 87,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 1440,
+        "name": "den",
+        "gid": 603,
+        "x": 1408,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6906,7 +6906,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 1472,
+        "x": 1440,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6918,7 +6918,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 1536,
+        "x": 1472,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6928,9 +6928,9 @@
         "id": 90,
         "visible": true,
         "rotation": 0,
-        "name": "berk",
-        "gid": 604,
-        "x": 1568,
+        "name": "eik",
+        "gid": 601,
+        "x": 1536,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6940,9 +6940,9 @@
         "id": 91,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 1600,
+        "name": "berk",
+        "gid": 604,
+        "x": 1568,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6954,7 +6954,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1664,
+        "x": 1600,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6966,7 +6966,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1696,
+        "x": 1664,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6978,7 +6978,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1728,
+        "x": 1696,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -6990,7 +6990,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1760,
+        "x": 1728,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -7002,7 +7002,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1792,
+        "x": 1760,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -7010,6 +7010,18 @@
        },
        {
         "id": 97,
+        "visible": true,
+        "rotation": 0,
+        "name": "den",
+        "gid": 603,
+        "x": 1792,
+        "y": 0,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 98,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -7021,24 +7033,12 @@
         "properties": []
        },
        {
-        "id": 98,
+        "id": 99,
         "visible": true,
         "rotation": 0,
         "name": "den",
         "gid": 603,
         "x": 1856,
-        "y": 0,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 99,
-        "visible": true,
-        "rotation": 0,
-        "name": "berk",
-        "gid": 604,
-        "x": 1888,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -7050,7 +7050,7 @@
         "rotation": 0,
         "name": "berk",
         "gid": 604,
-        "x": 1920,
+        "x": 1888,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -7062,7 +7062,7 @@
         "rotation": 0,
         "name": "berk",
         "gid": 604,
-        "x": 2048,
+        "x": 1920,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -7072,9 +7072,9 @@
         "id": 102,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 2080,
+        "name": "berk",
+        "gid": 604,
+        "x": 2048,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -7086,7 +7086,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 2112,
+        "x": 2080,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -7094,6 +7094,18 @@
        },
        {
         "id": 104,
+        "visible": true,
+        "rotation": 0,
+        "name": "eik",
+        "gid": 601,
+        "x": 2112,
+        "y": 0,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 105,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -7105,7 +7117,7 @@
         "properties": []
        },
        {
-        "id": 105,
+        "id": 106,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -7117,24 +7129,12 @@
         "properties": []
        },
        {
-        "id": 106,
+        "id": 107,
         "visible": true,
         "rotation": 0,
         "name": "berk",
         "gid": 604,
         "x": 2240,
-        "y": 0,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 107,
-        "visible": true,
-        "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 2272,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -7146,7 +7146,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 2304,
+        "x": 2272,
         "y": 0,
         "width": 346,
         "height": 308,
@@ -7154,6 +7154,18 @@
        },
        {
         "id": 109,
+        "visible": true,
+        "rotation": 0,
+        "name": "eik",
+        "gid": 601,
+        "x": 2304,
+        "y": 0,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 110,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -7165,7 +7177,7 @@
         "properties": []
        },
        {
-        "id": 110,
+        "id": 111,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -7177,7 +7189,7 @@
         "properties": []
        },
        {
-        "id": 111,
+        "id": 112,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -7189,24 +7201,12 @@
         "properties": []
        },
        {
-        "id": 112,
+        "id": 113,
         "visible": true,
         "rotation": 0,
         "name": "eik",
         "gid": 601,
         "x": 0,
-        "y": 32,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 113,
-        "visible": true,
-        "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 32,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7218,7 +7218,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 64,
+        "x": 32,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7226,6 +7226,18 @@
        },
        {
         "id": 115,
+        "visible": true,
+        "rotation": 0,
+        "name": "den",
+        "gid": 603,
+        "x": 64,
+        "y": 32,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 116,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -7237,7 +7249,7 @@
         "properties": []
        },
        {
-        "id": 116,
+        "id": 117,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -7249,24 +7261,12 @@
         "properties": []
        },
        {
-        "id": 117,
+        "id": 118,
         "visible": true,
         "rotation": 0,
         "name": "berk",
         "gid": 604,
         "x": 352,
-        "y": 32,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 118,
-        "visible": true,
-        "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 384,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7278,7 +7278,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 416,
+        "x": 384,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7288,9 +7288,9 @@
         "id": 120,
         "visible": true,
         "rotation": 0,
-        "name": "berk",
-        "gid": 604,
-        "x": 448,
+        "name": "den",
+        "gid": 603,
+        "x": 416,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7300,9 +7300,9 @@
         "id": 121,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 480,
+        "name": "berk",
+        "gid": 604,
+        "x": 448,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7314,7 +7314,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 544,
+        "x": 480,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7324,9 +7324,9 @@
         "id": 123,
         "visible": true,
         "rotation": 0,
-        "name": "berk",
-        "gid": 604,
-        "x": 576,
+        "name": "den",
+        "gid": 603,
+        "x": 544,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7336,9 +7336,9 @@
         "id": 124,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 608,
+        "name": "berk",
+        "gid": 604,
+        "x": 576,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7350,7 +7350,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 640,
+        "x": 608,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7362,7 +7362,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 672,
+        "x": 640,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7372,9 +7372,9 @@
         "id": 127,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 704,
+        "name": "den",
+        "gid": 603,
+        "x": 672,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7386,7 +7386,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 736,
+        "x": 704,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7398,7 +7398,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 768,
+        "x": 736,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7408,9 +7408,9 @@
         "id": 130,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 800,
+        "name": "eik",
+        "gid": 601,
+        "x": 768,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7422,7 +7422,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 864,
+        "x": 800,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7430,6 +7430,18 @@
        },
        {
         "id": 132,
+        "visible": true,
+        "rotation": 0,
+        "name": "den",
+        "gid": 603,
+        "x": 864,
+        "y": 32,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 133,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -7441,7 +7453,7 @@
         "properties": []
        },
        {
-        "id": 133,
+        "id": 134,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -7453,7 +7465,7 @@
         "properties": []
        },
        {
-        "id": 134,
+        "id": 135,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -7465,24 +7477,12 @@
         "properties": []
        },
        {
-        "id": 135,
+        "id": 136,
         "visible": true,
         "rotation": 0,
         "name": "eik",
         "gid": 601,
         "x": 992,
-        "y": 32,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 136,
-        "visible": true,
-        "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 1088,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7494,7 +7494,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1216,
+        "x": 1088,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7506,7 +7506,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1248,
+        "x": 1216,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7518,7 +7518,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1280,
+        "x": 1248,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7526,6 +7526,18 @@
        },
        {
         "id": 140,
+        "visible": true,
+        "rotation": 0,
+        "name": "den",
+        "gid": 603,
+        "x": 1280,
+        "y": 32,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 141,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -7537,24 +7549,12 @@
         "properties": []
        },
        {
-        "id": 141,
+        "id": 142,
         "visible": true,
         "rotation": 0,
         "name": "eik",
         "gid": 601,
         "x": 1408,
-        "y": 32,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 142,
-        "visible": true,
-        "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 1440,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7566,7 +7566,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1472,
+        "x": 1440,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7576,9 +7576,9 @@
         "id": 144,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 1504,
+        "name": "den",
+        "gid": 603,
+        "x": 1472,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7590,7 +7590,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 1600,
+        "x": 1504,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7602,7 +7602,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 1632,
+        "x": 1600,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7614,7 +7614,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 1760,
+        "x": 1632,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7622,6 +7622,18 @@
        },
        {
         "id": 148,
+        "visible": true,
+        "rotation": 0,
+        "name": "eik",
+        "gid": 601,
+        "x": 1760,
+        "y": 32,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 149,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -7633,7 +7645,7 @@
         "properties": []
        },
        {
-        "id": 149,
+        "id": 150,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -7645,24 +7657,12 @@
         "properties": []
        },
        {
-        "id": 150,
+        "id": 151,
         "visible": true,
         "rotation": 0,
         "name": "berk",
         "gid": 604,
         "x": 1856,
-        "y": 32,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 151,
-        "visible": true,
-        "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 1888,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7674,7 +7674,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1952,
+        "x": 1888,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7684,9 +7684,9 @@
         "id": 153,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 2016,
+        "name": "den",
+        "gid": 603,
+        "x": 1952,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7696,9 +7696,9 @@
         "id": 154,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 2048,
+        "name": "eik",
+        "gid": 601,
+        "x": 2016,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7710,7 +7710,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 2080,
+        "x": 2048,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7718,6 +7718,18 @@
        },
        {
         "id": 156,
+        "visible": true,
+        "rotation": 0,
+        "name": "den",
+        "gid": 603,
+        "x": 2080,
+        "y": 32,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 157,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -7729,24 +7741,12 @@
         "properties": []
        },
        {
-        "id": 157,
+        "id": 158,
         "visible": true,
         "rotation": 0,
         "name": "berk",
         "gid": 604,
         "x": 2176,
-        "y": 32,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 158,
-        "visible": true,
-        "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 2368,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7758,7 +7758,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 2400,
+        "x": 2368,
         "y": 32,
         "width": 346,
         "height": 308,
@@ -7770,6 +7770,18 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
+        "x": 2400,
+        "y": 32,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 161,
+        "visible": true,
+        "rotation": 0,
+        "name": "eik",
+        "gid": 601,
         "x": 0,
         "y": 64,
         "width": 346,
@@ -7777,7 +7789,7 @@
         "properties": []
        },
        {
-        "id": 161,
+        "id": 162,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -7789,7 +7801,7 @@
         "properties": []
        },
        {
-        "id": 162,
+        "id": 163,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -7801,7 +7813,7 @@
         "properties": []
        },
        {
-        "id": 163,
+        "id": 164,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -7813,7 +7825,7 @@
         "properties": []
        },
        {
-        "id": 164,
+        "id": 165,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -7825,24 +7837,12 @@
         "properties": []
        },
        {
-        "id": 165,
+        "id": 166,
         "visible": true,
         "rotation": 0,
         "name": "berk",
         "gid": 604,
         "x": 160,
-        "y": 64,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 166,
-        "visible": true,
-        "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 320,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -7854,7 +7854,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 352,
+        "x": 320,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -7866,7 +7866,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 384,
+        "x": 352,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -7874,6 +7874,18 @@
        },
        {
         "id": 169,
+        "visible": true,
+        "rotation": 0,
+        "name": "eik",
+        "gid": 601,
+        "x": 384,
+        "y": 64,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 170,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -7885,7 +7897,7 @@
         "properties": []
        },
        {
-        "id": 170,
+        "id": 171,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -7897,7 +7909,7 @@
         "properties": []
        },
        {
-        "id": 171,
+        "id": 172,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -7909,7 +7921,7 @@
         "properties": []
        },
        {
-        "id": 172,
+        "id": 173,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -7921,7 +7933,7 @@
         "properties": []
        },
        {
-        "id": 173,
+        "id": 174,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -7933,7 +7945,7 @@
         "properties": []
        },
        {
-        "id": 174,
+        "id": 175,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -7945,7 +7957,7 @@
         "properties": []
        },
        {
-        "id": 175,
+        "id": 176,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -7957,24 +7969,12 @@
         "properties": []
        },
        {
-        "id": 176,
+        "id": 177,
         "visible": true,
         "rotation": 0,
         "name": "eik",
         "gid": 601,
         "x": 864,
-        "y": 64,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 177,
-        "visible": true,
-        "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 960,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -7986,7 +7986,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1024,
+        "x": 960,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -7998,7 +7998,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1088,
+        "x": 1024,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8008,9 +8008,9 @@
         "id": 180,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 1184,
+        "name": "den",
+        "gid": 603,
+        "x": 1088,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8020,9 +8020,9 @@
         "id": 181,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 1248,
+        "name": "eik",
+        "gid": 601,
+        "x": 1184,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8034,7 +8034,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1280,
+        "x": 1248,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8044,9 +8044,9 @@
         "id": 183,
         "visible": true,
         "rotation": 0,
-        "name": "berk",
-        "gid": 604,
-        "x": 1312,
+        "name": "den",
+        "gid": 603,
+        "x": 1280,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8056,9 +8056,9 @@
         "id": 184,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 1344,
+        "name": "berk",
+        "gid": 604,
+        "x": 1312,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8070,7 +8070,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1440,
+        "x": 1344,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8082,7 +8082,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1472,
+        "x": 1440,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8092,9 +8092,9 @@
         "id": 187,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 1536,
+        "name": "den",
+        "gid": 603,
+        "x": 1472,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8106,7 +8106,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 1568,
+        "x": 1536,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8116,9 +8116,9 @@
         "id": 189,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 1632,
+        "name": "eik",
+        "gid": 601,
+        "x": 1568,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8128,9 +8128,9 @@
         "id": 190,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 1664,
+        "name": "den",
+        "gid": 603,
+        "x": 1632,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8142,7 +8142,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 1696,
+        "x": 1664,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8152,9 +8152,9 @@
         "id": 192,
         "visible": true,
         "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 1728,
+        "name": "eik",
+        "gid": 601,
+        "x": 1696,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8166,7 +8166,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 1824,
+        "x": 1728,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8176,9 +8176,9 @@
         "id": 194,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 1888,
+        "name": "den",
+        "gid": 603,
+        "x": 1824,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8190,7 +8190,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 1952,
+        "x": 1888,
         "y": 64,
         "width": 346,
         "height": 308,
@@ -8198,6 +8198,18 @@
        },
        {
         "id": 196,
+        "visible": true,
+        "rotation": 0,
+        "name": "eik",
+        "gid": 601,
+        "x": 1952,
+        "y": 64,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 197,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8209,7 +8221,7 @@
         "properties": []
        },
        {
-        "id": 197,
+        "id": 198,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8221,7 +8233,7 @@
         "properties": []
        },
        {
-        "id": 198,
+        "id": 199,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -8233,7 +8245,7 @@
         "properties": []
        },
        {
-        "id": 199,
+        "id": 200,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -8245,7 +8257,7 @@
         "properties": []
        },
        {
-        "id": 200,
+        "id": 201,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -8257,7 +8269,7 @@
         "properties": []
        },
        {
-        "id": 201,
+        "id": 202,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8269,7 +8281,7 @@
         "properties": []
        },
        {
-        "id": 202,
+        "id": 203,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -8281,7 +8293,7 @@
         "properties": []
        },
        {
-        "id": 203,
+        "id": 204,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8293,24 +8305,12 @@
         "properties": []
        },
        {
-        "id": 204,
+        "id": 205,
         "visible": true,
         "rotation": 0,
         "name": "den",
         "gid": 603,
         "x": 0,
-        "y": 96,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 205,
-        "visible": true,
-        "rotation": 0,
-        "name": "berk",
-        "gid": 604,
-        "x": 32,
         "y": 96,
         "width": 346,
         "height": 308,
@@ -8322,7 +8322,7 @@
         "rotation": 0,
         "name": "berk",
         "gid": 604,
-        "x": 128,
+        "x": 32,
         "y": 96,
         "width": 346,
         "height": 308,
@@ -8332,9 +8332,9 @@
         "id": 207,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 160,
+        "name": "berk",
+        "gid": 604,
+        "x": 128,
         "y": 96,
         "width": 346,
         "height": 308,
@@ -8346,7 +8346,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 320,
+        "x": 160,
         "y": 96,
         "width": 346,
         "height": 308,
@@ -8354,6 +8354,18 @@
        },
        {
         "id": 209,
+        "visible": true,
+        "rotation": 0,
+        "name": "eik",
+        "gid": 601,
+        "x": 320,
+        "y": 96,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 210,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8365,7 +8377,7 @@
         "properties": []
        },
        {
-        "id": 210,
+        "id": 211,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8377,7 +8389,7 @@
         "properties": []
        },
        {
-        "id": 211,
+        "id": 212,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -8389,7 +8401,7 @@
         "properties": []
        },
        {
-        "id": 212,
+        "id": 213,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8401,7 +8413,7 @@
         "properties": []
        },
        {
-        "id": 213,
+        "id": 214,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -8413,7 +8425,7 @@
         "properties": []
        },
        {
-        "id": 214,
+        "id": 215,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8425,7 +8437,7 @@
         "properties": []
        },
        {
-        "id": 215,
+        "id": 216,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8437,7 +8449,7 @@
         "properties": []
        },
        {
-        "id": 216,
+        "id": 217,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8449,7 +8461,7 @@
         "properties": []
        },
        {
-        "id": 217,
+        "id": 218,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8461,24 +8473,12 @@
         "properties": []
        },
        {
-        "id": 218,
-        "visible": true,
-        "rotation": 0,
-        "name": "berk",
-        "gid": 604,
-        "x": 928,
-        "y": 96,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
         "id": 219,
         "visible": true,
         "rotation": 0,
         "name": "berk",
         "gid": 604,
-        "x": 960,
+        "x": 928,
         "y": 96,
         "width": 346,
         "height": 308,
@@ -8490,7 +8490,7 @@
         "rotation": 0,
         "name": "berk",
         "gid": 604,
-        "x": 992,
+        "x": 960,
         "y": 96,
         "width": 346,
         "height": 308,
@@ -8498,6 +8498,18 @@
        },
        {
         "id": 221,
+        "visible": true,
+        "rotation": 0,
+        "name": "berk",
+        "gid": 604,
+        "x": 992,
+        "y": 96,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 222,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8509,7 +8521,7 @@
         "properties": []
        },
        {
-        "id": 222,
+        "id": 223,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -8521,7 +8533,7 @@
         "properties": []
        },
        {
-        "id": 223,
+        "id": 224,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8533,7 +8545,7 @@
         "properties": []
        },
        {
-        "id": 224,
+        "id": 225,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -8545,7 +8557,7 @@
         "properties": []
        },
        {
-        "id": 225,
+        "id": 226,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8557,7 +8569,7 @@
         "properties": []
        },
        {
-        "id": 226,
+        "id": 227,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -8569,7 +8581,7 @@
         "properties": []
        },
        {
-        "id": 227,
+        "id": 228,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8581,7 +8593,7 @@
         "properties": []
        },
        {
-        "id": 228,
+        "id": 229,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8593,7 +8605,7 @@
         "properties": []
        },
        {
-        "id": 229,
+        "id": 230,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8605,7 +8617,7 @@
         "properties": []
        },
        {
-        "id": 230,
+        "id": 231,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8617,24 +8629,12 @@
         "properties": []
        },
        {
-        "id": 231,
+        "id": 232,
         "visible": true,
         "rotation": 0,
         "name": "den",
         "gid": 603,
         "x": 1632,
-        "y": 96,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 232,
-        "visible": true,
-        "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 1664,
         "y": 96,
         "width": 346,
         "height": 308,
@@ -8646,7 +8646,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 1728,
+        "x": 1664,
         "y": 96,
         "width": 346,
         "height": 308,
@@ -8654,6 +8654,18 @@
        },
        {
         "id": 234,
+        "visible": true,
+        "rotation": 0,
+        "name": "eik",
+        "gid": 601,
+        "x": 1728,
+        "y": 96,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 235,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8665,7 +8677,7 @@
         "properties": []
        },
        {
-        "id": 235,
+        "id": 236,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8677,7 +8689,7 @@
         "properties": []
        },
        {
-        "id": 236,
+        "id": 237,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8689,7 +8701,7 @@
         "properties": []
        },
        {
-        "id": 237,
+        "id": 238,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8701,24 +8713,12 @@
         "properties": []
        },
        {
-        "id": 238,
-        "visible": true,
-        "rotation": 0,
-        "name": "den",
-        "gid": 603,
-        "x": 2176,
-        "y": 96,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
         "id": 239,
         "visible": true,
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 2368,
+        "x": 2176,
         "y": 96,
         "width": 346,
         "height": 308,
@@ -8730,8 +8730,8 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 64,
-        "y": 128,
+        "x": 2368,
+        "y": 96,
         "width": 346,
         "height": 308,
         "properties": []
@@ -8742,7 +8742,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 96,
+        "x": 64,
         "y": 128,
         "width": 346,
         "height": 308,
@@ -8754,7 +8754,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 320,
+        "x": 96,
         "y": 128,
         "width": 346,
         "height": 308,
@@ -8766,7 +8766,7 @@
         "rotation": 0,
         "name": "den",
         "gid": 603,
-        "x": 352,
+        "x": 320,
         "y": 128,
         "width": 346,
         "height": 308,
@@ -8776,9 +8776,9 @@
         "id": 244,
         "visible": true,
         "rotation": 0,
-        "name": "eik",
-        "gid": 601,
-        "x": 480,
+        "name": "den",
+        "gid": 603,
+        "x": 352,
         "y": 128,
         "width": 346,
         "height": 308,
@@ -8790,7 +8790,7 @@
         "rotation": 0,
         "name": "eik",
         "gid": 601,
-        "x": 800,
+        "x": 480,
         "y": 128,
         "width": 346,
         "height": 308,
@@ -8798,6 +8798,18 @@
        },
        {
         "id": 246,
+        "visible": true,
+        "rotation": 0,
+        "name": "eik",
+        "gid": 601,
+        "x": 800,
+        "y": 128,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 247,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8809,7 +8821,7 @@
         "properties": []
        },
        {
-        "id": 247,
+        "id": 248,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8821,7 +8833,7 @@
         "properties": []
        },
        {
-        "id": 248,
+        "id": 249,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -8833,7 +8845,7 @@
         "properties": []
        },
        {
-        "id": 249,
+        "id": 250,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8845,7 +8857,7 @@
         "properties": []
        },
        {
-        "id": 250,
+        "id": 251,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -8857,7 +8869,7 @@
         "properties": []
        },
        {
-        "id": 251,
+        "id": 252,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8869,24 +8881,12 @@
         "properties": []
        },
        {
-        "id": 252,
+        "id": 253,
         "visible": true,
         "rotation": 0,
         "name": "eik",
         "gid": 601,
         "x": 1504,
-        "y": 128,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
-        "id": 253,
-        "visible": true,
-        "rotation": 0,
-        "name": "berk",
-        "gid": 604,
-        "x": 1632,
         "y": 128,
         "width": 346,
         "height": 308,
@@ -8898,7 +8898,7 @@
         "rotation": 0,
         "name": "berk",
         "gid": 604,
-        "x": 1728,
+        "x": 1632,
         "y": 128,
         "width": 346,
         "height": 308,
@@ -8906,6 +8906,18 @@
        },
        {
         "id": 255,
+        "visible": true,
+        "rotation": 0,
+        "name": "berk",
+        "gid": 604,
+        "x": 1728,
+        "y": 128,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 256,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8917,7 +8929,7 @@
         "properties": []
        },
        {
-        "id": 256,
+        "id": 257,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8929,7 +8941,7 @@
         "properties": []
        },
        {
-        "id": 257,
+        "id": 258,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -8941,7 +8953,7 @@
         "properties": []
        },
        {
-        "id": 258,
+        "id": 259,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8953,7 +8965,7 @@
         "properties": []
        },
        {
-        "id": 259,
+        "id": 260,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8965,7 +8977,7 @@
         "properties": []
        },
        {
-        "id": 260,
+        "id": 261,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -8977,7 +8989,7 @@
         "properties": []
        },
        {
-        "id": 261,
+        "id": 262,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -8989,7 +9001,7 @@
         "properties": []
        },
        {
-        "id": 262,
+        "id": 263,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -9001,7 +9013,7 @@
         "properties": []
        },
        {
-        "id": 263,
+        "id": 264,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -9013,7 +9025,7 @@
         "properties": []
        },
        {
-        "id": 264,
+        "id": 265,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -9025,7 +9037,7 @@
         "properties": []
        },
        {
-        "id": 265,
+        "id": 266,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -9037,7 +9049,7 @@
         "properties": []
        },
        {
-        "id": 266,
+        "id": 267,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -9049,7 +9061,7 @@
         "properties": []
        },
        {
-        "id": 267,
+        "id": 268,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -9061,7 +9073,7 @@
         "properties": []
        },
        {
-        "id": 268,
+        "id": 269,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -9073,7 +9085,7 @@
         "properties": []
        },
        {
-        "id": 269,
+        "id": 270,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -9085,7 +9097,7 @@
         "properties": []
        },
        {
-        "id": 270,
+        "id": 271,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -9097,7 +9109,7 @@
         "properties": []
        },
        {
-        "id": 271,
+        "id": 272,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -9109,7 +9121,7 @@
         "properties": []
        },
        {
-        "id": 272,
+        "id": 273,
         "visible": true,
         "rotation": 0,
         "name": "berk",
@@ -9121,7 +9133,7 @@
         "properties": []
        },
        {
-        "id": 273,
+        "id": 274,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -9133,7 +9145,7 @@
         "properties": []
        },
        {
-        "id": 274,
+        "id": 275,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -9145,7 +9157,7 @@
         "properties": []
        },
        {
-        "id": 275,
+        "id": 276,
         "visible": true,
         "rotation": 0,
         "name": "den",
@@ -9157,7 +9169,7 @@
         "properties": []
        },
        {
-        "id": 276,
+        "id": 277,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -9169,7 +9181,7 @@
         "properties": []
        },
        {
-        "id": 277,
+        "id": 278,
         "visible": true,
         "rotation": 0,
         "name": "eik",
@@ -9181,7 +9193,7 @@
         "properties": []
        },
        {
-        "id": 278,
+        "id": 279,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9193,7 +9205,7 @@
         "properties": []
        },
        {
-        "id": 279,
+        "id": 280,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9205,7 +9217,7 @@
         "properties": []
        },
        {
-        "id": 280,
+        "id": 281,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9217,24 +9229,12 @@
         "properties": []
        },
        {
-        "id": 281,
-        "visible": true,
-        "rotation": 0,
-        "name": "wilg",
-        "gid": 606,
-        "x": 160,
-        "y": 416,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
         "id": 282,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
         "gid": 606,
-        "x": 288,
+        "x": 160,
         "y": 416,
         "width": 346,
         "height": 308,
@@ -9247,13 +9247,25 @@
         "name": "wilg",
         "gid": 606,
         "x": 288,
-        "y": 448,
+        "y": 416,
         "width": 346,
         "height": 308,
         "properties": []
        },
        {
         "id": 284,
+        "visible": true,
+        "rotation": 0,
+        "name": "wilg",
+        "gid": 606,
+        "x": 288,
+        "y": 448,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 285,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9265,7 +9277,7 @@
         "properties": []
        },
        {
-        "id": 285,
+        "id": 286,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9277,7 +9289,7 @@
         "properties": []
        },
        {
-        "id": 286,
+        "id": 287,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9289,7 +9301,7 @@
         "properties": []
        },
        {
-        "id": 287,
+        "id": 288,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9301,24 +9313,12 @@
         "properties": []
        },
        {
-        "id": 288,
-        "visible": true,
-        "rotation": 0,
-        "name": "wilg",
-        "gid": 606,
-        "x": 96,
-        "y": 768,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
         "id": 289,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
         "gid": 606,
-        "x": 224,
+        "x": 96,
         "y": 768,
         "width": 346,
         "height": 308,
@@ -9330,8 +9330,8 @@
         "rotation": 0,
         "name": "wilg",
         "gid": 606,
-        "x": 64,
-        "y": 832,
+        "x": 224,
+        "y": 768,
         "width": 346,
         "height": 308,
         "properties": []
@@ -9343,13 +9343,25 @@
         "name": "wilg",
         "gid": 606,
         "x": 64,
-        "y": 896,
+        "y": 832,
         "width": 346,
         "height": 308,
         "properties": []
        },
        {
         "id": 292,
+        "visible": true,
+        "rotation": 0,
+        "name": "wilg",
+        "gid": 606,
+        "x": 64,
+        "y": 896,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 293,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9361,7 +9373,7 @@
         "properties": []
        },
        {
-        "id": 293,
+        "id": 294,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9373,7 +9385,7 @@
         "properties": []
        },
        {
-        "id": 294,
+        "id": 295,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9385,7 +9397,7 @@
         "properties": []
        },
        {
-        "id": 295,
+        "id": 296,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9397,7 +9409,7 @@
         "properties": []
        },
        {
-        "id": 296,
+        "id": 297,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9409,7 +9421,7 @@
         "properties": []
        },
        {
-        "id": 297,
+        "id": 298,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9421,24 +9433,12 @@
         "properties": []
        },
        {
-        "id": 298,
-        "visible": true,
-        "rotation": 0,
-        "name": "wilg",
-        "gid": 606,
-        "x": 192,
-        "y": 1728,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
         "id": 299,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
         "gid": 606,
-        "x": 320,
+        "x": 192,
         "y": 1728,
         "width": 346,
         "height": 308,
@@ -9451,7 +9451,7 @@
         "name": "wilg",
         "gid": 606,
         "x": 320,
-        "y": 1760,
+        "y": 1728,
         "width": 346,
         "height": 308,
         "properties": []
@@ -9463,13 +9463,25 @@
         "name": "wilg",
         "gid": 606,
         "x": 320,
-        "y": 1792,
+        "y": 1760,
         "width": 346,
         "height": 308,
         "properties": []
        },
        {
         "id": 302,
+        "visible": true,
+        "rotation": 0,
+        "name": "wilg",
+        "gid": 606,
+        "x": 320,
+        "y": 1792,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 303,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9481,7 +9493,7 @@
         "properties": []
        },
        {
-        "id": 303,
+        "id": 304,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9493,7 +9505,7 @@
         "properties": []
        },
        {
-        "id": 304,
+        "id": 305,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9505,7 +9517,7 @@
         "properties": []
        },
        {
-        "id": 305,
+        "id": 306,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9517,7 +9529,7 @@
         "properties": []
        },
        {
-        "id": 306,
+        "id": 307,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9529,7 +9541,7 @@
         "properties": []
        },
        {
-        "id": 307,
+        "id": 308,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9541,7 +9553,7 @@
         "properties": []
        },
        {
-        "id": 308,
+        "id": 309,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9553,24 +9565,12 @@
         "properties": []
        },
        {
-        "id": 309,
-        "visible": true,
-        "rotation": 0,
-        "name": "wilg",
-        "gid": 606,
-        "x": 96,
-        "y": 2208,
-        "width": 346,
-        "height": 308,
-        "properties": []
-       },
-       {
         "id": 310,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
         "gid": 606,
-        "x": 192,
+        "x": 96,
         "y": 2208,
         "width": 346,
         "height": 308,
@@ -9583,13 +9583,25 @@
         "name": "wilg",
         "gid": 606,
         "x": 192,
-        "y": 2240,
+        "y": 2208,
         "width": 346,
         "height": 308,
         "properties": []
        },
        {
         "id": 312,
+        "visible": true,
+        "rotation": 0,
+        "name": "wilg",
+        "gid": 606,
+        "x": 192,
+        "y": 2240,
+        "width": 346,
+        "height": 308,
+        "properties": []
+       },
+       {
+        "id": 313,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9601,7 +9613,7 @@
         "properties": []
        },
        {
-        "id": 313,
+        "id": 314,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9613,7 +9625,7 @@
         "properties": []
        },
        {
-        "id": 314,
+        "id": 315,
         "visible": true,
         "rotation": 0,
         "name": "wilg",
@@ -9625,7 +9637,7 @@
         "properties": []
        },
        {
-        "id": 315,
+        "id": 316,
         "visible": true,
         "rotation": 0,
         "name": "kool",
@@ -9637,7 +9649,7 @@
         "properties": []
        },
        {
-        "id": 316,
+        "id": 317,
         "visible": true,
         "rotation": 0,
         "name": "kool",
@@ -9649,7 +9661,7 @@
         "properties": []
        },
        {
-        "id": 317,
+        "id": 318,
         "visible": true,
         "rotation": 0,
         "name": "bonen",
@@ -9661,7 +9673,7 @@
         "properties": []
        },
        {
-        "id": 318,
+        "id": 319,
         "visible": true,
         "rotation": 0,
         "name": "bonen",
@@ -9673,7 +9685,7 @@
         "properties": []
        },
        {
-        "id": 319,
+        "id": 320,
         "visible": true,
         "rotation": 0,
         "name": "kruidenbed",
@@ -9685,7 +9697,7 @@
         "properties": []
        },
        {
-        "id": 320,
+        "id": 321,
         "visible": true,
         "rotation": 0,
         "name": "bonen",
@@ -9697,7 +9709,7 @@
         "properties": []
        },
        {
-        "id": 321,
+        "id": 322,
         "visible": true,
         "rotation": 0,
         "name": "kruidenbed",
@@ -9709,7 +9721,7 @@
         "properties": []
        },
        {
-        "id": 322,
+        "id": 323,
         "visible": true,
         "rotation": 0,
         "name": "regenton",
@@ -9721,7 +9733,7 @@
         "properties": []
        },
        {
-        "id": 323,
+        "id": 324,
         "visible": true,
         "rotation": 0,
         "name": "kruidenbed",
@@ -9733,7 +9745,7 @@
         "properties": []
        },
        {
-        "id": 324,
+        "id": 325,
         "visible": true,
         "rotation": 0,
         "name": "regenton",

@@ -1578,6 +1578,35 @@ Wat het vraagt:
 - **Wanneer** (vraag 23): een getuige kan pas iets zien als de mensen poppetjes zijn. Voorstel van
   Claude: als stap in 3b, na de poppetjes, in plaats van later bij punt 11 (de nacht), omdat
   verstoppen er meteen spannender door wordt.
+- **Het plan, met Marcels keuzes** (27 sep; werklijst, vraag 40; Marcel: "A ja B ja C ja D ja"):
+  - **Stuk 1, iedereen ziet, en 's nachts minder ver:** wie buiten is, ziet de schout als hij dichtbij
+    genoeg is en er niets tussen staat: overdag acht tegels, in de schemering vijf, 's nachts twee, en
+    in het licht van een lantaarn of de herberg verder. Wie binnen is of slaapt, ziet niets. Een paar
+    vaste lantaarns in het gehucht branden 's avonds (D). Zet je iets weg of haal je iets terug
+    terwijl iemand je ziet, dan is hij getuige, en dat zie je meteen: een oogje boven zijn hoofd en een
+    bericht (A). Alleen die handeling telt, niet het sjouwen (B).
+  - **Stuk 2, wat een getuige doet, naar zijn karakter:** de roddelaar vertelt het in de herberg, en dan
+    vinden de soldaten die plek makkelijker; de herbergierster vertelt het je de volgende dag. Dan komt
+    ook de keuze in de spelregels of je het meteen ziet of pas later (A).
+  - **Later:** een lantaarn voor de schout zelf, bij punt 11 (C); de koster die de lantaarns aansteekt,
+    de keur "een lantaarn aan elke deur" en de nachtwacht.
+
+**Zo werkt het nu: het zichtveld, stuk 1** (27 sep; `js/zien.js`, toetsen in `test/zien.test.cjs`):
+- **Wie buiten is, ziet de schout,** als hij dichtbij genoeg is en er niets tussen staat: hemelsbreed,
+  en een huis of een boom houdt de blik tegen (`T.zietTegel`, zoals de inner kijkt). Hoe ver hangt af van
+  het licht waar de schout staat (`T.zichtOp`): overdag acht tegels, 's nachts twee, in de schemering
+  ertussen, en in het licht van een lantaarn of de herberg zes. Wie binnen is of slaapt, ziet niets; een
+  dier of een monster is geen getuige.
+- **Het licht in het dorp** (`T.lichtBronnen`): de herberg, met zijn lantaarn en zijn ramen, en een
+  lantaarn bij de put, voor de deur van de schout, die 's avonds brandt tot bedtijd (D). Een tweede bij de
+  bank viel vanuit de camera achter de hut weg. Het spel tekent er de gloed van in de nacht.
+- **Een getuige** (A, B): zet je iets weg of haal je iets terug terwijl iemand je ziet, dan krijgt hij
+  een oogje boven zijn hoofd, zegt het bericht wie het was ("Klaas zag je 10 graan in je eigen kelder
+  zetten"), en onthoudt de plek het (`g.getuigen`: wie, wanneer, wat), voor stuk 2. Zag niemand het, dan
+  zegt het bericht dat. Wie in het huis van de plek woont, telt niet: het is zijn kelder, en of hij
+  meedoet, zegt zijn karakter al. Het venster van de plek zegt vooraf wie je nu ziet ("Niemand ziet
+  je.", of in het rood wie wel), en staat op een breed scherm opzij, zodat je ziet wie er om je heen
+  staat.
 
 **Hoe het zo kwam:**
 

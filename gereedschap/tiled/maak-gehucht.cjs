@@ -442,6 +442,11 @@ zetTegel('put', 33, 35, true);
 const PLEIN_BOMEN = [[38, 42], [31, 41], [43, 37], [34, 45], [40, 34]];
 for (const [x, y] of PLEIN_BOMEN) zetTegel('eik', x, y, true);
 zetTegel('bank', 39, 43, true);
+// Een lantaarn die 's avonds brandt (werklijst punt 3, vraag 40, D; js/zien.js): bij de put, voor de
+// deur van de schout. Daar zien de mensen je 's avonds van verder; wie iets wil wegzetten, zoekt de
+// donkere hoeken op. De herberg heeft zijn eigen lantaarn. Een tweede bij de bank viel vanuit de camera
+// achter de hut aan de zuidoosthoek weg, en zijn gloed lag dan op het dak ervoor (27 sep).
+zetTegel('lantaarn', 34, 34, true);
 
 // ---- losse bomen bij de huizen en op het land: appelbomen bij een erf, eiken verderop ----
 const BOMEN = [
@@ -529,8 +534,8 @@ for (let y = 0; y < H; y++) {
   }
   const akkerTegels = AKKERS.reduce((n, a) => n + a.b * a.h, 0);
   if (akkerTegels !== AKKER_TEGELS) fouten.push(`de akkers zijn samen ${akkerTegels} tegels in plaats van ${AKKER_TEGELS}: de oogst verschuift`);
-  // Op het plein staat niets dan de put, de eiken en de bank, en geen akker.
-  const magOpPlein = new Set(['put', 'eik', 'bank']);
+  // Op het plein staat niets dan de put, de eiken, de bank en een lantaarn, en geen akker.
+  const magOpPlein = new Set(['put', 'eik', 'bank', 'lantaarn']);
   for (const o of objecten) {
     const [vb, vd] = gidVan(o.name).tegel.beslaat || [1, 1];
     const x0 = o.x / 32;

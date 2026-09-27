@@ -132,7 +132,8 @@
 
   // Hoe donker het is, van 0 (de zon is op) tot nachtDonker (nacht), met een schemering van
   // schemerUren vóór zonsopgang en na zonsondergang; en een gloed (0 tot 1) rond zonsopgang en
-  // zonsondergang, voor een warm randje aan de dag (js/tekenen.js).
+  // zonsondergang, voor een warm randje aan de dag (js/tekenen.js). `nacht` is hetzelfde van 0 tot 1:
+  // hoe ver het naar de nacht is, voor wie wat ziet (js/zien.js) en wat 's avonds brandt.
   T.lichtVan = function (dag) {
     const i = IN();
     const u = T.uurVanDag(dag);
@@ -142,7 +143,7 @@
     if (u < zon.op) donker = Math.min(1, (zon.op - u) / s);
     else if (u > zon.onder) donker = Math.min(1, (u - zon.onder) / s);
     const gloed = Math.max(0, 1 - Math.min(Math.abs(u - zon.op), Math.abs(u - zon.onder)) / s);
-    return { donker: donker * i.nachtDonker, gloed };
+    return { donker: donker * i.nachtDonker, nacht: donker, gloed };
   };
 
   // ---------------------------------------------------------------------------------------------

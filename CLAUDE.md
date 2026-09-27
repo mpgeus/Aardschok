@@ -117,7 +117,7 @@ Alles hangt aan één naamruimte, `globalThis.Spel` (in de code `T`), zodat hetz
 de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html` telt.
 
 - `js/wereld.js`: wat een wezen is (`T.WEZENS`) en wat een voorwerp is (`T.VOORWERPEN`), de
-  vragen over een kaart (`isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`, `isZichtbaar`,
+  vragen over een kaart (`isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`/`zietTegel`, `isZichtbaar`,
   `opHetPlein`: op het plein wordt niet gebouwd),
   en de proefkamers (`T.maakProefkamers`): drie kamers in code voor de toetsen van het gevecht.
   Elke kaart van het spel komt uit Tiled (`js/kaart.js`). De speler is `S.schout`, met soort
@@ -184,6 +184,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wie er zat, en de marskramer logeert er (`T.logiesAnker`). 's Avonds branden de ramen van de herberg,
   met de gasten erachter als schimmen: de huizenbouwer geeft per huis door waar de ramen zitten (`ramen`
   in `tegels.json`), en `js/tekenen.js` tekent ze zo dat wat ervoor staat ze afdekt (`brandendeRamen`).
+- `js/zien.js`: **het zichtveld en de getuigen** (werklijst punt 3, 27 sep): wie buiten is, ziet de
+  schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
+  verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het
+  dorp staat op één plek (`T.lichtBronnen`: de herberg en de lantaarns op de kaart, die 's avonds
+  branden), voor wie wat ziet én voor de gloed in `js/tekenen.js`. Wie de schout iets ziet wegzetten of
+  terughalen, is getuige (`T.werdGezien`: de plek onthoudt het in `g.getuigen`, en boven zijn hoofd
+  staat een oogje); wie er woont, telt niet. Het venster van de plek zegt vooraf wie je ziet
+  (`T.kijkersTekst`).
 - Een zin in een gesprek kan iets uit het spel noemen: `{woord}` vult `T.GESPREK_WOORDEN` in
   (`js/gesprek.js`), zoals `{gisteravond}` (`js/herberg.js`).
 - `js/akkers.js`: **alleen het gehucht** (`ontwerp/spel.md`): welk stadium een
@@ -346,7 +354,8 @@ een open plek bij de schout. `Spel.debug.bewoners()` zegt per bewoner wie het is
 waar hij staat en waar hij nu hoort (`('herder')` zoekt er een). `Spel.debug.gezin()` laat nu een
 gezin komen (overdag over de weg; er moet een huis met plaats zijn), `(-4)` laat er een wegtrekken.
 `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
-en het bier (`(30)` zet eerst 30 bier).
+en het bier (`(30)` zet eerst 30 bier). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
+hij staat, wie er kijkt, en welk licht er brandt.
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1
 slachtmaand).
 De spelregels die de browser onthield (`localStorage`, `aardschok.spelregels`) gelden ook voor wie

@@ -746,5 +746,13 @@ kbd {
 /* Verstoppen (js/hud.js, T.ui.openVerstoppen; js/verstoppen.js): in de stijl van de marskramer. Wie
    er woont en wat dat betekent, staat cursief boven de rijen. */
 #verstoppen .verstop-bewoner { margin: 0 0 8px; font: italic 13px var(--kop); color: var(--inkt); }
+/* Wie je nu ziet (js/zien.js, T.kijkersTekst); kijkt er iemand, dan in het rood. */
+#verstoppen .verstop-kijkers { margin: -4px 0 10px; font-size: 13px; color: var(--groen); }
+#verstoppen .verstop-kijkers.gezien { color: var(--rood); font-weight: bold; }
 #verstoppen .handel-rij { grid-template-columns: 1fr 1fr; row-gap: 6px; }
 #verstoppen .handel-knoppen { grid-column: 1 / -1; flex-wrap: wrap; justify-content: flex-end; }
+/* Op een breed scherm opzij (27 sep, werklijst punt 3): de schout staat midden in beeld, en wie om hem
+   heen kijkt, wil je zien terwijl je iets wegzet, met het oogje boven wie het zag (js/zien.js). */
+@media (min-width: 1100px) {
+  #verstoppen { left: auto; right: 24px; transform: translateY(-50%); width: min(470px, calc(100vw - 32px)); }
+}

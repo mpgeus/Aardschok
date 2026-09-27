@@ -133,8 +133,10 @@
   // Wie wegtrekt, staat niet meer in S.bewoners.mensen; zijn poppetje loopt nog tot de uitgang
   // (e.vertrekt, S.bewoners.vertrekken).
 
-  // Hoe hij heet: een boer zoals T.MENSEN (en de spelregels) het zeggen, de schout "de schout".
+  // Hoe hij heet: een boer zoals T.MENSEN (en de spelregels) het zeggen, de schout "de schout". Ook
+  // voor de herberg (js/herberg.js) en de getuigen (js/zien.js).
   const naamVan = (p) => (p.schout ? 'de schout' : p.wie ? T.naamVanMens(p.wie) : p.naam);
+  T.naamVanBewoner = naamVan;
   // Hoort hij bij het gezin van de schout?
   const vanSchout = (p) => !!(p.schout || (p.hoofd && p.hoofd.schout));
   // Kan hij werken? Iedereen, behalve de schout zelf en een kleuter. Het gezin van de schout werkt
