@@ -10,14 +10,14 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (27 sep 2026, negende sessie): de herberg is af (punt 2)
+## De stand (27 sep 2026, negende sessie): de herberg is af (punt 2), en stuk 1 van het zichtveld
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 513/513.
+`npm test`: 522/522.
 
 **Waar het werk staat:** de achtste sessie staat in `main`. De negende (27 sep) staat op de branch
 `claude/werklijst-doorzetten-ikazjp`, nog niet in `main` en nog niet gepusht: dat doet Claude als Marcel
@@ -77,13 +77,20 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   staat nu in de oude hoek). 's Avonds branden zijn ramen, met de gasten erachter als schimmen, en wat
   ervoor staat, dekt ze af. Omdat de meeste boeren oost en noord wonen, lopen ze nu verder en komen er
   iets minder gasten (in de herfst 2,0 per avond in plaats van 2,2). Marcel kreeg schermafdrukken.
+- **Het zichtveld, stuk 1** (punt 3, vraag 40; Marcel: "A ja B ja C ja D ja"): wie buiten is, ziet de
+  schout als het licht het toelaat (overdag acht tegels, 's nachts twee, bij een lantaarn zes), en wie hem
+  iets ziet wegzetten of terughalen, is getuige: een oogje boven zijn hoofd en een bericht. Er brandt 's
+  avonds een lantaarn bij de put. Het venster van de plek zegt vooraf wie je ziet. Marcel kreeg
+  schermafdrukken.
 - **Een fout gevonden en gerepareerd:** in het spel telde het karakter van wie er woont bij de kelders
   niet (de vrome weigerde niet, de woekeraar hield niets). Twee bestanden hadden twee namen gemeen, en
   het laatste won; de toetsen laadden dat bestand niet. Dat is precies waar vraag 25, E voor is.
 
-**Punt 2, de herberg, is af** (27 sep, drie stukken). **Nu komt punt 3, het zichtveld en de getuigen:**
-het plan staat bij vraag 40 en **wacht op Marcel**; Claude bouwt pas als hij het goed vindt. Wat Marcel
-kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
+**Punt 2, de herberg, is af** (27 sep, drie stukken), **en van punt 3 stuk 1** (het zichtveld: wie ziet
+de schout, en wie is getuige). **Nu stuk 2: wat een getuige doet,** naar zijn karakter (het plan van vraag
+40, goedgekeurd): de roddelaar vertelt het in de herberg, en dan vinden de soldaten die plek makkelijker;
+de herbergierster vertelt het je de volgende dag. Dan komt ook de keuze in de spelregels of je een getuige
+meteen ziet of pas later (A). Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -111,7 +118,7 @@ voorstel van Claude, en daar gaat vraag 26 over.
    branden. Zie onder Af.
 3. **Nu: het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
    steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
-   uit verstoppen deel 1b op. Het plan, in twee stukken, staat bij vraag 40.
+   uit verstoppen deel 1b op. Het plan, in twee stukken, staat bij vraag 40. Stuk 1 is af (27 sep).
 4. **De kern afmaken** (punt 6 en 6a), en daarmee de vraag van het tweede proefje: is dit leuk?
    - verstoppen deel 1b, de rest (Marcel koos het op 25 sep): de soldaten zoeken op Sint-Maarten
      altijd op 2 of 3 plekken, ook zonder argwaan, en je bepaalt de route zelf, maar soms wil de heer
@@ -336,6 +343,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     branden van de avond tot bedtijd: daar zie je verder, en word je eerder gezien, dus zoek je voor je
     nachtwerk de donkere hoeken op. Wie ze aansteekt, komt later: de koster (als er een kapel is), de
     keur "een lantaarn aan elke deur" (deel C) en de nachtwacht (punt 11).
+    **Beantwoord (Marcel, 27 sep): "A ja B ja C ja D ja".** Stuk 1 loopt.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -626,6 +634,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 27 sep 2026 — **Het zichtveld, stuk 1** (negende sessie; punt 3, vraag 40, Marcel: "A ja B ja C ja D
+  ja"). Wie buiten is, ziet de schout als hij dichtbij genoeg is en er niets tussen staat: overdag acht
+  tegels, 's nachts twee, in het licht van een lantaarn of de herberg zes (`js/zien.js`, `T.zichtOp`,
+  `T.getuigenVan`). Het licht staat op één plek (`T.lichtBronnen`), en er brandt 's avonds een lantaarn
+  bij de put. Wie de schout iets ziet wegzetten of terughalen, is getuige (`T.werdGezien`): een oogje
+  boven zijn hoofd, een bericht, en de plek onthoudt het (`g.getuigen`). Het venster van de plek zegt
+  vooraf wie je ziet en staat op een breed scherm opzij. `npm test`: 522/522.
 - 27 sep 2026 — **De herberg, stuk 3: groter, aan het plein, en de ramen branden** (negende sessie;
   vraag 39, Marcel: "Prima" en "Ja idd"). De herberg is een T van vakwerk onder riet, acht bij elf tegels,
   met de deur midden op de lange kant, naar het plein; hij staat aan de westkant ervan, en de lege hut
