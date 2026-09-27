@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (27 sep 2026, na de negende en tiende sessie): punt 2 en 3 zijn af, van punt 4 stuk 1 en 2, en een jaar gespeeld
+## De stand (27 sep 2026, na de negende en tiende sessie): alles staat in main
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
@@ -19,13 +19,31 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met 
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
 `npm test`: 538/538.
 
-**Waar het werk staat:** de tiende sessie (27 sep) staat in `main` (Marcel: "Zet het in main"), en ook
-op haar eigen branch `claude/offline-flight-tasks-35l4cj`. De negende sessie staat in `main` tot en met
-stuk 1 van het zichtveld (Marcel: "Ja, zet het in main"); wat ze daarna deed (stuk 2 van het zichtveld,
-stuk 1 en 2 van punt 4, en het idee voor het bos) staat op haar eigen branch
-`claude/werklijst-doorzetten-ikazjp`, samen met de tiende sessie, maar nog niet in `main`: dat doet
-Claude als Marcel erom vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder
-Git.
+**Waar het werk staat:** alles staat in `main` (Marcel, 27 sep: "Alle openstaande punten meenemen naar
+nieuwe sessie en alles naar main"): de negende sessie (ook op `claude/werklijst-doorzetten-ikazjp`) en
+de tiende (ook op `claude/offline-flight-tasks-35l4cj`), samengevoegd. Hoe een eigen branch en `main`
+samengaan, staat in `CLAUDE.md`, onder Git.
+
+**Openstaand, voor de volgende sessie** (Marcel vroeg het, 27 sep):
+- **Vraag 33, wat de proefversie nog nodig heeft** (`speelbaar.md`, 33a tot en met 33d): wacht op Marcel,
+  en bepaalt de volgorde. 33c (de inner bespelen, vóór de proef of erna) is ingehaald: dat is er sinds
+  punt 4, stuk 2.
+- **De winter zichtbaar maken:** het tweede van wat de speeltest eerst wil. De kou kost bijna de helft van
+  het dorp, het hout is eind wintermaand op, en het bericht zegt niet waaraan (`speelbaar.md`,
+  `opmerkingen.md`). Het eerste, de soldaten altijd laten zoeken, is af.
+- **Een nieuwe speeltest, als Marcel dat wil:** de vorige liep op `main` van vóór de soldaten die altijd
+  zoeken en de inner die je kunt bespelen. Hoe het nu speelt, weet nog niemand.
+- **De inner bijstellen, later** (Marcel: "We gaan later finetunen"): hoe lang hij praat en wacht, en wat
+  een geschenk oplevert (de werkbank, "De inner"; wat opviel staat in `opmerkingen.md`).
+- **Het bos met de kudde:** een idee met vier vragen (A tot en met D) in `opmerkingen.md`, onder de
+  voorstellen van Claude; niet bouwen tot Marcel erom vraagt (vraag 43).
+- **De rest van punt 4:** de marskramer die vee, kaas, wol en hooi koopt en verkoopt (deel 3), en de twee
+  rekenboeken.
+- **Vraag 8, een naam:** voorstel Martinmas, of Schout (`verpakken.md`, "De naam").
+- **Oudere vragen, zonder haast:** 6 (de groepen en keuren), 7 (ijs op de beek), 10 tot en met 13 (de oude
+  monsters, het leven van de schout, de knop Slaan, een eigen figuur), 22 (de tijdsversneller), 25 C en D
+  (`hud.js` en `tekenen.js` splitsen) en 26 (de volgorde).
+- **Wat nog ruw is:** `opmerkingen.md`, bovenaan.
 
 **Wat er in de tiende sessie gebeurde** (27 sep, terwijl Marcel twee uur vloog; hij koos vooraf 1, 3 en
 4 uit een lijst van Claude, en niet stuk 2 van de getuigen):
@@ -120,14 +138,9 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   het laatste won; de toetsen laadden dat bestand niet. Dat is precies waar vraag 25, E voor is.
 
 **Punt 2, de herberg, en punt 3, het zichtveld en de getuigen, zijn af** (27 sep), **en van punt 4 stuk
-1 en 2** (de soldaten zoeken altijd; de inner afleiden en omkopen). De getallen daarvan blijven voorlopig
-zoals ze zijn (Marcel, 27 sep: "We gaan later finetunen"). **Het tweede proefje is gespeeld** door een
-andere agent (de tiende sessie, hierboven), maar op `main`, dus zonder stuk 2 van het zichtveld en stuk 1
-en 2 van punt 4. Van de twee dingen die de speeltest eerst wil (`speelbaar.md`), is het eerste daarmee
-al af: de soldaten zoeken altijd. Het tweede, de winter zichtbaar maken, nog niet. **Wacht op Marcel:
-vraag 33** (`speelbaar.md`, 33a tot en met 33d), want daaruit volgt of de volgorde hieronder verandert.
-Het plan voor het bos met de kudde is **als idee bewaard** in `opmerkingen.md` (vraag 43; Marcel: "Push
-en alles als idee opslaan"). Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
+1 en 2** (de soldaten zoeken altijd; de inner afleiden en omkopen). **Het tweede proefje is gespeeld**
+(de tiende sessie, hierboven), maar op `main` van vóór stuk 1 en 2. Wat nu openstaat, staat hierboven
+onder "Openstaand". Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -220,9 +233,8 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 22. Welke standen krijgt de tijdsversneller? Voorstel: 1×, 3×, 10× en 30×, en slapen tot de ochtend
     als de schout thuis is. Een jaar duurt dan 30 uur, 10 uur, 3 uur of 1 uur. Zo gebouwd (26 sep);
     andere standen zijn één regel (`T.SNELHEDEN`, `js/tijd.js`).
-23. Komen het zichtveld voor iedereen en de getuigen (Marcels idee, 26 sep) als stap in 3b, na de
-    poppetjes, of later bij punt 11 (de nacht)? Voorstel: in 3b, want verstoppen wordt er meteen
-    spannender door. Waar precies in 3b, is vraag 26: Claude stelt voor de herberg ervoor te doen.
+23. ~~Komen het zichtveld voor iedereen en de getuigen (Marcels idee, 26 sep) als stap in 3b, of later
+    bij punt 11 (de nacht)?~~ Het werd punt 3, na de herberg, en is af (27 sep).
 24. Wat nu, na de dag: de poppetjes (3b, stap 2), of eerst verstoppen deel 1b? Voorstel: de
     poppetjes, en dan het zichtveld (vraag 23), waarin "wie vlak langs loopt, kan iets vinden" opgaat.
     **Beantwoord (Marcel, 26 sep): de poppetjes.**

@@ -60,7 +60,8 @@ aan het eind moet het zeggen hoe het ging. Op 30× duurt zo'n jaar ongeveer een 
 
 - **Stap 3 van de inner: praten, afleiden, omkopen** (punt 4 van de werklijst). Zonder is zijn bezoek
   iets wat je laat gebeuren. Vraag 33c: vóór de proef of erna? Voorstel: erna, tenzij de speeltest of
-  Marcels eigen spel laat zien dat het bezoek saai is.
+  Marcels eigen spel laat zien dat het bezoek saai is. **Ingehaald:** de negende sessie bouwde het
+  tegelijk, op Marcels antwoord op vraag 42 (27 sep; werklijst, onder Af).
 - **Hoe een tester het krijgt** (vraag 33d): een bladzijde op internet (het draait al in de browser)
   of een programma om te downloaden (Electron, `verpakken.md`). Marcel wil geen browserspel als
   product; voor een proef met een paar mensen is een bladzijde het snelst.
@@ -92,7 +93,7 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
   verstopt), wat de heer denkt dat je hebt, en hoe het dorp erbij staat (mensen, tevredenheid). Geen
   punten, wel een zin van de heer en een van het dorp.
 - **33b.** Opslaan: vanzelf elke ochtend op één plek, of ook zelf opslaan op meer plekken?
-- **33c.** Stap 3 van de inner (praten, afleiden, omkopen): vóór de proef of erna?
+- **33c.** ~~Stap 3 van de inner (praten, afleiden, omkopen): vóór de proef of erna?~~ Ingehaald: het is er (27 sep).
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma?
 
 ## De speeltest van 27 sep
