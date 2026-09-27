@@ -8,7 +8,7 @@ for (const f of [
   'js/tijd.js', 'js/dag.js', 'js/voorraad.js', 'js/wereld.js', 'beelden/beschrijving.js', 'tegels/tegels.js',
   'kaarten/kaarten.js', 'js/mensen.js', 'js/vee.js', 'js/gebouwen.js', 'js/behoeften.js', 'js/handel.js',
   'js/heer.js', 'js/inner.js', 'js/verstoppen.js', 'js/kaart.js', 'js/gebied.js', 'js/pad.js', 'js/akkers.js',
-  'js/boeren.js', 'js/bewoners.js', 'js/herberg.js', 'js/zien.js',
+  'js/boeren.js', 'js/bewoners.js', 'js/herberg.js', 'js/zien.js', 'js/gesprekken.js', 'js/gesprek.js',
 ]) require('../' + f);
 const T = globalThis.Spel;
 const IN = T.ZIEN_INSTELLINGEN;
@@ -166,7 +166,7 @@ test('zet je iets weg terwijl iemand kijkt, dan is hij getuige: de plek onthoudt
   assert.deepEqual(z.getuigen, [p.wezen]);
   assert.equal(z.bericht, `${T.hoofdletter(T.naamVanBewoner(p))} zag je 10 graan in je eigen kelder zetten.`);
   assert.equal(huis.getuigen.length, 1);
-  assert.deepEqual({ ...huis.getuigen[0], bewoner: undefined }, { dag: Math.floor(S.kalender.dag), naam: T.naamVanBewoner(p), bewoner: undefined, handeling: 'weg', wat: 'graan', n: 10 });
+  assert.deepEqual({ ...huis.getuigen[0], bewoner: undefined }, { dag: Math.floor(S.kalender.dag), tijd: S.kalender.dag, naam: T.naamVanBewoner(p), bewoner: undefined, handeling: 'weg', wat: 'graan', n: 10 });
   assert.equal(huis.getuigen[0].bewoner, p, 'wie het was, voor stuk 2');
   assert.ok(p.wezen.oogje > S.tijd, 'het oogje staat boven zijn hoofd');
   // Terughalen telt ook, en twee getuigen staan samen in het bericht.
@@ -202,4 +202,119 @@ test('een dier of een monster is geen getuige', () => {
   const wie = T.getuigenVan(S, null);
   assert.ok(!wie.includes(koe), 'de koe niet');
   assert.ok(!wie.includes(wolf), 'de wolf niet (die ziet je op zijn eigen manier, T.zoekOntdekking)');
+});
+
+// ---------------------------------------------------------------------------------------------
+// Stuk 2: wat een getuige doet, naar zijn karakter
+// ---------------------------------------------------------------------------------------------
+
+const V = T.VERSTOP_INSTELLINGEN;
+const boer = (S, id) => mensen(S).find((p) => p.wie === id);
+const kelderVan = (S, id) => S.gebouwen.find((g) => g.huis === id);
+const zegt = (S) => T.gesprekKnoop(S, 'herbergierster', 'welkom').tekst;
+// De eerste avond vanaf `van` dat p in de herberg zit.
+function avondInDeHerberg(S, p, van) {
+  let d = van;
+  while (!T.herbergGasten(S, d).includes(p) && d < van + 90) d++;
+  assert.ok(d < van + 90, `${T.naamVanBewoner(p)} gaat wel eens naar de herberg`);
+  return d;
+}
+// Trijn (boer4) is de roddelaar, en ziet de schout 10 graan in de kelder van Klaas (boer1, de zanger)
+// zetten, om twaalf uur 's middags op dag `dag`.
+function trijnZietHet(dag) {
+  const S = gehucht(bijUur(dag, 12));
+  T.zetVoorraad(S, 'bier', 100);
+  const trijn = boer(S, 'boer4');
+  trijn.wezen.karakter = 'roddelaar';
+  const kelder = kelderVan(S, 'boer1');
+  alleen(S, trijn.wezen);
+  zet(S.schout, 36, RIJ);
+  zet(trijn.wezen, 39, RIJ);
+  assert.ok(T.verstop(S, kelder, 'graan', 10).kan);
+  const z = T.werdGezien(S, kelder, 'weg', 'graan', 10);
+  assert.deepEqual(z.getuigen, [trijn.wezen]);
+  return { S, trijn, kelder, z };
+}
+
+test('het bericht zegt het als je getuige het rondvertelt', () => {
+  const { z } = trijnZietHet(HERFST);
+  assert.match(z.bericht, /^Trijn zag je 10 graan in de kelder van .* zetten\. Trijn weet alles van iedereen, en vertelt het ook\.$/);
+});
+
+test('de roddelaar die je zag, vertelt het de eerstvolgende avond in de herberg: dan vinden de soldaten het er makkelijker, en de herbergierster vertelt het je', () => {
+  const { S, trijn, kelder } = trijnZietHet(HERFST);
+  const basis = V.plekken.boerderij.vinden;
+  assert.equal(T.verstopPlekVan(S, kelder).vinden, basis, 'zolang ze het niet vertelde, is het een kelder als alle andere');
+  const d = avondInDeHerberg(S, trijn, HERFST);
+  T.tikHerbergDag(S, d + 1);
+  assert.equal(kelder.verteld, d);
+  assert.equal(kelder.verteldDoor, 'Trijn');
+  const p = T.verstopPlekVan(S, kelder);
+  assert.equal(p.vinden, basis * V.bewoners.roddelaar.vinden, 'nu weet het hele dorp het');
+  assert.equal(p.verteldDoor, 'Trijn');
+  assert.ok(T.heeftVlag(S, 'herbergGetuige'));
+  assert.equal(zegt(S), `Aan de tap gisteravond: ${T.GESPREK_WOORDEN.gisteravond(S)}. En Trijn wist te vertellen dat de schout 10 graan in ${p.naam} zette. Ik zeg niet dat het waar is, schout. Ik zeg dat iedereen het nu weet.`);
+  // Wat ze vertelde, vertelt ze niet nog eens.
+  const e = avondInDeHerberg(S, trijn, d + 1);
+  T.tikHerbergDag(S, e + 1);
+  assert.ok(!T.heeftVlag(S, 'herbergGetuige'), 'niets nieuws te vertellen');
+  // Haal je alles terug, dan is wat ze vertelde niet meer waar.
+  T.haalTerug(S, kelder, 'graan', kelder.verstopt.graan);
+  assert.equal(kelder.verteld, undefined);
+  assert.equal(kelder.verteldDoor, undefined);
+  assert.equal(T.verstopPlekVan(S, kelder).vinden, basis);
+});
+
+test('wat na bedtijd gebeurde, vertelt ze die avond nog niet, maar de volgende keer wel', () => {
+  const S = gehucht(bijUur(HERFST, 12));
+  T.zetVoorraad(S, 'bier', 100);
+  const trijn = boer(S, 'boer4');
+  trijn.wezen.karakter = 'roddelaar';
+  const kelder = kelderVan(S, 'boer1');
+  const d = avondInDeHerberg(S, trijn, HERFST);
+  // Om twee uur 's nachts na die avond (dag d + 1): ze ziet het pas als ze al thuis zou moeten zijn.
+  S.kalender.dag = bijUur(d + 1, 2);
+  alleen(S, trijn.wezen);
+  zet(S.schout, 36, RIJ);
+  zet(trijn.wezen, 37, RIJ);
+  assert.ok(T.verstop(S, kelder, 'graan', 10).kan);
+  assert.equal(T.werdGezien(S, kelder, 'weg', 'graan', 10).getuigen.length, 1, 'van dichtbij ziet ze het wel');
+  T.tikHerbergDag(S, d + 1);
+  assert.equal(kelder.verteld, undefined, 'op de avond ervoor kon ze het nog niet vertellen');
+  const e = avondInDeHerberg(S, trijn, d + 1);
+  T.tikHerbergDag(S, e + 1);
+  assert.equal(kelder.verteld, e);
+});
+
+test('wie het niet rondvertelt, zwijgt; en telt het karakter niet (de spelregels), dan zwijgt iedereen', () => {
+  const { S, trijn, kelder } = trijnZietHet(HERFST);
+  trijn.wezen.karakter = 'zanger';
+  const d = avondInDeHerberg(S, trijn, HERFST);
+  T.tikHerbergDag(S, d + 1);
+  assert.equal(kelder.verteld, undefined, 'de zanger zingt, maar vertelt niets');
+  assert.ok(!T.heeftVlag(S, 'herbergGetuige'));
+  // De roddelaar, maar het karakter telt niet.
+  const b = trijnZietHet(HERFST);
+  const was = V.karakters;
+  V.karakters = false;
+  try {
+    const e = avondInDeHerberg(b.S, b.trijn, HERFST);
+    T.tikHerbergDag(b.S, e + 1);
+    assert.equal(b.kelder.verteld, undefined);
+    assert.ok(!T.heeftVlag(b.S, 'herbergGetuige'));
+  } finally {
+    V.karakters = was;
+  }
+});
+
+test('met "pas later" in de spelregels krijgt een getuige geen oogje, maar de plek onthoudt het wel', () => {
+  const was = IN.meteen;
+  IN.meteen = false;
+  try {
+    const { S, trijn, kelder } = trijnZietHet(HERFST);
+    assert.ok(!(trijn.wezen.oogje > S.tijd), 'geen oogje');
+    assert.equal(kelder.getuigen.length, 1, 'maar ze zag het wel');
+  } finally {
+    IN.meteen = was;
+  }
 });

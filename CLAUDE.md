@@ -191,7 +191,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   branden), voor wie wat ziet én voor de gloed in `js/tekenen.js`. Wie de schout iets ziet wegzetten of
   terughalen, is getuige (`T.werdGezien`: de plek onthoudt het in `g.getuigen`, en boven zijn hoofd
   staat een oogje); wie er woont, telt niet. Het venster van de plek zegt vooraf wie je ziet
-  (`T.kijkersTekst`).
+  (`T.kijkersTekst`). Wie het rondvertelt (de roddelaar, `T.vertelInDeHerberg` in `js/verstoppen.js`),
+  vertelt het de eerstvolgende avond in de herberg (`T.getuigenVertellen`, vanuit `T.tikHerbergDag`):
+  dan vinden de soldaten die plek makkelijker (`g.verteldDoor`), en de herbergierster vertelt het je
+  (`{getuige}`, `{gezien}`). Of je een getuige meteen ziet, is een keuze in de spelregels (`meteen`).
 - Een zin in een gesprek kan iets uit het spel noemen: `{woord}` vult `T.GESPREK_WOORDEN` in
   (`js/gesprek.js`), zoals `{gisteravond}` (`js/herberg.js`).
 - `js/akkers.js`: **alleen het gehucht** (`ontwerp/spel.md`): welk stadium een

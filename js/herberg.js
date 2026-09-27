@@ -151,29 +151,30 @@
   // zijn kelder iets verstopt ligt. Dan weet de halve herberg het, en vinden de soldaten het met
   // Sint-Maarten makkelijker. Zijn kelder is zijn huis (de boerderij).
   function vertelt(p) {
-    const V = T.VERSTOP_INSTELLINGEN;
-    const eigen = V && V.karakters && V.bewoners && V.bewoners[karakterVan(p)];
     const kelder = p.huis;
-    return !!(eigen && eigen.inDeHerberg && kelder && kelder.verstopt && T.inhoudTekst && T.inhoudTekst(kelder.verstopt));
+    return !!(T.vertelInDeHerberg && T.vertelInDeHerberg(p) && kelder && kelder.verstopt && T.inhoudTekst(kelder.verstopt));
   }
 
   // Elke nacht de avond verrekenen (T.tikGebouwenDag, js/gebouwen.js, aan het begin van dag `dag`): wie
   // er gisteravond was, dronk zijn bier en onthoudt dat (p.herbergDag, voor T.herbergGezelligheid).
   // En wat er gezegd werd: de roddelaar vertelde wat er in zijn kelder ligt (g.verteld op die kelder,
-  // js/verstoppen.js). De herbergierster weet het de volgende dag (haar gesprek in js/gesprekken.js):
-  // de vlaggen herbergGasten, herbergRoddel en herbergDroog, en de namen in S.herberg.gisteravond.
+  // js/verstoppen.js), en wat hij de schout zag doen (T.getuigenVertellen, js/zien.js). De
+  // herbergierster weet het de volgende dag (haar gesprek in js/gesprekken.js): de vlaggen
+  // herbergGasten, herbergRoddel, herbergGetuige en herbergDroog, en de namen in S.herberg.gisteravond.
   T.tikHerbergDag = function (S, dag) {
     if (!T.herbergVan(S) || !S.bewoners) return;
     const gisteren = Math.floor(dag) - 1;
     const droog = T.herbergDroog(S);
     const gasten = T.herbergGasten(S, gisteren);
     const roddel = gasten.find(vertelt) || null;
+    const gezien = T.getuigenVertellen ? T.getuigenVertellen(S, gasten, gisteren) : [];
     const H = S.herberg || (S.herberg = {});
-    H.gisteravond = { dag: gisteren, gasten: gasten.length, namen: gasten.map(T.naamVanBewoner), roddel: roddel ? T.naamVanBewoner(roddel) : null };
+    H.gisteravond = { dag: gisteren, gasten: gasten.length, namen: gasten.map(T.naamVanBewoner), roddel: roddel ? T.naamVanBewoner(roddel) : null, gezien };
     if (T.zetVlag) {
-      for (const v of ['herbergGasten', 'herbergRoddel', 'herbergDroog']) T.wisVlag(S, v);
+      for (const v of ['herbergGasten', 'herbergRoddel', 'herbergGetuige', 'herbergDroog']) T.wisVlag(S, v);
       if (gasten.length) T.zetVlag(S, 'herbergGasten');
       if (roddel) T.zetVlag(S, 'herbergRoddel');
+      if (gezien.length) T.zetVlag(S, 'herbergGetuige');
       if (droog) T.zetVlag(S, 'herbergDroog');
     }
     if (roddel) roddel.huis.verteld = gisteren;

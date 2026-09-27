@@ -23,13 +23,15 @@ require('../js/bewoners.js');
 require('../js/gesprekken.js');
 require('../js/gesprek.js');
 require('../js/doorkijk.js');
+require('../js/herberg.js');
+require('../js/zien.js');
 const T = globalThis.Spel;
 
 // De blokken zoals de bestanden ze zetten, vóór opties.js er iets mee doet.
 const BLOKKEN = [
   'GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN', 'INNER_INSTELLINGEN',
   'BOEREN_INSTELLINGEN', 'VELDEN_INSTELLINGEN', 'VEE_INSTELLINGEN', 'VERSTOP_INSTELLINGEN', 'DAG_INSTELLINGEN',
-  'BEWONERS_INSTELLINGEN', 'DOORKIJK_INSTELLINGEN',
+  'BEWONERS_INSTELLINGEN', 'DOORKIJK_INSTELLINGEN', 'HERBERG_INSTELLINGEN', 'ZIEN_INSTELLINGEN',
 ];
 const LOS = ['GRAAN_PER_TEGEL', 'ZAAIGRAAN_PER_TEGEL', 'DAG_LENGTE', 'OOGST_UREN_PER_TEGEL'];
 const bestanden = {};

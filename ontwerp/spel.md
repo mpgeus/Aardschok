@@ -1608,6 +1608,23 @@ Wat het vraagt:
   je.", of in het rood wie wel), en staat op een breed scherm opzij, zodat je ziet wie er om je heen
   staat.
 
+**Zo werkt het nu: het zichtveld, stuk 2** (27 sep; Marcel: "Doorzetten"; `js/zien.js`, toetsen in
+`test/zien.test.cjs`):
+- **De roddelaar vertelt wat hij zag:** zag een roddelaar je iets wegzetten of terughalen, dan vertelt
+  hij het de eerstvolgende avond dat hij in de herberg zit, als het vóór bedtijd gebeurde en er nog iets
+  ligt (`T.getuigenVertellen`, vanuit de afrekening van de herberg). Dan weet het dorp het: de soldaten
+  vinden het op die plek twee keer zo makkelijk, net als in de kelder van de roddelaar zelf, tot je de
+  plek leeghaalt. Wat hij vertelde, vertelt hij niet nog eens. Het bericht zegt het meteen als een
+  roddelaar je zag ("Trijn weet alles van iedereen, en vertelt het ook."), en het venster van de plek zegt
+  het als het verteld is ("Trijn vertelde in de herberg wat je hier deed.").
+- **De herbergierster weet het de volgende dag:** "En Trijn wist te vertellen dat de schout 10 graan in
+  de kelder van Klaas zette. Ik zeg niet dat het waar is, schout. Ik zeg dat iedereen het nu weet."
+- **De rest zwijgt,** tot de inner het vraagt (punt 4 van de werklijst); telt het karakter niet (de
+  spelregels), dan zwijgt iedereen.
+- **Meteen of pas later** (A, een keuze in de spelregels: "Wie je ziet"): meteen zegt het venster wie je
+  ziet en krijgt een getuige het oogje; pas later weet je niet wie er keek, en hoor je het pas als het
+  rondverteld is.
+
 **Hoe het zo kwam:**
 
 > Een dorp moet groeien en huizen moeten er organisch bijgebouwd worden. Maar ook tavernes, kleine

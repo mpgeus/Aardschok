@@ -13,7 +13,15 @@
 //     dan is die een getuige (T.werdGezien): de plek onthoudt het, en je ziet het meteen, een oogje
 //     boven zijn hoofd en een bericht (A).
 // Wie er zelf woont, telt niet als getuige: het is zijn kelder, en of hij meedoet, zegt zijn karakter
-// al (js/verstoppen.js). Wat een getuige met wat hij zag doet, is stuk 2.
+// al (js/verstoppen.js).
+//
+// Stuk 2 (27 sep; Marcel: "Doorzetten"): wat een getuige met wat hij zag doet, naar zijn karakter. Wie
+// het in de herberg vertelt (de roddelaar, T.vertelInDeHerberg in js/verstoppen.js), doet dat de
+// eerstvolgende avond dat hij er zit (T.getuigenVertellen, vanuit T.tikHerbergDag in js/herberg.js):
+// dan weet het dorp wat er op die plek ligt, en vinden de soldaten het er makkelijker (g.verteld en
+// g.verteldDoor, js/verstoppen.js). De herbergierster vertelt het je de volgende dag. De rest zwijgt,
+// tot de inner het vraagt (werklijst punt 4). En of je meteen ziet wie je zag, of pas later, is een
+// keuze in de spelregels (A; `meteen` hieronder, js/opties.js).
 (function (T) {
   'use strict';
 
@@ -30,6 +38,9 @@
     lantaarnSterkte: 0.45,
     // Zo lang staat het oogje boven een getuige, in seconden op het scherm.
     oogjeTijd: 5,
+    // Zie je meteen wie je ziet (het venster, het oogje en het bericht), of hoor je het pas later, als het
+    // rondverteld is? Een keuze in de spelregels (Marcel, vraag 40, A).
+    meteen: true,
   };
   const IN = () => T.ZIEN_INSTELLINGEN;
 
@@ -105,22 +116,65 @@
     return `${T.hoofdletter(opsomming(wie))} ${wie.length > 1 ? 'zien' : 'ziet'} je.`;
   };
 
+  // Wat de schout deed, in woorden: "10 graan in de kelder van Gerrit zetten" (`vorm` 'zetten'), of "…
+  // zette" ('zette'). Vanuit de schout (`vanUit` 'schout') heet zijn eigen kelder "je eigen kelder",
+  // vanuit een ander "zijn eigen kelder".
+  function watDeed(S, g, handeling, wat, n, vorm, vanUit) {
+    const plek = T.verstopPlekVan ? T.verstopPlekVan(S, g) : null;
+    const waar = !plek ? 'daar' : plek.vanSchout && vanUit !== 'schout' ? 'zijn eigen kelder' : plek.naam;
+    const hoeveel = `${Math.floor(n)} ${wat}`;
+    if (handeling === 'weg') return `${hoeveel} in ${waar} ${vorm === 'zette' ? 'zette' : 'zetten'}`;
+    return `${hoeveel} uit ${waar} ${vorm === 'zette' ? 'haalde' : 'halen'}`;
+  }
+
   // De schout zette iets weg (handeling 'weg') of haalde iets terug ('terug') bij `g`, en wie hem nu
-  // ziet, is getuige: de plek onthoudt het (g.getuigen, voor stuk 2: wat een getuige ermee doet), en elke
-  // getuige krijgt het oogje (e.oogje, tot die schermtijd; js/tekenen.js). Geeft { getuigen, bericht }.
+  // ziet, is getuige: de plek onthoudt het (g.getuigen: wanneer, wie, wat; voor T.getuigenVertellen), en
+  // als je het meteen ziet (`meteen`), krijgt elke getuige het oogje (e.oogje, tot die schermtijd;
+  // js/tekenen.js). Geeft { getuigen, bericht }; het bericht zegt ook wie het rondvertelt.
   T.werdGezien = function (S, g, handeling, wat, n) {
     const wie = T.getuigenVan(S, g);
-    const dag = S.kalender ? Math.floor(S.kalender.dag) : 0;
+    const tijd = S.kalender ? S.kalender.dag : 0;
     for (const e of wie) {
-      e.oogje = (S.tijd || 0) + IN().oogjeTijd;
-      (g.getuigen || (g.getuigen = [])).push({ dag, naam: naamVan(S, e), bewoner: T.bewonerVan ? T.bewonerVan(S, e) : null, handeling, wat, n });
+      if (IN().meteen) e.oogje = (S.tijd || 0) + IN().oogjeTijd;
+      (g.getuigen || (g.getuigen = [])).push({ dag: Math.floor(tijd), tijd, naam: naamVan(S, e), bewoner: T.bewonerVan ? T.bewonerVan(S, e) : null, handeling, wat, n });
     }
     if (!wie.length) return { getuigen: wie, bericht: 'Niemand zag het.' };
-    const plek = T.verstopPlekVan ? T.verstopPlekVan(S, g) : null;
-    const waar = plek ? plek.naam : 'daar';
-    const hoeveel = `${Math.floor(n)} ${wat}`;
-    const deed = handeling === 'weg' ? `${hoeveel} in ${waar} zetten` : `${hoeveel} uit ${waar} halen`;
     const namen = opsomming(wie.map((e) => naamVan(S, e)));
-    return { getuigen: wie, bericht: `${T.hoofdletter(namen)} ${wie.length > 1 ? 'zagen' : 'zag'} je ${deed}.` };
+    let bericht = `${T.hoofdletter(namen)} ${wie.length > 1 ? 'zagen' : 'zag'} je ${watDeed(S, g, handeling, wat, n, 'zetten', 'schout')}.`;
+    // Wie het in de herberg vertelt, staat erbij: dan weet je wat je te wachten staat.
+    for (const e of wie) {
+      const p = T.bewonerVan ? T.bewonerVan(S, e) : null;
+      if (p && T.vertelInDeHerberg && T.vertelInDeHerberg(p)) bericht += ` ${naamVan(S, e)} weet alles van iedereen, en vertelt het ook.`;
+    }
+    return { getuigen: wie, bericht };
   };
+
+  // Stuk 2: in de herberg vertelt een getuige wat hij zag (vanuit T.tikHerbergDag, js/herberg.js, voor de
+  // avond van `dag`). Wie er die avond zat (`gasten`) en het rondvertelt (T.vertelInDeHerberg), vertelt
+  // alles wat hij zag en nog niet vertelde, als het vóór bedtijd gebeurde en er nog iets ligt: dan weet het
+  // dorp het (g.verteld, g.verteldDoor), en vinden de soldaten het er makkelijker (js/verstoppen.js). Wat
+  // hij vertelde, vertelt hij niet nog eens. Geeft wat er verteld is, voor de herbergierster:
+  // [{ door, wat }] ("Klaas", "10 graan in de kelder van Gerrit zette").
+  T.getuigenVertellen = function (S, gasten, dag) {
+    const tot = dag + (T.dagindeling ? T.dagindeling(dag).slapen : 24) / 24;
+    const verteld = [];
+    for (const g of S.gebouwen || []) {
+      for (const z of g.getuigen || []) {
+        if (z.verteld != null || !z.bewoner || !gasten.includes(z.bewoner)) continue;
+        if (!T.vertelInDeHerberg || !T.vertelInDeHerberg(z.bewoner) || !(z.tijd < tot)) continue;
+        z.verteld = dag;
+        if (!T.inhoudTekst || !T.inhoudTekst(g.verstopt || {})) continue; // er ligt niets meer: niets te vinden
+        g.verteld = dag;
+        g.verteldDoor = z.naam;
+        verteld.push({ door: z.naam, wat: watDeed(S, g, z.handeling, z.wat, z.n, 'zette') });
+      }
+    }
+    return verteld;
+  };
+
+  // Wat de herbergierster invult (js/gesprekken.js): wie het vertelde, en wat de schout deed.
+  const gisteren = (S) => (S.herberg && S.herberg.gisteravond && S.herberg.gisteravond.gezien) || [];
+  T.GESPREK_WOORDEN = T.GESPREK_WOORDEN || {};
+  T.GESPREK_WOORDEN.getuige = (S) => opsomming([...new Set(gisteren(S).map((v) => v.door))]) || 'iemand';
+  T.GESPREK_WOORDEN.gezien = (S) => opsomming(gisteren(S).map((v) => v.wat)) || 'iets wegzette';
 })(globalThis.Spel = globalThis.Spel || {});

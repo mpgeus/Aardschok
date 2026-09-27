@@ -260,6 +260,18 @@
           uitleg: 'Wie op het plein speelt, verdwijnt achter een huis, net als overal in het dorp.' },
       ],
     },
+    // Het zichtveld (27 sep; werklijst punt 3, vraag 40, A: "zie je meteen dat iemand je zag, of pas
+    // later?"; js/zien.js).
+    {
+      id: 'getuigen', naam: 'Wie je ziet', standaard: 'meteen',
+      uitleg: 'Of je weet wie er kijkt als je iets wegzet of terughaalt.',
+      keuzes: [
+        { id: 'meteen', naam: 'Meteen', zet: { 'ZIEN_INSTELLINGEN.meteen': true },
+          uitleg: 'Het venster zegt wie je ziet, en wie het zag, krijgt een oogje boven zijn hoofd.' },
+        { id: 'later', naam: 'Pas later', zet: { 'ZIEN_INSTELLINGEN.meteen': false },
+          uitleg: 'Je weet niet wie er keek. Je hoort het pas als het rondverteld is: van de herbergierster, of als de soldaten het vinden.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -290,6 +302,7 @@
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
     { naam: 'De doorkijk', blok: 'DOORKIJK_INSTELLINGEN' },
+    { naam: 'Het zichtveld', blok: 'ZIEN_INSTELLINGEN' },
   ];
 
   // ---------------------------------------------------------------------------------------------

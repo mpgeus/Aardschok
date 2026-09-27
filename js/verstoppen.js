@@ -35,7 +35,8 @@
     karakters: true,
     // De roddelaar vertelt het in de herberg (Marcel koos het op 27 sep, vraag 38): zijn kelder is pas
     // riskanter als hij er zat terwijl er iets lag (inDeHerberg; js/herberg.js zet g.verteld). Een dorp
-    // zonder herberg hoort het toch wel.
+    // zonder herberg hoort het toch wel. Zag hij de schout ergens anders iets wegzetten, dan vertelt hij
+    // dat ook, en daar vinden ze het dan net zo makkelijk (js/zien.js, stuk 2 van het zichtveld).
     bewoners: {
       roddelaar: { vinden: 2, inDeHerberg: true }, // vertelt het rond
       vrome: { weigert: true }, // bidt ook voor de heer
@@ -93,6 +94,16 @@
   const vrouw = (e) => !!(e && T.MENSEN && T.MENSEN[e.wie] && T.MENSEN[e.wie].geslacht === 'vrouw');
   const karakterVan = (e) => (e ? e.karakter || (T.MENSEN && T.MENSEN[e.wie] && T.MENSEN[e.wie].karakter) || null : null);
 
+  // Vertelt deze bewoner in de herberg wat hij weet? Zijn karakter zegt het (inDeHerberg: de
+  // roddelaar), als het karakter telt (de optie in de spelregels). Voor wat er in zijn eigen kelder ligt
+  // (js/herberg.js), en voor wat hij de schout zag doen (js/zien.js).
+  T.vertelInDeHerberg = function (p) {
+    const V = VI();
+    const k = karakterVan(p && p.wezen) || (p && T.MENSEN && T.MENSEN[p.wie] && T.MENSEN[p.wie].karakter);
+    const eigen = V.karakters && k && V.bewoners[k];
+    return !!(eigen && eigen.inDeHerberg);
+  };
+
   function plekNaam(g, vanSchout, bewoner) {
     if (g.soort === 'kapel') return 'de kapel';
     if (vanSchout) return 'je eigen kelder';
@@ -114,9 +125,14 @@
     let vinden = vanSchout ? V.vindenBijSchout : basis.vinden;
     // Wat pas telt als het in de herberg verteld is (de roddelaar), telt alleen dan; zonder herberg altijd.
     const heeftHerberg = !!(T.herbergVan && T.herbergVan(S));
-    const verteld = !!g.verteld;
+    const verteld = g.verteld != null;
     const telt = eigen && (!eigen.inDeHerberg || verteld || !heeftHerberg);
     if (telt && typeof eigen.vinden === 'number') vinden *= eigen.vinden;
+    // Vertelde een getuige in de herberg wat hij hier zag (js/zien.js), dan vinden de soldaten het net zo
+    // makkelijk als in de kelder van de roddelaar, en één keer: woont de roddelaar hier zelf, dan telde
+    // het hierboven al.
+    const doorGetuige = !!(V.karakters && g.verteldDoor && !(eigen && eigen.inDeHerberg));
+    if (doorGetuige && V.bewoners.roddelaar && typeof V.bewoners.roddelaar.vinden === 'number') vinden *= V.bewoners.roddelaar.vinden;
     const houdtHier = basis.houdt || 0;
     const houdtBewoner = (eigen && eigen.houdt) || 0;
     const houdt = Math.max(houdtHier, houdtBewoner);
@@ -133,6 +149,7 @@
       weigert: !!(eigen && eigen.weigert),
       verteld: !!(eigen && eigen.inDeHerberg && heeftHerberg && verteld),
       inDeHerberg: !!(eigen && eigen.inDeHerberg && heeftHerberg),
+      verteldDoor: doorGetuige ? g.verteldDoor : null, // de getuige die het in de herberg vertelde
     };
   };
 
@@ -252,8 +269,11 @@
     const inhoud = g.verstopt;
     inhoud[wat] = Math.max(0, inhoud[wat] - n);
     if (inhoud[wat] < 1e-9) inhoud[wat] = 0;
-    // Is de kelder leeg, dan is wat de roddelaar in de herberg vertelde niet meer waar.
-    if (!T.inhoudTekst(inhoud)) delete g.verteld;
+    // Is de kelder leeg, dan is wat er in de herberg verteld werd niet meer waar.
+    if (!T.inhoudTekst(inhoud)) {
+      delete g.verteld;
+      delete g.verteldDoor;
+    }
     T.wijzigVoorraad(S, wat, n);
     return k;
   };
@@ -324,6 +344,7 @@
       gevonden.push(`${tekst} in ${p.naam}`);
       g.verstopt = { graan: 0, goud: 0 };
       delete g.verteld;
+      delete g.verteldDoor;
       if (VI().argwaanPerVondst > 0 && T.zetArgwaan) T.zetArgwaan(S, VI().argwaanPerVondst, 'de soldaten vonden wat je verstopte');
     }
     if (gevonden.length && T.ui && T.ui.toonVoorraad) T.ui.toonVoorraad(S);

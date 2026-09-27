@@ -931,9 +931,9 @@
   }
 
   // Wie je nu ziet (js/zien.js, T.kijkersTekst): zo weet je het vóór je iets wegzet (Marcel, vraag 40,
-  // A). Kijkt er iemand, dan in het rood.
+  // A). Kijkt er iemand, dan in het rood. Met "pas later" in de spelregels zie je het niet.
   function verstopKijkers(S, g) {
-    if (!T.kijkersTekst) return '';
+    if (!T.kijkersTekst || !T.ZIEN_INSTELLINGEN.meteen) return '';
     const t = T.kijkersTekst(S, g);
     const iemand = T.getuigenVan(S, g).length > 0;
     return `<p class="verstop-kijkers${iemand ? ' gezien' : ''}">${veilig(t)}</p>`;
@@ -942,6 +942,7 @@
   // Wat de soldaten hier doen, en wat het kost, in één alinea.
   function verstopRisico(p) {
     let t = `Doorzoeken de soldaten het dorp, dan vinden ze het hier ${T.vindKansTekst(p.vinden)}.`;
+    if (p.verteldDoor) t += ` ${T.hoofdletter(p.verteldDoor)} vertelde in de herberg wat je hier deed.`;
     if (p.vanSchout) t += ' Bij de schout kijken ze het eerst.';
     if (p.gebouw.soort === 'kapel') t += ' Het is gewijde grond.';
     if (p.houdt > 0 && p.wieHoudt === 'de kapelaan') t += ` De kapelaan houdt ${T.deelTekst(p.houdt)} van wat je hier neerzet.`;
@@ -1015,10 +1016,11 @@
     const n = Number(b.dataset.n);
     const r = b.dataset.actie === 'weg' ? T.verstop(S, verstopGebouw, b.dataset.wat, n) : T.haalTerug(S, verstopGebouw, b.dataset.wat, n);
     if (!r.kan && T.ui.bericht) T.ui.bericht(r.reden);
-    // Wie het zag, is getuige (js/zien.js): een oogje boven zijn hoofd, en het bericht zegt wie.
+    // Wie het zag, is getuige (js/zien.js): een oogje boven zijn hoofd, en het bericht zegt wie; met "pas
+    // later" in de spelregels hoor je het pas als het rondverteld is.
     if (r.kan && T.werdGezien) {
       const z = T.werdGezien(S, verstopGebouw, b.dataset.actie, b.dataset.wat, n);
-      if (T.ui.bericht) T.ui.bericht(z.bericht);
+      if (T.ZIEN_INSTELLINGEN.meteen && T.ui.bericht) T.ui.bericht(z.bericht);
     }
     toonVerstoppen(S);
   });

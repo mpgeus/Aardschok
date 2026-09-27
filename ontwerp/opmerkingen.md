@@ -22,6 +22,14 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   - Het gezin van de schout staat 's avonds vaak bij zijn deur, in het licht van de lantaarn bij de
     put: het telt niet (het is hun kelder), maar in stuk 2 is de vraag of een huisgenoot het ooit
     doorvertelt.
+  - Na stuk 2 (27 sep): alleen de roddelaar vertelt door, en die zit in zo'n zes van de tien spellen
+    onder de vijf boeren (de karakters worden geloot). In de andere spellen vertelt niemand iets, tot de
+    inner gaat vragen (punt 4). Is dat te stil, dan kan ook de drinker na een paar kannen zijn mond
+    voorbijpraten: een keuze voor later.
+  - Een getuige vertelt alleen wat er nog ligt. Haalde je het vóór die avond weg, dan vertelt hij niets,
+    en ook later niet meer.
+  - Zat de verteller alleen aan de tap, dan zegt de herbergierster zijn naam twee keer: "Aan de tap
+    gisteravond: Trijn. En Trijn wist te vertellen ...".
 
 - **De herberg, wat nog ruw is** (27 sep, na stuk 1; `spel.md`, "Zaken waar de mensen zelf heen gaan"):
   - Er hangt nog geen uithangbord: je herkent de herberg aan de lantaarn en het bankje bij de deur, en
