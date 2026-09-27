@@ -21,8 +21,8 @@ de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) l
 
 **Waar het werk staat:** de negende sessie (27 sep) staat in `main` tot en met stuk 1 van het
 zichtveld (Marcel: "Ja, zet het in main"). Wat daarna kwam (stuk 2 van het zichtveld, en stuk 1 en 2 van
-punt 4) staat alleen op de eigen branch `claude/werklijst-doorzetten-ikazjp`, nog niet gepusht: dat doet
-Claude als Marcel "push it" zegt. Hoe
+punt 4) is gepusht naar de eigen branch `claude/werklijst-doorzetten-ikazjp` (Marcel: "Push dit"), maar
+staat nog niet in `main`: dat doet Claude als Marcel erom vraagt. Hoe
 een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
@@ -101,9 +101,11 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   het laatste won; de toetsen laadden dat bestand niet. Dat is precies waar vraag 25, E voor is.
 
 **Punt 2, de herberg, en punt 3, het zichtveld en de getuigen, zijn af** (27 sep), **en van punt 4 stuk
-1 en 2** (de soldaten zoeken altijd; de inner afleiden en omkopen). **Nu het tweede proefje:** een heel
-jaar spelen en kijken of rijk worden en arm lijken leuk is (punt 4 hieronder). Wat Marcel kan bekijken,
-staat onder "Spelen, en zeggen hoe het voelt".
+1 en 2** (de soldaten zoeken altijd; de inner afleiden en omkopen). De getallen daarvan blijven voorlopig
+zoals ze zijn (Marcel, 27 sep: "We gaan later finetunen"). **Nu het tweede proefje:** een heel jaar spelen
+en kijken of rijk worden en arm lijken leuk is (punt 4 hieronder). Claude stelde voor het twee keer te
+spelen, eerlijk en sluw, en op te schrijven wat sluw zijn oplevert; Marcel speelt het ook. Wat Marcel kan
+bekijken, staat onder "Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -394,7 +396,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 27 sep): "Ja ab goed zo".** Stuk 2 is af (zie onder Af). Twee dingen kwamen
     erbij om het te laten werken: hij praat hooguit drie uur per bezoek (anders houd je hem met een open
     gesprek de hele dag op), en naast een schout die stilstaat, wacht hij een half uur (anders was
-    stilstaan hetzelfde als praten). Allebei in de werkbank.
+    stilstaan hetzelfde als praten). Allebei in de werkbank. Of de getallen goed zijn (is de helft
+    minder voor 25 goud te goedkoop?), zien we later: "We gaan later finetunen" (Marcel, 27 sep).
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
