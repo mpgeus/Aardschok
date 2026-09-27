@@ -7,7 +7,7 @@ for (const f of [
   'js/tijd.js', 'js/dag.js', 'js/voorraad.js', 'js/wereld.js', 'beelden/beschrijving.js', 'tegels/tegels.js',
   'kaarten/kaarten.js', 'js/mensen.js', 'js/vee.js', 'js/gebouwen.js', 'js/behoeften.js', 'js/handel.js',
   'js/heer.js', 'js/inner.js', 'js/verstoppen.js', 'js/kaart.js', 'js/gebied.js', 'js/pad.js', 'js/akkers.js',
-  'js/boeren.js', 'js/bewoners.js', 'js/herberg.js', 'js/anim.js', 'js/verkennen.js',
+  'js/boeren.js', 'js/bewoners.js', 'js/herberg.js', 'js/anim.js', 'js/verkennen.js', 'js/gesprekken.js', 'js/gesprek.js',
 ]) require('../' + f);
 const T = globalThis.Spel;
 const IN = T.HERBERG_INSTELLINGEN;
@@ -258,4 +258,93 @@ test('\'s avonds brandt de lantaarn van de herberg, en met meer gasten binnen is
   // Na bedtijd brandt hij nog zolang er iemand binnen zit.
   S.kalender.dag = bijUur(HERFST, d.slapen + 0.2);
   assert.equal(T.herbergLicht(S).length, 1);
+});
+
+// ---------------------------------------------------------------------------------------------
+// Stuk 2: in de herberg wordt gepraat (Marcel koos B, 27 sep, vraag 38)
+// ---------------------------------------------------------------------------------------------
+
+const zegt = (S) => T.gesprekKnoop(S, 'herbergierster', 'welkom').tekst;
+
+test('de herbergierster vertelt wie er gisteravond aan de tap zat, en of het droog was', () => {
+  const S = gehucht();
+  assert.match(zegt(S), /^Stil gisteravond/);
+  const gasten = T.herbergGasten(S, HERFST);
+  assert.ok(gasten.length > 0);
+  T.tikHerbergDag(S, HERFST + 1);
+  assert.ok(T.heeftVlag(S, 'herbergGasten'));
+  const zin = zegt(S);
+  for (const p of gasten) assert.ok(zin.includes(p.wie ? T.naamVanMens(p.wie) : p.naam), zin);
+  assert.ok(!zin.includes('{'), `alles is ingevuld: ${zin}`);
+  T.zetVoorraad(S, 'bier', 0);
+  T.tikHerbergDag(S, HERFST + 2);
+  assert.ok(T.heeftVlag(S, 'herbergDroog') && !T.heeftVlag(S, 'herbergGasten'), 'droog, en er kwam niemand');
+  assert.match(zegt(S), /^Geen druppel/);
+});
+
+test('de roddelaar vertelt in de herberg wat er in zijn kelder ligt, en pas dan vinden de soldaten het makkelijker', () => {
+  // Trijn (boer4) woont vlak bij de herberg.
+  const S = gehucht({ karakters: { boer4: 'roddelaar' } });
+  const trijn = bewoner(S, 'boer4');
+  const kelder = trijn.huis;
+  const V = T.VERSTOP_INSTELLINGEN;
+  const basis = V.plekken.boerderij.vinden;
+  T.zetVoorraad(S, 'graan', 50);
+  assert.ok(T.verstop(S, kelder, 'graan', 10).kan);
+  let p = T.verstopPlekVan(S, kelder);
+  assert.equal(p.vinden, basis, 'zolang ze het niet vertelde, is het een kelder als alle andere');
+  assert.match(T.overKelderTekst(p), /vertelt het in de herberg/);
+  // De eerste avond dat ze naar de herberg gaat.
+  let d = HERFST;
+  while (!T.herbergGasten(S, d).includes(trijn) && d < HERFST + 60) d++;
+  assert.ok(d < HERFST + 60, 'ze gaat wel eens');
+  T.tikHerbergDag(S, d + 1);
+  assert.equal(kelder.verteld, d);
+  p = T.verstopPlekVan(S, kelder);
+  assert.equal(p.vinden, basis * V.bewoners.roddelaar.vinden, 'nu weet de halve herberg het');
+  assert.match(T.overKelderTekst(p), /in de herberg al verteld/);
+  assert.ok(T.heeftVlag(S, 'herbergRoddel'));
+  const zin = zegt(S);
+  assert.ok(zin.includes(`En ${T.naamVanMens('boer4')} had het weer over wat er in de kelder ligt`), zin);
+  // Haal je alles terug, dan is wat ze vertelde niet meer waar.
+  T.haalTerug(S, kelder, 'graan', kelder.verstopt.graan);
+  assert.equal(kelder.verteld, undefined);
+  assert.equal(T.verstopPlekVan(S, kelder).vinden, basis);
+  // Met een lege kelder heeft ze niets te vertellen.
+  let e = d + 1;
+  while (!T.herbergGasten(S, e).includes(trijn) && e < d + 60) e++;
+  T.tikHerbergDag(S, e + 1);
+  assert.ok(!T.heeftVlag(S, 'herbergRoddel'), 'niets te vertellen');
+});
+
+test('een dorp zonder herberg hoort het van de roddelaar toch wel', () => {
+  const S = gehucht({ karakters: { boer4: 'roddelaar' } });
+  const kelder = bewoner(S, 'boer4').huis;
+  T.herbergVan(S).klaar = false;
+  const V = T.VERSTOP_INSTELLINGEN;
+  assert.equal(T.verstopPlekVan(S, kelder).vinden, V.plekken.boerderij.vinden * V.bewoners.roddelaar.vinden);
+  assert.match(T.overKelderTekst(T.verstopPlekVan(S, kelder)), /en vertelt het ook\.$/);
+});
+
+test('de marskramer zit \'s avonds in de herberg en slaapt er, en staat overdag weer bij zijn waar', () => {
+  const S = gehucht({ dag: bijUur(HERFST, 9.5), snelheid: 10 });
+  T.marskramerKomt(S, 2, HERFST);
+  S.marskramer.meteen = true;
+  const d = T.dagindeling(HERFST);
+  const deur = deurVan(S, T.herbergVan(S));
+  const tot = (dag) => {
+    for (let i = 0; S.kalender.dag < dag && i < 200000; i++) {
+      stap(S, 0.05);
+      T.werkMarskramerBij(S);
+    }
+  };
+  tot(bijUur(HERFST, d.werkEind - 0.5));
+  const m = S.marskramer;
+  const e = m.wezen;
+  assert.ok(m.staat && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1, 'overdag staat hij bij zijn waar op het plein');
+  tot(bijUur(HERFST, d.slapen + 1));
+  assert.ok(e.binnen && zelfde(e.deur, deur), 'hij slaapt in de herberg');
+  assert.match(T.gebouwToestand(S, T.herbergVan(S)), /de marskramer logeert hier\.$/);
+  tot(bijUur(HERFST + 1, 12));
+  assert.ok(!e.binnen && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1, 'de volgende ochtend staat hij er weer');
 });

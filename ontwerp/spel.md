@@ -1826,7 +1826,8 @@ eigen erf.
   in het donker naar huis. Elk bezoek drinkt een kan bier, en wie deze week in de herberg was, is
   tevredener. Is de herberg droog, dan mist het dorp bier.
 - **Stuk 2: de kern en de schout.** De inner ziet een volle herberg, de herbergierster vertelt het
-  nieuws van de dag, en de marskramer slaapt er.
+  nieuws van de dag, en de marskramer slaapt er. Marcel koos B (vraag 38): in de herberg wordt gepraat,
+  niet de heer die op bier heft. Zo gebouwd, zie hieronder.
 - **Wacht:** een huis dat groeit door wat zijn bewoners bereiken, bij punt 5 van de werklijst (vraag
   37); de bakker en de smid als zaak waar mensen heen gaan, bij het dorp.
 
@@ -1859,6 +1860,24 @@ eigen erf.
 - **Bij de muis op de herberg:** hoeveel gasten er vanavond komen of binnen zitten, en hoeveel bier er
   ligt. `Spel.debug.herberg()` zegt wie er vanavond gaat en hoe ver ze lopen.
 - Alle getallen staan in de werkbank (`O`), onder "De herberg".
+
+**Zo werkt het nu: de herberg, stuk 2** (27 sep; Marcel koos B, vraag 38: "Het wordt B"). In de herberg
+wordt gepraat:
+- **De roddelaar vertelt er wat er in zijn kelder ligt.** Zijn kelder is pas riskanter (de soldaten
+  vinden het met Sint-Maarten twee keer zo makkelijk) als hij in de herberg zat terwijl er iets lag
+  (`inDeHerberg` bij de roddelaar in `T.VERSTOP_INSTELLINGEN`; `g.verteld` op zijn kelder). Haal je
+  alles terug, dan is het verhaal niet meer waar. Een dorp zonder herberg hoort het toch wel, zoals
+  vroeger. Bij de kelder zegt de muis "vertelt het in de herberg", of "heeft in de herberg al verteld wat
+  hier ligt".
+- **De herbergierster vertelt je wie er gisteravond aan de tap zat,** en of de roddelaar over zijn kelder
+  praatte, of dat de herberg droog stond (haar gesprek in `js/gesprekken.js`; de vlaggen herbergGasten,
+  herbergRoddel en herbergDroog zet `js/herberg.js` elke nacht). Zo weet je het op tijd, en kun je het
+  graan nog verplaatsen vóór Sint-Maarten.
+- **Een zin kan een naam noemen:** `{woord}` in een zin vult het spel in (`T.GESPREK_WOORDEN`,
+  `js/gesprek.js`): `{gisteravond}` en `{roddelaar}` (`js/herberg.js`).
+- **De marskramer logeert in de herberg:** hij staat tien dagen op het plein, zit 's avonds in de
+  herberg en slaapt er, en staat 's ochtends weer bij zijn waar (`T.logiesAnker`, dat `T.dagAnker`
+  vraagt). Bij de muis op de herberg staat dan "de marskramer logeert hier".
 
 ### Het dorp bouwt zelf
 

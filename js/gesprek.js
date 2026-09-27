@@ -59,11 +59,18 @@
     return (keuzes || []).filter((keuze) => T.voorwaardeGeldt(S, wieId, keuze.als));
   };
 
-  // Eén knoop, opgelost tot wat er nu staat: de tekst die nu geldt, en de keuzes die nu tonen.
+  // Woorden die het spel invult (27 sep): {gisteravond} in een zin wordt wat
+  // T.GESPREK_WOORDEN.gisteravond(S) zegt. Zo kan een zin een naam noemen die per spel anders is, zoals
+  // wie er gisteravond in de herberg zat (js/herberg.js). Een woord dat niemand kent, blijft staan.
+  T.GESPREK_WOORDEN = T.GESPREK_WOORDEN || {};
+  T.vulWoordenIn = (S, zin) => String(zin || '').replace(/\{(\w+)\}/g, (heel, w) => (T.GESPREK_WOORDEN[w] ? T.GESPREK_WOORDEN[w](S) : heel));
+
+  // Eén knoop, opgelost tot wat er nu staat: de tekst die nu geldt, met de woorden ingevuld, en de
+  // keuzes die nu tonen.
   T.gesprekKnoop = function (S, wieId, knoopId) {
     const knoop = T.GESPREKKEN[wieId].knopen[knoopId];
     const regel = T.eersteDiePast(S, wieId, knoop.tekst);
-    return { tekst: regel ? regel.zeg : '', keuzes: T.zichtbareKeuzes(S, wieId, knoop.keuzes) };
+    return { tekst: regel ? T.vulWoordenIn(S, regel.zeg) : '', keuzes: T.zichtbareKeuzes(S, wieId, knoop.keuzes) };
   };
 
   // Wat een antwoord doet: een vlag zetten of wissen, en iets in je tas stoppen of eruit halen

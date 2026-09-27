@@ -48,6 +48,9 @@
 // of weg: 'marskramer' (quest zonder allebei begint hem). Zie js/quests.js voor de quests zelf.
 // En handel: true opent het handelsvenster van de marskramer (js/handel.js, js/hud.js), en
 // heer: true het venster waarin je de heer betaalt op Sint-Maarten (js/heer.js, js/hud.js).
+//
+// In een zin mag {woord} staan: dat vult het spel in (T.GESPREK_WOORDEN in js/gesprek.js), zoals
+// {gisteravond}, wie er gisteravond in de herberg zat (js/herberg.js).
 (function (T) {
   'use strict';
 
@@ -190,6 +193,42 @@
           ],
           keuzes: [
             { zeg: 'Loop maar met me mee.', sluit: true },
+          ],
+        },
+      },
+    },
+    // De herbergierster (js/herberg.js; spel.md, "Zaken waar de mensen zelf heen gaan"; Marcel koos op
+    // 27 sep dat er in de herberg gepraat wordt, vraag 38). Ze weet wie er gisteravond zat en wat er
+    // gezegd werd. herbergGasten, herbergRoddel en herbergDroog zet js/herberg.js elke nacht;
+    // {gisteravond} en {roddelaar} vult het spel in met de namen van wie er zat en van wie te veel zei.
+    herbergierster: {
+      naam: 'de herbergierster',
+      start: 'welkom',
+      situaties: [
+        { naam: 'Gisteravond zat er volk', als: { vlag: 'herbergGasten' } },
+        { naam: '…en de roddelaar had het over zijn kelder', als: { vlag: ['herbergGasten', 'herbergRoddel'] } },
+        { naam: 'De herberg staat droog', als: { vlag: 'herbergDroog' } },
+        { naam: 'De marskramer logeert hier', als: { vlag: 'marskramerOpBezoek' } },
+      ],
+      knopen: {
+        welkom: {
+          tekst: [
+            { als: { vlag: 'herbergDroog' }, zeg: 'Geen druppel meer, schout. Zonder graan brouw ik niets, en zonder bier zit hier niemand. Een lege herberg hoort alles en weet niets.' },
+            { als: { vlag: 'herbergRoddel' }, zeg: 'Aan de tap gisteravond: {gisteravond}. En {roddelaar} had het weer over wat er in de kelder ligt. Hardop, schout. Wat de halve herberg weet, weet de heer met Sint-Maarten.' },
+            { als: { vlag: 'herbergGasten' }, zeg: 'Aan de tap gisteravond: {gisteravond}. Het weer, de pacht, en wie er met wie. Niets wat u hoeft te weten, en alles wat ik wil weten.' },
+            { zeg: 'Stil gisteravond. Niemand kwam. Dan tap ik voor mezelf, en ik ben een slechte klant.' },
+          ],
+          keuzes: [
+            { zeg: 'En de marskramer?', naar: 'marskramer', als: { vlag: 'marskramerOpBezoek' } },
+            { zeg: 'Houd uw oren open.', sluit: true },
+          ],
+        },
+        marskramer: {
+          tekst: [
+            { zeg: 'Hij slaapt boven, zolang hij op het plein staat. Hij betaalt met een lint of een spiegeltje, en praat voor drie. Wat hij op het kasteel vertelt, heeft hij hier eerst gehoord.' },
+          ],
+          keuzes: [
+            { zeg: 'Houd uw oren open.', sluit: true },
           ],
         },
       },

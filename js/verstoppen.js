@@ -33,8 +33,11 @@
     // Of het karakter van wie er woont telt (een optie), en wat het doet: de kans dat de soldaten
     // het vinden keer `vinden`, en het deel van wat je er neerzet dat hij houdt.
     karakters: true,
+    // De roddelaar vertelt het in de herberg (Marcel koos het op 27 sep, vraag 38): zijn kelder is pas
+    // riskanter als hij er zat terwijl er iets lag (inDeHerberg; js/herberg.js zet g.verteld). Een dorp
+    // zonder herberg hoort het toch wel.
     bewoners: {
-      roddelaar: { vinden: 2 }, // vertelt het rond
+      roddelaar: { vinden: 2, inDeHerberg: true }, // vertelt het rond
       vrome: { weigert: true }, // bidt ook voor de heer
       woekeraar: { vinden: 0.5, houdt: 0.2 }, // een goede kelder, maar hij houdt een vijfde
       grijsaard: { vinden: 0.25 }, // de oudste weet een oude plek onder de vloer
@@ -109,7 +112,11 @@
     const karakter = karakterVan(bewoner);
     const eigen = V.karakters && karakter ? V.bewoners[karakter] || null : null;
     let vinden = vanSchout ? V.vindenBijSchout : basis.vinden;
-    if (eigen && typeof eigen.vinden === 'number') vinden *= eigen.vinden;
+    // Wat pas telt als het in de herberg verteld is (de roddelaar), telt alleen dan; zonder herberg altijd.
+    const heeftHerberg = !!(T.herbergVan && T.herbergVan(S));
+    const verteld = !!g.verteld;
+    const telt = eigen && (!eigen.inDeHerberg || verteld || !heeftHerberg);
+    if (telt && typeof eigen.vinden === 'number') vinden *= eigen.vinden;
     const houdtHier = basis.houdt || 0;
     const houdtBewoner = (eigen && eigen.houdt) || 0;
     const houdt = Math.max(houdtHier, houdtBewoner);
@@ -124,6 +131,8 @@
       houdt: Math.max(0, Math.min(1, houdt)),
       wieHoudt,
       weigert: !!(eigen && eigen.weigert),
+      verteld: !!(eigen && eigen.inDeHerberg && heeftHerberg && verteld),
+      inDeHerberg: !!(eigen && eigen.inDeHerberg && heeftHerberg),
     };
   };
 
@@ -153,7 +162,10 @@
     const hij = vrouw(b) ? 'zij' : 'hij';
     const zijn = vrouw(b) ? 'haar' : 'zijn';
     switch (p.karakter) {
-      case 'roddelaar': return `${b.naam} weet alles van iedereen, en vertelt het ook.`;
+      case 'roddelaar':
+        if (p.verteld) return `${b.naam} heeft in de herberg al verteld wat hier ligt.`;
+        if (p.inDeHerberg) return `${b.naam} weet alles van iedereen, en vertelt het in de herberg.`;
+        return `${b.naam} weet alles van iedereen, en vertelt het ook.`;
       case 'vrome': return `${b.naam} bidt drie keer per dag, en één keer voor de heer: in ${zijn} kelder verstop je niets.`;
       case 'woekeraar': return `${b.naam} leent graan uit tegen woeker. ${hoofdletter(zijn)} kelder is goed, maar ${hij} houdt ${T.deelTekst(p.houdt)} van wat je er neerzet.`;
       case 'grijsaard': return `${b.naam} is de oudste, en weet nog waar ${zijn} vader het graan verstopte toen de vorige heer kwam.`;
@@ -240,6 +252,8 @@
     const inhoud = g.verstopt;
     inhoud[wat] = Math.max(0, inhoud[wat] - n);
     if (inhoud[wat] < 1e-9) inhoud[wat] = 0;
+    // Is de kelder leeg, dan is wat de roddelaar in de herberg vertelde niet meer waar.
+    if (!T.inhoudTekst(inhoud)) delete g.verteld;
     T.wijzigVoorraad(S, wat, n);
     return k;
   };
@@ -309,6 +323,7 @@
       if (r >= p.vinden) continue;
       gevonden.push(`${tekst} in ${p.naam}`);
       g.verstopt = { graan: 0, goud: 0 };
+      delete g.verteld;
       if (VI().argwaanPerVondst > 0 && T.zetArgwaan) T.zetArgwaan(S, VI().argwaanPerVondst, 'de soldaten vonden wat je verstopte');
     }
     if (gevonden.length && T.ui && T.ui.toonVoorraad) T.ui.toonVoorraad(S);

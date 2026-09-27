@@ -22,7 +22,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   - Bij de muis zegt de herberg na bedtijd nog "vanavond": dat is dan de avond die net voorbij is.
   - Het telt maar één herberg (de eerste). Komen er meer, dan hoort ieder naar de dichtstbijzijnde te
     gaan.
-  - De herbergierster zegt nog niets (klikken doet niets); haar nieuws komt in stuk 2.
+  - Na stuk 2 (27 sep): de herbergierster heeft nog geen portret. Ze noemt de gasten bij hun voornaam
+    ("Gerrit, Diewer en Geesje"); wie Diewer is, zie je pas met de muis ("vrouw van Gerrit").
+  - Overdag spreek je haar; 's avonds is ze binnen en kun je haar niet aanklikken. Een gesprek ín de
+    herberg (binnen zijn) bestaat nog niet.
+  - De inner hoort in de herberg nog niets, en de roddelaar vertelt alleen over zijn eigen kelder. Wie
+    jou 's nachts ziet sjouwen en het in de herberg vertelt, hoort bij de getuigen (punt 3).
   - De toetsen van de dag en de bewoners kijken nu om twee uur 's nachts of iedereen binnen is, niet
     meer om half twaalf: wie van ver in de herberg zat, is later thuis.
 - **De poppetjes, wat nog ruw is** (26 sep, na stap 2; `spel.md`, "Mensen worden poppetjes"):

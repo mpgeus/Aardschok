@@ -13,6 +13,10 @@
 //     bedtijd in het donker naar huis. De herbergierster staat 's avonds achter de tap;
 //   - de avond verrekend (T.tikHerbergDag, elke nacht vanuit T.tikGebouwenDag in js/gebouwen.js): elk
 //     bezoek drinkt bier, en wie er was, onthoudt de dag;
+//   - wat er gezegd werd (stuk 2, Marcel koos B op 27 sep, vraag 38): de roddelaar vertelt er wat er in
+//     zijn kelder ligt, en de herbergierster weet de volgende dag wie er zat en wie te veel zei (haar
+//     gesprek in js/gesprekken.js, met de woorden {gisteravond} en {roddelaar});
+//   - wie er logeert (T.logiesAnker): de marskramer zit er 's avonds en slaapt er;
 //   - wat het doet (T.herbergGezelligheid, voor js/behoeften.js): wie deze week in de herberg was, is
 //     tevredener;
 //   - wat er te zien is (T.herbergTekst, bij de muis op de herberg).
@@ -140,17 +144,64 @@
     return p.huis !== g && T.herbergGasten(S, S.kalender.dag).includes(p);
   };
 
+  // De naam van een bewoner, zoals de herbergierster hem noemt.
+  const naamVan = (p) => (p.wie ? (T.naamVanMens ? T.naamVanMens(p.wie) : p.wie) : p.naam);
+  const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || '');
+
+  // Vertelt p in de herberg wat er in zijn kelder ligt? Wie het karakter heeft dat het in de herberg
+  // rondvertelt (de roddelaar: `inDeHerberg` in T.VERSTOP_INSTELLINGEN, js/verstoppen.js), als er in
+  // zijn kelder iets verstopt ligt. Dan weet de halve herberg het, en vinden de soldaten het met
+  // Sint-Maarten makkelijker. Zijn kelder is zijn huis (de boerderij).
+  function vertelt(p) {
+    const V = T.VERSTOP_INSTELLINGEN;
+    const eigen = V && V.karakters && V.bewoners && V.bewoners[karakterVan(p)];
+    const kelder = p.huis;
+    return !!(eigen && eigen.inDeHerberg && kelder && kelder.verstopt && T.inhoudTekst && T.inhoudTekst(kelder.verstopt));
+  }
+
   // Elke nacht de avond verrekenen (T.tikGebouwenDag, js/gebouwen.js, aan het begin van dag `dag`): wie
   // er gisteravond was, dronk zijn bier en onthoudt dat (p.herbergDag, voor T.herbergGezelligheid).
+  // En wat er gezegd werd: de roddelaar vertelde wat er in zijn kelder ligt (g.verteld op die kelder,
+  // js/verstoppen.js). De herbergierster weet het de volgende dag (haar gesprek in js/gesprekken.js):
+  // de vlaggen herbergGasten, herbergRoddel en herbergDroog, en de namen in S.herberg.gisteravond.
   T.tikHerbergDag = function (S, dag) {
     if (!T.herbergVan(S) || !S.bewoners) return;
     const gisteren = Math.floor(dag) - 1;
+    const droog = T.herbergDroog(S);
     const gasten = T.herbergGasten(S, gisteren);
+    const roddel = gasten.find(vertelt) || null;
     const H = S.herberg || (S.herberg = {});
-    H.gisteravond = { dag: gisteren, gasten: gasten.length };
+    H.gisteravond = { dag: gisteren, gasten: gasten.length, namen: gasten.map(naamVan), roddel: roddel ? naamVan(roddel) : null };
+    if (T.zetVlag) {
+      for (const v of ['herbergGasten', 'herbergRoddel', 'herbergDroog']) T.wisVlag(S, v);
+      if (gasten.length) T.zetVlag(S, 'herbergGasten');
+      if (roddel) T.zetVlag(S, 'herbergRoddel');
+      if (droog) T.zetVlag(S, 'herbergDroog');
+    }
+    if (roddel) roddel.huis.verteld = gisteren;
     if (!gasten.length) return;
     T.wijzigVoorraad(S, 'bier', -gasten.length * IN().bierPerBezoek);
     for (const p of gasten) p.herbergDag = gisteren;
+  };
+
+  // Wat de herbergierster invult in haar gesprek (js/gesprek.js, T.vulWoordenIn): wie er gisteravond
+  // aan de tap zat, en wie er te veel zei.
+  T.GESPREK_WOORDEN = T.GESPREK_WOORDEN || {};
+  T.GESPREK_WOORDEN.gisteravond = (S) => opsomming((S.herberg && S.herberg.gisteravond && S.herberg.gisteravond.namen) || []) || 'niemand';
+  T.GESPREK_WOORDEN.roddelaar = (S) => (S.herberg && S.herberg.gisteravond && S.herberg.gisteravond.roddel) || 'iemand';
+
+  // Wie over de weg kwam en een paar dagen blijft, logeert in de herberg (Marcel koos het met B, vraag
+  // 38): de marskramer, die tien dagen op het plein staat (js/handel.js), zit er 's avonds en slaapt er,
+  // en staat 's ochtends weer bij zijn waar. Voor T.dagAnker in js/dag.js; anders null.
+  T.logiesAnker = function (S, e) {
+    const m = S.marskramer;
+    if (!m || m.wezen !== e || !m.staat || m.weg) return null;
+    const g = T.herbergVan(S);
+    if (!g || !S.kalender || !T.dagdeelVan) return null;
+    const deel = T.dagdeelVan(S.kalender.dag, T.isOogstDag && T.isOogstDag(S.kalender.dag));
+    if (deel !== 'avond' && deel !== 'nacht') return null;
+    const deur = T.deurVan(S.wereld, g);
+    return { x: deur.x, y: deur.y, straal: 0, binnen: true };
   };
 
   // Hoeveel tevredener het dorp is door de herberg, op dag `dag` (js/behoeften.js): het deel van de
@@ -194,7 +245,9 @@
     const vanavond = avond
       ? binnen ? `${binnen} ${binnen === 1 ? 'gast' : 'gasten'} binnen` : 'nog niemand binnen'
       : `vanavond ${gasten.length ? `${gasten.length} ${gasten.length === 1 ? 'gast' : 'gasten'}` : 'geen gasten'}`;
-    return `${vanavond}; ${bier ? `${bier} bier` : 'geen bier meer'}.`;
+    const m = S.marskramer;
+    const logeert = m && m.staat && !m.weg ? '; de marskramer logeert hier' : '';
+    return `${vanavond}; ${bier ? `${bier} bier` : 'geen bier meer'}${logeert}.`;
   };
   T.GEBOUW_ERBIJ = T.GEBOUW_ERBIJ || {};
   T.GEBOUW_ERBIJ.herberg = T.herbergTekst;

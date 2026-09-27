@@ -166,6 +166,9 @@
   // js/heer.js), volgt dat en niet de dag.
   T.dagAnker = function (S, e, oogst) {
     if (!S || !S.kalender || !e || !e.thuis || e.moetNaar) return null;
+    // Wie in de herberg logeert (de marskramer), zit er 's avonds en slaapt er (js/herberg.js).
+    const logies = T.logiesAnker ? T.logiesAnker(S, e) : null;
+    if (logies) return logies;
     const p = e.bewoner;
     if (!p && !e.werkAkkers) return null;
     const deel = T.dagdeelVan(S.kalender.dag, oogst);
