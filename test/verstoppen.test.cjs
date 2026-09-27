@@ -23,6 +23,10 @@ require('../js/inner.js');
 require('../js/verstoppen.js');
 require('../js/kaart.js');
 require('../js/gebied.js');
+// Ook de bewoners, ná verstoppen.js, zoals in index.html: tot 27 sep hadden de twee bestanden twee
+// namen gemeen (T.bewonerVan en T.overBewonerTekst), en dan won in het spel die van js/bewoners.js. Het
+// karakter van wie er woont, telde bij de kelder dus nooit, terwijl deze toetsen groen bleven.
+require('../js/bewoners.js');
 const T = globalThis.Spel;
 const V = T.VERSTOP_INSTELLINGEN;
 const IN = T.INNER_INSTELLINGEN;
@@ -236,7 +240,7 @@ test('een vrome boerin bidt ook: "haar kelder"', () => {
   const S = gehucht();
   boer(S, 'boer2').karakter = 'vrome'; // Aaltje
   const p = T.verstopPlekVan(S, kelderVan(S, 'boer2'));
-  assert.match(T.overBewonerTekst(p), /^Aaltje bidt .* in haar kelder/);
+  assert.match(T.overKelderTekst(p), /^Aaltje bidt .* in haar kelder/);
 });
 
 // ---------------------------------------------------------------------------------------------

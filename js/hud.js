@@ -945,7 +945,7 @@
       T.ui.sluitVerstoppen(S);
       return;
     }
-    const over = T.overBewonerTekst(p);
+    const over = T.overKelderTekst(p);
     const wie = verstopWie(p);
     $('verstoppen').innerHTML =
       `<div class="venster-kop"><span class="venster-titel">${veilig(T.hoofdletter(p.naam))}</span>` +

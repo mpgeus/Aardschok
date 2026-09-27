@@ -79,7 +79,9 @@
   // Wie er woont: de boer met hetzelfde `huis` als de boerderij (uit het betekenisbestand, net als
   // bij een akker; js/kaart.js). Het huis van de schout heet "schout". Een huis dat de speler zelf
   // bouwde, heeft niemand met een naam: daar wonen gewone dorpelingen.
-  T.bewonerVan = function (S, g) {
+  // Niet T.bewonerVan: die naam is van js/bewoners.js (de bewoner van een poppetje). Tot 27 sep heette
+  // deze ook zo, en omdat js/bewoners.js later laadt, kreeg de kelder in het spel nooit een bewoner.
+  T.bewonerVanGebouw = function (S, g) {
     if (!g || !g.huis || g.huis === 'schout') return null;
     const w = S.wereld;
     return (w && (w.wezens || []).find((e) => e.huis === g.huis && e.wie)) || null;
@@ -103,7 +105,7 @@
     const basis = g && V.plekken[g.soort];
     if (!basis || !g.klaar) return null;
     const vanSchout = g.huis === 'schout';
-    const bewoner = T.bewonerVan(S, g);
+    const bewoner = T.bewonerVanGebouw(S, g);
     const karakter = karakterVan(bewoner);
     const eigen = V.karakters && karakter ? V.bewoners[karakter] || null : null;
     let vinden = vanSchout ? V.vindenBijSchout : basis.vinden;
@@ -143,8 +145,9 @@
   };
 
   // Wat het karakter van wie er woont hier betekent, in één zin (het venster, en de muis als hij
-  // weigert). Alleen als het karakter telt; anders is het een kelder als alle andere.
-  T.overBewonerTekst = function (p) {
+  // weigert). Alleen als het karakter telt; anders is het een kelder als alle andere. (Tot 27 sep
+  // T.overBewonerTekst, net als de muistekst in js/bewoners.js, en die won.)
+  T.overKelderTekst = function (p) {
     const b = p.bewoner;
     if (!b || !VI().karakters || !VI().bewoners[p.karakter]) return '';
     const hij = vrouw(b) ? 'zij' : 'hij';
@@ -185,7 +188,7 @@
     const p = T.verstopPlekVan(S, g);
     if (!p) return { kan: false, reden: 'Hier kun je niets verstoppen.' };
     if (!WAT.includes(wat)) return { kan: false, reden: `${hoofdletter(wat)} verstop je hier niet.` };
-    if (p.weigert) return { kan: false, reden: T.overBewonerTekst(p) || 'Wie hier woont, wil er niets van weten.' };
+    if (p.weigert) return { kan: false, reden: T.overKelderTekst(p) || 'Wie hier woont, wil er niets van weten.' };
     const stil = nietNu(S);
     if (stil) return { kan: false, reden: stil };
     if (!(n > 0)) return { kan: false, reden: 'Er is niets om weg te zetten.' };
@@ -247,7 +250,7 @@
     const inhoud = T.inhoudTekst(inhoudVan(p.gebouw));
     const erin = inhoud ? ` · er ligt ${inhoud}` : '';
     if (p.weigert && !inhoud) {
-      return { tekst: `${hoofdletter(p.naam)}: ${p.bewoner.naam} wil er niets van weten`, kan: false, reden: T.overBewonerTekst(p) };
+      return { tekst: `${hoofdletter(p.naam)}: ${p.bewoner.naam} wil er niets van weten`, kan: false, reden: T.overKelderTekst(p) };
     }
     const stil = nietNu(S);
     if (stil) return { tekst: `${hoofdletter(p.naam)}: niet zolang ${wieIsEr(S)} in het dorp is${erin}`, kan: false, reden: stil };
