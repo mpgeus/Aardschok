@@ -10,18 +10,19 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (27 sep 2026, negende sessie): de herberg is af (punt 2), en stuk 1 van het zichtveld
+## De stand (27 sep 2026, negende sessie): de herberg en het zichtveld zijn af (punt 2 en 3)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 522/522.
+`npm test`: 527/527.
 
-**Waar het werk staat:** de negende sessie (27 sep) staat in `main` (Marcel: "Ja, zet het in main"),
-en ook op haar eigen branch `claude/werklijst-doorzetten-ikazjp`. Hoe een eigen branch en `main`
-samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** de negende sessie (27 sep) staat in `main` tot en met stuk 1 van het
+zichtveld (Marcel: "Ja, zet het in main"). Stuk 2 kwam daarna, en staat alleen op de eigen branch
+`claude/werklijst-doorzetten-ikazjp`, nog niet gepusht: dat doet Claude als Marcel "push it" zegt. Hoe
+een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
 toevoegen voor we bij een speelbaar product komen." Houd je aan de volgorde hieronder. Een nieuw idee,
@@ -82,15 +83,17 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   iets ziet wegzetten of terughalen, is getuige: een oogje boven zijn hoofd en een bericht. Er brandt 's
   avonds een lantaarn bij de put. Het venster van de plek zegt vooraf wie je ziet. Marcel kreeg
   schermafdrukken.
+- **Het zichtveld, stuk 2** (Marcel: "Doorzetten"): zag een roddelaar je, dan vertelt hij het de
+  eerstvolgende avond in de herberg, en dan vinden de soldaten het op die plek twee keer zo makkelijk;
+  de herbergierster vertelt het je de volgende dag. De rest zwijgt. In de spelregels kies je of je een
+  getuige meteen ziet of pas later. Daarmee is punt 3 af.
 - **Een fout gevonden en gerepareerd:** in het spel telde het karakter van wie er woont bij de kelders
   niet (de vrome weigerde niet, de woekeraar hield niets). Twee bestanden hadden twee namen gemeen, en
   het laatste won; de toetsen laadden dat bestand niet. Dat is precies waar vraag 25, E voor is.
 
-**Punt 2, de herberg, is af** (27 sep, drie stukken), **en van punt 3 stuk 1** (het zichtveld: wie ziet
-de schout, en wie is getuige). **Nu stuk 2: wat een getuige doet,** naar zijn karakter (het plan van vraag
-40, goedgekeurd): de roddelaar vertelt het in de herberg, en dan vinden de soldaten die plek makkelijker;
-de herbergierster vertelt het je de volgende dag. Dan komt ook de keuze in de spelregels of je een getuige
-meteen ziet of pas later (A). Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
+**Punt 2, de herberg, en punt 3, het zichtveld en de getuigen, zijn af** (27 sep). **Nu komt punt 4, de
+kern afmaken:** Claude begint met een kort plan voor Marcel, en bouwt pas als hij het goed vindt. Wat
+Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -116,10 +119,10 @@ voorstel van Claude, en daar gaat vraag 26 over.
    (`spel.md`, "Zaken waar de mensen zelf heen gaan"). In drie stukken (27 sep): de herberg staat er en de
    avond gaat erheen; er wordt gepraat; en hij is groter, aan de westkant van het plein, met ramen die
    branden. Zie onder Af.
-3. **Nu: het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
-   steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
-   uit verstoppen deel 1b op. Het plan, in twee stukken, staat bij vraag 40. Stuk 1 is af (27 sep).
-4. **De kern afmaken** (punt 6 en 6a), en daarmee de vraag van het tweede proefje: is dit leuk?
+3. **Af (negende sessie): het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen
+   in een donker steegje, zonder dat iemand het ziet. "Wie vlak langs een plek loopt, kan iets vinden"
+   uit verstoppen deel 1b ging hierin op: wie je ziet, weet het. Het plan staat bij vraag 40; zie onder Af.
+4. **Nu: de kern afmaken** (punt 6 en 6a), en daarmee de vraag van het tweede proefje: is dit leuk?
    - verstoppen deel 1b, de rest (Marcel koos het op 25 sep): de soldaten zoeken op Sint-Maarten
      altijd op 2 of 3 plekken, ook zonder argwaan, en je bepaalt de route zelf, maar soms wil de heer
      kiezen;
@@ -634,6 +637,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 27 sep 2026 — **Het zichtveld, stuk 2: wat een getuige doet** (negende sessie; punt 3, vraag 40,
+  Marcel: "Doorzetten"). Zag een roddelaar je iets wegzetten of terughalen, dan vertelt hij het de
+  eerstvolgende avond dat hij in de herberg zit (`T.getuigenVertellen`, `js/zien.js`): de soldaten
+  vinden het op die plek dan twee keer zo makkelijk, tot je hem leeghaalt (`g.verteldDoor`,
+  `js/verstoppen.js`), en de herbergierster vertelt het je de volgende dag. Wie in de herberg vertelt, is
+  één vraag voor de kelder van de roddelaar en voor wat hij zag (`T.vertelInDeHerberg`). In de
+  spelregels: een getuige meteen zien, of pas later. Daarmee is punt 3 af. `npm test`: 527/527.
 - 27 sep 2026 — **Het zichtveld, stuk 1** (negende sessie; punt 3, vraag 40, Marcel: "A ja B ja C ja D
   ja"). Wie buiten is, ziet de schout als hij dichtbij genoeg is en er niets tussen staat: overdag acht
   tegels, 's nachts twee, in het licht van een lantaarn of de herberg zes (`js/zien.js`, `T.zichtOp`,
