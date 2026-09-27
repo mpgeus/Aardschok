@@ -20,8 +20,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   - Een oogje staat vijf seconden. Op een smal scherm staat het venster van de plek nog midden in beeld,
     over de schout heen, en dan zie je het oogje pas als je het sluit.
   - Het gezin van de schout staat 's avonds vaak bij zijn deur, in het licht van de lantaarn bij de
-    put: het telt niet (het is hun kelder), maar in stuk 2 is de vraag of een huisgenoot het ooit
-    doorvertelt.
+    put: het telt niet (het is hun kelder). Of een huisgenoot het ooit doorvertelt: nee, het gezin
+    zwijgt (Marcel, 27 sep; `spel.md`, bij stuk 2 van het zichtveld).
 
 - **De herberg, wat nog ruw is** (27 sep, na stuk 1; `spel.md`, "Zaken waar de mensen zelf heen gaan"):
   - Er hangt nog geen uithangbord: je herkent de herberg aan de lantaarn en het bankje bij de deur, en
