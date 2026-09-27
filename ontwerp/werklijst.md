@@ -19,9 +19,9 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met 
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
 `npm test`: 523/523.
 
-**Waar het werk staat:** de tiende sessie (27 sep) staat op haar eigen branch
-`claude/offline-flight-tasks-35l4cj`, gepusht (Marcel: "Ja, eigen branch"), nog niet in `main`. De
-negende sessie staat in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** de tiende sessie (27 sep) staat in `main` (Marcel: "Zet het in main"), en ook
+op haar eigen branch `claude/offline-flight-tasks-35l4cj`. Hoe een eigen branch en `main` samengaan,
+staat in `CLAUDE.md`, onder Git.
 
 **Wat er in de tiende sessie gebeurde** (27 sep, terwijl Marcel twee uur vloog; hij koos vooraf 1, 3 en
 4 uit een lijst van Claude, en niet stuk 2 van de getuigen):
