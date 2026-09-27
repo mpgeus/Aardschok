@@ -5,25 +5,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/tijd.js');
-require('../js/dag.js');
-require('../js/wereld.js');
-require('../js/voorraad.js');
-require('../js/mensen.js');
-require('../js/vee.js');
-require('../js/gebouwen.js');
-require('../js/behoeften.js');
-require('../js/akkers.js');
-require('../js/handel.js');
-require('../js/heer.js');
-require('../js/inner.js');
-require('../js/verstoppen.js');
-require('../js/boeren.js');
-require('../js/bewoners.js');
-require('../js/gesprekken.js');
-require('../js/gesprek.js');
-require('../js/doorkijk.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 // De blokken zoals de bestanden ze zetten, vóór opties.js er iets mee doet.
 const BLOKKEN = [
@@ -36,8 +18,6 @@ const bestanden = {};
 for (const k of BLOKKEN.concat(LOS)) bestanden[k] = JSON.parse(JSON.stringify(T[k]));
 const namen = {};
 for (const id of ['heer', 'boer1', 'boer2', 'boer3', 'boer4', 'boer5']) namen[id] = T.MENSEN[id].naam;
-
-require('../js/opties.js');
 
 // Elke toets begint en eindigt op de standaard (en de browser, die er hier niet is, onthoudt niets).
 test.afterEach(() => T.pasOptiesToe(null));

@@ -11,13 +11,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/wereld.js');
-require('../beelden/beschrijving.js');
-require('../tegels/tegels.js');
-require('../kaarten/kaarten.js');
-require('../js/mensen.js');
-require('../js/kaart.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 test('een ingelezen kaart heeft de goede afmeting en een begaanbare wereld', () => {
   const w = T.laadKaart(T.KAARTEN.proef, T.BETEKENIS.proef);

@@ -5,12 +5,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/wereld.js');
-require('../js/gesprek.js');
-require('../js/gesprekken.js');
-require('../js/quests.js');
-require('../js/quest.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 const gemeld = [];
 T.ui = { bericht: (tekst) => gemeld.push(tekst), toonGoud: () => {} };

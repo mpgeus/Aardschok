@@ -6,26 +6,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/tijd.js');
-require('../js/voorraad.js');
-require('../js/wereld.js');
-require('../js/mensen.js');
-require('../js/vee.js');
-require('../js/gebouwen.js');
-require('../js/behoeften.js');
-require('../beelden/beschrijving.js');
-require('../tegels/tegels.js');
-require('../kaarten/kaarten.js');
-require('../js/kaart.js');
-require('../js/gebied.js');
-require('../js/pad.js');
-require('../js/akkers.js');
-require('../js/boeren.js');
-require('../js/gevecht.js');
-require('../js/verkennen.js');
-require('../js/gesprekken.js');
-require('../js/gesprek.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 const IN = T.VEE_INSTELLINGEN;
 const bijna = (a, b) => Math.abs(a - b) < 1e-9;
@@ -53,7 +34,8 @@ function boerMet(velden, opties) {
   const boer = { naam: 'Klaas', tx: 12, ty: 12, x: 12, y: 12, dood: false, pad: [], werkAkkers: akkers.slice(), huis: 'boer1' };
   const S = {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, tijd: 0,
-    kalender: { dag: (opties && opties.dag) || dagVan('hooimaand', 1) }, lot: { zaad: 42 },
+    // 1 hooimaand om tien uur 's ochtends: in de werkuren, want 's nachts maait niemand (js/dag.js).
+    kalender: { dag: (opties && opties.dag) || dagVan('hooimaand', 1) + 10 / 24 }, lot: { zaad: 42 },
     wereld: {
       b: 30, h: 30, wezens: [boer], akkers, meenten: [],
       tegels: Array.from({ length: 30 }, () => Array(30).fill('gras')),

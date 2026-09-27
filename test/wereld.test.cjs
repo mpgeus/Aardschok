@@ -6,20 +6,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/wereld.js');
-require('../tegels/tegels.js');
-require('../kaarten/kaarten.js');
-require('../js/mensen.js');
-require('../js/kaart.js');
-require('../js/gebied.js');
-require('../js/pad.js');
-require('../js/iso.js');
-require('../js/sprites.js');
-require('../js/anim.js');
-require('../js/verkennen.js');
-require('../js/gevecht.js');
-require('../js/tekenen.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 // Zonder scherm doet elke aanroep naar T.ui niets.
 T.ui = new Proxy({}, { get: () => () => {} });

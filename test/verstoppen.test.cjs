@@ -5,29 +5,10 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/tijd.js');
-require('../js/dag.js');
-require('../js/wereld.js');
-require('../js/pad.js');
-require('../js/voorraad.js');
-require('../beelden/beschrijving.js');
-require('../tegels/tegels.js');
-require('../kaarten/kaarten.js');
-require('../js/mensen.js');
-require('../js/gebouwen.js');
-require('../js/behoeften.js');
-require('../js/akkers.js');
-require('../js/handel.js');
-require('../js/heer.js');
-require('../js/inner.js');
-require('../js/verstoppen.js');
-require('../js/kaart.js');
-require('../js/gebied.js');
+const T = require('./laad.cjs').spel();
 // Ook de bewoners, ná verstoppen.js, zoals in index.html: tot 27 sep hadden de twee bestanden twee
 // namen gemeen (T.bewonerVan en T.overBewonerTekst), en dan won in het spel die van js/bewoners.js. Het
 // karakter van wie er woont, telde bij de kelder dus nooit, terwijl deze toetsen groen bleven.
-require('../js/bewoners.js');
-const T = globalThis.Spel;
 const V = T.VERSTOP_INSTELLINGEN;
 const IN = T.INNER_INSTELLINGEN;
 const HEER = T.HEER_INSTELLINGEN;
@@ -41,13 +22,21 @@ const SINT_MAARTEN = dagVan('slachtmaand', 11);
 
 // Het echte gehucht (kaarten/gehucht.tmj): vijf boerderijen, elk met zijn boer, en het huis van de
 // schout. Zonder js/boeren.js heeft elke boer zijn vaste karakter uit js/mensen.js.
+// Het echte gehucht, met een vast zaad (zoals test/herberg.test.cjs): uit het zaad komen de karakters
+// van de boeren, en het lot van de soldaten op Sint-Maarten.
 function gehucht() {
-  const S = {
-    voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0,
-    kalender: { dag: 10, snelheid: 1 }, inventaris: new Set(), modus: 'verkennen',
-  };
-  assert.ok(T.beginOpKaart(S, 'gehucht'));
-  return S;
+  const echtLot = T.lootBoeren;
+  T.lootBoeren = (S2) => echtLot(S2, 1234);
+  try {
+    const S = {
+      voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0,
+      kalender: { dag: 10, snelheid: 1 }, inventaris: new Set(), modus: 'verkennen',
+    };
+    assert.ok(T.beginOpKaart(S, 'gehucht'));
+    return S;
+  } finally {
+    T.lootBoeren = echtLot;
+  }
 }
 const kelderVan = (S, huis) => S.gebouwen.find((g) => g.huis === huis);
 const boer = (S, id) => S.wereld.wezens.find((e) => e.wie === id);
@@ -211,7 +200,12 @@ test('het karakter telt: de roddelaar, de vrome, de woekeraar en de oudste', () 
   };
   const basis = V.plekken.boerderij.vinden;
   assert.equal(zet('zanger').vinden, basis);
+  // De roddelaar vertelt het in de herberg (js/herberg.js): pas als ze dat gedaan heeft, is haar kelder
+  // riskanter.
+  assert.equal(zet('roddelaar').vinden, basis, 'zolang ze niets verteld heeft');
+  g.verteld = true;
   assert.equal(zet('roddelaar').vinden, basis * V.bewoners.roddelaar.vinden, 'zij vertelt het rond');
+  delete g.verteld;
   assert.equal(zet('grijsaard').vinden, basis * V.bewoners.grijsaard.vinden, 'de oudste kent een oude plek');
   // De vrome weigert.
   const vroom = zet('vrome');

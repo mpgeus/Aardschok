@@ -6,15 +6,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/tijd.js');
-require('../js/dag.js');
-require('../js/wereld.js');
-require('../js/voorraad.js');
-require('../js/mensen.js');
-require('../js/gesprek.js');
-require('../js/gesprekken.js');
-require('../js/handel.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 // De dag (vanaf het begin van het spel, 1 lentemaand) van een datum in het eerste jaar.
 function dagVan(maand, dagVanMaand) {

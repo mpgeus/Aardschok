@@ -3,12 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/wereld.js');
-require('../js/gebied.js');
-require('../js/pad.js');
-require('../js/gevecht.js');
-require('../js/verkennen.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 const schoutMag = (w, schout) => (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: true, wezensBlokkeren: true, wie: schout });
 const monsterMag = (w, m) => (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: false, wezensBlokkeren: true, wie: m });

@@ -11,12 +11,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/gesprekken.js');
-require('../js/gesprek.js');
-require('../js/quests.js');
-require('../js/quest.js');
-require('../gereedschap/gesprekken-tool.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').pagina('gereedschap/gesprekken.html');
 const { situatiesVan, staatVanSituatie } = T.gesprekkenTool;
 
 // Alle toestanden waarin we deze persoon bekijken: wat hij zelf aan situaties heeft, plus de

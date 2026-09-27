@@ -8,13 +8,7 @@ const assert = require('node:assert/strict');
 const TEGELS = require('../tegels/tegels.json');
 const { HUIZEN } = require('../gereedschap/pixelart/huizen.cjs');
 
-for (const f of [
-  'js/tijd.js', 'js/dag.js', 'js/voorraad.js', 'js/wereld.js', 'beelden/beschrijving.js', 'tegels/tegels.js',
-  'kaarten/kaarten.js', 'js/mensen.js', 'js/vee.js', 'js/gebouwen.js', 'js/behoeften.js', 'js/handel.js',
-  'js/heer.js', 'js/inner.js', 'js/verstoppen.js', 'js/kaart.js', 'js/gebied.js', 'js/pad.js', 'js/akkers.js',
-  'js/boeren.js', 'js/bewoners.js',
-]) require('../' + f);
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 const opHetVel = () => TEGELS.huizen.tiles.filter((t) => t && t.naam);
 

@@ -4,17 +4,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/tijd.js');
-require('../js/dag.js');
-require('../js/wereld.js');
-require('../js/voorraad.js');
-require('../js/mensen.js');
-require('../js/gesprekken.js');
-require('../js/gesprek.js');
-require('../js/akkers.js');
-require('../js/boeren.js');
-require('../js/heer.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 const BOEREN = ['boer1', 'boer2', 'boer3', 'boer4', 'boer5'];
 
 // Een gehucht met de vijf boeren, elk met een akker van 2×2.
@@ -151,7 +141,6 @@ test('wat je ziet: het karakter en wat hij kan, en wat gewoon is, staat er niet 
 // van dat karakter op zijn lijf (boer-zanger, boerin-weduwe) als dat vel er is, en anders gewoon het
 // vel van zijn lijf. js/sprites.js kiest het, in S.houding, met T.sprites.velMetKarakter.
 test('een boer draagt het vel van zijn karakter als dat er is, en anders gewoon zijn lijf', () => {
-  require('../js/sprites.js');
   const heeft = (naam) => naam === 'boer-zanger' || naam === 'boerin-weduwe';
   assert.equal(T.sprites.velMetKarakter('boer', 'zanger', heeft), 'boer-zanger');
   assert.equal(T.sprites.velMetKarakter('boerin', 'weduwe', heeft), 'boerin-weduwe');
@@ -162,7 +151,6 @@ test('een boer draagt het vel van zijn karakter als dat er is, en anders gewoon 
 });
 
 test('de vijf van de vaste verdeling hebben hun vel, en dat loopt zoals hun lijf', () => {
-  require('../beelden/beschrijving.js');
   const F = T.BEELDEN.figuren;
   for (const id of BOEREN) {
     const m = T.MENSEN[id];
@@ -187,8 +175,6 @@ test('de vijf van de vaste verdeling hebben hun vel, en dat loopt zoals hun lijf
 // karakter elk spel opnieuw, dus elk van de achttien kan in het gehucht rondlopen, en het spel kiest
 // het ook: niemand valt meer terug op het gewone lijf.
 test('alle achttien vellen: elk karakter op elk lijf dat erbij kan, en het loopt zoals dat lijf', () => {
-  require('../beelden/beschrijving.js');
-  require('../js/sprites.js');
   const F = T.BEELDEN.figuren;
   const vellen = [];
   for (const [karakter, k] of Object.entries(T.KARAKTERS)) {

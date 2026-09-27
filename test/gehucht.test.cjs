@@ -4,17 +4,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/tijd.js');
-require('../js/wereld.js');
-require('../js/voorraad.js');
-require('../beelden/beschrijving.js');
-require('../tegels/tegels.js');
-require('../kaarten/kaarten.js');
-require('../js/mensen.js');
-require('../js/gebouwen.js');
-require('../js/kaart.js');
-require('../js/gebied.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 function begin() {
   const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
@@ -28,7 +18,6 @@ test('de schout draagt het vel van een dorpeling, en hij kan lopen', () => {
   assert.equal(S.schout.kant, 'speler');
   // Welk vel hij draagt: in Node laadt js/sprites.js geen plaatjes, dus kijkt het hier in de
   // beschrijving zelf (T.BEELDEN, beelden/beschrijving.js), waar het spel ook uit leest.
-  require('../js/sprites.js');
   const echt = T.sprites.figuurGegevens;
   T.sprites.figuurGegevens = (naam) => T.BEELDEN.figuren[naam] || null;
   try {

@@ -7,26 +7,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/tijd.js');
-require('../js/voorraad.js');
-require('../js/wereld.js');
-require('../js/mensen.js');
-require('../js/vee.js');
-require('../js/gebouwen.js');
-require('../js/behoeften.js');
-require('../beelden/beschrijving.js');
-require('../tegels/tegels.js');
-require('../kaarten/kaarten.js');
-require('../js/kaart.js');
-require('../js/gebied.js');
-require('../js/pad.js');
-require('../js/akkers.js');
-require('../js/boeren.js');
-require('../js/gevecht.js');
-require('../js/verkennen.js');
-require('../js/gesprekken.js');
-require('../js/gesprek.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 const Vee = require('../gereedschap/pixelart/vee.cjs');
 
 const HOUDINGEN = ['grazen', 'staan', 'lopen', 'liggen'];
@@ -205,7 +186,6 @@ test('de muis op een dier: alleen wat het is, geen gesprek en geen klik', () => 
 test('de loopsnelheid in het spel is die van de kunst, anders glijden de voeten', () => {
   for (const [soort, v] of Object.entries(T.VEE)) assert.equal(v.snelheid, Vee.SNELHEID[soort], soort);
   // en de vellen in beelden/, als ze er al zijn, lopen daar ook op en hebben alle vier de houdingen
-  require('../beelden/beschrijving.js');
   const F = (T.BEELDEN && T.BEELDEN.figuren) || {};
   for (const vel of Vee.VELLEN) {
     const f = F[vel.naam];

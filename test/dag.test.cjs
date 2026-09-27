@@ -4,13 +4,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-for (const f of [
-  'js/tijd.js', 'js/dag.js', 'js/voorraad.js', 'js/wereld.js', 'beelden/beschrijving.js', 'tegels/tegels.js',
-  'kaarten/kaarten.js', 'js/mensen.js', 'js/vee.js', 'js/gebouwen.js', 'js/behoeften.js', 'js/handel.js',
-  'js/heer.js', 'js/inner.js', 'js/verstoppen.js', 'js/kaart.js', 'js/gebied.js', 'js/pad.js', 'js/akkers.js',
-  'js/boeren.js', 'js/bewoners.js', 'js/herberg.js', 'js/anim.js', 'js/verkennen.js',
-]) require('../' + f);
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 const IN = T.DAG_INSTELLINGEN;
 
 const berichten = [];

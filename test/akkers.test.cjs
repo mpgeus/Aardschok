@@ -4,10 +4,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/tijd.js');
-require('../js/akkers.js');
-require('../js/voorraad.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 function stadiumOp(naam, dag) {
   const maand = T.MAANDEN.findIndex((m) => m.naam === naam);
@@ -109,9 +106,9 @@ test('T.wandelAnker: in het groeiseizoen rond de akker, anders (of zonder akker)
 
 // ---------------------------------------------------------------- T.werkOogstBij
 //
-// T.zoekPad hoort bij js/pad.js (niet hier geladen — dat vraagt om een echt raster) en T.afstand
-// bij js/wereld.js; voor deze toets is alleen de vorm van hun antwoord van belang, dus worden ze
-// hier met een simpele, eigen versie ingevuld. Het "aankomen" zelf (e.pad leegmaken, e.tx/e.ty
+// T.zoekPad hoort bij js/pad.js en T.afstand bij js/wereld.js; die vragen om een echt raster, en voor
+// deze toets is alleen de vorm van hun antwoord van belang, dus worden ze hier met een simpele, eigen
+// versie ingevuld. Het "aankomen" zelf (e.pad leegmaken, e.tx/e.ty
 // bijwerken) doet normaal js/anim.js tijdens het lopen; hier wordt dat met de hand nagedaan, één
 // stap per keer, precies zoals de echte animator dat ook doet.
 T.afstand = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
@@ -124,12 +121,13 @@ function nieuweBoerWereld() {
   const boer = { tx: 5, ty: 5, x: 5, y: 5, dood: false, pad: [], werkAkkers: [akker] };
   return { w: { wezens: [boer], akkers: [akker] }, akker, boer };
 }
-// 1 hooimaand: ruim binnen het "rijp"-venster (hooi- en oogstmaand).
+// 1 hooimaand, om tien uur 's ochtends: ruim binnen het "rijp"-venster (hooi- en oogstmaand), en
+// in de werkuren, want 's nachts en in de schaft maait niemand (js/dag.js).
 const RIJP_DAG = (() => {
   const maand = T.MAANDEN.findIndex((m) => m.naam === 'hooimaand');
   let dag = 0;
   while (T.datumVanDag(dag).maand !== maand || T.datumVanDag(dag).dagVanMaand !== 1) dag++;
-  return dag;
+  return dag + 10 / 24;
 })();
 
 test('T.werkOogstBij: buiten het oogstseizoen gebeurt er niets', () => {
@@ -288,8 +286,8 @@ test('T.tikAkkersDag: het eerste jaar is al gezaaid, vanaf het tweede kost zaaie
 
 // ---------------------------------------------------------------------------------------------
 // Velden: akker, weide of braak (ontwerp/spel.md, "Weides met koeien en schapen", stap 1). Het vee
-// zelf (js/vee.js) staat in test/vee.test.cjs; hier is het niet geladen, dus is er niets om op te
-// letten als een weide iets anders wordt.
+// zelf (js/vee.js) staat in test/vee.test.cjs; hier staan er geen dieren op de velden, dus is er
+// niets om op te letten als een weide iets anders wordt.
 // ---------------------------------------------------------------------------------------------
 
 const bijna = (a, b) => Math.abs(a - b) < 1e-9;

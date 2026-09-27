@@ -6,21 +6,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/tijd.js');
-require('../js/dag.js');
-require('../js/wereld.js');
-require('../js/voorraad.js');
-require('../js/mensen.js');
-require('../js/vee.js');
-require('../js/gebouwen.js');
-require('../js/behoeften.js');
-require('../js/akkers.js');
-require('../js/boeren.js');
-require('../js/gesprek.js');
-require('../js/gesprekken.js');
-require('../js/handel.js');
-require('../js/heer.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 const IN = T.HEER_INSTELLINGEN;
 // Deze toetsen rekenen met de pacht per akkertegel: vast en makkelijk na te tellen. Een deel van
 // wat de inner telde (de standaard sinds punt 6) staat in test/inner.test.cjs.
@@ -628,7 +614,6 @@ test('wie aan de schandpaal staat, staat met zijn rug naar de paal, en zolang is
 });
 
 test('de schandpaal heeft kunst: leeg, bezet en het halsijzer, en een nek voor elk vel dat eraan kan', () => {
-  require('../beelden/beschrijving.js');
   const t = T.BEELDEN.schandpaal;
   assert.ok(t, 'draai node gereedschap/pixelart/naar-spel.cjs --alleen schandpaal');
   assert.deepEqual(t.delen, ['leeg', 'bezet', 'halsijzer']);
