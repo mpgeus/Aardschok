@@ -27,8 +27,9 @@ het gesprek; wat alleen in een gesprek staat, raakt kwijt. Laat groot zoek- en l
 agent over, zodat alleen de samenvatting in het gesprek komt.
 
 - **`ontwerp/werklijst.md`: wat we doen, in welke volgorde. Begin een sessie hier.** Lees de stand
-  bovenaan en zeg Marcel in een paar regels waar we zijn. Werk de stand bij aan het eind van de
-  sessie.
+  bovenaan en zeg Marcel in een paar regels waar we zijn. Daar staat ook al het werk op prioriteit
+  (Marcel, 27 sep: eerst wat een proefversie van één jaar nodig heeft): neem het bovenste, en begin
+  met een plan voor Marcel. Werk de stand bij aan het eind van de sessie.
 - **`ontwerp/spel.md`: het spel.** De schout, de heer en de inner, keuren en politiek, avontuur,
   en wat nog open is. Bovenaan staat per onderwerp de stand, en elk onderwerp begint met **Zo werkt
   het nu**; wie iets bouwt of verandert, werkt dat blok bij (Marcel, 25 sep).
@@ -55,7 +56,11 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - In de cloud krijgt elke sessie een eigen branch. Zet die aan het eind in `main` als Marcel dat
   vraagt, anders begint de sessie erna op een oude stand. Kijk vóór het pushen of `main` intussen
   verder is (`git fetch origin main`, dan `git merge origin/main`): twee sessies tegelijk schrijven
-  allebei in de stand van de werklijst.
+  allebei in de stand van de werklijst. Laat die controle de push tegenhouden, niet alleen iets
+  afdrukken: `git fetch origin main && git merge-base --is-ancestor origin/main HEAD && npm test &&
+  git push`. Op 27 sep ging een push door terwijl `main` zeven commits verder was.
+- Een speeltest of proef zegt op welke stand hij speelt (branch en commit). Op 27 sep speelde er een op
+  `main`, terwijl een andere sessie de kern op haar branch al verder had gebouwd.
 - Haal in een verse kloon eerst de hele geschiedenis op (`git fetch --unshallow`):
   `test/tegelvolgorde.test.cjs` leest een oude commit, en in een ondiepe kloon falen er dan twee
   toetsen die niets met je werk te maken hebben.
@@ -309,6 +314,12 @@ begrijpen blijft en te onderhouden / aan te passen"). Dus: één manier per ding
 al is, en maak geen tweede variant ernaast); getallen in één blok bovenaan; regels zonder scherm, met
 toetsen; en na een groot stuk werk een opruimronde vóór het volgende. Wat daar concreet nog voor
 moet, staat in de werklijst (vraag 25).
+
+**Geen bewakers voor regels** (27 sep, vraag 25 E): een toets laadt het hele spel, dus `T.x && T.x(...)`
+of `if (T.x)` voor een regel uit `js/` doet niets, behalve lezen alsof een deel van het spel er soms
+niet is. Ze blijven alleen waar een bladzijde een deel van het spel laadt (`gereedschap/wereld.html`
+zonder het vee, de heer en de bewoners, en de gespreksschrijver zonder de inner), op `T.ui`, en op
+gegevens (`T.MENSEN.x && ...`).
 
 Over het raster, het gevecht in beurten en de overgang ernaartoe.
 
