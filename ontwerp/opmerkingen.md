@@ -377,3 +377,34 @@ de vorm van `tegels.json`, `js/sprites.js` en hoe Tiled een vel leest; vóór he
   ketting, een staf, een hoed) maakt hem vindbaar, en past bij een spel waarin de heer, de inner en
   de soldaten ook hun eigen figuur hebben. In `js/sprites.js` is dat daarna één regel: nu krijgt
   de soort 'schout' altijd een dorpelingvel, ook als er een vel 'schout' zou zijn.
+- **Het bos met de kudde: hoe Claude het zou bouwen** (27 sep, het plan voor punt 4, deel 2, vraag 43;
+  Marcel: "Push en alles als idee opslaan"). Wat Marcel op 25 sep al koos, staat in `spel.md` ("Rijk
+  worden en arm lijken: de inner" en "Weides met koeien en schapen", stap 3): een plek in het bos voor
+  graan en goud (ver lopen, muizen en vocht), een deel van de kudde het bos in voor de inner komt, de
+  inner telt de kudde, de heer vraagt per dier, en wol en kaas zijn sporen. Zo zou het gaan, in twee
+  stukken:
+  - **Stuk 1, de inner telt de kudde.** Hij telt de koeien en schapen die hij ziet, net als de
+    gebouwen. De heer vraagt dan per dier in plaats van per schaapskooi: 2 goud per koe en 2,5 wol per
+    schaap (acht schapen is 20 wol, zoals nu). Wol is een spoor: een schaap geeft 4 wol, en ze worden
+    een maand voor zijn komst geschoren; ligt er meer wol dan zijn schapen konden geven, dan groeit zijn
+    argwaan. Kaas is in het spel nog graan (de melk telt als graan), dus voor de koeien is er nog geen
+    spoor. Komt hij onverwacht terug en staan er ineens meer dieren, dan weet hij genoeg, zoals bij het
+    graan.
+  - **Stuk 2, het bos.** Een open plek diep in de bosrand, in het noordwesten, zo'n vijftig tegels van
+    de weide: een halve dag lopen voor een koe. Daar kun je vee heen drijven (klik op de weide of de
+    heide, kies hoeveel koeien en schapen, en ze lopen erheen; de inner komt er niet, want het bos
+    staat niet op zijn ronde en door bomen ziet hij niet; in het bos geven koeien geen melk, elke nacht
+    kan de wolf een dier halen, en voor de winter moeten ze terug, want er is geen hooi), en je kunt er
+    graan en goud verstoppen (zoals in een kelder, maar zoveel je wilt, en de soldaten zoeken er nooit;
+    wel eten muizen en vocht elke dag een deel van het graan, goud niet). Wie je ziet drijven of iets
+    wegzetten, is getuige, zoals bij de kelders (punt 3).
+  - Het past bij hoe het ging: vee liep vroeger echt in het bos (bosweide), en varkens gingen er in de
+    herfst heen voor de eikels. Het bos was meestal van de heer, en wie er vee liet lopen, betaalde
+    ervoor; later kan de heer het dus verbieden, met een keur.
+  - Wat er nu al is: de kudde (drie koeien op de weide onder het plein, acht schapen op de heide in het
+    zuidwesten) telt nergens mee; de heer vraagt 20 wol per schaapskooi; het bos is een rand van zeven
+    rijen bomen aan de noordkant, en bomen houden het zicht van de inner al tegen.
+  - Nog te kiezen: de twee stukken in deze volgorde; wat de heer per dier vraagt; het bos als open plek
+    op de kaart (voorstel: je ziet je koeien daar staan, en loopt erheen) of als plek buiten de kaart
+    (ze lopen de kaart af, zoals een bezoeker de weg af); en wat het bos kost (geen melk en de wolf voor
+    het vee, muizen en vocht voor het graan).

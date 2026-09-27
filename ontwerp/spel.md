@@ -306,9 +306,9 @@ Is rijk worden en arm lijken leuk?
   zelf aan, in die volgorde. Gaat de heer weg voor ze klaar zijn, dan doorzoeken ze de rest nog. Wie ze
   langs lege plekken leidt (of langs de kelder van de vrome, waar niets ligt), is ze kwijt voor ze iets
   vinden. Vanaf 50% doorzoeken ze het hele dorp in één keer, zoals eerst.
-- **Nog open:** deel 2, het bos, met de kudde die de inner telt; deel 3, de marskramer die vee, kaas,
-  wol en hooi koopt en verkoopt; en van stap 3 de twee rekenboeken (praten, afleiden en omkopen zijn er
-  sinds 27 sep).
+- **Nog open:** deel 2, het bos, met de kudde die de inner telt (hoe Claude het zou bouwen, staat als
+  idee in `opmerkingen.md`, 27 sep); deel 3, de marskramer die vee, kaas, wol en hooi koopt en verkoopt;
+  en van stap 3 de twee rekenboeken (praten, afleiden en omkopen zijn er sinds 27 sep).
 - **Voorstel voor later: de inner telt de mensen die hij ziet** (Claude, 26 sep; Marcel: "Ja, als
   voorstel", nog niet te bouwen). Nu rekent hij het hoofdgeld naar de woonruimte van de huizen die hij
   zag. Sinds iedereen een poppetje is (`js/bewoners.js`), kan hij de mensen zelf tellen: wie op het
