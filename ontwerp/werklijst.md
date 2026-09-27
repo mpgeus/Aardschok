@@ -10,18 +10,33 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (27 sep 2026, negende sessie): de herberg is af (punt 2), en stuk 1 van het zichtveld
+## De stand (27 sep 2026, tiende sessie): opgeruimd, een jaar gespeeld, en een voorstel voor speelbaar
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 522/522.
+`npm test`: 523/523.
 
-**Waar het werk staat:** de negende sessie (27 sep) staat in `main` (Marcel: "Ja, zet het in main"),
-en ook op haar eigen branch `claude/werklijst-doorzetten-ikazjp`. Hoe een eigen branch en `main`
-samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** de tiende sessie (27 sep) staat op haar eigen branch
+`claude/offline-flight-tasks-35l4cj`, gepusht (Marcel: "Ja, eigen branch"), nog niet in `main`. De
+negende sessie staat in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+
+**Wat er in de tiende sessie gebeurde** (27 sep, terwijl Marcel twee uur vloog; hij koos vooraf 1, 3 en
+4 uit een lijst van Claude, en niet stuk 2 van de getuigen):
+- **Opgeruimd (vraag 25, E):** elke toets laadt het spel zoals het draait (`test/laad.cjs`). Twaalf
+  toetsen bleken een ander spel te toetsen dan er draait; ruim honderd bewakers gingen weg. Zie onder Af.
+- **Een jaar gespeeld:** een agent speelde het gehucht drie keer een jaar (alles geven, 30% en 60%
+  verstoppen), zonder iets bij te stellen. Het jaar loopt zonder fouten. De winter kost bijna de helft van
+  het dorp aan kou, verstoppen is zonder risico (de soldaten zoeken alleen bij argwaan), en goud is het
+  knelpunt. Alles staat in `speelbaar.md`, en in grafieken op de pagina "Een jaar in het gehucht"
+  (https://claude.ai/artifact/WVebn7ycRcPLNuJrtzvQbr).
+- **Vraag 33 uitgewerkt** in `speelbaar.md`: wat er nog ontbreekt voor een proefversie van één jaar, de
+  kortste weg, en vier vragen (33a tot en met 33d).
+- **Vraag 8, een naam:** voorstel Martinmas, of Schout (`verpakken.md`, "De naam").
+- **Marcel koos:** het gezin van de schout zwijgt over wat het zag (`spel.md`, bij stuk 2 van het
+  zichtveld).
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
 toevoegen voor we bij een speelbaar product komen." Houd je aan de volgorde hieronder. Een nieuw idee,
@@ -87,7 +102,10 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   het laatste won; de toetsen laadden dat bestand niet. Dat is precies waar vraag 25, E voor is.
 
 **Punt 2, de herberg, is af** (27 sep, drie stukken), **en van punt 3 stuk 1** (het zichtveld: wie ziet
-de schout, en wie is getuige). **Nu stuk 2: wat een getuige doet,** naar zijn karakter (het plan van vraag
+de schout, en wie is getuige). **Wacht op Marcel: vraag 33** (`speelbaar.md`), want daaruit volgt of de
+volgorde hieronder verandert: de speeltest stelt voor om na stuk 2 eerst de soldaten altijd te laten
+zoeken (verstoppen deel 1b, uit punt 4) en de winter zichtbaar te maken. **Anders nu stuk 2: wat een
+getuige doet,** naar zijn karakter (het plan van vraag
 40, goedgekeurd): de roddelaar vertelt het in de herberg, en dan vinden de soldaten die plek makkelijker;
 de herbergierster vertelt het je de volgende dag. Dan komt ook de keuze in de spelregels of je een getuige
 meteen ziet of pas later (A). Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
@@ -415,6 +433,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
   de soldaten nu zoeken.
 
 *Lezen:*
+- De speeltest van een jaar en het voorstel voor een eerste speelbare versie (27 sep, tiende sessie), op
+  de pagina "Een jaar in het gehucht" (https://claude.ai/artifact/WVebn7ycRcPLNuJrtzvQbr) en in
+  `speelbaar.md`: vier vragen, 33a tot en met 33d. En de namen in `verpakken.md` (vraag 8).
 - De tien karakters en hun zinnen, in `gereedschap/gesprekken.html`. Ze zijn een voorstel van Claude;
   de vrome, de roddelaar, de oudste, de nieuwkomer en de drinker zijn nieuw. De namen van de heer en
   de boeren stel je zelf in (spelregels).
@@ -636,6 +657,11 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 27 sep 2026 — **Een jaar gespeeld, en een voorstel voor speelbaar** (tiende sessie; vraag 33 en 8).
+  Een agent speelde het gehucht drie keer een jaar in de browser (`Spel.debug.stap`, twee minuten per
+  jaar), zonder iets bij te stellen: alles geven, 30% en 60% verstoppen. Wat opviel, staat in
+  `speelbaar.md` en `opmerkingen.md`, met grafieken op de pagina "Een jaar in het gehucht". Daarbij het
+  voorstel voor een proefversie van één jaar (vraag 33a tot en met 33d) en acht namen (`verpakken.md`).
 - 27 sep 2026 — **Eén laadlijst voor de toetsen** (tiende sessie; vraag 25, E, Marcel koos het vóór zijn
   vlucht). Elke toets laadt het spel zoals het draait: de scripts uit `index.html`, in die volgorde,
   zonder wat alleen scherm is (`test/laad.cjs`); een toets van het gereedschap laadt wat zijn bladzijde

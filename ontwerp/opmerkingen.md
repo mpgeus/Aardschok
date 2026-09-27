@@ -9,6 +9,18 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De speeltest van een jaar, wat opviel** (27 sep, tiende sessie; alles in `speelbaar.md`, "De
+  speeltest van 27 sep"). Een agent speelde drie jaren zonder iets te doen behalve verstoppen:
+  - De winter kost bijna de helft van het dorp aan kou (het hout is eind wintermaand op), zonder
+    waarschuwing vooraf; het bericht "De winter is hard: Folkert is gestorven" zegt niet waaraan.
+  - Verstoppen is zonder risico zolang de inner meer dan 60% ziet: dan zoeken de soldaten niet.
+  - De heer vraagt goud per ziel en per gebouw dat de inner zag; wat hij ziet, hangt af van zijn route
+    (15 tegen 22 goud), en dat kan meer zijn dan het hele dorp heeft.
+  - Drie maanden zonder eten in het voorjaar kosten niemand het leven, en de tevredenheid blijft 55%.
+  - Een kelder houdt 40 graan: in het gehucht past hooguit de helft van de oogst.
+  - De eerste seconden, vóór de tekeningen geladen zijn, tekent het spel blokken; in de winter ziet het
+    gehucht eruit als in de zomer, alleen donkerder.
+
 - **Het zichtveld, wat nog ruw is** (27 sep, na stuk 1 van punt 3; `spel.md`, "Zo werkt het nu: het
   zichtveld, stuk 1"):
   - De gloed van een lantaarn wordt over alles heen getekend, ook over wat ervóór staat: staat er een

@@ -46,7 +46,14 @@ aan het eind moet het zeggen hoe het ging. Op 30× duurt zo'n jaar ongeveer een 
    ("loop naar de kelder van je huis", "de inner komt: zet iets opzij"), zonder nieuw systeem.
 5. **Punt 3, stuk 2: wat een getuige doet.** De stap die loopt, en hij hoort bij de kern: nu ziet een
    getuige alles en doet hij niets.
-6. **De getallen, met Marcel.** De speeltest hieronder laat zien waar het schuurt. Bijstellen doet
+6. **Een risico bij verstoppen.** Nu zoeken de soldaten alleen als de inner argwaan heeft, en die
+   krijgt hij pas onder 60% van wat de velden beloven. In de speeltest werd daarom nooit gezocht:
+   verstoppen was gratis. Marcel koos op 25 sep al dat de soldaten op Sint-Maarten altijd op twee of drie
+   plekken zoeken, ook zonder argwaan (werklijst punt 4, verstoppen deel 1b); dat is nog niet gebouwd.
+7. **De winter die je ziet aankomen.** In de speeltest stierf bijna de helft van het dorp aan de kou,
+   zonder waarschuwing vooraf, en het bericht zegt niet waaraan. Wie het spel niet kent, weet niet dat
+   hij hout moet hakken.
+8. **De getallen, met Marcel.** De speeltest hieronder laat zien waar het schuurt. Bijstellen doet
    Marcel met de werkbank in de spelregels.
 
 ### Wat nog niet hoeft, maar wel beslist moet worden
@@ -70,11 +77,14 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 ### De kortste weg, in volgorde
 
 1. Punt 3, stuk 2 afmaken (de getuigen).
-2. Een speeltest door Marcel zelf, met de lijst hieronder erbij, en de getallen bijstellen.
-3. Opslaan, Verder en een titelscherm.
-4. De afrekening na het eerste jaar.
-5. De eerste weken als opdrachten.
-6. Een tester die het niet kent laten spelen, en kijken waar hij vastloopt.
+2. Verstoppen deel 1b: de soldaten zoeken altijd op twee of drie plekken. Zonder is er geen gok.
+3. De winter zichtbaar maken: een waarschuwing als het hout of het eten de winter niet haalt, en in het
+   bericht waaraan iemand stierf.
+4. Een speeltest door Marcel zelf, met de speeltest hieronder erbij, en de getallen bijstellen.
+5. Opslaan, Verder en een titelscherm.
+6. De afrekening na het eerste jaar.
+7. De eerste weken als opdrachten.
+8. Een tester die het niet kent laten spelen, en kijken waar hij vastloopt.
 
 ## Vragen aan Marcel
 
@@ -87,4 +97,53 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 
 ## De speeltest van 27 sep
 
-(Volgt: een jaar op drie manieren, door een agent, zonder iets bij te stellen.)
+Een agent speelde het gehucht drie keer een jaar, van 2 lentemaand 1323 tot 1 grasmaand 1324, op 30× met
+nacht, zonder iets bij te stellen. A gaf de heer alles. B zette 30% van het graan en het goud weg, vóór de
+inner kwam en op 1 slachtmaand. C deed hetzelfde met 60%. Het was een luie speler: hij bouwde niets,
+handelde niet met de marskramer, liep niet met de inner mee en haalde niets terug. Wat hier staat, zegt dus
+wat de regels doen als je weinig doet, niet hoe een goede speler het doet. De cijfers per maand, in
+grafieken, staan op de pagina "Een jaar in het gehucht" (https://claude.ai/artifact/WVebn7ycRcPLNuJrtzvQbr).
+
+**Het jaar loopt.** Drie keer dertien maanden zonder één fout in de console, en geen venster bleef hangen.
+Een jaar kost de computer twee minuten (`Spel.debug.stap`).
+
+| | A, alles geven | B, 30% weg | C, 60% weg |
+|---|---|---|---|
+| De heer vroeg | 82 graan, 15 goud | 80 graan, 22 goud | 67 graan, 21 goud |
+| Gegeven | alles | 80 graan, 10 goud (74%) | 67 graan, 3 goud (56%) |
+| Straf | geen | boete: 18 goud erbij | boete en twee soldaten tot de lente |
+| Argwaan van de inner | 0 | 0 | 0 |
+| Verstopt aan het eind | niets | 76 graan, 10 goud | 130 graan, 16 goud |
+| Mensen (begin 26) | 24 | 24 | 20 |
+
+**Wat opviel, van belangrijk naar minder:**
+
+1. **De winter doodt, niet de heer.** In alle drie stierven er 17 van de 37 mensen, op precies dezelfde
+   dagen, van 30 wintermaand tot 27 sprokkelmaand. Het was de kou: de 40 hout waarmee het gehucht begint,
+   was eind wintermaand op, en niemand hakte nieuw. Graan lag er genoeg; in de winter telt het ergste
+   tekort (`js/behoeften.js`). Het bericht zegt alleen "De winter is hard: Folkert is gestorven", niet
+   waarom, en vooraf waarschuwt niets. In A stierven tien van de elf nieuwkomers van de zomer, en de
+   ouden.
+2. **Verstoppen is nu zonder risico, en levert weinig op.** De soldaten zoeken alleen als de inner
+   argwaan heeft (`js/heer.js`), en die krijgt hij pas als hij minder dan 60% ziet van wat de velden
+   beloven (`graanVerwacht`, `js/inner.js`). In C zag hij nog ongeveer 72%: de argwaan bleef 0, en er werd
+   nergens gezocht. Tegelijk vraagt de heer maar 15% van het graan dat de inner zag (82 van 545): wie 130
+   graan wegzet, spaart er zo'n 20. Geen risico en weinig winst: er valt nog niets te kiezen.
+3. **Goud is het knelpunt.** Het gehucht begint met 20 goud, en alleen de marskramer brengt er meer. De
+   heer vraagt hoofdgeld per ziel en per gebouw dat de inner zag, en een deel van de kist. Bij B en C was
+   dat meer dan het hele dorp had. Wie goud verstopt, kan niet betalen: B kreeg een boete, C soldaten die
+   meeaten, en de tevredenheid zakte in de winter tot 32%.
+4. **Wat de inner ziet, is geluk.** Bij A zag hij 3 boerderijen en 2 huizen, bij B 4 boerderijen, 2
+   huizen, een hut en de herberg: 15 tegen 22 goud. Met hem meelopen en zijn route sturen zou dat
+   verschil moeten maken; deze speler deed dat niet.
+5. **Drie maanden honger in het voorjaar, zonder gevolg.** Het graan is eind grasmaand op, en van
+   bloeimaand tot hooimaand is er niets te eten. Niemand sterft (buiten de winter kost honger standaard
+   alleen tevredenheid), en de tevredenheid blijft 55%. Na het zaaien in het tweede jaar is het graan in
+   grasmaand al weer op.
+6. **Een kelder houdt 40 graan** (goud onbeperkt). In de kelders van het gehucht past hooguit zo'n 250
+   graan, minder dan de helft van de oogst (580), en de tweede ronde verstoppen liep vast op volle kelders.
+   Wat verstopt ligt, eet niemand en zaait niemand: bij C bleven 75 van de 179 akkertegels in het tweede
+   jaar ongezaaid, terwijl er 130 graan in de kelders lag.
+
+Kleiner: de eerste schermafdruk, vlak na het begin, toonde nog blokken in plaats van huizen (de tekeningen
+waren nog niet geladen); en in de winter ziet het gehucht eruit als in de zomer, alleen donkerder.
