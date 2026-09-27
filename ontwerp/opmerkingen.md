@@ -404,7 +404,10 @@ de vorm van `tegels.json`, `js/sprites.js` en hoe Tiled een vel leest; vóór he
   - Wat er nu al is: de kudde (drie koeien op de weide onder het plein, acht schapen op de heide in het
     zuidwesten) telt nergens mee; de heer vraagt 20 wol per schaapskooi; het bos is een rand van zeven
     rijen bomen aan de noordkant, en bomen houden het zicht van de inner al tegen.
-  - Nog te kiezen: de twee stukken in deze volgorde; wat de heer per dier vraagt; het bos als open plek
-    op de kaart (voorstel: je ziet je koeien daar staan, en loopt erheen) of als plek buiten de kaart
-    (ze lopen de kaart af, zoals een bezoeker de weg af); en wat het bos kost (geen melk en de wolf voor
-    het vee, muizen en vocht voor het graan).
+  - **Vragen, nog te kiezen:**
+    - **A.** Eerst stuk 1, dan stuk 2?
+    - **B.** Per dier 2 goud per koe en 2,5 wol per schaap, in plaats van 20 wol per kooi?
+    - **C.** Het bos als open plek op de kaart, waar je je koeien ziet staan? Of als plek buiten de
+      kaart, waar ze heen lopen zoals een bezoeker de weg af? Voorstel: op de kaart.
+    - **D.** Is dit de goede prijs voor het bos: geen melk en de wolf voor het vee, muizen en vocht voor
+      het graan?

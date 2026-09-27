@@ -406,8 +406,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     minder voor 25 goud te goedkoop?), zien we later: "We gaan later finetunen" (Marcel, 27 sep).
 43. ~~**Punt 4, deel 2: het bos met de kudde, het plan**~~ (Claude, 27 sep, terwijl een andere agent het
     proefje speelt). **Bewaard als idee** (Marcel, 27 sep: "Push en alles als idee opslaan"): het hele
-    plan, met de open vragen, staat in `opmerkingen.md` onder "Voorstellen van Claude die nog niet
-    gekozen zijn". Niet bouwen tot Marcel erom vraagt.
+    plan, met de vier open vragen (A tot en met D), staat in `opmerkingen.md` onder "Voorstellen van
+    Claude die nog niet gekozen zijn". Niet bouwen tot Marcel erom vraagt.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
