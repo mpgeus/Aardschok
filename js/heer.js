@@ -633,11 +633,13 @@
     if (!b || b.staat) return;
     b.staat = true;
     // Op het plein kijkt hij rond: wat hij ziet en niet in het rapport van zijn inner staat, komt
-    // alsnog op de rekening, en dat maakt argwanend (js/inner.js). En is de argwaan hoog genoeg,
-    // dan doorzoeken zijn soldaten het dorp.
+    // alsnog op de rekening, en dat maakt argwanend (js/inner.js). En zijn soldaten zoeken: is de
+    // argwaan hoog genoeg, het hele dorp; anders twee of drie plekken, waar de schout ze langs leidt
+    // (js/doorzoeken.js; werklijst punt 4, vraag 41).
     if (T.heerKijktRond) T.heerKijktRond(S);
     const INN = T.INNER_INSTELLINGEN;
     if (INN && S.inner && S.inner.argwaan >= INN.doorzoekenVanaf && T.doorzoekDorp) T.doorzoekDorp(S);
+    else if (T.beginDoorzoeken) T.beginDoorzoeken(S);
     b.wachtTot = dagNu(S) + IN().wachtDagen;
     T.naarGewoneSnelheid(S);
     bericht('De heer staat op het plein en wacht op je.');

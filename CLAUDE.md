@@ -184,6 +184,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wie er zat, en de marskramer logeert er (`T.logiesAnker`). 's Avonds branden de ramen van de herberg,
   met de gasten erachter als schimmen: de huizenbouwer geeft per huis door waar de ramen zitten (`ramen`
   in `tegels.json`), en `js/tekenen.js` tekent ze zo dat wat ervoor staat ze afdekt (`brandendeRamen`).
+- `js/doorzoeken.js`: **de soldaten doorzoeken het dorp** (werklijst punt 4, stuk 1, 27 sep): op
+  Sint-Maarten onder de grens van de argwaan op twee of drie plekken (`T.beginDoorzoeken`, vanuit
+  `T.heerStaatErOp`). Ze lopen met de schout mee (`T.loopNaastDeSchout` in `js/inner.js`, zoals de inner)
+  en doorzoeken plek voor plek wat zijn route vlak passeert (`T.zoekOpPlek` in `js/verstoppen.js`); na een
+  paar uur kiezen ze zelf, en zo vaak als zijn argwaan kiest de heer (`T.werkDoorzoekenBij`, elk beeld).
+  De rechthoek van een gebouw vraag je aan `T.voetVanGebouw` (`js/gebouwen.js`).
 - `js/zien.js`: **het zichtveld en de getuigen** (werklijst punt 3, 27 sep): wie buiten is, ziet de
   schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
   verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het
@@ -350,7 +356,8 @@ tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.b
 `Spel.debug.inner()` de inner (`(true)`: onverwacht), en `Spel.debug.argwaan(0.6)` zet zijn argwaan.
 `Spel.debug.verstopt()` zegt wat er waar verstopt ligt en hoe vaak de soldaten het er vinden;
 `Spel.debug.verstopt('boer1', 30, 5)` zet 30 graan en 5 goud in die kelder (of `'schout'`, `'kapel'`),
-en `Spel.debug.zoeken()` laat de soldaten nu zoeken, zoals op Sint-Maarten.
+en `Spel.debug.zoeken()` laat de soldaten nu zoeken, zoals op Sint-Maarten: staat de heer op het plein,
+dan op twee of drie plekken met de schout mee (`('dorp')`: het hele dorp in één keer).
 `Spel.debug.vee('koe', 4)` zet vier koeien op de weide met de meeste plaats, bij de kudde: ze
 blijven binnen de weide en geven melk (`js/vee.js`); een schaap gaat naar de heide. Zonder weide rond
 een open plek bij de schout. `Spel.debug.bewoners()` zegt per bewoner wie het is, zijn huis, zijn werk,

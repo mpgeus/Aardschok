@@ -9,6 +9,15 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De soldaten, wat nog ruw is** (27 sep, na stuk 1 van punt 4; `spel.md`, "De soldaten zoeken altijd"):
+  - Staat de schout ver van het plein, dan lopen ze eerst een uur of twee naar hem toe. Het wachten telt
+    pas vanaf dat ze bij hem zijn.
+  - De kelder van de vrome is een plek waar nooit iets ligt: wie de soldaten erlangs leidt, is een
+    zoektocht kwijt zonder risico. Dat mag (het is slim), maar het wordt misschien te makkelijk.
+  - Ze staan naast de schout, en lopen elkaar soms in de weg als ze tegelijk naar dezelfde tegel willen.
+  - `Spel.debug.heer()` laat de heer komen zonder de kalender te verzetten: het bericht zegt Sint-Maarten,
+    de balk nog de dag van nu.
+
 - **Het zichtveld, wat nog ruw is** (27 sep, na stuk 1 van punt 3; `spel.md`, "Zo werkt het nu: het
   zichtveld, stuk 1"):
   - De gloed van een lantaarn wordt over alles heen getekend, ook over wat ervóór staat: staat er een

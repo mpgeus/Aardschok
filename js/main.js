@@ -253,6 +253,7 @@
     T.werkGebouwenBij(S); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
     T.werkMarskramerBij(S); // zijn poppetje: over de weg binnen, naar het plein, en weer weg (js/handel.js)
     T.werkHeerBij(S); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)
+    T.werkDoorzoekenBij(S); // zijn soldaten zoeken, met de schout mee of waar de heer wijst (js/doorzoeken.js)
     T.werkInnerBij(S); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
     if (T.werkBewonersBij) T.werkBewonersBij(S); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
     T.werkAnimatiesBij(S, dt, dtWereld);
@@ -584,8 +585,16 @@
       }));
       return { deur: `${deur.x},${deur.y}`, bier: Math.floor(S.voorraad.bier || 0), vanavond, gisteravond: S.herberg && S.herberg.gisteravond, tekst: T.gebouwToestand(S, g) };
     },
-    // De soldaten het dorp nu laten doorzoeken, zoals op Sint-Maarten (js/inner.js): wat ze vinden.
-    zoeken() {
+    // De soldaten nu laten zoeken, zoals op Sint-Maarten: staat de heer op het plein, dan op twee of drie
+    // plekken, met de schout mee of waar de heer wijst (js/doorzoeken.js); anders, of met ('dorp'), het
+    // hele dorp in één keer (js/inner.js), en dan zegt het wat ze vonden.
+    zoeken(wat) {
+      const b = S.heer && S.heer.bezoek;
+      if (wat !== 'dorp' && b && b.staat && T.beginDoorzoeken) {
+        delete b.zoeken;
+        const z = T.beginDoorzoeken(S);
+        return z && { plekken: z.nodig, heerKiest: z.heerKiest, doelen: (z.doelen || []).map((g) => T.verstopPlekVan(S, g).naam) };
+      }
       return T.doorzoekDorp ? T.doorzoekDorp(S) : 'Hier zoekt niemand.';
     },
     // Het slachtvenster nu openen (js/hud.js, T.ui.openSlachten), zonder op 1 slachtmaand te wachten.

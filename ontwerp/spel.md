@@ -272,7 +272,8 @@ Is rijk worden en arm lijken leuk?
   10 goud), als de heer op het plein iets ziet wat niet in het rapport stond (15% per ding), en als
   de soldaten iets vinden (15% per plek). Ze doet vier dingen: een toeslag (de argwaan maal de helft
   van de rekening); vanaf 40% komt hij onverwacht terug; vanaf 50% doorzoeken de soldaten op
-  Sint-Maarten het dorp; vanaf 80% telt het rapport niet meer. Na Sint-Maarten zakt ze tot de helft.
+  Sint-Maarten het hele dorp (daaronder twee of drie plekken, zie "De soldaten zoeken altijd"); vanaf
+  80% telt het rapport niet meer. Na Sint-Maarten zakt ze tot de helft.
 - **Verstoppen:** klik een huis, een boerderij of de kapel, en de schout zet er graan of goud weg of
   haalt het terug. Wat verstopt ligt, telt de inner niet en eet het dorp niet. Je eigen kelder
   vinden de soldaten vaak (60%), die van een boer soms (30%), de kapel bijna nooit (5%, maar de
@@ -281,9 +282,16 @@ Is rijk worden en arm lijken leuk?
   (een kwart zo vaak). Zolang de inner of de heer in het dorp is, sjouw je niets.
 - In de spelregels: waar de heer de rekening op maakt, wat hij van het graan vraagt, de sporen, de
   kist, en of het karakter van wie er woont telt.
-- **Nog te bouwen, deel 1b** (Marcel koos op 25 sep, zie onderaan): ook onder de 40% een risico. De
-  soldaten zoeken op Sint-Maarten altijd op 2 of 3 plekken; wie er vlak langs loopt, kan iets
-  vinden; en soms kiest de heer zelf de route.
+- **De soldaten zoeken altijd** (deel 1b, gebouwd 27 sep; `js/doorzoeken.js`; vraag 41, Marcel: "A ja B
+  ja C ja"). Op Sint-Maarten, als de heer op het plein staat: onder de grens van 50% zoeken zijn soldaten
+  op twee of drie plekken. Ze lopen naar de schout toe en dan met hem mee (zoals de inner), en
+  doorzoeken elke plek die hij of zij vlak passeren (twee tegels van de muur) terwijl ze bij hem zijn:
+  zijn route. Wat ze onderweg naar hem passeren, telt niet. Leidt hij ze na twee uur (vanaf dat ze bij hem
+  zijn) nog niet genoeg langs, dan kiezen ze zelf: zijn eigen kelder eerst, dan het grootste gebouw, de
+  kapel als laatste. Zo vaak als de argwaan van de heer (bij 30% een op de drie keer) wijst hij de plekken
+  zelf aan, in die volgorde. Gaat de heer weg voor ze klaar zijn, dan doorzoeken ze de rest nog. Wie ze
+  langs lege plekken leidt (of langs de kelder van de vrome, waar niets ligt), is ze kwijt voor ze iets
+  vinden. Vanaf 50% doorzoeken ze het hele dorp in één keer, zoals eerst.
 - **Nog open:** deel 2, het bos, met de kudde die de inner telt; deel 3, de marskramer die vee, kaas,
   wol en hooi koopt en verkoopt; en stap 3: praten, afleiden, omkopen en de twee rekenboeken.
 - **Voorstel voor later: de inner telt de mensen die hij ziet** (Claude, 26 sep; Marcel: "Ja, als
