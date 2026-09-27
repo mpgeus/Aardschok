@@ -239,7 +239,8 @@
       tekening: 'gebouwen/herberg', beschrijving: 'reizigers, nieuws en verhalen, bier',
       opmerking: 'In het gehucht staat er een vanaf het begin, met de herbergierster (kaarten/gehucht.betekenis.json), '
         + 'in een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in het dorp bouwt, krijgt nog de '
-        + 'oude tekening van steen onder pannen. Het nieuws en de verhalen komen met stuk 2 en het avontuur.',
+        + 'oude tekening van steen onder pannen, zonder ramen die branden. Plaatsen heeft hij nog niet: alleen het bier '
+        + 'houdt de gasten tegen (meegroeien hoort bij punt 5 van de werklijst).',
     },
     kapel: {
       naam: 'kapel', trede: 'gehucht', voet: { b: 5, h: 5 }, kosten: { hout: 10, goud: 8 }, heer: {}, bouwtijd: 4,

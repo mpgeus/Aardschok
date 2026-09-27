@@ -1563,6 +1563,18 @@ Wat het vraagt:
     de vrome biecht het op bij de kapelaan, en een verklikker (punt 10) gaat naar de inner;
   - een lantaarn voor de schout: met een lantaarn zie jij verder in het donker, maar ziet iedereen
     jou ook; zonder lantaarn zie je weinig, en loop je zo tegen de nachtwacht aan.
+  - **lichtbronnen in het dorp** (Marcel, 27 sep: "Denk wel dat we ook losse lantaarns / lichtbronnen
+    in het dorp nodig hebben. Hadden we vroeger niet iemand die de lampen 's avonds aanstak?"). Claude:
+    de lantaarnopsteker hoort bij straatverlichting, en die kwam pas in 1669 (Amsterdam, de lantaarns
+    van Jan van der Heyden). In 1323 was er 's nachts weinig licht: de lantaarn van de herberg, een
+    kaars in de kapel, het vuur in huis, en in de stad de nachtwacht met zijn lantaarn. Wat er wel was:
+    de regel dat elk huis op donkere winteravonden een lantaarn aan de deur hangt (Londen, 1417). Voor
+    ons is dat een keur, en een met een prijs voor de kern: meer licht maakt het dorp veiliger, maar
+    geeft ook meer getuigen als jij 's nachts iets wegzet; de avondklok is het omgekeerde. En wie de
+    lantaarns aansteekt, is er al: de koster, die in de kunst al een brandende lantaarn en de
+    sleutelbos van de kerk draagt en "elke avond alles afsluit" (`gereedschap/pixelart/dorpelingen3.cjs`;
+    in het spel draagt hij nog het vel van een gewone dorpeling). Voorstel: vaste lantaarns bij punt 3
+    (werklijst, vraag 40, D); de keur, de koster die ze aansteekt, en de nachtwacht later.
 - **Wanneer** (vraag 23): een getuige kan pas iets zien als de mensen poppetjes zijn. Voorstel van
   Claude: als stap in 3b, na de poppetjes, in plaats van later bij punt 11 (de nacht), omdat
   verstoppen er meteen spannender door wordt.
@@ -1833,11 +1845,19 @@ eigen erf.
 - **Groter, en een raam** (vraag 39): Marcel vroeg of de herberg groter moet ("Of maken we nog een los
   cafe?") en kwam met een idee: "Misschien een raam waar je mensen doorheen ziet." Hij koos het
   voorstel ("Prima", en "Ja idd" op de schimmen). Zo gebouwd, zie "stuk 3" hieronder.
+- **Later: de herberg groeit mee, en er komt een tapperij** (Marcel, 27 sep: "De herberg kan ook
+  meegroeien met capaciteit", en "Later een tapperij of kroeg toevoegen als het uitgroeit tot dorp /
+  stad"). Nu houdt alleen het bier de gasten tegen, en in het gehucht is dat genoeg: er komen er een à
+  drie per avond. Voorstel (Claude): de herberg krijgt plaatsen, en groeit door zoals een huis (`wordt`
+  in `T.GEBOUWEN`, op de ladder van de huizenbouwer): meer plaatsen, meer bier per dag, en bedden voor
+  reizigers. Wie komt als hij vol is, blijft op het bankje of gaat naar huis. Dat hoort bij punt 5 van
+  de werklijst (bouwen). De tapperij komt met het dorp (punt 14, de treden): alleen drank, voor het dorp
+  zelf, vaak in de voorkamer van een gewoon huis.
 
 **Zo werkt het nu: de herberg, stuk 1** (27 sep; `js/herberg.js`, toetsen in `test/herberg.test.cjs`):
-- **De herberg staat er vanaf het begin,** in de hoek tussen het plein en de weg (tegel 44,44, vijf
-  bij zeven), met zijn deur aan de weg, een lantaarn en een bankje. Vakwerk onder riet, van de
-  huizenbouwer (`herberg1` in `gereedschap/pixelart/huizen.cjs`), met een zolder, dakkapellen, luiken
+- **De herberg staat er vanaf het begin,** met een lantaarn en een bankje bij de deur. Tot stuk 3
+  stond hij in de hoek tussen het plein en de weg (vijf bij zeven); nu aan de westkant van het plein,
+  groter (zie stuk 3). Vakwerk onder riet, van de huizenbouwer (`herberg1` in `gereedschap/pixelart/huizen.cjs`), met een zolder, dakkapellen, luiken
   en bloembakken. Wie er een bouwt in het dorp, krijgt nog de oude tekening.
 - **De herbergierster woont er, alleen** (`js/mensen.js`, met haar eigen vel), en werkt er: het gehucht
   telt nu 26 mensen. Ze brouwt van graan, zolang er niet genoeg bier ligt: acht kannen per dag voor
@@ -1848,8 +1868,9 @@ eigen erf.
   vaak: de kans zakt met de weg erheen, tot niets bij drie uur lopen, en wie er niet minstens een half
   uur kan zitten voor bedtijd, blijft thuis. Nooit meer dan er bier is: wie het dichtst bij woont,
   eerst. Het lot ligt vast per mens per dag, dus het klopt ook als je slaapt of versnelt. In het
-  gehucht wonen de meesten een tot anderhalf uur lopen van de herberg (op de klok van het spel is
-  twintig tegels ruim een uur); zo gaan er twee à drie per avond, in de winter meer.
+  gehucht wonen de meesten sinds stuk 3 zo'n anderhalf uur lopen van de herberg (op de klok van het
+  spel is twintig tegels ruim een uur); zo gaan er gemiddeld twee per avond, in de zomer minder en in
+  de winter iets meer.
 - **Erheen, en weer naar huis:** na het werk lopen ze de herberg in en zijn ze binnen. Bij bedtijd
   komen ze naar buiten en lopen ze in het donker naar hun eigen deur; wie ver woont, is pas na
   middernacht thuis. De herbergierster staat 's avonds binnen, achter de tap. Bij de muis staat bij een

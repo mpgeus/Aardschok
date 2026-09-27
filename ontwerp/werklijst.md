@@ -125,7 +125,8 @@ voorstel van Claude, en daar gaat vraag 26 over.
 5. **Bouwen:** het dorp bouwt zelf, en beter (3b, stap 5): op bouwgrond die jij aanwijst, voor
    materiaal en goud, met steen per trede. (Ronde 4b van de huizenbouwer staat sinds vraag 29 hierboven,
    bij 1.) Dan komen ook de treden 3 tot 5 van de ladder in het spel (Marcel, 27 sep: "De ladder is goed
-   zo"); baksteen moet daarvoor nog in de huizenbouwer.
+   zo"); baksteen moet daarvoor nog in de huizenbouwer. Ook de herberg groeit dan mee, met plaatsen
+   (Marcel, 27 sep: "De herberg kan ook meegroeien met capaciteit"; `spel.md`, "De herberg: het plan").
 6. **Daarna zoals onder "Daarna, in deze volgorde":** straten en paden (6c; het plein is er sinds 26
    sep), en ontginnen (6b); dan deel C, verhalen en besturen (voorvallen, groepen en keuren, rechtspraak); deel
    D, de nacht en het verzet (de nacht, de eigen buidel, de militie, en daarbij de stal, de hoefsmid
@@ -326,6 +327,15 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     de plek, of ook met een zak graan door het dorp lopen? Voorstel: alleen de handeling; sjouwen komt
     pas als goederen echt gedragen worden. **C**, een lantaarn voor de schout (je ziet verder, maar wordt
     ook eerder gezien): nu of later? Voorstel: later, bij punt 11, de nacht.
+    **Marcel (27 sep): "Denk wel dat we ook losse lantaarns / lichtbronnen in het dorp nodig hebben.
+    Hadden we vroeger niet iemand die de lampen 's avonds aanstak?"** Claude: de lantaarnopsteker kwam
+    met de straatverlichting, in 1669; in 1323 hing er hooguit een lantaarn aan de deur, en in sommige
+    steden was dat een regel (`spel.md`, "lichtbronnen in het dorp"). Wie ze aansteekt, hebben we al in
+    de kunst: de koster, met een brandende lantaarn en de sleutels van de kerk. **D**, voorstel: in stuk
+    1 een paar vaste lantaarns in het gehucht (bij de put op het plein; de herberg heeft er al een), die
+    branden van de avond tot bedtijd: daar zie je verder, en word je eerder gezien, dus zoek je voor je
+    nachtwerk de donkere hoeken op. Wie ze aansteekt, komt later: de koster (als er een kapel is), de
+    keur "een lantaarn aan elke deur" (deel C) en de nachtwacht (punt 11).
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -542,7 +552,8 @@ nog nodig is".
 
 14. **De treden.** Klaar als het gehucht een dorp wordt, dan marktrecht krijgt (markt, kramen,
     handelaars) en een stad wordt, met schepenen die stemmen. Met het dorp komt de voerman met
-    een kar, die stenen brengt (`spel.md`, "Handel").
+    een kar, die stenen brengt (`spel.md`, "Handel"), en een tapperij of kroeg naast de herberg
+    (Marcel, 27 sep).
 15. **Stadsrechten kopen.**
 16. **De opstand:** trainen, wapens verbergen, en het gevecht in beurten.
 
