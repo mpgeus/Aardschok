@@ -10,14 +10,14 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (27 sep 2026, negende sessie): de herberg, stuk 1 is af
+## De stand (27 sep 2026, negende sessie): de herberg, stuk 1 en 2 zijn af
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 507/507.
+`npm test`: 512/512.
 
 **Waar het werk staat:** de achtste sessie staat in `main`. De negende (27 sep) staat op de branch
 `claude/werklijst-doorzetten-ikazjp`, nog niet in `main` en nog niet gepusht: dat doet Claude als Marcel
@@ -69,12 +69,15 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   herbergierster woont er en brouwt zelf, en 's avonds gaan er twee à drie mensen heen, in de winter
   meer; bij bedtijd lopen ze in het donker naar huis, en de lantaarn brandt. Marcel kreeg twee
   schermafdrukken.
+- **De herberg, stuk 2** (Marcel koos B, vraag 38): in de herberg wordt gepraat. De roddelaar vertelt er
+  wat er in zijn kelder ligt (pas dan vinden de soldaten het makkelijker), de herbergierster vertelt je de
+  volgende dag wie er zat en wat er gezegd werd, en de marskramer logeert er.
 - **Een fout gevonden en gerepareerd:** in het spel telde het karakter van wie er woont bij de kelders
   niet (de vrome weigerde niet, de woekeraar hield niets). Twee bestanden hadden twee namen gemeen, en
   het laatste won; de toetsen laadden dat bestand niet. Dat is precies waar vraag 25, E voor is.
 
-**Loopt nu: de herberg** (punt 2 hieronder). Stuk 1 is af (27 sep); **stuk 2 wacht op Marcel** (vraag
-38): wat de herberg voor de kern doet. Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het
+**Loopt nu: de herberg** (punt 2 hieronder). Stuk 1 en 2 zijn af (27 sep). **Wacht op Marcel: vraag 39**,
+een grotere herberg (en waar). Daarna is punt 2 af, en komt punt 3, het zichtveld en de getuigen. Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het
 voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
@@ -98,8 +101,8 @@ voorstel van Claude, en daar gaat vraag 26 over.
      lagen, baksteen onder pannen) komt voor twee huizen op een plaat, zodat Marcel ziet waar het heen
      gaat (Marcel: "1 en 2 in spel, rest op plaat"). In het spel komt hij bij punt 5, Bouwen.
 2. **Nu: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel (`spel.md`, "Zaken
-   waar de mensen zelf heen gaan"). Stuk 1 is af (27 sep): de herberg staat er, en de avond gaat
-   erheen. Stuk 2 wacht op vraag 38.
+   waar de mensen zelf heen gaan"). Stuk 1 en 2 zijn af (27 sep): de herberg staat er, de avond gaat
+   erheen, en er wordt gepraat. Een grotere herberg wacht op vraag 39.
 3. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
    steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
    uit verstoppen deel 1b op.
@@ -276,7 +279,19 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     naar de herberg gaat. En de herbergierster vertelt jou wie er gisteravond was en wat er gezegd werd.
     Zo speelt de herberg mee in het verstoppen, en krijg je informatie in plaats van een getal; het is
     ook het begin van de getuigen (punt 3). C: allebei. Bij alle drie slaapt de marskramer in de herberg:
-    hij staat tien dagen op het plein. **Voorstel: B.**
+    hij staat tien dagen op het plein. **Voorstel: B.** **Beantwoord (Marcel, 27 sep): "Het wordt B."**
+39. **Moet de herberg groter, of komt er een los café?** (Marcel, 27 sep, bij het antwoord op 38: "ik denk
+    dat de herberg ook groter moet zijn? Of maken we nog een los cafe?") Claude: een café bestaat in 1323
+    nog niet, want koffie kwam hier pas rond 1660. Wat er wel was: de herberg, met bedden en een stal voor
+    wie op reis is, en de tapperij of kroeg, alleen drank voor het dorp zelf, vaak in de voorkamer van
+    een gewoon huis. Een tweede in een gehucht van 26 mensen is veel; een tapperij past bij het dorp (punt
+    14, de treden). Groter: ja, want hij is nu zo groot als een boerderij, terwijl hij het enige gebouw van
+    iedereen is. Drie vormen op een plaat, allemaal vakwerk onder riet: A, een L (7×10); B, een T met de
+    topgevel naar voren (8×11); C, twee lagen (6×9), maar dat is trede 4 van de ladder. In de hoek tussen
+    het plein en de weg past geen groter huis: de weide, het pad van Wouter en de weg zitten eromheen.
+    **Voorstel: B, aan de westkant van het plein, waar nu de lege hut staat, met zijn deur naar het plein.
+    De lege hut ruilt van plek en komt waar nu de herberg staat.** Achter de herberg is dan ook plaats
+    voor de stal (punt 13).
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -313,10 +328,12 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vóór je veel bouwt.
 
 *Spelen, en zeggen hoe het voelt:*
-- **De herberg** (27 sep, negende sessie; stuk 1). Loop naar de hoek tussen het plein en de weg, en blijf
-  er tot de avond (`Spel.debug.uur(17)`): wie gaat erheen, en brandt de lantaarn? Zijn twee à drie gasten
-  per avond genoeg, en is de herberg herkenbaar zonder uithangbord? `Spel.debug.herberg()` zegt wie er
-  vanavond gaat. De getallen staan in de spelregels (`O`), onder "De herberg".
+- **De herberg** (27 sep, negende sessie; stuk 1 en 2). Loop naar de hoek tussen het plein en de weg, en
+  blijf er tot de avond (`Spel.debug.uur(17)`): wie gaat erheen, en brandt de lantaarn? Zijn twee à drie
+  gasten per avond genoeg, en is de herberg herkenbaar zonder uithangbord? Praat de volgende ochtend met
+  de herbergierster: weet ze wie er zat? Verstop iets bij de roddelaar en kijk wanneer zij het weet.
+  `Spel.debug.herberg()` zegt wie er vanavond gaat, `Spel.debug.marskramer()` laat de marskramer komen
+  (hij logeert er). De getallen staan in de spelregels (`O`), onder "De herberg".
 - **De nieuwe huizen** (26 sep, achtste sessie; ronde 4b). Op de beelden beantwoord (Marcel, 27 sep):
   de boerderijen van Gerrit en Trijn mogen met hun achterkant naar je toe staan ("geeft het wat meer
   leven"), en de ladder is goed zo. Nog te spelen: bouw een hut en een huis (`B`) en kijk hoe ze in vijf
@@ -564,6 +581,12 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 27 sep 2026 — **De herberg, stuk 2: er wordt gepraat** (negende sessie; vraag 38, Marcel koos B). De
+  roddelaar vertelt in de herberg wat er in zijn kelder ligt: pas dan vinden de soldaten het met
+  Sint-Maarten twee keer zo makkelijk (`g.verteld`, `js/verstoppen.js`). De herbergierster vertelt de
+  volgende dag wie er aan de tap zat en wie te veel zei (haar gesprek, met `{gisteravond}` en
+  `{roddelaar}`: een zin kan nu iets uit het spel noemen, `T.GESPREK_WOORDEN`). De marskramer logeert er:
+  's avonds en 's nachts in de herberg, overdag bij zijn waar. `npm test`: 512/512.
 - 27 sep 2026 — **De herberg, stuk 1** (negende sessie; punt 2, vraag 35 tot en met 37). De herberg staat
   vanaf het begin in het gehucht, in de hoek tussen het plein en de weg, in een eigen tekening van de
   huizenbouwer (`herberg1`: vakwerk onder riet, trede 2; de oude was van steen onder pannen). De
