@@ -72,3 +72,38 @@ titelscherm en het opslaan:
 **En de keuze blijft omkeerbaar.** Bijna alles wat er ligt is onafhankelijk van de motor: het
 ontwerp, de pixel art-keten, alle beelden, en de kaarten (Tiled leest Godot net zo goed in). Alleen
 de spelcode zelf, een paar duizend regels, zou opnieuw moeten.
+
+## De naam (vraag 8; voorstel van Claude, 27 sep, tiende sessie)
+
+"Aardschok" past niet meer. Waar een naam aan moet voldoen: kort, uit te spreken, uniek genoeg om te
+vinden, en hij zegt iets over het spel: middeleeuws, een dorp, en de kern (rijk worden, arm lijken).
+De spelteksten zijn Nederlands, maar Steam is vooral Engels: de naam werkt in allebei, of er komen er
+twee.
+
+Nagekeken met een zoekmachine (27 sep). Steam zelf kon Claude vanuit de cloud niet openen (het
+netwerk van de werkplek laat store.steampowered.com niet toe), dus "niets gevonden" is nog geen "vrij".
+
+- **Martinmas** (Engels voor Sint-Maarten): de dag waarop de heer komt innen. Zo was het ook echt: rond
+  Sint-Maarten werden pachten en schulden betaald, en sloot het boerenjaar. Eén zeldzaam woord, dus goed
+  te vinden, en het klinkt middeleeuws. "Sint-Maarten" zelf gaat niet: dan vind je het eiland. Geen
+  spel met die naam gevonden.
+- **Two Ledgers** (twee boeken): de kern in twee woorden, het boek voor de heer en het echte (de
+  rekenboeken van punt 6). Klinkt minder middeleeuws. Niets gevonden.
+- **Schout**: wie je bent. Echt, kort en uniek, maar buiten Nederland zegt het niets, en de sch is
+  lastig. Met een ondertitel gaat het wel: "Schout: word rijk, lijk arm". Niets gevonden.
+- **Heerlijkheid**: het gebied van een heer, en tegelijk "heerlijk". Precies de zwarte satire, maar
+  alleen voor wie Nederlands kent.
+- **Goudblind**: de heer ziet alleen goud. Ook alleen Nederlands.
+- **Kerfstok**, in het Engels **Tally**: het stokje waarin een schuld werd gekerfd, en "iets op je
+  kerfstok hebben". De heer houdt een kerfstok bij, jij twee boeken. Tally is een gewoon Engels woord,
+  dus slecht te vinden.
+- **A Poor Harvest**: "een slechte oogst", wat je de inner vertelt terwijl je kelder vol ligt. Er is
+  al een klein spel met die naam op itch.io.
+- **Bailiwick**: het ambtsgebied van een baljuw, bijna een schout. Er is al een bordspel met die naam.
+
+**Voorstel: Martinmas,** met de kern als ondertitel: "Get rich. Look poor." ("Word rijk. Lijk arm.").
+Het zegt waar elk jaar naartoe loopt, het is uniek, en het werkt in beide talen. Wie de Nederlandse
+kant voorop wil: Schout, met dezelfde ondertitel.
+
+**Vóór je kiest:** zoeken op Steam zelf, in de merkenregisters (EUIPO, en BOIP voor de Benelux), en
+kijken of de domeinnaam vrij is.

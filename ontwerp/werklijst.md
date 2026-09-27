@@ -154,7 +154,9 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 6. De kern voor het tweede proefje (`spel.md`, "De kern voor het tweede proefje"): de drie groepen en
    vijf keuren, nodig vóór punt 9.
 7. Moet het ijs op de beek te zien zijn (tekenwerk), en vangt de jager 's winters minder?
-8. Een naam; "Aardschok" past niet meer.
+8. Een naam; "Aardschok" past niet meer. Voorstel van Claude (27 sep): **Martinmas** (de dag waarop de
+   heer int), met als ondertitel "Get rich. Look poor."; of **Schout**. Acht namen met waarom staan in
+   `verpakken.md`, "De naam". Steam zelf is nog niet nagekeken.
 10. De monsters van het oude spel: de slijmkruiper, de skeletwacht, de reuzenspin en de kobold passen
     niet in het nieuwe spel, de wolf wel. Weg ermee, of bewaren tot er rovers zijn om de toetsen van
     het gevecht op te draaien? (`opmerkingen.md`, "Het gevecht na de leeftijd".)
