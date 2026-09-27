@@ -10,18 +10,19 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (27 sep 2026, negende sessie): de herberg en het zichtveld zijn af (punt 2 en 3)
+## De stand (27 sep 2026, negende sessie): punt 2 en 3 zijn af, en van punt 4 stuk 1 en 2
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 533/533.
+`npm test`: 537/537.
 
 **Waar het werk staat:** de negende sessie (27 sep) staat in `main` tot en met stuk 1 van het
-zichtveld (Marcel: "Ja, zet het in main"). Stuk 2 kwam daarna, en staat alleen op de eigen branch
-`claude/werklijst-doorzetten-ikazjp`, nog niet gepusht: dat doet Claude als Marcel "push it" zegt. Hoe
+zichtveld (Marcel: "Ja, zet het in main"). Wat daarna kwam (stuk 2 van het zichtveld, en stuk 1 en 2 van
+punt 4) staat alleen op de eigen branch `claude/werklijst-doorzetten-ikazjp`, nog niet gepusht: dat doet
+Claude als Marcel "push it" zegt. Hoe
 een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
@@ -91,14 +92,18 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   grens zoeken ze op Sint-Maarten, op twee of drie plekken. Ze lopen met de schout mee en doorzoeken wat
   zijn route vlak passeert; na twee uur kiezen ze zelf, zijn eigen kelder eerst; zo vaak als zijn argwaan
   wijst de heer ze zelf aan. Marcel kreeg een schermafdruk.
+- **De kern, stuk 2: de inner bespelen** (punt 4, vraag 42; Marcel: "Ja ab goed zo"): zijn bezoek duurt
+  tot zonsondergang; wie met hem praat, houdt hem op terwijl de dag doorloopt (drie uur per bezoek), en
+  een geschenk van 5, 10 of 20 goud laat hem minder opschrijven, tot de helft, maar een op de vijf keer
+  hoort de heer het. Wie niets doet, betaalt nu meer: alleen ziet hij het hele gehucht.
 - **Een fout gevonden en gerepareerd:** in het spel telde het karakter van wie er woont bij de kelders
   niet (de vrome weigerde niet, de woekeraar hield niets). Twee bestanden hadden twee namen gemeen, en
   het laatste won; de toetsen laadden dat bestand niet. Dat is precies waar vraag 25, E voor is.
 
 **Punt 2, de herberg, en punt 3, het zichtveld en de getuigen, zijn af** (27 sep), **en van punt 4 stuk
-1** (de soldaten zoeken altijd). **Nu stuk 2, de inner bespelen:** het plan staat bij vraag 42 en **wacht
-op Marcel**. Daarna het tweede proefje. Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het
-voelt".
+1 en 2** (de soldaten zoeken altijd; de inner afleiden en omkopen). **Nu het tweede proefje:** een heel
+jaar spelen en kijken of rijk worden en arm lijken leuk is (punt 4 hieronder). Wat Marcel kan bekijken,
+staat onder "Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -128,15 +133,17 @@ voorstel van Claude, en daar gaat vraag 26 over.
    in een donker steegje, zonder dat iemand het ziet. "Wie vlak langs een plek loopt, kan iets vinden"
    uit verstoppen deel 1b ging hierin op: wie je ziet, weet het. Het plan staat bij vraag 40; zie onder Af.
 4. **Nu: de kern afmaken** (punt 6 en 6a), en daarmee de vraag van het tweede proefje: is dit leuk?
-   - verstoppen deel 1b, de rest (Marcel koos het op 25 sep): de soldaten zoeken op Sint-Maarten
-     altijd op 2 of 3 plekken, ook zonder argwaan, en je bepaalt de route zelf, maar soms wil de heer
-     kiezen;
+   De volgorde koos Marcel bij vraag 41 (C): stuk 1 en 2, dan het proefje, dan de rest.
+   - **Af (27 sep), stuk 1:** verstoppen deel 1b, de rest: de soldaten zoeken op Sint-Maarten altijd op
+     2 of 3 plekken, en je bepaalt de route zelf, maar soms kiest de heer;
+   - **Af (27 sep), stuk 2:** van stap 3 van de inner praten, afleiden en omkopen (vraag 42);
+   - **nu: het tweede proefje:** een heel jaar spelen, van het voorjaar tot Sint-Maarten, en kijken of
+     rijk worden en arm lijken leuk is. Marcel speelt het ook;
    - deel 2, het bos met de kudde (Marcel, 25 sep): een plek in het bos voor graan en goud (ver lopen,
      muizen en vocht), en een deel van de kudde het bos in voor de inner komt; hij telt de kudde, de
      heer vraagt per dier, en kaas en wol zijn sporen (dat is ook stap 3 van de weides);
    - deel 3: de marskramer koopt en verkoopt vee, kaas, wol en hooi;
-   - stap 3 van de inner: praten, afleiden, omkopen (ook de marskramer, het spoor van het goud) en de
-     rekenboeken.
+   - de rest van stap 3 van de inner: de twee rekenboeken, en de marskramer als spoor van het goud.
 5. **Bouwen:** het dorp bouwt zelf, en beter (3b, stap 5): op bouwgrond die jij aanwijst, voor
    materiaal en goud, met steen per trede. (Ronde 4b van de huizenbouwer staat sinds vraag 29 hierboven,
    bij 1.) Dan komen ook de treden 3 tot 5 van de ladder in het spel (Marcel, 27 sep: "De ladder is goed
@@ -384,7 +391,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       hoort de heer het: dan telt het geschenk als goud in de kist, en wordt hij argwanend.
     Vragen: **A**, afleiden zo (tot zonsondergang, en praten kost hem zijn dag)? **B**, omkopen zo (goud
     tegen minder op het rapport, met een kans dat de heer het hoort)?
-    **Beantwoord (Marcel, 27 sep): "Ja ab goed zo".** Stuk 2 loopt.
+    **Beantwoord (Marcel, 27 sep): "Ja ab goed zo".** Stuk 2 is af (zie onder Af). Twee dingen kwamen
+    erbij om het te laten werken: hij praat hooguit drie uur per bezoek (anders houd je hem met een open
+    gesprek de hele dag op), en naast een schout die stilstaat, wacht hij een half uur (anders was
+    stilstaan hetzelfde als praten). Allebei in de werkbank.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -445,8 +455,13 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
   gevecht probeer je op `localhost:8123/?kaart=proef`: klik op de slijmkruiper.
 - Een heel jaar: hoe snel het gaat, de winter, en Sint-Maarten (is de honger te veel of te weinig;
   mag de heer harder, of juist zachter?).
-- Het bezoek van de inner (`Spel.debug.inner()`, of wachten tot oogstmaand): voelt meelopen goed,
-  en is 90 stappen geduld te veel of te weinig?
+- **De inner bespelen** (27 sep, negende sessie; punt 4, stuk 2). Laat hem komen (`Spel.debug.uur(9)`,
+  dan `Spel.debug.inner()`, of wacht tot oogstmaand), klik hem aan en praat: vraag hoe het op het kasteel
+  gaat, en kijk op de klok hoeveel van zijn dag dat kost. Geef hem een geschenk en kijk bij zijn vertrek
+  wat er in zijn rapport staat. Voelt meelopen goed, nu hij tot zonsondergang blijft? Is de helft minder
+  voor 25 goud te goedkoop, en een op de vijf kans dat de heer het hoort te weinig? `Spel.debug.inner()`
+  zegt tot hoe laat hij blijft en wat je hem gaf; de getallen staan in de spelregels (`O`), onder "De
+  inner".
 - De winter van het vee: `Spel.debug.slachten()` opent het slachtvenster, en in het veldenvenster
   (`V`) staan de mest en wat het hooi van volgend jaar de winter door helpt.
 - Verstoppen: klik een boerderij. `Spel.debug.verstopt()` zegt wat er waar ligt,
@@ -675,6 +690,14 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 27 sep 2026 — **De kern, stuk 2: de inner bespelen** (negende sessie; punt 4, vraag 42, Marcel: "Ja ab
+  goed zo"). Zijn bezoek duurt tot zonsondergang (`T.werkInnerBij`, `js/inner.js`), niet meer 90 stappen.
+  Afleiden: wie met hem praat, houdt hem op terwijl de dag doorloopt, drie uur per bezoek; staat de schout
+  stil naast hem, dan wacht hij een half uur en telt hij daarna zelf verder. Omkopen: in zijn gesprek
+  geef je 5, 10 of 20 goud (`doe: { omkopen }`, `T.koopInnerOm`); per 5 goud schrijft hij een tiende
+  minder op, tot de helft (`T.innerKorting`, `T.maakRapport`); een op de vijf keer hoort de heer het, en
+  dan telt het geschenk als goud in de kist (`T.eisVanDeHeer`) en groeit de argwaan. Zijn gesprek kreeg
+  een praatje over het kasteel. `npm test`: 537/537.
 - 27 sep 2026 — **De kern, stuk 1: de soldaten zoeken altijd** (negende sessie; punt 4, vraag 41, Marcel:
   "A ja B ja C ja"). Onder de grens van de argwaan zoeken de soldaten op Sint-Maarten op twee of drie
   plekken (`js/doorzoeken.js`): ze lopen met de schout mee en doorzoeken wat zijn route vlak passeert; na
