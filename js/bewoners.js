@@ -155,13 +155,8 @@
   // Plekken: een deur, de put, het plein, en waar iemand werkt
   // ---------------------------------------------------------------------------------------------
 
-  // De rechthoek die een gebouw beslaat: zijn tekening als die groter is (net als T.randVanGebouw in
-  // js/verstoppen.js), anders zijn voet.
-  function voetVan(g) {
-    if (g.voorwerp && g.voorwerp.beslaat) return { x: g.x, y: g.y, b: g.voorwerp.beslaat[0], h: g.voorwerp.beslaat[1] };
-    const v = g.voet || (T.gebouwVoet && T.gebouwVoet(g.soort)) || { b: 1, h: 1 };
-    return { x: g.x, y: g.y, b: v.b, h: v.h };
-  }
+  // De rechthoek die een gebouw beslaat (T.voetVanGebouw, js/gebouwen.js).
+  const voetVan = (g) => T.voetVanGebouw(g);
 
   // De begaanbare tegel rond een rechthoek die het dichtst bij `bij` ligt, of null.
   function tegelRond(w, r, bij) {

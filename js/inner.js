@@ -114,12 +114,8 @@
   // Wat hij ziet
   // ---------------------------------------------------------------------------------------------
 
-  // De voet van een gebouw: waar hij staat en hoe groot hij is.
-  function voetVan(g) {
-    if (g.voorwerp && g.voorwerp.beslaat) return { x: g.x, y: g.y, b: g.voorwerp.beslaat[0], h: g.voorwerp.beslaat[1] };
-    const v = g.voet || (T.gebouwVoet && T.gebouwVoet(g.soort)) || { b: 1, h: 1 };
-    return { x: g.x, y: g.y, b: v.b, h: v.h };
-  }
+  // De voet van een gebouw: waar hij staat en hoe groot hij is (T.voetVanGebouw, js/gebouwen.js).
+  const voetVan = (g) => T.voetVanGebouw(g);
 
   // Wat hij kan zien: gebouwen met een tekening (een verstopplek heeft er geen, en die ziet hij dus
   // niet zomaar; zie werklijst punt 6, stap 2).
@@ -485,6 +481,26 @@
     return !!(pad && pad.length);
   }
 
+  // Wie met de schout meeloopt, loopt naast hem: staat hij er niet, of loopt de schout door, dan een
+  // nieuw pad naar een vrije tegel naast hem. `opnieuw`: in elk geval een nieuw pad (hij liep nog niet
+  // mee). Voor de inner (hieronder), en voor de soldaten van de heer (js/doorzoeken.js).
+  T.loopNaastDeSchout = function (S, e, opnieuw) {
+    const h = S.schout;
+    const afstand = T.afstand({ x: h.tx, y: h.ty }, { x: e.tx, y: e.ty });
+    const eind = e.pad[e.pad.length - 1];
+    if (opnieuw || (afstand > 1 && !(eind && T.afstand(eind, { x: h.tx, y: h.ty }) <= 1))) {
+      e.pad = [];
+      const naast = afstand > 1 && staanBij(S, e, h.tx, h.ty, 1);
+      if (naast) loopNaar(S, e, naast);
+    }
+  };
+
+  // Loop naar een vrije tegel zo dicht mogelijk bij (x, y) (op minstens `vanaf`). Geeft of het kan.
+  T.loopNaarBij = function (S, e, x, y, vanaf) {
+    const plek = staanBij(S, e, x, y, vanaf || 0);
+    return !!(plek && loopNaar(S, e, plek));
+  };
+
   T.werkInnerBij = function (S) {
     const I = S.inner;
     const b = I && I.bezoek;
@@ -557,12 +573,7 @@
     if (b.volgt) {
       // Hij laat zijn eigen ronde los, en loopt naar de schout; loopt die door, dan loopt hij mee
       // naar waar de schout nu is. (Hij staat nu op een tegel, dus zijn pad mag weg.)
-      const eind = e.pad[e.pad.length - 1];
-      if (!volgde || (afstand > 1 && !(eind && T.afstand(eind, { x: h.tx, y: h.ty }) <= 1))) {
-        e.pad = [];
-        const naast = afstand > 1 && staanBij(S, e, h.tx, h.ty, 1);
-        if (naast) loopNaar(S, e, naast);
-      }
+      T.loopNaastDeSchout(S, e, !volgde);
       return;
     }
     if (volgde) e.pad = []; // de schout liep weg: zijn eigen ronde weer, vanaf hier
@@ -577,8 +588,7 @@
         beste = d;
       }
     }
-    const plek = beste && staanBij(S, e, beste.x, beste.y, 0);
     // Niet te bereiken (ingesloten, of de weg staat vol): dan slaat hij het over.
-    if (!plek || !loopNaar(S, e, plek)) b.overslaan.add(beste.gebouw || beste.akker);
+    if (!beste || !T.loopNaarBij(S, e, beste.x, beste.y, 0)) b.overslaan.add(beste.gebouw || beste.akker);
   };
 })(globalThis.Spel = globalThis.Spel || {});

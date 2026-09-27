@@ -413,6 +413,16 @@
     return g.voet;
   };
 
+  // De rechthoek die een gebouw op de kaart beslaat, { x, y, b, h }: de tekening als die er is (die
+  // kan groter zijn dan de voet uit het betekenisbestand), anders zijn voet, anders de maat van zijn
+  // soort. Voor wie wil weten waar een gebouw staat: de bewoners, de inner, de verstopplekken en de
+  // soldaten. (Tot 27 sep had elk van die bestanden er een eigen kopie van.)
+  T.voetVanGebouw = function (g) {
+    if (g.voorwerp && g.voorwerp.beslaat) return { x: g.x, y: g.y, b: g.voorwerp.beslaat[0], h: g.voorwerp.beslaat[1] };
+    const v = g.voet || T.gebouwVoet(g.soort) || { b: 1, h: 1 };
+    return { x: g.x, y: g.y, b: v.b, h: v.h };
+  };
+
   // Welke tekening krijgt het volgende gebouw van deze soort? Een soort met `tekeningen` (de hut, het
   // huis) krijgt er steeds een, nooit twee keer achter elkaar dezelfde, zodat een rij hutten niet uit
   // één stempel komt (Marcel, 26 sep: "We hebben meer afwisseling nodig in de huizen en hutten"). De

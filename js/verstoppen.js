@@ -297,9 +297,7 @@
   // die tegel. Null als er geen is.
   T.randVanGebouw = function (S, g) {
     const w = S.wereld;
-    const v = g.voorwerp && g.voorwerp.beslaat
-      ? { x: g.x, y: g.y, b: g.voorwerp.beslaat[0], h: g.voorwerp.beslaat[1] }
-      : { x: g.x, y: g.y, ...(g.voet || (T.gebouwVoet && T.gebouwVoet(g.soort)) || { b: 1, h: 1 }) };
+    const v = T.voetVanGebouw(g);
     const binnen = (x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
     const van = S.schout ? { x: S.schout.tx != null ? S.schout.tx : Math.round(S.schout.x), y: S.schout.ty != null ? S.schout.ty : Math.round(S.schout.y) } : { x: v.x, y: v.y };
     let beste = null;
@@ -330,24 +328,31 @@
     return x - Math.floor(x);
   }
 
-  // Plek voor plek: wat ze vinden, is weg, en elke vondst maakt argwanend. Geeft wat ze vonden, als
-  // tekst ("20 graan in de kelder van Klaas"). `getal` (voor een toets) geeft per plek een getal
-  // 0..1 in plaats van het lot: onder de kans van de plek vinden ze het.
+  // Eén plek doorzoeken (p van T.verstopPlekVan): onder de kans van de plek vinden ze wat er ligt, en
+  // dat is weg; elke vondst maakt argwanend. Geeft wat ze vonden als tekst ("20 graan in de kelder van
+  // Klaas"), of null. `r` (voor een toets) is een getal 0..1 in plaats van het lot. Voor het hele dorp
+  // (T.zoekVerstopt) en voor de soldaten die met de schout meelopen (js/doorzoeken.js).
+  T.zoekOpPlek = function (S, p, r) {
+    const g = p.gebouw;
+    const tekst = T.inhoudTekst(inhoudVan(g));
+    if (!tekst) return null;
+    if ((r != null ? r : lot(S, g)) >= p.vinden) return null;
+    g.verstopt = { graan: 0, goud: 0 };
+    delete g.verteld;
+    delete g.verteldDoor;
+    if (VI().argwaanPerVondst > 0 && T.zetArgwaan) T.zetArgwaan(S, VI().argwaanPerVondst, 'de soldaten vonden wat je verstopte');
+    if (T.ui && T.ui.toonVoorraad) T.ui.toonVoorraad(S);
+    return `${tekst} in ${p.naam}`;
+  };
+
+  // Het hele dorp, plek voor plek. Geeft wat ze vonden. `getal` (voor een toets) geeft per plek een getal
+  // 0..1 in plaats van het lot.
   T.zoekVerstopt = function (S, getal) {
     const gevonden = [];
     for (const p of T.verstopPlekken(S)) {
-      const g = p.gebouw;
-      const tekst = T.inhoudTekst(inhoudVan(g));
-      if (!tekst) continue;
-      const r = getal ? getal(p) : lot(S, g);
-      if (r >= p.vinden) continue;
-      gevonden.push(`${tekst} in ${p.naam}`);
-      g.verstopt = { graan: 0, goud: 0 };
-      delete g.verteld;
-      delete g.verteldDoor;
-      if (VI().argwaanPerVondst > 0 && T.zetArgwaan) T.zetArgwaan(S, VI().argwaanPerVondst, 'de soldaten vonden wat je verstopte');
+      const t = T.zoekOpPlek(S, p, getal ? getal(p) : null);
+      if (t) gevonden.push(t);
     }
-    if (gevonden.length && T.ui && T.ui.toonVoorraad) T.ui.toonVoorraad(S);
     return gevonden;
   };
 })(globalThis.Spel = globalThis.Spel || {});
