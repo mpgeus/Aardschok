@@ -19,9 +19,9 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met 
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
 `npm test`: 522/522.
 
-**Waar het werk staat:** de achtste sessie staat in `main`. De negende (27 sep) staat op de branch
-`claude/werklijst-doorzetten-ikazjp`, gepusht (Marcel: "Push"), maar nog niet in `main`: dat gebeurt als
-Marcel erom vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** de negende sessie (27 sep) staat in `main` (Marcel: "Ja, zet het in main"),
+en ook op haar eigen branch `claude/werklijst-doorzetten-ikazjp`. Hoe een eigen branch en `main`
+samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
 toevoegen voor we bij een speelbaar product komen." Houd je aan de volgorde hieronder. Een nieuw idee,
