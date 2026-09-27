@@ -9,6 +9,20 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De inner afleiden en omkopen, wat nog ruw is** (27 sep, na stuk 2 van punt 4; `spel.md`, "Rijk
+  worden en arm lijken: de inner"):
+  - Wie niets doet, betaalt nu meer: tot zonsondergang ziet de inner het hele gehucht (11 van de 11
+    gebouwen), met zijn oude geduld van 90 stappen zo'n 7. Het tweede proefje moet zeggen of dat goed
+    is; met "weg voor donker" in de werkbank gaat hij eerder.
+  - Praten loopt op de klok van het spel, dus wie langzaam leest, houdt hem langer op, en op 10× gaan
+    drie uur praten in een paar tellen. De drie uur per bezoek houdt het binnen de perken.
+  - Hij vergeet hele gebouwen: wat hij het laatst zag. Is dat de schaapskooi (20 wol per jaar), dan is
+    een klein geschenk ineens veel waard.
+  - Of de heer het hoort, is nu een lot van een op de vijf. Het kan ook via de getuigen (punt 3): wie
+    de schout de inner goud ziet geven, vertelt het in de herberg.
+  - Nagelopen en opgelost: stond de schout stil op het plein, dan bleef de inner naast hem staan tot zijn
+    geduld op was, en zag hij in een op de drie spellen maar 5 gebouwen. Nu wacht hij een half uur.
+
 - **De soldaten, wat nog ruw is** (27 sep, na stuk 1 van punt 4; `spel.md`, "De soldaten zoeken altijd"):
   - Staat de schout ver van het plein, dan lopen ze eerst een uur of twee naar hem toe. Het wachten telt
     pas vanaf dat ze bij hem zijn.

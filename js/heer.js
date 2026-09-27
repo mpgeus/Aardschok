@@ -168,6 +168,10 @@
       const kist = b && !b.weg && b.kist != null ? b.kist : (S.voorraad && S.voorraad.goud) || 0;
       if (IN().kist && kist > 0) tel('goud', kist * IN().deelVanGoud, `een deel van de ${Math.floor(kist)} goud in uw kist`);
     }
+    // Wat je zijn inner toestopte en de heer hoorde (js/inner.js, T.koopInnerOm): dat telt hij als goud
+    // in je kist (Marcel, 27 sep, vraag 42).
+    const toegestopt = (I && I.gehoord) || 0;
+    if (IN().kist && toegestopt > 0) tel('goud', toegestopt * IN().deelVanGoud, `een deel van de ${toegestopt} goud die u Onze inner toestopte, want dat tellen Wij als goud in uw kist`);
     // Per soort gebouw één regel, in de volgorde van T.GEBOUWEN: wat in het rapport staat, of alles.
     const aantal = {};
     if (rapport) Object.assign(aantal, rapport.gebouwen);

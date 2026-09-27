@@ -5,10 +5,13 @@
 //     ziet (T.innerKijkt: in een rechte lijn, tot zoveel tegels, en huizen en schuren houden zijn
 //     blik tegen), zijn rapport (T.maakRapport) en zijn argwaan.
 //   - zijn komen en gaan als poppetje (T.werkInnerBij): loopt de schout naast hem, dan volgt hij de
-//     schout; anders loopt hij zijn eigen ronde, langs wat hij nog niet zag, tot zijn geduld op is.
+//     schout; anders loopt hij zijn eigen ronde, langs wat hij nog niet zag, tot zonsondergang.
 // Zijn rapport is de rekening van de heer (js/heer.js, T.eisVanDeHeer): wat hij niet zag, betaal je
 // dat jaar niet. Zijn argwaan doet vier dingen: de heer vraagt meer, soldaten doorzoeken het dorp,
 // hij komt onverwacht terug, en bij heel hoge argwaan telt het rapport niet meer.
+// De schout kan hem bespelen (werklijst punt 4, stuk 2; vraag 42, Marcel, 27 sep): wie met hem praat,
+// houdt hem op terwijl de dag doorloopt (afleiden), en voor een geschenk schrijft hij minder op
+// (omkopen, T.koopInnerOm), maar met een kans hoort de heer het.
 //
 // Alleen waar ook de heer komt: een wereld met een plein (js/heer.js). Daarbuiten blijft dit stil.
 (function (T) {
@@ -23,16 +26,28 @@
     aankondiging: 10,
     // Zo ver kijkt hij, in tegels, in een rechte lijn; huizen en schuren houden zijn blik tegen.
     zicht: 7,
-    // Zoveel stappen loopt hij, dan gaat hij met zijn rapport. Alleen ziet hij in die tijd het hele
-    // gehucht; wie met hem meeloopt, kan hem langs de lege kant leiden tot zijn geduld op is.
-    geduld: 90,
-    // Stilstaan (naast een schout die niet verder loopt) kost ook geduld: een stap per zoveel
-    // seconden. Iets meer dan lopen, want wachten doet hij niet graag.
-    stilPerStap: 0.5,
+    // Zijn bezoek duurt tot zonsondergang, min zoveel uur (Marcel, 27 sep, vraag 42: hij moet voor
+    // donker terug zijn op het kasteel). Wat hij dan nog niet zag, staat niet in zijn rapport. Alleen
+    // ziet hij in die tijd het hele gehucht; wie met hem meeloopt, leidt hem langs de lege kant. (Tot
+    // 27 sep liep hij 90 stappen, en praten kostte hem niets.)
+    wegVoorDonker: 0,
+    // Afleiden: wie met hem praat, houdt hem op. Hij staat stil en kijkt niet, en de dag loopt door.
+    // Zoveel uur per bezoek; daarna telt hij door, ook als je nog praat.
+    praatUren: 3,
+    // Staat hij naast een schout die niet verder loopt, dan wacht hij zoveel uur. Daarna telt hij zelf
+    // verder, en volgt hij zoveel uur niemand (eigenGang). Anders hield wie stilstond hem net zo op als
+    // wie met hem praatte.
+    wachtUren: 0.5,
+    eigenGang: 1,
     // Loop je zo dichtbij, dan volgt hij jou; loop je verder weg dan volgLos, dan gaat hij zijn eigen
     // ronde weer.
     volgAfstand: 2,
     volgLos: 5,
+    // Omkopen (Marcel, 27 sep, vraag 42): in zijn gesprek geef je hem een geschenk (T.koopInnerOm). Per
+    // `per` goud schrijft hij `stap` minder op zijn rapport, tot `tot`. Met een kans (`gehoord`) hoort
+    // de heer het: dan telt het geschenk op Sint-Maarten als goud in je kist (js/heer.js), en groeit de
+    // argwaan met `argwaan` per goud.
+    omkopen: { per: 5, stap: 0.1, tot: 0.5, gehoord: 0.2, argwaan: 0.015 },
     // Het graan: van elke gezaaide akkertegel die hij zag, verwacht hij een volle oogst
     // (T.GRAAN_PER_TEGEL). Ziet hij in de schuren en op die velden samen minder dan dit deel daarvan,
     // dan groeit zijn argwaan met wat het scheelt, keer graanArgwaan.
@@ -76,6 +91,7 @@
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
   const inJaar = (maand, dag) => maand * T.DAGEN_PER_MAAND + (dag - 1);
   const dagNu = (S) => Math.floor(S.kalender ? S.kalender.dag : 0);
+  const uurNu = (S) => (S.kalender ? S.kalender.dag * 24 : 0);
   const sleutel = (x, y) => x + ',' + y;
 
   function bericht(tekst, soort) {
@@ -90,6 +106,9 @@
       rapport: null, // wat hij dit jaar zag, tot de heer op Sint-Maarten betaald is
       terugOp: null, // de dag waarop hij onverwacht terugkomt
       teruggeweest: false,
+      geschenken: 0, // wat je hem dit jaar gaf (T.koopInnerOm), tot Sint-Maarten
+      gehoord: 0, // en wat de heer daarvan hoorde
+      aantalGeschenken: 0,
     };
   };
 
@@ -218,17 +237,37 @@
   // Het rapport: wat hij zag, en wat de heer ervan vraagt (js/heer.js)
   // ---------------------------------------------------------------------------------------------
 
+  // Hoeveel minder hij opschrijft (0 tot omkopen.tot): omkopen.stap per omkopen.per goud die je hem
+  // dit jaar gaf (T.koopInnerOm).
+  T.innerKorting = function (S) {
+    const I = S.inner;
+    const o = IN().omkopen;
+    if (!I || !(I.geschenken > 0) || !(o.per > 0)) return 0;
+    return Math.min(o.tot, Math.floor(I.geschenken / o.per + 1e-9) * o.stap);
+  };
+
   // Het rapport van dit bezoek, samen met wat hij eerder dit jaar zag (bij een tweede bezoek).
-  // { jaar, gebouwen: { soort: aantal }, woonruimte, tegels, graanGezien, graanVerwacht }.
+  //   - wat hij opschreef, en wat de heer dus vraagt (js/heer.js): jaar, gebouwen ({ soort: aantal }),
+  //     woonruimte, tegels, graanGezien en goudGezien;
+  //   - voor zijn eigen argwaan (T.innerVertrekt): graanNu, graanVerwacht, goudNu en goudVerwacht;
+  //   - wat hij onthoudt voor een tweede bezoek: gezien, tegelsGezien, graanGeteld en goudGeteld.
+  // Wat hij opschreef, is wat hij zag, tenzij je hem omkocht (korting).
   T.maakRapport = function (S) {
     const I = S.inner;
     const b = I.bezoek;
     const vorig = I.rapport;
-    const alle = new Set(b.gebouwen);
-    if (vorig && vorig.gezien) for (const g of vorig.gezien) alle.add(g);
+    // Wat hij eerder zag eerst, want wat hij weglaat, is wat hij het laatst zag.
+    const alle = new Set(vorig && vorig.gezien);
+    for (const g of b.gebouwen) alle.add(g);
+    // Omgekocht (T.koopInnerOm): van de gebouwen laat hij weg wat hij het laatst zag, en van de
+    // akkertegels, het graan en de kist een even groot deel. Wat hij zag, onthoudt hij wel (gezien):
+    // de heer ziet op Sint-Maarten dus niets nieuws aan wat hij wegliet, en een tweede bezoek telt
+    // het niet dubbel.
+    const korting = T.innerKorting(S);
+    const opgeschreven = [...alle].slice(0, Math.round(alle.size * (1 - korting)));
     const gebouwen = {};
     let woonruimte = 0;
-    for (const g of alle) {
+    for (const g of opgeschreven) {
       gebouwen[g.soort] = (gebouwen[g.soort] || 0) + 1;
       woonruimte += (T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].woonruimte) || 0;
     }
@@ -259,17 +298,21 @@
     }
     const nuGezien = staand + ((S.voorraad && S.voorraad.graan) || 0);
     // De kist (Marcel, 25 sep: "hij telt de kist"): het goud dat er nu in ligt. Wat verstopt ligt
-    // (js/verstoppen.js), ligt er niet in.
+    // (js/verstoppen.js), ligt er niet in, en wat je hem gaf ook niet.
     const kist = (S.voorraad && S.voorraad.goud) || 0;
+    const graanGeteld = Math.max(nuGezien, (vorig && vorig.graanGeteld) || 0);
+    const goudGeteld = Math.max(kist, (vorig && vorig.goudGeteld) || 0);
     return {
-      jaar: datum.jaar, gebouwen, woonruimte, tegels,
-      graanGezien: Math.max(nuGezien, (vorig && vorig.graanGezien) || 0),
+      jaar: datum.jaar, gebouwen, woonruimte,
+      tegels: Math.round(tegels * (1 - korting)),
+      graanGezien: graanGeteld * (1 - korting),
+      goudGezien: goudGeteld * (1 - korting),
       graanNu: nuGezien,
       graanVerwacht: Math.max(verwacht, (vorig && vorig.graanVerwacht) || 0),
-      goudGezien: Math.max(kist, (vorig && vorig.goudGezien) || 0),
-      goudNu: kist,
+      // Wat je hem gaf, weet hij: dat is niet weg, dat zit in zijn zak.
+      goudNu: kist + (I.geschenken || 0),
       goudVerwacht: goudVerwacht(S, alle),
-      gezien: alle, tegelsGezien,
+      gezien: alle, tegelsGezien, graanGeteld, goudGeteld, korting,
     };
   };
 
@@ -290,13 +333,50 @@
   }
 
   // ---------------------------------------------------------------------------------------------
+  // Omkopen (Marcel, 27 sep, vraag 42)
+  // ---------------------------------------------------------------------------------------------
+
+  // Een geschenk van `goud`, in zijn gesprek (js/gesprekken.js: doe: { omkopen: 10 }, via
+  // T.doeGevolg). Zolang hij telt: daarna is zijn rapport af. Hoe minder hij opschrijft, zegt
+  // T.innerKorting; T.maakRapport schrijft het zo op. Met een kans (omkopen.gehoord) hoort de heer het:
+  // dan telt het geschenk op Sint-Maarten als goud in je kist (js/heer.js, T.eisVanDeHeer), en groeit
+  // de argwaan. Het lot valt meteen, en het bericht zegt het, zodat je weet waar je staat.
+  // Geeft { kan, korting, gehoord }.
+  T.koopInnerOm = function (S, goud) {
+    const I = S.inner;
+    const b = I && I.bezoek;
+    const heeft = (S.voorraad ? S.voorraad.goud : S.goud) || 0;
+    if (!b || b.weg || !(goud > 0) || heeft < goud) return { kan: false, korting: T.innerKorting(S), gehoord: false };
+    const o = IN().omkopen;
+    if (S.voorraad) T.wijzigVoorraad(S, 'goud', -goud);
+    else S.goud = heeft - goud;
+    I.geschenken = (I.geschenken || 0) + goud;
+    I.aantalGeschenken = (I.aantalGeschenken || 0) + 1;
+    const korting = T.innerKorting(S);
+    if (korting >= o.tot && T.zetVlag) T.zetVlag(S, 'innerOmgekochtVol');
+    const gehoord = willekeurig(S, I.aantalGeschenken) < o.gehoord;
+    if (gehoord) {
+      I.gehoord = (I.gehoord || 0) + goud;
+      T.zetArgwaan(S, goud * o.argwaan, 'hij hoorde dat je zijn inner omkocht');
+      // Telt de heer de kist niet (een keuze in de spelregels), dan kost het alleen argwaan.
+      const kist = T.HEER_INSTELLINGEN && T.HEER_INSTELLINGEN.kist ? ` Die ${goud} goud telt hij op Sint-Maarten als goud in je kist,` : '';
+      bericht(`De inner steekt het goud niet weg: hij weegt het in zijn hand, waar iedereen bij staat. Dit hoort de heer.${kist}${kist ? ' en' : ' En'} hij vertrouwt je minder.`, 'gevaar');
+    }
+    if (T.ui && T.ui.toonArgwaan) T.ui.toonArgwaan(S);
+    return { kan: true, korting, gehoord };
+  };
+
+  // ---------------------------------------------------------------------------------------------
   // De dagen: aankondiging, komst, en onverwacht terug
   // ---------------------------------------------------------------------------------------------
 
   T.innerKomt = function (S, dag, onverwacht) {
     const I = S.inner || (S.inner = T.nieuweInner());
     I.bezoek = {
-      komtOp: dag, onverwacht: !!onverwacht, geduld: IN().geduld,
+      komtOp: dag, onverwacht: !!onverwacht,
+      tot: null, // tot wanneer hij blijft (de dag, met het uur achter de komma), zodra hij er is
+      gepraat: 0, // hoeveel uur je hem aan de praat hield (afleiden), en of het genoeg was
+      uitgepraat: false,
       gebouwen: new Set(), tegels: new Set(), wezen: null, weg: false, laatste: null, volgt: false,
       overslaan: new Set(), // wat hij niet kon bereiken
       aankomst: {
@@ -355,8 +435,11 @@
     const namen = Object.entries(r.gebouwen).map(([soort, n]) => (n === 1 ? `een ${T.GEBOUWEN[soort].naam}` : `${n} × ${T.GEBOUWEN[soort].naam}`));
     const delen = (namen.length ? namen : ['geen gebouwen']).concat(`${Math.round(r.graanGezien)} graan`);
     if (T.HEER_INSTELLINGEN && T.HEER_INSTELLINGEN.kist) delen.push(`${Math.floor(r.goudGezien)} goud in de kist`);
-    bericht(`De inner vertrekt. In zijn rapport: ${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}.`);
+    const korting = r.korting > 0 ? ` Om je geschenk schreef hij ${Math.round(r.korting * 100)}% minder op dan hij zag.` : '';
+    bericht(`De inner vertrekt. In zijn rapport: ${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}.${korting}`);
     if (T.wisVlag) T.wisVlag(S, 'innerOnverwacht');
+    // Zijn rapport is af: een geschenk of een praatje verandert er niets meer aan (js/gesprekken.js).
+    if (T.zetVlag) T.zetVlag(S, 'innerGeteld');
     if (!b.wezen) haalWeg(S);
     if (T.ui && T.ui.toonArgwaan) T.ui.toonArgwaan(S);
     return r;
@@ -370,7 +453,7 @@
       const i = S.wereld.wezens.indexOf(b.wezen);
       if (i >= 0) S.wereld.wezens.splice(i, 1);
     }
-    if (T.wisVlag) T.wisVlag(S, 'innerOpBezoek');
+    if (T.wisVlag) for (const v of ['innerOpBezoek', 'innerUitgepraat', 'innerGeteld']) T.wisVlag(S, v);
     I.bezoek = null;
   }
 
@@ -381,10 +464,10 @@
     return Math.floor(dag) + (((verschil % T.DAGEN_PER_JAAR) + T.DAGEN_PER_JAAR) % T.DAGEN_PER_JAAR || T.DAGEN_PER_JAAR);
   }
 
-  // Een getal 0..1 voor wanneer hij terugkomt; vast per spel en per dag (uit het lot van de boeren
-  // als dat er is), zodat een toets hetzelfde uitkomt.
-  function willekeurig(S) {
-    const zaad = ((S.lot && S.lot.zaad) || 1) + dagNu(S) * 7919;
+  // Een getal 0..1, vast per spel, per dag en per vraag `n` (uit het lot van de boeren als dat er is),
+  // zodat een toets hetzelfde uitkomt: wanneer hij terugkomt, en of de heer een geschenk hoort.
+  function willekeurig(S, n) {
+    const zaad = ((S.lot && S.lot.zaad) || 1) + dagNu(S) * 7919 + (n || 0) * 131;
     const x = Math.sin(zaad) * 10000;
     return x - Math.floor(x);
   }
@@ -415,6 +498,9 @@
     I.rapport = null;
     I.terugOp = null;
     I.teruggeweest = false;
+    I.geschenken = 0;
+    I.gehoord = 0;
+    if (T.wisVlag) T.wisVlag(S, 'innerOmgekochtVol');
     I.argwaan *= IN().naSintMaarten;
     // Wat de marskramer hem vertelt, telt vanaf nu opnieuw (js/handel.js).
     if (T.nieuwBoekMarskramer) S.boekMarskramer = T.nieuwBoekMarskramer(dagNu(S));
@@ -501,6 +587,24 @@
     return !!(plek && loopNaar(S, e, plek));
   };
 
+  // Tot wanneer hij blijft: de eerstvolgende zonsondergang (js/dag.js), min wegVoorDonker, als dag met
+  // het uur achter de komma. Roep je hem 's nachts (Spel.debug.inner), dan is dat die van morgen.
+  // Zonder kalender (een toets zonder dag) blijft hij tot hij alles zag.
+  function totZonsondergang(S) {
+    if (!S.kalender || !T.zonVan) return Infinity;
+    const nu = S.kalender.dag;
+    for (let d = Math.floor(nu); ; d++) {
+      const tot = d + (T.zonVan(d).onder - IN().wegVoorDonker) / 24;
+      if (tot > nu) return tot;
+    }
+  }
+
+  // Praat de schout nog met hem, dan houdt dat gesprek op (js/dialoog.js). Zonder scherm (een toets)
+  // staat er niets open.
+  function stopGesprek(S, e) {
+    if (S.modus === 'dialoog' && S.spreektMet === e && T.sluitDialoog) T.sluitDialoog(S);
+  }
+
   T.werkInnerBij = function (S) {
     const I = S.inner;
     const b = I && I.bezoek;
@@ -523,6 +627,7 @@
       const e = T.maakMens('inner', uitgang.x, uitgang.y, 0);
       e.dwaalt = false; // hij loopt waar hij heen wil, niet waar het dwalen hem brengt
       b.wezen = e;
+      b.tot = totZonsondergang(S);
       w.wezens.push(e);
       return;
     }
@@ -533,39 +638,57 @@
       else if (!e.pad.length && !e.onderweg) loopNaar(S, e, uitgang);
       return;
     }
-    if (S.modus === 'dialoog' && S.spreektMet === e) {
-      b.stilSinds = null; // wie met hem praat, houdt hem op, en dat telt niet als wachten
+    // De zon gaat onder: hij moet voor donker terug zijn op het kasteel, en gaat met wat hij zag.
+    const nu = uurNu(S);
+    if (b.tot != null && nu >= b.tot * 24) {
+      bericht('De zon gaat onder, en de inner moet voor donker terug zijn op het kasteel.');
+      stopGesprek(S, e);
+      T.innerVertrekt(S);
       return;
     }
-    // Bij elke nieuwe tegel: rondkijken, en een stap van zijn geduld eraf. Staat hij stil, dan
-    // kost het wachten ook geduld (stilPerStap).
+    // Afleiden: wie met hem praat, houdt hem op. Hij staat stil en kijkt niet, en de dag loopt door. Tot
+    // hij genoeg gepraat heeft (praatUren per bezoek): dan telt hij door, ook als je nog praat.
+    if (S.modus === 'dialoog' && S.spreektMet === e && !b.uitgepraat) {
+      if (b.praatVan != null) b.gepraat += nu - b.praatVan;
+      b.praatVan = nu;
+      b.stilSinds = null; // praten is geen wachten
+      if (b.gepraat < IN().praatUren) return;
+      b.uitgepraat = true;
+      if (T.zetVlag) T.zetVlag(S, 'innerUitgepraat');
+      bericht('"Genoeg gepraat, schout. Ik moet tellen, en voor donker terug zijn."');
+      stopGesprek(S, e);
+    }
+    b.praatVan = null;
+    // Bij elke nieuwe tegel: rondkijken.
     const hier = sleutel(e.tx, e.ty);
     if (hier !== b.laatste) {
-      if (b.laatste != null) b.geduld--;
       b.laatste = hier;
       b.stilSinds = null;
       const nieuw = T.innerKijkt(S, { x: e.tx, y: e.ty });
       if (nieuw.length) bericht(`De inner noteert: ${nieuw.join(', ')}.`);
-    } else if (!e.onderweg && !e.pad.length) {
-      // Op de tijd van de wereld (js/main.js), zodat stilstaan op elke snelheid even veel kost.
-      const nu = S.wereldTijd || 0;
+    } else if (b.volgt && !e.onderweg && !e.pad.length) {
+      // Naast een schout die niet verder loopt, wacht hij niet eeuwig: daarna telt hij zelf verder, en
+      // volgt hij een tijd niemand. In uren op de klok, dus op elke snelheid even lang.
       if (b.stilSinds == null) b.stilSinds = nu;
-      else if (nu - b.stilSinds >= IN().stilPerStap) {
-        b.geduld--;
-        b.stilSinds = nu;
+      else if (nu - b.stilSinds >= IN().wachtUren) {
+        b.stilSinds = null;
+        b.eigenTot = nu + IN().eigenGang;
+        bericht('De inner wacht niet langer op je, en telt zelf verder.');
       }
     }
     const doelen = nogTeZien(S);
-    if (b.geduld <= 0 || !doelen.length) {
+    if (!doelen.length) {
       T.innerVertrekt(S);
       return;
     }
     if (e.onderweg) return;
-    // Loopt de schout naast hem, dan volgt hij de schout; loopt die weg, dan gaat hij zijn eigen gang.
+    // Loopt de schout naast hem, dan volgt hij de schout; loopt die weg, of wachtte hij te lang op hem,
+    // dan gaat hij zijn eigen gang.
     const h = S.schout;
     const afstand = h ? T.afstand({ x: h.tx, y: h.ty }, { x: e.tx, y: e.ty }) : Infinity;
     const volgde = b.volgt;
-    if (afstand <= IN().volgAfstand) b.volgt = true;
+    if (b.eigenTot != null && nu < b.eigenTot) b.volgt = false;
+    else if (afstand <= IN().volgAfstand) b.volgt = true;
     else if (afstand > IN().volgLos) b.volgt = false;
     // Volgt hij, dan houdt hij de pas van de schout bij: hij draaft erachteraan. Anders zijn eigen maat.
     const eigen = (T.MENSEN && T.MENSEN.inner && T.MENSEN.inner.snelheid) || e.snelheid;

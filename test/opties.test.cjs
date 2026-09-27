@@ -89,7 +89,8 @@ test('de rekening en het graan van de heer zijn keuzes (punt 6), en de inner sta
   assert.equal(T.HEER_INSTELLINGEN.graan, 'pacht');
   const inner = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'INNER_INSTELLINGEN'));
   assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.terugNaDagen.van').label, 'terug na dagen · van');
-  assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.geduld').waarde, bestanden.INNER_INSTELLINGEN.geduld);
+  assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.praatUren').waarde, bestanden.INNER_INSTELLINGEN.praatUren);
+  assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.omkopen.gehoord').waarde, bestanden.INNER_INSTELLINGEN.omkopen.gehoord);
   assert.ok(!inner.some((g) => g.pad === 'INNER_INSTELLINGEN.komt.maand'), 'een maand is geen getal');
 });
 

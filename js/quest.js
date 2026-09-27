@@ -140,7 +140,8 @@
     }
     if (als.nietQuest && T.questLoopt(S, als.nietQuest)) return false;
     if (als.questAf && !T.questAf(S, als.questAf)) return false;
-    if (als.goud != null && (S.goud || 0) < als.goud) return false;
+    // Goud telt uit de voorraad als die er is (js/voorraad.js), net als T.geefGoud hierboven.
+    if (als.goud != null && ((S.voorraad ? S.voorraad.goud : S.goud) || 0) < als.goud) return false;
     return true;
   };
 

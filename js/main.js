@@ -486,17 +486,21 @@
     },
     // De inner nu laten komen, zonder op oogstmaand te wachten (js/inner.js): Spel.debug.inner(),
     // of Spel.debug.inner(true) voor zijn onverwachte tweede bezoek. Is hij er al, dan zegt het
-    // wat hij zag, hoeveel geduld hij nog heeft, en wat er in zijn rapport staat.
+    // wat hij zag, tot hoe laat hij blijft, hoe lang je hem aan de praat hield, wat je hem gaf, en
+    // wat er in zijn rapport staat.
     inner(onverwacht) {
       const I = S.inner || (S.inner = T.nieuweInner());
       if (!I.bezoek) T.innerKomt(S, Math.floor(S.kalender.dag), !!onverwacht);
       const b = I.bezoek;
       b.meteen = true; // ook 's nachts: niet op het bezoekuur wachten (js/dag.js, T.bezoekerKomtAan)
       const r = I.rapport;
+      const uur = (dag) => `${Math.floor(T.uurVanDag(dag))}:${String(Math.floor((T.uurVanDag(dag) % 1) * 60)).padStart(2, '0')}`;
       return {
-        geduld: b.geduld, volgt: b.volgt, weg: b.weg, gebouwen: b.gebouwen.size, tegels: b.tegels.size,
+        blijftTot: b.tot != null && isFinite(b.tot) ? uur(b.tot) : null, gepraat: Math.round(b.gepraat * 10) / 10, uitgepraat: b.uitgepraat,
+        volgt: b.volgt, weg: b.weg, gebouwen: b.gebouwen.size, tegels: b.tegels.size,
         nogTeZien: b.weg ? 0 : T.innerNogTeZien(S).length, argwaan: I.argwaan, waarom: I.waarom.slice(),
-        rapport: r && { gebouwen: r.gebouwen, woonruimte: r.woonruimte, tegels: r.tegels, graanGezien: r.graanGezien, graanVerwacht: r.graanVerwacht, goudGezien: r.goudGezien, goudVerwacht: r.goudVerwacht },
+        geschenken: I.geschenken, korting: T.innerKorting(S), gehoord: I.gehoord,
+        rapport: r && { gebouwen: r.gebouwen, woonruimte: r.woonruimte, tegels: r.tegels, graanGezien: r.graanGezien, graanVerwacht: r.graanVerwacht, goudGezien: r.goudGezien, goudVerwacht: r.goudVerwacht, korting: r.korting },
       };
     },
     // Zijn argwaan zetten (0..1), om te zien wat ze doet: Spel.debug.argwaan(0.6). Zonder getal

@@ -17,7 +17,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
-| Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd | 6 |
+| Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep) | 4, 6 |
 | Het dorp: mensen, behoeften en de winter | gebouwd (23 sep) | 3 |
 | Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
 | Handel: de marskramer | gebouwd (24 sep) | 4 |
@@ -256,13 +256,27 @@ Is rijk worden en arm lijken leuk?
 
 ## Rijk worden en arm lijken: de inner (Marcel, 24 sep 2026; werklijst punt 6)
 
-**Zo werkt het nu** (25 sep; `js/inner.js`, `js/verstoppen.js`, `js/heer.js`):
+**Zo werkt het nu** (25 sep, bijgewerkt 27 sep; `js/inner.js`, `js/verstoppen.js`, `js/heer.js`):
 - **De inner** komt op 15 oogstmaand, tien dagen vooraf aangekondigd, overdag vanaf negen uur. Sinds
-  de dag (26 sep) loopt de tijd dan door, op 1× (daarvoor stond hij stil zolang de inner er was): zijn
-  bezoek duurt een dag. Hij kijkt 7 tegels ver in een rechte lijn; huizen en schuren houden zijn blik
-  tegen.
+  de dag (26 sep) loopt de tijd dan door, op 1× (daarvoor stond hij stil zolang de inner er was). Hij
+  kijkt 7 tegels ver in een rechte lijn; huizen en schuren houden zijn blik tegen.
   Alleen loopt hij naar wat hij nog niet zag. Sta je binnen 2 tegels, dan loopt hij met je mee, tot
-  je verder dan 5 tegels wegloopt. Zijn geduld is 90 stappen.
+  je verder dan 5 tegels wegloopt. Blijf je stilstaan, dan wacht hij een half uur, en telt hij daarna
+  een uur lang zelf verder.
+- **Zijn bezoek duurt tot zonsondergang** (27 sep, vraag 42): hij moet voor donker terug zijn op het
+  kasteel, en gaat met wat hij tot dan zag. Alleen ziet hij zo het hele gehucht (tot 27 sep liep hij 90
+  stappen, en zag hij er zo'n 7 van de 11 gebouwen).
+- **Afleiden** (27 sep, vraag 42): zolang je met hem praat, staat hij stil en kijkt hij niet, en de dag
+  loopt door. Drie uur per bezoek; dan heeft hij genoeg gepraat en telt hij door. In zijn gesprek staat
+  daarvoor een praatje over het kasteel (de heer stuurde de maan een aanmaning). Drie uur praten kost hem
+  in het gehucht zo'n drie gebouwen.
+- **Omkopen** (27 sep, vraag 42): in zijn gesprek geef je hem 5, 10 of 20 goud. Per 5 goud schrijft hij
+  een tiende minder op, tot de helft: van de gebouwen laat hij weg wat hij het laatst zag, van de
+  akkertegels, het graan en de kist een even groot deel. Een op de vijf keer hoort de heer het (het
+  bericht zegt het meteen): dan telt het geschenk op Sint-Maarten als goud in je kist, en groeit de
+  argwaan met 1,5% per goud. Is zijn rapport af, dan helpt een geschenk niet meer. In het gehucht
+  bespaart een geschenk ongeveer twee keer wat het kost (25 goud: de rekening zakt van 88 naar 38 goud
+  aan waarde).
 - **Zijn rapport is de rekening:** de gebouwen die hij zag (met hun woonruimte, voor het hoofdgeld),
   het graan in de schuur en op de velden die hij zag, en het goud in de kist. Wat hij niet zag,
   betaal je dat jaar niet. Op Sint-Maarten kijkt de heer zelf nog rond vanaf het plein, en hoe
@@ -293,7 +307,8 @@ Is rijk worden en arm lijken leuk?
   langs lege plekken leidt (of langs de kelder van de vrome, waar niets ligt), is ze kwijt voor ze iets
   vinden. Vanaf 50% doorzoeken ze het hele dorp in één keer, zoals eerst.
 - **Nog open:** deel 2, het bos, met de kudde die de inner telt; deel 3, de marskramer die vee, kaas,
-  wol en hooi koopt en verkoopt; en stap 3: praten, afleiden, omkopen en de twee rekenboeken.
+  wol en hooi koopt en verkoopt; en van stap 3 de twee rekenboeken (praten, afleiden en omkopen zijn er
+  sinds 27 sep).
 - **Voorstel voor later: de inner telt de mensen die hij ziet** (Claude, 26 sep; Marcel: "Ja, als
   voorstel", nog niet te bouwen). Nu rekent hij het hoofdgeld naar de woonruimte van de huizen die hij
   zag. Sinds iedereen een poppetje is (`js/bewoners.js`), kan hij de mensen zelf tellen: wie op het

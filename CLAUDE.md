@@ -229,9 +229,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kwijt; zaaien en braak staan in `js/akkers.js`), `js/inner.js` (de inner in oogstmaand: wat hij
   ziet, in een rechte lijn en niet door huizen, `T.innerKijkt`; zijn rapport, `T.maakRapport`, dat
   `T.eisVanDeHeer` als rekening neemt; de argwaan, `T.zetArgwaan`, en wat ze doet; zijn poppetje dat
-  zijn eigen ronde loopt of met de schout mee, `T.werkInnerBij`; en `T.heerKijktRond` op
+  zijn eigen ronde loopt of met de schout mee, tot zonsondergang, `T.werkInnerBij`; en `T.heerKijktRond` op
   Sint-Maarten; sinds 25 sep telt hij ook de kist, en vertelt de marskramer hem wat hij je betaalde,
-  `T.boekMarskramer` in `js/handel.js`), `js/verstoppen.js` (de verstopplekken: de kelder van een
+  `T.boekMarskramer` in `js/handel.js`; sinds 27 sep kun je hem bespelen: wie met hem praat, houdt hem op,
+  en een geschenk in zijn gesprek (`doe: { omkopen: 10 }`, `T.koopInnerOm`) laat hem minder opschrijven,
+  `T.innerKorting`), `js/verstoppen.js` (de verstopplekken: de kelder van een
   huis of boerderij en de kapel, `T.verstopPlekVan`; wegzetten en terughalen, `T.verstop` en
   `T.haalTerug`; het karakter van wie er woont, via `huis` op de boerderij, dezelfde id als op de
   boer; en wat de soldaten vinden, `T.zoekVerstopt`), `js/boeren.js` (wie de boeren zijn, geloot per
@@ -353,7 +355,8 @@ dag (zonder getal zegt het hoe laat het is; een dag duurt vijf minuten bij 1×, 
 tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.bouw('huis', x, y)` bouwt,
 `Spel.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
 `Spel.debug.brief()` stuurt de brief van de heer nu, `Spel.debug.heer()` laat hem nu komen,
-`Spel.debug.inner()` de inner (`(true)`: onverwacht), en `Spel.debug.argwaan(0.6)` zet zijn argwaan.
+`Spel.debug.inner()` de inner (`(true)`: onverwacht; is hij er, dan zegt het tot hoe laat hij blijft, hoe
+lang je hem aan de praat hield en wat je hem gaf), en `Spel.debug.argwaan(0.6)` zet zijn argwaan.
 `Spel.debug.verstopt()` zegt wat er waar verstopt ligt en hoe vaak de soldaten het er vinden;
 `Spel.debug.verstopt('boer1', 30, 5)` zet 30 graan en 5 goud in die kelder (of `'schout'`, `'kapel'`),
 en `Spel.debug.zoeken()` laat de soldaten nu zoeken, zoals op Sint-Maarten: staat de heer op het plein,

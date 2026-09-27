@@ -48,6 +48,7 @@
 // of weg: 'marskramer' (quest zonder allebei begint hem). Zie js/quests.js voor de quests zelf.
 // En handel: true opent het handelsvenster van de marskramer (js/handel.js, js/hud.js), en
 // heer: true het venster waarin je de heer betaalt op Sint-Maarten (js/heer.js, js/hud.js).
+// omkopen: 10 geeft de inner tien goud, voor minder op zijn rapport (js/inner.js, T.koopInnerOm).
 //
 // In een zin mag {woord} staan: dat vult het spel in (T.GESPREK_WOORDEN in js/gesprek.js), zoals
 // {gisteravond}, wie er gisteravond in de herberg zat (js/herberg.js).
@@ -165,17 +166,77 @@
       situaties: [
         { naam: 'Oogstmaand: hij komt tellen', als: { vlag: 'innerOpBezoek' } },
         { naam: 'Hij komt onverwacht terug', als: { vlag: ['innerOpBezoek', 'innerOnverwacht'] } },
+        { naam: 'Hij komt tellen, en je hebt goud', als: { vlag: 'innerOpBezoek', goud: 20 } },
+        { naam: 'Hij heeft genoeg gepraat', als: { vlag: ['innerOpBezoek', 'innerUitgepraat'], goud: 20 } },
+        { naam: 'Omgekocht tot de helft', als: { vlag: ['innerOpBezoek', 'innerOmgekochtVol'], goud: 20 } },
+        { naam: 'Zijn rapport is af', als: { vlag: ['innerOpBezoek', 'innerGeteld'] } },
       ],
+      // Afleiden en omkopen (werklijst punt 4, stuk 2; vraag 42, Marcel, 27 sep): zolang je met hem
+      // praat, kijkt hij niet en loopt de dag door, tot hij genoeg gepraat heeft (innerUitgepraat). Een
+      // geschenk laat hem minder opschrijven (omkopen), tot de helft (innerOmgekochtVol). Is zijn rapport
+      // af (innerGeteld), dan verandert een praatje of een geschenk er niets meer aan. De vlaggen zet
+      // js/inner.js.
       knopen: {
         welkom: {
           tekst: [
+            { als: { vlag: 'innerGeteld' }, zeg: 'Mijn rapport is af, schout. Zijne Genade leest het vanavond. Alleen de getallen: de woorden slaat hij over.' },
+            { als: { vlag: 'innerUitgepraat' }, zeg: 'Geen praatjes meer, schout: ik moet tellen, en voor donker terug zijn op het kasteel. Zeg het onderweg maar.' },
             { als: { vlag: 'innerOnverwacht' }, zeg: 'Schout. Ik was toevallig in de buurt. Dat is niet waar: ik kwam speciaal. Zijne Genade vroeg zich af of ik wel goed geteld had. Ik tel altijd goed. Maar ik tel graag twee keer.' },
             { zeg: 'Goedendag, schout. Ik ben de inner van Zijne Genade, en ik kom tellen: de huizen, de schuren, de velden en de kist. Wat ik zie, schrijf ik op. Wat ik opschrijf, betaalt u op Sint-Maarten.' },
           ],
           keuzes: [
-            { zeg: 'Loop maar met me mee. Ik laat u alles zien.', sluit: true },
-            { zeg: 'Wat telt u precies?', naar: 'wat' },
-            { zeg: 'Tel maar raak.', sluit: true },
+            { zeg: 'Loop maar met me mee. Ik laat u alles zien.', als: { nietVlag: 'innerGeteld' }, sluit: true },
+            { zeg: 'Wat telt u precies?', als: { nietVlag: ['innerUitgepraat', 'innerGeteld'] }, naar: 'wat' },
+            { zeg: 'Hoe gaat het op het kasteel?', als: { nietVlag: ['innerUitgepraat', 'innerGeteld'] }, naar: 'kasteel' },
+            { zeg: 'Ik heb iets voor u, voor de moeite.', als: { goud: 5, nietVlag: ['innerOmgekochtVol', 'innerGeteld'] }, naar: 'geschenk' },
+            { zeg: 'Tel maar raak.', als: { nietVlag: 'innerGeteld' }, sluit: true },
+            { zeg: 'Goede reis.', als: { vlag: 'innerGeteld' }, sluit: true },
+          ],
+        },
+        kasteel: {
+          tekst: [
+            { zeg: 'Zijne Genade maakt het uitstekend. Vorige week liet hij de vijver leegscheppen, omdat hij er een gouden munt in zag liggen. Het was de maan. Hij heeft de maan nu een brief gestuurd.' },
+          ],
+          keuzes: [
+            { zeg: 'Een brief aan de maan?', naar: 'maan' },
+            { zeg: 'Loop maar met me mee.', sluit: true },
+          ],
+        },
+        maan: {
+          tekst: [
+            { zeg: 'Een aanmaning. De maan staat elke nacht boven zijn land, zegt Zijne Genade, en betaalt nooit iets. Ik moest hem tellen. Eén, schreef ik op. Zijne Genade vond het weinig.' },
+          ],
+          keuzes: [
+            { zeg: 'En wat vindt u er zelf van?', naar: 'zelf' },
+            { zeg: 'Loop maar met me mee.', sluit: true },
+          ],
+        },
+        zelf: {
+          tekst: [
+            { zeg: 'Ik vind niets, schout. Ik tel. Wie iets vindt, komt in de kerker, en daar valt niets te tellen behalve de dagen. Is het al zo laat? We staan hier maar te praten.' },
+          ],
+          keuzes: [
+            { zeg: 'Loop maar met me mee.', sluit: true },
+          ],
+        },
+        geschenk: {
+          tekst: [
+            { zeg: 'Iets voor mij? Schout, ik ben de inner van Zijne Genade. Wat ik zie, schrijf ik op. Al zie ik niet alles even goed. Mijn ogen zijn niet meer wat ze waren, zeker niet als er iets in mijn hand ligt.' },
+          ],
+          keuzes: [
+            { zeg: 'Vijf goud, voor uw ogen.', als: { goud: 5 }, doe: { omkopen: 5 }, naar: 'bedankt' },
+            { zeg: 'Tien goud.', als: { goud: 10 }, doe: { omkopen: 10 }, naar: 'bedankt' },
+            { zeg: 'Twintig goud.', als: { goud: 20 }, doe: { omkopen: 20 }, naar: 'bedankt' },
+            { zeg: 'Laat maar.', naar: 'welkom' },
+          ],
+        },
+        bedankt: {
+          tekst: [
+            { als: { vlag: 'innerOmgekochtVol' }, zeg: 'Dank u, schout. Nu ben ik de helft vergeten, en meer kan ik niet vergeten: dan valt het op, en dan hangen we allebei.' },
+            { zeg: 'Dank u, schout. Merkwaardig: ik zie ineens een stuk minder dan vanochtend. De leeftijd, zeker.' },
+          ],
+          keuzes: [
+            { zeg: 'Loop maar met me mee.', sluit: true },
           ],
         },
         wat: {

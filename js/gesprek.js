@@ -92,5 +92,7 @@
     if (doe.handel && T.ui && T.ui.openHandel) T.ui.openHandel(S);
     // De heer betalen op Sint-Maarten (js/heer.js): net zo, het venster staat in js/hud.js.
     if (doe.heer && T.ui && T.ui.openHeer) T.ui.openHeer(S);
+    // De inner een geschenk geven, voor minder op zijn rapport (js/inner.js).
+    if (doe.omkopen && T.koopInnerOm) T.koopInnerOm(S, doe.omkopen);
   };
 })(globalThis.Spel = globalThis.Spel || {});
