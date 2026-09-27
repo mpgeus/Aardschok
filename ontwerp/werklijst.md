@@ -10,18 +10,18 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (26 sep 2026, achtste sessie): ronde 4b van de huizenbouwer is af
+## De stand (27 sep 2026, negende sessie): de herberg, stuk 1 is af
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 498/498.
+`npm test`: 507/507.
 
-**Waar het werk staat:** alles staat in `main`, ook de achtste sessie van 26 sep (Marcel: "push it").
-Begin de volgende sessie dus gewoon vanaf `main`; hoe een eigen branch en `main` samengaan, staat in
-`CLAUDE.md`, onder Git.
+**Waar het werk staat:** de achtste sessie staat in `main`. De negende (27 sep) staat op de branch
+`claude/werklijst-doorzetten-ikazjp`, nog niet in `main` en nog niet gepusht: dat doet Claude als Marcel
+"push it" zegt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
 toevoegen voor we bij een speelbaar product komen." Houd je aan de volgorde hieronder. Een nieuw idee,
@@ -63,9 +63,19 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   gehucht heeft nu echte hutten, huizen van vakwerk, vijf boerderijen die niet allemaal dezelfde kant
   op staan, en elk huis weet waar zijn deur is. Marcel kreeg schermafdrukken en de plaat van de ladder.
 
-**Loopt nu (27 sep, negende sessie): de herberg** (punt 2 hieronder; vraag 35 tot en met 37), stuk 1:
-de herberg staat er, en de avond gaat erheen. Ronde 4b is af (achtste sessie, zie onder Af): wat
-Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
+**Wat er op 27 sep gebeurde** (negende sessie; details onder Af en in `spel.md`):
+- **De herberg, stuk 1** (punt 2; vraag 35 tot en met 37, Marcel: "Werklijst doorzetten"): de herberg
+  staat er vanaf het begin, in de hoek tussen het plein en de weg, van vakwerk onder riet. De
+  herbergierster woont er en brouwt zelf, en 's avonds gaan er twee à drie mensen heen, in de winter
+  meer; bij bedtijd lopen ze in het donker naar huis, en de lantaarn brandt. Marcel kreeg twee
+  schermafdrukken.
+- **Een fout gevonden en gerepareerd:** in het spel telde het karakter van wie er woont bij de kelders
+  niet (de vrome weigerde niet, de woekeraar hield niets). Twee bestanden hadden twee namen gemeen, en
+  het laatste won; de toetsen laadden dat bestand niet. Dat is precies waar vraag 25, E voor is.
+
+**Loopt nu: de herberg** (punt 2 hieronder). Stuk 1 is af (27 sep); **stuk 2 wacht op Marcel** (vraag
+38): wat de herberg voor de kern doet. Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het
+voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -87,8 +97,9 @@ voorstel van Claude, en daar gaat vraag 26 over.
    - **Stuk 3, de rest van de ladder:** in het spel alleen stap 1 en 2; de hele ladder (half steen, twee
      lagen, baksteen onder pannen) komt voor twee huizen op een plaat, zodat Marcel ziet waar het heen
      gaat (Marcel: "1 en 2 in spel, rest op plaat"). In het spel komt hij bij punt 5, Bouwen.
-2. **Nu: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel. Begin met een kort
-   plan voor Marcel (`spel.md`, "Zaken waar de mensen zelf heen gaan").
+2. **Nu: de herberg en de kleine zaken** (3b, stap 3): de avond krijgt een doel (`spel.md`, "Zaken
+   waar de mensen zelf heen gaan"). Stuk 1 is af (27 sep): de herberg staat er, en de avond gaat
+   erheen. Stuk 2 wacht op vraag 38.
 3. **Het zichtveld en de getuigen** (vraag 23; Marcels idee): 's nachts iets doen in een donker
    steegje, zonder dat iemand het ziet. Hierin gaat "wie vlak langs een plek loopt, kan iets vinden"
    uit verstoppen deel 1b op.
@@ -257,6 +268,15 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     zelf** (dat deden herbergiers vaak).
 37. ~~"Een huis groeit door wat zijn bewoners kunnen bereiken": nu, of bij punt 5?~~ **Het voorstel: bij
     punt 5,** want pas dan klimmen de huizen de ladder op.
+38. **Stuk 2 van de herberg: wat doet hij voor de kern?** (Claude, 27 sep, na stuk 1.) A: **de heer heft
+    op bier.** De inner vraagt de herbergierster wat er getapt is, zoals de marskramer hem vertelt wat hij
+    je betaalde, en de heer wil er een deel van in goud. Eenvoudig, maar je kunt er nog niets tegen doen;
+    dat komt met de keuren (bier belasten, een avondklok). B: **in de herberg wordt gepraat.** De
+    roddelaar vertelt daar wat er in zijn kelder ligt: wat je bij hem verstopt, is alleen riskant als hij
+    naar de herberg gaat. En de herbergierster vertelt jou wie er gisteravond was en wat er gezegd werd.
+    Zo speelt de herberg mee in het verstoppen, en krijg je informatie in plaats van een getal; het is
+    ook het begin van de getuigen (punt 3). C: allebei. Bij alle drie slaapt de marskramer in de herberg:
+    hij staat tien dagen op het plein. **Voorstel: B.**
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -293,6 +313,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vóór je veel bouwt.
 
 *Spelen, en zeggen hoe het voelt:*
+- **De herberg** (27 sep, negende sessie; stuk 1). Loop naar de hoek tussen het plein en de weg, en blijf
+  er tot de avond (`Spel.debug.uur(17)`): wie gaat erheen, en brandt de lantaarn? Zijn twee à drie gasten
+  per avond genoeg, en is de herberg herkenbaar zonder uithangbord? `Spel.debug.herberg()` zegt wie er
+  vanavond gaat. De getallen staan in de spelregels (`O`), onder "De herberg".
 - **De nieuwe huizen** (26 sep, achtste sessie; ronde 4b). Op de beelden beantwoord (Marcel, 27 sep):
   de boerderijen van Gerrit en Trijn mogen met hun achterkant naar je toe staan ("geeft het wat meer
   leven"), en de ladder is goed zo. Nog te spelen: bouw een hut en een huis (`B`) en kijk hoe ze in vijf
@@ -540,6 +564,18 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 27 sep 2026 — **De herberg, stuk 1** (negende sessie; punt 2, vraag 35 tot en met 37). De herberg staat
+  vanaf het begin in het gehucht, in de hoek tussen het plein en de weg, in een eigen tekening van de
+  huizenbouwer (`herberg1`: vakwerk onder riet, trede 2; de oude was van steen onder pannen). De
+  herbergierster woont er alleen (26 mensen) en brouwt van graan tot er dertig bier ligt. 's Avonds gaan
+  volwassenen erheen naar karakter, seizoen en looptijd, niet meer dan er bier is; ze gaan naar binnen
+  en lopen bij bedtijd naar hun eigen deur. Elke nacht gaat het bier op, en wie er die week was, maakt
+  het dorp tevredener. De lantaarn brandt 's avonds. `js/herberg.js`, `test/herberg.test.cjs`.
+  `npm test`: 507/507.
+- 27 sep 2026 — **De kelders telden het karakter niet** (negende sessie). `js/verstoppen.js` en
+  `js/bewoners.js` hadden `T.bewonerVan` en `T.overBewonerTekst` allebei, en het laatste bestand won:
+  in het spel weigerde de vrome niet en hield de woekeraar niets. Nu heten die van het verstoppen
+  `T.bewonerVanGebouw` en `T.overKelderTekst`, en laadt de toets ook `js/bewoners.js`.
 - 26 sep 2026 — **Ronde 4b van de huizenbouwer** (achtste sessie; punt 1, en ronde 4 van "Tegelijk: de
   huizenbouwer"). Marcel koos het plan ("1 en 2 in spel, rest op plaat"; de schout "Vakwerk op stenen
   voet"). De huizen van de huizenbouwer staan op een eigen vel, `tegels/huizen.png`, elk met een vaste
