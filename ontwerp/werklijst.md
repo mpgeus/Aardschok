@@ -17,7 +17,7 @@ en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het 
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 527/527.
+`npm test`: 533/533.
 
 **Waar het werk staat:** de negende sessie (27 sep) staat in `main` tot en met stuk 1 van het
 zichtveld (Marcel: "Ja, zet het in main"). Stuk 2 kwam daarna, en staat alleen op de eigen branch
@@ -87,15 +87,18 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   eerstvolgende avond in de herberg, en dan vinden de soldaten het op die plek twee keer zo makkelijk;
   de herbergierster vertelt het je de volgende dag. De rest zwijgt. In de spelregels kies je of je een
   getuige meteen ziet of pas later. Daarmee is punt 3 af.
+- **De kern, stuk 1: de soldaten zoeken altijd** (punt 4, vraag 41; Marcel: "A ja B ja C ja"): ook onder de
+  grens zoeken ze op Sint-Maarten, op twee of drie plekken. Ze lopen met de schout mee en doorzoeken wat
+  zijn route vlak passeert; na twee uur kiezen ze zelf, zijn eigen kelder eerst; zo vaak als zijn argwaan
+  wijst de heer ze zelf aan. Marcel kreeg een schermafdruk.
 - **Een fout gevonden en gerepareerd:** in het spel telde het karakter van wie er woont bij de kelders
   niet (de vrome weigerde niet, de woekeraar hield niets). Twee bestanden hadden twee namen gemeen, en
   het laatste won; de toetsen laadden dat bestand niet. Dat is precies waar vraag 25, E voor is.
 
-**Punt 2, de herberg, en punt 3, het zichtveld en de getuigen, zijn af** (27 sep). **Nu punt 4, de kern
-afmaken, stuk 1** (vraag 41; Marcel: "A ja B ja C ja"): de soldaten zoeken op Sint-Maarten altijd, op
-twee of drie plekken; de schout loopt voor en zij doorzoeken wat ze vlak passeren, en soms kiest de heer
-zelf. Daarna stuk 2 (de inner bespelen) en het tweede proefje. Wat Marcel kan bekijken, staat onder
-"Spelen, en zeggen hoe het voelt".
+**Punt 2, de herberg, en punt 3, het zichtveld en de getuigen, zijn af** (27 sep), **en van punt 4 stuk
+1** (de soldaten zoeken altijd). **Nu stuk 2, de inner bespelen:** het plan staat bij vraag 42 en **wacht
+op Marcel**. Daarna het tweede proefje. Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het
+voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -368,7 +371,19 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **B**, hoe vaak de heer zelf kiest. Voorstel: zo vaak als zijn argwaan (bij 30% argwaan een op de
     drie keer), en dan kiest hij de plekken die het rijkst ogen. **C**, de volgorde hierboven: eerst
     stuk 1 en 2, dan het proefje, dan de rest?
-    **Beantwoord (Marcel, 27 sep): "A ja B ja C ja".** Stuk 1 loopt.
+    **Beantwoord (Marcel, 27 sep): "A ja B ja C ja".** Stuk 1 is af.
+42. **Punt 4, stuk 2: de inner bespelen** (Claude, 27 sep, na stuk 1; wacht op Marcel). Wat er al is:
+    zolang je met de inner praat, staat hij stil en kijkt hij niet. Maar het kost hem niets: zijn bezoek
+    duurt tot zijn geduld op is (90 stappen), en praten telt daar niet mee, dus daarna telt hij gewoon
+    verder. Voorstel:
+    - **Afleiden:** zijn bezoek duurt tot zonsondergang, want hij moet voor donker terug zijn op het
+      kasteel. Zolang je met hem praat, loopt de dag door (dat doet hij nu al). Wie hem aan de praat
+      houdt, laat hem minder zien.
+    - **Omkopen:** in zijn gesprek geef je hem een geschenk van 5, 10 of 20 goud. Dan schrijft hij minder
+      op: per 5 goud een tiende minder op zijn rapport, tot de helft. Maar met een kans (een op de vijf)
+      hoort de heer het: dan telt het geschenk als goud in de kist, en wordt hij argwanend.
+    Vragen: **A**, afleiden zo (tot zonsondergang, en praten kost hem zijn dag)? **B**, omkopen zo (goud
+    tegen minder op het rapport, met een kans dat de heer het hoort)?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -659,6 +674,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 27 sep 2026 — **De kern, stuk 1: de soldaten zoeken altijd** (negende sessie; punt 4, vraag 41, Marcel:
+  "A ja B ja C ja"). Onder de grens van de argwaan zoeken de soldaten op Sint-Maarten op twee of drie
+  plekken (`js/doorzoeken.js`): ze lopen met de schout mee en doorzoeken wat zijn route vlak passeert; na
+  twee uur bij hem kiezen ze zelf, zijn eigen kelder eerst; zo vaak als zijn argwaan wijst de heer ze
+  aan; gaat hij weg voor ze klaar zijn, dan doorzoeken ze de rest nog. Vooraf opgeruimd: één rechthoek
+  per gebouw (`T.voetVanGebouw`), meelopen gedeeld met de inner (`T.loopNaastDeSchout`), en plek voor
+  plek zoeken (`T.zoekOpPlek`). `npm test`: 533/533.
 - 27 sep 2026 — **Het zichtveld, stuk 2: wat een getuige doet** (negende sessie; punt 3, vraag 40,
   Marcel: "Doorzetten"). Zag een roddelaar je iets wegzetten of terughalen, dan vertelt hij het de
   eerstvolgende avond dat hij in de herberg zit (`T.getuigenVertellen`, `js/zien.js`): de soldaten
