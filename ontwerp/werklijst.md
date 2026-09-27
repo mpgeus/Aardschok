@@ -32,7 +32,8 @@ al van af). Elk stuk begint met een plan voor Marcel.
 *1. Nu: naar een proefversie van één jaar*
 1. **De winter zichtbaar maken.** Een waarschuwing als het hout of het eten de winter niet haalt, en in het
    bericht waaraan iemand stierf. In de speeltest stierf bijna de helft van het dorp aan de kou, en de
-   speler wist niet waarom. Het grootste gat, en klein om te bouwen.
+   speler wist niet waarom. Het grootste gat, en klein om te bouwen. **Loopt:** het plan staat bij vraag
+   44 en wacht op Marcel (Marcel, 27 sep: "Goed zo, begin met de winter").
 2. **Een speeltest op de stand van nu.** De vorige liep op `main` van vóór de soldaten die altijd zoeken en
    de inner die je kunt bespelen: hoe de kern nu speelt, weet nog niemand. Een agent kan het, zoals de
    vorige keer, en Marcel speelt ook. De getallen bijstellen (het goud, de kelders, de honger, de inner)
@@ -464,6 +465,30 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     proefje speelt). **Bewaard als idee** (Marcel, 27 sep: "Push en alles als idee opslaan"): het hele
     plan, met de vier open vragen (A tot en met D), staat in `opmerkingen.md` onder "Voorstellen van
     Claude die nog niet gekozen zijn". Niet bouwen tot Marcel erom vraagt.
+44. **De winter zichtbaar maken: het plan** (Claude, 27 sep; Marcel: "Goed zo, begin met de winter";
+    wacht op Marcel). Wat er nu is: de winter duurt drie maanden (wintermaand tot en met sprokkelmaand), en
+    dan stookt elk huishouden 0,15 hout per dag. Voor het gehucht (26 mensen, 7 huishoudens) is dat zo'n
+    95 hout; het begint met 40, en alleen een houthakker brengt meer (2 per dag, het hele jaar; de
+    marskramer verkoopt geen hout). Is het hout of het eten op, dan sterft er elke dag een deel van het
+    dorp, en het bericht zegt "De winter is hard: Folkert is gestorven", niet waaraan. Vooraf zegt niets
+    het: de tevredenheid noemt het brandhout pas als het vandaag op is. Voor het vee bestaat het wel: "Het
+    hooi is over 12 dagen op, en de winter duurt nog 40 dagen." Voorstel, in één stuk:
+    - **Vooraf:** op 1 herfstmaand (drie maanden vooraf) en op 1 slachtmaand (een maand vooraf) zegt een
+      bericht of het hout en het eten de winter halen, naar wat er ligt en wat er nu per dag bijkomt (wat
+      de houthakkers gisteren hakten). Haalt het de winter niet, dan zegt het ook wat helpt: "Over een
+      maand is het winter. Het hout haalt 38 van de 90 dagen. Een houthakker hakt 2 hout per dag."
+    - **In de winter:** zoals bij het hooi, één keer per winter: "Het hout is over 12 dagen op, en de
+      winter duurt nog 40 dagen." Het hooi en het hout zeggen het op dezelfde manier, uit één regel.
+    - **In de balk:** bij de muis op het hout staat voor hoeveel van de 90 winterdagen het genoeg is, en
+      het cijfer wordt rood als dat de winter niet haalt.
+    - **Waaraan iemand stierf:** "De kou is hard, want het hout is op: Folkert is gestorven." Of de
+      honger, want het eten is op, of allebei.
+    - Het eten gaat net zo (graan, kaas en vlees, en de melk van de koeien, tegen wat het dorp eet), maar
+      dat was in de speeltest niet het probleem.
+    Vragen: **A**, wanneer waarschuwen: drie maanden en een maand vooraf, en dan in de winter zelf? **B**,
+    het rode cijfer in de balk ook? **C**, sneeuw of rijp in het beeld, zodat je de winter ook ziet (nu is
+    het gehucht in de winter alleen donkerder)? Voorstel: niet nu, want dat is tekenwerk voor elke tegel,
+    boom en elk dak; wel op de lijst, na de proefversie.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
