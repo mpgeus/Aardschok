@@ -72,6 +72,11 @@ const HUIZEN = {
   // ── de schout: trede 3, steen beneden en vakwerk erboven (Marcel: "Vakwerk op stenen voet") ──
   // niemand bouwt het huis van de schout, dus geen bouwfases (bouwfasen.cjs)
   schoutshuis: { gebouw: 'huis', trede: 3, fasen: false, zaad: 41, vorm: 'rechthoek', b: 8, d: 6, lagen: 2, nok: 'x', dak: 'riet', wand: 'veldsteen', boven: 'vakwerk', schoor: false, uit: { luiken: true, bakken: 2 } },
+  // ── de herberg van het gehucht (27 sep, werklijst punt 2): trede 2, vakwerk onder riet zoals de
+  // huizen, maar hoger, met een zolder en dakkapellen, en zijn deur aan de weg. De oude tekening
+  // (tegels/gebouwen.png) is van steen onder pannen: trede 4 à 5, dus te rijk voor een gehucht.
+  // Hij staat op de kaart (gereedschap/tiled/maak-gehucht.cjs), niemand bouwt hem, dus geen bouwfases ──
+  herberg1: { gebouw: 'herberg', trede: 2, fasen: false, zaad: 51, vorm: 'rechthoek', b: 7, d: 5, lagen: 1.5, nok: 'y', dak: 'riet', wand: 'vakwerk', plint: 40, schoorsteen: 'leem', schoor: false, uit: { kapellen: 2, luiken: true, bakken: 2 } },
 };
 
 // ---------------------------------------------------------------- meten: voet en deur

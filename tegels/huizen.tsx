@@ -135,8 +135,10 @@
  </tile>
  <tile id="16">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="herberg1"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="5x7"/>
+    <property name="deur" value="5,2"/>
   </properties>
  </tile>
  <tile id="17">

@@ -31,7 +31,7 @@ test('elke opgave ligt vast, ook de uitbouwen', () => {
     assert.ok(o.uit !== undefined, `${naam}: geen uit`);
     assert.ok(Number.isInteger(o.zaad), `${naam}: geen zaad`);
     assert.ok(o.vorm && o.b && o.d && o.lagen && o.nok && o.dak && o.wand, `${naam}: de opgave is niet helemaal uitgeschreven`);
-    assert.ok(['hut', 'huis', 'boerderij'].includes(o.gebouw), `${naam}: onbekend gebouw ${o.gebouw}`);
+    assert.ok(T.GEBOUWEN[o.gebouw], `${naam}: onbekend gebouw ${o.gebouw}`);
   }
 });
 

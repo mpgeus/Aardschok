@@ -8997,13 +8997,24 @@
       ]
      },
      {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
+      "naam": "herberg1",
+      "vast": true,
+      "beslaat": [
+       5,
+       7
+      ],
       "groep": null,
       "staat": null,
-      "deur": null,
-      "doos": null
+      "deur": [
+       5,
+       2
+      ],
+      "doos": [
+       273,
+       382,
+       201,
+       179
+      ]
      },
      {
       "naam": null,
