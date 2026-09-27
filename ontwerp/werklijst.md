@@ -103,9 +103,10 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
 **Punt 2, de herberg, en punt 3, het zichtveld en de getuigen, zijn af** (27 sep), **en van punt 4 stuk
 1 en 2** (de soldaten zoeken altijd; de inner afleiden en omkopen). De getallen daarvan blijven voorlopig
 zoals ze zijn (Marcel, 27 sep: "We gaan later finetunen"). **Nu het tweede proefje:** een heel jaar spelen
-en kijken of rijk worden en arm lijken leuk is (punt 4 hieronder). Claude stelde voor het twee keer te
-spelen, eerlijk en sluw, en op te schrijven wat sluw zijn oplevert; Marcel speelt het ook. Wat Marcel kan
-bekijken, staat onder "Spelen, en zeggen hoe het voelt".
+en kijken of rijk worden en arm lijken leuk is (punt 4 hieronder). Dat jaar speelt een andere agent nu
+voor Marcel (27 sep: "Ik heb een andere agent al een op een test playthrough van een jaar staan"): begin
+er dus niet zelf aan, en wacht op wat eruit komt. Wat Marcel kan bekijken, staat onder "Spelen, en zeggen
+hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -140,7 +141,7 @@ voorstel van Claude, en daar gaat vraag 26 over.
      2 of 3 plekken, en je bepaalt de route zelf, maar soms kiest de heer;
    - **Af (27 sep), stuk 2:** van stap 3 van de inner praten, afleiden en omkopen (vraag 42);
    - **nu: het tweede proefje:** een heel jaar spelen, van het voorjaar tot Sint-Maarten, en kijken of
-     rijk worden en arm lijken leuk is. Marcel speelt het ook;
+     rijk worden en arm lijken leuk is. Een andere agent speelt het nu voor Marcel (27 sep);
    - deel 2, het bos met de kudde (Marcel, 25 sep): een plek in het bos voor graan en goud (ver lopen,
      muizen en vocht), en een deel van de kudde het bos in voor de inner komt; hij telt de kudde, de
      heer vraagt per dier, en kaas en wol zijn sporen (dat is ook stap 3 van de weides);
