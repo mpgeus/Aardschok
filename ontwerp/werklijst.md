@@ -20,8 +20,8 @@ de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) l
 `npm test`: 522/522.
 
 **Waar het werk staat:** de achtste sessie staat in `main`. De negende (27 sep) staat op de branch
-`claude/werklijst-doorzetten-ikazjp`, nog niet in `main` en nog niet gepusht: dat doet Claude als Marcel
-"push it" zegt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+`claude/werklijst-doorzetten-ikazjp`, gepusht (Marcel: "Push"), maar nog niet in `main`: dat gebeurt als
+Marcel erom vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
 toevoegen voor we bij een speelbaar product komen." Houd je aan de volgorde hieronder. Een nieuw idee,
