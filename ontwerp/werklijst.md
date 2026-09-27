@@ -92,8 +92,8 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   het laatste won; de toetsen laadden dat bestand niet. Dat is precies waar vraag 25, E voor is.
 
 **Punt 2, de herberg, en punt 3, het zichtveld en de getuigen, zijn af** (27 sep). **Nu komt punt 4, de
-kern afmaken:** Claude begint met een kort plan voor Marcel, en bouwt pas als hij het goed vindt. Wat
-Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
+kern afmaken:** het plan staat bij vraag 41 en **wacht op Marcel**; Claude bouwt pas als hij het goed
+vindt. Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
