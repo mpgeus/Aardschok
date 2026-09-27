@@ -91,9 +91,11 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   niet (de vrome weigerde niet, de woekeraar hield niets). Twee bestanden hadden twee namen gemeen, en
   het laatste won; de toetsen laadden dat bestand niet. Dat is precies waar vraag 25, E voor is.
 
-**Punt 2, de herberg, en punt 3, het zichtveld en de getuigen, zijn af** (27 sep). **Nu komt punt 4, de
-kern afmaken:** het plan staat bij vraag 41 en **wacht op Marcel**; Claude bouwt pas als hij het goed
-vindt. Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
+**Punt 2, de herberg, en punt 3, het zichtveld en de getuigen, zijn af** (27 sep). **Nu punt 4, de kern
+afmaken, stuk 1** (vraag 41; Marcel: "A ja B ja C ja"): de soldaten zoeken op Sint-Maarten altijd, op
+twee of drie plekken; de schout loopt voor en zij doorzoeken wat ze vlak passeren, en soms kiest de heer
+zelf. Daarna stuk 2 (de inner bespelen) en het tweede proefje. Wat Marcel kan bekijken, staat onder
+"Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -366,6 +368,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **B**, hoe vaak de heer zelf kiest. Voorstel: zo vaak als zijn argwaan (bij 30% argwaan een op de
     drie keer), en dan kiest hij de plekken die het rijkst ogen. **C**, de volgorde hierboven: eerst
     stuk 1 en 2, dan het proefje, dan de rest?
+    **Beantwoord (Marcel, 27 sep): "A ja B ja C ja".** Stuk 1 loopt.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

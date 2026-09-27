@@ -480,6 +480,12 @@ Nog open na deel 1 (vragen van Claude):
 - **Verstoppen krijgt ook onder de grens een risico (deel 1b, nog te bouwen):** de soldaten zoeken op
   Sint-Maarten altijd op 2 of 3 plekken, ook zonder argwaan; wie vlak langs een plek loopt, kan
   iets vinden; en je bepaalt de route zelf, maar soms wil de heer kiezen.
+- **Hoe (27 sep; werklijst, vraag 41; Marcel: "A ja B ja C ja"):** de schout loopt voor, en de soldaten
+  lopen met hem mee (zoals de inner nu met je meeloopt) en doorzoeken elke plek die ze vlak passeren, tot
+  ze er twee of drie hebben gehad; leidt hij ze te weinig langs, dan kiezen ze er zelf bij, zijn eigen
+  kelder eerst (A). Zo vaak als de argwaan van de heer (bij 30% een op de drie keer) kiest de heer zelf,
+  en dan de plekken die het rijkst ogen (B). Eerst dit en de inner bespelen, dan het tweede proefje,
+  dan de rest van punt 4 (C).
 - **De heer kijkt rond naar gelang zijn argwaan (gebouwd, 25 sep):** zonder argwaan kijkt hij niet,
   en hoe argwanender, hoe verder, tot zes tegels vanaf 50% (`heerZichtVol` in de werkbank).
 
