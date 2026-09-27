@@ -9,6 +9,22 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De herberg, wat nog ruw is** (27 sep, na stuk 1; `spel.md`, "Zaken waar de mensen zelf heen gaan"):
+  - Er hangt nog geen uithangbord: je herkent de herberg aan de lantaarn en het bankje bij de deur, en
+    aan zijn zolder met dakkapellen. Een bord is tekenwerk voor de huizenbouwer.
+  - Wie er in het dorp een bouwt, krijgt de oude tekening van steen onder pannen. Een herberg per trede
+    hoort bij punt 5 (bouwen), net als de huizen.
+  - In het voorjaar kan het graan op raken, en dan staat de herberg droog: de herbergierster brouwt
+    alleen van wat er na het eten over is. Het dorp mist dan bier, en tot de oogst is er niemand.
+  - De drinker gaat elke avond, ook van ver: van de verste boerderij loopt hij ruim twee uur heen en
+    is hij pas om half twee thuis. Dat hij 's ochtends later begint (`spel.md`, "Het karakter zie je aan
+    het ritme"), is er nog niet.
+  - Bij de muis zegt de herberg na bedtijd nog "vanavond": dat is dan de avond die net voorbij is.
+  - Het telt maar één herberg (de eerste). Komen er meer, dan hoort ieder naar de dichtstbijzijnde te
+    gaan.
+  - De herbergierster zegt nog niets (klikken doet niets); haar nieuws komt in stuk 2.
+  - De toetsen van de dag en de bewoners kijken nu om twee uur 's nachts of iedereen binnen is, niet
+    meer om half twaalf: wie van ver in de herberg zat, is later thuis.
 - **De poppetjes, wat nog ruw is** (26 sep, na stap 2; `spel.md`, "Mensen worden poppetjes"):
   - Een knaap of meid draagt het vel van een jongen of meisje, en een oude vrouw dat van de boerin
     met het karakter "de oudste". Eigen vellen (een knaap, een oude vrouw, een kind in werkkleren)

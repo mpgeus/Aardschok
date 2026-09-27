@@ -108,6 +108,14 @@
 
   T.isWerktijd = (dag, oogst) => T.dagdeelVan(dag, oogst) === 'werk';
 
+  // Is het op deze dag oogst, van het graan of het hooi? Dan werkt iedereen tot het donker, en begint de
+  // avond later (js/herberg.js). Zonder js/akkers.js (een toets die het niet laadt) nooit.
+  T.isOogstDag = function (dag) {
+    if (!T.akkerStadium || !T.datumVanDag) return false;
+    const d = T.datumVanDag(dag);
+    return T.akkerStadium(d.maand, d.dagVanMaand) === 'rijp' || !!(T.isHooitijd && T.isHooitijd(d));
+  };
+
   // Het uur zoals je het zegt: "zeven uur", "half acht". Wat voor of na de middag is, zegt het deel
   // van de dag dat de balk eronder zet (js/hud.js).
   const GETALLEN = ['twaalf', 'een', 'twee', 'drie', 'vier', 'vijf', 'zes', 'zeven', 'acht', 'negen', 'tien', 'elf'];
@@ -146,7 +154,7 @@
   //   - 's ochtends op zijn erf, en wie van het gezin water haalt, bij de put;
   //   - overdag, bij het werk en de schaft, bij zijn werk. Wie geen werk heeft: een kind op het plein,
   //     een oude en een kleuter bij huis (de plekken zet js/bewoners.js, per bewoner);
-  //   - 's avonds op zijn erf. De herberg komt in stap 3 van punt 3b;
+  //   - 's avonds op zijn erf, of in de herberg als hij vanavond gaat (js/herberg.js, T.herbergAnker);
   //   - wie net in het gehucht komt, eerst naar zijn huis, en wie wegtrekt, overdag naar de uitgang
   //     van de kaart (js/bewoners.js, T.werkBewonersBij).
   // Een boer volgt hetzelfde, maar overdag geeft dit voor hem null: dan geldt zijn eigen anker
@@ -166,6 +174,9 @@
     // T.werkBewonersBij).
     if (e.vertrekt) return { x: e.vertrekt.x, y: e.vertrekt.y, straal: 1 };
     const erf = { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
+    // 's Avonds de herberg in, wie vanavond gaat (ook een boer, en de herbergierster zelf).
+    const herberg = deel === 'avond' && T.herbergAnker ? T.herbergAnker(S, e) : null;
+    if (herberg) return herberg;
     if (!p) return deel === 'ochtend' || deel === 'avond' ? erf : null;
     if (p.komt) return erf;
     const plek = p.plek || {};

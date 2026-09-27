@@ -303,6 +303,21 @@
     verloop.addColorStop(1, `rgba(12, 18, 40, ${l.donker.toFixed(3)})`);
     ctx.fillStyle = verloop;
     ctx.fillRect(0, 0, bw, bh);
+    // Warm licht in het donker: de lantaarn van de herberg, 's avonds, warmer naarmate er meer gasten
+    // binnen zitten (js/herberg.js, T.herbergLicht). Zo zie je van ver waar het dorp 's avonds is.
+    for (const b of T.herbergLicht ? T.herbergLicht(S) : []) {
+      const q = T.naarScherm(b.x, b.y);
+      const lx = Math.round(bw / 2) + (q.x - Math.round(S.camera.x)) * S.zoom;
+      const ly = Math.round(bh / 2) + (q.y - 24 - Math.round(S.camera.y)) * S.zoom;
+      const r = Math.max(1, b.straal * 32 * S.zoom);
+      const gloed = ctx.createRadialGradient(lx, ly, 0, lx, ly, r);
+      // Vol als het nacht is, zwakker in de schemering.
+      const nacht = Math.min(1, l.donker / ((T.DAG_INSTELLINGEN && T.DAG_INSTELLINGEN.nachtDonker) || 0.68));
+      gloed.addColorStop(0, `rgba(255, 186, 104, ${(b.sterkte * nacht).toFixed(3)})`);
+      gloed.addColorStop(1, 'rgba(255, 186, 104, 0)');
+      ctx.fillStyle = gloed;
+      ctx.fillRect(lx - r, ly - r, 2 * r, 2 * r);
+    }
   }
 
   // Gras op een weide (js/akkers.js: T.akkerTegelStadium geeft 'weide'; spel.md, "Weides met koeien

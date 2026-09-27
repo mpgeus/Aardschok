@@ -294,33 +294,37 @@
     return t ? { x: t.x, y: t.y, straal: IN().straalPlein } : bijHuis;
   }
 
-  // Hoe lang iemand onderweg is van zijn deur naar zijn werk, in uren (stuk 2; Marcel koos op 26 sep
-  // de looptijd): langs de weg die zijn poppetje ook loopt (T.zoekPad tot binnen de straal van zijn
-  // werkplek, zonder anderen in de weg), met zijn eigen snelheid, en schuin telt als √2, zoals bij het
-  // lopen zelf (js/anim.js). Een uur is T.DAG_LENGTE / 24 seconden van de wereld. Een pad zoeken kost
-  // een paar milliseconden, en dit gebeurt elke dag voor iedereen die werkt; daarom bewaart hij zijn
-  // weg (p.wegNaarWerk), zolang zijn deur en zijn werkplek dezelfde zijn en er niets op staat.
-  function looptijd(w, p, deur) {
-    const doel = p.plek.werk;
+  // Hoe lang iemand onderweg is van `van` naar `doel` (tot binnen doel.straal), in uren (stuk 2; Marcel
+  // koos op 26 sep de looptijd): langs de weg die zijn poppetje ook loopt (T.zoekPad, zonder anderen in
+  // de weg), met zijn eigen snelheid, en schuin telt als √2, zoals bij het lopen zelf (js/anim.js). Een
+  // uur is T.DAG_LENGTE / 24 seconden van de wereld. Een pad zoeken kost een paar milliseconden, en dit
+  // gebeurt elke dag voor iedereen; daarom bewaart hij zijn weg per doel (p.wegen[sleutel]: 'werk', of
+  // 'herberg' in js/herberg.js), zolang begin en doel dezelfde zijn en er niets op staat.
+  T.looptijdVan = function (w, p, van, doel, sleutel) {
     if (!doel) return 0;
     const straal = doel.straal || 0;
-    let o = p.wegNaarWerk;
-    const zelfde = o && o.van.x === deur.x && o.van.y === deur.y && o.doel.x === doel.x && o.doel.y === doel.y && o.straal === straal;
+    const wegen = p.wegen || (p.wegen = {});
+    let o = wegen[sleutel];
+    const zelfde = o && o.van.x === van.x && o.van.y === van.y && o.doel.x === doel.x && o.doel.y === doel.y && o.straal === straal;
     if (!zelfde || !o.pad.every((t) => T.isBegaanbaar(w, t.x, t.y))) {
-      const pad = T.zoekPad(deur, doel, (x, y) => T.isBegaanbaar(w, x, y), (x, y) => T.isVast(w, x, y), { tot: straal });
+      const pad = T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y), (x, y) => T.isVast(w, x, y), { tot: straal });
       let lengte = 0;
-      let vorig = deur;
+      let vorig = van;
       for (const t of pad || []) {
         lengte += Math.hypot(t.x - vorig.x, t.y - vorig.y);
         vorig = t;
       }
       // Geen weg (een kaart die niet overal aansluit): hemelsbreed.
-      if (!pad) lengte = Math.max(0, T.afstand(deur, doel) - straal);
-      o = p.wegNaarWerk = { van: { x: deur.x, y: deur.y }, doel: { x: doel.x, y: doel.y }, straal, pad: pad || [], lengte };
+      if (!pad) lengte = Math.max(0, T.afstand(van, doel) - straal);
+      o = wegen[sleutel] = { van: { x: van.x, y: van.y }, doel: { x: doel.x, y: doel.y }, straal, pad: pad || [], lengte };
     }
-    const snelheid = IN()[T.LEEFTIJDEN[p.leeftijd].snelheid] || 1;
+    // Zijn eigen snelheid: die van zijn poppetje (een boer loopt zoals T.MENSEN zegt), anders die van
+    // zijn leeftijd.
+    const snelheid = (p.wezen && p.wezen.snelheid) || IN()[T.LEEFTIJDEN[p.leeftijd].snelheid] || 1;
     return o.lengte / snelheid / (T.DAG_LENGTE / 24);
-  }
+  };
+  // Van zijn deur naar zijn werk.
+  const looptijd = (w, p, deur) => T.looptijdVan(w, p, deur, p.plek.werk, 'werk');
 
   // Zijn plekken opnieuw uitrekenen: bij een nieuw poppetje, en elke dag na het verdelen van het werk
   // (zijn werk kan veranderd zijn). T.dagAnker (js/dag.js) kiest er per deel van de dag een uit.
@@ -372,11 +376,13 @@
   // Het karakter van een boer: het geloote (js/boeren.js), anders zoals hij geschreven is.
   const karakterVan = (boer) => boer.karakter || (T.MENSEN[boer.wie] && T.MENSEN[boer.wie].karakter) || null;
 
-  // Het gezin op een boerderij: de boer (zijn wezen staat al op de kaart), en wie er naar zijn
-  // karakter bij woont.
-  function gezinVanBoer(S, g, boer, r) {
-    const vast = GEZIN_VAN_KARAKTER[karakterVan(boer)] || {};
+  // Het gezin van wie de kaart met naam in zijn huis zet: een boer op zijn boerderij, of de
+  // herbergierster in haar herberg. Hij zelf (zijn wezen staat al op de kaart), en wie er naar zijn
+  // karakter bij woont. Wie geen karakter heeft, zegt in T.MENSEN wie er bij hem woont (`gezin`,
+  // js/mensen.js: de herbergierster woont alleen); anders een man of vrouw en een kind of ouder.
+  function gezinVanMens(S, g, boer, r) {
     const m = T.MENSEN[boer.wie] || {};
+    const vast = GEZIN_VAN_KARAKTER[karakterVan(boer)] || (m.gezin ? { partner: false, anderen: m.gezin } : {});
     const hoofd = nieuweBewoner(S, { wie: boer.wie, geslacht: m.geslacht || 'man', leeftijd: vast.hoofd || 'volwassen', gezin: S.bewoners.gezinnen++, huis: g, wezen: boer });
     const anderen = [];
     if (vast.partner !== false) anderen.push(partnerVan(hoofd));
@@ -635,8 +641,9 @@
         zetGezin(S, schout, SCHOUTSGEZIN, r);
         continue;
       }
-      const boer = g.huis && w.wezens.find((e) => e.wie === g.huis && !e.dood);
-      if (boer) gezinVanBoer(S, g, boer, r);
+      // Een boer op zijn boerderij, of de herbergierster in de herberg: `huis` zegt wie.
+      const mens = g.huis && w.wezens.find((e) => e.wie === g.huis && !e.dood);
+      if (mens) gezinVanMens(S, g, mens, r);
     }
     // De gewone huizen, zoals de kaart zegt: eerst een oud stel, dan een jong gezin van wie er nog
     // over is. Een huis zonder "bewoners" blijft leeg, voor wie later komt.
@@ -784,7 +791,10 @@
     if (!p || p.schout || p.wie) return '';
     let wie = naamVan(p);
     if (p.hoofd) wie += `, ${p.band} van ${naamVan(p.hoofd)}`;
-    const werk = e && e.vertrekt ? 'trekt weg' : p.komt ? 'nieuw in het gehucht' : werkTekst(S, p);
+    const werk = e && e.vertrekt ? 'trekt weg'
+      : p.komt ? 'nieuw in het gehucht'
+      : T.gaatNaarDeHerberg && T.gaatNaarDeHerberg(S, p) ? 'naar de herberg' // 's avonds (js/herberg.js)
+      : werkTekst(S, p);
     return werk ? `${wie} · ${werk}` : wie;
   };
 })(globalThis.Spel = globalThis.Spel || {});

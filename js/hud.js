@@ -93,10 +93,18 @@
     '<path d="M5 4.5c2.3 1.2 4.5 1.2 7 0s4.7-1.2 7 0c-1.2 3.2-1.2 6.3 0 9.3s1.2 4 0 5.7c-2.3-1.2-4.5-1.2-7 0s-4.7 1.2-7 0c1.2-2.2 1.2-4.4 0-7.2s-1.2-5.4 0-7.8z" fill="#a0784a" stroke="#c89a5a" stroke-width="1.1" stroke-linejoin="round"/>' +
     '<circle cx="10" cy="10" r="1.3" fill="#7d5a34"/><circle cx="14.5" cy="13.5" r="1.1" fill="#7d5a34"/><circle cx="11" cy="15.5" r="0.9" fill="#7d5a34"/>' +
     '</svg>';
+  // De herberg (js/herberg.js): een aarden kan, met schuim, zoals de herbergierster hem tapt.
+  const BIER_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M5.5 8.5h10v11c0 .8-.7 1.5-1.5 1.5H7c-.8 0-1.5-.7-1.5-1.5z" fill="#c9972f" stroke="#e2b64a" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<path d="M15.5 11h2.2c1 0 1.8.8 1.8 1.8v2.4c0 1-.8 1.8-1.8 1.8h-2.2" fill="none" stroke="#e2b64a" stroke-width="1.5"/>' +
+    '<path d="M5 8.8c-.9-1.8.4-3.8 2.3-3.5.6-1.4 2.5-1.8 3.6-.8 1-1 2.9-.7 3.4.7 1.8-.2 2.8 1.9 1.7 3.6z" fill="#f5eedc" stroke="#e6dcc3" stroke-width="1" stroke-linejoin="round"/>' +
+    '<path d="M8.5 12v6M12.5 12v6" stroke="#9c7424" stroke-width="1.1" stroke-linecap="round"/>' +
+    '</svg>';
   const GRONDSTOF_ICOON = {
     goud: GOUD_ICOON, graan: GRAAN_ICOON, wol: WOL_ICOON, hout: HOUT_ICOON,
     ijzer: IJZER_ICOON, zout: ZOUT_ICOON, gereedschap: GEREEDSCHAP_ICOON, kaas: KAAS_ICOON,
-    hooi: HOOI_ICOON, mest: MEST_ICOON, vlees: VLEES_ICOON, huiden: HUIDEN_ICOON,
+    hooi: HOOI_ICOON, mest: MEST_ICOON, vlees: VLEES_ICOON, huiden: HUIDEN_ICOON, bier: BIER_ICOON,
   };
   const GRONDSTOF_UITLEG = {
     goud: 'Goud. Wat de heer het liefst ziet.',
@@ -111,12 +119,13 @@
     mest: 'Mest. Uit de schaapskooi: leg hem in het veldenvenster (V) op een akker, dan wordt die vruchtbaarder.',
     vlees: 'Vlees. Van het slachten: het vult een maag. Wat je niet zout, bederft, dus dat eet het dorp eerst op; gezouten vlees bewaart het tot het graan op is.',
     huiden: 'Huiden. Van het slachten.',
+    bier: 'Bier. De herbergierster brouwt het van graan, en wie \'s avonds in de herberg zit, drinkt het. Wie er deze week was, is tevredener.',
   };
   // Deze staan pas in de balk als het dorp ze eens gehad heeft (S.gehad, js/voorraad.js): in het
-  // begin blijft de balk kort. Kaas en hooi staan naast het graan, want het is allemaal eten, voor
-  // mens of dier; de rest achteraan.
-  const BALK_LATER = ['kaas', 'hooi', 'vlees', 'ijzer', 'zout', 'gereedschap', 'mest', 'huiden'];
-  const NAAST_GRAAN = ['kaas', 'hooi', 'vlees'];
+  // begin blijft de balk kort. Kaas, hooi, vlees en bier staan naast het graan, want het is allemaal
+  // eten en drinken, voor mens of dier; de rest achteraan.
+  const BALK_LATER = ['kaas', 'hooi', 'vlees', 'bier', 'ijzer', 'zout', 'gereedschap', 'mest', 'huiden'];
+  const NAAST_GRAAN = ['kaas', 'hooi', 'vlees', 'bier'];
   const BALK = T.GRONDSTOFFEN.flatMap((wat) => (wat === 'graan' ? ['graan', ...NAAST_GRAAN] : [wat]))
     .concat(BALK_LATER.filter((wat) => !NAAST_GRAAN.includes(wat)));
   // Het aantal mensen, en hoeveel woonruimte er is (js/gebouwen.js): dezelfde stijl als een

@@ -17,7 +17,7 @@
 //   2. Brandhout: hout of turf, per huishouden per dag, maar alleen gestookt in de winter.
 //   3. Een kerk: heeft het dorp een klare kapel (T.GEBOUWEN.kapel.kerk)?
 //   4. Daaruit volgt S.behoeften.tevredenheid (0..1) en S.behoeften.mist (wat het dorp mist, voor
-//      de balk, js/hud.js).
+//      de balk, js/hud.js). Wie deze week in de herberg was, maakt het dorp wat tevredener (js/herberg.js).
 //   5. Wat tevredenheid doet: hoe hard er gewerkt wordt (js/gebouwen.js, stap 6), of er een gezin
 //      bijkomt (js/gebouwen.js, stap 4) of juist wegtrekt (hieronder), en of een huis doorgroeit.
 //   6. De winter: een tekort aan brandhout of eten kost mensen — geen apart scherm, alleen een
@@ -135,18 +135,23 @@
     // mist het dorp niet, daar heeft het last van; het gaat eraf, tot niet onder nul.
     const heer = T.heerOntevredenheid ? T.heerOntevredenheid(S, dag) : { minder: 0, waarom: [] };
 
-    const tevredenheid = Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor - heer.minder);
+    // De herberg (js/herberg.js, sinds 27 sep): wie er deze week was, is tevredener. Dat komt erbij,
+    // tot niet boven de één; zonder herberg is het nul.
+    const gezelligheid = T.herbergGezelligheid ? T.herbergGezelligheid(S, dag) : 0;
+
+    const tevredenheid = Math.min(1, Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + gezelligheid - heer.minder));
 
     const mist = [];
     if (voedselDekking < 1) mist.push('eten');
     if (brandhoutDekking < 1) mist.push('brandhout voor de winter');
     if (!heeftKerk) mist.push('een kerk');
+    if (T.herbergDroog && T.herbergDroog(S)) mist.push('bier');
 
     return {
       tevredenheid, mist, last: heer.waarom, inWinter,
       voedselDekking, extraSoorten, voedselFactor,
       brandhoutDekking, brandhoutBenodigd, brandhoutVoorraad, brandhoutFactor,
-      huishoudens, heeftKerk, kerkFactor,
+      huishoudens, heeftKerk, kerkFactor, gezelligheid,
     };
   };
 
@@ -357,6 +362,7 @@
     S.behoeften.tevredenheid = b.tevredenheid;
     S.behoeften.mist = b.mist;
     S.behoeften.last = b.last;
+    S.behoeften.gezelligheid = b.gezelligheid;
 
     // De extra soorten worden ook echt opgegeten, anders stapelt de moestuin zich oneindig op.
     let bederfelijkGegeten = 0;

@@ -172,7 +172,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zet dit bestand. Komen en gaan zie je (`T.werkBewonersBij`, elk beeld): een nieuw gezin komt overdag
   over de weg binnen, op dezelfde manier als een bezoeker (`T.bezoekerKomtAan`), en wie wegtrekt,
   loopt de weg af; het bericht zegt wie het zijn. Werk telt in uren (`T.werkUrenVan`, een optie): een
-  werkplaats maakt naar de uren dat zijn mensen er echt zijn, min de weg van hun deur erheen.
+  werkplaats maakt naar de uren dat zijn mensen er echt zijn, min de weg van hun deur erheen. Hoe lang
+  iemand ergens heen loopt, zegt `T.looptijdVan` (ook voor de herberg).
+- `js/herberg.js`: **de herberg** (werklijst punt 2, 27 sep): wie er 's avonds heen gaat
+  (`T.herbergGasten`: naar karakter, seizoen en looptijd, en niet meer dan er bier is), het anker voor de
+  avond (`T.herbergAnker`, dat `T.dagAnker` vraagt), de afrekening elke nacht (`T.tikHerbergDag`: bier op,
+  en wie er was, maakt het dorp tevredener), en de lantaarn 's avonds (`T.herbergLicht`). Het brouwen is
+  gewoon werk van het gebouw (`T.GEBOUWEN.herberg.maakt`, met `tot`: tot er genoeg ligt). In het gehucht
+  staat hij vanaf het begin, en de herbergierster woont er.
 - `js/akkers.js`: **alleen het gehucht** (`ontwerp/spel.md`): welk stadium een
   akker heeft op welke dag (`T.AKKER_STADIA`, één tabel, `T.akkerStadium`), het windbeeld per
   tegel (`T.windBeeld`) en zijn vaste variant (`T.akkerVariant`), waar een boer in het
@@ -332,6 +339,8 @@ blijven binnen de weide en geven melk (`js/vee.js`); een schaap gaat naar de hei
 een open plek bij de schout. `Spel.debug.bewoners()` zegt per bewoner wie het is, zijn huis, zijn werk,
 waar hij staat en waar hij nu hoort (`('herder')` zoekt er een). `Spel.debug.gezin()` laat nu een
 gezin komen (overdag over de weg; er moet een huis met plaats zijn), `(-4)` laat er een wegtrekken.
+`Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
+en het bier (`(30)` zet eerst 30 bier).
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1
 slachtmaand).
 De spelregels die de browser onthield (`localStorage`, `aardschok.spelregels`) gelden ook voor wie

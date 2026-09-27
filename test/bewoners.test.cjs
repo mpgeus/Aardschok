@@ -8,7 +8,7 @@ for (const f of [
   'js/tijd.js', 'js/dag.js', 'js/voorraad.js', 'js/wereld.js', 'beelden/beschrijving.js', 'tegels/tegels.js',
   'kaarten/kaarten.js', 'js/mensen.js', 'js/vee.js', 'js/gebouwen.js', 'js/behoeften.js', 'js/handel.js',
   'js/heer.js', 'js/inner.js', 'js/verstoppen.js', 'js/kaart.js', 'js/gebied.js', 'js/pad.js', 'js/akkers.js',
-  'js/boeren.js', 'js/bewoners.js', 'js/anim.js', 'js/verkennen.js',
+  'js/boeren.js', 'js/bewoners.js', 'js/herberg.js', 'js/anim.js', 'js/verkennen.js',
 ]) require('../' + f);
 const T = globalThis.Spel;
 const IN = T.BEWONERS_INSTELLINGEN;
@@ -114,7 +114,7 @@ function bouwHuis(S) {
 
 test('bij een nieuw spel is er één bewoner per mond, elk met een huis en een poppetje', () => {
   const S = gehucht();
-  assert.equal(S.bevolking, 25, 'zoveel als de kaart zegt ("beginBevolking")');
+  assert.equal(S.bevolking, 26, 'zoveel als de kaart zegt ("beginBevolking"): 25, en sinds 27 sep de herbergierster');
   assert.ok(S.woonruimte > S.bevolking, 'ook al is er plaats voor meer');
   assert.equal(mensen(S).length, S.bevolking, 'het getal in de balk blijft de waarheid');
   for (const g of S.gebouwen) {
@@ -125,7 +125,7 @@ test('bij een nieuw spel is er één bewoner per mond, elk met een huis en een p
     assert.ok(p.wezen, `${p.id} heeft een poppetje`);
     assert.ok(S.wereld.wezens.includes(p.wezen), `${p.id} staat in de wereld`);
   }
-  assert.equal(nieuwe(S).length, 19, 'de schout en de vijf boeren stonden er al; de rest is nieuw');
+  assert.equal(nieuwe(S).length, 19, 'de schout, de vijf boeren en de herbergierster stonden er al; de rest is nieuw');
   const namen = nieuwe(S).map((p) => p.naam);
   assert.equal(new Set(namen).size, namen.length, 'geen twee dezelfde namen');
   for (const p of nieuwe(S)) {
@@ -195,11 +195,11 @@ test('wie werkt: elke hand is een mens, de boer op zijn eigen land, en de herder
   for (let ronde = 0; ronde < 8; ronde++) {
     const S = gehucht();
     const handen = S.gebouwen.reduce((n, g) => n + (g.handen || 0), 0);
-    assert.equal(handen, 11, 'twee per boerderij en een herder');
+    assert.equal(handen, 12, 'twee per boerderij, een herder, en de herbergierster in haar herberg');
     const werkers = mensen(S).filter((p) => p.werk);
     assert.equal(werkers.length, handen, 'elke hand is iemand');
     for (const g of S.gebouwen) assert.equal(werkers.filter((p) => p.werk === g).length, g.handen || 0, `${g.soort} ${g.huis}`);
-    for (const p of mensen(S).filter((x) => x.wie)) assert.equal(p.werk, p.huis, `${p.wie} werkt op zijn eigen boerderij`);
+    for (const p of mensen(S).filter((x) => x.wie)) assert.equal(p.werk, p.huis, `${p.wie} werkt op zijn eigen boerderij, of in haar eigen herberg`);
     const herder = werkers.find((p) => p.werk.soort === 'schaapskooi');
     const knaap = mensen(S).some((p) => p.leeftijd === 'jong' && !vanSchout(p));
     if (knaap) assert.equal(herder.leeftijd, 'jong', `is er een knaap, dan hoedt een knaap (${herder.naam})`);
@@ -213,7 +213,7 @@ test('T.werkendeHanden: wie kan werken, en zonder bewoners het hele getal', () =
   assert.equal(T.werkendeHanden({ bevolking: 7 }), 7, 'zonder bewoners, zoals vóór de poppetjes');
   const S = gehucht();
   const kleuters = mensen(S).filter((p) => p.leeftijd === 'kleuter').length;
-  assert.equal(T.werkendeHanden(S), 25 - 1 - kleuters, 'iedereen behalve de schout en de kleuters');
+  assert.equal(T.werkendeHanden(S), S.bevolking - 1 - kleuters, 'iedereen behalve de schout en de kleuters');
 });
 
 test('wie werk heeft, houdt het, en een nieuwe werkplaats krijgt de vrije hand die het best past', () => {
@@ -241,6 +241,7 @@ test('wie werk heeft, houdt het, en een nieuwe werkplaats krijgt de vrije hand d
 
 test('T.wijzigBevolking: een nieuw gezin in een huis met plaats; wie sterft is eerst oud; wie wegtrekt kwam het laatst', () => {
   const S = gehucht();
+  const metNaam = mensen(S).filter((p) => p.wie).length;
   const huis = bouwHuis(S);
   assert.equal(T.wijzigBevolking(S, 4, 'groei'), 4);
   assert.equal(mensen(S).length, S.bevolking);
@@ -262,7 +263,7 @@ test('T.wijzigBevolking: een nieuw gezin in een huis met plaats; wie sterft is e
   assert.equal(inHuis(S, huis).length, 0, 'het gezin dat het laatst kwam, trekt weer weg');
   assert.equal(mensen(S).length, S.bevolking);
   assert.ok(mensen(S).find((p) => p.schout), 'de schout blijft');
-  assert.equal(mensen(S).filter((p) => p.wie).length, 5, 'de boeren blijven');
+  assert.equal(mensen(S).filter((p) => p.wie).length, metNaam, 'de boeren en de herbergierster blijven');
 });
 
 // ---------------------------------------------------------------------------------------------
@@ -384,20 +385,24 @@ test('T.dagAnker voor een bewoner: \'s nachts binnen, \'s ochtends de put of het
 test('in het gehucht is iedereen \'s nachts binnen, overdag waar hij hoort, en \'s avonds thuis', () => {
   const S = gehucht({ dag: bijUur(GROEI, 4), snelheid: 10 });
   const binnen = (p) => p.wezen.binnen;
+  // Waar hij hoort: binnen de straal van zijn plek, of, als hij daar naar binnen hoort (de herberg,
+  // js/herberg.js), binnen, of voor die deur.
   const binnenStraal = (p) => {
     const a = T.dagAnker(S, p.wezen);
-    return a && T.afstand(a, opTegel(p.wezen)) <= a.straal;
+    return !!a && (T.afstand(a, opTegel(p.wezen)) <= a.straal || (a.binnen && (p.wezen.binnen || T.afstand(a, opTegel(p.wezen)) <= 1)));
   };
   loopTot(S, bijUur(GROEI, 11));
   const verkeerd = nieuwe(S).filter((p) => !binnenStraal(p));
   assert.ok(verkeerd.length <= 1, `om elf uur is (bijna) iedereen waar hij hoort; niet: ${verkeerd.map((p) => p.naam).join(', ')}`);
   loopTot(S, bijUur(GROEI, 21.5));
   // De herder mag dan nog onderweg zijn: in het gehucht van 26 sep ligt de heide ver van het plein en
-  // van de boerderijen aan de oostkant, en woont hij daar, dan loopt hij bijna de hele kaart over. Om
-  // half twaalf is ook hij binnen (hieronder).
+  // van de boerderijen aan de oostkant, en woont hij daar, dan loopt hij bijna de hele kaart over. 's
+  // Nachts is ook hij binnen (hieronder). Wie naar de herberg ging, zit daar (binnenStraal).
   const nietThuis = nieuwe(S).filter((p) => !binnenStraal(p) && !(p.werk && p.werk.soort === 'schaapskooi'));
   assert.ok(nietThuis.length <= 1, `'s avonds is (bijna) iedereen op zijn erf; niet: ${nietThuis.map((p) => p.naam).join(', ')}`);
-  loopTot(S, bijUur(GROEI, 23.5));
+  // Om twee uur 's nachts: wie in de herberg zat, liep bij bedtijd (tien uur) naar huis, en wie ver
+  // woont, doet daar ruim twee uur over (js/herberg.js; tot 27 sep stond hier half twaalf).
+  loopTot(S, bijUur(GROEI + 1, 2));
   const buiten = nieuwe(S).filter((p) => !binnen(p));
   assert.equal(buiten.length, 0, `'s nachts is iedereen binnen; niet: ${buiten.map((p) => p.naam).join(', ')}`);
 });
@@ -407,7 +412,8 @@ test('staat de schout in zijn deur, dan gaat zijn gezin vanaf de tegel ernaast n
   const huis = S.gebouwen.find((g) => g.huis === 'schout');
   const deur = T.deurVan(S.wereld, huis);
   assert.deepEqual(opTegel(S.schout), deur, 'de schout begint voor zijn eigen deur');
-  loopTot(S, bijUur(GROEI, 23.5));
+  // Om twee uur 's nachts, want zijn vrouw kan in de herberg zitten (js/herberg.js).
+  loopTot(S, bijUur(GROEI + 1, 2));
   for (const p of inHuis(S, huis)) if (!p.schout) assert.ok(p.wezen.binnen, `${p.naam} is binnen`);
 });
 

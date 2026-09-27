@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 26 sep 2026)
+## Waar staat wat (bijgewerkt 27 sep 2026)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -26,7 +26,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep) | 6a |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | besloten, nog niet gebouwd | 6c |
-| Een dorp dat leeft en groeit | de dag en de bewoners (stap 2, stuk 1) gebouwd (26 sep); de rest een voorstel, grotendeels gekozen | 3b, 11, 13, 14 |
+| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
@@ -1365,7 +1365,8 @@ Nog open, voor als punt 6c gebouwd wordt (vragen van Claude):
 
 **Zo werkt het nu** (26 sep): stap 1 van punt 3b, **de dag, is gebouwd** (`js/dag.js`, `js/tijd.js`;
 hieronder), en van stap 2 **het eerste stuk: iedereen een poppetje met een huis, werk en een dagritme**
-(`js/bewoners.js`; "Mensen worden poppetjes").
+(`js/bewoners.js`; "Mensen worden poppetjes"). Sinds 27 sep gaat het dorp **'s avonds naar de herberg**
+(stap 3, stuk 1; `js/herberg.js`; "Zaken waar de mensen zelf heen gaan").
 De rest is een voorstel van Claude, waarvan Marcel het meeste koos, in drie opmerkingen op
 de pagina. Het raakt punt 11 (de nacht), 13 (de militie) en 14 (de treden), en de huizenbouwer (ronde
 4b). Wat nog open is, staat onderaan, en met een nummer in de werklijst.
@@ -1810,6 +1811,54 @@ past (hierboven, bij het plein).
   praat. De herbergierster staat al in `js/mensen.js`. Achter de herberg komt de eerste stal (zie
   "Paarden").
 - De heer heft op bier (dat staat al bij de brouwerij), en een volle herberg ziet de inner ook.
+
+**De herberg: het plan** (27 sep, negende sessie; werklijst, vraag 35 tot en met 37). Marcel antwoordde
+op het voorstel met "Werklijst doorzetten", en Claude nam dat als ja. De herberg hoorde bij de trede
+dorp, en was in het gehucht dus niet te bouwen; bier dronk niemand, en 's avonds stond iedereen op zijn
+eigen erf.
+- **Stuk 1: de herberg staat er, en de avond gaat erheen.** Een herberg vanaf het begin, in de hoek
+  tussen het plein en de weg, met zijn deur aan de weg. Hij krijgt een eigen tekening van de
+  huizenbouwer, vakwerk onder riet (trede 2), met een zolder en dakkapellen: de oude tekening is van
+  steen onder pannen, en dat is trede 4 à 5 van de ladder. De herbergierster woont er (ze staat al in
+  `js/mensen.js`, met haar eigen vel) en brouwt zelf van graan, zolang er niet genoeg bier ligt.
+  's Avonds gaat een deel van de volwassenen erheen, naar karakter (de drinker elke avond, de vrome
+  nooit), vaker in de winter, en minder vaak wie ver woont. Ze gaan naar binnen, en lopen bij bedtijd
+  in het donker naar huis. Elk bezoek drinkt een kan bier, en wie deze week in de herberg was, is
+  tevredener. Is de herberg droog, dan mist het dorp bier.
+- **Stuk 2: de kern en de schout.** De inner ziet een volle herberg, de herbergierster vertelt het
+  nieuws van de dag, en de marskramer slaapt er.
+- **Wacht:** een huis dat groeit door wat zijn bewoners bereiken, bij punt 5 van de werklijst (vraag
+  37); de bakker en de smid als zaak waar mensen heen gaan, bij het dorp.
+
+**Zo werkt het nu: de herberg, stuk 1** (27 sep; `js/herberg.js`, toetsen in `test/herberg.test.cjs`):
+- **De herberg staat er vanaf het begin,** in de hoek tussen het plein en de weg (tegel 44,44, vijf
+  bij zeven), met zijn deur aan de weg, een lantaarn en een bankje. Vakwerk onder riet, van de
+  huizenbouwer (`herberg1` in `gereedschap/pixelart/huizen.cjs`), met een zolder, dakkapellen, luiken
+  en bloembakken. Wie er een bouwt in het dorp, krijgt nog de oude tekening.
+- **De herbergierster woont er, alleen** (`js/mensen.js`, met haar eigen vel), en werkt er: het gehucht
+  telt nu 26 mensen. Ze brouwt van graan, zolang er niet genoeg bier ligt: acht kannen per dag voor
+  een vijfde graan, tot er dertig liggen (`T.GEBOUWEN.herberg.maakt`, met `tot`). Het gehucht begint met
+  twintig bier. Het bier staat in de balk, naast het graan.
+- **Wie er 's avonds gaat** (`T.herbergGasten`): een volwassene, niet de schout, met een kans van 0,3
+  per avond, 0,45 in de winter. De drinker gaat elke avond, de vrome nooit. Wie ver woont, gaat minder
+  vaak: de kans zakt met de weg erheen, tot niets bij drie uur lopen, en wie er niet minstens een half
+  uur kan zitten voor bedtijd, blijft thuis. Nooit meer dan er bier is: wie het dichtst bij woont,
+  eerst. Het lot ligt vast per mens per dag, dus het klopt ook als je slaapt of versnelt. In het
+  gehucht wonen de meesten een tot anderhalf uur lopen van de herberg (op de klok van het spel is
+  twintig tegels ruim een uur); zo gaan er twee à drie per avond, in de winter meer.
+- **Erheen, en weer naar huis:** na het werk lopen ze de herberg in en zijn ze binnen. Bij bedtijd
+  komen ze naar buiten en lopen ze in het donker naar hun eigen deur; wie ver woont, is pas na
+  middernacht thuis. De herbergierster staat 's avonds binnen, achter de tap. Bij de muis staat bij een
+  bewoner "naar de herberg".
+- **'s Avonds brandt de lantaarn:** een warme gloed bij de deur, sterker en wijder naarmate er meer
+  gasten binnen zitten. Zo zie je in het donker waar het dorp is.
+- **Wat het doet:** elke nacht wordt de avond verrekend (`T.tikHerbergDag`): elk bezoek drinkt een kan
+  bier. Wie er de laatste zeven dagen was, maakt het dorp tevredener, tot 0,06 als alle volwassenen er
+  waren (`js/behoeften.js`). Is de herberg droog, dan mist het dorp bier. Een jaar kost zo'n vijftien
+  graan, op een oogst van ruim zeshonderd.
+- **Bij de muis op de herberg:** hoeveel gasten er vanavond komen of binnen zitten, en hoeveel bier er
+  ligt. `Spel.debug.herberg()` zegt wie er vanavond gaat en hoe ver ze lopen.
+- Alle getallen staan in de werkbank (`O`), onder "De herberg".
 
 ### Het dorp bouwt zelf
 

@@ -8,7 +8,7 @@ for (const f of [
   'js/tijd.js', 'js/dag.js', 'js/voorraad.js', 'js/wereld.js', 'beelden/beschrijving.js', 'tegels/tegels.js',
   'kaarten/kaarten.js', 'js/mensen.js', 'js/vee.js', 'js/gebouwen.js', 'js/behoeften.js', 'js/handel.js',
   'js/heer.js', 'js/inner.js', 'js/verstoppen.js', 'js/kaart.js', 'js/gebied.js', 'js/pad.js', 'js/akkers.js',
-  'js/boeren.js', 'js/bewoners.js', 'js/anim.js', 'js/verkennen.js',
+  'js/boeren.js', 'js/bewoners.js', 'js/herberg.js', 'js/anim.js', 'js/verkennen.js',
 ]) require('../' + f);
 const T = globalThis.Spel;
 const IN = T.DAG_INSTELLINGEN;
@@ -135,7 +135,9 @@ test('T.dagAnker: een boer is \'s nachts binnen, \'s ochtends en \'s avonds op z
 
 test('in het gehucht gaan de vijf boeren \'s avonds naar huis en \'s nachts naar binnen, en komen ze \'s ochtends weer naar buiten', () => {
   const S = gehucht(bijUur(GROEI, 17), 10);
-  loopTot(S, bijUur(GROEI, 23.5));
+  // Om twee uur 's nachts: een boer die naar de herberg ging (js/herberg.js), liep bij bedtijd naar
+  // huis, en de verste doet daar ruim twee uur over (tot 27 sep stond hier half twaalf).
+  loopTot(S, bijUur(GROEI + 1, 2));
   // Met zijn gezin erbij (js/bewoners.js) staat er soms iemand in zijn deur, en dan gaat hij naar
   // binnen vanaf de tegel ernaast (T.laatDwalen, js/verkennen.js).
   for (const e of boeren(S)) {

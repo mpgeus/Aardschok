@@ -325,7 +325,10 @@
       const deurBezet = !!(dagAnker && dagAnker.binnen && T.wezenOp(w, dagAnker.x, dagAnker.y, m));
       const naastDeur = deurBezet ? 1 : 0;
       if (m.binnen) {
-        if (dagAnker && dagAnker.binnen) continue;
+        // Binnen blijft hij, zolang hij binnen hoort achter dezelfde deur. Wie 's avonds in de herberg
+        // zat (js/herberg.js), komt bij bedtijd naar buiten en loopt naar zijn eigen deur.
+        const zelfdeDeur = !m.deur || (dagAnker && m.deur.x === dagAnker.x && m.deur.y === dagAnker.y);
+        if (dagAnker && dagAnker.binnen && zelfdeDeur) continue;
         if (T.wezenOp(w, m.tx, m.ty, m)) continue;
         m.binnen = false;
         m.deurSinds = S.tijd;

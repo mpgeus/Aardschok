@@ -70,7 +70,7 @@ test('de huizen van het gehucht komen van de huizenbouwer, en voor elke deur kun
   console.warn = waarschuw;
   const w = S.wereld;
   const huizen = S.gebouwen.filter((g) => g.tekening && g.tekening.startsWith('huizen/'));
-  assert.equal(huizen.length, 9, 'vijf boerderijen, de schout, een huis en twee hutten');
+  assert.equal(huizen.length, 10, 'vijf boerderijen, de schout, een huis, twee hutten en de herberg');
   const kanten = new Set();
   for (const g of huizen) {
     const eig = T.opzoekTegelNaam(g.tekening).eig;

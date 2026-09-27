@@ -29,7 +29,8 @@
 //                                    // dan groeit deze soort niet door.
 //     maakt:       null,             // of { in: {hout: 1}, uit: {planken: 1} }: per dag, op volle
 //                                    // bezetting (T.tikGebouwenDag schaalt mee met hoe bezet hij is
-//                                    // én, sinds js/behoeften.js, met de tevredenheid)
+//                                    // én, sinds js/behoeften.js, met de tevredenheid). Met
+//                                    // tot: {bier: 30} maakt hij niet meer als er zoveel ligt.
 //     stilIn:      null,             // of { winter: 'de beek ligt dicht' }: in dat seizoen maakt hij
 //                                    // niets, en dit is waarom (de visser; spel.md, "Handel")
 //     verdacht:    false,            // moet de heer dit niet zien? (wapenmaker, schuttershof, …)
@@ -232,9 +233,13 @@
     },
     herberg: {
       naam: 'herberg', trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 12 }, heer: { goud: 5 }, bouwtijd: 4,
-      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      // Wie er woont, tapt en brouwt: van graan, zolang er niet genoeg bier ligt (27 sep, werklijst punt
+      // 2). Een kan bier kost een veertigste graan; wie er 's avonds heen gaat, staat in js/herberg.js.
+      handen: 1, woonruimte: 1, maakt: { in: { graan: 0.2 }, uit: { bier: 8 }, tot: { bier: 30 } }, verdacht: false, menu: true,
       tekening: 'gebouwen/herberg', beschrijving: 'reizigers, nieuws en verhalen, bier',
-      opmerking: 'Zijn waarde is verhaal, geen grondstof; dat komt met het avontuur (werklijst.md, punt 8).',
+      opmerking: 'In het gehucht staat er een vanaf het begin, met de herbergierster (kaarten/gehucht.betekenis.json), '
+        + 'in een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in het dorp bouwt, krijgt nog de '
+        + 'oude tekening van steen onder pannen. Het nieuws en de verhalen komen met stuk 2 en het avontuur.',
     },
     kapel: {
       naam: 'kapel', trede: 'gehucht', voet: { b: 5, h: 5 }, kosten: { hout: 10, goud: 8 }, heer: {}, bouwtijd: 4,
@@ -491,9 +496,19 @@
   // Hoe het met één gebouw staat, in één zin: voor de muis op een gebouw (js/verkennen.js). Leest
   // wat T.tikGebouwenDag de laatste dag zag (g.werkte, g.tekort), dus hij zegt wat er vandaag
   // gebeurde, niet wat er misschien zou kunnen.
+  // Per soort wat er bij de muis nog achter komt, van een bestand dat meer over dat gebouw weet:
+  // T.GEBOUW_ERBIJ.herberg = (S, g) => 'vanavond 4 gasten; 23 bier.' (js/herberg.js).
+  T.GEBOUW_ERBIJ = T.GEBOUW_ERBIJ || {};
   T.gebouwToestand = function (S, g) {
     const soort = T.GEBOUWEN[g.soort];
     if (!soort) return '';
+    const zin = toestandZin(S, g, soort);
+    // Wat er verder in dit gebouw gebeurt, als een ander bestand dat weet: in de herberg hoeveel gasten
+    // er vanavond zijn, en het bier (js/herberg.js).
+    const meer = g.klaar && T.GEBOUW_ERBIJ && T.GEBOUW_ERBIJ[g.soort] ? T.GEBOUW_ERBIJ[g.soort](S, g) : '';
+    return meer ? `${zin} ${T.hoofdletter(meer)}` : zin;
+  };
+  function toestandZin(S, g, soort) {
     const naam = T.hoofdletter(soort.naam);
     if (!g.klaar) {
       const dagNu = S.kalender ? Math.floor(S.kalender.dag) : 0;
@@ -505,6 +520,7 @@
     if (soort.handen > 0 && !g.handen) return `${naam}: staat stil, er zijn geen handen voor.`;
     if (g.tekort && !(g.werkte > 0)) return `${naam}: staat stil, er is geen ${g.tekort}.`;
     if (g.tekort) return `${naam}: werkt maar half, er is te weinig ${g.tekort}.`;
+    if (g.vol && !(g.werkte > 0)) return `${naam}: er ligt genoeg ${g.vol}.`;
     const handen = soort.handen > 0 ? ` (${g.handen} van ${soort.handen} handen)` : '';
     // Werk in uren (js/bewoners.js, T.werkUrenVan): hoeveel er echt gewerkt werd, en hoe lang de
     // handen onderweg waren; anders is het een straf die je niet ziet.
@@ -516,7 +532,7 @@
       return `${naam}: aan het werk${handen}, ${gewerkt} van de ${Math.round(u.nodig)} uur; ${onderweg} uur onderweg.`;
     }
     return `${naam}: aan het werk${handen}.`;
-  };
+  }
 
   // ---------------------------------------------------------------------------------------------
   // Neerzetten: past het, en dan echt neerzetten (bouwmenu, T.plaatsGebouw hieronder) — en de
@@ -703,6 +719,10 @@
     // lentemaand verhuist het vee daar naar zijn nieuwe weide; vóór de behoeften, want het dorp eet
     // de melk van vandaag als eerste (stap 3), en de tevredenheid moet hem dus al zien.
     if (T.tikVeeDag) T.tikVeeDag(S, dag);
+    // De herberg (js/herberg.js): wie er gisteravond was, dronk zijn bier. Vóór de behoeften, want wie
+    // er deze week was, is tevredener; en vóór het brouwen hieronder, want het bier van gisteravond
+    // kwam uit de voorraad van gisteren.
+    if (T.tikHerbergDag) T.tikHerbergDag(S, dag);
     // Behoeften: eten, brandhout en een kerk, en de tevredenheid die daaruit volgt
     // (js/behoeften.js, T.tikBehoeftenDag) — vóór de rest, zodat stap 4 en 6 hieronder de
     // tevredenheid van vandaag gebruiken. Zacht gekoppeld (net als T.ui hieronder): zonder
@@ -761,6 +781,7 @@
       const soort = T.GEBOUWEN[g.soort];
       const wasStil = g.stilWant;
       g.tekort = null;
+      g.vol = null;
       g.werkte = 0;
       g.stilWant = null;
       g.uren = null;
@@ -788,6 +809,18 @@
           if (kan < factor) {
             factor = kan;
             g.tekort = wat;
+          }
+        }
+      }
+      // Wie maakt tot er genoeg ligt (maakt.tot: de herberg brouwt tot er zoveel bier is), maakt niet
+      // meer dan wat er nog bij kan.
+      if (soort.maakt.tot) {
+        for (const wat in soort.maakt.tot) {
+          const per = (soort.maakt.uit && soort.maakt.uit[wat]) || 0;
+          const kan = per > 0 ? Math.max(0, soort.maakt.tot[wat] - (S.voorraad[wat] || 0)) / per : factor;
+          if (kan < factor) {
+            factor = kan;
+            g.vol = wat;
           }
         }
       }

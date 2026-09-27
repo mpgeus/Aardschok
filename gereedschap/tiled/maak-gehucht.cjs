@@ -29,6 +29,10 @@
 // weide ligt één tegel dichter bij de strook van Wouter, zodat ze samen één weide kunnen worden
 // (AKKERS hieronder).
 //
+// Met de herberg (27 sep, werklijst punt 2, vraag 35: "Werklijst doorzetten", op het voorstel van
+// Claude): hij staat er vanaf het begin, in de hoek tussen het plein en de weg, met zijn deur aan de
+// weg (HERBERG hieronder). Daar woont de herbergierster, en 's avonds gaat het dorp erheen (js/herberg.js).
+//
 // De grond gaat via de terreinsets van tegels/rand.tsx, en de tegels worden op naam opgezocht in
 // plaats van op nummer (net als maak-wereld.cjs). Welke akker van welke boer is, wie waar woont en
 // waar het plein ligt, staat in het betekenisbestand, niet in de .tmj: zie ontwerp/kaarten.md, "Tiled
@@ -394,6 +398,13 @@ const GEWONE_HUIZEN = [
   { gebouw: 'hut', tegel: 'hut1', x: 21, y: 36, b: 5, d: 4, bewoners: 'oudStel' },
   { gebouw: 'hut', tegel: 'hut4', x: 24, y: 45, b: 6, d: 6 },
 ];
+// De herberg (27 sep, werklijst punt 2): in de hoek tussen het plein en de weg, waar de weg het plein
+// op komt, met zijn deur aan de weg, zodat wie over de weg binnenkomt er langs loopt. Hij hoorde bij de
+// trede dorp en was in het gehucht niet te bouwen; nu staat hij er vanaf het begin, met de
+// herbergierster (js/mensen.js). Vakwerk onder riet, van de huizenbouwer (herberg1 in
+// gereedschap/pixelart/huizen.cjs): de oude tekening van steen onder pannen is te rijk voor een
+// gehucht. Voor de deur een lantaarn en een bankje, zodat je ziet dat het geen gewoon huis is.
+const HERBERG = { tegel: 'herberg1', x: 44, y: 44, b: 5, d: 7 };
 // De schaapskooi aan de rand van de heide: het gehucht begint met één, en dus met de schapen op de
 // heide in plaats van op de weide. Voorlopig in de tekening van de blokhutschuur, net als in het
 // bouwmenu (js/gebouwen.js, T.GEBOUWEN.schaapskooi).
@@ -413,6 +424,13 @@ for (const h of Object.values(HUIZEN)) zetTegel(h.tegel, h.x, h.y, true);
 zetTegel(SCHOUT_HUIS.tegel, SCHOUT_HUIS.x, SCHOUT_HUIS.y, true);
 for (const h of GEWONE_HUIZEN) zetTegel(h.tegel, h.x, h.y, true);
 zetTegel(KOOI.tegel, KOOI.x, KOOI.y, true);
+zetTegel(HERBERG.tegel, HERBERG.x, HERBERG.y, true);
+{
+  // de lantaarn naast de deur, en een bankje tegen de muur ernaast
+  const d = deurVan(HERBERG);
+  zetTegel('lantaarn', d.x, d.y - 1, true);
+  zetTegel('bankje-y', d.x, d.y + 2, true);
+}
 
 // ---- het plein: de put op het zand voor de deur van de schout, en vijf oude eiken, met een bank
 // onder de grootste (waar later misschien recht gesproken wordt; ontwerp/opmerkingen.md) ----
@@ -499,7 +517,7 @@ for (let y = 0; y < H; y++) {
   if (!vrij(UITGANG.x, UITGANG.y)) fouten.push('de tegel bij de uitgang (rechts) is niet begaanbaar');
   // De maat in de tabellen hierboven is die van de tekening: anders staat de boer naast zijn deur,
   // en zet het spel een andere voet vast dan er te zien is.
-  for (const h of [...Object.values(HUIZEN), SCHOUT_HUIS, ...GEWONE_HUIZEN, KOOI]) {
+  for (const h of [...Object.values(HUIZEN), SCHOUT_HUIS, ...GEWONE_HUIZEN, KOOI, HERBERG]) {
     const t = gidVan(h.tegel);
     const [vb, vd] = (t && t.tegel.beslaat) || [];
     if (t && (vb !== h.b || vd !== h.d)) fouten.push(`"${h.tegel}" is ${vb}×${vd} tegels, niet ${h.b}×${h.d}`);
@@ -567,6 +585,9 @@ dingen.push({ ...deurVan(SCHOUT_HUIS), wezen: 'schout' });
 // (gereedschap/keuring.js) staat niet toe dat dezelfde mens twee keer op de kaart staat, en "huis"
 // koppelt hem aan zijn akker(s) hierboven (js/kaart.js).
 for (const [id, h] of Object.entries(HUIZEN)) dingen.push({ ...deurVan(h), wie: id, straal: 3, huis: id });
+// De herbergierster (T.MENSEN.herbergierster, met haar eigen vel), voor de deur van haar herberg, net
+// als een boer voor de zijne: `huis` koppelt haar aan de herberg hieronder (js/bewoners.js).
+dingen.push({ ...deurVan(HERBERG), wie: 'herbergierster', straal: 3, huis: 'herbergierster' });
 // De huizen zelf, als gebouw (js/gebouwen.js, T.zetBestaandeGebouwen): hun tekening staat al op
 // de kaart (hierboven, zetTegel), dit is alleen de betekenis erbij, zodat het dorp niet leeg begint.
 // De vijf boerenhuizen tellen als "boerderij", het stenen huis van de schout als "huis". "huis" zegt
@@ -581,6 +602,7 @@ for (const g of GEWONE_HUIZEN) {
   dingen.push(d);
 }
 dingen.push({ gebouw: 'schaapskooi', x: KOOI.x, y: KOOI.y, b: KOOI.b, h: KOOI.d });
+dingen.push({ gebouw: 'herberg', x: HERBERG.x, y: HERBERG.y, b: HERBERG.b, h: HERBERG.d, huis: 'herbergierster', tekening: tekeningVan(HERBERG.tegel) });
 // De akkers (js/kaart.js, "WAT EEN DING BETEKENT"), en de meent: de heide, waar de schapen grazen
 // (js/vee.js, "Waar een dier graast").
 for (const a of AKKERS) dingen.push(a);
@@ -595,15 +617,17 @@ dingen.push({ x: UITGANG.x, y: UITGANG.y, overgang: 'wereld', tekst: 'De weg de 
 const betekenis = {
   versie: 1,
   proef: true,
-  uitleg: 'De betekenis van kaarten/gehucht.tmj: de schout, de vijf boeren en hun akkers, de huizen en wie erin woont, en het plein. Zie ontwerp/kaarten.md, "Tiled tekent alleen nog de grond". "proef": true omdat dit gehucht nog aan geen andere kaart vasthangt (ontwerp/werklijst.md); zodra er een echte aansluiting naar "wereld" komt, mag dat weer weg.',
+  uitleg: 'De betekenis van kaarten/gehucht.tmj: de schout, de vijf boeren en hun akkers, de huizen en wie erin woont, de herberg met de herbergierster, en het plein. Zie ontwerp/kaarten.md, "Tiled tekent alleen nog de grond". "proef": true omdat dit gehucht nog aan geen andere kaart vasthangt (ontwerp/werklijst.md); zodra er een echte aansluiting naar "wereld" komt, mag dat weer weg.',
   // Een klein beginvoorraadje, zodat er meteen iets te bouwen valt (js/gebouwen.js, T.plaatsGebouw
   // via het bouwmenu) zonder eerst te hoeven wachten op de eerste opbrengst. Het hooi is wat er van
   // vorige winter over is: het spel begint op 1 lentemaand, en dan eet het vee nog een maand hooi
-  // (js/vee.js, T.voerHooi): drie koeien, dertig dagen.
-  beginVoorraad: { hout: 40, goud: 20, graan: 60, hooi: 100 },
+  // (js/vee.js, T.voerHooi): drie koeien, dertig dagen. En de herbergierster heeft nog bier van de
+  // vorige brouwsels, zodat de eerste avond niet droog is (js/herberg.js).
+  beginVoorraad: { hout: 40, goud: 20, graan: 60, hooi: 100, bier: 20 },
   // Hoeveel mensen er bij het begin wonen: 25, zoals in de derde versie, ook al is er nu plaats voor
-  // meer (Marcel koos C, 26 sep; js/gebouwen.js, T.zetBestaandeGebouwen).
-  beginBevolking: 25,
+  // meer (Marcel koos C, 26 sep; js/gebouwen.js, T.zetBestaandeGebouwen), en sinds 27 sep de
+  // herbergierster erbij.
+  beginBevolking: 26,
   // Waar de marskramer zijn waar uitstalt (js/handel.js): op het zand voor de deur van de schout,
   // waar ook de heer op Sint-Maarten staat (js/heer.js). Hij komt over de weg binnen (de uitgang
   // hieronder) en gaat daar ook weer heen.
@@ -636,4 +660,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { B, H, AKKERS, HUIZEN, SCHOUT_HUIS, GEWONE_HUIZEN, MEENT, KOOI, PLEIN_RAND, ZAND, kaart, betekenis };
+module.exports = { B, H, AKKERS, HUIZEN, SCHOUT_HUIS, GEWONE_HUIZEN, HERBERG, MEENT, KOOI, PLEIN_RAND, ZAND, kaart, betekenis };

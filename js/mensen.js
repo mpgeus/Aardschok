@@ -30,7 +30,11 @@
 //     karakter: 'zanger',      // alleen de boeren: wie hij is als er niet geloot wordt (T.KARAKTERS
 //                              // hieronder, js/boeren.js). Zijn gesprek is dan dat van zijn
 //                              // karakter, en alleen wie een karakter heeft, kan aan de schandpaal.
-//     geslacht: 'vrouw',       // alleen de boeren: een weduwe of vroedvrouw wordt altijd een boerin
+//     geslacht: 'vrouw',       // een boer: een weduwe of vroedvrouw wordt altijd een boerin; en wie
+//                              // met een gezin in een huis woont (js/bewoners.js)
+//     gezin:    [],            // wie er bij hem woont, als [band, leeftijd, geslacht], voor wie een
+//                              // huis heeft en geen karakter (js/bewoners.js): de herbergierster
+//                              // woont alleen. Een boer krijgt zijn gezin van zijn karakter of het lot.
 //     aanzien:  'geliefd',     // alleen de boeren: hoe het dorp hem ziet als er niet geloot wordt en
 //                              // zijn karakter het niet vastlegt (js/boeren.js)
 //   }
@@ -50,7 +54,9 @@
     // anders gaan zijn voeten over de grond glijden.
     smid: { naam: 'de smid', snelheid: 1.5, straal: 3 },
     smidsvrouw: { naam: 'de smidsvrouw', snelheid: 1.45, straal: 3 },
-    herbergierster: { naam: 'de herbergierster', snelheid: 1.4, straal: 3 },
+    // Sinds 27 sep staat zij in het gehucht (kaarten/gehucht.betekenis.json): in haar herberg, alleen, en
+    // ze brouwt zelf (js/herberg.js).
+    herbergierster: { naam: 'de herbergierster', snelheid: 1.4, straal: 3, geslacht: 'vrouw', gezin: [] },
     boer: { naam: 'de boer', snelheid: 1.5, straal: 3 },
     boerin: { naam: 'de boerin', snelheid: 1.4, straal: 3 },
     dorpsoudste: { naam: 'de dorpsoudste', snelheid: 1, straal: 3 },

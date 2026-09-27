@@ -1,14 +1,15 @@
 {
  "versie": 1,
  "proef": true,
- "uitleg": "De betekenis van kaarten/gehucht.tmj: de schout, de vijf boeren en hun akkers, de huizen en wie erin woont, en het plein. Zie ontwerp/kaarten.md, \"Tiled tekent alleen nog de grond\". \"proef\": true omdat dit gehucht nog aan geen andere kaart vasthangt (ontwerp/werklijst.md); zodra er een echte aansluiting naar \"wereld\" komt, mag dat weer weg.",
+ "uitleg": "De betekenis van kaarten/gehucht.tmj: de schout, de vijf boeren en hun akkers, de huizen en wie erin woont, de herberg met de herbergierster, en het plein. Zie ontwerp/kaarten.md, \"Tiled tekent alleen nog de grond\". \"proef\": true omdat dit gehucht nog aan geen andere kaart vasthangt (ontwerp/werklijst.md); zodra er een echte aansluiting naar \"wereld\" komt, mag dat weer weg.",
  "beginVoorraad": {
   "hout": 40,
   "goud": 20,
   "graan": 60,
-  "hooi": 100
+  "hooi": 100,
+  "bier": 20
  },
- "beginBevolking": 25,
+ "beginBevolking": 26,
  "marskramer": {
   "x": 35,
   "y": 37
@@ -117,6 +118,13 @@
    "huis": "boer5"
   },
   {
+   "x": 49,
+   "y": 46,
+   "wie": "herbergierster",
+   "straal": 3,
+   "huis": "herbergierster"
+  },
+  {
    "gebouw": "boerderij",
    "x": 10,
    "y": 25,
@@ -202,6 +210,15 @@
    "y": 56,
    "b": 5,
    "h": 7
+  },
+  {
+   "gebouw": "herberg",
+   "x": 44,
+   "y": 44,
+   "b": 5,
+   "h": 7,
+   "huis": "herbergierster",
+   "tekening": "huizen/herberg1"
   },
   {
    "akker": "akker1",

@@ -66,6 +66,6 @@ test('het plein is het open hart, en de akkers, de weide en de heide zijn even g
   assert.equal(w.akkers.reduce((n, a) => n + a.b * a.h, 0), 209, 'de akkers en de weide samen');
   assert.equal(w.meenten.reduce((n, m) => n + m.b * m.h, 0), 23 * 8, 'de heide');
   assert.ok(T.opHetPlein(w, w.marskramer.x, w.marskramer.y), 'de marskramer en de heer staan op het plein');
-  assert.equal(S.bevolking, 25, 'dezelfde 25 mensen, ook al is er plaats voor meer');
+  assert.equal(S.bevolking, 26, 'dezelfde 25 mensen en de herbergierster (27 sep), ook al is er plaats voor meer');
   assert.ok(S.woonruimte > S.bevolking);
 });

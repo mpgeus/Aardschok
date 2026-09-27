@@ -536,7 +536,7 @@
         const e = p.wezen;
         const a = e && T.dagAnker ? T.dagAnker(S, e) : null;
         return {
-          wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)} (boer)` : T.overBewonerTekst(S, e, p),
+          wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)}${T.MENSEN[p.wie] && T.MENSEN[p.wie].karakter ? ' (boer)' : ''}` : T.overBewonerTekst(S, e, p),
           leeftijd: p.leeftijd, huis: p.huis ? p.huis.huis || `${p.huis.soort} ${p.huis.x},${p.huis.y}` : '-',
           werk: p.werk ? `${p.werk.soort} ${p.werk.x},${p.werk.y}` : '-',
           staat: e ? (e.binnen ? 'binnen' : `${e.tx},${e.ty}`) : p.komt ? 'onderweg hierheen' : '-',
@@ -554,6 +554,21 @@
       const echt = plaats < 0 ? T.wijzigBevolking(S, plaats, 'vertrek', 'het dorp is niet tevreden genoeg') : T.wijzigBevolking(S, plaats, 'groei');
       T.ui.toonBevolking(S);
       return echt < 0 ? `${-echt} trekken weg.` : `${echt} komen over de weg, overdag vanaf ${T.DAG_INSTELLINGEN.bezoekUur} uur.`;
+    },
+    // De herberg (js/herberg.js): wie er vanavond gaat, hoe ver ze lopen, gisteravond, en het bier.
+    // Spel.debug.herberg(30) zet eerst 30 bier in de voorraad.
+    herberg(bier) {
+      const g = T.herbergVan && T.herbergVan(S);
+      if (!g) return 'Hier staat geen herberg.';
+      if (typeof bier === 'number') T.zetVoorraad(S, 'bier', bier);
+      const w = S.bewoners.wereld;
+      const deur = T.deurVan(w, g);
+      const vanavond = T.herbergGasten(S, S.kalender.dag).map((p) => ({
+        wie: p.wie ? T.naamVanMens(p.wie) : T.overBewonerTekst(S, p.wezen, p),
+        uurLopen: Math.round(T.looptijdVan(w, p, T.deurVan(w, p.huis), { x: deur.x, y: deur.y, straal: 0 }, 'herberg') * 10) / 10,
+        staat: p.wezen ? (p.wezen.binnen ? 'binnen' : `${p.wezen.tx},${p.wezen.ty}`) : '-',
+      }));
+      return { deur: `${deur.x},${deur.y}`, bier: Math.floor(S.voorraad.bier || 0), vanavond, gisteravond: S.herberg && S.herberg.gisteravond, tekst: T.gebouwToestand(S, g) };
     },
     // De soldaten het dorp nu laten doorzoeken, zoals op Sint-Maarten (js/inner.js): wat ze vinden.
     zoeken() {

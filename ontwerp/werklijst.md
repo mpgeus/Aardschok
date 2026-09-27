@@ -63,9 +63,9 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   gehucht heeft nu echte hutten, huizen van vakwerk, vijf boerderijen die niet allemaal dezelfde kant
   op staan, en elk huis weet waar zijn deur is. Marcel kreeg schermafdrukken en de plaat van de ladder.
 
-**Loopt nu:** niets. **Het volgende: de herberg en de kleine zaken** (punt 2 hieronder), in een nieuwe
-sessie (Marcel, 27 sep: "Hier maken we nieuwe sessie voor"). Ronde 4b is af
-(achtste sessie, zie onder Af): wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
+**Loopt nu (27 sep, negende sessie): de herberg** (punt 2 hieronder; vraag 35 tot en met 37), stuk 1:
+de herberg staat er, en de avond gaat erheen. Ronde 4b is af (achtste sessie, zie onder Af): wat
+Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -242,6 +242,21 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     Dus in de spelregels twee keuzes: hoe je door iets heen kijkt (het kijkvenster, standaard, of het
     raster) en wie je door een huis ziet (ook iedereen op het plein, standaard, of alleen wie ertoe
     doet).
+
+*De herberg* (27 sep, negende sessie; `spel.md`, "Zaken waar de mensen zelf heen gaan"). Bij het kijken
+zag Claude dat de herberg bij de trede dorp hoort, en in het gehucht dus niet te bouwen is; de brouwerij
+ook niet, en bier drinkt nog niemand. 's Avonds staat iedereen op zijn eigen erf. Het plan van Claude: een
+herberg aan het plein, waar de weg binnenkomt, met de herbergierster die zelf brouwt; 's avonds gaat een
+deel van de volwassenen erheen, naar karakter en seizoen, en wie ver woont minder vaak; elk bezoek drinkt
+bier, en de bezoeken maken het dorp tevredener (stuk 1). Daarna de inner die een volle herberg ziet, het
+nieuws van de herbergierster, en de marskramer die er slaapt (stuk 2). Marcel antwoordde op de drie vragen
+met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als het anders moet.
+35. ~~Hoe komt de herberg in het gehucht?~~ A, hij staat er van het begin; B, jij bouwt hem; of C, pas als
+    het gehucht een dorp wordt. **Het voorstel: A.**
+36. ~~Brouwt de herbergierster zelf van graan, of moet er eerst een brouwerij komen?~~ **Het voorstel:
+    zelf** (dat deden herbergiers vaak).
+37. ~~"Een huis groeit door wat zijn bewoners kunnen bereiken": nu, of bij punt 5?~~ **Het voorstel: bij
+    punt 5,** want pas dan klimmen de huizen de ladder op.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
