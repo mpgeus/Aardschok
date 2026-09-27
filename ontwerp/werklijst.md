@@ -384,6 +384,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       hoort de heer het: dan telt het geschenk als goud in de kist, en wordt hij argwanend.
     Vragen: **A**, afleiden zo (tot zonsondergang, en praten kost hem zijn dag)? **B**, omkopen zo (goud
     tegen minder op het rapport, met een kans dat de heer het hoort)?
+    **Beantwoord (Marcel, 27 sep): "Ja ab goed zo".** Stuk 2 loopt.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
