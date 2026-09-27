@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (27 sep 2026, na de negende en tiende sessie): alles staat in main
+## De stand (27 sep 2026, na de negende en tiende sessie): alles staat in main, en al het werk op prioriteit
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
@@ -24,26 +24,49 @@ nieuwe sessie en alles naar main"): de negende sessie (ook op `claude/werklijst-
 de tiende (ook op `claude/offline-flight-tasks-35l4cj`), samengevoegd. Hoe een eigen branch en `main`
 samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Openstaand, voor de volgende sessie** (Marcel vroeg het, 27 sep):
-- **Vraag 33, wat de proefversie nog nodig heeft** (`speelbaar.md`, 33a tot en met 33d): wacht op Marcel,
-  en bepaalt de volgorde. 33c (de inner bespelen, vóór de proef of erna) is ingehaald: dat is er sinds
-  punt 4, stuk 2.
-- **De winter zichtbaar maken:** het tweede van wat de speeltest eerst wil. De kou kost bijna de helft van
-  het dorp, het hout is eind wintermaand op, en het bericht zegt niet waaraan (`speelbaar.md`,
-  `opmerkingen.md`). Het eerste, de soldaten altijd laten zoeken, is af.
-- **Een nieuwe speeltest, als Marcel dat wil:** de vorige liep op `main` van vóór de soldaten die altijd
-  zoeken en de inner die je kunt bespelen. Hoe het nu speelt, weet nog niemand.
-- **De inner bijstellen, later** (Marcel: "We gaan later finetunen"): hoe lang hij praat en wacht, en wat
-  een geschenk oplevert (de werkbank, "De inner"; wat opviel staat in `opmerkingen.md`).
-- **Het bos met de kudde:** een idee met vier vragen (A tot en met D) in `opmerkingen.md`, onder de
-  voorstellen van Claude; niet bouwen tot Marcel erom vraagt (vraag 43).
-- **De rest van punt 4:** de marskramer die vee, kaas, wol en hooi koopt en verkoopt (deel 3), en de twee
-  rekenboeken.
-- **Vraag 8, een naam:** voorstel Martinmas, of Schout (`verpakken.md`, "De naam").
-- **Oudere vragen, zonder haast:** 6 (de groepen en keuren), 7 (ijs op de beek), 10 tot en met 13 (de oude
-  monsters, het leven van de schout, de knop Slaan, een eigen figuur), 22 (de tijdsversneller), 25 C en D
-  (`hud.js` en `tekenen.js` splitsen) en 26 (de volgorde).
-- **Wat nog ruw is:** `opmerkingen.md`, bovenaan.
+**Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; de volgorde is een
+voorstel van Claude). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat een proefversie van één
+jaar nodig heeft, de kortste weg uit `speelbaar.md` (de getuigen en de soldaten die altijd zoeken, zijn daar
+al van af). Elk stuk begint met een plan voor Marcel.
+
+*1. Nu: naar een proefversie van één jaar*
+1. **De winter zichtbaar maken.** Een waarschuwing als het hout of het eten de winter niet haalt, en in het
+   bericht waaraan iemand stierf. In de speeltest stierf bijna de helft van het dorp aan de kou, en de
+   speler wist niet waarom. Het grootste gat, en klein om te bouwen.
+2. **Een speeltest op de stand van nu.** De vorige liep op `main` van vóór de soldaten die altijd zoeken en
+   de inner die je kunt bespelen: hoe de kern nu speelt, weet nog niemand. Een agent kan het, zoals de
+   vorige keer, en Marcel speelt ook. De getallen bijstellen (het goud, de kelders, de honger, de inner)
+   komt daarna, als Marcel wil ("We gaan later finetunen").
+3. **Opslaan, Verder en een titelscherm** (wacht op 33b, en op een naam, vraag 8). Zonder opslaan speelt
+   niemand een jaar van een uur uit.
+4. **De afrekening na het eerste jaar** (wacht op 33a): wat je gaf, wat je achterhield en wat daarvan
+   gevonden werd, en hoe het dorp erbij staat.
+5. **De eerste weken als opdrachten,** zodat wie het niet kent, weet wat hij moet doen. Het vak voor de
+   opdracht en de quests zijn er al.
+6. **Een tester die het niet kent** laten spelen (wacht op 33d: een bladzijde op internet, of een
+   programma).
+
+*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* 33a (wat is goed na het eerste jaar), 33b
+(opslaan), 33d (hoe een tester het krijgt), in `speelbaar.md`; en 8, een naam, voor het titelscherm
+(voorstel Martinmas, of Schout; `verpakken.md`).
+
+*3. Na de proefversie* (`speelbaar.md`, "Wat kan wachten"):
+- de rest van punt 4: het bos met de kudde (een idee met vier vragen in `opmerkingen.md`, vraag 43), de
+  marskramer die vee, kaas, wol en hooi koopt en verkoopt, en de twee rekenboeken;
+- punt 5, het dorp bouwt zelf: bouwgrond, de ladder tot baksteen, de herberg die meegroeit;
+- straten en paden (6c), en ontginnen (6b);
+- deel C tot en met E: voorvallen, groepen en keuren, rechtspraak; de nacht, de eigen buidel, de militie;
+  de treden, stadsrechten, de opstand;
+- deel F: geluid, en verpakken voor Steam als de proef goed is.
+
+*4. Opruimen, als die bestanden toch open moeten:* `hud.js` en `tekenen.js` splitsen (vraag 25, C en D).
+
+*5. Vragen zonder haast:* 6 (de groepen en keuren, pas nodig bij deel C), 7 (ijs op de beek), 10 tot en
+met 12 (de oude monsters, het leven van de schout, de knop Slaan), 13 (een eigen figuur voor de schout: die
+helpt een tester zichzelf te vinden, dus misschien toch vóór de proef), 22 (de tijdsversneller) en 26 (de
+volgorde: deze lijst is het nieuwe voorstel).
+
+*Wat nog ruw is:* `opmerkingen.md`, bovenaan.
 
 **Wat er in de tiende sessie gebeurde** (27 sep, terwijl Marcel twee uur vloog; hij koos vooraf 1, 3 en
 4 uit een lijst van Claude, en niet stuk 2 van de getuigen):
@@ -139,11 +162,12 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
 
 **Punt 2, de herberg, en punt 3, het zichtveld en de getuigen, zijn af** (27 sep), **en van punt 4 stuk
 1 en 2** (de soldaten zoeken altijd; de inner afleiden en omkopen). **Het tweede proefje is gespeeld**
-(de tiende sessie, hierboven), maar op `main` van vóór stuk 1 en 2. Wat nu openstaat, staat hierboven
-onder "Openstaand". Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
+(de tiende sessie, hierboven), maar op `main` van vóór stuk 1 en 2. Wat er nu te doen is, staat hierboven
+onder "Al het werk, op prioriteit". Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
-voorstel van Claude, en daar gaat vraag 26 over.
+voorstel van Claude, en daar gaat vraag 26 over. Sinds 27 sep staat al het werk op prioriteit bovenaan
+(Marcel: "Al het werk ordenen op prioriteit"); wat hieronder staat, zijn per punt de details.
 
 1. **Af (achtste sessie): ronde 4b van de huizenbouwer** (3b, stap 4; naar voren gehaald, vraag 29;
    zie onder Af). Wat hieronder staat, was het plan: elk huis in elk
@@ -174,8 +198,8 @@ voorstel van Claude, en daar gaat vraag 26 over.
    - **Af (27 sep), stuk 1:** verstoppen deel 1b, de rest: de soldaten zoeken op Sint-Maarten altijd op
      2 of 3 plekken, en je bepaalt de route zelf, maar soms kiest de heer;
    - **Af (27 sep), stuk 2:** van stap 3 van de inner praten, afleiden en omkopen (vraag 42);
-   - **nu: het tweede proefje:** een heel jaar spelen, van het voorjaar tot Sint-Maarten, en kijken of
-     rijk worden en arm lijken leuk is. Een andere agent speelt het nu voor Marcel (27 sep);
+   - **gespeeld (27 sep, tiende sessie): het tweede proefje,** een heel jaar, maar op `main` van vóór stuk
+     1 en 2 (`speelbaar.md`, "De speeltest van 27 sep"); een nieuwe staat bovenaan, bij de prioriteit;
    - deel 2, het bos met de kudde (Marcel, 25 sep): een plek in het bos voor graan en goud (ver lopen,
      muizen en vocht), en een deel van de kudde het bos in voor de inner komt; hij telt de kudde, de
      heer vraagt per dier, en kaas en wol zijn sporen (dat is ook stap 3 van de weides). Een plan staat

@@ -45,11 +45,12 @@ aan het eind moet het zeggen hoe het ging. Op 30× duurt zo'n jaar ongeveer een 
    gereedschap, maar er zijn nog geen quests. Voorstel: de eerste weken als een paar korte opdrachten
    ("loop naar de kelder van je huis", "de inner komt: zet iets opzij"), zonder nieuw systeem.
 5. **Punt 3, stuk 2: wat een getuige doet.** De stap die loopt, en hij hoort bij de kern: nu ziet een
-   getuige alles en doet hij niets.
+   getuige alles en doet hij niets. **Af** (27 sep, negende sessie): de roddelaar vertelt het in de herberg.
 6. **Een risico bij verstoppen.** Nu zoeken de soldaten alleen als de inner argwaan heeft, en die
    krijgt hij pas onder 60% van wat de velden beloven. In de speeltest werd daarom nooit gezocht:
    verstoppen was gratis. Marcel koos op 25 sep al dat de soldaten op Sint-Maarten altijd op twee of drie
-   plekken zoeken, ook zonder argwaan (werklijst punt 4, verstoppen deel 1b); dat is nog niet gebouwd.
+   plekken zoeken, ook zonder argwaan (werklijst punt 4, verstoppen deel 1b). **Af** (27 sep, negende
+   sessie, punt 4, stuk 1).
 7. **De winter die je ziet aankomen.** In de speeltest stierf bijna de helft van het dorp aan de kou,
    zonder waarschuwing vooraf, en het bericht zegt niet waaraan. Wie het spel niet kent, weet niet dat
    hij hout moet hakken.
@@ -77,11 +78,13 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 
 ### De kortste weg, in volgorde
 
-1. Punt 3, stuk 2 afmaken (de getuigen).
-2. Verstoppen deel 1b: de soldaten zoeken altijd op twee of drie plekken. Zonder is er geen gok.
+1. ~~Punt 3, stuk 2 afmaken (de getuigen).~~ Af (27 sep).
+2. ~~Verstoppen deel 1b: de soldaten zoeken altijd op twee of drie plekken. Zonder is er geen gok.~~ Af
+   (27 sep).
 3. De winter zichtbaar maken: een waarschuwing als het hout of het eten de winter niet haalt, en in het
    bericht waaraan iemand stierf.
-4. Een speeltest door Marcel zelf, met de speeltest hieronder erbij, en de getallen bijstellen.
+4. Een speeltest door Marcel zelf, met de speeltest hieronder erbij, en de getallen bijstellen. Op de
+   stand van nu: de speeltest hieronder liep zonder stap 1 en 2, en zonder de inner die je kunt bespelen.
 5. Opslaan, Verder en een titelscherm.
 6. De afrekening na het eerste jaar.
 7. De eerste weken als opdrachten.
