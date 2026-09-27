@@ -1830,6 +1830,10 @@ eigen erf.
   niet de heer die op bier heft. Zo gebouwd, zie hieronder.
 - **Wacht:** een huis dat groeit door wat zijn bewoners bereiken, bij punt 5 van de werklijst (vraag
   37); de bakker en de smid als zaak waar mensen heen gaan, bij het dorp.
+- **Groter, en een raam** (vraag 39, open): Marcel vroeg of de herberg groter moet ("Of maken we nog een
+  los cafe?") en kwam met een idee: "Misschien een raam waar je mensen doorheen ziet." Het voorstel
+  staat in de werklijst: een T met de topgevel naar voren, aan de westkant van het plein, met ramen die
+  's avonds branden en waarin je de gasten als schimmen ziet.
 
 **Zo werkt het nu: de herberg, stuk 1** (27 sep; `js/herberg.js`, toetsen in `test/herberg.test.cjs`):
 - **De herberg staat er vanaf het begin,** in de hoek tussen het plein en de weg (tegel 44,44, vijf

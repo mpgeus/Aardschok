@@ -292,6 +292,13 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Voorstel: B, aan de westkant van het plein, waar nu de lege hut staat, met zijn deur naar het plein.
     De lege hut ruilt van plek en komt waar nu de herberg staat.** Achter de herberg is dan ook plaats
     voor de stal (punt 13).
+    **Marcel (27 sep): "Misschien een raam waar je mensen doorheen ziet."** Voorstel van Claude: 's avonds
+    branden de ramen van de herberg, en daarin zie je de gasten als schimmen bewegen, meer naarmate er
+    meer binnen zitten. De huizenbouwer weet van elk raam waar het zit; die moet dat aan het spel
+    doorgeven. Daarna kan het ook voor elk huis: licht achter het raam zolang er iemand wakker is. Dat
+    helpt punt 3, want een verlicht raam is een getuige. Goedkoper: 's zomers blijven de gasten buiten op
+    het bankje zitten, 's winters gaan ze naar binnen. Een doorkijk in de herberg zelf (tafels, een
+    tapkast) is veel tekenwerk en hoort er nu niet bij.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
