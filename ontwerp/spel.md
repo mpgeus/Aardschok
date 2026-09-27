@@ -1830,10 +1830,9 @@ eigen erf.
   niet de heer die op bier heft. Zo gebouwd, zie hieronder.
 - **Wacht:** een huis dat groeit door wat zijn bewoners bereiken, bij punt 5 van de werklijst (vraag
   37); de bakker en de smid als zaak waar mensen heen gaan, bij het dorp.
-- **Groter, en een raam** (vraag 39, open): Marcel vroeg of de herberg groter moet ("Of maken we nog een
-  los cafe?") en kwam met een idee: "Misschien een raam waar je mensen doorheen ziet." Het voorstel
-  staat in de werklijst: een T met de topgevel naar voren, aan de westkant van het plein, met ramen die
-  's avonds branden en waarin je de gasten als schimmen ziet.
+- **Groter, en een raam** (vraag 39): Marcel vroeg of de herberg groter moet ("Of maken we nog een los
+  cafe?") en kwam met een idee: "Misschien een raam waar je mensen doorheen ziet." Hij koos het
+  voorstel ("Prima", en "Ja idd" op de schimmen). Zo gebouwd, zie "stuk 3" hieronder.
 
 **Zo werkt het nu: de herberg, stuk 1** (27 sep; `js/herberg.js`, toetsen in `test/herberg.test.cjs`):
 - **De herberg staat er vanaf het begin,** in de hoek tussen het plein en de weg (tegel 44,44, vijf
@@ -1882,6 +1881,25 @@ wordt gepraat:
 - **De marskramer logeert in de herberg:** hij staat tien dagen op het plein, zit 's avonds in de
   herberg en slaapt er, en staat 's ochtends weer bij zijn waar (`T.logiesAnker`, dat `T.dagAnker`
   vraagt). Bij de muis op de herberg staat dan "de marskramer logeert hier".
+
+**Zo werkt het nu: de herberg, stuk 3** (27 sep; vraag 39, Marcel: "Prima" en "Ja idd"):
+- **Groter, aan de westkant van het plein:** een T van vakwerk onder riet (acht bij elf tegels, groter dan
+  elke boerderij), met een topgevel naar voren en de dwarsvleugel naar achteren, en de deur midden op de
+  lange kant, naar het plein. Hij staat waar de lege hut stond; die staat nu in de hoek tussen het plein
+  en de weg. Achter de herberg is plaats voor de stal (punt 13). Met de vleugel naar voren kwam de deur
+  in de binnenhoek, drie tegels van de tegel ervoor; daarom staat de vleugel achter.
+- **Wat dat kost:** de meeste boeren wonen aan de oost- en noordkant, dus ze lopen nu verder naar de
+  herberg: gemiddeld anderhalf uur in plaats van ruim een uur. Er komen daardoor iets minder gasten per
+  avond (in de herfst 2,0 in plaats van 2,2; in de winter 2,3 in plaats van 2,8; gemeten met een vast
+  zaad). Als het dorp naar het westen groeit, trekt dat weer bij.
+- **'s Avonds branden de ramen, en je ziet de gasten erachter als schimmen:** een hoofd en schouders die
+  een beetje heen en weer gaan, in zoveel ramen als er gasten binnen zitten (ook de marskramer telt).
+  De huizenbouwer geeft van elk huis door waar zijn ramen zitten: welke pixels glas zijn, in ruitjes,
+  per raam (`ramen` in `tegels.json`; `ramenVan` in `gereedschap/pixelart/huizen.cjs`; welk raam, zegt
+  het glas zelf). Het spel tekent ze warm geel als `T.herbergLicht` zegt dat de herberg open is
+  (`brandendeRamen` in `js/tekenen.js`), en wat vóór de herberg staat, een boom of het dak van een
+  boerderij, dekt ze af. Nu alleen de herberg; de ramen van de andere huizen kunnen dezelfde weg, bij
+  punt 3.
 
 ### Het dorp bouwt zelf
 

@@ -262,16 +262,23 @@
       lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, punt: { x: e.tx, y: e.ty }, f: () => tekenWezen(ctx, S, e) });
       if (e === aanDePaal) lijst.push({ d: e.x + e.y, l: 2.5, punt: { x: e.tx, y: e.ty }, f: () => tekenHalsijzer(ctx, e) });
     }
-    for (const item of tekenVolgorde(lijst)) item.f();
+    // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
+    // nacht licht wordt (brandendeRamen, hieronder).
+    const ramen = brandendeRamen(S);
+    for (const item of tekenVolgorde(lijst)) {
+      item.f();
+      for (const r of ramen) if (isTekeningVan(item, r.g)) ponsRamen(ctx, r);
+    }
     ctx.restore();
 
     // De nacht valt over de wereld, maar niet over de zwevende teksten: die komen erna, met dezelfde
-    // camera als hierboven.
+    // camera als hierboven. Ertussen gaan de ramen aan.
     tekenNacht(ctx, S, bw, bh);
     ctx.save();
     ctx.translate(Math.round(bw / 2), Math.round(bh / 2));
     ctx.scale(S.zoom, S.zoom);
     ctx.translate(-Math.round(S.camera.x), -Math.round(S.camera.y));
+    for (const r of ramen) vulRamen(ctx, S, r);
     tekenEffecten(ctx, S);
     ctx.restore();
     tekenVignet(ctx, S, bw, bh);
@@ -284,6 +291,14 @@
   // true zet hem uit, om te vergelijken.
   function tekenNacht(ctx, S, bw, bh) {
     if (!S.kalender || !T.lichtVan || (T.debug && T.debug.geenNacht)) return;
+    ctx.save();
+    // Alleen over wat er getekend is: waar een raam brandt, zit nog een gat in het doek (ponsRamen
+    // hieronder), en daar valt de nacht niet in. Op de rest is dit hetzelfde als gewoon eroverheen.
+    ctx.globalCompositeOperation = 'source-atop';
+    tekenNachtLagen(ctx, S, bw, bh);
+    ctx.restore();
+  }
+  function tekenNachtLagen(ctx, S, bw, bh) {
     const l = T.lichtVan(S.kalender.dag);
     if (l.gloed > 0.01) {
       ctx.fillStyle = `rgba(255, 150, 70, ${(0.1 * l.gloed).toFixed(3)})`;
@@ -304,20 +319,128 @@
     ctx.fillStyle = verloop;
     ctx.fillRect(0, 0, bw, bh);
     // Warm licht in het donker: de lantaarn van de herberg, 's avonds, warmer naarmate er meer gasten
-    // binnen zitten (js/herberg.js, T.herbergLicht). Zo zie je van ver waar het dorp 's avonds is.
+    // binnen zitten (js/herberg.js, T.herbergLicht). Zo zie je van ver waar het dorp 's avonds is. De
+    // ramen branden ook (brandendeRamen hieronder).
+    const nacht = nachtVan(S); // vol als het nacht is, zwakker in de schemering
     for (const b of T.herbergLicht ? T.herbergLicht(S) : []) {
       const q = T.naarScherm(b.x, b.y);
       const lx = Math.round(bw / 2) + (q.x - Math.round(S.camera.x)) * S.zoom;
       const ly = Math.round(bh / 2) + (q.y - 24 - Math.round(S.camera.y)) * S.zoom;
       const r = Math.max(1, b.straal * 32 * S.zoom);
       const gloed = ctx.createRadialGradient(lx, ly, 0, lx, ly, r);
-      // Vol als het nacht is, zwakker in de schemering.
-      const nacht = Math.min(1, l.donker / ((T.DAG_INSTELLINGEN && T.DAG_INSTELLINGEN.nachtDonker) || 0.68));
       gloed.addColorStop(0, `rgba(255, 186, 104, ${(b.sterkte * nacht).toFixed(3)})`);
       gloed.addColorStop(1, 'rgba(255, 186, 104, 0)');
       ctx.fillStyle = gloed;
       ctx.fillRect(lx - r, ly - r, 2 * r, 2 * r);
     }
+  }
+
+  // Hoe donker het is, van 0 (dag) tot 1 (volle nacht); 0 zonder kalender, of als de nacht uit staat.
+  function nachtVan(S) {
+    if (!S.kalender || !T.lichtVan || (T.debug && T.debug.geenNacht)) return 0;
+    const vol = (T.DAG_INSTELLINGEN && T.DAG_INSTELLINGEN.nachtDonker) || 0.68;
+    return Math.min(1, T.lichtVan(S.kalender.dag).donker / vol);
+  }
+
+  // Ramen die 's avonds branden (js/herberg.js, T.herbergLicht; Marcel, 27 sep: "Misschien een raam
+  // waar je mensen doorheen ziet"): elk ruitje warm geel, en in zoveel ramen als er gasten zijn een
+  // schim, een hoofd en schouders die een beetje heen en weer gaan. De ruitjes komen van de
+  // huizenbouwer (tegels.json, "ramen" bij de tekening; gereedschap/pixelart/huizen.cjs), in pixels
+  // vanaf het anker van de tekening, dat op zijn achterste tegel valt.
+  //
+  // Wat vóór het gebouw staat, moet de ramen afdekken, en de nacht mag er niet overheen. Daarom gaat
+  // het in drie stappen, met een gat in het doek: meteen nadat het gebouw getekend is, gaan de ruitjes
+  // eruit (ponsRamen); alles wat daarna komt en ervoor staat, tekent het gat weer dicht; de nacht valt
+  // alleen op wat er getekend is (tekenNacht, 'source-atop'); en wat er dan nog van het gat over is,
+  // wordt licht (vulRamen). Zo tekent niets twee keer, en dekt een boom of een dak ervoor het raam af.
+  // Hoe fel: in de schemering nog zwak, 's nachts bijna vol, en dan zie je nog net het glas.
+  function brandendeRamen(S) {
+    const nacht = nachtVan(S);
+    if (nacht <= 0.02 || !T.herbergLicht || !metSprites()) return [];
+    const uit = [];
+    for (const b of T.herbergLicht(S)) {
+      const g = b.ramenVan;
+      const opz = g && g.tekening && T.opzoekTegelNaam ? T.opzoekTegelNaam(g.tekening) : null;
+      const ramen = opz && opz.eig && opz.eig.ramen;
+      if (ramen && ramen.length) uit.push({ g, ramen, schimmen: b.schimmen || 0, fel: 0.9 * nacht, hoek: T.naarScherm(g.x, g.y) });
+    }
+    return uit;
+  }
+  const isTekeningVan = (item, g) => !!(item.gebouw && item.gebouw.x === g.x && item.gebouw.y === g.y);
+  // Een ruitje is zijn omtrek, [x, y, x, y, ...] vanaf de hoek van de tekening.
+  function ruitPad(ctx, hoek, ruit) {
+    ctx.moveTo(hoek.x + ruit[0], hoek.y + ruit[1]);
+    for (let i = 2; i < ruit.length; i += 2) ctx.lineTo(hoek.x + ruit[i], hoek.y + ruit[i + 1]);
+    ctx.closePath();
+  }
+  // Waar de rechte lijn omhoog door x een ruitje snijdt: [boven, onder]. Naast het ruitje: zijn rand.
+  function snedeVan(ruit, x) {
+    const xs = ruit.filter((_, k) => k % 2 === 0);
+    const lx = Math.max(Math.min(...xs), Math.min(Math.max(...xs), x));
+    let boven = Infinity;
+    let onder = -Infinity;
+    for (let k = 0; k < ruit.length; k += 2) {
+      const [x1, y1, x2, y2] = [ruit[k], ruit[k + 1], ruit[(k + 2) % ruit.length], ruit[(k + 3) % ruit.length]];
+      if (lx < Math.min(x1, x2) || lx > Math.max(x1, x2)) continue;
+      const ys = x1 === x2 ? [y1, y2] : [y1 + ((y2 - y1) * (lx - x1)) / (x2 - x1)];
+      boven = Math.min(boven, ...ys);
+      onder = Math.max(onder, ...ys);
+    }
+    return [boven, onder];
+  }
+  function ponsRamen(ctx, r) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = `rgba(0, 0, 0, ${r.fel.toFixed(3)})`;
+    ctx.beginPath();
+    for (const raam of r.ramen) for (const ruit of raam) ruitPad(ctx, r.hoek, ruit);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 'destination-over' tekent alleen waar het doek nog open is, dus in wat er van de gaten over is:
+  // eerst de schimmen, dan het licht erachter.
+  const SCHIM = 'rgba(34, 20, 12, 0.88)';
+  const RAAMLICHT = 'rgb(255, 200, 118)';
+  function vulRamen(ctx, S, r) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-over';
+    // Welke ramen een schim krijgen: vast per raam (anders springen ze), zoveel als er gasten zijn.
+    const volgorde = r.ramen.map((_, i) => i).sort((a, b) => ((a * 7 + 3) % 11) - ((b * 7 + 3) % 11));
+    for (const i of volgorde.slice(0, Math.min(r.schimmen, r.ramen.length))) {
+      const raam = r.ramen[i];
+      const xs = raam.flatMap((q) => q.filter((_, k) => k % 2 === 0));
+      const b = Math.max(...xs) - Math.min(...xs);
+      const mx = (Math.min(...xs) + Math.max(...xs)) / 2 + Math.sin(S.tijd * 0.8 + i * 1.7) * b * 0.15;
+      const cx = r.hoek.x + mx;
+      // Boven- en onderkant van het raam recht boven de schim: een raam in een muur loopt schuin, een
+      // mens staat rechtop.
+      let boven = Infinity;
+      let onder = -Infinity;
+      for (const q of raam) {
+        const [t, o] = snedeVan(q, mx);
+        boven = Math.min(boven, r.hoek.y + t);
+        onder = Math.max(onder, r.hoek.y + o);
+      }
+      const h = onder - boven;
+      if (b < 4 || h < 5) continue; // te klein voor een mens
+      ctx.save();
+      ctx.beginPath();
+      for (const ruit of raam) ruitPad(ctx, r.hoek, ruit);
+      ctx.clip(); // een schim blijft in zijn eigen raam
+      ctx.fillStyle = SCHIM;
+      ctx.beginPath();
+      ctx.arc(cx, boven + h * 0.45, Math.max(1.5, Math.min(b * 0.2, h * 0.15)), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(cx, onder + h * 0.08, b * 0.38, h * 0.4, 0, Math.PI, 0);
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.fillStyle = RAAMLICHT;
+    ctx.beginPath();
+    for (const raam of r.ramen) for (const ruit of raam) ruitPad(ctx, r.hoek, ruit);
+    ctx.fill();
+    ctx.restore();
   }
 
   // Gras op een weide (js/akkers.js: T.akkerTegelStadium geeft 'weide'; spel.md, "Weides met koeien

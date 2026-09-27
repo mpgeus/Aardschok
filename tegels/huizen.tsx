@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="huizen" tilewidth="662" tileheight="757" tilecount="32" columns="8" objectalignment="bottom">
- <tileoffset x="-6" y="275"/>
+<tileset version="1.10" tiledversion="1.11.0" name="huizen" tilewidth="662" tileheight="789" tilecount="32" columns="8" objectalignment="bottom">
+ <tileoffset x="-6" y="307"/>
  <properties>
   <property name="notitie" value="De huizen van de huizenbouwer (huizen.cjs, ronde 4b): hutten van vlechtwerk en huizen van vakwerk onder riet, de boerderijen en het huis van de schout. Zet ze neer op de tegel linksboven van hun voet (&quot;beslaat&quot;); &quot;deur&quot; is de tegel voor de deur, gerekend vanaf die tegel."/>
  </properties>
- <image source="huizen.png" width="5296" height="3028"/>
+ <image source="huizen.png" width="5296" height="3156"/>
  <tile id="0">
   <properties>
     <property name="naam" value="hut1"/>
@@ -137,8 +137,8 @@
   <properties>
     <property name="naam" value="herberg1"/>
     <property name="vast" type="bool" value="true"/>
-    <property name="beslaat" value="5x7"/>
-    <property name="deur" value="5,2"/>
+    <property name="beslaat" value="8x11"/>
+    <property name="deur" value="8,5"/>
   </properties>
  </tile>
  <tile id="17">

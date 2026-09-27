@@ -30,8 +30,9 @@
 // (AKKERS hieronder).
 //
 // Met de herberg (27 sep, werklijst punt 2, vraag 35: "Werklijst doorzetten", op het voorstel van
-// Claude): hij staat er vanaf het begin, in de hoek tussen het plein en de weg, met zijn deur aan de
-// weg (HERBERG hieronder). Daar woont de herbergierster, en 's avonds gaat het dorp erheen (js/herberg.js).
+// Claude): hij staat er vanaf het begin (HERBERG hieronder). Daar woont de herbergierster, en 's avonds
+// gaat het dorp erheen (js/herberg.js). Eerst stond hij klein in de hoek tussen het plein en de weg; sinds
+// vraag 39 (Marcel: "Prima") staat hij groter aan de westkant van het plein, en de lege hut in die hoek.
 //
 // De grond gaat via de terreinsets van tegels/rand.tsx, en de tegels worden op naam opgezocht in
 // plaats van op nummer (net als maak-wereld.cjs). Welke akker van welke boer is, wie waar woont en
@@ -396,15 +397,18 @@ const SCHOUT_HUIS = { tegel: 'schoutshuis', x: 29, y: 27, b: 8, d: 6 };
 const GEWONE_HUIZEN = [
   { gebouw: 'huis', tegel: 'huis1', x: 40, y: 25, b: 7, d: 5, bewoners: 'jongGezin' },
   { gebouw: 'hut', tegel: 'hut1', x: 21, y: 36, b: 5, d: 4, bewoners: 'oudStel' },
-  { gebouw: 'hut', tegel: 'hut4', x: 24, y: 45, b: 6, d: 6 },
+  // de lege hut in de hoek tussen het plein en de weg, waar de herberg tot vraag 39 stond
+  { gebouw: 'hut', tegel: 'hut4', x: 44, y: 44, b: 6, d: 6 },
 ];
-// De herberg (27 sep, werklijst punt 2): in de hoek tussen het plein en de weg, waar de weg het plein
-// op komt, met zijn deur aan de weg, zodat wie over de weg binnenkomt er langs loopt. Hij hoorde bij de
-// trede dorp en was in het gehucht niet te bouwen; nu staat hij er vanaf het begin, met de
-// herbergierster (js/mensen.js). Vakwerk onder riet, van de huizenbouwer (herberg1 in
-// gereedschap/pixelart/huizen.cjs): de oude tekening van steen onder pannen is te rijk voor een
-// gehucht. Voor de deur een lantaarn en een bankje, zodat je ziet dat het geen gewoon huis is.
-const HERBERG = { tegel: 'herberg1', x: 44, y: 44, b: 5, d: 7 };
+// De herberg (27 sep, werklijst punt 2): aan de westkant van het plein, waar tot vraag 39 de lege hut
+// stond, tussen de weg naar de brug en de boerderij van Wouter, met zijn deur naar het plein. Hij hoorde
+// bij de trede dorp en was in het gehucht niet te bouwen; nu staat hij er vanaf het begin, met de
+// herbergierster (js/mensen.js). Groter dan een boerderij (Marcel, 27 sep: "ik denk dat de herberg ook
+// groter moet zijn?"): een T van vakwerk onder riet, van de huizenbouwer (herberg1 in
+// gereedschap/pixelart/huizen.cjs); de oude tekening van steen onder pannen is te rijk voor een gehucht.
+// Voor de deur een lantaarn en een bankje, zodat je ziet dat het geen gewoon huis is. Achter hem is
+// plaats voor de stal (werklijst punt 13).
+const HERBERG = { tegel: 'herberg1', x: 19, y: 43, b: 8, d: 11 };
 // De schaapskooi aan de rand van de heide: het gehucht begint met één, en dus met de schapen op de
 // heide in plaats van op de weide. Voorlopig in de tekening van de blokhutschuur, net als in het
 // bouwmenu (js/gebouwen.js, T.GEBOUWEN.schaapskooi).
@@ -429,7 +433,7 @@ zetTegel(HERBERG.tegel, HERBERG.x, HERBERG.y, true);
   // de lantaarn naast de deur, en een bankje tegen de muur ernaast
   const d = deurVan(HERBERG);
   zetTegel('lantaarn', d.x, d.y - 1, true);
-  zetTegel('bankje-y', d.x, d.y + 2, true);
+  zetTegel('bankje-y', d.x, d.y + 1, true);
 }
 
 // ---- het plein: de put op het zand voor de deur van de schout, en vijf oude eiken, met een bank
@@ -447,8 +451,9 @@ const BOMEN = [
 for (const [x, y, soort] of BOMEN) zetTegel(soort, x, y);
 
 // ---- groente: een rijtje kool bij een huis, en een moestuin bij Gerrit (boer3) ----
-// [x, y, b, h] in tegels: een rijtje van b bij h.
-const KOOL = [[18, 38, 1, 3], [44, 30, 3, 1], [62, 40, 1, 3], [36, 64, 3, 1], [20, 47, 2, 1]];
+// [x, y, b, h] in tegels: een rijtje van b bij h. (Het rijtje bij de hut aan de westkant van het plein
+// ging weg toen de herberg daar kwam, 27 sep: het lag onder zijn voet en werd stil overgeslagen.)
+const KOOL = [[18, 38, 1, 3], [44, 30, 3, 1], [62, 40, 1, 3], [36, 64, 3, 1]];
 for (const [x0, y0, b, h] of KOOL) for (let y = y0; y < y0 + h; y++) for (let x = x0; x < x0 + b; x++) zetTegel('kool', x, y);
 {
   const RIJEN = ['kool', 'prei', 'bonen', 'kruidenbed'];

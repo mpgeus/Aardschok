@@ -118,8 +118,8 @@
    "huis": "boer5"
   },
   {
-   "x": 49,
-   "y": 46,
+   "x": 27,
+   "y": 48,
    "wie": "herbergierster",
    "straal": 3,
    "huis": "herbergierster"
@@ -198,8 +198,8 @@
   },
   {
    "gebouw": "hut",
-   "x": 24,
-   "y": 45,
+   "x": 44,
+   "y": 44,
    "b": 6,
    "h": 6,
    "tekening": "huizen/hut4"
@@ -213,10 +213,10 @@
   },
   {
    "gebouw": "herberg",
-   "x": 44,
-   "y": 44,
-   "b": 5,
-   "h": 7,
+   "x": 19,
+   "y": 43,
+   "b": 8,
+   "h": 11,
    "huis": "herbergierster",
    "tekening": "huizen/herberg1"
   },

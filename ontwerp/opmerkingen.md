@@ -28,6 +28,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     herberg (binnen zijn) bestaat nog niet.
   - De inner hoort in de herberg nog niets, en de roddelaar vertelt alleen over zijn eigen kelder. Wie
     jou 's nachts ziet sjouwen en het in de herberg vertelt, hoort bij de getuigen (punt 3).
+  - Na stuk 3 (27 sep): de schimmen zijn een hoofd en schouders in een donkere kleur, geen echte
+    figuren; een raam krijgt er hoogstens één, en ze zitten ook achter de ramen boven. Is de herberg zelf
+    doorzichtig (de schout staat erachter: het kijkgat of het raster), dan branden de ramen gewoon door
+    over wat je door het gat ziet; dat komt 's avonds zelden voor. Een ruitje is een vierhoek om het
+    glas heen; waar een vensterbank het glas scheef afsnijdt, blijft een hoekje donker.
+  - De ramen van de andere huizen weten nu ook waar ze zitten, maar branden nog niet: dat hoort bij punt
+    3 (een verlicht raam is een getuige).
   - De toetsen van de dag en de bewoners kijken nu om twee uur 's nachts of iedereen binnen is, niet
     meer om half twaalf: wie van ver in de herberg zat, is later thuis.
 - **De poppetjes, wat nog ruw is** (26 sep, na stap 2; `spel.md`, "Mensen worden poppetjes"):

@@ -18,7 +18,7 @@
 //            onder riet, 2 vakwerk onder riet, 3 half steen. In het spel nu alleen 1 en 2, en de
 //            schout in 3 (Marcel, 26 sep).
 //
-// renderHuis(opgave) geeft { plaat, anker, voet, deur }:
+// renderHuis(opgave) geeft { plaat, anker, voet, deur, ramen }:
 //   plaat  de tekening, strak gesneden, zonder gras en zonder schaduw op de grond: het spel legt
 //          zijn eigen grond eronder;
 //   anker  het punt in de plaat waar de achterste hoek van de voet valt (naar-tiled.cjs legt daar
@@ -27,7 +27,9 @@
 //          (muren, een aanbouw, een trap, de palen van een galerij), niet aan zijn dak;
 //   deur   [dx, dy]: de tegel vóór de deur, vanaf de achterste tegel van de voet. Die ligt buiten de
 //          voet, dus een van beide is -1, b of d. Het spel stuurt de bewoners daarheen
-//          (T.deurVan, js/bewoners.js).
+//          (T.deurVan, js/bewoners.js);
+//   ramen  de ramen die je ziet, elk een lijst ruitjes (vierhoeken in pixels vanaf het anker van het
+//          spel; ramenVan hieronder). 's Avonds branden die van de herberg (js/tekenen.js).
 const fs = require('fs');
 const os = require('os');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
@@ -73,10 +75,14 @@ const HUIZEN = {
   // niemand bouwt het huis van de schout, dus geen bouwfases (bouwfasen.cjs)
   schoutshuis: { gebouw: 'huis', trede: 3, fasen: false, zaad: 41, vorm: 'rechthoek', b: 8, d: 6, lagen: 2, nok: 'x', dak: 'riet', wand: 'veldsteen', boven: 'vakwerk', schoor: false, uit: { luiken: true, bakken: 2 } },
   // ── de herberg van het gehucht (27 sep, werklijst punt 2): trede 2, vakwerk onder riet zoals de
-  // huizen, maar hoger, met een zolder en dakkapellen, en zijn deur aan de weg. De oude tekening
-  // (tegels/gebouwen.png) is van steen onder pannen: trede 4 à 5, dus te rijk voor een gehucht.
-  // Hij staat op de kaart (gereedschap/tiled/maak-gehucht.cjs), niemand bouwt hem, dus geen bouwfases ──
-  herberg1: { gebouw: 'herberg', trede: 2, fasen: false, zaad: 51, vorm: 'rechthoek', b: 7, d: 5, lagen: 1.5, nok: 'y', dak: 'riet', wand: 'vakwerk', plint: 40, schoorsteen: 'leem', schoor: false, uit: { kapellen: 2, luiken: true, bakken: 2 } },
+  // huizen, maar groter en hoger, met een zolder en dakkapellen. Een T, zodat hij groter is dan een
+  // boerderij (vraag 39; Marcel: "Prima"), met een topgevel naar voren en de dwarsvleugel naar achteren
+  // (voor: false): met de vleugel naar voren kwam de deur in de binnenhoek, en lag de tegel ervoor drie
+  // tegels van de muur. Nu zit de deur midden op de lange kant, naar het plein, met de ramen erlangs. De
+  // oude tekening (tegels/gebouwen.png) is van steen onder pannen: trede 4 à 5, te rijk voor een
+  // gehucht. Hij staat op de kaart (gereedschap/tiled/maak-gehucht.cjs), niemand bouwt hem, dus geen
+  // bouwfases ──
+  herberg1: { gebouw: 'herberg', trede: 2, fasen: false, zaad: 53, vorm: 'T', b: 11, d: 5, b2: 4, p2: 3, voor: false, lagen: 1.5, nok: 'y', dak: 'riet', wand: 'vakwerk', plint: 40, schoorsteen: 'leem', schoor: false, uit: { kapellen: 3, luiken: true, bakken: 2 } },
 };
 
 // ---------------------------------------------------------------- meten: voet en deur
@@ -217,14 +223,86 @@ function renderHuis(spec) {
     }
   }
   if (x1 < 0) throw new Error('niets getekend');
+  const anker = [Math.round(ax) - xa, Math.round(ay) - ya];
   return {
     plaat: plaat.uitsnede(xa, ya, x1 - xa + 1, y1 - ya + 1),
-    anker: [Math.round(ax) - xa, Math.round(ay) - ya],
+    anker,
     voet: m.voet,
     deur: m.deur,
     deurVer: m.deurVer,
+    ramen: ramenVan(B, W, xa, ya, anker),
     ms: Date.now() - t0,
   };
+}
+
+// De ramen die je ziet (27 sep, werklijst vraag 39: 's avonds branden de ramen van de herberg, en je
+// ziet de gasten erachter als schimmen): welke pixels van het beeld glas zijn (de groep 'glas' van de
+// huizenbouwer, en alleen wat vooraan ligt), in ruitjes die aan elkaar liggen. Een kruis in het kozijn
+// deelt een raam in ruitjes; welk raam het is, zegt het deel van het glas (huis-sdf.cjs geeft elk raam
+// zijn eigen glas, deel 600 plus zijn nummer). Een ruitje is zijn omtrek, [x, y, x, y, ...] (omtrekVan),
+// in pixels vanaf het anker van het spel: de achterste voethoek plus 16 (naar-tiled.cjs, "anker"). Het
+// spel tekent ermee (js/tekenen.js). Een spikkel van een paar pixels telt niet.
+const RAAM_KLEINST = 4; // pixels
+
+// De omtrek van een ruitje: het bolle omhulsel van zijn pixels (van hun hoeken), zonder punten op een
+// rechte lijn. Een ruitje is een parallellogram in een schuine muur, en vaak snijdt het kozijn er een
+// hoek af; een vierhoek tussen zijn linker- en rechterkolom liet dan een driehoekje glas donker.
+function omtrekVan(px) {
+  const gezien = new Set();
+  const punten = [];
+  for (const [x, y] of px) {
+    for (const [hx, hy] of [[x, y], [x + 1, y], [x, y + 1], [x + 1, y + 1]]) {
+      const k = hx * 4096 + hy;
+      if (!gezien.has(k)) gezien.add(k), punten.push([hx, hy]);
+    }
+  }
+  punten.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const draai = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const helft = (lijst) => {
+    const uit = [];
+    for (const q of lijst) {
+      while (uit.length >= 2 && draai(uit[uit.length - 2], uit[uit.length - 1], q) <= 0) uit.pop();
+      uit.push(q);
+    }
+    return uit.slice(0, -1);
+  };
+  return helft(punten).concat(helft(punten.slice().reverse()));
+}
+function ramenVan(B, W, xa, ya, anker) {
+  const glas = new Set(W.groepen.filter((g) => g.naam === 'glas' && g.obj != null).map((g) => g.obj));
+  if (!glas.size) return [];
+  const isGlas = (x, y) => x >= 0 && y >= 0 && x < B.b && y < B.h && glas.has(B.obj[y * B.b + x]);
+  const gezien = new Uint8Array(B.b * B.h);
+  // Pixels vanaf het anker van het spel (de achterste voethoek plus 16), met de rand van de pixel.
+  const ox = xa + anker[0];
+  const oy = ya + anker[1] + 16;
+  const ramen = new Map(); // per raam (het deel van zijn glas): zijn ruitjes
+  for (let y = 0; y < B.h; y++) {
+    for (let x = 0; x < B.b; x++) {
+      if (gezien[y * B.b + x] || !isGlas(x, y)) continue;
+      // één ruitje: alles van hetzelfde raam wat er (recht, niet schuin) aan vastzit
+      const deel = B.deel[y * B.b + x];
+      const px = [];
+      const rij = [[x, y]];
+      gezien[y * B.b + x] = 1;
+      while (rij.length) {
+        const [cx, cy] = rij.pop();
+        px.push([cx, cy]);
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const nx = cx + dx;
+          const ny = cy + dy;
+          if (isGlas(nx, ny) && !gezien[ny * B.b + nx] && B.deel[ny * B.b + nx] === deel) {
+            gezien[ny * B.b + nx] = 1;
+            rij.push([nx, ny]);
+          }
+        }
+      }
+      if (px.length < RAAM_KLEINST) continue;
+      if (!ramen.has(deel)) ramen.set(deel, []);
+      ramen.get(deel).push(omtrekVan(px).flatMap(([hx, hy]) => [hx - ox, hy - oy]));
+    }
+  }
+  return [...ramen.values()];
 }
 
 // ---------------------------------------------------------------- de bouwfasen
@@ -494,7 +572,7 @@ if (!isMainThread && workerData === 'huizen') {
   parentPort.on('message', ({ i, naam }) => {
     try {
       const r = renderHuis(HUIZEN[naam]);
-      parentPort.postMessage({ i, naam, b: r.plaat.b, h: r.plaat.h, px: r.plaat.px, anker: r.anker, voet: r.voet, deur: r.deur, deurVer: r.deurVer, ms: r.ms });
+      parentPort.postMessage({ i, naam, b: r.plaat.b, h: r.plaat.h, px: r.plaat.px, anker: r.anker, voet: r.voet, deur: r.deur, deurVer: r.deurVer, ramen: r.ramen, ms: r.ms });
     } catch (e) {
       parentPort.postMessage({ i, naam, fout: e.message });
     }
@@ -528,8 +606,8 @@ function renderHuizen(namen = Object.keys(HUIZEN), draden = DRADEN()) {
         else {
           const plaat = new K.Plaat(m.b, m.h);
           plaat.px = m.px;
-          uit[m.i] = { naam: m.naam, plaat, anker: m.anker, voet: m.voet, deur: m.deur, deurVer: m.deurVer, ms: m.ms };
-          console.log(`  ${m.naam.padEnd(12)} ${m.b}×${m.h}  voet ${m.voet.join('×')}  deur ${m.deur} (${m.deurVer} tegel voor de muur)  ${(m.ms / 1000).toFixed(1)} s`);
+          uit[m.i] = { naam: m.naam, plaat, anker: m.anker, voet: m.voet, deur: m.deur, deurVer: m.deurVer, ramen: m.ramen, ms: m.ms };
+          console.log(`  ${m.naam.padEnd(12)} ${m.b}×${m.h}  voet ${m.voet.join('×')}  deur ${m.deur} (${m.deurVer} tegel voor de muur)  ${m.ramen.length} ramen  ${(m.ms / 1000).toFixed(1)} s`);
         }
         if (++gedaan === namen.length) {
           for (const x of werkers) x.terminate();

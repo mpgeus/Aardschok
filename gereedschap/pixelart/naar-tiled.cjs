@@ -729,6 +729,8 @@ function bouwLosVel(veldNaam, items, notitie) {
     tiles: geordend.map((it) => (it ? {
       naam: it.naam, vast: it.vast, beslaat: it.beslaat, staat: it.staat || null, deur: it.deur || null,
       doos: [it.anker[0], it.anker[1] + 16, it.plaat.b - it.anker[0], it.plaat.h - it.anker[1] - 16],
+      // de ramen die je ziet, alleen bij een huis (huizen.cjs, ramenVan): 's avonds branden ze
+      ...(it.ramen ? { ramen: it.ramen } : {}),
     } : { naam: null, vast: false })),
   };
   schrijfTsx(beschrijving);
@@ -745,7 +747,7 @@ function bouwLosVel(veldNaam, items, notitie) {
 async function bouwHuizenVel() {
   const t0 = Date.now();
   const lijst = await HZ.renderHuizen();
-  const items = lijst.map((r) => ({ naam: r.naam, vast: true, plaat: r.plaat, anker: r.anker, beslaat: r.voet, deur: r.deur }));
+  const items = lijst.map((r) => ({ naam: r.naam, vast: true, plaat: r.plaat, anker: r.anker, beslaat: r.voet, deur: r.deur, ramen: r.ramen }));
   console.log(`  huizen: ${lijst.length} in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   return bouwLosVel('huizen', items, 'De huizen van de huizenbouwer (huizen.cjs, ronde 4b): hutten van vlechtwerk en huizen van vakwerk onder riet, de boerderijen en het huis van de schout. Zet ze neer op de tegel linksboven van hun voet ("beslaat"); "deur" is de tegel voor de deur, gerekend vanaf die tegel.');
 }
@@ -1027,7 +1029,8 @@ if (wil('rand')) padRandTegels();
       objectalignment: v.objectalignment,
       anker,
       // per lokaal tegel-id (0, 1, 2, …, zoals in de .tsx) dezelfde eigenschappen als daar.
-      tiles: v.tiles.map((t) => ({ naam: t.naam, vast: t.vast, beslaat: t.beslaat || null, groep: t.groep || null, staat: t.staat || null, deur: t.deur || null, doos: t.doos || null })),
+      // En bij een huis de ramen die je ziet (huizen.cjs, ramenVan): alleen in dit bestand, niet in de .tsx.
+      tiles: v.tiles.map((t) => ({ naam: t.naam, vast: t.vast, beslaat: t.beslaat || null, groep: t.groep || null, staat: t.staat || null, deur: t.deur || null, doos: t.doos || null, ...(t.ramen ? { ramen: t.ramen } : {}) })),
     };
   }
   const json = JSON.stringify(TEGELS_JSON, null, 1);

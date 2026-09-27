@@ -181,7 +181,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   gewoon werk van het gebouw (`T.GEBOUWEN.herberg.maakt`, met `tot`: tot er genoeg ligt). In het gehucht
   staat hij vanaf het begin, en de herbergierster woont er. In de herberg wordt gepraat: de roddelaar
   vertelt er wat er in zijn kelder ligt (`g.verteld`, `js/verstoppen.js`), de herbergierster vertelt jou
-  wie er zat, en de marskramer logeert er (`T.logiesAnker`).
+  wie er zat, en de marskramer logeert er (`T.logiesAnker`). 's Avonds branden de ramen van de herberg,
+  met de gasten erachter als schimmen: de huizenbouwer geeft per huis door waar de ramen zitten (`ramen`
+  in `tegels.json`), en `js/tekenen.js` tekent ze zo dat wat ervoor staat ze afdekt (`brandendeRamen`).
 - Een zin in een gesprek kan iets uit het spel noemen: `{woord}` vult `T.GESPREK_WOORDEN` in
   (`js/gesprek.js`), zoals `{gisteravond}` (`js/herberg.js`).
 - `js/akkers.js`: **alleen het gehucht** (`ontwerp/spel.md`): welk stadium een

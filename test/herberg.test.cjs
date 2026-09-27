@@ -82,13 +82,20 @@ const heenVan = (S, p) => {
 // De herberg en de herbergierster
 // ---------------------------------------------------------------------------------------------
 
-test('in het gehucht staat een herberg aan de weg, en de herbergierster woont er alleen en tapt er', () => {
+test('in het gehucht staat een herberg aan het plein, groter dan een boerderij, en de herbergierster woont er alleen en tapt er', () => {
   const S = gehucht();
   const g = T.herbergVan(S);
   assert.ok(g, 'er is een herberg');
   assert.equal(g.tekening, 'huizen/herberg1', 'vakwerk onder riet, van de huizenbouwer');
   for (let y = g.y; y < g.y + g.voet.h; y++) for (let x = g.x; x < g.x + g.voet.b; x++) assert.ok(!T.opHetPlein(S.wereld, x, y), 'niet op het plein');
-  assert.ok(T.isBegaanbaar(S.wereld, deurVan(S, g).x, deurVan(S, g).y), 'voor de deur kun je staan');
+  const deur = deurVan(S, g);
+  assert.ok(T.isBegaanbaar(S.wereld, deur.x, deur.y), 'voor de deur kun je staan');
+  // Aan het plein: binnen een paar tegels van de deur begint het plein (vraag 39: de westkant).
+  let bijPlein = false;
+  for (let dy = -5; dy <= 5; dy++) for (let dx = -5; dx <= 5; dx++) if (T.opHetPlein(S.wereld, deur.x + dx, deur.y + dy)) bijPlein = true;
+  assert.ok(bijPlein, 'zijn deur ligt aan het plein');
+  const oppervlak = (x) => x.voet.b * x.voet.h;
+  for (const b of S.gebouwen.filter((x) => x.soort === 'boerderij')) assert.ok(oppervlak(g) > oppervlak(b), `groter dan de boerderij ${b.huis}`);
   const zij = bewoner(S, 'herbergierster');
   assert.ok(zij, 'de herbergierster is een bewoner');
   assert.equal(zij.huis, g);
@@ -149,9 +156,16 @@ test('wie ver woont, gaat minder vaak, en in de winter gaan ze vaker', () => {
     return n;
   };
   const herfst = tel(HERFST, 60);
-  const dichtbij = wie.filter((p) => heenVan(S, p) < 0.8);
-  const ver = wie.filter((p) => heenVan(S, p) > 1.2);
-  assert.ok(dichtbij.length && ver.length, `${dichtbij.length} dichtbij, ${ver.length} ver`);
+  // Het derde dat het dichtst bij woont tegen het derde dat het verst weg woont, zonder wie om zijn
+  // karakter altijd of nooit gaat: dat hangt niet af van waar de herberg precies staat (vraag 39 zette
+  // hem aan de andere kant van het plein).
+  const vast = (p) => IN.karakters[(p.wezen && p.wezen.karakter) || (T.MENSEN[p.wie] && T.MENSEN[p.wie].karakter)] != null;
+  const opAfstand = wie.filter((p) => !vast(p)).sort((a, b) => heenVan(S, a) - heenVan(S, b));
+  const derde = Math.floor(opAfstand.length / 3);
+  const dichtbij = opAfstand.slice(0, derde);
+  const ver = opAfstand.slice(-derde);
+  assert.ok(derde >= 2, `te weinig mensen om te vergelijken (${opAfstand.length})`);
+  assert.ok(heenVan(S, ver[0]) - heenVan(S, dichtbij[derde - 1]) > 0.3, 'tussen dichtbij en ver zit afstand');
   const gemiddeld = (lijst, n) => lijst.reduce((s, p) => s + n.get(p), 0) / lijst.length;
   assert.ok(gemiddeld(dichtbij, herfst) > gemiddeld(ver, herfst), `dichtbij ${gemiddeld(dichtbij, herfst)}, ver ${gemiddeld(ver, herfst)}`);
   const winter = tel(WINTER, 60);
@@ -255,6 +269,10 @@ test('\'s avonds brandt de lantaarn van de herberg, en met meer gasten binnen is
   for (const p of T.herbergGasten(S, HERFST)) Object.assign(p.wezen, { binnen: true, deur: { x: deur.x, y: deur.y } });
   const vol = T.herbergLicht(S);
   assert.ok(vol[0].sterkte > leeg[0].sterkte && vol[0].straal > leeg[0].straal, 'warmer en verder');
+  // De ramen branden, met evenveel schimmen als er gasten binnen zitten (vraag 39: "Ja idd").
+  assert.equal(leeg[0].ramenVan, T.herbergVan(S));
+  assert.equal(leeg[0].schimmen, 0);
+  assert.equal(vol[0].schimmen, T.herbergGasten(S, HERFST).length);
   // Na bedtijd brandt hij nog zolang er iemand binnen zit.
   S.kalender.dag = bijUur(HERFST, d.slapen + 0.2);
   assert.equal(T.herbergLicht(S).length, 1);

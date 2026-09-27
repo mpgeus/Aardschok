@@ -224,15 +224,20 @@
 
   // Het licht van de herberg, voor de nacht (js/tekenen.js): 's avonds brandt de lantaarn bij de deur,
   // en hoe meer gasten er binnen zitten, hoe warmer de gloed. Blijft er na bedtijd nog iemand hangen,
-  // dan brandt hij nog. Geeft een lijst { x, y, straal, sterkte } (tegels, 0..1), of een lege lijst.
+  // dan brandt hij nog. En dan branden ook de ramen, met de gasten erachter als schimmen (Marcel, 27 sep,
+  // vraag 39: "Misschien een raam waar je mensen doorheen ziet", en "Ja idd" op de schimmen): `ramenVan`
+  // is het gebouw waarvan de ramen branden, `schimmen` hoeveel gasten er binnen zitten. Geeft een lijst
+  // { x, y, straal, sterkte, ramenVan, schimmen } (tegels, 0..1), of een lege lijst.
   T.herbergLicht = function (S) {
     const g = T.herbergVan(S);
     if (!g || !S.kalender || !S.bewoners || !T.dagdeelVan) return [];
     const deur = T.deurVan(S.bewoners.wereld, g);
     const avond = T.dagdeelVan(S.kalender.dag, T.isOogstDag && T.isOogstDag(S.kalender.dag)) === 'avond';
-    const binnen = S.bewoners.mensen.filter((p) => p.huis !== g && p.wezen && p.wezen.binnen && p.wezen.deur && p.wezen.deur.x === deur.x && p.wezen.deur.y === deur.y).length;
+    const zitBinnen = (e) => !!(e && e.binnen && e.deur && e.deur.x === deur.x && e.deur.y === deur.y);
+    const binnen = S.bewoners.mensen.filter((p) => p.huis !== g && zitBinnen(p.wezen)).length
+      + (S.marskramer && zitBinnen(S.marskramer.wezen) ? 1 : 0);
     if (!avond && !binnen) return [];
-    return [{ x: deur.x, y: deur.y, straal: 3.5 + Math.min(3, binnen * 0.5), sterkte: Math.min(0.65, 0.3 + 0.08 * binnen) }];
+    return [{ x: deur.x, y: deur.y, straal: 3.5 + Math.min(3, binnen * 0.5), sterkte: Math.min(0.65, 0.3 + 0.08 * binnen), ramenVan: g, schimmen: binnen }];
   };
 
   // Wat er bij de muis op de herberg staat, na wat het gebouw doet (T.gebouwToestand, js/gebouwen.js):
