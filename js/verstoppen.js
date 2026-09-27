@@ -50,7 +50,7 @@
   const VI = () => T.VERSTOP_INSTELLINGEN;
   const WAT = ['graan', 'goud'];
   const dagNu = (S) => Math.floor(S.kalender ? S.kalender.dag : 0);
-  const hoofdletter = (s) => (T.hoofdletter ? T.hoofdletter(s) : s.charAt(0).toUpperCase() + s.slice(1));
+  const hoofdletter = (s) => T.hoofdletter(s);
   const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || '');
   const inhoudVan = (g) => g.verstopt || { graan: 0, goud: 0 };
 
@@ -124,7 +124,7 @@
     const eigen = V.karakters && karakter ? V.bewoners[karakter] || null : null;
     let vinden = vanSchout ? V.vindenBijSchout : basis.vinden;
     // Wat pas telt als het in de herberg verteld is (de roddelaar), telt alleen dan; zonder herberg altijd.
-    const heeftHerberg = !!(T.herbergVan && T.herbergVan(S));
+    const heeftHerberg = !!T.herbergVan(S);
     const verteld = g.verteld != null;
     const telt = eigen && (!eigen.inDeHerberg || verteld || !heeftHerberg);
     if (telt && typeof eigen.vinden === 'number') vinden *= eigen.vinden;

@@ -109,11 +109,10 @@
   T.isWerktijd = (dag, oogst) => T.dagdeelVan(dag, oogst) === 'werk';
 
   // Is het op deze dag oogst, van het graan of het hooi? Dan werkt iedereen tot het donker, en begint de
-  // avond later (js/herberg.js). Zonder js/akkers.js (een toets die het niet laadt) nooit.
+  // avond later (js/herberg.js).
   T.isOogstDag = function (dag) {
-    if (!T.akkerStadium || !T.datumVanDag) return false;
     const d = T.datumVanDag(dag);
-    return T.akkerStadium(d.maand, d.dagVanMaand) === 'rijp' || !!(T.isHooitijd && T.isHooitijd(d));
+    return T.akkerStadium(d.maand, d.dagVanMaand) === 'rijp' || !!T.isHooitijd(d);
   };
 
   // Het uur zoals je het zegt: "zeven uur", "half acht". Wat voor of na de middag is, zegt het deel

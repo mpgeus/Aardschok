@@ -5,13 +5,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/wereld.js');
-require('../js/tijd.js');
-require('../js/voorraad.js');
-require('../js/mensen.js');
-require('../js/gebouwen.js');
-require('../js/behoeften.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 // Dezelfde lege wereld als test/gebouwen.test.cjs (alleen wat T.isVast/T.voorwerpOp nodig hebben).
 function maakLegeWereld(b, h) {
@@ -247,7 +241,7 @@ test('T.tikGebouwenDag: productie schaalt mee met de tevredenheid (T.BEHOEFTEN_I
 test('T.tikBehoeftenDag: een huis groeit door (T.GEBOUWEN[x].wordt) als het lang genoeg tevreden genoeg is en er ruimte is', () => {
   const S = maakS(40, 40);
   T.zetVoorraad(S, 'hout', 8);
-  const r = T.plaatsGebouw(S, 'hut', 10, 10); // voet 3x3; "huis" is 6x6 en past ruim in de lege wereld
+  const r = T.plaatsGebouw(S, 'hut', 10, 10); // een huis past ruim in de lege wereld
   assert.equal(r.gelukt, true);
   for (let d = 1; d <= T.GEBOUWEN.hut.bouwtijd; d++) T.tikGebouwenDag(S, d);
   assert.equal(S.gebouwen[0].klaar, true);
@@ -265,7 +259,11 @@ test('T.tikBehoeftenDag: een huis groeit door (T.GEBOUWEN[x].wordt) als het lang
     T.tikGebouwenDag(S, dag);
   }
   assert.equal(S.gebouwen[0].soort, 'huis');
-  assert.deepEqual(S.gebouwen[0].voorwerp.beslaat, [T.GEBOUWEN.huis.voet.b, T.GEBOUWEN.huis.voet.h]);
+  // Het huis krijgt een tekening van zijn soort, en de voet van die tekening (T.gebouwVoet), niet de
+  // geschatte voet uit T.GEBOUWEN.
+  const voet = T.gebouwVoet('huis', S.gebouwen[0].tekening);
+  assert.ok(S.gebouwen[0].tekening, 'het huis heeft een tekening');
+  assert.deepEqual(S.gebouwen[0].voorwerp.beslaat, [voet.b, voet.h]);
   // De uitbreiding is ook echt vast gemaakt, anders kan er straks iets overlappend bij staan.
   assert.equal(T.isVast(S.wereld, 14, 14), true);
 });
@@ -300,9 +298,9 @@ test('T.tikBehoeftenDag: een huis groeit niet door als er geen ruimte voor de ui
 
 test('T.tikBehoeftenDag: een huis dat van vorm wisselt (smal en diep naar breed en ondiep) laat geen onzichtbare muur achter', () => {
   // In het echte tegelvel is "hut" smal en diep (5×7) en "huis" breed en ondiep (7×5) — geen
-  // gewone groei in twee richtingen, maar een andere vorm. Dat hier nabootsen (in plaats van
-  // T.GEBOUWEN.hut/huis zelf te gebruiken) omdat T.gebouwVoet zonder js/kaart.js altijd op de
-  // geschatte, allebei-vierkante voet terugvalt, en dan test dit geval zichzelf niet.
+  // gewone groei in twee richtingen, maar een andere vorm. Dat hier nabootsen met twee eigen soorten
+  // zonder tekening (dus met hun eigen voet), zodat de toets niet afhangt van welke tekeningen er op
+  // het vel staan.
   T.GEBOUWEN._proefSmal = { naam: 'smal', trede: 'gehucht', voet: { b: 3, h: 7 }, kosten: {}, bouwtijd: 0, handen: 0, woonruimte: 1, wordt: '_proefBreed', maakt: null, verdacht: false, menu: false, tekening: null, beschrijving: '', opmerking: 'alleen voor deze toets' };
   T.GEBOUWEN._proefBreed = { naam: 'breed', trede: 'gehucht', voet: { b: 7, h: 3 }, kosten: {}, bouwtijd: 0, handen: 0, woonruimte: 2, maakt: null, verdacht: false, menu: false, tekening: null, beschrijving: '', opmerking: 'alleen voor deze toets' };
   try {

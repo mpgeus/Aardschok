@@ -56,7 +56,7 @@
       toonPortret(gesprek.portret);
       // Een boer voert het gesprek van zijn karakter (js/boeren.js), maar heet zoals hij heet:
       // Aaltje, en niet "de weduwe". Onder zijn naam staat wie hij is en wat hij kan.
-      const over = T.overBoerTekst ? T.overBoerTekst(wie) : '';
+      const over = T.overBoerTekst(wie);
       T.ui.toonDialoog(
         T.hoofdletter(over && wie.naam ? wie.naam : gesprek.naam),
         knoop.tekst,

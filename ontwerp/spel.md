@@ -1616,7 +1616,10 @@ Wat het vraagt:
     bericht (A). Alleen die handeling telt, niet het sjouwen (B).
   - **Stuk 2, wat een getuige doet, naar zijn karakter:** de roddelaar vertelt het in de herberg, en dan
     vinden de soldaten die plek makkelijker; de herbergierster vertelt het je de volgende dag. Dan komt
-    ook de keuze in de spelregels of je het meteen ziet of pas later (A).
+    ook de keuze in de spelregels of je het meteen ziet of pas later (A). **Het gezin van de schout
+    zwijgt** (Marcel, 27 sep, tiende sessie, op de vraag of een huisgenoot het ooit doorvertelt): het is
+    hun eigen kelder, en wat de heer de schout aandoet, raakt hen ook. Een kind dat zich op het plein
+    verspreekt, was het andere antwoord; dat is niet gekozen.
   - **Later:** een lantaarn voor de schout zelf, bij punt 11 (C); de koster die de lantaarns aansteekt,
     de keur "een lantaarn aan elke deur" en de nachtwacht.
 

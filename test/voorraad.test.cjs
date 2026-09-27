@@ -3,8 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/voorraad.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 test('een nieuwe voorraad begint op nul', () => {
   assert.deepEqual(T.nieuweVoorraad(), { goud: 0, graan: 0, wol: 0, hout: 0 });

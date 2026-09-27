@@ -8,21 +8,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/wereld.js');
-require('../beelden/beschrijving.js');
-require('../tegels/tegels.js');
-require('../kaarten/kaarten.js');
-require('../js/mensen.js');
-require('../js/kaart.js');
-require('../js/gebied.js');
-require('../js/pad.js');
-require('../js/gesprekken.js');
-require('../js/gesprek.js');
-require('../js/quests.js');
-require('../js/quest.js');
-require('../js/verkennen.js');
-require('../gereedschap/keuring.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').pagina('gereedschap/wereld.html');
 
 // Een kaartje van 6×4 gras met één object erop, om een enkele fout te kunnen laten zien. De
 // vorm is die van een .tmj zoals Tiled hem opslaat; grond.tsx begint bij gid 1.

@@ -282,17 +282,17 @@
     let verwacht = 0;
     let staand = 0;
     const datum = T.datumVanDag(dagNu(S));
-    const basis = T.akkerStadium ? T.akkerStadium(datum.maand, datum.dagVanMaand) : 'gemaaid';
+    const basis = T.akkerStadium(datum.maand, datum.dagVanMaand);
     for (const akker of (S.wereld && S.wereld.akkers) || []) {
-      const isAkker = !T.bestemmingVan || T.bestemmingVan(akker) === 'akker';
-      const perTegel = T.oogstPerTegel ? T.oogstPerTegel(akker) : T.GRAAN_PER_TEGEL || 0;
+      const isAkker = T.bestemmingVan(akker) === 'akker';
+      const perTegel = T.oogstPerTegel(akker);
       for (const t of T.akkerTegels(akker)) {
         const k = sleutel(t.x, t.y);
         if (!tegelsGezien.has(k)) continue;
         tegels++;
         if (!isAkker || (akker.ongezaaid && akker.ongezaaid.has(k))) continue;
         verwacht += perTegel;
-        const stadium = T.akkerTegelStadium ? T.akkerTegelStadium(akker, t.x, t.y, basis) : basis;
+        const stadium = T.akkerTegelStadium(akker, t.x, t.y, basis);
         if (stadium === 'rijp' || stadium === 'groen' || stadium === 'kiemend') staand += perTegel;
       }
     }
@@ -353,7 +353,7 @@
     I.geschenken = (I.geschenken || 0) + goud;
     I.aantalGeschenken = (I.aantalGeschenken || 0) + 1;
     const korting = T.innerKorting(S);
-    if (korting >= o.tot && T.zetVlag) T.zetVlag(S, 'innerOmgekochtVol');
+    if (korting >= o.tot) T.zetVlag(S, 'innerOmgekochtVol');
     const gehoord = willekeurig(S, I.aantalGeschenken) < o.gehoord;
     if (gehoord) {
       I.gehoord = (I.gehoord || 0) + goud;
@@ -437,9 +437,9 @@
     if (T.HEER_INSTELLINGEN && T.HEER_INSTELLINGEN.kist) delen.push(`${Math.floor(r.goudGezien)} goud in de kist`);
     const korting = r.korting > 0 ? ` Om je geschenk schreef hij ${Math.round(r.korting * 100)}% minder op dan hij zag.` : '';
     bericht(`De inner vertrekt. In zijn rapport: ${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}.${korting}`);
-    if (T.wisVlag) T.wisVlag(S, 'innerOnverwacht');
+    T.wisVlag(S, 'innerOnverwacht');
     // Zijn rapport is af: een geschenk of een praatje verandert er niets meer aan (js/gesprekken.js).
-    if (T.zetVlag) T.zetVlag(S, 'innerGeteld');
+    T.zetVlag(S, 'innerGeteld');
     if (!b.wezen) haalWeg(S);
     if (T.ui && T.ui.toonArgwaan) T.ui.toonArgwaan(S);
     return r;
@@ -453,7 +453,7 @@
       const i = S.wereld.wezens.indexOf(b.wezen);
       if (i >= 0) S.wereld.wezens.splice(i, 1);
     }
-    if (T.wisVlag) for (const v of ['innerOpBezoek', 'innerUitgepraat', 'innerGeteld']) T.wisVlag(S, v);
+    for (const v of ['innerOpBezoek', 'innerUitgepraat', 'innerGeteld']) T.wisVlag(S, v);
     I.bezoek = null;
   }
 
@@ -500,7 +500,7 @@
     I.teruggeweest = false;
     I.geschenken = 0;
     I.gehoord = 0;
-    if (T.wisVlag) T.wisVlag(S, 'innerOmgekochtVol');
+    T.wisVlag(S, 'innerOmgekochtVol');
     I.argwaan *= IN().naSintMaarten;
     // Wat de marskramer hem vertelt, telt vanaf nu opnieuw (js/handel.js).
     if (T.nieuwBoekMarskramer) S.boekMarskramer = T.nieuwBoekMarskramer(dagNu(S));
@@ -514,7 +514,7 @@
   // Op Sint-Maarten doorzoeken de soldaten het dorp als de argwaan hoog genoeg is (Marcel, 24 sep).
   // Plek voor plek (js/verstoppen.js, T.zoekVerstopt): wat ze vinden, is weg. Geeft wat ze vonden.
   T.doorzoekDorp = function (S) {
-    const gevonden = T.zoekVerstopt ? T.zoekVerstopt(S) : [];
+    const gevonden = T.zoekVerstopt(S);
     const lijst = gevonden.length > 1 ? `${gevonden.slice(0, -1).join(', ')} en ${gevonden[gevonden.length - 1]}` : gevonden[0];
     bericht(gevonden.length
       ? `De soldaten van de heer doorzoeken het dorp, en vinden ${lijst}. Dat is weg.`
@@ -527,7 +527,7 @@
   // ---------------------------------------------------------------------------------------------
 
   function kanLopen(S) {
-    return !!(S.wereld && S.wereld.wezens && T.maakMens && T.wegInEnUit && T.wegInEnUit(S.wereld) && T.zoekPad);
+    return !!(S.wereld && S.wereld.wezens && T.maakMens && T.wegInEnUit(S.wereld) && T.zoekPad);
   }
 
   // Een vrije tegel waar hij kan staan, zo dicht mogelijk bij (x, y), maar minstens `vanaf` ervan
@@ -591,7 +591,7 @@
   // het uur achter de komma. Roep je hem 's nachts (Spel.debug.inner), dan is dat die van morgen.
   // Zonder kalender (een toets zonder dag) blijft hij tot hij alles zag.
   function totZonsondergang(S) {
-    if (!S.kalender || !T.zonVan) return Infinity;
+    if (!S.kalender) return Infinity;
     const nu = S.kalender.dag;
     for (let d = Math.floor(nu); ; d++) {
       const tot = d + (T.zonVan(d).onder - IN().wegVoorDonker) / 24;
@@ -654,7 +654,7 @@
       b.stilSinds = null; // praten is geen wachten
       if (b.gepraat < IN().praatUren) return;
       b.uitgepraat = true;
-      if (T.zetVlag) T.zetVlag(S, 'innerUitgepraat');
+      T.zetVlag(S, 'innerUitgepraat');
       bericht('"Genoeg gepraat, schout. Ik moet tellen, en voor donker terug zijn."');
       stopGesprek(S, e);
     }

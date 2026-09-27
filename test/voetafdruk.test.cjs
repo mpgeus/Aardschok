@@ -5,9 +5,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/wereld.js');
-
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 test('een voorwerp met een voet van drie bij drie blokkeert die hele voet, en niets daarbuiten', () => {
   T.VOORWERPEN.proefblok = { blokkeert: true, zichtDicht: false, voet: { dx: -2, dy: -2, b: 3, h: 3 } };

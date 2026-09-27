@@ -411,7 +411,7 @@
   S.grasTegel = function (x, y) {
     const g = grasVel();
     if (!g.ids.length) return null;
-    return S.buiten(g.velNaam, g.ids[T.akkerVariant ? T.akkerVariant(x, y, g.ids.length) : 0]);
+    return S.buiten(g.velNaam, g.ids[T.akkerVariant(x, y, g.ids.length)]);
   };
 
   // De rand van een weide. De grond van de kaart is een terreinset met hoeken: elke tegel zegt in
@@ -467,7 +467,7 @@
       }
     }
     if (!ids || !ids.length) return null;
-    return S.buiten(velNaam, ids[T.akkerVariant ? T.akkerVariant(x, y, ids.length) : 0]);
+    return S.buiten(velNaam, ids[T.akkerVariant(x, y, ids.length)]);
   };
 
   // ---------------------------------------------------------------- het graan (gereedschap/pixelart/graan-vel.cjs)

@@ -4,9 +4,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/gesprek.js');
-require('../js/gesprekken.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 function nieuweS() {
   return { schout: {}, inventaris: new Set() };

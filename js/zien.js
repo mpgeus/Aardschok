@@ -50,9 +50,9 @@
   // herberg ook met ramenVan en schimmen.
   T.lichtBronnen = function (S) {
     const w = S.wereld;
-    const herberg = T.herbergLicht ? T.herbergLicht(S) : [];
+    const herberg = T.herbergLicht(S);
     if (!w || !S.kalender || !T.dagdeelVan) return herberg;
-    if (T.dagdeelVan(S.kalender.dag, T.isOogstDag && T.isOogstDag(S.kalender.dag)) !== 'avond') return herberg;
+    if (T.dagdeelVan(S.kalender.dag, T.isOogstDag(S.kalender.dag)) !== 'avond') return herberg;
     // De lantaarn naast de deur van de herberg is het licht van de herberg al.
     const vanDeHerberg = (v) => herberg.some((h) => T.afstand(h, v) <= 1);
     const lantaarns = w.voorwerpen
@@ -65,7 +65,7 @@
   // licht van een lantaarn of de herberg staat.
   T.zichtOp = function (S, plek) {
     const I = IN();
-    const nacht = S.kalender && T.lichtVan ? T.lichtVan(S.kalender.dag).nacht : 0;
+    const nacht = S.kalender ? T.lichtVan(S.kalender.dag).nacht : 0;
     let ver = I.dag + (I.nacht - I.dag) * nacht;
     for (const b of T.lichtBronnen(S)) {
       const dx = plek.x - b.x;
@@ -83,7 +83,7 @@
 
   // Hoe het bericht hem noemt: een bewoner bij zijn naam, een bezoeker zoals T.MENSEN hem noemt.
   function naamVan(S, e) {
-    const p = T.bewonerVan ? T.bewonerVan(S, e) : null;
+    const p = T.bewonerVan(S, e);
     if (p && T.naamVanBewoner) return T.naamVanBewoner(p);
     if (e.wie && T.naamVanMens) return T.naamVanMens(e.wie);
     return 'een dorpeling';
@@ -100,7 +100,7 @@
     const ver = T.zichtOp(S, doel);
     return w.wezens.filter((e) => {
       if (!kijkt(S, e)) return false;
-      const p = g && T.bewonerVan ? T.bewonerVan(S, e) : null;
+      const p = g && T.bewonerVan(S, e);
       if (p && p.huis === g) return false;
       return T.zietTegel(w, T.tegelVan(e), doel, ver);
     });
@@ -120,7 +120,7 @@
   // zette" ('zette'). Vanuit de schout (`vanUit` 'schout') heet zijn eigen kelder "je eigen kelder",
   // vanuit een ander "zijn eigen kelder".
   function watDeed(S, g, handeling, wat, n, vorm, vanUit) {
-    const plek = T.verstopPlekVan ? T.verstopPlekVan(S, g) : null;
+    const plek = T.verstopPlekVan(S, g);
     const waar = !plek ? 'daar' : plek.vanSchout && vanUit !== 'schout' ? 'zijn eigen kelder' : plek.naam;
     const hoeveel = `${Math.floor(n)} ${wat}`;
     if (handeling === 'weg') return `${hoeveel} in ${waar} ${vorm === 'zette' ? 'zette' : 'zetten'}`;
@@ -136,15 +136,15 @@
     const tijd = S.kalender ? S.kalender.dag : 0;
     for (const e of wie) {
       if (IN().meteen) e.oogje = (S.tijd || 0) + IN().oogjeTijd;
-      (g.getuigen || (g.getuigen = [])).push({ dag: Math.floor(tijd), tijd, naam: naamVan(S, e), bewoner: T.bewonerVan ? T.bewonerVan(S, e) : null, handeling, wat, n });
+      (g.getuigen || (g.getuigen = [])).push({ dag: Math.floor(tijd), tijd, naam: naamVan(S, e), bewoner: T.bewonerVan(S, e), handeling, wat, n });
     }
     if (!wie.length) return { getuigen: wie, bericht: 'Niemand zag het.' };
     const namen = opsomming(wie.map((e) => naamVan(S, e)));
     let bericht = `${T.hoofdletter(namen)} ${wie.length > 1 ? 'zagen' : 'zag'} je ${watDeed(S, g, handeling, wat, n, 'zetten', 'schout')}.`;
     // Wie het in de herberg vertelt, staat erbij: dan weet je wat je te wachten staat.
     for (const e of wie) {
-      const p = T.bewonerVan ? T.bewonerVan(S, e) : null;
-      if (p && T.vertelInDeHerberg && T.vertelInDeHerberg(p)) bericht += ` ${naamVan(S, e)} weet alles van iedereen, en vertelt het ook.`;
+      const p = T.bewonerVan(S, e);
+      if (p && T.vertelInDeHerberg(p)) bericht += ` ${naamVan(S, e)} weet alles van iedereen, en vertelt het ook.`;
     }
     return { getuigen: wie, bericht };
   };
@@ -156,14 +156,14 @@
   // hij vertelde, vertelt hij niet nog eens. Geeft wat er verteld is, voor de herbergierster:
   // [{ door, wat }] ("Klaas", "10 graan in de kelder van Gerrit zette").
   T.getuigenVertellen = function (S, gasten, dag) {
-    const tot = dag + (T.dagindeling ? T.dagindeling(dag).slapen : 24) / 24;
+    const tot = dag + T.dagindeling(dag).slapen / 24;
     const verteld = [];
     for (const g of S.gebouwen || []) {
       for (const z of g.getuigen || []) {
         if (z.verteld != null || !z.bewoner || !gasten.includes(z.bewoner)) continue;
-        if (!T.vertelInDeHerberg || !T.vertelInDeHerberg(z.bewoner) || !(z.tijd < tot)) continue;
+        if (!T.vertelInDeHerberg(z.bewoner) || !(z.tijd < tot)) continue;
         z.verteld = dag;
-        if (!T.inhoudTekst || !T.inhoudTekst(g.verstopt || {})) continue; // er ligt niets meer: niets te vinden
+        if (!T.inhoudTekst(g.verstopt || {})) continue; // er ligt niets meer: niets te vinden
         g.verteld = dag;
         g.verteldDoor = z.naam;
         verteld.push({ door: z.naam, wat: watDeed(S, g, z.handeling, z.wat, z.n, 'zette') });

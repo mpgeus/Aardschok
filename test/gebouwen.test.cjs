@@ -4,12 +4,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/tijd.js');
-require('../js/wereld.js');
-require('../js/voorraad.js');
-require('../js/mensen.js');
-require('../js/gebouwen.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 // Een kleine, lege wereld om gebouwen op neer te zetten: net als T.maakProefkamers() maar zonder de
 // hele toren erbij — alleen wat T.isVast/T.voorwerpOp nodig hebben (js/wereld.js).
@@ -47,9 +42,12 @@ test('alle soorten uit spel.md staan erin', () => {
   }
 });
 
-test('T.gebouwVoet geeft de geschatte voet als er geen tekening is opgezocht', () => {
-  // Zonder T.opzoekTegelNaam (kaart.js is hier niet geladen) valt hij terug op g.voet.
-  assert.deepEqual(T.gebouwVoet('put'), { b: 1, h: 1 });
+test('T.gebouwVoet: de voet van de tekening, en zonder tekening de geschatte voet', () => {
+  // De put heeft een tekening (T.GEBOUWEN.put.tekening), en de voet van die tekening telt.
+  const put = T.opzoekTegelNaam(T.GEBOUWEN.put.tekening);
+  assert.deepEqual(T.gebouwVoet('put'), { b: put.eig.beslaat[0], h: put.eig.beslaat[1] });
+  // De verstopplek heeft geen tekening: dan de geschatte voet uit T.GEBOUWEN.
+  assert.deepEqual(T.gebouwVoet('verstopplek'), T.GEBOUWEN.verstopplek.voet);
 });
 
 test('T.gebouwPast: ja op lege grond, nee waar al iets vast staat', () => {
@@ -214,13 +212,23 @@ test('T.tikGebouwenDag: een werkplaats zonder genoeg handen maakt naar rato mind
   assert.equal(S.voorraad.hout, 0); // geen bezetting, dus geen productie
 });
 
-test('T.tikGebouwenDag: volle bezetting geeft de volle opbrengst, in de voorraad', () => {
+// Hoe hard er vandaag gewerkt wordt, naar de tevredenheid (js/behoeften.js; stap 6 van
+// T.tikGebouwenDag). Een dorp zonder eten is niet tevreden, dus in deze toetsen werkt het niet op volle
+// kracht: ze draaien met de behoeften, zoals het spel.
+const werkFactor = (S) => {
+  const IN = T.BEHOEFTEN_INSTELLINGEN;
+  return IN.werkBasis + (1 - IN.werkBasis) * S.behoeften.tevredenheid;
+};
+const ongeveer = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `verwachtte ${b}, kreeg ${a}`);
+
+test('T.tikGebouwenDag: volle bezetting geeft de volle opbrengst, maal hoe hard er gewerkt wordt', () => {
   const S = maakS();
   S.bevolking = T.GEBOUWEN.houthakker.handen;
   S.gebouwen.push({ soort: 'houthakker', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0 });
   T.zetVoorraad(S, 'hout', 0);
   T.tikGebouwenDag(S, 1);
-  assert.equal(S.voorraad.hout, T.GEBOUWEN.houthakker.maakt.uit.hout);
+  assert.ok(werkFactor(S) > 0 && werkFactor(S) < 1, 'zonder eten werkt het dorp minder hard');
+  ongeveer(S.voorraad.hout, T.GEBOUWEN.houthakker.maakt.uit.hout * werkFactor(S));
 });
 
 test('T.tikGebouwenDag: een gebouw met een "in" trekt dat er ook af', () => {
@@ -230,8 +238,8 @@ test('T.tikGebouwenDag: een gebouw met een "in" trekt dat er ook af', () => {
   T.zetVoorraad(S, 'meel', 10);
   T.zetVoorraad(S, 'brood', 0);
   T.tikGebouwenDag(S, 1);
-  assert.equal(S.voorraad.meel, 10 - T.GEBOUWEN.bakkerij.maakt.in.meel);
-  assert.equal(S.voorraad.brood, T.GEBOUWEN.bakkerij.maakt.uit.brood);
+  ongeveer(S.voorraad.meel, 10 - T.GEBOUWEN.bakkerij.maakt.in.meel * werkFactor(S));
+  ongeveer(S.voorraad.brood, T.GEBOUWEN.bakkerij.maakt.uit.brood * werkFactor(S));
 });
 
 test('T.werkGebouwenBij: de eerste aanroep onthoudt alleen de dag, en verandert nog niets', () => {

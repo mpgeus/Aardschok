@@ -32,6 +32,20 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   - `Spel.debug.heer()` laat de heer komen zonder de kalender te verzetten: het bericht zegt Sint-Maarten,
     de balk nog de dag van nu.
 
+- **De speeltest van een jaar, wat opviel** (27 sep, tiende sessie; alles in `speelbaar.md`, "De
+  speeltest van 27 sep"). Een agent speelde drie jaren zonder iets te doen behalve verstoppen:
+  - De winter kost bijna de helft van het dorp aan kou (het hout is eind wintermaand op), zonder
+    waarschuwing vooraf; het bericht "De winter is hard: Folkert is gestorven" zegt niet waaraan.
+  - Verstoppen is zonder risico zolang de inner meer dan 60% ziet: dan zoeken de soldaten niet. (Dat
+    liep op `main`; sinds stuk 1 van punt 4, van de negende sessie, zoeken ze altijd op twee of drie
+    plekken.)
+  - De heer vraagt goud per ziel en per gebouw dat de inner zag; wat hij ziet, hangt af van zijn route
+    (15 tegen 22 goud), en dat kan meer zijn dan het hele dorp heeft.
+  - Drie maanden zonder eten in het voorjaar kosten niemand het leven, en de tevredenheid blijft 55%.
+  - Een kelder houdt 40 graan: in het gehucht past hooguit de helft van de oogst.
+  - De eerste seconden, vóór de tekeningen geladen zijn, tekent het spel blokken; in de winter ziet het
+    gehucht eruit als in de zomer, alleen donkerder.
+
 - **Het zichtveld, wat nog ruw is** (27 sep, na stuk 1 van punt 3; `spel.md`, "Zo werkt het nu: het
   zichtveld, stuk 1"):
   - De gloed van een lantaarn wordt over alles heen getekend, ook over wat ervóór staat: staat er een
@@ -43,8 +57,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   - Een oogje staat vijf seconden. Op een smal scherm staat het venster van de plek nog midden in beeld,
     over de schout heen, en dan zie je het oogje pas als je het sluit.
   - Het gezin van de schout staat 's avonds vaak bij zijn deur, in het licht van de lantaarn bij de
-    put: het telt niet (het is hun kelder), maar in stuk 2 is de vraag of een huisgenoot het ooit
-    doorvertelt.
+    put: het telt niet (het is hun kelder). Of een huisgenoot het ooit doorvertelt: nee, het gezin
+    zwijgt (Marcel, 27 sep; `spel.md`, bij stuk 2 van het zichtveld).
   - Na stuk 2 (27 sep): alleen de roddelaar vertelt door, en die zit in zo'n zes van de tien spellen
     onder de vijf boeren (de karakters worden geloot). In de andere spellen vertelt niemand iets, tot de
     inner gaat vragen (punt 4). Is dat te stil, dan kan ook de drinker na een paar kannen zijn mond

@@ -67,12 +67,7 @@ test('een hek is laag en open: geen terugval naar het dichte staketsel van ronde
 
 // ---------------------------------------------------------------- in het spel
 
-require('../js/wereld.js');
-require('../beelden/beschrijving.js');
-require('../tegels/tegels.js');
-require('../js/mensen.js');
-require('../js/kaart.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 // Een kleine kaart in het geheugen: gras overal, en twee tuinstukken op de objectlaag, net zoals
 // Marcel ze met "Tegel invoegen" in Tiled zou neerzetten. th=32 (tileheight), obj.x/y in die

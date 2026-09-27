@@ -6,26 +6,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/tijd.js');
-require('../js/voorraad.js');
-require('../js/wereld.js');
-require('../js/mensen.js');
-require('../js/vee.js');
-require('../js/gebouwen.js');
-require('../js/behoeften.js');
-require('../beelden/beschrijving.js');
-require('../tegels/tegels.js');
-require('../kaarten/kaarten.js');
-require('../js/kaart.js');
-require('../js/gebied.js');
-require('../js/pad.js');
-require('../js/akkers.js');
-require('../js/boeren.js');
-require('../js/gevecht.js');
-require('../js/verkennen.js');
-require('../js/gesprekken.js');
-require('../js/gesprek.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 // Het gehucht zoals het begint: de beginkudde op het blok van Klaas (akker6).
 function gehucht() {

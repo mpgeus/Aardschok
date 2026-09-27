@@ -5,22 +5,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/tijd.js');
-require('../js/dag.js');
-require('../js/wereld.js');
-require('../js/pad.js');
-require('../js/voorraad.js');
-require('../js/mensen.js');
-require('../js/gebouwen.js');
-require('../js/behoeften.js');
-require('../js/akkers.js');
-require('../js/gesprek.js');
-require('../js/quest.js'); // het goud in een voorwaarde (een geschenk voor de inner)
-require('../js/gesprekken.js');
-require('../js/handel.js');
-require('../js/heer.js');
-require('../js/inner.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 const IN = T.INNER_INSTELLINGEN;
 const HEER = T.HEER_INSTELLINGEN;
 

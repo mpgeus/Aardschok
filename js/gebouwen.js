@@ -462,10 +462,10 @@
     for (const wat in kosten) T.wijzigVoorraad(S, wat, -kosten[wat]);
   };
 
-  // Het seizoen van een dag (js/tijd.js), of null. Zonder tijd.js (een toets die alleen gebouwen.js
-  // laadt) is er geen seizoen, en ligt er dus ook niets stil vanwege het seizoen.
+  // Het seizoen van een dag (js/tijd.js), of null zonder dag: dan ligt er ook niets stil vanwege het
+  // seizoen.
   function seizoenVan(dag) {
-    return T.datumVanDag && dag != null ? T.datumVanDag(dag).seizoen : null;
+    return dag != null ? T.datumVanDag(dag).seizoen : null;
   }
 
   // Hoeveel handen er vandaag iets maken, en hoeveel daarvan gereedschap hebben: de dekking
@@ -602,7 +602,7 @@
     const g = T.GEBOUWEN[instantie.soort];
     const w = S.wereld;
     const tekening = instantie.tekening || g.tekening;
-    const opz = tekening && T.opzoekTegelNaam ? T.opzoekTegelNaam(tekening) : null;
+    const opz = tekening && T.opzoekTegelNaam(tekening);
     const voet = instantie.voet || T.gebouwVoet(instantie.soort, tekening) || { b: 1, h: 1 };
     const naam = 'gebouw:' + instantie.soort;
     T.registreerGebouwSoort(naam);
@@ -699,10 +699,9 @@
   // De handen verdelen over de werkplaatsen, op volgorde van S.gebouwen: eerst de gebouwen die er al
   // stonden, dan wie het eerst gebouwd is ("op volgorde", ontwerp/werklijst.md punt 2). Hoeveel
   // handen er zijn: wie kan werken (T.werkendeHanden, js/bewoners.js: geen kleuter, en de schout
-  // niet), en zonder bewoners (een toets die alleen de regels laadt) het hele getal. Wíé er werkt,
-  // zegt daarna T.wijsWerkToe.
+  // niet). Wíé er werkt, zegt daarna T.wijsWerkToe.
   T.verdeelHanden = function (S) {
-    let vrij = T.werkendeHanden ? T.werkendeHanden(S) : S.bevolking;
+    let vrij = T.werkendeHanden(S);
     for (const g of S.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
       if (!g.klaar || !soort.handen) {
@@ -712,7 +711,7 @@
       g.handen = Math.min(soort.handen, vrij);
       vrij -= g.handen;
     }
-    if (T.wijsWerkToe) T.wijsWerkToe(S);
+    T.wijsWerkToe(S);
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -725,27 +724,25 @@
     const IN = T.GEBOUWEN_INSTELLINGEN;
     // 0. De akkers (js/akkers.js): zaaien op 1 lentemaand, en het vangnet na de oogsttijd. Als
     // eerste: de boeren zaaien 's morgens, en daarna eet het dorp van wat er over is.
-    if (T.tikAkkersDag) T.tikAkkersDag(S, dag);
+    T.tikAkkersDag(S, dag);
     // Het vee (js/vee.js): jongen op 1 grasmaand, en de melk van vandaag. Ná de akkers, want op 1
     // lentemaand verhuist het vee daar naar zijn nieuwe weide; vóór de behoeften, want het dorp eet
     // de melk van vandaag als eerste (stap 3), en de tevredenheid moet hem dus al zien.
-    if (T.tikVeeDag) T.tikVeeDag(S, dag);
+    T.tikVeeDag(S, dag);
     // De herberg (js/herberg.js): wie er gisteravond was, dronk zijn bier. Vóór de behoeften, want wie
     // er deze week was, is tevredener; en vóór het brouwen hieronder, want het bier van gisteravond
     // kwam uit de voorraad van gisteren.
-    if (T.tikHerbergDag) T.tikHerbergDag(S, dag);
+    T.tikHerbergDag(S, dag);
     // Behoeften: eten, brandhout en een kerk, en de tevredenheid die daaruit volgt
     // (js/behoeften.js, T.tikBehoeftenDag) — vóór de rest, zodat stap 4 en 6 hieronder de
-    // tevredenheid van vandaag gebruiken. Zacht gekoppeld (net als T.ui hieronder): zonder
-    // js/behoeften.js geladen (bijvoorbeeld in een toets die alleen gebouwen.js laadt) blijft
-    // alles zoals het was.
-    if (T.tikBehoeftenDag) T.tikBehoeftenDag(S, dag);
-    // En de marskramer (js/handel.js): komt hij vandaag, of is zijn tijd om? Zelfde zachte koppeling.
-    if (T.tikHandelDag) T.tikHandelDag(S, dag);
+    // tevredenheid van vandaag gebruiken.
+    T.tikBehoeftenDag(S, dag);
+    // En de marskramer (js/handel.js): komt hij vandaag, of is zijn tijd om?
+    T.tikHandelDag(S, dag);
     // En de heer (js/heer.js): zijn brief in wijnmaand, hijzelf op Sint-Maarten, en de soldaten.
-    if (T.tikHeerDag) T.tikHeerDag(S, dag);
+    T.tikHeerDag(S, dag);
     // En de inner (js/inner.js): hij komt in oogstmaand tellen, en soms onverwacht terug.
-    if (T.tikInnerDag) T.tikInnerDag(S, dag);
+    T.tikInnerDag(S, dag);
     // 1. Gebouwen die vandaag klaarkomen: het spookbeeld wordt de tekening zelf (dezelfde
     // voorwerp-ingang, zie zetGebouwVoorwerp hierboven — er komt er geen tweede bij).
     for (const g of S.gebouwen) {
@@ -761,14 +758,12 @@
     // 3. Eten: iedereen eet, of er genoeg is of niet (T.wijzigVoorraad zakt nooit onder nul — een
     // dorp dat te veel monden telt, eet zijn voorraad dus leeg; wat honger doet, staat in
     // js/behoeften.js). Eerst de melk van vandaag, dan graan, dan kaas, en wat er van de melk over
-    // is, wordt kaas (T.eetVandaag, js/behoeften.js). Zonder dat bestand alleen graan, zoals vroeger.
-    if (T.eetVandaag) T.eetVandaag(S);
-    else if (S.bevolking > 0) T.wijzigVoorraad(S, 'graan', -S.bevolking * IN.etenPerMensPerDag);
+    // is, wordt kaas (T.eetVandaag, js/behoeften.js).
+    T.eetVandaag(S);
     // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als er nog ruimte is, de voorraad
     // een buffer overhoudt (zodat een net geboren gezin niet meteen honger lijdt), en het dorp
     // tevreden genoeg is (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel). Zonder
-    // S.behoeften (behoeften.js niet geladen, of nog geen dag getikt) blokkeert dat laatste
-    // niets — zie de opmerking bij stap 0 hierboven.
+    // S.behoeften (nog geen dag getikt) blokkeert dat laatste niets.
     const tevredenGenoeg = !S.behoeften || S.behoeften.tevredenheid >= T.BEHOEFTEN_INSTELLINGEN.groeiDrempel;
     if (dag > 0 && dag % IN.gezinDagen === 0 && S.bevolking < woonruimte && S.voorraad.graan >= IN.graanBufferVoorGroei && tevredenGenoeg) {
       T.wijzigBevolking(S, Math.min(woonruimte, S.bevolking + IN.gezinGrootte) - S.bevolking, 'groei');
@@ -778,7 +773,8 @@
     // 6. Productie: wat een gebouw maakt, gaat per dag naar de voorraad — naar rato van hoe bezet
     // hij is (de helft van zijn handen geeft de helft van zijn opbrengst), en van de tevredenheid
     // (js/behoeften.js: "hoe hard er gewerkt wordt"; T.BEHOEFTEN_INSTELLINGEN.werkBasis is de
-    // ondergrens bij 0% tevreden, 1 is geen effect). Zelfde zachte koppeling als hierboven.
+    // ondergrens bij 0% tevreden, 1 is geen effect). Zonder S.behoeften (nog geen dag getikt) op
+    // volle kracht.
     const werkFactor = S.behoeften
       ? T.BEHOEFTEN_INSTELLINGEN.werkBasis + (1 - T.BEHOEFTEN_INSTELLINGEN.werkBasis) * S.behoeften.tevredenheid
       : 1;

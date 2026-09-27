@@ -8,15 +8,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/wereld.js');
-require('../js/mensen.js');
-require('../js/gebied.js');
-require('../js/pad.js');
-require('../js/gevecht.js');
-require('../js/verkennen.js');
-require('../js/sprites.js');
-require('../beelden/beschrijving.js'); // T.BEELDEN, voor "heeft een vel" hieronder
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 const wezen = (w, soort) => w.wezens.find((e) => e.soort === soort);
 function zet(e, x, y) {

@@ -39,7 +39,7 @@
       voorraad: T.nieuweVoorraad(), // goud, graan, wol, hout (js/voorraad.js)
       gebouwen: [], // wat er staat of in aanbouw is (js/gebouwen.js), en hoe ver S.gebouwenDag is
       bevolking: 0, woonruimte: 0, // aantal mensen, en hoeveel er als woonruimte gegeven is
-      behoeften: T.nieuweBehoeften ? T.nieuweBehoeften() : null, // tevredenheid en wat het dorp mist (js/behoeften.js)
+      behoeften: T.nieuweBehoeften(), // tevredenheid en wat het dorp mist (js/behoeften.js)
       trede: 'gehucht', // de hoogste trede van het dorp; omhoog gaat pas mee met "Groei" (werklijst.md, punt 5)
       bouwSoort: null, bouwHover: null, bouwMenuOpen: false, // het bouwmenu (T.NIEUWE_HUD, js/hud.js)
       goud: 0,
@@ -249,13 +249,13 @@
     // De kalender loopt op haar eigen klok, niet op S.tijd (CLAUDE.md, "Testen in de browser"):
     // zo laat pauzeren of versnellen nooit een animatie stilvallen of doorschieten.
     T.tikKalender(S, dt);
-    if (T.werkDagBij) T.werkDagBij(S); // wakker worden na het slapen (js/dag.js)
+    T.werkDagBij(S); // wakker worden na het slapen (js/dag.js)
     T.werkGebouwenBij(S); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
     T.werkMarskramerBij(S); // zijn poppetje: over de weg binnen, naar het plein, en weer weg (js/handel.js)
     T.werkHeerBij(S); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)
     T.werkDoorzoekenBij(S); // zijn soldaten zoeken, met de schout mee of waar de heer wijst (js/doorzoeken.js)
     T.werkInnerBij(S); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
-    if (T.werkBewonersBij) T.werkBewonersBij(S); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
+    T.werkBewonersBij(S); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
     T.werkAnimatiesBij(S, dt, dtWereld);
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
@@ -271,7 +271,7 @@
       // Vóór T.laatDwalen: wie hier een pad krijgt of aan het maaien slaat (T.werkOogstBij,
       // js/akkers.js, alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
       // T.laatDwalen al "bezig" (m.pad.length of m.maait) en dwaalt deze beurt niet ook nog weg.
-      if (T.werkOogstBij) T.werkOogstBij(S, dtWereld);
+      T.werkOogstBij(S, dtWereld);
       T.laatDwalen(S, dtWereld);
       const m = T.zoekOntdekking(S);
       if (m) T.startGevecht(S, m, false);
@@ -553,7 +553,7 @@
       if (!S.bewoners) return 'Er wonen hier geen bewoners.';
       const lijst = S.bewoners.mensen.map((p) => {
         const e = p.wezen;
-        const a = e && T.dagAnker ? T.dagAnker(S, e) : null;
+        const a = e && T.dagAnker(S, e);
         return {
           wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)}${T.MENSEN[p.wie] && T.MENSEN[p.wie].karakter ? ' (boer)' : ''}` : T.overBewonerTekst(S, e, p),
           leeftijd: p.leeftijd, huis: p.huis ? p.huis.huis || `${p.huis.soort} ${p.huis.x},${p.huis.y}` : '-',
@@ -577,7 +577,7 @@
     // De herberg (js/herberg.js): wie er vanavond gaat, hoe ver ze lopen, gisteravond, en het bier.
     // Spel.debug.herberg(30) zet eerst 30 bier in de voorraad.
     herberg(bier) {
-      const g = T.herbergVan && T.herbergVan(S);
+      const g = T.herbergVan(S);
       if (!g) return 'Hier staat geen herberg.';
       if (typeof bier === 'number') T.zetVoorraad(S, 'bier', bier);
       const w = S.bewoners.wereld;
@@ -594,12 +594,12 @@
     // hele dorp in één keer (js/inner.js), en dan zegt het wat ze vonden.
     zoeken(wat) {
       const b = S.heer && S.heer.bezoek;
-      if (wat !== 'dorp' && b && b.staat && T.beginDoorzoeken) {
+      if (wat !== 'dorp' && b && b.staat) {
         delete b.zoeken;
         const z = T.beginDoorzoeken(S);
         return z && { plekken: z.nodig, heerKiest: z.heerKiest, doelen: (z.doelen || []).map((g) => T.verstopPlekVan(S, g).naam) };
       }
-      return T.doorzoekDorp ? T.doorzoekDorp(S) : 'Hier zoekt niemand.';
+      return T.doorzoekDorp(S);
     },
     // Het slachtvenster nu openen (js/hud.js, T.ui.openSlachten), zonder op 1 slachtmaand te wachten.
     slachten() {
@@ -621,7 +621,7 @@
       const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true });
       const opWeide = [];
       // Een schaap gaat naar de heide als het gehucht er een heeft (js/vee.js, T.graastOp).
-      const meent = T.graastOp && T.graastOp(w, soort) === 'meent' ? T.meentVan(w) : null;
+      const meent = T.graastOp(w, soort) === 'meent' ? T.meentVan(w) : null;
       const weides = meent ? [meent] : (w.akkers || []).filter((v) => T.bestemmingVan(v) === 'weide');
       while (opWeide.length < aantal && weides.length) {
         weides.sort((a, b) => T.weideStand(S, b).vrij - T.weideStand(S, a).vrij);

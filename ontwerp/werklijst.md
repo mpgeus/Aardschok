@@ -10,20 +10,39 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (27 sep 2026, negende sessie): punt 2 en 3 zijn af, en van punt 4 stuk 1 en 2
+## De stand (27 sep 2026, na de negende en tiende sessie): punt 2 en 3 zijn af, van punt 4 stuk 1 en 2, en een jaar gespeeld
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 537/537.
+`npm test`: 538/538.
 
-**Waar het werk staat:** de negende sessie (27 sep) staat in `main` tot en met stuk 1 van het
-zichtveld (Marcel: "Ja, zet het in main"). Wat daarna kwam (stuk 2 van het zichtveld, en stuk 1 en 2 van
-punt 4) is gepusht naar de eigen branch `claude/werklijst-doorzetten-ikazjp` (Marcel: "Push dit"), maar
-staat nog niet in `main`: dat doet Claude als Marcel erom vraagt. Hoe
-een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** de tiende sessie (27 sep) staat in `main` (Marcel: "Zet het in main"), en ook
+op haar eigen branch `claude/offline-flight-tasks-35l4cj`. De negende sessie staat in `main` tot en met
+stuk 1 van het zichtveld (Marcel: "Ja, zet het in main"); wat ze daarna deed (stuk 2 van het zichtveld,
+stuk 1 en 2 van punt 4, en het idee voor het bos) staat op haar eigen branch
+`claude/werklijst-doorzetten-ikazjp`, samen met de tiende sessie, maar nog niet in `main`: dat doet
+Claude als Marcel erom vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder
+Git.
+
+**Wat er in de tiende sessie gebeurde** (27 sep, terwijl Marcel twee uur vloog; hij koos vooraf 1, 3 en
+4 uit een lijst van Claude, en niet stuk 2 van de getuigen):
+- **Opgeruimd (vraag 25, E):** elke toets laadt het spel zoals het draait (`test/laad.cjs`). Twaalf
+  toetsen bleken een ander spel te toetsen dan er draait; ruim honderd bewakers gingen weg. Zie onder Af.
+- **Een jaar gespeeld:** een agent speelde het gehucht drie keer een jaar (alles geven, 30% en 60%
+  verstoppen), zonder iets bij te stellen. Het jaar loopt zonder fouten. De winter kost bijna de helft van
+  het dorp aan kou, verstoppen is zonder risico (de soldaten zoeken alleen bij argwaan), en goud is het
+  knelpunt. Alles staat in `speelbaar.md`, en in grafieken op de pagina "Een jaar in het gehucht"
+  (https://claude.ai/artifact/WVebn7ycRcPLNuJrtzvQbr).
+  Het jaar liep op `main`, zonder wat de negende sessie daarna deed (stuk 2 van het zichtveld, en stuk 1
+  en 2 van punt 4): de soldaten zoeken daar alleen bij argwaan, en de inner valt niet te bespelen.
+- **Vraag 33 uitgewerkt** in `speelbaar.md`: wat er nog ontbreekt voor een proefversie van één jaar, de
+  kortste weg, en vier vragen (33a tot en met 33d).
+- **Vraag 8, een naam:** voorstel Martinmas, of Schout (`verpakken.md`, "De naam").
+- **Marcel koos:** het gezin van de schout zwijgt over wat het zag (`spel.md`, bij stuk 2 van het
+  zichtveld).
 
 **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
 toevoegen voor we bij een speelbaar product komen." Houd je aan de volgorde hieronder. Een nieuw idee,
@@ -102,15 +121,13 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
 
 **Punt 2, de herberg, en punt 3, het zichtveld en de getuigen, zijn af** (27 sep), **en van punt 4 stuk
 1 en 2** (de soldaten zoeken altijd; de inner afleiden en omkopen). De getallen daarvan blijven voorlopig
-zoals ze zijn (Marcel, 27 sep: "We gaan later finetunen"). **Nu het tweede proefje:** een heel jaar spelen
-en kijken of rijk worden en arm lijken leuk is (punt 4 hieronder). Dat jaar speelt een andere agent nu
-voor Marcel (27 sep: "Ik heb een andere agent al een op een test playthrough van een jaar staan"): begin
-er dus niet zelf aan, en wacht op wat eruit komt. Let bij de uitkomst op de versie: `main` stond op 27 sep
-nog vóór stuk 2 van het zichtveld en stuk 1 en 2 van punt 4, dus wie daarop speelde, speelde zonder de
-roddelaar in de herberg, de soldaten die altijd zoeken, en de inner afleiden en omkopen. Het plan voor het
-volgende deel, het bos met de kudde, is **als idee bewaard** in `opmerkingen.md` (Marcel, 27 sep: "Push en
-alles als idee opslaan"; vraag 43). Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het
-voelt".
+zoals ze zijn (Marcel, 27 sep: "We gaan later finetunen"). **Het tweede proefje is gespeeld** door een
+andere agent (de tiende sessie, hierboven), maar op `main`, dus zonder stuk 2 van het zichtveld en stuk 1
+en 2 van punt 4. Van de twee dingen die de speeltest eerst wil (`speelbaar.md`), is het eerste daarmee
+al af: de soldaten zoeken altijd. Het tweede, de winter zichtbaar maken, nog niet. **Wacht op Marcel:
+vraag 33** (`speelbaar.md`, 33a tot en met 33d), want daaruit volgt of de volgorde hieronder verandert.
+Het plan voor het bos met de kudde is **als idee bewaard** in `opmerkingen.md` (vraag 43; Marcel: "Push
+en alles als idee opslaan"). Wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -177,7 +194,9 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 6. De kern voor het tweede proefje (`spel.md`, "De kern voor het tweede proefje"): de drie groepen en
    vijf keuren, nodig vóór punt 9.
 7. Moet het ijs op de beek te zien zijn (tekenwerk), en vangt de jager 's winters minder?
-8. Een naam; "Aardschok" past niet meer.
+8. Een naam; "Aardschok" past niet meer. Voorstel van Claude (27 sep): **Martinmas** (de dag waarop de
+   heer int), met als ondertitel "Get rich. Look poor."; of **Schout**. Acht namen met waarom staan in
+   `verpakken.md`, "De naam". Steam zelf is nog niet nagekeken.
 10. De monsters van het oude spel: de slijmkruiper, de skeletwacht, de reuzenspin en de kobold passen
     niet in het nieuwe spel, de wolf wel. Weg ermee, of bewaren tot er rovers zijn om de toetsen van
     het gevecht op te draaien? (`opmerkingen.md`, "Het gevecht na de leeftijd".)
@@ -276,7 +295,8 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
     worden); "Ja er wordt graan van buiten gebracht naar de markt"; en "De kaart blijft wel groeien.
     Er is geen grens voor een max afmeting stad."
 33. **Wat is het eerste speelbare product?** (Claude, 26 sep, na Marcels waarschuwing voor functie
-    creep.) Voorstel: een proefversie van één jaar in het gehucht, van de benoemingsbrief tot
+    creep. Uitgewerkt op 27 sep, tiende sessie, in `speelbaar.md`: wat er is, wat ontbreekt, de kortste
+    weg, en vier vragen, 33a tot en met 33d.) Voorstel: een proefversie van één jaar in het gehucht, van de benoemingsbrief tot
     Sint-Maarten, met de kern (rijk worden en arm lijken: verstoppen, de inner, de heer), opslaan en een
     titelscherm. Dan wordt duidelijk welke punten van de volgorde daarvoor nodig zijn, en welke kunnen
     wachten tot daarna.
@@ -428,11 +448,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     - **D. `js/tekenen.js` (1.499 regels) net zo:** de grond, de wezens, de weides, de nacht.
       Begonnen op 26 sep (zevende sessie): de doorkijk staat nu in `js/doorkijk.js`, en `tekenen.js`
       heeft 1.404 regels.
-    - **E. Eén laadlijst voor de toetsen,** in de volgorde van `index.html`. Dan zijn de 24 bewakers
-      van de vorm `T.x && T.x(...)` niet meer nodig, en toetsen de toetsen het spel zoals het draait.
-      B liet zien waarom: vijf toetsen laadden `js/dag.js` niet, en draaiden dus zonder werkuren en
-      zonder bezoekuur, zonder dat iets klaagde. Vijf doen dat nog (`akkers`, `hooi`, `vee`, `velden`
-      en `weides`: daar maaien de boeren dus ook 's nachts).
+    - **E. Eén laadlijst voor de toetsen (af, 27 sep, tiende sessie; zie onder Af),** in de volgorde van
+      `index.html`. Dan zijn de bewakers van de vorm `T.x && T.x(...)` niet meer nodig, en toetsen de
+      toetsen het spel zoals het draait. B liet zien waarom: vijf toetsen laadden `js/dag.js` niet, en
+      draaiden dus zonder werkuren en zonder bezoekuur, zonder dat iets klaagde.
     Voorstel: A en B nu, zolang de dag vers is; C en D als die bestanden toch open moeten (de
     poppetjes raken ze allebei); E later.
 
@@ -482,6 +501,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
   de soldaten nu zoeken.
 
 *Lezen:*
+- De speeltest van een jaar en het voorstel voor een eerste speelbare versie (27 sep, tiende sessie), op
+  de pagina "Een jaar in het gehucht" (https://claude.ai/artifact/WVebn7ycRcPLNuJrtzvQbr) en in
+  `speelbaar.md`: vier vragen, 33a tot en met 33d. En de namen in `verpakken.md` (vraag 8).
 - De tien karakters en hun zinnen, in `gereedschap/gesprekken.html`. Ze zijn een voorstel van Claude;
   de vrome, de roddelaar, de oudste, de nieuwkomer en de drinker zijn nieuw. De namen van de heer en
   de boeren stel je zelf in (spelregels).
@@ -725,6 +747,21 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   `js/verstoppen.js`), en de herbergierster vertelt het je de volgende dag. Wie in de herberg vertelt, is
   één vraag voor de kelder van de roddelaar en voor wat hij zag (`T.vertelInDeHerberg`). In de
   spelregels: een getuige meteen zien, of pas later. Daarmee is punt 3 af. `npm test`: 527/527.
+- 27 sep 2026 — **Een jaar gespeeld, en een voorstel voor speelbaar** (tiende sessie; vraag 33 en 8).
+  Een agent speelde het gehucht drie keer een jaar in de browser (`Spel.debug.stap`, twee minuten per
+  jaar), zonder iets bij te stellen: alles geven, 30% en 60% verstoppen. Wat opviel, staat in
+  `speelbaar.md` en `opmerkingen.md`, met grafieken op de pagina "Een jaar in het gehucht". Daarbij het
+  voorstel voor een proefversie van één jaar (vraag 33a tot en met 33d) en acht namen (`verpakken.md`).
+- 27 sep 2026 — **Eén laadlijst voor de toetsen** (tiende sessie; vraag 25, E, Marcel koos het vóór zijn
+  vlucht). Elke toets laadt het spel zoals het draait: de scripts uit `index.html`, in die volgorde,
+  zonder wat alleen scherm is (`test/laad.cjs`); een toets van het gereedschap laadt wat zijn bladzijde
+  laadt. Twaalf toetsen vielen om en lieten zien dat ze een ander spel toetsten dan er draait: de boeren
+  maaiden er om middernacht, de kelder van de roddelaar was riskant zonder dat ze iets verteld had, twee
+  spellen hadden dezelfde boeren, een huis groeide naar een geschatte voet, en een werkplaats werkte op
+  volle kracht zonder eten. Aan het spel veranderde niets. Daarna gingen ruim honderd bewakers weg die er
+  alleen voor de toetsen waren (`T.x && T.x(...)` en dergelijke), met hun commentaar; 23 blijven, want
+  `gereedschap/wereld.html` laadt een deel van het spel. `npm test`: 523/523, met de controle op de
+  bosvijanden en de laadlijst zelf.
 - 27 sep 2026 — **Het zichtveld, stuk 1** (negende sessie; punt 3, vraag 40, Marcel: "A ja B ja C ja D
   ja"). Wie buiten is, ziet de schout als hij dichtbij genoeg is en er niets tussen staat: overdag acht
   tegels, 's nachts twee, in het licht van een lantaarn of de herberg zes (`js/zien.js`, `T.zichtOp`,

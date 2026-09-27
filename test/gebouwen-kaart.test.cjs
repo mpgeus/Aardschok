@@ -5,15 +5,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-require('../js/wereld.js');
-require('../js/voorraad.js');
-require('../beelden/beschrijving.js');
-require('../tegels/tegels.js');
-require('../kaarten/kaarten.js');
-require('../js/mensen.js');
-require('../js/gebouwen.js');
-require('../js/kaart.js');
-const T = globalThis.Spel;
+const T = require('./laad.cjs').spel();
 
 test('een "gebouw" ding in de betekenis landt in w.gebouwenOpKaart, met zijn maat', () => {
   const betekenis = { dingen: [{ gebouw: 'boerderij', x: 2, y: 2, b: 3, h: 4, tekening: 'huizen/boerderij1' }] };

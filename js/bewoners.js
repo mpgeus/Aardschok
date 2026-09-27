@@ -271,7 +271,7 @@
     const g = p.werk;
     if (!g) return null;
     if (g.soort === 'schaapskooi') {
-      const meent = T.meentVan && T.meentVan(w);
+      const meent = T.meentVan(w);
       const t = meent && tegelBij(w, { x: meent.x + (meent.b - 1) / 2, y: meent.y + (meent.h - 1) / 2 });
       if (t) return { x: t.x, y: t.y, straal: IN().straalHeide };
     }
@@ -445,7 +445,7 @@
     const B = S.bewoners;
     B.worpen = (B.worpen || 0) + 1;
     const zaad = ((B.zaad >>> 0) + B.worpen * 7919) >>> 0;
-    return T.dobbelsteen ? T.dobbelsteen(zaad) : Math.random;
+    return T.dobbelsteen(zaad);
   }
 
   // Hoeveel mensen er in huis g wonen.
@@ -473,7 +473,7 @@
       gezinnen.push(nieuwGezin(S, g, k, r));
       n -= k;
     }
-    const weg = overDeWeg && T.wegInEnUit ? T.wegInEnUit(B.wereld) : null;
+    const weg = overDeWeg && T.wegInEnUit(B.wereld);
     for (const leden of gezinnen) {
       for (const p of leden) zetPlekken(S, p);
       if (!weg) {
@@ -510,7 +510,7 @@
   function gaanWeg(S, weg, reden) {
     const B = S.bewoners;
     const w = B.wereld;
-    const uitgang = reden === 'vertrek' && T.wegInEnUit ? T.wegInEnUit(w) : null;
+    const uitgang = reden === 'vertrek' && T.wegInEnUit(w);
     for (const p of weg) {
       B.mensen.splice(B.mensen.indexOf(p), 1);
       p.werk = null;
@@ -603,7 +603,7 @@
     for (const a of B.komen.slice()) {
       if (!T.bezoekerKomtAan(S, a)) continue;
       B.komen.splice(B.komen.indexOf(a), 1);
-      const weg = T.wegInEnUit ? T.wegInEnUit(w) : null;
+      const weg = T.wegInEnUit(w);
       for (const p of a.mensen) maakPoppetje(S, p, weg);
     }
     for (const p of B.mensen) {
@@ -654,8 +654,7 @@
     if (verschil > 0) komenErBij(S, verschil);
     else if (verschil < 0) gaanWeg(S, wieGaat(S, 'vertrek').slice(0, -verschil), 'vertrek');
     for (const p of S.bewoners.mensen) maakPoppetje(S, p);
-    if (T.verdeelHanden) T.verdeelHanden(S);
-    else for (const p of S.bewoners.mensen) zetPlekken(S, p);
+    T.verdeelHanden(S);
   };
 
   // Het getal veranderde (T.wijzigBevolking, js/gebouwen.js): de bewoners gaan mee. `reden`: 'groei'
@@ -676,8 +675,8 @@
   // Wie waar werkt
   // ---------------------------------------------------------------------------------------------
 
-  // Hoeveel handen het dorp heeft: wie kan werken. Zonder bewoners (een toets die alleen de regels
-  // laadt) is dat het hele getal, zoals vóór de poppetjes.
+  // Hoeveel handen het dorp heeft: wie kan werken. Zonder bewoners (een toets met een eigen, kleine
+  // wereld) is dat het hele getal, zoals vóór de poppetjes.
   T.werkendeHanden = function (S) {
     if (!S.bewoners) return S.bevolking || 0;
     return S.bewoners.mensen.filter(kanWerken).length;
@@ -748,11 +747,11 @@
   // het begin van het werk tot het eind, zonder de schaft), min zijn weg heen (p.plek.heen). Hij
   // vertrekt als het werk begint; de weg terug gaat van zijn avond af. Wie vandaag pas komt (p.komt),
   // werkt nog niet. Geeft { gewerkt, onderweg, nodig } in uren, nodig voor alle handen die het gebouw
-  // vraagt; zonder bewoners (een toets die alleen de regels laadt) null.
+  // vraagt; zonder bewoners (een toets met een eigen, kleine wereld) null.
   T.werkUrenVan = function (S, g, dag) {
     const B = S.bewoners;
     const soort = T.GEBOUWEN[g.soort];
-    if (!B || !soort || !T.dagindeling) return null;
+    if (!B || !soort) return null;
     const d = T.dagindeling(dag);
     const perHand = Math.max(0, d.werkEind - d.werkBegin - (d.schaftEind - d.schaftBegin));
     let gewerkt = 0;
@@ -790,7 +789,7 @@
     if (p.hoofd) wie += `, ${p.band} van ${naamVan(p.hoofd)}`;
     const werk = e && e.vertrekt ? 'trekt weg'
       : p.komt ? 'nieuw in het gehucht'
-      : T.gaatNaarDeHerberg && T.gaatNaarDeHerberg(S, p) ? 'naar de herberg' // 's avonds (js/herberg.js)
+      : T.gaatNaarDeHerberg(S, p) ? 'naar de herberg' // 's avonds (js/herberg.js)
       : werkTekst(S, p);
     return werk ? `${wie} · ${werk}` : wie;
   };

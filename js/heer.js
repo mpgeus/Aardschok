@@ -335,16 +335,16 @@
     const oogst = rijp ? volgendeKeer(dag, { maand: T.MAANDEN[rijp.maand].naam, dag: rijp.dag }) : dag;
     const lente = volgendeKeer(dag, IN().soldatenTot);
     const perMens = T.GEBOUWEN_INSTELLINGEN ? T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag : 0;
-    const melk = T.verwachteMelk ? T.verwachteMelk(S, dag, oogst) : 0;
+    const melk = T.verwachteMelk(S, dag, oogst);
     const eten = Math.max(0, (S.bevolking || 0) * perMens * (oogst - dag) - melk);
     const soldaten = g && g.soldaten ? IN().soldaten * IN().soldaatEetAls * perMens * (lente - dag) : 0;
-    const wordtAkker = (a) => !T.planVan || T.planVan(a) === 'akker';
+    const wordtAkker = (a) => T.planVan(a) === 'akker';
     const tegels = ((S.wereld && S.wereld.akkers) || []).filter(wordtAkker).reduce((n, a) => n + a.b * a.h, 0);
     const zaaien = tegels * (T.ZAAIGRAAN_PER_TEGEL || 0);
     const na = ((S.voorraad && S.voorraad.graan) || 0) - ((g && g.neemt && g.neemt.graan) || 0);
     const kaas = (S.voorraad && S.voorraad.kaas) || 0;
     // Vlees vult sinds 25 sep ook een maag (js/behoeften.js): het vangt net als de kaas een tekort op.
-    const vlees = T.vleesAlsEten ? T.vleesAlsEten(S) : 0;
+    const vlees = T.vleesAlsEten(S);
     return { na, eten, melk, kaas, vlees, soldaten, zaaien, over: na - eten - soldaten - zaaien, dagen: oogst - dag };
   };
 
@@ -364,7 +364,7 @@
     b.betaald = g;
     h.jaren.push({ jaar: T.datumVanDag(dagNu(S)).jaar, deel: g.deel, straf: g.straf });
     // Het rapport van de inner is betaald, en zijn argwaan zakt (js/inner.js).
-    if (T.innerNaSintMaarten) T.innerNaSintMaarten(S);
+    T.innerNaSintMaarten(S);
     if (T.zetVlag) {
       T.zetVlag(S, 'heerBetaald');
       T.wisVlag(S, 'heerSchuld');
@@ -423,13 +423,13 @@
         e.straal = 5;
       }
     }
-    if (T.zetVlag) T.zetVlag(S, 'soldatenInHuis');
+    T.zetVlag(S, 'soldatenInHuis');
   }
 
   function soldatenGaan(S) {
     const h = S.heer;
     const s = h.soldaten;
-    if (T.wisVlag) T.wisVlag(S, 'soldatenInHuis');
+    T.wisVlag(S, 'soldatenInHuis');
     bericht('Het is lente. De soldaten van de heer trekken weg.', 'goed');
     if (s.wezens && s.wezens.length) {
       s.weg = true; // ze lopen nog naar de weg; T.werkHeerBij haalt ze daar weg
@@ -446,10 +446,10 @@
     const lijst = [];
     const gezien = new Set();
     for (const e of (S.wereld && S.wereld.wezens) || []) {
-      const kost = T.aanzienVan ? T.aanzienVan(e) : null;
+      const kost = T.aanzienVan(e);
       if (kost == null || e.dood || gezien.has(e.wie)) continue;
       gezien.add(e.wie);
-      const eigenschap = T.overBoerTekst ? T.overBoerTekst(e) : '';
+      const eigenschap = T.overBoerTekst(e);
       lijst.push({ wie: e.wie, naam: e.naam || T.naamVanMens(e.wie), eigenschap, kost, boete: 0 });
     }
     if (!IN().schoutMagZelf) return lijst;
@@ -547,7 +547,7 @@
     if (wie === 'schout') {
       // Het dorp neemt het je niet kwalijk, maar de heer vindt het lachwekkend (Marcel, 24 sep).
       h.schuld += keuze.boete;
-      if (T.zetVlag) T.zetVlag(S, 'schoutAanDeSchandpaal');
+      T.zetVlag(S, 'schoutAanDeSchandpaal');
       bericht(`Je zet jezelf aan de schandpaal. Het dorp kijkt zwijgend toe. De heer lacht tot hij hikt, en zet er ${keuze.boete} goud bij.`, 'gevaar');
     } else {
       // Zijn poppetje loopt naar het plein en staat daar (T.wandelAnker, js/akkers.js, kijkt naar
@@ -557,7 +557,7 @@
       const e = ((S.wereld && S.wereld.wezens) || []).find((x) => x.wie === wie && !x.dood);
       const lopen = !!(e && kanLopen(S));
       h.wrok.push({ wie, dag: dagNu(S), kost: keuze.kost, staat: true, vanaf: lopen ? null : dagNu(S) });
-      if (T.zetVlag) T.zetVlag(S, T.schandpaalVlag(e && T.gesprekIdVan ? T.gesprekIdVan(e) : wie));
+      T.zetVlag(S, T.schandpaalVlag(e ? T.gesprekIdVan(e) : wie));
       if (e) e.moetNaar = { ...voorDePaal(S), straal: 0 };
       bericht(`${keuze.naam} moet ${IN().schandpaalDagen} dagen aan de schandpaal op het plein. Het dorp zal het onthouden.`, 'gevaar');
     }
@@ -602,7 +602,7 @@
   T.stuurBrief = function (S, dag) {
     const h = S.heer || (S.heer = T.nieuweHeer());
     h.brief = { dag, eis: T.eisVanDeHeer(S) };
-    if (T.zetVlag) T.zetVlag(S, 'briefVanDeHeer');
+    T.zetVlag(S, 'briefVanDeHeer');
     if (T.ui && T.ui.toonBrief) T.ui.toonBrief(S);
     else bericht('Er is een brief van de heer.');
   };
@@ -640,10 +640,10 @@
     // alsnog op de rekening, en dat maakt argwanend (js/inner.js). En zijn soldaten zoeken: is de
     // argwaan hoog genoeg, het hele dorp; anders twee of drie plekken, waar de schout ze langs leidt
     // (js/doorzoeken.js; werklijst punt 4, vraag 41).
-    if (T.heerKijktRond) T.heerKijktRond(S);
+    T.heerKijktRond(S);
     const INN = T.INNER_INSTELLINGEN;
     if (INN && S.inner && S.inner.argwaan >= INN.doorzoekenVanaf && T.doorzoekDorp) T.doorzoekDorp(S);
-    else if (T.beginDoorzoeken) T.beginDoorzoeken(S);
+    else T.beginDoorzoeken(S);
     b.wachtTot = dagNu(S) + IN().wachtDagen;
     T.naarGewoneSnelheid(S);
     bericht('De heer staat op het plein en wacht op je.');
@@ -653,7 +653,7 @@
     const h = S.heer;
     const b = h.bezoek;
     b.weg = true;
-    if (T.zetVlag) T.zetVlag(S, 'heerVertrekt');
+    T.zetVlag(S, 'heerVertrekt');
     if (b.wezens && b.wezens.length) for (const e of b.wezens) naarDeWeg(S, e);
     else haalHeerWeg(S);
   };
@@ -712,7 +712,7 @@
   // ---------------------------------------------------------------------------------------------
 
   function kanLopen(S) {
-    return !!(S.wereld && T.maakMens && T.wegInEnUit && T.wegInEnUit(S.wereld) && S.wereld.wezens);
+    return !!(S.wereld && T.maakMens && T.wegInEnUit(S.wereld) && S.wereld.wezens);
   }
 
   function naarDeWeg(S, e) {

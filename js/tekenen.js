@@ -362,7 +362,7 @@
     const uit = [];
     for (const b of T.lichtBronnen(S)) {
       const g = b.ramenVan;
-      const opz = g && g.tekening && T.opzoekTegelNaam ? T.opzoekTegelNaam(g.tekening) : null;
+      const opz = g && g.tekening && T.opzoekTegelNaam(g.tekening);
       const ramen = opz && opz.eig && opz.eig.ramen;
       if (ramen && ramen.length) uit.push({ g, ramen, schimmen: b.schimmen || 0, fel: 0.9 * nacht, hoek: T.naarScherm(g.x, g.y) });
     }

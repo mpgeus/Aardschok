@@ -32,6 +32,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - **`ontwerp/spel.md`: het spel.** De schout, de heer en de inner, keuren en politiek, avontuur,
   en wat nog open is. Bovenaan staat per onderwerp de stand, en elk onderwerp begint met **Zo werkt
   het nu**; wie iets bouwt of verandert, werkt dat blok bij (Marcel, 25 sep).
+- `ontwerp/speelbaar.md`: wat er nog ontbreekt voor een eerste speelbaar product (vraag 33), en wat er
+  in een speeltest van een heel jaar gebeurde.
 - `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
 - `ontwerp/kaarten.md`: van Tiled naar het spel, en hoe hoogte gaat werken.
 - `ontwerp/wereld.md`: de plekken en mensen van het oude spel (erf, bos, dorp); het dorp en zijn
@@ -68,7 +70,11 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   - het spel: `http://localhost:8123/`
   - **het gereedschap: `http://localhost:8123/gereedschap/`** — een bladzijde die naar alle drie
     wijst. De belangrijkste is `gereedschap/wereld.html`: daar wordt het spel gemaakt.
-- `npm test` draait `test/*.test.cjs` met `node --test`: de regels zonder scherm.
+- `npm test` draait `node --test`: de toetsen in `test/`, de regels zonder scherm. Een toets laadt het
+  spel zoals het draait, met `require('./laad.cjs').spel()`: de scripts uit `index.html`, in die
+  volgorde, zonder wat alleen scherm is (`test/laad.cjs`). Een toets van het gereedschap laadt wat
+  zijn bladzijde laadt (`.pagina('gereedschap/wereld.html')`). Nooit een eigen lijstje: dan mist er
+  vroeg of laat een bestand, en toetst de toets een ander spel dan er draait.
 - `npm run pixelart` rendert alle HD-pixel art naar `gereedschap/pixelart/uit/` (niet in git).
 - `npm run pixelart:spel` zet daaruit alleen wat het spel tekent in `beelden/` (wél in git,
   want het spel heeft het nodig als het draait). Draai het opnieuw als de kunst verandert.
