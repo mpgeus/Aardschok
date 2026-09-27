@@ -105,8 +105,9 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
 zoals ze zijn (Marcel, 27 sep: "We gaan later finetunen"). **Nu het tweede proefje:** een heel jaar spelen
 en kijken of rijk worden en arm lijken leuk is (punt 4 hieronder). Dat jaar speelt een andere agent nu
 voor Marcel (27 sep: "Ik heb een andere agent al een op een test playthrough van een jaar staan"): begin
-er dus niet zelf aan, en wacht op wat eruit komt. Wat Marcel kan bekijken, staat onder "Spelen, en zeggen
-hoe het voelt".
+er dus niet zelf aan, en wacht op wat eruit komt. Intussen staat het plan voor het volgende deel, **het bos
+met de kudde, bij vraag 43, en dat wacht op Marcel.** Wat Marcel kan bekijken, staat onder "Spelen, en
+zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
 voorstel van Claude, en daar gaat vraag 26 over.
@@ -144,7 +145,8 @@ voorstel van Claude, en daar gaat vraag 26 over.
      rijk worden en arm lijken leuk is. Een andere agent speelt het nu voor Marcel (27 sep);
    - deel 2, het bos met de kudde (Marcel, 25 sep): een plek in het bos voor graan en goud (ver lopen,
      muizen en vocht), en een deel van de kudde het bos in voor de inner komt; hij telt de kudde, de
-     heer vraagt per dier, en kaas en wol zijn sporen (dat is ook stap 3 van de weides);
+     heer vraagt per dier, en kaas en wol zijn sporen (dat is ook stap 3 van de weides). Het plan staat
+     bij vraag 43;
    - deel 3: de marskramer koopt en verkoopt vee, kaas, wol en hooi;
    - de rest van stap 3 van de inner: de twee rekenboeken, en de marskramer als spoor van het goud.
 5. **Bouwen:** het dorp bouwt zelf, en beter (3b, stap 5): op bouwgrond die jij aanwijst, voor
@@ -399,6 +401,39 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     gesprek de hele dag op), en naast een schout die stilstaat, wacht hij een half uur (anders was
     stilstaan hetzelfde als praten). Allebei in de werkbank. Of de getallen goed zijn (is de helft
     minder voor 25 goud te goedkoop?), zien we later: "We gaan later finetunen" (Marcel, 27 sep).
+43. **Punt 4, deel 2: het bos met de kudde, het plan** (Claude, 27 sep, terwijl een andere agent het
+    proefje speelt; Marcel: "Push en dan plan maken"; wacht op Marcel). Wat Marcel op 25 sep koos: een
+    plek in het bos voor graan en goud (ver lopen, muizen en vocht), een deel van de kudde het bos in
+    voor de inner komt, de inner telt de kudde, de heer vraagt per dier, en wol en kaas zijn sporen. Wat
+    er nu is: de kudde (drie koeien op de weide onder het plein, acht schapen op de heide in het
+    zuidwesten) telt nergens mee; de heer vraagt 20 wol per schaapskooi; het bos is een rand van zeven
+    rijen bomen aan de noordkant, en bomen houden het zicht van de inner al tegen. Voorstel, in twee
+    stukken:
+    - **Stuk 1, de inner telt de kudde.** Hij telt de koeien en schapen die hij ziet, net als de
+      gebouwen. De heer vraagt dan per dier in plaats van per schaapskooi: 2 goud per koe en 2,5 wol per
+      schaap (acht schapen is 20 wol, zoals nu). Wol is een spoor: een schaap geeft 4 wol, en ze worden
+      een maand voor zijn komst geschoren; ligt er meer wol dan zijn schapen konden geven, dan groeit
+      zijn argwaan. Kaas is in het spel nog graan (de melk telt als graan), dus voor de koeien is er
+      nog geen spoor. Komt hij onverwacht terug en staan er ineens meer dieren, dan weet hij genoeg,
+      zoals bij het graan.
+    - **Stuk 2, het bos.** Een open plek diep in de bosrand, in het noordwesten, zo'n vijftig tegels
+      van de weide: een halve dag lopen voor een koe. Daar kun je twee dingen:
+      - **vee heen drijven:** klik op de weide of de heide, kies hoeveel koeien en schapen, en ze lopen
+        erheen. De inner komt er niet: het bos staat niet op zijn ronde, en door bomen ziet hij niet. In
+        het bos geven koeien geen melk, en elke nacht kan de wolf een dier halen. Voor de winter moeten
+        ze terug, want in het bos is geen hooi;
+      - **graan en goud verstoppen**, zoals in een kelder, maar zoveel je wilt, en de soldaten zoeken
+        er nooit: ze zoeken in het dorp. Wel eten muizen en vocht elke dag een deel van het graan
+        (goud niet).
+      Wie je ziet drijven of iets wegzetten, is getuige, zoals bij de kelders (punt 3).
+    Het past bij hoe het ging: vee liep vroeger echt in het bos (bosweide), en varkens gingen er in de
+    herfst heen voor de eikels. Het bos was meestal van de heer, en wie er vee liet lopen, betaalde
+    ervoor; later kan de heer het dus verbieden, met een keur.
+    Vragen: **A**, de twee stukken, in deze volgorde? **B**, per dier 2 goud per koe en 2,5 wol per
+    schaap, in plaats van 20 wol per kooi? **C**, het bos als open plek op de kaart (je ziet je koeien
+    daar staan, en loopt erheen), of als plek buiten de kaart (ze lopen de kaart af, zoals een bezoeker
+    de weg af)? Voorstel: op de kaart. **D**, wat het bos kost: geen melk en de wolf voor het vee,
+    muizen en vocht voor het graan?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
