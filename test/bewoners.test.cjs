@@ -378,8 +378,13 @@ test('T.dagAnker voor een bewoner: \'s nachts binnen, \'s ochtends de put of het
   assert.ok(new Set(plekken.map((a) => a.x + ',' + a.y)).size > 1, 'niet allemaal op dezelfde plek');
   const oud = nieuwe(S).find((p) => p.leeftijd === 'oud' || p.leeftijd === 'kleuter');
   assert.equal(T.dagAnker(S, oud.wezen).straal, IN.straalBijHuis, 'een oude of een kleuter blijft bij huis');
+  // 's Avonds is hij op zijn erf, of in de herberg als hij daar vanavond heen gaat (js/herberg.js; dat
+  // lot is per spel anders, want de gezinnen zijn het ook).
   zet(20.5);
-  assert.deepEqual(T.dagAnker(S, herder.wezen), { x: herder.wezen.thuis.x, y: herder.wezen.thuis.y, straal: T.DAG_INSTELLINGEN.erfStraal });
+  const avond = T.gaatNaarDeHerberg(S, herder)
+    ? T.herbergAnker(S, herder.wezen)
+    : { x: herder.wezen.thuis.x, y: herder.wezen.thuis.y, straal: T.DAG_INSTELLINGEN.erfStraal };
+  assert.deepEqual(T.dagAnker(S, herder.wezen), avond);
 });
 
 test('in het gehucht is iedereen \'s nachts binnen, overdag waar hij hoort, en \'s avonds thuis', () => {
