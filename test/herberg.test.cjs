@@ -25,14 +25,17 @@ const HERFST = dagVan('wijnmaand', 10);
 const WINTER = dagVan('louwmaand', 5);
 const bijUur = (dag, uur) => Math.floor(dag) + uur / 24;
 
-// Het echte gehucht. Met `karakters` ({ boer4: 'drinker' }) wordt er niet geloot, en heeft elke boer
-// het karakter zoals het in T.MENSEN staat, of zoals het hier gezet wordt. Er ligt bier genoeg.
+// Het echte gehucht. Er wordt niet geloot: elke boer heeft het karakter zoals het in T.MENSEN staat, of
+// zoals het hier gezet wordt (`karakters`: { boer4: 'drinker' }). Het zaad van het spel ligt vast
+// (`zaad`), want daaruit komen de gezinnen, en dus wie er 's avonds gaat. Er ligt bier genoeg.
 function gehucht(opties = {}) {
   const echt = console.warn;
   const loten = T.BOEREN_INSTELLINGEN.loten;
+  const echtLot = T.lootBoeren;
   const was = {};
   console.warn = () => {};
   T.BOEREN_INSTELLINGEN.loten = false;
+  T.lootBoeren = (S2) => echtLot(S2, opties.zaad != null ? opties.zaad : 1234);
   for (const id in opties.karakters || {}) {
     was[id] = T.MENSEN[id].karakter;
     T.MENSEN[id].karakter = opties.karakters[id];
@@ -43,6 +46,7 @@ function gehucht(opties = {}) {
   } finally {
     console.warn = echt;
     T.BOEREN_INSTELLINGEN.loten = loten;
+    T.lootBoeren = echtLot;
     for (const id in was) T.MENSEN[id].karakter = was[id];
   }
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', effecten: [], wachters: [], bezocht: new Set(), inventaris: new Set() });
@@ -214,10 +218,16 @@ test('de herbergierster brouwt van graan, tot er genoeg bier ligt', () => {
   T.tikGebouwenDag(S, HERFST + 1);
   assert.ok(g.werkte > 0, T.gebouwToestand(S, g));
   assert.ok(Math.abs(S.voorraad.bier - soort.maakt.uit.bier * g.werkte) < 1e-9, 'bier naar het werk van vandaag');
-  // Ligt er bijna genoeg, dan brouwt ze niet meer dan er nog bij kan: wat er gisteravond gedronken is,
-  // en tot het plafond.
-  T.zetVoorraad(S, 'bier', soort.maakt.tot.bier - 1);
-  T.tikGebouwenDag(S, HERFST + 2);
+  // Ligt er bijna genoeg, dan brouwt ze niet meer dan er nog bij kan. Gisteravond ging er niemand
+  // (anders dronken ze eerst: met vijf gasten brouwt ze op één dag niet alles terug).
+  const was = { ...IN };
+  Object.assign(IN, { kansPerAvond: 0, kansWinter: 0, karakters: {} });
+  try {
+    T.zetVoorraad(S, 'bier', soort.maakt.tot.bier - 1);
+    T.tikGebouwenDag(S, HERFST + 2);
+  } finally {
+    Object.assign(IN, was);
+  }
   assert.ok(Math.abs(S.voorraad.bier - soort.maakt.tot.bier) < 1e-9, `${S.voorraad.bier}`);
   assert.equal(g.vol, 'bier');
   g.werkte = 0;
