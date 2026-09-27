@@ -1846,6 +1846,9 @@ past (hierboven, bij het plein).
   voor twee huizen op een plaat, en in het spel bij punt 5 van de werklijst. Eén uitzondering: **de
   schout woont al in stap 3,** vakwerk op een stenen voet ("Vakwerk op stenen voet"), het enige huis in
   het gehucht dat half steen is (`beeld.md`, "Ronde 4b: de huizen in het spel").
+- **De ladder is goedgekeurd** (Marcel, 27 sep, op de plaat met een hut en een huis in de vijf treden:
+  "De ladder is goed zo."). Baksteen kent de huizenbouwer nog niet: dat moet erbij vóór trede 5 in het
+  spel komt.
 - Elke stap kost materiaal (planken, keien, bakstenen, pannen) en goud (Marcel, 26 sep: "anders is
   het te makkelijk"), en dus ook het werk van wie het materiaal maakt: de timmerman, de keienraper,
   de steenbakkerij. Wat het oplevert: tevredenere bewoners, en meer plaats per huis.

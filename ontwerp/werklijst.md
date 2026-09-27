@@ -63,7 +63,8 @@ ook een goed idee van Claude, gaat naar `opmerkingen.md` of achteraan, niet in d
   gehucht heeft nu echte hutten, huizen van vakwerk, vijf boerderijen die niet allemaal dezelfde kant
   op staan, en elk huis weet waar zijn deur is. Marcel kreeg schermafdrukken en de plaat van de ladder.
 
-**Loopt nu:** niets. **Het volgende: de herberg en de kleine zaken** (punt 2 hieronder). Ronde 4b is af
+**Loopt nu:** niets. **Het volgende: de herberg en de kleine zaken** (punt 2 hieronder), in een nieuwe
+sessie (Marcel, 27 sep: "Hier maken we nieuwe sessie voor"). Ronde 4b is af
 (achtste sessie, zie onder Af): wat Marcel kan bekijken, staat onder "Spelen, en zeggen hoe het voelt".
 
 **De volgorde van het werk** (Marcel vroeg erom, 26 sep). Wat hij koos, staat erbij; de rest is een
@@ -103,7 +104,8 @@ voorstel van Claude, en daar gaat vraag 26 over.
      rekenboeken.
 5. **Bouwen:** het dorp bouwt zelf, en beter (3b, stap 5): op bouwgrond die jij aanwijst, voor
    materiaal en goud, met steen per trede. (Ronde 4b van de huizenbouwer staat sinds vraag 29 hierboven,
-   bij 1.)
+   bij 1.) Dan komen ook de treden 3 tot 5 van de ladder in het spel (Marcel, 27 sep: "De ladder is goed
+   zo"); baksteen moet daarvoor nog in de huizenbouwer.
 6. **Daarna zoals onder "Daarna, in deze volgorde":** straten en paden (6c; het plein is er sinds 26
    sep), en ontginnen (6b); dan deel C, verhalen en besturen (voorvallen, groepen en keuren, rechtspraak); deel
    D, de nacht en het verzet (de nacht, de eigen buidel, de militie, en daarbij de stal, de hoefsmid
@@ -276,10 +278,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vóór je veel bouwt.
 
 *Spelen, en zeggen hoe het voelt:*
-- **De nieuwe huizen** (26 sep, achtste sessie; ronde 4b): loop door het gehucht en om de boerderijen.
-  Staan ze goed zo, ook de twee (van Gerrit en Trijn) met hun achterkant naar je toe en hun deur naar
-  het plein? Bouw een hut en een huis (`B`) en kijk hoe ze in vijf fases oprijzen. En de plaat van de
-  ladder (`gereedschap/pixelart/uit/proefhuis/ladder.png`): is dat de weg van hut tot stenen huis?
+- **De nieuwe huizen** (26 sep, achtste sessie; ronde 4b). Op de beelden beantwoord (Marcel, 27 sep):
+  de boerderijen van Gerrit en Trijn mogen met hun achterkant naar je toe staan ("geeft het wat meer
+  leven"), en de ladder is goed zo. Nog te spelen: bouw een hut en een huis (`B`) en kijk hoe ze in vijf
+  fases oprijzen.
 - **De doorkijk** (26 sep, zevende sessie): loop achter een huis langs, bijvoorbeeld achter de
   boerderij aan de oostkant van het plein, en kies in de spelregels (`O`) bij "Door een huis heen
   kijken" het kijkvenster of het raster. **Wat je kiest, wordt de standaard** (vraag 31). Vóór het plein

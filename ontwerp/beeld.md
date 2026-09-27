@@ -173,6 +173,12 @@ verschillend. Wat de nieuwe bouwer moet kunnen, in Marcels woorden en daarna uit
 - **De ladder** staat op `uit/proefhuis/ladder.png` (`node huis-sdf-export.cjs ladder`): een hut en
   een huis, elk in de vijf treden. Baksteen kent de bouwer nog niet; de vijfde trede is daar veldsteen.
 
+**Marcel na de beelden** (27 sep):
+- Over de boerderijen die met hun achterkant naar je toe staan: "Ja dat mag, geeft het wat meer leven.
+  Iedereen heeft zn voorkeur, en soms vroeger bouwden mensen praktisch. Als het zo past dan is het
+  goed." Een huis mag dus elke kant op staan, zolang het past.
+- Over de plaat van de ladder: "De ladder is goed zo."
+
 ## Ontwerpcanvas
 
 https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:
