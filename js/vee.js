@@ -198,7 +198,7 @@
   // ---------------------------------------------------------------------------------------------
 
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
-  const isWeide = (veld) => !!veld && !veld.meent && (T.bestemmingVan ? T.bestemmingVan(veld) : veld.bestemming || 'akker') === 'weide';
+  const isWeide = (veld) => !!veld && !veld.meent && T.bestemmingVan(veld) === 'weide';
   const tegelsVan = (veld) => veld.b * veld.h;
   const opVeld = (v, x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
   // Hoeveel plaats een dier (of een soort) nodig heeft.
@@ -488,7 +488,7 @@
   // geeft het vee daar minder melk en werpt het geen jongen, tot je meer weide maakt. Zonder enige
   // weide blijft het staan waar het stond. Geeft de dieren die verhuisden.
   T.verhuisVee = function (S) {
-    const r = T.plaatsVoorVee(S, (v) => (T.bestemmingVan ? T.bestemmingVan(v) : v.bestemming));
+    const r = T.plaatsVoorVee(S, (v) => T.bestemmingVan(v));
     if (!r.moeten.length) return [];
     const teVol = verdeel(r.moeten.filter((e) => !r.plek.has(e)), r.vrij, true);
     const verhuisd = [];

@@ -117,7 +117,7 @@
   // De voet van een gebouw: waar hij staat en hoe groot hij is.
   function voetVan(g) {
     if (g.voorwerp && g.voorwerp.beslaat) return { x: g.x, y: g.y, b: g.voorwerp.beslaat[0], h: g.voorwerp.beslaat[1] };
-    const v = g.voet || (T.gebouwVoet && T.gebouwVoet(g.soort)) || { b: 1, h: 1 };
+    const v = g.voet || T.gebouwVoet(g.soort) || { b: 1, h: 1 };
     return { x: g.x, y: g.y, b: v.b, h: v.h };
   }
 
@@ -247,17 +247,17 @@
     let verwacht = 0;
     let staand = 0;
     const datum = T.datumVanDag(dagNu(S));
-    const basis = T.akkerStadium ? T.akkerStadium(datum.maand, datum.dagVanMaand) : 'gemaaid';
+    const basis = T.akkerStadium(datum.maand, datum.dagVanMaand);
     for (const akker of (S.wereld && S.wereld.akkers) || []) {
-      const isAkker = !T.bestemmingVan || T.bestemmingVan(akker) === 'akker';
-      const perTegel = T.oogstPerTegel ? T.oogstPerTegel(akker) : T.GRAAN_PER_TEGEL || 0;
+      const isAkker = T.bestemmingVan(akker) === 'akker';
+      const perTegel = T.oogstPerTegel(akker);
       for (const t of T.akkerTegels(akker)) {
         const k = sleutel(t.x, t.y);
         if (!tegelsGezien.has(k)) continue;
         tegels++;
         if (!isAkker || (akker.ongezaaid && akker.ongezaaid.has(k))) continue;
         verwacht += perTegel;
-        const stadium = T.akkerTegelStadium ? T.akkerTegelStadium(akker, t.x, t.y, basis) : basis;
+        const stadium = T.akkerTegelStadium(akker, t.x, t.y, basis);
         if (stadium === 'rijp' || stadium === 'groen' || stadium === 'kiemend') staand += perTegel;
       }
     }
@@ -360,7 +360,7 @@
     const delen = (namen.length ? namen : ['geen gebouwen']).concat(`${Math.round(r.graanGezien)} graan`);
     if (T.HEER_INSTELLINGEN && T.HEER_INSTELLINGEN.kist) delen.push(`${Math.floor(r.goudGezien)} goud in de kist`);
     bericht(`De inner vertrekt. In zijn rapport: ${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}.`);
-    if (T.wisVlag) T.wisVlag(S, 'innerOnverwacht');
+    T.wisVlag(S, 'innerOnverwacht');
     if (!b.wezen) haalWeg(S);
     if (T.ui && T.ui.toonArgwaan) T.ui.toonArgwaan(S);
     return r;
@@ -374,7 +374,7 @@
       const i = S.wereld.wezens.indexOf(b.wezen);
       if (i >= 0) S.wereld.wezens.splice(i, 1);
     }
-    if (T.wisVlag) T.wisVlag(S, 'innerOpBezoek');
+    T.wisVlag(S, 'innerOpBezoek');
     I.bezoek = null;
   }
 
@@ -432,7 +432,7 @@
   // Op Sint-Maarten doorzoeken de soldaten het dorp als de argwaan hoog genoeg is (Marcel, 24 sep).
   // Plek voor plek (js/verstoppen.js, T.zoekVerstopt): wat ze vinden, is weg. Geeft wat ze vonden.
   T.doorzoekDorp = function (S) {
-    const gevonden = T.zoekVerstopt ? T.zoekVerstopt(S) : [];
+    const gevonden = T.zoekVerstopt(S);
     const lijst = gevonden.length > 1 ? `${gevonden.slice(0, -1).join(', ')} en ${gevonden[gevonden.length - 1]}` : gevonden[0];
     bericht(gevonden.length
       ? `De soldaten van de heer doorzoeken het dorp, en vinden ${lijst}. Dat is weg.`
@@ -445,7 +445,7 @@
   // ---------------------------------------------------------------------------------------------
 
   function kanLopen(S) {
-    return !!(S.wereld && S.wereld.wezens && T.maakMens && T.wegInEnUit && T.wegInEnUit(S.wereld) && T.zoekPad);
+    return !!(S.wereld && S.wereld.wezens && T.maakMens && T.wegInEnUit(S.wereld) && T.zoekPad);
   }
 
   // Een vrije tegel waar hij kan staan, zo dicht mogelijk bij (x, y), maar minstens `vanaf` ervan

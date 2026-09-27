@@ -86,7 +86,7 @@
     // Wat je in een gesprek krijgt of afgeeft, hoort meteen in beeld te staan; rondlopen doet
     // dat zelf (js/verkennen.js), maar een gesprek kwam daar niet langs.
     if (tas.length && T.ui && T.ui.toonInventaris) T.ui.toonInventaris(S);
-    if (T.questGevolg) T.questGevolg(S, doe);
+    T.questGevolg(S, doe);
     // Handelen met de marskramer (js/handel.js): het venster staat in js/hud.js. Het gesprek sluit
     // daarna gewoon (sluit: true op hetzelfde antwoord); het venster blijft open.
     if (doe.handel && T.ui && T.ui.openHandel) T.ui.openHandel(S);

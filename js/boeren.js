@@ -9,8 +9,8 @@
 // T.lootBoeren trekt voor elke boer (een mens met een `karakter` in T.MENSEN) een karakter en zijn
 // eigenschappen, uit een zaad, zodat een spel zijn lot houdt; T.pasLotToe zet het op de poppetjes.
 // De regels vragen het aan T.boerFactor (js/akkers.js: maaien, opbrengst, zaaien) en T.aanzienVan
-// (js/heer.js: de schandpaal), het scherm aan T.overBoer. Zonder dit bestand (een toets die het
-// niet laadt) is iedere boer gewoon, en voert hij het gesprek van zijn vaste karakter.
+// (js/heer.js: de schandpaal), het scherm aan T.overBoer. Het gereedschap (gereedschap/wereld.html)
+// laadt dit bestand niet: daar is iedere boer gewoon, en voert hij het gesprek van zijn vaste karakter.
 (function (T) {
   'use strict';
 

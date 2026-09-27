@@ -39,9 +39,9 @@
   // herberg ook met ramenVan en schimmen.
   T.lichtBronnen = function (S) {
     const w = S.wereld;
-    const herberg = T.herbergLicht ? T.herbergLicht(S) : [];
+    const herberg = T.herbergLicht(S);
     if (!w || !S.kalender || !T.dagdeelVan) return herberg;
-    if (T.dagdeelVan(S.kalender.dag, T.isOogstDag && T.isOogstDag(S.kalender.dag)) !== 'avond') return herberg;
+    if (T.dagdeelVan(S.kalender.dag, T.isOogstDag(S.kalender.dag)) !== 'avond') return herberg;
     // De lantaarn naast de deur van de herberg is het licht van de herberg al.
     const vanDeHerberg = (v) => herberg.some((h) => T.afstand(h, v) <= 1);
     const lantaarns = w.voorwerpen
@@ -54,7 +54,7 @@
   // licht van een lantaarn of de herberg staat.
   T.zichtOp = function (S, plek) {
     const I = IN();
-    const nacht = S.kalender && T.lichtVan ? T.lichtVan(S.kalender.dag).nacht : 0;
+    const nacht = S.kalender ? T.lichtVan(S.kalender.dag).nacht : 0;
     let ver = I.dag + (I.nacht - I.dag) * nacht;
     for (const b of T.lichtBronnen(S)) {
       const dx = plek.x - b.x;
@@ -72,7 +72,7 @@
 
   // Hoe het bericht hem noemt: een bewoner bij zijn naam, een bezoeker zoals T.MENSEN hem noemt.
   function naamVan(S, e) {
-    const p = T.bewonerVan ? T.bewonerVan(S, e) : null;
+    const p = T.bewonerVan(S, e);
     if (p && T.naamVanBewoner) return T.naamVanBewoner(p);
     if (e.wie && T.naamVanMens) return T.naamVanMens(e.wie);
     return 'een dorpeling';
@@ -89,7 +89,7 @@
     const ver = T.zichtOp(S, doel);
     return w.wezens.filter((e) => {
       if (!kijkt(S, e)) return false;
-      const p = g && T.bewonerVan ? T.bewonerVan(S, e) : null;
+      const p = g && T.bewonerVan(S, e);
       if (p && p.huis === g) return false;
       return T.zietTegel(w, T.tegelVan(e), doel, ver);
     });
@@ -113,10 +113,10 @@
     const dag = S.kalender ? Math.floor(S.kalender.dag) : 0;
     for (const e of wie) {
       e.oogje = (S.tijd || 0) + IN().oogjeTijd;
-      (g.getuigen || (g.getuigen = [])).push({ dag, naam: naamVan(S, e), bewoner: T.bewonerVan ? T.bewonerVan(S, e) : null, handeling, wat, n });
+      (g.getuigen || (g.getuigen = [])).push({ dag, naam: naamVan(S, e), bewoner: T.bewonerVan(S, e), handeling, wat, n });
     }
     if (!wie.length) return { getuigen: wie, bericht: 'Niemand zag het.' };
-    const plek = T.verstopPlekVan ? T.verstopPlekVan(S, g) : null;
+    const plek = T.verstopPlekVan(S, g);
     const waar = plek ? plek.naam : 'daar';
     const hoeveel = `${Math.floor(n)} ${wat}`;
     const deed = handeling === 'weg' ? `${hoeveel} in ${waar} zetten` : `${hoeveel} uit ${waar} halen`;

@@ -143,7 +143,7 @@
       if (e.bewoner && T.overBewonerTekst) return { tekst: T.overBewonerTekst(S, e) };
       // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: een boer, de heer. Welk
       // gesprek dat is, zegt T.gesprekIdVan — een dorpeling kan er een eigen hebben.
-      if (T.gesprekVan && T.gesprekVan(e)) {
+      if (T.gesprekVan(e)) {
         // Bij een boer ook wie hij is en wat hij kan (js/boeren.js; Marcel wilde het meteen zien).
         const over = T.overBoerTekst ? T.overBoerTekst(e, true) : '';
         return { tekst: `Praten met ${e.naam}${over ? ` (${over})` : ''}`, doe: () => loopNaast(S, e, () => T.openDialoog(S, e)) };
@@ -193,7 +193,7 @@
     // Een veld (alleen het nieuwe spel): de muis zegt wat het is, en een klik is gewoon erheen
     // lopen, want de velden zijn groot en je moet eroverheen kunnen. Wat het volgend jaar wordt,
     // kies je in het veldenvenster (js/hud.js, V).
-    const veld = T.veldOp && T.veldOp(w, doel.x, doel.y);
+    const veld = T.veldOp(w, doel.x, doel.y);
     if (veld) return { tekst: T.veldTekst(S, veld), doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
     // De heide, de meent (js/vee.js): wie er graast, en hoeveel de kooi bergt.
     const meent = T.meentOp && T.meentOp(w, doel.x, doel.y);
@@ -305,9 +305,9 @@
     // Eén keer per beurt de datum omrekenen, niet per wezen: T.wandelAnker heeft alleen het
     // stadium nodig (kiemend/groen/rijp), niet de datum zelf.
     const datum = T.datumVanDag && S.kalender ? T.datumVanDag(S.kalender.dag) : null;
-    const basis = datum && T.akkerStadium ? T.akkerStadium(datum.maand, datum.dagVanMaand) : null;
+    const basis = datum && T.akkerStadium(datum.maand, datum.dagVanMaand);
     // In de oogst (graan of hooi) werkt men tot het donker (js/dag.js).
-    const oogst = basis === 'rijp' || !!(datum && T.isHooitijd && T.isHooitijd(datum));
+    const oogst = basis === 'rijp' || !!(datum && T.isHooitijd(datum));
     for (const m of w.wezens) {
       if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait) continue;
       // Een dier dat ligt, blijft liggen tot zijn rust zegt dat het weer opstaat (js/vee.js).
@@ -321,7 +321,7 @@
       // kwam, en waar zijn deur is, onthoudt hij voor het scherm: js/tekenen.js laat hem de deur in
       // stappen en vervagen, of eruit komen, in plaats van in één klap te verdwijnen (Marcel, 26 sep:
       // "Zodra mensen bij de deur komen 'verdwijnen' ze naar binnen").
-      const dagAnker = T.dagAnker ? T.dagAnker(S, m, oogst) : null;
+      const dagAnker = T.dagAnker(S, m, oogst);
       const deurBezet = !!(dagAnker && dagAnker.binnen && T.wezenOp(w, dagAnker.x, dagAnker.y, m));
       const naastDeur = deurBezet ? 1 : 0;
       if (m.binnen) {
@@ -356,7 +356,7 @@
         } else if (opties.length) m.pad = [opties[Math.floor(Math.random() * opties.length)]];
         continue;
       }
-      const thuisNu = dagAnker || (T.wandelAnker && T.wandelAnker(m, basis)) || m.thuis;
+      const thuisNu = dagAnker || T.wandelAnker(m, basis) || m.thuis;
       // Ligt hij nu buiten die straal — een boer wiens huis niet naast zijn akker staat, bij het
       // begin van het groeiseizoen — dan is geen van de vier buurtegels ooit dichtbij genoeg, en
       // zou hij voor eeuwig blijven staan. Dan eerst een heus pad ernaartoe (T.zoekPad, net als

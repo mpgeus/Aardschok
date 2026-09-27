@@ -133,11 +133,11 @@
 
     // Wat de heer bracht (js/heer.js): soldaten in huis, en wie jij aan de schandpaal zette. Dat
     // mist het dorp niet, daar heeft het last van; het gaat eraf, tot niet onder nul.
-    const heer = T.heerOntevredenheid ? T.heerOntevredenheid(S, dag) : { minder: 0, waarom: [] };
+    const heer = T.heerOntevredenheid(S, dag);
 
     // De herberg (js/herberg.js, sinds 27 sep): wie er deze week was, is tevredener. Dat komt erbij,
     // tot niet boven de één; zonder herberg is het nul.
-    const gezelligheid = T.herbergGezelligheid ? T.herbergGezelligheid(S, dag) : 0;
+    const gezelligheid = T.herbergGezelligheid(S, dag);
 
     const tevredenheid = Math.min(1, Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + gezelligheid - heer.minder));
 
@@ -145,7 +145,7 @@
     if (voedselDekking < 1) mist.push('eten');
     if (brandhoutDekking < 1) mist.push('brandhout voor de winter');
     if (!heeftKerk) mist.push('een kerk');
-    if (T.herbergDroog && T.herbergDroog(S)) mist.push('bier');
+    if (T.herbergDroog(S)) mist.push('bier');
 
     return {
       tevredenheid, mist, last: heer.waarom, inWinter,
@@ -200,7 +200,7 @@
     S.behoeften.winterVerliesRest -= verlies;
     const wat = b.inWinter ? 'De winter is hard' : 'De honger is hard';
     // Met bewoners zegt het bericht wie het zijn (T.bewonersVolgen, js/bewoners.js); zonder (een toets
-    // die alleen de regels laadt) alleen hoeveel.
+    // met een eigen, kleine wereld) alleen hoeveel.
     T.wijzigBevolking(S, -verlies, 'winter', wat);
     if (!S.bewoners && T.ui && T.ui.bericht) {
       T.ui.bericht(
@@ -260,7 +260,7 @@
     instantie.tekening = tekening;
     instantie.voet = nieuweVoet;
     instantie.groeiDagen = 0;
-    const opz = tekening && T.opzoekTegelNaam ? T.opzoekTegelNaam(tekening) : null;
+    const opz = tekening && T.opzoekTegelNaam(tekening);
     const naam = 'gebouw:' + soort.wordt;
     T.registreerGebouwSoort(naam);
     instantie.voorwerp.soort = naam;

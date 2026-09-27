@@ -174,8 +174,8 @@
     const datumEl = $('kalender-datum');
     datumEl.textContent = d.tekst;
     datumEl.classList.toggle('sint-maarten', d.sintMaarten);
-    const uur = T.uurTekst ? T.uurTekst(S.kalender.dag) + (T.dagdeelVan ? ', ' + T.dagdeelVan(S.kalender.dag) : '') : '';
-    $('kalender-seizoen').textContent = T.hoofdletter(d.seizoen) + (uur ? ' · ' + uur : '') + (d.sintMaarten ? ' · Sint-Maarten: de heer int' : '');
+    const uur = T.uurTekst(S.kalender.dag) + ', ' + T.dagdeelVan(S.kalender.dag);
+    $('kalender-seizoen').textContent = T.hoofdletter(d.seizoen) + ' · ' + uur + (d.sintMaarten ? ' · Sint-Maarten: de heer int' : '');
     for (const b of document.querySelectorAll('#kalender-knoppen button')) {
       b.classList.toggle('actief', Number(b.dataset.snelheid) === T.snelheidNu(S));
     }
@@ -187,7 +187,7 @@
   // alleen dan; wie slaapt, ziet hem niet (hij wordt vanzelf wakker, of door een klik of een toets).
   function werkSlaapKnopBij(S) {
     const knop = $('slaap-knop');
-    if (knop) knop.classList.toggle('verborgen', !(T.magSlapen && T.magSlapen(S)));
+    if (knop) knop.classList.toggle('verborgen', !T.magSlapen(S));
   }
   T.ui.werkSlaapKnopBij = werkSlaapKnopBij;
 
@@ -247,7 +247,7 @@
       const dag = Math.floor(S.kalender.dag);
       const perDag = T.hooiPerWinterdag(S, dag);
       const winterNu = T.isVeeWinter(dag);
-      const nogTeMaaien = !winterNu && T.verwachtHooi ? T.verwachtHooi(S) : 0;
+      const nogTeMaaien = winterNu ? 0 : T.verwachtHooi(S);
       const hooi = (S.voorraad.hooi || 0) + nogTeMaaien;
       const winter = T.winterDagen(dag);
       const dagen = perDag > 0 ? Math.floor(hooi / perDag) : Infinity;
@@ -501,7 +501,7 @@
       `<p>Het is Ons ter ore gekomen dat het u goed gaat. Dat verheugt Ons zeer, want het gaat Ons ook graag goed. Op Sint-Maarten komen Wij persoonlijk ophalen wat Ons toekomt. ${brief.eis.rapport ? 'Naar wat Onze inner in oogstmaand zag' : 'Naar wat Wij nu zien'}, is dat:</p>` +
       `<ul class="brief-lijst">${regels || '<li>niets. Dat kan niet kloppen.</li>'}</ul>${samen}` +
       `<p>Wat er tot Sint-Maarten bijkomt, zien Wij ook. Wie Ons tekortdoet, zal het merken, want Wij tellen zeer zorgvuldig. Bijna altijd.</p>` +
-      `<p class="brief-groet">Uw genadige heer${T.naamVanDeHeer && T.naamVanDeHeer() ? `,<br>${veilig(T.naamVanDeHeer())}` : ''}</p>` +
+      `<p class="brief-groet">Uw genadige heer${T.naamVanDeHeer() ? `,<br>${veilig(T.naamVanDeHeer())}` : ''}</p>` +
       `</div>` +
       `<p class="venster-staat">Je hebt nu ${nu}. Wat je hem aan graan geeft, kun je in de lente niet zaaien.${marskramer}</p>` +
       `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit; de knop Brief bovenin opent hem weer.</p>`
@@ -530,7 +530,7 @@
   // brief in wijnmaand en in hetzelfde venster. De tijd staat stil zolang je leest; de knop, het
   // kruisje en Esc sluiten hem (T.ui.sluitBrief), en daarna loopt de tijd zoals hij liep.
   function benoemingInhoud(S) {
-    const naam = T.naamVanDeHeer && T.naamVanDeHeer();
+    const naam = T.naamVanDeHeer();
     const dag = S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '';
     return (
       `<div class="venster-kop"><span class="venster-titel">Een brief van de heer</span><span class="venster-wanneer">${dag}</span>` +
@@ -645,7 +645,7 @@
   // Ligt er nog iets verstopt (js/verstoppen.js), dan zegt het venster dat: zolang de heer in het
   // dorp is, kun je er niet bij, dus wie zijn goud te laat terughaalt, komt tekort.
   function verstoptBijDeHeer(S) {
-    const v = T.verstoptTotaal ? T.verstoptTotaal(S) : null;
+    const v = T.verstoptTotaal(S);
     const wat = v ? T.inhoudTekst(v) : '';
     return wat ? `<p class="venster-staat">Er ligt nog ${wat} verstopt. Zolang de heer in het dorp is, kun je er niet bij.</p>` : '';
   }
@@ -933,7 +933,6 @@
   // Wie je nu ziet (js/zien.js, T.kijkersTekst): zo weet je het vóór je iets wegzet (Marcel, vraag 40,
   // A). Kijkt er iemand, dan in het rood.
   function verstopKijkers(S, g) {
-    if (!T.kijkersTekst) return '';
     const t = T.kijkersTekst(S, g);
     const iemand = T.getuigenVan(S, g).length > 0;
     return `<p class="verstop-kijkers${iemand ? ' gezien' : ''}">${veilig(t)}</p>`;
@@ -1052,12 +1051,12 @@
   // Wat een veld nu is, met wat erbij hoort: het graan op een akker, de kudde op een weide.
   function veldNu(S, veld) {
     const bestemming = T.bestemmingVan(veld);
-    const dieren = T.dierenOp ? T.dierenOp(S, veld) : [];
+    const dieren = T.dierenOp(S, veld);
     let over = '';
     let zorg = false;
     // Samen met een veld ernaast één weide (js/vee.js, T.weideGroepen): dan gaan de kudde en de
     // plaats over allebei.
-    const samen = bestemming === 'weide' && T.samenMetTekst ? T.samenMetTekst(S, veld) : '';
+    const samen = bestemming === 'weide' ? T.samenMetTekst(S, veld) : '';
     if (dieren.length) {
       const st = T.weideStand(S, veld);
       const bezet = `${st.nodig} van de ${st.tegels} tegels`;
@@ -1126,8 +1125,8 @@
   // winterzorg.
   function hooiVooruit(S, weides) {
     const VI = T.VEE_INSTELLINGEN;
-    if (!VI || !VI.winterzorg || !T.winterLengte || !weides.length) return '';
-    const hooi = weides.reduce((n, v) => n + v.b * v.h * (T.hooiPerTegel ? T.hooiPerTegel(v, T.boerVanVeld(S, v)) : VI.hooiPerTegel), 0);
+    if (!VI.winterzorg || !weides.length) return '';
+    const hooi = weides.reduce((n, v) => n + v.b * v.h * T.hooiPerTegel(v, T.boerVanVeld(S, v)), 0);
     const koeien = Math.floor(hooi / (T.winterLengte() * (VI.hooiPerDag.koe || 1)));
     const nu = T.veeVan(S).filter((e) => e.dier === 'koe').length;
     return ` Die ${weides.length === 1 ? 'weide geeft' : 'weides geven'} in ${VI.hooien} zo'n ${Math.round(hooi)} hooi: ` +
@@ -1151,9 +1150,9 @@
 
   // De hele kudde in één regel, met de knop om te slachten (het venster hierboven).
   function kuddeRegel(S) {
-    const kudde = T.veeVan ? T.veeVan(S) : [];
+    const kudde = T.veeVan(S);
     if (!kudde.length || !T.dierenTekst) return '';
-    const meent = T.meentVan && T.meentVan(S.wereld);
+    const meent = T.meentVan(S.wereld);
     return `<p class="veld-kudde">De kudde: ${T.dierenTekst(kudde, dagNu(S))}. ` +
       `<button class="veld-keuze" data-actie="slachten" title="Wie gaat er naar de slager?">Slachten…</button></p>` +
       (meent && T.meentTekst ? `<p class="veld-kudde">${veilig(T.meentTekst(S, meent))}.</p>` : '');
@@ -1287,7 +1286,7 @@
     const namen = T.NAAM_OPTIES.map((id) => {
       // Wie een boer nu is en wat hij kan (js/boeren.js), zoals het poppetje het in dit spel heeft.
       const e = T.S && T.S.wereld && T.S.wereld.wezens.find((x) => x.wie === id);
-      const over = e && T.overBoerTekst ? T.overBoerTekst(e) : '';
+      const over = e ? T.overBoerTekst(e) : '';
       const wie = id === 'heer' ? 'de heer, die standaard geen naam heeft' : over;
       const leeg = id === 'heer' ? 'de heer' : T.standaardNaam(id);
       return (
@@ -1337,7 +1336,6 @@
   T.ui.spelregelsOpen = () => !$('spelregels').classList.contains('verborgen');
 
   T.ui.openSpelregels = function (S) {
-    if (!T.OPTIES) return;
     S.modus = 'spelregels';
     S.bouwSoort = null;
     S.bouwMenuOpen = false;

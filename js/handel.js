@@ -131,7 +131,7 @@
   function vertrek(S, dag) {
     const m = S.marskramer;
     m.weg = true;
-    if (T.zetVlag) T.zetVlag(S, 'marskramerVertrekt');
+    T.zetVlag(S, 'marskramerVertrekt');
     if (T.ui && T.ui.sluitHandel && S.modus === 'handel') T.ui.sluitHandel(S);
     if (T.ui && T.ui.bericht) T.ui.bericht(`De marskramer trekt verder. Hij komt terug in ${T.volgendeMarskramer(dag)}.`);
     if (!m.wezen) haalWeg(S);

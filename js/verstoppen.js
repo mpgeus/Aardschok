@@ -49,7 +49,7 @@
   const VI = () => T.VERSTOP_INSTELLINGEN;
   const WAT = ['graan', 'goud'];
   const dagNu = (S) => Math.floor(S.kalender ? S.kalender.dag : 0);
-  const hoofdletter = (s) => (T.hoofdletter ? T.hoofdletter(s) : s.charAt(0).toUpperCase() + s.slice(1));
+  const hoofdletter = (s) => T.hoofdletter(s);
   const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || '');
   const inhoudVan = (g) => g.verstopt || { graan: 0, goud: 0 };
 
@@ -113,7 +113,7 @@
     const eigen = V.karakters && karakter ? V.bewoners[karakter] || null : null;
     let vinden = vanSchout ? V.vindenBijSchout : basis.vinden;
     // Wat pas telt als het in de herberg verteld is (de roddelaar), telt alleen dan; zonder herberg altijd.
-    const heeftHerberg = !!(T.herbergVan && T.herbergVan(S));
+    const heeftHerberg = !!T.herbergVan(S);
     const verteld = !!g.verteld;
     const telt = eigen && (!eigen.inDeHerberg || verteld || !heeftHerberg);
     if (telt && typeof eigen.vinden === 'number') vinden *= eigen.vinden;
@@ -279,7 +279,7 @@
     const w = S.wereld;
     const v = g.voorwerp && g.voorwerp.beslaat
       ? { x: g.x, y: g.y, b: g.voorwerp.beslaat[0], h: g.voorwerp.beslaat[1] }
-      : { x: g.x, y: g.y, ...(g.voet || (T.gebouwVoet && T.gebouwVoet(g.soort)) || { b: 1, h: 1 }) };
+      : { x: g.x, y: g.y, ...(g.voet || T.gebouwVoet(g.soort) || { b: 1, h: 1 }) };
     const binnen = (x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
     const van = S.schout ? { x: S.schout.tx != null ? S.schout.tx : Math.round(S.schout.x), y: S.schout.ty != null ? S.schout.ty : Math.round(S.schout.y) } : { x: v.x, y: v.y };
     let beste = null;

@@ -89,10 +89,6 @@
   // mocht hij per ongeluk op de spiegelknop klikken.
   const zonderVlag = (gid) => gid & 0x1fffffff;
 
-  // Wat een veld kan zijn (js/akkers.js, T.BESTEMMINGEN). Hier nog eens, want dit bestand wordt ook
-  // zonder js/akkers.js geladen (test/gehucht.test.cjs), en een verschrijving moet hoe dan ook
-  // opvallen in plaats van stil een akker te worden.
-  const BESTEMMINGEN = ['akker', 'weide', 'braak'];
 
   // "../tegels/grond.tsx" (of met \, of zonder ../) wordt "grond": zo vinden we het vel terug in
   // T.TEGELS zonder dat kaart.js zelf paden hoeft te kennen.
@@ -307,8 +303,9 @@
         // hierboven. Het plan voor volgend jaar begint gelijk aan de bestemming, en de
         // vruchtbaarheid vol (js/akkers.js, T.VELDEN_INSTELLINGEN).
         let bestemming = p.bestemming !== undefined ? String(p.bestemming) : 'akker';
-        if (!BESTEMMINGEN.includes(bestemming)) {
-          console.warn(`T.laadKaart: akker "${p.akker}" heeft bestemming "${bestemming}"; dat is geen ${BESTEMMINGEN.join(', ')}. Hij wordt een akker.`);
+        // Een verschrijving moet opvallen, in plaats van stil een akker te worden (T.BESTEMMINGEN, js/akkers.js).
+        if (!T.BESTEMMINGEN.includes(bestemming)) {
+          console.warn(`T.laadKaart: akker "${p.akker}" heeft bestemming "${bestemming}"; dat is geen ${T.BESTEMMINGEN.join(', ')}. Hij wordt een akker.`);
           bestemming = 'akker';
         }
         akkers.push({
@@ -356,7 +353,7 @@
       const v = { soort: eig.naam, x: gx, y: gy, vel: t.vel, id: t.id, beslaat };
       // quest="bakker:zoeken": dit ding ligt er alleen zolang die quest in die fase is. Vast
       // kan het niet zijn — dan zou er een muur komen en gaan waar net iemand liep.
-      const grendel = p.quest !== undefined && T.questGrendel ? T.questGrendel(String(p.quest)) : null;
+      const grendel = p.quest !== undefined && T.questGrendel(String(p.quest));
       if (grendel && eig.vast) {
         console.warn(`T.laadKaart: "${eig.naam}" op (${gx}, ${gy}) is vast en kan dus niet aan een quest hangen`);
       } else if (grendel) {

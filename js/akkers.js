@@ -443,7 +443,7 @@
     const hooitijd = T.isHooitijd(datum);
     // Gemaaid wordt in de werkuren, in de oogst tot het donker (js/dag.js); zonder de dag (een
     // toets die js/dag.js niet laadt) altijd.
-    const werktijd = !T.isWerktijd || T.isWerktijd(S.kalender.dag, true);
+    const werktijd = T.isWerktijd(S.kalender.dag, true);
     const nu = S.wereldTijd || 0;
     for (const e of w.wezens) {
       if (e.dood || !e.werkAkkers || !e.werkAkkers.length) continue;
