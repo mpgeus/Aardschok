@@ -92,6 +92,9 @@ volgorde: deze lijst is het nieuwe voorstel).
   onthoudt, zit in `Spel.S`, 380 kB, en wegschrijven kost 5 ms. Dus alles in één keer bewaren.
 - **Punt 3 is af** (Marcel: "A ja B ja C ja D ja, push it"): het spel slaat elke ochtend zelf op, je hebt vijf
   eigen plekken, het opent op een titelscherm met het gehucht erachter, en `Esc` is het menu. Zie onder Af.
+- **De proef met opslaan** (in de speeltest, `--opslaan`): een jaar dat halverwege opslaat, de bladzijde
+  herlaadt en verder gaat met Verder, loopt letter voor letter af als hetzelfde jaar zonder opslaan, ook met
+  volle kelders vlak voor de heer. Eerst vond de proef nog vier verschillen, alle vier scherm (zie onder Af).
 - **Een fout gevonden en gerepareerd:** een nieuw spel wiste niet wat de regels onderweg in de spelstaat
   zetten (de heer, de inner, het slapen, het einde). "Opnieuw beginnen" na een val in een gevecht nam dat dus
   mee naar het volgende spel; na je ambt kwijt herlaadde de bladzijde, en daar viel het niet op.
@@ -1027,8 +1030,14 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   spelen, Opslaan, Laden, Spelregels, Naar het titelscherm; de twee eindschermen gaan ook daarheen. Een
   proefje (`?kaart=`) slaat niets op. Getoetst: `test/opslaan.test.cjs` (bewaren, laden en weer bewaren geeft
   dezelfde tekst; wat elkaar aanwijst, blijft aan elkaar vast), en de proef met opslaan in de speeltest
-  (`npm run speeltest -- braaf --zaad 1 --opslaan`: opslaan op 1 oogstmaand via het menu, herladen, Verder, en
-  het jaar moet letter voor letter aflopen als zonder opslaan). De speeltest klikt voortaan zelf Nieuw spel.
+  (`npm run speeltest -- braaf --zaad 1 --opslaan`): de speler slaat via het menu op, de bladzijde herlaadt, hij
+  gaat verder met Verder, en het jaar moet aflopen als hetzelfde jaar zonder opslaan. **Gespeeld:** braaf,
+  opgeslagen op 1 oogstmaand, en lui 60%, opgeslagen op 6 slachtmaand met volle kelders (`--opslaan 245`; daarna
+  de heer, de soldaten, de winter en het zaaien): allebei precies hetzelfde jaar, gelijk tot de laatste letter
+  (393 en 399 kB). Onderweg vond de proef vier dingen die in de spelstaat stonden maar alleen scherm zijn: het
+  laatst getekende beeld van een wezen, de klok van de doorkijk, de muis, en de volgorde van de velden na het
+  laden. Die gaan nu niet meer mee. En een gewoon jaar (braaf, zaad 1) liep op de nieuwe stand in alle 24
+  onderdelen precies als op de stand van vóór vandaag. De speeltest klikt voortaan zelf Nieuw spel.
 - 28 sep 2026 — **De naam op één plek** (dertiende sessie; vraag 8, Marcel: "De naam blijft aardschok voor nu.
   We maken later iets anders. Zorg dat we dat makkelijk door het hele spel kunnen aanpassen"). `T.NAAM` in
   `js/naam.js`, het eerste script van elke bladzijde: het tabblad van het spel en van het gereedschap (`{naam}`
