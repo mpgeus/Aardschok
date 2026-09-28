@@ -25,11 +25,11 @@ veertiende (de afrekening geparkeerd, de nieuwe richting, en het plan voor de ni
 met 51) staat op haar eigen branch, `ccr-78e7abf2-tn06lu`, en nog niet in `main`. Hoe een eigen branch en `main`
 samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 1: het dorp bouwt zelf (vraag 52). De
-richting staat (vraag 50: besturen en groeien worden het hart, de heer blijft als de druk van boven, en vechten
-begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook (vraag 51: de proef wordt "van gehucht tot
-dorp", in vijf stukken). De afrekening (vraag 49) is geparkeerd, en vraag 47 (de eerste weken als opdrachten)
-wordt herschreven bij stap 5.
+**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 1: het dorp bouwt zelf; het plan staat bij
+vraag 52 en wacht op Marcels A, B, C en D. De richting staat (vraag 50: besturen en groeien worden het hart, de
+heer blijft als de druk van boven, en vechten begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook
+(vraag 51: de proef wordt "van gehucht tot dorp", in vijf stukken). De afrekening (vraag 49) is geparkeerd, en
+vraag 47 (de eerste weken als opdrachten) wordt herschreven bij stap 5.
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; opnieuw geordend op 28 sep,
 vraag 51, na de nieuwe richting). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat de proef "van
@@ -41,7 +41,7 @@ proef eindigt met een brief van de heer: "Wij vernemen dat Ons gehucht een dorp 
 kost u vanaf nu meer."
 1. **Nu: het dorp bouwt zelf** (3b, stap 5; `spel.md`, "Het dorp bouwt zelf"). Jij wijst bouwgrond aan, en een
    nieuw gezin zet er zelf een hut op, met hout uit de voorraad. Groeien wordt plannen, in plaats van elk huis
-   zelf neerzetten. Het plan komt bij vraag 52.
+   zelf neerzetten. Het plan staat bij vraag 52 (28 sep, veertiende sessie; wacht op Marcel).
 2. **De eerste trede: van gehucht tot dorp** (punt 14). Een dorp bij 50 mensen, een kapel en een smidse (Marcel
    koos het; de getallen in de werkbank), met het bouwmenu van het dorp en de brief van de heer. Het einde van de
    proef.
@@ -56,7 +56,7 @@ kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 52 (het plan voor stap 1, komt), en 33d (hoe een tester het krijgt, in
+*2. Wacht op Marcel:* vraag 52 (het plan voor stap 1: erven, en het gezin dat zelf bouwt), en 33d (hoe een tester het krijgt, in
 `speelbaar.md`). Vraag 47 wordt herschreven bij stap 5. Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51;
 het bijstellen na de speeltest (vraag 46) komt later, met een menu met opties.
 
@@ -102,6 +102,10 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
 - **Marcel koos de nieuwe volgorde** (vraag 51: "A ja B ja C ja D ja"): de proef wordt "van gehucht tot dorp", een
   dorp is 50 mensen, een kapel en een smidse, en de eerste keuren zijn vreemden, rantsoen en houtkap. De
   prioriteit bovenaan is opnieuw geordend, en `speelbaar.md` begint met de nieuwe proef.
+- **Een plan voor stap 1, het dorp bouwt zelf** (vraag 52): erven van 10 bij 10 die je één voor één aanwijst, een
+  gezin dat zelf zijn hut bouwt met hout uit de voorraad, en de hut en het huis uit het bouwmenu. Een agent zocht
+  vooraf uit hoe bouwen en groeien nu werken, en hoeveel plaats de kaart heeft: genoeg voor zo'n acht erven. Hij
+  vond ook dat je nu op een akker of een pad kunt bouwen, en dat een gezin zonder plaats niets zegt.
 
 **Wat er in de dertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 5, de eerste weken als opdrachten** (vraag 47): het schrift van je voorganger als stem
@@ -924,6 +928,59 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     eerder? **C**, 50 mensen, een kapel en een smidse? **D**, deze drie keuren?
     **Beantwoord (Marcel, 28 sep): "A ja B ja C ja D ja".** Alle vier zoals voorgesteld. De nieuwe volgorde staat
     bovenaan, onder "Al het werk, op prioriteit", en de proef in `speelbaar.md`, bovenaan.
+52. **Het dorp bouwt zelf: het plan** (Claude, 28 sep, veertiende sessie; stap 1 van de proef "van gehucht tot
+    dorp", vraag 51; wacht op Marcel). Het ontwerp is gekozen op 26 sep (`spel.md`, "Het dorp bouwt zelf"): jij
+    wijst bouwgrond aan, een nieuw gezin kiest er een erf, zet er zelf een hut op met hout uit de voorraad, en
+    een erf is meteen zo groot als het huis ooit wordt. Wat er nu is (nagekeken door een agent):
+    - Jij zet elk gebouw neer met het bouwmenu (`B`), ook de hut (8 hout, 2 dagen, plaats voor 3) en het huis
+      (16 hout en 4 goud, 4 dagen, plaats voor 5). Het rijst vanzelf in vijf fases op, zonder dat iemand erheen
+      loopt.
+    - Om de 20 dagen komt er een gezin van hooguit vier, als er een huis met plaats is, 20 graan en 55%
+      tevreden. Het gehucht begint met plaats voor 37 en 26 mensen, dus na drie gezinnen is het vol. Is er geen
+      plaats, dan gebeurt er niets, en niets zegt het je.
+    - Een hut groeit na 30 tevreden dagen vanzelf door tot een huis, op dezelfde plek, maar in een willekeurige
+      tekening die groter kan zijn (tot 10 bij 7 of 8 bij 9 tegels), zonder dat er plaats voor gereserveerd is.
+    - Een gebouw mag nu niet op het plein en niet op iets vasts (water, bomen, een ander gebouw), maar wél op
+      een akker, een weide of een pad.
+    - De kaart heeft plaats: buiten de donkere rand en de heide passen zo'n acht erven van 10 bij 10 tegels. Om
+      van 37 naar 50 plaatsen te komen, zijn er vier à vijf nodig (een hut is 3, een huis 5). Ontginnen hoeft
+      dus niet naar voren. Dicht bij het plein is het krap: de eerste erven liggen op 9 tot 15 tegels ervan.
+    Voorstel:
+    - **A, erven aanwijzen, één voor één.** In het bouwmenu komt "Erf": je zet het neer zoals een gebouw, een
+      vak van 10 bij 10 tegels, groot genoeg voor elk huis dat er ooit komt, met zijn deur en een moestuin. Het
+      andere is een rechthoek bouwgrond trekken die het spel zelf in erven deelt, zoals in Manor Lords. Dat is
+      sneller bij honderd erven, maar op deze kaart, waar de vrije plekken grillig liggen en een erf 10 bij 10
+      is, verspilt een rechthoek veel ruimte, en het kost een nieuwe manier van aanwijzen. Voorstel: één voor
+      één nu, met het bouwmenu dat er al is; de rechthoek komt als de stad groeit, samen met ontginnen (6b), dat
+      ook velden moet kunnen trekken.
+    - **B, het gezin bouwt zelf.** Het komt over de weg binnen, loopt naar het vrije erf dat het dichtst bij
+      zijn werk ligt (zonder werk: bij het plein), en werkt op de bouwplaats terwijl zijn hut in twee dagen
+      oprijst; het slaapt in de halve hut. Het hout gaat eraf als het begint. Ligt er te weinig, dan wacht de
+      bouwplaats, met een bericht ("Het gezin van Albert wacht op hout voor zijn hut"). Een huis met plaats gaat
+      nog altijd voor: een erf is voor als het dorp vol is. Het andere: de hut staat er eerst, en het gezin komt
+      pas als hij klaar is. Eenvoudiger, maar je ziet niemand bouwen.
+    - **C, de hut en het huis gaan uit het bouwmenu,** want jij zet geen huizen meer neer; werkplaatsen en wat
+      van het hele dorp is (de put, de kapel, de smidse) zet je neer zoals nu. Als keuze in de spelregels, zoals
+      altijd: "Huizen: het dorp bouwt zelf" (de standaard) of "jij zet ze neer" (zoals tot nu).
+    - **D, een vrij erf zie je aan paaltjes** op zijn hoeken, in de wereld, zodat je ook zonder bouwmenu ziet
+      dat er plaats is; met het bouwmenu open staat de rand van elk erf op de grond. Het andere: alleen de rand,
+      en alleen als het bouwmenu open is.
+    - **Ook in deze stap** (geen vraag): niemand bouwt nog op een akker, een weide of een pad (één regel,
+      `T.waaromPastHetNiet`, voor alles wat je neerzet); een gezin dat wil komen maar geen plaats vindt, zegt
+      het ("Er wil een gezin komen, maar er is geen plaats. Wijs een erf aan."); een hut groeit door tot een
+      huis binnen zijn eigen erf, en zijn deur gaat mee (nu blijft die misschien achter; dat zoek ik na).
+    - **Wat het doet** (inzicht): hout wordt een keuze. Een hut kost 8 hout, de winter zo'n 95, en het gehucht
+      begint met 40: de houthakker wordt belangrijker. En met plaats genoeg kan er elke 20 dagen een gezin
+      komen, dus de 50 mensen van de trede kunnen al in het eerste jaar. Wat dan remt, is de tevredenheid (55%),
+      het graan en het hout; de speeltest van stap 5 laat zien of "zo'n twee jaar" klopt, en anders stellen we
+      de trede bij.
+    Klaar als je in het bouwmenu een erf kunt neerzetten (niet op het plein, een veld of een pad), een vrij erf
+    paaltjes heeft, een gezin komt als er een huis met plaats of een vrij erf is en anders zegt dat er geen
+    plaats is, het naar zijn erf loopt en er zijn hut bouwt met hout uit de voorraad (of erop wacht), de hut
+    doorgroeit binnen zijn erf, de hut en het huis niet meer in het bouwmenu staan (tenzij de spelregel het
+    anders zegt), opslaan en laden de erven houdt, `npm test` groen is, en een schermafdruk voor Marcel een
+    gezin op zijn erf laat zien. Vragen: **A**, erven één voor één? **B**, het gezin bouwt zelf, en wacht op
+    hout? **C**, hut en huis uit het bouwmenu, met een spelregel? **D**, paaltjes?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
