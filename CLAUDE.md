@@ -28,8 +28,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 
 - **`ontwerp/werklijst.md`: wat we doen, in welke volgorde. Begin een sessie hier.** Lees de stand
   bovenaan en zeg Marcel in een paar regels waar we zijn. Daar staat ook al het werk op prioriteit
-  (Marcel, 27 sep: eerst wat een proefversie van één jaar nodig heeft): neem het bovenste, en begin
-  met een plan voor Marcel. Werk de stand bij aan het eind van de sessie.
+  (Marcel, 27 sep: eerst wat een proefversie nodig heeft; sinds de nieuwe richting van 28 sep wordt
+  die proef "van gehucht tot dorp", vraag 51): neem het bovenste, en begin met een plan voor Marcel.
+  Werk de stand bij aan het eind van de sessie.
 - **`ontwerp/spel.md`: het spel.** De schout, de heer en de inner, keuren en politiek, avontuur,
   en wat nog open is. Bovenaan staat per onderwerp de stand, en elk onderwerp begint met **Zo werkt
   het nu**; wie iets bouwt of verandert, werkt dat blok bij (Marcel, 25 sep).
@@ -316,9 +317,11 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   met eigen belangen (de politiek) en mensen met een verhaal (het avontuur).
 - Vrij word je door **stadsrechten** te kopen of door een **opstand**, een gevecht in beurten op
   dezelfde kaart. Dan word je burgemeester.
-- De kern zoals Claude hem voorstelt, nog te toetsen met een proefje: **rijk worden en arm
-  lijken.** Marcel, 28 sep: misschien schuift het hart naar besturen en groeien, en vechten met
-  omliggende steden (nog niet besloten; werklijst, vraag 50).
+- **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én
+  bouwen en plannen. **Rijk worden en arm lijken** (de heer, de inner en het verstoppen), eerst de
+  kern, blijft als de druk van boven. **Vechten** begint met aanvallen op je eigen dorp (rovers, de
+  heervaart, dan een rivaal), in beurten op je eigen kaart met je militie; daarna de streek als
+  kaarten naast elkaar; tussen steden pas na de vrijheid.
 - Toon: zwarte satire. De heer is lachwekkend, zijn straffen niet (voorstel).
 - **Instelbaar** (Marcel, 24 sep): waar een ontwerpvraag meer dan één goed antwoord heeft, wordt het
   een optie in de spelregels (`js/opties.js`), en wat Marcel koos, is de standaard. Bouw een nieuwe

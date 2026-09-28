@@ -6,10 +6,9 @@ staat wat besloten is, daaronder het voorstel, en onderaan de speeltest die het 
 
 ## Besloten
 
-- **Wat de proef is, hangt weer open** (Marcel, 28 sep): "Mogelijk wil ik meer de richting op van management van
-  het dorp en het groeien. Ook het vechten met omliggende steden etc." Wat hieronder staat, is een proef van één
-  jaar met de heer; verschuift het hart naar groeien, dan wordt het eerste speelbare product iets anders
-  (werklijst, vraag 50).
+- **De proef verandert** (Marcel, 28 sep, werklijst vraag 50): het hart wordt besturen en groeien, en de heer de
+  druk van boven. Wat hieronder staat, is de proef van één jaar met de heer, van vóór die keuze. Het voorstel voor
+  de nieuwe proef, "van gehucht tot dorp", staat in de werklijst, vraag 51.
 - **De afrekening is geparkeerd** (Marcel, 28 sep: "Laten we afrekening even parkeren maar later kan dat? Ik denk
   dat het een minder interessant spel element is dan ik aanvankelijk dacht."). Het plan staat in de werklijst,
   vraag 49, voor later.

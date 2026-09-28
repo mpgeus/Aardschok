@@ -13,7 +13,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 | Onderwerp | Stand | Werklijst |
 |---|---|---|
-| Een nieuwe richting? | Marcel, 28 sep: meer besturen en groeien, en vechten met omliggende steden; nog niet besloten | vraag 50 |
+| Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp | vraag 50, 51 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
@@ -32,10 +32,24 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
 
-## Een nieuwe richting? (Marcel, 28 sep 2026; nog niet besloten)
+## Een nieuwe richting (Marcel, 28 sep 2026)
 
-**Zo staat het nu** (28 sep): Marcel denkt aan een andere nadruk. Er is nog niets besloten of veranderd; de
-vragen erover staan in de werklijst, vraag 50.
+**Zo staat het nu** (28 sep): besloten, en nog niets van gebouwd. Marcel koos op vier vragen van Claude
+(werklijst, vraag 50: "A ja B allebei C ja D ja"):
+- **Het hart:** groeien en besturen. De heer met zijn inner en het verstoppen blijft als de druk van boven, niet
+  meer als de puzzel waar alles om draait. Er gaat niets weg.
+- **Besturen is allebei:** knoppen met een prijs (de keuren, "Keuren en politiek") én bouwen en plannen
+  (bouwgrond, ontginnen, straten, de treden).
+- **Vechten, in twee stappen:** eerst aanvallen op je eigen dorp, in beurten op je eigen kaart, met je eigen
+  militie; daarna de streek als kaarten naast elkaar, waar je over de weg naar het buurdorp loopt en daar vecht,
+  zoals de sectoren van Jagged Alliance 2. Geen kaart van bovenaf met legers, zoals in Lords of the Realm 2: daar
+  ben je een hand van bovenaf, en hier een poppetje.
+- **De buren, en wanneer:** eerst onder de heer (rovers en de heervaart, dan een rivaal, een ander dorp van
+  dezelfde heer), en vechten tussen steden pas na de vrijheid, als vrije stad tussen de anderen.
+- De nieuwe volgorde en het eerste speelbare product ("van gehucht tot dorp") zijn een voorstel in de werklijst,
+  vraag 51.
+
+**Hoe het zo kwam:**
 
 > Laten we afrekening even parkeren maar later kan dat? Ik denk dat het een minder interessant spel element is
 > dan ik aanvankelijk dacht. Mogelijk wil ik meer de richting op van management van het dorp en het groeien.
@@ -53,6 +67,8 @@ vragen erover staan in de werklijst, vraag 50.
   dezelfde tegels, en als ideeën de heervaart, buurdorpen als rivalen, rovers en de militie ("Lords of the Realm
   2 als voorbeeld").
 - **Geparkeerd:** de afrekening na het eerste jaar (werklijst, vraag 49). Marcel: "later kan dat".
+- **De vragen** (Claude, 28 sep, vraag 50): het hart, wat besturen is, hoe groot vechten wordt, en wie de buren
+  zijn. Het antwoord staat bovenaan.
 
 ## Besloten (Marcel, 23 sep 2026)
 
