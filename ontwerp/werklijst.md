@@ -51,7 +51,7 @@ al van af). Elk stuk begint met een plan voor Marcel.
 4. **De afrekening na het eerste jaar** (wacht op 33a): wat je gaf, wat je achterhield en wat daarvan
    gevonden werd, en hoe het dorp erbij staat.
 5. **De eerste weken als opdrachten,** zodat wie het niet kent, weet wat hij moet doen. Het vak voor de
-   opdracht en de quests zijn er al.
+   opdracht en de quests zijn er al. Het plan staat bij vraag 47 (28 sep, dertiende sessie; wacht op Marcel).
 6. **Een tester die het niet kent** laten spelen (wacht op 33d: een bladzijde op internet, of een
    programma).
 
@@ -608,6 +608,56 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 28 sep): "Niet nu. Dit stellen we later in. We maken dan een menu met opties etc."**
     Niets gebouwd. De voorstellen blijven hier staan voor als het zover is, en de gaten uit de speeltest in
     `opmerkingen.md`.
+47. **De eerste weken als opdrachten: het plan** (Claude, 28 sep, dertiende sessie; Marcel: "Werklijst
+    doorzetten"; wacht op Marcel). Punt 5 van de prioriteit. Wat er al is: het vak linksboven voor "de
+    opdracht van dit moment" (`T.ui.opdracht`, `js/ui.js`), en quests met fasen, een doel per fase, een melding
+    en wegen die vanzelf gaan (`klaarAls`, `js/quest.js`), met een eigen bewerker (`gereedschap/quests.html`).
+    Er staat nog geen quest in. Wat een nieuwe speler nu krijgt: de benoemingsbrief, en dan niets. Hij staat
+    bij zijn eigen deur, twee tegels van het plein; het zaaien gaat vanzelf; de marskramer komt op 5 grasmaand,
+    de inner op 15 oogstmaand, de heer op Sint-Maarten. Voorstel:
+    - **A, wie het zegt: het schrift van je voorganger.** De brief zegt dat hij "nu elders" is; zijn schrift
+      zegt wat hij deed, en waar het misging. De kop in het vak is "Het schrift van je voorganger", en elke regel
+      is een raad in zijn stem, met de toets erbij. Zo gebeurt het in de wereld zelf, zonder uitlegger en zonder
+      scène (Marcel, 25 sep), en leert het de kern: wat hij verborg, en wat ze vonden. De benoemingsbrief krijgt
+      een regel erbij: "Uw voorganger liet een schrift achter. Wij hebben het niet gelezen: er stonden geen
+      bedragen in." Het andere: een gewoon "Te doen", in de stem van het spel.
+    - **B, de eerste weken: zes stappen**, één tegelijk in het vak, elk klaar zodra je het doet:
+      1. *Het plein:* "Loop naar het plein: klik op de grond. Daar komt de marskramer om te verkopen, en de heer
+         om te halen." (Lopen, en waar de bezoekers staan.)
+      2. *Praten:* "Praat met een boer: klik hem aan. De ene houdt zijn mond, de andere niet." (Gesprekken, en
+         dat het karakter van een boer telt voor zijn kelder.)
+      3. *De kelder:* "Klik op je huis. In de kelder zet je weg wat de inner niet hoeft te zien. Mijn kelder
+         zochten ze altijd het eerst." (Het venster van de plek; de kern.)
+      4. *Bouwen:* "Het hout haalt de winter niet. Bouw een houthakker: `B`." (Het bouwmenu, en de winter
+         vóór de waarschuwing van 1 herfstmaand.)
+      5. *De tijd:* "Een dag duurt lang. Zet de tijd sneller met `+` of de knoppen bij de datum; 's avonds slaap
+         je thuis: `Z`."
+      6. *De marskramer:* eerst "Op 5 grasmaand komt de marskramer", en als hij er is: "Verkoop hem graan: de heer
+         wil goud, en daar heb je te weinig van." (De enige weg naar goud; in de speeltest haalde ook wie alles
+         gaf, het goud van de heer niet.)
+    - **C, ook drie momenten later in het jaar**, in hetzelfde vak: (7) vóór de inner: "Op 15 oogstmaand komt de
+      inner. Wat hij niet ziet, telt hij niet", en als hij er is: "Wie met hem praat, houdt hem op"; (8) op
+      Sint-Maarten: "Praat met de heer en betaal. Wat je achterhoudt, zoeken zijn soldaten"; (9) na Sint-Maarten:
+      "Haal terug wat je verstopte: wat in een kelder ligt, eet niemand en zaait niemand." Daarna: "Hier houdt
+      het schrift op." Waarom: de duurste fout uit de speeltest van 28 sep is precies die van een nieuwkomer. De
+      luie spelers verstopten en haalden niets terug; in de winter stierven er gemiddeld 4 en 9 van de honger,
+      en in lentemaand bleef elke akker ongezaaid. De eerste weken alleen vangen dat niet.
+    - **Hoe het werkt** (geen vraag, wel goed om te weten): het schrift is een quest met één weg per fase, zodat
+      er één systeem blijft, met één vak en één bewerker; daar kun je de zinnen zelf herschrijven. De toets van
+      drie antwoorden (elke quest drie wegen die elk iets anders kosten) komt uit het oude spel en past niet op
+      uitleg; een quest met `uitleg: true` slaat hem over. Een weg weet nu alleen van vlaggen, voorwerpen, quests
+      en goud; er komen een paar vragen aan het spel bij, op één plek (staat de schout op het plein, is er een
+      houthakker, heb je gehandeld, is de inner er). Wat je al deed, slaat het schrift stil over. Wie een stap
+      laat liggen, zit niet vast: na een paar dagen bladert het schrift verder, en wat aan een dag hangt (de
+      marskramer, de inner, de heer), komt op die dag, wat je ook deed. In de spelregels (`O`) zet je het uit,
+      standaard staat het aan; op `?kaart=proef` is het er niet. De regels krijgen toetsen zonder scherm, en
+      `npm run speeltest` schrijft erbij op welke dag elke stap af was, of dat het schrift zonder verder ging.
+      De spelers van de speeltest veranderen niet.
+    Klaar als een nieuw spel na de brief de eerste stap toont, elke stap afgaat zodra je hem doet (ook als je
+    hem al deed), niemand op een stap blijft hangen, het schrift uit kan, `npm test` groen is, en de speeltest
+    het schrift bij alle vier de spelers tot het eind ziet komen. Vragen: **A**, het schrift van je voorganger,
+    of een gewoon "Te doen"? **B**, deze zes stappen, en de zinnen zo? **C**, ook de drie momenten later in het
+    jaar?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
