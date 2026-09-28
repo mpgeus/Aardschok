@@ -317,7 +317,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 - Vrij word je door **stadsrechten** te kopen of door een **opstand**, een gevecht in beurten op
   dezelfde kaart. Dan word je burgemeester.
 - De kern zoals Claude hem voorstelt, nog te toetsen met een proefje: **rijk worden en arm
-  lijken.**
+  lijken.** Marcel, 28 sep: misschien schuift het hart naar besturen en groeien, en vechten met
+  omliggende steden (nog niet besloten; werklijst, vraag 50).
 - Toon: zwarte satire. De heer is lachwekkend, zijn straffen niet (voorstel).
 - **Instelbaar** (Marcel, 24 sep): waar een ontwerpvraag meer dan één goed antwoord heeft, wordt het
   een optie in de spelregels (`js/opties.js`), en wat Marcel koos, is de standaard. Bouw een nieuwe

@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (28 sep 2026, veertiende sessie): het plan voor de afrekening wacht op Marcel
+## De stand (28 sep 2026, veertiende sessie): een nieuwe richting? De afrekening is geparkeerd
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
@@ -20,12 +20,16 @@ benoemingsbrief van de heer; `Z` is slapen bij je huis, `Esc` het menu, en het s
 op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 565/565.
 
 **Waar het werk staat:** de dertiende sessie staat in `main` (Marcel, 28 sep: "Graag alles naar main"). De
-veertiende (het plan voor de afrekening, vraag 49) staat op haar eigen branch, `ccr-78e7abf2-tn06lu`, en nog
-niet in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+veertiende (het plan voor de afrekening, vraag 49, en de vragen over de richting, vraag 50) staat op haar eigen
+branch, `ccr-78e7abf2-tn06lu`, en nog niet in `main`. Hoe een eigen branch en `main` samengaan, staat in
+`CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij de prioriteit hieronder. Punt 4, de afrekening na het eerste jaar: het
-plan staat bij vraag 49 en wacht op Marcels A, B, C en D. Vraag 47 (de eerste weken als opdrachten, punt 5)
-wacht nog op Marcels A, B en C.
+**Waar de volgende sessie begint:** bij vraag 50. Marcel denkt aan een andere nadruk (28 sep): "Mogelijk wil ik
+meer de richting op van management van het dorp en het groeien. Ook het vechten met omliggende steden etc."
+Tot die richting er staat, ligt de prioriteit hieronder stil: ze is gebouwd op een proefversie van één jaar met
+de heer. De afrekening (punt 4, vraag 49) is geparkeerd, voor later; vraag 47 (de eerste weken als opdrachten)
+wacht op de richting, want die gaat over de kelder en de inner. Als vraag 50 beantwoord is, maakt Claude een
+nieuwe volgorde en een nieuw eerste speelbaar product, en legt die aan Marcel voor.
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; de volgorde is een
 voorstel van Claude). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat een proefversie van één
@@ -48,16 +52,18 @@ al van af). Elk stuk begint met een plan voor Marcel.
 3. **Af (28 sep, dertiende sessie): opslaan, Verder en een titelscherm** (vraag 48; Marcel: "A ja B ja C ja
    D ja"). Het spel slaat elke ochtend zelf op, je hebt vijf eigen plekken, het opent op een titelscherm met
    het gehucht erachter, en `Esc` is het menu. De naam blijft Aardschok, op één plek (vraag 8). Zie onder Af.
-4. **Nu: de afrekening na het eerste jaar:** wat je gaf, wat je achterhield en wat daarvan gevonden werd, en
-   hoe het dorp erbij staat. Marcel koos op 28 sep het voorstel van 33a, en spelen beslist waar goed ophoudt:
-   die grenzen staan in de werkbank. Het plan staat bij vraag 49 (28 sep, veertiende sessie; wacht op Marcel).
+4. **Geparkeerd (Marcel, 28 sep): de afrekening na het eerste jaar:** wat je gaf, wat je achterhield en wat
+   daarvan gevonden werd, en hoe het dorp erbij staat. Marcel: "Laten we afrekening even parkeren maar later kan
+   dat? Ik denk dat het een minder interessant spel element is dan ik aanvankelijk dacht." Het plan blijft staan
+   bij vraag 49, voor later.
 5. **De eerste weken als opdrachten,** zodat wie het niet kent, weet wat hij moet doen. Het vak voor de
    opdracht en de quests zijn er al. Het plan staat bij vraag 47 (28 sep, dertiende sessie; wacht op Marcel).
 6. **Een tester die het niet kent** laten spelen (wacht op 33d: een bladzijde op internet, of een
    programma).
 
-*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* vraag 49 (het plan voor de afrekening), vraag
-47 (het plan voor de eerste weken), en 33d (hoe een tester het krijgt, in `speelbaar.md`). 33a, 33b, 8 en 48 beantwoordde Marcel op 28 sep. Het bijstellen na de speeltest (vraag 46) komt
+*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* vraag 50 (de richting: besturen, groeien, en
+vechten met omliggende steden), vraag 47 (het plan voor de eerste weken, dat op de richting wacht), en 33d (hoe
+een tester het krijgt, in `speelbaar.md`). Vraag 49 (de afrekening) is geparkeerd. 33a, 33b, 8 en 48 beantwoordde Marcel op 28 sep. Het bijstellen na de speeltest (vraag 46) komt
 later, met een menu met opties (Marcel, 28 sep).
 
 *3. Na de proefversie* (`speelbaar.md`, "Wat kan wachten"):
@@ -86,6 +92,10 @@ volgorde: deze lijst is het nieuwe voorstel).
 - **Nagekeken vóór het plan:** het spel houdt nu niet bij wat je aan het begin had, wat de soldaten vonden (alleen
   als zin in een bericht) en wie er stierf en waaraan; het rapport van de inner en het bezoek van de heer zijn na
   Sint-Maarten weg. De afrekening heeft dus een jaarboek nodig.
+- **Marcel parkeerde de afrekening** ("Laten we afrekening even parkeren maar later kan dat? Ik denk dat het een
+  minder interessant spel element is dan ik aanvankelijk dacht"), en noemde een andere nadruk: "Mogelijk wil ik
+  meer de richting op van management van het dorp en het groeien. Ook het vechten met omliggende steden etc."
+  Opgeschreven in `spel.md` ("Een nieuwe richting?"), met vier vragen van Claude in vraag 50. Niets gebouwd.
 
 **Wat er in de dertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 5, de eerste weken als opdrachten** (vraag 47): het schrift van je voorganger als stem
@@ -810,6 +820,48 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     test` groen is; en de speeltest bij alle vier de spelers de afrekening opschrijft. Vragen: **A**, op 1
     lentemaand na de winter, elk jaar, met Verder spelen? **B**, de drie getallen zo, als twee boeken en het dorp?
     **C**, hoe arm je leek zo meten? **D**, deze zinnen, met de bijzondere?
+    **Geparkeerd (Marcel, 28 sep): "Laten we afrekening even parkeren maar later kan dat? Ik denk dat het een
+    minder interessant spel element is dan ik aanvankelijk dacht."** Niets gebouwd. Het plan blijft hier staan
+    voor later; een jaaroverzicht kan ook bij een spel over groeien passen (hoeveel mensen erbij, wat er gebouwd
+    werd), maar dat is voor als de richting er staat (vraag 50).
+50. **Een nieuwe richting: besturen, groeien, en vechten met omliggende steden** (Marcel, 28 sep, veertiende
+    sessie: "Mogelijk wil ik meer de richting op van management van het dorp en het groeien. Ook het vechten met
+    omliggende steden etc"; de vragen zijn van Claude; wacht op Marcel). Het staat ook in `spel.md`, "Een nieuwe
+    richting?". Het is minder een draai dan het lijkt: op 23 sep beschreef Marcel het spel als "Management sim
+    met groeiende aantallen van mensen", en "rijk worden en arm lijken" was het voorstel van Claude voor de
+    kern, "nog te toetsen" (`CLAUDE.md`). Dat is nu getoetst, en groeien wint. Nieuw is vechten met de buren:
+    tot nu toe vocht je alleen in de opstand, tegen de heer. Vragen:
+    - **A, het hart:** groeien en besturen worden het hart. De heer met zijn inner en het verstoppen blijven als
+      de druk van boven, maar niet meer als de puzzel waar alles om draait. Er gaat niets weg: het werkt en het
+      is getoetst. Voorstel: zo, want de heer is ook wat ons spel eigen maakt. Manor Lords (2024) doet groeien
+      en vechten met een rivaal al, en was een groot succes op Steam; een schout onder een verwarde heer heeft
+      het niet. Of moet de heer verder naar achteren, bijvoorbeeld als keuze in de spelregels?
+    - **B, wat is besturen?** Nu heeft de schout weinig knoppen: bouwen, de velden, slachten, de heer betalen en
+      verstoppen. Wat ontbreekt, zijn knoppen met een prijs, en die stonden al gepland als keuren (punt 9;
+      Marcel, 23 sep: "policies implementeren"): het rantsoen, de werkuren, een belasting voor de dorpskas, een
+      avondklok, bier in de herberg. Groeien is daarnaast vooral bouwen en plannen: bouwgrond aanwijzen (het
+      dorp bouwt dan zelf), ontginnen (6b), straten (6c), en de treden van gehucht naar dorp (14). Wat bedoel je
+      vooral: meer knoppen, meer bouwen en plannen, of allebei?
+    - **C, vechten: hoe groot?**
+      1. *Aanvallen op je eigen dorp,* in beurten op je eigen kaart, met je eigen militie: rovers, een buurdorp,
+         soldaten. Het gevecht in beurten is er al; het moet groeien van één schout naar een groepje.
+      2. *De streek als kaarten naast elkaar:* over de weg loop je naar het buurdorp, en daar vecht je, ook in
+         beurten. Zo werkt Jagged Alliance 2, al het voorbeeld voor ons gevecht: steden in sectoren, een militie
+         die je traint, en een tegenstander die terugslaat. Kaarten met aansluitingen ertussen kan het spel al
+         (het wereldgereedschap).
+      3. *Een kaart van de streek van bovenaf, met legers,* zoals Lords of the Realm 2. Dat is een nieuwe laag,
+         en daar ben je een hand van bovenaf, geen poppetje in het dorp (besloten op 23 sep).
+      Voorstel: eerst 1, dan 2. Nummer 3 past slecht bij de schout als poppetje.
+    - **D, wie zijn de buren, en wanneer vecht je?** Onder de heer: zijn oorlog (de heervaart: hij vraagt mannen,
+      midden in de oogst; `spel.md`, "Lords of the Realm 2 als voorbeeld", idee 1), rovers, en andere dorpen van
+      dezelfde heer als rivalen. Na de vrijheid: andere steden, met jouw stad als vrije stad tussen de anderen.
+      (In Holland begonnen in 1350, zevenentwintig jaar na het begin van ons spel, de Hoekse en Kabeljauwse
+      twisten, waarin steden en edelen partij kozen: stof genoeg.) Voorstel: eerst onder de heer (rovers en de
+      heervaart, dan een rivaal), en vechten tussen steden na de vrijheid.
+    Wat eruit volgt (geen vraag): als A tot en met D staan, maakt Claude een nieuwe volgorde voor de werklijst, en
+    een nieuw eerste speelbaar product. Nu is dat een jaar met de heer; het wordt eerder iets als "een gehucht
+    dat in een paar jaar een dorp wordt". Vraag 47 (de eerste weken als opdrachten) blijft tot dan liggen, want
+    die gaat over de kelder en de inner.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

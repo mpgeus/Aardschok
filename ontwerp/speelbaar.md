@@ -6,6 +6,13 @@ staat wat besloten is, daaronder het voorstel, en onderaan de speeltest die het 
 
 ## Besloten
 
+- **Wat de proef is, hangt weer open** (Marcel, 28 sep): "Mogelijk wil ik meer de richting op van management van
+  het dorp en het groeien. Ook het vechten met omliggende steden etc." Wat hieronder staat, is een proef van één
+  jaar met de heer; verschuift het hart naar groeien, dan wordt het eerste speelbare product iets anders
+  (werklijst, vraag 50).
+- **De afrekening is geparkeerd** (Marcel, 28 sep: "Laten we afrekening even parkeren maar later kan dat? Ik denk
+  dat het een minder interessant spel element is dan ik aanvankelijk dacht."). Het plan staat in de werklijst,
+  vraag 49, voor later.
 - **Wat "goed" is na het eerste jaar** (vraag 33a; Marcel, 28 sep: "Goed idee. Maar spelen bepaalt waar ik
   vind dat we staan uiteindelijk. Dit wordt later nog regelmatig aangepast."). De afrekening komt zoals
   voorgesteld: geen punten, maar drie getallen naast elkaar (wat je echt hebt, ook wat verstopt ligt; wat de
@@ -101,7 +108,7 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
    twaalf jaren (hieronder, "De speeltest van 28 sep"). Het bijstellen komt later, met een menu met opties
    (Marcel, 28 sep: "Niet nu. Dit stellen we later in."; werklijst, vraag 46).
 5. ~~Opslaan, Verder en een titelscherm.~~ Af (28 sep).
-6. De afrekening na het eerste jaar. Het plan staat in de werklijst, vraag 49 (28 sep; wacht op Marcel).
+6. De afrekening na het eerste jaar. Geparkeerd (Marcel, 28 sep); het plan staat in de werklijst, vraag 49.
 7. De eerste weken als opdrachten.
 8. Een tester die het niet kent laten spelen, en kijken waar hij vastloopt.
 

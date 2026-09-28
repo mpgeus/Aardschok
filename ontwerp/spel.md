@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 28 sep 2026)
+## Waar staat wat (bijgewerkt 28 sep 2026, veertiende sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -13,6 +13,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 | Onderwerp | Stand | Werklijst |
 |---|---|---|
+| Een nieuwe richting? | Marcel, 28 sep: meer besturen en groeien, en vechten met omliggende steden; nog niet besloten | vraag 50 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
@@ -30,6 +31,28 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
+
+## Een nieuwe richting? (Marcel, 28 sep 2026; nog niet besloten)
+
+**Zo staat het nu** (28 sep): Marcel denkt aan een andere nadruk. Er is nog niets besloten of veranderd; de
+vragen erover staan in de werklijst, vraag 50.
+
+> Laten we afrekening even parkeren maar later kan dat? Ik denk dat het een minder interessant spel element is
+> dan ik aanvankelijk dacht. Mogelijk wil ik meer de richting op van management van het dorp en het groeien.
+> Ook het vechten met omliggende steden etc
+
+- **Wat het betekent:** het hart van het spel schuift van de heer te slim af zijn ("rijk worden en arm lijken",
+  het voorstel van Claude van 23 sep, "nog te toetsen") naar besturen en groeien, zoals Marcel het spel op 23
+  sep zelf beschreef ("Management sim met groeiende aantallen van mensen"; "Als je het goed doet wordt het dorp
+  een stad", hieronder). Nieuw is vechten met omliggende steden: tot nu toe vocht je alleen in de opstand, tegen
+  de heer.
+- **Wat er al ligt voor groeien en besturen.** Gebouwd: 45 soorten gebouwen, bewoners met een huis, werk en een
+  dagritme, handen en productie, behoeften en de winter, handel, en vee. Ontworpen en gekozen, maar nog niet
+  gebouwd: het dorp bouwt zelf (bouwgrond), beter bouwen, ontginnen, straten, de treden van gehucht tot stad
+  ("Een dorp dat leeft en groeit") en de keuren ("Keuren en politiek"). Voor vechten: het gevecht in beurten op
+  dezelfde tegels, en als ideeën de heervaart, buurdorpen als rivalen, rovers en de militie ("Lords of the Realm
+  2 als voorbeeld").
+- **Geparkeerd:** de afrekening na het eerste jaar (werklijst, vraag 49). Marcel: "later kan dat".
 
 ## Besloten (Marcel, 23 sep 2026)
 
