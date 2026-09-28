@@ -10,23 +10,23 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (28 sep 2026, na de twaalfde sessie): de speeltest is gespeeld, en alles staat in main
+## De stand (28 sep 2026, in de dertiende sessie): twee plannen wachten op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 550/550.
+`npm test`: 553/553.
 
-**Waar het werk staat:** alles staat in `main`, ook de twaalfde sessie, de speeltest (Marcel, 28 sep: "Graag
-alles naar main"; ook op `claude/werklijst-doorzetten-465m5t`). Hoe een eigen branch en `main` samengaan,
-staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** de twaalfde sessie staat in `main`. De dertiende staat op
+`claude/werklijst-doorzetten-kfeqsq` en nog niet in `main` (Marcel vroeg het nog niet). Hoe een eigen branch en
+`main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint** (Marcel, 28 sep: "starten we nieuwe sessie met het volgende werk"): bij de
-prioriteit hieronder. Punt 3 (opslaan, Verder, titelscherm) wacht op 33b en een naam (vraag 8), punt 4 (de
-afrekening) op 33a; punt 5 (de eerste weken als opdrachten) wacht nergens op. Vraag Marcel eerst naar 33a,
-33b en 8, en begin anders met een plan voor punt 5.
+**Waar de volgende sessie begint:** bij de prioriteit hieronder. Marcel beantwoordde 33a, 33b en 8 (28 sep),
+dus punt 3 en 4 wachten niet meer op een besluit, maar op zijn keuze uit een plan: vraag 48 (opslaan, het menu
+en het titelscherm, punt 3) en vraag 47 (de eerste weken als opdrachten, punt 5). Vraag hem daarnaar, en
+bouw punt 3 zodra hij kiest. Het plan voor punt 4 (de afrekening) komt daarna.
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; de volgorde is een
 voorstel van Claude). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat een proefversie van één
@@ -80,6 +80,17 @@ helpt een tester zichzelf te vinden, dus misschien toch vóór de proef), 22 (de
 volgorde: deze lijst is het nieuwe voorstel).
 
 *Wat nog ruw is:* `opmerkingen.md`, bovenaan.
+
+**Wat er in de dertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
+- **Een plan voor punt 5, de eerste weken als opdrachten** (vraag 47): het schrift van je voorganger als stem
+  in het vak linksboven, zes stappen voor de eerste weken, en drie momenten later in het jaar.
+- **Marcel beantwoordde 33a, 33b en 8.** De afrekening zoals voorgesteld, en spelen beslist waar de grenzen
+  liggen; vanzelf opslaan en ook zelf, met een menu en een titelscherm; de naam blijft Aardschok, voor nu
+  (`speelbaar.md` en `verpakken.md`, onder Besloten).
+- **De naam staat op één plek** (`js/naam.js`, `T.NAAM`), zodat een andere naam één regel is. De sleutel van de
+  opslag in de browser verandert bewust niet mee. Zie onder Af.
+- **Een plan voor punt 3, opslaan, het menu en het titelscherm** (vraag 48), na een meting: alles wat het spel
+  onthoudt, zit in `Spel.S`, 380 kB, en wegschrijven kost 5 ms. Dus alles in één keer bewaren.
 
 **Wat er in de twaalfde sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **De speeltest als script** (vraag 45; Marcel: "A ja B ja C ja D ja, push it"). `gereedschap/speeltest/`
@@ -662,6 +673,44 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     het schrift bij alle vier de spelers tot het eind ziet komen. Vragen: **A**, het schrift van je voorganger,
     of een gewoon "Te doen"? **B**, deze zes stappen, en de zinnen zo? **C**, ook de drie momenten later in het
     jaar?
+48. **Opslaan, het menu en het titelscherm: het plan** (Claude, 28 sep, dertiende sessie; na Marcels antwoord
+    op 33b: "Auto opslaan, maar ook zelf kunnen kiezen. Er moet ook een menu komen titel scherm etc"; wacht op
+    Marcel). Punt 3 van de prioriteit. Wat er nu is: wie de bladzijde opent of herlaadt, begint een nieuw spel,
+    met nieuwe boeren; alleen de spelregels onthoudt de browser. Gemeten in een half jaar spelen: **alles wat
+    het spel onthoudt, zit in `Spel.S`** (geen enkel bestand houdt iets apart bij), er zit geen functie in, wel
+    twaalf verzamelingen en zo'n 140 plekken waar het ene het andere aanwijst (een bewoner zijn poppetje, zijn
+    huis en zijn werk). Alles samen is 380 kB, waarvan vier vijfde de kaart zelf, en het wegschrijven kost 5
+    ms. Voorstel:
+    - **Hoe (geen vraag): alles in één keer.** Het spel bewaart heel `Spel.S`, behalve wat alleen scherm is
+      (de camera, de muis, de buffer van de grond), en houdt daarbij de verzamelingen en wie wie aanwijst heel.
+      Zo hoeft niets te zeggen wat het bewaart, en vergeet niemand iets als er straks iets bijkomt. Het staat
+      achter één functie: in de browser in de opslag van de browser, in de verpakking voor Steam een bestand
+      (`verpakken.md`, "Wat we tot die tijd niet mogen breken", 3). Een opgeslagen spel draagt een
+      versienummer: past het niet meer bij het spel, dan zegt het menu dat, in plaats van een spel dat
+      halverwege stukloopt. Zolang een tester speelt, veranderen we de vorm dan liever niet.
+    - **A, vanzelf opslaan:** elke ochtend bij zonsopgang, op één plek die steeds overschreven wordt. Staat er
+      dan een venster open, dan zodra het dicht is. Een klein "Opgeslagen" in de hoek zegt dat het gebeurde.
+    - **B, zelf opslaan:** vijf plekken, elk met de dag in het spel en wanneer je opsloeg ("12 grasmaand 1323,
+      ochtend · vandaag 21:40"). Overschrijven vraagt eerst. Laden kan uit alle zes, de nieuwste bovenaan.
+    - **C, het titelscherm:** de naam (`T.NAAM`), met **Verder** (het nieuwste spel, vanzelf of zelf
+      opgeslagen; alleen als er een is), **Nieuw spel** (dan de benoemingsbrief, zoals nu), **Laden** en
+      **Spelregels** (het venster van `O`, met de werkbank: daar komt later het bijstellen, vraag 46). Achter het
+      scherm ligt het gehucht al, stil, met de camera die langzaam over het plein glijdt: het nieuwe spel wacht
+      er klaar. Zo laadt ook de pixel art achter het scherm, en zie je geen vlakken meer bij het opstarten
+      (`verpakken.md`, "Wat het wél browserig laat voelen"). Op `?kaart=proef` blijft het weg.
+    - **D, het menu in het spel:** `Esc` (als er niets anders open is om te sluiten) of een knop rechtsboven.
+      **Verder spelen**, **Opslaan**, **Laden**, **Spelregels**, **Naar het titelscherm**. De tijd staat stil
+      zolang het open is; in een gevecht kan opslaan niet. En de twee eindschermen ("Je ambt kwijt" en
+      "Gevallen") gaan allebei naar het titelscherm. Nu herlaadt het ene de bladzijde en begint het andere een
+      nieuw spel: twee manieren voor één ding.
+    - **Getoetst:** opslaan, laden en weer opslaan geeft precies hetzelfde; en de speeltest speelt een jaar
+      waarin hij op 1 oogstmaand opslaat, de bladzijde herlaadt en verder speelt vanaf het titelscherm. Dat
+      jaar moet precies zo aflopen als hetzelfde jaar zonder opslaan (hetzelfde zaad). Voortaan klikt de
+      speeltest ook zelf op "Nieuw spel".
+    Klaar als het spel opent op het titelscherm, Verder het nieuwste spel laadt, het spel elke ochtend zelf
+    opslaat, het menu opslaat, laadt en naar het titelscherm gaat, een geladen jaar afloopt als een jaar dat
+    nooit bewaard werd, en `npm test` groen is. Vragen: **A**, elke ochtend op één plek? **B**, vijf eigen
+    plekken? **C**, het titelscherm zo, met het gehucht erachter? **D**, het menu zo?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
