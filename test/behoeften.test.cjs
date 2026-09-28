@@ -454,3 +454,18 @@ test('honger buiten de winter, "wegtrekken": op een groeidag trekt een gezin weg
     assert.equal(S.bevolking, 20 - T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
   });
 });
+
+// ── Vlees vult een maag, ook als het dorp kijkt of er eten is (28 sep) ──
+
+test('vlees vult een maag, ook in de winter: wie alleen vlees heeft, sterft niet van de honger', () => {
+  // Tot 28 sep telde het vlees niet mee in wat er te eten was, terwijl het dorp het wel at.
+  const S = maakS();
+  S.bevolking = 20;
+  T.zetVoorraad(S, 'hout', 1000);
+  T.zetVoorraad(S, 'vlees', 200);
+  T.zetVoorraad(S, 'zout', 20);
+  assert.equal(T.berekenTevredenheid(S, WINTERDAG).voedselDekking, 1);
+  for (let dag = WINTERDAG; dag < WINTERDAG + 20; dag++) T.tikGebouwenDag(S, dag);
+  assert.equal(S.bevolking, 20);
+  assert.ok(S.voorraad.vlees < 200, 'en het vlees is gegeten');
+});

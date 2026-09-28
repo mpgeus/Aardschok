@@ -113,9 +113,12 @@
     const bevolking = S.bevolking || 0;
     const v = S.voorraad || {};
 
-    // Wat er vandaag te eten is: de melk van vandaag (js/vee.js, T.tikVeeDag), het graan, en de kaas.
+    // Wat er vandaag te eten is: de melk van vandaag (js/vee.js, T.tikVeeDag), het graan, de kaas, en
+    // het vlees als dat een maag vult (T.vleesAlsEten). Tot 28 sep telde het vlees hier niet, terwijl
+    // het dorp het wel at (T.eetVandaag): met alleen vlees in de schuur stierven er in de winter
+    // mensen van de honger.
     const voedselBenodigd = bevolking * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
-    const voedsel = ((S.vee && S.vee.melk) || 0) + (v.graan || 0) + (v.kaas || 0);
+    const voedsel = ((S.vee && S.vee.melk) || 0) + (v.graan || 0) + (v.kaas || 0) + T.vleesAlsEten(S);
     const voedselDekking = voedselBenodigd > 0 ? Math.min(1, voedsel / voedselBenodigd) : 1;
     const extraSoorten = ['groente', 'vis', 'vlees'].filter((wat) => (v[wat] || 0) >= IN.extraVoedselDrempel);
     const voedselFactor = voedselDekking * (0.5 + 0.5 * (extraSoorten.length / 3));
