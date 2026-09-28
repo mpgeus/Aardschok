@@ -36,7 +36,8 @@ al van af). Elk stuk begint met een plan voor Marcel.
    zoeken, de inner die je kunt bespelen en de winter die je ziet aankomen: hoe de kern nu speelt, weet nog
    niemand. Een agent kan het, zoals de vorige keer, en Marcel speelt ook: op `main`, waar sinds 28 sep
    alles in staat, en zeg op welke commit. De getallen bijstellen (het goud, de kelders, de honger, de
-   inner) komt daarna, als Marcel wil ("We gaan later finetunen").
+   inner) komt daarna, als Marcel wil ("We gaan later finetunen"). **Loopt:** het plan staat bij vraag 45
+   en wacht op Marcel (twaalfde sessie, 28 sep).
 3. **Opslaan, Verder en een titelscherm** (wacht op 33b, en op een naam, vraag 8). Zonder opslaan speelt
    niemand een jaar van een uur uit.
 4. **De afrekening na het eerste jaar** (wacht op 33a): wat je gaf, wat je achterhield en wat daarvan
@@ -504,6 +505,49 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     de winter zelf; B: het rode cijfer in de balk; C: geen sneeuw nu, wel op de lijst na de proefversie
     (Claude las "ja" als ja op het voorstel; zeg het als het anders bedoeld was). Het besluit staat in
     `spel.md`, "Het dorp: mensen, behoeften en de winter". **Gebouwd (28 sep, elfde sessie):** zie onder Af.
+45. **De speeltest op de stand van nu: het plan** (Claude, 28 sep, twaalfde sessie; Marcel: "Werklijst
+    doorzetten"; wacht op Marcel). Hij speelt op `main`, commit `ba8ff55`. Sinds de speeltest van 27 sep kwam
+    erbij: de soldaten zoeken op Sint-Maarten altijd op twee of drie plekken, met de schout mee; de inner
+    blijft tot zonsondergang, en je houdt hem op met praten of koopt hem om (5, 10 of 20 goud, en een op de
+    vijf keer hoort de heer het); een roddelaar die je iets zag wegzetten, vertelt het in de herberg; de
+    winter waarschuwt; en vlees telt als eten. De test moet laten zien of verstoppen nu een gok is: wat het
+    kost als het gevonden wordt, tegen wat het oplevert. Daarin telt het lot mee: bij een zoekbeurt vinden
+    de soldaten een kelder voor 30%, die van de schout voor 60%, een kapel voor 5%. Eén jaar per manier zegt
+    dan bij toeval weinig. Voorstel:
+    - **Wie speelt: een script dat blijft** (`gereedschap/speeltest/`), geen agent die met de hand speelt
+      zoals op 27 sep. Het spel draait zoals het draait, in een onzichtbare browser (`Spel.debug.stap`), en
+      een speler in code doet wat een speler doet: lopen, verstoppen, met de inner praten, de soldaten
+      leiden, en de vensters (de brief, slachten, betalen) met hun eigen knoppen. Elk jaar krijgt een vast
+      zaad: hetzelfde zaad geeft dezelfde boeren en hetzelfde lot. Waarom: na het bijstellen van een getal
+      speel je hetzelfde jaar opnieuw en zie je precies wat de wijziging deed (het finetunen van straks),
+      en dat kost dan alleen rekentijd, zo'n twee minuten per jaar. Het script van 27 sep is er niet meer:
+      elke speeltest begint nu opnieuw. De eerste keer is het wel meer werk dan een agent laten spelen.
+    - **Vier spelers.** (1) **Braaf**: geeft alles; de maatstaf. (2) en (3) **Lui, 30% en 60% weg**, zoals
+      B en C van 27 sep (overdag, in de kelders die het dichtst bij zijn, niet meelopen, niets terughalen),
+      zodat je ziet wat de nieuwe regels met dezelfde speler doen. (4) **Slim, 60% weg**: verstopt 's nachts
+      als niemand kijkt, niet bij de roddelaar; praat met de inner en geeft hem 10 goud; loopt met hem mee
+      langs de armste huizen; leidt de soldaten langs lege kelders; verkoopt graan aan de marskramer; en
+      haalt na Sint-Maarten terug wat nodig is om te eten en te zaaien. Alle vier luisteren naar de winter:
+      zegt het dorp dat het hout de winter niet haalt, dan bouwen ze een houthakker. Anders sterft weer
+      bijna de helft en zegt de test niets over de kern; zo toetst hij meteen of de waarschuwing op tijd
+      komt.
+    - **Drie jaren per speler,** elk met een ander zaad: twaalf jaren.
+    - **Wat hij meet.** Per maand: de voorraad (graan, goud, hout), wat waar verstopt ligt, de mensen en
+      waaraan ze stierven, de tevredenheid en de argwaan. Per jaar: wat de inner zag tegen wat er was, zijn
+      rapport, wat de heer vroeg en kreeg, de straf, welke plekken de soldaten doorzochten en wat ze vonden,
+      de getuigen en wie het vertelde, wat de inner kreeg en of de heer het hoorde, wanneer de winter
+      waarschuwde, en de fouten in de console.
+    - **Waar hij op let:** of er één zet is die altijd wint, want dan valt er niets te kiezen. Een die nu
+      al opvalt: een kapel (10 hout en 8 goud) houdt 120 graan, de soldaten vinden hem voor 5% en kiezen hem
+      als laatste, en de heer vraagt er niets voor. De slimme speler bouwt er daarom een.
+    - **De uitslag** komt in `speelbaar.md`, en in grafieken op de pagina "Een jaar in het gehucht",
+      naast die van 27 sep.
+    - **Niets bijstellen tijdens de test,** ook niet wat al schuurt (een kelder houdt 40 graan, de heer
+      vraagt 15% van het graan): eerst meten, dan samen bijstellen.
+    Marcel speelt ook, op `main` (commit `ba8ff55`); wat er te bekijken is, staat onder "Spelen, en zeggen
+    hoe het voelt" (de inner bespelen, de winter). Vragen: **A**, een script dat blijft (voorstel), of een
+    agent zoals op 27 sep? **B**, deze vier spelers? **C**, drie jaren per speler? **D**, niets bijstellen
+    tijdens de test?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
