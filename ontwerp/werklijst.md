@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (28 sep 2026, veertiende sessie): een nieuwe richting, en een plan voor de nieuwe volgorde
+## De stand (28 sep 2026, veertiende sessie): een nieuwe richting, en de proef wordt "van gehucht tot dorp"
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -25,65 +25,59 @@ veertiende (de afrekening geparkeerd, de nieuwe richting, en het plan voor de ni
 met 51) staat op haar eigen branch, `ccr-78e7abf2-tn06lu`, en nog niet in `main`. Hoe een eigen branch en `main`
 samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij vraag 51. De richting staat (Marcel, 28 sep, vraag 50: "A ja B allebei C
-ja D ja"): besturen en groeien worden het hart, de heer blijft als de druk van boven, en vechten begint met
-aanvallen op je eigen dorp. Het plan voor de nieuwe volgorde en het eerste speelbare product ("van gehucht tot
-dorp") staat bij vraag 51 en wacht op Marcels A, B, C en D. Tot dan ligt de prioriteit hieronder stil: ze is
-gebouwd op een proefversie van één jaar met de heer. De afrekening (punt 4, vraag 49) is geparkeerd, en vraag 47
-(de eerste weken als opdrachten) wordt herschreven als de volgorde staat.
+**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 1: het dorp bouwt zelf (vraag 52). De
+richting staat (vraag 50: besturen en groeien worden het hart, de heer blijft als de druk van boven, en vechten
+begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook (vraag 51: de proef wordt "van gehucht tot
+dorp", in vijf stukken). De afrekening (vraag 49) is geparkeerd, en vraag 47 (de eerste weken als opdrachten)
+wordt herschreven bij stap 5.
 
-**Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; de volgorde is een
-voorstel van Claude). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat een proefversie van één
-jaar nodig heeft, de kortste weg uit `speelbaar.md` (de getuigen en de soldaten die altijd zoeken, zijn daar
-al van af). Elk stuk begint met een plan voor Marcel.
+**Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; opnieuw geordend op 28 sep,
+vraag 51, na de nieuwe richting). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat de proef "van
+gehucht tot dorp" nodig heeft (`speelbaar.md`, bovenaan). Elk stuk begint met een plan voor Marcel.
 
-*1. Nu: naar een proefversie van één jaar*
-1. **Af (28 sep, elfde sessie): de winter zichtbaar maken.** Een waarschuwing vooraf en in de winter als
-   het hout of het eten de winter niet haalt, het hout rood in de balk, en in het bericht waaraan iemand
-   stierf (vraag 44; zie onder Af).
-2. **Af (28 sep, twaalfde sessie): een speeltest op de stand van nu** (vraag 45). Een script dat blijft
-   (`npm run speeltest`) speelde twaalf jaren: vier spelers, elk drie keer. Het jaar loopt zonder fout, en de
-   winter doodt niet meer. Maar de inner is uit te schakelen (met praten en meelopen zag hij niets, en vroeg
-   de heer 28 graan en 2 goud in plaats van 88 en 25), verstoppen levert weinig op, de soldaten vonden nooit
-   iets, en ook wie alles geeft, krijgt een boete. Zie `speelbaar.md`, "De speeltest van 28 sep".
-   **Het bijstellen komt later** (vraag 46; Marcel, 28 sep: "Niet nu. Dit stellen we later in. We maken dan
-   een menu met opties etc."). Dan speelt `npm run speeltest` dezelfde twaalf jaren opnieuw. Er is al een
-   venster met de spelregels en een werkbank met alle getallen (`O`, `js/opties.js`); het menu kan daarop
-   bouwen, bijvoorbeeld vanuit het titelscherm van punt 3.
-3. **Af (28 sep, dertiende sessie): opslaan, Verder en een titelscherm** (vraag 48; Marcel: "A ja B ja C ja
-   D ja"). Het spel slaat elke ochtend zelf op, je hebt vijf eigen plekken, het opent op een titelscherm met
-   het gehucht erachter, en `Esc` is het menu. De naam blijft Aardschok, op één plek (vraag 8). Zie onder Af.
-4. **Geparkeerd (Marcel, 28 sep): de afrekening na het eerste jaar:** wat je gaf, wat je achterhield en wat
-   daarvan gevonden werd, en hoe het dorp erbij staat. Marcel: "Laten we afrekening even parkeren maar later kan
-   dat? Ik denk dat het een minder interessant spel element is dan ik aanvankelijk dacht." Het plan blijft staan
-   bij vraag 49, voor later.
-5. **De eerste weken als opdrachten,** zodat wie het niet kent, weet wat hij moet doen. Het vak voor de
-   opdracht en de quests zijn er al. Het plan staat bij vraag 47 (28 sep, dertiende sessie; wacht op Marcel).
-6. **Een tester die het niet kent** laten spelen (wacht op 33d: een bladzijde op internet, of een
-   programma).
+*1. Nu: naar de proef "van gehucht tot dorp"* (Marcel, 28 sep, vraag 51: "A ja B ja C ja D ja"). Je begint zoals
+nu, met de brief van de heer en 26 mensen, en het doel is dat het gehucht in zo'n twee jaar een dorp wordt. De
+proef eindigt met een brief van de heer: "Wij vernemen dat Ons gehucht een dorp is geworden. Gefeliciteerd. Dat
+kost u vanaf nu meer."
+1. **Nu: het dorp bouwt zelf** (3b, stap 5; `spel.md`, "Het dorp bouwt zelf"). Jij wijst bouwgrond aan, en een
+   nieuw gezin zet er zelf een hut op, met hout uit de voorraad. Groeien wordt plannen, in plaats van elk huis
+   zelf neerzetten. Het plan komt bij vraag 52.
+2. **De eerste trede: van gehucht tot dorp** (punt 14). Een dorp bij 50 mensen, een kapel en een smidse (Marcel
+   koos het; de getallen in de werkbank), met het bouwmenu van het dorp en de brief van de heer. Het einde van de
+   proef.
+3. **De eerste keuren** (punt 9, nog zonder groepen en schepenen): vreemden, rantsoen en houtkap, in één venster,
+   en elke keur zegt vooraf wat hij doet.
+4. **Rovers en een militie** (punt 13): rovers vallen het gehucht aan, en je verdedigt het in beurten op je eigen
+   kaart, met naast de schout een paar mannen uit het wachthuis. Wie wegtrekt, wordt rover.
+5. **De proef afmaken:** de eerste weken als opdrachten (vraag 47, herschreven voor de nieuwe richting), een
+   speeltest van twee jaar, en een tester die het niet kent (33d).
 
-*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* vraag 51 (de nieuwe volgorde, en van gehucht tot
-dorp als eerste speelbaar product), vraag 47 (de eerste weken, die herschreven wordt), en 33d (hoe een tester
-het krijgt, in `speelbaar.md`). Vraag 49 (de afrekening) is geparkeerd; vraag 50 (de richting) is beantwoord.
-33a, 33b, 8 en 48 beantwoordde Marcel op 28 sep. Het bijstellen na de speeltest (vraag 46) komt later, met een
-menu met opties (Marcel, 28 sep).
+*Eerder af, voor de proef van één jaar met de heer (27 en 28 sep):* de winter zichtbaar (elfde sessie), de
+speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
+(dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*3. Na de proefversie* (`speelbaar.md`, "Wat kan wachten"):
-- de rest van punt 4: het bos met de kudde (een idee met vier vragen in `opmerkingen.md`, vraag 43), de
-  marskramer die vee, kaas, wol en hooi koopt en verkoopt, en de twee rekenboeken;
-- punt 5, het dorp bouwt zelf: bouwgrond, de ladder tot baksteen, de herberg die meegroeit;
-- straten en paden (6c), en ontginnen (6b);
-- deel C tot en met E: voorvallen, groepen en keuren, rechtspraak; de nacht, de eigen buidel, de militie;
-  de treden, stadsrechten, de opstand;
-- deel F: geluid, en verpakken voor Steam als de proef goed is;
-- sneeuw of rijp in het beeld in de winter (vraag 44, C).
+*2. Wacht op Marcel:* vraag 52 (het plan voor stap 1, komt), en 33d (hoe een tester het krijgt, in
+`speelbaar.md`). Vraag 47 wordt herschreven bij stap 5. Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51;
+het bijstellen na de speeltest (vraag 46) komt later, met een menu met opties.
+
+*3. Na de proef* (vraag 51):
+- de heervaart, en een rivaal: een ander dorp van dezelfde heer (vraag 50, D);
+- ontginnen (6b) en straten en paden (6c), tenzij de kaart al eerder te klein is;
+- beter bouwen: de ladder tot baksteen, en de herberg die meegroeit (het tweede deel van 3b, stap 5);
+- de groepen en de schepenen (de rest van punt 9), voorvallen (8), rechtspraak (10), de nacht (11), de eigen
+  buidel (12);
+- marktrecht en de stad (14), stadsrechten (15), de opstand (16), en de streek als kaarten naast elkaar, met het
+  buurdorp (vraag 50, C);
+- de rest van punt 4: het bos met de kudde (vraag 43), de marskramer die vee koopt en verkoopt, de twee
+  rekenboeken; en de afrekening als jaaroverzicht (vraag 49);
+- deel F: geluid, en verpakken voor Steam als de proef goed is; sneeuw of rijp in de winter (vraag 44, C).
 
 *4. Opruimen, als die bestanden toch open moeten:* `hud.js` en `tekenen.js` splitsen (vraag 25, C en D).
 
-*5. Vragen zonder haast:* 6 (de groepen en keuren, pas nodig bij deel C), 7 (ijs op de beek), 10 tot en
-met 12 (de oude monsters, het leven van de schout, de knop Slaan), 13 (een eigen figuur voor de schout: die
-helpt een tester zichzelf te vinden, dus misschien toch vóór de proef), 22 (de tijdsversneller) en 26 (de
-volgorde: deze lijst is het nieuwe voorstel).
+*5. Vragen zonder haast:* 6 (de groepen; de keuren zelf komen in stap 3), 7 (ijs op de beek), 10 tot en met 12
+(de oude monsters, het leven van de schout, de knop Slaan: die komen terug bij stap 4), 13 (een eigen figuur voor
+de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de proef), 22 (de tijdsversneller) en
+26 (de volgorde: deze lijst is het nieuwe voorstel).
 
 *Wat nog ruw is:* `opmerkingen.md`, bovenaan.
 
@@ -105,6 +99,9 @@ volgorde: deze lijst is het nieuwe voorstel).
   vijf stukken: het dorp bouwt zelf, de eerste trede, de eerste keuren, rovers en een militie, en de proef
   afmaken. Nagekeken: de trede staat al in de spelstaat en het bouwmenu, maar gaat nooit omhoog; het gevecht
   kent nog maar één man aan jouw kant.
+- **Marcel koos de nieuwe volgorde** (vraag 51: "A ja B ja C ja D ja"): de proef wordt "van gehucht tot dorp", een
+  dorp is 50 mensen, een kapel en een smidse, en de eerste keuren zijn vreemden, rantsoen en houtkap. De
+  prioriteit bovenaan is opnieuw geordend, en `speelbaar.md` begint met de nieuwe proef.
 
 **Wat er in de dertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 5, de eerste weken als opdrachten** (vraag 47): het schrift van je voorganger als stem
@@ -809,10 +806,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
         de herberg wordt het stil als de schout binnenkomt."
       - Bijzonder, als er iemand van de honger stierf terwijl er graan in je kelders lag: "Vier stierven van de
         honger, en in je kelders lag 240 graan. Het dorp weet het." Dat is de duurste fout uit de speeltest, en
-        zo leert een nieuwe speler hem aan het eind van zijn eerste jaar. In de speeltest zou braaf "gewoon"
-        krijgen (52% tevreden), slim "goed" (67%), en lui de bijzondere. De grenzen staan in de werkbank, de
-        zinnen in hetzelfde blok in het bestand: de werkbank kent alleen getallen. Zinnen herschrijven in het
-        spel zelf kan later, bij het menu met opties (vraag 46).
+        zo leert een nieuwe speler hem aan het eind van zijn eerste jaar.
+      In de speeltest zou braaf "gewoon" krijgen (52% tevreden), slim "goed" (67%), en lui de bijzondere. De
+      grenzen staan in de werkbank, de zinnen in hetzelfde blok in het bestand: de werkbank kent alleen
+      getallen. Zinnen herschrijven in het spel zelf kan later, bij het menu met opties (vraag 46).
     - **Hoe het werkt** (geen vraag, wel goed om te weten): een jaarboek in de spelstaat (`S.jaarboek`), dus
       vanzelf bewaard. Het schrijft op wat je had bij het begin van het jaar; bij de inner wat hij telde en wat
       er echt was; op Sint-Maarten wat de heer vroeg, wat je gaf en wat er verstopt lag; wat de soldaten vonden,
@@ -822,17 +819,17 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       in `js/menu.js`, en het einde van "je ambt kwijt" wordt hetzelfde scherm, met het ontslag als zin van de
       heer en alleen Naar het titelscherm: één scherm voor twee eindes, en `js/hud.js` wordt kleiner. Een spel
       dat vóór deze stap bewaard werd, krijgt een afrekening met wat er dan bekend is. De speeltest klikt Verder
-      spelen, en schrijft per speler de afrekening in `samenvatting.md`. Klaar als op 1 lentemaand de afrekening
-      van het jaar opent, met de twee boeken, het dorp, Sint-Maarten en de twee zinnen; Verder spelen en Naar
-      het titelscherm werken; wie zijn ambt kwijtraakt, hetzelfde scherm ziet; de grenzen in de werkbank staan;
-      een jaar dat halverwege opslaat en herlaadt dezelfde afrekening geeft; `npm test` groen is; en de
-      speeltest bij alle vier de spelers de afrekening opschrijft. Vragen: **A**, op 1 lentemaand na de winter,
-      elk jaar, met Verder spelen? **B**, de drie getallen zo, als twee boeken en het dorp? **C**, hoe arm je
-      leek zo meten? **D**, deze zinnen, met de bijzondere? **Geparkeerd (Marcel, 28 sep): "Laten we afrekening
-      even parkeren maar later kan dat? Ik denk dat het een minder interessant spel element is dan ik
-      aanvankelijk dacht."** Niets gebouwd. Het plan blijft hier staan voor later; een jaaroverzicht kan ook bij
-      een spel over groeien passen (hoeveel mensen erbij, wat er gebouwd werd), maar dat is voor als de richting
-      er staat (vraag 50).
+      spelen, en schrijft per speler de afrekening in `samenvatting.md`.
+    Klaar als op 1 lentemaand de afrekening van het jaar opent, met de twee boeken, het dorp, Sint-Maarten en de
+    twee zinnen; Verder spelen en Naar het titelscherm werken; wie zijn ambt kwijtraakt, hetzelfde scherm ziet;
+    de grenzen in de werkbank staan; een jaar dat halverwege opslaat en herlaadt dezelfde afrekening geeft; `npm
+    test` groen is; en de speeltest bij alle vier de spelers de afrekening opschrijft. Vragen: **A**, op 1
+    lentemaand na de winter, elk jaar, met Verder spelen? **B**, de drie getallen zo, als twee boeken en het
+    dorp? **C**, hoe arm je leek zo meten? **D**, deze zinnen, met de bijzondere?
+    **Geparkeerd (Marcel, 28 sep): "Laten we afrekening even parkeren maar later kan dat? Ik denk dat het een
+    minder interessant spel element is dan ik aanvankelijk dacht."** Niets gebouwd. Het plan blijft hier staan
+    voor later; een jaaroverzicht kan ook bij een spel over groeien passen (hoeveel mensen erbij, wat er gebouwd
+    werd), maar dat is voor als de richting er staat (vraag 50).
 50. **Een nieuwe richting: besturen, groeien, en vechten met omliggende steden** (Marcel, 28 sep, veertiende
     sessie: "Mogelijk wil ik meer de richting op van management van het dorp en het groeien. Ook het vechten met
     omliggende steden etc"; de vragen zijn van Claude; wacht op Marcel). Het staat ook in `spel.md`, "Een nieuwe
@@ -866,17 +863,18 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       dorpen van dezelfde heer als rivalen. Na de vrijheid: andere steden, met jouw stad als vrije stad tussen
       de anderen. (In Holland begonnen in 1350, zevenentwintig jaar na het begin van ons spel, de Hoekse en
       Kabeljauwse twisten, waarin steden en edelen partij kozen: stof genoeg.) Voorstel: eerst onder de heer
-      (rovers en de heervaart, dan een rivaal), en vechten tussen steden na de vrijheid. Wat eruit volgt (geen
-      vraag): als A tot en met D staan, maakt Claude een nieuwe volgorde voor de werklijst, en een nieuw eerste
-      speelbaar product. Nu is dat een jaar met de heer; het wordt eerder iets als "een gehucht dat in een paar
-      jaar een dorp wordt". Vraag 47 (de eerste weken als opdrachten) blijft tot dan liggen, want die gaat over
-      de kelder en de inner. **Beantwoord (Marcel, 28 sep): "A ja B allebei C ja D ja".** A: groeien en besturen
-      worden het hart; de heer, de inner en het verstoppen blijven als de druk van boven, en er gaat niets weg.
-      B: allebei, meer knoppen (keuren) én meer bouwen en plannen. C: eerst aanvallen op je eigen dorp, in
-      beurten op je eigen kaart, met je militie; daarna de streek als kaarten naast elkaar; geen kaart van
-      bovenaf met legers. D: eerst onder de heer (rovers en de heervaart, dan een rivaal), en vechten tussen
-      steden na de vrijheid. Opgeschreven in `spel.md` ("Een nieuwe richting") en `CLAUDE.md` ("Het spel in het
-      kort"). De nieuwe volgorde en het eerste speelbare product: vraag 51.
+      (rovers en de heervaart, dan een rivaal), en vechten tussen steden na de vrijheid.
+    Wat eruit volgt (geen vraag): als A tot en met D staan, maakt Claude een nieuwe volgorde voor de werklijst,
+    en een nieuw eerste speelbaar product. Nu is dat een jaar met de heer; het wordt eerder iets als "een
+    gehucht dat in een paar jaar een dorp wordt". Vraag 47 (de eerste weken als opdrachten) blijft tot dan
+    liggen, want die gaat over de kelder en de inner.
+    **Beantwoord (Marcel, 28 sep): "A ja B allebei C ja D ja".** A: groeien en besturen worden het hart; de
+    heer, de inner en het verstoppen blijven als de druk van boven, en er gaat niets weg. B: allebei, meer
+    knoppen (keuren) én meer bouwen en plannen. C: eerst aanvallen op je eigen dorp, in beurten op je eigen
+    kaart, met je militie; daarna de streek als kaarten naast elkaar; geen kaart van bovenaf met legers. D:
+    eerst onder de heer (rovers en de heervaart, dan een rivaal), en vechten tussen steden na de vrijheid.
+    Opgeschreven in `spel.md` ("Een nieuwe richting") en `CLAUDE.md` ("Het spel in het kort"). De nieuwe
+    volgorde en het eerste speelbare product: vraag 51.
 51. **De nieuwe volgorde, en het eerste speelbare product: het plan** (Claude, 28 sep, veertiende sessie; na
     Marcels antwoord op vraag 50; wacht op Marcel). De prioriteit bovenaan was gebouwd op een proef van één jaar
     met de heer, en die vervalt. Wat er al is en past: 45 soorten gebouwen, bewoners met werk en een dagritme,
@@ -906,10 +904,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
          is er sinds 26 sep. En wie wegtrekt, wordt rover (idee 2): wie slecht bestuurt, maakt zijn eigen
          vijanden.
       5. *De proef afmaken:* de eerste weken als opdrachten (vraag 47, herschreven voor de nieuwe richting), een
-         speeltest van twee jaar, en een tester die het niet kent (33d). Na de proef: de heervaart, ontginnen
-         (6b) en straten (6c), groepen en schepenen, marktrecht, de streek als kaarten naast elkaar (vraag 50,
-         C), en de afrekening als jaaroverzicht (vraag 49). Heeft de kaart van nu (76 bij 76 tegels) te weinig
-         plaats voor een dorp, dan komt ontginnen naar voren; dat zoekt het plan voor stap 1 uit.
+         speeltest van twee jaar, en een tester die het niet kent (33d).
+      Na de proef: de heervaart, ontginnen (6b) en straten (6c), groepen en schepenen, marktrecht, de streek als
+      kaarten naast elkaar (vraag 50, C), en de afrekening als jaaroverzicht (vraag 49). Heeft de kaart van nu
+      (76 bij 76 tegels) te weinig plaats voor een dorp, dan komt ontginnen naar voren; dat zoekt het plan voor
+      stap 1 uit.
     - **C, wanneer is het een dorp?** Voorstel: 50 mensen, een kapel en een smidse (allebei al te bouwen in het
       gehucht), met de getallen in de werkbank, zodat spelen het beslist. Vroeger was het verschil vaak de kerk:
       een gehucht had er geen, een dorp wel. Een kapel die een kerk wordt, kan later. In de speeltest van 28 sep
@@ -919,10 +918,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       knop voor groei), *rantsoen* (meer eten maakt tevredener, minder laat meer over voor de heer of de
       kelder), en *houtkap* in het bos van de heer (hout om te stoken en te bouwen, maar de inner telt de
       stronken). Andere uit de lijst van 23 sep (`spel.md`, "Keuren en politiek"): een avondklok, de
-      herendienst, marktgeld, bier belasten, of armenzorg. Staan A tot en met D, dan komt de nieuwe volgorde
-      bovenaan de werklijst, en begint stap 1 met een eigen plan. Vragen: **A**, van gehucht tot dorp als eerste
-      speelbare product? **B**, deze volgorde, of het vechten eerder? **C**, 50 mensen, een kapel en een smidse?
-      **D**, deze drie keuren?
+      herendienst, marktgeld, bier belasten, of armenzorg.
+    Staan A tot en met D, dan komt de nieuwe volgorde bovenaan de werklijst, en begint stap 1 met een eigen
+    plan. Vragen: **A**, van gehucht tot dorp als eerste speelbare product? **B**, deze volgorde, of het vechten
+    eerder? **C**, 50 mensen, een kapel en een smidse? **D**, deze drie keuren?
+    **Beantwoord (Marcel, 28 sep): "A ja B ja C ja D ja".** Alle vier zoals voorgesteld. De nieuwe volgorde staat
+    bovenaan, onder "Al het werk, op prioriteit", en de proef in `speelbaar.md`, bovenaan.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

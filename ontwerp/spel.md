@@ -46,8 +46,9 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
   ben je een hand van bovenaf, en hier een poppetje.
 - **De buren, en wanneer:** eerst onder de heer (rovers en de heervaart, dan een rivaal, een ander dorp van
   dezelfde heer), en vechten tussen steden pas na de vrijheid, als vrije stad tussen de anderen.
-- De nieuwe volgorde en het eerste speelbare product ("van gehucht tot dorp") zijn een voorstel in de werklijst,
-  vraag 51.
+- **Het eerste speelbare product is "van gehucht tot dorp"** (Marcel, 28 sep, werklijst vraag 51: "A ja B ja C ja
+  D ja"): in zo'n twee jaar van 26 naar 50 mensen, met een kapel en een smidse, met bouwgrond, de eerste keuren
+  (vreemden, rantsoen, houtkap) en rovers met een militie onderweg (`speelbaar.md`, bovenaan).
 
 **Hoe het zo kwam:**
 

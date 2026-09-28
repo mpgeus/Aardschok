@@ -28,8 +28,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 
 - **`ontwerp/werklijst.md`: wat we doen, in welke volgorde. Begin een sessie hier.** Lees de stand
   bovenaan en zeg Marcel in een paar regels waar we zijn. Daar staat ook al het werk op prioriteit
-  (Marcel, 27 sep: eerst wat een proefversie nodig heeft; sinds de nieuwe richting van 28 sep wordt
-  die proef "van gehucht tot dorp", vraag 51): neem het bovenste, en begin met een plan voor Marcel.
+  (Marcel, 28 sep, vraag 51: eerst wat de proef "van gehucht tot dorp" nodig heeft): neem het
+  bovenste, en begin met een plan voor Marcel.
   Werk de stand bij aan het eind van de sessie.
 - **`ontwerp/spel.md`: het spel.** De schout, de heer en de inner, keuren en politiek, avontuur,
   en wat nog open is. Bovenaan staat per onderwerp de stand, en elk onderwerp begint met **Zo werkt

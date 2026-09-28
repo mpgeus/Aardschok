@@ -4,11 +4,30 @@ Marcel, 26 sep: "We moeten oppassen voor functie creep. Anders blijven we toevoe
 speelbaar product komen." Dit bestand zegt wat daarvoor nog nodig is, en wat kan wachten. Bovenaan
 staat wat besloten is, daaronder het voorstel, en onderaan de speeltest die het onderbouwt.
 
+## De proef: van gehucht tot dorp (Marcel, 28 sep; werklijst, vraag 51)
+
+**Zo staat het nu** (28 sep): besloten, en nog niets van gebouwd. Het eerste speelbare product is niet meer één
+jaar met de heer, maar **van gehucht tot dorp**. Je begint zoals nu, met de benoemingsbrief en 26 mensen, en het
+doel is dat het gehucht in zo'n twee jaar een dorp wordt. Onderweg laat je het groeien, bestuur je het, komt de
+heer elk jaar, en verdedig je het tegen rovers. De proef eindigt met een brief van de heer: "Wij vernemen dat Ons
+gehucht een dorp is geworden. Gefeliciteerd. Dat kost u vanaf nu meer."
+
+- **Een dorp** is 50 mensen, een kapel en een smidse, met de getallen in de werkbank: spelen beslist.
+- **De eerste keuren** zijn vreemden, rantsoen en houtkap.
+- **De kortste weg,** in volgorde (de werklijst, bovenaan): het dorp bouwt zelf; de eerste trede; de eerste
+  keuren; rovers en een militie; en de proef afmaken, met de eerste weken als opdrachten, een speeltest van twee
+  jaar en een tester die het niet kent.
+- **Wat blijft:** alles van de proef van één jaar hieronder: de heer, de inner, verstoppen, de winter, opslaan,
+  het titelscherm en de speeltest als script. De heer hoeft er niet voor te veranderen: hij vraagt per huis en
+  per ziel, dus wie groeit, betaalt meer.
+- **Wat anders wordt:** de speeltest speelt dan twee jaar, met spelers die bouwen en besturen; de vier spelers van
+  nu gaan over verstoppen.
+
 ## Besloten
 
 - **De proef verandert** (Marcel, 28 sep, werklijst vraag 50): het hart wordt besturen en groeien, en de heer de
-  druk van boven. Wat hieronder staat, is de proef van één jaar met de heer, van vóór die keuze. Het voorstel voor
-  de nieuwe proef, "van gehucht tot dorp", staat in de werklijst, vraag 51.
+  druk van boven. Wat hieronder staat, is de proef van één jaar met de heer, van vóór die keuze. De nieuwe proef
+  staat hierboven (vraag 51).
 - **De afrekening is geparkeerd** (Marcel, 28 sep: "Laten we afrekening even parkeren maar later kan dat? Ik denk
   dat het een minder interessant spel element is dan ik aanvankelijk dacht."). Het plan staat in de werklijst,
   vraag 49, voor later.
@@ -26,7 +45,7 @@ staat wat besloten is, daaronder het voorstel, en onderaan de speeltest die het 
 
 Wat hieronder staat, is het voorstel van Claude (27 sep, tiende sessie), met daarin wat Marcel sindsdien koos.
 
-## Het voorstel: een proefversie van één jaar
+## Het voorstel: een proefversie van één jaar (27 sep; sinds 28 sep vervangen door "van gehucht tot dorp")
 
 Een jaar in het gehucht, van de benoemingsbrief tot en met de winter na Sint-Maarten, met de kern:
 rijk worden en arm lijken. Een ander moet het kunnen spelen zonder dat Marcel of Claude ernaast zit, en
