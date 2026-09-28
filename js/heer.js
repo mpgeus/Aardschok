@@ -116,6 +116,8 @@
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
   const inJaar = (maand, dag) => maand * T.DAGEN_PER_MAAND + (dag - 1);
   const dagNu = (S) => Math.floor(S.kalender ? S.kalender.dag : 0);
+  // Wat zijn soldaten samen per dag eten, in graan: elk voor soldaatEetAls mensen.
+  const soldatenPerDag = () => IN().soldaten * IN().soldaatEetAls * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
 
   // De eerstvolgende dag ná `dag` met deze datum ({ maand, dag }).
   function volgendeKeer(dag, datum) {
@@ -337,7 +339,7 @@
     const perMens = T.GEBOUWEN_INSTELLINGEN ? T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag : 0;
     const melk = T.verwachteMelk(S, dag, oogst);
     const eten = Math.max(0, (S.bevolking || 0) * perMens * (oogst - dag) - melk);
-    const soldaten = g && g.soldaten ? IN().soldaten * IN().soldaatEetAls * perMens * (lente - dag) : 0;
+    const soldaten = g && g.soldaten ? soldatenPerDag() * (lente - dag) : 0;
     const wordtAkker = (a) => T.planVan(a) === 'akker';
     const tegels = ((S.wereld && S.wereld.akkers) || []).filter(wordtAkker).reduce((n, a) => n + a.b * a.h, 0);
     const zaaien = tegels * (T.ZAAIGRAAN_PER_TEGEL || 0);
@@ -675,6 +677,13 @@
     }
   }
 
+  // Wat de soldaten vandaag eten, in graan: niets als ze er niet (meer) zijn. Ook voor wat het dorp
+  // vooruitziet (js/behoeften.js, T.etenVoorDeWinter).
+  T.soldatenEten = function (S, dag) {
+    const s = S.heer && S.heer.soldaten;
+    return s && !s.weg && dag < s.tot ? soldatenPerDag() : 0;
+  };
+
   // Eén dag. Wordt aangeroepen vanuit T.tikGebouwenDag (js/gebouwen.js, stap 0), één keer per
   // verstreken kalenderdag, net als T.tikHandelDag.
   T.tikHeerDag = function (S, dag) {
@@ -684,7 +693,7 @@
     // De soldaten eten mee zolang ze er zijn, elk voor drie; in de lente gaan ze.
     if (h.soldaten && !h.soldaten.weg) {
       if (dag >= h.soldaten.tot) soldatenGaan(S);
-      else if (S.voorraad) T.wijzigVoorraad(S, 'graan', -IN().soldaten * IN().soldaatEetAls * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag);
+      else if (S.voorraad) T.wijzigVoorraad(S, 'graan', -T.soldatenEten(S, dag));
     }
     // Wie aan de schandpaal stond, mag na zijn dagen weer naar huis. Die tellen vanaf dat hij er
     // staat; komt hij er om wat voor reden ook niet, dan mag hij na een week ook naar huis.

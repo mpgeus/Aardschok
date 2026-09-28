@@ -21,7 +21,10 @@
 //   5. Wat tevredenheid doet: hoe hard er gewerkt wordt (js/gebouwen.js, stap 6), of er een gezin
 //      bijkomt (js/gebouwen.js, stap 4) of juist wegtrekt (hieronder), en of een huis doorgroeit.
 //   6. De winter: een tekort aan brandhout of eten kost mensen — geen apart scherm, alleen een
-//      melding en de bevolking die zakt.
+//      melding en de bevolking die zakt. De melding zegt waaraan: de kou of de honger.
+//   7. De winter zien aankomen (sinds 28 sep, vraag 44): op 1 herfstmaand en 1 slachtmaand zegt het
+//      dorp of het hout en het eten de winter halen, en in de winter één keer wanneer het op is
+//      (T.houtVoorDeWinter en T.etenVoorDeWinter, onderaan).
 (function (T) {
   'use strict';
 
@@ -58,6 +61,11 @@
     // S.behoeften.winterVerliesRest in plaats van met de dobbelstenen, zodat twee spellen met
     // dezelfde voorraad ook altijd hetzelfde verlies geven (net als T.akkerVariant in akkers.js).
     winterVerliesFactor: 0.01,
+    // De winter zien aankomen (Marcel, 27 sep, vraag 44): op deze dagen zegt het dorp of het hout en
+    // het eten de winter halen (drie maanden en een maand vooraf), en in de winter zelf één keer, als
+    // het binnen zoveel dagen op is (zoals het hooi: T.VEE_INSTELLINGEN.hooiWaarschuwing).
+    winterVooraf: [{ maand: 'herfstmaand', dag: 1 }, { maand: 'slachtmaand', dag: 1 }],
+    opraakWaarschuwing: 15,
     // Honger buiten de winter (een optie in de Spelregels, js/opties.js; Marcel, 24 sep):
     // 'tevredenheid' (alleen dat, zoals het tot 24 sep was), 'wegtrekken' (op een groeidag trekt
     // een gezin weg zolang er geen eten genoeg is), of 'sterven' (net als in de winter kost een
@@ -84,9 +92,20 @@
     vleesAlsGraan: 1,
   };
 
+  // `gezegd`: wat het dorp deze winter al zei dat op raakte (het hout, het eten; zegDeWinter onderaan).
   T.nieuweBehoeften = function () {
-    return { tevredenheid: 1, mist: [], last: [], winterVerliesRest: 0 };
+    return { tevredenheid: 1, mist: [], last: [], winterVerliesRest: 0, gezegd: {} };
   };
+
+  function bericht(tekst, soort) {
+    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
+  }
+
+  // Brandhout is hout of turf (eerst turf: pasBrandhoutToe), en het dorp stookt per huishouden, met de
+  // maat van een gezin (T.GEBOUWEN_INSTELLINGEN.gezinGrootte, dezelfde als bij groei).
+  const BRANDHOUT = ['turf', 'hout'];
+  const brandhoutVan = (S) => BRANDHOUT.reduce((n, wat) => n + ((S.voorraad && S.voorraad[wat]) || 0), 0);
+  const huishoudensVan = (S) => Math.ceil((S.bevolking || 0) / T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
 
   // Hoeveel vis en vlees er ligt, en hoeveel daarvan het zout goed houdt. Puur; ook voor de balk
   // (js/hud.js), die bij het zout zegt wat het dekt.
@@ -123,9 +142,9 @@
     const extraSoorten = ['groente', 'vis', 'vlees'].filter((wat) => (v[wat] || 0) >= IN.extraVoedselDrempel);
     const voedselFactor = voedselDekking * (0.5 + 0.5 * (extraSoorten.length / 3));
 
-    const huishoudens = Math.ceil(bevolking / T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
+    const huishoudens = huishoudensVan(S);
     const brandhoutBenodigd = huishoudens * IN.brandhoutPerHuishoudenPerDag;
-    const brandhoutVoorraad = (v.turf || 0) + (v.hout || 0);
+    const brandhoutVoorraad = brandhoutVan(S);
     const brandhoutDekking = brandhoutBenodigd > 0 ? Math.min(1, brandhoutVoorraad / brandhoutBenodigd) : 1;
     // Geen straf buiten de winter (niemand stookt in de zomer), maar T.tikBehoeftenDag laat het
     // gemis in S.behoeften.mist wél altijd zien — dat is nu juist het plannen vóór de winter.
@@ -144,9 +163,11 @@
 
     const tevredenheid = Math.min(1, Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + gezelligheid - heer.minder));
 
+    // Het brandhout mist het dorp ook als het de winter niet haalt (T.houtVoorDeWinter), niet pas als
+    // het vandaag op is: dan zegt de balk het op tijd, net als het rode hout ernaast (js/hud.js).
     const mist = [];
     if (voedselDekking < 1) mist.push('eten');
-    if (brandhoutDekking < 1) mist.push('brandhout voor de winter');
+    if (brandhoutDekking < 1 || !T.houtVoorDeWinter(S, dag).haalt) mist.push('brandhout voor de winter');
     if (!heeftKerk) mist.push('een kerk');
     if (T.herbergDroog(S)) mist.push('bier');
 
@@ -201,12 +222,17 @@
     const verlies = Math.floor(S.behoeften.winterVerliesRest);
     if (verlies <= 0) return;
     S.behoeften.winterVerliesRest -= verlies;
-    const wat = b.inWinter ? 'De winter is hard' : 'De honger is hard';
+    // Waaraan (Marcel, 27 sep, vraag 44): tot 28 sep zei het bericht alleen "De winter is hard".
+    const koud = b.inWinter && b.brandhoutDekking < 1;
+    const honger = b.voedselDekking < 1;
+    const wat = koud && honger ? 'De winter is hard, want het hout en het eten zijn op'
+      : koud ? 'De kou is hard, want het hout is op'
+      : 'De honger is hard, want het eten is op';
     // Met bewoners zegt het bericht wie het zijn (T.bewonersVolgen, js/bewoners.js); zonder (een toets
     // met een eigen, kleine wereld) alleen hoeveel.
     T.wijzigBevolking(S, -verlies, 'winter', wat);
-    if (!S.bewoners && T.ui && T.ui.bericht) {
-      T.ui.bericht(
+    if (!S.bewoners) {
+      bericht(
         verlies === 1 ? `${wat}: het dorp verliest een dorpeling.` : `${wat}: het dorp verliest ${verlies} dorpelingen.`,
         'gevaar',
       );
@@ -352,6 +378,139 @@
     return IN.vleesIsEten ? ((S.voorraad && S.voorraad.vlees) || 0) * (IN.vleesAlsGraan || 0) : 0;
   };
 
+  // ---------------------------------------------------------------------------------------------
+  // De winter zien aankomen (Marcel, 27 sep, vraag 44)
+  // ---------------------------------------------------------------------------------------------
+  //
+  // In de speeltest van 27 sep stierf bijna de helft van het gehucht aan de kou, en de speler wist
+  // niet waarom: niets zei het vooraf. Nu zegt het dorp op de dagen van winterVooraf of het hout en het
+  // eten de winter halen, en in de winter zelf één keer wanneer het op is, zoals het hooi van het vee
+  // (js/vee.js). In de balk staat het hout in het rood als het de winter niet haalt (js/hud.js).
+
+  // De winter van het dorp: de maanden met seizoen "winter" (T.MAANDEN: wintermaand tot en met
+  // sprokkelmaand), want dan stookt het. Het vee eet langer hooi: van slachtmaand tot en met lentemaand
+  // (T.winterDagen, js/vee.js).
+  const isWinter = (dag) => T.datumVanDag(dag).seizoen === 'winter';
+
+  const dagenTekst = (n) => (n === 1 ? 'één dag' : `${n} dagen`);
+  const MAANDEN_TEKST = ['', 'een maand', 'twee maanden', 'drie maanden', 'vier maanden', 'vijf maanden', 'zes maanden'];
+
+  // Of een voorraad de winter haalt: één regel voor het hout en het eten van het dorp, en het hooi van
+  // het vee (js/vee.js). `voorraad` ligt er nu; tot de winter komt er `voorWinter` bij (of gaat er af:
+  // het dorp eet ook vóór de winter); in de winter gaat er per dag `perWinterdag` af, met wat erbij
+  // komt er al vanaf. Geeft { dagen, winter, haalt }: voor hoeveel van de `winter` dagen het genoeg is.
+  T.haaltDeWinter = function ({ voorraad, voorWinter = 0, perWinterdag, winter }) {
+    const begin = voorraad + voorWinter;
+    let dagen = winter;
+    if (perWinterdag > 0) dagen = begin <= 0 ? 0 : Math.min(winter, Math.floor(begin / perWinterdag + 1e-9));
+    return { dagen, winter, haalt: dagen >= winter };
+  };
+
+  // Raakt het op binnen `binnen` dagen, en haalt het de winter niet? Dan de zin die het dorp zegt: "Het
+  // hout is over 12 dagen op, en de winter duurt nog 40 dagen." Anders null. Voor het hout en het eten
+  // (hieronder) en het hooi (js/vee.js); wie hem zegt, zegt hem één keer per winter.
+  T.raaktOp = function (wat, v, binnen) {
+    if (v.haalt || v.dagen > binnen) return null;
+    const op = v.dagen < 1 ? 'op' : `over ${dagenTekst(v.dagen)} op`;
+    return `${T.hoofdletter(wat)} is ${op}, en de winter duurt nog ${dagenTekst(v.winter)}.`;
+  };
+
+  // Wat er per dag aan brandhout bijkomt: wat de werkplaatsen de laatste dag maakten (g.werkte,
+  // js/gebouwen.js, stap 6), min wat ze ervan gebruikten. In het gehucht hakt alleen de houthakker.
+  T.brandhoutErbij = function (S) {
+    let erbij = 0;
+    for (const g of S.gebouwen || []) {
+      const m = T.GEBOUWEN[g.soort].maakt;
+      if (!m || !g.werkte) continue;
+      for (const wat of BRANDHOUT) erbij += (((m.uit && m.uit[wat]) || 0) - ((m.in && m.in[wat]) || 0)) * g.werkte;
+    }
+    return erbij;
+  };
+
+  // Of het hout de winter haalt: wat er ligt, en wat er per dag bijkomt, tegen wat het dorp in de
+  // winter stookt. Vanaf `dag`, met die dag. Geeft wat T.haaltDeWinter geeft, en `tot` (dagen tot de
+  // winter, 0 in de winter zelf), `stook` (per winterdag) en `erbij` (per dag).
+  T.houtVoorDeWinter = function (S, dag) {
+    const { tot, duur } = T.periodeVanaf(dag, isWinter);
+    const stook = huishoudensVan(S) * T.BEHOEFTEN_INSTELLINGEN.brandhoutPerHuishoudenPerDag;
+    const erbij = T.brandhoutErbij(S);
+    const v = T.haaltDeWinter({ voorraad: brandhoutVan(S), voorWinter: erbij * tot, perWinterdag: stook - erbij, winter: duur });
+    return Object.assign(v, { tot, stook, erbij });
+  };
+
+  // Of het eten de winter haalt: het graan, de kaas en het vlees (als dat een maag vult), met de melk
+  // die de koeien nog geven (js/vee.js), tegen wat het dorp eet, het hele jaar door, en de soldaten van
+  // de heer zolang ze er zijn (js/heer.js). Alles in graan, zoals het dorp eet (T.eetVandaag). Vanaf
+  // `dag`, met die dag. Geeft wat T.haaltDeWinter geeft, en `tot` en `eet` (per dag).
+  T.etenVoorDeWinter = function (S, dag) {
+    const { tot, duur } = T.periodeVanaf(dag, isWinter);
+    const v = S.voorraad || {};
+    const eet = (S.bevolking || 0) * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag + T.soldatenEten(S, dag);
+    const van = Math.floor(dag);
+    const melkVoor = T.verwachteMelk(S, van, van + tot);
+    const melkIn = duur > 0 ? T.verwachteMelk(S, van + tot, van + tot + duur) / duur : 0;
+    const r = T.haaltDeWinter({
+      voorraad: (v.graan || 0) + (v.kaas || 0) + T.vleesAlsEten(S),
+      voorWinter: melkVoor - eet * tot,
+      perWinterdag: eet - melkIn,
+      winter: duur,
+    });
+    return Object.assign(r, { tot, eet });
+  };
+
+  // Wat helpt als het hout de winter niet haalt: een houthakker, of nog een.
+  function houtHelpt(S) {
+    const per = T.GEBOUWEN.houthakker.maakt.uit.hout;
+    return (S.gebouwen || []).some((g) => g.soort === 'houthakker')
+      ? `nog een houthakker hakt er ${per} per dag bij`
+      : `een houthakker hakt ${per} hout per dag`;
+  }
+
+  // En als het eten de winter niet haalt: de oogst is binnen, maar een jager schiet vlees, als dat een
+  // maag vult.
+  function etenHelpt() {
+    if (!T.BEHOEFTEN_INSTELLINGEN.vleesIsEten) return '';
+    return `: een jager schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag, en vlees vult een maag`;
+  }
+
+  // Het bericht vooraf: "Over een maand is het winter. Het hout haalt 38 van de 90 dagen: een
+  // houthakker hakt 2 hout per dag. Het eten haalt de winter."
+  function zegDeWinterVooraf(S, dag) {
+    const hout = T.houtVoorDeWinter(S, dag);
+    const eten = T.etenVoorDeWinter(S, dag);
+    const wanneer = hout.tot > 0 ? `Over ${MAANDEN_TEKST[hout.tot / T.DAGEN_PER_MAAND] || dagenTekst(hout.tot)} is het winter.` : 'Het is winter.';
+    const zinnen = [wanneer];
+    if (hout.haalt && eten.haalt) zinnen.push('Het hout en het eten halen de winter.');
+    else {
+      zinnen.push(hout.haalt ? 'Het hout haalt de winter.' : `Het hout haalt ${hout.dagen} van de ${hout.winter} dagen: ${houtHelpt(S)}.`);
+      zinnen.push(eten.haalt ? 'Het eten haalt de winter.' : `Het eten haalt ${eten.dagen} van de ${eten.winter} dagen${etenHelpt()}.`);
+    }
+    bericht(zinnen.join(' '), hout.haalt && eten.haalt ? 'goed' : 'gevaar');
+  }
+
+  // Wat het dorp over de winter zegt, één keer per dag (T.tikBehoeftenDag, vóór het stoken en het eten
+  // van vandaag, want de dagen tellen met vandaag): op de dagen van winterVooraf het bericht vooraf, en
+  // in de winter één keer wanneer het hout of het eten op is.
+  function zegDeWinter(S, dag) {
+    const IN = T.BEHOEFTEN_INSTELLINGEN;
+    const B = S.behoeften;
+    if (!(S.bevolking > 0)) return;
+    const d = T.datumVanDag(dag);
+    if (IN.winterVooraf.some((w) => w.maand === T.MAANDEN[d.maand].naam && w.dag === d.dagVanMaand)) zegDeWinterVooraf(S, dag);
+    if (!isWinter(dag)) {
+      B.gezegd = {}; // een nieuwe winter mag weer waarschuwen
+      return;
+    }
+    const gezegd = B.gezegd || (B.gezegd = {});
+    const nu = { 'het hout': T.houtVoorDeWinter(S, dag), 'het eten': T.etenVoorDeWinter(S, dag) };
+    for (const wat in nu) {
+      const tekst = !gezegd[wat] && T.raaktOp(wat, nu[wat], IN.opraakWaarschuwing);
+      if (!tekst) continue;
+      gezegd[wat] = true;
+      bericht(tekst, 'gevaar');
+    }
+  }
+
   // Eén dag bijwerken: wordt aangeroepen vanuit T.tikGebouwenDag (js/gebouwen.js, stap 0), dus
   // één keer per verstreken kalenderdag, vóór woonruimte/eten/groei/handen/productie van die dag.
   // Losstaand aanroepbaar (net als T.tikGebouwenDag zelf), zodat een toets ook één dag in één keer
@@ -366,6 +525,9 @@
     S.behoeften.mist = b.mist;
     S.behoeften.last = b.last;
     S.behoeften.gezelligheid = b.gezelligheid;
+
+    // Of het hout en het eten de winter halen, vóór het stoken en het eten van vandaag.
+    zegDeWinter(S, dag);
 
     // De extra soorten worden ook echt opgegeten, anders stapelt de moestuin zich oneindig op.
     let bederfelijkGegeten = 0;

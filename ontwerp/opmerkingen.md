@@ -9,6 +9,26 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De winter zien aankomen, wat nog ruw is** (28 sep, elfde sessie, na punt 1 van de prioriteit; `spel.md`,
+  "Het dorp: mensen, behoeften en de winter"):
+  - Het bericht vooraf rekent met wat er ligt en wat er de laatste dag bijkwam, niet met wat de heer op
+    Sint-Maarten neemt: 15% van het graan dat de inner telde, en 20 hout voor elke houthakker ("hout voor
+    zijn bos"). Op 1 slachtmaand weet je dat al, want zijn brief kwam op 1 wijnmaand. Voorstel: dan zegt
+    het bericht het erbij ("en 13 dagen als de heer krijgt wat hij vraagt"), en het venster van de heer
+    zegt naast het graan tot de oogst ook het hout voor de winter.
+  - Het ziet ook niet dat het dorp nog groeit. In een jaar in een script zei 1 herfstmaand "33 van de 90
+    dagen" en 1 slachtmaand "26", omdat er gezinnen bijkwamen; het bericht in de winter zelf vangt dat op.
+  - Twee winters: het vee eet hooi van slachtmaand tot en met lentemaand (150 dagen), het dorp stookt van
+    wintermaand tot en met sprokkelmaand (90 dagen). Allebei zeggen ze "de winter duurt nog", dus in
+    louwmaand zegt het hooi "nog 68 dagen" en het hout "nog 38". Voorstel: het hooi zegt "en het vee eet
+    nog 68 dagen hooi". Zo was het al vóór 28 sep, maar nu staan ze naast elkaar.
+  - Vlees zonder zout telt voor de winter als eten, maar bederft binnen een paar weken; het venster van de
+    heer telt het net zo.
+  - Een houthakker in aanbouw telt nog niet mee: pas als hij een dag gehakt heeft.
+  - Een bericht blijft staan tot er vijf nieuwere zijn. Komen er veel tegelijk (nieuwe gezinnen, de
+    inner), dan is de waarschuwing snel weg, en er is geen logboek om hem terug te lezen. Het rode hout in
+    de balk blijft wel.
+
 - **De inner afleiden en omkopen, wat nog ruw is** (27 sep, na stuk 2 van punt 4; `spel.md`, "Rijk
   worden en arm lijken: de inner"):
   - Wie niets doet, betaalt nu meer: tot zonsondergang ziet de inner het hele gehucht (11 van de 11
@@ -34,8 +54,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 - **De speeltest van een jaar, wat opviel** (27 sep, tiende sessie; alles in `speelbaar.md`, "De
   speeltest van 27 sep"). Een agent speelde drie jaren zonder iets te doen behalve verstoppen:
-  - De winter kost bijna de helft van het dorp aan kou (het hout is eind wintermaand op), zonder
-    waarschuwing vooraf; het bericht "De winter is hard: Folkert is gestorven" zegt niet waaraan.
+  - De winter kost bijna de helft van het dorp aan kou (het hout is eind wintermaand op). Sinds 28 sep
+    zie je het aankomen, en zegt het bericht waaraan iemand stierf; of de speler er dan ook iets aan doet,
+    zegt de volgende speeltest.
   - Verstoppen is zonder risico zolang de inner meer dan 60% ziet: dan zoeken de soldaten niet. (Dat
     liep op `main`; sinds stuk 1 van punt 4, van de negende sessie, zoeken ze altijd op twee of drie
     plekken.)

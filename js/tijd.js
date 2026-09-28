@@ -83,6 +83,25 @@
     return { dag: T.TIJD_START_UUR / 24, snelheid: 1 };
   };
 
+  // Hoeveel dagen het vanaf `dag` nog duurt voor een tijd van het jaar begint (0 als hij al loopt),
+  // en hoe lang hij dan duurt (loopt hij al: nog, met vandaag). `hoort(dag)` zegt of een dag erbij
+  // hoort. Voor de winter van het dorp (js/behoeften.js) en die van het vee (js/vee.js), want die zijn
+  // niet even lang. Geeft { tot, duur }.
+  T.periodeVanaf = function (dag, hoort) {
+    let d = Math.floor(dag);
+    let tot = 0;
+    while (!hoort(d) && tot < T.DAGEN_PER_JAAR) {
+      d++;
+      tot++;
+    }
+    let duur = 0;
+    while (hoort(d) && duur < T.DAGEN_PER_JAAR) {
+      d++;
+      duur++;
+    }
+    return { tot, duur };
+  };
+
   // Het uur van de dag, van 0 tot 24: wat er achter de komma van de dagteller staat.
   T.uurVanDag = function (dag) {
     return (dag - Math.floor(dag)) * 24;

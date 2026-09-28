@@ -53,7 +53,7 @@ aan het eind moet het zeggen hoe het ging. Op 30× duurt zo'n jaar ongeveer een 
    sessie, punt 4, stuk 1).
 7. **De winter die je ziet aankomen.** In de speeltest stierf bijna de helft van het dorp aan de kou,
    zonder waarschuwing vooraf, en het bericht zegt niet waaraan. Wie het spel niet kent, weet niet dat
-   hij hout moet hakken.
+   hij hout moet hakken. **Af** (28 sep, elfde sessie; werklijst, vraag 44).
 8. **De getallen, met Marcel.** De speeltest hieronder laat zien waar het schuurt. Bijstellen doet
    Marcel met de werkbank in de spelregels.
 
@@ -81,10 +81,11 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 1. ~~Punt 3, stuk 2 afmaken (de getuigen).~~ Af (27 sep).
 2. ~~Verstoppen deel 1b: de soldaten zoeken altijd op twee of drie plekken. Zonder is er geen gok.~~ Af
    (27 sep).
-3. De winter zichtbaar maken: een waarschuwing als het hout of het eten de winter niet haalt, en in het
-   bericht waaraan iemand stierf.
+3. ~~De winter zichtbaar maken: een waarschuwing als het hout of het eten de winter niet haalt, en in het
+   bericht waaraan iemand stierf.~~ Af (28 sep).
 4. Een speeltest door Marcel zelf, met de speeltest hieronder erbij, en de getallen bijstellen. Op de
-   stand van nu: de speeltest hieronder liep zonder stap 1 en 2, en zonder de inner die je kunt bespelen.
+   stand van nu: de speeltest hieronder liep zonder stap 1 tot en met 3, en zonder de inner die je kunt
+   bespelen.
 5. Opslaan, Verder en een titelscherm.
 6. De afrekening na het eerste jaar.
 7. De eerste weken als opdrachten.

@@ -262,6 +262,21 @@
       cel.title = GRONDSTOF_UITLEG.hooi + over;
       cel.classList.toggle('laag', dagen < winter);
     }
+    // Bij het hout: voor hoeveel van de winterdagen het genoeg is, met wat er nu per dag bijkomt
+    // (js/behoeften.js, T.houtVoorDeWinter). Haalt het de winter niet, dan staat het getal in het rood
+    // (Marcel, 27 sep, vraag 44).
+    if (S.kalender && S.bevolking > 0) {
+      const cel = box.querySelector('[data-wat="hout"]');
+      const v = T.houtVoorDeWinter(S, Math.floor(S.kalender.dag));
+      const perDag = (x) => String(Math.round(x * 100) / 100).replace('.', ',');
+      const erbij = v.erbij > 0.005 ? `, en er komt ${perDag(v.erbij)} per dag bij` : '';
+      const genoeg = v.tot > 0
+        ? (v.haalt ? 'genoeg voor de hele winter' : `genoeg voor ${v.dagen} van de ${v.winter} dagen winter`)
+        : (v.haalt ? 'genoeg voor de rest van de winter' : `genoeg voor ${v.dagen} dag${v.dagen === 1 ? '' : 'en'}, en de winter duurt nog ${v.winter} dagen`);
+      const stookt = v.tot > 0 ? 'In de winter stookt het dorp' : 'Het dorp stookt';
+      cel.title = `${GRONDSTOF_UITLEG.hout} ${stookt} er ${perDag(v.stook)} per dag van${erbij}: ${genoeg}.`;
+      cel.classList.toggle('laag', !v.haalt);
+    }
   };
 
   // Het aantal mensen en de woonruimte (js/gebouwen.js, T.werkGebouwenBij): een eigen functie,

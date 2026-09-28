@@ -455,6 +455,166 @@ test('honger buiten de winter, "wegtrekken": op een groeidag trekt een gezin weg
   });
 });
 
+// ---------------------------------------------------------------------------------------------
+// De winter zien aankomen (werklijst, vraag 44; Marcel, 27 sep: "A ja B ja C ja")
+// ---------------------------------------------------------------------------------------------
+
+const bijna = (a, b) => Math.abs(a - b) < 1e-9;
+
+// De dag (vanaf het begin van het spel, 1 lentemaand) van een datum in het eerste jaar.
+function dagVan(maand, dagVanMaand) {
+  const m = T.MAANDEN.findIndex((x) => x.naam === maand);
+  return ((m - T.TIJD_START_MAAND + 12) % 12) * T.DAGEN_PER_MAAND + dagVanMaand - 1;
+}
+
+// Wat het dorp zegt terwijl fn loopt: T.ui vangt de berichten, en daarna is T.ui weer zoals het was.
+function berichtenVan(fn) {
+  const oud = T.ui;
+  const berichten = [];
+  T.ui = { bericht: (tekst, soort) => berichten.push({ tekst, soort }) };
+  try {
+    fn();
+  } finally {
+    T.ui = oud;
+  }
+  return berichten;
+}
+
+// Zoals het gehucht begint: 26 mensen, dus 7 huishoudens, die samen 1,05 hout per winterdag stoken, en
+// 40 hout. Graan genoeg, zodat het hier om het hout gaat.
+function gehucht() {
+  const S = maakS();
+  S.bevolking = 26;
+  T.zetVoorraad(S, 'hout', 40);
+  T.zetVoorraad(S, 'graan', 1000);
+  return S;
+}
+
+test('de winter van het dorp duurt negentig dagen, die van het vee honderdvijftig', () => {
+  const winter = (d) => T.datumVanDag(d).seizoen === 'winter';
+  assert.deepEqual(T.periodeVanaf(dagVan('herfstmaand', 1), winter), { tot: 90, duur: 90 });
+  assert.deepEqual(T.periodeVanaf(WINTERDAG, winter), { tot: 0, duur: 80 }, '11 wintermaand: nog 80, met vandaag');
+  assert.deepEqual(T.periodeVanaf(dagVan('sprokkelmaand', 30), winter), { tot: 0, duur: 1 });
+  // Het vee eet hooi van slachtmaand tot en met lentemaand (js/vee.js).
+  assert.equal(T.winterDagen(dagVan('herfstmaand', 1)), 150);
+});
+
+test('T.haaltDeWinter: wat er ligt, wat er tot de winter bij komt of af gaat, en wat een winterdag kost', () => {
+  assert.deepEqual(T.haaltDeWinter({ voorraad: 40, perWinterdag: 1.05, winter: 90 }), { dagen: 38, winter: 90, haalt: false });
+  assert.deepEqual(T.haaltDeWinter({ voorraad: 40, voorWinter: 60, perWinterdag: 1, winter: 90 }), { dagen: 90, winter: 90, haalt: true });
+  // Het dorp eet ook vóór de winter: is het dan al op, dan haalt het geen dag.
+  assert.equal(T.haaltDeWinter({ voorraad: 10, voorWinter: -30, perWinterdag: 1, winter: 90 }).dagen, 0);
+  // Komt er in de winter meer bij dan er af gaat, dan haalt het de winter, ook zonder voorraad.
+  assert.equal(T.haaltDeWinter({ voorraad: 0, perWinterdag: -1, winter: 90 }).haalt, true);
+});
+
+test('T.raaktOp: de zin, alleen als het de winter niet haalt en binnenkort op is', () => {
+  const v = (dagen, winter) => ({ dagen, winter, haalt: dagen >= winter });
+  assert.equal(T.raaktOp('het hout', v(12, 40), 15), 'Het hout is over 12 dagen op, en de winter duurt nog 40 dagen.');
+  assert.equal(T.raaktOp('het eten', v(1, 40), 15), 'Het eten is over één dag op, en de winter duurt nog 40 dagen.');
+  assert.equal(T.raaktOp('het hout', v(0, 1), 15), 'Het hout is op, en de winter duurt nog één dag.');
+  assert.equal(T.raaktOp('het hout', v(20, 40), 15), null, 'nog niet binnenkort');
+  assert.equal(T.raaktOp('het hout', v(40, 40), 15), null, 'het haalt de winter');
+});
+
+test('T.houtVoorDeWinter: het gehucht haalt met 40 hout 38 van de 90 dagen, met een houthakker de hele winter', () => {
+  const S = gehucht();
+  const dag = dagVan('herfstmaand', 1);
+  const v = T.houtVoorDeWinter(S, dag);
+  assert.ok(bijna(v.stook, 7 * T.BEHOEFTEN_INSTELLINGEN.brandhoutPerHuishoudenPerDag));
+  assert.deepEqual([v.tot, v.dagen, v.winter, v.haalt, v.erbij], [90, 38, 90, false, 0]);
+  // Een houthakker die de laatste dag op volle kracht hakte (g.werkte, js/gebouwen.js): 2 per dag.
+  S.gebouwen.push({ soort: 'houthakker', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 1, werkte: 1 });
+  const met = T.houtVoorDeWinter(S, dag);
+  assert.equal(met.erbij, T.GEBOUWEN.houthakker.maakt.uit.hout);
+  assert.equal(met.haalt, true);
+});
+
+test('T.etenVoorDeWinter: het dorp eet het hele jaar, en graan, kaas en vlees tellen alle drie', () => {
+  const S = maakS();
+  S.bevolking = 20; // samen één graan per dag
+  T.zetVoorraad(S, 'graan', 100);
+  const dag = dagVan('slachtmaand', 1);
+  // Dertig dagen eten tot de winter, en dan nog 70 voor de 90 winterdagen.
+  const v = T.etenVoorDeWinter(S, dag);
+  assert.deepEqual([v.tot, v.dagen, v.winter, v.haalt], [30, 70, 90, false]);
+  T.zetVoorraad(S, 'kaas', 10);
+  T.zetVoorraad(S, 'vlees', 10);
+  assert.equal(T.etenVoorDeWinter(S, dag).haalt, true);
+});
+
+test('T.etenVoorDeWinter: de soldaten van de heer eten mee zolang ze er zijn', () => {
+  const S = maakS();
+  S.bevolking = 20;
+  T.zetVoorraad(S, 'graan', 100);
+  const dag = dagVan('wintermaand', 1);
+  const zonder = T.etenVoorDeWinter(S, dag);
+  S.heer = T.nieuweHeer();
+  S.heer.soldaten = { tot: dag + 90, wezens: [] };
+  const met = T.etenVoorDeWinter(S, dag);
+  const H = T.HEER_INSTELLINGEN;
+  assert.ok(bijna(met.eet - zonder.eet, H.soldaten * H.soldaatEetAls * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag));
+  assert.ok(zonder.haalt && !met.haalt, `zonder ${zonder.dagen}, met ${met.dagen}`);
+});
+
+test('op 1 herfstmaand en 1 slachtmaand zegt het dorp of het hout en het eten de winter halen, en wat helpt', () => {
+  const S = gehucht();
+  assert.deepEqual(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('herfstmaand', 1))), [{
+    tekst: 'Over drie maanden is het winter. Het hout haalt 38 van de 90 dagen: een houthakker hakt 2 hout per dag. Het eten haalt de winter.',
+    soort: 'gevaar',
+  }]);
+  assert.deepEqual(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('herfstmaand', 2))), [], 'alleen op die dagen');
+  // Staat er al een houthakker, dan helpt er nog een.
+  S.gebouwen.push({ soort: 'houthakker', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0 });
+  assert.match(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('slachtmaand', 1)))[0].tekst, /Het hout haalt \d+ van de 90 dagen: nog een houthakker hakt er 2 per dag bij\./);
+  T.zetVoorraad(S, 'hout', 200);
+  assert.deepEqual(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('slachtmaand', 1))), [
+    { tekst: 'Over een maand is het winter. Het hout en het eten halen de winter.', soort: 'goed' },
+  ]);
+});
+
+test('in de winter zegt het dorp één keer dat het hout op raakt, en de volgende winter weer', () => {
+  const S = maakS();
+  S.bevolking = 20; // 5 huishoudens: 0,75 hout per dag
+  T.zetVoorraad(S, 'graan', 1000);
+  T.zetVoorraad(S, 'hout', 12); // zestien dagen
+  const eerste = dagVan('wintermaand', 1);
+  const gezegd = [];
+  for (let dag = eerste; dag < eerste + 5; dag++) {
+    for (const b of berichtenVan(() => T.tikBehoeftenDag(S, dag))) gezegd.push(`${dag - eerste + 1} wintermaand: ${b.tekst}`);
+  }
+  assert.deepEqual(gezegd, ['2 wintermaand: Het hout is over 15 dagen op, en de winter duurt nog 89 dagen.']);
+  // Na de winter mag het weer.
+  T.tikBehoeftenDag(S, T.DAGEN_PER_JAAR); // 1 lentemaand
+  T.zetVoorraad(S, 'hout', 11.25);
+  const weer = berichtenVan(() => T.tikBehoeftenDag(S, eerste + T.DAGEN_PER_JAAR));
+  assert.deepEqual(weer.map((b) => b.tekst), ['Het hout is over 15 dagen op, en de winter duurt nog 90 dagen.']);
+});
+
+test('wie in de winter sterft, sterft van de kou of de honger, en het bericht zegt waaraan', () => {
+  function eersteDode(hout, graan) {
+    const S = maakS();
+    S.bevolking = 20;
+    T.zetVoorraad(S, 'hout', hout);
+    T.zetVoorraad(S, 'graan', graan);
+    const berichten = berichtenVan(() => {
+      for (let dag = WINTERDAG; dag < WINTERDAG + 20; dag++) T.tikBehoeftenDag(S, dag);
+    });
+    return berichten.map((b) => b.tekst).find((t) => t.includes('dorpeling'));
+  }
+  assert.equal(eersteDode(0, 1000), 'De kou is hard, want het hout is op: het dorp verliest een dorpeling.');
+  assert.equal(eersteDode(1000, 0), 'De honger is hard, want het eten is op: het dorp verliest een dorpeling.');
+  assert.equal(eersteDode(0, 0), 'De winter is hard, want het hout en het eten zijn op: het dorp verliest een dorpeling.');
+});
+
+test('het dorp mist brandhout voor de winter zodra het hout de winter niet haalt, niet pas als het op is', () => {
+  const S = gehucht();
+  const dag = dagVan('herfstmaand', 1);
+  assert.ok(T.berekenTevredenheid(S, dag).mist.includes('brandhout voor de winter'));
+  T.zetVoorraad(S, 'hout', 200);
+  assert.ok(!T.berekenTevredenheid(S, dag).mist.includes('brandhout voor de winter'));
+});
+
 // ── Vlees vult een maag, ook als het dorp kijkt of er eten is (28 sep) ──
 
 test('vlees vult een maag, ook in de winter: wie alleen vlees heeft, sterft niet van de honger', () => {

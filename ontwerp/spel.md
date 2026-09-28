@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 27 sep 2026)
+## Waar staat wat (bijgewerkt 28 sep 2026)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -18,7 +18,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
 | Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep) | 4, 6 |
-| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep) | 3 |
+| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep) | 3 |
 | Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
 | Handel: de marskramer | gebouwd (24 sep) | 4 |
 | Sint-Maarten | gebouwd (24 sep) | 5 |
@@ -514,33 +514,46 @@ Nog open na deel 1 (vragen van Claude):
 
 ## Het dorp: mensen, behoeften en de winter (werklijst punt 3, 23 sep 2026)
 
-**Zo werkt het nu** (25 sep; `js/behoeften.js`, `js/gebouwen.js`):
-- **Mensen** zijn een getal in de balk (25 bij het begin), geen poppetjes; alleen de boeren lopen
-  rond. Huizen geven woonruimte: een hut 3, een boerderij 4, een huis 5.
+**Zo werkt het nu** (28 sep; `js/behoeften.js`, `js/gebouwen.js`):
+- **Mensen** zijn het getal in de balk (26 bij het begin), en sinds 26 sep is ieder van hen ook een
+  poppetje met een naam, een huis en werk ("Een dorp dat leeft en groeit"). Huizen geven woonruimte:
+  een hut 3, een boerderij 4, een huis 5.
 - **Eten:** elk mens eet 0,05 graan per dag. Het dorp eet eerst de melk van vandaag, dan het vlees
   dat anders bederft, dan graan, en pas als het graan op is kaas en gezouten vlees (sinds 25 sep
-  vult vlees een maag, een optie). Groente, vis of vlees erbij maakt ook tevredener. Zonder zout
-  bederven vis en vlees.
-- **Brandhout:** in wintermaand, louwmaand en sprokkelmaand stookt elk huishouden hout of turf.
+  vult vlees een maag, een optie; sinds 28 sep telt het ook mee als het dorp kijkt of er eten is).
+  Groente, vis of vlees erbij maakt ook tevredener. Zonder zout bederven vis en vlees.
+- **Brandhout:** in wintermaand, louwmaand en sprokkelmaand (90 dagen) stookt elk huishouden van vier
+  mensen 0,15 hout of turf per dag; het gehucht van 26 mensen zo'n 95 hout per winter. Het begint met
+  40, en alleen een houthakker hakt meer (2 per dag); de marskramer verkoopt geen hout.
 - **Een kerk:** een kapel die af is, maakt het dorp tevredener.
 - **Tevredenheid** (0 tot 100%, in de balk, met bij de muis wat het dorp mist) bepaalt hoe hard er
   gewerkt wordt, of er elke 20 dagen een gezin van vier bijkomt (als er ook plaats is en minstens 20
   graan) of juist wegtrekt, en of een huis doorgroeit (hut, huis, stenen huis).
-- **De winter:** een tekort aan brandhout of eten kost mensen. Buiten de winter kost honger
+- **De winter:** een tekort aan brandhout of eten kost mensen, en het bericht zegt waaraan: "De kou is
+  hard, want het hout is op: de oude Folkert is gestorven." Of de honger, want het eten is op, of
+  allebei ("De winter is hard, want het hout en het eten zijn op"). Buiten de winter kost honger
   standaard alleen tevredenheid; wegtrekken of sterven zijn keuzes in de spelregels.
+- **De winter zie je aankomen** (28 sep; Marcel, 27 sep, vraag 44: "A ja B ja C ja"). Op 1 herfstmaand
+  en 1 slachtmaand zegt een bericht of het hout en het eten de winter halen, naar wat er ligt en wat er
+  per dag bijkomt (wat de houthakkers de laatste dag hakten), en zo niet, wat helpt: "Over een maand is
+  het winter. Het hout haalt 38 van de 90 dagen: een houthakker hakt 2 hout per dag. Het eten haalt de
+  winter." In de winter zegt het één keer, zoals het hooi en uit dezelfde regel (`T.haaltDeWinter`,
+  `T.raaktOp`): "Het hout is over 15 dagen op, en de winter duurt nog 40 dagen." In de balk staat het
+  hout in het rood als het de winter niet haalt, met bij de muis voor hoeveel dagen het genoeg is, en de
+  tevredenheid mist dan "brandhout voor de winter". Het eten rekent met graan, kaas en vlees, de melk die
+  de koeien nog geven, en de soldaten van de heer als ze er zijn. De dagen staan in de werkbank
+  (`winterVooraf`, `opraakWaarschuwing`). Sneeuw of rijp in het beeld komt later, na de proefversie.
 - **Nog open:** de winter is hard (in een proef van 25 naar 2 mensen zonder hout); het eerste
   voorjaar is krap (60 graan voor 25 mensen); moet ook vis eten zijn, nu vlees het is? Brand en
-  ziekte komen bij punt 8.
-- **Besloten: de winter zichtbaar maken** (Marcel, 27 sep, vraag 44: "A ja B ja C ja"; nog te bouwen).
-  Op 1 herfstmaand en 1 slachtmaand zegt een bericht of het hout en het eten de winter halen, naar wat
-  er ligt en wat er per dag bijkomt, en wat helpt (een houthakker). In de winter zegt het, zoals bij het
-  hooi, wanneer het op is. In de balk staat bij het hout voor hoeveel winterdagen het genoeg is, rood als
-  dat de winter niet haalt. Wie sterft, sterft van de kou of de honger, en het bericht zegt het. Sneeuw
-  of rijp in het beeld komt later, na de proefversie.
+  ziekte komen bij punt 8. Het bericht vooraf rekent nog niet met wat de heer op Sint-Maarten neemt,
+  en het hooi en het hout zeggen allebei "de winter duurt nog", terwijl het vee langer hooi eet dan het
+  dorp stookt (`opmerkingen.md`).
 
 **Hoe het zo kwam:** dit is punt 3 van de werklijst, gebouwd op 23 sep uit "Het dorp in leven
 houden" (onderaan, in "Welke gameplay er nog nodig is"). Er stond geen eigen voorstel voor in dit
-bestand; de details staan in `git log` en in de uitleg bovenin `js/behoeften.js`.
+bestand; de details staan in `git log` en in de uitleg bovenin `js/behoeften.js`. In de speeltest van
+27 sep stierf bijna de helft van het dorp aan de kou, en de speler wist niet waarom; het plan om de
+winter zichtbaar te maken staat in de werklijst bij vraag 44, en werd op 28 sep gebouwd.
 
 ## Gebouwen (Marcel, 23 sep 2026)
 

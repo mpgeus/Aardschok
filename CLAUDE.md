@@ -232,7 +232,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag,
   `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; een gebouw maakt alleen wat zijn grondstof
   toelaat, en gereedschap laat harder werken), `js/behoeften.js` (tevredenheid uit eten, brandhout
-  en een kerk; de winter; een huis dat doorgroeit; zout dat vis en vlees goed houdt),
+  en een kerk; de winter, en of het hout en het eten hem halen, `T.houtVoorDeWinter` en
+  `T.etenVoorDeWinter`, uit één regel met het hooi, `T.haaltDeWinter` en `T.raaktOp`; een huis dat
+  doorgroeit; zout dat vis en vlees goed houdt),
   `js/handel.js` (de marskramer: drie bezoeken per jaar, prijzen per bezoek, `T.kanKopen` en
   `T.kanVerkopen`; hij staat op de plek `"marskramer"` uit het betekenisbestand), `js/heer.js`
   (Sint-Maarten: zijn brief in wijnmaand, wat hij vraagt naar wat hij ziet via `T.eisVanDeHeer` en
@@ -345,7 +347,7 @@ Over het raster, het gevecht in beurten en de overgang ernaartoe.
 - Het getal in de balk verandert op één manier (26 sep): `T.wijzigBevolking(S, verschil, reden,
   waarom)` (`js/gebouwen.js`), zoals de voorraad via `T.wijzigVoorraad`. Zo gaan de bewoners mee
   (`js/bewoners.js`): een nieuw gezin krijgt een huis, en wie sterft of wegtrekt, gaat; met `waarom`
-  ("De winter is hard") zegt het bericht wie het zijn.
+  ("De kou is hard, want het hout is op") zegt het bericht wie het zijn.
 - De tijd stilzetten gaat op één manier (26 sep): `T.houdTijdStil(S, reden)` en
   `T.laatTijdGaan(S, reden)` (`js/tijd.js`), met een naam per venster ('brief', 'handel', ...).
   `S.kalender.snelheid` is alleen wat de speler koos; hoe snel het nu echt gaat, zegt

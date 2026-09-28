@@ -194,6 +194,23 @@ test('te weinig hooi: het jongste krijgt honger, en na tien dagen sterft het; wi
   assert.ok(!S.wereld.wezens.includes(jong), 'weg uit de wereld');
 });
 
+test('het hooi zegt één keer per winter dat het op raakt, net als het hout en het eten (T.raaktOp)', () => {
+  const { S, velden: [weide] } = boerMet([{ x: 2, y: 2, b: 5, h: 5, bestemming: 'weide' }]);
+  zet(S, weide, 'koe', 2); // samen twee hooi per winterdag
+  T.zetVoorraad(S, 'hooi', 34); // zeventien dagen
+  const eerste = dagVan('louwmaand', 1);
+  const berichten = [];
+  const oud = T.ui;
+  T.ui = { bericht: (tekst) => berichten.push(tekst) };
+  try {
+    for (let dag = eerste; dag < eerste + 5; dag++) T.voerHooi(S, dag);
+  } finally {
+    T.ui = oud;
+  }
+  // Op 3 louwmaand is er nog hooi voor vijftien dagen, met die dag, en het vee eet nog 88 dagen hooi.
+  assert.deepEqual(berichten, ['Het hooi is over 15 dagen op, en de winter duurt nog 88 dagen.']);
+});
+
 test('een winterdag in het spel: het vee eet hooi, en in de zomer niet', () => {
   const { S, velden: [weide] } = boerMet([{ x: 2, y: 2, b: 5, h: 5, bestemming: 'weide' }]);
   zet(S, weide, 'koe', 3);

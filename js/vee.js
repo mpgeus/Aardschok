@@ -712,16 +712,7 @@
 
   // Hoeveel winterdagen er vanaf `dag` (die meegeteld) nog komen voordat het vee weer graast. Is het
   // nu geen winter, dan de hele volgende winter.
-  T.winterDagen = function (dag) {
-    let d = Math.floor(dag);
-    for (let n = 0; n < T.DAGEN_PER_JAAR && !winterTijd(d); n++) d++;
-    let dagen = 0;
-    while (winterTijd(d) && dagen < T.DAGEN_PER_JAAR) {
-      dagen++;
-      d++;
-    }
-    return dagen;
-  };
+  T.winterDagen = (dag) => T.periodeVanaf(dag, winterTijd).duur;
 
   // Het oudste eerst: de beginkudde (zonder geboortedag), dan wie het eerst geboren is. Bij hetzelfde
   // de volgorde van het zaad, zodat het vast is.
@@ -858,9 +849,9 @@
       const een = gestorven.length === 1;
       bericht(`${T.hoofdletter(dierenTekst(gestorven, dag))} ${een ? 'is' : 'zijn'} van honger gestorven: het hooi was op.`, 'gevaar');
     }
-    // Vooraf zeggen, één keer per winter: het hooi is binnenkort op, of nu al.
-    const over = nodig > 0 ? hooi / nodig : Infinity;
-    const winterNog = T.winterDagen(dag) - 1;
+    // Vooraf zeggen, één keer per winter: het hooi is binnenkort op, of nu al. Binnenkort zegt het zoals
+    // het dorp het zegt van het hout en het eten (T.raaktOp, js/behoeften.js): vanaf vandaag, met
+    // vandaag, dus met het hooi van vóór het voeren.
     if (gegeten < nodig - 1e-9) {
       if (!V.hongerGemeld) {
         V.hongerGemeld = true;
@@ -868,9 +859,11 @@
       }
     } else {
       V.hongerGemeld = false;
-      if (over < winterNog && over <= IN().hooiWaarschuwing && !V.hooiGewaarschuwd) {
+      const v = T.haaltDeWinter({ voorraad: hooi + gegeten, perWinterdag: nodig, winter: T.winterDagen(dag) });
+      const tekst = !V.hooiGewaarschuwd && T.raaktOp('het hooi', v, IN().hooiWaarschuwing);
+      if (tekst) {
         V.hooiGewaarschuwd = true;
-        bericht(`Het hooi is over ${Math.max(1, Math.floor(over))} dagen op, en de winter duurt nog ${winterNog} dagen.`, 'gevaar');
+        bericht(tekst, 'gevaar');
       }
     }
     return { nodig, gegeten, gestorven };
