@@ -20,17 +20,15 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, e
 benoemingsbrief van de heer; `Z` is slapen bij je huis, `Esc` het menu, en het spel slaat elke ochtend zelf
 op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 578/578.
 
-**Waar het werk staat:** de dertiende sessie staat in `main` (Marcel, 28 sep: "Graag alles naar main"). De
-veertiende (de afrekening geparkeerd, de nieuwe richting, en het plan voor de nieuwe volgorde: vraag 49 tot en
-met 51) staat op haar eigen branch, `ccr-78e7abf2-tn06lu`, en nog niet in `main`. Hoe een eigen branch en `main`
-samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook de veertiende sessie (Marcel, 28 sep: "Graag alles naar
+main"; ook op `ccr-78e7abf2-tn06lu`). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 2: de eerste trede, van gehucht tot dorp;
-begin met een plan voor Marcel. Stap 1, het dorp bouwt zelf, is af (vraag 52). Let bij stap 2 op het bouwmenu,
-dat nu alleen de trede van nu toont (`opmerkingen.md`, bovenaan). De richting staat (vraag 50: besturen en groeien worden het hart, de
-heer blijft als de druk van boven, en vechten begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook
-(vraag 51: de proef wordt "van gehucht tot dorp", in vijf stukken). De afrekening (vraag 49) is geparkeerd, en
-vraag 47 (de eerste weken als opdrachten) wordt herschreven bij stap 5.
+**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 2: de eerste trede, van gehucht tot dorp.
+Het plan staat bij vraag 53 en wacht op Marcels A, B, C en D. Stap 1, het dorp bouwt zelf, is af (vraag 52). De
+richting staat (vraag 50: besturen en groeien worden het hart, de heer blijft als de druk van boven, en vechten
+begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook (vraag 51: de proef wordt "van gehucht tot
+dorp", in vijf stukken). De afrekening (vraag 49) is geparkeerd, en vraag 47 (de eerste weken als opdrachten)
+wordt herschreven bij stap 5.
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; opnieuw geordend op 28 sep,
 vraag 51, na de nieuwe richting). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat de proef "van
@@ -44,7 +42,7 @@ kost u vanaf nu meer."
    is het dorp vol, dan zet een nieuw gezin er zelf een hut op, met hout uit de voorraad. Zie onder Af.
 2. **Nu: de eerste trede: van gehucht tot dorp** (punt 14). Een dorp bij 50 mensen, een kapel en een smidse
    (Marcel koos het; de getallen in de werkbank), met het bouwmenu van het dorp en de brief van de heer. Het einde
-   van de proef. Begin met een plan.
+   van de proef. Het plan staat bij vraag 53 (28 sep, veertiende sessie; wacht op Marcel).
 3. **De eerste keuren** (punt 9, nog zonder groepen en schepenen): vreemden, rantsoen en houtkap, in één venster,
    en elke keur zegt vooraf wat hij doet.
 4. **Rovers en een militie** (punt 13): rovers vallen het gehucht aan, en je verdedigt het in beurten op je eigen
@@ -56,7 +54,7 @@ kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* 33d (hoe een tester het krijgt, in
+*2. Wacht op Marcel:* vraag 53 (het plan voor stap 2, de eerste trede), en 33d (hoe een tester het krijgt, in
 `speelbaar.md`). Vraag 47 wordt herschreven bij stap 5. Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51;
 het bijstellen na de speeltest (vraag 46) komt later, met een menu met opties.
 
@@ -109,6 +107,11 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
 - **Stap 1 is af: het dorp bouwt zelf** (Marcel: "A ja B ja C ja D ja"). Zie onder Af. In de browser gespeeld: een
   erf met paaltjes, een gezin dat over de weg komt en voor zijn hut staat terwijl die oprijst, en na twee dagen
   de hut; zonder fouten. `npm test`: 578/578.
+- **Alles staat in `main`** (Marcel: "Graag alles naar main, en begin met stap 2").
+- **Een plan voor stap 2, de eerste trede** (vraag 53): het doel linksboven en in de benoemingsbrief, een brief van
+  de heer met twee knoppen als het een dorp is, en het bouwmenu van het dorp erbij. Nagekeken: de trede staat in de
+  spelstaat maar gaat nooit omhoog, het bouwmenu toont alleen de trede van nu, en het gehucht begint zonder kapel
+  en smidse (samen 18 van de 20 goud).
 
 **Wat er in de dertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 5, de eerste weken als opdrachten** (vraag 47): het schrift van je voorganger als stem
@@ -985,6 +988,52 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     gezin op zijn erf laat zien. Vragen: **A**, erven één voor één? **B**, het gezin bouwt zelf, en wacht op
     hout? **C**, hut en huis uit het bouwmenu, met een spelregel? **D**, paaltjes?
     **Beantwoord (Marcel, 28 sep): "A ja B ja C ja D ja".** Alle vier zoals voorgesteld; het wordt gebouwd.
+53. **De eerste trede, van gehucht tot dorp: het plan** (Claude, 28 sep, veertiende sessie; stap 2 van de proef,
+    vraag 51; Marcel: "begin met stap 2"; wacht op Marcel). Marcel koos bij vraag 51 wanneer het gehucht een
+    dorp is: 50 mensen, een kapel en een smidse, met de getallen in de werkbank; en dat de proef dan eindigt met
+    een brief van de heer. Wat er nu is:
+    - De trede staat in de spelstaat (`S.trede`), maar is altijd "gehucht": niets zet hem hoger.
+    - Het bouwmenu toont alleen de gebouwen van precies deze trede. Wordt het een dorp, dan zouden de put, de
+      kapel en het erf verdwijnen. Met het dorp komen er twaalf bij, onder meer de timmerman, de molen, de
+      bakkerij, de wapenmaker en het schuttershof; de meeste lenen nog een tekening.
+    - Het gehucht begint zonder kapel en zonder smidse. Samen kosten ze 24 hout en 18 goud (van de 40 hout en 20
+      goud waarmee je begint), en de smidse kost je op Sint-Maarten elk jaar 4 goud.
+    - Nergens staat het doel. Linksboven is een vak voor "de opdracht van dit moment" (`T.ui.opdracht`), maar
+      dat vult alleen een quest, en er zijn er nog geen.
+    Voorstel:
+    - **A, het doel staat in beeld, en de heer zegt het.** Vanaf het begin staat linksboven "Naar een dorp", met
+      hoe ver je bent: "43 van 50 mensen · een kapel · nog geen smidse". De benoemingsbrief krijgt er een regel
+      bij: "Wij verwachten dat Ons gehucht een dorp wordt, met een kapel, een smidse en vijftig zielen. Een dorp
+      brengt Ons meer op." Zo komt het doel uit de wereld zelf, zoals de heer is: hij wil groei omdat hij eraan
+      verdient. Komen later de opdrachten voor de eerste weken (vraag 47), dan gaan die in het vak voor.
+    - **B, het moment: een brief met twee knoppen.** Elke dag kijkt het spel of er 50 mensen zijn en een kapel
+      en een smidse klaar staan. Is dat zo, dan is het gehucht een dorp (en dat blijft het, ook als er mensen
+      wegtrekken). De tijd staat stil, en de heer schrijft: "Wij vernemen dat Ons gehucht een dorp is geworden.
+      Gefeliciteerd. Dat kost u vanaf nu meer." Onder de brief staan "Verder als dorp" en "Naar het
+      titelscherm": voor een tester is dit het eind van de proef, en wie wil, speelt door. Geen apart
+      eindscherm, want de brief is het moment.
+    - **C, wat het dorp vrijzet:** het bouwmenu toont voortaan de gebouwen van deze trede én die ervoor, dus in
+      het dorp staan de gebouwen van het gehucht er nog in, met die van het dorp erbij. Verder niets: de
+      schepenen, de voerman met stenen en de tapperij horen bij punt 14, na de proef.
+    - **D, "Dat kost u vanaf nu meer": alleen woorden, of echt?** De heer vraagt al per huis, per ziel en per
+      gebouw (de smidse 4 goud), dus een dorp betaalt vanzelf meer. Het kan ook echt: in een dorp een hoger
+      hoofdgeld per mens. Voorstel: alleen woorden, en in de werkbank een getal voor het hoofdgeld in een dorp
+      dat op 1 staat, zodat het later hoger kan als spelen dat vraagt.
+    - **Wat het doet** (inzicht): de kapel en de smidse vragen 18 van de 20 goud, en de heer wil op Sint-Maarten
+      zo'n 25. Wie ze meteen bouwt, moet graan verkopen aan de marskramer, of de heer tekortdoen. En de kapel
+      maakt het dorp tevredener (een kerk telt voor een vijfde mee), en tevredenheid laat het groeien: de kapel
+      is dus een goede eerste zet. Zo zit er in het doel al een keuze, zonder dat er iets nieuws bij hoeft.
+    - **Hoe het werkt** (geen vraag): een klein nieuw bestand, `js/treden.js`, zonder scherm en dus getoetst,
+      met bovenaan één blok (`T.TREDEN_INSTELLINGEN`: 50 mensen, de kapel en de smidse, het hoofdgeld in een
+      dorp), dat in de werkbank komt. `T.tredeDoel` geeft de tekst voor het vak, en een dagelijkse tik zet de
+      trede. De brief komt in hetzelfde venster als de andere brieven van de heer. Op een proefkaart (`?kaart=`)
+      gebeurt het niet. Opslaan houdt de trede vanzelf (`S.trede`).
+    Klaar als het doel vanaf het begin linksboven staat met de voortgang, de benoemingsbrief het noemt, het
+    gehucht bij 50 mensen met een klare kapel en smidse een dorp wordt, de brief van de heer dan komt met zijn
+    twee knoppen, het bouwmenu de gebouwen van het dorp erbij toont (en die van het gehucht houdt), de getallen
+    in de werkbank staan, `npm test` groen is, en een schermafdruk de brief laat zien. Vragen: **A**, het doel
+    linksboven en in de benoemingsbrief? **B**, de brief met twee knoppen als eind van de proef? **C**, alleen
+    het bouwmenu erbij? **D**, alleen woorden, met het getal op 1?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
