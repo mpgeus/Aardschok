@@ -10,19 +10,19 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (27 sep 2026, na de negende en tiende sessie): alles staat in main, en al het werk op prioriteit
+## De stand (28 sep 2026, na de elfde sessie): de winter is zichtbaar; nu een speeltest op de stand van nu
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 538/538.
+`npm test`: 550/550.
 
-**Waar het werk staat:** alles staat in `main` (Marcel, 27 sep: "Alle openstaande punten meenemen naar
-nieuwe sessie en alles naar main"): de negende sessie (ook op `claude/werklijst-doorzetten-ikazjp`) en
-de tiende (ook op `claude/offline-flight-tasks-35l4cj`), samengevoegd. Hoe een eigen branch en `main`
-samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** de elfde sessie (28 sep, de winter zichtbaar) staat op
+`claude/werklijst-doorzetten-cxck6z`, nog niet in `main`: dat doet Marcel als hij erom vraagt. Alles
+daarvoor staat in `main` (Marcel, 27 sep: "Alle openstaande punten meenemen naar nieuwe sessie en alles
+naar main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; de volgorde is een
 voorstel van Claude). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat een proefversie van één
@@ -30,14 +30,14 @@ jaar nodig heeft, de kortste weg uit `speelbaar.md` (de getuigen en de soldaten 
 al van af). Elk stuk begint met een plan voor Marcel.
 
 *1. Nu: naar een proefversie van één jaar*
-1. **De winter zichtbaar maken.** Een waarschuwing als het hout of het eten de winter niet haalt, en in het
-   bericht waaraan iemand stierf. In de speeltest stierf bijna de helft van het dorp aan de kou, en de
-   speler wist niet waarom. Het grootste gat, en klein om te bouwen. **Loopt:** het plan staat bij vraag
-   44, en Marcel keurde het goed ("A ja B ja C ja"): nu bouwen.
-2. **Een speeltest op de stand van nu.** De vorige liep op `main` van vóór de soldaten die altijd zoeken en
-   de inner die je kunt bespelen: hoe de kern nu speelt, weet nog niemand. Een agent kan het, zoals de
-   vorige keer, en Marcel speelt ook. De getallen bijstellen (het goud, de kelders, de honger, de inner)
-   komt daarna, als Marcel wil ("We gaan later finetunen").
+1. **Af (28 sep, elfde sessie): de winter zichtbaar maken.** Een waarschuwing vooraf en in de winter als
+   het hout of het eten de winter niet haalt, het hout rood in de balk, en in het bericht waaraan iemand
+   stierf (vraag 44; zie onder Af).
+2. **Nu: een speeltest op de stand van nu.** De vorige liep op `main` van vóór de soldaten die altijd
+   zoeken, de inner die je kunt bespelen en de winter die je ziet aankomen: hoe de kern nu speelt, weet nog
+   niemand. Een agent kan het, zoals de vorige keer, en Marcel speelt ook; zet de elfde sessie eerst in
+   `main`, of speel op haar branch, en zeg op welke stand. De getallen bijstellen (het goud, de kelders, de
+   honger, de inner) komt daarna, als Marcel wil ("We gaan later finetunen").
 3. **Opslaan, Verder en een titelscherm** (wacht op 33b, en op een naam, vraag 8). Zonder opslaan speelt
    niemand een jaar van een uur uit.
 4. **De afrekening na het eerste jaar** (wacht op 33a): wat je gaf, wat je achterhield en wat daarvan
@@ -69,6 +69,17 @@ helpt een tester zichzelf te vinden, dus misschien toch vóór de proef), 22 (de
 volgorde: deze lijst is het nieuwe voorstel).
 
 *Wat nog ruw is:* `opmerkingen.md`, bovenaan.
+
+**Wat er in de elfde sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
+- **De winter is zichtbaar** (punt 1 van de prioriteit, vraag 44). Op 1 herfstmaand en 1 slachtmaand zegt
+  het dorp of het hout en het eten de winter halen, en wat helpt; in de winter één keer wanneer het op is,
+  zoals het hooi; het hout staat rood in de balk als het de winter niet haalt; en wie sterft, sterft van
+  de kou of de honger. Zie onder Af, en `spel.md`, "Het dorp: mensen, behoeften en de winter".
+- **Een fout gevonden en gerepareerd:** vlees vulde wel een maag, maar telde niet mee als het dorp keek
+  of er eten was. Met alleen vlees in de schuur stierven er in de winter mensen van de honger.
+- **Opgevallen, voor later** (`opmerkingen.md`): het bericht vooraf rekent niet met wat de heer op
+  Sint-Maarten neemt, en het hooi en het hout zeggen allebei "de winter duurt nog", terwijl de winter
+  van het vee langer duurt dan die van het dorp.
 
 **Wat er in de tiende sessie gebeurde** (27 sep, terwijl Marcel twee uur vloog; hij koos vooraf 1, 3 en
 4 uit een lijst van Claude, en niet stuk 2 van de getuigen):
@@ -493,7 +504,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 27 sep): "A ja B ja C ja, push it".** A: drie maanden en een maand vooraf, en in
     de winter zelf; B: het rode cijfer in de balk; C: geen sneeuw nu, wel op de lijst na de proefversie
     (Claude las "ja" als ja op het voorstel; zeg het als het anders bedoeld was). Het besluit staat in
-    `spel.md`, "Het dorp: mensen, behoeften en de winter". Nu bouwen.
+    `spel.md`, "Het dorp: mensen, behoeften en de winter". **Gebouwd (28 sep, elfde sessie):** zie onder Af.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -791,6 +802,22 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 28 sep 2026 — **De winter zichtbaar** (elfde sessie; punt 1 van de prioriteit, vraag 44, Marcel: "A ja B
+  ja C ja"). Op 1 herfstmaand en 1 slachtmaand zegt het dorp of het hout en het eten de winter halen,
+  naar wat er ligt en wat er de laatste dag bijkwam, en zo niet, wat helpt: "Over drie maanden is het
+  winter. Het hout haalt 33 van de 90 dagen: een houthakker hakt 2 hout per dag. Het eten haalt de
+  winter." In de winter zegt het één keer "Het hout is over 15 dagen op, en de winter duurt nog 79
+  dagen", uit dezelfde regel als het hooi (`T.haaltDeWinter` en `T.raaktOp` in `js/behoeften.js`; de
+  lengte van een winter uit `T.periodeVanaf` in `js/tijd.js`). Het hout staat rood in de balk als het
+  de winter niet haalt, met bij de muis voor hoeveel dagen, en de tevredenheid mist dan "brandhout voor
+  de winter". Wie sterft, sterft van de kou, de honger of allebei, en het bericht zegt het ("De kou is
+  hard, want het hout is op: de oude Folkert is gestorven."). Het eten rekent met graan, kaas, vlees, de
+  melk die nog komt en de soldaten van de heer (`T.soldatenEten`). Onderweg gerepareerd: vlees telde niet
+  mee als het dorp keek of er eten was (`T.berekenTevredenheid`), terwijl het wel gegeten werd. Een jaar
+  in een script, zonder dat de schout iets doet: de drie waarschuwingen komen, en daarna sterven er
+  zeventien van de kou; met een houthakker vanaf herfstmaand zegt 1 slachtmaand dat het hout de winter
+  haalt, en sterft er niemand. In de browser nagekeken: het rode hout, de tekst bij de muis, en het
+  bericht op 1 herfstmaand. `npm test`: 550/550.
 - 27 sep 2026 — **De kern, stuk 2: de inner bespelen** (negende sessie; punt 4, vraag 42, Marcel: "Ja ab
   goed zo"). Zijn bezoek duurt tot zonsondergang (`T.werkInnerBij`, `js/inner.js`), niet meer 90 stappen.
   Afleiden: wie met hem praat, houdt hem op terwijl de dag doorloopt, drie uur per bezoek; staat de schout
