@@ -233,10 +233,16 @@
     }
   };
 
-  // Een gelezen spel in S, bovenop wat er al is: js/main.js begint daarvoor een nieuw spel, zodat wat er sinds
-  // het bewaren in het spel bij kwam, de waarde van een nieuw spel heeft. Wat alleen scherm is, begint opnieuw.
+  // Een gelezen spel in S. js/main.js begint daarvoor een nieuw spel, zodat wat er sinds het bewaren in het spel
+  // bij kwam, de waarde van een nieuw spel heeft. Het bewaarde spel komt erin zoals het was, ook in de volgorde
+  // van zijn velden (de proef met opslaan vergelijkt letter voor letter); wat er sindsdien bij kwam, en wat
+  // alleen scherm is, komt erachter.
   T.zetSpel = function (S, gelezen) {
-    Object.assign(S, gelezen.staat, T.schermVelden());
+    const vers = { ...S };
+    for (const k of Object.keys(S)) delete S[k];
+    Object.assign(S, gelezen.staat);
+    for (const k of Object.keys(vers)) if (!(k in S)) S[k] = vers[k];
+    Object.assign(S, T.schermVelden());
   };
 
   // Allebei in één keer. Lukt het niet, dan blijft S zoals het was.

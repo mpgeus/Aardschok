@@ -110,6 +110,19 @@ test('wat elkaar aanwijst, wijst na het laden nog steeds naar hetzelfde', () => 
   assert.equal(S2.gebieden[S2.wereld.gebied].wezens.find((e) => e === S2.schout).tx, -99);
 });
 
+test('een geladen spel heeft zijn velden in de volgorde van het bewaarde, en wat er sindsdien bij kwam, erachter', () => {
+  const S = gehucht();
+  const S2 = gehucht();
+  S2.nieuwVeld = 'van na het bewaren';
+  // Een nieuw spel zet zijn velden in een eigen volgorde; het bewaarde spel had een andere.
+  const tekst = T.bewaarSpel(S, { nu: NU });
+  const volgorde = Object.keys(JSON.parse(tekst).staat);
+  T.zetSpel(S2, T.leesSpel(tekst));
+  assert.deepEqual(Object.keys(S2).slice(0, volgorde.length), volgorde);
+  assert.equal(S2.nieuwVeld, 'van na het bewaren', 'wat het bewaarde spel niet kende, houdt zijn nieuwe waarde');
+  assert.equal(T.bewaarSpel(S2, { nu: NU }).replace(',"nieuwVeld":"van na het bewaren"', ''), tekst);
+});
+
 test('verzamelingen blijven verzamelingen, en het scherm begint opnieuw', () => {
   const S = gehucht();
   T.zetVlag(S, 'heerBetaald');
