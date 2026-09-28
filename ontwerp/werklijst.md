@@ -19,9 +19,9 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, e
 benoemingsbrief van de heer; `Z` is slapen bij je huis, `Esc` het menu, en het spel slaat elke ochtend zelf
 op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 563/563.
 
-**Waar het werk staat:** de twaalfde sessie staat in `main`. De dertiende staat op
-`claude/werklijst-doorzetten-kfeqsq` en nog niet in `main` (Marcel vroeg het nog niet). Hoe een eigen branch en
-`main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook de dertiende sessie (Marcel, 28 sep: "Graag alles naar
+main"; ook op `claude/werklijst-doorzetten-kfeqsq`). Hoe een eigen branch en `main` samengaan, staat in
+`CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** bij de prioriteit hieronder. Punt 3 is af (opslaan, het menu en het
 titelscherm). Nu punt 4, de afrekening na het eerste jaar: begin met een plan voor Marcel (33a is beantwoord:
