@@ -41,7 +41,7 @@ proef eindigt met een brief van de heer: "Wij vernemen dat Ons gehucht een dorp 
 kost u vanaf nu meer."
 1. **Nu: het dorp bouwt zelf** (3b, stap 5; `spel.md`, "Het dorp bouwt zelf"). Jij wijst bouwgrond aan, en een
    nieuw gezin zet er zelf een hut op, met hout uit de voorraad. Groeien wordt plannen, in plaats van elk huis
-   zelf neerzetten. Het plan staat bij vraag 52 (28 sep, veertiende sessie; wacht op Marcel).
+   zelf neerzetten. Het plan staat bij vraag 52 (Marcel, 28 sep: "A ja B ja C ja D ja"; wordt gebouwd).
 2. **De eerste trede: van gehucht tot dorp** (punt 14). Een dorp bij 50 mensen, een kapel en een smidse (Marcel
    koos het; de getallen in de werkbank), met het bouwmenu van het dorp en de brief van de heer. Het einde van de
    proef.
@@ -981,6 +981,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     anders zegt), opslaan en laden de erven houdt, `npm test` groen is, en een schermafdruk voor Marcel een
     gezin op zijn erf laat zien. Vragen: **A**, erven één voor één? **B**, het gezin bouwt zelf, en wacht op
     hout? **C**, hut en huis uit het bouwmenu, met een spelregel? **D**, paaltjes?
+    **Beantwoord (Marcel, 28 sep): "A ja B ja C ja D ja".** Alle vier zoals voorgesteld; het wordt gebouwd.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

@@ -2061,6 +2061,12 @@ wordt gepraat:
 
 ### Het dorp bouwt zelf
 
+**Besloten (Marcel, 28 sep, werklijst vraag 52: "A ja B ja C ja D ja"):** erven van 10 bij 10 tegels, die je één
+voor één neerzet met het bouwmenu; een nieuw gezin loopt naar het vrije erf dat het dichtst bij zijn werk ligt,
+en bouwt er zelf zijn hut, met hout uit de voorraad (ligt er te weinig, dan wacht de bouwplaats); een huis met
+plaats gaat voor; de hut en het huis gaan uit het bouwmenu, met een spelregel om ze terug te zetten; en een vrij
+erf zie je aan paaltjes op zijn hoeken. Stap 1 van de proef "van gehucht tot dorp".
+
 - **Een nieuw gezin bouwt zijn eigen huis.** Jij zet geen huizen meer neer, maar wijst **bouwgrond**
   aan: land waar gebouwd mag worden, zoals de erven in Manor Lords. Het gezin kiest er een erf, dicht
   bij zijn werk en aan een pad, en zet er eerst een hut op. Werkplaatsen en wat van het hele dorp is
