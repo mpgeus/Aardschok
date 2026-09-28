@@ -86,7 +86,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed (`-- slim --zaad 2` voor
   één jaar). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
   (`gereedschap/speeltest/speler.js`). Een jaar kost twee tot zeven minuten; nodig is Playwright (in de
-  cloud staat het klaar). Wat het vond, staat in `ontwerp/speelbaar.md`.
+  cloud staat het klaar). Wat het vond, staat in `ontwerp/speelbaar.md`. Met `--opslaan` is het de proef met
+  opslaan: de speler slaat op 1 oogstmaand op via het menu, de bladzijde herlaadt, hij gaat verder met Verder,
+  en het jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`).
 - `npm run pixelart` rendert alle HD-pixel art naar `gereedschap/pixelart/uit/` (niet in git).
 - `npm run pixelart:spel` zet daaruit alleen wat het spel tekent in `beelden/` (wél in git,
   want het spel heeft het nodig als het draait). Draai het opnieuw als de kunst verandert.
@@ -137,6 +139,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/naam.js`: de naam van het spel (`T.NAAM`), op één plek, want hij verandert nog (Marcel, 28 sep); een
   titel schrijft `{naam}`. De sleutel waaronder de browser iets bewaart (`T.OPSLAG_SLEUTEL`) staat ernaast en
   verandert nooit mee. `test/naam.test.cjs` bewaakt dat de naam nergens anders staat.
+- `js/opslaan.js`: **opslaan en laden** (werklijst punt 3, vraag 48): het bewaart heel `Spel.S` behalve wat
+  alleen scherm is (`T.schermVelden`), met de verzamelingen en alles wat elkaar aanwijst heel
+  (`T.bewaarSpel`, `T.leesSpel`, `T.zetSpel`). Een plek die vanzelf gaat, elke ochtend als de mensen opstaan
+  (`T.werkOpslaanBij`), en vijf eigen (`T.slaOp`, `T.opgeslagenSpellen`); waar het blijft, zegt één functie
+  (`T.opslagPlek`: de opslag van de browser, straks een bestand). `js/menu.js` is het scherm erbij: het
+  titelscherm, waarop het spel opent, en het menu onder `Esc`. `js/main.js` begint een nieuw spel
+  (`T.nieuwSpel`, dat een vorig spel helemaal wist), laadt er een (`T.laadSpel`), en gaat terug naar het
+  titelscherm (`T.naarTitelscherm`).
 
 - `js/wereld.js`: wat een wezen is (`T.WEZENS`) en wat een voorwerp is (`T.VOORWERPEN`), de
   vragen over een kaart (`isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`/`zietTegel`, `isZichtbaar`,
@@ -328,6 +338,13 @@ al is, en maak geen tweede variant ernaast); getallen in één blok bovenaan; re
 toetsen; en na een groot stuk werk een opruimronde vóór het volgende. Wat daar concreet nog voor
 moet, staat in de werklijst (vraag 25).
 
+**Alles in `Spel.S` wordt bewaard** (28 sep, vraag 48; `js/opslaan.js`), zonder dat een regel dat hoeft te
+zeggen. Dus: wat het spel onthoudt, staat in `S`, als gewone gegevens (objecten, lijsten, Set, Map; geen
+functie, geen canvas, geen Date), en nergens in een losse variabele in een bestand. Wat alleen scherm is (de
+muis, een flits), komt in `T.schermVelden`. Verandert de vorm van `S` zo dat een oud spel niet meer past (iets
+heet anders, of betekent iets anders), verhoog dan `T.OPSLAAN_INSTELLINGEN.versie`; een veld erbij hoeft dat
+niet. `test/opslaan.test.cjs` bewaakt dat bewaren en laden hetzelfde spel geeft.
+
 **Geen bewakers voor regels** (27 sep, vraag 25 E): een toets laadt het hele spel, dus `T.x && T.x(...)`
 of `if (T.x)` voor een regel uit `js/` doet niets, behalve lezen alsof een deel van het spel er soms
 niet is. Ze blijven alleen waar een bladzijde een deel van het spel laadt (`gereedschap/wereld.html`
@@ -400,7 +417,8 @@ gezin komen (overdag over de weg; er moet een huis met plaats zijn), `(-4)` laat
 en het bier (`(30)` zet eerst 30 bier). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
 hij staat, wie er kijkt, en welk licht er brandt.
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1
-slachtmaand).
+slachtmaand). `Spel.debug.opslaan('2')` zet het spel op plek 2, `Spel.debug.laden('auto')` laadt wat er vanzelf
+bewaard is, en `Spel.debug.spellen()` zegt wat er op de plekken staat.
 De spelregels die de browser onthield (`localStorage`, `aardschok.spelregels`) gelden ook voor wie
 test; `Spel.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
 Een sprong met `kalender` tikt alle dagen ertussen af: valt 1 wijnmaand erin, dan staat de brief
@@ -468,9 +486,11 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
 
 Drie dingen die bij het mikken misgaan:
 
-- een open venster vangt de klik. Een nieuw spel begint met de benoemingsbrief, en zolang die
-  openstaat, staat de tijd stil en valt elke klik op de brief: sluit hem eerst (de knop "Aan het
-  werk", `.heer-geef-knop`, of Esc). Op `?kaart=proef` komt er geen brief;
+- een open venster vangt de klik. Het spel opent op het titelscherm: klik eerst Nieuw spel
+  (`#menu [data-actie="nieuw"]`; staat er al iets vanzelf bewaard, dan vraagt het eerst, en is het
+  `[data-actie="ja"]`). Dan komt de benoemingsbrief, en zolang die openstaat, staat de tijd stil en valt elke
+  klik op de brief: sluit hem eerst (de knop "Aan het werk", `.heer-geef-knop`, of Esc). Op `?kaart=proef`
+  komen er geen titelscherm en geen brief, en wordt er niet opgeslagen;
 - de camera glijdt mee, dus reken de schermpositie pas uit als hij stilstaat (een seconde
   `stap` na elke verplaatsing), anders klik je een tegel ernaast;
 - wat vooraan staat, vangt de muis. Mik op het lijf van een wezen (zo'n 16 pixels boven zijn

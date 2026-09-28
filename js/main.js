@@ -23,12 +23,18 @@
   const voorwerpHoogte = (v) =>
     (T.sprites.aan && !T.debug.vlakken ? SPRITE_VOORWERP_HOOGTE : VOORWERP_HOOGTE)[v.soort];
 
-  // Een nieuw spel begint in het gehucht, met de benoemingsbrief van de heer (T.ui.toonBenoeming,
-  // js/hud.js). Marcel koos hem op 25 sep in plaats van een titelscherm: de tutorial van het oude
-  // spel vertelde je waarom je er was, en nu doet de heer dat zelf (ontwerp/spel.md, onder Open).
+  // Een nieuw spel: een verse wereld in het gehucht. Alles van een vorig spel gaat eerst weg, ook wat de
+  // regels er onderweg bij zetten (de heer, de inner, het slapen, het einde); alleen de zoom van het scherm
+  // blijft. Het begint niet vanzelf: het titelscherm (js/menu.js, vraag 48) laat het erachter wachten, en
+  // pas "Nieuw spel" geeft de benoemingsbrief van de heer, waarmee een spel begint sinds Marcel hem op
+  // 25 sep koos (T.ui.toonBenoeming, js/hud.js). Een proefje (?kaart=) begint meteen, zonder brief, en
+  // wordt nooit opgeslagen (S.proefje; js/opslaan.js).
   T.nieuwSpel = function () {
-    S.gebieden = {}; // een nieuw spel begint met schone gebieden
+    for (const k of Object.keys(S)) if (k !== 'zoom') delete S[k];
     Object.assign(S, {
+      tijd: 0,
+      wind: 0,
+      gebieden: {}, // een nieuw spel begint met schone gebieden
       vlaggen: new Set(),
       modus: 'verkennen',
       gevecht: null,
@@ -41,7 +47,6 @@
       bevolking: 0, woonruimte: 0, // aantal mensen, en hoeveel er als woonruimte gegeven is
       behoeften: T.nieuweBehoeften(), // tevredenheid en wat het dorp mist (js/behoeften.js)
       trede: 'gehucht', // de hoogste trede van het dorp; omhoog gaat pas mee met "Groei" (werklijst.md, punt 5)
-      bouwSoort: null, bouwHover: null, bouwMenuOpen: false, // het bouwmenu (T.NIEUWE_HUD, js/hud.js)
       goud: 0,
       goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
       quests: {}, // per quest de fase waarin hij staat (js/quest.js)
@@ -53,28 +58,40 @@
       bezocht: new Set(['hal']),
       naarGebied: null,
       netGeland: null, // de tegel waar de schout zojuist is neergezet (js/gebied.js)
-      grond: null, // de buffer waar de grond op staat (js/tekenen.js)
-      effecten: [],
-      wachters: [],
-      rasterAlpha: 0,
-      rasterTegels: [],
-      rasterStart: 0,
-      rasterVan: null,
-      bereik: null,
-      hover: null,
-      handeling: null,
-      naLopen: null,
-      spreektMet: null,
-    });
+    }, T.schermVelden()); // wat alleen scherm is (de muis, het raster, het bouwmenu): js/opslaan.js
     // Een proefje (?kaart=) begint op zijn eigen kaart, zonder brief; lukt dat niet (de kaart
     // bestaat niet), dan valt het terug op het gehucht — een half aangelegde wereld mag nooit het
     // spel breken.
     const proefje = !!BEGIN_KAART && T.beginOpKaart(S, BEGIN_KAART);
     if (!proefje) T.beginOpKaart(S, 'gehucht'); // zet S.wereld en S.schout
+    if (proefje) S.proefje = true;
+    zetCameraOpSchout();
+    T.ui.reset(S);
+  };
+
+  function zetCameraOpSchout() {
     const p = T.naarScherm(S.schout.x, S.schout.y);
     S.camera = { x: p.x, y: p.y - 24 };
+  }
+
+  // Een bewaard spel laden (js/opslaan.js). Eerst lezen: lukt dat niet, dan blijft het spel zoals het was.
+  // Dan een nieuw spel, zodat wat er sinds het bewaren in het spel bij kwam, zijn beginwaarde heeft; het
+  // bewaarde erover; en het scherm opnieuw op de schout. Geeft { gelukt, kop } of { gelukt: false, reden }.
+  T.laadSpel = function (plek) {
+    const gelezen = T.leesVanPlek(plek);
+    if (!gelezen.gelukt) return gelezen;
+    T.nieuwSpel();
+    T.zetSpel(S, gelezen);
+    zetCameraOpSchout();
     T.ui.reset(S);
-    if (!proefje && T.ui.toonBenoeming) T.ui.toonBenoeming(S);
+    return { gelukt: true, kop: gelezen.kop };
+  };
+
+  // Terug naar het titelscherm (het menu, en de twee eindschermen: je ambt kwijt, of gevallen). Daarachter
+  // wacht een nieuw spel, zoals toen de bladzijde openging.
+  T.naarTitelscherm = function () {
+    T.nieuwSpel();
+    if (!S.proefje) T.ui.toonTitel(S);
   };
 
   // Het beeld zoomt mee met het venster: op een groot scherm wordt het gehucht groter, op een
@@ -217,6 +234,22 @@
   // altijd. Dat houdt hem ook vanzelf uit de buurt van het paneel en de knoppen onderaan, want
   // zijn plek op het scherm staat dan vast in plaats van dat hij naar een bevroren camera toe kan
   // weglopen.
+  // Achter het titelscherm glijdt de camera langzaam rond het plein (vraag 48 C): een rondje in twee
+  // minuten, op de klok van het scherm, want de wereld staat daar stil.
+  function titelCamera() {
+    const rand = S.wereld.plein;
+    let mx = S.schout.x;
+    let my = S.schout.y;
+    if (rand && rand.length) {
+      mx = rand.reduce((n, [x]) => n + x, 0) / rand.length;
+      my = rand.reduce((n, [, y]) => n + y, 0) / rand.length;
+    }
+    const hoek = (S.tijd / 120) * 2 * Math.PI;
+    const p = T.naarScherm(mx + 4 * Math.cos(hoek), my + 4 * Math.sin(hoek));
+    return { x: p.x, y: p.y - 24 };
+  }
+  T.titelCamera = titelCamera;
+
   function cameraDoel() {
     const aanleiding = S.overgang && S.overgang.aanleiding;
     const lijst = S.gevecht
@@ -250,6 +283,9 @@
     // zo laat pauzeren of versnellen nooit een animatie stilvallen of doorschieten.
     T.tikKalender(S, dt);
     T.werkDagBij(S); // wakker worden na het slapen (js/dag.js)
+    // Elke ochtend vanzelf opslaan (js/opslaan.js, vraag 48 A); js/menu.js zegt het in de hoek.
+    const bewaard = T.werkOpslaanBij(S);
+    if (bewaard) T.ui.opgeslagen(bewaard);
     T.werkGebouwenBij(S); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
     T.werkMarskramerBij(S); // zijn poppetje: over de weg binnen, naar het plein, en weer weg (js/handel.js)
     T.werkHeerBij(S); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)
@@ -279,7 +315,7 @@
     if (S.modus === 'overgang' && S.wereld.wezens.every((e) => !e.pad.length)) T.beginGevecht(S);
     const doelAlpha = S.modus === 'gevecht' ? 1 : 0;
     S.rasterAlpha += (doelAlpha - S.rasterAlpha) * Math.min(1, dt * 5);
-    const doel = cameraDoel();
+    const doel = T.ui.titelOpen() ? titelCamera() : cameraDoel();
     const k = 1 - Math.exp(-dt * 5);
     S.camera.x += (doel.x - S.camera.x) * k;
     S.camera.y += (doel.y - S.camera.y) * k;
@@ -404,6 +440,8 @@
         S.bouwSoort = null;
         S.bouwMenuOpen = false;
         if (T.ui.toonBouwmenu) T.ui.toonBouwmenu(S);
+      } else {
+        T.ui.openMenu(S); // is er niets anders om weg te leggen: het menu (js/menu.js, vraag 48 D)
       }
       return;
     }
@@ -601,6 +639,21 @@
       }
       return T.doorzoekDorp(S);
     },
+    // Opslaan en laden zonder het menu (js/opslaan.js): Spel.debug.opslaan('2') zet het spel op plek 2
+    // (zonder plek: 1), Spel.debug.laden('auto') laadt wat er vanzelf bewaard is, en Spel.debug.spellen()
+    // zegt wat er op de plekken staat, het nieuwste bovenaan.
+    opslaan(plek = '1') {
+      const r = T.slaOp(S, String(plek));
+      return r.gelukt ? `Opgeslagen op plek ${plek}: ${r.kop.datum}.` : r.reden;
+    },
+    laden(plek = 'auto') {
+      const r = T.laadSpel(String(plek));
+      if (r.gelukt && T.ui.titelOpen()) T.ui.sluitTitel(S);
+      return r.gelukt ? `Geladen: ${r.kop.datum}.` : r.reden;
+    },
+    spellen() {
+      return T.opgeslagenSpellen().map((s) => `${s.plek}: ${s.kop.datum || '?'}, ${s.kop.bevolking} mensen${s.reden ? ` (${s.reden})` : ''}`);
+    },
     // Het slachtvenster nu openen (js/hud.js, T.ui.openSlachten), zonder op 1 slachtmaand te wachten.
     slachten() {
       if (!T.ui.openSlachten) return 'Het slachtvenster is er alleen in het gehucht.';
@@ -767,9 +820,10 @@
   };
 
   formaat();
-  // De pixel art gaat meteen laden; tot hij klaar is tekent het spel zijn vlakken. Achter de
-  // benoemingsbrief is dat nauwelijks te zien.
+  // De pixel art gaat meteen laden; tot hij klaar is tekent het spel zijn vlakken, achter het titelscherm.
+  // Een proefje (?kaart=) slaat het titelscherm over.
   T.sprites.laad();
   T.nieuwSpel();
+  if (!S.proefje) T.ui.toonTitel(S);
   requestAnimationFrame(lus);
 })(globalThis.Spel = globalThis.Spel || {});

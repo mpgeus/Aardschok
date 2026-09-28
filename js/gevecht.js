@@ -354,8 +354,8 @@
         'Gevallen',
         '<p>Je valt, en je staat niet meer op.</p>' +
           '<p>De heer schrijft de nieuwe schout dat die beter moet opletten: zo’n begrafenis kost ook weer geld.</p>',
-        'Opnieuw beginnen',
-        () => T.nieuwSpel(),
+        'Naar het titelscherm', // net als wie zijn ambt kwijt is (js/hud.js, T.ui.toonEinde)
+        () => T.naarTitelscherm(),
       );
     });
   };

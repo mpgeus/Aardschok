@@ -511,18 +511,13 @@
   };
 
   // ---------------------------------------------------------------------------------------------
-  // Onthouden, in de browser (localStorage). Kan dat niet (een toets, een privévenster), dan
-  // gewoon niet: het spel werkt dan met de standaard.
+  // Onthouden, in de browser: waar, zegt T.opslagPlek (js/opslaan.js), dezelfde plek als voor de
+  // opgeslagen spellen. Kan dat niet (een toets, een privévenster), dan gewoon niet: het spel werkt
+  // dan met de standaard.
   // ---------------------------------------------------------------------------------------------
 
   const SLEUTEL = T.OPSLAG_SLEUTEL + '.spelregels';
-  function opslag() {
-    try {
-      return typeof localStorage !== 'undefined' ? localStorage : null;
-    } catch (e) {
-      return null;
-    }
-  }
+  const opslag = () => T.opslagPlek();
 
   T.bewaarOpties = function (waar) {
     const o = waar || opslag();

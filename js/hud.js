@@ -762,8 +762,8 @@
       `<p>Twee keer achter elkaar gaf je de heer veel te weinig. Hij heeft een nieuwe schout benoemd: zijn neef, die ook niet kan tellen.</p>` +
         `<p>Jij bent weer een gewone dorpeling, en je buren weten nog precies wat je deed.</p>` +
         (jaren ? `<p class="einde-jaren">Wat de heer kreeg: ${jaren}</p>` : ''),
-      'Opnieuw beginnen',
-      () => location.reload(),
+      'Naar het titelscherm', // daar begin je opnieuw, of laad je een bewaard spel (js/menu.js)
+      () => T.naarTitelscherm(),
     );
   };
 

@@ -17,7 +17,7 @@ const WORTEL = path.join(__dirname, '..');
 
 // Wat het scherm opbouwt. Deze bestanden raken `document` aan zodra ze laden, of zetten een echte
 // T.ui neer, terwijl een toets zijn eigen stille T.ui wil (de berichten naar niemand).
-const ALLEEN_SCHERM = ['js/ui.js', 'js/hud.js', 'js/dialoog.js', 'js/main.js', 'gereedschap/wereld-tool.js'];
+const ALLEEN_SCHERM = ['js/ui.js', 'js/hud.js', 'js/dialoog.js', 'js/menu.js', 'js/main.js', 'gereedschap/wereld-tool.js'];
 
 // De scripts van een bladzijde, in volgorde, als pad vanaf de wortel. Commentaar telt niet mee, en
 // een <base href> ook wel (gereedschap/wereld.html laadt zo alles vanaf de wortel).

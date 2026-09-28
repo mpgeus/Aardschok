@@ -25,7 +25,9 @@ er geen apart pad voor "in het echt".
 2. **Geen `fetch` voor spullen.** `beelden/beschrijving.js` is met opzet een gewoon script. Dat
    lijkt een detail maar het is precies wat `file://` en de meeste schillen breekt.
 3. **Opslaan meteen als aparte laag.** In de browser opslag in de browser, in de schil een echt
-   bestand. Achter één functie, dan hoeft er later niets om.
+   bestand. Achter één functie, dan hoeft er later niets om. **Zo gebouwd** (28 sep, werklijst vraag 48):
+   `T.opslagPlek` in `js/opslaan.js` is die functie; de opgeslagen spellen en de spelregels gaan er allebei
+   langs. In de schil geeft hij iets met `getItem`, `setItem` en `removeItem` dat in een bestand schrijft.
 
 ## Wanneer wél een bouwstap (20 sep 2026)
 

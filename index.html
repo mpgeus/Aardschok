@@ -36,6 +36,7 @@
     <button id="brief-knop" class="paneel verborgen" title="De brief van de heer: wat hij op Sint-Maarten wil">Brief</button>
     <button id="slaap-knop" class="paneel verborgen" title="Slapen tot de ochtend (Z): kan 's avonds en 's nachts, bij je eigen huis"><kbd>Z</kbd> Slapen</button>
     <button id="spelregels-knop" class="paneel" title="Spelregels: wat je zelf instelt (O)"><kbd>O</kbd> Spelregels</button>
+    <button id="menu-knop" class="paneel" title="Het menu: opslaan, laden, en terug naar het titelscherm (Esc)"><kbd>Esc</kbd> Menu</button>
   </div>
 
   <!-- Het bouwmenu (js/hud.js, T.ui.toonBouwmenu): de soorten van de huidige trede, met hun
@@ -68,6 +69,11 @@
   <!-- De spelregels (js/hud.js, T.ui.openSpelregels; de lijst in js/opties.js): de keuzes, de
        namen, en de werkbank met alle getallen. -->
   <div id="spelregels" class="paneel verborgen"></div>
+
+  <!-- Het titelscherm en het menu (js/menu.js; de regels in js/opslaan.js): het spel opent op het
+       titelscherm, en in het spel opent Esc het menu. Opslaan, laden, de spelregels, en terug. -->
+  <div id="menu" class="verborgen"></div>
+  <div id="opgeslagen" aria-live="polite">Opgeslagen</div>
 
   <div id="plek"></div>
   <div id="volgorde" class="paneel"></div>
@@ -112,7 +118,8 @@
     Kalender: <kbd>P</kbd> pauze/hervat · <kbd>-</kbd> <kbd>=</kbd> trager/sneller · <kbd>Z</kbd> slapen, bij je huis<br>
     <kbd>B</kbd> bouwen · <kbd>Esc</kbd> of rechtsklik legt een gebouw weer weg<br>
     <kbd>V</kbd> velden: akker, weide of braak<br>
-    <kbd>O</kbd> spelregels: wat je zelf instelt
+    <kbd>O</kbd> spelregels: wat je zelf instelt<br>
+    <kbd>Esc</kbd> menu: opslaan en laden
   </div>
 
   <!-- Gewone scripts, geen modules: zo werkt het spel ook als je index.html los opent.
@@ -159,8 +166,10 @@
   <script src="js/gevecht.js"></script>
   <script src="js/doorkijk.js"></script>
   <script src="js/tekenen.js"></script>
+  <script src="js/opslaan.js"></script>
   <!-- Na alle regels en gesprekken: de spelregels nemen hun waarden als standaard. -->
   <script src="js/opties.js"></script>
+  <script src="js/menu.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
