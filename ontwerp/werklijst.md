@@ -36,8 +36,9 @@ al van af). Elk stuk begint met een plan voor Marcel.
    zoeken, de inner die je kunt bespelen en de winter die je ziet aankomen: hoe de kern nu speelt, weet nog
    niemand. Een agent kan het, zoals de vorige keer, en Marcel speelt ook: op `main`, waar sinds 28 sep
    alles in staat, en zeg op welke commit. De getallen bijstellen (het goud, de kelders, de honger, de
-   inner) komt daarna, als Marcel wil ("We gaan later finetunen"). **Loopt:** het plan staat bij vraag 45
-   en wacht op Marcel (twaalfde sessie, 28 sep).
+   inner) komt daarna, als Marcel wil ("We gaan later finetunen"). **Loopt** (twaalfde sessie, 28 sep): het
+   plan staat bij vraag 45, en Marcel koos het zoals voorgesteld ("A ja B ja C ja D ja"): een script dat
+   blijft, vier spelers, drie jaren elk.
 3. **Opslaan, Verder en een titelscherm** (wacht op 33b, en op een naam, vraag 8). Zonder opslaan speelt
    niemand een jaar van een uur uit.
 4. **De afrekening na het eerste jaar** (wacht op 33a): wat je gaf, wat je achterhield en wat daarvan
@@ -548,6 +549,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     hoe het voelt" (de inner bespelen, de winter). Vragen: **A**, een script dat blijft (voorstel), of een
     agent zoals op 27 sep? **B**, deze vier spelers? **C**, drie jaren per speler? **D**, niets bijstellen
     tijdens de test?
+    **Beantwoord (Marcel, 28 sep): "A ja B ja C ja D ja, push it".** Een script dat blijft, deze vier
+    spelers, drie jaren per speler, en niets bijstellen tijdens de test.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
