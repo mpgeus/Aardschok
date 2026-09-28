@@ -48,10 +48,12 @@ aan het eind moet het zeggen hoe het ging. Op 30× duurt zo'n jaar ongeveer een 
    (`S.heer.jaren`, `T.ui.toonEinde` in `js/hud.js`) zijn er al; dit is hetzelfde scherm voor wie wint.
 2. **Opslaan en verder spelen.** Nu begint elk herladen een nieuw spel, met nieuwe boeren. Een jaar is
    een uur of meer; zonder opslaan speelt niemand het uit. Voorstel: vanzelf opslaan elke ochtend, één
-   plek, en bij het openen "Verder" (vraag 33b).
+   plek, en bij het openen "Verder" (vraag 33b). **Af** (28 sep, dertiende sessie; werklijst, vraag 48):
+   vanzelf elke ochtend, en vijf eigen plekken.
 3. **Een titelscherm**: Nieuw spel, Verder, Spelregels. Marcel koos op 25 sep de benoemingsbrief in
    plaats van een titelscherm; met opslaan is er één nodig om te kiezen tussen nieuw en verder. De brief
-   blijft het begin van een nieuw spel.
+   blijft het begin van een nieuw spel. **Af** (28 sep): het titelscherm, met het gehucht erachter, en een
+   menu onder `Esc`.
 4. **Uitleg voor wie het niet kent.** Nu is er alleen de brief. Het spel heeft al een vak voor "de
    opdracht van dit moment" (linksboven, `T.ui.opdracht` in `js/ui.js`) en een questsysteem met
    gereedschap, maar er zijn nog geen quests. Voorstel: de eerste weken als een paar korte opdrachten
@@ -98,7 +100,7 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 4. Een speeltest op de stand van nu, en de getallen bijstellen. **Gespeeld** (28 sep): een script speelde
    twaalf jaren (hieronder, "De speeltest van 28 sep"). Het bijstellen komt later, met een menu met opties
    (Marcel, 28 sep: "Niet nu. Dit stellen we later in."; werklijst, vraag 46).
-5. Opslaan, Verder en een titelscherm.
+5. ~~Opslaan, Verder en een titelscherm.~~ Af (28 sep).
 6. De afrekening na het eerste jaar.
 7. De eerste weken als opdrachten.
 8. Een tester die het niet kent laten spelen, en kijken waar hij vastloopt.

@@ -10,23 +10,23 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (28 sep 2026, in de dertiende sessie): twee plannen wachten op Marcel
+## De stand (28 sep 2026, na de dertiende sessie): opslaan, het menu en het titelscherm zijn er
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
-Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met de benoemingsbrief van
-de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
-`npm test`: 553/553.
+Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, en Nieuw spel geeft de
+benoemingsbrief van de heer; `Z` is slapen bij je huis, `Esc` het menu, en het spel slaat elke ochtend zelf
+op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 563/563.
 
 **Waar het werk staat:** de twaalfde sessie staat in `main`. De dertiende staat op
 `claude/werklijst-doorzetten-kfeqsq` en nog niet in `main` (Marcel vroeg het nog niet). Hoe een eigen branch en
 `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij de prioriteit hieronder. Marcel beantwoordde 33a, 33b en 8 (28 sep),
-dus punt 3 en 4 wachten niet meer op een besluit, maar op zijn keuze uit een plan: vraag 48 (opslaan, het menu
-en het titelscherm, punt 3) en vraag 47 (de eerste weken als opdrachten, punt 5). Vraag hem daarnaar, en
-bouw punt 3 zodra hij kiest. Het plan voor punt 4 (de afrekening) komt daarna.
+**Waar de volgende sessie begint:** bij de prioriteit hieronder. Punt 3 is af (opslaan, het menu en het
+titelscherm). Nu punt 4, de afrekening na het eerste jaar: begin met een plan voor Marcel (33a is beantwoord:
+drie getallen naast elkaar, en de grenzen in de werkbank). Vraag 47 (de eerste weken als opdrachten, punt 5)
+wacht nog op Marcels A, B en C.
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; de volgorde is een
 voorstel van Claude). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat een proefversie van één
@@ -46,20 +46,19 @@ al van af). Elk stuk begint met een plan voor Marcel.
    een menu met opties etc."). Dan speelt `npm run speeltest` dezelfde twaalf jaren opnieuw. Er is al een
    venster met de spelregels en een werkbank met alle getallen (`O`, `js/opties.js`); het menu kan daarop
    bouwen, bijvoorbeeld vanuit het titelscherm van punt 3.
-3. **Opslaan, Verder en een titelscherm.** Zonder opslaan speelt niemand een jaar van een uur uit. Marcel
-   koos op 28 sep: vanzelf opslaan, en ook zelf, met een menu en een titelscherm (33b); de naam blijft
-   Aardschok, op één plek (vraag 8; gebouwd, zie onder Af). Het plan staat bij vraag 48 (wacht op Marcel).
-4. **De afrekening na het eerste jaar:** wat je gaf, wat je achterhield en wat daarvan gevonden werd, en hoe
-   het dorp erbij staat. Marcel koos op 28 sep het voorstel van 33a, en spelen beslist waar goed ophoudt:
-   die grenzen staan in de werkbank. Het plan komt na punt 3.
+3. **Af (28 sep, dertiende sessie): opslaan, Verder en een titelscherm** (vraag 48; Marcel: "A ja B ja C ja
+   D ja"). Het spel slaat elke ochtend zelf op, je hebt vijf eigen plekken, het opent op een titelscherm met
+   het gehucht erachter, en `Esc` is het menu. De naam blijft Aardschok, op één plek (vraag 8). Zie onder Af.
+4. **Nu: de afrekening na het eerste jaar:** wat je gaf, wat je achterhield en wat daarvan gevonden werd, en
+   hoe het dorp erbij staat. Marcel koos op 28 sep het voorstel van 33a, en spelen beslist waar goed ophoudt:
+   die grenzen staan in de werkbank. Begin met een plan.
 5. **De eerste weken als opdrachten,** zodat wie het niet kent, weet wat hij moet doen. Het vak voor de
    opdracht en de quests zijn er al. Het plan staat bij vraag 47 (28 sep, dertiende sessie; wacht op Marcel).
 6. **Een tester die het niet kent** laten spelen (wacht op 33d: een bladzijde op internet, of een
    programma).
 
-*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* vraag 48 (het plan voor opslaan, het menu en
-het titelscherm), vraag 47 (het plan voor de eerste weken), en 33d (hoe een tester het krijgt, in
-`speelbaar.md`). 33a, 33b en 8 beantwoordde Marcel op 28 sep. Het bijstellen na de speeltest (vraag 46) komt
+*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* vraag 47 (het plan voor de eerste weken), en
+33d (hoe een tester het krijgt, in `speelbaar.md`). 33a, 33b, 8 en 48 beantwoordde Marcel op 28 sep. Het bijstellen na de speeltest (vraag 46) komt
 later, met een menu met opties (Marcel, 28 sep).
 
 *3. Na de proefversie* (`speelbaar.md`, "Wat kan wachten"):
@@ -91,6 +90,11 @@ volgorde: deze lijst is het nieuwe voorstel).
   opslag in de browser verandert bewust niet mee. Zie onder Af.
 - **Een plan voor punt 3, opslaan, het menu en het titelscherm** (vraag 48), na een meting: alles wat het spel
   onthoudt, zit in `Spel.S`, 380 kB, en wegschrijven kost 5 ms. Dus alles in één keer bewaren.
+- **Punt 3 is af** (Marcel: "A ja B ja C ja D ja, push it"): het spel slaat elke ochtend zelf op, je hebt vijf
+  eigen plekken, het opent op een titelscherm met het gehucht erachter, en `Esc` is het menu. Zie onder Af.
+- **Een fout gevonden en gerepareerd:** een nieuw spel wiste niet wat de regels onderweg in de spelstaat
+  zetten (de heer, de inner, het slapen, het einde). "Opnieuw beginnen" na een val in een gevecht nam dat dus
+  mee naar het volgende spel; na je ambt kwijt herlaadde de bladzijde, en daar viel het niet op.
 
 **Wat er in de twaalfde sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **De speeltest als script** (vraag 45; Marcel: "A ja B ja C ja D ja, push it"). `gereedschap/speeltest/`
@@ -711,6 +715,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     opslaat, het menu opslaat, laadt en naar het titelscherm gaat, een geladen jaar afloopt als een jaar dat
     nooit bewaard werd, en `npm test` groen is. Vragen: **A**, elke ochtend op één plek? **B**, vijf eigen
     plekken? **C**, het titelscherm zo, met het gehucht erachter? **D**, het menu zo?
+    **Beantwoord (Marcel, 28 sep): "A ja B ja C ja D ja, push it".** Alle vier zoals voorgesteld. (Claude las
+    het als het antwoord op vraag 48, want alleen die had een D; vraag 47 staat nog open.)
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -1011,6 +1017,18 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 28 sep 2026 — **Opslaan, Verder en een titelscherm** (dertiende sessie; punt 3 van de prioriteit, vraag 48,
+  Marcel: "A ja B ja C ja D ja, push it"). `js/opslaan.js` bewaart heel `Spel.S` behalve het scherm
+  (`T.schermVelden`), met de verzamelingen en alles wat elkaar aanwijst heel, achter één functie
+  (`T.opslagPlek`, de opslag van de browser; straks een bestand). Elke ochtend, als de mensen opstaan, slaat het
+  spel zelf op (A; "Opgeslagen" rechtsonder), en er zijn vijf eigen plekken (B). Het spel opent op het
+  titelscherm (C, `js/menu.js`): de naam, Verder, Nieuw spel, Laden en Spelregels, met het gehucht erachter en
+  de camera die langzaam rond het plein glijdt. In het spel opent `Esc` of de knop Menu het menu (D): Verder
+  spelen, Opslaan, Laden, Spelregels, Naar het titelscherm; de twee eindschermen gaan ook daarheen. Een
+  proefje (`?kaart=`) slaat niets op. Getoetst: `test/opslaan.test.cjs` (bewaren, laden en weer bewaren geeft
+  dezelfde tekst; wat elkaar aanwijst, blijft aan elkaar vast), en de proef met opslaan in de speeltest
+  (`npm run speeltest -- braaf --zaad 1 --opslaan`: opslaan op 1 oogstmaand via het menu, herladen, Verder, en
+  het jaar moet letter voor letter aflopen als zonder opslaan). De speeltest klikt voortaan zelf Nieuw spel.
 - 28 sep 2026 — **De naam op één plek** (dertiende sessie; vraag 8, Marcel: "De naam blijft aardschok voor nu.
   We maken later iets anders. Zorg dat we dat makkelijk door het hele spel kunnen aanpassen"). `T.NAAM` in
   `js/naam.js`, het eerste script van elke bladzijde: het tabblad van het spel en van het gereedschap (`{naam}`

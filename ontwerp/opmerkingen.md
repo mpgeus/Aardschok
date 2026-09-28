@@ -333,6 +333,18 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Een questweg kan nog "jaren" kosten** (`js/quest.js`, KOSTEN, en de toets van drie antwoorden).
   In het nieuwe spel kost niets meer jaren; misschien wordt het "tijd" of "leven". Beslissen als de
   quests van het gehucht komen.
+- **Opslaan, het menu en het titelscherm, wat opviel** (28 sep, dertiende sessie; werklijst, vraag 48):
+  - **De kaart van het gehucht heet een proefkaart** (`"proef": true` in `kaarten/gehucht.betekenis.json`),
+    zodat de keuring zijn weg naar nergens met rust laat. Daardoor zegt `w.proef` niet of je een proefje
+    speelt; dat onthoudt het spel nu zelf (`S.proefje`, bij `?kaart=`). Eigenlijk hoort de keuring de weg
+    naar nergens anders toe te staan, en is het gehucht geen proefkaart.
+  - **De melding over de weg naar "wereld"** komt nu bij elk nieuw spel, en dus ook bij elk laden en elke
+    keer terug naar het titelscherm (hieronder, "Na de namen"): laden begint eerst een nieuw spel.
+  - **Een opgeslagen spel is 380 kB, en vier vijfde daarvan is de kaart.** Zes plekken passen ruim in wat
+    een browser bewaart (zo'n 5 MB). Groeit de kaart met de stad mee, dan kan de kaart eruit, en bij het
+    laden uit Tiled komen; in de verpakking voor Steam, met een bestand, speelt het niet.
+  - **Laden vraagt niets als het titelscherm open is**, want dan is er nog geen spel om kwijt te raken; in
+    het menu wel. "Nieuw spel" vraagt het ook, als er iets vanzelf bewaard is: dat wordt overschreven.
 - **`server.oud.cjs` lijkt een overblijfsel** (28 sep, dertiende sessie, bij de naam op één plek). Het kwam op
   22 sep mee in een commit die met de oude server iets nagemeten had (`e8ab95b`), en niets gebruikt het:
   `npm start` draait `server.cjs`. Het mag weg.
