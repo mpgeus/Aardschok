@@ -9,6 +9,41 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wat de speeltest van 28 sep in de regels vond** (twaalfde sessie; vraag 45; `speelbaar.md`, "De speeltest
+  van 28 sep"). Niets hiervan is veranderd: Marcel koos "niets bijstellen tijdens de test" (D).
+  - **Wie de heer op de weg betaalt, krijgt geen soldaten.** De soldaten gaan pas zoeken, en de heer kijkt pas
+    rond, als hij op het plein staat (`T.heerStaatErOp`, `js/heer.js`). Betalen kan al zodra hij over de weg
+    komt (`T.heerWacht`), en wie dat doet, is hem kwijt voor er iets gebeurt. Voorstel: pas betalen als hij
+    op het plein staat ("Eerst wil ik zien wat ik kom halen"), of de soldaten zoeken ook als hij al betaald
+    is. De spelers van de speeltest wachten op "De heer staat op het plein".
+  - **Vanaf middernacht van zijn dag is de inner "in het dorp".** Zijn bezoek begint om middernacht, maar hij
+    loopt pas om negen uur binnen; daartussen zet je niets weg ("De inner is in het dorp. Wie nu graan
+    versjouwt, valt op."). Bij de heer net zo. Wie de laatste nacht wil gebruiken, merkt het pas als het te
+    laat is. Voorstel: `wieIsEr` (`js/verstoppen.js`) kijkt of zijn poppetje er is, niet of zijn bezoek begon.
+  - **De schout blijft staan als er iemand op de volgende tegel staat, en de klik is weg** (`beweeg`,
+    `js/anim.js`). Met 37 mensen gebeurt dat vaak: je klikt op een kelder, hij loopt een eind, en het venster
+    gaat niet open. De speler in de speeltest klikt dan opnieuw; een mens denkt dat de klik niet werkte.
+    Voorstel: een eind verder opnieuw een pad zoeken, of even wachten tot de tegel vrij is.
+  - **Of een koe ligt of graast, gaat op de klok van het scherm** (`T.rustVanDier(m, S.tijd)`,
+    `js/verkennen.js`), niet op die van de wereld. Op 30× wisselt een koe dus dertig keer minder vaak per dag.
+    Klein, maar het is de enige regel die zo telt; de speeltest moest er de klok voor op nul zetten om
+    hetzelfde jaar twee keer gelijk te spelen.
+  - **De inner is uit te schakelen** (het grootste; werklijst, vraag 46, A). Wie hem bij de weg opwacht, drie uur
+    met hem praat en daarna met hem heen en weer loopt waar hij niets nieuws ziet, houdt hem tot zonsondergang
+    bezig: in alle drie de jaren van de slimme speler zag hij geen gebouw en geen akkertegel, en vroeg de heer
+    28 graan en 2 goud in plaats van 88 graan en 25 goud. Hij volgt wie naast hem loopt zolang die loopt
+    (`T.werkInnerBij`, `js/inner.js`); alleen stilstaan maakt hem ongeduldig.
+  - **De argwaan stijgt bijna nooit** (vraag 46, C). In twaalf jaren bleef hij 0 tot 4%, ook bij wie 250 graan
+    wegzette of de inner niets liet zien: hij groeit pas onder 60% van het graan dat de velden beloven die hij
+    zag, en wie hem geen veld laat zien, belooft niets. De heer kiest dus nooit zelf waar de soldaten zoeken,
+    en kijkt op het plein niet rond (dat doet hij pas met argwaan).
+  - **Het goud van de heer haalt het gehucht niet** (vraag 46, D). Hij vraagt 25 goud, het gehucht heeft er na
+    de houthakker 16. Ook wie alles geeft, krijgt elk jaar een boete.
+  - **De winterberichten rekenen niet met wat verstopt ligt.** Op 1 slachtmaand zei het dorp bij de luie spelers
+    "Het hout en het eten halen de winter", en in louwmaand stierven ze van de honger: de heer nam zijn deel,
+    zijn soldaten aten mee, en 240 graan lag in de kelders. Het bericht in de winter kan zeggen "en in de
+    kelders ligt nog 240 graan" (hoort bij de eerste regel onder "De winter zien aankomen" hieronder).
+
 - **De winter zien aankomen, wat nog ruw is** (28 sep, elfde sessie, na punt 1 van de prioriteit; `spel.md`,
   "Het dorp: mensen, behoeften en de winter"):
   - Het bericht vooraf rekent met wat er ligt en wat er de laatste dag bijkwam, niet met wat de heer op

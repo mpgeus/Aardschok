@@ -83,9 +83,9 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
    (27 sep).
 3. ~~De winter zichtbaar maken: een waarschuwing als het hout of het eten de winter niet haalt, en in het
    bericht waaraan iemand stierf.~~ Af (28 sep).
-4. Een speeltest door Marcel zelf, met de speeltest hieronder erbij, en de getallen bijstellen. Op de
-   stand van nu: de speeltest hieronder liep zonder stap 1 tot en met 3, en zonder de inner die je kunt
-   bespelen.
+4. Een speeltest op de stand van nu, en de getallen bijstellen. **Gespeeld** (28 sep): een script speelde
+   twaalf jaren (hieronder, "De speeltest van 28 sep"); Marcel speelt ook. Het bijstellen wacht op Marcel
+   (werklijst, vraag 46).
 5. Opslaan, Verder en een titelscherm.
 6. De afrekening na het eerste jaar.
 7. De eerste weken als opdrachten.
@@ -99,6 +99,84 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33b.** Opslaan: vanzelf elke ochtend op één plek, of ook zelf opslaan op meer plekken?
 - **33c.** ~~Stap 3 van de inner (praten, afleiden, omkopen): vóór de proef of erna?~~ Ingehaald: het is er (27 sep).
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma?
+
+## De speeltest van 28 sep
+
+Een script speelde het gehucht twaalf jaren, van 1 lentemaand 1323 tot 1 grasmaand 1324: vier spelers,
+elk met zaad 1, 2 en 3 (Marcel koos het zo, werklijst, vraag 45). Het spel stond op commit `9f59661`, zoals
+op `main` (`ba8ff55`), en er is niets bijgesteld. Het script staat in `gereedschap/speeltest/`
+(`npm run speeltest`): het speelt het spel zoals het draait, klikt en drukt op de knoppen van de vensters, en
+hetzelfde zaad geeft precies hetzelfde jaar. De cijfers per maand, in grafieken, staan op de pagina "Een jaar
+in het gehucht" (https://claude.ai/artifact/WVebn7ycRcPLNuJrtzvQbr), boven die van 27 sep.
+
+De spelers:
+- **Braaf** geeft de heer alles wat hij vraagt.
+- **Lui, 30% en 60% weg**, zoals B en C van 27 sep: hij zet overdag graan en goud weg in de kelders die het
+  dichtst bij zijn, de dag vóór de inner komt en op 1 slachtmaand; hij loopt niet mee en haalt niets terug.
+- **Slim, 60% weg**: hij bouwt een kapel, zet 's nachts weg als niemand kijkt (niet bij de roddelaar),
+  wacht de inner op bij de weg, praat drie uur met hem, geeft hem een geschenk, loopt met hem heen en weer
+  waar hij niets nieuws ziet, leidt de soldaten langs lege kelders, betaalt de heer 90%, en haalt na
+  Sint-Maarten alles terug.
+- Alle vier bouwen een houthakker als het dorp zegt dat het hout de winter niet haalt.
+
+**Het jaar loopt.** Twaalf keer dertien maanden zonder één fout in de console, en geen venster bleef hangen.
+
+| gemiddeld over drie zaden | braaf | lui, 30% weg | lui, 60% weg | slim, 60% weg |
+|---|---|---|---|---|
+| De inner zag | 11 van 11 gebouwen, 170 van 209 akkertegels | 11, 172 | 11, 173 | **0 van 12, 0** |
+| De heer vroeg | 88 graan, 25 goud | 71 graan, 25 goud | 55 graan, 24 goud | **28 graan, 2 goud** |
+| Gegeven | 85%: boete | 75%: boete | 62%: boete en soldaten | 83%: boete van 3 goud |
+| Weggezet | niets | 230 graan, 5 goud | 250 graan, 10 goud | 250 graan, 5 goud |
+| De soldaten vonden | niets | niets | niets | niets |
+| Na Sint-Maarten (graan, goud) | 397, 0 | 414, 5 (230 verstopt) | 429, 10 (250 verstopt) | 437, 5 |
+| Mensen (begin 26) | 37 | 33 | 28 | 37 |
+| Dood van de kou, van de honger | 0, 0 | 0, 4 | 0, 9 | 0, 0 |
+| Tevreden aan het eind | 52% | 52% | 54% | 67% |
+| Ongezaaid in lentemaand 1324 | 4% | 100% | 100% | 0% |
+
+**Wat opviel, van belangrijk naar minder:**
+
+1. **De inner is uit te schakelen.** Bij de slimme speler zag hij in alle drie de jaren niets: geen gebouw en
+   geen akkertegel. Wie hem opwacht waar de weg de kaart op komt, drie uur met hem praat (dan kijkt hij niet)
+   en daarna met hem heen en weer loopt waar hij niets nieuws ziet, houdt hem tot zonsondergang bezig. Hij
+   volgt wie naast hem loopt, en niets dwingt hem het dorp te zien. Zijn rapport is dan alleen het graan in
+   de schuur en de kist, en de heer vraagt 23 tot 35 graan en 1 tot 3 goud, tegen 85 tot 91 graan en 25 goud
+   bij wie niets doet. Dat is heel "arm lijken" in één zet, en er hoeft niets voor verstopt te worden. Wie
+   niet meeloopt, laat hem 10 of 11 van de 11 gebouwen en zo'n 172 van de 209 akkertegels zien.
+2. **Verstoppen levert weinig op.** De heer vraagt 15% van het graan dat de inner telde. Wie 250 graan
+   wegzet, betaalt er zo'n 33 minder (lui 60%: 55 in plaats van 88). Het goud dat hij vraagt, blijft gelijk
+   (24 of 25), want dat is hoofdgeld, per gebouw en een deel van de kist.
+3. **Wie verstopt en niet terughaalt, verhongert.** Wat verstopt ligt, eet niemand en zaait niemand. De luie
+   spelers lieten in lentemaand 1324 alle 179 akkertegels ongezaaid, en in louwmaand en sprokkelmaand stierven
+   er gemiddeld 4 (30%) en 9 (60%) van de honger, in één jaar 15. Het bericht op 1 slachtmaand zei in alle zes
+   "Het hout en het eten halen de winter": het rekent niet met wat de heer neemt, met zijn soldaten die
+   meeëten, en met wat in de kelders ligt. Het bericht in de winter ("Het eten is over 15 dagen op") zegt niet
+   dat er nog 240 graan verstopt ligt.
+   De slimme speler haalde alles terug: niemand dood, alles gezaaid.
+4. **De soldaten vonden in twaalf jaren niets, en de argwaan bleef 0 tot 4%.** De slimme speler leidde ze
+   langs lege kelders, zoals bedoeld. Bij de luie spelers zochten ze in volle kelders, ook in die van de
+   schout (60% kans), maar het lot viel drie keer boven de 60% (0,85, 0,96 en 0,89; nagerekend, het lot zelf
+   is eerlijk). Met drie zaden zegt dat weinig: gemiddeld zou een luie speler per jaar zo'n 36 graan en de helft
+   van zijn verstopte goud kwijtraken, ongeveer wat verstoppen hem aan de rekening scheelt. Omdat de argwaan niet steeg, koos de heer
+   nooit zelf waar ze zochten, en werd het hele dorp nooit doorzocht. Er valt dus nog niets te gokken: wie
+   het weet, leidt ze; wie het niet weet, heeft geluk of pech.
+5. **Ook wie alles geeft, krijgt een boete.** De heer vraagt 25 goud: hoofdgeld, per gebouw, en 15% van de
+   kist. Het gehucht begint met 20 goud, de houthakker kost er 4, en alleen de marskramer brengt meer. Braaf
+   gaf al zijn goud (16) en kwam op 85%: een boete van 14 goud erbij, volgend jaar.
+6. **De winter: de waarschuwing werkt.** Op 1 herfstmaand zei het dorp "Het hout haalt 26 van de 90 dagen",
+   de spelers bouwden een houthakker, en niemand stierf van de kou (op 27 sep 17 van de 37). De slimme speler
+   kon hem pas op 1 slachtmaand betalen (zijn goud ging op aan de kapel en het geschenk), en ook dat was op
+   tijd. Eén houthakker is ruim genoeg: aan het eind lag er gemiddeld 135 tot 228 hout.
+7. **Getuigen.** Wie overdag verstopte, werd drie tot vijf keer per jaar gezien, en één keer vertelde de
+   roddelaar het in de herberg; 's nachts zag niemand de slimme speler. Omdat de soldaten niets vonden, had het
+   geen gevolg.
+8. **De kapel maakt tevreden.** De slimme speler eindigde op 67% (braaf 52%): de kapel geeft het dorp een kerk.
+9. **Voorjaarshonger, zoals op 27 sep.** Van bloeimaand tot hooimaand ligt er geen graan, en op 1 grasmaand
+   1324 weer niet: de oogst haalt het jaar net niet.
+
+Wat onderweg aan de regels opviel (betalen op de weg, de inner vanaf middernacht, de schout die blijft staan),
+staat in `opmerkingen.md`, bovenaan "Het spel". Wat nu bijgesteld zou kunnen worden, is vraag 46 in de
+werklijst.
 
 ## De speeltest van 27 sep
 

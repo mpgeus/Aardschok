@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (28 sep 2026, na de elfde sessie): alles staat in main; nu een speeltest op de stand van nu
+## De stand (28 sep 2026, na de twaalfde sessie): de speeltest is gespeeld; vraag 46 wacht op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
@@ -19,9 +19,10 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met 
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
 `npm test`: 550/550.
 
-**Waar het werk staat:** alles staat in `main` (Marcel, 28 sep: "Zet het naar main"), ook de elfde
-sessie (de winter zichtbaar; ook op `claude/werklijst-doorzetten-cxck6z`). Hoe een eigen branch en `main`
-samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** tot en met de elfde sessie staat alles in `main` (Marcel, 28 sep: "Zet het naar
+main"). De twaalfde sessie (de speeltest) staat op `claude/werklijst-doorzetten-465m5t` en nog niet in
+`main`; ze raakt het spel zelf niet, alleen `gereedschap/speeltest/`, `ontwerp/` en `CLAUDE.md`. Hoe een
+eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; de volgorde is een
 voorstel van Claude). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat een proefversie van één
@@ -32,13 +33,13 @@ al van af). Elk stuk begint met een plan voor Marcel.
 1. **Af (28 sep, elfde sessie): de winter zichtbaar maken.** Een waarschuwing vooraf en in de winter als
    het hout of het eten de winter niet haalt, het hout rood in de balk, en in het bericht waaraan iemand
    stierf (vraag 44; zie onder Af).
-2. **Nu: een speeltest op de stand van nu.** De vorige liep op `main` van vóór de soldaten die altijd
-   zoeken, de inner die je kunt bespelen en de winter die je ziet aankomen: hoe de kern nu speelt, weet nog
-   niemand. Een agent kan het, zoals de vorige keer, en Marcel speelt ook: op `main`, waar sinds 28 sep
-   alles in staat, en zeg op welke commit. De getallen bijstellen (het goud, de kelders, de honger, de
-   inner) komt daarna, als Marcel wil ("We gaan later finetunen"). **Loopt** (twaalfde sessie, 28 sep): het
-   plan staat bij vraag 45, en Marcel koos het zoals voorgesteld ("A ja B ja C ja D ja"): een script dat
-   blijft, vier spelers, drie jaren elk.
+2. **Af (28 sep, twaalfde sessie): een speeltest op de stand van nu** (vraag 45). Een script dat blijft
+   (`npm run speeltest`) speelde twaalf jaren: vier spelers, elk drie keer. Het jaar loopt zonder fout, en de
+   winter doodt niet meer. Maar de inner is uit te schakelen (met praten en meelopen zag hij niets, en vroeg
+   de heer 28 graan en 2 goud in plaats van 88 en 25), verstoppen levert weinig op, de soldaten vonden nooit
+   iets, en ook wie alles geeft, krijgt een boete. Zie `speelbaar.md`, "De speeltest van 28 sep".
+   **Nu: de getallen bijstellen, vraag 46** (wacht op Marcel), en Marcel speelt zelf ("We gaan later
+   finetunen"). Na het bijstellen speelt `npm run speeltest` dezelfde twaalf jaren opnieuw.
 3. **Opslaan, Verder en een titelscherm** (wacht op 33b, en op een naam, vraag 8). Zonder opslaan speelt
    niemand een jaar van een uur uit.
 4. **De afrekening na het eerste jaar** (wacht op 33a): wat je gaf, wat je achterhield en wat daarvan
@@ -48,9 +49,10 @@ al van af). Elk stuk begint met een plan voor Marcel.
 6. **Een tester die het niet kent** laten spelen (wacht op 33d: een bladzijde op internet, of een
    programma).
 
-*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* 33a (wat is goed na het eerste jaar), 33b
-(opslaan), 33d (hoe een tester het krijgt), in `speelbaar.md`; en 8, een naam, voor het titelscherm
-(voorstel Martinmas, of Schout; `verpakken.md`).
+*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* 46 (wat bijstellen na de speeltest: de inner,
+verstoppen, de argwaan, het goud, de kleine gaten); 33a (wat is goed na het eerste jaar), 33b (opslaan), 33d
+(hoe een tester het krijgt), in `speelbaar.md`; en 8, een naam, voor het titelscherm (voorstel Martinmas, of
+Schout; `verpakken.md`).
 
 *3. Na de proefversie* (`speelbaar.md`, "Wat kan wachten"):
 - de rest van punt 4: het bos met de kudde (een idee met vier vragen in `opmerkingen.md`, vraag 43), de
@@ -70,6 +72,20 @@ helpt een tester zichzelf te vinden, dus misschien toch vóór de proef), 22 (de
 volgorde: deze lijst is het nieuwe voorstel).
 
 *Wat nog ruw is:* `opmerkingen.md`, bovenaan.
+
+**Wat er in de twaalfde sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
+- **De speeltest als script** (vraag 45; Marcel: "A ja B ja C ja D ja, push it"). `gereedschap/speeltest/`
+  speelt het spel zoals het draait, in een onzichtbare browser: de speler klikt, loopt en drukt op de knoppen
+  van de vensters, en een luisteraar op de regels schrijft op wat er gebeurt. Hetzelfde zaad geeft precies
+  hetzelfde jaar (daarvoor moest het lot bij het begin van het jaar opnieuw op het zaad, en de klok van het
+  scherm op nul, want of een koe ligt, hangt daarvan af). Een jaar kost twee tot zeven minuten.
+- **Twaalf jaren gespeeld**, op het spel van `9f59661` (zoals `main`), zonder iets bij te stellen. De uitslag
+  staat in `speelbaar.md`, en in grafieken op de pagina "Een jaar in het gehucht"
+  (https://claude.ai/artifact/WVebn7ycRcPLNuJrtzvQbr), boven die van 27 sep. Wat nu bij te stellen is,
+  staat in vraag 46.
+- **Drie gaten in de regels gevonden** (`opmerkingen.md`, bovenaan): wie de heer op de weg betaalt, krijgt
+  geen soldaten; vanaf middernacht van zijn dag telt de inner al als in het dorp; en de schout blijft staan
+  als er iemand op de volgende tegel staat, en dan is de klik weg. Niets veranderd (Marcel koos D).
 
 **Wat er in de elfde sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **De winter is zichtbaar** (punt 1 van de prioriteit, vraag 44). Op 1 herfstmaand en 1 slachtmaand zegt
@@ -550,7 +566,37 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     agent zoals op 27 sep? **B**, deze vier spelers? **C**, drie jaren per speler? **D**, niets bijstellen
     tijdens de test?
     **Beantwoord (Marcel, 28 sep): "A ja B ja C ja D ja, push it".** Een script dat blijft, deze vier
-    spelers, drie jaren per speler, en niets bijstellen tijdens de test.
+    spelers, drie jaren per speler, en niets bijstellen tijdens de test. **Gespeeld (28 sep, twaalfde
+    sessie):** de uitslag staat in `speelbaar.md`, "De speeltest van 28 sep", en wat nu bij te stellen is,
+    in vraag 46.
+46. **Wat bijstellen na de speeltest van 28 sep** (Claude, 28 sep, twaalfde sessie; wacht op Marcel). Twaalf
+    jaren liepen zonder fout, en de winter doodt niet meer: iedereen bouwde na de waarschuwing een
+    houthakker. Maar de kern is nog geen gok. Wie weet hoe het werkt, lijkt arm met één zet, en verstoppen
+    doet er weinig toe (`speelbaar.md`, "De speeltest van 28 sep"). Voorstellen, elk als optie in de
+    spelregels zoals altijd, met jouw keuze als standaard:
+    - **A, de inner laat zich niet uitschakelen.** Nu volgt hij wie naast hem loopt zo lang die loopt: met
+      drie uur praten en heen en weer lopen waar hij niets ziet, zag hij in drie van de drie jaren niets, en
+      vroeg de heer 28 graan en 2 goud in plaats van 88 graan en 25 goud. Voorstel: hij volgt je hooguit twee
+      uur per bezoek, zoals hij drie uur praat ("Genoeg gewandeld, schout: ik moet tellen"); daarna loopt hij
+      zijn eigen ronde, en meelopen stuurt hem alleen nog. Zo blijft meelopen de moeite waard (hij ziet
+      minder, of later), maar het hele dorp verbergen kan niet meer.
+    - **B, verstoppen levert meer op.** De heer vraagt 15% van het graan dat de inner telde, dus wie 250 graan
+      wegzet, spaart er 33 (en loopt het risico dat de soldaten het vinden). Voorstel: niets aan verstoppen
+      zelf, maar A en C maken de inner scherper, en dan telt wat hij níet ziet weer. Wil je meer, dan kan de
+      heer een groter deel van het graan vragen (de werkbank, "wat de heer van het graan vraagt").
+    - **C, de argwaan kan stijgen.** Hij groeit pas onder 60% van het graan dat de velden beloven die de inner
+      zag; in twaalf jaren bleef hij 0 tot 4%. Voorstel: de inner weet hoe groot het gehucht is (de heer
+      stuurde hem met een lijst), en wat hij niet zag, maakt hem argwanend ("Drie boerderijen? Ik heb er vijf
+      op mijn lijst."). Dan kiest de heer soms zelf waar de soldaten zoeken, en kan leiden mislukken: de gok.
+    - **D, het goud.** De heer vraagt 25 goud, het gehucht heeft er 16: ook wie alles geeft, krijgt elk jaar
+      een boete. Voorstel: het hoofdgeld en de prijs per gebouw zo dat een braaf gehucht dat niet handelt, het
+      net haalt (zo'n 15 goud), en wie meer wil, verkoopt graan aan de marskramer.
+    - **E, de kleine gaten** (`opmerkingen.md`, bovenaan): pas betalen als de heer op het plein staat (nu kun
+      je hem op de weg betalen, en dan zoeken de soldaten niet); verstoppen kan tot de inner echt binnenloopt,
+      niet tot middernacht; en de winterberichten rekenen met de heer, zijn soldaten en het verstopte graan.
+    Na het bijstellen speelt `npm run speeltest` dezelfde twaalf jaren opnieuw, en zie je precies wat het deed.
+    Vragen: **A**, **B**, **C**, **D** en **E**: ja, anders, of niet nu? En wil je eerst zelf een jaar spelen
+    voor we iets veranderen?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -624,6 +670,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
   de soldaten nu zoeken.
 
 *Lezen:*
+- **De speeltest van 28 sep** (twaalfde sessie): vier spelers, twaalf jaren, op de pagina "Een jaar in het
+  gehucht" (https://claude.ai/artifact/WVebn7ycRcPLNuJrtzvQbr) en in `speelbaar.md`; wat nu bij te stellen is,
+  in vraag 46.
 - De speeltest van een jaar en het voorstel voor een eerste speelbare versie (27 sep, tiende sessie), op
   de pagina "Een jaar in het gehucht" (https://claude.ai/artifact/WVebn7ycRcPLNuJrtzvQbr) en in
   `speelbaar.md`: vier vragen, 33a tot en met 33d. En de namen in `verpakken.md` (vraag 8).
@@ -848,6 +897,16 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 28 sep 2026 — **De speeltest op de stand van nu** (twaalfde sessie; punt 2 van de prioriteit, vraag 45,
+  Marcel: "A ja B ja C ja D ja"). `npm run speeltest` speelt het gehucht een jaar in een onzichtbare browser,
+  met vier spelers in code (braaf, lui 30%, lui 60%, slim), elk met zaad 1 tot en met 3
+  (`gereedschap/speeltest/`: `speeltest.cjs` draait de jaren, `speler.js` speelt in de bladzijde,
+  `samenvatting.cjs` maakt de tabellen in `uit/samenvatting.md`). De speler klikt zoals een mens
+  (`T.handelingVerkennen`) en drukt op de knoppen van de vensters, dus de getuigen en wat de inner ziet
+  tellen zoals in het spel; een luisteraar op de regels schrijft op wat er gebeurt, zonder iets te
+  veranderen. Hetzelfde zaad geeft precies hetzelfde jaar. De uitslag van twaalf jaren staat in
+  `speelbaar.md`, "De speeltest van 28 sep"; wat nu bij te stellen is, in vraag 46; drie gaten in de regels in
+  `opmerkingen.md`.
 - 28 sep 2026 — **De winter zichtbaar** (elfde sessie; punt 1 van de prioriteit, vraag 44, Marcel: "A ja B
   ja C ja"). Op 1 herfstmaand en 1 slachtmaand zegt het dorp of het hout en het eten de winter halen,
   naar wat er ligt en wat er de laatste dag bijkwam, en zo niet, wat helpt: "Over drie maanden is het
