@@ -101,7 +101,7 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
    twaalf jaren (hieronder, "De speeltest van 28 sep"). Het bijstellen komt later, met een menu met opties
    (Marcel, 28 sep: "Niet nu. Dit stellen we later in."; werklijst, vraag 46).
 5. ~~Opslaan, Verder en een titelscherm.~~ Af (28 sep).
-6. De afrekening na het eerste jaar.
+6. De afrekening na het eerste jaar. Het plan staat in de werklijst, vraag 49 (28 sep; wacht op Marcel).
 7. De eerste weken als opdrachten.
 8. Een tester die het niet kent laten spelen, en kijken waar hij vastloopt.
 

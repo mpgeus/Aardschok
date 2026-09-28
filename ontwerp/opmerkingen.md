@@ -496,3 +496,8 @@ de vorm van `tegels.json`, `js/sprites.js` en hoe Tiled een vel leest; vóór he
       kaart, waar ze heen lopen zoals een bezoeker de weg af? Voorstel: op de kaart.
     - **D.** Is dit de goede prijs voor het bos: geen melk en de wolf voor het vee, muizen en vocht voor
       het graan?
+- **De twee boeken tijdens het jaar** (28 sep, veertiende sessie, bij het plan voor de afrekening, vraag 49).
+  De afrekening zet je eigen boek en dat van de heer naast elkaar, één keer per jaar. Dezelfde twee boeken
+  zouden er het hele jaar kunnen zijn, onder een toets: wat je echt hebt, en wat de heer tot nu toe van je
+  weet (wat zijn inner telde, wat de marskramer hem vertelde). Dat zijn de rekenboeken van `spel.md` (punt 6),
+  en het maakt de kern elke dag zichtbaar, niet pas in lentemaand. Na de proef; niet gekozen.

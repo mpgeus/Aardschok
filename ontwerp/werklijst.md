@@ -10,22 +10,21 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (28 sep 2026, na de dertiende sessie): opslaan, het menu en het titelscherm zijn er
+## De stand (28 sep 2026, veertiende sessie): het plan voor de afrekening wacht op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
 onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, en Nieuw spel geeft de
 benoemingsbrief van de heer; `Z` is slapen bij je huis, `Esc` het menu, en het spel slaat elke ochtend zelf
-op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 563/563.
+op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 565/565.
 
-**Waar het werk staat:** alles staat in `main`, ook de dertiende sessie (Marcel, 28 sep: "Graag alles naar
-main"; ook op `claude/werklijst-doorzetten-kfeqsq`). Hoe een eigen branch en `main` samengaan, staat in
-`CLAUDE.md`, onder Git.
+**Waar het werk staat:** de dertiende sessie staat in `main` (Marcel, 28 sep: "Graag alles naar main"). De
+veertiende (het plan voor de afrekening, vraag 49) staat op haar eigen branch, `ccr-78e7abf2-tn06lu`, en nog
+niet in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij de prioriteit hieronder. Punt 3 is af (opslaan, het menu en het
-titelscherm). Nu punt 4, de afrekening na het eerste jaar: begin met een plan voor Marcel (33a is beantwoord:
-drie getallen naast elkaar, en de grenzen in de werkbank). Vraag 47 (de eerste weken als opdrachten, punt 5)
+**Waar de volgende sessie begint:** bij de prioriteit hieronder. Punt 4, de afrekening na het eerste jaar: het
+plan staat bij vraag 49 en wacht op Marcels A, B, C en D. Vraag 47 (de eerste weken als opdrachten, punt 5)
 wacht nog op Marcels A, B en C.
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; de volgorde is een
@@ -51,14 +50,14 @@ al van af). Elk stuk begint met een plan voor Marcel.
    het gehucht erachter, en `Esc` is het menu. De naam blijft Aardschok, op één plek (vraag 8). Zie onder Af.
 4. **Nu: de afrekening na het eerste jaar:** wat je gaf, wat je achterhield en wat daarvan gevonden werd, en
    hoe het dorp erbij staat. Marcel koos op 28 sep het voorstel van 33a, en spelen beslist waar goed ophoudt:
-   die grenzen staan in de werkbank. Begin met een plan.
+   die grenzen staan in de werkbank. Het plan staat bij vraag 49 (28 sep, veertiende sessie; wacht op Marcel).
 5. **De eerste weken als opdrachten,** zodat wie het niet kent, weet wat hij moet doen. Het vak voor de
    opdracht en de quests zijn er al. Het plan staat bij vraag 47 (28 sep, dertiende sessie; wacht op Marcel).
 6. **Een tester die het niet kent** laten spelen (wacht op 33d: een bladzijde op internet, of een
    programma).
 
-*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* vraag 47 (het plan voor de eerste weken), en
-33d (hoe een tester het krijgt, in `speelbaar.md`). 33a, 33b, 8 en 48 beantwoordde Marcel op 28 sep. Het bijstellen na de speeltest (vraag 46) komt
+*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* vraag 49 (het plan voor de afrekening), vraag
+47 (het plan voor de eerste weken), en 33d (hoe een tester het krijgt, in `speelbaar.md`). 33a, 33b, 8 en 48 beantwoordde Marcel op 28 sep. Het bijstellen na de speeltest (vraag 46) komt
 later, met een menu met opties (Marcel, 28 sep).
 
 *3. Na de proefversie* (`speelbaar.md`, "Wat kan wachten"):
@@ -79,6 +78,14 @@ helpt een tester zichzelf te vinden, dus misschien toch vóór de proef), 22 (de
 volgorde: deze lijst is het nieuwe voorstel).
 
 *Wat nog ruw is:* `opmerkingen.md`, bovenaan.
+
+**Wat er in de veertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
+- **Een plan voor punt 4, de afrekening na het eerste jaar** (vraag 49): op 1 lentemaand, na de winter, de
+  twee boeken naast elkaar (je eigen boek en dat van de heer) en het dorp, met een zin van de heer en een van
+  het dorp. Hoe arm je leek, meet het aan wat de heer vroeg tegen wat hij gevraagd had als hij alles zag.
+- **Nagekeken vóór het plan:** het spel houdt nu niet bij wat je aan het begin had, wat de soldaten vonden (alleen
+  als zin in een bericht) en wie er stierf en waaraan; het rapport van de inner en het bezoek van de heer zijn na
+  Sint-Maarten weg. De afrekening heeft dus een jaarboek nodig.
 
 **Wat er in de dertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 5, de eerste weken als opdrachten** (vraag 47): het schrift van je voorganger als stem
@@ -720,6 +727,89 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     plekken? **C**, het titelscherm zo, met het gehucht erachter? **D**, het menu zo?
     **Beantwoord (Marcel, 28 sep): "A ja B ja C ja D ja, push it".** Alle vier zoals voorgesteld. (Claude las
     het als het antwoord op vraag 48, want alleen die had een D; vraag 47 staat nog open.)
+49. **De afrekening na het eerste jaar: het plan** (Claude, 28 sep, veertiende sessie; Marcel: "Werklijst
+    doorzetten"; wacht op Marcel). Punt 4 van de prioriteit. Marcel koos bij 33a drie getallen naast elkaar (wat
+    je echt hebt, ook verstopt; wat de heer denkt dat je hebt; hoe het dorp erbij staat), een zin van de heer en
+    een van het dorp, geen punten, en de grenzen in de werkbank. Wat er al is: het eindscherm als je je ambt
+    kwijt bent (`T.ui.toonEinde`, `js/hud.js`), en per jaar welk deel je de heer gaf en welke straf erop volgde
+    (`S.heer.jaren`). Wat er niet is: het spel onthoudt niet wat je aan het begin van het jaar had, wat de
+    soldaten vonden (alleen als zin in een bericht), en wie er stierf en waaraan; en het rapport van de inner en
+    het bezoek van de heer worden na Sint-Maarten gewist. Voorstel:
+    - **A, wanneer: op 1 lentemaand, na de winter,** bij zonsopgang: dan gaan de soldaten weg en begint het
+      nieuwe jaar van de velden. Zo telt de winter mee, en daar valt de rekening van het verstoppen: in de
+      speeltest van 28 sep stierven bij de luie spelers 4 en 9 mensen van de honger, naast volle kelders. De tijd
+      staat stil tot je kiest: **Verder spelen** of **Naar het titelscherm**. Elk jaar komt dezelfde afrekening,
+      over dat jaar; voor een tester is de eerste het eind van de proef. Het andere moment, meteen als de heer
+      vertrekt, maakt de proef bijna een derde korter, maar dan zie je niet wat verstoppen kostte. (Wil je allebei,
+      dan wordt het een keuze in de spelregels.)
+    - **B, de drie getallen als twee boeken en het dorp.** In `spel.md` staat al "het rekenboek: het echte en dat
+      voor de heer" (punt 6); de eerste twee getallen zíjn die twee boeken, hier voor het eerst te zien. Een
+      voorbeeld, ongeveer de slimme speler van de speeltest:
+
+      ```
+                              Je eerste jaar als schout
+                                  1 lentemaand 1324
+
+      Je eigen boek             Het boek van de heer            Het dorp
+      240 graan, 5 goud         190 graan, 13 goud              37 mensen, 67% tevreden
+      niets in de kelders;      zo telde zijn inner in          bij je komst 26;
+      bij je komst 60 graan     oogstmaand, met 0 van je 12     niemand gestorven
+      en 20 goud                gebouwen (er was 620 graan
+                                en 18 goud). De heer vroeg
+                                28 graan en 2 goud; had hij
+                                alles gezien: 100 en 26.
+
+      Sint-Maarten: je gaf 83% van wat hij vroeg, een boete van 3 goud. De soldaten
+      zochten op twee plekken, en vonden niets.
+
+      De heer: "Wat een armoedig gat, schout. Wij zouden u bijna iets geven. Bijna."
+      Het dorp: "In de herberg drinken ze op de schout. Zachtjes, want de heer heeft oren."
+
+                        [ Verder spelen ]    [ Naar het titelscherm ]
+      ```
+
+      Je eigen boek is wat je nu hebt, in de schuur, de kist en de kelders (rijk worden). Het boek van de heer is
+      wat zijn inner telde, want daar maakte de heer zijn rekening op (arm lijken). Het dorp: mensen en
+      tevredenheid, en wie er stierf of wegtrok, en waaraan. De regel over Sint-Maarten is wat je gaf, wat je
+      achterhield en wat daarvan gevonden werd (punt 4).
+    - **C, hoe arm je leek: wat de heer vroeg, naast wat hij gevraagd had als hij alles zag.** In goud, zoals hij
+      rekent: alle gebouwen en akkers, en ook wat in de kelders lag toen de inner telde. Dat is precies wat arm
+      lijken oplevert, met de gebouwen en het hoofdgeld erbij. Zo rekent de heer al als hij alles zelf ziet (de
+      regel 'alles' in `js/heer.js`), maar dan met de kelders erbij. Naar schatting uit de speeltest van 28 sep:
+      braaf 0,93, lui (30% weg) 0,84, lui (60% weg) 0,74, slim 0,19. Daarop kiest de heer zijn zin: onder 0,5
+      arm, vanaf 0,85 rijk, daartussen gewoon. Wat opvalt: 250 graan in de kelders maakt je nauwelijks armer (van
+      0,93 naar 0,74), de inner ontlopen doet alles. Dat zag de speeltest al (vraag 46, A en B); de afrekening laat
+      het elke speler zien, en is straks het meetlint als het bijstellen komt.
+    - **D, de zinnen: drie van de heer, drie van het dorp, en een bijzondere.**
+      - De heer. Arm: "Wat een armoedig gat, schout. Wij zouden u bijna iets geven. Bijna." Gewoon: "Een gewoon
+        jaar, schout. Niets te straffen en niets te vieren. Wij weten niet wat Wij erger vinden." Rijk: "Wat een
+        rijk gehucht, schout! Het doet Ons deugd. Wij komen volgend jaar graag weer."
+      - Het dorp. Goed (60% tevreden of meer, en niemand stierf van kou of honger): "In de herberg drinken ze op
+        de schout. Zachtjes, want de heer heeft oren." Gewoon: "Het dorp mort, zoals een dorp mort. Dat is een
+        goed teken, zegt de oudste." Slecht (onder 40%, of meer dan een twintigste van het dorp gestorven): "In
+        de herberg wordt het stil als de schout binnenkomt."
+      - Bijzonder, als er iemand van de honger stierf terwijl er graan in je kelders lag: "Vier stierven van de
+        honger, en in je kelders lag 240 graan. Het dorp weet het." Dat is de duurste fout uit de speeltest, en
+        zo leert een nieuwe speler hem aan het eind van zijn eerste jaar.
+      In de speeltest zou braaf "gewoon" krijgen (52% tevreden), slim "goed" (67%), en lui de bijzondere. De
+      grenzen staan in de werkbank, de zinnen in hetzelfde blok in het bestand: de werkbank kent alleen getallen.
+      Zinnen herschrijven in het spel zelf kan later, bij het menu met opties (vraag 46).
+    - **Hoe het werkt** (geen vraag, wel goed om te weten): een jaarboek in de spelstaat (`S.jaarboek`), dus
+      vanzelf bewaard. Het schrijft op wat je had bij het begin van het jaar; bij de inner wat hij telde en wat er
+      echt was; op Sint-Maarten wat de heer vroeg, wat je gaf en wat er verstopt lag; wat de soldaten vonden, nu
+      als getal; en wie er stierf of wegtrok, en waaraan. De regels staan in een nieuw bestand,
+      `js/afrekening.js`, zonder scherm en dus getoetst, met bovenaan één blok (`T.AFREKENING_INSTELLINGEN`: de
+      grenzen en de zinnen), dat in de werkbank komt als "De afrekening". Het scherm komt bij het titelscherm, in
+      `js/menu.js`, en het einde van "je ambt kwijt" wordt hetzelfde scherm, met het ontslag als zin van de heer
+      en alleen Naar het titelscherm: één scherm voor twee eindes, en `js/hud.js` wordt kleiner. Een spel dat
+      vóór deze stap bewaard werd, krijgt een afrekening met wat er dan bekend is. De speeltest klikt Verder
+      spelen, en schrijft per speler de afrekening in `samenvatting.md`.
+    Klaar als op 1 lentemaand de afrekening van het jaar opent, met de twee boeken, het dorp, Sint-Maarten en de
+    twee zinnen; Verder spelen en Naar het titelscherm werken; wie zijn ambt kwijtraakt, hetzelfde scherm ziet; de
+    grenzen in de werkbank staan; een jaar dat halverwege opslaat en herlaadt dezelfde afrekening geeft; `npm
+    test` groen is; en de speeltest bij alle vier de spelers de afrekening opschrijft. Vragen: **A**, op 1
+    lentemaand na de winter, elk jaar, met Verder spelen? **B**, de drie getallen zo, als twee boeken en het dorp?
+    **C**, hoe arm je leek zo meten? **D**, deze zinnen, met de bijzondere?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
