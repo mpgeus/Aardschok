@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (28 sep 2026, veertiende sessie): een nieuwe richting, en de proef wordt "van gehucht tot dorp"
+## De stand (28 sep 2026, veertiende sessie): een nieuwe richting, en het dorp bouwt zelf
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -18,15 +18,16 @@ gevochten wordt; rijk worden en arm lijken blijft de druk van boven. Wat er nu s
 per onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, en Nieuw spel geeft de
 benoemingsbrief van de heer; `Z` is slapen bij je huis, `Esc` het menu, en het spel slaat elke ochtend zelf
-op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 565/565.
+op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 578/578.
 
 **Waar het werk staat:** de dertiende sessie staat in `main` (Marcel, 28 sep: "Graag alles naar main"). De
 veertiende (de afrekening geparkeerd, de nieuwe richting, en het plan voor de nieuwe volgorde: vraag 49 tot en
 met 51) staat op haar eigen branch, `ccr-78e7abf2-tn06lu`, en nog niet in `main`. Hoe een eigen branch en `main`
 samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 1: het dorp bouwt zelf; het plan staat bij
-vraag 52 en wacht op Marcels A, B, C en D. De richting staat (vraag 50: besturen en groeien worden het hart, de
+**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 2: de eerste trede, van gehucht tot dorp;
+begin met een plan voor Marcel. Stap 1, het dorp bouwt zelf, is af (vraag 52). Let bij stap 2 op het bouwmenu,
+dat nu alleen de trede van nu toont (`opmerkingen.md`, bovenaan). De richting staat (vraag 50: besturen en groeien worden het hart, de
 heer blijft als de druk van boven, en vechten begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook
 (vraag 51: de proef wordt "van gehucht tot dorp", in vijf stukken). De afrekening (vraag 49) is geparkeerd, en
 vraag 47 (de eerste weken als opdrachten) wordt herschreven bij stap 5.
@@ -39,12 +40,11 @@ gehucht tot dorp" nodig heeft (`speelbaar.md`, bovenaan). Elk stuk begint met ee
 nu, met de brief van de heer en 26 mensen, en het doel is dat het gehucht in zo'n twee jaar een dorp wordt. De
 proef eindigt met een brief van de heer: "Wij vernemen dat Ons gehucht een dorp is geworden. Gefeliciteerd. Dat
 kost u vanaf nu meer."
-1. **Nu: het dorp bouwt zelf** (3b, stap 5; `spel.md`, "Het dorp bouwt zelf"). Jij wijst bouwgrond aan, en een
-   nieuw gezin zet er zelf een hut op, met hout uit de voorraad. Groeien wordt plannen, in plaats van elk huis
-   zelf neerzetten. Het plan staat bij vraag 52 (Marcel, 28 sep: "A ja B ja C ja D ja"; wordt gebouwd).
-2. **De eerste trede: van gehucht tot dorp** (punt 14). Een dorp bij 50 mensen, een kapel en een smidse (Marcel
-   koos het; de getallen in de werkbank), met het bouwmenu van het dorp en de brief van de heer. Het einde van de
-   proef.
+1. **Af (28 sep, veertiende sessie): het dorp bouwt zelf** (vraag 52). Jij wijst erven aan met het bouwmenu, en
+   is het dorp vol, dan zet een nieuw gezin er zelf een hut op, met hout uit de voorraad. Zie onder Af.
+2. **Nu: de eerste trede: van gehucht tot dorp** (punt 14). Een dorp bij 50 mensen, een kapel en een smidse
+   (Marcel koos het; de getallen in de werkbank), met het bouwmenu van het dorp en de brief van de heer. Het einde
+   van de proef. Begin met een plan.
 3. **De eerste keuren** (punt 9, nog zonder groepen en schepenen): vreemden, rantsoen en houtkap, in één venster,
    en elke keur zegt vooraf wat hij doet.
 4. **Rovers en een militie** (punt 13): rovers vallen het gehucht aan, en je verdedigt het in beurten op je eigen
@@ -56,7 +56,7 @@ kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 52 (het plan voor stap 1: erven, en het gezin dat zelf bouwt), en 33d (hoe een tester het krijgt, in
+*2. Wacht op Marcel:* 33d (hoe een tester het krijgt, in
 `speelbaar.md`). Vraag 47 wordt herschreven bij stap 5. Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51;
 het bijstellen na de speeltest (vraag 46) komt later, met een menu met opties.
 
@@ -106,6 +106,9 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   gezin dat zelf zijn hut bouwt met hout uit de voorraad, en de hut en het huis uit het bouwmenu. Een agent zocht
   vooraf uit hoe bouwen en groeien nu werken, en hoeveel plaats de kaart heeft: genoeg voor zo'n acht erven. Hij
   vond ook dat je nu op een akker of een pad kunt bouwen, en dat een gezin zonder plaats niets zegt.
+- **Stap 1 is af: het dorp bouwt zelf** (Marcel: "A ja B ja C ja D ja"). Zie onder Af. In de browser gespeeld: een
+  erf met paaltjes, een gezin dat over de weg komt en voor zijn hut staat terwijl die oprijst, en na twee dagen
+  de hut; zonder fouten. `npm test`: 578/578.
 
 **Wat er in de dertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 5, de eerste weken als opdrachten** (vraag 47): het schrift van je voorganger als stem
@@ -1282,6 +1285,18 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 28 sep 2026 — **Het dorp bouwt zelf** (veertiende sessie; stap 1 van de proef "van gehucht tot dorp", vraag 52,
+  Marcel: "A ja B ja C ja D ja"). `js/erven.js`: in het bouwmenu staat "Erf", een vak van 10 bij 10 tegels
+  (`T.ERVEN_INSTELLINGEN`, ook in de werkbank) dat je neerzet als een gebouw; het is land, geen gebouw
+  (`S.erven`), en een vrij erf heeft paaltjes op zijn hoeken (`gereedschap/pixelart/paaltje.cjs`,
+  `T.sprites.paaltje`); een klik met het erf in de hand op een vrij erf haalt het weg. Een huis met plaats gaat
+  voor; is het dorp vol, dan neemt een nieuw gezin op een groeidag het vrije erf bij de werkplaats die de meeste
+  handen mist, komt over de weg, en zet er zelf een hut op (8 hout, twee dagen), woont er al en is er overdag
+  bij; zonder hout wacht de bouwplaats, met een bericht. Zonder vrij erf zegt het dorp dat er geen plaats is. De
+  hut weet welk huis hij wordt, zodat hij binnen zijn erf doorgroeit, en de bewoners gaan dan naar de nieuwe deur
+  (dat laatste ging tot nu voor elk huis mis). De hut en het huis staan niet meer in het bouwmenu; de spelregel
+  "Huizen" (`O`) zet ze terug. En op een akker, een weide of een pad bouw je niet meer: dat kon tot nu. Getoetst:
+  `test/erven.test.cjs` (13 toetsen), en in de browser.
 - 28 sep 2026 — **Opslaan, Verder en een titelscherm** (dertiende sessie; punt 3 van de prioriteit, vraag 48,
   Marcel: "A ja B ja C ja D ja, push it"). `js/opslaan.js` bewaart heel `Spel.S` behalve het scherm
   (`T.schermVelden`), met de verzamelingen en alles wat elkaar aanwijst heel, achter één functie

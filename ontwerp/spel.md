@@ -27,7 +27,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep) | 6a |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | besloten, nog niet gebouwd | 6c |
-| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14 |
+| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
@@ -2060,6 +2060,29 @@ wordt gepraat:
   punt 3.
 
 ### Het dorp bouwt zelf
+
+**Zo werkt het nu** (28 sep, veertiende sessie; `js/erven.js`, werklijst vraag 52, Marcel: "A ja B ja C ja D ja"):
+- **Een erf wijs je aan met het bouwmenu** (`B`, "Erf"), zoals een gebouw: een vak van 10 bij 10 tegels
+  (`T.ERVEN_INSTELLINGEN`, ook in de werkbank), groot genoeg voor elk huis dat er ooit komt, met zijn deur en
+  plaats voor een moestuin. Het moet helemaal vrij zijn: niet op het plein, een veld, een pad of iets vasts. Het
+  is land, geen gebouw: je loopt eroverheen, en de inner en de heer zien het niet. Een vrij erf heeft paaltjes op
+  zijn hoeken; met het bouwmenu open staat de rand van elk erf op de grond. Met het erf in de hand maakt een klik
+  op een vrij erf het weer gewone grond.
+- **Een huis met plaats gaat voor.** Is het dorp vol, dan neemt een nieuw gezin op een groeidag het vrije erf dat
+  het dichtst bij de werkplaats ligt die de meeste handen mist (anders bij het plein), en komt over de weg. Het
+  zet er zelf een hut op (8 hout uit de voorraad, twee dagen), woont er al terwijl hij oprijst, en is er overdag
+  bij, niet op zijn werk. Ligt er te weinig hout, dan wacht de bouwplaats, met een bericht, en begint hij zodra het
+  hout er is. Is er geen vrij erf, dan zegt het dorp dat er een gezin wil komen maar geen plaats is (tot 28 sep
+  gebeurde er dan niets).
+- **De hut groeit door binnen zijn erf.** Bij de hut ligt vast welk huis hij wordt (een tekening die met dezelfde
+  hoek en zijn deur in het erf past), en na het doorgroeien gaan de bewoners naar de nieuwe deur (`T.huisVeranderd`
+  in `js/bewoners.js`; tot 28 sep bleef de deur waar hij was).
+- **De hut en het huis staan niet meer in het bouwmenu.** De spelregel "Huizen" (`O`) zet ze terug: "Jij zet ze
+  neer", zoals tot 28 sep, en dan zijn er geen erven.
+- **Op een akker, een weide of een pad bouw je niet meer**, ook geen werkplaats (`T.waaromPastHetNiet`); tot 28 sep
+  kon dat wel.
+- Nog niet: een erf dat de speler met een rechthoek in stukken deelt (komt met ontginnen, 6b), de moestuin zelf,
+  en een aanvraag om te bouwen (Marcel, 26 sep). Een erf achter een huis zie je slecht (opmerkingen.md).
 
 **Besloten (Marcel, 28 sep, werklijst vraag 52: "A ja B ja C ja D ja"):** erven van 10 bij 10 tegels, die je één
 voor één neerzet met het bouwmenu; een nieuw gezin loopt naar het vrije erf dat het dichtst bij zijn werk ligt,
