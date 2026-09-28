@@ -84,8 +84,8 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 3. ~~De winter zichtbaar maken: een waarschuwing als het hout of het eten de winter niet haalt, en in het
    bericht waaraan iemand stierf.~~ Af (28 sep).
 4. Een speeltest op de stand van nu, en de getallen bijstellen. **Gespeeld** (28 sep): een script speelde
-   twaalf jaren (hieronder, "De speeltest van 28 sep"); Marcel speelt ook. Het bijstellen wacht op Marcel
-   (werklijst, vraag 46).
+   twaalf jaren (hieronder, "De speeltest van 28 sep"). Het bijstellen komt later, met een menu met opties
+   (Marcel, 28 sep: "Niet nu. Dit stellen we later in."; werklijst, vraag 46).
 5. Opslaan, Verder en een titelscherm.
 6. De afrekening na het eerste jaar.
 7. De eerste weken als opdrachten.
@@ -175,8 +175,8 @@ De spelers:
    1324 weer niet: de oogst haalt het jaar net niet.
 
 Wat onderweg aan de regels opviel (betalen op de weg, de inner vanaf middernacht, de schout die blijft staan),
-staat in `opmerkingen.md`, bovenaan "Het spel". Wat nu bijgesteld zou kunnen worden, is vraag 46 in de
-werklijst.
+staat in `opmerkingen.md`, bovenaan "Het spel". Wat bijgesteld zou kunnen worden, is vraag 46 in de
+werklijst; Marcel (28 sep): "Niet nu. Dit stellen we later in. We maken dan een menu met opties etc."
 
 ## De speeltest van 27 sep
 

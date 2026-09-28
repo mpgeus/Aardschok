@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (28 sep 2026, na de twaalfde sessie): de speeltest is gespeeld; vraag 46 wacht op Marcel
+## De stand (28 sep 2026, na de twaalfde sessie): de speeltest is gespeeld, en alles staat in main
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
@@ -19,10 +19,14 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met 
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
 `npm test`: 550/550.
 
-**Waar het werk staat:** tot en met de elfde sessie staat alles in `main` (Marcel, 28 sep: "Zet het naar
-main"). De twaalfde sessie (de speeltest) staat op `claude/werklijst-doorzetten-465m5t` en nog niet in
-`main`; ze raakt het spel zelf niet, alleen `gereedschap/speeltest/`, `ontwerp/` en `CLAUDE.md`. Hoe een
-eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook de twaalfde sessie, de speeltest (Marcel, 28 sep: "Graag
+alles naar main"; ook op `claude/werklijst-doorzetten-465m5t`). Hoe een eigen branch en `main` samengaan,
+staat in `CLAUDE.md`, onder Git.
+
+**Waar de volgende sessie begint** (Marcel, 28 sep: "starten we nieuwe sessie met het volgende werk"): bij de
+prioriteit hieronder. Punt 3 (opslaan, Verder, titelscherm) wacht op 33b en een naam (vraag 8), punt 4 (de
+afrekening) op 33a; punt 5 (de eerste weken als opdrachten) wacht nergens op. Vraag Marcel eerst naar 33a,
+33b en 8, en begin anders met een plan voor punt 5.
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; de volgorde is een
 voorstel van Claude). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat een proefversie van één
@@ -38,8 +42,10 @@ al van af). Elk stuk begint met een plan voor Marcel.
    winter doodt niet meer. Maar de inner is uit te schakelen (met praten en meelopen zag hij niets, en vroeg
    de heer 28 graan en 2 goud in plaats van 88 en 25), verstoppen levert weinig op, de soldaten vonden nooit
    iets, en ook wie alles geeft, krijgt een boete. Zie `speelbaar.md`, "De speeltest van 28 sep".
-   **Nu: de getallen bijstellen, vraag 46** (wacht op Marcel), en Marcel speelt zelf ("We gaan later
-   finetunen"). Na het bijstellen speelt `npm run speeltest` dezelfde twaalf jaren opnieuw.
+   **Het bijstellen komt later** (vraag 46; Marcel, 28 sep: "Niet nu. Dit stellen we later in. We maken dan
+   een menu met opties etc."). Dan speelt `npm run speeltest` dezelfde twaalf jaren opnieuw. Er is al een
+   venster met de spelregels en een werkbank met alle getallen (`O`, `js/opties.js`); het menu kan daarop
+   bouwen, bijvoorbeeld vanuit het titelscherm van punt 3.
 3. **Opslaan, Verder en een titelscherm** (wacht op 33b, en op een naam, vraag 8). Zonder opslaan speelt
    niemand een jaar van een uur uit.
 4. **De afrekening na het eerste jaar** (wacht op 33a): wat je gaf, wat je achterhield en wat daarvan
@@ -49,10 +55,10 @@ al van af). Elk stuk begint met een plan voor Marcel.
 6. **Een tester die het niet kent** laten spelen (wacht op 33d: een bladzijde op internet, of een
    programma).
 
-*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* 46 (wat bijstellen na de speeltest: de inner,
-verstoppen, de argwaan, het goud, de kleine gaten); 33a (wat is goed na het eerste jaar), 33b (opslaan), 33d
-(hoe een tester het krijgt), in `speelbaar.md`; en 8, een naam, voor het titelscherm (voorstel Martinmas, of
-Schout; `verpakken.md`).
+*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* 33a (wat is goed na het eerste jaar), 33b
+(opslaan), 33d (hoe een tester het krijgt), in `speelbaar.md`; en 8, een naam, voor het titelscherm (voorstel
+Martinmas, of Schout; `verpakken.md`). Het bijstellen na de speeltest (vraag 46) komt later, met een menu met
+opties (Marcel, 28 sep).
 
 *3. Na de proefversie* (`speelbaar.md`, "Wat kan wachten"):
 - de rest van punt 4: het bos met de kudde (een idee met vier vragen in `opmerkingen.md`, vraag 43), de
@@ -86,6 +92,8 @@ volgorde: deze lijst is het nieuwe voorstel).
 - **Drie gaten in de regels gevonden** (`opmerkingen.md`, bovenaan): wie de heer op de weg betaalt, krijgt
   geen soldaten; vanaf middernacht van zijn dag telt de inner al als in het dorp; en de schout blijft staan
   als er iemand op de volgende tegel staat, en dan is de klik weg. Niets veranderd (Marcel koos D).
+- **Marcel over het bijstellen** (vraag 46): "Niet nu. Dit stellen we later in. We maken dan een menu met
+  opties etc." En: "Graag alles naar main", en een nieuwe sessie voor het volgende werk.
 
 **Wat er in de elfde sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **De winter is zichtbaar** (punt 1 van de prioriteit, vraag 44). Op 1 herfstmaand en 1 slachtmaand zegt
@@ -569,7 +577,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     spelers, drie jaren per speler, en niets bijstellen tijdens de test. **Gespeeld (28 sep, twaalfde
     sessie):** de uitslag staat in `speelbaar.md`, "De speeltest van 28 sep", en wat nu bij te stellen is,
     in vraag 46.
-46. **Wat bijstellen na de speeltest van 28 sep** (Claude, 28 sep, twaalfde sessie; wacht op Marcel). Twaalf
+46. **Wat bijstellen na de speeltest van 28 sep** (Claude, 28 sep, twaalfde sessie; later). Twaalf
     jaren liepen zonder fout, en de winter doodt niet meer: iedereen bouwde na de waarschuwing een
     houthakker. Maar de kern is nog geen gok. Wie weet hoe het werkt, lijkt arm met één zet, en verstoppen
     doet er weinig toe (`speelbaar.md`, "De speeltest van 28 sep"). Voorstellen, elk als optie in de
@@ -597,6 +605,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Na het bijstellen speelt `npm run speeltest` dezelfde twaalf jaren opnieuw, en zie je precies wat het deed.
     Vragen: **A**, **B**, **C**, **D** en **E**: ja, anders, of niet nu? En wil je eerst zelf een jaar spelen
     voor we iets veranderen?
+    **Beantwoord (Marcel, 28 sep): "Niet nu. Dit stellen we later in. We maken dan een menu met opties etc."**
+    Niets gebouwd. De voorstellen blijven hier staan voor als het zover is, en de gaten uit de speeltest in
+    `opmerkingen.md`.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
