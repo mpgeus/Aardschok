@@ -278,6 +278,14 @@
     return !!(w && w.plein && w.plein.length >= 3 && T.binnenRand(w.plein, x + 0.5, y + 0.5));
   };
 
+  // Loopt hier een pad? Wat de grond zegt (js/kaart.js, `naam` bij de tegel in de .tmj): een zandpad of
+  // kasseien. Op een pad wordt niet gebouwd (js/gebouwen.js, T.waaromPastHetNiet), en er komt geen erf.
+  const PADEN = ['zandpad', 'kasseien'];
+  T.opPad = function (w, x, y) {
+    const g = w && w.grond && w.grond[y] && w.grond[y][x];
+    return !!(g && PADEN.includes(g.naam));
+  };
+
   // Twee tegels raken elkaar als ze naast elkaar liggen, ook schuin, maar niet schuin
   // om een muurhoek heen. Dat geldt voor slaan, praten en iets gebruiken.
   T.raakt = function (w, a, b) {

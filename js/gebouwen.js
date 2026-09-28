@@ -36,6 +36,10 @@
 //     verdacht:    false,            // moet de heer dit niet zien? (wapenmaker, schuttershof, …)
 //     kerk:        false,            // telt als "een kerk" voor de behoeften (js/behoeften.js:
 //                                    // T.heeftKerk) — nu alleen de kapel, later ook de kerk zelf
+//     woning:      true,             // een huis om in te wonen (hut, huis, stenen huis): als het dorp zelf
+//                                    // bouwt (js/erven.js, T.ERVEN_INSTELLINGEN.dorpBouwtZelf), zet jij
+//                                    // die niet neer, en staat hij niet in het bouwmenu (T.inBouwmenu).
+//     erf:         true,             // alleen bij "erf": bouwgrond voor een gezin, geen gebouw (js/erven.js)
 //     menu:        true,             // false: niet via het bouwmenu (akker, stadsmuur, palissade —
 //                                    // die hebben een eigen manier van neerzetten, geen enkele voet)
 //     tekening:    'gebouwen/dorpshuis1',  // "vel/naam" uit tegels/, zoals T.laadKaart "tegel" leest
@@ -78,9 +82,18 @@
 
   T.GEBOUWEN = {
     // ── Gehucht ──
+    // Bouwgrond voor een nieuw gezin (werklijst vraag 52, Marcel, 28 sep; spel.md, "Het dorp bouwt
+    // zelf"): je zet het neer met het bouwmenu, zoals een gebouw, maar het is land, geen gebouw. Een
+    // gezin zet er zelf een hut op. De maat staat in T.ERVEN_INSTELLINGEN; de rest in js/erven.js.
+    erf: {
+      naam: 'erf', trede: 'gehucht', voet: null, kosten: {}, heer: {}, bouwtijd: 0,
+      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: true, erf: true,
+      tekening: null, beschrijving: 'bouwgrond: een nieuw gezin zet er zelf een hut op, met hout uit de voorraad',
+      opmerking: '',
+    },
     hut: {
       naam: 'hut', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, heer: {}, bouwtijd: 2,
-      handen: 0, woonruimte: 3, wordt: 'huis', maakt: null, verdacht: false, menu: true,
+      handen: 0, woonruimte: 3, wordt: 'huis', maakt: null, verdacht: false, menu: true, woning: true,
       tekening: 'huizen/hut1', beschrijving: 'ruimte voor een gezin; goedkoop, en arm om te zien',
       // Vier echte hutten van vlechtwerk en leem onder riet, laag, zonder schoorsteen (ronde 4b van de
       // huizenbouwer, gereedschap/pixelart/huizen.cjs), zodat een rij hutten niet uit één stempel komt
@@ -90,7 +103,7 @@
     },
     huis: {
       naam: 'huis', trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
-      handen: 0, woonruimte: 5, wordt: 'stenenHuis', maakt: null, verdacht: false, menu: true,
+      handen: 0, woonruimte: 5, wordt: 'stenenHuis', maakt: null, verdacht: false, menu: true, woning: true,
       tekening: 'huizen/huis1', beschrijving: 'ruimte voor meer mensen', opmerking: '',
       // Zes huizen van vakwerk onder riet, met een schoorsteen van leem, want steen hoort pas bij een
       // dorp (Marcel, 26 sep; spel.md, "Beter bouwen"; ronde 4b van de huizenbouwer).
@@ -320,7 +333,7 @@
     // ── Stad ──
     stenenHuis: {
       naam: 'stenen huis', trede: 'stad', voet: { b: 6, h: 8 }, kosten: { hout: 20, goud: 30 }, heer: { goud: 6 }, bouwtijd: 6,
-      handen: 0, woonruimte: 8, maakt: null, verdacht: false, menu: true,
+      handen: 0, woonruimte: 8, maakt: null, verdacht: false, menu: true, woning: true,
       tekening: 'gebouwen/stenenHuis', beschrijving: 'veel ruimte, en rijk om te zien', opmerking: '',
     },
     raadhuis: {
@@ -405,6 +418,7 @@
   T.gebouwVoet = function (soort, tekening) {
     const g = T.GEBOUWEN[soort];
     if (!g) return null;
+    if (g.erf) return T.erfMaat();
     const t = tekening || g.tekening;
     if (t && T.opzoekTegelNaam) {
       const opz = T.opzoekTegelNaam(t);
@@ -554,19 +568,48 @@
   // gewoon voorwerp)? Geeft de reden, voor de speler, of null als hij past. Niet op het plein
   // (T.opHetPlein, js/wereld.js; Marcel, 26 sep: "Op het Plein wordt niet gebouwd"), en binnen de
   // kaart nergens al vast: dat dekt zowel de rand van de wereld als een ander gebouw, een boom, of
-  // muur (T.isVast). Het bouwmenu laat de reden zien bij de muis en na een klik (js/main.js).
+  // muur (T.isVast). Sinds 28 sep (werklijst vraag 52) ook niet op een akker of weide, een pad of een
+  // erf: tot dan kon een werkplaats midden op een akker staan. Een erf heeft een eigen regel
+  // (T.waaromPastErfNiet, js/erven.js). Het bouwmenu laat de reden zien bij de muis en na een klik
+  // (js/main.js).
   T.waaromPastHetNiet = function (S, soort, x, y) {
+    if (T.GEBOUWEN[soort] && T.GEBOUWEN[soort].erf) return T.waaromPastErfNiet(S, x, y);
     const voet = T.gebouwVoet(soort, T.volgendeTekening(S, soort));
     const w = S.wereld;
     if (!voet || !w) return 'Daar past het niet.';
     let vast = false;
+    let reden = null;
     for (let dy = 0; dy < voet.h; dy++) {
       for (let dx = 0; dx < voet.b; dx++) {
         if (T.opHetPlein(w, x + dx, y + dy)) return 'Op het plein wordt niet gebouwd.';
         if (T.isVast(w, x + dx, y + dy)) vast = true;
+        else reden = reden || T.waaromNietOpDezeGrond(S, x + dx, y + dy);
       }
     }
-    return vast ? 'Daar past het niet.' : null;
+    return vast ? 'Daar past het niet.' : reden;
+  };
+
+  // Of er op deze tegel gebouwd mag worden, voor een gebouw en voor een erf: niet op een akker of weide
+  // (T.veldOp, js/akkers.js), niet op een pad (T.opPad, js/wereld.js), en niet op een erf (T.erfOp,
+  // js/erven.js). Geeft de reden, of null.
+  T.waaromNietOpDezeGrond = function (S, x, y) {
+    const w = S.wereld;
+    if (T.veldOp(w, x, y)) return 'Daar ligt een veld.';
+    if (T.opPad(w, x, y)) return 'Daar loopt een pad.';
+    if (T.erfOp(S, x, y)) return 'Daar ligt een erf.';
+    return null;
+  };
+
+  // Staat deze soort nu in het bouwmenu (js/hud.js)? Die van de trede van nu, behalve wat een eigen
+  // manier van neerzetten heeft (menu: false). Bouwt het dorp zelf (js/erven.js, de spelregel
+  // "Huizen"), dan staat het erf erin en de woningen niet; anders andersom.
+  T.inBouwmenu = function (S, soort) {
+    const g = T.GEBOUWEN[soort];
+    if (!g || g.trede !== S.trede || g.menu === false) return false;
+    const zelf = T.ERVEN_INSTELLINGEN.dorpBouwtZelf;
+    if (g.erf) return zelf;
+    if (g.woning) return !zelf;
+    return true;
   };
   T.gebouwPast = (S, soort, x, y) => !T.waaromPastHetNiet(S, soort, x, y);
 
@@ -586,6 +629,7 @@
   // (geen S, geen scherm) en dus in een toets te vangen zonder een gebouw echt neer te zetten.
   const AANTAL_BOUWFASEN = 5;
   T.bouwFaseIndex = function (dagNu, klaarOp, bouwtijd) {
+    if (klaarOp == null) return 0; // nog niet begonnen: een bouwplaats die op hout wacht (js/erven.js)
     if (!(bouwtijd > 0)) return AANTAL_BOUWFASEN - 1; // bouwtijd 0: meteen de laatste fase
     const voortgang = 1 - (klaarOp - dagNu) / bouwtijd;
     return Math.max(0, Math.min(AANTAL_BOUWFASEN - 1, Math.floor(voortgang * AANTAL_BOUWFASEN)));
@@ -637,6 +681,8 @@
   T.plaatsGebouw = function (S, soort, x, y) {
     const g = T.GEBOUWEN[soort];
     if (!g || g.menu === false) return { gelukt: false, reden: 'Dat kan niet via het bouwmenu.' };
+    // Een erf is land, geen gebouw: het krijgt geen voorwerp en maakt de grond niet vast (js/erven.js).
+    if (g.erf) return T.legErfAan(S, x, y);
     const past = T.waaromPastHetNiet(S, soort, x, y);
     if (past) return { gelukt: false, reden: past };
     if (!T.kanBetalen(S, g.kosten)) return { gelukt: false, reden: 'Daar is de voorraad niet groot genoeg voor.' };
@@ -646,10 +692,18 @@
     const tekening = T.neemTekening(S, soort);
     const voet = T.gebouwVoet(soort, tekening);
     const instantie = { soort, x, y, tekening, voet, klaar: g.bouwtijd <= 0, klaarOp: dagNu + g.bouwtijd, handen: 0, voorwerp: null };
+    T.bouwGebouw(S, instantie);
+    return { gelukt: true, instantie, bericht: `${T.hoofdletter(g.naam)} in aanbouw (${g.bouwtijd} dag${g.bouwtijd === 1 ? '' : 'en'}).` };
+  };
+
+  // Een gebouw in het dorp zetten: in S.gebouwen, met zijn voorwerp op de kaart (zetGebouwVoorwerp
+  // hierboven). Voor wat de speler neerzet (T.plaatsGebouw) en voor de hut die een gezin op zijn erf
+  // zet (T.zetHutOpErf, js/erven.js): één manier voor allebei.
+  T.bouwGebouw = function (S, instantie) {
     S.gebouwen.push(instantie);
     zetGebouwVoorwerp(S, instantie);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
-    return { gelukt: true, instantie };
+    return instantie;
   };
 
   // De gebouwen die al op de kaart staan (kaarten/<naam>.betekenis.json, ding "gebouw": de vijf
@@ -681,6 +735,14 @@
     T.wijzigBevolking(S, w.beginBevolking != null ? Math.min(w.beginBevolking, woonruimte) : woonruimte, 'begin');
     S.woonruimte = woonruimte;
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
+  };
+
+  // Woonruimte: de som van wat elk klaar gebouw geeft, en van de hut op een erf die nog oprijst: daar woont
+  // zijn gezin al (js/erven.js). Een huis dat jij neerzet, telt pas als het klaar is.
+  T.telWoonruimte = function (S) {
+    let woonruimte = 0;
+    for (const g of S.gebouwen) if (g.klaar || g.erf) woonruimte += T.GEBOUWEN[g.soort].woonruimte || 0;
+    return woonruimte;
   };
 
   // Het getal in de balk veranderen: de enige manier, zoals T.wijzigVoorraad voor de voorraad. Het
@@ -743,30 +805,34 @@
     T.tikHeerDag(S, dag);
     // En de inner (js/inner.js): hij komt in oogstmaand tellen, en soms onverwacht terug.
     T.tikInnerDag(S, dag);
+    // Een hut op een erf die op hout wachtte, begint als het er nu is (js/erven.js).
+    T.tikErvenDag(S);
     // 1. Gebouwen die vandaag klaarkomen: het spookbeeld wordt de tekening zelf (dezelfde
-    // voorwerp-ingang, zie zetGebouwVoorwerp hierboven — er komt er geen tweede bij).
+    // voorwerp-ingang, zie zetGebouwVoorwerp hierboven — er komt er geen tweede bij). Een bouwplaats
+    // die nog niet begon (klaarOp null, js/erven.js), komt niet klaar.
     for (const g of S.gebouwen) {
-      if (!g.klaar && dag >= g.klaarOp) {
+      if (!g.klaar && g.klaarOp != null && dag >= g.klaarOp) {
         g.klaar = true;
         if (g.voorwerp) g.voorwerp.inAanbouw = false;
       }
     }
-    // 2. Woonruimte: de som van wat elk klaar gebouw geeft.
-    let woonruimte = 0;
-    for (const g of S.gebouwen) if (g.klaar) woonruimte += T.GEBOUWEN[g.soort].woonruimte || 0;
+    // 2. Woonruimte (T.telWoonruimte hieronder).
+    const woonruimte = T.telWoonruimte(S);
     S.woonruimte = woonruimte;
     // 3. Eten: iedereen eet, of er genoeg is of niet (T.wijzigVoorraad zakt nooit onder nul — een
     // dorp dat te veel monden telt, eet zijn voorraad dus leeg; wat honger doet, staat in
     // js/behoeften.js). Eerst de melk van vandaag, dan graan, dan kaas, en wat er van de melk over
     // is, wordt kaas (T.eetVandaag, js/behoeften.js).
     T.eetVandaag(S);
-    // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als er nog ruimte is, de voorraad
-    // een buffer overhoudt (zodat een net geboren gezin niet meteen honger lijdt), en het dorp
-    // tevreden genoeg is (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel). Zonder
-    // S.behoeften (nog geen dag getikt) blokkeert dat laatste niets.
+    // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als de voorraad een buffer overhoudt
+    // (zodat een net geboren gezin niet meteen honger lijdt), en het dorp tevreden genoeg is
+    // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel). Zonder S.behoeften (nog geen dag
+    // getikt) blokkeert dat laatste niets. Een huis met plaats gaat voor; is het dorp vol, dan neemt
+    // het een vrij erf en zet het er zelf een hut op, of zegt het dat er geen plaats is (js/erven.js).
     const tevredenGenoeg = !S.behoeften || S.behoeften.tevredenheid >= T.BEHOEFTEN_INSTELLINGEN.groeiDrempel;
-    if (dag > 0 && dag % IN.gezinDagen === 0 && S.bevolking < woonruimte && S.voorraad.graan >= IN.graanBufferVoorGroei && tevredenGenoeg) {
-      T.wijzigBevolking(S, Math.min(woonruimte, S.bevolking + IN.gezinGrootte) - S.bevolking, 'groei');
+    if (dag > 0 && dag % IN.gezinDagen === 0 && S.voorraad.graan >= IN.graanBufferVoorGroei && tevredenGenoeg) {
+      if (S.bevolking < woonruimte) T.wijzigBevolking(S, Math.min(woonruimte, S.bevolking + IN.gezinGrootte) - S.bevolking, 'groei');
+      else T.gezinZoektEenErf(S);
     }
     // 5. Handen: verdeeld over de werkplaatsen, en wie waar werkt (T.verdeelHanden hierboven).
     T.verdeelHanden(S);

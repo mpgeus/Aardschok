@@ -271,8 +271,10 @@
     if (!nieuweSoort) return false;
     const w = S.wereld;
     // Ook een huis dat doorgroeit, krijgt een van de tekeningen van zijn nieuwe soort
-    // (T.volgendeTekening, js/gebouwen.js).
-    const tekening = T.volgendeTekening(S, soort.wordt);
+    // (T.volgendeTekening, js/gebouwen.js). Een hut op een erf weet al welke: die is gekozen toen hij
+    // er kwam, zodat het huis in het erf past (js/erven.js).
+    const vast = instantie.wordtTekening || null;
+    const tekening = vast || T.volgendeTekening(S, soort.wordt);
     const oudeVoet = instantie.voet || T.gebouwVoet(instantie.soort, instantie.tekening) || { b: 1, h: 1 };
     const nieuweVoet = T.gebouwVoet(soort.wordt, tekening) || oudeVoet;
     const inOud = (dx, dy) => dx < oudeVoet.b && dy < oudeVoet.h;
@@ -284,7 +286,8 @@
       }
     }
     const oudeNaam = soort.naam;
-    T.neemTekening(S, soort.wordt);
+    if (!vast) T.neemTekening(S, soort.wordt);
+    delete instantie.wordtTekening;
     instantie.soort = soort.wordt;
     instantie.tekening = tekening;
     instantie.voet = nieuweVoet;
@@ -316,6 +319,8 @@
     // (ontwerp/werklijst.md, punt 6, "Rijk worden en arm lijken" — de argwaan van de inner stijgt
     // als wat hij ziet niet bij het rekenboek past). Een dorp vol stenen huizen wekt dus andere
     // verwachtingen dan een dorp vol hutten; dat is nu nog geen regel, alleen deze opmerking.
+    // Wie er woont, gaat voortaan naar de deur van de nieuwe tekening (js/bewoners.js).
+    T.huisVeranderd(S, instantie);
     if (T.ui && T.ui.bericht) T.ui.bericht(`Een ${oudeNaam} is gegroeid tot een ${nieuweSoort.naam}.`, 'goed');
     return true;
   }

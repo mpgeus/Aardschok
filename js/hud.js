@@ -331,13 +331,15 @@
   };
 
   // Het bouwmenu: de soorten van de huidige trede, met hun kosten en wat ze doen (ontwerp/spel.md,
-  // "Gebouwen"). Een klik op een rij geeft T.S.bouwSoort dat gebouw mee — daarna richt de muis
+  // "Gebouwen"). Welke erin staan, zegt T.inBouwmenu (js/gebouwen.js): bouwt het dorp zelf, dan het erf
+  // en geen woningen. Een klik op een rij geeft T.S.bouwSoort dat gebouw mee — daarna richt de muis
   // een spookbeeld (js/main.js, js/tekenen.js) tot een klik op de kaart hem neerzet.
   function bouwmenuInhoud(S) {
     const rijen = Object.keys(T.GEBOUWEN)
-      .filter((id) => T.GEBOUWEN[id].trede === S.trede && T.GEBOUWEN[id].menu !== false)
+      .filter((id) => T.inBouwmenu(S, id))
       .map((id) => {
         const g = T.GEBOUWEN[id];
+        if (g.erf) return erfRij(S, id, g);
         const kosten = Object.entries(g.kosten).map(([wat, n]) => `${n} ${wat}`).join(', ');
         // Wat de heer er elk jaar voor wil (js/heer.js): zo weet je bij elk gebouw wat het je op
         // Sint-Maarten kost, want wat je bouwt, is wat hij ziet.
@@ -354,6 +356,21 @@
       })
       .join('');
     return `<div class="kop">Bouwen — het ${S.trede}</div>${rijen || '<p class="bouw-leeg">Hier valt nu niets te bouwen.</p>'}`;
+  }
+
+  // De rij van het erf (js/erven.js): wat het kost is niets, maar er staat bij hoeveel er vrij zijn, en
+  // wat een gezin erop nodig heeft.
+  function erfRij(S, id, g) {
+    const maat = T.erfMaat();
+    const vrij = T.vrijeErven(S).length;
+    const hout = T.GEBOUWEN.hut.kosten.hout;
+    return (
+      `<button data-soort="${id}">` +
+      `<span class="bouw-naam">${T.hoofdletter(g.naam)}</span>` +
+      `<span class="bouw-kosten">${maat.b} bij ${maat.h} tegels · ${vrij ? `${vrij} vrij` : 'geen vrij'}</span>` +
+      `<span class="bouw-uitleg">${g.beschrijving}: ${hout} hout per hut. Klik op een vrij erf om het weer weg te halen.</span>` +
+      `</button>`
+    );
   }
 
   T.ui.toonBouwmenu = function (S) {

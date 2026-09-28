@@ -272,6 +272,17 @@
           uitleg: 'Je weet niet wie er keek. Je hoort het pas als het rondverteld is: van de herbergierster, of als de soldaten het vinden.' },
       ],
     },
+    // Het dorp bouwt zelf (Marcel, 28 sep, werklijst vraag 52: "C ja"; js/erven.js).
+    {
+      id: 'huizen', naam: 'Huizen', standaard: 'dorpBouwtZelf',
+      uitleg: 'Wie de huizen neerzet.',
+      keuzes: [
+        { id: 'dorpBouwtZelf', naam: 'Het dorp bouwt zelf', zet: { 'ERVEN_INSTELLINGEN.dorpBouwtZelf': true },
+          uitleg: 'Jij wijst erven aan, en een nieuw gezin zet er zelf een hut op, met hout uit de voorraad. De hut en het huis staan niet in het bouwmenu.' },
+        { id: 'jij', naam: 'Jij zet ze neer', zet: { 'ERVEN_INSTELLINGEN.dorpBouwtZelf': false },
+          uitleg: 'De hut en het huis staan in het bouwmenu, en een nieuw gezin komt alleen als er een huis met plaats is. Erven zijn er niet.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -292,6 +303,7 @@
     { naam: 'De dag', blok: 'DAG_INSTELLINGEN' },
     { naam: 'Gebouwen en bevolking', blok: 'GEBOUWEN_INSTELLINGEN' },
     { naam: 'De bewoners', blok: 'BEWONERS_INSTELLINGEN' },
+    { naam: 'De erven', blok: 'ERVEN_INSTELLINGEN' },
     { naam: 'De herberg', blok: 'HERBERG_INSTELLINGEN' },
     { naam: 'Behoeften en de winter', blok: 'BEHOEFTEN_INSTELLINGEN' },
     { naam: 'De marskramer', blok: 'HANDEL_INSTELLINGEN' },

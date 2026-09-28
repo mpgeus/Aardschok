@@ -184,6 +184,16 @@
     const f = T.naarWereld(sx, sy);
     const x = Math.round(f.x);
     const y = Math.round(f.y);
+    // Met een erf in de hand op een vrij erf: een klik maakt het weer gewone grond (js/erven.js).
+    const erf = T.GEBOUWEN[S.bouwSoort].erf ? T.erfOp(S, x, y) : null;
+    if (erf && !erf.hut) {
+      S.bouwHover = { x, y, ok: false, weghalen: erf };
+      canvas.style.cursor = 'pointer';
+      T.ui.tooltip('Klik: dit erf weer gewone grond maken.', S.muis.x, S.muis.y);
+      S.hover = null;
+      S.handeling = null;
+      return;
+    }
     // Past hij niet, dan zegt de muis waarom (op het plein wordt niet gebouwd), net als de klik.
     const reden = T.waaromPastHetNiet(S, S.bouwSoort, x, y);
     S.bouwHover = { x, y, ok: !reden, reden };
@@ -344,6 +354,12 @@
     if (S.bouwSoort) {
       const soort = S.bouwSoort;
       const hover = S.bouwHover;
+      if (hover && hover.weghalen) {
+        const r = T.haalErfWeg(S, hover.weghalen);
+        T.ui.bericht(r.gelukt ? r.bericht : r.reden, r.gelukt ? null : 'gevaar');
+        S.bouwSoort = null;
+        return;
+      }
       if (!hover || !hover.ok) {
         T.ui.bericht((hover && hover.reden) || 'Daar past het niet.', 'gevaar');
         return;
@@ -353,7 +369,7 @@
         T.ui.bericht(r.reden, 'gevaar');
         return;
       }
-      T.ui.bericht(`${T.GEBOUWEN[soort].naam} in aanbouw (${T.GEBOUWEN[soort].bouwtijd} dagen).`, 'goed');
+      T.ui.bericht(r.bericht, 'goed');
       S.bouwSoort = null;
       return;
     }
@@ -602,14 +618,29 @@
       return zoek ? lijst.filter((r) => JSON.stringify(r).includes(zoek)) : lijst;
     },
     // Een nieuw gezin laten komen, zonder op een groeidag te wachten: het komt overdag over de weg
-    // (js/bewoners.js). Spel.debug.gezin(-4) laat er een wegtrekken, zoals als het dorp ontevreden is.
+    // (js/bewoners.js). Is het dorp vol, dan neemt het een vrij erf, zoals op een groeidag (js/erven.js).
+    // Spel.debug.gezin(-4) laat er een wegtrekken, zoals als het dorp ontevreden is.
     gezin(n = 4) {
       if (!S.bewoners) return 'Er wonen hier geen bewoners.';
       const plaats = n < 0 ? n : Math.max(0, Math.min(n, (S.woonruimte || 0) - S.bevolking));
-      if (plaats === 0) return 'Er is geen plaats: bouw eerst een hut of een huis (Spel.debug.bouw).';
+      if (plaats === 0) {
+        const hut = T.gezinZoektEenErf(S);
+        T.ui.toonBevolking(S);
+        return hut ? `Een gezin neemt het erf op (${hut.erf.x}, ${hut.erf.y}), en komt overdag over de weg.` : 'Er is geen plaats: wijs eerst een erf aan (Spel.debug.bouw(\'erf\', x, y)).';
+      }
       const echt = plaats < 0 ? T.wijzigBevolking(S, plaats, 'vertrek', 'het dorp is niet tevreden genoeg') : T.wijzigBevolking(S, plaats, 'groei');
       T.ui.toonBevolking(S);
       return echt < 0 ? `${-echt} trekken weg.` : `${echt} komen over de weg, overdag vanaf ${T.DAG_INSTELLINGEN.bezoekUur} uur.`;
+    },
+    // De erven (js/erven.js): waar ze liggen, en wie er woont of bouwt. Een erf aanwijzen gaat als een
+    // gebouw: Spel.debug.bouw('erf', 30, 20).
+    erven() {
+      return (S.erven || []).map((e) => {
+        const hut = e.hut;
+        const wie = hut && S.bewoners ? S.bewoners.mensen.filter((p) => p.huis === hut).map((p) => p.naam) : [];
+        const staat = !hut ? 'vrij' : hut.wachtOpHout ? 'wacht op hout' : hut.klaar ? `een ${T.GEBOUWEN[hut.soort].naam}` : `in aanbouw, klaar op dag ${hut.klaarOp}`;
+        return { x: e.x, y: e.y, staat, wie: wie.join(', ') };
+      });
     },
     // De herberg (js/herberg.js): wie er vanavond gaat, hoe ver ze lopen, gisteravond, en het bier.
     // Spel.debug.herberg(30) zet eerst 30 bier in de voorraad.

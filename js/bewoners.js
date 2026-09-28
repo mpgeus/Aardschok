@@ -451,10 +451,11 @@
   // Hoeveel mensen er in huis g wonen.
   const inHetHuis = (S, g) => S.bewoners.mensen.filter((p) => p.huis === g).length;
 
-  // De huizen van het dorp: wat klaar is en mensen een plek geeft, met hoeveel er nog bij kunnen.
+  // De huizen van het dorp: wat klaar is en mensen een plek geeft, met hoeveel er nog bij kunnen. Ook de
+  // hut op een erf die nog oprijst: daar woont zijn gezin al (js/erven.js).
   function huizenMetPlaats(S) {
     return (S.gebouwen || [])
-      .filter((g) => g.klaar && T.GEBOUWEN[g.soort] && (T.GEBOUWEN[g.soort].woonruimte || 0) > 0)
+      .filter((g) => (g.klaar || g.erf) && T.GEBOUWEN[g.soort] && (T.GEBOUWEN[g.soort].woonruimte || 0) > 0)
       .map((g) => ({ g, vrij: T.GEBOUWEN[g.soort].woonruimte - inHetHuis(S, g) }));
   }
 
@@ -481,7 +482,9 @@
         continue;
       }
       for (const p of leden) p.komt = true;
-      B.komen.push({ mensen: leden, aankomst: { tekst: `Er komt een nieuw gezin over de weg: ${gezinTekst(S, leden)}. (+${leden.length})` } });
+      // Wie een erf nam (js/erven.js), bouwt daar zelf zijn hut.
+      const erf = leden[0].huis && leden[0].huis.erf && !leden[0].huis.klaar ? ' Ze zetten een hut op hun erf.' : '';
+      B.komen.push({ mensen: leden, aankomst: { tekst: `Er komt een nieuw gezin over de weg: ${gezinTekst(S, leden)}.${erf} (+${leden.length})` } });
     }
     return gezinnen.flat();
   }
@@ -655,6 +658,20 @@
     else if (verschil < 0) gaanWeg(S, wieGaat(S, 'vertrek').slice(0, -verschil), 'vertrek');
     for (const p of S.bewoners.mensen) maakPoppetje(S, p);
     T.verdeelHanden(S);
+  };
+
+  // Een huis kreeg een andere tekening, en dus misschien een andere deur (een hut die een huis werd,
+  // js/behoeften.js): wie er woont, gaat voortaan naar die deur, en rekent zijn wegen opnieuw uit. Tot
+  // 28 sep bleef zijn deur waar die was.
+  T.huisVeranderd = function (S, g) {
+    const w = S.bewoners && S.bewoners.wereld;
+    if (!w) return;
+    const deur = T.deurVan(w, g);
+    for (const p of S.bewoners.mensen) {
+      if (p.huis !== g) continue;
+      if (p.wezen) p.wezen.thuis = { x: deur.x, y: deur.y };
+      zetPlekken(S, p);
+    }
   };
 
   // Het getal veranderde (T.wijzigBevolking, js/gebouwen.js): de bewoners gaan mee. `reden`: 'groei'

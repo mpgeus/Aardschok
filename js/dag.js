@@ -185,6 +185,8 @@
     const plek = p.plek || {};
     if (deel === 'ochtend') return (p.haaltWater && plek.put) || erf;
     if (deel === 'avond') return erf;
+    // Wie zijn eigen hut bouwt op een erf (js/erven.js), werkt er overdag aan, en niet op zijn werk.
+    if (p.huis && p.huis.erf && !p.huis.klaar) return erf;
     return plek.werk || plek.vrij || erf;
   };
 
