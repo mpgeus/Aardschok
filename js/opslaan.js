@@ -50,6 +50,7 @@
     bouwMenuOpen: false,
     naLopen: null, // wat er gebeurt als de schout er is, zoals een venster dat opengaat
     spreektMet: null, // een gesprek dat openstaat
+    doorkijkTijd: 0, // de klok van de doorkijk, die met het tekenen meeloopt (js/tekenen.js)
   });
   const NIET_MEE = new Set([...Object.keys(T.schermVelden()), 'camera', 'zoom']);
   // En wat alleen scherm is binnen een ding, waar het ook staat: hoe de tekening van een wezen erbij staat
