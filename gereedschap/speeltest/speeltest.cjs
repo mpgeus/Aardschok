@@ -84,7 +84,7 @@ async function speelJaar(browser, speler, zaad) {
   try {
     uitslag = await page.evaluate((o) => Spel.speeltest.speel(o), { speler, zaad });
   } catch (e) {
-    uitslag = { speler, zaad, mislukt: String(e && e.message || e) };
+    uitslag = { speler, zaad, mislukt: String((e && e.message) || e).split('\n').slice(0, 2).join(' ') };
   }
   uitslag.fouten = fouten;
   uitslag.duurSeconden = Math.round((Date.now() - begin) / 1000);
