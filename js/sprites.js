@@ -87,7 +87,7 @@
       S.buitenAan = buiten.length > 0 && uitBuiten.every(Boolean);
       S.bouwfasenAan = !!bouwfasenOk;
       if (S.aan) snijVloeren();
-      if (!S.aan || !S.buitenAan) console.warn('Aardschok: sprites ontbreken, het spel tekent daar vlakken.', S.mist);
+      if (!S.aan || !S.buitenAan) console.warn(`${T.NAAM}: sprites ontbreken, het spel tekent daar vlakken.`, S.mist);
       return S.aan;
     })();
     return belofte;

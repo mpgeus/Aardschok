@@ -962,6 +962,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 28 sep 2026 — **De naam op één plek** (dertiende sessie; vraag 8, Marcel: "De naam blijft aardschok voor nu.
+  We maken later iets anders. Zorg dat we dat makkelijk door het hele spel kunnen aanpassen"). `T.NAAM` in
+  `js/naam.js`, het eerste script van elke bladzijde: het tabblad van het spel en van het gereedschap (`{naam}`
+  in de titel), de kop van `gereedschap/index.html` (`data-spelnaam`), de server en de meldingen in de console
+  lezen hem daar. De sleutel van de opslag in de browser (`T.OPSLAG_SLEUTEL`) staat ernaast en verandert niet
+  mee, zodat een nieuwe naam niemand zijn spel kost. `test/naam.test.cjs` bewaakt dat de naam nergens anders
+  staat (`verpakken.md`, "De naam").
 - 28 sep 2026 — **De speeltest op de stand van nu** (twaalfde sessie; punt 2 van de prioriteit, vraag 45,
   Marcel: "A ja B ja C ja D ja"). `npm run speeltest` speelt het gehucht een jaar in een onzichtbare browser,
   met vier spelers in code (braaf, lui 30%, lui 60%, slim), elk met zaad 1 tot en met 3

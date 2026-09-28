@@ -134,6 +134,10 @@ lang hij leeft. Daaruit volgt, van meest naar minst effect:
 Alles hangt aan één naamruimte, `globalThis.Spel` (in de code `T`), zodat hetzelfde bestand in
 de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html` telt.
 
+- `js/naam.js`: de naam van het spel (`T.NAAM`), op één plek, want hij verandert nog (Marcel, 28 sep); een
+  titel schrijft `{naam}`. De sleutel waaronder de browser iets bewaart (`T.OPSLAG_SLEUTEL`) staat ernaast en
+  verandert nooit mee. `test/naam.test.cjs` bewaakt dat de naam nergens anders staat.
+
 - `js/wereld.js`: wat een wezen is (`T.WEZENS`) en wat een voorwerp is (`T.VOORWERPEN`), de
   vragen over een kaart (`isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`/`zietTegel`, `isZichtbaar`,
   `opHetPlein`: op het plein wordt niet gebouwd),

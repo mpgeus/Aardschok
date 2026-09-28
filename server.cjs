@@ -6,6 +6,9 @@ const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFile } = require('node:child_process');
+// De naam van het spel staat op één plek (js/naam.js); de server leest hem daar, net als de toetsen.
+require('./js/naam.js');
+const NAAM = globalThis.Spel.NAAM;
 
 const MAP = __dirname;
 const POORT = Number(process.env.PORT) || 8123;
@@ -273,7 +276,7 @@ http
   .listen(POORT, '127.0.0.1', () => {
     // De adressen erbij, want "waar zit het gereedschap?" is anders elke keer weer zoeken.
     const hier = `http://localhost:${POORT}`;
-    console.log(`Aardschok draait op ${hier}`);
+    console.log(`${NAAM} draait op ${hier}`);
     console.log('');
     console.log(`  het spel       ${hier}/`);
     console.log(`  de wereld      ${hier}/gereedschap/wereld.html      kaarten, mensen, quests, controle`);

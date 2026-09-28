@@ -333,6 +333,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Een questweg kan nog "jaren" kosten** (`js/quest.js`, KOSTEN, en de toets van drie antwoorden).
   In het nieuwe spel kost niets meer jaren; misschien wordt het "tijd" of "leven". Beslissen als de
   quests van het gehucht komen.
+- **`server.oud.cjs` lijkt een overblijfsel** (28 sep, dertiende sessie, bij de naam op één plek). Het kwam op
+  22 sep mee in een commit die met de oude server iets nagemeten had (`e8ab95b`), en niets gebruikt het:
+  `npm start` draait `server.cjs`. Het mag weg.
 
 ## Het beeld
 

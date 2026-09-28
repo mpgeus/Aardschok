@@ -58,7 +58,7 @@
       // Een gebied zonder uitgang is een val: daar kom je nooit meer weg. Dat moet hoorbaar zijn
       // zodra het gebeurt, niet pas als een speler vaststaat.
       if (!w.overgangen || !w.overgangen.length) {
-        console.error(`Aardschok: gebied "${naam}" heeft geen enkele overgang — je komt er niet meer uit. Zet in Tiled een object met de eigenschap "overgang" op de kaart en draai npm run kaarten.`);
+        console.error(`${T.NAAM}: gebied "${naam}" heeft geen enkele overgang — je komt er niet meer uit. Zet in Tiled een object met de eigenschap "overgang" op de kaart en draai npm run kaarten.`);
       }
       // En andersom: een overgang die naar een kaart wijst die niet bestaat. Ook dat hoort hier
       // al te klagen, bij het inlezen, en niet pas als een speler er per ongeluk op stapt. Behalve
@@ -76,7 +76,7 @@
   // Eén klacht voor allebei de plekken waar het opvalt, in dezelfde bewoording: wat er ontbreekt
   // en wat Marcel eraan doet.
   function ontbreekt(naar, waar) {
-    console.error(`Aardschok: overgang naar "${naar}", maar dat gebied bestaat niet (${waar}). Teken kaarten/${naar}.tmj in Tiled en draai npm run kaarten.`);
+    console.error(`${T.NAAM}: overgang naar "${naar}", maar dat gebied bestaat niet (${waar}). Teken kaarten/${naar}.tmj in Tiled en draai npm run kaarten.`);
   }
 
   T.overgangOp = function (w, x, y) {

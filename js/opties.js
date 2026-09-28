@@ -515,7 +515,7 @@
   // gewoon niet: het spel werkt dan met de standaard.
   // ---------------------------------------------------------------------------------------------
 
-  const SLEUTEL = 'aardschok.spelregels';
+  const SLEUTEL = T.OPSLAG_SLEUTEL + '.spelregels';
   function opslag() {
     try {
       return typeof localStorage !== 'undefined' ? localStorage : null;

@@ -107,3 +107,15 @@ kant voorop wil: Schout, met dezelfde ondertitel.
 
 **Vóór je kiest:** zoeken op Steam zelf, in de merkenregisters (EUIPO, en BOIP voor de Benelux), en
 kijken of de domeinnaam vrij is.
+
+**Besloten (Marcel, 28 sep): "De naam blijft aardschok voor nu. We maken later iets anders. Zorg dat we dat
+makkelijk door het hele spel kunnen aanpassen."** De naam staat op één plek: `T.NAAM` in `js/naam.js`. Het
+tabblad van het spel en van het gereedschap, de server en de meldingen in de console lezen hem daar, en het
+titelscherm straks ook. Een andere naam is dus één regel. `test/naam.test.cjs` bewaakt dat hij nergens anders
+in het spel staat.
+
+Eén ding verandert bewust niet mee: de sleutel waaronder de browser de spelregels bewaart, en straks de
+opgeslagen spellen (`T.OPSLAG_SLEUTEL`, in hetzelfde bestand, "aardschok"). Zou die meeveranderen, dan is
+iedereen bij de nieuwe naam zijn opgeslagen spel kwijt. De technische naam in `package.json` en
+`.claude/launch.json` ziet geen speler; die mag blijven. Als het spel verpakt wordt, neemt de schil de naam
+voor het venster en de winkel ook uit `js/naam.js`.
