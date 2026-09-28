@@ -8,6 +8,9 @@
 //   npm run speeltest -- slim                  één speler, met zaad 1, 2 en 3
 //   npm run speeltest -- slim --zaad 7         één jaar
 //   npm run speeltest -- --zaden 1-5           andere zaden
+//   npm run speeltest -- lui60 --zaad 1 --opslaan        de proef met opslaan (vraag 48): op 1 oogstmaand
+//                                                        opslaan, herladen, Verder, en dan precies hetzelfde
+//                                                        jaar als zonder opslaan (--opslaan 245: een andere dag)
 //
 // De spelers staan in speler.js (die draait in de bladzijde, naast het spel). Wat er per jaar gebeurde,
 // komt in gereedschap/speeltest/uit/<speler>-<zaad>.json, en een tabel in uit/samenvatting.md (niet in
@@ -37,18 +40,21 @@ function laadPlaywright() {
   }
 }
 
+const OOGSTMAAND = 150; // 1 oogstmaand, de dag waarop de proef met opslaan opslaat (vraag 48)
+
 function leesOpdracht(argv) {
-  const o = { spelers: [], zaden: [1, 2, 3] };
+  const o = { spelers: [], zaden: [1, 2, 3], opslaan: null };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
-    if (a === '--zaad') o.zaden = [Number(argv[++i])];
+    if (a === '--opslaan') o.opslaan = /^\d+$/.test(argv[i + 1] || '') ? Number(argv[++i]) : OOGSTMAAND;
+    else if (a === '--zaad') o.zaden = [Number(argv[++i])];
     else if (a === '--zaden') {
       const [van, tot] = argv[++i].split('-').map(Number);
       o.zaden = [];
       for (let z = van; z <= (tot || van); z++) o.zaden.push(z);
     } else if (SPELERS.includes(a)) o.spelers.push(a);
     else {
-      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n of --zaden van-tot.`);
+      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot of --opslaan [dag].`);
       process.exit(1);
     }
   }
@@ -57,8 +63,10 @@ function leesOpdracht(argv) {
 }
 
 // Een jaar: een schone browser, Math.random uit het zaad (daaruit loot het spel de boeren en zijn eigen
-// zaad, js/boeren.js), het spel zoals index.html het laadt, en dan de speler erbij.
-async function speelJaar(browser, speler, zaad) {
+// zaad, js/boeren.js), het spel zoals index.html het laadt, en dan de speler erbij. Met `opslaan` (de proef
+// met opslaan): { dag, bewaar }, zie speler.js; slaat de speler op, dan herlaadt dit de bladzijde, en gaat
+// hij verder met Verder op het titelscherm.
+async function speelJaar(browser, speler, zaad, opslaan = null) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await context.newPage();
   const fouten = [];
@@ -76,13 +84,23 @@ async function speelJaar(browser, speler, zaad) {
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
   }, zaad);
+  const laad = async () => {
+    await page.waitForFunction(() => globalThis.Spel && Spel.S && Spel.S.kalender && Spel.debug);
+    await page.addScriptTag({ path: path.join(__dirname, 'speler.js') });
+  };
   await page.goto('file://' + path.join(WORTEL, 'index.html'));
-  await page.waitForFunction(() => globalThis.Spel && Spel.S && Spel.S.kalender && Spel.debug);
-  await page.addScriptTag({ path: path.join(__dirname, 'speler.js') });
+  await laad();
   const begin = Date.now();
   let uitslag;
   try {
-    uitslag = await page.evaluate((o) => Spel.speeltest.speel(o), { speler, zaad });
+    uitslag = await page.evaluate((o) => Spel.speeltest.speel(o), { speler, zaad, opslaan });
+    if (uitslag.opgeslagen) {
+      const opgeslagen = uitslag.opgeslagen;
+      await page.reload();
+      await laad();
+      uitslag = await page.evaluate((o) => Spel.speeltest.speel(o), { speler, zaad, verder: { eenKeer: opgeslagen.eenKeer } });
+      uitslag.opgeslagen = opgeslagen;
+    }
   } catch (e) {
     uitslag = { speler, zaad, mislukt: String((e && e.message) || e).split('\n').slice(0, 2).join(' ') };
   }
@@ -105,6 +123,11 @@ async function main() {
   fs.mkdirSync(UIT, { recursive: true });
   const { chromium } = laadPlaywright();
   const browser = await chromium.launch();
+  if (o.opslaan != null) {
+    await proefMetOpslaan(browser, o);
+    await browser.close();
+    return;
+  }
   const rij = [];
   for (const speler of o.spelers) for (const zaad of o.zaden) rij.push({ speler, zaad });
   const uitslagen = [];
@@ -125,6 +148,41 @@ async function main() {
   const tabel = require('./samenvatting.cjs').maak(uitslagen, stand);
   fs.writeFileSync(path.join(UIT, 'samenvatting.md'), tabel);
   console.log('\n' + tabel);
+}
+
+// De proef met opslaan (vraag 48): per speler en zaad twee jaren naast elkaar. Het ene slaat op de dag op,
+// herlaadt de bladzijde en gaat verder met Verder op het titelscherm; het andere speelt door. Vanaf dat
+// moment hebben ze hetzelfde lot (speler.js), dus moet het spel aan het eind letter voor letter gelijk zijn.
+async function proefMetOpslaan(browser, o) {
+  const regels = [];
+  for (const speler of o.spelers) {
+    for (const zaad of o.zaden) {
+      const [gewoon, bewaard] = await Promise.all([
+        speelJaar(browser, speler, zaad, { dag: o.opslaan, bewaar: false }),
+        speelJaar(browser, speler, zaad, { dag: o.opslaan, bewaar: true }),
+      ]);
+      const wie = `${speler}, zaad ${zaad}`;
+      let regel;
+      if (gewoon.mislukt || bewaard.mislukt) regel = `${wie}: MISLUKT: ${gewoon.mislukt || bewaard.mislukt}`;
+      else if (!bewaard.opgeslagen) regel = `${wie}: MISLUKT: de speler heeft niet opgeslagen`;
+      else {
+        const a = gewoon.eindStaat;
+        const b = bewaard.eindStaat;
+        const op = `opgeslagen op ${bewaard.opgeslagen.datum} ("${bewaard.opgeslagen.melding}"), herladen, verder met Verder`;
+        if (a === b) regel = `${wie}: ${op}: precies hetzelfde jaar (${Math.round(a.length / 1024)} kB, gelijk tot de laatste letter)`;
+        else {
+          let i = 0;
+          while (i < a.length && a[i] === b[i]) i++;
+          regel = `${wie}: ${op}: VERSCHIL vanaf teken ${i}\n  zonder: …${a.slice(Math.max(0, i - 160), i + 160)}…\n  met:    …${b.slice(Math.max(0, i - 160), i + 160)}…`;
+        }
+      }
+      const fouten = [...(gewoon.fouten || []), ...(bewaard.fouten || [])];
+      if (fouten.length) regel += `\n  fouten in de console: ${fouten.slice(0, 3).join(' / ')}`;
+      console.log(regel);
+      regels.push(regel);
+    }
+  }
+  fs.writeFileSync(path.join(UIT, 'opslaan.md'), `# De proef met opslaan\n\n${regels.map((r) => `- ${r}`).join('\n')}\n`);
 }
 
 main().catch((e) => {

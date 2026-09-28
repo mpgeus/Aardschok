@@ -1,6 +1,11 @@
 // De speler van de speeltest (gereedschap/speeltest/speeltest.cjs; werklijst, vraag 45). Dit bestand draait
-// in de bladzijde, naast het spel zoals index.html het laadt, en speelt één jaar: van de benoemingsbrief
-// (1 lentemaand) tot 1 grasmaand van het jaar erna, zodat de winter en het zaaien erin zitten.
+// in de bladzijde, naast het spel zoals index.html het laadt, en speelt één jaar: van het titelscherm en de
+// benoemingsbrief (1 lentemaand) tot 1 grasmaand van het jaar erna, zodat de winter en het zaaien erin zitten.
+//
+// De proef met opslaan (speeltest.cjs --opslaan; werklijst, vraag 48): de speler slaat op een dag op, via het
+// menu zoals een mens, en stopt; speeltest.cjs herlaadt de bladzijde, en de speler gaat verder met Verder op
+// het titelscherm. Hetzelfde jaar zonder opslaan trekt op dat moment het lot opnieuw, net als het herladen jaar
+// na het laden, zodat allebei vanaf daar hetzelfde lot hebben: dan moet het jaar precies zo aflopen.
 //
 // De speler doet wat een speler doet, met dezelfde klik: hij loopt erheen (T.handelingVerkennen, de klik
 // op een tegel, een gebouw of een mens) en drukt op de knoppen van het venster dat dan opengaat. Zo tellen
@@ -748,12 +753,20 @@
     };
   }
 
+  // Het lot vanaf het moment van opslaan, in het jaar dat opslaat en herlaadt en in hetzelfde jaar zonder.
+  const zaaiNaHetOpslaan = (zaad) => zaai(Math.imul(zaad, 40503) ^ 0x0b5a7e);
+
   T.speeltest = {
-    async speel({ speler, zaad }) {
-      zaai(Math.imul(zaad, 2654435761) ^ 0x5eed);
-      // En de klok van het scherm op nul: of een koe ligt of graast, hangt ervan af (T.rustVanDier,
-      // js/vee.js), en een liggende koe staat een ander anders in de weg dan een grazende.
-      T.S.tijd = 0;
+    // opslaan: { dag, bewaar }: op de eerste stille stap vanaf die dag opslaan en stoppen (bewaar), of alleen
+    // het lot opnieuw trekken (hetzelfde jaar zonder opslaan). verder: { eenKeer }: na het herladen verder
+    // met Verder op het titelscherm, met wat de speler al één keer deed.
+    async speel({ speler, zaad, opslaan = null, verder = null }) {
+      if (!verder) {
+        zaai(Math.imul(zaad, 2654435761) ^ 0x5eed);
+        // En de klok van het scherm op nul: of een koe ligt of graast, hangt ervan af (T.rustVanDier,
+        // js/vee.js), en een liggende koe staat een ander anders in de weg dan een grazende.
+        T.S.tijd = 0;
+      }
       boek = {
         speler, zaad, berichten: [], bevolking: [], daden: [], maanden: [], gebouwd: [], getuigen: [], verstopt: [],
         inner: { geschenken: [], gepraatUren: 0, rapport: null },
@@ -766,15 +779,37 @@
       // het scheelt driekwart van de tijd. De lus van de browser zelf tekent niet tussendoor, want dit
       // hele jaar wacht nooit op de browser (T.debug.stap, js/main.js).
       T.tekenScene = () => {};
-      // De benoemingsbrief: lezen, en aan het werk.
-      if (!klik('#brief .heer-geef-knop') && T.ui.briefOpen()) T.ui.sluitBrief(s);
+      if (verder) {
+        // Het titelscherm: Verder laadt het nieuwste spel, dat de speler net zelf opsloeg (js/menu.js).
+        if (!klik('#menu [data-actie="verder"]')) throw new Error('er staat geen Verder op het titelscherm');
+        for (const naam of verder.eenKeer) eenKeer.add(naam);
+        zaaiNaHetOpslaan(zaad);
+      } else {
+        // Het titelscherm: een nieuw spel (js/menu.js). Dan de benoemingsbrief: lezen, en aan het werk.
+        if (!klik('#menu [data-actie="nieuw"]')) throw new Error('er staat geen Nieuw spel op het titelscherm');
+        if (!klik('#brief .heer-geef-knop') && T.ui.briefOpen()) T.ui.sluitBrief(s);
+      }
       T.zetSnelheid(s, 30);
       boek.spelZaad = s.lot.zaad;
       boek.boeren = Object.fromEntries(Object.entries(s.lot.boeren).map(([id, b]) => [id, b.karakter]));
       boek.begin = tel(); // de eerste van de maand zelf schrijft de boekhouding op, bij de eerste stap
       const P = SPELERS[speler];
-      if (P.begin) await P.begin();
+      if (P.begin && !verder) await P.begin();
       for (let i = 0; i < 400000 && dagNu() < EIND && !s.einde; i++) {
+        if (opslaan && !opslaan.gedaan && dagNu() >= opslaan.dag && !T.waaromNietOpslaan(s) && !s.slaap) {
+          opslaan.gedaan = true;
+          if (opslaan.bewaar) {
+            // Zoals een speler: het menu, Opslaan, plek 1, en weer spelen. Dan stopt dit deel van het jaar.
+            klik('#menu-knop');
+            klik('#menu [data-actie="opslaan"]');
+            klik('#menu [data-actie="bewaar"][data-plek="1"]');
+            klik('#menu [data-actie="ja"]');
+            const melding = (document.querySelector('#menu .menu-melding') || {}).textContent || '';
+            klik('#menu [data-actie="verder"]');
+            return { speler, zaad, opgeslagen: { dag: heel(dagNu()), datum: datum(), melding, eenKeer: [...eenKeer] } };
+          }
+          zaaiNaHetOpslaan(zaad);
+        }
         await stap();
         await P.elkeStap();
       }
@@ -787,6 +822,8 @@
       };
       boek.eind = eind();
       boek.winter = winter();
+      // Voor de proef met opslaan: het hele spel aan het eind, om twee jaren letter voor letter te vergelijken.
+      if (opslaan || verder) boek.eindStaat = T.bewaarSpel(s, { plek: 'eind', nu: 0 });
       return JSON.parse(JSON.stringify(boek));
     },
   };
