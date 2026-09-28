@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (28 sep 2026, na de elfde sessie): de winter is zichtbaar; nu een speeltest op de stand van nu
+## De stand (28 sep 2026, na de elfde sessie): alles staat in main; nu een speeltest op de stand van nu
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet,
 en je probeert rijk te worden terwijl je arm lijkt. Wat er nu speelt en hoe het werkt, staat per
@@ -19,10 +19,9 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel begint in het gehucht, met 
 de heer; `Z` is slapen bij je huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag.
 `npm test`: 550/550.
 
-**Waar het werk staat:** de elfde sessie (28 sep, de winter zichtbaar) staat op
-`claude/werklijst-doorzetten-cxck6z`, nog niet in `main`: dat doet Marcel als hij erom vraagt. Alles
-daarvoor staat in `main` (Marcel, 27 sep: "Alle openstaande punten meenemen naar nieuwe sessie en alles
-naar main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main` (Marcel, 28 sep: "Zet het naar main"), ook de elfde
+sessie (de winter zichtbaar; ook op `claude/werklijst-doorzetten-cxck6z`). Hoe een eigen branch en `main`
+samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; de volgorde is een
 voorstel van Claude). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat een proefversie van één
@@ -35,9 +34,9 @@ al van af). Elk stuk begint met een plan voor Marcel.
    stierf (vraag 44; zie onder Af).
 2. **Nu: een speeltest op de stand van nu.** De vorige liep op `main` van vóór de soldaten die altijd
    zoeken, de inner die je kunt bespelen en de winter die je ziet aankomen: hoe de kern nu speelt, weet nog
-   niemand. Een agent kan het, zoals de vorige keer, en Marcel speelt ook; zet de elfde sessie eerst in
-   `main`, of speel op haar branch, en zeg op welke stand. De getallen bijstellen (het goud, de kelders, de
-   honger, de inner) komt daarna, als Marcel wil ("We gaan later finetunen").
+   niemand. Een agent kan het, zoals de vorige keer, en Marcel speelt ook: op `main`, waar sinds 28 sep
+   alles in staat, en zeg op welke commit. De getallen bijstellen (het goud, de kelders, de honger, de
+   inner) komt daarna, als Marcel wil ("We gaan later finetunen").
 3. **Opslaan, Verder en een titelscherm** (wacht op 33b, en op een naam, vraag 8). Zonder opslaan speelt
    niemand een jaar van een uur uit.
 4. **De afrekening na het eerste jaar** (wacht op 33a): wat je gaf, wat je achterhield en wat daarvan
