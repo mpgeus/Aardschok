@@ -52,6 +52,11 @@
     spreektMet: null, // een gesprek dat openstaat
   });
   const NIET_MEE = new Set([...Object.keys(T.schermVelden()), 'camera', 'zoom']);
+  // En wat alleen scherm is binnen een ding, waar het ook staat: hoe de tekening van een wezen erbij staat
+  // (e.beeldStand, js/sprites.js: hoe ver zijn voeten liepen, en het laatst getekende beeld). Dat maakt de
+  // tekening zelf weer aan. Het ging eerst mee, en toen bleek in de proef met opslaan (speeltest --opslaan)
+  // dat het van hoeveel beelden de browser vóór het spel al tekende afhing, en niet van het spel.
+  const SCHERM_SLEUTELS = new Set(['beeldStand']);
 
   // ── Van S naar tekst, en terug ──
   //
@@ -88,7 +93,7 @@
           tel(x);
         }
       }
-      else for (const k of Object.keys(v)) tel(v[k]);
+      else for (const k of Object.keys(v)) if (!SCHERM_SLEUTELS.has(k)) tel(v[k]);
     };
     tel(wortel);
 
@@ -128,6 +133,7 @@
       const o = {};
       let dollar = false;
       for (const k of Object.keys(v)) {
+        if (SCHERM_SLEUTELS.has(k)) continue;
         const w = schrijf(v[k], `${pad}.${k}`);
         if (w !== undefined) o[k] = w;
         if (k[0] === '$') dollar = true;

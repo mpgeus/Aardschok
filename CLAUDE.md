@@ -341,7 +341,8 @@ moet, staat in de werklijst (vraag 25).
 **Alles in `Spel.S` wordt bewaard** (28 sep, vraag 48; `js/opslaan.js`), zonder dat een regel dat hoeft te
 zeggen. Dus: wat het spel onthoudt, staat in `S`, als gewone gegevens (objecten, lijsten, Set, Map; geen
 functie, geen canvas, geen Date), en nergens in een losse variabele in een bestand. Wat alleen scherm is (de
-muis, een flits), komt in `T.schermVelden`. Verandert de vorm van `S` zo dat een oud spel niet meer past (iets
+muis, een flits), komt in `T.schermVelden`; wat alleen scherm is binnen een ding (hoe de tekening van een wezen
+erbij staat, `e.beeldStand`), in `SCHERM_SLEUTELS` in `js/opslaan.js`. Verandert de vorm van `S` zo dat een oud spel niet meer past (iets
 heet anders, of betekent iets anders), verhoog dan `T.OPSLAAN_INSTELLINGEN.versie`; een veld erbij hoeft dat
 niet. `test/opslaan.test.cjs` bewaakt dat bewaren en laden hetzelfde spel geeft.
 

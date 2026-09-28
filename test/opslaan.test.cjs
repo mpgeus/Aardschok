@@ -125,6 +125,15 @@ test('verzamelingen blijven verzamelingen, en het scherm begint opnieuw', () => 
   assert.equal(S2.grond, null);
 });
 
+test('hoe de tekening van een wezen erbij staat, gaat niet mee: die maakt de tekening zelf weer aan', () => {
+  const S = gehucht();
+  S.schout.beeldStand = { afgelegd: 3, x: 1, y: 2, richting: 'N', laatste: { naam: 'dorpeling1', beeld: 2 } };
+  const S2 = gehucht();
+  assert.equal(T.herstelSpel(S2, T.bewaarSpel(S, { nu: NU })).gelukt, true);
+  assert.equal('beeldStand' in S2.schout, false);
+  assert.equal(S2.schout.tx, S.schout.tx, 'de rest van de schout gaat wel mee');
+});
+
 test('ook wat JSON zelf niet kent, komt terug', () => {
   const lus = { naam: 'lus' };
   lus.zelf = lus;

@@ -150,6 +150,17 @@ async function main() {
   console.log('\n' + tabel);
 }
 
+// Waar twee bewaarde spellen verschillen: het pad en de twee waarden, hoogstens twintig.
+function verschillen(a, b, pad = '', uit = []) {
+  if (uit.length >= 20) return uit;
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
+    for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) verschillen(a[k], b[k], `${pad}.${k}`, uit);
+  } else if (JSON.stringify(a) !== JSON.stringify(b)) {
+    uit.push(`${pad}: ${JSON.stringify(a)} tegen ${JSON.stringify(b)}`.slice(0, 300));
+  }
+  return uit;
+}
+
 // De proef met opslaan (vraag 48): per speler en zaad twee jaren naast elkaar. Het ene slaat op de dag op,
 // herlaadt de bladzijde en gaat verder met Verder op het titelscherm; het andere speelt door. Vanaf dat
 // moment hebben ze hetzelfde lot (speler.js), dus moet het spel aan het eind letter voor letter gelijk zijn.
@@ -171,9 +182,12 @@ async function proefMetOpslaan(browser, o) {
         const op = `opgeslagen op ${bewaard.opgeslagen.datum} ("${bewaard.opgeslagen.melding}"), herladen, verder met Verder`;
         if (a === b) regel = `${wie}: ${op}: precies hetzelfde jaar (${Math.round(a.length / 1024)} kB, gelijk tot de laatste letter)`;
         else {
-          let i = 0;
-          while (i < a.length && a[i] === b[i]) i++;
-          regel = `${wie}: ${op}: VERSCHIL vanaf teken ${i}\n  zonder: …${a.slice(Math.max(0, i - 160), i + 160)}…\n  met:    …${b.slice(Math.max(0, i - 160), i + 160)}…`;
+          // Beide eindstanden bewaren, en elke plek noemen waar ze verschillen (de eerste twintig).
+          fs.writeFileSync(path.join(UIT, `opslaan-${speler}-${zaad}-zonder.json`), a);
+          fs.writeFileSync(path.join(UIT, `opslaan-${speler}-${zaad}-met.json`), b);
+          const plekken = verschillen(JSON.parse(a), JSON.parse(b));
+          regel = `${wie}: ${op}: VERSCHIL op ${plekken.length === 20 ? '20 of meer' : plekken.length} plekken\n` +
+            plekken.map((v) => `  ${v}`).join('\n');
         }
       }
       const fouten = [...(gewoon.fouten || []), ...(bewaard.fouten || [])];
