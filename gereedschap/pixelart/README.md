@@ -84,6 +84,11 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   staat (`node schandpaal.cjs` maakt de proefplaat `uit/schandpaal-proef.png`, daarna
   `node naar-spel.cjs --alleen schandpaal`). De hoogte van de nek wordt gemeten op de boer en de
   boerin zelf; komt er een vel bij dat aan de paal kan, zet het dan in `FIGUREN` daar.
+- `paaltje.cjs`: het paaltje op de hoeken van een vrij erf (werklijst, vraag 52): een dunne, licht
+  verweerde landmeterspaal tot de knie van een dorpeling, met een reepje doek en een hoopje aarde.
+  Eén tekening (20×31, anker 10,25 op de grond in het midden van de tegel; `node paaltje.cjs`
+  maakt de proefplaat `uit/paaltje-proef.png` en zegt of hij nog in zijn cel past, daarna
+  `node naar-spel.cjs --alleen paaltje`). Het spel vraagt hem met `T.sprites.paaltje()`.
 - `bosvijanden.cjs`: wolf, reuzenspin en kobold, met houdingen (`bosvijanden-anim.cjs`).
 - `vee.cjs`: de koe en het schaap (`beeld.md`, "Het vee"), op het tuig van de wolf, met vier
   houdingen: grazen, staan, lopen en liggen. Elk in drie kleuren, een vel per kleur (`koe0..2`:

@@ -68,6 +68,7 @@
       const vellen = [gegevens.muren.bestand, gegevens.vloeren.bestand, gegevens.voorwerpen.bestand];
       if (gegevens.graan) vellen.push(gegevens.graan.bestand);
       if (gegevens.schandpaal) vellen.push(gegevens.schandpaal.bestand);
+      if (gegevens.paaltje) vellen.push(gegevens.paaltje.bestand);
       const lijst = vellen.map((f) => MAP + f);
       for (const f of Object.values(gegevens.figuren)) {
         for (const h of Object.values(f.houdingen)) lijst.push(MAP + 'figuren/' + h.bestand);
@@ -367,6 +368,14 @@
     const l = e.beeldStand && e.beeldStand.laatste;
     const naam = (l && l.naam) || e.vel || S.figuurNaam(e.soort);
     return t.nek[naam] != null ? t.nek[naam] : t.nek.standaard;
+  };
+
+  // Het paaltje op de hoek van een vrij erf (gereedschap/pixelart/paaltje.cjs): één tekening, geen
+  // delen, met het anker op de grond in het midden van de tegel. Null als het vel er niet is.
+  S.paaltje = function () {
+    if (!gegevens || !gegevens.paaltje) return null;
+    const t = gegevens.paaltje;
+    return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
   };
 
   // ---------------------------------------------------------------- bouwfasen (tegels/bouwfasen.png + .json/.js)

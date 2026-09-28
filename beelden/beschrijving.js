@@ -2231,6 +2231,17 @@
      "boer-drinker": 51,
      "boerin-drinker": 51
     }
+   },
+   "paaltje": {
+    "bestand": "paaltje.png",
+    "cel": [
+     20,
+     31
+    ],
+    "anker": [
+     10,
+     25
+    ]
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});
