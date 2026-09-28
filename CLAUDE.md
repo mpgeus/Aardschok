@@ -80,6 +80,13 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   volgorde, zonder wat alleen scherm is (`test/laad.cjs`). Een toets van het gereedschap laadt wat
   zijn bladzijde laadt (`.pagina('gereedschap/wereld.html')`). Nooit een eigen lijstje: dan mist er
   vroeg of laat een bestand, en toetst de toets een ander spel dan er draait.
+- `npm run speeltest` speelt het gehucht een jaar met vier spelers in code (braaf, lui 30%, lui 60%, slim;
+  vraag 45), elk met zaad 1 tot en met 3, in een onzichtbare browser, en zet de uitslag in
+  `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`. Hetzelfde zaad geeft
+  hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed (`-- slim --zaad 2` voor
+  één jaar). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
+  (`gereedschap/speeltest/speler.js`). Een jaar kost twee tot zeven minuten; nodig is Playwright (in de
+  cloud staat het klaar). Wat het vond, staat in `ontwerp/speelbaar.md`.
 - `npm run pixelart` rendert alle HD-pixel art naar `gereedschap/pixelart/uit/` (niet in git).
 - `npm run pixelart:spel` zet daaruit alleen wat het spel tekent in `beelden/` (wél in git,
   want het spel heeft het nodig als het draait). Draai het opnieuw als de kunst verandert.

@@ -771,8 +771,7 @@
       T.zetSnelheid(s, 30);
       boek.spelZaad = s.lot.zaad;
       boek.boeren = Object.fromEntries(Object.entries(s.lot.boeren).map(([id, b]) => [id, b.karakter]));
-      boek.begin = tel();
-      boek.maanden.push(boek.begin);
+      boek.begin = tel(); // de eerste van de maand zelf schrijft de boekhouding op, bij de eerste stap
       const P = SPELERS[speler];
       if (P.begin) await P.begin();
       for (let i = 0; i < 400000 && dagNu() < EIND && !s.einde; i++) {

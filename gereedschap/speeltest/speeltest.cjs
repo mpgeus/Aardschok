@@ -94,10 +94,13 @@ async function speelJaar(browser, speler, zaad) {
 
 async function main() {
   const o = leesOpdracht(process.argv.slice(2));
-  const commit = execSync('git rev-parse --short HEAD', { cwd: WORTEL, encoding: 'utf8' }).trim();
-  const tak = execSync('git rev-parse --abbrev-ref HEAD', { cwd: WORTEL, encoding: 'utf8' }).trim();
-  const vies = execSync('git status --porcelain -- js index.html kaarten beelden', { cwd: WORTEL, encoding: 'utf8' }).trim();
-  const stand = `${tak} op ${commit}${vies ? ' (met wijzigingen die nog niet gecommit zijn)' : ''}`;
+  // Op welke stand: de laatste commit die het spel zelf veranderde (js/, index.html, de kaarten en de
+  // beelden), want een commit in ontwerp/ of hier verandert niets aan hoe het speelt.
+  const git = (opdracht) => execSync(`git ${opdracht}`, { cwd: WORTEL, encoding: 'utf8' }).trim();
+  const SPEL = '-- js index.html kaarten beelden';
+  const vies = git(`status --porcelain ${SPEL}`);
+  const stand = `het spel van ${git(`log -1 --format=%h ${SPEL}`)} (${git('rev-parse --abbrev-ref HEAD')} op ${git('rev-parse --short HEAD')})` +
+    (vies ? ', met wijzigingen in het spel die nog niet gecommit zijn' : '');
   console.log(`De speeltest speelt op ${stand}.`);
   fs.mkdirSync(UIT, { recursive: true });
   const { chromium } = laadPlaywright();
