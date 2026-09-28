@@ -46,19 +46,21 @@ al van af). Elk stuk begint met een plan voor Marcel.
    een menu met opties etc."). Dan speelt `npm run speeltest` dezelfde twaalf jaren opnieuw. Er is al een
    venster met de spelregels en een werkbank met alle getallen (`O`, `js/opties.js`); het menu kan daarop
    bouwen, bijvoorbeeld vanuit het titelscherm van punt 3.
-3. **Opslaan, Verder en een titelscherm** (wacht op 33b, en op een naam, vraag 8). Zonder opslaan speelt
-   niemand een jaar van een uur uit.
-4. **De afrekening na het eerste jaar** (wacht op 33a): wat je gaf, wat je achterhield en wat daarvan
-   gevonden werd, en hoe het dorp erbij staat.
+3. **Opslaan, Verder en een titelscherm.** Zonder opslaan speelt niemand een jaar van een uur uit. Marcel
+   koos op 28 sep: vanzelf opslaan, en ook zelf, met een menu en een titelscherm (33b); de naam blijft
+   Aardschok, op één plek (vraag 8; gebouwd, zie onder Af). Het plan staat bij vraag 48 (wacht op Marcel).
+4. **De afrekening na het eerste jaar:** wat je gaf, wat je achterhield en wat daarvan gevonden werd, en hoe
+   het dorp erbij staat. Marcel koos op 28 sep het voorstel van 33a, en spelen beslist waar goed ophoudt:
+   die grenzen staan in de werkbank. Het plan komt na punt 3.
 5. **De eerste weken als opdrachten,** zodat wie het niet kent, weet wat hij moet doen. Het vak voor de
    opdracht en de quests zijn er al. Het plan staat bij vraag 47 (28 sep, dertiende sessie; wacht op Marcel).
 6. **Een tester die het niet kent** laten spelen (wacht op 33d: een bladzijde op internet, of een
    programma).
 
-*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* 33a (wat is goed na het eerste jaar), 33b
-(opslaan), 33d (hoe een tester het krijgt), in `speelbaar.md`; en 8, een naam, voor het titelscherm (voorstel
-Martinmas, of Schout; `verpakken.md`). Het bijstellen na de speeltest (vraag 46) komt later, met een menu met
-opties (Marcel, 28 sep).
+*2. Wacht op Marcel, want het werk hierboven hangt ervan af:* vraag 48 (het plan voor opslaan, het menu en
+het titelscherm), vraag 47 (het plan voor de eerste weken), en 33d (hoe een tester het krijgt, in
+`speelbaar.md`). 33a, 33b en 8 beantwoordde Marcel op 28 sep. Het bijstellen na de speeltest (vraag 46) komt
+later, met een menu met opties (Marcel, 28 sep).
 
 *3. Na de proefversie* (`speelbaar.md`, "Wat kan wachten"):
 - de rest van punt 4: het bos met de kudde (een idee met vier vragen in `opmerkingen.md`, vraag 43), de
@@ -269,9 +271,11 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
 6. De kern voor het tweede proefje (`spel.md`, "De kern voor het tweede proefje"): de drie groepen en
    vijf keuren, nodig vóór punt 9.
 7. Moet het ijs op de beek te zien zijn (tekenwerk), en vangt de jager 's winters minder?
-8. Een naam; "Aardschok" past niet meer. Voorstel van Claude (27 sep): **Martinmas** (de dag waarop de
+8. ~~Een naam; "Aardschok" past niet meer. Voorstel van Claude (27 sep): **Martinmas** (de dag waarop de
    heer int), met als ondertitel "Get rich. Look poor."; of **Schout**. Acht namen met waarom staan in
-   `verpakken.md`, "De naam". Steam zelf is nog niet nagekeken.
+   `verpakken.md`, "De naam". Steam zelf is nog niet nagekeken.~~ **Beantwoord (Marcel, 28 sep): "De naam
+   blijft aardschok voor nu. We maken later iets anders. Zorg dat we dat makkelijk door het hele spel kunnen
+   aanpassen."** De naam staat nu op één plek, `js/naam.js` (`verpakken.md`, "De naam").
 10. De monsters van het oude spel: de slijmkruiper, de skeletwacht, de reuzenspin en de kobold passen
     niet in het nieuwe spel, de wolf wel. Weg ermee, of bewaren tot er rovers zijn om de toetsen van
     het gevecht op te draaien? (`opmerkingen.md`, "Het gevecht na de leeftijd".)

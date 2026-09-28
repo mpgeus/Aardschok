@@ -6,7 +6,19 @@ staat wat besloten is, daaronder het voorstel, en onderaan de speeltest die het 
 
 ## Besloten
 
-Nog niets. Alles hieronder is een voorstel van Claude (27 sep, tiende sessie), voor als Marcel landt.
+- **Wat "goed" is na het eerste jaar** (vraag 33a; Marcel, 28 sep: "Goed idee. Maar spelen bepaalt waar ik
+  vind dat we staan uiteindelijk. Dit wordt later nog regelmatig aangepast."). De afrekening komt zoals
+  voorgesteld: geen punten, maar drie getallen naast elkaar (wat je echt hebt, ook wat verstopt ligt; wat de
+  heer denkt dat je hebt; hoe het dorp erbij staat), met een zin van de heer en een van het dorp. Waar goed
+  ophoudt en slecht begint, beslist spelen, en dat verandert nog vaak: die grenzen en de zinnen staan daarom
+  in één blok, in de werkbank van de spelregels, en niet in de code verspreid.
+- **Opslaan** (vraag 33b; Marcel, 28 sep: "Auto opslaan, maar ook zelf kunnen kiezen. Er moet ook een menu
+  komen titel scherm etc"). Het spel slaat vanzelf op, en je kunt ook zelf opslaan en kiezen wat je laadt.
+  Er komt een menu, met een titelscherm. Het plan staat in de werklijst, vraag 48.
+- **De naam** (vraag 8): Aardschok, voor nu, en op één plek, zodat hij later in één keer anders kan
+  (`verpakken.md`, "De naam").
+
+Wat hieronder staat, is het voorstel van Claude (27 sep, tiende sessie), met daarin wat Marcel sindsdien koos.
 
 ## Het voorstel: een proefversie van één jaar
 
@@ -93,10 +105,12 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 
 ## Vragen aan Marcel
 
-- **33a.** Wat is "goed" na het eerste jaar? Voorstel: drie getallen naast elkaar: wat je hebt (ook
+- **33a.** ~~Wat is "goed" na het eerste jaar? Voorstel: drie getallen naast elkaar: wat je hebt (ook
   verstopt), wat de heer denkt dat je hebt, en hoe het dorp erbij staat (mensen, tevredenheid). Geen
-  punten, wel een zin van de heer en een van het dorp.
-- **33b.** Opslaan: vanzelf elke ochtend op één plek, of ook zelf opslaan op meer plekken?
+  punten, wel een zin van de heer en een van het dorp.~~ Beantwoord (28 sep): zo, en spelen beslist waar de
+  grenzen liggen (zie Besloten).
+- **33b.** ~~Opslaan: vanzelf elke ochtend op één plek, of ook zelf opslaan op meer plekken?~~ Beantwoord
+  (28 sep): allebei, met een menu en een titelscherm (zie Besloten).
 - **33c.** ~~Stap 3 van de inner (praten, afleiden, omkopen): vóór de proef of erna?~~ Ingehaald: het is er (27 sep).
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma?
 
