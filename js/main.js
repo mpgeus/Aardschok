@@ -33,7 +33,6 @@
     for (const k of Object.keys(S)) if (k !== 'zoom') delete S[k];
     Object.assign(S, {
       tijd: 0,
-      wind: 0,
       gebieden: {}, // een nieuw spel begint met schone gebieden
       vlaggen: new Set(),
       modus: 'verkennen',
