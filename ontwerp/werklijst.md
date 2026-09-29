@@ -1373,6 +1373,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     een dubbelklik speelt en opslaat; en `npm test` groen is. Vragen: **A**, eerst meten met een bouwer, twee jaar?
     **B**, een raad onder het doel, of vijf opdrachten na elkaar? **C**, een zip, itch.io of een programma; en wie
     is de eerste tester?
+    **Beantwoord (Marcel, 29 sep): "A Ja goed idee. B onder het doel. C itch io. Als ik thuis ben want heb alleen
+    telefoon hier".** A en B worden gebouwd zoals voorgesteld. Voor C maakt Claude de zip klaar die itch.io wil
+    (`index.html` bovenin), met de stappen voor het uploaden in `verpakken.md`; Marcel zet hem erop als hij thuis is.
+    Wie de eerste tester is, staat nog open.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
