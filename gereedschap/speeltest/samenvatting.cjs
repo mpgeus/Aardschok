@@ -58,6 +58,7 @@ function maten(u) {
     tevreden: u.eind.tevredenheid,
     houthakker: (u.gebouwd || []).filter((g) => g.soort === 'houthakker' && g.gelukt).map((g) => g.datum.replace(/ 13\d\d$/, '')).join(', '),
     ongezaaid: u.eind.akkertegels ? u.eind.ongezaaid / u.eind.akkertegels : null,
+    voorvallen: (u.voorvallen || []).length,
   };
 }
 
@@ -112,6 +113,7 @@ exports.maak = function (uitslagen, stand) {
     uit.push('');
   }
   if (eenJaar.length) uit.push(...gemiddeldPerSpeler(eenJaar));
+  uit.push(...deVoorvallen(goed));
   uit.push(...vanGehuchtTotDorp(goed));
   return uit.join('\n') + '\n';
 };
@@ -132,6 +134,28 @@ function gemiddeldPerSpeler(goed) {
       getal(gemiddelde(j, (m) => m.mensen)),
       getal(gemiddelde(j, (m) => m.doden)),
       pct(gemiddelde(j, (m) => m.tevreden)),
+    ]));
+  }
+  uit.push('');
+  return uit;
+}
+
+// De voorvallen (js/voorvallen.js, vraag 65): hoeveel er waren, en hoe vaak het spel dan een keuze vraagt. Een jaar is
+// een uur op 30×, en het had er al een keer of acht (vraag 65: drie keer de marskramer, de inner, Sint-Maarten, twee
+// keer de rovers, het slachten); "Klaar als" vraagt een keuze per één à twee minuten.
+const KEUZES_ZONDER = 8;
+function deVoorvallen(goed) {
+  const uit = ['## De voorvallen', '', `Een jaar is een uur op 30×; met de ${KEUZES_ZONDER} keuzes die een jaar al had, vraagt het spel een keuze per zoveel minuten.`, ''];
+  const kop = ['speler', 'zaad', 'voorvallen', 'per jaar', 'een keuze per', 'welke (de eerste tien)'];
+  uit.push(regel(kop), regel(kop.map(() => '---')));
+  for (const u of goed) {
+    const v = u.voorvallen || [];
+    const jaren = u.speler === 'bouwer' ? 2 : 1;
+    const perJaar = v.length / jaren;
+    uit.push(regel([
+      NAMEN[u.speler] || u.speler, u.zaad, String(v.length), getal(perJaar),
+      `${(60 / (perJaar + KEUZES_ZONDER)).toFixed(1).replace('.', ',')} min`,
+      v.slice(0, 10).map((x) => x.id).join(', '),
     ]));
   }
   uit.push('');

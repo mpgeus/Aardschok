@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (29 sep 2026, zeventiende sessie): de heervaart en de naam van je dorp gebouwd; het land en de raadsman besloten; "het voelt leeg" (vraag 65) wacht op Marcel
+## De stand (29 sep 2026, zeventiende sessie): de heervaart, de naam van je dorp en de voorvallen gebouwd; het land en de raadsman besloten; de raadsman is de volgende stap
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -19,19 +19,22 @@ per onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint m
 Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, en Nieuw spel geeft de
 naam van je dorp en de benoemingsbrief van de heer; `W` zijn de wetten, `Z` is slapen bij je huis, `Esc` het menu, en
 het spel slaat elke ochtend zelf op; onder het doel linksboven staat de raad. In een dorp vraagt de heer op 1 hooimaand
-mannen voor zijn oorlog (`Spel.debug.heervaart('vraag')`). De pagina "Stand van het gehucht" (25 sep) loopt achter op
-de dag. `npm test`: 635/635.
+mannen voor zijn oorlog (`Spel.debug.heervaart('vraag')`). Om de paar dagen komt iemand je zoeken met een voorval: een
+uitroepteken boven zijn hoofd, en hij spreekt je aan als je stilstaat (`Spel.debug.voorval('brand')`). De pagina
+"Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 651/651.
 
 **Waar het werk staat:** alles staat in `main`, ook stap 5 (Marcel, 29 sep: "alles op main"; ook op
 `ccr-0e928644-rvlci5`). Het werk van de zeventiende sessie (vraag 60 en 61) staat op `ccr-ef2496ce-pa4iti`, en gaat
 naar `main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij vraag 65, "het voelt leeg" (Marcel, 29 sep: "Het voelt gewoon nog leeg
-nu"): het voorstel is dat het dorp je aanspreekt, met voorvallen, een raadsman die je kiest, en het dorp van bovenaf
-met tekens waar je nodig bent, en dat dit vóór het land komt. Het wacht op Marcels antwoord. Het land met provincies
-(vraag 63) en de raadsman (vraag 64, B en D) zijn besloten; daarna of daarvoor, zoals Marcel kiest: 1a van het land,
-de kaart van het land en reizen, het buurdorp in een eigen provincie, en een snellere dagtik. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je dorp bij Nieuw spel; zie
-onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
+**Waar de volgende sessie begint:** bij de raadsman (vraag 65, B; vraag 64, B en D): iemand uit het dorp met een geloot
+karakter en gelote eigenschappen, die jij kiest uit twee of drie, en die de voorvallen afhandelt als je er niet bent.
+Begin met een plan voor Marcel: nu gaat een voorval na twee dagen voorbij als je er niet bent, en dat is precies de plek
+waar hij beslist. De voorvallen zijn gebouwd (vraag 65, A; zie onder Af), en het dorp van bovenaf blijft open (Marcel:
+"nee niet bovenaf, ik denk hier nog over na"). Eerst één dorp vol leven, dan het land (vraag 65, D): het land met
+provincies (vraag 63) komt daarna, met 1a van het land, de kaart van het land en reizen, het buurdorp in een eigen
+provincie, en een snellere dagtik. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
+dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
 thuis is (`npm run proefversie`, `verpakken.md`), en wie de eerste tester is, staat open (33d). Van de proef zijn
 stap 1 tot en met 5 gebouwd: het dorp bouwt zelf (vraag 52), de eerste trede (vraag 53), de eerste wetten (vraag
@@ -67,8 +70,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* "het voelt leeg": voorvallen, de raadsman en het dorp van bovenaf, en of dat vóór het land
-komt (vraag 65); de proefversie op itch.io zetten als hij
+*2. Wacht op Marcel:* het dorp van bovenaf (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
 heer in het hogere doel past). Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51; het bijstellen na de
@@ -81,8 +83,8 @@ speeltest (vraag 46) komt later, met een menu met opties.
   vraag 63, en de eerste stap is het buurdorp;
 - ontginnen (6b) en straten en paden (6c), tenzij de kaart al eerder te klein is;
 - beter bouwen: de ladder tot baksteen, en de herberg die meegroeit (het tweede deel van 3b, stap 5);
-- de groepen en de schepenen (de rest van punt 9), voorvallen (8), rechtspraak (10), de nacht (11), de eigen
-  buidel (12);
+- de raadsman (vraag 65, B), dan de groepen en de schepenen (de rest van punt 9), de nacht (11), de eigen buidel
+  (12); voorvallen (8) en rechtspraak (10) zijn er sinds 29 sep als voorvallen (vraag 65, A);
 - marktrecht en de stad (14), stadsrechten (15), de opstand (16), en de streek als kaarten naast elkaar, met het
   buurdorp (vraag 50, C);
 - de rest van punt 4: het bos met de kudde (vraag 43), de marskramer die vee koopt en verkoopt, de twee
@@ -126,6 +128,12 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   regels (twee jaar met alleen de dagtik: 26 → 37 in het eerste jaar, zoals met poppetjes); een speeldag kost 44 ms
   per dorp, bijna allemaal in `T.voorwerpOp`, dat voor elke tegel alle voorwerpen afloopt; een bewaard spel is 370 kB
   per dorp. Daaruit het plan voor het land (vraag 63), met een schets. Niets gebouwd.
+- **Marcel koos** (vraag 63 en 64): het land met provincies en de raadsman, en "Het voelt gewoon nog leeg nu". Gemeten:
+  een jaar vroeg een keuze of acht. Het plan werd vraag 65; Marcel: "A ja B ja C nee niet bovenaf, ik denk hier nog over
+  na. D ja". **Gebouwd: de voorvallen** (A; zie onder Af). In de browser gezien, en in de speeltest: de eerste keer nam
+  de speler altijd het eerste antwoord, verbande een dief, die kwam terug als rover en vertrapte een akker, en het dorp
+  verhongerde (26 → 16); met verstandige antwoorden speelt het jaar zoals zonder voorvallen, met een keuze per ruim een
+  minuut. Daaruit: het venster zegt nu "moet het bos in", en een opmerking voor later (`opmerkingen.md`).
 - **Marcel vroeg hoe het leuk blijft** ("zelf als persoon rond hobbelen in je eigen stad maakt het wel lastig.
   Misschien voelt het handiger als we een soort raadsman en aansturen die je regels oplegt?"). Nagekeken: de camera
   volgt altijd de schout en je ziet maar een klein stuk van je dorp, dus bouwen gaat alleen waar hij staat. Het
@@ -1863,6 +1871,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 29 sep): "A ja B ja C nee niet bovenaf, ik denk hier nog over na. D ja".** Dus: voorvallen
     zoals voorgesteld; de raadsman zoals voorgesteld; geen dorp van bovenaf (Marcel denkt er nog over na, dus het
     blijft open); en eerst één dorp vol leven, dan het land. Wordt gebouwd: eerst de voorvallen, dan de raadsman.
+    **A gebouwd (29 sep, zeventiende sessie):** zie onder Af, en `spel.md`, "De voorvallen". Nog: B, de raadsman.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -2163,6 +2172,28 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 29 sep 2026 — **De voorvallen: het dorp spreekt je aan** (zeventiende sessie; vraag 65, A, Marcel: "A ja"). `js/voorvallen.js`:
+  om de paar dagen (gemiddeld om de tien, in de winter om de zes, niet in de eerste vier) komt iemand uit het dorp de
+  schout zoeken met een vraag, een ruzie of een ramp. Hij krijgt een uitroepteken, het bericht zegt "Trijn zoekt je."
+  (bij een ramp "Brand! Harm komt je halen."), hij loopt naar je toe, en staat de schout stil, dan spreekt hij hem aan;
+  de tijd staat stil tot je kiest. Twee of drie antwoorden, elk met zijn prijs eronder ("+1 goud, tevredenheid +2%",
+  "Geert moet het bos in", "30% kans op een dode"); wat er niet is, kun je niet geven, met waarom. 35 voorvallen van zes
+  soorten (rechtspraak, verzoeken, rampen, kansen, feesten, de grillen van de heer), van wie het past (een karakter als
+  de weduwe of de zanger in het dorp is), en sommige komen terug (de dief, de lening, het zaaigraan, de woekeraar).
+  Een antwoord doet: de voorraad, de tevredenheid (een stemming die in dertig dagen wegslijt, in de balk), de argwaan,
+  verbannen (het bos in, en dan als rover terug), een kans op een dode, een gezin erbij, schapen voor de wolven, en een
+  vervolg. Wie je niet sprak, komt de volgende ochtend terug, en gaat na twee dagen voorbij ("een schout die er niet
+  was"). De woorden staan als gesprekken in `js/gesprekken.js` (naam `'{wie}'`), zodat je ze in de gespreksschrijver
+  leest en schrijft; die kent de nieuwe gevolgen. Erbij: een gezin komt op één manier (`T.gezinKomt`), de tevredenheid
+  opnieuw op één manier (`T.tevredenheidOpnieuw`, ook voor de wetten), `T.verliesVee`, een antwoord dat uit staat in
+  het venster, `{wie}` en `{ander}` ook in een antwoord, de spelregel "Voorvallen" (vaak, gewoon, zelden, uit), de
+  werkbank, `Spel.debug.voorval()`, en de speeltest beantwoordt ze (tabel "De voorvallen" in `samenvatting.md`).
+  Getoetst: `test/voorvallen.test.cjs` (16 toetsen); `npm test` 651/651; in de browser iemand die je zoekt, aanspreekt,
+  wacht na Esc en met een klik weer praat, een knop die uit staat, en na een antwoord weer de tijd. De speeltest braaf
+  (zaad 1 tot 3): 47 tot 53 voorvallen in een jaar, dus met de acht keuzes die er al waren een keuze per ruim een
+  minuut op 30×, en het jaar eindigt zoals zonder voorvallen (26 → 37, niemand dood); de bouwer (zaad 1) ook: een dorp
+  tien dagen eerder, en hetzelfde einde in het tweede jaar (vraag 59). De eerste keer, toen de speler altijd het eerste
+  antwoord nam, verhongerde het dorp: zie `opmerkingen.md` en `speelbaar.md`. Open: B, de raadsman.
 - 29 sep 2026 — **De heervaart, veteranen, en de naam van je dorp** (zeventiende sessie; vraag 60, Marcel: "A ja B ja
   C ja, speler mag zelf de naam voor zijn dorp kiezen aan het begin"). `js/heervaart.js`: in een dorp (niet in het
   gehucht, dus niet in de proef) vraagt de heer elk jaar op 1 hooimaand een man per tien zielen voor zijn oorlog, of

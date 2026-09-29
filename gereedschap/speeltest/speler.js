@@ -49,6 +49,32 @@
 
   let boek = null; // wat er gebeurde, voor speeltest.cjs
   const bezig = {}; // welk venster de speler zelf openhoudt: dat sluit beantwoord() niet
+  const geboekt = new WeakSet(); // de voorvallen die al in het boek staan
+
+  // Staat het gesprek van een voorval open (js/voorvallen.js): praat de schout met wie hem zocht?
+  const voorvalOpen = (s) => s.modus === 'dialoog' && !!(s.voorvallen && s.voorvallen.lopend) && s.spreektMet === s.voorvallen.lopend.wie.wezen;
+  // Wat een antwoord kost, zoals het venster het onder het antwoord zet (T.prijsVanKeuze in js/voorvallen.js).
+  const prijsVan = (b) => (b.querySelector('.dialoog-prijs') || {}).textContent || '';
+  // Haalt het dorp de winter nog als dit eraf gaat (T.etenVoorDeWinter, T.houtVoorDeWinter in js/behoeften.js)? Even
+  // uitrekenen met minder in de schuur, en de schuur weer terug.
+  function haaltHetNog(s, wat, n) {
+    const oud = s.voorraad[wat] || 0;
+    s.voorraad[wat] = oud - n;
+    const dag = Math.floor(s.kalender.dag);
+    const haalt = (wat === 'hout' ? T.houtVoorDeWinter(s, dag) : T.etenVoorDeWinter(s, dag)).haalt;
+    s.voorraad[wat] = oud;
+    return haalt;
+  }
+  // Een verstandig antwoord: niemand het bos in (wie het bos in gaat, komt terug als rover, en deze spelers lopen de
+  // rovers niet achterna), en geen graan of hout dat de winter nodig heeft.
+  function verstandig(s, prijs) {
+    if (/het bos in/.test(prijs)) return false;
+    for (const wat of ['graan', 'hout']) {
+      const m = new RegExp(`−(\\d+) ${wat}`).exec(prijs);
+      if (m && !haaltHetNog(s, wat, Number(m[1]))) return false;
+    }
+    return true;
+  }
 
   const S = () => T.S;
   const dagNu = () => S().kalender.dag;
@@ -123,6 +149,20 @@
     if (T.ui.slachtenOpen()) {
       if (!klik('#slachten [data-actie="slacht"]')) klik('#slachten [data-actie="sluit"]');
       if (T.ui.slachtenOpen()) T.ui.sluitSlachten(s);
+    }
+    // Een voorval (js/voorvallen.js): wie de schout zoekt, spreekt hem aan. Elke speler leest de prijs onder de
+    // antwoorden en kiest het eerste verstandige (hieronder), met de knop zoals een mens, en anders het eerste dat kan;
+    // heeft het gesprek nog een knoop, dan daar weer.
+    for (let i = 0; i < 4 && voorvalOpen(s); i++) {
+      const L = s.voorvallen.lopend;
+      const knoppen = [...document.querySelectorAll('#dialoog-keuzes button')].filter((b) => !b.disabled);
+      const knop = knoppen.find((b) => verstandig(s, prijsVan(b))) || knoppen[0];
+      if (!knop) break;
+      if (!geboekt.has(L)) {
+        geboekt.add(L);
+        boek.voorvallen.push({ dag: heel(s.kalender.dag), datum: datum(), id: L.id, wie: T.naamVanBewoner(L.wie), antwoord: knop.textContent.replace(/^\d/, '') });
+      }
+      knop.click();
     }
     if (s.modus === 'verstoppen' && !bezig.verstoppen) T.ui.sluitVerstoppen(s);
     if (s.modus === 'handel' && !bezig.handel) T.ui.sluitHandel(s);
@@ -946,7 +986,7 @@
         inner: { geschenken: [], gepraatUren: 0, rapport: null },
         soldaten: { beurten: [], zoeken: null, hetHeleDorp: false, leeg: null },
         argwaan: { naInner: null, opSintMaarten: null }, heer: null, brief: null, naSintMaarten: null, luisterFouten: [],
-        heerJaren: [], dorp: null, groei: [], raad: {},
+        heerJaren: [], dorp: null, groei: [], raad: {}, voorvallen: [],
       };
       const s = S();
       luister();

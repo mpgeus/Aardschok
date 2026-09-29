@@ -9,6 +9,15 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wie je verbant, kan een dorp laten verhongeren** (29 sep, zeventiende sessie; de voorvallen, vraag 65). In de eerste
+  speeltest met voorvallen (braaf, zaad 1) koos de speler steeds het eerste antwoord, en bij een diefstal is dat "Verban
+  hem". Harm ging het bos in, kwam terug als rover (zo werken de rovers sinds vraag 55), vertrapte de akker van Gerrit en
+  nam om de twintig dagen graan mee; de speler liep hem nooit achterna. Met een groot oogstfeest en een bruiloft erbij
+  lag er op 1 wintermaand 28 graan, en het dorp ging van 37 naar 16 mensen. Zonder voorvallen: 489 graan op 1
+  herfstmaand, en 37 mensen. Het werkt zoals bedoeld ("wie je veroordeelde, vergeet het niet"), en het venster zegt nu
+  "Harm moet het bos in"; de spelers in de speeltest kiezen sindsdien verstandig (niemand het bos in, geen graan of hout
+  dat de winter nodig heeft). Om over na te denken: is één verbannen dief die een akker vertrapt niet te veel? Een
+  bende van één rover kan klein blijven (hij rooft, maar vertrapt niets), of een verbannen man gaat soms naar de stad.
 - **Spelen op de telefoon** (Marcel vroeg het, 29 sep: "Kan ik dit spelen op mn telefoon?"; nagekeken met een
   nagebootste iPhone, rechtop en dwars). Het spel laadt en slaat op, zonder fouten, en rechtop loopt de schout waar je
   tikt. Maar speelbaar is het niet: de vakken linksboven en de uitleg rechts dekken het halve scherm, de balk loopt

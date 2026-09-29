@@ -149,6 +149,37 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 29 sep, met de voorvallen (werklijst, vraag 65)
+
+Gespeeld in de zeventiende sessie, op `145e11f` van `ccr-ef2496ce-pa4iti` met de voorvallen erbij (nog niet gecommit
+toen), zonder één fout in de console. Elke speler leest de prijs onder de antwoorden en kiest het eerste verstandige:
+niemand het bos in, en geen graan of hout dat de winter nodig heeft (`gereedschap/speeltest/speler.js`).
+
+| | braaf, zaad 1 | braaf, zaad 2 | braaf, zaad 3 | bouwer, zaad 1 (twee jaar) |
+|---|---|---|---|---|
+| Voorvallen | 53 | 47 | 53 | 69, tot Sint-Maarten 1324 |
+| Een keuze per (op 30×, met de acht die er al waren) | 1,0 min | 1,1 min | 1,0 min | 1,4 min |
+| Mensen aan het eind | 26 → 37 | 26 → 37 | 26 → 37 | het ambt kwijt op Sint-Maarten 1324 |
+| Graan op 1 herfstmaand 1323 | 437 | 497 | 498 | |
+
+**Wat opviel:**
+
+1. **Een keuze per ruim een minuut,** in de winter vaker: dat is wat "Klaar als" vroeg (een per één à twee minuten). Het
+   jaar van braaf eindigt zoals zonder voorvallen (26 → 37, niemand dood); in de zomer en de herfst is het dorp wat
+   tevredener (tot 79% tegen 71%), er is meer goud (boetes, een vondst: 17 over tegen 0), en de argwaan beweegt wat (tot
+   10%).
+2. **De eerste keer nam de speler altijd het eerste antwoord** (braaf, zaad 1), en dat is bij een diefstal "Verban hem".
+   Harm ging het bos in, kwam terug als rover, vertrapte een akker en nam om de twintig dagen graan mee; met een groot
+   oogstfeest en een feestelijke bruiloft lag er op 1 wintermaand 28 graan, en het dorp ging van 37 naar 16. Zonder
+   voorvallen had het op 1 herfstmaand 489 graan. Daarom zegt het venster nu "Harm moet het bos in", en staat het in
+   `opmerkingen.md`.
+3. **De bouwer speelt zoals zonder voorvallen:** een dorp op 21 oogstmaand 1323 (tien dagen eerder, 52 mensen), 80
+   mensen op het meest, 24 na de eerste winter, 44 doden van kou en honger, en het ambt kwijt op Sint-Maarten 1324. Dat
+   is vraag 59 (geparkeerd): de voorvallen maken het niet erger, en niet beter.
+4. **Wat vaak kwam** (de bouwer, twee jaar): koorts 6 keer, een vechtpartij, een diefstal, een heler en een zwerver elk
+   5, brand, een stroper, een lening, een akkergrens en vreemdelingen elk 4. Een verbannen dief die zijn luiken
+   ingooit, kwam bij braaf drie keer achter elkaar terug (zaad 1 en 3).
+
 ## De speeltest van 29 sep: de bouwer, twee jaar (werklijst, vraag 58, A)
 
 Een vijfde speler, de bouwer, speelde het gehucht twee jaar, van 1 lentemaand 1323 tot 1 grasmaand 1325, met zaad 1, 2
