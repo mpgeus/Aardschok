@@ -3,9 +3,10 @@
 Aardschok (werktitel, past niet meer): een spel dat Marcel en Claude samen bouwen, met als doel het
 uiteindelijk te verkopen (Steam eerst, als los programma verpakt). Een bouw- en beheerspel in
 isometrisch beeld, met politiek en avontuur erin. Je bent de schout van een dorp onder een verwarde
-heer die alleen geld ziet. Je breidt het dorp uit tot een stad, bestuurt het met keuren, en maakt
-je aan het eind van de heer los, met stadsrechten of een opstand. Zie "Het spel in het kort"
-hieronder, en `ontwerp/spel.md`.
+heer die alleen geld ziet. Je breidt het dorp uit tot een stad en bestuurt het met wetten. Het hogere
+doel is al het land veroveren of met iedereen bevriend raken, zoals in Civilization (Marcel, 29 sep).
+Eerder was het eind dat je je van de heer losmaakt, met stadsrechten of een opstand; hoe dat met het
+hogere doel samengaat, is open. Zie "Het spel in het kort" hieronder, en `ontwerp/spel.md`.
 
 Het beeld is isometrisch (Mystic Towers als voorbeeld), de HD-pixel art komt uit code, en
 rondlopen gaat naadloos over in een gevecht in beurten op dezelfde tegels (Fallout, Jagged
@@ -323,7 +324,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 
 - Je bent de **schout**, een poppetje dat door het dorp loopt, geen hand van bovenaf. Je breidt
-  het dorp uit en bestuurt het met **keuren** (regels), samen met de schepenen.
+  het dorp uit en bestuurt het met **wetten** (eerst keuren genoemd), in een menu zoals in Democracy 3
+  (Marcel, 29 sep), en later samen met de schepenen.
 - De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het
   dorp, jou zelf, met hogere eisen, en met soldaten. Zijn **inner** komt kijken, en wat je opzij
   zet, moet uit zijn zicht.
@@ -331,12 +333,16 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   met eigen belangen (de politiek) en mensen met een verhaal (het avontuur).
 - Vrij word je door **stadsrechten** te kopen of door een **opstand**, een gevecht in beurten op
   dezelfde kaart. Dan word je burgemeester.
+- **Het hogere doel** (Marcel, 29 sep): "al het land veroveren of met iedereen vriendjes maken. Denk aan
+  civilisation". Hoe de heer en de vrijheid daarin passen, is nog open (`spel.md`, "Een nieuwe richting").
 - **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én
   bouwen en plannen. **Rijk worden en arm lijken** (de heer, de inner en het verstoppen), eerst de
   kern, blijft als de druk van boven. **Vechten** begint met aanvallen op je eigen dorp (rovers, de
   heervaart, dan een rivaal), in beurten op je eigen kaart met je militie; daarna de streek als
   kaarten naast elkaar; tussen steden pas na de vrijheid.
 - Toon: zwarte satire. De heer is lachwekkend, zijn straffen niet (voorstel).
+- **Niet te ingewikkeld** (Marcel, 29 sep): "er is geen gelijkenis met de werkelijkheid. We zijn gewoon een
+  schout die een dorp runt en land wil uitbreiden." De eenvoudige regel gaat voor de regel die klopt met vroeger.
 - **Instelbaar** (Marcel, 24 sep): waar een ontwerpvraag meer dan één goed antwoord heeft, wordt het
   een optie in de spelregels (`js/opties.js`), en wat Marcel koos, is de standaard. Bouw een nieuwe
   keuze dus als optie, niet als vaste regel.

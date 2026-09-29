@@ -13,7 +13,8 @@ heer elk jaar, en verdedig je het tegen rovers. De proef eindigt met een brief v
 gehucht een dorp is geworden. Gefeliciteerd. Dat kost u vanaf nu meer."
 
 - **Een dorp** is 50 mensen, een kapel en een smidse, met de getallen in de werkbank: spelen beslist.
-- **De eerste keuren** zijn vreemden, rantsoen en houtkap.
+- **De eerste keuren** zijn vreemden, rantsoen en houtkap; voortaan heten ze wetten, in een menu zoals in Democracy 3
+  (Marcel, 29 sep; werklijst, vraag 54).
 - **De kortste weg,** in volgorde (de werklijst, bovenaan): het dorp bouwt zelf; de eerste trede; de eerste
   keuren; rovers en een militie; en de proef afmaken, met de eerste weken als opdrachten, een speeltest van twee
   jaar en een tester die het niet kent.

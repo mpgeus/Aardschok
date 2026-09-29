@@ -24,7 +24,8 @@ op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test
 main"; ook op `ccr-78e7abf2-tn06lu`). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 3: de eerste keuren (vreemden, rantsoen en
-houtkap). Het plan staat klaar en wacht op Marcel (vraag 54, vijftiende sessie). Stap 1 (het dorp bouwt zelf,
+houtkap), voortaan wetten, in een menu zoals in Democracy 3. Het eenvoudige plan wacht op Marcel (vraag 54,
+vijftiende sessie). Stap 1 (het dorp bouwt zelf,
 vraag 52) en stap 2 (de eerste trede, vraag 53) zijn af. De
 richting staat (vraag 50: besturen en groeien worden het hart, de heer blijft als de druk van boven, en vechten
 begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook (vraag 51: de proef wordt "van gehucht tot
@@ -45,7 +46,8 @@ kost u vanaf nu meer."
    en in de benoemingsbrief; bij 50 mensen met een kapel en een smidse wordt het een dorp, en schrijft de heer. Zie
    onder Af.
 3. **Nu: de eerste keuren** (punt 9, nog zonder groepen en schepenen): vreemden, rantsoen en houtkap, in één
-   venster, en elke keur zegt vooraf wat hij doet. Het plan staat klaar: vraag 54, wacht op Marcel.
+   venster, en elke keur zegt vooraf wat hij doet. Voortaan wetten, in een menu zoals in Democracy 3 (Marcel, 29
+   sep). Het eenvoudige plan staat klaar: vraag 54, wacht op Marcel.
 4. **Rovers en een militie** (punt 13): rovers vallen het gehucht aan, en je verdedigt het in beurten op je eigen
    kaart, met naast de schout een paar mannen uit het wachthuis. Wie wegtrekt, wordt rover.
 5. **De proef afmaken:** de eerste weken als opdrachten (vraag 47, herschreven voor de nieuwe richting), een
@@ -55,7 +57,7 @@ kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 54 (het plan voor de eerste keuren), en 33d (hoe een tester het krijgt, in
+*2. Wacht op Marcel:* vraag 54 (het eenvoudige plan voor de eerste wetten), en 33d (hoe een tester het krijgt, in
 `speelbaar.md`). Vraag 47 wordt herschreven bij stap 5. Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51;
 het bijstellen na de speeltest (vraag 46) komt later, met een menu met opties.
 
@@ -87,6 +89,11 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   alle groei komt van vreemden (er wordt niemand geboren), meer eten maakt nu niet tevredener, en hout is niet
   schaars (één houthakker hakt ruim 600 per jaar), dus een houtkap die alleen meer hout geeft, kiest niemand.
   Daarom stelt het plan voor dat de houthakker zonder keur alleen sprokkelt, half zoveel als nu. Niets gebouwd.
+- **Marcel: eenvoudiger, en een hoger doel.** "Het wordt gewoon een menu zoals in diplomacy 3, waar je weten kunt
+  aannemen etc. Maak het niet te ingewikkeld, er is geen gelijkenis met de werkelijkheid." En: "Ons hogere doel is
+  al het land veroveren of met iedereen vriendjes maken. Denk aan civilisation". Opgeschreven in `spel.md` en
+  `CLAUDE.md`; het plan werd eenvoudig: een menu Wetten onder `W`, drie wetten met een voordeel en een nadeel,
+  en belasting als idee voor een vierde (vraag 54).
 
 **Wat er in de veertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 4, de afrekening na het eerste jaar** (vraag 49): op 1 lentemaand, na de winter, de
@@ -1134,6 +1141,38 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     doet), en een schermafdruk het venster laat zien. Vragen: **A**, het venster onder `K`, afgekondigd de volgende
     ochtend? **B**, karig, gewoon en ruim, met deze getallen? **C**, niemand, tegen inkoopgeld en iedereen? **D**,
     sprokkelen als standaard (half zoveel hout als nu), en kappen met stronken die de inner telt?
+    **Marcels antwoord (29 sep):** "Het wordt gewoon een menu zoals in diplomacy 3, waar je weten kunt aannemen etc.
+    Maak het niet te ingewikkeld, er is geen gelijkenis met de werkelijkheid. We zijn gewoon een schout die een dorp
+    runt en land wil uitbreiden. Ons hogere doel is al het land veroveren of met iedereen vriendjes maken. Denk aan
+    civilisation". (Bedoeld is vast Democracy 3, het spel waarin je wetten aanneemt en ziet wat ze doen.)
+    Opgeschreven in `spel.md` ("Een nieuwe richting") en `CLAUDE.md` ("Het spel in het kort"). Het plan hierboven
+    was dus te ingewikkeld: stronken die de inner telt, sprokkelen, afkondigen op het plein, inkoopgeld.
+    **Het plan, eenvoudig** (Claude, 29 sep; wacht op Marcel):
+    - **Het menu Wetten,** onder `W` en met een knop in de balk, zoals in Democracy 3. Elke wet is een kaart: zijn
+      naam, één zin, wat hij doet in groen en rood ("10% tevredener", "anderhalf keer zoveel graan: 2,0 per dag in
+      plaats van 1,3"), en een knop Aannemen of Afschaffen. Het rantsoen heeft drie standen. Een wet werkt meteen
+      en kost niets om aan te nemen: zijn nadeel is de prijs. De tijd staat stil zolang het menu open is. Wetten
+      horen bij een trede, zoals de gebouwen in het bouwmenu: het gehucht heeft er drie, en het dorp krijgt er later
+      meer bij, zoals je in Civilization nieuwe keuzes krijgt als je verder komt. In het spel heten ze wetten, niet
+      keuren: dat woord kent bijna niemand.
+    - **De drie wetten van het gehucht,** met de getallen in de werkbank:
+      - *Rantsoen* (krap, gewoon of ruim): krap is driekwart eten en 15% minder tevreden; ruim is anderhalf keer
+        zoveel eten en 10% tevredener.
+      - *Vreemden welkom:* er komt twee keer zo vaak een gezin (om de 10 dagen in plaats van 20), en het dorp is 5%
+        minder tevreden.
+      - *Houtkap in het bos van de heer:* de houthakker hakt twee keer zoveel, en de heer rekent op Sint-Maarten 5
+        goud boete. Hout is nu niet schaars, dus deze wet gaat pas tellen als het dorp groeit.
+    - **Idee, een vierde wet: belasting.** Elke maand wat goud per mens in de kist, en het dorp is minder tevreden.
+      Goud is nu het krapst: de heer vraagt 25, en een braaf gehucht heeft er op Sint-Maarten 16.
+    - **Hoe het werkt** (geen vraag): `js/wetten.js` zonder scherm, met de wetten als gegevens op één plek
+      (`T.WETTEN`), de getallen in één blok (`T.WETTEN_INSTELLINGEN`, in de werkbank) en wat je aannam in de spelstaat
+      (`S.wetten`, dus vanzelf bewaard). Het menu krijgt een eigen bestand, en elke wet één haakje: in het eten, de
+      tevredenheid, de groei, de houthakker en de rekening van de heer.
+    Klaar als het menu onder `W` opengaat met de drie wetten, elke kaart zegt wat de wet doet, aannemen en afschaffen
+    het spel verandert zoals de kaart zegt, de getallen in de werkbank staan, opslaan en laden de wetten houdt,
+    `npm test` groen is, een speeljaar van de speeltest zonder fouten loopt, en een schermafdruk het menu laat zien.
+    Vragen: **A**, zo bouwen? **B**, belasting erbij? **C** (geen haast): is vrij worden van de heer een stap op weg
+    naar het hogere doel, of is de heer zelf een van de partijen die je verovert of te vriend maakt?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

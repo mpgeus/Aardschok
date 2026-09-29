@@ -13,7 +13,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 | Onderwerp | Stand | Werklijst |
 |---|---|---|
-| Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp | vraag 50, 51 |
+| Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3 | vraag 50, 51, 54 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
@@ -34,7 +34,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 ## Een nieuwe richting (Marcel, 28 sep 2026)
 
-**Zo staat het nu** (28 sep): besloten, en nog niets van gebouwd. Marcel koos op vier vragen van Claude
+**Zo staat het nu** (28 en 29 sep): besloten, en nog niets van gebouwd. Marcel koos op vier vragen van Claude
 (werklijst, vraag 50: "A ja B allebei C ja D ja"):
 - **Het hart:** groeien en besturen. De heer met zijn inner en het verstoppen blijft als de druk van boven, niet
   meer als de puzzel waar alles om draait. Er gaat niets weg.
@@ -46,6 +46,17 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
   ben je een hand van bovenaf, en hier een poppetje.
 - **De buren, en wanneer:** eerst onder de heer (rovers en de heervaart, dan een rivaal, een ander dorp van
   dezelfde heer), en vechten tussen steden pas na de vrijheid, als vrije stad tussen de anderen.
+- **Het hogere doel** (Marcel, 29 sep, bij het plan voor de eerste keuren, werklijst vraag 54): "Ons hogere doel is
+  al het land veroveren of met iedereen vriendjes maken. Denk aan civilisation". Twee manieren om te winnen, zoals
+  in Civilization: alles veroveren, of met iedereen bevriend raken. Nog open: hoe de heer en de vrijheid
+  (stadsrechten of een opstand) daarin passen. Is vrij worden een stap op weg, of is de heer een van de partijen?
+- **Eenvoudig, geen geschiedenisles** (Marcel, 29 sep): "Maak het niet te ingewikkeld, er is geen gelijkenis met
+  de werkelijkheid. We zijn gewoon een schout die een dorp runt en land wil uitbreiden." De eenvoudige regel gaat
+  voor de regel die klopt met vroeger.
+- **Besturen gaat met wetten, in een menu zoals in Democracy 3** (Marcel, 29 sep: "Het wordt gewoon een menu zoals
+  in diplomacy 3, waar je weten kunt aannemen etc."; bedoeld is vast Democracy 3, het spel waarin je wetten
+  aanneemt en ziet wat ze doen). Ze heetten eerst keuren ("Keuren en politiek", hieronder). Het plan staat in de
+  werklijst, vraag 54.
 - **Het eerste speelbare product is "van gehucht tot dorp"** (Marcel, 28 sep, werklijst vraag 51: "A ja B ja C ja
   D ja"): in zo'n twee jaar van 26 naar 50 mensen, met een kapel en een smidse, met bouwgrond, de eerste keuren
   (vreemden, rantsoen, houtkap) en rovers met een militie onderweg (`speelbaar.md`, bovenaan).
