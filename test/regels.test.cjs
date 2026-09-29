@@ -136,15 +136,15 @@ test('een klik op een open deur is erheen lopen, ook als je ernaast staat', () =
   assert.equal(typeof h.doe, 'function');
 });
 
-test('de deurknop hoort bij een open deur naast de schout waar niemand in staat', () => {
+test('de deurknop hoort bij een open deur naast wie aan de beurt is, waar niemand in staat', () => {
   const w = T.maakProefkamers();
   const S = { wereld: w, schout: wezen(w, 'schout') };
   zet(S.schout, 8, 4);
-  assert.equal(T.deurNaastSchout(S), null); // de deur is nog dicht
+  assert.equal(T.deurNaast(S, S.schout), null); // de deur is nog dicht
   T.deurOp(w, 9, 4).staat = 'open';
-  assert.equal(T.deurNaastSchout(S), T.deurOp(w, 9, 4));
+  assert.equal(T.deurNaast(S, S.schout), T.deurOp(w, 9, 4));
   zet(wezen(w, 'slijm'), 9, 4);
-  assert.equal(T.deurNaastSchout(S), null); // er staat iemand in de opening
+  assert.equal(T.deurNaast(S, S.schout), null); // er staat iemand in de opening
 });
 
 // Sinds 25 sep heeft de schout levenspunten, net als een monster (Marcel koos het, voorlopig:

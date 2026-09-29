@@ -751,13 +751,14 @@
   // Het getal in de balk veranderen: de enige manier, zoals T.wijzigVoorraad voor de voorraad. Het
   // zakt nooit onder nul. De bewoners gaan mee (T.bewonersVolgen, js/bewoners.js): een nieuw gezin
   // in een huis met plaats, of wie sterft of wegtrekt. `reden`: 'begin', 'groei', 'winter' of
-  // 'vertrek'; `waarom` is het begin van het bericht dat zegt wie het zijn ("De winter is hard").
+  // 'vertrek'; `waarom` is het begin van het bericht dat zegt wie het zijn ("De winter is hard"). `wie`: als het
+  // om bepaalde mensen gaat (een wachter die sneuvelt tegen de rovers, js/rovers.js), wie dat zijn.
   // Geeft terug hoeveel het echt veranderde.
-  T.wijzigBevolking = function (S, verschil, reden, waarom) {
+  T.wijzigBevolking = function (S, verschil, reden, waarom, wie) {
     const voor = S.bevolking || 0;
     S.bevolking = Math.max(0, voor + verschil);
     const echt = S.bevolking - voor;
-    if (echt && T.bewonersVolgen) T.bewonersVolgen(S, echt, reden, waarom);
+    if (echt && T.bewonersVolgen) T.bewonersVolgen(S, echt, reden, waarom, wie);
     return echt;
   };
 
@@ -931,6 +932,8 @@
     if (slijt > 0) T.wijzigVoorraad(S, 'gereedschap', -slijt);
     // 7. De wetten (js/wetten.js): wie vandaag in het bos van de heer hakte, en de belasting op de eerste van de maand.
     T.tikWettenDag(S, dag);
+    // En de rovers (js/rovers.js): de doden begraven, wie het overleefde geneest, en komen ze vandaag?
+    T.tikRoversDag(S, dag);
     // 8. De trede (js/treden.js): met genoeg mensen, en een kapel en een smidse klaar, wordt het gehucht een dorp.
     T.tikTredeDag(S);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);

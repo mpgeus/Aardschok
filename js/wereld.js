@@ -98,6 +98,16 @@
       naam: 'kobold', kant: 'monster', leven: 16, ap: 6, initiatief: 7, snelheid: 2.4, zicht: 6, dwaalt: true,
       aanval: { kosten: 3, schade: [2, 4], zin: 'steekt je met zijn speer' },
     },
+    // De rovers (js/rovers.js; werklijst vraag 55, 29 sep): wie wegtrok, of wilde rovers van buiten. Ze dwalen niet
+    // maar lopen waar hun aanval ze heen stuurt, en dragen het vel van gewone mensen (e.vel, zie S.houding in
+    // js/sprites.js): er hoeft niets voor getekend te worden.
+    rover: {
+      naam: 'rover', kant: 'monster', leven: 12, ap: 6, initiatief: 6, snelheid: 2.2, zicht: 6, dwaalt: false, vel: 'boer',
+      aanval: { kosten: 3, schade: [2, 4], zin: 'slaat je met een knuppel' },
+    },
+    // Een man van de militie, uit het wachthuis: wat hij kan als hij bij een aanval naast de schout vecht
+    // (js/rovers.js). Hij is een bewoner met zijn eigen poppetje; dit is alleen zijn leven en zijn punten.
+    wachter: { naam: 'wachter', kant: 'speler', leven: 16, ap: 8, initiatief: 8, snelheid: 2.4, vel: 'boer' },
   };
 
   const sleutelVan = (x, y) => x + ',' + y;

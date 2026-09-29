@@ -126,8 +126,6 @@
     y: (sy - Math.round(S.camera.y)) * S.zoom + Math.round(bh / 2),
   });
 
-  const schoutAanDeBeurt = () => !!S.gevecht && S.gevecht.volgorde[S.gevecht.beurt] === S.schout;
-
   // Wat ligt er onder de muis? Wezens en voorwerpen steken boven hun tegel uit, dus die
   // worden eerst gezocht, van voor naar achter. Anders is het de tegel zelf.
   function zoekDoel(mx, my) {
@@ -210,19 +208,26 @@
       werkBouwHoverBij();
       return;
     }
-    const actief = S.modus === 'verkennen' || (S.modus === 'gevecht' && !S.bezig && schoutAanDeBeurt());
+    // In een gevecht bestuur je wie van jouw kant aan de beurt is: de schout, of een man van de militie.
+    const actief = S.modus === 'verkennen' || (S.modus === 'gevecht' && !S.bezig && T.spelerAanDeBeurt(S));
     if (!S.muis || !actief) {
       S.hover = null;
       S.handeling = null;
       T.ui.verbergTooltip();
       canvas.style.cursor = 'default';
-      if (S.modus === 'gevecht' && schoutAanDeBeurt()) T.ui.toonAp(S.schout.ap, S.schout.maxAp, 0, true);
+      if (S.modus === 'gevecht' && T.spelerAanDeBeurt(S)) {
+        const v = T.aanDeBeurt(S);
+        T.ui.toonAp(v.ap, v.maxAp, 0, true);
+      }
       return;
     }
     S.hover = zoekDoel(S.muis.x, S.muis.y);
     const h = S.modus === 'verkennen' ? T.handelingVerkennen(S, S.hover) : T.handelingGevecht(S, S.hover);
     S.handeling = h;
-    if (S.modus === 'gevecht') T.ui.toonAp(S.schout.ap, S.schout.maxAp, h ? h.kosten || 0 : 0, !h || h.kan !== false);
+    if (S.modus === 'gevecht') {
+      const v = T.aanDeBeurt(S);
+      T.ui.toonAp(v.ap, v.maxAp, h ? h.kosten || 0 : 0, !h || h.kan !== false);
+    }
     if (h && h.tekst) T.ui.tooltip(tipTekst(h), S.muis.x, S.muis.y, !!h.fout || h.kan === false);
     else T.ui.verbergTooltip();
     canvas.style.cursor = h ? 'pointer' : 'default';
@@ -260,10 +265,13 @@
   }
   T.titelCamera = titelCamera;
 
+  // In een gevecht kijkt de camera naar wie van jouw kant aan de beurt is (de schout, of een man van de
+  // militie) en de vijanden die nog staan.
   function cameraDoel() {
     const aanleiding = S.overgang && S.overgang.aanleiding;
+    const wie = T.spelerAanDeBeurt(S) ? T.aanDeBeurt(S) : S.schout;
     const lijst = S.gevecht
-      ? [S.schout, ...S.gevecht.monsters.filter((m) => !m.dood)]
+      ? [wie, ...S.gevecht.monsters.filter((m) => !m.dood)]
       : aanleiding && !aanleiding.dood
         ? [S.schout, aanleiding]
         : [S.schout];
@@ -302,6 +310,7 @@
     T.werkDoorzoekenBij(S); // zijn soldaten zoeken, met de schout mee of waar de heer wijst (js/doorzoeken.js)
     T.werkInnerBij(S); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
     T.werkBewonersBij(S); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
+    T.werkRoversBij(S); // rovers komen naar een akker, roven en gaan weer; de militie loopt met je mee (js/rovers.js)
     T.werkAnimatiesBij(S, dt, dtWereld);
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
@@ -651,6 +660,22 @@
       if (naar) T.wordtTrede(S, naar);
       const doel = T.tredeDoel(S);
       return { trede: S.trede, doel: doel ? `${doel.kop}: ${doel.tekst}` : 'geen volgende trede' };
+    },
+    // De rovers (js/rovers.js): de bende (wie wegtrok), wanneer die en de wilde rovers komen, en de aanval die
+    // loopt. Spel.debug.rovers(3) laat nu drie wilde rovers komen, Spel.debug.rovers('bende') de bende.
+    rovers(wat) {
+      const R = S.rovers || (S.rovers = T.nieuweRovers());
+      if (wat != null && !R.aanval) {
+        const bende = wat === 'bende';
+        if (bende && !R.bende.length) return 'Er is geen bende: nog niemand trok weg.';
+        R.aanval = { soort: bende ? 'bende' : 'wild', dag: Math.floor(S.kalender.dag), fase: 'wacht', aantal: bende ? 0 : Number(wat) || 3, meteen: true };
+      }
+      const A = R.aanval;
+      return {
+        bende: R.bende.map((l) => l.naam), bendeOp: R.bendeOp, wildeOp: R.wildeOp,
+        aanval: A ? { soort: A.soort, fase: A.fase, rovers: (A.rovers || []).map((e) => `${e.tx},${e.ty}${e.dood ? ' dood' : ''}`), akker: A.veld } : null,
+        militie: S.wereld.wezens.filter((e) => e.opgeroepen).map((e) => `${e.naam} (${e.leven} leven)`),
+      };
     },
     // De wetten (js/wetten.js): per wet de stand, en wat hij dan doet. Spel.debug.wetten('rantsoen', 'krap')
     // zet er eerst een, zoals het menu (W) dat doet; de boete voor de houtkap en wat de belasting nog meeneemt,

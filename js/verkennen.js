@@ -309,7 +309,8 @@
     // In de oogst (graan of hooi) werkt men tot het donker (js/dag.js).
     const oogst = basis === 'rijp' || !!(datum && T.isHooitijd(datum));
     for (const m of w.wezens) {
-      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait) continue;
+      // Een man van de militie bij een aanval dwaalt niet: hij loopt met de schout mee (js/rovers.js).
+      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.opgeroepen) continue;
       // Een dier dat ligt, blijft liggen tot zijn rust zegt dat het weer opstaat (js/vee.js).
       if (m.dier && T.rustVanDier && T.rustVanDier(m, S.tijd || 0) === 'liggen') continue;
       // Het ritme van de dag (js/dag.js): 's ochtends en 's avonds op zijn erf, 's nachts binnen. Wie

@@ -367,6 +367,18 @@
   }
   T.akkerOnbeslistTegels = onbeslistTegels; // ook voor test/akkers.test.cjs
 
+  // Rovers die een akker kapotmaken (js/rovers.js; Marcel, 29 sep: "ook maken ze soms velden kapot"): wat erop
+  // staat, groeit dit jaar niet meer. Die tegels tellen dan als ongezaaid (hierboven): ze groeien niet, worden niet
+  // gemaaid, en tonen kale grond, tot er op 1 lentemaand weer gezaaid wordt. Geeft hoeveel tegels verloren gingen
+  // (0 als er niets stond: na de oogst, of op een weide of braak).
+  T.vertrapAkker = function (akker) {
+    const weg = onbeslistTegels(akker);
+    if (!weg.length) return 0;
+    if (!akker.ongezaaid) akker.ongezaaid = new Set();
+    for (const t of weg) akker.ongezaaid.add(sleutel(t.x, t.y));
+    return weg.length;
+  };
+
   // ── Het hooi (de weides, stap 2; Marcel, 25 sep: "het hooi komt van de hele weide") ──
   //
   // In hooimaand maait de boer zijn weide, zoals hij in oogstmaand zijn graan maait: tegel voor

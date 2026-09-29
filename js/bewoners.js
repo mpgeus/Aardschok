@@ -508,8 +508,9 @@
   }
 
   // Wie in `weg` staat, telt niet meer mee en werkt nergens meer. Wie wegtrekt, loopt de weg af: zijn
-  // poppetje gaat pas van de kaart bij de uitgang (T.werkBewonersBij). Wie sterft, is er niet meer.
-  // Wie nog onderweg was hierheen, komt niet meer.
+  // poppetje gaat pas van de kaart bij de uitgang (T.werkBewonersBij), en een jongere of volwassene gaat het
+  // bos in en komt terug als rover (js/rovers.js). Wie sterft, is er niet meer; wie in een gevecht viel, ligt er
+  // tot de volgende dag (js/rovers.js begraaft hem). Wie nog onderweg was hierheen, komt niet meer.
   function gaanWeg(S, weg, reden) {
     const B = S.bewoners;
     const w = B.wereld;
@@ -522,8 +523,9 @@
         if (uitgang) {
           e.vertrekt = { x: uitgang.x, y: uitgang.y };
           B.vertrekken.push(e);
-        } else w.wezens.splice(w.wezens.indexOf(e), 1);
+        } else if (!e.dood) w.wezens.splice(w.wezens.indexOf(e), 1);
       }
+      if (reden === 'vertrek') T.wordtRover(S, p);
       // Was hij het hoofd van zijn gezin, dan wordt de volgende dat (zijn vrouw, of de oudste).
       const rest = B.mensen.filter((x) => x.hoofd === p);
       if (rest.length) {
@@ -675,14 +677,16 @@
   };
 
   // Het getal veranderde (T.wijzigBevolking, js/gebouwen.js): de bewoners gaan mee. `reden`: 'groei'
-  // (een nieuw gezin, dat over de weg komt), 'winter' (wie sterft) of 'vertrek' (wie wegtrekt). Het
-  // begin ('begin') regelt T.zetBeginBewoners zelf, zodra de boeren hun karakter hebben. Met `waarom`
-  // (js/behoeften.js: "De winter is hard") komt er een bericht dat zegt wie het zijn.
-  T.bewonersVolgen = function (S, verschil, reden, waarom) {
+  // (een nieuw gezin, dat over de weg komt), 'winter' (wie sterft), 'vertrek' (wie wegtrekt) of 'gesneuveld'
+  // (een wachter tegen de rovers, js/rovers.js; `wie` zegt dan wie). Het begin ('begin') regelt
+  // T.zetBeginBewoners zelf, zodra de boeren hun karakter hebben. Met `waarom` (js/behoeften.js: "De winter is
+  // hard") komt er een bericht dat zegt wie het zijn.
+  T.bewonersVolgen = function (S, verschil, reden, waarom, wie) {
     if (!S.bewoners || reden === 'begin') return;
     if (verschil > 0) komenErBij(S, verschil, true);
     else if (verschil < 0) {
-      const weg = wieGaat(S, reden).slice(0, -verschil);
+      // Gaat het om bepaalde mensen (een wachter die sneuvelt, js/rovers.js), dan zij; anders wie het eerst gaat.
+      const weg = wie ? wie.filter((p) => S.bewoners.mensen.includes(p)).slice(0, -verschil) : wieGaat(S, reden).slice(0, -verschil);
       berichtOverWieGaat(S, weg, reden, waarom);
       gaanWeg(S, weg, reden);
     }

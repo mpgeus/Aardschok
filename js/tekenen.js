@@ -1459,7 +1459,9 @@
       ctx.fill();
     }
     ctx.restore();
-    if (!e.dood && e.kant === 'monster' && (S.gevecht || e.leven < e.maxLeven)) levensbalk(ctx, cx, top - 9, e);
+    // Een vijand draagt zijn levensbalk in een gevecht, of als hij geraakt is; een rover altijd (js/rovers.js): hij
+    // draagt het vel van een gewone dorpeling, en zo zie je dat hij geen dorpeling is.
+    if (!e.dood && e.kant === 'monster' && (S.gevecht || e.leven < e.maxLeven || e.rover)) levensbalk(ctx, cx, top - 9, e);
     if (e.alarm > 0) roep(ctx, '!', cx, top - 14 - Math.abs(Math.sin(e.alarm * 9)) * 4, '#ffd24a');
   }
 

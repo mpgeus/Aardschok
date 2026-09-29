@@ -306,6 +306,7 @@
     { naam: 'De erven', blok: 'ERVEN_INSTELLINGEN' },
     { naam: 'De treden', blok: 'TREDEN_INSTELLINGEN' },
     { naam: 'De wetten', blok: 'WETTEN_INSTELLINGEN' },
+    { naam: 'De rovers', blok: 'ROVERS_INSTELLINGEN' },
     { naam: 'De herberg', blok: 'HERBERG_INSTELLINGEN' },
     { naam: 'Behoeften en de winter', blok: 'BEHOEFTEN_INSTELLINGEN' },
     { naam: 'De marskramer', blok: 'HANDEL_INSTELLINGEN' },

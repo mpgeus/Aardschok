@@ -78,7 +78,7 @@
     const tot = dagNu() + maxUren / 24;
     for (let i = 0; i < 20000; i++) {
       if (voorwaarde()) return true;
-      if (dagNu() >= tot || S().einde) return false;
+      if (dagNu() >= tot || S().einde || S().modus === 'dood') return false;
       await stap(sec);
     }
     return false;
@@ -109,6 +109,29 @@
     if (s.modus === 'velden') T.ui.sluitVelden(s);
     if (s.modus === 'wetten') T.ui.sluitWetten(s);
     if (s.modus === 'spelregels') T.ui.sluitSpelregels(s);
+    vecht();
+  }
+
+  // Een gevecht (rovers, js/rovers.js; werklijst vraag 55): wie van jouw kant aan de beurt is, slaat de rover die
+  // hij kan halen; anders loopt hij er zo ver heen als zijn punten reiken; en kan hij niets, dan eindigt hij zijn
+  // beurt. Zo verdedigt elke speler zijn dorp, met de schout en de mannen van het wachthuis. Het gaat, zoals een
+  // speler, via dezelfde vraag als de klik (T.handelingGevecht, js/gevecht.js).
+  function vecht() {
+    const s = S();
+    if (s.modus !== 'gevecht' || s.bezig || !T.spelerAanDeBeurt(s)) return;
+    const v = T.aanDeBeurt(s);
+    const bij = (m) => T.afstand(T.tegelVan(m), T.tegelVan(v));
+    const vijanden = s.gevecht.monsters.filter((m) => !m.dood).sort((a, b) => bij(a) - bij(b));
+    for (const m of vijanden) {
+      const h = T.handelingGevecht(s, { wezen: m, x: m.tx, y: m.ty });
+      if (h && h.doe && h.kan !== false) return h.doe();
+      if (h && h.pad && h.pad.length && v.ap > 0) {
+        const t = h.pad[Math.min(v.ap, h.pad.length) - 1];
+        const lopen = T.handelingGevecht(s, { x: t.x, y: t.y });
+        if (lopen && lopen.doe && lopen.kan !== false) return lopen.doe();
+      }
+    }
+    T.eindeBeurt(s);
   }
 
   // ── Lopen en klikken ────────────────────────────────────────────────────────────────────────────
@@ -120,6 +143,10 @@
     const tot = dagNu() + maxUren / 24;
     let klaar = false;
     for (let poging = 0; poging < 8 && !klaar; poging++) {
+      // Midden in een gevecht (rovers) klikt een speler niet om ergens heen te lopen: de muis doet dan alleen het
+      // gevecht (js/main.js). Eerst het gevecht uit, dat vecht() hierboven voert.
+      if (S().modus !== 'verkennen') await wachtTot(() => S().modus === 'verkennen', 24);
+      if (S().modus !== 'verkennen') return false;
       const h = T.handelingVerkennen(S(), doel);
       if (!h || !h.doe) return false;
       h.doe();
@@ -715,8 +742,16 @@
       ongezaaid += a.ongezaaid ? a.ongezaaid.size : 0;
     }
     return Object.assign(tel(), {
-      tekst: s.einde ? `het ambt kwijt op ${datum()}` : `het jaar uit, tot ${datum()}`,
+      tekst: s.einde ? `het ambt kwijt op ${datum()}` : s.modus === 'dood' ? `gevallen op ${datum()}` : `het jaar uit, tot ${datum()}`,
       ambtKwijt: !!s.einde,
+      gevallen: s.modus === 'dood',
+      // De rovers (js/rovers.js): hoe vaak ze kwamen, hoe vaak ze verslagen werden, en wat ze meenamen.
+      rovers: {
+        kwamen: boek.berichten.filter((b) => /^Rovers!/.test(b.tekst)).length,
+        verslagen: boek.berichten.filter((b) => b.tekst === 'De rovers zijn verslagen.').length,
+        roofden: boek.berichten.filter((b) => /gaan ervandoor/.test(b.tekst)).map((b) => `${b.datum}: ${b.tekst}`),
+        gesneuveld: boek.bevolking.filter((b) => b.reden === 'gesneuveld').length,
+      },
       akkertegels: tegels, ongezaaid,
       jaren: s.heer.jaren,
       verstoptPerPlek: plekken().filter((p) => p.ligt.graan > 0 || p.ligt.goud > 0).map((p) => ({ plek: p.naam, graan: Math.round(p.ligt.graan), goud: Math.round(p.ligt.goud) })),
@@ -733,7 +768,7 @@
         if (/hout en het eten/.test(b.waarom)) w.beide -= b.verschil;
         else if (/hout/.test(b.waarom)) w.kou -= b.verschil;
         else w.honger -= b.verschil;
-      } else w.weg -= b.verschil;
+      } else if (b.reden !== 'gesneuveld') w.weg -= b.verschil; // wie tegen de rovers viel, trok niet weg
     }
     w.waarschuwingen = boek.berichten.filter((b) => /winter/i.test(b.tekst) && /haalt|halen|is over|op, en de winter/.test(b.tekst)).map((b) => `${b.datum}: ${b.tekst}`);
     return w;
@@ -796,7 +831,7 @@
       boek.begin = tel(); // de eerste van de maand zelf schrijft de boekhouding op, bij de eerste stap
       const P = SPELERS[speler];
       if (P.begin && !verder) await P.begin();
-      for (let i = 0; i < 400000 && dagNu() < EIND && !s.einde; i++) {
+      for (let i = 0; i < 400000 && dagNu() < EIND && !s.einde && s.modus !== 'dood'; i++) {
         if (opslaan && !opslaan.gedaan && dagNu() >= opslaan.dag && !T.waaromNietOpslaan(s) && !s.slaap) {
           opslaan.gedaan = true;
           if (opslaan.bewaar) {

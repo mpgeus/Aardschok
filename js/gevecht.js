@@ -2,6 +2,13 @@
 // zijn stap af, daarna verschijnt het raster op dezelfde vloer en gaat de wereld verder in
 // beurten. Er is geen apart gevechtsscherm, en dat is de kern van het idee: de kamer waarin
 // je rondliep, is het slagveld, met dezelfde deuren en kisten.
+//
+// Aan jouw kant (kant 'speler') vecht de schout, en sinds de rovers (werklijst vraag 55, 29 sep) ook de
+// mannen van het wachthuis die met hem meeliepen (T.militieInGevecht, js/rovers.js). Elk heeft zijn eigen
+// beurt en actiepunten, en jij bestuurt wie aan de beurt is (T.aanDeBeurt), zoals in Jagged Alliance 2. Een
+// vijand zoekt de man van jouw kant die het dichtst bij staat. Wie valt, is dood (Marcel, 29 sep: "mensen
+// kunnen sterven"): een vijand is verslagen, een wachter is een mond minder (T.sneuvelt), en valt de schout,
+// dan is het spel uit.
 (function (T) {
   'use strict';
 
@@ -13,6 +20,17 @@
   T.DEUR_SLUITEN = 1;
 
   const worp = (b) => b[0] + Math.floor(Math.random() * (b[1] - b[0] + 1));
+
+  // Wie er nu aan de beurt is, en of jij hem bestuurt: de schout of een man van de militie.
+  T.aanDeBeurt = (S) => (S.gevecht ? S.gevecht.volgorde[S.gevecht.beurt] || null : null);
+  T.spelerAanDeBeurt = function (S) {
+    const e = T.aanDeBeurt(S);
+    return !!e && e.kant === 'speler' && !e.dood;
+  };
+  // Wie er aan jouw kant nog meevecht.
+  T.spelers = (S) => (S.gevecht ? S.gevecht.volgorde.filter((e) => e.kant === 'speler' && !e.dood) : [S.schout]);
+  // "Je slaat" of "Jan slaat": de schout ben jij, een man van de militie heeft een naam.
+  const wie = (S, v) => (v === S.schout ? 'Je' : v.naam);
 
   // Stap 1 van de overgang: de wereld bevriest. De spellus roept beginGevecht aan zodra
   // niemand meer onderweg is.
@@ -28,14 +46,16 @@
     T.ui.bericht(schoutBegint ? `Je valt de ${aanleiding.naam} aan!` : `De ${aanleiding.naam} ziet je!`, 'gevaar');
   };
 
-  // Stap 2: iedereen staat op een tegel. Wie doet mee, in welke volgorde, op welke vloer.
+  // Stap 2: iedereen staat op een tegel. Wie doet mee, in welke volgorde, op welke vloer. Eerst jouw kant
+  // (de schout, dan de militie), dan de vijanden, de snelste eerst.
   T.beginGevecht = function (S) {
     const w = S.wereld;
     const schout = S.schout;
     const monsters = T.deelnemers(w, schout, S.overgang.aanleiding);
+    const militie = T.militieInGevecht(S);
     S.overgang = null;
     const kamers = new Set();
-    for (const e of [schout, ...monsters]) {
+    for (const e of [schout, ...militie, ...monsters]) {
       const k = T.kamerVan(w, e.tx, e.ty);
       if (k) {
         kamers.add(k.id);
@@ -44,7 +64,7 @@
     }
     if (!kamers.size) kamers.add(w.huidigeKamer);
     monsters.sort((a, b) => b.initiatief - a.initiatief);
-    S.gevecht = { monsters, volgorde: [schout, ...monsters], beurt: 0, ronde: 1, kamers, teller: 0 };
+    S.gevecht = { monsters, volgorde: [schout, ...militie, ...monsters], beurt: 0, ronde: 1, kamers, teller: 0 };
     S.rasterTegels = rasterVoor(w, kamers, S.gevecht.volgorde);
     S.rasterStart = S.tijd;
     S.rasterVan = T.tegelVan(schout);
@@ -54,13 +74,15 @@
   };
 
   // Wie doet er mee: het monster dat het begon, elk monster in dezelfde kamer als de schout,
-  // en elk monster dat hem van dichtbij kan zien.
+  // en elk monster dat hem van dichtbij kan zien. Rovers komen met hun hele bende (js/rovers.js): begint
+  // er een, dan doen ze allemaal mee.
   T.deelnemers = function (w, schout, aanleiding) {
     const h = T.tegelVan(schout);
     const kamerSchout = T.kamerVan(w, h.x, h.y);
     return w.wezens.filter((m) => {
       if (m.dood || m.kant !== 'monster') return false;
       if (m === aanleiding) return true;
+      if (aanleiding && aanleiding.rover && m.rover) return true;
       const p = T.tegelVan(m);
       const k = T.kamerVan(w, p.x, p.y);
       // Buiten is de hele kaart één kamer; dan zou elk monster op het erf meedoen. Daar telt
@@ -100,15 +122,16 @@
   }
 
   // Loopt iemand tijdens het gevecht een nieuwe kamer in, dan groeit het raster mee; buiten
-  // schuift het gewoon met de vechters mee.
+  // schuift het gewoon met de vechters mee. Wie aan jouw kant een stap zet, betaalt er een punt voor.
   T.gevechtBijAankomst = function (S, e, t) {
     const g = S.gevecht;
-    if (e === S.schout) {
+    const speler = e.kant === 'speler' && e === T.aanDeBeurt(S);
+    if (speler) {
       e.ap = Math.max(0, e.ap - 1);
       T.ui.toonAp(e.ap, e.maxAp, 0, true);
     }
     if (S.wereld.buiten) {
-      if (e === S.schout) S.rasterTegels = rasterVoor(S.wereld, g.kamers, g.volgorde);
+      if (speler) S.rasterTegels = rasterVoor(S.wereld, g.kamers, g.volgorde);
       return;
     }
     const k = T.kamerVan(S.wereld, t.x, t.y);
@@ -123,25 +146,26 @@
     const g = S.gevecht;
     if (!g) return;
     g.teller++;
-    const wie = g.volgorde[g.beurt];
+    const v = g.volgorde[g.beurt];
     T.ui.toonVolgorde(S);
-    if (wie === S.schout) {
-      // Kan geen enkel monster de schout nog zien of bereiken (een deur dichtgegooid),
-      // dan is hij ontsnapt.
-      if (!g.monsters.some((m) => !m.dood && kanBijSchout(S, m))) {
+    if (v.kant === 'speler') {
+      // Kan geen enkel monster nog iemand van jouw kant zien of bereiken (een deur dichtgegooid),
+      // dan zijn jullie ontsnapt.
+      const spelers = T.spelers(S);
+      if (!g.monsters.some((m) => !m.dood && spelers.some((s) => kanBij(S, m, s)))) {
         T.eindeGevecht(S, 'kwijt');
         return;
       }
-      S.schout.ap = S.schout.maxAp;
+      v.ap = v.maxAp;
       S.bezig = false;
       T.ververBereik(S);
       knoppenAan(S);
-      T.ui.toonAp(S.schout.ap, S.schout.maxAp, 0, true);
+      T.ui.toonAp(v.ap, v.maxAp, 0, true);
     } else {
       S.bezig = true;
       S.bereik = null;
       T.ui.zetKnoppen(false);
-      monsterBeurt(S, wie);
+      monsterBeurt(S, v);
     }
   }
 
@@ -159,7 +183,7 @@
 
   T.eindeBeurt = function (S) {
     const g = S.gevecht;
-    if (!g || S.bezig || g.volgorde[g.beurt] !== S.schout) return;
+    if (!g || S.bezig || !T.spelerAanDeBeurt(S)) return;
     S.bezig = true;
     S.bereik = null;
     T.ui.zetKnoppen(false);
@@ -177,25 +201,28 @@
     for (const m of S.wereld.wezens) {
       if (m.kant === 'monster' && !m.dood) m.dwaalTijd = 2.5;
     }
+    // Waren het rovers, dan zegt js/rovers.js wat er van hun aanval overblijft.
+    T.naGevecht(S, reden);
   };
 
+  // Waar wie aan de beurt is heen kan met zijn punten.
   T.ververBereik = function (S) {
     const w = S.wereld;
-    const schout = S.schout;
+    const v = T.aanDeBeurt(S) || S.schout;
     S.bereik = T.bereik(
-      T.tegelVan(schout),
-      schout.ap,
-      (x, y) => T.isZichtbaar(w, x, y) && T.isBegaanbaar(w, x, y, { deurenOpenen: true, wezensBlokkeren: true, wie: schout }),
+      T.tegelVan(v),
+      v.ap,
+      (x, y) => T.isZichtbaar(w, x, y) && T.isBegaanbaar(w, x, y, { deurenOpenen: true, wezensBlokkeren: true, wie: v }),
       (x, y) => T.isVast(w, x, y),
     );
   };
 
-  function schoutPad(S, doel, naast) {
+  function padVoor(S, v, doel, naast) {
     const w = S.wereld;
     return T.zoekPad(
-      T.tegelVan(S.schout),
+      T.tegelVan(v),
       doel,
-      (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: true, wezensBlokkeren: true, wie: S.schout }),
+      (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: true, wezensBlokkeren: true, wie: v }),
       (x, y) => T.isVast(w, x, y),
       { naast },
     );
@@ -204,30 +231,31 @@
   // Wat gebeurt er als je in je beurt hierop klikt, en wat kost het? Geeft
   // { tekst, kosten, kan, doe, pad } terug. kan = false: wel tonen, niet doen.
   // kosten staat alleen op 0 als het niet aan de punten ligt (te ver, geen zicht).
+  // Het gaat om wie van jouw kant aan de beurt is: de schout, of een man van de militie.
   T.handelingGevecht = function (S, doel) {
     if (!doel) return null;
     const w = S.wereld;
-    const schout = S.schout;
-    const ap = schout.ap;
-    const h = T.tegelVan(schout);
+    const v = T.aanDeBeurt(S) || S.schout;
+    if (v.kant !== 'speler') return null;
+    const ap = v.ap;
+    const h = T.tegelVan(v);
 
     if (doel.wezen && doel.wezen.kant === 'monster' && !doel.wezen.dood) {
       const m = doel.wezen;
       const p = T.tegelVan(m);
       const k = T.SLAAN.kosten;
-      if (T.raakt(w, h, p)) return { tekst: `Slaan (${T.SLAAN.schade.join('–')} schade)`, kosten: k, kan: ap >= k, doe: () => slaan(S, m, []) };
-      const pad = schoutPad(S, p, true);
+      if (T.raakt(w, h, p)) return { tekst: `Slaan (${T.SLAAN.schade.join('–')} schade)`, kosten: k, kan: ap >= k, doe: () => slaan(S, v, m, []) };
+      const pad = padVoor(S, v, p, true);
       if (!pad) return { tekst: 'Je kunt er niet bij', kosten: 0, kan: false };
       const totaal = pad.length + k;
-      return { tekst: 'Erheen lopen en slaan', kosten: totaal, kan: ap >= totaal, doe: () => slaan(S, m, pad), pad };
+      return { tekst: 'Erheen lopen en slaan', kosten: totaal, kan: ap >= totaal, doe: () => slaan(S, v, m, pad), pad };
     }
 
-
     if (doel.x === h.x && doel.y === h.y) return null;
-    if (!T.isZichtbaar(w, doel.x, doel.y) || !T.isBegaanbaar(w, doel.x, doel.y, { deurenOpenen: true, wezensBlokkeren: true, wie: schout })) return null;
-    const pad = schoutPad(S, { x: doel.x, y: doel.y }, false);
+    if (!T.isZichtbaar(w, doel.x, doel.y) || !T.isBegaanbaar(w, doel.x, doel.y, { deurenOpenen: true, wezensBlokkeren: true, wie: v })) return null;
+    const pad = padVoor(S, v, { x: doel.x, y: doel.y }, false);
     if (!pad) return null;
-    return { tekst: 'Lopen', kosten: pad.length, kan: ap >= pad.length, doe: () => lopen(S, pad), pad };
+    return { tekst: 'Lopen', kosten: pad.length, kan: ap >= pad.length, doe: () => lopen(S, v, pad), pad };
   };
 
   function bezigMet(S) {
@@ -236,34 +264,34 @@
     T.ui.verbergTooltip();
   }
 
-  async function lopen(S, pad) {
+  async function lopen(S, v, pad) {
     bezigMet(S);
-    await T.anim.loop(S.schout, pad);
+    await T.anim.loop(v, pad);
     naHandeling(S);
   }
 
-  async function slaan(S, m, pad) {
+  async function slaan(S, v, m, pad) {
     bezigMet(S);
-    if (pad.length) await T.anim.loop(S.schout, pad);
-    if (m.dood || !T.raakt(S.wereld, T.tegelVan(S.schout), T.tegelVan(m))) {
+    if (pad.length) await T.anim.loop(v, pad);
+    if (m.dood || !T.raakt(S.wereld, T.tegelVan(v), T.tegelVan(m))) {
       naHandeling(S);
       return;
     }
-    S.schout.ap -= T.SLAAN.kosten;
-    T.ui.toonAp(S.schout.ap, S.schout.maxAp, 0, true);
-    await T.anim.uitval(S.schout, T.tegelVan(m));
+    v.ap -= T.SLAAN.kosten;
+    T.ui.toonAp(v.ap, v.maxAp, 0, true);
+    await T.anim.uitval(v, T.tegelVan(m));
     const n = worp(T.SLAAN.schade);
-    T.ui.bericht(`Je slaat de ${m.naam}: ${n} schade.`);
+    T.ui.bericht(`${wie(S, v)} slaat de ${m.naam}: ${n} schade.`);
     raak(S, m, n);
     await T.anim.wacht(S, 320);
     naHandeling(S);
   }
 
-  // Een open deur naast de schout, waar niemand in staat. Die kan hij dichtgooien: een
+  // Een open deur naast wie aan de beurt is, waar niemand in staat. Die kan hij dichtgooien: een
   // monster opent geen deuren, dus zo snijd je een achtervolger af.
-  T.deurNaastSchout = function (S) {
+  T.deurNaast = function (S, v) {
     const w = S.wereld;
-    const h = T.tegelVan(S.schout);
+    const h = T.tegelVan(v || S.schout);
     for (const d of w.deuren.values()) {
       if (d.staat === 'open' && T.raakt(w, h, d) && !T.wezenOp(w, d.x, d.y)) return d;
     }
@@ -272,19 +300,21 @@
 
   T.deurDicht = function (S) {
     const g = S.gevecht;
-    if (!g || S.bezig || g.volgorde[g.beurt] !== S.schout) return;
-    const d = T.deurNaastSchout(S);
-    if (!d || S.schout.ap < T.DEUR_SLUITEN) return;
-    S.schout.ap -= T.DEUR_SLUITEN;
+    if (!g || S.bezig || !T.spelerAanDeBeurt(S)) return;
+    const v = T.aanDeBeurt(S);
+    const d = T.deurNaast(S, v);
+    if (!d || v.ap < T.DEUR_SLUITEN) return;
+    v.ap -= T.DEUR_SLUITEN;
     d.staat = 'dicht';
-    T.ui.bericht('Je gooit de deur dicht.');
+    T.ui.bericht(v === S.schout ? 'Je gooit de deur dicht.' : `${v.naam} gooit de deur dicht.`);
     naHandeling(S);
   };
 
   // De knoppen staan aan in de eigen beurt; de deurknop verschijnt alleen naast een open deur.
   function knoppenAan(S) {
+    const v = T.aanDeBeurt(S);
     T.ui.zetKnoppen(true, 'slaan');
-    T.ui.toonDeurKnop(!!T.deurNaastSchout(S), S.schout.ap >= T.DEUR_SLUITEN);
+    T.ui.toonDeurKnop(!!T.deurNaast(S, v), v.ap >= T.DEUR_SLUITEN);
   }
 
   function naHandeling(S) {
@@ -294,13 +324,14 @@
       T.eindeGevecht(S, 'gewonnen');
       return;
     }
+    const v = T.aanDeBeurt(S);
     S.bezig = false;
     T.ververBereik(S);
     knoppenAan(S);
-    T.ui.toonAp(S.schout.ap, S.schout.maxAp, 0, true);
+    T.ui.toonAp(v.ap, v.maxAp, 0, true);
     // Zijn de punten op, dan gaat de beurt vanzelf over. De teller voorkomt dat deze
     // vertraagde aanroep een latere beurt afbreekt.
-    if (S.schout.ap <= 0) {
+    if (v.ap <= 0) {
       const teller = g.teller;
       T.anim.wacht(S, 450).then(() => {
         if (S.gevecht === g && g.teller === teller) T.eindeBeurt(S);
@@ -308,26 +339,31 @@
     }
   }
 
-  // Een klap kost levenspunten, een monster net zo goed als de schout. Wie op nul komt, valt: een
-  // monster is dan verslagen, en voor de schout is het het einde (T.schoutGevallen; voorlopig, tot
-  // punt 13 van de werklijst zegt wat vallen echt betekent).
+  // Een klap kost levenspunten, een monster net zo goed als de schout. Wie op nul komt, valt, en is dood
+  // (Marcel, 29 sep: "mensen kunnen sterven"): een monster is verslagen, een man van de militie sneuvelt
+  // (T.sneuvelt, js/rovers.js: een mond minder), en voor de schout is het het einde (T.schoutGevallen).
   function raak(S, doel, n) {
     doel.leven = Math.max(0, doel.leven - n);
     doel.flits = 0.3;
-    T.anim.tekst(S, doel, '-' + n, doel === S.schout ? '#f3b1a5' : '#ffd36b');
+    T.anim.tekst(S, doel, '-' + n, doel.kant === 'speler' ? '#f3b1a5' : '#ffd36b');
     if (doel.leven > 0) T.ui.toonVolgorde(S);
     else if (doel === S.schout) T.schoutGevallen(S);
-    else sterf(S, doel);
+    else if (doel.kant === 'speler') {
+      sterf(S, doel, false); // het bericht zegt wie hij was (T.sneuvelt)
+      T.sneuvelt(S, doel);
+    } else sterf(S, doel);
   }
   // De ene plek waar een klap landt, ook voor de toetsen (test/regels.test.cjs).
   T.raak = raak;
 
-  // Werkt ook zonder gevecht: dan is er geen beurtvolgorde om het uit te halen.
-  function sterf(S, e) {
+  // Werkt ook zonder gevecht: dan is er geen beurtvolgorde om het uit te halen. Een rover die valt, is
+  // uit zijn bende (js/rovers.js). `bericht` false: iemand anders zegt het.
+  function sterf(S, e, bericht) {
     e.dood = true;
     e.sterfTijd = 0;
     e.pad = [];
-    T.ui.bericht(`De ${e.naam} is verslagen.`, 'goed');
+    if (bericht !== false) T.ui.bericht(`De ${e.naam} is verslagen.`, 'goed');
+    if (e.rover) T.roverVerslagen(S, e);
     const g = S.gevecht;
     if (!g) return;
     const i = g.volgorde.indexOf(e);
@@ -338,7 +374,7 @@
     T.ui.toonVolgorde(S);
   }
 
-  // De schout valt, en dat is voorlopig het einde van het spel.
+  // De schout valt, en dat is het einde van het spel.
   T.schoutGevallen = function (S) {
     const schout = S.schout;
     schout.dood = true;
@@ -363,51 +399,57 @@
   // Met hoeveel punten begint een monster zijn beurt? Met al zijn punten.
   T.monsterAp = (m) => m.maxAp;
 
-  // Wat doet een monster in zijn beurt? Het loopt zo kort mogelijk naar de schout, en slaat
-  // toe zo vaak als de overgebleven punten toelaten. Haalt het de schout niet, dan komt het
-  // zo dichtbij als het kan. Los van het scherm, zodat het te toetsen is.
-  T.planMonsterBeurt = function (w, m, schout) {
+  // Wat doet een monster in zijn beurt? Het loopt zo kort mogelijk naar wie van jouw kant het dichtst bij
+  // staat (`doel`: één wezen, of een lijst), en slaat toe zo vaak als de overgebleven punten toelaten. Haalt
+  // het hem niet, dan komt het zo dichtbij als het kan. Los van het scherm, zodat het te toetsen is.
+  // Geeft { pad, aanvallen, kanNiet, doel }.
+  T.planMonsterBeurt = function (w, m, doel) {
     const ap = T.monsterAp(m);
-    const pad = T.zoekPad(
-      T.tegelVan(m),
-      T.tegelVan(schout),
-      (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: false, wezensBlokkeren: true, wie: m }),
-      (x, y) => T.isVast(w, x, y),
-      { naast: true },
-    );
-    if (pad === null) return { pad: [], aanvallen: 0, kanNiet: true };
-    const stappen = Math.min(pad.length, ap);
-    const aanvallen = stappen === pad.length ? Math.floor((ap - stappen) / m.aanval.kosten) : 0;
-    return { pad: pad.slice(0, stappen), aanvallen, kanNiet: false };
+    const doelen = (Array.isArray(doel) ? doel : [doel]).filter((d) => d && !d.dood);
+    let beste = null;
+    for (const d of doelen) {
+      const pad = T.zoekPad(
+        T.tegelVan(m),
+        T.tegelVan(d),
+        (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: false, wezensBlokkeren: true, wie: m }),
+        (x, y) => T.isVast(w, x, y),
+        { naast: true },
+      );
+      if (pad !== null && (!beste || pad.length < beste.pad.length)) beste = { pad, doel: d };
+    }
+    if (!beste) return { pad: [], aanvallen: 0, kanNiet: true, doel: null };
+    const stappen = Math.min(beste.pad.length, ap);
+    const aanvallen = stappen === beste.pad.length ? Math.floor((ap - stappen) / m.aanval.kosten) : 0;
+    return { pad: beste.pad.slice(0, stappen), aanvallen, kanNiet: false, doel: beste.doel };
   };
 
   async function monsterBeurt(S, m) {
     const w = S.wereld;
-    const schout = S.schout;
     await T.anim.wacht(S, 260);
     if (!S.gevecht) return;
-    const plan = T.planMonsterBeurt(w, m, schout);
+    const plan = T.planMonsterBeurt(w, m, T.spelers(S));
+    const doel = plan.doel;
     if (plan.pad.length) await T.anim.loop(m, plan.pad);
     for (let i = 0; i < plan.aanvallen; i++) {
-      if (schout.dood || !S.gevecht) return;
-      if (!T.raakt(w, T.tegelVan(m), T.tegelVan(schout))) break;
-      await T.anim.uitval(m, T.tegelVan(schout));
+      if (!doel || doel.dood || !S.gevecht) break;
+      if (!T.raakt(w, T.tegelVan(m), T.tegelVan(doel))) break;
+      await T.anim.uitval(m, T.tegelVan(doel));
       const n = worp(m.aanval.schade);
-      T.ui.bericht(`De ${m.naam} ${m.aanval.zin}: ${n} schade.`, 'gevaar');
-      raak(S, schout, n);
+      T.ui.bericht(doel === S.schout ? `De ${m.naam} ${m.aanval.zin}: ${n} schade.` : `De ${m.naam} ${m.aanval.zin.replace(/\bje\b/, doel.naam)}: ${n} schade.`, 'gevaar');
+      raak(S, doel, n);
       await T.anim.wacht(S, 380);
     }
-    if (schout.dood || !S.gevecht) return;
+    if (S.schout.dood || !S.gevecht) return;
     await T.anim.wacht(S, 160);
     volgendeBeurt(S);
   }
 
-  // Kan dit monster de schout nog zien of bereiken? Andere wezens tellen hier niet als
+  // Kan dit monster dit wezen van jouw kant nog zien of bereiken? Andere wezens tellen hier niet als
   // obstakel: die gaan nog opzij.
-  function kanBijSchout(S, m) {
+  function kanBij(S, m, doel) {
     const w = S.wereld;
     const a = T.tegelVan(m);
-    const h = T.tegelVan(S.schout);
+    const h = T.tegelVan(doel);
     if (T.zichtTussen(w, a, h)) return true;
     const pad = T.zoekPad(a, h, (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: false }), (x, y) => T.isVast(w, x, y), { naast: true });
     return pad !== null;
