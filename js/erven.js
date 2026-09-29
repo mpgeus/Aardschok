@@ -50,6 +50,10 @@
 
   T.vrijeErven = (S) => (S.erven || []).filter((e) => !e.hut);
 
+  // Kan een nieuw gezin een erf nemen? Als het dorp zelf bouwt en er een vrij erf is (T.gezinZoektEenErf
+  // hieronder; en T.waaromGeenGezin in js/gebouwen.js, die zegt of er plaats is).
+  T.kanEenErfNemen = (S) => IN().dorpBouwtZelf && T.vrijeErven(S).length > 0;
+
   // Waarom past een erf niet met zijn linkerbovenhoek op (x, y)? De reden, of null. Het hele vak moet vrij
   // zijn: niet op het plein, niets vasts (water, een boom, een gebouw, de rand van de kaart), geen veld,
   // geen pad en geen ander erf (T.waaromNietOpDezeGrond, js/gebouwen.js). En er moet een hut in passen die
@@ -229,7 +233,7 @@
   // en zei niets het je). Geeft de hut, of null.
   T.gezinZoektEenErf = function (S) {
     const zelf = IN().dorpBouwtZelf;
-    const erf = zelf ? T.kiesErf(S) : null;
+    const erf = T.kanEenErfNemen(S) ? T.kiesErf(S) : null;
     const hut = erf ? T.zetHutOpErf(S, erf) : null;
     if (!hut) {
       bericht(zelf

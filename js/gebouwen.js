@@ -784,6 +784,25 @@
   // (js/wetten.js).
   T.gezinDagen = (S) => Math.max(1, Math.round(T.GEBOUWEN_INSTELLINGEN.gezinDagen / T.wetFactor(S, 'gezinnen')));
 
+  // De eerstvolgende dag waarop er een gezin kan komen (T.tikGebouwenDag, stap 4): na vandaag, want die dag is al
+  // geteld.
+  T.volgendeGezinDag = function (S) {
+    const n = T.gezinDagen(S);
+    return (Math.floor(Math.floor((S.kalender && S.kalender.dag) || 0) / n) + 1) * n;
+  };
+
+  // Waarom er nu geen gezin kan komen, als lijst: 'graan' (minder dan de buffer in de voorraad), 'tevreden' (onder
+  // de drempel, js/behoeften.js) en 'plaats' (geen huis met plaats en geen vrij erf, js/erven.js). Een lege lijst
+  // als het kan. De groei vraagt het (T.tikGebouwenDag, stap 4), en de raad linksboven ook (js/raad.js), zodat die
+  // zegt wat de groei doet en niet wat hij zelf denkt.
+  T.waaromGeenGezin = function (S) {
+    const waarom = [];
+    if ((S.voorraad.graan || 0) < T.GEBOUWEN_INSTELLINGEN.graanBufferVoorGroei) waarom.push('graan');
+    if (S.behoeften && S.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.groeiDrempel) waarom.push('tevreden');
+    if ((S.bevolking || 0) >= T.telWoonruimte(S) && !T.kanEenErfNemen(S)) waarom.push('plaats');
+    return waarom;
+  };
+
   // Wat een gebouw per dag maakt als het helemaal bezet is (T.GEBOUWEN[x].maakt.uit), met wat de wetten erbij
   // doen: wie in het bos van de heer hakt (bos), hakt met de wet Houtkap meer (js/wetten.js). Of null.
   T.maaktUit = function (S, soort) {
@@ -846,14 +865,17 @@
     T.eetVandaag(S);
     // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als de voorraad een buffer overhoudt
     // (zodat een net geboren gezin niet meteen honger lijdt), en het dorp tevreden genoeg is
-    // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel). Zonder S.behoeften (nog geen dag
-    // getikt) blokkeert dat laatste niets. Een huis met plaats gaat voor; is het dorp vol, dan neemt
-    // het een vrij erf en zet het er zelf een hut op, of zegt het dat er geen plaats is (js/erven.js).
-    // Met de wet Vreemden welkom kan dat vaker (T.gezinDagen hierboven).
-    const tevredenGenoeg = !S.behoeften || S.behoeften.tevredenheid >= T.BEHOEFTEN_INSTELLINGEN.groeiDrempel;
-    if (dag > 0 && dag % T.gezinDagen(S) === 0 && S.voorraad.graan >= IN.graanBufferVoorGroei && tevredenGenoeg) {
-      if (S.bevolking < woonruimte) T.wijzigBevolking(S, Math.min(woonruimte, S.bevolking + IN.gezinGrootte) - S.bevolking, 'groei');
-      else T.gezinZoektEenErf(S);
+    // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel); allebei zegt T.waaromGeenGezin
+    // hierboven. Zonder S.behoeften (nog geen dag getikt) blokkeert dat laatste niets. Een huis met
+    // plaats gaat voor; is het dorp vol, dan neemt het een vrij erf en zet het er zelf een hut op, of
+    // zegt het dat er geen plaats is (js/erven.js). Met de wet Vreemden welkom kan dat vaker
+    // (T.gezinDagen hierboven).
+    if (dag > 0 && dag % T.gezinDagen(S) === 0) {
+      const waarom = T.waaromGeenGezin(S);
+      if (!waarom.includes('graan') && !waarom.includes('tevreden')) {
+        if (S.bevolking < woonruimte) T.wijzigBevolking(S, Math.min(woonruimte, S.bevolking + IN.gezinGrootte) - S.bevolking, 'groei');
+        else T.gezinZoektEenErf(S);
+      }
     }
     // 5. Handen: verdeeld over de werkplaatsen, en wie waar werkt (T.verdeelHanden hierboven).
     T.verdeelHanden(S);

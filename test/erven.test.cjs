@@ -198,6 +198,39 @@ test('op een groeidag neemt een gezin een vrij erf als het dorp vol is', () => {
   assert.equal(S.bewoners.mensen.filter((p) => p.huis === S.erven[0].hut).length, T.GEBOUWEN.hut.woonruimte);
 });
 
+test('waarom er geen gezin komt: geen plaats, te weinig graan, of niet tevreden genoeg', () => {
+  const S = gehucht();
+  S.behoeften = Object.assign(T.nieuweBehoeften(), { tevredenheid: 0.7 });
+  assert.deepEqual(T.waaromGeenGezin(S), [], 'in het begin is er plaats, graan en tevredenheid');
+  vol(S);
+  assert.deepEqual(T.waaromGeenGezin(S), ['plaats']);
+  // Een vrij erf is plaats: daar zet een gezin zijn hut op.
+  const plek = erfPlek(S);
+  T.plaatsGebouw(S, 'erf', plek.x, plek.y);
+  assert.deepEqual(T.waaromGeenGezin(S), []);
+  // Wat de groei verder vraagt: een buffer graan, en een dorp dat tevreden genoeg is.
+  T.zetVoorraad(S, 'graan', T.GEBOUWEN_INSTELLINGEN.graanBufferVoorGroei - 1);
+  S.behoeften.tevredenheid = T.BEHOEFTEN_INSTELLINGEN.groeiDrempel - 0.01;
+  assert.deepEqual(T.waaromGeenGezin(S), ['graan', 'tevreden']);
+  // En zo doet de groei het ook: op een groeidag komt er dan niemand, en het erf blijft vrij.
+  const voor = S.bevolking;
+  T.tikGebouwenDag(S, T.GEBOUWEN_INSTELLINGEN.gezinDagen);
+  assert.equal(S.bevolking, voor);
+  assert.equal(S.erven[0].hut, null);
+});
+
+test('het volgende gezin: op de eerstvolgende groeidag na vandaag, met Vreemden welkom vaker', () => {
+  const S = gehucht();
+  const n = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
+  S.kalender.dag = 0;
+  assert.equal(T.volgendeGezinDag(S), n);
+  S.kalender.dag = n + 0.5; // die dag is al geteld
+  assert.equal(T.volgendeGezinDag(S), 2 * n);
+  T.zetWet(S, 'vreemden', 'aangenomen');
+  assert.equal(T.volgendeGezinDag(S), n + T.gezinDagen(S));
+  assert.ok(T.gezinDagen(S) < n);
+});
+
 test('zonder hout wacht de bouwplaats, en hij begint zodra het hout er is', () => {
   const S = gehucht();
   vol(S);
