@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (29 sep 2026, zestiende sessie): stap 5 staat in main, vraag 59 is geparkeerd, en nu de heervaart
+## De stand (29 sep 2026, zeventiende sessie): een plan voor de heervaart en een rivaal (vraag 60) wacht op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -22,11 +22,12 @@ elke ochtend zelf op; onder het doel linksboven staat de raad. De pagina "Stand 
 achter op de dag. `npm test`: 624/624.
 
 **Waar het werk staat:** alles staat in `main`, ook stap 5 (Marcel, 29 sep: "alles op main"; ook op
-`ccr-0e928644-rvlci5`). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+`ccr-0e928644-rvlci5`). Het plan van de zeventiende sessie (vraag 60) staat op `ccr-ef2496ce-pa4iti`, en gaat naar
+`main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij het volgende punt (Marcel, 29 sep: "we gaan naar het volgende punt in nieuwe
-sessie"): het eerste van *3. Na de proef* hieronder, de heervaart en een rivaal, een ander dorp van dezelfde heer
-(vraag 50, D). Begin met een plan voor Marcel, en houd het eenvoudig (Marcel, 29 sep: "Maak het niet te
+**Waar de volgende sessie begint:** bij vraag 60, het plan voor het eerste punt van *3. Na de proef* hieronder: de
+heervaart en een rivaal, een ander dorp van dezelfde heer (vraag 50, D). Het wacht op Marcels antwoord; is het er,
+dan eerst de heervaart (A en B), dan het buurdorp (C en D), en houd het eenvoudig (Marcel, 29 sep: "Maak het niet te
 ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
 thuis is (`npm run proefversie`, `verpakken.md`), en wie de eerste tester is, staat open (33d). Van de proef zijn
@@ -63,13 +64,14 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* de proefversie op itch.io zetten als hij thuis is, en wie de eerste tester is; vraag 59 is
+*2. Wacht op Marcel:* het plan voor de heervaart en een rivaal (vraag 60); de proefversie op itch.io zetten als hij
+thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
 heer in het hogere doel past). Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51; het bijstellen na de
 speeltest (vraag 46) komt later, met een menu met opties.
 
 *3. Nu: na de proef* (vraag 51; Marcel, 29 sep: "we gaan naar het volgende punt"; het eerste is het volgende):
-- de heervaart, en een rivaal: een ander dorp van dezelfde heer (vraag 50, D);
+- de heervaart, en een rivaal: een ander dorp van dezelfde heer (vraag 50, D); het plan is vraag 60;
 - ontginnen (6b) en straten en paden (6c), tenzij de kaart al eerder te klein is;
 - beter bouwen: de ladder tot baksteen, en de herberg die meegroeit (het tweede deel van 3b, stap 5);
 - de groepen en de schepenen (de rest van punt 9), voorvallen (8), rechtspraak (10), de nacht (11), de eigen
@@ -87,6 +89,14 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
 26 (de volgorde: deze lijst is het nieuwe voorstel).
 
 *Wat nog ruw is:* `opmerkingen.md`, bovenaan.
+
+**Wat er in de zeventiende sessie gebeurde** (29 sep; Marcel: "Werklijst doorzetten"):
+- **Eerst gekeken wat er is** (op `7c00e01`, `npm test` 624/624): de heer vraagt alleen goud en graan, zijn brieven
+  hebben geen keuzes, tijdelijk weg zijn bestaat niet, en het buurdorp bestaat alleen in wat de nieuwkomer zegt. Een
+  zoekagent met acht vragen deed er 106 stappen over (235.000 tokens): voortaan liever twee kleine, of zelf zoeken.
+- **Een plan voor de heervaart en een rivaal** (vraag 60): allebei pas in het dorp. De heer vraagt op 1 hooimaand
+  mannen of goud, en wie terugkomt, is veteraan. Het buurdorp komt twee keer per jaar met een vraag, met één getal
+  voor hoe jullie staan: vrienden betalen terug, vijanden roven. Niets gebouwd.
 
 **Wat er in de zestiende sessie gebeurde** (29 sep; Marcel: "Werklijst doorzetten"):
 - **Eerst gemeten:** een speeljaar van nu (braaf, zaad 1, op `6750a21`), zonder fouten. Het gehucht groeit van 26 naar
@@ -1428,6 +1438,78 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     hout of het eten de winter niet haalt? **C**, de raad zegt waar goud vandaan komt?
     **Geparkeerd (Marcel, 29 sep): "Parkeer deze vraag", alles naar `main`, en naar het volgende punt in een nieuwe
     sessie.** Niets gebouwd; de voorstellen blijven hier staan voor later.
+60. **De heervaart en een rivaal: het plan** (Claude, 29 sep, zeventiende sessie; het eerste punt na de proef, vraag
+    51; Marcel: "Werklijst doorzetten"; wacht op Marcel). Marcel koos bij vraag 50 (D): eerst vechten onder de heer,
+    met rovers, de heervaart en dan een rivaal, een ander dorp van dezelfde heer. En op 29 sep: "Maak het niet te
+    ingewikkeld", met als hoger doel al het land veroveren of met iedereen bevriend raken, zoals in Civilization. Wat
+    er nu is:
+    - **De heer vraagt alleen goud en graan,** op Sint-Maarten. "Dat kost u vanaf nu meer", in zijn brief als het
+      gehucht een dorp is, is nog alleen woorden: het hoofdgeld in een dorp staat op 1 (vraag 53, D).
+    - **Een brief van de heer heeft geen keuzes.** De benoeming, de schatting en de dorpsbrief zijn drie kopieën van
+      hetzelfde venster in `js/hud.js`; betalen gaat in een eigen venster.
+    - **Wie het dorp verlaat, is weg:** uit de bewoners en uit het getal in de balk. Tijdelijk weg zijn en terugkomen
+      bestaat niet; alleen wie wegtrekt, komt terug, als rover.
+    - **De militie is het wachthuis:** twee man met 16 leven, die even hard slaan als de schout. Wie vaker vocht, is
+      niet beter.
+    - **Er is één weg naar buiten,** naar het oosten; daarover komen de marskramer, de heer, de inner en nieuwe
+      gezinnen. Andere dorpen bestaan alleen als woord: de nieuwkomer "kwam vorig jaar uit het buurdorp, en niemand
+      weet waarom", en daar "deed de schout andere dingen".
+    - **Het jaar is vol vanaf de zomer** (hooi en graan in hooimaand en oogstmaand, de inner op 15 oogstmaand, de
+      brief op 1 wijnmaand, Sint-Maarten op 11 slachtmaand); in de lente komt alleen de marskramer langs.
+    Voorstel, in twee stukken: eerst de heervaart, want die bouwt op wat er is, en dan de rivaal. Allebei pas als het
+    gehucht een dorp is, zodat de proef blijft zoals hij getest is.
+    - **A, de heervaart is "Dat kost u vanaf nu meer".** In een dorp schrijft de heer elk jaar op 1 hooimaand: "Wij
+      trekken ten strijde tegen de heer van Kromwijk, die Ons niet groette. Zend Ons vijf weerbare mannen, of vijftien
+      goud." Hij vraagt een man per tien zielen, of drie goud per man (werkbank), en de dorpsbrief kondigt het aan.
+      Onder de brief staan twee knoppen, die vooraf zeggen wat ze doen:
+      - *Stuur ze.* Het spel kiest wie: mannen, jong of volwassen, eerst wie geen werk heeft, een boer het laatst.
+        De brief noemt ze bij naam, met het werk dat stil komt te liggen. Ze lopen de weg af en komen op 1
+        herfstmaand terug, na de oogst. Hun plaats in huis blijft van hen, en het dorp voedt ze (de heer doet dat
+        niet). Van elke vier komt er gemiddeld één niet terug.
+      - *Koop ze vrij.* Het goud, en de argwaan stijgt: wie kan betalen, is niet arm.
+    - **B, wie terugkomt, is veteraan.** Hij vecht mee als er rovers komen, ook zonder wachthuis, en met meer leven
+      (20 in plaats van 16). Zo is sturen niet alleen verlies: je krijgt minder mannen terug, maar hardere. Het andere:
+      wie terugkomt, is gewoon weer een bewoner, en alleen het wachthuis vecht.
+    - **C, de rivaal is het buurdorp** waar de nieuwkomer vandaan kwam: een dorp van dezelfde heer, over de weg, met
+      een naam in de werkbank (voorstel: Zevenhuizen, uit `spel.md`). Je ziet het niet, want de streek als kaarten
+      naast elkaar komt later (vraag 50, C), maar je merkt het:
+      - *Hoe jullie staan,* is één getal, van vijandig tot bevriend, in woorden. Het staat op één plek, zodat het later
+        voor elke buur werkt: het begin van "met iedereen bevriend, of alles veroveren".
+      - *Zijn schout komt twee keer per jaar* over de weg met een vraag, op twee plekken die nu leeg zijn: op 20
+        grasmaand "leen ons twintig graan tot de oogst", op 20 herfstmaand "geef ons hout voor de winter". Geven maakt
+        jullie beter, weigeren slechter, en elk antwoord zegt vooraf wat het kost.
+      - *Vrienden* betalen terug met rente (dertig voor twintig), en verkopen je in de lente zaaigraan: wat een dorp
+        nu mist als de schuur leeg is (vraag 59). *Vijanden* vragen niet maar eisen ("geef, of we halen het"); weiger
+        je, dan komen zijn mannen roven zoals de rovers, van de oostkant, en je militie vecht. Elke man van hem die
+        valt, maakt het erger.
+      - *De heer vergelijkt,* in zijn brieven, en altijd in je nadeel: "Zevenhuizen zond Ons zeven man." Ben je
+        bevriend, dan zegt hun schout: "Zegt hij u ook dat wij meer brachten? Ons zegt hij hetzelfde over u."
+    - **D, zelf terugslaan: nu, of met de streek?** Vijanden komen naar jou; naar hen toe gaan kan pas als hun dorp een
+      kaart is. Het kan eerder, op de manier van de heervaart: je stuurt je veteranen drie dagen over de weg, en ze
+      komen terug met graan, met minder, en met een buurman die je meer haat. Voorstel: met de streek, want nu is het
+      een knop zonder gevecht.
+    - **Wat het doet** (inzicht): elke trede krijgt zijn eigen druk, zoals de tijdperken in Civilization: het gehucht
+      de rovers, het dorp de heervaart en een buurman. Groeien is dan niet alleen meer, maar ook anders. De heervaart
+      zet de kern op een nieuwe plek: goud geven zegt dat je niet arm bent, en mannen geven kost werk en levens, maar
+      maakt je militie sterk. En het buurdorp geeft een idee voor de open vraag hoe de heer in het hogere doel past
+      (vraag 54, C): de heer speelt zijn dorpen tegen elkaar uit. Wie met iedereen bevriend raakt, staat samen tegen
+      hem (de vrijheid), en wie alles verovert, wordt zelf heer. Niet voor nu, wel om te onthouden.
+    - **Hoe het werkt** (geen vraag): twee nieuwe bestanden zonder scherm, met toetsen: `js/heervaart.js` (de eis, wie
+      gaat, weg en terug, de veteraan) en `js/buren.js` (het buurdorp, hoe jullie staan, de bezoeken), elk met één
+      blok getallen in de werkbank en als spelregel aan en uit te zetten. Een aanval van het buurdorp gaat door
+      `js/rovers.js`, als derde soort naast de bende en de wilde rovers: één manier om aan te vallen. De brieven van de
+      heer worden één functie met knoppen, in een eigen bestand (`js/brieven.js`): het eerste stuk van `hud.js`
+      splitsen (vraag 25, C), nu dat bestand toch open moet. Wie op heervaart is, blijft bewoner (hij telt mee en
+      eet), maar heeft geen poppetje en geen werk. Alles staat in `S`, dus opslaan houdt het. `Spel.debug.heervaart()`
+      en `Spel.debug.buren()` laten het nu gebeuren.
+    Klaar als de heer in een dorp op 1 hooimaand mannen vraagt, met twee knoppen die vooraf zeggen wat ze doen; wie
+    gaat, de weg afloopt en op 1 herfstmaand terugkomt, minder, als veteraan die meevecht; vrijkopen goud en argwaan
+    kost; de schout van het buurdorp twee keer per jaar komt, en hoe jullie staan verandert met wat je antwoordt;
+    vrienden terugbetalen en zaaigraan verkopen, en vijanden eisen en roven; de heer vergelijkt; de getallen in de
+    werkbank staan; opslaan alles houdt; `npm test` groen is; en schermafdrukken de brief van de heervaart en een
+    aanval van het buurdorp laten zien. Vragen: **A**, de heervaart pas in het dorp, op 1 hooimaand, sturen of
+    vrijkopen? **B**, wie terugkomt, vecht mee? **C**, het buurdorp zo: bezoeken, hoe jullie staan, en roven als
+    jullie vijanden zijn? **D**, zelf terugslaan pas met de streek?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
