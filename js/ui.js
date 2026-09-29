@@ -64,17 +64,19 @@
     },
 
     // Wat er nu van je gevraagd wordt; null laat het vak verdwijnen. `tekst` mag <kbd> bevatten.
-    // De kop zegt wie het vraagt: de naam van de quest.
-    opdracht(tekst, kop) {
-      const nu = tekst ? `${kop || 'Te doen'}|${tekst}` : null;
+    // De kop zegt wie het vraagt: de naam van de quest. Daaronder de raad (js/raad.js), met een
+    // toets tussen haken ([B]) als toets.
+    opdracht(tekst, kop, raad) {
+      const nu = tekst || raad ? `${kop || 'Te doen'}|${tekst || ''}|${raad || ''}` : null;
       if (nu === vorigeOpdracht) return;
       vorigeOpdracht = nu;
       const el = opdrachtVak();
-      el.classList.toggle('verborgen', !tekst);
-      if (tekst) {
+      el.classList.toggle('verborgen', !nu);
+      if (nu) {
         el.innerHTML =
           `<div style="font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em">${kop || 'Te doen'}</div>` +
-          `<div>${tekst}</div>`;
+          (tekst ? `<div>${tekst}</div>` : '') +
+          (raad ? `<div class="raad" style="${tekst ? 'margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--rand); ' : ''}color: var(--goud)">${raad.replace(/\[([^\]]+)\]/g, '<kbd>$1</kbd>')}</div>` : '');
       }
     },
 

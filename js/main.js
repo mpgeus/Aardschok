@@ -319,10 +319,11 @@
     // Quests gaan vanzelf verder (js/quest.js): heb je wat een quest vraagt, dan schuift de
     // fase op, nog vóór er iets dwaalt of iemand je ziet. Het vak linksboven is van de quest die
     // je het eerst aannam; zonder quest staat er het doel van het gehucht: een dorp worden
-    // (js/treden.js).
+    // (js/treden.js). Daaronder de raad: wat nu tussen jou en een dorp staat (js/raad.js).
     T.werkQuestsBij(S);
     const doelNu = T.questDoel(S) || T.tredeDoel(S);
-    T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop);
+    const raad = T.raadNu(S);
+    T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, raad && raad.tekst);
     if (S.modus === 'verkennen') {
       // Vóór T.laatDwalen: wie hier een pad krijgt of aan het maaien slaat (T.werkOogstBij,
       // js/akkers.js, alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
@@ -660,6 +661,12 @@
       if (naar) T.wordtTrede(S, naar);
       const doel = T.tredeDoel(S);
       return { trede: S.trede, doel: doel ? `${doel.kop}: ${doel.tekst}` : 'geen volgende trede' };
+    },
+    // De raad onder het doel (js/raad.js): wat er nu staat, en welke raden nu allemaal gelden, in hun volgorde.
+    raad() {
+      if (!(S.wereld && S.wereld.plein)) return 'Hier is geen raad: deze kaart heeft geen plein.';
+      const nu = T.raadNu(S);
+      return { nu: nu ? nu.tekst : 'geen', gelden: T.RADEN.filter((r) => r.als(S)).map((r) => r.id) };
     },
     // De rovers (js/rovers.js): de bende (wie wegtrok), wanneer die en de wilde rovers komen, en de aanval die
     // loopt. Spel.debug.rovers(3) laat nu drie wilde rovers komen, Spel.debug.rovers('bende') de bende.

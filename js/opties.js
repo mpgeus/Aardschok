@@ -283,6 +283,17 @@
           uitleg: 'De hut en het huis staan in het bouwmenu, en een nieuw gezin komt alleen als er een huis met plaats is. Erven zijn er niet.' },
       ],
     },
+    // De raad onder het doel (Marcel, 29 sep, werklijst vraag 58: "B onder het doel"; js/raad.js).
+    {
+      id: 'raad', naam: 'Raad', standaard: 'aan',
+      uitleg: 'Een regel onder het doel linksboven.',
+      keuzes: [
+        { id: 'aan', naam: 'Aan', zet: { 'RAAD_INSTELLINGEN.aan': true },
+          uitleg: 'Onder het doel staat wat nu tussen jou en een dorp staat: waarom er geen gezin komt, of wanneer het volgende komt, het hout voor de winter, de inner, de rovers. Met de toets erbij.' },
+        { id: 'uit', naam: 'Uit', zet: { 'RAAD_INSTELLINGEN.aan': false },
+          uitleg: 'Alleen het doel. Wat het dorp je zegt, zie je in de berichten.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -307,6 +318,7 @@
     { naam: 'De treden', blok: 'TREDEN_INSTELLINGEN' },
     { naam: 'De wetten', blok: 'WETTEN_INSTELLINGEN' },
     { naam: 'De rovers', blok: 'ROVERS_INSTELLINGEN' },
+    { naam: 'De raad', blok: 'RAAD_INSTELLINGEN' },
     { naam: 'De herberg', blok: 'HERBERG_INSTELLINGEN' },
     { naam: 'Behoeften en de winter', blok: 'BEHOEFTEN_INSTELLINGEN' },
     { naam: 'De marskramer', blok: 'HANDEL_INSTELLINGEN' },

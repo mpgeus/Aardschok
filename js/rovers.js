@@ -235,6 +235,7 @@
     }
     A.fase = 'komen';
     A.sinds = uurNu(S);
+    R.laatsteAanval = A.dag; // de raad zegt dan een tijd lang wat een wachthuis doet (js/raad.js)
     const militie = militieVan(S);
     for (const e of militie) roepOp(e);
     const boer = T.boerVanVeld(S, w.akkers[A.veld]);
