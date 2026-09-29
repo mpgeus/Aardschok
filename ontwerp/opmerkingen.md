@@ -9,6 +9,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Spelen op de telefoon** (Marcel vroeg het, 29 sep: "Kan ik dit spelen op mn telefoon?"; nagekeken met een
+  nagebootste iPhone, rechtop en dwars). Het spel laadt en slaat op, zonder fouten, en rechtop loopt de schout waar je
+  tikt. Maar speelbaar is het niet: de vakken linksboven en de uitleg rechts dekken het halve scherm, de balk loopt
+  van het scherm af (Bouwen, Wetten en Menu zie je niet), dwars viel de tik op de uitleg, en wat nu aan een muis hangt
+  (de tekst bij de muis, rechtsklik om een gebouw weg te leggen, zoomen met het wiel) heeft geen vinger-variant. En er
+  is nog geen adres om het op een telefoon te openen. Het doel is Steam, dus een computer; een telefoon is later.
 - **Wat een speeljaar op 29 sep liet zien** (zestiende sessie; braaf, zaad 1, op `6750a21`; werklijst vraag 58):
   - **Het tweede jaar begint armer dan het eerste.** Op 1 lentemaand 1324 lag er geen graan: de heer nam er 75, de
     rovers 20, en in zomermaand vertrapten ze een akker. Er was zaaigraan voor 100 van de 179 akkertegels (op 28 sep,
