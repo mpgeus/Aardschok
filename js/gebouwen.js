@@ -600,12 +600,14 @@
     return null;
   };
 
-  // Staat deze soort nu in het bouwmenu (js/hud.js)? Die van de trede van nu, behalve wat een eigen
-  // manier van neerzetten heeft (menu: false). Bouwt het dorp zelf (js/erven.js, de spelregel
-  // "Huizen"), dan staat het erf erin en de woningen niet; anders andersom.
+  // Staat deze soort nu in het bouwmenu (js/hud.js)? Die van de trede van nu en de treden ervoor (in een
+  // dorp ook de put en de kapel van het gehucht; js/treden.js), behalve wat een eigen manier van
+  // neerzetten heeft (menu: false). Bouwt het dorp zelf (js/erven.js, de spelregel "Huizen"), dan staat
+  // het erf erin en de woningen niet; anders andersom.
   T.inBouwmenu = function (S, soort) {
     const g = T.GEBOUWEN[soort];
-    if (!g || g.trede !== S.trede || g.menu === false) return false;
+    const vrij = T.GEBOUW_TREDEN.indexOf(g && g.trede) <= T.GEBOUW_TREDEN.indexOf(S.trede);
+    if (!g || !vrij || g.menu === false) return false;
     const zelf = T.ERVEN_INSTELLINGEN.dorpBouwtZelf;
     if (g.erf) return zelf;
     if (g.woning) return !zelf;
@@ -908,6 +910,8 @@
     for (const g of S.gebouwen) if (g.werkte > 0 && g.handen > 0) aanHetWerk += g.handen;
     const slijt = Math.min(S.voorraad.gereedschap || 0, aanHetWerk) / IN.gereedschapSlijtDagen;
     if (slijt > 0) T.wijzigVoorraad(S, 'gereedschap', -slijt);
+    // 7. De trede (js/treden.js): met genoeg mensen, en een kapel en een smidse klaar, wordt het gehucht een dorp.
+    T.tikTredeDag(S);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
   };
 

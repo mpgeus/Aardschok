@@ -45,7 +45,7 @@
       gebouwen: [], // wat er staat of in aanbouw is (js/gebouwen.js), en hoe ver S.gebouwenDag is
       bevolking: 0, woonruimte: 0, // aantal mensen, en hoeveel er als woonruimte gegeven is
       behoeften: T.nieuweBehoeften(), // tevredenheid en wat het dorp mist (js/behoeften.js)
-      trede: 'gehucht', // de hoogste trede van het dorp; omhoog gaat pas mee met "Groei" (werklijst.md, punt 5)
+      trede: 'gehucht', // de trede van het dorp: een dorp bij genoeg mensen, een kapel en een smidse (js/treden.js)
       goud: 0,
       goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
       quests: {}, // per quest de fase waarin hij staat (js/quest.js)
@@ -308,9 +308,10 @@
     if (S.naarGebied) T.gaNaarGebied(S, S.naarGebied);
     // Quests gaan vanzelf verder (js/quest.js): heb je wat een quest vraagt, dan schuift de
     // fase op, nog vóór er iets dwaalt of iemand je ziet. Het vak linksboven is van de quest die
-    // je het eerst aannam.
+    // je het eerst aannam; zonder quest staat er het doel van het gehucht: een dorp worden
+    // (js/treden.js).
     T.werkQuestsBij(S);
-    const doelNu = T.questDoel(S);
+    const doelNu = T.questDoel(S) || T.tredeDoel(S);
     T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop);
     if (S.modus === 'verkennen') {
       // Vóór T.laatDwalen: wie hier een pad krijgt of aan het maaien slaat (T.werkOogstBij,
@@ -631,6 +632,13 @@
       const echt = plaats < 0 ? T.wijzigBevolking(S, plaats, 'vertrek', 'het dorp is niet tevreden genoeg') : T.wijzigBevolking(S, plaats, 'groei');
       T.ui.toonBevolking(S);
       return echt < 0 ? `${-echt} trekken weg.` : `${echt} komen over de weg, overdag vanaf ${T.DAG_INSTELLINGEN.bezoekUur} uur.`;
+    },
+    // De trede (js/treden.js): hoe ver het gehucht is met een dorp worden. Spel.debug.trede('dorp') maakt er nu
+    // een dorp van, met de brief van de heer, zonder dat de eis gehaald is.
+    trede(naar) {
+      if (naar) T.wordtTrede(S, naar);
+      const doel = T.tredeDoel(S);
+      return { trede: S.trede, doel: doel ? `${doel.kop}: ${doel.tekst}` : 'geen volgende trede' };
     },
     // De erven (js/erven.js): waar ze liggen, en wie er woont of bouwt. Een erf aanwijzen gaat als een
     // gebouw: Spel.debug.bouw('erf', 30, 20).

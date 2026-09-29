@@ -574,6 +574,8 @@
       `<p>Het heeft Ons behaagd u tot schout te benoemen over dit gehucht. Uw voorganger kon niet tellen, of juist te goed; dat weten Wij niet meer precies. Hij is nu elders.</p>` +
       `<p>Op Sint-Maarten komen Wij persoonlijk halen wat Ons toekomt. In oogstmaand komt Onze inner kijken hoeveel dat is.</p>` +
       `<p>Wij vertrouwen u volkomen. Onze inner telt toch even na.</p>` +
+      // Het doel van de proef (js/treden.js; Marcel, 29 sep, vraag 53, A): de heer wil groei, want hij verdient eraan.
+      `<p>Wij verwachten dat Ons gehucht een dorp wordt, met ${T.tredeEisTekst('dorp')}. Een dorp brengt Ons meer op.</p>` +
       `<p class="brief-groet">Uw genadige heer${naam ? `,<br>${veilig(naam)}` : ''}</p>` +
       `</div>` +
       `<div class="heer-knoppen"><button class="heer-geef-knop" data-actie="sluit">Aan het werk</button></div>`
@@ -587,9 +589,35 @@
     box.classList.remove('verborgen');
   };
 
+  // Het gehucht is een dorp (js/treden.js; Marcel, 29 sep, vraag 53, B): de heer schrijft, in hetzelfde venster
+  // als zijn andere brieven, en de tijd staat stil. Het eind van de proef "van gehucht tot dorp": je speelt door
+  // als dorp, of gaat naar het titelscherm.
+  T.ui.toonDorpsbrief = function (S) {
+    const naam = T.naamVanDeHeer();
+    const dag = S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '';
+    const box = $('brief');
+    box.innerHTML =
+      `<div class="venster-kop"><span class="venster-titel">Een brief van de heer</span><span class="venster-wanneer">${dag}</span>` +
+      `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
+      `<div class="brief-tekst">` +
+      `<p>Aan Onze schout,</p>` +
+      `<p>Wij vernemen dat Ons gehucht een dorp is geworden. Gefeliciteerd. Dat kost u vanaf nu meer.</p>` +
+      `<p class="brief-groet">Uw genadige heer${naam ? `,<br>${veilig(naam)}` : ''}</p>` +
+      `</div>` +
+      `<div class="heer-knoppen"><button data-actie="titel">Naar het titelscherm</button>` +
+      `<button class="heer-geef-knop" data-actie="sluit">Verder als dorp</button></div>`;
+    T.houdTijdStil(S, 'brief');
+    box.classList.remove('verborgen');
+  };
+
   $('brief').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
-    if (b && b.dataset.actie === 'sluit' && T.S) T.ui.sluitBrief(T.S);
+    if (!b || !T.S) return;
+    if (b.dataset.actie === 'sluit') T.ui.sluitBrief(T.S);
+    else if (b.dataset.actie === 'titel') {
+      T.ui.sluitBrief(T.S);
+      T.naarTitelscherm();
+    }
   });
   $('brief-knop').addEventListener('click', (ev) => {
     ev.currentTarget.blur();

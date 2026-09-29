@@ -138,6 +138,9 @@
   // regels zijn voor de brief en het venster: waarvoor hij wat vraagt. Elke regel rondt hij naar
   // boven af, en per goed is het de som van zijn regels. Een gebouw in aanbouw telt al mee: hij
   // ziet een steiger en rekent een huis. Een verstopplek ziet hij niet (zijn prijs is niets).
+  // Het hoofdgeld per ziel: in een dorp zoveel keer zoveel als de trede zegt (js/treden.js; voorlopig 1).
+  const hoofdgeld = (S) => IN().hoofdgeldPerMens * T.hoofdgeldFactor(S);
+
   T.eisVanDeHeer = function (S) {
     const regels = [];
     const tel = (wat, aantal, waarom) => {
@@ -154,7 +157,7 @@
     if (rapport) {
       if (IN().graan === 'deel') tel('graan', rapport.graanGezien * IN().deelVanGraan, `een deel van de ${Math.round(rapport.graanGezien)} graan die Onze inner telde`);
       else if (rapport.tegels) tel('graan', rapport.tegels * IN().pachtPerAkkertegel, `de pacht voor ${rapport.tegels} akkertegels die Onze inner zag`);
-      if (rapport.woonruimte) tel('goud', rapport.woonruimte * IN().hoofdgeldPerMens, `hoofdgeld voor ${rapport.woonruimte} zielen in de huizen die hij zag`);
+      if (rapport.woonruimte) tel('goud', rapport.woonruimte * hoofdgeld(S), `hoofdgeld voor ${rapport.woonruimte} zielen in de huizen die hij zag`);
       if (IN().kist && rapport.goudGezien > 0) tel('goud', rapport.goudGezien * IN().deelVanGoud, `een deel van de ${Math.floor(rapport.goudGezien)} goud die Onze inner in uw kist telde`);
     } else {
       const tegels = akkers.reduce((n, a) => n + a.b * a.h, 0);
@@ -164,7 +167,7 @@
       } else if (tegels) {
         tel('graan', tegels * IN().pachtPerAkkertegel, `de pacht voor ${tegels} akkertegels`);
       }
-      if (S.bevolking > 0) tel('goud', S.bevolking * IN().hoofdgeldPerMens, `hoofdgeld voor ${S.bevolking} zielen`);
+      if (S.bevolking > 0) tel('goud', S.bevolking * hoofdgeld(S), `hoofdgeld voor ${S.bevolking} zielen`);
       // De kist zoals hij hem telde toen hij kwam; vóór zijn komst (de brief) wat er nu in ligt.
       const b = S.heer && S.heer.bezoek;
       const kist = b && !b.weg && b.kist != null ? b.kist : (S.voorraad && S.voorraad.goud) || 0;
