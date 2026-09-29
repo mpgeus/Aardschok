@@ -305,6 +305,7 @@
     { naam: 'De bewoners', blok: 'BEWONERS_INSTELLINGEN' },
     { naam: 'De erven', blok: 'ERVEN_INSTELLINGEN' },
     { naam: 'De treden', blok: 'TREDEN_INSTELLINGEN' },
+    { naam: 'De wetten', blok: 'WETTEN_INSTELLINGEN' },
     { naam: 'De herberg', blok: 'HERBERG_INSTELLINGEN' },
     { naam: 'Behoeften en de winter', blok: 'BEHOEFTEN_INSTELLINGEN' },
     { naam: 'De marskramer', blok: 'HANDEL_INSTELLINGEN' },
@@ -464,8 +465,13 @@
   }
 
   // Een bereik voor de schuif, naar de standaard: een fractie tussen 0 en 1 (of wat ruimer als hij
-  // klein is), een heel getal tot drie keer zo groot. Het getalveld ernaast kent geen grenzen.
+  // klein is), een heel getal tot drie keer zo groot. Het getalveld ernaast kent geen grenzen. Een getal onder
+  // nul (wat een wet van de tevredenheid afhaalt, js/wetten.js) krijgt hetzelfde bereik in spiegelbeeld, tot nul.
   T.werkbankBereik = function (st) {
+    if (st < 0) {
+      const b = T.werkbankBereik(-st);
+      return { min: -b.max, max: 0, stap: b.stap };
+    }
     if (!(st > 0)) return { min: 0, max: 1, stap: 0.01 };
     if (Number.isInteger(st)) return { min: 0, max: Math.max(3, st * 3), stap: 1 };
     if (st < 1) return { min: 0, max: Math.min(1, Math.max(0.1, Math.ceil(st * 400) / 100)), stap: st < 0.1 ? 0.001 : 0.01 };

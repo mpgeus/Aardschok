@@ -129,7 +129,8 @@
     },
     houthakker: {
       naam: 'houthakker', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 4 }, heer: { hout: 20 }, bouwtijd: 3,
-      handen: 1, woonruimte: 0, maakt: { uit: { hout: 2 } }, verdacht: false, menu: true,
+      // bos: hij hakt in het bos van de heer, dus de wet Houtkap laat hem meer hakken (js/wetten.js, T.maaktUit).
+      handen: 1, woonruimte: 0, maakt: { uit: { hout: 2 } }, bos: true, verdacht: false, menu: true,
       tekening: 'gebouwen/houtschuur', beschrijving: 'hout uit het bos van de heer', opmerking: '',
     },
     // Sinds de weides, stap 2 (25 sep 2026) maakt de kooi zelf niets: de schapen van de heide slapen
@@ -778,6 +779,22 @@
     T.wijsWerkToe(S);
   };
 
+  // Om de hoeveel dagen er een nieuw gezin kan komen: gezinDagen, en met de wet Vreemden welkom vaker
+  // (js/wetten.js).
+  T.gezinDagen = (S) => Math.max(1, Math.round(T.GEBOUWEN_INSTELLINGEN.gezinDagen / T.wetFactor(S, 'gezinnen')));
+
+  // Wat een gebouw per dag maakt als het helemaal bezet is (T.GEBOUWEN[x].maakt.uit), met wat de wetten erbij
+  // doen: wie in het bos van de heer hakt (bos), hakt met de wet Houtkap meer (js/wetten.js). Of null.
+  T.maaktUit = function (S, soort) {
+    const uit = soort.maakt && soort.maakt.uit;
+    if (!uit || !soort.bos) return uit || null;
+    const f = T.wetFactor(S, 'hout');
+    if (f === 1) return uit;
+    const r = {};
+    for (const wat in uit) r[wat] = uit[wat] * f;
+    return r;
+  };
+
   // ---------------------------------------------------------------------------------------------
   // Elke dag: gebouwen die klaarkomen, woonruimte, eten, groei, handen en productie
   // ---------------------------------------------------------------------------------------------
@@ -831,8 +848,9 @@
     // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel). Zonder S.behoeften (nog geen dag
     // getikt) blokkeert dat laatste niets. Een huis met plaats gaat voor; is het dorp vol, dan neemt
     // het een vrij erf en zet het er zelf een hut op, of zegt het dat er geen plaats is (js/erven.js).
+    // Met de wet Vreemden welkom kan dat vaker (T.gezinDagen hierboven).
     const tevredenGenoeg = !S.behoeften || S.behoeften.tevredenheid >= T.BEHOEFTEN_INSTELLINGEN.groeiDrempel;
-    if (dag > 0 && dag % IN.gezinDagen === 0 && S.voorraad.graan >= IN.graanBufferVoorGroei && tevredenGenoeg) {
+    if (dag > 0 && dag % T.gezinDagen(S) === 0 && S.voorraad.graan >= IN.graanBufferVoorGroei && tevredenGenoeg) {
       if (S.bevolking < woonruimte) T.wijzigBevolking(S, Math.min(woonruimte, S.bevolking + IN.gezinGrootte) - S.bevolking, 'groei');
       else T.gezinZoektEenErf(S);
     }
@@ -902,7 +920,8 @@
       g.werkte = factor;
       if (factor <= 0) continue;
       if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(S, wat, -soort.maakt.in[wat] * factor);
-      if (soort.maakt.uit) for (const wat in soort.maakt.uit) T.wijzigVoorraad(S, wat, soort.maakt.uit[wat] * factor);
+      const uit = T.maaktUit(S, soort);
+      if (uit) for (const wat in uit) T.wijzigVoorraad(S, wat, uit[wat] * factor);
     }
     // Wat in gebruik was, slijt: één stuk per hand die vandaag echt iets maakte (een smidse zonder
     // ijzer slijt zijn hamers niet).
@@ -910,7 +929,9 @@
     for (const g of S.gebouwen) if (g.werkte > 0 && g.handen > 0) aanHetWerk += g.handen;
     const slijt = Math.min(S.voorraad.gereedschap || 0, aanHetWerk) / IN.gereedschapSlijtDagen;
     if (slijt > 0) T.wijzigVoorraad(S, 'gereedschap', -slijt);
-    // 7. De trede (js/treden.js): met genoeg mensen, en een kapel en een smidse klaar, wordt het gehucht een dorp.
+    // 7. De wetten (js/wetten.js): wie vandaag in het bos van de heer hakte, en de belasting op de eerste van de maand.
+    T.tikWettenDag(S, dag);
+    // 8. De trede (js/treden.js): met genoeg mensen, en een kapel en een smidse klaar, wordt het gehucht een dorp.
     T.tikTredeDag(S);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
   };

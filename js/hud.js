@@ -228,7 +228,7 @@
     }
     // Bij de kaas: voor hoeveel dagen eten hij is, en hoeveel melk de koeien nu geven (js/vee.js,
     // T.melkVanDag), want daar komt hij van. Beide in graan gerekend, zoals het dorp ze eet.
-    const perMens = T.GEBOUWEN_INSTELLINGEN ? T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag : 0;
+    const perMens = T.etenPerMens(S);
     if (perMens > 0) {
       const perDag = (S.bevolking || 0) * perMens;
       const kaas = S.voorraad.kaas || 0;
@@ -300,9 +300,10 @@
     cel.querySelector('.aantal').textContent = `${pct}%`;
     cel.classList.toggle('laag', S.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel);
     const last = S.behoeften.last && S.behoeften.last.length ? ` Het heeft last van ${S.behoeften.last.join(' en ')}.` : '';
+    const blij = S.behoeften.blij && S.behoeften.blij.length ? ` Het is blij met ${S.behoeften.blij.join(' en ')}.` : '';
     cel.title = S.behoeften.mist.length
-      ? `Tevredenheid: ${pct}%. Het dorp mist: ${S.behoeften.mist.join(', ')}.${last}`
-      : `Tevredenheid: ${pct}%. Het dorp heeft wat het nodig heeft.${last}`;
+      ? `Tevredenheid: ${pct}%. Het dorp mist: ${S.behoeften.mist.join(', ')}.${last}${blij}`
+      : `Tevredenheid: ${pct}%. Het dorp heeft wat het nodig heeft.${last}${blij}`;
   };
 
   // De argwaan van de inner (js/inner.js), en op hover waarom en wat ze doet. Pas in de balk als hij
@@ -392,9 +393,10 @@
     ev.currentTarget.blur();
     const S = T.S;
     if (!S) return;
-    // Bouwen en de velden tegelijk kan niet: bouwen richt de muis op de kaart, en die ligt stil
-    // zolang het veldenvenster open is.
+    // Bouwen en de velden (of de wetten, js/wettenmenu.js) tegelijk kan niet: bouwen richt de muis op de
+    // kaart, en die ligt stil zolang zo'n venster open is.
     if (T.ui.veldenOpen && T.ui.veldenOpen()) T.ui.sluitVelden(S);
+    if (T.ui.wettenOpen && T.ui.wettenOpen()) T.ui.sluitWetten(S);
     if (S.bouwSoort || S.bouwMenuOpen) {
       S.bouwSoort = null;
       S.bouwMenuOpen = false;
@@ -440,7 +442,7 @@
     });
     // Wat hij koopt, voor zover je er iets van hebt. Bij het graan staat hoeveel dagen het dorp
     // ervan kan eten, zodat je niet per ongeluk je wintereten verkoopt.
-    const etenPerDag = (S.bevolking || 0) * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
+    const etenPerDag = (S.bevolking || 0) * T.etenPerMens(S);
     const koopt = Object.keys(H.koopt).filter((wat) => heb(wat) > 0).map((wat) => {
       const k = T.kanVerkopen(S, wat, 1);
       const eten = wat === 'graan' && etenPerDag > 0 ? ` · eten voor ${Math.floor((v.graan || 0) / etenPerDag)} dagen` : '';
@@ -576,6 +578,8 @@
       `<p>Wij vertrouwen u volkomen. Onze inner telt toch even na.</p>` +
       // Het doel van de proef (js/treden.js; Marcel, 29 sep, vraag 53, A): de heer wil groei, want hij verdient eraan.
       `<p>Wij verwachten dat Ons gehucht een dorp wordt, met ${T.tredeEisTekst('dorp')}. Een dorp brengt Ons meer op.</p>` +
+      // De wetten (js/wetten.js; Marcel, 29 sep, vraag 54): het menu onder W. De houtkap in zijn bos is er een van.
+      `<p>Wetten mag u maken, zoveel u wilt. Over Ons bos gaat u niet.</p>` +
       `<p class="brief-groet">Uw genadige heer${naam ? `,<br>${veilig(naam)}` : ''}</p>` +
       `</div>` +
       `<div class="heer-knoppen"><button class="heer-geef-knop" data-actie="sluit">Aan het werk</button></div>`
@@ -1325,8 +1329,9 @@
       T.ui.sluitVelden(S);
       return;
     }
-    // Van de spelregels meteen naar de velden, zonder eerst het ene venster dicht te hoeven doen.
+    // Van de spelregels (of de wetten) meteen naar de velden, zonder eerst het ene venster dicht te hoeven doen.
     if (T.ui.spelregelsOpen()) T.ui.sluitSpelregels(S);
+    if (T.ui.wettenOpen()) T.ui.sluitWetten(S);
     if (S.modus === 'verkennen') T.ui.openVelden(S);
   });
 
@@ -1431,6 +1436,7 @@
       return;
     }
     if (T.ui.veldenOpen()) T.ui.sluitVelden(S);
+    if (T.ui.wettenOpen()) T.ui.sluitWetten(S);
     if (S.modus === 'verkennen') T.ui.openSpelregels(S);
   });
 

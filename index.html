@@ -31,12 +31,16 @@
       <div id="kalender-seizoen"></div>
     </div>
     <div id="voorraadbalk" class="paneel"></div>
+    <!-- De knoppen: past de rij niet, dan gaan ze naar een tweede regel, rechts van de voorraad (stijl.css). -->
+    <div id="balk-knoppen">
     <button id="bouwmenu-knop" class="paneel" title="Bouwen"><kbd>B</kbd> Bouwen</button>
     <button id="velden-knop" class="paneel" title="De velden: wat elk veld is, en wat het volgend jaar wordt (V)"><kbd>V</kbd> Velden</button>
+    <button id="wetten-knop" class="paneel" title="Wetten: aannemen en afschaffen (W)"><kbd>W</kbd> Wetten</button>
     <button id="brief-knop" class="paneel verborgen" title="De brief van de heer: wat hij op Sint-Maarten wil">Brief</button>
     <button id="slaap-knop" class="paneel verborgen" title="Slapen tot de ochtend (Z): kan 's avonds en 's nachts, bij je eigen huis"><kbd>Z</kbd> Slapen</button>
     <button id="spelregels-knop" class="paneel" title="Spelregels: wat je zelf instelt (O)"><kbd>O</kbd> Spelregels</button>
     <button id="menu-knop" class="paneel" title="Het menu: opslaan, laden, en terug naar het titelscherm (Esc)"><kbd>Esc</kbd> Menu</button>
+    </div>
   </div>
 
   <!-- Het bouwmenu (js/hud.js, T.ui.toonBouwmenu): de soorten van de huidige trede, met hun
@@ -65,6 +69,10 @@
   <!-- De velden (js/hud.js, T.ui.openVelden; de regels in js/akkers.js en js/vee.js): elk veld met
        van wie het is, hoe vruchtbaar, wat het nu is, en wat het volgend jaar wordt. -->
   <div id="velden" class="paneel verborgen"></div>
+
+  <!-- De wetten (js/wettenmenu.js, T.ui.openWetten; de regels in js/wetten.js): een menu zoals in
+       Democracy 3, elke wet een kaart met wat hij doet, en een knop om hem aan te nemen of af te schaffen. -->
+  <div id="wetten" class="paneel verborgen"></div>
 
   <!-- De spelregels (js/hud.js, T.ui.openSpelregels; de lijst in js/opties.js): de keuzes, de
        namen, en de werkbank met alle getallen. -->
@@ -118,6 +126,7 @@
     Kalender: <kbd>P</kbd> pauze/hervat · <kbd>-</kbd> <kbd>=</kbd> trager/sneller · <kbd>Z</kbd> slapen, bij je huis<br>
     <kbd>B</kbd> bouwen · <kbd>Esc</kbd> of rechtsklik legt een gebouw weer weg<br>
     <kbd>V</kbd> velden: akker, weide of braak<br>
+    <kbd>W</kbd> wetten: aannemen en afschaffen<br>
     <kbd>O</kbd> spelregels: wat je zelf instelt<br>
     <kbd>Esc</kbd> menu: opslaan en laden
   </div>
@@ -151,6 +160,7 @@
   <script src="js/bewoners.js"></script>
   <script src="js/erven.js"></script>
   <script src="js/treden.js"></script>
+  <script src="js/wetten.js"></script>
   <script src="js/herberg.js"></script>
   <script src="js/zien.js"></script>
   <script src="js/doorzoeken.js"></script>
@@ -159,6 +169,7 @@
   <script src="js/anim.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/hud.js"></script>
+  <script src="js/wettenmenu.js"></script>
   <script src="js/gesprekken.js"></script>
   <script src="js/gesprek.js"></script>
   <script src="js/quests.js"></script>

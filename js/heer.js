@@ -189,6 +189,9 @@
     }
     const h = S.heer;
     if (h && h.schuld > 0) tel('goud', h.schuld, 'wat u vorig jaar schuldig bleef, met de boete');
+    // Heeft een houthakker dit jaar in zijn bos gekapt (de wet Houtkap, js/wetten.js), dan rekent hij een boete.
+    const boete = T.houtkapBoete(S);
+    if (boete > 0) tel('goud', boete, 'een boete voor de bomen die u uit Ons bos haalde');
     // Wil hij (een deel) in goud, dan rekent hij om, naar boven: de rest van de pacht, of alles.
     const wijze = IN().betalenIn;
     if (wijze === 'graanEnGoud' || wijze === 'alleenGoud') {
@@ -339,7 +342,7 @@
     const rijp = T.AKKER_STADIA && T.AKKER_STADIA.find((s) => s.stadium === 'rijp');
     const oogst = rijp ? volgendeKeer(dag, { maand: T.MAANDEN[rijp.maand].naam, dag: rijp.dag }) : dag;
     const lente = volgendeKeer(dag, IN().soldatenTot);
-    const perMens = T.GEBOUWEN_INSTELLINGEN ? T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag : 0;
+    const perMens = T.etenPerMens(S);
     const melk = T.verwachteMelk(S, dag, oogst);
     const eten = Math.max(0, (S.bevolking || 0) * perMens * (oogst - dag) - melk);
     const soldaten = g && g.soldaten ? soldatenPerDag() * (lente - dag) : 0;
@@ -368,8 +371,9 @@
     h.brief = null;
     b.betaald = g;
     h.jaren.push({ jaar: T.datumVanDag(dagNu(S)).jaar, deel: g.deel, straf: g.straf });
-    // Het rapport van de inner is betaald, en zijn argwaan zakt (js/inner.js).
+    // Het rapport van de inner is betaald, en zijn argwaan zakt (js/inner.js); de boete voor de houtkap ook.
     T.innerNaSintMaarten(S);
+    T.wettenNaSintMaarten(S);
     if (T.zetVlag) {
       T.zetVlag(S, 'heerBetaald');
       T.wisVlag(S, 'heerSchuld');

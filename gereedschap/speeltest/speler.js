@@ -107,6 +107,7 @@
     if (s.modus === 'heer' && !bezig.heer) T.ui.sluitHeer(s);
     if (s.modus === 'dialoog' && !bezig.praten) T.sluitDialoog(s);
     if (s.modus === 'velden') T.ui.sluitVelden(s);
+    if (s.modus === 'wetten') T.ui.sluitWetten(s);
     if (s.modus === 'spelregels') T.ui.sluitSpelregels(s);
   }
 

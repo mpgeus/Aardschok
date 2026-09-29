@@ -46,6 +46,7 @@
       bevolking: 0, woonruimte: 0, // aantal mensen, en hoeveel er als woonruimte gegeven is
       behoeften: T.nieuweBehoeften(), // tevredenheid en wat het dorp mist (js/behoeften.js)
       trede: 'gehucht', // de trede van het dorp: een dorp bij genoeg mensen, een kapel en een smidse (js/treden.js)
+      wetten: T.nieuweWetten(), // welke wetten je aannam, en wat de heer en de belasting nog tegoed hebben (js/wetten.js)
       goud: 0,
       goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
       quests: {}, // per quest de fase waarin hij staat (js/quest.js)
@@ -411,12 +412,18 @@
       return;
     }
     // Het veldenvenster (js/hud.js): net als bij de spelregels staat de tijd stil en ligt de rest
-    // stil. Esc of V sluit het; B en O sluiten het ook en gaan dan meteen door naar het bouwmenu of
-    // de spelregels, hieronder.
+    // stil. Esc of V sluit het; B, O en W sluiten het ook en gaan dan meteen door naar het bouwmenu,
+    // de spelregels of de wetten, hieronder.
     if (S.modus === 'velden') {
       const k = (ev.key || '').toLowerCase();
-      if (k === 'escape' || k === 'v' || k === 'b' || k === 'o') T.ui.sluitVelden(S);
-      if (k !== 'b' && k !== 'o') return;
+      if (k === 'escape' || k === 'v' || k === 'b' || k === 'o' || k === 'w') T.ui.sluitVelden(S);
+      if (k !== 'b' && k !== 'o' && k !== 'w') return;
+    }
+    // Het menu Wetten (js/wettenmenu.js) net zo: Esc of W sluit het, en B, O en V gaan meteen door.
+    if (S.modus === 'wetten') {
+      const k = (ev.key || '').toLowerCase();
+      if (k === 'escape' || k === 'w' || k === 'b' || k === 'o' || k === 'v') T.ui.sluitWetten(S);
+      if (k !== 'b' && k !== 'o' && k !== 'v') return;
     }
     if (ev.key === 'Escape' && T.ui.briefOpen && T.ui.briefOpen()) {
       T.ui.sluitBrief(S);
@@ -439,6 +446,11 @@
     // V: de velden (js/hud.js; wat elk veld is en volgend jaar wordt), ook alleen bij het rondlopen.
     if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'v' || ev.key === 'V') && S.wereld.akkers) {
       T.ui.openVelden(S);
+      return;
+    }
+    // W: de wetten (js/wettenmenu.js), ook alleen bij het rondlopen.
+    if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'w' || ev.key === 'W')) {
+      T.ui.openWetten(S);
       return;
     }
     if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'b' || ev.key === 'B')) {
@@ -639,6 +651,20 @@
       if (naar) T.wordtTrede(S, naar);
       const doel = T.tredeDoel(S);
       return { trede: S.trede, doel: doel ? `${doel.kop}: ${doel.tekst}` : 'geen volgende trede' };
+    },
+    // De wetten (js/wetten.js): per wet de stand, en wat hij dan doet. Spel.debug.wetten('rantsoen', 'krap')
+    // zet er eerst een, zoals het menu (W) dat doet; de boete voor de houtkap en wat de belasting nog meeneemt,
+    // staan erbij.
+    wetten(id, stand) {
+      if (id) {
+        const r = T.zetWet(S, id, stand);
+        if (!r.kan) return r.reden;
+      }
+      const lijst = T.wettenVanNu(S).map((w) => {
+        const s = T.standVanWet(S, w);
+        return { wet: w, stand: s, doet: T.watDeWetDoet(S, w, s).map((r) => (r.goed ? '+ ' : '− ') + r.tekst).join(' · ') };
+      });
+      return { wetten: lijst, boete: T.houtkapBoete(S), belastingRest: S.wetten ? S.wetten.belastingRest : 0 };
     },
     // De erven (js/erven.js): waar ze liggen, en wie er woont of bouwt. Een erf aanwijzen gaat als een
     // gebouw: Spel.debug.bouw('erf', 30, 20).

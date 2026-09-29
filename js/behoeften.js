@@ -94,7 +94,7 @@
 
   // `gezegd`: wat het dorp deze winter al zei dat op raakte (het hout, het eten; zegDeWinter onderaan).
   T.nieuweBehoeften = function () {
-    return { tevredenheid: 1, mist: [], last: [], winterVerliesRest: 0, gezegd: {} };
+    return { tevredenheid: 1, mist: [], last: [], blij: [], winterVerliesRest: 0, gezegd: {} };
   };
 
   function bericht(tekst, soort) {
@@ -117,6 +117,11 @@
     return { totaal, gezouten, onbeschermd: totaal - gezouten };
   };
 
+  // Wat één mens per dag eet, in graan: het getal uit js/gebouwen.js, maal het rantsoen (js/wetten.js). Eén plek,
+  // zodat het eten, de balk, de heer en de marskramer met hetzelfde rantsoen rekenen. De soldaten van de heer eten
+  // hun eigen rantsoen (js/heer.js), en wat een koe geeft, hangt er ook niet van af (js/vee.js).
+  T.etenPerMens = (S) => T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag * T.wetFactor(S, 'eten');
+
   T.heeftKerk = function (S) {
     return (S.gebouwen || []).some((g) => g.klaar && T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].kerk);
   };
@@ -136,7 +141,7 @@
     // het vlees als dat een maag vult (T.vleesAlsEten). Tot 28 sep telde het vlees hier niet, terwijl
     // het dorp het wel at (T.eetVandaag): met alleen vlees in de schuur stierven er in de winter
     // mensen van de honger.
-    const voedselBenodigd = bevolking * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
+    const voedselBenodigd = bevolking * T.etenPerMens(S);
     const voedsel = ((S.vee && S.vee.melk) || 0) + (v.graan || 0) + (v.kaas || 0) + T.vleesAlsEten(S);
     const voedselDekking = voedselBenodigd > 0 ? Math.min(1, voedsel / voedselBenodigd) : 1;
     const extraSoorten = ['groente', 'vis', 'vlees'].filter((wat) => (v[wat] || 0) >= IN.extraVoedselDrempel);
@@ -161,7 +166,11 @@
     // tot niet boven de één; zonder herberg is het nul.
     const gezelligheid = T.herbergGezelligheid(S, dag);
 
-    const tevredenheid = Math.min(1, Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + gezelligheid - heer.minder));
+    // De wetten (js/wetten.js, sinds 29 sep): een krap rantsoen of de belasting gaat eraf, een ruim rantsoen
+    // komt erbij.
+    const wetten = T.wettenTevredenheid(S);
+
+    const tevredenheid = Math.min(1, Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + gezelligheid + wetten.erbij - heer.minder));
 
     // Het brandhout mist het dorp ook als het de winter niet haalt (T.houtVoorDeWinter), niet pas als
     // het vandaag op is: dan zegt de balk het op tijd, net als het rode hout ernaast (js/hud.js).
@@ -172,7 +181,7 @@
     if (T.herbergDroog(S)) mist.push('bier');
 
     return {
-      tevredenheid, mist, last: heer.waarom, inWinter,
+      tevredenheid, mist, last: heer.waarom.concat(wetten.last), blij: wetten.blij, inWinter,
       voedselDekking, extraSoorten, voedselFactor,
       brandhoutDekking, brandhoutBenodigd, brandhoutVoorraad, brandhoutFactor,
       huishoudens, heeftKerk, kerkFactor, gezelligheid,
@@ -351,7 +360,7 @@
   // Geeft ook `vlees`: wat er van het vlees gegeten is (in vlees, niet in graan).
   T.eetVandaag = function (S) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
-    const nodig = (S.bevolking || 0) * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
+    const nodig = (S.bevolking || 0) * T.etenPerMens(S);
     const v = S.voorraad;
     const melkVandaag = (S.vee && S.vee.melk) || 0;
     const melk = Math.min(nodig, melkVandaag);
@@ -427,7 +436,8 @@
     for (const g of S.gebouwen || []) {
       const m = T.GEBOUWEN[g.soort].maakt;
       if (!m || !g.werkte) continue;
-      for (const wat of BRANDHOUT) erbij += (((m.uit && m.uit[wat]) || 0) - ((m.in && m.in[wat]) || 0)) * g.werkte;
+      const uit = T.maaktUit(S, T.GEBOUWEN[g.soort]);
+      for (const wat of BRANDHOUT) erbij += (((uit && uit[wat]) || 0) - ((m.in && m.in[wat]) || 0)) * g.werkte;
     }
     return erbij;
   };
@@ -450,7 +460,7 @@
   T.etenVoorDeWinter = function (S, dag) {
     const { tot, duur } = T.periodeVanaf(dag, isWinter);
     const v = S.voorraad || {};
-    const eet = (S.bevolking || 0) * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag + T.soldatenEten(S, dag);
+    const eet = (S.bevolking || 0) * T.etenPerMens(S) + T.soldatenEten(S, dag);
     const van = Math.floor(dag);
     const melkVoor = T.verwachteMelk(S, van, van + tot);
     const melkIn = duur > 0 ? T.verwachteMelk(S, van + tot, van + tot + duur) / duur : 0;
@@ -465,7 +475,7 @@
 
   // Wat helpt als het hout de winter niet haalt: een houthakker, of nog een.
   function houtHelpt(S) {
-    const per = T.GEBOUWEN.houthakker.maakt.uit.hout;
+    const per = T.maaktUit(S, T.GEBOUWEN.houthakker).hout;
     return (S.gebouwen || []).some((g) => g.soort === 'houthakker')
       ? `nog een houthakker hakt er ${per} per dag bij`
       : `een houthakker hakt ${per} hout per dag`;
@@ -529,6 +539,7 @@
     S.behoeften.tevredenheid = b.tevredenheid;
     S.behoeften.mist = b.mist;
     S.behoeften.last = b.last;
+    S.behoeften.blij = b.blij;
     S.behoeften.gezelligheid = b.gezelligheid;
 
     // Of het hout en het eten de winter halen, vóór het stoken en het eten van vandaag.
