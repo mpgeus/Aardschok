@@ -21,13 +21,14 @@ gehucht een dorp is geworden. Gefeliciteerd. Dat kost u vanaf nu meer."
 - **Wat er al is** (29 sep): het dorp bouwt zelf op erven (stap 1), de trede zelf, met het doel linksboven en de
   brief van de heer als eind (stap 2), de eerste wetten in een menu onder `W`: het rantsoen, vreemden welkom,
   houtkap en belasting (stap 3), en rovers met een militie: wie wegtrekt, komt als rover terug, er komen wilde
-  rovers, ze roven een akker, de mannen van het wachthuis vechten mee, en wie valt, is dood (stap 4). Wat nog komt:
-  de proef afmaken.
+  rovers, ze roven een akker, de mannen van het wachthuis vechten mee, en wie valt, is dood (stap 4). En stap 5 (29
+  sep): de raad onder het doel, de bouwer in de speeltest en een proefversie voor itch.io. Wat de bouwer liet zien,
+  staat hieronder in "De speeltest van 29 sep"; de vragen die eruit volgen, in de werklijst (vraag 59).
 - **Wat blijft:** alles van de proef van één jaar hieronder: de heer, de inner, verstoppen, de winter, opslaan,
   het titelscherm en de speeltest als script. De heer hoeft er niet voor te veranderen: hij vraagt per huis en
   per ziel, dus wie groeit, betaalt meer.
 - **Wat anders wordt:** de speeltest speelt dan twee jaar, met spelers die bouwen en besturen; de vier spelers van
-  nu gaan over verstoppen.
+  nu gaan over verstoppen. Sinds 29 sep is er een vijfde, de bouwer.
 
 ## Besloten
 
@@ -147,6 +148,53 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33c.** ~~Stap 3 van de inner (praten, afleiden, omkopen): vóór de proef of erna?~~ Ingehaald: het is er (27 sep).
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
+
+## De speeltest van 29 sep: de bouwer, twee jaar (werklijst, vraag 58, A)
+
+Een vijfde speler, de bouwer, speelde het gehucht twee jaar, van 1 lentemaand 1323 tot 1 grasmaand 1325, met zaad 1, 2
+en 3. Hij doet wat het doel vraagt, zoals in het plan: hij neemt Vreemden welkom aan, bouwt de kapel en de smidse zodra
+het goud en het hout er zijn (dat is op de eerste dag), houdt steeds één erf vrij, wil een houthakker als het dorp
+waarschuwt, verkoopt graan als het goud tekortschiet maar houdt wat het dorp tot de lente eet, het zaaigraan en het
+graan van de heer, en betaalt de heer alles. Hij verstopt niets en loopt de rovers niet achterna. Het spel stond op
+`d6ad12a` (branch `ccr-0e928644-rvlci5`). Zonder één fout in de console, 8 tot 10 minuten per zaad.
+
+| | zaad 1 | zaad 2 | zaad 3 |
+|---|---|---|---|
+| Een dorp op | 1 herfstmaand 1323, 51 mensen | 1 herfstmaand 1323, 51 mensen | 1 herfstmaand 1323, 51 mensen |
+| Het meest | 74 mensen, 1 wintermaand 1323 | 74 | 74 |
+| Na de eerste winter (1 lentemaand 1324) | 24 mensen | 27 | 27 |
+| Aan het eind | het ambt kwijt op Sint-Maarten 1324 | 1 mens | 1 mens |
+| Doden (kou; waarvan ook honger), weg | 42 (42; 18), 8 weg | 53 (53; 21), 20 weg | 53 (53; 19), 20 weg |
+| De heer kreeg (1323; 1324) | 50%, schandpaal; 0%, schandpaal | 53%, soldaten; 0%, schandpaal | 60%, soldaten; 0%, schandpaal |
+| De rovers kwamen | 17 keer | 25 | 24 |
+| Groeidagen: een gezin, te weinig graan, niet tevreden | 16, 41, 14 (van 61) | 16, 54, 26 (van 75) | 16, 53, 26 (van 75) |
+| De raad stond (dagen) | hout 184, rovers 144, graan 91, gezin 73 | hout 241, rovers 207, graan 94, gezin 70 | hout 252, rovers 197, graan 98, gezin 66 |
+
+**Wat opviel, van belangrijk naar minder:**
+
+1. **De proef duurt zes maanden, niet twee jaar.** In alle drie de zaden is het gehucht op 1 herfstmaand van het
+   eerste jaar een dorp: 51 mensen, een kapel en een smidse. Dat is vóór de heer komt en vóór de winter. De brief
+   ("Dat kost u vanaf nu meer") komt dus voordat een tester de heer ooit zag, en het eind van de proef valt vóór
+   het moeilijkste deel van het jaar. Groei is geen knelpunt meer: met erven en Vreemden welkom komt er om de tien
+   dagen een gezin, zolang er graan is en het dorp tevreden genoeg is.
+2. **Wie verder speelt, verliest alles.** Het dorp groeit door tot 74 mensen in wintermaand, en er is geen hout: de
+   16 hout na de kapel en de smidse gaan naar de hutten, en een houthakker komt er nooit, want er is geen goud (2 over
+   op de eerste dag) en het graan is nodig. In de eerste winter sterven er 42 tot 53, van de kou en de honger, en
+   wie wegtrekt, komt als rover terug (17 tot 25 keer). Op 1 lentemaand 1324 ligt er geen zaaigraan, dus wordt er
+   niets gezaaid en niets geoogst: het tweede jaar heeft het dorp geen graan, de heer krijgt niets, en na de tweede
+   winter is er één mens over (of het ambt is kwijt).
+3. **Goud beslist.** Het gehucht begint met 20 goud; de kapel en de smidse kosten er samen 18, een houthakker 4, en
+   de heer vraagt 25 tot 30 per jaar. Goud komt van graan dat het dorp zelf nodig heeft (2 tot 4 goud per 10 graan) en
+   van de belasting. Wie de kapel en de smidse meteen bouwt, heeft een dorp, maar geen houthakker.
+4. **De raad zag het aankomen.** Vanaf 1 herfstmaand zei hij bij alle drie "Het hout haalt de winter niet: bouw een
+   houthakker", 184 tot 252 dagen lang; de bouwer luisterde, maar kon hem niet betalen. Daarom zegt de raad sinds 29
+   sep ook hoe ver het komt ("haalt 0 van de 90 dagen van de winter").
+5. **Een tweede bouwer, die wel deed wat de raad zei** (de houthakker vóór de smidse, en een jager als de raad over
+   het eten begon; zaad 1, tot louwmaand), kwam nooit aan de smidse toe: twee goud te kort, en het graan was nodig.
+   Hij had 74 mensen in louwmaand en negen jagers, want de raad bleef zeggen dat het eten de winter niet haalde, en hij
+   bouwde er om de tien dagen een bij. Hij was zo traag dat twee jaar niet in een uur pasten, en ging uit de speeltest.
+6. **Braaf** (zaad 1, een jaar) blijft op 37 mensen staan: de raad zei 207 dagen "Er komt geen gezin: het dorp is
+   vol. Wijs een erf aan", en braaf wijst er geen aan. Zijn jaar liep letter voor letter als ervoor, ook met de raad.
 
 ## De speeltest van 28 sep
 

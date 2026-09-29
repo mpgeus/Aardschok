@@ -14,8 +14,17 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     rovers 20, en in zomermaand vertrapten ze een akker. Er was zaaigraan voor 100 van de 179 akkertegels (op 28 sep,
     vóór de rovers, bleef bij braaf gemiddeld 4% ongezaaid), en het dorp was 47% tevreden. Een proef van twee jaar
     loopt daar recht in; de speeltest met de bouwer (vraag 58, A) laat zien of een goede speler het ook raakt.
-  - **Waarom er geen gezin komt, zegt het spel alleen bij "geen plaats".** Te weinig graan (vijf keer in de lente
-    en de zomer) en te weinig tevreden zijn stil.
+  - ~~**Waarom er geen gezin komt, zegt het spel alleen bij "geen plaats".**~~ De raad onder het doel zegt het nu
+    (29 sep, `js/raad.js`).
+  - **Zonder zaaigraan komt een dorp nooit meer boven** (de bouwer, 29 sep, `speelbaar.md`). Ligt er op 1 lentemaand
+    geen graan, dan wordt er niets gezaaid, dus niets geoogst, dus is er het jaar erna weer geen zaaigraan. De
+    marskramer verkoopt geen graan, en niets anders brengt het. Bij de bouwer bleef het tweede jaar elke akker leeg.
+    Mogelijk: de marskramer verkoopt in de lente zaaigraan, of de heer "leent" het (tegen rente, satire).
+  - **Een regel die blijft staan, lokt een speler die hem volgt tot te veel.** Een bouwer die deed wat de raad zei,
+    bouwde om de tien dagen een jager, want "het eten haalt de winter niet" bleef staan: negen in louwmaand. Daarom
+    zegt de raad nu hoe ver het komt ("26 van de 90 dagen"). Een mens rekent dan zelf; een speler in code nog niet.
+  - **Huizen groeien vanzelf door** (hut, huis, stenen huis), en daarmee groeit het dorp ook zonder erven: de
+    bouwer had 74 mensen in wintermaand, met vijf erven.
 - **Wat opviel bij de rovers en de militie** (29 sep, vijftiende sessie; `js/rovers.js`, werklijst vraag 55):
   - **Een rover lijkt op een boer.** Hij draagt het vel van een boer of boerin (met strohoed); alleen zijn levensbalk
     zegt dat hij een vijand is. Een eigen, donkerder vel zou helpen, of een doek voor zijn gezicht.

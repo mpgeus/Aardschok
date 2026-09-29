@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (29 sep 2026, zestiende sessie): het plan voor stap 5 (de proef afmaken) wacht op Marcel
+## De stand (29 sep 2026, zestiende sessie): stap 5 is gebouwd, en de bouwer zegt dat de proef te kort is (vraag 59)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -18,20 +18,23 @@ gevochten wordt; rijk worden en arm lijken blijft de druk van boven. Wat er nu s
 per onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, en Nieuw spel geeft de
 benoemingsbrief van de heer; `W` zijn de wetten, `Z` is slapen bij je huis, `Esc` het menu, en het spel slaat
-elke ochtend zelf op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 611/611.
+elke ochtend zelf op; onder het doel linksboven staat de raad. De pagina "Stand van het gehucht" (25 sep) loopt
+achter op de dag. `npm test`: 624/624.
 
-**Waar het werk staat:** alles staat in `main`, ook stap 4 (Marcel, 29 sep: "A, ja naar main"; ook op
-`ccr-ff387f8f-iqbokf`). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`,
-onder Git.
+**Waar het werk staat:** stap 1 tot en met 4 staan in `main`. Stap 5 (de zestiende sessie) staat op de branch
+`ccr-0e928644-rvlci5`, nog niet in `main`: dat doet Marcel, of vraagt hij. Hoe een eigen branch en `main` samengaan,
+staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij vraag 58, het plan voor stap 5: de proef afmaken (eerst meten met een
-bouwer in de speeltest, dan een raad onder het doel, dan een tester met een zip). Heeft Marcel geantwoord, bouw dan
-wat hij koos; zo niet, vraag het. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Stap 1 tot
-en met 4 zijn af: het dorp bouwt zelf (vraag 52), de eerste trede (vraag 53), de eerste wetten (vraag 54) en rovers
-met een militie (vraag 55). De richting staat (vraag 50: besturen en groeien worden het hart, de heer blijft als de
-druk van boven, en vechten begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook (vraag 51: de proef
-wordt "van gehucht tot dorp", in vijf stukken). De afrekening (vraag 49) is geparkeerd, en vraag 47 (de eerste
-weken als opdrachten) is herschreven in vraag 58, B.
+**Waar de volgende sessie begint:** bij vraag 59: wanneer het een dorp is, een rem op de groei, en waar goud vandaan
+komt. De bouwer in de speeltest liet zien dat de proef nu in zes maanden klaar is, en dat wie verder speelt, alles
+verliest. Heeft Marcel geantwoord, bouw dan wat hij koos en speel de bouwer opnieuw (`npm run speeltest -- bouwer`);
+daarna zet Marcel de proefversie op itch.io (`npm run proefversie`, `verpakken.md`), en zoekt hij een tester (33d).
+Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Stap 1 tot en met 4 zijn af (het dorp bouwt
+zelf, vraag 52; de eerste trede, vraag 53; de eerste wetten, vraag 54; rovers met een militie, vraag 55), en van
+stap 5 de raad, de bouwer en de proefversie (vraag 58). De richting staat (vraag 50: besturen en groeien worden het
+hart, de heer blijft als de druk van boven, en vechten begint met aanvallen op je eigen dorp), en de nieuwe volgorde
+ook (vraag 51: de proef wordt "van gehucht tot dorp", in vijf stukken). De afrekening (vraag 49) is geparkeerd, en
+vraag 47 (de eerste weken als opdrachten) is herschreven in vraag 58, B.
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; opnieuw geordend op 28 sep,
 vraag 51, na de nieuwe richting). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat de proef "van
@@ -52,14 +55,17 @@ kost u vanaf nu meer."
 4. **Af (29 sep, vijftiende sessie): rovers en een militie** (vraag 55). Wie wegtrekt, komt als rover terug, en er
    komen wilde rovers; ze roven een akker, de mannen van het wachthuis vechten mee, en wie valt, is dood. Zie onder Af.
 5. **Nu: de proef afmaken:** de eerste weken als opdrachten (vraag 47, herschreven voor de nieuwe richting), een
-   speeltest van twee jaar, en een tester die het niet kent (33d). Het plan is vraag 58, en wacht op Marcel.
+   speeltest van twee jaar, en een tester die het niet kent (33d). Het plan is vraag 58. **Gebouwd (29 sep, zestiende
+   sessie):** de raad onder het doel, de bouwer in de speeltest en de proefversie voor itch.io. Wat de bouwer liet
+   zien, werd vraag 59 (wacht op Marcel); daarna de tester.
 
 *Eerder af, voor de proef van één jaar met de heer (27 en 28 sep):* de winter zichtbaar (elfde sessie), de
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 58 (het plan voor stap 5: A, B en C; daarin ook 33d, hoe een tester het krijgt, en
-vraag 47, herschreven), en later vraag 54, C (hoe de heer in het hogere doel past). Op 28 sep beantwoordde Marcel
+*2. Wacht op Marcel:* vraag 59 (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt), de
+proefversie op itch.io zetten als hij thuis is, en wie de eerste tester is; en later vraag 54, C (hoe de heer in het
+hogere doel past). Op 28 sep beantwoordde Marcel
 33a, 33b, 8, 48, 50 en 51; het bijstellen na de speeltest (vraag 46) komt later, met een menu met opties.
 
 *3. Na de proef* (vraag 51):
@@ -91,6 +97,18 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
 - **Een plan voor stap 5, de proef afmaken** (vraag 58): A, eerst meten met een vijfde speler in de speeltest, de
   bouwer, twee jaar; B, de eerste weken als een raad onder het doel, die zegt wat nu tussen jou en een dorp staat
   (en anders "het volgende gezin komt over 7 dagen"); C, de tester krijgt een zip. Niets gebouwd.
+- **Marcel koos** (vraag 58): "A Ja goed idee. B onder het doel. C itch io. Als ik thuis ben want heb alleen telefoon
+  hier". Gebouwd: de raad onder het doel, de bouwer in de speeltest, en `npm run proefversie`, een zip voor itch.io
+  met de stappen in `verpakken.md`. Zie onder Af. In de browser gezien: de raad in goud onder het doel, met de toets
+  als toetsje, en de proefversie uitgepakt in een schone browser, zonder fouten en zonder één ontbrekend bestand.
+- **Wat de bouwer liet zien** (zaad 1 tot en met 3, `speelbaar.md`): een dorp op 1 herfstmaand van het eerste jaar,
+  in alle drie, en daarna de ondergang: geen goud voor een houthakker, 42 tot 53 doden in de eerste winter, geen
+  zaaigraan in de lente, en aan het eind één mens of het ambt kwijt. Dat werd vraag 59.
+- **Onderweg:** een tweede bouwer die de raad volgde, bouwde elke tien dagen een jager (de raad bleef zeggen dat het
+  eten de winter niet haalde), en werd te traag; hij ging eruit, en de raad zegt nu hoe ver het hout en het eten komen
+  ("haalt 26 van de 90 dagen"). De raad rekende elk beeld de hele winter uit (0,7 ms, en meer met een grotere kudde):
+  nu om de halve seconde, en het eten pas vlak voor de winter. Braaf speelt met de raad erbij letter voor letter
+  hetzelfde jaar als ervoor.
 
 **Wat er in de vijftiende sessie gebeurde** (29 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor stap 3, de eerste keuren** (vraag 54): één venster onder `K`, een keuze die de volgende ochtend
@@ -1377,6 +1395,35 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     telefoon hier".** A en B worden gebouwd zoals voorgesteld. Voor C maakt Claude de zip klaar die itch.io wil
     (`index.html` bovenin), met de stappen voor het uploaden in `verpakken.md`; Marcel zet hem erop als hij thuis is.
     Wie de eerste tester is, staat nog open.
+    **Gebouwd (29 sep, zestiende sessie);** zie onder Af, en `speelbaar.md`, "De speeltest van 29 sep", voor wat de
+    bouwer liet zien. Daaruit volgt vraag 59.
+59. **De proef is in zes maanden klaar, en wie verder speelt, verliest alles** (Claude, 29 sep, zestiende sessie; na
+    de bouwer in de speeltest, vraag 58, A; wacht op Marcel). Wat de bouwer liet zien, met zaad 1, 2 en 3
+    (`speelbaar.md`, "De speeltest van 29 sep"): wie de kapel en de smidse op de eerste dag bouwt, steeds een erf vrij
+    houdt en Vreemden welkom aanneemt, heeft op 1 herfstmaand van het eerste jaar een dorp van 51 mensen, vóór de heer
+    komt en vóór de winter. Daarna groeit het door tot 74, is er geen goud voor een houthakker (2 over op de eerste
+    dag, en het graan is nodig), sterven er in de eerste winter 42 tot 53 mensen, en is er in de lente geen zaaigraan:
+    het tweede jaar heeft het dorp niets, de heer krijgt niets, en aan het eind is er één mens over of het ambt kwijt.
+    Een tweede bouwer, die de houthakker vóór de smidse bouwde, kwam nooit aan de smidse toe (twee goud te kort).
+    Drie vragen, van belangrijk naar minder:
+    - **A, wanneer is het een dorp?** Nu: zodra er 50 mensen, een kapel en een smidse zijn. Voorstel: pas op 1
+      lentemaand, na de winter: heeft het dorp dan nog 50 mensen, een kapel en een smidse, dan schrijft de heer. Zo
+      zit de hele proef erin (de inner, de heer, de winter), duurt hij minstens een jaar, en telt wat na zes maanden
+      gebeurt ook. Het is één datum en één regel, en het doel linksboven zegt het ("op 1 lentemaand"). Het andere: op
+      Sint-Maarten, als de heer het ziet (dan zonder de winter), of zoals nu.
+    - **B, groei zonder rem.** Er komt een gezin zolang er 20 graan ligt en het dorp tevreden genoeg is, ook als het
+      hout en het eten de winter niet halen. Voorstel: er komt geen gezin als het hout of het eten de winter niet
+      haalt (vanaf drie maanden ervoor, zoals het dorp het zegt), en de raad zegt waarom ("Er komt geen gezin: het
+      hout haalt de winter niet"). Het is een spelregel, standaard aan. Het andere: zo laten, en de speler moet het
+      zelf zien (de raad waarschuwt nu al).
+    - **C, goud.** 20 goud bij het begin, 18 voor de kapel en de smidse, 25 tot 30 per jaar voor de heer, en alleen
+      graan en belasting brengen goud. Voorstel: de getallen laten zoals ze zijn (het is de keuze van het eerste jaar:
+      een dorp of een houthakker), en de raad zegt waar goud vandaan komt als je het nodig hebt: "Voor de smidse mis
+      je 8 goud: de marskramer koopt graan, en belasting [W] brengt elke maand goud." Het andere: meer goud bij het
+      begin, of een goedkopere smidse, in de werkbank.
+    En opgevallen, zonder vraag: zonder zaaigraan in lentemaand komt een dorp nooit meer boven, want de marskramer
+    verkoopt geen graan (`opmerkingen.md`). Vragen: **A**, pas een dorp op 1 lentemaand? **B**, geen gezin als het
+    hout of het eten de winter niet haalt? **C**, de raad zegt waar goud vandaan komt?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -1677,6 +1724,22 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 29 sep 2026 — **De proef afmaken: de raad, de bouwer en de proefversie** (zestiende sessie; stap 5 van de proef,
+  vraag 58, Marcel: "A Ja goed idee. B onder het doel. C itch io"). **B:** `js/raad.js`: onder het doel linksboven
+  één regel, in goud, die zegt wat nu tussen jou en een dorp staat, met de toets erbij: de inner (drie dagen vooraf),
+  het goud voor de heer als de marskramer er in de herfst is, een wachthuis na een aanval, het hout en het eten voor de
+  winter (vanaf drie maanden ervoor, met hoe ver het komt), het graan dat na Sint-Maarten nog in de kelders ligt, de
+  eerste dag hoe de tijd sneller gaat, en dan de groei: waarom er geen gezin komt, of wanneer het volgende komt. Hij
+  vraagt het aan de regels zelf: de groei zegt nu waarom er geen gezin komt (`T.waaromGeenGezin`, `T.volgendeGezinDag`
+  in `js/gebouwen.js`), en de winter hoe ver het hout en het eten komen. De spelregel "Raad" zet hem uit, de dagen staan
+  in de werkbank, `Spel.debug.raad()` zegt wat er geldt. **A:** de speeltest heeft een vijfde speler, de bouwer, die
+  twee jaar speelt (`npm run speeltest -- bouwer`), en van elke speler schrijft hij op waarom er op een groeidag geen
+  gezin kwam, op welke dag het een dorp werd, en welke raad er hoe lang stond (een tabel in `samenvatting.md`). **C:**
+  `npm run proefversie`: een zip met alleen wat het spel laadt, `index.html` bovenin, de stand (datum, commit) klein
+  op het titelscherm (`T.STAND`), en de stappen voor itch.io in `verpakken.md`. Getoetst: `test/raad.test.cjs` (11
+  toetsen) en twee in `test/erven.test.cjs`; `npm test` 624/624; braaf speelt met de raad letter voor letter hetzelfde
+  jaar; de bouwer drie keer twee jaar zonder fouten (`speelbaar.md`); en de proefversie uitgepakt in een schone
+  browser. Open: vraag 59, de proefversie op itch.io (Marcel, thuis), en de eerste tester.
 - 29 sep 2026 — **Rovers en een militie** (vijftiende sessie; stap 4 van de proef, vraag 55, Marcel: "A, Ja en ook
   'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms velden kapot. C, Ja. D, mensen kunnen
   sterven"). `js/rovers.js`: wie wegtrekt, gaat het bos in en komt na tien dagen als rover terug, met zijn naam en
