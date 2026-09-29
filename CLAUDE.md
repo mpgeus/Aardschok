@@ -169,7 +169,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`.
 - `js/verkennen.js`: rondlopen, klikhandelingen, dwalende monsters, ontdekt worden.
 - `js/gevecht.js`: de overgang, beurtvolgorde, actiepunten, handelingen, monster-AI
-  (`planMonsterBeurt`, los van het scherm en dus te toetsen).
+  (`planMonsterBeurt`, los van het scherm en dus te toetsen). Sinds 29 sep voor een groep: aan jouw kant (kant
+  'speler') de schout en de militie, elk met een eigen beurt; wie aan de beurt is, zegt `T.aanDeBeurt`, en een
+  vijand zoekt de man van jouw kant die het dichtst bij staat.
 - `js/quests.js`: de quests als gegevens (nu nog leeg, met de vorm erboven);
   `js/quest.js`: de regels erachter, zonder scherm en dus te toetsen — fasen en wegen
   (`T.zetQuest`, `T.neemWeg`, `T.werkQuestsBij`), goud (`T.geefGoud`), de haken waarmee een
@@ -247,6 +249,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en doorzoeken plek voor plek wat zijn route vlak passeert (`T.zoekOpPlek` in `js/verstoppen.js`); na een
   paar uur kiezen ze zelf, en zo vaak als zijn argwaan kiest de heer (`T.werkDoorzoekenBij`, elk beeld).
   De rechthoek van een gebouw vraag je aan `T.voetVanGebouw` (`js/gebouwen.js`).
+- `js/rovers.js`: **de rovers en de militie** (stap 4 van de proef, vraag 55, 29 sep): wie wegtrekt, gaat het bos in en
+  komt terug als rover (`S.rovers.bende`, `T.wordtRover` vanuit `js/bewoners.js`), en er komen wilde rovers van buiten
+  (`T.tikRoversDag`). Een aanval (`S.rovers.aanval`, `T.werkRoversBij`): tegen de avond van de rand van de kaart
+  (`T.roverIngang`) naar een akker, twee uur roven (graan uit de voorraad, en soms de akker kapot: `T.vertrapAkker` in
+  `js/akkers.js`), en weer weg. De mannen van het wachthuis lopen dan met de schout mee (`opgeroepen`, zodat
+  `T.dagAnker` en het dwalen ze met rust laten) en vechten mee (`T.militieInGevecht`). Wie valt, is dood: een rover
+  is uit de bende (`T.roverVerslagen`), een wachter een mond minder (`T.sneuvelt`, via `T.wijzigBevolking` met wie
+  het is), en wie het overleeft, geneest na een nacht. De getallen in `T.ROVERS_INSTELLINGEN` (in de werkbank).
 - `js/zien.js`: **het zichtveld en de getuigen** (werklijst punt 3, 27 sep): wie buiten is, ziet de
   schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
   verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het
@@ -360,8 +370,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   gaat naar `ontwerp/opmerkingen.md` of achteraan de werklijst, niet in de stap die loopt. Wie iets
   nieuws wil beginnen, vraagt eerst: brengt dit een speelbaar product dichterbij?
 
-In een gevecht heeft de schout levenspunten, net als een monster (voorlopig: wat vallen echt
-betekent, komt bij punt 13 van de werklijst).
+In een gevecht heeft de schout levenspunten, net als een vijand. Wie valt, is dood (Marcel, 29 sep, vraag 55:
+"mensen kunnen sterven"): valt de schout, dan is het spel uit. Wie het overleeft, geneest na een nacht.
 
 ## Afspraken in de code
 
@@ -397,7 +407,7 @@ Over het raster, het gevecht in beurten en de overgang ernaartoe.
 - Een klik op een deur is altijd erheen lopen. Dichtgooien is in een gevecht een eigen knop
   (`D`), die alleen verschijnt naast een open deur. Eerst ging een open deur dicht als je er
   naast stond en erop klikte, en dat is precies wat je niet wilt.
-- Toetsen in een gevecht: klik op een monster om te slaan (de knop `1` Slaan zegt wat het kost),
+- Toetsen in een gevecht: klik op een vijand om te slaan (de knop Slaan zegt wat het kost),
   `D` deur dicht, `spatie` einde beurt; bij het rondlopen `S` sluipen. De actiepunten en de knoppen
   schuiven onderaan in beeld zodra een gevecht begint, ook in het gehucht.
 - Monsters openen geen deuren. Kan geen enkel monster de schout nog zien of bereiken, dan eindigt
@@ -450,6 +460,8 @@ gezin komen (overdag over de weg; is het dorp vol, dan neemt het een vrij erf), 
 `Spel.debug.bouw('erf', 48, 50)` wijst een erf aan (daar is plaats, ten zuidoosten van het plein), en
 `Spel.debug.erven()` zegt per erf of het vrij is, wie er woont, en hoe ver de hut is. `Spel.debug.trede()` zegt
 hoe ver het gehucht is met een dorp worden, en `('dorp')` maakt er nu een dorp van, met de brief van de heer.
+`Spel.debug.rovers()` zegt wie er in de bende zit, wanneer die en de wilde rovers komen, en hoe een aanval ervoor
+staat; `(3)` laat nu drie wilde rovers komen, `('bende')` de bende.
 `Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
 en het bier (`(30)` zet eerst 30 bier). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar

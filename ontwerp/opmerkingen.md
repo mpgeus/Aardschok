@@ -9,6 +9,24 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wat opviel bij de rovers en de militie** (29 sep, vijftiende sessie; `js/rovers.js`, werklijst vraag 55):
+  - **Een rover lijkt op een boer.** Hij draagt het vel van een boer of boerin (met strohoed); alleen zijn levensbalk
+    zegt dat hij een vijand is. Een eigen, donkerder vel zou helpen, of een doek voor zijn gezicht.
+  - **De volgorde in een gevecht valt over de voorraadbalk** (bovenin het midden). Was al zo, maar met de militie is
+    de rij langer.
+  - **Rovers vallen geen dorpelingen aan**, alleen de schout en de wachters, en een boer op zijn akker loopt niet
+    weg. Ze nemen alleen graan mee ("graan etc": vee of goud kan later).
+  - **Wie in het wachthuis werkt, kiest het spel** (`T.wijsWerkToe`): dat kunnen ook vrouwen zijn, zoals Fenna en
+    Ida in de proef. Geen probleem voor het spel, maar een keuze wie er wacht, kan later.
+  - **Een gevecht dat verloren lijkt**, kun je niet opgeven of ontvluchten, behalve door een deur dicht te gooien
+    (binnen). Buiten ben je ze pas kwijt als niemand je nog ziet.
+  - **Ze roven uit de schuur, niet van de akker.** De akker is waar ze heen lopen en wat ze vertrappen; het graan
+    komt uit de voorraad. In zomermaand staan ze dan op een akker vol graan en gaan ze "met lege handen" weg als de
+    schuur leeg is (de speeltest, 27 zomermaand). Eenvoudig recht te zetten: is de schuur leeg en staat er graan op
+    de akker, dan nemen ze dat mee, en wordt dat stuk niet meer geoogst.
+  - **In een gevecht zoek je jezelf.** De schout draagt het vel van een gewone dorpeling, de wachters dat van een
+    boer of boerin, en de rovers ook; alleen de rovers hebben een levensbalk. Vraag 13 (een eigen figuur voor de
+    schout) weegt daardoor zwaarder.
 - **Wat opviel bij de wetten** (29 sep, vijftiende sessie; `js/wetten.js`, werklijst vraag 54):
   - **Op de eerste dag staat de tevredenheid op 100%,** tot na de eerste nacht (`T.nieuweBehoeften` begint op 1, en
     pas de dagelijkse tik rekent hem uit). Het menu Wetten zegt dan "Het dorp is nu 100% tevreden"; neem je een wet

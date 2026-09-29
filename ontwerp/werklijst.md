@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (29 sep 2026, vijftiende sessie): de eerste wetten staan, en stap 4 (rovers en een militie) is de volgende
+## De stand (29 sep 2026, vijftiende sessie): de wetten en de rovers staan, en stap 5 (de proef afmaken) is de volgende
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -18,16 +18,17 @@ gevochten wordt; rijk worden en arm lijken blijft de druk van boven. Wat er nu s
 per onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, en Nieuw spel geeft de
 benoemingsbrief van de heer; `W` zijn de wetten, `Z` is slapen bij je huis, `Esc` het menu, en het spel slaat
-elke ochtend zelf op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 598/598.
+elke ochtend zelf op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 610/610.
 
-**Waar het werk staat:** alles staat in `main`, ook de vijftiende sessie (Marcel, 29 sep: "Graag alles naar main, en
-begin met stap 4"; ook op `ccr-ff387f8f-iqbokf`). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`,
+**Waar het werk staat:** de vijftiende sessie tot en met het plan voor stap 4 staat in `main` (Marcel, 29 sep: "Graag
+alles naar main, en begin met stap 4"); stap 4 zelf staat op `ccr-ff387f8f-iqbokf`, tot Marcel zegt dat het naar
+`main` mag. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`,
 onder Git.
 
-**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 4: rovers en een militie. Het plan staat
-klaar en is beantwoord (vraag 55); het wordt gebouwd. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te
-ingewikkeld"). Stap 1 (het dorp bouwt zelf,
-vraag 52), stap 2 (de eerste trede, vraag 53) en stap 3 (de eerste wetten, vraag 54) zijn af. De
+**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 5: de proef afmaken (de eerste weken als
+opdrachten, een speeltest van twee jaar, en een tester); begin met een plan voor Marcel, en houd het eenvoudig
+(Marcel, 29 sep: "Maak het niet te ingewikkeld"). Stap 1 tot en met 4 zijn af: het dorp bouwt zelf (vraag 52), de
+eerste trede (vraag 53), de eerste wetten (vraag 54) en rovers met een militie (vraag 55). De
 richting staat (vraag 50: besturen en groeien worden het hart, de heer blijft als de druk van boven, en vechten
 begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook (vraag 51: de proef wordt "van gehucht tot
 dorp", in vijf stukken). De afrekening (vraag 49) is geparkeerd, en vraag 47 (de eerste weken als opdrachten)
@@ -49,10 +50,9 @@ kost u vanaf nu meer."
 3. **Af (29 sep, vijftiende sessie): de eerste wetten** (vraag 54; eerst keuren genoemd). Een menu zoals in
    Democracy 3 onder `W`, met het rantsoen, vreemden welkom, houtkap in het bos van de heer en de belasting. Zie
    onder Af.
-4. **Nu: rovers en een militie** (punt 13): rovers vallen het gehucht aan, en je verdedigt het in beurten op je eigen
-   kaart, met naast de schout een paar mannen uit het wachthuis. Wie wegtrekt, wordt rover, en er komen wilde
-   rovers. Het plan is beantwoord (vraag 55) en wordt gebouwd.
-5. **De proef afmaken:** de eerste weken als opdrachten (vraag 47, herschreven voor de nieuwe richting), een
+4. **Af (29 sep, vijftiende sessie): rovers en een militie** (vraag 55). Wie wegtrekt, komt als rover terug, en er
+   komen wilde rovers; ze roven een akker, de mannen van het wachthuis vechten mee, en wie valt, is dood. Zie onder Af.
+5. **Nu: de proef afmaken:** de eerste weken als opdrachten (vraag 47, herschreven voor de nieuwe richting), een
    speeltest van twee jaar, en een tester die het niet kent (33d).
 
 *Eerder af, voor de proef van één jaar met de heer (27 en 28 sep):* de winter zichtbaar (elfde sessie), de
@@ -77,8 +77,7 @@ het bijstellen na de speeltest (vraag 46) komt later, met een menu met opties.
 
 *4. Opruimen, als die bestanden toch open moeten:* `hud.js` en `tekenen.js` splitsen (vraag 25, C en D).
 
-*5. Vragen zonder haast:* 6 (de groepen; de eerste wetten zijn er sinds stap 3), 7 (ijs op de beek), 10 tot en met 12
-(de oude monsters, het leven van de schout, de knop Slaan: die komen terug bij stap 4), 13 (een eigen figuur voor
+*5. Vragen zonder haast:* 6 (de groepen; de eerste wetten zijn er sinds stap 3), 7 (ijs op de beek), 13 (een eigen figuur voor
 de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de proef), 22 (de tijdsversneller) en
 26 (de volgorde: deze lijst is het nieuwe voorstel).
 
@@ -108,6 +107,12 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   komt er een bende van buiten; ze stelen op het plein; de mannen van het wachthuis vechten mee, elk met een eigen
   beurt; en wie valt, is gewond tot de ochtend. Nagekeken: het gevecht draait nu helemaal om de schout, en in het
   gehucht staat nog geen enkele vijand. Niets gebouwd.
+- **Stap 4 is af: rovers en een militie** (Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc
+  ook maken ze soms velden kapot. C, Ja. D, mensen kunnen sterven"). Zie onder Af. Een speeljaar van de speeltest
+  (braaf, zaad 1) liep zonder fouten, met twee keer wilde rovers (twee man): in zomermaand was de schuur leeg en
+  vertrapten ze de akker van Trijn, in louwmaand namen ze 20 graan mee. De speler had geen wachthuis en ging ze niet
+  te lijf. In de browser veertien gevechten gespeeld, zonder fouten: tegen drie rovers valt een schout die voorop
+  loopt, en wint wie de wachters voor laat gaan; tegen twee wint iedereen. Dat werd vraag 56.
 
 **Wat er in de veertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 4, de afrekening na het eerste jaar** (vraag 49): op 1 lentemaand, na de winter, de
@@ -364,11 +369,14 @@ De vragen hebben een nummer, zodat een antwoord kort kan.
    aanpassen."** De naam staat nu op één plek, `js/naam.js` (`verpakken.md`, "De naam").
 10. De monsters van het oude spel: de slijmkruiper, de skeletwacht, de reuzenspin en de kobold passen
     niet in het nieuwe spel, de wolf wel. Weg ermee, of bewaren tot er rovers zijn om de toetsen van
-    het gevecht op te draaien? (`opmerkingen.md`, "Het gevecht na de leeftijd".)
+    het gevecht op te draaien? (`opmerkingen.md`, "Het gevecht na de leeftijd".) **Opgelost bij stap 4 (29 sep,
+    vraag 55):** ze blijven alleen op de proefkaart, voor de toetsen; in het gehucht vechten de rovers.
 11. Komt het leven van de schout terug (elke dag een beetje, of na een nacht rust), of wachten we
-    daarmee tot punt 13, als vallen iets anders gaat betekenen?
+    daarmee tot punt 13, als vallen iets anders gaat betekenen? **Opgelost bij stap 4 (29 sep, vraag 55):** wie
+    valt, is dood (Marcel: "mensen kunnen sterven"), en wie het overleeft, geneest na een nacht.
 12. De knop Slaan draagt nog het toetsje `1`, dat sinds 7b niets doet: weg ermee, of laat 1 het
-    monster slaan dat het dichtst bij staat? (`opmerkingen.md`, "Het gevecht na de leeftijd".)
+    monster slaan dat het dichtst bij staat? (`opmerkingen.md`, "Het gevecht na de leeftijd".) **Opgelost bij
+    stap 4 (29 sep):** het toetsje is weg; slaan doe je door op een vijand te klikken.
 13. Een eigen figuur voor de schout, zodat je jezelf in een menigte terugvindt? (Voorstel van
     Claude, 26 sep; `opmerkingen.md`, onder de voorstellen.)
 
@@ -1242,6 +1250,25 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     soms maken ze de akker kapot: wat erop staat, is dan weg. C, zoals voorgesteld. D, wie valt, is dood: een
     wachter die sneuvelt, is een mond minder, een rover komt niet terug, en valt de schout, dan is het spel uit,
     zoals nu. Wie een gevecht overleeft, staat de volgende ochtend weer met al zijn leven op (vraag 11).
+    **Gebouwd (29 sep);** zie onder Af, en vraag 56 voor wat de gevechten lieten zien.
+56. **Valt de schout, is het spel dan uit?** (Claude, 29 sep, vijftiende sessie; na stap 4, vraag 55; wacht op
+    Marcel.) In de browser veertien gevechten gespeeld tegen wilde rovers, met twee wachters naast de schout. Een
+    rover slaat wie van jouw kant het dichtst bij staat, en dat is eerst de schout: hem zien ze het eerst.
+    - **Tegen drie rovers, als de schout voorop loopt:** alle drie slaan op hem, en hij valt in de tweede of derde
+      ronde (5 van de 5 keer). Dan is het spel uit; de wachters zijn niet eens geraakt.
+    - **Tegen drie rovers, als de schout achterblijft** en de wachters voorop gaan: de rovers zijn in twee of drie
+      rondes verslagen (5 van de 5), en meestal sneuvelt er een wachter (4 van de 5).
+    - **Tegen twee rovers** wint ook wie blind aanvalt (4 van de 4, niemand dood).
+    Het gevecht is dus een echte keuze. Maar een tester die het spel niet kent (stap 5), loopt voorop, en is bij de
+    eerste aanval van drie man zijn spel kwijt. Het spel bewaart wel elke ochtend, dus hij kan die dag overdoen.
+    - **A.** Zo laten, en het bericht bij een aanval zegt het erbij: "Blijf achter je wachters: val jij, dan is het
+      uit."
+    - **B.** Een spelregel (CLAUDE.md, "Instelbaar"): valt de schout, dan is het spel uit, zoals nu, of hij is
+      gewond. Dan is het gevecht verloren, nemen de rovers mee wat ze kwamen halen, en wordt hij de volgende ochtend
+      thuis wakker. De standaard kies jij.
+    - **C.** De eerste wilde rovers komen met twee man, daarna met twee tot vier (een getal in de werkbank).
+    Voorstel: A en C, voor de proef; ze kosten een zin en een getal. B als je vindt dat een tester zijn spel niet
+    mag verliezen door één misstap.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -1542,6 +1569,24 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 29 sep 2026 — **Rovers en een militie** (vijftiende sessie; stap 4 van de proef, vraag 55, Marcel: "A, Ja en ook
+  'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms velden kapot. C, Ja. D, mensen kunnen
+  sterven"). `js/rovers.js`: wie wegtrekt, gaat het bos in en komt na tien dagen als rover terug, met zijn naam en
+  zijn vel, en daarna om de twintig dagen, zolang er een van de bende leeft. Daarnaast komen er zo'n twee keer per
+  jaar twee tot vier wilde rovers van buiten, op een dag die je niet ziet aankomen (de eerste niet vóór dag 60).
+  Tegen de avond komen ze van de rand die het dichtst bij een akker ligt, roven daar twee uur, en gaan ervandoor
+  met 10 graan per rover uit de voorraad; drie van de tien keer vertrappen ze de akker, en wat erop stond, groeit
+  dat jaar niet meer (`T.vertrapAkker`). Een bericht zegt het, en de tijd gaat naar 1×. De mannen van het wachthuis
+  zijn de militie: bij een aanval lopen ze met de schout mee, en ziet een rover hem, dan vechten ze naast hem, elk
+  met een eigen beurt (16 leven, 8 punten), en jij bestuurt ze. `js/gevecht.js` vecht nu met een groep: de
+  volgorde, de actiepunten, de knoppen en de camera gaan over wie er aan de beurt is (`T.aanDeBeurt`), en een
+  rover slaat de man van jouw kant die het dichtst bij staat. Wie valt, is dood: een wachter is een mond minder
+  (`T.sneuvelt`, met de reden "gesneuveld"), een verslagen rover komt niet terug, en valt de schout, dan is het
+  spel uit, zoals eerder. Wie het overleeft, staat de volgende ochtend weer met al zijn leven op (vraag 11). De
+  getallen staan in de werkbank (`T.ROVERS_INSTELLINGEN`), en opslaan houdt de bende. De knop Slaan verloor het
+  toetsje `1` (vraag 12); de oude monsters blijven op de proefkaart, voor de toetsen (vraag 10). Getoetst:
+  `test/rovers.test.cjs` (12 toetsen), een speeljaar van de speeltest, en in de browser veertien gevechten (vraag
+  56).
 - 29 sep 2026 — **De eerste wetten** (vijftiende sessie; stap 3 van de proef, vraag 54, Marcel: "Het wordt gewoon een
   menu zoals in diplomacy 3, waar je weten kunt aannemen etc. Maak het niet te ingewikkeld", en "A ja B ja, C later").
   De keuren heten nu wetten. `js/wettenmenu.js`: een menu onder `W` en als knop in de balk, elke wet een kaart met

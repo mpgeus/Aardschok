@@ -14,6 +14,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Onderwerp | Stand | Werklijst |
 |---|---|---|
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3 | vraag 50, 51, 54 |
+| Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
 | De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen, vreemden welkom, houtkap en belasting | vraag 54 |
@@ -82,6 +83,40 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 - **Geparkeerd:** de afrekening na het eerste jaar (werklijst, vraag 49). Marcel: "later kan dat".
 - **De vragen** (Claude, 28 sep, vraag 50): het hart, wat besturen is, hoe groot vechten wordt, en wie de buren
   zijn. Het antwoord staat bovenaan.
+
+## Rovers en de militie (Marcel, 28 en 29 sep 2026; werklijst vraag 51 en 55)
+
+**Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
+in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms
+velden kapot. C, Ja. D, mensen kunnen sterven"):
+- **Wie rover wordt.** Wie wegtrekt, gaat het bos in: de jongeren en volwassenen worden rover, met hun naam en hun
+  uiterlijk (de bende). Na tien dagen komen ze terug, en daarna om de twintig dagen, zolang er een van hen leeft.
+  Daarnaast komen er wilde rovers van buiten: twee tot vier man, gemiddeld twee keer per jaar, op een dag die je
+  niet ziet aankomen, en niet in de eerste zestig dagen van een spel.
+- **Een aanval.** Tegen de avond (vijf uur) komen ze van de rand van de kaart die het dichtst bij een akker ligt, en
+  lopen erheen. Een bericht zegt wie het zijn en naar wiens akker ze gaan, en de tijd gaat naar 1×. Twee uur roven ze;
+  dan gaan ze weg met 10 graan per rover uit de voorraad, en met een kans van 30% is de akker vertrapt: wat erop
+  stond, groeit dit jaar niet meer (kale grond, geen oogst). Een rover draagt het vel van een gewone dorpeling en
+  altijd zijn levensbalk, zodat je hem herkent.
+- **De militie is het wachthuis.** Wie er werkt (twee handen), loopt bij een aanval naar de schout en met hem mee,
+  zoals de inner. Ziet een rover de schout, dan begint het gevecht in beurten, met de hele bende en de wachters die
+  binnen twaalf tegels van hem staan. Elk heeft zijn eigen beurt en actiepunten (een wachter: 16 leven, 8 punten), en
+  jij bestuurt wie aan de beurt is; de camera kijkt met hem mee. Een rover zoekt wie van jouw kant het dichtst bij
+  staat. Zonder wachthuis vecht de schout alleen.
+- **Wie valt, is dood.** Een rover is uit de bende, een wachter is een mond minder (het bericht zegt wie het was), en
+  valt de schout, dan is het spel uit. Wie viel, ligt er tot de volgende dag. Wie het overleeft, staat de volgende
+  ochtend weer met al zijn leven op (werklijst vraag 11).
+- **De getallen** staan in de werkbank (`T.ROVERS_INSTELLINGEN`), het leven en de klappen in `T.WEZENS` (`rover`,
+  `wachter`). `Spel.debug.rovers(3)` laat nu drie wilde rovers komen, en `Spel.debug.rovers('bende')` de bende.
+- **Nog niet:** rovers vallen geen dorpelingen aan, alleen de schout en de wachters, en ze nemen alleen graan mee;
+  een eigen tekening voor een rover (ze dragen nu het vel van een boer of een boerin); oefenen, wapens en de
+  schutterij (punt 13); de heervaart en een rivaal (na de proef).
+- **Open:** valt de schout, is het spel dan uit? Tegen drie rovers valt een schout die voorop loopt in de tweede of
+  derde ronde, en wint wie de wachters voor laat gaan (werklijst vraag 56).
+
+**Hoe het zo kwam:** het plan staat in de werklijst, vraag 55. Claude stelde voor dat de rovers naar het plein gingen,
+eens per jaar een bende van buiten, en dat wie viel alleen gewond was tot de ochtend. Marcel koos anders: ook wilde
+rovers, ze roven de velden en maken er soms een kapot, en mensen kunnen sterven.
 
 ## Besloten (Marcel, 23 sep 2026)
 
