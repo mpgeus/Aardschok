@@ -53,6 +53,15 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
   al het land veroveren of met iedereen vriendjes maken. Denk aan civilisation". Twee manieren om te winnen, zoals
   in Civilization: alles veroveren, of met iedereen bevriend raken. Nog open: hoe de heer en de vrijheid
   (stadsrechten of een opstand) daarin passen. Is vrij worden een stap op weg, of is de heer een van de partijen?
+- **Tegenspelers die zelf bouwen** (Marcel, 29 sep, bij het plan voor de heervaart en een rivaal, werklijst vraag
+  60, D): "we moeten toe naar een scenario waarin we aan het begin kiezen hoeveel tegenspelers we hebben. We hebben
+  dan een AI nodig om tegen de speler te spelen. Deze worden gelijk aan het begin op de kaart gespawned, maar de
+  exacte locatie is nog onbekend voor de speler. Ze bouwen zelf een dorp met als doel de grootste te worden. Ze
+  moeten intelligent genoeg zijn om echt weerstand te bieden." Zoals in Civilization: je kiest vooraf hoeveel, ze
+  beginnen tegelijk met jou, en je vindt ze pas als je ze zoekt. Het buurdorp (vraag 60, C) is er straks de eerste
+  van. Het plan: werklijst, vraag 61.
+- **Je dorp heeft een naam, die je zelf kiest** (Marcel, 29 sep, vraag 60: "speler mag zelf de naam voor zijn dorp
+  kiezen aan het begin"): bij Nieuw spel.
 - **Eenvoudig, geen geschiedenisles** (Marcel, 29 sep): "Maak het niet te ingewikkeld, er is geen gelijkenis met
   de werkelijkheid. We zijn gewoon een schout die een dorp runt en land wil uitbreiden." De eenvoudige regel gaat
   voor de regel die klopt met vroeger.

@@ -1510,6 +1510,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     aanval van het buurdorp laten zien. Vragen: **A**, de heervaart pas in het dorp, op 1 hooimaand, sturen of
     vrijkopen? **B**, wie terugkomt, vecht mee? **C**, het buurdorp zo: bezoeken, hoe jullie staan, en roven als
     jullie vijanden zijn? **D**, zelf terugslaan pas met de streek?
+    **Beantwoord (Marcel, 29 sep): "A ja B ja C ja, speler mag zelf de naam voor zijn dorp kiezen aan het begin. D we
+    moeten toe naar een scenario waarin we aan het begin kiezen hoeveel tegenspelers we hebben. We hebben dan een AI
+    nodig om tegen de speler te spelen. Deze worden gelijk aan het begin op de kaart gespawned, maar de exacte locatie
+    is nog onbekend voor de speler. Ze bouwen zelf een dorp met als doel de grootste te worden. Ze moeten intelligent
+    genoeg zijn om echt weerstand te bieden."** A, B en C zoals voorgesteld, en de speler geeft zijn dorp aan het
+    begin zelf een naam. D wordt een eigen stuk, met een eigen plan: tegenspelers die zelf bouwen (vraag 61). Het
+    buurdorp uit C is er straks de eerste van, en wat C bouwt (hoe jullie staan, de bezoeken, het roven, de heer die
+    vergelijkt), wordt hoe je met elke tegenspeler omgaat.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
