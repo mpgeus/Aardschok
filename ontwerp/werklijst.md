@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (29 sep 2026, zeventiende sessie): de heervaart en de naam van je dorp gebouwd; tegenspelers (vraag 61) wacht op Marcel
+## De stand (29 sep 2026, zeventiende sessie): de heervaart en de naam van je dorp gebouwd; het buurdorp op één grote kaart (vraag 62) wacht op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -26,10 +26,10 @@ de dag. `npm test`: 635/635.
 `ccr-0e928644-rvlci5`). Het werk van de zeventiende sessie (vraag 60 en 61) staat op `ccr-ef2496ce-pa4iti`, en gaat
 naar `main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij vraag 61, het plan voor tegenspelers die zelf bouwen (Marcel, 29 sep, bij
-vraag 60: "we moeten toe naar een scenario waarin we aan het begin kiezen hoeveel tegenspelers we hebben"). Het wacht
-op Marcels antwoord; de eerste stap is één tegenspeler met zijn eigen dorp in getallen, met het buurdorp uit vraag 60
-(C) erin. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je dorp bij Nieuw spel; zie
+**Waar de volgende sessie begint:** bij vraag 62, het plan voor het buurdorp op één grote kaart: stap 1 van de
+tegenspelers (vraag 61; Marcel, 29 sep: "A een grote kaart ... basis voor nu is alles veroveren. En ja we starten met
+het buurdorp erbij"). Het wacht op Marcels antwoord; daarna 1a: de grote kaart, met het buurdorp dat op dezelfde regels
+leeft. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je dorp bij Nieuw spel; zie
 onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
 thuis is (`npm run proefversie`, `verpakken.md`), en wie de eerste tester is, staat open (33d). Van de proef zijn
@@ -66,7 +66,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor tegenspelers die zelf bouwen (vraag 61); de proefversie op itch.io zetten als hij
+*2. Wacht op Marcel:* het plan voor het buurdorp op één grote kaart (vraag 62); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
 heer in het hogere doel past). Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51; het bijstellen na de
@@ -75,7 +75,8 @@ speeltest (vraag 46) komt later, met een menu met opties.
 *3. Nu: na de proef* (vraag 51; Marcel, 29 sep: "we gaan naar het volgende punt"; het eerste is het volgende):
 - de heervaart, en een rivaal: een ander dorp van dezelfde heer (vraag 50, D). De heervaart is gebouwd (vraag 60, A en
   B); de rivaal wordt de eerste tegenspeler (vraag 61, stap 1);
-- tegenspelers die zelf bouwen, in de streek (Marcel, 29 sep, vraag 60, D; het plan is vraag 61);
+- tegenspelers die zelf bouwen, op één grote kaart (Marcel, 29 sep, vraag 60, D, en vraag 61); stap 1, het buurdorp,
+  is vraag 62;
 - ontginnen (6b) en straten en paden (6c), tenzij de kaart al eerder te klein is;
 - beter bouwen: de ladder tot baksteen, en de herberg die meegroeit (het tweede deel van 3b, stap 5);
 - de groepen en de schepenen (de rest van punt 9), voorvallen (8), rechtspraak (10), de nacht (11), de eigen
@@ -111,6 +112,12 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   spel van de speler, dus een tweede dorp kan op dezelfde regels draaien. Voorstel: de streek als kaarten naast elkaar,
   gelijk beginnen met dezelfde regels, een schout in code die kiest zoals een speler, en in vier stappen, te beginnen
   met één tegenspeler in getallen, met het buurdorp uit vraag 60 (C) erin. C is daarom nog niet gebouwd.
+- **Marcel koos** (vraag 61): "A een grote kaart. B Ja in de basis wel, dit kunnen we later aanpassen. C afhankelijk
+  van het moeilijkheidsniveau. D kan beide kanten op, basis voor nu is alles veroveren. En ja we starten met het
+  buurdorp erbij." Eén grote kaart in plaats van de streek, en dat verandert stap 1. Nagekeken: zo'n vijftien
+  regelbestanden gaan uit van één dorp op de kaart (de akkers, het plein, de weg in en uit); meer poppetjes kan (337
+  poppetjes kosten 4,7 ms rekenwerk per beeld op 30×); en donker tot je het ziet, bestaat al half (`w.bekend`, uit het
+  torenspel). Daaruit het plan voor stap 1 op één grote kaart (vraag 62), met een schets van de kaart. Niets gebouwd.
 
 **Wat er in de zestiende sessie gebeurde** (29 sep; Marcel: "Werklijst doorzetten"):
 - **Eerst gemeten:** een speeljaar van nu (braaf, zaad 1, op `6750a21`), zonder fouten. Het gehucht groeit van 26 naar
@@ -1597,6 +1604,57 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     als kaarten naast elkaar, of één grote kaart? **B**, eerlijk: gelijk beginnen, dezelfde regels? **C**, de maat:
     een dorp in twee jaar, en de winters door? **D**, winnen: de grootste worden, en veroveren of bevriend raken voor
     later? En: beginnen met stap 1, met het buurdorp uit vraag 60 (C) erin?
+    **Beantwoord (Marcel, 29 sep): "A een grote kaart. B Ja in de basis wel, dit kunnen we later aanpassen. C
+    afhankelijk van het moeilijkheidsniveau. D kan beide kanten op, basis voor nu is alles veroveren. En ja we starten
+    met het buurdorp erbij."** Dus: A, niet de streek maar één grote kaart met alle dorpen erop; B, gelijk beginnen
+    met dezelfde regels, voor nu; C, hoe goed een tegenspeler is, hangt af van een moeilijkheidsgraad (een spelregel);
+    D, winnen kan op twee manieren, en voor nu is het alles veroveren. Stap 1 begint met het buurdorp. Omdat het één
+    kaart wordt, verandert het plan voor stap 1: zie vraag 62.
+62. **Het buurdorp op één grote kaart: het plan voor stap 1** (Claude, 29 sep, zeventiende sessie; na Marcels
+    antwoord op vraag 61: "A een grote kaart ... En ja we starten met het buurdorp erbij"; wacht op Marcel). Wat er
+    nu is, nagekeken:
+    - **Eén kaart, één dorp.** Het gehucht is 76 bij 76 tegels, en veel regels gaan ervan uit dat alles op de kaart
+      van dat ene dorp is: de akkers, het plein, de weide, de heide, de plek van de marskramer, en de weg in en uit aan
+      de rand, waar de heer, de inner, de marskramer, nieuwe gezinnen en de rovers vandaan komen. Zo'n vijftien
+      regelbestanden kijken ernaar.
+    - **Wat per dorp is, is dat al:** de voorraad, de gebouwen, de bewoners, de wetten, de heer en de trede staan in
+      het dorp (`S`), niet op de kaart.
+    - **Meer poppetjes kan.** Gemeten op 30×: 37 poppetjes kosten 0,9 ms rekenwerk per beeld, 187 kosten er 2,2, en
+      337 kosten er 4,7 (een beeld heeft er 16). Het tekenen doet al alleen wat in beeld is.
+    - **Donker tot je het ziet, bestaat al half:** in het oude torenspel ging een kamer pas open als je erin kwam
+      (`w.bekend`); het gehucht is nu één kamer die je meteen kent.
+    - **De kaart komt uit code** (`maak-gehucht.cjs`), met vaste plekken voor elk huis, elke akker en de weg.
+    Voorstel: stap 1 in drie stukken, elk speelbaar.
+    - **1a, de grote kaart, en het buurdorp dat leeft.** De kaart wordt drie bij drie gehuchten groot (228 bij 228
+      tegels; de schets stond in het gesprek): jouw gehucht linksonder, precies zoals het nu is, en het buurdorp
+      rechtsboven, met wild land ertussen (bos, heide, een beek) en de weg, een ochtend lopen (de schout loopt zo'n 27
+      tegels per uur). Wat je nog niet zag, is donker. Het buurdorp begint als jouw gehucht, met dezelfde indeling en
+      andere namen (eerlijk, vraag 61, B), en het leeft op dezelfde regels, met zijn eigen voorraad, mensen, akkers en
+      heer. Het beslist nog niets: het maait, eet, stookt en groeit vanzelf, zoals bij een schout die niets doet. Je
+      kunt erheen lopen en het zien; wat er daar gebeurt, komt niet in jouw berichten.
+    - **1b, de schout van het buurdorp beslist,** met een moeilijkheidsgraad bij Nieuw spel. Hij bouwt, wijst erven
+      aan, neemt wetten aan, betaalt de heer, en stuurt mannen of koopt ze vrij. Op normaal wordt zijn gehucht in twee
+      jaar een dorp en haalt het de winters; op makkelijk minder, op moeilijk meer (vraag 61, C).
+    - **1c, hoe jullie staan** (vraag 60, C): bezoeken, vragen, de heer die vergelijkt, en roven, nu echt: zijn mannen
+      lopen over de kaart naar je toe.
+    - **Het grootste werk** (inzicht) is niet het tweede dorp, maar dat op één kaart elke regel moet leren welke
+      akker, welk plein en welke weide van welk dorp is, en dat bezoekers en rovers niet meer van de rand komen, maar
+      over de weg naar hun eigen dorp. Dat is 1a; daarna gaat het sneller.
+    - **Hoe het werkt** (geen vraag): elk dorp is een eigen deel van het spel (voorraad, gebouwen, bewoners, wetten,
+      heer), zoals het jouwe nu; ze delen de kaart en de kalender, en alles blijft in `S`, dus wordt het bewaard. De
+      grote kaart komt uit dezelfde code als het gehucht, die dan een gehucht op een plek zet in plaats van op de hele
+      kaart.
+    Klaar als (1a): je bij Nieuw spel kiest tussen 0 en 1 tegenspeler; met 0 is het het spel van nu, en met 1 de grote
+    kaart; jouw gehucht is daar zoals nu, en het buurdorp een gehucht met een eigen naam, mensen, voorraad en akkers,
+    dat op dezelfde regels leeft (het maait, eet, groeit en stookt, en ook daar komen de inner en de heer); wat je
+    nog niet zag, donker is; je erheen kunt lopen; opslaan allebei houdt; `npm test` groen is; braaf met 0
+    tegenspelers letter voor letter hetzelfde jaar speelt; en met 1 tegenspeler een speeljaar zonder fouten loopt,
+    met minder dan 8 ms rekenwerk per beeld. Vragen: **A**, de kaart zo: drie bij drie, jij linksonder, het buurdorp
+    rechtsboven, een ochtend lopen? **B**, het buurdorp begint als een kopie van jouw gehucht, met andere namen, en
+    een eigen indeling komt later? **C**, 0 tegenspelers is het spel van nu, op de kleine kaart, zodat de proef blijft
+    zoals hij is, en 1 is de grote kaart met het buurdorp? **D**, veroveren (dat is stap 2, maar het bepaalt nu hoe we
+    bouwen): verover je een dorp, dan wordt het van jou en ben je de schout van allebei; of komen hun mensen naar jou,
+    en blijft hun dorp leeg achter?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
