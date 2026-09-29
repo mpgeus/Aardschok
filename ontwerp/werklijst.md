@@ -20,9 +20,9 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, e
 benoemingsbrief van de heer; `W` zijn de wetten, `Z` is slapen bij je huis, `Esc` het menu, en het spel slaat
 elke ochtend zelf op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 598/598.
 
-**Waar het werk staat:** de veertiende sessie staat in `main` (Marcel, 28 sep: "Graag alles naar main"). De
-vijftiende (de wetten) staat op `ccr-ff387f8f-iqbokf`, en gaat naar `main` als Marcel dat vraagt. Hoe een eigen
-branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook de vijftiende sessie (Marcel, 29 sep: "Graag alles naar main, en
+begin met stap 4"; ook op `ccr-ff387f8f-iqbokf`). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`,
+onder Git.
 
 **Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 4: rovers en een militie; begin met een plan
 voor Marcel, en houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Stap 1 (het dorp bouwt zelf,
