@@ -227,8 +227,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/treden.js`: **van gehucht tot dorp** (stap 2 van de proef, vraag 53, 29 sep): het gehucht wordt een dorp bij
   50 mensen met een kapel en een smidse klaar (`T.TREDEN_INSTELLINGEN`, in de werkbank). `T.tredeDoel` geeft het
   doel voor het vak linksboven (js/main.js, als er geen quest is), `T.tikTredeDag` zet `S.trede` (en die gaat nooit
-  terug), en de heer schrijft dan (`T.ui.toonDorpsbrief` in js/hud.js): het eind van de proef. Het bouwmenu toont
-  deze trede en de treden ervoor (`T.inBouwmenu`).
+  terug), en de heer schrijft dan (`T.ui.toonBrief(S, 'dorp')` in js/brieven.js): het eind van de proef. Het bouwmenu
+  toont deze trede en de treden ervoor (`T.inBouwmenu`); wat pas in een dorp komt, vraagt `T.tredeMinstens`. Hoe je
+  dorp heet (`S.dorpsnaam`, `T.dorpsnaam`, `T.zetDorpsnaam`), kies je bij Nieuw spel (js/menu.js), met een voorstel
+  uit `T.DORPSNAMEN` (vraag 60).
 - `js/raad.js`: **de raad onder het doel** (stap 5 van de proef, vraag 58, 29 sep; de eerste weken, vraag 47,
   herschreven): één regel onder het doel linksboven die zegt wat nu tussen jou en een dorp staat, met de toets erbij
   (`[B]` wordt een toets): de eerste uit `T.RADEN` die nu geldt (`T.raadNu`). Hij vraagt het aan de regels zelf: of er
@@ -267,6 +269,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.dagAnker` en het dwalen ze met rust laten) en vechten mee (`T.militieInGevecht`). Wie valt, is dood: een rover
   is uit de bende (`T.roverVerslagen`), een wachter een mond minder (`T.sneuvelt`, via `T.wijzigBevolking` met wie
   het is), en wie het overleeft, geneest na een nacht. De getallen in `T.ROVERS_INSTELLINGEN` (in de werkbank).
+  Ook de veteranen van de heervaart vechten mee (`p.veteraan`, met het leven van `T.WEZENS.veteraan`).
+- `js/heervaart.js`: **de heervaart** (vraag 60, A en B, 29 sep): in een dorp vraagt de heer op 1 hooimaand een man per
+  tien zielen voor zijn oorlog, of goud (`T.vraagHeervaart`, `T.heervaartKeuzes` voor de knoppen onder zijn brief).
+  Sturen (`T.stuurHeervaart`): wie gaat (`T.weerbareMannen` in `js/bewoners.js`), blijft bewoner, telt mee en eet,
+  maar werkt nergens en loopt de weg af (`T.stuurWeg`, `p.weg`); op 1 herfstmaand komt hij terug (`T.komtTerug`), een
+  op de vier niet, en wie terugkomt, is veteraan. Vrijkopen (`T.koopHeervaartAf`) kost goud en argwaan. Wie niet
+  kiest, stuurt ze na een week. De getallen in `T.HEERVAART_INSTELLINGEN` (in de werkbank), de spelregel "Heervaart".
 - `js/zien.js`: **het zichtveld en de getuigen** (werklijst punt 3, 27 sep): wie buiten is, ziet de
   schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
   verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het
@@ -326,9 +335,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   één plek, zoals `T.GEBOUWEN`; een keuze zet alleen waarden in de instellingenblokken, zodat elk
   getal één plek houdt; de namen; en `T.WERKBANK` met alle getallen, die vóór een keuze gaan. Het
   komt ná alle regels en gesprekken, want het neemt hun waarden als standaard, en het gereedschap
-  laadt het bewust niet), en `js/hud.js` (de balk, het bouwmenu onder
-  `B`, het veldenvenster onder `V`, het handelsvenster, de brief en het betalen aan de heer, en de
-  benoemingsbrief `T.ui.toonBenoeming` waarmee een nieuw spel begint). Een nieuw spel begint in
+  laadt het bewust niet), `js/hud.js` (de balk, het bouwmenu onder
+  `B`, het veldenvenster onder `V`, het handelsvenster en het betalen aan de heer), en `js/brieven.js`: **de
+  brieven van de heer op één plek** (vraag 60, het eerste stuk van hud.js splitsen): de benoeming waarmee een nieuw
+  spel begint, de schatting op 1 wijnmaand, de heervaart en de dorpsbrief, elk een soort in `BRIEVEN`, getoond met
+  `T.ui.toonBrief(S, soort)`; de knop Brief opent een brief die op je antwoord wacht. Een nieuw spel begint in
   het gehucht met `T.beginOpKaart`
   (`js/gebied.js`; `?kaart=<naam>` begint op een andere kaart, zonder brief); de kaart komt uit
   `gereedschap/tiled/maak-gehucht.cjs`, de
@@ -476,6 +487,8 @@ gezin komen (overdag over de weg; is het dorp vol, dan neemt het een vrij erf), 
 hoe ver het gehucht is met een dorp worden, en `('dorp')` maakt er nu een dorp van, met de brief van de heer.
 `Spel.debug.rovers()` zegt wie er in de bende zit, wanneer die en de wilde rovers komen, en hoe een aanval ervoor
 staat; `(3)` laat nu drie wilde rovers komen, `('bende')` de bende.
+`Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
+hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
 `Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
@@ -553,7 +566,8 @@ Drie dingen die bij het mikken misgaan:
 
 - een open venster vangt de klik. Het spel opent op het titelscherm: klik eerst Nieuw spel
   (`#menu [data-actie="nieuw"]`; staat er al iets vanzelf bewaard, dan vraagt het eerst, en is het
-  `[data-actie="ja"]`). Dan komt de benoemingsbrief, en zolang die openstaat, staat de tijd stil en valt elke
+  `[data-actie="ja"]`), dan Begin onder de naam van je dorp (`#menu [data-actie="begin"]`; het veld is
+  `#dorpsnaam`, met een voorstel erin). Dan komt de benoemingsbrief, en zolang die openstaat, staat de tijd stil en valt elke
   klik op de brief: sluit hem eerst (de knop "Aan het werk", `.heer-geef-knop`, of Esc). Op `?kaart=proef`
   komen er geen titelscherm en geen brief, en wordt er niet opgeslagen;
 - de camera glijdt mee, dus reken de schermpositie pas uit als hij stilstaat (een seconde

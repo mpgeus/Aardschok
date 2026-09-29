@@ -10,25 +10,27 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (29 sep 2026, zeventiende sessie): een plan voor de heervaart en een rivaal (vraag 60) wacht op Marcel
+## De stand (29 sep 2026, zeventiende sessie): de heervaart en de naam van je dorp gebouwd; tegenspelers (vraag 61) wacht op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
 gevochten wordt; rijk worden en arm lijken blijft de druk van boven. Wat er nu speelt en hoe het werkt, staat
 per onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, en Nieuw spel geeft de
-benoemingsbrief van de heer; `W` zijn de wetten, `Z` is slapen bij je huis, `Esc` het menu, en het spel slaat
-elke ochtend zelf op; onder het doel linksboven staat de raad. De pagina "Stand van het gehucht" (25 sep) loopt
-achter op de dag. `npm test`: 624/624.
+naam van je dorp en de benoemingsbrief van de heer; `W` zijn de wetten, `Z` is slapen bij je huis, `Esc` het menu, en
+het spel slaat elke ochtend zelf op; onder het doel linksboven staat de raad. In een dorp vraagt de heer op 1 hooimaand
+mannen voor zijn oorlog (`Spel.debug.heervaart('vraag')`). De pagina "Stand van het gehucht" (25 sep) loopt achter op
+de dag. `npm test`: 635/635.
 
 **Waar het werk staat:** alles staat in `main`, ook stap 5 (Marcel, 29 sep: "alles op main"; ook op
-`ccr-0e928644-rvlci5`). Het plan van de zeventiende sessie (vraag 60) staat op `ccr-ef2496ce-pa4iti`, en gaat naar
-`main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+`ccr-0e928644-rvlci5`). Het werk van de zeventiende sessie (vraag 60 en 61) staat op `ccr-ef2496ce-pa4iti`, en gaat
+naar `main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij vraag 60, het plan voor het eerste punt van *3. Na de proef* hieronder: de
-heervaart en een rivaal, een ander dorp van dezelfde heer (vraag 50, D). Het wacht op Marcels antwoord; is het er,
-dan eerst de heervaart (A en B), dan het buurdorp (C en D), en houd het eenvoudig (Marcel, 29 sep: "Maak het niet te
-ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
+**Waar de volgende sessie begint:** bij vraag 61, het plan voor tegenspelers die zelf bouwen (Marcel, 29 sep, bij
+vraag 60: "we moeten toe naar een scenario waarin we aan het begin kiezen hoeveel tegenspelers we hebben"). Het wacht
+op Marcels antwoord; de eerste stap is één tegenspeler met zijn eigen dorp in getallen, met het buurdorp uit vraag 60
+(C) erin. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je dorp bij Nieuw spel; zie
+onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
 thuis is (`npm run proefversie`, `verpakken.md`), en wie de eerste tester is, staat open (33d). Van de proef zijn
 stap 1 tot en met 5 gebouwd: het dorp bouwt zelf (vraag 52), de eerste trede (vraag 53), de eerste wetten (vraag
@@ -64,14 +66,16 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor de heervaart en een rivaal (vraag 60); de proefversie op itch.io zetten als hij
+*2. Wacht op Marcel:* het plan voor tegenspelers die zelf bouwen (vraag 61); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
 heer in het hogere doel past). Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51; het bijstellen na de
 speeltest (vraag 46) komt later, met een menu met opties.
 
 *3. Nu: na de proef* (vraag 51; Marcel, 29 sep: "we gaan naar het volgende punt"; het eerste is het volgende):
-- de heervaart, en een rivaal: een ander dorp van dezelfde heer (vraag 50, D); het plan is vraag 60;
+- de heervaart, en een rivaal: een ander dorp van dezelfde heer (vraag 50, D). De heervaart is gebouwd (vraag 60, A en
+  B); de rivaal wordt de eerste tegenspeler (vraag 61, stap 1);
+- tegenspelers die zelf bouwen, in de streek (Marcel, 29 sep, vraag 60, D; het plan is vraag 61);
 - ontginnen (6b) en straten en paden (6c), tenzij de kaart al eerder te klein is;
 - beter bouwen: de ladder tot baksteen, en de herberg die meegroeit (het tweede deel van 3b, stap 5);
 - de groepen en de schepenen (de rest van punt 9), voorvallen (8), rechtspraak (10), de nacht (11), de eigen
@@ -96,7 +100,17 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   zoekagent met acht vragen deed er 106 stappen over (235.000 tokens): voortaan liever twee kleine, of zelf zoeken.
 - **Een plan voor de heervaart en een rivaal** (vraag 60): allebei pas in het dorp. De heer vraagt op 1 hooimaand
   mannen of goud, en wie terugkomt, is veteraan. Het buurdorp komt twee keer per jaar met een vraag, met één getal
-  voor hoe jullie staan: vrienden betalen terug, vijanden roven. Niets gebouwd.
+  voor hoe jullie staan: vrienden betalen terug, vijanden roven.
+- **Marcel koos** (vraag 60): "A ja B ja C ja, speler mag zelf de naam voor zijn dorp kiezen aan het begin", en voor D
+  een nieuwe richting: tegenspelers met een AI, die tegelijk met jou beginnen, ergens waar je ze nog moet vinden, en
+  zelf bouwen om de grootste te worden. Gebouwd: de heervaart, de veteranen, de brieven van de heer op één plek, en de
+  naam van je dorp (zie onder Af). In de browser gezien: de brief met zijn knoppen, sturen, de mannen die de kaart
+  aflopen en terugkomen, de naamstap op het titelscherm, en een gevecht met drie veteranen. Daar viel op dat twee
+  veteranen op kinderen leken: nu gaan eerst de volwassen mannen.
+- **Een plan voor de tegenspelers** (vraag 61). Wat het mogelijk maakt: geen enkel regelbestand kijkt naar het ene
+  spel van de speler, dus een tweede dorp kan op dezelfde regels draaien. Voorstel: de streek als kaarten naast elkaar,
+  gelijk beginnen met dezelfde regels, een schout in code die kiest zoals een speler, en in vier stappen, te beginnen
+  met één tegenspeler in getallen, met het buurdorp uit vraag 60 (C) erin. C is daarom nog niet gebouwd.
 
 **Wat er in de zestiende sessie gebeurde** (29 sep; Marcel: "Werklijst doorzetten"):
 - **Eerst gemeten:** een speeljaar van nu (braaf, zaad 1, op `6750a21`), zonder fouten. Het gehucht groeit van 26 naar
@@ -1518,6 +1532,70 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     begin zelf een naam. D wordt een eigen stuk, met een eigen plan: tegenspelers die zelf bouwen (vraag 61). Het
     buurdorp uit C is er straks de eerste van, en wat C bouwt (hoe jullie staan, de bezoeken, het roven, de heer die
     vergelijkt), wordt hoe je met elke tegenspeler omgaat.
+    **Gebouwd (29 sep, zeventiende sessie):** A en B, de heervaart en de veteranen, en de naam van je dorp bij Nieuw
+    spel; zie onder Af. C wacht op het plan voor D (vraag 61), want met D wordt het buurdorp een echte tegenspeler.
+61. **Tegenspelers die zelf bouwen: het plan** (Claude, 29 sep, zeventiende sessie; Marcels antwoord D op vraag 60;
+    wacht op Marcel). Marcel: "we moeten toe naar een scenario waarin we aan het begin kiezen hoeveel tegenspelers we
+    hebben. We hebben dan een AI nodig om tegen de speler te spelen. Deze worden gelijk aan het begin op de kaart
+    gespawned, maar de exacte locatie is nog onbekend voor de speler. Ze bouwen zelf een dorp met als doel de
+    grootste te worden. Ze moeten intelligent genoeg zijn om echt weerstand te bieden." Wat er nu is:
+    - **De regels werken al per dorp.** Elke regel krijgt het dorp mee (`S`), en geen enkel regelbestand kijkt naar
+      het ene spel van de speler (`T.S` staat alleen in de schermbestanden). Een tweede dorp kan dus met precies
+      dezelfde regels draaien: dezelfde bouwkosten, dezelfde winter, dezelfde heer.
+    - **Maar ze zijn gebouwd voor één dorp op één kaart.** De akkers zijn tegels, de oogst doen poppetjes, en elk
+      bericht gaat naar jouw scherm. Waar geen poppetjes zijn, vangen de regels het al op: wat niet gemaaid werd, gaat
+      bij de volgende ploegtijd in één keer (het vangnet), en zonder bewoners telt het getal.
+    - **Kaarten naast elkaar kan het spel al** (gebieden met overgangen, zoals het proefbos), maar alleen de kaart
+      waar je bent, leeft. En de kaart van het gehucht komt uit code (`maak-gehucht.cjs`): een tweede gehucht kan ook.
+    - **Er speelt al een computer**: de spelers van de speeltest, die klikken zoals een mens. De bouwer haalde een dorp
+      in zes maanden, en ging in de eerste winter ten onder (vraag 59).
+    Voorstel:
+    - **A, de wereld is de streek: kaarten naast elkaar** (zoals vraag 50, C). Elk dorp ligt op een eigen kaart, met
+      land ertussen (bos, heide). Je loopt over de weg naar de volgende kaart, en waar de tegenspelers liggen, weet je
+      niet: je vindt ze door te gaan kijken. Van het begin af weet je wel dat ze er zijn, want de heer vergelijkt
+      jullie in zijn brieven. Een dorp waar je niet bent, draait door op dezelfde regels, maar zonder poppetjes; kom
+      je er, dan zie je het zoals het nu is. Het andere: één grote kaart met alle dorpen erop, waar je ze ziet
+      groeien als je in de buurt komt. Dat is mooier, maar zwaar voor de computer (honderden poppetjes tegelijk), en
+      elke regel moet dan leren van welk dorp een akker of een huis is.
+    - **B, eerlijk: gelijk beginnen, met dezelfde regels.** Elke tegenspeler begint zoals jij: een gehucht van 26
+      mensen, een schout, dezelfde heer, en de kaart uit dezelfde code met een ander zaad. Hij speelt zonder vals
+      spelen, en moeilijker betekent dat hij beter kiest, niet dat hij meer krijgt. Zo zegt de computer ook iets over
+      het spel: wat hij niet overleeft, is te zwaar.
+    - **C, hoe slim: een schout in code die kiest zoals een speler.** Elke dag kijkt hij wat nu het meest nodig is
+      (eten, hout, woonruimte, goud voor de heer, verdediging, de volgende trede), en doet hij het nuttigste: bouwen,
+      een erf, een wet, mannen in het wachthuis, of een tocht naar een buurman. Hij vraagt het aan dezelfde regels als
+      de raad, en hij kent zijn buren: hij valt aan wie zwakker is en hem iets weigerde, en zoekt vriendschap als hij
+      zelf zwak is. De maat, gemeten met de speeltest (computer tegen computer, bij elk zaad): een tegenspeler wordt
+      in twee jaar een dorp, en haalt de winters. Dat haalt vraag 59 terug: een tegenspeler die in de eerste winter
+      sterft, biedt geen weerstand.
+    - **D, zo ga je met ze om: het buurdorp uit vraag 60 (C).** Hoe jullie staan (één getal, van vijandig tot
+      bevriend), bezoeken van hun schout, roven als jullie vijanden zijn, en de heer die vergelijkt. Maar de
+      tegenspeler kiest nu zelf wat hij vraagt en wanneer: heeft hij in de lente geen graan, dan komt hij lenen. En
+      wie wint? De tegenspelers willen de grootste worden. Voorstel: jij ook, als eerste eind (na een aantal jaar, of
+      wie het eerst een stad is), en "alles veroveren of met iedereen bevriend" (het hogere doel) als de twee grote
+      eindes voor later.
+    - **Het begin:** bij Nieuw spel, onder de naam van je dorp, kies je Tegenspelers: 0 tot 3 (met 0 speel je zoals
+      nu, de proef).
+    - **In stappen, elk speelbaar:**
+      1. *Eén tegenspeler, met zijn eigen dorp in getallen:* het buurdorp draait op dezelfde regels, met een schout in
+         code die bouwt en groeit, en die naar jou komt (C van vraag 60). Je weet hoe groot hij is, en hij groeit echt.
+      2. *De streek:* zijn dorp op een eigen kaart, over de weg. Je kunt erheen, zien wat hij bouwde, en daar vechten
+         (zelf terugslaan, D van vraag 60).
+      3. *Kiezen hoeveel, en ze zoeken:* een streek van meer kaarten, met de tegenspelers op een plek die je nog niet
+         kent.
+      4. *Slimmer:* de computer tegen zichzelf in de speeltest, tot hij echt weerstand biedt.
+    - **Hoe het werkt** (geen vraag): elke tegenspeler is een dorp van dezelfde vorm als het jouwe, in
+      `S.tegenspelers`, en dus vanzelf bewaard. De dagtik draait voor elk dorp; wat er in zijn dorp gebeurt, gaat niet
+      naar jouw berichten maar naar zijn eigen kroniek, en dat hoor je via zijn bezoeken en de herbergierster ("in
+      Wolfsdonk is de smidse af"). Zijn schout staat in een nieuw bestand, `js/tegenspeler.js`, zonder scherm en dus
+      getoetst, met één blok getallen in de werkbank.
+    Klaar als (stap 1): er bij Nieuw spel één tegenspeler bij kan, zijn dorp op dezelfde regels groeit, zijn schout
+    bouwt, erven aanwijst en wetten kiest, hij naar je toe komt met een vraag of om te roven, hoe jullie staan
+    verandert met wat je doet, de heer jullie vergelijkt, opslaan zijn dorp houdt, `npm test` groen is, en de
+    speeltest laat zien dat hij bij elk zaad in twee jaar een dorp wordt en de winters haalt. Vragen: **A**, de streek
+    als kaarten naast elkaar, of één grote kaart? **B**, eerlijk: gelijk beginnen, dezelfde regels? **C**, de maat:
+    een dorp in twee jaar, en de winters door? **D**, winnen: de grootste worden, en veroveren of bevriend raken voor
+    later? En: beginnen met stap 1, met het buurdorp uit vraag 60 (C) erin?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -1818,6 +1896,22 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 29 sep 2026 — **De heervaart, veteranen, en de naam van je dorp** (zeventiende sessie; vraag 60, Marcel: "A ja B ja
+  C ja, speler mag zelf de naam voor zijn dorp kiezen aan het begin"). `js/heervaart.js`: in een dorp (niet in het
+  gehucht, dus niet in de proef) vraagt de heer elk jaar op 1 hooimaand een man per tien zielen voor zijn oorlog, of
+  drie goud per man; de dorpsbrief kondigt het aan. Sturen: het spel kiest wie (zonder werk eerst, dan de volwassen
+  mannen, de jongens het laatst; nooit de schout, zijn gezin of een boer), en ze lopen de weg af tot 1 herfstmaand.
+  Ze blijven bewoner (ze tellen mee en eten, hun plaats in huis blijft), maar werken nergens (`p.weg`, `T.stuurWeg`
+  en `T.komtTerug` in `js/bewoners.js`); een op de vier komt niet terug. Wie terugkomt, is veteraan en vecht mee als er
+  rovers komen, ook zonder wachthuis, met 20 leven (`T.WEZENS.veteraan`, de militie in `js/rovers.js`). Vrijkopen kost
+  het goud en 0,5% argwaan per goud; wie niet kiest, stuurt ze na een week. De brieven van de heer staan nu op één
+  plek, `js/brieven.js`, met één venster en knoppen (het eerste stuk van hud.js splitsen, vraag 25, C), en de knop
+  Brief opent elke brief die op je wacht. Bij Nieuw spel kies je de naam van je dorp, met een voorstel; de heer schrijft
+  hem in zijn brieven, en hij staat in het doel en bij een opgeslagen spel. De spelregel "Heervaart" en de werkbank
+  ("De heervaart"); `Spel.debug.heervaart('vraag')` en `('terug')`. Getoetst: `test/heervaart.test.cjs` (9 toetsen)
+  en twee in `test/treden.test.cjs`; `npm test` 635/635; in de browser de brief, sturen en terugkomen, de naamstap, en
+  een gevecht met drie veteranen; de speeltest braaf (zaad 1) speelt zijn jaar zoals eerst (26 → 37). Open: C (het
+  buurdorp) wacht op het plan voor tegenspelers, vraag 61.
 - 29 sep 2026 — **De proef afmaken: de raad, de bouwer en de proefversie** (zestiende sessie; stap 5 van de proef,
   vraag 58, Marcel: "A Ja goed idee. B onder het doel. C itch io"). **B:** `js/raad.js`: onder het doel linksboven
   één regel, in goud, die zegt wat nu tussen jou en een dorp staat, met de toets erbij: de inner (drie dagen vooraf),

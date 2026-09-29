@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 29 sep 2026, zestiende sessie)
+## Waar staat wat (bijgewerkt 29 sep 2026, zeventiende sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -15,6 +15,8 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 |---|---|---|
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3 | vraag 50, 51, 54 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
+| De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
+| Tegenspelers | plan (29 sep): dorpen met een AI die zelf bouwen, in de streek, gelijk beginnend met dezelfde regels | vraag 61 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf | vraag 58 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -113,7 +115,8 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
   zoals de inner. Ziet een rover de schout, dan begint het gevecht in beurten, met de hele bende en de wachters die
   binnen twaalf tegels van hem staan. Elk heeft zijn eigen beurt en actiepunten (een wachter: 16 leven, 8 punten), en
   jij bestuurt wie aan de beurt is; de camera kijkt met hem mee. Een rover zoekt wie van jouw kant het dichtst bij
-  staat. Zonder wachthuis vecht de schout alleen.
+  staat. Zonder wachthuis vecht de schout alleen, tenzij er veteranen van de heervaart zijn: die komen ook (sinds 29
+  sep, "De heervaart" hieronder).
 - **Wie valt, is dood.** Een rover is uit de bende, een wachter is een mond minder (het bericht zegt wie het was), en
   valt de schout, dan is het spel uit. Wie viel, ligt er tot de volgende dag. Wie het overleeft, staat de volgende
   ochtend weer met al zijn leven op (werklijst vraag 11).
@@ -121,7 +124,7 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
   `wachter`). `Spel.debug.rovers(3)` laat nu drie wilde rovers komen, en `Spel.debug.rovers('bende')` de bende.
 - **Nog niet:** rovers vallen geen dorpelingen aan, alleen de schout en de wachters, en ze nemen alleen graan mee;
   een eigen tekening voor een rover (ze dragen nu het vel van een boer of een boerin); oefenen, wapens en de
-  schutterij (punt 13); de heervaart en een rivaal (na de proef).
+  schutterij (punt 13); een rivaal (de tegenspelers, werklijst vraag 61). De heervaart is er sinds 29 sep.
 - **Besloten (Marcel, 29 sep, werklijst vraag 56):** "schout kan sterven": valt hij, dan is het spel uit, en een
   aanval waarschuwt daar niet voor ("A laten zo, geen bericht"). Tegen drie rovers valt een schout die voorop loopt
   in de tweede of derde ronde, en wint wie de wachters voor laat gaan. En "We bouwen het langzaam op": de wilde
@@ -131,6 +134,33 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
 **Hoe het zo kwam:** het plan staat in de werklijst, vraag 55. Claude stelde voor dat de rovers naar het plein gingen,
 eens per jaar een bende van buiten, en dat wie viel alleen gewond was tot de ochtend. Marcel koos anders: ook wilde
 rovers, ze roven de velden en maken er soms een kapot, en mensen kunnen sterven.
+
+## De heervaart (Marcel, 29 sep 2026; werklijst vraag 60)
+
+**Zo werkt het nu** (29 sep, zeventiende sessie; `js/heervaart.js`, de brief in `js/brieven.js`, toetsen in
+`test/heervaart.test.cjs`; Marcel: "A ja B ja"):
+- **"Dat kost u vanaf nu meer."** Pas als het gehucht een dorp is, vraagt de heer elk jaar op 1 hooimaand ook mannen
+  voor zijn oorlog (de dorpsbrief kondigt het aan): een man per tien zielen, of drie goud per man. In het gehucht,
+  dus in de proef, verandert niets. Waarom hij ten strijde trekt, wisselt per jaar ("tegen de heer van Kromwijk, die
+  Ons niet groette").
+- **Zijn brief heeft twee knoppen**, die vooraf zeggen wat ze doen. *Stuur ze:* het spel kiest wie (mannen zonder
+  werk eerst, dan de volwassenen, en de jongens pas als er niet genoeg zijn; nooit de schout, zijn gezin of een
+  boer), en de brief noemt ze bij naam, met het werk dat stil komt te liggen. *Koop ze vrij:* het goud, en de
+  argwaan stijgt (0,5% per goud): wie kan betalen, is niet arm. Sluit je de brief, dan opent de knop Brief hem weer;
+  kies je na een week nog niet, dan halen zijn soldaten ze op.
+- **Wie gaat, blijft bewoner.** Hij loopt de weg af, telt mee en eet (het dorp voedt ze, de heer niet), en zijn plaats
+  in huis blijft van hem, maar hij werkt nergens. Op 1 herfstmaand, na de oogst, komen ze overdag over de weg terug;
+  een op de vier gemiddeld niet ("Hij laat weten dat hij dapper was").
+- **Wie terugkomt, is veteraan.** Hij vecht mee als er rovers komen, ook zonder wachthuis, met 20 leven (een wachter
+  heeft er 16; `T.WEZENS.veteraan`).
+- **Instelbaar:** de spelregel "Heervaart" zet hem uit, en de getallen staan in de werkbank
+  (`T.HEERVAART_INSTELLINGEN`). `Spel.debug.heervaart('vraag')` laat de heer nu mannen vragen, `('terug')` laat ze nu
+  terugkomen.
+- **Nog niet:** zelf kiezen wie er gaat; wat een veteraan verder kan (oefenen, de schutterij); een buurdorp dat ook
+  mannen stuurt en waarmee de heer je vergelijkt (vraag 60, C, en de tegenspelers, vraag 61).
+
+**Hoe het zo kwam:** het plan staat in de werklijst, vraag 60. Claude stelde voor de heervaart pas in het dorp te laten
+beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer" eindelijk inhoud kreeg.
 
 ## De raad onder het doel (Marcel, 29 sep 2026; werklijst vraag 58)
 

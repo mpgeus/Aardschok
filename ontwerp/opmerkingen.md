@@ -31,6 +31,17 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     zegt de raad nu hoe ver het komt ("26 van de 90 dagen"). Een mens rekent dan zelf; een speler in code nog niet.
   - **Huizen groeien vanzelf door** (hut, huis, stenen huis), en daarmee groeit het dorp ook zonder erven: de
     bouwer had 74 mensen in wintermaand, met vijf erven.
+- **Wat opviel bij de heervaart** (29 sep, zeventiende sessie; `js/heervaart.js`, werklijst vraag 60):
+  - **Wie er gaat, kiest het spel.** Zelf kiezen (een wachter sturen, zodat hij harder terugkomt, of juist houden) is
+    een echte keuze, maar vraagt een lijst in de brief. Later, als spelen laat zien dat het ertoe doet.
+  - **Het gehucht heeft 2 tot 5 weerbare mannen** (de boeren, de schout en zijn gezin gaan nooit), naar het lot van
+    de boeren. In een dorp komen er met elk nieuw gezin een bij. Zijn er minder dan de heer vraagt, dan gaat wie er is,
+    en de heer merkt het niet.
+  - **Een veteraan ziet eruit als ieder ander**, net als een wachter: alleen in een gevecht zie je dat hij meevecht. Een
+    eigen teken (een helm, een speer) zou helpen, zoals vraag 13 voor de schout.
+  - **Een kleine tekst staat op zes plekken.** "Jan, Piet en Klaas" (`opsomming`) staat in zes bestanden, en het
+    ontsnappen van een naam voor html (`veilig`) in vier. De telwoorden werden er vandaag één (`T.telwoord`); de rest
+    kan mee als die bestanden toch open moeten (vraag 25).
 - **Wat opviel bij de rovers en de militie** (29 sep, vijftiende sessie; `js/rovers.js`, werklijst vraag 55):
   - **Een rover lijkt op een boer.** Hij draagt het vel van een boer of boerin (met strohoed); alleen zijn levensbalk
     zegt dat hij een vijand is. Een eigen, donkerder vel zou helpen, of een doek voor zijn gezicht.
