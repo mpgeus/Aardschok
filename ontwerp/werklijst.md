@@ -111,7 +111,9 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
 - **Alles staat in `main`** (Marcel: "Graag alles naar main, en begin met stap 2").
 - **Stap 2 is af: de eerste trede** (vraag 53; Marcel: "A ja B ja C ja D ja"). Zie onder Af. In de browser gezien:
   het doel linksboven ("26 van 50 mensen · nog geen kapel · nog geen smidse"), de regel in de benoemingsbrief, en
-  de brief van de heer met zijn twee knoppen; de tijd staat stil zolang hij openstaat.
+  de brief van de heer met zijn twee knoppen; de tijd staat stil zolang hij openstaat. Eén speeljaar van de
+  speeltest (braaf, zaad 1, op de werkmap met stap 1 en 2 erin) liep zonder fouten: 26 naar 37 mensen, niemand dood,
+  de houthakker op 1 herfstmaand, net als op 28 sep.
 - **Een plan voor stap 2, de eerste trede** (vraag 53): het doel linksboven en in de benoemingsbrief, een brief van
   de heer met twee knoppen als het een dorp is, en het bouwmenu van het dorp erbij. Nagekeken: de trede staat in de
   spelstaat maar gaat nooit omhoog, het bouwmenu toont alleen de trede van nu, en het gehucht begint zonder kapel
