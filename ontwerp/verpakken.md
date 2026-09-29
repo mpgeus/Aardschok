@@ -29,6 +29,37 @@ er geen apart pad voor "in het echt".
    `T.opslagPlek` in `js/opslaan.js` is die functie; de opgeslagen spellen en de spelregels gaan er allebei
    langs. In de schil geeft hij iets met `getItem`, `setItem` en `removeItem` dat in een bestand schrijft.
 
+## Een proefversie op itch.io (Marcel, 29 sep 2026, werklijst vraag 58, C: "C itch io")
+
+**Zo werkt het nu:** `npm run proefversie` maakt `gereedschap/proefversie/uit/aardschok-proef-<datum>-<commit>.zip`
+(niet in git), met `gereedschap/proefversie/maak.cjs`: `index.html` bovenin, de scripts en de stijl die erin staan,
+en de plaatjes uit `beelden/` en `tegels/`. Op 29 sep: 189 bestanden, 11 MB. De stand (datum en commit, en "en
+wijzigingen" als er nog iets niet gecommit was) staat klein rechtsonder op het titelscherm (`T.STAND` in
+`js/naam.js`), zodat we weten waarop een tester speelde. Commit dus eerst. Uitgepakt speelt de zip ook los, met een
+dubbelklik op `index.html`: nagekeken in een schone browser, zonder fouten en zonder één ontbrekend bestand.
+
+**Wat itch.io vraagt** (hun eigen hulp, [HTML5](https://itch.io/docs/creators/html5)): een zip met `index.html`,
+hooguit 1000 bestanden en 500 MB uitgepakt, geen bestand boven 200 MB, geen pad langer dan 240 tekens, en namen
+waarin hoofdletters tellen. Dat halen we ruim.
+
+**Erop zetten** (een account is gratis; wat de knoppen precies heten, kan iets anders zijn):
+1. Dashboard, Create new project. Kind of project: **HTML**.
+2. Bij Uploads de zip, en vink aan dat hij **in de browser gespeeld** wordt.
+3. Bij Embed options: **1280 bij 800** (daar is de balk op gemaakt), met de knop voor **volledig scherm** aan.
+4. Bij Visibility: niet Public zolang het een proef is. **Draft** geeft een geheime link die je kunt delen;
+   **Restricted** kan met een wachtwoord ([Limited Playtests](https://itch.io/docs/creators/limited-releases)).
+5. Opslaan, en het één keer zelf spelen op de pagina, vóór je de link stuurt.
+6. Een nieuwe versie: dezelfde pagina, de oude zip eraf en de nieuwe erop. Een tester houdt zijn opgeslagen spel,
+   want de sleutel van de opslag verandert niet (`T.OPSLAG_SLEUTEL`); verandert de vorm van het spel zo dat een oud
+   spel niet meer past, dan zegt het menu dat (`T.OPSLAAN_INSTELLINGEN.versie`).
+
+**Wat anders is dan thuis:**
+- Het spel staat in een venster op de pagina. De toetsen werken pas als je er één keer in klikt. Op volledig scherm
+  neemt de browser `Esc` zelf (dan ga je terug uit volledig scherm); het menu zit ook onder de knop Menu.
+- Opslaan gaat in de opslag van de browser, bij itch.io. In een privévenster is het spel weg zodra het venster dicht
+  is; een browser die opslag in zo'n venster helemaal blokkeert, onthoudt niets, en het spel loopt dan gewoon
+  (`T.opslagPlek` geeft dan niets). Zeg een tester dus: een gewoon venster, en steeds dezelfde browser.
+
 ## Wanneer wél een bouwstap (20 sep 2026)
 
 Drie treden, en we staan op de eerste:
