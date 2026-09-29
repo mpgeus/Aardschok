@@ -305,6 +305,21 @@
           uitleg: 'Hij vraagt alleen goud en graan, op Sint-Maarten.' },
       ],
     },
+    // De voorvallen (Marcel, 29 sep, werklijst vraag 65: "A ja"; js/voorvallen.js).
+    {
+      id: 'voorvallen', naam: 'Voorvallen', standaard: 'gewoon',
+      uitleg: 'Hoe vaak iemand uit het dorp je komt zoeken met een vraag, een ruzie of een ramp.',
+      keuzes: [
+        { id: 'vaak', naam: 'Vaak', zet: { 'VOORVALLEN_INSTELLINGEN.aan': true, 'VOORVALLEN_INSTELLINGEN.dagenTussen': 6, 'VOORVALLEN_INSTELLINGEN.dagenTussenWinter': 4 },
+          uitleg: 'Om de zes dagen of zo, in de winter om de vier.' },
+        { id: 'gewoon', naam: 'Gewoon', zet: { 'VOORVALLEN_INSTELLINGEN.aan': true, 'VOORVALLEN_INSTELLINGEN.dagenTussen': 10, 'VOORVALLEN_INSTELLINGEN.dagenTussenWinter': 6 },
+          uitleg: 'Om de tien dagen of zo, in de winter om de zes. Elk antwoord zegt vooraf wat het kost.' },
+        { id: 'zelden', naam: 'Zelden', zet: { 'VOORVALLEN_INSTELLINGEN.aan': true, 'VOORVALLEN_INSTELLINGEN.dagenTussen': 20, 'VOORVALLEN_INSTELLINGEN.dagenTussenWinter': 12 },
+          uitleg: 'Om de twintig dagen of zo, in de winter om de twaalf.' },
+        { id: 'uit', naam: 'Uit', zet: { 'VOORVALLEN_INSTELLINGEN.aan': false },
+          uitleg: 'Niemand komt je zoeken. Het dorp gaat zijn gang.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -335,6 +350,7 @@
     { naam: 'De marskramer', blok: 'HANDEL_INSTELLINGEN' },
     { naam: 'De heer', blok: 'HEER_INSTELLINGEN' },
     { naam: 'De heervaart', blok: 'HEERVAART_INSTELLINGEN' },
+    { naam: 'De voorvallen', blok: 'VOORVALLEN_INSTELLINGEN' },
     { naam: 'De inner', blok: 'INNER_INSTELLINGEN' },
     { naam: 'De verstopplekken', blok: 'VERSTOP_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },

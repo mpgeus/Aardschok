@@ -241,8 +241,9 @@ test('de dekking zegt wat het spel vraagt en nergens staat', () => {
   // is, horen deze regels vanzelf te verdwijnen — en dan zegt deze toets dat ze er niet meer zijn.
   for (const wie of Object.keys(T.GESPREKKEN)) {
     // Wie over de weg komt (de heer en zijn soldaten), hoeft nergens te staan, en het gesprek van een
-    // karakter (de zanger, de weduwe, …) voert een boer die het trekt (js/boeren.js).
-    const staat = (T.MENSEN[wie] && T.MENSEN[wie].bezoeker) || (T.KARAKTERS && T.KARAKTERS[wie]) || Object.values(T.GEBIEDEN).some((g) => g.maak().wezens.some((e) => e.soort === wie));
+    // karakter (de zanger, de weduwe, …) voert een boer die het trekt (js/boeren.js). Dat van een
+    // voorval (js/voorvallen.js) voert wie het spel ervoor kiest.
+    const staat = (T.MENSEN[wie] && T.MENSEN[wie].bezoeker) || (T.KARAKTERS && T.KARAKTERS[wie]) || T.VOORVALLEN[wie] || Object.values(T.GEBIEDEN).some((g) => g.maak().wezens.some((e) => e.soort === wie));
     assert.equal(!tekst.includes(`"${wie}" heeft een gesprek`), !!staat, `${wie}: de dekking en de wereld zijn het oneens`);
   }
 });

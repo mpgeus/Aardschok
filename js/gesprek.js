@@ -94,5 +94,8 @@
     if (doe.heer && T.ui && T.ui.openHeer) T.ui.openHeer(S);
     // De inner een geschenk geven, voor minder op zijn rapport (js/inner.js).
     if (doe.omkopen && T.koopInnerOm) T.koopInnerOm(S, doe.omkopen);
+    // Wat een antwoord op een voorval doet (js/voorvallen.js): graan, tevreden, verban, een vervolg, ... De
+    // gespreksschrijver laadt dat bestand niet.
+    if (T.voorvalGevolg) T.voorvalGevolg(S, doe);
   };
 })(globalThis.Spel = globalThis.Spel || {});

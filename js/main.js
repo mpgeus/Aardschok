@@ -317,6 +317,7 @@
     T.werkInnerBij(S); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
     T.werkBewonersBij(S); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
     T.werkRoversBij(S); // rovers komen naar een akker, roven en gaan weer; de militie loopt met je mee (js/rovers.js)
+    T.werkVoorvallenBij(S); // wie je zoekt met een voorval, loopt naar je toe en spreekt je aan (js/voorvallen.js)
     T.werkAnimatiesBij(S, dt, dtWereld);
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
@@ -708,6 +709,35 @@
         weg: H.tocht ? { wie: H.tocht.wie.map(naam), terug: T.datumVanDag(H.tocht.terugOp).tekst } : null,
         laatste: H.laatste,
         veteranen: (S.bewoners ? S.bewoners.mensen.filter((p) => p.veteraan) : []).map(naam),
+      };
+    },
+    // De voorvallen (js/voorvallen.js): wat er nu loopt, welke vervolgen nog komen, wanneer het volgende komt, en
+    // welke er nu kunnen. Spel.debug.voorval('diefstal') laat dat nu beginnen, over mensen die erbij passen (ook als
+    // het er nu de tijd niet voor is); wie het zegt, zoekt je meteen.
+    voorval(id) {
+      const dag = Math.floor(S.kalender.dag);
+      if (!S.voorvallen) S.voorvallen = T.nieuweVoorvallen();
+      if (id) {
+        if (!T.VOORVALLEN[id]) return `Er is geen voorval "${id}". Er zijn: ${Object.keys(T.VOORVALLEN).join(', ')}.`;
+        const v = T.VOORVALLEN[id];
+        const oud = { vervolg: v.vervolg, als: v.als, pauze: v.pauze };
+        Object.assign(v, { vervolg: false, als: undefined, pauze: 0 });
+        const mensen = T.voorvalKan(S, id, dag);
+        Object.assign(v, oud);
+        if (!mensen) return `Voor "${id}" is er nu niemand die het kan zeggen, of over wie het kan gaan.`;
+        if (S.voorvallen.lopend) T.voorvalBeantwoord(S, S.voorvallen.lopend.id);
+        T.beginVoorval(S, id, mensen.wie, mensen.ander, dag).vanaf = S.kalender.dag;
+      }
+      const V = S.voorvallen;
+      const naam = (p) => (p ? T.naamVanBewoner(p) : null);
+      return {
+        lopend: V.lopend ? { id: V.lopend.id, wie: naam(V.lopend.wie), ander: naam(V.lopend.ander), vanaf: T.uurTekst(V.lopend.vanaf), zoekt: !!(V.lopend.wie.wezen && V.lopend.wie.wezen.zoektSchout) } : null,
+        wacht: V.wacht.map((w) => ({ id: w.id, op: T.datumVanDag(w.op).tekst, wie: naam(w.wie), ander: naam(w.ander) })),
+        volgende: V.volgende != null ? T.datumVanDag(V.volgende).tekst : null,
+        kunnen: Object.keys(T.VOORVALLEN).filter((v) => T.voorvalKan(S, v, dag)),
+        aantal: V.aantal,
+        beantwoord: V.beantwoord,
+        stemming: T.voorvalStemming(S, dag),
       };
     },
     // De wetten (js/wetten.js): per wet de stand, en wat hij dan doet. Spel.debug.wetten('rantsoen', 'krap')

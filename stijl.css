@@ -284,6 +284,10 @@ kbd {
 }
 #dialoog-keuzes button:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(226, 182, 74, 0.5); }
 #dialoog-keuzes kbd { margin-right: 8px; }
+/* Wat een antwoord kost of oplevert (een voorval, js/voorvallen.js), onder het antwoord. */
+#dialoog-keuzes .dialoog-prijs { display: block; margin: 2px 0 0 26px; font-size: 12.5px; color: var(--gedempt); }
+#dialoog-keuzes button:disabled { opacity: 0.5; cursor: default; }
+#dialoog-keuzes button:disabled:hover { background: rgba(255, 255, 255, 0.04); border-color: var(--rand); }
 #dialoog-portret {
   display: none;
   grid-row: 1 / span 3;

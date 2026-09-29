@@ -170,7 +170,10 @@
     // komt erbij.
     const wetten = T.wettenTevredenheid(S);
 
-    const tevredenheid = Math.min(1, Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + gezelligheid + wetten.erbij - heer.minder));
+    // De voorvallen (js/voorvallen.js, sinds 29 sep): wat het dorp je antwoorden nadraagt, en dat slijt weg.
+    const voorvallen = T.voorvalStemming(S, dag);
+
+    const tevredenheid = Math.min(1, Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + gezelligheid + wetten.erbij + voorvallen.erbij - heer.minder));
 
     // Het brandhout mist het dorp ook als het de winter niet haalt (T.houtVoorDeWinter), niet pas als
     // het vandaag op is: dan zegt de balk het op tijd, net als het rode hout ernaast (js/hud.js).
@@ -181,11 +184,20 @@
     if (T.herbergDroog(S)) mist.push('bier');
 
     return {
-      tevredenheid, mist, last: heer.waarom.concat(wetten.last), blij: wetten.blij, inWinter,
+      tevredenheid, mist, last: heer.waarom.concat(wetten.last, voorvallen.last), blij: wetten.blij.concat(voorvallen.blij), inWinter,
       voedselDekking, extraSoorten, voedselFactor,
       brandhoutDekking, brandhoutBenodigd, brandhoutVoorraad, brandhoutFactor,
       huishoudens, heeftKerk, kerkFactor, gezelligheid,
     };
+  };
+
+  // De balk zegt de tevredenheid meteen zoals ze nu is, niet pas morgen: na een wet die je aannam (js/wetten.js) of
+  // een antwoord op een voorval (js/voorvallen.js). Zonder dat er al een dag getikt is, wacht het op die dag.
+  T.tevredenheidOpnieuw = function (S) {
+    if (!S.behoeften || !S.kalender) return;
+    const b = T.berekenTevredenheid(S, Math.floor(S.kalender.dag));
+    Object.assign(S.behoeften, { tevredenheid: b.tevredenheid, mist: b.mist, last: b.last, blij: b.blij });
+    if (T.ui && T.ui.toonTevredenheid) T.ui.toonTevredenheid(S);
   };
 
   // De vijf "pas ... toe"-functies hieronder passen wat T.berekenTevredenheid uitrekende ook

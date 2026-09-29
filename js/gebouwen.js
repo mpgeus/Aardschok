@@ -780,6 +780,17 @@
     T.wijsWerkToe(S);
   };
 
+  // Er komt een gezin: in een huis met plaats, en is het dorp vol, dan neemt het een vrij erf en zet het er zelf een
+  // hut op, of zegt het dat er geen plaats is (js/erven.js). Voor de groei (T.tikGebouwenDag, stap 4) en een voorval
+  // (js/voorvallen.js: vreemdelingen die willen blijven).
+  T.gezinKomt = function (S) {
+    const woonruimte = T.telWoonruimte(S);
+    if (S.bevolking < woonruimte) T.wijzigBevolking(S, Math.min(woonruimte, S.bevolking + T.GEBOUWEN_INSTELLINGEN.gezinGrootte) - S.bevolking, 'groei');
+    else T.gezinZoektEenErf(S);
+  };
+  // Is er plaats voor een gezin: een huis met plaats, of een vrij erf?
+  T.plaatsVoorEenGezin = (S) => (S.bevolking || 0) < T.telWoonruimte(S) || T.kanEenErfNemen(S);
+
   // Om de hoeveel dagen er een nieuw gezin kan komen: gezinDagen, en met de wet Vreemden welkom vaker
   // (js/wetten.js).
   T.gezinDagen = (S) => Math.max(1, Math.round(T.GEBOUWEN_INSTELLINGEN.gezinDagen / T.wetFactor(S, 'gezinnen')));
@@ -847,6 +858,8 @@
     T.tikHeervaartDag(S, dag);
     // En de inner (js/inner.js): hij komt in oogstmaand tellen, en soms onverwacht terug.
     T.tikInnerDag(S, dag);
+    // En de voorvallen (js/voorvallen.js): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp.
+    T.tikVoorvallenDag(S, dag);
     // Een hut op een erf die op hout wachtte, begint als het er nu is (js/erven.js).
     T.tikErvenDag(S);
     // 1. Gebouwen die vandaag klaarkomen: het spookbeeld wordt de tekening zelf (dezelfde
@@ -875,10 +888,7 @@
     // (T.gezinDagen hierboven).
     if (dag > 0 && dag % T.gezinDagen(S) === 0) {
       const waarom = T.waaromGeenGezin(S);
-      if (!waarom.includes('graan') && !waarom.includes('tevreden')) {
-        if (S.bevolking < woonruimte) T.wijzigBevolking(S, Math.min(woonruimte, S.bevolking + IN.gezinGrootte) - S.bevolking, 'groei');
-        else T.gezinZoektEenErf(S);
-      }
+      if (!waarom.includes('graan') && !waarom.includes('tevreden')) T.gezinKomt(S);
     }
     // 5. Handen: verdeeld over de werkplaatsen, en wie waar werkt (T.verdeelHanden hierboven).
     T.verdeelHanden(S);

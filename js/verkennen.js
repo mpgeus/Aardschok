@@ -139,6 +139,10 @@
       if (e.kant === 'monster') return { tekst: `De ${e.naam} aanvallen`, doe: () => T.startGevecht(S, e, true) };
       // Een dier (js/vee.js) praat niet en doet nog niets: bij de muis staat alleen wat het is.
       if (e.dier) return { tekst: T.hoofdletter(`een ${e.naam}`) };
+      // Wie je zoekt met een voorval (js/voorvallen.js), daar praat je over het voorval, ook als hij een eigen
+      // gesprek heeft.
+      const voorval = T.voorvalVan(S, e);
+      if (voorval) return { tekst: `Praten met ${T.naamVanBewoner(voorval.wie)} (zoekt je)`, doe: () => loopNaast(S, e, () => T.openDialoog(S, e, voorval.id)) };
       // Een bewoner (js/bewoners.js) heeft nog geen gesprek: bij de muis staat wie hij is.
       if (e.bewoner && T.overBewonerTekst) return { tekst: T.overBewonerTekst(S, e) };
       // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: een boer, de heer. Welk
@@ -309,8 +313,9 @@
     // In de oogst (graan of hooi) werkt men tot het donker (js/dag.js).
     const oogst = basis === 'rijp' || !!(datum && T.isHooitijd(datum));
     for (const m of w.wezens) {
-      // Een man van de militie bij een aanval dwaalt niet: hij loopt met de schout mee (js/rovers.js).
-      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.opgeroepen) continue;
+      // Een man van de militie bij een aanval dwaalt niet: hij loopt met de schout mee (js/rovers.js). Wie de schout
+      // zoekt met een voorval, ook niet (js/voorvallen.js).
+      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.opgeroepen || m.zoektSchout) continue;
       // Een dier dat ligt, blijft liggen tot zijn rust zegt dat het weer opstaat (js/vee.js).
       if (m.dier && T.rustVanDier && T.rustVanDier(m, S.tijd || 0) === 'liggen') continue;
       // Het ritme van de dag (js/dag.js): 's ochtends en 's avonds op zijn erf, 's nachts binnen. Wie

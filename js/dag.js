@@ -164,9 +164,9 @@
   // Voor de boeren (een huis en een akker) en de bewoners (e.bewoner, js/bewoners.js); de schout, het
   // vee en een bezoeker volgen hun eigen weg, en een man van de militie bij een aanval ook (opgeroepen: hij
   // loopt met de schout mee, js/rovers.js). Wie ergens anders moet zijn (moetNaar: de schandpaal,
-  // js/heer.js), volgt dat en niet de dag.
+  // js/heer.js), volgt dat en niet de dag, en wie de schout zoekt met een voorval ook (js/voorvallen.js).
   T.dagAnker = function (S, e, oogst) {
-    if (!S || !S.kalender || !e || !e.thuis || e.moetNaar || e.opgeroepen) return null;
+    if (!S || !S.kalender || !e || !e.thuis || e.moetNaar || e.opgeroepen || e.zoektSchout) return null;
     // Wie in de herberg logeert (de marskramer), zit er 's avonds en slaapt er (js/herberg.js).
     const logies = T.logiesAnker ? T.logiesAnker(S, e) : null;
     if (logies) return logies;

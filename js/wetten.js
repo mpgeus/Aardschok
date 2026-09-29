@@ -102,12 +102,7 @@
     S.wetten.standen[id] = stand;
     if (!T.wetIsAanUit(id)) bericht(`${wet.naam}: vanaf vandaag ${stand}.`);
     else bericht(`${wet.naam}: ${stand === 'aangenomen' ? 'aangenomen' : 'afgeschaft'}.`);
-    // De balk zegt de tevredenheid meteen zoals ze nu is, niet pas morgen.
-    if (S.behoeften && S.kalender) {
-      const b = T.berekenTevredenheid(S, Math.floor(S.kalender.dag));
-      Object.assign(S.behoeften, { tevredenheid: b.tevredenheid, mist: b.mist, last: b.last, blij: b.blij });
-      if (T.ui && T.ui.toonTevredenheid) T.ui.toonTevredenheid(S);
-    }
+    T.tevredenheidOpnieuw(S);
     return { kan: true };
   };
 

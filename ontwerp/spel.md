@@ -17,7 +17,8 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
-| De raadsman en de voorvallen | besloten (29 sep): een raadsman per dorp met een geloot karakter, die jij kiest; voorstel: voorvallen, zodat het dorp je aanspreekt ("Het voelt gewoon nog leeg nu") | vraag 64, 65 |
+| De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug | vraag 65 |
+| De raadsman | besloten (29 sep): een raadsman per dorp met een geloot karakter, die jij kiest, en die beslist als je er niet bent; nog niet gebouwd | vraag 64, 65 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf | vraag 58 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -175,6 +176,47 @@ rovers, ze roven de velden en maken er soms een kapot, en mensen kunnen sterven.
 
 **Hoe het zo kwam:** het plan staat in de werklijst, vraag 60. Claude stelde voor de heervaart pas in het dorp te laten
 beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer" eindelijk inhoud kreeg.
+
+## De voorvallen: het dorp spreekt je aan (Marcel, 29 sep 2026; werklijst vraag 65)
+
+**Zo werkt het nu** (29 sep, zeventiende sessie; `js/voorvallen.js`, de woorden in `js/gesprekken.js`, toetsen in
+`test/voorvallen.test.cjs`; Marcel: "A ja", bij "Het voelt gewoon nog leeg nu"):
+- **Om de paar dagen** komt iemand uit het dorp de schout zoeken: gemiddeld om de tien dagen, in de winter om de zes,
+  en niet in de eerste vier dagen. Hij krijgt een uitroepteken boven zijn hoofd, het bericht zegt "Trijn zoekt je."
+  (bij een ramp: "Brand! Harm komt je halen."), en hij loopt naar je toe. Staat de schout stil, dan spreekt hij hem
+  aan: het gesprek gaat open, en de tijd staat stil tot je kiest.
+- **Twee of drie antwoorden, elk met zijn prijs eronder:** "+1 goud, tevredenheid +2%", "−20 graan", "Geert moet het bos in",
+  "30% kans op een dode". Wat er niet is, kun je niet geven: dan staat de knop uit, met waarom ("je hebt 5 graan").
+  Elk voorval heeft een antwoord dat altijd kan. Of het later terugkomt, zegt het venster niet.
+- **35 voorvallen, van zes soorten:** rechtspraak (een diefstal, een vechtpartij in de herberg, twee boeren om een
+  akkergrens, een stroper in het bos van de heer, een heks, een schuld bij de woekeraar), verzoeken (een lening,
+  vreemdelingen die willen blijven, zaaigraan in de lente, het dak van de weduwe, een klok voor de kapel), rampen
+  (brand, vaker in de winter; koorts uit de put; wolven bij de schapen, in de winter; storm; muizen), kansen (ijzer met
+  het wapen van de heer, spotgoedkoop; een pot met munten; een zwerver die wil werken; een smid uit de stad; de raad
+  van de oudste), feesten (een bruiloft, het oogstfeest, een lied over de heer) en de grillen van de heer, via zijn
+  bode (een standbeeld van eik, een jacht, een belasting op ramen).
+- **Wie het zegt, heeft een naam** en past bij het voorval: een vrouw die haar kippen kwijt is, twee boeren om een
+  grens, de weduwe, de vrome, de zanger of de oudste als die in het dorp wonen (de karakters, `js/boeren.js`). Over wie
+  het gaat ({ander}), is van een ander gezin; nooit de schout of zijn gezin.
+- **Wat een antwoord doet:** de voorraad (graan, hout, bier, ijzer, vlees, goud), de tevredenheid (die in dertig dagen
+  wegslijt, en in de balk staat: "Het is blij met de bruiloft"), de argwaan van de inner, iemand verbannen (hij trekt
+  weg, en komt terug als rover), een kans op een dode, een gezin erbij (als er plaats is), schapen die de wolven halen.
+- **Sommige komen terug:** wie je liet gaan, steelt weer, of brengt je later een haas; wie een boete kreeg, gooit
+  soms je luiken in; een lening komt terug, met rente, of later; het zaaigraan komt na de oogst terug, met tien extra;
+  en de woekeraar die je tegensprak, gaat naar de inner, tenzij je hem vijf goud geeft.
+- **Wie je niet spreekt,** gaat 's avonds naar huis en komt de volgende ochtend terug; na twee dagen gaat het voorbij,
+  en dat neemt het dorp je kwalijk ("een schout die er niet was"). Sluit je het gesprek zonder antwoord (Esc), dan
+  wacht hij met zijn uitroepteken tot je hem aanspreekt.
+- **Instelbaar:** de spelregel "Voorvallen" (vaak, gewoon, zelden, uit), en de getallen in de werkbank
+  (`T.VOORVALLEN_INSTELLINGEN`). `Spel.debug.voorval()` zegt wat er loopt en wat er nu kan, en
+  `Spel.debug.voorval('brand')` laat er nu een beginnen.
+- **Zelf schrijven:** een voorval is een gesprek onder dezelfde naam als in `T.VOORVALLEN` (dat zegt wanneer, en over
+  wie), met '{wie}' als naam; je leest en schrijft het in de gespreksschrijver, die de nieuwe gevolgen kent.
+- **In de speeltest** (`speelbaar.md`): 47 tot 53 voorvallen in een jaar, dus met wat er al was een keuze per ruim een
+  minuut op 30×; wie verstandig kiest, speelt het jaar zoals zonder voorvallen. Wie altijd het eerste antwoord neemt,
+  verbant een dief, die als rover terugkomt, en kan het dorp laten verhongeren (`opmerkingen.md`).
+- **Nog niet:** de raadsman die beslist als je er niet bent (vraag 64; nu gaat het voorbij), voorvallen die de kaart
+  veranderen (een huis dat afbrandt), en wie je veroordeelde, keert zich nog niet in een gevecht tegen je.
 
 ## De raad onder het doel (Marcel, 29 sep 2026; werklijst vraag 58)
 
@@ -2468,7 +2510,7 @@ in vier lagen:
 **De drie die het spel maken:** voorvallen met een keuze (zonder wordt een bouwspel een
 spreadsheet), argwaan met verstopplekken en het bezoek van de inner (de kern), en behoeften met de
 winter (die maken groeien moeilijk genoeg om over na te denken). Rechtspraak is de vierde: dat
-heeft geen ander bouwspel.
+heeft geen ander bouwspel. (Op 29 sep kwamen de voorvallen erbij, met rechtspraak erin: "De voorvallen" bovenaan.)
 
 **Besloten (Marcel, 23 sep): "Ik wil het allemaal."** Alle vier de lagen komen erin. De volgorde
 staat in `werklijst.md`: eerst een dorp dat draait, dan de heer en de kern, dan verhalen en
@@ -2650,7 +2692,8 @@ en over de heervaart [Wikipedia](https://nl.wikipedia.org/wiki/Heervaart).
   werklijst, vraag 64. **Besloten (29 sep):** een raadsman per dorp, met een karakter en gelote eigenschappen die
   hem in bepaalde gevallen beter maken, en jij kiest hem op zijn karakter en wat hij kan. Over besturen van bovenaf:
   "Hier moeten nog even dieper op ingaan. Het voelt gewoon nog leeg nu." Dat werd vraag 65: het dorp spreekt je aan,
-  met voorvallen.
+  met voorvallen (gebouwd, 29 sep: "De voorvallen" hierboven); het dorp van bovenaf bleef open (Marcel: "nee niet
+  bovenaf, ik denk hier nog over na").
 - Hoe ver gaat de politiek: keuren, schepenen en groepen zoals hierboven, of ook verkiezingen,
   partijen en intriges aan het hof van de heer?
 - Goederen, groepen en keuren: een eerste voorstel staat hierboven ("De kern voor het tweede proefje"),

@@ -42,10 +42,15 @@
     e.pad = e.onderweg && e.pad[0] ? [e.pad[0]] : [];
   };
 
-  T.openDialoog = function (S, wie) {
-    const wieId = T.gesprekIdVan(wie);
+  // `gesprekId`: een ander gesprek dan het zijne, zoals een voorval (js/voorvallen.js) dat hij je komt vertellen.
+  T.openDialoog = function (S, wie, gesprekId) {
+    const wieId = gesprekId || T.gesprekIdVan(wie);
     const gesprek = T.GESPREKKEN[wieId];
+    const voorval = !!T.VOORVALLEN[wieId];
     S.modus = 'dialoog';
+    // Een voorval is een keuze met een prijs: de tijd staat stil tot je kiest, zoals bij een brief. Een gewoon gesprek
+    // laat de dag doorlopen (wie de inner aan de praat houdt, houdt hem op: js/inner.js).
+    if (voorval) T.houdTijdStil(S, 'voorval');
     staStil(S.schout);
     // Met wie je praat, staat stil en blijft zichtbaar: hij komt door een boom of een huis heen
     // (js/doorkijk.js) en hij dwaalt niet weg midden in het gesprek.
@@ -55,19 +60,29 @@
       const knoop = T.gesprekKnoop(S, wieId, knoopId);
       toonPortret(gesprek.portret);
       // Een boer voert het gesprek van zijn karakter (js/boeren.js), maar heet zoals hij heet:
-      // Aaltje, en niet "de weduwe". Onder zijn naam staat wie hij is en wat hij kan.
-      const over = T.overBoerTekst(wie);
+      // Aaltje, en niet "de weduwe". Onder zijn naam staat wie hij is en wat hij kan; bij een voorval ook
+      // bij een gewone bewoner (js/bewoners.js). De naam van een voorval is {wie}: die vult het spel in.
+      const over = T.overBoerTekst(wie) || (voorval ? T.overBewonerTekst(S, wie) : '');
       T.ui.toonDialoog(
-        T.hoofdletter(over && wie.naam ? wie.naam : gesprek.naam),
+        T.hoofdletter(over && wie.naam ? wie.naam : T.vulWoordenIn(S, gesprek.naam)),
         knoop.tekst,
-        knoop.keuzes.map((keuze) => ({
-          tekst: keuze.zeg,
-          kies: () => {
-            T.doeGevolg(S, keuze.doe);
-            if (keuze.sluit) T.sluitDialoog(S);
-            else toon(keuze.naar);
-          },
-        })),
+        knoop.keuzes.map((keuze) => {
+          // Wat het kost of oplevert, zegt het venster vooraf; wat er niet is, kun je niet geven.
+          const prijs = T.prijsVanKeuze(S, keuze.doe);
+          return {
+            tekst: T.vulWoordenIn(S, keuze.zeg),
+            prijs: prijs.tekst,
+            kan: prijs.kan,
+            waarom: prijs.waarom,
+            kies: () => {
+              T.doeGevolg(S, keuze.doe);
+              if (keuze.sluit) {
+                T.voorvalBeantwoord(S, wieId);
+                T.sluitDialoog(S);
+              } else toon(keuze.naar);
+            },
+          };
+        }),
         over,
       );
     };
@@ -78,5 +93,10 @@
     T.ui.sluitDialoog();
     S.spreektMet = null;
     if (S.modus === 'dialoog') S.modus = 'verkennen';
+    T.laatTijdGaan(S, 'voorval');
   };
+
+  // Iemand spreekt de schout aan met een voorval (js/voorvallen.js, T.werkVoorvallenBij): de regels zeggen wanneer,
+  // en het scherm opent het gesprek.
+  T.ui.spreekAan = (S, wie, gesprekId) => T.openDialoog(S, wie, gesprekId);
 })(globalThis.Spel = globalThis.Spel || {});

@@ -50,8 +50,13 @@
 // heer: true het venster waarin je de heer betaalt op Sint-Maarten (js/heer.js, js/hud.js).
 // omkopen: 10 geeft de inner tien goud, voor minder op zijn rapport (js/inner.js, T.koopInnerOm).
 //
+// Een voorval (js/voorvallen.js) is een gesprek dat de ander begint, onder dezelfde naam als in T.VOORVALLEN. Zijn
+// naam is '{wie}': wie het je komt zeggen. Een antwoord mag daar ook hebben: graan: -20 (of hout, bier, ijzer, ...),
+// tevreden: 5, argwaan: 3, verban: 'ander', sterfkans: 30, gezin: 1, schaap: -2 en voorval: 'x' (een vervolg). Wat
+// dat is, staat boven in js/voorvallen.js; het venster zegt de prijs vooraf.
+//
 // In een zin mag {woord} staan: dat vult het spel in (T.GESPREK_WOORDEN in js/gesprek.js), zoals
-// {gisteravond}, wie er gisteravond in de herberg zat (js/herberg.js).
+// {gisteravond}, wie er gisteravond in de herberg zat (js/herberg.js), en in een voorval {wie} en {ander}.
 (function (T) {
   'use strict';
 
@@ -538,6 +543,563 @@
           ],
           keuzes: [
             { zeg: 'Tot ziens.', sluit: true },
+          ],
+        },
+      },
+    },
+    // De voorvallen (js/voorvallen.js, werklijst vraag 65): een gesprek dat de ander begint, als hij de schout
+    // komt zoeken. {wie} is wie het zegt, {ander} over wie het gaat; wat een antwoord kost, zegt het venster vooraf.
+    // Wanneer er een komt en over wie, staat in T.VOORVALLEN.
+    diefstal: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, {ander} heeft twee kippen uit mijn hok gehaald. Ik zag hem gaan, met de veren nog aan zijn mouw. Wat doet u eraan?' },
+          ],
+          keuzes: [
+            { zeg: 'Verban hem. Wie steelt, hoort hier niet.', sluit: true, doe: { tevreden: 3, verban: 'ander' } },
+            { zeg: 'Hij betaalt ze terug, en een goud boete voor de kist.', sluit: true, doe: { goud: 1, tevreden: 2, voorval: ['diefstalWrok', 'niets'] } },
+            { zeg: 'Laat hem gaan. Het waren maar kippen.', sluit: true, doe: { tevreden: -3, voorval: ['diefstalWeer', 'diefDank'] } },
+          ],
+        },
+      },
+    },
+    diefstalWeer: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, het is weer {ander}. Nu uit de schuur van het dorp: een zak graan. Hij zegt dat hij hem gevonden heeft. In de schuur.' },
+          ],
+          keuzes: [
+            { zeg: 'Nu is het genoeg. Verban hem.', sluit: true, doe: { tevreden: 4, verban: 'ander' } },
+            { zeg: 'Hij brengt het terug, en werkt een maand voor niets.', sluit: true, doe: { tevreden: 1 } },
+            { zeg: 'Hij zal wel honger hebben. Laat hem het houden.', sluit: true, doe: { graan: -10, tevreden: -4 } },
+          ],
+        },
+      },
+    },
+    diefstalWrok: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, vannacht heeft iemand de luiken van uw huis ingegooid. De buren zagen {ander} weglopen. Hij is die boete nog niet vergeten, zegt hij.' },
+          ],
+          keuzes: [
+            { zeg: 'Hij betaalt de luiken, en nog een boete.', sluit: true, doe: { goud: 1, tevreden: 1, voorval: ['diefstalWrok', 'niets', 'niets'] } },
+            { zeg: 'Verban hem.', sluit: true, doe: { tevreden: 2, verban: 'ander' } },
+            { zeg: 'Laat maar. Het waren oude luiken.', sluit: true, doe: { tevreden: -1 } },
+          ],
+        },
+      },
+    },
+    diefDank: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout. Weet u nog, de kippen van {ander}? U liet me gaan. Ik heb iets voor u: een haas. Ik weet waar er meer zitten, maar dat is in het bos van de heer.' },
+          ],
+          keuzes: [
+            { zeg: 'Dank je. Geef hem maar aan {ander}.', sluit: true, doe: { tevreden: 2 } },
+            { zeg: 'Ik neem hem aan. En die andere hazen ook.', sluit: true, doe: { vlees: 8, argwaan: 2 } },
+            { zeg: 'Uit het bos van de heer? Breng hem terug.', sluit: true, doe: { argwaan: -2 } },
+          ],
+        },
+      },
+    },
+    vechtpartij: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Kijk naar mijn oog, schout. Dat was {ander}, gisteravond in de herberg. Om niks. Nou ja, om een grap over zijn moeder. Maar het was een goeie grap.' },
+          ],
+          keuzes: [
+            { zeg: '{ander} betaalt twee goud boete, voor de kist.', sluit: true, doe: { goud: 2, tevreden: 1 } },
+            { zeg: 'Allebei een maand geen bier.', sluit: true, doe: { bier: 5, tevreden: -1 } },
+            { zeg: 'Een grap over zijn moeder? Dan had je het verdiend.', sluit: true, doe: { tevreden: -2 } },
+          ],
+        },
+      },
+    },
+    akkergrens: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: '{ander} heeft drie voren over de grens geploegd. Mijn grens, schout. Die steen heeft mijn grootvader daar zelf gelegd. Nou ja, gerold.' },
+          ],
+          keuzes: [
+            { zeg: 'De steen blijft waar hij ligt.', sluit: true, doe: { tevreden: 1, voorval: ['akkergrensWraak', 'niets'] } },
+            { zeg: 'Wie het land ploegt, mag het houden.', sluit: true, doe: { tevreden: -2 } },
+            { zeg: 'Ik laat het opmeten, met de ketting van de heer.', sluit: true, doe: { goud: -2, tevreden: 2 } },
+          ],
+        },
+      },
+    },
+    akkergrensWraak: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, er ligt een dode kat in mijn put. Ik zeg niet wie dat gedaan heeft. {ander}. Dat zeg ik dus niet.' },
+          ],
+          keuzes: [
+            { zeg: '{ander} haalt hem eruit, en betaalt een boete.', sluit: true, doe: { goud: 1, tevreden: 1 } },
+            { zeg: 'Een dode kat. Dat kan iedereen zijn.', sluit: true, doe: { tevreden: -2 } },
+          ],
+        },
+      },
+    },
+    stroper: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Ik zag {ander} in het bos van de heer, met een haas onder zijn jas. Als de heer het hoort, zijn we allemaal de klos. Ik zeg het maar, schout.' },
+          ],
+          keuzes: [
+            { zeg: 'Ik geef hem aan bij de heer.', sluit: true, doe: { tevreden: -3, argwaan: -4 } },
+            { zeg: 'Hij deelt die haas met het dorp, en houdt zijn mond.', sluit: true, doe: { vlees: 3, argwaan: 2 } },
+            { zeg: 'Ik heb niets gehoord. En jij ook niet.', sluit: true, doe: { argwaan: 1 } },
+          ],
+        },
+      },
+    },
+    heks: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: '{ander} is een heks, schout. Ze keek naar mijn koe, en sindsdien geeft die zure melk. Iedereen zegt het. Nou ja, ik zeg het.' },
+          ],
+          keuzes: [
+            { zeg: 'Onzin. Ga naar huis.', sluit: true, doe: { tevreden: -1 } },
+            { zeg: 'Laat haar een week je koe verzorgen. Dan zien we het wel.', sluit: true, doe: { tevreden: 1 } },
+            { zeg: 'Verban haar. Voor de zekerheid.', sluit: true, doe: { tevreden: 3, verban: 'ander' } },
+          ],
+        },
+      },
+    },
+    woeker: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: '{ander} wil mijn koe, voor een schuld van drie goud. Ik leende er twee. Zonder koe hebben mijn kinderen geen melk, schout.' },
+          ],
+          keuzes: [
+            { zeg: 'Een schuld is een schuld.', sluit: true, doe: { tevreden: -3 } },
+            { zeg: 'Ik betaal het uit de kist.', sluit: true, doe: { goud: -3, tevreden: 3 } },
+            { zeg: 'Twee geleend, twee terug. De rest is woeker.', sluit: true, doe: { tevreden: 2, voorval: 'woekerWraak' } },
+          ],
+        },
+      },
+    },
+    woekerWraak: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Morgen ga ik naar de inner, schout. Om te praten. Over u, en over wat er in uw kelder ligt. Tenzij u mij iets te zeggen hebt.' },
+          ],
+          keuzes: [
+            { zeg: 'Hier, vijf goud. En nu je mond dicht.', sluit: true, doe: { goud: -5 } },
+            { zeg: 'Ga maar. De inner gelooft geen woekeraar.', sluit: true, doe: { argwaan: 6 } },
+          ],
+        },
+      },
+    },
+    lening: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, mijn dak lekt, en het regent hier altijd. Kunt u me drie goud lenen? Over een paar weken krijgt u het terug. Echt waar.' },
+          ],
+          keuzes: [
+            { zeg: 'Hier, drie goud.', sluit: true, doe: { goud: -3, voorval: ['leningTerug', 'leningTerug', 'leningUitstel'] } },
+            { zeg: 'Het goud in de kist is van de heer.', sluit: true, doe: { tevreden: -1 } },
+          ],
+        },
+      },
+    },
+    leningTerug: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Hier is uw goud, schout. Vier: drie van u, en één voor het wachten.' },
+          ],
+          keuzes: [
+            { zeg: 'Dank je.', sluit: true, doe: { goud: 4 } },
+            { zeg: 'Houd die ene maar.', sluit: true, doe: { goud: 3, tevreden: 1 } },
+          ],
+        },
+      },
+    },
+    leningUitstel: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, over dat goud. Het dak was duurder dan ik dacht. En het lekt nog steeds. Mag ik nog wat langer?' },
+          ],
+          keuzes: [
+            { zeg: 'Nog een paar weken dan.', sluit: true, doe: { voorval: 'leningTerug' } },
+            { zeg: 'Dan werk je het af: een week hout hakken.', sluit: true, doe: { hout: 10, tevreden: -1 } },
+            { zeg: 'Laat maar zitten.', sluit: true, doe: { tevreden: 2 } },
+          ],
+        },
+      },
+    },
+    vreemdeling: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Bij de brug staat een gezin, schout. Een man, een vrouw en hun kinderen. Ze komen uit het zuiden, waar oorlog is. Ze willen hier blijven.' },
+          ],
+          keuzes: [
+            { zeg: 'Laat ze blijven. Er is werk genoeg.', sluit: true, doe: { graan: -10, gezin: 1 } },
+            { zeg: 'We hebben zelf niet genoeg. Stuur ze door.', sluit: true, doe: { tevreden: -1 } },
+          ],
+        },
+      },
+    },
+    smid: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Er is een smid uit de stad, schout. Zijn gilde wil hem niet meer: hij sloeg de gildemeester. Met een hamer. Maar zijn hoefijzers zijn de beste van de streek, en hij wil hier wonen.' },
+          ],
+          keuzes: [
+            { zeg: 'Welkom. Maar hier slaan we alleen op ijzer.', sluit: true, doe: { ijzer: 5, gezin: 1 } },
+            { zeg: 'Een smid die slaat? Nee.', sluit: true },
+          ],
+        },
+      },
+    },
+    zaaigraan: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Mijn zaaigraan is beschimmeld, schout. Allemaal. Zonder zaad geen oogst. Kan het dorp me twintig graan lenen? Na de oogst krijgt u het terug.' },
+          ],
+          keuzes: [
+            { zeg: 'Twintig graan.', sluit: true, doe: { graan: -20, voorval: 'zaaigraanTerug' } },
+            { zeg: 'Dan moet je het zelf maar zien te vinden.', sluit: true, doe: { tevreden: -2 } },
+          ],
+        },
+      },
+    },
+    zaaigraanTerug: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'De oogst is binnen, schout. Hier is uw graan: dertig. Twintig, en tien omdat u ja zei.' },
+          ],
+          keuzes: [
+            { zeg: 'Dank je.', sluit: true, doe: { graan: 30 } },
+            { zeg: 'Twintig is genoeg.', sluit: true, doe: { graan: 20, tevreden: 1 } },
+          ],
+        },
+      },
+    },
+    weduweDak: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Mijn dak lekt, schout, en ik heb geen man die het maakt. De buren hebben het druk, zeggen ze. Met wat, weet ik niet.' },
+          ],
+          keuzes: [
+            { zeg: 'Ik stuur twee mannen, met hout.', sluit: true, doe: { hout: -6, tevreden: 3 } },
+            { zeg: 'Iedereen heeft het druk.', sluit: true, doe: { tevreden: -2 } },
+          ],
+        },
+      },
+    },
+    brand: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Brand, schout! Het dak van {ander} staat in brand! Het riet brandt als stro. Het is ook stro.' },
+          ],
+          keuzes: [
+            { zeg: 'Iedereen aan de emmers!', sluit: true, doe: { hout: -8, tevreden: 2 } },
+            { zeg: 'Laat het branden. Dan bouwen ze maar opnieuw.', sluit: true, doe: { tevreden: -5 } },
+          ],
+        },
+      },
+    },
+    ziekte: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Er is koorts in het dorp, schout. Eerst bij de buren, nu ook bij ons. De vroedvrouw zegt dat het van de put komt. Er ligt iets in. Iets doods.' },
+          ],
+          keuzes: [
+            { zeg: 'Laat de put leeghalen en schoonmaken.', sluit: true, doe: { goud: -2, sterfkans: 10 } },
+            { zeg: 'Drink bier, geen water, tot het over is.', sluit: true, doe: { bier: -15, sterfkans: 20 } },
+            { zeg: 'Bidden. Dat helpt ook.', sluit: true, doe: { sterfkans: 50 } },
+          ],
+        },
+      },
+    },
+    wolven: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Wolven, schout! Vannacht bij de schapen. Ze hebben er een meegenomen, en ze komen terug. Wolven komen altijd terug.' },
+          ],
+          keuzes: [
+            { zeg: 'Een jacht. {ander} weet waar ze zitten.', sluit: true, doe: { tevreden: 2, sterfkans: 15, schaap: -1 } },
+            { zeg: 'Een hoger hek om de schapen.', sluit: true, doe: { hout: -12, schaap: -1 } },
+            { zeg: 'Het was maar één schaap.', sluit: true, doe: { schaap: -4 } },
+          ],
+        },
+      },
+    },
+    storm: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'De storm heeft het dak van de schuur half weggeblazen, schout. Als het gaat regenen, wordt het graan nat. En het gaat regenen. Het regent hier altijd.' },
+          ],
+          keuzes: [
+            { zeg: 'Repareren, nu meteen.', sluit: true, doe: { hout: -10 } },
+            { zeg: 'Het houdt het nog wel even.', sluit: true, doe: { graan: -30 } },
+          ],
+        },
+      },
+    },
+    muizen: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Er zitten muizen in het graan, schout. Veel muizen. Dikke muizen. Ze kijken je aan als je binnenkomt.' },
+          ],
+          keuzes: [
+            { zeg: 'Haal een kat. Of drie.', sluit: true, doe: { goud: -1, graan: -8 } },
+            { zeg: 'Iedereen een dag muizen vangen.', sluit: true, doe: { graan: -5, tevreden: -2 } },
+            { zeg: 'Muizen moeten ook eten.', sluit: true, doe: { graan: -25 } },
+          ],
+        },
+      },
+    },
+    heler: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Bij de brug staat een man met een kar vol ijzer, schout. Spotgoedkoop. Hij zegt niet waar het vandaan komt, maar er staat een wapen op. Dat van de heer.' },
+          ],
+          keuzes: [
+            { zeg: 'Koop het. Alles.', sluit: true, doe: { goud: -2, ijzer: 10, argwaan: 5 } },
+            { zeg: 'Laat hem vastzetten, en stuur het ijzer naar de heer.', sluit: true, doe: { tevreden: -1, argwaan: -5 } },
+            { zeg: 'Stuur hem weg.', sluit: true },
+          ],
+        },
+      },
+    },
+    vondst: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Kijk, schout! Bij het graven vond ik een pot. Met munten erin. Oude munten, met een koning erop die niemand kent.' },
+          ],
+          keuzes: [
+            { zeg: 'Die zijn voor de kist van het dorp.', sluit: true, doe: { goud: 4 } },
+            { zeg: 'Een vondst is van de heer. Hij krijgt ze.', sluit: true, doe: { argwaan: -6 } },
+            { zeg: 'Houd ze. En zeg het tegen niemand.', sluit: true, doe: { tevreden: 1 } },
+          ],
+        },
+      },
+    },
+    zwerver: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Er zit een zwerver bij de put, schout. Hij wil werken voor zijn eten. Hij zegt dat hij kan houthakken. Hij zegt ook dat hij ooit ridder was.' },
+          ],
+          keuzes: [
+            { zeg: 'Een week houthakken, voor brood.', sluit: true, doe: { graan: -5, hout: 15 } },
+            { zeg: 'Stuur hem door.', sluit: true },
+          ],
+        },
+      },
+    },
+    wijsheid: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Ik heb drie heren overleefd, schout. Wil je weten hoe? Geef me een kan bier, en ik vertel het je.' },
+          ],
+          keuzes: [
+            { zeg: 'Een kan bier dan.', naar: 'raad', doe: { bier: -1 } },
+            { zeg: 'Een andere keer.', sluit: true },
+          ],
+        },
+        raad: {
+          tekst: [
+            { zeg: 'Laat ze nooit zien wat je hebt, en laat ze altijd zien wat je niet hebt. Een lege schuur, een mager kind. De heer houdt van magere kinderen: die kosten hem niets.' },
+          ],
+          keuzes: [
+            { zeg: 'Dank je.', sluit: true, doe: { argwaan: -3 } },
+          ],
+        },
+      },
+    },
+    bruiloft: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, {ander} gaat trouwen! Met een meisje uit het buurdorp. Het hele dorp komt, als het dorp het bier betaalt. Dat is traditie. Sinds vandaag.' },
+          ],
+          keuzes: [
+            { zeg: 'Een feest! Bier en brood voor iedereen.', sluit: true, doe: { graan: -15, bier: -10, tevreden: 6 } },
+            { zeg: 'Een klein feest, met wat er is.', sluit: true, doe: { graan: -5, tevreden: 2 } },
+            { zeg: 'Trouwen kan ook zonder feest.', sluit: true, doe: { tevreden: -2 } },
+          ],
+        },
+      },
+    },
+    oogstfeest: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'De oogst is binnen, schout! Vroeger hielden we dan een feest, met alles erop en eraan. Wat op is, kan de inner niet tellen, zei mijn vader altijd.' },
+          ],
+          keuzes: [
+            { zeg: 'Een groot feest.', sluit: true, doe: { graan: -40, bier: -15, tevreden: 8 } },
+            { zeg: 'Een klein feest.', sluit: true, doe: { graan: -15, tevreden: 3 } },
+            { zeg: 'Geen feest. De heer telt mee.', sluit: true, doe: { tevreden: -3 } },
+          ],
+        },
+      },
+    },
+    klok: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, onze kapel heeft geen klok. Hoe weet God dan wanneer we bidden? Voor vier goud giet de smid in de stad er een.' },
+          ],
+          keuzes: [
+            { zeg: 'Een klok, van het beste brons.', sluit: true, doe: { goud: -4, tevreden: 4 } },
+            { zeg: 'God weet het zelf wel.', sluit: true, doe: { tevreden: -1 } },
+          ],
+        },
+      },
+    },
+    lied: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Ik heb een lied gemaakt, schout. Over de heer. Het rijmt op varken. Mag ik het vanavond zingen, in de herberg?' },
+          ],
+          keuzes: [
+            { zeg: 'Zing maar. Hard.', sluit: true, doe: { tevreden: 4, argwaan: 4 } },
+            { zeg: 'Zing het zachtjes. En niet het laatste couplet.', sluit: true, doe: { tevreden: 2, argwaan: 1 } },
+            { zeg: 'Niet zingen.', sluit: true, doe: { tevreden: -1 } },
+          ],
+        },
+      },
+    },
+    standbeeld: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Er was een bode van de heer, schout. De heer wil een standbeeld van zichzelf, op ons plein, voor Pasen. Van eik, want marmer is voor de keizer, en hij is bescheiden.' },
+          ],
+          keuzes: [
+            { zeg: 'Dan krijgt hij een standbeeld.', sluit: true, doe: { hout: -20, tevreden: -2, argwaan: -6 } },
+            { zeg: 'Een vogelverschrikker, in een oude jas van hem.', sluit: true, doe: { hout: -3, tevreden: 3, argwaan: 3 } },
+            { zeg: 'Pasen is nog ver.', sluit: true, doe: { argwaan: 3 } },
+          ],
+        },
+      },
+    },
+    jacht: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'De bode van de heer was er, schout. De heer komt jagen, in ons bos. Het dorp levert de drijvers, en het eten. En de wijn, maar die hebben we niet.' },
+          ],
+          keuzes: [
+            { zeg: 'Drijvers en eten, en bier in plaats van wijn.', sluit: true, doe: { graan: -20, bier: -10, argwaan: -5 } },
+            { zeg: 'Alleen de drijvers.', sluit: true, doe: { argwaan: 2 } },
+            { zeg: 'Zeg hem dat het wild op is.', sluit: true, doe: { argwaan: 5 } },
+          ],
+        },
+      },
+    },
+    ramen: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'De bode van de heer las voor, op het plein: er komt een belasting op ramen. Een stuiver per raam. Hij is nu aan het tellen.' },
+          ],
+          keuzes: [
+            { zeg: 'Betaal maar.', sluit: true, doe: { goud: -2 } },
+            { zeg: 'Iedereen zet planken voor zijn ramen. Vandaag nog.', sluit: true, doe: { hout: -8, tevreden: -2 } },
+            { zeg: 'Laat hem tellen. Hij kan niet tellen.', sluit: true, doe: { argwaan: 4 } },
           ],
         },
       },

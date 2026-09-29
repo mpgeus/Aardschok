@@ -746,6 +746,14 @@
     e.dood = true;
   }
 
+  // Het vee verliest dieren van een soort (de wolven, js/voorvallen.js): het jongste eerst, want dat pakt een wolf.
+  // Geeft hoeveel.
+  T.verliesVee = function (S, soort, n) {
+    const dieren = T.veeVan(S).filter((e) => e.dier === soort).sort(oudsteEerst).reverse().slice(0, Math.max(0, n));
+    for (const e of dieren) haalWeg(S, e);
+    return dieren.length;
+  };
+
   // ── Slachten (stap 2) ──
   //
   // Op 1 slachtmaand vraagt het dorp wie er naar de slager gaat (het venster in js/hud.js; je kunt het

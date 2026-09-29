@@ -1463,6 +1463,8 @@
     // draagt het vel van een gewone dorpeling, en zo zie je dat hij geen dorpeling is.
     if (!e.dood && e.kant === 'monster' && (S.gevecht || e.leven < e.maxLeven || e.rover)) levensbalk(ctx, cx, top - 9, e);
     if (e.alarm > 0) roep(ctx, '!', cx, top - 14 - Math.abs(Math.sin(e.alarm * 9)) * 4, '#ffd24a');
+    // Wie de schout zoekt met een voorval (js/voorvallen.js): een uitroepteken dat zacht op en neer gaat.
+    else if (e.zoektSchout && !e.binnen) roep(ctx, '!', cx, top - 12 - Math.abs(Math.sin(S.tijd * 3)) * 3, '#f3e2a4');
   }
 
   // Het oogje boven een getuige (js/zien.js, T.werdGezien): hij zag je iets wegzetten of terughalen

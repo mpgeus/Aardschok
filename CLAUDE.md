@@ -276,6 +276,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   maar werkt nergens en loopt de weg af (`T.stuurWeg`, `p.weg`); op 1 herfstmaand komt hij terug (`T.komtTerug`), een
   op de vier niet, en wie terugkomt, is veteraan. Vrijkopen (`T.koopHeervaartAf`) kost goud en argwaan. Wie niet
   kiest, stuurt ze na een week. De getallen in `T.HEERVAART_INSTELLINGEN` (in de werkbank), de spelregel "Heervaart".
+- `js/voorvallen.js`: **het dorp spreekt je aan** (vraag 65, A, 29 sep): om de paar dagen, in de winter vaker, komt
+  iemand de schout zoeken met een vraag, een ruzie of een ramp (`T.tikVoorvallenDag`, `T.kiesVoorval`): hij krijgt een
+  uitroepteken, loopt naar je toe (`T.werkVoorvallenBij`, met `T.loopNaastDeSchout` zoals de inner; `e.zoektSchout` laat
+  het dagritme, het dwalen en het maaien hem met rust) en spreekt je aan zodra je stilstaat (`T.ui.spreekAan`); de tijd
+  staat stil tot je kiest. Wanneer en over wie staat in `T.VOORVALLEN`, de woorden onder dezelfde naam in
+  `js/gesprekken.js` (naam `'{wie}'`, en `{ander}` in een zin), zodat je ze in de gespreksschrijver leest. Een antwoord
+  zegt vooraf wat het kost (`T.prijsVanKeuze`, in het venster onder elk antwoord); wat het doet, staat in zijn gevolg:
+  de voorraad, `tevreden` (een stemming die wegslijt, `T.voorvalStemming` in de tevredenheid), `argwaan`, `verban`,
+  `sterfkans`, `gezin` (`T.gezinKomt` in `js/gebouwen.js`, dezelfde als de groei), het vee (`T.verliesVee`), en
+  `voorval` (een vervolg, later, over dezelfde mensen). Wie je niet sprak, gaat na twee dagen voorbij; straks beslist
+  dan de raadsman. De spelregel "Voorvallen", de getallen in `T.VOORVALLEN_INSTELLINGEN`.
 - `js/zien.js`: **het zichtveld en de getuigen** (werklijst punt 3, 27 sep): wie buiten is, ziet de
   schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
   verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het
@@ -288,7 +299,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   dan vinden de soldaten die plek makkelijker (`g.verteldDoor`), en de herbergierster vertelt het je
   (`{getuige}`, `{gezien}`). Of je een getuige meteen ziet, is een keuze in de spelregels (`meteen`).
 - Een zin in een gesprek kan iets uit het spel noemen: `{woord}` vult `T.GESPREK_WOORDEN` in
-  (`js/gesprek.js`), zoals `{gisteravond}` (`js/herberg.js`).
+  (`js/gesprek.js`), zoals `{gisteravond}` (`js/herberg.js`), en in een voorval `{wie}` en `{ander}`
+  (`js/voorvallen.js`).
 - `js/akkers.js`: **alleen het gehucht** (`ontwerp/spel.md`): welk stadium een
   akker heeft op welke dag (`T.AKKER_STADIA`, één tabel, `T.akkerStadium`), het windbeeld per
   tegel (`T.windBeeld`) en zijn vaste variant (`T.akkerVariant`), waar een boer in het
@@ -385,8 +397,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   karakter bestuurt zichzelf en is zwakker. Met 0 tegenspelers blijft het spel zoals nu. Je eigen dorp krijgt bij
   Nieuw spel een naam die je zelf kiest.
 - **De raadsman** (Marcel, 29 sep, vraag 64): elk dorp heeft er een, met een karakter en gelote eigenschappen, en
-  jij kiest hem; hij voert je regels uit waar je niet bent. En "Het voelt gewoon nog leeg nu": het plan om het dorp je
-  te laten aanspreken, met voorvallen, is vraag 65.
+  jij kiest hem; hij voert je regels uit waar je niet bent. En "Het voelt gewoon nog leeg nu": sinds 29 sep spreekt het
+  dorp je aan, met voorvallen (vraag 65, `js/voorvallen.js`); het dorp van bovenaf bleef open.
 - **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én
   bouwen en plannen. **Rijk worden en arm lijken** (de heer, de inner en het verstoppen), eerst de
   kern, blijft als de druk van boven. **Vechten** begint met aanvallen op je eigen dorp (rovers, de
@@ -498,6 +510,8 @@ staat; `(3)` laat nu drie wilde rovers komen, `('bende')` de bende.
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
+`Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen en welke voorvallen er nu kunnen;
+`('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.
 `Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
 en het bier (`(30)` zet eerst 30 bier). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar

@@ -477,9 +477,11 @@
         continue;
       }
       if (e.binnen) continue; // 's nachts in zijn huis
+      // Wie de schout zoekt met een voorval (js/voorvallen.js), maait niet: hij stopt zoals in de schaft.
+      const werkt = werktijd && !e.zoektSchout;
       if (e.maait) {
         // Schaft of avond: hij stopt, en wat hij van deze tegel al maaide, blijft liggen voor morgen.
-        if (!werktijd) {
+        if (!werkt) {
           const m = e.maait;
           const k = sleutel(m.x, m.y);
           m.akker.half.set(k, (m.akker.half.get(k) || 0) + Math.max(0, nu - m.sinds));
@@ -504,7 +506,7 @@
       }
       // Buiten de werkuren begint hij aan niets nieuws; was hij op weg naar een tegel, dan maakt hij
       // alleen zijn stap af, en neemt het ritme van de dag het over (T.laatDwalen, js/verkennen.js).
-      if (!werktijd) {
+      if (!werkt) {
         if (e.oogstDoel) {
           e.oogstDoel = null;
           if (e.pad && e.pad.length) e.pad = e.onderweg ? [e.pad[0]] : [];
