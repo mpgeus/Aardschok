@@ -108,6 +108,17 @@ test('het hout: vanaf drie maanden voor de winter, als het hem niet haalt, en da
   assert.notEqual(id(S), 'hout');
 });
 
+test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: een jager', () => {
+  const S = gehucht();
+  T.zetVoorraad(S, 'hout', 5000);
+  T.zetVoorraad(S, 'graan', 0);
+  opDag(S, dagVan('herfstmaand', 1) + 0.5);
+  assert.equal(id(S), 'eten');
+  assert.equal(raad(S).tekst, `Het eten haalt de winter niet: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag.`);
+  T.zetVoorraad(S, 'graan', 5000);
+  assert.notEqual(id(S), 'eten');
+});
+
 test('de inner: een paar dagen vooraf, en op zijn dag zelf niet meer', () => {
   const S = gehucht();
   const komt = dagVan(T.INNER_INSTELLINGEN.komt.maand, T.INNER_INSTELLINGEN.komt.dag);
@@ -125,7 +136,8 @@ test('na Sint-Maarten: wat nog in een kelder ligt, eet niemand; ervoor zegt de r
   const S = gehucht();
   const boerderij = S.gebouwen.find((g) => g.soort === 'boerderij');
   boerderij.verstopt = { graan: 30, goud: 0 };
-  T.zetVoorraad(S, 'hout', 5000); // anders gaat het hout voor de winter voor
+  T.zetVoorraad(S, 'hout', 5000); // anders gaan het hout en het eten voor de winter voor
+  T.zetVoorraad(S, 'graan', 5000);
   opDag(S, dagVan('wijnmaand', 10) + 0.5);
   assert.notEqual(id(S), 'kelders');
   opDag(S, dagVan('slachtmaand', 20) + 0.5);

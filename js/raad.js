@@ -5,8 +5,8 @@
 // blijft het na de eerste weken nuttig. Het zijn de eerste weken als opdrachten (vraag 47), herschreven.
 //
 // Of er een gezin komt, vraagt de raad aan de groei zelf (T.waaromGeenGezin en T.volgendeGezinDag, js/gebouwen.js),
-// en of het hout de winter haalt aan het dorp (T.houtVoorDeWinter, js/behoeften.js): de raad zegt wat het spel doet,
-// en rekent niet naast het spel.
+// en of het hout en het eten de winter halen aan het dorp (T.houtVoorDeWinter en T.etenVoorDeWinter,
+// js/behoeften.js): de raad zegt wat het spel doet, en rekent niet naast het spel.
 //
 // Een toets staat tussen haken, [B]: in het vak wordt dat een toets (<kbd>, js/ui.js).
 //
@@ -21,9 +21,9 @@
     aan: true,
     // Zoveel dagen vóór de inner komt, zegt de raad het.
     innerVooraf: 3,
-    // Zoveel dagen vóór de winter zegt de raad het als het hout hem niet haalt: vanaf 1 herfstmaand, net als het dorp
-    // zelf (T.BEHOEFTEN_INSTELLINGEN.winterVooraf).
-    houtVooraf: 90,
+    // Zoveel dagen vóór de winter zegt de raad het als het hout of het eten hem niet haalt: vanaf 1 herfstmaand, net
+    // als het dorp zelf (T.BEHOEFTEN_INSTELLINGEN.winterVooraf).
+    winterVooraf: 90,
     // Zoveel dagen na een aanval van de rovers zegt de raad wat een wachthuis doet, als er geen is.
     roversNa: 10,
   };
@@ -58,6 +58,9 @@
     return (d.maand === sm.maand && d.dagVanMaand > sm.dag) || d.maand > sm.maand || d.maand < maandIdx('lentemaand');
   }
 
+  // Het hout of het eten haalt de winter niet, en die is binnen winterVooraf dagen (of al begonnen).
+  const haaltHetNiet = (v) => v.tot <= IN().winterVooraf && !v.haalt;
+
   // De marskramer staat op het plein, op zijn laatste ronde vóór de heer komt (js/handel.js).
   function marskramerInDeHerfst(S) {
     const m = S.marskramer;
@@ -84,13 +87,18 @@
     },
     {
       id: 'hout',
-      als: (S) => {
-        const v = T.houtVoorDeWinter(S, S.kalender.dag);
-        return v.tot <= IN().houtVooraf && !v.haalt;
-      },
+      als: (S) => haaltHetNiet(T.houtVoorDeWinter(S, S.kalender.dag)),
       tekst: (S) => (heeft(S, 'houthakker')
         ? 'Het hout haalt de winter nog niet: nog een houthakker [B] hakt erbij.'
         : 'Het hout haalt de winter niet: bouw een houthakker [B].'),
+    },
+    {
+      id: 'eten',
+      als: (S) => haaltHetNiet(T.etenVoorDeWinter(S, S.kalender.dag)),
+      // Wat helpt, zegt het dorp ook (js/behoeften.js): een jager, als vlees een maag vult.
+      tekst: () => (T.BEHOEFTEN_INSTELLINGEN.vleesIsEten
+        ? `Het eten haalt de winter niet: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag.`
+        : 'Het eten haalt de winter niet.'),
     },
     {
       id: 'kelders',
