@@ -380,9 +380,13 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   "intelligent genoeg om echt weerstand te bieden". Marcel koos (vraag 61 en 62): een land met provincies waar je
   dagen reist, zoals Lords of the Realm ("Denk in dagen"); een tegenspeler met een willekeurig dorp, een eigen weg en
   een voorsprong; een moeilijkheidsgraad; winnen is voor nu alles veroveren, en een veroverd dorp blijft bestaan en
-  leid je erbij; en uitzoeken of 5 of 6 spelers kan. Het plan voor het land is vraag 63; de eerste stap is het
-  buurdorp. Met 0 tegenspelers blijft het spel zoals nu. Je eigen dorp krijgt bij Nieuw spel een naam die je zelf
-  kiest.
+  leid je erbij; 5 of 6 spelers kan. Het land (vraag 63, besloten): een kaart met provincies waarop je reist, en per
+  provincie een kaart waar je loopt en vecht; elke tegenspeler een karakter met een voorsprong; een provincie zonder
+  karakter bestuurt zichzelf en is zwakker. Met 0 tegenspelers blijft het spel zoals nu. Je eigen dorp krijgt bij
+  Nieuw spel een naam die je zelf kiest.
+- **De raadsman** (Marcel, 29 sep, vraag 64): elk dorp heeft er een, met een karakter en gelote eigenschappen, en
+  jij kiest hem; hij voert je regels uit waar je niet bent. En "Het voelt gewoon nog leeg nu": het plan om het dorp je
+  te laten aanspreken, met voorvallen, is vraag 65.
 - **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én
   bouwen en plannen. **Rijk worden en arm lijken** (de heer, de inner en het verstoppen), eerst de
   kern, blijft als de druk van boven. **Vechten** begint met aanvallen op je eigen dorp (rovers, de

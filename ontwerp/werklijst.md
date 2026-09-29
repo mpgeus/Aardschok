@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (29 sep 2026, zeventiende sessie): de heervaart en de naam van je dorp gebouwd; het land (vraag 63) en de raadsman (vraag 64) wachten op Marcel
+## De stand (29 sep 2026, zeventiende sessie): de heervaart en de naam van je dorp gebouwd; het land en de raadsman besloten; "het voelt leeg" (vraag 65) wacht op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -26,12 +26,11 @@ de dag. `npm test`: 635/635.
 `ccr-0e928644-rvlci5`). Het werk van de zeventiende sessie (vraag 60 en 61) staat op `ccr-ef2496ce-pa4iti`, en gaat
 naar `main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij vraag 63, het plan voor een land met provincies waar je dagen reist, zoals
-Lords of the Realm (Marcel, 29 sep, vraag 62: "Denk in dagen ... Met een land met provincies"), met de tegenspelers
-erin; de eerste stap is het buurdorp. En bij vraag 64, hoe het leuk blijft (Marcel, 29 sep: "zelf als persoon rond
-hobbelen in je eigen stad maakt het wel lastig"): besturen van bovenaf, en een raadsman per dorp die jouw regels
-uitvoert. Allebei wachten ze op Marcels antwoord, en 64 bepaalt mee hoe 63 wordt (wie er reist, wie thuis bestuurt);
-daarna 1a: de kaart van het land en reizen, het buurdorp in een eigen provincie, en een snellere dagtik. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je dorp bij Nieuw spel; zie
+**Waar de volgende sessie begint:** bij vraag 65, "het voelt leeg" (Marcel, 29 sep: "Het voelt gewoon nog leeg
+nu"): het voorstel is dat het dorp je aanspreekt, met voorvallen, een raadsman die je kiest, en het dorp van bovenaf
+met tekens waar je nodig bent, en dat dit vóór het land komt. Het wacht op Marcels antwoord. Het land met provincies
+(vraag 63) en de raadsman (vraag 64, B en D) zijn besloten; daarna of daarvoor, zoals Marcel kiest: 1a van het land,
+de kaart van het land en reizen, het buurdorp in een eigen provincie, en een snellere dagtik. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je dorp bij Nieuw spel; zie
 onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
 thuis is (`npm run proefversie`, `verpakken.md`), en wie de eerste tester is, staat open (33d). Van de proef zijn
@@ -68,8 +67,8 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor een land met provincies (vraag 63), en hoe het leuk blijft: besturen zonder te
-lopen en een raadsman (vraag 64); de proefversie op itch.io zetten als hij
+*2. Wacht op Marcel:* "het voelt leeg": voorvallen, de raadsman en het dorp van bovenaf, en of dat vóór het land
+komt (vraag 65); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
 heer in het hogere doel past). Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51; het bijstellen na de
@@ -132,6 +131,12 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   volgt altijd de schout en je ziet maar een klein stuk van je dorp, dus bouwen gaat alleen waar hij staat. Het
   meedenken staat in vraag 64 (besturen van bovenaf met één toets, een raadsman per dorp met een bouwlijst en staande
   orders, de schout voor wat persoonlijk is), met een schets van de raadsman in het spel. Niets gebouwd.
+- **Marcel koos** (vraag 63): het land met provincies, zelf reizen, tegenspelers met een karakter, en provincies zonder
+  karakter die zichzelf besturen en zwakker zijn. En (vraag 64) een raadsman met een geloot karakter, die jij kiest; maar
+  over besturen van bovenaf: "Het voelt gewoon nog leeg nu." Gemeten: een jaar van braaf heeft 60 berichten, maar maar
+  een keer of acht een keuze (een per zeven minuten op 30×), en de winter bijna niets. Op 23 sep stond al dat voorvallen
+  met een keuze het spel maken ("zonder wordt een bouwspel een spreadsheet"); die zijn er nog niet. Het voorstel is vraag
+  65: het dorp spreekt je aan. Niets gebouwd.
 
 **Wat er in de zestiende sessie gebeurde** (29 sep; Marcel: "Werklijst doorzetten"):
 - **Eerst gemeten:** een speeljaar van nu (braaf, zaad 1, op `6750a21`), zonder fouten. Het gehucht groeit van 26 naar
@@ -1739,6 +1744,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     provincies waarop je reist, en per provincie de kaart waar je loopt? **B**, je reist zelf, met wie je meeneemt, en
     thuis draait het door? **C**, elke tegenspeler een karakter met een voorsprong? **D**, provincies zonder dorp voor
     nu alleen om doorheen te reizen?
+    **Beantwoord (Marcel, 29 sep):** "A ... Ja goed idee. B ... Ja dan moet je als speler de afweging maken waar
+    prioriteit ligt. C ... Ja dit maakt tegenstanders moeilijker in te schatten. D ... Ja, dit zijn zelfsturende
+    provincies, vaak zwakker dan die aangestuurd door een karakter." Dus: A, het land is een kaart met provincies
+    waarop je reist, en elke provincie heeft een eigen kaart waar je loopt en vecht; B, je reist zelf met wie je
+    meeneemt, en thuis draait het door, ook als de heer komt: waar je bent, is een afweging; C, elke tegenspeler heeft
+    een karakter met een voorsprong, zodat je hem moeilijker inschat; D, een provincie zonder karakter bestuurt zichzelf
+    en is vaak zwakker (zoals de vrije graafschappen in Lords of the Realm 2): voor nu land om doorheen te reizen,
+    later ook om in te nemen. Nog niets gebouwd: eerst vraag 65 (Marcel, bij vraag 64: "Het voelt gewoon nog leeg nu").
 64. **Hoe blijft het leuk: besturen zonder te lopen, en een raadsman** (Marcel, 29 sep, zeventiende sessie: "Ook
     moeten we even nadenken over hoe we het spel 'leuk' houden. Want zelf als persoon rond hobbelen in je eigen stad
     maakt het wel lastig. Misschien voelt het handiger als we een soort raadsman en aansturen die je regels oplegt?
@@ -1783,6 +1796,70 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     met een bouwlijst en staande orders, en de raad als zijn stem? **C**, de schout voor wat persoonlijk is, en sneller
     waar het vervoer is? **D**, jij kiest de raadsman uit het dorp, en zijn karakter telt? Of het andere: geen poppetje
     meer om te besturen?
+    **Beantwoord (Marcel, 29 sep):** "A ... Hier moeten nog even dieper op ingaan. Het voelt gewoon nog leeg nu. B ...
+    Een raadsman moet een karakter hebben. Gerandomiseerde eigenschappen en skills wat hem in bepaalde scenarios beter
+    maakt. C ... Dit valt samen met A. D ... Jij kiest een raadsman, op basis van skills en karakter." Dus: B en D, een
+    raadsman met een karakter en eigenschappen die per spel geloot worden, en die hem in bepaalde gevallen beter maken;
+    jij kiest hem op zijn karakter en wat hij kan. A en C samen: dieper op ingaan, want het spel voelt nu leeg. Dat is
+    vraag 65.
+65. **Het voelt leeg: het dorp spreekt je aan** (Marcel, 29 sep, zeventiende sessie, bij vraag 64: "Hier moeten nog even
+    dieper op ingaan. Het voelt gewoon nog leeg nu"; het meedenken is van Claude; wacht op Marcel). Wat er nu is,
+    gemeten:
+    - **Het spel vraagt weinig van je.** Een jaar van braaf in de speeltest (zaad 1): 60 berichten, maar een keuze vraagt
+      het spel een keer of acht: drie keer de marskramer, de inner, Sint-Maarten, twee keer de rovers, en het slachten.
+      Daarnaast bouw je en kies je wetten wanneer je wilt. Op 30× duurt een jaar een uur: een keuze per zeven minuten.
+    - **De winter is dood.** Van wintermaand tot sprokkelmaand komen er twee berichten, in oogstmaand negentien.
+    - **De mensen hebben een naam en een karakter, maar vragen niets.** Ze gaan hun dag door, en zeggen iets als je ze
+      aanspreekt. Quests zijn er nog niet (`js/quests.js` is leeg).
+    - **Het stond er al.** Op 23 sep (`spel.md`, "Welke gameplay er nog nodig is"): "De drie die het spel maken:
+      voorvallen met een keuze (zonder wordt een bouwspel een spreadsheet), argwaan met verstopplekken en het bezoek van
+      de inner, en behoeften met de winter." De argwaan en de winter zijn gebouwd, de voorvallen nog niet, en
+      rechtspraak, "de vierde", ook niet.
+    - **Lopen of van bovenaf lost dit niet op.** Van bovenaf ga je sneller, maar als er niets gebeurt, zie je alleen
+      sneller dat er niets gebeurt.
+    Voorstel:
+    - **A, het dorp spreekt je aan: voorvallen.** Om de paar dagen gebeurt er iets: iemand met een naam en een karakter
+      komt naar de schout met een vraag, een ruzie of een ramp, en jij kiest uit twee of drie antwoorden, elk met een
+      prijs die je vooraf ziet. Soorten:
+      - *Rechtspraak* (de vierde van 23 sep): een dief, een vechtpartij in de herberg, twee boeren om een akkergrens.
+        Streng houdt de orde, mild houdt vrienden, en wie je veroordeelde, vergeet het niet.
+      - *Verzoeken:* een lening, een erf voor een zoon, een vreemdeling die wil blijven.
+      - *Rampen:* brand in een rieten dak, ziekte uit een vuile put, wolven bij de schapen: iets doen kost iets, niets
+        doen ook.
+      - *Kansen:* een marskramer met gestolen goed, spotgoedkoop; een smid uit de stad die wil komen.
+      - *Feesten:* een bruiloft, een oogstfeest: graan op en een tevreden dorp, en wat op is, telt de inner niet (Lords
+        of the Realm, idee 4).
+      - *De grillen van de heer* (een idee van 23 sep): "Een standbeeld van Ons, voor Pasen."
+      Sommige komen terug: de dief die je liet gaan, steelt weer, of redt later je leven. In de winter komen ze vaker,
+      zodat ook die tijd iets vraagt.
+    - **B, de raadsman, zoals je koos (vraag 64, B en D):** iemand uit het dorp, met een karakter en eigenschappen die
+      per spel geloot worden: rechtspreken, rekenen (de handel), bouwen, vechten (de militie), zwijgen (tegenover de
+      inner). Je kiest hem uit twee of drie mensen, op wat hij kan en wie hij is. Ben je er niet, dan handelt hij de
+      voorvallen af naar wat hij kan, en hoor je het als je terugkomt ("Terwijl u weg was, heb ik de dief laten gaan. Hij
+      was mijn neef."). Zo telt zijn karakter, en bevalt je keuze je soms niet.
+    - **C, het dorp van bovenaf laat zien waar je nodig bent** (A en C van vraag 64 samen). Met één toets kijk je over je
+      dorp, en waar iets speelt, staat een teken boven het huis: een vraag, rook, twee mensen die ruziën. Klik erop, en de
+      schout gaat erheen, te paard; of je laat het aan de raadsman. Zo heeft kijken van bovenaf een doel: zien waar je
+      nodig bent, en niet alleen bouwen.
+    - **D, de volgorde:** eerst één dorp vol leven (de voorvallen, de raadsman, het dorp van bovenaf), dan het land met
+      het buurdorp. Een land vol dorpen waarin niets gebeurt, is nog leger.
+    - **Hoe het werkt** (geen vraag): een voorval is een gesprek dat de ander begint. Het staat in dezelfde vorm als de
+      gesprekken en de quests die er al zijn (met situaties, voorwaarden en een prijs per antwoord), dus je kunt ze
+      zelf schrijven en nalezen in de gespreksschrijver. Wanneer er een komt en welke, zegt een klein nieuw bestand
+      zonder scherm (`js/voorvallen.js`), met de getallen in de werkbank en een spelregel voor hoe vaak.
+    - **Wat het doet** (inzicht): elke paar minuten een keuze die ertoe doet, uit het dorp zelf; de winter krijgt
+      verhalen; de mensen worden mensen, omdat ze iets van je willen; en rijk worden en arm lijken krijgt nieuwe kanten
+      (een feest dat een overschot laat verdwijnen, een raadsman die zwijgt of juist niet). Het maakt ook reizen
+      spannend: wie weg is, mist wat er thuis gebeurt, en dan beslist de raadsman.
+    - **Ook leeg, om te onthouden** (geen vraag): het dorp is stil. Geluid (vogels, een hamer, de herberg 's avonds)
+      doet veel voor weinig; het staat in deel F.
+    Klaar als (A): er om de paar dagen een voorval komt, meer in de winter; de mens die het betreft naar de schout loopt
+    (of het wacht tot hij er is); elk antwoord vooraf zijn prijs zegt; er een stuk of dertig voorvallen zijn, van elke
+    soort een paar; sommige terugkomen; de spelregel "Voorvallen" zegt hoe vaak; `npm test` groen is; en de speeltest ze
+    beantwoordt, met in een speeljaar een keuze per één tot twee minuten op 30×. Vragen: **A**, voorvallen: om de paar
+    dagen, meer in de winter, van mensen met een naam, en soms komen ze terug? **B**, de raadsman zo: geloot, gekozen
+    uit twee of drie, en ben je er niet, dan beslist hij naar wat hij kan? **C**, het dorp van bovenaf met tekens waar
+    je nodig bent, en erheen te paard? **D**, eerst één dorp vol leven, dan het land?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

@@ -16,7 +16,8 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3 | vraag 50, 51, 54 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
-| Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), met een eigen weg en een voorsprong, en een moeilijkheidsgraad; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij. Het land: plan | vraag 61, 62, 63 |
+| Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
+| De raadsman en de voorvallen | besloten (29 sep): een raadsman per dorp met een geloot karakter, die jij kiest; voorstel: voorvallen, zodat het dorp je aanspreekt ("Het voelt gewoon nog leeg nu") | vraag 64, 65 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf | vraag 58 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -69,7 +70,12 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
   **En daarna (29 sep, vraag 62):** "reistijd moet groter zijn. Denk in dagen. Het moet voelen meer als Lords of the
   Realm. Met een land met provincies." Een tegenspeler "mag random zijn, mag zijn eigen weg bepalen. Heeft mogelijk
   een voorsprong op bepaalde gebieden van het spel." Een veroverd dorp "blijft bestaan. Je wordt inderdaad leider van
-  2." En: "uitzoeken of we ook met 5 - 6 spelers kunnen." Het plan voor het land: vraag 63.
+  2." En: "uitzoeken of we ook met 5 - 6 spelers kunnen." Het plan voor het land: vraag 63. **Besloten (29 sep,
+  vraag 63):** het land is een kaart met provincies waarop je reist, en elke provincie heeft een eigen kaart waar je
+  loopt en vecht; je reist zelf, met wie je meeneemt, en thuis draait het door ("dan moet je als speler de afweging
+  maken waar prioriteit ligt"); elke tegenspeler heeft een karakter met een voorsprong ("dit maakt tegenstanders
+  moeilijker in te schatten"); en een provincie zonder karakter bestuurt zichzelf, en is vaak zwakker. 5 of 6 spelers
+  kan (gemeten; werklijst, vraag 63).
 - **Je dorp heeft een naam, die je zelf kiest** (Marcel, 29 sep, vraag 60: "speler mag zelf de naam voor zijn dorp
   kiezen aan het begin"): bij Nieuw spel.
 - **Eenvoudig, geen geschiedenisles** (Marcel, 29 sep): "Maak het niet te ingewikkeld, er is geen gelijkenis met
@@ -2641,7 +2647,10 @@ en over de heervaart [Wikipedia](https://nl.wikipedia.org/wiki/Heervaart).
   paard. **Op 29 sep kwam Marcel erop terug** ("zelf als persoon rond hobbelen in je eigen stad maakt het wel
   lastig. Misschien voelt het handiger als we een soort raadsman en aansturen die je regels oplegt?"): het voorstel
   van Claude, besturen van bovenaf met één toets en een raadsman per dorp die jouw regels uitvoert, staat in de
-  werklijst, vraag 64.
+  werklijst, vraag 64. **Besloten (29 sep):** een raadsman per dorp, met een karakter en gelote eigenschappen die
+  hem in bepaalde gevallen beter maken, en jij kiest hem op zijn karakter en wat hij kan. Over besturen van bovenaf:
+  "Hier moeten nog even dieper op ingaan. Het voelt gewoon nog leeg nu." Dat werd vraag 65: het dorp spreekt je aan,
+  met voorvallen.
 - Hoe ver gaat de politiek: keuren, schepenen en groepen zoals hierboven, of ook verkiezingen,
   partijen en intriges aan het hof van de heer?
 - Goederen, groepen en keuren: een eerste voorstel staat hierboven ("De kern voor het tweede proefje"),
