@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 29 sep 2026, vijftiende sessie)
+## Waar staat wat (bijgewerkt 29 sep 2026, zestiende sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -15,6 +15,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 |---|---|---|
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3 | vraag 50, 51, 54 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
+| De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf | vraag 58 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
 | De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen, vreemden welkom, houtkap en belasting | vraag 54 |
@@ -121,6 +122,28 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
 **Hoe het zo kwam:** het plan staat in de werklijst, vraag 55. Claude stelde voor dat de rovers naar het plein gingen,
 eens per jaar een bende van buiten, en dat wie viel alleen gewond was tot de ochtend. Marcel koos anders: ook wilde
 rovers, ze roven de velden en maken er soms een kapot, en mensen kunnen sterven.
+
+## De raad onder het doel (Marcel, 29 sep 2026; werklijst vraag 58)
+
+**Zo werkt het nu** (29 sep, zestiende sessie; `js/raad.js`, toetsen in `test/raad.test.cjs`; Marcel: "B onder het
+doel"):
+- **Onder het doel** linksboven ("26 van 50 mensen · nog geen kapel · nog geen smidse", `js/treden.js`) staat in goud
+  één regel die zegt wat nu tussen jou en een dorp staat, met de toets erbij. Het is de eerste die nu geldt, in deze
+  volgorde: de inner (drie dagen vooraf: "wat hij niet ziet, telt de heer niet"); het goud voor de heer, als de
+  marskramer er in de herfst is en je te weinig hebt; een wachthuis, tien dagen na een aanval als er geen is; het hout
+  en het eten voor de winter, vanaf drie maanden ervoor, met de houthakker en de jager erbij; het graan dat na
+  Sint-Maarten nog in de kelders ligt ("dat eet niemand en zaait niemand"); de eerste dag hoe de tijd sneller gaat en
+  hoe je slaapt; en dan de groei: waarom er geen gezin komt (het dorp is vol: wijs een erf aan; niet tevreden genoeg;
+  te weinig graan), of wanneer het volgende komt, zoals een stad in Civilization zegt wanneer hij groeit.
+- **Uit de regels zelf:** de raad vraagt het aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in
+  `js/gebouwen.js`, dezelfde vraag die de groei stelt) en aan de winter (`T.houtVoorDeWinter`, `T.etenVoorDeWinter`),
+  zodat hij zegt wat het spel doet.
+- **De eerste weken** (vraag 47, herschreven): geen rij opdrachten die je afwerkt, maar wat nu telt. Zo blijft niemand
+  op een stap hangen, komt een toets pas als je hem nodig hebt, en blijft het na de eerste weken nuttig.
+- **Instelbaar:** de spelregel "Raad" zet hem uit, en de dagen staan in de werkbank (`T.RAAD_INSTELLINGEN`).
+  `Spel.debug.raad()` zegt welke raden nu gelden.
+- **Nog niet:** de raad zegt niets over de wetten, en niet waar goud vandaan komt, behalve in de herfst voor de heer.
+  Wat de bouwer in de speeltest ermee deed, staat in `speelbaar.md`.
 
 ## Besloten (Marcel, 23 sep 2026)
 

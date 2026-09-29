@@ -83,7 +83,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   zijn bladzijde laadt (`.pagina('gereedschap/wereld.html')`). Nooit een eigen lijstje: dan mist er
   vroeg of laat een bestand, en toetst de toets een ander spel dan er draait.
 - `npm run speeltest` speelt het gehucht een jaar met vier spelers in code (braaf, lui 30%, lui 60%, slim;
-  vraag 45), elk met zaad 1 tot en met 3, in een onzichtbare browser, en zet de uitslag in
+  vraag 45), en twee jaar met een vijfde, de bouwer, die van gehucht tot dorp wil en de raad volgt (vraag 58), elk met
+  zaad 1 tot en met 3, in een onzichtbare browser, en zet de uitslag in
   `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`. Hetzelfde zaad geeft
   hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed (`-- slim --zaad 2` voor
   één jaar). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
@@ -91,6 +92,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   cloud staat het klaar). Wat het vond, staat in `ontwerp/speelbaar.md`. Met `--opslaan` is het de proef met
   opslaan: de speler slaat op 1 oogstmaand op via het menu, de bladzijde herlaadt, hij gaat verder met Verder,
   en het jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`).
+- `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
+  (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
+  titelscherm (`T.STAND`). Commit eerst.
 - `npm run pixelart` rendert alle HD-pixel art naar `gereedschap/pixelart/uit/` (niet in git).
 - `npm run pixelart:spel` zet daaruit alleen wat het spel tekent in `beelden/` (wél in git,
   want het spel heeft het nodig als het draait). Draai het opnieuw als de kunst verandert.
@@ -140,7 +144,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - `js/naam.js`: de naam van het spel (`T.NAAM`), op één plek, want hij verandert nog (Marcel, 28 sep); een
   titel schrijft `{naam}`. De sleutel waaronder de browser iets bewaart (`T.OPSLAG_SLEUTEL`) staat ernaast en
-  verandert nooit mee. `test/naam.test.cjs` bewaakt dat de naam nergens anders staat.
+  verandert nooit mee. `test/naam.test.cjs` bewaakt dat de naam nergens anders staat. `T.STAND` is leeg, behalve in
+  een proefversie (`npm run proefversie` zet er de datum en de commit in).
 - `js/opslaan.js`: **opslaan en laden** (werklijst punt 3, vraag 48): het bewaart heel `Spel.S` behalve wat
   alleen scherm is (`T.schermVelden`), met de verzamelingen en alles wat elkaar aanwijst heel
   (`T.bewaarSpel`, `T.leesSpel`, `T.zetSpel`). Een plek die vanzelf gaat, elke ochtend als de mensen opstaan
@@ -224,6 +229,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   doel voor het vak linksboven (js/main.js, als er geen quest is), `T.tikTredeDag` zet `S.trede` (en die gaat nooit
   terug), en de heer schrijft dan (`T.ui.toonDorpsbrief` in js/hud.js): het eind van de proef. Het bouwmenu toont
   deze trede en de treden ervoor (`T.inBouwmenu`).
+- `js/raad.js`: **de raad onder het doel** (stap 5 van de proef, vraag 58, 29 sep; de eerste weken, vraag 47,
+  herschreven): één regel onder het doel linksboven die zegt wat nu tussen jou en een dorp staat, met de toets erbij
+  (`[B]` wordt een toets): de eerste uit `T.RADEN` die nu geldt (`T.raadNu`). Hij vraagt het aan de regels zelf: of er
+  een gezin komt aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in `js/gebouwen.js`), het hout en het eten
+  aan de winter. Uit te zetten in de spelregels ("Raad").
 - `js/wetten.js`: **de wetten** (stap 3 van de proef, vraag 54, 29 sep; eerst keuren genoemd): een menu zoals in
   Democracy 3 (`js/wettenmenu.js`, onder `W` en als knop in de balk), met het rantsoen, vreemden welkom, houtkap in
   het bos van de heer en de belasting. Wat een wet doet, staat als getallen per stand in één blok
@@ -462,6 +472,7 @@ gezin komen (overdag over de weg; is het dorp vol, dan neemt het een vrij erf), 
 hoe ver het gehucht is met een dorp worden, en `('dorp')` maakt er nu een dorp van, met de brief van de heer.
 `Spel.debug.rovers()` zegt wie er in de bende zit, wanneer die en de wilde rovers komen, en hoe een aanval ervoor
 staat; `(3)` laat nu drie wilde rovers komen, `('bende')` de bende.
+`Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
 `Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
 en het bier (`(30)` zet eerst 30 bier). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
