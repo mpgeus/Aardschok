@@ -2176,6 +2176,14 @@ wordt, wordt dus vanzelf duurder. De schout moet kiezen:
 
 ### Van dorp tot stad
 
+**Besloten: de eerste trede** (Marcel, 28 en 29 sep, werklijst vraag 51 en 53: "A ja B ja C ja D ja"). Het gehucht
+wordt een dorp bij 50 mensen, met een kapel en een smidse die klaar zijn (de getallen in de werkbank). Het doel
+staat vanaf het begin linksboven, met hoe ver je bent, en de heer noemt het in zijn benoemingsbrief ("Een dorp
+brengt Ons meer op"). Is het zover, dan schrijft hij: "Wij vernemen dat Ons gehucht een dorp is geworden.
+Gefeliciteerd. Dat kost u vanaf nu meer.", met "Verder als dorp" en "Naar het titelscherm": het eind van de proef
+"van gehucht tot dorp". Het dorp zet alleen het bouwmenu van het dorp open, met dat van het gehucht erbij. "Dat kost
+u meer" is voorlopig alleen woorden: een getal voor het hoofdgeld in een dorp staat in de werkbank, op 1.
+
 Dat is punt 14 (de treden). Met het bovenstaande zie je de stad groeien, in plaats van dat hij
 vrijkomt: een rijk midden van baksteen en pannen, een arme rand van hutten, straten waar gelopen
 wordt, en de markt op het plein, met troggen voor het vee op marktdagen.

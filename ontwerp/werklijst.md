@@ -42,7 +42,7 @@ kost u vanaf nu meer."
    is het dorp vol, dan zet een nieuw gezin er zelf een hut op, met hout uit de voorraad. Zie onder Af.
 2. **Nu: de eerste trede: van gehucht tot dorp** (punt 14). Een dorp bij 50 mensen, een kapel en een smidse
    (Marcel koos het; de getallen in de werkbank), met het bouwmenu van het dorp en de brief van de heer. Het einde
-   van de proef. Het plan staat bij vraag 53 (28 sep, veertiende sessie; wacht op Marcel).
+   van de proef. Het plan staat bij vraag 53 (Marcel, 29 sep: "A ja B ja C ja D ja"; wordt gebouwd).
 3. **De eerste keuren** (punt 9, nog zonder groepen en schepenen): vreemden, rantsoen en houtkap, in één venster,
    en elke keur zegt vooraf wat hij doet.
 4. **Rovers en een militie** (punt 13): rovers vallen het gehucht aan, en je verdedigt het in beurten op je eigen
@@ -1034,6 +1034,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     in de werkbank staan, `npm test` groen is, en een schermafdruk de brief laat zien. Vragen: **A**, het doel
     linksboven en in de benoemingsbrief? **B**, de brief met twee knoppen als eind van de proef? **C**, alleen
     het bouwmenu erbij? **D**, alleen woorden, met het getal op 1?
+    **Beantwoord (Marcel, 29 sep): "A ja B ja C ja D ja".** Alle vier zoals voorgesteld; het wordt gebouwd.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
