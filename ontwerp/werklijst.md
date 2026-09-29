@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (29 sep 2026, zeventiende sessie): de heervaart en de naam van je dorp gebouwd; het buurdorp op één grote kaart (vraag 62) wacht op Marcel
+## De stand (29 sep 2026, zeventiende sessie): de heervaart en de naam van je dorp gebouwd; het land met provincies (vraag 63) wacht op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -26,10 +26,10 @@ de dag. `npm test`: 635/635.
 `ccr-0e928644-rvlci5`). Het werk van de zeventiende sessie (vraag 60 en 61) staat op `ccr-ef2496ce-pa4iti`, en gaat
 naar `main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij vraag 62, het plan voor het buurdorp op één grote kaart: stap 1 van de
-tegenspelers (vraag 61; Marcel, 29 sep: "A een grote kaart ... basis voor nu is alles veroveren. En ja we starten met
-het buurdorp erbij"). Het wacht op Marcels antwoord; daarna 1a: de grote kaart, met het buurdorp dat op dezelfde regels
-leeft. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je dorp bij Nieuw spel; zie
+**Waar de volgende sessie begint:** bij vraag 63, het plan voor een land met provincies waar je dagen reist, zoals
+Lords of the Realm (Marcel, 29 sep, vraag 62: "Denk in dagen ... Met een land met provincies"), met de tegenspelers
+erin; de eerste stap is het buurdorp. Het wacht op Marcels antwoord; daarna 1a: de kaart van het land en reizen, het
+buurdorp in een eigen provincie, en een snellere dagtik. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je dorp bij Nieuw spel; zie
 onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
 thuis is (`npm run proefversie`, `verpakken.md`), en wie de eerste tester is, staat open (33d). Van de proef zijn
@@ -66,7 +66,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor het buurdorp op één grote kaart (vraag 62); de proefversie op itch.io zetten als hij
+*2. Wacht op Marcel:* het plan voor een land met provincies (vraag 63); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
 heer in het hogere doel past). Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51; het bijstellen na de
@@ -75,8 +75,8 @@ speeltest (vraag 46) komt later, met een menu met opties.
 *3. Nu: na de proef* (vraag 51; Marcel, 29 sep: "we gaan naar het volgende punt"; het eerste is het volgende):
 - de heervaart, en een rivaal: een ander dorp van dezelfde heer (vraag 50, D). De heervaart is gebouwd (vraag 60, A en
   B); de rivaal wordt de eerste tegenspeler (vraag 61, stap 1);
-- tegenspelers die zelf bouwen, op één grote kaart (Marcel, 29 sep, vraag 60, D, en vraag 61); stap 1, het buurdorp,
-  is vraag 62;
+- tegenspelers die zelf bouwen, in een land met provincies (Marcel, 29 sep, vraag 60, D, 61 en 62); het plan is
+  vraag 63, en de eerste stap is het buurdorp;
 - ontginnen (6b) en straten en paden (6c), tenzij de kaart al eerder te klein is;
 - beter bouwen: de ladder tot baksteen, en de herberg die meegroeit (het tweede deel van 3b, stap 5);
 - de groepen en de schepenen (de rest van punt 9), voorvallen (8), rechtspraak (10), de nacht (11), de eigen
@@ -118,6 +118,12 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   regelbestanden gaan uit van één dorp op de kaart (de akkers, het plein, de weg in en uit); meer poppetjes kan (337
   poppetjes kosten 4,7 ms rekenwerk per beeld op 30×); en donker tot je het ziet, bestaat al half (`w.bekend`, uit het
   torenspel). Daaruit het plan voor stap 1 op één grote kaart (vraag 62), met een schets van de kaart. Niets gebouwd.
+- **Marcel koos** (vraag 62): "reistijd moet groter zijn. Denk in dagen. Het moet voelen meer als Lords of the Realm.
+  Met een land met provincies", een tegenspeler met een eigen weg en een voorsprong, een veroverd dorp dat blijft en
+  dat je erbij leidt, en uitzoeken of 5 of 6 spelers kan. Gemeten: een dorp draait ook zonder poppetjes op dezelfde
+  regels (twee jaar met alleen de dagtik: 26 → 37 in het eerste jaar, zoals met poppetjes); een speeldag kost 44 ms
+  per dorp, bijna allemaal in `T.voorwerpOp`, dat voor elke tegel alle voorwerpen afloopt; een bewaard spel is 370 kB
+  per dorp. Daaruit het plan voor het land (vraag 63), met een schets. Niets gebouwd.
 
 **Wat er in de zestiende sessie gebeurde** (29 sep; Marcel: "Werklijst doorzetten"):
 - **Eerst gemeten:** een speeljaar van nu (braaf, zaad 1, op `6750a21`), zonder fouten. Het gehucht groeit van 26 naar
@@ -1655,6 +1661,76 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     zoals hij is, en 1 is de grote kaart met het buurdorp? **D**, veroveren (dat is stap 2, maar het bepaalt nu hoe we
     bouwen): verover je een dorp, dan wordt het van jou en ben je de schout van allebei; of komen hun mensen naar jou,
     en blijft hun dorp leeg achter?
+    **Beantwoord (Marcel, 29 sep): "A, Nee, reistijd moet groter zijn. Denk in dagen. Het moet voelen meer als Lords of
+    the Realm. Met een land met provincies. B het buurdorp mag random zijn, mag zijn eigen weg bepalen. Heeft mogelijk
+    een voorsprong op bepaalde gebieden van het spel. Kunnen we later aanpassen en finetunen. C dat is goed. D ja dat
+    dorp blijft bestaan. Je wordt inderdaad leider van 2. E uitzoeken of we ook met 5 - 6 spelers kunnen."** Dus: A,
+    reizen duurt dagen, in een land met provincies, zoals Lords of the Realm; B, een tegenspeler heeft een eigen
+    indeling (willekeurig), kiest zijn eigen weg, en kan ergens een voorsprong in hebben, met de getallen later bij
+    te stellen; C, 0 tegenspelers is het spel van nu op de kleine kaart, zoals voorgesteld; D, een veroverd dorp blijft
+    bestaan, en je bent de leider van allebei; E, uitzoeken of het met 5 of 6 spelers kan. A verandert het plan
+    opnieuw: zie vraag 63.
+63. **Een land met provincies: het plan** (Claude, 29 sep, zeventiende sessie; na Marcels antwoord op vraag 62: "Denk
+    in dagen. Het moet voelen meer als Lords of the Realm. Met een land met provincies", en "E uitzoeken of we ook met
+    5 - 6 spelers kunnen"; wacht op Marcel). Wat er nu is, nagekeken:
+    - **Reizen in dagen op één doorlopende tegelkaart wordt een kaart van duizenden tegels.** De schout loopt zo'n 27
+      tegels per uur, dus een dag lopen is zo'n 300 tegels. Zes dorpen die dagen uit elkaar liggen, vragen een kaart van
+      duizenden tegels breed, en bijna alles daarvan is leeg land waar je doorheen loopt.
+    - **Lords of the Realm doet het met een kaart van het land:** graafschappen, en daartussen reis je; het gevecht
+      speelt op een eigen kaart. Jagged Alliance 2, ons voorbeeld voor het gevecht, net zo: je reist over de kaart van
+      het land, en je loopt en vecht op de kaart van één stuk ervan.
+    - **Een dorp waar je niet bent, kan draaien zonder poppetjes.** Gemeten: het gehucht twee jaar met alleen de
+      dagtik, zonder dat iemand iets beslist, groeit in het eerste jaar van 26 naar 37, precies zoals in de speeltest
+      mét poppetjes; de oogst komt binnen, en de winter kost mensen. Alleen de bezoekers (de heer, de inner, de
+      marskramer) doen nu hun werk als poppetje; voor een dorp zonder poppetjes moet dat anders.
+    - **5 of 6 spelers (E): het kan, met twee dingen erbij.** Per beeld kost alleen de provincie waar je bent iets (337
+      poppetjes: 4,7 ms van de 16). Maar (1) een speeldag kost nu 44 ms rekenwerk per dorp, bijna allemaal omdat elke
+      bewoner elke dag een plek zoekt en het spel daarbij voor elke tegel alle honderden bomen en huizen afloopt
+      (`T.voorwerpOp`); met een lijst van wat waar staat, gaat dat vele malen sneller, en dat helpt het spel van nu
+      ook (dat hapert nu elke speeldag even). En (2) een bewaard spel is 370 kB per dorp: met zes dorpen past het niet
+      zes keer in de opslag van de browser (5 MB). Op Steam is het een bestand, en speelt dat niet; voor de browser
+      (itch.io) moet het kleiner (samengeperst), of met minder plekken.
+    Voorstel:
+    - **A, het land is een kaart met provincies, zoals in Lords of the Realm**, en elke provincie heeft zijn eigen kaart
+      waar je loopt, bouwt en vecht, zoals het gehucht nu. Loop je je provincie uit over de weg, dan open je de kaart
+      van het land: daar zie je de provincies die je kent, en hoeveel dagen reizen het is. Kies je er een, dan gaan
+      de dagen snel voorbij (zoals slapen), en kom je daar aan. Wat je nog niet zag, is donker. Een land voor jou en
+      één tegenspeler heeft zo'n negen provincies, met één tot drie dagen reizen per stap; het buurdorp ligt een paar
+      stappen verder. Met meer tegenspelers groeit het land (tot zo'n twintig provincies voor zes spelers). Het
+      andere: één doorlopende tegelkaart, dagen lopen.
+    - **B, wie reist, en wat thuis gebeurt.** Je reist zelf, als schout, en neemt mee wie je wilt: je wachters en je
+      veteranen (voor het veroveren, stap 2). Je dorp draait door terwijl je weg bent, op zijn eigen regels en jouw
+      wetten; komt de heer op Sint-Maarten en ben je er niet, dan neemt hij zelf wat hij wil, zoals nu. Wat er thuis
+      gebeurde, hoor je als je terugkomt.
+    - **C, elke tegenspeler heeft een karakter, zoals de rivalen in Lords of the Realm 2,** met zijn eigen weg en een
+      voorsprong daarin (Marcel: "mag zijn eigen weg bepalen. Heeft mogelijk een voorsprong"): de bouwer (bouwt eerst
+      een sterk dorp, en begint met meer hout), de groeier (wil groot worden, en neemt te veel hooi op zijn vork), de
+      krijger (bewapent zich en valt aan, en begint met een wachthuis), de handelaar (verdient aan de marskramer, en
+      begint met meer goud). Zijn gehucht ligt elke keer anders (willekeurig), uit dezelfde code als het jouwe. De
+      getallen staan in de werkbank.
+    - **D, provincies zonder dorp:** voor nu land waar je doorheen reist (bos, heide, het kasteel van de heer, de stad
+      waar de marskramer vandaan komt). Later: ontginnen en een nieuw dorp stichten (land uitbreiden), een roversnest,
+      of grondstoffen.
+    - **In stappen, elk speelbaar:**
+      1. *Het land, met het buurdorp* (vraag 60, C, en 61, stap 1): (a) de kaart van het land en reizen in dagen; je
+         dorp draait door als je weg bent; het buurdorp in zijn eigen provincie, met een willekeurig gehucht dat op
+         dezelfde regels leeft; en de dagtik sneller. (b) Zijn schout beslist, naar zijn karakter en de
+         moeilijkheidsgraad. (c) Hoe jullie staan: bezoeken, vragen, roven, en de heer die vergelijkt.
+      2. *Veroveren:* met je mannen erheen, vechten in zijn dorp, en leider van twee (vraag 62, D).
+      3. *Kiezen hoeveel, tot 5 of 6,* met een land dat meegroeit.
+      4. *Slimmer, en bijstellen.*
+    - **Wat het doet** (inzicht): reizen in dagen maakt afstand een keuze. Wie een week weg is om een buurman te
+      veroveren, laat zijn eigen dorp alleen, met de rovers en de heer; bij Lords of the Realm speelde je dat met
+      legers, hier met jezelf. En de heer kan niet op zes plekken tegelijk zijn: zijn ronde op Sint-Maarten gaat van
+      dorp naar dorp, zodat hij kan vertellen wat de anderen hem gaven.
+    Klaar als (stap 1a): met 1 tegenspeler begint het spel in jouw provincie (het gehucht zoals nu); over de weg kom je
+    op de kaart van het land, waar je reist en de dagen voorbijgaan; het buurdorp ligt in een eigen provincie, met een
+    gehucht dat elke keer anders ligt en op dezelfde regels leeft; je dorp draait door als je weg bent; wat je nog niet
+    zag, is donker; een speeldag kost per dorp een fractie van nu; opslaan houdt het land en alle dorpen; `npm test`
+    groen; en met 0 tegenspelers speelt het spel letter voor letter zoals nu. Vragen: **A**, het land zo: een kaart met
+    provincies waarop je reist, en per provincie de kaart waar je loopt? **B**, je reist zelf, met wie je meeneemt, en
+    thuis draait het door? **C**, elke tegenspeler een karakter met een voorsprong? **D**, provincies zonder dorp voor
+    nu alleen om doorheen te reizen?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

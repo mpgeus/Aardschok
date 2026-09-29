@@ -31,6 +31,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     zegt de raad nu hoe ver het komt ("26 van de 90 dagen"). Een mens rekent dan zelf; een speler in code nog niet.
   - **Huizen groeien vanzelf door** (hut, huis, stenen huis), en daarmee groeit het dorp ook zonder erven: de
     bouwer had 74 mensen in wintermaand, met vijf erven.
+- **Elke speeldag hapert het spel even** (gemeten 29 sep, zeventiende sessie, werklijst vraag 63): de dagtik kost zo'n
+  44 ms, en op 30× komt er elke tien seconden een. Bijna alles zit in `T.voorwerpOp` (`js/wereld.js`), dat voor één
+  tegel alle honderden voorwerpen afloopt (bomen, huizen, hekjes), en dat een miljoen keer per dag, omdat elke bewoner
+  elke dag een plek zoekt (`plekOpHetPlein`, via `T.isBegaanbaar`). Een lijst van wat waar staat, of de vrije plekken
+  één keer per dag zoeken, maakt het vele malen sneller. Nodig voor het land met tegenspelers (een dagtik per dorp),
+  en het helpt het spel van nu.
 - **Wat opviel bij de heervaart** (29 sep, zeventiende sessie; `js/heervaart.js`, werklijst vraag 60):
   - **Wie er gaat, kiest het spel.** Zelf kiezen (een wachter sturen, zodat hij harder terugkomt, of juist houden) is
     een echte keuze, maar vraagt een lijst in de brief. Later, als spelen laat zien dat het ertoe doet.

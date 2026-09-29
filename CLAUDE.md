@@ -377,9 +377,12 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   civilisation". Hoe de heer en de vrijheid daarin passen, is nog open (`spel.md`, "Een nieuwe richting").
 - **Tegenspelers** (Marcel, 29 sep, vraag 60, D): aan het begin kies je hoeveel. Het zijn dorpen met een AI, die
   tegelijk met jou beginnen, ergens op de kaart waar je ze nog moet vinden, en zelf bouwen om de grootste te worden;
-  "intelligent genoeg om echt weerstand te bieden". Marcel koos (vraag 61): één grote kaart met alle dorpen erop,
-  gelijk beginnen met dezelfde regels, een moeilijkheidsgraad, en winnen is voor nu alles veroveren. De eerste stap
-  is het buurdorp (vraag 62). Je eigen dorp krijgt bij Nieuw spel een naam die je zelf kiest.
+  "intelligent genoeg om echt weerstand te bieden". Marcel koos (vraag 61 en 62): een land met provincies waar je
+  dagen reist, zoals Lords of the Realm ("Denk in dagen"); een tegenspeler met een willekeurig dorp, een eigen weg en
+  een voorsprong; een moeilijkheidsgraad; winnen is voor nu alles veroveren, en een veroverd dorp blijft bestaan en
+  leid je erbij; en uitzoeken of 5 of 6 spelers kan. Het plan voor het land is vraag 63; de eerste stap is het
+  buurdorp. Met 0 tegenspelers blijft het spel zoals nu. Je eigen dorp krijgt bij Nieuw spel een naam die je zelf
+  kiest.
 - **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én
   bouwen en plannen. **Rijk worden en arm lijken** (de heer, de inner en het verstoppen), eerst de
   kern, blijft als de druk van boven. **Vechten** begint met aanvallen op je eigen dorp (rovers, de

@@ -16,7 +16,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3 | vraag 50, 51, 54 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
-| Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, op één grote kaart, gelijk beginnend met dezelfde regels, met een moeilijkheidsgraad; winnen is voor nu alles veroveren. Stap 1, het buurdorp: plan | vraag 61, 62 |
+| Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), met een eigen weg en een voorsprong, en een moeilijkheidsgraad; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij. Het land: plan | vraag 61, 62, 63 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf | vraag 58 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -66,6 +66,10 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
   alles veroveren. En ja we starten met het buurdorp erbij." Dus één grote kaart met alle dorpen erop (niet de
   streek als kaarten naast elkaar); gelijk beginnen met dezelfde regels, voor nu; een moeilijkheidsgraad die zegt
   hoe goed een tegenspeler is; en winnen is voor nu alles veroveren. Het plan voor de eerste stap: vraag 62.
+  **En daarna (29 sep, vraag 62):** "reistijd moet groter zijn. Denk in dagen. Het moet voelen meer als Lords of the
+  Realm. Met een land met provincies." Een tegenspeler "mag random zijn, mag zijn eigen weg bepalen. Heeft mogelijk
+  een voorsprong op bepaalde gebieden van het spel." Een veroverd dorp "blijft bestaan. Je wordt inderdaad leider van
+  2." En: "uitzoeken of we ook met 5 - 6 spelers kunnen." Het plan voor het land: vraag 63.
 - **Je dorp heeft een naam, die je zelf kiest** (Marcel, 29 sep, vraag 60: "speler mag zelf de naam voor zijn dorp
   kiezen aan het begin"): bij Nieuw spel.
 - **Eenvoudig, geen geschiedenisles** (Marcel, 29 sep): "Maak het niet te ingewikkeld, er is geen gelijkenis met
