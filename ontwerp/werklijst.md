@@ -25,7 +25,8 @@ alles naar main, en begin met stap 4"); stap 4 zelf staat op `ccr-ff387f8f-iqbok
 `main` mag. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`,
 onder Git.
 
-**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 5: de proef afmaken (de eerste weken als
+**Waar de volgende sessie begint:** bij vraag 57 als Marcel die beantwoordde (hoe de rovers langzaam opbouwen, een
+klein stuk van stap 4), en dan bij de prioriteit hieronder, stap 5: de proef afmaken (de eerste weken als
 opdrachten, een speeltest van twee jaar, en een tester); begin met een plan voor Marcel, en houd het eenvoudig
 (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Stap 1 tot en met 4 zijn af: het dorp bouwt zelf (vraag 52), de
 eerste trede (vraag 53), de eerste wetten (vraag 54) en rovers met een militie (vraag 55). De
@@ -113,6 +114,8 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   vertrapten ze de akker van Trijn, in louwmaand namen ze 20 graan mee. De speler had geen wachthuis en ging ze niet
   te lijf. In de browser veertien gevechten gespeeld, zonder fouten: tegen drie rovers valt een schout die voorop
   loopt, en wint wie de wachters voor laat gaan; tegen twee wint iedereen. Dat werd vraag 56.
+- **Marcel beantwoordde vraag 56:** "A laten zo, geen bericht. B schout kan sterven. C. We bouwen het langzaam op".
+  Hoe de rovers langzaam opbouwen, werd vraag 57 (elk jaar een man meer, of naar de grootte van het dorp).
 
 **Wat er in de veertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 4, de afrekening na het eerste jaar** (vraag 49): op 1 lentemaand, na de winter, de
@@ -1269,6 +1272,20 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **C.** De eerste wilde rovers komen met twee man, daarna met twee tot vier (een getal in de werkbank).
     Voorstel: A en C, voor de proef; ze kosten een zin en een getal. B als je vindt dat een tester zijn spel niet
     mag verliezen door één misstap.
+    **Beantwoord (Marcel, 29 sep): "A laten zo, geen bericht. B schout kan sterven. C. We bouwen het langzaam op".**
+    Dus: geen waarschuwing bij een aanval, en valt de schout, dan is het spel uit; dat wordt geen spelregel. De
+    rovers bouwen langzaam op; hoe precies, is vraag 57.
+57. **Hoe bouwen de rovers langzaam op?** (Claude, 29 sep, vijftiende sessie; na vraag 56; wacht op Marcel.) Nu
+    komen er twee tot vier wilde rovers, door het lot gekozen, al bij de eerste aanval. Wat de gevechten lieten zien
+    (vraag 56): tegen twee rovers wint iedereen, tegen drie moet je nadenken en kost het meestal een wachter, en
+    vier is niet geprobeerd. Een tweede wachthuis geeft twee man meer; dat werkt al.
+    - **A. Elk jaar een man meer** (voorstel): het eerste jaar komen ze met twee man, het tweede met drie, daarna
+      met vier. Dat is voorspelbaar. Wie weet dat ze volgend jaar met drie komen, bouwt op tijd een tweede
+      wachthuis, en dat kost goud dat ook de kapel en de smidse nodig hebben. Het worden twee getallen in de
+      werkbank: met hoeveel man ze beginnen, en hoeveel er elk jaar bij komen.
+    - **B. Naar de grootte van het dorp:** één rover per vijftien mensen, minstens twee. Een gehucht van 26 mensen
+      krijgt er twee, een dorp van 50 drie. Wie groeit, trekt rovers aan, net als de heer, die per ziel vraagt.
+    De bende van wie wegtrok, blijft zoals hij is: die is zo groot als je hem zelf maakt.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

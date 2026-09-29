@@ -111,8 +111,10 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
 - **Nog niet:** rovers vallen geen dorpelingen aan, alleen de schout en de wachters, en ze nemen alleen graan mee;
   een eigen tekening voor een rover (ze dragen nu het vel van een boer of een boerin); oefenen, wapens en de
   schutterij (punt 13); de heervaart en een rivaal (na de proef).
-- **Open:** valt de schout, is het spel dan uit? Tegen drie rovers valt een schout die voorop loopt in de tweede of
-  derde ronde, en wint wie de wachters voor laat gaan (werklijst vraag 56).
+- **Besloten (Marcel, 29 sep, werklijst vraag 56):** "schout kan sterven": valt hij, dan is het spel uit, en een
+  aanval waarschuwt daar niet voor ("A laten zo, geen bericht"). Tegen drie rovers valt een schout die voorop loopt
+  in de tweede of derde ronde, en wint wie de wachters voor laat gaan. En "We bouwen het langzaam op": de rovers
+  beginnen klein en worden later meer. Hoe precies, is vraag 57.
 
 **Hoe het zo kwam:** het plan staat in de werklijst, vraag 55. Claude stelde voor dat de rovers naar het plein gingen,
 eens per jaar een bende van buiten, en dat wie viel alleen gewond was tot de ochtend. Marcel koos anders: ook wilde
