@@ -25,7 +25,8 @@ begin met stap 4"; ook op `ccr-ff387f8f-iqbokf`). Hoe een eigen branch en `main`
 onder Git.
 
 **Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 4: rovers en een militie. Het plan staat
-klaar en wacht op Marcel (vraag 55); houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Stap 1 (het dorp bouwt zelf,
+klaar en is beantwoord (vraag 55); het wordt gebouwd. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te
+ingewikkeld"). Stap 1 (het dorp bouwt zelf,
 vraag 52), stap 2 (de eerste trede, vraag 53) en stap 3 (de eerste wetten, vraag 54) zijn af. De
 richting staat (vraag 50: besturen en groeien worden het hart, de heer blijft als de druk van boven, en vechten
 begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook (vraag 51: de proef wordt "van gehucht tot
@@ -49,8 +50,8 @@ kost u vanaf nu meer."
    Democracy 3 onder `W`, met het rantsoen, vreemden welkom, houtkap in het bos van de heer en de belasting. Zie
    onder Af.
 4. **Nu: rovers en een militie** (punt 13): rovers vallen het gehucht aan, en je verdedigt het in beurten op je eigen
-   kaart, met naast de schout een paar mannen uit het wachthuis. Wie wegtrekt, wordt rover. Het plan staat klaar:
-   vraag 55, wacht op Marcel.
+   kaart, met naast de schout een paar mannen uit het wachthuis. Wie wegtrekt, wordt rover, en er komen wilde
+   rovers. Het plan is beantwoord (vraag 55) en wordt gebouwd.
 5. **De proef afmaken:** de eerste weken als opdrachten (vraag 47, herschreven voor de nieuwe richting), een
    speeltest van twee jaar, en een tester die het niet kent (33d).
 
@@ -58,8 +59,7 @@ kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 55 (het plan voor rovers en een militie), 33d (hoe een tester het krijgt, in
-`speelbaar.md`), en later vraag 54, C (hoe de heer in het
+*2. Wacht op Marcel:* 33d (hoe een tester het krijgt, in `speelbaar.md`), en later vraag 54, C (hoe de heer in het
 hogere doel past). Vraag 47 wordt herschreven bij stap 5. Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51;
 het bijstellen na de speeltest (vraag 46) komt later, met een menu met opties.
 
@@ -1235,6 +1235,13 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     groen is, een speeljaar van de speeltest zonder fouten loopt, en een schermafdruk een gevecht met de militie
     laat zien. Vragen: **A**, rovers uit wie wegtrok, en eens per jaar van buiten? **B**, naar het plein, 10 graan
     en 2 goud per rover? **C**, de militie is het wachthuis? **D**, vallen is gewond tot de ochtend?
+    **Beantwoord (Marcel, 29 sep): "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms
+    velden kapot. C, Ja. D, mensen kunnen sterven".** Zo wordt het gebouwd (Claude): A, wie wegtrekt, komt als
+    rover terug, en daarnaast komen er wilde rovers van buiten, op een dag die je niet ziet aankomen (zo'n twee keer
+    per jaar; het getal in de werkbank). B, ze gaan niet naar het plein maar naar een akker, roven daar graan, en
+    soms maken ze de akker kapot: wat erop staat, is dan weg. C, zoals voorgesteld. D, wie valt, is dood: een
+    wachter die sneuvelt, is een mond minder, een rover komt niet terug, en valt de schout, dan is het spel uit,
+    zoals nu. Wie een gevecht overleeft, staat de volgende ochtend weer met al zijn leven op (vraag 11).
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
