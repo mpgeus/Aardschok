@@ -2176,6 +2176,15 @@ wordt, wordt dus vanzelf duurder. De schout moet kiezen:
 
 ### Van dorp tot stad
 
+**Zo werkt het nu: de eerste trede** (29 sep, veertiende sessie; `js/treden.js`, werklijst vraag 53). Het gehucht
+wordt een dorp als er 50 mensen zijn en een kapel en een smidse klaar staan (`T.TREDEN_INSTELLINGEN`, in de
+werkbank). Het doel staat vanaf het begin linksboven, met hoe ver je bent ("26 van 50 mensen · een kapel ✓ · nog
+geen smidse"), zolang geen quest het vak nodig heeft, en de benoemingsbrief noemt het. Is het zover, dan blijft
+het een dorp, staat de tijd stil en schrijft de heer, met "Verder als dorp" en "Naar het titelscherm". Het
+bouwmenu toont dan de gebouwen van het dorp, met die van het gehucht erbij. Het hoofdgeld in een dorp staat in de
+werkbank op 1 ("Dat kost u vanaf nu meer" is nog alleen woorden). Nog niet: de treden daarna (marktrecht, de
+stad), de schepenen, en wat een dorp verder anders maakt.
+
 **Besloten: de eerste trede** (Marcel, 28 en 29 sep, werklijst vraag 51 en 53: "A ja B ja C ja D ja"). Het gehucht
 wordt een dorp bij 50 mensen, met een kapel en een smidse die klaar zijn (de getallen in de werkbank). Het doel
 staat vanaf het begin linksboven, met hoe ver je bent, en de heer noemt het in zijn benoemingsbrief ("Een dorp

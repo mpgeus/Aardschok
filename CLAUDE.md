@@ -216,6 +216,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwmenu staat, zegt `T.inBouwmenu`: het erf, en de woningen niet, tenzij de spelregel "Huizen" anders zegt. Op
   een akker, een weide, een pad of een erf bouw je niet (`T.waaromNietOpDezeGrond`). De paaltjes op een vrij erf
   tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`).
+- `js/treden.js`: **van gehucht tot dorp** (stap 2 van de proef, vraag 53, 29 sep): het gehucht wordt een dorp bij
+  50 mensen met een kapel en een smidse klaar (`T.TREDEN_INSTELLINGEN`, in de werkbank). `T.tredeDoel` geeft het
+  doel voor het vak linksboven (js/main.js, als er geen quest is), `T.tikTredeDag` zet `S.trede` (en die gaat nooit
+  terug), en de heer schrijft dan (`T.ui.toonDorpsbrief` in js/hud.js): het eind van de proef. Het bouwmenu toont
+  deze trede en de treden ervoor (`T.inBouwmenu`).
 - `js/herberg.js`: **de herberg** (werklijst punt 2, 27 sep): wie er 's avonds heen gaat
   (`T.herbergGasten`: naar karakter, seizoen en looptijd, en niet meer dan er bier is), het anker voor de
   avond (`T.herbergAnker`, dat `T.dagAnker` vraagt), de afrekening elke nacht (`T.tikHerbergDag`: bier op,
@@ -428,7 +433,8 @@ een open plek bij de schout. `Spel.debug.bewoners()` zegt per bewoner wie het is
 waar hij staat en waar hij nu hoort (`('herder')` zoekt er een). `Spel.debug.gezin()` laat nu een
 gezin komen (overdag over de weg; is het dorp vol, dan neemt het een vrij erf), `(-4)` laat er een wegtrekken.
 `Spel.debug.bouw('erf', 48, 50)` wijst een erf aan (daar is plaats, ten zuidoosten van het plein), en
-`Spel.debug.erven()` zegt per erf of het vrij is, wie er woont, en hoe ver de hut is.
+`Spel.debug.erven()` zegt per erf of het vrij is, wie er woont, en hoe ver de hut is. `Spel.debug.trede()` zegt
+hoe ver het gehucht is met een dorp worden, en `('dorp')` maakt er nu een dorp van, met de brief van de heer.
 `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
 en het bier (`(30)` zet eerst 30 bier). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
 hij staat, wie er kijkt, en welk licht er brandt.

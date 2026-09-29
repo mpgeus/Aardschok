@@ -13,9 +13,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   - **Een erf achter een huis zie je slecht.** Het eerste vrije erf bij het plein (28, 17) ligt achter twee grote
     huizen: vanuit de camera zie je er niets van, en de paaltjes ook niet. Met het bouwmenu open staat de rand op
     de grond, maar een huis dekt die af. Open grond ligt vooral ten zuidoosten van het plein (48, 50).
-  - **Het bouwmenu toont alleen de trede van nu** (`T.inBouwmenu`: `trede === S.trede`). Wordt het gehucht een
-    dorp (stap 2), dan verdwijnen de put, de kapel en het erf uit het menu. Dat moet bij stap 2 "deze trede en
-    lager" worden.
   - **Een gezin wordt verdeeld over huizen met één plaats.** Is er in drie huizen elk één plaats, dan komt een
     gezin van vier als drie losse mensen en één; zo ging het al vóór de erven (`komenErBij` in `js/bewoners.js`).
     Met erven kan een gezin beter samen een erf nemen dan uiteenvallen.
