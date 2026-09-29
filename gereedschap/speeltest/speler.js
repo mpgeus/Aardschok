@@ -960,8 +960,10 @@
         for (const naam of verder.eenKeer) eenKeer.add(naam);
         zaaiNaHetOpslaan(zaad);
       } else {
-        // Het titelscherm: een nieuw spel (js/menu.js). Dan de benoemingsbrief: lezen, en aan het werk.
+        // Het titelscherm: een nieuw spel (js/menu.js), met de naam die het voorstelt (vraag 60). Dan de
+        // benoemingsbrief: lezen, en aan het werk.
         if (!klik('#menu [data-actie="nieuw"]')) throw new Error('er staat geen Nieuw spel op het titelscherm');
+        if (!klik('#menu [data-actie="begin"]')) throw new Error('er staat geen Begin onder de naam van het dorp');
         if (!klik('#brief .heer-geef-knop') && T.ui.briefOpen()) T.ui.sluitBrief(s);
       }
       T.zetSnelheid(s, 30);

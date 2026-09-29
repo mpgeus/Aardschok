@@ -118,3 +118,28 @@ test('de trede in de werkbank, en bewaard met het spel', () => {
   assert.equal(T.herstelSpel(S2, T.bewaarSpel(S, { nu: 1790000000000 })).gelukt, true);
   assert.equal(S2.trede, 'dorp');
 });
+
+test('minstens een trede: het gehucht is geen dorp, een dorp is minstens een gehucht', () => {
+  assert.equal(T.tredeMinstens({ trede: 'gehucht' }, 'dorp'), false);
+  assert.equal(T.tredeMinstens({ trede: 'dorp' }, 'dorp'), true);
+  assert.equal(T.tredeMinstens({ trede: 'dorp' }, 'gehucht'), true);
+  assert.equal(T.tredeMinstens({}, 'dorp'), false, 'een proefkaart heeft geen trede');
+});
+
+test('de naam van je dorp (vraag 60): wat je typt, zonder spaties eromheen en niet te lang, in het doel en bewaard', () => {
+  const S = gehucht();
+  assert.equal(T.dorpsnaam(S), null, 'zonder naam');
+  assert.ok(T.DORPSNAMEN.includes(T.voorgesteldeDorpsnaam(12345)));
+  assert.equal(T.voorgesteldeDorpsnaam(3), T.voorgesteldeDorpsnaam(3), 'hetzelfde zaad, hetzelfde voorstel');
+  assert.equal(T.zetDorpsnaam(S, '   Groot   Heikant  '), 'Groot Heikant');
+  assert.equal(T.tredeDoel(S).kop, 'Groot Heikant · naar een dorp');
+  assert.equal(T.zetDorpsnaam(S, 'x'.repeat(40)).length, 24);
+  assert.equal(T.zetDorpsnaam(S, '   '), null, 'leeg is geen naam');
+  assert.equal(T.tredeDoel(S).kop, 'Naar een dorp');
+  T.zetDorpsnaam(S, 'Beekveld');
+  const S2 = gehucht();
+  const tekst = T.bewaarSpel(S, { nu: 1790000000000 });
+  assert.equal(JSON.parse(tekst).kop.naam, 'Beekveld', 'de lijst in het menu ziet de naam zonder het spel te lezen');
+  assert.equal(T.herstelSpel(S2, tekst).gelukt, true);
+  assert.equal(T.dorpsnaam(S2), 'Beekveld');
+});

@@ -18,6 +18,8 @@
   let lijst = null;
   let vraag = null; // { tekst, ja, doe }
   let melding = null;
+  // Bij Nieuw spel eerst de naam van je dorp (Marcel, 29 sep, werklijst vraag 60): het voorstel dat in het veld staat.
+  let naamVoorstel = null;
 
   T.ui.titelOpen = () => scherm === 'titel';
   T.ui.menuOpen = () => scherm === 'menu';
@@ -38,9 +40,10 @@
     return `${d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' })} ${tijd}`;
   }
 
-  // Een bewaard spel in één regel: de dag in het spel, hoe laat, hoeveel mensen, en wanneer je opsloeg.
+  // Een bewaard spel in één regel: hoe het dorp heet, de dag in het spel, hoe laat, hoeveel mensen, en wanneer je
+  // opsloeg. Een spel van vóór 29 sep heeft geen naam.
   const beschrijf = (kop) =>
-    `${T.datumVanDag(kop.dag).tekst}, ${T.uurTekst(kop.dag)} · ${kop.bevolking} mensen · ${wanneer(kop.bewaardOm)}`;
+    `${kop.naam ? `${kop.naam} · ` : ''}${T.datumVanDag(kop.dag).tekst}, ${T.uurTekst(kop.dag)} · ${kop.bevolking} mensen · ${wanneer(kop.bewaardOm)}`;
 
   // ── Wat er te zien is ──
 
@@ -90,6 +93,12 @@
   function inhoud(S) {
     let midden;
     if (vraag) midden = `<p class="menu-vraag">${veilig(vraag.tekst)}</p>` + knop('ja', vraag.ja, { hoofd: true }) + knop('terug', 'Terug');
+    else if (naamVoorstel != null) {
+      midden =
+        `<label class="menu-kop" for="dorpsnaam">Hoe heet je dorp?</label>` +
+        `<input id="dorpsnaam" class="menu-invoer" type="text" maxlength="24" autocomplete="off" spellcheck="false" value="${veilig(naamVoorstel)}">` +
+        knop('begin', 'Begin', { hoofd: true }) + knop('terug', 'Terug');
+    }
     else if (lijst) midden = `<p class="menu-kop">${lijst === 'opslaan' ? 'Opslaan op' : 'Laden van'}</p>` + plekKnoppen() + knop('terug', 'Terug');
     else midden = hoofdKnoppen(S);
     const bericht = melding ? `<p class="menu-melding">${veilig(melding)}</p>` : '';
@@ -110,6 +119,11 @@
     const doos = $('menu');
     doos.className = scherm || 'verborgen';
     if (scherm) doos.innerHTML = inhoud(S);
+    const veld = $('dorpsnaam');
+    if (veld) {
+      veld.focus();
+      veld.select();
+    }
   }
 
   // ── Open en dicht ──
@@ -119,6 +133,7 @@
     lijst = null;
     vraag = null;
     melding = null;
+    naamVoorstel = null;
     T.houdTijdStil(S, 'titel');
     document.body.classList.add('titelscherm');
     S.camera = T.titelCamera(); // meteen goed, zonder eerst over het dorp te schuiven
@@ -152,6 +167,7 @@
     lijst = null;
     vraag = null;
     melding = null;
+    naamVoorstel = null;
     document.body.classList.remove('titelscherm');
     $('menu-knop').classList.remove('actief');
     toon(S);
@@ -160,7 +176,17 @@
 
   // ── Wat een knop doet ──
 
+  // Nieuw spel: eerst de naam van je dorp, met een voorstel (T.voorgesteldeDorpsnaam, js/treden.js). Het spel zelf
+  // wacht al achter het titelscherm.
+  function kiesNaam(S) {
+    naamVoorstel = T.voorgesteldeDorpsnaam(S.lot && S.lot.zaad);
+    toon(S);
+  }
+
+  // Begin: de naam die er staat (leeg is het voorstel), en dan de brief van de heer.
   function begin(S) {
+    const veld = $('dorpsnaam');
+    T.zetDorpsnaam(S, (veld && veld.value.trim()) || naamVoorstel);
     sluit(S);
     T.ui.toonBrief(S, 'benoeming'); // een nieuw spel begint met de brief van de heer (js/brieven.js)
   }
@@ -194,6 +220,7 @@
     }
     if (actie === 'terug') {
       if (vraag) vraag = null;
+      else if (naamVoorstel != null) naamVoorstel = null;
       else lijst = null;
     } else if (actie === 'verder') {
       if (scherm === 'menu') return sluit(S);
@@ -205,11 +232,13 @@
         vraag = {
           tekst: 'Een nieuw spel beginnen? Wat er vanzelf bewaard is, wordt dan overschreven. Je eigen plekken blijven.',
           ja: 'Nieuw spel',
-          doe: () => begin(S),
+          doe: () => kiesNaam(S),
         };
       } else {
-        return begin(S);
+        return kiesNaam(S);
       }
+    } else if (actie === 'begin') {
+      return begin(S);
     } else if (actie === 'opslaan' || actie === 'laden') {
       lijst = actie;
     } else if (actie === 'spelregels') {
@@ -260,8 +289,12 @@
     (ev) => {
       if (!scherm || !T.S || T.ui.spelregelsOpen()) return;
       ev.stopImmediatePropagation();
+      if (ev.key === 'Enter' && naamVoorstel != null) {
+        ev.preventDefault();
+        return doe(T.S, 'begin');
+      }
       if (ev.key !== 'Escape') return;
-      if (vraag || lijst) doe(T.S, 'terug');
+      if (vraag || lijst || naamVoorstel != null) doe(T.S, 'terug');
       else if (scherm === 'menu') sluit(T.S);
     },
     true,

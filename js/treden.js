@@ -57,7 +57,9 @@
         delen.push(lijst.length ? `de ${naam} in aanbouw` : `nog geen ${naam}`);
       }
     }
-    return { kop: `Naar een ${trede}`, tekst: delen.join(' · '), klaar, trede };
+    // De kop draagt de naam van je dorp, als het er een heeft: "Heikant · naar een dorp".
+    const naam = T.dorpsnaam(S);
+    return { kop: naam ? `${naam} · naar een ${trede}` : `Naar een ${trede}`, tekst: delen.join(' · '), klaar, trede };
   };
 
   // Elke dag (T.tikGebouwenDag, js/gebouwen.js, na de groei): is het doel gehaald, dan gaat de trede omhoog.

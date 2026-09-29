@@ -187,12 +187,13 @@
 
   // ── Een spel bewaren en herstellen ──
 
-  // Wat een plek in de lijst zegt, zonder het hele spel te lezen (js/menu.js): de dag in het spel, het deel
-  // van de dag, hoeveel mensen er wonen, en wanneer je opsloeg.
+  // Wat een plek in de lijst zegt, zonder het hele spel te lezen (js/menu.js): hoe het dorp heet, de dag in het
+  // spel, het deel van de dag, hoeveel mensen er wonen, en wanneer je opsloeg.
   function kopVan(S, plek, nu) {
     const dag = S.kalender.dag;
     return {
       plek,
+      naam: T.dorpsnaam(S),
       dag,
       datum: T.datumVanDag(dag).tekst,
       dagdeel: T.dagdeelVan(dag),

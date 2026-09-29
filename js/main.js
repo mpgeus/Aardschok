@@ -774,7 +774,7 @@
       return r.gelukt ? `Geladen: ${r.kop.datum}.` : r.reden;
     },
     spellen() {
-      return T.opgeslagenSpellen().map((s) => `${s.plek}: ${s.kop.datum || '?'}, ${s.kop.bevolking} mensen${s.reden ? ` (${s.reden})` : ''}`);
+      return T.opgeslagenSpellen().map((s) => `${s.plek}: ${s.kop.naam ? `${s.kop.naam}, ` : ''}${s.kop.datum || '?'}, ${s.kop.bevolking} mensen${s.reden ? ` (${s.reden})` : ''}`);
     },
     // Het slachtvenster nu openen (js/hud.js, T.ui.openSlachten), zonder op 1 slachtmaand te wachten.
     slachten() {

@@ -870,6 +870,17 @@ kbd {
 .menu-knop:disabled { opacity: 0.55; cursor: default; }
 .menu-kop { margin: 2px 0 2px; font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; text-transform: uppercase; }
 .menu-vraag { margin: 2px 0 6px; font-size: 14px; line-height: 1.5; }
+/* De naam van je dorp, bij Nieuw spel (js/menu.js; werklijst vraag 60): een veld zoals een knop, met de naam groot. */
+.menu-invoer {
+  padding: 9px 14px;
+  font: 20px var(--kop);
+  color: var(--goud);
+  background: var(--paneel);
+  border: 1px solid rgba(226, 182, 74, 0.6);
+  border-radius: 8px;
+  outline: none;
+}
+.menu-invoer:focus { border-color: var(--goud); }
 .menu-melding { margin: 0 0 4px; font-size: 13px; color: var(--goud); }
 #menu.titel .menu-kop, #menu.titel .menu-vraag, #menu.titel .menu-melding { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8); }
 /* Zolang het titelscherm er ligt, is er nog geen spel om over te zeggen. */
