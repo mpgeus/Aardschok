@@ -109,6 +109,13 @@
     if (T.ui.briefOpen() && /dorp is geworden/.test((document.querySelector('#brief .brief-tekst') || {}).textContent || '')) {
       if (!klik('#brief .heer-geef-knop')) T.ui.sluitBrief(s);
     }
+    // De heervaart (js/heervaart.js; in een dorp, op 1 hooimaand): de speler stuurt ze, en schrijft op wat de heer
+    // vroeg.
+    if (T.ui.briefOpen() && document.querySelector('#brief [data-actie="stuur"]')) {
+      const v = s.heervaart && s.heervaart.vraag;
+      if (v) (boek.heervaart = boek.heervaart || []).push({ dag: heel(s.kalender.dag), datum: datum(), mannen: v.wie.length, goud: v.goud });
+      if (!klik('#brief [data-actie="stuur"]')) T.ui.sluitBrief(s);
+    }
     if (T.ui.briefOpen()) {
       if (s.kalender.dag > 1) boek.brief = { dag: heel(s.kalender.dag), datum: datum(), eis: eisKort(T.eisVanDeHeer(s)) };
       if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);

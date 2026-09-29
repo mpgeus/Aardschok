@@ -8,7 +8,7 @@
 //     (T.tikHeerDag): de brief op 1 wijnmaand, zijn komst op Sint-Maarten, de soldaten die in de
 //     lente weer gaan.
 //   - zijn komen en gaan als poppetje, met twee soldaten (T.werkHeerBij), net als de marskramer.
-// De vensters (de brief, het betalen, de schandpaal en het einde) staan in js/hud.js.
+// De vensters (het betalen, de schandpaal en het einde) staan in js/hud.js, zijn brieven in js/brieven.js.
 //
 // Alleen waar de marskramer ook komt: een wereld met een plein (js/kaart.js leest "heer" uit het
 // betekenisbestand, en anders de plek van de marskramer). Daarbuiten blijft dit bestand stil.
@@ -612,7 +612,7 @@
     const h = S.heer || (S.heer = T.nieuweHeer());
     h.brief = { dag, eis: T.eisVanDeHeer(S) };
     T.zetVlag(S, 'briefVanDeHeer');
-    if (T.ui && T.ui.toonBrief) T.ui.toonBrief(S);
+    if (T.ui && T.ui.toonBrief) T.ui.toonBrief(S, 'schatting');
     else bericht('Er is een brief van de heer.');
   };
 

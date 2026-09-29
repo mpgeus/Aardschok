@@ -4,8 +4,8 @@
 // Het gehucht wordt een dorp als er genoeg mensen zijn en een kapel en een smidse klaar staan. Het doel staat vanaf
 // het begin linksboven (T.tredeDoel; js/main.js zet het in het vak als er geen quest is), en de heer noemt het in
 // zijn benoemingsbrief. Is het zover (T.tikTredeDag, elke dag), dan blijft het een dorp, ook als er mensen
-// wegtrekken, en schrijft de heer een brief (js/hud.js, T.ui.toonDorpsbrief): het eind van de proef, met "Verder
-// als dorp" en "Naar het titelscherm". Het dorp zet het bouwmenu van het dorp open (T.inBouwmenu, js/gebouwen.js:
+// wegtrekken, en schrijft de heer een brief (js/brieven.js, T.ui.toonBrief(S, 'dorp')): het eind van de proef, met
+// "Verder als dorp" en "Naar het titelscherm". Het dorp zet het bouwmenu van het dorp open (T.inBouwmenu, js/gebouwen.js:
 // deze trede en de treden ervoor). De trede staat in S.trede, en wordt dus vanzelf bewaard.
 //
 // Zonder scherm, en dus getoetst (test/treden.test.cjs).
@@ -32,6 +32,11 @@
 
   // De trede na deze, of null. Voorlopig is er alleen het dorp.
   T.volgendeTrede = (S) => (S.trede === 'gehucht' ? 'dorp' : null);
+
+  // Is het al minstens deze trede? Voor wat pas in een dorp komt: het hoofdgeld hieronder, en de heervaart
+  // (js/heervaart.js).
+  const VOLGORDE = ['gehucht', 'dorp'];
+  T.tredeMinstens = (S, trede) => VOLGORDE.indexOf(S.trede || 'gehucht') >= VOLGORDE.indexOf(trede);
 
   // Hoe het ervoor staat met de volgende trede: { kop, tekst, klaar, trede }, of null als er niets te halen is.
   // `tekst` is voor het vak linksboven: "43 van 50 mensen · een kapel ✓ · nog geen smidse".
@@ -61,22 +66,38 @@
     if (doel && doel.klaar) T.wordtTrede(S, doel.trede);
   };
 
-  // Het gehucht is een dorp: dat blijft het. De heer schrijft (js/hud.js); zonder scherm (een toets) alleen een
+  // Het gehucht is een dorp: dat blijft het. De heer schrijft (js/brieven.js); zonder scherm (een toets) alleen een
   // bericht.
   T.wordtTrede = function (S, trede) {
     S.trede = trede;
-    if (T.ui && T.ui.toonDorpsbrief) T.ui.toonDorpsbrief(S);
+    if (T.ui && T.ui.toonBrief) T.ui.toonBrief(S, 'dorp');
     else bericht(`Het gehucht is een ${trede} geworden.`, 'goed');
   };
 
   // Het hoofdgeld in deze trede, als factor op wat de heer per ziel vraagt (js/heer.js, T.eisVanDeHeer).
-  T.hoofdgeldFactor = (S) => (S.trede && S.trede !== 'gehucht' ? IN().hoofdgeldInDorp : 1);
+  T.hoofdgeldFactor = (S) => (T.tredeMinstens(S, 'dorp') ? IN().hoofdgeldInDorp : 1);
 
-  // Wat de heer in zijn benoemingsbrief vraagt (js/hud.js): "een kapel, een smidse en vijftig zielen".
+  // Wat de heer in zijn benoemingsbrief vraagt (js/brieven.js): "een kapel, een smidse en vijftig zielen".
   const TIENTALLEN = { 20: 'twintig', 30: 'dertig', 40: 'veertig', 50: 'vijftig', 60: 'zestig', 70: 'zeventig', 80: 'tachtig', 90: 'negentig', 100: 'honderd' };
   T.tredeEisTekst = function (trede) {
     const eis = IN()[trede];
     const gebouwen = eis.gebouwen.map((s) => `een ${T.GEBOUWEN[s].naam}`);
     return `${gebouwen.join(', ')} en ${TIENTALLEN[eis.mensen] || eis.mensen} zielen`;
+  };
+
+  // Hoe het dorp heet (Marcel, 29 sep, werklijst vraag 60: "speler mag zelf de naam voor zijn dorp kiezen aan het
+  // begin"): je kiest het bij Nieuw spel (js/menu.js), met een van deze als voorstel. Het staat in S.dorpsnaam, en
+  // de heer schrijft het in zijn brieven ("Ons gehucht Heikant"). Zonder naam (een proefkaart, of een spel van
+  // vóór 29 sep) is het "dit gehucht".
+  T.DORPSNAMEN = ['Heikant', 'Beekveld', 'Wolfsdonk', 'Oudeland', 'Molenhoek', 'Eikenrode', 'Veldhoek', 'Kraaiwijk', 'Lindeloo', 'Braakhuizen'];
+  const LANGSTE_NAAM = 24;
+  T.dorpsnaam = (S) => (S && S.dorpsnaam) || null;
+  // Een voorstel, vast bij een getal (het zaad van het spel), zodat een speeltest hetzelfde dorp krijgt.
+  T.voorgesteldeDorpsnaam = (n) => T.DORPSNAMEN[Math.abs(Math.floor(n || 0)) % T.DORPSNAMEN.length];
+  // Wat de speler typte: zonder spaties eromheen, niet te lang, en leeg is geen naam.
+  T.zetDorpsnaam = function (S, naam) {
+    const schoon = String(naam == null ? '' : naam).replace(/\s+/g, ' ').trim().slice(0, LANGSTE_NAAM);
+    S.dorpsnaam = schoon || null;
+    return S.dorpsnaam;
   };
 })(globalThis.Spel = globalThis.Spel || {});

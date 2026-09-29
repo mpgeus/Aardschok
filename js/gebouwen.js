@@ -842,6 +842,9 @@
     T.tikHandelDag(S, dag);
     // En de heer (js/heer.js): zijn brief in wijnmaand, hijzelf op Sint-Maarten, en de soldaten.
     T.tikHeerDag(S, dag);
+    // En zijn heervaart (js/heervaart.js): in een dorp vraagt hij op 1 hooimaand mannen, en op 1 herfstmaand komen
+    // ze terug. Vóór het verdelen van de handen hieronder, want wie vandaag gaat, werkt vandaag niet meer.
+    T.tikHeervaartDag(S, dag);
     // En de inner (js/inner.js): hij komt in oogstmaand tellen, en soms onverwacht terug.
     T.tikInnerDag(S, dag);
     // Een hut op een erf die op hout wachtte, begint als het er nu is (js/erven.js).

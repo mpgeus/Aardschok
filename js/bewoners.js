@@ -129,7 +129,9 @@
   //             heen },            // en hoeveel uur hij onderweg is naar zijn werk (T.werkUrenVan)
   //     komt: true,                // hij is nieuw en nog niet bij zijn huis (T.werkBewonersBij)
   //     wie: 'boer1',              // alleen een boer: zijn id in T.MENSEN, waar zijn naam vandaan komt
-  //     schout: true }             // alleen de schout zelf
+  //     schout: true,              // alleen de schout zelf
+  //     weg: { waarom: 'heervaart' },  // hij is een tijd weg (T.stuurWeg): hij telt mee, maar werkt nergens
+  //     veteraan: true }           // hij kwam terug van de heervaart, en vecht mee als er rovers komen
   // Wie wegtrekt, staat niet meer in S.bewoners.mensen; zijn poppetje loopt nog tot de uitgang
   // (e.vertrekt, S.bewoners.vertrekken).
 
@@ -139,9 +141,9 @@
   T.naamVanBewoner = naamVan;
   // Hoort hij bij het gezin van de schout?
   const vanSchout = (p) => !!(p.schout || (p.hoofd && p.hoofd.schout));
-  // Kan hij werken? Iedereen, behalve de schout zelf en een kleuter. Het gezin van de schout werkt
-  // alleen als er niemand anders meer is (T.wijsWerkToe).
-  const kanWerken = (p) => !p.schout && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
+  // Kan hij werken? Iedereen, behalve de schout zelf, een kleuter, en wie een tijd weg is (p.weg: de heervaart,
+  // js/heervaart.js). Het gezin van de schout werkt alleen als er niemand anders meer is (T.wijsWerkToe).
+  const kanWerken = (p) => !p.schout && !p.weg && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
 
   // De bewoner van een poppetje: een nieuw poppetje draagt hem mee (e.bewoner); de schout en de boeren
   // hebben hun wezen al van de kaart, en die zoeken we op.
@@ -497,7 +499,7 @@
   const STERFTE = { oud: 0, kleuter: 1, kind: 2, jong: 3, volwassen: 4 };
   const VERTREK = { jong: 0, volwassen: 1, kind: 2, kleuter: 3, oud: 4 };
   function wieGaat(S, reden) {
-    const kan = S.bewoners.mensen.filter((p) => !p.wie && !vanSchout(p));
+    const kan = S.bewoners.mensen.filter((p) => !p.wie && !vanSchout(p) && !p.weg);
     if (reden === 'vertrek') {
       const later = (p) => !(p.hoofd || p).wie; // een gezin dat later kwam: zijn hoofd is geen boer
       const partner = (p) => p.band === 'vrouw' || p.band === 'man';
@@ -546,7 +548,6 @@
   // ---------------------------------------------------------------------------------------------
 
   const VOOR_DE_NAAM = { oud: 'de oude ', kleuter: 'de kleine ' };
-  const TELWOORDEN = ['geen', 'een', 'twee', 'drie', 'vier', 'vijf', 'zes', 'zeven'];
   const hoofdletter = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 
   // Eén mens: "de oude Jan, vader van Klaas", "Geert, zoon van Klaas", "Albert, man van Grietje".
@@ -564,7 +565,7 @@
     const kinderen = leden.length - 1 - (partner ? 1 : 0);
     let t = partner ? `${naamVan(hoofd)} en ${naamVan(partner)}` : naamVan(hoofd);
     if (kinderen === 1) t += ', met een kind';
-    else if (kinderen > 1) t += `, met ${TELWOORDEN[kinderen] || kinderen} kinderen`;
+    else if (kinderen > 1) t += `, met ${T.telwoord(kinderen)} kinderen`;
     return t;
   }
 
@@ -619,7 +620,68 @@
       if (e.onderweg || T.afstand(e.vertrekt, { x: e.tx, y: e.ty }) > 1) continue;
       B.vertrekken.splice(B.vertrekken.indexOf(e), 1);
       if (w.wezens.includes(e)) w.wezens.splice(w.wezens.indexOf(e), 1);
+      // Wie een tijd weg is (T.stuurWeg), krijgt een nieuw poppetje als hij terugkomt (T.komtTerug).
+      if (e.bewoner && e.bewoner.weg && e.bewoner.wezen === e) e.bewoner.wezen = null;
     }
+  };
+
+  // ---------------------------------------------------------------------------------------------
+  // Een tijd weg, en terug (de heervaart, js/heervaart.js)
+  // ---------------------------------------------------------------------------------------------
+
+  // Wie weerbaar is: mannen, jong of volwassen, die hier zijn. Nooit de schout, zijn gezin of een boer zelf (die
+  // horen bij het verhaal, net als bij wie wegtrekt), en niet wie nog onderweg hierheen is of al weg is. Wie geen
+  // werk heeft, het eerst, dan de jongsten.
+  const WEERBAAR = { jong: 0, volwassen: 1 };
+  T.weerbareMannen = function (S) {
+    if (!S.bewoners) return [];
+    return S.bewoners.mensen
+      .filter((p) => p.geslacht === 'man' && WEERBAAR[p.leeftijd] != null && !p.wie && !vanSchout(p) && !p.komt && !p.weg)
+      .sort((a, b) => (!!a.werk - !!b.werk) || (WEERBAAR[a.leeftijd] - WEERBAAR[b.leeftijd]) || (a.id - b.id));
+  };
+
+  // Een tijd weg (`waarom`: 'heervaart'). Hij blijft bewoner: hij telt mee en eet, en zijn plaats in huis blijft van
+  // hem, maar hij werkt nergens (kanWerken) en loopt overdag de weg af, zoals wie wegtrekt (e.vertrekt, T.dagAnker).
+  // Bij de uitgang gaat zijn poppetje van de kaart (T.werkBewonersBij).
+  T.stuurWeg = function (S, wie, waarom) {
+    const B = S.bewoners;
+    const uitgang = T.wegInEnUit(B.wereld);
+    for (const p of wie) {
+      p.weg = { waarom };
+      p.werk = null;
+      const e = p.wezen;
+      if (!e) continue;
+      e.opgeroepen = false;
+      if (uitgang && !e.dood) {
+        e.vertrekt = { x: uitgang.x, y: uitgang.y };
+        if (!B.vertrekken.includes(e)) B.vertrekken.push(e);
+      } else {
+        if (B.wereld.wezens.includes(e)) B.wereld.wezens.splice(B.wereld.wezens.indexOf(e), 1);
+        p.wezen = null;
+      }
+    }
+  };
+
+  // Terug: hij komt overdag over de weg binnen, zoals een nieuw gezin (T.bezoekerKomtAan, met `aankomst` als
+  // bericht), en loopt naar huis. Staat zijn poppetje nog op de kaart (hij haalde de uitgang niet), dan keert het om.
+  T.komtTerug = function (S, wie, aankomst) {
+    const B = S.bewoners;
+    const onderweg = [];
+    for (const p of wie) {
+      delete p.weg;
+      const e = p.wezen;
+      if (e && B.wereld.wezens.includes(e)) {
+        delete e.vertrekt;
+        if (B.vertrekken.includes(e)) B.vertrekken.splice(B.vertrekken.indexOf(e), 1);
+      } else {
+        p.wezen = null;
+        p.komt = true;
+        onderweg.push(p);
+      }
+      zetPlekken(S, p);
+    }
+    if (onderweg.length) B.komen.push({ mensen: onderweg, aankomst });
+    else if (T.ui && T.ui.bericht) T.ui.bericht(aankomst.tekst, aankomst.soort);
   };
 
   // ---------------------------------------------------------------------------------------------

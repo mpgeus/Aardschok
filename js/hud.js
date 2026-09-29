@@ -179,7 +179,7 @@
     for (const b of document.querySelectorAll('#kalender-knoppen button')) {
       b.classList.toggle('actief', Number(b.dataset.snelheid) === T.snelheidNu(S));
     }
-    werkBriefKnopBij(S);
+    T.ui.werkBriefKnopBij(S);
     werkSlaapKnopBij(S);
   };
 
@@ -504,131 +504,15 @@
   });
 
   // ── De heer (js/heer.js; spel.md, "Sint-Maarten") ──
-  // Twee vensters in de stijl van dat van de marskramer: zijn brief (1 wijnmaand; de knop Brief
-  // opent hem weer tot hij geweest is), en het betalen op Sint-Maarten (vanuit zijn gesprek,
-  // doe: { heer: true }), met daarin de schandpaal als die erbij hoort. Het einde (je ambt kwijt)
-  // gebruikt het scherm over alles heen uit js/ui.js (T.ui.toonOverlay).
+  // Het betalen op Sint-Maarten, in de stijl van het venster van de marskramer (vanuit zijn gesprek,
+  // doe: { heer: true }), met daarin de schandpaal als die erbij hoort. Zijn brieven staan in
+  // js/brieven.js. Het einde (je ambt kwijt) gebruikt het scherm over alles heen uit js/ui.js
+  // (T.ui.toonOverlay).
   const hebNu = (S, wat) => Math.floor((S.voorraad && S.voorraad[wat]) || 0);
   // Een naam kan de speler zelf geven (js/opties.js), dus die gaat nooit rauw in de html.
   const veilig = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || 'niets');
   const eisInTaal = (eis) => opsomming(eis.volgorde.map((wat) => `${eis.per[wat]} ${wat}`));
-
-  // De knop Brief naast Bouwen: alleen zolang er een brief is.
-  function werkBriefKnopBij(S) {
-    $('brief-knop').classList.toggle('verborgen', !(S.heer && S.heer.brief));
-  }
-
-  function briefInhoud(S) {
-    const brief = S.heer.brief;
-    const regels = brief.eis.regels.map((r) => `<li><b>${r.aantal} ${r.wat}</b> <span>${r.waarom}</span></li>`).join('');
-    const samen = brief.eis.regels.length > 1 ? `<p class="brief-samen">Samen: ${eisInTaal(brief.eis)}.</p>` : '';
-    const nu = opsomming(brief.eis.volgorde.map((wat) => `${hebNu(S, wat)} ${wat}`));
-    // Komt de marskramer nog, dan kun je nog verkopen voor zijn goud (daarom valt de brief ervóór).
-    const herfst = T.HANDEL_INSTELLINGEN && T.HANDEL_INSTELLINGEN.bezoeken[T.HANDEL_INSTELLINGEN.bezoeken.length - 1];
-    const vandaag = T.datumVanDag(S.kalender ? S.kalender.dag : brief.dag);
-    const komtNog = herfst && T.MAANDEN[vandaag.maand].naam === herfst.maand && vandaag.dagVanMaand < herfst.dag;
-    const marskramer = komtNog ? ` De marskramer komt op ${herfst.dag} ${herfst.maand}: dan kun je nog verkopen voor zijn goud.` : '';
-    return (
-      `<div class="venster-kop"><span class="venster-titel">Een brief van de heer</span><span class="venster-wanneer">${T.datumVanDag(brief.dag).tekst}</span>` +
-      `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
-      `<div class="brief-tekst">` +
-      `<p>Aan Onze trouwe schout,</p>` +
-      `<p>Het is Ons ter ore gekomen dat het u goed gaat. Dat verheugt Ons zeer, want het gaat Ons ook graag goed. Op Sint-Maarten komen Wij persoonlijk ophalen wat Ons toekomt. ${brief.eis.rapport ? 'Naar wat Onze inner in oogstmaand zag' : 'Naar wat Wij nu zien'}, is dat:</p>` +
-      `<ul class="brief-lijst">${regels || '<li>niets. Dat kan niet kloppen.</li>'}</ul>${samen}` +
-      `<p>Wat er tot Sint-Maarten bijkomt, zien Wij ook. Wie Ons tekortdoet, zal het merken, want Wij tellen zeer zorgvuldig. Bijna altijd.</p>` +
-      `<p class="brief-groet">Uw genadige heer${T.naamVanDeHeer() ? `,<br>${veilig(T.naamVanDeHeer())}` : ''}</p>` +
-      `</div>` +
-      `<p class="venster-staat">Je hebt nu ${nu}. Wat je hem aan graan geeft, kun je in de lente niet zaaien.${marskramer}</p>` +
-      `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit; de knop Brief bovenin opent hem weer.</p>`
-    );
-  }
-
-  T.ui.toonBrief = function (S) {
-    if (!S.heer || !S.heer.brief) return;
-    const box = $('brief');
-    box.innerHTML = briefInhoud(S);
-    T.houdTijdStil(S, 'brief');
-    box.classList.remove('verborgen');
-    werkBriefKnopBij(S);
-  };
-
-  T.ui.sluitBrief = function (S) {
-    $('brief').classList.add('verborgen');
-    T.laatTijdGaan(S, 'brief');
-  };
-
-  T.ui.briefOpen = () => !$('brief').classList.contains('verborgen');
-
-  // De benoeming: de eerste brief van de heer, als een nieuw spel begint (js/main.js). Marcel koos
-  // hem op 25 sep in plaats van een titelscherm (ontwerp/spel.md, onder Open): de tutorial van het
-  // oude spel vertelde je waarom je er was, en nu doet de heer dat zelf, in dezelfde hand als zijn
-  // brief in wijnmaand en in hetzelfde venster. De tijd staat stil zolang je leest; de knop, het
-  // kruisje en Esc sluiten hem (T.ui.sluitBrief), en daarna loopt de tijd zoals hij liep.
-  function benoemingInhoud(S) {
-    const naam = T.naamVanDeHeer();
-    const dag = S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '';
-    return (
-      `<div class="venster-kop"><span class="venster-titel">Een brief van de heer</span><span class="venster-wanneer">${dag}</span>` +
-      `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
-      `<div class="brief-tekst">` +
-      `<p>Aan Onze nieuwe schout,</p>` +
-      `<p>Het heeft Ons behaagd u tot schout te benoemen over dit gehucht. Uw voorganger kon niet tellen, of juist te goed; dat weten Wij niet meer precies. Hij is nu elders.</p>` +
-      `<p>Op Sint-Maarten komen Wij persoonlijk halen wat Ons toekomt. In oogstmaand komt Onze inner kijken hoeveel dat is.</p>` +
-      `<p>Wij vertrouwen u volkomen. Onze inner telt toch even na.</p>` +
-      // Het doel van de proef (js/treden.js; Marcel, 29 sep, vraag 53, A): de heer wil groei, want hij verdient eraan.
-      `<p>Wij verwachten dat Ons gehucht een dorp wordt, met ${T.tredeEisTekst('dorp')}. Een dorp brengt Ons meer op.</p>` +
-      // De wetten (js/wetten.js; Marcel, 29 sep, vraag 54): het menu onder W. De houtkap in zijn bos is er een van.
-      `<p>Wetten mag u maken, zoveel u wilt. Over Ons bos gaat u niet.</p>` +
-      `<p class="brief-groet">Uw genadige heer${naam ? `,<br>${veilig(naam)}` : ''}</p>` +
-      `</div>` +
-      `<div class="heer-knoppen"><button class="heer-geef-knop" data-actie="sluit">Aan het werk</button></div>`
-    );
-  }
-
-  T.ui.toonBenoeming = function (S) {
-    const box = $('brief');
-    box.innerHTML = benoemingInhoud(S);
-    T.houdTijdStil(S, 'brief');
-    box.classList.remove('verborgen');
-  };
-
-  // Het gehucht is een dorp (js/treden.js; Marcel, 29 sep, vraag 53, B): de heer schrijft, in hetzelfde venster
-  // als zijn andere brieven, en de tijd staat stil. Het eind van de proef "van gehucht tot dorp": je speelt door
-  // als dorp, of gaat naar het titelscherm.
-  T.ui.toonDorpsbrief = function (S) {
-    const naam = T.naamVanDeHeer();
-    const dag = S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '';
-    const box = $('brief');
-    box.innerHTML =
-      `<div class="venster-kop"><span class="venster-titel">Een brief van de heer</span><span class="venster-wanneer">${dag}</span>` +
-      `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
-      `<div class="brief-tekst">` +
-      `<p>Aan Onze schout,</p>` +
-      `<p>Wij vernemen dat Ons gehucht een dorp is geworden. Gefeliciteerd. Dat kost u vanaf nu meer.</p>` +
-      `<p class="brief-groet">Uw genadige heer${naam ? `,<br>${veilig(naam)}` : ''}</p>` +
-      `</div>` +
-      `<div class="heer-knoppen"><button data-actie="titel">Naar het titelscherm</button>` +
-      `<button class="heer-geef-knop" data-actie="sluit">Verder als dorp</button></div>`;
-    T.houdTijdStil(S, 'brief');
-    box.classList.remove('verborgen');
-  };
-
-  $('brief').addEventListener('click', (ev) => {
-    const b = ev.target.closest('button');
-    if (!b || !T.S) return;
-    if (b.dataset.actie === 'sluit') T.ui.sluitBrief(T.S);
-    else if (b.dataset.actie === 'titel') {
-      T.ui.sluitBrief(T.S);
-      T.naarTitelscherm();
-    }
-  });
-  $('brief-knop').addEventListener('click', (ev) => {
-    ev.currentTarget.blur();
-    if (!T.S) return;
-    if (T.ui.briefOpen()) T.ui.sluitBrief(T.S);
-    else T.ui.toonBrief(T.S);
-  });
 
   // Wat de schout de heer geeft, per goed, zoals het in het venster staat. Het begint op alles wat
   // hij vraagt, voor zover je het hebt; wie minder wil geven, schuift naar beneden.
@@ -761,7 +645,7 @@
     if (S.modus === 'heer') S.modus = 'verkennen';
     geef = null;
     T.laatTijdGaan(S, 'heer');
-    werkBriefKnopBij(S);
+    T.ui.werkBriefKnopBij(S);
   };
 
   $('heer').addEventListener('input', (ev) => {

@@ -294,6 +294,17 @@
           uitleg: 'Alleen het doel. Wat het dorp je zegt, zie je in de berichten.' },
       ],
     },
+    // De heervaart (Marcel, 29 sep, werklijst vraag 60: "A ja B ja"; js/heervaart.js).
+    {
+      id: 'heervaart', naam: 'Heervaart', standaard: 'aan',
+      uitleg: 'Of de heer mannen vraagt voor zijn oorlog, als het gehucht een dorp is.',
+      keuzes: [
+        { id: 'aan', naam: 'Aan', zet: { 'HEERVAART_INSTELLINGEN.aan': true },
+          uitleg: 'Op 1 hooimaand vraagt hij een man per tien zielen, of goud. Wie gaat, is terug na de oogst, als veteraan die meevecht tegen de rovers; niet iedereen komt terug. Wie betaalt, maakt hem argwanend.' },
+        { id: 'uit', naam: 'Uit', zet: { 'HEERVAART_INSTELLINGEN.aan': false },
+          uitleg: 'Hij vraagt alleen goud en graan, op Sint-Maarten.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -323,6 +334,7 @@
     { naam: 'Behoeften en de winter', blok: 'BEHOEFTEN_INSTELLINGEN' },
     { naam: 'De marskramer', blok: 'HANDEL_INSTELLINGEN' },
     { naam: 'De heer', blok: 'HEER_INSTELLINGEN' },
+    { naam: 'De heervaart', blok: 'HEERVAART_INSTELLINGEN' },
     { naam: 'De inner', blok: 'INNER_INSTELLINGEN' },
     { naam: 'De verstopplekken', blok: 'VERSTOP_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },

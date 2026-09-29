@@ -33,7 +33,6 @@
   const over = (n) => (n <= 1 ? 'morgen' : `over ${n} dagen`);
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
   const heeft = (S, soort) => (S.gebouwen || []).some((g) => g.soort === soort);
-  const TELWOORDEN = ['geen', 'een', 'twee', 'drie', 'vier', 'vijf', 'zes'];
 
   // Hoeveel mensen het doel nog vraagt (js/treden.js), of 0 als er geen trede meer te halen is.
   function mensenNodig(S) {
@@ -87,7 +86,7 @@
     {
       id: 'rovers',
       als: (S) => S.rovers && S.rovers.laatsteAanval != null && dagNu(S) - S.rovers.laatsteAanval < IN().roversNa && !heeft(S, 'wachthuis'),
-      tekst: () => `De rovers komen terug. Een wachthuis [B] geeft je ${TELWOORDEN[T.GEBOUWEN.wachthuis.handen] || T.GEBOUWEN.wachthuis.handen} man die meevechten.`,
+      tekst: () => `De rovers komen terug. Een wachthuis [B] geeft je ${T.telwoord(T.GEBOUWEN.wachthuis.handen)} man die meevechten.`,
     },
     {
       id: 'hout',

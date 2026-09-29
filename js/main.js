@@ -27,8 +27,8 @@
   // regels er onderweg bij zetten (de heer, de inner, het slapen, het einde); alleen de zoom van het scherm
   // blijft. Het begint niet vanzelf: het titelscherm (js/menu.js, vraag 48) laat het erachter wachten, en
   // pas "Nieuw spel" geeft de benoemingsbrief van de heer, waarmee een spel begint sinds Marcel hem op
-  // 25 sep koos (T.ui.toonBenoeming, js/hud.js). Een proefje (?kaart=) begint meteen, zonder brief, en
-  // wordt nooit opgeslagen (S.proefje; js/opslaan.js).
+  // 25 sep koos (T.ui.toonBrief(S, 'benoeming'), js/brieven.js). Een proefje (?kaart=) begint meteen,
+  // zonder brief, en wordt nooit opgeslagen (S.proefje; js/opslaan.js).
   T.nieuwSpel = function () {
     for (const k of Object.keys(S)) if (k !== 'zoom') delete S[k];
     Object.assign(S, {
@@ -691,6 +691,23 @@
         bende: R.bende.map((l) => l.naam), bendeOp: R.bendeOp, wildeOp: R.wildeOp,
         aanval: A ? { soort: A.soort, fase: A.fase, rovers: (A.rovers || []).map((e) => `${e.tx},${e.ty}${e.dood ? ' dood' : ''}`), akker: A.veld } : null,
         militie: S.wereld.wezens.filter((e) => e.opgeroepen).map((e) => `${e.naam} (${e.leven} leven)`),
+      };
+    },
+    // De heervaart (js/heervaart.js): wat de heer vraagt, wie er weg is en tot wanneer, hoe het de laatste keer ging,
+    // en wie veteraan is. Spel.debug.heervaart('vraag') laat hem nu mannen vragen (ook in een gehucht), en
+    // Spel.debug.heervaart('terug') laat ze nu terugkomen.
+    heervaart(wat) {
+      const H0 = S.heervaart;
+      if (wat === 'vraag' && !(H0 && (H0.vraag || H0.tocht))) T.vraagHeervaart(S, Math.floor(S.kalender.dag));
+      else if (wat === 'terug' && H0 && H0.tocht) T.heervaartKomtTerug(S);
+      const H = S.heervaart || T.nieuweHeervaart();
+      const naam = (p) => T.naamVanBewoner(p);
+      return {
+        geldt: T.heervaartGeldt(S),
+        vraag: H.vraag ? { mannen: H.vraag.mannen, goud: H.vraag.goud, wie: H.vraag.wie.map(naam), uiterlijk: T.datumVanDag(H.vraag.uiterlijk).tekst } : null,
+        weg: H.tocht ? { wie: H.tocht.wie.map(naam), terug: T.datumVanDag(H.tocht.terugOp).tekst } : null,
+        laatste: H.laatste,
+        veteranen: (S.bewoners ? S.bewoners.mensen.filter((p) => p.veteraan) : []).map(naam),
       };
     },
     // De wetten (js/wetten.js): per wet de stand, en wat hij dan doet. Spel.debug.wetten('rantsoen', 'krap')

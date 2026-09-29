@@ -162,7 +162,7 @@
 
   function begin(S) {
     sluit(S);
-    T.ui.toonBenoeming(S); // een nieuw spel begint met de brief van de heer (js/hud.js)
+    T.ui.toonBrief(S, 'benoeming'); // een nieuw spel begint met de brief van de heer (js/brieven.js)
   }
 
   function laad(S, plek) {

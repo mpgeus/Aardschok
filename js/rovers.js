@@ -115,26 +115,28 @@
   }
 
   // ---------------------------------------------------------------------------------------------
-  // De militie: de mannen van het wachthuis
+  // De militie: de mannen van het wachthuis, en de veteranen van de heervaart
   // ---------------------------------------------------------------------------------------------
 
-  // Wie in het wachthuis werkt, met zijn poppetje.
+  // Wie in het wachthuis werkt, en wie van de heervaart terugkwam (js/heervaart.js; Marcel, 29 sep, vraag 60, B: ook
+  // zonder wachthuis), met zijn poppetje. Wie nog weg is, of nog onderweg naar huis, vecht niet mee.
   const militieVan = (S) =>
     (S.bewoners ? S.bewoners.mensen : [])
-      .filter((p) => p.werk && p.werk.soort === 'wachthuis' && p.wezen && !p.wezen.dood)
+      .filter((p) => ((p.werk && p.werk.soort === 'wachthuis') || p.veteraan) && !p.weg && !p.komt && p.wezen && !p.wezen.dood)
       .map((p) => p.wezen);
   const opgeroepen = (S) => (S.wereld ? S.wereld.wezens.filter((e) => e.opgeroepen && !e.dood) : []);
 
-  // Bij een aanval komt hij naar de schout: hij vecht aan jouw kant, met wat een wachter kan (T.WEZENS.wachter), en
-  // met het leven dat hij nog heeft.
+  // Bij een aanval komt hij naar de schout: hij vecht aan jouw kant, met wat een wachter kan (T.WEZENS.wachter) of een
+  // veteraan (T.WEZENS.veteraan), en met het leven dat hij nog heeft.
   function roepOp(e) {
-    const s = T.WEZENS.wachter;
+    const s = T.WEZENS[e.bewoner && e.bewoner.veteraan ? 'veteraan' : 'wachter'];
     e.opgeroepen = true;
     e.binnen = false;
     e.kant = 'speler';
-    if (!e.maxLeven) {
+    if (e.maxLeven !== s.leven) {
+      // Nieuw in de militie, of intussen veteraan: het leven dat erbij komt, krijgt hij ook.
+      e.leven = (e.maxLeven ? e.leven : 0) + s.leven - (e.maxLeven || 0);
       e.maxLeven = s.leven;
-      e.leven = s.leven;
     }
     e.ap = s.ap;
     e.maxAp = s.ap;
@@ -242,11 +244,13 @@
     const akker = `de akker${boer ? ` van ${boer.naam}` : ''}`;
     const wie = A.soort === 'bende'
       ? `${T.opsomming(leden.map((l) => l.naam))}, ${leden.length === 1 ? 'die wegtrok, komt' : 'die wegtrokken, komen'} terug als ${leden.length === 1 ? 'rover' : 'rovers'}`
-      : `${leden.length === 1 ? 'Een wilde rover komt' : `${T.hoofdletter(TELWOORDEN[leden.length] || String(leden.length))} wilde rovers komen`} de kaart op`;
-    const hulp = militie.length ? ' De wachters komen naar je toe.' : '';
+      : `${leden.length === 1 ? 'Een wilde rover komt' : `${T.hoofdletter(T.telwoord(leden.length))} wilde rovers komen`} de kaart op`;
+    // Wie er komt: de wachters, de veteranen van de heervaart, of allebei.
+    const veteranen = militie.filter((e) => e.bewoner && e.bewoner.veteraan).length;
+    const wachters = militie.length - veteranen;
+    const hulp = !militie.length ? '' : ` ${wachters && veteranen ? 'De wachters en de veteranen komen' : wachters ? 'De wachters komen' : veteranen === 1 ? 'De veteraan komt' : 'De veteranen komen'} naar je toe.`;
     T.bezoekerKomtAan(S, { meteen: true, aankomst: { tekst: `Rovers! ${wie}, op weg naar ${akker}.${hulp}`, soort: 'gevaar', naarGewoon: true } });
   }
-  const TELWOORDEN = ['geen', 'een', 'twee', 'drie', 'vier', 'vijf', 'zes', 'zeven', 'acht'];
 
   // Wilde rovers zien eruit als gewone mensen van buiten: mannen en vrouwen, jong en volwassen.
   function wildVel(S, dag, i) {

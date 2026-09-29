@@ -108,6 +108,9 @@
     // Een man van de militie, uit het wachthuis: wat hij kan als hij bij een aanval naast de schout vecht
     // (js/rovers.js). Hij is een bewoner met zijn eigen poppetje; dit is alleen zijn leven en zijn punten.
     wachter: { naam: 'wachter', kant: 'speler', leven: 16, ap: 8, initiatief: 8, snelheid: 2.4, vel: 'boer' },
+    // Wie van de heervaart terugkwam (js/heervaart.js; Marcel, 29 sep, vraag 60, B): hij heeft leren vechten. Hij
+    // vecht mee als er rovers komen, ook zonder wachthuis, en houdt meer klappen uit dan een wachter.
+    veteraan: { naam: 'veteraan', kant: 'speler', leven: 20, ap: 8, initiatief: 8, snelheid: 2.4, vel: 'boer' },
   };
 
   const sleutelVan = (x, y) => x + ',' + y;
@@ -121,6 +124,9 @@
 
   // "ij" is in het Nederlands één letter: ijzer wordt IJzer, niet Ijzer.
   T.hoofdletter = (s) => (/^ij/.test(s) ? 'IJ' + s.slice(2) : s.charAt(0).toUpperCase() + s.slice(1));
+  // Een klein getal in woorden, voor een bericht of een brief: "drie wilde rovers", "vijf weerbare mannen".
+  const TELWOORDEN = ['geen', 'een', 'twee', 'drie', 'vier', 'vijf', 'zes', 'zeven', 'acht', 'negen', 'tien', 'elf', 'twaalf'];
+  T.telwoord = (n) => TELWOORDEN[n] || String(n);
   T.tegelVan = (e) => ({ x: e.tx, y: e.ty });
   // Afstand in stappen: schuin telt als één stap, net als bij het lopen.
   T.afstand = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
