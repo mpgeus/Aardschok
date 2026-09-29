@@ -405,6 +405,9 @@
   // sprokkelmaand), want dan stookt het. Het vee eet langer hooi: van slachtmaand tot en met lentemaand
   // (T.winterDagen, js/vee.js).
   const isWinter = (dag) => T.datumVanDag(dag).seizoen === 'winter';
+  // Hoeveel dagen het vanaf `dag` nog duurt tot die winter (0 als hij al loopt). Voor wie niet meer wil weten
+  // (de raad, js/raad.js), want het eten van de hele winter uitrekenen kost meer.
+  T.dagenTotDeWinter = (dag) => T.periodeVanaf(dag, isWinter).tot;
 
   const dagenTekst = (n) => (n === 1 ? 'één dag' : `${n} dagen`);
   const MAANDEN_TEKST = ['', 'een maand', 'twee maanden', 'drie maanden', 'vier maanden', 'vijf maanden', 'zes maanden'];

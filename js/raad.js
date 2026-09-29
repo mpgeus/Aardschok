@@ -58,8 +58,9 @@
     return (d.maand === sm.maand && d.dagVanMaand > sm.dag) || d.maand > sm.maand || d.maand < maandIdx('lentemaand');
   }
 
-  // Het hout of het eten haalt de winter niet, en die is binnen winterVooraf dagen (of al begonnen).
-  const haaltHetNiet = (v) => v.tot <= IN().winterVooraf && !v.haalt;
+  // Het hout of het eten (`voorDeWinter`: T.houtVoorDeWinter of T.etenVoorDeWinter) haalt de winter niet, en die
+  // is binnen winterVooraf dagen, of al begonnen. Eerst de dagen tot de winter: dat is goedkoop, het eten niet.
+  const haaltHetNiet = (S, voorDeWinter) => T.dagenTotDeWinter(S.kalender.dag) <= IN().winterVooraf && !voorDeWinter(S, S.kalender.dag).haalt;
 
   // De marskramer staat op het plein, op zijn laatste ronde vóór de heer komt (js/handel.js).
   function marskramerInDeHerfst(S) {
@@ -87,14 +88,14 @@
     },
     {
       id: 'hout',
-      als: (S) => haaltHetNiet(T.houtVoorDeWinter(S, S.kalender.dag)),
+      als: (S) => haaltHetNiet(S, T.houtVoorDeWinter),
       tekst: (S) => (heeft(S, 'houthakker')
         ? 'Het hout haalt de winter nog niet: nog een houthakker [B] hakt erbij.'
         : 'Het hout haalt de winter niet: bouw een houthakker [B].'),
     },
     {
       id: 'eten',
-      als: (S) => haaltHetNiet(T.etenVoorDeWinter(S, S.kalender.dag)),
+      als: (S) => haaltHetNiet(S, T.etenVoorDeWinter),
       // Wat helpt, zegt het dorp ook (js/behoeften.js): een jager, als vlees een maag vult.
       tekst: () => (T.BEHOEFTEN_INSTELLINGEN.vleesIsEten
         ? `Het eten haalt de winter niet: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag.`

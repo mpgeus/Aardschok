@@ -285,6 +285,12 @@
     return { x: x / lijst.length, y: y / lijst.length - 24 };
   }
 
+  // De raad onder het doel (js/raad.js) rekent met de groei en de winter, en dat hoeft niet elk beeld: om de halve
+  // seconde is genoeg. Hij verandert niets, en is alleen scherm, dus hij staat niet in S.
+  const RAAD_ELKE = 0.5;
+  let raadNu = null;
+  let raadOp = -Infinity;
+
   function werkBij(dt) {
     // Een resize-gebeurtenis komt niet altijd (een tabblad dat verborgen opstartte, heeft
     // eerst geen maat), dus kijkt de lus zelf of het venster veranderd is.
@@ -322,8 +328,11 @@
     // (js/treden.js). Daaronder de raad: wat nu tussen jou en een dorp staat (js/raad.js).
     T.werkQuestsBij(S);
     const doelNu = T.questDoel(S) || T.tredeDoel(S);
-    const raad = T.raadNu(S);
-    T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, raad && raad.tekst);
+    if (!(S.tijd - raadOp < RAAD_ELKE) || S.tijd < raadOp) {
+      raadNu = T.raadNu(S);
+      raadOp = S.tijd;
+    }
+    T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, raadNu && raadNu.tekst);
     if (S.modus === 'verkennen') {
       // Vóór T.laatDwalen: wie hier een pad krijgt of aan het maaien slaat (T.werkOogstBij,
       // js/akkers.js, alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
