@@ -9,6 +9,16 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wat opviel bij de wetten** (29 sep, vijftiende sessie; `js/wetten.js`, werklijst vraag 54):
+  - **Op de eerste dag staat de tevredenheid op 100%,** tot na de eerste nacht (`T.nieuweBehoeften` begint op 1, en
+    pas de dagelijkse tik rekent hem uit). Het menu Wetten zegt dan "Het dorp is nu 100% tevreden"; neem je een wet
+    aan, dan springt hij naar wat hij echt is (zo'n 67%, min de wet). Was al zo; de eerste dag meteen uitrekenen
+    lost het op.
+  - **Wetten op een groeidag wisselen.** De tevredenheid heeft geen traagheid: wie weet dat er om de 20 dagen een
+    gezin kan komen, zet het rantsoen die dag op ruim en daarna weer op krap. Marcel: niet te ingewikkeld, dus nu
+    niets tegen gedaan; als spelen laat zien dat het gebeurt, kan de wet een paar dagen nodig hebben om te gelden.
+  - **Hout is nog niet schaars** (één houthakker hakt ruim 600 per jaar), dus de houtkap telt pas als het dorp
+    groeit (hutten, en in stap 4 een palissade van 40 hout). Stellen we bij na de speeltest van twee jaar.
 - **Wat opviel bij het dorp dat zelf bouwt** (28 sep, veertiende sessie; `js/erven.js`, werklijst vraag 52):
   - **Een erf achter een huis zie je slecht.** Het eerste vrije erf bij het plein (28, 17) ligt achter twee grote
     huizen: vanuit de camera zie je er niets van, en de paaltjes ook niet. Met het bouwmenu open staat de rand op

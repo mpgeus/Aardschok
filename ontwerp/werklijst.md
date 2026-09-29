@@ -96,7 +96,8 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   en belasting als idee voor een vierde (vraag 54).
 - **Stap 3 is af: de eerste wetten** (Marcel: "A ja B ja, C later"). Zie onder Af. In de browser gezien: het
   menu onder `W`, de kaarten met wat een wet doet, en de tevredenheid in de balk die meteen meegaat. De balk paste
-  met de extra knop niet meer op 1280 pixels breed; de knoppen gaan nu naar een tweede regel. Een speeljaar van de
+  met de extra knop niet meer op 1280 pixels breed; op een smaller scherm staan de knoppen nu zonder toetsletters,
+  en past het toch niet, dan gaan ze naar een tweede regel. Een speeljaar van de
   speeltest (braaf, zaad 1, met de wetten op hun standaard) liep zonder fouten, en letter voor letter hetzelfde als
   dat jaar op de stand van vóór de wetten (`fa47629`, in een losse kopie met `git worktree`): dezelfde 57 berichten,
   26 naar 37 mensen, niemand dood, de houthakker op 1 herfstmaand.
@@ -1493,7 +1494,8 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   maand in de kist, en 10% minder tevreden). Wat een mens eet, vraagt het spel nu op één plek (`T.etenPerMens`), en
   de balk zegt bij de tevredenheid waar het dorp last van heeft en blij mee is. De benoemingsbrief: "Wetten mag u
   maken, zoveel u wilt. Over Ons bos gaat u niet." Onderweg: de werkbank kan nu ook negatieve getallen aan, en de
-  knoppen in de balk gaan op een smal scherm naar een tweede regel (op 1280 breed viel Menu er al half af).
+  knoppen in de balk passen weer op 1280 breed (op een scherm tot 1500 breed zonder de toetsletters, en met een
+  tweede regel als het toch niet past; Menu viel er al half af).
   Getoetst: `test/wetten.test.cjs` (12 toetsen), en in de browser.
 - 29 sep 2026 — **De eerste trede, van gehucht tot dorp** (veertiende sessie; stap 2 van de proef, vraag 53, Marcel:
   "A ja B ja C ja D ja"). `js/treden.js`: het gehucht wordt een dorp bij 50 mensen met een kapel en een smidse

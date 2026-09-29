@@ -102,6 +102,13 @@ kbd {
    de kalender. Tussen de knoppen klik je gewoon op de kaart. */
 .nieuwe-hud #hud-gehucht > #balk-knoppen { display: flex; flex-wrap: wrap; gap: 10px; flex: 1; min-width: 0; pointer-events: none; }
 #balk-knoppen > * { pointer-events: auto; }
+/* Op een smaller scherm eerst zonder de toetsletters (ze staan ook in de uitleg rechts en bij de muis) en met
+   minder ruimte, zodat de rij past: een tweede regel komt onder een venster in het midden terecht. */
+@media (max-width: 1500px) {
+  .nieuwe-hud #hud-gehucht > #balk-knoppen { gap: 8px; }
+  .nieuwe-hud #balk-knoppen > button { padding: 0 9px; }
+  .nieuwe-hud #balk-knoppen kbd { display: none; }
+}
 /* De uitleg rechts onder de rij bovenin, niet ernaast: met de knop Velden erbij (en straks meer in
    de balk: kaas, ijzer, zout) liep die rij op 1280 pixels breed al onder de uitleg door. */
 .nieuwe-hud #hulp-gehucht { display: block; top: 118px; }
