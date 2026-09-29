@@ -27,10 +27,9 @@ uitroepteken boven zijn hoofd, en hij spreekt je aan als je stilstaat (`Spel.deb
 `ccr-0e928644-rvlci5`). Het werk van de zeventiende sessie (vraag 60 en 61) staat op `ccr-ef2496ce-pa4iti`, en gaat
 naar `main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij de raadsman (vraag 65, B; vraag 64, B en D): iemand uit het dorp met een geloot
-karakter en gelote eigenschappen, die jij kiest uit twee of drie, en die de voorvallen afhandelt als je er niet bent.
-Begin met een plan voor Marcel: nu gaat een voorval na twee dagen voorbij als je er niet bent, en dat is precies de plek
-waar hij beslist. De voorvallen zijn gebouwd (vraag 65, A; zie onder Af), en het dorp van bovenaf blijft open (Marcel:
+**Waar de volgende sessie begint:** bij de raadsman (vraag 65, B; vraag 64, B en D): het plan is vraag 66, en wacht op
+Marcels antwoord (een van de boeren, gekozen in de eerste week, eerst voor de voorvallen, met "Dat laat ik aan ...
+over"; staande orders pas met het land). De voorvallen zijn gebouwd (vraag 65, A; zie onder Af), en het dorp van bovenaf blijft open (Marcel:
 "nee niet bovenaf, ik denk hier nog over na"). Eerst één dorp vol leven, dan het land (vraag 65, D): het land met
 provincies (vraag 63) komt daarna, met 1a van het land, de kaart van het land en reizen, het buurdorp in een eigen
 provincie, en een snellere dagtik. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
@@ -70,7 +69,8 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het dorp van bovenaf (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
+*2. Wacht op Marcel:* het plan voor de raadsman (vraag 66); het dorp van bovenaf (vraag 65, C: "ik denk hier nog over
+na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
 heer in het hogere doel past). Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51; het bijstellen na de
@@ -1871,7 +1871,35 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 29 sep): "A ja B ja C nee niet bovenaf, ik denk hier nog over na. D ja".** Dus: voorvallen
     zoals voorgesteld; de raadsman zoals voorgesteld; geen dorp van bovenaf (Marcel denkt er nog over na, dus het
     blijft open); en eerst één dorp vol leven, dan het land. Wordt gebouwd: eerst de voorvallen, dan de raadsman.
-    **A gebouwd (29 sep, zeventiende sessie):** zie onder Af, en `spel.md`, "De voorvallen". Nog: B, de raadsman.
+    **A gebouwd (29 sep, zeventiende sessie):** zie onder Af, en `spel.md`, "De voorvallen". Nog: B, de raadsman; het
+    plan is vraag 66.
+66. **De raadsman: het plan** (Marcel, 29 sep, vraag 64, B en D, en 65, B: "Een raadsman moet een karakter hebben.
+    Gerandomiseerde eigenschappen en skills wat hem in bepaalde scenarios beter maakt", "Jij kiest een raadsman, op
+    basis van skills en karakter"; het plan is van Claude; wacht op Marcel). Wat er nu is: een voorval dat je niet
+    beantwoordt, gaat na twee dagen voorbij, en dat kost wat tevredenheid; verder hangt alles aan jou. Voorstel:
+    - **A, wie het kan worden: een van de boeren.** Ze hebben al een naam, een karakter (de weduwe, de woekeraar, de
+      roddelaar, ...), een aanzien (geliefd, gewoon, gehaat) en gelote eigenschappen, en je kent ze uit de voorvallen.
+      Erbij komen twee gelote vaardigheden uit vijf: rechtspreken, rekenen, bouwen, vechten en zwijgen, elk goed of
+      slecht. Wie raadsman is, maait minder: dat is zijn prijs.
+    - **B, kiezen:** in de eerste week stelt de herbergierster het voor ("U kunt niet overal zijn, schout"), en een
+      venster toont drie kandidaten: naam, karakter, aanzien en wat hij kan. Later kun je hem vervangen; wie je ontslaat,
+      neemt het je kwalijk.
+    - **C, wat hij eerst doet: de voorvallen.** Elk voorval krijgt een antwoord "Dat laat ik aan Klaas over": hij beslist
+      naar zijn karakter (de vrome mild, de heethoofd streng, de woekeraar zuinig en hard voor wie schuld heeft, de zanger
+      kiest het feest). Een voorval dat je mist, beslist hij ook, in plaats van dat het voorbijgaat, en hij vertelt het je
+      als hij je ziet: "Terwijl u weg was, heb ik de dief laten gaan. Hij was mijn neef." Van zijn vaardigheden tellen
+      eerst rechtspreken (zijn vonnis maakt meer of minder tevreden) en zwijgen (wat de inner van hem hoort); rekenen,
+      vechten en bouwen komen met het land, als je dagen weg bent.
+    - **D, staande orders** (de schets van vraag 64: wat hij doet met de heer op Sint-Maarten, de heervaart en de
+      marskramer) komen pas met het land: nu ben je er altijd zelf.
+    - **Wat het doet** (inzicht): de raadsman is er meteen, en niet pas als je gaat reizen. Wie het druk heeft, geeft een
+      voorval aan hem, en ziet zijn karakter in wat hij beslist; zo bevalt je keuze je soms niet, zoals Marcel wilde. En
+      hij maakt het land mogelijk: wie vier dagen naar het buurdorp reist, laat een dorp achter dat doorloopt.
+    Klaar als (A tot C): je kiest in de eerste week uit drie boeren; elk voorval heeft "Dat laat ik aan ... over"; wat je
+    mist, beslist hij, en hij zegt wat hij deed; twee karakters kiezen verschillend; rechtspreken en zwijgen tellen; de
+    spelregel "Raadsman"; `npm test` groen; en de speeltest geeft er een deel aan hem. Vragen: **A**, een van de boeren
+    als raadsman? **B**, kiezen in de eerste week, voorgesteld door de herbergierster? **C**, eerst de voorvallen, met
+    "Dat laat ik aan ... over"? **D**, staande orders pas met het land?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
