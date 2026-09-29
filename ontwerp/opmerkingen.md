@@ -22,8 +22,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     (binnen). Buiten ben je ze pas kwijt als niemand je nog ziet.
   - **Ze roven uit de schuur, niet van de akker.** De akker is waar ze heen lopen en wat ze vertrappen; het graan
     komt uit de voorraad. In zomermaand staan ze dan op een akker vol graan en gaan ze "met lege handen" weg als de
-    schuur leeg is (de speeltest, 27 zomermaand). Eenvoudig recht te zetten: is de schuur leeg en staat er graan op
-    de akker, dan nemen ze dat mee, en wordt dat stuk niet meer geoogst.
+    schuur leeg is (de speeltest, 27 zomermaand). **Zo blijft het** (Marcel, 29 sep: "graan uit de schuur is
+    goed").
   - **In een gevecht zoek je jezelf.** De schout draagt het vel van een gewone dorpeling, de wachters dat van een
     boer of boerin, en de rovers ook; alleen de rovers hebben een levensbalk. Vraag 13 (een eigen figuur voor de
     schout) weegt daardoor zwaarder.

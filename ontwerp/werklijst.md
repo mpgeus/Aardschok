@@ -18,15 +18,13 @@ gevochten wordt; rijk worden en arm lijken blijft de druk van boven. Wat er nu s
 per onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, en Nieuw spel geeft de
 benoemingsbrief van de heer; `W` zijn de wetten, `Z` is slapen bij je huis, `Esc` het menu, en het spel slaat
-elke ochtend zelf op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 610/610.
+elke ochtend zelf op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 611/611.
 
-**Waar het werk staat:** de vijftiende sessie tot en met het plan voor stap 4 staat in `main` (Marcel, 29 sep: "Graag
-alles naar main, en begin met stap 4"); stap 4 zelf staat op `ccr-ff387f8f-iqbokf`, tot Marcel zegt dat het naar
-`main` mag. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`,
+**Waar het werk staat:** alles staat in `main`, ook stap 4 (Marcel, 29 sep: "A, ja naar main"; ook op
+`ccr-ff387f8f-iqbokf`). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`,
 onder Git.
 
-**Waar de volgende sessie begint:** bij vraag 57 als Marcel die beantwoordde (hoe de rovers langzaam opbouwen, een
-klein stuk van stap 4), en dan bij de prioriteit hieronder, stap 5: de proef afmaken (de eerste weken als
+**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 5: de proef afmaken (de eerste weken als
 opdrachten, een speeltest van twee jaar, en een tester); begin met een plan voor Marcel, en houd het eenvoudig
 (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Stap 1 tot en met 4 zijn af: het dorp bouwt zelf (vraag 52), de
 eerste trede (vraag 53), de eerste wetten (vraag 54) en rovers met een militie (vraag 55). De
@@ -116,6 +114,10 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   loopt, en wint wie de wachters voor laat gaan; tegen twee wint iedereen. Dat werd vraag 56.
 - **Marcel beantwoordde vraag 56:** "A laten zo, geen bericht. B schout kan sterven. C. We bouwen het langzaam op".
   Hoe de rovers langzaam opbouwen, werd vraag 57 (elk jaar een man meer, of naar de grootte van het dorp).
+- **Marcel koos vraag 57 A** ("A, ja naar main, graan uit de schuur is goed"): de wilde rovers komen elk jaar van je
+  ambt met een man meer, van twee tot vier. Gebouwd, en alles staat in `main`. Een speeljaar van de speeltest
+  (braaf, zaad 1) liep daarna letter voor letter als ervoor (dezelfde 60 berichten): beide aanvallen vielen in het
+  eerste jaar, met twee man, zoals het lot ze eerder ook koos.
 
 **Wat er in de veertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 4, de afrekening na het eerste jaar** (vraag 49): op 1 lentemaand, na de winter, de
@@ -1286,6 +1288,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **B. Naar de grootte van het dorp:** één rover per vijftien mensen, minstens twee. Een gehucht van 26 mensen
       krijgt er twee, een dorp van 50 drie. Wie groeit, trekt rovers aan, net als de heer, die per ziel vraagt.
     De bende van wie wegtrok, blijft zoals hij is: die is zo groot als je hem zelf maakt.
+    **Beantwoord (Marcel, 29 sep): "A, ja naar main, graan uit de schuur is goed".** Gebouwd: de wilde rovers
+    komen elk jaar van je ambt met een man meer, van twee tot vier (`wildeEerst`, `wildeErbijPerJaar` en
+    `wildeMeest` in `T.ROVERS_INSTELLINGEN`, in de werkbank). Het graan blijven ze uit de schuur halen, en stap 4
+    ging naar `main`.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -1590,7 +1596,8 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms velden kapot. C, Ja. D, mensen kunnen
   sterven"). `js/rovers.js`: wie wegtrekt, gaat het bos in en komt na tien dagen als rover terug, met zijn naam en
   zijn vel, en daarna om de twintig dagen, zolang er een van de bende leeft. Daarnaast komen er zo'n twee keer per
-  jaar twee tot vier wilde rovers van buiten, op een dag die je niet ziet aankomen (de eerste niet vóór dag 60).
+  jaar wilde rovers van buiten, op een dag die je niet ziet aankomen (de eerste niet vóór dag 60); ze bouwen
+  langzaam op: het eerste jaar van je ambt met twee man, het tweede met drie, daarna met vier (vraag 57).
   Tegen de avond komen ze van de rand die het dichtst bij een akker ligt, roven daar twee uur, en gaan ervandoor
   met 10 graan per rover uit de voorraad; drie van de tien keer vertrappen ze de akker, en wat erop stond, groeit
   dat jaar niet meer (`T.vertrapAkker`). Een bericht zegt het, en de tijd gaat naar 1×. De mannen van het wachthuis
@@ -1602,7 +1609,7 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   spel uit, zoals eerder. Wie het overleeft, staat de volgende ochtend weer met al zijn leven op (vraag 11). De
   getallen staan in de werkbank (`T.ROVERS_INSTELLINGEN`), en opslaan houdt de bende. De knop Slaan verloor het
   toetsje `1` (vraag 12); de oude monsters blijven op de proefkaart, voor de toetsen (vraag 10). Getoetst:
-  `test/rovers.test.cjs` (12 toetsen), een speeljaar van de speeltest, en in de browser veertien gevechten (vraag
+  `test/rovers.test.cjs` (13 toetsen), een speeljaar van de speeltest, en in de browser veertien gevechten (vraag
   56).
 - 29 sep 2026 — **De eerste wetten** (vijftiende sessie; stap 3 van de proef, vraag 54, Marcel: "Het wordt gewoon een
   menu zoals in diplomacy 3, waar je weten kunt aannemen etc. Maak het niet te ingewikkeld", en "A ja B ja, C later").

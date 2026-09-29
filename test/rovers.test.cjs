@@ -102,7 +102,7 @@ test('de bende komt terug op de dag die het zegt, tegen de avond, van de rand va
   assert.equal(S.rovers.bende.length, bende.length - 1);
 });
 
-test('wilde rovers komen op een dag die vastligt per spel, niet in de eerste zestig dagen, met twee tot vier man', () => {
+test('wilde rovers komen op een dag die vastligt per spel, niet in de eerste zestig dagen, het eerste jaar met twee man', () => {
   const S = gehucht();
   T.tikRoversDag(S, 1);
   const op = S.rovers.wildeOp;
@@ -115,8 +115,21 @@ test('wilde rovers komen op een dag die vastligt per spel, niet in de eerste zes
   T.tikRoversDag(S, op);
   const A = S.rovers.aanval;
   assert.equal(A.soort, 'wild');
-  assert.ok(A.aantal >= 2 && A.aantal <= 4, `${A.aantal} man`);
+  assert.ok(op < T.DAGEN_PER_JAAR, `dag ${op} ligt in het eerste jaar`);
+  assert.equal(A.aantal, 2, 'het eerste jaar met twee man');
   assert.ok(S.rovers.wildeOp > op, 'en daarna komen ze weer');
+});
+
+test('de wilde rovers bouwen langzaam op: elk jaar van je ambt een man meer, tot vier (vraag 57)', () => {
+  const aantalOp = (dag) => {
+    const S = gehucht();
+    S.rovers = T.nieuweRovers();
+    S.rovers.wildeOp = dag;
+    T.tikRoversDag(S, dag);
+    return S.rovers.aanval.aantal;
+  };
+  const J = T.DAGEN_PER_JAAR;
+  assert.deepEqual([100, J - 1, J, 2 * J - 1, 2 * J, 5 * J].map(aantalOp), [2, 2, 3, 3, 4, 4]);
 });
 
 test('rovers die de akker halen, roven er graan en gaan weer weg', () => {

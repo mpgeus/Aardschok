@@ -25,10 +25,13 @@
     terugNaDagen: 10,
     opnieuwNaDagen: 20,
     // Wilde rovers, van buiten: gemiddeld zo vaak per jaar, op een dag tussen de helft en anderhalf keer de tijd
-    // ertussen, en niet in de eerste zoveel dagen van een spel. Met zoveel man.
+    // ertussen, en niet in de eerste zoveel dagen van een spel. Ze bouwen langzaam op (Marcel, 29 sep, vraag 57):
+    // het eerste jaar van je ambt komen ze met zoveel man, elk jaar daarna met zoveel meer, en nooit met meer dan
+    // zoveel.
     wildePerJaar: 2,
     eersteWildeNa: 60,
-    wildeMinst: 2,
+    wildeEerst: 2,
+    wildeErbijPerJaar: 1,
     wildeMeest: 4,
     // Tegen de avond komen ze (het uur), en zo lang roven ze op de akker voor ze weer gaan. Halen ze hun akker of de
     // weg terug niet binnen opUren (ingesloten, of steeds iemand in de weg), dan geven ze het op.
@@ -74,7 +77,9 @@
   const gemiddeldTussen = () => (IN().wildePerJaar > 0 ? T.DAGEN_PER_JAAR / IN().wildePerJaar : Infinity);
   const wildeTussen = (S, dag) => Math.max(1, Math.round(gemiddeldTussen() * (0.5 + lot(S, dag, 5))));
   const eersteWilde = (S, dag) => dag + IN().eersteWildeNa + Math.round(gemiddeldTussen() * lot(S, dag, 6));
-  const wildeAantal = (S, dag) => IN().wildeMinst + Math.floor(lot(S, dag, 7) * (IN().wildeMeest - IN().wildeMinst + 1));
+  // Met hoeveel man ze komen: elk jaar van je ambt met een man meer (dag 0 is de dag van je benoeming).
+  const wildeAantal = (dag) =>
+    Math.min(IN().wildeMeest, IN().wildeEerst + Math.floor(dag / T.DAGEN_PER_JAAR) * IN().wildeErbijPerJaar);
 
   // Elke dag (T.tikGebouwenDag, js/gebouwen.js): de doden van gisteren worden begraven, wie het overleefde staat
   // weer op met al zijn leven, en er wordt bepaald of er vandaag rovers komen.
@@ -89,7 +94,7 @@
       R.aanval = { soort: 'bende', dag, fase: 'wacht' };
       R.bendeOp = dag + IN().opnieuwNaDagen;
     } else if (dag >= R.wildeOp) {
-      R.aanval = { soort: 'wild', dag, fase: 'wacht', aantal: wildeAantal(S, dag) };
+      R.aanval = { soort: 'wild', dag, fase: 'wacht', aantal: wildeAantal(dag) };
       R.wildeOp = dag + wildeTussen(S, dag);
     }
   };

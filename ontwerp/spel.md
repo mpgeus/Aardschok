@@ -91,8 +91,9 @@ in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de 
 velden kapot. C, Ja. D, mensen kunnen sterven"):
 - **Wie rover wordt.** Wie wegtrekt, gaat het bos in: de jongeren en volwassenen worden rover, met hun naam en hun
   uiterlijk (de bende). Na tien dagen komen ze terug, en daarna om de twintig dagen, zolang er een van hen leeft.
-  Daarnaast komen er wilde rovers van buiten: twee tot vier man, gemiddeld twee keer per jaar, op een dag die je
-  niet ziet aankomen, en niet in de eerste zestig dagen van een spel.
+  Daarnaast komen er wilde rovers van buiten, gemiddeld twee keer per jaar, op een dag die je niet ziet aankomen,
+  en niet in de eerste zestig dagen van een spel. Ze bouwen langzaam op (Marcel, 29 sep, vraag 57): het eerste
+  jaar van je ambt komen ze met twee man, het tweede met drie, daarna met vier.
 - **Een aanval.** Tegen de avond (vijf uur) komen ze van de rand van de kaart die het dichtst bij een akker ligt, en
   lopen erheen. Een bericht zegt wie het zijn en naar wiens akker ze gaan, en de tijd gaat naar 1×. Twee uur roven ze;
   dan gaan ze weg met 10 graan per rover uit de voorraad, en met een kans van 30% is de akker vertrapt: wat erop
@@ -113,8 +114,9 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
   schutterij (punt 13); de heervaart en een rivaal (na de proef).
 - **Besloten (Marcel, 29 sep, werklijst vraag 56):** "schout kan sterven": valt hij, dan is het spel uit, en een
   aanval waarschuwt daar niet voor ("A laten zo, geen bericht"). Tegen drie rovers valt een schout die voorop loopt
-  in de tweede of derde ronde, en wint wie de wachters voor laat gaan. En "We bouwen het langzaam op": de rovers
-  beginnen klein en worden later meer. Hoe precies, is vraag 57.
+  in de tweede of derde ronde, en wint wie de wachters voor laat gaan. En "We bouwen het langzaam op": de wilde
+  rovers komen elk jaar met een man meer (vraag 57: "A"). Het graan halen ze uit de schuur, en dat blijft zo
+  (Marcel: "graan uit de schuur is goed").
 
 **Hoe het zo kwam:** het plan staat in de werklijst, vraag 55. Claude stelde voor dat de rovers naar het plein gingen,
 eens per jaar een bende van buiten, en dat wie viel alleen gewond was tot de ochtend. Marcel koos anders: ook wilde
