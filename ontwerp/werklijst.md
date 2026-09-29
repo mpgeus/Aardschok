@@ -24,8 +24,8 @@ elke ochtend zelf op. De pagina "Stand van het gehucht" (25 sep) loopt achter op
 begin met stap 4"; ook op `ccr-ff387f8f-iqbokf`). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`,
 onder Git.
 
-**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 4: rovers en een militie; begin met een plan
-voor Marcel, en houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Stap 1 (het dorp bouwt zelf,
+**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 4: rovers en een militie. Het plan staat
+klaar en wacht op Marcel (vraag 55); houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Stap 1 (het dorp bouwt zelf,
 vraag 52), stap 2 (de eerste trede, vraag 53) en stap 3 (de eerste wetten, vraag 54) zijn af. De
 richting staat (vraag 50: besturen en groeien worden het hart, de heer blijft als de druk van boven, en vechten
 begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook (vraag 51: de proef wordt "van gehucht tot
@@ -49,7 +49,8 @@ kost u vanaf nu meer."
    Democracy 3 onder `W`, met het rantsoen, vreemden welkom, houtkap in het bos van de heer en de belasting. Zie
    onder Af.
 4. **Nu: rovers en een militie** (punt 13): rovers vallen het gehucht aan, en je verdedigt het in beurten op je eigen
-   kaart, met naast de schout een paar mannen uit het wachthuis. Wie wegtrekt, wordt rover.
+   kaart, met naast de schout een paar mannen uit het wachthuis. Wie wegtrekt, wordt rover. Het plan staat klaar:
+   vraag 55, wacht op Marcel.
 5. **De proef afmaken:** de eerste weken als opdrachten (vraag 47, herschreven voor de nieuwe richting), een
    speeltest van twee jaar, en een tester die het niet kent (33d).
 
@@ -57,7 +58,8 @@ kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* 33d (hoe een tester het krijgt, in `speelbaar.md`), en later vraag 54, C (hoe de heer in het
+*2. Wacht op Marcel:* vraag 55 (het plan voor rovers en een militie), 33d (hoe een tester het krijgt, in
+`speelbaar.md`), en later vraag 54, C (hoe de heer in het
 hogere doel past). Vraag 47 wordt herschreven bij stap 5. Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51;
 het bijstellen na de speeltest (vraag 46) komt later, met een menu met opties.
 
@@ -101,6 +103,11 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   speeltest (braaf, zaad 1, met de wetten op hun standaard) liep zonder fouten, en letter voor letter hetzelfde als
   dat jaar op de stand van vóór de wetten (`fa47629`, in een losse kopie met `git worktree`): dezelfde 57 berichten,
   26 naar 37 mensen, niemand dood, de houthakker op 1 herfstmaand.
+- **Alles staat in `main`** (Marcel: "Graag alles naar main, en begin met stap 4").
+- **Een plan voor stap 4, rovers en een militie** (vraag 55): wie wegtrekt, komt als rover terug, en eens per jaar
+  komt er een bende van buiten; ze stelen op het plein; de mannen van het wachthuis vechten mee, elk met een eigen
+  beurt; en wie valt, is gewond tot de ochtend. Nagekeken: het gevecht draait nu helemaal om de schout, en in het
+  gehucht staat nog geen enkele vijand. Niets gebouwd.
 
 **Wat er in de veertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 4, de afrekening na het eerste jaar** (vraag 49): op 1 lentemaand, na de winter, de
@@ -1182,6 +1189,52 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     naar het hogere doel, of is de heer zelf een van de partijen die je verovert of te vriend maakt?
     **Beantwoord (Marcel, 29 sep): "A ja B ja, C later".** Het menu en de drie wetten zoals voorgesteld, met
     belasting als vierde; het wordt gebouwd. Vraag C (de heer en het hogere doel) komt later.
+55. **Rovers en een militie: het plan** (Claude, 29 sep, vijftiende sessie; stap 4 van de proef "van gehucht tot
+    dorp", vraag 51; Marcel: "Graag alles naar main, en begin met stap 4"; wacht op Marcel). Marcel koos bij vraag 51:
+    rovers vallen het gehucht aan, en je verdedigt het in beurten op je eigen kaart, met naast de schout een paar
+    mannen uit het wachthuis; wie wegtrekt, wordt rover. En op 29 sep: "Maak het niet te ingewikkeld". Wat er nu is:
+    - **Het gevecht in beurten werkt, maar voor één man.** Alles draait om de schout: lopen, slaan, de actiepunten, en
+      de vijand die hem zoekt (`js/gevecht.js`). Het begint vanzelf als een vijand hem ziet (`T.zoekOntdekking`), en
+      buiten ligt het raster negen tegels om de vechters. In het gehucht staat nog geen enkele vijand: de wolf en de
+      oude monsters staan alleen op de proefkaart.
+    - **Het wachthuis staat al in het bouwmenu:** 10 hout en 4 goud, twee handen, het maakt niets, en de heer wil er
+      2 goud per jaar voor.
+    - **Wie wegtrekt,** loopt de weg af, eerst een gezin dat later kwam. Dat gebeurt alleen onder 25% tevreden, en in
+      de speeltesten gebeurde het nooit.
+    - **Vallen** is nu het einde van het spel, en het leven van de schout komt niet terug (vraag 11).
+    Voorstel:
+    - **A, wanneer komen er rovers?** Wie wegtrekt, gaat het bos in en wordt rover: dezelfde mensen, met hun naam en
+      hun vel ("Albert, die in grasmaand wegtrok"), dus zonder nieuwe tekeningen. Na zo'n tien dagen komen ze terug,
+      tegen de avond, uit het bos in het noorden. En omdat een goed bestuurd dorp niemand kwijtraakt, komt er ook eens
+      per jaar een bende van buiten (drie man, in wintermaand, als ze honger hebben): zo komt elke speler ze tegen.
+      Het andere: alleen wie wegtrok, komt terug, en wie goed bestuurt, vecht nooit.
+    - **B, wat willen ze?** Ze lopen naar het plein en nemen mee wat ze kunnen dragen: per rover 10 graan en 2 goud.
+      Een bericht zegt het ("Rovers uit het bos! Ze gaan naar het plein."), en de tijd gaat naar 1×. Ziet een rover de
+      schout, dan begint het gevecht, daar waar ze staan. Houd je ze niet tegen, dan pakken ze het en gaan ze weer
+      het bos in.
+    - **C, de militie is het wachthuis.** De twee mannen die er werken, komen bij een aanval naar de schout (zoals de
+      inner meeloopt) en vechten naast hem. Elk heeft zijn eigen beurt en actiepunten, en jij bestuurt ze, zoals in
+      Jagged Alliance 2. Zonder wachthuis vecht je alleen; een tweede wachthuis geeft twee man meer.
+    - **D, vallen is niet meer het einde.** Wie valt, is gewond en doet niet meer mee; de volgende ochtend staat hij
+      weer op, met al zijn leven, ook de schout (dat beantwoordt vraag 11). Valt de schout, dan is het gevecht
+      verloren: de rovers pakken wat ze kwamen halen, en hij wordt thuis wakker. Een rover die valt, is verslagen en
+      komt niet terug. Het spel eindigt dan alleen nog via de heer. Het andere: wie valt, is dood (een wachter die
+      sneuvelt, is een mond minder).
+    - **Ook in deze stap** (geen vraag): het gevecht groeit van één schout naar een groepje (wie aan de beurt is, de
+      knoppen, de camera en de volgorde); een rover zoekt de man van jouw kant die het dichtst bij staat. De oude
+      monsters blijven alleen op de proefkaart, voor de toetsen (vraag 10), en de knop Slaan verliest het toetsje `1`,
+      dat niets doet (vraag 12). De getallen (hoeveel dagen, wat ze meenemen, leven en schade) staan in de werkbank,
+      en opslaan houdt de bende.
+    - **Wat het doet** (inzicht): de rovers laten de wetten bijten. Een krap rantsoen en de belasting maken het dorp
+      minder tevreden, en wie daardoor wegtrekt, komt terug om te stelen: wie slecht bestuurt, maakt zijn eigen
+      vijanden. En het wachthuis kost goud dat je ook voor de kapel en de smidse nodig hebt.
+    Klaar als er rovers komen (wie wegtrok, en eens per jaar een bende van buiten), ze naar het plein lopen en daar
+    stelen als niemand ze tegenhoudt, het gevecht begint als ze de schout zien, de mannen van het wachthuis
+    meevechten en elk hun eigen beurt hebben, wie valt tot de ochtend gewond is, een verloren gevecht geen einde van
+    het spel is, verslagen rovers weg zijn, de getallen in de werkbank staan, opslaan de bende houdt, `npm test`
+    groen is, een speeljaar van de speeltest zonder fouten loopt, en een schermafdruk een gevecht met de militie
+    laat zien. Vragen: **A**, rovers uit wie wegtrok, en eens per jaar van buiten? **B**, naar het plein, 10 graan
+    en 2 goud per rover? **C**, de militie is het wachthuis? **D**, vallen is gewond tot de ochtend?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
