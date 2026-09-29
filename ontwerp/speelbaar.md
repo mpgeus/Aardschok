@@ -170,6 +170,11 @@ graan van de heer, en betaalt de heer alles. Hij verstopt niets en loopt de rove
 | Groeidagen: een gezin, te weinig graan, niet tevreden | 16, 41, 14 (van 61) | 16, 54, 26 (van 75) | 16, 53, 26 (van 75) |
 | De raad stond (dagen) | hout 184, rovers 144, graan 91, gezin 73 | hout 241, rovers 207, graan 94, gezin 70 | hout 252, rovers 197, graan 98, gezin 66 |
 
+**Opnieuw met de heervaart** (29 sep, zeventiende sessie, zaad 1, op `db21255` van `ccr-ef2496ce-pa4iti`): het eerste
+jaar speelt zoals hierboven, met dezelfde getallen, want de heervaart begint pas in een dorp. In het tweede jaar vroeg
+de heer op 1 hooimaand drie man (het dorp was toen nog 25 zielen), de bouwer stuurde ze, en op 1 herfstmaand kwamen er
+twee terug als veteraan. Zonder fouten in de console.
+
 **Wat opviel, van belangrijk naar minder:**
 
 1. **De proef duurt zes maanden, niet twee jaar.** In alle drie de zaden is het gehucht op 1 herfstmaand van het

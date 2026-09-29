@@ -1577,8 +1577,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **Het begin:** bij Nieuw spel, onder de naam van je dorp, kies je Tegenspelers: 0 tot 3 (met 0 speel je zoals
       nu, de proef).
     - **In stappen, elk speelbaar:**
-      1. *Eén tegenspeler, met zijn eigen dorp in getallen:* het buurdorp draait op dezelfde regels, met een schout in
-         code die bouwt en groeit, en die naar jou komt (C van vraag 60). Je weet hoe groot hij is, en hij groeit echt.
+      1. *Eén tegenspeler, met zijn eigen dorp in getallen:* het buurdorp draait op dezelfde regels, op een eigen kaart
+         waar je nog niet heen kunt (de regels hebben er een nodig: de akkers zijn tegels), met een schout in code die
+         bouwt en groeit, en die naar jou komt (C van vraag 60). Je weet hoe groot hij is, en hij groeit echt.
       2. *De streek:* zijn dorp op een eigen kaart, over de weg. Je kunt erheen, zien wat hij bouwde, en daar vechten
          (zelf terugslaan, D van vraag 60).
       3. *Kiezen hoeveel, en ze zoeken:* een streek van meer kaarten, met de tegenspelers op een plek die je nog niet
@@ -1910,7 +1911,9 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   hem in zijn brieven, en hij staat in het doel en bij een opgeslagen spel. De spelregel "Heervaart" en de werkbank
   ("De heervaart"); `Spel.debug.heervaart('vraag')` en `('terug')`. Getoetst: `test/heervaart.test.cjs` (9 toetsen)
   en twee in `test/treden.test.cjs`; `npm test` 635/635; in de browser de brief, sturen en terugkomen, de naamstap, en
-  een gevecht met drie veteranen; de speeltest braaf (zaad 1) speelt zijn jaar zoals eerst (26 → 37). Open: C (het
+  een gevecht met drie veteranen; de speeltest braaf (zaad 1) speelt zijn jaar zoals eerst (26 → 37), en de bouwer
+  (zaad 1) zijn eerste jaar ook, zonder fouten; in zijn tweede jaar stuurde hij op 1 hooimaand drie man, en op 1
+  herfstmaand kwamen er twee terug ("Wolter sneuvelde voor de heer. Hij laat weten dat hij dapper was."). Open: C (het
   buurdorp) wacht op het plan voor tegenspelers, vraag 61.
 - 29 sep 2026 — **De proef afmaken: de raad, de bouwer en de proefversie** (zestiende sessie; stap 5 van de proef,
   vraag 58, Marcel: "A Ja goed idee. B onder het doel. C itch io"). **B:** `js/raad.js`: onder het doel linksboven
