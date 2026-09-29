@@ -2638,7 +2638,10 @@ en over de heervaart [Wikipedia](https://nl.wikipedia.org/wiki/Heervaart).
   De politiek beantwoordt de vraag half: met vijf boeren praat je met ieder, met vijfhonderd praat
   je met wie voor hen spreekt, en bestuur je met keuren. Op 26 sep kwamen er twee halve antwoorden
   bij ("Een dorp dat leeft en groeit"): het dorp bouwt zijn eigen huizen, en de schout rijdt te
-  paard.
+  paard. **Op 29 sep kwam Marcel erop terug** ("zelf als persoon rond hobbelen in je eigen stad maakt het wel
+  lastig. Misschien voelt het handiger als we een soort raadsman en aansturen die je regels oplegt?"): het voorstel
+  van Claude, besturen van bovenaf met één toets en een raadsman per dorp die jouw regels uitvoert, staat in de
+  werklijst, vraag 64.
 - Hoe ver gaat de politiek: keuren, schepenen en groepen zoals hierboven, of ook verkiezingen,
   partijen en intriges aan het hof van de heer?
 - Goederen, groepen en keuren: een eerste voorstel staat hierboven ("De kern voor het tweede proefje"),

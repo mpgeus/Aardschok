@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (29 sep 2026, zeventiende sessie): de heervaart en de naam van je dorp gebouwd; het land met provincies (vraag 63) wacht op Marcel
+## De stand (29 sep 2026, zeventiende sessie): de heervaart en de naam van je dorp gebouwd; het land (vraag 63) en de raadsman (vraag 64) wachten op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -28,8 +28,10 @@ naar `main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, sta
 
 **Waar de volgende sessie begint:** bij vraag 63, het plan voor een land met provincies waar je dagen reist, zoals
 Lords of the Realm (Marcel, 29 sep, vraag 62: "Denk in dagen ... Met een land met provincies"), met de tegenspelers
-erin; de eerste stap is het buurdorp. Het wacht op Marcels antwoord; daarna 1a: de kaart van het land en reizen, het
-buurdorp in een eigen provincie, en een snellere dagtik. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je dorp bij Nieuw spel; zie
+erin; de eerste stap is het buurdorp. En bij vraag 64, hoe het leuk blijft (Marcel, 29 sep: "zelf als persoon rond
+hobbelen in je eigen stad maakt het wel lastig"): besturen van bovenaf, en een raadsman per dorp die jouw regels
+uitvoert. Allebei wachten ze op Marcels antwoord, en 64 bepaalt mee hoe 63 wordt (wie er reist, wie thuis bestuurt);
+daarna 1a: de kaart van het land en reizen, het buurdorp in een eigen provincie, en een snellere dagtik. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je dorp bij Nieuw spel; zie
 onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
 thuis is (`npm run proefversie`, `verpakken.md`), en wie de eerste tester is, staat open (33d). Van de proef zijn
@@ -66,7 +68,8 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor een land met provincies (vraag 63); de proefversie op itch.io zetten als hij
+*2. Wacht op Marcel:* het plan voor een land met provincies (vraag 63), en hoe het leuk blijft: besturen zonder te
+lopen en een raadsman (vraag 64); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
 heer in het hogere doel past). Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51; het bijstellen na de
@@ -124,6 +127,11 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   regels (twee jaar met alleen de dagtik: 26 → 37 in het eerste jaar, zoals met poppetjes); een speeldag kost 44 ms
   per dorp, bijna allemaal in `T.voorwerpOp`, dat voor elke tegel alle voorwerpen afloopt; een bewaard spel is 370 kB
   per dorp. Daaruit het plan voor het land (vraag 63), met een schets. Niets gebouwd.
+- **Marcel vroeg hoe het leuk blijft** ("zelf als persoon rond hobbelen in je eigen stad maakt het wel lastig.
+  Misschien voelt het handiger als we een soort raadsman en aansturen die je regels oplegt?"). Nagekeken: de camera
+  volgt altijd de schout en je ziet maar een klein stuk van je dorp, dus bouwen gaat alleen waar hij staat. Het
+  meedenken staat in vraag 64 (besturen van bovenaf met één toets, een raadsman per dorp met een bouwlijst en staande
+  orders, de schout voor wat persoonlijk is), met een schets van de raadsman in het spel. Niets gebouwd.
 
 **Wat er in de zestiende sessie gebeurde** (29 sep; Marcel: "Werklijst doorzetten"):
 - **Eerst gemeten:** een speeljaar van nu (braaf, zaad 1, op `6750a21`), zonder fouten. Het gehucht groeit van 26 naar
@@ -1731,6 +1739,50 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     provincies waarop je reist, en per provincie de kaart waar je loopt? **B**, je reist zelf, met wie je meeneemt, en
     thuis draait het door? **C**, elke tegenspeler een karakter met een voorsprong? **D**, provincies zonder dorp voor
     nu alleen om doorheen te reizen?
+64. **Hoe blijft het leuk: besturen zonder te lopen, en een raadsman** (Marcel, 29 sep, zeventiende sessie: "Ook
+    moeten we even nadenken over hoe we het spel 'leuk' houden. Want zelf als persoon rond hobbelen in je eigen stad
+    maakt het wel lastig. Misschien voelt het handiger als we een soort raadsman en aansturen die je regels oplegt?
+    Denk hierbij even mee"; het meedenken is van Claude; wacht op Marcel). Wat er nu is:
+    - **Om te besturen moet je lopen.** De camera volgt altijd de schout, en je ziet maar een klein stuk van je dorp
+      (inzoomen of de camera verschuiven kan niet). Bouwen en een erf aanwijzen kan dus alleen waar hij staat; de
+      marskramer en de heer spreek je op het plein; wie je iets wilt vragen, loop je achterna. Alleen de wetten (`W`)
+      en de velden (`V`) gaan van overal.
+    - **Het stond al onder Open** (`spel.md`, "Een poppetje en honderden mensen"): met vijf boeren kun je ieder
+      aanspreken, met vijfhonderd niet. Met een land waar je dagen reist en twee dorpen leidt (vraag 62 en 63), wordt
+      het een muur: je bent maar op één plek.
+    - **Lopen is leuk als het iets betekent:** 's nachts iets wegzetten waar niemand kijkt, de inner om de schuur heen
+      leiden, met je wachters tegen de rovers, iemand spreken die een verhaal heeft. **Lopen is een klus als het vervoer
+      is:** naar de andere kant van het dorp om een houthakker neer te zetten, naar het plein voor de marskramer.
+    - **Leuk zijn keuzes met een prijs, en verrassingen.** De beste momenten tot nu toe zijn allemaal keuzes: de
+      schatting van de heer, wat je verstopt en waar, de brief voor de heervaart, een wet. Klusjes halen de tijd weg
+      bij de keuzes.
+    Voorstel (meedenken; een schets van de raadsman stond in het gesprek):
+    - **A, besturen van bovenaf, van overal.** Met één toets (`Tab`) til je de camera van de schout af en kijk je over
+      je dorp, verder uitgezoomd: daar bouw je, wijs je erven aan, en zie je wat er gebeurt. De schout blijft staan waar
+      hij stond. Je bent nog steeds de schout, maar je hoeft niet te lopen om te besturen.
+    - **B, een raadsman in elk dorp, die jouw regels uitvoert.** Een man uit het dorp, met een naam en een karakter
+      zoals de boeren, die doet wat je hem opdraagt: een bouwlijst (wat hij bouwt, in welke volgorde, zodra er hout en
+      goud is) en staande orders voor als je er niet bent (wat hij de heer geeft, of hij mannen stuurt voor de
+      heervaart of ze vrijkoopt, wat hij de marskramer verkoopt). De raad onder het doel wordt zijn stem ("Heer schout,
+      het hout haalt de winter niet"). In een dorp waar je niet bent, je tweede dorp of je eigen als je reist, bestuurt
+      hij het naar jouw regels. Hij doet de klussen, jij maakt de keuzes.
+    - **C, de schout als persoon, voor wat persoonlijk is:** spreken, verstoppen, de inner, vechten en reizen. En waar
+      het vervoer is, sneller: te paard (een idee van 26 sep), of klik een plek op de kaart van je dorp en je loopt
+      erheen.
+    - **D, wie wordt raadsman?** Jij kiest hem uit het dorp, en zijn karakter telt: een roddelaar vertelt in de herberg
+      wat jij verstopt, een gierige houdt iets voor zichzelf, een vrome geeft de kapel wat van jou was, een heethoofd
+      is goed tegen rovers. Zo wordt besturen ook politiek, en zijn de schepenen van later (punt 9) er al half.
+    - **Het andere, zwaarder:** geen poppetje meer om te besturen, maar een hand van bovenaf, zoals in Lords of the
+      Realm; de schout verschijnt alleen nog als het persoonlijk wordt (een gevecht, de inner, verstoppen). Dat
+      verandert wat het spel is (Marcel, 23 sep: "een poppetje, geen hand van bovenaf").
+    - **Wat het doet** (inzicht): de tijd gaat naar keuzes in plaats van naar lopen, je kunt sneller spelen zonder
+      iets te missen, en het maakt het land met provincies mogelijk (vraag 63): je bent maar op één plek, dus moet iemand
+      anders de rest doen. Het gevaar: als alles vanzelf gaat, is er niets meer te doen. Daarom voert de raadsman uit,
+      en beslist hij niets zelf.
+    Vragen: **A**, besturen van bovenaf met één toets, terwijl de schout blijft staan? **B**, een raadsman per dorp,
+    met een bouwlijst en staande orders, en de raad als zijn stem? **C**, de schout voor wat persoonlijk is, en sneller
+    waar het vervoer is? **D**, jij kiest de raadsman uit het dorp, en zijn karakter telt? Of het andere: geen poppetje
+    meer om te besturen?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
