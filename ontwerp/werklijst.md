@@ -1173,6 +1173,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     `npm test` groen is, een speeljaar van de speeltest zonder fouten loopt, en een schermafdruk het menu laat zien.
     Vragen: **A**, zo bouwen? **B**, belasting erbij? **C** (geen haast): is vrij worden van de heer een stap op weg
     naar het hogere doel, of is de heer zelf een van de partijen die je verovert of te vriend maakt?
+    **Beantwoord (Marcel, 29 sep): "A ja B ja, C later".** Het menu en de drie wetten zoals voorgesteld, met
+    belasting als vierde; het wordt gebouwd. Vraag C (de heer en het hogere doel) komt later.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
