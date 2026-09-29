@@ -631,8 +631,8 @@
 
   // Wie weerbaar is: mannen, jong of volwassen, die hier zijn. Nooit de schout, zijn gezin of een boer zelf (die
   // horen bij het verhaal, net als bij wie wegtrekt), en niet wie nog onderweg hierheen is of al weg is. Wie geen
-  // werk heeft, het eerst, dan de jongsten.
-  const WEERBAAR = { jong: 0, volwassen: 1 };
+  // werk heeft, het eerst; dan de volwassenen, en de jongens pas als er niet genoeg mannen zijn.
+  const WEERBAAR = { volwassen: 0, jong: 1 };
   T.weerbareMannen = function (S) {
     if (!S.bewoners) return [];
     return S.bewoners.mensen
