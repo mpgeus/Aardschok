@@ -184,8 +184,8 @@ kunt aannemen etc. Maak het niet te ingewikkeld", en op het plan: "A ja B ja, C 
   treden ervoor. Alle vier zijn van het gehucht; het dorp krijgt er later meer bij.
 - **De heer** noemt ze in de benoemingsbrief: "Wetten mag u maken, zoveel u wilt. Over Ons bos gaat u niet."
 - **Zonder wetten** (de standaard, of een oud spel) speelt het spel zoals ervoor: een speeljaar van de speeltest
-  (braaf, zaad 1) liep daarna zonder fouten, met dezelfde uitkomst als op 28 en 29 sep: 26 naar 37 mensen, niemand
-  dood, en de houthakker op 1 herfstmaand.
+  (braaf, zaad 1) liep daarna zonder fouten, en letter voor letter hetzelfde als dat jaar op de stand van vóór de
+  wetten (`fa47629`): dezelfde 57 berichten, 26 naar 37 mensen, niemand dood, de houthakker op 1 herfstmaand.
 - **Nog niet:** de groepen, de schepenen en hun stemmen, en de andere keuren van hieronder (een avondklok, de
   herendienst, marktgeld, bier belasten, armenzorg). Hoe de heer in het hogere doel past, is vraag 54, C (later).
 

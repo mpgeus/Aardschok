@@ -97,8 +97,9 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
 - **Stap 3 is af: de eerste wetten** (Marcel: "A ja B ja, C later"). Zie onder Af. In de browser gezien: het
   menu onder `W`, de kaarten met wat een wet doet, en de tevredenheid in de balk die meteen meegaat. De balk paste
   met de extra knop niet meer op 1280 pixels breed; de knoppen gaan nu naar een tweede regel. Een speeljaar van de
-  speeltest (braaf, zaad 1, met de wetten op hun standaard) liep zonder fouten: 26 naar 37 mensen, niemand dood, de
-  houthakker op 1 herfstmaand, net als op 28 en 29 sep.
+  speeltest (braaf, zaad 1, met de wetten op hun standaard) liep zonder fouten, en letter voor letter hetzelfde als
+  dat jaar op de stand van vóór de wetten (`fa47629`, in een losse kopie met `git worktree`): dezelfde 57 berichten,
+  26 naar 37 mensen, niemand dood, de houthakker op 1 herfstmaand.
 
 **Wat er in de veertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 4, de afrekening na het eerste jaar** (vraag 49): op 1 lentemaand, na de winter, de
