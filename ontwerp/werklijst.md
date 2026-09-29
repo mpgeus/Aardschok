@@ -1860,6 +1860,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     dagen, meer in de winter, van mensen met een naam, en soms komen ze terug? **B**, de raadsman zo: geloot, gekozen
     uit twee of drie, en ben je er niet, dan beslist hij naar wat hij kan? **C**, het dorp van bovenaf met tekens waar
     je nodig bent, en erheen te paard? **D**, eerst één dorp vol leven, dan het land?
+    **Beantwoord (Marcel, 29 sep): "A ja B ja C nee niet bovenaf, ik denk hier nog over na. D ja".** Dus: voorvallen
+    zoals voorgesteld; de raadsman zoals voorgesteld; geen dorp van bovenaf (Marcel denkt er nog over na, dus het
+    blijft open); en eerst één dorp vol leven, dan het land. Wordt gebouwd: eerst de voorvallen, dan de raadsman.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
