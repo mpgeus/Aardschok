@@ -102,7 +102,8 @@ test('het hout: vanaf drie maanden voor de winter, als het hem niet haalt, en da
   assert.notEqual(id(S), 'hout');
   opDag(S, dagVan('herfstmaand', 1) + 0.5);
   assert.equal(id(S), 'hout');
-  assert.equal(raad(S).tekst, 'Het hout haalt de winter niet: bouw een houthakker [B].');
+  const v = T.houtVoorDeWinter(S, S.kalender.dag);
+  assert.equal(raad(S).tekst, `Het hout haalt ${v.dagen} van de ${v.winter} dagen van de winter: bouw een houthakker [B].`);
   // Met genoeg hout zegt hij het niet.
   T.zetVoorraad(S, 'hout', 5000);
   assert.notEqual(id(S), 'hout');
@@ -114,7 +115,8 @@ test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: een j
   T.zetVoorraad(S, 'graan', 0);
   opDag(S, dagVan('herfstmaand', 1) + 0.5);
   assert.equal(id(S), 'eten');
-  assert.equal(raad(S).tekst, `Het eten haalt de winter niet: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag.`);
+  const v = T.etenVoorDeWinter(S, S.kalender.dag);
+  assert.equal(raad(S).tekst, `Het eten haalt ${v.dagen} van de ${v.winter} dagen van de winter: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag.`);
   T.zetVoorraad(S, 'graan', 5000);
   assert.notEqual(id(S), 'eten');
 });

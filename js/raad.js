@@ -61,6 +61,9 @@
   // Het hout of het eten (`voorDeWinter`: T.houtVoorDeWinter of T.etenVoorDeWinter) haalt de winter niet, en die
   // is binnen winterVooraf dagen, of al begonnen. Eerst de dagen tot de winter: dat is goedkoop, het eten niet.
   const haaltHetNiet = (S, voorDeWinter) => T.dagenTotDeWinter(S.kalender.dag) <= IN().winterVooraf && !voorDeWinter(S, S.kalender.dag).haalt;
+  // Hoe ver het komt, zoals het dorp het zegt (js/behoeften.js): "26 van de 90 dagen". Zo weet je of één houthakker
+  // genoeg is; de bouwer die alleen hoorde dat het niet genoeg was, bouwde er een na de ander (29 sep).
+  const haalt = (v) => `${v.dagen} van de ${v.winter} dagen`;
 
   // De marskramer staat op het plein, op zijn laatste ronde vóór de heer komt (js/handel.js).
   function marskramerInDeHerfst(S) {
@@ -89,17 +92,13 @@
     {
       id: 'hout',
       als: (S) => haaltHetNiet(S, T.houtVoorDeWinter),
-      tekst: (S) => (heeft(S, 'houthakker')
-        ? 'Het hout haalt de winter nog niet: nog een houthakker [B] hakt erbij.'
-        : 'Het hout haalt de winter niet: bouw een houthakker [B].'),
+      tekst: (S) => `Het hout haalt ${haalt(T.houtVoorDeWinter(S, S.kalender.dag))} van de winter: ${heeft(S, 'houthakker') ? 'nog een houthakker [B] hakt erbij' : 'bouw een houthakker [B]'}.`,
     },
     {
       id: 'eten',
       als: (S) => haaltHetNiet(S, T.etenVoorDeWinter),
       // Wat helpt, zegt het dorp ook (js/behoeften.js): een jager, als vlees een maag vult.
-      tekst: () => (T.BEHOEFTEN_INSTELLINGEN.vleesIsEten
-        ? `Het eten haalt de winter niet: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag.`
-        : 'Het eten haalt de winter niet.'),
+      tekst: (S) => `Het eten haalt ${haalt(T.etenVoorDeWinter(S, S.kalender.dag))} van de winter${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? `: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag` : ''}.`,
     },
     {
       id: 'kelders',
