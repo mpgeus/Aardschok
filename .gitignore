@@ -3,6 +3,8 @@ node_modules/
 gereedschap/pixelart/uit/
 # wat de speeltest per jaar opschrijft: komt uit npm run speeltest
 gereedschap/speeltest/uit/
+# de zip voor een tester (itch.io): komt uit npm run proefversie
+gereedschap/proefversie/uit/
 # reservekopieën van het gereedschap (gereedschap/gesprekken.html en quests.html)
 *.bak
 # losse werkkopieën van agents (git worktree), niet van het spel zelf

@@ -94,7 +94,8 @@
     else midden = hoofdKnoppen(S);
     const bericht = melding ? `<p class="menu-melding">${veilig(melding)}</p>` : '';
     if (scherm === 'titel') {
-      return `<div class="menu-titel"><h1 class="menu-naam">${veilig(T.NAAM)}</h1><div class="menu-knoppen">${bericht}${midden}</div></div>`;
+      const stand = T.STAND ? `<p class="menu-stand">${veilig(T.STAND)}</p>` : '';
+      return `<div class="menu-titel"><h1 class="menu-naam">${veilig(T.NAAM)}</h1><div class="menu-knoppen">${bericht}${midden}</div></div>${stand}`;
     }
     const dag = S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '';
     return (

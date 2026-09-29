@@ -12,6 +12,10 @@
 
   T.NAAM = 'Aardschok';
   T.OPSLAG_SLEUTEL = 'aardschok';
+  // Welke stand dit is. Leeg zolang het spel uit de map draait; in een proefversie (npm run proefversie,
+  // gereedschap/proefversie/maak.cjs) de datum en de commit, zodat we weten waarop een tester speelde. Het titelscherm
+  // zet hem klein onderaan (js/menu.js).
+  T.STAND = null;
 
   // Dit bestand staat in de kop van elke bladzijde, dus de titel is er al, de rest van de bladzijde nog niet.
   if (typeof document !== 'undefined') {
