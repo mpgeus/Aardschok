@@ -222,6 +222,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   doel voor het vak linksboven (js/main.js, als er geen quest is), `T.tikTredeDag` zet `S.trede` (en die gaat nooit
   terug), en de heer schrijft dan (`T.ui.toonDorpsbrief` in js/hud.js): het eind van de proef. Het bouwmenu toont
   deze trede en de treden ervoor (`T.inBouwmenu`).
+- `js/wetten.js`: **de wetten** (stap 3 van de proef, vraag 54, 29 sep; eerst keuren genoemd): een menu zoals in
+  Democracy 3 (`js/wettenmenu.js`, onder `W` en als knop in de balk), met het rantsoen, vreemden welkom, houtkap in
+  het bos van de heer en de belasting. Wat een wet doet, staat als getallen per stand in één blok
+  (`T.WETTEN_INSTELLINGEN`, in de werkbank); de regels vragen het aan `T.wetFactor` en `T.wetSom`: wat een mens eet
+  (`T.etenPerMens` in `js/behoeften.js`, één plek voor het rantsoen), de tevredenheid (`T.wettenTevredenheid`), om de
+  hoeveel dagen een gezin kan komen (`T.gezinDagen`) en wat een houthakker hakt (`T.maaktUit`, met `bos` op het
+  gebouw) in `js/gebouwen.js`, en de boete voor de houtkap op de rekening van de heer (`T.houtkapBoete`). Wat een
+  kaart in het menu zegt, komt uit dezelfde getallen (`T.watDeWetDoet`). Wat je aannam, staat in `S.wetten`; zonder
+  staat elke wet op zijn standaard, en speelt het spel zoals ervoor.
 - `js/herberg.js`: **de herberg** (werklijst punt 2, 27 sep): wie er 's avonds heen gaat
   (`T.herbergGasten`: naar karakter, seizoen en looptijd, en niet meer dan er bier is), het anker voor de
   avond (`T.herbergAnker`, dat `T.dagAnker` vraagt), de afrekening elke nacht (`T.tikHerbergDag`: bier op,
@@ -441,7 +450,8 @@ gezin komen (overdag over de weg; is het dorp vol, dan neemt het een vrij erf), 
 `Spel.debug.bouw('erf', 48, 50)` wijst een erf aan (daar is plaats, ten zuidoosten van het plein), en
 `Spel.debug.erven()` zegt per erf of het vrij is, wie er woont, en hoe ver de hut is. `Spel.debug.trede()` zegt
 hoe ver het gehucht is met een dorp worden, en `('dorp')` maakt er nu een dorp van, met de brief van de heer.
-`Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
+`Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
+het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
 en het bier (`(30)` zet eerst 30 bier). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
 hij staat, wie er kijkt, en welk licht er brandt.
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1

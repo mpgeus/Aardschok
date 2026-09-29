@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 28 sep 2026, veertiende sessie)
+## Waar staat wat (bijgewerkt 29 sep 2026, vijftiende sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -16,6 +16,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3 | vraag 50, 51, 54 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
+| De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen, vreemden welkom, houtkap en belasting | vraag 54 |
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
 | Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep) | 4, 6 |
@@ -158,6 +159,37 @@ ertussen: het werktuig van de heer, en de enige hoop van het dorp.
 - **Toon: zwarte satire.** De heer is lachwekkend, zijn straffen niet.
 
 ### Keuren en politiek (Marcel wil het, 23 sep; de uitwerking is een voorstel)
+
+**Zo werkt het nu: de wetten** (29 sep, vijftiende sessie; `js/wetten.js`, het menu in `js/wettenmenu.js`, toetsen in
+`test/wetten.test.cjs`; werklijst vraag 54, Marcel: "Het wordt gewoon een menu zoals in diplomacy 3, waar je weten
+kunt aannemen etc. Maak het niet te ingewikkeld", en op het plan: "A ja B ja, C later"). De keuren heten nu wetten.
+- **Het menu Wetten** staat onder `W`, en als knop in de balk. Elke wet is een kaart met zijn naam, één zin, wat hij
+  doet in groen (+) en rood (−), met de getallen van nu, en een knop Aannemen of Afschaffen; het rantsoen heeft een
+  knop per stand. Een wet geldt meteen, ook in de balk, en aannemen kost niets: zijn nadeel is de prijs. Een wet die
+  niet op zijn standaard staat, krijgt een gouden streep. Zolang het menu open is, staat de tijd stil. Bovenin staat
+  hoe tevreden het dorp is, en dat er vanaf 55% nieuwe gezinnen komen.
+- **Vier wetten in het gehucht,** met de getallen in de werkbank (`T.WETTEN_INSTELLINGEN`):
+  - *Rantsoen* (krap, gewoon, ruim): krap is driekwart eten en 15% minder tevreden, ruim anderhalf keer zoveel eten
+    en 10% tevredener.
+  - *Vreemden welkom:* om de 10 dagen kan er een gezin komen in plaats van om de 20, en het dorp is 5% minder
+    tevreden.
+  - *Houtkap in het bos van de heer:* een houthakker hakt twee keer zoveel (het bericht over de winter rekent ermee),
+    en heeft hij dat jaar in het bos van de heer gehakt, dan rekent de heer op Sint-Maarten 5 goud boete, ook als de
+    wet intussen weer is afgeschaft. Zonder houthakker kost de wet niets.
+  - *Belasting:* op de eerste van de maand 0,05 goud per mens in de kist (26 mensen: 1, 1, 1 en dan 2 goud; wat geen
+    heel goud is, gaat mee), en het dorp is 10% minder tevreden.
+- **Bij de tevredenheid** in de balk zegt het dorp waar het last van heeft ("het krappe rantsoen", "de vreemden",
+  "de belasting") en waar het blij mee is ("het ruime rantsoen").
+- **Wetten horen bij een trede,** zoals de gebouwen in het bouwmenu: het menu toont de wetten van deze trede en de
+  treden ervoor. Alle vier zijn van het gehucht; het dorp krijgt er later meer bij.
+- **De heer** noemt ze in de benoemingsbrief: "Wetten mag u maken, zoveel u wilt. Over Ons bos gaat u niet."
+- **Zonder wetten** (de standaard, of een oud spel) speelt het spel zoals ervoor: een speeljaar van de speeltest
+  (braaf, zaad 1) liep daarna zonder fouten, met dezelfde uitkomst als op 28 en 29 sep: 26 naar 37 mensen, niemand
+  dood, en de houthakker op 1 herfstmaand.
+- **Nog niet:** de groepen, de schepenen en hun stemmen, en de andere keuren van hieronder (een avondklok, de
+  herendienst, marktgeld, bier belasten, armenzorg). Hoe de heer in het hogere doel past, is vraag 54, C (later).
+
+**Het voorstel van 23 sep, zoals het er stond:**
 
 - **Keuren.** Je vaardigt regels uit: marktgeld, een avondklok, de broodprijs, bier belasten,
   vreemden wel of niet toelaten, hoe je de herendiensten voor de heer verdeelt, houtkap in het bos,

@@ -10,23 +10,23 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (29 sep 2026, vijftiende sessie): het gehucht kan een dorp worden, en het plan voor de keuren wacht
+## De stand (29 sep 2026, vijftiende sessie): de eerste wetten staan, en stap 4 (rovers en een militie) is de volgende
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
 gevochten wordt; rijk worden en arm lijken blijft de druk van boven. Wat er nu speelt en hoe het werkt, staat
 per onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
 Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, en Nieuw spel geeft de
-benoemingsbrief van de heer; `Z` is slapen bij je huis, `Esc` het menu, en het spel slaat elke ochtend zelf
-op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 586/586.
+benoemingsbrief van de heer; `W` zijn de wetten, `Z` is slapen bij je huis, `Esc` het menu, en het spel slaat
+elke ochtend zelf op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 598/598.
 
-**Waar het werk staat:** alles staat in `main`, ook de veertiende sessie (Marcel, 28 sep: "Graag alles naar
-main"; ook op `ccr-78e7abf2-tn06lu`). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** de veertiende sessie staat in `main` (Marcel, 28 sep: "Graag alles naar main"). De
+vijftiende (de wetten) staat op `ccr-ff387f8f-iqbokf`, en gaat naar `main` als Marcel dat vraagt. Hoe een eigen
+branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 3: de eerste keuren (vreemden, rantsoen en
-houtkap), voortaan wetten, in een menu zoals in Democracy 3. Het eenvoudige plan wacht op Marcel (vraag 54,
-vijftiende sessie). Stap 1 (het dorp bouwt zelf,
-vraag 52) en stap 2 (de eerste trede, vraag 53) zijn af. De
+**Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 4: rovers en een militie; begin met een plan
+voor Marcel, en houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Stap 1 (het dorp bouwt zelf,
+vraag 52), stap 2 (de eerste trede, vraag 53) en stap 3 (de eerste wetten, vraag 54) zijn af. De
 richting staat (vraag 50: besturen en groeien worden het hart, de heer blijft als de druk van boven, en vechten
 begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook (vraag 51: de proef wordt "van gehucht tot
 dorp", in vijf stukken). De afrekening (vraag 49) is geparkeerd, en vraag 47 (de eerste weken als opdrachten)
@@ -45,10 +45,10 @@ kost u vanaf nu meer."
 2. **Af (29 sep, veertiende sessie): de eerste trede, van gehucht tot dorp** (vraag 53). Het doel staat linksboven
    en in de benoemingsbrief; bij 50 mensen met een kapel en een smidse wordt het een dorp, en schrijft de heer. Zie
    onder Af.
-3. **Nu: de eerste keuren** (punt 9, nog zonder groepen en schepenen): vreemden, rantsoen en houtkap, in één
-   venster, en elke keur zegt vooraf wat hij doet. Voortaan wetten, in een menu zoals in Democracy 3 (Marcel, 29
-   sep). Het eenvoudige plan staat klaar: vraag 54, wacht op Marcel.
-4. **Rovers en een militie** (punt 13): rovers vallen het gehucht aan, en je verdedigt het in beurten op je eigen
+3. **Af (29 sep, vijftiende sessie): de eerste wetten** (vraag 54; eerst keuren genoemd). Een menu zoals in
+   Democracy 3 onder `W`, met het rantsoen, vreemden welkom, houtkap in het bos van de heer en de belasting. Zie
+   onder Af.
+4. **Nu: rovers en een militie** (punt 13): rovers vallen het gehucht aan, en je verdedigt het in beurten op je eigen
    kaart, met naast de schout een paar mannen uit het wachthuis. Wie wegtrekt, wordt rover.
 5. **De proef afmaken:** de eerste weken als opdrachten (vraag 47, herschreven voor de nieuwe richting), een
    speeltest van twee jaar, en een tester die het niet kent (33d).
@@ -57,8 +57,8 @@ kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 54 (het eenvoudige plan voor de eerste wetten), en 33d (hoe een tester het krijgt, in
-`speelbaar.md`). Vraag 47 wordt herschreven bij stap 5. Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51;
+*2. Wacht op Marcel:* 33d (hoe een tester het krijgt, in `speelbaar.md`), en later vraag 54, C (hoe de heer in het
+hogere doel past). Vraag 47 wordt herschreven bij stap 5. Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51;
 het bijstellen na de speeltest (vraag 46) komt later, met een menu met opties.
 
 *3. Na de proef* (vraag 51):
@@ -75,7 +75,7 @@ het bijstellen na de speeltest (vraag 46) komt later, met een menu met opties.
 
 *4. Opruimen, als die bestanden toch open moeten:* `hud.js` en `tekenen.js` splitsen (vraag 25, C en D).
 
-*5. Vragen zonder haast:* 6 (de groepen; de keuren zelf komen in stap 3), 7 (ijs op de beek), 10 tot en met 12
+*5. Vragen zonder haast:* 6 (de groepen; de eerste wetten zijn er sinds stap 3), 7 (ijs op de beek), 10 tot en met 12
 (de oude monsters, het leven van de schout, de knop Slaan: die komen terug bij stap 4), 13 (een eigen figuur voor
 de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de proef), 22 (de tijdsversneller) en
 26 (de volgorde: deze lijst is het nieuwe voorstel).
@@ -94,6 +94,11 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   al het land veroveren of met iedereen vriendjes maken. Denk aan civilisation". Opgeschreven in `spel.md` en
   `CLAUDE.md`; het plan werd eenvoudig: een menu Wetten onder `W`, drie wetten met een voordeel en een nadeel,
   en belasting als idee voor een vierde (vraag 54).
+- **Stap 3 is af: de eerste wetten** (Marcel: "A ja B ja, C later"). Zie onder Af. In de browser gezien: het
+  menu onder `W`, de kaarten met wat een wet doet, en de tevredenheid in de balk die meteen meegaat. De balk paste
+  met de extra knop niet meer op 1280 pixels breed; de knoppen gaan nu naar een tweede regel. Een speeljaar van de
+  speeltest (braaf, zaad 1, met de wetten op hun standaard) liep zonder fouten: 26 naar 37 mensen, niemand dood, de
+  houthakker op 1 herfstmaand, net als op 28 en 29 sep.
 
 **Wat er in de veertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 4, de afrekening na het eerste jaar** (vraag 49): op 1 lentemaand, na de winter, de
@@ -1475,6 +1480,20 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 29 sep 2026 — **De eerste wetten** (vijftiende sessie; stap 3 van de proef, vraag 54, Marcel: "Het wordt gewoon een
+  menu zoals in diplomacy 3, waar je weten kunt aannemen etc. Maak het niet te ingewikkeld", en "A ja B ja, C later").
+  De keuren heten nu wetten. `js/wettenmenu.js`: een menu onder `W` en als knop in de balk, elke wet een kaart met
+  wat hij doet in groen en rood, met de getallen van nu, en een knop Aannemen of Afschaffen (het rantsoen: krap,
+  gewoon, ruim). Een wet geldt meteen, ook in de balk, en kost niets om aan te nemen. `js/wetten.js`: vier wetten
+  in het gehucht, met hun getallen in één blok in de werkbank (`T.WETTEN_INSTELLINGEN`): het rantsoen (krap:
+  driekwart eten en 15% minder tevreden; ruim: anderhalf en 10% tevredener), vreemden welkom (om de 10 dagen een
+  gezin in plaats van 20, en 5% minder tevreden), houtkap in het bos van de heer (een houthakker hakt twee keer
+  zoveel, en wie dat jaar kapte, betaalt de heer op Sint-Maarten 5 goud boete) en belasting (0,05 goud per mens per
+  maand in de kist, en 10% minder tevreden). Wat een mens eet, vraagt het spel nu op één plek (`T.etenPerMens`), en
+  de balk zegt bij de tevredenheid waar het dorp last van heeft en blij mee is. De benoemingsbrief: "Wetten mag u
+  maken, zoveel u wilt. Over Ons bos gaat u niet." Onderweg: de werkbank kan nu ook negatieve getallen aan, en de
+  knoppen in de balk gaan op een smal scherm naar een tweede regel (op 1280 breed viel Menu er al half af).
+  Getoetst: `test/wetten.test.cjs` (12 toetsen), en in de browser.
 - 29 sep 2026 — **De eerste trede, van gehucht tot dorp** (veertiende sessie; stap 2 van de proef, vraag 53, Marcel:
   "A ja B ja C ja D ja"). `js/treden.js`: het gehucht wordt een dorp bij 50 mensen met een kapel en een smidse
   klaar (`T.TREDEN_INSTELLINGEN`, in de werkbank), en dat blijft het. Het doel staat vanaf het begin linksboven met

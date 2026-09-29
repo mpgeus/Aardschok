@@ -18,8 +18,9 @@ gehucht een dorp is geworden. Gefeliciteerd. Dat kost u vanaf nu meer."
 - **De kortste weg,** in volgorde (de werklijst, bovenaan): het dorp bouwt zelf; de eerste trede; de eerste
   keuren; rovers en een militie; en de proef afmaken, met de eerste weken als opdrachten, een speeltest van twee
   jaar en een tester die het niet kent.
-- **Wat er al is** (29 sep): het dorp bouwt zelf op erven (stap 1), en de trede zelf, met het doel linksboven en de
-  brief van de heer als eind (stap 2). Wat nog komt: de eerste keuren, rovers en een militie, en de proef afmaken.
+- **Wat er al is** (29 sep): het dorp bouwt zelf op erven (stap 1), de trede zelf, met het doel linksboven en de
+  brief van de heer als eind (stap 2), en de eerste wetten in een menu onder `W`: het rantsoen, vreemden welkom,
+  houtkap en belasting (stap 3). Wat nog komt: rovers en een militie, en de proef afmaken.
 - **Wat blijft:** alles van de proef van één jaar hieronder: de heer, de inner, verstoppen, de winter, opslaan,
   het titelscherm en de speeltest als script. De heer hoeft er niet voor te veranderen: hij vraagt per huis en
   per ziel, dus wie groeit, betaalt meer.
