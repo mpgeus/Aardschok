@@ -28,10 +28,21 @@
 //           merkt hij niets), en haalt na Sint-Maarten alles terug.
 // Alle vier luisteren naar de winter: zegt het dorp dat het hout de winter niet haalt, dan bouwen ze een
 // houthakker.
+//
+// En een vijfde, voor de proef "van gehucht tot dorp" (werklijst, vraag 58, A; Marcel, 29 sep: "A Ja goed idee"):
+//   bouwer  doet wat het doel vraagt (js/treden.js) en wat de raad onder het doel zegt (js/raad.js), twee jaar lang:
+//           hij neemt Vreemden welkom aan, bouwt de kapel, een houthakker en de smidse, in die volgorde, zodra het
+//           goud en het hout er zijn; wijst een erf aan als de raad zegt dat het dorp vol is, en bouwt nog een
+//           houthakker, een jager of een wachthuis als de raad zegt dat het hout of het eten de winter niet haalt,
+//           of dat de rovers terugkomen. Hij verkoopt de marskramer graan als het goud tekortschiet, zolang het eten
+//           de winter haalt, en betaalt de heer alles. Hij verstopt niets en loopt de rovers niet achterna.
+// Van elke speler schrijft hij op waarom er op een groeidag geen gezin kwam (T.waaromGeenGezin, js/gebouwen.js),
+// op welke dag het gehucht een dorp werd, en welke raad er elke dag onder het doel stond (js/raad.js).
 (function (T) {
   'use strict';
 
-  const EIND = 390; // 1 grasmaand van het tweede jaar
+  const EIND = 390; // 1 grasmaand van het tweede jaar; wie twee jaar speelt (jaren: 2), een jaar later
+  const JAAR = 360;
   const STAP = 0.25; // schermseconden per stap; op 30× ruim een half uur
   const DAG_INNER = 164; // 15 oogstmaand
   const DAG_HEER = 250; // 11 slachtmaand, Sint-Maarten
@@ -94,6 +105,11 @@
   // het hooi de winter haalt). Een venster dat de speler niet zelf openhoudt, gaat dicht.
   function beantwoord() {
     const s = S();
+    // De brief van de heer als het gehucht een dorp is (js/treden.js): verder als dorp. Wanneer, schrijft de
+    // luisteraar op wordtTrede op.
+    if (T.ui.briefOpen() && /dorp is geworden/.test((document.querySelector('#brief .brief-tekst') || {}).textContent || '')) {
+      if (!klik('#brief .heer-geef-knop')) T.ui.sluitBrief(s);
+    }
     if (T.ui.briefOpen()) {
       if (s.kalender.dag > 1) boek.brief = { dag: heel(s.kalender.dag), datum: datum(), eis: eisKort(T.eisVanDeHeer(s)) };
       if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
@@ -554,6 +570,14 @@
       daad(`zou graan verkopen voor ${nodig} goud, maar het graan is nodig`);
       return;
     }
+    await verkoopGraan(pakken, prijs);
+  }
+
+  // Naar de marskramer (zijn gesprek), dan het handelsvenster, zoals de keuze in zijn gesprek het opent, en zoveel
+  // pakken graan verkopen als hij wil hebben, tot `pakken`; met `magNog` alleen zolang dat zegt dat het mag.
+  async function verkoopGraan(pakken, prijs, magNog = () => true) {
+    const s = S();
+    const m = s.marskramer;
     bezig.praten = true;
     await klikOp({ wezen: m.wezen }, 3, () => s.modus === 'dialoog');
     bezig.praten = false;
@@ -561,7 +585,7 @@
     bezig.handel = true;
     T.doeGevolg(s, { handel: true });
     let verkocht = 0;
-    for (let i = 0; i < pakken; i++) if (klik('#handel button[data-actie="verkoop"][data-wat="graan"][data-n="1"]')) verkocht++;
+    for (let i = 0; i < pakken && magNog(); i++) if (klik('#handel button[data-actie="verkoop"][data-wat="graan"][data-n="1"]')) verkocht++;
     if (!klik('#handel [data-actie="sluit"]')) T.ui.sluitHandel(s);
     bezig.handel = false;
     daad(`verkoopt ${verkocht * T.HANDEL_INSTELLINGEN.koopt.graan.per} graan aan de marskramer, voor ${verkocht * prijs} goud`);
@@ -593,7 +617,87 @@
     };
   }
 
+  // De bouwer (vraag 58, A): wat het doel vraagt, van gehucht tot dorp, twee jaar lang, en wat de raad onder het
+  // doel zegt (js/raad.js). Zijn eerste versie bouwde de kapel en de smidse op de eerste dag, hield steeds een erf vrij
+  // en verkocht alleen graan dat het dorp tot de lente niet nodig had (zaad 1, 29 sep): een dorp op 1 herfstmaand,
+  // doorgegroeid tot 74 mensen, geen goud voor een houthakker, en in de winter 42 doden.
+  function bouwer() {
+    const wil = ['kapel', 'houthakker', 'smidse']; // wat hij nog wil bouwen, in deze volgorde
+    const betaald = new Set(); // de jaren waarin hij de heer betaalde
+    const gebouwdOp = {}; // soort → de dag waarop hij er het laatst een bouwde
+    let erfNietVoor = 0; // paste een erf nergens, dan zoekt hij pas een maand later opnieuw
+    const jaar = () => Math.floor(dagNu() / JAAR);
+    const kosten = (soort) => T.GEBOUWEN[soort].kosten;
+    // Iets willen bouwen: niet als het al op zijn lijst staat, of als hij er net een bouwde (die moet eerst klaar zijn
+    // en werken voor de raad het merkt).
+    function wilOok(soort, vooraan) {
+      if (wil.includes(soort) || dagNu() - (gebouwdOp[soort] != null ? gebouwdOp[soort] : -99) < 10) return;
+      if (vooraan) wil.unshift(soort);
+      else wil.push(soort);
+    }
+    // Wat de raad zegt, doet hij, als er iets te doen is: een erf als het dorp vol is, een houthakker als het hout de
+    // winter niet haalt, een jager voor het eten, en een wachthuis na de rovers. Het goud voor de heer haalt hij bij
+    // de marskramer, hieronder.
+    function volgDeRaad() {
+      const r = T.raadNu(S());
+      if (!r) return;
+      if (r.id === 'plaats' && dagNu() >= erfNietVoor && !bouw('erf')) erfNietVoor = dagNu() + 30;
+      else if (r.id === 'hout') wilOok('houthakker', true);
+      else if (r.id === 'eten') wilOok('jager', true);
+      else if (r.id === 'rovers') wilOok('wachthuis', false);
+    }
+    // Het goud dat hij nodig heeft: voor de heer (als hij hem dit jaar nog niet betaalde) en voor wat hij als
+    // eerste wil bouwen.
+    function goudNodig() {
+      const heer = betaald.has(jaar()) ? 0 : T.eisVanDeHeer(S()).per.goud || 0;
+      return heer + (wil.length ? kosten(wil[0]).goud || 0 : 0);
+    }
+    // Graan verkopen zolang het eten de winter haalt, zoals het dorp het rekent (T.etenVoorDeWinter), en het graan
+    // van de heer blijft liggen.
+    async function verkoop() {
+      const s = S();
+      const nodig = goudNodig() - Math.floor(s.voorraad.goud || 0);
+      if (nodig <= 0) return;
+      const per = T.HANDEL_INSTELLINGEN.koopt.graan.per;
+      const prijs = T.HANDEL_INSTELLINGEN.koopt.graan.prijs[s.marskramer.bezoek];
+      const heerGraan = betaald.has(jaar()) ? 0 : T.eisVanDeHeer(s).per.graan || 0;
+      const magNog = () => (s.voorraad.graan || 0) - per >= heerGraan + 20 && T.etenVoorDeWinter(s, s.kalender.dag).haalt;
+      if (!magNog()) {
+        daad(`zou graan verkopen voor ${nodig} goud, maar het graan is nodig`);
+        return;
+      }
+      await verkoopGraan(Math.ceil(nodig / prijs), prijs, magNog);
+    }
+    return {
+      jaren: 2,
+      async begin() {
+        // Vreemden welkom, met het menu (W) en de knop op de kaart van de wet, zoals een speler.
+        const s = S();
+        T.ui.openWetten(s);
+        if (!klik('#wetten button[data-wet="vreemden"][data-stand="aangenomen"]')) daad('kan Vreemden welkom niet aannemen');
+        if (!klik('#wetten [data-actie="sluit"]')) T.ui.sluitWetten(s);
+        if (T.standVanWet(s, 'vreemden') === 'aangenomen') daad('neemt Vreemden welkom aan');
+      },
+      async elkeStap() {
+        const s = S();
+        volgDeRaad();
+        // Bouwen wat hij wil, in zijn volgorde, zodra het goud en het hout er zijn.
+        while (wil.length && T.kanBetalen(s, kosten(wil[0]))) {
+          const soort = wil.shift();
+          if (bouw(soort)) gebouwdOp[soort] = dagNu();
+        }
+        const m = s.marskramer;
+        if (m && !m.weg && m.staat && nuEenKeer(`handel${jaar()}-${m.bezoek}`)) await verkoop();
+        if (heerOpHetPlein() && nuEenKeer(`betaal${jaar()}`)) {
+          await betaal(1);
+          betaald.add(jaar());
+        }
+      },
+    };
+  }
+
   const SPELERS = {
+    bouwer: bouwer(),
     braaf: {
       async elkeStap() {
         luisterNaarDeWinter();
@@ -660,6 +764,12 @@
     if (d === laatsteDag) return;
     laatsteDag = d;
     if (T.datumVanDag(d).dagVanMaand === 1) boek.maanden.push(tel());
+    // Welke raad er onder het doel stond (js/raad.js, vraag 58, B): hoeveel dagen, en wanneer voor het eerst.
+    const r = T.raadNu(S());
+    if (r) {
+      const b = boek.raad[r.id] || (boek.raad[r.id] = { dagen: 0, eerst: datum(d) });
+      b.dagen++;
+    }
     if (d === DAG_HEER + 3) boek.argwaan.opSintMaarten = argwaan();
     if (d === DAG_HEER + 4) boek.naSintMaarten = tel(); // hoe rijk het dorp is als de heer weg is
   }
@@ -720,6 +830,7 @@
         vroeg: voor, gaf: Object.assign({}, geef), deel: r.deel, straf: r.straf || 'geen', tekst: r.tekst || '', kan: r.kan,
         argwaan: argwaan(),
       };
+      boek.heerJaren.push(boek.heer); // wie twee jaar speelt, betaalt twee keer
     };
     betaal.voor = () => eisKort(T.eisVanDeHeer(s));
     na('betaalHeer', betaal);
@@ -728,6 +839,27 @@
     });
     na('doorzoekDorp', () => {
       boek.soldaten.hetHeleDorp = true;
+    });
+    // Van gehucht tot dorp (js/treden.js): op welke dag, en met hoeveel mensen.
+    na('wordtTrede', (r, voor, S_, trede) => {
+      if (!boek.dorp) boek.dorp = { trede, dag: heel(s.kalender.dag), datum: datum(), mensen: s.bevolking };
+    });
+    // Op elke groeidag: waarom er geen gezin kwam, zoals de groei het zelf vraagt (T.waaromGeenGezin, stap 4 van
+    // T.tikGebouwenDag, js/gebouwen.js). Alleen wat die dag in de groei gevraagd wordt, telt: de raad linksboven
+    // vraagt het ook.
+    let groeidag = null;
+    const tik = T.tikGebouwenDag;
+    T.tikGebouwenDag = function (S_, dag) {
+      groeidag = dag;
+      try {
+        return tik.apply(this, arguments);
+      } finally {
+        groeidag = null;
+      }
+    };
+    na('waaromGeenGezin', (r) => {
+      if (groeidag == null) return;
+      boek.groei.push({ dag: groeidag, datum: datum(groeidag), waarom: r.slice(), mensen: s.bevolking, woonruimte: T.telWoonruimte(s), vrijeErven: T.vrijeErven(s).length });
     });
   }
 
@@ -808,6 +940,7 @@
         inner: { geschenken: [], gepraatUren: 0, rapport: null },
         soldaten: { beurten: [], zoeken: null, hetHeleDorp: false, leeg: null },
         argwaan: { naInner: null, opSintMaarten: null }, heer: null, brief: null, naSintMaarten: null, luisterFouten: [],
+        heerJaren: [], dorp: null, groei: [], raad: {},
       };
       const s = S();
       luister();
@@ -830,8 +963,9 @@
       boek.boeren = Object.fromEntries(Object.entries(s.lot.boeren).map(([id, b]) => [id, b.karakter]));
       boek.begin = tel(); // de eerste van de maand zelf schrijft de boekhouding op, bij de eerste stap
       const P = SPELERS[speler];
+      const eindDag = EIND + JAAR * ((P.jaren || 1) - 1);
       if (P.begin && !verder) await P.begin();
-      for (let i = 0; i < 400000 && dagNu() < EIND && !s.einde && s.modus !== 'dood'; i++) {
+      for (let i = 0; i < 800000 && dagNu() < eindDag && !s.einde && s.modus !== 'dood'; i++) {
         if (opslaan && !opslaan.gedaan && dagNu() >= opslaan.dag && !T.waaromNietOpslaan(s) && !s.slaap) {
           opslaan.gedaan = true;
           if (opslaan.bewaar) {
