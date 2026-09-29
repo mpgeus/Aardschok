@@ -9,6 +9,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wat een speeljaar op 29 sep liet zien** (zestiende sessie; braaf, zaad 1, op `6750a21`; werklijst vraag 58):
+  - **Het tweede jaar begint armer dan het eerste.** Op 1 lentemaand 1324 lag er geen graan: de heer nam er 75, de
+    rovers 20, en in zomermaand vertrapten ze een akker. Er was zaaigraan voor 100 van de 179 akkertegels (op 28 sep,
+    vóór de rovers, bleef bij braaf gemiddeld 4% ongezaaid), en het dorp was 47% tevreden. Een proef van twee jaar
+    loopt daar recht in; de speeltest met de bouwer (vraag 58, A) laat zien of een goede speler het ook raakt.
+  - **Waarom er geen gezin komt, zegt het spel alleen bij "geen plaats".** Te weinig graan (vijf keer in de lente
+    en de zomer) en te weinig tevreden zijn stil.
 - **Wat opviel bij de rovers en de militie** (29 sep, vijftiende sessie; `js/rovers.js`, werklijst vraag 55):
   - **Een rover lijkt op een boer.** Hij draagt het vel van een boer of boerin (met strohoed); alleen zijn levensbalk
     zegt dat hij een vijand is. Een eigen, donkerder vel zou helpen, of een doek voor zijn gezicht.

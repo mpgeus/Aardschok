@@ -145,7 +145,8 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33b.** ~~Opslaan: vanzelf elke ochtend op één plek, of ook zelf opslaan op meer plekken?~~ Beantwoord
   (28 sep): allebei, met een menu en een titelscherm (zie Besloten).
 - **33c.** ~~Stap 3 van de inner (praten, afleiden, omkopen): vóór de proef of erna?~~ Ingehaald: het is er (27 sep).
-- **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma?
+- **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
+  met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
 ## De speeltest van 28 sep
 
