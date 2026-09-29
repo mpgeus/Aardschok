@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (29 sep 2026, veertiende sessie): het dorp bouwt zelf, en het gehucht kan een dorp worden
+## De stand (29 sep 2026, vijftiende sessie): het gehucht kan een dorp worden, en het plan voor de keuren wacht
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -24,8 +24,8 @@ op. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test
 main"; ook op `ccr-78e7abf2-tn06lu`). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** bij de prioriteit hieronder, stap 3: de eerste keuren (vreemden, rantsoen en
-houtkap); begin met een plan voor Marcel. Stap 1 (het dorp bouwt zelf, vraag 52) en stap 2 (de eerste trede,
-vraag 53) zijn af. De
+houtkap). Het plan staat klaar en wacht op Marcel (vraag 54, vijftiende sessie). Stap 1 (het dorp bouwt zelf,
+vraag 52) en stap 2 (de eerste trede, vraag 53) zijn af. De
 richting staat (vraag 50: besturen en groeien worden het hart, de heer blijft als de druk van boven, en vechten
 begint met aanvallen op je eigen dorp), en de nieuwe volgorde ook (vraag 51: de proef wordt "van gehucht tot
 dorp", in vijf stukken). De afrekening (vraag 49) is geparkeerd, en vraag 47 (de eerste weken als opdrachten)
@@ -45,7 +45,7 @@ kost u vanaf nu meer."
    en in de benoemingsbrief; bij 50 mensen met een kapel en een smidse wordt het een dorp, en schrijft de heer. Zie
    onder Af.
 3. **Nu: de eerste keuren** (punt 9, nog zonder groepen en schepenen): vreemden, rantsoen en houtkap, in één
-   venster, en elke keur zegt vooraf wat hij doet. Begin met een plan.
+   venster, en elke keur zegt vooraf wat hij doet. Het plan staat klaar: vraag 54, wacht op Marcel.
 4. **Rovers en een militie** (punt 13): rovers vallen het gehucht aan, en je verdedigt het in beurten op je eigen
    kaart, met naast de schout een paar mannen uit het wachthuis. Wie wegtrekt, wordt rover.
 5. **De proef afmaken:** de eerste weken als opdrachten (vraag 47, herschreven voor de nieuwe richting), een
@@ -55,7 +55,7 @@ kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* 33d (hoe een tester het krijgt, in
+*2. Wacht op Marcel:* vraag 54 (het plan voor de eerste keuren), en 33d (hoe een tester het krijgt, in
 `speelbaar.md`). Vraag 47 wordt herschreven bij stap 5. Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51;
 het bijstellen na de speeltest (vraag 46) komt later, met een menu met opties.
 
@@ -79,6 +79,14 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
 26 (de volgorde: deze lijst is het nieuwe voorstel).
 
 *Wat nog ruw is:* `opmerkingen.md`, bovenaan.
+
+**Wat er in de vijftiende sessie gebeurde** (29 sep; Marcel: "Werklijst doorzetten"):
+- **Een plan voor stap 3, de eerste keuren** (vraag 54): één venster onder `K`, een keuze die de volgende ochtend
+  op het plein wordt afgekondigd, en per keur twee of drie keuzes die vooraf in getallen van nu zeggen wat ze
+  doen. Twee agents zochten vooraf uit hoe eten, tevredenheid, groei, hout en de inner nu werken. Wat ze vonden:
+  alle groei komt van vreemden (er wordt niemand geboren), meer eten maakt nu niet tevredener, en hout is niet
+  schaars (één houthakker hakt ruim 600 per jaar), dus een houtkap die alleen meer hout geeft, kiest niemand.
+  Daarom stelt het plan voor dat de houthakker zonder keur alleen sprokkelt, half zoveel als nu. Niets gebouwd.
 
 **Wat er in de veertiende sessie gebeurde** (28 sep; Marcel: "Werklijst doorzetten"):
 - **Een plan voor punt 4, de afrekening na het eerste jaar** (vraag 49): op 1 lentemaand, na de winter, de
@@ -1041,6 +1049,91 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     linksboven en in de benoemingsbrief? **B**, de brief met twee knoppen als eind van de proef? **C**, alleen
     het bouwmenu erbij? **D**, alleen woorden, met het getal op 1?
     **Beantwoord (Marcel, 29 sep): "A ja B ja C ja D ja".** Alle vier zoals voorgesteld; het wordt gebouwd.
+54. **De eerste keuren: het plan** (Claude, 29 sep, vijftiende sessie; stap 3 van de proef "van gehucht tot dorp",
+    vraag 51; Marcel: "Werklijst doorzetten"; wacht op Marcel). Marcel koos bij vraag 51 drie keuren: vreemden,
+    rantsoen en houtkap, in één venster, en elke keur zegt vooraf wat hij doet (`spel.md`, "Lords of the Realm 2 als
+    voorbeeld", idee 5). Wat er nu is (nagekeken door twee agents):
+    - Van keuren is er nog niets: geen knop, geen venster, niets in de spelstaat.
+    - **Groei komt alleen van vreemden.** Er wordt niemand geboren en niemand wordt ouder. Om de 20 dagen komt er een
+      gezin, als er 20 graan ligt, het dorp 55% tevreden is en er plaats is (een huis, of een vrij erf waarop het
+      een hut zet voor 8 hout). Die regel staat nergens in beeld: wie niemand ziet komen, weet niet waarom.
+    - **Tevredenheid** wordt elke dag opnieuw uitgerekend: voor de helft het eten, voor drie tiende het brandhout,
+      voor een vijfde de kerk, met de herberg erbij en de straffen van de heer eraf. Meer eten maakt niet
+      tevredener, alleen afwisseling (groente, vis, vlees). Een gehucht met alleen graan en zonder kapel komt zo op
+      zo'n 67% (de herberg geeft er soms een paar bij), met een kapel op 75%. Vanaf 55% komen er gezinnen, onder 25%
+      trekken ze weg, vanaf 70% groeit een hut door tot een huis, en hoe tevredener, hoe harder er gewerkt wordt.
+    - **Eten:** ieder eet 0,05 graan per dag (26 mensen: 1,3), en dat getal wordt op acht plekken gelezen. Van
+      bloeimaand tot de oogst ligt er geen graan: de voorjaarshonger uit beide speeltesten.
+    - **Hout is niet schaars.** Het komt alleen van de houthakker: 2 per dag, het hele jaar, zonder bos (ruim 600
+      per jaar), en het dorp stookt er 95 (26 mensen) tot 176 (50 mensen) per winter. Er valt geen boom om. In de
+      speeltest van 28 sep lag er aan het eind 135 tot 228 hout over. Een keur die alleen méér hout geeft, kiest
+      dus niemand.
+    - **Het bos van de heer** staat nog nergens, maar de bosrand is er: 226 bomen in de zeven noordelijke rijen. Een
+      stronk bestaat al als tekening (bij de begroeiing), maar staat nergens op de kaart.
+    - **De inner** ziet geen eten en geen bomen: hij telt gebouwen, woonruimte, akkertegels, graan en goud, en loopt
+      alleen langs gebouwen en velden. De heer vraagt 0,2 goud hoofdgeld per plaats om te wonen, en 20 hout per
+      houthakker.
+    Voorstel:
+    - **A, één venster onder `K`,** met een knop in de balk: "Keuren". De drie keuren staan onder elkaar, elk met
+      twee of drie keuzes, en bij elke keuze staat in getallen van nu wat hij doet (zie B tot en met D). De tijd
+      staat stil zolang het open is. Een keuze geldt vanaf de volgende ochtend: dan wordt hij op het plein
+      afgekondigd, en een bericht zegt het ("Op het plein afgekondigd: vanaf vandaag is het rantsoen karig.");
+      bedenk je je vóór de ochtend, dan kost dat niets. De heer noemt de keuren in de benoemingsbrief: "U mag keuren
+      uitvaardigen over wat Ons gehucht eet, wie er komt wonen en het sprokkelhout. Over Ons bos gaat u niet." Het
+      andere: keuren worden eens per maand afgekondigd, op de eerste. Dat geeft een ritme, maar een keur die je nu
+      nodig hebt, laat dan tot een maand op zich wachten (op 10× een kwartier).
+    - **B, het rantsoen: karig, gewoon (zoals nu) of ruim.** Karig is driekwart: 1,0 graan per dag voor 26 mensen in
+      plaats van 1,3, en het dorp is 15 punten minder tevreden. Ruim is anderhalf: 2,0 per dag, en 10 punten
+      tevredener. Het venster zegt het in getallen van nu, bijvoorbeeld: "Karig: 1,0 graan per dag; het graan haalt
+      12 bloeimaand in plaats van 20 grasmaand; tevreden 67% → 52%: dan komen er geen gezinnen meer, en er wordt
+      minder hard gewerkt." Wat het doet: karig in het voorjaar, tegen de voorjaarshonger, en ruim na de oogst, als
+      er genoeg ligt (boven de 70% groeien de hutten door). Zo stel je een keur per seizoen bij, zoals in Lords of the
+      Realm 2, maar met drie knoppen in plaats van een schuif per graafschap. En een kapel maakt karig betaalbaar:
+      van 75% naar 60%, en dan komen er nog gezinnen. De inner ziet het rantsoen nog niet; dat een doorvoed dorp dat
+      arm doet hem argwanend maakt (idee 4 uit Lords of the Realm 2), is voor na de proef.
+    - **C, vreemden: niemand, tegen inkoopgeld, of iedereen (zoals nu).** Iedereen: om de 20 dagen een gezin, en het
+      venster zegt waar het op wacht ("als er plaats is: 2 vrije erven; 20 graan: er ligt 60; 55% tevreden: het dorp
+      is 67%"). Tegen inkoopgeld: een gezin betaalt 2 goud voor zijn plaats, maar niet iedereen kan dat, dus er
+      komen er ongeveer half zoveel; het goud gaat in de kist, waar de inner het telt. Niemand: het gehucht blijft
+      zo groot als het is, een rem voor een krappe winter, en er eten geen nieuwe monden mee. Wat het doet:
+      inkoopgeld is een tweede bron van goud naast de marskramer (de heer vraagt 25 goud, het gehucht begint met
+      20). En het venster legt eindelijk uit waarom er niemand komt, wat een tester nu nergens ziet.
+    - **D, houtkap in het bos van de heer: verboden (alleen sprokkelen) of kappen.** Omdat hout nu niet schaars is:
+      zonder de keur raapt de houthakker alleen dood hout, 1 per dag, half zoveel als nu (dood hout rapen mocht
+      vroeger, kappen niet). Met kappen hakt hij 2 per dag, zoals nu, en per 20 hout valt er een boom aan de
+      zuidkant van de bosrand, zo'n 30 per jaar: de boom wordt een stronk, en het bos wijkt zichtbaar terug. De inner
+      loopt voortaan ook langs de bosrand en telt de stronken die hij ziet; de heer rekent op Sint-Maarten een goud
+      per vijf stronken ("voor 15 bomen uit Ons bos: 3 goud"), en elke stronk maakt de inner iets argwanender. Wat
+      het doet: hout wordt een keuze tussen een tweede houthakker (10 hout, 4 goud en een hand, en de heer wil er 20
+      hout per jaar van) en het bos van de heer (meteen, zonder goud, maar zichtbaar en later te betalen). Vroeg in
+      het spel is goud schaars (de kapel en de smidse vragen er 18 van de 20), dus dan is kappen verleidelijk. Een
+      dorp van 50 mensen met zijn hutten, zijn kapel en zijn smidse vraagt zo'n 250 tot 280 hout per jaar, en één
+      sprokkelaar raapt er zo'n 290: krap, niet onmogelijk. In stap 4 komt er een palissade tegen de rovers bij (40
+      hout), en na de proef is wat gekapt is grond om te ontginnen (6b). Het andere: de houthakker hakt zoals nu, en
+      kappen verdubbelt het. Dan verandert het evenwicht niet, maar kiest ook niemand het, tot er later meer hout
+      nodig is.
+    - **Wat het doet, alles samen** (inzicht): de drie keuren zijn precies de drie kranen van de groei: of het dorp
+      tevreden genoeg is (het rantsoen), wie er komt (vreemden), en hout voor de hutten (houtkap). En elk trekt aan
+      een andere kant van de heer: het rantsoen aan wat er op Sint-Maarten overblijft, vreemden aan zijn hoofdgeld
+      en de kist, en houtkap aan zijn bos.
+    - **Hoe het werkt** (geen vraag): een nieuw bestand, `js/keuren.js`, zonder scherm en dus getoetst: de drie
+      keuren als gegevens op één plek (`T.KEUREN`, zoals `T.GEBOUWEN`), de getallen in één blok
+      (`T.KEUREN_INSTELLINGEN`, in de werkbank), en wat je koos in de spelstaat (`S.keuren`, dus vanzelf bewaard).
+      Wat een keuze vooraf zegt, komt uit één functie, die het venster en de toetsen allebei vragen. Wat een mens
+      eet, vraagt het spel voortaan aan één functie in plaats van op acht plekken aan het getal; de tevredenheid
+      krijgt één term erbij (met de reden bij de muis: "karig rantsoen"); de groei vraagt de keur of er een gezin mag
+      komen; de houthakker krijgt een factor. Het bos van de heer wordt de bosrand in het noorden, en de stronk komt
+      uit de begroeiing die er al is. Het venster krijgt een eigen bestand, want `hud.js` is al 1.533 regels (vraag
+      25, C). De speeltest kent het nieuwe venster, en speelt verder met de keuren zoals ze beginnen.
+    Klaar als het venster onder `K` en de knop opengaat met de drie keuren, elke keuze vooraf in getallen van nu
+    zegt wat hij doet, een keuze de volgende ochtend geldt met een bericht, het rantsoen het eten en de tevredenheid
+    verandert, vreemden de groei (en inkoopgeld goud in de kist brengt), de houthakker zonder keur sprokkelt en met
+    keur bomen kapt die stronken worden, de inner de stronken telt die hij ziet en de heer ze rekent, de
+    benoemingsbrief de keuren noemt, de getallen in de werkbank staan, opslaan en laden de keuren en de stronken
+    houdt, `npm test` groen is, een speeljaar van de speeltest zonder fouten loopt (en laat zien wat het halve hout
+    doet), en een schermafdruk het venster laat zien. Vragen: **A**, het venster onder `K`, afgekondigd de volgende
+    ochtend? **B**, karig, gewoon en ruim, met deze getallen? **C**, niemand, tegen inkoopgeld en iedereen? **D**,
+    sprokkelen als standaard (half zoveel hout als nu), en kappen met stronken die de inner telt?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
