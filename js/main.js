@@ -740,6 +740,22 @@
         stemming: T.voorvalStemming(S, dag),
       };
     },
+    // De raadsman (js/raadsman.js): wie het is en wat hij kan, uit wie je kiest, en wat hij besloot.
+    // Spel.debug.raadsman('boer2') of ('Aaltje') maakt die boer raadsman.
+    raadsman(wie) {
+      if (wie) {
+        const p = S.bewoners && S.bewoners.mensen.find((x) => x.wie === wie || T.naamVanBewoner(x) === wie);
+        if (!p) return `Er is geen boer "${wie}".`;
+        const r = T.kiesRaadsman(S, p);
+        if (!r.kan) return r.reden;
+      }
+      const nu = T.raadsmanVan(S);
+      return {
+        raadsman: nu ? T.overRaadsmanTekst(S, nu) : null,
+        kandidaten: T.raadsmanKandidaten(S).map((p) => T.overRaadsmanTekst(S, p)),
+        besluiten: ((S.raadsman && S.raadsman.besluiten) || []).slice(-5).map((b) => `${T.datumVanDag(b.dag).tekst}: ${b.id}, "${b.antwoord}"${b.prijs ? ` (${b.prijs})` : ''}`),
+      };
+    },
     // De wetten (js/wetten.js): per wet de stand, en wat hij dan doet. Spel.debug.wetten('rantsoen', 'krap')
     // zet er eerst een, zoals het menu (W) dat doet; de boete voor de houtkap en wat de belasting nog meeneemt,
     // staan erbij.

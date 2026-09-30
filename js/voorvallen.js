@@ -21,8 +21,9 @@
 // Wanneer er een komt en welke, zegt dit bestand (T.VOORVALLEN hieronder). Wie je zoekt, loopt naar de schout en
 // spreekt hem aan zodra hij stilstaat; de tijd staat stil tot je antwoordt (js/dialoog.js). Sluit je het gesprek
 // zonder antwoord, dan wacht hij, met een uitroepteken, tot je hem aanspreekt. 's Avonds gaat hij naar huis, en de
-// volgende ochtend komt hij terug; na zoektDagen gaat het voorbij, en dat neemt het dorp je kwalijk. Straks beslist
-// dan de raadsman (vraag 64).
+// volgende ochtend komt hij terug. Is de schout er niet (niet in het dorp, of hij sprak hem niet binnen zoektDagen),
+// dan beslist de raadsman (js/raadsman.js; vraag 66); zonder raadsman gaat het voorbij, en dat neemt het dorp je
+// kwalijk.
 (function (T) {
   'use strict';
 
@@ -164,8 +165,8 @@
   //   wacht      de vervolgen die nog komen: [{ id, op, wie, ander }]
   //   geweest    per voorval de laatste dag dat het er was
   //   stemming   wat het dorp nadraagt: [{ waarde, dag, woorden }] (T.voorvalStemming)
-  //   aantal, beantwoord   hoeveel er waren, en hoeveel je er beantwoordde
-  T.nieuweVoorvallen = () => ({ volgende: null, lopend: null, wacht: [], geweest: {}, stemming: [], aantal: 0, beantwoord: 0 });
+  //   aantal, beantwoord, doorRaadsman   hoeveel er waren, hoeveel je er beantwoordde, en hoeveel de raadsman
+  T.nieuweVoorvallen = () => ({ volgende: null, lopend: null, wacht: [], geweest: {}, stemming: [], aantal: 0, beantwoord: 0, doorRaadsman: 0 });
 
   // ---------------------------------------------------------------------------------------------
   // Wie het je komt zeggen, en over wie het gaat
@@ -181,7 +182,7 @@
     const e = p && p.wezen;
     return kanHetBetreffen(S, p) && !!e && !e.dood && !e.vertrekt && !e.opgeroepen && !e.moetNaar;
   }
-  const isBoer = (p) => !!(p.wie && p.huis && p.huis.soort === 'boerderij');
+  const isBoer = (p) => T.isBoer(p.wezen);
 
   // Past hij bij een vraag (zie T.VOORVALLEN)? Een karakter is altijd een boer, van elke leeftijd.
   function past(p, vraag) {
@@ -285,9 +286,11 @@
   }
 
   // Het dorp neemt je iets kwalijk, of is je dankbaar: dat komt bij de tevredenheid (T.voorvalStemming), en slijt weg.
-  function stemming(S, procent, v, dag) {
+  // Besliste de raadsman (js/raadsman.js), dan heet het naar hem.
+  function stemming(S, procent, v, dag, door) {
     const waarde = procent / 100;
-    const woorden = (waarde > 0 ? v.woorden && v.woorden.blij : v.woorden && v.woorden.last) || `je antwoord op ${v.titel}`;
+    const eigen = waarde > 0 ? v.woorden && v.woorden.blij : v.woorden && v.woorden.last;
+    const woorden = eigen || (door ? `wat ${naam(door)} besliste over ${v.titel}` : `je antwoord op ${v.titel}`);
     S.voorvallen.stemming.push({ waarde, dag, woorden });
     T.tevredenheidOpnieuw(S);
   }
@@ -306,9 +309,10 @@
     S.voorvallen.lopend = null;
   }
 
-  // Hij vond je niet, of je sprak hem niet aan: het gaat voorbij, en het dorp neemt het je kwalijk. (Straks beslist
-  // hier de raadsman, vraag 64.)
+  // Hij vond je niet, of je sprak hem niet aan: dan beslist de raadsman (js/raadsman.js). Is er geen, dan gaat het
+  // voorbij, en neemt het dorp het je kwalijk.
   function voorbij(S, dag) {
+    if (T.raadsmanBeslist(S)) return;
     const L = S.voorvallen.lopend;
     bericht(`${T.hoofdletter(naam(L.wie))} heeft je niet gesproken, en gaat weer aan het werk.`);
     stemming(S, IN().nietGevonden, { woorden: { last: 'een schout die er niet was' } }, dag);
@@ -376,6 +380,8 @@
     const w = S.bewoners.wereld;
     const nu = S.kalender.dag;
     const deel = T.dagdeelVan(nu);
+    // Is de schout niet in het dorp als wie hem zoekt, gaat zoeken, dan beslist de raadsman meteen.
+    if (nu >= L.vanaf && S.wereld !== w && T.raadsmanBeslist(S)) return;
     if (nu < L.vanaf || deel === 'avond' || deel === 'nacht' || S.wereld !== w) {
       laatLos(e);
       return;
@@ -406,13 +412,15 @@
     if (!e.onderweg) T.loopNaastDeSchout(S, e);
   };
 
-  // Je koos een antwoord dat het gesprek sluit (js/dialoog.js): het voorval is af, en wie het zei, gaat zijns weegs.
-  T.voorvalBeantwoord = function (S, id) {
+  // Je koos een antwoord dat het gesprek sluit (js/dialoog.js), of de raadsman deed het (`door`, js/raadsman.js): het
+  // voorval is af, en wie het zei, gaat zijns weegs.
+  T.voorvalBeantwoord = function (S, id, door) {
     const V = S.voorvallen;
     if (!V || !V.lopend || V.lopend.id !== id) return;
     laatLos(V.lopend.wie.wezen);
     V.lopend = null;
-    V.beantwoord = (V.beantwoord || 0) + 1;
+    if (door) V.doorRaadsman = (V.doorRaadsman || 0) + 1;
+    else V.beantwoord = (V.beantwoord || 0) + 1;
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -428,7 +436,7 @@
     const dag = dagNu(S);
     for (const wat of WAREN) if (doe[wat]) T.wijzigVoorraad(S, wat, doe[wat]);
     for (const soort of Object.keys(T.VEE)) if (doe[soort] < 0) T.verliesVee(S, soort, -doe[soort]);
-    if (doe.tevreden) stemming(S, doe.tevreden, v, dag);
+    if (doe.tevreden) stemming(S, doe.tevreden, v, dag, L.door);
     if (doe.argwaan) T.zetArgwaan(S, doe.argwaan / 100, v.titel);
     for (let i = 0; i < (doe.gezin || 0); i++) T.gezinKomt(S);
     const verbannen = doe.verban && L[doe.verban];

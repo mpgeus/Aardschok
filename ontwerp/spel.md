@@ -18,7 +18,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
 | De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug | vraag 65 |
-| De raadsman | besloten (29 sep): een raadsman per dorp met een geloot karakter, die jij kiest, en die beslist als je er niet bent; nog niet gebouwd | vraag 64, 65 |
+| De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je er niet bent, naar zijn karakter; hoe je hem kiest, is open | vraag 64, 65, 66, 67 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf | vraag 58 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -204,9 +204,9 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
 - **Sommige komen terug:** wie je liet gaan, steelt weer, of brengt je later een haas; wie een boete kreeg, gooit
   soms je luiken in; een lening komt terug, met rente, of later; het zaaigraan komt na de oogst terug, met tien extra;
   en de woekeraar die je tegensprak, gaat naar de inner, tenzij je hem vijf goud geeft.
-- **Wie je niet spreekt,** gaat 's avonds naar huis en komt de volgende ochtend terug; na twee dagen gaat het voorbij,
-  en dat neemt het dorp je kwalijk ("een schout die er niet was"). Sluit je het gesprek zonder antwoord (Esc), dan
-  wacht hij met zijn uitroepteken tot je hem aanspreekt.
+- **Wie je niet spreekt,** gaat 's avonds naar huis en komt de volgende ochtend terug; na twee dagen beslist je
+  raadsman, en heb je er geen, dan gaat het voorbij, en dat neemt het dorp je kwalijk ("een schout die er niet was").
+  Sluit je het gesprek zonder antwoord (Esc), dan wacht hij met zijn uitroepteken tot je hem aanspreekt.
 - **Instelbaar:** de spelregel "Voorvallen" (vaak, gewoon, zelden, uit), en de getallen in de werkbank
   (`T.VOORVALLEN_INSTELLINGEN`). `Spel.debug.voorval()` zegt wat er loopt en wat er nu kan, en
   `Spel.debug.voorval('brand')` laat er nu een beginnen.
@@ -215,8 +215,34 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
 - **In de speeltest** (`speelbaar.md`): 47 tot 53 voorvallen in een jaar, dus met wat er al was een keuze per ruim een
   minuut op 30×; wie verstandig kiest, speelt het jaar zoals zonder voorvallen. Wie altijd het eerste antwoord neemt,
   verbant een dief, die als rover terugkomt, en kan het dorp laten verhongeren (`opmerkingen.md`).
-- **Nog niet:** de raadsman die beslist als je er niet bent (vraag 64; nu gaat het voorbij), voorvallen die de kaart
-  veranderen (een huis dat afbrandt), en wie je veroordeelde, keert zich nog niet in een gevecht tegen je.
+- **Nog niet:** voorvallen die de kaart veranderen (een huis dat afbrandt), en wie je veroordeelde, keert zich nog
+  niet in een gevecht tegen je. Ben je er niet, dan beslist sinds 30 sep de raadsman ("De raadsman" hieronder).
+
+## De raadsman (Marcel, 29 en 30 sep 2026; werklijst vraag 64, 65, 66 en 67)
+
+**Zo werkt het nu** (30 sep, zeventiende sessie; `js/raadsman.js`, toetsen in `test/raadsman.test.cjs`; Marcel, vraag 66:
+"A Ja, b Nee, c Nee, wordt automatisch als de schout er niet is. D prima"):
+- **Een van de boeren** wordt raadsman, met zijn karakter en aanzien (`js/boeren.js`) en twee gelote vaardigheden uit
+  vijf, elk goed of slecht: rechtspreken, zwijgen, rekenen, bouwen en vechten. Je kiest uit drie, vast per spel.
+- **Hij beslist vanzelf als de schout er niet is:** is de schout niet in het dorp als iemand hem met een voorval gaat
+  zoeken, dan beslist de raadsman meteen; en sprak de schout wie hem zocht niet binnen twee dagen, dan beslist hij
+  dan (zonder raadsman gaat het voorbij, en neemt het dorp het je kwalijk). Een bericht zegt wat hij deed: 'Aaltje, je
+  raadsman, besliste over de diefstal: "Hij betaalt ze terug, en een goud boete voor de kist." (+1 goud,
+  tevredenheid +3%)', en in de balk heet het naar hem ("Het is blij met wat Aaltje besliste over de diefstal").
+- **Naar zijn karakter:** elk karakter vindt iets anders een antwoord waard (tevredenheid, argwaan, goud, waren,
+  iemand het bos in, een kans op een dode, een gezin erbij). De heethoofd verbant de dief, de woekeraar legt een
+  boete op voor de kist; bij koorts laat de vrome bidden en de vroedvrouw de put schoonmaken; de weduwe en de woekeraar
+  houden het oogstfeest klein; en waar de oudste de heer zijn standbeeld bouwt, zet de zanger een vogelverschrikker neer
+  in een oude jas van de heer. Hij kiest alleen wat er te betalen valt.
+- **Wat hij kan, telt mee** in wat hij beslist: wie goed recht spreekt, maakt het dorp met zijn vonnis tevredener
+  (en minder ontevreden); wie niets voor zich kan houden, maakt de inner argwanender; rekenen werkt op het goud en de
+  waren, bouwen op het hout, vechten op de kans op een dode.
+- **Zijn prijs:** wie raadsman is, maait trager (maal 1,25). Bij de muis staat "je raadsman".
+- **Instelbaar:** de spelregel "Raadsman" (aan, uit), en de getallen in de werkbank (`T.RAADSMAN_INSTELLINGEN`, met de
+  neigingen per karakter). `Spel.debug.raadsman()` zegt wie het is, uit wie je kiest en wat hij besloot, en
+  `Spel.debug.raadsman('Aaltje')` maakt Aaltje raadsman.
+- **Nog open:** hoe en wanneer je hem kiest (vraag 67: niet in de eerste week via de herbergierster, zei Marcel), en
+  staande orders (de heer, de heervaart, de marskramer) komen met het land (vraag 66, D).
 
 ## De raad onder het doel (Marcel, 29 sep 2026; werklijst vraag 58)
 

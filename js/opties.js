@@ -320,6 +320,17 @@
           uitleg: 'Niemand komt je zoeken. Het dorp gaat zijn gang.' },
       ],
     },
+    // De raadsman (Marcel, 30 sep, werklijst vraag 66: "c Nee, wordt automatisch als de schout er niet is"; js/raadsman.js).
+    {
+      id: 'raadsman', naam: 'Raadsman', standaard: 'aan',
+      uitleg: 'Of je raadsman beslist als je er niet bent.',
+      keuzes: [
+        { id: 'aan', naam: 'Aan', zet: { 'RAADSMAN_INSTELLINGEN.aan': true },
+          uitleg: 'Is de schout er niet als iemand hem met een voorval zoekt, dan beslist je raadsman, naar zijn karakter en wat hij kan. Wie raadsman is, maait wel trager.' },
+        { id: 'uit', naam: 'Uit', zet: { 'RAADSMAN_INSTELLINGEN.aan': false },
+          uitleg: 'Wat je mist, gaat voorbij, en dat neemt het dorp je kwalijk.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -351,6 +362,7 @@
     { naam: 'De heer', blok: 'HEER_INSTELLINGEN' },
     { naam: 'De heervaart', blok: 'HEERVAART_INSTELLINGEN' },
     { naam: 'De voorvallen', blok: 'VOORVALLEN_INSTELLINGEN' },
+    { naam: 'De raadsman', blok: 'RAADSMAN_INSTELLINGEN' },
     { naam: 'De inner', blok: 'INNER_INSTELLINGEN' },
     { naam: 'De verstopplekken', blok: 'VERSTOP_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },

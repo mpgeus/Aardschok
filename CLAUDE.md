@@ -285,8 +285,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zegt vooraf wat het kost (`T.prijsVanKeuze`, in het venster onder elk antwoord); wat het doet, staat in zijn gevolg:
   de voorraad, `tevreden` (een stemming die wegslijt, `T.voorvalStemming` in de tevredenheid), `argwaan`, `verban`,
   `sterfkans`, `gezin` (`T.gezinKomt` in `js/gebouwen.js`, dezelfde als de groei), het vee (`T.verliesVee`), en
-  `voorval` (een vervolg, later, over dezelfde mensen). Wie je niet sprak, gaat na twee dagen voorbij; straks beslist
-  dan de raadsman. De spelregel "Voorvallen", de getallen in `T.VOORVALLEN_INSTELLINGEN`.
+  `voorval` (een vervolg, later, over dezelfde mensen). Wie je niet sprak, laat het na twee dagen aan de raadsman, en
+  zonder raadsman gaat het voorbij. De spelregel "Voorvallen", de getallen in `T.VOORVALLEN_INSTELLINGEN`.
+- `js/raadsman.js`: **de raadsman** (vraag 66, 30 sep): een van de boeren (`T.isBoer` in `js/boeren.js`), met twee gelote
+  vaardigheden (`T.vaardighedenVan`: uit het zaad en zijn naam, zodat het lot van de boeren niet verandert). Is de schout
+  er niet (niet in het dorp als wie hem zoekt, gaat zoeken, of niet op tijd gesproken), dan beslist hij het voorval
+  (`T.raadsmanBeslist`, vanuit `js/voorvallen.js`): het antwoord dat zijn karakter het meest waard vindt
+  (`T.raadsmanKeuze`, de neigingen in `T.RAADSMAN_INSTELLINGEN.karakters`), met wat hij kan erin (`T.metVaardigheden`).
+  Wie het is, staat op zijn poppetje (`e.raadsman`), want ook het maaien kijkt ernaar (`T.boerFactor`: hij maait
+  trager). Uit wie je kiest: `T.raadsmanKandidaten`; kiezen: `T.kiesRaadsman`. Hoe dat in het spel gaat, is vraag 67.
 - `js/zien.js`: **het zichtveld en de getuigen** (werklijst punt 3, 27 sep): wie buiten is, ziet de
   schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
   verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het
@@ -397,8 +404,10 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   karakter bestuurt zichzelf en is zwakker. Met 0 tegenspelers blijft het spel zoals nu. Je eigen dorp krijgt bij
   Nieuw spel een naam die je zelf kiest.
 - **De raadsman** (Marcel, 29 sep, vraag 64): elk dorp heeft er een, met een karakter en gelote eigenschappen, en
-  jij kiest hem; hij voert je regels uit waar je niet bent. En "Het voelt gewoon nog leeg nu": sinds 29 sep spreekt het
-  dorp je aan, met voorvallen (vraag 65, `js/voorvallen.js`); het dorp van bovenaf bleef open.
+  jij kiest hem; hij voert je regels uit waar je niet bent. Sinds 30 sep (vraag 66): een van de boeren, die vanzelf de
+  voorvallen beslist als de schout er niet is (`js/raadsman.js`); hoe je hem kiest, is open (vraag 67). En "Het voelt
+  gewoon nog leeg nu": sinds 29 sep spreekt het dorp je aan, met voorvallen (vraag 65, `js/voorvallen.js`); het dorp
+  van bovenaf bleef open.
 - **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én
   bouwen en plannen. **Rijk worden en arm lijken** (de heer, de inner en het verstoppen), eerst de
   kern, blijft als de druk van boven. **Vechten** begint met aanvallen op je eigen dorp (rovers, de
@@ -512,6 +521,8 @@ hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen en welke voorvallen er nu kunnen;
 `('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.
+`Spel.debug.raadsman()` zegt wie je raadsman is en wat hij kan, uit wie je kiest, en wat hij besloot; `('Aaltje')` of
+`('boer2')` maakt die boer raadsman. Ga dan met `Spel.debug.gaNaar('proef')` weg, en hij beslist het volgende voorval.
 `Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
 en het bier (`(30)` zet eerst 30 bier). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar

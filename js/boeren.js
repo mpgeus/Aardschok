@@ -80,6 +80,8 @@
 
   // Wie zijn de boeren? De mensen in de wereld met een karakter in T.MENSEN (js/mensen.js).
   const isBoer = (e) => !!(e && e.wie && T.MENSEN && T.MENSEN[e.wie] && T.MENSEN[e.wie].karakter);
+  // Ook voor de voorvallen (js/voorvallen.js) en de raadsman (js/raadsman.js), met het poppetje van een bewoner.
+  T.isBoer = isBoer;
   const boerenIn = (S) => ((S.wereld && S.wereld.wezens) || []).filter((e) => isBoer(e) && !e.dood);
 
   // Het aanzien van een karakter, als dat vastligt, anders dat van de mens als er niet geloot wordt.
@@ -133,11 +135,13 @@
   };
 
   // Hoeveel keer zo lang (maaien), zoveel graan (opbrengst), zoveel zaaigraan (zaaien): de factor
-  // van deze eigenschap bij deze boer. 1 voor wie er geen heeft, of geen boer is.
+  // van deze eigenschap bij deze boer. 1 voor wie er geen heeft, of geen boer is. Wie raadsman is
+  // (js/raadsman.js), maait trager: dat is zijn prijs.
   T.boerFactor = function (e, soort) {
     const id = e && e.eigenschappen && e.eigenschappen[soort];
     const t = id && trede(soort, id);
-    return t && typeof t.factor === 'number' ? t.factor : 1;
+    const f = t && typeof t.factor === 'number' ? t.factor : 1;
+    return soort === 'maaien' && e && e.raadsman && T.RAADSMAN_INSTELLINGEN.aan ? f * T.RAADSMAN_INSTELLINGEN.maaien : f;
   };
 
   // Wat de schandpaal het dorp kost als hij er staat, naar zijn aanzien; null voor wie geen boer
@@ -162,6 +166,7 @@
       const t = id && id !== 'gewoon' && trede(soort, id);
       if (t) eigenschappen.push(t.naam);
     }
+    if (e.raadsman && T.RAADSMAN_INSTELLINGEN.aan) eigenschappen.push('je raadsman');
     return { kort: k.kort || karakter, lang: k.lang || '', eigenschappen };
   };
 
