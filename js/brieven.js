@@ -136,6 +136,11 @@
 
   // Een brief in het venster: `soort` uit BRIEVEN, of zonder soort de brief die op je wacht.
   T.ui.toonBrief = function (S, soort) {
+    // Een brief die komt terwijl de schout op reis is (js/land.js), wacht tot hij thuis is.
+    if (soort && T.opReis(S)) {
+      T.briefVoorLater(S, soort);
+      return;
+    }
     soort = soort || wachtend(S);
     const brief = soort && BRIEVEN[soort] && BRIEVEN[soort](S);
     if (!brief) return;
@@ -152,6 +157,14 @@
     open = null;
     T.laatTijdGaan(S, 'brief');
     T.ui.werkBriefKnopBij(S);
+    T.ui.toonBriefVanLater(S);
+  };
+
+  // De brieven die kwamen terwijl je op reis was (js/land.js), een voor een, nu je thuis bent.
+  T.ui.toonBriefVanLater = function (S) {
+    const L = S.land;
+    if (!L || !L.brieven.length || T.opReis(S) || T.ui.briefOpen()) return;
+    T.ui.toonBrief(S, L.brieven.shift());
   };
 
   T.ui.briefOpen = () => !$('brief').classList.contains('verborgen');

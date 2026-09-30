@@ -334,6 +334,18 @@
           uitleg: 'Wat je mist, gaat voorbij, en dat neemt het dorp je kwalijk.' },
       ],
     },
+    // Het land (werklijst vraag 63 en 69; js/land.js): tot het buurdorp er is, staat het uit, en speelt de proef zoals
+    // nu. Dan wordt het een keuze bij Nieuw spel: 0 of 1 tegenspeler.
+    {
+      id: 'land', naam: 'Land', standaard: 'uit',
+      uitleg: 'Of je over de weg je gehucht uit kunt, het land in.',
+      keuzes: [
+        { id: 'uit', naam: 'Uit', zet: { 'LAND_INSTELLINGEN.aan': false },
+          uitleg: 'Je gehucht is de hele wereld, zoals in de proef.' },
+        { id: 'aan', naam: 'Aan', zet: { 'LAND_INSTELLINGEN.aan': true },
+          uitleg: 'Loop over de weg je gehucht uit, en de kaart van het land opent: provincies waar je dagen reist, en wat je nog niet zag, is donker. Thuis gaat alles door zonder jou; wat er gebeurde, hoor je als je terug bent. Het buurdorp komt nog.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -366,6 +378,7 @@
     { naam: 'De heervaart', blok: 'HEERVAART_INSTELLINGEN' },
     { naam: 'De voorvallen', blok: 'VOORVALLEN_INSTELLINGEN' },
     { naam: 'De raadsman', blok: 'RAADSMAN_INSTELLINGEN' },
+    { naam: 'Het land', blok: 'LAND_INSTELLINGEN' },
     { naam: 'De inner', blok: 'INNER_INSTELLINGEN' },
     { naam: 'De verstopplekken', blok: 'VERSTOP_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },

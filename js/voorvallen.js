@@ -317,7 +317,7 @@
   // "Raadsman" hem ook dan laat beslissen (nietGesproken, js/raadsman.js). Had een raadsman hier beslist, en is er geen,
   // dan zegt de raad onder het doel het een tijd (js/raad.js): kies een raadsman.
   function voorbij(S, dag) {
-    const weg = S.wereld !== S.bewoners.wereld;
+    const weg = T.schoutIsWeg(S);
     const raadsmanMag = weg || T.RAADSMAN_INSTELLINGEN.nietGesproken;
     if (raadsmanMag && T.raadsmanBeslist(S)) return;
     const L = S.voorvallen.lopend;
@@ -388,9 +388,11 @@
     const w = S.bewoners.wereld;
     const nu = S.kalender.dag;
     const deel = T.dagdeelVan(nu);
-    // Is de schout niet in het dorp als wie hem zoekt, gaat zoeken, dan beslist de raadsman meteen.
-    if (nu >= L.vanaf && S.wereld !== w && T.raadsmanBeslist(S)) return;
-    if (nu < L.vanaf || deel === 'avond' || deel === 'nacht' || S.wereld !== w) {
+    // Is de schout niet in het dorp als wie hem zoekt, gaat zoeken (T.schoutIsWeg, js/land.js: op reis, of in een
+    // ander gebied), dan beslist de raadsman meteen.
+    const weg = T.schoutIsWeg(S);
+    if (nu >= L.vanaf && weg && T.raadsmanBeslist(S)) return;
+    if (nu < L.vanaf || deel === 'avond' || deel === 'nacht' || weg) {
       laatLos(e);
       return;
     }

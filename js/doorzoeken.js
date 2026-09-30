@@ -135,7 +135,8 @@
     // Wat ze vlak passeren: een doel als ze er een hebben, anders de route van de schout, zolang ze bij hem
     // zijn (wat hij of zij vlak passeren).
     for (const s of soldaten) {
-      const bijHem = T.afstand({ x: h.tx, y: h.ty }, { x: s.tx, y: s.ty }) <= IN().bijDeSchout;
+      // Is de schout op reis (js/land.js), dan is hij bij niemand: ze wachten tot de heer gaat, en zoeken dan zelf.
+      const bijHem = !T.schoutIsWeg(S) && T.afstand({ x: h.tx, y: h.ty }, { x: s.tx, y: s.ty }) <= IN().bijDeSchout;
       if (bijHem && z.sinds == null) z.sinds = uurNu(S); // vanaf nu telt het wachten
       for (const p of T.verstopPlekken(S)) {
         if (z.gedaan.includes(p.gebouw)) continue;

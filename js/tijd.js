@@ -176,8 +176,9 @@
   };
 
   // Voor wie ertoe doet als hij komt (de heer, de inner, js/dag.js T.bezoekerKomtAan): wie sneller
-  // dan 1× speelt, gaat naar 1×, anders zie je hem nauwelijks komen.
+  // dan 1× speelt, gaat naar 1×, anders zie je hem nauwelijks komen. Wie op reis is (js/land.js), ziet
+  // hem toch niet: die hoort het als hij terug is, en de reis gaat op zijn snelheid door.
   T.naarGewoneSnelheid = function (S) {
-    if (S && S.kalender && S.kalender.snelheid > 1) T.zetSnelheid(S, 1);
+    if (S && S.kalender && S.kalender.snelheid > 1 && !T.opReis(S)) T.zetSnelheid(S, 1);
   };
 })(globalThis.Spel = globalThis.Spel || {});

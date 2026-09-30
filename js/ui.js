@@ -47,6 +47,7 @@
       this.verbergOverlay();
       this.verbergTooltip();
       this.opdracht(null);
+      $('terug').classList.add('verborgen'); // wat er gebeurde toen je op reis was (js/landkaart.js)
       // De kalender en de voorraad van het gehuchtspel (js/hud.js); dat bestand laadt na dit
       // bestand, dus staan de functies er dan al, maar niet als ui.js ooit alleen gebruikt wordt.
       if (this.toonKalender) this.toonKalender(S);
@@ -143,6 +144,11 @@
     },
 
     bericht(tekst, soort) {
+      // Is de schout op reis (js/land.js), dan hoort hij het als hij terug is: het bericht wacht in S.land.
+      if (T.S && T.opReis(T.S)) {
+        T.bewaarVoorLater(T.S, tekst, soort);
+        return;
+      }
       const box = $('berichten');
       // Dezelfde melding vlak achter elkaar ("Daar kun je niet komen.", vier keer geklikt) wordt
       // één regel met een teller, en komt weer vers onderaan in beeld, in plaats van de hele

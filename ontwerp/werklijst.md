@@ -1975,6 +1975,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     legt pas bij stap 3 van het land (kiezen hoeveel, tot 5 of 6), waar hij echt nodig is? Of die maker nu al? Claude
     raadt het eerste aan. De kaart van het land als schets, met het plan en de vraag: de pagina "Het land met
     provincies" (https://claude.ai/artifact/KJHyaEbye8LQCjJk75vXWT).
+    **Beantwoord (Marcel, 30 sep): "De maker nu".** Het buurdorp krijgt een gehucht van een maker die elk spel een ander
+    gehucht legt, in het spel zelf, uit dezelfde delen als het jouwe (het plein als hart, huizen eromheen, boerderijen
+    met hun velden verder naar buiten, de weg, de beek). Hij komt als eigen stuk vóór het buurdorp, met eerst een schets
+    van een paar gemaakte gehuchten voor Marcel. Jouw eigen gehucht blijft het ontworpen gehucht. Over de volgorde en de
+    schets zei Marcel niets, dus stuk 1 begint: de kaart van het land en reizen.
+    Uitgewerkt bij het bouwen van stuk 1 (nagekeken): de heer, de inner, de marskramer en de rovers lopen in het gebied
+    waar de schout is (`S.wereld`), niet in het dorp. Wie reist, verlaat daarom niet de kaart van het dorp: de schout
+    gaat eruit, en het dorp blijft de wereld van het spel, zodat thuis alles zijn werk doet zonder hem.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

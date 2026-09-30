@@ -683,8 +683,8 @@
     }
     if (e.onderweg) return;
     // Loopt de schout naast hem, dan volgt hij de schout; loopt die weg, of wachtte hij te lang op hem,
-    // dan gaat hij zijn eigen gang.
-    const h = S.schout;
+    // dan gaat hij zijn eigen gang. Is de schout op reis (js/land.js), dan is er niemand om te volgen.
+    const h = T.schoutIsWeg(S) ? null : S.schout;
     const afstand = h ? T.afstand({ x: h.tx, y: h.ty }, { x: e.tx, y: e.ty }) : Infinity;
     const volgde = b.volgt;
     if (b.eigenTot != null && nu < b.eigenTot) b.volgt = false;

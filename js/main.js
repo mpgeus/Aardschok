@@ -318,6 +318,8 @@
     T.werkBewonersBij(S); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
     T.werkRoversBij(S); // rovers komen naar een akker, roven en gaan weer; de militie loopt met je mee (js/rovers.js)
     T.werkVoorvallenBij(S); // wie je zoekt met een voorval, loopt naar je toe en spreekt je aan (js/voorvallen.js)
+    T.werkLandBij(S); // op reis de volgende provincie, en over de weg het gehucht uit de kaart van het land (js/land.js)
+    T.ui.werkLandkaartBij(S); // en die kaart op het scherm (js/landkaart.js)
     T.werkAnimatiesBij(S, dt, dtWereld);
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
     // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
@@ -334,13 +336,14 @@
       raadOp = S.tijd;
     }
     T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, raadNu && raadNu.tekst);
-    if (S.modus === 'verkennen') {
+    // Ook op reis (js/land.js, de kaart van het land) gaat het dorp zijn gang: er wordt gemaaid en gedwaald.
+    if (S.modus === 'verkennen' || S.modus === 'land') {
       // Vóór T.laatDwalen: wie hier een pad krijgt of aan het maaien slaat (T.werkOogstBij,
       // js/akkers.js, alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
       // T.laatDwalen al "bezig" (m.pad.length of m.maait) en dwaalt deze beurt niet ook nog weg.
       T.werkOogstBij(S, dtWereld);
       T.laatDwalen(S, dtWereld);
-      const m = T.zoekOntdekking(S);
+      const m = S.modus === 'verkennen' && T.zoekOntdekking(S);
       if (m) T.startGevecht(S, m, false);
     }
     if (S.modus === 'overgang' && S.wereld.wezens.every((e) => !e.pad.length)) T.beginGevecht(S);
@@ -450,6 +453,17 @@
       const k = (ev.key || '').toLowerCase();
       if (k === 'escape' || k === 'r' || k === 'b' || k === 'o' || k === 'v' || k === 'w') T.ui.sluitRaadsman(S);
       if (k !== 'b' && k !== 'o' && k !== 'v' && k !== 'w') return;
+    }
+    // De kaart van het land (js/landkaart.js): Esc is terug het gehucht in, als je nog thuis bent; op reis of in een
+    // andere provincie kies je op de kaart waar je heen gaat.
+    if (S.modus === 'land') {
+      if (ev.key === 'Escape') T.ui.sluitLand(S);
+      return;
+    }
+    // Thuis na een reis (js/landkaart.js): wat er gebeurde; Esc is verder.
+    if (ev.key === 'Escape' && T.ui.terugOpen()) {
+      T.ui.sluitTerug(S);
+      return;
     }
     if (ev.key === 'Escape' && T.ui.briefOpen && T.ui.briefOpen()) {
       T.ui.sluitBrief(S);
@@ -749,6 +763,37 @@
         aantal: V.aantal,
         beantwoord: V.beantwoord,
         stemming: T.voorvalStemming(S, dag),
+      };
+    },
+    // Het land (js/land.js): waar de schout is, of hij reist, wat hij zag en welke wegen er zijn. ('open') opent de
+    // kaart, ('reis', 'De heide') of ('reis', 'p3') reist erheen, ('alles') laat het hele land zien, ('nieuw') maakt
+    // het land opnieuw uit het zaad. Staat de spelregel Land uit, dan zet hij hem eerst aan.
+    land(wat, waar) {
+      if (!T.LAND_INSTELLINGEN.aan) T.zetOptie('land', 'aan');
+      if (!S.land) S.land = T.nieuwLand(S);
+      const L = S.land;
+      const naam = (p) => T.provincieNaam(S, p);
+      const zoek = (x) => L.provincies.find((p) => p.id === x || naam(p).toLowerCase() === String(x).toLowerCase());
+      if (wat === 'nieuw') S.land = T.nieuwLand(S);
+      if (wat === 'alles') for (const p of L.provincies) L.gezien.add(p.id);
+      if (wat === 'open') T.openLand(S);
+      if (wat === 'reis') {
+        const p = zoek(waar);
+        if (!p) return `Er is geen provincie "${waar}".`;
+        if (S.modus !== 'land') T.openLand(S);
+        const r = T.beginReis(S, p.id);
+        if (!r.kan) return r.reden;
+      }
+      const M = S.land;
+      const R = M.reis;
+      return {
+        waar: naam(T.provincie(M, M.waar)),
+        reis: R ? { naar: naam(T.provincie(M, R.route[R.route.length - 1])), nogDagen: Math.round((R.aankomst - S.kalender.dag) * 10) / 10 } : null,
+        gezien: M.provincies.filter((p) => M.gezien.has(p.id)).map(naam),
+        provincies: M.provincies.map((p) => `${p.id}: ${naam(p)}${M.gezien.has(p.id) ? '' : ' (donker)'}`),
+        wegen: M.wegen.map((w) => `${naam(T.provincie(M, w.van))} — ${naam(T.provincie(M, w.naar))}: ${w.dagen} ${w.dagen === 1 ? 'dag' : 'dagen'}`),
+        gemist: M.gemist.length,
+        brieven: M.brieven.slice(),
       };
     },
     // De raadsman (js/raadsman.js): wie het is en wat hij kan, uit wie je kiest, en wat hij besloot.
