@@ -84,6 +84,8 @@
         const bx = x + dx;
         const by = y + dy;
         maak('path', { d: `M${bx} ${by}L${bx - 5} ${by - 8}M${bx} ${by}L${bx} ${by - 10}M${bx} ${by}L${bx + 5} ${by - 8}`, fill: 'none', stroke: 'var(--land-grens)', 'stroke-width': 1.8, 'stroke-linecap': 'round' }, g);
+        // Een bloempje op elke spriet: heide, en geen pijlen.
+        for (const [tx, ty] of [[bx - 5, by - 8], [bx, by - 10], [bx + 5, by - 8]]) maak('circle', { cx: tx, cy: ty, r: 2.1, fill: 'var(--land-bloei)' }, g);
       }
     },
     veen: (g, x, y) => golfjes(g, x, y),
@@ -142,8 +144,13 @@
         continue;
       }
       TEKEN[p.soort](tekens, p.x, p.y - 8);
+      // Een lange naam ("Het kasteel van de heer") op twee regels, zodat hij niet over een weg valt.
       const t = maak('text', { x: p.x, y: p.y + 26, 'text-anchor': 'middle', class: 'land-naam' }, tekens);
-      t.textContent = naam(S, p);
+      const woorden = naam(S, p);
+      const regels = woorden.length > 16 && woorden.includes(' van ') ? [woorden.slice(0, woorden.indexOf(' van ')), woorden.slice(woorden.indexOf(' van ') + 1)] : [woorden];
+      regels.forEach((r, i) => {
+        maak('tspan', { x: p.x, dy: i ? '1.05em' : 0 }, t).textContent = r;
+      });
     }
 
     // Wat je aanklikte, met een gouden rand; en daarboven de vlakken om op te klikken (onzichtbaar, zonder golf, zodat
@@ -187,12 +194,13 @@
     const p = gekozen && T.provincie(L, gekozen);
     if (!p) return '<span class="land-zacht">Klik een provincie om te zien hoe ver het is.</span>';
     const wie = L.gezien.has(p.id) ? veilig(naam(S, p)) : 'Dit land ken je nog niet';
-    if (p.id === L.waar) return `<b>${wie}</b>: hier ben je.`;
+    // De naam en de tekst in één stuk, de knop ernaast: de regel is een flex-rij.
+    if (p.id === L.waar) return `<span><b>${wie}</b>: hier ben je.</span>`;
     const r = T.reisNaar(S, p.id);
-    if (!r) return `<b>${wie}</b>: daar weet je de weg nog niet.`;
+    if (!r) return `<span><b>${wie}</b>: daar weet je de weg nog niet.</span>`;
     const over = r.route.length > 1 ? `, over ${r.route.slice(0, -1).map((id) => veilig(naam(S, T.provincie(L, id)))).join(' en ')}` : '';
     const thuis = p.id === L.thuis ? 'Naar huis' : 'Reis erheen';
-    return `<b>${wie}</b>: ${dagen(r.dagen)} reizen${over}. <button class="land-knop" data-actie="reis" data-naar="${p.id}">${thuis}</button>`;
+    return `<span><b>${wie}</b>: ${dagen(r.dagen)} reizen${over}.</span> <button class="land-knop" data-actie="reis" data-naar="${p.id}">${thuis}</button>`;
   }
 
   function venster(S) {
