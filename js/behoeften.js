@@ -321,6 +321,7 @@
     instantie.voorwerp.id = opz ? opz.id : null;
     instantie.voorwerp.beslaat = [nieuweVoet.b, nieuweVoet.h];
     instantie.voorwerp.tekeningNaam = tekening ? tekening.split('/').pop() : null;
+    T.voorwerpenVeranderd(w); // een andere soort, dus misschien een andere voet (js/wereld.js)
     for (let dy = 0; dy < nieuweVoet.h; dy++) {
       for (let dx = 0; dx < nieuweVoet.b; dx++) {
         const yy = instantie.y + dy;

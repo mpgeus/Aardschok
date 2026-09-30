@@ -247,3 +247,102 @@ test('een overgang naar een kaart die niet bestaat, laat de speler niet vastlope
   assert.equal(S.wereld.wezens.includes(S.schout), true, 'de schout staat nog in zijn eigen wereld');
   assert.ok(fouten.some((m) => String(m).includes('ditbestaatniet')), 'en het klaagt hoorbaar');
 });
+
+// ------------------------------------------------- wat er op een tegel staat (js/wereld.js, werklijst vraag 71)
+
+// Zoals T.voorwerpOp het tot 30 sep deed: alle voorwerpen aflopen. De lijst per tegel moet precies dit geven.
+const langsAlle = (w, x, y) => w.voorwerpen.find((v) => {
+  const f = T.voetVan(v);
+  return x >= f.x1 && x <= f.x2 && y >= f.y1 && y <= f.y2;
+}) || null;
+
+function vergelijkElkeTegel(w, waar) {
+  for (let y = -2; y < w.h + 2; y++) {
+    for (let x = -2; x < w.b + 2; x++) {
+      if (T.voorwerpOp(w, x, y) !== langsAlle(w, x, y)) assert.fail(`${waar}: op ${x},${y} geeft de lijst per tegel iets anders dan alle voorwerpen aflopen`);
+    }
+  }
+}
+
+// Het gehucht zoals een nieuw spel begint, stil en zonder venster, met genoeg om te bouwen.
+function gehuchtOm(makerZaad) {
+  const echt = console.warn;
+  console.warn = () => {};
+  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  try {
+    assert.ok(T.beginOpKaart(S, 'gehucht', makerZaad));
+  } finally {
+    console.warn = echt;
+  }
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  S.kalender = T.nieuweKalender();
+  for (const wat of ['hout', 'goud', 'steen']) T.zetVoorraad(S, wat, 500);
+  return S;
+}
+
+test('de lijst per tegel geeft hetzelfde voorwerp als alle voorwerpen aflopen, ook na bouwen en weghalen', () => {
+  for (const zaad of [undefined, 1]) {
+    const S = gehuchtOm(zaad);
+    const w = S.wereld;
+    const waar = zaad == null ? 'het ontworpen gehucht' : `het gehucht van zaad ${zaad}`;
+    vergelijkElkeTegel(w, waar);
+    // Een hut erbij, waar hij past: zijn voorwerp komt erbij (js/gebouwen.js).
+    let gezet = null;
+    for (let y = 0; y < w.h && !gezet; y++) {
+      for (let x = 0; x < w.b && !gezet; x++) if (!T.waaromPastHetNiet(S, 'hut', x, y)) gezet = T.plaatsGebouw(S, 'hut', x, y);
+    }
+    assert.ok(gezet && gezet.gelukt, `${waar}: ergens past een hut`);
+    assert.equal(T.voorwerpOp(w, gezet.instantie.x, gezet.instantie.y), gezet.instantie.voorwerp, 'de nieuwe hut staat meteen in de lijst');
+    vergelijkElkeTegel(w, `${waar}, met een hut erbij`);
+    // De schandpaal van de heer (js/heer.js), en een boom die weggaat.
+    T.zetSchandpaalNeer(S);
+    vergelijkElkeTegel(w, `${waar}, met de schandpaal`);
+    const boom = w.voorwerpen.find((v) => v !== gezet.instantie.voorwerp && v.soort !== 'schandpaal');
+    T.haalVoorwerpWeg(w, boom);
+    assert.equal(w.voorwerpen.includes(boom), false);
+    vergelijkElkeTegel(w, `${waar}, zonder ${boom.soort}`);
+  }
+});
+
+test('wie een voorwerp op de kaart zet of weghaalt, doet dat met T.zetVoorwerp en T.haalVoorwerpWeg', () => {
+  // Anders weet de lijst per tegel het niet, en staat er voor T.isBegaanbaar een boom waar er geen meer is.
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const map = path.join(__dirname, '..', 'js');
+  const fout = [];
+  for (const f of fs.readdirSync(map).filter((f) => f.endsWith('.js') && f !== 'wereld.js')) {
+    fs.readFileSync(path.join(map, f), 'utf8').split('\n').forEach((regel, i) => {
+      if (/^\s*\/\//.test(regel)) return;
+      if (/\.voorwerpen\.(push|splice|unshift|shift|pop|sort|reverse|fill)\(/.test(regel)) fout.push(`js/${f}:${i + 1}`);
+    });
+  }
+  assert.deepEqual(fout, [], `Zet en haal voorwerpen met T.zetVoorwerp en T.haalVoorwerpWeg (js/wereld.js): ${fout.join(', ')}`);
+});
+
+test('de tegels van het plein komen één keer per kaart, en een plek op het plein is dezelfde als vroeger', () => {
+  // Zoals T.plekOpHetPlein het tot 30 sep deed, voor elk kind elke dag opnieuw.
+  const vroeger = (w, n) => {
+    if (!w || !w.plein || w.plein.length < 3) return null;
+    const xs = w.plein.map((p) => p[0]);
+    const ys = w.plein.map((p) => p[1]);
+    const tegels = [];
+    for (let y = Math.floor(Math.min(...ys)); y <= Math.ceil(Math.max(...ys)); y++) {
+      for (let x = Math.floor(Math.min(...xs)); x <= Math.ceil(Math.max(...xs)); x++) {
+        if (T.opHetPlein(w, x, y) && T.isBegaanbaar(w, x, y)) tegels.push({ x, y });
+      }
+    }
+    return tegels.length ? tegels[(Math.imul(n | 0, 2654435761) >>> 0) % tegels.length] : null;
+  };
+  for (const zaad of [undefined, 2]) {
+    const w = gehuchtOm(zaad).wereld;
+    assert.ok(T.pleinTegels(w).length > 50, 'het plein heeft tegels');
+    assert.equal(T.pleinTegels(w), T.pleinTegels(w), 'één keer uitgerekend');
+    for (let n = 0; n < 80; n++) assert.deepEqual(T.plekOpHetPlein(w, n), vroeger(w, n), `plek ${n}`);
+    // Wie de plek krijgt, kan er niets aan veranderen voor een ander.
+    const p = T.plekOpHetPlein(w, 3);
+    p.x += 100;
+    assert.deepEqual(T.plekOpHetPlein(w, 3), vroeger(w, 3));
+  }
+  assert.deepEqual(T.pleinTegels({ plein: null }), [], 'een kaart zonder plein heeft geen tegels op het plein');
+  assert.equal(T.plekOpHetPlein(T.gebied({}, 'proef'), 1), null);
+});

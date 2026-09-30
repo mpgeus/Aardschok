@@ -233,16 +233,9 @@
   // krijgt zijn eigen plek (n: zijn nummer), zodat ze over het hele plein verspreid zijn en niet
   // allemaal bij de marskramer staan. Heeft de kaart geen plein (T.opHetPlein, js/wereld.js), dan null.
   T.plekOpHetPlein = function (w, n) {
-    if (!w || !w.plein || w.plein.length < 3) return null;
-    const xs = w.plein.map((p) => p[0]);
-    const ys = w.plein.map((p) => p[1]);
-    const tegels = [];
-    for (let y = Math.floor(Math.min(...ys)); y <= Math.ceil(Math.max(...ys)); y++) {
-      for (let x = Math.floor(Math.min(...xs)); x <= Math.ceil(Math.max(...xs)); x++) {
-        if (T.opHetPlein(w, x, y) && T.isBegaanbaar(w, x, y)) tegels.push({ x, y });
-      }
-    }
-    return tegels.length ? tegels[(Math.imul(n | 0, 2654435761) >>> 0) % tegels.length] : null;
+    const tegels = T.pleinTegels(w).filter((t) => T.isBegaanbaar(w, t.x, t.y));
+    const t = tegels.length ? tegels[(Math.imul(n | 0, 2654435761) >>> 0) % tegels.length] : null;
+    return t ? { x: t.x, y: t.y } : null;
   };
 
   // De put het dichtst bij deze tegel, als plek om te staan: een begaanbare tegel ernaast. Een put

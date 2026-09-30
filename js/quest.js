@@ -180,8 +180,8 @@
     for (const v of w.questVoorwerpen) {
       const hoort = !v.grendel || T.questVoorwaarde(S, { quest: v.grendel.quest, fase: v.grendel.fase });
       const i = w.voorwerpen.indexOf(v);
-      if (hoort && i < 0) w.voorwerpen.push(v);
-      else if (!hoort && i >= 0) w.voorwerpen.splice(i, 1);
+      if (hoort && i < 0) T.zetVoorwerp(w, v);
+      else if (!hoort && i >= 0) T.haalVoorwerpWeg(w, v);
     }
   };
 

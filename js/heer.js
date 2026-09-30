@@ -510,7 +510,7 @@
     if (h.paal) return h.paal;
     const w = S.wereld;
     h.paal = T.plekVoorDeSchandpaal(S);
-    (w.voorwerpen || (w.voorwerpen = [])).push({ soort: 'schandpaal', x: h.paal.x, y: h.paal.y });
+    T.zetVoorwerp(w, { soort: 'schandpaal', x: h.paal.x, y: h.paal.y });
     return h.paal;
   };
 

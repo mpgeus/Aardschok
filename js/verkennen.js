@@ -461,7 +461,7 @@
       if (d) T.ontdekBijDeur(w, d);
       const v = T.voorwerpOp(w, t.x, t.y);
       if (v && OPRAPEN[v.soort]) {
-        w.voorwerpen.splice(w.voorwerpen.indexOf(v), 1);
+        T.haalVoorwerpWeg(w, v);
         S.inventaris.add(v.soort);
         T.ui.toonInventaris(S);
         T.ui.bericht(OPRAPEN[v.soort].vind, 'goed');

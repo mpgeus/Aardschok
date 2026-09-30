@@ -664,7 +664,7 @@
       tekeningNaam: tekening ? tekening.split('/').pop() : null,
       klaarOp: instantie.klaarOp, bouwtijd: g.bouwtijd,
     };
-    w.voorwerpen.push(v);
+    T.zetVoorwerp(w, v);
     instantie.voorwerp = v;
     for (let dy = 0; dy < voet.h; dy++) {
       for (let dx = 0; dx < voet.b; dx++) {

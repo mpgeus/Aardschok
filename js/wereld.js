@@ -237,12 +237,52 @@
     return { x1: v.x + f.dx, y1: v.y + f.dy, x2: v.x + f.dx + f.b - 1, y2: v.y + f.dy + f.h - 1 };
   };
 
+  // ── Wat er op een tegel staat: een lijst per tegel ──
+  // T.voorwerpOp wordt heel vaak gevraagd: bij elke stap die een poppetje overweegt (T.isBegaanbaar), en elke dag
+  // voor elke tegel van het plein (js/bewoners.js). Tot 30 sep liep het daarvoor alle voorwerpen van de kaart af,
+  // honderden bomen, huizen en bankjes, en dat was 85% van een speeldag (werklijst, vraag 71). Nu houdt elke kaart een
+  // lijst per tegel bij, die er pas komt als iemand hem vraagt. Het is geen spelstaat maar iets wat uit de kaart volgt,
+  // dus hij staat niet in S en gaat niet mee in het opslaan: een geladen kaart bouwt hem opnieuw.
+  // Een voorwerp zet je erbij met T.zetVoorwerp en haal je weg met T.haalVoorwerpWeg; verandert er een van plaats of
+  // maat, dan zegt T.voorwerpenVeranderd het (test/wereld.test.cjs kijkt dat niemand het anders doet).
+  const PER_TEGEL = new WeakMap();
+  const tegelSleutel = (x, y) => (y + 4096) * 8192 + (x + 4096);
+  function lijstPerTegel(w) {
+    const l = PER_TEGEL.get(w);
+    // Een vangnet voor wie de lijst van de kaart toch zelf vervangt of aanvult: dan komt er een nieuwe.
+    if (l && l.voorwerpen === w.voorwerpen && l.aantal === w.voorwerpen.length) return l.op;
+    const op = new Map();
+    for (const v of w.voorwerpen) {
+      const f = T.voetVan(v);
+      for (let y = f.y1; y <= f.y2; y++) {
+        for (let x = f.x1; x <= f.x2; x++) {
+          const k = tegelSleutel(x, y);
+          if (!op.has(k)) op.set(k, v); // staan er twee op één tegel, dan de eerste, zoals altijd
+        }
+      }
+    }
+    PER_TEGEL.set(w, { voorwerpen: w.voorwerpen, aantal: w.voorwerpen.length, op });
+    return op;
+  }
   T.voorwerpOp = function (w, x, y) {
+    if (Number.isInteger(x) && Number.isInteger(y)) return lijstPerTegel(w).get(tegelSleutel(x, y)) || null;
+    // Tussen twee tegels in (een poppetje onderweg): zoals vroeger, langs alle voorwerpen.
     return w.voorwerpen.find((v) => {
       const f = T.voetVan(v);
       return x >= f.x1 && x <= f.x2 && y >= f.y1 && y <= f.y2;
     }) || null;
   };
+  T.zetVoorwerp = function (w, v) {
+    (w.voorwerpen || (w.voorwerpen = [])).push(v);
+    PER_TEGEL.delete(w);
+    return v;
+  };
+  T.haalVoorwerpWeg = function (w, v) {
+    const i = w.voorwerpen.indexOf(v);
+    if (i >= 0) w.voorwerpen.splice(i, 1);
+    PER_TEGEL.delete(w);
+  };
+  T.voorwerpenVeranderd = (w) => PER_TEGEL.delete(w);
   // Wie binnen is (een boer 's nachts in zijn huis, js/dag.js), staat niemand in de weg.
   T.wezenOp = (w, x, y, behalve) => w.wezens.find((e) => !e.dood && !e.binnen && e !== behalve && e.tx === x && e.ty === y) || null;
 
@@ -292,6 +332,26 @@
   // spelen de kinderen (js/bewoners.js, T.pleinVan).
   T.opHetPlein = function (w, x, y) {
     return !!(w && w.plein && w.plein.length >= 3 && T.binnenRand(w.plein, x + 0.5, y + 0.5));
+  };
+
+  // De tegels van het plein, rij voor rij van boven naar onder, en in een rij van links naar rechts. Eén keer per kaart
+  // uitgerekend, want de rand van het plein verandert niet (werklijst, vraag 71: dit werd elke dag voor elk kind
+  // opnieuw gedaan). Net als de lijst per tegel hierboven volgt het uit de kaart, en staat het niet in S.
+  const PLEIN = new WeakMap();
+  T.pleinTegels = function (w) {
+    if (!w || !w.plein || w.plein.length < 3) return [];
+    const p = PLEIN.get(w);
+    if (p && p.rand === w.plein) return p.tegels;
+    const xs = w.plein.map((q) => q[0]);
+    const ys = w.plein.map((q) => q[1]);
+    const tegels = [];
+    for (let y = Math.floor(Math.min(...ys)); y <= Math.ceil(Math.max(...ys)); y++) {
+      for (let x = Math.floor(Math.min(...xs)); x <= Math.ceil(Math.max(...xs)); x++) {
+        if (T.opHetPlein(w, x, y)) tegels.push({ x, y });
+      }
+    }
+    PLEIN.set(w, { rand: w.plein, tegels });
+    return tegels;
   };
 
   // Loopt hier een pad? Wat de grond zegt (js/kaart.js, `naam` bij de tegel in de .tmj): een zandpad of
