@@ -2259,6 +2259,34 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     ja". Dus: B zoals voorgesteld; de boeren kiezen hun velden en slachten zelf, en jij kunt het veranderen; de mensen
     sprokkelen zelf hout, maar dat is niet genoeg voor de winter, dus een houthakker blijft nodig; en geen camera van
     bovenaf. Stap 1 (B) is het eerste werk, dan stap 2.
+75. **De dag in fasen: het plan** (Claude, 30 sep, negentiende sessie; vraag 74, stap 3, A; Marcel bij vraag 73: "dit
+    moet toch richting de dag verdeling van de pdf. Meerdere fasen op een dag"; wacht op Marcel). Wat er nu is: de dag
+    heeft al delen (`T.dagdeelVan` in `js/dag.js`: nacht, ochtend, werk, schaft, avond), maar alleen voor de mensen van
+    het dorp: zij halen 's ochtends water, werken, schaften en gaan 's avonds naar de herberg. De schout is de hele dag
+    vrij. Een voorval loopt je tussen negen en twee uur achterna, en slapen doe je met `Z`. Voorstel, op die delen:
+    - **'s Ochtends: het rapport van je raadsman.** Bij het opstaan (of als je thuiskomt) staat hij aan je deur met wat
+      er gisteren gebeurde (wie kwam en wie ging, wat de boeren deden), wat er opraakt (de winter, het hout, het eten),
+      welke oorzaak er speelt (stap 1: "Er is honger, want het rantsoen is krap") en wat er vandaag komt (de zitting, een
+      bezoeker). Hoe goed het klopt, zegt zijn rekenen: wie slecht rekent, zit ernaast, en dan loont zelf kijken (stap
+      4). Zonder raadsman geen rapport: dan ga je zelf rond (het concept: "Vroeger moest ik zelf naar de markt").
+      Het is een papier, zoals de brief van de heer: een knop in de balk tot je het las, en de tijd staat stil zolang
+      het open is. Op een dag zonder iets bijzonders is het één regel.
+    - **Overdag: rondgaan.** Zoals nu: kijken, bouwen, praten. Een ramp (brand, wolven) komt je nog steeds halen.
+    - **'s Middags, na het schaften: de zitting.** De rechtszaken (de diefstal, de vechtpartij, de akkergrens, de
+      stroper, de heks, de woeker) lopen je niet meer achterna, maar wachten bij je huis tot je zitting houdt. Ben je er
+      niet, dan wachten ze tot morgen; na twee dagen beslist je raadsman, of het gaat voorbij, zoals nu.
+    - **'s Avonds: de herberg.** Wat er speelt, hoor je daar eerder dan in het rapport: de herbergierster vertelt wie er
+      klaagt, met de oorzaken van stap 1 als gepraat ("Ze zeggen dat het rantsoen krap is"), en de roddelaar wat hij
+      zag, zoals nu.
+    - **'s Nachts** slaap je; het spel slaat 's ochtends op, zoals nu.
+    - De tijd staat alleen stil als iets je nodig heeft: een stille dag gaat op 30× voorbij zoals nu. Zo krijgt de dag
+      een route (thuis, rond, thuis voor de zitting, de herberg), en wordt het dorp groter, dan wordt die route langer:
+      daar is de raadsman voor.
+    Klaar als: het rapport, de zitting en het gepraat in de herberg werken, met toetsen; een voorval dat geen rechtszaak
+    is, gaat zoals nu; met de spelregels op "zoals vóór 30 sep" speelt de speeltest letter voor letter hetzelfde jaar;
+    `npm test` groen. Vragen: **a**, het rapport zo, aan je deur, met zijn rekenen erin, en zonder raadsman geen rapport?
+    **b**, de zitting zo, na het schaften bij je huis, voor de rechtszaken? **c**, de herberg zo, met de oorzaken als
+    gepraat? **d**, in die volgorde: a, dan b, dan c?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
