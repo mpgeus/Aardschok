@@ -285,17 +285,20 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zegt vooraf wat het kost (`T.prijsVanKeuze`, in het venster onder elk antwoord); wat het doet, staat in zijn gevolg:
   de voorraad, `tevreden` (een stemming die wegslijt, `T.voorvalStemming` in de tevredenheid), `argwaan`, `verban`,
   `sterfkans`, `gezin` (`T.gezinKomt` in `js/gebouwen.js`, dezelfde als de groei), het vee (`T.verliesVee`), en
-  `voorval` (een vervolg, later, over dezelfde mensen). Wie je niet sprak, laat het na twee dagen aan de raadsman, en
-  zonder raadsman gaat het voorbij. De spelregel "Voorvallen", de getallen in `T.VOORVALLEN_INSTELLINGEN`.
+  `voorval` (een vervolg, later, over dezelfde mensen). Wie je niet sprak, gaat na twee dagen voorbij; ben je weg (een
+  ander gebied), dan beslist je raadsman (vraag 68, B). De spelregel "Voorvallen", de getallen in
+  `T.VOORVALLEN_INSTELLINGEN`.
 - `js/raadsman.js`: **de raadsman** (vraag 66, 30 sep): een van de boeren (`T.isBoer` in `js/boeren.js`), met twee gelote
   vaardigheden (`T.vaardighedenVan`: uit het zaad en zijn naam, zodat het lot van de boeren niet verandert). Is de schout
-  er niet (niet in het dorp als wie hem zoekt, gaat zoeken, of niet op tijd gesproken), dan beslist hij het voorval
-  (`T.raadsmanBeslist`, vanuit `js/voorvallen.js`): het antwoord dat zijn karakter het meest waard vindt
-  (`T.raadsmanKeuze`, de neigingen in `T.RAADSMAN_INSTELLINGEN.karakters`), met wat hij kan erin (`T.metVaardigheden`).
+  weg (niet in het dorp als wie hem zoekt, gaat zoeken, of als diens tijd om is), dan beslist hij het voorval; wie je in
+  het dorp niet op tijd spreekt, gaat voorbij (vraag 68, B; de spelregel "Raadsman" kan hem ook dan laten beslissen,
+  `nietGesproken`). Hij beslist met `T.raadsmanBeslist` (vanuit `js/voorvallen.js`): het antwoord dat zijn karakter het
+  meest waard vindt (`T.raadsmanKeuze`, de neigingen in `T.RAADSMAN_INSTELLINGEN.karakters`), met wat hij kan erin
+  (`T.metVaardigheden`).
   Wie het is, staat op zijn poppetje (`e.raadsman`), want ook het maaien kijkt ernaar (`T.boerFactor`: hij maait
   trager). Uit wie je kiest: `T.raadsmanKandidaten`; kiezen: `T.kiesRaadsman`, in het venster Raadsman
-  (`js/raadsmanvenster.js`, onder `R` en als knop in de balk; vraag 67, B). Ging er een voorval voorbij zonder dat
-  iemand besliste, dan zegt de raad het (`js/raad.js`, `laatstVoorbij` in `S.voorvallen`).
+  (`js/raadsmanvenster.js`, onder `R` en als knop in de balk; vraag 67, B). Ging er een voorval voorbij dat een
+  raadsman had beslist, dan zegt de raad het (`js/raad.js`, `laatstVoorbij` in `S.voorvallen`).
 - `js/zien.js`: **het zichtveld en de getuigen** (werklijst punt 3, 27 sep): wie buiten is, ziet de
   schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
   verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het
@@ -407,8 +410,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   Nieuw spel een naam die je zelf kiest.
 - **De raadsman** (Marcel, 29 sep, vraag 64): elk dorp heeft er een, met een karakter en gelote eigenschappen, en
   jij kiest hem; hij voert je regels uit waar je niet bent. Sinds 30 sep (vraag 66): een van de boeren, die vanzelf de
-  voorvallen beslist als de schout er niet is (`js/raadsman.js`); je kiest hem wanneer je wilt, met de knop Raadsman
-  (vraag 67, B). En "Het voelt
+  voorvallen beslist als de schout weg is, en alleen dan (vraag 68, B) (`js/raadsman.js`); je kiest hem wanneer je wilt,
+  met de knop Raadsman (vraag 67, B). En "Het voelt
   gewoon nog leeg nu": sinds 29 sep spreekt het dorp je aan, met voorvallen (vraag 65, `js/voorvallen.js`); het dorp
   van bovenaf bleef open.
 - **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én

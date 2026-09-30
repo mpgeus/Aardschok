@@ -20,15 +20,15 @@ Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, e
 naam van je dorp en de benoemingsbrief van de heer; `W` zijn de wetten, `Z` is slapen bij je huis, `Esc` het menu, en
 het spel slaat elke ochtend zelf op; onder het doel linksboven staat de raad. In een dorp vraagt de heer op 1 hooimaand
 mannen voor zijn oorlog (`Spel.debug.heervaart('vraag')`). Om de paar dagen komt iemand je zoeken met een voorval: een
-uitroepteken boven zijn hoofd, en hij spreekt je aan als je stilstaat (`Spel.debug.voorval('brand')`); ben je er
-niet, dan beslist je raadsman, die je kiest met de knop Raadsman (`R`). De pagina "Stand van het gehucht" (25 sep)
-loopt achter op de dag. `npm test`: 661/661.
+uitroepteken boven zijn hoofd, en hij spreekt je aan als je stilstaat (`Spel.debug.voorval('brand')`); ben je weg,
+dan beslist je raadsman, die je kiest met de knop Raadsman (`R`). De pagina "Stand van het gehucht" (25 sep) loopt
+achter op de dag. `npm test`: 662/662.
 
-**Waar het werk staat:** alles staat in `main`, ook stap 5 (Marcel, 29 sep: "alles op main"; ook op
-`ccr-0e928644-rvlci5`). Het werk van de zeventiende sessie (vraag 60 en 61) staat op `ccr-ef2496ce-pa4iti`, en gaat
-naar `main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook het werk van de zeventiende sessie (vraag 60 tot en met 68; Marcel,
+30 sep: "alles push en main"; ook op `ccr-ef2496ce-pa4iti`). Hoe een eigen branch en `main` samengaan, staat in
+`CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** de voorvallen en de raadsman zijn gebouwd (vraag 65, 66 en 67; zie onder Af). Marcel
+**Waar de volgende sessie begint:** de voorvallen en de raadsman zijn gebouwd (vraag 65 tot en met 68; zie onder Af). Marcel
 koos eerst één dorp vol leven, dan het land (vraag 65, D). Begin met Marcel te vragen of het dorp nu vol genoeg voelt:
 speel het een kwartier, of laat de speeltest zeggen wat een jaar vraagt. Is het genoeg, dan is de volgende stap het
 land met provincies (vraag 63): 1a van het land, de kaart van het land en reizen, het buurdorp in een eigen provincie,
@@ -70,8 +70,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* of het dorp nu vol genoeg voelt om aan het land te beginnen (vraag 65, D); of wegsturen telt als
-er niet zijn (vraag 68: A, B of C, in het verslag van de zeventiende sessie hieronder); het dorp van bovenaf
+*2. Wacht op Marcel:* of het dorp nu vol genoeg voelt om aan het land te beginnen (vraag 65, D); het dorp van bovenaf
 (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -146,8 +145,9 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   B (voorstel), zoals Marcel het zei ("als de schout er niet is"): de raadsman beslist alleen als je echt weg bent (een
   ander gebied, straks op reis); wie in het dorp is en wegstuurt, laat het voorbijgaan, met de prijs die dat nu al
   heeft (tevredenheid −2%). C, wegsturen mag, maar kost iets (wie je wegstuurde, onthoudt het), en de raadsman beslist.
-  Wat Marcel niet kiest, kan een spelregel worden. Niets gebouwd. En: het getal in de balk zakte in de tweede winter
-  naar 0, terwijl er elf mensen bleven rondlopen (`opmerkingen.md`, bij vraag 59).
+  Wat Marcel niet kiest, kan een spelregel worden. En: het getal in de balk zakte in de tweede winter naar 0, terwijl
+  er elf mensen bleven rondlopen (`opmerkingen.md`, bij vraag 59). **Marcel koos B** ("Ja B inderdaad. Dan alles push
+  en main"); gebouwd, met A als spelregel (zie onder Af), en alles staat in `main`.
 - **Marcel vroeg hoe het leuk blijft** ("zelf als persoon rond hobbelen in je eigen stad maakt het wel lastig.
   Misschien voelt het handiger als we een soort raadsman en aansturen die je regels oplegt?"). Nagekeken: de camera
   volgt altijd de schout en je ziet maar een klein stuk van je dorp, dus bouwen gaat alleen waar hij staat. Het
@@ -2237,6 +2237,18 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 30 sep 2026 — **De raadsman beslist alleen als je weg bent** (zeventiende sessie; vraag 68, Marcel: "Ja B inderdaad").
+  In de speeltest liet de bouwer met `Esc` elk voorval aan zijn raadsman, en had hij geen voorvallen meer. Nu beslist
+  de raadsman alleen als de schout niet in het dorp is (een ander gebied, straks op reis); wie je in het dorp niet op
+  tijd spreekt, gaat voorbij, ook met een raadsman, en de balk zegt dan "een schout die geen tijd had" (weg: "een
+  schout die er niet was"). De raad zegt "kies een raadsman" alleen nog als een raadsman had beslist ("Wat je mist als
+  je weg bent, gaat voorbij: kies een raadsman [R]"), en het venster Raadsman zegt wanneer hij beslist. De spelregel
+  "Raadsman" heeft drie keuzes: "Als je weg bent" (de standaard), "Ook als je niet spreekt" (A, zoals het was:
+  `nietGesproken` in `T.RAADSMAN_INSTELLINGEN`) en uit. De bouwer in de speeltest kiest nog een raadsman, maar
+  beantwoordt de voorvallen weer zelf. Getoetst: een toets erbij in `test/raadsman.test.cjs`, en de toetsen die "niet
+  op tijd gesproken" als weg telden, spelen nu met de schout weg; `npm test` 662/662; in de browser de spelregel met
+  drie keuzes, het venster zonder en met raadsman, en een voorval in het dorp dat voorbijgaat zonder dat de raadsman
+  beslist, zonder fouten in de console.
 - 30 sep 2026 — **De raadsman** (zeventiende sessie; vraag 66, Marcel: "A Ja, b Nee, c Nee, wordt automatisch als de
   schout er niet is. D prima"). `js/raadsman.js`: een van de boeren wordt raadsman, met zijn karakter en aanzien en twee
   gelote vaardigheden uit vijf (rechtspreken, zwijgen, rekenen, bouwen, vechten; goed of slecht, vast per spel, zonder
