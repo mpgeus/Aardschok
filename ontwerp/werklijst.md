@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (30 sep 2026, negentiende sessie): stuk 2 van het land is af (de snellere dag, één dorp als één ding, elk dorp leeft); het plan voor het buurdorp wacht op Marcel (vraag 72)
+## De stand (30 sep 2026, negentiende sessie): stuk 2 van het land is af (de snellere dag, één dorp als één ding, elk dorp leeft); het concept van Marcel (vraag 73) en het plan voor het buurdorp (vraag 72) wachten op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -36,8 +36,11 @@ vervallen"; zie onder Af): een speeldag kost 0,5 ms in plaats van 30 tot 39, all
 (`S.dorpen`, je eigen dorp `S.dorp`, `js/dorp.js`), en elk dorp leeft, ook als je er niet bent, met poppetjes die lopen,
 maaien en dwalen, alleen niet getekend; een ander dorp spreekt niet tegen jou (`T.zeg`). In het spel is er nog één dorp:
 de speeltest speelt letter voor letter hetzelfde jaar als ervoor, en duurt nu zo'n zeven minuten in plaats van een uur.
-`test/dorpen.test.cjs` zet jouw gehucht en een van de maker naast elkaar. Het volgende is **stuk 3, het buurdorp**: het
-plan is vraag 72, en wacht op Marcel (A tot en met E). Begin daar niet zonder zijn antwoord. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
+`test/dorpen.test.cjs` zet jouw gehucht en een van de maker naast elkaar. **Daarna bracht Marcel een concept mee** ("De
+Schout", `concept.md`: het poppetje is de manier waarop je bestuurt; "Ik denk dat we hiermee een goede kant opgaan"). Het
+voorstel is vraag 73: eerst de kern door de toets van één uur, met drie kleine stappen, en dan het buurdorp. Wat het
+volgende is, hangt af van zijn antwoord: **stuk 3, het buurdorp** (vraag 72, A tot en met E), of eerst vraag 73. Begin
+aan geen van beide zonder zijn antwoord. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
 raadsman komen met het land (vraag 66, D). Open blijven: het dorp van bovenaf
 (vraag 65, C; Marcel: "nee niet bovenaf, ik denk hier nog over na"), en de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
 dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
@@ -76,7 +79,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor het buurdorp (vraag 72: A tot en met E); het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* zijn concept, en wat eerst komt (vraag 73: 1 tot en met 4); het plan voor het buurdorp (vraag 72: A tot en met E); het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2175,6 +2178,27 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     eigen namen? **B**, zijn schout een poppetje dat nog niets beslist? **C**, erheen zoals naar elke provincie? **D**, 0
     of 1 tegenspeler bij Nieuw spel, met 0 als standaard tot stap 1b? **E**, dezelfde heer en inner, voorlopig op
     dezelfde dag?
+73. **Het concept: de schout als de manier waarop je bestuurt** (Marcel, 30 sep, negentiende sessie: een concept van 15
+    bladzijden, "De Schout: Game Concept & Mini GDD", met "Ik denk dat we hiermee een goede kant opgaan"; wacht op
+    Marcel). Wat erin staat en hoe het naast ons spel ligt: `concept.md`. Kort: zijn regel is dat wat in een
+    managementspel één klik is, hier via een persoon, een plek, een papier of een handeling in de wereld gaat, en zijn
+    toets is of je na een uur denkt "ik moet even gaan kijken wat daar aan de hand is". Veel ervan is er al (het
+    poppetje, de voorvallen, de raadsman, de herberg, de proef als eerste versie), maar de toets haalt het spel nu niet:
+    alles komt naar je toe, de balk zegt elk getal precies, en bouwen en de wetten gaan van overal. Alleen de inner
+    haalt hem (wat hij ziet, hangt af van waar hij staat). Het schuurt met het land: het concept zegt klein en diep,
+    zonder grote wereld of diplomatie, in de eerste versie.
+    Voorstel (Claude): eerst de kern door de toets van één uur, met drie kleine stappen, en dan het buurdorp (vraag 72):
+    - **A, het ochtendrapport:** de raadsman meldt 's ochtends wat er gisteren gebeurde en wat er opraakt; hoe beter hij
+      rekent, hoe beter het rapport. Uit handen geven wordt groeien, en het is een weg uit de balk die volloopt.
+    - **B, voorvallen met een oorzaak:** diefstal bij honger, koorts in een vol dorp, brand bij huizen dicht op elkaar,
+      in plaats van vooral uit de lucht; het bericht zegt waarom.
+    - **C, zelf gaan kijken:** bij rechtspraak het antwoord "Ik kom kijken": je loopt erheen, hoort of ziet meer, en
+      beslist met meer kennis.
+    - Later, als optie: wat je weet, is wat je zag (de voorraad in de balk is wat er het laatst geteld is).
+    Vragen: **1**, is dit ons kompas (zijn regel en zijn acht principes), naast wat wij al hebben (de heer, de inner, de
+    satire, de seizoenen)? **2**, eerst de kern door de toets, en dan het buurdorp? **3**, welke van A, B en C (voorstel:
+    B, dan A, dan C)? **4**, is dit ook het antwoord op het dorp van bovenaf (vraag 65, C): niet bovenaf, want het
+    poppetje is hoe je bestuurt?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

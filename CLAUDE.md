@@ -35,6 +35,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - **`ontwerp/spel.md`: het spel.** De schout, de heer en de inner, keuren en politiek, avontuur,
   en wat nog open is. Bovenaan staat per onderwerp de stand, en elk onderwerp begint met **Zo werkt
   het nu**; wie iets bouwt of verandert, werkt dat blok bij (Marcel, 25 sep).
+- `ontwerp/concept.md`: het concept dat Marcel op 30 sep meebracht ("De Schout": het poppetje is de manier
+  waarop je bestuurt), en hoe het naast ons spel ligt; wat ervan besloten wordt, is vraag 73.
 - `ontwerp/speelbaar.md`: wat er nog ontbreekt voor een eerste speelbaar product (vraag 33), en wat er
   in een speeltest van een heel jaar gebeurde.
 - `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
