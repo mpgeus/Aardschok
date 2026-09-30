@@ -895,7 +895,7 @@
     // in een gesprek of een ander venster), en tot dan blijft de vraag staan.
     const s = IN().slachten;
     if (d.maand === maandIdx(s.maand) && d.dagVanMaand === s.dag) V.slachtVraag = true;
-    if (V.slachtVraag && T.ui && T.ui.openSlachten && (!D.modus || D.modus === 'verkennen')) T.ui.openSlachten(D);
+    if (V.slachtVraag && T.ui && T.ui.openSlachten) T.ui.openSlachten(D);
     if (IN().winterzorg && winterTijd(dag)) T.voerHooi(D, dag);
     else V.hooiGewaarschuwd = V.hongerGemeld = false; // een nieuwe winter mag weer waarschuwen
     // De schapen: scheren in zomermaand, en elke dag de mest uit de kooi.

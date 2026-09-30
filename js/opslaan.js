@@ -25,7 +25,9 @@
     // omhoog: het menu zegt dan dat een ouder spel niet meer te laden is, in plaats van een spel dat
     // halverwege stukloopt. Een veld erbij is geen reden, want dat krijgt bij het laden de waarde van een
     // nieuw spel (T.herstelSpel). Wel: een veld dat anders gaat heten, of iets anders gaat betekenen.
-    versie: 1,
+    // 2 (30 sep): alles van een dorp staat bij elkaar in S.dorpen (js/dorp.js; werklijst, vraag 71). Een spel van
+    // daarvoor mocht vervallen (Marcel: "oud spel mag vervallen").
+    versie: 2,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
   };
   const IN = () => T.OPSLAAN_INSTELLINGEN;
@@ -193,11 +195,11 @@
     const dag = S.kalender.dag;
     return {
       plek,
-      naam: T.dorpsnaam(S),
+      naam: T.dorpsnaam(S.dorp),
       dag,
       datum: T.datumVanDag(dag).tekst,
       dagdeel: T.dagdeelVan(dag),
-      bevolking: S.bevolking || 0,
+      bevolking: S.dorp.bevolking || 0,
       bewaardOm: nu,
     };
   }
@@ -275,7 +277,7 @@
     if (!S || !S.kalender || !S.wereld) return 'Er is nog geen spel.';
     // Een proefje (?kaart=, js/main.js) is geen spel: het mag het spel van de speler niet overschrijven.
     if (S.proefje) return 'Een proefje wordt niet opgeslagen.';
-    if (S.einde || S.modus === 'einde') return 'Het spel is uit.';
+    if (S.dorp.einde || S.modus === 'einde') return 'Het spel is uit.';
     if (S.gevecht || S.overgang || S.modus === 'gevecht' || S.modus === 'overgang') return 'In een gevecht kan dat niet.';
     if (S.modus !== 'verkennen' || (S.kalender.stil || []).some((r) => r !== 'menu')) return 'Sluit eerst het venster.';
     if ((S.wachters && S.wachters.length) || S.naarGebied) return 'Wacht even: er beweegt nog iets.';

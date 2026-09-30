@@ -297,54 +297,54 @@
 
   // Elk beeld (js/main.js, werkBij): de aanval loopt, van komen tot weggaan. In een gevecht staat hij stil: dan
   // beweegt het gevecht in beurten iedereen (js/gevecht.js).
-  T.werkRoversBij = function (S) {
-    const A = S.rovers && S.rovers.aanval;
-    if (!A || !heeftRovers(S)) return;
+  T.werkRoversBij = function (S, D) {
+    const A = D.rovers && D.rovers.aanval;
+    if (!A || !heeftRovers(D)) return;
     if (S.modus === 'gevecht' || S.modus === 'overgang' || S.modus === 'dood') return;
-    const w = S.wereld;
+    const w = D.wereld;
     if (A.fase === 'wacht') {
       if (S.modus !== 'verkennen') return;
-      if (!A.meteen && T.uurVanDag(S.kalender.dag) < IN().uur) return;
-      begin(S, A);
+      if (!A.meteen && T.uurVanDag(D.kalender.dag) < IN().uur) return;
+      begin(D, A);
       return;
     }
     // De militie loopt met de schout mee (zoals de inner, js/inner.js).
-    for (const e of opgeroepen(S)) if (!e.onderweg) T.loopNaastDeSchout(S, e);
+    for (const e of opgeroepen(D)) if (!e.onderweg) T.loopNaastDeSchout(D, e);
     const levend = A.rovers.filter((e) => !e.dood && w.wezens.includes(e));
     if (!levend.length) {
-      eind(S);
+      eind(D);
       return;
     }
     const veld = w.akkers[A.veld];
     if (A.fase === 'komen') {
-      for (const e of levend) if (!e.pad.length && !e.onderweg && !opVeld(veld, e)) stuur(S, e, { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) });
+      for (const e of levend) if (!e.pad.length && !e.onderweg && !opVeld(veld, e)) stuur(D, e, { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) });
       if (levend.some((e) => opVeld(veld, e))) {
         A.fase = 'roven';
-        A.roofTot = uurNu(S) + IN().roofUren;
-      } else if (uurNu(S) >= A.sinds + IN().opUren) {
+        A.roofTot = uurNu(D) + IN().roofUren;
+      } else if (uurNu(D) >= A.sinds + IN().opUren) {
         // Ze halen de akker niet: dan gaan ze met lege handen terug.
         A.fase = 'weg';
-        A.sinds = uurNu(S);
+        A.sinds = uurNu(D);
         for (const e of levend) e.pad = [];
       }
       return;
     }
     if (A.fase === 'roven') {
-      if (uurNu(S) < A.roofTot) return;
-      roof(S, A, levend);
+      if (uurNu(D) < A.roofTot) return;
+      roof(D, A, levend);
       A.fase = 'weg';
-      A.sinds = uurNu(S);
+      A.sinds = uurNu(D);
       for (const e of levend) e.pad = [];
       return;
     }
     // Weg: naar waar ze kwamen, en daar zijn ze de kaart af. Halen ze het niet op tijd, dan zijn ze toch weg.
-    const opgegeven = uurNu(S) >= A.sinds + IN().opUren;
+    const opgegeven = uurNu(D) >= A.sinds + IN().opUren;
     for (const e of levend) {
       if (e.onderweg && !opgegeven) continue;
       if (opgegeven || (e.tx === A.ingang.x && e.ty === A.ingang.y)) w.wezens.splice(w.wezens.indexOf(e), 1);
-      else if (!e.pad.length) stuur(S, e, A.ingang);
+      else if (!e.pad.length) stuur(D, e, A.ingang);
     }
-    if (!A.rovers.some((e) => !e.dood && w.wezens.includes(e))) eind(S);
+    if (!A.rovers.some((e) => !e.dood && w.wezens.includes(e))) eind(D);
   };
 
   // Na een gevecht (T.eindeGevecht, js/gevecht.js): zijn alle rovers van de aanval verslagen, dan is hij voorbij.

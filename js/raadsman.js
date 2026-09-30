@@ -211,7 +211,7 @@
     const prijs = T.prijsVanKeuze(D, keuze.doe).tekst;
     const zeg = T.vulWoordenIn(D, keuze.zeg);
     L.door = p;
-    T.doeGevolg(D, keuze.doe);
+    T.doeGevolg(null, D, keuze.doe); // de raadsman beslist zonder jou: niets uit je tas
     if (!D.raadsman) D.raadsman = T.nieuweRaadsman();
     D.raadsman.besluiten.push({ dag: dagNu(D), id: L.id, door: naam(p), wie: naam(L.wie), antwoord: zeg, prijs });
     if (D.raadsman.besluiten.length > 20) D.raadsman.besluiten.shift();

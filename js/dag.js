@@ -236,10 +236,10 @@
 
   // Slapen kan 's avonds en 's nachts, bij je eigen huis, als je gewoon rondloopt.
   T.magSlapen = function (S) {
-    if (!S || !S.kalender || S.slaap || S.einde || S.modus !== 'verkennen') return false;
+    if (!S || !S.kalender || S.slaap || (S.dorp && S.dorp.einde) || S.modus !== 'verkennen') return false;
     const deel = T.dagdeelVan(S.kalender.dag);
     if (deel !== 'nacht' && deel !== 'avond') return false;
-    return afstandTotHuis(S) <= IN().slaapAfstand;
+    return afstandTotHuis(S.dorp) <= IN().slaapAfstand;
   };
 
   // De schout gaat naar binnen, en de nacht gaat snel voorbij (T.SLAAP_SNELHEID) tot het opstaan.

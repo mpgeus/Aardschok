@@ -79,13 +79,13 @@ test('T.deurVan neemt de deur van de tekening, en anders het midden van de zuidk
 // spel"): de huizen van het gehucht komen van de huizenbouwer, elk met zijn eigen deur, en niet allemaal
 // dezelfde kant op. Voor elke deur moet je kunnen staan: daar gaan de bewoners heen (T.deurVan).
 test('de huizen van het gehucht komen van de huizenbouwer, en voor elke deur kun je staan', () => {
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   const waarschuw = console.warn;
   console.warn = () => {};
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   console.warn = waarschuw;
   const w = S.wereld;
-  const huizen = S.gebouwen.filter((g) => g.tekening && g.tekening.startsWith('huizen/'));
+  const huizen = S.dorp.gebouwen.filter((g) => g.tekening && g.tekening.startsWith('huizen/'));
   assert.equal(huizen.length, 10, 'vijf boerderijen, de schout, een huis, twee hutten en de herberg');
   const kanten = new Set();
   for (const g of huizen) {

@@ -52,7 +52,9 @@
     const w = S.wereld;
     const schout = S.schout;
     const monsters = T.deelnemers(w, schout, S.overgang.aanleiding);
-    const militie = T.militieInGevecht(S);
+    // De militie van het dorp waar gevochten wordt (js/rovers.js, js/dorp.js); buiten een dorp is er geen.
+    const D = T.dorpHier(S);
+    const militie = D ? T.militieInGevecht(D) : [];
     S.overgang = null;
     const kamers = new Set();
     for (const e of [schout, ...militie, ...monsters]) {
@@ -202,7 +204,8 @@
       if (m.kant === 'monster' && !m.dood) m.dwaalTijd = 2.5;
     }
     // Waren het rovers, dan zegt js/rovers.js wat er van hun aanval overblijft.
-    T.naGevecht(S, reden);
+    const D = T.dorpHier(S);
+    if (D) T.naGevecht(D, reden);
   };
 
   // Waar wie aan de beurt is heen kan met zijn punten.
@@ -350,7 +353,8 @@
     else if (doel === S.schout) T.schoutGevallen(S);
     else if (doel.kant === 'speler') {
       sterf(S, doel, false); // het bericht zegt wie hij was (T.sneuvelt)
-      T.sneuvelt(S, doel);
+      const D = T.dorpHier(S);
+      if (D) T.sneuvelt(D, doel);
     } else sterf(S, doel);
   }
   // De ene plek waar een klap landt, ook voor de toetsen (test/regels.test.cjs).
@@ -363,7 +367,8 @@
     e.sterfTijd = 0;
     e.pad = [];
     if (bericht !== false) T.ui.bericht(`De ${e.naam} is verslagen.`, 'goed');
-    if (e.rover) T.roverVerslagen(S, e);
+    const D = T.dorpHier(S);
+    if (e.rover && D) T.roverVerslagen(D, e);
     const g = S.gevecht;
     if (!g) return;
     const i = g.volgorde.indexOf(e);

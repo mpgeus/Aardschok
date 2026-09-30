@@ -40,7 +40,7 @@
       vorigeAp = '';
       this.toonSluipen(false);
       this.toonInventaris(S);
-      this.toonGoud(S);
+      this.toonGoud();
       this.toonGevecht(false);
       this.zetKnoppen(false);
       this.sluitDialoog();
@@ -83,11 +83,12 @@
 
     // Goud, naast sluipen. Het vakje komt pas als je ooit goud had: een leeg vakje dat nul
     // zegt is alleen maar ruis.
-    toonGoud(S) {
+    toonGoud() {
+      const S = T.S;
       const el = $('goud');
-      if (!el) return;
-      el.classList.toggle('verborgen', !S.goudGehad);
-      $('goud-aantal').textContent = S.goud || 0;
+      if (!el || !S.dorp) return;
+      el.classList.toggle('verborgen', !S.dorp.goudGehad);
+      $('goud-aantal').textContent = S.dorp.goud || 0;
     },
 
     // De gevechtsbalken schuiven in en uit beeld via één klasse op body, zodat de overgang

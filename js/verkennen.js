@@ -85,9 +85,9 @@
 
   // De regel bij de muis op de heide (js/vee.js, de meent): "De heide, de meent van het dorp · 8
   // schapen · de kooi bergt er 20". Het veldenvenster (js/hud.js) zegt het ook.
-  T.meentTekst = function (S, meent) {
-    const schapen = T.dierenOp(S, meent);
-    const plaats = T.kooiPlaats ? T.kooiPlaats(S) : 0;
+  T.meentTekst = function (D, meent) {
+    const schapen = T.dierenOp(D, meent);
+    const plaats = T.kooiPlaats ? T.kooiPlaats(D) : 0;
     const kooien = plaats && T.VEE_INSTELLINGEN ? Math.round(plaats / T.VEE_INSTELLINGEN.kooiPlaats) : 0;
     return [
       `De ${meent.naam}, de meent van het dorp`,
@@ -101,11 +101,11 @@
 
   // Is deze weide samen met velden ernaast één weide (js/vee.js, T.weideGroepen)? Dan
   // "samen één weide met het veld van Gerrit"; anders ''.
-  T.samenMetTekst = function (S, veld) {
-    const groep = T.weideVan ? T.weideVan(S.wereld, veld) : null;
+  T.samenMetTekst = function (D, veld) {
+    const groep = T.weideVan ? T.weideVan(D.wereld, veld) : null;
     if (!groep || groep.velden.length < 2) return '';
     const anderen = groep.velden.filter((v) => v !== veld);
-    const namen = [...new Set(anderen.map((v) => T.boerVanVeld(S, v)).filter(Boolean).map((b) => b.naam))];
+    const namen = [...new Set(anderen.map((v) => T.boerVanVeld(D, v)).filter(Boolean).map((b) => b.naam))];
     const welke = anderen.length === 1 ? 'het veld' : `${anderen.length} velden`;
     return `samen één weide met ${welke}${namen.length ? ` van ${T.opsomming(namen)}` : ''}`;
   };
@@ -113,14 +113,14 @@
   // De regel bij de muis: "Weide van Klaas · 3 koeien, 9 schapen · vruchtbaar 90%". Staat er meer
   // vee op dan er plaats is, dan zegt hij dat; is de weide samen met een veld ernaast één weide, dan
   // ook dat; en wordt het veld volgend jaar iets anders, of krijgt het mest, dan ook wat en wanneer.
-  T.veldTekst = function (S, veld) {
+  T.veldTekst = function (D, veld) {
     const bestemming = T.bestemmingVan(veld);
-    const boer = T.boerVanVeld(S, veld);
+    const boer = T.boerVanVeld(D, veld);
     const delen = [T.hoofdletter(bestemming) + (boer ? ` van ${boer.naam}` : '')];
-    const samen = bestemming === 'weide' ? T.samenMetTekst(S, veld) : '';
+    const samen = bestemming === 'weide' ? T.samenMetTekst(D, veld) : '';
     if (samen) delen.push(samen);
-    const dieren = T.dierenOp ? T.dierenOp(S, veld) : [];
-    if (dieren.length) delen.push(T.kuddeTekst(dieren) + (T.weideStand(S, veld).vrij < 0 ? ' (te vol)' : ''));
+    const dieren = T.dierenOp ? T.dierenOp(D, veld) : [];
+    if (dieren.length) delen.push(T.kuddeTekst(dieren) + (T.weideStand(D, veld).vrij < 0 ? ' (te vol)' : ''));
     else if (bestemming === 'weide') delen.push('nog geen vee');
     delen.push(`vruchtbaar ${Math.round(T.vruchtbaarheidVan(veld) * 100)}%`);
     const plan = T.planVan(veld);
@@ -134,6 +134,8 @@
   T.handelingVerkennen = function (S, doel) {
     if (!doel) return null;
     const w = S.wereld;
+    const D = T.dorpHier(S); // het dorp dat hier ligt (js/dorp.js), of geen
+
     if (doel.wezen) {
       const e = doel.wezen;
       if (e.kant === 'monster') return { tekst: `De ${e.naam} aanvallen`, doe: () => T.startGevecht(S, e, true) };
@@ -141,10 +143,10 @@
       if (e.dier) return { tekst: T.hoofdletter(`een ${e.naam}`) };
       // Wie je zoekt met een voorval (js/voorvallen.js), daar praat je over het voorval, ook als hij een eigen
       // gesprek heeft.
-      const voorval = T.voorvalVan(S, e);
+      const voorval = D && T.voorvalVan(D, e);
       if (voorval) return { tekst: `Praten met ${T.naamVanBewoner(voorval.wie)} (zoekt je)`, doe: () => loopNaast(S, e, () => T.openDialoog(S, e, voorval.id)) };
       // Een bewoner (js/bewoners.js) heeft nog geen gesprek: bij de muis staat wie hij is.
-      if (e.bewoner && T.overBewonerTekst) return { tekst: T.overBewonerTekst(S, e) };
+      if (e.bewoner && D && T.overBewonerTekst) return { tekst: T.overBewonerTekst(D, e) };
       // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: een boer, de heer. Welk
       // gesprek dat is, zegt T.gesprekIdVan — een dorpeling kan er een eigen hebben.
       if (T.gesprekVan(e)) {
@@ -164,19 +166,19 @@
     // Een gebouw dat de speler neerzette (js/gebouwen.js): de muis op zijn voet zegt hoe het ermee
     // staat — in aanbouw, aan het werk, of stil en waarom (spel.md, "Handel": een smidse zonder
     // ijzer staat stil, en zegt dat).
-    const gebouw = T.gebouwOp && T.gebouwOp(S, doel.x, doel.y);
+    const gebouw = D && T.gebouwOp && T.gebouwOp(D, doel.x, doel.y);
     if (gebouw) {
       // Een huis, een boerderij of de kapel: daar verstop je graan en goud (js/verstoppen.js). Je
       // loopt erheen, en dan gaat het venster open (js/hud.js). Kan het nu niet (de vrome weigert,
       // de inner is in het dorp), dan zegt de klik waarom.
-      const plek = T.verstopPlekVan && T.verstopPlekVan(S, gebouw);
+      const plek = T.verstopPlekVan && T.verstopPlekVan(D, gebouw);
       if (plek && T.ui.openVerstoppen) {
-        const h = T.verstopHandeling(S, plek);
-        const rand = h.kan && T.randVanGebouw(S, gebouw);
+        const h = T.verstopHandeling(D, plek);
+        const rand = h.kan && T.randVanGebouw(D, gebouw);
         if (rand) return { tekst: h.tekst, doe: () => loopNaast(S, rand, () => T.ui.openVerstoppen(S, gebouw)) };
         return { tekst: h.tekst, doe: () => T.ui.bericht(h.reden || 'Daar kun je niet bij.') };
       }
-      const tekst = T.gebouwToestand(S, gebouw);
+      const tekst = T.gebouwToestand(D, gebouw);
       return { tekst, doe: () => T.ui.bericht(tekst) };
     }
     const d = T.deurOp(w, doel.x, doel.y);
@@ -198,10 +200,10 @@
     // lopen, want de velden zijn groot en je moet eroverheen kunnen. Wat het volgend jaar wordt,
     // kies je in het veldenvenster (js/hud.js, V).
     const veld = T.veldOp(w, doel.x, doel.y);
-    if (veld) return { tekst: T.veldTekst(S, veld), doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
+    if (veld && D) return { tekst: T.veldTekst(D, veld), doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
     // De heide, de meent (js/vee.js): wie er graast, en hoeveel de kooi bergt.
     const meent = T.meentOp && T.meentOp(w, doel.x, doel.y);
-    if (meent) return { tekst: T.meentTekst(S, meent), doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
+    if (meent && D) return { tekst: T.meentTekst(D, meent), doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
     return { tekst: null, doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
   };
 
@@ -306,6 +308,7 @@
   // net zijn doel bereikt en zwaait daar de zeis, dat is geen moment om weg te dwalen.
   T.laatDwalen = function (S, dt) {
     const w = S.wereld;
+    const D = T.dorpHier(S); // het dorp dat hier ligt (js/dorp.js): zijn bewoners hebben een ritme
     // Eén keer per beurt de datum omrekenen, niet per wezen: T.wandelAnker heeft alleen het
     // stadium nodig (kiemend/groen/rijp), niet de datum zelf.
     const datum = T.datumVanDag && S.kalender ? T.datumVanDag(S.kalender.dag) : null;
@@ -327,7 +330,7 @@
       // kwam, en waar zijn deur is, onthoudt hij voor het scherm: js/tekenen.js laat hem de deur in
       // stappen en vervagen, of eruit komen, in plaats van in één klap te verdwijnen (Marcel, 26 sep:
       // "Zodra mensen bij de deur komen 'verdwijnen' ze naar binnen").
-      const dagAnker = T.dagAnker(S, m, oogst);
+      const dagAnker = T.dagAnker(D, m, oogst);
       const deurBezet = !!(dagAnker && dagAnker.binnen && T.wezenOp(w, dagAnker.x, dagAnker.y, m));
       const naastDeur = deurBezet ? 1 : 0;
       if (m.binnen) {

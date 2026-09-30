@@ -7,7 +7,7 @@ const assert = require('node:assert/strict');
 const T = require('./laad.cjs').spel();
 
 function begin() {
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   return S;
 }
@@ -33,8 +33,8 @@ test('de schout draagt het vel van een dorpeling, en hij kan lopen', () => {
 
 test('de gebouwen die er al staan, tellen mee, met hun voet', () => {
   const S = begin();
-  assert.ok(S.gebouwen.length > 0);
-  for (const g of S.gebouwen) assert.ok(g.voet && g.voet.b >= 1 && g.voet.h >= 1, g.soort);
+  assert.ok(S.dorp.gebouwen.length > 0);
+  for (const g of S.dorp.gebouwen) assert.ok(g.voet && g.voet.b >= 1 && g.voet.h >= 1, g.soort);
 });
 
 // De vierde versie van het gehucht (26 sep, vraag 29 tot en met 31; gereedschap/tiled/maak-gehucht.cjs):
@@ -50,11 +50,11 @@ test('het plein is het open hart, en de akkers, de weide en de heide zijn even g
     for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.b; x++) if (T.opHetPlein(w, x, y)) return true;
     return false;
   };
-  for (const g of S.gebouwen) assert.ok(!opPlein({ x: g.x, y: g.y, b: g.voet.b, h: g.voet.h }), `${g.soort} ${g.huis || ''} staat niet op het plein`);
+  for (const g of S.dorp.gebouwen) assert.ok(!opPlein({ x: g.x, y: g.y, b: g.voet.b, h: g.voet.h }), `${g.soort} ${g.huis || ''} staat niet op het plein`);
   for (const a of w.akkers) assert.ok(!opPlein(a), `${a.naam} ligt niet op het plein`);
   assert.equal(w.akkers.reduce((n, a) => n + a.b * a.h, 0), 209, 'de akkers en de weide samen');
   assert.equal(w.meenten.reduce((n, m) => n + m.b * m.h, 0), 23 * 8, 'de heide');
   assert.ok(T.opHetPlein(w, w.marskramer.x, w.marskramer.y), 'de marskramer en de heer staan op het plein');
-  assert.equal(S.bevolking, 26, 'dezelfde 25 mensen en de herbergierster (27 sep), ook al is er plaats voor meer');
-  assert.ok(S.woonruimte > S.bevolking);
+  assert.equal(S.dorp.bevolking, 26, 'dezelfde 25 mensen en de herbergierster (27 sep), ook al is er plaats voor meer');
+  assert.ok(S.dorp.woonruimte > S.dorp.bevolking);
 });

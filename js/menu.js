@@ -185,16 +185,16 @@
       T.houdTijdStil(S, 'titel');
       S.camera = T.titelCamera();
     }
-    naamVoorstel = T.voorgesteldeDorpsnaam(S.lot && S.lot.zaad);
+    naamVoorstel = T.voorgesteldeDorpsnaam(S.dorp.lot && S.dorp.lot.zaad);
     toon(S);
   }
 
   // Begin: de naam die er staat (leeg is het voorstel), en dan de brief van de heer.
   function begin(S) {
     const veld = $('dorpsnaam');
-    T.zetDorpsnaam(S, (veld && veld.value.trim()) || naamVoorstel);
+    T.zetDorpsnaam(S.dorp, (veld && veld.value.trim()) || naamVoorstel);
     sluit(S);
-    T.ui.toonBrief(S, 'benoeming'); // een nieuw spel begint met de brief van de heer (js/brieven.js)
+    T.ui.toonBrief(S.dorp, 'benoeming'); // een nieuw spel begint met de brief van de heer (js/brieven.js)
   }
 
   function laad(S, plek) {

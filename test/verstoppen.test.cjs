@@ -28,21 +28,19 @@ function gehucht() {
   const echtLot = T.lootBoeren;
   T.lootBoeren = (S2) => echtLot(S2, 1234);
   try {
-    const S = {
-      voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0,
-      kalender: { dag: 10, snelheid: 1 }, inventaris: new Set(), modus: 'verkennen',
-    };
+    const S = { kalender: { dag: 10, snelheid: 1 }, inventaris: new Set(), modus: 'verkennen' }; // het spel; zijn dorp (S.dorp) komt met de kaart
     assert.ok(T.beginOpKaart(S, 'gehucht'));
     return S;
   } finally {
     T.lootBoeren = echtLot;
   }
 }
-const kelderVan = (S, huis) => S.gebouwen.find((g) => g.huis === huis);
+const kelderVan = (S, huis) => S.dorp.gebouwen.find((g) => g.huis === huis);
 const boer = (S, id) => S.wereld.wezens.find((e) => e.wie === id);
 
 // Een kleine wereld voor de inner, zoals in test/inner.test.cjs: gras, het plein op (5, 10), een akker
-// van 2 bij 2 ernaast, en een huis vlak bij het plein (met een kelder, zonder bewoner met een naam).
+// van 2 bij 2 ernaast, en een huis vlak bij het plein (met een kelder, zonder bewoner met een naam). Het losse object
+// is het dorp zelf (D, js/dorp.js): de inner en de heer vragen alleen het dorp, dus geef het dorpsregels gewoon S.
 function maakS() {
   const b = 30;
   const h = 20;
@@ -62,6 +60,7 @@ function maakS() {
   return S;
 }
 
+// Een bezoek waarin de inner van het plein rondkeek en daarna vertrok: zijn rapport. S is hier het losse dorp van maakS.
 function bezoekVanafHetPlein(S) {
   T.innerKomt(S, KOMT, false);
   T.innerKijkt(S, { x: 5, y: 10 });
@@ -97,7 +96,7 @@ function metBerichten(fn) {
 
 test('de plekken in het gehucht: vijf kelders van boeren, die van de schout en die van het huis', () => {
   const S = gehucht();
-  const plekken = T.verstopPlekken(S);
+  const plekken = T.verstopPlekken(S.dorp);
   // Het huis om het plein (26 sep, de vierde versie van het gehucht) heeft ook een kelder; een hut
   // niet (hieronder).
   assert.equal(plekken.length, 7);
@@ -115,11 +114,11 @@ test('de plekken in het gehucht: vijf kelders van boeren, die van de schout en d
 
 test('een hut heeft geen kelder, en een kapel is pas een plek als hij af is', () => {
   const S = gehucht();
-  assert.equal(T.verstopPlekVan(S, { soort: 'hut', x: 0, y: 0, klaar: true }), null);
+  assert.equal(T.verstopPlekVan(S.dorp, { soort: 'hut', x: 0, y: 0, klaar: true }), null);
   const kapel = { soort: 'kapel', x: 1, y: 1, voet: { b: 5, h: 5 }, klaar: false };
-  assert.equal(T.verstopPlekVan(S, kapel), null);
+  assert.equal(T.verstopPlekVan(S.dorp, kapel), null);
   kapel.klaar = true;
-  const p = T.verstopPlekVan(S, kapel);
+  const p = T.verstopPlekVan(S.dorp, kapel);
   assert.equal(p.naam, 'de kapel');
   assert.equal(p.plaats, V.plekken.kapel.plaats);
   assert.equal(p.vinden, V.plekken.kapel.vinden);
@@ -134,57 +133,57 @@ test('een hut heeft geen kelder, en een kapel is pas een plek als hij af is', ()
 test('wegzetten: uit de schuur de kelder in, tot hij vol is; goud past altijd', () => {
   const S = gehucht();
   const g = kelderVan(S, 'boer1'); // Klaas, de zanger: een gewone kelder
-  T.zetVoorraad(S, 'graan', 100);
-  T.zetVoorraad(S, 'goud', 50);
-  assert.equal(T.hoeveelVerstoppen(S, g, 'graan'), V.plekken.boerderij.plaats);
-  assert.ok(T.verstop(S, g, 'graan', 30).kan);
-  assert.equal(S.voorraad.graan, 70);
+  T.zetVoorraad(S.dorp, 'graan', 100);
+  T.zetVoorraad(S.dorp, 'goud', 50);
+  assert.equal(T.hoeveelVerstoppen(S.dorp, g, 'graan'), V.plekken.boerderij.plaats);
+  assert.ok(T.verstop(S.dorp, g, 'graan', 30).kan);
+  assert.equal(S.dorp.voorraad.graan, 70);
   assert.equal(g.verstopt.graan, 30);
-  const vol = T.kanVerstoppen(S, g, 'graan', 20);
+  const vol = T.kanVerstoppen(S.dorp, g, 'graan', 20);
   assert.equal(vol.kan, false);
   assert.match(vol.reden, /nog maar 10/);
-  assert.equal(T.hoeveelVerstoppen(S, g, 'graan'), 10);
-  assert.ok(T.verstop(S, g, 'goud', 50).kan, 'goud past altijd: een pot onder de vloer');
-  assert.equal(S.voorraad.goud, 0);
-  assert.match(T.kanVerstoppen(S, g, 'goud', 1).reden, /geen goud/);
-  assert.equal(T.kanVerstoppen(S, g, 'hooi', 1).kan, false, 'alleen graan en goud');
+  assert.equal(T.hoeveelVerstoppen(S.dorp, g, 'graan'), 10);
+  assert.ok(T.verstop(S.dorp, g, 'goud', 50).kan, 'goud past altijd: een pot onder de vloer');
+  assert.equal(S.dorp.voorraad.goud, 0);
+  assert.match(T.kanVerstoppen(S.dorp, g, 'goud', 1).reden, /geen goud/);
+  assert.equal(T.kanVerstoppen(S.dorp, g, 'hooi', 1).kan, false, 'alleen graan en goud');
   // Terughalen: weer in de schuur, en niet meer dan er ligt.
-  assert.match(T.kanTerughalen(S, g, 'graan', 31).reden, /Zoveel ligt hier niet/);
-  assert.ok(T.haalTerug(S, g, 'graan', 30).kan);
-  assert.equal(S.voorraad.graan, 100);
+  assert.match(T.kanTerughalen(S.dorp, g, 'graan', 31).reden, /Zoveel ligt hier niet/);
+  assert.ok(T.haalTerug(S.dorp, g, 'graan', 30).kan);
+  assert.equal(S.dorp.voorraad.graan, 100);
   assert.equal(g.verstopt.graan, 0);
-  assert.deepEqual(T.verstoptTotaal(S), { graan: 0, goud: 50, plekken: 1 });
+  assert.deepEqual(T.verstoptTotaal(S.dorp), { graan: 0, goud: 50, plekken: 1 });
 });
 
 test('de kapelaan houdt een tiende van wat je in de kapel zet', () => {
   const S = gehucht();
   const kapel = { soort: 'kapel', x: 1, y: 1, voet: { b: 5, h: 5 }, klaar: true };
-  S.gebouwen.push(kapel);
-  T.zetVoorraad(S, 'graan', 200);
-  T.verstop(S, kapel, 'graan', 100);
-  assert.equal(S.voorraad.graan, 100);
+  S.dorp.gebouwen.push(kapel);
+  T.zetVoorraad(S.dorp, 'graan', 200);
+  T.verstop(S.dorp, kapel, 'graan', 100);
+  assert.equal(S.dorp.voorraad.graan, 100);
   assert.ok(Math.abs(kapel.verstopt.graan - 100 * (1 - V.plekken.kapel.houdt)) < 1e-9);
   // Vullen rekent de tiende mee: er past nog 30, dus je zet er 33 weg.
-  const max = T.hoeveelVerstoppen(S, kapel, 'graan');
+  const max = T.hoeveelVerstoppen(S.dorp, kapel, 'graan');
   assert.equal(max, Math.floor((V.plekken.kapel.plaats - 90) / (1 - V.plekken.kapel.houdt)));
-  assert.ok(T.verstop(S, kapel, 'graan', max).kan);
+  assert.ok(T.verstop(S.dorp, kapel, 'graan', max).kan);
   assert.ok(kapel.verstopt.graan <= V.plekken.kapel.plaats + 1e-9);
-  assert.equal(T.kanVerstoppen(S, kapel, 'graan', 2).kan, false);
+  assert.equal(T.kanVerstoppen(S.dorp, kapel, 'graan', 2).kan, false);
 });
 
 test('zolang de inner of de heer in het dorp is, sjouw je niets', () => {
   const S = gehucht();
   const g = kelderVan(S, 'schout');
-  T.zetVoorraad(S, 'graan', 50);
-  S.inner = T.nieuweInner();
-  S.inner.bezoek = { weg: false };
-  assert.match(T.kanVerstoppen(S, g, 'graan', 10).reden, /inner/);
-  assert.match(T.kanTerughalen(S, g, 'graan', 10).reden, /inner/);
-  assert.equal(T.verstopHandeling(S, T.verstopPlekVan(S, g)).kan, false);
-  S.inner.bezoek.weg = true;
-  assert.ok(T.kanVerstoppen(S, g, 'graan', 10).kan);
-  S.heer = { bezoek: { weg: false } };
-  assert.match(T.kanVerstoppen(S, g, 'graan', 10).reden, /heer/);
+  T.zetVoorraad(S.dorp, 'graan', 50);
+  S.dorp.inner = T.nieuweInner();
+  S.dorp.inner.bezoek = { weg: false };
+  assert.match(T.kanVerstoppen(S.dorp, g, 'graan', 10).reden, /inner/);
+  assert.match(T.kanTerughalen(S.dorp, g, 'graan', 10).reden, /inner/);
+  assert.equal(T.verstopHandeling(S.dorp, T.verstopPlekVan(S.dorp, g)).kan, false);
+  S.dorp.inner.bezoek.weg = true;
+  assert.ok(T.kanVerstoppen(S.dorp, g, 'graan', 10).kan);
+  S.dorp.heer = { bezoek: { weg: false } };
+  assert.match(T.kanVerstoppen(S.dorp, g, 'graan', 10).reden, /heer/);
 });
 
 // ---------------------------------------------------------------------------------------------
@@ -196,7 +195,7 @@ test('het karakter telt: de roddelaar, de vrome, de woekeraar en de oudste', () 
   const g = kelderVan(S, 'boer1');
   const zet = (k) => {
     boer(S, 'boer1').karakter = k;
-    return T.verstopPlekVan(S, g);
+    return T.verstopPlekVan(S.dorp, g);
   };
   const basis = V.plekken.boerderij.vinden;
   assert.equal(zet('zanger').vinden, basis);
@@ -210,17 +209,17 @@ test('het karakter telt: de roddelaar, de vrome, de woekeraar en de oudste', () 
   // De vrome weigert.
   const vroom = zet('vrome');
   assert.equal(vroom.weigert, true);
-  T.zetVoorraad(S, 'graan', 50);
-  const nee = T.kanVerstoppen(S, g, 'graan', 10);
+  T.zetVoorraad(S.dorp, 'graan', 50);
+  const nee = T.kanVerstoppen(S.dorp, g, 'graan', 10);
   assert.equal(nee.kan, false);
   assert.match(nee.reden, /bidt/);
-  assert.equal(T.hoeveelVerstoppen(S, g, 'graan'), 0);
+  assert.equal(T.hoeveelVerstoppen(S.dorp, g, 'graan'), 0);
   // De woekeraar: een goede kelder, maar hij houdt zijn deel.
   const woeker = zet('woekeraar');
   assert.equal(woeker.houdt, V.bewoners.woekeraar.houdt);
   assert.equal(woeker.wieHoudt, boer(S, 'boer1').naam);
   assert.equal(woeker.vinden, basis * V.bewoners.woekeraar.vinden);
-  T.verstop(S, g, 'graan', 10);
+  T.verstop(S.dorp, g, 'graan', 10);
   assert.ok(Math.abs(g.verstopt.graan - 10 * (1 - V.bewoners.woekeraar.houdt)) < 1e-9);
   // Telt het karakter niet (de optie in de spelregels), dan is elke kelder gelijk.
   metInstelling(V, { karakters: false }, () => {
@@ -233,7 +232,7 @@ test('het karakter telt: de roddelaar, de vrome, de woekeraar en de oudste', () 
 test('een vrome boerin bidt ook: "haar kelder"', () => {
   const S = gehucht();
   boer(S, 'boer2').karakter = 'vrome'; // Aaltje
-  const p = T.verstopPlekVan(S, kelderVan(S, 'boer2'));
+  const p = T.verstopPlekVan(S.dorp, kelderVan(S, 'boer2'));
   assert.match(T.overKelderTekst(p), /^Aaltje bidt .* in haar kelder/);
 });
 
@@ -243,35 +242,35 @@ test('een vrome boerin bidt ook: "haar kelder"', () => {
 
 test('de soldaten zoeken plek voor plek: wat ze vinden is weg, en elke vondst maakt argwanend', () => {
   const S = gehucht();
-  T.zetVoorraad(S, 'graan', 100);
-  T.zetVoorraad(S, 'goud', 20);
+  T.zetVoorraad(S.dorp, 'graan', 100);
+  T.zetVoorraad(S.dorp, 'goud', 20);
   const schout = kelderVan(S, 'schout');
   const klaas = kelderVan(S, 'boer1');
-  T.verstop(S, schout, 'graan', 30);
-  T.verstop(S, klaas, 'graan', 20);
-  T.verstop(S, klaas, 'goud', 5);
-  S.inner = T.nieuweInner();
+  T.verstop(S.dorp, schout, 'graan', 30);
+  T.verstop(S.dorp, klaas, 'graan', 20);
+  T.verstop(S.dorp, klaas, 'goud', 5);
+  S.dorp.inner = T.nieuweInner();
   // Een getal onder de kans bij de schout (0,6) maar boven die bij Klaas (0,3): alleen bij de schout.
-  assert.deepEqual(T.zoekVerstopt(S, () => 0.45), ['30 graan in je eigen kelder']);
+  assert.deepEqual(T.zoekVerstopt(S.dorp, () => 0.45), ['30 graan in je eigen kelder']);
   assert.equal(schout.verstopt.graan, 0);
   assert.equal(klaas.verstopt.graan, 20);
-  assert.ok(Math.abs(S.inner.argwaan - V.argwaanPerVondst) < 1e-9);
-  assert.ok(S.inner.waarom.includes('de soldaten vonden wat je verstopte'));
-  assert.deepEqual(T.zoekVerstopt(S, () => 0.99), []);
-  assert.deepEqual(T.zoekVerstopt(S, () => 0), ['20 graan en 5 goud in de kelder van Klaas']);
-  assert.deepEqual(T.verstoptTotaal(S), { graan: 0, goud: 0, plekken: 0 });
+  assert.ok(Math.abs(S.dorp.inner.argwaan - V.argwaanPerVondst) < 1e-9);
+  assert.ok(S.dorp.inner.waarom.includes('de soldaten vonden wat je verstopte'));
+  assert.deepEqual(T.zoekVerstopt(S.dorp, () => 0.99), []);
+  assert.deepEqual(T.zoekVerstopt(S.dorp, () => 0), ['20 graan en 5 goud in de kelder van Klaas']);
+  assert.deepEqual(T.verstoptTotaal(S.dorp), { graan: 0, goud: 0, plekken: 0 });
 });
 
 test('op Sint-Maarten: het doorzoeken zegt wat ze vonden, en het lot is vast per spel en per dag', () => {
   const zoek = () => {
     const S = gehucht();
     S.kalender.dag = SINT_MAARTEN;
-    T.zetVoorraad(S, 'graan', 200);
-    for (const huis of ['schout', 'boer1', 'boer2', 'boer4', 'boer5']) T.verstop(S, kelderVan(S, huis), 'graan', 20);
-    S.inner = T.nieuweInner();
+    T.zetVoorraad(S.dorp, 'graan', 200);
+    for (const huis of ['schout', 'boer1', 'boer2', 'boer4', 'boer5']) T.verstop(S.dorp, kelderVan(S, huis), 'graan', 20);
+    S.dorp.inner = T.nieuweInner();
     let gevonden;
     const berichten = metBerichten(() => {
-      gevonden = T.doorzoekDorp(S);
+      gevonden = T.doorzoekDorp(S.dorp);
     });
     return { gevonden, berichten };
   };
@@ -289,19 +288,19 @@ test('op Sint-Maarten: het doorzoeken zegt wat ze vonden, en het lot is vast per
 
 test('de schout kan bij elke plek komen: een tegel aan de rand van de voet met een vrije buur', () => {
   const S = gehucht();
-  for (const p of T.verstopPlekken(S)) {
+  for (const p of T.verstopPlekken(S.dorp)) {
     const g = p.gebouw;
-    const r = T.randVanGebouw(S, g);
+    const r = T.randVanGebouw(S.dorp, g);
     assert.ok(r, p.naam);
     assert.ok(r.x >= g.x && r.x < g.x + g.voet.b && r.y >= g.y && r.y < g.y + g.voet.h, `${p.naam}: op de voet`);
     assert.ok([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => T.isBegaanbaar(S.wereld, r.x + dx, r.y + dy)), `${p.naam}: met een vrije buur`);
   }
-  const h = T.verstopHandeling(S, T.verstopPlekVan(S, kelderVan(S, 'schout')));
+  const h = T.verstopHandeling(S.dorp, T.verstopPlekVan(S.dorp, kelderVan(S, 'schout')));
   assert.equal(h.kan, true);
   assert.match(h.tekst, /^Verstoppen in je eigen kelder/);
   // Een klik op zijn voet vindt het huis, ook al stond het al op de kaart (T.gebouwOp).
   const g = kelderVan(S, 'boer3');
-  assert.equal(T.gebouwOp(S, g.x + 1, g.y + 1), g);
+  assert.equal(T.gebouwOp(S.dorp, g.x + 1, g.y + 1), g);
 });
 
 // ---------------------------------------------------------------------------------------------

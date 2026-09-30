@@ -12,7 +12,7 @@
   // Wat een wet in een stand doet, als lijstje in groen (+) en rood (−), met de stand erboven als het er meer dan
   // één is (het rantsoen: krap en ruim).
   function doet(S, id, stand, kop) {
-    const regels = T.watDeWetDoet(S, id, stand);
+    const regels = T.watDeWetDoet(S.dorp, id, stand);
     if (!regels.length) return '';
     return (
       `<ul class="wet-doet">${kop ? `<li class="wet-stand">${veilig(kop)}</li>` : ''}` +
@@ -23,7 +23,7 @@
 
   function kaart(S, id) {
     const wet = T.WETTEN[id];
-    const stand = T.standVanWet(S, id);
+    const stand = T.standVanWet(S.dorp, id);
     const aanUit = T.wetIsAanUit(id);
     let knoppen;
     let wat;
@@ -50,13 +50,13 @@
 
   function inhoud(S) {
     const dag = S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '';
-    const pct = Math.round((S.behoeften ? S.behoeften.tevredenheid : 1) * 100);
+    const pct = Math.round((S.dorp.behoeften ? S.dorp.behoeften.tevredenheid : 1) * 100);
     const drempel = Math.round(T.BEHOEFTEN_INSTELLINGEN.groeiDrempel * 100);
     return (
       `<div class="venster-kop"><span class="venster-titel">Wetten</span><span class="venster-wanneer">${dag}</span>` +
       `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
       `<p class="venster-staat">Een wet geldt vanaf vandaag. Het dorp is nu <b>${pct}%</b> tevreden; bij ${drempel}% of meer komen er nieuwe gezinnen.</p>` +
-      T.wettenVanNu(S).map((id) => kaart(S, id)).join('') +
+      T.wettenVanNu(S.dorp).map((id) => kaart(S, id)).join('') +
       '<p class="venster-voet">Zolang dit open is, staat de tijd stil. <kbd>Esc</kbd> of <kbd>W</kbd> sluit.</p>'
     );
   }
@@ -101,7 +101,7 @@
       return;
     }
     if (!b.dataset.wet) return;
-    const r = T.zetWet(S, b.dataset.wet, b.dataset.stand);
+    const r = T.zetWet(S.dorp, b.dataset.wet, b.dataset.stand);
     if (!r.kan) T.ui.bericht(r.reden, 'gevaar');
     toon(S);
   });

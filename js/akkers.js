@@ -447,15 +447,15 @@
     return { x: e.tx, y: e.ty, sinds: nu, tot: nu + Math.max(0, duur - al), akker: doel.akker, hooi: !!doel.hooi };
   }
 
-  T.werkOogstBij = function (S, dt) {
-    const w = S.wereld;
+  T.werkOogstBij = function (S, D, dt) {
+    const w = D.wereld;
     if (!w.akkers || !w.akkers.length) return;
-    const datum = T.datumVanDag(S.kalender.dag);
+    const datum = T.datumVanDag(D.kalender.dag);
     const basis = T.akkerStadium(datum.maand, datum.dagVanMaand);
     const hooitijd = T.isHooitijd(datum);
     // Gemaaid wordt in de werkuren, in de oogst tot het donker (js/dag.js); zonder de dag (een
     // toets die js/dag.js niet laadt) altijd.
-    const werktijd = T.isWerktijd(S.kalender.dag, true);
+    const werktijd = T.isWerktijd(D.kalender.dag, true);
     const nu = S.wereldTijd || 0;
     for (const e of w.wezens) {
       if (e.dood || !e.werkAkkers || !e.werkAkkers.length) continue;
@@ -494,10 +494,10 @@
           a.half.delete(sleutel(e.maait.x, e.maait.y));
           if (e.maait.hooi) {
             a.gehooid.add(sleutel(e.maait.x, e.maait.y));
-            if (S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'hooi', T.hooiPerTegel(a, e));
+            if (D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'hooi', T.hooiPerTegel(a, e));
           } else {
             a.geoogst.add(sleutel(e.maait.x, e.maait.y));
-            if (S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'graan', T.oogstPerTegel(a, e));
+            if (D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'graan', T.oogstPerTegel(a, e));
           }
           e.maait = null;
           e.oogstDoel = null;

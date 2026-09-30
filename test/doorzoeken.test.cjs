@@ -28,7 +28,7 @@ function gehucht(argwaan = 0) {
   const loten = T.BOEREN_INSTELLINGEN.loten;
   console.warn = () => {};
   T.BOEREN_INSTELLINGEN.loten = false;
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht'));
   } finally {
@@ -36,17 +36,17 @@ function gehucht(argwaan = 0) {
     T.BOEREN_INSTELLINGEN.loten = loten;
   }
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', effecten: [], wachters: [], bezocht: new Set(), inventaris: new Set() });
-  S.kalender = { dag: DAG, snelheid: 10 };
-  S.inner = Object.assign(T.nieuweInner(), { argwaan });
-  T.zetVoorraad(S, 'graan', 200);
-  T.zetVoorraad(S, 'goud', 20);
+  Object.assign(S.kalender, { dag: DAG, snelheid: 10 });
+  S.dorp.inner = Object.assign(T.nieuweInner(), { argwaan });
+  T.zetVoorraad(S.dorp, 'graan', 200);
+  T.zetVoorraad(S.dorp, 'goud', 20);
   return { S, heerKomt: () => heerKomt(S) };
 }
 function heerKomt(S) {
   const heer = T.maakMens('heer', 37, 40, 1);
   const soldaten = [T.maakMens('soldaat', 36, 41, 2), T.maakMens('soldaat', 38, 41, 2)];
-  S.heer = T.nieuweHeer();
-  S.heer.bezoek = { staat: true, weg: false, wezens: [heer, ...soldaten], betaald: null };
+  S.dorp.heer = T.nieuweHeer();
+  S.dorp.heer.bezoek = { staat: true, weg: false, wezens: [heer, ...soldaten], betaald: null };
   S.wereld.wezens.push(heer, ...soldaten);
   berichten.length = 0;
   return soldaten;
@@ -58,7 +58,7 @@ function stap(S, dt) {
   S.kalender.dag += (dtW / T.DAG_LENGTE) || 0;
   T.werkAnimatiesBij(S, dt, dtW);
   T.laatDwalen(S, dtW);
-  T.werkDoorzoekenBij(S);
+  T.werkDoorzoekenBij(S.dorp);
 }
 // Stap tot `klaar` of tot er zoveel speluren om zijn.
 function loopTot(S, klaar, uren) {
@@ -67,7 +67,7 @@ function loopTot(S, klaar, uren) {
   return klaar();
 }
 const zetSchout = (S, x, y) => Object.assign(S.schout, { x, y, tx: x, ty: y, pad: [], onderweg: false });
-const plekVan = (S, huis) => T.verstopPlekVan(S, S.gebouwen.find((g) => g.huis === huis));
+const plekVan = (S, huis) => T.verstopPlekVan(S.dorp, S.dorp.gebouwen.find((g) => g.huis === huis));
 // Een instelling even anders, en daarna terug.
 function met(blok, pad, waarde, doe) {
   const delen = pad.split('.');
@@ -85,7 +85,7 @@ function met(blok, pad, waarde, doe) {
 test('onder de grens zoeken ze op twee of drie plekken, en de schout loopt voor', () => {
   const { S, heerKomt } = gehucht(0);
   heerKomt();
-  const z = T.beginDoorzoeken(S);
+  const z = T.beginDoorzoeken(S.dorp);
   assert.ok(z.nodig >= IN.minst && z.nodig <= IN.meest, `twee of drie plekken (${z.nodig})`);
   assert.equal(z.heerKiest, false, 'zonder argwaan kiest de heer nooit');
   assert.equal(z.doelen, undefined, 'de schout bepaalt de route');
@@ -96,11 +96,11 @@ test('wat ze met de schout vlak passeren, doorzoeken ze; wat ze vinden, is weg',
   const { S, heerKomt } = gehucht(0);
   const klaas = plekVan(S, 'boer1');
   const kelder = klaas.gebouw;
-  assert.ok(T.verstop(S, kelder, 'graan', 20).kan);
+  assert.ok(T.verstop(S.dorp, kelder, 'graan', 20).kan);
   const soldaten = heerKomt();
-  assert.equal(T.verstop(S, kelder, 'graan', 5).kan, false, 'zolang de heer er is, zet je niets meer weg');
+  assert.equal(T.verstop(S.dorp, kelder, 'graan', 5).kan, false, 'zolang de heer er is, zet je niets meer weg');
   met(V, 'plekken.boerderij.vinden', 1, () => {
-    const z = T.beginDoorzoeken(S);
+    const z = T.beginDoorzoeken(S.dorp);
     // De schout gaat bij de deur van Klaas staan, aan de rand van het dorp; de soldaten lopen naar hem
     // toe (dat kost wat uren), en passeren onderweg niets wat telt.
     const deur = T.deurVan(S.wereld, kelder);
@@ -117,10 +117,10 @@ test('wat ze met de schout vlak passeren, doorzoeken ze; wat ze vinden, is weg',
 test('leidt de schout ze nergens langs, dan kiezen ze na een paar uur zelf, zijn eigen kelder eerst', () => {
   const { S, heerKomt } = gehucht(0);
   const eigen = plekVan(S, 'schout');
-  assert.ok(T.verstop(S, eigen.gebouw, 'graan', 10).kan);
+  assert.ok(T.verstop(S.dorp, eigen.gebouw, 'graan', 10).kan);
   heerKomt();
   met(V, 'vindenBijSchout', 1, () => {
-    const z = T.beginDoorzoeken(S);
+    const z = T.beginDoorzoeken(S.dorp);
     // Midden op het plein, ver genoeg van elke kelder.
     zetSchout(S, 37, 38);
     loopTot(S, () => z.gedaan.length > 0, IN.wachtUren - 0.25);
@@ -138,12 +138,12 @@ test('leidt de schout ze nergens langs, dan kiezen ze na een paar uur zelf, zijn
 test('zo vaak als zijn argwaan kiest de heer zelf, en dan wat het rijkst oogt', () => {
   const { S, heerKomt } = gehucht(1);
   heerKomt();
-  const z = T.beginDoorzoeken(S);
+  const z = T.beginDoorzoeken(S.dorp);
   assert.equal(z.heerKiest, true, 'bij volle argwaan altijd');
   assert.equal(z.doelen.length, z.nodig);
   assert.equal(z.doelen[0], plekVan(S, 'schout').gebouw, 'de kelder van de schout eerst');
   const grootte = (g) => T.voetVanGebouw(g).b * T.voetVanGebouw(g).h;
-  const anderen = T.verstopPlekken(S).filter((p) => !p.vanSchout && p.gebouw.soort !== 'kapel').map((p) => p.gebouw);
+  const anderen = T.verstopPlekken(S.dorp).filter((p) => !p.vanSchout && p.gebouw.soort !== 'kapel').map((p) => p.gebouw);
   assert.equal(grootte(z.doelen[1]), Math.max(...anderen.map(grootte)), 'dan het grootste gebouw');
   assert.match(berichten.join(' '), /De heer wijst zelf aan/);
   // Zonder argwaan nooit, en daartussen ongeveer zo vaak als de argwaan zegt.
@@ -152,7 +152,7 @@ test('zo vaak als zijn argwaan kiest de heer zelf, en dan wat het rijkst oogt', 
     const t = gehucht(0.3);
     t.heerKomt();
     t.S.kalender.dag = DAG + d;
-    if (T.beginDoorzoeken(t.S).heerKiest) keer++;
+    if (T.beginDoorzoeken(t.S.dorp).heerKiest) keer++;
   }
   assert.ok(keer > 30 && keer < 90, `bij 30% argwaan kiest hij ongeveer een op de drie keer (${keer} van 200)`);
 });
@@ -160,9 +160,9 @@ test('zo vaak als zijn argwaan kiest de heer zelf, en dan wat het rijkst oogt', 
 test('gaat de heer weg voor ze klaar zijn, dan doorzoeken ze de rest nog voor ze gaan', () => {
   const { S, heerKomt } = gehucht(0);
   const soldaten = heerKomt();
-  const z = T.beginDoorzoeken(S);
-  S.heer.bezoek.weg = true;
-  T.werkDoorzoekenBij(S);
+  const z = T.beginDoorzoeken(S.dorp);
+  S.dorp.heer.bezoek.weg = true;
+  T.werkDoorzoekenBij(S.dorp);
   assert.equal(z.klaar, true);
   assert.equal(z.gedaan.length, z.nodig);
   assert.equal(z.gedaan[0], plekVan(S, 'schout').gebouw, 'hun eigen volgorde: de kelder van de schout eerst');
@@ -172,12 +172,12 @@ test('gaat de heer weg voor ze klaar zijn, dan doorzoeken ze de rest nog voor ze
 
 test('boven de grens doorzoeken ze het hele dorp in één keer, zoals altijd', () => {
   const { S, heerKomt } = gehucht(T.INNER_INSTELLINGEN.doorzoekenVanaf);
-  for (const g of S.gebouwen) if (T.verstopPlekVan(S, g) && !T.verstopPlekVan(S, g).weigert) T.verstop(S, g, 'goud', 1);
+  for (const g of S.dorp.gebouwen) if (T.verstopPlekVan(S.dorp, g) && !T.verstopPlekVan(S.dorp, g).weigert) T.verstop(S.dorp, g, 'goud', 1);
   heerKomt();
-  S.heer.bezoek.staat = false;
+  S.dorp.heer.bezoek.staat = false;
   met(V, 'vindenBijSchout', 1, () => met(V, 'plekken.boerderij.vinden', 1, () => met(V, 'plekken.huis.vinden', 1, () => {
-    T.heerStaatErOp(S);
-    assert.equal(S.heer.bezoek.zoeken, undefined, 'geen route: het hele dorp');
+    T.heerStaatErOp(S.dorp);
+    assert.equal(S.dorp.heer.bezoek.zoeken, undefined, 'geen route: het hele dorp');
     assert.match(berichten.join(' '), /doorzoeken het dorp/);
   })));
 });

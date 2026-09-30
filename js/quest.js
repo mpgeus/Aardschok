@@ -59,9 +59,9 @@
     const sleutel = `${naam}:${fase}`;
     if (beloond(S).has(sleutel)) return;
     beloond(S).add(sleutel);
-    if (beloning.goud) T.geefGoud(S, beloning.goud);
+    if (beloning.goud) T.geefGoud(S.dorp, beloning.goud);
     for (const soort of lijst(beloning.geef)) S.inventaris.add(soort);
-    for (const vlag of lijst(beloning.vlag)) T.zetVlag(S, vlag);
+    for (const vlag of lijst(beloning.vlag)) T.zetVlag(S.dorp, vlag);
   }
 
   // Een weg nemen: het gevolg eerst (goud eraf, het voorwerp weg), dan pas de nieuwe fase, zodat
@@ -74,7 +74,7 @@
       console.warn(`T.neemWeg: "${naam}" heeft in fase "${fase}" geen weg "${wegId}"`);
       return false;
     }
-    if (w.doe) T.doeGevolg(S, w.doe);
+    if (w.doe) T.doeGevolg(S, S.dorp, w.doe);
     T.zetQuest(S, naam, w.naar, wegId);
     return true;
   };
@@ -89,7 +89,7 @@
       const f = q.fasen[stand(S)[naam]];
       if (!f || !f.wegen) continue;
       for (const [id, w] of Object.entries(f.wegen)) {
-        if (w.klaarAls && T.voorwaardeGeldt(S, q.gever, w.klaarAls)) {
+        if (w.klaarAls && T.voorwaardeGeldt(S, S.dorp, q.gever, w.klaarAls)) {
           T.neemWeg(S, naam, id);
           break;
         }
@@ -114,41 +114,42 @@
 
   // Goud koopt nooit jaren terug (ontwerp/toren.md, "Wat de kernregel ervan vraagt"); het koopt
   // dingen waarmee je jaren kunt vermijden. Het vakje in beeld komt pas als je ooit goud had.
-  // Sinds het gehuchtspel (js/voorraad.js) is goud ook een van de vier grondstoffen. Loopt die
-  // mee (S.voorraad bestaat, en T.wijzigVoorraad is geladen), dan gaat de wijziging daarlangs en
-  // blijft S.goud gewoon in de pas lopen; zonder S.voorraad (de bestaande toetsen, en het oude
-  // gereedschap) werkt deze functie zoals hij altijd deed.
-  T.geefGoud = function (S, n) {
-    if (T.wijzigVoorraad && S.voorraad) {
-      T.wijzigVoorraad(S, 'goud', n);
+  // Sinds het gehuchtspel (js/voorraad.js) is goud ook een van de vier grondstoffen, in de voorraad van
+  // het dorp (D). Loopt die mee (D.voorraad bestaat, en T.wijzigVoorraad is geladen), dan gaat de
+  // wijziging daarlangs; zonder D.voorraad (het gereedschap, dat geen voorraad heeft) telt D.goud.
+  T.geefGoud = function (D, n) {
+    if (T.wijzigVoorraad && D.voorraad) {
+      T.wijzigVoorraad(D, 'goud', n);
     } else {
-      S.goud = Math.max(0, (S.goud || 0) + n);
-      if (S.goud > 0) S.goudGehad = true;
+      D.goud = Math.max(0, (D.goud || 0) + n);
+      if (D.goud > 0) D.goudGehad = true;
     }
-    if (T.ui && T.ui.toonGoud) T.ui.toonGoud(S);
+    if (T.ui && T.ui.toonGoud) T.ui.toonGoud();
   };
 
   // ── Wat een gesprek ermee kan (de haken uit gesprek.js) ──
 
-  // Een voorwaarde. quest zonder fase betekent "die quest loopt"; fase mag een lijstje zijn.
-  T.questVoorwaarde = function (S, als) {
+  // Een voorwaarde. quest zonder fase betekent "die quest loopt"; fase mag een lijstje zijn. De quests zijn van
+  // jou (S; zonder spel, als de raadsman beslist, loopt er geen), het goud van het dorp (D).
+  T.questVoorwaarde = function (S, D, als) {
+    if (!S && (als.quest || als.questAf)) return false;
     if (als.quest) {
       const fase = T.questFase(S, als.quest);
       if (!fase) return false;
       if (als.fase && !lijst(als.fase).includes(fase)) return false;
       if (als.weg && T.questWegVan(S, als.quest) !== als.weg) return false;
     }
-    if (als.nietQuest && T.questLoopt(S, als.nietQuest)) return false;
+    if (als.nietQuest && S && T.questLoopt(S, als.nietQuest)) return false;
     if (als.questAf && !T.questAf(S, als.questAf)) return false;
     // Goud telt uit de voorraad als die er is (js/voorraad.js), net als T.geefGoud hierboven.
-    if (als.goud != null && ((S.voorraad ? S.voorraad.goud : S.goud) || 0) < als.goud) return false;
+    if (als.goud != null && ((D.voorraad ? D.voorraad.goud : D.goud) || 0) < als.goud) return false;
     return true;
   };
 
   // Een gevolg: een quest in een fase zetten (of een weg nemen), en goud erbij of eraf.
-  T.questGevolg = function (S, doe) {
-    if (doe.goud) T.geefGoud(S, doe.goud);
-    if (!doe.quest) return;
+  T.questGevolg = function (S, D, doe) {
+    if (doe.goud) T.geefGoud(D, doe.goud);
+    if (!doe.quest || !S) return;
     if (doe.weg) T.neemWeg(S, doe.quest, doe.weg);
     else if (doe.fase) T.zetQuest(S, doe.quest, doe.fase);
     else {
@@ -178,7 +179,7 @@
     const w = S.wereld;
     if (!w || !w.questVoorwerpen) return;
     for (const v of w.questVoorwerpen) {
-      const hoort = !v.grendel || T.questVoorwaarde(S, { quest: v.grendel.quest, fase: v.grendel.fase });
+      const hoort = !v.grendel || T.questVoorwaarde(S, S.dorp, { quest: v.grendel.quest, fase: v.grendel.fase });
       const i = w.voorwerpen.indexOf(v);
       if (hoort && i < 0) T.zetVoorwerp(w, v);
       else if (!hoort && i >= 0) T.haalVoorwerpWeg(w, v);
@@ -201,7 +202,7 @@
     if (!w || !w.geheimen) return;
     for (const g of w.geheimen) {
       const sleutel = g.x + ',' + g.y;
-      const hoort = !g.als || T.voorwaardeGeldt(S, null, g.als);
+      const hoort = !g.als || T.voorwaardeGeldt(S, S.dorp, null, g.als);
       const staatEr = w.deuren.get(sleutel) === g;
       if (hoort && !staatEr) {
         w.deuren.set(sleutel, g);

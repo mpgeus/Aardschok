@@ -363,6 +363,10 @@ test('op Sint-Maarten komt hij zelf, en wacht hij op je terwijl de tijd op 1× d
   const S = gehucht();
   S.kalender.snelheid = 30;
   S.kalender.dag = SINT_MAARTEN;
+  // Je eigen dorp, en je bent er (js/dorp.js): dan zie je hem op 1× komen.
+  S.speler = true;
+  S.schout = T.maakWezen('schout', 20, 20);
+  S.wereld.wezens.push(S.schout);
   T.tikHeerDag(S, SINT_MAARTEN);
   assert.ok(T.heerWacht(S));
   assert.ok(T.heeftVlag(S, 'heerOpBezoek'));
@@ -496,19 +500,19 @@ test('zijn poppetje komt over de weg met twee soldaten, en op het plein wacht hi
 
 test('zijn gesprek opent het betalen, en na het betalen niet meer', () => {
   const S = metHeer();
-  const knoop = T.gesprekKnoop(S, 'heer', 'welkom');
+  const knoop = T.gesprekKnoop(S, S, 'heer', 'welkom');
   assert.ok(knoop.keuzes.some((k) => k.doe && k.doe.heer));
   const oudeUi = T.ui;
   let geopend = 0;
   T.ui = { openHeer: () => geopend++ };
   try {
-    T.doeGevolg(S, { heer: true });
+    T.doeGevolg(S, S, { heer: true });
   } finally {
     T.ui = oudeUi;
   }
   assert.equal(geopend, 1);
   T.zetVlag(S, 'heerBetaald');
-  assert.ok(!T.gesprekKnoop(S, 'heer', 'welkom').keuzes.some((k) => k.doe && k.doe.heer));
+  assert.ok(!T.gesprekKnoop(S, S, 'heer', 'welkom').keuzes.some((k) => k.doe && k.doe.heer));
 });
 
 test('de schandpaal komt er de eerste keer, blijft staan, en wie gestraft wordt, staat ervoor', () => {

@@ -12,14 +12,13 @@ T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevo
 function gehucht() {
   const echt = console.warn;
   console.warn = () => {};
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht'));
   } finally {
     console.warn = echt;
   }
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
-  S.kalender = T.nieuweKalender();
   return S;
 }
 
@@ -41,8 +40,8 @@ const NU = 1790000000000; // een vaste echte tijd, zodat twee keer bewaren dezel
 
 test('bewaren, herstellen en weer bewaren geeft precies dezelfde tekst', () => {
   const S = gehucht();
-  const bewoner = S.bewoners.mensen.find((p) => p.wezen && p.huis);
-  T.zetVlag(S, 'marskramerOpBezoek');
+  const bewoner = S.dorp.bewoners.mensen.find((p) => p.wezen && p.huis);
+  T.zetVlag(S.dorp, 'marskramerOpBezoek');
   const overgeslagen = [];
   const tekst = T.bewaarSpel(S, { nu: NU, overgeslagen });
   assert.deepEqual(overgeslagen, [], 'een gehucht zonder scherm heeft niets wat niet te bewaren is');
@@ -103,11 +102,17 @@ test('wat elkaar aanwijst, wijst na het laden nog steeds naar hetzelfde', () => 
   for (const [wie, s] of [['vóór', S], ['na', S2]]) {
     assert.ok(s.gebieden[s.wereld.gebied] === s.wereld, `${wie}: S.wereld is het gebied in S.gebieden, geen kopie`);
     assert.ok(s.wereld.wezens.includes(s.schout), `${wie}: de schout is een wezen in de wereld, geen kopie`);
-    assert.ok(s.bewoners.mensen.every((p) => !p.wezen || s.wereld.wezens.includes(p.wezen)), `${wie}: elk poppetje staat in de wereld`);
+    assert.ok(s.dorp.bewoners.mensen.every((p) => !p.wezen || s.wereld.wezens.includes(p.wezen)), `${wie}: elk poppetje staat in de wereld`);
+    // Het dorp (js/dorp.js) is een dorp in S.dorpen, en wijst naar de kaart, de schout en de kalender van het spel.
+    assert.ok(s.dorpen.includes(s.dorp), `${wie}: S.dorp is een van de dorpen in S.dorpen, geen kopie`);
+    assert.ok(s.dorp.wereld === s.wereld && s.dorp.schout === s.schout, `${wie}: het dorp heeft de kaart en de schout van het spel, geen kopie`);
+    assert.ok(s.dorp.kalender === s.kalender, `${wie}: het dorp deelt de kalender van het spel, geen kopie`);
   }
   // En wat nu verandert, verandert overal: één ding, geen twee.
   S2.schout.tx = -99;
   assert.equal(S2.gebieden[S2.wereld.gebied].wezens.find((e) => e === S2.schout).tx, -99);
+  S2.kalender.dag = 99.5;
+  assert.equal(S2.dorp.kalender.dag, 99.5);
 });
 
 test('een geladen spel heeft zijn velden in de volgorde van het bewaarde, en wat er sindsdien bij kwam, erachter', () => {
@@ -125,12 +130,12 @@ test('een geladen spel heeft zijn velden in de volgorde van het bewaarde, en wat
 
 test('verzamelingen blijven verzamelingen, en het scherm begint opnieuw', () => {
   const S = gehucht();
-  T.zetVlag(S, 'heerBetaald');
+  T.zetVlag(S.dorp, 'heerBetaald');
   S.effecten.push({ soort: 'flits' });
   S.hover = { x: 3, y: 4 };
   const S2 = gehucht();
   T.herstelSpel(S2, T.bewaarSpel(S, { nu: NU }));
-  assert.ok(S2.vlaggen instanceof Set && S2.vlaggen.has('heerBetaald'));
+  assert.ok(S2.dorp.vlaggen instanceof Set && S2.dorp.vlaggen.has('heerBetaald'));
   assert.ok(S2.wereld.deuren instanceof Map);
   assert.equal(S2.wereld.deuren.size, S.wereld.deuren.size);
   assert.deepEqual(S2.effecten, [], 'wat op het scherm bewoog, beweegt niet meer');
@@ -154,7 +159,7 @@ test('ook wat JSON zelf niet kent, komt terug', () => {
   const sleutel = { id: 7 };
   const S = {
     kalender: { dag: 40.5 },
-    bevolking: 3,
+    dorp: { bevolking: 3 }, // de kop van het bewaarde spel (js/opslaan.js) leest het uit het dorp
     wereld: {},
     getallen: [Infinity, -Infinity, NaN, 1.5],
     gaten: [1, undefined, 3],
@@ -251,7 +256,7 @@ test('de plekken: vijf eigen en één die vanzelf gaat, het nieuwste bovenaan', 
   assert.equal(T.slaOp(S, '6', NU).gelukt, false, 'er zijn vijf eigen plekken');
   assert.deepEqual(T.opgeslagenSpellen().map((s) => s.plek), ['3', 'auto']);
   assert.equal(T.nieuwsteSpel().plek, '3');
-  assert.equal(T.nieuwsteSpel().kop.bevolking, S.bevolking);
+  assert.equal(T.nieuwsteSpel().kop.bevolking, S.dorp.bevolking);
 
   const S2 = gehucht();
   const gelezen = T.leesVanPlek('3');

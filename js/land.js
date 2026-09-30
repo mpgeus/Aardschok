@@ -156,7 +156,7 @@
   // reizen, en waar de schout is. Het gehucht ligt niet in het midden: er ligt land aan één kant van je, en de rest
   // verder weg.
   T.nieuwLand = function (S) {
-    const dobbel = T.dobbelsteen(((S.lot && S.lot.zaad) || 1) * 131 + 7);
+    const dobbel = T.dobbelsteen(((S.dorp.lot && S.dorp.lot.zaad) || 1) * 131 + 7);
     const B = IN().breed;
     const H = IN().hoog;
     const vorm = vormVan(dobbel, B, H);
@@ -240,20 +240,13 @@
 
   T.provincie = (L, id) => (L ? L.provincies.find((p) => p.id === id) || null : null);
   // Het gehucht heet naar je dorp; zonder naam (een proefje) is het "Je gehucht".
-  T.provincieNaam = (S, p) => (p.soort === 'gehucht' ? T.dorpsnaam(S) || 'Je gehucht' : T.LANDSOORTEN[p.soort].naam);
+  T.provincieNaam = (S, p) => (p.soort === 'gehucht' ? T.dorpsnaam(S.dorp) || 'Je gehucht' : T.LANDSOORTEN[p.soort].naam);
   const wegTussen = (L, a, b) => L.wegen.find((w) => (w.van === a && w.naar === b) || (w.van === b && w.naar === a)) || null;
   T.wegTussen = wegTussen;
   T.buurProvincies = (L, id) => L.wegen.filter((w) => w.van === id || w.naar === id).map((w) => (w.van === id ? w.naar : w.van));
 
   // Is de schout op reis, of in een andere provincie dan zijn gehucht?
   T.opReis = (S) => !!(S.land && (S.land.reis || S.land.waar !== S.land.thuis));
-
-  // Is de schout weg uit zijn dorp: op reis, in een andere provincie, of in een ander gebied (js/gebied.js)? Dan
-  // beslist de raadsman (js/voorvallen.js), en roept niemand de militie bij hem (js/rovers.js).
-  T.schoutIsWeg = function (S) {
-    if (S.bewoners && S.bewoners.wereld && S.wereld !== S.bewoners.wereld) return true;
-    return T.opReis(S);
-  };
 
   // De kortste reis in dagen van waar je bent naar `naar`, over wegen die je kent: door provincies die je al zag, en de
   // laatste stap mag het donker in. Geeft { route: [id, ...] (zonder waar je bent), dagen } of null.
@@ -290,11 +283,11 @@
 
   // Hoe het dorp ervoor staat, om na een reis te zeggen wat er veranderde.
   const standVan = (S) => ({
-    bevolking: S.bevolking || 0,
-    graan: Math.floor((S.voorraad && S.voorraad.graan) || 0),
-    hout: Math.floor((S.voorraad && S.voorraad.hout) || 0),
-    goud: Math.floor((S.voorraad && S.voorraad.goud) || 0),
-    doorRaadsman: (S.voorvallen && S.voorvallen.doorRaadsman) || 0,
+    bevolking: S.dorp.bevolking || 0,
+    graan: Math.floor((S.dorp.voorraad && S.dorp.voorraad.graan) || 0),
+    hout: Math.floor((S.dorp.voorraad && S.dorp.voorraad.hout) || 0),
+    goud: Math.floor((S.dorp.voorraad && S.dorp.voorraad.goud) || 0),
+    doorRaadsman: (S.dorp.voorvallen && S.dorp.voorvallen.doorRaadsman) || 0,
   });
 
   // ---------------------------------------------------------------------------------------------
@@ -369,7 +362,7 @@
   // Thuis: de schout staat weer in zijn gehucht, net binnen de weg, en het venster zegt wat er gebeurde terwijl hij weg
   // was (js/landkaart.js).
   function komThuis(S, L) {
-    const w = S.bewoners ? S.bewoners.wereld : S.wereld;
+    const w = S.dorp.wereld;
     const plek = binnenBijDeWeg(w);
     const h = S.schout;
     if (!w.wezens.includes(h)) w.wezens.push(h);
@@ -409,7 +402,7 @@
   // Elk beeld (js/main.js): op reis de volgende provincie; en loopt de schout over de weg zijn gehucht uit, dan opent
   // de kaart. Staat de spelregel uit, dan is er geen land, en komt wie weg was meteen thuis.
   T.werkLandBij = function (S) {
-    if (!S.land && IN().aan && S.lot && S.bewoners && !S.proefje) S.land = T.nieuwLand(S);
+    if (!S.land && IN().aan && S.dorp && S.dorp.lot && S.dorp.bewoners && !S.proefje) S.land = T.nieuwLand(S);
     const L = S.land;
     if (!L || !S.kalender) return;
     if (!IN().aan) {
@@ -421,7 +414,7 @@
       return;
     }
     if (L.reis) return reisVerder(S, L);
-    if (S.modus !== 'verkennen' || !S.bewoners || S.wereld !== S.bewoners.wereld) return;
+    if (S.modus !== 'verkennen' || !S.dorp.bewoners || S.wereld !== S.dorp.wereld) return;
     const h = S.schout;
     const uit = T.wegInEnUit(S.wereld);
     const opDeWeg = !!uit && h.tx === uit.x && h.ty === uit.y && !h.onderweg && !(h.pad && h.pad.length);

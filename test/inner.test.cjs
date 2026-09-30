@@ -80,7 +80,7 @@ function bezoekVanafHetPlein(S) {
 // weg is, of tot `tot` zegt dat het genoeg is.
 function laatLopen(S, rondes, tot) {
   for (let i = 0; i < rondes && S.inner.bezoek; i++) {
-    T.werkInnerBij(S);
+    T.werkInnerBij(S, S);
     const e = S.inner.bezoek && S.inner.bezoek.wezen;
     if (e && e.pad.length) {
       const p = e.pad.shift();
@@ -98,6 +98,10 @@ function laatLopen(S, rondes, tot) {
 test('hij wordt aangekondigd, komt in oogstmaand tellen, en de tijd loopt door op 1× (sinds de dag, 26 sep)', () => {
   const S = maakS();
   S.kalender.snelheid = 10;
+  // Je eigen dorp, en je bent er (js/dorp.js): dan zie je hem op 1× komen.
+  S.speler = true;
+  S.schout = T.maakWezen('schout', 29, 19);
+  S.wereld.wezens.push(S.schout);
   const berichten = metBerichten(() => {
     T.tikInnerDag(S, KOMT - IN.aankondiging);
     assert.equal(S.inner.bezoek, null);
@@ -328,7 +332,7 @@ test('zijn poppetje komt over de weg, loopt zijn eigen ronde tot hij alles zag, 
   const S = maakS();
   S.wereld.overgangen = [{ x: 0, y: 10, naar: 'wereld' }];
   T.innerKomt(S, KOMT, false);
-  T.werkInnerBij(S);
+  T.werkInnerBij(S, S);
   const e = S.inner.bezoek.wezen;
   assert.equal(e.wie, 'inner');
   assert.deepEqual([e.tx, e.ty], [0, 10], 'hij komt binnen over de weg');
@@ -349,8 +353,8 @@ test('loopt de schout naast hem, dan volgt hij de schout; loopt die ver weg, dan
   S.schout = schout;
   S.wereld.wezens.push(schout);
   T.innerKomt(S, KOMT, false);
-  T.werkInnerBij(S);
-  T.werkInnerBij(S);
+  T.werkInnerBij(S, S);
+  T.werkInnerBij(S, S);
   const b = S.inner.bezoek;
   assert.ok(b.volgt, 'de schout staat naast hem');
   // De schout loopt naar boven, weg van alles; hij loopt mee en blijft naast hem.
@@ -383,8 +387,8 @@ test('naast een schout die niet verder loopt, wacht hij een half uur; dan telt h
   S.schout = schout;
   S.wereld.wezens.push(schout);
   T.innerKomt(S, KOMT, false);
-  T.werkInnerBij(S);
-  T.werkInnerBij(S);
+  T.werkInnerBij(S, S);
+  T.werkInnerBij(S, S);
   const b = S.inner.bezoek;
   const e = b.wezen;
   assert.ok(b.volgt);
@@ -406,7 +410,7 @@ test('naast een schout die niet verder loopt, wacht hij een half uur; dan telt h
   S.kalender.dag += IN.eigenGang / 24;
   schout.tx = schout.x = e.tx;
   schout.ty = schout.y = e.ty + 1;
-  T.werkInnerBij(S);
+  T.werkInnerBij(S, S);
   assert.ok(b.volgt, 'daarna weer wel');
 });
 
@@ -414,7 +418,7 @@ test('gaat de zon onder, dan moet hij voor donker terug zijn, en gaat hij met wa
   const S = maakS();
   S.wereld.overgangen = [{ x: 0, y: 10, naar: 'wereld' }];
   T.innerKomt(S, KOMT, false);
-  T.werkInnerBij(S);
+  T.werkInnerBij(S, S);
   const b = S.inner.bezoek;
   assert.ok(Math.abs(T.uurVanDag(b.tot) - T.zonVan(KOMT).onder) < 1e-9, 'hij blijft tot zonsondergang');
   assert.equal(Math.floor(b.tot), KOMT, 'van deze dag');
@@ -433,7 +437,7 @@ test('gaat de zon onder, dan moet hij voor donker terug zijn, en gaat hij met wa
     const S2 = maakS();
     S2.wereld.overgangen = [{ x: 0, y: 10, naar: 'wereld' }];
     T.innerKomt(S2, KOMT, false);
-    T.werkInnerBij(S2);
+    T.werkInnerBij(S2, S2);
     assert.ok(Math.abs(T.uurVanDag(S2.inner.bezoek.tot) - (T.zonVan(KOMT).onder - 2)) < 1e-9);
   });
   const S3 = maakS();
@@ -441,14 +445,14 @@ test('gaat de zon onder, dan moet hij voor donker terug zijn, en gaat hij met wa
   S3.kalender.dag = KOMT + 22 / 24;
   T.innerKomt(S3, KOMT, false);
   S3.inner.bezoek.meteen = true;
-  T.werkInnerBij(S3);
+  T.werkInnerBij(S3, S3);
   assert.equal(Math.floor(S3.inner.bezoek.tot), KOMT + 1);
 });
 
 test('zonder weg de kaart op kijkt hij vanaf het plein en gaat hij meteen', () => {
   const S = maakS();
   T.innerKomt(S, KOMT, false);
-  T.werkInnerBij(S);
+  T.werkInnerBij(S, S);
   assert.equal(S.inner.bezoek, null);
   assert.deepEqual(S.inner.rapport.gebouwen, { huis: 1 }, 'wat hij vanaf het plein zag');
   assert.equal(S.kalender.snelheid, 1, 'de tijd liep gewoon door');
@@ -469,7 +473,7 @@ test('wie met hem praat, houdt hem op: hij kijkt niet en de dag loopt door, tot 
   const S = maakS();
   S.wereld.overgangen = [{ x: 0, y: 10, naar: 'wereld' }];
   T.innerKomt(S, KOMT, false);
-  T.werkInnerBij(S);
+  T.werkInnerBij(S, S);
   const b = S.inner.bezoek;
   const e = b.wezen;
   S.modus = 'dialoog';
@@ -488,7 +492,7 @@ test('wie met hem praat, houdt hem op: hij kijkt niet en de dag loopt door, tot 
   assert.match(berichten.join(' '), /Genoeg gepraat/);
   assert.notDeepEqual([e.tx, e.ty], [0, 10], 'hij telt door, ook al praat je nog');
   // Zijn gesprek weet het: geen praatjes meer.
-  assert.match(T.gesprekKnoop(S, 'inner', 'welkom').tekst, /Geen praatjes meer/);
+  assert.match(T.gesprekKnoop(S, S, 'inner', 'welkom').tekst, /Geen praatjes meer/);
   laatLopen(S, 400);
   assert.ok(!T.heeftVlag(S, 'innerUitgepraat'), 'weg is weg: een volgend bezoek praat hij weer');
 });
@@ -496,10 +500,10 @@ test('wie met hem praat, houdt hem op: hij kijkt niet en de dag loopt door, tot 
 test('zijn gesprek: wie hij is, en wat hij telt', () => {
   const S = maakS();
   T.innerKomt(S, KOMT, false);
-  const knoop = T.gesprekKnoop(S, 'inner', 'welkom');
+  const knoop = T.gesprekKnoop(S, S, 'inner', 'welkom');
   assert.match(knoop.tekst, /inner van Zijne Genade/);
   T.zetVlag(S, 'innerOnverwacht');
-  assert.match(T.gesprekKnoop(S, 'inner', 'welkom').tekst, /twee keer/);
+  assert.match(T.gesprekKnoop(S, S, 'inner', 'welkom').tekst, /twee keer/);
 });
 
 // ---------------------------------------------------------------------------------------------
@@ -617,19 +621,19 @@ test('zijn gesprek: een geschenk kan zolang hij telt en je het goud hebt, via T.
   const S = maakS();
   S.wereld.overgangen = [{ x: 0, y: 10, naar: 'wereld' }];
   T.innerKomt(S, KOMT, false);
-  metBerichten(() => T.werkInnerBij(S)); // zijn poppetje: na zijn rapport loopt hij nog naar de weg
-  const keuzes = () => T.gesprekKnoop(S, 'inner', 'welkom').keuzes.map((k) => k.zeg);
+  metBerichten(() => T.werkInnerBij(S, S)); // zijn poppetje: na zijn rapport loopt hij nog naar de weg
+  const keuzes = () => T.gesprekKnoop(S, S, 'inner', 'welkom').keuzes.map((k) => k.zeg);
   assert.ok(!keuzes().some((k) => /iets voor u/.test(k)), 'zonder goud geen geschenk');
   T.zetVoorraad(S, 'goud', 12);
   assert.ok(keuzes().some((k) => /iets voor u/.test(k)));
-  const bedragen = T.gesprekKnoop(S, 'inner', 'geschenk').keuzes.filter((k) => k.doe && k.doe.omkopen).map((k) => k.doe.omkopen);
+  const bedragen = T.gesprekKnoop(S, S, 'inner', 'geschenk').keuzes.filter((k) => k.doe && k.doe.omkopen).map((k) => k.doe.omkopen);
   assert.deepEqual(bedragen, [5, 10], 'twintig heb je niet');
-  metBerichten(() => T.doeGevolg(S, { omkopen: 10 }));
+  metBerichten(() => T.doeGevolg(S, S, { omkopen: 10 }));
   assert.equal(S.voorraad.goud, 2);
   assert.ok(Math.abs(T.innerKorting(S) - 0.2) < 1e-9);
-  assert.match(T.gesprekKnoop(S, 'inner', 'bedankt').tekst, /zie ineens een stuk minder/);
+  assert.match(T.gesprekKnoop(S, S, 'inner', 'bedankt').tekst, /zie ineens een stuk minder/);
   metBerichten(() => T.innerVertrekt(S));
   T.zetVoorraad(S, 'goud', 50);
-  assert.match(T.gesprekKnoop(S, 'inner', 'welkom').tekst, /rapport is af/);
+  assert.match(T.gesprekKnoop(S, S, 'inner', 'welkom').tekst, /rapport is af/);
   assert.deepEqual(keuzes(), ['Goede reis.'], 'is zijn rapport af, dan valt er niets meer te regelen');
 });

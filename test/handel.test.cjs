@@ -206,13 +206,13 @@ test('zijn poppetje komt over de weg, zijn dagen tellen pas op het plein, en daa
 
 test('in het gehucht opent zijn gesprek de handel, en buiten zijn bezoek niet', () => {
   const S = metMarskramer(2);
-  const knoop = T.gesprekKnoop(S, 'marskramer', 'welkom');
+  const knoop = T.gesprekKnoop(S, S, 'marskramer', 'welkom');
   assert.match(knoop.tekst, /winter/);
   assert.ok(knoop.keuzes.some((k) => k.doe && k.doe.handel), 'er is een antwoord dat de handel opent');
   // Buiten een bezoek (geen vlag marskramerOpBezoek) valt er niets te handelen. Tot 25 sep had hij
   // daar nog een gesprek uit het oude spel, over een sleutel bij de toren.
   const buiten = { inventaris: new Set(), schout: {} };
-  const buitenKnoop = T.gesprekKnoop(buiten, 'marskramer', 'welkom');
+  const buitenKnoop = T.gesprekKnoop(buiten, buiten, 'marskramer', 'welkom');
   assert.ok(!buitenKnoop.keuzes.some((k) => k.doe && k.doe.handel));
   assert.ok(buitenKnoop.keuzes.some((k) => k.sluit), 'wel een afscheid');
 });
@@ -223,7 +223,7 @@ test('doe: { handel: true } in een gesprek opent het venster', () => {
   let geopend = 0;
   T.ui = { openHandel: () => geopend++ };
   try {
-    T.doeGevolg(S, { handel: true });
+    T.doeGevolg(S, S, { handel: true });
   } finally {
     T.ui = oudeUi;
   }

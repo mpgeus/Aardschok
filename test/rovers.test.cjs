@@ -14,15 +14,14 @@ T.anim = { tekst() {}, wacht: () => new Promise(() => {}), loop: () => new Promi
 function gehucht() {
   const echt = console.warn;
   console.warn = () => {};
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, trede: 'gehucht' };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht'));
   } finally {
     console.warn = echt;
   }
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
-  S.kalender = T.nieuweKalender();
-  S.lot = Object.assign(S.lot || {}, { zaad: 7 });
+  S.dorp.lot = Object.assign(S.dorp.lot || {}, { zaad: 7 });
   return S;
 }
 
@@ -38,21 +37,21 @@ const opUur = (S, dag, uur) => {
 
 // Een aanval die meteen begint (zoals Spel.debug.rovers), met zoveel wilde rovers.
 function aanval(S, aantal) {
-  S.rovers = S.rovers || T.nieuweRovers();
-  S.rovers.aanval = { soort: 'wild', dag: Math.floor(S.kalender.dag), fase: 'wacht', aantal, meteen: true };
-  T.werkRoversBij(S);
-  return S.rovers.aanval;
+  S.dorp.rovers = S.dorp.rovers || T.nieuweRovers();
+  S.dorp.rovers.aanval = { soort: 'wild', dag: Math.floor(S.kalender.dag), fase: 'wacht', aantal, meteen: true };
+  T.werkRoversBij(S, S.dorp);
+  return S.dorp.rovers.aanval;
 }
 
 // Een wachthuis met zijn twee mannen (T.verdeelHanden en T.wijsWerkToe, js/gebouwen.js en js/bewoners.js).
 function metWachthuis(S) {
-  S.voorraad.hout = 100;
-  S.voorraad.goud = 100;
-  const r = T.plaatsGebouw(S, 'wachthuis', 49, 51);
+  S.dorp.voorraad.hout = 100;
+  S.dorp.voorraad.goud = 100;
+  const r = T.plaatsGebouw(S.dorp, 'wachthuis', 49, 51);
   assert.equal(r.gelukt, true, r.reden);
   r.instantie.klaar = true;
-  T.verdeelHanden(S);
-  const mannen = S.bewoners.mensen.filter((p) => p.werk === r.instantie);
+  T.verdeelHanden(S.dorp);
+  const mannen = S.dorp.bewoners.mensen.filter((p) => p.werk === r.instantie);
   assert.equal(mannen.length, 2, 'het wachthuis heeft twee handen');
   return mannen.map((p) => p.wezen);
 }
@@ -60,31 +59,31 @@ function metWachthuis(S) {
 test('wie wegtrekt, gaat het bos in: de jongeren en volwassenen worden rover, met hun naam', () => {
   const S = gehucht();
   opUur(S, 30, 10);
-  const voor = S.bewoners.mensen.slice();
-  T.wijzigBevolking(S, -4, 'vertrek', 'het dorp is niet tevreden genoeg');
-  const weg = voor.filter((p) => !S.bewoners.mensen.includes(p));
+  const voor = S.dorp.bewoners.mensen.slice();
+  T.wijzigBevolking(S.dorp, -4, 'vertrek', 'het dorp is niet tevreden genoeg');
+  const weg = voor.filter((p) => !S.dorp.bewoners.mensen.includes(p));
   const groot = weg.filter((p) => p.leeftijd === 'jong' || p.leeftijd === 'volwassen');
   assert.ok(groot.length > 0, 'er trekt iemand weg die rover kan worden');
-  assert.deepEqual(S.rovers.bende.map((l) => l.naam), groot.map((p) => p.naam));
-  assert.equal(S.rovers.bendeOp, 30 + T.ROVERS_INSTELLINGEN.terugNaDagen);
+  assert.deepEqual(S.dorp.rovers.bende.map((l) => l.naam), groot.map((p) => p.naam));
+  assert.equal(S.dorp.rovers.bendeOp, 30 + T.ROVERS_INSTELLINGEN.terugNaDagen);
 });
 
 test('de bende komt terug op de dag die het zegt, tegen de avond, van de rand van de kaart, en het dorp ziet ze', () => {
   const S = gehucht();
   opUur(S, 30, 10);
-  T.wijzigBevolking(S, -4, 'vertrek', 'het dorp is niet tevreden genoeg');
-  const bende = S.rovers.bende.map((l) => l.naam);
-  T.tikRoversDag(S, 39);
-  assert.equal(S.rovers.aanval, null, 'nog niet');
-  T.tikRoversDag(S, 40);
-  assert.equal(S.rovers.aanval.soort, 'bende');
+  T.wijzigBevolking(S.dorp, -4, 'vertrek', 'het dorp is niet tevreden genoeg');
+  const bende = S.dorp.rovers.bende.map((l) => l.naam);
+  T.tikRoversDag(S.dorp, 39);
+  assert.equal(S.dorp.rovers.aanval, null, 'nog niet');
+  T.tikRoversDag(S.dorp, 40);
+  assert.equal(S.dorp.rovers.aanval.soort, 'bende');
   opUur(S, 40, 16);
-  T.werkRoversBij(S);
-  assert.equal(S.rovers.aanval.fase, 'wacht', 'niet voor het uur');
+  T.werkRoversBij(S, S.dorp);
+  assert.equal(S.dorp.rovers.aanval.fase, 'wacht', 'niet voor het uur');
   opUur(S, 40, 17.5);
   berichten.length = 0;
-  T.werkRoversBij(S);
-  const A = S.rovers.aanval;
+  T.werkRoversBij(S, S.dorp);
+  const A = S.dorp.rovers.aanval;
   const w = S.wereld;
   assert.equal(A.fase, 'komen');
   assert.equal(A.rovers.length, bende.length);
@@ -99,34 +98,34 @@ test('de bende komt terug op de dag die het zegt, tegen de avond, van de rand va
   assert.equal(S.kalender.snelheid, 1, 'de tijd gaat naar 1×');
   // Een rover die valt, is uit de bende.
   T.raak(S, A.rovers[0], 100);
-  assert.equal(S.rovers.bende.length, bende.length - 1);
+  assert.equal(S.dorp.rovers.bende.length, bende.length - 1);
 });
 
 test('wilde rovers komen op een dag die vastligt per spel, niet in de eerste zestig dagen, het eerste jaar met twee man', () => {
   const S = gehucht();
-  T.tikRoversDag(S, 1);
-  const op = S.rovers.wildeOp;
+  T.tikRoversDag(S.dorp, 1);
+  const op = S.dorp.rovers.wildeOp;
   assert.ok(op >= 1 + T.ROVERS_INSTELLINGEN.eersteWildeNa, `dag ${op}`);
   const S2 = gehucht();
-  T.tikRoversDag(S2, 1);
-  assert.equal(S2.rovers.wildeOp, op, 'hetzelfde zaad, dezelfde dag');
-  for (let d = 2; d < op; d++) T.tikRoversDag(S, d);
-  assert.equal(S.rovers.aanval, null);
-  T.tikRoversDag(S, op);
-  const A = S.rovers.aanval;
+  T.tikRoversDag(S2.dorp, 1);
+  assert.equal(S2.dorp.rovers.wildeOp, op, 'hetzelfde zaad, dezelfde dag');
+  for (let d = 2; d < op; d++) T.tikRoversDag(S.dorp, d);
+  assert.equal(S.dorp.rovers.aanval, null);
+  T.tikRoversDag(S.dorp, op);
+  const A = S.dorp.rovers.aanval;
   assert.equal(A.soort, 'wild');
   assert.ok(op < T.DAGEN_PER_JAAR, `dag ${op} ligt in het eerste jaar`);
   assert.equal(A.aantal, 2, 'het eerste jaar met twee man');
-  assert.ok(S.rovers.wildeOp > op, 'en daarna komen ze weer');
+  assert.ok(S.dorp.rovers.wildeOp > op, 'en daarna komen ze weer');
 });
 
 test('de wilde rovers bouwen langzaam op: elk jaar van je ambt een man meer, tot vier (vraag 57)', () => {
   const aantalOp = (dag) => {
     const S = gehucht();
-    S.rovers = T.nieuweRovers();
-    S.rovers.wildeOp = dag;
-    T.tikRoversDag(S, dag);
-    return S.rovers.aanval.aantal;
+    S.dorp.rovers = T.nieuweRovers();
+    S.dorp.rovers.wildeOp = dag;
+    T.tikRoversDag(S.dorp, dag);
+    return S.dorp.rovers.aanval.aantal;
   };
   const J = T.DAGEN_PER_JAAR;
   assert.deepEqual([100, J - 1, J, 2 * J - 1, 2 * J, 5 * J].map(aantalOp), [2, 2, 3, 3, 4, 4]);
@@ -139,18 +138,18 @@ test('rovers die de akker halen, roven er graan en gaan weer weg', () => {
   assert.equal(A.fase, 'komen');
   const veld = S.wereld.akkers[A.veld];
   zet(A.rovers[0], veld.x, veld.y);
-  T.werkRoversBij(S);
+  T.werkRoversBij(S, S.dorp);
   assert.equal(A.fase, 'roven');
-  const graan = S.voorraad.graan;
+  const graan = S.dorp.voorraad.graan;
   opUur(S, 5, 17 + T.ROVERS_INSTELLINGEN.roofUren + 0.1);
   berichten.length = 0;
-  T.werkRoversBij(S);
+  T.werkRoversBij(S, S.dorp);
   assert.equal(A.fase, 'weg');
-  assert.equal(graan - S.voorraad.graan, Math.min(graan, 2 * T.ROVERS_INSTELLINGEN.graanPerRover));
+  assert.equal(graan - S.dorp.voorraad.graan, Math.min(graan, 2 * T.ROVERS_INSTELLINGEN.graanPerRover));
   assert.ok(berichten.some((t) => /gaan ervandoor met \d+ graan/.test(t)), berichten.join(' | '));
   for (const e of A.rovers) zet(e, A.ingang.x, A.ingang.y);
-  T.werkRoversBij(S);
-  assert.equal(S.rovers.aanval, null, 'ze zijn de kaart af');
+  T.werkRoversBij(S, S.dorp);
+  assert.equal(S.dorp.rovers.aanval, null, 'ze zijn de kaart af');
   assert.ok(!S.wereld.wezens.some((e) => e.rover));
 });
 
@@ -158,15 +157,15 @@ test('halen ze hun akker niet, dan geven ze het op en gaan ze met lege handen', 
   const S = gehucht();
   opUur(S, 5, 17);
   const A = aanval(S, 2);
-  const graan = S.voorraad.graan;
+  const graan = S.dorp.voorraad.graan;
   for (const e of A.rovers) e.snelheid = 0; // ze komen niet vooruit
   opUur(S, 5, 17 + T.ROVERS_INSTELLINGEN.opUren + 0.1);
-  T.werkRoversBij(S);
+  T.werkRoversBij(S, S.dorp);
   assert.equal(A.fase, 'weg');
   opUur(S, 5, 17 + 2 * T.ROVERS_INSTELLINGEN.opUren + 0.2);
-  T.werkRoversBij(S);
-  assert.equal(S.rovers.aanval, null, 'ook de weg terug heeft een grens');
-  assert.equal(S.voorraad.graan, graan, 'ze namen niets mee');
+  T.werkRoversBij(S, S.dorp);
+  assert.equal(S.dorp.rovers.aanval, null, 'ook de weg terug heeft een grens');
+  assert.equal(S.dorp.voorraad.graan, graan, 'ze namen niets mee');
 });
 
 test('een vertrapte akker: wat erop stond, groeit dit jaar niet meer', () => {
@@ -190,13 +189,13 @@ test('de militie: wie in het wachthuis werkt, loopt bij een aanval met de schout
     assert.equal(e.opgeroepen, true);
     assert.equal(e.kant, 'speler');
     assert.equal(e.leven, T.WEZENS.wachter.leven);
-    assert.equal(T.dagAnker(S, e), null, 'zijn gewone dag telt even niet');
+    assert.equal(T.dagAnker(S.dorp, e), null, 'zijn gewone dag telt even niet');
   }
   // De eerste staat bij de schout, de tweede nog ver weg: alleen wie dichtbij is, vecht mee.
   const h = S.schout;
   zet(een, h.tx + 1, h.ty);
   zet(twee, h.tx + 30, h.ty);
-  assert.deepEqual(T.militieInGevecht(S), [een]);
+  assert.deepEqual(T.militieInGevecht(S.dorp), [een]);
   // Het gevecht: de schout, dan de wachter, dan de hele bende.
   S.overgang = { aanleiding: A.rovers[0] };
   T.beginGevecht(S);
@@ -232,23 +231,23 @@ test('wie valt, is dood: een wachter is een mond minder, en ligt er tot de volge
   opUur(S, 5, 17);
   aanval(S, 2);
   const p = een.bewoner;
-  const voor = S.bevolking;
+  const voor = S.dorp.bevolking;
   berichten.length = 0;
   T.raak(S, een, 100);
   assert.equal(een.dood, true);
-  assert.equal(S.bevolking, voor - 1);
-  assert.ok(!S.bewoners.mensen.includes(p), 'hij woont er niet meer');
+  assert.equal(S.dorp.bevolking, voor - 1);
+  assert.ok(!S.dorp.bewoners.mensen.includes(p), 'hij woont er niet meer');
   assert.ok(S.wereld.wezens.includes(een), 'hij ligt er nog');
   assert.ok(berichten.some((t) => t.includes(p.naam) && /gestorven/.test(t)), berichten.join(' | '));
-  S.rovers.aanval = null;
-  T.tikRoversDag(S, 6);
+  S.dorp.rovers.aanval = null;
+  T.tikRoversDag(S.dorp, 6);
   assert.ok(!S.wereld.wezens.includes(een), 'de volgende dag is hij begraven');
 });
 
 test('na een nacht heeft wie het overleefde weer al zijn leven', () => {
   const S = gehucht();
   S.schout.leven = 5;
-  T.tikRoversDag(S, 3);
+  T.tikRoversDag(S.dorp, 3);
   assert.equal(S.schout.leven, S.schout.maxLeven);
 });
 
@@ -260,7 +259,7 @@ test('zijn alle rovers verslagen, dan is de aanval voorbij en gaat de militie na
   for (const e of A.rovers) T.raak(S, e, 100);
   berichten.length = 0;
   T.eindeGevecht(S, 'gewonnen');
-  assert.equal(S.rovers.aanval, null);
+  assert.equal(S.dorp.rovers.aanval, null);
   assert.ok(berichten.includes('De rovers zijn verslagen.'), berichten.join(' | '));
   for (const e of mannen) {
     assert.equal(e.opgeroepen, false);
@@ -271,12 +270,12 @@ test('zijn alle rovers verslagen, dan is de aanval voorbij en gaat de militie na
 test('de bende en een aanval gaan mee in een bewaard spel', () => {
   const S = gehucht();
   opUur(S, 30, 10);
-  T.wijzigBevolking(S, -4, 'vertrek', 'het dorp is niet tevreden genoeg');
+  T.wijzigBevolking(S.dorp, -4, 'vertrek', 'het dorp is niet tevreden genoeg');
   opUur(S, 31, 17);
   const A = aanval(S, 2);
   const S2 = gehucht();
   assert.equal(T.herstelSpel(S2, T.bewaarSpel(S, { nu: 1790000000000 })).gelukt, true);
-  assert.deepEqual(S2.rovers.bende.map((l) => l.naam), S.rovers.bende.map((l) => l.naam));
-  assert.equal(S2.rovers.aanval.fase, A.fase);
-  for (const e of S2.rovers.aanval.rovers) assert.ok(S2.wereld.wezens.includes(e), 'een rover in de aanval is dezelfde als op de kaart');
+  assert.deepEqual(S2.dorp.rovers.bende.map((l) => l.naam), S.dorp.rovers.bende.map((l) => l.naam));
+  assert.equal(S2.dorp.rovers.aanval.fase, A.fase);
+  for (const e of S2.dorp.rovers.aanval.rovers) assert.ok(S2.wereld.wezens.includes(e), 'een rover in de aanval is dezelfde als op de kaart');
 });

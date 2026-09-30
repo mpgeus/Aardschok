@@ -222,10 +222,10 @@ test('een snelle maaier doet korter over een tegel, een trage langer', () => {
   for (const [id, verwacht] of [['snel', 0.7], ['gewoon', 1], ['traag', 1.3]]) {
     const { S, e, klaar } = eenBoerOpZijnAkker({ maaien: id });
     try {
-      T.werkOogstBij(S, 0.1); // hij staat al op de tegel: meteen maaien
+      T.werkOogstBij(S, S, 0.1); // hij staat al op de tegel: meteen maaien
       if (e.pad.length) {
         e.pad = [];
-        T.werkOogstBij(S, 0.1);
+        T.werkOogstBij(S, S, 0.1);
       }
       assert.ok(e.maait, `${id}: hij maait niet`);
       assert.ok(Math.abs(e.maait.tot - T.oogstTegelDuur() * verwacht) < 1e-9, `${id}: ${e.maait.tot}`);
@@ -239,13 +239,13 @@ test('groene vingers geven meer graan per tegel, slordig minder, ook bij het van
   for (const [id, verwacht] of [['groeneVingers', 1.15], ['slordig', 0.85]]) {
     const { S, e, klaar } = eenBoerOpZijnAkker({ opbrengst: id });
     try {
-      T.werkOogstBij(S, 0.1);
+      T.werkOogstBij(S, S, 0.1);
       if (e.pad.length) {
         e.pad = [];
-        T.werkOogstBij(S, 0.1);
+        T.werkOogstBij(S, S, 0.1);
       }
       S.wereldTijd = e.maait.tot;
-      T.werkOogstBij(S, 0.1);
+      T.werkOogstBij(S, S, 0.1);
       assert.ok(Math.abs(S.voorraad.graan - T.GRAAN_PER_TEGEL * verwacht) < 1e-9, `${id}: ${S.voorraad.graan}`);
     } finally {
       klaar();

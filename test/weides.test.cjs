@@ -17,7 +17,8 @@ function dagVan(maand, dagVanMaand, jaar) {
 }
 
 // Een wereld zonder kaart, met deze velden ({ x, y, b, h, bestemming }), een vast lot, en zo nodig een
-// meent. Groot genoeg om over te lopen: een raster van 40 bij 40 open land.
+// meent. Groot genoeg om over te lopen: een raster van 40 bij 40 open land. Het losse object S is het dorp zelf (D,
+// js/dorp.js), met alleen wat de regels over weides, vee en mest nodig hebben: die vragen het dorp, niet het spel.
 function wereldMet(velden, meent) {
   const akkers = velden.map((v, i) => ({ naam: `veld${i}`, huis: null, plan: v.bestemming, vruchtbaarheid: 1, ...v }));
   const S = {
@@ -110,7 +111,7 @@ test('alleen weides doen mee: een akker ertussen of ernaast is geen weide, en de
 });
 
 test('in het gehucht: de weide van Klaas en de strook van Wouter ernaast worden samen één weide, met de strook ertussen', () => {
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   const veld = (naam) => S.wereld.akkers.find((a) => a.naam === naam);
   const klaas = veld('akker6');
@@ -264,16 +265,16 @@ test('lammeren op de meent: alleen zolang er plaats is in de schaapskooi', () =>
 });
 
 test('de muis en het venster zeggen dat een weide samen met het veld ernaast één weide is', () => {
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   const veld = (naam) => S.wereld.akkers.find((a) => a.naam === naam);
   const klaas = veld('akker6');
   const wouter = veld('akker5');
-  assert.equal(T.samenMetTekst(S, klaas), '');
+  assert.equal(T.samenMetTekst(S.dorp, klaas), '');
   wouter.bestemming = wouter.plan = 'weide';
-  const boerWouter = T.boerVanVeld(S, wouter);
-  assert.equal(T.samenMetTekst(S, klaas), `samen één weide met het veld van ${boerWouter.naam}`);
-  assert.match(T.veldTekst(S, wouter), new RegExp(`samen één weide met het veld van ${T.boerVanVeld(S, klaas).naam}`));
+  const boerWouter = T.boerVanVeld(S.dorp, wouter);
+  assert.equal(T.samenMetTekst(S.dorp, klaas), `samen één weide met het veld van ${boerWouter.naam}`);
+  assert.match(T.veldTekst(S.dorp, wouter), new RegExp(`samen één weide met het veld van ${T.boerVanVeld(S.dorp, klaas).naam}`));
   assert.equal(T.opsomming(['Klaas', 'Jan', 'Gerrit']), 'Klaas, Jan en Gerrit');
 });
 
@@ -324,14 +325,14 @@ test('de schaapskooi maakt zelf geen wol meer: die komt van de schapen', () => {
 });
 
 test('de muis op de heide: wie er graast, en hoeveel de kooi bergt', () => {
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   const meent = T.meentVan(S.wereld);
   assert.equal(T.meentOp(S.wereld, meent.x + 2, meent.y + 3), meent);
   assert.equal(T.meentOp(S.wereld, meent.x - 1, meent.y), null);
-  assert.equal(T.meentTekst(S, meent), `De heide, de meent van het dorp · ${IN.beginKudde.schaap} schapen · de kooi bergt er ${IN.kooiPlaats}`);
+  assert.equal(T.meentTekst(S.dorp, meent), `De heide, de meent van het dorp · ${IN.beginKudde.schaap} schapen · de kooi bergt er ${IN.kooiPlaats}`);
   const h = T.handelingVerkennen(Object.assign(S, { spreuk: null, inventaris: new Set() }), { x: meent.x + 2, y: meent.y + 3 });
-  assert.equal(h.tekst, T.meentTekst(S, meent));
+  assert.equal(h.tekst, T.meentTekst(S.dorp, meent));
 });
 
 // ---------------------------------------------------------------- mest per veld
@@ -396,9 +397,9 @@ test('met de optie "vanzelf" gaat de mest naar verhouding over alle akkers van v
 });
 
 test('de muis op een akker met mest zegt het', () => {
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   const akker = S.wereld.akkers.find((a) => a.naam === 'akker2');
-  T.zetMest(S, akker, true);
-  assert.match(T.veldTekst(S, akker), / · krijgt mest op 1 lentemaand$/);
+  T.zetMest(S.dorp, akker, true);
+  assert.match(T.veldTekst(S.dorp, akker), / · krijgt mest op 1 lentemaand$/);
 });

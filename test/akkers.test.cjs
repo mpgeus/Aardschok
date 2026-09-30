@@ -133,7 +133,7 @@ const RIJP_DAG = (() => {
 test('T.werkOogstBij: buiten het oogstseizoen gebeurt er niets', () => {
   const { w, boer } = nieuweBoerWereld();
   const S = { wereld: w, tijd: 0, kalender: { dag: 0 } }; // dag 0 = geploegd
-  T.werkOogstBij(S, 0.1);
+  T.werkOogstBij(S, S, 0.1);
   assert.equal(boer.pad.length, 0);
   assert.equal(boer.maait, null);
 });
@@ -144,7 +144,7 @@ test('T.werkOogstBij: loopt naar een tegel, maait hem, en gaat door tot de hele 
 
   let veiligheid = 0;
   while (akker.geoogst.size < 4 && veiligheid++ < 200) {
-    T.werkOogstBij(S, 0.1);
+    T.werkOogstBij(S, S, 0.1);
     if (boer.pad.length) {
       // doe alsof hij is aangekomen (dat doet anders js/anim.js)
       boer.tx = boer.pad[0].x;
@@ -165,7 +165,7 @@ test('T.werkOogstBij: een nieuw jaar (geploegd) veegt de oogst van vorig jaar we
   const { w, akker, boer } = nieuweBoerWereld();
   akker.geoogst = new Set(['0,0', '1,0', '0,1', '1,1']);
   const S = { wereld: w, tijd: 0, kalender: { dag: 0 } }; // dag 0 = geploegd
-  T.werkOogstBij(S, 0.1);
+  T.werkOogstBij(S, S, 0.1);
   assert.equal(akker.geoogst.size, 0);
 });
 
@@ -174,7 +174,7 @@ test('T.werkOogstBij: een nieuw jaar (geploegd) veegt de oogst van vorig jaar we
 function maaiTotKlaar(S, boer, klaar) {
   let veiligheid = 0;
   while (!klaar() && veiligheid++ < 500) {
-    T.werkOogstBij(S, 0.1);
+    T.werkOogstBij(S, S, 0.1);
     if (boer.pad.length) {
       boer.tx = boer.pad[0].x;
       boer.ty = boer.pad[0].y;
@@ -467,7 +467,7 @@ test('T.werkOogstBij: een boer die al op een ongemaaide tegel staat, begint daar
   T.zoekPad = (van, doel) => (van.x === doel.x && van.y === doel.y ? [] : [{ x: doel.x, y: doel.y }]); // zoals js/pad.js
   try {
     const S = { wereld: w, tijd: 0, kalender: { dag: RIJP_DAG }, voorraad: { graan: 0 } };
-    T.werkOogstBij(S, 0.1);
+    T.werkOogstBij(S, S, 0.1);
     assert.ok(boer.maait, 'hij maait meteen de tegel waar hij staat');
     assert.deepEqual([boer.maait.x, boer.maait.y], [1, 1]);
     maaiTotKlaar(S, boer, () => akker.geoogst.size === 4);

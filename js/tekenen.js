@@ -132,6 +132,8 @@
 
   T.tekenScene = function (ctx, S, bw, bh) {
     const w = S.wereld;
+    // Het dorp dat hier ligt (js/dorp.js), of geen: een ander gebied, of het gereedschap.
+    const D = T.dorpHier(S);
     // Buiten is het niets de nacht tussen de bomen, binnen het donker om de kamer heen.
     ctx.fillStyle = w.buiten ? '#0e1310' : '#0c0b0a';
     ctx.fillRect(0, 0, bw, bh);
@@ -187,7 +189,7 @@
     }
     // De paaltjes op de hoeken van een vrij erf (js/erven.js): ze staan in de weg van niemand, maar
     // worden als een voorwerp op hun tegel getekend, zodat wie ervoor loopt ervoor staat.
-    for (const erf of S.erven || []) {
+    for (const erf of (D && D.erven) || []) {
       for (const t of T.paaltjesVan(erf)) {
         if (!inVak(vak, t.x, t.y) || !T.isZichtbaar(w, t.x, t.y)) continue;
         lijst.push({ d: t.x + t.y, l: 1, punt: { x: t.x, y: t.y }, f: () => tekenPaaltje(ctx, t.x, t.y) });
@@ -261,7 +263,7 @@
     T.werkDoorkijkBij(S, dt, zichtbaar);
     // Wie aan de schandpaal staat, krijgt het halsijzer om: een eigen laag ná zijn beeld (l 2,5,
     // zoals de voorlaag van het graan), zodat de band vóór zijn nek komt.
-    const aanDePaal = metSprites() && T.aanDePaal ? T.aanDePaal(S) : null;
+    const aanDePaal = metSprites() && D && T.aanDePaal ? T.aanDePaal(D) : null;
     for (const e of w.wezens) {
       // Met sprites blijft het laatste beeld van het sterven liggen; met vlakken vervaagt het.
       if (e.dood && e.sterfTijd > 0.8 && !metSprites()) continue;
@@ -332,7 +334,8 @@
     // van ver waar het dorp 's avonds is, en waar je gezien wordt. De ramen van de herberg branden ook
     // (brandendeRamen hieronder).
     const nacht = nachtVan(S); // vol als het nacht is, zwakker in de schemering
-    for (const b of T.lichtBronnen ? T.lichtBronnen(S) : []) {
+    const D = T.dorpHier(S);
+    for (const b of T.lichtBronnen && D ? T.lichtBronnen(D) : []) {
       const q = T.naarScherm(b.x, b.y);
       const lx = Math.round(bw / 2) + (q.x - Math.round(S.camera.x)) * S.zoom;
       const ly = Math.round(bh / 2) + (q.y - 24 - Math.round(S.camera.y)) * S.zoom;
@@ -366,9 +369,10 @@
   // Hoe fel: in de schemering nog zwak, 's nachts bijna vol, en dan zie je nog net het glas.
   function brandendeRamen(S) {
     const nacht = nachtVan(S);
-    if (nacht <= 0.02 || !T.lichtBronnen || !metSprites()) return [];
+    const D = T.dorpHier(S);
+    if (nacht <= 0.02 || !T.lichtBronnen || !D || !metSprites()) return [];
     const uit = [];
-    for (const b of T.lichtBronnen(S)) {
+    for (const b of T.lichtBronnen(D)) {
       const g = b.ramenVan;
       const opz = g && g.tekening && T.opzoekTegelNaam(g.tekening);
       const ramen = opz && opz.eig && opz.eig.ramen;
@@ -699,10 +703,11 @@
   // De randen van de erven (js/erven.js), zolang het bouwmenu open is of je bouwt: zo zie je waar ze
   // liggen en welke vrij zijn (licht) of bewoond (gedempt). Een lijn langs de buitenkant, op de grond.
   function tekenErfRanden(ctx, S) {
-    if (!(S.bouwSoort || S.bouwMenuOpen) || !(S.erven && S.erven.length)) return;
+    const erven = S.dorp && S.dorp.erven; // bouwen doe je in je eigen dorp (het bouwmenu, js/hud.js)
+    if (!(S.bouwSoort || S.bouwMenuOpen) || !(erven && erven.length)) return;
     ctx.save();
     ctx.lineWidth = 2;
-    for (const erf of S.erven) {
+    for (const erf of erven) {
       const hoeken = [
         T.naarScherm(erf.x - 0.5, erf.y - 0.5), T.naarScherm(erf.x + erf.b - 0.5, erf.y - 0.5),
         T.naarScherm(erf.x + erf.b - 0.5, erf.y + erf.h - 0.5), T.naarScherm(erf.x - 0.5, erf.y + erf.h - 0.5),
@@ -736,7 +741,7 @@
       return;
     }
     // De voet van de tekening die dit gebouw echt krijgt (T.volgendeTekening, js/gebouwen.js).
-    const voet = T.gebouwVoet(S.bouwSoort, T.volgendeTekening(S, S.bouwSoort));
+    const voet = T.gebouwVoet(S.bouwSoort, T.volgendeTekening(S.dorp, S.bouwSoort));
     if (!voet) return;
     ctx.fillStyle = S.bouwHover.ok ? 'rgba(134, 196, 111, 0.45)' : 'rgba(224, 96, 79, 0.45)';
     for (let dy = 0; dy < voet.h; dy++) {
@@ -1234,7 +1239,8 @@
     if (v.soort === 'schandpaal') {
       // De schandpaal (js/heer.js): leeg, met het halsijzer open tegen de paal, of bezet, met de
       // ketting naar wie ervoor staat (T.aanDePaal); diens halsijzer komt ná hem (tekenHalsijzer).
-      const paal = metSprites() && T.sprites.schandpaal && T.sprites.schandpaal(T.aanDePaal && T.aanDePaal(S) ? 'bezet' : 'leeg');
+      const D = T.dorpHier(S);
+      const paal = metSprites() && T.sprites.schandpaal && T.sprites.schandpaal(T.aanDePaal && D && T.aanDePaal(D) ? 'bezet' : 'leeg');
       if (paal) {
         T.sprites.teken(ctx, paal, p.x, p.y, helder);
         return;

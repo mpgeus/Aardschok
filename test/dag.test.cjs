@@ -27,14 +27,14 @@ const bijUur = (dag, uur) => Math.floor(dag) + uur / 24;
 function gehucht(dag, snelheid) {
   const echt = console.warn;
   console.warn = () => {};
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht'));
   } finally {
     console.warn = echt;
   }
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', effecten: [], wachters: [], bezocht: new Set(), inventaris: new Set() });
-  S.kalender = { dag, snelheid: snelheid || 1 };
+  Object.assign(S.kalender, { dag, snelheid: snelheid || 1 });
   return S;
 }
 function stap(S, dt) {
@@ -44,7 +44,7 @@ function stap(S, dt) {
   T.tikKalender(S, dt);
   T.werkDagBij(S);
   T.werkAnimatiesBij(S, dt, dtW);
-  T.werkOogstBij(S, dtW);
+  T.werkOogstBij(S, S.dorp, dtW);
   T.laatDwalen(S, dtW);
 }
 function loopTot(S, dag) {
@@ -158,7 +158,7 @@ function maaiDagen(snelheid, dagen) {
       const dtW = dt * T.wereldFactor(S);
       S.wereldTijd += dtW;
       T.tikKalender(S, dt);
-      T.werkOogstBij(S, dtW);
+      T.werkOogstBij(S, S, dtW);
       if (boer.pad.length) {
         boer.tx = boer.x = boer.pad[0].x;
         boer.ty = boer.y = boer.pad[0].y;
@@ -182,17 +182,17 @@ test('\'s avonds stopt het maaien, en wat hij van een tegel al deed, blijft ligg
   const akker = { x: 0, y: 0, b: 2, h: 2, huis: 'boer1', geoogst: new Set() };
   const boer = { tx: 0, ty: 0, x: 0, y: 0, dood: false, pad: [], werkAkkers: [akker] };
   const S = { wereld: { wezens: [boer], akkers: [akker] }, wereldTijd: 0, kalender: { dag: bijUur(HOOI, 15) }, voorraad: { graan: 0 } };
-  T.werkOogstBij(S, 0.1);
+  T.werkOogstBij(S, S, 0.1);
   assert.ok(boer.maait, 'midden op de dag maait hij');
   const duur = boer.maait.tot - boer.maait.sinds;
   S.wereldTijd = duur / 3; // een derde gedaan
   S.kalender.dag = bijUur(HOOI, 23); // en dan is het nacht
-  T.werkOogstBij(S, 0.1);
+  T.werkOogstBij(S, S, 0.1);
   assert.equal(boer.maait, null, 'hij stopt');
   assert.ok(Math.abs(akker.half.get('0,0') - duur / 3) < 1e-9, 'een derde van de tegel blijft liggen');
   assert.equal(akker.geoogst.size, 0);
   S.kalender.dag = bijUur(HOOI + 1, 9); // de volgende ochtend, aan het werk
-  T.werkOogstBij(S, 0.1);
+  T.werkOogstBij(S, S, 0.1);
   assert.ok(boer.maait);
   assert.ok(Math.abs(boer.maait.tot - boer.maait.sinds - (duur * 2) / 3) < 1e-9, 'hij doet nog twee derde');
 });
@@ -223,19 +223,24 @@ test('slapen kan \'s avonds bij je eigen huis, en bij het eerste licht word je w
 });
 
 test('een bezoeker komt op één manier: overdag, met zijn bericht één keer, en de heer en de inner zetten de tijd op 1×', () => {
-  const S = { kalender: { dag: bijUur(GROEI, 3), snelheid: 10 } };
+  // Een los object dat als dorp dient: het is jouw dorp (speler), en de schout staat op zijn kaart (T.naarGewoneSnelheid).
+  const losDorp = (dag) => {
+    const schout = {};
+    return { speler: true, schout, wereld: { wezens: [schout] }, kalender: { dag, snelheid: 10 } };
+  };
+  const D = losDorp(bijUur(GROEI, 3));
   berichten.length = 0;
   const bezoek = { aankomst: { tekst: 'Er komt iemand over de weg.', soort: 'gevaar', naarGewoon: true } };
-  assert.equal(T.bezoekerKomtAan(S, bezoek), false, 'om drie uur \'s nachts nog niet');
+  assert.equal(T.bezoekerKomtAan(D, bezoek), false, 'om drie uur \'s nachts nog niet');
   assert.deepEqual(berichten, []);
-  S.kalender.dag = bijUur(GROEI, IN.bezoekUur + 0.25);
-  assert.equal(T.bezoekerKomtAan(S, bezoek), true, 'vanaf het bezoekuur wel');
-  assert.equal(T.bezoekerKomtAan(S, bezoek), true, 'en daarna blijft hij er');
+  D.kalender.dag = bijUur(GROEI, IN.bezoekUur + 0.25);
+  assert.equal(T.bezoekerKomtAan(D, bezoek), true, 'vanaf het bezoekuur wel');
+  assert.equal(T.bezoekerKomtAan(D, bezoek), true, 'en daarna blijft hij er');
   assert.deepEqual(berichten, ['Er komt iemand over de weg.'], 'het bericht één keer');
-  assert.equal(S.kalender.snelheid, 1, 'van 10× naar 1×');
+  assert.equal(D.kalender.snelheid, 1, 'van 10× naar 1×');
   // Wie meteen komt (Spel.debug, of er is geen weg de kaart op), wacht niet op de ochtend; en
   // zonder naarGewoon (de marskramer) blijft de snelheid zoals de speler hem zette.
-  const nacht = { kalender: { dag: bijUur(GROEI, 3), snelheid: 10 } };
+  const nacht = losDorp(bijUur(GROEI, 3));
   assert.equal(T.bezoekerKomtAan(nacht, { meteen: true, aankomst: { tekst: 'De marskramer.', soort: 'goed' } }), true);
   assert.equal(nacht.kalender.snelheid, 10);
   assert.equal(T.bezoekerKomtAan(nacht, null), false, 'geen bezoek, niemand die komt');
@@ -245,15 +250,15 @@ test('de inner komt overdag: valt zijn dag \'s nachts in, dan loopt hij pas om n
   const S = gehucht(bijUur(dagVan('oogstmaand', 15), 0.5), 10);
   S.schout = S.schout || null;
   berichten.length = 0;
-  T.innerKomt(S, Math.floor(S.kalender.dag), false);
-  T.werkInnerBij(S);
-  assert.ok(S.inner.bezoek, 'hij is op komst');
-  assert.equal(S.inner.bezoek.wezen, null, 'maar niet midden in de nacht');
+  T.innerKomt(S.dorp, Math.floor(S.kalender.dag), false);
+  T.werkInnerBij(S, S.dorp);
+  assert.ok(S.dorp.inner.bezoek, 'hij is op komst');
+  assert.equal(S.dorp.inner.bezoek.wezen, null, 'maar niet midden in de nacht');
   assert.ok(!berichten.some((b) => /komt tellen/.test(b)), 'en het bericht wacht ook');
   assert.equal(S.kalender.snelheid, 10);
   S.kalender.dag = bijUur(S.kalender.dag, IN.bezoekUur + 0.25);
-  T.werkInnerBij(S);
-  assert.ok(S.inner.bezoek.wezen, 'om negen uur is hij er');
+  T.werkInnerBij(S, S.dorp);
+  assert.ok(S.dorp.inner.bezoek.wezen, 'om negen uur is hij er');
   assert.ok(berichten.some((b) => /komt tellen/.test(b)));
   assert.equal(S.kalender.snelheid, 1, 'wie op 10× speelde, ziet hem op 1× komen');
 });

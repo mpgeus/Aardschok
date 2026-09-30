@@ -20,7 +20,7 @@ function gehucht() {
   let n = 11;
   console.warn = () => {};
   Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, trede: 'gehucht' };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht'));
   } finally {
@@ -28,9 +28,8 @@ function gehucht() {
     Math.random = toeval;
   }
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
-  S.kalender = T.nieuweKalender();
-  S.lot = Object.assign(S.lot || {}, { zaad: 7 });
-  S.voorvallen = T.nieuweVoorvallen();
+  S.dorp.lot = Object.assign(S.dorp.lot || {}, { zaad: 7 });
+  S.dorp.voorvallen = T.nieuweVoorvallen();
   return S;
 }
 
@@ -40,10 +39,10 @@ function metVoorval(S, id, dag = 10) {
   const v = T.VOORVALLEN[id];
   const oud = { vervolg: v.vervolg, als: v.als };
   Object.assign(v, { vervolg: false, als: undefined });
-  const mensen = T.voorvalKan(S, id, dag);
+  const mensen = T.voorvalKan(S.dorp, id, dag);
   Object.assign(v, oud);
   assert.ok(mensen, `er is iemand voor "${id}"`);
-  return T.beginVoorval(S, id, mensen.wie, mensen.ander, dag);
+  return T.beginVoorval(S.dorp, id, mensen.wie, mensen.ander, dag);
 }
 
 // Het eerste antwoord van een voorval dat het gesprek sluit en waarvoor genoeg is, zoals een speler kiest.
@@ -111,11 +110,11 @@ test('om de paar dagen een voorval, in de winter vaker, en niet in de eerste dag
   const dagen = [];
   for (let d = 1; d < T.DAGEN_PER_JAAR; d++) {
     S.kalender.dag = d;
-    T.tikVoorvallenDag(S, d);
-    const L = S.voorvallen.lopend;
+    T.tikVoorvallenDag(S.dorp, d);
+    const L = S.dorp.voorvallen.lopend;
     if (L && L.dag === d) {
       dagen.push(d);
-      T.voorvalBeantwoord(S, L.id);
+      T.voorvalBeantwoord(S.dorp, L.id);
     }
   }
   assert.ok(dagen[0] >= T.VOORVALLEN_INSTELLINGEN.eersteNa, 'het eerste komt niet vóór eersteNa');
@@ -124,27 +123,27 @@ test('om de paar dagen een voorval, in de winter vaker, en niet in de eerste dag
   const winter = dagen.filter((d) => T.datumVanDag(d).seizoen === 'winter').length / 90;
   const rest = dagen.filter((d) => T.datumVanDag(d).seizoen !== 'winter').length / 270;
   assert.ok(winter > rest, `in de winter vaker: ${winter.toFixed(3)} per dag, anders ${rest.toFixed(3)}`);
-  assert.equal(S.voorvallen.aantal, dagen.length);
+  assert.equal(S.dorp.voorvallen.aantal, dagen.length);
 });
 
 test('wie het zegt en over wie het gaat, passen bij het voorval, en zijn niet van hetzelfde gezin', () => {
   const S = gehucht();
   const boer = (p) => !!(p.wie && p.huis && p.huis.soort === 'boerderij');
-  const dief = T.voorvalKan(S, 'diefstal', 10);
+  const dief = T.voorvalKan(S.dorp, 'diefstal', 10);
   assert.ok(dief);
   assert.equal(dief.wie.geslacht, 'vrouw');
   assert.equal(dief.ander.geslacht, 'man');
   assert.ok(!boer(dief.ander), 'de dief is geen boer');
   assert.notEqual(dief.wie.gezin, dief.ander.gezin);
-  const grens = T.voorvalKan(S, 'akkergrens', 10);
+  const grens = T.voorvalKan(S.dorp, 'akkergrens', 10);
   assert.ok(grens && boer(grens.wie) && boer(grens.ander) && grens.wie !== grens.ander, 'twee boeren om een grens');
   // Een karakter: de boer die het trok (js/boeren.js), en anders komt het voorval niet.
   for (const [id, karakter] of [['weduweDak', 'weduwe'], ['lied', 'zanger'], ['klok', 'vrome'], ['wijsheid', 'grijsaard']]) {
-    const heeft = S.bewoners.mensen.some((p) => boer(p) && p.wezen.karakter === karakter);
+    const heeft = S.dorp.bewoners.mensen.some((p) => boer(p) && p.wezen.karakter === karakter);
     const v = T.VOORVALLEN[id];
     const oud = v.als;
     v.als = undefined;
-    const m = T.voorvalKan(S, id, 10);
+    const m = T.voorvalKan(S.dorp, id, 10);
     v.als = oud;
     assert.equal(!!m, heeft, `${id}: alleen als er een ${karakter} is`);
     if (m) assert.equal(m.wie.wezen.karakter, karakter);
@@ -152,7 +151,7 @@ test('wie het zegt en over wie het gaat, passen bij het voorval, en zijn niet va
   // Niemand van het gezin van de schout, en de schout zelf niet.
   for (let d = 1; d < 200; d += 3) {
     for (const id of Object.keys(T.VOORVALLEN)) {
-      const m = T.voorvalKan(S, id, d);
+      const m = T.voorvalKan(S.dorp, id, d);
       for (const p of m ? [m.wie, m.ander].filter(Boolean) : []) assert.ok(!p.schout && !(p.hoofd && p.hoofd.schout), `${id}: niet de schout of zijn gezin`);
     }
   }
@@ -163,134 +162,134 @@ test('een voorval komt als het er de tijd voor is: de maand, een gebouw, de voor
   const GRASMAAND = 1 * T.DAGEN_PER_MAAND;
   const HOOIMAAND = 4 * T.DAGEN_PER_MAAND;
   const OOGSTMAAND = 5 * T.DAGEN_PER_MAAND;
-  assert.ok(T.voorvalKan(S, 'zaaigraan', GRASMAAND + 3), 'zaaigraan in grasmaand');
-  assert.equal(T.voorvalKan(S, 'zaaigraan', HOOIMAAND + 3), null, 'en niet in hooimaand');
-  T.zetVoorraad(S, 'graan', 50);
-  assert.equal(T.voorvalKan(S, 'oogstfeest', OOGSTMAAND + 3), null, 'een oogstfeest met 50 graan: nee');
-  T.zetVoorraad(S, 'graan', 200);
-  assert.ok(T.voorvalKan(S, 'oogstfeest', OOGSTMAAND + 3), 'met 200 graan wel');
-  assert.equal(T.voorvalKan(S, 'oogstfeest', GRASMAAND + 3), null, 'maar niet in grasmaand');
+  assert.ok(T.voorvalKan(S.dorp, 'zaaigraan', GRASMAAND + 3), 'zaaigraan in grasmaand');
+  assert.equal(T.voorvalKan(S.dorp, 'zaaigraan', HOOIMAAND + 3), null, 'en niet in hooimaand');
+  T.zetVoorraad(S.dorp, 'graan', 50);
+  assert.equal(T.voorvalKan(S.dorp, 'oogstfeest', OOGSTMAAND + 3), null, 'een oogstfeest met 50 graan: nee');
+  T.zetVoorraad(S.dorp, 'graan', 200);
+  assert.ok(T.voorvalKan(S.dorp, 'oogstfeest', OOGSTMAAND + 3), 'met 200 graan wel');
+  assert.equal(T.voorvalKan(S.dorp, 'oogstfeest', GRASMAAND + 3), null, 'maar niet in grasmaand');
   // De vechtpartij is in de herberg: zonder herberg niet.
-  assert.ok(T.voorvalKan(S, 'vechtpartij', 10));
-  const herberg = S.gebouwen.find((g) => g.soort === 'herberg');
+  assert.ok(T.voorvalKan(S.dorp, 'vechtpartij', 10));
+  const herberg = S.dorp.gebouwen.find((g) => g.soort === 'herberg');
   herberg.klaar = false;
-  assert.equal(T.voorvalKan(S, 'vechtpartij', 10), null);
+  assert.equal(T.voorvalKan(S.dorp, 'vechtpartij', 10), null);
   herberg.klaar = true;
   // Wolven in de winter, en alleen als er schapen zijn om te halen.
   const LOUWMAAND = 10 * T.DAGEN_PER_MAAND;
-  const schapen = T.veeVan(S).filter((e) => e.dier === 'schaap').length;
-  assert.equal(!!T.voorvalKan(S, 'wolven', LOUWMAAND + 3), schapen >= 3, `wolven met ${schapen} schapen`);
-  assert.equal(T.voorvalKan(S, 'wolven', GRASMAAND + 3), null, 'niet in grasmaand');
+  const schapen = T.veeVan(S.dorp).filter((e) => e.dier === 'schaap').length;
+  assert.equal(!!T.voorvalKan(S.dorp, 'wolven', LOUWMAAND + 3), schapen >= 3, `wolven met ${schapen} schapen`);
+  assert.equal(T.voorvalKan(S.dorp, 'wolven', GRASMAAND + 3), null, 'niet in grasmaand');
   // Hetzelfde voorval niet binnen zijn pauze.
   metVoorval(S, 'zwerver', 20);
-  T.voorvalBeantwoord(S, 'zwerver');
-  assert.equal(T.voorvalKan(S, 'zwerver', 30), null);
-  assert.ok(T.voorvalKan(S, 'zwerver', 20 + T.VOORVALLEN_INSTELLINGEN.pauze));
+  T.voorvalBeantwoord(S.dorp, 'zwerver');
+  assert.equal(T.voorvalKan(S.dorp, 'zwerver', 30), null);
+  assert.ok(T.voorvalKan(S.dorp, 'zwerver', 20 + T.VOORVALLEN_INSTELLINGEN.pauze));
   // Een vervolg komt nooit zomaar.
-  assert.equal(T.voorvalKan(S, 'diefstalWeer', 10), null);
+  assert.equal(T.voorvalKan(S.dorp, 'diefstalWeer', 10), null);
 });
 
 test('het venster zegt vooraf wat een antwoord kost, en wat er niet is, kun je niet geven', () => {
   const S = gehucht();
   const L = metVoorval(S, 'diefstal');
-  const [verban, boete, laatGaan] = antwoorden('diefstal').map((k) => T.prijsVanKeuze(S, k.doe));
+  const [verban, boete, laatGaan] = antwoorden('diefstal').map((k) => T.prijsVanKeuze(S.dorp, k.doe));
   assert.equal(verban.tekst, `tevredenheid +3%, ${T.naamVanBewoner(L.ander)} moet het bos in`);
   assert.equal(boete.tekst, '+1 goud, tevredenheid +2%');
   assert.equal(laatGaan.tekst, 'tevredenheid −3%', 'dat hij terug kan komen, zegt het niet');
-  T.zetVoorraad(S, 'graan', 5);
-  const p = T.prijsVanKeuze(S, { graan: -10, tevreden: -4 });
+  T.zetVoorraad(S.dorp, 'graan', 5);
+  const p = T.prijsVanKeuze(S.dorp, { graan: -10, tevreden: -4 });
   assert.equal(p.kan, false);
   assert.equal(p.waarom, 'je hebt 5 graan');
-  assert.deepEqual(T.prijsVanKeuze(S, { graan: 10 }), { tekst: '+10 graan', kan: true, waarom: '' }, 'wat erbij komt, kan altijd');
-  assert.equal(T.prijsVanKeuze(S, { schaap: -2, sterfkans: 30, argwaan: -5 }).tekst, '−2 schapen, argwaan −5%, 30% kans op een dode');
+  assert.deepEqual(T.prijsVanKeuze(S.dorp, { graan: 10 }), { tekst: '+10 graan', kan: true, waarom: '' }, 'wat erbij komt, kan altijd');
+  assert.equal(T.prijsVanKeuze(S.dorp, { schaap: -2, sterfkans: 30, argwaan: -5 }).tekst, '−2 schapen, argwaan −5%, 30% kans op een dode');
   // Een gewoon gesprek: de marskramer opent zijn venster, en dat kost niets.
-  assert.deepEqual(T.prijsVanKeuze(S, { handel: true }), { tekst: '', kan: true, waarom: '' });
+  assert.deepEqual(T.prijsVanKeuze(S.dorp, { handel: true }), { tekst: '', kan: true, waarom: '' });
 });
 
 test('een antwoord doet wat het zegt: de voorraad, de tevredenheid die wegslijt, en de argwaan', () => {
   const S = gehucht();
-  S.behoeften = T.nieuweBehoeften();
+  S.dorp.behoeften = T.nieuweBehoeften();
   metVoorval(S, 'bruiloft', 40);
-  T.zetVoorraad(S, 'graan', 100);
-  T.zetVoorraad(S, 'bier', 30);
-  T.doeGevolg(S, antwoorden('bruiloft')[0].doe);
-  assert.equal(S.voorraad.graan, 85);
-  assert.equal(S.voorraad.bier, 20);
-  const nu = T.voorvalStemming(S, 40);
+  T.zetVoorraad(S.dorp, 'graan', 100);
+  T.zetVoorraad(S.dorp, 'bier', 30);
+  T.doeGevolg(S, S.dorp, antwoorden('bruiloft')[0].doe);
+  assert.equal(S.dorp.voorraad.graan, 85);
+  assert.equal(S.dorp.voorraad.bier, 20);
+  const nu = T.voorvalStemming(S.dorp, 40);
   assert.ok(Math.abs(nu.erbij - 0.06) < 1e-9, 'zes procent tevredener');
   assert.deepEqual(nu.blij, ['de bruiloft']);
-  assert.ok(Math.abs(T.voorvalStemming(S, 55).erbij - 0.03) < 1e-9, 'na een halve stemmingDagen nog de helft');
-  assert.equal(T.voorvalStemming(S, 40 + T.VOORVALLEN_INSTELLINGEN.stemmingDagen).erbij, 0, 'en dan is het weg');
-  const b = T.berekenTevredenheid(S, 40);
+  assert.ok(Math.abs(T.voorvalStemming(S.dorp, 55).erbij - 0.03) < 1e-9, 'na een halve stemmingDagen nog de helft');
+  assert.equal(T.voorvalStemming(S.dorp, 40 + T.VOORVALLEN_INSTELLINGEN.stemmingDagen).erbij, 0, 'en dan is het weg');
+  const b = T.berekenTevredenheid(S.dorp, 40);
   assert.ok(b.blij.includes('de bruiloft'), 'de balk zegt waar het dorp blij mee is');
-  const argwaan = (S.inner && S.inner.argwaan) || 0;
-  T.doeGevolg(S, { argwaan: 5 });
-  assert.ok(Math.abs(S.inner.argwaan - argwaan - 0.05) < 1e-9);
+  const argwaan = (S.dorp.inner && S.dorp.inner.argwaan) || 0;
+  T.doeGevolg(S, S.dorp, { argwaan: 5 });
+  assert.ok(Math.abs(S.dorp.inner.argwaan - argwaan - 0.05) < 1e-9);
 });
 
 test('verbannen: de dief trekt weg, en gaat het bos in als rover', () => {
   const S = gehucht();
   const L = metVoorval(S, 'diefstal');
   const dief = L.ander;
-  const voor = S.bevolking;
-  T.doeGevolg(S, antwoorden('diefstal')[0].doe);
-  assert.equal(S.bevolking, voor - 1);
-  assert.ok(!S.bewoners.mensen.includes(dief), 'hij woont hier niet meer');
-  assert.ok(S.rovers.bende.some((r) => r.id === dief.id), 'hij is bij de rovers');
+  const voor = S.dorp.bevolking;
+  T.doeGevolg(S, S.dorp, antwoorden('diefstal')[0].doe);
+  assert.equal(S.dorp.bevolking, voor - 1);
+  assert.ok(!S.dorp.bewoners.mensen.includes(dief), 'hij woont hier niet meer');
+  assert.ok(S.dorp.rovers.bende.some((r) => r.id === dief.id), 'hij is bij de rovers');
   assert.ok(berichten.some((t) => t.startsWith(dief.naam) && t.includes('trekt weg: verbannen door de schout')));
 });
 
 test('de koorts: met pech sterft er iemand; de wolven halen schapen; en een gezin komt als er plaats is', () => {
   const S = gehucht();
   metVoorval(S, 'ziekte');
-  const voor = S.bevolking;
-  T.doeGevolg(S, { sterfkans: 100 });
-  assert.equal(S.bevolking, voor - 1, 'bij honderd procent sterft er een');
+  const voor = S.dorp.bevolking;
+  T.doeGevolg(S, S.dorp, { sterfkans: 100 });
+  assert.equal(S.dorp.bevolking, voor - 1, 'bij honderd procent sterft er een');
   assert.ok(berichten.some((t) => t.startsWith('De koorts: ')));
-  T.doeGevolg(S, { sterfkans: 0 });
-  assert.equal(S.bevolking, voor - 1);
-  const schapen = () => T.veeVan(S).filter((e) => e.dier === 'schaap').length;
+  T.doeGevolg(S, S.dorp, { sterfkans: 0 });
+  assert.equal(S.dorp.bevolking, voor - 1);
+  const schapen = () => T.veeVan(S.dorp).filter((e) => e.dier === 'schaap').length;
   if (schapen() >= 2) {
     const n = schapen();
-    T.doeGevolg(S, { schaap: -2 });
+    T.doeGevolg(S, S.dorp, { schaap: -2 });
     assert.equal(schapen(), n - 2);
   }
-  const mensen = S.bevolking;
-  const plaats = T.plaatsVoorEenGezin(S);
-  T.doeGevolg(S, { gezin: 1 });
-  assert.equal(S.bevolking > mensen, plaats, 'er komt een gezin als er plaats is');
+  const mensen = S.dorp.bevolking;
+  const plaats = T.plaatsVoorEenGezin(S.dorp);
+  T.doeGevolg(S, S.dorp, { gezin: 1 });
+  assert.equal(S.dorp.bevolking > mensen, plaats, 'er komt een gezin als er plaats is');
 });
 
 test('een vervolg komt later, over dezelfde mensen, of zoals het vervolg zegt', () => {
   const S = gehucht();
   const L = metVoorval(S, 'diefstal', 50);
-  T.doeGevolg(S, { voorval: 'diefDank' });
-  const w = S.voorvallen.wacht[0];
+  T.doeGevolg(S, S.dorp, { voorval: 'diefDank' });
+  const w = S.dorp.voorvallen.wacht[0];
   const IN = T.VOORVALLEN_INSTELLINGEN;
   assert.equal(w.id, 'diefDank');
   assert.ok(w.op >= 50 + IN.vervolgVan && w.op <= 50 + IN.vervolgTot, `op dag ${w.op}`);
   assert.equal(w.wie, L.wie);
   assert.equal(w.ander, L.ander);
-  T.voorvalBeantwoord(S, 'diefstal');
-  S.voorvallen.volgende = 1e9;
+  T.voorvalBeantwoord(S.dorp, 'diefstal');
+  S.dorp.voorvallen.volgende = 1e9;
   S.kalender.dag = w.op;
-  T.tikVoorvallenDag(S, w.op);
-  const nu = S.voorvallen.lopend;
+  T.tikVoorvallenDag(S.dorp, w.op);
+  const nu = S.dorp.voorvallen.lopend;
   assert.equal(nu.id, 'diefDank');
   assert.equal(nu.wie, L.ander, 'de dief komt het zelf zeggen');
   assert.equal(nu.ander, L.wie);
   // 'niets' in een lijstje is niets.
-  T.voorvalBeantwoord(S, 'diefDank');
-  T.doeGevolg(S, { voorval: ['niets'] });
-  assert.equal(S.voorvallen.wacht.length, 0);
+  T.voorvalBeantwoord(S.dorp, 'diefDank');
+  T.doeGevolg(S, S.dorp, { voorval: ['niets'] });
+  assert.equal(S.dorp.voorvallen.wacht.length, 0);
   // Een vervolg op zijn eigen tijd: het zaaigraan komt na de oogst terug.
   const Z = gehucht();
-  T.zetVoorraad(Z, 'graan', 100);
+  T.zetVoorraad(Z.dorp, 'graan', 100);
   metVoorval(Z, 'zaaigraan', 35);
-  T.doeGevolg(Z, antwoorden('zaaigraan')[0].doe);
+  T.doeGevolg(Z, Z.dorp, antwoorden('zaaigraan')[0].doe);
   const [van, tot] = T.VOORVALLEN.zaaigraanTerug.na;
-  assert.equal(Z.voorraad.graan, 80);
-  assert.ok(Z.voorvallen.wacht[0].op >= 35 + van && Z.voorvallen.wacht[0].op <= 35 + tot, 'na de oogst');
+  assert.equal(Z.dorp.voorraad.graan, 80);
+  assert.ok(Z.dorp.voorvallen.wacht[0].op >= 35 + van && Z.dorp.voorvallen.wacht[0].op <= 35 + tot, 'na de oogst');
 });
 
 test('wie het zegt, zoekt de schout: hij loopt naar hem toe, spreekt hem aan, en gaat na je antwoord zijns weegs', () => {
@@ -298,14 +297,14 @@ test('wie het zegt, zoekt de schout: hij loopt naar hem toe, spreekt hem aan, en
   const L = metVoorval(S, 'zwerver', 20);
   const e = L.wie.wezen;
   S.kalender.dag = L.vanaf - 0.01;
-  T.werkVoorvallenBij(S);
+  T.werkVoorvallenBij(S, S.dorp);
   assert.ok(!e.zoektSchout, 'vóór zijn uur nog niet');
   S.kalender.dag = L.vanaf + 0.001;
-  T.werkVoorvallenBij(S);
+  T.werkVoorvallenBij(S, S.dorp);
   assert.ok(e.zoektSchout, 'vanaf zijn uur zoekt hij je');
   assert.ok(berichten.includes(`${T.naamVanBewoner(L.wie)} zoekt je.`));
-  assert.equal(T.dagAnker(S, e), null, 'het dagritme laat hem gaan');
-  assert.equal(T.voorvalVan(S, e), L, 'wie op hem klikt, praat over het voorval');
+  assert.equal(T.dagAnker(S.dorp, e), null, 'het dagritme laat hem gaan');
+  assert.equal(T.voorvalVan(S.dorp, e), L, 'wie op hem klikt, praat over het voorval');
   assert.ok(e.pad.length > 0 || T.afstand({ x: e.tx, y: e.ty }, { x: S.schout.tx, y: S.schout.ty }) <= 1, 'hij loopt naar de schout');
   // Hij staat naast de schout, en die staat stil: dan spreekt hij hem aan, één keer.
   e.pad = [];
@@ -315,15 +314,15 @@ test('wie het zegt, zoekt de schout: hij loopt naar hem toe, spreekt hem aan, en
   e.x = e.tx = naast.x;
   e.y = e.ty = naast.y;
   aangesproken.length = 0;
-  T.werkVoorvallenBij(S);
-  T.werkVoorvallenBij(S);
+  T.werkVoorvallenBij(S, S.dorp);
+  T.werkVoorvallenBij(S, S.dorp);
   assert.equal(aangesproken.length, 1);
   assert.equal(aangesproken[0].e, e);
   assert.equal(aangesproken[0].id, 'zwerver');
-  T.voorvalBeantwoord(S, 'zwerver');
-  assert.equal(S.voorvallen.lopend, null);
+  T.voorvalBeantwoord(S.dorp, 'zwerver');
+  assert.equal(S.dorp.voorvallen.lopend, null);
   assert.ok(!e.zoektSchout);
-  assert.equal(S.voorvallen.beantwoord, 1);
+  assert.equal(S.dorp.voorvallen.beantwoord, 1);
 });
 
 test("'s avonds gaat hij naar huis, en de volgende ochtend komt hij terug", () => {
@@ -331,43 +330,47 @@ test("'s avonds gaat hij naar huis, en de volgende ochtend komt hij terug", () =
   const L = metVoorval(S, 'zwerver', 20);
   const e = L.wie.wezen;
   S.kalender.dag = L.vanaf + 0.01;
-  T.werkVoorvallenBij(S);
+  T.werkVoorvallenBij(S, S.dorp);
   assert.ok(e.zoektSchout, 'overdag zoekt hij je');
   S.kalender.dag = 20 + 21 / 24;
-  T.werkVoorvallenBij(S);
+  T.werkVoorvallenBij(S, S.dorp);
   assert.ok(!e.zoektSchout, "'s avonds niet");
   S.kalender.dag = 21;
-  T.tikVoorvallenDag(S, 21);
-  assert.equal(S.voorvallen.lopend, L, 'de volgende dag loopt het nog');
+  T.tikVoorvallenDag(S.dorp, 21);
+  assert.equal(S.dorp.voorvallen.lopend, L, 'de volgende dag loopt het nog');
   S.kalender.dag = 21 + 10 / 24;
-  T.werkVoorvallenBij(S);
+  T.werkVoorvallenBij(S, S.dorp);
   assert.ok(e.zoektSchout, 'en zoekt hij je weer');
 });
 
 test('wie je niet sprak, gaat voorbij, en dat neemt het dorp je kwalijk', () => {
   const S = gehucht();
   const L = metVoorval(S, 'lening', 30);
-  S.voorvallen.volgende = 1e9;
-  T.tikVoorvallenDag(S, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen - 1);
-  assert.equal(S.voorvallen.lopend, L);
-  T.tikVoorvallenDag(S, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen);
-  assert.equal(S.voorvallen.lopend, null);
+  S.dorp.voorvallen.volgende = 1e9;
+  T.tikVoorvallenDag(S.dorp, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen - 1);
+  assert.equal(S.dorp.voorvallen.lopend, L);
+  T.tikVoorvallenDag(S.dorp, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen);
+  assert.equal(S.dorp.voorvallen.lopend, null);
   assert.ok(berichten.includes(`${T.naamVanBewoner(L.wie)} heeft je niet gesproken, en gaat weer aan het werk.`));
-  const s = T.voorvalStemming(S, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen);
+  const s = T.voorvalStemming(S.dorp, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen);
   assert.ok(s.erbij < 0);
   assert.deepEqual(s.last, ['een schout die geen tijd had'], 'hij was in het dorp');
   assert.ok(!L.wie.wezen.zoektSchout);
-  assert.equal(S.voorvallen.laatstVoorbij, undefined, 'een raadsman had hier niet beslist (vraag 68, B), dus de raad zegt niets');
+  assert.equal(S.dorp.voorvallen.laatstVoorbij, undefined, 'een raadsman had hier niet beslist (vraag 68, B), dus de raad zegt niets');
 
   // Was de schout weg, dan had een raadsman beslist: de raad zegt het dan een tijd (js/raad.js).
   const S2 = gehucht();
   metVoorval(S2, 'lening', 30);
-  S2.voorvallen.volgende = 1e9;
-  S2.wereld = { wezens: [], naam: 'elders' };
-  T.tikVoorvallenDag(S2, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen);
-  assert.equal(S2.voorvallen.lopend, null);
-  assert.deepEqual(T.voorvalStemming(S2, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen).last, ['een schout die er niet was']);
-  assert.equal(S2.voorvallen.laatstVoorbij, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen, 'de raad zegt dan: kies een raadsman');
+  S2.dorp.voorvallen.volgende = 1e9;
+  // Hij is elders: van de kaart van het dorp af en op een andere, zoals T.gaNaarGebied hem verzet (js/gebied.js).
+  const kaart = S2.dorp.wereld;
+  kaart.wezens.splice(kaart.wezens.indexOf(S2.schout), 1);
+  S2.wereld = { wezens: [S2.schout], naam: 'elders' };
+  assert.ok(T.schoutIsWeg(S2.dorp));
+  T.tikVoorvallenDag(S2.dorp, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen);
+  assert.equal(S2.dorp.voorvallen.lopend, null);
+  assert.deepEqual(T.voorvalStemming(S2.dorp, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen).last, ['een schout die er niet was']);
+  assert.equal(S2.dorp.voorvallen.laatstVoorbij, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen, 'de raad zegt dan: kies een raadsman');
 });
 
 test('de spelregel: uit komt er niemand, en vaak komen ze vaker', () => {
@@ -376,11 +379,11 @@ test('de spelregel: uit komt er niemand, en vaak komen ze vaker', () => {
     const S = gehucht();
     let n = 0;
     for (let d = 1; d < 180; d++) {
-      T.tikVoorvallenDag(S, d);
-      const L = S.voorvallen.lopend;
+      T.tikVoorvallenDag(S.dorp, d);
+      const L = S.dorp.voorvallen.lopend;
       if (L && L.dag === d) {
         n++;
-        T.voorvalBeantwoord(S, L.id);
+        T.voorvalBeantwoord(S.dorp, L.id);
       }
     }
     return n;
@@ -399,13 +402,13 @@ test('de spelregel: uit komt er niemand, en vaak komen ze vaker', () => {
 test('bewaren en laden: het voorval van nu, zijn mensen en wat nog komt, blijven hetzelfde', () => {
   const S = gehucht();
   const L = metVoorval(S, 'diefstal', 50);
-  T.doeGevolg(S, { voorval: 'diefDank', tevreden: 2 });
+  T.doeGevolg(S, S.dorp, { voorval: 'diefDank', tevreden: 2 });
   const S2 = gehucht();
   T.zetSpel(S2, T.leesSpel(T.bewaarSpel(S, { nu: 1790000000000 })));
-  const L2 = S2.voorvallen.lopend;
+  const L2 = S2.dorp.voorvallen.lopend;
   assert.equal(L2.id, 'diefstal');
-  assert.ok(S2.bewoners.mensen.includes(L2.wie), 'wie het zegt, is een bewoner van het geladen spel');
+  assert.ok(S2.dorp.bewoners.mensen.includes(L2.wie), 'wie het zegt, is een bewoner van het geladen spel');
   assert.equal(L2.wie.naam, L.wie.naam);
-  assert.equal(S2.voorvallen.wacht[0].ander, L2.ander, 'het vervolg gaat over dezelfde dief');
-  assert.equal(S2.voorvallen.stemming.length, 1);
+  assert.equal(S2.dorp.voorvallen.wacht[0].ander, L2.ander, 'het vervolg gaat over dezelfde dief');
+  assert.equal(S2.dorp.voorvallen.stemming.length, 1);
 });

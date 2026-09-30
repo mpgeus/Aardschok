@@ -17,13 +17,13 @@ test('de eerste passende regel wint; een regel zonder voorwaarde is het vangnet'
     { als: { vlag: 'iets' }, zeg: 'met vlag' },
     { zeg: 'zonder voorwaarde' },
   ];
-  assert.equal(T.eersteDiePast(S, 'test', lijst).zeg, 'zonder voorwaarde');
+  assert.equal(T.eersteDiePast(S, S, 'test', lijst).zeg, 'zonder voorwaarde');
 
   T.zetVlag(S, 'iets');
-  assert.equal(T.eersteDiePast(S, 'test', lijst).zeg, 'met vlag');
+  assert.equal(T.eersteDiePast(S, S, 'test', lijst).zeg, 'met vlag');
 
   S.inventaris.add('kaart'); // staat bovenaan de lijst, en wint dus ook als de andere ook kloppen
-  assert.equal(T.eersteDiePast(S, 'test', lijst).zeg, 'met kaart');
+  assert.equal(T.eersteDiePast(S, S, 'test', lijst).zeg, 'met kaart');
 });
 
 test('een keuze met een voorwaarde blijft verborgen tot die klopt', () => {
@@ -32,10 +32,10 @@ test('een keuze met een voorwaarde blijft verborgen tot die klopt', () => {
     { zeg: 'altijd' },
     { zeg: 'alleen met sleutel', als: { heeft: 'sleutel' } },
   ];
-  assert.deepEqual(T.zichtbareKeuzes(S, 'test', keuzes).map((k) => k.zeg), ['altijd']);
+  assert.deepEqual(T.zichtbareKeuzes(S, S, 'test', keuzes).map((k) => k.zeg), ['altijd']);
 
   S.inventaris.add('sleutel');
-  assert.deepEqual(T.zichtbareKeuzes(S, 'test', keuzes).map((k) => k.zeg), ['altijd', 'alleen met sleutel']);
+  assert.deepEqual(T.zichtbareKeuzes(S, S, 'test', keuzes).map((k) => k.zeg), ['altijd', 'alleen met sleutel']);
 });
 
 test('een vlag blijft staan tot hij gewist wordt, en werkt ook via een bestaand veld op de spelstaat', () => {
@@ -83,16 +83,16 @@ test('een gesprek loopt van knoop naar knoop, en een antwoord verandert wat er d
   metProefGesprek();
   try {
     const S = nieuweS();
-    let welkom = T.gesprekKnoop(S, 'proef', 'welkom');
+    let welkom = T.gesprekKnoop(S, S, 'proef', 'welkom');
     assert.equal(welkom.tekst, 'Goedendag, schout.');
     const helpen = welkom.keuzes.find((k) => k.naar === 'hulp');
     assert.ok(helpen, 'wie nog niet hielp, kan het aanbieden');
-    const hulp = T.gesprekKnoop(S, 'proef', helpen.naar);
+    const hulp = T.gesprekKnoop(S, S, 'proef', helpen.naar);
     const geven = hulp.keuzes[0];
-    T.doeGevolg(S, geven.doe);
+    T.doeGevolg(S, S, geven.doe);
     assert.ok(T.heeftVlag(S, 'geholpen'));
     assert.ok(S.inventaris.has('pakje'));
-    welkom = T.gesprekKnoop(S, 'proef', geven.naar);
+    welkom = T.gesprekKnoop(S, S, 'proef', geven.naar);
     assert.equal(welkom.tekst, 'Dank je nog, schout.');
     assert.ok(!welkom.keuzes.some((k) => k.naar === 'hulp'), 'en daarna niet meer');
   } finally {

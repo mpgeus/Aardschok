@@ -163,10 +163,21 @@ test('wie zelf op pauze zette, houdt pauze als een venster sluit', () => {
 });
 
 test('naar gewone snelheid: wie sneller speelt, gaat naar 1×; 1× en pauze blijven', () => {
+  // Je eigen dorp (js/dorp.js), met de schout erin: dan zie je wie er komt op 1×.
+  const dorp = (anders) => {
+    const schout = T.maakWezen('schout', 1, 1);
+    return Object.assign({ speler: true, kalender: T.nieuweKalender(), schout, wereld: { wezens: [schout] } }, anders);
+  };
   for (const [voor, na] of [[30, 1], [10, 1], [3, 1], [1, 1], [0, 0]]) {
-    const S = { kalender: T.nieuweKalender() };
-    T.zetSnelheid(S, voor);
-    T.naarGewoneSnelheid(S);
-    assert.equal(S.kalender.snelheid, na, `${voor}×`);
+    const D = dorp();
+    T.zetSnelheid(D, voor);
+    T.naarGewoneSnelheid(D);
+    assert.equal(D.kalender.snelheid, na, `${voor}×`);
+  }
+  // Een ander dorp dan het jouwe, of je bent er niet (op reis, js/land.js): dan gaat de tijd door zoals je koos.
+  for (const D of [dorp({ speler: false }), dorp({ wereld: { wezens: [] } })]) {
+    T.zetSnelheid(D, 30);
+    T.naarGewoneSnelheid(D);
+    assert.equal(D.kalender.snelheid, 30);
   }
 });

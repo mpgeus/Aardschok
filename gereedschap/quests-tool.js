@@ -375,8 +375,8 @@
     const zonder = proefStaat(false);
     for (const pid of personen()) {
       const p = T.GESPREKKEN[pid];
-      const nu = T.gesprekKnoop(met, pid, p.start);
-      const anders = T.gesprekKnoop(zonder, pid, p.start);
+      const nu = T.gesprekKnoop(met, met, pid, p.start);
+      const anders = T.gesprekKnoop(zonder, zonder, pid, p.start);
       const reageert = nu.tekst !== anders.tekst || nu.keuzes.length !== anders.keuzes.length;
       const blok = el('div', 'gt-proef-persoon' + (reageert ? ' gt-reageert' : ''));
       const kop = el('div', 'gt-proef-naam', p.naam);

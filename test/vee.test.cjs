@@ -265,7 +265,9 @@ function dagVan(maand, dagVanMaand, jaar) {
   return (jaar || 0) * T.DAGEN_PER_JAAR + ((m - T.TIJD_START_MAAND + 12) % 12) * T.DAGEN_PER_MAAND + dagVanMaand - 1;
 }
 
-// Een gehucht zonder kaart, met deze velden ({ x, y, b, h, bestemming }) en een vast lot.
+// Een gehucht zonder kaart, met deze velden ({ x, y, b, h, bestemming }) en een vast lot. Het losse object S is het dorp
+// zelf (D, js/dorp.js), met alleen wat de regels over vee, melk, eten en weides nodig hebben: die vragen het dorp, niet het
+// spel. Zo ook de losse S in de toetsen over het eten hieronder.
 function wereldMet(...velden) {
   const akkers = velden.map((v, i) => ({ naam: `veld${i}`, huis: null, plan: v.bestemming, vruchtbaarheid: 1, ...v }));
   const S = {
@@ -294,14 +296,14 @@ function metInstelling(blok, waarden, fn) {
 const binnen = (e, v) => e.tx >= v.x && e.tx < v.x + v.b && e.ty >= v.y && e.ty < v.y + v.h;
 
 test('de beginkudde: drie koeien op het blok van Klaas (akker6), binnen de weide, en acht schapen op de heide', () => {
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   const weide = S.wereld.akkers.find((a) => a.naam === 'akker6');
   assert.equal(weide.bestemming, 'weide', 'het betekenisbestand zegt het');
   assert.equal(weide.plan, 'weide');
   assert.ok(S.wereld.akkers.filter((a) => a !== weide).every((a) => a.bestemming === 'akker' && a.plan === 'akker'));
   assert.ok(S.wereld.akkers.every((a) => a.vruchtbaarheid === T.VELDEN_INSTELLINGEN.beginVruchtbaarheid));
-  const vee = T.veeVan(S);
+  const vee = T.veeVan(S.dorp);
   assert.equal(vee.filter((e) => e.dier === 'koe').length, IN.beginKudde.koe);
   assert.equal(vee.filter((e) => e.dier === 'schaap').length, IN.beginKudde.schaap);
   // Sinds stap 2 van de weides staan de schapen op de heide, de meent (spel.md, "Marcel koos voor
@@ -317,9 +319,9 @@ test('de beginkudde: drie koeien op het blok van Klaas (akker6), binnen de weide
   assert.equal(new Set(vee.map((e) => e.tx + ',' + e.ty)).size, vee.length, 'niet twee op één tegel');
   // Drie koeien hebben 12 van de 30 tegels nodig.
   const nodig = IN.beginKudde.koe * IN.plaats.koe;
-  assert.deepEqual(T.weideStand(S, weide), { tegels: 30, nodig, vrij: 30 - nodig, vol: 1, koeien: 3, schapen: 0 });
-  assert.equal(T.dierenOp(S, meent).length, IN.beginKudde.schaap);
-  assert.equal(T.kooiPlaats(S), IN.kooiPlaats, 'en er staat een schaapskooi');
+  assert.deepEqual(T.weideStand(S.dorp, weide), { tegels: 30, nodig, vrij: 30 - nodig, vol: 1, koeien: 3, schapen: 0 });
+  assert.equal(T.dierenOp(S.dorp, meent).length, IN.beginKudde.schaap);
+  assert.equal(T.kooiPlaats(S.dorp), IN.kooiPlaats, 'en er staat een schaapskooi');
   // Zonder weide geen vee.
   const { S: kaal } = wereldMet({ x: 0, y: 0, b: 4, h: 4, bestemming: 'akker' });
   assert.deepEqual(T.zetBeginKudde(kaal), []);

@@ -131,20 +131,20 @@
   // ziet, is getuige: de plek onthoudt het (g.getuigen: wanneer, wie, wat; voor T.getuigenVertellen), en
   // als je het meteen ziet (`meteen`), krijgt elke getuige het oogje (e.oogje, tot die schermtijd;
   // js/tekenen.js). Geeft { getuigen, bericht }; het bericht zegt ook wie het rondvertelt.
-  T.werdGezien = function (S, g, handeling, wat, n) {
-    const wie = T.getuigenVan(S, g);
-    const tijd = S.kalender ? S.kalender.dag : 0;
+  T.werdGezien = function (S, D, g, handeling, wat, n) {
+    const wie = T.getuigenVan(D, g);
+    const tijd = D.kalender ? D.kalender.dag : 0;
     for (const e of wie) {
       if (IN().meteen) e.oogje = (S.tijd || 0) + IN().oogjeTijd;
-      (g.getuigen || (g.getuigen = [])).push({ dag: Math.floor(tijd), tijd, naam: naamVan(S, e), bewoner: T.bewonerVan(S, e), handeling, wat, n });
+      (g.getuigen || (g.getuigen = [])).push({ dag: Math.floor(tijd), tijd, naam: naamVan(D, e), bewoner: T.bewonerVan(D, e), handeling, wat, n });
     }
     if (!wie.length) return { getuigen: wie, bericht: 'Niemand zag het.' };
-    const namen = opsomming(wie.map((e) => naamVan(S, e)));
-    let bericht = `${T.hoofdletter(namen)} ${wie.length > 1 ? 'zagen' : 'zag'} je ${watDeed(S, g, handeling, wat, n, 'zetten', 'schout')}.`;
+    const namen = opsomming(wie.map((e) => naamVan(D, e)));
+    let bericht = `${T.hoofdletter(namen)} ${wie.length > 1 ? 'zagen' : 'zag'} je ${watDeed(D, g, handeling, wat, n, 'zetten', 'schout')}.`;
     // Wie het in de herberg vertelt, staat erbij: dan weet je wat je te wachten staat.
     for (const e of wie) {
-      const p = T.bewonerVan(S, e);
-      if (p && T.vertelInDeHerberg(p)) bericht += ` ${naamVan(S, e)} weet alles van iedereen, en vertelt het ook.`;
+      const p = T.bewonerVan(D, e);
+      if (p && T.vertelInDeHerberg(p)) bericht += ` ${naamVan(D, e)} weet alles van iedereen, en vertelt het ook.`;
     }
     return { getuigen: wie, bericht };
   };

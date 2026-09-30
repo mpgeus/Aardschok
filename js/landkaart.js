@@ -233,7 +233,7 @@
       if (L && L.terug && $('terug').classList.contains('verborgen')) toonTerug(S);
       return;
     }
-    const sleutel = [L.waar, L.reis ? L.reis.stap : '-', [...L.gezien].join(','), gekozen, T.dorpsnaam(S), L.reis ? 'r' : 's'].join('|');
+    const sleutel = [L.waar, L.reis ? L.reis.stap : '-', [...L.gezien].join(','), gekozen, T.dorpsnaam(S.dorp), L.reis ? 'r' : 's'].join('|');
     if (box.classList.contains('verborgen') || sleutel !== getekend) {
       box.innerHTML = venster(S);
       tekenKaart(S, $('land-kaart'));

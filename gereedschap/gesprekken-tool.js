@@ -237,6 +237,8 @@
   // Van een situatie een spelstaat maken, zodat ../js/gesprek.js hem kan beoordelen. Wat een
   // voorwaarde ontkent (nietVlag, nietHeeft, nietQuest) hoeft hier niets te doen: de verse staat
   // is al leeg.
+  // Een situatie als proefstaat. Hij is spel en dorp tegelijk (js/gesprek.js krijgt beide: je tas en je quests van
+  // het spel, de vlaggen en het goud van het dorp), dus een regel krijgt hem twee keer.
   function staatVanSituatie(als, persoonId) {
     const S = {
       schout: {},
@@ -265,7 +267,7 @@
   // zin staat — en als het antwoord "nergens" is, is dat een regel die de speler nooit hoort.
   function situatiesWaarin(persoonId, als) {
     return situatiesVan(persoonId)
-      .filter((s) => T.voorwaardeGeldt(staatVanSituatie(s.als, persoonId), persoonId, als))
+      .filter((s) => { const st = staatVanSituatie(s.als, persoonId); return T.voorwaardeGeldt(st, st, persoonId, als); })
       .map((s) => s.naam);
   }
   // Heeft deze persoon zelf nog geen situatie bedacht? Dan zegt "nergens te horen" niets over de
@@ -314,8 +316,8 @@
       const id = rij.shift();
       const knoop = persoon.knopen[id];
       const opgelost = {
-        regel: T.eersteDiePast(S, wie, knoop.tekst || []),
-        keuzes: T.zichtbareKeuzes(S, wie, knoop.keuzes),
+        regel: T.eersteDiePast(S, S, wie, knoop.tekst || []),
+        keuzes: T.zichtbareKeuzes(S, S, wie, knoop.keuzes),
       };
       zichtbaar.set(id, opgelost);
       for (const k of opgelost.keuzes) {
@@ -1180,7 +1182,7 @@
     const persoon = T.GESPREKKEN[pid];
     const lijst = situatiesVan(pid);
     const komtErUit = (s) => planGesprek(persoon, staatVanSituatie(s.als, pid)).zichtbaar.has(kid);
-    let nr = lijst.findIndex((s) => komtErUit(s) && T.voorwaardeGeldt(staatVanSituatie(s.als, pid), pid, als));
+    let nr = lijst.findIndex((s) => { const st = staatVanSituatie(s.als, pid); return komtErUit(s) && T.voorwaardeGeldt(st, st, pid, als); });
     if (nr < 0) nr = lijst.findIndex(komtErUit);
     huidigeSituatieNr = nr >= 0 ? nr : 0;
     herbouwAlles();
@@ -1335,7 +1337,7 @@
   }
   // Zelfde vraag als situatiesWaarin, maar voor een andere persoon dan degene die je bewerkt.
   function situatiesWaarinVoor(persoonId, als) {
-    return situatiesVan(persoonId).filter((s) => T.voorwaardeGeldt(staatVanSituatie(s.als, persoonId), persoonId, als)).map((s) => s.naam);
+    return situatiesVan(persoonId).filter((s) => { const st = staatVanSituatie(s.als, persoonId); return T.voorwaardeGeldt(st, st, persoonId, als); }).map((s) => s.naam);
   }
 
   function renderFouten() {
@@ -1407,11 +1409,11 @@
       wrap.appendChild(el('p', 'gt-proef-eind', 'Het gesprek is afgelopen.'));
       return;
     }
-    const opgelost = T.gesprekKnoop(proefS, huidigePersoonId, proefKnoopId);
+    const opgelost = T.gesprekKnoop(proefS, proefS, huidigePersoonId, proefKnoopId);
     wrap.appendChild(el('p', 'gt-proef-zegt', opgelost.tekst || '(zegt hier niets)'));
     for (const keuze of opgelost.keuzes) {
       const b = knop('gt-proef-keuze', keuze.zeg || '(leeg antwoord)', () => {
-        T.doeGevolg(proefS, keuze.doe);
+        T.doeGevolg(proefS, proefS, keuze.doe);
         proefKnoopId = keuze.sluit ? null : keuze.naar;
         renderProef();
       });

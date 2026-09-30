@@ -25,7 +25,7 @@ test('elke zin die iemand zegt, klinkt in minstens één situatie', () => {
     for (const [knoopId, knoop] of Object.entries(persoon.knopen)) {
       for (const regel of knoop.tekst || []) {
         if (!regel.als) continue; // een vangnet wint altijd ergens
-        const wint = lijst.some(({ S }) => T.eersteDiePast(S, id, knoop.tekst) === regel);
+        const wint = lijst.some(({ S }) => T.eersteDiePast(S, S, id, knoop.tekst) === regel);
         if (!wint) nergens.push(`${persoon.naam} · ${knoopId} · "${(regel.zeg || '').slice(0, 50)}"`);
       }
     }
@@ -40,7 +40,7 @@ test('elk antwoord dat je kunt geven, staat er in minstens één situatie', () =
     for (const [knoopId, knoop] of Object.entries(persoon.knopen)) {
       for (const keuze of knoop.keuzes || []) {
         if (!keuze.als) continue;
-        const zichtbaar = lijst.some(({ S }) => T.voorwaardeGeldt(S, id, keuze.als));
+        const zichtbaar = lijst.some(({ S }) => T.voorwaardeGeldt(S, S, id, keuze.als));
         if (!zichtbaar) nergens.push(`${persoon.naam} · ${knoopId} · "${(keuze.zeg || '').slice(0, 50)}"`);
       }
     }
@@ -90,11 +90,11 @@ test('wie een quest geeft, krijgt zijn fasen als situatie zonder ze te verzinnen
 
 test('een voorwaarde mag een lijstje vlaggen zijn, net als een gevolg', () => {
   const S = staatVanSituatie({ vlag: ['briefVanDeHeer', 'heerBetaald'] }, 'heer');
-  assert.ok(T.voorwaardeGeldt(S, 'heer', { vlag: ['briefVanDeHeer', 'heerBetaald'] }), 'allebei gezet');
-  assert.equal(T.voorwaardeGeldt(S, 'heer', { vlag: ['briefVanDeHeer', 'soldatenInHuis'] }), false, 'één ervan mist');
-  assert.equal(T.voorwaardeGeldt(S, 'heer', { nietVlag: ['soldatenInHuis', 'briefVanDeHeer'] }), false, 'één ervan staat wél');
-  assert.ok(T.voorwaardeGeldt(S, 'heer', { nietVlag: ['soldatenInHuis', 'innerOpBezoek'] }), 'geen van beide');
+  assert.ok(T.voorwaardeGeldt(S, S, 'heer', { vlag: ['briefVanDeHeer', 'heerBetaald'] }), 'allebei gezet');
+  assert.equal(T.voorwaardeGeldt(S, S, 'heer', { vlag: ['briefVanDeHeer', 'soldatenInHuis'] }), false, 'één ervan mist');
+  assert.equal(T.voorwaardeGeldt(S, S, 'heer', { nietVlag: ['soldatenInHuis', 'briefVanDeHeer'] }), false, 'één ervan staat wél');
+  assert.ok(T.voorwaardeGeldt(S, S, 'heer', { nietVlag: ['soldatenInHuis', 'innerOpBezoek'] }), 'geen van beide');
   // Zo kun je in een situatie met twee vlaggen een antwoord toevoegen dat er ook echt staat:
   // de schrijver zet de voorwaarde van de situatie op wat je erbij maakt.
-  assert.ok(T.voorwaardeGeldt(S, 'heer', { heeft: [] }), 'een leeg lijstje houdt niets tegen');
+  assert.ok(T.voorwaardeGeldt(S, S, 'heer', { heeft: [] }), 'een leeg lijstje houdt niets tegen');
 });

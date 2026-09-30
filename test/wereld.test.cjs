@@ -268,15 +268,14 @@ function vergelijkElkeTegel(w, waar) {
 function gehuchtOm(makerZaad) {
   const echt = console.warn;
   console.warn = () => {};
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht', makerZaad));
   } finally {
     console.warn = echt;
   }
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
-  S.kalender = T.nieuweKalender();
-  for (const wat of ['hout', 'goud', 'steen']) T.zetVoorraad(S, wat, 500);
+  for (const wat of ['hout', 'goud', 'steen']) T.zetVoorraad(S.dorp, wat, 500);
   return S;
 }
 
@@ -289,13 +288,13 @@ test('de lijst per tegel geeft hetzelfde voorwerp als alle voorwerpen aflopen, o
     // Een hut erbij, waar hij past: zijn voorwerp komt erbij (js/gebouwen.js).
     let gezet = null;
     for (let y = 0; y < w.h && !gezet; y++) {
-      for (let x = 0; x < w.b && !gezet; x++) if (!T.waaromPastHetNiet(S, 'hut', x, y)) gezet = T.plaatsGebouw(S, 'hut', x, y);
+      for (let x = 0; x < w.b && !gezet; x++) if (!T.waaromPastHetNiet(S.dorp, 'hut', x, y)) gezet = T.plaatsGebouw(S.dorp, 'hut', x, y);
     }
     assert.ok(gezet && gezet.gelukt, `${waar}: ergens past een hut`);
     assert.equal(T.voorwerpOp(w, gezet.instantie.x, gezet.instantie.y), gezet.instantie.voorwerp, 'de nieuwe hut staat meteen in de lijst');
     vergelijkElkeTegel(w, `${waar}, met een hut erbij`);
     // De schandpaal van de heer (js/heer.js), en een boom die weggaat.
-    T.zetSchandpaalNeer(S);
+    T.zetSchandpaalNeer(S.dorp);
     vergelijkElkeTegel(w, `${waar}, met de schandpaal`);
     const boom = w.voorwerpen.find((v) => v !== gezet.instantie.voorwerp && v.soort !== 'schandpaal');
     T.haalVoorwerpWeg(w, boom);

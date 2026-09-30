@@ -12,11 +12,13 @@ T.ui = { bericht: (tekst) => gemeld.push(tekst), toonGoud: () => {} };
 
 function nieuweS() {
   gemeld.length = 0;
-  return {
+  const S = {
     schout: { tx: 5, ty: 5 },
     inventaris: new Set(), vlaggen: new Set(),
     goud: 0, quests: {}, questWeg: {}, questBeloond: new Set(),
   };
+  S.dorp = S; // spel en dorp tegelijk (js/dorp.js): de quests van het spel, de vlaggen en het goud van het dorp
+  return S;
 }
 
 // De quest waarmee hier gewerkt wordt, in de vorm van De koude oven: vier wegen die verschillend
@@ -138,7 +140,7 @@ test('wat er linksboven staat, is de fase van de quest die je het eerst aannam',
 test('een gesprek kan op de stand van een quest letten, en op de weg die je nam', () => {
   metQuest();
   const S = nieuweS();
-  const geldt = (als) => T.voorwaardeGeldt(S, 'bakker', als);
+  const geldt = (als) => T.voorwaardeGeldt(S, S, 'bakker', als);
   assert.equal(geldt({ nietQuest: 'proef' }), true);
   assert.equal(geldt({ quest: 'proef' }), false);
 
@@ -160,27 +162,27 @@ test('een gesprek kan op de stand van een quest letten, en op de weg die je nam'
 test('een antwoord kan goud en voorwerpen geven en nemen, en een quest verder zetten', () => {
   metQuest();
   const S = nieuweS();
-  T.doeGevolg(S, { quest: 'proef' }); // zonder fase: begin hem
+  T.doeGevolg(S, S, { quest: 'proef' }); // zonder fase: begin hem
   assert.equal(T.questFase(S, 'proef'), 'zoeken');
 
-  T.doeGevolg(S, { goud: 30, geef: 'leem' });
+  T.doeGevolg(S, S, { goud: 30, geef: 'leem' });
   assert.equal(S.goud, 30);
   assert.equal(S.inventaris.has('leem'), true);
 
-  T.doeGevolg(S, { quest: 'proef', weg: 'kramer' });
+  T.doeGevolg(S, S, { quest: 'proef', weg: 'kramer' });
   assert.equal(T.questFase(S, 'proef'), 'terug');
   assert.equal(S.goud, 15);
 
-  T.doeGevolg(S, { neem: ['leem', 'vuurklei'] });
+  T.doeGevolg(S, S, { neem: ['leem', 'vuurklei'] });
   assert.equal(S.inventaris.has('leem'), false);
   assert.equal(S.inventaris.has('vuurklei'), false);
 });
 
 test('goud is een voorwaarde, komt nooit onder nul, en het vakje blijft in beeld als je ooit goud had', () => {
   const S = nieuweS();
-  assert.equal(T.voorwaardeGeldt(S, 'kramer', { goud: 10 }), false);
+  assert.equal(T.voorwaardeGeldt(S, S, 'kramer', { goud: 10 }), false);
   T.geefGoud(S, 10);
-  assert.equal(T.voorwaardeGeldt(S, 'kramer', { goud: 10 }), true, 'tien is minstens tien');
+  assert.equal(T.voorwaardeGeldt(S, S, 'kramer', { goud: 10 }), true, 'tien is minstens tien');
   assert.equal(S.goudGehad, true);
   T.geefGoud(S, -50);
   assert.equal(S.goud, 0);

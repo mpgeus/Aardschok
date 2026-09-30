@@ -226,20 +226,10 @@
     if (schout.zaad == null) schout.zaad = 1;
     S.schout = schout;
     zetNeer(schout, schout.x, schout.y);
-    // Een klein beginvoorraadje (kaarten/<naam>.betekenis.json, "beginVoorraad") en de gebouwen
-    // die al op de kaart staan (js/gebouwen.js) — zodat een dorp niet leeg begint.
-    if (w.beginVoorraad && T.zetVoorraad) {
-      for (const wat in w.beginVoorraad) T.zetVoorraad(S, wat, w.beginVoorraad[wat]);
-    }
-    if (T.zetBestaandeGebouwen) T.zetBestaandeGebouwen(S);
-    // Wie de boeren zijn en wat ze kunnen, wordt bij elk nieuw spel geloot (js/boeren.js).
-    if (T.lootBoeren) T.lootBoeren(S, zaad != null ? zaad : undefined);
-    // De beginkudde op de weide(s) die de kaart noemt (js/vee.js), net als de gebouwen hierboven;
-    // ná het lot, want het zaad van het spel kiest ook de kleuren van het vee.
-    if (T.zetBeginKudde) T.zetBeginKudde(S);
-    // Wie er verder woont, en wie waar werkt (js/bewoners.js): ná het lot, want het karakter van een
-    // boer zegt wie er bij hem woont (de weduwe heeft drie kleine kinderen).
-    if (T.zetBeginBewoners) T.zetBeginBewoners(S);
+    // Het dorp op deze kaart, met jou als zijn schout (js/dorp.js): wat er staat, de boeren, het vee en wie er
+    // woont. Het is je eigen dorp (S.dorp), en voorlopig het enige.
+    S.dorp = T.nieuwDorp(S, w, schout, { zaad, speler: true });
+    S.dorpen = [S.dorp];
     return true;
   };
 })(globalThis.Spel = globalThis.Spel || {});

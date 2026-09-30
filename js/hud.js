@@ -169,7 +169,8 @@
 
   // De datum, en eronder het seizoen met het uur en het deel van de dag ("Lente · half acht,
   // ochtend"; js/dag.js). Ververst elk half uur (T.tikKalender).
-  T.ui.toonKalender = function (S) {
+  T.ui.toonKalender = function () {
+    const S = T.S; // de kalender is die van het spel, ook als een dorp de tijd stilzet (js/tijd.js)
     const d = T.datumVanDag(S.kalender.dag);
     const datumEl = $('kalender-datum');
     datumEl.textContent = d.tekst;
@@ -191,19 +192,21 @@
   }
   T.ui.werkSlaapKnopBij = werkSlaapKnopBij;
 
-  T.ui.toonVoorraad = function (S) {
+  T.ui.toonVoorraad = function (D) {
+    const S = T.S;
+    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
     const box = $('voorraadbalk');
     if (!box.children.length) bouwVoorraadbalk(box);
     for (const wat of BALK) {
       const cel = box.querySelector(`[data-wat="${wat}"]`);
-      cel.querySelector('.aantal').textContent = Math.floor(S.voorraad[wat] || 0);
-      if (BALK_LATER.includes(wat)) cel.classList.toggle('verborgen', !(S.gehad && S.gehad[wat]));
+      cel.querySelector('.aantal').textContent = Math.floor(S.dorp.voorraad[wat] || 0);
+      if (BALK_LATER.includes(wat)) cel.classList.toggle('verborgen', !(S.dorp.gehad && S.dorp.gehad[wat]));
     }
     // Wat er verstopt ligt (js/verstoppen.js), klein naast het graan en het goud, en bij de muis
     // waar: het dorp eet het niet, en de inner telt het niet.
     if (T.verstoptTotaal) {
-      const v = T.verstoptTotaal(S);
-      const plekken = T.verstopPlekken(S).filter((p) => p.gebouw.verstopt && (p.gebouw.verstopt.graan >= 1 || p.gebouw.verstopt.goud >= 1));
+      const v = T.verstoptTotaal(S.dorp);
+      const plekken = T.verstopPlekken(S.dorp).filter((p) => p.gebouw.verstopt && (p.gebouw.verstopt.graan >= 1 || p.gebouw.verstopt.goud >= 1));
       const waar = plekken.map((p) => `${T.inhoudTekst(p.gebouw.verstopt)} in ${p.naam}`);
       for (const wat of ['graan', 'goud']) {
         const cel = box.querySelector(`[data-wat="${wat}"]`);
@@ -215,26 +218,26 @@
     // Wat zout en gereedschap nu doen, bij de muis: hoeveel vis en vlees het zout goed houdt, en
     // hoeveel handen het gereedschap dekt (js/behoeften.js, js/gebouwen.js).
     if (T.zoutDekking) {
-      const d = T.zoutDekking(S);
+      const d = T.zoutDekking(S.dorp);
       box.querySelector('[data-wat="zout"]').title = d.totaal >= 1
         ? `Zout. Eén zout houdt ${T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed} vis of vlees goed; de rest bederft. Nu gezouten: ${Math.floor(d.gezouten)} van de ${Math.floor(d.totaal)}.`
         : GRONDSTOF_UITLEG.zout;
     }
     if (T.gereedschapDekking) {
-      const d = T.gereedschapDekking(S);
+      const d = T.gereedschapDekking(S.dorp);
       box.querySelector('[data-wat="gereedschap"]').title = d.handen
         ? `Gereedschap. Genoeg voor ${Math.min(d.handen, Math.floor(d.heeft))} van de ${d.handen} handen aan het werk: er wordt ${Math.round((d.factor - 1) * 100)}% harder gewerkt. Het slijt.`
         : GRONDSTOF_UITLEG.gereedschap;
     }
     // Bij de kaas: voor hoeveel dagen eten hij is, en hoeveel melk de koeien nu geven (js/vee.js,
     // T.melkVanDag), want daar komt hij van. Beide in graan gerekend, zoals het dorp ze eet.
-    const perMens = T.etenPerMens(S);
+    const perMens = T.etenPerMens(S.dorp);
     if (perMens > 0) {
-      const perDag = (S.bevolking || 0) * perMens;
-      const kaas = S.voorraad.kaas || 0;
+      const perDag = (S.dorp.bevolking || 0) * perMens;
+      const kaas = S.dorp.voorraad.kaas || 0;
       const dagen = perDag > 0 ? Math.floor(kaas / perDag) : 0;
       const voor = kaas >= 1 && perDag > 0 ? ` Genoeg voor ${dagen} dag${dagen === 1 ? '' : 'en'} eten.` : '';
-      const melkNu = T.melkVanDag && S.kalender ? T.melkVanDag(S, Math.floor(S.kalender.dag)) : 0;
+      const melkNu = T.melkVanDag && S.kalender ? T.melkVanDag(S.dorp, Math.floor(S.kalender.dag)) : 0;
       const mensen = Math.round(melkNu / perMens);
       const melk = mensen > 0 ? ` De koeien geven nu elke dag melk voor ${mensen} mensen; wat het dorp niet drinkt, wordt kaas.` : '';
       box.querySelector('[data-wat="kaas"]').title = GRONDSTOF_UITLEG.kaas + voor + melk;
@@ -245,10 +248,10 @@
     if (T.hooiPerWinterdag && S.kalender) {
       const cel = box.querySelector('[data-wat="hooi"]');
       const dag = Math.floor(S.kalender.dag);
-      const perDag = T.hooiPerWinterdag(S, dag);
+      const perDag = T.hooiPerWinterdag(S.dorp, dag);
       const winterNu = T.isVeeWinter(dag);
-      const nogTeMaaien = winterNu ? 0 : T.verwachtHooi(S);
-      const hooi = (S.voorraad.hooi || 0) + nogTeMaaien;
+      const nogTeMaaien = winterNu ? 0 : T.verwachtHooi(S.dorp);
+      const hooi = (S.dorp.voorraad.hooi || 0) + nogTeMaaien;
       const winter = T.winterDagen(dag);
       const dagen = perDag > 0 ? Math.floor(hooi / perDag) : Infinity;
       const perDagTekst = Math.round(perDag * 10) / 10;
@@ -265,9 +268,9 @@
     // Bij het hout: voor hoeveel van de winterdagen het genoeg is, met wat er nu per dag bijkomt
     // (js/behoeften.js, T.houtVoorDeWinter). Haalt het de winter niet, dan staat het getal in het rood
     // (Marcel, 27 sep, vraag 44).
-    if (S.kalender && S.bevolking > 0) {
+    if (S.kalender && S.dorp.bevolking > 0) {
       const cel = box.querySelector('[data-wat="hout"]');
-      const v = T.houtVoorDeWinter(S, Math.floor(S.kalender.dag));
+      const v = T.houtVoorDeWinter(S.dorp, Math.floor(S.kalender.dag));
       const perDag = (x) => String(Math.round(x * 100) / 100).replace('.', ',');
       const erbij = v.erbij > 0.005 ? `, en er komt ${perDag(v.erbij)} per dag bij` : '';
       const genoeg = v.tot > 0
@@ -281,38 +284,44 @@
 
   // Het aantal mensen en de woonruimte (js/gebouwen.js, T.werkGebouwenBij): een eigen functie,
   // want die twee veranderen niet via T.wijzigVoorraad en dus niet vanzelf mee met toonVoorraad.
-  T.ui.toonBevolking = function (S) {
+  T.ui.toonBevolking = function (D) {
+    const S = T.S;
+    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
     const box = $('voorraadbalk');
     if (!box.children.length) bouwVoorraadbalk(box);
     const el = box.querySelector('[data-wat="bevolking"] .aantal');
-    if (el) el.textContent = `${Math.floor(S.bevolking)}/${Math.floor(S.woonruimte)}`;
+    if (el) el.textContent = `${Math.floor(S.dorp.bevolking)}/${Math.floor(S.dorp.woonruimte)}`;
   };
 
   // De tevredenheid (js/behoeften.js, T.tikBehoeftenDag) en, op hover, wat het dorp mist — dezelfde
   // vraag als T.ui.toonBevolking hierboven, met een eigen functie om dezelfde reden: tevredenheid
   // verandert niet via T.wijzigVoorraad.
-  T.ui.toonTevredenheid = function (S) {
+  T.ui.toonTevredenheid = function (D) {
+    const S = T.S;
+    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
     const box = $('voorraadbalk');
     if (!box.children.length) bouwVoorraadbalk(box);
     const cel = box.querySelector('[data-wat="tevredenheid"]');
-    if (!cel || !S.behoeften) return;
-    const pct = Math.round(S.behoeften.tevredenheid * 100);
+    if (!cel || !S.dorp.behoeften) return;
+    const pct = Math.round(S.dorp.behoeften.tevredenheid * 100);
     cel.querySelector('.aantal').textContent = `${pct}%`;
-    cel.classList.toggle('laag', S.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel);
-    const last = S.behoeften.last && S.behoeften.last.length ? ` Het heeft last van ${S.behoeften.last.join(' en ')}.` : '';
-    const blij = S.behoeften.blij && S.behoeften.blij.length ? ` Het is blij met ${S.behoeften.blij.join(' en ')}.` : '';
-    cel.title = S.behoeften.mist.length
-      ? `Tevredenheid: ${pct}%. Het dorp mist: ${S.behoeften.mist.join(', ')}.${last}${blij}`
+    cel.classList.toggle('laag', S.dorp.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel);
+    const last = S.dorp.behoeften.last && S.dorp.behoeften.last.length ? ` Het heeft last van ${S.dorp.behoeften.last.join(' en ')}.` : '';
+    const blij = S.dorp.behoeften.blij && S.dorp.behoeften.blij.length ? ` Het is blij met ${S.dorp.behoeften.blij.join(' en ')}.` : '';
+    cel.title = S.dorp.behoeften.mist.length
+      ? `Tevredenheid: ${pct}%. Het dorp mist: ${S.dorp.behoeften.mist.join(', ')}.${last}${blij}`
       : `Tevredenheid: ${pct}%. Het dorp heeft wat het nodig heeft.${last}${blij}`;
   };
 
   // De argwaan van de inner (js/inner.js), en op hover waarom en wat ze doet. Pas in de balk als hij
   // er eens geweest is, of als er argwaan is: in het begin blijft de balk kort.
-  T.ui.toonArgwaan = function (S) {
+  T.ui.toonArgwaan = function (D) {
+    const S = T.S;
+    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
     const box = $('voorraadbalk');
     if (!box.children.length) bouwVoorraadbalk(box);
     const cel = box.querySelector('[data-wat="argwaan"]');
-    const I = S.inner;
+    const I = S.dorp.inner;
     const IN = T.INNER_INSTELLINGEN;
     if (!cel || !IN) return;
     const zichtbaar = !!(I && (I.argwaan > 0 || I.rapport || I.bezoek));
@@ -324,7 +333,7 @@
     const waarom = I.waarom.length ? ` Waarom: ${I.waarom.join('; ')}.` : '';
     const nu = I.argwaan > 0 && IN.toeslag > 0 ? ` Nu vraagt de heer ${pct(I.argwaan * IN.toeslag)} meer.` : '';
     // Wat je hem dit jaar gaf (js/inner.js, T.koopInnerOm), en wat hij daarom minder opschrijft.
-    const geschenk = I.geschenken > 0 ? ` Je gaf hem dit jaar ${I.geschenken} goud: hij schrijft ${pct(T.innerKorting(S))} minder op.` : '';
+    const geschenk = I.geschenken > 0 ? ` Je gaf hem dit jaar ${I.geschenken} goud: hij schrijft ${pct(T.innerKorting(S.dorp))} minder op.` : '';
     cel.title =
       `Argwaan van de inner: ${pct(I.argwaan)}.${waarom}${nu}${geschenk} ` +
       `Vanaf ${pct(IN.terugkomenVanaf)} komt hij onverwacht terug, vanaf ${pct(IN.doorzoekenVanaf)} doorzoeken de soldaten op Sint-Maarten het dorp, ` +
@@ -337,7 +346,7 @@
   // een spookbeeld (js/main.js, js/tekenen.js) tot een klik op de kaart hem neerzet.
   function bouwmenuInhoud(S) {
     const rijen = Object.keys(T.GEBOUWEN)
-      .filter((id) => T.inBouwmenu(S, id))
+      .filter((id) => T.inBouwmenu(S.dorp, id))
       .map((id) => {
         const g = T.GEBOUWEN[id];
         if (g.erf) return erfRij(S, id, g);
@@ -356,14 +365,14 @@
         );
       })
       .join('');
-    return `<div class="kop">Bouwen — het ${S.trede}</div>${rijen || '<p class="bouw-leeg">Hier valt nu niets te bouwen.</p>'}`;
+    return `<div class="kop">Bouwen — het ${S.dorp.trede}</div>${rijen || '<p class="bouw-leeg">Hier valt nu niets te bouwen.</p>'}`;
   }
 
   // De rij van het erf (js/erven.js): wat het kost is niets, maar er staat bij hoeveel er vrij zijn, en
   // wat een gezin erop nodig heeft.
   function erfRij(S, id, g) {
     const maat = T.erfMaat();
-    const vrij = T.vrijeErven(S).length;
+    const vrij = T.vrijeErven(S.dorp).length;
     const hout = T.GEBOUWEN.hut.kosten.hout;
     return (
       `<button data-soort="${id}">` +
@@ -419,7 +428,7 @@
 
   // Of dit de duurste of goedkoopste keer van het jaar is, als regeltje onder de prijs.
   function prijsMerk(S, wat, kant) {
-    const hoe = T.prijsVanHetJaar(S, wat, kant);
+    const hoe = T.prijsVanHetJaar(S.dorp, wat, kant);
     return hoe ? `<span class="handel-merk ${hoe}">${PRIJS_TAAL[kant][hoe]}</span>` : '';
   }
 
@@ -429,28 +438,28 @@
   }
 
   function handelInhoud(S) {
-    const m = S.marskramer;
+    const m = S.dorp.marskramer;
     const H = T.HANDEL_INSTELLINGEN;
-    const v = S.voorraad;
+    const v = S.dorp.voorraad;
     const heb = (wat) => Math.floor(v[wat] || 0);
     const verkoopt = Object.keys(H.verkoopt).map((wat) => {
-      const k = T.kanKopen(S, wat, 1);
+      const k = T.kanKopen(S.dorp, wat, 1);
       return (
         `<div class="handel-rij"><span class="handel-naam">${T.hoofdletter(wat)} <small>je hebt ${heb(wat)}</small></span>` +
         `<span class="handel-prijs">${k.prijs} goud per stuk<small>${prijsMerk(S, wat, 'verkoopt')}hij heeft er nog ${m.heeft[wat] || 0}</small></span>` +
-        `<span class="handel-knoppen">${handelKnop('koop', wat, 1, 'Koop 1', k)}${handelKnop('koop', wat, 5, 'Koop 5', T.kanKopen(S, wat, 5))}</span></div>`
+        `<span class="handel-knoppen">${handelKnop('koop', wat, 1, 'Koop 1', k)}${handelKnop('koop', wat, 5, 'Koop 5', T.kanKopen(S.dorp, wat, 5))}</span></div>`
       );
     });
     // Wat hij koopt, voor zover je er iets van hebt. Bij het graan staat hoeveel dagen het dorp
     // ervan kan eten, zodat je niet per ongeluk je wintereten verkoopt.
-    const etenPerDag = (S.bevolking || 0) * T.etenPerMens(S);
+    const etenPerDag = (S.dorp.bevolking || 0) * T.etenPerMens(S.dorp);
     const koopt = Object.keys(H.koopt).filter((wat) => heb(wat) > 0).map((wat) => {
-      const k = T.kanVerkopen(S, wat, 1);
+      const k = T.kanVerkopen(S.dorp, wat, 1);
       const eten = wat === 'graan' && etenPerDag > 0 ? ` · eten voor ${Math.floor((v.graan || 0) / etenPerDag)} dagen` : '';
       return (
         `<div class="handel-rij"><span class="handel-naam">${T.hoofdletter(wat)} <small>je hebt ${heb(wat)}${eten}</small></span>` +
         `<span class="handel-prijs">${k.per} voor ${k.prijs} goud<small>${prijsMerk(S, wat, 'koopt')}</small></span>` +
-        `<span class="handel-knoppen">${handelKnop('verkoop', wat, 1, `Verkoop ${k.per}`, k)}${handelKnop('verkoop', wat, 5, `Verkoop ${k.per * 5}`, T.kanVerkopen(S, wat, 5))}</span></div>`
+        `<span class="handel-knoppen">${handelKnop('verkoop', wat, 1, `Verkoop ${k.per}`, k)}${handelKnop('verkoop', wat, 5, `Verkoop ${k.per * 5}`, T.kanVerkopen(S.dorp, wat, 5))}</span></div>`
       );
     });
     const maand = H.bezoeken[m.bezoek].maand;
@@ -471,8 +480,10 @@
     box.classList.remove('verborgen');
   }
 
-  T.ui.openHandel = function (S) {
-    if (!T.kanHandelen || !T.kanHandelen(S)) return;
+  T.ui.openHandel = function (D) {
+    const S = T.S;
+    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
+    if (!T.kanHandelen || !T.kanHandelen(S.dorp)) return;
     S.modus = 'handel';
     S.bouwSoort = null;
     S.bouwMenuOpen = false;
@@ -482,7 +493,9 @@
     toonHandel(S);
   };
 
-  T.ui.sluitHandel = function (S) {
+  T.ui.sluitHandel = function (D) {
+    const S = T.S;
+    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
     $('handel').classList.add('verborgen');
     if (S.modus === 'handel') S.modus = 'verkennen';
     T.laatTijdGaan(S, 'handel');
@@ -494,14 +507,14 @@
     if (!b || !S) return;
     b.blur();
     if (b.dataset.actie === 'sluit') {
-      T.ui.sluitHandel(S);
+      T.ui.sluitHandel(S.dorp);
       return;
     }
     const n = Number(b.dataset.n);
-    const r = b.dataset.actie === 'koop' ? T.koop(S, b.dataset.wat, n) : T.verkoop(S, b.dataset.wat, n);
+    const r = b.dataset.actie === 'koop' ? T.koop(S.dorp, b.dataset.wat, n) : T.verkoop(S.dorp, b.dataset.wat, n);
     if (!r.kan && T.ui.bericht) T.ui.bericht(r.reden);
-    if (T.kanHandelen(S)) toonHandel(S);
-    else T.ui.sluitHandel(S);
+    if (T.kanHandelen(S.dorp)) toonHandel(S);
+    else T.ui.sluitHandel(S.dorp);
   });
 
   // ── De heer (js/heer.js; spel.md, "Sint-Maarten") ──
@@ -509,7 +522,7 @@
   // doe: { heer: true }), met daarin de schandpaal als die erbij hoort. Zijn brieven staan in
   // js/brieven.js. Het einde (je ambt kwijt) gebruikt het scherm over alles heen uit js/ui.js
   // (T.ui.toonOverlay).
-  const hebNu = (S, wat) => Math.floor((S.voorraad && S.voorraad[wat]) || 0);
+  const hebNu = (S, wat) => Math.floor((S.dorp.voorraad && S.dorp.voorraad[wat]) || 0);
   // Een naam kan de speler zelf geven (js/opties.js), dus die gaat nooit rauw in de html.
   const veilig = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || 'niets');
@@ -539,8 +552,8 @@
   // Het deel dat met de schuiven meeverandert: hoeveel je geeft, wat dat kost, en of je graan het
   // haalt tot de oogst. Dezelfde vraag als de knop (T.gevolgVanBetaling).
   function heerSamenvatting(S, eis) {
-    const g = T.gevolgVanBetaling(S, geef, eis);
-    const v = T.heerVooruitzicht(S, g);
+    const g = T.gevolgVanBetaling(S.dorp, geef, eis);
+    const v = T.heerVooruitzicht(S.dorp, g);
     const pct = Math.floor(g.deel * 100 + 1e-9);
     const soort = g.ambtKwijt || g.schandpaal ? 'zwaar' : g.boete ? 'boete' : 'goed';
     const goudExtra = g.neemt.goud > (eis.per.goud || 0) ? ` Van je goud neemt hij ${g.neemt.goud}, ook in de plaats van wat er verder ontbreekt.` : '';
@@ -577,7 +590,7 @@
   }
 
   function schandpaalInhoud(S) {
-    const rijen = T.schandpaalKeuzes(S).map((k) => {
+    const rijen = T.schandpaalKeuzes(S.dorp).map((k) => {
       const prijs = k.wie === 'schout'
         ? `Het dorp neemt het je niet kwalijk. De heer lacht, en zet er ${k.boete} goud bij.`
         : `Het dorp is ${Math.round(k.kost * 100)}% minder tevreden, en vergeet het pas na maanden.`;
@@ -596,18 +609,18 @@
   // Ligt er nog iets verstopt (js/verstoppen.js), dan zegt het venster dat: zolang de heer in het
   // dorp is, kun je er niet bij, dus wie zijn goud te laat terughaalt, komt tekort.
   function verstoptBijDeHeer(S) {
-    const v = T.verstoptTotaal(S);
+    const v = T.verstoptTotaal(S.dorp);
     const wat = v ? T.inhoudTekst(v) : '';
     return wat ? `<p class="venster-staat">Er ligt nog ${wat} verstopt. Zolang de heer in het dorp is, kun je er niet bij.</p>` : '';
   }
 
   function toonHeer(S) {
     const box = $('heer');
-    const b = S.heer && S.heer.bezoek;
+    const b = S.dorp.heer && S.dorp.heer.bezoek;
     if (b && b.schandpaal) {
       box.innerHTML = schandpaalInhoud(S);
     } else {
-      const eis = T.eisVanDeHeer(S);
+      const eis = T.eisVanDeHeer(S.dorp);
       if (!geef) {
         geef = {};
         for (const wat of eis.volgorde) geef[wat] = Math.min(eis.per[wat], hebNu(S, wat));
@@ -625,8 +638,8 @@
   }
 
   T.ui.openHeer = function (S) {
-    const b = S.heer && S.heer.bezoek;
-    if (!T.heerWacht(S) && !(b && b.schandpaal)) return;
+    const b = S.dorp.heer && S.dorp.heer.bezoek;
+    if (!T.heerWacht(S.dorp) && !(b && b.schandpaal)) return;
     S.modus = 'heer';
     S.bouwSoort = null;
     S.bouwMenuOpen = false;
@@ -640,7 +653,7 @@
   // Dicht. Bij de schandpaal kan dat niet: daar moet je kiezen. De tijd loopt weer op de snelheid
   // die de speler koos (js/tijd.js, T.laatTijdGaan).
   T.ui.sluitHeer = function (S) {
-    const b = S.heer && S.heer.bezoek;
+    const b = S.dorp.heer && S.dorp.heer.bezoek;
     if (b && b.schandpaal) return;
     $('heer').classList.add('verborgen');
     if (S.modus === 'heer') S.modus = 'verkennen';
@@ -655,7 +668,7 @@
     if (!r || !S || !geef) return;
     geef[r.dataset.wat] = Number(r.value);
     $('heer').querySelector(`[data-geef="${r.dataset.wat}"]`).textContent = r.value;
-    $('heer').querySelector('.heer-samen').innerHTML = heerSamenvatting(S, T.eisVanDeHeer(S));
+    $('heer').querySelector('.heer-samen').innerHTML = heerSamenvatting(S, T.eisVanDeHeer(S.dorp));
   });
 
   $('heer').addEventListener('click', (ev) => {
@@ -669,26 +682,28 @@
       geef = null;
       toonHeer(S);
     } else if (b.dataset.actie === 'betaal') {
-      const g = T.betaalHeer(S, geef);
+      const g = T.betaalHeer(S.dorp, geef);
       if (!g.kan) {
         T.ui.bericht(g.reden);
         return;
       }
-      if (S.einde) return; // het einde staat al in beeld (T.ui.toonEinde)
-      if (S.heer.bezoek && S.heer.bezoek.schandpaal) toonHeer(S);
+      if (S.dorp.einde) return; // het einde staat al in beeld (T.ui.toonEinde)
+      if (S.dorp.heer.bezoek && S.dorp.heer.bezoek.schandpaal) toonHeer(S);
       else T.ui.sluitHeer(S);
     } else if (b.dataset.wie) {
-      T.zetAanDeSchandpaal(S, b.dataset.wie);
+      T.zetAanDeSchandpaal(S.dorp, b.dataset.wie);
       T.ui.sluitHeer(S);
     }
   });
 
   // Je ambt kwijt: het spel is uit. Het scherm over alles heen, met wat er elk jaar gebeurde.
-  T.ui.toonEinde = function (S) {
+  T.ui.toonEinde = function (D) {
+    const S = T.S;
+    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
     S.modus = 'einde';
     $('heer').classList.add('verborgen');
     if (T.ui.briefOpen()) $('brief').classList.add('verborgen');
-    const jaren = ((S.heer && S.heer.jaren) || [])
+    const jaren = ((S.dorp.heer && S.dorp.heer.jaren) || [])
       .map((j) => `${j.jaar}: ${Math.floor(j.deel * 100 + 1e-9)}%${j.straf ? `, ${j.straf}` : ''}`)
       .join(' · ');
     T.ui.toonOverlay(
@@ -733,9 +748,9 @@
   function slachtSamenvatting(S, groepen) {
     const dag = dagNu(S);
     const weg = gekozen(groepen);
-    const blijft = T.veeVan(S).filter((e) => !weg.includes(e));
-    const perDag = T.hooiPerWinterdag(S, dag, blijft);
-    const hooi = T.hooiVoorDeWinter(S, dag);
+    const blijft = T.veeVan(S.dorp).filter((e) => !weg.includes(e));
+    const perDag = T.hooiPerWinterdag(S.dorp, dag, blijft);
+    const hooi = T.hooiVoorDeWinter(S.dorp, dag);
     const winter = T.winterDagen(dag);
     const dagen = perDag > 0 ? Math.floor(hooi / perDag) : Infinity;
     const haalt = dagen >= winter;
@@ -752,8 +767,8 @@
       ? `Het slachten geeft ${Math.round(o.vlees)} vlees en ${o.huiden} ${o.huiden === 1 ? 'huid' : 'huiden'}.`
       : 'Je slacht niemand.';
     if (o.vlees > 0 && T.zoutDekking) {
-      const z = T.zoutDekking(S);
-      const vrij = Math.max(0, Math.floor((S.voorraad.zout || 0) * T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed - z.totaal));
+      const z = T.zoutDekking(S.dorp);
+      const vrij = Math.max(0, Math.floor((S.dorp.voorraad.zout || 0) * T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed - z.totaal));
       opbrengst += vrij >= o.vlees
         ? ' Je zout houdt het vlees goed.'
         : vrij > 0
@@ -770,12 +785,12 @@
   function toonSlachten(S) {
     const box = $('slachten');
     const dag = dagNu(S);
-    const groepen = T.kuddeGroepen(S, dag);
+    const groepen = T.kuddeGroepen(S.dorp, dag);
     if (!slacht) {
-      const voorstel = T.slachtVoorstel(S, dag).dieren;
+      const voorstel = T.slachtVoorstel(S.dorp, dag).dieren;
       slacht = groepen.map((g) => g.dieren.filter((e) => voorstel.includes(e)).length);
     }
-    const hooi = Math.floor(T.hooiVoorDeWinter(S, dag));
+    const hooi = Math.floor(T.hooiVoorDeWinter(S.dorp, dag));
     const winter = T.winterDagen(dag);
     const inleiding = T.VEE_INSTELLINGEN.winterzorg
       ? (T.isVeeWinter(dag)
@@ -795,9 +810,14 @@
 
   T.ui.slachtenOpen = () => !$('slachten').classList.contains('verborgen');
 
-  T.ui.openSlachten = function (S) {
-    if (!T.kuddeGroepen || !T.veeVan(S).length) {
-      if (S.vee) S.vee.slachtVraag = false;
+  T.ui.openSlachten = function (D) {
+    const S = T.S;
+    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
+    // Het venster opent zodra je rondloopt, niet midden in een gesprek of een ander venster; tot dan blijft de
+    // vraag staan (js/vee.js, T.tikVeeDag vraagt het elke dag).
+    if (S.modus && S.modus !== 'verkennen') return;
+    if (!T.kuddeGroepen || !T.veeVan(S.dorp).length) {
+      if (S.dorp.vee) S.dorp.vee.slachtVraag = false;
       return;
     }
     if (T.ui.veldenOpen()) T.ui.sluitVelden(S);
@@ -815,7 +835,7 @@
   T.ui.sluitSlachten = function (S) {
     $('slachten').classList.add('verborgen');
     if (S.modus === 'slachten') S.modus = 'verkennen';
-    if (S.vee) S.vee.slachtVraag = false;
+    if (S.dorp.vee) S.dorp.vee.slachtVraag = false;
     slacht = null;
     T.laatTijdGaan(S, 'slachten');
   };
@@ -826,7 +846,7 @@
     if (!r || !S || !slacht) return;
     slacht[Number(r.dataset.groep)] = Number(r.value);
     $('slachten').querySelector(`[data-slacht="${r.dataset.groep}"]`).textContent = r.value;
-    $('slachten').querySelector('.heer-samen').innerHTML = slachtSamenvatting(S, T.kuddeGroepen(S, dagNu(S)));
+    $('slachten').querySelector('.heer-samen').innerHTML = slachtSamenvatting(S, T.kuddeGroepen(S.dorp, dagNu(S)));
   });
 
   $('slachten').addEventListener('click', (ev) => {
@@ -840,8 +860,8 @@
       slacht = null;
       toonSlachten(S);
     } else if (b.dataset.actie === 'slacht') {
-      const weg = gekozen(T.kuddeGroepen(S, dagNu(S)));
-      if (weg.length) T.slacht(S, weg, dagNu(S));
+      const weg = gekozen(T.kuddeGroepen(S.dorp, dagNu(S)));
+      if (weg.length) T.slacht(S.dorp, weg, dagNu(S));
       T.ui.sluitSlachten(S);
     }
   });
@@ -865,18 +885,18 @@
     const ligt = (g.verstopt && g.verstopt[wat]) || 0;
     const stap = wat === 'graan' ? 10 : 5;
     // Alles wat kan: bij graan de kelder vol (of wat je hebt), bij goud alles.
-    const max = T.hoeveelVerstoppen(S, g, wat);
-    const alles = max > 0 ? T.kanVerstoppen(S, g, wat, max) : T.kanVerstoppen(S, g, wat, Math.max(1, hebNu(S, wat)));
+    const max = T.hoeveelVerstoppen(S.dorp, g, wat);
+    const alles = max > 0 ? T.kanVerstoppen(S.dorp, g, wat, max) : T.kanVerstoppen(S.dorp, g, wat, Math.max(1, hebNu(S, wat)));
     const vul = wat === 'graan' ? `Vul hem${max > 0 ? ` (${max})` : ''}` : `Alles weg${max > 0 ? ` (${max})` : ''}`;
     const past = wat === 'graan' ? `er past nog ${Math.max(0, Math.floor(p.plaats - ligt))} bij` : 'past altijd, in een pot onder de vloer';
     return (
       `<div class="handel-rij"><span class="handel-naam">${T.hoofdletter(wat)} <small>je hebt ${hebNu(S, wat)} ${VERSTOP_WAAR[wat]}</small></span>` +
       `<span class="handel-prijs">hier ${Math.floor(ligt)}<small>${past}</small></span>` +
       `<span class="handel-knoppen">` +
-      verstopKnop('weg', wat, stap, `Zet ${stap} weg`, T.kanVerstoppen(S, g, wat, stap)) +
+      verstopKnop('weg', wat, stap, `Zet ${stap} weg`, T.kanVerstoppen(S.dorp, g, wat, stap)) +
       verstopKnop('weg', wat, max, vul, alles) +
-      verstopKnop('terug', wat, stap, `Haal ${stap} terug`, T.kanTerughalen(S, g, wat, stap)) +
-      verstopKnop('terug', wat, ligt, 'Alles terug', T.kanTerughalen(S, g, wat, ligt)) +
+      verstopKnop('terug', wat, stap, `Haal ${stap} terug`, T.kanTerughalen(S.dorp, g, wat, stap)) +
+      verstopKnop('terug', wat, ligt, 'Alles terug', T.kanTerughalen(S.dorp, g, wat, ligt)) +
       `</span></div>`
     );
   }
@@ -885,8 +905,8 @@
   // A). Kijkt er iemand, dan in het rood. Met "pas later" in de spelregels zie je het niet.
   function verstopKijkers(S, g) {
     if (!T.ZIEN_INSTELLINGEN.meteen) return '';
-    const t = T.kijkersTekst(S, g);
-    const iemand = T.getuigenVan(S, g).length > 0;
+    const t = T.kijkersTekst(S.dorp, g);
+    const iemand = T.getuigenVan(S.dorp, g).length > 0;
     return `<p class="verstop-kijkers${iemand ? ' gezien' : ''}">${veilig(t)}</p>`;
   }
 
@@ -910,7 +930,7 @@
 
   function toonVerstoppen(S) {
     const g = verstopGebouw;
-    const p = g && T.verstopPlekVan(S, g);
+    const p = g && T.verstopPlekVan(S.dorp, g);
     if (!p) {
       T.ui.sluitVerstoppen(S);
       return;
@@ -935,7 +955,7 @@
   T.ui.verstoppenOpen = () => !$('verstoppen').classList.contains('verborgen');
 
   T.ui.openVerstoppen = function (S, g) {
-    if (!T.verstopPlekVan || !T.verstopPlekVan(S, g)) return;
+    if (!T.verstopPlekVan || !T.verstopPlekVan(S.dorp, g)) return;
     if (T.ui.veldenOpen()) T.ui.sluitVelden(S);
     if (T.ui.briefOpen()) T.ui.sluitBrief(S);
     S.modus = 'verstoppen';
@@ -965,12 +985,12 @@
       return;
     }
     const n = Number(b.dataset.n);
-    const r = b.dataset.actie === 'weg' ? T.verstop(S, verstopGebouw, b.dataset.wat, n) : T.haalTerug(S, verstopGebouw, b.dataset.wat, n);
+    const r = b.dataset.actie === 'weg' ? T.verstop(S.dorp, verstopGebouw, b.dataset.wat, n) : T.haalTerug(S.dorp, verstopGebouw, b.dataset.wat, n);
     if (!r.kan && T.ui.bericht) T.ui.bericht(r.reden);
     // Wie het zag, is getuige (js/zien.js): een oogje boven zijn hoofd, en het bericht zegt wie; met "pas
     // later" in de spelregels hoor je het pas als het rondverteld is.
     if (r.kan && T.werdGezien) {
-      const z = T.werdGezien(S, verstopGebouw, b.dataset.actie, b.dataset.wat, n);
+      const z = T.werdGezien(S, S.dorp, verstopGebouw, b.dataset.actie, b.dataset.wat, n);
       if (T.ZIEN_INSTELLINGEN.meteen && T.ui.bericht) T.ui.bericht(z.bericht);
     }
     toonVerstoppen(S);
@@ -1005,14 +1025,14 @@
   // Wat een veld nu is, met wat erbij hoort: het graan op een akker, de kudde op een weide.
   function veldNu(S, veld) {
     const bestemming = T.bestemmingVan(veld);
-    const dieren = T.dierenOp(S, veld);
+    const dieren = T.dierenOp(S.dorp, veld);
     let over = '';
     let zorg = false;
     // Samen met een veld ernaast één weide (js/vee.js, T.weideGroepen): dan gaan de kudde en de
     // plaats over allebei.
-    const samen = bestemming === 'weide' ? T.samenMetTekst(S, veld) : '';
+    const samen = bestemming === 'weide' ? T.samenMetTekst(S.dorp, veld) : '';
     if (dieren.length) {
-      const st = T.weideStand(S, veld);
+      const st = T.weideStand(S.dorp, veld);
       const bezet = `${st.nodig} van de ${st.tegels} tegels`;
       const kleinste = Math.min(...Object.values(T.VEE_INSTELLINGEN.plaats));
       zorg = st.vrij < 0;
@@ -1035,14 +1055,14 @@
   }
 
   function veldRij(S, veld, i) {
-    const boer = T.boerVanVeld(S, veld);
+    const boer = T.boerVanVeld(S.dorp, veld);
     const bestemming = T.bestemmingVan(veld);
     const plan = T.planVan(veld);
     const pct = Math.round(T.vruchtbaarheidVan(veld) * 100);
     const redenen = [];
     const knoppen = T.BESTEMMINGEN.map((b) => {
       if (b === plan) return `<button class="veld-keuze gekozen" data-veld="${i}" data-bestemming="${b}" title="Dit wordt het volgend jaar">${BESTEMMING_NAAM[b]}</button>`;
-      const k = T.kanBestemming(S, veld, b);
+      const k = T.kanBestemming(S.dorp, veld, b);
       if (!k.kan && !redenen.includes(k.reden)) redenen.push(k.reden);
       const titel = veilig(k.kan ? `Volgend jaar ${b}` : k.reden);
       return `<button class="veld-keuze" data-veld="${i}" data-bestemming="${b}" title="${titel}"${k.kan ? '' : ' disabled'}>${BESTEMMING_NAAM[b]}</button>`;
@@ -1051,7 +1071,7 @@
     // op wat volgend jaar akker is; wat niet kan, staat uit en zegt waarom.
     let mestKnop = '';
     if (T.kanMest && !T.VELDEN_INSTELLINGEN.mestVanzelf && T.VELDEN_INSTELLINGEN.vruchtbaarheid) {
-      const km = T.kanMest(S, veld);
+      const km = T.kanMest(S.dorp, veld);
       const karren = Math.round(T.mestVoorVeld(veld) * 10) / 10;
       const pct = Math.round(T.VELDEN_INSTELLINGEN.mestErbij * 100);
       const titel = veld.mest
@@ -1080,9 +1100,9 @@
   function hooiVooruit(S, weides) {
     const VI = T.VEE_INSTELLINGEN;
     if (!VI.winterzorg || !weides.length) return '';
-    const hooi = weides.reduce((n, v) => n + v.b * v.h * T.hooiPerTegel(v, T.boerVanVeld(S, v)), 0);
+    const hooi = weides.reduce((n, v) => n + v.b * v.h * T.hooiPerTegel(v, T.boerVanVeld(S.dorp, v)), 0);
     const koeien = Math.floor(hooi / (T.winterLengte() * (VI.hooiPerDag.koe || 1)));
-    const nu = T.veeVan(S).filter((e) => e.dier === 'koe').length;
+    const nu = T.veeVan(S.dorp).filter((e) => e.dier === 'koe').length;
     return ` Die ${weides.length === 1 ? 'weide geeft' : 'weides geven'} in ${VI.hooien} zo'n ${Math.round(hooi)} hooi: ` +
       `genoeg voor ${koeien} ${koeien === 1 ? 'koe' : 'koeien'} de winter door (een kalf telt half), en je hebt er nu ${nu}.`;
   }
@@ -1091,8 +1111,8 @@
   // vragen. Leeg als er geen mest is en er ook niemand om vraagt.
   function mestVooruit(S) {
     if (!T.mestPlan || !T.VELDEN_INSTELLINGEN.vruchtbaarheid) return '';
-    const mp = T.mestPlan(S);
-    const heb = Math.floor((S.voorraad && S.voorraad.mest) || 0);
+    const mp = T.mestPlan(S.dorp);
+    const heb = Math.floor((S.dorp.voorraad && S.dorp.voorraad.mest) || 0);
     if (!mp.velden.length && !heb) return '';
     if (T.VELDEN_INSTELLINGEN.mestVanzelf) {
       return ` De mest gaat vanzelf over alle akkers: je hebt ${heb} karren, en een volle beurt vraagt er ${Math.round(mp.nodig)}.`;
@@ -1104,12 +1124,12 @@
 
   // De hele kudde in één regel, met de knop om te slachten (het venster hierboven).
   function kuddeRegel(S) {
-    const kudde = T.veeVan(S);
+    const kudde = T.veeVan(S.dorp);
     if (!kudde.length || !T.dierenTekst) return '';
     const meent = T.meentVan(S.wereld);
     return `<p class="veld-kudde">De kudde: ${T.dierenTekst(kudde, dagNu(S))}. ` +
       `<button class="veld-keuze" data-actie="slachten" title="Wie gaat er naar de slager?">Slachten…</button></p>` +
-      (meent && T.meentTekst ? `<p class="veld-kudde">${veilig(T.meentTekst(S, meent))}.</p>` : '');
+      (meent && T.meentTekst ? `<p class="veld-kudde">${veilig(T.meentTekst(S.dorp, meent))}.</p>` : '');
   }
 
   function veldenInhoud(S) {
@@ -1189,19 +1209,19 @@
     }
     if (b.dataset.actie === 'slachten') {
       T.ui.sluitVelden(S);
-      T.ui.openSlachten(S);
+      T.ui.openSlachten(S.dorp);
       return;
     }
     if (b.dataset.mest !== undefined) {
       const v = S.wereld.akkers[Number(b.dataset.mest)];
-      const r = T.zetMest(S, v, !v.mest);
+      const r = T.zetMest(S.dorp, v, !v.mest);
       if (!r.kan) T.ui.bericht(r.reden, 'gevaar');
       toonVelden(S);
       return;
     }
     const veld = S.wereld.akkers[Number(b.dataset.veld)];
     if (!veld || !b.dataset.bestemming || T.planVan(veld) === b.dataset.bestemming) return;
-    const r = T.zetPlan(S, veld, b.dataset.bestemming);
+    const r = T.zetPlan(S.dorp, veld, b.dataset.bestemming);
     if (!r.kan) T.ui.bericht(r.reden, 'gevaar');
     toonVelden(S);
   });
@@ -1310,7 +1330,7 @@
     if (S.modus === 'spelregels') S.modus = 'verkennen';
     T.laatTijdGaan(S, 'spelregels');
     // Wat een regel verandert, kan de balk raken (de snelheid van een dag, wat de heer vraagt).
-    T.ui.toonVoorraad(S);
+    T.ui.toonVoorraad(S.dorp);
     T.ui.toonKalender(S);
   };
 
@@ -1353,7 +1373,7 @@
       T.optiesTerug(S);
       toonSpelregels();
     } else if (b.dataset.actie === 'loot') {
-      T.lootBoeren(S);
+      T.lootBoeren(S.dorp);
       toonSpelregels();
     } else if (b.dataset.optie) {
       T.zetOptie(b.dataset.optie, b.dataset.keuze, S);

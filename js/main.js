@@ -27,7 +27,7 @@
   // regels er onderweg bij zetten (de heer, de inner, het slapen, het einde); alleen de zoom van het scherm
   // blijft. Het begint niet vanzelf: het titelscherm (js/menu.js, vraag 48) laat het erachter wachten, en
   // pas "Nieuw spel" geeft de benoemingsbrief van de heer, waarmee een spel begint sinds Marcel hem op
-  // 25 sep koos (T.ui.toonBrief(S, 'benoeming'), js/brieven.js). Een proefje (?kaart=) begint meteen,
+  // 25 sep koos (T.ui.toonBrief(S.dorp, 'benoeming'), js/brieven.js). Een proefje (?kaart=) begint meteen,
   // zonder brief, en wordt nooit opgeslagen (S.proefje; js/opslaan.js). Met `makerZaad` begint het op
   // een gehucht van de maker uit dat zaad (T.beginOpKaart, js/gebied.js; Spel.debug.gehucht).
   T.nieuwSpel = function (makerZaad) {
@@ -35,21 +35,13 @@
     Object.assign(S, {
       tijd: 0,
       gebieden: {}, // een nieuw spel begint met schone gebieden
-      vlaggen: new Set(),
       modus: 'verkennen',
       gevecht: null,
       overgang: null,
       bezig: false,
       inventaris: new Set(),
-      kalender: T.nieuweKalender(), // dag, seizoen, jaar en snelheid (js/tijd.js)
-      voorraad: T.nieuweVoorraad(), // goud, graan, wol, hout (js/voorraad.js)
-      gebouwen: [], // wat er staat of in aanbouw is (js/gebouwen.js), en hoe ver S.gebouwenDag is
-      bevolking: 0, woonruimte: 0, // aantal mensen, en hoeveel er als woonruimte gegeven is
-      behoeften: T.nieuweBehoeften(), // tevredenheid en wat het dorp mist (js/behoeften.js)
-      trede: 'gehucht', // de trede van het dorp: een dorp bij genoeg mensen, een kapel en een smidse (js/treden.js)
-      wetten: T.nieuweWetten(), // welke wetten je aannam, en wat de heer en de belasting nog tegoed hebben (js/wetten.js)
-      goud: 0,
-      goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
+      kalender: T.nieuweKalender(), // dag, seizoen, jaar en snelheid (js/tijd.js), voor het spel en al zijn dorpen
+      // De dorpen (S.dorpen) en je eigen dorp (S.dorp) komen met de kaart: T.beginOpKaart hieronder (js/dorp.js).
       quests: {}, // per quest de fase waarin hij staat (js/quest.js)
       questWeg: {}, // en hoe je hem oploste, zodat het dorp erop kan reageren
       questBeloond: new Set(),
@@ -197,7 +189,7 @@
     const x = Math.round(f.x);
     const y = Math.round(f.y);
     // Met een erf in de hand op een vrij erf: een klik maakt het weer gewone grond (js/erven.js).
-    const erf = T.GEBOUWEN[S.bouwSoort].erf ? T.erfOp(S, x, y) : null;
+    const erf = T.GEBOUWEN[S.bouwSoort].erf ? T.erfOp(S.dorp, x, y) : null;
     if (erf && !erf.hut) {
       S.bouwHover = { x, y, ok: false, weghalen: erf };
       canvas.style.cursor = 'pointer';
@@ -207,7 +199,7 @@
       return;
     }
     // Past hij niet, dan zegt de muis waarom (op het plein wordt niet gebouwd), net als de klik.
-    const reden = T.waaromPastHetNiet(S, S.bouwSoort, x, y);
+    const reden = T.waaromPastHetNiet(S.dorp, S.bouwSoort, x, y);
     S.bouwHover = { x, y, ok: !reden, reden };
     canvas.style.cursor = 'crosshair';
     if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
@@ -323,14 +315,14 @@
     // Elke ochtend vanzelf opslaan (js/opslaan.js, vraag 48 A); js/menu.js zegt het in de hoek.
     const bewaard = T.werkOpslaanBij(S);
     if (bewaard) T.ui.opgeslagen(bewaard);
-    T.werkGebouwenBij(S); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
-    T.werkMarskramerBij(S); // zijn poppetje: over de weg binnen, naar het plein, en weer weg (js/handel.js)
-    T.werkHeerBij(S); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)
-    T.werkDoorzoekenBij(S); // zijn soldaten zoeken, met de schout mee of waar de heer wijst (js/doorzoeken.js)
-    T.werkInnerBij(S); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
-    T.werkBewonersBij(S); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
-    T.werkRoversBij(S); // rovers komen naar een akker, roven en gaan weer; de militie loopt met je mee (js/rovers.js)
-    T.werkVoorvallenBij(S); // wie je zoekt met een voorval, loopt naar je toe en spreekt je aan (js/voorvallen.js)
+    T.werkGebouwenBij(S.dorp); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
+    T.werkMarskramerBij(S.dorp); // zijn poppetje: over de weg binnen, naar het plein, en weer weg (js/handel.js)
+    T.werkHeerBij(S.dorp); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)
+    T.werkDoorzoekenBij(S.dorp); // zijn soldaten zoeken, met de schout mee of waar de heer wijst (js/doorzoeken.js)
+    T.werkInnerBij(S, S.dorp); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
+    T.werkBewonersBij(S.dorp); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
+    T.werkRoversBij(S, S.dorp); // rovers komen naar een akker, roven en gaan weer; de militie loopt met je mee (js/rovers.js)
+    T.werkVoorvallenBij(S, S.dorp); // wie je zoekt met een voorval, loopt naar je toe en spreekt je aan (js/voorvallen.js)
     T.werkLandBij(S); // op reis de volgende provincie, en over de weg het gehucht uit de kaart van het land (js/land.js)
     T.ui.werkLandkaartBij(S); // en die kaart op het scherm (js/landkaart.js)
     T.werkAnimatiesBij(S, dt, dtWereld);
@@ -343,9 +335,9 @@
     // je het eerst aannam; zonder quest staat er het doel van het gehucht: een dorp worden
     // (js/treden.js). Daaronder de raad: wat nu tussen jou en een dorp staat (js/raad.js).
     T.werkQuestsBij(S);
-    const doelNu = T.questDoel(S) || T.tredeDoel(S);
+    const doelNu = T.questDoel(S) || T.tredeDoel(S.dorp);
     if (!(S.tijd - raadOp < RAAD_ELKE) || S.tijd < raadOp) {
-      raadNu = T.raadNu(S);
+      raadNu = T.raadNu(S.dorp);
       raadOp = S.tijd;
     }
     T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, raadNu && raadNu.tekst);
@@ -354,7 +346,7 @@
       // Vóór T.laatDwalen: wie hier een pad krijgt of aan het maaien slaat (T.werkOogstBij,
       // js/akkers.js, alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
       // T.laatDwalen al "bezig" (m.pad.length of m.maait) en dwaalt deze beurt niet ook nog weg.
-      T.werkOogstBij(S, dtWereld);
+      T.werkOogstBij(S, S.dorp, dtWereld);
       T.laatDwalen(S, dtWereld);
       const m = S.modus === 'verkennen' && T.zoekOntdekking(S);
       if (m) T.startGevecht(S, m, false);
@@ -393,7 +385,7 @@
       const soort = S.bouwSoort;
       const hover = S.bouwHover;
       if (hover && hover.weghalen) {
-        const r = T.haalErfWeg(S, hover.weghalen);
+        const r = T.haalErfWeg(S.dorp, hover.weghalen);
         T.ui.bericht(r.gelukt ? r.bericht : r.reden, r.gelukt ? null : 'gevaar');
         S.bouwSoort = null;
         return;
@@ -402,7 +394,7 @@
         T.ui.bericht((hover && hover.reden) || 'Daar past het niet.', 'gevaar');
         return;
       }
-      const r = T.plaatsGebouw(S, soort, hover.x, hover.y);
+      const r = T.plaatsGebouw(S.dorp, soort, hover.x, hover.y);
       if (!r.gelukt) {
         T.ui.bericht(r.reden, 'gevaar');
         return;
@@ -422,7 +414,7 @@
   window.addEventListener('keydown', (ev) => {
     // Bij de marskramer (js/hud.js, het handelsvenster) ligt de rest stil; Esc sluit het venster.
     if (S.modus === 'handel') {
-      if (ev.key === 'Escape') T.ui.sluitHandel(S);
+      if (ev.key === 'Escape') T.ui.sluitHandel(S.dorp);
       return;
     }
     // Bij de heer net zo (js/hud.js, betalen op Sint-Maarten; bij de schandpaal moet je kiezen),
@@ -584,14 +576,14 @@
     // Een gebouw rechtstreeks neerzetten, zonder het bouwmenu: Spel.debug.bouw('huis', 10, 10).
     // Zelfde antwoord als een klik in het bouwmenu (js/gebouwen.js, T.plaatsGebouw).
     bouw(soort, x, y) {
-      return T.plaatsGebouw(S, soort, x, y);
+      return T.plaatsGebouw(S.dorp, soort, x, y);
     },
     // De marskramer nu laten komen, zonder op grasmaand te wachten: Spel.debug.marskramer() voor
     // het bezoek van de lente, (1) voor de zomer, (2) voor de herfst (js/handel.js). Is hij er al,
     // dan zegt het hoe het met hem staat.
     marskramer(bezoek) {
-      if (!S.marskramer) T.marskramerKomt(S, bezoek || 0, Math.floor(S.kalender.dag));
-      const m = S.marskramer;
+      if (!S.dorp.marskramer) T.marskramerKomt(S.dorp, bezoek || 0, Math.floor(S.kalender.dag));
+      const m = S.dorp.marskramer;
       if (m) m.meteen = true; // ook 's nachts: niet op het bezoekuur wachten (js/dag.js, T.bezoekerKomtAan)
       return m && { bezoek: m.bezoek, beurs: m.beurs, plaats: m.plaats, heeft: { ...m.heeft }, staat: m.staat, weg: m.weg, gaatOp: m.gaatOp };
     },
@@ -599,22 +591,22 @@
     // Is hij er al, dan zegt het wat hij vraagt en hoe het met hem staat. Spel.debug.brief()
     // stuurt zijn brief van wijnmaand nu.
     heer() {
-      if (!S.heer || !S.heer.bezoek) T.heerKomt(S, Math.floor(S.kalender.dag));
-      const b = S.heer.bezoek;
+      if (!S.dorp.heer || !S.dorp.heer.bezoek) T.heerKomt(S.dorp, Math.floor(S.kalender.dag));
+      const b = S.dorp.heer.bezoek;
       b.meteen = true; // ook 's nachts: niet op het bezoekuur wachten (js/dag.js, T.bezoekerKomtAan)
-      return { vraagt: T.eisVanDeHeer(S).per, staat: b.staat, betaald: !!b.betaald, schuld: S.heer.schuld };
+      return { vraagt: T.eisVanDeHeer(S.dorp).per, staat: b.staat, betaald: !!b.betaald, schuld: S.dorp.heer.schuld };
     },
     brief() {
-      T.stuurBrief(S, Math.floor(S.kalender.dag));
-      return T.eisVanDeHeer(S).per;
+      T.stuurBrief(S.dorp, Math.floor(S.kalender.dag));
+      return T.eisVanDeHeer(S.dorp).per;
     },
     // De inner nu laten komen, zonder op oogstmaand te wachten (js/inner.js): Spel.debug.inner(),
     // of Spel.debug.inner(true) voor zijn onverwachte tweede bezoek. Is hij er al, dan zegt het
     // wat hij zag, tot hoe laat hij blijft, hoe lang je hem aan de praat hield, wat je hem gaf, en
     // wat er in zijn rapport staat.
     inner(onverwacht) {
-      const I = S.inner || (S.inner = T.nieuweInner());
-      if (!I.bezoek) T.innerKomt(S, Math.floor(S.kalender.dag), !!onverwacht);
+      const I = S.dorp.inner || (S.dorp.inner = T.nieuweInner());
+      if (!I.bezoek) T.innerKomt(S.dorp, Math.floor(S.kalender.dag), !!onverwacht);
       const b = I.bezoek;
       b.meteen = true; // ook 's nachts: niet op het bezoekuur wachten (js/dag.js, T.bezoekerKomtAan)
       const r = I.rapport;
@@ -622,18 +614,18 @@
       return {
         blijftTot: b.tot != null && isFinite(b.tot) ? uur(b.tot) : null, gepraat: Math.round(b.gepraat * 10) / 10, uitgepraat: b.uitgepraat,
         volgt: b.volgt, weg: b.weg, gebouwen: b.gebouwen.size, tegels: b.tegels.size,
-        nogTeZien: b.weg ? 0 : T.innerNogTeZien(S).length, argwaan: I.argwaan, waarom: I.waarom.slice(),
-        geschenken: I.geschenken, korting: T.innerKorting(S), gehoord: I.gehoord,
+        nogTeZien: b.weg ? 0 : T.innerNogTeZien(S.dorp).length, argwaan: I.argwaan, waarom: I.waarom.slice(),
+        geschenken: I.geschenken, korting: T.innerKorting(S.dorp), gehoord: I.gehoord,
         rapport: r && { gebouwen: r.gebouwen, woonruimte: r.woonruimte, tegels: r.tegels, graanGezien: r.graanGezien, graanVerwacht: r.graanVerwacht, goudGezien: r.goudGezien, goudVerwacht: r.goudVerwacht, korting: r.korting },
       };
     },
     // Zijn argwaan zetten (0..1), om te zien wat ze doet: Spel.debug.argwaan(0.6). Zonder getal
     // zegt het hoe hoog ze is, en waarom.
     argwaan(n) {
-      const I = S.inner || (S.inner = T.nieuweInner());
+      const I = S.dorp.inner || (S.dorp.inner = T.nieuweInner());
       if (typeof n === 'number') {
         I.argwaan = Math.max(0, Math.min(1, n));
-        if (T.ui.toonArgwaan) T.ui.toonArgwaan(S);
+        if (T.ui.toonArgwaan) T.ui.toonArgwaan(S.dorp);
       }
       return { argwaan: I.argwaan, waarom: I.waarom.slice() };
     },
@@ -643,12 +635,12 @@
       if (!T.getuigenVan) return 'Zien kan alleen in het gehucht.';
       const h = T.tegelVan(S.schout);
       return {
-        zicht: Math.round(T.zichtOp(S, h) * 10) / 10,
-        kijkers: T.getuigenVan(S, null).map((e) => {
-          const p = T.bewonerVan(S, e);
+        zicht: Math.round(T.zichtOp(S.dorp, h) * 10) / 10,
+        kijkers: T.getuigenVan(S.dorp, null).map((e) => {
+          const p = T.bewonerVan(S.dorp, e);
           return { wie: p ? T.naamVanBewoner(p) : e.wie || e.soort, tegel: `${e.tx},${e.ty}`, afstand: Math.round(Math.hypot(e.tx - h.x, e.ty - h.y) * 10) / 10 };
         }),
-        licht: T.lichtBronnen(S).map((b) => `${b.x},${b.y} (${b.straal})`),
+        licht: T.lichtBronnen(S.dorp).map((b) => `${b.x},${b.y} (${b.straal})`),
       };
     },
     // De verstopplekken (js/verstoppen.js): waar je iets kunt verstoppen, wat er ligt, en hoe vaak
@@ -656,13 +648,13 @@
     // de kelder van boer1 (of 'schout', of 'kapel'), zonder te lopen, als het kan.
     verstopt(huis, graan = 0, goud = 0) {
       if (!T.verstopPlekken) return 'Verstoppen kan alleen in het gehucht.';
-      const plekken = T.verstopPlekken(S);
+      const plekken = T.verstopPlekken(S.dorp);
       if (huis) {
         const p = plekken.find((q) => q.gebouw.huis === huis || q.gebouw.soort === huis);
         if (!p) return `Geen plek bij "${huis}". Er is: ${plekken.map((q) => q.gebouw.huis || q.gebouw.soort).join(', ')}.`;
         for (const [wat, n] of [['graan', graan], ['goud', goud]]) {
           if (!(n > 0)) continue;
-          const r = T.verstop(S, p.gebouw, wat, n);
+          const r = T.verstop(S.dorp, p.gebouw, wat, n);
           if (!r.kan) return r.reden;
         }
       }
@@ -674,12 +666,12 @@
     // Wie er woont (js/bewoners.js): per bewoner wie hij is, zijn huis, zijn werk, waar hij staat en
     // waar hij nu hoort. Spel.debug.bewoners('herder') zoekt in de tekst, zodat je er één vindt.
     bewoners(zoek) {
-      if (!S.bewoners) return 'Er wonen hier geen bewoners.';
-      const lijst = S.bewoners.mensen.map((p) => {
+      if (!S.dorp.bewoners) return 'Er wonen hier geen bewoners.';
+      const lijst = S.dorp.bewoners.mensen.map((p) => {
         const e = p.wezen;
-        const a = e && T.dagAnker(S, e);
+        const a = e && T.dagAnker(S.dorp, e);
         return {
-          wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)}${T.MENSEN[p.wie] && T.MENSEN[p.wie].karakter ? ' (boer)' : ''}` : T.overBewonerTekst(S, e, p),
+          wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)}${T.MENSEN[p.wie] && T.MENSEN[p.wie].karakter ? ' (boer)' : ''}` : T.overBewonerTekst(S.dorp, e, p),
           leeftijd: p.leeftijd, huis: p.huis ? p.huis.huis || `${p.huis.soort} ${p.huis.x},${p.huis.y}` : '-',
           werk: p.werk ? `${p.werk.soort} ${p.werk.x},${p.werk.y}` : '-',
           staat: e ? (e.binnen ? 'binnen' : `${e.tx},${e.ty}`) : p.komt ? 'onderweg hierheen' : '-',
@@ -692,23 +684,23 @@
     // (js/bewoners.js). Is het dorp vol, dan neemt het een vrij erf, zoals op een groeidag (js/erven.js).
     // Spel.debug.gezin(-4) laat er een wegtrekken, zoals als het dorp ontevreden is.
     gezin(n = 4) {
-      if (!S.bewoners) return 'Er wonen hier geen bewoners.';
-      const plaats = n < 0 ? n : Math.max(0, Math.min(n, (S.woonruimte || 0) - S.bevolking));
+      if (!S.dorp.bewoners) return 'Er wonen hier geen bewoners.';
+      const plaats = n < 0 ? n : Math.max(0, Math.min(n, (S.dorp.woonruimte || 0) - S.dorp.bevolking));
       if (plaats === 0) {
-        const hut = T.gezinZoektEenErf(S);
-        T.ui.toonBevolking(S);
+        const hut = T.gezinZoektEenErf(S.dorp);
+        T.ui.toonBevolking(S.dorp);
         return hut ? `Een gezin neemt het erf op (${hut.erf.x}, ${hut.erf.y}), en komt overdag over de weg.` : 'Er is geen plaats: wijs eerst een erf aan (Spel.debug.bouw(\'erf\', x, y)).';
       }
-      const echt = plaats < 0 ? T.wijzigBevolking(S, plaats, 'vertrek', 'het dorp is niet tevreden genoeg') : T.wijzigBevolking(S, plaats, 'groei');
-      T.ui.toonBevolking(S);
+      const echt = plaats < 0 ? T.wijzigBevolking(S.dorp, plaats, 'vertrek', 'het dorp is niet tevreden genoeg') : T.wijzigBevolking(S.dorp, plaats, 'groei');
+      T.ui.toonBevolking(S.dorp);
       return echt < 0 ? `${-echt} trekken weg.` : `${echt} komen over de weg, overdag vanaf ${T.DAG_INSTELLINGEN.bezoekUur} uur.`;
     },
     // De trede (js/treden.js): hoe ver het gehucht is met een dorp worden. Spel.debug.trede('dorp') maakt er nu
     // een dorp van, met de brief van de heer, zonder dat de eis gehaald is.
     trede(naar) {
-      if (naar) T.wordtTrede(S, naar);
-      const doel = T.tredeDoel(S);
-      return { trede: S.trede, doel: doel ? `${doel.kop}: ${doel.tekst}` : 'geen volgende trede' };
+      if (naar) T.wordtTrede(S.dorp, naar);
+      const doel = T.tredeDoel(S.dorp);
+      return { trede: S.dorp.trede, doel: doel ? `${doel.kop}: ${doel.tekst}` : 'geen volgende trede' };
     },
     // Het gehucht van de maker (js/maker.js): uit welk zaad het gehucht komt (of dat het het ontworpen gehucht is).
     // Spel.debug.gehucht(3) begint nu een nieuw spel op het gehucht van zaad 3, zoals op de pagina "Gehuchten van de
@@ -721,13 +713,13 @@
     // De raad onder het doel (js/raad.js): wat er nu staat, en welke raden nu allemaal gelden, in hun volgorde.
     raad() {
       if (!(S.wereld && S.wereld.plein)) return 'Hier is geen raad: deze kaart heeft geen plein.';
-      const nu = T.raadNu(S);
+      const nu = T.raadNu(S.dorp);
       return { nu: nu ? nu.tekst : 'geen', gelden: T.RADEN.filter((r) => r.als(S)).map((r) => r.id) };
     },
     // De rovers (js/rovers.js): de bende (wie wegtrok), wanneer die en de wilde rovers komen, en de aanval die
     // loopt. Spel.debug.rovers(3) laat nu drie wilde rovers komen, Spel.debug.rovers('bende') de bende.
     rovers(wat) {
-      const R = S.rovers || (S.rovers = T.nieuweRovers());
+      const R = S.dorp.rovers || (S.dorp.rovers = T.nieuweRovers());
       if (wat != null && !R.aanval) {
         const bende = wat === 'bende';
         if (bende && !R.bende.length) return 'Er is geen bende: nog niemand trok weg.';
@@ -744,17 +736,17 @@
     // en wie veteraan is. Spel.debug.heervaart('vraag') laat hem nu mannen vragen (ook in een gehucht), en
     // Spel.debug.heervaart('terug') laat ze nu terugkomen.
     heervaart(wat) {
-      const H0 = S.heervaart;
-      if (wat === 'vraag' && !(H0 && (H0.vraag || H0.tocht))) T.vraagHeervaart(S, Math.floor(S.kalender.dag));
-      else if (wat === 'terug' && H0 && H0.tocht) T.heervaartKomtTerug(S);
-      const H = S.heervaart || T.nieuweHeervaart();
+      const H0 = S.dorp.heervaart;
+      if (wat === 'vraag' && !(H0 && (H0.vraag || H0.tocht))) T.vraagHeervaart(S.dorp, Math.floor(S.kalender.dag));
+      else if (wat === 'terug' && H0 && H0.tocht) T.heervaartKomtTerug(S.dorp);
+      const H = S.dorp.heervaart || T.nieuweHeervaart();
       const naam = (p) => T.naamVanBewoner(p);
       return {
-        geldt: T.heervaartGeldt(S),
+        geldt: T.heervaartGeldt(S.dorp),
         vraag: H.vraag ? { mannen: H.vraag.mannen, goud: H.vraag.goud, wie: H.vraag.wie.map(naam), uiterlijk: T.datumVanDag(H.vraag.uiterlijk).tekst } : null,
         weg: H.tocht ? { wie: H.tocht.wie.map(naam), terug: T.datumVanDag(H.tocht.terugOp).tekst } : null,
         laatste: H.laatste,
-        veteranen: (S.bewoners ? S.bewoners.mensen.filter((p) => p.veteraan) : []).map(naam),
+        veteranen: (S.dorp.bewoners ? S.dorp.bewoners.mensen.filter((p) => p.veteraan) : []).map(naam),
       };
     },
     // De voorvallen (js/voorvallen.js): wat er nu loopt, welke vervolgen nog komen, wanneer het volgende komt, en
@@ -762,28 +754,28 @@
     // het er nu de tijd niet voor is); wie het zegt, zoekt je meteen.
     voorval(id) {
       const dag = Math.floor(S.kalender.dag);
-      if (!S.voorvallen) S.voorvallen = T.nieuweVoorvallen();
+      if (!S.dorp.voorvallen) S.dorp.voorvallen = T.nieuweVoorvallen();
       if (id) {
         if (!T.VOORVALLEN[id]) return `Er is geen voorval "${id}". Er zijn: ${Object.keys(T.VOORVALLEN).join(', ')}.`;
         const v = T.VOORVALLEN[id];
         const oud = { vervolg: v.vervolg, als: v.als, pauze: v.pauze };
         Object.assign(v, { vervolg: false, als: undefined, pauze: 0 });
-        const mensen = T.voorvalKan(S, id, dag);
+        const mensen = T.voorvalKan(S.dorp, id, dag);
         Object.assign(v, oud);
         if (!mensen) return `Voor "${id}" is er nu niemand die het kan zeggen, of over wie het kan gaan.`;
-        if (S.voorvallen.lopend) T.voorvalBeantwoord(S, S.voorvallen.lopend.id);
-        T.beginVoorval(S, id, mensen.wie, mensen.ander, dag).vanaf = S.kalender.dag;
+        if (S.dorp.voorvallen.lopend) T.voorvalBeantwoord(S.dorp, S.dorp.voorvallen.lopend.id);
+        T.beginVoorval(S.dorp, id, mensen.wie, mensen.ander, dag).vanaf = S.kalender.dag;
       }
-      const V = S.voorvallen;
+      const V = S.dorp.voorvallen;
       const naam = (p) => (p ? T.naamVanBewoner(p) : null);
       return {
         lopend: V.lopend ? { id: V.lopend.id, wie: naam(V.lopend.wie), ander: naam(V.lopend.ander), vanaf: T.uurTekst(V.lopend.vanaf), zoekt: !!(V.lopend.wie.wezen && V.lopend.wie.wezen.zoektSchout) } : null,
         wacht: V.wacht.map((w) => ({ id: w.id, op: T.datumVanDag(w.op).tekst, wie: naam(w.wie), ander: naam(w.ander) })),
         volgende: V.volgende != null ? T.datumVanDag(V.volgende).tekst : null,
-        kunnen: Object.keys(T.VOORVALLEN).filter((v) => T.voorvalKan(S, v, dag)),
+        kunnen: Object.keys(T.VOORVALLEN).filter((v) => T.voorvalKan(S.dorp, v, dag)),
         aantal: V.aantal,
         beantwoord: V.beantwoord,
-        stemming: T.voorvalStemming(S, dag),
+        stemming: T.voorvalStemming(S.dorp, dag),
       };
     },
     // Het land (js/land.js): waar de schout is, of hij reist, wat hij zag en welke wegen er zijn. ('open') opent de
@@ -821,16 +813,16 @@
     // Spel.debug.raadsman('boer2') of ('Aaltje') maakt die boer raadsman.
     raadsman(wie) {
       if (wie) {
-        const p = S.bewoners && S.bewoners.mensen.find((x) => x.wie === wie || T.naamVanBewoner(x) === wie);
+        const p = S.dorp.bewoners && S.dorp.bewoners.mensen.find((x) => x.wie === wie || T.naamVanBewoner(x) === wie);
         if (!p) return `Er is geen boer "${wie}".`;
-        const r = T.kiesRaadsman(S, p);
+        const r = T.kiesRaadsman(S.dorp, p);
         if (!r.kan) return r.reden;
       }
-      const nu = T.raadsmanVan(S);
+      const nu = T.raadsmanVan(S.dorp);
       return {
-        raadsman: nu ? T.overRaadsmanTekst(S, nu) : null,
-        kandidaten: T.raadsmanKandidaten(S).map((p) => T.overRaadsmanTekst(S, p)),
-        besluiten: ((S.raadsman && S.raadsman.besluiten) || []).slice(-5).map((b) => `${T.datumVanDag(b.dag).tekst}: ${b.id}, "${b.antwoord}"${b.prijs ? ` (${b.prijs})` : ''}`),
+        raadsman: nu ? T.overRaadsmanTekst(S.dorp, nu) : null,
+        kandidaten: T.raadsmanKandidaten(S.dorp).map((p) => T.overRaadsmanTekst(S.dorp, p)),
+        besluiten: ((S.dorp.raadsman && S.dorp.raadsman.besluiten) || []).slice(-5).map((b) => `${T.datumVanDag(b.dag).tekst}: ${b.id}, "${b.antwoord}"${b.prijs ? ` (${b.prijs})` : ''}`),
       };
     },
     // De wetten (js/wetten.js): per wet de stand, en wat hij dan doet. Spel.debug.wetten('rantsoen', 'krap')
@@ -838,21 +830,21 @@
     // staan erbij.
     wetten(id, stand) {
       if (id) {
-        const r = T.zetWet(S, id, stand);
+        const r = T.zetWet(S.dorp, id, stand);
         if (!r.kan) return r.reden;
       }
-      const lijst = T.wettenVanNu(S).map((w) => {
-        const s = T.standVanWet(S, w);
-        return { wet: w, stand: s, doet: T.watDeWetDoet(S, w, s).map((r) => (r.goed ? '+ ' : '− ') + r.tekst).join(' · ') };
+      const lijst = T.wettenVanNu(S.dorp).map((w) => {
+        const s = T.standVanWet(S.dorp, w);
+        return { wet: w, stand: s, doet: T.watDeWetDoet(S.dorp, w, s).map((r) => (r.goed ? '+ ' : '− ') + r.tekst).join(' · ') };
       });
-      return { wetten: lijst, boete: T.houtkapBoete(S), belastingRest: S.wetten ? S.wetten.belastingRest : 0 };
+      return { wetten: lijst, boete: T.houtkapBoete(S.dorp), belastingRest: S.dorp.wetten ? S.dorp.wetten.belastingRest : 0 };
     },
     // De erven (js/erven.js): waar ze liggen, en wie er woont of bouwt. Een erf aanwijzen gaat als een
     // gebouw: Spel.debug.bouw('erf', 30, 20).
     erven() {
-      return (S.erven || []).map((e) => {
+      return (S.dorp.erven || []).map((e) => {
         const hut = e.hut;
-        const wie = hut && S.bewoners ? S.bewoners.mensen.filter((p) => p.huis === hut).map((p) => p.naam) : [];
+        const wie = hut && S.dorp.bewoners ? S.dorp.bewoners.mensen.filter((p) => p.huis === hut).map((p) => p.naam) : [];
         const staat = !hut ? 'vrij' : hut.wachtOpHout ? 'wacht op hout' : hut.klaar ? `een ${T.GEBOUWEN[hut.soort].naam}` : `in aanbouw, klaar op dag ${hut.klaarOp}`;
         return { x: e.x, y: e.y, staat, wie: wie.join(', ') };
       });
@@ -860,29 +852,29 @@
     // De herberg (js/herberg.js): wie er vanavond gaat, hoe ver ze lopen, gisteravond, en het bier.
     // Spel.debug.herberg(30) zet eerst 30 bier in de voorraad.
     herberg(bier) {
-      const g = T.herbergVan(S);
+      const g = T.herbergVan(S.dorp);
       if (!g) return 'Hier staat geen herberg.';
-      if (typeof bier === 'number') T.zetVoorraad(S, 'bier', bier);
-      const w = S.bewoners.wereld;
+      if (typeof bier === 'number') T.zetVoorraad(S.dorp, 'bier', bier);
+      const w = S.dorp.bewoners.wereld;
       const deur = T.deurVan(w, g);
-      const vanavond = T.herbergGasten(S, S.kalender.dag).map((p) => ({
-        wie: p.wie ? T.naamVanMens(p.wie) : T.overBewonerTekst(S, p.wezen, p),
+      const vanavond = T.herbergGasten(S.dorp, S.kalender.dag).map((p) => ({
+        wie: p.wie ? T.naamVanMens(p.wie) : T.overBewonerTekst(S.dorp, p.wezen, p),
         uurLopen: Math.round(T.looptijdVan(w, p, T.deurVan(w, p.huis), { x: deur.x, y: deur.y, straal: 0 }, 'herberg') * 10) / 10,
         staat: p.wezen ? (p.wezen.binnen ? 'binnen' : `${p.wezen.tx},${p.wezen.ty}`) : '-',
       }));
-      return { deur: `${deur.x},${deur.y}`, bier: Math.floor(S.voorraad.bier || 0), vanavond, gisteravond: S.herberg && S.herberg.gisteravond, tekst: T.gebouwToestand(S, g) };
+      return { deur: `${deur.x},${deur.y}`, bier: Math.floor(S.dorp.voorraad.bier || 0), vanavond, gisteravond: S.dorp.herberg && S.dorp.herberg.gisteravond, tekst: T.gebouwToestand(S.dorp, g) };
     },
     // De soldaten nu laten zoeken, zoals op Sint-Maarten: staat de heer op het plein, dan op twee of drie
     // plekken, met de schout mee of waar de heer wijst (js/doorzoeken.js); anders, of met ('dorp'), het
     // hele dorp in één keer (js/inner.js), en dan zegt het wat ze vonden.
     zoeken(wat) {
-      const b = S.heer && S.heer.bezoek;
+      const b = S.dorp.heer && S.dorp.heer.bezoek;
       if (wat !== 'dorp' && b && b.staat) {
         delete b.zoeken;
-        const z = T.beginDoorzoeken(S);
-        return z && { plekken: z.nodig, heerKiest: z.heerKiest, doelen: (z.doelen || []).map((g) => T.verstopPlekVan(S, g).naam) };
+        const z = T.beginDoorzoeken(S.dorp);
+        return z && { plekken: z.nodig, heerKiest: z.heerKiest, doelen: (z.doelen || []).map((g) => T.verstopPlekVan(S.dorp, g).naam) };
       }
-      return T.doorzoekDorp(S);
+      return T.doorzoekDorp(S.dorp);
     },
     // Opslaan en laden zonder het menu (js/opslaan.js): Spel.debug.opslaan('2') zet het spel op plek 2
     // (zonder plek: 1), Spel.debug.laden('auto') laadt wat er vanzelf bewaard is, en Spel.debug.spellen()
@@ -902,7 +894,7 @@
     // Het slachtvenster nu openen (js/hud.js, T.ui.openSlachten), zonder op 1 slachtmaand te wachten.
     slachten() {
       if (!T.ui.openSlachten) return 'Het slachtvenster is er alleen in het gehucht.';
-      T.ui.openSlachten(S);
+      T.ui.openSlachten(S.dorp);
       return T.ui.slachtenOpen() ? 'open' : 'Er is geen vee om te slachten.';
     },
     // Vee neerzetten om naar te kijken (js/vee.js): Spel.debug.vee('koe', 4) zet vier koeien op de
@@ -922,10 +914,10 @@
       const meent = T.graastOp(w, soort) === 'meent' ? T.meentVan(w) : null;
       const weides = meent ? [meent] : (w.akkers || []).filter((v) => T.bestemmingVan(v) === 'weide');
       while (opWeide.length < aantal && weides.length) {
-        weides.sort((a, b) => T.weideStand(S, b).vrij - T.weideStand(S, a).vrij);
+        weides.sort((a, b) => T.weideStand(S.dorp, b).vrij - T.weideStand(S.dorp, a).vrij);
         const v = weides[0];
         // De vrije tegel die het verst van de andere dieren op deze weide ligt: zo spreidt de kudde.
-        const anderen = T.dierenOp(S, v);
+        const anderen = T.dierenOp(S.dorp, v);
         let plek = null;
         let ruimte = -1;
         for (let y = v.y; y < v.y + v.h; y++) {
@@ -942,13 +934,13 @@
           weides.shift(); // geen vrije tegel meer op deze weide: de volgende
           continue;
         }
-        S.veeZaad = (S.veeZaad || 0) + 1;
-        const e = T.zetOpWeide(T.maakDier(soort, plek.x, plek.y, S.veeZaad), v);
+        S.dorp.veeZaad = (S.dorp.veeZaad || 0) + 1;
+        const e = T.zetOpWeide(T.maakDier(soort, plek.x, plek.y, S.dorp.veeZaad), v);
         w.wezens.push(e);
         opWeide.push(e);
       }
       const opWeideTekst = opWeide.map((e) => `${e.naam} ${e.vel} op ${e.tx},${e.ty}, op ${e.weide.meent ? 'de heide' : `de weide ${e.weide.naam}`}`);
-      if (opWeide.length && T.ui.toonVoorraad) T.ui.toonVoorraad(S); // de melk bij de kaas in de balk
+      if (opWeide.length && T.ui.toonVoorraad) T.ui.toonVoorraad(S.dorp); // de melk bij de kaas in de balk
       if (opWeide.length === aantal) return opWeideTekst;
       aantal -= opWeide.length;
       // Het midden van de kudde: de dichtstbijzijnde tegel, drie of meer stappen van de schout, met
@@ -977,8 +969,8 @@
             const y = midden.y + dy;
             if (Math.max(Math.abs(dx), Math.abs(dy)) !== r || !vrij(x, y) || T.afstand(h, { x, y }) < 2) continue;
             if (dieren.some((d) => T.afstand({ x: d.tx, y: d.ty }, { x, y }) < 2)) continue;
-            S.veeZaad = (S.veeZaad || 0) + 1;
-            const e = T.maakDier(soort, x, y, S.veeZaad);
+            S.dorp.veeZaad = (S.dorp.veeZaad || 0) + 1;
+            const e = T.maakDier(soort, x, y, S.dorp.veeZaad);
             w.wezens.push(e);
             dieren.push(e);
             geplaatst.push(e);
@@ -1044,7 +1036,7 @@
       if (!q.fasen[fase]) return `"${fase}" is geen fase van ${q.naam}. Er is: ${Object.keys(q.fasen).join(', ')}.`;
       T.zetQuest(S, naam, fase);
       const f = q.fasen[fase];
-      return { quest: q.naam, fase, doel: f.doel || null, goud: S.goud, tas: [...S.inventaris] };
+      return { quest: q.naam, fase, doel: f.doel || null, goud: S.dorp.goud, tas: [...S.inventaris] };
     },
     // Naar een ander gebied springen zonder ernaartoe te lopen: Spel.debug.gaNaar('proefbos').
     gaNaar(naam) {

@@ -221,7 +221,7 @@
     if (elk(als.nietGebouw).some((s) => heeftGebouw(D, s))) return false;
     for (const [wat, n] of Object.entries(als.voorraad || {})) if (((D.voorraad && D.voorraad[wat]) || 0) < n) return false;
     for (const [soort, n] of Object.entries(als.vee || {})) if (T.veeVan(D).filter((e) => e.dier === soort).length < n) return false;
-    return T.voorwaardeGeldt(D, null, als);
+    return T.voorwaardeGeldt(null, D, null, als);
   }
 
   // Kan dit voorval nu komen? Het is er de tijd voor, het was er niet te kort geleden, en er is iemand die het je komt
@@ -377,21 +377,21 @@
   // Elk beeld (js/main.js): overdag, vanaf zijn uur, zoekt hij de schout. Hij loopt naar hem toe (T.loopNaastDeSchout,
   // js/inner.js, zoals de inner), en staat hij naast een schout die stilstaat, dan spreekt hij hem aan. Daarna wacht
   // hij, tot je hem aanspreekt. 's Avonds, of als de schout in een ander gebied is, gaat hij zijns weegs.
-  T.werkVoorvallenBij = function (S) {
-    const L = S.voorvallen && S.voorvallen.lopend;
-    if (!L || !S.kalender || !S.bewoners) return;
-    if (!IN().aan || !kanKomen(S, L.wie)) {
-      stop(S);
+  T.werkVoorvallenBij = function (S, D) {
+    const L = D.voorvallen && D.voorvallen.lopend;
+    if (!L || !D.kalender || !D.bewoners) return;
+    if (!IN().aan || !kanKomen(D, L.wie)) {
+      stop(D);
       return;
     }
     const e = L.wie.wezen;
-    const w = S.bewoners.wereld;
-    const nu = S.kalender.dag;
+    const w = D.bewoners.wereld;
+    const nu = D.kalender.dag;
     const deel = T.dagdeelVan(nu);
     // Is de schout niet in het dorp als wie hem zoekt, gaat zoeken (T.schoutIsWeg, js/land.js: op reis, of in een
     // ander gebied), dan beslist de raadsman meteen.
-    const weg = T.schoutIsWeg(S);
-    if (nu >= L.vanaf && weg && T.raadsmanBeslist(S)) return;
+    const weg = T.schoutIsWeg(D);
+    if (nu >= L.vanaf && weg && T.raadsmanBeslist(D)) return;
     if (nu < L.vanaf || deel === 'avond' || deel === 'nacht' || weg) {
       laatLos(e);
       return;
@@ -413,13 +413,13 @@
       e.deurSinds = S.tijd;
     }
     if (L.aangesproken) return;
-    const h = S.schout;
+    const h = D.schout;
     if (T.afstand({ x: h.tx, y: h.ty }, { x: e.tx, y: e.ty }) <= 1 && !h.onderweg && !e.onderweg) {
       L.aangesproken = true;
       if (T.ui && T.ui.spreekAan) T.ui.spreekAan(S, e, L.id);
       return;
     }
-    if (!e.onderweg) T.loopNaastDeSchout(S, e);
+    if (!e.onderweg) T.loopNaastDeSchout(D, e);
   };
 
   // Je koos een antwoord dat het gesprek sluit (js/dialoog.js), of de raadsman deed het (`door`, js/raadsman.js): het

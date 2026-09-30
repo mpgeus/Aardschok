@@ -47,14 +47,13 @@ T.ui = new Proxy({}, { get: () => () => {} });
 function nieuwSpel(zaad) {
   const echt = console.warn;
   console.warn = () => {};
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, trede: 'gehucht' };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
   } finally {
     console.warn = echt;
   }
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
-  S.kalender = T.nieuweKalender();
   return S;
 }
 
@@ -84,12 +83,12 @@ test('een gemaakt gehucht leest het spel in zoals het ontworpen gehucht: dezelfd
 test('een nieuw spel op een gemaakt gehucht: 26 mensen, en het zaad van het spel is het zaad van het gehucht', () => {
   const S = nieuwSpel(5);
   assert.equal(S.wereld.maker.zaad, 5);
-  assert.equal(S.lot.zaad, 5);
-  assert.equal(S.bevolking, 26);
-  assert.equal(S.bewoners.mensen.length, 26);
-  assert.equal(S.gebouwen.length, 11);
+  assert.equal(S.dorp.lot.zaad, 5);
+  assert.equal(S.dorp.bevolking, 26);
+  assert.equal(S.dorp.bewoners.mensen.length, 26);
+  assert.equal(S.dorp.gebouwen.length, 11);
   // hetzelfde zaad geeft hetzelfde spel, ook de boeren
-  assert.deepEqual(nieuwSpel(5).lot, S.lot);
+  assert.deepEqual(nieuwSpel(5).dorp.lot, S.dorp.lot);
 });
 
 test('de spelregel "Je gehucht": standaard het ontworpen gehucht, en met "Elk spel een ander" legt de maker het', () => {
@@ -101,7 +100,7 @@ test('de spelregel "Je gehucht": standaard het ontworpen gehucht, en met "Elk sp
     assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, true);
     const S = nieuwSpel();
     assert.ok(S.wereld.maker, 'geen gehucht van de maker');
-    assert.equal(S.lot.zaad, S.wereld.maker.zaad);
+    assert.equal(S.dorp.lot.zaad, S.wereld.maker.zaad);
   } finally {
     T.pasOptiesToe({});
   }

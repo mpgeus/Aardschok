@@ -2,7 +2,7 @@
 // Ze staan allemaal in hetzelfde venster (#brief) en in dezelfde hand: de benoeming als een nieuw spel begint
 // (js/menu.js), de schatting op 1 wijnmaand (js/heer.js), de heervaart op 1 hooimaand (js/heervaart.js), en de
 // brief als het gehucht een dorp is (js/treden.js). Elke brief is een soort in BRIEVEN hieronder: wat erin staat,
-// en welke knoppen eronder staan. T.ui.toonBrief(S, soort) zet hem neer, en zolang je leest, staat de tijd stil.
+// en welke knoppen eronder staan. T.ui.toonBrief(D, soort) zet hem neer (D: het dorp waar hij heen gaat; alleen jouw dorp komt in beeld), en zolang je leest, staat de tijd stil.
 // Een brief die op je wacht (de schatting tot je betaald hebt, de heervaart tot je kiest), opent de knop Brief
 // bovenin weer. Wat een knop doet, vraagt de brief aan de regels (T.heervaartKeuzes), zodat de knop en wat hij
 // doet uit hetzelfde antwoord komen.
@@ -13,11 +13,11 @@
   // Een naam kan de speler zelf geven (js/opties.js, en het dorp bij Nieuw spel), dus die gaat nooit rauw in de html.
   const veilig = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || 'niets');
-  const hebNu = (S, wat) => Math.floor((S.voorraad && S.voorraad[wat]) || 0);
+  const hebNu = (S, wat) => Math.floor((S.dorp.voorraad && S.dorp.voorraad[wat]) || 0);
   const vandaag = (S) => (S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '');
   const eisInTaal = (eis) => opsomming(eis.volgorde.map((wat) => `${eis.per[wat]} ${wat}`));
   // "Ons gehucht Heikant", of zonder naam "dit gehucht".
-  const hetDorp = (S, wat) => (T.dorpsnaam(S) ? `Ons ${wat} ${veilig(T.dorpsnaam(S))}` : `dit ${wat}`);
+  const hetDorp = (S, wat) => (T.dorpsnaam(S.dorp) ? `Ons ${wat} ${veilig(T.dorpsnaam(S.dorp))}` : `dit ${wat}`);
 
   // Welke brief nu open staat (alleen scherm; na het laden staat er geen open).
   let open = null;
@@ -60,7 +60,7 @@
     // De schatting op 1 wijnmaand (js/heer.js, T.stuurBrief): wat hij op Sint-Maarten komt halen. Hij wacht tot je
     // betaald hebt; de knop Brief opent hem weer.
     schatting: (S) => {
-      const brief = S.heer && S.heer.brief;
+      const brief = S.dorp.heer && S.dorp.heer.brief;
       if (!brief) return null;
       const regels = brief.eis.regels.map((r) => `<li><b>${r.aantal} ${r.wat}</b> <span>${r.waarom}</span></li>`).join('');
       const samen = brief.eis.regels.length > 1 ? `<p class="brief-samen">Samen: ${eisInTaal(brief.eis)}.</p>` : '';
@@ -80,11 +80,11 @@
     // De heervaart op 1 hooimaand (js/heervaart.js; Marcel, 29 sep, vraag 60, A): mannen voor zijn oorlog, of goud.
     // Twee knoppen, die vooraf zeggen wat ze kosten; wie niet kiest, stuurt ze (op de dag die de voet noemt).
     heervaart: (S) => {
-      const v = S.heervaart && S.heervaart.vraag;
+      const v = S.dorp.heervaart && S.dorp.heervaart.vraag;
       if (!v) return null;
-      const keuzes = T.heervaartKeuzes(S);
+      const keuzes = T.heervaartKeuzes(S.dorp);
       const vrij = keuzes.find((k) => k.actie === 'vrijkopen');
-      const wie = T.heervaartWieTekst(S, v.wie);
+      const wie = T.heervaartWieTekst(S.dorp, v.wie);
       const telwoord = T.telwoord(v.mannen);
       return {
         wanneer: T.datumVanDag(v.dag).tekst,
@@ -127,7 +127,7 @@
   }
 
   // Welke brief op je wacht, voor de knop Brief: de heervaart eerst (daar hoort een dag bij), dan de schatting.
-  const wachtend = (S) => (S.heervaart && S.heervaart.vraag ? 'heervaart' : S.heer && S.heer.brief ? 'schatting' : null);
+  const wachtend = (S) => (S.dorp.heervaart && S.dorp.heervaart.vraag ? 'heervaart' : S.dorp.heer && S.dorp.heer.brief ? 'schatting' : null);
 
   // De knop Brief naast Bouwen: alleen zolang er een brief op je wacht.
   T.ui.werkBriefKnopBij = function (S) {
@@ -135,7 +135,9 @@
   };
 
   // Een brief in het venster: `soort` uit BRIEVEN, of zonder soort de brief die op je wacht.
-  T.ui.toonBrief = function (S, soort) {
+  T.ui.toonBrief = function (D, soort) {
+    const S = T.S;
+    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
     // Een brief die komt terwijl de schout op reis is (js/land.js), wacht tot hij thuis is.
     if (soort && T.opReis(S)) {
       T.briefVoorLater(S, soort);
@@ -164,7 +166,7 @@
   T.ui.toonBriefVanLater = function (S) {
     const L = S.land;
     if (!L || !L.brieven.length || T.opReis(S) || T.ui.briefOpen()) return;
-    T.ui.toonBrief(S, L.brieven.shift());
+    T.ui.toonBrief(S.dorp, L.brieven.shift());
   };
 
   T.ui.briefOpen = () => !$('brief').classList.contains('verborgen');
@@ -181,9 +183,9 @@
       return T.naarTitelscherm();
     }
     if (open === 'heervaart') {
-      const keuze = T.heervaartKeuzes(S).find((k) => k.actie === actie);
+      const keuze = T.heervaartKeuzes(S.dorp).find((k) => k.actie === actie);
       if (!keuze || !keuze.kan) return;
-      keuze.doe(S);
+      keuze.doe();
       T.ui.sluitBrief(S);
     }
   });
@@ -192,6 +194,6 @@
     ev.currentTarget.blur();
     if (!T.S) return;
     if (T.ui.briefOpen()) T.ui.sluitBrief(T.S);
-    else T.ui.toonBrief(T.S);
+    else T.ui.toonBrief(T.S.dorp);
   });
 })(globalThis.Spel = globalThis.Spel || {});

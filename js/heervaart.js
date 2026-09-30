@@ -102,9 +102,9 @@
       {
         actie: 'vrijkopen', tekst: `Koop ze vrij: ${v.goud} goud`, kan,
         waarom: kan ? '' : `Vrijkopen kost ${v.goud} goud, en je hebt er ${goud}.`,
-        doe: (s) => T.koopHeervaartAf(s),
+        doe: () => T.koopHeervaartAf(D),
       },
-      { actie: 'stuur', tekst: v.wie.length === 1 ? 'Stuur hem' : 'Stuur ze', kan: true, hoofd: true, doe: (s) => T.stuurHeervaart(s, 'gestuurd') },
+      { actie: 'stuur', tekst: v.wie.length === 1 ? 'Stuur hem' : 'Stuur ze', kan: true, hoofd: true, doe: () => T.stuurHeervaart(D, 'gestuurd') },
     ];
   };
 

@@ -17,7 +17,7 @@
     const eigenschappen = over.eigenschappen.filter((t) => t !== 'je raadsman');
     const wie = [T.hoofdletter(over.lang || over.kort || '')].concat(eigenschappen).filter(Boolean).join(' · ');
     const neiging = T.RAADSMAN_NEIGINGEN[e.karakter];
-    const kan = Object.entries(T.vaardighedenVan(S, p)).map(([soort, niveau]) => {
+    const kan = Object.entries(T.vaardighedenVan(S.dorp, p)).map(([soort, niveau]) => {
       const v = T.VAARDIGHEDEN[soort];
       return `<li class="${niveau === 'goed' ? 'goed' : 'kost'}">${niveau === 'goed' ? '+' : '−'} ${veilig(v[niveau])} <span>(${veilig(v.waarop)})</span></li>`;
     });
@@ -37,8 +37,8 @@
 
   function inhoud(S) {
     const dag = S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '';
-    const nu = T.raadsmanVan(S);
-    const kandidaten = T.raadsmanKandidaten(S);
+    const nu = T.raadsmanVan(S.dorp);
+    const kandidaten = T.raadsmanKandidaten(S.dorp);
     // Wie je eerder koos (ook buiten deze drie, met Spel.debug.raadsman), staat er ook bij.
     if (nu && !kandidaten.includes(nu)) kandidaten.unshift(nu);
     // Wanneer hij beslist (werklijst vraag 68): als je weg bent, en met de spelregel ook als je niet op tijd spreekt.
@@ -50,7 +50,7 @@
       : nu
         ? `Je raadsman is <b>${veilig(naam(nu))}</b>. ${wanneer}, dan beslist ${veilig(naam(nu))}. Wie raadsman is, maait trager.`
         : `Je hebt nog geen raadsman. ${wanneer}, dan gaat het voorbij. Kies er een uit deze boeren; wie raadsman is, maait trager.`;
-    const besluiten = ((S.raadsman && S.raadsman.besluiten) || []).slice(-5).reverse();
+    const besluiten = ((S.dorp.raadsman && S.dorp.raadsman.besluiten) || []).slice(-5).reverse();
     return (
       `<div class="venster-kop"><span class="venster-titel">Raadsman</span><span class="venster-wanneer">${dag}</span>` +
       `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
@@ -105,8 +105,8 @@
       return;
     }
     if (!b.dataset.wie) return;
-    const p = S.bewoners && S.bewoners.mensen.find((x) => x.wie === b.dataset.wie);
-    const r = p ? T.kiesRaadsman(S, p) : { kan: false, reden: 'Die is er niet meer.' };
+    const p = S.dorp.bewoners && S.dorp.bewoners.mensen.find((x) => x.wie === b.dataset.wie);
+    const r = p ? T.kiesRaadsman(S.dorp, p) : { kan: false, reden: 'Die is er niet meer.' };
     if (!r.kan) T.ui.bericht(r.reden, 'gevaar');
     toon(S);
   });

@@ -182,6 +182,7 @@ test('een geheime doorgang is er pas als zijn vlag staat', () => {
   assert.equal(T.deurOp(w, 3, 2), null, 'zonder de vlag staat er geen deur');
 
   const S = { wereld: w, vlaggen: new Set(), inventaris: new Set(), quests: {} };
+  S.dorp = S; // een proefstaat is zijn eigen dorp (js/dorp.js), zoals in het gereedschap
   T.werkGeheimenBij(S);
   assert.equal(T.deurOp(w, 3, 2), null, 'nog steeds niet, de vlag staat niet');
   S.vlaggen.add('bakkerVertelde');

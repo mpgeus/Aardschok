@@ -29,6 +29,9 @@
     goud: 0, goudGehad: false, sluipen: false, fonteinLeeg: false, spreektMet: null,
     gebieden: {},
   });
+  // Hier wordt niet gespeeld, dus er is geen dorp (js/dorp.js): de staat is zijn eigen dorp, voor de vlaggen en de
+  // quests (js/quest.js, T.zetQuest en T.werkQuestVoorwerpen). Zonder S.dorpen tekent js/tekenen.js geen dorp.
+  S.dorp = S;
   T.debug = T.debug || {};
 
   let kaartNaam = '';

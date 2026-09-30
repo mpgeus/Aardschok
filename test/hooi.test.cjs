@@ -50,7 +50,7 @@ function boerMet(velden, opties) {
 function maaiTot(S, boer, klaar, max = 400) {
   const volgorde = [];
   for (let i = 0; i < max && !klaar(); i++) {
-    T.werkOogstBij(S, 0.1);
+    T.werkOogstBij(S, S, 0.1);
     if (boer.pad.length) {
       const eind = boer.pad[boer.pad.length - 1];
       boer.x = boer.tx = eind.x;
@@ -124,7 +124,7 @@ test('een nieuw jaar veegt het hooi van vorig jaar weg: in hooimaand staat de we
   weide.gehooid = new Set(['2,2', '3,2', '2,3', '3,3']);
   assert.equal(T.weideHooiTegels(weide).length, 0);
   S.kalender.dag = dagVan('lentemaand', 1, 1);
-  T.werkOogstBij(S, 0.1);
+  T.werkOogstBij(S, S, 0.1);
   assert.equal(weide.gehooid.size, 0);
   assert.equal(T.weideHooiTegels(weide).length, 4);
   void boer;
@@ -229,15 +229,15 @@ test('een winterdag in het spel: het vee eet hooi, en in de zomer niet', () => {
 });
 
 test('het gehucht begint met hooi voor de rest van de winter: drie koeien, dertig dagen lentemaand', () => {
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
+  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   assert.ok(T.beginOpKaart(S, 'gehucht'));
-  const koeien = () => T.veeVan(S).filter((e) => e.dier === 'koe').length;
+  const koeien = () => T.veeVan(S.dorp).filter((e) => e.dier === 'koe').length;
   assert.equal(koeien(), IN.beginKudde.koe);
-  const begin = S.voorraad.hooi;
+  const begin = S.dorp.voorraad.hooi;
   assert.ok(begin >= koeien() * 30, `${begin} hooi voor ${koeien()} koeien`);
-  for (let dag = 0; dag < 30; dag++) T.tikVeeDag(S, dag);
+  for (let dag = 0; dag < 30; dag++) T.tikVeeDag(S.dorp, dag);
   assert.equal(koeien(), IN.beginKudde.koe, 'niemand verhongerd');
-  assert.ok(bijna(S.voorraad.hooi, begin - 30 * koeien()));
+  assert.ok(bijna(S.dorp.voorraad.hooi, begin - 30 * koeien()));
   assert.equal(T.isVeeWinter(30), false, 'op 1 grasmaand graast het weer');
 });
 
@@ -302,15 +302,26 @@ test('op 1 slachtmaand vraagt het dorp wie er naar de slager gaat; het venster o
   T.zetVoorraad(S, 'hooi', 1000);
   T.tikVeeDag(S, dagVan('wijnmaand', 30));
   assert.ok(!S.vee.slachtVraag);
+  // De regels vragen het venster elke dag, met het dorp (T.ui.openSlachten(D), js/vee.js). Of het opent, beslist het
+  // scherm (js/hud.js, dat een toets niet laadt): alleen als je rondloopt, en tot dan blijft de vraag staan. Dat doet
+  // de nep hieronder na, zoals hud.js het doet: het is de modus van het spel, niet van het dorp.
+  const gevraagd = [];
   const geopend = [];
-  T.ui = { openSlachten: (s) => geopend.push(s.modus) };
+  T.ui = {
+    openSlachten: (dorp) => {
+      gevraagd.push(dorp);
+      if (S.modus === 'verkennen') geopend.push(S.modus);
+    },
+  };
   try {
     S.modus = 'dialoog';
     T.tikVeeDag(S, dagVan('slachtmaand', 1));
     assert.equal(S.vee.slachtVraag, true);
+    assert.deepEqual(gevraagd, [S], 'de regels vragen het scherm, met het dorp');
     assert.deepEqual(geopend, [], 'niet midden in een gesprek');
     S.modus = 'verkennen';
     T.tikVeeDag(S, dagVan('slachtmaand', 2));
+    assert.equal(gevraagd.length, 2, 'de vraag bleef staan, dus de volgende dag vragen ze het opnieuw');
     assert.deepEqual(geopend, ['verkennen'], 'daarna wel');
   } finally {
     delete T.ui;

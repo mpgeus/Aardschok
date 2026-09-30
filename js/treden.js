@@ -4,7 +4,7 @@
 // Het gehucht wordt een dorp als er genoeg mensen zijn en een kapel en een smidse klaar staan. Het doel staat vanaf
 // het begin linksboven (T.tredeDoel; js/main.js zet het in het vak als er geen quest is), en de heer noemt het in
 // zijn benoemingsbrief. Is het zover (T.tikTredeDag, elke dag), dan blijft het een dorp, ook als er mensen
-// wegtrekken, en schrijft de heer een brief (js/brieven.js, T.ui.toonBrief(S, 'dorp')): het eind van de proef, met
+// wegtrekken, en schrijft de heer een brief (js/brieven.js, T.ui.toonBrief(D, 'dorp')): het eind van de proef, met
 // "Verder als dorp" en "Naar het titelscherm". Het dorp zet het bouwmenu van het dorp open (T.inBouwmenu, js/gebouwen.js:
 // deze trede en de treden ervoor). De trede staat in S.trede, en wordt dus vanzelf bewaard.
 //

@@ -595,13 +595,13 @@
     return uit;
   };
 
-  // Je ambt kwijt: het spel is uit (js/hud.js toont het einde).
+  // Je ambt kwijt: de heer ontslaat de schout van dit dorp (D.einde). In jouw dorp is het spel dan uit: js/hud.js
+  // toont het einde, en zet het spel stil.
   T.ambtKwijt = function (D) {
     D.einde = { reden: 'ambt', dag: dagNu(D) };
     bericht('"Twee keer, schout." De heer schudt zijn hoofd. "U bent ontslagen."', 'gevaar');
     T.houdTijdStil(D, 'einde');
     if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
-    else D.modus = 'einde';
   };
 
   // ---------------------------------------------------------------------------------------------

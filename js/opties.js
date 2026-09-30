@@ -493,7 +493,7 @@
     }
     T.OPTIES_NU = nu;
     // Geloot of vast (js/boeren.js): de poppetjes die er al staan, meteen bijwerken.
-    if (S && T.pasLotToe) T.pasLotToe(S);
+    if (S && S.dorp && T.pasLotToe) T.pasLotToe(S.dorp);
     return nu;
   };
 

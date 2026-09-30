@@ -175,10 +175,11 @@
     return k.stil && k.stil.length ? 0 : k.snelheid || 0;
   };
 
-  // Voor wie ertoe doet als hij komt (de heer, de inner, js/dag.js T.bezoekerKomtAan): wie sneller
-  // dan 1× speelt, gaat naar 1×, anders zie je hem nauwelijks komen. Wie op reis is (js/land.js), ziet
-  // hem toch niet: die hoort het als hij terug is, en de reis gaat op zijn snelheid door.
-  T.naarGewoneSnelheid = function (S) {
-    if (S && S.kalender && S.kalender.snelheid > 1 && !T.opReis(S)) T.zetSnelheid(S, 1);
+  // Voor wie ertoe doet als hij in een dorp komt (de heer, de inner, js/dag.js T.bezoekerKomtAan): wie sneller dan 1×
+  // speelt, gaat naar 1×, anders zie je hem nauwelijks komen. Alleen in je eigen dorp (js/dorp.js), en alleen als je er
+  // bent: wie op reis is (js/land.js), ziet hem toch niet; die hoort het als hij terug is, en de reis gaat op zijn
+  // snelheid door. De kalender van het dorp is die van het spel.
+  T.naarGewoneSnelheid = function (D) {
+    if (D.speler && !T.schoutIsWeg(D) && D.kalender.snelheid > 1) T.zetSnelheid(D, 1);
   };
 })(globalThis.Spel = globalThis.Spel || {});

@@ -601,21 +601,21 @@
 
   // Praat de schout nog met hem, dan houdt dat gesprek op (js/dialoog.js). Zonder scherm (een toets)
   // staat er niets open.
-  function stopGesprek(S, e) {
+  function stopGesprek(S, D, e) {
     if (S.modus === 'dialoog' && S.spreektMet === e && T.sluitDialoog) T.sluitDialoog(S);
   }
 
-  T.werkInnerBij = function (S) {
-    const I = S.inner;
+  T.werkInnerBij = function (S, D) {
+    const I = D.inner;
     const b = I && I.bezoek;
-    if (!b || !magKomen(S)) return;
-    const w = S.wereld;
+    if (!b || !magKomen(D)) return;
+    const w = D.wereld;
     // Geen weg de kaart op (of niets om mee te lopen): dan kijkt hij één keer rond vanaf het plein en
     // gaat hij. Anders bleef hij er, en stond de tijd voorgoed stil.
-    if (!kanLopen(S)) {
+    if (!kanLopen(D)) {
       if (!b.weg) {
-        T.innerKijkt(S, w.heer || w.marskramer);
-        T.innerVertrekt(S);
+        T.innerKijkt(D, w.heer || w.marskramer);
+        T.innerVertrekt(D);
       }
       return;
     }
@@ -623,27 +623,27 @@
     if (!b.wezen) {
       if (b.weg) return;
       // Overdag, vanaf het bezoekuur, met zijn bericht (js/dag.js).
-      if (!T.bezoekerKomtAan(S, b)) return;
+      if (!T.bezoekerKomtAan(D, b)) return;
       const e = T.maakMens('inner', uitgang.x, uitgang.y, 0);
       e.dwaalt = false; // hij loopt waar hij heen wil, niet waar het dwalen hem brengt
       b.wezen = e;
-      b.tot = totZonsondergang(S);
+      b.tot = totZonsondergang(D);
       w.wezens.push(e);
       return;
     }
     const e = b.wezen;
     if (b.weg) {
       // Naar de weg, en daar is hij weg.
-      if (e.tx === uitgang.x && e.ty === uitgang.y && !e.pad.length && !e.onderweg) haalWeg(S);
-      else if (!e.pad.length && !e.onderweg) loopNaar(S, e, uitgang);
+      if (e.tx === uitgang.x && e.ty === uitgang.y && !e.pad.length && !e.onderweg) haalWeg(D);
+      else if (!e.pad.length && !e.onderweg) loopNaar(D, e, uitgang);
       return;
     }
     // De zon gaat onder: hij moet voor donker terug zijn op het kasteel, en gaat met wat hij zag.
-    const nu = uurNu(S);
+    const nu = uurNu(D);
     if (b.tot != null && nu >= b.tot * 24) {
       bericht('De zon gaat onder, en de inner moet voor donker terug zijn op het kasteel.');
-      stopGesprek(S, e);
-      T.innerVertrekt(S);
+      stopGesprek(S, D, e);
+      T.innerVertrekt(D);
       return;
     }
     // Afleiden: wie met hem praat, houdt hem op. Hij staat stil en kijkt niet, en de dag loopt door. Tot
@@ -656,7 +656,7 @@
       b.uitgepraat = true;
       T.zetVlag(S, 'innerUitgepraat');
       bericht('"Genoeg gepraat, schout. Ik moet tellen, en voor donker terug zijn."');
-      stopGesprek(S, e);
+      stopGesprek(S, D, e);
     }
     b.praatVan = null;
     // Bij elke nieuwe tegel: rondkijken.
@@ -664,7 +664,7 @@
     if (hier !== b.laatste) {
       b.laatste = hier;
       b.stilSinds = null;
-      const nieuw = T.innerKijkt(S, { x: e.tx, y: e.ty });
+      const nieuw = T.innerKijkt(D, { x: e.tx, y: e.ty });
       if (nieuw.length) bericht(`De inner noteert: ${nieuw.join(', ')}.`);
     } else if (b.volgt && !e.onderweg && !e.pad.length) {
       // Naast een schout die niet verder loopt, wacht hij niet eeuwig: daarna telt hij zelf verder, en
@@ -676,15 +676,15 @@
         bericht('De inner wacht niet langer op je, en telt zelf verder.');
       }
     }
-    const doelen = nogTeZien(S);
+    const doelen = nogTeZien(D);
     if (!doelen.length) {
-      T.innerVertrekt(S);
+      T.innerVertrekt(D);
       return;
     }
     if (e.onderweg) return;
     // Loopt de schout naast hem, dan volgt hij de schout; loopt die weg, of wachtte hij te lang op hem,
     // dan gaat hij zijn eigen gang. Is de schout op reis (js/land.js), dan is er niemand om te volgen.
-    const h = T.schoutIsWeg(S) ? null : S.schout;
+    const h = T.schoutIsWeg(D) ? null : D.schout;
     const afstand = h ? T.afstand({ x: h.tx, y: h.ty }, { x: e.tx, y: e.ty }) : Infinity;
     const volgde = b.volgt;
     if (b.eigenTot != null && nu < b.eigenTot) b.volgt = false;
@@ -696,7 +696,7 @@
     if (b.volgt) {
       // Hij laat zijn eigen ronde los, en loopt naar de schout; loopt die door, dan loopt hij mee
       // naar waar de schout nu is. (Hij staat nu op een tegel, dus zijn pad mag weg.)
-      T.loopNaastDeSchout(S, e, !volgde);
+      T.loopNaastDeSchout(D, e, !volgde);
       return;
     }
     if (volgde) e.pad = []; // de schout liep weg: zijn eigen ronde weer, vanaf hier
@@ -712,6 +712,6 @@
       }
     }
     // Niet te bereiken (ingesloten, of de weg staat vol): dan slaat hij het over.
-    if (!beste || !T.loopNaarBij(S, e, beste.x, beste.y, 0)) b.overslaan.add(beste.gebouw || beste.akker);
+    if (!beste || !T.loopNaarBij(D, e, beste.x, beste.y, 0)) b.overslaan.add(beste.gebouw || beste.akker);
   };
 })(globalThis.Spel = globalThis.Spel || {});
