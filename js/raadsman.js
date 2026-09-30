@@ -76,41 +76,41 @@
   const goedVoorHetDorp = (wat, n) => (wat === 'argwaan' ? n < 0 : wat === 'sterfkans' ? false : n > 0);
   const WAREN = T.VAARDIGHEDEN.rekenen.op.filter((w) => w !== 'goud').concat('hout');
 
-  const dagNu = (S) => Math.floor(S.kalender ? S.kalender.dag : 0);
+  const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
   const bericht = (tekst, soort) => {
     if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
   };
   const naam = (p) => T.naamVanBewoner(p);
   const isBoer = (p) => !!p && T.isBoer(p.wezen);
-  const hier = (S, p) => !!(S.bewoners && S.bewoners.mensen.includes(p)) && !p.weg && !!p.wezen && !p.wezen.dood;
+  const hier = (D, p) => !!(D.bewoners && D.bewoners.mensen.includes(p)) && !p.weg && !!p.wezen && !p.wezen.dood;
 
   // S.raadsman: wat hij besloot, het laatste achteraan: [{ dag, id, door, wie, antwoord, prijs }]. Wíé raadsman is,
   // staat op zijn poppetje (e.raadsman), want daar kijkt ook het maaien naar (T.boerFactor).
   T.nieuweRaadsman = () => ({ besluiten: [] });
 
   // De raadsman van nu (een bewoner), of null: geen gekozen, hij is er niet meer, of de spelregel staat uit.
-  T.raadsmanVan = function (S) {
-    if (!IN().aan || !S.bewoners) return null;
-    return S.bewoners.mensen.find((p) => p.wezen && p.wezen.raadsman && hier(S, p)) || null;
+  T.raadsmanVan = function (D) {
+    if (!IN().aan || !D.bewoners) return null;
+    return D.bewoners.mensen.find((p) => p.wezen && p.wezen.raadsman && hier(D, p)) || null;
   };
 
   // Uit wie je kiest: zoveel boeren als kandidaten zegt, vast per spel (uit het zaad), zodat een speeltest dezelfde
   // krijgt.
-  T.raadsmanKandidaten = function (S) {
-    const boeren = S.bewoners ? S.bewoners.mensen.filter((p) => isBoer(p) && hier(S, p)) : [];
+  T.raadsmanKandidaten = function (D) {
+    const boeren = D.bewoners ? D.bewoners.mensen.filter((p) => isBoer(p) && hier(D, p)) : [];
     boeren.sort((a, b) => (a.wie < b.wie ? -1 : a.wie > b.wie ? 1 : 0));
-    const r = T.dobbelsteen(((((S.lot && S.lot.zaad) || 1) * 67) ^ 0x7a5b) >>> 0);
+    const r = T.dobbelsteen(((((D.lot && D.lot.zaad) || 1) * 67) ^ 0x7a5b) >>> 0);
     const uit = [];
     while (boeren.length && uit.length < IN().kandidaten) uit.push(boeren.splice(Math.floor(r() * boeren.length), 1)[0]);
     return uit;
   };
 
   // Een boer wordt raadsman; wie het was, is het niet meer. Geeft { kan, reden }.
-  T.kiesRaadsman = function (S, p) {
-    if (!isBoer(p) || !hier(S, p)) return { kan: false, reden: 'Alleen een boer die hier is, kan raadsman worden.' };
-    for (const x of S.bewoners.mensen) if (x.wezen && x !== p) x.wezen.raadsman = false;
+  T.kiesRaadsman = function (D, p) {
+    if (!isBoer(p) || !hier(D, p)) return { kan: false, reden: 'Alleen een boer die hier is, kan raadsman worden.' };
+    for (const x of D.bewoners.mensen) if (x.wezen && x !== p) x.wezen.raadsman = false;
     p.wezen.raadsman = true;
-    if (!S.raadsman) S.raadsman = T.nieuweRaadsman();
+    if (!D.raadsman) D.raadsman = T.nieuweRaadsman();
     bericht(`${T.hoofdletter(naam(p))} is je raadsman. Ben je er niet, dan beslist ${naam(p)}.`);
     return { kan: true };
   };
@@ -118,11 +118,11 @@
   // Zijn twee vaardigheden, geloot uit de vijf, goed of slecht: { rechtspreken: 'goed', zwijgen: 'slecht' }. Vast per
   // spel en per boer (uit het zaad en zijn naam), zonder dat het lot van de boeren (js/boeren.js) verandert. Wordt er
   // niet geloot (de spelregels), dan kan niemand iets bijzonders.
-  T.vaardighedenVan = function (S, p) {
+  T.vaardighedenVan = function (D, p) {
     if (!isBoer(p) || !T.BOEREN_INSTELLINGEN.loten) return {};
     let h = 0;
     for (const c of p.wie) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-    const r = T.dobbelsteen(((((S.lot && S.lot.zaad) || 1) * 61) ^ h) >>> 0);
+    const r = T.dobbelsteen(((((D.lot && D.lot.zaad) || 1) * 61) ^ h) >>> 0);
     const vrij = Object.keys(T.VAARDIGHEDEN);
     const uit = {};
     for (let i = 0; i < 2 && vrij.length; i++) {
@@ -134,9 +134,9 @@
 
   // Wie hij is en wat hij kan, als één regel: "Aaltje · weduwe · geliefd · spreekt goed recht · kan niets voor zich
   // houden". Voor het kiezen, en voor het bericht.
-  T.overRaadsmanTekst = function (S, p) {
+  T.overRaadsmanTekst = function (D, p) {
     const over = T.overBoer(p.wezen);
-    const kan = Object.entries(T.vaardighedenVan(S, p)).map(([soort, niveau]) => T.VAARDIGHEDEN[soort][niveau]);
+    const kan = Object.entries(T.vaardighedenVan(D, p)).map(([soort, niveau]) => T.VAARDIGHEDEN[soort][niveau]);
     return [T.hoofdletter(naam(p)), over && over.kort].concat((over && over.eigenschappen) || [], kan).filter(Boolean).join(' · ');
   };
 
@@ -145,9 +145,9 @@
   // ---------------------------------------------------------------------------------------------
 
   // Een antwoord zoals hij het uitvoert: wat hij kan, telt mee (T.VAARDIGHEDEN). Goud en waren blijven hele getallen.
-  T.metVaardigheden = function (S, p, doe) {
+  T.metVaardigheden = function (D, p, doe) {
     const uit = { ...(doe || {}) };
-    for (const [soort, niveau] of Object.entries(T.vaardighedenVan(S, p))) {
+    for (const [soort, niveau] of Object.entries(T.vaardighedenVan(D, p))) {
       const f = IN().vaardigheden[soort] || 0;
       for (const wat of T.VAARDIGHEDEN[soort].op) {
         const n = uit[wat];
@@ -189,11 +189,11 @@
 
   // Welk antwoord hij kiest op het voorval van nu: het meest waard, uit wat er te betalen valt; bij gelijk het eerste.
   // { zeg, doe } (doe met zijn vaardigheden erin), of null.
-  T.raadsmanKeuze = function (S, p, id) {
+  T.raadsmanKeuze = function (D, p, id) {
     let beste = null;
     for (const a of antwoordenVan(id)) {
-      const doe = T.metVaardigheden(S, p, a.doe);
-      if (!T.prijsVanKeuze(S, doe).kan) continue;
+      const doe = T.metVaardigheden(D, p, a.doe);
+      if (!T.prijsVanKeuze(D, doe).kan) continue;
       const w = waarde(p, doe);
       if (!beste || w > beste.w) beste = { zeg: a.zeg, doe, w };
     }
@@ -202,22 +202,22 @@
 
   // Het voorval van nu, beslist door de raadsman (js/voorvallen.js: de schout is er niet). Het gevolg gaat zoals bij
   // een antwoord van jou (T.doeGevolg), en een bericht zegt wat hij deed. Geeft of hij het deed.
-  T.raadsmanBeslist = function (S) {
-    const L = S.voorvallen && S.voorvallen.lopend;
-    const p = T.raadsmanVan(S);
+  T.raadsmanBeslist = function (D) {
+    const L = D.voorvallen && D.voorvallen.lopend;
+    const p = T.raadsmanVan(D);
     if (!L || !p) return false;
-    const keuze = T.raadsmanKeuze(S, p, L.id);
+    const keuze = T.raadsmanKeuze(D, p, L.id);
     if (!keuze) return false;
-    const prijs = T.prijsVanKeuze(S, keuze.doe).tekst;
-    const zeg = T.vulWoordenIn(S, keuze.zeg);
+    const prijs = T.prijsVanKeuze(D, keuze.doe).tekst;
+    const zeg = T.vulWoordenIn(D, keuze.zeg);
     L.door = p;
-    T.doeGevolg(S, keuze.doe);
-    if (!S.raadsman) S.raadsman = T.nieuweRaadsman();
-    S.raadsman.besluiten.push({ dag: dagNu(S), id: L.id, door: naam(p), wie: naam(L.wie), antwoord: zeg, prijs });
-    if (S.raadsman.besluiten.length > 20) S.raadsman.besluiten.shift();
+    T.doeGevolg(D, keuze.doe);
+    if (!D.raadsman) D.raadsman = T.nieuweRaadsman();
+    D.raadsman.besluiten.push({ dag: dagNu(D), id: L.id, door: naam(p), wie: naam(L.wie), antwoord: zeg, prijs });
+    if (D.raadsman.besluiten.length > 20) D.raadsman.besluiten.shift();
     const titel = T.VOORVALLEN[L.id].titel;
     bericht(`${T.hoofdletter(naam(p))}, je raadsman, besliste over ${titel}: "${zeg}"${prijs ? ` (${prijs})` : ''}`);
-    T.voorvalBeantwoord(S, L.id, p);
+    T.voorvalBeantwoord(D, L.id, p);
     return true;
   };
 })(globalThis.Spel = globalThis.Spel || {});

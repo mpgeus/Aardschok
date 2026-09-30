@@ -82,7 +82,7 @@
   const isBoer = (e) => !!(e && e.wie && T.MENSEN && T.MENSEN[e.wie] && T.MENSEN[e.wie].karakter);
   // Ook voor de voorvallen (js/voorvallen.js) en de raadsman (js/raadsman.js), met het poppetje van een bewoner.
   T.isBoer = isBoer;
-  const boerenIn = (S) => ((S.wereld && S.wereld.wezens) || []).filter((e) => isBoer(e) && !e.dood);
+  const boerenIn = (D) => ((D.wereld && D.wereld.wezens) || []).filter((e) => isBoer(e) && !e.dood);
 
   // Het aanzien van een karakter, als dat vastligt, anders dat van de mens als er niet geloot wordt.
   function vastAanzien(id, karakter) {
@@ -93,10 +93,10 @@
   // Het lot voor alle boeren in de wereld, uit een zaad (zonder zaad een willekeurig). Wie het
   // krapst zit, trekt eerst: mannen kunnen geen vrouwenkarakter trekken (een weduwe is altijd een
   // boerin), dus zij kiezen eerst uit de karakters die beide kunnen. Geen karakter twee keer.
-  T.lootBoeren = function (S, zaad) {
+  T.lootBoeren = function (D, zaad) {
     const z = zaad != null ? zaad : Math.floor(Math.random() * 2147483647);
     const r = dobbelsteen(z);
-    const ids = boerenIn(S).map((e) => e.wie).filter((id, i, a) => a.indexOf(id) === i).sort();
+    const ids = boerenIn(D).map((e) => e.wie).filter((id, i, a) => a.indexOf(id) === i).sort();
     ids.sort((a, b) => (T.MENSEN[a].geslacht === 'vrouw') - (T.MENSEN[b].geslacht === 'vrouw'));
     const vrij = Object.keys(T.KARAKTERS || {});
     const boeren = {};
@@ -111,17 +111,17 @@
       if (vast) eigenschappen.aanzien = vast;
       boeren[id] = { karakter, eigenschappen };
     }
-    S.lot = { zaad: z, boeren };
-    T.pasLotToe(S);
-    return S.lot;
+    D.lot = { zaad: z, boeren };
+    T.pasLotToe(D);
+    return D.lot;
   };
 
   // Het lot op de poppetjes zetten: karakter, eigenschappen, en het gesprek van zijn karakter.
   // Wordt er niet geloot (de optie in de spelregels), dan is iedereen zoals hij geschreven was.
-  T.pasLotToe = function (S) {
-    for (const e of boerenIn(S)) {
+  T.pasLotToe = function (D) {
+    for (const e of boerenIn(D)) {
       const m = T.MENSEN[e.wie];
-      const uitLot = IN().loten && S.lot && S.lot.boeren && S.lot.boeren[e.wie];
+      const uitLot = IN().loten && D.lot && D.lot.boeren && D.lot.boeren[e.wie];
       e.karakter = uitLot ? uitLot.karakter : m.karakter;
       if (uitLot) {
         e.eigenschappen = { ...uitLot.eigenschappen };

@@ -109,13 +109,13 @@
   function pleinVan(w) {
     return (w && (w.heer || w.marskramer)) || null;
   }
-  function magKomen(S) {
-    return !!pleinVan(S.wereld);
+  function magKomen(D) {
+    return !!pleinVan(D.wereld);
   }
 
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
   const inJaar = (maand, dag) => maand * T.DAGEN_PER_MAAND + (dag - 1);
-  const dagNu = (S) => Math.floor(S.kalender ? S.kalender.dag : 0);
+  const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
   // Wat zijn soldaten samen per dag eten, in graan: elk voor soldaatEetAls mensen.
   const soldatenPerDag = () => IN().soldaten * IN().soldaatEetAls * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
 
@@ -139,9 +139,9 @@
   // boven af, en per goed is het de som van zijn regels. Een gebouw in aanbouw telt al mee: hij
   // ziet een steiger en rekent een huis. Een verstopplek ziet hij niet (zijn prijs is niets).
   // Het hoofdgeld per ziel: in een dorp zoveel keer zoveel als de trede zegt (js/treden.js; voorlopig 1).
-  const hoofdgeld = (S) => IN().hoofdgeldPerMens * T.hoofdgeldFactor(S);
+  const hoofdgeld = (D) => IN().hoofdgeldPerMens * T.hoofdgeldFactor(D);
 
-  T.eisVanDeHeer = function (S) {
+  T.eisVanDeHeer = function (D) {
     const regels = [];
     const tel = (wat, aantal, waarom) => {
       const n = Math.ceil(aantal - 1e-9);
@@ -149,28 +149,28 @@
     };
     // Waar hij de rekening op maakt: het rapport van de inner (js/inner.js), tenzij hij alles zelf
     // wil zien, er geen rapport is, of de argwaan zo hoog is dat hij het rapport niet meer gelooft.
-    const I = S.inner;
+    const I = D.inner;
     const argwaan = (I && I.argwaan) || 0;
     const INN = T.INNER_INSTELLINGEN;
     const rapport = IN().rekening === 'rapport' && I && I.rapport && !(INN && argwaan >= INN.rapportTeltNietVanaf) ? I.rapport : null;
-    const akkers = (S.wereld && S.wereld.akkers) || [];
+    const akkers = (D.wereld && D.wereld.akkers) || [];
     if (rapport) {
       if (IN().graan === 'deel') tel('graan', rapport.graanGezien * IN().deelVanGraan, `een deel van de ${Math.round(rapport.graanGezien)} graan die Onze inner telde`);
       else if (rapport.tegels) tel('graan', rapport.tegels * IN().pachtPerAkkertegel, `de pacht voor ${rapport.tegels} akkertegels die Onze inner zag`);
-      if (rapport.woonruimte) tel('goud', rapport.woonruimte * hoofdgeld(S), `hoofdgeld voor ${rapport.woonruimte} zielen in de huizen die hij zag`);
+      if (rapport.woonruimte) tel('goud', rapport.woonruimte * hoofdgeld(D), `hoofdgeld voor ${rapport.woonruimte} zielen in de huizen die hij zag`);
       if (IN().kist && rapport.goudGezien > 0) tel('goud', rapport.goudGezien * IN().deelVanGoud, `een deel van de ${Math.floor(rapport.goudGezien)} goud die Onze inner in uw kist telde`);
     } else {
       const tegels = akkers.reduce((n, a) => n + a.b * a.h, 0);
       if (IN().graan === 'deel') {
-        const graan = (S.voorraad && S.voorraad.graan) || 0;
+        const graan = (D.voorraad && D.voorraad.graan) || 0;
         tel('graan', graan * IN().deelVanGraan, `een deel van de ${Math.round(graan)} graan in uw schuren`);
       } else if (tegels) {
         tel('graan', tegels * IN().pachtPerAkkertegel, `de pacht voor ${tegels} akkertegels`);
       }
-      if (S.bevolking > 0) tel('goud', S.bevolking * hoofdgeld(S), `hoofdgeld voor ${S.bevolking} zielen`);
+      if (D.bevolking > 0) tel('goud', D.bevolking * hoofdgeld(D), `hoofdgeld voor ${D.bevolking} zielen`);
       // De kist zoals hij hem telde toen hij kwam; vóór zijn komst (de brief) wat er nu in ligt.
-      const b = S.heer && S.heer.bezoek;
-      const kist = b && !b.weg && b.kist != null ? b.kist : (S.voorraad && S.voorraad.goud) || 0;
+      const b = D.heer && D.heer.bezoek;
+      const kist = b && !b.weg && b.kist != null ? b.kist : (D.voorraad && D.voorraad.goud) || 0;
       if (IN().kist && kist > 0) tel('goud', kist * IN().deelVanGoud, `een deel van de ${Math.floor(kist)} goud in uw kist`);
     }
     // Wat je zijn inner toestopte en de heer hoorde (js/inner.js, T.koopInnerOm): dat telt hij als goud
@@ -180,17 +180,17 @@
     // Per soort gebouw één regel, in de volgorde van T.GEBOUWEN: wat in het rapport staat, of alles.
     const aantal = {};
     if (rapport) Object.assign(aantal, rapport.gebouwen);
-    else for (const g of S.gebouwen || []) aantal[g.soort] = (aantal[g.soort] || 0) + 1;
+    else for (const g of D.gebouwen || []) aantal[g.soort] = (aantal[g.soort] || 0) + 1;
     for (const id of Object.keys(T.GEBOUWEN || {})) {
       const n = aantal[id];
       const prijs = T.GEBOUWEN[id].heer;
       if (!n || !prijs) continue;
       for (const wat in prijs) tel(wat, prijs[wat] * n, n === 1 ? `een ${T.GEBOUWEN[id].naam}` : `${n} × ${T.GEBOUWEN[id].naam}`);
     }
-    const h = S.heer;
+    const h = D.heer;
     if (h && h.schuld > 0) tel('goud', h.schuld, 'wat u vorig jaar schuldig bleef, met de boete');
     // Heeft een houthakker dit jaar in zijn bos gekapt (de wet Houtkap, js/wetten.js), dan rekent hij een boete.
-    const boete = T.houtkapBoete(S);
+    const boete = T.houtkapBoete(D);
     if (boete > 0) tel('goud', boete, 'een boete voor de bomen die u uit Ons bos haalde');
     // Wil hij (een deel) in goud, dan rekent hij om, naar boven: de rest van de pacht, of alles.
     const wijze = IN().betalenIn;
@@ -234,9 +234,9 @@
   // ---------------------------------------------------------------------------------------------
 
   // Is hij er, en wacht hij nog op zijn geld?
-  T.heerWacht = function (S) {
-    const b = S.heer && S.heer.bezoek;
-    return !!(b && !b.betaald && !b.weg && !S.einde);
+  T.heerWacht = function (D) {
+    const b = D.heer && D.heer.bezoek;
+    return !!(b && !b.betaald && !b.weg && !D.einde);
   };
 
   // Wat gebeurt er als de schout hem dit geeft? `geef` is { graan: 80, goud: 12, … }. Het antwoord
@@ -247,9 +247,9 @@
   // Hij neemt van elk goed hooguit wat hij vraagt, en nooit meer dan je hebt. Goud neemt hij altijd
   // in de plaats van iets anders (Marcel, 24 sep: hij ziet alleen geld): wat je aan goud meer
   // geeft dan hij vraagt, telt voor wat er verder ontbreekt, tot alles gedekt is.
-  T.gevolgVanBetaling = function (S, geef, eis) {
-    eis = eis || T.eisVanDeHeer(S);
-    const v = S.voorraad || {};
+  T.gevolgVanBetaling = function (D, geef, eis) {
+    eis = eis || T.eisVanDeHeer(D);
+    const v = D.voorraad || {};
     const neemt = {};
     let gevraagd = 0;
     let gegeven = 0;
@@ -274,19 +274,19 @@
     let ambtKwijt;
     let keer = 0; // hoeveel jaar achter elkaar tekort, dit jaar meegeteld (telWijze 'hoeVaak')
     if (IN().telWijze === 'hoeVaak') {
-      keer = deel < 1 - 1e-9 ? ((S.heer && S.heer.tekortJaren) || 0) + 1 : 0;
+      keer = deel < 1 - 1e-9 ? ((D.heer && D.heer.tekortJaren) || 0) + 1 : 0;
       zwaarte = Math.min(STRAFFEN.length, keer);
       ambtKwijt = keer > 0 && keer >= IN().ambtKwijtNa;
     } else {
       const band = IN().straffen.find((b) => deel >= b.vanaf - 1e-9) || IN().straffen[IN().straffen.length - 1];
       zwaarte = STRAFFEN.indexOf(band.straf) + 1;
       veelTeWeinig = deel < IN().veelTeWeinig - 1e-9;
-      keer = veelTeWeinig ? ((S.heer && S.heer.veelTeWeinig) || 0) + 1 : 0;
+      keer = veelTeWeinig ? ((D.heer && D.heer.veelTeWeinig) || 0) + 1 : 0;
       ambtKwijt = veelTeWeinig && keer >= IN().ambtKwijtNa;
     }
     const schuld = zwaarte ? Math.ceil(tekort * (1 + IN().boete) - 1e-9) : 0;
     const uit = {
-      kan: T.heerWacht(S), neemt, gevraagd, gegeven, deel, tekort, straf: zwaarte ? STRAFFEN[zwaarte - 1] : null,
+      kan: T.heerWacht(D), neemt, gevraagd, gegeven, deel, tekort, straf: zwaarte ? STRAFFEN[zwaarte - 1] : null,
       boete: zwaarte >= 1, soldaten: zwaarte >= 2, schandpaal: zwaarte >= 3,
       veelTeWeinig, ambtKwijt, schuld, keer,
     };
@@ -337,32 +337,32 @@
   // grasmaand af (`melk`, js/vee.js) drinkt het eerst; en wie graan tekortkomt, eet daarna nog de
   // `kaas` op, dus honger is pas een tekort groter dan de kaas. Zaaien kost alleen wat volgend jaar
   // akker wordt (het plan, js/akkers.js): een weide of braak zaai je niet.
-  T.heerVooruitzicht = function (S, g) {
-    const dag = dagNu(S);
+  T.heerVooruitzicht = function (D, g) {
+    const dag = dagNu(D);
     const rijp = T.AKKER_STADIA && T.AKKER_STADIA.find((s) => s.stadium === 'rijp');
     const oogst = rijp ? volgendeKeer(dag, { maand: T.MAANDEN[rijp.maand].naam, dag: rijp.dag }) : dag;
     const lente = volgendeKeer(dag, IN().soldatenTot);
-    const perMens = T.etenPerMens(S);
-    const melk = T.verwachteMelk(S, dag, oogst);
-    const eten = Math.max(0, (S.bevolking || 0) * perMens * (oogst - dag) - melk);
+    const perMens = T.etenPerMens(D);
+    const melk = T.verwachteMelk(D, dag, oogst);
+    const eten = Math.max(0, (D.bevolking || 0) * perMens * (oogst - dag) - melk);
     const soldaten = g && g.soldaten ? soldatenPerDag() * (lente - dag) : 0;
     const wordtAkker = (a) => T.planVan(a) === 'akker';
-    const tegels = ((S.wereld && S.wereld.akkers) || []).filter(wordtAkker).reduce((n, a) => n + a.b * a.h, 0);
+    const tegels = ((D.wereld && D.wereld.akkers) || []).filter(wordtAkker).reduce((n, a) => n + a.b * a.h, 0);
     const zaaien = tegels * (T.ZAAIGRAAN_PER_TEGEL || 0);
-    const na = ((S.voorraad && S.voorraad.graan) || 0) - ((g && g.neemt && g.neemt.graan) || 0);
-    const kaas = (S.voorraad && S.voorraad.kaas) || 0;
+    const na = ((D.voorraad && D.voorraad.graan) || 0) - ((g && g.neemt && g.neemt.graan) || 0);
+    const kaas = (D.voorraad && D.voorraad.kaas) || 0;
     // Vlees vult sinds 25 sep ook een maag (js/behoeften.js): het vangt net als de kaas een tekort op.
-    const vlees = T.vleesAlsEten(S);
+    const vlees = T.vleesAlsEten(D);
     return { na, eten, melk, kaas, vlees, soldaten, zaaien, over: na - eten - soldaten - zaaien, dagen: oogst - dag };
   };
 
   // Betalen. Geeft het gevolg terug (T.gevolgVanBetaling), of { kan: false, reden }.
-  T.betaalHeer = function (S, geef) {
-    if (!T.heerWacht(S)) return { kan: false, reden: 'De heer is er niet.' };
-    const h = S.heer;
+  T.betaalHeer = function (D, geef) {
+    if (!T.heerWacht(D)) return { kan: false, reden: 'De heer is er niet.' };
+    const h = D.heer;
     const b = h.bezoek;
-    const g = T.gevolgVanBetaling(S, geef);
-    for (const wat in g.neemt) if (g.neemt[wat] > 0) T.wijzigVoorraad(S, wat, -g.neemt[wat]);
+    const g = T.gevolgVanBetaling(D, geef);
+    for (const wat in g.neemt) if (g.neemt[wat] > 0) T.wijzigVoorraad(D, wat, -g.neemt[wat]);
     // De oude schuld zat in wat hij vroeg; wat er nu openstaat, met de boete, is de nieuwe.
     h.schuld = g.schuld;
     h.tekort = g.tekort;
@@ -370,45 +370,45 @@
     h.tekortJaren = g.deel < 1 - 1e-9 ? (h.tekortJaren || 0) + 1 : 0;
     h.brief = null;
     b.betaald = g;
-    h.jaren.push({ jaar: T.datumVanDag(dagNu(S)).jaar, deel: g.deel, straf: g.straf });
+    h.jaren.push({ jaar: T.datumVanDag(dagNu(D)).jaar, deel: g.deel, straf: g.straf });
     // Het rapport van de inner is betaald, en zijn argwaan zakt (js/inner.js); de boete voor de houtkap ook.
-    T.innerNaSintMaarten(S);
-    T.wettenNaSintMaarten(S);
+    T.innerNaSintMaarten(D);
+    T.wettenNaSintMaarten(D);
     if (T.zetVlag) {
-      T.zetVlag(S, 'heerBetaald');
-      T.wisVlag(S, 'heerSchuld');
-      T.wisVlag(S, 'briefVanDeHeer');
+      T.zetVlag(D, 'heerBetaald');
+      T.wisVlag(D, 'heerSchuld');
+      T.wisVlag(D, 'briefVanDeHeer');
     }
     if (g.ambtKwijt) {
-      T.ambtKwijt(S);
+      T.ambtKwijt(D);
       return g;
     }
     bericht(heerZegt(g), g.boete ? 'gevaar' : null);
-    if (g.soldaten) soldatenBlijven(S);
+    if (g.soldaten) soldatenBlijven(D);
     // Bij de schandpaal wacht hij op jouw keuze (T.zetAanDeSchandpaal); anders gaat hij.
     if (g.schandpaal) b.schandpaal = true;
-    else T.heerVertrekt(S);
+    else T.heerVertrekt(D);
     return g;
   };
 
   // Komt de schout niet, dan neemt de heer het zelf: van alles wat hij vraagt zoveel als er is, en
   // wat er dan nog ontbreekt in goud. Moet er iemand aan de schandpaal, dan wijst hij zelf aan:
   // wie het dorp het meest raakt. "Het dorp denkt dat jij het zo wilde."
-  T.heerNeemtZelf = function (S) {
-    if (!T.heerWacht(S)) return { kan: false, reden: 'De heer is er niet.' };
-    const eis = T.eisVanDeHeer(S);
-    const geef = { ...eis.per, goud: (S.voorraad && S.voorraad.goud) || 0 };
+  T.heerNeemtZelf = function (D) {
+    if (!T.heerWacht(D)) return { kan: false, reden: 'De heer is er niet.' };
+    const eis = T.eisVanDeHeer(D);
+    const geef = { ...eis.per, goud: (D.voorraad && D.voorraad.goud) || 0 };
     bericht('Je bent niet gekomen. De heer neemt zelf mee wat hij hebben wil.', 'gevaar');
-    const g = T.betaalHeer(S, geef);
-    if (g.schandpaal && !S.einde) {
-      const keuzes = T.schandpaalKeuzes(S).filter((k) => k.wie !== 'schout');
+    const g = T.betaalHeer(D, geef);
+    if (g.schandpaal && !D.einde) {
+      const keuzes = T.schandpaalKeuzes(D).filter((k) => k.wie !== 'schout');
       const zijn = keuzes.sort((a, b) => b.kost - a.kost)[0];
       if (zijn) {
         bericht(`De heer wees zelf aan wie er aan de schandpaal moest: ${zijn.naam}. Het dorp denkt dat jij het zo wilde.`, 'gevaar');
-        T.zetAanDeSchandpaal(S, zijn.wie);
+        T.zetAanDeSchandpaal(D, zijn.wie);
       } else {
-        S.heer.bezoek.schandpaal = false;
-        T.heerVertrekt(S);
+        D.heer.bezoek.schandpaal = false;
+        T.heerVertrekt(D);
       }
     }
     return g;
@@ -418,31 +418,31 @@
   // De straffen: soldaten, de schandpaal, en je ambt kwijt
   // ---------------------------------------------------------------------------------------------
 
-  function soldatenBlijven(S) {
-    const h = S.heer;
+  function soldatenBlijven(D) {
+    const h = D.heer;
     const b = h.bezoek;
-    h.soldaten = { tot: volgendeKeer(dagNu(S), IN().soldatenTot), wezens: [] };
+    h.soldaten = { tot: volgendeKeer(dagNu(D), IN().soldatenTot), wezens: [] };
     // Zijn soldaten liepen met hem mee; die blijven nu hier, en lopen rond op het plein.
     if (b && b.wezens) {
       h.soldaten.wezens = b.wezens.filter((e) => e.wie === 'soldaat');
       b.wezens = b.wezens.filter((e) => e.wie !== 'soldaat');
-      const plek = pleinVan(S.wereld);
+      const plek = pleinVan(D.wereld);
       for (const e of h.soldaten.wezens) {
         e.thuis = { x: plek.x, y: plek.y };
         e.straal = 5;
       }
     }
-    T.zetVlag(S, 'soldatenInHuis');
+    T.zetVlag(D, 'soldatenInHuis');
   }
 
-  function soldatenGaan(S) {
-    const h = S.heer;
+  function soldatenGaan(D) {
+    const h = D.heer;
     const s = h.soldaten;
-    T.wisVlag(S, 'soldatenInHuis');
+    T.wisVlag(D, 'soldatenInHuis');
     bericht('Het is lente. De soldaten van de heer trekken weg.', 'goed');
     if (s.wezens && s.wezens.length) {
       s.weg = true; // ze lopen nog naar de weg; T.werkHeerBij haalt ze daar weg
-      for (const e of s.wezens) naarDeWeg(S, e);
+      for (const e of s.wezens) naarDeWeg(D, e);
     } else {
       h.soldaten = null;
     }
@@ -451,10 +451,10 @@
   // Wie er aan de schandpaal kan: de boeren (wie een karakter heeft, js/boeren.js), met wat het het
   // dorp kost naar hun aanzien, en de schout zelf. [{ wie, naam, eigenschap, kost, boete }]: kost is
   // de tevredenheid, boete het goud dat de heer erbij zet (alleen bij de schout).
-  T.schandpaalKeuzes = function (S) {
+  T.schandpaalKeuzes = function (D) {
     const lijst = [];
     const gezien = new Set();
-    for (const e of (S.wereld && S.wereld.wezens) || []) {
+    for (const e of (D.wereld && D.wereld.wezens) || []) {
       const kost = T.aanzienVan(e);
       if (kost == null || e.dood || gezien.has(e.wie)) continue;
       gezien.add(e.wie);
@@ -462,7 +462,7 @@
       lijst.push({ wie: e.wie, naam: e.naam || T.naamVanMens(e.wie), eigenschap, kost, boete: 0 });
     }
     if (!IN().schoutMagZelf) return lijst;
-    const h = S.heer;
+    const h = D.heer;
     const extra = h ? Math.ceil(h.tekort * (IN().boeteZelf - IN().boete) - 1e-9) : 0;
     lijst.push({ wie: 'schout', naam: 'Jijzelf', eigenschap: 'de schout', kost: 0, boete: Math.max(0, extra) });
     return lijst;
@@ -495,8 +495,8 @@
 
   // Waar de paal komt: zo dicht mogelijk bij twee tegels rechts van de heer, waar de paal én de
   // tegel ervoor vrij zijn. Puur: zet nog niets neer.
-  T.plekVoorDeSchandpaal = function (S) {
-    const w = S.wereld;
+  T.plekVoorDeSchandpaal = function (D) {
+    const w = D.wereld;
     const plek = pleinVan(w);
     const doel = { x: plek.x + 2, y: plek.y };
     return eersteRond(doel, 4, (x, y) => !(x === plek.x && y === plek.y)
@@ -505,29 +505,29 @@
 
   // De paal neerzetten, als hij er nog niet staat: een voorwerp dat zijn tegel beslaat
   // (T.VOORWERPEN.schandpaal, js/wereld.js). Geeft waar hij staat.
-  T.zetSchandpaalNeer = function (S) {
-    const h = S.heer || (S.heer = T.nieuweHeer());
+  T.zetSchandpaalNeer = function (D) {
+    const h = D.heer || (D.heer = T.nieuweHeer());
     if (h.paal) return h.paal;
-    const w = S.wereld;
-    h.paal = T.plekVoorDeSchandpaal(S);
+    const w = D.wereld;
+    h.paal = T.plekVoorDeSchandpaal(D);
     T.zetVoorwerp(w, { soort: 'schandpaal', x: h.paal.x, y: h.paal.y });
     return h.paal;
   };
 
   // Waar wie gestraft wordt, staat: vóór de paal. Is die tegel intussen bebouwd, dan de
   // dichtstbijzijnde vrije tegel ernaast.
-  function voorDePaal(S) {
-    const paal = T.zetSchandpaalNeer(S);
+  function voorDePaal(D) {
+    const paal = T.zetSchandpaalNeer(D);
     const doel = { x: paal.x + VOOR_DE_PAAL.dx, y: paal.y + VOOR_DE_PAAL.dy };
-    return eersteRond(doel, 3, (x, y) => vrijOpHetPlein(S.wereld, x, y)) || doel;
+    return eersteRond(doel, 3, (x, y) => vrijOpHetPlein(D.wereld, x, y)) || doel;
   }
 
   // Wie staat er nu aan de paal? Wie voor zijn straf op de tegel ervóór moet (h.wrok, moetNaar),
   // daar is aangekomen (zijn dagen tellen) en stilstaat; anders null. Dan is de paal bezet: de
   // ketting loopt naar hem en hij draagt het halsijzer (js/tekenen.js). Puur.
-  T.aanDePaal = function (S) {
-    const h = S.heer;
-    const w = S.wereld;
+  T.aanDePaal = function (D) {
+    const h = D.heer;
+    const w = D.wereld;
     if (!h || !h.paal || !w || !w.wezens) return null;
     const x = h.paal.x + VOOR_DE_PAAL.dx;
     const y = h.paal.y + VOOR_DE_PAAL.dy;
@@ -545,41 +545,41 @@
   // het gesprek van de weduwe. Elk karakter hoort in een spel bij één boer.
   T.schandpaalVlag = (wie) => 'schandpaal' + wie.charAt(0).toUpperCase() + wie.slice(1);
 
-  T.zetAanDeSchandpaal = function (S, wie) {
-    const h = S.heer;
+  T.zetAanDeSchandpaal = function (D, wie) {
+    const h = D.heer;
     const b = h && h.bezoek;
     if (!b || !b.schandpaal) return { kan: false, reden: 'Er hoeft niemand aan de schandpaal.' };
-    const keuze = T.schandpaalKeuzes(S).find((k) => k.wie === wie);
+    const keuze = T.schandpaalKeuzes(D).find((k) => k.wie === wie);
     if (!keuze) return { kan: false, reden: 'Die is er niet.' };
     // De eerste keer komt de paal er, en die blijft staan.
-    T.zetSchandpaalNeer(S);
+    T.zetSchandpaalNeer(D);
     if (wie === 'schout') {
       // Het dorp neemt het je niet kwalijk, maar de heer vindt het lachwekkend (Marcel, 24 sep).
       h.schuld += keuze.boete;
-      T.zetVlag(S, 'schoutAanDeSchandpaal');
+      T.zetVlag(D, 'schoutAanDeSchandpaal');
       bericht(`Je zet jezelf aan de schandpaal. Het dorp kijkt zwijgend toe. De heer lacht tot hij hikt, en zet er ${keuze.boete} goud bij.`, 'gevaar');
     } else {
       // Zijn poppetje loopt naar het plein en staat daar (T.wandelAnker, js/akkers.js, kijkt naar
       // moetNaar). Zijn dagen aan de paal tellen pas als hij er staat (T.werkHeerBij), net als bij
       // de marskramer: drie dagen zijn op 1× maar zeven seconden, en anders mocht hij al naar huis
       // voor hij er was. Zonder poppetje of zonder wereld om in te lopen staat hij er meteen.
-      const e = ((S.wereld && S.wereld.wezens) || []).find((x) => x.wie === wie && !x.dood);
-      const lopen = !!(e && kanLopen(S));
-      h.wrok.push({ wie, dag: dagNu(S), kost: keuze.kost, staat: true, vanaf: lopen ? null : dagNu(S) });
-      T.zetVlag(S, T.schandpaalVlag(e ? T.gesprekIdVan(e) : wie));
-      if (e) e.moetNaar = { ...voorDePaal(S), straal: 0 };
+      const e = ((D.wereld && D.wereld.wezens) || []).find((x) => x.wie === wie && !x.dood);
+      const lopen = !!(e && kanLopen(D));
+      h.wrok.push({ wie, dag: dagNu(D), kost: keuze.kost, staat: true, vanaf: lopen ? null : dagNu(D) });
+      T.zetVlag(D, T.schandpaalVlag(e ? T.gesprekIdVan(e) : wie));
+      if (e) e.moetNaar = { ...voorDePaal(D), straal: 0 };
       bericht(`${keuze.naam} moet ${IN().schandpaalDagen} dagen aan de schandpaal op het plein. Het dorp zal het onthouden.`, 'gevaar');
     }
     b.schandpaal = false;
-    T.heerVertrekt(S);
+    T.heerVertrekt(D);
     return { kan: true };
   };
 
   // Hoeveel minder tevreden het dorp is door wat de heer bracht: soldaten in huis, en wie jij aan de
   // schandpaal zette (dat slijt in wrokDagen weg). Voor T.berekenTevredenheid (js/behoeften.js):
   // { minder, waarom: ['soldaten in huis', …] }. Puur.
-  T.heerOntevredenheid = function (S, dag) {
-    const h = S.heer;
+  T.heerOntevredenheid = function (D, dag) {
+    const h = D.heer;
     const uit = { minder: 0, waarom: [] };
     if (!h) return uit;
     if (h.soldaten && !h.soldaten.weg) {
@@ -596,52 +596,52 @@
   };
 
   // Je ambt kwijt: het spel is uit (js/hud.js toont het einde).
-  T.ambtKwijt = function (S) {
-    S.einde = { reden: 'ambt', dag: dagNu(S) };
+  T.ambtKwijt = function (D) {
+    D.einde = { reden: 'ambt', dag: dagNu(D) };
     bericht('"Twee keer, schout." De heer schudt zijn hoofd. "U bent ontslagen."', 'gevaar');
-    T.houdTijdStil(S, 'einde');
-    if (T.ui && T.ui.toonEinde) T.ui.toonEinde(S);
-    else S.modus = 'einde';
+    T.houdTijdStil(D, 'einde');
+    if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
+    else D.modus = 'einde';
   };
 
   // ---------------------------------------------------------------------------------------------
   // De dagen: de brief, zijn komst, het wachten, de soldaten die meeëten en weer gaan
   // ---------------------------------------------------------------------------------------------
 
-  T.stuurBrief = function (S, dag) {
-    const h = S.heer || (S.heer = T.nieuweHeer());
-    h.brief = { dag, eis: T.eisVanDeHeer(S) };
-    T.zetVlag(S, 'briefVanDeHeer');
-    if (T.ui && T.ui.toonBrief) T.ui.toonBrief(S, 'schatting');
+  T.stuurBrief = function (D, dag) {
+    const h = D.heer || (D.heer = T.nieuweHeer());
+    h.brief = { dag, eis: T.eisVanDeHeer(D) };
+    T.zetVlag(D, 'briefVanDeHeer');
+    if (T.ui && T.ui.toonBrief) T.ui.toonBrief(D, 'schatting');
     else bericht('Er is een brief van de heer.');
   };
 
-  T.heerKomt = function (S, dag) {
-    const h = S.heer || (S.heer = T.nieuweHeer());
+  T.heerKomt = function (D, dag) {
+    const h = D.heer || (D.heer = T.nieuweHeer());
     // Hij telt de kist als hij komt, en dat getal houdt hij (js/heer.js, T.eisVanDeHeer, zonder
     // rapport): anders werd zijn eis kleiner terwijl je hem betaalde.
     h.bezoek = {
       komtOp: dag, staat: false, wachtTot: null, betaald: null, weg: false, wezens: null, schandpaal: false,
-      kist: (S.voorraad && S.voorraad.goud) || 0,
+      kist: (D.voorraad && D.voorraad.goud) || 0,
       aankomst: { tekst: 'Sint-Maarten. De heer komt over de weg, met twee soldaten.', soort: 'gevaar', naarGewoon: true },
     };
     if (T.zetVlag) {
-      T.zetVlag(S, 'heerOpBezoek');
-      if (h.schuld > 0) T.zetVlag(S, 'heerSchuld');
+      T.zetVlag(D, 'heerOpBezoek');
+      if (h.schuld > 0) T.zetVlag(D, 'heerSchuld');
     }
     // Hij komt overdag (js/dag.js, T.bezoekerKomtAan): valt zijn dag 's nachts in, dan zegt het
     // bericht het pas als hij de kaart op loopt (T.werkHeerBij). Zonder poppetje (een toets zonder
     // wereld om in te lopen) is hij er meteen, en staat hij meteen op het plein.
-    if (!kanLopen(S)) h.bezoek.meteen = true;
-    T.bezoekerKomtAan(S, h.bezoek);
-    if (!kanLopen(S)) T.heerStaatErOp(S);
+    if (!kanLopen(D)) h.bezoek.meteen = true;
+    T.bezoekerKomtAan(D, h.bezoek);
+    if (!kanLopen(D)) T.heerStaatErOp(D);
   };
 
   // Hij staat op het plein en wacht op je, en zijn wachtdagen tellen. Tot 26 sep stond de tijd dan
   // stil, omdat naar hem toe lopen bij een dag van 2,5 seconde dagen kostte; sinds de dag (js/dag.js)
   // kost het een uur of twee, en loopt de tijd gewoon door, op 1×.
-  T.heerStaatErOp = function (S) {
-    const h = S.heer;
+  T.heerStaatErOp = function (D) {
+    const h = D.heer;
     const b = h.bezoek;
     if (!b || b.staat) return;
     b.staat = true;
@@ -649,58 +649,58 @@
     // alsnog op de rekening, en dat maakt argwanend (js/inner.js). En zijn soldaten zoeken: is de
     // argwaan hoog genoeg, het hele dorp; anders twee of drie plekken, waar de schout ze langs leidt
     // (js/doorzoeken.js; werklijst punt 4, vraag 41).
-    T.heerKijktRond(S);
+    T.heerKijktRond(D);
     const INN = T.INNER_INSTELLINGEN;
-    if (INN && S.inner && S.inner.argwaan >= INN.doorzoekenVanaf && T.doorzoekDorp) T.doorzoekDorp(S);
-    else T.beginDoorzoeken(S);
-    b.wachtTot = dagNu(S) + IN().wachtDagen;
-    T.naarGewoneSnelheid(S);
+    if (INN && D.inner && D.inner.argwaan >= INN.doorzoekenVanaf && T.doorzoekDorp) T.doorzoekDorp(D);
+    else T.beginDoorzoeken(D);
+    b.wachtTot = dagNu(D) + IN().wachtDagen;
+    T.naarGewoneSnelheid(D);
     bericht('De heer staat op het plein en wacht op je.');
   };
 
-  T.heerVertrekt = function (S) {
-    const h = S.heer;
+  T.heerVertrekt = function (D) {
+    const h = D.heer;
     const b = h.bezoek;
     b.weg = true;
-    T.zetVlag(S, 'heerVertrekt');
-    if (b.wezens && b.wezens.length) for (const e of b.wezens) naarDeWeg(S, e);
-    else haalHeerWeg(S);
+    T.zetVlag(D, 'heerVertrekt');
+    if (b.wezens && b.wezens.length) for (const e of b.wezens) naarDeWeg(D, e);
+    else haalHeerWeg(D);
   };
 
   // Helemaal weg, ook uit de wereld; zijn vlaggen gaan mee.
-  function haalHeerWeg(S) {
-    const h = S.heer;
+  function haalHeerWeg(D) {
+    const h = D.heer;
     if (!h || !h.bezoek) return;
-    haalUitWereld(S, h.bezoek.wezens);
-    if (T.wisVlag) for (const v of ['heerOpBezoek', 'heerBetaald', 'heerVertrekt', 'heerSchuld']) T.wisVlag(S, v);
+    haalUitWereld(D, h.bezoek.wezens);
+    if (T.wisVlag) for (const v of ['heerOpBezoek', 'heerBetaald', 'heerVertrekt', 'heerSchuld']) T.wisVlag(D, v);
     h.bezoek = null;
   }
 
-  function haalUitWereld(S, wezens) {
-    if (!wezens || !S.wereld) return;
+  function haalUitWereld(D, wezens) {
+    if (!wezens || !D.wereld) return;
     for (const e of wezens) {
-      const i = S.wereld.wezens.indexOf(e);
-      if (i >= 0) S.wereld.wezens.splice(i, 1);
+      const i = D.wereld.wezens.indexOf(e);
+      if (i >= 0) D.wereld.wezens.splice(i, 1);
     }
   }
 
   // Wat de soldaten vandaag eten, in graan: niets als ze er niet (meer) zijn. Ook voor wat het dorp
   // vooruitziet (js/behoeften.js, T.etenVoorDeWinter).
-  T.soldatenEten = function (S, dag) {
-    const s = S.heer && S.heer.soldaten;
+  T.soldatenEten = function (D, dag) {
+    const s = D.heer && D.heer.soldaten;
     return s && !s.weg && dag < s.tot ? soldatenPerDag() : 0;
   };
 
   // Eén dag. Wordt aangeroepen vanuit T.tikGebouwenDag (js/gebouwen.js, stap 0), één keer per
   // verstreken kalenderdag, net als T.tikHandelDag.
-  T.tikHeerDag = function (S, dag) {
-    if (!magKomen(S) || S.einde) return;
-    const h = S.heer || (S.heer = T.nieuweHeer());
+  T.tikHeerDag = function (D, dag) {
+    if (!magKomen(D) || D.einde) return;
+    const h = D.heer || (D.heer = T.nieuweHeer());
     const d = T.datumVanDag(dag);
     // De soldaten eten mee zolang ze er zijn, elk voor drie; in de lente gaan ze.
     if (h.soldaten && !h.soldaten.weg) {
-      if (dag >= h.soldaten.tot) soldatenGaan(S);
-      else if (S.voorraad) T.wijzigVoorraad(S, 'graan', -T.soldatenEten(S, dag));
+      if (dag >= h.soldaten.tot) soldatenGaan(D);
+      else if (D.voorraad) T.wijzigVoorraad(D, 'graan', -T.soldatenEten(D, dag));
     }
     // Wie aan de schandpaal stond, mag na zijn dagen weer naar huis. Die tellen vanaf dat hij er
     // staat; komt hij er om wat voor reden ook niet, dan mag hij na een week ook naar huis.
@@ -709,17 +709,17 @@
       const klaar = w.vanaf != null ? dag >= w.vanaf + IN().schandpaalDagen : dag >= w.dag + IN().schandpaalDagen + 7;
       if (!klaar) continue;
       w.staat = false;
-      const e = ((S.wereld && S.wereld.wezens) || []).find((x) => x.wie === w.wie);
+      const e = ((D.wereld && D.wereld.wezens) || []).find((x) => x.wie === w.wie);
       if (e) {
         e.moetNaar = null;
         e.kijkt = null;
       }
     }
-    if (d.maand === maandIdx(IN().brief.maand) && d.dagVanMaand === IN().brief.dag && !h.bezoek) T.stuurBrief(S, dag);
-    if (d.sintMaarten && !h.bezoek) T.heerKomt(S, dag);
+    if (d.maand === maandIdx(IN().brief.maand) && d.dagVanMaand === IN().brief.dag && !h.bezoek) T.stuurBrief(D, dag);
+    if (d.sintMaarten && !h.bezoek) T.heerKomt(D, dag);
     // Hij wacht; komt de schout niet, dan neemt hij het zelf.
     const b = h.bezoek;
-    if (b && b.staat && !b.betaald && b.wachtTot != null && dag >= b.wachtTot) T.heerNeemtZelf(S);
+    if (b && b.staat && !b.betaald && b.wachtTot != null && dag >= b.wachtTot) T.heerNeemtZelf(D);
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -727,12 +727,12 @@
   // Het lopen zelf doet het gewone dwaalwerk (js/verkennen.js, T.laatDwalen).
   // ---------------------------------------------------------------------------------------------
 
-  function kanLopen(S) {
-    return !!(S.wereld && T.maakMens && T.wegInEnUit(S.wereld) && S.wereld.wezens);
+  function kanLopen(D) {
+    return !!(D.wereld && T.maakMens && T.wegInEnUit(D.wereld) && D.wereld.wezens);
   }
 
-  function naarDeWeg(S, e) {
-    const uitgang = T.wegInEnUit(S.wereld);
+  function naarDeWeg(D, e) {
+    const uitgang = T.wegInEnUit(D.wereld);
     e.moetNaar = null;
     e.thuis = { x: uitgang.x, y: uitgang.y };
     e.straal = 1;
@@ -740,21 +740,21 @@
   }
 
   // Staat hij op de weg de kaart uit (of er vlak naast, want zijn straal is één), dan is hij weg.
-  function isBijDeUitgang(S, e) {
-    const uitgang = T.wegInEnUit(S.wereld);
+  function isBijDeUitgang(D, e) {
+    const uitgang = T.wegInEnUit(D.wereld);
     return e.tx === uitgang.x && e.ty === uitgang.y && !(e.pad && e.pad.length) && !e.onderweg;
   }
 
-  T.werkHeerBij = function (S) {
-    const h = S.heer;
-    if (!h || !magKomen(S) || !kanLopen(S)) return;
-    const w = S.wereld;
+  T.werkHeerBij = function (D) {
+    const h = D.heer;
+    if (!h || !magKomen(D) || !kanLopen(D)) return;
+    const w = D.wereld;
     const uitgang = T.wegInEnUit(w);
     const plek = pleinVan(w);
     const b = h.bezoek;
     if (b && !b.wezens && !b.weg) {
       // Overdag, vanaf het bezoekuur, met zijn bericht (js/dag.js).
-      if (!T.bezoekerKomtAan(S, b)) return;
+      if (!T.bezoekerKomtAan(D, b)) return;
       // Hij komt de kaart op, met zijn twee soldaten vlak achter zich.
       const heer = T.maakMens('heer', uitgang.x, uitgang.y, 1);
       heer.thuis = { x: plek.x, y: plek.y };
@@ -770,13 +770,13 @@
     }
     if (b && b.wezens && !b.staat && !b.weg) {
       const heer = b.wezens[0];
-      if (T.afstand({ x: plek.x, y: plek.y }, { x: heer.tx, y: heer.ty }) <= 1) T.heerStaatErOp(S);
+      if (T.afstand({ x: plek.x, y: plek.y }, { x: heer.tx, y: heer.ty }) <= 1) T.heerStaatErOp(D);
     }
     if (b && b.weg && b.wezens) {
-      const nog = b.wezens.filter((e) => !isBijDeUitgang(S, e));
-      haalUitWereld(S, b.wezens.filter((e) => !nog.includes(e)));
+      const nog = b.wezens.filter((e) => !isBijDeUitgang(D, e));
+      haalUitWereld(D, b.wezens.filter((e) => !nog.includes(e)));
       b.wezens = nog;
-      if (!nog.length) haalHeerWeg(S);
+      if (!nog.length) haalHeerWeg(D);
     }
     // Wie aan de schandpaal moet: staat hij er, dan beginnen zijn dagen, en staat hij met zijn rug
     // naar de paal (e.kijkt, js/sprites.js): de paal staat een tegel schuin achter hem, dus naar Z.
@@ -784,14 +784,14 @@
       if (!wr.staat || wr.vanaf != null) continue;
       const e = w.wezens.find((x) => x.wie === wr.wie);
       if (e && e.moetNaar && e.tx === e.moetNaar.x && e.ty === e.moetNaar.y) {
-        wr.vanaf = dagNu(S);
+        wr.vanaf = dagNu(D);
         e.kijkt = 'Z';
       }
     }
     const s = h.soldaten;
     if (s && s.weg) {
-      const nog = s.wezens.filter((e) => !isBijDeUitgang(S, e));
-      haalUitWereld(S, s.wezens.filter((e) => !nog.includes(e)));
+      const nog = s.wezens.filter((e) => !isBijDeUitgang(D, e));
+      haalUitWereld(D, s.wezens.filter((e) => !nog.includes(e)));
       s.wezens = nog;
       if (!nog.length) h.soldaten = null;
     }

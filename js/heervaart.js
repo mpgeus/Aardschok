@@ -41,11 +41,11 @@
   };
   const IN = () => T.HEERVAART_INSTELLINGEN;
 
-  const dagNu = (S) => Math.floor(S.kalender ? S.kalender.dag : 0);
+  const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
   // Een getal 0..1, vast per spel, per dag en per vraag `n` (zoals in js/rovers.js), zodat een speeltest met
   // hetzelfde zaad hetzelfde jaar speelt.
-  const lot = (S, dag, n) => T.dobbelsteen(((S.lot && S.lot.zaad) || 1) * 41 + Math.floor(dag) * 7919 + n)();
+  const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 41 + Math.floor(dag) * 7919 + n)();
   const bericht = (tekst, soort) => {
     if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
   };
@@ -60,43 +60,43 @@
   // S.heervaart: de vraag die op je antwoord wacht (tot je kiest), de mannen die weg zijn (tot ze terugkomen), en
   // hoe het de laatste keer ging.
   T.nieuweHeervaart = () => ({ vraag: null, tocht: null, laatste: null });
-  const heervaartVan = (S) => S.heervaart || (S.heervaart = T.nieuweHeervaart());
+  const heervaartVan = (D) => D.heervaart || (D.heervaart = T.nieuweHeervaart());
 
   // Vraagt de heer dit jaar mannen? Alleen als de spelregel aan staat, en vanaf de trede (een dorp).
-  T.heervaartGeldt = (S) => !!IN().aan && T.tredeMinstens(S, IN().vanaf);
+  T.heervaartGeldt = (D) => !!IN().aan && T.tredeMinstens(D, IN().vanaf);
 
   // Hoeveel mannen hij vraagt: een per zoveel zielen, naar boven afgerond.
-  T.heervaartMannen = (S) => Math.max(1, Math.ceil((S.bevolking || 0) / IN().zielenPerMan));
+  T.heervaartMannen = (D) => Math.max(1, Math.ceil((D.bevolking || 0) / IN().zielenPerMan));
 
   // Zijn brief op 1 hooimaand (T.tikHeervaartDag): wat hij vraagt, en wie het spel dan stuurt. Wie gaat, staat nu al
   // vast, zodat de brief ze bij naam noemt.
-  T.vraagHeervaart = function (S, dag) {
-    const H = heervaartVan(S);
+  T.vraagHeervaart = function (D, dag) {
+    const H = heervaartVan(D);
     const d = T.datumVanDag(dag);
-    const mannen = T.heervaartMannen(S);
+    const mannen = T.heervaartMannen(D);
     const oorlogen = IN().oorlogen;
     H.vraag = {
       dag, jaar: d.jaar, mannen, goud: mannen * IN().goudPerMan,
-      wie: T.weerbareMannen(S).slice(0, mannen),
-      oorlog: oorlogen[(((S.lot && S.lot.zaad) || 1) + d.jaar) % oorlogen.length],
+      wie: T.weerbareMannen(D).slice(0, mannen),
+      oorlog: oorlogen[(((D.lot && D.lot.zaad) || 1) + d.jaar) % oorlogen.length],
       uiterlijk: dag + IN().kiesBinnenDagen,
     };
-    if (T.ui && T.ui.toonBrief) T.ui.toonBrief(S, 'heervaart');
+    if (T.ui && T.ui.toonBrief) T.ui.toonBrief(D, 'heervaart');
     else bericht('Er is een brief van de heer: hij vraagt mannen voor zijn oorlog.');
     return H.vraag;
   };
 
   // Wie er gaat, in woorden, met het werk dat stil komt te liggen: "Piet, Klaas en Jan (bij de houthakker)".
-  T.heervaartWieTekst = function (S, wie) {
+  T.heervaartWieTekst = function (D, wie) {
     return T.opsomming(wie.map((p) => `${T.naamVanBewoner(p)}${p.werk ? ` (bij de ${T.GEBOUWEN[p.werk.soort].naam})` : ''}`));
   };
 
   // Wat je kunt kiezen, voor de knoppen onder de brief (js/brieven.js): { actie, tekst, kan, waarom, hoofd, doe }.
   // De knop en de klik stellen dezelfde vraag (CLAUDE.md, "Afspraken in de code").
-  T.heervaartKeuzes = function (S) {
-    const v = S.heervaart && S.heervaart.vraag;
+  T.heervaartKeuzes = function (D) {
+    const v = D.heervaart && D.heervaart.vraag;
     if (!v) return [];
-    const goud = Math.floor((S.voorraad && S.voorraad.goud) || 0);
+    const goud = Math.floor((D.voorraad && D.voorraad.goud) || 0);
     const kan = goud >= v.goud;
     return [
       {
@@ -110,19 +110,19 @@
 
   // Ze gaan: `hoe` is 'gestuurd' (je koos het) of 'gehaald' (je koos niet, en de heer haalde ze). Wie sinds de
   // brief stierf of wegtrok, gaat niet; de heer merkt het niet. Geeft terug wie er gingen.
-  T.stuurHeervaart = function (S, hoe) {
-    const H = heervaartVan(S);
+  T.stuurHeervaart = function (D, hoe) {
+    const H = heervaartVan(D);
     const v = H.vraag;
     if (!v) return [];
     H.vraag = null;
-    const wie = v.wie.filter((p) => S.bewoners && S.bewoners.mensen.includes(p) && !p.weg);
+    const wie = v.wie.filter((p) => D.bewoners && D.bewoners.mensen.includes(p) && !p.weg);
     H.laatste = { jaar: v.jaar, antwoord: hoe, mannen: wie.length };
     if (!wie.length) {
       bericht('De heer vroeg mannen, maar er was niemand die kon gaan.');
       return wie;
     }
-    T.stuurWeg(S, wie, 'heervaart');
-    H.tocht = { wie, terugOp: volgende(dagNu(S), IN().terug) };
+    T.stuurWeg(D, wie, 'heervaart');
+    H.tocht = { wie, terugOp: volgende(dagNu(D), IN().terug) };
     const terug = `${IN().terug.dag} ${IN().terug.maand}`;
     if (hoe === 'gehaald') bericht(`Je antwoordde de heer niet. Zijn soldaten haalden ${namen(wie)} op; terug op ${terug}.`, 'gevaar');
     else bericht(`${T.hoofdletter(namen(wie))} ${wie.length === 1 ? 'gaat' : 'gaan'} met de heer ten strijde. Terug op ${terug}.`);
@@ -130,13 +130,13 @@
   };
 
   // Vrijkopen: het goud, en de heer vraagt zich af waar het vandaan kwam (de argwaan, js/inner.js).
-  T.koopHeervaartAf = function (S) {
-    const H = heervaartVan(S);
+  T.koopHeervaartAf = function (D) {
+    const H = heervaartVan(D);
     const v = H.vraag;
-    if (!v || ((S.voorraad && S.voorraad.goud) || 0) < v.goud) return false;
+    if (!v || ((D.voorraad && D.voorraad.goud) || 0) < v.goud) return false;
     H.vraag = null;
-    T.wijzigVoorraad(S, 'goud', -v.goud);
-    T.zetArgwaan(S, v.goud * IN().argwaanPerGoud, 'je kocht je mannen vrij van zijn heervaart');
+    T.wijzigVoorraad(D, 'goud', -v.goud);
+    T.zetArgwaan(D, v.goud * IN().argwaanPerGoud, 'je kocht je mannen vrij van zijn heervaart');
     H.laatste = { jaar: v.jaar, antwoord: 'vrijgekocht', goud: v.goud };
     bericht(`Je koopt je mannen vrij voor ${v.goud} goud. De heer vraagt zich af waar dat vandaan kwam.`);
     return true;
@@ -145,22 +145,22 @@
   // Ze komen terug (T.tikHeervaartDag, op 1 herfstmaand): een op de vier gemiddeld niet. Wie terugkomt, is veteraan,
   // en komt overdag over de weg binnen, met het bericht wie het zijn en wie er sneuvelde (T.komtTerug,
   // js/bewoners.js).
-  T.heervaartKomtTerug = function (S) {
-    const H = heervaartVan(S);
+  T.heervaartKomtTerug = function (D) {
+    const H = heervaartVan(D);
     const t = H.tocht;
     if (!t) return null;
     H.tocht = null;
-    const wie = t.wie.filter((p) => S.bewoners && S.bewoners.mensen.includes(p));
+    const wie = t.wie.filter((p) => D.bewoners && D.bewoners.mensen.includes(p));
     const dood = [];
     const terug = [];
-    wie.forEach((p, i) => (lot(S, dagNu(S), i) < IN().kansNietTerug ? dood : terug).push(p));
+    wie.forEach((p, i) => (lot(D, dagNu(D), i) < IN().kansNietTerug ? dood : terug).push(p));
     const over = dood.length
       ? ` ${T.hoofdletter(namen(dood))} ${dood.length === 1 ? 'sneuvelde' : 'sneuvelden'} voor de heer. Hij laat weten dat ${dood.length === 1 ? 'hij dapper was' : 'ze dapper waren'}.`
       : '';
     const tekst = terug.length ? `De mannen van de heervaart komen terug: ${namen(terug)}.${over}` : `Niemand van de heervaart komt terug.${over}`;
-    if (dood.length) T.wijzigBevolking(S, -dood.length, 'gesneuveld', null, dood);
+    if (dood.length) T.wijzigBevolking(D, -dood.length, 'gesneuveld', null, dood);
     for (const p of terug) p.veteraan = true;
-    if (terug.length) T.komtTerug(S, terug, { tekst, soort: dood.length ? 'gevaar' : 'goed' });
+    if (terug.length) T.komtTerug(D, terug, { tekst, soort: dood.length ? 'gevaar' : 'goed' });
     else bericht(tekst, 'gevaar');
     if (H.laatste) Object.assign(H.laatste, { gesneuveld: dood.length, terug: terug.length });
     return { terug, dood };
@@ -169,13 +169,13 @@
   // Eén dag (T.tikGebouwenDag, js/gebouwen.js, na de heer): zijn brief op 1 hooimaand, de mannen die hij ophaalt
   // als je na een week nog niet koos, en wie er op 1 herfstmaand terugkomt. Wie weg is, komt ook terug als de
   // spelregel intussen uit ging.
-  T.tikHeervaartDag = function (S, dag) {
-    const H = S.heervaart;
-    if (H && H.tocht && H.tocht.terugOp != null && dag >= H.tocht.terugOp) T.heervaartKomtTerug(S);
-    if (S.einde || !S.bewoners) return;
-    if (H && H.vraag && dag >= H.vraag.uiterlijk) T.stuurHeervaart(S, 'gehaald');
-    if (!T.heervaartGeldt(S) || !isDatum(T.datumVanDag(dag), IN().brief)) return;
+  T.tikHeervaartDag = function (D, dag) {
+    const H = D.heervaart;
+    if (H && H.tocht && H.tocht.terugOp != null && dag >= H.tocht.terugOp) T.heervaartKomtTerug(D);
+    if (D.einde || !D.bewoners) return;
+    if (H && H.vraag && dag >= H.vraag.uiterlijk) T.stuurHeervaart(D, 'gehaald');
+    if (!T.heervaartGeldt(D) || !isDatum(T.datumVanDag(dag), IN().brief)) return;
     if (H && (H.vraag || H.tocht)) return;
-    T.vraagHeervaart(S, dag);
+    T.vraagHeervaart(D, dag);
   };
 })(globalThis.Spel = globalThis.Spel || {});

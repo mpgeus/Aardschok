@@ -62,8 +62,8 @@
 
   // Waar hij kan komen: een wereld met een plek voor hem (js/kaart.js leest "marskramer" uit het
   // betekenisbestand). Zonder die plek (het oude spel, of een toets zonder wereld) gebeurt er niets.
-  function magKomen(S) {
-    return !!(S.wereld && S.wereld.marskramer);
+  function magKomen(D) {
+    return !!(D.wereld && D.wereld.marskramer);
   }
 
   // De dag in het jaar (0..359) waarop een bezoek begint, in dezelfde telling als T.datumVanDag.
@@ -92,11 +92,11 @@
 
   // Hij komt: een vers bezoek met een volle mars en een volle beurs. `dag` is de dag dat hij het
   // gehucht in loopt; T.werkMarskramerBij zet de klok pas echt aan als hij op het plein staat.
-  T.marskramerKomt = function (S, i, dag) {
+  T.marskramerKomt = function (D, i, dag) {
     const bezoek = IN().bezoeken[i];
     const heeft = {};
     for (const wat in IN().verkoopt) heeft[wat] = IN().verkoopt[wat].heeft;
-    S.marskramer = {
+    D.marskramer = {
       bezoek: i, komtOp: dag, gaatOp: dag + IN().blijftDagen,
       beurs: IN().beurs, plaats: IN().plaats, heeft,
       weg: false, // true zodra hij vertrekt: dan handelt hij niet meer, hij loopt naar de weg
@@ -109,66 +109,66 @@
       },
     };
     if (T.zetVlag) {
-      T.zetVlag(S, 'marskramerOpBezoek');
-      T.zetVlag(S, bezoek.vlag);
+      T.zetVlag(D, 'marskramerOpBezoek');
+      T.zetVlag(D, bezoek.vlag);
     }
     // Hij komt overdag (js/dag.js, T.bezoekerKomtAan): valt zijn dag 's nachts in, dan zegt het
     // bericht het pas als hij de kaart op loopt (T.werkMarskramerBij). Zonder wereld om in te lopen
     // (een toets) meteen.
-    if (!kanLopen(S)) S.marskramer.meteen = true;
-    T.bezoekerKomtAan(S, S.marskramer);
+    if (!kanLopen(D)) D.marskramer.meteen = true;
+    T.bezoekerKomtAan(D, D.marskramer);
   };
 
   // Kan hij over de weg de kaart op? Dan heeft hij een poppetje (T.werkMarskramerBij).
-  function kanLopen(S) {
-    return !!(magKomen(S) && T.maakMens && deWeg(S.wereld));
+  function kanLopen(D) {
+    return !!(magKomen(D) && T.maakMens && deWeg(D.wereld));
   }
 
   // Hij gaat, op deze dag: vanaf nu handelt hij niet meer. Heeft hij een poppetje, dan loopt dat
   // eerst de weg op (T.werkMarskramerBij haalt hem daar weg); zonder poppetje is hij meteen weg.
   // De dag komt van T.tikHandelDag en niet van de kalender: springt die vooruit, dan tikken de
   // dagen ertussen één voor één na, en rekent "wanneer komt hij terug" vanaf zijn eigen dag.
-  function vertrek(S, dag) {
-    const m = S.marskramer;
+  function vertrek(D, dag) {
+    const m = D.marskramer;
     m.weg = true;
-    T.zetVlag(S, 'marskramerVertrekt');
-    if (T.ui && T.ui.sluitHandel && S.modus === 'handel') T.ui.sluitHandel(S);
+    T.zetVlag(D, 'marskramerVertrekt');
+    if (T.ui && T.ui.sluitHandel && D.modus === 'handel') T.ui.sluitHandel(D);
     if (T.ui && T.ui.bericht) T.ui.bericht(`De marskramer trekt verder. Hij komt terug in ${T.volgendeMarskramer(dag)}.`);
-    if (!m.wezen) haalWeg(S);
+    if (!m.wezen) haalWeg(D);
   }
 
   // Helemaal weg, ook uit de wereld.
-  function haalWeg(S) {
-    const m = S.marskramer;
+  function haalWeg(D) {
+    const m = D.marskramer;
     if (!m) return;
-    if (m.wezen && S.wereld) {
-      const i = S.wereld.wezens.indexOf(m.wezen);
-      if (i >= 0) S.wereld.wezens.splice(i, 1);
+    if (m.wezen && D.wereld) {
+      const i = D.wereld.wezens.indexOf(m.wezen);
+      if (i >= 0) D.wereld.wezens.splice(i, 1);
     }
     if (T.wisVlag) {
-      T.wisVlag(S, 'marskramerOpBezoek');
-      T.wisVlag(S, 'marskramerVertrekt');
-      for (const b of IN().bezoeken) T.wisVlag(S, b.vlag);
+      T.wisVlag(D, 'marskramerOpBezoek');
+      T.wisVlag(D, 'marskramerVertrekt');
+      for (const b of IN().bezoeken) T.wisVlag(D, b.vlag);
     }
-    S.marskramer = null;
+    D.marskramer = null;
   }
 
   // Eén dag: komt hij vandaag, of is zijn tijd om? Wordt aangeroepen vanuit T.tikGebouwenDag
   // (js/gebouwen.js, stap 0), één keer per verstreken kalenderdag, net als T.tikBehoeftenDag.
-  T.tikHandelDag = function (S, dag) {
-    if (!magKomen(S)) return;
-    const m = S.marskramer;
+  T.tikHandelDag = function (D, dag) {
+    if (!magKomen(D)) return;
+    const m = D.marskramer;
     // Zolang hij nog over de weg aan komt lopen, telt zijn tijd niet: zie blijftDagen.
-    if (m && !m.weg && (!m.wezen || m.staat) && dag >= m.gaatOp) vertrek(S, dag);
-    if (!S.marskramer) {
+    if (m && !m.weg && (!m.wezen || m.staat) && dag >= m.gaatOp) vertrek(D, dag);
+    if (!D.marskramer) {
       const i = T.marskramerBegintOp(dag);
-      if (i != null) T.marskramerKomt(S, i, dag);
+      if (i != null) T.marskramerKomt(D, i, dag);
     }
   };
 
   // Kan er nu gehandeld worden? Alleen als hij er is en nog niet vertrekt.
-  T.kanHandelen = function (S) {
-    return !!(S.marskramer && !S.marskramer.weg);
+  T.kanHandelen = function (D) {
+    return !!(D.marskramer && !D.marskramer.weg);
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -177,16 +177,16 @@
   // ---------------------------------------------------------------------------------------------
 
   // Jij koopt `aantal` stuks van hem (ijzer, zout).
-  T.kanKopen = function (S, wat, aantal) {
-    const m = S.marskramer;
+  T.kanKopen = function (D, wat, aantal) {
+    const m = D.marskramer;
     const waar = IN().verkoopt[wat];
-    if (!T.kanHandelen(S)) return { kan: false, reden: 'De marskramer is er niet.' };
+    if (!T.kanHandelen(D)) return { kan: false, reden: 'De marskramer is er niet.' };
     if (!waar) return { kan: false, reden: `Hij heeft geen ${wat} bij zich.` };
     const prijs = waar.prijs[m.bezoek];
     const heeft = m.heeft[wat] || 0;
     const uit = { prijs, kosten: prijs * aantal, heeft };
     if (aantal > heeft) return { ...uit, kan: false, reden: heeft ? `Hij heeft er nog maar ${heeft}.` : 'Het is op.' };
-    if ((S.voorraad.goud || 0) < prijs * aantal) return { ...uit, kan: false, reden: `Daar heb je het goud niet voor (${prijs * aantal}).` };
+    if ((D.voorraad.goud || 0) < prijs * aantal) return { ...uit, kan: false, reden: `Daar heb je het goud niet voor (${prijs * aantal}).` };
     return { ...uit, kan: true };
   };
 
@@ -195,28 +195,28 @@
   // 2"; js/inner.js): wie veel verkocht en een lege kist heeft, valt op. Na Sint-Maarten begint het
   // opnieuw (T.innerNaSintMaarten).
   T.nieuwBoekMarskramer = (dag) => ({ sinds: dag || 0, ontvangen: 0, betaald: 0 });
-  T.boekMarskramer = (S) => S.boekMarskramer || (S.boekMarskramer = T.nieuwBoekMarskramer(0));
+  T.boekMarskramer = (D) => D.boekMarskramer || (D.boekMarskramer = T.nieuwBoekMarskramer(0));
 
-  T.koop = function (S, wat, aantal) {
-    const k = T.kanKopen(S, wat, aantal);
+  T.koop = function (D, wat, aantal) {
+    const k = T.kanKopen(D, wat, aantal);
     if (!k.kan) return k;
-    const m = S.marskramer;
-    T.wijzigVoorraad(S, 'goud', -k.kosten);
-    T.wijzigVoorraad(S, wat, aantal);
+    const m = D.marskramer;
+    T.wijzigVoorraad(D, 'goud', -k.kosten);
+    T.wijzigVoorraad(D, wat, aantal);
     m.heeft[wat] -= aantal;
     m.beurs += k.kosten;
-    T.boekMarskramer(S).betaald += k.kosten;
+    T.boekMarskramer(D).betaald += k.kosten;
     return k;
   };
 
   // Jij verkoopt hem `pakken` pakken van iets (een pak is `per` stuks: tien graan, vijf wol).
-  T.kanVerkopen = function (S, wat, pakken) {
-    const m = S.marskramer;
+  T.kanVerkopen = function (D, wat, pakken) {
+    const m = D.marskramer;
     const vraag = IN().koopt[wat];
-    if (!T.kanHandelen(S)) return { kan: false, reden: 'De marskramer is er niet.' };
+    if (!T.kanHandelen(D)) return { kan: false, reden: 'De marskramer is er niet.' };
     if (!vraag) return { kan: false, reden: `${T.hoofdletter(wat)} koopt hij niet.` };
     const prijs = vraag.prijs[m.bezoek];
-    const hebPakken = Math.floor((S.voorraad[wat] || 0) / vraag.per + 1e-9);
+    const hebPakken = Math.floor((D.voorraad[wat] || 0) / vraag.per + 1e-9);
     const uit = { prijs, per: vraag.per, opbrengst: prijs * pakken, stuks: vraag.per * pakken };
     if (pakken > hebPakken) return { ...uit, kan: false, reden: `Daar heb je niet genoeg ${wat} voor (${vraag.per * pakken}).` };
     if (pakken > m.plaats) return { ...uit, kan: false, reden: m.plaats ? `Hij kan nog maar ${m.plaats} pak${m.plaats === 1 ? '' : 'ken'} meenemen.` : 'Zijn mars is vol.' };
@@ -224,24 +224,24 @@
     return { ...uit, kan: true };
   };
 
-  T.verkoop = function (S, wat, pakken) {
-    const k = T.kanVerkopen(S, wat, pakken);
+  T.verkoop = function (D, wat, pakken) {
+    const k = T.kanVerkopen(D, wat, pakken);
     if (!k.kan) return k;
-    const m = S.marskramer;
-    T.wijzigVoorraad(S, wat, -k.stuks);
-    T.wijzigVoorraad(S, 'goud', k.opbrengst);
+    const m = D.marskramer;
+    T.wijzigVoorraad(D, wat, -k.stuks);
+    T.wijzigVoorraad(D, 'goud', k.opbrengst);
     m.beurs -= k.opbrengst;
     m.plaats -= pakken;
-    T.boekMarskramer(S).ontvangen += k.opbrengst;
+    T.boekMarskramer(D).ontvangen += k.opbrengst;
     return k;
   };
 
   // Is dit de goedkoopste of de duurste keer van het jaar? Voor het venster: 'duur', 'goedkoop' of
   // null, voor wat hij koopt ('koopt') of verkoopt ('verkoopt'), bij het bezoek van nu.
-  T.prijsVanHetJaar = function (S, wat, kant) {
+  T.prijsVanHetJaar = function (D, wat, kant) {
     const rij = IN()[kant][wat];
-    if (!rij || !S.marskramer) return null;
-    const nu = rij.prijs[S.marskramer.bezoek];
+    if (!rij || !D.marskramer) return null;
+    const nu = rij.prijs[D.marskramer.bezoek];
     const hoog = Math.max(...rij.prijs);
     const laag = Math.min(...rij.prijs);
     if (hoog === laag) return null;
@@ -267,15 +267,15 @@
   }
   T.wegInEnUit = (w) => (w ? deWeg(w) : null);
 
-  T.werkMarskramerBij = function (S) {
-    const m = S.marskramer;
-    const w = S.wereld;
-    if (!m || !magKomen(S) || !T.maakMens) return;
+  T.werkMarskramerBij = function (D) {
+    const m = D.marskramer;
+    const w = D.wereld;
+    if (!m || !magKomen(D) || !T.maakMens) return;
     const uitgang = deWeg(w);
     if (!m.wezen) {
       if (m.weg || !uitgang) return;
       // Overdag, vanaf het bezoekuur, met zijn bericht (js/dag.js).
-      if (!T.bezoekerKomtAan(S, m)) return;
+      if (!T.bezoekerKomtAan(D, m)) return;
       const e = T.maakMens('marskramer', uitgang.x, uitgang.y, 1);
       // Zijn thuis is zijn plek op het plein, met een straal van één: daar scharrelt hij bij zijn
       // uitgestalde waar.
@@ -288,11 +288,11 @@
     if (!m.staat && !m.weg && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1) {
       // Hij staat er: nu pas beginnen zijn dagen te tellen.
       m.staat = true;
-      m.gaatOp = Math.floor(S.kalender ? S.kalender.dag : m.komtOp) + IN().blijftDagen;
+      m.gaatOp = Math.floor(D.kalender ? D.kalender.dag : m.komtOp) + IN().blijftDagen;
     }
     if (m.weg && uitgang) {
       e.thuis = { x: uitgang.x, y: uitgang.y, straal: 0 };
-      if (e.tx === uitgang.x && e.ty === uitgang.y && !e.pad.length && !e.onderweg) haalWeg(S);
+      if (e.tx === uitgang.x && e.ty === uitgang.y && !e.pad.length && !e.onderweg) haalWeg(D);
     }
   };
 })(globalThis.Spel = globalThis.Spel || {});

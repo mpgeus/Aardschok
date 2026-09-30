@@ -47,8 +47,8 @@
   const IN = () => T.HERBERG_INSTELLINGEN;
 
   // De herberg van het dorp: de eerste die klaar is, of null.
-  T.herbergVan = function (S) {
-    return (S.gebouwen || []).find((g) => g.soort === 'herberg' && g.klaar) || null;
+  T.herbergVan = function (D) {
+    return (D.gebouwen || []).find((g) => g.soort === 'herberg' && g.klaar) || null;
   };
 
   // Het karakter van een bewoner: alleen een boer heeft er een (js/boeren.js zet het geloote op zijn
@@ -81,8 +81,8 @@
   }
 
   // Hoe groot de kans is dat p vanavond gaat, en hoe lang hij onderweg is: { kans, heen }.
-  function kansVan(S, p, deur, dag) {
-    const B = S.bewoners;
+  function kansVan(D, p, deur, dag) {
+    const B = D.bewoners;
     const w = B.wereld;
     const k = karakterVan(p);
     const winter = T.datumVanDag(dag).seizoen === 'winter';
@@ -98,21 +98,21 @@
   // Wie er op de avond van dag `dag` naar de herberg gaat: een lijst bewoners, wie het dichtst bij woont
   // eerst, en niet meer dan er bier is. Hetzelfde antwoord voor het scherm (wie er loopt) en voor de
   // regels (T.tikHerbergDag), en bewaard zolang de dag, het bier en het dorp hetzelfde zijn.
-  T.herbergGasten = function (S, dag) {
-    const B = S.bewoners;
-    const g = T.herbergVan(S);
+  T.herbergGasten = function (D, dag) {
+    const B = D.bewoners;
+    const g = T.herbergVan(D);
     if (!B || !B.wereld || !g) return [];
     const d = Math.floor(dag);
-    const bier = (S.voorraad && S.voorraad.bier) || 0;
+    const bier = (D.voorraad && D.voorraad.bier) || 0;
     const plaats = Math.floor(bier / IN().bierPerBezoek + 1e-9);
     const sleutel = `${d}:${plaats}:${B.mensen.length}`;
-    const H = S.herberg || (S.herberg = {});
+    const H = D.herberg || (D.herberg = {});
     if (H.gasten && H.gasten.sleutel === sleutel) return H.gasten.lijst;
     const deur = T.deurVan(B.wereld, g);
     const wie = [];
     for (const p of B.mensen) {
       if (!kanGaan(p, g)) continue;
-      const { kans, heen } = kansVan(S, p, deur, d);
+      const { kans, heen } = kansVan(D, p, deur, d);
       if (kans > 0 && lot(B, p, d) < kans) wie.push({ p, heen });
     }
     wie.sort((a, b) => a.heen - b.heen);
@@ -125,22 +125,22 @@
   // herberg, en naar binnen. Wie er woont, staat er 's avonds achter de tap. Anders null: dan gaat hij
   // naar zijn erf, zoals altijd. Bij bedtijd zegt T.dagAnker "naar huis", en dan komt hij naar buiten en
   // loopt hij in het donker naar zijn eigen deur (T.laatDwalen, js/verkennen.js).
-  T.herbergAnker = function (S, e) {
-    const g = T.herbergVan(S);
-    if (!g || !S.bewoners || !S.kalender) return null;
-    const p = T.bewonerVan(S, e);
+  T.herbergAnker = function (D, e) {
+    const g = T.herbergVan(D);
+    if (!g || !D.bewoners || !D.kalender) return null;
+    const p = T.bewonerVan(D, e);
     if (!p) return null;
-    const deur = T.deurVan(S.bewoners.wereld, g);
+    const deur = T.deurVan(D.bewoners.wereld, g);
     const binnen = { x: deur.x, y: deur.y, straal: 0, binnen: true };
     if (p.huis === g) return binnen;
-    return T.herbergGasten(S, S.kalender.dag).includes(p) ? binnen : null;
+    return T.herbergGasten(D, D.kalender.dag).includes(p) ? binnen : null;
   };
 
   // Is hij vanavond in de herberg, of op weg erheen? Voor de muis (js/bewoners.js).
-  T.gaatNaarDeHerberg = function (S, p) {
-    const g = T.herbergVan(S);
-    if (!g || !S.kalender || T.dagdeelVan(S.kalender.dag, T.isOogstDag(S.kalender.dag)) !== 'avond') return false;
-    return p.huis !== g && T.herbergGasten(S, S.kalender.dag).includes(p);
+  T.gaatNaarDeHerberg = function (D, p) {
+    const g = T.herbergVan(D);
+    if (!g || !D.kalender || T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag)) !== 'avond') return false;
+    return p.huis !== g && T.herbergGasten(D, D.kalender.dag).includes(p);
   };
 
   const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || '');
@@ -160,53 +160,53 @@
   // js/verstoppen.js), en wat hij de schout zag doen (T.getuigenVertellen, js/zien.js). De
   // herbergierster weet het de volgende dag (haar gesprek in js/gesprekken.js): de vlaggen
   // herbergGasten, herbergRoddel, herbergGetuige en herbergDroog, en de namen in S.herberg.gisteravond.
-  T.tikHerbergDag = function (S, dag) {
-    if (!T.herbergVan(S) || !S.bewoners) return;
+  T.tikHerbergDag = function (D, dag) {
+    if (!T.herbergVan(D) || !D.bewoners) return;
     const gisteren = Math.floor(dag) - 1;
-    const droog = T.herbergDroog(S);
-    const gasten = T.herbergGasten(S, gisteren);
+    const droog = T.herbergDroog(D);
+    const gasten = T.herbergGasten(D, gisteren);
     const roddel = gasten.find(vertelt) || null;
-    const gezien = T.getuigenVertellen(S, gasten, gisteren);
-    const H = S.herberg || (S.herberg = {});
+    const gezien = T.getuigenVertellen(D, gasten, gisteren);
+    const H = D.herberg || (D.herberg = {});
     H.gisteravond = { dag: gisteren, gasten: gasten.length, namen: gasten.map(T.naamVanBewoner), roddel: roddel ? T.naamVanBewoner(roddel) : null, gezien };
     if (T.zetVlag) {
-      for (const v of ['herbergGasten', 'herbergRoddel', 'herbergGetuige', 'herbergDroog']) T.wisVlag(S, v);
-      if (gasten.length) T.zetVlag(S, 'herbergGasten');
-      if (roddel) T.zetVlag(S, 'herbergRoddel');
-      if (gezien.length) T.zetVlag(S, 'herbergGetuige');
-      if (droog) T.zetVlag(S, 'herbergDroog');
+      for (const v of ['herbergGasten', 'herbergRoddel', 'herbergGetuige', 'herbergDroog']) T.wisVlag(D, v);
+      if (gasten.length) T.zetVlag(D, 'herbergGasten');
+      if (roddel) T.zetVlag(D, 'herbergRoddel');
+      if (gezien.length) T.zetVlag(D, 'herbergGetuige');
+      if (droog) T.zetVlag(D, 'herbergDroog');
     }
     if (roddel) roddel.huis.verteld = gisteren;
     if (!gasten.length) return;
-    T.wijzigVoorraad(S, 'bier', -gasten.length * IN().bierPerBezoek);
+    T.wijzigVoorraad(D, 'bier', -gasten.length * IN().bierPerBezoek);
     for (const p of gasten) p.herbergDag = gisteren;
   };
 
   // Wat de herbergierster invult in haar gesprek (js/gesprek.js, T.vulWoordenIn): wie er gisteravond
   // aan de tap zat, en wie er te veel zei.
   T.GESPREK_WOORDEN = T.GESPREK_WOORDEN || {};
-  T.GESPREK_WOORDEN.gisteravond = (S) => opsomming((S.herberg && S.herberg.gisteravond && S.herberg.gisteravond.namen) || []) || 'niemand';
-  T.GESPREK_WOORDEN.roddelaar = (S) => (S.herberg && S.herberg.gisteravond && S.herberg.gisteravond.roddel) || 'iemand';
+  T.GESPREK_WOORDEN.gisteravond = (D) => opsomming((D.herberg && D.herberg.gisteravond && D.herberg.gisteravond.namen) || []) || 'niemand';
+  T.GESPREK_WOORDEN.roddelaar = (D) => (D.herberg && D.herberg.gisteravond && D.herberg.gisteravond.roddel) || 'iemand';
 
   // Wie over de weg kwam en een paar dagen blijft, logeert in de herberg (Marcel koos het met B, vraag
   // 38): de marskramer, die tien dagen op het plein staat (js/handel.js), zit er 's avonds en slaapt er,
   // en staat 's ochtends weer bij zijn waar. Voor T.dagAnker in js/dag.js; anders null.
-  T.logiesAnker = function (S, e) {
-    const m = S.marskramer;
+  T.logiesAnker = function (D, e) {
+    const m = D.marskramer;
     if (!m || m.wezen !== e || !m.staat || m.weg) return null;
-    const g = T.herbergVan(S);
-    if (!g || !S.kalender || !T.dagdeelVan) return null;
-    const deel = T.dagdeelVan(S.kalender.dag, T.isOogstDag(S.kalender.dag));
+    const g = T.herbergVan(D);
+    if (!g || !D.kalender || !T.dagdeelVan) return null;
+    const deel = T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag));
     if (deel !== 'avond' && deel !== 'nacht') return null;
-    const deur = T.deurVan(S.wereld, g);
+    const deur = T.deurVan(D.wereld, g);
     return { x: deur.x, y: deur.y, straal: 0, binnen: true };
   };
 
   // Hoeveel tevredener het dorp is door de herberg, op dag `dag` (js/behoeften.js): het deel van de
   // volwassenen dat er de laatste gezelligheidDagen was, maal gezelligheid. Puur.
-  T.herbergGezelligheid = function (S, dag) {
-    const g = T.herbergVan(S);
-    const B = S.bewoners;
+  T.herbergGezelligheid = function (D, dag) {
+    const g = T.herbergVan(D);
+    const B = D.bewoners;
     if (!g || !B) return 0;
     const wie = B.mensen.filter((p) => kanGaan(p, g));
     if (!wie.length) return 0;
@@ -216,8 +216,8 @@
   };
 
   // Is de herberg droog? Dan mist het dorp bier (js/behoeften.js).
-  T.herbergDroog = function (S) {
-    return !!T.herbergVan(S) && ((S.voorraad && S.voorraad.bier) || 0) < IN().bierPerBezoek;
+  T.herbergDroog = function (D) {
+    return !!T.herbergVan(D) && ((D.voorraad && D.voorraad.bier) || 0) < IN().bierPerBezoek;
   };
 
   // Het licht van de herberg, voor de nacht (js/tekenen.js): 's avonds brandt de lantaarn bij de deur,
@@ -226,29 +226,29 @@
   // vraag 39: "Misschien een raam waar je mensen doorheen ziet", en "Ja idd" op de schimmen): `ramenVan`
   // is het gebouw waarvan de ramen branden, `schimmen` hoeveel gasten er binnen zitten. Geeft een lijst
   // { x, y, straal, sterkte, ramenVan, schimmen } (tegels, 0..1), of een lege lijst.
-  T.herbergLicht = function (S) {
-    const g = T.herbergVan(S);
-    if (!g || !S.kalender || !S.bewoners || !T.dagdeelVan) return [];
-    const deur = T.deurVan(S.bewoners.wereld, g);
-    const avond = T.dagdeelVan(S.kalender.dag, T.isOogstDag(S.kalender.dag)) === 'avond';
+  T.herbergLicht = function (D) {
+    const g = T.herbergVan(D);
+    if (!g || !D.kalender || !D.bewoners || !T.dagdeelVan) return [];
+    const deur = T.deurVan(D.bewoners.wereld, g);
+    const avond = T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag)) === 'avond';
     const zitBinnen = (e) => !!(e && e.binnen && e.deur && e.deur.x === deur.x && e.deur.y === deur.y);
-    const binnen = S.bewoners.mensen.filter((p) => p.huis !== g && zitBinnen(p.wezen)).length
-      + (S.marskramer && zitBinnen(S.marskramer.wezen) ? 1 : 0);
+    const binnen = D.bewoners.mensen.filter((p) => p.huis !== g && zitBinnen(p.wezen)).length
+      + (D.marskramer && zitBinnen(D.marskramer.wezen) ? 1 : 0);
     if (!avond && !binnen) return [];
     return [{ x: deur.x, y: deur.y, straal: 3.5 + Math.min(3, binnen * 0.5), sterkte: Math.min(0.65, 0.3 + 0.08 * binnen), ramenVan: g, schimmen: binnen }];
   };
 
   // Wat er bij de muis op de herberg staat, na wat het gebouw doet (T.gebouwToestand, js/gebouwen.js):
   // hoeveel gasten er vanavond zijn (of gisteravond waren), en hoeveel bier er ligt.
-  T.herbergTekst = function (S, g) {
-    const bier = Math.floor((S.voorraad && S.voorraad.bier) || 0);
-    const gasten = S.kalender ? T.herbergGasten(S, S.kalender.dag) : [];
-    const avond = S.kalender && T.dagdeelVan(S.kalender.dag, T.isOogstDag(S.kalender.dag)) === 'avond';
+  T.herbergTekst = function (D, g) {
+    const bier = Math.floor((D.voorraad && D.voorraad.bier) || 0);
+    const gasten = D.kalender ? T.herbergGasten(D, D.kalender.dag) : [];
+    const avond = D.kalender && T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag)) === 'avond';
     const binnen = avond ? gasten.filter((p) => p.wezen && p.wezen.binnen).length : 0;
     const vanavond = avond
       ? binnen ? `${binnen} ${binnen === 1 ? 'gast' : 'gasten'} binnen` : 'nog niemand binnen'
       : `vanavond ${gasten.length ? `${gasten.length} ${gasten.length === 1 ? 'gast' : 'gasten'}` : 'geen gasten'}`;
-    const m = S.marskramer;
+    const m = D.marskramer;
     const logeert = m && m.staat && !m.weg ? '; de marskramer logeert hier' : '';
     return `${vanavond}; ${bier ? `${bier} bier` : 'geen bier meer'}${logeert}.`;
   };

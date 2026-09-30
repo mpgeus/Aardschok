@@ -206,7 +206,7 @@
   // Een kalf is nog geen koe: wie dit spel geboren is, melkt en werpt pas als het een jaar oud is.
   const volwassen = (e, dag) => e.geboren == null || dag - e.geboren >= T.DAGEN_PER_JAAR;
   const etenPerMens = () => (T.GEBOUWEN_INSTELLINGEN ? T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag : 0);
-  const spelZaad = (S) => (S.lot && S.lot.zaad) || 1;
+  const spelZaad = (D) => (D.lot && D.lot.zaad) || 1;
 
   function bericht(tekst, soort) {
     if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
@@ -247,10 +247,10 @@
   // worden, of weer uit elkaar gaan.
 
   // Alle levende dieren in de wereld.
-  T.veeVan = (S) => ((S && S.wereld && S.wereld.wezens) || []).filter((e) => e.dier && !e.dood);
+  T.veeVan = (D) => ((D && D.wereld && D.wereld.wezens) || []).filter((e) => e.dier && !e.dood);
   // Het vee dat op een weide graast, niet op de meent: daar gaan de plaats op de velden en de wissel
   // over (T.plaatsVoorVee, T.verhuisVee, en T.wisselVelden in js/akkers.js).
-  T.weideVee = (S) => T.veeVan(S).filter((e) => e.weide && !e.weide.meent);
+  T.weideVee = (D) => T.veeVan(D).filter((e) => e.weide && !e.weide.meent);
   // De meent van deze wereld (de heide), of null. Eén is genoeg; een kaart met meer komt later.
   T.meentVan = (w) => ((w && w.meenten) || [])[0] || null;
   // De meent op tegel (x, y), voor de muis (js/verkennen.js), of null.
@@ -358,9 +358,9 @@
   };
 
   // Het vee van één weide: van de hele groep waar dit veld bij hoort (of van de meent).
-  T.dierenOp = function (S, veld) {
-    const velden = veldenVan(S && S.wereld, veld);
-    return T.veeVan(S).filter((e) => velden.includes(e.weide));
+  T.dierenOp = function (D, veld) {
+    const velden = veldenVan(D && D.wereld, veld);
+    return T.veeVan(D).filter((e) => velden.includes(e.weide));
   };
 
   // Hoe het ervoor staat op een weide (de hele groep) of op de meent, voor het venster en voor de
@@ -368,9 +368,9 @@
   // plaats nodig hebben, `vrij` wat er over is (onder nul: te vol), en `vol` de factor voor de melk:
   // 1 zolang ze passen, en naar verhouding minder als het te vol is (30 tegels voor 40 nodig geeft
   // 0,75).
-  T.weideStand = function (S, veld) {
-    const dieren = T.dierenOp(S, veld);
-    const tegels = veldenVan(S && S.wereld, veld).reduce((n, v) => n + tegelsVan(v), 0);
+  T.weideStand = function (D, veld) {
+    const dieren = T.dierenOp(D, veld);
+    const tegels = veldenVan(D && D.wereld, veld).reduce((n, v) => n + tegelsVan(v), 0);
     const nodig = dieren.reduce((n, e) => n + plaatsVan(e), 0);
     return {
       tegels, nodig, vrij: tegels - nodig,
@@ -392,8 +392,8 @@
   };
 
   // Een tegel op de weide waar nog niemand staat, zo dicht mogelijk bij `bij` (of het midden).
-  function vrijeTegel(S, veld, bij) {
-    const bezet = new Set(((S.wereld && S.wereld.wezens) || []).filter((e) => !e.dood).map((e) => e.tx + ',' + e.ty));
+  function vrijeTegel(D, veld, bij) {
+    const bezet = new Set(((D.wereld && D.wereld.wezens) || []).filter((e) => !e.dood).map((e) => e.tx + ',' + e.ty));
     const doel = bij || { x: veld.x + (veld.b - 1) / 2, y: veld.y + (veld.h - 1) / 2 };
     let beste = null;
     let afstand = Infinity;
@@ -412,10 +412,10 @@
 
   // Elk dier een eigen zaad (zijn kleur, zijn ritme), uit het zaad van het spel en een teller: zo
   // krijgt hetzelfde spel dezelfde kudde, en een ander spel een andere.
-  function nieuwZaad(S) {
-    const V = S.vee || (S.vee = T.nieuwVee());
+  function nieuwZaad(D) {
+    const V = D.vee || (D.vee = T.nieuwVee());
     V.zaden = (V.zaden || 0) + 1;
-    return 1 + Math.floor(lot(spelZaad(S), V.zaden, 17) * 2147483646);
+    return 1 + Math.floor(lot(spelZaad(D), V.zaden, 17) * 2147483646);
   }
 
   // Zet elk dier (of elke soort) op een weide: de grootste eerst, elk op de weide met de meeste
@@ -459,10 +459,10 @@
   // doet op 1 lentemaand dezelfde verdeling echt. Een dier zonder weide (Spel.debug.vee zet ze los
   // bij de schout) en een schaap op de meent tellen niet mee.
   // { past, reden, moeten: [dier], plek: Map(dier → weide), vrij: Map(weide → vrij) }.
-  T.plaatsVoorVee = function (S, plan) {
-    const weides = T.weideGroepen(S.wereld, (v) => plan(v) === 'weide');
+  T.plaatsVoorVee = function (D, plan) {
+    const weides = T.weideGroepen(D.wereld, (v) => plan(v) === 'weide');
     const weideVan = (v) => weides.find((g) => g.velden.includes(v)) || null;
-    const dieren = T.weideVee(S);
+    const dieren = T.weideVee(D);
     const vrij = new Map(weides.map((g) => [g, g.tegels]));
     for (const e of dieren) {
       const g = weideVan(e.weide);
@@ -487,8 +487,8 @@
   // het plan), dan gaat de rest naar de weide met de meeste plaats, ook al wordt die te vol: dan
   // geeft het vee daar minder melk en werpt het geen jongen, tot je meer weide maakt. Zonder enige
   // weide blijft het staan waar het stond. Geeft de dieren die verhuisden.
-  T.verhuisVee = function (S) {
-    const r = T.plaatsVoorVee(S, (v) => T.bestemmingVan(v));
+  T.verhuisVee = function (D) {
+    const r = T.plaatsVoorVee(D, (v) => T.bestemmingVan(v));
     if (!r.moeten.length) return [];
     const teVol = verdeel(r.moeten.filter((e) => !r.plek.has(e)), r.vrij, true);
     const verhuisd = [];
@@ -510,7 +510,7 @@
   // een gulden snede verder. Tot 25 sep stonden ze rij na rij op volgorde, en pasten er precies
   // zoveel dieren als de breedte telde, dan stonden ze allemaal in één kolom. Elk dier hoort bij het
   // veld waar het terechtkomt. Geeft de dieren.
-  function spreid(S, velden, soorten) {
+  function spreid(D, velden, soorten) {
     const x0 = Math.min(...velden.map((v) => v.x));
     const y0 = Math.min(...velden.map((v) => v.y));
     const b = Math.max(...velden.map((v) => v.x + v.b)) - x0;
@@ -521,9 +521,9 @@
         y: y0 + Math.floor(((k + 0.5) / soorten.length) * h),
       };
       const veld = velden.find((v) => opVeld(v, bij.x, bij.y)) || dichtstbij(velden, { tx: bij.x, ty: bij.y });
-      const t = vrijeTegel(S, veld, bij);
-      const e = T.zetOpWeide(T.maakDier(soort, t.x, t.y, nieuwZaad(S)), veld);
-      S.wereld.wezens.push(e);
+      const t = vrijeTegel(D, veld, bij);
+      const e = T.zetOpWeide(T.maakDier(soort, t.x, t.y, nieuwZaad(D)), veld);
+      D.wereld.wezens.push(e);
       return e;
     });
   }
@@ -533,8 +533,8 @@
   // dit aan, net als T.zetBestaandeGebouwen, ná het lot van de boeren, want het zaad van het spel
   // kiest ook de kleuren van het vee. Zonder weide geen koeien, en zonder weide of meent geen
   // schapen. Geeft de dieren.
-  T.zetBeginKudde = function (S) {
-    const w = S.wereld;
+  T.zetBeginKudde = function (D) {
+    const w = D.wereld;
     const weides = T.weideGroepen(w);
     const meent = T.meentVan(w);
     const naarWeide = [];
@@ -544,11 +544,11 @@
     }
     const dieren = [];
     if (weides.length) {
-      const vrij = new Map(weides.map((g) => [g, T.weideStand(S, g.velden[0]).vrij]));
+      const vrij = new Map(weides.map((g) => [g, T.weideStand(D, g.velden[0]).vrij]));
       const plek = verdeel(naarWeide.map((soort) => ({ dier: soort })), vrij, true);
-      for (const g of weides) dieren.push(...spreid(S, g.velden, [...plek].filter(([, x]) => x === g).map(([d]) => d.dier)));
+      for (const g of weides) dieren.push(...spreid(D, g.velden, [...plek].filter(([, x]) => x === g).map(([d]) => d.dier)));
     }
-    if (meent) dieren.push(...spreid(S, [meent], naarMeent));
+    if (meent) dieren.push(...spreid(D, [meent], naarMeent));
     return dieren;
   };
 
@@ -565,14 +565,14 @@
   // De melk van één dag, in graan gerekend (wat het dorp ervan kan eten): elke volwassen koe op een
   // weide geeft melk voor IN().melkVoorMensen mensen, maal hoe vol haar weide is. Buiten de melktijd
   // niets.
-  T.melkVanDag = function (S, dag) {
+  T.melkVanDag = function (D, dag) {
     if (!melkTijd(dag)) return 0;
     const perKoe = IN().melkVoorMensen * etenPerMens();
     const vol = new Map();
     let melk = 0;
-    for (const e of T.veeVan(S)) {
+    for (const e of T.veeVan(D)) {
       if (e.dier !== 'koe' || !isWeide(e.weide) || !volwassen(e, dag)) continue;
-      if (!vol.has(e.weide)) vol.set(e.weide, T.weideStand(S, e.weide).vol);
+      if (!vol.has(e.weide)) vol.set(e.weide, T.weideStand(D, e.weide).vol);
       melk += perKoe * vol.get(e.weide);
     }
     return melk;
@@ -581,10 +581,10 @@
   // Hoeveel melk het dorp van dag `van` tot (niet met) dag `tot` zal drinken, met de kudde en de
   // monden van nu: elke dag hooguit wat het nodig heeft, want de rest wordt kaas. Voor het venster
   // van de heer (js/heer.js, T.heerVooruitzicht): wat je overhoudt tot de oogst.
-  T.verwachteMelk = function (S, van, tot) {
-    const nodig = (S.bevolking || 0) * etenPerMens();
+  T.verwachteMelk = function (D, van, tot) {
+    const nodig = (D.bevolking || 0) * etenPerMens();
     let som = 0;
-    for (let d = Math.floor(van); d < tot; d++) som += Math.min(nodig, T.melkVanDag(S, d));
+    for (let d = Math.floor(van); d < tot; d++) som += Math.min(nodig, T.melkVanDag(D, d));
     return som;
   };
 
@@ -596,24 +596,24 @@
   // jaar en het dier zelf, niet uit Math.random: hetzelfde spel werpt elk jaar dezelfde jongen, en
   // een toets komt vast uit. Wie het laagst loot, werpt het eerst, zodat bij krappe plaats niet
   // altijd dezelfde soort voorgaat. Geeft de nieuwe dieren.
-  T.werpJongen = function (S, dag) {
-    const w = S.wereld;
+  T.werpJongen = function (D, dag) {
+    const w = D.wereld;
     const jaar = T.datumVanDag(dag).jaar;
     const nieuw = [];
     let geenPlaats = 0;
     // Elke weide (een groep velden) met zijn vrije plaats, en de meent: daar telt ook de kooi, want
     // wie er geen plaats in heeft, werpt geen lam.
-    const plekken = T.weideGroepen(w).map((g) => ({ velden: g.velden, vrij: T.weideStand(S, g.velden[0]).vrij }));
+    const plekken = T.weideGroepen(w).map((g) => ({ velden: g.velden, vrij: T.weideStand(D, g.velden[0]).vrij }));
     const meent = T.meentVan(w);
     if (meent) {
-      const schapen = T.dierenOp(S, meent).length;
-      const inKooi = (T.kooiPlaats(S) - schapen) * plaatsVan('schaap');
-      plekken.push({ velden: [meent], vrij: Math.min(T.weideStand(S, meent).vrij, inKooi) });
+      const schapen = T.dierenOp(D, meent).length;
+      const inKooi = (T.kooiPlaats(D) - schapen) * plaatsVan('schaap');
+      plekken.push({ velden: [meent], vrij: Math.min(T.weideStand(D, meent).vrij, inKooi) });
     }
     for (const plek of plekken) {
-      const moeders = T.veeVan(S)
+      const moeders = T.veeVan(D)
         .filter((e) => plek.velden.includes(e.weide) && volwassen(e, dag))
-        .map((e) => ({ e, lot: lot(spelZaad(S), jaar, Math.floor(e.zaad) || 0) }))
+        .map((e) => ({ e, lot: lot(spelZaad(D), jaar, Math.floor(e.zaad) || 0) }))
         .filter((m) => m.lot < (IN().kansOpJong[m.e.dier] || 0))
         .sort((a, b) => a.lot - b.lot);
       let vrij = plek.vrij;
@@ -622,8 +622,8 @@
           geenPlaats++;
           continue;
         }
-        const t = vrijeTegel(S, e.weide, { x: e.tx, y: e.ty });
-        const jong = T.zetOpWeide(T.maakDier(e.dier, t.x, t.y, nieuwZaad(S)), e.weide);
+        const t = vrijeTegel(D, e.weide, { x: e.tx, y: e.ty });
+        const jong = T.zetOpWeide(T.maakDier(e.dier, t.x, t.y, nieuwZaad(D)), e.weide);
         jong.geboren = dag;
         w.wezens.push(jong);
         vrij -= plaatsVan(e);
@@ -643,8 +643,8 @@
 
   // Hoeveel schapen de schaapskooien samen bergen: IN().kooiPlaats per kooi die klaar is
   // (js/gebouwen.js, S.gebouwen).
-  const kooienVan = (S) => ((S && S.gebouwen) || []).filter((g) => g.soort === 'schaapskooi' && g.klaar);
-  T.kooiPlaats = (S) => kooienVan(S).length * IN().kooiPlaats;
+  const kooienVan = (D) => ((D && D.gebouwen) || []).filter((g) => g.soort === 'schaapskooi' && g.klaar);
+  T.kooiPlaats = (D) => kooienVan(D).length * IN().kooiPlaats;
 
   // ── De schapen en de kooi (stap 2) ──
   //
@@ -654,29 +654,29 @@
   // van de schapen.
 
   // De schapen die in een kooi slapen: alle schapen op de meent, tot de kooien vol zijn.
-  T.schapenInKooi = function (S) {
-    const meent = T.meentVan(S && S.wereld);
-    const schapen = meent ? T.dierenOp(S, meent).filter((e) => e.dier === 'schaap').length : 0;
-    return Math.min(schapen, T.kooiPlaats(S));
+  T.schapenInKooi = function (D) {
+    const meent = T.meentVan(D && D.wereld);
+    const schapen = meent ? T.dierenOp(D, meent).filter((e) => e.dier === 'schaap').length : 0;
+    return Math.min(schapen, T.kooiPlaats(D));
   };
 
   // De mest van één dag: IN().mestPerSchaap per jaar voor elk schaap in de kooi, naar rato van hoeveel
   // kooien hun herder hebben (een kooi zonder hand: de mest blijft liggen).
-  T.mestVanDag = function (S) {
-    const kooien = kooienVan(S);
+  T.mestVanDag = function (D) {
+    const kooien = kooienVan(D);
     if (!kooien.length) return 0;
     const soort = T.GEBOUWEN && T.GEBOUWEN.schaapskooi;
     const nodig = (soort && soort.handen) || 0;
     const herders = nodig ? kooien.reduce((n, g) => n + Math.min(1, (g.handen || 0) / nodig), 0) / kooien.length : 1;
-    return (T.schapenInKooi(S) * IN().mestPerSchaap * herders) / T.DAGEN_PER_JAAR;
+    return (T.schapenInKooi(D) * IN().mestPerSchaap * herders) / T.DAGEN_PER_JAAR;
   };
 
   // Scheren: elk volwassen schaap geeft IN().wolPerSchaap wol. Geeft de wol.
-  T.scheerSchapen = function (S, dag) {
-    const schapen = T.veeVan(S).filter((e) => e.dier === 'schaap' && volwassen(e, dag));
+  T.scheerSchapen = function (D, dag) {
+    const schapen = T.veeVan(D).filter((e) => e.dier === 'schaap' && volwassen(e, dag));
     const wol = schapen.length * IN().wolPerSchaap;
-    if (wol > 0 && S.voorraad && T.wijzigVoorraad) {
-      T.wijzigVoorraad(S, 'wol', wol);
+    if (wol > 0 && D.voorraad && T.wijzigVoorraad) {
+      T.wijzigVoorraad(D, 'wol', wol);
       bericht(`Het is ${T.MAANDEN[T.datumVanDag(dag).maand].naam}: ${schapen.length} ${schapen.length === 1 ? 'schaap is' : 'schapen zijn'} geschoren. Dat geeft ${wol} wol.`, 'goed');
     }
     return wol;
@@ -701,7 +701,7 @@
   // Wat dit dier op een winterdag aan hooi eet: een jong de helft, en niets zonder winterzorg.
   T.hooiVanDier = (e, dag) => (IN().winterzorg ? (IN().hooiPerDag[e.dier] || 0) * (volwassen(e, dag) ? 1 : IN().jongEet) : 0);
   // Wat deze dieren (standaard de hele kudde) samen op één winterdag eten.
-  T.hooiPerWinterdag = (S, dag, dieren) => (dieren || T.veeVan(S)).reduce((n, e) => n + T.hooiVanDier(e, dag), 0);
+  T.hooiPerWinterdag = (D, dag, dieren) => (dieren || T.veeVan(D)).reduce((n, e) => n + T.hooiVanDier(e, dag), 0);
 
   // Hoe lang een hele winter duurt, in dagen (150: van slachtmaand tot en met lentemaand).
   T.winterLengte = function () {
@@ -739,8 +739,8 @@
   T.dierenTekst = dierenTekst;
 
   // Een dier uit de wereld halen: geslacht, of gestorven.
-  function haalWeg(S, e) {
-    const w = S.wereld;
+  function haalWeg(D, e) {
+    const w = D.wereld;
     const i = w.wezens.indexOf(e);
     if (i >= 0) w.wezens.splice(i, 1);
     e.dood = true;
@@ -748,9 +748,9 @@
 
   // Het vee verliest dieren van een soort (de wolven, js/voorvallen.js): het jongste eerst, want dat pakt een wolf.
   // Geeft hoeveel.
-  T.verliesVee = function (S, soort, n) {
-    const dieren = T.veeVan(S).filter((e) => e.dier === soort).sort(oudsteEerst).reverse().slice(0, Math.max(0, n));
-    for (const e of dieren) haalWeg(S, e);
+  T.verliesVee = function (D, soort, n) {
+    const dieren = T.veeVan(D).filter((e) => e.dier === soort).sort(oudsteEerst).reverse().slice(0, Math.max(0, n));
+    for (const e of dieren) haalWeg(D, e);
     return dieren.length;
   };
 
@@ -763,11 +763,11 @@
 
   // De groepen van de kudde: [{ soort, jong, naam, meervoud, dieren }], met de dieren het oudste eerst.
   // Een lege groep staat er niet in.
-  T.kuddeGroepen = function (S, dag) {
+  T.kuddeGroepen = function (D, dag) {
     const groepen = [];
     for (const [soort, v] of Object.entries(T.VEE)) {
       for (const jong of [false, true]) {
-        const dieren = T.veeVan(S).filter((e) => e.dier === soort && !volwassen(e, dag) === jong).sort(oudsteEerst);
+        const dieren = T.veeVan(D).filter((e) => e.dier === soort && !volwassen(e, dag) === jong).sort(oudsteEerst);
         if (dieren.length) groepen.push({ soort, jong, naam: jong ? v.jong : v.naam, meervoud: jong ? v.jongen : v.meervoud, dieren });
       }
     }
@@ -788,18 +788,18 @@
 
   // Het hooi voor de winter: in de winter zelf wat er in de voorraad ligt; daarbuiten ook wat er dit
   // jaar nog op de weides staat (js/akkers.js, T.verwachtHooi), want dat is voor de volgende winter.
-  T.hooiVoorDeWinter = (S, dag) => ((S.voorraad && S.voorraad.hooi) || 0)
-    + (T.verwachtHooi && !winterTijd(dag) ? T.verwachtHooi(S, dag) : 0);
+  T.hooiVoorDeWinter = (D, dag) => ((D.voorraad && D.voorraad.hooi) || 0)
+    + (T.verwachtHooi && !winterTijd(dag) ? T.verwachtHooi(D, dag) : 0);
 
   // Het voorstel: zo weinig dieren als kan, zodat het hooi de rest van de winter haalt. Is één dier
   // genoeg, dan het kleinste dat volstaat (een kalf eet de helft); anders het oudste. Alleen wie hooi
   // eet, komt erin: een schaap op de heide niet. { hooi, winter, perDag, dieren }: `perDag` is wat
   // de kudde eet zonder de dieren van het voorstel.
-  T.slachtVoorstel = function (S, dag) {
-    const hooi = T.hooiVoorDeWinter(S, dag);
+  T.slachtVoorstel = function (D, dag) {
+    const hooi = T.hooiVoorDeWinter(D, dag);
     const winter = T.winterDagen(dag);
-    const eters = T.veeVan(S).filter((e) => T.hooiVanDier(e, dag) > 0).sort(oudsteEerst);
-    let perDag = T.hooiPerWinterdag(S, dag, eters);
+    const eters = T.veeVan(D).filter((e) => T.hooiVanDier(e, dag) > 0).sort(oudsteEerst);
+    let perDag = T.hooiPerWinterdag(D, dag, eters);
     const dieren = [];
     while (perDag * winter > hooi + 1e-9) {
       const over = eters.filter((e) => !dieren.includes(e));
@@ -816,14 +816,14 @@
 
   // Slacht deze dieren: weg uit de wereld, en hun vlees en huiden in de voorraad. Geeft
   // { vlees, huiden }.
-  T.slacht = function (S, dieren, dag) {
+  T.slacht = function (D, dieren, dag) {
     const o = T.slachtOpbrengst(dieren, dag);
-    for (const e of dieren) haalWeg(S, e);
-    if (S.voorraad && T.wijzigVoorraad) {
-      if (o.vlees > 0) T.wijzigVoorraad(S, 'vlees', o.vlees);
-      if (o.huiden > 0) T.wijzigVoorraad(S, 'huiden', o.huiden);
+    for (const e of dieren) haalWeg(D, e);
+    if (D.voorraad && T.wijzigVoorraad) {
+      if (o.vlees > 0) T.wijzigVoorraad(D, 'vlees', o.vlees);
+      if (o.huiden > 0) T.wijzigVoorraad(D, 'huiden', o.huiden);
     }
-    if (S.vee) S.vee.slachtVraag = false;
+    if (D.vee) D.vee.slachtVraag = false;
     if (dieren.length) {
       bericht(`${T.hoofdletter(dierenTekst(dieren, dag))} ${dieren.length === 1 ? 'gaat' : 'gaan'} naar de slager: ${Math.round(o.vlees)} vlees en ${o.huiden} ${o.huiden === 1 ? 'huid' : 'huiden'}.`, 'goed');
     }
@@ -835,11 +835,11 @@
   // naar hoeveel het tekortkwam); na IN().hongerDagen sterft het. Wie weer genoeg eet, knapt per dag
   // een dag op. Raakt het hooi binnenkort op, dan zegt het dorp dat vooraf. Geeft
   // { nodig, gegeten, gestorven }.
-  T.voerHooi = function (S, dag) {
-    const V = S.vee || (S.vee = T.nieuwVee());
-    const dieren = T.veeVan(S).filter((e) => T.hooiVanDier(e, dag) > 0).sort(oudsteEerst);
-    let hooi = (S.voorraad && S.voorraad.hooi) || 0;
-    const nodig = T.hooiPerWinterdag(S, dag, dieren);
+  T.voerHooi = function (D, dag) {
+    const V = D.vee || (D.vee = T.nieuwVee());
+    const dieren = T.veeVan(D).filter((e) => T.hooiVanDier(e, dag) > 0).sort(oudsteEerst);
+    let hooi = (D.voorraad && D.voorraad.hooi) || 0;
+    const nodig = T.hooiPerWinterdag(D, dag, dieren);
     let gegeten = 0;
     const gestorven = [];
     for (const e of dieren) {
@@ -851,8 +851,8 @@
       e.honger = tekort > 1e-9 ? (e.honger || 0) + tekort : Math.max(0, (e.honger || 0) - 1);
       if (e.honger >= IN().hongerDagen - 1e-9) gestorven.push(e);
     }
-    if (gegeten > 0 && S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'hooi', -gegeten);
-    for (const e of gestorven) haalWeg(S, e);
+    if (gegeten > 0 && D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'hooi', -gegeten);
+    for (const e of gestorven) haalWeg(D, e);
     if (gestorven.length) {
       const een = gestorven.length === 1;
       bericht(`${T.hoofdletter(dierenTekst(gestorven, dag))} ${een ? 'is' : 'zijn'} van honger gestorven: het hooi was op.`, 'gevaar');
@@ -884,25 +884,25 @@
   // van vandaag als eerste (js/behoeften.js, T.eetVandaag). Op 1 grasmaand eerst de jongen, dan de
   // melk. S.vee.melk is de melk van vandaag; wat er na het eten van over is, wordt kaas. In de
   // winter eet het vee hooi (T.voerHooi).
-  T.tikVeeDag = function (S, dag) {
-    const V = S.vee || (S.vee = T.nieuwVee());
+  T.tikVeeDag = function (D, dag) {
+    const V = D.vee || (D.vee = T.nieuwVee());
     V.melk = 0;
-    if (!T.veeVan(S).length) return;
+    if (!T.veeVan(D).length) return;
     const d = T.datumVanDag(dag);
     const werpen = IN().werpen;
-    if (IN().groeit && d.maand === maandIdx(werpen.maand) && d.dagVanMaand === werpen.dag) T.werpJongen(S, dag);
+    if (IN().groeit && d.maand === maandIdx(werpen.maand) && d.dagVanMaand === werpen.dag) T.werpJongen(D, dag);
     // Op 1 slachtmaand: wie gaat er naar de slager? Het venster opent zodra je rondloopt (niet midden
     // in een gesprek of een ander venster), en tot dan blijft de vraag staan.
     const s = IN().slachten;
     if (d.maand === maandIdx(s.maand) && d.dagVanMaand === s.dag) V.slachtVraag = true;
-    if (V.slachtVraag && T.ui && T.ui.openSlachten && (!S.modus || S.modus === 'verkennen')) T.ui.openSlachten(S);
-    if (IN().winterzorg && winterTijd(dag)) T.voerHooi(S, dag);
+    if (V.slachtVraag && T.ui && T.ui.openSlachten && (!D.modus || D.modus === 'verkennen')) T.ui.openSlachten(D);
+    if (IN().winterzorg && winterTijd(dag)) T.voerHooi(D, dag);
     else V.hooiGewaarschuwd = V.hongerGemeld = false; // een nieuwe winter mag weer waarschuwen
     // De schapen: scheren in zomermaand, en elke dag de mest uit de kooi.
     const sch = IN().scheren;
-    if (d.maand === maandIdx(sch.maand) && d.dagVanMaand === sch.dag) T.scheerSchapen(S, dag);
-    const mest = T.mestVanDag(S);
-    if (mest > 0 && S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'mest', mest);
-    V.melk = T.melkVanDag(S, dag);
+    if (d.maand === maandIdx(sch.maand) && d.dagVanMaand === sch.dag) T.scheerSchapen(D, dag);
+    const mest = T.mestVanDag(D);
+    if (mest > 0 && D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'mest', mest);
+    V.melk = T.melkVanDag(D, dag);
   };
 })(globalThis.Spel = globalThis.Spel || {});

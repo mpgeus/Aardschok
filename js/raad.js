@@ -32,44 +32,44 @@
   };
   const IN = () => T.RAAD_INSTELLINGEN;
 
-  const dagNu = (S) => Math.floor(S.kalender.dag);
+  const dagNu = (D) => Math.floor(D.kalender.dag);
   const over = (n) => (n <= 1 ? 'morgen' : `over ${n} dagen`);
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
-  const heeft = (S, soort) => (S.gebouwen || []).some((g) => g.soort === soort);
+  const heeft = (D, soort) => (D.gebouwen || []).some((g) => g.soort === soort);
 
   // Hoeveel mensen het doel nog vraagt (js/treden.js), of 0 als er geen trede meer te halen is.
-  function mensenNodig(S) {
-    const trede = T.volgendeTrede(S);
-    return trede ? Math.max(0, T.TREDEN_INSTELLINGEN[trede].mensen - (S.bevolking || 0)) : 0;
+  function mensenNodig(D) {
+    const trede = T.volgendeTrede(D);
+    return trede ? Math.max(0, T.TREDEN_INSTELLINGEN[trede].mensen - (D.bevolking || 0)) : 0;
   }
 
   // Over hoeveel dagen de inner komt (T.INNER_INSTELLINGEN.komt), als dat binnen `binnen` dagen is; anders null.
-  function innerOver(S, binnen) {
+  function innerOver(D, binnen) {
     const komt = T.INNER_INSTELLINGEN.komt;
     for (let n = 1; n <= binnen; n++) {
-      const d = T.datumVanDag(dagNu(S) + n);
+      const d = T.datumVanDag(dagNu(D) + n);
       if (T.MAANDEN[d.maand].naam === komt.maand && d.dagVanMaand === komt.dag) return n;
     }
     return null;
   }
 
   // Van na Sint-Maarten tot 1 lentemaand, als er gezaaid wordt: de tijd waarin wat in een kelder ligt, niemand voedt.
-  function naSintMaarten(S) {
-    const d = T.datumVanDag(S.kalender.dag);
+  function naSintMaarten(D) {
+    const d = T.datumVanDag(D.kalender.dag);
     const sm = T.SINT_MAARTEN;
     return (d.maand === sm.maand && d.dagVanMaand > sm.dag) || d.maand > sm.maand || d.maand < maandIdx('lentemaand');
   }
 
   // Het hout of het eten (`voorDeWinter`: T.houtVoorDeWinter of T.etenVoorDeWinter) haalt de winter niet, en die
   // is binnen winterVooraf dagen, of al begonnen. Eerst de dagen tot de winter: dat is goedkoop, het eten niet.
-  const haaltHetNiet = (S, voorDeWinter) => T.dagenTotDeWinter(S.kalender.dag) <= IN().winterVooraf && !voorDeWinter(S, S.kalender.dag).haalt;
+  const haaltHetNiet = (D, voorDeWinter) => T.dagenTotDeWinter(D.kalender.dag) <= IN().winterVooraf && !voorDeWinter(D, D.kalender.dag).haalt;
   // Hoe ver het komt, zoals het dorp het zegt (js/behoeften.js): "26 van de 90 dagen". Zo weet je of één houthakker
   // genoeg is; de bouwer die alleen hoorde dat het niet genoeg was, bouwde er een na de ander (29 sep).
   const haalt = (v) => `${v.dagen} van de ${v.winter} dagen`;
 
   // De marskramer staat op het plein, op zijn laatste ronde vóór de heer komt (js/handel.js).
-  function marskramerInDeHerfst(S) {
-    const m = S.marskramer;
+  function marskramerInDeHerfst(D) {
+    const m = D.marskramer;
     return !!(m && m.staat && !m.weg && T.HANDEL_INSTELLINGEN.bezoeken[m.bezoek] && T.HANDEL_INSTELLINGEN.bezoeken[m.bezoek].naam === 'herfst');
   }
 
@@ -78,77 +78,77 @@
   T.RADEN = [
     {
       id: 'inner',
-      als: (S) => innerOver(S, IN().innerVooraf) != null,
-      tekst: (S) => `De inner komt ${over(innerOver(S, IN().innerVooraf))}. Wat hij niet ziet, telt de heer niet.`,
+      als: (D) => innerOver(D, IN().innerVooraf) != null,
+      tekst: (D) => `De inner komt ${over(innerOver(D, IN().innerVooraf))}. Wat hij niet ziet, telt de heer niet.`,
     },
     {
       id: 'heerGoud',
-      als: (S) => marskramerInDeHerfst(S) && (S.voorraad.goud || 0) < (T.eisVanDeHeer(S).per.goud || 0),
-      tekst: (S) => `De heer wil ${Math.ceil(T.eisVanDeHeer(S).per.goud)} goud, en je hebt er ${Math.floor(S.voorraad.goud || 0)}. De marskramer koopt graan, zolang hij er is.`,
+      als: (D) => marskramerInDeHerfst(D) && (D.voorraad.goud || 0) < (T.eisVanDeHeer(D).per.goud || 0),
+      tekst: (D) => `De heer wil ${Math.ceil(T.eisVanDeHeer(D).per.goud)} goud, en je hebt er ${Math.floor(D.voorraad.goud || 0)}. De marskramer koopt graan, zolang hij er is.`,
     },
     {
       id: 'rovers',
-      als: (S) => S.rovers && S.rovers.laatsteAanval != null && dagNu(S) - S.rovers.laatsteAanval < IN().roversNa && !heeft(S, 'wachthuis'),
+      als: (D) => D.rovers && D.rovers.laatsteAanval != null && dagNu(D) - D.rovers.laatsteAanval < IN().roversNa && !heeft(D, 'wachthuis'),
       tekst: () => `De rovers komen terug. Een wachthuis [B] geeft je ${T.telwoord(T.GEBOUWEN.wachthuis.handen)} man die meevechten.`,
     },
     {
       id: 'hout',
-      als: (S) => haaltHetNiet(S, T.houtVoorDeWinter),
-      tekst: (S) => `Het hout haalt ${haalt(T.houtVoorDeWinter(S, S.kalender.dag))} van de winter: ${heeft(S, 'houthakker') ? 'nog een houthakker [B] hakt erbij' : 'bouw een houthakker [B]'}.`,
+      als: (D) => haaltHetNiet(D, T.houtVoorDeWinter),
+      tekst: (D) => `Het hout haalt ${haalt(T.houtVoorDeWinter(D, D.kalender.dag))} van de winter: ${heeft(D, 'houthakker') ? 'nog een houthakker [B] hakt erbij' : 'bouw een houthakker [B]'}.`,
     },
     {
       id: 'eten',
-      als: (S) => haaltHetNiet(S, T.etenVoorDeWinter),
+      als: (D) => haaltHetNiet(D, T.etenVoorDeWinter),
       // Wat helpt, zegt het dorp ook (js/behoeften.js): een jager, als vlees een maag vult.
-      tekst: (S) => `Het eten haalt ${haalt(T.etenVoorDeWinter(S, S.kalender.dag))} van de winter${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? `: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag` : ''}.`,
+      tekst: (D) => `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? `: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag` : ''}.`,
     },
     {
       id: 'kelders',
-      als: (S) => naSintMaarten(S) && !(S.heer && S.heer.bezoek) && T.verstoptTotaal(S).graan >= 1,
-      tekst: (S) => `In de kelders ligt nog ${Math.floor(T.verstoptTotaal(S).graan)} graan. Dat eet niemand en zaait niemand.`,
+      als: (D) => naSintMaarten(D) && !(D.heer && D.heer.bezoek) && T.verstoptTotaal(D).graan >= 1,
+      tekst: (D) => `In de kelders ligt nog ${Math.floor(T.verstoptTotaal(D).graan)} graan. Dat eet niemand en zaait niemand.`,
     },
     {
       // Marcel koos het zo (vraag 67, B): de raad zegt het zodra er een voorval voorbijging dat een raadsman had
       // beslist (vraag 68, B: je was weg), en de knop Raadsman (R) opent het venster (js/raadsmanvenster.js).
       id: 'raadsman',
-      als: (S) => T.RAADSMAN_INSTELLINGEN.aan && !T.raadsmanVan(S) && S.voorvallen && S.voorvallen.laatstVoorbij != null
-        && dagNu(S) - S.voorvallen.laatstVoorbij < IN().raadsmanNa,
+      als: (D) => T.RAADSMAN_INSTELLINGEN.aan && !T.raadsmanVan(D) && D.voorvallen && D.voorvallen.laatstVoorbij != null
+        && dagNu(D) - D.voorvallen.laatstVoorbij < IN().raadsmanNa,
       tekst: () => 'Wat je mist als je weg bent, gaat voorbij: kies een raadsman [R].',
     },
     {
       id: 'tijd',
-      als: (S) => S.kalender.dag < 1 && !(S.kalender.snelheid > 1),
+      als: (D) => D.kalender.dag < 1 && !(D.kalender.snelheid > 1),
       tekst: () => 'Een dag duurt lang: [+] zet de tijd sneller, en [Z] is slapen tot de ochtend.',
     },
     {
       id: 'plaats',
-      als: (S) => mensenNodig(S) > 0 && T.waaromGeenGezin(S).includes('plaats'),
+      als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('plaats'),
       tekst: () => (T.ERVEN_INSTELLINGEN.dorpBouwtZelf
         ? 'Er komt geen gezin: het dorp is vol. Wijs een erf aan: [B], dan Erf.'
         : 'Er komt geen gezin: het dorp is vol. Bouw een hut of een huis: [B].'),
     },
     {
       id: 'tevreden',
-      als: (S) => mensenNodig(S) > 0 && T.waaromGeenGezin(S).includes('tevreden'),
-      tekst: (S) => `Er komt geen gezin: het dorp is ${Math.round(S.behoeften.tevredenheid * 100)}% tevreden, en een gezin wil ${Math.round(T.BEHOEFTEN_INSTELLINGEN.groeiDrempel * 100)}%.`,
+      als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('tevreden'),
+      tekst: (D) => `Er komt geen gezin: het dorp is ${Math.round(D.behoeften.tevredenheid * 100)}% tevreden, en een gezin wil ${Math.round(T.BEHOEFTEN_INSTELLINGEN.groeiDrempel * 100)}%.`,
     },
     {
       id: 'graan',
-      als: (S) => mensenNodig(S) > 0 && T.waaromGeenGezin(S).includes('graan'),
+      als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('graan'),
       tekst: () => `Er komt geen gezin: er ligt minder dan ${T.GEBOUWEN_INSTELLINGEN.graanBufferVoorGroei} graan.`,
     },
     {
       id: 'gezin',
-      als: (S) => mensenNodig(S) > 0,
-      tekst: (S) => `Het volgende gezin komt ${over(T.volgendeGezinDag(S) - dagNu(S))}.`,
+      als: (D) => mensenNodig(D) > 0,
+      tekst: (D) => `Het volgende gezin komt ${over(T.volgendeGezinDag(D) - dagNu(D))}.`,
     },
   ];
 
   // De raad van nu: { id, tekst }, of null. Alleen in het gehucht zelf (een wereld met een plein, waar de heer
   // komt), en niet als de spelregel hem uitzette.
-  T.raadNu = function (S) {
-    if (!IN().aan || !(S.wereld && S.wereld.plein) || !S.kalender || !S.voorraad) return null;
-    for (const r of T.RADEN) if (r.als(S)) return { id: r.id, tekst: r.tekst(S) };
+  T.raadNu = function (D) {
+    if (!IN().aan || !(D.wereld && D.wereld.plein) || !D.kalender || !D.voorraad) return null;
+    for (const r of T.RADEN) if (r.als(D)) return { id: r.id, tekst: r.tekst(D) };
     return null;
   };
 })(globalThis.Spel = globalThis.Spel || {});

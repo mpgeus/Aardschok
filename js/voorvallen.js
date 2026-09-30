@@ -147,10 +147,10 @@
     ramen: { soort: 'heer', titel: 'de belasting op ramen', pauze: 360 },
   };
 
-  const dagNu = (S) => Math.floor(S.kalender ? S.kalender.dag : 0);
+  const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
   // Een getal 0..1, vast per spel, per dag en per vraag `n` (zoals in js/rovers.js), zodat een speeltest met hetzelfde
   // zaad hetzelfde jaar speelt.
-  const lot = (S, dag, n) => T.dobbelsteen(((S.lot && S.lot.zaad) || 1) * 43 + Math.floor(dag) * 7919 + n)();
+  const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 43 + Math.floor(dag) * 7919 + n)();
   const bericht = (tekst, soort) => {
     if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
   };
@@ -174,14 +174,14 @@
   // ---------------------------------------------------------------------------------------------
 
   // Kan het over hem gaan? Hij woont hier, is er (niet weg, niet onderweg hierheen), en hoort niet bij de schout.
-  function kanHetBetreffen(S, p) {
-    return !!(p && S.bewoners && S.bewoners.mensen.includes(p)) && !p.schout && !(p.hoofd && p.hoofd.schout) && !p.weg && !p.komt;
+  function kanHetBetreffen(D, p) {
+    return !!(p && D.bewoners && D.bewoners.mensen.includes(p)) && !p.schout && !(p.hoofd && p.hoofd.schout) && !p.weg && !p.komt;
   }
   // Kan hij het je komen zeggen? En niets anders heeft hem nu: hij trekt niet weg, loopt niet met de militie mee
   // (js/rovers.js), en staat niet aan de schandpaal (js/heer.js).
-  function kanKomen(S, p) {
+  function kanKomen(D, p) {
     const e = p && p.wezen;
-    return kanHetBetreffen(S, p) && !!e && !e.dood && !e.vertrekt && !e.opgeroepen && !e.moetNaar;
+    return kanHetBetreffen(D, p) && !!e && !e.dood && !e.vertrekt && !e.opgeroepen && !e.moetNaar;
   }
   const isBoer = (p) => T.isBoer(p.wezen);
 
@@ -197,10 +197,10 @@
 
   // Wie het is: de eerste vraag uit een lijstje die iemand oplevert (zo gaat de heethoofd voor, en anders een man),
   // geloot uit wie past. Niet wie het al is, en niet uit zijn gezin.
-  function kies(S, vragen, dag, n, kan, naast) {
+  function kies(D, vragen, dag, n, kan, naast) {
     for (const vraag of elk(vragen)) {
-      const lijst = S.bewoners.mensen.filter((p) => kan(S, p) && past(p, vraag) && !(naast && (p === naast || p.gezin === naast.gezin)));
-      if (lijst.length) return lijst[Math.floor(lot(S, dag, n) * lijst.length)];
+      const lijst = D.bewoners.mensen.filter((p) => kan(D, p) && past(p, vraag) && !(naast && (p === naast || p.gezin === naast.gezin)));
+      if (lijst.length) return lijst[Math.floor(lot(D, dag, n) * lijst.length)];
     }
     return null;
   }
@@ -209,66 +209,66 @@
   // Welk voorval, en wanneer
   // ---------------------------------------------------------------------------------------------
 
-  const heeftGebouw = (S, soort) => (S.gebouwen || []).some((g) => g.soort === soort && g.klaar);
+  const heeftGebouw = (D, soort) => (D.gebouwen || []).some((g) => g.soort === soort && g.klaar);
 
   // Is het er de tijd voor (als, in T.VOORVALLEN)?
-  function tijdVoor(S, als, dag) {
+  function tijdVoor(D, als, dag) {
     const d = T.datumVanDag(dag);
     if (als.maanden && !elk(als.maanden).includes(T.MAANDEN[d.maand].naam)) return false;
     if (als.seizoen && !elk(als.seizoen).includes(d.seizoen)) return false;
-    if (als.trede && !T.tredeMinstens(S, als.trede)) return false;
-    if (!elk(als.gebouw).every((s) => heeftGebouw(S, s))) return false;
-    if (elk(als.nietGebouw).some((s) => heeftGebouw(S, s))) return false;
-    for (const [wat, n] of Object.entries(als.voorraad || {})) if (((S.voorraad && S.voorraad[wat]) || 0) < n) return false;
-    for (const [soort, n] of Object.entries(als.vee || {})) if (T.veeVan(S).filter((e) => e.dier === soort).length < n) return false;
-    return T.voorwaardeGeldt(S, null, als);
+    if (als.trede && !T.tredeMinstens(D, als.trede)) return false;
+    if (!elk(als.gebouw).every((s) => heeftGebouw(D, s))) return false;
+    if (elk(als.nietGebouw).some((s) => heeftGebouw(D, s))) return false;
+    for (const [wat, n] of Object.entries(als.voorraad || {})) if (((D.voorraad && D.voorraad[wat]) || 0) < n) return false;
+    for (const [soort, n] of Object.entries(als.vee || {})) if (T.veeVan(D).filter((e) => e.dier === soort).length < n) return false;
+    return T.voorwaardeGeldt(D, null, als);
   }
 
   // Kan dit voorval nu komen? Het is er de tijd voor, het was er niet te kort geleden, en er is iemand die het je komt
   // zeggen (en over wie het gaat). Geeft { wie, ander } of null. Een vervolg komt alleen na zijn eerste keer.
-  T.voorvalKan = function (S, id, dag) {
+  T.voorvalKan = function (D, id, dag) {
     const v = T.VOORVALLEN[id];
-    if (!v || v.vervolg || !T.GESPREKKEN[id] || !S.bewoners) return null;
-    const V = S.voorvallen || T.nieuweVoorvallen();
+    if (!v || v.vervolg || !T.GESPREKKEN[id] || !D.bewoners) return null;
+    const V = D.voorvallen || T.nieuweVoorvallen();
     const vorige = V.geweest[id];
     if (vorige != null && dag - vorige < (v.pauze != null ? v.pauze : IN().pauze)) return null;
-    if (!tijdVoor(S, v.als || {}, dag)) return null;
-    const wie = kies(S, v.wie || {}, dag, 11, kanKomen, null);
-    const ander = wie && v.ander ? kies(S, v.ander, dag, 13, kanHetBetreffen, wie) : null;
+    if (!tijdVoor(D, v.als || {}, dag)) return null;
+    const wie = kies(D, v.wie || {}, dag, 11, kanKomen, null);
+    const ander = wie && v.ander ? kies(D, v.ander, dag, 13, kanHetBetreffen, wie) : null;
     if (!wie || (v.ander && !ander)) return null;
     return { wie, ander };
   };
 
   // Welk voorval er vandaag komt: geloot naar gewicht, uit wat er nu kan. Geeft { id, wie, ander } of null.
-  T.kiesVoorval = function (S, dag) {
+  T.kiesVoorval = function (D, dag) {
     const winter = inWinter(dag);
     const kan = [];
     let som = 0;
     for (const id of Object.keys(T.VOORVALLEN)) {
       const v = T.VOORVALLEN[id];
       const gewicht = winter && v.winter != null ? v.winter : v.gewicht != null ? v.gewicht : 1;
-      const mensen = gewicht > 0 && T.voorvalKan(S, id, dag);
+      const mensen = gewicht > 0 && T.voorvalKan(D, id, dag);
       if (!mensen) continue;
       kan.push({ id, gewicht, wie: mensen.wie, ander: mensen.ander });
       som += gewicht;
     }
-    let r = lot(S, dag, 7) * som;
+    let r = lot(D, dag, 7) * som;
     for (const k of kan) if ((r -= k.gewicht) < 0) return k;
     return null;
   };
 
   // Om de hoeveel dagen het volgende komt: in de winter vaker, en nooit precies even vaak.
-  function tussen(S, dag) {
+  function tussen(D, dag) {
     const basis = inWinter(dag) ? IN().dagenTussenWinter : IN().dagenTussen;
     const s = IN().spreiding;
-    return Math.max(1, Math.round(basis * (1 - s + 2 * s * lot(S, dag, 19))));
+    return Math.max(1, Math.round(basis * (1 - s + 2 * s * lot(D, dag, 19))));
   }
 
   // Een voorval begint: wie het zegt, gaat je vandaag zoeken, vanaf een uur tussen zoektVanaf en zoektTot.
-  T.beginVoorval = function (S, id, wie, ander, dag) {
-    const V = S.voorvallen || (S.voorvallen = T.nieuweVoorvallen());
+  T.beginVoorval = function (D, id, wie, ander, dag) {
+    const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
     const d = Math.floor(dag);
-    const uur = IN().zoektVanaf + lot(S, d, 17) * (IN().zoektTot - IN().zoektVanaf);
+    const uur = IN().zoektVanaf + lot(D, d, 17) * (IN().zoektTot - IN().zoektVanaf);
     V.lopend = { id, wie, ander: ander || null, dag: d, vanaf: d + uur / 24, tot: d + IN().zoektDagen, gemeld: false, aangesproken: false };
     V.geweest[id] = d;
     V.aantal++;
@@ -277,23 +277,23 @@
 
   // Wie een vervolg zegt en over wie het gaat: dezelfde mensen als de eerste keer, of wat het vervolg vraagt ('ander':
   // hij komt het nu zelf zeggen; een vraag: iemand anders). Geeft { wie, ander }, of null als dat niet meer kan.
-  function mensenVanVervolg(S, w, dag) {
+  function mensenVanVervolg(D, w, dag) {
     const v = T.VOORVALLEN[w.id];
     const toen = { wie: w.wie, ander: w.ander };
-    const wie = typeof v.wie === 'string' ? toen[v.wie] : v.wie ? kies(S, v.wie, dag, 31, kanKomen, w.ander) : w.wie;
+    const wie = typeof v.wie === 'string' ? toen[v.wie] : v.wie ? kies(D, v.wie, dag, 31, kanKomen, w.ander) : w.wie;
     const ander = typeof v.ander === 'string' ? toen[v.ander] : w.ander;
-    if (!wie || !kanKomen(S, wie) || (ander && !kanHetBetreffen(S, ander))) return null;
+    if (!wie || !kanKomen(D, wie) || (ander && !kanHetBetreffen(D, ander))) return null;
     return { wie, ander };
   }
 
   // Het dorp neemt je iets kwalijk, of is je dankbaar: dat komt bij de tevredenheid (T.voorvalStemming), en slijt weg.
   // Besliste de raadsman (js/raadsman.js), dan heet het naar hem.
-  function stemming(S, procent, v, dag, door) {
+  function stemming(D, procent, v, dag, door) {
     const waarde = procent / 100;
     const eigen = waarde > 0 ? v.woorden && v.woorden.blij : v.woorden && v.woorden.last;
     const woorden = eigen || (door ? `wat ${naam(door)} besliste over ${v.titel}` : `je antwoord op ${v.titel}`);
-    S.voorvallen.stemming.push({ waarde, dag, woorden });
-    T.tevredenheidOpnieuw(S);
+    D.voorvallen.stemming.push({ waarde, dag, woorden });
+    T.tevredenheidOpnieuw(D);
   }
 
   // Wie je zocht, gaat weer zijns weegs: het dagritme neemt hem terug (T.dagAnker, js/dag.js).
@@ -304,10 +304,10 @@
   }
 
   // Het voorval is om, zonder dat iets het afmaakt: wie het zei, is weg of dood, of de spelregel staat uit.
-  function stop(S) {
-    const L = S.voorvallen.lopend;
+  function stop(D) {
+    const L = D.voorvallen.lopend;
     if (L && L.wie) laatLos(L.wie.wezen);
-    S.voorvallen.lopend = null;
+    D.voorvallen.lopend = null;
   }
 
   // Hij vond je niet, of je sprak hem niet aan: dan beslist de raadsman (js/raadsman.js). Is er geen, dan gaat het
@@ -316,51 +316,51 @@
   // dan gaat het voorbij, ook met een raadsman (werklijst vraag 68, Marcel: "Ja B inderdaad"), tenzij de spelregel
   // "Raadsman" hem ook dan laat beslissen (nietGesproken, js/raadsman.js). Had een raadsman hier beslist, en is er geen,
   // dan zegt de raad onder het doel het een tijd (js/raad.js): kies een raadsman.
-  function voorbij(S, dag) {
-    const weg = T.schoutIsWeg(S);
+  function voorbij(D, dag) {
+    const weg = T.schoutIsWeg(D);
     const raadsmanMag = weg || T.RAADSMAN_INSTELLINGEN.nietGesproken;
-    if (raadsmanMag && T.raadsmanBeslist(S)) return;
-    const L = S.voorvallen.lopend;
-    if (raadsmanMag) S.voorvallen.laatstVoorbij = Math.floor(dag);
+    if (raadsmanMag && T.raadsmanBeslist(D)) return;
+    const L = D.voorvallen.lopend;
+    if (raadsmanMag) D.voorvallen.laatstVoorbij = Math.floor(dag);
     bericht(`${T.hoofdletter(naam(L.wie))} heeft je niet gesproken, en gaat weer aan het werk.`);
-    stemming(S, IN().nietGevonden, { woorden: { last: weg ? 'een schout die er niet was' : 'een schout die geen tijd had' } }, dag);
-    stop(S);
+    stemming(D, IN().nietGevonden, { woorden: { last: weg ? 'een schout die er niet was' : 'een schout die geen tijd had' } }, dag);
+    stop(D);
   }
 
   // Elke dag (T.tikGebouwenDag, js/gebouwen.js): loopt er een voorval, dan komt wie het zei morgen terug, tot zijn
   // tijd om is; anders eerst een vervolg dat nu komt, en dan, als het de dag is, een nieuw voorval.
-  T.tikVoorvallenDag = function (S, dag) {
-    const V = S.voorvallen || (S.voorvallen = T.nieuweVoorvallen());
+  T.tikVoorvallenDag = function (D, dag) {
+    const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
     V.stemming = V.stemming.filter((s) => dag - s.dag < IN().stemmingDagen);
     const L = V.lopend;
-    if (!IN().aan || !S.bewoners) {
-      if (L) stop(S);
+    if (!IN().aan || !D.bewoners) {
+      if (L) stop(D);
       return;
     }
     if (L) {
-      if (!kanKomen(S, L.wie) || (L.ander && !kanHetBetreffen(S, L.ander))) stop(S);
-      else if (dag >= L.tot) voorbij(S, dag);
+      if (!kanKomen(D, L.wie) || (L.ander && !kanHetBetreffen(D, L.ander))) stop(D);
+      else if (dag >= L.tot) voorbij(D, dag);
       else L.aangesproken = false;
       return;
     }
     const i = V.wacht.findIndex((w) => w.op <= dag);
     if (i >= 0) {
       const w = V.wacht.splice(i, 1)[0];
-      const mensen = mensenVanVervolg(S, w, dag);
+      const mensen = mensenVanVervolg(D, w, dag);
       if (mensen) {
-        T.beginVoorval(S, w.id, mensen.wie, mensen.ander, dag);
+        T.beginVoorval(D, w.id, mensen.wie, mensen.ander, dag);
         return;
       }
     }
     if (V.volgende == null) V.volgende = IN().eersteNa;
     if (dag < V.volgende) return;
-    const k = T.kiesVoorval(S, dag);
+    const k = T.kiesVoorval(D, dag);
     if (!k) {
       V.volgende = dag + 1;
       return;
     }
-    T.beginVoorval(S, k.id, k.wie, k.ander, dag);
-    V.volgende = dag + tussen(S, dag);
+    T.beginVoorval(D, k.id, k.wie, k.ander, dag);
+    V.volgende = dag + tussen(D, dag);
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -369,8 +369,8 @@
 
   // Het voorval waarvoor dit wezen je zoekt, of null. Voor de klik (js/verkennen.js) en het uitroepteken
   // (js/tekenen.js).
-  T.voorvalVan = function (S, e) {
-    const L = S.voorvallen && S.voorvallen.lopend;
+  T.voorvalVan = function (D, e) {
+    const L = D.voorvallen && D.voorvallen.lopend;
     return L && e && e.zoektSchout && L.wie.wezen === e ? L : null;
   };
 
@@ -424,8 +424,8 @@
 
   // Je koos een antwoord dat het gesprek sluit (js/dialoog.js), of de raadsman deed het (`door`, js/raadsman.js): het
   // voorval is af, en wie het zei, gaat zijns weegs.
-  T.voorvalBeantwoord = function (S, id, door) {
-    const V = S.voorvallen;
+  T.voorvalBeantwoord = function (D, id, door) {
+    const V = D.voorvallen;
     if (!V || !V.lopend || V.lopend.id !== id) return;
     laatLos(V.lopend.wie.wezen);
     V.lopend = null;
@@ -439,43 +439,43 @@
 
   // Een gevolg (doe) van een antwoord, naast wat elk gesprek doet (T.doeGevolg, js/gesprek.js). Wie en ander zijn die
   // van het voorval van nu.
-  T.voorvalGevolg = function (S, doe) {
-    const V = S.voorvallen || (S.voorvallen = T.nieuweVoorvallen());
+  T.voorvalGevolg = function (D, doe) {
+    const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
     const L = V.lopend || {};
     const v = T.VOORVALLEN[L.id] || { titel: 'wat er gebeurde' };
-    const dag = dagNu(S);
-    for (const wat of WAREN) if (doe[wat]) T.wijzigVoorraad(S, wat, doe[wat]);
-    for (const soort of Object.keys(T.VEE)) if (doe[soort] < 0) T.verliesVee(S, soort, -doe[soort]);
-    if (doe.tevreden) stemming(S, doe.tevreden, v, dag, L.door);
-    if (doe.argwaan) T.zetArgwaan(S, doe.argwaan / 100, v.titel);
-    for (let i = 0; i < (doe.gezin || 0); i++) T.gezinKomt(S);
+    const dag = dagNu(D);
+    for (const wat of WAREN) if (doe[wat]) T.wijzigVoorraad(D, wat, doe[wat]);
+    for (const soort of Object.keys(T.VEE)) if (doe[soort] < 0) T.verliesVee(D, soort, -doe[soort]);
+    if (doe.tevreden) stemming(D, doe.tevreden, v, dag, L.door);
+    if (doe.argwaan) T.zetArgwaan(D, doe.argwaan / 100, v.titel);
+    for (let i = 0; i < (doe.gezin || 0); i++) T.gezinKomt(D);
     const verbannen = doe.verban && L[doe.verban];
-    if (verbannen && kanHetBetreffen(S, verbannen)) T.wijzigBevolking(S, -1, 'vertrek', 'verbannen door de schout', [verbannen]);
-    if (doe.sterfkans && lot(S, dag, 37 + V.aantal) < doe.sterfkans / 100) {
-      const wie = L.ander && kanHetBetreffen(S, L.ander) ? [L.ander] : undefined;
-      T.wijzigBevolking(S, -1, 'ziekte', v.sterft || T.hoofdletter(v.titel), wie);
+    if (verbannen && kanHetBetreffen(D, verbannen)) T.wijzigBevolking(D, -1, 'vertrek', 'verbannen door de schout', [verbannen]);
+    if (doe.sterfkans && lot(D, dag, 37 + V.aantal) < doe.sterfkans / 100) {
+      const wie = L.ander && kanHetBetreffen(D, L.ander) ? [L.ander] : undefined;
+      T.wijzigBevolking(D, -1, 'ziekte', v.sterft || T.hoofdletter(v.titel), wie);
     }
     if (doe.voorval && L.wie) {
       const lijst = elk(doe.voorval);
-      const id = lijst[Math.floor(lot(S, dag, 41 + V.aantal) * lijst.length)];
+      const id = lijst[Math.floor(lot(D, dag, 41 + V.aantal) * lijst.length)];
       const na = (T.VOORVALLEN[id] && T.VOORVALLEN[id].na) || [IN().vervolgVan, IN().vervolgTot];
-      if (T.VOORVALLEN[id]) V.wacht.push({ id, op: dag + na[0] + Math.floor(lot(S, dag, 43) * (na[1] - na[0] + 1)), wie: L.wie, ander: L.ander });
+      if (T.VOORVALLEN[id]) V.wacht.push({ id, op: dag + na[0] + Math.floor(lot(D, dag, 43) * (na[1] - na[0] + 1)), wie: L.wie, ander: L.ander });
     }
   };
 
   // Wat een antwoord kost of oplevert, voor het venster: { tekst, kan, waarom }. Wat eraf gaat, moet er zijn; wat
   // erbij komt, is er altijd. Een vervolg zegt het niet: dat is de verrassing.
-  T.prijsVanKeuze = function (S, doe) {
+  T.prijsVanKeuze = function (D, doe) {
     const uit = { tekst: '', kan: true, waarom: '' };
     if (!doe) return uit;
-    const L = (S.voorvallen && S.voorvallen.lopend) || {};
+    const L = (D.voorvallen && D.voorvallen.lopend) || {};
     const delen = [];
     const teken = (n) => (n > 0 ? '+' : '−');
     for (const wat of ['goud', ...WAREN]) {
       const n = doe[wat] || 0;
       if (!n) continue;
       delen.push(`${teken(n)}${Math.abs(n)} ${wat}`);
-      const heeft = Math.floor((S.voorraad ? S.voorraad[wat] : wat === 'goud' ? S.goud : 0) || 0);
+      const heeft = Math.floor((D.voorraad ? D.voorraad[wat] : wat === 'goud' ? D.goud : 0) || 0);
       if (n < 0 && heeft < -n && uit.kan) Object.assign(uit, { kan: false, waarom: `je hebt ${heeft} ${wat}` });
     }
     for (const soort of Object.keys(T.VEE)) {
@@ -488,7 +488,7 @@
     if (doe.verban && L[doe.verban]) delen.push(`${naam(L[doe.verban])} moet het bos in`);
     if (doe.gezin) {
       delen.push(doe.gezin === 1 ? 'een gezin erbij' : `${doe.gezin} gezinnen erbij`);
-      if (!T.plaatsVoorEenGezin(S) && uit.kan) Object.assign(uit, { kan: false, waarom: 'er is geen plaats: wijs een erf aan (B)' });
+      if (!T.plaatsVoorEenGezin(D) && uit.kan) Object.assign(uit, { kan: false, waarom: 'er is geen plaats: wijs een erf aan (B)' });
     }
     if (doe.sterfkans) delen.push(`${doe.sterfkans}% kans op een dode`);
     uit.tekst = delen.join(', ');
@@ -497,9 +497,9 @@
 
   // Wat de voorvallen aan de tevredenheid doen (T.berekenTevredenheid, js/behoeften.js): { erbij, last, blij }, zoals de
   // wetten (js/wetten.js). Een stemming slijt in stemmingDagen weg, zoals de wrok van de schandpaal (js/heer.js).
-  T.voorvalStemming = function (S, dag) {
+  T.voorvalStemming = function (D, dag) {
     const r = { erbij: 0, last: [], blij: [] };
-    for (const s of (S.voorvallen && S.voorvallen.stemming) || []) {
+    for (const s of (D.voorvallen && D.voorvallen.stemming) || []) {
       const w = s.waarde * Math.max(0, 1 - (dag - s.dag) / IN().stemmingDagen);
       if (!w) continue;
       r.erbij += w;
@@ -511,12 +511,12 @@
 
   // Wat het spel in een zin invult (js/gesprek.js, T.vulWoordenIn): wie het je komt zeggen, en over wie het gaat.
   T.GESPREK_WOORDEN = T.GESPREK_WOORDEN || {};
-  T.GESPREK_WOORDEN.wie = (S) => {
-    const L = S.voorvallen && S.voorvallen.lopend;
+  T.GESPREK_WOORDEN.wie = (D) => {
+    const L = D.voorvallen && D.voorvallen.lopend;
     return L ? naam(L.wie) : 'iemand';
   };
-  T.GESPREK_WOORDEN.ander = (S) => {
-    const L = S.voorvallen && S.voorvallen.lopend;
+  T.GESPREK_WOORDEN.ander = (D) => {
+    const L = D.voorvallen && D.voorvallen.lopend;
     return L && L.ander ? naam(L.ander) : 'iemand';
   };
 })(globalThis.Spel = globalThis.Spel || {});

@@ -165,21 +165,21 @@
   // vee en een bezoeker volgen hun eigen weg, en een man van de militie bij een aanval ook (opgeroepen: hij
   // loopt met de schout mee, js/rovers.js). Wie ergens anders moet zijn (moetNaar: de schandpaal,
   // js/heer.js), volgt dat en niet de dag, en wie de schout zoekt met een voorval ook (js/voorvallen.js).
-  T.dagAnker = function (S, e, oogst) {
-    if (!S || !S.kalender || !e || !e.thuis || e.moetNaar || e.opgeroepen || e.zoektSchout) return null;
+  T.dagAnker = function (D, e, oogst) {
+    if (!D || !D.kalender || !e || !e.thuis || e.moetNaar || e.opgeroepen || e.zoektSchout) return null;
     // Wie in de herberg logeert (de marskramer), zit er 's avonds en slaapt er (js/herberg.js).
-    const logies = T.logiesAnker ? T.logiesAnker(S, e) : null;
+    const logies = T.logiesAnker ? T.logiesAnker(D, e) : null;
     if (logies) return logies;
     const p = e.bewoner;
     if (!p && !e.werkAkkers) return null;
-    const deel = T.dagdeelVan(S.kalender.dag, oogst);
+    const deel = T.dagdeelVan(D.kalender.dag, oogst);
     if (deel === 'nacht') return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };
     // Wie wegtrekt, loopt overdag de weg af; wie nieuw is, loopt eerst naar zijn huis (js/bewoners.js,
     // T.werkBewonersBij).
     if (e.vertrekt) return { x: e.vertrekt.x, y: e.vertrekt.y, straal: 1 };
     const erf = { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
     // 's Avonds de herberg in, wie vanavond gaat (ook een boer, en de herbergierster zelf).
-    const herberg = deel === 'avond' && T.herbergAnker ? T.herbergAnker(S, e) : null;
+    const herberg = deel === 'avond' && T.herbergAnker ? T.herbergAnker(D, e) : null;
     if (herberg) return herberg;
     if (!p) return deel === 'ochtend' || deel === 'avond' ? erf : null;
     if (p.komt) return erf;
@@ -193,9 +193,9 @@
 
   // Komen de marskramer, de heer en de inner al? Overdag, vanaf het bezoekuur. Zonder kalender (een
   // toets) meteen.
-  T.isBezoektijd = function (S) {
-    if (!S || !S.kalender) return true;
-    return T.uurVanDag(S.kalender.dag) >= IN().bezoekUur;
+  T.isBezoektijd = function (D) {
+    if (!D || !D.kalender) return true;
+    return T.uurVanDag(D.kalender.dag) >= IN().bezoekUur;
   };
 
   // Een bezoeker komt aan: de marskramer (S.marskramer), de heer (S.heer.bezoek) of de inner
@@ -207,14 +207,14 @@
   // Hij komt overdag, vanaf het bezoekuur. De eerste keer dat hij er mag zijn, zegt het bericht dat
   // hij komt, en met naarGewoon gaat de tijd naar 1× (de heer en de inner: wie sneller speelt, ziet
   // hen anders nauwelijks komen). Geeft true zodra hij er mag zijn; zijn poppetje zet de module zelf.
-  T.bezoekerKomtAan = function (S, bezoek) {
+  T.bezoekerKomtAan = function (D, bezoek) {
     if (!bezoek) return false;
     if (bezoek.aangekomen) return true;
-    if (!bezoek.meteen && !T.isBezoektijd(S)) return false;
+    if (!bezoek.meteen && !T.isBezoektijd(D)) return false;
     bezoek.aangekomen = true;
     const a = bezoek.aankomst || {};
     if (a.tekst) bericht(a.tekst, a.soort);
-    if (a.naarGewoon) T.naarGewoneSnelheid(S);
+    if (a.naarGewoon) T.naarGewoneSnelheid(D);
     return true;
   };
 
@@ -224,9 +224,9 @@
 
   // Hoe ver de schout van zijn huis staat, in tegels tot de rand ervan (het huis met huis: 'schout'
   // in kaarten/gehucht.betekenis.json, door T.zetBestaandeGebouwen in S.gebouwen gezet).
-  function afstandTotHuis(S) {
-    const g = (S.gebouwen || []).find((x) => x.huis === 'schout');
-    const h = S.schout;
+  function afstandTotHuis(D) {
+    const g = (D.gebouwen || []).find((x) => x.huis === 'schout');
+    const h = D.schout;
     if (!g || !h) return Infinity;
     const voet = g.voet || { b: 1, h: 1 };
     const dx = Math.max(g.x - h.tx, 0, h.tx - (g.x + voet.b - 1));

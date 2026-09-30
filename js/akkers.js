@@ -102,12 +102,12 @@
   // mag het hele jaar door veranderen; het gaat pas in op 1 lentemaand. Wordt een weide iets anders,
   // dan moet zijn vee volgend jaar ergens heen: kan dat nergens, dan niet (js/vee.js, T.plaatsVoorVee,
   // met de reden erbij). Zonder vee (of zonder js/vee.js) is er niets om op te letten.
-  T.kanBestemming = function (S, veld, bestemming) {
+  T.kanBestemming = function (D, veld, bestemming) {
     if (!veld) return { kan: false, reden: 'Daar ligt geen veld.' };
     if (!T.BESTEMMINGEN.includes(bestemming)) return { kan: false, reden: 'Een veld is akker, weide of braak.' };
     if (T.planVan(veld) === bestemming) return { kan: false, reden: `Het wordt volgend jaar al ${bestemming}.` };
     if (T.planVan(veld) === 'weide' && T.plaatsVoorVee) {
-      const plaats = T.plaatsVoorVee(S, (v) => (v === veld ? bestemming : T.planVan(v)));
+      const plaats = T.plaatsVoorVee(D, (v) => (v === veld ? bestemming : T.planVan(v)));
       if (!plaats.past) return { kan: false, reden: plaats.reden };
     }
     return { kan: true, reden: null };
@@ -115,8 +115,8 @@
 
   // Het plan zetten, na dezelfde vraag. Geeft hetzelfde antwoord als T.kanBestemming. Wordt het veld
   // iets anders dan een akker, dan gaat de mest er weer af (T.kanMest).
-  T.zetPlan = function (S, veld, bestemming) {
-    const r = T.kanBestemming(S, veld, bestemming);
+  T.zetPlan = function (D, veld, bestemming) {
+    const r = T.kanBestemming(D, veld, bestemming);
     if (r.kan) {
       veld.plan = bestemming;
       if (bestemming !== 'akker') veld.mest = false;
@@ -132,7 +132,7 @@
   // Mag er mest op dit veld? Alleen op wat volgend jaar akker is: een weide mest zichzelf, en een
   // braak rust. En niet als de mest vanzelf gaat, of het land niet uitput (allebei de spelregels).
   // { kan, reden }, zoals T.kanBestemming.
-  T.kanMest = function (S, veld) {
+  T.kanMest = function (D, veld) {
     if (!veld) return { kan: false, reden: 'Daar ligt geen veld.' };
     if (!VIN().vruchtbaarheid) return { kan: false, reden: 'Het land put niet uit: dat staat uit in de spelregels.' };
     if (VIN().mestVanzelf) return { kan: false, reden: 'De mest gaat vanzelf over alle akkers: zo staat het in de spelregels.' };
@@ -143,20 +143,20 @@
   // Mest op dit veld (aan) of eraf (uit). Hij gaat mee met de wissel op 1 lentemaand, elk jaar
   // opnieuw, tot je hem eraf haalt; is er dan te weinig, dan krijgt het laatste veld een deel.
   // Uitzetten kan altijd. Geeft { kan, reden }.
-  T.zetMest = function (S, veld, aan) {
+  T.zetMest = function (D, veld, aan) {
     if (!aan) {
       if (veld) veld.mest = false;
       return { kan: true, reden: null };
     }
-    const r = T.kanMest(S, veld);
+    const r = T.kanMest(D, veld);
     if (r.kan) veld.mest = true;
     return r;
   };
 
   // Hoeveel mest de wissel vraagt: de velden met mest erop (of met de optie: alle akkers van
   // volgend jaar), en wat dat samen kost. { velden, nodig }.
-  T.mestPlan = function (S) {
-    const w = S && S.wereld;
+  T.mestPlan = function (D) {
+    const w = D && D.wereld;
     const akkers = ((w && w.akkers) || []).filter((v) => T.planVan(v) === 'akker');
     const velden = !VIN().vruchtbaarheid ? [] : VIN().mestVanzelf ? akkers : akkers.filter((v) => v.mest);
     return { velden, nodig: velden.reduce((n, v) => n + T.mestVoorVeld(v), 0) };
@@ -165,10 +165,10 @@
   // De mest van de wissel (T.wisselVelden): uit de voorraad op de velden van T.mestPlan. Per veld
   // in hun volgorde, zolang er is; het laatste krijgt wat er over is. Met de optie krijgt elke akker
   // hetzelfde deel. Geeft een Map veld → deel (0..1) van een volle mestbeurt.
-  function strooiMest(S) {
+  function strooiMest(D) {
     const deel = new Map();
-    const { velden, nodig } = T.mestPlan(S);
-    let heb = (S.voorraad && S.voorraad.mest) || 0;
+    const { velden, nodig } = T.mestPlan(D);
+    let heb = (D.voorraad && D.voorraad.mest) || 0;
     if (!velden.length || heb <= 0) {
       if (velden.length && T.ui && T.ui.bericht) T.ui.bericht('Er was geen mest voor de akkers die je koos.', 'gevaar');
       return deel;
@@ -188,7 +188,7 @@
         gebruikt += kost * f;
       }
     }
-    if (gebruikt > 0 && T.wijzigVoorraad) T.wijzigVoorraad(S, 'mest', -gebruikt);
+    if (gebruikt > 0 && T.wijzigVoorraad) T.wijzigVoorraad(D, 'mest', -gebruikt);
     if (T.ui && T.ui.bericht) {
       const vol = velden.filter((v) => (deel.get(v) || 0) >= 1 - 1e-9).length;
       T.ui.bericht(vol === velden.length
@@ -207,18 +207,18 @@
   // Is er volgend jaar geen enkele weide meer terwijl er wel vee is (dat laat T.kanBestemming niet
   // toe, maar een plan kan er ook buiten om komen), dan blijven de weides met vee weide: het vee
   // verdwijnt niet omdat een plan niet klopte. Geeft [{ veld, was, wordt, vruchtbaarheid }].
-  T.wisselVelden = function (S) {
-    const w = S.wereld;
+  T.wisselVelden = function (D) {
+    const w = D.wereld;
     if (!w || !w.akkers) return [];
     const IN = VIN();
-    const vee = T.weideVee ? T.weideVee(S) : []; // de schapen op de meent hebben geen weide nodig
+    const vee = T.weideVee ? T.weideVee(D) : []; // de schapen op de meent hebben geen weide nodig
     if (vee.length && !w.akkers.some((v) => T.planVan(v) === 'weide')) {
       for (const v of w.akkers) if (vee.some((e) => e.weide === v)) v.plan = 'weide';
       if (T.ui && T.ui.bericht) T.ui.bericht('Er zou geen weide meer zijn, maar het vee moet ergens grazen: de weide blijft weide.', 'gevaar');
     }
     const verslag = [];
     // De mest gaat op wat volgend jaar akker is, bovenop wat het veld het afgelopen jaar deed.
-    const mest = IN.vruchtbaarheid ? strooiMest(S) : new Map();
+    const mest = IN.vruchtbaarheid ? strooiMest(D) : new Map();
     for (const v of w.akkers) {
       const was = T.bestemmingVan(v);
       if (IN.vruchtbaarheid) {
@@ -231,7 +231,7 @@
       v.plan = v.bestemming;
       verslag.push({ veld: v, was, wordt: v.bestemming, vruchtbaarheid: v.vruchtbaarheid });
     }
-    if (T.verhuisVee) T.verhuisVee(S);
+    if (T.verhuisVee) T.verhuisVee(D);
     return verslag;
   };
 
@@ -559,7 +559,7 @@
   function boerVan(w, akker) {
     return (w.wezens || []).find((e) => !e.dood && e.werkAkkers && e.werkAkkers.includes(akker)) || null;
   }
-  T.boerVanVeld = (S, veld) => (S && S.wereld ? boerVan(S.wereld, veld) : null);
+  T.boerVanVeld = (D, veld) => (D && D.wereld ? boerVan(D.wereld, veld) : null);
 
   // Het vangnet (Marcel, 24 sep; ontwerp/spel.md, "Sint-Maarten"): wat op de eerste dag na de
   // oogsttijd nog op het veld staat, halen de boeren alsnog in één keer binnen. Tot 24 sep rotte
@@ -567,8 +567,8 @@
   // meer bleef staan: wie snel speelde, verloor graan zonder het te weten. Sinds de dag (26 sep)
   // loopt het maaien op de tijd van de wereld, en maakt de snelheid niets meer uit. Een akker zonder
   // boer rot nog wel: er is niemand om hem binnen te halen. Geeft het aantal tegels terug.
-  T.haalOogstBinnen = function (S) {
-    const w = S.wereld;
+  T.haalOogstBinnen = function (D) {
+    const w = D.wereld;
     if (!w || !w.akkers) return 0;
     let tegels = 0;
     let graan = 0;
@@ -582,8 +582,8 @@
         graan += T.oogstPerTegel(akker, boer); // vruchtbaar of uitgeput, groene vingers of slordig
       }
     }
-    if (tegels && S.voorraad && T.wijzigVoorraad) {
-      T.wijzigVoorraad(S, 'graan', graan);
+    if (tegels && D.voorraad && T.wijzigVoorraad) {
+      T.wijzigVoorraad(D, 'graan', graan);
       if (T.ui && T.ui.bericht) T.ui.bericht(`De boeren halen de rest van de oogst binnen: ${Math.round(graan)} graan.`, 'goed');
     }
     return tegels;
@@ -592,8 +592,8 @@
   // Het vangnet voor het hooi, op de eerste dag na hooitijd: wat er op een weide met een boer nog
   // staat, maaien de boeren alsnog in één keer. Zo bepaalt de snelheid van het spel ook hier alleen
   // wánneer het hooi binnenkomt, niet hoeveel. Geeft het aantal tegels terug.
-  T.haalHooiBinnen = function (S) {
-    const w = S.wereld;
+  T.haalHooiBinnen = function (D) {
+    const w = D.wereld;
     if (!w || !w.akkers) return 0;
     let tegels = 0;
     let hooi = 0;
@@ -608,8 +608,8 @@
       }
     }
     for (const e of w.wezens || []) if (e.maait && e.maait.hooi) e.maait = e.oogstDoel = null;
-    if (tegels && S.voorraad && T.wijzigVoorraad) {
-      T.wijzigVoorraad(S, 'hooi', hooi);
+    if (tegels && D.voorraad && T.wijzigVoorraad) {
+      T.wijzigVoorraad(D, 'hooi', hooi);
       if (T.ui && T.ui.bericht) T.ui.bericht(`De boeren halen de rest van het hooi binnen: ${Math.round(hooi)} hooi.`, 'goed');
     }
     return tegels;
@@ -619,10 +619,10 @@
   // van de velden en het slachten (js/hud.js), op dag `dag` (standaard vandaag). Alleen van de wissel
   // op 1 lentemaand tot en met hooitijd; daarna komt er dit jaar geen hooi meer bij. Een weide zonder
   // boer geeft niets.
-  T.verwachtHooi = function (S, dag) {
-    const w = S.wereld;
+  T.verwachtHooi = function (D, dag) {
+    const w = D.wereld;
     if (!w || !w.akkers || !hooien()) return 0;
-    const d = T.datumVanDag(dag != null ? dag : (S.kalender && S.kalender.dag) || 0);
+    const d = T.datumVanDag(dag != null ? dag : (D.kalender && D.kalender.dag) || 0);
     const nu = dagInJaar(d.maand, d.dagVanMaand);
     const begin = stadiumBegin('geploegd');
     const eind = dagInJaar(hooiMaand(), T.DAGEN_PER_MAAND);
@@ -642,8 +642,8 @@
   // en tekent als kale grond (T.akkerTegelStadium). Het ongezaaide stuk is het verste stuk van elke
   // akker, want T.akkerTegels telt vanaf zijn hoek. Alleen wat dit jaar akker is, wordt gezaaid en
   // kost zaaigraan: een weide of braak niet (25 sep). Geeft { tegels, gezaaid, ongezaaid, graan }.
-  T.zaaiAkkers = function (S) {
-    const w = S.wereld;
+  T.zaaiAkkers = function (D) {
+    const w = D.wereld;
     if (!w || !w.akkers || !w.akkers.length) return null;
     // Een nieuw jaar, voor elk veld: de oogst en het hooi van vorig jaar zijn vergeten.
     for (const a of w.akkers) {
@@ -658,7 +658,7 @@
     const maat = akkers.map((a) => a.b * a.h);
     const totaal = maat.reduce((n, m) => n + m, 0);
     const nodig = maat.reduce((n, m, i) => n + m * per[i], 0);
-    const heb = (S.voorraad && S.voorraad.graan) || 0;
+    const heb = (D.voorraad && D.voorraad.graan) || 0;
     // Elke akker zijn deel, naar beneden afgerond; wat er dan nog over is, hooguit één tegel per
     // akker erbij, op volgorde, zolang het graan het toelaat.
     const deel = nodig > 0 ? Math.min(1, heb / nodig) : 1;
@@ -676,7 +676,7 @@
         if (j >= gezaaid[i]) a.ongezaaid.add(sleutel(t.x, t.y));
       });
     });
-    if (kost > 0 && S.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(S, 'graan', -kost);
+    if (kost > 0 && D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'graan', -kost);
     if (T.ui && T.ui.bericht && totaal > 0) {
       if (kan < totaal) {
         T.ui.bericht(`Er is zaaigraan voor ${kan} van de ${totaal} akkertegels. De rest blijft dit jaar ongezaaid.`, 'gevaar');
@@ -698,23 +698,23 @@
   // zaaigoed de grond in brachten. Pas vanaf het tweede jaar kost zaaien graan uit de voorraad, en
   // pas dan wisselen de velden (T.wisselVelden): eerst de wissel, dan het zaaien, zodat alleen
   // gezaaid wordt wat dit jaar akker is.
-  T.tikAkkersDag = function (S, dag) {
-    const w = S.wereld;
+  T.tikAkkersDag = function (D, dag) {
+    const w = D.wereld;
     if (!w || !w.akkers || !w.akkers.length) return;
     const d = T.datumVanDag(dag);
     const nu = dagInJaar(d.maand, d.dagVanMaand);
     if (dag >= T.DAGEN_PER_JAAR && nu === stadiumBegin('geploegd')) {
-      T.wisselVelden(S);
-      T.zaaiAkkers(S);
+      T.wisselVelden(D);
+      T.zaaiAkkers(D);
     }
-    if (nu === stadiumBegin('gemaaid')) T.haalOogstBinnen(S);
+    if (nu === stadiumBegin('gemaaid')) T.haalOogstBinnen(D);
     // Het hooi: op de eerste dag van hooitijd een woord vooraf, en op de eerste dag erna het vangnet.
     if (hooien() && d.dagVanMaand === 1) {
       const weides = w.akkers.some((v) => T.bestemmingVan(v) === 'weide');
       if (d.maand === hooiMaand() && weides && T.ui && T.ui.bericht) {
         T.ui.bericht(`Het is ${T.MAANDEN[d.maand].naam}: de boeren maaien eerst het hooi van de weides, en dan het graan.`);
       }
-      if (d.maand === (hooiMaand() + 1) % 12) T.haalHooiBinnen(S);
+      if (d.maand === (hooiMaand() + 1) % 12) T.haalHooiBinnen(D);
     }
   };
 })(globalThis.Spel = globalThis.Spel || {});

@@ -444,23 +444,23 @@
   // keuze ligt vast tot hij gebouwd is (S.volgendeTekening), zodat het spookbeeld van het bouwmenu de
   // voet laat zien die er echt komt. T.neemTekening zegt dat hij gebouwd is: de volgende wordt een
   // andere.
-  T.volgendeTekening = function (S, soort) {
+  T.volgendeTekening = function (D, soort) {
     const g = T.GEBOUWEN[soort];
     if (!g) return null;
     const lijst = g.tekeningen && g.tekeningen.length ? g.tekeningen : null;
     if (!lijst) return g.tekening || null;
-    const volgende = S.volgendeTekening || (S.volgendeTekening = {});
+    const volgende = D.volgendeTekening || (D.volgendeTekening = {});
     if (!lijst.includes(volgende[soort])) {
-      const vorige = S.vorigeTekening && S.vorigeTekening[soort];
+      const vorige = D.vorigeTekening && D.vorigeTekening[soort];
       const kan = lijst.length > 1 ? lijst.filter((t) => t !== vorige) : lijst;
       volgende[soort] = kan[Math.floor(Math.random() * kan.length)];
     }
     return volgende[soort];
   };
-  T.neemTekening = function (S, soort) {
-    const t = T.volgendeTekening(S, soort);
-    (S.vorigeTekening || (S.vorigeTekening = {}))[soort] = t;
-    if (S.volgendeTekening) delete S.volgendeTekening[soort];
+  T.neemTekening = function (D, soort) {
+    const t = T.volgendeTekening(D, soort);
+    (D.vorigeTekening || (D.vorigeTekening = {}))[soort] = t;
+    if (D.volgendeTekening) delete D.volgendeTekening[soort];
     return t;
   };
 
@@ -468,13 +468,13 @@
   // Geld en goederen
   // ---------------------------------------------------------------------------------------------
 
-  T.kanBetalen = function (S, kosten) {
-    for (const wat in kosten) if ((S.voorraad[wat] || 0) < kosten[wat]) return false;
+  T.kanBetalen = function (D, kosten) {
+    for (const wat in kosten) if ((D.voorraad[wat] || 0) < kosten[wat]) return false;
     return true;
   };
 
-  T.betaalKosten = function (S, kosten) {
-    for (const wat in kosten) T.wijzigVoorraad(S, wat, -kosten[wat]);
+  T.betaalKosten = function (D, kosten) {
+    for (const wat in kosten) T.wijzigVoorraad(D, wat, -kosten[wat]);
   };
 
   // Het seizoen van een dag (js/tijd.js), of null zonder dag: dan ligt er ook niets stil vanwege het
@@ -487,20 +487,20 @@
   // (0..1) en wat dat aan harder werken geeft (factor, 1 is niets extra). Leest g.handen van
   // vandaag, dus pas na stap 5 van T.tikGebouwenDag; ook voor de balk (js/hud.js), die bij het
   // gereedschap zegt hoeveel handen het dekt.
-  T.gereedschapDekking = function (S, seizoen) {
+  T.gereedschapDekking = function (D, seizoen) {
     const IN = T.GEBOUWEN_INSTELLINGEN;
-    const nu = seizoen !== undefined ? seizoen : seizoenVan(S.kalender && S.kalender.dag);
+    const nu = seizoen !== undefined ? seizoen : seizoenVan(D.kalender && D.kalender.dag);
     let handen = 0;
-    for (const g of S.gebouwen || []) {
+    for (const g of D.gebouwen || []) {
       const soort = T.GEBOUWEN[g.soort];
       if (!g.klaar || !soort || !soort.maakt || !(g.handen > 0)) continue;
       // Wie niets te bewerken heeft (een smidse zonder ijzer) of in dit seizoen stilligt (de
       // visser als de beek dichtligt), gebruikt ook geen gereedschap.
-      if (soort.maakt.in && Object.keys(soort.maakt.in).some((wat) => !((S.voorraad || {})[wat] > 0))) continue;
+      if (soort.maakt.in && Object.keys(soort.maakt.in).some((wat) => !((D.voorraad || {})[wat] > 0))) continue;
       if (soort.stilIn && nu && soort.stilIn[nu]) continue;
       handen += g.handen;
     }
-    const heeft = (S.voorraad && S.voorraad.gereedschap) || 0;
+    const heeft = (D.voorraad && D.voorraad.gereedschap) || 0;
     const dekking = handen > 0 ? Math.min(1, heeft / handen) : 0;
     return { handen, heeft, dekking, factor: 1 + IN.gereedschapBonus * dekking };
   };
@@ -509,8 +509,8 @@
   // stond (T.zetBestaandeGebouwen): dat heeft geen eigen voorwerp, maar wel een voet uit het
   // betekenisbestand. Die telden hier eerst niet mee (ze maken niets, dus ze staan ook nooit
   // stil), maar sinds 25 sep kun je er iets in verstoppen (js/verstoppen.js).
-  T.gebouwOp = function (S, x, y) {
-    for (const g of S.gebouwen || []) {
+  T.gebouwOp = function (D, x, y) {
+    for (const g of D.gebouwen || []) {
       const v = g.voorwerp;
       const voet = v && v.beslaat ? { x: v.x, y: v.y, b: v.beslaat[0], h: v.beslaat[1] } : g.voet ? { x: g.x, y: g.y, b: g.voet.b, h: g.voet.h } : null;
       if (!voet) continue;
@@ -525,19 +525,19 @@
   // Per soort wat er bij de muis nog achter komt, van een bestand dat meer over dat gebouw weet:
   // T.GEBOUW_ERBIJ.herberg = (S, g) => 'vanavond 4 gasten; 23 bier.' (js/herberg.js).
   T.GEBOUW_ERBIJ = T.GEBOUW_ERBIJ || {};
-  T.gebouwToestand = function (S, g) {
+  T.gebouwToestand = function (D, g) {
     const soort = T.GEBOUWEN[g.soort];
     if (!soort) return '';
-    const zin = toestandZin(S, g, soort);
+    const zin = toestandZin(D, g, soort);
     // Wat er verder in dit gebouw gebeurt, als een ander bestand dat weet: in de herberg hoeveel gasten
     // er vanavond zijn, en het bier (js/herberg.js).
-    const meer = g.klaar && T.GEBOUW_ERBIJ && T.GEBOUW_ERBIJ[g.soort] ? T.GEBOUW_ERBIJ[g.soort](S, g) : '';
+    const meer = g.klaar && T.GEBOUW_ERBIJ && T.GEBOUW_ERBIJ[g.soort] ? T.GEBOUW_ERBIJ[g.soort](D, g) : '';
     return meer ? `${zin} ${T.hoofdletter(meer)}` : zin;
   };
-  function toestandZin(S, g, soort) {
+  function toestandZin(D, g, soort) {
     const naam = T.hoofdletter(soort.naam);
     if (!g.klaar) {
-      const dagNu = S.kalender ? Math.floor(S.kalender.dag) : 0;
+      const dagNu = D.kalender ? Math.floor(D.kalender.dag) : 0;
       const nog = Math.max(1, g.klaarOp - dagNu);
       return `${naam}: in aanbouw, nog ${nog} dag${nog === 1 ? '' : 'en'}.`;
     }
@@ -573,10 +573,10 @@
   // erf: tot dan kon een werkplaats midden op een akker staan. Een erf heeft een eigen regel
   // (T.waaromPastErfNiet, js/erven.js). Het bouwmenu laat de reden zien bij de muis en na een klik
   // (js/main.js).
-  T.waaromPastHetNiet = function (S, soort, x, y) {
-    if (T.GEBOUWEN[soort] && T.GEBOUWEN[soort].erf) return T.waaromPastErfNiet(S, x, y);
-    const voet = T.gebouwVoet(soort, T.volgendeTekening(S, soort));
-    const w = S.wereld;
+  T.waaromPastHetNiet = function (D, soort, x, y) {
+    if (T.GEBOUWEN[soort] && T.GEBOUWEN[soort].erf) return T.waaromPastErfNiet(D, x, y);
+    const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort));
+    const w = D.wereld;
     if (!voet || !w) return 'Daar past het niet.';
     let vast = false;
     let reden = null;
@@ -584,7 +584,7 @@
       for (let dx = 0; dx < voet.b; dx++) {
         if (T.opHetPlein(w, x + dx, y + dy)) return 'Op het plein wordt niet gebouwd.';
         if (T.isVast(w, x + dx, y + dy)) vast = true;
-        else reden = reden || T.waaromNietOpDezeGrond(S, x + dx, y + dy);
+        else reden = reden || T.waaromNietOpDezeGrond(D, x + dx, y + dy);
       }
     }
     return vast ? 'Daar past het niet.' : reden;
@@ -593,11 +593,11 @@
   // Of er op deze tegel gebouwd mag worden, voor een gebouw en voor een erf: niet op een akker of weide
   // (T.veldOp, js/akkers.js), niet op een pad (T.opPad, js/wereld.js), en niet op een erf (T.erfOp,
   // js/erven.js). Geeft de reden, of null.
-  T.waaromNietOpDezeGrond = function (S, x, y) {
-    const w = S.wereld;
+  T.waaromNietOpDezeGrond = function (D, x, y) {
+    const w = D.wereld;
     if (T.veldOp(w, x, y)) return 'Daar ligt een veld.';
     if (T.opPad(w, x, y)) return 'Daar loopt een pad.';
-    if (T.erfOp(S, x, y)) return 'Daar ligt een erf.';
+    if (T.erfOp(D, x, y)) return 'Daar ligt een erf.';
     return null;
   };
 
@@ -605,16 +605,16 @@
   // dorp ook de put en de kapel van het gehucht; js/treden.js), behalve wat een eigen manier van
   // neerzetten heeft (menu: false). Bouwt het dorp zelf (js/erven.js, de spelregel "Huizen"), dan staat
   // het erf erin en de woningen niet; anders andersom.
-  T.inBouwmenu = function (S, soort) {
+  T.inBouwmenu = function (D, soort) {
     const g = T.GEBOUWEN[soort];
-    const vrij = T.GEBOUW_TREDEN.indexOf(g && g.trede) <= T.GEBOUW_TREDEN.indexOf(S.trede);
+    const vrij = T.GEBOUW_TREDEN.indexOf(g && g.trede) <= T.GEBOUW_TREDEN.indexOf(D.trede);
     if (!g || !vrij || g.menu === false) return false;
     const zelf = T.ERVEN_INSTELLINGEN.dorpBouwtZelf;
     if (g.erf) return zelf;
     if (g.woning) return !zelf;
     return true;
   };
-  T.gebouwPast = (S, soort, x, y) => !T.waaromPastHetNiet(S, soort, x, y);
+  T.gebouwPast = (D, soort, x, y) => !T.waaromPastHetNiet(D, soort, x, y);
 
   // Eén keer aan T.VOORWERPEN toevoegen, zoals kaart.js dat doet voor een tegel uit Tiled: hij
   // blokkeert altijd zijn voet (dat ís zijn voet immers al in de tegelslaag hieronder), en het
@@ -645,9 +645,9 @@
   // heeft, zie T.bouwFaseIndex hierboven en T.sprites.bouwfase in js/sprites.js), zodat de speler
   // ziet waar hij bezig is; T.tikGebouwenDag zet dat om zodra de bouwtijd om is, op hetzelfde
   // voorwerp, dus zonder dat er ooit een tweede bij komt.
-  function zetGebouwVoorwerp(S, instantie) {
+  function zetGebouwVoorwerp(D, instantie) {
     const g = T.GEBOUWEN[instantie.soort];
-    const w = S.wereld;
+    const w = D.wereld;
     const tekening = instantie.tekening || g.tekening;
     const opz = tekening && T.opzoekTegelNaam(tekening);
     const voet = instantie.voet || T.gebouwVoet(instantie.soort, tekening) || { b: 1, h: 1 };
@@ -681,31 +681,31 @@
   // { gelukt, reden } terug (reden alleen als het niet lukte), zodat de aanroeper kan zeggen
   // waarom een klik niets deed — dezelfde vorm als handelingVerkennen/handelingGevecht
   // (CLAUDE.md, "Scherm en klik stellen dezelfde vraag").
-  T.plaatsGebouw = function (S, soort, x, y) {
+  T.plaatsGebouw = function (D, soort, x, y) {
     const g = T.GEBOUWEN[soort];
     if (!g || g.menu === false) return { gelukt: false, reden: 'Dat kan niet via het bouwmenu.' };
     // Een erf is land, geen gebouw: het krijgt geen voorwerp en maakt de grond niet vast (js/erven.js).
-    if (g.erf) return T.legErfAan(S, x, y);
-    const past = T.waaromPastHetNiet(S, soort, x, y);
+    if (g.erf) return T.legErfAan(D, x, y);
+    const past = T.waaromPastHetNiet(D, soort, x, y);
     if (past) return { gelukt: false, reden: past };
-    if (!T.kanBetalen(S, g.kosten)) return { gelukt: false, reden: 'Daar is de voorraad niet groot genoeg voor.' };
-    T.betaalKosten(S, g.kosten);
-    const dagNu = S.kalender ? Math.floor(S.kalender.dag) : 0;
+    if (!T.kanBetalen(D, g.kosten)) return { gelukt: false, reden: 'Daar is de voorraad niet groot genoeg voor.' };
+    T.betaalKosten(D, g.kosten);
+    const dagNu = D.kalender ? Math.floor(D.kalender.dag) : 0;
     // Zijn eigen tekening en de voet die daarbij hoort (T.volgendeTekening): een hut is niet elke hut.
-    const tekening = T.neemTekening(S, soort);
+    const tekening = T.neemTekening(D, soort);
     const voet = T.gebouwVoet(soort, tekening);
     const instantie = { soort, x, y, tekening, voet, klaar: g.bouwtijd <= 0, klaarOp: dagNu + g.bouwtijd, handen: 0, voorwerp: null };
-    T.bouwGebouw(S, instantie);
+    T.bouwGebouw(D, instantie);
     return { gelukt: true, instantie, bericht: `${T.hoofdletter(g.naam)} in aanbouw (${g.bouwtijd} dag${g.bouwtijd === 1 ? '' : 'en'}).` };
   };
 
   // Een gebouw in het dorp zetten: in S.gebouwen, met zijn voorwerp op de kaart (zetGebouwVoorwerp
   // hierboven). Voor wat de speler neerzet (T.plaatsGebouw) en voor de hut die een gezin op zijn erf
   // zet (T.zetHutOpErf, js/erven.js): één manier voor allebei.
-  T.bouwGebouw = function (S, instantie) {
-    S.gebouwen.push(instantie);
-    zetGebouwVoorwerp(S, instantie);
-    if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
+  T.bouwGebouw = function (D, instantie) {
+    D.gebouwen.push(instantie);
+    zetGebouwVoorwerp(D, instantie);
+    if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(D);
     return instantie;
   };
 
@@ -716,8 +716,8 @@
   // de boekhouding: woonruimte, en straks handen. Hoeveel mensen er wonen, zegt de kaart
   // ("beginBevolking": in het gehucht 25, ook al is er plaats voor meer; Marcel koos het op 26 sep,
   // vraag 31); zegt hij niets, dan staan de huizen vol.
-  T.zetBestaandeGebouwen = function (S) {
-    const w = S.wereld;
+  T.zetBestaandeGebouwen = function (D) {
+    const w = D.wereld;
     if (!w || !w.gebouwenOpKaart || !w.gebouwenOpKaart.length) return;
     let woonruimte = 0;
     for (const d of w.gebouwenOpKaart) {
@@ -730,21 +730,21 @@
       // En wie er woont (`huis`, de boer met dezelfde id of de schout): dat telt voor zijn kelder
       // (js/verstoppen.js). In een gewoon huis zegt `bewoners` wie er bij het begin woont
       // (T.zetBeginBewoners, js/bewoners.js). En `tekening` weet waar de deur is (T.deurVan).
-      S.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, tekening: d.tekening || null, klaar: true, klaarOp: 0, handen: 0, voorwerp: null, huis: d.huis || null, bewoners: d.bewoners || null });
+      D.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, tekening: d.tekening || null, klaar: true, klaarOp: 0, handen: 0, voorwerp: null, huis: d.huis || null, bewoners: d.bewoners || null });
       woonruimte += g.woonruimte || 0;
     }
     // De boeren die je ziet lopen, wonen al in hun huis. Wie er verder woont, zet T.zetBeginBewoners
     // (js/bewoners.js) straks, als de boeren hun karakter hebben.
-    T.wijzigBevolking(S, w.beginBevolking != null ? Math.min(w.beginBevolking, woonruimte) : woonruimte, 'begin');
-    S.woonruimte = woonruimte;
-    if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
+    T.wijzigBevolking(D, w.beginBevolking != null ? Math.min(w.beginBevolking, woonruimte) : woonruimte, 'begin');
+    D.woonruimte = woonruimte;
+    if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(D);
   };
 
   // Woonruimte: de som van wat elk klaar gebouw geeft, en van de hut op een erf die nog oprijst: daar woont
   // zijn gezin al (js/erven.js). Een huis dat jij neerzet, telt pas als het klaar is.
-  T.telWoonruimte = function (S) {
+  T.telWoonruimte = function (D) {
     let woonruimte = 0;
-    for (const g of S.gebouwen) if (g.klaar || g.erf) woonruimte += T.GEBOUWEN[g.soort].woonruimte || 0;
+    for (const g of D.gebouwen) if (g.klaar || g.erf) woonruimte += T.GEBOUWEN[g.soort].woonruimte || 0;
     return woonruimte;
   };
 
@@ -754,11 +754,11 @@
   // 'vertrek'; `waarom` is het begin van het bericht dat zegt wie het zijn ("De winter is hard"). `wie`: als het
   // om bepaalde mensen gaat (een wachter die sneuvelt tegen de rovers, js/rovers.js), wie dat zijn.
   // Geeft terug hoeveel het echt veranderde.
-  T.wijzigBevolking = function (S, verschil, reden, waarom, wie) {
-    const voor = S.bevolking || 0;
-    S.bevolking = Math.max(0, voor + verschil);
-    const echt = S.bevolking - voor;
-    if (echt && T.bewonersVolgen) T.bewonersVolgen(S, echt, reden, waarom, wie);
+  T.wijzigBevolking = function (D, verschil, reden, waarom, wie) {
+    const voor = D.bevolking || 0;
+    D.bevolking = Math.max(0, voor + verschil);
+    const echt = D.bevolking - voor;
+    if (echt && T.bewonersVolgen) T.bewonersVolgen(D, echt, reden, waarom, wie);
     return echt;
   };
 
@@ -766,9 +766,9 @@
   // stonden, dan wie het eerst gebouwd is ("op volgorde", ontwerp/werklijst.md punt 2). Hoeveel
   // handen er zijn: wie kan werken (T.werkendeHanden, js/bewoners.js: geen kleuter, en de schout
   // niet). Wíé er werkt, zegt daarna T.wijsWerkToe.
-  T.verdeelHanden = function (S) {
-    let vrij = T.werkendeHanden(S);
-    for (const g of S.gebouwen) {
+  T.verdeelHanden = function (D) {
+    let vrij = T.werkendeHanden(D);
+    for (const g of D.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
       if (!g.klaar || !soort.handen) {
         g.handen = 0;
@@ -777,49 +777,49 @@
       g.handen = Math.min(soort.handen, vrij);
       vrij -= g.handen;
     }
-    T.wijsWerkToe(S);
+    T.wijsWerkToe(D);
   };
 
   // Er komt een gezin: in een huis met plaats, en is het dorp vol, dan neemt het een vrij erf en zet het er zelf een
   // hut op, of zegt het dat er geen plaats is (js/erven.js). Voor de groei (T.tikGebouwenDag, stap 4) en een voorval
   // (js/voorvallen.js: vreemdelingen die willen blijven).
-  T.gezinKomt = function (S) {
-    const woonruimte = T.telWoonruimte(S);
-    if (S.bevolking < woonruimte) T.wijzigBevolking(S, Math.min(woonruimte, S.bevolking + T.GEBOUWEN_INSTELLINGEN.gezinGrootte) - S.bevolking, 'groei');
-    else T.gezinZoektEenErf(S);
+  T.gezinKomt = function (D) {
+    const woonruimte = T.telWoonruimte(D);
+    if (D.bevolking < woonruimte) T.wijzigBevolking(D, Math.min(woonruimte, D.bevolking + T.GEBOUWEN_INSTELLINGEN.gezinGrootte) - D.bevolking, 'groei');
+    else T.gezinZoektEenErf(D);
   };
   // Is er plaats voor een gezin: een huis met plaats, of een vrij erf?
-  T.plaatsVoorEenGezin = (S) => (S.bevolking || 0) < T.telWoonruimte(S) || T.kanEenErfNemen(S);
+  T.plaatsVoorEenGezin = (D) => (D.bevolking || 0) < T.telWoonruimte(D) || T.kanEenErfNemen(D);
 
   // Om de hoeveel dagen er een nieuw gezin kan komen: gezinDagen, en met de wet Vreemden welkom vaker
   // (js/wetten.js).
-  T.gezinDagen = (S) => Math.max(1, Math.round(T.GEBOUWEN_INSTELLINGEN.gezinDagen / T.wetFactor(S, 'gezinnen')));
+  T.gezinDagen = (D) => Math.max(1, Math.round(T.GEBOUWEN_INSTELLINGEN.gezinDagen / T.wetFactor(D, 'gezinnen')));
 
   // De eerstvolgende dag waarop er een gezin kan komen (T.tikGebouwenDag, stap 4): na vandaag, want die dag is al
   // geteld.
-  T.volgendeGezinDag = function (S) {
-    const n = T.gezinDagen(S);
-    return (Math.floor(Math.floor((S.kalender && S.kalender.dag) || 0) / n) + 1) * n;
+  T.volgendeGezinDag = function (D) {
+    const n = T.gezinDagen(D);
+    return (Math.floor(Math.floor((D.kalender && D.kalender.dag) || 0) / n) + 1) * n;
   };
 
   // Waarom er nu geen gezin kan komen, als lijst: 'graan' (minder dan de buffer in de voorraad), 'tevreden' (onder
   // de drempel, js/behoeften.js) en 'plaats' (geen huis met plaats en geen vrij erf, js/erven.js). Een lege lijst
   // als het kan. De groei vraagt het (T.tikGebouwenDag, stap 4), en de raad linksboven ook (js/raad.js), zodat die
   // zegt wat de groei doet en niet wat hij zelf denkt.
-  T.waaromGeenGezin = function (S) {
+  T.waaromGeenGezin = function (D) {
     const waarom = [];
-    if ((S.voorraad.graan || 0) < T.GEBOUWEN_INSTELLINGEN.graanBufferVoorGroei) waarom.push('graan');
-    if (S.behoeften && S.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.groeiDrempel) waarom.push('tevreden');
-    if ((S.bevolking || 0) >= T.telWoonruimte(S) && !T.kanEenErfNemen(S)) waarom.push('plaats');
+    if ((D.voorraad.graan || 0) < T.GEBOUWEN_INSTELLINGEN.graanBufferVoorGroei) waarom.push('graan');
+    if (D.behoeften && D.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.groeiDrempel) waarom.push('tevreden');
+    if ((D.bevolking || 0) >= T.telWoonruimte(D) && !T.kanEenErfNemen(D)) waarom.push('plaats');
     return waarom;
   };
 
   // Wat een gebouw per dag maakt als het helemaal bezet is (T.GEBOUWEN[x].maakt.uit), met wat de wetten erbij
   // doen: wie in het bos van de heer hakt (bos), hakt met de wet Houtkap meer (js/wetten.js). Of null.
-  T.maaktUit = function (S, soort) {
+  T.maaktUit = function (D, soort) {
     const uit = soort.maakt && soort.maakt.uit;
     if (!uit || !soort.bos) return uit || null;
-    const f = T.wetFactor(S, 'hout');
+    const f = T.wetFactor(D, 'hout');
     if (f === 1) return uit;
     const r = {};
     for (const wat in uit) r[wat] = uit[wat] * f;
@@ -832,81 +832,81 @@
 
   // Eén dag bijwerken. Losstaand van T.werkGebouwenBij hieronder (die roept dit per verstreken
   // dag aan) zodat hij ook in een toets in één keer op een vaste dag te proberen is.
-  T.tikGebouwenDag = function (S, dag) {
+  T.tikGebouwenDag = function (D, dag) {
     const IN = T.GEBOUWEN_INSTELLINGEN;
     // 0. De akkers (js/akkers.js): zaaien op 1 lentemaand, en het vangnet na de oogsttijd. Als
     // eerste: de boeren zaaien 's morgens, en daarna eet het dorp van wat er over is.
-    T.tikAkkersDag(S, dag);
+    T.tikAkkersDag(D, dag);
     // Het vee (js/vee.js): jongen op 1 grasmaand, en de melk van vandaag. Ná de akkers, want op 1
     // lentemaand verhuist het vee daar naar zijn nieuwe weide; vóór de behoeften, want het dorp eet
     // de melk van vandaag als eerste (stap 3), en de tevredenheid moet hem dus al zien.
-    T.tikVeeDag(S, dag);
+    T.tikVeeDag(D, dag);
     // De herberg (js/herberg.js): wie er gisteravond was, dronk zijn bier. Vóór de behoeften, want wie
     // er deze week was, is tevredener; en vóór het brouwen hieronder, want het bier van gisteravond
     // kwam uit de voorraad van gisteren.
-    T.tikHerbergDag(S, dag);
+    T.tikHerbergDag(D, dag);
     // Behoeften: eten, brandhout en een kerk, en de tevredenheid die daaruit volgt
     // (js/behoeften.js, T.tikBehoeftenDag) — vóór de rest, zodat stap 4 en 6 hieronder de
     // tevredenheid van vandaag gebruiken.
-    T.tikBehoeftenDag(S, dag);
+    T.tikBehoeftenDag(D, dag);
     // En de marskramer (js/handel.js): komt hij vandaag, of is zijn tijd om?
-    T.tikHandelDag(S, dag);
+    T.tikHandelDag(D, dag);
     // En de heer (js/heer.js): zijn brief in wijnmaand, hijzelf op Sint-Maarten, en de soldaten.
-    T.tikHeerDag(S, dag);
+    T.tikHeerDag(D, dag);
     // En zijn heervaart (js/heervaart.js): in een dorp vraagt hij op 1 hooimaand mannen, en op 1 herfstmaand komen
     // ze terug. Vóór het verdelen van de handen hieronder, want wie vandaag gaat, werkt vandaag niet meer.
-    T.tikHeervaartDag(S, dag);
+    T.tikHeervaartDag(D, dag);
     // En de inner (js/inner.js): hij komt in oogstmaand tellen, en soms onverwacht terug.
-    T.tikInnerDag(S, dag);
+    T.tikInnerDag(D, dag);
     // En de voorvallen (js/voorvallen.js): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp.
-    T.tikVoorvallenDag(S, dag);
+    T.tikVoorvallenDag(D, dag);
     // Een hut op een erf die op hout wachtte, begint als het er nu is (js/erven.js).
-    T.tikErvenDag(S);
+    T.tikErvenDag(D);
     // 1. Gebouwen die vandaag klaarkomen: het spookbeeld wordt de tekening zelf (dezelfde
     // voorwerp-ingang, zie zetGebouwVoorwerp hierboven — er komt er geen tweede bij). Een bouwplaats
     // die nog niet begon (klaarOp null, js/erven.js), komt niet klaar.
-    for (const g of S.gebouwen) {
+    for (const g of D.gebouwen) {
       if (!g.klaar && g.klaarOp != null && dag >= g.klaarOp) {
         g.klaar = true;
         if (g.voorwerp) g.voorwerp.inAanbouw = false;
       }
     }
     // 2. Woonruimte (T.telWoonruimte hieronder).
-    const woonruimte = T.telWoonruimte(S);
-    S.woonruimte = woonruimte;
+    const woonruimte = T.telWoonruimte(D);
+    D.woonruimte = woonruimte;
     // 3. Eten: iedereen eet, of er genoeg is of niet (T.wijzigVoorraad zakt nooit onder nul — een
     // dorp dat te veel monden telt, eet zijn voorraad dus leeg; wat honger doet, staat in
     // js/behoeften.js). Eerst de melk van vandaag, dan graan, dan kaas, en wat er van de melk over
     // is, wordt kaas (T.eetVandaag, js/behoeften.js).
-    T.eetVandaag(S);
+    T.eetVandaag(D);
     // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als de voorraad een buffer overhoudt
     // (zodat een net geboren gezin niet meteen honger lijdt), en het dorp tevreden genoeg is
     // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel); allebei zegt T.waaromGeenGezin
-    // hierboven. Zonder S.behoeften (nog geen dag getikt) blokkeert dat laatste niets. Een huis met
+    // hierboven. Zonder D.behoeften (nog geen dag getikt) blokkeert dat laatste niets. Een huis met
     // plaats gaat voor; is het dorp vol, dan neemt het een vrij erf en zet het er zelf een hut op, of
     // zegt het dat er geen plaats is (js/erven.js). Met de wet Vreemden welkom kan dat vaker
     // (T.gezinDagen hierboven).
-    if (dag > 0 && dag % T.gezinDagen(S) === 0) {
-      const waarom = T.waaromGeenGezin(S);
-      if (!waarom.includes('graan') && !waarom.includes('tevreden')) T.gezinKomt(S);
+    if (dag > 0 && dag % T.gezinDagen(D) === 0) {
+      const waarom = T.waaromGeenGezin(D);
+      if (!waarom.includes('graan') && !waarom.includes('tevreden')) T.gezinKomt(D);
     }
     // 5. Handen: verdeeld over de werkplaatsen, en wie waar werkt (T.verdeelHanden hierboven).
-    T.verdeelHanden(S);
+    T.verdeelHanden(D);
     // 6. Productie: wat een gebouw maakt, gaat per dag naar de voorraad — naar rato van hoe bezet
     // hij is (de helft van zijn handen geeft de helft van zijn opbrengst), en van de tevredenheid
     // (js/behoeften.js: "hoe hard er gewerkt wordt"; T.BEHOEFTEN_INSTELLINGEN.werkBasis is de
-    // ondergrens bij 0% tevreden, 1 is geen effect). Zonder S.behoeften (nog geen dag getikt) op
+    // ondergrens bij 0% tevreden, 1 is geen effect). Zonder D.behoeften (nog geen dag getikt) op
     // volle kracht.
-    const werkFactor = S.behoeften
-      ? T.BEHOEFTEN_INSTELLINGEN.werkBasis + (1 - T.BEHOEFTEN_INSTELLINGEN.werkBasis) * S.behoeften.tevredenheid
+    const werkFactor = D.behoeften
+      ? T.BEHOEFTEN_INSTELLINGEN.werkBasis + (1 - T.BEHOEFTEN_INSTELLINGEN.werkBasis) * D.behoeften.tevredenheid
       : 1;
     // Gereedschap: wie iets maakt en er gereedschap voor heeft, werkt harder (alleen wie handen
     // heeft: een kippenhok werkt niet harder met een hamer), en het slijt (hieronder, na het werk).
     // Wie in dit seizoen stilligt (T.GEBOUWEN[x].stilIn: de visser als de beek dichtligt), maakt
     // vandaag niets; de eerste dag dat het zo is, zegt het dorp het.
     const seizoen = seizoenVan(dag);
-    const gereedschap = T.gereedschapDekking(S, seizoen);
-    for (const g of S.gebouwen) {
+    const gereedschap = T.gereedschapDekking(D, seizoen);
+    for (const g of D.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
       const wasStil = g.stilWant;
       g.tekort = null;
@@ -925,7 +925,7 @@
       // werk woont, is langer onderweg, en de werkplaats maakt naar de uren dat hij er echt is. Zonder
       // die optie, of zonder bewoners, naar het aantal handen, zoals vroeger.
       const metUren = soort.handen > 0 && T.werkUrenVan && T.BEWONERS_INSTELLINGEN && T.BEWONERS_INSTELLINGEN.werkInUren;
-      g.uren = metUren ? T.werkUrenVan(S, g, dag) : null;
+      g.uren = metUren ? T.werkUrenVan(D, g, dag) : null;
       const bezet = g.uren ? (g.uren.nodig > 0 ? g.uren.gewerkt / g.uren.nodig : 0) : g.handen / soort.handen;
       let factor = soort.handen > 0 ? bezet * werkFactor * gereedschap.factor : werkFactor;
       if (factor <= 0) continue;
@@ -934,7 +934,7 @@
       // niets, en maalde een molen zonder graan toch meel (spel.md, "Handel").
       if (soort.maakt.in) {
         for (const wat in soort.maakt.in) {
-          const kan = (S.voorraad[wat] || 0) / soort.maakt.in[wat];
+          const kan = (D.voorraad[wat] || 0) / soort.maakt.in[wat];
           if (kan < factor) {
             factor = kan;
             g.tekort = wat;
@@ -946,7 +946,7 @@
       if (soort.maakt.tot) {
         for (const wat in soort.maakt.tot) {
           const per = (soort.maakt.uit && soort.maakt.uit[wat]) || 0;
-          const kan = per > 0 ? Math.max(0, soort.maakt.tot[wat] - (S.voorraad[wat] || 0)) / per : factor;
+          const kan = per > 0 ? Math.max(0, soort.maakt.tot[wat] - (D.voorraad[wat] || 0)) / per : factor;
           if (kan < factor) {
             factor = kan;
             g.vol = wat;
@@ -955,39 +955,39 @@
       }
       g.werkte = factor;
       if (factor <= 0) continue;
-      if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(S, wat, -soort.maakt.in[wat] * factor);
-      const uit = T.maaktUit(S, soort);
-      if (uit) for (const wat in uit) T.wijzigVoorraad(S, wat, uit[wat] * factor);
+      if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(D, wat, -soort.maakt.in[wat] * factor);
+      const uit = T.maaktUit(D, soort);
+      if (uit) for (const wat in uit) T.wijzigVoorraad(D, wat, uit[wat] * factor);
     }
     // Wat in gebruik was, slijt: één stuk per hand die vandaag echt iets maakte (een smidse zonder
     // ijzer slijt zijn hamers niet).
     let aanHetWerk = 0;
-    for (const g of S.gebouwen) if (g.werkte > 0 && g.handen > 0) aanHetWerk += g.handen;
-    const slijt = Math.min(S.voorraad.gereedschap || 0, aanHetWerk) / IN.gereedschapSlijtDagen;
-    if (slijt > 0) T.wijzigVoorraad(S, 'gereedschap', -slijt);
+    for (const g of D.gebouwen) if (g.werkte > 0 && g.handen > 0) aanHetWerk += g.handen;
+    const slijt = Math.min(D.voorraad.gereedschap || 0, aanHetWerk) / IN.gereedschapSlijtDagen;
+    if (slijt > 0) T.wijzigVoorraad(D, 'gereedschap', -slijt);
     // 7. De wetten (js/wetten.js): wie vandaag in het bos van de heer hakte, en de belasting op de eerste van de maand.
-    T.tikWettenDag(S, dag);
+    T.tikWettenDag(D, dag);
     // En de rovers (js/rovers.js): de doden begraven, wie het overleefde geneest, en komen ze vandaag?
-    T.tikRoversDag(S, dag);
+    T.tikRoversDag(D, dag);
     // 8. De trede (js/treden.js): met genoeg mensen, en een kapel en een smidse klaar, wordt het gehucht een dorp.
-    T.tikTredeDag(S);
-    if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(S);
+    T.tikTredeDag(D);
+    if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(D);
   };
 
   // Wordt elk beeld aangeroepen (js/main.js, werkBij, net als T.tikKalender) en merkt zelf wanneer
   // er een hele dag voorbij is — op de eigen kalenderklok, dus dit loopt vanzelf mee met pauze en
   // met 1×/2×/3× (js/tijd.js). Kan er meer dan één dag in één stap voorbij zijn (een grote dt),
   // dan komt elke dag apart aan de beurt, zodat groei en verbruik niet worden overgeslagen.
-  T.werkGebouwenBij = function (S) {
-    if (!S.kalender || !S.gebouwen) return;
-    const dagNu = Math.floor(S.kalender.dag);
-    if (S.gebouwenDag == null) {
-      S.gebouwenDag = dagNu; // eerste keer: alleen onthouden waar we beginnen
+  T.werkGebouwenBij = function (D) {
+    if (!D.kalender || !D.gebouwen) return;
+    const dagNu = Math.floor(D.kalender.dag);
+    if (D.gebouwenDag == null) {
+      D.gebouwenDag = dagNu; // eerste keer: alleen onthouden waar we beginnen
       return;
     }
-    while (S.gebouwenDag < dagNu) {
-      S.gebouwenDag++;
-      T.tikGebouwenDag(S, S.gebouwenDag);
+    while (D.gebouwenDag < dagNu) {
+      D.gebouwenDag++;
+      T.tikGebouwenDag(D, D.gebouwenDag);
     }
   };
 })(globalThis.Spel = globalThis.Spel || {});

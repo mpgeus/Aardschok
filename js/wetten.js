@@ -82,52 +82,52 @@
   T.wetIsAanUit = (id) => T.WETTEN[id].standen.length === 2 && T.WETTEN[id].standen[1] === 'aangenomen';
 
   // In welke stand een wet nu staat.
-  T.standVanWet = (S, id) => (S.wetten && S.wetten.standen[id]) || T.WETTEN[id].standaard;
+  T.standVanWet = (D, id) => (D.wetten && D.wetten.standen[id]) || T.WETTEN[id].standaard;
 
   // Wat een wet in een stand doet: { eten, tevreden, ... }, of {} (de standaard doet niets).
   T.wetDoet = (id, stand) => (IN()[id] && IN()[id][stand]) || {};
 
   // De wetten die je hier mag maken: van deze trede en de treden ervoor, zoals de gebouwen in het bouwmenu
   // (T.inBouwmenu, js/gebouwen.js).
-  T.wettenVanNu = (S) => Object.keys(T.WETTEN).filter((id) => T.GEBOUW_TREDEN.indexOf(T.WETTEN[id].trede) <= T.GEBOUW_TREDEN.indexOf(S.trede || 'gehucht'));
+  T.wettenVanNu = (D) => Object.keys(T.WETTEN).filter((id) => T.GEBOUW_TREDEN.indexOf(T.WETTEN[id].trede) <= T.GEBOUW_TREDEN.indexOf(D.trede || 'gehucht'));
 
   // Een wet aannemen, afschaffen of in een andere stand zetten. Geeft { kan, reden }. Hij geldt meteen: wat het
   // dorp eet, hoe tevreden het is en wat de houthakker hakt, vragen de regels elke dag opnieuw.
-  T.zetWet = function (S, id, stand) {
+  T.zetWet = function (D, id, stand) {
     const wet = T.WETTEN[id];
     if (!wet || !wet.standen.includes(stand)) return { kan: false, reden: 'Die wet bestaat niet.' };
-    if (!T.wettenVanNu(S).includes(id)) return { kan: false, reden: `Dat mag pas als het een ${wet.trede} is.` };
-    if (T.standVanWet(S, id) === stand) return { kan: true };
-    if (!S.wetten) S.wetten = T.nieuweWetten();
-    S.wetten.standen[id] = stand;
+    if (!T.wettenVanNu(D).includes(id)) return { kan: false, reden: `Dat mag pas als het een ${wet.trede} is.` };
+    if (T.standVanWet(D, id) === stand) return { kan: true };
+    if (!D.wetten) D.wetten = T.nieuweWetten();
+    D.wetten.standen[id] = stand;
     if (!T.wetIsAanUit(id)) bericht(`${wet.naam}: vanaf vandaag ${stand}.`);
     else bericht(`${wet.naam}: ${stand === 'aangenomen' ? 'aangenomen' : 'afgeschaft'}.`);
-    T.tevredenheidOpnieuw(S);
+    T.tevredenheidOpnieuw(D);
     return { kan: true };
   };
 
   // Wat alle wetten samen doen, voor één soort: een factor (eten, gezinnen, hout) vermenigvuldigt, een getal
   // (tevreden, goud) telt op.
-  T.wetFactor = function (S, soort) {
+  T.wetFactor = function (D, soort) {
     let f = 1;
     for (const id of Object.keys(T.WETTEN)) {
-      const d = T.wetDoet(id, T.standVanWet(S, id));
+      const d = T.wetDoet(id, T.standVanWet(D, id));
       if (d[soort] != null) f *= d[soort];
     }
     return f;
   };
-  T.wetSom = function (S, soort) {
+  T.wetSom = function (D, soort) {
     let n = 0;
-    for (const id of Object.keys(T.WETTEN)) n += T.wetDoet(id, T.standVanWet(S, id))[soort] || 0;
+    for (const id of Object.keys(T.WETTEN)) n += T.wetDoet(id, T.standVanWet(D, id))[soort] || 0;
     return n;
   };
 
   // Wat de wetten aan de tevredenheid doen (T.berekenTevredenheid, js/behoeften.js): { erbij, last, blij }, met
   // de woorden van de wetten die eraf doen en die erbij doen.
-  T.wettenTevredenheid = function (S) {
+  T.wettenTevredenheid = function (D) {
     const r = { erbij: 0, last: [], blij: [] };
     for (const id of Object.keys(T.WETTEN)) {
-      const stand = T.standVanWet(S, id);
+      const stand = T.standVanWet(D, id);
       const t = T.wetDoet(id, stand).tevreden || 0;
       if (!t) continue;
       r.erbij += t;
@@ -139,27 +139,27 @@
 
   // De boete die de heer op Sint-Maarten rekent (T.eisVanDeHeer, js/heer.js): heeft een houthakker dit jaar in
   // zijn bos gekapt, dan de boete uit de werkbank, ook als de wet intussen weer is afgeschaft.
-  T.houtkapBoete = (S) => (S.wetten && S.wetten.gekapt ? T.wetDoet('houtkap', 'aangenomen').boete || 0 : 0);
+  T.houtkapBoete = (D) => (D.wetten && D.wetten.gekapt ? T.wetDoet('houtkap', 'aangenomen').boete || 0 : 0);
 
   // Na Sint-Maarten (T.betaalHeer, js/heer.js): de boete is betaald, en het tellen begint opnieuw.
-  T.wettenNaSintMaarten = function (S) {
-    if (S.wetten) S.wetten.gekapt = false;
+  T.wettenNaSintMaarten = function (D) {
+    if (D.wetten) D.wetten.gekapt = false;
   };
 
   // Elke dag, na het werk (T.tikGebouwenDag, js/gebouwen.js): heeft een houthakker vandaag in het bos van de heer
   // gehakt, dan weet de heer het op Sint-Maarten; en op de eerste van de maand brengt de belasting goud op. Wat
   // niet een heel goud is, gaat mee naar de volgende maand.
-  T.tikWettenDag = function (S, dag) {
-    if (!S.wetten) S.wetten = T.nieuweWetten();
-    const W = S.wetten;
-    if (T.wetFactor(S, 'hout') > 1 && (S.gebouwen || []).some((g) => g.werkte > 0 && T.GEBOUWEN[g.soort].bos)) W.gekapt = true;
-    const perMens = T.wetSom(S, 'goud');
+  T.tikWettenDag = function (D, dag) {
+    if (!D.wetten) D.wetten = T.nieuweWetten();
+    const W = D.wetten;
+    if (T.wetFactor(D, 'hout') > 1 && (D.gebouwen || []).some((g) => g.werkte > 0 && T.GEBOUWEN[g.soort].bos)) W.gekapt = true;
+    const perMens = T.wetSom(D, 'goud');
     if (perMens > 0 && T.datumVanDag(dag).dagVanMaand === 1) {
-      W.belastingRest += (S.bevolking || 0) * perMens;
+      W.belastingRest += (D.bevolking || 0) * perMens;
       const goud = Math.floor(W.belastingRest + 1e-9);
       if (goud > 0) {
         W.belastingRest -= goud;
-        T.wijzigVoorraad(S, 'goud', goud);
+        T.wijzigVoorraad(D, 'goud', goud);
         bericht(`De belasting bracht ${goud} goud op.`, 'goed');
       }
     }
@@ -175,10 +175,10 @@
   const vaak = (f) => (f === 2 ? 'twee keer zo vaak' : f === 3 ? 'drie keer zo vaak' : `${getal(f)} keer zo vaak`);
 
   // Wat een wet in een stand doet: [{ tekst, goed }], met de getallen van nu. Eerst wat goed is, dan wat het kost.
-  T.watDeWetDoet = function (S, id, stand) {
+  T.watDeWetDoet = function (D, id, stand) {
     const d = T.wetDoet(id, stand);
     const regels = [];
-    const bevolking = S.bevolking || 0;
+    const bevolking = D.bevolking || 0;
     if (d.eten != null && d.eten !== 1) {
       const nu = bevolking * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
       regels.push({ goed: d.eten < 1, tekst: `ieder eet ${keer(d.eten)}: ${getal(nu * d.eten)} graan per dag in plaats van ${getal(nu)}` });
@@ -188,7 +188,7 @@
       regels.push({ goed: d.gezinnen > 1, tekst: `${vaak(d.gezinnen)} een nieuw gezin: om de ${Math.max(1, Math.round(basis / d.gezinnen))} dagen in plaats van ${basis}` });
     }
     if (d.hout != null && d.hout !== 1) {
-      const heeft = (S.gebouwen || []).some((g) => T.GEBOUWEN[g.soort].bos);
+      const heeft = (D.gebouwen || []).some((g) => T.GEBOUWEN[g.soort].bos);
       regels.push({ goed: d.hout > 1, tekst: `een houthakker hakt ${keer(d.hout)} hout${heeft ? '' : ' (er is nog geen houthakker)'}` });
     }
     if (d.goud) regels.push({ goed: true, tekst: `elke maand ${getal(bevolking * d.goud)} goud in de kist` });

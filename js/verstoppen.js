@@ -49,7 +49,7 @@
 
   const VI = () => T.VERSTOP_INSTELLINGEN;
   const WAT = ['graan', 'goud'];
-  const dagNu = (S) => Math.floor(S.kalender ? S.kalender.dag : 0);
+  const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
   const hoofdletter = (s) => T.hoofdletter(s);
   const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || '');
   const inhoudVan = (g) => g.verstopt || { graan: 0, goud: 0 };
@@ -85,9 +85,9 @@
   // bouwde, heeft niemand met een naam: daar wonen gewone dorpelingen.
   // Niet T.bewonerVan: die naam is van js/bewoners.js (de bewoner van een poppetje). Tot 27 sep heette
   // deze ook zo, en omdat js/bewoners.js later laadt, kreeg de kelder in het spel nooit een bewoner.
-  T.bewonerVanGebouw = function (S, g) {
+  T.bewonerVanGebouw = function (D, g) {
     if (!g || !g.huis || g.huis === 'schout') return null;
-    const w = S.wereld;
+    const w = D.wereld;
     return (w && (w.wezens || []).find((e) => e.huis === g.huis && e.wie)) || null;
   };
 
@@ -114,17 +114,17 @@
   // Kun je in dit gebouw iets verstoppen, en hoe gaat het daar? null als het niet kan: een hut heeft
   // geen kelder, en een gebouw in aanbouw nog niet. Anders { gebouw, naam, plaats, vinden, houdt,
   // wieHoudt, weigert, bewoner, karakter, vanSchout }.
-  T.verstopPlekVan = function (S, g) {
+  T.verstopPlekVan = function (D, g) {
     const V = VI();
     const basis = g && V.plekken[g.soort];
     if (!basis || !g.klaar) return null;
     const vanSchout = g.huis === 'schout';
-    const bewoner = T.bewonerVanGebouw(S, g);
+    const bewoner = T.bewonerVanGebouw(D, g);
     const karakter = karakterVan(bewoner);
     const eigen = V.karakters && karakter ? V.bewoners[karakter] || null : null;
     let vinden = vanSchout ? V.vindenBijSchout : basis.vinden;
     // Wat pas telt als het in de herberg verteld is (de roddelaar), telt alleen dan; zonder herberg altijd.
-    const heeftHerberg = !!T.herbergVan(S);
+    const heeftHerberg = !!T.herbergVan(D);
     const verteld = g.verteld != null;
     const telt = eigen && (!eigen.inDeHerberg || verteld || !heeftHerberg);
     if (telt && typeof eigen.vinden === 'number') vinden *= eigen.vinden;
@@ -153,14 +153,14 @@
     };
   };
 
-  T.verstopPlekken = function (S) {
-    return (S.gebouwen || []).map((g) => T.verstopPlekVan(S, g)).filter(Boolean);
+  T.verstopPlekken = function (D) {
+    return (D.gebouwen || []).map((g) => T.verstopPlekVan(D, g)).filter(Boolean);
   };
 
   // Alles wat nu verstopt ligt: { graan, goud, plekken } (hoeveel plekken er iets in hebben).
-  T.verstoptTotaal = function (S) {
+  T.verstoptTotaal = function (D) {
     const t = { graan: 0, goud: 0, plekken: 0 };
-    for (const g of S.gebouwen || []) {
+    for (const g of D.gebouwen || []) {
       const v = g.verstopt;
       if (!v || !(v.graan > 0 || v.goud > 0)) continue;
       t.graan += v.graan || 0;
@@ -197,15 +197,15 @@
   // Zolang de inner of de heer in het dorp is, sjouw je niets: dat valt op. Het is dus werk voor
   // vóór zijn komst (hij kondigt zich tien dagen vooraf aan), en voor als hij weer weg is. Geeft
   // wie er is ('de inner', 'de heer') of null.
-  function wieIsEr(S) {
-    const b = S.inner && S.inner.bezoek;
+  function wieIsEr(D) {
+    const b = D.inner && D.inner.bezoek;
     if (b && !b.weg) return 'de inner';
-    const h = S.heer && S.heer.bezoek;
+    const h = D.heer && D.heer.bezoek;
     if (h && !h.weg) return 'de heer';
     return null;
   }
-  function nietNu(S) {
-    const wie = wieIsEr(S);
+  function nietNu(D) {
+    const wie = wieIsEr(D);
     if (wie === 'de inner') return 'De inner is in het dorp. Wie nu graan versjouwt, valt op.';
     if (wie === 'de heer') return 'De heer en zijn soldaten zijn in het dorp.';
     return null;
@@ -213,15 +213,15 @@
 
   // Mag `n` van `wat` (graan of goud) hierheen? { kan, reden } of { kan, komt, houdt, plek }: wat
   // er aankomt, en wat een ander ervan houdt.
-  T.kanVerstoppen = function (S, g, wat, n) {
-    const p = T.verstopPlekVan(S, g);
+  T.kanVerstoppen = function (D, g, wat, n) {
+    const p = T.verstopPlekVan(D, g);
     if (!p) return { kan: false, reden: 'Hier kun je niets verstoppen.' };
     if (!WAT.includes(wat)) return { kan: false, reden: `${hoofdletter(wat)} verstop je hier niet.` };
     if (p.weigert) return { kan: false, reden: T.overKelderTekst(p) || 'Wie hier woont, wil er niets van weten.' };
-    const stil = nietNu(S);
+    const stil = nietNu(D);
     if (stil) return { kan: false, reden: stil };
     if (!(n > 0)) return { kan: false, reden: 'Er is niets om weg te zetten.' };
-    const heb = (S.voorraad && S.voorraad[wat]) || 0;
+    const heb = (D.voorraad && D.voorraad[wat]) || 0;
     if (heb + 1e-9 < n) return { kan: false, reden: heb >= 1 ? `Zoveel ${wat} heb je niet (${Math.floor(heb)}).` : `Je hebt geen ${wat}.` };
     const komt = n * (1 - p.houdt);
     if (wat === 'graan') {
@@ -231,30 +231,30 @@
     return { kan: true, komt, houdt: n - komt, plek: p };
   };
 
-  T.verstop = function (S, g, wat, n) {
-    const k = T.kanVerstoppen(S, g, wat, n);
+  T.verstop = function (D, g, wat, n) {
+    const k = T.kanVerstoppen(D, g, wat, n);
     if (!k.kan) return k;
     const inhoud = g.verstopt || (g.verstopt = { graan: 0, goud: 0 });
     inhoud[wat] += k.komt;
     // Pas daarna uit de voorraad: die werkt het scherm bij, en dan klopt ook wat er verstopt ligt.
-    T.wijzigVoorraad(S, wat, -n);
+    T.wijzigVoorraad(D, wat, -n);
     return k;
   };
 
   // Hoeveel je er hoogstens van kunt wegzetten: wat je hebt, en bij graan wat er nog past (met wat
   // een ander ervan houdt erbij). Voor de knop die de kelder vult.
-  T.hoeveelVerstoppen = function (S, g, wat) {
-    const p = T.verstopPlekVan(S, g);
+  T.hoeveelVerstoppen = function (D, g, wat) {
+    const p = T.verstopPlekVan(D, g);
     if (!p || p.weigert) return 0;
-    const heb = Math.floor((S.voorraad && S.voorraad[wat]) || 0);
+    const heb = Math.floor((D.voorraad && D.voorraad[wat]) || 0);
     if (wat !== 'graan' || p.houdt >= 1) return heb;
     const vrij = p.plaats - inhoudVan(g).graan;
     return Math.max(0, Math.min(heb, Math.floor(vrij / (1 - p.houdt) + 1e-9)));
   };
 
-  T.kanTerughalen = function (S, g, wat, n) {
-    if (!T.verstopPlekVan(S, g) && !(inhoudVan(g)[wat] > 0)) return { kan: false, reden: 'Hier ligt niets.' };
-    const stil = nietNu(S);
+  T.kanTerughalen = function (D, g, wat, n) {
+    if (!T.verstopPlekVan(D, g) && !(inhoudVan(g)[wat] > 0)) return { kan: false, reden: 'Hier ligt niets.' };
+    const stil = nietNu(D);
     if (stil) return { kan: false, reden: stil };
     const ligt = inhoudVan(g)[wat] || 0;
     if (ligt < 1e-9) return { kan: false, reden: `Hier ligt geen ${wat}.` };
@@ -263,8 +263,8 @@
     return { kan: true, n };
   };
 
-  T.haalTerug = function (S, g, wat, n) {
-    const k = T.kanTerughalen(S, g, wat, n);
+  T.haalTerug = function (D, g, wat, n) {
+    const k = T.kanTerughalen(D, g, wat, n);
     if (!k.kan) return k;
     const inhoud = g.verstopt;
     inhoud[wat] = Math.max(0, inhoud[wat] - n);
@@ -274,20 +274,20 @@
       delete g.verteld;
       delete g.verteldDoor;
     }
-    T.wijzigVoorraad(S, wat, n);
+    T.wijzigVoorraad(D, wat, n);
     return k;
   };
 
   // Wat de muis op een gebouw met een plek zegt, en of een klik het venster opent (js/verkennen.js):
   // { tekst, kan, reden }.
-  T.verstopHandeling = function (S, p) {
+  T.verstopHandeling = function (D, p) {
     const inhoud = T.inhoudTekst(inhoudVan(p.gebouw));
     const erin = inhoud ? ` · er ligt ${inhoud}` : '';
     if (p.weigert && !inhoud) {
       return { tekst: `${hoofdletter(p.naam)}: ${p.bewoner.naam} wil er niets van weten`, kan: false, reden: T.overKelderTekst(p) };
     }
-    const stil = nietNu(S);
-    if (stil) return { tekst: `${hoofdletter(p.naam)}: niet zolang ${wieIsEr(S)} in het dorp is${erin}`, kan: false, reden: stil };
+    const stil = nietNu(D);
+    if (stil) return { tekst: `${hoofdletter(p.naam)}: niet zolang ${wieIsEr(D)} in het dorp is${erin}`, kan: false, reden: stil };
     const kar = VI().karakters && p.karakter && T.KARAKTERS && T.KARAKTERS[p.karakter] ? ` (${T.KARAKTERS[p.karakter].kort})` : '';
     return { tekst: `Verstoppen in ${p.naam}${kar}${erin}`, kan: true };
   };
@@ -295,11 +295,11 @@
   // Waar de schout gaat staan om bij een gebouw te komen: een tegel aan de rand van zijn voet die
   // aan een begaanbare tegel grenst, zo dicht mogelijk bij hem. T.loopNaast loopt dan tot naast
   // die tegel. Null als er geen is.
-  T.randVanGebouw = function (S, g) {
-    const w = S.wereld;
+  T.randVanGebouw = function (D, g) {
+    const w = D.wereld;
     const v = T.voetVanGebouw(g);
     const binnen = (x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
-    const van = S.schout ? { x: S.schout.tx != null ? S.schout.tx : Math.round(S.schout.x), y: S.schout.ty != null ? S.schout.ty : Math.round(S.schout.y) } : { x: v.x, y: v.y };
+    const van = D.schout ? { x: D.schout.tx != null ? D.schout.tx : Math.round(D.schout.x), y: D.schout.ty != null ? D.schout.ty : Math.round(D.schout.y) } : { x: v.x, y: v.y };
     let beste = null;
     let bij = Infinity;
     for (let y = v.y; y < v.y + v.h; y++) {
@@ -322,8 +322,8 @@
 
   // Een getal 0..1, vast per spel, per dag en per plek (zoals de inner het doet), zodat een toets
   // hetzelfde uitkomt.
-  function lot(S, g) {
-    const zaad = ((S.lot && S.lot.zaad) || 1) + dagNu(S) * 7919 + g.x * 104729 + g.y * 1299709;
+  function lot(D, g) {
+    const zaad = ((D.lot && D.lot.zaad) || 1) + dagNu(D) * 7919 + g.x * 104729 + g.y * 1299709;
     const x = Math.sin(zaad) * 10000;
     return x - Math.floor(x);
   }
@@ -332,25 +332,25 @@
   // dat is weg; elke vondst maakt argwanend. Geeft wat ze vonden als tekst ("20 graan in de kelder van
   // Klaas"), of null. `r` (voor een toets) is een getal 0..1 in plaats van het lot. Voor het hele dorp
   // (T.zoekVerstopt) en voor de soldaten die met de schout meelopen (js/doorzoeken.js).
-  T.zoekOpPlek = function (S, p, r) {
+  T.zoekOpPlek = function (D, p, r) {
     const g = p.gebouw;
     const tekst = T.inhoudTekst(inhoudVan(g));
     if (!tekst) return null;
-    if ((r != null ? r : lot(S, g)) >= p.vinden) return null;
+    if ((r != null ? r : lot(D, g)) >= p.vinden) return null;
     g.verstopt = { graan: 0, goud: 0 };
     delete g.verteld;
     delete g.verteldDoor;
-    if (VI().argwaanPerVondst > 0 && T.zetArgwaan) T.zetArgwaan(S, VI().argwaanPerVondst, 'de soldaten vonden wat je verstopte');
-    if (T.ui && T.ui.toonVoorraad) T.ui.toonVoorraad(S);
+    if (VI().argwaanPerVondst > 0 && T.zetArgwaan) T.zetArgwaan(D, VI().argwaanPerVondst, 'de soldaten vonden wat je verstopte');
+    if (T.ui && T.ui.toonVoorraad) T.ui.toonVoorraad(D);
     return `${tekst} in ${p.naam}`;
   };
 
   // Het hele dorp, plek voor plek. Geeft wat ze vonden. `getal` (voor een toets) geeft per plek een getal
   // 0..1 in plaats van het lot.
-  T.zoekVerstopt = function (S, getal) {
+  T.zoekVerstopt = function (D, getal) {
     const gevonden = [];
-    for (const p of T.verstopPlekken(S)) {
-      const t = T.zoekOpPlek(S, p, getal ? getal(p) : null);
+    for (const p of T.verstopPlekken(D)) {
+      const t = T.zoekOpPlek(D, p, getal ? getal(p) : null);
       if (t) gevonden.push(t);
     }
     return gevonden;
