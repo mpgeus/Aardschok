@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 29 sep 2026, zeventiende sessie)
+## Waar staat wat (bijgewerkt 30 sep 2026, zeventiende sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -16,6 +16,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3 | vraag 50, 51, 54 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
+| Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is | vraag 63, 69 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
 | De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug | vraag 65 |
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
@@ -252,6 +253,36 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
   (`T.RAADSMAN_INSTELLINGEN`, met de neigingen per karakter). `Spel.debug.raadsman()` zegt wie het is, uit wie je
   kiest en wat hij besloot, en `Spel.debug.raadsman('Aaltje')` maakt Aaltje raadsman.
 - **Nog niet:** staande orders (de heer, de heervaart, de marskramer) komen met het land (vraag 66, D).
+
+## Het land (Marcel, 29 en 30 sep 2026; werklijst vraag 63 en 69)
+
+**Zo werkt het nu** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in
+`test/land.test.cjs`; Marcel: "Ja, begin aan het land"):
+- **De kaart van het land:** loop je over de weg je gehucht uit (de tegel waar de marskramer binnenkomt), dan opent een
+  venster met de kaart: negen provincies, met je gehucht (dat heet naar je dorp), het kasteel van de heer, de stad en zes
+  soorten wildernis (het woud, de heide, het veen, het broek, het zand, de kampen), met wegen ertussen en hoeveel dagen
+  reizen elke weg is (één tot drie). Het land komt uit het zaad van het spel: elk spel een ander land, en je gehucht ligt
+  nooit in het midden. Wat je nog niet zag, is gearceerd donker, met een vraagteken; de wegen erheen zie je wel.
+- **Reizen:** klik een provincie, en het venster zegt hoe ver het is ("2 dagen reizen, over het woud"), met de knop Reis
+  erheen. Je reist over wegen die je kent: door provincies die je zag, en de laatste stap mag het donker in. Onderweg
+  schuift de schout over de weg, en de dagen gaan snel voorbij, zoals bij slapen; wat je doorkruist, is daarna niet meer
+  donker. Een provincie zonder dorp is voor nu land om doorheen te reizen (vraag 63, D): je staat op de kaart, met een
+  zin over wat je er ziet ("Stuifzand, waar niets wil groeien"), en de tijd staat stil tot je verder kiest. Esc of de
+  knop brengt je van de weg terug het gehucht in, zolang je nog thuis bent.
+- **Thuis gaat alles door zonder je.** Wie reist, verlaat de kaart van het dorp niet: de schout gaat eruit, en het dorp
+  blijft de wereld van het spel. Er wordt gemaaid en gedwaald, de raadsman beslist de voorvallen (vraag 68), de heer
+  wacht op het plein en neemt het zelf, de inner loopt zijn eigen ronde, de soldaten zoeken zelf, niemand roept de
+  militie tegen de rovers, en een bezoeker die komt, zet de reis niet op 1×. Een brief van de heer wacht tot je thuis
+  bent, en de berichten ook.
+- **Terug:** je staat net binnen de weg, en een venster zegt hoe lang je weg was, hoe het dorp ervoor staat ("26 mensen
+  (gelijk) · 54 graan (−6)", en wat je raadsman besliste), en wat er gebeurde; daarna komen de brieven.
+- **Instelbaar:** de spelregel "Land" (uit, de standaard, tot het buurdorp er is: dan speelt de proef zoals nu; en aan),
+  en de getallen in de werkbank (`T.LAND_INSTELLINGEN`: hoeveel provincies, hoeveel dagen per weg, hoe snel de reis).
+  `Spel.debug.land()` zegt waar de schout is, wat hij zag en welke wegen er zijn; `('open')`, `('reis', 'De heide')`,
+  `('alles')` en `('nieuw')`.
+- **Nog niet:** het buurdorp (stuk 3), met een gehucht van een maker die elk spel een ander gehucht legt (vraag 69:
+  Marcel, "De maker nu"); eerst één dorp als één ding in de spelstaat (stuk 2), met een snellere dagtik. Bij Nieuw spel
+  kies je dan 0 of 1 tegenspeler.
 
 ## De raad onder het doel (Marcel, 29 sep 2026; werklijst vraag 58)
 

@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (30 sep 2026, zeventiende sessie): de heervaart, de naam van je dorp, de voorvallen en de raadsman gebouwd; één dorp vol leven, en dan het land
+## De stand (30 sep 2026, zeventiende sessie): de heervaart, de naam van je dorp, de voorvallen, de raadsman en de kaart van het land gebouwd; nu op naar het buurdorp
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -21,18 +21,22 @@ naam van je dorp en de benoemingsbrief van de heer; `W` zijn de wetten, `Z` is s
 het spel slaat elke ochtend zelf op; onder het doel linksboven staat de raad. In een dorp vraagt de heer op 1 hooimaand
 mannen voor zijn oorlog (`Spel.debug.heervaart('vraag')`). Om de paar dagen komt iemand je zoeken met een voorval: een
 uitroepteken boven zijn hoofd, en hij spreekt je aan als je stilstaat (`Spel.debug.voorval('brand')`); ben je weg,
-dan beslist je raadsman, die je kiest met de knop Raadsman (`R`). De pagina "Stand van het gehucht" (25 sep) loopt
-achter op de dag. `npm test`: 662/662.
+dan beslist je raadsman, die je kiest met de knop Raadsman (`R`). Met de spelregel Land aan (`O`) loop je over de weg
+je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). De pagina "Stand van het gehucht" (25 sep) loopt
+achter op de dag. `npm test`: 673/673.
 
 **Waar het werk staat:** alles staat in `main`, ook het werk van de zeventiende sessie (vraag 60 tot en met 68; Marcel,
 30 sep: "alles push en main"; ook op `ccr-ef2496ce-pa4iti`). Hoe een eigen branch en `main` samengaan, staat in
 `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** de voorvallen en de raadsman zijn gebouwd (vraag 65 tot en met 68; zie onder Af), en
-Marcel zei "Ja, begin aan het land" (30 sep). Het plan voor stap 1a staat onder vraag 69, met een schets van de kaart
-van het land: eerst de kaart en reizen, dan één dorp als één ding (onzichtbaar, met een snellere dagtik), dan het
-buurdorp. Begin met stuk 1 zodra Marcel het plan en vraag 69, C beantwoordde; staande orders voor de raadsman komen met
-het land (vraag 66, D). Open blijven: het dorp van bovenaf
+**Waar de volgende sessie begint:** stuk 1 van het land is gebouwd: de kaart van het land en reizen (vraag 69; zie onder
+Af). Marcel koos "De maker nu" (vraag 69, C): het buurdorp krijgt een gehucht van een maker die elk spel een ander
+gehucht legt. Begin met een schets voor Marcel: drie gehuchten van de maker naast elkaar, als plattegrond (het plein als
+hart, huizen eromheen, boerderijen met hun velden verder naar buiten, de weg en de beek), zoals "Het plein als hart" op
+26 sep; dan kan hij kijken terwijl stuk 2 gebouwd wordt (één dorp als één ding in de spelstaat, met een snellere
+dagtik, bewezen met de speeltest die letter voor letter hetzelfde jaar moet spelen). Daarna de maker in het spel, en
+dan het buurdorp (stuk 3), met bij Nieuw spel 0 of 1 tegenspeler. Staande orders voor de raadsman komen met het land
+(vraag 66, D). Open blijven: het dorp van bovenaf
 (vraag 65, C; Marcel: "nee niet bovenaf, ik denk hier nog over na"), en de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
 dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
@@ -70,8 +74,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor het land, stap 1a, en of het buurdorp eerst een gehucht met de hand krijgt (vraag
-69, C, met een schets); het dorp van bovenaf
+*2. Wacht op Marcel:* hoe de kaart van het land en reizen voelen (spelregel Land aan, `O`); het dorp van bovenaf
 (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -149,6 +152,9 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   Wat Marcel niet kiest, kan een spelregel worden. En: het getal in de balk zakte in de tweede winter naar 0, terwijl
   er elf mensen bleven rondlopen (`opmerkingen.md`, bij vraag 59). **Marcel koos B** ("Ja B inderdaad. Dan alles push
   en main"); gebouwd, met A als spelregel (zie onder Af), en alles staat in `main`.
+- **Het plan voor het land, stap 1a** (vraag 69; Marcel: "Ja, begin aan het land"), in drie stukken, met een schets van
+  de kaart van het land (de pagina "Het land met provincies"). **Marcel koos** (30 sep): "De maker nu": het buurdorp
+  krijgt een gehucht dat elk spel anders ligt. **Gebouwd: stuk 1**, de kaart van het land en reizen (zie onder Af).
 - **Marcel vroeg hoe het leuk blijft** ("zelf als persoon rond hobbelen in je eigen stad maakt het wel lastig.
   Misschien voelt het handiger als we een soort raadsman en aansturen die je regels oplegt?"). Nagekeken: de camera
   volgt altijd de schout en je ziet maar een klein stuk van je dorp, dus bouwen gaat alleen waar hij staat. Het
@@ -1983,6 +1989,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Uitgewerkt bij het bouwen van stuk 1 (nagekeken): de heer, de inner, de marskramer en de rovers lopen in het gebied
     waar de schout is (`S.wereld`), niet in het dorp. Wie reist, verlaat daarom niet de kaart van het dorp: de schout
     gaat eruit, en het dorp blijft de wereld van het spel, zodat thuis alles zijn werk doet zonder hem.
+    **Stuk 1 gebouwd (30 sep, zeventiende sessie):** de kaart van het land en reizen; zie onder Af, en `spel.md`, "Het
+    land".
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -2283,6 +2291,20 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 30 sep 2026 — **De kaart van het land, en reizen** (zeventiende sessie; vraag 69, stuk 1 van stap 1a; Marcel: "Ja, begin
+  aan het land"). `js/land.js`: loop je over de weg je gehucht uit, dan opent de kaart van het land (`js/landkaart.js`):
+  negen provincies uit het zaad van het spel (je gehucht, het kasteel van de heer, de stad, zes soorten wildernis), met
+  wegen van één tot drie dagen, en wat je niet zag in het donker. Klik een provincie en het venster zegt hoe ver het is;
+  met Reis erheen gaan de dagen snel voorbij, en ben je er. Een provincie zonder dorp is voor nu land om doorheen te
+  reizen. Wie reist, verlaat de kaart van het dorp niet: de schout gaat eruit en het dorp blijft de wereld van het spel,
+  zodat er gemaaid en gedwaald wordt, de heer en de inner hun werk doen, de raadsman de voorvallen beslist
+  (`T.schoutIsWeg`), niemand de militie roept, en een bezoeker de reis niet op 1× zet. Berichten en brieven wachten tot
+  je thuis bent; dan zegt een venster hoe lang je weg was, wat er gebeurde en hoe het dorp ervoor staat. Achter de
+  spelregel Land (standaard uit), met de getallen in de werkbank en `Spel.debug.land()`. Getoetst:
+  `test/land.test.cjs` (11 toetsen: het land uit het zaad, alles bereikbaar, het donker, een reis over meer provincies,
+  thuiskomen net binnen de weg, de weg die de kaart opent, de raadsman onderweg, de spelregel uit, bewaren midden in een
+  reis); `npm test` 673/673; in de browser een reis heen en terug met het venster erna, zonder fouten; en de speeltest
+  (braaf, zaad 1) met het land uit, op de stand van vóór het land en erna: letter voor letter hetzelfde jaar.
 - 30 sep 2026 — **De raadsman beslist alleen als je weg bent** (zeventiende sessie; vraag 68, Marcel: "Ja B inderdaad").
   In de speeltest liet de bouwer met `Esc` elk voorval aan zijn raadsman, en had hij geen voorvallen meer. Nu beslist
   de raadsman alleen als de schout niet in het dorp is (een ander gebied, straks op reis); wie je in het dorp niet op

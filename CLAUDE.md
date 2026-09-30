@@ -299,6 +299,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   trager). Uit wie je kiest: `T.raadsmanKandidaten`; kiezen: `T.kiesRaadsman`, in het venster Raadsman
   (`js/raadsmanvenster.js`, onder `R` en als knop in de balk; vraag 67, B). Ging er een voorval voorbij dat een
   raadsman had beslist, dan zegt de raad het (`js/raad.js`, `laatstVoorbij` in `S.voorvallen`).
+- `js/land.js`: **het land** (vraag 63 en 69, 30 sep; stap 1a, stuk 1): een kaart met provincies uit het zaad van het
+  spel (`T.nieuwLand`, in `S.land`), wegen met hoeveel dagen reizen, en wat je zag (`gezien`; de rest is donker). Reizen:
+  `T.reisNaar` (over wegen die je kent) en `T.beginReis`; `T.werkLandBij` (elk beeld) laat je aankomen of thuiskomen, en
+  opent de kaart als de schout op de weg het dorp uit staat (`T.wegInEnUit`). **Wie reist, verlaat de kaart van het
+  dorp niet:** de schout gaat uit de wezens, en het dorp blijft `S.wereld`, zodat de heer, de inner, de marskramer en de
+  rovers thuis hun werk doen. Of de schout weg is, zegt `T.schoutIsWeg` (ook een ander gebied), of hij op reis is,
+  `T.opReis`; berichten (`js/ui.js`) en brieven (`js/brieven.js`) wachten dan in `S.land` (`T.bewaarVoorLater`,
+  `T.briefVoorLater`), en een bezoeker zet de reis niet op 1× (`T.naarGewoneSnelheid`). Achter de spelregel "Land"
+  (standaard uit, tot het buurdorp er is); de getallen in `T.LAND_INSTELLINGEN`. Het scherm: `js/landkaart.js` (de kaart
+  als SVG, en het venster als je terug bent).
 - `js/zien.js`: **het zichtveld en de getuigen** (werklijst punt 3, 27 sep): wie buiten is, ziet de
   schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
   verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het
@@ -529,6 +539,9 @@ hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.
 `Spel.debug.raadsman()` zegt wie je raadsman is en wat hij kan, uit wie je kiest, en wat hij besloot; `('Aaltje')` of
 `('boer2')` maakt die boer raadsman. Ga dan met `Spel.debug.gaNaar('proef')` weg, en hij beslist het volgende voorval.
+`Spel.debug.land()` zegt waar de schout is in het land, of hij reist, wat hij zag en welke wegen er zijn (en zet de
+spelregel Land aan); `('open')` opent de kaart, `('reis', 'De heide')` reist erheen, `('alles')` laat het hele land
+zien, `('nieuw')` maakt het opnieuw uit het zaad.
 `Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
 en het bier (`(30)` zet eerst 30 bier). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
