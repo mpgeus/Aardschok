@@ -28,8 +28,9 @@ gehucht" (25 sep) loopt achter op de dag. `npm test`: 680/680.
 
 **Waar het werk staat:** alles staat in `main`, ook het werk van de achttiende sessie (de maker, vraag 69, C, en 70;
 Marcel, 30 sep: "Ja, zet alles in main"; ook op `claude/werklijst-doorzetten-qagxwq`), en dat van de zeventiende (vraag 60
-tot en met 69, met stuk 1 van het land). Het werk van de negentiende sessie (vraag 71: stuk 2 van het land; en het plan
-voor stuk 3, vraag 72) staat op `ccr-4cd08e9d-1g0phy`, nog niet in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+tot en met 69, met stuk 1 van het land). Het werk van de negentiende sessie (vraag 71: stuk 2 van het land; het plan
+voor stuk 3, vraag 72; het concept, vraag 73; en de kern, vraag 74, stap 1 en 2, met het plan voor stap 3, vraag 75)
+staat op `ccr-4cd08e9d-1g0phy`, nog niet in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** **stuk 2 van het land is af** (vraag 71; Marcel: "A ja B ja C ja, oud spel mag
 vervallen"; zie onder Af): een speeldag kost 0,5 ms in plaats van 30 tot 39, alles van een dorp staat bij elkaar
@@ -2587,6 +2588,28 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 30 sep 2026 — **De boeren doen het seizoen** (negentiende sessie; vraag 74, stap 2; Marcel: "Het zaaien wordt gewoon
+  iets wat de boeren doen, zo ook het oogsten en de winter. Jij moet als schout wel een oogje in het zeil houden", en
+  "zelf sprokkelen, maar lost niet volledig op. Houthakker is nodig"). Na de oogst, op 1 herfstmaand, kiest elke boer wat
+  zijn velden volgend jaar worden (`T.boerenKiezenVelden` in `js/akkers.js`): een akker die volgend voorjaar onder 75%
+  zou zakken, krijgt mest als die er is en rust anders een jaar, een braak wordt weer akker, een weide blijft weide. Het
+  bericht zegt wat ze kozen, het veldenvenster bij elk veld wie het koos en waarom (`T.planTekst`), en wat jij kiest,
+  laat de boer staan (`veld.planDoor`). Op 1 slachtmaand slachten de boeren wat het hooi niet haalt (`T.boerenSlachten`
+  in `js/vee.js`, met het voorstel dat het venster al had). Het hele jaar sprokkelt elk huishouden 0,015 hout per dag
+  (`T.sprokkelHout` in `js/behoeften.js`), zo'n 40% van wat het in de winter stookt: het gehucht haalt met zijn 40 hout
+  52 van de 90 winterdagen in plaats van 38, en zonder houthakker nooit de hele winter, en het bericht zegt dat ("ook met
+  wat de mensen sprokkelen"). De spelregel "Het seizoen" (de boeren, of jij: zoals vóór 30 sep). De toetsen die het
+  stoken en de houthakker precies nameten, draaien met die spelregel op jij; 6 nieuwe toetsen.
+- 30 sep 2026 — **Voorvallen met een oorzaak** (negentiende sessie; vraag 74, stap 1, B; Marcel: "a ja"). Vier oorzaken
+  die je kunt zien en zelf kunt veranderen (`T.OORZAKEN` in `js/voorvallen.js`): honger (een krap rantsoen, of het dorp
+  mist eten), kou (in de winter, als het hout het niet haalt), vol (geen plaats in de huizen) en onvrede (onder 50%).
+  Diefstal, de stroper, de lening en de woeker komen van honger, de vechtpartij van onvrede, de koorts van kou of een vol
+  dorp, de brand van een vol dorp: met de oorzaak drie keer zo vaak, zonder een kwart zo vaak (`T.gewichtVanVoorval`; de
+  getallen in de werkbank, op 1 en 1 zoals ervoor). Het bericht zegt waarom ("Trijn zoekt je. Er is honger, want het
+  rantsoen is krap."), ook als de raadsman beslist, en een gesprek kan het zeggen met `{oorzaak}`.
+  `Spel.debug.voorval()` zegt welke oorzaken spelen en hoe zwaar elk voorval weegt. 5 nieuwe toetsen.
+- 30 sep 2026 — **Speeltest met een andere spelregel of een ander getal** (negentiende sessie): `--regel seizoen=jij` en
+  `--getal VOORVALLEN_INSTELLINGEN.metOorzaak=1`, zoals de browser ze onthoudt als een speler ze kiest.
 - 30 sep 2026 — **Elk dorp leeft** (negentiende sessie; vraag 71, stap 3 van stuk 2, A en C). `T.werkDorpBij(S, D, dt,
   dtWereld)` (`js/dorp.js`) doet elk beeld alles van een dorp, voor elk dorp in `S.dorpen` (`js/main.js`); ligt het niet
   waar je bent, dan lopen, maaien en dwalen zijn poppetjes daar ook, op zijn eigen kaart en niet getekend
