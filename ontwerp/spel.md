@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 30 sep 2026, zeventiende sessie)
+## Waar staat wat (bijgewerkt 30 sep 2026, negentiende sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -13,7 +13,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 | Onderwerp | Stand | Werklijst |
 |---|---|---|
-| Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3 | vraag 50, 51, 54 |
+| Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern | vraag 50, 51, 54, 73, 74 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt met de spelregel "Je gehucht" elk spel een ander gehucht (30 sep). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
@@ -42,8 +42,15 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 ## Een nieuwe richting (Marcel, 28 sep 2026)
 
-**Zo staat het nu** (28 en 29 sep): besloten, en nog niets van gebouwd. Marcel koos op vier vragen van Claude
+**Zo staat het nu** (28 tot en met 30 sep): besloten; wat er sindsdien van gebouwd is, staat bij elk onderwerp. Marcel koos op vier vragen van Claude
 (werklijst, vraag 50: "A ja B allebei C ja D ja"):
+- **Meer een management sim, en het poppetje is hoe je bestuurt** (Marcel, 30 sep, werklijst vraag 73): "We zetten
+  eerst de kern goed neer. Ik wil meer naar management sim toe. Het zaaien wordt gewoon iets wat de boeren doen, zo ook
+  het oogsten en de winter. Jij moet als schout wel een oogje in het zeil houden dat alles goed blijft verlopen." Het
+  concept dat Marcel meebracht (`concept.md`) is het kompas: wat elders één klik is, gaat hier via een persoon, een
+  plek, een papier of een handeling, en de toets is of je na een uur denkt "ik moet even gaan kijken wat daar aan de
+  hand is". Eerst de kern (voorvallen met een oorzaak, de dag in fasen, zelf gaan kijken), dan het buurdorp. Het plan:
+  werklijst, vraag 74.
 - **Het hart:** groeien en besturen. De heer met zijn inner en het verstoppen blijft als de druk van boven, niet
   meer als de puzzel waar alles om draait. Er gaat niets weg.
 - **Besturen is allebei:** knoppen met een prijs (de keuren, "Keuren en politiek") én bouwen en plannen

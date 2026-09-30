@@ -9,6 +9,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Het overzicht als een papier: een kaart van je dorp op tafel** (30 sep, negentiende sessie, bij vraag 74, d; een
+  idee van Claude, niet gekozen). Wordt het dorp groot, dan kan het overzicht een papier worden in plaats van een camera
+  van bovenaf: een kaart van je dorp op tafel in je huis, waarop je bouwt en plant, en die laat zien wat je weet (wat jij
+  of je raadsman het laatst zag), niet wat er nu is. Zo blijft het poppetje de manier waarop je bestuurt (`concept.md`),
+  en hoef je niet voor elke bouwplaats te lopen.
 - **Het slachtvenster wacht op het scherm, en geen toets kijkt dat na** (30 sep, negentiende sessie; vraag 71). Sinds
   één dorp één ding is, vraagt de regel (`T.tikVeeDag`, `js/vee.js`) elke dag van slachtmaand het venster aan het
   scherm, met het dorp, en beslist het scherm (`T.ui.openSlachten`, `js/hud.js`) of het opent: niet midden in een

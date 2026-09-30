@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (30 sep 2026, negentiende sessie): stuk 2 van het land is af (de snellere dag, één dorp als één ding, elk dorp leeft); het concept van Marcel (vraag 73) en het plan voor het buurdorp (vraag 72) wachten op Marcel
+## De stand (30 sep 2026, negentiende sessie): stuk 2 van het land is af; Marcel koos het concept als kompas en eerst de kern (vraag 73); het plan voor de kern (vraag 74) wacht op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -38,11 +38,13 @@ maaien en dwalen, alleen niet getekend; een ander dorp spreekt niet tegen jou (`
 de speeltest speelt letter voor letter hetzelfde jaar als ervoor, en duurt nu zo'n zeven minuten in plaats van een uur.
 `test/dorpen.test.cjs` zet jouw gehucht en een van de maker naast elkaar. **Daarna bracht Marcel een concept mee** ("De
 Schout", `concept.md`: het poppetje is de manier waarop je bestuurt; "Ik denk dat we hiermee een goede kant opgaan"). Het
-voorstel is vraag 73: eerst de kern door de toets van één uur, met drie kleine stappen, en dan het buurdorp. Wat het
-volgende is, hangt af van zijn antwoord: **stuk 3, het buurdorp** (vraag 72, A tot en met E), of eerst vraag 73. Begin
-aan geen van beide zonder zijn antwoord. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
+concept is ons kompas, en **eerst komt de kern** (vraag 73; Marcel: "We zetten eerst de kern goed neer. Ik wil meer
+naar management sim toe"): de boeren doen het seizoen en jij houdt een oogje in het zeil, voorvallen krijgen een oorzaak
+(B), de dag komt in fasen (A), en zelf gaan kijken kan altijd (C). **Het plan voor de kern is vraag 74** (a tot en met d),
+en wacht op Marcel: begin er niet zonder zijn antwoord. Ernaast loopt een meting van hoe groot een dorp kan worden
+(vraag 74). Het buurdorp (vraag 72) wacht tot de kern staat. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
 raadsman komen met het land (vraag 66, D). Open blijven: het dorp van bovenaf
-(vraag 65, C; Marcel: "nee niet bovenaf, ik denk hier nog over na"), en de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
+(vraag 65, C; het voorstel staat nu in vraag 74, d), en de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
 dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
 thuis is (`npm run proefversie`, `verpakken.md`), en wie de eerste tester is, staat open (33d). Van de proef zijn
@@ -79,8 +81,8 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* zijn concept, en wat eerst komt (vraag 73: 1 tot en met 4); het plan voor het buurdorp (vraag 72: A tot en met E); het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
-(vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
+*2. Wacht op Marcel:* het plan voor de kern (vraag 74: a tot en met d); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+(vraag 65, C; het voorstel in vraag 74, d); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
 heer in het hogere doel past). Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51; het bijstellen na de
@@ -2184,7 +2186,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     managementspel één klik is, hier via een persoon, een plek, een papier of een handeling in de wereld gaat, en zijn
     toets is of je na een uur denkt "ik moet even gaan kijken wat daar aan de hand is". Veel ervan is er al (het
     poppetje, de voorvallen, de raadsman, de herberg, de proef als eerste versie), maar de toets haalt het spel nu niet:
-    alles komt naar je toe, de balk zegt elk getal precies, en bouwen en de wetten gaan van overal. Alleen de inner
+    lopen doe je voor klusjes (bouwen kan alleen waar de schout staat), en om iets te weten of te beslissen hoef je
+    nergens heen: wie een voorval heeft, loopt naar jou, de balk zegt elk getal precies, en de wetten gaan van overal
+    (verbeterd: eerst stond hier dat ook bouwen van overal gaat). Alleen de inner
     haalt hem (wat hij ziet, hangt af van waar hij staat). Het schuurt met het land: het concept zegt klein en diep,
     zonder grote wereld of diplomatie, in de eerste versie.
     Voorstel (Claude): eerst de kern door de toets van één uur, met drie kleine stappen, en dan het buurdorp (vraag 72):
@@ -2199,6 +2203,58 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     satire, de seizoenen)? **2**, eerst de kern door de toets, en dan het buurdorp? **3**, welke van A, B en C (voorstel:
     B, dan A, dan C)? **4**, is dit ook het antwoord op het dorp van bovenaf (vraag 65, C): niet bovenaf, want het
     poppetje is hoe je bestuurt?
+    **Beantwoord (Marcel, 30 sep):** "We zetten eerst de kern goed neer. Ik wil meer naar management sim toe. Het zaaien
+    wordt gewoon iets wat de boeren doen, zo ook het oogsten en de winter. Jij moet als schout wel een oogje in het zeil
+    houden dat alles goed blijft verlopen. Godot hoeft niet, maar ik wil wel onderzoeken hoe groot een dorp / stad kan
+    worden? A dit moet toch richting de dag verdeling van de pdf. Meerdere fasen op een dag. B goed idee. C zelf kijken is
+    altijd een optie als je het niet vertrouwd of meer wil weten. 1. Als je bovenstaande bedoeld, Ja 2. Eens 3. Prima 4.
+    Wat bedoel je hier". Dus: het concept is ons kompas; eerst de kern, dan het buurdorp; meer een management sim, waarin
+    de boeren het seizoen doen en jij een oogje in het zeil houdt; B, dan A (de dag in fasen), dan C (zelf kijken kan
+    altijd); en een meting van hoe groot een dorp kan worden. Wat besloten is, staat bovenaan in `concept.md`. Het plan:
+    vraag 74. Vraag 4 is daar uitgelegd (d).
+74. **De kern goed neerzetten: het plan** (Claude, 30 sep, negentiende sessie; vraag 73; wacht op Marcel). Wat er nu is,
+    nagekeken: de voorvallen komen op gewicht en seizoen (`T.VOORVALLEN`), niet uit wat er in het dorp speelt; alleen de
+    muizen (een volle schuur) en de wolven (schapen in de winter) hebben een oorzaak. De boeren maaien al zelf, en het
+    zaaien gaat al vanzelf op 1 lentemaand. Wat jij doet: de velden kiezen (`V`: akker, weide of braak, en de mest), en op
+    1 slachtmaand het slachten (een venster met een voorstel). Wat het dorp mist, weet het spel al (`D.behoeften.mist`:
+    eten, brandhout, een kerk, bier).
+    Voorstel, in deze volgorde:
+    - **Stap 1, B: voorvallen met een oorzaak.** Vier oorzaken die je in het dorp kunt zien en zelf kunt veranderen:
+      *honger* (het eten haalt het niet, of het rantsoen is krap), *kou* (het hout haalt de winter niet), *vol* (geen
+      plaats meer in de huizen) en *onvrede* (het dorp is ontevreden). Diefstal, de stroper, de lening en de woeker komen
+      van honger; de vechtpartij van onvrede; de koorts van kou en een vol dorp; de brand van een vol dorp (en in de
+      winter, zoals nu). Met een oorzaak komt zo'n voorval drie keer zo vaak, zonder een kwart zo vaak (de getallen in de
+      werkbank; op 1 en 1 speelt het zoals nu). Het bericht zegt waarom ("Er is gestolen. Er is honger: het rantsoen is
+      krap"), en een gesprek kan het zeggen met `{oorzaak}`. De storm blijft uit de lucht; kansen, feesten, verzoeken en
+      de grillen van de heer zijn geen problemen.
+    - **Stap 2: de boeren doen het seizoen.** Elke boer kiest op 1 lentemaand zelf wat zijn velden worden, met één regel:
+      een veld dat uitgeput raakt, rust een jaar, of krijgt mest als die er is. Het slachtvenster verdwijnt: de boeren
+      slachten op 1 slachtmaand wat het voorstel zegt (zo weinig als kan, zodat het hooi de winter haalt), en het bericht
+      zegt wat. Het veldenvenster (`V`) blijft, als je oogje in het zeil: het toont wat elke boer koos en waarom, en jij
+      kunt het veranderen. Een spelregel "Het seizoen": de boeren (standaard) of jij (zoals nu). Later, met C: een boer
+      met een slecht karakter maakt fouten, en dat merk je als je gaat kijken.
+    - **Stap 3, A: de dag in fasen** (het plan komt als we daar zijn). Een schets: 's ochtends staat je raadsman aan je
+      deur met wat er gisteren gebeurde, wat er opraakt en welke oorzaak er speelt (stap 1); overdag loop je, kijk je en
+      spreek je mensen; 's middags is er zitting, waar de rechtszaken op je wachten in plaats van dat ze je achternalopen;
+      's avonds hoor je in de herberg wat er speelt; 's nachts sluit de dag. De tijd staat alleen stil als iets je nodig
+      heeft, zodat een stille dag op 30× voorbijgaat, en het jaar houdt zijn 360 dagen.
+    - **Stap 4, C: zelf gaan kijken** kan altijd, bij elk voorval en bij het rapport: je loopt erheen en ziet hoe het
+      echt zit. Een raadsman die slecht rekent, of een gierige, meldt het niet altijd goed.
+    - **Ernaast: hoe groot kan een dorp worden.** Een meting, zonder iets te veranderen: met 26 tot 1.600 poppetjes wat
+      een beeld kost aan de wereld en aan het tekenen, wat een dag kost, en hoe groot een bewaard spel wordt. De uitslag
+      komt hier.
+    - **d, het dorp van bovenaf** (vraag 73, 4: "Wat bedoel je hier"). Op 29 sep stelde Claude voor dat je met één toets
+      (`Tab`) de camera van de schout af tilt en over je dorp kijkt, om te bouwen en te plannen zonder te lopen (vraag 64,
+      A); Marcel zei toen "nee niet bovenaf, ik denk hier nog over na" (vraag 65, C). Het concept kiest: geen oog van
+      bovenaf, want dan ben je weer de god boven de stad. Wat je niet zelf ziet, hoor je (het rapport, de mensen) of ga je
+      bekijken (C). Voorstel: zo. Wordt het dorp later groot, dan kan het overzicht een papier worden: een kaart van je
+      dorp op tafel in je huis, waarop je bouwt en plant, en die laat zien wat je weet (voor later, `opmerkingen.md`).
+    Klaar als (stap 1 en 2): een toets per oorzaak; zonder oorzaak komen de problemen zelden; de boeren kiezen hun velden
+    en slachten zelf; met de getallen van B op 1 en de spelregel "Het seizoen" op jij speelt de speeltest letter voor
+    letter hetzelfde jaar als nu; `npm test` groen. Vragen: **a**, B zo, met deze vier oorzaken? **b**, de boeren kiezen
+    hun velden en slachten zelf, en jij kunt het in het veldenvenster veranderen, met de spelregel "Het seizoen"? **c**,
+    het hout: sprokkelen de mensen het zelf in het bos, of blijft de houthakker iets wat jij bouwt? **d**, geen camera van
+    bovenaf: de schout blijft in beeld, en het overzicht komt via rapporten en zelf kijken?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

@@ -2,8 +2,28 @@
 
 Marcel bracht op 30 sep een concept van 15 bladzijden mee, "De Schout: Game Concept & Mini GDD" (een PDF), met de
 woorden: "Wat vind je hiervan? Ik denk dat we hiermee een goede kant opgaan." Hieronder staat wat erin staat, kort en
-waar het ertoe doet in zijn eigen woorden, en daaronder hoe het naast ons spel ligt. **Besloten is nog niets:** de
-vragen staan in de werklijst, vraag 73.
+waar het ertoe doet in zijn eigen woorden, en daaronder hoe het naast ons spel ligt. Wat Marcel erover besliste, staat
+eerst.
+
+## Besloten (Marcel, 30 sep 2026; werklijst, vraag 73)
+
+> We zetten eerst de kern goed neer. Ik wil meer naar management sim toe. Het zaaien wordt gewoon iets wat de boeren
+> doen, zo ook het oogsten en de winter. Jij moet als schout wel een oogje in het zeil houden dat alles goed blijft
+> verlopen. Godot hoeft niet, maar ik wil wel onderzoeken hoe groot een dorp / stad kan worden?
+>
+> A dit moet toch richting de dag verdeling van de pdf. Meerdere fasen op een dag. B goed idee. C zelf kijken is altijd
+> een optie als je het niet vertrouwd of meer wil weten. 1. Als je bovenstaande bedoeld, Ja 2. Eens 3. Prima
+
+- **Het concept is ons kompas:** zijn regel (wat elders één klik is, gaat hier via een persoon, een plek, een papier of
+  een handeling) en zijn acht principes, naast wat wij al hebben: de heer, de inner, de satire en de seizoenen.
+- **Eerst de kern, dan het buurdorp** (werklijst, vraag 72 wacht).
+- **Meer een management sim.** Het zaaien, het oogsten en de winter doen de boeren zelf. Jij houdt als schout een oogje
+  in het zeil dat alles goed blijft gaan.
+- **De volgorde:** eerst B, voorvallen met een oorzaak; dan A, dat de dag in fasen wordt, zoals in het concept (niet
+  alleen een rapport in de ochtend, maar meer fasen op een dag); dan C, zelf gaan kijken, dat altijd kan, bij alles,
+  als je het niet vertrouwt of meer wilt weten.
+- **Godot hoeft niet.** Wel onderzoeken hoe groot een dorp of stad kan worden (een meting; werklijst, vraag 74).
+- **Nog open:** vraag 4, het dorp van bovenaf; Marcel vroeg wat ermee bedoeld was.
 
 ## Wat erin staat
 
@@ -73,9 +93,11 @@ het poppetje de manier is waarop je bestuurt."
   niet gebouwd;
 - en zijn eerste versie is bijna onze proef "van gehucht tot dorp".
 
-**De toets van één uur haalt het spel nu niet.** Alles komt naar je toe: wie een voorval heeft, loopt naar jou, de balk
-zegt elk getal precies, de raad zegt wat je moet doen, en bouwen en de wetten gaan van overal. Het poppetje loopt,
-maar besturen heeft hem niet nodig. Misschien is dat wat Marcel op 29 sep "leeg" noemde (vraag 64). Het deel dat de
+**De toets van één uur haalt het spel nu niet.** Lopen doe je nu vooral voor klusjes: bouwen kan alleen waar de schout
+staat (de camera volgt hem), en de marskramer spreek je op het plein. Om iets te weten of te beslissen hoef je nergens
+heen: wie een voorval heeft, loopt naar jou, de balk zegt elk getal precies, de raad zegt wat je moet doen, en de
+wetten gaan van overal. Misschien is dat wat Marcel op 29 sep "leeg" noemde, en "rond hobbelen" lastig (vraag 64):
+lopen voor klusjes is lastig, lopen om iets uit te zoeken niet. Het deel dat de
 toets wél haalt, is de inner: wat hij ziet, hangt af van waar hij staat, en er zijn getuigen, de roddelaar, en de kelder
 waar je zelf heen moet. Het concept vraagt eigenlijk dat de regels van de inner de regels van al het besturen worden.
 Het is daarmee ook een antwoord op het dorp van bovenaf (vraag 65, C): niet bovenaf; het poppetje is hoe je bestuurt.

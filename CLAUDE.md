@@ -443,6 +443,10 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 - Je bent de **schout**, een poppetje dat door het dorp loopt, geen hand van bovenaf. Je breidt
   het dorp uit en bestuurt het met **wetten** (eerst keuren genoemd), in een menu zoals in Democracy 3
   (Marcel, 29 sep), en later samen met de schepenen.
+- **Meer een management sim** (Marcel, 30 sep, vraag 73): het poppetje is de manier waarop je bestuurt, en het
+  concept dat Marcel meebracht (`ontwerp/concept.md`) is het kompas: wat elders één klik is, gaat hier via een persoon,
+  een plek, een papier of een handeling. De boeren zaaien, oogsten en halen de winter zelf; jij houdt een oogje in het
+  zeil. Eerst de kern (vraag 74), dan het buurdorp.
 - De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het
   dorp, jou zelf, met hogere eisen, en met soldaten. Zijn **inner** komt kijken, en wat je opzij
   zet, moet uit zijn zicht.
