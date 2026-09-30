@@ -149,6 +149,39 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 30 sep: voorvallen met een oorzaak, en de boeren doen het seizoen (werklijst, vraag 74, stap 1 en 2)
+
+Gespeeld in de negentiende sessie, op `3c68667` van `ccr-4cd08e9d-1g0phy`, zonder één fout in de console, alle vijf
+spelers met zaad 1 tot en met 3.
+
+**Het bewijs:** met de oude instellingen (`--regel seizoen=jij --getal VOORVALLEN_INSTELLINGEN.metOorzaak=1 --getal
+VOORVALLEN_INSTELLINGEN.zonderOorzaak=1`) spelen alle 15 jaren letter voor letter zoals op het spel van vóór vraag 74
+(`8945be9`). Het enige verschil is de zin die er nu achter een bericht staat en zegt waar een voorval van kwam: 1 tot 14 per
+jaar ("De huizen zitten vol.", "Er is honger, want ...").
+
+**Op de nieuwe standaard,** naast dat oude spel:
+
+| | oud | nieuw |
+|---|---|---|
+| Problemen onder de voorvallen (diefstal, stroper, lening, woeker, vechtpartij, koorts, brand), eerste jaar van alle drie de zaden | braaf 45 van 141, slim 46 van 141, lui60 37 van 106 | braaf 39 van 140, slim 40 van 145, lui60 34 van 110 |
+| Slim: doden, en mensen aan het eind | 14, 16 en 0; 27, 25 en 37 | 0, 9 en 0; 37, 35 en 37 |
+| Braaf: hout aan het eind | 213 tot 246 | 262 tot 289 |
+| De bouwer, tot Sint-Maarten 1324 | 43 tot 45 doden, de heer kreeg in 1323 45%: schandpaal, en in 1324 het ambt kwijt (alle drie) | 44 tot 47 doden, en twee van de drie houden hun ambt (de heer kreeg in 1323 meer, dus een lichtere straf) |
+
+**Wat opviel:**
+
+1. **Wie goed bestuurt, krijgt minder problemen,** maar niet veel minder: een dorp dat groeit, zit vaak vol, en dan komen
+   de koorts en de brand vaker. Wie het rantsoen krap zet, krijgt ze wel veel vaker (57 keer een diefstal tegen 5, als
+   er elke dag een voorval gekozen werd; `test/voorvallen.test.cjs`).
+2. **Het sprokkelen helpt wie het hout net niet haalde:** de slimme speler, die het goud liever voor de heer bewaart, kwam
+   met zaad 1 veertien mensen kwijt aan de kou en nu niemand.
+3. **De ineenstorting van de bouwer in zijn eerste winter als dorp blijft** (44 doden, vraag 59, geparkeerd). Twee van de
+   drie houden nu hun ambt op Sint-Maarten 1324, en spelen dus een tweede winter, waarin er nog eens 18 en 29 sterven.
+   Of dat door het sprokkelen komt of door andere voorvallen, is niet uitgezocht: één ander voorval verandert alles wat
+   erna komt.
+4. **De velden:** in twee jaar raakt geen akker uitgeput (van 100% naar 90% naar 80%), dus de boeren kozen overal weer
+   akker. Hun regel gaat pas in het derde jaar iets doen.
+
 ## De speeltest van 30 sep: de bouwer op gehuchten van de maker (werklijst, vraag 70, C)
 
 Gespeeld in de achttiende sessie met `npm run speeltest -- bouwer --maker`: de spelregel "Je gehucht" op "Elk spel een

@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (30 sep 2026, negentiende sessie): stuk 2 van het land is af; Marcel koos het concept als kompas en eerst de kern (vraag 73); het plan voor de kern (vraag 74) wacht op Marcel
+## De stand (30 sep 2026, negentiende sessie): het concept is het kompas en eerst komt de kern (vraag 73); stap 1 en 2 van de kern zijn af (vraag 74); het plan voor de dag in fasen (vraag 75) wacht op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -42,8 +42,13 @@ Schout", `concept.md`: het poppetje is de manier waarop je bestuurt; "Ik denk da
 concept is ons kompas, en **eerst komt de kern** (vraag 73; Marcel: "We zetten eerst de kern goed neer. Ik wil meer
 naar management sim toe"): de boeren doen het seizoen en jij houdt een oogje in het zeil, voorvallen krijgen een oorzaak
 (B), de dag komt in fasen (A), en zelf gaan kijken kan altijd (C). **Het plan voor de kern is vraag 74**, en Marcel
-koos het ("a ja b ja c zelf sprokkelen, maar lost niet volledig op. Houthakker is nodig d ja"): stap 1 (B) is bezig. Ernaast loopt een meting van hoe groot een dorp kan worden
-(vraag 74). Het buurdorp (vraag 72) wacht tot de kern staat. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
+koos het ("a ja b ja c zelf sprokkelen, maar lost niet volledig op. Houthakker is nodig d ja"). **Stap 1 en 2 zijn af**
+(zie onder Af): een probleem heeft een oorzaak die je kunt zien (honger, kou, vol, onvrede), en de boeren kiezen hun
+velden, slachten en sprokkelen zelf (de spelregel "Het seizoen"). De speeltest speelt met de oude instellingen letter voor
+letter hetzelfde jaar, en op de nieuwe standaard staat wat het deed in `speelbaar.md`. **Het volgende is stap 3, de dag in
+fasen: het plan is vraag 75** (a tot en met d), en wacht op Marcel; begin er niet zonder zijn antwoord. Ernaast liep een
+meting van hoe groot een dorp kan worden (vraag 74; de uitslag staat daar). Het buurdorp (vraag 72) wacht tot de kern
+staat. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
 raadsman komen met het land (vraag 66, D). Het dorp van bovenaf is beslist: niet
 (vraag 74, d). Open blijft de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
 dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
@@ -82,7 +87,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het plan voor de dag in fasen (vraag 75: a tot en met d); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
