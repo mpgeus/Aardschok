@@ -476,3 +476,61 @@ test('T.werkOogstBij: een boer die al op een ongemaaide tegel staat, begint daar
     T.zoekPad = echtPad;
   }
 });
+
+// ── De boeren kiezen (werklijst vraag 74, stap 2; Marcel, 30 sep: "Het zaaien wordt gewoon iets wat de boeren doen") ──
+
+test('na de oogst kiezen de boeren: een uitgeputte akker rust, een braak wordt weer akker, een weide blijft weide', () => {
+  const { S, akker, weide, braak, boer } = drieVelden();
+  boer.naam = 'Klaas';
+  akker.vruchtbaarheid = 0.8; // volgend voorjaar 0,7: onder rustOnder
+  const gezegd = [];
+  T.ui = { bericht: (t) => gezegd.push(t) };
+  try {
+    T.tikAkkersDag(S, dagVan('oogstmaand', 30));
+    assert.equal(akker.plan, 'akker', 'vóór de oogst kiest niemand');
+    T.tikAkkersDag(S, dagVan('herfstmaand', 1));
+  } finally {
+    delete T.ui;
+  }
+  assert.deepEqual([akker.plan, weide.plan, braak.plan], ['braak', 'weide', 'akker']);
+  assert.equal(T.planTekst(S, akker), 'Klaas koos het: het land raakt uitgeput');
+  assert.equal(T.planTekst(S, braak), 'Klaas koos het: het land heeft gerust');
+  assert.equal(T.planTekst(S, weide), 'Klaas koos het');
+  assert.ok(gezegd.includes('Na de oogst kozen de boeren wat hun velden volgend jaar worden: het veld van Klaas rust een jaar en dat van Klaas wordt weer akker. In het veldenvenster (V) kun je het veranderen.'), gezegd.join(' | '));
+  // Op 1 lentemaand gaat het in, en begint een nieuw jaar: na de oogst kiest de boer weer.
+  T.wisselVelden(S);
+  assert.deepEqual([akker.bestemming, braak.bestemming], ['braak', 'akker']);
+  assert.equal(T.planTekst(S, akker), '');
+});
+
+test('een akker die nog niet uitgeput raakt, blijft akker; een uitgeputte krijgt mest als die er is', () => {
+  const { S, akker } = drieVelden();
+  akker.vruchtbaarheid = 0.9; // volgend voorjaar 0,8: nog genoeg
+  T.boerenKiezenVelden(S);
+  assert.equal(akker.plan, 'akker');
+  assert.equal(akker.mest, false);
+  akker.vruchtbaarheid = 0.8;
+  T.zetVoorraad(S, 'mest', T.mestVoorVeld(akker));
+  T.boerenKiezenVelden(S);
+  assert.deepEqual([akker.plan, akker.mest, akker.planWaarom], ['akker', true, 'het land raakt uitgeput, en er is mest']);
+});
+
+test('wat jij koos, laat de boer staan; met de spelregel "Het seizoen" op jij kiest alleen jij', () => {
+  const { S, akker, braak } = drieVelden();
+  akker.vruchtbaarheid = 0.8;
+  assert.equal(T.zetPlan(S, braak, 'weide').kan, true);
+  T.boerenKiezenVelden(S);
+  assert.equal(braak.plan, 'weide', 'jouw keuze blijft');
+  assert.equal(T.planTekst(S, braak), 'Jij koos het');
+  assert.equal(akker.plan, 'braak', 'de rest kiest de boer');
+  const zo = drieVelden();
+  zo.akker.vruchtbaarheid = 0.8;
+  T.zetOptie('seizoen', 'jij');
+  try {
+    assert.deepEqual(T.boerenKiezenVelden(zo.S), []);
+    assert.equal(zo.akker.plan, 'akker');
+    assert.equal(T.planTekst(zo.S, zo.akker), '');
+  } finally {
+    T.optiesTerug();
+  }
+});

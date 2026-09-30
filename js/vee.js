@@ -69,9 +69,13 @@
     hongerDagen: 10,
     // Hoeveel dagen vooraf het dorp zegt dat het hooi opraakt.
     hooiWaarschuwing: 15,
-    // Op deze dag opent het slachtvenster vanzelf (js/hud.js): de winter begint, en het hooi zegt
-    // hoeveel vee je houdt.
+    // Op deze dag slachten de boeren (boerenSlachten), of opent het slachtvenster vanzelf (js/hud.js): de winter
+    // begint, en het hooi zegt hoeveel vee je houdt.
     slachten: { maand: 'slachtmaand', dag: 1 },
+    // De boeren slachten zelf (werklijst vraag 74, stap 2; Marcel, 30 sep: "Het zaaien wordt gewoon iets wat de boeren
+    // doen, zo ook het oogsten en de winter"): wat het voorstel zegt, zo weinig als kan, zodat het hooi de winter haalt
+    // (T.boerenSlachten). De spelregel "Het seizoen"; uit: het slachtvenster vraagt het jou, zoals vóór 30 sep.
+    boerenSlachten: true,
     // Wat een geslacht dier geeft. Een jong geeft de helft van het vlees, en ook een huid. Vlees vult
     // een maag (sinds 25 sep, een optie), en het bederft tenzij het gezouten is (js/behoeften.js).
     slacht: { koe: { vlees: 20, huiden: 1 }, schaap: { vlees: 6, huiden: 1 } },
@@ -827,6 +831,21 @@
     return o;
   };
 
+  // De boeren slachten zelf, op 1 slachtmaand (werklijst vraag 74, stap 2): wat het voorstel zegt (T.slachtVoorstel),
+  // en het bericht zegt het, ook als het hooi de winter haalt en er niets hoeft. Je kunt daarna nog zelf slachten, in
+  // het veldenvenster. Geeft wat T.slacht geeft.
+  T.boerenSlachten = function (D, dag) {
+    const eters = T.veeVan(D).filter((e) => T.hooiVanDier(e, dag) > 0);
+    if (!eters.length) return { vlees: 0, huiden: 0 };
+    const voorstel = T.slachtVoorstel(D, dag);
+    if (!voorstel.dieren.length) {
+      T.zeg(D, 'Het hooi haalt de winter: de boeren houden al hun vee.', 'goed');
+      return { vlees: 0, huiden: 0 };
+    }
+    T.zeg(D, 'Het hooi haalt de winter niet voor de hele kudde: de boeren slachten wat te veel is.');
+    return T.slacht(D, voorstel.dieren, dag);
+  };
+
   // Eén winterdag (T.tikVeeDag): het vee eet hooi uit de voorraad, het oudste eerst (de kern van de
   // kudde; het jongste eet als laatste). Wie niet genoeg krijgt, krijgt honger (e.honger, in dagen,
   // naar hoeveel het tekortkwam); na IN().hongerDagen sterft het. Wie weer genoeg eet, knapt per dag
@@ -888,10 +907,14 @@
     const d = T.datumVanDag(dag);
     const werpen = IN().werpen;
     if (IN().groeit && d.maand === maandIdx(werpen.maand) && d.dagVanMaand === werpen.dag) T.werpJongen(D, dag);
-    // Op 1 slachtmaand: wie gaat er naar de slager? Het venster opent zodra je rondloopt (niet midden
-    // in een gesprek of een ander venster), en tot dan blijft de vraag staan.
+    // Op 1 slachtmaand: wie gaat er naar de slager? Dat kiezen de boeren (boerenSlachten), of het venster vraagt het
+    // jou: het opent zodra je rondloopt (niet midden in een gesprek of een ander venster), en tot dan blijft de vraag
+    // staan.
     const s = IN().slachten;
-    if (d.maand === maandIdx(s.maand) && d.dagVanMaand === s.dag) V.slachtVraag = true;
+    if (d.maand === maandIdx(s.maand) && d.dagVanMaand === s.dag) {
+      if (IN().boerenSlachten) T.boerenSlachten(D, dag);
+      else V.slachtVraag = true;
+    }
     if (V.slachtVraag && T.ui && T.ui.openSlachten) T.ui.openSlachten(D);
     if (IN().winterzorg && winterTijd(dag)) T.voerHooi(D, dag);
     else V.hooiGewaarschuwd = V.hongerGemeld = false; // een nieuwe winter mag weer waarschuwen

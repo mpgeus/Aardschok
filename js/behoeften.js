@@ -43,6 +43,13 @@
     // maat van een gezin, dezelfde als bij groei) per dag, alleen in wintermaand, louwmaand en
     // sprokkelmaand (T.MAANDEN: seizoen "winter").
     brandhoutPerHuishoudenPerDag: 0.15,
+    // Sprokkelen (werklijst vraag 74, stap 2; Marcel, 30 sep: "zelf sprokkelen, maar lost niet volledig op.
+    // Houthakker is nodig"): elk huishouden raapt elke dag zoveel dood hout in het bos, het hele jaar. Een jaar
+    // sprokkelen is zo'n 40% van wat een huishouden in de winter stookt (360 × 0,015 tegen 90 × 0,15): zonder
+    // houthakker haalt het dorp de winter niet. Of er gesprokkeld wordt: de spelregel "Het seizoen" (uit: niemand
+    // sprokkelt, zoals vóór 30 sep).
+    sprokkelen: true,
+    sprokkelPerHuishoudenPerDag: 0.015,
     // Hoe de drie hierboven optellen tot S.behoeften.tevredenheid (0..1); de drie gewichten samen
     // zijn 1. kerkBasis is de tevredenheid-bijdrage van "kerk" zónder kerk: een gemis, geen ramp.
     gewichtEten: 0.5,
@@ -439,10 +446,14 @@
     return `${T.hoofdletter(wat)} is ${op}, en de winter duurt nog ${dagenTekst(v.winter)}.`;
   };
 
-  // Wat er per dag aan brandhout bijkomt: wat de werkplaatsen de laatste dag maakten (g.werkte,
-  // js/gebouwen.js, stap 6), min wat ze ervan gebruikten. In het gehucht hakt alleen de houthakker.
+  // Wat de mensen per dag sprokkelen (sprokkelPerHuishoudenPerDag): hout erbij, elke dag (T.tikBehoeftenDag).
+  T.sprokkelHout = (D) => (T.BEHOEFTEN_INSTELLINGEN.sprokkelen ? huishoudensVan(D) * T.BEHOEFTEN_INSTELLINGEN.sprokkelPerHuishoudenPerDag : 0);
+
+  // Wat er per dag aan brandhout bijkomt: wat de mensen sprokkelen (T.sprokkelHout), en wat de werkplaatsen de
+  // laatste dag maakten (g.werkte, js/gebouwen.js, stap 6), min wat ze ervan gebruikten. In het gehucht hakt alleen de
+  // houthakker.
   T.brandhoutErbij = function (D) {
-    let erbij = 0;
+    let erbij = T.sprokkelHout(D);
     for (const g of D.gebouwen || []) {
       const m = T.GEBOUWEN[g.soort].maakt;
       if (!m || !g.werkte) continue;
@@ -498,8 +509,8 @@
     return `: een jager schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag, en vlees vult een maag`;
   }
 
-  // Het bericht vooraf: "Over een maand is het winter. Het hout haalt 38 van de 90 dagen: een
-  // houthakker hakt 2 hout per dag. Het eten haalt de winter."
+  // Het bericht vooraf: "Over een maand is het winter. Het hout haalt 52 van de 90 dagen, ook met wat de mensen
+  // sprokkelen: een houthakker hakt 2 hout per dag. Het eten haalt de winter."
   function zegDeWinterVooraf(D, dag) {
     const hout = T.houtVoorDeWinter(D, dag);
     const eten = T.etenVoorDeWinter(D, dag);
@@ -507,7 +518,9 @@
     const zinnen = [wanneer];
     if (hout.haalt && eten.haalt) zinnen.push('Het hout en het eten halen de winter.');
     else {
-      zinnen.push(hout.haalt ? 'Het hout haalt de winter.' : `Het hout haalt ${hout.dagen} van de ${hout.winter} dagen: ${houtHelpt(D)}.`);
+      // Sprokkelen de mensen (vraag 74, stap 2), dan zegt het dat dat niet genoeg is.
+      const ook = T.sprokkelHout(D) > 0 ? ', ook met wat de mensen sprokkelen' : '';
+      zinnen.push(hout.haalt ? 'Het hout haalt de winter.' : `Het hout haalt ${hout.dagen} van de ${hout.winter} dagen${ook}: ${houtHelpt(D)}.`);
       zinnen.push(eten.haalt ? 'Het eten haalt de winter.' : `Het eten haalt ${eten.dagen} van de ${eten.winter} dagen${etenHelpt()}.`);
     }
     T.zeg(D, zinnen.join(' '), hout.haalt && eten.haalt ? 'goed' : 'gevaar');
@@ -565,6 +578,8 @@
 
     pasBederfToe(D, bederfelijkGegeten);
     pasBrandhoutToe(D, b);
+    const sprokkel = T.sprokkelHout(D); // het dode hout van vandaag, voor de winter
+    if (sprokkel > 0) T.wijzigVoorraad(D, 'hout', sprokkel);
     pasWinterVerliesToe(D, b);
     pasVertrekToe(D, b, dag);
     pasHuisGroeiToe(D, b);

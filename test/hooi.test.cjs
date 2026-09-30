@@ -296,7 +296,33 @@ test('T.slacht: weg uit de wereld, en vlees en huiden in de voorraad (een jong d
   assert.ok(koe.dood && !S.wereld.wezens.includes(koe));
 });
 
-test('op 1 slachtmaand vraagt het dorp wie er naar de slager gaat; het venster opent als je rondloopt', () => {
+test('op 1 slachtmaand slachten de boeren wat het hooi niet haalt, en het bericht zegt het (vraag 74, stap 2)', () => {
+  const { S, velden: [weide] } = boerMet([{ x: 2, y: 2, b: 6, h: 6, bestemming: 'weide' }]);
+  const dag = dagVan('slachtmaand', 1);
+  zet(S, weide, 'koe', 3);
+  T.zetVoorraad(S, 'hooi', 300); // 2 per winterdag: een koe te veel
+  const voorstel = T.slachtVoorstel(S, dag).dieren;
+  assert.equal(voorstel.length, 1);
+  const gezegd = [];
+  T.ui = { bericht: (t) => gezegd.push(t), openSlachten: () => gezegd.push('venster') };
+  try {
+    T.tikVeeDag(S, dag);
+    assert.ok(voorstel[0].dood && T.veeVan(S).length === 2, 'de boeren slachtten wat het voorstel zei');
+    assert.ok(!S.vee.slachtVraag, 'en vragen het jou niet');
+    assert.ok(!gezegd.includes('venster'), 'geen venster');
+    assert.match(gezegd.join(' '), /de boeren slachten wat te veel is/);
+    // Een jaar later, met hooi genoeg: niemand hoeft weg, en het dorp zegt dat ook.
+    T.zetVoorraad(S, 'hooi', 1000);
+    gezegd.length = 0;
+    T.tikVeeDag(S, dagVan('slachtmaand', 1, 1));
+    assert.deepEqual(gezegd, ['Het hooi haalt de winter: de boeren houden al hun vee.']);
+    assert.equal(T.veeVan(S).length, 2);
+  } finally {
+    delete T.ui;
+  }
+});
+
+test('met de spelregel "Het seizoen" op jij vraagt het dorp op 1 slachtmaand wie er naar de slager gaat; het venster opent als je rondloopt', () => metInstelling(IN, { boerenSlachten: false }, () => {
   const { S, velden: [weide] } = boerMet([{ x: 2, y: 2, b: 6, h: 6, bestemming: 'weide' }]);
   zet(S, weide, 'koe', 2);
   T.zetVoorraad(S, 'hooi', 1000);
@@ -326,4 +352,4 @@ test('op 1 slachtmaand vraagt het dorp wie er naar de slager gaat; het venster o
   } finally {
     delete T.ui;
   }
-});
+}));

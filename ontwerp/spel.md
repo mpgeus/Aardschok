@@ -18,7 +18,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt met de spelregel "Je gehucht" elk spel een ander gehucht (30 sep). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
-| De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug | vraag 65 |
+| De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug; sinds 30 sep heeft een probleem een oorzaak (honger, kou, vol, onvrede) | vraag 65, 74 |
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf | vraag 58 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
@@ -27,12 +27,12 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
 | Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep) | 4, 6 |
-| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep) | 3 |
+| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep) | 3, vraag 74 |
 | Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
 | Handel: de marskramer | gebouwd (24 sep) | 4 |
 | Sint-Maarten | gebouwd (24 sep) | 5 |
 | Instelbaar, en de boeren | gebouwd (24 sep): 17 keuzes, 188 getallen | |
-| Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep) | 6a |
+| Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep); sinds 30 sep kiezen de boeren hun velden en slachten ze zelf, en jij kunt het veranderen | 6a, vraag 74 |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | besloten, nog niet gebouwd | 6c |
 | Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14 |
@@ -890,7 +890,13 @@ Nog open na deel 1 (vragen van Claude):
   Groente, vis of vlees erbij maakt ook tevredener. Zonder zout bederven vis en vlees.
 - **Brandhout:** in wintermaand, louwmaand en sprokkelmaand (90 dagen) stookt elk huishouden van vier
   mensen 0,15 hout of turf per dag; het gehucht van 26 mensen zo'n 95 hout per winter. Het begint met
-  40, en alleen een houthakker hakt meer (2 per dag); de marskramer verkoopt geen hout.
+  40, en een houthakker hakt 2 per dag; de marskramer verkoopt geen hout.
+- **Sprokkelen** (30 sep, negentiende sessie; werklijst vraag 74, stap 2; Marcel: "zelf sprokkelen, maar lost niet
+  volledig op. Houthakker is nodig"): elk huishouden raapt het hele jaar 0,015 hout per dag in het bos, zo'n 40% van
+  wat het in de winter stookt (`T.sprokkelHout`). Het gehucht haalt zo met zijn 40 hout 52 van de 90 winterdagen in
+  plaats van 38, en zonder houthakker nooit de hele winter; het bericht zegt het: "Het hout haalt 52 van de 90 dagen, ook
+  met wat de mensen sprokkelen: een houthakker hakt 2 hout per dag." Je ziet het nog niet: niemand loopt met een bos
+  takken (`opmerkingen.md`). De spelregel "Het seizoen" (op jij: niemand sprokkelt).
 - **Een kerk:** een kapel die af is, maakt het dorp tevredener.
 - **Tevredenheid** (0 tot 100%, in de balk, met bij de muis wat het dorp mist) bepaalt hoe hard er
   gewerkt wordt, of er elke 20 dagen een gezin van vier bijkomt (als er ook plaats is en minstens 20
@@ -1425,17 +1431,24 @@ en meer soorten (sluw, praatziek, sterk) komen bij de punten waar ze iets doen.
 ## Weides met koeien en schapen (Marcel, 25 sep 2026)
 
 **Zo werkt het nu** (25 sep; `js/akkers.js`, `js/vee.js`, het veldenvenster in `js/hud.js`):
-- **Velden:** elk veld is akker, weide of braak. In het veldenvenster (`V`) kies je wat het volgend
-  jaar wordt; de wissel gaat in op 1 lentemaand. Een akker put het land uit (elk jaar 10% minder,
-  tot 40%), een braak geeft 15% terug, een weide 20%. Velden naast elkaar die weide zijn, zijn samen
-  één weide.
+- **Velden:** elk veld is akker, weide of braak. Na de oogst, op 1 herfstmaand, kiest elke boer wat zijn
+  velden volgend jaar worden (30 sep, negentiende sessie; werklijst vraag 74, stap 2; Marcel: "Het zaaien wordt
+  gewoon iets wat de boeren doen ... Jij moet als schout wel een oogje in het zeil houden"): een akker die volgend
+  voorjaar onder 75% zou zakken, krijgt mest als die er is, en rust anders een jaar; een braak wordt weer akker; een
+  weide blijft weide (`T.boerenKiezenVelden`). Het bericht zegt wat ze kozen ("het veld van Klaas rust een jaar"), en
+  het veldenvenster (`V`) bij elk veld wie het koos en waarom ("Klaas koos het: het land raakt uitgeput"). Daar kun je
+  het veranderen, tot 1 lentemaand: wat jij kiest, laat de boer staan. De wissel gaat in op 1 lentemaand. Een akker put
+  het land uit (elk jaar 10% minder, tot 40%), een braak geeft 15% terug, een weide 20%. Velden naast elkaar die weide
+  zijn, zijn samen één weide. De spelregel "Het seizoen": de boeren (de standaard), of jij, zoals vóór 30 sep.
 - **Koeien:** 4 tegels weide per koe. Van grasmaand tot en met wijnmaand geeft een koe elke dag melk
   voor vijf mensen; wat over is, wordt kaas. In grasmaand komen er kalveren bij, zolang er plaats
   is.
 - **Hooi en winter:** in hooimaand maaien de boeren eerst het hooi van hun weide (12,5 per tegel).
   Van slachtmaand tot en met lentemaand (150 dagen) eet een koe 1 hooi per dag. Op 1 slachtmaand
-  kies je in een venster wie naar de slager gaat (een koe geeft 20 vlees en een huid, een schaap 6),
-  met een voorstel dat net genoeg slacht. Vlees vult een maag (sinds 25 sep): wat je niet zout,
+  slachten de boeren wat het hooi niet haalt, zo weinig als kan (sinds 30 sep, `T.boerenSlachten`; een koe geeft 20
+  vlees en een huid, een schaap 6), en het bericht zegt het, ook als niemand hoeft ("Het hooi haalt de winter: de
+  boeren houden al hun vee"). Met de spelregel "Het seizoen" op jij kies je het in een venster, met hetzelfde
+  voorstel; zelf slachten kan altijd, onderaan het veldenvenster. Vlees vult een maag (sinds 25 sep): wat je niet zout,
   eet het dorp eerst op, gezouten vlees bewaart het tot het graan op is.
 - **Schapen:** ze grazen op de heide (de meent, 23 bij 8 tegels, 2 tegels per schaap) en slapen in
   de schaapskooi (hoogstens 20); in grasmaand werpt een schaap met kans 0,3 een lam, als er plaats

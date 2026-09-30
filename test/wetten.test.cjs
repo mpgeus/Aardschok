@@ -90,10 +90,11 @@ test('vreemden welkom: om de 10 dagen een gezin in plaats van 20, en 5% minder t
 test('houtkap: de houthakker hakt twee keer zoveel, en de heer rekent een boete, ook als de wet weer weg is', () => {
   const S = gehucht();
   S.dorp.gebouwen.push({ soort: 'houthakker', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 1, werkte: 1, voorwerp: null });
-  const hakt = T.brandhoutErbij(S.dorp);
+  // Wat de houthakker erbij doet; wat de mensen sprokkelen (T.sprokkelHout, vraag 74) verandert niet mee.
+  const hakt = T.brandhoutErbij(S.dorp) - T.sprokkelHout(S.dorp);
   T.zetWet(S.dorp, 'houtkap', 'aangenomen');
   assert.deepEqual(T.maaktUit(S.dorp, T.GEBOUWEN.houthakker), { hout: 2 * T.GEBOUWEN.houthakker.maakt.uit.hout });
-  assert.ok(bijna(T.brandhoutErbij(S.dorp), 2 * hakt), 'ook het bericht over de winter rekent ermee');
+  assert.ok(bijna(T.brandhoutErbij(S.dorp) - T.sprokkelHout(S.dorp), 2 * hakt), 'ook het bericht over de winter rekent ermee');
   // Een boer hakt geen hout: alleen wie in het bos hakt (bos), hakt meer.
   assert.deepEqual(T.maaktUit(S.dorp, T.GEBOUWEN.visser), T.GEBOUWEN.visser.maakt.uit);
 

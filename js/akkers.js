@@ -40,9 +40,11 @@
   // schapen", stap 1). Elk veld uit het betekenisbestand (js/kaart.js, w.akkers) heeft:
   //   bestemming      wat het dit jaar is: 'akker' (gezaaid en gemaaid), 'weide' (vee graast
   //                   erop, js/vee.js) of 'braak' (het rust);
-  //   plan            wat het volgend jaar wordt. De speler kiest het (T.zetPlan), en op 1
-  //                   lentemaand wordt het de bestemming (T.wisselVelden), vóór het zaaien. Staand
-  //                   graan vertrappen of midden in de zomer zaaien kan dus niet.
+  //   plan            wat het volgend jaar wordt. De boer kiest het na de oogst (T.boerenKiezenVelden),
+  //                   en jij kunt het veranderen (T.zetPlan); op 1 lentemaand wordt het de bestemming
+  //                   (T.wisselVelden), vóór het zaaien. Staand graan vertrappen of midden in de zomer
+  //                   zaaien kan dus niet. planDoor: wie het koos ('boer' of 'schout'), planWaarom: waarom
+  //                   de boer het koos.
   //   vruchtbaarheid  0..1: een akker geeft zijn graan maal dit getal (T.oogstPerTegel).
   // De lijst heet nog w.akkers, zoals vóór 25 sep: de oogst, de inner en de heer kennen hem onder
   // die naam. Een veld zonder bestemming is een akker, zoals elk veld tot 25 sep.
@@ -77,6 +79,14 @@
     // Of de mest vanzelf over alle akkers gaat in plaats van dat jij per veld kiest: een optie in de
     // spelregels ("De mest"). Dan krijgt elke akker een deel, naar wat er is.
     mestVanzelf: false,
+    // De boeren kiezen zelf (werklijst vraag 74, stap 2; Marcel, 30 sep: "Het zaaien wordt gewoon iets wat de boeren
+    // doen, zo ook het oogsten en de winter. Jij moet als schout wel een oogje in het zeil houden"): na de oogst, op 1
+    // herfstmaand, kiest elke boer wat zijn velden volgend jaar worden (T.boerenKiezenVelden). De spelregel "Het
+    // seizoen"; uit: alleen jij kiest, zoals vóór 30 sep.
+    boerenKiezen: true,
+    // Een akker die volgend voorjaar onder deze vruchtbaarheid zou zakken, krijgt mest als die er is, en rust anders
+    // een jaar.
+    rustOnder: 0.75,
   };
   const VIN = () => T.VELDEN_INSTELLINGEN;
 
@@ -114,12 +124,15 @@
   };
 
   // Het plan zetten, na dezelfde vraag. Geeft hetzelfde antwoord als T.kanBestemming. Wordt het veld
-  // iets anders dan een akker, dan gaat de mest er weer af (T.kanMest).
+  // iets anders dan een akker, dan gaat de mest er weer af (T.kanMest). Wat jij zet, laat de boer staan
+  // (planDoor, T.boerenKiezenVelden).
   T.zetPlan = function (D, veld, bestemming) {
     const r = T.kanBestemming(D, veld, bestemming);
     if (r.kan) {
       veld.plan = bestemming;
       if (bestemming !== 'akker') veld.mest = false;
+      veld.planDoor = 'schout';
+      delete veld.planWaarom;
     }
     return r;
   };
@@ -149,7 +162,11 @@
       return { kan: true, reden: null };
     }
     const r = T.kanMest(D, veld);
-    if (r.kan) veld.mest = true;
+    if (r.kan) {
+      veld.mest = true;
+      veld.planDoor = 'schout';
+      delete veld.planWaarom;
+    }
     return r;
   };
 
@@ -228,10 +245,72 @@
       }
       v.bestemming = T.planVan(v);
       v.plan = v.bestemming;
+      delete v.planDoor; // een nieuw jaar: na de oogst kiest de boer weer
+      delete v.planWaarom;
       verslag.push({ veld: v, was, wordt: v.bestemming, vruchtbaarheid: v.vruchtbaarheid });
     }
     if (T.verhuisVee) T.verhuisVee(D);
     return verslag;
+  };
+
+  // ── De boeren kiezen (werklijst vraag 74, stap 2) ──
+  //
+  // Na de oogst, op 1 herfstmaand, kiest elke boer wat zijn velden volgend jaar worden, met één regel: een akker die
+  // volgend voorjaar onder rustOnder zou zakken, krijgt mest als die er is, en rust anders een jaar; een braak die
+  // rustte, wordt weer akker; een weide blijft weide, want het vee graast erop. Wat jij koos (planDoor 'schout', met
+  // T.zetPlan of T.zetMest), laat hij staan. Het plan gaat in op 1 lentemaand (T.wisselVelden), en tot dan kun jij het
+  // in het veldenvenster veranderen: dat is je oogje in het zeil. Geeft wat er anders wordt: [{ veld, plan, mest,
+  // waarom }].
+  T.boerenKiezenVelden = function (D) {
+    const w = D.wereld;
+    const IN = VIN();
+    if (!IN.boerenKiezen || !w || !w.akkers) return [];
+    // De mest die er is, min wat jij al op een veld legde.
+    let mest = (D.voorraad && D.voorraad.mest) || 0;
+    for (const v of w.akkers) if (v.planDoor === 'schout' && v.mest) mest -= T.mestVoorVeld(v);
+    const anders = [];
+    for (const v of w.akkers) {
+      if (v.planDoor === 'schout') continue;
+      const nu = T.bestemmingVan(v);
+      let plan = nu === 'braak' ? 'akker' : nu;
+      let metMest = false;
+      let waarom = nu === 'braak' ? 'het land heeft gerust' : '';
+      if (nu === 'akker' && IN.vruchtbaarheid && T.vruchtbaarheidVan(v) - IN.akkerPutUit < IN.rustOnder - 1e-9) {
+        if (!IN.mestVanzelf && mest >= T.mestVoorVeld(v)) {
+          metMest = true;
+          mest -= T.mestVoorVeld(v);
+          waarom = 'het land raakt uitgeput, en er is mest';
+        } else {
+          plan = 'braak';
+          waarom = 'het land raakt uitgeput';
+        }
+      }
+      if (plan !== T.planVan(v) || metMest !== !!v.mest) anders.push({ veld: v, plan, mest: metMest, waarom });
+      v.plan = plan;
+      v.mest = metMest;
+      v.planDoor = 'boer';
+      if (waarom) v.planWaarom = waarom;
+      else delete v.planWaarom;
+    }
+    if (anders.length) {
+      // "het veld van Klaas rust een jaar en dat van Aaltje krijgt mest"
+      const wat = anders.map((a, i) => {
+        const boer = T.boerVanVeld(D, a.veld);
+        const van = boer ? `${i ? 'dat' : 'het veld'} van ${boer.naam}` : `${i ? 'een' : 'het'} veld zonder boer`;
+        return `${van} ${a.plan === 'braak' ? 'rust een jaar' : a.mest ? 'krijgt mest' : `wordt weer ${a.plan}`}`;
+      });
+      T.zeg(D, `Na de oogst kozen de boeren wat hun velden volgend jaar worden: ${T.opsomming(wat)}. In het veldenvenster (V) kun je het veranderen.`);
+    }
+    return anders;
+  };
+
+  // Wie het plan van dit veld koos, en waarom, voor het veldenvenster: "Klaas koos het: het land raakt uitgeput", of
+  // "Jij koos het", of '' als niemand iets koos.
+  T.planTekst = function (D, veld) {
+    if (!veld || !veld.planDoor) return '';
+    if (veld.planDoor === 'schout') return 'Jij koos het';
+    const boer = T.boerVanVeld(D, veld);
+    return `${boer ? boer.naam : 'De boer'} koos het${veld.planWaarom ? `: ${veld.planWaarom}` : ''}`;
   };
 
   // Welk stadium hoort van nature bij deze datum? Dit is het stadium vóórdat een boer ook maar
@@ -706,7 +785,10 @@
       T.wisselVelden(D);
       T.zaaiAkkers(D);
     }
-    if (nu === stadiumBegin('gemaaid')) T.haalOogstBinnen(D);
+    if (nu === stadiumBegin('gemaaid')) {
+      T.haalOogstBinnen(D);
+      T.boerenKiezenVelden(D); // na de oogst kiezen de boeren wat hun velden volgend jaar worden
+    }
     // Het hooi: op de eerste dag van hooitijd een woord vooraf, en op de eerste dag erna het vangnet.
     if (hooien() && d.dagVanMaand === 1) {
       const weides = w.akkers.some((v) => T.bestemmingVan(v) === 'weide');

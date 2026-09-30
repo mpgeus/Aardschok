@@ -6,6 +6,17 @@ const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
 
+// Zoals vóór 30 sep, met de spelregel "Het seizoen" op jij: niemand sprokkelt (werklijst vraag 74, stap 2). Voor de
+// toetsen die wat een werkplaats maakt precies nameten.
+function alsJijHetSeizoenDoet(fn) {
+  T.zetOptie('seizoen', 'jij');
+  try {
+    return fn();
+  } finally {
+    T.optiesTerug();
+  }
+}
+
 // Een kleine, lege wereld om gebouwen op neer te zetten: net als T.maakProefkamers() maar zonder de
 // hele toren erbij — alleen wat T.isVast/T.voorwerpOp nodig hebben (js/wereld.js).
 function maakLegeWereld(b, h) {
@@ -221,7 +232,7 @@ const werkFactor = (S) => {
 };
 const ongeveer = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `verwachtte ${b}, kreeg ${a}`);
 
-test('T.tikGebouwenDag: volle bezetting geeft de volle opbrengst, maal hoe hard er gewerkt wordt', () => {
+test('T.tikGebouwenDag: volle bezetting geeft de volle opbrengst, maal hoe hard er gewerkt wordt', () => alsJijHetSeizoenDoet(() => {
   const S = maakS();
   S.bevolking = T.GEBOUWEN.houthakker.handen;
   S.gebouwen.push({ soort: 'houthakker', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0 });
@@ -229,7 +240,7 @@ test('T.tikGebouwenDag: volle bezetting geeft de volle opbrengst, maal hoe hard 
   T.tikGebouwenDag(S, 1);
   assert.ok(werkFactor(S) > 0 && werkFactor(S) < 1, 'zonder eten werkt het dorp minder hard');
   ongeveer(S.voorraad.hout, T.GEBOUWEN.houthakker.maakt.uit.hout * werkFactor(S));
-});
+}));
 
 test('T.tikGebouwenDag: een gebouw met een "in" trekt dat er ook af', () => {
   const S = maakS();
@@ -412,7 +423,7 @@ test('een molen zonder graan maalt niets', () => {
   assert.equal(S.voorraad.meel || 0, 0);
 });
 
-test('gereedschap laat harder werken, en wat in gebruik is, slijt', () => {
+test('gereedschap laat harder werken, en wat in gebruik is, slijt', () => alsJijHetSeizoenDoet(() => {
   const zonder = metGebouw('houthakker');
   const met = metGebouw('houthakker');
   met.voorraad.gereedschap = 1;
@@ -421,7 +432,7 @@ test('gereedschap laat harder werken, en wat in gebruik is, slijt', () => {
   const IN = T.GEBOUWEN_INSTELLINGEN;
   assert.ok(Math.abs(met.voorraad.hout - zonder.voorraad.hout * (1 + IN.gereedschapBonus)) < 1e-9);
   assert.ok(Math.abs(met.voorraad.gereedschap - (1 - 1 / IN.gereedschapSlijtDagen)) < 1e-9);
-});
+}));
 
 test('gereedschap bij wie stilstaat, slijt niet en telt niet mee', () => {
   const S = metGebouw('smidse'); // zonder ijzer: de smid heeft niets te smeden

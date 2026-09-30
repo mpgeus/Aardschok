@@ -9,6 +9,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Het sprokkelen zie je niet** (30 sep, negentiende sessie; vraag 74, stap 2). Het hout komt elke dag in de voorraad
+  (`T.sprokkelHout`), maar niemand loopt naar de bosrand en terug met een bos takken. Het concept wil dat je de stad
+  ziet voordat je de getallen ziet: wie niets te doen heeft (de ouderen, de kinderen), zou 's middags kunnen sprokkelen,
+  met het hout naar wie er echt ging (zoals het werk in uren, `T.werkUrenVan`). Past bij de dag in fasen (vraag 74, A).
+- **Een boer kiest nog zonder karakter** (30 sep, vraag 74, stap 2). Elke boer kiest zijn velden met dezelfde verstandige
+  regel (`T.boerenKiezenVelden`). Het plan was dat een boer met een slecht karakter fouten maakt, die je merkt als je
+  gaat kijken (vraag 74, C): de drinker laat zijn akker niet rusten, de gierige legt de mest op zijn eigen veld.
 - **Het overzicht als een papier: een kaart van je dorp op tafel** (30 sep, negentiende sessie, bij vraag 74, d; een
   idee van Claude, niet gekozen). Wordt het dorp groot, dan kan het overzicht een papier worden in plaats van een camera
   van bovenaf: een kaart van je dorp op tafel in je huis, waarop je bouwt en plant, en die laat zien wat je weet (wat jij

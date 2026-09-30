@@ -32,6 +32,17 @@ function maakS(b, h) {
 const WINTERDAG = 280;
 const ZOMERDAG = 30;
 
+// Zoals vóór 30 sep, met de spelregel "Het seizoen" op jij: niemand sprokkelt (werklijst vraag 74, stap 2). Voor de
+// toetsen die het stoken of de houthakker precies nameten; wat het sprokkelen doet, toetsen de toetsen erover.
+function alsJijHetSeizoenDoet(fn) {
+  T.zetOptie('seizoen', 'jij');
+  try {
+    return fn();
+  } finally {
+    T.optiesTerug();
+  }
+}
+
 test('dag 280 is winter en dag 30 niet (aanname achter de toetsen hieronder)', () => {
   assert.equal(T.datumVanDag(WINTERDAG).seizoen, 'winter');
   assert.notEqual(T.datumVanDag(ZOMERDAG).seizoen, 'winter');
@@ -152,7 +163,7 @@ test('T.tikBehoeftenDag: eet de extra soorten ook echt op, naar rato van de bevo
   assert.ok(Math.abs(S.voorraad.groente - verwacht) < 1e-9);
 });
 
-test('T.tikBehoeftenDag: stookt in de winter turf vóór hout', () => {
+test('T.tikBehoeftenDag: stookt in de winter turf vóór hout', () => alsJijHetSeizoenDoet(() => {
   const S = maakS();
   S.bevolking = 4; // 1 huishouden
   T.zetVoorraad(S, 'turf', 10);
@@ -161,14 +172,28 @@ test('T.tikBehoeftenDag: stookt in de winter turf vóór hout', () => {
   const benodigd = 1 * T.BEHOEFTEN_INSTELLINGEN.brandhoutPerHuishoudenPerDag;
   assert.ok(Math.abs(S.voorraad.turf - (10 - benodigd)) < 1e-9);
   assert.equal(S.voorraad.hout, 10, 'hout blijft onaangeroerd zolang de turf het dekt');
-});
+}));
 
-test('T.tikBehoeftenDag: buiten de winter wordt er geen brandhout gestookt', () => {
+test('T.tikBehoeftenDag: buiten de winter wordt er geen brandhout gestookt', () => alsJijHetSeizoenDoet(() => {
   const S = maakS();
   S.bevolking = 4;
   T.zetVoorraad(S, 'hout', 10);
   T.tikBehoeftenDag(S, ZOMERDAG);
   assert.equal(S.voorraad.hout, 10);
+}));
+
+test('de mensen sprokkelen elke dag hout, het hele jaar: een huishouden zoveel per dag (vraag 74, stap 2)', () => {
+  const bijna = (a, b) => Math.abs(a - b) < 1e-9;
+  const S = maakS();
+  S.bevolking = 8; // 2 huishoudens
+  T.zetVoorraad(S, 'hout', 10);
+  const per = 2 * T.BEHOEFTEN_INSTELLINGEN.sprokkelPerHuishoudenPerDag;
+  assert.ok(bijna(T.sprokkelHout(S), per));
+  T.tikBehoeftenDag(S, ZOMERDAG);
+  assert.ok(bijna(S.voorraad.hout, 10 + per), 'in de zomer komt het erbij');
+  T.tikBehoeftenDag(S, WINTERDAG);
+  assert.ok(bijna(S.voorraad.hout, 10 + 2 * per - 2 * T.BEHOEFTEN_INSTELLINGEN.brandhoutPerHuishoudenPerDag), 'in de winter ook, en er wordt gestookt');
+  alsJijHetSeizoenDoet(() => assert.equal(T.sprokkelHout(S), 0, 'met de spelregel op jij sprokkelt niemand'));
 });
 
 test('T.tikBehoeftenDag: genoeg eten en brandhout voorkomt winterverlies, negentig dagen lang', () => {
@@ -222,7 +247,7 @@ test('T.tikGebouwenDag: geen nieuw gezin op een groeidag als de tevredenheid ond
   assert.equal(S.bevolking, 1);
 });
 
-test('T.tikGebouwenDag: productie schaalt mee met de tevredenheid (T.BEHOEFTEN_INSTELLINGEN.werkBasis)', () => {
+test('T.tikGebouwenDag: productie schaalt mee met de tevredenheid (T.BEHOEFTEN_INSTELLINGEN.werkBasis)', () => alsJijHetSeizoenDoet(() => {
   const S = maakS();
   const IN = T.BEHOEFTEN_INSTELLINGEN;
   S.bevolking = T.GEBOUWEN.houthakker.handen;
@@ -234,7 +259,7 @@ test('T.tikGebouwenDag: productie schaalt mee met de tevredenheid (T.BEHOEFTEN_I
   T.tikGebouwenDag(S, dag);
   const verwacht = T.GEBOUWEN.houthakker.maakt.uit.hout * werkFactor;
   assert.ok(Math.abs(S.voorraad.hout - verwacht) < 1e-9, `verwachtte ${verwacht}, kreeg ${S.voorraad.hout}`);
-});
+}));
 
 // ── Een huis dat doorgroeit ──
 
@@ -517,17 +542,30 @@ test('T.raaktOp: de zin, alleen als het de winter niet haalt en binnenkort op is
   assert.equal(T.raaktOp('het hout', v(40, 40), 15), null, 'het haalt de winter');
 });
 
-test('T.houtVoorDeWinter: het gehucht haalt met 40 hout 38 van de 90 dagen, met een houthakker de hele winter', () => {
+test('T.houtVoorDeWinter: het gehucht haalt met 40 hout en wat het sprokkelt 52 van de 90 dagen, met een houthakker de hele winter', () => {
   const S = gehucht();
   const dag = dagVan('herfstmaand', 1);
   const v = T.houtVoorDeWinter(S, dag);
   assert.ok(bijna(v.stook, 7 * T.BEHOEFTEN_INSTELLINGEN.brandhoutPerHuishoudenPerDag));
-  assert.deepEqual([v.tot, v.dagen, v.winter, v.haalt, v.erbij], [90, 38, 90, false, 0]);
+  // Sprokkelen (vraag 74, stap 2; Marcel: "lost niet volledig op. Houthakker is nodig"): 7 huishoudens rapen 0,105
+  // per dag, dus 9,45 tot de winter, en in de winter stoken ze 0,945 per dag meer dan ze rapen.
+  assert.ok(bijna(v.erbij, 7 * T.BEHOEFTEN_INSTELLINGEN.sprokkelPerHuishoudenPerDag));
+  assert.deepEqual([v.tot, v.dagen, v.winter, v.haalt], [90, 52, 90, false]);
+  alsJijHetSeizoenDoet(() => assert.equal(T.houtVoorDeWinter(S, dag).dagen, 38, 'zonder sprokkelen 38'));
   // Een houthakker die de laatste dag op volle kracht hakte (g.werkte, js/gebouwen.js): 2 per dag.
   S.gebouwen.push({ soort: 'houthakker', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 1, werkte: 1 });
   const met = T.houtVoorDeWinter(S, dag);
-  assert.equal(met.erbij, T.GEBOUWEN.houthakker.maakt.uit.hout);
+  assert.ok(bijna(met.erbij, T.GEBOUWEN.houthakker.maakt.uit.hout + v.erbij));
   assert.equal(met.haalt, true);
+});
+
+test('zonder houthakker haalt een gehucht dat alleen sprokkelt de winter niet, ook als het er een jaar voor krijgt', () => {
+  const S = gehucht();
+  // Een heel jaar sprokkelen, vanaf 1 lentemaand zonder hout: dan de winter in.
+  T.zetVoorraad(S, 'hout', 0);
+  const v = T.houtVoorDeWinter(S, 0);
+  assert.equal(v.haalt, false);
+  assert.ok(v.dagen > 0 && v.dagen < v.winter / 2, `het haalt ${v.dagen} van de ${v.winter} dagen: minder dan de helft`);
 });
 
 test('T.etenVoorDeWinter: het dorp eet het hele jaar, en graan, kaas en vlees tellen alle drie', () => {
@@ -560,20 +598,20 @@ test('T.etenVoorDeWinter: de soldaten van de heer eten mee zolang ze er zijn', (
 test('op 1 herfstmaand en 1 slachtmaand zegt het dorp of het hout en het eten de winter halen, en wat helpt', () => {
   const S = gehucht();
   assert.deepEqual(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('herfstmaand', 1))), [{
-    tekst: 'Over drie maanden is het winter. Het hout haalt 38 van de 90 dagen: een houthakker hakt 2 hout per dag. Het eten haalt de winter.',
+    tekst: 'Over drie maanden is het winter. Het hout haalt 52 van de 90 dagen, ook met wat de mensen sprokkelen: een houthakker hakt 2 hout per dag. Het eten haalt de winter.',
     soort: 'gevaar',
   }]);
   assert.deepEqual(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('herfstmaand', 2))), [], 'alleen op die dagen');
   // Staat er al een houthakker, dan helpt er nog een.
   S.gebouwen.push({ soort: 'houthakker', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0 });
-  assert.match(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('slachtmaand', 1)))[0].tekst, /Het hout haalt \d+ van de 90 dagen: nog een houthakker hakt er 2 per dag bij\./);
+  assert.match(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('slachtmaand', 1)))[0].tekst, /Het hout haalt \d+ van de 90 dagen, ook met wat de mensen sprokkelen: nog een houthakker hakt er 2 per dag bij\./);
   T.zetVoorraad(S, 'hout', 200);
   assert.deepEqual(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('slachtmaand', 1))), [
     { tekst: 'Over een maand is het winter. Het hout en het eten halen de winter.', soort: 'goed' },
   ]);
 });
 
-test('in de winter zegt het dorp één keer dat het hout op raakt, en de volgende winter weer', () => {
+test('in de winter zegt het dorp één keer dat het hout op raakt, en de volgende winter weer', () => alsJijHetSeizoenDoet(() => {
   const S = maakS();
   S.bevolking = 20; // 5 huishoudens: 0,75 hout per dag
   T.zetVoorraad(S, 'graan', 1000);
@@ -589,7 +627,7 @@ test('in de winter zegt het dorp één keer dat het hout op raakt, en de volgend
   T.zetVoorraad(S, 'hout', 11.25);
   const weer = berichtenVan(() => T.tikBehoeftenDag(S, eerste + T.DAGEN_PER_JAAR));
   assert.deepEqual(weer.map((b) => b.tekst), ['Het hout is over 15 dagen op, en de winter duurt nog 90 dagen.']);
-});
+}));
 
 test('wie in de winter sterft, sterft van de kou of de honger, en het bericht zegt waaraan', () => {
   function eersteDode(hout, graan) {

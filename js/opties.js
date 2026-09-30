@@ -185,6 +185,19 @@
           uitleg: 'Op 1 lentemaand gaat alle mest naar verhouding over de akkers van dat jaar. Je hoeft niets te doen.' },
       ],
     },
+    // Het seizoen (Marcel, 30 sep, werklijst vraag 74: "Het zaaien wordt gewoon iets wat de boeren doen, zo ook het
+    // oogsten en de winter. Jij moet als schout wel een oogje in het zeil houden"; js/akkers.js, js/vee.js en
+    // js/behoeften.js).
+    {
+      id: 'seizoen', naam: 'Het seizoen', standaard: 'boeren',
+      uitleg: 'Wie kiest wat de velden worden, wie het vee slacht voor de winter, en of er hout gesprokkeld wordt.',
+      keuzes: [
+        { id: 'boeren', naam: 'De boeren', zet: { 'VELDEN_INSTELLINGEN.boerenKiezen': true, 'VEE_INSTELLINGEN.boerenSlachten': true, 'BEHOEFTEN_INSTELLINGEN.sprokkelen': true },
+          uitleg: 'Na de oogst kiest elke boer wat zijn velden volgend jaar worden: een uitgeput veld rust een jaar, of krijgt mest. Op 1 slachtmaand slachten ze wat het hooi niet haalt, en het hele jaar sprokkelen de mensen hout, al is dat niet genoeg voor de winter. Jij houdt een oogje in het zeil: in het veldenvenster zie je wat ze kozen, en verander je het.' },
+        { id: 'jij', naam: 'Jij', zet: { 'VELDEN_INSTELLINGEN.boerenKiezen': false, 'VEE_INSTELLINGEN.boerenSlachten': false, 'BEHOEFTEN_INSTELLINGEN.sprokkelen': false },
+          uitleg: 'Jij kiest in het veldenvenster wat de velden worden, op 1 slachtmaand vraagt het slachtvenster wie er naar de slager gaat, en niemand sprokkelt: al het hout komt van de houthakker.' },
+      ],
+    },
     // Marcel, 25 sep (een vraag uit de proef van stap 2 van de weides): "Ja vlees moet ook eten zijn."
     {
       id: 'vlees', naam: 'Vlees', standaard: 'eten',

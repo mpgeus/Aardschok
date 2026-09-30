@@ -1082,13 +1082,16 @@
     const wanneer = plan !== bestemming || veld.mest
       ? `<small class="veld-wanneer">${plan !== bestemming ? `wordt ${plan}` : 'krijgt mest'}${plan !== bestemming && veld.mest ? ', met mest,' : ''} op ${T.veldWisselTekst()}</small>`
       : '';
+    // Wie het koos, en waarom (js/akkers.js, T.boerenKiezenVelden): je oogje in het zeil.
+    const koos = T.planTekst(S.dorp, veld);
+    const wieKoos = koos ? `<small class="veld-koos">${veilig(koos)}.</small>` : '';
     return (
       `<div class="veld-rij${plan !== bestemming || veld.mest ? ' verandert' : ''}">` +
       `<div class="veld-wie" title="${veld.b} bij ${veld.h} tegels"><span class="veld-naam">${boer ? veilig(boer.naam) : 'Zonder boer'}</span> ` +
       `<small>${veld.b * veld.h} tegels</small></div>` +
       `<div class="veld-vrucht" title="Vruchtbaar: een akker geeft zijn graan maal dit getal."><span class="veld-balk"><i style="width:${pct}%"></i></span> <small>${pct}%</small></div>` +
       `<div class="veld-nu">${veldNu(S, veld)}</div>` +
-      `<div class="veld-plan"><div class="veld-keuzes">${knoppen}${mestKnop}</div>${wanneer}</div>` +
+      `<div class="veld-plan"><div class="veld-keuzes">${knoppen}${mestKnop}</div>${wanneer}${wieKoos}</div>` +
       (redenen.length ? `<p class="veld-reden">${redenen.map(veilig).join(' ')}</p>` : '') +
       `</div>`
     );
@@ -1157,7 +1160,8 @@
     return (
       `<div class="venster-kop"><span class="venster-titel">De velden</span><span class="venster-wanneer">de wissel op ${wissel}${over}</span>` +
       `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
-      `<p class="venster-staat">Elk veld is akker, weide of braak. Wat je hier kiest, gaat in op <b>${wissel}</b>, als de boeren ploegen: ` +
+      `<p class="venster-staat">Elk veld is akker, weide of braak. ${T.VELDEN_INSTELLINGEN.boerenKiezen ? 'Na de oogst kiezen de boeren wat hun velden volgend jaar worden, en wat jij hier kiest, gaat voor. ' : ''}` +
+      `Het gaat in op <b>${wissel}</b>, als de boeren ploegen: ` +
       `staand graan vertrap je niet. ${land}</p>` +
       `<div class="veld-rij veld-kop"><span>Veld</span><span title="Een akker geeft zijn graan maal zijn vruchtbaarheid.">Vruchtbaar</span>` +
       `<span>Nu</span><span>Volgend jaar</span></div>` +

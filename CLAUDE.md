@@ -95,6 +95,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   opslaan: de speler slaat op 1 oogstmaand op via het menu, de bladzijde herlaadt, hij gaat verder met Verder,
   en het jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`). Met `--maker`
   speelt het op gehuchten van de maker (de spelregel "Je gehucht" op "Elk spel een ander"; `uit/samenvatting-maker.md`).
+  Met `--regel seizoen=jij` speelt het met een spelregel anders, en met `--getal VOORVALLEN_INSTELLINGEN.metOorzaak=1` met
+  een getal uit de werkbank anders (allebei zo vaak als je wilt; de uitslag krijgt `-regels` achter zijn naam).
 - `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
   titelscherm (`T.STAND`). Commit eerst.
@@ -373,7 +375,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   tegel (`T.windBeeld`) en zijn vaste variant (`T.akkerVariant`), waar een boer in het
   groeiseizoen dwaalt (`T.wandelAnker`, anders gewoon bij zijn huis) en de oogst zelf, tegel voor
   tegel (`T.werkOogstBij`, met een vangnet: haalt hij het seizoen niet, dan wordt bij de volgende
-  ploegtijd toch de hele akker in één keer "gemaaid"). `js/tekenen.js` tekent ermee (achterlaag,
+  ploegtijd toch de hele akker in één keer "gemaaid"). Na de oogst, op 1 herfstmaand, kiezen de boeren wat hun velden
+  volgend jaar worden (`T.boerenKiezenVelden`, vraag 74, stap 2): een uitgeputte akker rust of krijgt mest, een braak
+  wordt weer akker; wat jij koos (`T.zetPlan`, `veld.planDoor`), laten ze staan, en het veldenvenster zegt wie wat koos
+  (`T.planTekst`). `js/tekenen.js` tekent ermee (achterlaag,
   wezen, voorlaag, zodat iemand tot zijn middel in het graan staat); `js/kaart.js` koppelt een
   boer aan zijn akker(s) via `huis`, dezelfde id op de boer als op de akker.
 - **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen en het
@@ -387,7 +392,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; een gebouw maakt alleen wat zijn grondstof
   toelaat, en gereedschap laat harder werken), `js/behoeften.js` (tevredenheid uit eten, brandhout
   en een kerk; de winter, en of het hout en het eten hem halen, `T.houtVoorDeWinter` en
-  `T.etenVoorDeWinter`, uit één regel met het hooi, `T.haaltDeWinter` en `T.raaktOp`; een huis dat
+  `T.etenVoorDeWinter`, uit één regel met het hooi, `T.haaltDeWinter` en `T.raaktOp`; het hout dat de mensen elke dag
+  sprokkelen, `T.sprokkelHout`, zo'n 40% van wat de winter vraagt, zodat een houthakker nodig blijft; een huis dat
   doorgroeit; zout dat vis en vlees goed houdt),
   `js/handel.js` (de marskramer: drie bezoeken per jaar, prijzen per bezoek, `T.kanKopen` en
   `T.kanVerkopen`; hij staat op de plek `"marskramer"` uit het betekenisbestand), `js/heer.js`
@@ -409,7 +415,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.aanzienVan`, het scherm `T.overBoerTekst`), `js/vee.js` (het vee: `T.VEE` en `T.maakDier`,
   koeien en schapen die grazen, staan en liggen, `T.rustVanDier`; velden naast elkaar als één weide,
   `T.weideGroepen`; waar een dier graast, op een weide of op de meent (de heide), `T.graaslandVan`;
-  het hooi in de winter, `T.voerHooi`; slachten, `T.slacht` en `T.slachtVoorstel`; en de schaapskooi,
+  het hooi in de winter, `T.voerHooi`; slachten, `T.slacht` en `T.slachtVoorstel`, en op 1 slachtmaand doen de boeren
+  het zelf, `T.boerenSlachten`; en de schaapskooi,
   met scheren en mest), `js/opties.js` (de spelregels: `T.OPTIES` op
   één plek, zoals `T.GEBOUWEN`; een keuze zet alleen waarden in de instellingenblokken, zodat elk
   getal één plek houdt; de namen; en `T.WERKBANK` met alle getallen, die vóór een keuze gaan. Het
@@ -447,8 +454,9 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   (Marcel, 29 sep), en later samen met de schepenen.
 - **Meer een management sim** (Marcel, 30 sep, vraag 73): het poppetje is de manier waarop je bestuurt, en het
   concept dat Marcel meebracht (`ontwerp/concept.md`) is het kompas: wat elders één klik is, gaat hier via een persoon,
-  een plek, een papier of een handeling. De boeren zaaien, oogsten en halen de winter zelf; jij houdt een oogje in het
-  zeil. Eerst de kern (vraag 74), dan het buurdorp.
+  een plek, een papier of een handeling. De boeren zaaien, oogsten en halen de winter zelf (sinds 30 sep: ze kiezen hun
+  velden, slachten en sprokkelen; de spelregel "Het seizoen"); jij houdt een oogje in het zeil. Een probleem heeft een
+  oorzaak die je had kunnen zien (`T.OORZAKEN`). Eerst de kern (vraag 74), dan het buurdorp.
 - De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het
   dorp, jou zelf, met hogere eisen, en met soldaten. Zijn **inner** komt kijken, en wat je opzij
   zet, moet uit zijn zicht.
