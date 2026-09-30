@@ -188,6 +188,12 @@ twee dagen beslist de raadsman. Naast de bouwer die zelf koos (29 sep, hieronder
    vraag 59.
 5. De speeltest duurde 900 s voor 750 dagen (698 s voor 610 toen de bouwer zelf koos): even snel per dag.
 
+**Na vraag 68 (B), opnieuw gespeeld** op `f898638`, zonder één fout: de bouwer kiest Klaas met de knop Raadsman, en
+beantwoordt de voorvallen weer zelf. Het gaf precies dezelfde getallen als op 29 sep, toen hij zelf koos zonder raadsman
+(69 voorvallen, een keuze per 1,4 min, een dorp op 21 oogstmaand 1323 met 52 mensen, 44 doden, het ambt kwijt op
+Sint-Maarten 1324), en Klaas besliste niets, want de schout gaat in de speeltest nergens heen. Dat hij trager maait,
+veranderde niets: het vangnet haalt de oogst toch binnen (`js/akkers.js`).
+
 ## De speeltest van 29 sep, met de voorvallen (werklijst, vraag 65)
 
 Gespeeld in de zeventiende sessie, op `145e11f` van `ccr-ef2496ce-pa4iti` met de voorvallen erbij (nog niet gecommit
