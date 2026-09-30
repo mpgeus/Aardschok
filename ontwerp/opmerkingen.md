@@ -9,6 +9,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De balk loopt vol** (30 sep, bij de knop Raadsman): op een scherm van 1280 breed gaan Spelregels en Menu nu naar
+  een tweede regel, rechts onder de voorraad. Dat mag (stijl.css), maar het wordt druk. Mogelijk: alleen de toets
+  en een teken, met de naam bij de muis; of Spelregels in het menu (Esc).
 - **Wie je verbant, kan een dorp laten verhongeren** (29 sep, zeventiende sessie; de voorvallen, vraag 65). In de eerste
   speeltest met voorvallen (braaf, zaad 1) koos de speler steeds het eerste antwoord, en bij een diefstal is dat "Verban
   hem". Harm ging het bos in, kwam terug als rover (zo werken de rovers sinds vraag 55), vertrapte de akker van Gerrit en

@@ -293,7 +293,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.raadsmanBeslist`, vanuit `js/voorvallen.js`): het antwoord dat zijn karakter het meest waard vindt
   (`T.raadsmanKeuze`, de neigingen in `T.RAADSMAN_INSTELLINGEN.karakters`), met wat hij kan erin (`T.metVaardigheden`).
   Wie het is, staat op zijn poppetje (`e.raadsman`), want ook het maaien kijkt ernaar (`T.boerFactor`: hij maait
-  trager). Uit wie je kiest: `T.raadsmanKandidaten`; kiezen: `T.kiesRaadsman`. Hoe dat in het spel gaat, is vraag 67.
+  trager). Uit wie je kiest: `T.raadsmanKandidaten`; kiezen: `T.kiesRaadsman`, in het venster Raadsman
+  (`js/raadsmanvenster.js`, onder `R` en als knop in de balk; vraag 67, B). Ging er een voorval voorbij zonder dat
+  iemand besliste, dan zegt de raad het (`js/raad.js`, `laatstVoorbij` in `S.voorvallen`).
 - `js/zien.js`: **het zichtveld en de getuigen** (werklijst punt 3, 27 sep): wie buiten is, ziet de
   schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
   verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het
@@ -405,7 +407,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   Nieuw spel een naam die je zelf kiest.
 - **De raadsman** (Marcel, 29 sep, vraag 64): elk dorp heeft er een, met een karakter en gelote eigenschappen, en
   jij kiest hem; hij voert je regels uit waar je niet bent. Sinds 30 sep (vraag 66): een van de boeren, die vanzelf de
-  voorvallen beslist als de schout er niet is (`js/raadsman.js`); hoe je hem kiest, is open (vraag 67). En "Het voelt
+  voorvallen beslist als de schout er niet is (`js/raadsman.js`); je kiest hem wanneer je wilt, met de knop Raadsman
+  (vraag 67, B). En "Het voelt
   gewoon nog leeg nu": sinds 29 sep spreekt het dorp je aan, met voorvallen (vraag 65, `js/voorvallen.js`); het dorp
   van bovenaf bleef open.
 - **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én

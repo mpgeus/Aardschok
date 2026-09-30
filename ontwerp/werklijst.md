@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (30 sep 2026, zeventiende sessie): de heervaart, de naam van je dorp, de voorvallen en de raadsman gebouwd; hoe je de raadsman kiest (vraag 67) wacht op Marcel
+## De stand (30 sep 2026, zeventiende sessie): de heervaart, de naam van je dorp, de voorvallen en de raadsman gebouwd; één dorp vol leven, en dan het land
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -21,16 +21,19 @@ naam van je dorp en de benoemingsbrief van de heer; `W` zijn de wetten, `Z` is s
 het spel slaat elke ochtend zelf op; onder het doel linksboven staat de raad. In een dorp vraagt de heer op 1 hooimaand
 mannen voor zijn oorlog (`Spel.debug.heervaart('vraag')`). Om de paar dagen komt iemand je zoeken met een voorval: een
 uitroepteken boven zijn hoofd, en hij spreekt je aan als je stilstaat (`Spel.debug.voorval('brand')`); ben je er
-niet, dan beslist je raadsman (`Spel.debug.raadsman('Aaltje')`). De pagina "Stand van het gehucht" (25 sep) loopt
-achter op de dag. `npm test`: 660/660.
+niet, dan beslist je raadsman, die je kiest met de knop Raadsman (`R`). De pagina "Stand van het gehucht" (25 sep)
+loopt achter op de dag. `npm test`: 661/661.
 
 **Waar het werk staat:** alles staat in `main`, ook stap 5 (Marcel, 29 sep: "alles op main"; ook op
 `ccr-0e928644-rvlci5`). Het werk van de zeventiende sessie (vraag 60 en 61) staat op `ccr-ef2496ce-pa4iti`, en gaat
 naar `main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** bij vraag 67, hoe je de raadsman kiest (wacht op Marcel). De raadsman zelf is
-gebouwd (vraag 66; zie onder Af): een van de boeren, die de voorvallen beslist als de schout er niet is, naar zijn
-karakter en wat hij kan. Staande orders komen met het land (vraag 66, D). De voorvallen zijn gebouwd (vraag 65, A; zie onder Af), en het dorp van bovenaf blijft open (Marcel:
+**Waar de volgende sessie begint:** de voorvallen en de raadsman zijn gebouwd (vraag 65, 66 en 67; zie onder Af). Marcel
+koos eerst één dorp vol leven, dan het land (vraag 65, D). Begin met Marcel te vragen of het dorp nu vol genoeg voelt:
+speel het een kwartier, of laat de speeltest zeggen wat een jaar vraagt. Is het genoeg, dan is de volgende stap het
+land met provincies (vraag 63): 1a van het land, de kaart van het land en reizen, het buurdorp in een eigen provincie,
+en een snellere dagtik; staande orders voor de raadsman komen daarmee (vraag 66, D). Open blijven: het dorp van bovenaf
+(vraag 65, C), en de balk die volloopt (`opmerkingen.md`). De voorvallen zijn gebouwd (vraag 65, A; zie onder Af), en het dorp van bovenaf blijft open (Marcel:
 "nee niet bovenaf, ik denk hier nog over na"). Eerst één dorp vol leven, dan het land (vraag 65, D): het land met
 provincies (vraag 63) komt daarna, met 1a van het land, de kaart van het land en reizen, het buurdorp in een eigen
 provincie, en een snellere dagtik. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
@@ -70,8 +73,8 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* hoe je de raadsman kiest (vraag 67); het dorp van bovenaf (vraag 65, C: "ik denk hier nog over
-na"); de proefversie op itch.io zetten als hij
+*2. Wacht op Marcel:* of het dorp nu vol genoeg voelt om aan het land te beginnen (vraag 65, D); het dorp van bovenaf
+(vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
 heer in het hogere doel past). Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51; het bijstellen na de
@@ -84,9 +87,8 @@ speeltest (vraag 46) komt later, met een menu met opties.
   vraag 63, en de eerste stap is het buurdorp;
 - ontginnen (6b) en straten en paden (6c), tenzij de kaart al eerder te klein is;
 - beter bouwen: de ladder tot baksteen, en de herberg die meegroeit (het tweede deel van 3b, stap 5);
-- het kiezen van de raadsman (vraag 67), dan de groepen en de schepenen (de rest van punt 9), de nacht (11), de eigen
-  buidel (12); voorvallen (8) en rechtspraak (10) zijn er sinds 29 sep als voorvallen (vraag 65, A), en de raadsman
-  sinds 30 sep (vraag 66);
+- de groepen en de schepenen (de rest van punt 9), de nacht (11), de eigen buidel (12); voorvallen (8) en rechtspraak
+  (10) zijn er sinds 29 sep als voorvallen (vraag 65, A), en de raadsman sinds 30 sep (vraag 66 en 67);
 - marktrecht en de stad (14), stadsrechten (15), de opstand (16), en de streek als kaarten naast elkaar, met het
   buurdorp (vraag 50, C);
 - de rest van punt 4: het bos met de kudde (vraag 43), de marskramer die vee koopt en verkoopt, de twee
@@ -138,7 +140,8 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   minuut. Daaruit: het venster zegt nu "moet het bos in", en een opmerking voor later (`opmerkingen.md`).
 - **Het plan voor de raadsman** (vraag 66); **Marcel koos** (30 sep): "A Ja, b Nee, c Nee, wordt automatisch als de
   schout er niet is. D prima". **Gebouwd: de raadsman** (zie onder Af): een van de boeren, die de voorvallen beslist als
-  de schout er niet is. In de browser gezien. Hoe je hem kiest, werd vraag 67.
+  de schout er niet is. In de browser gezien. Hoe je hem kiest, werd vraag 67; Marcel: "B", en dat is gebouwd: de knop
+  Raadsman, en de raad die het zegt.
 - **Marcel vroeg hoe het leuk blijft** ("zelf als persoon rond hobbelen in je eigen stad maakt het wel lastig.
   Misschien voelt het handiger als we een soort raadsman en aansturen die je regels oplegt?"). Nagekeken: de camera
   volgt altijd de schout en je ziet maar een klein stuk van je dorp, dus bouwen gaat alleen waar hij staat. Het
@@ -1925,6 +1928,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       de knop uit B kies je later een ander.
     Claude raadt B aan: je kiest als je ze kent, en de raad zorgt dat je het niet vergeet. Klaar als: je kunt hem kiezen
     zoals gekozen, ook een ander later; de speeltest kiest er een; `npm test` groen. Vraag: **A, B of C?**
+    **Beantwoord (Marcel, 30 sep): "B".** Een knop "Raadsman" in de balk opent een venster met de drie; tot je kiest,
+    is er geen, en zodra een voorval voorbijging, zegt de raad onder het doel het. Later kies je er een ander mee.
+    **Gebouwd (30 sep, zeventiende sessie):** zie onder Af, en `spel.md`, "De raadsman".
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -2235,8 +2241,14 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   hij deed, en in de balk heet het naar hem. Wie raadsman is, maait trager, en bij de muis staat "je raadsman". Erbij:
   `T.isBoer` op één plek (ook voor de voorvallen), de spelregel "Raadsman", de werkbank met de neigingen per karakter, en
   `Spel.debug.raadsman()`. Getoetst: `test/raadsman.test.cjs` (9 toetsen); `npm test` 660/660; in de browser een
-  raadsman gekozen, naar een ander gebied, en daar besliste Aaltje (vroom, spreekt goed recht) over een diefstal. Open:
-  hoe je hem kiest (vraag 67).
+  raadsman gekozen, naar een ander gebied, en daar besliste Aaltje (vroom, spreekt goed recht) over een diefstal.
+  **Het kiezen** (vraag 67, Marcel: "B"): de knop Raadsman in de balk (of `R`) opent een venster met de drie
+  (`js/raadsmanvenster.js`), elk een kaart met wie hij is, hoe hij beslist ("Beslist streng: wie steelt, moet het bos
+  in") en wat hij kan, goed in groen en slecht in rood; daar kies je hem, en later een ander; onderaan wat hij besloot.
+  De tijd staat stil zolang het open is. Ging er een voorval voorbij zonder dat iemand besliste, dan zegt de raad tien
+  dagen lang: "Wat je mist, gaat voorbij: kies een raadsman [R]". De bouwer in de speeltest kiest er een met die knop,
+  en laat de voorvallen aan hem. Getoetst: een toets in `test/raad.test.cjs` en een in `test/voorvallen.test.cjs`;
+  `npm test` 661/661; in de browser de raad, `R`, kiezen, van het venster door naar de wetten met `W`, en `Esc`.
 - 29 sep 2026 — **De voorvallen: het dorp spreekt je aan** (zeventiende sessie; vraag 65, A, Marcel: "A ja"). `js/voorvallen.js`:
   om de paar dagen (gemiddeld om de tien, in de winter om de zes, niet in de eerste vier) komt iemand uit het dorp de
   schout zoeken met een vraag, een ruzie of een ramp. Hij krijgt een uitroepteken, het bericht zegt "Trijn zoekt je."

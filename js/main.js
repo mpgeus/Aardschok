@@ -436,14 +436,20 @@
     // de spelregels of de wetten, hieronder.
     if (S.modus === 'velden') {
       const k = (ev.key || '').toLowerCase();
-      if (k === 'escape' || k === 'v' || k === 'b' || k === 'o' || k === 'w') T.ui.sluitVelden(S);
-      if (k !== 'b' && k !== 'o' && k !== 'w') return;
+      if (k === 'escape' || k === 'v' || k === 'b' || k === 'o' || k === 'w' || k === 'r') T.ui.sluitVelden(S);
+      if (k !== 'b' && k !== 'o' && k !== 'w' && k !== 'r') return;
     }
-    // Het menu Wetten (js/wettenmenu.js) net zo: Esc of W sluit het, en B, O en V gaan meteen door.
+    // Het menu Wetten (js/wettenmenu.js) net zo: Esc of W sluit het, en B, O, V en R gaan meteen door.
     if (S.modus === 'wetten') {
       const k = (ev.key || '').toLowerCase();
-      if (k === 'escape' || k === 'w' || k === 'b' || k === 'o' || k === 'v') T.ui.sluitWetten(S);
-      if (k !== 'b' && k !== 'o' && k !== 'v') return;
+      if (k === 'escape' || k === 'w' || k === 'b' || k === 'o' || k === 'v' || k === 'r') T.ui.sluitWetten(S);
+      if (k !== 'b' && k !== 'o' && k !== 'v' && k !== 'r') return;
+    }
+    // Het venster Raadsman (js/raadsmanvenster.js) net zo: Esc of R sluit het, en B, O, V en W gaan meteen door.
+    if (S.modus === 'raadsman') {
+      const k = (ev.key || '').toLowerCase();
+      if (k === 'escape' || k === 'r' || k === 'b' || k === 'o' || k === 'v' || k === 'w') T.ui.sluitRaadsman(S);
+      if (k !== 'b' && k !== 'o' && k !== 'v' && k !== 'w') return;
     }
     if (ev.key === 'Escape' && T.ui.briefOpen && T.ui.briefOpen()) {
       T.ui.sluitBrief(S);
@@ -471,6 +477,11 @@
     // W: de wetten (js/wettenmenu.js), ook alleen bij het rondlopen.
     if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'w' || ev.key === 'W')) {
       T.ui.openWetten(S);
+      return;
+    }
+    // R: je raadsman (js/raadsmanvenster.js), ook alleen bij het rondlopen.
+    if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'r' || ev.key === 'R')) {
+      T.ui.openRaadsman(S);
       return;
     }
     if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'b' || ev.key === 'B')) {

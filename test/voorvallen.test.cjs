@@ -357,6 +357,7 @@ test('wie je niet sprak, gaat voorbij, en dat neemt het dorp je kwalijk', () => 
   assert.ok(s.erbij < 0);
   assert.deepEqual(s.last, ['een schout die er niet was']);
   assert.ok(!L.wie.wezen.zoektSchout);
+  assert.equal(S.voorvallen.laatstVoorbij, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen, 'de raad zegt dan: kies een raadsman');
 });
 
 test('de spelregel: uit komt er niemand, en vaak komen ze vaker', () => {

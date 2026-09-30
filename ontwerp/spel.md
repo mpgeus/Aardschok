@@ -18,7 +18,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
 | De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug | vraag 65 |
-| De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je er niet bent, naar zijn karakter; hoe je hem kiest, is open | vraag 64, 65, 66, 67 |
+| De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je er niet bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf | vraag 58 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -224,6 +224,12 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
 "A Ja, b Nee, c Nee, wordt automatisch als de schout er niet is. D prima"):
 - **Een van de boeren** wordt raadsman, met zijn karakter en aanzien (`js/boeren.js`) en twee gelote vaardigheden uit
   vijf, elk goed of slecht: rechtspreken, zwijgen, rekenen, bouwen en vechten. Je kiest uit drie, vast per spel.
+- **Kiezen, wanneer je wilt** (vraag 67, Marcel: "B"): de knop Raadsman in de balk (of `R`) opent een venster met de
+  drie, elk een kaart met wie hij is, hoe hij beslist ("Beslist streng: wie steelt, moet het bos in") en wat hij kan,
+  goed in groen, slecht in rood, met waar het over gaat. Daar kies je hem, en later een ander. Onderaan staat wat hij
+  besloot. Zolang het venster open is, staat de tijd stil (`js/raadsmanvenster.js`). Tot je kiest, is er geen, en zodra
+  er een voorval voorbijging, zegt de raad onder het doel tien dagen lang: "Wat je mist, gaat voorbij: kies een
+  raadsman [R]".
 - **Hij beslist vanzelf als de schout er niet is:** is de schout niet in het dorp als iemand hem met een voorval gaat
   zoeken, dan beslist de raadsman meteen; en sprak de schout wie hem zocht niet binnen twee dagen, dan beslist hij
   dan (zonder raadsman gaat het voorbij, en neemt het dorp het je kwalijk). Een bericht zegt wat hij deed: 'Aaltje, je
@@ -241,8 +247,7 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
 - **Instelbaar:** de spelregel "Raadsman" (aan, uit), en de getallen in de werkbank (`T.RAADSMAN_INSTELLINGEN`, met de
   neigingen per karakter). `Spel.debug.raadsman()` zegt wie het is, uit wie je kiest en wat hij besloot, en
   `Spel.debug.raadsman('Aaltje')` maakt Aaltje raadsman.
-- **Nog open:** hoe en wanneer je hem kiest (vraag 67: niet in de eerste week via de herbergierster, zei Marcel), en
-  staande orders (de heer, de heervaart, de marskramer) komen met het land (vraag 66, D).
+- **Nog niet:** staande orders (de heer, de heervaart, de marskramer) komen met het land (vraag 66, D).
 
 ## De raad onder het doel (Marcel, 29 sep 2026; werklijst vraag 58)
 

@@ -43,13 +43,28 @@
   };
   const IN = () => T.RAADSMAN_INSTELLINGEN;
 
-  // De vijf vaardigheden: hoe je ze ziet, goed of slecht, en op welk deel van een antwoord ze werken.
+  // De vijf vaardigheden: hoe je ze ziet, goed of slecht, waar ze over gaan (voor het venster, js/raadsmanvenster.js),
+  // en op welk deel van een antwoord ze werken.
   T.VAARDIGHEDEN = {
-    rechtspreken: { goed: 'spreekt goed recht', slecht: 'spreekt slecht recht', op: ['tevreden'] },
-    zwijgen: { goed: 'kan zwijgen', slecht: 'kan niets voor zich houden', op: ['argwaan'] },
-    rekenen: { goed: 'kan rekenen', slecht: 'kan niet rekenen', op: ['goud', 'graan', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi'] },
-    bouwen: { goed: 'kan bouwen', slecht: 'heeft twee linkerhanden', op: ['hout'] },
-    vechten: { goed: 'kan vechten', slecht: 'is bang', op: ['sterfkans'] },
+    rechtspreken: { goed: 'spreekt goed recht', slecht: 'spreekt slecht recht', waarop: 'hoe tevreden het dorp is met zijn vonnis', op: ['tevreden'] },
+    zwijgen: { goed: 'kan zwijgen', slecht: 'kan niets voor zich houden', waarop: 'wat de inner te horen krijgt', op: ['argwaan'] },
+    rekenen: { goed: 'kan rekenen', slecht: 'kan niet rekenen', waarop: 'wat het kost aan goud en waren', op: ['goud', 'graan', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi'] },
+    bouwen: { goed: 'kan bouwen', slecht: 'heeft twee linkerhanden', waarop: 'wat het kost aan hout', op: ['hout'] },
+    vechten: { goed: 'kan vechten', slecht: 'is bang', waarop: 'de kans dat er iemand sterft', op: ['sterfkans'] },
+  };
+
+  // Hoe elk karakter beslist, in een paar woorden, voor het venster: wat de neigingen hierboven (karakters) zeggen.
+  T.RAADSMAN_NEIGINGEN = {
+    zanger: 'gul: een feest is nooit te groot, en de heer mag het horen',
+    weduwe: 'zuinig en mild: niemand het bos in, en een klein feest',
+    woekeraar: 'op het geld: een boete gaat in de kist',
+    vroedvrouw: 'zorgzaam: liever niemand dood, wat het ook kost',
+    heethoofd: 'streng: wie steelt, moet het bos in',
+    vrome: 'vroom: bidden helpt ook, en niemand het bos in',
+    roddelaar: 'praat graag, ook met de inner',
+    grijsaard: 'voorzichtig: de heer moet tevreden zijn',
+    nieuwkomer: 'gastvrij: vreemdelingen zijn welkom, en niemand het bos in',
+    drinker: 'gezellig: het dorp moet blij zijn, het kost wat het kost',
   };
   // Wat goed uitvalt voor het dorp: meer tevredenheid, goud en waren; minder argwaan; en een kans op een dode nooit.
   const goedVoorHetDorp = (wat, n) => (wat === 'argwaan' ? n < 0 : wat === 'sterfkans' ? false : n > 0);
@@ -63,7 +78,7 @@
   const isBoer = (p) => !!p && T.isBoer(p.wezen);
   const hier = (S, p) => !!(S.bewoners && S.bewoners.mensen.includes(p)) && !p.weg && !!p.wezen && !p.wezen.dood;
 
-  // S.raadsman: wat hij besloot, het laatste eerst achteraan: [{ dag, id, wie, antwoord, prijs }]. Wíé raadsman is,
+  // S.raadsman: wat hij besloot, het laatste achteraan: [{ dag, id, door, wie, antwoord, prijs }]. Wíé raadsman is,
   // staat op zijn poppetje (e.raadsman), want daar kijkt ook het maaien naar (T.boerFactor).
   T.nieuweRaadsman = () => ({ besluiten: [] });
 
@@ -192,7 +207,7 @@
     L.door = p;
     T.doeGevolg(S, keuze.doe);
     if (!S.raadsman) S.raadsman = T.nieuweRaadsman();
-    S.raadsman.besluiten.push({ dag: dagNu(S), id: L.id, wie: naam(L.wie), antwoord: zeg, prijs });
+    S.raadsman.besluiten.push({ dag: dagNu(S), id: L.id, door: naam(p), wie: naam(L.wie), antwoord: zeg, prijs });
     if (S.raadsman.besluiten.length > 20) S.raadsman.besluiten.shift();
     const titel = T.VOORVALLEN[L.id].titel;
     bericht(`${T.hoofdletter(naam(p))}, je raadsman, besliste over ${titel}: "${zeg}"${prijs ? ` (${prijs})` : ''}`);

@@ -146,15 +146,17 @@ function gemiddeldPerSpeler(goed) {
 const KEUZES_ZONDER = 8;
 function deVoorvallen(goed) {
   const uit = ['## De voorvallen', '', `Een jaar is een uur op 30×; met de ${KEUZES_ZONDER} keuzes die een jaar al had, vraagt het spel een keuze per zoveel minuten.`, ''];
-  const kop = ['speler', 'zaad', 'voorvallen', 'per jaar', 'een keuze per', 'welke (de eerste tien)'];
+  const kop = ['speler', 'zaad', 'voorvallen', 'per jaar', 'een keuze per', 'door de raadsman', 'welke (de eerste tien)'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   for (const u of goed) {
     const v = u.voorvallen || [];
     const jaren = u.speler === 'bouwer' ? 2 : 1;
-    const perJaar = v.length / jaren;
+    // Wat hij aan zijn raadsman liet, besliste hij niet zelf (speler.js, de bouwer).
+    const zelf = v.filter((x) => x.antwoord !== '(aan de raadsman)').length / jaren;
     uit.push(regel([
-      NAMEN[u.speler] || u.speler, u.zaad, String(v.length), getal(perJaar),
-      `${(60 / (perJaar + KEUZES_ZONDER)).toFixed(1).replace('.', ',')} min`,
+      NAMEN[u.speler] || u.speler, u.zaad, String(v.length), getal(v.length / jaren),
+      `${(60 / (zelf + KEUZES_ZONDER)).toFixed(1).replace('.', ',')} min`,
+      u.raadsman ? `${u.raadsman.door}: ${u.raadsman.over}` : '',
       v.slice(0, 10).map((x) => x.id).join(', '),
     ]));
   }

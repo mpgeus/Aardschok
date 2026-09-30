@@ -166,6 +166,7 @@
   //   geweest    per voorval de laatste dag dat het er was
   //   stemming   wat het dorp nadraagt: [{ waarde, dag, woorden }] (T.voorvalStemming)
   //   aantal, beantwoord, doorRaadsman   hoeveel er waren, hoeveel je er beantwoordde, en hoeveel de raadsman
+  //   laatstVoorbij   de dag dat er het laatst een voorbijging zonder dat iemand besliste (js/raad.js)
   T.nieuweVoorvallen = () => ({ volgende: null, lopend: null, wacht: [], geweest: {}, stemming: [], aantal: 0, beantwoord: 0, doorRaadsman: 0 });
 
   // ---------------------------------------------------------------------------------------------
@@ -314,6 +315,8 @@
   function voorbij(S, dag) {
     if (T.raadsmanBeslist(S)) return;
     const L = S.voorvallen.lopend;
+    // De raad onder het doel zegt het dan een tijd (js/raad.js): kies een raadsman.
+    S.voorvallen.laatstVoorbij = Math.floor(dag);
     bericht(`${T.hoofdletter(naam(L.wie))} heeft je niet gesproken, en gaat weer aan het werk.`);
     stemming(S, IN().nietGevonden, { woorden: { last: 'een schout die er niet was' } }, dag);
     stop(S);

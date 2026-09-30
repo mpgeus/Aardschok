@@ -397,6 +397,7 @@
     // kaart, en die ligt stil zolang zo'n venster open is.
     if (T.ui.veldenOpen && T.ui.veldenOpen()) T.ui.sluitVelden(S);
     if (T.ui.wettenOpen && T.ui.wettenOpen()) T.ui.sluitWetten(S);
+    if (T.ui.raadsmanOpen && T.ui.raadsmanOpen()) T.ui.sluitRaadsman(S);
     if (S.bouwSoort || S.bouwMenuOpen) {
       S.bouwSoort = null;
       S.bouwMenuOpen = false;
@@ -1213,9 +1214,11 @@
       T.ui.sluitVelden(S);
       return;
     }
-    // Van de spelregels (of de wetten) meteen naar de velden, zonder eerst het ene venster dicht te hoeven doen.
+    // Van de spelregels (of de wetten, of de raadsman) meteen naar de velden, zonder eerst het ene venster dicht te
+    // hoeven doen.
     if (T.ui.spelregelsOpen()) T.ui.sluitSpelregels(S);
     if (T.ui.wettenOpen()) T.ui.sluitWetten(S);
+    if (T.ui.raadsmanOpen()) T.ui.sluitRaadsman(S);
     if (S.modus === 'verkennen') T.ui.openVelden(S);
   });
 
@@ -1321,6 +1324,7 @@
     }
     if (T.ui.veldenOpen()) T.ui.sluitVelden(S);
     if (T.ui.wettenOpen()) T.ui.sluitWetten(S);
+    if (T.ui.raadsmanOpen()) T.ui.sluitRaadsman(S);
     if (S.modus === 'verkennen') T.ui.openSpelregels(S);
   });
 

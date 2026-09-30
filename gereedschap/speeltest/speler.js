@@ -50,7 +50,10 @@
   let boek = null; // wat er gebeurde, voor speeltest.cjs
   const bezig = {}; // welk venster de speler zelf openhoudt: dat sluit beantwoord() niet
   const geboekt = new WeakSet(); // de voorvallen die al in het boek staan
+  let laatAanRaadsman = false; // laat deze speler de voorvallen aan zijn raadsman (de bouwer)?
 
+  // Wat het boek bij een voorval zet dat de speler aan zijn raadsman liet.
+  const AAN_DE_RAADSMAN = '(aan de raadsman)';
   // Staat het gesprek van een voorval open (js/voorvallen.js): praat de schout met wie hem zocht?
   const voorvalOpen = (s) => s.modus === 'dialoog' && !!(s.voorvallen && s.voorvallen.lopend) && s.spreektMet === s.voorvallen.lopend.wie.wezen;
   // Wat een antwoord kost, zoals het venster het onder het antwoord zet (T.prijsVanKeuze in js/voorvallen.js).
@@ -150,6 +153,16 @@
       if (!klik('#slachten [data-actie="slacht"]')) klik('#slachten [data-actie="sluit"]');
       if (T.ui.slachtenOpen()) T.ui.sluitSlachten(s);
     }
+    // Wie het aan zijn raadsman laat (de bouwer; js/raadsman.js), sluit het gesprek, zoals met Esc: wie hem zocht,
+    // wacht, en na twee dagen beslist de raadsman.
+    if (laatAanRaadsman && voorvalOpen(s) && T.raadsmanVan(s)) {
+      const L = s.voorvallen.lopend;
+      if (!geboekt.has(L)) {
+        geboekt.add(L);
+        boek.voorvallen.push({ dag: heel(s.kalender.dag), datum: datum(), id: L.id, wie: T.naamVanBewoner(L.wie), antwoord: AAN_DE_RAADSMAN });
+      }
+      T.sluitDialoog(s);
+    }
     // Een voorval (js/voorvallen.js): wie de schout zoekt, spreekt hem aan. Elke speler leest de prijs onder de
     // antwoorden en kiest het eerste verstandige (hieronder), met de knop zoals een mens, en anders het eerste dat kan;
     // heeft het gesprek nog een knoop, dan daar weer.
@@ -164,6 +177,7 @@
       }
       knop.click();
     }
+    if (s.modus === 'raadsman' && !bezig.raadsman) T.ui.sluitRaadsman(s);
     if (s.modus === 'verstoppen' && !bezig.verstoppen) T.ui.sluitVerstoppen(s);
     if (s.modus === 'handel' && !bezig.handel) T.ui.sluitHandel(s);
     if (s.modus === 'heer' && !bezig.heer) T.ui.sluitHeer(s);
@@ -717,6 +731,8 @@
     }
     return {
       jaren: 2,
+      // Hij heeft het druk met bouwen: de voorvallen laat hij aan zijn raadsman (vraag 66 en 67).
+      laatAanRaadsman: true,
       async begin() {
         // Vreemden welkom, met het menu (W) en de knop op de kaart van de wet, zoals een speler.
         const s = S();
@@ -724,6 +740,12 @@
         if (!klik('#wetten button[data-wet="vreemden"][data-stand="aangenomen"]')) daad('kan Vreemden welkom niet aannemen');
         if (!klik('#wetten [data-actie="sluit"]')) T.ui.sluitWetten(s);
         if (T.standVanWet(s, 'vreemden') === 'aangenomen') daad('neemt Vreemden welkom aan');
+        // Een raadsman, met de knop in de balk (R) zoals een speler: de eerste van de drie.
+        klik('#raadsman-knop');
+        if (!klik('#raadsman button[data-wie]')) daad('kan geen raadsman kiezen');
+        if (!klik('#raadsman [data-actie="sluit"]') && T.ui.raadsmanOpen()) T.ui.sluitRaadsman(s);
+        const r = T.raadsmanVan(s);
+        if (r) daad(`kiest als raadsman: ${T.overRaadsmanTekst(s, r)}`);
       },
       async elkeStap() {
         const s = S();
@@ -1011,6 +1033,7 @@
       boek.boeren = Object.fromEntries(Object.entries(s.lot.boeren).map(([id, b]) => [id, b.karakter]));
       boek.begin = tel(); // de eerste van de maand zelf schrijft de boekhouding op, bij de eerste stap
       const P = SPELERS[speler];
+      laatAanRaadsman = !!P.laatAanRaadsman;
       const eindDag = EIND + JAAR * ((P.jaren || 1) - 1);
       if (P.begin && !verder) await P.begin();
       for (let i = 0; i < 800000 && dagNu() < eindDag && !s.einde && s.modus !== 'dood'; i++) {
@@ -1040,6 +1063,9 @@
       };
       boek.eind = eind();
       boek.winter = winter();
+      // De raadsman (js/raadsman.js): wie het was, en hoeveel voorvallen hij besliste.
+      const rm = T.raadsmanVan(s);
+      boek.raadsman = rm ? { over: T.overRaadsmanTekst(s, rm), door: (s.voorvallen && s.voorvallen.doorRaadsman) || 0, laatste: ((s.raadsman && s.raadsman.besluiten) || []).slice(-5) } : null;
       // Voor de proef met opslaan: het hele spel aan het eind, om twee jaren letter voor letter te vergelijken.
       if (opslaan || verder) boek.eindStaat = T.bewaarSpel(s, { plek: 'eind', nu: 0 });
       return JSON.parse(JSON.stringify(boek));

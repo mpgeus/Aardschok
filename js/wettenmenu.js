@@ -114,9 +114,10 @@
       T.ui.sluitWetten(S);
       return;
     }
-    // Van de spelregels of de velden meteen naar de wetten, zonder eerst het ene venster dicht te hoeven doen.
+    // Van de spelregels, de velden of de raadsman meteen naar de wetten, zonder eerst het ene venster dicht te hoeven doen.
     if (T.ui.spelregelsOpen()) T.ui.sluitSpelregels(S);
     if (T.ui.veldenOpen()) T.ui.sluitVelden(S);
+    if (T.ui.raadsmanOpen()) T.ui.sluitRaadsman(S);
     if (S.modus === 'verkennen') T.ui.openWetten(S);
   });
 })(globalThis.Spel = globalThis.Spel || {});
