@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (30 sep 2026, zeventiende sessie): de heervaart, de naam van je dorp, de voorvallen, de raadsman en de kaart van het land gebouwd; nu op naar het buurdorp
+## De stand (30 sep 2026, achttiende sessie): de schets van de maker staat klaar, met vraag 70 voor Marcel; daarna de maker in het spel, stuk 2 en het buurdorp
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -23,20 +23,21 @@ mannen voor zijn oorlog (`Spel.debug.heervaart('vraag')`). Om de paar dagen komt
 uitroepteken boven zijn hoofd, en hij spreekt je aan als je stilstaat (`Spel.debug.voorval('brand')`); ben je weg,
 dan beslist je raadsman, die je kiest met de knop Raadsman (`R`). Met de spelregel Land aan (`O`) loop je over de weg
 je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). De pagina "Stand van het gehucht" (25 sep) loopt
-achter op de dag. `npm test`: 673/673.
+achter op de dag. `npm test`: 676/676.
 
-**Waar het werk staat:** alles staat in `main`, ook het werk van de zeventiende sessie (vraag 60 tot en met 69, met stuk 1
-van het land; Marcel, 30 sep: "alles push en main" en "Op main, we finetunen later"; ook op `ccr-ef2496ce-pa4iti`). Hoe een eigen branch en `main` samengaan, staat in
-`CLAUDE.md`, onder Git.
+**Waar het werk staat:** het werk van de zeventiende sessie staat in `main` (vraag 60 tot en met 69, met stuk 1 van het
+land; Marcel, 30 sep: "alles push en main" en "Op main, we finetunen later"). Het werk van de achttiende sessie (de maker
+als schets, vraag 70) staat op `claude/werklijst-doorzetten-qagxwq`, nog niet in `main`. Hoe een eigen branch en `main`
+samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** stuk 1 van het land is gebouwd: de kaart van het land en reizen (vraag 69; zie onder
-Af). Marcel koos "De maker nu" (vraag 69, C): het buurdorp krijgt een gehucht van een maker die elk spel een ander
-gehucht legt. Begin met een schets voor Marcel: drie gehuchten van de maker naast elkaar, als plattegrond (het plein als
-hart, huizen eromheen, boerderijen met hun velden verder naar buiten, de weg en de beek), zoals "Het plein als hart" op
-26 sep; dan kan hij kijken terwijl stuk 2 gebouwd wordt (één dorp als één ding in de spelstaat, met een snellere
-dagtik, bewezen met de speeltest die letter voor letter hetzelfde jaar moet spelen). Daarna de maker in het spel, en
-dan het buurdorp (stuk 3), met bij Nieuw spel 0 of 1 tegenspeler. Staande orders voor de raadsman komen met het land
-(vraag 66, D). Open blijven: het dorp van bovenaf
+**Waar de volgende sessie begint:** de maker bestaat, als gereedschap (vraag 69, C; zie onder Af): hij legt een gehucht
+uit een zaad, uit dezelfde delen als het ontworpen gehucht, en `npm run maker` tekent ze als plattegrond. De schets staat
+op de pagina "Gehuchten van de maker", met **vraag 70** voor Marcel: kloppen de delen (A), hoeveel verschil (B), en mag
+de maker ook je eigen gehucht leggen, als spelregel (C). Kiest Marcel C, dan komt de maker eerst het spel in (een nieuw
+spel op een gemaakt gehucht, en de speeltest op drie gemaakte gehuchten), dan stuk 2 (één dorp als één ding in de
+spelstaat, met een snellere dagtik, bewezen met de speeltest die letter voor letter hetzelfde jaar moet spelen), en dan
+het buurdorp (stuk 3), met bij Nieuw spel 0 of 1 tegenspeler; zonder C komt stuk 2 eerst. Staande orders voor de
+raadsman komen met het land (vraag 66, D). Open blijven: het dorp van bovenaf
 (vraag 65, C; Marcel: "nee niet bovenaf, ik denk hier nog over na"), en de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
 dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
@@ -74,8 +75,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* de schets van de maker (drie gehuchten, zie hieronder bij "Waar de volgende sessie begint"),
-zodra die er is; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* vraag 70, de schets van de maker (de pagina "Gehuchten van de maker"); het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -104,6 +104,21 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
 26 (de volgorde: deze lijst is het nieuwe voorstel).
 
 *Wat nog ruw is:* `opmerkingen.md`, bovenaan.
+
+**Wat er in de achttiende sessie gebeurde** (30 sep; Marcel: "Werklijst doorzetten"):
+- **Eerst gekeken wat er is** (op `a0e5e78`, `npm test` 673/673): het ontworpen gehucht komt uit
+  `gereedschap/tiled/maak-gehucht.cjs`, met vaste plekken voor alles; de huistekeningen hebben elk een vaste maat en een
+  deur aan een vaste kant (zuid, oost of west, nooit noord).
+- **De maker, als schets** (vraag 69, C; zie onder Af): `gereedschap/maker/maker.js` legt een gehucht uit een zaad, keurt
+  het zelf en probeert het anders tot het deugt. Onderweg: een ring van huizen die allemaal binnen twee tegels van het
+  plein staan, paste nooit (in het ontworpen gehucht staat een hut acht tegels van het plein, met een pad); en pal aan
+  het plein kon een huis maar aan één kant staan, want het huis staat recht in het raster en de rand van het plein
+  schuin. Daarom loopt het zand van de deur van de schout het plein op, zoals in het ontworpen gehucht. Het ontworpen
+  gehucht komt door dezelfde keuring (23 van de 214 tegels van het plein liggen er achter een dak; de maker blijft
+  daaronder).
+- **De schets voor Marcel:** de pagina "Gehuchten van de maker" (https://claude.ai/artifact/KqCC7EzyVKbAQ9gcEYCmkX), met
+  het ontworpen gehucht naast zaad 1, 2 en 3, en zaad 4 tot en met 12 klein. Het plan voor wat volgt, met vraag 70.
+  Niets aan het spel veranderd.
 
 **Wat er in de zeventiende sessie gebeurde** (29 sep; Marcel: "Werklijst doorzetten"):
 - **Eerst gekeken wat er is** (op `7c00e01`, `npm test` 624/624): de heer vraagt alleen goud en graan, zijn brieven
@@ -1993,7 +2008,29 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     waar de schout is (`S.wereld`), niet in het dorp. Wie reist, verlaat daarom niet de kaart van het dorp: de schout
     gaat eruit, en het dorp blijft de wereld van het spel, zodat thuis alles zijn werk doet zonder hem.
     **Stuk 1 gebouwd (30 sep, zeventiende sessie):** de kaart van het land en reizen; zie onder Af, en `spel.md`, "Het
-    land".
+    land". **De maker als schets (30 sep, achttiende sessie):** zie vraag 70.
+70. **De schets van de maker** (Claude, 30 sep, achttiende sessie; Marcel, bij vraag 69: "De maker nu"; wacht op
+    Marcel). De maker bestaat, als gereedschap: `gereedschap/maker/maker.js` legt een gehucht uit een zaad
+    (`T.maakGehucht`), uit dezelfde delen als het ontworpen gehucht, keurt zijn eigen werk en probeert het anders tot het
+    deugt (gemiddeld twee pogingen, een halve seconde); `npm run maker` tekent ze als plattegrond. Aan het spel is niets
+    veranderd. De schets, met drie gehuchten naast het jouwe en negen andere zaden: de pagina "Gehuchten van de maker"
+    (https://claude.ai/artifact/KqCC7EzyVKbAQ9gcEYCmkX). Wat opviel: de herberg staat altijd links van het plein, want
+    elke tekening heeft haar deur aan een vaste kant, en een deur kijkt naar het plein (gespiegelde tekeningen zouden
+    helpen; voor later, `opmerkingen.md`). Vragen:
+    - **A. Kloppen de delen?** Of mist er iets, of is er iets te veel? Voorstel: ja, het zijn dezelfde delen als het
+      ontworpen gehucht, zodat dezelfde regels erop werken.
+    - **B. Hoeveel verschil?** Alleen de ligging, zoals in de schets, of ook het land eromheen naar de provincie waar het
+      dorp ligt (in het woud meer bos, op de heide een grote heide, in het broek meer water; de kaart van het land kent
+      die soorten al). Voorstel: alleen de ligging nu; het land eromheen later, als er meer tegenspelers zijn.
+    - **C. Ook je eigen gehucht?** Een spelregel "Je gehucht": het ontworpen gehucht (de standaard) of elk spel een
+      ander. Voorstel: ja, en als eerste. Dan gaat de maker het spel in waar je hem meteen speelt, en speelt de speeltest
+      de proef op drie gemaakte gehuchten, zodat we weten dat de heer, de inner, de rovers en de oogst er werken voordat
+      het buurdorp er een krijgt. En een spel dat elke keer anders begint, is goed voor Steam. De volgorde wordt dan: de
+      maker in het spel, stuk 2, het buurdorp. Zonder C komt stuk 2 eerst, en gaat de maker pas met het buurdorp het
+      spel in.
+    Klaar als (de maker in het spel): met de spelregel aan begint een nieuw spel op een gemaakt gehucht, met dezelfde 26
+    mensen, de boeren bij hun akkers, en de heer, de inner en de marskramer die de weg vinden; de speeltest speelt de
+    proef op zaad 1 tot en met 3; `npm test` groen. Vraag: **A, B en C?**
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -2294,6 +2331,16 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 30 sep 2026 — **De schets van de maker** (achttiende sessie; vraag 69, C, en 70; Marcel: "Werklijst doorzetten").
+  `gereedschap/maker/maker.js`: een gehucht uit een zaad (`T.maakGehucht`), uit dezelfde delen als het ontworpen gehucht:
+  het plein als hart, de schout erachter met het zand van zijn deur het plein op, de herberg, een huis en twee hutten
+  eromheen, vijf boerderijen met hun akkers aan de buitenkant (samen 209 tegels, per boer zoals nu), de heide met de
+  kooi aan de rand, de weg met het bruggetje over de beek, en het bos. Het lot kiest de vorm van het plein, waar de weg,
+  de beek, het bos en de heide liggen, de tekeningen, en waar elke boerderij staat. Hij keurt zelf (iedereen komt
+  overal, niet meer dan 12% van het plein achter een dak) en probeert het opnieuw tot het deugt. `npm run maker` tekent
+  gehuchten naast het ontworpen gehucht (`gereedschap/maker/schets.cjs`), en `test/maker.test.cjs` bewaakt dat hetzelfde
+  zaad hetzelfde gehucht geeft en dat het ontworpen gehucht door de keuring komt. Nog niet in het spel: dat wacht op
+  vraag 70.
 - 30 sep 2026 — **De kaart van het land, en reizen** (zeventiende sessie; vraag 69, stuk 1 van stap 1a; Marcel: "Ja, begin
   aan het land"). `js/land.js`: loop je over de weg je gehucht uit, dan opent de kaart van het land (`js/landkaart.js`):
   negen provincies uit het zaad van het spel (je gehucht, het kasteel van de heer, de stad, zes soorten wildernis), met

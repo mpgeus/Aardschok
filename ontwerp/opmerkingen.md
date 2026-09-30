@@ -9,6 +9,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De herberg van de maker staat altijd links van het plein** (30 sep, achttiende sessie; de schets van de maker, vraag
+  70). Elke huistekening heeft haar deur aan een vaste kant (zuid, oost of west; nooit noord), en de maker zet een huis
+  met zijn deur naar het plein. De herberg heeft haar deur in het oosten, dus staat ze in elk gemaakt gehucht in het
+  westen van het plein, en de huizen met een deur in het zuiden staan erachter. Meer afwisseling: de huizenbouwer
+  (`gereedschap/pixelart/huis-sdf.cjs`) maakt elk huis ook gespiegeld, met de deur aan de andere kant, en de maker mag
+  kiezen. Niet nu (eerst speelbaar), maar wel vóór er vijf dorpen van de maker naast elkaar liggen.
 - **Het getal zakt onder wie niet kan sterven** (30 sep, de speeltest van de bouwer met een raadsman; hoort bij vraag
   59). Wie sterft of wegtrekt, is nooit de schout, zijn gezin of een boer met een naam (`wieGaat` in `js/bewoners.js`:
   "die horen bij het verhaal"), en ook de herbergierster niet. Is er niemand anders meer, dan zakt alleen het getal: in
