@@ -5,6 +5,8 @@ gereedschap/pixelart/uit/
 gereedschap/speeltest/uit/
 # de zip voor een tester (itch.io): komt uit npm run proefversie
 gereedschap/proefversie/uit/
+# de schets van de maker: komt uit npm run maker
+gereedschap/maker/uit/
 # reservekopieën van het gereedschap (gereedschap/gesprekken.html en quests.html)
 *.bak
 # losse werkkopieën van agents (git worktree), niet van het spel zelf

@@ -95,6 +95,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
   titelscherm (`T.STAND`). Commit eerst.
+- `npm run maker` legt gehuchten met de maker (`gereedschap/maker/maker.js`, `T.maakGehucht(zaad)`: elk spel een ander
+  gehucht, vraag 69 en 70; nog niet in het spel) en tekent ze als plattegrond naast het ontworpen gehucht, in
+  `gereedschap/maker/uit/` (niet in git); `-- 7 12` voor andere zaden.
 - `npm run pixelart` rendert alle HD-pixel art naar `gereedschap/pixelart/uit/` (niet in git).
 - `npm run pixelart:spel` zet daaruit alleen wat het spel tekent in `beelden/` (wél in git,
   want het spel heeft het nodig als het draait). Draai het opnieuw als de kunst verandert.

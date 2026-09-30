@@ -670,4 +670,6 @@ if (require.main === module) {
   }
 }
 
-module.exports = { B, H, AKKERS, HUIZEN, SCHOUT_HUIS, GEWONE_HUIZEN, HERBERG, MEENT, KOOI, PLEIN_RAND, ZAND, kaart, betekenis };
+// De schets van de maker (gereedschap/maker/schets.cjs) tekent dit gehucht naast de gemaakte, uit dezelfde delen: de
+// grond per hoekpunt (soortOp), het bruggetje en de uitgang erbij.
+module.exports = { B, H, AKKERS, HUIZEN, SCHOUT_HUIS, GEWONE_HUIZEN, HERBERG, MEENT, KOOI, PLEIN_RAND, ZAND, kaart, betekenis, soortOp, BRUG_Y, BRUG_X0, BRUG_X1, UITGANG, OP_HET_ZAND };
