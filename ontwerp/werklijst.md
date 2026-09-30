@@ -28,11 +28,11 @@ achter op de dag. `npm test`: 662/662.
 30 sep: "alles push en main"; ook op `ccr-ef2496ce-pa4iti`). Hoe een eigen branch en `main` samengaan, staat in
 `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** de voorvallen en de raadsman zijn gebouwd (vraag 65 tot en met 68; zie onder Af). Marcel
-koos eerst één dorp vol leven, dan het land (vraag 65, D). Begin met Marcel te vragen of het dorp nu vol genoeg voelt:
-speel het een kwartier, of laat de speeltest zeggen wat een jaar vraagt. Is het genoeg, dan is de volgende stap het
-land met provincies (vraag 63): 1a van het land, de kaart van het land en reizen, het buurdorp in een eigen provincie,
-en een snellere dagtik; staande orders voor de raadsman komen daarmee (vraag 66, D). Open blijven: het dorp van bovenaf
+**Waar de volgende sessie begint:** de voorvallen en de raadsman zijn gebouwd (vraag 65 tot en met 68; zie onder Af), en
+Marcel zei "Ja, begin aan het land" (30 sep). Het plan voor stap 1a staat onder vraag 69, met een schets van de kaart
+van het land: eerst de kaart en reizen, dan één dorp als één ding (onzichtbaar, met een snellere dagtik), dan het
+buurdorp. Begin met stuk 1 zodra Marcel het plan en vraag 69, C beantwoordde; staande orders voor de raadsman komen met
+het land (vraag 66, D). Open blijven: het dorp van bovenaf
 (vraag 65, C; Marcel: "nee niet bovenaf, ik denk hier nog over na"), en de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
 dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
@@ -70,7 +70,8 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* of het dorp nu vol genoeg voelt om aan het land te beginnen (vraag 65, D); het dorp van bovenaf
+*2. Wacht op Marcel:* het plan voor het land, stap 1a, en of het buurdorp eerst een gehucht met de hand krijgt (vraag
+69, C, met een schets); het dorp van bovenaf
 (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -1937,6 +1938,43 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 30 sep): "B".** Een knop "Raadsman" in de balk opent een venster met de drie; tot je kiest,
     is er geen, en zodra een voorval voorbijging, zegt de raad onder het doel het. Later kies je er een ander mee.
     **Gebouwd (30 sep, zeventiende sessie):** zie onder Af, en `spel.md`, "De raadsman".
+68. **Telt wegsturen als er niet zijn?** (Claude, 30 sep, na de speeltest met de raadsman: de bouwer drukte bij elk
+    voorval `Esc`, en had geen voorvallen meer.) **Beantwoord (Marcel, 30 sep): "Ja B inderdaad"**: de raadsman beslist
+    alleen als je weg bent, en wie je in het dorp wegstuurt, gaat voorbij. Gebouwd, met A als spelregel; zie onder Af.
+69. **Het land, stap 1a: het plan** (Claude, 30 sep, zeventiende sessie; Marcel, bij vraag 65, D: "Ja, begin aan het
+    land"; wacht op Marcel). Wat vraag 63 besloot: een kaart van het land met provincies waarop je in dagen reist, per
+    provincie een kaart waar je loopt, en stap 1a: de kaart van het land en reizen, je dorp dat doordraait, het buurdorp
+    in een eigen provincie, en een snellere dagtik. Wat er nu is, nagekeken:
+    - **Er is plaats voor één dorp.** Alles wat bij het dorp hoort, staat los in de spelstaat: de voorraad, de gebouwen,
+      de bevolking, de bewoners, de erven, de wetten, de heer, de inner, de rovers, de voorvallen, de raadsman, de trede
+      en het vee (samen honderden plekken in 19 bestanden). Een tweede dorp kan pas als dat per dorp bij elkaar staat.
+    - **Een ander gebied kan al:** de schout gaat naar een andere kaart (`S.gebieden`, `js/gebied.js`), en het dorp
+      draait door met al zijn poppetjes. Reizen kan dus op dezelfde manier beginnen.
+    - **De kaart van het gehucht is met de hand ontworpen** (het plein als hart, naar de schets die Marcel goedkeurde) en
+      wordt buiten het spel gemaakt (`gereedschap/tiled/maak-gehucht.cjs`). Een gehucht dat elke keer anders ligt (vraag
+      63, C), vraagt een nieuwe maker die in het spel zelf draait, en die legt eerst een kaler gehucht dan het jouwe.
+    - **Een speeldag kost nu 29 ms per dorp** (gemeten), en een bewaard spel is 374 kB per dorp; voor twee dorpen past dat
+      in de browser.
+    Voorstel, in drie stukken, elk af en getoetst voordat het volgende begint:
+    1. **De kaart van het land, en reizen** (dat zie je meteen): loop je over de weg je provincie uit, dan opent de kaart
+       van het land: zo'n negen provincies, met je gehucht erin, wegen ertussen met hoeveel dagen reizen, het kasteel van
+       de heer en de stad, en wat je nog niet zag donker. Kies je een provincie, dan gaan de dagen snel voorbij, zoals bij
+       slapen, en ben je er. Een provincie zonder dorp is voor nu land om doorheen te reizen (vraag 63, D), zonder eigen
+       kaart. Thuis draait het door zoals nu als je in een ander gebied bent: de raadsman beslist de voorvallen, en de
+       heer, de inner en de marskramer doen hun werk zonder jou. Kom je terug, dan zegt een bericht wat er gebeurde.
+       Tot het buurdorp er is, staat het land achter een spelregel, en speelt de proef zoals nu.
+    2. **Eén dorp als één ding** (dat zie je niet): alles wat bij een dorp hoort, komt bij elkaar in de spelstaat, zodat er
+       twee kunnen zijn; een dorp waar je niet bent, draait op zijn dagtik, zonder poppetjes die lopen; en de dagtik wordt
+       sneller (een lijst van wat waar staat, in plaats van voor elke tegel alle bomen en huizen aflopen), wat ook het
+       haperen van nu weghaalt. Klaar als de speeltest met hetzelfde zaad letter voor letter hetzelfde jaar speelt.
+    3. **Het buurdorp:** in een eigen provincie, een paar dagen reizen, met een eigen gehucht, eigen mensen (andere namen
+       en karakters) en dezelfde regels. Je kunt erheen en er rondlopen; zijn schout beslist nog niets (dat is stap 1b).
+       Bij Nieuw spel kies je dan 0 of 1 tegenspeler, en met 0 is het spel zoals nu (vraag 62, C).
+    Klaar als: zoals vraag 63 zegt voor stap 1a. Vraag: **C**, het buurdorp eerst met een tweede gehucht dat met de hand
+    ontworpen is (snel, en even mooi als het jouwe, maar elk spel hetzelfde), en de maker die elke keer een ander gehucht
+    legt pas bij stap 3 van het land (kiezen hoeveel, tot 5 of 6), waar hij echt nodig is? Of die maker nu al? Claude
+    raadt het eerste aan. De kaart van het land als schets, met het plan en de vraag: de pagina "Het land met
+    provincies" (https://claude.ai/artifact/KJHyaEbye8LQCjJk75vXWT).
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
