@@ -25,8 +25,8 @@ dan beslist je raadsman, die je kiest met de knop Raadsman (`R`). Met de spelreg
 je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). De pagina "Stand van het gehucht" (25 sep) loopt
 achter op de dag. `npm test`: 673/673.
 
-**Waar het werk staat:** alles staat in `main`, ook het werk van de zeventiende sessie (vraag 60 tot en met 68; Marcel,
-30 sep: "alles push en main"; ook op `ccr-ef2496ce-pa4iti`). Hoe een eigen branch en `main` samengaan, staat in
+**Waar het werk staat:** alles staat in `main`, ook het werk van de zeventiende sessie (vraag 60 tot en met 69, met stuk 1
+van het land; Marcel, 30 sep: "alles push en main" en "Op main, we finetunen later"; ook op `ccr-ef2496ce-pa4iti`). Hoe een eigen branch en `main` samengaan, staat in
 `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** stuk 1 van het land is gebouwd: de kaart van het land en reizen (vraag 69; zie onder
@@ -74,7 +74,8 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* hoe de kaart van het land en reizen voelen (spelregel Land aan, `O`); het dorp van bovenaf
+*2. Wacht op Marcel:* de schets van de maker (drie gehuchten, zie hieronder bij "Waar de volgende sessie begint"),
+zodra die er is; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -155,6 +156,8 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
 - **Het plan voor het land, stap 1a** (vraag 69; Marcel: "Ja, begin aan het land"), in drie stukken, met een schets van
   de kaart van het land (de pagina "Het land met provincies"). **Marcel koos** (30 sep): "De maker nu": het buurdorp
   krijgt een gehucht dat elk spel anders ligt. **Gebouwd: stuk 1**, de kaart van het land en reizen (zie onder Af).
+  Marcel: "Op main, we finetunen later": alles staat in `main`, en het bijstellen (de dagen, de snelheid, de kaart)
+  komt later.
 - **Marcel vroeg hoe het leuk blijft** ("zelf als persoon rond hobbelen in je eigen stad maakt het wel lastig.
   Misschien voelt het handiger als we een soort raadsman en aansturen die je regels oplegt?"). Nagekeken: de camera
   volgt altijd de schout en je ziet maar een klein stuk van je dorp, dus bouwen gaat alleen waar hij staat. Het
