@@ -32,11 +32,11 @@ samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** de maker bestaat, als gereedschap (vraag 69, C; zie onder Af): hij legt een gehucht
 uit een zaad, uit dezelfde delen als het ontworpen gehucht, en `npm run maker` tekent ze als plattegrond. De schets staat
-op de pagina "Gehuchten van de maker", met **vraag 70** voor Marcel: kloppen de delen (A), hoeveel verschil (B), en mag
-de maker ook je eigen gehucht leggen, als spelregel (C). Kiest Marcel C, dan komt de maker eerst het spel in (een nieuw
-spel op een gemaakt gehucht, en de speeltest op drie gemaakte gehuchten), dan stuk 2 (één dorp als één ding in de
-spelstaat, met een snellere dagtik, bewezen met de speeltest die letter voor letter hetzelfde jaar moet spelen), en dan
-het buurdorp (stuk 3), met bij Nieuw spel 0 of 1 tegenspeler; zonder C komt stuk 2 eerst. Staande orders voor de
+op de pagina "Gehuchten van de maker", met vraag 70. **Marcel koos (30 sep): A ja, B nu alleen de ligging, C ja.** Dus
+komt de maker eerst het spel in: een spelregel "Je gehucht" (het ontworpen gehucht blijft de standaard), een nieuw spel
+op een gemaakt gehucht, en de speeltest op drie gemaakte gehuchten. Dan stuk 2 (één dorp als één ding in de spelstaat,
+met een snellere dagtik, bewezen met de speeltest die letter voor letter hetzelfde jaar moet spelen), en dan het buurdorp
+(stuk 3), met bij Nieuw spel 0 of 1 tegenspeler. Staande orders voor de
 raadsman komen met het land (vraag 66, D). Open blijven: het dorp van bovenaf
 (vraag 65, C; Marcel: "nee niet bovenaf, ik denk hier nog over na"), en de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
 dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
@@ -75,7 +75,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 70, de schets van de maker (de pagina "Gehuchten van de maker"); het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2031,6 +2031,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Klaar als (de maker in het spel): met de spelregel aan begint een nieuw spel op een gemaakt gehucht, met dezelfde 26
     mensen, de boeren bij hun akkers, en de heer, de inner en de marskramer die de weg vinden; de speeltest speelt de
     proef op zaad 1 tot en met 3; `npm test` groen. Vraag: **A, B en C?**
+    **Beantwoord (Marcel, 30 sep): "A Ja, b nu alleen ligging later de rest, c ja".** De delen kloppen; de maker
+    verschilt voor nu alleen in de ligging, en het land eromheen naar de provincie komt later; en de maker mag ook je
+    eigen gehucht leggen, als spelregel, met het ontworpen gehucht als standaard. Daarmee is de volgorde: eerst de maker
+    in het spel (voor je eigen gehucht, en de speeltest op drie gemaakte gehuchten), dan stuk 2, dan het buurdorp.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

@@ -287,8 +287,9 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
   gehucht), de heide met de kooi aan de rand, de weg met het bruggetje, en het bos. Het lot kiest de vorm van het plein,
   de kant van de weg, de beek, het bos en de heide, de tekeningen, en waar elke boerderij staat. Hij keurt zelf (iedereen
   komt overal, en van het plein ligt niet meer achter een dak dan in het ontworpen gehucht) en probeert het opnieuw tot
-  het deugt. `npm run maker` tekent ze als plattegrond. Nog niet in het spel: vraag 70 (mag hij ook je eigen gehucht
-  leggen, als spelregel?).
+  het deugt. `npm run maker` tekent ze als plattegrond. **Marcel koos (vraag 70):** de delen kloppen; voor nu verschilt
+  een gehucht alleen in de ligging (het land eromheen naar de provincie komt later); en de maker mag ook je eigen
+  gehucht leggen, als spelregel "Je gehucht", met het ontworpen gehucht als standaard. Dat komt eerst.
 - **Nog niet:** het buurdorp (stuk 3), met een gehucht van de maker; eerst één dorp als één ding in de spelstaat (stuk
   2), met een snellere dagtik. Bij Nieuw spel kies je dan 0 of 1 tegenspeler.
 
