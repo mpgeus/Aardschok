@@ -2247,8 +2247,35 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **Stap 4, C: zelf gaan kijken** kan altijd, bij elk voorval en bij het rapport: je loopt erheen en ziet hoe het
       echt zit. Een raadsman die slecht rekent, of een gierige, meldt het niet altijd goed.
     - **Ernaast: hoe groot kan een dorp worden.** Een meting, zonder iets te veranderen: met 26 tot 1.600 poppetjes wat
-      een beeld kost aan de wereld en aan het tekenen, wat een dag kost, en hoe groot een bewaard spel wordt. De uitslag
-      komt hier.
+      een beeld kost aan de wereld en aan het tekenen, wat een dag kost, en hoe groot een bewaard spel wordt. **De
+      uitslag** (30 sep; een agent, op een vaste kopie van `ad0b8b3`, met echte bewoners op erven en een grotere kaart
+      naarmate het dorp groeit, op deze machine in de cloud: 4 trage kernen en Chromium zonder videokaart, een gewone pc
+      is 1,5 tot 2 keer sneller):
+
+      | mensen | kaart | wereld per beeld op 30× (gemiddeld, traagste 5%) | op 1× | een dag | bewaard | beelden per seconde, 1× en 30× |
+      |---|---|---|---|---|---|---|
+      | 26 | 76² | 0,17 en 2 ms | 0,03 ms | 1,2 ms | 385 kB | 60 en 59 |
+      | 100 | 100² | 1,1 en 13 ms | 0,13 ms | 4 ms | 791 kB | 58 en 51 |
+      | 200 | 128² | 6,9 en 72 ms | 0,4 ms | 8 ms | 1,4 MB | 53 en 41 |
+      | 400 | 192² | 43 en 425 ms | 1,9 ms | 19 ms | 3,3 MB | 39 en 8 |
+      | 800 | 256² | 283 ms en 2,8 s | 11 ms | 58 ms | 6,7 MB (past niet meer) | |
+      | 1.600 | 384² | 15 s | | 149 ms | 18 MB (past niet) | |
+
+      - Tot zo'n **150 mensen** speelt het vloeiend op 30×, en op 1× tot 300 à 400. Het gehucht zelf (76 bij 76 tegels)
+        is vol bij 76 tot 102 mensen; de proef wil er 50.
+      - **Het tekenen is geen grens:** alleen wat in beeld is telt (13 tot 16 ms per beeld bij elke grootte, hier zonder
+        videokaart), en gebouwen kosten bijna niets (2.011 gebouwen: 0,7 ms per beeld).
+      - **De grens is het zoeken van paden:** bij 1.600 mensen 99,6% van de tijd. In de ochtend- en avondspits zoekt
+        iedereen tegelijk een pad (`T.dwaal` → `T.zoekPad`), en voor elke tegel die A* bekijkt, loopt `T.wezenOp` alle
+        wezens af. Zo groeit het met het kwadraat: 0,4 ms per zoektocht bij 26 mensen, 13 ms bij 400, 392 ms bij 1.600. Op
+        een lege kaart van 256 bij 256 kost een zoektocht naar een plek die je niet kunt bereiken een hele seconde.
+      - **Opslaan:** de opslag van de browser (5 MB) is vol bij zo'n 600 mensen, want de kaart gaat mee (55 bytes per
+        tegel); het opslaan zelf is bij 400 mensen al een beeld van 125 ms. Als bestand (Steam) valt die grens weg.
+      - **Wat helpt, als het groter moet** (voor later, `opmerkingen.md`): wie waar staat per tegel bijhouden, zoals de
+        voorwerpen sinds stuk 2; A* met een heap en getallen als sleutel; de vaste wegen (huis, werk, put, herberg)
+        onthouden in plaats van elke dag opnieuw zoeken; en de kaart niet opslaan, want die komt uit het zaad of het
+        bestand. Hoe groot het dan kan, meten we dan opnieuw. De grens zit in hoe we paden zoeken, niet in JavaScript of
+        het tekenen: Godot is ervoor niet nodig.
     - **d, het dorp van bovenaf** (vraag 73, 4: "Wat bedoel je hier"). Op 29 sep stelde Claude voor dat je met één toets
       (`Tab`) de camera van de schout af tilt en over je dorp kijkt, om te bouwen en te plannen zonder te lopen (vraag 64,
       A); Marcel zei toen "nee niet bovenaf, ik denk hier nog over na" (vraag 65, C). Het concept kiest: geen oog van

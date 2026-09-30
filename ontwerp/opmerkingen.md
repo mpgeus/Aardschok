@@ -9,6 +9,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een dorp van meer dan zo'n 150 mensen hapert op 30×, door het zoeken van paden** (30 sep, negentiende sessie; de
+  meting bij vraag 74). In de ochtend- en avondspits zoekt iedereen tegelijk een pad (`T.dwaal` in `js/verkennen.js` →
+  `T.zoekPad` in `js/pad.js`), en voor elke tegel die A* bekijkt, loopt `T.wezenOp` (`js/wereld.js`) alle wezens af. Wat
+  helpt, van meeste naar minste: wie waar staat per tegel bijhouden (zoals `T.voorwerpOp` sinds stuk 2); de vaste wegen
+  (huis, werk, put, herberg) onthouden in plaats van elke dag opnieuw zoeken; A* met een heap en getallen als sleutel; een
+  zoektocht die niet slaagt, niet de hele kaart laten afzoeken. En de kaart hoeft niet in een bewaard spel (55 bytes per
+  tegel; bij 256 bij 256 al 3,6 MB): die komt uit het zaad of uit het bestand. Pas nodig als het dorp een stad wordt.
 - **Het sprokkelen zie je niet** (30 sep, negentiende sessie; vraag 74, stap 2). Het hout komt elke dag in de voorraad
   (`T.sprokkelHout`), maar niemand loopt naar de bosrand en terug met een bos takken. Het concept wil dat je de stad
   ziet voordat je de getallen ziet: wie niets te doen heeft (de ouderen, de kinderen), zou 's middags kunnen sprokkelen,
