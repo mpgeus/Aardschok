@@ -149,6 +149,45 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 30 sep: de bouwer laat de voorvallen aan zijn raadsman (werklijst, vraag 67)
+
+Gespeeld in de zeventiende sessie, op `c3e6e2b` van `ccr-ef2496ce-pa4iti` met het venster Raadsman erbij (het werk van
+`7b5d6b8`), zonder één fout in de console. De bouwer kiest op de eerste dag met de knop Raadsman de eerste van de drie
+(Klaas: een nieuwkomer die goed recht spreekt en niets voor zich kan houden), en sluit elk voorval, zoals met `Esc`: na
+twee dagen beslist de raadsman. Naast de bouwer die zelf koos (29 sep, hieronder), zaad 1:
+
+| | de bouwer kiest zelf (29 sep) | Klaas beslist (30 sep) |
+|---|---|---|
+| Voorvallen | 69, tot Sint-Maarten 1324 | 88, tot 1 grasmaand 1325; 87 door Klaas, één liep nog |
+| Een keuze per (op 30×) | 1,4 min | 7,5 min: alleen de acht die er al waren |
+| Een dorp op | 21 oogstmaand 1323 (52 mensen) | 21 oogstmaand 1323 (52 mensen) |
+| Het meest, na de eerste winter | 80, 24 | 76, 23 |
+| De heer kreeg | 1323: 45%, schandpaal; 1324: 2% | 1323: 66%, soldaten; 1324: 19%, schandpaal |
+| Het eind | het ambt kwijt op Sint-Maarten 1324 | het tweede jaar uit, met 0 in de balk |
+
+**Wat opviel:**
+
+1. **Klaas beslist minstens zo goed als de bouwer.** Een boete voor de kist bij een vechtpartij, een diefstal of een
+   ingegooid luik (1 à 2 goud), vreemdelingen doorgestuurd als er zelf niet genoeg is, de stroper aangegeven bij de heer
+   (argwaan −2%), en de smid uit de stad welkom (een gezin, en ijzer). Waar het geld kost, kan het vaak niet: bij een brand
+   "Laat het branden" zodra er geen acht hout meer is, en bij het zaaigraan "Dan moet je het zelf maar zien te vinden".
+   Een bruiloft in oogstmaand kreeg een feest (−15 graan, −10 bier), een in de winter niet ("Trouwen kan ook zonder
+   feest"). In 1323 kreeg de heer 66%, tegen 45% toen de bouwer zelf koos.
+2. **Wie alles aan de raadsman laat, heeft geen voorvallen meer.** Met `Esc` bij elk voorval vraagt het jaar weer alleen
+   de acht keuzes die het al had, en het dorp loopt zoals toen de bouwer zelf koos. Zo is het gebouwd (vraag 66: hij
+   beslist als de schout er niet is, en wie je niet op tijd sprak, telt als er niet zijn); of dat zo moet blijven, is
+   een vraag voor Marcel.
+3. **Het tweede jaar gaat zoals vraag 59 zegt:** geen zaaigraan in de lente (0 van de 179 akkertegels), geen hout, geen
+   houthakker. Omdat de heer in 1323 meer dan de helft kreeg, was 1324 pas de eerste keer "veel te weinig" (twee keer
+   achter elkaar kost het ambt, `T.HEER_INSTELLINGEN`): het ambt bleef ("nog een keer zo, en je bent je ambt kwijt"),
+   en de bouwer speelde ook de tweede winter: 26 op Sint-Maarten, 0 op 1 grasmaand 1325 (50 doden in de
+   twee winters, 28 weggetrokken).
+4. **Het getal zakt onder wie niet kan sterven.** Op 1 grasmaand 1325 staat er 0 in de balk, maar Trijn, Klaas en Aaltje
+   zochten de schout nog met een voorval, en Klaas besliste nog. Wie sterft of wegtrekt, is nooit de schout, zijn gezin
+   of een boer; is er niemand anders, dan zakt alleen het getal. En een leeg dorp eindigt niet. In `opmerkingen.md`, bij
+   vraag 59.
+5. De speeltest duurde 900 s voor 750 dagen (698 s voor 610 toen de bouwer zelf koos): even snel per dag.
+
 ## De speeltest van 29 sep, met de voorvallen (werklijst, vraag 65)
 
 Gespeeld in de zeventiende sessie, op `145e11f` van `ccr-ef2496ce-pa4iti` met de voorvallen erbij (nog niet gecommit

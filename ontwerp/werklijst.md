@@ -33,10 +33,7 @@ koos eerst één dorp vol leven, dan het land (vraag 65, D). Begin met Marcel te
 speel het een kwartier, of laat de speeltest zeggen wat een jaar vraagt. Is het genoeg, dan is de volgende stap het
 land met provincies (vraag 63): 1a van het land, de kaart van het land en reizen, het buurdorp in een eigen provincie,
 en een snellere dagtik; staande orders voor de raadsman komen daarmee (vraag 66, D). Open blijven: het dorp van bovenaf
-(vraag 65, C), en de balk die volloopt (`opmerkingen.md`). De voorvallen zijn gebouwd (vraag 65, A; zie onder Af), en het dorp van bovenaf blijft open (Marcel:
-"nee niet bovenaf, ik denk hier nog over na"). Eerst één dorp vol leven, dan het land (vraag 65, D): het land met
-provincies (vraag 63) komt daarna, met 1a van het land, de kaart van het land en reizen, het buurdorp in een eigen
-provincie, en een snellere dagtik. Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
+(vraag 65, C; Marcel: "nee niet bovenaf, ik denk hier nog over na"), en de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
 dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
 thuis is (`npm run proefversie`, `verpakken.md`), en wie de eerste tester is, staat open (33d). Van de proef zijn
@@ -2248,7 +2245,11 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   De tijd staat stil zolang het open is. Ging er een voorval voorbij zonder dat iemand besliste, dan zegt de raad tien
   dagen lang: "Wat je mist, gaat voorbij: kies een raadsman [R]". De bouwer in de speeltest kiest er een met die knop,
   en laat de voorvallen aan hem. Getoetst: een toets in `test/raad.test.cjs` en een in `test/voorvallen.test.cjs`;
-  `npm test` 661/661; in de browser de raad, `R`, kiezen, van het venster door naar de wetten met `W`, en `Esc`.
+  `npm test` 661/661; in de browser de raad, `R`, kiezen, van het venster door naar de wetten met `W`, en `Esc`. De
+  speeltest (de bouwer, zaad 1, `speelbaar.md`): Klaas besliste 87 van de 88 voorvallen, zonder één fout, minstens zo
+  goed als de bouwer zelf (de heer kreeg in 1323 66%, tegen 45%); daardoor bleef het ambt in 1324, en in de tweede
+  winter zakte het getal naar 0 terwijl er elf mensen bleven, want de schout, zijn gezin en de boeren sterven niet
+  (`opmerkingen.md`, bij vraag 59).
 - 29 sep 2026 — **De voorvallen: het dorp spreekt je aan** (zeventiende sessie; vraag 65, A, Marcel: "A ja"). `js/voorvallen.js`:
   om de paar dagen (gemiddeld om de tien, in de winter om de zes, niet in de eerste vier) komt iemand uit het dorp de
   schout zoeken met een vraag, een ruzie of een ramp. Hij krijgt een uitroepteken, het bericht zegt "Trijn zoekt je."

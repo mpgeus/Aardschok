@@ -9,6 +9,14 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Het getal zakt onder wie niet kan sterven** (30 sep, de speeltest van de bouwer met een raadsman; hoort bij vraag
+  59). Wie sterft of wegtrekt, is nooit de schout, zijn gezin of een boer met een naam (`wieGaat` in `js/bewoners.js`:
+  "die horen bij het verhaal"), en ook de herbergierster niet. Is er niemand anders meer, dan zakt alleen het getal: in
+  een verse proef zakt het met 100 naar 0 in de balk, terwijl er elf mensen blijven rondlopen (vijf boeren, de schout
+  met vier in zijn gezin, de herbergierster). In de speeltest stond er op 1 grasmaand 1325 0 in de balk, en zochten Trijn,
+  Klaas en Aaltje de schout nog met een voorval. Een leeg dorp eindigt ook niet, terwijl `spel.md` "een leeg dorp" noemt
+  als een manier van verliezen. Mogelijk: het getal zakt niet onder wie er niet kan sterven (het gehucht houdt een kern);
+  of wie een naam heeft, gaat als laatste, en een leeg dorp is het eind. Dat is aan Marcel, met vraag 59.
 - **De balk loopt vol** (30 sep, bij de knop Raadsman): op een scherm van 1280 breed gaan Spelregels en Menu nu naar
   een tweede regel, rechts onder de voorraad. Dat mag (stijl.css), maar het wordt druk. Mogelijk: alleen de toets
   en een teken, met de naam bij de muis; of Spelregels in het menu (Esc).
