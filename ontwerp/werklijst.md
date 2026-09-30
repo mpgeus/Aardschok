@@ -26,10 +26,9 @@ je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). Met de s
 ander" legt de maker elk nieuw spel een ander gehucht (`Spel.debug.gehucht(3)` voor zaad 3). De pagina "Stand van het
 gehucht" (25 sep) loopt achter op de dag. `npm test`: 680/680.
 
-**Waar het werk staat:** het werk van de zeventiende sessie staat in `main` (vraag 60 tot en met 69, met stuk 1 van het
-land; Marcel, 30 sep: "alles push en main" en "Op main, we finetunen later"). Het werk van de achttiende sessie (de maker,
-vraag 69, C, en 70) staat op `claude/werklijst-doorzetten-qagxwq` (gepusht), nog niet in `main`. Hoe een eigen branch en
-`main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook het werk van de achttiende sessie (de maker, vraag 69, C, en 70;
+Marcel, 30 sep: "Ja, zet alles in main"; ook op `claude/werklijst-doorzetten-qagxwq`), en dat van de zeventiende (vraag 60
+tot en met 69, met stuk 1 van het land). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** de maker zit in het spel (vraag 69, C, en 70; zie onder Af): met de spelregel "Je
 gehucht" op "Elk spel een ander" begint een nieuw spel op een gehucht van de maker, en de bouwer speelde er in de
