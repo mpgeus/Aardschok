@@ -179,6 +179,12 @@
   // Nieuw spel: eerst de naam van je dorp, met een voorstel (T.voorgesteldeDorpsnaam, js/treden.js). Het spel zelf
   // wacht al achter het titelscherm.
   function kiesNaam(S) {
+    // Zette je de spelregel "Je gehucht" om nadat dit spel klaarstond, dan eerst een vers spel (js/main.js), dat net
+    // zo stil achter het titelscherm wacht.
+    if (T.gehuchtNaarDeSpelregel()) {
+      T.houdTijdStil(S, 'titel');
+      S.camera = T.titelCamera();
+    }
     naamVoorstel = T.voorgesteldeDorpsnaam(S.lot && S.lot.zaad);
     toon(S);
   }

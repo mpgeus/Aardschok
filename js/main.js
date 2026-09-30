@@ -70,6 +70,18 @@
     T.ui.reset(S);
   };
 
+  // Het spel dat achter het titelscherm klaarstaat, begint op het gehucht dat de spelregel "Je gehucht" nu zegt
+  // (js/maker.js). Het stond er al toen de bladzijde opende; wie de spelregel daarna omzette (op het titelscherm, of
+  // in een spel), krijgt bij Nieuw spel (js/menu.js) eerst een vers spel. Wie niets omzette, houdt het spel dat
+  // klaarstond, zodat hetzelfde zaad hetzelfde spel blijft geven (de speeltest).
+  // Geeft true als er een vers spel kwam.
+  T.gehuchtNaarDeSpelregel = function () {
+    const gemaakt = !!(S.gebieden && S.gebieden.gehucht && S.gebieden.gehucht.maker);
+    if (S.proefje || gemaakt === !!T.MAKER_INSTELLINGEN.eigenGehucht) return false;
+    T.nieuwSpel();
+    return true;
+  };
+
   function zetCameraOpSchout() {
     const p = T.naarScherm(S.schout.x, S.schout.y);
     S.camera = { x: p.x, y: p.y - 24 };
