@@ -346,6 +346,17 @@
           uitleg: 'Loop over de weg je gehucht uit, en de kaart van het land opent: provincies waar je dagen reist, en wat je nog niet zag, is donker. Thuis gaat alles door zonder jou; wat er gebeurde, hoor je als je terug bent. Het buurdorp komt nog.' },
       ],
     },
+    {
+      // Vraag 70, C (Marcel, 30 sep: "c ja"): de maker (js/maker.js) mag ook je eigen gehucht leggen.
+      id: 'gehucht', naam: 'Je gehucht', standaard: 'ontworpen',
+      uitleg: 'Waar een nieuw spel begint. Geldt vanaf het volgende nieuwe spel.',
+      keuzes: [
+        { id: 'ontworpen', naam: 'Het ontworpen gehucht', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': false },
+          uitleg: 'Elk spel hetzelfde gehucht, met de hand gelegd: het plein als hart, en Klaas, Aaltje, Gerrit, Trijn en Wouter bij hun velden.' },
+        { id: 'maker', naam: 'Elk spel een ander', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true },
+          uitleg: 'De maker legt elk nieuw spel een ander gehucht, uit dezelfde delen: het plein, de schout erachter, de boerderijen bij hun akkers, de heide, de beek en het bos, maar elke keer anders.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -379,6 +390,7 @@
     { naam: 'De voorvallen', blok: 'VOORVALLEN_INSTELLINGEN' },
     { naam: 'De raadsman', blok: 'RAADSMAN_INSTELLINGEN' },
     { naam: 'Het land', blok: 'LAND_INSTELLINGEN' },
+    { naam: 'De maker', blok: 'MAKER_INSTELLINGEN' },
     { naam: 'De inner', blok: 'INNER_INSTELLINGEN' },
     { naam: 'De verstopplekken', blok: 'VERSTOP_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },

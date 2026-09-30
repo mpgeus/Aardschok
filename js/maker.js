@@ -11,14 +11,21 @@
 // achter een dak, zijn de akkers even groot als in het ontworpen gehucht. Deugt het niet, dan probeert hij het
 // met hetzelfde zaad opnieuw, en hetzelfde zaad geeft altijd hetzelfde gehucht.
 //
-// Voor nu legt hij alleen de indeling: T.maakGehucht(zaad) geeft een plan, zonder tegels, voor de schets
-// (gereedschap/maker/schets.cjs). Van plan naar kaart komt als de maker het spel in gaat. Hij gebruikt de regels
-// uit js/ zelf: de dobbelsteen (T.dobbelsteen, js/boeren.js), de rand van het plein (T.binnenRand, js/wereld.js)
-// en de maten van de tekeningen (T.TEGELS, tegels/tegels.js).
+// T.maakGehucht(zaad) legt het plan (de indeling, zonder tegels); T.kaartVanGehucht(plan) maakt er een kaart met een
+// betekenisbestand van, in dezelfde vorm als een kaart uit Tiled, zodat het spel een gemaakt gehucht inleest zoals het
+// ontworpen gehucht (T.laadKaart, js/kaart.js). Met de spelregel "Je gehucht" op "Elk spel een ander" (vraag 70, C;
+// Marcel, 30 sep: "c ja") begint een nieuw spel op een gemaakt gehucht, uit het zaad van dat spel (T.beginOpKaart,
+// js/gebied.js). De schets (gereedschap/maker/schets.cjs, npm run maker) tekent plannen als plattegrond.
+//
+// Hij gebruikt de regels uit js/ zelf: de dobbelsteen (T.dobbelsteen, js/boeren.js), de rand van het plein
+// (T.binnenRand, js/wereld.js), de maten en deuren van de tekeningen en de grondtegels (T.TEGELS, tegels/tegels.js).
 (function (T) {
   'use strict';
 
   T.MAKER_INSTELLINGEN = {
+    // Legt de maker ook je eigen gehucht? De spelregel "Je gehucht" (js/opties.js) zet dit; het ontworpen gehucht is
+    // de standaard.
+    eigenGehucht: false,
     b: 76,
     h: 76,
     // Zo vaak probeert hij het met hetzelfde zaad, tot een gehucht deugt.
@@ -713,18 +720,29 @@
       const rand = x === m.x || x === m.x + m.b || y === m.y || y === m.y + m.h;
       return !rand || r() < 0.5;
     };
-    const grond = [];
+    const hoeken = [];
     for (let y = 0; y <= H; y++) {
-      let rij = '';
+      const rij = [];
       for (let x = 0; x <= B; x++) {
-        if (inBeek(x, y)) rij += 'w';
-        else if (naastWater(x, y)) rij += 'g';
-        else if (opWeg(x, y) || inAkker(x, y) || T.binnenRand(zand, x, y)) rij += 'z';
-        else if (opHeide(x, y)) rij += 'h';
-        else rij += 'g';
+        if (inBeek(x, y)) rij.push('w');
+        else if (naastWater(x, y)) rij.push('g');
+        else if (opWeg(x, y) || inAkker(x, y) || T.binnenRand(zand, x, y)) rij.push('z');
+        else if (opHeide(x, y)) rij.push('h');
+        else rij.push('g');
       }
-      grond.push(rij);
+      hoeken.push(rij);
     }
+    // Heide grenst alleen aan gras: voor heide naast zandpad of water heeft tegels/rand.tsx geen overgang (net als
+    // voor zandpad vlak naast water, hierboven). Zo'n hoekpunt wordt gras.
+    for (let y = 0; y <= H; y++) {
+      for (let x = 0; x <= B; x++) {
+        if (hoeken[y][x] !== 'h') continue;
+        let naast = false;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (['z', 'w'].includes((hoeken[y + dy] || [])[x + dx])) naast = true;
+        if (naast) hoeken[y][x] = 'g';
+      }
+    }
+    const grond = hoeken.map((rij) => rij.join(''));
     const opGras = (x, y) => [[0, 0], [1, 0], [1, 1], [0, 1]].every(([dx, dy]) => (grond[y + dy] || '')[x + dx] === 'g');
 
     // ---- 12. Wat er verder staat: de put en de eiken op het plein, bomen, tuinen, en het bos ----
@@ -996,4 +1014,139 @@
   };
   // Voor de schets: hetzelfde keuren op een plan dat niet van de maker komt (het ontworpen gehucht).
   T.keurGehucht = keur;
+
+  // ---------------------------------------------------------------------------------------------
+  // Van plan naar kaart: een kaart en een betekenisbestand, zoals Tiled en gereedschap/wereld.html ze maken
+  // ---------------------------------------------------------------------------------------------
+
+  // De grondtegels uit tegels/rand.tsx, opgezocht op wat er in hun vier hoeken ligt. Tiled kiest ze met zijn
+  // terreinsets; het spel leest hetzelfde uit hun groep: "gras over zandpad: boven+rechts" heeft gras in de hoeken
+  // boven en rechts, en zandpad in de andere twee. De hoeken van tegel (x, y) liggen in beeld zo: boven (x, y), rechts
+  // (x+1, y), onder (x+1, y+1) en links (x, y+1).
+  const HOEKEN = ['boven', 'rechts', 'onder', 'links'];
+  const GRONDSOORT = { g: 'gras', w: 'water', z: 'zandpad', h: 'heide' };
+  let grondTegels = null;
+  function grondIndex() {
+    if (grondTegels) return grondTegels;
+    const vlak = {};
+    const overgang = {};
+    const brug = {};
+    T.TEGELS.rand.tiles.forEach((t, id) => {
+      if (!t || !t.groep) return;
+      if (t.groep === 'vlak') (vlak[t.naam] = vlak[t.naam] || []).push(id);
+      const o = /^(\S+) over (\S+): (.+)$/.exec(t.groep);
+      if (o) {
+        const erin = o[3].split('+');
+        const sleutel = HOEKEN.map((h) => (erin.includes(h) ? o[1] : o[2])).join(',');
+        (overgang[sleutel] = overgang[sleutel] || []).push(id);
+      }
+      const b = /^brug ([xy]) (begin|midden|eind)$/.exec(t.groep);
+      if (b) brug[`${b[1]} ${b[2]}`] = id;
+    });
+    return (grondTegels = { vlak, overgang, brug });
+  }
+  // Een vaste keus uit een paar varianten, per tegel (dezelfde als in maak-gehucht.cjs).
+  function hash(x, y, zout) {
+    let h = (x * 374761393 + y * 668265263 + zout * 2654435761) >>> 0;
+    h = (h ^ (h >>> 13)) * 1274126177;
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+  }
+  // Drie soorten in één tegel kan geen tegel tekenen: dan telt alleen wat er het meest ligt (maak-gehucht.cjs).
+  function totTwee(soorten) {
+    const tel = {};
+    for (const s of soorten) tel[s] = (tel[s] || 0) + 1;
+    const volgorde = Object.keys(tel).sort((p, q) => tel[q] - tel[p]);
+    if (volgorde.length <= 2) return soorten;
+    return soorten.map((s) => (s === volgorde[0] || s === volgorde[1] ? s : volgorde[0]));
+  }
+  // In welk vel een voorwerp staat, in dezelfde volgorde als maak-gehucht.cjs zoekt: "eik" wordt "bomen/eik".
+  const VELLEN = ['bomen', 'begroeiing', 'gebouwen', 'erf', 'tuin', 'huizen'];
+  function opNaam(naam) {
+    for (const vel of VELLEN) if (T.TEGELS[vel] && T.TEGELS[vel].tiles.some((t) => t && t.naam === naam)) return `${vel}/${naam}`;
+    throw new Error(`de maker kent geen voorwerp "${naam}" (tegels/tegels.js)`);
+  }
+
+  // Een plan wordt { kaart, betekenis }: de grond als tegellaag, en al het andere op naam in het betekenisbestand
+  // (js/kaart.js, "WAT EEN DING BETEKENT"), zoals gereedschap/tiled/maak-gehucht.cjs het ontworpen gehucht schrijft.
+  // Wat voor beide gelijk moet zijn (de beginvoorraad, hoeveel mensen er wonen, de naam van de kaart), neemt hij van het
+  // ontworpen gehucht, zodat het op één plek staat.
+  T.kaartVanGehucht = function (plan) {
+    const B = plan.b;
+    const H = plan.h;
+    const g = grondIndex();
+    const data = new Array(B * H);
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < B; x++) {
+        const hoeken = totTwee([plan.grond[y][x], plan.grond[y][x + 1], plan.grond[y + 1][x + 1], plan.grond[y + 1][x]].map((s) => GRONDSOORT[s]));
+        const kies = (lijst) => lijst[Math.floor((hash(x, y, 63) * 1e6) % lijst.length)];
+        const lijst = new Set(hoeken).size === 1 ? g.vlak[hoeken[0]] : g.overgang[hoeken.join(',')];
+        if (!lijst) throw new Error(`de maker heeft geen grondtegel voor ${hoeken.join(', ')} op (${x}, ${y})`);
+        data[y * B + x] = 1 + kies(lijst);
+      }
+    }
+    // Het bruggetje over de beek, in de richting van de weg: begin, midden en eind.
+    const brug = plan.brug.slice().sort((p, q) => p.x + p.y - (q.x + q.y));
+    brug.forEach((p, i) => {
+      const deel = i === 0 ? 'begin' : i === brug.length - 1 ? 'eind' : 'midden';
+      data[p.y * B + p.x] = 1 + g.brug[`${plan.landschap.weg} ${deel}`];
+    });
+    const ontworpen = (T.KAARTEN && T.KAARTEN.gehucht) || {};
+    const kaart = {
+      type: 'map',
+      orientation: 'isometric',
+      width: B,
+      height: H,
+      tilewidth: 64,
+      tileheight: 32,
+      properties: (ontworpen.properties || [{ name: 'naam', type: 'string', value: 'Het gehucht' }]).map((p) => ({ ...p })),
+      tilesets: [{ firstgid: 1, source: '../tegels/rand.tsx' }],
+      layers: [{ type: 'tilelayer', name: 'grond', width: B, height: H, data }],
+    };
+
+    const dingen = [];
+    // de tekeningen: de huizen en alles wat er verder staat
+    for (const h of plan.huizen) dingen.push({ x: h.x, y: h.y, tegel: `${h.vel}/${h.tekening}` });
+    for (const v of plan.voorwerpen) dingen.push({ x: v.x, y: v.y, tegel: opNaam(v.naam) });
+    // wie er staat: de schout voor zijn deur, de boeren voor de hunne (met "huis" aan hun akkers), en de herbergierster
+    const deurVan = (rol) => plan.huizen.find((h) => h.rol === rol).deur;
+    dingen.push({ ...deurVan('schout'), wezen: 'schout' });
+    for (const h of plan.huizen.filter((x) => x.rol === 'boerderij')) dingen.push({ ...h.deur, wie: h.huis, straal: 3, huis: h.huis });
+    dingen.push({ ...deurVan('herberg'), wie: 'herbergierster', straal: 3, huis: 'herbergierster' });
+    // de huizen als gebouw, zodat het dorp niet leeg begint (js/gebouwen.js, T.zetBestaandeGebouwen)
+    const SOORT = { schout: 'huis', herberg: 'herberg', huis: 'huis', hut: 'hut', boerderij: 'boerderij', kooi: 'schaapskooi' };
+    for (const h of plan.huizen) {
+      const d = { gebouw: SOORT[h.rol], x: h.x, y: h.y, b: h.b, h: h.d };
+      if (h.huis) d.huis = h.huis;
+      if (h.rol !== 'kooi') d.tekening = `${h.vel}/${h.tekening}`;
+      if (h.bewoners) d.bewoners = h.bewoners;
+      dingen.push(d);
+    }
+    for (const a of plan.akkers) dingen.push({ ...a });
+    dingen.push({ ...plan.meent });
+    dingen.push({ ...plan.uitgang, overgang: 'wereld', tekst: 'De weg de wereld in' });
+
+    const eigen = (T.BETEKENIS && T.BETEKENIS.gehucht) || {};
+    const betekenis = {
+      versie: 1,
+      // net als het ontworpen gehucht hangt het nog aan geen andere kaart vast (gereedschap/tiled/maak-gehucht.cjs)
+      proef: true,
+      uitleg: `Een gehucht van de maker (js/maker.js), uit zaad ${plan.zaad}.`,
+      beginVoorraad: { ...(eigen.beginVoorraad || {}) },
+      beginBevolking: eigen.beginBevolking,
+      marskramer: { ...plan.marskramer },
+      plein: plan.plein.map(([x, y]) => [x, y]),
+      dingen,
+    };
+    return { kaart, betekenis };
+  };
+
+  // Een gemaakt gehucht als wereld, zoals T.gebied (js/gebied.js) een kaart uit kaarten/ inleest. `maker` zegt uit welk
+  // zaad hij komt.
+  T.laadGemaaktGehucht = function (zaad) {
+    const plan = T.maakGehucht(zaad);
+    const { kaart, betekenis } = T.kaartVanGehucht(plan);
+    const w = T.laadKaart(kaart, betekenis);
+    w.maker = { zaad: plan.zaad, poging: plan.poging };
+    return w;
+  };
 })(globalThis.Spel = globalThis.Spel || {});

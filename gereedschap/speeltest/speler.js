@@ -1015,6 +1015,8 @@
       }
       T.zetSnelheid(s, 30);
       boek.spelZaad = s.lot.zaad;
+      // Op welk gehucht: het ontworpen, of een van de maker (uit het zaad van het spel; js/maker.js).
+      boek.gehucht = s.gebieden.gehucht && s.gebieden.gehucht.maker ? 'van de maker' : 'ontworpen';
       boek.boeren = Object.fromEntries(Object.entries(s.lot.boeren).map(([id, b]) => [id, b.karakter]));
       boek.begin = tel(); // de eerste van de maand zelf schrijft de boekhouding op, bij de eerste stap
       const P = SPELERS[speler];

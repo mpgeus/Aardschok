@@ -1,11 +1,10 @@
-// De maker (gereedschap/maker/maker.js; werklijst vraag 69, C, Marcel, 30 sep: "De maker nu"): een gehucht dat elk
-// spel anders ligt, uit dezelfde delen als het ontworpen gehucht. Hij staat nog niet in het spel; de schets
-// (gereedschap/maker/schets.cjs) laadt hem zoals hier: het spel, en de maker erbij.
+// De maker (js/maker.js; werklijst vraag 69, C, en 70, Marcel, 30 sep: "De maker nu", en "c ja"): een gehucht dat
+// elk spel anders ligt, uit dezelfde delen als het ontworpen gehucht, met de spelregel "Je gehucht" ook als je eigen
+// gehucht.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-require('../gereedschap/maker/maker.js');
 
 test('de maker: hetzelfde zaad geeft hetzelfde gehucht, en een ander zaad een ander', () => {
   const een = T.maakGehucht(1);
@@ -37,4 +36,84 @@ test('de maker keurt het ontworpen gehucht goed: zijn keuring is niet strenger d
   assert.equal(g.fout, undefined, g.fout);
   assert.equal(g.maat.pleinTegels, 214);
   assert.equal(g.maat.akkerTegels, 209);
+});
+
+// ---------------------------------------------------------------- de maker in het spel (vraag 70, C)
+
+T.ui = new Proxy({}, { get: () => () => {} });
+
+// Een nieuw spel op een gehucht, stil en zonder venster, zoals test/opslaan.test.cjs het ontworpen gehucht begint;
+// met `zaad` op het gehucht van de maker uit dat zaad.
+function nieuwSpel(zaad) {
+  const echt = console.warn;
+  console.warn = () => {};
+  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, trede: 'gehucht' };
+  try {
+    assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
+  } finally {
+    console.warn = echt;
+  }
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  S.kalender = T.nieuweKalender();
+  return S;
+}
+
+test('een gemaakt gehucht leest het spel in zoals het ontworpen gehucht: dezelfde mensen, akkers en gebouwen', () => {
+  const echt = console.warn;
+  console.warn = () => {};
+  const w = T.laadGemaaktGehucht(3);
+  console.warn = echt;
+  assert.deepEqual(w.maker.zaad, 3);
+  const wie = w.wezens.map((e) => e.wie || e.soort).sort();
+  assert.deepEqual(wie, ['boer1', 'boer2', 'boer3', 'boer4', 'boer5', 'herbergierster', 'schout']);
+  for (const e of w.wezens.filter((x) => /^boer/.test(x.wie || ''))) assert.ok(w.akkers.some((a) => a.huis === e.wie), `${e.wie} heeft geen akker`);
+  assert.deepEqual(w.gebouwenOpKaart.map((g) => g.soort).sort(), ['boerderij', 'boerderij', 'boerderij', 'boerderij', 'boerderij', 'herberg', 'huis', 'huis', 'hut', 'hut', 'schaapskooi']);
+  assert.equal(w.meenten.length, 1);
+  assert.deepEqual(w.overgangen.map((o) => o.naar), ['wereld']);
+  // elke tegel heeft grond, en het plein en de plek van de marskramer liggen erop
+  for (let y = 0; y < w.h; y++) for (let x = 0; x < w.b; x++) assert.ok(w.grond[y][x], `geen grond op (${x}, ${y})`);
+  assert.ok(T.opHetPlein(w, w.marskramer.x, w.marskramer.y));
+  // en je loopt van de deur van de schout naar de uitgang, de marskramer en de deur van elke boer
+  const schout = w.wezens.find((e) => e.soort === 'schout');
+  const loop = (doel) => T.zoekPad({ x: schout.tx, y: schout.ty }, doel, (x, y) => T.isBegaanbaar(w, x, y, {}), (x, y) => T.isVast(w, x, y), { naast: true });
+  assert.ok(loop(w.overgangen[0]), 'de uitgang is niet te bereiken');
+  assert.ok(loop(w.marskramer), 'de marskramer is niet te bereiken');
+  for (const e of w.wezens) assert.ok(e === schout || loop({ x: e.tx, y: e.ty }), `${e.wie} is niet te bereiken`);
+});
+
+test('een nieuw spel op een gemaakt gehucht: 26 mensen, en het zaad van het spel is het zaad van het gehucht', () => {
+  const S = nieuwSpel(5);
+  assert.equal(S.wereld.maker.zaad, 5);
+  assert.equal(S.lot.zaad, 5);
+  assert.equal(S.bevolking, 26);
+  assert.equal(S.bewoners.mensen.length, 26);
+  assert.equal(S.gebouwen.length, 11);
+  // hetzelfde zaad geeft hetzelfde spel, ook de boeren
+  assert.deepEqual(nieuwSpel(5).lot, S.lot);
+});
+
+test('de spelregel "Je gehucht": standaard het ontworpen gehucht, en met "Elk spel een ander" legt de maker het', () => {
+  const o = T.OPTIES.find((x) => x.id === 'gehucht');
+  assert.equal(o.standaard, 'ontworpen');
+  assert.equal(nieuwSpel().wereld.maker, undefined);
+  T.pasOptiesToe({ keuzes: { gehucht: 'maker' } });
+  try {
+    assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, true);
+    const S = nieuwSpel();
+    assert.ok(S.wereld.maker, 'geen gehucht van de maker');
+    assert.equal(S.lot.zaad, S.wereld.maker.zaad);
+  } finally {
+    T.pasOptiesToe({});
+  }
+  assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, false);
+});
+
+test('een spel op een gemaakt gehucht bewaren en weer laden geeft precies hetzelfde spel', () => {
+  const S = nieuwSpel(2);
+  const tekst = T.bewaarSpel(S, { nu: 1790000000000 });
+  const S2 = nieuwSpel();
+  const r = T.herstelSpel(S2, tekst);
+  assert.equal(r.gelukt, true, r.reden);
+  assert.equal(S2.wereld.maker.zaad, 2);
+  assert.equal(T.bewaarSpel(S2, { nu: 1790000000000 }), tekst);
 });

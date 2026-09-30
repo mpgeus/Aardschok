@@ -44,13 +44,14 @@
 
   // Het gebied bij deze naam, één keer gemaakt en daarna bewaard in S.gebieden. Geeft null
   // terug als dat gebied niet bestaat; de aanroeper moet dan gewoon doorspelen (zie
-  // T.gaNaarGebied), want een kaart die nog niet getekend is, mag het spel niet omgooien.
-  T.gebied = function (S, naam) {
+  // T.gaNaarGebied), want een kaart die nog niet getekend is, mag het spel niet omgooien. Met `maak`
+  // komt de wereld ergens anders vandaan dan uit kaarten/: een gehucht van de maker (js/maker.js).
+  T.gebied = function (S, naam, maak) {
     if (!S.gebieden) S.gebieden = {};
     if (!S.gebieden[naam]) {
       const g = T.GEBIEDEN[naam];
       if (!g) return null;
-      const w = g.maak();
+      const w = (maak || g.maak)();
       w.gebied = naam;
       // Buiten is er één kamer die de hele kaart beslaat (js/kaart.js); die heet naar het gebied,
       // zodat "Het erf" in beeld komt en niet "Buiten".
@@ -193,8 +194,16 @@
   // (index.html?kaart=<naam>, zie js/main.js). Geeft true terug als het gelukt is; S.wereld en
   // S.schout staan dan klaar. Bestaat de kaart niet, dan false — de aanroeper valt dan terug op het
   // gehucht. Staat er geen "schout" op, dan zet het er zelf een neer.
-  T.beginOpKaart = function (S, naam) {
-    const w = T.gebied(S, naam);
+  //
+  // Met de spelregel "Je gehucht" op "Elk spel een ander" (vraag 70, C) legt de maker het gehucht
+  // (js/maker.js), uit een nieuw zaad; met `makerZaad` uit dat zaad, ook zonder de spelregel
+  // (Spel.debug.gehucht). De boeren worden daarna uit hetzelfde zaad geloot, zodat het zaad van het spel
+  // (S.lot.zaad) ook het gehucht zegt, en hetzelfde zaad hetzelfde spel geeft.
+  T.beginOpKaart = function (S, naam, makerZaad) {
+    let zaad = null;
+    if (naam === 'gehucht' && makerZaad != null) zaad = makerZaad;
+    else if (naam === 'gehucht' && T.MAKER_INSTELLINGEN.eigenGehucht) zaad = Math.floor(Math.random() * 2147483647);
+    const w = T.gebied(S, naam, zaad != null ? () => T.laadGemaaktGehucht(zaad) : null);
     if (!w) {
       console.warn(`Spel.beginOpKaart: kaart "${naam}" bestaat niet — draai npm run kaarten?`);
       return false;
@@ -224,7 +233,7 @@
     }
     if (T.zetBestaandeGebouwen) T.zetBestaandeGebouwen(S);
     // Wie de boeren zijn en wat ze kunnen, wordt bij elk nieuw spel geloot (js/boeren.js).
-    if (T.lootBoeren) T.lootBoeren(S);
+    if (T.lootBoeren) T.lootBoeren(S, zaad != null ? zaad : undefined);
     // De beginkudde op de weide(s) die de kaart noemt (js/vee.js), net als de gebouwen hierboven;
     // ná het lot, want het zaad van het spel kiest ook de kleuren van het vee.
     if (T.zetBeginKudde) T.zetBeginKudde(S);

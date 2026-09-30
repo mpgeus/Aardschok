@@ -5,8 +5,8 @@
 //   npm run maker              de zaden 1, 2 en 3, en het ontworpen gehucht
 //   npm run maker -- 7 12 40   andere zaden
 //
-// Het laadt het spel zoals een toets (test/laad.cjs), zodat de maker de regels uit js/ gebruikt en de maten van de
-// tekeningen uit tegels/tegels.js.
+// Het laadt het spel zoals een toets (test/laad.cjs), met de maker erin (js/maker.js), zodat hij de regels uit js/
+// gebruikt en de maten van de tekeningen uit tegels/tegels.js.
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -14,7 +14,6 @@ const path = require('path');
 const WORTEL = path.join(__dirname, '..', '..');
 const UIT = path.join(__dirname, 'uit');
 const T = require(path.join(WORTEL, 'test', 'laad.cjs')).spel();
-require('./maker.js');
 
 // ---------------------------------------------------------------- het ontworpen gehucht als plan
 // Uit dezelfde delen als een plan van de maker (gereedschap/tiled/maak-gehucht.cjs), zodat de schets beide op

@@ -12,10 +12,13 @@
 //   npm run speeltest -- lui60 --zaad 1 --opslaan        de proef met opslaan (vraag 48): op 1 oogstmaand
 //                                                        opslaan, herladen, Verder, en dan precies hetzelfde
 //                                                        jaar als zonder opslaan (--opslaan 245: een andere dag)
+//   npm run speeltest -- bouwer --maker        op een gehucht van de maker (vraag 70, C): de spelregel "Je
+//                                              gehucht" op "Elk spel een ander", elk zaad een ander gehucht
 //
 // De spelers staan in speler.js (die draait in de bladzijde, naast het spel). Wat er per jaar gebeurde,
 // komt in gereedschap/speeltest/uit/<speler>-<zaad>.json, en een tabel in uit/samenvatting.md (niet in
-// git). Het spel gebruikt de standaard spelregels: een nieuwe browser onthoudt niets.
+// git; met --maker <speler>-<zaad>-maker.json en samenvatting-maker.md). Het spel gebruikt de standaard
+// spelregels, behalve met --maker: een nieuwe browser onthoudt niets.
 //
 // Nodig: Playwright met Chromium (in de cloud staat het klaar; thuis `npm i -g playwright` en
 // `npx playwright install chromium`). Het spel zelf blijft zonder afhankelijkheden.
@@ -44,10 +47,11 @@ function laadPlaywright() {
 const OOGSTMAAND = 150; // 1 oogstmaand, de dag waarop de proef met opslaan opslaat (vraag 48)
 
 function leesOpdracht(argv) {
-  const o = { spelers: [], zaden: [1, 2, 3], opslaan: null };
+  const o = { spelers: [], zaden: [1, 2, 3], opslaan: null, maker: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--opslaan') o.opslaan = /^\d+$/.test(argv[i + 1] || '') ? Number(argv[++i]) : OOGSTMAAND;
+    else if (a === '--maker') o.maker = true;
     else if (a === '--zaad') o.zaden = [Number(argv[++i])];
     else if (a === '--zaden') {
       const [van, tot] = argv[++i].split('-').map(Number);
@@ -55,7 +59,7 @@ function leesOpdracht(argv) {
       for (let z = van; z <= (tot || van); z++) o.zaden.push(z);
     } else if (SPELERS.includes(a)) o.spelers.push(a);
     else {
-      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot of --opslaan [dag].`);
+      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot, --opslaan [dag] of --maker.`);
       process.exit(1);
     }
   }
@@ -66,8 +70,10 @@ function leesOpdracht(argv) {
 // Een jaar: een schone browser, Math.random uit het zaad (daaruit loot het spel de boeren en zijn eigen
 // zaad, js/boeren.js), het spel zoals index.html het laadt, en dan de speler erbij. Met `opslaan` (de proef
 // met opslaan): { dag, bewaar }, zie speler.js; slaat de speler op, dan herlaadt dit de bladzijde, en gaat
-// hij verder met Verder op het titelscherm.
-async function speelJaar(browser, speler, zaad, opslaan = null) {
+// hij verder met Verder op het titelscherm. Met `maker` staat de spelregel "Je gehucht" op "Elk spel een
+// ander" (js/opties.js), zoals de browser het onthoudt als een speler hem kiest: dan legt de maker het gehucht
+// uit het zaad van het spel (js/maker.js).
+async function speelJaar(browser, speler, zaad, opslaan = null, maker = false) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await context.newPage();
   const fouten = [];
@@ -75,7 +81,7 @@ async function speelJaar(browser, speler, zaad, opslaan = null) {
   page.on('console', (m) => {
     if (m.type() === 'error') fouten.push(m.text());
   });
-  await page.addInitScript((z) => {
+  await page.addInitScript(({ z, maker }) => {
     let s = z >>> 0; // mulberry32: klein, en elk zaad geeft een eigen reeks
     Math.random = () => {
       s = (s + 0x6d2b79f5) >>> 0;
@@ -84,7 +90,8 @@ async function speelJaar(browser, speler, zaad, opslaan = null) {
       t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
-  }, zaad);
+    if (maker) localStorage.setItem('aardschok.spelregels', JSON.stringify({ keuzes: { gehucht: 'maker' }, namen: {}, getallen: {} }));
+  }, { z: zaad, maker });
   const laad = async () => {
     await page.waitForFunction(() => globalThis.Spel && Spel.S && Spel.S.kalender && Spel.debug);
     await page.addScriptTag({ path: path.join(__dirname, 'speler.js') });
@@ -120,7 +127,9 @@ async function main() {
   const vies = git(`status --porcelain ${SPEL}`);
   const stand = `het spel van ${git(`log -1 --format=%h ${SPEL}`)} (${git('rev-parse --abbrev-ref HEAD')} op ${git('rev-parse --short HEAD')})` +
     (vies ? ', met wijzigingen in het spel die nog niet gecommit zijn' : '');
-  console.log(`De speeltest speelt op ${stand}.`);
+  const op = o.maker ? `${stand}, op gehuchten van de maker` : stand;
+  const achter = o.maker ? '-maker' : '';
+  console.log(`De speeltest speelt op ${op}.`);
   fs.mkdirSync(UIT, { recursive: true });
   const { chromium } = laadPlaywright();
   const browser = await chromium.launch();
@@ -136,18 +145,18 @@ async function main() {
   async function werker() {
     while (volgende < rij.length) {
       const { speler, zaad } = rij[volgende++];
-      const u = await speelJaar(browser, speler, zaad);
-      u.stand = stand;
+      const u = await speelJaar(browser, speler, zaad, null, o.maker);
+      u.stand = op;
       uitslagen.push(u);
-      fs.writeFileSync(path.join(UIT, `${speler}-${zaad}.json`), JSON.stringify(u, null, 1));
+      fs.writeFileSync(path.join(UIT, `${speler}-${zaad}${achter}.json`), JSON.stringify(u, null, 1));
       const kort = u.mislukt ? `MISLUKT: ${u.mislukt}` : `${u.eind ? u.eind.tekst : ''}`;
       console.log(`${speler}, zaad ${zaad}: ${u.duurSeconden} s, ${u.fouten.length} fouten. ${kort}`);
     }
   }
   await Promise.all(Array.from({ length: Math.min(TEGELIJK, rij.length) }, werker));
   await browser.close();
-  const tabel = require('./samenvatting.cjs').maak(uitslagen, stand);
-  fs.writeFileSync(path.join(UIT, 'samenvatting.md'), tabel);
+  const tabel = require('./samenvatting.cjs').maak(uitslagen, op);
+  fs.writeFileSync(path.join(UIT, `samenvatting${achter}.md`), tabel);
   console.log('\n' + tabel);
 }
 

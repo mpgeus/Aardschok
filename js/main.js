@@ -28,8 +28,9 @@
   // blijft. Het begint niet vanzelf: het titelscherm (js/menu.js, vraag 48) laat het erachter wachten, en
   // pas "Nieuw spel" geeft de benoemingsbrief van de heer, waarmee een spel begint sinds Marcel hem op
   // 25 sep koos (T.ui.toonBrief(S, 'benoeming'), js/brieven.js). Een proefje (?kaart=) begint meteen,
-  // zonder brief, en wordt nooit opgeslagen (S.proefje; js/opslaan.js).
-  T.nieuwSpel = function () {
+  // zonder brief, en wordt nooit opgeslagen (S.proefje; js/opslaan.js). Met `makerZaad` begint het op
+  // een gehucht van de maker uit dat zaad (T.beginOpKaart, js/gebied.js; Spel.debug.gehucht).
+  T.nieuwSpel = function (makerZaad) {
     for (const k of Object.keys(S)) if (k !== 'zoom') delete S[k];
     Object.assign(S, {
       tijd: 0,
@@ -62,8 +63,8 @@
     // Een proefje (?kaart=) begint op zijn eigen kaart, zonder brief; lukt dat niet (de kaart
     // bestaat niet), dan valt het terug op het gehucht — een half aangelegde wereld mag nooit het
     // spel breken.
-    const proefje = !!BEGIN_KAART && T.beginOpKaart(S, BEGIN_KAART);
-    if (!proefje) T.beginOpKaart(S, 'gehucht'); // zet S.wereld en S.schout
+    const proefje = !!BEGIN_KAART && T.beginOpKaart(S, BEGIN_KAART, makerZaad);
+    if (!proefje) T.beginOpKaart(S, 'gehucht', makerZaad); // zet S.wereld en S.schout
     if (proefje) S.proefje = true;
     zetCameraOpSchout();
     T.ui.reset(S);
@@ -696,6 +697,14 @@
       if (naar) T.wordtTrede(S, naar);
       const doel = T.tredeDoel(S);
       return { trede: S.trede, doel: doel ? `${doel.kop}: ${doel.tekst}` : 'geen volgende trede' };
+    },
+    // Het gehucht van de maker (js/maker.js): uit welk zaad het gehucht komt (of dat het het ontworpen gehucht is).
+    // Spel.debug.gehucht(3) begint nu een nieuw spel op het gehucht van zaad 3, zoals op de pagina "Gehuchten van de
+    // maker", zonder brief; zo kun je een zaad bekijken zonder de spelregel om te zetten.
+    gehucht(zaad) {
+      if (zaad != null) T.nieuwSpel(Number(zaad));
+      const w = S.gebieden && S.gebieden.gehucht;
+      return w && w.maker ? `Een gehucht van de maker, uit zaad ${w.maker.zaad}.` : 'Het ontworpen gehucht.';
     },
     // De raad onder het doel (js/raad.js): wat er nu staat, en welke raden nu allemaal gelden, in hun volgorde.
     raad() {
