@@ -310,7 +310,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   op de vier niet, en wie terugkomt, is veteraan. Vrijkopen (`T.koopHeervaartAf`) kost goud en argwaan. Wie niet
   kiest, stuurt ze na een week. De getallen in `T.HEERVAART_INSTELLINGEN` (in de werkbank), de spelregel "Heervaart".
 - `js/voorvallen.js`: **het dorp spreekt je aan** (vraag 65, A, 29 sep): om de paar dagen, in de winter vaker, komt
-  iemand de schout zoeken met een vraag, een ruzie of een ramp (`T.tikVoorvallenDag`, `T.kiesVoorval`): hij krijgt een
+  iemand de schout zoeken met een vraag, een ruzie of een ramp (`T.tikVoorvallenDag`, `T.kiesVoorval`, dat loot naar
+  `T.gewichtVanVoorval`: een probleem met een oorzaak uit `T.OORZAKEN`, honger, kou, vol of onvrede, komt vaker als die
+  speelt en zelden als hij niet speelt, vraag 74, B; `T.oorzaakVan` zegt welke, en het bericht zegt waarom): hij krijgt een
   uitroepteken, loopt naar je toe (`T.werkVoorvallenBij`, met `T.loopNaastDeSchout` zoals de inner; `e.zoektSchout` laat
   het dagritme, het dwalen en het maaien hem met rust) en spreekt je aan zodra je stilstaat (`T.ui.spreekAan`); de tijd
   staat stil tot je kiest. Wanneer en over wie staat in `T.VOORVALLEN`, de woorden onder dezelfde naam in
@@ -470,7 +472,7 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   voorvallen beslist als de schout weg is, en alleen dan (vraag 68, B) (`js/raadsman.js`); je kiest hem wanneer je wilt,
   met de knop Raadsman (vraag 67, B). En "Het voelt
   gewoon nog leeg nu": sinds 29 sep spreekt het dorp je aan, met voorvallen (vraag 65, `js/voorvallen.js`); het dorp
-  van bovenaf bleef open.
+  van bovenaf komt er niet (vraag 74, d).
 - **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én
   bouwen en plannen. **Rijk worden en arm lijken** (de heer, de inner en het verstoppen), eerst de
   kern, blijft als de druk van boven. **Vechten** begint met aanvallen op je eigen dorp (rovers, de
@@ -584,7 +586,8 @@ hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een
 nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker".
-`Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen en welke voorvallen er nu kunnen;
+`Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe
+zwaar ze wegen) en welke oorzaken er spelen;
 `('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.
 `Spel.debug.raadsman()` zegt wie je raadsman is en wat hij kan, uit wie je kiest, en wat hij besloot; `('Aaltje')` of
 `('boer2')` maakt die boer raadsman. Ga dan met `Spel.debug.gaNaar('proef')` weg, en hij beslist het volgende voorval.

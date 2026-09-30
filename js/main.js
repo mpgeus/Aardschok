@@ -766,10 +766,15 @@
       const V = S.dorp.voorvallen;
       const naam = (p) => (p ? T.naamVanBewoner(p) : null);
       return {
-        lopend: V.lopend ? { id: V.lopend.id, wie: naam(V.lopend.wie), ander: naam(V.lopend.ander), vanaf: T.uurTekst(V.lopend.vanaf), zoekt: !!(V.lopend.wie.wezen && V.lopend.wie.wezen.zoektSchout) } : null,
+        lopend: V.lopend ? { id: V.lopend.id, wie: naam(V.lopend.wie), ander: naam(V.lopend.ander), vanaf: T.uurTekst(V.lopend.vanaf), zoekt: !!(V.lopend.wie.wezen && V.lopend.wie.wezen.zoektSchout), oorzaak: V.lopend.oorzaak ? V.lopend.oorzaak.zin : null } : null,
         wacht: V.wacht.map((w) => ({ id: w.id, op: T.datumVanDag(w.op).tekst, wie: naam(w.wie), ander: naam(w.ander) })),
         volgende: V.volgende != null ? T.datumVanDag(V.volgende).tekst : null,
-        kunnen: Object.keys(T.VOORVALLEN).filter((v) => T.voorvalKan(S.dorp, v, dag)),
+        // Wat er nu kan, met hoe zwaar het weegt, en waar het van komt als er een oorzaak speelt (vraag 74, B).
+        kunnen: Object.keys(T.VOORVALLEN).filter((v) => T.voorvalKan(S.dorp, v, dag)).map((v) => {
+          const o = T.oorzaakVan(S.dorp, v, dag);
+          return `${v} (${Math.round(T.gewichtVanVoorval(S.dorp, v, dag) * 100) / 100})${o ? `: ${o.zin}` : ''}`;
+        }),
+        oorzaken: Object.keys(T.OORZAKEN).filter((o) => T.OORZAKEN[o].speelt(S.dorp, dag) != null),
         aantal: V.aantal,
         beantwoord: V.beantwoord,
         stemming: T.voorvalStemming(S.dorp, dag),

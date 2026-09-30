@@ -412,3 +412,119 @@ test('bewaren en laden: het voorval van nu, zijn mensen en wat nog komt, blijven
   assert.equal(S2.dorp.voorvallen.wacht[0].ander, L2.ander, 'het vervolg gaat over dezelfde dief');
   assert.equal(S2.dorp.voorvallen.stemming.length, 1);
 });
+
+// ---------------------------------------------------------------------------------------------
+// Waar het van komt (werklijst vraag 74, B; Marcel, 30 sep: "a ja")
+// ---------------------------------------------------------------------------------------------
+
+const WINTER = 10 * T.DAGEN_PER_MAAND + 3; // louwmaand
+const ZOMER = 4 * T.DAGEN_PER_MAAND + 3; // hooimaand
+
+// Het gehucht zonder oorzaak: gevoed, warm, tevreden, en met plaats in de huizen.
+function zonderOorzaak() {
+  const S = gehucht();
+  const D = S.dorp;
+  D.behoeften.tevredenheid = 0.8;
+  D.behoeften.mist = [];
+  D.behoeften.last = [];
+  D.bevolking = T.telWoonruimte(D) - 4;
+  for (const o of Object.keys(T.OORZAKEN)) assert.equal(T.OORZAKEN[o].speelt(D, ZOMER), null, `${o} speelt niet`);
+  return S;
+}
+
+test('een oorzaak speelt als het dorp hem heeft, en zegt waarom', () => {
+  const D = zonderOorzaak().dorp;
+  assert.equal(T.oorzaakVan(D, 'diefstal', ZOMER), null, 'zonder honger komt een diefstal uit de lucht');
+
+  T.zetWet(D, 'rantsoen', 'krap');
+  assert.deepEqual(T.oorzaakVan(D, 'diefstal', ZOMER), { id: 'honger', zin: 'Er is honger, want het rantsoen is krap.' });
+  T.zetWet(D, 'rantsoen', 'gewoon');
+  D.behoeften.mist = ['eten'];
+  assert.equal(T.oorzaakVan(D, 'stroper', ZOMER).zin, 'Er is honger, want er is niet genoeg eten.');
+  D.behoeften.mist = [];
+
+  D.behoeften.mist = ['brandhout voor de winter'];
+  assert.equal(T.oorzaakVan(D, 'ziekte', ZOMER), null, 'kou is er alleen in de winter');
+  D.voorraad.hout = 30;
+  D.voorraad.turf = 0;
+  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'Het is koud in de huizen, want het hout haalt de winter niet.');
+  D.voorraad.hout = 0;
+  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'Het is koud in de huizen, want het brandhout is op.');
+  D.behoeften.mist = [];
+
+  D.bevolking = T.telWoonruimte(D);
+  assert.deepEqual(T.oorzaakVan(D, 'brand', ZOMER), { id: 'vol', zin: 'De huizen zitten vol.' });
+  assert.equal(T.oorzaakVan(D, 'ziekte', ZOMER).id, 'vol', 'de koorts komt van kou, of van een vol dorp');
+  D.bevolking -= 4;
+
+  D.behoeften.tevredenheid = T.VOORVALLEN_INSTELLINGEN.onvrede - 0.1;
+  D.behoeften.last = ['de belasting'];
+  assert.equal(T.oorzaakVan(D, 'vechtpartij', ZOMER).zin, 'Het dorp is ontevreden, want het heeft last van de belasting.');
+  assert.equal(T.oorzaakVan(D, 'zwerver', ZOMER), null, 'een kans heeft geen oorzaak');
+});
+
+test('met een oorzaak komt een probleem vaker, zonder zelden; op 1 en 1 zoals vóór 30 sep', () => {
+  const D = zonderOorzaak().dorp;
+  const IN = T.VOORVALLEN_INSTELLINGEN;
+  assert.equal(T.gewichtVanVoorval(D, 'diefstal', ZOMER), IN.zonderOorzaak);
+  assert.equal(T.gewichtVanVoorval(D, 'zwerver', ZOMER), 1, 'zonder oorzaak in T.VOORVALLEN verandert er niets');
+  assert.equal(T.gewichtVanVoorval(D, 'brand', WINTER), 3 * IN.zonderOorzaak, 'het wintergewicht blijft');
+  T.zetWet(D, 'rantsoen', 'krap');
+  assert.equal(T.gewichtVanVoorval(D, 'diefstal', ZOMER), IN.metOorzaak);
+  const oud = { met: IN.metOorzaak, zonder: IN.zonderOorzaak };
+  try {
+    Object.assign(IN, { metOorzaak: 1, zonderOorzaak: 1 });
+    assert.equal(T.gewichtVanVoorval(D, 'diefstal', ZOMER), 1);
+    assert.equal(T.gewichtVanVoorval(D, 'brand', WINTER), 3);
+  } finally {
+    Object.assign(IN, { metOorzaak: oud.met, zonderOorzaak: oud.zonder });
+  }
+});
+
+test('een jaar met een krap rantsoen heeft meer diefstal, stroperij en schulden dan een jaar zonder', () => {
+  const tel = (rantsoen) => {
+    const D = zonderOorzaak().dorp;
+    T.zetWet(D, 'rantsoen', rantsoen);
+    let n = 0;
+    for (let d = 1; d < T.DAGEN_PER_JAAR; d++) {
+      const k = T.kiesVoorval(D, d);
+      if (k && T.VOORVALLEN[k.id].oorzaak === 'honger') n++;
+    }
+    return n;
+  };
+  const gewoon = tel('gewoon');
+  const krap = tel('krap');
+  assert.ok(krap > 3 * gewoon, `met honger ${krap} keer, zonder ${gewoon} keer`);
+});
+
+test('het bericht zegt waarom, de raadsman ook, en een gesprek kan het zeggen met {oorzaak}', () => {
+  const S = zonderOorzaak();
+  const D = S.dorp;
+  assert.equal(T.vulWoordenIn(D, 'Zo is het. {oorzaak}'), 'Zo is het. ', 'zonder voorval zegt {oorzaak} niets');
+  T.zetWet(D, 'rantsoen', 'krap');
+  const L = metVoorval(S, 'diefstal', ZOMER);
+  assert.equal(L.oorzaak.id, 'honger');
+  assert.equal(T.vulWoordenIn(D, 'Zo is het. {oorzaak}'), 'Zo is het. Er is honger, want het rantsoen is krap.');
+  berichten.length = 0;
+  S.kalender.dag = L.vanaf + 0.01;
+  T.werkVoorvallenBij(S, D);
+  assert.ok(berichten.some((b) => b.endsWith(' zoekt je. Er is honger, want het rantsoen is krap.')), berichten.join(' | '));
+  // Ben je er niet, dan beslist de raadsman, en zijn bericht zegt het ook.
+  const boer = T.raadsmanKandidaten(D)[0];
+  T.kiesRaadsman(D, boer);
+  berichten.length = 0;
+  assert.ok(T.raadsmanBeslist(D));
+  assert.ok(berichten.some((b) => b.includes('besliste over de diefstal') && b.endsWith('Er is honger, want het rantsoen is krap.')), berichten.join(' | '));
+});
+
+test('een voorval dat uit de lucht kwam, zegt geen waarom, en een vervolg ook niet', () => {
+  const S = zonderOorzaak();
+  const L = metVoorval(S, 'diefstal', ZOMER);
+  assert.equal(L.oorzaak, null);
+  berichten.length = 0;
+  S.kalender.dag = L.vanaf + 0.01;
+  T.werkVoorvallenBij(S, S.dorp);
+  assert.ok(berichten.some((b) => b.endsWith(' zoekt je.')), berichten.join(' | '));
+  T.zetWet(S.dorp, 'rantsoen', 'krap');
+  assert.equal(T.oorzaakVan(S.dorp, 'diefstalWeer', ZOMER), null, 'een vervolg komt van het eerste voorval, niet van een oorzaak');
+});

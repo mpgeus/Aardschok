@@ -213,7 +213,8 @@
     D.raadsman.besluiten.push({ dag: dagNu(D), id: L.id, door: naam(p), wie: naam(L.wie), antwoord: zeg, prijs });
     if (D.raadsman.besluiten.length > 20) D.raadsman.besluiten.shift();
     const titel = T.VOORVALLEN[L.id].titel;
-    T.zeg(D, `${T.hoofdletter(naam(p))}, je raadsman, besliste over ${titel}: "${zeg}"${prijs ? ` (${prijs})` : ''}`);
+    const waarom = L.oorzaak ? ` ${L.oorzaak.zin}` : ''; // waar het van kwam (js/voorvallen.js, T.oorzaakVan)
+    T.zeg(D, `${T.hoofdletter(naam(p))}, je raadsman, besliste over ${titel}: "${zeg}"${prijs ? ` (${prijs})` : ''}${waarom}`);
     T.voorvalBeantwoord(D, L.id, p);
     return true;
   };

@@ -203,6 +203,18 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
   het wapen van de heer, spotgoedkoop; een pot met munten; een zwerver die wil werken; een smid uit de stad; de raad
   van de oudste), feesten (een bruiloft, het oogstfeest, een lied over de heer) en de grillen van de heer, via zijn
   bode (een standbeeld van eik, een jacht, een belasting op ramen).
+- **Een probleem heeft een oorzaak** (30 sep, negentiende sessie; werklijst vraag 74, B; Marcel: "a ja"; toetsen in
+  `test/voorvallen.test.cjs`). Vier oorzaken die je kunt zien en zelf kunt veranderen (`T.OORZAKEN`): *honger* (het
+  rantsoen is krap, of het dorp mist eten), *kou* (in de winter, als het hout de winter niet haalt of op is), *vol* (geen
+  plaats meer in de huizen) en *onvrede* (tevredenheid onder de 50%). Diefstal, de stroper, de lening en de woeker komen
+  van honger, de vechtpartij van onvrede, de koorts van kou of een vol dorp, en de brand van een vol dorp. Speelt de
+  oorzaak, dan komt zo'n voorval drie keer zo vaak; speelt hij niet, een kwart zo vaak (`metOorzaak`, `zonderOorzaak`
+  en `onvrede` in de werkbank; op 1 en 1 is het zoals vóór 30 sep). Het bericht zegt waarom: "Trijn zoekt je. Er is
+  honger, want het rantsoen is krap."; ook als de raadsman beslist. Een gesprek kan het zeggen met `{oorzaak}` (een hele
+  zin, of niets als het uit de lucht kwam); de gesprekken zelf doen dat nog niet. Gemeten, met elke dag van een jaar een
+  keuze: met een krap rantsoen 57 keer een diefstal, met een gewoon 5 keer. De storm, de muizen (een volle schuur) en de
+  wolven (schapen in de winter) houden hun eigen regel; kansen, feesten, verzoeken en de grillen van de heer zijn geen
+  problemen. `Spel.debug.voorval()` zegt welke oorzaken er spelen, en per voorval hoe zwaar het weegt.
 - **Wie het zegt, heeft een naam** en past bij het voorval: een vrouw die haar kippen kwijt is, twee boeren om een
   grens, de weduwe, de vrome, de zanger of de oudste als die in het dorp wonen (de karakters, `js/boeren.js`). Over wie
   het gaat ({ander}), is van een ander gezin; nooit de schout of zijn gezin.

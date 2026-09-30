@@ -1,7 +1,9 @@
 // De voorvallen: het dorp spreekt je aan (werklijst vraag 65, A; Marcel, 29 sep: "A ja"). Om de paar dagen gebeurt
 // er iets: iemand met een naam komt naar de schout met een vraag, een ruzie of een ramp, en jij kiest uit twee of
 // drie antwoorden, elk met een prijs die je vooraf ziet. In de winter vaker, zodat ook die tijd iets vraagt, en
-// sommige komen terug. Regels zonder scherm; toetsen in test/voorvallen.test.cjs.
+// sommige komen terug. Sinds 30 sep (vraag 74, B) komt een probleem uit iets wat je had kunnen zien: diefstal van
+// honger, de koorts van kou en een vol dorp (T.OORZAKEN), en het bericht zegt waarom. Regels zonder scherm; toetsen in
+// test/voorvallen.test.cjs.
 //
 // Een voorval is een gesprek dat de ander begint. Wat er gezegd wordt, staat in js/gesprekken.js onder dezelfde naam
 // als hier (T.GESPREKKEN.diefstal hoort bij T.VOORVALLEN.diefstal), zodat je het in de gespreksschrijver schrijft en
@@ -53,6 +55,13 @@
     stemmingDagen: 30,
     // Wie je niet vond, neemt je dat kwalijk: zoveel procent minder tevreden.
     nietGevonden: -2,
+    // Voorvallen met een oorzaak (werklijst vraag 74, B; Marcel, 30 sep: "a ja"): een probleem met een oorzaak
+    // (diefstal, de koorts, de brand, ...; T.OORZAKEN hieronder) komt zoveel keer zo vaak als die oorzaak speelt, en
+    // zoveel keer zo vaak als hij niet speelt. Allebei 1: zoals vóór 30 sep, uit de lucht.
+    metOorzaak: 3,
+    zonderOorzaak: 0.25,
+    // Onder deze tevredenheid is het dorp ontevreden (de oorzaak onvrede).
+    onvrede: 0.5,
   };
   const IN = () => T.VOORVALLEN_INSTELLINGEN;
 
@@ -71,6 +80,8 @@
   //   als      wanneer het kan: { maanden, seizoen, gebouw, nietGebouw, voorraad: { graan: 40 }, vee: { schaap: 3 },
   //            trede, en wat een gesprek ook kent (vlag, goud) }
   //   gewicht  hoe vaak, naast de andere die kunnen (zonder: 1); winter: het gewicht in de winter
+  //   oorzaak  waar het van komt (T.OORZAKEN hieronder): speelt er een, dan komt het vaker, anders zelden
+  //            (metOorzaak, zonderOorzaak), en het bericht zegt waarom
   //   pauze    niet binnen zoveel dagen terug (zonder: de pauze uit het blok hierboven)
   //   vervolg  true: komt alleen als vervolg op een ander voorval; na: [van, tot], na zoveel dagen
   //   roep     het bericht als hij je gaat zoeken (zonder: "{wie} zoekt je.")
@@ -80,30 +91,30 @@
     // Rechtspraak (de vierde van 23 sep, spel.md): streng houdt de orde, mild houdt vrienden, en wie je
     // veroordeelde, vergeet het niet.
     diefstal: {
-      soort: 'recht', titel: 'de diefstal',
+      soort: 'recht', titel: 'de diefstal', oorzaak: 'honger',
       wie: { geslacht: 'vrouw', leeftijd: ['volwassen', 'oud'] }, ander: { ...MAN, boer: false },
     },
     diefstalWeer: { soort: 'recht', titel: 'de dief', vervolg: true, wie: { leeftijd: ['volwassen', 'oud'] } },
     diefstalWrok: { soort: 'recht', titel: 'de dief', vervolg: true, wie: { leeftijd: ['volwassen', 'oud'] } },
     diefDank: { soort: 'kans', titel: 'de dief', vervolg: true, wie: 'ander', ander: 'wie' },
     vechtpartij: {
-      soort: 'recht', titel: 'de vechtpartij', als: { gebouw: 'herberg' },
+      soort: 'recht', titel: 'de vechtpartij', als: { gebouw: 'herberg' }, oorzaak: 'onvrede',
       wie: MAN, ander: [{ karakter: 'heethoofd', geslacht: 'man' }, { karakter: 'drinker', geslacht: 'man' }, MAN],
     },
     akkergrens: { soort: 'recht', titel: 'de akkergrens', wie: { boer: true }, ander: { boer: true } },
     akkergrensWraak: { soort: 'recht', titel: 'de akkergrens', vervolg: true },
     stroper: {
-      soort: 'recht', titel: 'de stroper',
+      soort: 'recht', titel: 'de stroper', oorzaak: 'honger',
       wie: { geslacht: 'man', leeftijd: ['volwassen', 'oud'] }, ander: { ...MAN, boer: false },
     },
     heks: {
       soort: 'recht', titel: 'de heks', woorden: { blij: 'je vonnis over de heks', last: 'je vonnis over de heks' }, pauze: 180,
       wie: {}, ander: { geslacht: 'vrouw', leeftijd: 'oud', boer: false },
     },
-    woeker: { soort: 'recht', titel: 'de schuld bij de woekeraar', wie: { boer: false }, ander: { karakter: 'woekeraar' } },
+    woeker: { soort: 'recht', titel: 'de schuld bij de woekeraar', oorzaak: 'honger', wie: { boer: false }, ander: { karakter: 'woekeraar' } },
     woekerWraak: { soort: 'recht', titel: 'de woekeraar', vervolg: true, wie: 'ander', ander: 'wie' },
     // Verzoeken
-    lening: { soort: 'verzoek', titel: 'de lening', wie: { boer: false } },
+    lening: { soort: 'verzoek', titel: 'de lening', oorzaak: 'honger', wie: { boer: false } },
     leningTerug: { soort: 'verzoek', titel: 'de lening', vervolg: true },
     leningUitstel: { soort: 'verzoek', titel: 'de lening', vervolg: true },
     vreemdeling: { soort: 'verzoek', titel: 'de vreemdelingen', wie: { leeftijd: ['volwassen', 'oud'] } },
@@ -113,10 +124,10 @@
     weduweDak: { soort: 'verzoek', titel: 'het dak van de weduwe', als: { seizoen: ['herfst', 'winter'] }, wie: { karakter: 'weduwe' } },
     // Rampen: iets doen kost iets, niets doen ook.
     brand: {
-      soort: 'ramp', titel: 'de brand', winter: 3, roep: 'Brand! {wie} komt je halen.',
+      soort: 'ramp', titel: 'de brand', winter: 3, oorzaak: 'vol', roep: 'Brand! {wie} komt je halen.',
       wie: { leeftijd: ['jong', 'volwassen'] }, ander: { boer: false },
     },
-    ziekte: { soort: 'ramp', titel: 'de koorts', winter: 2, sterft: 'De koorts', wie: { geslacht: 'vrouw' } },
+    ziekte: { soort: 'ramp', titel: 'de koorts', winter: 2, oorzaak: ['kou', 'vol'], sterft: 'De koorts', wie: { geslacht: 'vrouw' } },
     wolven: {
       soort: 'ramp', titel: 'de wolven', als: { seizoen: 'winter', vee: { schaap: 3 } }, winter: 3, sterft: 'De jacht op de wolven',
       roep: 'Wolven! {wie} komt je halen.', wie: [{ werk: 'schaapskooi' }, MAN], ander: MAN,
@@ -203,6 +214,53 @@
   }
 
   // ---------------------------------------------------------------------------------------------
+  // Waar het van komt (werklijst vraag 74, B)
+  // ---------------------------------------------------------------------------------------------
+
+  const mist = (D, wat) => !!(D.behoeften && D.behoeften.mist && D.behoeften.mist.includes(wat));
+  const brandhout = (D) => ((D.voorraad && D.voorraad.hout) || 0) + ((D.voorraad && D.voorraad.turf) || 0);
+
+  // Wat in het dorp speelt en een probleem uitlokt: iets wat je kunt zien (de balk zegt het, of de raad) en zelf kunt
+  // veranderen. Zo komt een ramp niet uit de lucht, maar uit iets wat je had kunnen zien (het concept,
+  // ontwerp/concept.md: "problemen hebben oorzaken"). Per oorzaak: wat er dan is (kop), en of hij nu speelt (speelt:
+  // geeft waarom, het stuk zin na "want", of '' als er niets bij hoeft; null als hij niet speelt).
+  T.OORZAKEN = {
+    honger: {
+      kop: 'Er is honger',
+      speelt: (D) => (T.standVanWet(D, 'rantsoen') === 'krap' ? 'het rantsoen is krap' : mist(D, 'eten') ? 'er is niet genoeg eten' : null),
+    },
+    kou: {
+      kop: 'Het is koud in de huizen',
+      speelt: (D, dag) => (!inWinter(dag) || !mist(D, 'brandhout voor de winter') ? null : brandhout(D) < 1 ? 'het brandhout is op' : 'het hout haalt de winter niet'),
+    },
+    vol: {
+      kop: 'De huizen zitten vol',
+      speelt: (D) => ((D.bevolking || 0) > 0 && D.bevolking >= T.telWoonruimte(D) ? '' : null),
+    },
+    onvrede: {
+      kop: 'Het dorp is ontevreden',
+      speelt: (D) => {
+        const b = D.behoeften;
+        if (!b || b.tevredenheid >= IN().onvrede) return null;
+        if (b.last && b.last.length) return `het heeft last van ${b.last.join(' en ')}`;
+        return b.mist && b.mist.length ? `het mist ${b.mist.join(' en ')}` : '';
+      },
+    },
+  };
+
+  // Welke oorzaak van dit voorval nu speelt: de eerste die speelt, in de volgorde van het voorval, als { id, zin }, of
+  // null. De zin is wat het bericht erbij zegt: "Er is honger, want het rantsoen is krap."
+  T.oorzaakVan = function (D, id, dag) {
+    const v = T.VOORVALLEN[id];
+    for (const o of elk(v && v.oorzaak)) {
+      const O = T.OORZAKEN[o];
+      const waarom = O.speelt(D, dag);
+      if (waarom != null) return { id: o, zin: `${O.kop}${waarom ? `, want ${waarom}` : ''}.` };
+    }
+    return null;
+  };
+
+  // ---------------------------------------------------------------------------------------------
   // Welk voorval, en wanneer
   // ---------------------------------------------------------------------------------------------
 
@@ -236,14 +294,21 @@
     return { wie, ander };
   };
 
+  // Hoe vaak het komt, naast de andere die kunnen: zijn gewicht (in de winter zijn wintergewicht), en heeft het een
+  // oorzaak, dan vaker als die speelt en zelden als hij niet speelt (metOorzaak en zonderOorzaak).
+  T.gewichtVanVoorval = function (D, id, dag) {
+    const v = T.VOORVALLEN[id];
+    const gewicht = inWinter(dag) && v.winter != null ? v.winter : v.gewicht != null ? v.gewicht : 1;
+    if (!v.oorzaak) return gewicht;
+    return gewicht * (T.oorzaakVan(D, id, dag) ? IN().metOorzaak : IN().zonderOorzaak);
+  };
+
   // Welk voorval er vandaag komt: geloot naar gewicht, uit wat er nu kan. Geeft { id, wie, ander } of null.
   T.kiesVoorval = function (D, dag) {
-    const winter = inWinter(dag);
     const kan = [];
     let som = 0;
     for (const id of Object.keys(T.VOORVALLEN)) {
-      const v = T.VOORVALLEN[id];
-      const gewicht = winter && v.winter != null ? v.winter : v.gewicht != null ? v.gewicht : 1;
+      const gewicht = T.gewichtVanVoorval(D, id, dag);
       const mensen = gewicht > 0 && T.voorvalKan(D, id, dag);
       if (!mensen) continue;
       kan.push({ id, gewicht, wie: mensen.wie, ander: mensen.ander });
@@ -261,12 +326,16 @@
     return Math.max(1, Math.round(basis * (1 - s + 2 * s * lot(D, dag, 19))));
   }
 
-  // Een voorval begint: wie het zegt, gaat je vandaag zoeken, vanaf een uur tussen zoektVanaf en zoektTot.
+  // Een voorval begint: wie het zegt, gaat je vandaag zoeken, vanaf een uur tussen zoektVanaf en zoektTot. Speelt er
+  // een oorzaak (T.oorzaakVan), dan onthoudt het die, zodat het bericht zegt waarom.
   T.beginVoorval = function (D, id, wie, ander, dag) {
     const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
     const d = Math.floor(dag);
     const uur = IN().zoektVanaf + lot(D, d, 17) * (IN().zoektTot - IN().zoektVanaf);
-    V.lopend = { id, wie, ander: ander || null, dag: d, vanaf: d + uur / 24, tot: d + IN().zoektDagen, gemeld: false, aangesproken: false };
+    V.lopend = {
+      id, wie, ander: ander || null, dag: d, vanaf: d + uur / 24, tot: d + IN().zoektDagen, gemeld: false, aangesproken: false,
+      oorzaak: T.oorzaakVan(D, id, d),
+    };
     V.geweest[id] = d;
     V.aantal++;
     return V.lopend;
@@ -400,7 +469,8 @@
       if (!L.gemeld) {
         L.gemeld = true;
         const roep = T.VOORVALLEN[L.id].roep || '{wie} zoekt je.';
-        T.zeg(D, T.hoofdletter(roep.replace('{wie}', naam(L.wie))), T.VOORVALLEN[L.id].soort === 'ramp' ? 'gevaar' : undefined);
+        const waarom = L.oorzaak ? ` ${L.oorzaak.zin}` : '';
+        T.zeg(D, T.hoofdletter(roep.replace('{wie}', naam(L.wie))) + waarom, T.VOORVALLEN[L.id].soort === 'ramp' ? 'gevaar' : undefined);
       }
     }
     if (S.modus !== 'verkennen' || S.slaap) return;
@@ -507,8 +577,14 @@
     return r;
   };
 
-  // Wat het spel in een zin invult (js/gesprek.js, T.vulWoordenIn): wie het je komt zeggen, en over wie het gaat.
+  // Wat het spel in een zin invult (js/gesprek.js, T.vulWoordenIn): wie het je komt zeggen, over wie het gaat, en
+  // waar het van komt (een hele zin, "Er is honger, want het rantsoen is krap.", of niets als het uit de lucht kwam;
+  // zet hem dus aan het eind van een zin).
   T.GESPREK_WOORDEN = T.GESPREK_WOORDEN || {};
+  T.GESPREK_WOORDEN.oorzaak = (D) => {
+    const L = D.voorvallen && D.voorvallen.lopend;
+    return L && L.oorzaak ? L.oorzaak.zin : '';
+  };
   T.GESPREK_WOORDEN.wie = (D) => {
     const L = D.voorvallen && D.voorvallen.lopend;
     return L ? naam(L.wie) : 'iemand';
