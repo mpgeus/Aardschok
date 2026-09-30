@@ -306,9 +306,10 @@
   // Wie een gesprek voert, staat stil tot het uit is. En wie aan het maaien is
   // (T.werkOogstBij, js/akkers.js — roep die vóór T.laatDwalen aan) staat ook stil: hij heeft
   // net zijn doel bereikt en zwaait daar de zeis, dat is geen moment om weg te dwalen.
-  T.laatDwalen = function (S, dt) {
-    const w = S.wereld;
-    const D = T.dorpHier(S); // het dorp dat hier ligt (js/dorp.js): zijn bewoners hebben een ritme
+  // Waar je bent (js/main.js), met het dorp dat er ligt (js/dorp.js): zijn bewoners hebben een ritme. Een dorp waar je
+  // niet bent, dwaalt ook, op zijn eigen kaart (T.dwaal vanuit T.werkDorpBij).
+  T.laatDwalen = (S, dt) => T.dwaal(S, S.wereld, T.dorpHier(S), dt);
+  T.dwaal = function (S, w, D, dt) {
     // Eén keer per beurt de datum omrekenen, niet per wezen: T.wandelAnker heeft alleen het
     // stadium nodig (kiemend/groen/rijp), niet de datum zelf.
     const datum = T.datumVanDag && S.kalender ? T.datumVanDag(S.kalender.dag) : null;
@@ -433,8 +434,8 @@
   };
 
   // Mag deze stap nog? Tijdens het rondlopen kan er intussen een monster in de weg staan.
-  T.magStappen = function (S, e, t) {
-    return T.isBegaanbaar(S.wereld, t.x, t.y, { deurenOpenen: e === S.schout, wezensBlokkeren: true, wie: e });
+  T.magStappen = function (S, e, t, w = S.wereld) {
+    return T.isBegaanbaar(w, t.x, t.y, { deurenOpenen: e === S.schout, wezensBlokkeren: true, wie: e });
   };
 
   // Een dichte deur gaat open op het moment dat de schout erdoor stapt, niet pas als hij er

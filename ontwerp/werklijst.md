@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (30 sep 2026, negentiende sessie): stuk 2 van het land, stap 1 en 2 af (de snellere dag, één dorp als één ding); stap 3 is het volgende
+## De stand (30 sep 2026, negentiende sessie): stuk 2 van het land is af (de snellere dag, één dorp als één ding, elk dorp leeft); het plan voor het buurdorp wacht op Marcel (vraag 72)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -28,21 +28,16 @@ gehucht" (25 sep) loopt achter op de dag. `npm test`: 680/680.
 
 **Waar het werk staat:** alles staat in `main`, ook het werk van de achttiende sessie (de maker, vraag 69, C, en 70;
 Marcel, 30 sep: "Ja, zet alles in main"; ook op `claude/werklijst-doorzetten-qagxwq`), en dat van de zeventiende (vraag 60
-tot en met 69, met stuk 1 van het land). Het werk van de negentiende sessie (vraag 71, stap 1 en 2 van stuk 2) staat op
-`ccr-4cd08e9d-1g0phy`, nog niet in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+tot en met 69, met stuk 1 van het land). Het werk van de negentiende sessie (vraag 71: stuk 2 van het land; en het plan
+voor stuk 3, vraag 72) staat op `ccr-4cd08e9d-1g0phy`, nog niet in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** van **stuk 2 van het land** (vraag 71; Marcel: "A ja B ja C ja, oud spel mag
-vervallen") zijn stap 1 (de snellere dag: een speeldag 0,5 ms in plaats van 30 tot 39) en stap 2 (één dorp als één ding:
-`S.dorpen`, je eigen dorp `S.dorp`, `js/dorp.js`) af; zie onder Af. De speeltest speelt er letter voor letter hetzelfde
-jaar op, en duurt nu zo'n zeven minuten in plaats van een uur. Het volgende is **stap 3, elk dorp leeft**: de dag en de
-poppetjes voor elk dorp in de lijst (lopen en dwalen voor een kaart waar je niet bent: `js/anim.js` en `T.laatDwalen`
-gaan nu alleen over `S.wereld`), en een ander dorp spreekt niet tegen jou (`T.zeg(D, tekst, soort)` in plaats van
-`T.ui.bericht` in de dorpsregels; een hulpmiddel daarvoor staat klaar in de kladmap van de negentiende sessie, en is
-zo opnieuw te schrijven), met de toets van twee dorpen naast elkaar (jouw gehucht en een van de maker; een schets
-slaagt al voor drie van de vier delen: een jaar van het buurdorp laat jouw dorp letter voor letter ongemoeid, maar zijn
-berichten komen nog bij jou). Een voorval in een dorp dat niet het jouwe is: voorlopig beslist zijn raadsman, tot zijn
-schout in code kiest (stap 1b). Daarna het buurdorp (stuk 3): een eigen provincie met een gehucht van de maker, eigen mensen en dezelfde regels,
-en bij Nieuw spel 0 of 1 tegenspeler. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
+**Waar de volgende sessie begint:** **stuk 2 van het land is af** (vraag 71; Marcel: "A ja B ja C ja, oud spel mag
+vervallen"; zie onder Af): een speeldag kost 0,5 ms in plaats van 30 tot 39, alles van een dorp staat bij elkaar
+(`S.dorpen`, je eigen dorp `S.dorp`, `js/dorp.js`), en elk dorp leeft, ook als je er niet bent, met poppetjes die lopen,
+maaien en dwalen, alleen niet getekend; een ander dorp spreekt niet tegen jou (`T.zeg`). In het spel is er nog één dorp:
+de speeltest speelt letter voor letter hetzelfde jaar als ervoor, en duurt nu zo'n zeven minuten in plaats van een uur.
+`test/dorpen.test.cjs` zet jouw gehucht en een van de maker naast elkaar. Het volgende is **stuk 3, het buurdorp**: het
+plan is vraag 72, en wacht op Marcel (A tot en met E). Begin daar niet zonder zijn antwoord. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
 raadsman komen met het land (vraag 66, D). Open blijven: het dorp van bovenaf
 (vraag 65, C; Marcel: "nee niet bovenaf, ik denk hier nog over na"), en de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
 dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
@@ -81,7 +76,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het plan voor het buurdorp (vraag 72: A tot en met E); het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -128,6 +123,14 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   kreeg; alleen de boekhouding van de speeltest miste daardoor de getuigen, het spel niet. Twee agents zetten zo'n 60
   toetsen om naar het nieuwe model (Sonnet, samen zo'n 500.000 tokens); een wacht in de toetsen (een regel over een dorp
   die het hele spel krijgt, faalt) vond daarna nog zes toetsen die per ongeluk groen waren.
+- **Stap 3 gebouwd** (zie onder Af): elk dorp leeft, en een ander dorp spreekt niet tegen jou. Een schets van de toets van
+  twee dorpen liet eerst zien dat de berichten van het buurdorp nog bij jou kwamen ("Geertje heeft je niet gesproken");
+  nu gaan ze via `T.zeg`, en bewaart het buurdorp ze. De speeltest speelt er letter voor letter hetzelfde jaar op.
+- **Het plan voor stuk 3, het buurdorp** (vraag 72): een eigen provincie twee tot vier dagen verderop, eigen namen, een
+  schout die nog niets beslist, erheen over de kaart van het land, 0 of 1 tegenspeler bij Nieuw spel (voorstel: 0 als
+  standaard tot stap 1b), en dezelfde heer en inner. Nagekeken wat er nog ontbreekt: dezelfde vijf boeren en
+  herbergierster (hun naam staat één keer in `T.MENSEN`), zijn schout aan jouw kant, plaats voor één gehucht in het land,
+  `Math.random` op drie plekken, en een bewaard spel van 750 kB.
 
 **Wat er in de achttiende sessie gebeurde** (30 sep; Marcel: "Werklijst doorzetten"):
 - **Eerst gekeken wat er is** (op `a0e5e78`, `npm test` 673/673): het ontworpen gehucht komt uit
@@ -2128,6 +2131,50 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     poppetjes, alleen niet getekend; alles van een dorp komt bij elkaar, met een eigen schout per dorp; van het buurdorp
     hoor je niets vanzelf, en je balk blijft over je eigen dorp gaan; en een spel dat nu bewaard is, mag vervallen (de
     versie van het opslaan gaat omhoog, zonder omzetten). Stap 1, de snellere dag, begint.
+    **Gebouwd (30 sep, negentiende sessie):** stap 1, 2 en 3; zie onder Af. Het plan voor stuk 3 is vraag 72.
+72. **Stuk 3 van het land: het buurdorp, het plan** (Claude, 30 sep, negentiende sessie; vraag 69, stuk 3; wacht op
+    Marcel). Wat er nu is, na stuk 2: er kunnen twee dorpen naast elkaar leven (`S.dorpen`, `js/dorp.js`), elk met zijn
+    eigen kaart, mensen en voorraad; een dorp waar je niet bent, leeft met poppetjes; een ander dorp spreekt niet tegen
+    jou; en `test/dorpen.test.cjs` bewijst het met jouw gehucht en een van de maker. Wat er nog niet is, nagekeken:
+    - **Dezelfde namen.** Een gehucht van de maker heeft dezelfde vijf boeren (Klaas, Aaltje, Gerrit, Trijn, Wouter) en
+      dezelfde herbergierster als het jouwe, want hun naam staat één keer in `T.MENSEN`. De andere bewoners krijgen al
+      een eigen naam uit het lot van hun dorp.
+    - **Zijn schout is een schout zoals jij:** op de kaart van de maker staat een schout, van dezelfde soort als jij, dus
+      aan jouw kant in een gevecht.
+    - **Het land heeft plaats voor één gehucht:** de andere provincies zijn het kasteel, de stad en wildernis.
+    - **De dobbelsteen:** een paar dingen gebruiken nog `Math.random` (het dwalen, een nieuw poppetje, de tekening van
+      een nieuw huis), dus verandert jouw dorp een beetje zodra er een buurdorp naast leeft. Met eigen dobbelstenen per
+      dorp blijft jouw dorp hetzelfde, met of zonder buur.
+    - **Opslaan:** een spel met twee dorpen is zo'n 750 kB; zes plekken in de browser (5 MB) worden dan krap.
+    - **Wat jij doet:** de rovers en de inner kijken of jij vecht of met de inner praat (`S.modus`); in een ander dorp
+      mag dat niet meetellen (daar wacht een aanval nu tot jouw gevecht thuis voorbij is).
+    Voorstel:
+    - **A, het buurdorp ligt in een eigen provincie, twee tot vier dagen reizen van jou**, met een gehucht van de maker
+      uit zijn eigen zaad, en eigen mensen: zijn boeren en zijn herbergierster krijgen een naam uit het lot van hun dorp.
+      Het heet naar een naam uit dezelfde lijst als die van jouw dorp (vraag 60). Wat je nog niet zag, is donker: je
+      moet het vinden.
+    - **B, zijn schout is een poppetje dat nog niets beslist** (dat is stap 1b): hij woont in zijn huis, loopt zijn dorp
+      rond zoals een boer, en spreek je hem aan, dan zegt hij wie hij is ("Je bent ver van huis, schout van ...").
+      Hij is niet van jouw kant in een gevecht. Zijn voorvallen beslist zijn raadsman, die het dorp zelf kiest (de
+      eerste uit zijn kandidaten, zoals `T.raadsmanKandidaten` ze loot); nu heeft een ander dorp er nog geen, en gaan zijn
+      voorvallen voorbij.
+    - **C, erheen:** je reist over de kaart van het land (de spelregel Land gaat vanzelf aan met een tegenspeler), en
+      komt het buurdorp binnen over zijn weg. Je balk blijft over je eigen dorp gaan (vraag 71, C), en je eigen dorp leeft
+      door. Terug gaat zoals nu.
+    - **D, bij Nieuw spel kies je 0 of 1 tegenspeler**, naast de naam van je dorp. Met 0 speelt het spel zoals nu, en
+      bewijst de speeltest dat letter voor letter; met 1 is er een buurdorp. Voorstel: 0 als standaard, tot zijn schout
+      in stap 1b iets doet, want een buurdorp dat niets doet, is voor een tester een verrassing zonder reden.
+    - **E, dezelfde heer en dezelfde inner:** hij vraagt het buurdorp wat hij het jouwe vraagt, en de inner komt er ook.
+      Voorlopig komt hij op Sint-Maarten in beide dorpen op dezelfde dag; een ronde van dorp naar dorp (vraag 63: dan
+      kan hij vertellen wat de ander gaf) komt later.
+    - **Wat je niet ziet:** elk dorp een eigen dobbelsteen, en een bewaard spel dat kleiner is (vier vijfde is de kaart;
+      de grond van een gehucht van de maker ligt vast in zijn zaad, of het geheel kan samengeperst: eerst meten).
+    Klaar als: met 1 tegenspeler ligt het buurdorp ergens in het land, met eigen namen, en kun je erheen reizen en er
+    rondlopen, terwijl het leeft en jouw dorp thuis ook; met 0 speelt de speeltest letter voor letter hetzelfde jaar; een
+    spel met twee dorpen gaat mee in het opslaan; `npm test` groen. Vragen: **A**, zo, twee tot vier dagen verderop en met
+    eigen namen? **B**, zijn schout een poppetje dat nog niets beslist? **C**, erheen zoals naar elke provincie? **D**, 0
+    of 1 tegenspeler bij Nieuw spel, met 0 als standaard tot stap 1b? **E**, dezelfde heer en inner, voorlopig op
+    dezelfde dag?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -2428,6 +2475,17 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 30 sep 2026 — **Elk dorp leeft** (negentiende sessie; vraag 71, stap 3 van stuk 2, A en C). `T.werkDorpBij(S, D, dt,
+  dtWereld)` (`js/dorp.js`) doet elk beeld alles van een dorp, voor elk dorp in `S.dorpen` (`js/main.js`); ligt het niet
+  waar je bent, dan lopen, maaien en dwalen zijn poppetjes daar ook, op zijn eigen kaart en niet getekend
+  (`T.beweegWezens` in `js/anim.js`, `T.dwaal` in `js/verkennen.js`). Een ander dorp (`D.ander`) spreekt niet tegen jou:
+  een regel over een dorp zegt iets met `T.zeg(D, tekst, soort)` (alle hulpjes `bericht` in de dorpsbestanden gingen
+  eruit), en een ander dorp bewaart het (`D.gezegd`, de laatste twintig); een venster dat het zou openen, komt niet bij
+  jou, en het zet de tijd niet op 1× of stil. Een voorval in een ander dorp beslist zijn raadsman, als het er een heeft
+  (kiezen doet het nog niet; zie vraag 72, B), tot zijn schout in code kiest (stap 1b). `test/dorpen.test.cjs`: jouw gehucht en een van de maker naast elkaar; een jaar van het een laat
+  het ander letter voor letter ongemoeid en zegt jou niets, in een dorp waar je niet bent lopen de mensen rond, en geen
+  dorpsbestand spreekt nog rechtstreeks tegen het scherm. In het spel is er nog één dorp: `npm test` 689/689, en de
+  speeltest letter voor letter hetzelfde jaar.
 - 30 sep 2026 — **Eén dorp als één ding** (negentiende sessie; vraag 71, stap 2 van stuk 2; Marcel: "A ja B ja C ja, oud
   spel mag vervallen"). Alles van een dorp staat bij elkaar: `S` is het spel (de kalender, het land, jij, het scherm) met
   zijn dorpen (`S.dorpen`), je eigen dorp is `S.dorp`, en een dorp heeft zijn kaart, voorraad, mensen, wetten, heer en

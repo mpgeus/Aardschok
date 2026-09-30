@@ -587,8 +587,8 @@
     const wie = wieTekst(D, weg);
     const komma = wie.includes(',') ? ',' : '';
     const een = weg.length === 1;
-    if (reden === 'vertrek') T.ui.bericht(`${hoofdletter(wie)}${komma} ${een ? 'trekt' : 'trekken'} weg: ${waarom}. (-${weg.length})`, 'gevaar');
-    else T.ui.bericht(`${waarom}: ${wie}${komma} ${een ? 'is' : 'zijn'} gestorven.`, 'gevaar');
+    if (reden === 'vertrek') T.zeg(D, `${hoofdletter(wie)}${komma} ${een ? 'trekt' : 'trekken'} weg: ${waarom}. (-${weg.length})`, 'gevaar');
+    else T.zeg(D, `${waarom}: ${wie}${komma} ${een ? 'is' : 'zijn'} gestorven.`, 'gevaar');
   }
 
   // Elk beeld (js/main.js, werkBij), zoals T.werkMarskramerBij in js/handel.js. Wie komt, verschijnt
@@ -674,7 +674,7 @@
       zetPlekken(D, p);
     }
     if (onderweg.length) B.komen.push({ mensen: onderweg, aankomst });
-    else if (T.ui && T.ui.bericht) T.ui.bericht(aankomst.tekst, aankomst.soort);
+    else T.zeg(D, aankomst.tekst, aankomst.soort);
   };
 
   // ---------------------------------------------------------------------------------------------

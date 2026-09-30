@@ -72,9 +72,6 @@
     },
   };
 
-  const bericht = (tekst, soort) => {
-    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
-  };
 
   T.nieuweWetten = () => ({ standen: {}, gekapt: false, belastingRest: 0 });
 
@@ -100,8 +97,8 @@
     if (T.standVanWet(D, id) === stand) return { kan: true };
     if (!D.wetten) D.wetten = T.nieuweWetten();
     D.wetten.standen[id] = stand;
-    if (!T.wetIsAanUit(id)) bericht(`${wet.naam}: vanaf vandaag ${stand}.`);
-    else bericht(`${wet.naam}: ${stand === 'aangenomen' ? 'aangenomen' : 'afgeschaft'}.`);
+    if (!T.wetIsAanUit(id)) T.zeg(D, `${wet.naam}: vanaf vandaag ${stand}.`);
+    else T.zeg(D, `${wet.naam}: ${stand === 'aangenomen' ? 'aangenomen' : 'afgeschaft'}.`);
     T.tevredenheidOpnieuw(D);
     return { kan: true };
   };
@@ -160,7 +157,7 @@
       if (goud > 0) {
         W.belastingRest -= goud;
         T.wijzigVoorraad(D, 'goud', goud);
-        bericht(`De belasting bracht ${goud} goud op.`, 'goed');
+        T.zeg(D, `De belasting bracht ${goud} goud op.`, 'goed');
       }
     }
   };

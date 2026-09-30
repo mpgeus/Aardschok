@@ -40,10 +40,12 @@
   // `dtLopen` is de tijd van de wereld (js/main.js): de schermtijd maal de snelheid van de kalender
   // (T.wereldFactor, js/tijd.js). Lopen gaat daarop, zodat een tocht op elke snelheid even veel uren
   // kost; een uitval, een flits en de zwevende teksten blijven op de klok van het scherm.
-  T.werkAnimatiesBij = function (S, dt, dtLopen) {
+  // Wie loopt, loopt verder op de kaart w: waar je bent (T.werkAnimatiesBij hieronder), of in een dorp waar je niet
+  // bent en dat niet getekend wordt (js/dorp.js, T.werkDorpBij; werklijst, vraag 71, A).
+  T.beweegWezens = function (S, w, dt, dtLopen) {
     const lopen = dtLopen == null ? dt : dtLopen;
-    for (const e of S.wereld.wezens) {
-      beweeg(S, e, lopen);
+    for (const e of w.wezens) {
+      beweeg(S, w, e, lopen);
       if (e.uitval) {
         const u = e.uitval;
         u.t += dt / u.duur;
@@ -57,6 +59,10 @@
       if (e.alarm > 0) e.alarm = Math.max(0, e.alarm - dt);
       if (e.dood) e.sterfTijd += dt;
     }
+  };
+
+  T.werkAnimatiesBij = function (S, dt, dtLopen) {
+    T.beweegWezens(S, S.wereld, dt, dtLopen);
     if (S.wachters.length) {
       const nogNiet = [];
       for (const w of S.wachters) {
@@ -79,12 +85,13 @@
   // Wie in één beeld verder komt dan de volgende tegel, loopt door naar de tegel daarna: bij 30×
   // legt iemand zo'n 45 tegels per seconde af, en tot 26 sep bleef er na elke aankomst de rest van
   // het beeld liggen, zodat snel lopen vanzelf werd afgeremd.
-  function beweeg(S, e, dt) {
+  function beweeg(S, w, e, dt) {
+    const hier = w === S.wereld; // alleen waar je bent, is er een schout die een deur opent, of een gevecht
     let rest = dt;
     for (let veilig = 0; rest > 0 && e.pad.length && veilig < 64; veilig++) {
       const volgende = e.pad[0];
       if (!e.onderweg) {
-        if (!T.magStappen(S, e, volgende)) {
+        if (!T.magStappen(S, e, volgende, w)) {
           e.pad = [];
           klaar(e);
           return;
@@ -92,14 +99,14 @@
         e.onderweg = true;
         e.tx = volgende.x;
         e.ty = volgende.y;
-        T.bijStapBegin(S, e, volgende);
+        if (hier) T.bijStapBegin(S, e, volgende);
       }
       const dx = volgende.x - e.x;
       const dy = volgende.y - e.y;
       const afstand = Math.hypot(dx, dy);
       // In een gevecht lopen ook de trage monsters wat vlotter, anders duurt hun beurt te lang.
       // Wie sluipt, gaat half zo snel.
-      let snelheid = S.gevecht ? Math.max(3.2, T.snelheidVan(e) * 1.4) : T.snelheidVan(e);
+      let snelheid = S.gevecht && hier ? Math.max(3.2, T.snelheidVan(e) * 1.4) : T.snelheidVan(e);
       if (e === S.schout && S.sluipen && !S.gevecht) snelheid *= 0.5;
       if (!(snelheid > 0)) return;
       const nodig = afstand / snelheid;
@@ -109,7 +116,7 @@
         e.y = volgende.y;
         e.pad.shift();
         e.onderweg = false;
-        T.bijAankomst(S, e, volgende);
+        if (hier) T.bijAankomst(S, e, volgende);
         if (!e.pad.length) klaar(e);
       } else {
         const stap = snelheid * rest;

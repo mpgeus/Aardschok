@@ -223,10 +223,10 @@ test('slapen kan \'s avonds bij je eigen huis, en bij het eerste licht word je w
 });
 
 test('een bezoeker komt op één manier: overdag, met zijn bericht één keer, en de heer en de inner zetten de tijd op 1×', () => {
-  // Een los object dat als dorp dient: het is jouw dorp (speler), en de schout staat op zijn kaart (T.naarGewoneSnelheid).
+  // Een los object dat als dorp dient: het is jouw dorp (geen ander dorp), en de schout staat op zijn kaart (T.naarGewoneSnelheid).
   const losDorp = (dag) => {
     const schout = {};
-    return { speler: true, schout, wereld: { wezens: [schout] }, kalender: { dag, snelheid: 10 } };
+    return { schout, wereld: { wezens: [schout] }, kalender: { dag, snelheid: 10 } };
   };
   const D = losDorp(bijUur(GROEI, 3));
   berichten.length = 0;

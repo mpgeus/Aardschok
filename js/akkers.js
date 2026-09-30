@@ -170,7 +170,7 @@
     const { velden, nodig } = T.mestPlan(D);
     let heb = (D.voorraad && D.voorraad.mest) || 0;
     if (!velden.length || heb <= 0) {
-      if (velden.length && T.ui && T.ui.bericht) T.ui.bericht('Er was geen mest voor de akkers die je koos.', 'gevaar');
+      if (velden.length && T.ui && T.ui.bericht) T.zeg(D, 'Er was geen mest voor de akkers die je koos.', 'gevaar');
       return deel;
     }
     let gebruikt = 0;
@@ -191,10 +191,9 @@
     if (gebruikt > 0 && T.wijzigVoorraad) T.wijzigVoorraad(D, 'mest', -gebruikt);
     if (T.ui && T.ui.bericht) {
       const vol = velden.filter((v) => (deel.get(v) || 0) >= 1 - 1e-9).length;
-      T.ui.bericht(vol === velden.length
+      T.zeg(D, vol === velden.length
         ? `De mest gaat op de akkers: ${Math.round(gebruikt)} karren, op ${velden.length === 1 ? 'één veld' : `${velden.length} velden`}.`
-        : `Er was te weinig mest: ${Math.round(gebruikt)} karren, en ${velden.length - vol} van de ${velden.length} velden kregen minder dan ze vroegen.`,
-      vol === velden.length ? 'goed' : 'gevaar');
+        : `Er was te weinig mest: ${Math.round(gebruikt)} karren, en ${velden.length - vol} van de ${velden.length} velden kregen minder dan ze vroegen.`, vol === velden.length ? 'goed' : 'gevaar');
     }
     return deel;
   }
@@ -214,7 +213,7 @@
     const vee = T.weideVee ? T.weideVee(D) : []; // de schapen op de meent hebben geen weide nodig
     if (vee.length && !w.akkers.some((v) => T.planVan(v) === 'weide')) {
       for (const v of w.akkers) if (vee.some((e) => e.weide === v)) v.plan = 'weide';
-      if (T.ui && T.ui.bericht) T.ui.bericht('Er zou geen weide meer zijn, maar het vee moet ergens grazen: de weide blijft weide.', 'gevaar');
+      T.zeg(D, 'Er zou geen weide meer zijn, maar het vee moet ergens grazen: de weide blijft weide.', 'gevaar');
     }
     const verslag = [];
     // De mest gaat op wat volgend jaar akker is, bovenop wat het veld het afgelopen jaar deed.
@@ -584,7 +583,7 @@
     }
     if (tegels && D.voorraad && T.wijzigVoorraad) {
       T.wijzigVoorraad(D, 'graan', graan);
-      if (T.ui && T.ui.bericht) T.ui.bericht(`De boeren halen de rest van de oogst binnen: ${Math.round(graan)} graan.`, 'goed');
+      T.zeg(D, `De boeren halen de rest van de oogst binnen: ${Math.round(graan)} graan.`, 'goed');
     }
     return tegels;
   };
@@ -610,7 +609,7 @@
     for (const e of w.wezens || []) if (e.maait && e.maait.hooi) e.maait = e.oogstDoel = null;
     if (tegels && D.voorraad && T.wijzigVoorraad) {
       T.wijzigVoorraad(D, 'hooi', hooi);
-      if (T.ui && T.ui.bericht) T.ui.bericht(`De boeren halen de rest van het hooi binnen: ${Math.round(hooi)} hooi.`, 'goed');
+      T.zeg(D, `De boeren halen de rest van het hooi binnen: ${Math.round(hooi)} hooi.`, 'goed');
     }
     return tegels;
   };
@@ -679,9 +678,9 @@
     if (kost > 0 && D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'graan', -kost);
     if (T.ui && T.ui.bericht && totaal > 0) {
       if (kan < totaal) {
-        T.ui.bericht(`Er is zaaigraan voor ${kan} van de ${totaal} akkertegels. De rest blijft dit jaar ongezaaid.`, 'gevaar');
+        T.zeg(D, `Er is zaaigraan voor ${kan} van de ${totaal} akkertegels. De rest blijft dit jaar ongezaaid.`, 'gevaar');
       } else {
-        T.ui.bericht(`De boeren zaaien: ${Math.round(kost)} graan gaat de grond in.`);
+        T.zeg(D, `De boeren zaaien: ${Math.round(kost)} graan gaat de grond in.`);
       }
     }
     return { tegels: totaal, gezaaid: kan, ongezaaid: totaal - kan, graan: kost };
@@ -712,7 +711,7 @@
     if (hooien() && d.dagVanMaand === 1) {
       const weides = w.akkers.some((v) => T.bestemmingVan(v) === 'weide');
       if (d.maand === hooiMaand() && weides && T.ui && T.ui.bericht) {
-        T.ui.bericht(`Het is ${T.MAANDEN[d.maand].naam}: de boeren maaien eerst het hooi van de weides, en dan het graan.`);
+        T.zeg(D, `Het is ${T.MAANDEN[d.maand].naam}: de boeren maaien eerst het hooi van de weides, en dan het graan.`);
       }
       if (d.maand === (hooiMaand() + 1) % 12) T.haalHooiBinnen(D);
     }

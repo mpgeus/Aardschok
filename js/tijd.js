@@ -180,6 +180,6 @@
   // bent: wie op reis is (js/land.js), ziet hem toch niet; die hoort het als hij terug is, en de reis gaat op zijn
   // snelheid door. De kalender van het dorp is die van het spel.
   T.naarGewoneSnelheid = function (D) {
-    if (D.speler && !T.schoutIsWeg(D) && D.kalender.snelheid > 1) T.zetSnelheid(D, 1);
+    if (!D.ander && !T.schoutIsWeg(D) && D.kalender.snelheid > 1) T.zetSnelheid(D, 1);
   };
 })(globalThis.Spel = globalThis.Spel || {});

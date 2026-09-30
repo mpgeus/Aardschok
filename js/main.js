@@ -315,14 +315,10 @@
     // Elke ochtend vanzelf opslaan (js/opslaan.js, vraag 48 A); js/menu.js zegt het in de hoek.
     const bewaard = T.werkOpslaanBij(S);
     if (bewaard) T.ui.opgeslagen(bewaard);
-    T.werkGebouwenBij(S.dorp); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
-    T.werkMarskramerBij(S.dorp); // zijn poppetje: over de weg binnen, naar het plein, en weer weg (js/handel.js)
-    T.werkHeerBij(S.dorp); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)
-    T.werkDoorzoekenBij(S.dorp); // zijn soldaten zoeken, met de schout mee of waar de heer wijst (js/doorzoeken.js)
-    T.werkInnerBij(S, S.dorp); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
-    T.werkBewonersBij(S.dorp); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
-    T.werkRoversBij(S, S.dorp); // rovers komen naar een akker, roven en gaan weer; de militie loopt met je mee (js/rovers.js)
-    T.werkVoorvallenBij(S, S.dorp); // wie je zoekt met een voorval, loopt naar je toe en spreekt je aan (js/voorvallen.js)
+    // Elk dorp leeft (js/dorp.js; werklijst, vraag 71, A): zijn dag, zijn bezoekers, zijn mensen, zijn rovers en zijn
+    // voorvallen. Waar je bent, lopen, maaien en dwalen ze hieronder en worden ze getekend; een dorp waar je niet bent,
+    // doet dat in T.werkDorpBij zelf.
+    for (const D of S.dorpen) T.werkDorpBij(S, D, dt, dtWereld);
     T.werkLandBij(S); // op reis de volgende provincie, en over de weg het gehucht uit de kaart van het land (js/land.js)
     T.ui.werkLandkaartBij(S); // en die kaart op het scherm (js/landkaart.js)
     T.werkAnimatiesBij(S, dt, dtWereld);
@@ -346,7 +342,8 @@
       // Vóór T.laatDwalen: wie hier een pad krijgt of aan het maaien slaat (T.werkOogstBij,
       // js/akkers.js, alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
       // T.laatDwalen al "bezig" (m.pad.length of m.maait) en dwaalt deze beurt niet ook nog weg.
-      T.werkOogstBij(S, S.dorp, dtWereld);
+      const hier = T.dorpHier(S); // het dorp waar je bent; de andere maaien in T.werkDorpBij (js/dorp.js)
+      if (hier) T.werkOogstBij(S, hier, dtWereld);
       T.laatDwalen(S, dtWereld);
       const m = S.modus === 'verkennen' && T.zoekOntdekking(S);
       if (m) T.startGevecht(S, m, false);

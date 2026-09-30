@@ -133,7 +133,7 @@
     m.weg = true;
     T.zetVlag(D, 'marskramerVertrekt');
     if (T.ui && T.ui.sluitHandel) T.ui.sluitHandel(D); // staat het venster open (js/hud.js), dan gaat het dicht
-    if (T.ui && T.ui.bericht) T.ui.bericht(`De marskramer trekt verder. Hij komt terug in ${T.volgendeMarskramer(dag)}.`);
+    T.zeg(D, `De marskramer trekt verder. Hij komt terug in ${T.volgendeMarskramer(dag)}.`);
     if (!m.wezen) haalWeg(D);
   }
 

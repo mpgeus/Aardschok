@@ -159,6 +159,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   opent (`T.ui.toonBrief(D, ...)`, `T.ui.openSlachten(D)`, de balk met `T.ui.toonVoorraad(D)`), komt alleen voor je
   eigen dorp. `T.nieuwDorp` maakt een dorp op een kaart (vanuit `T.beginOpKaart`), en `T.schoutIsWeg(D)` zegt of zijn
   schout niet op de kaart van het dorp staat. Het gereedschap, dat niet speelt, is zijn eigen dorp (`S.dorp = S`).
+  **Elk dorp leeft** (vraag 71, A): `T.werkDorpBij(S, D, dt, dtWereld)` doet elk beeld alles van een dorp (js/main.js,
+  voor elk dorp in `S.dorpen`), en ligt het niet waar je bent, dan lopen, maaien en dwalen zijn poppetjes daar ook, op
+  zijn eigen kaart, niet getekend (`T.beweegWezens` in js/anim.js, `T.dwaal` in js/verkennen.js). Een ander dorp dan het
+  jouwe (`D.ander`, het buurdorp) spreekt niet tegen jou: **een regel over een dorp zegt iets met `T.zeg(D, tekst,
+  soort)`, nooit rechtstreeks met `T.ui.bericht`** (`test/dorpen.test.cjs` kijkt het na); een ander dorp bewaart wat
+  het zei (`D.gezegd`). Een voorval in een ander dorp beslist zijn raadsman, als het er een heeft (het kiest er nog
+  geen zelf: dat komt met het buurdorp, vraag 72), tot zijn schout in code kiest (stap 1b).
+  `test/dorpen.test.cjs` zet twee dorpen naast elkaar (jouw gehucht en een van de maker): een jaar van het ene laat het
+  andere letter voor letter ongemoeid.
 
 - `js/naam.js`: de naam van het spel (`T.NAAM`), op één plek, want hij verandert nog (Marcel, 28 sep); een
   titel schrijft `{naam}`. De sleutel waaronder de browser iets bewaart (`T.OPSLAG_SLEUTEL`) staat ernaast en
@@ -191,8 +200,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.sprites.teken` legt het anker van de cel op het midden van de tegel. Laadt alles met
   `Image`, nooit `getImageData`: anders werkt `file://` niet meer.
 - `js/anim.js`: beweging en effecten. `T.anim.*` geeft beloftes, zodat een beurt als gewone
-  code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`.
-- `js/verkennen.js`: rondlopen, klikhandelingen, dwalende monsters, ontdekt worden.
+  code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`. Wie loopt, loopt op een kaart
+  (`T.beweegWezens(S, w, ...)`): waar je bent, of een dorp waar je niet bent (`js/dorp.js`).
+- `js/verkennen.js`: rondlopen, klikhandelingen, dwalende monsters, ontdekt worden. Dwalen gaat op een kaart met het dorp
+  dat er ligt (`T.dwaal(S, w, D, dt)`; `T.laatDwalen(S, dt)` is dat voor waar je bent).
 - `js/gevecht.js`: de overgang, beurtvolgorde, actiepunten, handelingen, monster-AI
   (`planMonsterBeurt`, los van het scherm en dus te toetsen). Sinds 29 sep voor een groep: aan jouw kant (kant
   'speler') de schout en de militie, elk met een eigen beurt; wie aan de beurt is, zegt `T.aanDeBeurt`, en een

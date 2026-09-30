@@ -268,7 +268,7 @@ test('terwijl hij weg is, beslist de raadsman, roept niemand de militie, en vert
     assert.equal(S.dorp.voorvallen.lopend, null, 'het voorval is beslist');
     assert.equal(S.dorp.voorvallen.doorRaadsman, 1, 'door de raadsman');
     // De heer die op het plein staat, of een bezoeker die komt: de reis gaat op zijn snelheid door.
-    T.naarGewoneSnelheid(S);
+    T.naarGewoneSnelheid(S.dorp);
     assert.equal(S.kalender.snelheid, T.LAND_INSTELLINGEN.reisSnelheid);
   });
 });

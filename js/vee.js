@@ -208,9 +208,6 @@
   const etenPerMens = () => (T.GEBOUWEN_INSTELLINGEN ? T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag : 0);
   const spelZaad = (D) => (D.lot && D.lot.zaad) || 1;
 
-  function bericht(tekst, soort) {
-    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
-  }
 
   // "3 koeien en 8 schapen", "1 koe", "geen vee".
   function telKudde(dieren) {
@@ -498,9 +495,9 @@
     }
     if (teVol.size) {
       const wie = telKudde([...teVol.keys()]);
-      bericht(`Er is te weinig weide: ${wie} ${teVol.size === 1 ? 'staat' : 'staan'} te krap, en de koeien daar geven minder melk.`, 'gevaar');
+      T.zeg(D, `Er is te weinig weide: ${wie} ${teVol.size === 1 ? 'staat' : 'staan'} te krap, en de koeien daar geven minder melk.`, 'gevaar');
     } else if (verhuisd.length) {
-      bericht(`Het vee gaat naar zijn nieuwe weide: ${telKudde(verhuisd)}.`);
+      T.zeg(D, `Het vee gaat naar zijn nieuwe weide: ${telKudde(verhuisd)}.`);
     }
     return verhuisd;
   };
@@ -636,8 +633,8 @@
       if (n) wat.push(`${n} ${n === 1 ? v.jong : v.jongen}`);
     }
     const meer = geenPlaats ? ' Meer paste er niet.' : '';
-    if (wat.length) bericht(`Het is grasmaand: er ${nieuw.length === 1 ? 'is' : 'zijn'} ${wat.join(' en ')} geboren.${meer}`, 'goed');
-    else if (geenPlaats) bericht('Het is grasmaand, maar er is geen plaats voor jongen: niet op de weide, of niet in de kooi.');
+    if (wat.length) T.zeg(D, `Het is grasmaand: er ${nieuw.length === 1 ? 'is' : 'zijn'} ${wat.join(' en ')} geboren.${meer}`, 'goed');
+    else if (geenPlaats) T.zeg(D, 'Het is grasmaand, maar er is geen plaats voor jongen: niet op de weide, of niet in de kooi.');
     return nieuw;
   };
 
@@ -677,7 +674,7 @@
     const wol = schapen.length * IN().wolPerSchaap;
     if (wol > 0 && D.voorraad && T.wijzigVoorraad) {
       T.wijzigVoorraad(D, 'wol', wol);
-      bericht(`Het is ${T.MAANDEN[T.datumVanDag(dag).maand].naam}: ${schapen.length} ${schapen.length === 1 ? 'schaap is' : 'schapen zijn'} geschoren. Dat geeft ${wol} wol.`, 'goed');
+      T.zeg(D, `Het is ${T.MAANDEN[T.datumVanDag(dag).maand].naam}: ${schapen.length} ${schapen.length === 1 ? 'schaap is' : 'schapen zijn'} geschoren. Dat geeft ${wol} wol.`, 'goed');
     }
     return wol;
   };
@@ -825,7 +822,7 @@
     }
     if (D.vee) D.vee.slachtVraag = false;
     if (dieren.length) {
-      bericht(`${T.hoofdletter(dierenTekst(dieren, dag))} ${dieren.length === 1 ? 'gaat' : 'gaan'} naar de slager: ${Math.round(o.vlees)} vlees en ${o.huiden} ${o.huiden === 1 ? 'huid' : 'huiden'}.`, 'goed');
+      T.zeg(D, `${T.hoofdletter(dierenTekst(dieren, dag))} ${dieren.length === 1 ? 'gaat' : 'gaan'} naar de slager: ${Math.round(o.vlees)} vlees en ${o.huiden} ${o.huiden === 1 ? 'huid' : 'huiden'}.`, 'goed');
     }
     return o;
   };
@@ -855,7 +852,7 @@
     for (const e of gestorven) haalWeg(D, e);
     if (gestorven.length) {
       const een = gestorven.length === 1;
-      bericht(`${T.hoofdletter(dierenTekst(gestorven, dag))} ${een ? 'is' : 'zijn'} van honger gestorven: het hooi was op.`, 'gevaar');
+      T.zeg(D, `${T.hoofdletter(dierenTekst(gestorven, dag))} ${een ? 'is' : 'zijn'} van honger gestorven: het hooi was op.`, 'gevaar');
     }
     // Vooraf zeggen, één keer per winter: het hooi is binnenkort op, of nu al. Binnenkort zegt het zoals
     // het dorp het zegt van het hout en het eten (T.raaktOp, js/behoeften.js): vanaf vandaag, met
@@ -863,7 +860,7 @@
     if (gegeten < nodig - 1e-9) {
       if (!V.hongerGemeld) {
         V.hongerGemeld = true;
-        bericht(`Het hooi is op. Het vee krijgt honger, en wie ${IN().hongerDagen} dagen tekortkomt, sterft. Slacht wat je niet kunt voeren.`, 'gevaar');
+        T.zeg(D, `Het hooi is op. Het vee krijgt honger, en wie ${IN().hongerDagen} dagen tekortkomt, sterft. Slacht wat je niet kunt voeren.`, 'gevaar');
       }
     } else {
       V.hongerGemeld = false;
@@ -871,7 +868,7 @@
       const tekst = !V.hooiGewaarschuwd && T.raaktOp('het hooi', v, IN().hooiWaarschuwing);
       if (tekst) {
         V.hooiGewaarschuwd = true;
-        bericht(tekst, 'gevaar');
+        T.zeg(D, tekst, 'gevaar');
       }
     }
     return { nodig, gegeten, gestorven };

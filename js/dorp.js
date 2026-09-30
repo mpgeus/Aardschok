@@ -10,17 +10,26 @@
 // klok van het scherm), dan krijgt hij allebei: (S, D). Je eigen dorp is S.dorp: daarover gaat de balk, ook als je
 // elders bent (vraag 71, C). Het dorp waar je nu bent, zegt T.dorpHier.
 //
+// Elk dorp leeft (vraag 71, A): zijn dag, zijn bezoekers, zijn mensen, zijn rovers en zijn voorvallen, elk beeld, ook
+// als je er niet bent (T.werkDorpBij). Een dorp waar je niet bent, heeft zijn poppetjes, die lopen, maaien en dwalen
+// zoals thuis, alleen niet getekend. Een ander dorp dan het jouwe (D.ander) spreekt niet tegen jou: wat het zegt,
+// bewaart het (T.zeg), en een venster dat het zou openen, komt niet bij jou (js/hud.js, js/brieven.js).
+//
 // Tot 30 sep stond dit allemaal los in S, en kon er maar één dorp zijn.
 (function (T) {
   'use strict';
 
+  T.DORP_INSTELLINGEN = {
+    gezegd: 20, // zoveel berichten bewaart een ander dorp (D.gezegd), voor wie later vertelt hoe het er staat
+  };
+
   // Een nieuw dorp op kaart w, met zijn schout: wat er op de kaart staat (de gebouwen, de boeren, het vee), en wie er
-  // verder woont. `zaad` is het lot van de boeren (js/boeren.js): hetzelfde zaad geeft hetzelfde dorp. `speler`: dit
-  // is het dorp van de speler.
+  // verder woont. `zaad` is het lot van de boeren (js/boeren.js): hetzelfde zaad geeft hetzelfde dorp. `ander`: het is
+  // niet jouw dorp (het buurdorp): het spreekt niet tegen jou.
   T.nieuwDorp = function (S, w, schout, opties) {
     const o = opties || {};
     const D = {
-      speler: !!o.speler,
+      ander: !!o.ander,
       wereld: w,
       kalender: S.kalender,
       schout,
@@ -53,6 +62,38 @@
   // provincie, of in een ander gebied (js/gebied.js)? Dan beslist de raadsman (js/voorvallen.js), en roept niemand de
   // militie bij hem (js/rovers.js). Een dorp zonder schout heeft er ook geen die er is.
   T.schoutIsWeg = (D) => !D.schout || !D.wereld.wezens.includes(D.schout);
+
+  // Wat een dorp tegen het scherm zegt (vraag 71, C): een bericht komt bij jou als het jouw dorp is. Een ander dorp
+  // bewaart het, de laatste twintig (D.gezegd), zodat later de marskramer, of wie je stuurt, kan vertellen hoe het er
+  // staat. Zo zegt een regel over een dorp het altijd: T.zeg(D, tekst, soort), en nooit rechtstreeks T.ui.bericht.
+  T.zeg = function (D, tekst, soort) {
+    if (!D.ander) {
+      if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
+      return;
+    }
+    const g = D.gezegd || (D.gezegd = []);
+    g.push({ dag: Math.floor((D.kalender && D.kalender.dag) || 0), tekst, soort: soort || '' });
+    if (g.length > T.DORP_INSTELLINGEN.gezegd) g.shift();
+  };
+
+  // Elk beeld, voor elk dorp (js/main.js): zijn dag, zijn bezoekers, zijn mensen, zijn rovers en zijn voorvallen. Ligt
+  // het dorp niet waar je bent (S.wereld), dan lopen, maaien en dwalen zijn poppetjes hier ook, zoals js/main.js het
+  // doet voor waar je wel bent: op zijn eigen kaart, en niet getekend. `dt` is de tijd van het scherm, `dtWereld` die
+  // van de wereld (js/tijd.js).
+  T.werkDorpBij = function (S, D, dt, dtWereld) {
+    T.werkGebouwenBij(D); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
+    T.werkMarskramerBij(D); // zijn poppetje: over de weg binnen, naar het plein, en weer weg (js/handel.js)
+    T.werkHeerBij(D); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)
+    T.werkDoorzoekenBij(D); // zijn soldaten zoeken, met de schout mee of waar de heer wijst (js/doorzoeken.js)
+    T.werkInnerBij(S, D); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
+    T.werkBewonersBij(D); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
+    T.werkRoversBij(S, D); // rovers komen naar een akker, roven en gaan weer; de militie loopt met je mee (js/rovers.js)
+    T.werkVoorvallenBij(S, D); // wie je zoekt met een voorval, loopt naar je toe en spreekt je aan (js/voorvallen.js)
+    if (D.wereld === S.wereld) return; // waar je bent, lopen en dwalen ze in js/main.js, en worden ze getekend
+    T.beweegWezens(S, D.wereld, dt, dtWereld); // lopen (js/anim.js)
+    T.werkOogstBij(S, D, dtWereld); // maaien (js/akkers.js)
+    T.dwaal(S, D.wereld, D, dtWereld); // en dwalen, naar het ritme van de dag (js/verkennen.js)
+  };
 
   // Het dorp waar de schout nu is: het dorp met de kaart waarop hij staat, of null (een ander gebied, of op reis
   // over het land; dan blijft S.wereld de kaart van zijn dorp, js/land.js, en is dat het dorp hier).

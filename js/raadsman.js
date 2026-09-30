@@ -77,9 +77,6 @@
   const WAREN = T.VAARDIGHEDEN.rekenen.op.filter((w) => w !== 'goud').concat('hout');
 
   const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
-  const bericht = (tekst, soort) => {
-    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
-  };
   const naam = (p) => T.naamVanBewoner(p);
   const isBoer = (p) => !!p && T.isBoer(p.wezen);
   const hier = (D, p) => !!(D.bewoners && D.bewoners.mensen.includes(p)) && !p.weg && !!p.wezen && !p.wezen.dood;
@@ -111,7 +108,7 @@
     for (const x of D.bewoners.mensen) if (x.wezen && x !== p) x.wezen.raadsman = false;
     p.wezen.raadsman = true;
     if (!D.raadsman) D.raadsman = T.nieuweRaadsman();
-    bericht(`${T.hoofdletter(naam(p))} is je raadsman. Ben je er niet, dan beslist ${naam(p)}.`);
+    T.zeg(D, `${T.hoofdletter(naam(p))} is je raadsman. Ben je er niet, dan beslist ${naam(p)}.`);
     return { kan: true };
   };
 
@@ -216,7 +213,7 @@
     D.raadsman.besluiten.push({ dag: dagNu(D), id: L.id, door: naam(p), wie: naam(L.wie), antwoord: zeg, prijs });
     if (D.raadsman.besluiten.length > 20) D.raadsman.besluiten.shift();
     const titel = T.VOORVALLEN[L.id].titel;
-    bericht(`${T.hoofdletter(naam(p))}, je raadsman, besliste over ${titel}: "${zeg}"${prijs ? ` (${prijs})` : ''}`);
+    T.zeg(D, `${T.hoofdletter(naam(p))}, je raadsman, besliste over ${titel}: "${zeg}"${prijs ? ` (${prijs})` : ''}`);
     T.voorvalBeantwoord(D, L.id, p);
     return true;
   };

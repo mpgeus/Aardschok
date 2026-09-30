@@ -99,7 +99,6 @@ test('hij wordt aangekondigd, komt in oogstmaand tellen, en de tijd loopt door o
   const S = maakS();
   S.kalender.snelheid = 10;
   // Je eigen dorp, en je bent er (js/dorp.js): dan zie je hem op 1× komen.
-  S.speler = true;
   S.schout = T.maakWezen('schout', 29, 19);
   S.wereld.wezens.push(S.schout);
   const berichten = metBerichten(() => {

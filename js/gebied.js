@@ -228,7 +228,7 @@
     zetNeer(schout, schout.x, schout.y);
     // Het dorp op deze kaart, met jou als zijn schout (js/dorp.js): wat er staat, de boeren, het vee en wie er
     // woont. Het is je eigen dorp (S.dorp), en voorlopig het enige.
-    S.dorp = T.nieuwDorp(S, w, schout, { zaad, speler: true });
+    S.dorp = T.nieuwDorp(S, w, schout, { zaad });
     S.dorpen = [S.dorp];
     return true;
   };

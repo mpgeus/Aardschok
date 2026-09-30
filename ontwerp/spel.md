@@ -16,7 +16,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3 | vraag 50, 51, 54 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
-| Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt met de spelregel "Je gehucht" elk spel een ander gehucht (30 sep). Stuk 2 (30 sep): de snellere dag, en alles van een dorp bij elkaar, zodat er twee kunnen zijn | vraag 63, 69, 70, 71 |
+| Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt met de spelregel "Je gehucht" elk spel een ander gehucht (30 sep). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
 | De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug | vraag 65 |
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
@@ -309,10 +309,21 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
   het spel elke dag voor elk kind een plek op het plein zocht en daarbij voor elke tegel alle bomen en huizen afliep.
   Nu houdt elke kaart een lijst per tegel bij (`js/wereld.js`): een dag kost 0,5 ms, met dag voor dag dezelfde
   uitkomst, en lopen is ook goedkoper. Het haperen elke speeldag is weg.
-- **Nog niet:** stap 3 van stuk 2, elk dorp leeft: een dorp waar je niet bent, leeft met poppetjes, alleen niet
-  getekend (vraag 71, A), en een ander dorp spreekt niet tegen jou; met een toets van twee dorpen naast elkaar. Daarna
-  het buurdorp (stuk 3), met een gehucht van de maker, eigen mensen en dezelfde regels; bij Nieuw spel kies je dan 0 of
-  1 tegenspeler.
+- **Elk dorp leeft** (30 sep, negentiende sessie; stap 3 van stuk 2, vraag 71, A en C): elk beeld doet elk dorp zijn dag,
+  zijn bezoekers, zijn mensen, zijn rovers en zijn voorvallen, ook als je er niet bent. Een dorp waar je niet bent, heeft
+  zijn poppetjes, die lopen, maaien en dwalen zoals thuis, op hun eigen kaart, alleen niet getekend; zo is wat je ziet
+  als je er aankomt, wat er echt gebeurde. Een ander dorp dan het jouwe spreekt niet tegen jou: wat het zegt, bewaart
+  het (de laatste twintig berichten), zodat later de marskramer, of wie je stuurt, kan vertellen hoe het er staat. Een
+  voorval in een ander dorp beslist zijn raadsman, als het er een heeft (kiezen doet het nog niet: dat komt met het
+  buurdorp), tot zijn schout in code kiest (stap 1b). Nagekeken met twee dorpen
+  naast elkaar, jouw gehucht en een van de maker: een jaar van het een laat het ander letter voor letter ongemoeid, en
+  in het dorp waar je niet bent, lopen de mensen rond. In het spel is er nog maar één dorp, dus speelt alles zoals
+  ervoor.
+- **Nog niet:** het buurdorp in het spel (stuk 3): een eigen provincie, een gehucht van de maker, eigen mensen (andere
+  namen en karakters) en dezelfde regels; je kunt erheen en er rondlopen; bij Nieuw spel kies je 0 of 1 tegenspeler.
+  Wat er dan nog bij moet: elk dorp zijn eigen dobbelsteen voor wat nu nog `Math.random` gebruikt (het dwalen, een nieuw
+  poppetje, de tekening van een nieuw huis), anders verandert jouw dorp een beetje zodra er een buurdorp naast leeft; en
+  een bewaard spel met twee dorpen is zo'n 750 kB, zodat zes plekken in de browser (5 MB) krap worden.
 
 ## De raad onder het doel (Marcel, 29 sep 2026; werklijst vraag 58)
 

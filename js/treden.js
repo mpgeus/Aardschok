@@ -22,9 +22,6 @@
   };
   const IN = () => T.TREDEN_INSTELLINGEN;
 
-  const bericht = (tekst, soort) => {
-    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
-  };
 
   // Is hier een trede te halen? Alleen in het gehucht zelf: een wereld met een plein (waar de heer komt). Een
   // proefkaart (?kaart=proef) heeft er geen.
@@ -73,7 +70,7 @@
   T.wordtTrede = function (D, trede) {
     D.trede = trede;
     if (T.ui && T.ui.toonBrief) T.ui.toonBrief(D, 'dorp');
-    else bericht(`Het gehucht is een ${trede} geworden.`, 'goed');
+    else T.zeg(D, `Het gehucht is een ${trede} geworden.`, 'goed');
   };
 
   // Het hoofdgeld in deze trede, als factor op wat de heer per ziel vraagt (js/heer.js, T.eisVanDeHeer).

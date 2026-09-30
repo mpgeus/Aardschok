@@ -97,9 +97,6 @@
     return { tevredenheid: 1, mist: [], last: [], blij: [], winterVerliesRest: 0, gezegd: {} };
   };
 
-  function bericht(tekst, soort) {
-    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
-  }
 
   // Brandhout is hout of turf (eerst turf: pasBrandhoutToe), en het dorp stookt per huishouden, met de
   // maat van een gezin (T.GEBOUWEN_INSTELLINGEN.gezinGrootte, dezelfde als bij groei).
@@ -253,10 +250,7 @@
     // met een eigen, kleine wereld) alleen hoeveel.
     T.wijzigBevolking(D, -verlies, 'winter', wat);
     if (!D.bewoners) {
-      bericht(
-        verlies === 1 ? `${wat}: het dorp verliest een dorpeling.` : `${wat}: het dorp verliest ${verlies} dorpelingen.`,
-        'gevaar',
-      );
+      T.zeg(D, verlies === 1 ? `${wat}: het dorp verliest een dorpeling.` : `${wat}: het dorp verliest ${verlies} dorpelingen.`, 'gevaar');
     }
   }
 
@@ -273,7 +267,7 @@
     const waarom = honger ? 'er is geen eten' : 'het dorp is niet tevreden genoeg';
     // Met bewoners zegt het bericht wie het zijn en lopen ze de weg af (js/bewoners.js).
     T.wijzigBevolking(D, -verlies, 'vertrek', waarom);
-    if (!D.bewoners && T.ui && T.ui.bericht) T.ui.bericht(`Een gezin trekt weg: ${waarom}. (-${verlies})`, 'gevaar');
+    if (!D.bewoners && T.ui && T.ui.bericht) T.zeg(D, `Een gezin trekt weg: ${waarom}. (-${verlies})`, 'gevaar');
   }
 
   // Ruilt het voorwerp van een gebouw voor zijn "wordt"-soort: dezelfde tekening-ingang als
@@ -343,7 +337,7 @@
     // verwachtingen dan een dorp vol hutten; dat is nu nog geen regel, alleen deze opmerking.
     // Wie er woont, gaat voortaan naar de deur van de nieuwe tekening (js/bewoners.js).
     T.huisVeranderd(D, instantie);
-    if (T.ui && T.ui.bericht) T.ui.bericht(`Een ${oudeNaam} is gegroeid tot een ${nieuweSoort.naam}.`, 'goed');
+    T.zeg(D, `Een ${oudeNaam} is gegroeid tot een ${nieuweSoort.naam}.`, 'goed');
     return true;
   }
 
@@ -516,7 +510,7 @@
       zinnen.push(hout.haalt ? 'Het hout haalt de winter.' : `Het hout haalt ${hout.dagen} van de ${hout.winter} dagen: ${houtHelpt(D)}.`);
       zinnen.push(eten.haalt ? 'Het eten haalt de winter.' : `Het eten haalt ${eten.dagen} van de ${eten.winter} dagen${etenHelpt()}.`);
     }
-    bericht(zinnen.join(' '), hout.haalt && eten.haalt ? 'goed' : 'gevaar');
+    T.zeg(D, zinnen.join(' '), hout.haalt && eten.haalt ? 'goed' : 'gevaar');
   }
 
   // Wat het dorp over de winter zegt, één keer per dag (T.tikBehoeftenDag, vóór het stoken en het eten
@@ -538,7 +532,7 @@
       const tekst = !gezegd[wat] && T.raaktOp(wat, nu[wat], IN.opraakWaarschuwing);
       if (!tekst) continue;
       gezegd[wat] = true;
-      bericht(tekst, 'gevaar');
+      T.zeg(D, tekst, 'gevaar');
     }
   }
 

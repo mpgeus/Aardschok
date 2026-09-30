@@ -33,9 +33,6 @@
   };
   const IN = () => T.DOORZOEKEN_INSTELLINGEN;
 
-  function bericht(tekst, soort) {
-    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
-  }
   const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || '');
   const GETAL = ['geen', 'één', 'twee', 'drie', 'vier', 'vijf'];
   const uurNu = (D) => (D.kalender ? D.kalender.dag * 24 : 0);
@@ -85,9 +82,9 @@
     if (heerKiest) {
       z.doelen = volgorde(D, []).slice(0, nodig).map((p) => p.gebouw);
       const namen = z.doelen.map((g) => T.verstopPlekVan(D, g).naam);
-      bericht(`De heer wijst zelf aan waar zijn soldaten zoeken: ${opsomming(namen)}.`, 'gevaar');
+      T.zeg(D, `De heer wijst zelf aan waar zijn soldaten zoeken: ${opsomming(namen)}.`, 'gevaar');
     } else {
-      bericht(`De heer laat het dorp doorzoeken, op ${GETAL[nodig] || nodig} plekken. Zijn soldaten lopen met je mee: waar je ze vlak langs leidt, zoeken ze.`, 'gevaar');
+      T.zeg(D, `De heer laat het dorp doorzoeken, op ${GETAL[nodig] || nodig} plekken. Zijn soldaten lopen met je mee: waar je ze vlak langs leidt, zoeken ze.`, 'gevaar');
     }
     return z;
   };
@@ -98,8 +95,8 @@
     const lag = T.inhoudTekst(p.gebouw.verstopt || { graan: 0, goud: 0 });
     const vond = T.zoekOpPlek(D, p);
     if (vond) z.gevonden.push(vond);
-    if (vond) bericht(`De soldaten doorzoeken ${p.naam}, en vinden ${lag}. Dat is weg.`, 'gevaar');
-    else bericht(`De soldaten doorzoeken ${p.naam}, en vinden niets.`);
+    if (vond) T.zeg(D, `De soldaten doorzoeken ${p.naam}, en vinden ${lag}. Dat is weg.`, 'gevaar');
+    else T.zeg(D, `De soldaten doorzoeken ${p.naam}, en vinden niets.`);
   }
 
   // Klaar: de soldaten gaan terug naar de heer, op hun eigen maat.
@@ -126,7 +123,7 @@
     // nog voor ze gaan, in hun eigen volgorde.
     if (b.weg || !soldaten.length) {
       const rest = volgorde(D, z.gedaan).slice(0, z.nodig - z.gedaan.length);
-      if (rest.length) bericht(`Voor ze gaan, doorzoeken de soldaten nog ${opsomming(rest.map((p) => p.naam))}.`, 'gevaar');
+      if (rest.length) T.zeg(D, `Voor ze gaan, doorzoeken de soldaten nog ${opsomming(rest.map((p) => p.naam))}.`, 'gevaar');
       for (const p of rest) doorzoek(D, z, p);
       klaar(D, z, soldaten, null);
       return;
@@ -146,7 +143,7 @@
         if (!vlak) continue;
         doorzoek(D, z, p);
         if (z.gedaan.length >= z.nodig) {
-          bericht('De soldaten zijn klaar met zoeken, en gaan terug naar de heer.');
+          T.zeg(D, 'De soldaten zijn klaar met zoeken, en gaan terug naar de heer.');
           klaar(D, z, soldaten, heer);
           return;
         }
@@ -157,7 +154,7 @@
     if (!z.doelen && gewacht) {
       z.doelen = volgorde(D, z.gedaan).slice(0, z.nodig - z.gedaan.length).map((p) => p.gebouw);
       z.zelf = true;
-      bericht(`De soldaten wachten niet langer, en zoeken zelf: ${opsomming(z.doelen.map((g) => T.verstopPlekVan(D, g).naam))}.`, 'gevaar');
+      T.zeg(D, `De soldaten wachten niet langer, en zoeken zelf: ${opsomming(z.doelen.map((g) => T.verstopPlekVan(D, g).naam))}.`, 'gevaar');
     }
     // Lopen: naar hun doel, of met de schout mee, en houden zijn pas bij.
     for (const s of soldaten) {

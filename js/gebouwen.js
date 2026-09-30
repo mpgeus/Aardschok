@@ -918,7 +918,7 @@
       const stil = soort.stilIn && seizoen && soort.stilIn[seizoen];
       if (stil) {
         g.stilWant = stil;
-        if (!wasStil && T.ui && T.ui.bericht) T.ui.bericht(`${T.hoofdletter(soort.naam)} staat stil: ${stil}.`);
+        if (!wasStil && T.ui && T.ui.bericht) T.zeg(D, `${T.hoofdletter(soort.naam)} staat stil: ${stil}.`);
         continue;
       }
       // Werk telt in uren (js/bewoners.js, T.werkUrenVan; een optie, standaard aan): wie ver van zijn

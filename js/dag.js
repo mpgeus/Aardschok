@@ -213,7 +213,7 @@
     if (!bezoek.meteen && !T.isBezoektijd(D)) return false;
     bezoek.aangekomen = true;
     const a = bezoek.aankomst || {};
-    if (a.tekst) bericht(a.tekst, a.soort);
+    if (a.tekst) T.zeg(D, a.tekst, a.soort);
     if (a.naarGewoon) T.naarGewoneSnelheid(D);
     return true;
   };

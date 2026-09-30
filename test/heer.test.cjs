@@ -364,7 +364,6 @@ test('op Sint-Maarten komt hij zelf, en wacht hij op je terwijl de tijd op 1× d
   S.kalender.snelheid = 30;
   S.kalender.dag = SINT_MAARTEN;
   // Je eigen dorp, en je bent er (js/dorp.js): dan zie je hem op 1× komen.
-  S.speler = true;
   S.schout = T.maakWezen('schout', 20, 20);
   S.wereld.wezens.push(S.schout);
   T.tikHeerDag(S, SINT_MAARTEN);

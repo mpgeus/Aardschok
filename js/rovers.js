@@ -52,9 +52,6 @@
   // hetzelfde zaad hetzelfde jaar speelt.
   const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 37 + Math.floor(dag) * 7919 + n)();
 
-  const bericht = (tekst, soort) => {
-    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
-  };
 
   T.nieuweRovers = () => ({ bende: [], bendeOp: null, wildeOp: null, aanval: null });
 
@@ -285,7 +282,7 @@
     const delen = [];
     if (graan > 0) delen.push(`${Math.round(graan)} graan`);
     const buit = delen.length ? ` met ${delen.join(' en ')}` : ' met lege handen';
-    bericht(`De rovers gaan ervandoor${buit}.${kapot ? ` De akker${boer ? ` van ${boer.naam}` : ''} is vertrapt: wat erop stond, is weg.` : ''}`, 'gevaar');
+    T.zeg(D, `De rovers gaan ervandoor${buit}.${kapot ? ` De akker${boer ? ` van ${boer.naam}` : ''} is vertrapt: wat erop stond, is weg.` : ''}`, 'gevaar');
     A.buit = { graan, kapot };
   }
 
@@ -353,7 +350,7 @@
     const A = D.rovers && D.rovers.aanval;
     if (!A || !A.rovers) return;
     if (A.rovers.every((e) => e.dood)) {
-      bericht('De rovers zijn verslagen.', 'goed');
+      T.zeg(D, 'De rovers zijn verslagen.', 'goed');
       eind(D);
     }
   };

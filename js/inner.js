@@ -94,9 +94,6 @@
   const uurNu = (D) => (D.kalender ? D.kalender.dag * 24 : 0);
   const sleutel = (x, y) => x + ',' + y;
 
-  function bericht(tekst, soort) {
-    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
-  }
 
   T.nieuweInner = function () {
     return {
@@ -207,7 +204,7 @@
     }
     if (betrapt.length) {
       T.zetArgwaan(D, betrapt.length * IN().betrapt, 'de heer zag op het plein wat niet in het rapport stond');
-      bericht(`"Wat is DÁT, schout?" De heer wijst: ${betrapt.join(', ')}. "Dat staat niet in het rapport van Onze inner. Nu wel."`, 'gevaar');
+      T.zeg(D, `"Wat is DÁT, schout?" De heer wijst: ${betrapt.join(', ')}. "Dat staat niet in het rapport van Onze inner. Nu wel."`, 'gevaar');
     }
     return betrapt;
   };
@@ -360,7 +357,7 @@
       T.zetArgwaan(D, goud * o.argwaan, 'hij hoorde dat je zijn inner omkocht');
       // Telt de heer de kist niet (een keuze in de spelregels), dan kost het alleen argwaan.
       const kist = T.HEER_INSTELLINGEN && T.HEER_INSTELLINGEN.kist ? ` Die ${goud} goud telt hij op Sint-Maarten als goud in je kist,` : '';
-      bericht(`De inner steekt het goud niet weg: hij weegt het in zijn hand, waar iedereen bij staat. Dit hoort de heer.${kist}${kist ? ' en' : ' En'} hij vertrouwt je minder.`, 'gevaar');
+      T.zeg(D, `De inner steekt het goud niet weg: hij weegt het in zijn hand, waar iedereen bij staat. Dit hoort de heer.${kist}${kist ? ' en' : ' En'} hij vertrouwt je minder.`, 'gevaar');
     }
     if (T.ui && T.ui.toonArgwaan) T.ui.toonArgwaan(D);
     return { kan: true, korting, gehoord };
@@ -436,7 +433,7 @@
     const delen = (namen.length ? namen : ['geen gebouwen']).concat(`${Math.round(r.graanGezien)} graan`);
     if (T.HEER_INSTELLINGEN && T.HEER_INSTELLINGEN.kist) delen.push(`${Math.floor(r.goudGezien)} goud in de kist`);
     const korting = r.korting > 0 ? ` Om je geschenk schreef hij ${Math.round(r.korting * 100)}% minder op dan hij zag.` : '';
-    bericht(`De inner vertrekt. In zijn rapport: ${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}.${korting}`);
+    T.zeg(D, `De inner vertrekt. In zijn rapport: ${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}.${korting}`);
     T.wisVlag(D, 'innerOnverwacht');
     // Zijn rapport is af: een geschenk of een praatje verandert er niets meer aan (js/gesprekken.js).
     T.zetVlag(D, 'innerGeteld');
@@ -482,7 +479,7 @@
     const aankondiging = ((komt - IN().aankondiging) % T.DAGEN_PER_JAAR + T.DAGEN_PER_JAAR) % T.DAGEN_PER_JAAR;
     if (IN().aankondiging > 0 && nu === aankondiging && !I.bezoek) {
       const kist = T.HEER_INSTELLINGEN && T.HEER_INSTELLINGEN.kist ? ', de huizen en de kist' : ' en de huizen';
-      bericht(`Over ${IN().aankondiging} dagen komt de inner van de heer tellen: de velden, de schuren${kist}. Wat hij niet mag zien, zet je vóór die tijd weg.`);
+      T.zeg(D, `Over ${IN().aankondiging} dagen komt de inner van de heer tellen: de velden, de schuren${kist}. Wat hij niet mag zien, zet je vóór die tijd weg.`);
     }
     if (nu === komt && !I.bezoek) T.innerKomt(D, dag, false);
     if (I.terugOp != null && dag >= I.terugOp && !I.bezoek) {
@@ -516,7 +513,7 @@
   T.doorzoekDorp = function (D) {
     const gevonden = T.zoekVerstopt(D);
     const lijst = gevonden.length > 1 ? `${gevonden.slice(0, -1).join(', ')} en ${gevonden[gevonden.length - 1]}` : gevonden[0];
-    bericht(gevonden.length
+    T.zeg(D, gevonden.length
       ? `De soldaten van de heer doorzoeken het dorp, en vinden ${lijst}. Dat is weg.`
       : 'De soldaten van de heer doorzoeken het dorp, van de schuren tot de beerput. Ze vinden niets.', 'gevaar');
     return gevonden;
@@ -641,7 +638,7 @@
     // De zon gaat onder: hij moet voor donker terug zijn op het kasteel, en gaat met wat hij zag.
     const nu = uurNu(D);
     if (b.tot != null && nu >= b.tot * 24) {
-      bericht('De zon gaat onder, en de inner moet voor donker terug zijn op het kasteel.');
+      T.zeg(D, 'De zon gaat onder, en de inner moet voor donker terug zijn op het kasteel.');
       stopGesprek(S, D, e);
       T.innerVertrekt(D);
       return;
@@ -655,7 +652,7 @@
       if (b.gepraat < IN().praatUren) return;
       b.uitgepraat = true;
       T.zetVlag(S, 'innerUitgepraat');
-      bericht('"Genoeg gepraat, schout. Ik moet tellen, en voor donker terug zijn."');
+      T.zeg(D, '"Genoeg gepraat, schout. Ik moet tellen, en voor donker terug zijn."');
       stopGesprek(S, D, e);
     }
     b.praatVan = null;
@@ -665,7 +662,7 @@
       b.laatste = hier;
       b.stilSinds = null;
       const nieuw = T.innerKijkt(D, { x: e.tx, y: e.ty });
-      if (nieuw.length) bericht(`De inner noteert: ${nieuw.join(', ')}.`);
+      if (nieuw.length) T.zeg(D, `De inner noteert: ${nieuw.join(', ')}.`);
     } else if (b.volgt && !e.onderweg && !e.pad.length) {
       // Naast een schout die niet verder loopt, wacht hij niet eeuwig: daarna telt hij zelf verder, en
       // volgt hij een tijd niemand. In uren op de klok, dus op elke snelheid even lang.
@@ -673,7 +670,7 @@
       else if (nu - b.stilSinds >= IN().wachtUren) {
         b.stilSinds = null;
         b.eigenTot = nu + IN().eigenGang;
-        bericht('De inner wacht niet langer op je, en telt zelf verder.');
+        T.zeg(D, 'De inner wacht niet langer op je, en telt zelf verder.');
       }
     }
     const doelen = nogTeZien(D);

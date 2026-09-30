@@ -9,6 +9,19 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Het slachtvenster wacht op het scherm, en geen toets kijkt dat na** (30 sep, negentiende sessie; vraag 71). Sinds
+  één dorp één ding is, vraagt de regel (`T.tikVeeDag`, `js/vee.js`) elke dag van slachtmaand het venster aan het
+  scherm, met het dorp, en beslist het scherm (`T.ui.openSlachten`, `js/hud.js`) of het opent: niet midden in een
+  gesprek of een ander venster, want dat is de modus van het spel en niet van het dorp. Een toets laadt `js/hud.js` niet,
+  dus alleen de speeltest dekt die controle nog; `test/hooi.test.cjs` doet hem na. Een regel zonder scherm voor "mag er
+  nu een venster open" zou dat oplossen, als er meer vensters komen die een dorp zelf opent.
+- **De speeltest haakt in op functies van het spel** (30 sep, negentiende sessie). `gereedschap/speeltest/speler.js`
+  wikkelt een paar regels in (`T.werdGezien`, `T.betaalHeer`, `T.wijzigBevolking`, ...) om bij te houden wat er
+  gebeurde. Kreeg zo'n regel andere argumenten (bij één dorp als één ding: `T.werdGezien(S, D, ...)`), dan faalde de haak
+  stil: het spel speelde goed, maar de speeltest miste de getuigen. De fout staat wel in `luisterFouten` en in de
+  samenvatting, maar niet in de regel per jaar ("0 fouten"). Voortaan: bij een andere vorm van zo'n regel ook de haak
+  nalopen, of de regel per jaar laat ook de luisterfouten tellen.
+
 - **De herberg van de maker staat altijd links van het plein** (30 sep, achttiende sessie; de schets van de maker, vraag
   70). Elke huistekening heeft haar deur aan een vaste kant (zuid, oost of west; nooit noord), en de maker zet een huis
   met zijn deur naar het plein. De herberg heeft haar deur in het oosten, dus staat ze in elk gemaakt gehucht in het

@@ -35,9 +35,6 @@
   T.erfMaat = () => ({ b: IN().breed, h: IN().diep });
   const ervenVan = (D) => D.erven || (D.erven = []);
   const dagNu = (D) => Math.floor((D.kalender && D.kalender.dag) || 0);
-  const bericht = (tekst, soort) => {
-    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
-  };
 
   // ---------------------------------------------------------------------------------------------
   // Aanwijzen en weghalen
@@ -236,7 +233,7 @@
     const erf = T.kanEenErfNemen(D) ? T.kiesErf(D) : null;
     const hut = erf ? T.zetHutOpErf(D, erf) : null;
     if (!hut) {
-      bericht(zelf
+      T.zeg(D, zelf
         ? 'Er wil een gezin komen, maar er is geen plaats. Wijs een erf aan (B).'
         : 'Er wil een gezin komen, maar er is geen plaats. Bouw een hut of een huis (B).');
       return null;
@@ -245,7 +242,7 @@
     T.wijzigBevolking(D, Math.min(T.GEBOUWEN_INSTELLINGEN.gezinGrootte, T.GEBOUWEN.hut.woonruimte), 'groei');
     if (hut.wachtOpHout) {
       const hout = T.GEBOUWEN.hut.kosten.hout;
-      bericht(`${T.hoofdletter(gezinVan(D, hut))} wacht op hout voor zijn hut: daar is ${hout} hout voor nodig.`, 'gevaar');
+      T.zeg(D, `${T.hoofdletter(gezinVan(D, hut))} wacht op hout voor zijn hut: daar is ${hout} hout voor nodig.`, 'gevaar');
     }
     return hut;
   };
@@ -255,7 +252,7 @@
   T.tikErvenDag = function (D) {
     for (const erf of D.erven || []) {
       const hut = erf.hut;
-      if (hut && hut.wachtOpHout && begin(D, hut)) bericht(`${T.hoofdletter(gezinVan(D, hut))} begint aan zijn hut: het hout is er.`);
+      if (hut && hut.wachtOpHout && begin(D, hut)) T.zeg(D, `${T.hoofdletter(gezinVan(D, hut))} begint aan zijn hut: het hout is er.`);
     }
   };
 })(globalThis.Spel = globalThis.Spel || {});

@@ -126,9 +126,6 @@
     return Math.floor(dag) + (((verschil % T.DAGEN_PER_JAAR) + T.DAGEN_PER_JAAR) % T.DAGEN_PER_JAAR || T.DAGEN_PER_JAAR);
   }
 
-  function bericht(tekst, soort) {
-    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
-  }
 
   // ---------------------------------------------------------------------------------------------
   // Wat hij ziet, en wat dat waard is
@@ -383,7 +380,7 @@
       T.ambtKwijt(D);
       return g;
     }
-    bericht(heerZegt(g), g.boete ? 'gevaar' : null);
+    T.zeg(D, heerZegt(g), g.boete ? 'gevaar' : null);
     if (g.soldaten) soldatenBlijven(D);
     // Bij de schandpaal wacht hij op jouw keuze (T.zetAanDeSchandpaal); anders gaat hij.
     if (g.schandpaal) b.schandpaal = true;
@@ -398,13 +395,13 @@
     if (!T.heerWacht(D)) return { kan: false, reden: 'De heer is er niet.' };
     const eis = T.eisVanDeHeer(D);
     const geef = { ...eis.per, goud: (D.voorraad && D.voorraad.goud) || 0 };
-    bericht('Je bent niet gekomen. De heer neemt zelf mee wat hij hebben wil.', 'gevaar');
+    T.zeg(D, 'Je bent niet gekomen. De heer neemt zelf mee wat hij hebben wil.', 'gevaar');
     const g = T.betaalHeer(D, geef);
     if (g.schandpaal && !D.einde) {
       const keuzes = T.schandpaalKeuzes(D).filter((k) => k.wie !== 'schout');
       const zijn = keuzes.sort((a, b) => b.kost - a.kost)[0];
       if (zijn) {
-        bericht(`De heer wees zelf aan wie er aan de schandpaal moest: ${zijn.naam}. Het dorp denkt dat jij het zo wilde.`, 'gevaar');
+        T.zeg(D, `De heer wees zelf aan wie er aan de schandpaal moest: ${zijn.naam}. Het dorp denkt dat jij het zo wilde.`, 'gevaar');
         T.zetAanDeSchandpaal(D, zijn.wie);
       } else {
         D.heer.bezoek.schandpaal = false;
@@ -439,7 +436,7 @@
     const h = D.heer;
     const s = h.soldaten;
     T.wisVlag(D, 'soldatenInHuis');
-    bericht('Het is lente. De soldaten van de heer trekken weg.', 'goed');
+    T.zeg(D, 'Het is lente. De soldaten van de heer trekken weg.', 'goed');
     if (s.wezens && s.wezens.length) {
       s.weg = true; // ze lopen nog naar de weg; T.werkHeerBij haalt ze daar weg
       for (const e of s.wezens) naarDeWeg(D, e);
@@ -557,7 +554,7 @@
       // Het dorp neemt het je niet kwalijk, maar de heer vindt het lachwekkend (Marcel, 24 sep).
       h.schuld += keuze.boete;
       T.zetVlag(D, 'schoutAanDeSchandpaal');
-      bericht(`Je zet jezelf aan de schandpaal. Het dorp kijkt zwijgend toe. De heer lacht tot hij hikt, en zet er ${keuze.boete} goud bij.`, 'gevaar');
+      T.zeg(D, `Je zet jezelf aan de schandpaal. Het dorp kijkt zwijgend toe. De heer lacht tot hij hikt, en zet er ${keuze.boete} goud bij.`, 'gevaar');
     } else {
       // Zijn poppetje loopt naar het plein en staat daar (T.wandelAnker, js/akkers.js, kijkt naar
       // moetNaar). Zijn dagen aan de paal tellen pas als hij er staat (T.werkHeerBij), net als bij
@@ -568,7 +565,7 @@
       h.wrok.push({ wie, dag: dagNu(D), kost: keuze.kost, staat: true, vanaf: lopen ? null : dagNu(D) });
       T.zetVlag(D, T.schandpaalVlag(e ? T.gesprekIdVan(e) : wie));
       if (e) e.moetNaar = { ...voorDePaal(D), straal: 0 };
-      bericht(`${keuze.naam} moet ${IN().schandpaalDagen} dagen aan de schandpaal op het plein. Het dorp zal het onthouden.`, 'gevaar');
+      T.zeg(D, `${keuze.naam} moet ${IN().schandpaalDagen} dagen aan de schandpaal op het plein. Het dorp zal het onthouden.`, 'gevaar');
     }
     b.schandpaal = false;
     T.heerVertrekt(D);
@@ -599,8 +596,8 @@
   // toont het einde, en zet het spel stil.
   T.ambtKwijt = function (D) {
     D.einde = { reden: 'ambt', dag: dagNu(D) };
-    bericht('"Twee keer, schout." De heer schudt zijn hoofd. "U bent ontslagen."', 'gevaar');
-    T.houdTijdStil(D, 'einde');
+    T.zeg(D, '"Twee keer, schout." De heer schudt zijn hoofd. "U bent ontslagen."', 'gevaar');
+    if (!D.ander) T.houdTijdStil(D, 'einde');
     if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
   };
 
@@ -613,7 +610,7 @@
     h.brief = { dag, eis: T.eisVanDeHeer(D) };
     T.zetVlag(D, 'briefVanDeHeer');
     if (T.ui && T.ui.toonBrief) T.ui.toonBrief(D, 'schatting');
-    else bericht('Er is een brief van de heer.');
+    else T.zeg(D, 'Er is een brief van de heer.');
   };
 
   T.heerKomt = function (D, dag) {
@@ -655,7 +652,7 @@
     else T.beginDoorzoeken(D);
     b.wachtTot = dagNu(D) + IN().wachtDagen;
     T.naarGewoneSnelheid(D);
-    bericht('De heer staat op het plein en wacht op je.');
+    T.zeg(D, 'De heer staat op het plein en wacht op je.');
   };
 
   T.heerVertrekt = function (D) {

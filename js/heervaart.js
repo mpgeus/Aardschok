@@ -46,9 +46,6 @@
   // Een getal 0..1, vast per spel, per dag en per vraag `n` (zoals in js/rovers.js), zodat een speeltest met
   // hetzelfde zaad hetzelfde jaar speelt.
   const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 41 + Math.floor(dag) * 7919 + n)();
-  const bericht = (tekst, soort) => {
-    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
-  };
   const namen = (wie) => T.opsomming(wie.map(T.naamVanBewoner));
   const isDatum = (d, datum) => d.maand === maandIdx(datum.maand) && d.dagVanMaand === datum.dag;
   // De eerste dag na `dag` die { maand, dag } is.
@@ -82,7 +79,7 @@
       uiterlijk: dag + IN().kiesBinnenDagen,
     };
     if (T.ui && T.ui.toonBrief) T.ui.toonBrief(D, 'heervaart');
-    else bericht('Er is een brief van de heer: hij vraagt mannen voor zijn oorlog.');
+    else T.zeg(D, 'Er is een brief van de heer: hij vraagt mannen voor zijn oorlog.');
     return H.vraag;
   };
 
@@ -118,14 +115,14 @@
     const wie = v.wie.filter((p) => D.bewoners && D.bewoners.mensen.includes(p) && !p.weg);
     H.laatste = { jaar: v.jaar, antwoord: hoe, mannen: wie.length };
     if (!wie.length) {
-      bericht('De heer vroeg mannen, maar er was niemand die kon gaan.');
+      T.zeg(D, 'De heer vroeg mannen, maar er was niemand die kon gaan.');
       return wie;
     }
     T.stuurWeg(D, wie, 'heervaart');
     H.tocht = { wie, terugOp: volgende(dagNu(D), IN().terug) };
     const terug = `${IN().terug.dag} ${IN().terug.maand}`;
-    if (hoe === 'gehaald') bericht(`Je antwoordde de heer niet. Zijn soldaten haalden ${namen(wie)} op; terug op ${terug}.`, 'gevaar');
-    else bericht(`${T.hoofdletter(namen(wie))} ${wie.length === 1 ? 'gaat' : 'gaan'} met de heer ten strijde. Terug op ${terug}.`);
+    if (hoe === 'gehaald') T.zeg(D, `Je antwoordde de heer niet. Zijn soldaten haalden ${namen(wie)} op; terug op ${terug}.`, 'gevaar');
+    else T.zeg(D, `${T.hoofdletter(namen(wie))} ${wie.length === 1 ? 'gaat' : 'gaan'} met de heer ten strijde. Terug op ${terug}.`);
     return wie;
   };
 
@@ -138,7 +135,7 @@
     T.wijzigVoorraad(D, 'goud', -v.goud);
     T.zetArgwaan(D, v.goud * IN().argwaanPerGoud, 'je kocht je mannen vrij van zijn heervaart');
     H.laatste = { jaar: v.jaar, antwoord: 'vrijgekocht', goud: v.goud };
-    bericht(`Je koopt je mannen vrij voor ${v.goud} goud. De heer vraagt zich af waar dat vandaan kwam.`);
+    T.zeg(D, `Je koopt je mannen vrij voor ${v.goud} goud. De heer vraagt zich af waar dat vandaan kwam.`);
     return true;
   };
 
@@ -161,7 +158,7 @@
     if (dood.length) T.wijzigBevolking(D, -dood.length, 'gesneuveld', null, dood);
     for (const p of terug) p.veteraan = true;
     if (terug.length) T.komtTerug(D, terug, { tekst, soort: dood.length ? 'gevaar' : 'goed' });
-    else bericht(tekst, 'gevaar');
+    else T.zeg(D, tekst, 'gevaar');
     if (H.laatste) Object.assign(H.laatste, { gesneuveld: dood.length, terug: terug.length });
     return { terug, dood };
   };

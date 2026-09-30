@@ -151,9 +151,6 @@
   // Een getal 0..1, vast per spel, per dag en per vraag `n` (zoals in js/rovers.js), zodat een speeltest met hetzelfde
   // zaad hetzelfde jaar speelt.
   const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 43 + Math.floor(dag) * 7919 + n)();
-  const bericht = (tekst, soort) => {
-    if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
-  };
   const elk = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
   const naam = (p) => T.naamVanBewoner(p);
   const inWinter = (dag) => T.datumVanDag(dag).seizoen === 'winter';
@@ -322,7 +319,7 @@
     if (raadsmanMag && T.raadsmanBeslist(D)) return;
     const L = D.voorvallen.lopend;
     if (raadsmanMag) D.voorvallen.laatstVoorbij = Math.floor(dag);
-    bericht(`${T.hoofdletter(naam(L.wie))} heeft je niet gesproken, en gaat weer aan het werk.`);
+    T.zeg(D, `${T.hoofdletter(naam(L.wie))} heeft je niet gesproken, en gaat weer aan het werk.`);
     stemming(D, IN().nietGevonden, { woorden: { last: weg ? 'een schout die er niet was' : 'een schout die geen tijd had' } }, dag);
     stop(D);
   }
@@ -388,9 +385,10 @@
     const w = D.bewoners.wereld;
     const nu = D.kalender.dag;
     const deel = T.dagdeelVan(nu);
-    // Is de schout niet in het dorp als wie hem zoekt, gaat zoeken (T.schoutIsWeg, js/land.js: op reis, of in een
-    // ander gebied), dan beslist de raadsman meteen.
-    const weg = T.schoutIsWeg(D);
+    // Is de schout niet in het dorp als wie hem zoekt, gaat zoeken (T.schoutIsWeg, js/dorp.js: op reis, of in een
+    // ander gebied), dan beslist de raadsman meteen. In een ander dorp dan het jouwe ook: daar zoekt niemand jou, en
+    // beslist zijn raadsman als het er een heeft, tot zijn schout in code kiest (werklijst, vraag 72 en stap 1b).
+    const weg = T.schoutIsWeg(D) || !!D.ander;
     if (nu >= L.vanaf && weg && T.raadsmanBeslist(D)) return;
     if (nu < L.vanaf || deel === 'avond' || deel === 'nacht' || weg) {
       laatLos(e);
@@ -402,7 +400,7 @@
       if (!L.gemeld) {
         L.gemeld = true;
         const roep = T.VOORVALLEN[L.id].roep || '{wie} zoekt je.';
-        bericht(T.hoofdletter(roep.replace('{wie}', naam(L.wie))), T.VOORVALLEN[L.id].soort === 'ramp' ? 'gevaar' : undefined);
+        T.zeg(D, T.hoofdletter(roep.replace('{wie}', naam(L.wie))), T.VOORVALLEN[L.id].soort === 'ramp' ? 'gevaar' : undefined);
       }
     }
     if (S.modus !== 'verkennen' || S.slaap) return;
