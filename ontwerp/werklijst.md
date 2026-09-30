@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (30 sep 2026, negentiende sessie): het plan voor stuk 2 van het land wacht op Marcel (vraag 71)
+## De stand (30 sep 2026, negentiende sessie): stuk 2 van het land, stap 1 en 2 af (de snellere dag, één dorp als één ding); stap 3 is het volgende
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -28,15 +28,20 @@ gehucht" (25 sep) loopt achter op de dag. `npm test`: 680/680.
 
 **Waar het werk staat:** alles staat in `main`, ook het werk van de achttiende sessie (de maker, vraag 69, C, en 70;
 Marcel, 30 sep: "Ja, zet alles in main"; ook op `claude/werklijst-doorzetten-qagxwq`), en dat van de zeventiende (vraag 60
-tot en met 69, met stuk 1 van het land). Het plan van de negentiende sessie (vraag 71) staat op `ccr-4cd08e9d-1g0phy`,
-nog niet in `main`; aan het spel veranderde niets. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+tot en met 69, met stuk 1 van het land). Het werk van de negentiende sessie (vraag 71, stap 1 en 2 van stuk 2) staat op
+`ccr-4cd08e9d-1g0phy`, nog niet in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** het plan voor **stuk 2 van het land: één dorp als één ding** staat klaar (vraag
-71), en wacht op Marcel. Gemeten: een speeldag kost 30 tot 39 ms, en met een lijst per tegel van wat er staat 0,5 ms,
-met letter voor letter dezelfde dagen; en een dorp met al zijn poppetjes kost dan 0,1 tot 0,2 ms per beeld. Daarom stelt
-het plan voor dat een dorp waar je niet bent gewoon leeft met poppetjes, alleen niet getekend, in plaats van alleen in
-getallen (vraag 69): één manier per ding. Met Marcels antwoord begint stap 1, de snellere dag. De maker zit in het spel
-(vraag 69, C, en 70; zie onder Af). Daarna het buurdorp (stuk 3): een eigen provincie met een gehucht van de maker, eigen mensen en dezelfde regels,
+**Waar de volgende sessie begint:** van **stuk 2 van het land** (vraag 71; Marcel: "A ja B ja C ja, oud spel mag
+vervallen") zijn stap 1 (de snellere dag: een speeldag 0,5 ms in plaats van 30 tot 39) en stap 2 (één dorp als één ding:
+`S.dorpen`, je eigen dorp `S.dorp`, `js/dorp.js`) af; zie onder Af. De speeltest speelt er letter voor letter hetzelfde
+jaar op, en duurt nu zo'n zeven minuten in plaats van een uur. Het volgende is **stap 3, elk dorp leeft**: de dag en de
+poppetjes voor elk dorp in de lijst (lopen en dwalen voor een kaart waar je niet bent: `js/anim.js` en `T.laatDwalen`
+gaan nu alleen over `S.wereld`), en een ander dorp spreekt niet tegen jou (`T.zeg(D, tekst, soort)` in plaats van
+`T.ui.bericht` in de dorpsregels; een hulpmiddel daarvoor staat klaar in de kladmap van de negentiende sessie, en is
+zo opnieuw te schrijven), met de toets van twee dorpen naast elkaar (jouw gehucht en een van de maker; een schets
+slaagt al voor drie van de vier delen: een jaar van het buurdorp laat jouw dorp letter voor letter ongemoeid, maar zijn
+berichten komen nog bij jou). Een voorval in een dorp dat niet het jouwe is: voorlopig beslist zijn raadsman, tot zijn
+schout in code kiest (stap 1b). Daarna het buurdorp (stuk 3): een eigen provincie met een gehucht van de maker, eigen mensen en dezelfde regels,
 en bij Nieuw spel 0 of 1 tegenspeler. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
 raadsman komen met het land (vraag 66, D). Open blijven: het dorp van bovenaf
 (vraag 65, C; Marcel: "nee niet bovenaf, ik denk hier nog over na"), en de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
@@ -116,7 +121,13 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   tweede manier in getallen voor de oogst, de inner, de heer, de rovers, de marskramer en de voorvallen); alles van een dorp
   bij elkaar, met een eigen schout per dorp; en een dorp spreekt alleen tegen jou als het jouw dorp is. In drie stappen: de
   snellere dag, het dorp bij elkaar, elk dorp leeft; bewezen met de speeltest (letter voor letter hetzelfde jaar) en een
-  toets met twee dorpen naast elkaar.
+  toets met twee dorpen naast elkaar. **Marcel koos** (vraag 71): "A ja B ja C ja, oud spel mag vervallen".
+- **Stap 1 en 2 gebouwd** (zie onder Af): de snellere dag, en één dorp als één ding. De nulmeting (de hele speeltest op de
+  stand ervoor) draaide in een losse kopie (`git worktree`), en daarna speelden alle 18 jaren letter voor letter gelijk.
+  Onderweg: de speeltest had een haak op `T.werdGezien` die zijn argumenten miste toen die functie het spel én het dorp
+  kreeg; alleen de boekhouding van de speeltest miste daardoor de getuigen, het spel niet. Twee agents zetten zo'n 60
+  toetsen om naar het nieuwe model (Sonnet, samen zo'n 500.000 tokens); een wacht in de toetsen (een regel over een dorp
+  die het hele spel krijgt, faalt) vond daarna nog zes toetsen die per ongeluk groen waren.
 
 **Wat er in de achttiende sessie gebeurde** (30 sep; Marcel: "Werklijst doorzetten"):
 - **Eerst gekeken wat er is** (op `a0e5e78`, `npm test` 673/673): het ontworpen gehucht komt uit
@@ -2417,6 +2428,25 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 30 sep 2026 — **Eén dorp als één ding** (negentiende sessie; vraag 71, stap 2 van stuk 2; Marcel: "A ja B ja C ja, oud
+  spel mag vervallen"). Alles van een dorp staat bij elkaar: `S` is het spel (de kalender, het land, jij, het scherm) met
+  zijn dorpen (`S.dorpen`), je eigen dorp is `S.dorp`, en een dorp heeft zijn kaart, voorraad, mensen, wetten, heer en
+  inner, rovers, voorvallen, raadsman, trede, vee, vlaggen en zijn eigen schout (`js/dorp.js`, `T.nieuwDorp`). Eerst
+  kregen de regels over een dorp het dorp bij naam (`D`, stap 2a, met de ontleder van eslint: alleen de S die de
+  parameter is); dan kreeg het dorp zijn plek (2b). Wat het spel én het dorp nodig heeft, krijgt beide
+  (`T.werkInnerBij(S, D)`, een gesprek `T.doeGevolg(S, D, doe)`); de balk en de vensters gaan over je eigen dorp, en wat
+  getekend, aangeklikt of gevochten wordt, over het dorp dat er ligt (`T.dorpHier`). Een venster dat een ander dorp zou
+  openen, komt niet bij jou. Het opslaan ging naar versie 2. Bewezen: `npm test` 683/683, ook met een wacht die faalt
+  als een regel over een dorp het hele spel krijgt (hij vond zes toetsen die per ongeluk groen waren), en de speeltest
+  speelt letter voor letter hetzelfde jaar als ervoor (18 van 18 jaren, en de proef met opslaan). De toetsen zette
+  Claude voor een deel met een eigen hulpmiddel om, en twee agents deden de rest (zonder één fout in het spel te vinden).
+- 30 sep 2026 — **De snellere dag** (negentiende sessie; vraag 71, stap 1 van stuk 2). Een speeldag kostte 30 tot 39 ms,
+  voor 85% omdat `T.plekOpHetPlein` elke dag voor elk kind en elke werkloze voor elke tegel van het plein alle bomen en
+  huizen afliep (`T.voorwerpOp`). Nu houdt elke kaart een lijst per tegel bij (`js/wereld.js`; `T.zetVoorwerp`,
+  `T.haalVoorwerpWeg`, en een toets die kijkt dat niemand het anders doet), en liggen de tegels van het plein klaar
+  (`T.pleinTegels`): een dag kost 0,5 ms, met dag voor dag dezelfde uitkomst. Lopen werd ook goedkoper (een dorp met al
+  zijn poppetjes: 0,1 tot 0,2 ms per beeld), en een speeltestjaar duurt nu 30 seconden in plaats van drie minuten (de
+  bouwer: 80 tot 140 seconden voor twee jaar, was 10 tot 21 minuten).
 - 30 sep 2026 — **De maker in het spel: de spelregel "Je gehucht"** (achttiende sessie; vraag 70, C; Marcel: "c ja"). Met
   "Elk spel een ander" begint een nieuw spel op een gehucht van de maker; het ontworpen gehucht blijft de standaard, en
   dan speelt alles zoals ervoor. De maker staat in `js/maker.js`: een plan wordt een kaart met een betekenisbestand
