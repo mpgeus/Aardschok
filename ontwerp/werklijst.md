@@ -70,7 +70,8 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* of het dorp nu vol genoeg voelt om aan het land te beginnen (vraag 65, D); het dorp van bovenaf
+*2. Wacht op Marcel:* of het dorp nu vol genoeg voelt om aan het land te beginnen (vraag 65, D); of wegsturen telt als
+er niet zijn (vraag 68: A, B of C, in het verslag van de zeventiende sessie hieronder); het dorp van bovenaf
 (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -139,6 +140,14 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   schout er niet is. D prima". **Gebouwd: de raadsman** (zie onder Af): een van de boeren, die de voorvallen beslist als
   de schout er niet is. In de browser gezien. Hoe je hem kiest, werd vraag 67; Marcel: "B", en dat is gebouwd: de knop
   Raadsman, en de raad die het zegt.
+- **De speeltest met de raadsman** (de bouwer, zaad 1, `speelbaar.md`): Klaas besliste 87 van de 88 voorvallen, minstens
+  zo goed als de bouwer zelf. Maar de bouwer drukte bij elk voorval `Esc`, en had daarmee geen voorvallen meer. Dat werd
+  **vraag 68: telt wegsturen als er niet zijn?** A, zo laten: wie `Esc` drukt, laat het na twee dagen aan de raadsman.
+  B (voorstel), zoals Marcel het zei ("als de schout er niet is"): de raadsman beslist alleen als je echt weg bent (een
+  ander gebied, straks op reis); wie in het dorp is en wegstuurt, laat het voorbijgaan, met de prijs die dat nu al
+  heeft (tevredenheid −2%). C, wegsturen mag, maar kost iets (wie je wegstuurde, onthoudt het), en de raadsman beslist.
+  Wat Marcel niet kiest, kan een spelregel worden. Niets gebouwd. En: het getal in de balk zakte in de tweede winter
+  naar 0, terwijl er elf mensen bleven rondlopen (`opmerkingen.md`, bij vraag 59).
 - **Marcel vroeg hoe het leuk blijft** ("zelf als persoon rond hobbelen in je eigen stad maakt het wel lastig.
   Misschien voelt het handiger als we een soort raadsman en aansturen die je regels oplegt?"). Nagekeken: de camera
   volgt altijd de schout en je ziet maar een klein stuk van je dorp, dus bouwen gaat alleen waar hij staat. Het

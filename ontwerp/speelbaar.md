@@ -176,7 +176,7 @@ twee dagen beslist de raadsman. Naast de bouwer die zelf koos (29 sep, hieronder
 2. **Wie alles aan de raadsman laat, heeft geen voorvallen meer.** Met `Esc` bij elk voorval vraagt het jaar weer alleen
    de acht keuzes die het al had, en het dorp loopt zoals toen de bouwer zelf koos. Zo is het gebouwd (vraag 66: hij
    beslist als de schout er niet is, en wie je niet op tijd sprak, telt als er niet zijn); of dat zo moet blijven, is
-   een vraag voor Marcel.
+   vraag 68 (werklijst).
 3. **Het tweede jaar gaat zoals vraag 59 zegt:** geen zaaigraan in de lente (0 van de 179 akkertegels), geen hout, geen
    houthakker. Omdat de heer in 1323 meer dan de helft kreeg, was 1324 pas de eerste keer "veel te weinig" (twee keer
    achter elkaar kost het ambt, `T.HEER_INSTELLINGEN`): het ambt bleef ("nog een keer zo, en je bent je ambt kwijt"),
