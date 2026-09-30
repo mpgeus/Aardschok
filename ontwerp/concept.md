@@ -23,7 +23,11 @@ eerst.
   alleen een rapport in de ochtend, maar meer fasen op een dag); dan C, zelf gaan kijken, dat altijd kan, bij alles,
   als je het niet vertrouwt of meer wilt weten.
 - **Godot hoeft niet.** Wel onderzoeken hoe groot een dorp of stad kan worden (een meting; werklijst, vraag 74).
-- **Nog open:** vraag 4, het dorp van bovenaf; Marcel vroeg wat ermee bedoeld was.
+- **Geen camera van bovenaf** (vraag 74, d: "d ja"): de schout blijft in beeld, en het overzicht komt via rapporten en
+  zelf kijken.
+- **Het plan voor de kern** (vraag 74; "a ja b ja c zelf sprokkelen, maar lost niet volledig op. Houthakker is nodig d
+  ja"): eerst voorvallen met een oorzaak; dan kiezen de boeren hun velden en slachten ze zelf (jij kunt het veranderen),
+  en sprokkelen de mensen zelf hout, maar niet genoeg voor de winter, zodat een houthakker nodig blijft.
 
 ## Wat erin staat
 

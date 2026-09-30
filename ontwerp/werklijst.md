@@ -40,11 +40,11 @@ de speeltest speelt letter voor letter hetzelfde jaar als ervoor, en duurt nu zo
 Schout", `concept.md`: het poppetje is de manier waarop je bestuurt; "Ik denk dat we hiermee een goede kant opgaan"). Het
 concept is ons kompas, en **eerst komt de kern** (vraag 73; Marcel: "We zetten eerst de kern goed neer. Ik wil meer
 naar management sim toe"): de boeren doen het seizoen en jij houdt een oogje in het zeil, voorvallen krijgen een oorzaak
-(B), de dag komt in fasen (A), en zelf gaan kijken kan altijd (C). **Het plan voor de kern is vraag 74** (a tot en met d),
-en wacht op Marcel: begin er niet zonder zijn antwoord. Ernaast loopt een meting van hoe groot een dorp kan worden
+(B), de dag komt in fasen (A), en zelf gaan kijken kan altijd (C). **Het plan voor de kern is vraag 74**, en Marcel
+koos het ("a ja b ja c zelf sprokkelen, maar lost niet volledig op. Houthakker is nodig d ja"): stap 1 (B) is bezig. Ernaast loopt een meting van hoe groot een dorp kan worden
 (vraag 74). Het buurdorp (vraag 72) wacht tot de kern staat. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
-raadsman komen met het land (vraag 66, D). Open blijven: het dorp van bovenaf
-(vraag 65, C; het voorstel staat nu in vraag 74, d), en de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
+raadsman komen met het land (vraag 66, D). Het dorp van bovenaf is beslist: niet
+(vraag 74, d). Open blijft de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
 dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
 verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
 thuis is (`npm run proefversie`, `verpakken.md`), en wie de eerste tester is, staat open (33d). Van de proef zijn
@@ -81,8 +81,8 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor de kern (vraag 74: a tot en met d); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
-(vraag 65, C; het voorstel in vraag 74, d); de proefversie op itch.io zetten als hij
+*2. Wacht op Marcel:* het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
 heer in het hogere doel past). Op 28 sep beantwoordde Marcel 33a, 33b, 8, 48, 50 en 51; het bijstellen na de
@@ -2255,6 +2255,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     hun velden en slachten zelf, en jij kunt het in het veldenvenster veranderen, met de spelregel "Het seizoen"? **c**,
     het hout: sprokkelen de mensen het zelf in het bos, of blijft de houthakker iets wat jij bouwt? **d**, geen camera van
     bovenaf: de schout blijft in beeld, en het overzicht komt via rapporten en zelf kijken?
+    **Beantwoord (Marcel, 30 sep):** "a ja b ja c zelf sprokkelen, maar lost niet volledig op. Houthakker is nodig d
+    ja". Dus: B zoals voorgesteld; de boeren kiezen hun velden en slachten zelf, en jij kunt het veranderen; de mensen
+    sprokkelen zelf hout, maar dat is niet genoeg voor de winter, dus een houthakker blijft nodig; en geen camera van
+    bovenaf. Stap 1 (B) is het eerste werk, dan stap 2.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
