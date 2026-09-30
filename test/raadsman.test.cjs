@@ -58,6 +58,17 @@ function raadsman(S, karakter, niet = []) {
   return p;
 }
 
+// De schout is weg (een ander gebied), zolang fn loopt: dan beslist de raadsman (werklijst vraag 68, B).
+function weg(S, fn) {
+  const dorp = S.wereld;
+  S.wereld = { wezens: [], naam: 'elders' };
+  try {
+    return fn();
+  } finally {
+    S.wereld = dorp;
+  }
+}
+
 // Met deze vaardigheden, voor één toets.
 function metKunde(kunde, fn) {
   const echt = T.vaardighedenVan;
@@ -109,14 +120,14 @@ test('een boer wordt raadsman, de vorige niet meer, en wie het is, maait trager'
   assert.equal(T.kiesRaadsman(S, knecht).kan, false, 'alleen een boer');
 });
 
-test('wie je niet sprak, beslist de raadsman, naar zijn karakter', () => {
+test('ben je weg als zijn tijd om is, dan beslist de raadsman, naar zijn karakter', () => {
   const uitkomst = (karakter) => {
     const S = gehucht();
     const L = metVoorval(S, 'diefstal');
     const p = raadsman(S, karakter, [L.wie, L.ander]);
     const dief = L.ander;
     berichten.length = 0;
-    T.tikVoorvallenDag(S, L.tot);
+    weg(S, () => T.tikVoorvallenDag(S, L.tot));
     assert.equal(S.voorvallen.lopend, null, 'het voorval is af');
     assert.equal(S.voorvallen.doorRaadsman, 1);
     assert.ok(berichten.some((t) => t.startsWith(`${T.naamVanBewoner(p)}, je raadsman, besliste over de diefstal: "`)), berichten.join(' / '));
@@ -186,10 +197,34 @@ test('is de schout niet in het dorp, dan beslist hij meteen, als wie het zegt ga
   S.wereld = dorp;
 });
 
-test('zonder raadsman, of met de spelregel uit, gaat het voorbij zoals eerst', () => {
+test('ben je in het dorp en spreek je hem niet op tijd, dan gaat het voorbij, ook met een raadsman (vraag 68, B)', () => {
+  const S = gehucht();
+  const L = metVoorval(S, 'diefstal');
+  raadsman(S, 'woekeraar', [L.wie, L.ander]);
+  berichten.length = 0;
+  T.tikVoorvallenDag(S, L.tot);
+  assert.equal(S.voorvallen.lopend, null);
+  assert.equal(S.voorvallen.doorRaadsman, 0, 'hij beslist niet');
+  assert.ok(berichten.some((t) => /niet gesproken/.test(t)), berichten.join(' / '));
+  assert.ok(T.voorvalStemming(S, L.tot).last.includes('een schout die geen tijd had'));
+  // Met de spelregel "Ook als je niet spreekt" wel: wie je wegstuurt, laat je aan hem over.
+  try {
+    T.zetOptie('raadsman', 'ook');
+    const S2 = gehucht();
+    const L2 = metVoorval(S2, 'diefstal');
+    raadsman(S2, 'woekeraar', [L2.wie, L2.ander]);
+    T.tikVoorvallenDag(S2, L2.tot);
+    assert.equal(S2.voorvallen.lopend, null);
+    assert.equal(S2.voorvallen.doorRaadsman, 1);
+  } finally {
+    T.optiesTerug();
+  }
+});
+
+test('zonder raadsman, of met de spelregel uit, gaat het voorbij, ook als je weg bent', () => {
   const S = gehucht();
   const L = metVoorval(S, 'lening', 30);
-  T.tikVoorvallenDag(S, L.tot);
+  weg(S, () => T.tikVoorvallenDag(S, L.tot));
   assert.ok(T.voorvalStemming(S, L.tot).last.includes('een schout die er niet was'));
   try {
     T.zetOptie('raadsman', 'uit');
@@ -198,7 +233,7 @@ test('zonder raadsman, of met de spelregel uit, gaat het voorbij zoals eerst', (
     const p = raadsman(S2, 'weduwe', [L2.wie]);
     assert.equal(T.raadsmanVan(S2), null, 'uit is er geen raadsman');
     assert.ok(!T.overBoer(p.wezen).eigenschappen.includes('je raadsman'));
-    T.tikVoorvallenDag(S2, L2.tot);
+    weg(S2, () => T.tikVoorvallenDag(S2, L2.tot));
     assert.ok(T.voorvalStemming(S2, L2.tot).last.includes('een schout die er niet was'));
   } finally {
     T.optiesTerug();
@@ -209,7 +244,7 @@ test('bewaren en laden: de raadsman blijft de raadsman, en wat hij besloot', () 
   const S = gehucht();
   const L = metVoorval(S, 'diefstal');
   const p = raadsman(S, 'woekeraar', [L.wie, L.ander]);
-  T.tikVoorvallenDag(S, L.tot);
+  weg(S, () => T.tikVoorvallenDag(S, L.tot));
   const S2 = gehucht();
   T.zetSpel(S2, T.leesSpel(T.bewaarSpel(S, { nu: 1790000000000 })));
   assert.equal(T.raadsmanVan(S2).wie, p.wie);

@@ -21,9 +21,9 @@
 // Wanneer er een komt en welke, zegt dit bestand (T.VOORVALLEN hieronder). Wie je zoekt, loopt naar de schout en
 // spreekt hem aan zodra hij stilstaat; de tijd staat stil tot je antwoordt (js/dialoog.js). Sluit je het gesprek
 // zonder antwoord, dan wacht hij, met een uitroepteken, tot je hem aanspreekt. 's Avonds gaat hij naar huis, en de
-// volgende ochtend komt hij terug. Is de schout er niet (niet in het dorp, of hij sprak hem niet binnen zoektDagen),
-// dan beslist de raadsman (js/raadsman.js; vraag 66); zonder raadsman gaat het voorbij, en dat neemt het dorp je
-// kwalijk.
+// volgende ochtend komt hij terug. Is de schout niet in het dorp, dan beslist de raadsman (js/raadsman.js; vraag 66);
+// sprak hij hem in het dorp niet binnen zoektDagen, dan gaat het voorbij (vraag 68, B), en zonder raadsman ook. Dat
+// neemt het dorp je kwalijk.
 (function (T) {
   'use strict';
 
@@ -312,13 +312,18 @@
 
   // Hij vond je niet, of je sprak hem niet aan: dan beslist de raadsman (js/raadsman.js). Is er geen, dan gaat het
   // voorbij, en neemt het dorp het je kwalijk.
+  // Zijn tijd is om, en je sprak hem niet. Ben je weg (een ander gebied), dan beslist je raadsman; ben je in het dorp,
+  // dan gaat het voorbij, ook met een raadsman (werklijst vraag 68, Marcel: "Ja B inderdaad"), tenzij de spelregel
+  // "Raadsman" hem ook dan laat beslissen (nietGesproken, js/raadsman.js). Had een raadsman hier beslist, en is er geen,
+  // dan zegt de raad onder het doel het een tijd (js/raad.js): kies een raadsman.
   function voorbij(S, dag) {
-    if (T.raadsmanBeslist(S)) return;
+    const weg = S.wereld !== S.bewoners.wereld;
+    const raadsmanMag = weg || T.RAADSMAN_INSTELLINGEN.nietGesproken;
+    if (raadsmanMag && T.raadsmanBeslist(S)) return;
     const L = S.voorvallen.lopend;
-    // De raad onder het doel zegt het dan een tijd (js/raad.js): kies een raadsman.
-    S.voorvallen.laatstVoorbij = Math.floor(dag);
+    if (raadsmanMag) S.voorvallen.laatstVoorbij = Math.floor(dag);
     bericht(`${T.hoofdletter(naam(L.wie))} heeft je niet gesproken, en gaat weer aan het werk.`);
-    stemming(S, IN().nietGevonden, { woorden: { last: 'een schout die er niet was' } }, dag);
+    stemming(S, IN().nietGevonden, { woorden: { last: weg ? 'een schout die er niet was' : 'een schout die geen tijd had' } }, dag);
     stop(S);
   }
 

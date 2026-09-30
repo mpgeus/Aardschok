@@ -160,10 +160,10 @@ test('na een aanval van de rovers: wat een wachthuis doet, als er geen is', () =
   assert.notEqual(id(S), 'rovers');
 });
 
-test('ging er een voorval voorbij zonder dat iemand besliste: kies een raadsman, tot je er een hebt', () => {
+test('ging er een voorval voorbij terwijl je weg was: kies een raadsman, tot je er een hebt', () => {
   const S = opDag(gehucht(), 40.5);
   S.voorvallen = Object.assign(T.nieuweVoorvallen(), { laatstVoorbij: 39 });
-  assert.equal(raad(S).tekst, 'Wat je mist, gaat voorbij: kies een raadsman [R].');
+  assert.equal(raad(S).tekst, 'Wat je mist als je weg bent, gaat voorbij: kies een raadsman [R].');
   opDag(S, 39 + T.RAAD_INSTELLINGEN.raadsmanNa + 0.5);
   assert.notEqual(id(S), 'raadsman', 'een tijd, en dan zegt de raad weer wat anders');
   opDag(S, 40.5);

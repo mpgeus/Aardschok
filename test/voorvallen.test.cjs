@@ -355,9 +355,19 @@ test('wie je niet sprak, gaat voorbij, en dat neemt het dorp je kwalijk', () => 
   assert.ok(berichten.includes(`${T.naamVanBewoner(L.wie)} heeft je niet gesproken, en gaat weer aan het werk.`));
   const s = T.voorvalStemming(S, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen);
   assert.ok(s.erbij < 0);
-  assert.deepEqual(s.last, ['een schout die er niet was']);
+  assert.deepEqual(s.last, ['een schout die geen tijd had'], 'hij was in het dorp');
   assert.ok(!L.wie.wezen.zoektSchout);
-  assert.equal(S.voorvallen.laatstVoorbij, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen, 'de raad zegt dan: kies een raadsman');
+  assert.equal(S.voorvallen.laatstVoorbij, undefined, 'een raadsman had hier niet beslist (vraag 68, B), dus de raad zegt niets');
+
+  // Was de schout weg, dan had een raadsman beslist: de raad zegt het dan een tijd (js/raad.js).
+  const S2 = gehucht();
+  metVoorval(S2, 'lening', 30);
+  S2.voorvallen.volgende = 1e9;
+  S2.wereld = { wezens: [], naam: 'elders' };
+  T.tikVoorvallenDag(S2, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen);
+  assert.equal(S2.voorvallen.lopend, null);
+  assert.deepEqual(T.voorvalStemming(S2, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen).last, ['een schout die er niet was']);
+  assert.equal(S2.voorvallen.laatstVoorbij, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen, 'de raad zegt dan: kies een raadsman');
 });
 
 test('de spelregel: uit komt er niemand, en vaak komen ze vaker', () => {

@@ -4,9 +4,12 @@
 // zijn karakter, en wat hij kan, telt mee. Wat hij besloot, zegt een bericht. Zijn prijs: hij maait trager
 // (T.boerFactor in js/boeren.js). Regels zonder scherm; toetsen in test/raadsman.test.cjs.
 //
-// "Er niet" is: de schout is niet in het dorp als wie hem zoekt, gaat zoeken, of hij sprak hem niet op tijd (na
-// zoektDagen). Hoe je hem kiest, is nog open (werklijst vraag 67): T.raadsmanKandidaten zegt uit wie, T.kiesRaadsman
-// kiest. Staande orders (de heer, de heervaart, de marskramer) komen met het land (vraag 66, D).
+// "Er niet" is: de schout is niet in het dorp (een ander gebied, straks op reis) als wie hem zoekt, gaat zoeken, of als
+// zijn tijd om is. Is hij in het dorp en spreekt hij hem niet op tijd, dan gaat het voorbij, ook met een raadsman
+// (werklijst vraag 68, Marcel: "Ja B inderdaad"; met de spelregel "Raadsman" op "Ook als je niet spreekt" beslist hij
+// dan toch: nietGesproken hieronder). Je kiest hem in het venster Raadsman (js/raadsmanvenster.js, vraag 67):
+// T.raadsmanKandidaten zegt uit wie, T.kiesRaadsman kiest. Staande orders (de heer, de heervaart, de marskramer) komen
+// met het land (vraag 66, D).
 (function (T) {
   'use strict';
 
@@ -14,6 +17,9 @@
   // voorstel van Claude (30 sep).
   T.RAADSMAN_INSTELLINGEN = {
     aan: true,
+    // Beslist hij ook als de schout in het dorp is, maar wie hem zocht niet op tijd sprak (wie je wegstuurt, laat je
+    // aan hem over)? Marcel koos nee (vraag 68, B): alleen als je weg bent. De spelregel "Raadsman" zet het.
+    nietGesproken: false,
     // Uit hoeveel boeren je kiest.
     kandidaten: 3,
     // Zijn prijs: zoveel keer zo lang doet hij over een tegel maaien. Het vangnet haalt de oogst toch binnen

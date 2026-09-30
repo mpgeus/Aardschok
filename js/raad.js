@@ -26,8 +26,8 @@
     winterVooraf: 90,
     // Zoveel dagen na een aanval van de rovers zegt de raad wat een wachthuis doet, als er geen is.
     roversNa: 10,
-    // Zoveel dagen nadat een voorval voorbijging zonder dat iemand besliste (js/voorvallen.js), zegt de raad: kies een
-    // raadsman (js/raadsman.js).
+    // Zoveel dagen nadat een voorval voorbijging dat een raadsman had beslist, als je er een had (js/voorvallen.js: je
+    // was weg), zegt de raad: kies een raadsman (js/raadsman.js).
     raadsmanNa: 10,
   };
   const IN = () => T.RAAD_INSTELLINGEN;
@@ -108,12 +108,12 @@
       tekst: (S) => `In de kelders ligt nog ${Math.floor(T.verstoptTotaal(S).graan)} graan. Dat eet niemand en zaait niemand.`,
     },
     {
-      // Marcel koos het zo (vraag 67, B): de raad zegt het zodra er een voorval voorbijging, en de knop Raadsman (R)
-      // opent het venster (js/raadsmanvenster.js).
+      // Marcel koos het zo (vraag 67, B): de raad zegt het zodra er een voorval voorbijging dat een raadsman had
+      // beslist (vraag 68, B: je was weg), en de knop Raadsman (R) opent het venster (js/raadsmanvenster.js).
       id: 'raadsman',
       als: (S) => T.RAADSMAN_INSTELLINGEN.aan && !T.raadsmanVan(S) && S.voorvallen && S.voorvallen.laatstVoorbij != null
         && dagNu(S) - S.voorvallen.laatstVoorbij < IN().raadsmanNa,
-      tekst: () => 'Wat je mist, gaat voorbij: kies een raadsman [R].',
+      tekst: () => 'Wat je mist als je weg bent, gaat voorbij: kies een raadsman [R].',
     },
     {
       id: 'tijd',

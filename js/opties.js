@@ -320,14 +320,17 @@
           uitleg: 'Niemand komt je zoeken. Het dorp gaat zijn gang.' },
       ],
     },
-    // De raadsman (Marcel, 30 sep, werklijst vraag 66: "c Nee, wordt automatisch als de schout er niet is"; js/raadsman.js).
+    // De raadsman (Marcel, 30 sep, werklijst vraag 66: "c Nee, wordt automatisch als de schout er niet is"; en vraag 68:
+    // "Ja B inderdaad", alleen als je echt weg bent; js/raadsman.js).
     {
       id: 'raadsman', naam: 'Raadsman', standaard: 'aan',
-      uitleg: 'Of je raadsman beslist als je er niet bent.',
+      uitleg: 'Wanneer je raadsman een voorval beslist.',
       keuzes: [
-        { id: 'aan', naam: 'Aan', zet: { 'RAADSMAN_INSTELLINGEN.aan': true },
-          uitleg: 'Is de schout er niet als iemand hem met een voorval zoekt, dan beslist je raadsman, naar zijn karakter en wat hij kan. Wie raadsman is, maait wel trager.' },
-        { id: 'uit', naam: 'Uit', zet: { 'RAADSMAN_INSTELLINGEN.aan': false },
+        { id: 'aan', naam: 'Als je weg bent', zet: { 'RAADSMAN_INSTELLINGEN.aan': true, 'RAADSMAN_INSTELLINGEN.nietGesproken': false },
+          uitleg: 'Ben je niet in het dorp als iemand je met een voorval zoekt, dan beslist je raadsman, naar zijn karakter en wat hij kan. Ben je er wel en spreek je hem niet, dan gaat het voorbij. Wie raadsman is, maait wel trager.' },
+        { id: 'ook', naam: 'Ook als je niet spreekt', zet: { 'RAADSMAN_INSTELLINGEN.aan': true, 'RAADSMAN_INSTELLINGEN.nietGesproken': true },
+          uitleg: 'Hij beslist ook als je in het dorp bent en wie je zoekt niet op tijd spreekt: wie je wegstuurt, laat je aan hem over.' },
+        { id: 'uit', naam: 'Uit', zet: { 'RAADSMAN_INSTELLINGEN.aan': false, 'RAADSMAN_INSTELLINGEN.nietGesproken': false },
           uitleg: 'Wat je mist, gaat voorbij, en dat neemt het dorp je kwalijk.' },
       ],
     },

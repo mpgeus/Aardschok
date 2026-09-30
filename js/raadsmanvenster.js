@@ -41,11 +41,15 @@
     const kandidaten = T.raadsmanKandidaten(S);
     // Wie je eerder koos (ook buiten deze drie, met Spel.debug.raadsman), staat er ook bij.
     if (nu && !kandidaten.includes(nu)) kandidaten.unshift(nu);
+    // Wanneer hij beslist (werklijst vraag 68): als je weg bent, en met de spelregel ook als je niet op tijd spreekt.
+    const wanneer = T.RAADSMAN_INSTELLINGEN.nietGesproken
+      ? 'Ben je weg, of spreek je niet op tijd wie je met een voorval zoekt'
+      : 'Ben je niet in het dorp als iemand je met een voorval zoekt';
     const staat = !T.RAADSMAN_INSTELLINGEN.aan
       ? 'De spelregel "Raadsman" staat uit: wat je mist, gaat voorbij.'
       : nu
-        ? `Je raadsman is <b>${veilig(naam(nu))}</b>. Ben je er niet als iemand je met een voorval zoekt, dan beslist ${veilig(naam(nu))}. Wie raadsman is, maait trager.`
-        : 'Je hebt nog geen raadsman. Ben je er niet als iemand je met een voorval zoekt, dan gaat het voorbij. Kies er een uit deze boeren; wie raadsman is, maait trager.';
+        ? `Je raadsman is <b>${veilig(naam(nu))}</b>. ${wanneer}, dan beslist ${veilig(naam(nu))}. Wie raadsman is, maait trager.`
+        : `Je hebt nog geen raadsman. ${wanneer}, dan gaat het voorbij. Kies er een uit deze boeren; wie raadsman is, maait trager.`;
     const besluiten = ((S.raadsman && S.raadsman.besluiten) || []).slice(-5).reverse();
     return (
       `<div class="venster-kop"><span class="venster-titel">Raadsman</span><span class="venster-wanneer">${dag}</span>` +

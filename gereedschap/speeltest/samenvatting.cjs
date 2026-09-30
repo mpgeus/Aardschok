@@ -151,11 +151,9 @@ function deVoorvallen(goed) {
   for (const u of goed) {
     const v = u.voorvallen || [];
     const jaren = u.speler === 'bouwer' ? 2 : 1;
-    // Wat hij aan zijn raadsman liet, besliste hij niet zelf (speler.js, de bouwer).
-    const zelf = v.filter((x) => x.antwoord !== '(aan de raadsman)').length / jaren;
     uit.push(regel([
       NAMEN[u.speler] || u.speler, u.zaad, String(v.length), getal(v.length / jaren),
-      `${(60 / (zelf + KEUZES_ZONDER)).toFixed(1).replace('.', ',')} min`,
+      `${(60 / (v.length / jaren + KEUZES_ZONDER)).toFixed(1).replace('.', ',')} min`,
       u.raadsman ? `${u.raadsman.door}: ${u.raadsman.over}` : '',
       v.slice(0, 10).map((x) => x.id).join(', '),
     ]));
