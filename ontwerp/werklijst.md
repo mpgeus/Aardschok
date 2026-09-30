@@ -76,7 +76,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor stuk 2 van het land (vraag 71: A, B en C, en of een bewaard spel mag vervallen); het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2113,6 +2113,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     buurdorp (stuk 3) erbij zonder dat er een regel verandert. Vragen: **A**, een dorp waar je niet bent, leeft met
     poppetjes, alleen niet getekend? **B**, zo bij elkaar, met een eigen schout per dorp? **C**, van het buurdorp hoor je
     niets vanzelf, en je balk blijft over je eigen dorp gaan? En mag een spel dat je nu bewaard hebt, vervallen?
+    **Beantwoord (Marcel, 30 sep): "A ja B ja C ja, oud spel mag vervallen".** Een dorp waar je niet bent, leeft met
+    poppetjes, alleen niet getekend; alles van een dorp komt bij elkaar, met een eigen schout per dorp; van het buurdorp
+    hoor je niets vanzelf, en je balk blijft over je eigen dorp gaan; en een spel dat nu bewaard is, mag vervallen (de
+    versie van het opslaan gaat omhoog, zonder omzetten). Stap 1, de snellere dag, begint.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
