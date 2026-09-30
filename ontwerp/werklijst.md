@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (30 sep 2026, achttiende sessie): de schets van de maker staat klaar, met vraag 70 voor Marcel; daarna de maker in het spel, stuk 2 en het buurdorp
+## De stand (30 sep 2026, achttiende sessie): de maker legt met de spelregel "Je gehucht" elk spel een ander gehucht; nu op naar stuk 2 van het land
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -22,21 +22,22 @@ het spel slaat elke ochtend zelf op; onder het doel linksboven staat de raad. In
 mannen voor zijn oorlog (`Spel.debug.heervaart('vraag')`). Om de paar dagen komt iemand je zoeken met een voorval: een
 uitroepteken boven zijn hoofd, en hij spreekt je aan als je stilstaat (`Spel.debug.voorval('brand')`); ben je weg,
 dan beslist je raadsman, die je kiest met de knop Raadsman (`R`). Met de spelregel Land aan (`O`) loop je over de weg
-je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). De pagina "Stand van het gehucht" (25 sep) loopt
-achter op de dag. `npm test`: 676/676.
+je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). Met de spelregel "Je gehucht" op "Elk spel een
+ander" legt de maker elk nieuw spel een ander gehucht (`Spel.debug.gehucht(3)` voor zaad 3). De pagina "Stand van het
+gehucht" (25 sep) loopt achter op de dag. `npm test`: 680/680.
 
 **Waar het werk staat:** het werk van de zeventiende sessie staat in `main` (vraag 60 tot en met 69, met stuk 1 van het
-land; Marcel, 30 sep: "alles push en main" en "Op main, we finetunen later"). Het werk van de achttiende sessie (de maker
-als schets, vraag 70) staat op `claude/werklijst-doorzetten-qagxwq`, nog niet in `main`. Hoe een eigen branch en `main`
-samengaan, staat in `CLAUDE.md`, onder Git.
+land; Marcel, 30 sep: "alles push en main" en "Op main, we finetunen later"). Het werk van de achttiende sessie (de maker,
+vraag 69, C, en 70) staat op `claude/werklijst-doorzetten-qagxwq` (gepusht), nog niet in `main`. Hoe een eigen branch en
+`main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** de maker bestaat, als gereedschap (vraag 69, C; zie onder Af): hij legt een gehucht
-uit een zaad, uit dezelfde delen als het ontworpen gehucht, en `npm run maker` tekent ze als plattegrond. De schets staat
-op de pagina "Gehuchten van de maker", met vraag 70. **Marcel koos (30 sep): A ja, B nu alleen de ligging, C ja.** Dus
-komt de maker eerst het spel in: een spelregel "Je gehucht" (het ontworpen gehucht blijft de standaard), een nieuw spel
-op een gemaakt gehucht, en de speeltest op drie gemaakte gehuchten. Dan stuk 2 (één dorp als één ding in de spelstaat,
-met een snellere dagtik, bewezen met de speeltest die letter voor letter hetzelfde jaar moet spelen), en dan het buurdorp
-(stuk 3), met bij Nieuw spel 0 of 1 tegenspeler. Staande orders voor de
+**Waar de volgende sessie begint:** de maker zit in het spel (vraag 69, C, en 70; zie onder Af): met de spelregel "Je
+gehucht" op "Elk spel een ander" begint een nieuw spel op een gehucht van de maker, en de bouwer speelde er in de
+speeltest twee jaar op zonder één fout, zoals op het ontworpen gehucht (`speelbaar.md`). Het volgende is **stuk 2 van
+het land: één dorp als één ding** in de spelstaat, zodat er twee kunnen zijn, met een snellere dagtik, bewezen met de
+speeltest die met hetzelfde zaad letter voor letter hetzelfde jaar moet spelen (vraag 69). Begin met een plan voor
+Marcel. Daarna het buurdorp (stuk 3): een eigen provincie met een gehucht van de maker, eigen mensen en dezelfde regels,
+en bij Nieuw spel 0 of 1 tegenspeler. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
 raadsman komen met het land (vraag 66, D). Open blijven: het dorp van bovenaf
 (vraag 65, C; Marcel: "nee niet bovenaf, ik denk hier nog over na"), en de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
 dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
@@ -75,7 +76,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het plan voor stuk 2 van het land, zodra het er is; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 (vraag 65, C: "ik denk hier nog over na"); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -118,7 +119,12 @@ de schout: die helpt een tester zichzelf te vinden, dus misschien toch vóór de
   daaronder).
 - **De schets voor Marcel:** de pagina "Gehuchten van de maker" (https://claude.ai/artifact/KqCC7EzyVKbAQ9gcEYCmkX), met
   het ontworpen gehucht naast zaad 1, 2 en 3, en zaad 4 tot en met 12 klein. Het plan voor wat volgt, met vraag 70.
-  Niets aan het spel veranderd.
+- **Marcel koos** (vraag 70): "A Ja, b nu alleen ligging later de rest, c ja". **Gebouwd: de maker in het spel** (zie
+  onder Af): de spelregel "Je gehucht", en een gemaakt gehucht dat het spel inleest zoals het ontworpen gehucht. Onderweg
+  gevonden: Nieuw spel begint het spel dat al klaarstond toen de bladzijde opende, dus wie de spelregel op het
+  titelscherm omzette, begon nog op het oude gehucht; nu komt er dan eerst een vers spel.
+- **De speeltest op gehuchten van de maker** (`speelbaar.md`): de bouwer, zaad 1, 2 en 3, twee jaar, zonder één fout; een
+  dorp na zes maanden, en dezelfde tweede winter als op het ontworpen gehucht.
 
 **Wat er in de zeventiende sessie gebeurde** (29 sep; Marcel: "Werklijst doorzetten"):
 - **Eerst gekeken wat er is** (op `7c00e01`, `npm test` 624/624): de heer vraagt alleen goud en graan, zijn brieven
@@ -2035,6 +2041,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     verschilt voor nu alleen in de ligging, en het land eromheen naar de provincie komt later; en de maker mag ook je
     eigen gehucht leggen, als spelregel, met het ontworpen gehucht als standaard. Daarmee is de volgorde: eerst de maker
     in het spel (voor je eigen gehucht, en de speeltest op drie gemaakte gehuchten), dan stuk 2, dan het buurdorp.
+    **Gebouwd (30 sep, achttiende sessie):** de maker in het spel; zie onder Af, en `spel.md`, "Het land".
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -2335,6 +2342,15 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 30 sep 2026 — **De maker in het spel: de spelregel "Je gehucht"** (achttiende sessie; vraag 70, C; Marcel: "c ja"). Met
+  "Elk spel een ander" begint een nieuw spel op een gehucht van de maker; het ontworpen gehucht blijft de standaard, en
+  dan speelt alles zoals ervoor. De maker staat in `js/maker.js`: een plan wordt een kaart met een betekenisbestand
+  (`T.kaartVanGehucht`), die het spel inleest zoals het ontworpen gehucht (`T.laadKaart`); de grondtegels kiest hij uit
+  de groep van de rand-tegels ("gras over zandpad: boven+rechts"), dus zonder Tiled. Het zaad van het spel legt ook het
+  gehucht (`T.beginOpKaart` in `js/gebied.js`, en de boeren uit hetzelfde zaad), een bewaard spel komt met zijn gehucht
+  terug, en Nieuw spel volgt de spelregel ook als je hem op het titelscherm omzette (`T.gehuchtNaarDeSpelregel` in
+  `js/main.js`). `Spel.debug.gehucht(3)` begint een spel op zaad 3; de speeltest met `--maker`. Toetsen in
+  `test/maker.test.cjs`; de speeltest op zaad 1, 2 en 3 in `speelbaar.md`.
 - 30 sep 2026 — **De schets van de maker** (achttiende sessie; vraag 69, C, en 70; Marcel: "Werklijst doorzetten").
   `gereedschap/maker/maker.js`: een gehucht uit een zaad (`T.maakGehucht`), uit dezelfde delen als het ontworpen gehucht:
   het plein als hart, de schout erachter met het zand van zijn deur het plein op, de herberg, een huis en twee hutten

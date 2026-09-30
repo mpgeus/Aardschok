@@ -149,6 +149,36 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 30 sep: de bouwer op gehuchten van de maker (werklijst, vraag 70, C)
+
+Gespeeld in de achttiende sessie met `npm run speeltest -- bouwer --maker`: de spelregel "Je gehucht" op "Elk spel een
+ander", zoals een speler hem kiest, dus elk zaad een ander gehucht van de maker (`js/maker.js`). Het spel stond op
+`fe81fe3` (branch `claude/werklijst-doorzetten-qagxwq`; de speeltest zelf meldde nog "niet gecommit", want die commit kwam
+terwijl hij liep, zonder dat er iets aan het spel veranderde). Zonder één fout in de console, 756 tot 1342 seconden per
+zaad. Naast de bouwer op het ontworpen gehucht (29 sep, hieronder):
+
+| | zaad 1 | zaad 2 | zaad 3 | het ontworpen gehucht (29 sep) |
+|---|---|---|---|---|
+| Een dorp op | 21 oogstmaand 1323, 51 mensen | 21 oogstmaand 1323, 52 | 1 herfstmaand 1323, 52 | 21 oogstmaand of 1 herfstmaand 1323, 51 of 52 |
+| Aan het eind | het ambt kwijt op Sint-Maarten 1324 | 1 mens | 3 mensen | het ambt kwijt op Sint-Maarten 1324 (zaad 1); 1 mens |
+| Doden (kou; waarvan ook honger; gesneuveld) | 44 (44; 22; 0) | 56 (56; 26; 0) | 55 (55; 28; 1) | 42 tot 53 |
+| De heer kreeg (1323; 1324) | 45%, schandpaal; 10% | 53%, soldaten; 20% | 84%, boete; 35% | 50 tot 60%; 0% |
+| Groeidagen: een gezin, geen plaats | 16 van 61, 0 | 16 van 75, 0 | 15 van 75, 2 | 16 van 61 tot 75 |
+| Voorvallen | 71 | 85 | 93 | 69 (zaad 1) |
+
+**Wat opviel:**
+
+1. **Een gehucht van de maker speelt als het ontworpen gehucht.** Hetzelfde ritme: kapel en smidse op de eerste dag, een
+   dorp na zes maanden met 51 of 52 mensen, en in de tweede winter dezelfde ineenstorting (vraag 59, geparkeerd). Zaad 1
+   eindigt zelfs op dezelfde dag als op het ontworpen gehucht (het ambt kwijt op Sint-Maarten 1324, 44 doden): wat een
+   jaar doet, hangt aan de regels, niet aan waar de huizen staan.
+2. **Iedereen vond zijn weg:** de marskramer kwam zes keer over de weg en stond op het plein, de inner telde en schreef
+   zijn rapport, de heer nam zijn deel, de rovers kwamen van de rand van de kaart, en de bouwer vond plaats voor elf of
+   twaalf erven rond het huis van de schout. Geen regel hoefde te weten dat het gehucht anders lag.
+3. **Wat de heer kreeg, liep verder uiteen:** 45 tot 84% in het eerste jaar, tegen 50 tot 60% op het ontworpen gehucht.
+   Waar dat vandaan komt, is niet uitgezocht (wat de inner ziet, hangt wel af van waar de huizen staan); met drie zaden
+   is het te weinig om iets over te zeggen.
+
 ## De speeltest van 30 sep: de bouwer laat de voorvallen aan zijn raadsman (werklijst, vraag 67)
 
 Gespeeld in de zeventiende sessie, op `c3e6e2b` van `ccr-ef2496ce-pa4iti` met het venster Raadsman erbij (het werk van
