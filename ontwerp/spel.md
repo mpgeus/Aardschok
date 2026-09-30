@@ -16,7 +16,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3 | vraag 50, 51, 54 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
-| Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker (een gehucht dat elk spel anders ligt) is er als schets, nog niet in het spel (30 sep) | vraag 63, 69, 70 |
+| Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt met de spelregel "Je gehucht" elk spel een ander gehucht (30 sep) | vraag 63, 69, 70 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
 | De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug | vraag 65 |
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
@@ -280,16 +280,23 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
   en de getallen in de werkbank (`T.LAND_INSTELLINGEN`: hoeveel provincies, hoeveel dagen per weg, hoe snel de reis).
   `Spel.debug.land()` zegt waar de schout is, wat hij zag en welke wegen er zijn; `('open')`, `('reis', 'De heide')`,
   `('alles')` en `('nieuw')`.
-- **De maker, als schets** (30 sep, achttiende sessie; vraag 69, C, en 70; `gereedschap/maker/maker.js`, toetsen in
-  `test/maker.test.cjs`): hij legt een gehucht uit een zaad (`T.maakGehucht`), uit dezelfde delen als het ontworpen
-  gehucht: het plein als hart, de schout erachter met het zand van zijn deur het plein op, de herberg, een huis en twee
-  hutten eromheen, vijf boerderijen met hun akkers aan de buitenkant (samen 209 tegels, per boer zoals in het ontworpen
-  gehucht), de heide met de kooi aan de rand, de weg met het bruggetje, en het bos. Het lot kiest de vorm van het plein,
-  de kant van de weg, de beek, het bos en de heide, de tekeningen, en waar elke boerderij staat. Hij keurt zelf (iedereen
-  komt overal, en van het plein ligt niet meer achter een dak dan in het ontworpen gehucht) en probeert het opnieuw tot
-  het deugt. `npm run maker` tekent ze als plattegrond. **Marcel koos (vraag 70):** de delen kloppen; voor nu verschilt
-  een gehucht alleen in de ligging (het land eromheen naar de provincie komt later); en de maker mag ook je eigen
-  gehucht leggen, als spelregel "Je gehucht", met het ontworpen gehucht als standaard. Dat komt eerst.
+- **De maker** (30 sep, achttiende sessie; vraag 69, C, en 70; `js/maker.js`, toetsen in `test/maker.test.cjs`): hij
+  legt een gehucht uit een zaad (`T.maakGehucht`), uit dezelfde delen als het ontworpen gehucht: het plein als hart, de
+  schout erachter met het zand van zijn deur het plein op, de herberg, een huis en twee hutten eromheen, vijf
+  boerderijen met hun akkers aan de buitenkant (samen 209 tegels, per boer zoals in het ontworpen gehucht), de heide
+  met de kooi aan de rand, de weg met het bruggetje, en het bos. Het lot kiest de vorm van het plein, de kant van de
+  weg, de beek, het bos en de heide, de tekeningen, en waar elke boerderij staat. Hij keurt zelf (iedereen komt overal,
+  en van het plein ligt niet meer achter een dak dan in het ontworpen gehucht) en probeert het opnieuw tot het deugt.
+  `npm run maker` tekent ze als plattegrond. **Marcel koos (vraag 70):** de delen kloppen; voor nu verschilt een
+  gehucht alleen in de ligging (het land eromheen naar de provincie komt later); en de maker mag ook je eigen gehucht
+  leggen.
+- **Je eigen gehucht van de maker** (30 sep, achttiende sessie; vraag 70, C): de spelregel "Je gehucht" (standaard "Het
+  ontworpen gehucht", en dan speelt alles zoals ervoor; of "Elk spel een ander"). Met "Elk spel een ander" begint een
+  nieuw spel op een gehucht van de maker, uit het zaad van dat spel: hetzelfde zaad geeft hetzelfde gehucht en dezelfde
+  boeren, en een bewaard spel komt met zijn gehucht terug. Er wonen dezelfde 26 mensen, met dezelfde beginvoorraad;
+  Klaas, Aaltje, Gerrit, Trijn en Wouter wonen er ook, elk bij zijn eigen akkers. Het gehucht leest het spel in zoals
+  het ontworpen gehucht (een kaart met een betekenisbestand), dus de heer, de inner, de marskramer, de rovers, het vee
+  en de herberg vinden er hun weg zonder dat een regel het weet. `Spel.debug.gehucht(3)` begint een spel op zaad 3.
 - **Nog niet:** het buurdorp (stuk 3), met een gehucht van de maker; eerst één dorp als één ding in de spelstaat (stuk
   2), met een snellere dagtik. Bij Nieuw spel kies je dan 0 of 1 tegenspeler.
 

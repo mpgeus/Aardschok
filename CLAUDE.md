@@ -91,13 +91,14 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   (`gereedschap/speeltest/speler.js`). Een jaar kost twee tot zeven minuten; nodig is Playwright (in de
   cloud staat het klaar). Wat het vond, staat in `ontwerp/speelbaar.md`. Met `--opslaan` is het de proef met
   opslaan: de speler slaat op 1 oogstmaand op via het menu, de bladzijde herlaadt, hij gaat verder met Verder,
-  en het jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`).
+  en het jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`). Met `--maker`
+  speelt het op gehuchten van de maker (de spelregel "Je gehucht" op "Elk spel een ander"; `uit/samenvatting-maker.md`).
 - `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
   titelscherm (`T.STAND`). Commit eerst.
-- `npm run maker` legt gehuchten met de maker (`gereedschap/maker/maker.js`, `T.maakGehucht(zaad)`: elk spel een ander
-  gehucht, vraag 69 en 70; nog niet in het spel) en tekent ze als plattegrond naast het ontworpen gehucht, in
-  `gereedschap/maker/uit/` (niet in git); `-- 7 12` voor andere zaden.
+- `npm run maker` legt gehuchten met de maker (`js/maker.js`, `T.maakGehucht(zaad)`: elk spel een ander gehucht, vraag
+  69 en 70) en tekent ze als plattegrond naast het ontworpen gehucht, in `gereedschap/maker/uit/` (niet in git);
+  `-- 7 12` voor andere zaden.
 - `npm run pixelart` rendert alle HD-pixel art naar `gereedschap/pixelart/uit/` (niet in git).
 - `npm run pixelart:spel` zet daaruit alleen wat het spel tekent in `beelden/` (wél in git,
   want het spel heeft het nodig als het draait). Draai het opnieuw als de kunst verandert.
@@ -312,6 +313,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.briefVoorLater`), en een bezoeker zet de reis niet op 1× (`T.naarGewoneSnelheid`). Achter de spelregel "Land"
   (standaard uit, tot het buurdorp er is); de getallen in `T.LAND_INSTELLINGEN`. Het scherm: `js/landkaart.js` (de kaart
   als SVG, en het venster als je terug bent).
+- `js/maker.js`: **de maker, een gehucht dat elk spel anders ligt** (vraag 69 en 70, 30 sep): `T.maakGehucht(zaad)` legt
+  een plan uit dezelfde delen als het ontworpen gehucht (het plein als hart, de schout erachter, de herberg en hutten
+  eromheen, vijf boerderijen met hun akkers aan de buitenkant, samen 209 tegels, de heide met de kooi, de weg met het
+  bruggetje, het bos), keurt het zelf (`T.keurGehucht`) en probeert het anders tot het deugt; `T.kaartVanGehucht(plan)`
+  maakt er een kaart met betekenisbestand van, zoals Tiled en `gereedschap/wereld.html` ze maken (de grondtegels uit de
+  groep van de rand-tegels: "gras over zandpad: boven+rechts"), en `T.laadGemaaktGehucht` leest het in met
+  `T.laadKaart`. Met de spelregel "Je gehucht" op "Elk spel een ander" (`T.MAKER_INSTELLINGEN.eigenGehucht`) begint een
+  nieuw spel erop: `T.beginOpKaart` (`js/gebied.js`) trekt het zaad, en de boeren worden uit hetzelfde zaad geloot, zodat
+  `S.lot.zaad` ook het gehucht zegt. Het gehucht blijft `'gehucht'` heten, zodat alles wat het ontworpen gehucht kent,
+  ook hier werkt; `w.maker` zegt uit welk zaad het komt.
 - `js/zien.js`: **het zichtveld en de getuigen** (werklijst punt 3, 27 sep): wie buiten is, ziet de
   schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
   verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het
@@ -538,6 +549,8 @@ staat; `(3)` laat nu drie wilde rovers komen, `('bende')` de bende.
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
+`Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een
+nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker".
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen en welke voorvallen er nu kunnen;
 `('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.
 `Spel.debug.raadsman()` zegt wie je raadsman is en wat hij kan, uit wie je kiest, en wat hij besloot; `('Aaltje')` of
