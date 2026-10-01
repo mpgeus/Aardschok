@@ -186,6 +186,11 @@ bloeimaand.
 4. **De raad over goud (59, C) kwam niet voor:** de bouwer bouwt de kapel en de smidse op de eerste dag, en heeft dan
    genoeg.
 
+**De vier anderen, een jaar:** bijna hetzelfde als vóór. Ze groeien nauwelijks (twee of drie gezinnen), dus de winter houdt
+er hooguit één gezin tegen: bij lui30 met zaad 2 (25 mensen aan het eind in plaats van 29, één dode minder) en bij slim
+met zaad 2 (33 in plaats van 35, één dode van de kou minder). Nazaaien speelt in het eerste jaar niet. Lui60 met zaad 3
+valt in beide in oogstmaand, in een gevecht met de rovers: dat ligt niet aan deze stap.
+
 Wat eruit volgt, staat in de werklijst als vraag 81.
 
 ## De speeltest van 1 okt: het rapport van de raadsman (werklijst, vraag 75, 3a)
