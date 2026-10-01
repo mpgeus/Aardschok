@@ -202,7 +202,12 @@
     const reden = T.waaromPastHetNiet(S.dorp, S.bouwSoort, x, y);
     S.bouwHover = { x, y, ok: !reden, reden };
     canvas.style.cursor = 'crosshair';
+    // Een plek die een huis in de buurt wil (een put, een kapel, de herberg, een markt): wie hij hier bereikt. De kring is
+    // groter dan het scherm, dus zegt de muis het ook in woorden (js/wensen.js).
+    const voet = !reden && T.gebouwVoet(S.bouwSoort, T.volgendeTekening(S.dorp, S.bouwSoort));
+    const kring = voet && T.kringTekst(S.dorp, S.bouwSoort, { x, y, b: voet.b, h: voet.h });
     if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
+    else if (kring) T.ui.tooltip(kring, S.muis.x, S.muis.y);
     else T.ui.verbergTooltip();
     S.hover = null;
     S.handeling = null;
@@ -863,6 +868,25 @@
     },
     // De erven (js/erven.js): waar ze liggen, en wie er woont of bouwt. Een erf aanwijzen gaat als een
     // gebouw: Spel.debug.bouw('erf', 30, 20).
+    // De wensen per huis (js/wensen.js): per huis met mensen zijn stand, wie er woont, hoe tevreden het is, en wat het
+    // wil, met ✓ of ✗ (een goed dat maar deels gedekt is, met hoeveel); daarboven het dorp per stand, en wat er gemist
+    // wordt. Spel.debug.wensen('dorpelingen') laat alleen die stand zien.
+    wensen(stand) {
+      const b = T.berekenTevredenheid(S.dorp, Math.floor(S.kalender.dag));
+      if (!b.wensen) return `Geen wensen per huis: het dorp rekent als geheel (${Math.round(b.tevredenheid * 100)}%).`;
+      const pct = (x) => `${Math.round(x * 100)}%`;
+      const wie = (g) => S.dorp.bewoners.mensen.filter((p) => p.huis === g).map((p) => p.naam || T.naamVanMens(p.wie)).join(', ');
+      const huizen = (n) => (n === 1 ? 'één huis' : `${n} huizen`);
+      return {
+        dorp: pct(b.tevredenheid),
+        standen: Object.fromEntries(Object.entries(b.wensen.standen).map(([s, x]) => [s, `${pct(x.tevredenheid)}, ${x.mensen} mensen, ${x.alles} van de ${huizen(x.huizen)} heeft alles`])),
+        gemist: b.wensen.gemist.map((m) => `${m.naam}: ${huizen(m.huizen)}, ${m.mensen} mensen`),
+        huizen: b.wensen.huizen.filter((h) => !stand || h.stand === stand).map((h) => ({
+          huis: `${T.GEBOUWEN[h.g.soort].naam} op ${h.g.x},${h.g.y}`, stand: h.stand, wie: wie(h.g), tevreden: pct(h.tevredenheid),
+          wil: Object.entries(h.heeft).map(([id, x]) => `${T.WENSEN[id].naam} ${x >= 1 - 1e-9 ? '✓' : x > 0 ? `✗ (${pct(x)})` : '✗'}`).join(' · '),
+        })),
+      };
+    },
     erven() {
       return (S.dorp.erven || []).map((e) => {
         const hut = e.hut;

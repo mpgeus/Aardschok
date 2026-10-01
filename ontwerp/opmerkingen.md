@@ -9,6 +9,15 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De kring is groter dan het scherm** (1 okt, tweeëntwintigste sessie; vraag 85, 2a). Het beeld zoomt niet uit (de zoom
+  volgt het venster en is minstens 1), en al de kring van een put (12 tegels) is breder dan het scherm, die van een kapel
+  (30) veel breder. Wie een put of een kapel neerzet, ziet dus alleen de rand van de huizen in beeld oplichten, en de
+  muis zegt het in woorden ("Binnen 30 tegels: 6 huizen die een kapel willen. Ze hebben er nu geen."). Hoort bij 2c en de
+  pagina met ontwerpen voor de ui: uitzoomen bij het bouwen, of een kaart van je dorp op tafel (vraag 84).
+- **Groente en eieren hebben geen stand** (1 okt, tweeëntwintigste sessie; vraag 85, a). De afwisseling (groente, vis of
+  vlees maakt tevredener) ging op in de wensen: vlees of vis voor de dorpelingen. Groente en eieren tellen dus niet meer
+  voor de tevredenheid, alleen nog bij de marskramer en de heer. Een moestuin of een kippenhok heeft zo weinig zin. Ze
+  passen bij een stand (de keuters, of de boeren), of als eten.
 - **Een jager schiet onbeperkt** (1 okt, eenentwintigste sessie; de speeltest met de jager, `speelbaar.md`). Elke jager
   schiet elke dag 1 vlees, genoeg voor twintig mensen, en het wild raakt nooit op: twaalf jagers voedden een dorp van
   104 zonder één dode. Wild zou op kunnen raken (het bos is van de heer: stropen is ook een keuze), zodat eten weer een

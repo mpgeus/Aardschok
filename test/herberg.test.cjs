@@ -211,7 +211,10 @@ test('de avond wordt verrekend: het bier gaat op, en wie er was, maakt het dorp 
   for (const p of gasten) delete p.herbergDag;
   const zonder = T.berekenTevredenheid(S.dorp, HERFST + 1);
   assert.equal(zonder.gezelligheid, 0);
-  assert.ok(Math.abs(b.tevredenheid - zonder.tevredenheid - g) < 1e-9 || b.tevredenheid === 1, 'het komt erbij');
+  // Het komt bij elk huis erbij, tot 100% (js/wensen.js): voor het dorp het gemiddelde, naar mensen.
+  const huizen = zonder.wensen.huizen;
+  const erbij = huizen.reduce((n, h) => n + h.mensen * (Math.min(1, h.tevredenheid + g) - h.tevredenheid), 0) / huizen.reduce((n, h) => n + h.mensen, 0);
+  assert.ok(erbij > 0 && Math.abs(b.tevredenheid - zonder.tevredenheid - erbij) < 1e-9, 'het komt erbij');
   assert.ok(T.herbergGezelligheid(S.dorp, HERFST + 1 + IN.gezelligheidDagen + 1) === 0, 'een week later is het voorbij');
   assert.ok(!zonder.mist.includes('bier'));
   T.zetVoorraad(S.dorp, 'bier', 0);

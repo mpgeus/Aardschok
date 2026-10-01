@@ -708,15 +708,8 @@
     ctx.save();
     ctx.lineWidth = 2;
     for (const erf of erven) {
-      const hoeken = [
-        T.naarScherm(erf.x - 0.5, erf.y - 0.5), T.naarScherm(erf.x + erf.b - 0.5, erf.y - 0.5),
-        T.naarScherm(erf.x + erf.b - 0.5, erf.y + erf.h - 0.5), T.naarScherm(erf.x - 0.5, erf.y + erf.h - 0.5),
-      ];
       ctx.strokeStyle = erf.hut ? 'rgba(230, 220, 190, 0.35)' : 'rgba(240, 225, 170, 0.85)';
-      ctx.beginPath();
-      hoeken.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)));
-      ctx.closePath();
-      ctx.stroke();
+      tekenRand(ctx, erf);
     }
     ctx.restore();
   }
@@ -751,6 +744,51 @@
         ctx.fill();
       }
     }
+    tekenKring(ctx, S, S.bouwSoort, { x: S.bouwHover.x, y: S.bouwHover.y, b: voet.b, h: voet.h });
+  }
+
+  // Een rechthoek van tegels { x, y, b, h } als lijn langs de buitenkant, op de grond (zoals de erven hierboven).
+  function tekenRand(ctx, r) {
+    const hoeken = [
+      T.naarScherm(r.x - 0.5, r.y - 0.5), T.naarScherm(r.x + r.b - 0.5, r.y - 0.5),
+      T.naarScherm(r.x + r.b - 0.5, r.y + r.h - 0.5), T.naarScherm(r.x - 0.5, r.y + r.h - 0.5),
+    ];
+    ctx.beginPath();
+    hoeken.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)));
+    ctx.closePath();
+    ctx.stroke();
+  }
+
+  // De kring om een plek die een huis in de buurt wil (js/wensen.js; werklijst vraag 80, B): met een put, een kapel, de
+  // herberg of een markt in de hand zie je hoe ver hij reikt, en welke huizen die hem willen erin vallen (hun voet licht
+  // op) en welke niet (gedempt). Een kring van tegels is op het scherm een platte ellips.
+  function tekenKring(ctx, S, soort, plek) {
+    const straal = T.WENSEN_INSTELLINGEN.kring[soort];
+    const wens = Object.keys(T.WENSEN).find((id) => T.WENSEN[id].plek === soort);
+    if (!straal || !wens) return;
+    const m = { x: plek.x + plek.b / 2 - 0.5, y: plek.y + plek.h / 2 - 0.5 };
+    const c = T.naarScherm(m.x, m.y);
+    const d = straal / Math.SQRT2;
+    const ax = Math.abs(T.naarScherm(m.x + d, m.y - d).x - c.x);
+    const ay = Math.abs(T.naarScherm(m.x + d, m.y + d).y - c.y);
+    ctx.save();
+    ctx.beginPath();
+    ctx.ellipse(c.x, c.y, ax, ay, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(240, 225, 170, 0.07)';
+    ctx.fill();
+    ctx.setLineDash([8, 6]);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(240, 225, 170, 0.75)';
+    ctx.stroke();
+    ctx.setLineDash([]);
+    for (const g of S.dorp.gebouwen) {
+      const stand = T.standVan(g);
+      if (!stand || !T.wensenVanStand(stand).includes(wens)) continue;
+      const r = T.voetVanGebouw(g);
+      ctx.strokeStyle = T.inDeKring(r, plek, straal) ? 'rgba(160, 225, 130, 0.95)' : 'rgba(240, 225, 170, 0.3)';
+      tekenRand(ctx, r);
+    }
+    ctx.restore();
   }
 
   function tekenMarkeringen(ctx, S) {

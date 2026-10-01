@@ -24,6 +24,9 @@ function gehucht() {
 
 const bijna = (a, b) => Math.abs(a - b) < 1e-9;
 const tevreden = (S, dag = 5) => T.berekenTevredenheid(S.dorp, dag);
+// Wat een wet erbij doet, komt bij elk huis erbij, tot 100% (js/wensen.js): voor het dorp het gemiddelde, naar mensen.
+const erbijPerHuis = (b, x) => b.wensen.huizen.reduce((n, h) => n + h.mensen * (Math.min(1, h.tevredenheid + x) - h.tevredenheid), 0)
+  / b.wensen.huizen.reduce((n, h) => n + h.mensen, 0);
 
 test('zonder wetten staat elke wet op zijn standaard, en speelt het spel zoals ervoor', () => {
   const S = gehucht();
@@ -65,7 +68,7 @@ test('een ruim rantsoen: anderhalf keer zoveel eten, en 10% tevredener', () => {
   T.zetWet(S.dorp, 'rantsoen', 'ruim');
   assert.ok(bijna(T.etenPerMens(S.dorp), 1.5 * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag));
   const na = tevreden(S);
-  assert.ok(bijna(na.tevredenheid - voor.tevredenheid, 0.1), `${voor.tevredenheid} → ${na.tevredenheid}`);
+  assert.ok(bijna(na.tevredenheid - voor.tevredenheid, erbijPerHuis(voor, 0.1)), `${voor.tevredenheid} → ${na.tevredenheid}`);
   assert.deepEqual(na.blij, ['het ruime rantsoen']);
   // Terug naar gewoon: zoals ervoor.
   T.zetWet(S.dorp, 'rantsoen', 'gewoon');
@@ -75,9 +78,12 @@ test('een ruim rantsoen: anderhalf keer zoveel eten, en 10% tevredener', () => {
 test('vreemden welkom: om de 10 dagen een gezin in plaats van 20, en 5% minder tevreden', () => {
   const zonder = gehucht();
   const met = gehucht();
+  // Hetzelfde dorp vóór en na de wet: wie in welk huis woont, is elk spel anders, en de tevredenheid is het gemiddelde
+  // van de huizen (js/wensen.js).
+  const voorDeWet = tevreden(met).tevredenheid;
   T.zetWet(met.dorp, 'vreemden', 'aangenomen');
   assert.equal(T.gezinDagen(met.dorp), 10);
-  assert.ok(bijna(tevreden(zonder).tevredenheid - tevreden(met).tevredenheid, 0.05));
+  assert.ok(bijna(voorDeWet - tevreden(met).tevredenheid, 0.05));
   assert.ok(tevreden(met).last.includes('de vreemden'));
   // Op dag 10 komt er alleen met de wet een gezin: er is plaats, graan genoeg, en het dorp is tevreden genoeg.
   const voor = met.dorp.bevolking;

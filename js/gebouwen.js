@@ -444,6 +444,18 @@
     return { x: g.x, y: g.y, b: v.b, h: v.h };
   };
 
+  // Waar de plekken van een soort staan, als rechthoeken { x, y, b, h }: wat er op de kaart staat (de put op het plein
+  // is een voorwerp uit Tiled, geen gebouw), en de gebouwen van die soort die klaar zijn. Voor de put waar de mensen
+  // water halen (js/bewoners.js) en wat een huis in de buurt wil (js/wensen.js).
+  T.plekkenVan = function (D, soort) {
+    const plekken = [];
+    for (const v of (D.wereld && D.wereld.voorwerpen) || []) {
+      if (v.soort === soort) plekken.push({ x: v.x, y: v.y, b: (v.beslaat || [1, 1])[0], h: (v.beslaat || [1, 1])[1] });
+    }
+    for (const g of D.gebouwen || []) if (g.soort === soort && g.klaar) plekken.push(T.voetVanGebouw(g));
+    return plekken;
+  };
+
   // Welke tekening krijgt het volgende gebouw van deze soort? Een soort met `tekeningen` (de hut, het
   // huis) krijgt er steeds een, nooit twee keer achter elkaar dezelfde, zodat een rij hutten niet uit
   // één stempel komt (Marcel, 26 sep: "We hebben meer afwisseling nodig in de huizen en hutten"). De

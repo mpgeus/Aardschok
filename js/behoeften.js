@@ -182,21 +182,34 @@
     // De voorvallen (js/voorvallen.js, sinds 29 sep): wat het dorp je antwoorden nadraagt, en dat slijt weg.
     const voorvallen = T.voorvalStemming(D, dag);
 
-    const tevredenheid = Math.min(1, Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + gezelligheid + wetten.erbij + voorvallen.erbij - heer.minder));
+    const erbij = gezelligheid + wetten.erbij + voorvallen.erbij - heer.minder;
+
+    // De wensen per huis (js/wensen.js, sinds 1 okt; werklijst vraag 80 en 85): elk huis zijn eigen tevredenheid uit wat
+    // zijn stand wil, en het dorp het gemiddelde, naar mensen. De afwisseling van groente, vis en vlees ging daarin op
+    // (vlees of vis voor de dorpelingen), net als de kerk (een kapel in de buurt). Zonder (de spelregel "Wensen" op het
+    // dorp als geheel, of een dorp zonder bewoners) rekent het zoals vóór 1 okt.
+    const wensen = T.WENSEN_INSTELLINGEN.perHuis ? T.berekenWensen(D, dag, { eten: voedselDekking, brandhout: brandhoutFactor, erbij }) : null;
+    const tevredenheid = wensen
+      ? wensen.tevredenheid
+      : Math.min(1, Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + erbij));
 
     // Het brandhout mist het dorp ook als het de winter niet haalt (T.houtVoorDeWinter), niet pas als
     // het vandaag op is: dan zegt de balk het op tijd, net als het rode hout ernaast (js/hud.js).
     const mist = [];
     if (voedselDekking < 1) mist.push('eten');
     if (brandhoutDekking < 1 || !T.houtVoorDeWinter(D, dag).haalt) mist.push('brandhout voor de winter');
-    if (!heeftKerk) mist.push('een kerk');
-    if (T.herbergDroog(D)) mist.push('bier');
+    if (wensen) {
+      for (const m of wensen.gemist) mist.push(m.naam);
+    } else {
+      if (!heeftKerk) mist.push('een kerk');
+      if (T.herbergDroog(D)) mist.push('bier');
+    }
 
     return {
       tevredenheid, mist, last: heer.waarom.concat(wetten.last, voorvallen.last), blij: wetten.blij.concat(voorvallen.blij), inWinter,
-      voedselDekking, extraSoorten, voedselFactor,
+      voedselDekking, extraSoorten: wensen ? [] : extraSoorten, voedselFactor: wensen ? voedselDekking : voedselFactor,
       brandhoutDekking, brandhoutBenodigd, brandhoutVoorraad, brandhoutFactor,
-      huishoudens, heeftKerk, kerkFactor, gezelligheid,
+      huishoudens, heeftKerk, kerkFactor, gezelligheid, wensen,
     };
   };
 
@@ -206,6 +219,8 @@
     if (!D.behoeften || !D.kalender) return;
     const b = T.berekenTevredenheid(D, Math.floor(D.kalender.dag));
     Object.assign(D.behoeften, { tevredenheid: b.tevredenheid, mist: b.mist, last: b.last, blij: b.blij });
+    Object.assign(D.behoeften, { standen: b.wensen ? b.wensen.standen : null, gemist: b.wensen ? b.wensen.gemist : null });
+    T.onthoudWensen(D, b.wensen);
     if (T.ui && T.ui.toonTevredenheid) T.ui.toonTevredenheid(D);
   };
 
@@ -605,12 +620,17 @@
     D.behoeften.last = b.last;
     D.behoeften.blij = b.blij;
     D.behoeften.gezelligheid = b.gezelligheid;
+    // Per stand en wat er gemist wordt, voor de balk (js/hud.js); wat elk huis wil en heeft, op het huis (js/wensen.js).
+    D.behoeften.standen = b.wensen ? b.wensen.standen : null;
+    D.behoeften.gemist = b.wensen ? b.wensen.gemist : null;
+    T.onthoudWensen(D, b.wensen);
 
     // Of het hout en het eten de winter halen, vóór het stoken en het eten van vandaag.
     zegDeWinter(D, dag);
 
-    // De extra soorten worden ook echt opgegeten, anders stapelt de moestuin zich oneindig op.
-    let bederfelijkGegeten = 0;
+    // De huizen nemen wat hun stand gebruikt (js/wensen.js), vóór het eten (stap 3 in T.tikGebouwenDag). Zonder de
+    // wensen per huis worden de extra soorten opgegeten, zoals vóór 1 okt, anders stapelt de moestuin zich oneindig op.
+    let bederfelijkGegeten = b.wensen ? T.gebruikGoederen(D, b.wensen) : 0;
     for (const wat of b.extraSoorten) {
       const hoeveel = Math.min(D.voorraad[wat] || 0, (D.bevolking || 0) * IN.extraVoedselPerMensPerDag);
       T.wijzigVoorraad(D, wat, -hoeveel);

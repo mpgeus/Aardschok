@@ -320,6 +320,18 @@
           uitleg: 'Het dorp eet het zaaigraan als elk ander graan. Wie in de winter alles opeet, heeft in de lente niets te zaaien.' },
       ],
     },
+    // De wensen per stand (werklijst vraag 80 en 85; Marcel, 1 okt; js/wensen.js). Het dorp als geheel is het spel van
+    // vóór 1 okt.
+    {
+      id: 'wensen', naam: 'Wensen', standaard: 'huis',
+      uitleg: 'Waar de tevredenheid van het dorp vandaan komt.',
+      keuzes: [
+        { id: 'huis', naam: 'Per huis', zet: { 'WENSEN_INSTELLINGEN.perHuis': true },
+          uitleg: 'Elk huis wil wat zijn stand wil: keuters in een hut eten, brandhout en een put; dorpelingen in een huis daarbij bier, vlees of vis, een kapel en de herberg; ambachtslieden in een stenen huis daarbij brood, laken en een markt. De hoogste stand neemt eerst. Het dorp is het gemiddelde.' },
+        { id: 'dorp', naam: 'Het dorp als geheel', zet: { 'WENSEN_INSTELLINGEN.perHuis': false },
+          uitleg: 'Eén getal voor het hele dorp: eten, met groente, vis of vlees erbij, brandhout in de winter, en een kapel.' },
+      ],
+    },
     // De raad onder het doel (Marcel, 29 sep, werklijst vraag 58: "B onder het doel"; js/raad.js).
     {
       id: 'raad', naam: 'Raad', standaard: 'aan',
@@ -433,6 +445,7 @@
     { naam: 'De raad', blok: 'RAAD_INSTELLINGEN' },
     { naam: 'De herberg', blok: 'HERBERG_INSTELLINGEN' },
     { naam: 'Behoeften en de winter', blok: 'BEHOEFTEN_INSTELLINGEN' },
+    { naam: 'De wensen', blok: 'WENSEN_INSTELLINGEN' },
     { naam: 'De marskramer', blok: 'HANDEL_INSTELLINGEN' },
     { naam: 'De heer', blok: 'HEER_INSTELLINGEN' },
     { naam: 'De heervaart', blok: 'HEERVAART_INSTELLINGEN' },

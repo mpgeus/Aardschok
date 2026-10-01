@@ -241,11 +241,7 @@
   // De put het dichtst bij deze tegel, als plek om te staan: een begaanbare tegel ernaast. Een put
   // staat op de kaart als voorwerp (in het gehucht op het plein), of is gebouwd (T.GEBOUWEN.put).
   function putBij(D, w, van) {
-    const putten = [];
-    for (const v of w.voorwerpen || []) {
-      if (v.soort === 'put') putten.push({ x: v.x, y: v.y, b: (v.beslaat || [1, 1])[0], h: (v.beslaat || [1, 1])[1] });
-    }
-    for (const g of D.gebouwen || []) if (g.soort === 'put' && g.klaar) putten.push(voetVan(g));
+    const putten = T.plekkenVan(D, 'put');
     let beste = null;
     let afstand = Infinity;
     for (const r of putten) {

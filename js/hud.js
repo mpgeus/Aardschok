@@ -311,9 +311,17 @@
     cel.classList.toggle('laag', S.dorp.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel);
     const last = S.dorp.behoeften.last && S.dorp.behoeften.last.length ? ` Het heeft last van ${S.dorp.behoeften.last.join(' en ')}.` : '';
     const blij = S.dorp.behoeften.blij && S.dorp.behoeften.blij.length ? ` Het is blij met ${S.dorp.behoeften.blij.join(' en ')}.` : '';
-    cel.title = S.dorp.behoeften.mist.length
-      ? `Tevredenheid: ${pct}%. Het dorp mist: ${S.dorp.behoeften.mist.join(', ')}.${last}${blij}`
-      : `Tevredenheid: ${pct}%. Het dorp heeft wat het nodig heeft.${last}${blij}`;
+    // Met de wensen per huis (js/wensen.js): hoe tevreden elke stand is, en in hoeveel huizen iets gemist wordt.
+    const st = S.dorp.behoeften.standen;
+    const perStand = st ? ` ${T.hoofdletter(Object.keys(T.STANDEN).filter((s) => st[s]).map((s) => `${T.STANDEN[s].naam} ${Math.round(st[s].tevredenheid * 100)}%`).join(', '))}.` : '';
+    const gemist = S.dorp.behoeften.gemist || [];
+    const mist = S.dorp.behoeften.mist.map((m) => {
+      const g = gemist.find((x) => x.naam === m);
+      return g ? `${m} (${g.huizen === 1 ? 'één huis' : `${g.huizen} huizen`})` : m;
+    });
+    cel.title = mist.length
+      ? `Tevredenheid: ${pct}%.${perStand} Het dorp mist: ${mist.join(', ')}.${last}${blij}`
+      : `Tevredenheid: ${pct}%.${perStand} Het dorp heeft wat het nodig heeft.${last}${blij}`;
   };
 
   // De argwaan van de inner (js/inner.js), en op hover waarom en wat ze doet. Pas in de balk als hij
