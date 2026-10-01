@@ -52,7 +52,9 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
   om het je moeilijk te maken." Een ladder van doelen van de heer (een dorp, marktrecht, een stad) ging dus niet door.
   En "we moeten een manier zoeken zodat we toch 5k man kunnen hebben", met buiten zicht een vast pad. Hoe de wensen
   werken (per stand en per huis, zoals in Anno), hoe de twee einddoelen samengaan, de eisen van de heer en de 5.000:
-  het plan is werklijst vraag 79.
+  het plan is werklijst vraag 79, en Marcel koos het ("a twee manieren b ja c ja d ja. We focussen ons op een speelbare
+  kern. Daarna komt oorlog etc erbij en de rest van het land diplomatie trading etc"): twee manieren om te winnen, en
+  eerst één stad die je wint door iedereen super gelukkig te maken.
 - **Meer een management sim, en het poppetje is hoe je bestuurt** (Marcel, 30 sep, werklijst vraag 73): "We zetten
   eerst de kern goed neer. Ik wil meer naar management sim toe. Het zaaien wordt gewoon iets wat de boeren doen, zo ook
   het oogsten en de winter. Jij moet als schout wel een oogje in het zeil houden dat alles goed blijft verlopen." Het

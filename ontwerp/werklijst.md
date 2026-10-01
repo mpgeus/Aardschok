@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (1 okt 2026, eenentwintigste sessie): het doel is de vertical slice (vraag 77); het einddoel is de wereld veroveren en je mensen super gelukkig, zoals in Anno 1602 (vraag 78); het plan is vraag 79 en wacht op Marcel
+## De stand (1 okt 2026, eenentwintigste sessie): eerst een speelbare kern: één stad die je wint door iedereen super gelukkig te maken, met wensen zoals in Anno 1602 (vraag 78 en 79, gekozen); gebouwd wordt stap 1, een jaar dat te winnen is
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -32,7 +32,10 @@ main"; ook op `ccr-8e9e20ad-gg1umw`): het rapport van de raadsman (vraag 75, 3a)
 (vraag 76), de richtlijn voor statussen, en het plan voor de vertical slice (vraag 77). Hoe een eigen branch en `main`
 samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **het plan is vraag 79 en wacht op Marcel** (eenentwintigste sessie). Het plan voor
+**Waar de volgende sessie begint:** **het plan is vraag 79, en Marcel koos het** (eenentwintigste sessie: "a twee
+manieren b ja c ja d ja. We focussen ons op een speelbare kern. Daarna komt oorlog etc erbij en de rest van het land
+diplomatie trading etc"). Gebouwd wordt in de volgorde van vraag 79: 1, een jaar dat te winnen is; 2, de wensen per
+stand, met het eind; 3, het vaste pad buiten beeld; 4, de eisen van de heer; 5, de speeltest. Het plan voor
 stap 1 (vraag 78: elk jaar een doel van de heer) ging niet door: "de heer moet alleen betaald worden, en hij mag wel
 eisen stellen. Maar meer om het je moeilijk te maken"; het einddoel is "totale verovering van de wereld", en "dat
 mensen super gelukkig zijn en in al hun wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602"; en "we
@@ -82,7 +85,9 @@ gehucht"). Je begint als gehucht, zoals nu, en groeit naar een kleine stad van 1
 als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speeltest:
 1. **Nu: de wensen van de mensen, zoals in Anno 1602,** met als eind dat iedereen super gelukkig is, een jaar dat te
    winnen is, het jaar in het kort, de heer met eisen die het moeilijk maken, en het vaste pad buiten beeld voor 5.000
-   man (vraag 78; eerst "de cyclus" genoemd, met doelen van de heer, maar die stelt hij niet). Het plan is vraag 79.
+   man (vraag 78; eerst "de cyclus" genoemd, met doelen van de heer, maar die stelt hij niet). Het plan is vraag 79,
+   gekozen: twee manieren om te winnen (veroveren, of iedereen super gelukkig), en eerst een speelbare kern; oorlog,
+   de rest van het land, diplomatie en handel komen daarna.
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept.
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
 4. Wacht en misdaad: patrouilles, een misdaadgolf als status, het gevang.
@@ -115,7 +120,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor stap 1 van de slice, de wensen (vraag 79: a tot en met d); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2604,6 +2609,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     gelukkig), of samen één eind; en in de slice is super gelukkig het eind? **b**, de wensen zo: per huis, met deze vier
     standen, en de treden die erin opgaan? **c**, de eisen van de heer zo, na de wensen? **d**, 5.000 man in drie lagen,
     met het vaste pad meteen na de wensen?
+    **Beantwoord (Marcel, 1 okt):** "a twee manieren b ja c ja d ja. We focussen ons op een speelbare kern. Daarna komt
+    oorlog etc erbij en de rest van het land diplomatie trading etc". Dus: twee manieren om te winnen (de wereld veroveren,
+    of iedereen super gelukkig); de wensen per huis, met de vier standen en de treden die erin opgaan; de eisen van de heer
+    na de wensen; en 5.000 man in drie lagen, met het vaste pad meteen na de wensen. **Eerst een speelbare kern,** en dat
+    is één stad die je wint door iedereen super gelukkig te maken; oorlog, de rest van het land, diplomatie en handel
+    komen daarna. Gebouwd wordt in de volgorde hierboven, te beginnen met een jaar dat te winnen is.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

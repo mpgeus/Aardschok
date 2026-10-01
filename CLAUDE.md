@@ -480,8 +480,10 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   dezelfde kaart. Dan word je burgemeester.
 - **Het einddoel** (Marcel, 1 okt, vraag 78, B en C; eerder, 29 sep: "al het land veroveren of met iedereen vriendjes
   maken. Denk aan civilisation"): "totale verovering van de wereld", en "dat mensen super gelukkig zijn en in al hun
-  wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602". Hoe die twee samengaan en hoe de wensen
-  werken, is vraag 79. Hoe de heer en de vrijheid daarin passen, is nog open (`spel.md`, "Een nieuwe richting").
+  wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602". Dat zijn twee manieren om te winnen (vraag
+  79: "a twee manieren"). **Eerst een speelbare kern** ("Daarna komt oorlog etc erbij en de rest van het land
+  diplomatie trading etc"): één stad die je wint als iedereen super gelukkig is, met wensen per stand en per huis
+  (vraag 79). Hoe de heer en de vrijheid in het veroveren passen, is nog open (`spel.md`, "Een nieuwe richting").
 - **Tegenspelers** (Marcel, 29 sep, vraag 60, D): aan het begin kies je hoeveel. Het zijn dorpen met een AI, die
   tegelijk met jou beginnen, ergens op de kaart waar je ze nog moet vinden, en zelf bouwen om de grootste te worden;
   "intelligent genoeg om echt weerstand te bieden". Marcel koos (vraag 61 en 62): een land met provincies waar je
