@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 1 okt 2026, twintigste sessie)
+## Waar staat wat (bijgewerkt 1 okt 2026, eenentwintigste sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -13,8 +13,8 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 | Onderwerp | Stand | Werklijst |
 |---|---|---|
-| De vertical slice | besloten (Marcel, 1 okt, vraag 77): het doel is de vertical slice uit het concept: je begint als gehucht, zoals nu, en groeit naar haar maat (een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te klein), en uiteindelijk naar een stad van mogelijk 5000 of meer, in zes stappen te beginnen met de cyclus (een jaar met een eind); statussen met niveaus; een ambtenaar voor elke tak van het bestuur; en later een scherm met de statussen en de laatst bekende inventarisatie | vraag 77 |
-| Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern | vraag 50, 51, 54, 73, 74 |
+| De vertical slice | besloten (Marcel, 1 okt, vraag 77): het doel is de vertical slice uit het concept: je begint als gehucht, zoals nu, en groeit naar haar maat (een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te klein), en uiteindelijk naar een stad van mogelijk 5000 of meer ("we moeten een manier zoeken", vraag 78, E), in zes stappen te beginnen met de wensen van de mensen, zoals in Anno 1602 (vraag 78; het plan is vraag 79); statussen met niveaus; een ambtenaar voor elke tak van het bestuur; en later een scherm met de statussen en de laatst bekende inventarisatie | vraag 77, 78, 79 |
+| Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern | vraag 50, 51, 54, 73, 74, 78 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt met de spelregel "Je gehucht" elk spel een ander gehucht (30 sep). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
@@ -44,8 +44,15 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 ## Een nieuwe richting (Marcel, 28 sep 2026)
 
-**Zo staat het nu** (28 tot en met 30 sep): besloten; wat er sindsdien van gebouwd is, staat bij elk onderwerp. Marcel koos op vier vragen van Claude
+**Zo staat het nu** (28 sep tot en met 1 okt): besloten; wat er sindsdien van gebouwd is, staat bij elk onderwerp. Marcel koos op vier vragen van Claude
 (werklijst, vraag 50: "A ja B allebei C ja D ja"):
+- **Het einddoel, en de heer zonder doelen** (Marcel, 1 okt, werklijst vraag 78): "B einddoel is totale verovering van
+  de wereld C het einddoel wordt dat mensen super gelukkig zijn en in al hun wensen zijn voorzien. Denk aan eisen van
+  mensen zoals in anno 1602". En de heer: "de heer moet alleen betaald worden, en hij mag wel eisen stellen. Maar meer
+  om het je moeilijk te maken." Een ladder van doelen van de heer (een dorp, marktrecht, een stad) ging dus niet door.
+  En "we moeten een manier zoeken zodat we toch 5k man kunnen hebben", met buiten zicht een vast pad. Hoe de wensen
+  werken (per stand en per huis, zoals in Anno), hoe de twee einddoelen samengaan, de eisen van de heer en de 5.000:
+  het plan is werklijst vraag 79.
 - **Meer een management sim, en het poppetje is hoe je bestuurt** (Marcel, 30 sep, werklijst vraag 73): "We zetten
   eerst de kern goed neer. Ik wil meer naar management sim toe. Het zaaien wordt gewoon iets wat de boeren doen, zo ook
   het oogsten en de winter. Jij moet als schout wel een oogje in het zeil houden dat alles goed blijft verlopen." Het

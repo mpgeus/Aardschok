@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (1 okt 2026, eenentwintigste sessie): het doel is de vertical slice, van gehucht tot kleine stad (vraag 77, gekozen); het plan voor stap 1, de cyclus, is vraag 78 en wacht op Marcel
+## De stand (1 okt 2026, eenentwintigste sessie): het doel is de vertical slice (vraag 77); het einddoel is de wereld veroveren en je mensen super gelukkig, zoals in Anno 1602 (vraag 78); het plan is vraag 79 en wacht op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -32,10 +32,14 @@ main"; ook op `ccr-8e9e20ad-gg1umw`): het rapport van de raadsman (vraag 75, 3a)
 (vraag 76), de richtlijn voor statussen, en het plan voor de vertical slice (vraag 77). Hoe een eigen branch en `main`
 samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **het plan voor stap 1, de cyclus, is vraag 78 en wacht op Marcel** (eenentwintigste
-sessie): elk jaar één doel van de heer (een dorp, marktrecht, een kleine stad), geteld op 1 lentemaand na de winter, met
-de eindes (gewonnen, ontslagen, gevallen, uitgestorven), het jaar in het kort onder zijn brief, en een jaar dat te winnen
-is (vraag 59, B en C). Daarvóór, in de twintigste sessie: **3a, het rapport van de raadsman, is af** (vraag 75; Marcel: "A Ja dat is goed", en
+**Waar de volgende sessie begint:** **het plan is vraag 79 en wacht op Marcel** (eenentwintigste sessie). Het plan voor
+stap 1 (vraag 78: elk jaar een doel van de heer) ging niet door: "de heer moet alleen betaald worden, en hij mag wel
+eisen stellen. Maar meer om het je moeilijk te maken"; het einddoel is "totale verovering van de wereld", en "dat
+mensen super gelukkig zijn en in al hun wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602"; en "we
+moeten een manier zoeken zodat we toch 5k man kunnen hebben", met buiten zicht een vast pad. Vraag 79 stelt voor: wensen
+per stand en per huis (keuters, dorpelingen, ambachtslieden, poorters), met als eind van de slice iedereen super
+gelukkig; de heer met eisen die pijn doen; en 5.000 man in drie lagen. Het jaar in het kort en een jaar dat te winnen is
+(vraag 59, B en C) zijn al goed (vraag 78, D). Daarvóór, in de twintigste sessie: **3a, het rapport van de raadsman, is af** (vraag 75; Marcel: "A Ja dat is goed", en
 bij het nakijken van het plan "a ja b ja c ja"; zie onder Af): heb je een raadsman, dan staat hij 's ochtends aan je deur
 met wat er gebeurde, hoe het graan en het hout gaan sinds gisteren, of ze de winter halen, wat er speelt en wat er komt,
 en zijn rekenen kleurt de getallen. Met het rapport uit speelt de speeltest letter voor letter hetzelfde jaar (alle 15
@@ -76,8 +80,9 @@ is dat de vertical slice uit het concept, van gehucht tot kleine stad. Elk stuk 
 "Gebruik de slice in de pdf", "A we starten vanaf de slice kwa afmeting ... D prima", en "Nee, we starten wel als
 gehucht"). Je begint als gehucht, zoals nu, en groeit naar een kleine stad van 100 tot 200 mensen; een dorp van 50 is
 als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speeltest:
-1. **Nu: de cyclus,** een jaar met een eind: het oordeel van de heer, het jaar in het kort, een jaar dat te winnen is.
-   Het plan begint met de doelen die de heer per jaar stelt op weg naar de stad (vraag 77, a); het is vraag 78.
+1. **Nu: de wensen van de mensen, zoals in Anno 1602,** met als eind dat iedereen super gelukkig is, een jaar dat te
+   winnen is, het jaar in het kort, de heer met eisen die het moeilijk maken, en het vaste pad buiten beeld voor 5.000
+   man (vraag 78; eerst "de cyclus" genoemd, met doelen van de heer, maar die stelt hij niet). Het plan is vraag 79.
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept.
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
 4. Wacht en misdaad: patrouilles, een misdaadgolf als status, het gevang.
@@ -110,7 +115,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor stap 1 van de slice, de cyclus (vraag 78: a tot en met d); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het plan voor stap 1 van de slice, de wensen (vraag 79: a tot en met d); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2527,6 +2532,78 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **b**, het laatste doel: een stad tellen (100 zielen en een markt), of stadsrechten kopen (100 zielen en 100 goud)?
     **c**, niet gehaald: één jaar erbij, en dan je ambt kwijt; en onder de tien mensen is het uit? **d**, het jaar in
     het kort onder de brief, en een jaar dat te winnen is zoals in D?
+    **Beantwoord (Marcel, 1 okt):** "a Nee, de heer moet alleen betaald worden, en hij mag wel eisen stellen. Maar meer
+    om het je moeilijk te maken. B einddoel is totale verovering van de wereld C het einddoel wordt dat mensen super
+    gelukkig zijn en in al hun wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602 D dat is prima E let
+    op, we moeten een manier zoeken zodat we toch 5k man kunnen hebben". En erna: "Eerder gaf je het idee om een aantal
+    mensen gewoon een vast pad te geven wanneer ze niet in het zicht zijn" (`opmerkingen.md`, de 5.000). Dus:
+    - **a, de heer stelt geen doelen:** hij wil betaald worden, en zijn eisen zijn er om het je moeilijk te maken. De
+      ladder van de heer gaat niet door, en daarmee ook het oordeel op 1 lentemaand en "niet gehaald".
+    - **B en C, het einddoel:** de hele wereld veroveren, en je mensen super gelukkig, in al hun wensen voorzien, met
+      eisen zoals in Anno 1602. Hoe die twee samengaan, is vraag 79, a.
+    - **D, prima:** het jaar in het kort, en een jaar dat te winnen is (vraag 59, B en C, en zaaigraan).
+    - **E, 5.000 man moet kunnen:** buiten zicht een vast pad, en meer (vraag 79, D).
+    Het nieuwe plan is vraag 79.
+79. **De wensen van de mensen, de heer die het moeilijk maakt, en 5.000 man: het plan** (Claude, 1 okt,
+    eenentwintigste sessie; na Marcels antwoord op vraag 78; wacht op Marcel). **Wat het antwoord verandert:** de heer
+    stelt geen doelen meer, en het eind van het spel is de hele wereld veroveren (B) en je mensen super gelukkig (C).
+    Veroveren kan pas als het land en de tegenspelers er zijn (vraag 61 tot 63, 72); gelukkige mensen kan in één stad.
+    **Voorstel: in de slice is "iedereen super gelukkig" het eind, en veroveren komt erbij met het land.**
+    **Wat er al is:** een huis groeit door als het hele dorp dertig dagen tevreden genoeg is (70%): een hut wordt een
+    huis, een huis een stenen huis (`js/behoeften.js`). Die tevredenheid is één getal voor het hele dorp, uit het eten (en
+    of er groente, vis of vlees is), het brandhout, de kapel, de herberg, de wetten, de voorvallen en de heer. En vier
+    werkplaatsen maken iets wat niemand gebruikt: de molen (meel), de bakkerij (brood), de weverij (laken) en de kuiper
+    (vaten). In Anno zijn de wensen precies waar zulke ketens voor zijn.
+    - **A, wensen per stand, per huis.** Elk huis heeft een stand, en elke stand wil iets: goederen die het huis
+      gebruikt, en plekken in de buurt (gemeten met de looptijd vanaf de deur, `T.looptijdVan`). Heeft een huis een
+      maand lang alles wat zijn stand wil, dan groeit het door naar de volgende stand, met meer mensen en meer belasting;
+      mist het iets, dan wordt het ontevreden, en ten slotte trekt het weg. Zoals nu, maar per huis en met eigen wensen,
+      in plaats van één getal voor het hele dorp. De tevredenheid van het dorp wordt het gemiddelde van zijn huizen,
+      zodat alles wat er nu naar kijkt (de groei, het werk, de voorvallen, de raad), blijft werken. Een eerste voorstel,
+      op de huizen die er zijn:
+
+      | Stand | Huis | Gebruikt | Wil in de buurt |
+      |---|---|---|---|
+      | keuters | hut | eten; brandhout in de winter | een put |
+      | dorpelingen | huis | daarbij bier, en vlees of vis | een kapel en de herberg |
+      | ambachtslieden | stenen huis | daarbij brood en laken | een markt |
+      | poorters | nieuw: twee lagen, in baksteen | daarbij zout | een badhuis en een gasthuis |
+
+      Wat een stand wil, komt in het bouwmenu als er genoeg mensen zijn in de stand eronder, zoals in Anno: zo gaan de
+      treden (gehucht, dorp, marktrecht, stad) op in de standen, en komt wat je mag bouwen met je mensen, niet met een
+      brief van de heer. **Super gelukkig** is: al je huizen in de hoogste stand, met alles wat ze willen (hoeveel er
+      moeten, staat in de werkbank). Dan heb je gewonnen, en kun je verder spelen. Wat een huis mist, zie je eerst in de
+      wereld (een teken bij de deur, zoals het uitroepteken) en hoor je van je raadsman, niet eerst in een tabel.
+    - **B, de heer maakt het moeilijk.** Hij wordt betaald op Sint-Maarten, zoals nu, en zijn benoemingsbrief noemt geen
+      doel meer. Een of twee keer per jaar stelt hij een eis die pijn doet, uit een lijst in één blok, zoals de
+      voorvallen: zijn dochter trouwt (goud), zijn jachtpartij eet bij jou (vlees), een tol op de weg (de marskramer
+      komt minder), zijn bos gaat dicht, een knecht voor zijn kasteel (een hand minder). Weigeren kan, met een prijs:
+      argwaan, of een straf.
+    - **C, het eind en het jaar in het kort.** Gewonnen als iedereen super gelukkig is; verloren als je je ambt kwijt
+      bent of de schout valt (zoals nu), of als er minder dan tien mensen over zijn. Eén scherm voor elk eind. Het jaar
+      in het kort (D, prima) komt op 1 lentemaand als een papier, zoals het rapport: hoeveel mensen bij het begin en nu,
+      wie kwam, stierf en wegtrok, wat er gebouwd werd, hoeveel huizen doorgroeiden, en wat de heer kreeg. Een jaar dat
+      te winnen is (D, prima): geen gezin als het hout of het eten de winter niet haalt, de raad zegt waar goud vandaan
+      komt als je iets wilt bouwen, en de marskramer verkoopt in de lente zaaigraan.
+    - **D, 5.000 man, in drie lagen** (Marcel: "we moeten een manier zoeken zodat we toch 5k man kunnen hebben"):
+      1. **In beeld:** een poppetje met een eigen pad, zoals nu.
+      2. **Buiten beeld: een vast pad** (Marcels herinnering). Iemands wegen (deur, werk, put, herberg) worden één keer
+         gezocht, als hij een huis of werk krijgt, en onthouden. Buiten beeld loopt hij die, of staat hij gewoon waar het
+         uur hem wil (`T.dagAnker`); komt hij in beeld, dan loopt hij van daar verder. Dat haalt de spits weg, waar nu
+         99,6% van de tijd zit (vraag 74), en 200 mensen haperen nu al op 30×: dit is ook voor de slice nodig.
+      3. **Heel veel:** een huis telt zijn bewoners als getal, met de wensen per huis (A); een eigen mens met een naam
+         blijft wie dat nodig heeft (de boeren, de raadsman, de ambtenaren, de 10 tot 20 met banden). Wie in beeld loopt,
+         is een deel van de bewoners, zoals in Anno.
+      Daarbij: wie waar staat per tegel bijhouden, A* met een heap, en opslaan in een bestand (de browser is vol bij zo'n
+      600 mensen). Na elke laag meten met `npm run grootte`. Omdat de wensen per huis gaan, houdt niets van dit plan de
+      5.000 tegen.
+    **In deze volgorde:** 1, een jaar dat te winnen is (D, al goed); 2, de wensen per stand, met het eind; 3, het vaste
+    pad buiten beeld; 4, de eisen van de heer; 5, de speeltest, met een bouwer die naar super gelukkig speelt. De rest van
+    de slice (statussen, ambtenaren, wacht en misdaad, banden) volgt, en laag 3 komt met stap 6.
+    Vragen: **a**, B en C: twee manieren om te winnen, zoals in Civilization (de wereld veroveren, of iedereen super
+    gelukkig), of samen één eind; en in de slice is super gelukkig het eind? **b**, de wensen zo: per huis, met deze vier
+    standen, en de treden die erin opgaan? **c**, de eisen van de heer zo, na de wensen? **d**, 5.000 man in drie lagen,
+    met het vaste pad meteen na de wensen?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

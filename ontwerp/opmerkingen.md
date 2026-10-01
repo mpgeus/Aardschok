@@ -9,6 +9,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De heer als eerste tegenstander** (1 okt, eenentwintigste sessie; een idee van Claude, niet gekozen). Met de
+  verovering van de wereld als einddoel (werklijst vraag 78, B) wordt de heer vanzelf de eerste die je verslaat: eerst
+  betaal je hem, omdat je zwak bent, en als je sterk genoeg bent, sla je hem (de opstand uit het eerste plan, "Het
+  spel in het kort"). Dan is wat je voor hem verstopte, de kas van je opstand. Voor als het land en het vechten
+  tussen dorpen er zijn.
 - **Je eigen mensen horen iets op straat** (Marcel, 1 okt, bij vraag 75, c: "Later ook door je eigen mensen die iets
   horen op straat"). Naast de herberg en het rapport: mensen die voor jou luisteren, en je vertellen wat er speelt
   voordat het een voorval wordt. Past bij "informatie is een grondstof" (`concept.md`): wie meer oren heeft, weet meer.
@@ -26,7 +31,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   de stad telt per wijk (wie er woont, werkt, eet en ziek is), en wordt een poppetje als je er komt. Dat past bij het
   concept ("jij bent maar één persoon": wat je niet ziet, hoor je), en bij hoe een dorp waar je niet bent nu al leeft
   zonder getekend te worden (vraag 71). Een spel van die maat bewaart ook niet meer in de browser (5 MB is vol bij zo'n
-  600 mensen), maar in een bestand (Steam, `verpakken.md`).
+  600 mensen), maar in een bestand (Steam, `verpakken.md`). Marcel (1 okt, werklijst vraag 78, E): "we moeten een
+  manier zoeken zodat we toch 5k man kunnen hebben", en hij wees op het vaste pad buiten zicht. Het plan, in drie
+  lagen (in beeld een eigen pad, buiten beeld een vast pad, heel veel als getal per huis): vraag 79, D.
 - **Het sprokkelen zie je niet** (30 sep, negentiende sessie; vraag 74, stap 2). Het hout komt elke dag in de voorraad
   (`T.sprokkelHout`), maar niemand loopt naar de bosrand en terug met een bos takken. Het concept wil dat je de stad
   ziet voordat je de getallen ziet: wie niets te doen heeft (de ouderen, de kinderen), zou 's middags kunnen sprokkelen,

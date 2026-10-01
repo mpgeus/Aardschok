@@ -472,13 +472,16 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   oorzaak die je had kunnen zien (`T.OORZAKEN`). Eerst de kern (vraag 74), dan het buurdorp.
 - De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het
   dorp, jou zelf, met hogere eisen, en met soldaten. Zijn **inner** komt kijken, en wat je opzij
-  zet, moet uit zijn zicht.
+  zet, moet uit zijn zicht. Hij stelt geen doelen (Marcel, 1 okt, vraag 78, a): "de heer moet alleen betaald
+  worden, en hij mag wel eisen stellen. Maar meer om het je moeilijk te maken."
 - Het dorp groeit tot een stad met boeren, winkels, een markt en handel. Het zit vol **groepen**
   met eigen belangen (de politiek) en mensen met een verhaal (het avontuur).
 - Vrij word je door **stadsrechten** te kopen of door een **opstand**, een gevecht in beurten op
   dezelfde kaart. Dan word je burgemeester.
-- **Het hogere doel** (Marcel, 29 sep): "al het land veroveren of met iedereen vriendjes maken. Denk aan
-  civilisation". Hoe de heer en de vrijheid daarin passen, is nog open (`spel.md`, "Een nieuwe richting").
+- **Het einddoel** (Marcel, 1 okt, vraag 78, B en C; eerder, 29 sep: "al het land veroveren of met iedereen vriendjes
+  maken. Denk aan civilisation"): "totale verovering van de wereld", en "dat mensen super gelukkig zijn en in al hun
+  wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602". Hoe die twee samengaan en hoe de wensen
+  werken, is vraag 79. Hoe de heer en de vrijheid daarin passen, is nog open (`spel.md`, "Een nieuwe richting").
 - **Tegenspelers** (Marcel, 29 sep, vraag 60, D): aan het begin kies je hoeveel. Het zijn dorpen met een AI, die
   tegelijk met jou beginnen, ergens op de kaart waar je ze nog moet vinden, en zelf bouwen om de grootste te worden;
   "intelligent genoeg om echt weerstand te bieden". Marcel koos (vraag 61 en 62): een land met provincies waar je
@@ -514,7 +517,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   starten vanaf de slice kwa afmeting een gehucht met 50 is echt te klein", en "Nee, we starten wel als gehucht"): je
   begint als gehucht, zoals nu, en groeit naar een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te
   klein. **Uiteindelijk** is het doel een stad van mogelijk 5000 of meer mensen (Marcel, 1 okt): bouw zo dat dat later
-  kan (`opmerkingen.md`: niet iedereen loopt altijd zijn eigen pad; vraag 74: nu tot zo'n 150 vloeiend op 30×).
+  kan ("we moeten een manier zoeken zodat we toch 5k man kunnen hebben"; vraag 79, D: buiten beeld een vast pad, en
+  heel veel mensen als getal per huis; vraag 74: nu tot zo'n 150 vloeiend op 30×).
   Uiteindelijk heeft elke tak van het bestuur een ambtenaar die je steunt, en komt er een scherm met de statussen en
   de laatst bekende inventarisatie: wat je weet, is wat er het laatst geteld werd, niet wat er nu ligt.
 - **Niet te ingewikkeld** (Marcel, 29 sep): "er is geen gelijkenis met de werkelijkheid. We zijn gewoon een
