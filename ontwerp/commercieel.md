@@ -69,6 +69,22 @@ de uitverkopen en met updates. Zonder verlanglijstjes verkoopt een goed spel bij
    (r/CityBuilders, r/IndieDev) en elders, en de proefversie bij een paar testers (vraag 33d). Begrijpen ze het, en
    willen ze nog een jaar?
 
+## De sfeer en de ui (Marcel, 1 okt)
+
+"De atmosfeer moet goed zijn. Trekken als het ware. De ui moeten we nog maken. De losse info panelen etc ook." Wat er
+nu is en wat de sfeer maakt (voorstel van Claude):
+- **De sfeer trekt** als het dorp leeft en klinkt. Wat er is: dag en nacht, het licht van de herberg en de lantaarns,
+  mensen die naar hun werk lopen, het vee, het graan in de wind. Wat er niet is: **geluid** (geen enkel geluid: vogels,
+  wind, de hamer van de smid, het geroezemoes in de herberg, de klok van de kapel, en muziek), de **seizoenen in beeld**
+  (sneeuw in de winter, `spel.md`), en **het weer** (regen bij het zaaien, vraag 82). Geluid is de grootste stap.
+- **De ui hoort bij het idee.** Je bent één mens in het dorp, en wat je weet, komt via mensen en papieren. Dus de
+  vensters zijn dingen die je in handen hebt, in de stijl van de pixel art: het rapport van je raadsman, de brief van de
+  heer, het boek van de wetten, een kaart van je dorp op tafel (`opmerkingen.md`), in plaats van losse getallen over het
+  beeld. Zo maakt de ui de haak zichtbaar, en bedekt hij het dorp niet. Eén stijl, een eigen letter, en een fotomodus.
+- **Eerst een plan, met ontwerpen:** een pagina met een paar schetsen van de balk, een venster en een papier, om te
+  kiezen vóór er gebouwd wordt. Liefst vóór de wensen zichtbaar worden (vraag 80, 2c), want die krijgen nieuwe
+  vensters: dan worden die meteen in de goede stijl gemaakt.
+
 ## Een tijdpad (voorstel)
 
 - **Oktober tot december 2026:** de kleine speelbare kern (de wensen, het eind, de eisen van de heer), en de eerste

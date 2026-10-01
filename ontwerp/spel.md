@@ -159,6 +159,10 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
 - **Nog niet:** rovers vallen geen dorpelingen aan, alleen de schout en de wachters, en ze nemen alleen graan mee;
   een eigen tekening voor een rover (ze dragen nu het vel van een boer of een boerin); oefenen, wapens en de
   schutterij (punt 13); een rivaal (de tegenspelers, werklijst vraag 61). De heervaart is er sinds 29 sep.
+- **Een kazerne** (Marcel, 1 okt: "Extra gebouwen als barakken of iets om te soldaten te trainen / rekruteren"): een
+  gebouw waar je mannen rekruteert en traint tot soldaten, die beter vechten dan de wachters van het wachthuis, met
+  wapens van de wapenmaker. Nu is er alleen het wachthuis (twee man die meevechten) en de veteraan die terugkomt van de
+  heervaart. Wanneer: werklijst vraag 84, c.
 - **Besloten (Marcel, 29 sep, werklijst vraag 56):** "schout kan sterven": valt hij, dan is het spel uit, en een
   aanval waarschuwt daar niet voor ("A laten zo, geen bericht"). Tegen drie rovers valt een schout die voorop loopt
   in de tweede of derde ronde, en wint wie de wachters voor laat gaan. En "We bouwen het langzaam op": de wilde

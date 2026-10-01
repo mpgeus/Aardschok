@@ -142,7 +142,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het commerciële deel (vraag 83: a tot en met e, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het commerciële deel (vraag 83: a tot en met e, `commercieel.md`); de sfeer, de ui en een kazerne (vraag 84: a tot en met c); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2754,6 +2754,16 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     troef, maar de vensters erover maken de plaatjes zwakker. Dus c en een vijfde vraag worden: **c**, de haak zo, en
     wat hem zichtbaar maakt ("wat je weet, is wat er het laatst geteld werd", vraag 77, b) naar voren, vóór de demo?
     **e**, een fotomodus en vensters en een letter in de beeldstijl, vóór de Steam-pagina?
+84. **De sfeer, de ui, en een kazerne** (Marcel, 1 okt, eenentwintigste sessie: "De atmosfeer moet goed zijn. Trekken als
+    het ware. De ui moeten we nog maken. De losse info panelen etc ook. Extra gebouwen als barakken of iets om te soldaten
+    te trainen / rekruteren"; wacht op Marcel). Het voorstel staat in `commercieel.md` ("De sfeer en de ui") en `spel.md`
+    (bij de rovers, de kazerne). Kort: de sfeer trekt als het dorp klinkt (er is nog geen enkel geluid), de seizoenen te
+    zien zijn en het weer meedoet; de ui wordt papieren in de stijl van de pixel art (het rapport, de brieven, een boek
+    van de wetten, een kaart van je dorp op tafel), want zo maakt hij de haak zichtbaar ("je bent de schout in het dorp")
+    in plaats van het dorp te bedekken. Vragen: **a**, de ui zo, als papieren in de beeldstijl, met eerst een pagina met
+    ontwerpen om uit te kiezen, vóór de wensen zichtbaar worden (vraag 80, 2c)? **b**, voor de sfeer eerst geluid
+    (omgeving en muziek), dan de seizoenen in beeld en het weer? **c**, de kazerne: nu, zodat je militie tegen de rovers
+    beter wordt, of later, met de oorlog?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
