@@ -447,7 +447,7 @@
       const k = T.kanKopen(S.dorp, wat, 1);
       const prijs = k.per > 1 ? `${k.per} voor ${k.prijs} goud` : `${k.prijs} goud per stuk`;
       return (
-        `<div class="handel-rij"><span class="handel-naam">${T.hoofdletter(wat)} <small>je hebt ${heb(wat)}</small></span>` +
+        `<div class="handel-rij"><span class="handel-naam">${T.hoofdletter(H.verkoopt[wat].naam || wat)} <small>je hebt ${heb(wat)}</small></span>` +
         `<span class="handel-prijs">${prijs}<small>${prijsMerk(S, wat, 'verkoopt')}hij heeft er nog ${(m.heeft[wat] || 0) * k.per}</small></span>` +
         `<span class="handel-knoppen">${handelKnop('koop', wat, 1, `Koop ${k.per}`, k)}${handelKnop('koop', wat, 5, `Koop ${k.per * 5}`, T.kanKopen(S.dorp, wat, 5))}</span></div>`
       );

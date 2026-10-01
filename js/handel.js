@@ -41,11 +41,11 @@
     // Graan alleen in de lente, als zaaigraan (werklijst vraag 59 en 79; Marcel, 1 okt, vraag 78:
     // "D dat is prima"): wie na een slechte winter niets meer heeft, kan het kopen, en de boeren
     // zaaien het na tot 1 bloeimaand (T.zaaiNa, js/akkers.js). Een pak is tien graan, net als
-    // wanneer hij het koopt, en duurder dan hij het in de lente koopt.
+    // wanneer hij het koopt, en duurder dan hij het in de lente koopt. Een `naam` is hoe het venster het noemt.
     verkoopt: {
       ijzer: { heeft: 12, prijs: [3, 3, 4] },
       zout: { heeft: 15, prijs: [1, 1, 2] },
-      graan: { per: 10, heeft: [10, 0, 0], prijs: [5, 5, 5] },
+      graan: { naam: 'zaaigraan', per: 10, heeft: [10, 0, 0], prijs: [5, 5, 5] },
     },
     // Wat hij koopt: per pak van zoveel stuks, voor zoveel goud, per bezoek (lente, zomer,
     // herfst). Graan is in de lente schaars en na de oogst goedkoop: wie het door Sint-Maarten
