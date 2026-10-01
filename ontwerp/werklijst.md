@@ -32,7 +32,9 @@ stap 1 en het zaaigraan; Marcel, 1 okt: "Ok alles naar main pushen dan kunnen we
 branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** **bouw stap 2, de wensen per stand, klein** (vraag 80 en 82; Marcel, 1 okt: "80: a,
-Ja. B, Ja. C, Ja. D, een jaar", en "82: correct"). Alles is besloten, dus bouwen kan meteen, in de volgorde van vraag
+Ja. B, Ja. C, Ja. D, een jaar", en "82: correct"). **Het plan voor 2a en 2b is vraag 85** (tweeëntwintigste sessie;
+wacht op Marcel): bij het uitzoeken bleek dat de drie woningen van het begin nooit doorgroeien, dat het stenen huis nog
+geen tekening van de huizenbouwer heeft, en dat een kring van 25 tegels klein is voor dit gehucht. Alles is besloten, dus bouwen kan meteen, in de volgorde van vraag
 80 (2a de stand en de wensen per huis, met de tevredenheid als gemiddelde; 2b doorgroeien en achteruitgaan, met
 bouwstof; 2c zien wat een huis wil; 2d de treden uit de standen; 2e het eind en het jaar in het kort). **Vóór 2c eerst
 een pagina met ontwerpen voor de ui** (vraag 84, a: "ja"): de vensters worden papieren in de beeldstijl, en Marcel kiest
@@ -2796,6 +2798,72 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     kazerne komt met de oorlog (onder 3). In hetzelfde bericht: "Later wil ik ook dorpsfeesten die passen bij het seizoen,
     hier wil ik het hele dorp wat mee doet etc. Ook een bruiloft wordt groots gevierd. Er zijn veel soorten feesten die we
     kunnen gebruiken hiervoor. Voor nu een notitie later pas bouwen." Dat staat in `spel.md`, "Dorpsfeesten", en onder 3.
+85. **Stap 2a en 2b: de wensen per huis, en doorgroeien: het plan** (Claude, 1 okt, tweeëntwintigste sessie; vraag 80;
+    wacht op Marcel). Vraag 80 is besloten; dit is hoe het in de code komt, met wat er bij het uitzoeken opviel.
+    **Wat er al is:** de tevredenheid is één getal voor het hele dorp: eten (de helft, en meer als er groente, vis of
+    vlees bij is), brandhout in de winter (0,3) en een kapel (0,2), met de herberg, de wetten, de voorvallen en de heer
+    erbij of eraf. Het gehucht begint op 67%. Een huis groeit door als het hele dorp 30 dagen 70% tevreden is. Gemeten
+    in het gehucht:
+    - **De drie woningen van het begin groeien nooit.** Ze zijn in Tiled getekend, en alleen een huis dat jij of een
+      gezin bouwde, kan zijn tekening wisselen. Dan is "alle woningen stenen huizen" niet te halen. Ruimte is er wel:
+      beide hutten passen een huis, en het huis een stenen huis.
+    - **Het stenen huis heeft één tekening, uit de oude reeks** (`gereedschap/pixelart/dorp.cjs`), niet van de
+      huizenbouwer.
+    - **Een kring van 25 tegels is klein voor dit gehucht.** De boerderijen staan aan de rand, 21 tot 26 tegels van het
+      midden van het plein: een kapel op het plein haalt er dan drie van de vijf. De herberg staat in de hoek, en drie
+      boerderijen liggen er 37 tot 42 tegels vandaan. De put op het plein haalt met 12 tegels alleen de hut van het oude
+      stel; het huis van het jonge gezin staat op 13.
+    - In het huis van de schout wonen vijf mensen, en de herbergierster woont in de herberg.
+    - **A, de wensen per huis (2a).** Elk huis met mensen heeft een stand naar zijn soort: een hut keuters, een huis
+      dorpelingen, een stenen huis ambachtslieden, en een boerderij boeren (die groeien niet). Het huis van de schout en
+      de herberg hebben geen wensen: die zijn van jou en van de herbergierster. Een stand wil wat de stand eronder wil, en
+      meer, zoals in Anno:
+
+      | Stand | Gebruikt | Wil in de buurt |
+      |---|---|---|
+      | keuters | eten; brandhout in de winter | een put (12 tegels) |
+      | dorpelingen | daarbij bier, en vlees of vis | daarbij een kapel en de herberg (30) |
+      | ambachtslieden | daarbij brood en laken | daarbij een markt (30) |
+      | boeren | eten; brandhout in de winter | een kapel (30) |
+
+      Goederen deelt het dorp eerlijk: is er te weinig bier, dan heeft niemand genoeg, en dat zie je aan één getal ("het
+      bier is voor 60% genoeg"); zo rekent het ook voor 5.000 man. Elk huis heeft zijn eigen tevredenheid, uit zijn
+      wensen: eten de helft, brandhout 0,3 en de rest samen 0,2 (waar nu de kapel staat), met de herberg, de wetten, de
+      voorvallen en de heer erbij of eraf, zoals nu. Een huis dat alles heeft, staat op 100%: dat is super gelukkig. Het
+      dorp is het gemiddelde, naar mensen, dus de groei, het werk, de voorvallen en de raad werken gewoon door. De
+      afwisseling (groente, vis of vlees maakt tevredener) gaat op in de wensen: vlees of vis voor de dorpelingen.
+      Daardoor begint het gehucht hoger, op zo'n 85% in plaats van 67%, en wordt er in het begin iets harder gewerkt; groente
+      telt dan niet meer voor de tevredenheid, alleen nog bij de marskramer. Zien doe je in 2a nog weinig: het getal in
+      de balk, bij de muis wat de huizen missen, en de kring op de grond als je een put, een kapel, een herberg of een
+      markt neerzet, met de huizen die erin vallen. De vensters komen in 2c, na de pagina met ontwerpen voor de ui.
+      `Spel.debug.wensen()` zegt per huis wat het wil en wat het heeft.
+    - **B, doorgroeien (2b).** Heeft een huis 30 dagen op rij alles, dan groeit het door, als de bouwstof er is: een
+      huis kost 8 hout, een stenen huis 12 steen. Zonder bouwstof wacht het, en zegt het dorp het één keer. De drie
+      woningen van het begin groeien ook: ze krijgen hun tekening als eigen voorwerp, zoals een huis dat een gezin
+      bouwde. Een hogere stand betaalt meer belasting, als die wet is aangenomen (werkbank). **Het stenen huis:** de
+      huizenbouwer maakt er zes, elk het stenen broertje van een van de zes huizen, met dezelfde vorm en voet. Zo
+      versteent een huis op zijn eigen grond: er is altijd plaats, en je herkent je huis.
+    - **C, achteruitgaan.** In vraag 80 staat: mist een huis een maand iets, dan trekt er een gezin weg. Bij het
+      uitwerken bijt dat met het doorgroeien, dat vanzelf gaat: een hut die een huis wordt, wil meteen bier, vlees of
+      vis, een kapel en de herberg. Staat er nog geen kapel, dan verliest elk huis dat doorgroeit na een maand zijn
+      gezin, en jij kon het niet tegenhouden. Twee manieren, allebei als spelregel ("Achteruitgaan"), met wat Marcel
+      kiest als standaard:
+      1. **Zacht, zoals in Anno 1602** (advies): mist een huis iets, dan groeit het niet verder en is het minder
+         tevreden; er trekt pas een gezin weg als het huis onder de 25% zakt, en dat gebeurt alleen als het eten of het
+         brandhout mist. Dat is de regel van nu, maar per huis.
+      2. **Streng, zoals in vraag 80:** mist een huis een maand iets, dan trekt zijn gezin weg. Dan hoort er een rem bij,
+         bijvoorbeeld: het gezin vraagt de schout eerst of het mag doorgroeien ("Mogen we een huis bouwen? Het kost 8
+         hout"), als voorval, en ben je weg, dan beslist je raadsman.
+    **In deze volgorde:** 2a, met toetsen; 2b, met toetsen; de zes stenen huizen; de speeltest. Daarna de pagina met
+    ontwerpen voor de ui (vraag 84, a), en dan 2c.
+    **Klaar als** elk huis zijn stand en zijn wensen heeft, met wat het heeft en een getal; het dorp het gemiddelde is;
+    je de kring ziet als je bouwt; een huis doorgroeit na 30 dagen alles, met bouwstof, ook de drie van het begin; een
+    huis versteent op zijn eigen grond; achteruitgaan gaat zoals gekozen; `npm test` groen is; en de speeltest zegt wat
+    het deed.
+    Vragen: **a**, de wensen zo: een stand wil ook wat die eronder wil, goederen eerlijk gedeeld, en het getal per huis
+    (eten 0,5, brandhout 0,3, de rest 0,2), zodat het gehucht op zo'n 85% begint? **b**, de kring 30 voor de kapel, de
+    herberg en de markt, en de boeren willen een kapel maar niet de herberg? **c**, achteruitgaan zacht (advies) of
+    streng? **d**, het stenen huis als stenen broertje van elk huis, met dezelfde voet?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
