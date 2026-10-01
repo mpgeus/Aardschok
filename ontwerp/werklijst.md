@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (1 okt 2026, twintigste sessie): het rapport van de raadsman is af (vraag 75, 3a, en 76); nu eerst een speelbaar spel van begin tot eind (vraag 77, wacht op Marcel)
+## De stand (1 okt 2026, twintigste sessie): het rapport van de raadsman is af (vraag 75, 3a, en 76); het doel is de vertical slice op haar eigen maat (vraag 77, gekozen), en het volgende is het plan voor stap 1, de cyclus
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -27,12 +27,10 @@ deur als je bij huis slaapt (`Z`), en anders onder de knop Rapport (`Spel.debug.
 gehucht" op "Elk spel een ander" legt de maker elk nieuw spel een ander gehucht (`Spel.debug.gehucht(3)` voor zaad 3).
 De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 717/717.
 
-**Waar het werk staat:** het werk van de twintigste sessie, het rapport van de raadsman (vraag 75, 3a), staat op
-`ccr-8e9e20ad-gg1umw`, nog niet in `main`. Alles van daarvoor staat in `main`, ook het werk van de negentiende sessie
-(Marcel, 1 okt: "Ja zet in main"; ook op `ccr-4cd08e9d-1g0phy`): stuk 2 van het land (vraag 71), het plan voor het
-buurdorp (vraag 72), het concept (vraag 73), stap 1 en 2 van de kern (vraag 74) met de meting van de grootte (`npm run
-grootte`), en het plan voor de dag in fasen (vraag 75). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`,
-onder Git.
+**Waar het werk staat:** alles staat in `main`, ook het werk van de twintigste sessie (Marcel, 1 okt: "Alles pushen en
+main"; ook op `ccr-8e9e20ad-gg1umw`): het rapport van de raadsman (vraag 75, 3a), het rapport dat zegt wat verandert
+(vraag 76), de richtlijn voor statussen, en het plan voor de vertical slice (vraag 77). Hoe een eigen branch en `main`
+samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** **3a, het rapport van de raadsman, is af** (vraag 75; Marcel: "A Ja dat is goed", en
 bij het nakijken van het plan "a ja b ja c ja"; zie onder Af): heb je een raadsman, dan staat hij 's ochtends aan je deur
@@ -40,10 +38,12 @@ met wat er gebeurde, hoe het graan en het hout gaan sinds gisteren, of ze de win
 en zijn rekenen kleurt de getallen. Met het rapport uit speelt de speeltest letter voor letter hetzelfde jaar (alle 15
 jaren); daarna zegt het een oorzaak en de winter alleen nog als ze veranderen (vraag 76, af). **Nu eerst een spel van
 begin tot eind** (Marcel, 1 okt: "We gaan ook eerst verder 3b kan later. Laten we eerst eens een speelbaar spel maken van
-begin tot eind", en "Gebruik de slice in de pdf"): **het plan is vraag 77, en wacht op Marcel**: de vertical slice uit
-het concept naast ons spel, met een voorstel in zes stappen (de cyclus met een eind per jaar, statussen met niveaus,
-ambtenaren, wacht en misdaad, mensen met banden, de kleine stad), en Marcels richtlijn "Honger, droogte of een plaag,
-moet een status zijn", met niveaus. De zitting (3b) en de herberg (3c) wachten. **Hoe we hier kwamen:** stuk 2 van het
+begin tot eind", en "Gebruik de slice in de pdf"): **het plan is vraag 77, en Marcel koos het** ("A we starten vanaf
+de slice kwa afmeting een gehucht met 50 is echt te klein ... D prima"): de vertical slice uit het concept, in zes
+stappen (de cyclus met een eind per jaar, statussen met niveaus, ambtenaren, wacht en misdaad, mensen met banden, de
+kleine stad), op de maat van de slice: een kleine stad van 100 tot 200 mensen vanaf het begin. **Begin met het plan voor
+stap 1, de cyclus** (bij vraag 77 staat waar het mee begint: wat de heer na een jaar in een stad beoordeelt, en wanneer
+de kaart van de stad komt, want die moet er nu zijn als het spel begint). De zitting (3b) en de herberg (3c) wachten. **Hoe we hier kwamen:** stuk 2 van het
 land is af (vraag 71): alles van een dorp staat bij elkaar (`S.dorpen`, `js/dorp.js`), en elk dorp leeft, ook als je er
 niet bent. **Daarna bracht Marcel een concept mee** ("De Schout", `concept.md`: het poppetje is de manier waarop je
 bestuurt). Het concept is ons kompas, en **eerst komt de kern** (vraag 73; Marcel: "We zetten eerst de kern goed neer. Ik
@@ -65,10 +65,24 @@ eigen dorp), en de volgorde ook (vraag 51). De afrekening (vraag 49) is geparkee
 opdrachten) werd de raad (vraag 58, B).
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; opnieuw geordend op 28 sep,
-vraag 51, na de nieuwe richting). De maat is Marcels eigen regel, eerst speelbaar: bovenaan wat de proef "van
-gehucht tot dorp" nodig heeft (`speelbaar.md`, bovenaan). Elk stuk begint met een plan voor Marcel.
+vraag 51, na de nieuwe richting, en op 1 okt, vraag 77). De maat is Marcels eigen regel, eerst speelbaar: sinds 1 okt
+is dat de vertical slice uit het concept, op haar eigen maat. Elk stuk begint met een plan voor Marcel.
 
-*1. Gebouwd (28 en 29 sep): naar de proef "van gehucht tot dorp"* (Marcel, 28 sep, vraag 51: "A ja B ja C ja D ja").
+*0. Nu: de vertical slice* (Marcel, 1 okt, vraag 77: "Laten we eerst eens een speelbaar spel maken van begin tot eind",
+"Gebruik de slice in de pdf", en "A we starten vanaf de slice kwa afmeting ... D prima"). Een kleine stad van 100 tot
+200 mensen vanaf het begin, in zes stappen, elk eerst een plan, en na elke stap de speeltest:
+1. **Nu: de cyclus,** een jaar met een eind: het oordeel van de heer, het jaar in het kort, een jaar dat te winnen is.
+   Het plan begint met wat de heer in een stad beoordeelt, en wanneer de kaart van de stad komt (vraag 77, a).
+2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept.
+3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
+4. Wacht en misdaad: patrouilles, een misdaadgolf als status, het gevang.
+5. Mensen met banden: 10 tot 20 mensen met wat ze van jou en van elkaar vinden.
+6. De kleine stad: de kaart voor 200 mensen, de wijken, de markt, het raadhuis en de poort die iets doen, en sneller
+   paden zoeken. Omdat het spel nu als stad begint, komt de kaart misschien vroeger (vraag 77, a).
+Later: een scherm met de statussen en de laatst bekende inventarisatie (vraag 77, b).
+
+*1. Gebouwd (28 en 29 sep): naar de proef "van gehucht tot dorp"* (Marcel, 28 sep, vraag 51: "A ja B ja C ja D ja";
+sinds 1 okt opgegaan in de vertical slice, hierboven).
 Je begint zoals nu, met de brief van de heer en 26 mensen, en het doel is dat het gehucht in zo'n twee jaar een dorp
 wordt. De proef eindigt met een brief van de heer: "Wij vernemen dat Ons gehucht een dorp is geworden.
 Gefeliciteerd. Dat kost u vanaf nu meer."
@@ -91,8 +105,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 77 (een speelbaar spel van begin tot eind: de vertical slice, in zes stappen); het plan
-voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2435,6 +2448,22 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **a**, groeien naar de slice (gehucht, dorp, kleine stad, in een paar jaar), of meteen beginnen als kleine
     stad? **b**, de statussen zo, met niveaus, in de balk en in het rapport? **c**, welke ambtenaren: de marktmeester, de
     wachtmeester en de rentmeester? **d**, in deze volgorde, en beginnen met stap 1, de cyclus?
+    **Beantwoord (Marcel, 1 okt):** "A we starten vanaf de slice kwa afmeting een gehucht met 50 is echt te klein. B Ja,
+    er komt later ook ui met status overzicht en laatst bekende inventarisatie. C ja, uiteindelijk ambtenaar voor alle
+    'takken' van overheid om je te ondersteunen. D prima". Dus:
+    - **a, we beginnen op de maat van de slice:** een kleine stad van 100 tot 200 mensen, niet een gehucht dat groeit.
+      Dat zet stap 6 (de kaart met plaats voor 200 mensen, de wijken, en sneller paden zoeken) vóóraan in wat het spel
+      nodig heeft: de stad moet er zijn als het spel begint. De regels van stap 1 (een jaar met een eind) hangen niet aan
+      de maat, en kunnen eerst op de kaart van nu; wat de heer dan oordeelt, is geen "dorp worden" meer (dat is de stad
+      al), maar hoe het jaar ging. **Het plan voor stap 1 begint dus met die twee vragen:** wat de heer na een jaar
+      beoordeelt in een stad, en wanneer de kaart van de stad komt.
+    - **b, statussen met niveaus,** en later een scherm met een overzicht van de statussen en **de laatst bekende
+      inventarisatie**: wat je weet, is wat er het laatst geteld werd (door jou of een ambtenaar), niet wat er nu ligt.
+      Dat past bij "informatie is een grondstof" (`concept.md`) en bij wat het rapport liet zien: de balk die alles
+      precies zegt, maakt zelf kijken overbodig (vraag 75, b).
+    - **c, uiteindelijk een ambtenaar voor elke tak van het bestuur,** om je te steunen; de marktmeester, de
+      wachtmeester en de rentmeester eerst.
+    - **d, deze volgorde,** te beginnen met stap 1, de cyclus, met het plan erbij (zie a).
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

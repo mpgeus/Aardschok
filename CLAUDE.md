@@ -510,7 +510,10 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   begin tot eind", en "Gebruik de slice in de pdf"): één kleine stad met 100 tot 200 mensen, markt, woonwijk,
   ambachtswijk, raadhuis, kerk en stadspoort, dag en nacht, voedsel en economie, wacht en misdaad, 3 of 4 ambtenaren,
   10 tot 20 mensen met echte banden, een paar bouwprojecten, 5 tot 10 soorten gebeurtenissen, en één volledig speelbare
-  bestuurlijke cyclus (`concept.md`; het plan is vraag 77).
+  bestuurlijke cyclus (`concept.md`; het plan is vraag 77). **Op de maat van de slice** (Marcel: "we starten vanaf de
+  slice kwa afmeting een gehucht met 50 is echt te klein"): het spel begint als kleine stad, niet als gehucht.
+  Uiteindelijk heeft elke tak van het bestuur een ambtenaar die je steunt, en komt er een scherm met de statussen en
+  de laatst bekende inventarisatie: wat je weet, is wat er het laatst geteld werd, niet wat er nu ligt.
 - **Niet te ingewikkeld** (Marcel, 29 sep): "er is geen gelijkenis met de werkelijkheid. We zijn gewoon een
   schout die een dorp runt en land wil uitbreiden." De eenvoudige regel gaat voor de regel die klopt met vroeger.
 - **Instelbaar** (Marcel, 24 sep): waar een ontwerpvraag meer dan één goed antwoord heeft, wordt het
