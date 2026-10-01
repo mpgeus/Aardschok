@@ -142,7 +142,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het commerciële deel (vraag 83: a tot en met d, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het commerciële deel (vraag 83: a tot en met e, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2747,6 +2747,13 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **b**, Engels als hoofdtaal op Steam, Nederlands erbij, met de spelteksten op één plek, na de kleine kern? **c**, de
     haak vooraan: de eisen van de heer horen in de eerste demo, vóór het weer? **d**, wat er aan geld en tijd in kan:
     geluid (kopen of laten maken), een tekenaar voor de capsule en het logo, en de 100 dollar voor Steam?
+    **Marcel, daarna (1 okt):** "Dat verstoppen vind ik niet sterk genoeg eigenlijk. Volgens mij is ons idee dieper dan wat
+    er op Steam staat? Ook de art stijl speelt een grote rol denk ik." Bijgewerkt in `commercieel.md`: de haak is het
+    concept, **je bent geen god boven het dorp, maar de schout erin** (wie je nodig heeft, komt je zoeken, je raadsman
+    brengt het rapport, in de herberg hoor je wat er speelt), met de heer als de satire erin; en de beeldstijl is een
+    troef, maar de vensters erover maken de plaatjes zwakker. Dus c en een vijfde vraag worden: **c**, de haak zo, en
+    wat hem zichtbaar maakt ("wat je weet, is wat er het laatst geteld werd", vraag 77, b) naar voren, vóór de demo?
+    **e**, een fotomodus en vensters en een letter in de beeldstijl, vóór de Steam-pagina?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

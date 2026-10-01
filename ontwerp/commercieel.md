@@ -3,7 +3,9 @@
 **Besloten (Marcel, 1 okt 2026):** "Ik wil toevoegen dat we echt moeten denken aan het commerciële deel van het project.
 Ik wil hier eigenlijk geld mee verdienen." Dus: het commerciële deel denkt mee in elke keuze, en niet pas aan het eind.
 Wat er al lag: verkopen op Steam, als los programma (`verpakken.md`), een naam die op één plek staat (`T.NAAM`; de
-werktitel past niet meer, vraag 8), en een proefversie voor itch.io (vraag 58, C).
+werktitel past niet meer, vraag 8), en een proefversie voor itch.io (vraag 58, C). En daarna, op het eerste voorstel:
+"Dat verstoppen vind ik niet sterk genoeg eigenlijk. Volgens mij is ons idee dieper dan wat er op Steam staat? Ook de art
+stijl speelt een grote rol denk ik." Dus de haak is niet het verstoppen alleen, en de beeldstijl telt mee.
 
 Hieronder het voorstel van Claude (1 okt, eenentwintigste sessie), met wat er nagezocht is. De vragen erover staan in de
 werklijst als vraag 83.
@@ -33,11 +35,26 @@ de uitverkopen en met updates. Zonder verlanglijstjes verkoopt een goed spel bij
 
 ## Wat het voor ons betekent
 
-1. **De haak vooraan: "Word rijk. Lijk arm."** Wat wij hebben en de rest niet: je bent de schout, klem tussen een
-   hebberige, verwarde heer en een dorp dat meer wil, en wat je opzij zet, moet uit het zicht van zijn inner. Dat is
-   *Papers, Please* in een middeleeuws dorp: een klein raderwerk onder een gezag, met keuzes die pijn doen, en zwarte
-   humor. Wensen zoals in Anno heeft ieder bouwspel; de heer, de inner en het verstoppen niet. Dus: de heer en zijn
-   eisen horen in de eerste demo, en wat we laten zien (plaatjes, trailer, de eerste tien minuten) draait om hem.
+1. **De haak: je bent geen god boven het dorp, maar de schout erin** (Marcel: het verstoppen alleen is niet sterk
+   genoeg, "ons idee is dieper"; het eerste voorstel was "Word rijk. Lijk arm."). Het diepere idee is het concept
+   (`concept.md`): het poppetje is de manier waarop je bestuurt. Wie je nodig heeft, komt je zoeken (de voorvallen); je
+   raadsman staat 's ochtends aan je deur met zijn rapport; in de herberg hoor je wat er speelt; ben je weg, dan beslist
+   hij; en de inner ziet alleen wat in zijn zicht ligt. Bijna elk bouwspel op Steam laat je van bovenaf kijken, met alles
+   in tabellen. De spellen waarin je een mens in een middeleeuws dorp bent (Medieval Dynasty, Bellwright, de Guild-reeks),
+   gaan over overleven of een leven leiden, niet over besturen. Een pitch: "Je bent geen god boven je dorp. Je bent de
+   schout erin." (in het Engels: "You're not a god above your town. You're the reeve in it."). De heer, de inner en het
+   verstoppen zijn de satire en de druk daarin, niet de haak zelf.
+   **Dieper verkoopt alleen als je het ziet,** op één plaatje en in dertig seconden. Dat lukt nu half: de balk zegt elk
+   getal precies, en dan hoef je niet te lopen of te vragen (vraag 75, b). Wat het concept noemt, "wat je weet, is wat er
+   het laatst geteld werd" (vraag 77, b), maakt de haak pas echt.
+1b. **De beeldstijl is een troef** (Marcel: "Ook de art stijl speelt een grote rol denk ik"). Bekeken op 1 okt, op een
+   schermafdruk van het gehucht: rijk, warm en leesbaar (vakwerk met rode luiken, rieten daken, poppetjes die je uit
+   elkaar houdt), op het niveau van goede pixel art-spellen, en anders dan de 3D-bouwspellen die de markt vullen (Manor
+   Lords, Foundation). En het hoort bij de haak: wie in het dorp staat, leest het dorp af aan wat hij ziet ("de stad is
+   het dashboard", `concept.md`). Wat de plaatjes nu zwakker maakt, is wat eroverheen ligt: de balk, het hulpblok rechts,
+   het doel en de berichten bedekken een groot deel van het beeld, in browserletters. Nodig vóór de Steam-pagina: een
+   fotomodus (alles weg), een eigen letter en vensters in dezelfde stijl, en plaatjes van dichtbij én van het hele dorp,
+   ook 's avonds met de ramen van de herberg.
 2. **Engels.** Steam is vooral Engels; Nederlands alleen is een heel kleine markt. Nu staan de spelteksten in het
    Nederlands verspreid over veertig bestanden. Vertalen gaat pas goed als alle teksten op één plek staan, met een
    sleutel. Voorstel: Engels als hoofdtaal op Steam, Nederlands erbij; de code en het commentaar blijven Nederlands. Het
@@ -65,5 +82,6 @@ de uitverkopen en met updates. Zonder verlanglijstjes verkoopt een goed spel bij
 
 ## Open
 
-Zie de werklijst, vraag 83: dit tijdpad; Engels; de haak vooraan; en wat er aan geld en tijd in kan (geluid, een
-tekenaar voor de capsule, de 100 dollar).
+Zie de werklijst, vraag 83: dit tijdpad; Engels; de haak (de schout in het dorp, niet het verstoppen) en wat hem
+zichtbaar maakt; wat er aan geld en tijd in kan (geluid, een tekenaar voor de capsule, de 100 dollar); en de plaatjes
+(een fotomodus en vensters in de beeldstijl).

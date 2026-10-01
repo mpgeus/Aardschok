@@ -38,7 +38,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - `ontwerp/concept.md`: het concept dat Marcel op 30 sep meebracht ("De Schout": het poppetje is de manier
   waarop je bestuurt), en hoe het naast ons spel ligt; wat ervan besloten wordt, is vraag 73.
 - `ontwerp/commercieel.md`: hoe het spel geld gaat verdienen (Marcel, 1 okt: "Ik wil hier eigenlijk geld mee
-  verdienen"): de markt, verlanglijstjes en Steam Next Fest, de haak ("Word rijk. Lijk arm."), Engels, en een tijdpad.
+  verdienen"): de markt, verlanglijstjes en Steam Next Fest, de haak (je bent geen god boven het dorp, maar de schout
+  erin), de beeldstijl als troef, Engels, en een tijdpad.
   Het commerciële deel denkt mee in elke keuze; de vragen zijn vraag 83.
 - `ontwerp/speelbaar.md`: wat er nog ontbreekt voor een eerste speelbaar product (vraag 33), en wat er
   in een speeltest van een heel jaar gebeurde.
@@ -514,8 +515,9 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   kaarten naast elkaar; tussen steden pas na de vrijheid.
 - Toon: zwarte satire. De heer is lachwekkend, zijn straffen niet (voorstel).
 - **Geld verdienen** (Marcel, 1 okt): "we moeten echt denken aan het commerciële deel van het project. Ik wil hier
-  eigenlijk geld mee verdienen." Wat het spel verkoopt, is wat de rest niet heeft: de heer, de inner en het verstoppen
-  (`commercieel.md`).
+  eigenlijk geld mee verdienen." En: "Volgens mij is ons idee dieper dan wat er op Steam staat? Ook de art stijl speelt
+  een grote rol." Wat het spel verkoopt, is het concept (je bestuurt als één mens in het dorp) en de beeldstijl; de
+  heer, de inner en het verstoppen zijn de satire daarin (`commercieel.md`).
 - **Een toestand is een status** (Marcel, 1 okt, als richtlijn: "Honger, droogte of een plaag, moet een status zijn",
   en "Iets wat begint en eindigt. Mogelijk in verschillende niveaus. Ernstige droogte, en droogte bijvoorbeeld"): wat
   een tijd duurt, heeft een begin en een eind, soms in niveaus, en is te zien zolang het duurt; een bericht of het
