@@ -34,6 +34,17 @@
     // De kring om een plek, in tegels, van het midden van het huis tot het midden van de plek (vraag 80, B; vraag 85, b:
     // 25 was te klein voor het gehucht, waar de boerderijen aan de rand staan).
     kring: { put: 12, kapel: 30, herberg: 30, markt: 30 },
+    // Doorgroeien (vraag 80, C; 2b): heeft een huis T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen op rij alles, dan groeit het
+    // door naar de volgende stand, en dat kost bouwstof uit de voorraad, naar wat het wordt (zo krijgt steen een doel).
+    bouwstof: { huis: { hout: 8 }, stenenHuis: { steen: 12 } },
+    // Achteruitgaan (vraag 85, c; de spelregel "Achteruitgaan"): 'zacht' (de standaard, zoals in Anno 1602: een gezin
+    // trekt pas weg uit een huis onder de vertrekdrempel, en dat gebeurt alleen als het eten of het brandhout mist) of
+    // 'streng' (mist een huis missenDagen op rij iets, dan trekt zijn gezin weg; hooguit één huis per dag).
+    achteruit: 'zacht',
+    missenDagen: 30,
+    // Wat een mens van elke stand aan belasting opbrengt, als die wet is aangenomen (js/wetten.js): zoveel keer wat de
+    // wet per mens vraagt. Wie in geen huis met een stand woont (de schout en zijn huis, de herbergierster), telt als 1.
+    belasting: { keuters: 1, dorpelingen: 2, ambachtslieden: 3, boeren: 1 },
   };
   const IN = () => T.WENSEN_INSTELLINGEN;
 
@@ -255,6 +266,16 @@
       }
     }
     return bederfelijk;
+  };
+
+  // Voor hoeveel mensen het dorp belasting betaalt (de wet, js/wetten.js): een hogere stand betaalt meer (vraag 80, C),
+  // naar de standen van de laatste dag (D.behoeften.standen). Zonder wensen per huis is dat gewoon iedereen.
+  T.belastbaar = function (D) {
+    const st = D.behoeften && D.behoeften.standen;
+    let n = D.bevolking || 0;
+    if (!st) return n;
+    for (const s of Object.keys(st)) n += st[s].mensen * ((IN().belasting[s] || 1) - 1);
+    return n;
   };
 
   // Wat een huis wilde en had op de laatste dag die tikte (T.tikBehoeftenDag): op het huis zelf, zodat het venster van een

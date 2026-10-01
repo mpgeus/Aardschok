@@ -748,7 +748,12 @@
       // En wie er woont (`huis`, de boer met dezelfde id of de schout): dat telt voor zijn kelder
       // (js/verstoppen.js). In een gewoon huis zegt `bewoners` wie er bij het begin woont
       // (T.zetBeginBewoners, js/bewoners.js). En `tekening` weet waar de deur is (T.deurVan).
-      D.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, tekening: d.tekening || null, klaar: true, klaarOp: 0, handen: 0, voorwerp: null, huis: d.huis || null, bewoners: d.bewoners || null });
+      // Zijn tekening staat als voorwerp op de kaart, op dezelfde plek (uit Tiled, of van de maker): die neemt hij mee, zodat
+      // hij kan doorgroeien zoals een huis dat jij of een gezin bouwde (js/behoeften.js; werklijst vraag 85). Tot 1 okt
+      // had hij er geen, en groeiden de woningen van het begin nooit.
+      const naam = d.tekening ? d.tekening.split('/').pop() : null;
+      const voorwerp = (naam && (w.voorwerpen || []).find((v) => v.soort === naam && v.x === d.x && v.y === d.y)) || null;
+      D.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, tekening: d.tekening || null, klaar: true, klaarOp: 0, handen: 0, voorwerp, huis: d.huis || null, bewoners: d.bewoners || null });
       woonruimte += g.woonruimte || 0;
     }
     // De boeren die je ziet lopen, wonen al in hun huis. Wie er verder woont, zet T.zetBeginBewoners

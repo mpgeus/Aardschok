@@ -291,8 +291,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.berekenTevredenheid` (`js/behoeften.js`) maakt er het gemiddelde van, naar mensen; de huizen nemen hun goederen
   vóór het eten (`T.gebruikGoederen`), en wat een huis wil en heeft, staat op het huis (`g.wensen`). Met een put, een
   kapel, de herberg of een markt in de hand zie je de kring (`js/tekenen.js`) en zegt de muis wie hij bereikt
-  (`T.kringTekst`). De spelregel "Wensen" op "Het dorp als geheel" is het spel van vóór 1 okt; de getallen in
-  `T.WENSEN_INSTELLINGEN`.
+  (`T.kringTekst`). **Doorgroeien per huis** (2b, in `js/behoeften.js`): heeft een huis een maand op rij alles, dan
+  groeit het door naar de volgende stand, als de bouwstof er is (`bouwstof`: een huis hout, een stenen huis steen), ook
+  de woningen van het begin (`T.zetBestaandeGebouwen` geeft ze hun tekening als voorwerp); achteruitgaan is zacht (een
+  gezin trekt alleen weg uit een huis onder de vertrekdrempel) of streng (de spelregel "Achteruitgaan"); een hogere stand
+  betaalt meer belasting (`T.belastbaar`). De spelregel "Wensen" op "Het dorp als geheel" is het spel van vóór 1 okt; de
+  getallen in `T.WENSEN_INSTELLINGEN`.
 - `js/wetten.js`: **de wetten** (stap 3 van de proef, vraag 54, 29 sep; eerst keuren genoemd): een menu zoals in
   Democracy 3 (`js/wettenmenu.js`, onder `W` en als knop in de balk), met het rantsoen, vreemden welkom, houtkap in
   het bos van de heer en de belasting. Wat een wet doet, staat als getallen per stand in één blok

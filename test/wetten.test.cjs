@@ -133,6 +133,8 @@ test('de belasting: op de eerste van de maand goud in de kist, en wat geen heel 
   T.zetWet(S.dorp, 'belasting', 'aangenomen');
   assert.ok(bijna(voor - tevreden(S).tevredenheid, 0.1));
   assert.ok(tevreden(S).last.includes('de belasting'));
+  // Iedereen telt hier als één; dat een hogere stand meer betaalt (T.belastbaar), toetst test/wensen.test.cjs.
+  S.dorp.behoeften.standen = null;
   const goud = S.dorp.voorraad.goud;
   T.tikWettenDag(S.dorp, 31); // 2 grasmaand: geen eerste van de maand
   assert.equal(S.dorp.voorraad.goud, goud);

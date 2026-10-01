@@ -487,6 +487,9 @@
   // laatst achter.
   const STERFTE = { oud: 0, kleuter: 1, kind: 2, jong: 3, volwassen: 4 };
   const VERTREK = { jong: 0, volwassen: 1, kind: 2, kleuter: 3, oud: 4 };
+  // Wie het eerst gaat als er iemand wegtrekt of sterft, in volgorde; ook voor wie uit een bepaald huis wegtrekt (js/behoeften.js:
+  // achteruitgaan per huis, werklijst vraag 85, c).
+  T.wieGaatEerst = (D, reden) => wieGaat(D, reden);
   function wieGaat(D, reden) {
     const kan = D.bewoners.mensen.filter((p) => !p.wie && !vanSchout(p) && !p.weg);
     if (reden === 'vertrek') {

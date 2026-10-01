@@ -284,17 +284,53 @@
   // Ver onder de groeidrempel trekt op een groeidag een heel gezin juist weg, in plaats van dat
   // er (js/gebouwen.js, stap 4) een bij komt. Met de optie hongerBuitenWinter 'wegtrekken' ook als
   // er buiten de winter geen eten genoeg is.
+  //
+  // Met de wensen per huis (js/wensen.js; werklijst vraag 85, c: zacht, zoals in Anno 1602) komt wie wegtrekt uit een huis
+  // onder de vertrekdrempel, het nieuwste gezin eerst, zoals voor het hele dorp; dat gebeurt alleen als het eten of het
+  // brandhout mist (of de heer of een wet het huis er zo ver onder drukt). Wat een huis verder mist, houdt het alleen
+  // tegen om door te groeien.
   function pasVertrekToe(D, b, dag) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     if (dag <= 0 || dag % T.GEBOUWEN_INSTELLINGEN.gezinDagen !== 0) return;
     if (D.bevolking <= 0) return;
     const honger = IN.hongerBuitenWinter === 'wegtrekken' && !b.inWinter && b.voedselDekking < 1;
-    if (b.tevredenheid >= IN.vertrekDrempel && !honger) return;
-    const verlies = Math.min(D.bevolking, T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
-    const waarom = honger ? 'er is geen eten' : 'het dorp is niet tevreden genoeg';
+    const ontevreden = b.wensen ? b.wensen.huizen.filter((h) => h.tevredenheid < IN.vertrekDrempel) : null;
+    if (!honger && (ontevreden ? !ontevreden.length : b.tevredenheid >= IN.vertrekDrempel)) return;
+    let verlies = Math.min(D.bevolking, T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
+    let waarom = honger ? 'er is geen eten' : 'het dorp is niet tevreden genoeg';
+    let wie;
+    if (ontevreden && !honger) {
+      wie = T.wieGaatEerst(D, 'vertrek').filter((p) => ontevreden.some((h) => h.g === p.huis));
+      verlies = Math.min(verlies, wie.length);
+      if (!verlies) return;
+      // Onder de drempel zakt een huis alleen zonder eten of brandhout (of door de heer of een wet): dat zegt het bericht.
+      const h = ontevreden.find((x) => x.g === wie[0].huis);
+      const geen = ['eten', 'brandhout'].filter((id) => h.heeft[id] < 1 - 1e-9).map((id) => `geen ${T.WENSEN[id].naam}`);
+      waarom = geen.length ? `ze hebben ${T.opsomming(geen)}` : 'ze zijn niet tevreden genoeg';
+    }
     // Met bewoners zegt het bericht wie het zijn en lopen ze de weg af (js/bewoners.js).
-    T.wijzigBevolking(D, -verlies, 'vertrek', waarom);
+    T.wijzigBevolking(D, -verlies, 'vertrek', waarom, wie);
     if (!D.bewoners && T.ui && T.ui.bericht) T.zeg(D, `Een gezin trekt weg: ${waarom}. (-${verlies})`, 'gevaar');
+  }
+
+
+  // Achteruitgaan streng (de spelregel "Achteruitgaan", werklijst vraag 80, C): mist een huis missenDagen op rij iets, dan
+  // trekt zijn gezin weg; hooguit één huis per dag, het huis dat het langst mist. Hoelang een huis al iets mist, telt het
+  // altijd (g.missenDagen), ook zacht: dat kan een venster zeggen.
+  function pasStrengToe(D, wensen) {
+    const WI = T.WENSEN_INSTELLINGEN;
+    let langst = null;
+    for (const h of wensen.huizen) {
+      h.g.missenDagen = h.alles ? 0 : (h.g.missenDagen || 0) + 1;
+      if (WI.achteruit !== 'streng' || h.g.missenDagen < WI.missenDagen) continue;
+      if (!langst || h.g.missenDagen > langst.g.missenDagen) langst = h;
+    }
+    if (!langst) return;
+    langst.g.missenDagen = 0;
+    const wie = T.wieGaatEerst(D, 'vertrek').filter((p) => p.huis === langst.g);
+    const verlies = Math.min(T.GEBOUWEN_INSTELLINGEN.gezinGrootte, wie.length);
+    const mist = Object.keys(langst.heeft).filter((id) => langst.heeft[id] < 1 - 1e-9).map((id) => T.WENSEN[id].naam);
+    if (verlies) T.wijzigBevolking(D, -verlies, 'vertrek', `hun huis mist al een maand ${T.opsomming(mist)}`, wie);
   }
 
   // Ruilt het voorwerp van een gebouw voor zijn "wordt"-soort: dezelfde tekening-ingang als
@@ -312,23 +348,12 @@
     const nieuweSoort = T.GEBOUWEN[soort.wordt];
     if (!nieuweSoort) return false;
     const w = D.wereld;
-    // Ook een huis dat doorgroeit, krijgt een van de tekeningen van zijn nieuwe soort
-    // (T.volgendeTekening, js/gebouwen.js). Een hut op een erf weet al welke: die is gekozen toen hij
-    // er kwam, zodat het huis in het erf past (js/erven.js).
-    const vast = instantie.wordtTekening || null;
-    const tekening = vast || T.volgendeTekening(D, soort.wordt);
     const oudeVoet = instantie.voet || T.gebouwVoet(instantie.soort, instantie.tekening) || { b: 1, h: 1 };
-    const nieuweVoet = T.gebouwVoet(soort.wordt, tekening) || oudeVoet;
-    const inOud = (dx, dy) => dx < oudeVoet.b && dy < oudeVoet.h;
+    const keus = kiesGroei(D, instantie, soort.wordt, oudeVoet);
+    if (!keus) return false; // geen ruimte: morgen weer
+    const { tekening, voet: nieuweVoet } = keus;
     const inNieuw = (dx, dy) => dx < nieuweVoet.b && dy < nieuweVoet.h;
-    for (let dy = 0; dy < nieuweVoet.h; dy++) {
-      for (let dx = 0; dx < nieuweVoet.b; dx++) {
-        if (inOud(dx, dy)) continue; // eigen grond: was toch al van dit huis
-        if (T.isVast(w, instantie.x + dx, instantie.y + dy)) return false; // geen ruimte: morgen weer
-      }
-    }
-    const oudeNaam = soort.naam;
-    if (!vast) T.neemTekening(D, soort.wordt);
+    if (!instantie.wordtTekening && tekening === T.volgendeTekening(D, soort.wordt)) T.neemTekening(D, soort.wordt);
     delete instantie.wordtTekening;
     instantie.soort = soort.wordt;
     instantie.tekening = tekening;
@@ -364,21 +389,93 @@
     // verwachtingen dan een dorp vol hutten; dat is nu nog geen regel, alleen deze opmerking.
     // Wie er woont, gaat voortaan naar de deur van de nieuwe tekening (js/bewoners.js).
     T.huisVeranderd(D, instantie);
-    T.zeg(D, `Een ${oudeNaam} is gegroeid tot een ${nieuweSoort.naam}.`, 'goed');
     return true;
   }
 
+  // Welke tekening een huis krijgt als het doorgroeit, en zijn nieuwe voet: die van zijn erf (een hut op een erf weet al
+  // welk huis hij wordt, zodat het in het erf past; js/erven.js), het stenen broertje van zijn huis (`broertjes` op de
+  // nieuwe soort: dezelfde voet, dus er is altijd plaats; werklijst vraag 85, d), of de volgende van zijn nieuwe soort
+  // (T.volgendeTekening, js/gebouwen.js), en past die niet, een andere die wel past. Null als er geen past.
+  function kiesGroei(D, instantie, nieuw, oudeVoet) {
+    const soort = T.GEBOUWEN[nieuw];
+    const kandidaten = [];
+    if (instantie.wordtTekening) kandidaten.push(instantie.wordtTekening);
+    else {
+      const broertje = soort.broertjes && soort.broertjes[instantie.tekening];
+      if (broertje) kandidaten.push(broertje);
+      kandidaten.push(T.volgendeTekening(D, nieuw));
+      for (const t of soort.tekeningen || []) if (!kandidaten.includes(t)) kandidaten.push(t);
+    }
+    for (const tekening of kandidaten) {
+      const voet = T.gebouwVoet(nieuw, tekening) || oudeVoet;
+      if (heeftRuimte(D.wereld, instantie, oudeVoet, voet)) return { tekening, voet };
+    }
+    return null;
+  }
+
+  // Is er plaats voor de nieuwe voet: wat buiten de oude voet valt, mag niet vast zijn (een muur, een boom, een gebouw).
+  function heeftRuimte(w, instantie, oudeVoet, voet) {
+    for (let dy = 0; dy < voet.h; dy++) {
+      for (let dx = 0; dx < voet.b; dx++) {
+        if (dx < oudeVoet.b && dy < oudeVoet.h) continue; // eigen grond: was toch al van dit huis
+        if (T.isVast(w, instantie.x + dx, instantie.y + dy)) return false;
+      }
+    }
+    return true;
+  }
+
+  const kostenTekst = (kosten) => T.opsomming(Object.keys(kosten).map((wat) => `${kosten[wat]} ${wat}`));
+
+  // Het dorp als geheel (de spelregel "Wensen", zoals vóór 1 okt): is het dorp huisGroeiDagen op rij tevreden genoeg,
+  // dan groeit elk huis door, zonder bouwstof.
   function pasHuisGroeiToe(D, b) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
+    if (b.wensen) return pasHuisGroeiPerHuisToe(D, b.wensen);
     const tevredenGenoeg = b.tevredenheid >= IN.huisGroeiDrempel;
     for (const instantie of D.gebouwen) {
       const soort = T.GEBOUWEN[instantie.soort];
-      // Alleen gebouwen die de speler zelf neerzette groeien mee: wat al op de kaart stond
-      // (T.zetBestaandeGebouwen, js/gebouwen.js) heeft geen eigen voorwerp om de tekening op te
-      // wisselen, en blijft dus zoals het getekend is.
+      // Alleen een gebouw met een voorwerp groeit mee: dat van een huis dat de speler of een gezin bouwde, of de tekening
+      // die al op de kaart stond (T.zetBestaandeGebouwen, js/gebouwen.js).
       if (!instantie.klaar || !instantie.voorwerp || !soort || !soort.wordt) continue;
       instantie.groeiDagen = tevredenGenoeg ? (instantie.groeiDagen || 0) + 1 : 0;
-      if (instantie.groeiDagen >= IN.huisGroeiDagen) groeiGebouw(D, instantie, soort);
+      if (instantie.groeiDagen >= IN.huisGroeiDagen && groeiGebouw(D, instantie, soort)) {
+        T.zeg(D, `Een ${soort.naam} is gegroeid tot een ${T.GEBOUWEN[soort.wordt].naam}.`, 'goed');
+      }
+    }
+  }
+
+  // Per huis (js/wensen.js; werklijst vraag 80, C, en 85): heeft een huis huisGroeiDagen op rij alles wat zijn stand wil,
+  // dan groeit het door naar de volgende stand, als de bouwstof er is (T.WENSEN_INSTELLINGEN.bouwstof: een huis hout, een
+  // stenen huis steen). Zonder bouwstof wacht het, en zegt het dorp het één keer.
+  function pasHuisGroeiPerHuisToe(D, wensen) {
+    const IN = T.BEHOEFTEN_INSTELLINGEN;
+    // Een huis waar niemand meer woont, begint opnieuw te tellen als er weer iemand komt.
+    const bewoond = new Set(wensen.huizen.map((h) => h.g));
+    for (const g of D.gebouwen) {
+      if (bewoond.has(g)) continue;
+      delete g.groeiDagen;
+      delete g.missenDagen;
+      delete g.wachtOpBouwstof;
+    }
+    for (const h of wensen.huizen) {
+      const g = h.g;
+      const soort = T.GEBOUWEN[g.soort];
+      if (!g.klaar || !g.voorwerp || !soort.wordt) continue;
+      g.groeiDagen = h.alles ? (g.groeiDagen || 0) + 1 : 0;
+      if (!h.alles) delete g.wachtOpBouwstof;
+      if (g.groeiDagen < IN.huisGroeiDagen) continue;
+      const nieuw = T.GEBOUWEN[soort.wordt];
+      const kosten = T.WENSEN_INSTELLINGEN.bouwstof[soort.wordt] || {};
+      if (!T.kanBetalen(D, kosten)) {
+        if (!g.wachtOpBouwstof) T.zeg(D, `Een ${soort.naam} kan een ${nieuw.naam} worden, maar daar is ${kostenTekst(kosten)} voor nodig.`);
+        g.wachtOpBouwstof = true;
+        continue;
+      }
+      if (!groeiGebouw(D, g, soort)) continue; // geen ruimte: morgen weer
+      T.betaalKosten(D, kosten);
+      delete g.wachtOpBouwstof;
+      const voor = Object.keys(kosten).length ? `, voor ${kostenTekst(kosten)}` : '';
+      T.zeg(D, `Een ${soort.naam} is gegroeid tot een ${nieuw.naam}${voor}: wie erin woont, hoort nu bij de ${T.STANDEN[T.standVan(g)].naam}.`, 'goed');
     }
   }
 
@@ -643,6 +740,7 @@
     if (sprokkel > 0) T.wijzigVoorraad(D, 'hout', sprokkel);
     pasWinterVerliesToe(D, b);
     pasVertrekToe(D, b, dag);
+    if (b.wensen) pasStrengToe(D, b.wensen);
     pasHuisGroeiToe(D, b);
 
     if (T.ui && T.ui.toonTevredenheid) T.ui.toonTevredenheid(D);

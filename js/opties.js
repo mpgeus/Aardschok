@@ -329,7 +329,18 @@
         { id: 'huis', naam: 'Per huis', zet: { 'WENSEN_INSTELLINGEN.perHuis': true },
           uitleg: 'Elk huis wil wat zijn stand wil: keuters in een hut eten, brandhout en een put; dorpelingen in een huis daarbij bier, vlees of vis, een kapel en de herberg; ambachtslieden in een stenen huis daarbij brood, laken en een markt. De hoogste stand neemt eerst. Het dorp is het gemiddelde.' },
         { id: 'dorp', naam: 'Het dorp als geheel', zet: { 'WENSEN_INSTELLINGEN.perHuis': false },
-          uitleg: 'Eén getal voor het hele dorp: eten, met groente, vis of vlees erbij, brandhout in de winter, en een kapel.' },
+          uitleg: 'Eén getal voor het hele dorp: eten, met groente, vis of vlees erbij, brandhout in de winter, en een kapel. Is het dorp een maand tevreden genoeg, dan groeien alle huizen door, zonder bouwstof.' },
+      ],
+    },
+    // Achteruitgaan (werklijst vraag 85, c; Marcel, 1 okt: "c zacht"; js/behoeften.js). Alleen met de wensen per huis.
+    {
+      id: 'achteruit', naam: 'Achteruitgaan', standaard: 'zacht',
+      uitleg: 'Wat er gebeurt als een huis iets mist van wat zijn stand wil.',
+      keuzes: [
+        { id: 'zacht', naam: 'Zacht', zet: { 'WENSEN_INSTELLINGEN.achteruit': 'zacht' },
+          uitleg: 'Zoals in Anno 1602: een huis dat iets mist, groeit niet verder en is minder tevreden. Er trekt pas een gezin weg als het huis onder de vertrekdrempel zakt, en dat gebeurt alleen als het eten of het brandhout mist.' },
+        { id: 'streng', naam: 'Streng', zet: { 'WENSEN_INSTELLINGEN.achteruit': 'streng' },
+          uitleg: 'Mist een huis een maand lang iets, dan trekt zijn gezin weg, hooguit één huis per dag. Een huis dat net doorgroeide, wil meteen meer: zorg dat het er is.' },
       ],
     },
     // De raad onder het doel (Marcel, 29 sep, werklijst vraag 58: "B onder het doel"; js/raad.js).

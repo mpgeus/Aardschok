@@ -356,7 +356,8 @@ test('T.tikBehoeftenDag: een huis dat van vorm wisselt (smal en diep naar breed 
   }
 });
 
-test('T.tikBehoeftenDag: een gebouw zonder eigen voorwerp (al op de kaart, T.zetBestaandeGebouwen) groeit niet mee', () => {
+// Een gebouw op de kaart heeft sinds 1 okt wel zijn voorwerp (T.zetBestaandeGebouwen; test/wensen.test.cjs).
+test('T.tikBehoeftenDag: een gebouw zonder voorwerp groeit niet mee', () => {
   const S = maakS(40, 40);
   S.gebouwen.push({ soort: 'hut', x: 10, y: 10, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
   S.bevolking = 4;
