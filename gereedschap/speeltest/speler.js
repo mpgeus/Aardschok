@@ -34,8 +34,9 @@
 //           welkom aan, bouwt de kapel en de smidse zodra het goud en het hout er zijn, een houthakker als het
 //           dorp zegt dat het hout de winter niet haalt, verkoopt de marskramer graan als het goud tekortschiet (en
 //           houdt wat het dorp tot de lente eet, het zaaigraan en het graan van de heer), koopt in de lente zaaigraan
-//           als er akkers kaal liggen (sinds 1 okt, vraag 79), en betaalt de heer alles. Hij verstopt niets en loopt
-//           de rovers niet achterna.
+//           als er akkers kaal liggen (sinds 1 okt, vraag 79), bouwt een jager als het eten de winter niet haalt
+//           (hooguit één per maand; vraag 81), en betaalt de heer alles. Hij verstopt niets en loopt de rovers niet
+//           achterna.
 // Van elke speler schrijft hij op waarom er op een groeidag geen gezin kwam (T.waaromGeenGezin, js/gebouwen.js),
 // op welke dag het gehucht een dorp werd, en welke raad er elke dag onder het doel stond (js/raad.js).
 (function (T) {
@@ -744,6 +745,7 @@
     const betaald = new Set(); // de jaren waarin hij de heer betaalde
     let gelezenWinter = 0;
     let erfNietVoor = 0; // paste een erf nergens, dan zoekt hij pas een maand later opnieuw
+    let jagerNietVoor = 0; // een jager hooguit één keer per maand
     const jaar = () => Math.floor(dagNu() / JAAR);
     const kosten = (soort) => T.GEBOUWEN[soort].kosten;
     // Zegt het dorp dat het hout de winter niet haalt, dan wil hij eerst een houthakker (ook als het goud er nog
@@ -815,6 +817,12 @@
       async elkeStap() {
         const s = S();
         luisterNaarDeWinterBouwer();
+        // Haalt het eten de winter niet, dan een jager, hooguit één per maand (werklijst vraag 81, b): zoals een speler die
+        // de raad volgt ("een jager [B] schiet 1 vlees per dag"), en niet negen in louwmaand, zoals de bouwer van 29 sep.
+        if (dagNu() >= jagerNietVoor && T.watDeWinterNietHaalt(s.dorp, Math.floor(dagNu())).includes('eten') && T.kanBetalen(s.dorp, kosten('jager'))) {
+          jagerNietVoor = dagNu() + 30;
+          bouw('jager');
+        }
         // Steeds één erf vrij.
         if (!T.vrijeErven(s.dorp).length && dagNu() >= erfNietVoor && !bouw('erf')) erfNietVoor = dagNu() + 30;
         // Bouwen wat hij wil, zodra het goud en het hout er zijn.
