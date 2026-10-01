@@ -314,7 +314,7 @@
       uitleg: 'Een regel onder het doel linksboven.',
       keuzes: [
         { id: 'aan', naam: 'Aan', zet: { 'RAAD_INSTELLINGEN.aan': true },
-          uitleg: 'Onder het doel staat wat nu tussen jou en een dorp staat: waarom er geen gezin komt, of wanneer het volgende komt, het hout voor de winter, de inner, de rovers. Met de toets erbij.' },
+          uitleg: 'Onder het doel staat wat nu tussen jou en een dorp staat: waarom er geen gezin komt, of wanneer het volgende komt, het hout voor de winter, wat je mist voor de kapel en de smidse en waar het vandaan komt, de inner, de rovers. Met de toets erbij.' },
         { id: 'uit', naam: 'Uit', zet: { 'RAAD_INSTELLINGEN.aan': false },
           uitleg: 'Alleen het doel. Wat het dorp je zegt, zie je in de berichten.' },
       ],

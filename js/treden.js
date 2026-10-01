@@ -59,6 +59,14 @@
     return { kop: naam ? `${naam} · naar een ${trede}` : `Naar een ${trede}`, tekst: delen.join(' · '), klaar, trede };
   };
 
+  // Welke gebouwen het doel nog vraagt en die er nog niet staan, ook niet in aanbouw: voor de raad (js/raad.js), die
+  // zegt wat je ervoor mist. Leeg als er geen trede meer te halen is.
+  T.doelGebouwen = function (D) {
+    const trede = T.volgendeTrede(D);
+    if (!trede || !heeftTreden(D)) return [];
+    return IN()[trede].gebouwen.filter((soort) => !(D.gebouwen || []).some((g) => g.soort === soort));
+  };
+
   // Elke dag (T.tikGebouwenDag, js/gebouwen.js, na de groei): is het doel gehaald, dan gaat de trede omhoog.
   T.tikTredeDag = function (D) {
     const doel = T.tredeDoel(D);

@@ -67,6 +67,32 @@
   // genoeg is; de bouwer die alleen hoorde dat het niet genoeg was, bouwde er een na de ander (29 sep).
   const haalt = (v) => `${v.dagen} van de ${v.winter} dagen`;
 
+  // Wat je mist voor de gebouwen die het doel nog vraagt (T.doelGebouwen, js/treden.js): { soorten, mist: { goud, hout
+  // } }, of null als je ze kunt betalen. Alles samen, want wie eerst de kapel bouwt, heeft daarna minder voor de smidse.
+  function tekortVoorHetDoel(D) {
+    const soorten = T.doelGebouwen(D);
+    if (!soorten.length) return null;
+    const mist = {};
+    for (const wat of ['goud', 'hout']) {
+      const nodig = soorten.reduce((som, soort) => som + (T.GEBOUWEN[soort].kosten[wat] || 0), 0);
+      const tekort = Math.ceil(nodig - (D.voorraad[wat] || 0) - 1e-9);
+      if (tekort > 0) mist[wat] = tekort;
+    }
+    return Object.keys(mist).length ? { soorten, mist } : null;
+  }
+
+  // Waar het vandaan komt (werklijst vraag 59, C): goud van de marskramer, die graan koopt, en van de belasting; hout
+  // van een houthakker.
+  function waarVandaan(D, mist) {
+    const bronnen = [];
+    if (mist.goud) {
+      bronnen.push(T.kanHandelen(D) ? 'de marskramer koopt graan, zolang hij er is' : `de marskramer koopt graan in ${T.volgendeMarskramer(D.kalender.dag)}`);
+      bronnen.push(T.standVanWet(D, 'belasting') === 'aangenomen' ? 'de belasting brengt elke maand goud' : 'belasting [W] brengt elke maand goud');
+    }
+    if (mist.hout) bronnen.push(heeft(D, 'houthakker') ? 'de houthakker hakt hout' : 'een houthakker [B] hakt hout');
+    return bronnen;
+  }
+
   // De marskramer staat op het plein, op zijn laatste ronde vóór de heer komt (js/handel.js).
   function marskramerInDeHerfst(D) {
     const m = D.marskramer;
@@ -134,6 +160,19 @@
       tekst: () => (T.ERVEN_INSTELLINGEN.dorpBouwtZelf
         ? 'Er komt geen gezin: het dorp is vol. Wijs een erf aan: [B], dan Erf.'
         : 'Er komt geen gezin: het dorp is vol. Bouw een hut of een huis: [B].'),
+    },
+    {
+      // Wat je mist voor wat het doel vraagt, en waar het vandaan komt (werklijst vraag 59, C; Marcel, 1 okt, vraag 78:
+      // "D dat is prima"). De tweede bouwer van de speeltest kwam twee goud tekort voor de smidse (29 sep), en goud komt
+      // alleen van de marskramer en de belasting.
+      id: 'bouwen',
+      als: (D) => !!tekortVoorHetDoel(D),
+      tekst: (D) => {
+        const { soorten, mist } = tekortVoorHetDoel(D);
+        const wat = T.opsomming(soorten.map((soort) => `de ${T.GEBOUWEN[soort].naam}`));
+        const hoeveel = T.opsomming(Object.entries(mist).map(([w, n]) => `${n} ${w}`));
+        return `Voor ${wat} mis je ${hoeveel}: ${T.opsomming(waarVandaan(D, mist))}.`;
+      },
     },
     {
       id: 'tevreden',

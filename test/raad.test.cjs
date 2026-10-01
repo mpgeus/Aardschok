@@ -239,3 +239,34 @@ test('de spelregel zet hem uit, en op een kaart zonder plein is er geen', () => 
   S.dorp.wereld = Object.assign({}, S.dorp.wereld, { plein: null }); // het dorp heeft zijn eigen kaart (D.wereld)
   assert.equal(raad(S), null);
 });
+
+test('bouwen: wat je mist voor wat het doel vraagt, en waar het vandaan komt (vraag 59, C)', () => {
+  const S = opDag(gehucht(), 40.5); // na de eerste dagen, en ver van de winter
+  const kosten = (wat, soorten) => soorten.reduce((som, s) => som + (T.GEBOUWEN[s].kosten[wat] || 0), 0);
+  // In het begin kun je de kapel en de smidse allebei betalen: dan zegt hij niets.
+  assert.deepEqual(T.doelGebouwen(S.dorp), ['kapel', 'smidse']);
+  assert.notEqual(id(S), 'bouwen');
+  // Met te weinig goud zegt hij hoeveel je mist voor allebei samen, en waar goud vandaan komt.
+  const goud = kosten('goud', ['kapel', 'smidse']) - 6;
+  T.zetVoorraad(S.dorp, 'goud', goud);
+  const maand = T.volgendeMarskramer(S.kalender.dag);
+  assert.equal(raad(S).tekst, `Voor de kapel en de smidse mis je 6 goud: de marskramer koopt graan in ${maand} en belasting [W] brengt elke maand goud.`);
+  // Is de belasting al aangenomen, en staat de marskramer op het plein, dan zegt hij dat.
+  T.zetWet(S.dorp, 'belasting', 'aangenomen');
+  S.dorp.marskramer = { staat: true, weg: false, bezoek: 0 };
+  assert.equal(raad(S).tekst, 'Voor de kapel en de smidse mis je 6 goud: de marskramer koopt graan, zolang hij er is en de belasting brengt elke maand goud.');
+  S.dorp.marskramer = null;
+  // Ook te weinig hout: dan ook een houthakker.
+  T.zetVoorraad(S.dorp, 'hout', 5);
+  assert.match(raad(S).tekst, new RegExp(`^Voor de kapel en de smidse mis je 6 goud en ${kosten('hout', ['kapel', 'smidse']) - 5} hout: .* en een houthakker \\[B\\] hakt hout\\.$`));
+  // Staat de kapel er (of wordt hij gebouwd), dan telt alleen de smidse nog.
+  T.zetVoorraad(S.dorp, 'hout', 500);
+  S.dorp.gebouwen.push({ soort: 'kapel', x: 0, y: 0, klaar: false, handen: 0 });
+  assert.deepEqual(T.doelGebouwen(S.dorp), ['smidse']);
+  T.zetVoorraad(S.dorp, 'goud', T.GEBOUWEN.smidse.kosten.goud - 2);
+  assert.match(raad(S).tekst, /^Voor de smidse mis je 2 goud: /);
+  // Is het een dorp, dan vraagt het doel niets meer.
+  S.dorp.trede = 'dorp';
+  assert.deepEqual(T.doelGebouwen(S.dorp), []);
+  assert.notEqual(id(S), 'bouwen');
+});
