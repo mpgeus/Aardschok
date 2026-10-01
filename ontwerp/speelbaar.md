@@ -149,6 +149,50 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 1 okt: de wensen per huis (werklijst, vraag 85, stap 2a en 2b)
+
+Gespeeld in de tweeëntwintigste sessie, op `ccr-c70a2140-wt5zmz` (`107a28f`), in een losse kopie (`git worktree`), met de
+nulmeting op `d51ff59`, de stand ervoor. Geen fouten in de console. Wat er veranderde: elk huis heeft een stand met zijn
+wensen en zijn eigen tevredenheid, en het dorp is het gemiddelde (2a); een huis dat een maand alles heeft, groeit door voor
+bouwstof, ook de woningen van het begin, en een gezin trekt alleen weg uit een huis onder de vertrekdrempel (2b).
+
+**Het bewijs:** met de spelregel "Wensen" op "Het dorp als geheel" speelt de stand van 2a alle vijftien jaren letter voor
+letter zoals de nulmeting: de wensen veranderen verder niets.
+
+**Vóór → na,** per jaar (de bouwer twee jaar; tevreden is het gemiddelde over de maanden):
+
+| Jaar | Mensen aan het eind (het meest) | Doden | Weggetrokken | Tevreden, gemiddeld | Huizen doorgegroeid | Hutten, huizen, stenen huizen aan het eind |
+|---|---|---|---|---|---|---|
+| bouwer, zaad 1 | 91 (91) → 46 (51), ambt kwijt | 29 → 28 | 0 → 0 | 71% → 77% | 11 → 1 | 5, 2, 0 |
+| bouwer, zaad 2 | 59 (59) → 38 (78) | 28 → 64 | 0 → 0 | 72% → 74% | 10 → 1 | 14, 2, 0 |
+| bouwer, zaad 3 | 104 (104) → 51 (51) | 0 → 28 | 0 → 0 | 73% → 76% | 15 → 1 | 5, 2, 0 |
+| braaf, zaad 1, 2, 3 | 37, 36, 37 → 38, 38, 38 | 0 → 0 | 0 → 0 | 68% → 76% | 0 → 1 | 1, 2, 0 |
+| lui30, zaad 1, 2, 3 | 24, 28, 22 → 25, 30, 22 | 36 → 40 | 0 → 0 | 65% → 71% | 0 → 1 | 1, 2, 0 |
+| lui60, zaad 1, 2, 3 | 21, 19, 37 (gevallen) → 9, 13, 39 (gevallen) | 33 → 35 | 0 → 23 | 62% → 67% | 0 → 1 | 1, 2, 0 |
+| slim, zaad 1, 2, 3 | 37, 24, 37 → 39, 26, 39 | 13 → 12 | 0 → 0 | 75% → 81% | 0 → 1 | 1, 2, 0 |
+
+**Wat opviel:**
+
+1. **De bouwer blijft klein, want zijn huizen groeien niet meer door.** Vóór 2b groeide elk huis als het hele dorp een
+   maand 70% tevreden was, en dat haalde de bouwer: 10 tot 15 keer, tot 104 mensen. Nu groeit een huis alleen als het
+   alles heeft, en een hut op een erf mist bijna altijd een put (12 tegels; de enige put staat op het plein). Alleen de hut
+   van het oude stel, bij de put, groeit door. De bouwer weet niets van wensen: hij volgt de raad, en die zegt ze nog niet
+   (dat is 2c). Zo laat de speeltest zien wat de wensen moeten doen: wie ze niet geeft, blijft een gehucht van hutten.
+2. **Elke hut kost hout, en dan komt de houthakker er niet.** De bouwer houdt steeds één erf vrij en neemt Vreemden welkom
+   aan. Vóór 2b trok een nieuw gezin vaak in een huis dat was doorgegroeid; nu zet het een hut neer, van 8 hout. Bij zaad 2
+   kwamen er in het tweede voorjaar tien, en een bouwplaats neemt het hout zodra het er is (`js/erven.js`): het hout bleef
+   het hele jaar op 2 tot 5 staan, en de houthakker (10 hout) kwam er nooit, ook niet toen de raad vanaf herfstmaand 315
+   dagen lang zei dat het hout de winter niet haalt. De winter kostte 64 mensen. Een gezin wacht op de winter pas vanaf
+   1 herfstmaand, en toen was het dorp al 78 groot.
+3. **Iedereen is tevredener**, 6 tot 10 punten: de afwisseling telt niet meer, en zonder kapel scheelt het een huis 0,2 in
+   plaats van 0,08. De vier anderen groeien daardoor iets meer (38 of 39 mensen in plaats van 37).
+4. **Wie lui is, verliest nu ook gezinnen** (lui60, zaad 1 en 2: 11 en 12 mensen trokken weg, "ze hebben geen eten"). Zonder
+   eten zakt een huis dat ook nog een kapel mist onder de vertrekdrempel, zeker met soldaten van de heer in huis; voor het
+   hele dorp hield de kapelfactor (0,12 ook zonder kapel) het er net boven. Dat is de zachte regel zoals hij bedoeld is
+   (alleen bij honger of kou), maar harder dan vóór.
+
+Wat eruit volgt, staat in de werklijst als vraag 86.
+
 ## De speeltest van 1 okt: een jaar dat te winnen is (werklijst, vraag 79, stap 1)
 
 Gespeeld in de eenentwintigste sessie, op `ccr-b5dfb962-d3bery`: de regels op `5620dc5`, de bouwer op `98124bb` (die koopt

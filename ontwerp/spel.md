@@ -183,7 +183,9 @@ letter voor letter mee zoals ervoor).
 - **Gewonnen (2e)** als alle woningen stenen huizen zijn die alles hebben, en de boerderijen wat zij willen, een jaar
   lang (vraag 80, d: "een jaar").
 - **Nog open:** groente en eieren hebben geen stand; de boeren en de herberg ("voor nu"); de poorters (vierde stand,
-  met een huis van twee lagen in baksteen, een badhuis en een gasthuis); wat een huis wil, zie je pas in 2c.
+  met een huis van twee lagen in baksteen, een badhuis en een gasthuis); wat een huis wil, zie je pas in 2c. De speeltest
+  na 2a en 2b (`speelbaar.md`): wie de wensen niet geeft, blijft een gehucht van hutten, want een hut op een erf mist een
+  put en groeit dan niet door; en elke nieuwe hut kost 8 hout. Wat eruit volgt, is werklijst vraag 86.
 
 ## Rovers en de militie (Marcel, 28 en 29 sep 2026; werklijst vraag 51 en 55)
 

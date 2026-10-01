@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (1 okt 2026, eenentwintigste sessie): eerst een kleine speelbare kern, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 82); stap 1 en het zaaigraan zijn af; het volgende is stap 2, de wensen per stand, klein (vraag 80, gekozen)
+## De stand (1 okt 2026, tweeëntwintigste sessie): eerst een kleine speelbare kern, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 86); stap 2a en 2b, de wensen per huis en doorgroeien, zijn af, met zes stenen huizen; het volgende is vraag 86 (wacht op Marcel), dan de pagina met ontwerpen voor de ui (vraag 84, a) en 2c
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -25,41 +25,42 @@ dan beslist je raadsman, die je kiest met de knop Raadsman (`R`); die brengt je 
 deur als je bij huis slaapt (`Z`), en anders onder de knop Rapport (`Spel.debug.rapport()`). Met de spelregel Land aan
 (`O`) loop je over de weg je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). Met de spelregel "Je
 gehucht" op "Elk spel een ander" legt de maker elk nieuw spel een ander gehucht (`Spel.debug.gehucht(3)` voor zaad 3).
-De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 722/722.
+Elk huis heeft een stand met zijn wensen (sinds 1 okt, vraag 85): bij de muis op de tevredenheid in de balk staat hoe
+tevreden elke stand is en wat er gemist wordt, en `Spel.debug.wensen()` zegt het per huis. De pagina "Stand van het
+gehucht" (25 sep) loopt achter op de dag. `npm test`: 743/743.
 
-**Waar het werk staat:** alles staat in `main`, ook het werk van de eenentwintigste sessie (vraag 78 tot en met 84,
-stap 1 en het zaaigraan; Marcel, 1 okt: "Ok alles naar main pushen dan kunnen we nieuwe sessie doen?"). Hoe een eigen
-branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** het werk van de tweeëntwintigste sessie (2a, 2b, de stenen huizen en de speeltest) staat op de
+branch `ccr-c70a2140-wt5zmz`, nog niet in `main`: pushen en naar `main` gaan doet Claude als Marcel erom vraagt. Hoe een
+eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **bouw stap 2, de wensen per stand, klein** (vraag 80 en 82; Marcel, 1 okt: "80: a,
-Ja. B, Ja. C, Ja. D, een jaar", en "82: correct"). **Het plan voor 2a en 2b is vraag 85** (tweeëntwintigste sessie;
-wacht op Marcel): bij het uitzoeken bleek dat de drie woningen van het begin nooit doorgroeien, dat het stenen huis nog
-geen tekening van de huizenbouwer heeft, en dat een kring van 25 tegels klein is voor dit gehucht. Alles is besloten, dus bouwen kan meteen, in de volgorde van vraag
-80 (2a de stand en de wensen per huis, met de tevredenheid als gemiddelde; 2b doorgroeien en achteruitgaan, met
-bouwstof; 2c zien wat een huis wil; 2d de treden uit de standen; 2e het eind en het jaar in het kort). **Vóór 2c eerst
-een pagina met ontwerpen voor de ui** (vraag 84, a: "ja"): de vensters worden papieren in de beeldstijl, en Marcel kiest
-uit een paar schetsen van de balk, een venster en een papier; dan krijgen de wensen meteen vensters in die stijl. **Klein** is: drie
-standen, op de huizen die er al zijn; de poorters en hun huis komen later. De tabel:
+**Waar de volgende sessie begint:** **vraag 86 wacht op Marcel** (na de speeltest van 2a en 2b, `speelbaar.md`): de wensen
+doen wat ze moeten (wie ze niet geeft, blijft een gehucht van hutten), maar de speler ziet ze nog nauwelijks, en de bouwer
+van de speeltest kent ze niet. Het voorstel: eerst de woorden van 2c (de raad en het rapport zeggen wat de huizen missen),
+dan een bouwer die de wensen volgt. Daarna, zoals besloten: **de pagina met ontwerpen voor de ui** (vraag 84, a: de
+vensters worden papieren in de beeldstijl, en Marcel kiest uit een paar schetsen van de balk, een venster en een papier),
+en dan de rest van stap 2 (vraag 80): 2c zien wat een huis wil (het teken bij de deur, het venster van een huis), 2d de
+treden uit de standen, en 2e het eind en het jaar in het kort. **Stap 2a en 2b zijn af** (tweeëntwintigste sessie; vraag
+85, het plan, en Marcels antwoord: "a ja, maar een hogere stand eigent zich spullen toe ... b ja voor nu. c zacht d ja";
+zie onder Af): elk huis heeft een stand met zijn wensen, de hoogste stand neemt eerst, en een huis dat een maand alles
+heeft, groeit door voor bouwstof en versteent op zijn eigen grond. **Klein** is: drie standen, op de huizen die er al zijn;
+de poorters en hun huis komen later. De tabel:
 
 | Stand | Huis | Gebruikt | Wil in de buurt (een kring om het gebouw) |
 |---|---|---|---|
-| keuters | hut (3 mensen) | eten; brandhout in de winter | een put |
-| dorpelingen | huis (5) | daarbij bier, en vlees of vis | een kapel en de herberg |
-| ambachtslieden | stenen huis (8) | daarbij brood en laken | een markt |
+| keuters | hut (3 mensen) | eten; brandhout in de winter | een put (12 tegels) |
+| dorpelingen | huis (5) | daarbij bier, en vlees of vis | een kapel en de herberg (30) |
+| ambachtslieden | stenen huis (8) | daarbij brood en laken | een markt (30) |
+| boeren | boerderij (4) | eten; brandhout in de winter | een kapel (30) |
 
-Doorgroeien kost bouwstof (een huis hout, een stenen huis steen), en **gewonnen** is: alle woningen stenen huizen die
-alles hebben, en de boerderijen wat zij willen, **een jaar lang**. Het zaaigraan eet het dorp sinds vandaag pas bij nood
-(vraag 81). Daarna: de speeltest (de bouwer krijgt een jager, vraag 81, b), dan het weer en zaaien over dagen (vraag 82,
-b en c) en de eisen van de heer; het vaste pad voor 5.000 als het dorp groter moet. Begin met een nieuwe sessie: deze
-was lang. Hoe we hier kwamen: **het plan is vraag 79, en Marcel koos het** (eenentwintigste sessie: "a twee
-manieren b ja c ja d ja. We focussen ons op een speelbare kern. Daarna komt oorlog etc erbij en de rest van het land
-diplomatie trading etc"). Gebouwd wordt in de volgorde van vraag 79: 1, een jaar dat te winnen is; 2, de wensen per
-stand, met het eind; 3, het vaste pad buiten beeld; 4, de eisen van de heer; 5, de speeltest. **Stap 1 is af** (zie
-onder Af): een gezin wacht op de winter, de raad zegt wat je mist voor de kapel en de smidse, en de marskramer
-verkoopt in de lente zaaigraan, dat de boeren nazaaien. In de speeltest stierf niemand meer van de kou, maar het dorp
-at zijn zaaigraan op: **vraag 81** (het zaaigraan apart, en een bouwer met een jager). **Het plan voor stap 2 is vraag
-80** (de wensen per huis, een kring om het gebouw, doorgroeien met bouwstof, en gewonnen als alles een maand super
-gelukkig is). Begin daar, met Marcels antwoorden. Het plan voor
+Doorgroeien kost bouwstof (een huis 8 hout, een stenen huis 12 steen), en **gewonnen** is: alle woningen stenen huizen
+die alles hebben, en de boerderijen wat zij willen, **een jaar lang**. Daarna: het weer en zaaien over dagen (vraag 82, b
+en c) en de eisen van de heer; het vaste pad voor 5.000 als het dorp groter moet. Hoe we hier kwamen: **het plan is vraag
+79, en Marcel koos het** (eenentwintigste sessie: "a twee manieren b ja c ja d ja. We focussen ons op een speelbare kern.
+Daarna komt oorlog etc erbij en de rest van het land diplomatie trading etc"). Gebouwd wordt in de volgorde van vraag 79:
+1, een jaar dat te winnen is; 2, de wensen per stand, met het eind; 3, het vaste pad buiten beeld; 4, de eisen van de
+heer; 5, de speeltest. **Stap 1 is af** (zie onder Af): een gezin wacht op de winter, de raad zegt wat je mist voor de
+kapel en de smidse, en de marskramer verkoopt in de lente zaaigraan, dat de boeren nazaaien; en het zaaigraan eet het dorp
+pas bij nood (vraag 81). Het plan voor
 stap 1 (vraag 78: elk jaar een doel van de heer) ging niet door: "de heer moet alleen betaald worden, en hij mag wel
 eisen stellen. Maar meer om het je moeilijk te maken"; het einddoel is "totale verovering van de wereld", en "dat
 mensen super gelukkig zijn en in al hun wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602"; en "we
@@ -112,7 +113,9 @@ als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speelt
    man (vraag 78; eerst "de cyclus" genoemd, met doelen van de heer, maar die stelt hij niet). Het plan is vraag 79,
    gekozen: twee manieren om te winnen (veroveren, of iedereen super gelukkig), en eerst een speelbare kern; oorlog,
    de rest van het land, diplomatie en handel komen daarna. Stap 1, een jaar dat te winnen is, en het zaaigraan (vraag
-   81) zijn af (zie onder Af); het volgende is stap 2, de wensen per stand, klein, met drie standen (vraag 80 en 82).
+   81) zijn af (zie onder Af), en van stap 2, de wensen per stand, klein (vraag 80, 82 en 85), ook 2a en 2b: de wensen per
+   huis en doorgroeien, met zes stenen huizen. Het volgende is vraag 86 (na de speeltest), dan de pagina met ontwerpen
+   voor de ui (vraag 84, a), en 2c, 2d en 2e.
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept; en het
    weer, met zaaien dat dagen kost (Marcel, 1 okt: "Stel er is slecht weer"; vraag 82).
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
@@ -2869,6 +2872,25 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **de hoogste stand neemt eerst**, en wat er over is, gaat naar de stand eronder (binnen een stand gelijk op). De kring
     30 voor de kapel, de herberg en de markt, en de boeren willen een kapel, niet de herberg, "voor nu". Achteruitgaan
     zacht (de standaard; streng als spelregel). En het stenen huis als stenen broertje van elk huis.
+    **Gebouwd** (tweeëntwintigste sessie): 2a, 2b en de zes stenen huizen; zie onder Af, en de speeltest in `speelbaar.md`.
+86. **Na de speeltest van 2a en 2b** (Claude, 1 okt, tweeëntwintigste sessie; `speelbaar.md`; wacht op Marcel). De wensen
+    doen wat ze moeten: wie ze niet geeft, blijft een gehucht van hutten. De bouwer van de speeltest groeide vóór 2b tot 59
+    à 104 mensen, doordat elk huis vanzelf doorgroeide als het dorp tevreden was; nu groeit alleen de hut bij de put op het
+    plein, en komt hij tot 38 à 51. Elke nieuwe hut kost 8 hout, en een bouwplaats neemt het hout zodra het er is: bij zaad 2
+    kwam de houthakker er nooit, en de winter kostte 64 mensen. En wie lui is, verliest bij honger nu ook gezinnen die
+    wegtrekken. Maar de speler ziet de wensen nog nauwelijks: alleen de balk zegt bij de muis wat er gemist wordt. Voorstel:
+    - **a, de woorden van 2c eerst.** De raad onder het doel en het rapport van de raadsman zeggen wat de huizen het meest
+      missen, en wat helpt: "Vijf hutten willen een put binnen 12 tegels [B]", of "Twee hutten kunnen een huis worden, maar
+      er is geen 8 hout". Dat zijn zinnen, geen vensters, dus het hoeft niet te wachten op de pagina met ontwerpen voor de ui;
+      het teken bij de deur en het venster van een huis wel (vraag 84, a).
+    - **b, de bouwer van de speeltest volgt de wensen** (stap 5 van vraag 79), zoals hij nu de raad volgt: een put waar hutten
+      er een missen, en wat de dorpelingen willen. Een houthakker gaat dan vóór een nieuw erf, als er nog geen is. Zo meet de
+      speeltest hoe ver een speler komt naar super gelukkig, en niet hoe ver iemand komt die de wensen niet kent.
+    - **c, wegtrekken bij honger zo laten** (advies): het is de zachte regel zoals Marcel hem koos (alleen bij honger of kou),
+      en de raad en het rapport zeggen de honger op tijd. Het andere: een huis dat iets mist, telt bij de drempel alleen het
+      eten en het brandhout, zodat een kapel er niet meer toe doet.
+    Vragen: **a**, de raad en het rapport over de wensen nu, vóór de ui? **b**, de bouwer zo? **c**, wegtrekken bij honger zo
+    laten?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
