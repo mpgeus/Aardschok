@@ -26,11 +26,10 @@ je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). Met de s
 ander" legt de maker elk nieuw spel een ander gehucht (`Spel.debug.gehucht(3)` voor zaad 3). De pagina "Stand van het
 gehucht" (25 sep) loopt achter op de dag. `npm test`: 680/680.
 
-**Waar het werk staat:** alles staat in `main`, ook het werk van de achttiende sessie (de maker, vraag 69, C, en 70;
-Marcel, 30 sep: "Ja, zet alles in main"; ook op `claude/werklijst-doorzetten-qagxwq`), en dat van de zeventiende (vraag 60
-tot en met 69, met stuk 1 van het land). Het werk van de negentiende sessie (vraag 71: stuk 2 van het land; het plan
-voor stuk 3, vraag 72; het concept, vraag 73; en de kern, vraag 74, stap 1 en 2, met het plan voor stap 3, vraag 75)
-staat op `ccr-4cd08e9d-1g0phy`, nog niet in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook het werk van de negentiende sessie (Marcel, 1 okt: "Ja zet in main";
+ook op `ccr-4cd08e9d-1g0phy`): stuk 2 van het land (vraag 71), het plan voor het buurdorp (vraag 72), het concept (vraag
+73), stap 1 en 2 van de kern (vraag 74) met de meting van de grootte (`npm run grootte`), en het plan voor de dag in fasen
+(vraag 75), met hoe het rapport gebouwd wordt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** **stuk 2 van het land is af** (vraag 71; Marcel: "A ja B ja C ja, oud spel mag
 vervallen"; zie onder Af): een speeldag kost 0,5 ms in plaats van 30 tot 39, alles van een dorp staat bij elkaar
@@ -47,7 +46,8 @@ koos het ("a ja b ja c zelf sprokkelen, maar lost niet volledig op. Houthakker i
 velden, slachten en sprokkelen zelf (de spelregel "Het seizoen"). De speeltest speelt met de oude instellingen letter voor
 letter hetzelfde jaar, en op de nieuwe standaard staat wat het deed in `speelbaar.md`. **Het volgende is stap 3, de dag in
 fasen** (vraag 75; Marcel, 1 okt: "A Ja dat is goed. b zitting als die er zijn ... D prima"): eerst het rapport van de
-raadsman (3a), dan de zitting (3b), dan het gepraat in de herberg (3c). Ernaast liep een
+raadsman (3a), dan de zitting (3b), dan het gepraat in de herberg (3c). **Begin met 3a, het rapport:** hoe het gebouwd
+wordt, staat bij vraag 75. Ernaast liep een
 meting van hoe groot een dorp kan worden (vraag 74; de uitslag staat daar). Het buurdorp (vraag 72) wacht tot de kern
 staat. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
 raadsman komen met het land (vraag 66, D). Het dorp van bovenaf is beslist: niet
@@ -88,7 +88,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* of het werk van de negentiende sessie in `main` mag; het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
