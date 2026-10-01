@@ -434,7 +434,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     Vroeger ging het vee eraf tot het hooi binnen was.
   - Twee velden die samen één weide zijn, hebben geen hek om zich heen: je ziet het alleen aan het
     vee dat over de strook loopt, en in het venster.
-  - Vlees vult sinds 25 sep een maag (Marcel koos het); vis nog niet. Moet dat ook?
+  - Vlees vult sinds 25 sep een maag (Marcel koos het); vis nog niet. Moet dat ook? Brood, eieren en groente ook niet
+    (1 okt): de molen en de bakkerij maken van graan iets wat niemand eet, en kosten het dorp dus eten (werklijst vraag
+    78, A, met een voorstel voor brood).
   - De heer vraagt 20 wol per schaapskooi, ook in het eerste jaar; acht schapen geven er 32. In stap
     3 vraagt hij per dier.
   - Zonder herder (een hand voor de kooi) geeft de kooi geen mest. Het veldenvenster zegt nog niet

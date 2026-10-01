@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (1 okt 2026, twintigste sessie): het rapport van de raadsman is af (vraag 75, 3a, en 76); het doel is de vertical slice, van gehucht tot kleine stad (vraag 77, gekozen), en het volgende is het plan voor stap 1, de cyclus
+## De stand (1 okt 2026, eenentwintigste sessie): het doel is de vertical slice, van gehucht tot kleine stad (vraag 77, gekozen); het plan voor stap 1, de cyclus, is vraag 78 en wacht op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -32,7 +32,10 @@ main"; ook op `ccr-8e9e20ad-gg1umw`): het rapport van de raadsman (vraag 75, 3a)
 (vraag 76), de richtlijn voor statussen, en het plan voor de vertical slice (vraag 77). Hoe een eigen branch en `main`
 samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **3a, het rapport van de raadsman, is af** (vraag 75; Marcel: "A Ja dat is goed", en
+**Waar de volgende sessie begint:** **het plan voor stap 1, de cyclus, is vraag 78 en wacht op Marcel** (eenentwintigste
+sessie): elk jaar één doel van de heer (een dorp, marktrecht, een kleine stad), geteld op 1 lentemaand na de winter, met
+de eindes (gewonnen, ontslagen, gevallen, uitgestorven), het jaar in het kort onder zijn brief, en een jaar dat te winnen
+is (vraag 59, B en C). Daarvóór, in de twintigste sessie: **3a, het rapport van de raadsman, is af** (vraag 75; Marcel: "A Ja dat is goed", en
 bij het nakijken van het plan "a ja b ja c ja"; zie onder Af): heb je een raadsman, dan staat hij 's ochtends aan je deur
 met wat er gebeurde, hoe het graan en het hout gaan sinds gisteren, of ze de winter halen, wat er speelt en wat er komt,
 en zijn rekenen kleurt de getallen. Met het rapport uit speelt de speeltest letter voor letter hetzelfde jaar (alle 15
@@ -74,7 +77,7 @@ is dat de vertical slice uit het concept, van gehucht tot kleine stad. Elk stuk 
 gehucht"). Je begint als gehucht, zoals nu, en groeit naar een kleine stad van 100 tot 200 mensen; een dorp van 50 is
 als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speeltest:
 1. **Nu: de cyclus,** een jaar met een eind: het oordeel van de heer, het jaar in het kort, een jaar dat te winnen is.
-   Het plan begint met de doelen die de heer per jaar stelt op weg naar de stad (vraag 77, a).
+   Het plan begint met de doelen die de heer per jaar stelt op weg naar de stad (vraag 77, a); het is vraag 78.
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept.
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
 4. Wacht en misdaad: patrouilles, een misdaadgolf als status, het gevang.
@@ -107,7 +110,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het plan voor stap 1 van de slice, de cyclus (vraag 78: a tot en met d); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2467,6 +2470,63 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **c, uiteindelijk een ambtenaar voor elke tak van het bestuur,** om je te steunen; de marktmeester, de
       wachtmeester en de rentmeester eerst.
     - **d, deze volgorde,** te beginnen met stap 1, de cyclus.
+78. **Stap 1 van de slice, de cyclus: het plan** (Claude, 1 okt, eenentwintigste sessie; vraag 77, a en d; wacht op
+    Marcel). **Wat er nu is:** één trede, van gehucht tot dorp bij 50 mensen met een kapel en een smidse, die op elk
+    moment valt. De bouwer van de speeltest haalt hem op 1 herfstmaand van het eerste jaar, vóór de heer en de winter,
+    en verliest daarna in de winter de helft van zijn mensen (vraag 59). Na het dorp is er geen doel meer, en geen eind
+    behalve verliezen: je ambt kwijt op Sint-Maarten, of de schout die valt. Een dorp kan uitsterven tot één mens, en
+    speelt dan door. Het plan, in vier delen:
+    - **A, de ladder van de heer: elk jaar één doel, drie treden.** De heer stelt per jaar één doel, het eerste in zijn
+      benoemingsbrief en het volgende in zijn brief op 1 lentemaand. Hij wil groei, want groei levert hem geld op:
+
+      | Jaar | Het doel van de heer | Wat het opent |
+      |---|---|---|
+      | 1 (1323) | een dorp: 50 zielen, een kapel en een smidse (zoals nu) | de gebouwen van een dorp, en de heervaart |
+      | 2 (1324) | marktrecht: 75 zielen, een molen en een bakkerij | de gebouwen met marktrecht, met de markt |
+      | 3 (1325) | een kleine stad: 100 zielen en een markt | gewonnen: het eind van het spel |
+
+      De molen en de bakkerij omdat ze van de heer zijn, een banmolen en een banoven: wie maalt of bakt, betaalt hem (hij
+      vraagt er nu al 5 en 3 goud voor op Sint-Maarten). "Wij verwachten een molen en een oven. Onze molen en Onze oven,
+      uiteraard." De getallen staan in de werkbank, en de ladder is een lijst: een trede erbij is een regel erbij.
+      Waarom 75 en 100 en niet meer: de kaart van nu is vol bij 76 tot 102 mensen (vraag 74); met de kaart voor 200
+      (stap 6) gaat het laatste doel omhoog. Een heel spel duurt dan drie jaar, op 30× zo'n uur per jaar, met wat je
+      stilzet erbij. Wat opviel bij het nalopen:
+      - **De molen en de bakkerij kosten nu eten.** Ze maken meel en brood van graan, en brood telt niet als eten
+        (alleen graan, kaas, vlees en melk; vis, eieren en groente ook niet). Wie het doel van het tweede jaar haalt,
+        heeft dus minder te eten. Voorstel: brood is eten, en vult beter dan het graan waar het van komt (een brood als
+        anderhalf graan, in de werkbank). Dan is het doel ook wat een groter dorp nodig heeft om te eten: de akkers van
+        het gehucht voeden zo'n 25 mensen, de rest komt van het vee, de jager en straks de bakker.
+      - **De markt doet nog niets** (dat komt in stap 6, met het graan van buiten dat Marcel op 26 sep koos). Daarom
+        het andere voor het laatste doel: **stadsrechten kopen.** Met 100 zielen biedt de heer je stadsrechten aan,
+        voor 100 goud (werkbank), en wie betaalt, is vrij en wint ("Vrij word je door stadsrechten te kopen",
+        `CLAUDE.md`). Dan wordt het laatste jaar rijk worden en arm lijken: honderd goud sparen, terwijl de heer elk jaar
+        15% wil van wat de inner in de kist telt. De markt, het raadhuis en de poort bouw je daarna, als je verder speelt.
+    - **B, het oordeel op 1 lentemaand, na de winter.** Een trede telt pas dan (vraag 59, A): heb je het doel gehaald en
+      gehouden tot na de winter, dan schrijft de heer, en geeft hij het volgende doel. Zo telt de winter mee, en wint
+      groei alleen niet: wie tot 74 groeit en er 50 verliest, haalt het niet. Wie het doel vroeg haalt, ziet het vinkje
+      linksboven, met "de heer telt op 1 lentemaand". Niet gehaald, maar je ambt en je mensen nog: nog een jaar, met
+      hetzelfde doel; twee keer achter elkaar niet: je ambt kwijt, zoals twee keer veel te weinig op Sint-Maarten.
+      Verloren ook als de schout valt, en als er minder dan tien mensen over zijn (de heer geeft het dorp op). Gewonnen:
+      de laatste trede. Alle eindes krijgen één scherm, met het jaar in het kort; wie wint, kan verder spelen.
+    - **C, het jaar in het kort, onder de brief.** Geen afrekening met twee boeken (die blijft geparkeerd, vraag 49),
+      maar een paar regels onder de brief van 1 lentemaand: hoeveel zielen bij het begin en nu, wie kwam, stierf
+      (waaraan) en wegtrok, wat er gebouwd werd, wat de heer op Sint-Maarten kreeg, en hoeveel voorvallen je zelf
+      besliste, je raadsman besliste of voorbij gingen. Uit hetzelfde dagboek als het rapport, opgeteld in een jaarboek
+      (in `S`, dus bewaard).
+    - **D, een jaar dat te winnen is** (vraag 59, B en C; geparkeerd, maar nu nodig, want anders haalt ook de bouwer het
+      eerste doel niet): geen gezin als het hout of het eten de winter niet haalt, vanaf drie maanden ervoor (de raad
+      zegt waarom; een spelregel, standaard aan); de raad zegt waar goud vandaan komt als het doel goud vraagt; en de
+      marskramer verkoopt in de lente zaaigraan, zodat een dorp na een slechte winter weer boven kan komen.
+    **In deze volgorde,** elk met toetsen: 1a de ladder en het oordeel, met de eindes; 1b het jaar in het kort; 1c een
+    jaar dat te winnen is, met brood als eten; 1d de speeltest: de bouwer speelt tot het eind (drie jaar, of tot hij
+    verliest), met een plan voor elke trede, en de vier anderen een jaar, zoals nu.
+    **Klaar als** de heer op 1 lentemaand oordeelt (gehaald, nog een jaar, ontslagen, gewonnen), met het jaar in het
+    kort eronder; de ladder in de werkbank staat; elk eind hetzelfde scherm heeft; opslaan en laden midden in een jaar
+    hetzelfde oordeel geeft; `npm test` groen is; en de speeltest zegt hoe ver de bouwer komt.
+    Vragen: **a**, deze ladder (een dorp, marktrecht, een kleine stad; 50, 75 en 100 zielen), met brood als eten?
+    **b**, het laatste doel: een stad tellen (100 zielen en een markt), of stadsrechten kopen (100 zielen en 100 goud)?
+    **c**, niet gehaald: één jaar erbij, en dan je ambt kwijt; en onder de tien mensen is het uit? **d**, het jaar in
+    het kort onder de brief, en een jaar dat te winnen is zoals in D?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
