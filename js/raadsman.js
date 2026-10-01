@@ -215,6 +215,7 @@
     const titel = T.VOORVALLEN[L.id].titel;
     const waarom = L.oorzaak ? ` ${L.oorzaak.zin}` : ''; // waar het van kwam (js/voorvallen.js, T.oorzaakVan)
     T.zeg(D, `${T.hoofdletter(naam(p))}, je raadsman, besliste over ${titel}: "${zeg}"${prijs ? ` (${prijs})` : ''}${waarom}`);
+    T.schrijfOp(D, 'besluit', { door: naam(p), titel, antwoord: zeg, prijs }); // voor zijn rapport (js/ochtendrapport.js)
     T.voorvalBeantwoord(D, L.id, p);
     return true;
   };

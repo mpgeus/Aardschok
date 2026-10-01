@@ -121,6 +121,14 @@
       tekst: () => 'Een dag duurt lang: [+] zet de tijd sneller, en [Z] is slapen tot de ochtend.',
     },
     {
+      // Een nieuw spel begint zonder raadsman, en zonder raadsman geen rapport (js/ochtendrapport.js): de eerste dagen
+      // zegt de raad het (werklijst vraag 75, c; Marcel: "c ja").
+      id: 'rapport',
+      als: (D) => T.OCHTENDRAPPORT_INSTELLINGEN.aan && T.RAADSMAN_INSTELLINGEN.aan && !T.raadsmanVan(D)
+        && D.kalender.dag >= 1 && dagNu(D) < T.OCHTENDRAPPORT_INSTELLINGEN.raadTot,
+      tekst: () => 'Een raadsman brengt je elke ochtend een rapport: kies er een [R].',
+    },
+    {
       id: 'plaats',
       als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('plaats'),
       tekst: () => (T.ERVEN_INSTELLINGEN.dorpBouwtZelf

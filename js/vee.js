@@ -838,12 +838,17 @@
     const eters = T.veeVan(D).filter((e) => T.hooiVanDier(e, dag) > 0);
     if (!eters.length) return { vlees: 0, huiden: 0 };
     const voorstel = T.slachtVoorstel(D, dag);
+    // Wat ze deden, schrijft het dagboek op, voor het rapport van de raadsman (js/ochtendrapport.js).
     if (!voorstel.dieren.length) {
       T.zeg(D, 'Het hooi haalt de winter: de boeren houden al hun vee.', 'goed');
+      T.schrijfOp(D, 'boeren', { tekst: 'Het hooi haalt de winter: de boeren hielden al hun vee.' });
       return { vlees: 0, huiden: 0 };
     }
     T.zeg(D, 'Het hooi haalt de winter niet voor de hele kudde: de boeren slachten wat te veel is.');
-    return T.slacht(D, voorstel.dieren, dag);
+    const geslacht = dierenTekst(voorstel.dieren, dag);
+    const o = T.slacht(D, voorstel.dieren, dag);
+    T.schrijfOp(D, 'boeren', { tekst: `Het hooi haalt de winter niet voor de hele kudde: de boeren slachtten ${geslacht}, voor ${Math.round(o.vlees)} vlees.` });
+    return o;
   };
 
   // Eén winterdag (T.tikVeeDag): het vee eet hooi uit de voorraad, het oudste eerst (de kern van de

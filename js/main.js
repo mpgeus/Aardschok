@@ -774,7 +774,7 @@
           const o = T.oorzaakVan(S.dorp, v, dag);
           return `${v} (${Math.round(T.gewichtVanVoorval(S.dorp, v, dag) * 100) / 100})${o ? `: ${o.zin}` : ''}`;
         }),
-        oorzaken: Object.keys(T.OORZAKEN).filter((o) => T.OORZAKEN[o].speelt(S.dorp, dag) != null),
+        oorzaken: T.oorzakenNu(S.dorp, dag).map((o) => o.id),
         aantal: V.aantal,
         beantwoord: V.beantwoord,
         stemming: T.voorvalStemming(S.dorp, dag),
@@ -825,6 +825,26 @@
         raadsman: nu ? T.overRaadsmanTekst(S.dorp, nu) : null,
         kandidaten: T.raadsmanKandidaten(S.dorp).map((p) => T.overRaadsmanTekst(S.dorp, p)),
         besluiten: ((S.dorp.raadsman && S.dorp.raadsman.besluiten) || []).slice(-5).map((b) => `${T.datumVanDag(b.dag).tekst}: ${b.id}, "${b.antwoord}"${b.prijs ? ` (${b.prijs})` : ''}`),
+      };
+    },
+    // Het rapport van de raadsman (js/ochtendrapport.js): wat erin staat, of hij het bracht en of je het las, hoe hij
+    // rekent, en wat het dagboek van vandaag al heeft. ('nu') maakt nu een rapport, uit het dagboek van vandaag (hij
+    // brengt het niet: het ligt klaar onder de knop Rapport), ('open') opent het papier.
+    rapport(wat) {
+      const D = S.dorp;
+      const p = T.raadsmanVan(D);
+      if (wat === 'nu') {
+        if (!p) return 'Er is geen raadsman: kies er een met R, of met Spel.debug.raadsman("Aaltje").';
+        T.tikOchtendrapportDag(D, Math.floor(S.kalender.dag));
+        D.ochtendrapport.gebracht = true;
+      }
+      if (wat === 'open') T.ui.toonBrief(D, 'rapport');
+      const R = D.ochtendrapport;
+      return {
+        raadsman: p ? T.overRaadsmanTekst(D, p) : null,
+        rekenen: p ? T.vaardighedenVan(D, p).rekenen || 'gewoon' : null,
+        rapport: R ? { dag: T.datumVanDag(R.dag).tekst, door: R.door, gebracht: R.gebracht, gelezen: R.gelezen, regels: R.regels } : null,
+        dagboek: D.dagboek ? D.dagboek.regels.map((r) => `${r.soort}: ${r.wie || r.tekst || r.titel || ''}`) : [],
       };
     },
     // De wetten (js/wetten.js): per wet de stand, en wat hij dan doet. Spel.debug.wetten('rantsoen', 'krap')

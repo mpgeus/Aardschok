@@ -299,7 +299,9 @@
         const van = boer ? `${i ? 'dat' : 'het veld'} van ${boer.naam}` : `${i ? 'een' : 'het'} veld zonder boer`;
         return `${van} ${a.plan === 'braak' ? 'rust een jaar' : a.mest ? 'krijgt mest' : `wordt weer ${a.plan}`}`;
       });
-      T.zeg(D, `Na de oogst kozen de boeren wat hun velden volgend jaar worden: ${T.opsomming(wat)}. In het veldenvenster (V) kun je het veranderen.`);
+      const zin = `Na de oogst kozen de boeren wat hun velden volgend jaar worden: ${T.opsomming(wat)}.`;
+      T.zeg(D, `${zin} In het veldenvenster (V) kun je het veranderen.`);
+      T.schrijfOp(D, 'boeren', { tekst: zin }); // voor het rapport van de raadsman (js/ochtendrapport.js)
     }
     return anders;
   };

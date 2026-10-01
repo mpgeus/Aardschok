@@ -750,15 +750,18 @@
 
   // Het getal in de balk veranderen: de enige manier, zoals T.wijzigVoorraad voor de voorraad. Het
   // zakt nooit onder nul. De bewoners gaan mee (T.bewonersVolgen, js/bewoners.js): een nieuw gezin
-  // in een huis met plaats, of wie sterft of wegtrekt. `reden`: 'begin', 'groei', 'winter' of
-  // 'vertrek'; `waarom` is het begin van het bericht dat zegt wie het zijn ("De winter is hard"). `wie`: als het
-  // om bepaalde mensen gaat (een wachter die sneuvelt tegen de rovers, js/rovers.js), wie dat zijn.
+  // in een huis met plaats, of wie sterft of wegtrekt. `reden`: 'begin', 'groei', 'winter', 'vertrek',
+  // 'gesneuveld' of 'ziekte'; `waarom` is het begin van het bericht dat zegt wie het zijn ("De winter is hard"). `wie`:
+  // als het om bepaalde mensen gaat (een wachter die sneuvelt tegen de rovers, js/rovers.js), wie dat zijn. Het dagboek
+  // schrijft het op, met wie het zijn (T.schrijfOp, js/ochtendrapport.js): voor het rapport van de raadsman.
   // Geeft terug hoeveel het echt veranderde.
   T.wijzigBevolking = function (D, verschil, reden, waarom, wie) {
     const voor = D.bevolking || 0;
     D.bevolking = Math.max(0, voor + verschil);
     const echt = D.bevolking - voor;
-    if (echt && T.bewonersVolgen) T.bewonersVolgen(D, echt, reden, waarom, wie);
+    if (!echt || reden === 'begin') return echt;
+    const wieTekst = T.bewonersVolgen ? T.bewonersVolgen(D, echt, reden, waarom, wie) : '';
+    T.schrijfOp(D, 'mensen', { verschil: echt, reden, waarom: waarom || null, wie: wieTekst || null });
     return echt;
   };
 
@@ -971,6 +974,9 @@
     T.tikRoversDag(D, dag);
     // 8. De trede (js/treden.js): met genoeg mensen, en een kapel en een smidse klaar, wordt het gehucht een dorp.
     T.tikTredeDag(D);
+    // 9. Als laatste het rapport (js/ochtendrapport.js): de raadsman schrijft op wat er gebeurde en hoe het gaat, en
+    // brengt het je morgenvroeg; het dagboek begint opnieuw.
+    T.tikOchtendrapportDag(D, dag);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(D);
   };
 

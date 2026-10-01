@@ -341,6 +341,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   trager). Uit wie je kiest: `T.raadsmanKandidaten`; kiezen: `T.kiesRaadsman`, in het venster Raadsman
   (`js/raadsmanvenster.js`, onder `R` en als knop in de balk; vraag 67, B). Ging er een voorval voorbij dat een
   raadsman had beslist, dan zegt de raad het (`js/raad.js`, `laatstVoorbij` in `D.voorvallen`).
+- `js/ochtendrapport.js`: **het rapport van de raadsman, 's ochtends** (vraag 75, 3a, 1 okt; de dag in fasen): wat er
+  gebeurde, schrijft het dorp in een dagboek (`T.schrijfOp`, `D.dagboek`: `T.wijzigBevolking` met wie het zijn, wat de
+  boeren uit zichzelf deden, wat de raadsman besliste, wie je niet sprak), en elke nacht maakt hij er als laatste stap
+  van de dag zijn rapport van (`T.tikOchtendrapportDag`, `D.ochtendrapport`): wat er gebeurde, hoe het graan en het hout
+  gaan sinds gisteren, de winter, de oorzaken (`T.oorzakenNu` in `js/voorvallen.js`) en wat er komt. Het zegt wat de
+  balk niet zegt, en zijn rekenen kleurt de getallen (`T.rekenaarVan`). Hij brengt het: hij staat aan je deur als je
+  opstaat (`T.rapportAnker`, voor `T.dagAnker`), en naast je opent het papier (`T.werkOchtendrapportBij`, het venster
+  van de brieven, soort `rapport`); anders ligt het onder de knop Rapport. De spelregel "Het rapport".
 - `js/land.js`: **het land** (vraag 63 en 69, 30 sep; stap 1a, stuk 1): een kaart met provincies uit het zaad van het
   spel (`T.nieuwLand`, in `S.land`), wegen met hoeveel dagen reizen, en wat je zag (`gezien`; de rest is donker). Reizen:
   `T.reisNaar` (over wegen die je kent) en `T.beginReis`; `T.werkLandBij` (elk beeld) laat je aankomen of thuiskomen, en
@@ -483,7 +491,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 - **De raadsman** (Marcel, 29 sep, vraag 64): elk dorp heeft er een, met een karakter en gelote eigenschappen, en
   jij kiest hem; hij voert je regels uit waar je niet bent. Sinds 30 sep (vraag 66): een van de boeren, die vanzelf de
   voorvallen beslist als de schout weg is, en alleen dan (vraag 68, B) (`js/raadsman.js`); je kiest hem wanneer je wilt,
-  met de knop Raadsman (vraag 67, B). En "Het voelt
+  met de knop Raadsman (vraag 67, B). Sinds 1 okt brengt hij je elke ochtend een rapport, de eerste fase van de dag
+  (vraag 75, `js/ochtendrapport.js`). En "Het voelt
   gewoon nog leeg nu": sinds 29 sep spreekt het dorp je aan, met voorvallen (vraag 65, `js/voorvallen.js`); het dorp
   van bovenaf komt er niet (vraag 74, d).
 - **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én
@@ -604,6 +613,9 @@ zwaar ze wegen) en welke oorzaken er spelen;
 `('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.
 `Spel.debug.raadsman()` zegt wie je raadsman is en wat hij kan, uit wie je kiest, en wat hij besloot; `('Aaltje')` of
 `('boer2')` maakt die boer raadsman. Ga dan met `Spel.debug.gaNaar('proef')` weg, en hij beslist het volgende voorval.
+`Spel.debug.rapport()` zegt wat er in zijn rapport staat, of hij het bracht en je het las, hoe hij rekent en wat het
+dagboek van vandaag heeft; `('nu')` maakt nu een rapport, `('open')` opent het papier. Hij brengt het 's ochtends:
+slaap bij je huis (`Z`), en bij het opstaan staat hij er.
 `Spel.debug.land()` zegt waar de schout is in het land, of hij reist, wat hij zag en welke wegen er zijn (en zet de
 spelregel Land aan); `('open')` opent de kaart, `('reis', 'De heide')` reist erheen, `('alles')` laat het hele land
 zien, `('nieuw')` maakt het opnieuw uit het zaad.

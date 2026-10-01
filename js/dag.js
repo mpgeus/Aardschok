@@ -170,6 +170,10 @@
     // Wie in de herberg logeert (de marskramer), zit er 's avonds en slaapt er (js/herberg.js).
     const logies = T.logiesAnker ? T.logiesAnker(D, e) : null;
     if (logies) return logies;
+    // De raadsman die zijn rapport brengt (js/ochtendrapport.js): vóór het opstaan al naar de deur van de schout, en
+    // staat die buiten bij zijn huis, naar hem toe. Ook als het nog nacht is.
+    const rapport = T.rapportAnker ? T.rapportAnker(D, e) : null;
+    if (rapport) return rapport;
     const p = e.bewoner;
     if (!p && !e.werkAkkers) return null;
     const deel = T.dagdeelVan(D.kalender.dag, oogst);
@@ -223,8 +227,9 @@
   // ---------------------------------------------------------------------------------------------
 
   // Hoe ver de schout van zijn huis staat, in tegels tot de rand ervan (het huis met huis: 'schout'
-  // in kaarten/gehucht.betekenis.json, door T.zetBestaandeGebouwen in S.gebouwen gezet).
-  function afstandTotHuis(D) {
+  // in kaarten/gehucht.betekenis.json, door T.zetBestaandeGebouwen in S.gebouwen gezet). Voor het slapen,
+  // en voor de raadsman die 's ochtends zijn rapport brengt (js/ochtendrapport.js).
+  T.afstandTotHuis = function (D) {
     const g = (D.gebouwen || []).find((x) => x.huis === 'schout');
     const h = D.schout;
     if (!g || !h) return Infinity;
@@ -232,14 +237,14 @@
     const dx = Math.max(g.x - h.tx, 0, h.tx - (g.x + voet.b - 1));
     const dy = Math.max(g.y - h.ty, 0, h.ty - (g.y + voet.h - 1));
     return Math.max(dx, dy);
-  }
+  };
 
   // Slapen kan 's avonds en 's nachts, bij je eigen huis, als je gewoon rondloopt.
   T.magSlapen = function (S) {
     if (!S || !S.kalender || S.slaap || (S.dorp && S.dorp.einde) || S.modus !== 'verkennen') return false;
     const deel = T.dagdeelVan(S.kalender.dag);
     if (deel !== 'nacht' && deel !== 'avond') return false;
-    return afstandTotHuis(S.dorp) <= IN().slaapAfstand;
+    return T.afstandTotHuis(S.dorp) <= IN().slaapAfstand;
   };
 
   // De schout gaat naar binnen, en de nacht gaat snel voorbij (T.SLAAP_SNELHEID) tot het opstaan.

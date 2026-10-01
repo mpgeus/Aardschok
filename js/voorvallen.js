@@ -248,17 +248,28 @@
     },
   };
 
+  // Speelt oorzaak `o` nu? Dan { id, zin }, met de zin die het bericht erbij zegt: "Er is honger, want het rantsoen is
+  // krap." Anders null.
+  function oorzaakNu(D, o, dag) {
+    const O = T.OORZAKEN[o];
+    const waarom = O.speelt(D, dag);
+    return waarom == null ? null : { id: o, zin: `${O.kop}${waarom ? `, want ${waarom}` : ''}.` };
+  }
+
   // Welke oorzaak van dit voorval nu speelt: de eerste die speelt, in de volgorde van het voorval, als { id, zin }, of
-  // null. De zin is wat het bericht erbij zegt: "Er is honger, want het rantsoen is krap."
+  // null.
   T.oorzaakVan = function (D, id, dag) {
     const v = T.VOORVALLEN[id];
     for (const o of elk(v && v.oorzaak)) {
-      const O = T.OORZAKEN[o];
-      const waarom = O.speelt(D, dag);
-      if (waarom != null) return { id: o, zin: `${O.kop}${waarom ? `, want ${waarom}` : ''}.` };
+      const nu = oorzaakNu(D, o, dag);
+      if (nu) return nu;
     }
     return null;
   };
+
+  // Welke oorzaken er nu spelen, in de volgorde van T.OORZAKEN, als [{ id, zin }]: voor het rapport van de raadsman
+  // (js/ochtendrapport.js) en Spel.debug.voorval().
+  T.oorzakenNu = (D, dag) => Object.keys(T.OORZAKEN).map((o) => oorzaakNu(D, o, dag)).filter(Boolean);
 
   // ---------------------------------------------------------------------------------------------
   // Welk voorval, en wanneer
@@ -389,6 +400,7 @@
     const L = D.voorvallen.lopend;
     if (raadsmanMag) D.voorvallen.laatstVoorbij = Math.floor(dag);
     T.zeg(D, `${T.hoofdletter(naam(L.wie))} heeft je niet gesproken, en gaat weer aan het werk.`);
+    T.schrijfOp(D, 'voorbij', { wie: naam(L.wie), titel: T.VOORVALLEN[L.id].titel }); // voor het rapport (js/ochtendrapport.js)
     stemming(D, IN().nietGevonden, { woorden: { last: weg ? 'een schout die er niet was' : 'een schout die geen tijd had' } }, dag);
     stop(D);
   }

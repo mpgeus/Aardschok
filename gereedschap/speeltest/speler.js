@@ -142,6 +142,17 @@
       if (v) (boek.heervaart = boek.heervaart || []).push({ dag: heel(s.kalender.dag), datum: datum(), mannen: v.wie.length, goud: v.goud });
       if (!klik('#brief [data-actie="stuur"]')) T.ui.sluitBrief(s);
     }
+    // Het rapport van de raadsman ('s ochtends, js/ochtendrapport.js): lezen en dicht, en geen brief van de heer. De
+    // speler telt hoe vaak hij het kreeg en hoe vaak het "Niets bijzonders" was, en schrijft de eerste vijf op die iets
+    // zeiden, zodat de uitslag laat zien wat erin staat.
+    if (T.ui.briefOpen() && document.querySelector('#brief').dataset.soort === 'rapport') {
+      const R = s.dorp.ochtendrapport;
+      const r = boek.rapporten || (boek.rapporten = { gelezen: 0, stil: 0, voorbeelden: [] });
+      r.gelezen++;
+      if (R && /^Niets bijzonders/.test(R.regels[0])) r.stil++;
+      else if (R && r.voorbeelden.length < 5) r.voorbeelden.push({ datum: datum(), door: R.door, regels: R.regels.slice() });
+      if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
+    }
     if (T.ui.briefOpen()) {
       if (s.kalender.dag > 1) boek.brief = { dag: heel(s.kalender.dag), datum: datum(), eis: eisKort(T.eisVanDeHeer(s.dorp)) };
       if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);

@@ -347,6 +347,18 @@
           uitleg: 'Wat je mist, gaat voorbij, en dat neemt het dorp je kwalijk.' },
       ],
     },
+    // Het rapport van de raadsman, 's ochtends (werklijst vraag 75, 3a; Marcel, 1 okt: "A Ja dat is goed";
+    // js/ochtendrapport.js). Uit is het spel van vóór 1 okt.
+    {
+      id: 'rapport', naam: 'Het rapport', standaard: 'aan',
+      uitleg: 'Of je raadsman je elke ochtend een rapport brengt.',
+      keuzes: [
+        { id: 'aan', naam: 'Aan', zet: { 'OCHTENDRAPPORT_INSTELLINGEN.aan': true },
+          uitleg: "Heb je een raadsman, dan staat hij 's ochtends aan je deur met wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt. Hoe goed zijn getallen kloppen, zegt zijn rekenen. Was je er niet, dan ligt het klaar onder de knop Rapport." },
+        { id: 'uit', naam: 'Uit', zet: { 'OCHTENDRAPPORT_INSTELLINGEN.aan': false },
+          uitleg: 'Geen rapport: wat er gebeurde, zie je in de berichten, en je gaat zelf rond.' },
+      ],
+    },
     // Het land (werklijst vraag 63 en 69; js/land.js): tot het buurdorp er is, staat het uit, en speelt de proef zoals
     // nu. Dan wordt het een keuze bij Nieuw spel: 0 of 1 tegenspeler.
     {
@@ -402,6 +414,7 @@
     { naam: 'De heervaart', blok: 'HEERVAART_INSTELLINGEN' },
     { naam: 'De voorvallen', blok: 'VOORVALLEN_INSTELLINGEN' },
     { naam: 'De raadsman', blok: 'RAADSMAN_INSTELLINGEN' },
+    { naam: 'Het rapport', blok: 'OCHTENDRAPPORT_INSTELLINGEN' },
     { naam: 'Het land', blok: 'LAND_INSTELLINGEN' },
     { naam: 'De maker', blok: 'MAKER_INSTELLINGEN' },
     { naam: 'De inner', blok: 'INNER_INSTELLINGEN' },

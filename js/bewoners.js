@@ -582,9 +582,8 @@
   // Het bericht bij wie sterft of wegtrekt, met `waarom` van wie het besliste (js/behoeften.js):
   // "De winter is hard: de oude Jan, vader van Klaas, is gestorven." en "Albert en Grietje, met twee
   // kinderen, trekken weg: het dorp is niet tevreden genoeg. (-4)"
-  function berichtOverWieGaat(D, weg, reden, waarom) {
+  function berichtOverWieGaat(D, weg, wie, reden, waarom) {
     if (!waarom || !weg.length || !T.ui || !T.ui.bericht) return;
-    const wie = wieTekst(D, weg);
     const komma = wie.includes(',') ? ',' : '';
     const een = weg.length === 1;
     if (reden === 'vertrek') T.zeg(D, `${hoofdletter(wie)}${komma} ${een ? 'trekt' : 'trekken'} weg: ${waarom}. (-${weg.length})`, 'gevaar');
@@ -735,16 +734,21 @@
   // (een nieuw gezin, dat over de weg komt), 'winter' (wie sterft), 'vertrek' (wie wegtrekt) of 'gesneuveld'
   // (een wachter tegen de rovers, js/rovers.js; `wie` zegt dan wie). Het begin ('begin') regelt
   // T.zetBeginBewoners zelf, zodra de boeren hun karakter hebben. Met `waarom` (js/behoeften.js: "De winter is
-  // hard") komt er een bericht dat zegt wie het zijn.
+  // hard") komt er een bericht dat zegt wie het zijn. Geeft wie het zijn, in woorden ("de oude Jan, vader van Klaas"),
+  // voor het dagboek (js/ochtendrapport.js), of '' zonder bewoners.
   T.bewonersVolgen = function (D, verschil, reden, waarom, wie) {
-    if (!D.bewoners || reden === 'begin') return;
-    if (verschil > 0) komenErBij(D, verschil, true);
-    else if (verschil < 0) {
+    if (!D.bewoners || reden === 'begin') return '';
+    if (verschil > 0) return wieTekst(D, komenErBij(D, verschil, true));
+    if (verschil < 0) {
       // Gaat het om bepaalde mensen (een wachter die sneuvelt, js/rovers.js), dan zij; anders wie het eerst gaat.
       const weg = wie ? wie.filter((p) => D.bewoners.mensen.includes(p)).slice(0, -verschil) : wieGaat(D, reden).slice(0, -verschil);
-      berichtOverWieGaat(D, weg, reden, waarom);
+      // In woorden zolang ze er nog zijn: een heel gezin heet samen, en dat zie je alleen zolang het gezin er is.
+      const tekst = wieTekst(D, weg);
+      berichtOverWieGaat(D, weg, tekst, reden, waarom);
       gaanWeg(D, weg, reden);
+      return tekst;
     }
+    return '';
   };
 
   // ---------------------------------------------------------------------------------------------

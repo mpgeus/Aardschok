@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 30 sep 2026, negentiende sessie)
+## Waar staat wat (bijgewerkt 1 okt 2026, twintigste sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -20,6 +20,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
 | De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug; sinds 30 sep heeft een probleem een oorzaak (honger, kou, vol, onvrede) | vraag 65, 74 |
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
+| Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf | vraag 58 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -272,6 +273,41 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
   (`T.RAADSMAN_INSTELLINGEN`, met de neigingen per karakter). `Spel.debug.raadsman()` zegt wie het is, uit wie je
   kiest en wat hij besloot, en `Spel.debug.raadsman('Aaltje')` maakt Aaltje raadsman.
 - **Nog niet:** staande orders (de heer, de heervaart, de marskramer) komen met het land (vraag 66, D).
+- **Sinds 1 okt brengt hij je elke ochtend een rapport:** zie hieronder.
+
+## Het rapport van de raadsman: de dag in fasen, 's ochtends (Marcel, 1 okt 2026; werklijst vraag 75)
+
+**Zo werkt het nu** (1 okt, twintigste sessie; `js/ochtendrapport.js`, het papier in `js/brieven.js`, toetsen in
+`test/ochtendrapport.test.cjs`; Marcel, vraag 75: "A Ja dat is goed", en bij het nakijken van het plan "a ja b ja c
+ja"). De dag krijgt fasen, zoals in het concept (`concept.md`): 's ochtends het rapport (3a, dit), 's middags de
+zitting (3b) en 's avonds de herberg (3c) komen nog.
+- **Wat erin staat:** wat er gebeurde (wie er kwam, stierf of wegtrok, met wie het zijn en waarom; wat de boeren uit
+  zichzelf deden, hun velden kiezen en slachten; wat hij besliste toen je weg was; en wie je zocht en niet sprak), hoe
+  het gaat ("Sinds gisteren is er 12 graan minder en 3 hout meer"), vanaf drie maanden voor de winter of het hout en
+  het eten hem halen ("Het hout haalt 52 van de 90 dagen van de winter"), wat er speelt (de oorzaken van de voorvallen:
+  "Er is honger, want het rantsoen is krap") en wat er komt (de marskramer, de heer of de inner vandaag, de inner over
+  een paar dagen, de rovers, het goud voor de heer). Op een stille dag is het één regel, onder de aanhef "Heer
+  schout,": "Niets bijzonders. Sinds gisteren is er 3 graan minder."
+- **Wat de balk niet zegt** (vraag 75, b): het rapport herhaalt niet wat er ligt, want dat zegt de balk precies. Het
+  zegt hoe het gaat en hoe lang het duurt.
+- **Zijn rekenen kleurt de getallen:** wie kan rekenen, zegt ze precies; wie het niet bijzonder kan, rondt af ("zo'n
+  15"; onder tien telt iedereen); wie niet kan rekenen, zit er tot 30% naast, elke dag anders. Zo zegt hij soms dat het
+  hout de winter haalt terwijl het dat niet doet. Onder het papier staat hoe hij rekent, en wie het zeker wil weten,
+  gaat zelf kijken. Wie er kwam of ging, zegt hij altijd goed.
+- **Hij brengt het** (vraag 75, a): hij vertrekt zo vroeg dat hij aan je deur staat als je opstaat (zijn looptijd,
+  plus een kwartier; de boeren wonen 16 tot 27 stappen van je deur). Sta je buiten bij je huis, dan komt hij naar je
+  toe, en sta je stil naast hem, dan gaat het papier open en staat de tijd stil. Ben je er niet vóór het werk begint,
+  dan gaat hij aan het werk, en ligt het rapport klaar: de knop Brief bovenin heet dan Rapport. Las je het niet, dan
+  gaat het op in het rapport van de volgende dag (hij onthoudt de laatste twaalf dingen die gebeurden).
+- **Zonder raadsman geen rapport**, en dan ga je zelf rond. Een nieuw spel begint zonder raadsman; de eerste dagen zegt
+  de raad onder het doel: "Een raadsman brengt je elke ochtend een rapport: kies er een [R]" (vraag 75, c).
+- **Het dagboek:** wat er gebeurde, schrijft het dorp op (`D.dagboek`, `T.schrijfOp`), en elke nacht, als laatste stap
+  van de dag, maakt de raadsman er het rapport van (`D.ochtendrapport`). Het wordt bewaard met het spel.
+- **Instelbaar:** de spelregel "Het rapport" (aan, de standaard; uit is het spel van vóór 1 okt), en de getallen in de
+  werkbank (`T.OCHTENDRAPPORT_INSTELLINGEN`). `Spel.debug.rapport()` zegt wat erin staat, of hij het bracht en hoe hij
+  rekent; `('nu')` maakt er nu een, `('open')` opent het papier.
+- **Nog niet:** de zitting (3b) en het gepraat in de herberg (3c); en "of als je thuiskomt": wie de hele ochtend weg
+  was, vindt het rapport onder de knop, de raadsman komt het niet later nog brengen.
 
 ## Het land (Marcel, 29 en 30 sep 2026; werklijst vraag 63 en 69)
 
