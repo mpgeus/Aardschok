@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (1 okt 2026, twintigste sessie): het rapport van de raadsman is af (vraag 75, 3a, en 76); het doel is de vertical slice op haar eigen maat (vraag 77, gekozen), en het volgende is het plan voor stap 1, de cyclus
+## De stand (1 okt 2026, twintigste sessie): het rapport van de raadsman is af (vraag 75, 3a, en 76); het doel is de vertical slice, van gehucht tot kleine stad (vraag 77, gekozen), en het volgende is het plan voor stap 1, de cyclus
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -39,11 +39,12 @@ en zijn rekenen kleurt de getallen. Met het rapport uit speelt de speeltest lett
 jaren); daarna zegt het een oorzaak en de winter alleen nog als ze veranderen (vraag 76, af). **Nu eerst een spel van
 begin tot eind** (Marcel, 1 okt: "We gaan ook eerst verder 3b kan later. Laten we eerst eens een speelbaar spel maken van
 begin tot eind", en "Gebruik de slice in de pdf"): **het plan is vraag 77, en Marcel koos het** ("A we starten vanaf
-de slice kwa afmeting een gehucht met 50 is echt te klein ... D prima"): de vertical slice uit het concept, in zes
-stappen (de cyclus met een eind per jaar, statussen met niveaus, ambtenaren, wacht en misdaad, mensen met banden, de
-kleine stad), op de maat van de slice: een kleine stad van 100 tot 200 mensen vanaf het begin. **Begin met het plan voor
-stap 1, de cyclus** (bij vraag 77 staat waar het mee begint: wat de heer na een jaar in een stad beoordeelt, en wanneer
-de kaart van de stad komt, want die moet er nu zijn als het spel begint). De zitting (3b) en de herberg (3c) wachten. **Hoe we hier kwamen:** stuk 2 van het
+de slice kwa afmeting een gehucht met 50 is echt te klein ... D prima", en "Nee, we starten wel als gehucht"): de
+vertical slice uit het concept, in zes stappen (de cyclus met een eind per jaar, statussen met niveaus, ambtenaren, wacht
+en misdaad, mensen met banden, de kleine stad); je begint als gehucht, zoals nu, en groeit naar de maat van de slice,
+een kleine stad van 100 tot 200 mensen. **Begin met het plan voor stap 1, de cyclus** (bij vraag 77 staat waar het mee
+begint: welke doelen de heer per jaar stelt op weg naar de stad, en wat hij op 1 lentemaand beoordeelt). De zitting (3b)
+en de herberg (3c) wachten. **Hoe we hier kwamen:** stuk 2 van het
 land is af (vraag 71): alles van een dorp staat bij elkaar (`S.dorpen`, `js/dorp.js`), en elk dorp leeft, ook als je er
 niet bent. **Daarna bracht Marcel een concept mee** ("De Schout", `concept.md`: het poppetje is de manier waarop je
 bestuurt). Het concept is ons kompas, en **eerst komt de kern** (vraag 73; Marcel: "We zetten eerst de kern goed neer. Ik
@@ -66,19 +67,20 @@ opdrachten) werd de raad (vraag 58, B).
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; opnieuw geordend op 28 sep,
 vraag 51, na de nieuwe richting, en op 1 okt, vraag 77). De maat is Marcels eigen regel, eerst speelbaar: sinds 1 okt
-is dat de vertical slice uit het concept, op haar eigen maat. Elk stuk begint met een plan voor Marcel.
+is dat de vertical slice uit het concept, van gehucht tot kleine stad. Elk stuk begint met een plan voor Marcel.
 
 *0. Nu: de vertical slice* (Marcel, 1 okt, vraag 77: "Laten we eerst eens een speelbaar spel maken van begin tot eind",
-"Gebruik de slice in de pdf", en "A we starten vanaf de slice kwa afmeting ... D prima"). Een kleine stad van 100 tot
-200 mensen vanaf het begin, in zes stappen, elk eerst een plan, en na elke stap de speeltest:
+"Gebruik de slice in de pdf", "A we starten vanaf de slice kwa afmeting ... D prima", en "Nee, we starten wel als
+gehucht"). Je begint als gehucht, zoals nu, en groeit naar een kleine stad van 100 tot 200 mensen; een dorp van 50 is
+als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speeltest:
 1. **Nu: de cyclus,** een jaar met een eind: het oordeel van de heer, het jaar in het kort, een jaar dat te winnen is.
-   Het plan begint met wat de heer in een stad beoordeelt, en wanneer de kaart van de stad komt (vraag 77, a).
+   Het plan begint met de doelen die de heer per jaar stelt op weg naar de stad (vraag 77, a).
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept.
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
 4. Wacht en misdaad: patrouilles, een misdaadgolf als status, het gevang.
 5. Mensen met banden: 10 tot 20 mensen met wat ze van jou en van elkaar vinden.
 6. De kleine stad: de kaart voor 200 mensen, de wijken, de markt, het raadhuis en de poort die iets doen, en sneller
-   paden zoeken. Omdat het spel nu als stad begint, komt de kaart misschien vroeger (vraag 77, a).
+   paden zoeken.
 Later: een scherm met de statussen en de laatst bekende inventarisatie (vraag 77, b).
 
 *1. Gebouwd (28 en 29 sep): naar de proef "van gehucht tot dorp"* (Marcel, 28 sep, vraag 51: "A ja B ja C ja D ja";
@@ -2451,19 +2453,18 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 1 okt):** "A we starten vanaf de slice kwa afmeting een gehucht met 50 is echt te klein. B Ja,
     er komt later ook ui met status overzicht en laatst bekende inventarisatie. C ja, uiteindelijk ambtenaar voor alle
     'takken' van overheid om je te ondersteunen. D prima". Dus:
-    - **a, we beginnen op de maat van de slice:** een kleine stad van 100 tot 200 mensen, niet een gehucht dat groeit.
-      Dat zet stap 6 (de kaart met plaats voor 200 mensen, de wijken, en sneller paden zoeken) vóóraan in wat het spel
-      nodig heeft: de stad moet er zijn als het spel begint. De regels van stap 1 (een jaar met een eind) hangen niet aan
-      de maat, en kunnen eerst op de kaart van nu; wat de heer dan oordeelt, is geen "dorp worden" meer (dat is de stad
-      al), maar hoe het jaar ging. **Het plan voor stap 1 begint dus met die twee vragen:** wat de heer na een jaar
-      beoordeelt in een stad, en wanneer de kaart van de stad komt.
+    - **a, we beginnen als gehucht en groeien naar de maat van de slice** (Marcel, daarna: "Nee, we starten wel als
+      gehucht"; Claude las het eerst als "beginnen als stad"): je begint zoals nu, en het doel is een kleine stad van 100
+      tot 200 mensen; een dorp van 50 is als doel te klein. Het dorp blijft een trede onderweg. **Het plan voor stap 1
+      begint dus met de vraag** welke doelen de heer per jaar stelt op weg naar die stad (het dorp, en dan de stad), en
+      wat hij op 1 lentemaand beoordeelt. De kaart met plaats voor 200 mensen en sneller paden zoeken blijven stap 6.
     - **b, statussen met niveaus,** en later een scherm met een overzicht van de statussen en **de laatst bekende
       inventarisatie**: wat je weet, is wat er het laatst geteld werd (door jou of een ambtenaar), niet wat er nu ligt.
       Dat past bij "informatie is een grondstof" (`concept.md`) en bij wat het rapport liet zien: de balk die alles
       precies zegt, maakt zelf kijken overbodig (vraag 75, b).
     - **c, uiteindelijk een ambtenaar voor elke tak van het bestuur,** om je te steunen; de marktmeester, de
       wachtmeester en de rentmeester eerst.
-    - **d, deze volgorde,** te beginnen met stap 1, de cyclus, met het plan erbij (zie a).
+    - **d, deze volgorde,** te beginnen met stap 1, de cyclus.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
