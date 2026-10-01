@@ -149,6 +149,41 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 1 okt: het rapport van de raadsman (werklijst, vraag 75, 3a)
+
+Gespeeld in de twintigste sessie, op `ccr-8e9e20ad-gg1umw` (het rapport, toen nog niet gecommit; daarna `6a4573c`),
+zonder één fout in de console, alle vijf spelers met zaad 1 tot en met 3. De nulmeting (de hele speeltest op `934be17`,
+de stand ervoor) draaide in een losse kopie (`git worktree`).
+
+**Het bewijs:** met het rapport uit (`--regel rapport=uit`) spelen alle 15 jaren letter voor letter zoals op de stand
+ervoor. Op de nieuwe standaard ook de 12 jaren van de vier spelers die geen raadsman kiezen (braaf, lui30, lui60 en
+slim), op de raad na: de eerste dagen zegt die nu "Een raadsman brengt je elke ochtend een rapport: kies er een [R]".
+
+**De bouwer** kiest wel een raadsman, en kreeg het rapport bijna elke ochtend (hij slaapt bij huis). Wat erin stond,
+per soort regel, in twee jaar:
+
+| | zaad 1 | zaad 2 | zaad 3 |
+|---|---|---|---|
+| Rapporten; daarvan stil ("Niets bijzonders.") | 610; 44 | 746; 20 | 748; 22 |
+| Er is honger | 393 | 532 | 531 |
+| De winter (het hout of het eten, vanaf herfstmaand) | 504 | 749 | 713 |
+| Het dorp is ontevreden; de huizen zitten vol | 131; 81 | 245; 220 | 264; 198 |
+| Sinds gisteren (het graan en het hout) | 166 | 578 | 587 |
+| Wat er komt (de marskramer, de inner, de rovers, het goud voor de heer) | 184 | 79 | 69 |
+| Wie er kwam; wie er stierf | 18; 47 | 21; 72 | 19; 73 |
+| Doden en mensen aan het eind (zonder rapport) | 45 en 26 (62 en 12) | 71 en 20 (71 en 20) | 72 en 18 (45 en 46) |
+
+**Wat opviel:**
+
+1. **Het rapport zegt bijna elke dag hetzelfde.** Het dorp van de bouwer heeft bijna altijd honger, dus staat "Er is
+   honger, want er is niet genoeg eten." in twee van de drie rapporten, en vanaf herfstmaand elke dag de winter. Het
+   klopt, maar wie het elke dag leest, leest er overheen. Dat werd vraag 76: een oorzaak alleen zeggen als hij begint
+   of ophoudt.
+2. **De uitkomst van de bouwer verandert, maar zonder richting:** hij doet niets met wat het rapport zegt; alleen loopt
+   de raadsman 's ochtends anders en staat de tijd even stil, en één ander moment verandert alles wat erna komt (zaad 1
+   beter, zaad 2 gelijk, zaad 3 slechter).
+3. **"Sinds gisteren" zegt vaak niets** bij een dorp zonder graan: wat op is, verandert niet. Dan zegt de honger het.
+
 ## De speeltest van 30 sep: voorvallen met een oorzaak, en de boeren doen het seizoen (werklijst, vraag 74, stap 1 en 2)
 
 Gespeeld in de negentiende sessie, op `3c68667` van `ccr-4cd08e9d-1g0phy`, zonder één fout in de console, alle vijf

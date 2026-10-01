@@ -128,6 +128,24 @@
   // Wat vanzelf opengaat: de brief van de heer (1 wijnmaand) en het slachten (1 slachtmaand). De brief
   // lees je en sluit je; bij het slachten neem je het voorstel van het spel (zo weinig als kan, zodat
   // het hooi de winter haalt). Een venster dat de speler niet zelf openhoudt, gaat dicht.
+  // Welke soort regel er in een rapport staat (js/ochtendrapport.js), voor de telling hierboven.
+  const RAPPORT_SOORTEN = [
+    ['stil', /^Niets bijzonders/],
+    ['nieuw', /^Nieuw in het dorp/],
+    ['gestorven', /gestorven\.$|sneuvelde/],
+    ['weg', / weg: /],
+    ['boeren', /de boeren/],
+    ['besluit', /^Over .* besliste/],
+    ['nietGesproken', /zocht je over/],
+    ['sindsGisteren', /^Sinds gisteren/],
+    ['winter', /winter/],
+    ['honger', /^Er is honger/],
+    ['kou', /^Het is koud/],
+    ['vol', /^De huizen zitten vol/],
+    ['onvrede', /^Het dorp is ontevreden/],
+    ['komt', /^Vandaag komt|^De inner komt|^De rovers|^De heer wil/],
+  ];
+
   function beantwoord() {
     const s = S();
     // De brief van de heer als het gehucht een dorp is (js/treden.js): verder als dorp. Wanneer, schrijft de
@@ -143,14 +161,19 @@
       if (!klik('#brief [data-actie="stuur"]')) T.ui.sluitBrief(s);
     }
     // Het rapport van de raadsman ('s ochtends, js/ochtendrapport.js): lezen en dicht, en geen brief van de heer. De
-    // speler telt hoe vaak hij het kreeg en hoe vaak het "Niets bijzonders" was, en schrijft de eerste vijf op die iets
-    // zeiden, zodat de uitslag laat zien wat erin staat.
+    // speler telt hoe vaak hij het kreeg, hoe vaak het "Niets bijzonders" was en welke soort regels erin stonden, en
+    // schrijft de eerste vijf op die iets zeiden, zodat de uitslag laat zien wat erin staat.
     if (T.ui.briefOpen() && document.querySelector('#brief').dataset.soort === 'rapport') {
       const R = s.dorp.ochtendrapport;
-      const r = boek.rapporten || (boek.rapporten = { gelezen: 0, stil: 0, voorbeelden: [] });
+      const r = boek.rapporten || (boek.rapporten = { gelezen: 0, stil: 0, soorten: {}, voorbeelden: [] });
       r.gelezen++;
       if (R && /^Niets bijzonders/.test(R.regels[0])) r.stil++;
       else if (R && r.voorbeelden.length < 5) r.voorbeelden.push({ datum: datum(), door: R.door, regels: R.regels.slice() });
+      for (const regel of (R && R.regels) || []) {
+        const soort = RAPPORT_SOORTEN.find(([, re]) => re.test(regel));
+        const naam = soort ? soort[0] : 'anders';
+        r.soorten[naam] = (r.soorten[naam] || 0) + 1;
+      }
       if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
     }
     if (T.ui.briefOpen()) {

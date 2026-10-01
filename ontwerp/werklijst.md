@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (30 sep 2026, negentiende sessie): het concept is het kompas en eerst komt de kern (vraag 73); stap 1 en 2 van de kern zijn af (vraag 74); het plan voor de dag in fasen (vraag 75) wacht op Marcel
+## De stand (1 okt 2026, twintigste sessie): eerst de kern (vraag 73 en 74); van de dag in fasen (vraag 75) is het rapport van de raadsman af (3a), en de zitting (3b) is het volgende
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -21,33 +21,36 @@ naam van je dorp en de benoemingsbrief van de heer; `W` zijn de wetten, `Z` is s
 het spel slaat elke ochtend zelf op; onder het doel linksboven staat de raad. In een dorp vraagt de heer op 1 hooimaand
 mannen voor zijn oorlog (`Spel.debug.heervaart('vraag')`). Om de paar dagen komt iemand je zoeken met een voorval: een
 uitroepteken boven zijn hoofd, en hij spreekt je aan als je stilstaat (`Spel.debug.voorval('brand')`); ben je weg,
-dan beslist je raadsman, die je kiest met de knop Raadsman (`R`). Met de spelregel Land aan (`O`) loop je over de weg
-je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). Met de spelregel "Je gehucht" op "Elk spel een
-ander" legt de maker elk nieuw spel een ander gehucht (`Spel.debug.gehucht(3)` voor zaad 3). De pagina "Stand van het
-gehucht" (25 sep) loopt achter op de dag. `npm test`: 680/680.
+dan beslist je raadsman, die je kiest met de knop Raadsman (`R`); die brengt je ook elke ochtend een rapport, aan je
+deur als je bij huis slaapt (`Z`), en anders onder de knop Rapport (`Spel.debug.rapport()`). Met de spelregel Land aan
+(`O`) loop je over de weg je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). Met de spelregel "Je
+gehucht" op "Elk spel een ander" legt de maker elk nieuw spel een ander gehucht (`Spel.debug.gehucht(3)` voor zaad 3).
+De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 714/714.
 
-**Waar het werk staat:** alles staat in `main`, ook het werk van de negentiende sessie (Marcel, 1 okt: "Ja zet in main";
-ook op `ccr-4cd08e9d-1g0phy`): stuk 2 van het land (vraag 71), het plan voor het buurdorp (vraag 72), het concept (vraag
-73), stap 1 en 2 van de kern (vraag 74) met de meting van de grootte (`npm run grootte`), en het plan voor de dag in fasen
-(vraag 75), met hoe het rapport gebouwd wordt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** het werk van de twintigste sessie, het rapport van de raadsman (vraag 75, 3a), staat op
+`ccr-8e9e20ad-gg1umw`, nog niet in `main`. Alles van daarvoor staat in `main`, ook het werk van de negentiende sessie
+(Marcel, 1 okt: "Ja zet in main"; ook op `ccr-4cd08e9d-1g0phy`): stuk 2 van het land (vraag 71), het plan voor het
+buurdorp (vraag 72), het concept (vraag 73), stap 1 en 2 van de kern (vraag 74) met de meting van de grootte (`npm run
+grootte`), en het plan voor de dag in fasen (vraag 75). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`,
+onder Git.
 
-**Waar de volgende sessie begint:** **stuk 2 van het land is af** (vraag 71; Marcel: "A ja B ja C ja, oud spel mag
-vervallen"; zie onder Af): een speeldag kost 0,5 ms in plaats van 30 tot 39, alles van een dorp staat bij elkaar
-(`S.dorpen`, je eigen dorp `S.dorp`, `js/dorp.js`), en elk dorp leeft, ook als je er niet bent, met poppetjes die lopen,
-maaien en dwalen, alleen niet getekend; een ander dorp spreekt niet tegen jou (`T.zeg`). In het spel is er nog één dorp:
-de speeltest speelt letter voor letter hetzelfde jaar als ervoor, en duurt nu zo'n zeven minuten in plaats van een uur.
-`test/dorpen.test.cjs` zet jouw gehucht en een van de maker naast elkaar. **Daarna bracht Marcel een concept mee** ("De
-Schout", `concept.md`: het poppetje is de manier waarop je bestuurt; "Ik denk dat we hiermee een goede kant opgaan"). Het
-concept is ons kompas, en **eerst komt de kern** (vraag 73; Marcel: "We zetten eerst de kern goed neer. Ik wil meer
-naar management sim toe"): de boeren doen het seizoen en jij houdt een oogje in het zeil, voorvallen krijgen een oorzaak
-(B), de dag komt in fasen (A), en zelf gaan kijken kan altijd (C). **Het plan voor de kern is vraag 74**, en Marcel
-koos het ("a ja b ja c zelf sprokkelen, maar lost niet volledig op. Houthakker is nodig d ja"). **Stap 1 en 2 zijn af**
-(zie onder Af): een probleem heeft een oorzaak die je kunt zien (honger, kou, vol, onvrede), en de boeren kiezen hun
-velden, slachten en sprokkelen zelf (de spelregel "Het seizoen"). De speeltest speelt met de oude instellingen letter voor
-letter hetzelfde jaar, en op de nieuwe standaard staat wat het deed in `speelbaar.md`. **Het volgende is stap 3, de dag in
-fasen** (vraag 75; Marcel, 1 okt: "A Ja dat is goed. b zitting als die er zijn ... D prima"): eerst het rapport van de
-raadsman (3a), dan de zitting (3b), dan het gepraat in de herberg (3c). **Begin met 3a, het rapport:** hoe het gebouwd
-wordt, staat bij vraag 75. Ernaast liep een
+**Waar de volgende sessie begint:** **3a, het rapport van de raadsman, is af** (vraag 75; Marcel: "A Ja dat is goed", en
+bij het nakijken van het plan "a ja b ja c ja"; zie onder Af): heb je een raadsman, dan staat hij 's ochtends aan je deur
+met wat er gebeurde, hoe het graan en het hout gaan sinds gisteren, of ze de winter halen, wat er speelt en wat er komt,
+en zijn rekenen kleurt de getallen. Met het rapport uit speelt de speeltest letter voor letter hetzelfde jaar (alle 15
+jaren); de bouwer kreeg het bijna elke ochtend, en het zegt bijna elke dag hetzelfde: **vraag 76 wacht op Marcel**
+(`speelbaar.md`). **Het volgende is 3b, de zitting** (vraag 75, b; Marcel: "b zitting als
+die er zijn"): de rechtszaken (de diefstal, de vechtpartij, de akkergrens, de stroper, de heks, de woeker) lopen je niet
+meer achterna, maar wachten bij je huis tot je 's middags, na het schaften, zitting houdt, op een dag dat er zijn. **Begin
+met een plan voor Marcel:** hoe 3b gebouwd wordt, zoals bij 3a (eerst in de code nakijken wat het raakt; bij 3a vond dat
+drie dingen die het plan beter maakten). Daarna 3c, het gepraat in de herberg. **Hoe we hier kwamen:** stuk 2 van het
+land is af (vraag 71): alles van een dorp staat bij elkaar (`S.dorpen`, `js/dorp.js`), en elk dorp leeft, ook als je er
+niet bent. **Daarna bracht Marcel een concept mee** ("De Schout", `concept.md`: het poppetje is de manier waarop je
+bestuurt). Het concept is ons kompas, en **eerst komt de kern** (vraag 73; Marcel: "We zetten eerst de kern goed neer. Ik
+wil meer naar management sim toe"): de boeren doen het seizoen en jij houdt een oogje in het zeil, voorvallen krijgen een
+oorzaak (B), de dag komt in fasen (A), en zelf gaan kijken kan altijd (C). **Het plan voor de kern is vraag 74**: stap 1
+en 2 zijn af (een probleem heeft een oorzaak die je kunt zien; de boeren kiezen hun velden, slachten en sprokkelen zelf),
+en stap 3 is de dag in fasen (vraag 75): het rapport (3a, af), de zitting (3b) en de herberg (3c). Ernaast liep een
 meting van hoe groot een dorp kan worden (vraag 74; de uitslag staat daar). Het buurdorp (vraag 72) wacht tot de kern
 staat. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
 raadsman komen met het land (vraag 66, D). Het dorp van bovenaf is beslist: niet
@@ -88,7 +91,8 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* vraag 76 (het rapport dat bijna elke dag hetzelfde zegt: een oorzaak alleen als hij begint of
+ophoudt?); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2352,7 +2356,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       ongelezen rapport ligt, en opent het. De speler van de speeltest sluit een open brief al vanzelf.
     Klaar als: toetsen voor het dagboek, de inhoud, het rekenen en het brengen; met `--regel rapport=uit` speelt de
     speeltest letter voor letter hetzelfde jaar; `npm test` groen.
-    **Bij het nakijken** (Claude, 1 okt, twintigste sessie; wacht op Marcel): drie dingen die het plan raken.
+    **Bij het nakijken** (Claude, 1 okt, twintigste sessie; Marcel: "a ja b ja c ja"): drie dingen die het plan raken.
     - **a. Hij komt te laat.** De boeren wonen 16 tot 27 stappen van de deur van de schout (gemeten in het gehucht): bij
       1,5 tegel per seconde is dat 0,9 tot 1,5 uur speltijd, en de ochtend (opstaan tot het werk) duurt precies een uur.
       Wie wakker wordt en op pad gaat, ziet hem nooit. Voorstel: de raadsman staat een uur eerder op dan de rest, en
@@ -2368,6 +2372,15 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     boeren uit zichzelf deden (hun velden kiezen, slachten) en wat de raadsman zelf besliste, uit hetzelfde dagboek. En
     de speler van de speeltest moet het rapport van een brief van de heer onderscheiden: hij schrijft nu bij elke open
     brief de eis van de heer op.
+    **Gebouwd** (1 okt, twintigste sessie; zie onder Af), met a, b en c.
+76. **Het rapport zegt bijna elke dag hetzelfde** (Claude, 1 okt, twintigste sessie; de speeltest na 3a, in
+    `speelbaar.md`; wacht op Marcel). Bij de bouwer staat "Er is honger, want er is niet genoeg eten." in twee van de drie
+    rapporten (393 tot 532 van de 610 tot 748 in twee jaar), en vanaf herfstmaand elke dag de winter; een stille dag kwam
+    20 tot 44 keer voor. Het klopt (zijn dorp heeft bijna altijd honger), maar wie het elke dag leest, leest er overheen,
+    en het concept wil "alleen ingrijpen als er iets afwijkt". Vragen: **a**, een oorzaak alleen zeggen als hij begint of
+    ophoudt ("Sinds gisteren is er honger", "De honger is voorbij"), en zolang hij duurt één keer per week ("Er is nog
+    steeds honger, al twaalf dagen")? **b**, de winter net zo: alleen als het getal flink verandert, en anders één keer
+    per week? **c**, nu, vóór de zitting (3b), of later, als je het zelf gespeeld hebt?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -2668,6 +2681,23 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 1 okt 2026 — **Het rapport van de raadsman, 's ochtends** (twintigste sessie; vraag 75, 3a, de eerste fase van de dag;
+  Marcel: "A Ja dat is goed", en bij het nakijken van het plan "a ja b ja c ja"). Heb je een raadsman, dan brengt hij je
+  elke ochtend een papier (`js/ochtendrapport.js`): wie er kwam, stierf of wegtrok (met namen en waarom), wat de boeren
+  uit zichzelf deden, wat hij besliste toen je weg was en wie je niet sprak; hoe het graan en het hout gaan sinds
+  gisteren; vanaf drie maanden voor de winter of het hout en het eten hem halen; welke oorzaken er spelen; en wat er
+  komt. Een stille dag is één regel ("Niets bijzonders."). Bij het nakijken van de code vond Claude drie dingen, en
+  Marcel koos ze alle drie: **a**, de raadsman vertrekt zo vroeg dat hij aan je deur staat als je opstaat (de boeren
+  wonen 16 tot 27 stappen weg, bijna een uur lopen, en zo lang duurt de ochtend), en sta je buiten bij huis, dan komt hij
+  naar je toe; **b**, het rapport zegt wat de balk niet zegt, en zijn rekenen kleurt die getallen (precies, afgerond op
+  vijf, of tot 30% ernaast; anders verraadt de balk een slechte rekenaar meteen); **c**, de raad zegt de eerste dagen
+  "Een raadsman brengt je elke ochtend een rapport: kies er een [R]". Wat er gebeurde, schrijft het dorp in een dagboek
+  (`T.schrijfOp`; `T.wijzigBevolking` geeft wie het zijn mee), en elke nacht maakt hij er als laatste stap van de dag zijn
+  rapport van; een rapport dat je niet las, gaat op in het volgende. Het papier is het venster van de brieven, in zijn
+  hand; de knop Brief heet Rapport zolang er een ongelezen ligt. De spelregel "Het rapport", `Spel.debug.rapport()`. 13
+  nieuwe toetsen, `npm test` 714/714. De speeltest (`speelbaar.md`): met het rapport uit alle 15 jaren letter voor letter
+  zoals ervoor, en op de nieuwe standaard ook de vier spelers zonder raadsman, op de raad van de eerste dagen na. Wat
+  opviel, werd vraag 76: het rapport zegt bijna elke dag hetzelfde.
 - 30 sep 2026 — **De boeren doen het seizoen** (negentiende sessie; vraag 74, stap 2; Marcel: "Het zaaien wordt gewoon
   iets wat de boeren doen, zo ook het oogsten en de winter. Jij moet als schout wel een oogje in het zeil houden", en
   "zelf sprokkelen, maar lost niet volledig op. Houthakker is nodig"). Na de oogst, op 1 herfstmaand, kiest elke boer wat
