@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (1 okt 2026, eenentwintigste sessie): eerst een speelbare kern: één stad die je wint door iedereen super gelukkig te maken, met wensen zoals in Anno 1602 (vraag 78 en 79, gekozen); gebouwd wordt stap 1, een jaar dat te winnen is
+## De stand (1 okt 2026, eenentwintigste sessie): eerst een speelbare kern, één stad die je wint door iedereen super gelukkig te maken (vraag 78 en 79); stap 1, een jaar dat te winnen is, is af; het plan voor stap 2, de wensen per stand, is vraag 80, en vraag 81 gaat over het zaaigraan; allebei wachten op Marcel
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -27,15 +27,19 @@ deur als je bij huis slaapt (`Z`), en anders onder de knop Rapport (`Spel.debug.
 gehucht" op "Elk spel een ander" legt de maker elk nieuw spel een ander gehucht (`Spel.debug.gehucht(3)` voor zaad 3).
 De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 717/717.
 
-**Waar het werk staat:** alles staat in `main`, ook het werk van de twintigste sessie (Marcel, 1 okt: "Alles pushen en
-main"; ook op `ccr-8e9e20ad-gg1umw`): het rapport van de raadsman (vraag 75, 3a), het rapport dat zegt wat verandert
-(vraag 76), de richtlijn voor statussen, en het plan voor de vertical slice (vraag 77). Hoe een eigen branch en `main`
-samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** het werk van de twintigste sessie staat in `main` (Marcel, 1 okt: "Alles pushen en main"). Dat
+van de eenentwintigste sessie (vraag 78 tot en met 81, en stap 1) staat op `ccr-b5dfb962-d3bery`, gepusht maar nog niet
+in `main`: zet het erin als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** **het plan is vraag 79, en Marcel koos het** (eenentwintigste sessie: "a twee
 manieren b ja c ja d ja. We focussen ons op een speelbare kern. Daarna komt oorlog etc erbij en de rest van het land
 diplomatie trading etc"). Gebouwd wordt in de volgorde van vraag 79: 1, een jaar dat te winnen is; 2, de wensen per
-stand, met het eind; 3, het vaste pad buiten beeld; 4, de eisen van de heer; 5, de speeltest. Het plan voor
+stand, met het eind; 3, het vaste pad buiten beeld; 4, de eisen van de heer; 5, de speeltest. **Stap 1 is af** (zie
+onder Af): een gezin wacht op de winter, de raad zegt wat je mist voor de kapel en de smidse, en de marskramer
+verkoopt in de lente zaaigraan, dat de boeren nazaaien. In de speeltest stierf niemand meer van de kou, maar het dorp
+at zijn zaaigraan op: **vraag 81** (het zaaigraan apart, en een bouwer met een jager). **Het plan voor stap 2 is vraag
+80** (de wensen per huis, een kring om het gebouw, doorgroeien met bouwstof, en gewonnen als alles een maand super
+gelukkig is). Begin daar, met Marcels antwoorden. Het plan voor
 stap 1 (vraag 78: elk jaar een doel van de heer) ging niet door: "de heer moet alleen betaald worden, en hij mag wel
 eisen stellen. Maar meer om het je moeilijk te maken"; het einddoel is "totale verovering van de wereld", en "dat
 mensen super gelukkig zijn en in al hun wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602"; en "we
@@ -87,7 +91,8 @@ als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speelt
    winnen is, het jaar in het kort, de heer met eisen die het moeilijk maken, en het vaste pad buiten beeld voor 5.000
    man (vraag 78; eerst "de cyclus" genoemd, met doelen van de heer, maar die stelt hij niet). Het plan is vraag 79,
    gekozen: twee manieren om te winnen (veroveren, of iedereen super gelukkig), en eerst een speelbare kern; oorlog,
-   de rest van het land, diplomatie en handel komen daarna.
+   de rest van het land, diplomatie en handel komen daarna. Stap 1, een jaar dat te winnen is, is af (zie onder Af); het
+   plan voor stap 2, de wensen per stand, is vraag 80, en het zaaigraan vraag 81.
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept.
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
 4. Wacht en misdaad: patrouilles, een misdaadgolf als status, het gevang.
@@ -120,7 +125,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het plan voor stap 2, de wensen per stand (vraag 80: a tot en met d), en het zaaigraan (vraag 81: a en b); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2615,6 +2620,68 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     na de wensen; en 5.000 man in drie lagen, met het vaste pad meteen na de wensen. **Eerst een speelbare kern,** en dat
     is één stad die je wint door iedereen super gelukkig te maken; oorlog, de rest van het land, diplomatie en handel
     komen daarna. Gebouwd wordt in de volgorde hierboven, te beginnen met een jaar dat te winnen is.
+80. **Stap 2: de wensen per stand, het plan** (Claude, 1 okt, eenentwintigste sessie; vraag 79, A en C; wacht op
+    Marcel). **Wat er al is:** een huis groeit door als het hele dorp dertig dagen 70% tevreden is (een hut van 3 mensen
+    wordt een huis van 5, een huis een stenen huis van 8; een boerderij groeit niet), en die tevredenheid is één getal
+    voor het hele dorp. De molen, de bakkerij, de weverij en de kuiper maken iets wat niemand gebruikt (meel, brood,
+    laken, vaten), en de markt, het badhuis en het gasthuis doen niets.
+    - **A, elk huis een stand, met zijn wensen.** De stand hoort bij het huis: een hut is van keuters, een huis van
+      dorpelingen, een stenen huis van ambachtslieden, en een nieuw huis van twee lagen in baksteen (de huizenbouwer kan
+      het, zoals het huis van de schout) van poorters. Elke dag kijkt een huis of het heeft wat zijn stand wil, uit de
+      tabel van vraag 79 (de getallen in de werkbank): **goederen** die het per mens per dag gebruikt, uit de voorraad
+      (eten en in de winter brandhout, zoals nu; bier van de herberg of de brouwerij; vlees of vis; brood van de bakkerij,
+      met meel van de molen; laken van de weverij, met wol van de kooi; zout van de marskramer), en **plekken in de
+      buurt** (een put, een kapel, de herberg, een markt, een badhuis, een gasthuis). Zo krijgen de ketens die nu niets
+      doen een doel, zoals in Anno.
+    - **B, in de buurt is een kring om het gebouw,** zoals in Anno: de put reikt 12 tegels, een kapel, de herberg en een
+      markt 25, het badhuis en het gasthuis 30 (werkbank). Als je bouwt, zie je de kring op de grond, en welke huizen
+      erin vallen. Het andere is hoe lang je loopt, langs de wegen (`T.looptijdVan`): dat klopt beter, maar je ziet het
+      niet als je bouwt, en bij 5.000 man is het veel rekenwerk.
+    - **C, doorgroeien en achteruitgaan, per huis.** Heeft een huis een maand lang alles, dan groeit het door naar de
+      volgende stand, met meer mensen erin (hut 3, huis 5, stenen huis 8, poortershuis 12) en meer belasting. Doorgroeien
+      kost bouwstof uit de voorraad, zoals in Anno: een huis 8 hout, een stenen huis 12 steen, een poortershuis 20 steen
+      en 5 goud (werkbank). Zo krijgt steen een doel (de steengroeve, en later de steenbakkerij). Mist een huis een maand
+      iets, dan wordt het ontevreden, en trekt er een gezin weg. De tevredenheid van het dorp wordt het gemiddelde van
+      zijn huizen, zodat alles wat er nu naar kijkt (de groei, het werk, de voorvallen, de raad), blijft werken. De
+      boerderijen groeien niet: hun boeren willen eten, brandhout, een kapel en de herberg, en tellen zo mee.
+    - **D, de treden gaan op in de standen.** Wat een stand wil, komt in het bouwmenu als er genoeg mensen zijn in de stand
+      eronder, zoals in Anno: de markt, de molen, de bakkerij en de weverij bij 20 dorpelingen; het badhuis, het gasthuis
+      en de steenbakkerij bij 20 ambachtslieden. Het dorp heet naar zijn mensen: een dorp zodra er 20 dorpelingen zijn,
+      marktrecht bij 20 ambachtslieden, een stad bij 20 poorters (werkbank). De heervaart en de brief "Dat kost u vanaf nu
+      meer" blijven aan het dorp hangen. Linksboven staat hoeveel huizen super gelukkig zijn, en wat de volgende stand
+      nog mist.
+    - **E, je ziet het eerst in de wereld.** Een huis dat iets mist, heeft een klein teken bij de deur; loop erheen of klik
+      het, en je ziet wat het wil, met ✓ en ✗. Je raadsman zegt in zijn rapport wat het meest gemist wordt ("Zes huizen
+      willen een kapel dichterbij"), en de raad zegt het onder het doel.
+    - **F, het eind.** Gewonnen als alle woningen in de hoogste stand zijn en alles hebben wat ze willen, en de boerderijen
+      ook, een maand lang (werkbank). Verloren als je je ambt kwijt bent, als de schout valt, of als er minder dan tien
+      mensen over zijn. Eén scherm voor elk eind, met het jaar in het kort (vraag 78, D); wie wint, kan verder spelen.
+    **In deze volgorde,** elk met toetsen: 2a de stand en de wensen per huis, met de tevredenheid als gemiddelde; 2b
+    doorgroeien en achteruitgaan; 2c zien wat een huis wil (het teken, het venster, het rapport, het doel); 2d de treden
+    uit de standen, en het poortershuis; 2e het eind en het jaar in het kort. Daarna het vaste pad buiten beeld (vraag
+    79, stap 3) en de speeltest, met een bouwer die naar super gelukkig speelt.
+    **Klaar als** een huis zegt wat zijn stand wil en of het dat heeft; een huis doorgroeit als het alles heeft, en er een
+    gezin wegtrekt als er lang iets ontbreekt; de tevredenheid van het dorp het gemiddelde is; de treden uit de standen
+    komen; je kunt winnen en verliezen, met één scherm; `npm test` groen is; en de speeltest zegt hoe ver de bouwer komt.
+    Vragen: **a**, de wensen zo, uit de tabel van vraag 79, met de getallen in de werkbank? **b**, in de buurt als een
+    kring om het gebouw, zoals in Anno? **c**, doorgroeien kost bouwstof (hout, steen), zodat steen een doel krijgt?
+    **d**, gewonnen als alles een maand lang super gelukkig is?
+81. **Het dorp eet zijn zaaigraan op** (Claude, 1 okt, eenentwintigste sessie; de speeltest na stap 1 van vraag 79, in
+    `speelbaar.md`; wacht op Marcel). Na stap 1 sterft niemand meer van de kou, en 20 tot 31 mensen minder in twee jaar.
+    Maar op 1 lentemaand van het tweede jaar was er bij alle drie de zaden geen korrel zaaigraan: in de winter at het dorp
+    alles op, en zonder zaaigraan is er dat jaar geen oogst. De bouwer wilde het van de marskramer kopen, maar het goud
+    was op (alleen bij zaad 2 één zak). En het eten is te weinig voor een dorp: de akkers voeden zo'n 25 mensen, het doel
+    vraagt er 50, en de bouwer bouwt geen jager, al zei de raad 212 tot 323 dagen dat het eten de winter niet haalt.
+    Voorstel:
+    - **a, de boeren houden het zaaigraan apart.** Na de oogst leggen ze het zaaigraan voor volgend jaar opzij (één graan
+      per akkertegel), en dat eet het dorp niet, ook niet in de winter: liever honger in de winter dan een jaar zonder
+      oogst. Zo doen de boeren het seizoen ook zelf (vraag 74). In de balk staat bij het graan hoeveel daarvan zaaigraan
+      is, en de raad, het rapport en de winter rekenen het eten zonder. Een spelregel, standaard aan. Het andere: zo
+      laten, en de raad waarschuwt als het zaaigraan opgaat.
+    - **b, de bouwer bouwt een jager** als de raad zegt dat het eten de winter niet haalt, hooguit één per maand, zoals een
+      speler die de raad volgt. Dan meet de speeltest wat een speler kan, en niet alleen wat het doel vraagt.
+    In stap 2 vraagt het doel geen 50 mensen meer (vraag 80, D): eten wordt de eerste wens van elke stand, en een dorp
+    groeit dan zo ver als het te eten heeft. Vragen: **a**, het zaaigraan apart? **b**, de bouwer met een jager?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -2915,6 +2982,17 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 1 okt 2026 — **Een jaar dat te winnen is** (eenentwintigste sessie; stap 1 van vraag 79, met vraag 59, B en C, die
+  geparkeerd was; Marcel: "D dat is prima"). **Een gezin wacht op de winter:** haalt het hout of het eten de winter niet,
+  dan komt er vanaf 1 herfstmaand geen gezin, tot het genoeg is (`T.watDeWinterNietHaalt`, `T.waaromGeenGezin`:
+  'winter'; de spelregel "Groei"); het dorp en de raad zeggen het erbij, en het venster van 90 dagen staat nu één keer
+  (`T.winterInZicht`), voor de groei, de raad en het rapport. **De raad zegt wat je mist** voor de kapel en de smidse, en
+  waar het vandaan komt: de marskramer (nu, of in welke maand), de belasting [W], en voor hout een houthakker [B]
+  (`T.doelGebouwen`). **Zaaigraan:** de marskramer verkoopt in de lente tien pakken graan van tien, voor 5 goud per pak,
+  en omdat hij pas na het zaaien komt, zaaien de boeren na wat niet gezaaid kon worden, tot 1 bloeimaand (`T.zaaiNa`; ook
+  met graan uit een kelder; wat rovers vertrapten niet). De bouwer in de speeltest koopt het als er akkers kaal liggen.
+  In de speeltest (`speelbaar.md`) stierf niemand meer van de kou, en 20 tot 31 mensen minder in twee jaar; maar het dorp
+  at zijn zaaigraan op, en het eten blijft te weinig voor 50: dat werd vraag 81. 5 nieuwe toetsen, `npm test` 721/721.
 - 1 okt 2026 — **Het rapport zegt wat verandert** (twintigste sessie; vraag 76; Marcel: "a ja b ja c nu"). Een oorzaak
   zegt de raadsman als hij begint, één keer per week zolang hij blijft ("Er is nog steeds honger, al twaalf dagen: het
   rantsoen is krap."), en als hij voorbij is ("De honger is voorbij."); de winter als hij omslaat, als de dag waarop

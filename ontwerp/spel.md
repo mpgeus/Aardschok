@@ -22,16 +22,16 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug; sinds 30 sep heeft een probleem een oorzaak (honger, kou, vol, onvrede) | vraag 65, 74 |
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
-| De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf | vraag 58 |
+| De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt | vraag 58, 79 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
 | De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen, vreemden welkom, houtkap en belasting | vraag 54 |
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
 | Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep) | 4, 6 |
-| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep) | 3, vraag 74 |
+| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt (1 okt) | 3, vraag 74, 79 |
 | Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
-| Handel: de marskramer | gebouwd (24 sep) | 4 |
+| Handel: de marskramer | gebouwd (24 sep); in de lente ook zaaigraan, en de boeren zaaien na tot 1 bloeimaand (1 okt) | 4, vraag 79 |
 | Sint-Maarten | gebouwd (24 sep) | 5 |
 | Instelbaar, en de boeren | gebouwd (24 sep): 17 keuzes, 188 getallen | |
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep); sinds 30 sep kiezen de boeren hun velden en slachten ze zelf, en jij kunt het veranderen | 6a, vraag 74 |
@@ -410,10 +410,13 @@ doel"):
   één regel die zegt wat nu tussen jou en een dorp staat, met de toets erbij. Het is de eerste die nu geldt, in deze
   volgorde: de inner (drie dagen vooraf: "wat hij niet ziet, telt de heer niet"); het goud voor de heer, als de
   marskramer er in de herfst is en je te weinig hebt; een wachthuis, tien dagen na een aanval als er geen is; het hout
-  en het eten voor de winter, vanaf drie maanden ervoor, met de houthakker en de jager erbij; het graan dat na
-  Sint-Maarten nog in de kelders ligt ("dat eet niemand en zaait niemand"); de eerste dag hoe de tijd sneller gaat en
-  hoe je slaapt; en dan de groei: waarom er geen gezin komt (het dorp is vol: wijs een erf aan; niet tevreden genoeg;
-  te weinig graan), of wanneer het volgende komt, zoals een stad in Civilization zegt wanneer hij groeit.
+  en het eten voor de winter, vanaf drie maanden ervoor, met de houthakker en de jager erbij, en dat er zolang geen
+  gezin komt (sinds 1 okt, vraag 59, B); het graan dat na Sint-Maarten nog in de kelders ligt ("dat eet niemand en
+  zaait niemand"); de eerste dag hoe de tijd sneller gaat en hoe je slaapt; en dan de groei: waarom er geen gezin komt
+  (het dorp is vol: wijs een erf aan), wat je mist voor de kapel en de smidse en waar het vandaan komt (sinds 1 okt,
+  vraag 59, C: "Voor de smidse mis je 8 goud: de marskramer koopt graan in hooimaand en belasting [W] brengt elke maand
+  goud"), waarom er verder geen gezin komt (niet tevreden genoeg; te weinig graan), of wanneer het volgende komt, zoals
+  een stad in Civilization zegt wanneer hij groeit.
 - **Uit de regels zelf:** de raad vraagt het aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in
   `js/gebouwen.js`, dezelfde vraag die de groei stelt) en aan de winter (`T.houtVoorDeWinter`, `T.etenVoorDeWinter`),
   zodat hij zegt wat het spel doet.
@@ -421,8 +424,7 @@ doel"):
   op een stap hangen, komt een toets pas als je hem nodig hebt, en blijft het na de eerste weken nuttig.
 - **Instelbaar:** de spelregel "Raad" zet hem uit, en de dagen staan in de werkbank (`T.RAAD_INSTELLINGEN`).
   `Spel.debug.raad()` zegt welke raden nu gelden.
-- **Nog niet:** de raad zegt niets over de wetten, en niet waar goud vandaan komt, behalve in de herfst voor de heer.
-  Wat de bouwer in de speeltest ermee deed, staat in `speelbaar.md`.
+- **Nog niet:** de raad zegt niets over de wetten. Wat de bouwer in de speeltest ermee deed, staat in `speelbaar.md`.
 
 ## Besloten (Marcel, 23 sep 2026)
 
@@ -957,8 +959,9 @@ Nog open na deel 1 (vragen van Claude):
   takken (`opmerkingen.md`). De spelregel "Het seizoen" (op jij: niemand sprokkelt).
 - **Een kerk:** een kapel die af is, maakt het dorp tevredener.
 - **Tevredenheid** (0 tot 100%, in de balk, met bij de muis wat het dorp mist) bepaalt hoe hard er
-  gewerkt wordt, of er elke 20 dagen een gezin van vier bijkomt (als er ook plaats is en minstens 20
-  graan) of juist wegtrekt, en of een huis doorgroeit (hut, huis, stenen huis).
+  gewerkt wordt, of er elke 20 dagen een gezin van vier bijkomt (als er ook plaats is, minstens 20
+  graan, en sinds 1 okt hout en eten voor de winter, hieronder) of juist wegtrekt, en of een huis
+  doorgroeit (hut, huis, stenen huis).
 - **De winter:** een tekort aan brandhout of eten kost mensen, en het bericht zegt waaraan: "De kou is
   hard, want het hout is op: de oude Folkert is gestorven." Of de honger, want het eten is op, of
   allebei ("De winter is hard, want het hout en het eten zijn op"). Buiten de winter kost honger
@@ -973,6 +976,13 @@ Nog open na deel 1 (vragen van Claude):
   tevredenheid mist dan "brandhout voor de winter". Het eten rekent met graan, kaas en vlees, de melk die
   de koeien nog geven, en de soldaten van de heer als ze er zijn. De dagen staan in de werkbank
   (`winterVooraf`, `opraakWaarschuwing`). Sneeuw of rijp in het beeld komt later, na de proefversie.
+- **Een gezin wacht op de winter** (1 okt, eenentwintigste sessie; werklijst vraag 59, B, en 79; Marcel: "D dat is
+  prima"): vanaf de dag dat het dorp naar de winter kijkt (`winterVoorafDagen`, 90: vanaf 1 herfstmaand) komt er geen
+  gezin als het hout of het eten de winter niet haalt (`T.watDeWinterNietHaalt`, `T.waaromGeenGezin`: 'winter'), tot
+  het genoeg is of de winter voorbij. Het bericht vooraf zegt het erbij ("Tot het genoeg is, komt er geen nieuw
+  gezin."), en de raad ook. Zo groeit een dorp niet een winter in die het niet haalt: de bouwer van de speeltest groeide
+  in de herfst van 51 naar 74 mensen en verloor er in de winter 42 tot 53. Hetzelfde venster van 90 dagen geldt voor de
+  raad en het rapport (`T.winterInZicht`). De spelregel "Groei" (Altijd: het spel van vóór 1 okt).
 - **Nog open:** de winter is hard (in een proef van 25 naar 2 mensen zonder hout); het eerste
   voorjaar is krap (60 graan voor 25 mensen); moet ook vis eten zijn, nu vlees het is? Brand en
   ziekte komen bij punt 8. Het bericht vooraf rekent nog niet met wat de heer op Sint-Maarten neemt,
@@ -1143,6 +1153,12 @@ ziet de inner, behalve wat verstopt is.
   Hij heeft maar zoveel goud bij zich en zoveel plaats in zijn mars.
 - Hij verkoopt ijzer en zout, en koopt graan, wol, hout, eieren, groente, vis, vlees en huiden. De
   prijzen verschillen per bezoek: voor graan betaalt hij in de lente goed en na de oogst weinig.
+- **Zaaigraan in de lente** (1 okt, eenentwintigste sessie; werklijst vraag 59 en 79; Marcel: "D dat is prima"): in
+  zijn lenteronde verkoopt hij ook graan, tien pakken van tien voor 5 goud per pak (de werkbank), zodat een dorp dat na
+  een slechte winter geen zaaigraan meer had, weer kan zaaien. Hij komt pas na het zaaien, dus de boeren zaaien na wat
+  op 1 lentemaand niet gezaaid kon worden, zodra er graan is, tot het graan groen wordt op 1 bloeimaand (`T.zaaiNa` in
+  `js/akkers.js`, ook met graan uit een kelder); wat rovers vertrapten, zaaien ze niet na. Het venster toont alleen wat
+  hij die ronde bij zich heeft (`T.verkooptNu`).
 - Sinds 25 sep houdt hij bij wat hij je betaalde en wat jij hem, en vertelt hij dat de inner: het
   spoor van goud ("Rijk worden en arm lijken").
 - **Nog open:** vee, kaas en hooi kopen en verkopen (verstoppen, deel 3); hem omkopen (stap 3 van de

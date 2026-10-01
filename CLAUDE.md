@@ -275,7 +275,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   herschreven): één regel onder het doel linksboven die zegt wat nu tussen jou en een dorp staat, met de toets erbij
   (`[B]` wordt een toets): de eerste uit `T.RADEN` die nu geldt (`T.raadNu`). Hij vraagt het aan de regels zelf: of er
   een gezin komt aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in `js/gebouwen.js`), het hout en het eten
-  aan de winter. Uit te zetten in de spelregels ("Raad").
+  aan de winter, en wat je mist voor wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt.
+  Uit te zetten in de spelregels ("Raad").
 - `js/wetten.js`: **de wetten** (stap 3 van de proef, vraag 54, 29 sep; eerst keuren genoemd): een menu zoals in
   Democracy 3 (`js/wettenmenu.js`, onder `W` en als knop in de balk), met het rantsoen, vreemden welkom, houtkap in
   het bos van de heer en de belasting. Wat een wet doet, staat als getallen per stand in één blok
@@ -405,11 +406,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; een gebouw maakt alleen wat zijn grondstof
   toelaat, en gereedschap laat harder werken), `js/behoeften.js` (tevredenheid uit eten, brandhout
   en een kerk; de winter, en of het hout en het eten hem halen, `T.houtVoorDeWinter` en
-  `T.etenVoorDeWinter`, uit één regel met het hooi, `T.haaltDeWinter` en `T.raaktOp`; het hout dat de mensen elke dag
+  `T.etenVoorDeWinter`, uit één regel met het hooi, `T.haaltDeWinter` en `T.raaktOp`; vanaf 90 dagen ervoor kijkt het dorp
+  ernaar, `T.winterInZicht`, voor de raad, het rapport en de groei: haalt het hem niet, dan komt er geen gezin,
+  `T.watDeWinterNietHaalt`, de spelregel "Groei"; het hout dat de mensen elke dag
   sprokkelen, `T.sprokkelHout`, zo'n 40% van wat de winter vraagt, zodat een houthakker nodig blijft; een huis dat
   doorgroeit; zout dat vis en vlees goed houdt),
   `js/handel.js` (de marskramer: drie bezoeken per jaar, prijzen per bezoek, `T.kanKopen` en
-  `T.kanVerkopen`; hij staat op de plek `"marskramer"` uit het betekenisbestand), `js/heer.js`
+  `T.kanVerkopen`; in de lente ook zaaigraan, dat de boeren nazaaien tot 1 bloeimaand, `T.zaaiNa` in `js/akkers.js`; hij staat op de plek `"marskramer"` uit het betekenisbestand), `js/heer.js`
   (Sint-Maarten: zijn brief in wijnmaand, wat hij vraagt naar wat hij ziet via `T.eisVanDeHeer` en
   `T.GEBOUWEN[soort].heer`, `T.gevolgVanBetaling` voor venster en knop, de straffen tot je ambt
   kwijt; zaaien en braak staan in `js/akkers.js`), `js/inner.js` (de inner in oogstmaand: wat hij

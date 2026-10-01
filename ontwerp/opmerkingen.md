@@ -98,10 +98,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     loopt daar recht in; de speeltest met de bouwer (vraag 58, A) laat zien of een goede speler het ook raakt.
   - ~~**Waarom er geen gezin komt, zegt het spel alleen bij "geen plaats".**~~ De raad onder het doel zegt het nu
     (29 sep, `js/raad.js`).
-  - **Zonder zaaigraan komt een dorp nooit meer boven** (de bouwer, 29 sep, `speelbaar.md`). Ligt er op 1 lentemaand
-    geen graan, dan wordt er niets gezaaid, dus niets geoogst, dus is er het jaar erna weer geen zaaigraan. De
-    marskramer verkoopt geen graan, en niets anders brengt het. Bij de bouwer bleef het tweede jaar elke akker leeg.
-    Mogelijk: de marskramer verkoopt in de lente zaaigraan, of de heer "leent" het (tegen rente, satire).
+  - **De heer "leent" zaaigraan, tegen rente** (29 sep, bij de bouwer; een idee voor de eisen van de heer, werklijst
+    vraag 79, B): wie geen zaaigraan heeft, kan het van hem lenen, en betaalt het op Sint-Maarten dubbel terug. Het
+    zaaigraan zelf is sinds 1 okt opgelost: de marskramer verkoopt het in de lente, en de boeren zaaien na.
   - **Een regel die blijft staan, lokt een speler die hem volgt tot te veel.** Een bouwer die deed wat de raad zei,
     bouwde om de tien dagen een jager, want "het eten haalt de winter niet" bleef staan: negen in louwmaand. Daarom
     zegt de raad nu hoe ver het komt ("26 van de 90 dagen"). Een mens rekent dan zelf; een speler in code nog niet.

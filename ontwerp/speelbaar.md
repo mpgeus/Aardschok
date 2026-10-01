@@ -149,6 +149,45 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 1 okt: een jaar dat te winnen is (werklijst, vraag 79, stap 1)
+
+Gespeeld in de eenentwintigste sessie, op `ccr-b5dfb962-d3bery`: de regels op `5620dc5`, de bouwer op `98124bb` (die koopt
+nu in de lente zaaigraan als er akkers kaal liggen). De nulmeting op `5f2a2f5`, de stand ervoor, in een losse kopie (`git
+worktree`). Geen fouten in de console. Wat er veranderde: een gezin wacht op de winter (vraag 59, B), de raad zegt wat je
+mist voor de kapel en de smidse (59, C), en de marskramer verkoopt in de lente zaaigraan, dat de boeren nazaaien tot 1
+bloeimaand.
+
+**De bouwer, twee jaar** (zaad 1, 2 en 3):
+
+| | vóór | na |
+|---|---|---|
+| Een dorp op | 1 herfstmaand, 21 oogstmaand, 21 oogstmaand '23 | 11 herfstmaand, 21 oogstmaand, 21 oogstmaand '23 |
+| Het meest | 85, 86, 88 mensen | 63, 64, 56 |
+| Op 1 lentemaand 1324 | 28, 48, 46 | 38, 41, 36 |
+| Aan het eind | 26 (ambt kwijt), 20, 18 | 37 (ambt kwijt), 18, 13 |
+| Doden (van de kou) | 45 (45), 71 (0), 72 (0) | 25 (0), 49 (0), 41 (0) |
+| Groeidagen met een gezin; zonder, om de winter | 17, 19, 18; - | 9, 10, 8; 24, 33, 35 |
+| De heer kreeg in 1324 | 2%, 16%, 5% | 14%, 17%, 14% |
+
+**Wat opviel:**
+
+1. **Niemand sterft meer van de kou, en 20 tot 31 mensen minder in totaal.** Een gezin wacht nu als het hout of het eten
+   de winter niet haalt: het dorp groeit in de herfst niet meer tot 85, en de bouwer bouwt een houthakker als het dorp
+   zegt dat het hout het niet haalt. Maar er komen ook minder gezinnen, dus aan het eind zijn er niet meer mensen dan
+   vóór, behalve bij zaad 1.
+2. **Het dorp eet zijn zaaigraan op.** Op 1 lentemaand 1324 was er bij alle drie de zaden geen korrel zaaigraan: in de
+   winter at het dorp alles op, en sterft het daarna toch van de honger (25 tot 49). Zonder zaaigraan is er in 1324 geen
+   oogst, en dan is het tweede jaar verloren, wat er ook komt. De bouwer wilde zaaigraan kopen, maar had alleen bij
+   zaad 2 goud, voor één zak (10 akkertegels nagezaaid): na Sint-Maarten en de winter is het goud op.
+3. **Het eten is te weinig voor een dorp.** De akkers van het gehucht (179 tegels, netto 2,5 graan per tegel) voeden zo'n
+   25 mensen; het doel vraagt er 50. De raad zei 212 tot 323 dagen dat het eten de winter niet haalt, met "een jager
+   [B] schiet 1 vlees per dag" (genoeg voor 20 mensen), maar de bouwer bouwt alleen wat het doel vraagt en een
+   houthakker. Een speler die de raad volgt, zou een jager bouwen; de bouwer doet dat nog niet.
+4. **De raad over goud (59, C) kwam niet voor:** de bouwer bouwt de kapel en de smidse op de eerste dag, en heeft dan
+   genoeg.
+
+Wat eruit volgt, staat in de werklijst als vraag 81.
+
 ## De speeltest van 1 okt: het rapport van de raadsman (werklijst, vraag 75, 3a)
 
 Gespeeld in de twintigste sessie, op `ccr-8e9e20ad-gg1umw` (het rapport, toen nog niet gecommit; daarna `6a4573c`),
