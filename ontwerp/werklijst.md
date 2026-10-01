@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (1 okt 2026, eenentwintigste sessie): eerst een speelbare kern, één stad die je wint door iedereen super gelukkig te maken (vraag 78 en 79); stap 1, een jaar dat te winnen is, is af; het plan voor stap 2, de wensen per stand, is vraag 80, en vraag 81 gaat over het zaaigraan; allebei wachten op Marcel
+## De stand (1 okt 2026, eenentwintigste sessie): eerst een kleine speelbare kern, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 82); stap 1 en het zaaigraan zijn af; het volgende is stap 2, de wensen per stand, klein (vraag 80, gekozen)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -31,7 +31,23 @@ De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 7
 van de eenentwintigste sessie (vraag 78 tot en met 81, en stap 1) staat op `ccr-b5dfb962-d3bery`, gepusht maar nog niet
 in `main`: zet het erin als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **het plan is vraag 79, en Marcel koos het** (eenentwintigste sessie: "a twee
+**Waar de volgende sessie begint:** **bouw stap 2, de wensen per stand, klein** (vraag 80 en 82; Marcel, 1 okt: "80: a,
+Ja. B, Ja. C, Ja. D, een jaar", en "82: correct"). Alles is besloten, dus bouwen kan meteen, in de volgorde van vraag
+80 (2a de stand en de wensen per huis, met de tevredenheid als gemiddelde; 2b doorgroeien en achteruitgaan, met
+bouwstof; 2c zien wat een huis wil; 2d de treden uit de standen; 2e het eind en het jaar in het kort). **Klein** is: drie
+standen, op de huizen die er al zijn; de poorters en hun huis komen later. De tabel:
+
+| Stand | Huis | Gebruikt | Wil in de buurt (een kring om het gebouw) |
+|---|---|---|---|
+| keuters | hut (3 mensen) | eten; brandhout in de winter | een put |
+| dorpelingen | huis (5) | daarbij bier, en vlees of vis | een kapel en de herberg |
+| ambachtslieden | stenen huis (8) | daarbij brood en laken | een markt |
+
+Doorgroeien kost bouwstof (een huis hout, een stenen huis steen), en **gewonnen** is: alle woningen stenen huizen die
+alles hebben, en de boerderijen wat zij willen, **een jaar lang**. Het zaaigraan eet het dorp sinds vandaag pas bij nood
+(vraag 81). Daarna: de speeltest (de bouwer krijgt een jager, vraag 81, b), dan het weer en zaaien over dagen (vraag 82,
+b en c) en de eisen van de heer; het vaste pad voor 5.000 als het dorp groter moet. Begin met een nieuwe sessie: deze
+was lang. Hoe we hier kwamen: **het plan is vraag 79, en Marcel koos het** (eenentwintigste sessie: "a twee
 manieren b ja c ja d ja. We focussen ons op een speelbare kern. Daarna komt oorlog etc erbij en de rest van het land
 diplomatie trading etc"). Gebouwd wordt in de volgorde van vraag 79: 1, een jaar dat te winnen is; 2, de wensen per
 stand, met het eind; 3, het vaste pad buiten beeld; 4, de eisen van de heer; 5, de speeltest. **Stap 1 is af** (zie
@@ -91,8 +107,8 @@ als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speelt
    winnen is, het jaar in het kort, de heer met eisen die het moeilijk maken, en het vaste pad buiten beeld voor 5.000
    man (vraag 78; eerst "de cyclus" genoemd, met doelen van de heer, maar die stelt hij niet). Het plan is vraag 79,
    gekozen: twee manieren om te winnen (veroveren, of iedereen super gelukkig), en eerst een speelbare kern; oorlog,
-   de rest van het land, diplomatie en handel komen daarna. Stap 1, een jaar dat te winnen is, is af (zie onder Af); het
-   plan voor stap 2, de wensen per stand, is vraag 80, en het zaaigraan vraag 81.
+   de rest van het land, diplomatie en handel komen daarna. Stap 1, een jaar dat te winnen is, en het zaaigraan (vraag
+   81) zijn af (zie onder Af); het volgende is stap 2, de wensen per stand, klein, met drie standen (vraag 80 en 82).
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept; en het
    weer, met zaaien dat dagen kost (Marcel, 1 okt: "Stel er is slecht weer"; vraag 82).
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
@@ -3021,6 +3037,12 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 1 okt 2026 — **Het zaaigraan, pas bij nood** (eenentwintigste sessie; vraag 81; Marcel: "zaaigraan wordt bij nood
+  opgegeten, anders sterven er mensen"). Van de oogst tot het zaaien houden de boeren het zaaigraan voor volgend jaar
+  achter (`T.zaaigraanApart`, wat de akkers van volgend jaar vragen), en het dorp eet het pas na het andere graan, de
+  kaas en het gezouten vlees; dan zegt het dat één keer per winter, en staat het in het rapport. De winter rekent het
+  eten zonder het zaaigraan, en bij de muis op het graan in de balk staat hoeveel ervan zaaigraan is. De spelregel
+  "Zaaigraan". 1 nieuwe toets, `npm test` 722/722.
 - 1 okt 2026 — **Een jaar dat te winnen is** (eenentwintigste sessie; stap 1 van vraag 79, met vraag 59, B en C, die
   geparkeerd was; Marcel: "D dat is prima"). **Een gezin wacht op de winter:** haalt het hout of het eten de winter niet,
   dan komt er vanaf 1 herfstmaand geen gezin, tot het genoeg is (`T.watDeWinterNietHaalt`, `T.waaromGeenGezin`:

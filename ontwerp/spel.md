@@ -29,7 +29,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
 | Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep) | 4, 6 |
-| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt (1 okt) | 3, vraag 74, 79 |
+| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt, en het zaaigraan eet het dorp pas bij nood (1 okt) | 3, vraag 74, 79, 81 |
 | Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
 | Handel: de marskramer | gebouwd (24 sep); in de lente ook zaaigraan, en de boeren zaaien na tot 1 bloeimaand (1 okt) | 4, vraag 79 |
 | Sint-Maarten | gebouwd (24 sep) | 5 |
@@ -948,6 +948,12 @@ Nog open na deel 1 (vragen van Claude):
   dat anders bederft, dan graan, en pas als het graan op is kaas en gezouten vlees (sinds 25 sep
   vult vlees een maag, een optie; sinds 28 sep telt het ook mee als het dorp kijkt of er eten is).
   Groente, vis of vlees erbij maakt ook tevredener. Zonder zout bederven vis en vlees.
+- **Het zaaigraan, pas bij nood** (1 okt, eenentwintigste sessie; werklijst vraag 81; Marcel: "zaaigraan wordt bij nood
+  opgegeten, anders sterven er mensen"): van de oogst tot het zaaien houden de boeren het zaaigraan voor volgend jaar
+  achter, zoveel als de akkers van volgend jaar vragen (`T.zaaigraanApart`). Het dorp eet het pas na het andere graan,
+  de kaas en het gezouten vlees, en zegt het als het zover is ("De honger is groot: het dorp eet van het zaaigraan."). De
+  winter rekent het eten zonder het zaaigraan, en bij de muis op het graan in de balk staat hoeveel ervan zaaigraan is.
+  De spelregel "Zaaigraan" (Als ander graan: het spel van vóór 1 okt).
 - **Brandhout:** in wintermaand, louwmaand en sprokkelmaand (90 dagen) stookt elk huishouden van vier
   mensen 0,15 hout of turf per dag; het gehucht van 26 mensen zo'n 95 hout per winter. Het begint met
   40, en een houthakker hakt 2 per dag; de marskramer verkoopt geen hout.
