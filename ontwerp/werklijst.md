@@ -93,7 +93,8 @@ als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speelt
    gekozen: twee manieren om te winnen (veroveren, of iedereen super gelukkig), en eerst een speelbare kern; oorlog,
    de rest van het land, diplomatie en handel komen daarna. Stap 1, een jaar dat te winnen is, is af (zie onder Af); het
    plan voor stap 2, de wensen per stand, is vraag 80, en het zaaigraan vraag 81.
-2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept.
+2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept; en het
+   weer, met zaaien dat dagen kost (Marcel, 1 okt: "Stel er is slecht weer"; vraag 82).
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
 4. Wacht en misdaad: patrouilles, een misdaadgolf als status, het gevang.
 5. Mensen met banden: 10 tot 20 mensen met wat ze van jou en van elkaar vinden.
@@ -125,7 +126,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor stap 2, de wensen per stand (vraag 80: a tot en met d), en het zaaigraan (vraag 81: a en b); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het plan voor stap 2, de wensen per stand (vraag 80: a tot en met d), het zaaigraan (vraag 81: a en b), en klein spelen en het weer (vraag 82: a tot en met c); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2682,6 +2683,33 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       speler die de raad volgt. Dan meet de speeltest wat een speler kan, en niet alleen wat het doel vraagt.
     In stap 2 vraagt het doel geen 50 mensen meer (vraag 80, D): eten wordt de eerste wens van elke stand, en een dorp
     groeit dan zo ver als het te eten heeft. Vragen: **a**, het zaaigraan apart? **b**, de bouwer met een jager?
+82. **Een kleine speelbare variant, en zaaien dat dagen kost** (Marcel, 1 okt, eenentwintigste sessie: "De focus op een
+    speelbare kleine variant lijkt mij het beste toch?", en "Moet het zaaien niet meerdere dagen in beslag nemen? Stel er
+    is slecht weer. Dan wordt er minder gezaaid waardoor er minder eten is en er meer gehandeld moet worden om aan eten
+    te komen"; wacht op Marcel).
+    - **a, klein: ja.** De speeltest laat zien dat wat nu een speelbaar spel tegenhoudt, klein en basaal is (het dorp
+      eet zijn zaaigraan op, de akkers voeden 25 mensen), en dat zit er in elke maat in. Klein is: één gehucht dat groeit
+      tot zo'n 100 mensen op de kaart van nu; de wensen met **drie standen, op de huizen die er al zijn** (hut, huis,
+      stenen huis), zonder nieuw huis voor de poorters (dat komt later, met de vierde stand); de heer zoals hij is; de
+      winter; winnen als iedereen super gelukkig is, verliezen als je je ambt kwijt bent, valt, of als het dorp leegloopt.
+      Geen nieuwe kaart, geen 5.000, geen land of oorlog; wel alles per huis, zodat het later groter kan. Dan spelen,
+      bijstellen, en een tester. De volgorde wordt: het zaaigraan (vraag 81), de wensen klein (vraag 80, met drie
+      standen), het eind, de speeltest; dan het weer en de eisen van de heer; het vaste pad als het dorp groter moet.
+    - **b, zaaien zoals maaien.** Wat er nu is: op 1 lentemaand zaaien de boeren in één ochtend alles wat het zaaigraan
+      toelaat, en sinds vandaag zaaien ze na tot 1 bloeimaand. Maaien gaat al tegel voor tegel, met de boer op het land
+      (`T.werkOogstBij`). Voorstel: zaaien net zo, in lentemaand, zoveel tegels per dag als een boer haalt, met zaaigraan
+      uit de voorraad; wat op 1 bloeimaand niet gezaaid is, blijft kaal. Eén regel in plaats van twee (het zaaien en het
+      nazaaien), en je ziet de boeren zaaien.
+    - **c, het weer als status** (de richtlijn: een toestand is een status, met niveaus): regen in de lente (op een natte
+      dag zaait niemand; "aanhoudende regen" een week lang), en droogte in de zomer (de akkers geven minder; "ernstige
+      droogte" nog minder), geloot uit het zaad van het spel. Nu geeft een akker elk jaar hetzelfde, en is er dus geen
+      reden om iets opzij te leggen of te handelen; het weer geeft die reden. De marskramer verkoopt dan ook in de zomer
+      en de herfst graan, duur na een slecht jaar, en de heer wil in een slecht jaar evenveel. Het hoort bij stap 2 van
+      de slice (statussen met niveaus, vraag 77), waar de droogte al staat.
+    **Wanneer b en c:** na de wensen, samen met de statussen. Eerst moet een gewoon jaar te halen zijn (vraag 81): een slecht
+    jaar bovenop een dorp dat zijn zaaigraan al opeet, maakt het alleen erger. Het andere: nu, vóór de wensen.
+    Vragen: **a**, klein zo, met drie standen op de huizen die er zijn? **b** en **c**, zaaien over dagen en het weer, na de
+    wensen?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
