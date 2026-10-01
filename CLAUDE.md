@@ -513,7 +513,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   bestuurlijke cyclus (`concept.md`; het plan is vraag 77). **Van gehucht tot de maat van de slice** (Marcel: "we
   starten vanaf de slice kwa afmeting een gehucht met 50 is echt te klein", en "Nee, we starten wel als gehucht"): je
   begint als gehucht, zoals nu, en groeit naar een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te
-  klein.
+  klein. **Uiteindelijk** is het doel een stad van mogelijk 5000 of meer mensen (Marcel, 1 okt): bouw zo dat dat later
+  kan (`opmerkingen.md`: niet iedereen loopt altijd zijn eigen pad; vraag 74: nu tot zo'n 150 vloeiend op 30×).
   Uiteindelijk heeft elke tak van het bestuur een ambtenaar die je steunt, en komt er een scherm met de statussen en
   de laatst bekende inventarisatie: wat je weet, is wat er het laatst geteld werd, niet wat er nu ligt.
 - **Niet te ingewikkeld** (Marcel, 29 sep): "er is geen gelijkenis met de werkelijkheid. We zijn gewoon een

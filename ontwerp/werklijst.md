@@ -80,7 +80,7 @@ als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speelt
 4. Wacht en misdaad: patrouilles, een misdaadgolf als status, het gevang.
 5. Mensen met banden: 10 tot 20 mensen met wat ze van jou en van elkaar vinden.
 6. De kleine stad: de kaart voor 200 mensen, de wijken, de markt, het raadhuis en de poort die iets doen, en sneller
-   paden zoeken.
+   paden zoeken; zo gebouwd dat het later een stad van 5000 of meer kan worden (Marcel, 1 okt; `opmerkingen.md`).
 Later: een scherm met de statussen en de laatst bekende inventarisatie (vraag 77, b).
 
 *1. Gebouwd (28 en 29 sep): naar de proef "van gehucht tot dorp"* (Marcel, 28 sep, vraag 51: "A ja B ja C ja D ja";
@@ -2458,6 +2458,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       tot 200 mensen; een dorp van 50 is als doel te klein. Het dorp blijft een trede onderweg. **Het plan voor stap 1
       begint dus met de vraag** welke doelen de heer per jaar stelt op weg naar die stad (het dorp, en dan de stad), en
       wat hij op 1 lentemaand beoordeelt. De kaart met plaats voor 200 mensen en sneller paden zoeken blijven stap 6.
+      En verder (Marcel, 1 okt): "Uiteindelijk is het doel wel een stad die mogelijk 5000+ inwoners heeft". Dat vraagt
+      bij stap 6 meer dan snellere paden: niet iedereen loopt altijd zijn eigen pad (`opmerkingen.md`).
     - **b, statussen met niveaus,** en later een scherm met een overzicht van de statussen en **de laatst bekende
       inventarisatie**: wat je weet, is wat er het laatst geteld werd (door jou of een ambtenaar), niet wat er nu ligt.
       Dat past bij "informatie is een grondstof" (`concept.md`) en bij wat het rapport liet zien: de balk die alles

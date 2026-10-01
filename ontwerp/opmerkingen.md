@@ -20,6 +20,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   (huis, werk, put, herberg) onthouden in plaats van elke dag opnieuw zoeken; A* met een heap en getallen als sleutel; een
   zoektocht die niet slaagt, niet de hele kaart laten afzoeken. En de kaart hoeft niet in een bewaard spel (55 bytes per
   tegel; bij 256 bij 256 al 3,6 MB): die komt uit het zaad of uit het bestand. Pas nodig als het dorp een stad wordt.
+  **Uiteindelijk wordt het een stad van mogelijk 5000 of meer mensen** (Marcel, 1 okt; vraag 77). Dat haal je niet met
+  alleen snellere paden (bij 1.600 mensen kost een beeld nu 15 seconden): dan loopt niet iedereen altijd zijn eigen
+  pad. Voorstel van Claude, voor stap 6 van de slice: wie in de buurt van de schout is, loopt als poppetje; de rest van
+  de stad telt per wijk (wie er woont, werkt, eet en ziek is), en wordt een poppetje als je er komt. Dat past bij het
+  concept ("jij bent maar één persoon": wat je niet ziet, hoor je), en bij hoe een dorp waar je niet bent nu al leeft
+  zonder getekend te worden (vraag 71). Een spel van die maat bewaart ook niet meer in de browser (5 MB is vol bij zo'n
+  600 mensen), maar in een bestand (Steam, `verpakken.md`).
 - **Het sprokkelen zie je niet** (30 sep, negentiende sessie; vraag 74, stap 2). Het hout komt elke dag in de voorraad
   (`T.sprokkelHout`), maar niemand loopt naar de bosrand en terug met een bos takken. Het concept wil dat je de stad
   ziet voordat je de getallen ziet: wie niets te doen heeft (de ouderen, de kinderen), zou 's middags kunnen sprokkelen,
