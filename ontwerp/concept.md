@@ -25,6 +25,10 @@ eerst.
 - **Godot hoeft niet.** Wel onderzoeken hoe groot een dorp of stad kan worden (een meting; werklijst, vraag 74).
 - **Geen camera van bovenaf** (vraag 74, d: "d ja"): de schout blijft in beeld, en het overzicht komt via rapporten en
   zelf kijken.
+- **De dag in fasen** (vraag 75; Marcel, 1 okt: "A Ja dat is goed. b zitting als die er zijn. C herberg als 1 van de
+  mogelijkheden om dingen op te vangen. Later ook door je eigen mensen die iets horen op straat. D prima"): 's ochtends
+  het rapport van je raadsman, 's middags een zitting als er rechtszaken zijn, 's avonds de herberg als een van de
+  plekken waar je dingen opvangt.
 - **Het plan voor de kern** (vraag 74; "a ja b ja c zelf sprokkelen, maar lost niet volledig op. Houthakker is nodig d
   ja"): eerst voorvallen met een oorzaak; dan kiezen de boeren hun velden en slachten ze zelf (jij kunt het veranderen),
   en sprokkelen de mensen zelf hout, maar niet genoeg voor de winter, zodat een houthakker nodig blijft.

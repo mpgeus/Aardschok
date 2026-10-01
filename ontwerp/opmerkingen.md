@@ -9,6 +9,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Je eigen mensen horen iets op straat** (Marcel, 1 okt, bij vraag 75, c: "Later ook door je eigen mensen die iets
+  horen op straat"). Naast de herberg en het rapport: mensen die voor jou luisteren, en je vertellen wat er speelt
+  voordat het een voorval wordt. Past bij "informatie is een grondstof" (`concept.md`): wie meer oren heeft, weet meer.
+  Voor na stap 3 van de kern.
 - **Een dorp van meer dan zo'n 150 mensen hapert op 30×, door het zoeken van paden** (30 sep, negentiende sessie; de
   meting bij vraag 74). In de ochtend- en avondspits zoekt iedereen tegelijk een pad (`T.dwaal` in `js/verkennen.js` →
   `T.zoekPad` in `js/pad.js`), en voor elke tegel die A* bekijkt, loopt `T.wezenOp` (`js/wereld.js`) alle wezens af. Wat

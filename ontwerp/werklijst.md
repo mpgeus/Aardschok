@@ -46,7 +46,8 @@ koos het ("a ja b ja c zelf sprokkelen, maar lost niet volledig op. Houthakker i
 (zie onder Af): een probleem heeft een oorzaak die je kunt zien (honger, kou, vol, onvrede), en de boeren kiezen hun
 velden, slachten en sprokkelen zelf (de spelregel "Het seizoen"). De speeltest speelt met de oude instellingen letter voor
 letter hetzelfde jaar, en op de nieuwe standaard staat wat het deed in `speelbaar.md`. **Het volgende is stap 3, de dag in
-fasen: het plan is vraag 75** (a tot en met d), en wacht op Marcel; begin er niet zonder zijn antwoord. Ernaast liep een
+fasen** (vraag 75; Marcel, 1 okt: "A Ja dat is goed. b zitting als die er zijn ... D prima"): eerst het rapport van de
+raadsman (3a), dan de zitting (3b), dan het gepraat in de herberg (3c). Ernaast liep een
 meting van hoe groot een dorp kan worden (vraag 74; de uitslag staat daar). Het buurdorp (vraag 72) wacht tot de kern
 staat. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
 raadsman komen met het land (vraag 66, D). Het dorp van bovenaf is beslist: niet
@@ -87,7 +88,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor de dag in fasen (vraag 75: a tot en met d); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* of het werk van de negentiende sessie in `main` mag; het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2320,6 +2321,37 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     `npm test` groen. Vragen: **a**, het rapport zo, aan je deur, met zijn rekenen erin, en zonder raadsman geen rapport?
     **b**, de zitting zo, na het schaften bij je huis, voor de rechtszaken? **c**, de herberg zo, met de oorzaken als
     gepraat? **d**, in die volgorde: a, dan b, dan c?
+    **Beantwoord (Marcel, 1 okt):** "A Ja dat is goed. b zitting als die er zijn. C herberg als 1 van de mogelijkheden om
+    dingen op te vangen. Later ook door je eigen mensen die iets horen op straat. D prima". Dus: het rapport zoals
+    voorgesteld; een zitting alleen op een dag dat er rechtszaken zijn; de herberg als een van de plekken waar je dingen
+    opvangt (en later ook je eigen mensen die iets horen op straat, `opmerkingen.md`); en in die volgorde: eerst het
+    rapport (3a), dan de zitting (3b), dan de herberg (3c).
+    **Hoe 3a gebouwd wordt** (Claude, 1 okt; uitgezocht, nog niet gebouwd):
+    - **Een eigen bestand,** `js/ochtendrapport.js`, na `js/raadsman.js` in `index.html`, met `T.OCHTENDRAPPORT_INSTELLINGEN`
+      (in de werkbank) en de spelregel "Het rapport" (aan of uit; uit is zoals vóór 1 okt). Niet `T.maakRapport`
+      noemen: dat is het rapport van de inner (`js/inner.js`).
+    - **Wat er gebeurde,** houdt het dorp bij in een klein dagboek: `T.wijzigBevolking` (`js/gebouwen.js`, de enige weg)
+      schrijft elke verandering erin (`D.dagboek`: dag, verschil, reden, waarom), en het rapport leest wat er sinds het
+      vorige rapport in kwam en maakt het dagboek leeg. Zo staat het ook in een bewaard spel.
+    - **Het rapport ontstaat op de dagtik** (`T.tikOchtendrapportDag`, als laatste stap van `T.tikGebouwenDag`), alleen
+      met een raadsman (`T.raadsmanVan`), in `D.ochtendrapport` ({ dag, door, regels, gebracht, gelezen }). Wat erin
+      staat, zo kort mogelijk, en op een dag zonder iets bijzonders één regel ("Niets bijzonders, heer schout."):
+      wie er kwam, stierf of wegtrok (uit het dagboek, met het waarom); wat er in de schuur ligt (graan, hout) en in de
+      kist; of het hout en het eten de winter halen, zodra die binnen `winterVooraf` dagen is (zoals de raad,
+      `js/raad.js`); welke oorzaak er speelt (`T.OORZAKEN`); en wat er komt (de raden `inner`, `rovers` en `heerGoud`
+      uit `T.RADEN`, zonder de `[B]`).
+    - **Zijn rekenen** (`T.vaardighedenVan`): goed is precies, niets is afgerond op vijf, slecht zit er tot 30% naast
+      (geloot per dag, met `T.dobbelsteen`, zodat de speeltest hetzelfde jaar speelt). Het geldt voor de getallen
+      (voorraad en de dagen van de winter), niet voor wie er kwam of ging.
+    - **Hij brengt het:** 's ochtends is zijn plek de deur van de schout (`T.dagAnker` in `js/dag.js`, in plaats van de
+      put), tot hij het gaf. Staat de schout binnen twee tegels en lopen ze geen van beiden, dan opent het rapport
+      (`T.werkOchtendrapportBij`, vanuit `T.werkDorpBij` in `js/dorp.js`). Was je er niet, dan gaat hij aan het werk, en
+      ligt het rapport klaar.
+    - **Het papier:** het venster van de brieven (`js/brieven.js`), met een soort `rapport`: `venster()` krijgt een eigen
+      titel ("Het rapport van Klaas") en groet ("Klaas, uw raadsman"); de knop Brief heet "Rapport" zolang er een
+      ongelezen rapport ligt, en opent het. De speler van de speeltest sluit een open brief al vanzelf.
+    Klaar als: toetsen voor het dagboek, de inhoud, het rekenen en het brengen; met `--regel rapport=uit` speelt de
+    speeltest letter voor letter hetzelfde jaar; `npm test` groen.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
