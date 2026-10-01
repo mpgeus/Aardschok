@@ -501,6 +501,10 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   heervaart, dan een rivaal), in beurten op je eigen kaart met je militie; daarna de streek als
   kaarten naast elkaar; tussen steden pas na de vrijheid.
 - Toon: zwarte satire. De heer is lachwekkend, zijn straffen niet (voorstel).
+- **Een toestand is een status** (Marcel, 1 okt, als richtlijn: "Honger, droogte of een plaag, moet een status zijn"):
+  wat een tijd duurt, heeft een begin en een eind en is te zien zolang het duurt; een bericht of het rapport zegt het
+  als het begint of ophoudt, niet elke dag (vraag 76). Nu zijn dat de oorzaken (`T.OORZAKEN`: honger, kou, vol,
+  onvrede); de status in beeld, en droogte en een plaag, horen bij het plan voor een spel van begin tot eind (vraag 77).
 - **Niet te ingewikkeld** (Marcel, 29 sep): "er is geen gelijkenis met de werkelijkheid. We zijn gewoon een
   schout die een dorp runt en land wil uitbreiden." De eenvoudige regel gaat voor de regel die klopt met vroeger.
 - **Instelbaar** (Marcel, 24 sep): waar een ontwerpvraag meer dan één goed antwoord heeft, wordt het

@@ -9,13 +9,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
-- **Het rapport zegt bijna elke dag hetzelfde** (1 okt, twintigste sessie; de speeltest bij vraag 75, 3a, in
-  `speelbaar.md`). Bij de bouwer staat "Er is honger, want er is niet genoeg eten." in twee van de drie rapporten, en
-  vanaf herfstmaand elke dag de winter; een stille dag kwam 20 tot 44 keer voor in twee jaar. Het klopt, maar wie het
-  elke dag leest, leest er overheen, en het concept wil "alleen ingrijpen als er iets afwijkt". Voorstel van Claude: een
-  oorzaak alleen zeggen als hij begint of ophoudt ("Sinds gisteren is er honger", "De honger is voorbij"), en zolang
-  hij duurt één keer per week ("Er is nog steeds honger, al twaalf dagen"); de winter net zo, alleen als het getal
-  flink verandert. Ligt bij Marcel (werklijst, vraag 76).
 - **Je eigen mensen horen iets op straat** (Marcel, 1 okt, bij vraag 75, c: "Later ook door je eigen mensen die iets
   horen op straat"). Naast de herberg en het rapport: mensen die voor jou luisteren, en je vertellen wat er speelt
   voordat het een voorval wordt. Past bij "informatie is een grondstof" (`concept.md`): wie meer oren heeft, weet meer.

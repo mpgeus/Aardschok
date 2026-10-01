@@ -25,7 +25,7 @@ dan beslist je raadsman, die je kiest met de knop Raadsman (`R`); die brengt je 
 deur als je bij huis slaapt (`Z`), en anders onder de knop Rapport (`Spel.debug.rapport()`). Met de spelregel Land aan
 (`O`) loop je over de weg je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). Met de spelregel "Je
 gehucht" op "Elk spel een ander" legt de maker elk nieuw spel een ander gehucht (`Spel.debug.gehucht(3)` voor zaad 3).
-De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 714/714.
+De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 717/717.
 
 **Waar het werk staat:** het werk van de twintigste sessie, het rapport van de raadsman (vraag 75, 3a), staat op
 `ccr-8e9e20ad-gg1umw`, nog niet in `main`. Alles van daarvoor staat in `main`, ook het werk van de negentiende sessie
@@ -2381,6 +2381,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     ophoudt ("Sinds gisteren is er honger", "De honger is voorbij"), en zolang hij duurt één keer per week ("Er is nog
     steeds honger, al twaalf dagen")? **b**, de winter net zo: alleen als het getal flink verandert, en anders één keer
     per week? **c**, nu, vóór de zitting (3b), of later, als je het zelf gespeeld hebt?
+    **Beantwoord (Marcel, 1 okt):** "a ja b ja c nu. We gaan ook eerst verder 3b kan later. Laten we eerst eens een
+    speelbaar spel maken van begin tot eind". Dus: a en b nu; de zitting (3b) en de herberg (3c) wachten; en daarna eerst
+    een spel dat van begin tot eind te spelen is (het plan daarvoor is vraag 77). En als richtlijn (Marcel, 1 okt):
+    "Honger, droogte of een plaag, moet een status zijn" (in `CLAUDE.md` en `spel.md`). **Gebouwd** (1 okt, twintigste
+    sessie; zie onder Af).
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -2681,6 +2686,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 1 okt 2026 — **Het rapport zegt wat verandert** (twintigste sessie; vraag 76; Marcel: "a ja b ja c nu"). Een oorzaak
+  zegt de raadsman als hij begint, één keer per week zolang hij blijft ("Er is nog steeds honger, al twaalf dagen: het
+  rantsoen is krap."), en als hij voorbij is ("De honger is voorbij."); de winter als hij omslaat, als de dag waarop
+  het op is tien dagen verschuift, en anders één keer per week. Las je een rapport niet, dan geldt wat erin stond als
+  niet gezegd. Elke oorzaak heeft er zijn woorden voor (`nog` en `voorbij` in `T.OORZAKEN`). Bij de bouwer werd de helft
+  van de rapporten stil (299 tot 431 van de 610 tot 748, was 20 tot 44), en "Er is honger" kwam 3 keer in plaats van
+  393 tot 532. 3 nieuwe toetsen, `npm test` 717/717.
 - 1 okt 2026 — **Het rapport van de raadsman, 's ochtends** (twintigste sessie; vraag 75, 3a, de eerste fase van de dag;
   Marcel: "A Ja dat is goed", en bij het nakijken van het plan "a ja b ja c ja"). Heb je een raadsman, dan brengt hij je
   elke ochtend een papier (`js/ochtendrapport.js`): wie er kwam, stierf of wegtrok (met namen en waarom), wat de boeren

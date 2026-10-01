@@ -223,22 +223,32 @@
   // Wat in het dorp speelt en een probleem uitlokt: iets wat je kunt zien (de balk zegt het, of de raad) en zelf kunt
   // veranderen. Zo komt een ramp niet uit de lucht, maar uit iets wat je had kunnen zien (het concept,
   // ontwerp/concept.md: "problemen hebben oorzaken"). Per oorzaak: wat er dan is (kop), en of hij nu speelt (speelt:
-  // geeft waarom, het stuk zin na "want", of '' als er niets bij hoeft; null als hij niet speelt).
+  // geeft waarom, het stuk zin na "want", of '' als er niets bij hoeft; null als hij niet speelt). Voor het rapport van
+  // de raadsman (js/ochtendrapport.js; werklijst vraag 76) ook hoe je zegt dat hij blijft (nog) en dat hij over is
+  // (voorbij).
   T.OORZAKEN = {
     honger: {
       kop: 'Er is honger',
+      nog: 'Er is nog steeds honger',
+      voorbij: 'De honger is voorbij',
       speelt: (D) => (T.standVanWet(D, 'rantsoen') === 'krap' ? 'het rantsoen is krap' : mist(D, 'eten') ? 'er is niet genoeg eten' : null),
     },
     kou: {
       kop: 'Het is koud in de huizen',
+      nog: 'Het is nog steeds koud in de huizen',
+      voorbij: 'Het is niet koud meer in de huizen',
       speelt: (D, dag) => (!inWinter(dag) || !mist(D, 'brandhout voor de winter') ? null : brandhout(D) < 1 ? 'het brandhout is op' : 'het hout haalt de winter niet'),
     },
     vol: {
       kop: 'De huizen zitten vol',
+      nog: 'De huizen zitten nog steeds vol',
+      voorbij: 'Er is weer plaats in de huizen',
       speelt: (D) => ((D.bevolking || 0) > 0 && D.bevolking >= T.telWoonruimte(D) ? '' : null),
     },
     onvrede: {
       kop: 'Het dorp is ontevreden',
+      nog: 'Het dorp is nog steeds ontevreden',
+      voorbij: 'Het dorp is niet ontevreden meer',
       speelt: (D) => {
         const b = D.behoeften;
         if (!b || b.tevredenheid >= IN().onvrede) return null;
@@ -248,12 +258,12 @@
     },
   };
 
-  // Speelt oorzaak `o` nu? Dan { id, zin }, met de zin die het bericht erbij zegt: "Er is honger, want het rantsoen is
-  // krap." Anders null.
+  // Speelt oorzaak `o` nu? Dan { id, zin, waarom }, met de zin die het bericht erbij zegt: "Er is honger, want het
+  // rantsoen is krap." Anders null.
   function oorzaakNu(D, o, dag) {
     const O = T.OORZAKEN[o];
     const waarom = O.speelt(D, dag);
-    return waarom == null ? null : { id: o, zin: `${O.kop}${waarom ? `, want ${waarom}` : ''}.` };
+    return waarom == null ? null : { id: o, zin: `${O.kop}${waarom ? `, want ${waarom}` : ''}.`, waarom };
   }
 
   // Welke oorzaak van dit voorval nu speelt: de eerste die speelt, in de volgorde van het voorval, als { id, zin }, of

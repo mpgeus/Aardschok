@@ -328,3 +328,60 @@ test('het rapport is het laatste van de dag, alleen jouw dorp krijgt er een, en 
   D.ander = true;
   assert.equal(nacht(S, 3), null);
 });
+
+// Wat blijft zoals het was, zegt hij niet elke dag (werklijst vraag 76; Marcel: "a ja b ja c nu").
+// Een dag verder, en het rapport gelezen: dan weet je wat erin stond.
+function gelezenNacht(S, dag) {
+  const R = nacht(S, dag);
+  T.leesRapport(S.dorp);
+  return R;
+}
+
+test('een oorzaak zegt hij als hij begint, om de week zolang hij blijft, en als hij voorbij is', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  metRaadsman(S);
+  gelezenNacht(S, 10);
+  assert.ok(T.zetWet(D, 'rantsoen', 'krap').kan);
+  assert.ok(gelezenNacht(S, 11).regels.includes('Er is honger, want het rantsoen is krap.'));
+  for (let d = 12; d < 18; d++) assert.ok(!gelezenNacht(S, d).regels.some((r) => /honger/.test(r)), `dag ${d}`);
+  assert.ok(gelezenNacht(S, 18).regels.includes('Er is nog steeds honger, al zeven dagen: het rantsoen is krap.'));
+  assert.ok(!gelezenNacht(S, 19).regels.some((r) => /honger/.test(r)));
+  assert.ok(T.zetWet(D, 'rantsoen', 'gewoon').kan);
+  assert.ok(gelezenNacht(S, 20).regels.includes('De honger is voorbij.'));
+  assert.ok(!gelezenNacht(S, 21).regels.some((r) => /honger/.test(r)));
+});
+
+test('las je het rapport niet, dan zegt hij het de volgende dag nog eens', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  metRaadsman(S);
+  gelezenNacht(S, 10);
+  assert.ok(T.zetWet(D, 'rantsoen', 'krap').kan);
+  assert.ok(nacht(S, 11).regels.includes('Er is honger, want het rantsoen is krap.'));
+  assert.ok(gelezenNacht(S, 12).regels.includes('Er is honger, want het rantsoen is krap.'), 'niet gelezen: nog eens');
+  assert.ok(!gelezenNacht(S, 13).regels.some((r) => /honger/.test(r)));
+});
+
+test('de winter zegt hij als hij omslaat of flink verschuift, en anders om de week', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  metRaadsman(S); // Klaas kan rekenen
+  T.zetVoorraad(D, 'graan', 50000);
+  T.zetVoorraad(D, 'hout', 0);
+  const herfst = dagVan('herfstmaand', 1);
+  const eerst = gelezenNacht(S, herfst).regels;
+  assert.ok(eerst.some((r) => /^Het hout haalt \d+ van de 90 dagen van de winter\.$/.test(r)), eerst.join(' | '));
+  assert.ok(eerst.includes('Het eten haalt de winter.'));
+  assert.ok(!gelezenNacht(S, herfst + 1).regels.some((r) => /winter/.test(r)), 'een dag later: hetzelfde, dus niets');
+  // Genoeg hout: het slaat om, en dat zegt hij meteen (het eten niet: dat blijft hetzelfde).
+  T.zetVoorraad(D, 'hout', 50000);
+  const om = gelezenNacht(S, herfst + 2).regels.filter((r) => /winter/.test(r));
+  assert.deepEqual(om, ['Het hout haalt de winter.']);
+  // Een week nadat hij het zei: het eten nog eens.
+  assert.ok(!gelezenNacht(S, herfst + 6).regels.some((r) => /winter/.test(r)));
+  assert.deepEqual(gelezenNacht(S, herfst + 7).regels.filter((r) => /winter/.test(r)), ['Het eten haalt de winter.']);
+  // Weer zonder hout (een brand): het slaat weer om, en dat zegt hij meteen.
+  T.zetVoorraad(D, 'hout', 0);
+  assert.ok(gelezenNacht(S, herfst + 8).regels.some((r) => /^Het hout haalt/.test(r)));
+});

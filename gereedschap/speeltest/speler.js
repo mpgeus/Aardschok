@@ -138,6 +138,8 @@
     ['besluit', /^Over .* besliste/],
     ['nietGesproken', /zocht je over/],
     ['sindsGisteren', /^Sinds gisteren/],
+    ['nogSteeds', /nog steeds/],
+    ['voorbij', /voorbij\.$| meer in de huizen\.$| ontevreden meer\.$|^Er is weer plaats/],
     ['winter', /winter/],
     ['honger', /^Er is honger/],
     ['kou', /^Het is koud/],

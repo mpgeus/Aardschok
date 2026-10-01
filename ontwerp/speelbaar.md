@@ -184,6 +184,20 @@ per soort regel, in twee jaar:
    beter, zaad 2 gelijk, zaad 3 slechter).
 3. **"Sinds gisteren" zegt vaak niets** bij een dorp zonder graan: wat op is, verandert niet. Dan zegt de honger het.
 
+**Na vraag 76** (Marcel: "a ja b ja c nu"): een oorzaak zegt hij als hij begint, één keer per week als hij blijft, en
+als hij voorbij is; de winter als hij omslaat of flink verschuift, en anders één keer per week. Dezelfde bouwer, dezelfde
+jaren (de bouwer doet niets met het rapport, dus het spel speelt hetzelfde):
+
+| | zaad 1 | zaad 2 | zaad 3 |
+|---|---|---|---|
+| Rapporten; daarvan stil | 610; 299 (was 44) | 746; 428 (was 20) | 748; 431 (was 22) |
+| Er is honger (als het begint) | 3 (was 393) | 3 (was 532) | 3 (was 531) |
+| Nog steeds (een week later), voorbij | 92, 10 | 142, 11 | 138, 10 |
+| De winter | 77 (was 504) | 108 (was 749) | 107 (was 713) |
+
+Wat in twee jaar bijna elke dag hetzelfde zei, zegt nu iets als het verandert. De honger begon bij de bouwer drie keer,
+en duurde dan weken.
+
 ## De speeltest van 30 sep: voorvallen met een oorzaak, en de boeren doen het seizoen (werklijst, vraag 74, stap 1 en 2)
 
 Gespeeld in de negentiende sessie, op `3c68667` van `ccr-4cd08e9d-1g0phy`, zonder één fout in de console, alle vijf

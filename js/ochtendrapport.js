@@ -42,6 +42,11 @@
     winterVooraf: 90,
     // Een rapport dat je niet las, gaat op in het nieuwe: zoveel dingen die gebeurden onthoudt hij, de laatste.
     gebeurdOnthouden: 12,
+    // Wat blijft zoals het was, zegt hij niet elke dag (werklijst vraag 76; Marcel: "a ja b ja"): een oorzaak als hij
+    // begint of ophoudt, de winter als die zoveel dagen verschuift of omslaat, en zolang het zo blijft, om de zoveel
+    // dagen nog eens. Op 1 zegt hij alles elke dag.
+    herhaalNa: 7,
+    winterVerschil: 10,
     // Tot deze dag zegt de raad onder het doel dat een raadsman je een rapport brengt, als je er nog geen hebt
     // (vraag 75, c: een nieuw spel begint zonder raadsman, en anders komt een tester het nooit tegen).
     raadTot: 5,
@@ -137,15 +142,27 @@
     return delen.length ? `Sinds gisteren is er ${T.opsomming(delen)}.` : '';
   }
 
+  // Wat hij al zei (werklijst vraag 76): zolang het zo blijft, zegt hij het om de herhaalNa dagen nog eens. `oud` is
+  // wat je weet (uit het laatste rapport dat je las), `nieuw` wat je weet na dit rapport.
+  const nogEens = (dag, m) => dag - m.gezegd >= IN().herhaalNa;
+
   // De winter, zodra hij binnen winterVooraf dagen is of al loopt: of het hout en het eten hem halen
-  // (T.houtVoorDeWinter en T.etenVoorDeWinter, js/behoeften.js, zoals de raad). Het aantal dagen zegt hij naar zijn
-  // rekenen, dus wie niet kan rekenen, zegt misschien dat het de winter haalt terwijl het dat niet doet. Hoe lang de
-  // winter is, weet iedereen.
-  function winterRegels(D, dag, reken) {
+  // (T.houtVoorDeWinter en T.etenVoorDeWinter, js/behoeften.js, zoals de raad). Hij zegt het de eerste keer, als het
+  // omslaat (haalt hij hem of niet), als de dag waarop het op is winterVerschil dagen verschuift, en anders om de
+  // herhaalNa dagen. Het aantal dagen zegt hij naar zijn rekenen, dus wie niet kan rekenen, zegt misschien dat het de
+  // winter haalt terwijl het dat niet doet. Hoe lang de winter is, weet iedereen.
+  function winterRegels(D, dag, reken, oud, nieuw) {
     if (T.dagenTotDeWinter(dag) > IN().winterVooraf) return [];
     const halen = [];
     const uit = [];
-    for (const [wat, v] of [['het hout', T.houtVoorDeWinter(D, dag)], ['het eten', T.etenVoorDeWinter(D, dag)]]) {
+    for (const [id, wat, v] of [['hout', 'het hout', T.houtVoorDeWinter(D, dag)], ['eten', 'het eten', T.etenVoorDeWinter(D, dag)]]) {
+      const opDag = dag + v.tot + v.dagen; // de dag waarop het op is, of het eind van de winter
+      const m = oud[id];
+      if (m && m.haalt === v.haalt && Math.abs(opDag - m.opDag) < IN().winterVerschil && !nogEens(dag, m)) {
+        nieuw[id] = m;
+        continue;
+      }
+      nieuw[id] = { opDag, haalt: v.haalt, gezegd: dag };
       const g = reken(v.dagen);
       if (g.n >= v.winter) halen.push(wat);
       else if (v.tot > 0) uit.push(`${T.hoofdletter(wat)} haalt ${g.tekst} van de ${v.winter} dagen van de winter.`);
@@ -153,6 +170,26 @@
     }
     const loopt = T.dagenTotDeWinter(dag) === 0;
     if (halen.length) uit.unshift(`${T.hoofdletter(T.opsomming(halen))} ${halen.length > 1 ? 'halen' : 'haalt'} ${loopt ? 'het eind van de winter' : 'de winter'}.`);
+    return uit;
+  }
+
+  // Wat er speelt (T.OORZAKEN, js/voorvallen.js): een oorzaak als hij begint ("Er is honger, want het rantsoen is
+  // krap."), zolang hij duurt om de herhaalNa dagen ("Er is nog steeds honger, al twaalf dagen: het rantsoen is krap."),
+  // en als hij over is ("De honger is voorbij.").
+  function oorzaakRegels(D, dag, oud, nieuw) {
+    const uit = [];
+    const nu = T.oorzakenNu(D, dag);
+    for (const o of nu) {
+      const m = oud[o.id];
+      if (!m) {
+        uit.push(o.zin);
+        nieuw[o.id] = { sinds: dag, gezegd: dag };
+      } else if (nogEens(dag, m)) {
+        uit.push(`${T.OORZAKEN[o.id].nog}, al ${T.telwoord(dag - m.sinds)} dagen${o.waarom ? `: ${o.waarom}` : ''}.`);
+        nieuw[o.id] = { sinds: m.sinds, gezegd: dag };
+      } else nieuw[o.id] = m;
+    }
+    for (const id of Object.keys(oud)) if (!nu.some((o) => o.id === id)) uit.push(`${T.OORZAKEN[id].voorbij}.`);
     return uit;
   }
 
@@ -172,27 +209,31 @@
     return uit;
   }
 
+  // Wat hij nog niet zei: een leeg geheugen.
+  const niksGezegd = () => ({ winter: {}, oorzaken: {} });
+
   // Het rapport van vandaag, door raadsman `p`, over wat er gebeurde (`gebeurd`, uit het dagboek) en hoe het ging sinds
-  // `boek` begon: { dag, door, regels, gebeurd, gebracht, gelezen }. `regels` zijn de zinnen op het papier: wat er
-  // gebeurde, hoe het gaat, de winter, wat er speelt (T.OORZAKEN, js/voorvallen.js) en wat er komt. Op een dag zonder
-  // iets bijzonders is het één regel.
-  T.maakOchtendrapport = function (D, dag, p, gebeurd, boek) {
+  // `boek` begon, met wat je al wist (`basis`, vraag 76): { dag, door, regels, gebeurd, basis, onthoud, gebracht,
+  // gelezen }. `regels` zijn de zinnen op het papier: wat er gebeurde, hoe het gaat, de winter, wat er speelt en wat er
+  // komt. Op een dag zonder iets bijzonders is het één regel. `onthoud` is wat je weet als je het leest.
+  T.maakOchtendrapport = function (D, dag, p, gebeurd, boek, basis = niksGezegd()) {
     const door = naam(p);
     const reken = T.rekenaarVan(D, p, dag);
+    const onthoud = niksGezegd();
     const regels = gebeurd.map((g) => gebeurdTekst(g, door)).filter(Boolean);
     const gaat = hoeHetGaat(D, boek, reken);
-    const rest = winterRegels(D, dag, reken)
-      .concat(T.oorzakenNu(D, dag).map((o) => o.zin))
+    const rest = winterRegels(D, dag, reken, basis.winter, onthoud.winter)
+      .concat(oorzaakRegels(D, dag, basis.oorzaken, onthoud.oorzaken))
       .concat(watErKomt(D, dag));
     if (!regels.length && !rest.length) regels.push(`Niets bijzonders.${gaat ? ` ${gaat}` : ''}`);
     else regels.push(...(gaat ? [gaat] : []), ...rest);
-    return { dag, door, regels, gebeurd, gebracht: false, gelezen: false };
+    return { dag, door, regels, gebeurd, basis, onthoud, gebracht: false, gelezen: false };
   };
 
   // Elke nacht, als laatste stap van de dag (T.tikGebouwenDag, js/gebouwen.js): het dagboek begint opnieuw, en heeft je
   // dorp een raadsman, dan maakt hij er eerst het rapport van. Een rapport dat je niet las, gaat op in het nieuwe: wat
-  // er gebeurde, blijft erin staan tot je het leest (de laatste gebeurdOnthouden). Een ander dorp dan het jouwe brengt
-  // niemand een rapport.
+  // er gebeurde, blijft erin staan tot je het leest (de laatste gebeurdOnthouden), en wat erin stond over de winter en
+  // wat er speelt, geldt als niet gezegd. Een ander dorp dan het jouwe brengt niemand een rapport.
   T.tikOchtendrapportDag = function (D, dag) {
     const boek = D.dagboek || nieuwDagboek(D, dag);
     D.dagboek = nieuwDagboek(D, dag);
@@ -202,8 +243,10 @@
       D.ochtendrapport = null;
       return;
     }
-    const gebeurd = (vorig && !vorig.gelezen ? vorig.gebeurd : []).concat(boek.regels).slice(-IN().gebeurdOnthouden);
-    D.ochtendrapport = T.maakOchtendrapport(D, dag, p, gebeurd, boek);
+    const gelezen = vorig && vorig.gelezen;
+    const gebeurd = (vorig && !gelezen ? vorig.gebeurd : []).concat(boek.regels).slice(-IN().gebeurdOnthouden);
+    const basis = vorig ? (gelezen ? vorig.onthoud : vorig.basis) : niksGezegd();
+    D.ochtendrapport = T.maakOchtendrapport(D, dag, p, gebeurd, boek, basis);
   };
 
   // Ligt er een rapport dat je nog niet las? Voor de knop Rapport (js/brieven.js).

@@ -188,6 +188,11 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
 
 ## De voorvallen: het dorp spreekt je aan (Marcel, 29 sep 2026; werklijst vraag 65)
 
+**Richtlijn** (Marcel, 1 okt: "Honger, droogte of een plaag, moet een status zijn. Als richtlijn"): wat een tijd duurt,
+is een status, met een begin en een eind, en te zien zolang het duurt; een bericht of het rapport zegt het als het
+begint of ophoudt, niet elke dag. De oorzaken hieronder (honger, kou, vol, onvrede) zijn zulke statussen; hoe je ze in
+beeld ziet, en droogte en een plaag erbij, hoort bij het plan voor een spel van begin tot eind (werklijst, vraag 77).
+
 **Zo werkt het nu** (29 sep, zeventiende sessie; `js/voorvallen.js`, de woorden in `js/gesprekken.js`, toetsen in
 `test/voorvallen.test.cjs`; Marcel: "A ja", bij "Het voelt gewoon nog leeg nu"):
 - **Om de paar dagen** komt iemand uit het dorp de schout zoeken: gemiddeld om de tien dagen, in de winter om de zes,
@@ -290,6 +295,12 @@ zitting (3b) en 's avonds de herberg (3c) komen nog.
   schout,": "Niets bijzonders. Sinds gisteren is er 3 graan minder."
 - **Wat de balk niet zegt** (vraag 75, b): het rapport herhaalt niet wat er ligt, want dat zegt de balk precies. Het
   zegt hoe het gaat en hoe lang het duurt.
+- **Wat blijft zoals het was, zegt hij niet elke dag** (vraag 76; Marcel: "a ja b ja c nu"): een oorzaak als hij begint
+  ("Er is honger, want het rantsoen is krap."), zolang hij duurt één keer per week ("Er is nog steeds honger, al
+  twaalf dagen: het rantsoen is krap.") en als hij over is ("De honger is voorbij."); de winter de eerste keer, als hij
+  omslaat (haalt het hem of niet), als de dag waarop het op is tien dagen verschuift, en anders één keer per week. Las
+  je een rapport niet, dan geldt wat erin stond als niet gezegd. Bij de bouwer werd zo de helft van de rapporten stil
+  (`speelbaar.md`). De getallen (`herhaalNa`, `winterVerschil`) in de werkbank; op 1 zegt hij alles elke dag.
 - **Zijn rekenen kleurt de getallen:** wie kan rekenen, zegt ze precies; wie het niet bijzonder kan, rondt af ("zo'n
   15"; onder tien telt iedereen); wie niet kan rekenen, zit er tot 30% naast, elke dag anders. Zo zegt hij soms dat het
   hout de winter haalt terwijl het dat niet doet. Onder het papier staat hoe hij rekent, en wie het zeker wil weten,
