@@ -126,7 +126,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor stap 2, de wensen per stand (vraag 80: a tot en met d), het zaaigraan (vraag 81: a en b), en klein spelen en het weer (vraag 82: a tot en met c); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2667,6 +2667,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **a**, de wensen zo, uit de tabel van vraag 79, met de getallen in de werkbank? **b**, in de buurt als een
     kring om het gebouw, zoals in Anno? **c**, doorgroeien kost bouwstof (hout, steen), zodat steen een doel krijgt?
     **d**, gewonnen als alles een maand lang super gelukkig is?
+    **Beantwoord (Marcel, 1 okt):** "80: a, Ja. B, Ja. C, Ja. D, een jaar". Dus de wensen zo, in de buurt als een kring
+    om het gebouw, doorgroeien kost bouwstof, en **gewonnen als alles een jaar lang super gelukkig is**. En klein (vraag
+    82, a): eerst drie standen, op de huizen die er al zijn.
 81. **Het dorp eet zijn zaaigraan op** (Claude, 1 okt, eenentwintigste sessie; de speeltest na stap 1 van vraag 79, in
     `speelbaar.md`; wacht op Marcel). Na stap 1 sterft niemand meer van de kou, en 20 tot 31 mensen minder in twee jaar.
     Maar op 1 lentemaand van het tweede jaar was er bij alle drie de zaden geen korrel zaaigraan: in de winter at het dorp
@@ -2683,6 +2686,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       speler die de raad volgt. Dan meet de speeltest wat een speler kan, en niet alleen wat het doel vraagt.
     In stap 2 vraagt het doel geen 50 mensen meer (vraag 80, D): eten wordt de eerste wens van elke stand, en een dorp
     groeit dan zo ver als het te eten heeft. Vragen: **a**, het zaaigraan apart? **b**, de bouwer met een jager?
+    **Beantwoord (Marcel, 1 okt):** "81: zaaigraan wordt bij nood opgegeten, anders sterven er mensen". Dus niet strikt
+    apart: van de oogst tot het zaaien houden de boeren het zaaigraan achter, en het dorp eet het pas als er niets anders
+    meer is (na het andere graan, de kaas en het gezouten vlees); liever geen oogst dan doden. Het dorp zegt het als het
+    zover is, en de winter rekent het eten zonder het zaaigraan. Over b zei Marcel niets; het is gereedschap, geen spel,
+    dus de bouwer krijgt de jager bij de volgende speeltest, tenzij Marcel het anders wil.
 82. **Een kleine speelbare variant, en zaaien dat dagen kost** (Marcel, 1 okt, eenentwintigste sessie: "De focus op een
     speelbare kleine variant lijkt mij het beste toch?", en "Moet het zaaien niet meerdere dagen in beslag nemen? Stel er
     is slecht weer. Dan wordt er minder gezaaid waardoor er minder eten is en er meer gehandeld moet worden om aan eten
@@ -2710,6 +2718,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     jaar bovenop een dorp dat zijn zaaigraan al opeet, maakt het alleen erger. Het andere: nu, vóór de wensen.
     Vragen: **a**, klein zo, met drie standen op de huizen die er zijn? **b** en **c**, zaaien over dagen en het weer, na de
     wensen?
+    **Beantwoord (Marcel, 1 okt):** "82: correct". Dus klein, met drie standen op de huizen die er zijn, en zaaien over
+    dagen en het weer na de wensen, samen met de statussen. De volgorde: het zaaigraan (vraag 81), de wensen klein (vraag
+    80), het eind, de speeltest; dan het weer en de eisen van de heer; het vaste pad als het dorp groter moet.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
