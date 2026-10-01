@@ -2275,8 +2275,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       - **Wat helpt, als het groter moet** (voor later, `opmerkingen.md`): wie waar staat per tegel bijhouden, zoals de
         voorwerpen sinds stuk 2; A* met een heap en getallen als sleutel; de vaste wegen (huis, werk, put, herberg)
         onthouden in plaats van elke dag opnieuw zoeken; en de kaart niet opslaan, want die komt uit het zaad of het
-        bestand. Hoe groot het dan kan, meten we dan opnieuw. De grens zit in hoe we paden zoeken, niet in JavaScript of
-        het tekenen: Godot is ervoor niet nodig.
+        bestand. Hoe groot het dan kan, meten we dan opnieuw, met `npm run grootte` (Marcel, 1 okt: "scripts bewaren").
+        De grens zit in hoe we paden zoeken, niet in JavaScript of het tekenen: Godot is ervoor niet nodig.
     - **d, het dorp van bovenaf** (vraag 73, 4: "Wat bedoel je hier"). Op 29 sep stelde Claude voor dat je met één toets
       (`Tab`) de camera van de schout af tilt en over je dorp kijkt, om te bouwen en te plannen zonder te lopen (vraag 64,
       A); Marcel zei toen "nee niet bovenaf, ik denk hier nog over na" (vraag 65, C). Het concept kiest: geen oog van
@@ -2672,6 +2672,8 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   getallen in de werkbank, op 1 en 1 zoals ervoor). Het bericht zegt waarom ("Trijn zoekt je. Er is honger, want het
   rantsoen is krap."), ook als de raadsman beslist, en een gesprek kan het zeggen met `{oorzaak}`.
   `Spel.debug.voorval()` zegt welke oorzaken spelen en hoe zwaar elk voorval weegt. 5 nieuwe toetsen.
+- 1 okt 2026 — **`npm run grootte`** (negentiende sessie; Marcel: "scripts bewaren"): de meting van hoe groot een dorp
+  kan worden, als gereedschap (`gereedschap/grootte/`), zodat we na een verbetering precies hetzelfde opnieuw meten.
 - 30 sep 2026 — **Speeltest met een andere spelregel of een ander getal** (negentiende sessie): `--regel seizoen=jij` en
   `--getal VOORVALLEN_INSTELLINGEN.metOorzaak=1`, zoals de browser ze onthoudt als een speler ze kiest.
 - 30 sep 2026 — **Elk dorp leeft** (negentiende sessie; vraag 71, stap 3 van stuk 2, A en C). `T.werkDorpBij(S, D, dt,
