@@ -449,13 +449,18 @@
 
   // Rovers die een akker kapotmaken (js/rovers.js; Marcel, 29 sep: "ook maken ze soms velden kapot"): wat erop
   // staat, groeit dit jaar niet meer. Die tegels tellen dan als ongezaaid (hierboven): ze groeien niet, worden niet
-  // gemaaid, en tonen kale grond, tot er op 1 lentemaand weer gezaaid wordt. Geeft hoeveel tegels verloren gingen
-  // (0 als er niets stond: na de oogst, of op een weide of braak).
+  // gemaaid, en tonen kale grond, tot er op 1 lentemaand weer gezaaid wordt. Ze staan ook in akker.vertrapt, zodat de
+  // boeren ze niet nazaaien (T.zaaiNa). Geeft hoeveel tegels verloren gingen (0 als er niets stond: na de oogst, of op
+  // een weide of braak).
   T.vertrapAkker = function (akker) {
     const weg = onbeslistTegels(akker);
     if (!weg.length) return 0;
     if (!akker.ongezaaid) akker.ongezaaid = new Set();
-    for (const t of weg) akker.ongezaaid.add(sleutel(t.x, t.y));
+    if (!akker.vertrapt) akker.vertrapt = new Set();
+    for (const t of weg) {
+      akker.ongezaaid.add(sleutel(t.x, t.y));
+      akker.vertrapt.add(sleutel(t.x, t.y));
+    }
     return weg.length;
   };
 
@@ -715,6 +720,56 @@
     return hooi;
   };
 
+  // Wat een tegel aan zaaigraan kost, op deze akker: een zuinige boer zaait met minder, een kwistige met meer
+  // (js/boeren.js).
+  const zaaigraanPerTegel = (w, akker) => T.ZAAIGRAAN_PER_TEGEL * factor(boerVan(w, akker), 'zaaien');
+
+  // Het zaaigraan verdelen (T.zaaiAkkers en T.zaaiNa): elke akker zijn deel van wat er is, naar beneden afgerond; wat
+  // er dan nog over is, hooguit één tegel per akker erbij, op volgorde, zolang het graan het toelaat. `maat` is
+  // hoeveel tegels elke akker wil, `per` wat een tegel er kost, `heb` het graan. Geeft { gezaaid (per akker), kost }.
+  function verdeelZaaigraan(maat, per, heb) {
+    const nodig = maat.reduce((n, m, i) => n + m * per[i], 0);
+    const deel = nodig > 0 ? Math.min(1, heb / nodig) : 1;
+    const gezaaid = maat.map((m) => Math.floor(m * deel + 1e-9));
+    let kost = gezaaid.reduce((n, g, i) => n + g * per[i], 0);
+    for (let i = 0; i < maat.length; i++) {
+      if (gezaaid[i] < maat[i] && kost + per[i] <= heb + 1e-9) {
+        gezaaid[i]++;
+        kost += per[i];
+      }
+    }
+    return { gezaaid, kost };
+  }
+
+  // Nazaaien (werklijst vraag 79, stap 1; Marcel, 1 okt, vraag 78: "D dat is prima"): wat op 1 lentemaand niet gezaaid
+  // kon worden, zaaien de boeren alsnog zodra er graan is, tot het graan groen wordt (T.AKKER_STADIA; T.tikAkkersDag
+  // onderaan). Zo komt een dorp na een slechte winter weer boven: met graan uit een kelder, of met zaaigraan van de
+  // marskramer in grasmaand (js/handel.js). Wat later gezaaid is, groeit gewoon mee met de rest. Wat de rovers vertrapten
+  // (akker.vertrapt), zaaien ze niet na: dat groeit dit jaar niet meer. Het verdeelt zoals T.zaaiAkkers, en per akker
+  // gaat het dichtste stuk eerst. Geeft hoeveel tegels er gezaaid werden.
+  T.zaaiNa = function (D) {
+    const w = D.wereld;
+    const heb = (D.voorraad && D.voorraad.graan) || 0;
+    if (!w || !w.akkers || heb <= 0) return 0;
+    const open = new Map();
+    for (const a of w.akkers) {
+      if (!isAkker(a) || !a.ongezaaid || !a.ongezaaid.size) continue;
+      const tegels = T.akkerTegels(a).filter((t) => ongezaaidOp(a, t.x, t.y) && !(a.vertrapt && a.vertrapt.has(sleutel(t.x, t.y))));
+      if (tegels.length) open.set(a, tegels);
+    }
+    if (!open.size) return 0;
+    const akkers = [...open.keys()];
+    const { gezaaid, kost } = verdeelZaaigraan(akkers.map((a) => open.get(a).length), akkers.map((a) => zaaigraanPerTegel(w, a)), heb);
+    const n = gezaaid.reduce((s, g) => s + g, 0);
+    if (!n) return 0;
+    akkers.forEach((a, i) => open.get(a).slice(0, gezaaid[i]).forEach((t) => a.ongezaaid.delete(sleutel(t.x, t.y))));
+    T.wijzigVoorraad(D, 'graan', -kost);
+    const zin = `De boeren zaaien na: ${n} akkertegel${n === 1 ? '' : 's'} erbij, voor ${Math.round(kost)} graan.`;
+    T.zeg(D, zin, 'goed');
+    T.schrijfOp(D, 'boeren', { tekst: zin }); // voor het rapport van de raadsman (js/ochtendrapport.js)
+    return n;
+  };
+
   // Zaaien (Marcel, 24 sep: "zaaigoed telt"; ontwerp/spel.md, "Sint-Maarten"): elke akkertegel
   // kost T.ZAAIGRAAN_PER_TEGEL graan uit de voorraad. Wat je de heer gaf, kun je dus niet meer
   // zaaien. Is er te weinig, dan wordt er gezaaid wat kan, naar rato verdeeld over alle akkers
@@ -725,31 +780,18 @@
   T.zaaiAkkers = function (D) {
     const w = D.wereld;
     if (!w || !w.akkers || !w.akkers.length) return null;
-    // Een nieuw jaar, voor elk veld: de oogst en het hooi van vorig jaar zijn vergeten.
+    // Een nieuw jaar, voor elk veld: de oogst, het hooi en wat de rovers vertrapten zijn vergeten.
     for (const a of w.akkers) {
       a.ongezaaid = new Set();
       if (a.geoogst) a.geoogst.clear();
       if (a.gehooid) a.gehooid.clear();
+      if (a.vertrapt) a.vertrapt.clear();
     }
     const akkers = w.akkers.filter(isAkker);
-    // Wat een tegel aan zaaigraan kost, per akker: een zuinige boer zaait met minder, een kwistige
-    // met meer (js/boeren.js).
-    const per = akkers.map((a) => T.ZAAIGRAAN_PER_TEGEL * factor(boerVan(w, a), 'zaaien'));
+    const per = akkers.map((a) => zaaigraanPerTegel(w, a));
     const maat = akkers.map((a) => a.b * a.h);
     const totaal = maat.reduce((n, m) => n + m, 0);
-    const nodig = maat.reduce((n, m, i) => n + m * per[i], 0);
-    const heb = (D.voorraad && D.voorraad.graan) || 0;
-    // Elke akker zijn deel, naar beneden afgerond; wat er dan nog over is, hooguit één tegel per
-    // akker erbij, op volgorde, zolang het graan het toelaat.
-    const deel = nodig > 0 ? Math.min(1, heb / nodig) : 1;
-    const gezaaid = maat.map((m) => Math.floor(m * deel + 1e-9));
-    let kost = gezaaid.reduce((n, g, i) => n + g * per[i], 0);
-    for (let i = 0; i < maat.length; i++) {
-      if (gezaaid[i] < maat[i] && kost + per[i] <= heb + 1e-9) {
-        gezaaid[i]++;
-        kost += per[i];
-      }
-    }
+    const { gezaaid, kost } = verdeelZaaigraan(maat, per, (D.voorraad && D.voorraad.graan) || 0);
     const kan = gezaaid.reduce((n, g) => n + g, 0);
     akkers.forEach((a, i) => {
       T.akkerTegels(a).forEach((t, j) => {
@@ -777,7 +819,8 @@
   // Het eerste jaar is al gezaaid: het spel begint op 1 lentemaand, net nadat de boeren hun eigen
   // zaaigoed de grond in brachten. Pas vanaf het tweede jaar kost zaaien graan uit de voorraad, en
   // pas dan wisselen de velden (T.wisselVelden): eerst de wissel, dan het zaaien, zodat alleen
-  // gezaaid wordt wat dit jaar akker is.
+  // gezaaid wordt wat dit jaar akker is. Daarna, tot het graan groen is, zaaien ze na wat niet gezaaid
+  // kon worden (T.zaaiNa).
   T.tikAkkersDag = function (D, dag) {
     const w = D.wereld;
     if (!w || !w.akkers || !w.akkers.length) return;
@@ -786,6 +829,8 @@
     if (dag >= T.DAGEN_PER_JAAR && nu === stadiumBegin('geploegd')) {
       T.wisselVelden(D);
       T.zaaiAkkers(D);
+    } else if (nu > stadiumBegin('geploegd') && nu < stadiumBegin('groen')) {
+      T.zaaiNa(D); // wat niet gezaaid kon worden, zodra er graan is (hierboven)
     }
     if (nu === stadiumBegin('gemaaid')) {
       T.haalOogstBinnen(D);

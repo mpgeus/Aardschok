@@ -34,13 +34,18 @@
     // hoeveel pakken hij kan meenemen: een zak graan, een baal wol, elk één pak.
     beurs: 40,
     plaats: 12,
-    // Wat hij verkoopt: hoeveel hij per bezoek bij zich heeft, en de prijs per stuk in goud,
-    // per bezoek (lente, zomer, herfst). In de herfst wil iedereen het nog vóór de winter.
-    // Stenen niet: een marskramer draagt zijn waar op zijn rug. Die komen bij het dorp, met een
-    // voerman met een kar (werklijst.md, punt 14).
+    // Wat hij verkoopt: hoeveel hij per bezoek bij zich heeft (één getal, of een per bezoek), en de
+    // prijs in goud, per bezoek (lente, zomer, herfst); per stuk, of per pak van `per` stuks. In de
+    // herfst wil iedereen het nog vóór de winter. Stenen niet: een marskramer draagt zijn waar op
+    // zijn rug. Die komen bij het dorp, met een voerman met een kar (werklijst.md, punt 14).
+    // Graan alleen in de lente, als zaaigraan (werklijst vraag 59 en 79; Marcel, 1 okt, vraag 78:
+    // "D dat is prima"): wie na een slechte winter niets meer heeft, kan het kopen, en de boeren
+    // zaaien het na tot 1 bloeimaand (T.zaaiNa, js/akkers.js). Een pak is tien graan, net als
+    // wanneer hij het koopt, en duurder dan hij het in de lente koopt.
     verkoopt: {
       ijzer: { heeft: 12, prijs: [3, 3, 4] },
       zout: { heeft: 15, prijs: [1, 1, 2] },
+      graan: { per: 10, heeft: [10, 0, 0], prijs: [5, 5, 5] },
     },
     // Wat hij koopt: per pak van zoveel stuks, voor zoveel goud, per bezoek (lente, zomer,
     // herfst). Graan is in de lente schaars en na de oogst goedkoop: wie het door Sint-Maarten
@@ -90,12 +95,20 @@
     return (na || IN().bezoeken[0]).maand;
   };
 
+  // Hoeveel hij van iets bij zich heeft als bezoek `i` begint: in stuks, of in pakken als het per pak gaat.
+  function heeftBijBezoek(wat, i) {
+    const h = IN().verkoopt[wat].heeft;
+    return Array.isArray(h) ? h[i] || 0 : h;
+  }
+  // Wat hij bij dit bezoek te koop heeft (voor het venster, js/hud.js): wat hij die ronde meebracht, ook als het op is.
+  T.verkooptNu = (D) => (D.marskramer ? Object.keys(IN().verkoopt).filter((wat) => heeftBijBezoek(wat, D.marskramer.bezoek) > 0) : []);
+
   // Hij komt: een vers bezoek met een volle mars en een volle beurs. `dag` is de dag dat hij het
   // gehucht in loopt; T.werkMarskramerBij zet de klok pas echt aan als hij op het plein staat.
   T.marskramerKomt = function (D, i, dag) {
     const bezoek = IN().bezoeken[i];
     const heeft = {};
-    for (const wat in IN().verkoopt) heeft[wat] = IN().verkoopt[wat].heeft;
+    for (const wat in IN().verkoopt) heeft[wat] = heeftBijBezoek(wat, i);
     D.marskramer = {
       bezoek: i, komtOp: dag, gaatOp: dag + IN().blijftDagen,
       beurs: IN().beurs, plaats: IN().plaats, heeft,
@@ -176,16 +189,17 @@
   // dimmen met precies de reden die een klik zou geven.
   // ---------------------------------------------------------------------------------------------
 
-  // Jij koopt `aantal` stuks van hem (ijzer, zout).
+  // Jij koopt `aantal` van hem: stuks (ijzer, zout), of pakken van `per` stuks (graan in de lente).
   T.kanKopen = function (D, wat, aantal) {
     const m = D.marskramer;
     const waar = IN().verkoopt[wat];
     if (!T.kanHandelen(D)) return { kan: false, reden: 'De marskramer is er niet.' };
     if (!waar) return { kan: false, reden: `Hij heeft geen ${wat} bij zich.` };
     const prijs = waar.prijs[m.bezoek];
+    const per = waar.per || 1;
     const heeft = m.heeft[wat] || 0;
-    const uit = { prijs, kosten: prijs * aantal, heeft };
-    if (aantal > heeft) return { ...uit, kan: false, reden: heeft ? `Hij heeft er nog maar ${heeft}.` : 'Het is op.' };
+    const uit = { prijs, per, kosten: prijs * aantal, stuks: per * aantal, heeft };
+    if (aantal > heeft) return { ...uit, kan: false, reden: heeft ? `Hij heeft er nog maar ${heeft * per}.` : 'Het is op.' };
     if ((D.voorraad.goud || 0) < prijs * aantal) return { ...uit, kan: false, reden: `Daar heb je het goud niet voor (${prijs * aantal}).` };
     return { ...uit, kan: true };
   };
@@ -202,7 +216,7 @@
     if (!k.kan) return k;
     const m = D.marskramer;
     T.wijzigVoorraad(D, 'goud', -k.kosten);
-    T.wijzigVoorraad(D, wat, aantal);
+    T.wijzigVoorraad(D, wat, k.stuks);
     m.heeft[wat] -= aantal;
     m.beurs += k.kosten;
     T.boekMarskramer(D).betaald += k.kosten;

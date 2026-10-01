@@ -442,12 +442,14 @@
     const H = T.HANDEL_INSTELLINGEN;
     const v = S.dorp.voorraad;
     const heb = (wat) => Math.floor(v[wat] || 0);
-    const verkoopt = Object.keys(H.verkoopt).map((wat) => {
+    // Wat hij deze ronde bij zich heeft (T.verkooptNu): graan alleen in de lente, per pak van tien.
+    const verkoopt = T.verkooptNu(S.dorp).map((wat) => {
       const k = T.kanKopen(S.dorp, wat, 1);
+      const prijs = k.per > 1 ? `${k.per} voor ${k.prijs} goud` : `${k.prijs} goud per stuk`;
       return (
         `<div class="handel-rij"><span class="handel-naam">${T.hoofdletter(wat)} <small>je hebt ${heb(wat)}</small></span>` +
-        `<span class="handel-prijs">${k.prijs} goud per stuk<small>${prijsMerk(S, wat, 'verkoopt')}hij heeft er nog ${m.heeft[wat] || 0}</small></span>` +
-        `<span class="handel-knoppen">${handelKnop('koop', wat, 1, 'Koop 1', k)}${handelKnop('koop', wat, 5, 'Koop 5', T.kanKopen(S.dorp, wat, 5))}</span></div>`
+        `<span class="handel-prijs">${prijs}<small>${prijsMerk(S, wat, 'verkoopt')}hij heeft er nog ${(m.heeft[wat] || 0) * k.per}</small></span>` +
+        `<span class="handel-knoppen">${handelKnop('koop', wat, 1, `Koop ${k.per}`, k)}${handelKnop('koop', wat, 5, `Koop ${k.per * 5}`, T.kanKopen(S.dorp, wat, 5))}</span></div>`
       );
     });
     // Wat hij koopt, voor zover je er iets van hebt. Bij het graan staat hoeveel dagen het dorp

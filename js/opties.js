@@ -570,7 +570,7 @@
       if ('straf' in x) return x.straf || 'geen straf';
     }
     const bezoeken = T.HANDEL_INSTELLINGEN && T.HANDEL_INSTELLINGEN.bezoeken;
-    if (ouderSleutel === 'prijs' && bezoeken && bezoeken[i]) return bezoeken[i].naam;
+    if ((ouderSleutel === 'prijs' || ouderSleutel === 'heeft') && bezoeken && bezoeken[i]) return bezoeken[i].naam; // per bezoek (js/handel.js)
     return String(i + 1);
   }
 

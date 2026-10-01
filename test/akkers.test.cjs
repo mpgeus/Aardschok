@@ -284,6 +284,38 @@ test('T.tikAkkersDag: het eerste jaar is al gezaaid, vanaf het tweede kost zaaie
   assert.equal(S.voorraad.graan, 100 - 10 * T.ZAAIGRAAN_PER_TEGEL);
 });
 
+test('T.zaaiNa: wat niet gezaaid kon worden, zaaien de boeren na zodra er graan is, tot het groen wordt (vraag 79)', () => {
+  const { S, metBoer, zonder } = tweeAkkers();
+  T.tikAkkersDag(S, dagVan('lentemaand', 1, 1)); // het tweede jaar, zonder graan: niets gezaaid
+  assert.equal(metBoer.ongezaaid.size + zonder.ongezaaid.size, 10);
+  // Een dag later is er graan (uit een kelder, of van de marskramer): ze zaaien na, naar rato, de hoek eerst.
+  T.zetVoorraad(S, 'graan', 4 * T.ZAAIGRAAN_PER_TEGEL);
+  T.tikAkkersDag(S, dagVan('lentemaand', 2, 1));
+  assert.equal(S.voorraad.graan, 0);
+  assert.equal(metBoer.ongezaaid.size, 3);
+  assert.equal(zonder.ongezaaid.size, 3);
+  assert.ok(!metBoer.ongezaaid.has('0,0'), 'het dichtste stuk eerst');
+  // Wat de rovers vertrappen, groeit dit jaar niet meer: dat zaaien ze niet na.
+  const vertrapt = T.vertrapAkker(metBoer);
+  assert.equal(vertrapt, 3);
+  T.zetVoorraad(S, 'graan', 100);
+  assert.equal(T.zaaiNa(S), 6, 'de drie ongezaaide tegels van elke akker, niet de vertrapte');
+  assert.equal(zonder.ongezaaid.size, 0);
+  assert.equal(metBoer.ongezaaid.size, vertrapt);
+  assert.equal(S.voorraad.graan, 100 - 6 * T.ZAAIGRAAN_PER_TEGEL);
+  assert.equal(T.zaaiNa(S), 0, 'er valt niets meer na te zaaien');
+  // Vanaf 1 bloeimaand niet meer: dan is het graan groen.
+  const laat = tweeAkkers();
+  T.tikAkkersDag(laat.S, dagVan('lentemaand', 1, 1));
+  T.zetVoorraad(laat.S, 'graan', 100);
+  T.tikAkkersDag(laat.S, dagVan('bloeimaand', 1, 1));
+  assert.equal(laat.S.voorraad.graan, 100);
+  assert.equal(laat.metBoer.ongezaaid.size + laat.zonder.ongezaaid.size, 10);
+  // En op 1 lentemaand van het jaar erna is wat vertrapt was, vergeten.
+  T.tikAkkersDag(S, dagVan('lentemaand', 1, 2));
+  assert.equal(metBoer.vertrapt.size, 0);
+});
+
 // ---------------------------------------------------------------------------------------------
 // Velden: akker, weide of braak (ontwerp/spel.md, "Weides met koeien en schapen", stap 1). Het vee
 // zelf (js/vee.js) staat in test/vee.test.cjs; hier staan er geen dieren op de velden, dus is er

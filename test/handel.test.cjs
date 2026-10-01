@@ -132,6 +132,30 @@ test('kopen kan niet zonder goud, en niet meer dan hij bij zich heeft', () => {
   assert.equal(S.voorraad.goud, 1000, 'wat niet kan, kost ook niets');
 });
 
+test('zaaigraan: in de lente verkoopt hij graan per pak van tien, en in de zomer en de herfst niet (vraag 59 en 79)', () => {
+  const g = T.HANDEL_INSTELLINGEN.verkoopt.graan;
+  const S = metMarskramer(0);
+  assert.ok(T.verkooptNu(S).includes('graan'), 'in de lente heeft hij graan bij zich');
+  S.voorraad.goud = 100;
+  const r = T.koop(S, 'graan', 2);
+  assert.ok(r.kan);
+  assert.equal(S.voorraad.graan, 2 * g.per, 'twee pakken is twintig graan');
+  assert.equal(S.voorraad.goud, 100 - 2 * g.prijs[0]);
+  assert.equal(S.marskramer.heeft.graan, g.heeft[0] - 2);
+  // Meer dan hij heeft, kan niet, en dat zegt hij in graan.
+  const teVeel = T.kanKopen(S, 'graan', g.heeft[0]);
+  assert.equal(teVeel.kan, false);
+  assert.equal(teVeel.reden, `Hij heeft er nog maar ${(g.heeft[0] - 2) * g.per}.`);
+  // In de zomer en de herfst niet: dan staat het niet in zijn venster, en kopen kan niet.
+  for (const i of [1, 2]) {
+    const Z = metMarskramer(i);
+    Z.voorraad.goud = 100;
+    assert.ok(!T.verkooptNu(Z).includes('graan'));
+    assert.ok(T.verkooptNu(Z).includes('ijzer'), 'ijzer heeft hij altijd');
+    assert.equal(T.kanKopen(Z, 'graan', 1).kan, false);
+  }
+});
+
 test('verkopen gaat per pak, tot zijn beurs leeg of zijn mars vol is', () => {
   const S = metMarskramer(0);
   S.voorraad.graan = 1000;
