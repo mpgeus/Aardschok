@@ -412,13 +412,12 @@
   // Eet het dorp van het zaaigraan, dan zegt het dat één keer per winter, en schrijft het het op voor het rapport
   // (js/ochtendrapport.js). Wordt er niets achtergehouden (na het zaaien), dan mag het de volgende keer weer.
   function zegHetZaaigraan(D, gegeten, apart) {
-    const B = D.behoeften || (D.behoeften = T.nieuweBehoeften());
     if (apart <= 0) {
-      B.zaaigraanGegeten = false;
+      if (D.behoeften) D.behoeften.zaaigraanGegeten = false;
       return;
     }
-    if (gegeten <= 0 || B.zaaigraanGegeten) return;
-    B.zaaigraanGegeten = true;
+    if (gegeten <= 0 || (D.behoeften && D.behoeften.zaaigraanGegeten)) return;
+    (D.behoeften || (D.behoeften = T.nieuweBehoeften())).zaaigraanGegeten = true;
     const zin = 'De honger is groot: het dorp eet van het zaaigraan. Wat nu opgaat, kan in de lente niet de grond in.';
     T.zeg(D, zin, 'gevaar');
     T.schrijfOp(D, 'boeren', { tekst: 'De boeren gaven van het zaaigraan, want er was niets anders meer te eten.' });

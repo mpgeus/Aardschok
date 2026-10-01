@@ -193,6 +193,13 @@ valt in beide in oogstmaand, in een gevecht met de rovers: dat ligt niet aan dez
 
 Wat eruit volgt, staat in de werklijst als vraag 81.
 
+**Na vraag 81, het zaaigraan pas bij nood** (`36378a4`): het dorp eet nu eerst het andere graan, de kaas en het gezouten
+vlees, en de winter rekent het eten zonder het zaaigraan. De bouwer, zaad 1, 2 en 3: het meest 53, 52, 52 mensen (was
+63, 64, 56); aan het eind 46 (ambt kwijt), 18, 18 (was 37, 18, 13); doden 14, 37, 38, allemaal van de honger (was 25,
+49, 41). Er sterven dus minder, maar bij alle drie at het dorp in slacht- of wintermaand toch van het zaaigraan ("De
+honger is groot"), en lag er op 1 lentemaand 1324 weer niets te zaaien: een dorp van 52 heeft meer eten nodig dan de
+akkers geven. De bouwer zaaide bij zaad 1 en 3 wat na met zaaigraan van de marskramer (20 en 9 akkertegels).
+
 ## De speeltest van 1 okt: het rapport van de raadsman (werklijst, vraag 75, 3a)
 
 Gespeeld in de twintigste sessie, op `ccr-8e9e20ad-gg1umw` (het rapport, toen nog niet gecommit; daarna `6a4573c`),
