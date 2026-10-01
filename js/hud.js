@@ -214,6 +214,9 @@
         cel.querySelector('.verstopt').textContent = n >= 1 ? `+${n}` : '';
         cel.title = GRONDSTOF_UITLEG[wat] + (waar.length ? ` Verstopt: ${waar.join('; ')}. Dat eet het dorp niet, en de inner telt het niet.` : '');
       }
+      // Het zaaigraan dat de boeren achterhouden (js/akkers.js, T.zaaigraanApart): bij de muis, bij het graan.
+      const zaai = Math.min(Math.floor(S.dorp.voorraad.graan || 0), Math.ceil(T.zaaigraanApart(S.dorp, Math.floor(S.kalender.dag))));
+      if (zaai > 0) box.querySelector('[data-wat="graan"]').title += ` Daarvan is ${zaai} zaaigraan voor de lente: dat eet het dorp pas als er niets anders meer is.`;
     }
     // Wat zout en gereedschap nu doen, bij de muis: hoeveel vis en vlees het zout goed houdt, en
     // hoeveel handen het gereedschap dekt (js/behoeften.js, js/gebouwen.js).

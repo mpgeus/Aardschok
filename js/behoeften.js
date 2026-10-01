@@ -377,7 +377,7 @@
   // Sinds 25 sep telt ook vlees (vleesIsEten): wat het zout niet goed houdt, eet het dorp na de melk en
   // vóór het graan, want dat bederft anders toch; gezouten vlees pas als het graan en de kaas op zijn.
   // Geeft ook `vlees`: wat er van het vlees gegeten is (in vlees, niet in graan).
-  T.eetVandaag = function (D) {
+  T.eetVandaag = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     const nodig = (D.bevolking || 0) * T.etenPerMens(D);
     const v = D.voorraad;
@@ -388,12 +388,17 @@
     const d = vleesNu > 0 ? T.zoutDekking(D) : null;
     const ongezouten = d && d.totaal > 0 ? vleesNu * (d.onbeschermd / d.totaal) : vleesNu;
     const vers = perVlees > 0 ? Math.max(0, Math.min((nodig - melk) / perVlees, ongezouten)) : 0;
-    const graan = Math.max(0, Math.min(nodig - melk - vers * perVlees, v.graan || 0));
+    // Het zaaigraan eet het dorp pas bij nood (T.zaaigraanApart, js/akkers.js; werklijst vraag 81): eerst het andere
+    // graan, dan de kaas en het gezouten vlees, en pas dan het zaaigraan, liever dan dat er mensen sterven.
+    const apart = Math.min(v.graan || 0, T.zaaigraanApart(D, dag));
+    const graan = Math.max(0, Math.min(nodig - melk - vers * perVlees, (v.graan || 0) - apart));
     const kaas = Math.max(0, Math.min(nodig - melk - vers * perVlees - graan, v.kaas || 0));
     const rest = nodig - melk - vers * perVlees - graan - kaas;
     const gezouten = perVlees > 0 ? Math.max(0, Math.min(rest / perVlees, vleesNu - vers)) : 0;
+    const zaaigraan = Math.max(0, Math.min(rest - gezouten * perVlees, apart));
     const vlees = vers + gezouten;
-    if (graan > 0) T.wijzigVoorraad(D, 'graan', -graan);
+    if (graan + zaaigraan > 0) T.wijzigVoorraad(D, 'graan', -(graan + zaaigraan));
+    zegHetZaaigraan(D, zaaigraan, apart);
     if (kaas > 0) T.wijzigVoorraad(D, 'kaas', -kaas);
     if (vlees > 0) T.wijzigVoorraad(D, 'vlees', -vlees);
     // Wie gezouten vlees eet, eet het zout mee op, net als in pasBederfToe hieronder.
@@ -401,8 +406,23 @@
     const kaasErbij = (melkVandaag - melk) * (T.VEE_INSTELLINGEN ? T.VEE_INSTELLINGEN.melkNaarKaas : 0);
     if (kaasErbij > 0) T.wijzigVoorraad(D, 'kaas', kaasErbij);
     if (D.vee) D.vee.melk = 0;
-    return { nodig, melk, vlees, graan, kaas, kaasErbij, tekort: Math.max(0, rest - gezouten * perVlees) };
+    return { nodig, melk, vlees, graan: graan + zaaigraan, zaaigraan, kaas, kaasErbij, tekort: Math.max(0, rest - gezouten * perVlees - zaaigraan) };
   };
+
+  // Eet het dorp van het zaaigraan, dan zegt het dat één keer per winter, en schrijft het het op voor het rapport
+  // (js/ochtendrapport.js). Wordt er niets achtergehouden (na het zaaien), dan mag het de volgende keer weer.
+  function zegHetZaaigraan(D, gegeten, apart) {
+    const B = D.behoeften || (D.behoeften = T.nieuweBehoeften());
+    if (apart <= 0) {
+      B.zaaigraanGegeten = false;
+      return;
+    }
+    if (gegeten <= 0 || B.zaaigraanGegeten) return;
+    B.zaaigraanGegeten = true;
+    const zin = 'De honger is groot: het dorp eet van het zaaigraan. Wat nu opgaat, kan in de lente niet de grond in.';
+    T.zeg(D, zin, 'gevaar');
+    T.schrijfOp(D, 'boeren', { tekst: 'De boeren gaven van het zaaigraan, want er was niets anders meer te eten.' });
+  }
 
   // Hoeveel het vlees in de voorraad het dorp nog voedt, in graan (0 als vlees geen eten is): voor
   // het venster van de heer (js/heer.js, T.heerVooruitzicht).
@@ -492,8 +512,10 @@
     const van = Math.floor(dag);
     const melkVoor = T.verwachteMelk(D, van, van + tot);
     const melkIn = duur > 0 ? T.verwachteMelk(D, van + tot, van + tot + duur) / duur : 0;
+    // Het zaaigraan telt niet mee: dat eet het dorp pas bij nood (T.zaaigraanApart, js/akkers.js).
+    const graan = Math.max(0, (v.graan || 0) - T.zaaigraanApart(D, van));
     const r = T.haaltDeWinter({
-      voorraad: (v.graan || 0) + (v.kaas || 0) + T.vleesAlsEten(D),
+      voorraad: graan + (v.kaas || 0) + T.vleesAlsEten(D),
       voorWinter: melkVoor - eet * tot,
       perWinterdag: eet - melkIn,
       winter: duur,

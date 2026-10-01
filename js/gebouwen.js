@@ -888,8 +888,8 @@
     // 3. Eten: iedereen eet, of er genoeg is of niet (T.wijzigVoorraad zakt nooit onder nul — een
     // dorp dat te veel monden telt, eet zijn voorraad dus leeg; wat honger doet, staat in
     // js/behoeften.js). Eerst de melk van vandaag, dan graan, dan kaas, en wat er van de melk over
-    // is, wordt kaas (T.eetVandaag, js/behoeften.js).
-    T.eetVandaag(D);
+    // is, wordt kaas; het zaaigraan pas bij nood (T.eetVandaag, js/behoeften.js).
+    T.eetVandaag(D, dag);
     // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als de voorraad een buffer overhoudt
     // (zodat een net geboren gezin niet meteen honger lijdt), het dorp tevreden genoeg is
     // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel), en het de winter haalt als die in zicht

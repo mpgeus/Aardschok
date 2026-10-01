@@ -308,6 +308,18 @@
           uitleg: 'Er komt een gezin zolang er graan, plaats en tevredenheid is, ook als de winter het niet haalt. Wie dan groeit, verliest het in de winter.' },
       ],
     },
+    // Het zaaigraan (werklijst vraag 81; Marcel, 1 okt: "zaaigraan wordt bij nood opgegeten, anders sterven er mensen";
+    // js/akkers.js, T.zaaigraanApart). Als ander graan is het spel van vóór 1 okt.
+    {
+      id: 'zaaigraan', naam: 'Zaaigraan', standaard: 'nood',
+      uitleg: 'Wanneer het dorp het zaaigraan voor volgend jaar opeet.',
+      keuzes: [
+        { id: 'nood', naam: 'Pas bij nood', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': true },
+          uitleg: 'Van de oogst tot het zaaien houden de boeren het zaaigraan achter. Het dorp eet het pas als er niets anders meer is, en de winter rekent het eten zonder.' },
+        { id: 'gewoon', naam: 'Als ander graan', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': false },
+          uitleg: 'Het dorp eet het zaaigraan als elk ander graan. Wie in de winter alles opeet, heeft in de lente niets te zaaien.' },
+      ],
+    },
     // De raad onder het doel (Marcel, 29 sep, werklijst vraag 58: "B onder het doel"; js/raad.js).
     {
       id: 'raad', naam: 'Raad', standaard: 'aan',

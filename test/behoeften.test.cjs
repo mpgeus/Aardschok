@@ -667,3 +667,43 @@ test('vlees vult een maag, ook in de winter: wie alleen vlees heeft, sterft niet
   assert.equal(S.bevolking, 20);
   assert.ok(S.voorraad.vlees < 200, 'en het vlees is gegeten');
 });
+
+test('het zaaigraan: van de oogst tot het zaaien achtergehouden, en pas bij nood gegeten (vraag 81)', () => {
+  const S = maakS();
+  S.wereld.akkers = [{ x: 0, y: 0, b: 5, h: 4 }, { x: 10, y: 0, b: 2, h: 5, plan: 'weide' }];
+  const zaai = 20 * T.ZAAIGRAAN_PER_TEGEL; // de akker van 20 tegels; het veld dat weide wordt, telt niet
+  // Van het zaaien tot de oogst houden de boeren niets achter; van de oogst tot het zaaien zoveel als volgend jaar vraagt.
+  assert.equal(T.zaaigraanApart(S, ZOMERDAG), 0);
+  assert.equal(T.zaaigraanApart(S, dagVan('oogstmaand', 30)), 0);
+  assert.equal(T.zaaigraanApart(S, dagVan('herfstmaand', 1)), zaai);
+  assert.equal(T.zaaigraanApart(S, WINTERDAG), zaai);
+  assert.equal(T.zaaigraanApart(S, T.DAGEN_PER_JAAR), 0, 'op 1 lentemaand gaat het de grond in');
+  // Het dorp eet eerst het andere graan, dan de kaas, en pas dan het zaaigraan; en zegt dat één keer.
+  S.bevolking = 20; // samen 1 graan per dag
+  T.zetVoorraad(S, 'graan', zaai + 0.5);
+  T.zetVoorraad(S, 'kaas', 0.3);
+  const gezegd = berichtenVan(() => {
+    const r = T.eetVandaag(S, WINTERDAG);
+    assert.ok(bijna(r.zaaigraan, 0.2), `van het zaaigraan: ${r.zaaigraan}`);
+    assert.ok(bijna(r.tekort, 0), 'niemand komt tekort');
+    assert.ok(bijna(S.voorraad.kaas, 0), 'de kaas ging voor');
+    T.eetVandaag(S, WINTERDAG + 1);
+  });
+  assert.deepEqual(gezegd.map((b) => b.soort), ['gevaar'], 'één keer');
+  assert.match(gezegd[0].tekst, /eet van het zaaigraan/);
+  // Na het zaaien mag het de volgende winter weer.
+  T.eetVandaag(S, T.DAGEN_PER_JAAR);
+  assert.equal(S.behoeften.zaaigraanGegeten, false);
+  // De winter rekent het eten zonder het zaaigraan: wat net genoeg is met, is te weinig zonder.
+  T.zetVoorraad(S, 'kaas', 0);
+  T.zetVoorraad(S, 'graan', 190); // 1 per dag: 90 dagen tot de winter, en 100 voor de 90 winterdagen
+  assert.equal(T.etenVoorDeWinter(S, dagVan('herfstmaand', 1)).haalt, false, 'zonder het zaaigraan haalt het de winter niet');
+  // Met de spelregel Zaaigraan op Als ander graan is het zoals vóór 1 okt.
+  T.VELDEN_INSTELLINGEN.zaaigraanApart = false;
+  try {
+    assert.equal(T.zaaigraanApart(S, WINTERDAG), 0);
+    assert.equal(T.etenVoorDeWinter(S, dagVan('herfstmaand', 1)).haalt, true);
+  } finally {
+    T.VELDEN_INSTELLINGEN.zaaigraanApart = true;
+  }
+});

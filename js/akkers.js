@@ -55,6 +55,11 @@
   // Alle getallen van de velden in één blok (ook in de werkbank van de spelregels, js/opties.js).
   // Een eerste gok, uit het voorstel dat Marcel op 25 sep koos.
   T.VELDEN_INSTELLINGEN = {
+    // Het zaaigraan (werklijst vraag 81; Marcel, 1 okt: "zaaigraan wordt bij nood opgegeten, anders sterven er mensen"):
+    // van de oogst tot het zaaien houden de boeren het zaaigraan voor volgend jaar achter (T.zaaigraanApart), en het dorp
+    // eet het pas als er niets anders meer is (T.eetVandaag, js/behoeften.js). Uit (de spelregel "Zaaigraan") is het spel
+    // van vóór 1 okt: het dorp eet het als elk ander graan.
+    zaaigraanApart: true,
     // Of het land uitput: een optie in de spelregels ("Vruchtbaarheid"). Uit: elk veld geeft altijd
     // zijn volle graan, en de vruchtbaarheid blijft staan waar hij stond.
     vruchtbaarheid: true,
@@ -723,6 +728,21 @@
   // Wat een tegel aan zaaigraan kost, op deze akker: een zuinige boer zaait met minder, een kwistige met meer
   // (js/boeren.js).
   const zaaigraanPerTegel = (w, akker) => T.ZAAIGRAAN_PER_TEGEL * factor(boerVan(w, akker), 'zaaien');
+
+  // Het zaaigraan dat de boeren achterhouden (werklijst vraag 81, VELDEN_INSTELLINGEN.zaaigraanApart): van de oogst (het
+  // vangnet op 1 herfstmaand) tot het zaaien (1 lentemaand) zoveel graan als de akkers van volgend jaar vragen
+  // (T.planVan). Het dorp eet het pas als er niets anders meer is (T.eetVandaag, js/behoeften.js), en de winter rekent
+  // het eten zonder (T.etenVoorDeWinter). Buiten die tijd, of met de spelregel uit, 0. Wat er nodig is, niet wat er ligt.
+  T.zaaigraanApart = function (D, dag) {
+    const w = D.wereld;
+    if (!T.VELDEN_INSTELLINGEN.zaaigraanApart || !w || !w.akkers) return 0;
+    const d = T.datumVanDag(dag);
+    const nu = dagInJaar(d.maand, d.dagVanMaand);
+    if (nu < stadiumBegin('gemaaid') && nu >= stadiumBegin('geploegd')) return 0; // van het zaaien tot de oogst
+    let nodig = 0;
+    for (const veld of w.akkers) if (T.planVan(veld) === 'akker') nodig += veld.b * veld.h * zaaigraanPerTegel(w, veld);
+    return nodig;
+  };
 
   // Het zaaigraan verdelen (T.zaaiAkkers en T.zaaiNa): elke akker zijn deel van wat er is, naar beneden afgerond; wat
   // er dan nog over is, hooguit één tegel per akker erbij, op volgorde, zolang het graan het toelaat. `maat` is
