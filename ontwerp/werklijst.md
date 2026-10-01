@@ -142,7 +142,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* het commerciële deel (vraag 83: a tot en met d, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2737,6 +2737,16 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 1 okt):** "82: correct". Dus klein, met drie standen op de huizen die er zijn, en zaaien over
     dagen en het weer na de wensen, samen met de statussen. De volgorde: het zaaigraan (vraag 81), de wensen klein (vraag
     80), het eind, de speeltest; dan het weer en de eisen van de heer; het vaste pad als het dorp groter moet.
+83. **Het commerciële deel: geld verdienen** (Marcel, 1 okt, eenentwintigste sessie: "Ik wil toevoegen dat we echt moeten
+    denken aan het commerciële deel van het project. Ik wil hier eigenlijk geld mee verdienen"; wacht op Marcel). Het
+    voorstel staat in `commercieel.md`, met wat er nagezocht is: middeleeuws bouwen verkoopt maar is druk, verlanglijstjes
+    beslissen de verkoop (8.000 is een goede indie-release, en de eerste week verkoop je er 15 tot 25% van), en Steam Next
+    Fest mag een spel maar één keer doen. Wat wij hebben en de rest niet, is de heer, de inner en het verstoppen: "Word
+    rijk. Lijk arm.", *Papers, Please* in een middeleeuws dorp. Vragen: **a**, dit tijdpad: de kleine kern dit jaar; in
+    januari 2027 de naam, geluid, Engels en een Steam-pagina; in juni 2027 de demo in Next Fest; daarna early access?
+    **b**, Engels als hoofdtaal op Steam, Nederlands erbij, met de spelteksten op één plek, na de kleine kern? **c**, de
+    haak vooraan: de eisen van de heer horen in de eerste demo, vóór het weer? **d**, wat er aan geld en tijd in kan:
+    geluid (kopen of laten maken), een tekenaar voor de capsule en het logo, en de 100 dollar voor Steam?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
