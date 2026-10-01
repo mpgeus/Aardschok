@@ -897,6 +897,10 @@
       verstopt: { graan: Math.round(v.graan), goud: Math.round(v.goud) },
       bevolking: s.dorp.bevolking,
       tevredenheid: heel(s.dorp.behoeften.tevredenheid * 100) / 100,
+      // De wensen per huis (js/wensen.js; werklijst vraag 85): per stand hoe tevreden, met hoeveel mensen en hoeveel
+      // huizen alles hebben, en hoeveel woningen er van elke soort staan (wat er doorgroeide).
+      standen: s.dorp.behoeften.standen ? Object.fromEntries(Object.entries(s.dorp.behoeften.standen).map(([k, x]) => [k, { mensen: x.mensen, huizen: x.huizen, alles: x.alles, tevreden: heel(x.tevredenheid * 100) / 100 }])) : null,
+      woningen: Object.fromEntries(['hut', 'huis', 'stenenHuis'].map((soort) => [soort, s.dorp.gebouwen.filter((g) => g.soort === soort && g.huis !== 'schout').length])),
       argwaan: heel(argwaan() * 100) / 100,
       houthakkers: houthakkers.map((g) => ({ klaar: !!g.klaar, handen: g.handen || 0 })),
     };
