@@ -33,8 +33,9 @@
 //   bouwer  doet wat het doel vraagt (js/treden.js), twee jaar lang: hij houdt steeds één erf vrij, neemt Vreemden
 //           welkom aan, bouwt de kapel en de smidse zodra het goud en het hout er zijn, een houthakker als het
 //           dorp zegt dat het hout de winter niet haalt, verkoopt de marskramer graan als het goud tekortschiet (en
-//           houdt wat het dorp tot de lente eet, het zaaigraan en het graan van de heer), en betaalt de heer alles.
-//           Hij verstopt niets en loopt de rovers niet achterna.
+//           houdt wat het dorp tot de lente eet, het zaaigraan en het graan van de heer), koopt in de lente zaaigraan
+//           als er akkers kaal liggen (sinds 1 okt, vraag 79), en betaalt de heer alles. Hij verstopt niets en loopt
+//           de rovers niet achterna.
 // Van elke speler schrijft hij op waarom er op een groeidag geen gezin kwam (T.waaromGeenGezin, js/gebouwen.js),
 // op welke dag het gehucht een dorp werd, en welke raad er elke dag onder het doel stond (js/raad.js).
 (function (T) {
@@ -658,20 +659,47 @@
 
   // Naar de marskramer (zijn gesprek), dan het handelsvenster, zoals de keuze in zijn gesprek het opent, en zoveel
   // pakken graan verkopen als hij wil hebben, tot `pakken`.
-  async function verkoopGraan(pakken, prijs) {
+  // Naar de marskramer, zijn gesprek, het handelsvenster open, `doe` erin, en weer dicht, zoals een speler.
+  async function handelMet(doe) {
     const s = S();
-    const m = s.dorp.marskramer;
     bezig.praten = true;
-    await klikOp({ wezen: m.wezen }, 3, () => s.modus === 'dialoog');
+    await klikOp({ wezen: s.dorp.marskramer.wezen }, 3, () => s.modus === 'dialoog');
     bezig.praten = false;
     T.sluitDialoog(s);
     bezig.handel = true;
     T.doeGevolg(s, s.dorp, { handel: true });
-    let verkocht = 0;
-    for (let i = 0; i < pakken; i++) if (klik('#handel button[data-actie="verkoop"][data-wat="graan"][data-n="1"]')) verkocht++;
+    const uit = doe();
     if (!klik('#handel [data-actie="sluit"]')) T.ui.sluitHandel(s.dorp);
     bezig.handel = false;
+    return uit;
+  }
+
+  // Zoveel keer op een knop van het handelsvenster: kopen of verkopen, één pak per klik. Geeft hoe vaak het lukte.
+  const klikHandel = (actie, wat, keer) => {
+    let gelukt = 0;
+    for (let i = 0; i < keer; i++) if (klik(`#handel button[data-actie="${actie}"][data-wat="${wat}"][data-n="1"]`)) gelukt++;
+    return gelukt;
+  };
+
+  async function verkoopGraan(pakken, prijs) {
+    const verkocht = await handelMet(() => klikHandel('verkoop', 'graan', pakken));
     daad(`verkoopt ${verkocht * T.HANDEL_INSTELLINGEN.koopt.graan.per} graan aan de marskramer, voor ${verkocht * prijs} goud`);
+  }
+
+  // Zaaigraan, in de lente (js/handel.js; werklijst vraag 79, stap 1): de boeren zaaien het na (T.zaaiNa, js/akkers.js).
+  async function koopGraan(pakken, prijs) {
+    const gekocht = await handelMet(() => klikHandel('koop', 'graan', pakken));
+    daad(`koopt ${gekocht * T.HANDEL_INSTELLINGEN.verkoopt.graan.per} zaaigraan van de marskramer, voor ${gekocht * prijs} goud`);
+  }
+
+  // Hoeveel akkertegels er kaal liggen en na te zaaien zijn (T.zaaiNa, js/akkers.js): niet gezaaid, en niet vertrapt.
+  function kaleTegels() {
+    let n = 0;
+    for (const a of S().wereld.akkers || []) {
+      if (T.bestemmingVan(a) !== 'akker' || !a.ongezaaid) continue;
+      for (const k of a.ongezaaid) if (!(a.vertrapt && a.vertrapt.has(k))) n++;
+    }
+    return n;
   }
 
   // ── De spelers ──────────────────────────────────────────────────────────────────────────────────
@@ -740,6 +768,21 @@
       const heer = betaald.has(jaar()) ? 0 : T.eisVanDeHeer(s.dorp).per.graan || 0;
       return (s.dorp.voorraad.graan || 0) - eet * ((jaar() + 1) * JAAR - dag) - akkerTegels() * T.ZAAIGRAAN_PER_TEGEL - heer - 20;
     }
+    // Liggen er in de lente akkers kaal, omdat er op 1 lentemaand geen zaaigraan was, dan koopt hij zaaigraan van de
+    // marskramer, zoveel als zijn goud toelaat: zonder zaaien geen oogst, en dat gaat voor wat hij wil bouwen.
+    async function koopZaaigraan() {
+      const g = T.HANDEL_INSTELLINGEN.verkoopt.graan;
+      const m = D().marskramer;
+      const kaal = kaleTegels();
+      if (!g || !kaal || !((m.heeft && m.heeft.graan) || 0)) return;
+      const prijs = g.prijs[m.bezoek];
+      const pakken = Math.min(m.heeft.graan, Math.ceil((kaal * T.ZAAIGRAAN_PER_TEGEL) / g.per), Math.floor((D().voorraad.goud || 0) / prijs));
+      if (pakken <= 0) {
+        daad(`zou zaaigraan kopen voor ${kaal} kale akkertegels, maar heeft het goud niet`);
+        return;
+      }
+      await koopGraan(pakken, prijs);
+    }
     async function verkoop() {
       const s = S();
       const nodig = goudNodig() - Math.floor(s.dorp.voorraad.goud || 0);
@@ -777,7 +820,10 @@
         // Bouwen wat hij wil, zodra het goud en het hout er zijn.
         while (wil.length && T.kanBetalen(s.dorp, kosten(wil[0]))) bouw(wil.shift());
         const m = s.dorp.marskramer;
-        if (m && !m.weg && m.staat && nuEenKeer(`handel${jaar()}-${m.bezoek}`)) await verkoop();
+        if (m && !m.weg && m.staat && nuEenKeer(`handel${jaar()}-${m.bezoek}`)) {
+          await koopZaaigraan();
+          await verkoop();
+        }
         if (heerOpHetPlein() && nuEenKeer(`betaal${jaar()}`)) {
           await betaal(1);
           betaald.add(jaar());
