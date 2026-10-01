@@ -9,6 +9,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een erf ver van de herberg geeft een huis dat nooit alles heeft** (1 okt, drieëntwintigste sessie; vraag 87). Een huis
+  (de dorpelingen) wil de herberg binnen 30 tegels, en een herberg bouw je in een gehucht niet (hij staat in het bouwmenu
+  van een dorp). Van de 704 plekken waar een erf past, liggen er 113 zo dicht bij de herberg. Een hut op een erf verder weg
+  groeit door tot een huis dat de herberg altijd mist, en dan is niet iedereen super gelukkig. Wie een erf aanwijst, ziet
+  dat niet. Hoort bij 2c: bij het aanwijzen van een erf zeggen in welke kringen het valt (de put, de kapel, de herberg),
+  zoals de muis het nu zegt met een put in de hand.
 - **De kring is groter dan het scherm** (1 okt, tweeëntwintigste sessie; vraag 85, 2a). Het beeld zoomt niet uit (de zoom
   volgt het venster en is minstens 1), en al de kring van een put (12 tegels) is breder dan het scherm, die van een kapel
   (30) veel breder. Wie een put of een kapel neerzet, ziet dus alleen de rand van de huizen in beeld oplichten, en de

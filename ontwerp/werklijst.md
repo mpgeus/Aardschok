@@ -39,7 +39,9 @@ ziet ze nog nauwelijks, en de bouwer van de speeltest kent ze niet. Dus eerst **
 doel en het rapport van de raadsman zeggen wat de huizen het meest missen en wat helpt ("Vijf hutten willen een put binnen
 12 tegels [B]", "Twee hutten kunnen een huis worden, maar er is geen 8 hout"); dan **b**, een bouwer die de wensen volgt
 (een put waar hutten er een missen, wat de dorpelingen willen, en een houthakker vóór een nieuw erf), en de speeltest
-erna. Begin met een plan voor Marcel. Daarna, zoals besloten: **de pagina met ontwerpen voor de ui** (vraag 84, a: de
+erna. **Het plan is vraag 87** (drieëntwintigste sessie; wacht op Marcel), met wat er bij het uitzoeken opviel: één
+kapel haalt nooit alle zes huizen die er een willen, en een stenen huis wordt in een gehucht nooit super gelukkig. Daarna,
+zoals besloten: **de pagina met ontwerpen voor de ui** (vraag 84, a: de
 vensters worden papieren in de beeldstijl, en Marcel kiest uit een paar schetsen van de balk, een venster en een papier),
 en dan de rest van stap 2 (vraag 80): 2c zien wat een huis wil (het teken bij de deur, het venster van een huis), 2d de
 treden uit de standen, en 2e het eind en het jaar in het kort. **Stap 2a en 2b zijn af** (tweeëntwintigste sessie; vraag
@@ -2897,6 +2899,55 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 1 okt):** "a ja b ja c ja". Dus eerst de woorden van 2c: de raad onder het doel en het rapport
     van de raadsman zeggen wat de huizen het meest missen en wat helpt, vóór de pagina met ontwerpen voor de ui; dan een
     bouwer in de speeltest die de wensen volgt, met een houthakker vóór een nieuw erf; en wegtrekken bij honger blijft zo.
+87. **Vraag 86, a en b: de raad en het rapport over de wensen, en een bouwer die ze volgt: het plan** (Claude, 1 okt,
+    drieëntwintigste sessie; wacht op Marcel). Vraag 86 is besloten; dit is hoe het in de code komt, met wat er bij het
+    uitzoeken opviel.
+    **Wat er al is:** elk huis onthoudt wat het wil en heeft (`g.wensen`), en het dorp wat er gemist wordt en in hoeveel
+    huizen (`D.behoeften.gemist`). Dat zegt alleen de balk, bij de muis op de tevredenheid; een huis dat op bouwstof wacht,
+    zegt het één keer in een bericht. De raad en het rapport weten van geen van beide. Aan het begin van het gehucht missen
+    zes huizen een kapel (de vijf boerderijen en het huis), en het huis ook een put (het staat 13 tegels van de put op het
+    plein, de kring is 12) en vlees of vis; de hut heeft alles.
+    **Wat opviel:**
+    - **Eén kapel haalt nooit alle zes.** De boerderijen liggen aan de rand: met een kring van 30 haalt de beste plek er
+      vier. Met 38 zijn er 20 plekken die alle zes halen, met 40 zijn het er 50. Nu moet je dus twee kapellen bouwen (16
+      goud) om iedereen super gelukkig te maken.
+    - **Een stenen huis wordt in een gehucht nooit super gelukkig.** De ambachtslieden willen brood, laken en een markt, en
+      een bakkerij komt pas in een dorp, een weverij en een markt pas met marktrecht. Een huis dat versteent, zakt dus van
+      100% naar zo'n 92%. In Anno 1602 gaat het ook zo: wie een stand bereikt, maakt de gebouwen vrij die die stand wil.
+      Dat is 2d, de treden uit de standen.
+    - **De herberg bouw je in een gehucht niet**, en een huis wil hem binnen 30 tegels. Van de 704 plekken waar een erf
+      past, liggen er 113 zo dicht bij (`opmerkingen.md`; hoort bij 2c).
+    **Het plan:**
+    - **A, één vraag voor alle drie.** In `js/wensen.js` zegt `T.watDeHuizenMissen(D)` wat de huizen missen en wat helpt,
+      van wat het zwaarst weegt naar het lichtst: eerst huizen die een maand alles hadden en op bouwstof wachten, dan wat de
+      meeste mensen missen. Per stuk: welke huizen ("vijf boerderijen en een huis"), wat helpt (een gebouw uit het
+      bouwmenu, of wat er al staat), en of je er nu iets aan kunt doen. De raad, het rapport en de bouwer vragen het alle
+      drie, zodat ze niet uit elkaar lopen.
+    - **B, de raad** (`js/raad.js`): twee raden, na wat dringend is (de inner, het goud voor de heer, de rovers, de winter,
+      de kelders), de eerste dagen en "het dorp is vol", en vóór wat je mist voor de kapel en de smidse en waarom er geen
+      gezin komt. Zo zegt hij meestal iets over de wensen, want daarmee win je. "Twee hutten kunnen een huis worden, maar
+      er is geen 8 hout: een houthakker [B] hakt hout." "Vijf boerderijen en een huis willen een kapel binnen 30 tegels
+      [B]." "Een huis wil vlees of vis: een visser [B] vangt 2 vis per dag." Wat je nu niet kunt bouwen (de herberg, brood,
+      laken, een markt), slaat hij over, zodat hij niet blijft hangen op iets waar je niets aan kunt doen.
+    - **C, het rapport** (`js/ochtendrapport.js`): bij wat er gebeurde ook wie doorgroeide ("De hut van Geert en Grietje
+      is een huis geworden: ze horen nu bij de dorpelingen."), en de wensen als status (de richtlijn van 1 okt, en vraag
+      76): wat er gemist wordt, zegt hij als het begint, als het aantal huizen verandert en als het ophoudt ("Wie een kapel
+      wilde, heeft er nu een."), en anders om de zeven dagen. De drie die het meest gemist worden, met wat helpt, ook wat
+      nog niet kan ("De ambachtslieden willen brood; een bakkerij komt pas in een dorp."). Heeft elk huis alles: "Alle
+      huizen hebben wat ze willen."
+    - **D, de bouwer** (`gereedschap/speeltest/speler.js`) volgt dezelfde lijst: een put of een kapel op de plek die de
+      meeste huizen zonder bereikt (zoals een speler die met de put in de hand kijkt wat de muis zegt), een visser als de
+      dorpelingen vlees of vis missen, en een houthakker of een steengroeve als er een huis op bouwstof wacht; hooguit één
+      bouwwerk voor de wensen per maand, zodat er hout overblijft voor de hutten. En een houthakker vóór een nieuw erf, als
+      er nog geen staat. De speeltest telt erbij hoeveel huizen alles hebben.
+    **In deze volgorde:** A met toetsen, B, C, D, en de speeltest (alle vijf spelers, zaad 1 tot 3, vóór → na in
+    `speelbaar.md`). Daarna de pagina met ontwerpen voor de ui (vraag 84, a).
+    **Klaar als** de raad de wensen zegt met wat helpt en de toets; het rapport ze als status zegt, met wie er
+    doorgroeide; de bouwer ze volgt; `npm test` groen is; en de speeltest zegt hoe ver de bouwer komt naar super gelukkig.
+    Vragen: **a**, de raad en het rapport zo, met de wensen vóór de kapel en de smidse van het doel? **b**, de bouwer zo?
+    **c**, één kapel haalt nooit alle zes: de kring van een kapel naar 40 ("zo ver als je de klok hoort"; de herberg en de
+    markt blijven 30), of twee kapellen? **d**, een stenen huis in een gehucht: zo laten tot 2d, en het rapport zegt wat
+    nog niet kan (advies), of groeit een huis pas door als zijn nieuwe stand kan krijgen wat hij wil?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
