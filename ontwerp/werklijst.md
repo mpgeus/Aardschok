@@ -2352,6 +2352,22 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       ongelezen rapport ligt, en opent het. De speler van de speeltest sluit een open brief al vanzelf.
     Klaar als: toetsen voor het dagboek, de inhoud, het rekenen en het brengen; met `--regel rapport=uit` speelt de
     speeltest letter voor letter hetzelfde jaar; `npm test` groen.
+    **Bij het nakijken** (Claude, 1 okt, twintigste sessie; wacht op Marcel): drie dingen die het plan raken.
+    - **a. Hij komt te laat.** De boeren wonen 16 tot 27 stappen van de deur van de schout (gemeten in het gehucht): bij
+      1,5 tegel per seconde is dat 0,9 tot 1,5 uur speltijd, en de ochtend (opstaan tot het werk) duurt precies een uur.
+      Wie wakker wordt en op pad gaat, ziet hem nooit. Voorstel: de raadsman staat een uur eerder op dan de rest, en
+      staat al aan je deur als je wakker wordt.
+    - **b. De balk verraadt hem.** De balk zegt de voorraad precies (`T.ui.toonVoorraad`): zegt een raadsman die niet
+      kan rekenen "zo'n 150 graan" naast een balk met 118, dan zie je het meteen, en loont zelf kijken niet. Voorstel:
+      het rapport zegt wat de balk niet zegt: hoe het gaat ("het graan: 12 minder dan gisteren") en hoe lang het duurt
+      ("het hout haalt 60 van de 90 winterdagen"), en zijn rekenen werkt op die vooruitblik, niet op wat er ligt.
+    - **c. Niemand ziet het.** Een nieuw spel begint zonder raadsman (je kiest er een met `R`), en zonder raadsman
+      geen rapport: een tester komt het dus nooit tegen. Voorstel: de raad onder het doel zegt het de eerste dagen
+      ("Een raadsman brengt je elke ochtend een rapport: kies er een [R]"), alleen met de spelregel "Het rapport" aan.
+    Verder zonder vraag, want het staat in het plan dat Marcel koos ("wat de boeren deden"): het rapport zegt ook wat de
+    boeren uit zichzelf deden (hun velden kiezen, slachten) en wat de raadsman zelf besliste, uit hetzelfde dagboek. En
+    de speler van de speeltest moet het rapport van een brief van de heer onderscheiden: hij schrijft nu bij elke open
+    brief de eis van de heer op.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
