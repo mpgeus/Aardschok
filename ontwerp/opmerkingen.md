@@ -9,6 +9,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een jager schiet onbeperkt** (1 okt, eenentwintigste sessie; de speeltest met de jager, `speelbaar.md`). Elke jager
+  schiet elke dag 1 vlees, genoeg voor twintig mensen, en het wild raakt nooit op: twaalf jagers voedden een dorp van
+  104 zonder één dode. Wild zou op kunnen raken (het bos is van de heer: stropen is ook een keuze), zodat eten weer een
+  afweging wordt. Hoort bij het bijstellen, na de wensen.
 - **Nazaaien gaat vóór het eten** (1 okt, eenentwintigste sessie; vraag 79 en 81). Wat er in de lente aan graan
   binnenkomt (van de marskramer, uit een kelder), zaaien de boeren meteen na, zolang er kale akkers zijn, nog vóór het dorp
   eet. In de winter is het andersom: het zaaigraan eet het dorp bij nood, "anders sterven er mensen" (Marcel). Is een

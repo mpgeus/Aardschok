@@ -3052,7 +3052,9 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   achter (`T.zaaigraanApart`, wat de akkers van volgend jaar vragen), en het dorp eet het pas na het andere graan, de
   kaas en het gezouten vlees; dan zegt het dat één keer per winter, en staat het in het rapport. De winter rekent het
   eten zonder het zaaigraan, en bij de muis op het graan in de balk staat hoeveel ervan zaaigraan is. De spelregel
-  "Zaaigraan". 1 nieuwe toets, `npm test` 722/722.
+  "Zaaigraan". 1 nieuwe toets, `npm test` 722/722. In de speeltest stierven minder mensen, maar at een dorp van 52 het
+  zaaigraan toch op; met een bouwer die een jager per maand bouwt (vraag 81, b) stierf niemand meer van de honger, en
+  groeide zaad 3 tot 104 mensen zonder één dode (`speelbaar.md`).
 - 1 okt 2026 — **Een jaar dat te winnen is** (eenentwintigste sessie; stap 1 van vraag 79, met vraag 59, B en C, die
   geparkeerd was; Marcel: "D dat is prima"). **Een gezin wacht op de winter:** haalt het hout of het eten de winter niet,
   dan komt er vanaf 1 herfstmaand geen gezin, tot het genoeg is (`T.watDeWinterNietHaalt`, `T.waaromGeenGezin`:

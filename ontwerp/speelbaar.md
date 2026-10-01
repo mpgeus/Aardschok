@@ -200,6 +200,26 @@ vlees, en de winter rekent het eten zonder het zaaigraan. De bouwer, zaad 1, 2 e
 honger is groot"), en lag er op 1 lentemaand 1324 weer niets te zaaien: een dorp van 52 heeft meer eten nodig dan de
 akkers geven. De bouwer zaaide bij zaad 1 en 3 wat na met zaaigraan van de marskramer (20 en 9 akkertegels).
 
+**En met een jager** (`a19785a`, de regels van `36378a4`; vraag 81, b): de bouwer bouwt nu hooguit één jager per maand
+als het eten de winter niet haalt, zoals een speler die de raad volgt.
+
+| | zaad 1 | zaad 2 | zaad 3 |
+|---|---|---|---|
+| Mensen, begin en eind | 26 → 91 | 26 → 59 | 26 → 104 |
+| Doden (kou, honger) | 29 (29, 0) | 28 (28, 0) | 0 |
+| Jagers; de houthakker | 8; zomermaand '24 | 8; zomermaand '24 | 12; 1 herfstmaand '23 |
+| De heer kreeg (1323; 1324) | 51%, soldaten; 29%, schandpaal | 59%, soldaten; 30%, schandpaal | 55%, soldaten; 25%, schandpaal |
+
+1. **Niemand sterft meer van de honger**, en alle drie halen de twee jaar. Met zaad 3 groeit het tot 104 mensen zonder
+   één dode: een dorp van honderd is te voeden, met jagers.
+2. **De kou kwam terug waar de bouwer eerst jagers bouwde:** een jager kost 8 hout, en bij zaad 1 en 2 kwam de
+   houthakker pas in het tweede jaar. Dat is de volgorde van de bouwer, niet het spel; een speler die de raad volgt,
+   doet het hout eerst (de raad zegt het hout ook vóór het eten).
+3. **Een jager schiet onbeperkt:** twaalf jagers voeden honderd mensen, en het wild raakt nooit op. Dat maakt eten
+   makkelijk zodra je het doorhebt (`opmerkingen.md`).
+4. **De heer kreeg in het tweede jaar maar een kwart tot een derde,** dus de schandpaal; wie groeit, moet hem ook
+   betalen, en dat lukte de bouwer niet.
+
 ## De speeltest van 1 okt: het rapport van de raadsman (werklijst, vraag 75, 3a)
 
 Gespeeld in de twintigste sessie, op `ccr-8e9e20ad-gg1umw` (het rapport, toen nog niet gecommit; daarna `6a4573c`),
