@@ -29,8 +29,8 @@ Elk huis heeft een stand met zijn wensen (sinds 1 okt, vraag 85): bij de muis op
 tevreden elke stand is en wat er gemist wordt, en `Spel.debug.wensen()` zegt het per huis. De pagina "Stand van het
 gehucht" (25 sep) loopt achter op de dag. `npm test`: 743/743.
 
-**Waar het werk staat:** het werk van de tweeëntwintigste sessie (2a, 2b, de stenen huizen en de speeltest) staat op de
-branch `ccr-c70a2140-wt5zmz` (gepusht, Marcel: "push it"), nog niet in `main`: naar `main` gaat het als Marcel erom vraagt. Hoe een
+**Waar het werk staat:** alles staat in `main`, ook het werk van de tweeëntwintigste sessie (2a, 2b, de stenen huizen,
+de speeltest en vraag 85 en 86; Marcel, 1 okt: "push it", en daarna "naar main"). Hoe een
 eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** **bouw vraag 86, a en b** (na de speeltest van 2a en 2b, `speelbaar.md`; Marcel, 1
