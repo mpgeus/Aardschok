@@ -296,6 +296,18 @@
           uitleg: 'De hut en het huis staan in het bouwmenu, en een nieuw gezin komt alleen als er een huis met plaats is. Erven zijn er niet.' },
       ],
     },
+    // Een gezin wacht op de winter (werklijst vraag 59, B; Marcel, 1 okt, vraag 78: "D dat is prima"; js/gebouwen.js,
+    // T.waaromGeenGezin). Altijd is het spel van vóór 1 okt.
+    {
+      id: 'groei', naam: 'Groei', standaard: 'wacht',
+      uitleg: 'Of er een gezin komt als het dorp de winter niet haalt.',
+      keuzes: [
+        { id: 'wacht', naam: 'Een gezin wacht op de winter', zet: { 'GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter': true },
+          uitleg: 'Haalt het hout of het eten de winter niet, dan komt er vanaf 1 herfstmaand geen gezin, tot het genoeg is of de winter voorbij. Het dorp en de raad zeggen het.' },
+        { id: 'altijd', naam: 'Altijd', zet: { 'GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter': false },
+          uitleg: 'Er komt een gezin zolang er graan, plaats en tevredenheid is, ook als de winter het niet haalt. Wie dan groeit, verliest het in de winter.' },
+      ],
+    },
     // De raad onder het doel (Marcel, 29 sep, werklijst vraag 58: "B onder het doel"; js/raad.js).
     {
       id: 'raad', naam: 'Raad', standaard: 'aan',

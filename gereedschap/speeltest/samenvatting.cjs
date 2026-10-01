@@ -167,7 +167,7 @@ function deVoorvallen(goed) {
 // dagen welke raad onder het doel stond (js/raad.js).
 function vanGehuchtTotDorp(goed) {
   const uit = ['## Van gehucht tot dorp', '', 'Een groeidag is elke 20ste dag (met Vreemden welkom elke 10de). Een dag zonder gezin kan meer dan één reden hebben.', ''];
-  const kop = ['speler', 'zaad', 'een dorp op', 'mensen', 'groeidagen', 'een gezin', 'geen plaats', 'te weinig graan', 'niet tevreden', 'de heer kreeg', 'doden (kou, honger, gesneuveld)', 'gebouwd', 'de raad (dagen)'];
+  const kop = ['speler', 'zaad', 'een dorp op', 'mensen', 'groeidagen', 'een gezin', 'geen plaats', 'te weinig graan', 'niet tevreden', 'de winter niet gehaald', 'de heer kreeg', 'doden (kou, honger, gesneuveld)', 'gebouwd', 'de raad (dagen)'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   const kort = (datum) => datum.replace(/ 13(\d\d)$/, " '$1");
   for (const u of goed) {
@@ -183,7 +183,7 @@ function vanGehuchtTotDorp(goed) {
       `${u.begin.bevolking} → ${u.eind.bevolking}`,
       String(groei.length),
       String(groei.filter((g) => !g.waarom.length).length),
-      String(telt('plaats')), String(telt('graan')), String(telt('tevreden')),
+      String(telt('plaats')), String(telt('graan')), String(telt('tevreden')), String(telt('winter')),
       (u.eind.jaren || []).map((j) => `${j.jaar}: ${pct(j.deel)}, ${j.straf}`).join('; '),
       `${w.doden || 0} (${(w.kou || 0) + (w.beide || 0)}, ${(w.honger || 0) + (w.beide || 0)}, ${(u.eind.rovers && u.eind.rovers.gesneuveld) || 0})`,
       gebouwd.join(', ') || 'niets',

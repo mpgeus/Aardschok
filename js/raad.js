@@ -21,9 +21,6 @@
     aan: true,
     // Zoveel dagen vóór de inner komt, zegt de raad het.
     innerVooraf: 3,
-    // Zoveel dagen vóór de winter zegt de raad het als het hout of het eten hem niet haalt: vanaf 1 herfstmaand, net
-    // als het dorp zelf (T.BEHOEFTEN_INSTELLINGEN.winterVooraf).
-    winterVooraf: 90,
     // Zoveel dagen na een aanval van de rovers zegt de raad wat een wachthuis doet, als er geen is.
     roversNa: 10,
     // Zoveel dagen nadat een voorval voorbijging dat een raadsman had beslist, als je er een had (js/voorvallen.js: je
@@ -60,9 +57,12 @@
     return (d.maand === sm.maand && d.dagVanMaand > sm.dag) || d.maand > sm.maand || d.maand < maandIdx('lentemaand');
   }
 
-  // Het hout of het eten (`voorDeWinter`: T.houtVoorDeWinter of T.etenVoorDeWinter) haalt de winter niet, en die
-  // is binnen winterVooraf dagen, of al begonnen. Eerst de dagen tot de winter: dat is goedkoop, het eten niet.
-  const haaltHetNiet = (D, voorDeWinter) => T.dagenTotDeWinter(D.kalender.dag) <= IN().winterVooraf && !voorDeWinter(D, D.kalender.dag).haalt;
+  // Het hout of het eten (`voorDeWinter`: T.houtVoorDeWinter of T.etenVoorDeWinter) haalt de winter niet, en die is
+  // in zicht (T.winterInZicht, js/behoeften.js: vanaf 1 herfstmaand, net als het dorp zelf), of al begonnen. Eerst de
+  // dagen tot de winter: dat is goedkoop, het eten niet.
+  const haaltHetNiet = (D, voorDeWinter) => T.winterInZicht(D.kalender.dag) && !voorDeWinter(D, D.kalender.dag).haalt;
+  // Haalt het de winter niet, dan komt er geen gezin (js/gebouwen.js, gezinWachtOpDeWinter): dat zegt de raad erbij.
+  const geenGezin = () => (T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter ? ' Tot het genoeg is, komt er geen gezin.' : '');
   // Hoe ver het komt, zoals het dorp het zegt (js/behoeften.js): "26 van de 90 dagen". Zo weet je of één houthakker
   // genoeg is; de bouwer die alleen hoorde dat het niet genoeg was, bouwde er een na de ander (29 sep).
   const haalt = (v) => `${v.dagen} van de ${v.winter} dagen`;
@@ -94,13 +94,13 @@
     {
       id: 'hout',
       als: (D) => haaltHetNiet(D, T.houtVoorDeWinter),
-      tekst: (D) => `Het hout haalt ${haalt(T.houtVoorDeWinter(D, D.kalender.dag))} van de winter: ${heeft(D, 'houthakker') ? 'nog een houthakker [B] hakt erbij' : 'bouw een houthakker [B]'}.`,
+      tekst: (D) => `Het hout haalt ${haalt(T.houtVoorDeWinter(D, D.kalender.dag))} van de winter: ${heeft(D, 'houthakker') ? 'nog een houthakker [B] hakt erbij' : 'bouw een houthakker [B]'}.${geenGezin()}`,
     },
     {
       id: 'eten',
       als: (D) => haaltHetNiet(D, T.etenVoorDeWinter),
       // Wat helpt, zegt het dorp ook (js/behoeften.js): een jager, als vlees een maag vult.
-      tekst: (D) => `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? `: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag` : ''}.`,
+      tekst: (D) => `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? `: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag` : ''}.${geenGezin()}`,
     },
     {
       id: 'kelders',

@@ -218,6 +218,54 @@ test('waarom er geen gezin komt: geen plaats, te weinig graan, of niet tevreden 
   assert.equal(S.dorp.erven[0].hut, null);
 });
 
+// De dag (vanaf 1 lentemaand, dag 0) van een datum in het eerste jaar, zoals in test/raad.test.cjs.
+function dagVan(maand, dagVanMaand) {
+  for (let d = 0; d < T.DAGEN_PER_JAAR; d++) {
+    const x = T.datumVanDag(d);
+    if (T.MAANDEN[x.maand].naam === maand && x.dagVanMaand === dagVanMaand) return d;
+  }
+  throw new Error(`geen ${dagVanMaand} ${maand}`);
+}
+
+test('een gezin wacht op de winter: haalt het hout of het eten hem niet, dan komt er niemand (vraag 59, B)', () => {
+  const herfst = dagVan('herfstmaand', 1);
+  const n = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
+  const groeidag = Math.ceil(herfst / n) * n; // de eerste groeidag vanaf 1 herfstmaand
+  // Een gehucht met eten genoeg en zoveel hout; geeft hoeveel mensen er op de groeidag bij kwamen.
+  function groei(hout) {
+    const S = gehucht();
+    S.dorp.behoeften = Object.assign(T.nieuweBehoeften(), { tevredenheid: 0.7 });
+    T.zetVoorraad(S.dorp, 'graan', 5000);
+    T.zetVoorraad(S.dorp, 'hout', hout);
+    S.kalender.dag = groeidag;
+    const voor = S.dorp.bevolking;
+    T.tikGebouwenDag(S.dorp, groeidag);
+    return S.dorp.bevolking - voor;
+  }
+  // In de lente is de winter nog ver, en de dag vóór 1 herfstmaand ook: dan telt het niet.
+  const S = gehucht();
+  T.zetVoorraad(S.dorp, 'graan', 5000);
+  T.zetVoorraad(S.dorp, 'hout', 0);
+  assert.deepEqual(T.watDeWinterNietHaalt(S.dorp, 10), []);
+  assert.deepEqual(T.watDeWinterNietHaalt(S.dorp, herfst - 1), []);
+  // Vanaf 1 herfstmaand wel: zonder hout haalt het de winter niet, en dat zegt de groei.
+  assert.deepEqual(T.watDeWinterNietHaalt(S.dorp, herfst), ['hout']);
+  assert.ok(T.waaromGeenGezin(S.dorp, herfst).includes('winter'));
+  T.zetVoorraad(S.dorp, 'graan', 0);
+  assert.deepEqual(T.watDeWinterNietHaalt(S.dorp, herfst), ['hout', 'eten']);
+  // Op de groeidag: met hout genoeg komt er een gezin, zonder hout niet.
+  assert.equal(groei(5000), T.GEBOUWEN_INSTELLINGEN.gezinGrootte, 'met hout genoeg komt het gezin');
+  assert.equal(groei(0), 0, 'zonder hout wacht het');
+  // Met de spelregel Groei op Altijd komt het toch, zoals vóór 1 okt.
+  T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter = false;
+  try {
+    assert.ok(!T.waaromGeenGezin(S.dorp, herfst).includes('winter'));
+    assert.equal(groei(0), T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
+  } finally {
+    T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter = true;
+  }
+});
+
 test('het volgende gezin: op de eerstvolgende groeidag na vandaag, met Vreemden welkom vaker', () => {
   const S = gehucht();
   const n = T.GEBOUWEN_INSTELLINGEN.gezinDagen;

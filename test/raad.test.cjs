@@ -109,7 +109,15 @@ test('het hout: vanaf drie maanden voor de winter, als het hem niet haalt, en da
   opDag(S, dagVan('herfstmaand', 1) + 0.5);
   assert.equal(id(S), 'hout');
   const v = T.houtVoorDeWinter(S.dorp, S.kalender.dag);
-  assert.equal(raad(S).tekst, `Het hout haalt ${v.dagen} van de ${v.winter} dagen van de winter: bouw een houthakker [B].`);
+  // Zolang komt er geen gezin (js/gebouwen.js, gezinWachtOpDeWinter; werklijst vraag 59, B), en dat zegt hij erbij.
+  assert.equal(raad(S).tekst, `Het hout haalt ${v.dagen} van de ${v.winter} dagen van de winter: bouw een houthakker [B]. Tot het genoeg is, komt er geen gezin.`);
+  // Met de spelregel Groei op Altijd komt het gezin toch, en zegt hij dat niet.
+  T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter = false;
+  try {
+    assert.equal(raad(S).tekst, `Het hout haalt ${v.dagen} van de ${v.winter} dagen van de winter: bouw een houthakker [B].`);
+  } finally {
+    T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter = true;
+  }
   // Met genoeg hout zegt hij het niet.
   T.zetVoorraad(S.dorp, 'hout', 5000);
   assert.notEqual(id(S), 'hout');
@@ -122,7 +130,7 @@ test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: een j
   opDag(S, dagVan('herfstmaand', 1) + 0.5);
   assert.equal(id(S), 'eten');
   const v = T.etenVoorDeWinter(S.dorp, S.kalender.dag);
-  assert.equal(raad(S).tekst, `Het eten haalt ${v.dagen} van de ${v.winter} dagen van de winter: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag.`);
+  assert.equal(raad(S).tekst, `Het eten haalt ${v.dagen} van de ${v.winter} dagen van de winter: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag. Tot het genoeg is, komt er geen gezin.`);
   T.zetVoorraad(S.dorp, 'graan', 5000);
   assert.notEqual(id(S), 'eten');
 });

@@ -73,6 +73,12 @@
     etenPerMensPerDag: 0.05, // graan dat één mens per dag eet (T.wijzigVoorraad haalt dit uit S.voorraad.graan)
     graanBufferVoorGroei: 20, // zonder ten minste dit in de voorraad komt er geen nieuw gezin bij:
     // zo eet een groeiend dorp zichzelf niet meteen leeg.
+    // Een gezin wacht op de winter (werklijst vraag 59, B; Marcel, 1 okt, vraag 78: "D dat is prima"): haalt het hout of
+    // het eten de winter niet, dan komt er geen gezin, vanaf de dag dat het dorp naar de winter kijkt
+    // (T.BEHOEFTEN_INSTELLINGEN.winterVoorafDagen) tot het genoeg is of de winter voorbij. Zo groeit een dorp niet een
+    // winter in die het niet haalt: de bouwer van de speeltest groeide in de herfst van 51 naar 74 mensen, en verloor er
+    // in de winter 42 tot 53. Uit (de spelregel "Groei") is het spel van vóór 1 okt.
+    gezinWachtOpDeWinter: true,
     // Gereedschap (van de smidse, spel.md "Handel"): wie iets maakt en er gereedschap voor heeft,
     // werkt zoveel harder (0,25 is een kwart). Eén stuk per hand aan het werk is genoeg; met de
     // helft werkt de helft harder. Een stuk in gebruik gaat zoveel dagen mee en is dan versleten.
@@ -806,13 +812,15 @@
   };
 
   // Waarom er nu geen gezin kan komen, als lijst: 'graan' (minder dan de buffer in de voorraad), 'tevreden' (onder
-  // de drempel, js/behoeften.js) en 'plaats' (geen huis met plaats en geen vrij erf, js/erven.js). Een lege lijst
-  // als het kan. De groei vraagt het (T.tikGebouwenDag, stap 4), en de raad linksboven ook (js/raad.js), zodat die
-  // zegt wat de groei doet en niet wat hij zelf denkt.
-  T.waaromGeenGezin = function (D) {
+  // de drempel, js/behoeften.js), 'winter' (het hout of het eten haalt de winter niet, nu die in zicht is:
+  // gezinWachtOpDeWinter, T.watDeWinterNietHaalt in js/behoeften.js) en 'plaats' (geen huis met plaats en geen vrij erf,
+  // js/erven.js). Een lege lijst als het kan. De groei vraagt het (T.tikGebouwenDag, stap 4, met de dag die hij tikt),
+  // en de raad linksboven ook (js/raad.js), zodat die zegt wat de groei doet en niet wat hij zelf denkt.
+  T.waaromGeenGezin = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0) {
     const waarom = [];
     if ((D.voorraad.graan || 0) < T.GEBOUWEN_INSTELLINGEN.graanBufferVoorGroei) waarom.push('graan');
     if (D.behoeften && D.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.groeiDrempel) waarom.push('tevreden');
+    if (T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter && T.watDeWinterNietHaalt(D, dag).length) waarom.push('winter');
     if ((D.bevolking || 0) >= T.telWoonruimte(D) && !T.kanEenErfNemen(D)) waarom.push('plaats');
     return waarom;
   };
@@ -883,15 +891,16 @@
     // is, wordt kaas (T.eetVandaag, js/behoeften.js).
     T.eetVandaag(D);
     // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als de voorraad een buffer overhoudt
-    // (zodat een net geboren gezin niet meteen honger lijdt), en het dorp tevreden genoeg is
-    // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel); allebei zegt T.waaromGeenGezin
-    // hierboven. Zonder D.behoeften (nog geen dag getikt) blokkeert dat laatste niets. Een huis met
+    // (zodat een net geboren gezin niet meteen honger lijdt), het dorp tevreden genoeg is
+    // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel), en het de winter haalt als die in zicht
+    // is (gezinWachtOpDeWinter); dat zegt T.waaromGeenGezin hierboven. Zonder D.behoeften (nog geen
+    // dag getikt) blokkeert de tevredenheid niets. Een huis met
     // plaats gaat voor; is het dorp vol, dan neemt het een vrij erf en zet het er zelf een hut op, of
     // zegt het dat er geen plaats is (js/erven.js). Met de wet Vreemden welkom kan dat vaker
     // (T.gezinDagen hierboven).
     if (dag > 0 && dag % T.gezinDagen(D) === 0) {
-      const waarom = T.waaromGeenGezin(D);
-      if (!waarom.includes('graan') && !waarom.includes('tevreden')) T.gezinKomt(D);
+      const waarom = T.waaromGeenGezin(D, dag);
+      if (!waarom.includes('graan') && !waarom.includes('tevreden') && !waarom.includes('winter')) T.gezinKomt(D);
     }
     // 5. Handen: verdeeld over de werkplaatsen, en wie waar werkt (T.verdeelHanden hierboven).
     T.verdeelHanden(D);

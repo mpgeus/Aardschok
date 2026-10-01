@@ -73,6 +73,11 @@
     // het binnen zoveel dagen op is (zoals het hooi: T.VEE_INSTELLINGEN.hooiWaarschuwing).
     winterVooraf: [{ maand: 'herfstmaand', dag: 1 }, { maand: 'slachtmaand', dag: 1 }],
     opraakWaarschuwing: 15,
+    // Vanaf zoveel dagen vóór de winter kijkt het dorp of het hout en het eten hem halen (90: vanaf 1 herfstmaand, de
+    // eerste dag hierboven). Dan zeggen de raad (js/raad.js) en het rapport (js/ochtendrapport.js) het, en haalt het hem
+    // niet, dan komt er geen gezin (T.waaromGeenGezin in js/gebouwen.js; werklijst vraag 59, B). Eén getal voor alle
+    // drie, zodat ze niet uit elkaar lopen.
+    winterVoorafDagen: 90,
     // Honger buiten de winter (een optie in de Spelregels, js/opties.js; Marcel, 24 sep):
     // 'tevredenheid' (alleen dat, zoals het tot 24 sep was), 'wegtrekken' (op een groeidag trekt
     // een gezin weg zolang er geen eten genoeg is), of 'sterven' (net als in de winter kost een
@@ -422,6 +427,8 @@
   // Hoeveel dagen het vanaf `dag` nog duurt tot die winter (0 als hij al loopt). Voor wie niet meer wil weten
   // (de raad, js/raad.js), want het eten van de hele winter uitrekenen kost meer.
   T.dagenTotDeWinter = (dag) => T.periodeVanaf(dag, isWinter).tot;
+  // Is de winter in zicht: binnen winterVoorafDagen, of al begonnen? Dan kijkt het dorp of het hout en het eten hem halen.
+  T.winterInZicht = (dag) => T.dagenTotDeWinter(dag) <= T.BEHOEFTEN_INSTELLINGEN.winterVoorafDagen;
 
   const dagenTekst = (n) => (n === 1 ? 'één dag' : `${n} dagen`);
   const MAANDEN_TEKST = ['', 'een maand', 'twee maanden', 'drie maanden', 'vier maanden', 'vijf maanden', 'zes maanden'];
@@ -494,6 +501,17 @@
     return Object.assign(r, { tot, eet });
   };
 
+  // Wat de winter niet haalt, nu hij in zicht is (T.winterInZicht): ['hout'], ['eten'], allebei, of niets (ook als de
+  // winter nog ver is). De groei vraagt het (T.waaromGeenGezin, js/gebouwen.js): wie de winter niet haalt, krijgt er
+  // geen gezin bij.
+  T.watDeWinterNietHaalt = function (D, dag) {
+    if (!T.winterInZicht(dag)) return [];
+    const niet = [];
+    if (!T.houtVoorDeWinter(D, dag).haalt) niet.push('hout');
+    if (!T.etenVoorDeWinter(D, dag).haalt) niet.push('eten');
+    return niet;
+  };
+
   // Wat helpt als het hout de winter niet haalt: een houthakker, of nog een.
   function houtHelpt(D) {
     const per = T.maaktUit(D, T.GEBOUWEN.houthakker).hout;
@@ -522,6 +540,8 @@
       const ook = T.sprokkelHout(D) > 0 ? ', ook met wat de mensen sprokkelen' : '';
       zinnen.push(hout.haalt ? 'Het hout haalt de winter.' : `Het hout haalt ${hout.dagen} van de ${hout.winter} dagen${ook}: ${houtHelpt(D)}.`);
       zinnen.push(eten.haalt ? 'Het eten haalt de winter.' : `Het eten haalt ${eten.dagen} van de ${eten.winter} dagen${etenHelpt()}.`);
+      // Een gezin wacht op de winter (js/gebouwen.js, T.waaromGeenGezin): dat zegt het dorp erbij.
+      if (T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter && T.winterInZicht(dag)) zinnen.push('Tot het genoeg is, komt er geen nieuw gezin.');
     }
     T.zeg(D, zinnen.join(' '), hout.haalt && eten.haalt ? 'goed' : 'gevaar');
   }

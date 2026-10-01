@@ -598,7 +598,7 @@ test('T.etenVoorDeWinter: de soldaten van de heer eten mee zolang ze er zijn', (
 test('op 1 herfstmaand en 1 slachtmaand zegt het dorp of het hout en het eten de winter halen, en wat helpt', () => {
   const S = gehucht();
   assert.deepEqual(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('herfstmaand', 1))), [{
-    tekst: 'Over drie maanden is het winter. Het hout haalt 52 van de 90 dagen, ook met wat de mensen sprokkelen: een houthakker hakt 2 hout per dag. Het eten haalt de winter.',
+    tekst: 'Over drie maanden is het winter. Het hout haalt 52 van de 90 dagen, ook met wat de mensen sprokkelen: een houthakker hakt 2 hout per dag. Het eten haalt de winter. Tot het genoeg is, komt er geen nieuw gezin.',
     soort: 'gevaar',
   }]);
   assert.deepEqual(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('herfstmaand', 2))), [], 'alleen op die dagen');

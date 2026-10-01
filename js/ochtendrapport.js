@@ -38,8 +38,6 @@
     // Wie het niet bijzonder kan, rondt af op vijf ("zo'n 15"); onder tien telt hij precies.
     afrondenOp: 5,
     telTot: 10,
-    // Zoveel dagen vóór de winter zegt het rapport of het hout en het eten hem halen, zoals de raad (js/raad.js).
-    winterVooraf: 90,
     // Een rapport dat je niet las, gaat op in het nieuwe: zoveel dingen die gebeurden onthoudt hij, de laatste.
     gebeurdOnthouden: 12,
     // Wat blijft zoals het was, zegt hij niet elke dag (werklijst vraag 76; Marcel: "a ja b ja"): een oorzaak als hij
@@ -146,13 +144,13 @@
   // wat je weet (uit het laatste rapport dat je las), `nieuw` wat je weet na dit rapport.
   const nogEens = (dag, m) => dag - m.gezegd >= IN().herhaalNa;
 
-  // De winter, zodra hij binnen winterVooraf dagen is of al loopt: of het hout en het eten hem halen
+  // De winter, zodra hij in zicht is (T.winterInZicht, js/behoeften.js) of al loopt: of het hout en het eten hem halen
   // (T.houtVoorDeWinter en T.etenVoorDeWinter, js/behoeften.js, zoals de raad). Hij zegt het de eerste keer, als het
   // omslaat (haalt hij hem of niet), als de dag waarop het op is winterVerschil dagen verschuift, en anders om de
   // herhaalNa dagen. Het aantal dagen zegt hij naar zijn rekenen, dus wie niet kan rekenen, zegt misschien dat het de
   // winter haalt terwijl het dat niet doet. Hoe lang de winter is, weet iedereen.
   function winterRegels(D, dag, reken, oud, nieuw) {
-    if (T.dagenTotDeWinter(dag) > IN().winterVooraf) return [];
+    if (!T.winterInZicht(dag)) return [];
     const halen = [];
     const uit = [];
     for (const [id, wat, v] of [['hout', 'het hout', T.houtVoorDeWinter(D, dag)], ['eten', 'het eten', T.etenVoorDeWinter(D, dag)]]) {
