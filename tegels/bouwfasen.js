@@ -4,7 +4,7 @@
   T.BOUWFASEN = {
    "_lees_dit": "Vijf bouwfases per gebouw uit tegels/gebouwen.tsx en tegels/huizen.tsx, gemaakt door gereedschap/pixelart/bouwfasen.cjs — niet met de hand bijwerken. Sleutel is de tekeningnaam (T.GEBOUWEN.<soort>.tekening, na \"gebouwen/\" of \"huizen/\"). Per fase (0..4, oplopend in afbouw): x/y/b/h snijdt de cel uit bouwfasen.png, anker is het punt in die cel dat op T.naarScherm(x, y) van de aangeklikte tegel komt — dezelfde achterste-voethoek-afspraak als tegels.json (\"anker\" bij de tsx-vellen), en beslaat is dezelfde tegelmaat als in gebouwen.tsx of huizen.tsx voor dezelfde tekening. Fase 5 (klaar) staat niet hier: dat is gewoon de bestaande tegel in tegels/gebouwen.png of tegels/huizen.png.",
    "breedte": 8170,
-   "hoogte": 7187,
+   "hoogte": 8303,
    "bestand": "bouwfasen.png",
    "fasen": {
     "dorpKlein2": {
@@ -1799,6 +1799,390 @@
       }
      ]
     },
+    "steen1": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      7,
+      5
+     ],
+     "fasen": [
+      {
+       "x": 0,
+       "y": 5545,
+       "b": 471,
+       "h": 502,
+       "anker": [
+        207,
+        321
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 471,
+       "y": 5545,
+       "b": 471,
+       "h": 502,
+       "anker": [
+        207,
+        321
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 942,
+       "y": 5545,
+       "b": 471,
+       "h": 502,
+       "anker": [
+        207,
+        321
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 1413,
+       "y": 5545,
+       "b": 471,
+       "h": 502,
+       "anker": [
+        207,
+        321
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 1884,
+       "y": 5545,
+       "b": 471,
+       "h": 502,
+       "anker": [
+        207,
+        321
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "steen2": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      5,
+      7
+     ],
+     "fasen": [
+      {
+       "x": 2355,
+       "y": 5545,
+       "b": 472,
+       "h": 557,
+       "anker": [
+        271,
+        376
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 2827,
+       "y": 5545,
+       "b": 472,
+       "h": 557,
+       "anker": [
+        271,
+        376
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 3299,
+       "y": 5545,
+       "b": 472,
+       "h": 557,
+       "anker": [
+        271,
+        376
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 3771,
+       "y": 5545,
+       "b": 472,
+       "h": 557,
+       "anker": [
+        271,
+        376
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 4243,
+       "y": 5545,
+       "b": 472,
+       "h": 557,
+       "anker": [
+        271,
+        376
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "steen3": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      8,
+      7
+     ],
+     "fasen": [
+      {
+       "x": 4715,
+       "y": 5545,
+       "b": 555,
+       "h": 529,
+       "anker": [
+        257,
+        300
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 5270,
+       "y": 5545,
+       "b": 555,
+       "h": 529,
+       "anker": [
+        257,
+        300
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 5825,
+       "y": 5545,
+       "b": 555,
+       "h": 529,
+       "anker": [
+        257,
+        300
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 6380,
+       "y": 5545,
+       "b": 555,
+       "h": 529,
+       "anker": [
+        257,
+        300
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 6935,
+       "y": 5545,
+       "b": 555,
+       "h": 529,
+       "anker": [
+        257,
+        300
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "steen4": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      8,
+      8
+     ],
+     "fasen": [
+      {
+       "x": 0,
+       "y": 6102,
+       "b": 578,
+       "h": 559,
+       "anker": [
+        305,
+        314
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 578,
+       "y": 6102,
+       "b": 578,
+       "h": 559,
+       "anker": [
+        305,
+        314
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1156,
+       "y": 6102,
+       "b": 578,
+       "h": 559,
+       "anker": [
+        305,
+        314
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 1734,
+       "y": 6102,
+       "b": 578,
+       "h": 559,
+       "anker": [
+        305,
+        314
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 2312,
+       "y": 6102,
+       "b": 578,
+       "h": 559,
+       "anker": [
+        305,
+        314
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "steen5": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      7,
+      5
+     ],
+     "fasen": [
+      {
+       "x": 2890,
+       "y": 6102,
+       "b": 448,
+       "h": 543,
+       "anker": [
+        207,
+        362
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 3338,
+       "y": 6102,
+       "b": 448,
+       "h": 543,
+       "anker": [
+        207,
+        362
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 3786,
+       "y": 6102,
+       "b": 448,
+       "h": 543,
+       "anker": [
+        207,
+        362
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 4234,
+       "y": 6102,
+       "b": 448,
+       "h": 543,
+       "anker": [
+        207,
+        362
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 4682,
+       "y": 6102,
+       "b": 448,
+       "h": 543,
+       "anker": [
+        207,
+        362
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "steen6": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      8,
+      9
+     ],
+     "fasen": [
+      {
+       "x": 5130,
+       "y": 6102,
+       "b": 608,
+       "h": 558,
+       "anker": [
+        335,
+        297
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 5738,
+       "y": 6102,
+       "b": 608,
+       "h": 558,
+       "anker": [
+        335,
+        297
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 6346,
+       "y": 6102,
+       "b": 608,
+       "h": 558,
+       "anker": [
+        335,
+        297
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 6954,
+       "y": 6102,
+       "b": 608,
+       "h": 558,
+       "anker": [
+        335,
+        297
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 7562,
+       "y": 6102,
+       "b": 608,
+       "h": 558,
+       "anker": [
+        335,
+        297
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
     "boerderij1": {
      "gebouw": "boerderij",
      "beslaat": [
@@ -1808,7 +2192,7 @@
      "fasen": [
       {
        "x": 0,
-       "y": 5545,
+       "y": 6661,
        "b": 600,
        "h": 527,
        "anker": [
@@ -1819,7 +2203,7 @@
       },
       {
        "x": 600,
-       "y": 5545,
+       "y": 6661,
        "b": 600,
        "h": 527,
        "anker": [
@@ -1830,7 +2214,7 @@
       },
       {
        "x": 1200,
-       "y": 5545,
+       "y": 6661,
        "b": 600,
        "h": 527,
        "anker": [
@@ -1841,7 +2225,7 @@
       },
       {
        "x": 1800,
-       "y": 5545,
+       "y": 6661,
        "b": 600,
        "h": 527,
        "anker": [
@@ -1852,7 +2236,7 @@
       },
       {
        "x": 2400,
-       "y": 5545,
+       "y": 6661,
        "b": 600,
        "h": 527,
        "anker": [
@@ -1872,7 +2256,7 @@
      "fasen": [
       {
        "x": 3000,
-       "y": 5545,
+       "y": 6661,
        "b": 608,
        "h": 525,
        "anker": [
@@ -1883,7 +2267,7 @@
       },
       {
        "x": 3608,
-       "y": 5545,
+       "y": 6661,
        "b": 608,
        "h": 525,
        "anker": [
@@ -1894,7 +2278,7 @@
       },
       {
        "x": 4216,
-       "y": 5545,
+       "y": 6661,
        "b": 608,
        "h": 525,
        "anker": [
@@ -1905,7 +2289,7 @@
       },
       {
        "x": 4824,
-       "y": 5545,
+       "y": 6661,
        "b": 608,
        "h": 525,
        "anker": [
@@ -1916,7 +2300,7 @@
       },
       {
        "x": 5432,
-       "y": 5545,
+       "y": 6661,
        "b": 608,
        "h": 525,
        "anker": [
@@ -1936,7 +2320,7 @@
      "fasen": [
       {
        "x": 0,
-       "y": 6072,
+       "y": 7188,
        "b": 567,
        "h": 625,
        "anker": [
@@ -1947,7 +2331,7 @@
       },
       {
        "x": 567,
-       "y": 6072,
+       "y": 7188,
        "b": 567,
        "h": 625,
        "anker": [
@@ -1958,7 +2342,7 @@
       },
       {
        "x": 1134,
-       "y": 6072,
+       "y": 7188,
        "b": 567,
        "h": 625,
        "anker": [
@@ -1969,7 +2353,7 @@
       },
       {
        "x": 1701,
-       "y": 6072,
+       "y": 7188,
        "b": 567,
        "h": 625,
        "anker": [
@@ -1980,7 +2364,7 @@
       },
       {
        "x": 2268,
-       "y": 6072,
+       "y": 7188,
        "b": 567,
        "h": 625,
        "anker": [
@@ -2000,7 +2384,7 @@
      "fasen": [
       {
        "x": 2835,
-       "y": 6072,
+       "y": 7188,
        "b": 538,
        "h": 544,
        "anker": [
@@ -2011,7 +2395,7 @@
       },
       {
        "x": 3373,
-       "y": 6072,
+       "y": 7188,
        "b": 538,
        "h": 544,
        "anker": [
@@ -2022,7 +2406,7 @@
       },
       {
        "x": 3911,
-       "y": 6072,
+       "y": 7188,
        "b": 538,
        "h": 544,
        "anker": [
@@ -2033,7 +2417,7 @@
       },
       {
        "x": 4449,
-       "y": 6072,
+       "y": 7188,
        "b": 538,
        "h": 544,
        "anker": [
@@ -2044,7 +2428,7 @@
       },
       {
        "x": 4987,
-       "y": 6072,
+       "y": 7188,
        "b": 538,
        "h": 544,
        "anker": [
@@ -2064,7 +2448,7 @@
      "fasen": [
       {
        "x": 0,
-       "y": 6697,
+       "y": 7813,
        "b": 539,
        "h": 490,
        "anker": [
@@ -2075,7 +2459,7 @@
       },
       {
        "x": 539,
-       "y": 6697,
+       "y": 7813,
        "b": 539,
        "h": 490,
        "anker": [
@@ -2086,7 +2470,7 @@
       },
       {
        "x": 1078,
-       "y": 6697,
+       "y": 7813,
        "b": 539,
        "h": 490,
        "anker": [
@@ -2097,7 +2481,7 @@
       },
       {
        "x": 1617,
-       "y": 6697,
+       "y": 7813,
        "b": 539,
        "h": 490,
        "anker": [
@@ -2108,7 +2492,7 @@
       },
       {
        "x": 2156,
-       "y": 6697,
+       "y": 7813,
        "b": 539,
        "h": 490,
        "anker": [

@@ -185,38 +185,50 @@
  </tile>
  <tile id="24">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="steen1"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="7x5"/>
+    <property name="deur" value="2,5"/>
   </properties>
  </tile>
  <tile id="25">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="steen2"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="5x7"/>
+    <property name="deur" value="5,2"/>
   </properties>
  </tile>
  <tile id="26">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="steen3"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x7"/>
+    <property name="deur" value="8,2"/>
   </properties>
  </tile>
  <tile id="27">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="steen4"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x8"/>
+    <property name="deur" value="3,8"/>
   </properties>
  </tile>
  <tile id="28">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="steen5"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="7x5"/>
+    <property name="deur" value="3,5"/>
   </properties>
  </tile>
  <tile id="29">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="steen6"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x9"/>
+    <property name="deur" value="2,9"/>
   </properties>
  </tile>
  <tile id="30">

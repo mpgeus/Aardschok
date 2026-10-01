@@ -879,7 +879,7 @@
       const huizen = (n) => (n === 1 ? 'één huis' : `${n} huizen`);
       return {
         dorp: pct(b.tevredenheid),
-        standen: Object.fromEntries(Object.entries(b.wensen.standen).map(([s, x]) => [s, `${pct(x.tevredenheid)}, ${x.mensen} mensen, ${x.alles} van de ${huizen(x.huizen)} heeft alles`])),
+        standen: Object.fromEntries(Object.entries(b.wensen.standen).map(([s, x]) => [s, `${pct(x.tevredenheid)}, ${x.mensen} mensen, alles in ${x.alles} van ${huizen(x.huizen)}`])),
         gemist: b.wensen.gemist.map((m) => `${m.naam}: ${huizen(m.huizen)}, ${m.mensen} mensen`),
         huizen: b.wensen.huizen.filter((h) => !stand || h.stand === stand).map((h) => ({
           huis: `${T.GEBOUWEN[h.g.soort].naam} op ${h.g.x},${h.g.y}`, stand: h.stand, wie: wie(h.g), tevreden: pct(h.tevredenheid),

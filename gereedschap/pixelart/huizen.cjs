@@ -63,6 +63,18 @@ const HUIZEN = {
   huis4: { gebouw: 'huis', trede: 2, zaad: 24, vorm: 'L', b: 8, d: 5, b2: 4, d2: 8, kant: -1, voor: false, lagen: 1, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 36, schoorsteen: 'leem', schoor: false, uit: false },
   huis5: { gebouw: 'huis', trede: 2, zaad: 25, vorm: 'rechthoek', b: 6, d: 5, lagen: 1.5, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 36, schoorsteen: 'leem', schoor: false, uit: { gevelschoorsteen: true, kapellen: 1 } },
   huis6: { gebouw: 'huis', trede: 2, zaad: 26, vorm: 'T', b: 9, d: 5, b2: 4, p2: 3, voor: true, lagen: 1, nok: 'y', dak: 'riet', wand: 'vakwerk', plint: 36, schoorsteen: 'leem', schoor: false, uit: { bakken: 2 } },
+  // ── stenen huizen: trede 3, het stenen broertje van elk huis (werklijst vraag 85, d; Marcel, 1 okt: "d ja"): dezelfde
+  // vorm, maat, nok, uitbouwen en hetzelfde zaad, maar veldsteen met een stenen schoorsteen, onder riet. Zo versteent een
+  // huis op zijn eigen grond als zijn mensen ambachtslieden worden (js/behoeften.js, T.GEBOUWEN.stenenHuis.broertjes), en
+  // herken je het. Riet, want steen onder pannen hoort bij een stad (spel.md, "Beter bouwen"); leien en pannen staan op de
+  // proefplaat van 1 okt. Een anderhalve laag is steen onder en vakwerk erboven. Met bouwfases, voor wie het met de
+  // spelregel "Huizen" zelf bouwt ──
+  steen1: { gebouw: 'stenenHuis', trede: 3, zaad: 21, vorm: 'rechthoek', b: 7, d: 5, lagen: 1, nok: 'x', dak: 'riet', wand: 'veldsteen', boven: 'vakwerk', plint: 36, schoor: false, uit: { luiken: true, bakken: 1 } },
+  steen2: { gebouw: 'stenenHuis', trede: 3, zaad: 22, vorm: 'rechthoek', b: 7, d: 5, lagen: 1.5, nok: 'y', dak: 'riet', wand: 'veldsteen', boven: 'vakwerk', plint: 36, schoor: false, uit: { kapellen: 1 } },
+  steen3: { gebouw: 'stenenHuis', trede: 3, zaad: 23, vorm: 'rechthoek', b: 8, d: 5, lagen: 1, nok: 'x', dak: 'riet', wand: 'veldsteen', boven: 'vakwerk', plint: 36, schoor: true, uit: { aanbouw: true, luiken: true } },
+  steen4: { gebouw: 'stenenHuis', trede: 3, zaad: 24, vorm: 'L', b: 8, d: 5, b2: 4, d2: 8, kant: -1, voor: false, lagen: 1, nok: 'x', dak: 'riet', wand: 'veldsteen', boven: 'vakwerk', plint: 36, schoor: false, uit: false },
+  steen5: { gebouw: 'stenenHuis', trede: 3, zaad: 25, vorm: 'rechthoek', b: 6, d: 5, lagen: 1.5, nok: 'x', dak: 'riet', wand: 'veldsteen', boven: 'vakwerk', plint: 36, schoor: false, uit: { gevelschoorsteen: true, kapellen: 1 } },
+  steen6: { gebouw: 'stenenHuis', trede: 3, zaad: 26, vorm: 'T', b: 9, d: 5, b2: 4, p2: 3, voor: true, lagen: 1, nok: 'y', dak: 'riet', wand: 'veldsteen', boven: 'vakwerk', plint: 36, schoor: false, uit: { bakken: 2 } },
   // ── boerderijen: trede 2, elk in een ander hout onder riet (en één onder spanen). Elk past in zijn
   // vak op de kaart van het gehucht (gereedschap/tiled/maak-gehucht.cjs, HUIZEN), zoals Marcel die
   // indeling goedkeurde: een L, een T, en twee met hun deur achter, naar het plein toe ──

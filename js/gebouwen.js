@@ -339,9 +339,17 @@
 
     // ── Stad ──
     stenenHuis: {
-      naam: 'stenen huis', trede: 'stad', voet: { b: 6, h: 8 }, kosten: { hout: 20, goud: 30 }, heer: { goud: 6 }, bouwtijd: 6,
+      naam: 'stenen huis', trede: 'stad', voet: { b: 7, h: 5 }, kosten: { hout: 20, goud: 30 }, heer: { goud: 6 }, bouwtijd: 6,
       handen: 0, woonruimte: 8, maakt: null, verdacht: false, menu: true, woning: true,
-      tekening: 'gebouwen/stenenHuis', beschrijving: 'veel ruimte, en rijk om te zien', opmerking: '',
+      tekening: 'huizen/steen1', beschrijving: 'veel ruimte, en rijk om te zien', opmerking: '',
+      // Het stenen broertje van elk huis, met dezelfde vorm (werklijst vraag 85, d; gereedschap/pixelart/huizen.cjs): een
+      // huis dat doorgroeit, versteent op zijn eigen grond (js/behoeften.js), en je herkent het. Tot 1 okt was er één
+      // stenen huis, uit de oude reeks (gebouwen/stenenHuis).
+      tekeningen: ['huizen/steen1', 'huizen/steen2', 'huizen/steen3', 'huizen/steen4', 'huizen/steen5', 'huizen/steen6'],
+      broertjes: {
+        'huizen/huis1': 'huizen/steen1', 'huizen/huis2': 'huizen/steen2', 'huizen/huis3': 'huizen/steen3',
+        'huizen/huis4': 'huizen/steen4', 'huizen/huis5': 'huizen/steen5', 'huizen/huis6': 'huizen/steen6',
+      },
     },
     raadhuis: {
       naam: 'raadhuis', trede: 'stad', voet: { b: 8, h: 6 }, kosten: { hout: 24, goud: 40 }, heer: { goud: 20 }, bouwtijd: 8,

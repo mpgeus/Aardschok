@@ -290,10 +290,15 @@ test('een huis met alles groeit door tot een stenen huis, voor 12 steen; wie iet
   T.zetVoorraad(D, 'steen', 15);
   const h = () => T.berekenTevredenheid(D, dag).wensen.huizen.find((x) => x.g === huis);
   assert.ok(h().alles, JSON.stringify(h().heeft));
+  const voet = { ...huis.voet };
+  const tekening = huis.tekening;
   for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen; i++) T.tikBehoeftenDag(D, ++dag);
   assert.equal(huis.soort, 'stenenHuis');
   assert.equal(T.standVan(huis), 'ambachtslieden');
   assert.equal(D.voorraad.steen, 3);
+  // Het versteent tot zijn eigen broertje, op zijn eigen grond (vraag 85, d).
+  assert.equal(huis.tekening, T.GEBOUWEN.stenenHuis.broertjes[tekening]);
+  assert.deepEqual(huis.voet, voet);
 }));
 
 test('zacht: er trekt pas een gezin weg uit huizen onder de vertrekdrempel, als het eten en het brandhout in de winter missen', () => {
@@ -345,4 +350,15 @@ test('een hogere stand betaalt meer belasting', () => {
   const B = T.WENSEN_INSTELLINGEN.belasting;
   assert.equal(T.belastbaar(D), 20 + 3 * (B.keuters - 1) + 5 * (B.dorpelingen - 1) + 8 * (B.ambachtslieden - 1));
   assert.equal(T.belastbaar({ bevolking: 20, behoeften: { standen: null } }), 20, 'zonder standen iedereen als één');
+});
+
+test('elk huis heeft een stenen broertje dat op zijn eigen grond past', () => {
+  const steen = T.GEBOUWEN.stenenHuis;
+  for (const t of T.GEBOUWEN.huis.tekeningen) {
+    const broertje = steen.broertjes[t];
+    assert.ok(broertje && steen.tekeningen.includes(broertje), `${t} heeft een broertje`);
+    const a = T.gebouwVoet('huis', t);
+    const b = T.gebouwVoet('stenenHuis', broertje);
+    assert.ok(b.b <= a.b && b.h <= a.h, `${broertje} (${b.b}×${b.h}) past op ${t} (${a.b}×${a.h})`);
+  }
 });
