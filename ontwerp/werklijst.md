@@ -2864,6 +2864,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     (eten 0,5, brandhout 0,3, de rest 0,2), zodat het gehucht op zo'n 85% begint? **b**, de kring 30 voor de kapel, de
     herberg en de markt, en de boeren willen een kapel maar niet de herberg? **c**, achteruitgaan zacht (advies) of
     streng? **d**, het stenen huis als stenen broertje van elk huis, met dezelfde voet?
+    **Beantwoord (Marcel, 1 okt):** "a ja, maar een hogere stand eigent zich spullen toe. Dus stel er is te weinig bier,
+    dan nemen zij het laatste. b ja voor nu. c zacht d ja". Dus de wensen zo, maar goederen worden niet eerlijk gedeeld:
+    **de hoogste stand neemt eerst**, en wat er over is, gaat naar de stand eronder (binnen een stand gelijk op). De kring
+    30 voor de kapel, de herberg en de markt, en de boeren willen een kapel, niet de herberg, "voor nu". Achteruitgaan
+    zacht (de standaard; streng als spelregel). En het stenen huis als stenen broertje van elk huis.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

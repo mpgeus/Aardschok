@@ -14,6 +14,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Onderwerp | Stand | Werklijst |
 |---|---|---|
 | De vertical slice | besloten (Marcel, 1 okt, vraag 77): het doel is de vertical slice uit het concept: je begint als gehucht, zoals nu, en groeit naar haar maat (een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te klein), en uiteindelijk naar een stad van mogelijk 5000 of meer ("we moeten een manier zoeken", vraag 78, E), in zes stappen te beginnen met de wensen van de mensen, zoals in Anno 1602 (vraag 78; het plan is vraag 79); statussen met niveaus; een ambtenaar voor elke tak van het bestuur; en later een scherm met de statussen en de laatst bekende inventarisatie | vraag 77, 78, 79 |
+| De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85), in aanbouw: elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt, en wie een jaar lang alles heeft, wint | vraag 79, 80, 82, 85 |
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern | vraag 50, 51, 54, 73, 74, 78 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
@@ -130,6 +131,50 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 - **Geparkeerd:** de afrekening na het eerste jaar (werklijst, vraag 49). Marcel: "later kan dat".
 - **De vragen** (Claude, 28 sep, vraag 50): het hart, wat besturen is, hoe groot vechten wordt, en wie de buren
   zijn. Het antwoord staat bovenaan.
+
+## De wensen van de mensen, per stand (Marcel, 1 okt 2026; werklijst vraag 79, 80, 82 en 85)
+
+**Zo werkt het nu** (1 okt, tweeëntwintigste sessie): besloten, en in aanbouw, in de volgorde van vraag 80 (2a de wensen
+per huis, 2b doorgroeien, 2c zien wat een huis wil, 2d de treden uit de standen, 2e het eind). Zoals in Anno 1602: elk
+huis heeft een stand, en elke stand wil iets. Klein (vraag 82): drie standen, op de huizen die er al zijn; de poorters en
+hun huis komen later.
+- **Elk huis een stand, naar zijn soort.** Een stand wil wat de stand eronder wil, en meer. De boeren staan ernaast: hun
+  boerderij groeit niet. Het huis van de schout en de herberg hebben geen wensen; die zijn van jou en van de
+  herbergierster.
+
+  | Stand | Huis | Gebruikt | Wil in de buurt |
+  |---|---|---|---|
+  | keuters | hut (3 mensen) | eten; brandhout in de winter | een put (12 tegels) |
+  | dorpelingen | huis (5) | daarbij bier, en vlees of vis | daarbij een kapel en de herberg (30) |
+  | ambachtslieden | stenen huis (8) | daarbij brood en laken | daarbij een markt (30) |
+  | boeren | boerderij (4) | eten; brandhout in de winter | een kapel (30); de herberg niet, "voor nu" |
+
+- **Goederen: de hoogste stand neemt eerst** (Marcel, vraag 85: "een hogere stand eigent zich spullen toe. Dus stel er is
+  te weinig bier, dan nemen zij het laatste"). Elke dag gebruikt een mens van zijn stand zoveel bier, vlees of vis, brood
+  en laken uit de voorraad (de getallen in de werkbank). Is er te weinig, dan krijgt de hoogste stand het eerst, en gaat
+  wat over is naar de stand eronder; binnen een stand gelijk op. Eten en brandhout gaan zoals ze gingen, voor het hele
+  dorp.
+- **In de buurt is een kring om het gebouw** (vraag 80, B): de put 12 tegels, een kapel, de herberg en een markt 30
+  (vraag 85, b: 25 was te klein voor dit gehucht, waar de boerderijen aan de rand staan). Een put telt ook als hij op de
+  kaart staat, zoals die op het plein.
+- **Elk huis zijn eigen tevredenheid,** uit zijn wensen: eten de helft, brandhout 0,3 (alleen in de winter) en de rest
+  samen 0,2, met de herberg, de wetten, de voorvallen en de heer erbij of eraf, zoals voor het hele dorp. Heeft een huis
+  alles, dan is het **super gelukkig**. De tevredenheid van het dorp is het gemiddelde, naar mensen, zodat de groei, het
+  werk, de voorvallen en de raad gewoon doorwerken. De afwisseling van vroeger (groente, vis of vlees maakt tevredener)
+  ging op in de wensen; groente telt dus niet meer voor de tevredenheid. Het gehucht begint zo op zo'n 85% in plaats van
+  67%.
+- **Doorgroeien (2b):** heeft een huis 30 dagen op rij alles, dan groeit het door naar de volgende stand, als de bouwstof
+  er is (een huis 8 hout, een stenen huis 12 steen); een hogere stand betaalt meer belasting. Ook de woningen die bij het
+  begin op de kaart staan. **Het stenen huis** is het stenen broertje van een van de zes huizen, met dezelfde vorm en voet
+  (vraag 85, d): een huis versteent op zijn eigen grond.
+- **Achteruitgaan: zacht** (vraag 85, c), zoals in Anno 1602: mist een huis iets, dan groeit het niet verder en is het
+  minder tevreden; er trekt pas een gezin weg als het huis onder de vertrekdrempel zakt, en dat gebeurt alleen als het
+  eten of het brandhout mist. De spelregel "Achteruitgaan" kan het streng: mist een huis een maand iets, dan trekt zijn
+  gezin weg (vraag 80, C). Een idee voor streng, voor later: het gezin vraagt de schout eerst of het mag doorgroeien.
+- **Gewonnen (2e)** als alle woningen stenen huizen zijn die alles hebben, en de boerderijen wat zij willen, een jaar
+  lang (vraag 80, d: "een jaar").
+- **Nog open:** groente en eieren hebben geen stand; de boeren en de herberg ("voor nu"); de poorters (vierde stand,
+  met een huis van twee lagen in baksteen, een badhuis en een gasthuis); wat een huis wil, zie je pas in 2c.
 
 ## Rovers en de militie (Marcel, 28 en 29 sep 2026; werklijst vraag 51 en 55)
 
