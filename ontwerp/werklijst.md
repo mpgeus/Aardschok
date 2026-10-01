@@ -25,11 +25,11 @@ dan beslist je raadsman, die je kiest met de knop Raadsman (`R`); die brengt je 
 deur als je bij huis slaapt (`Z`), en anders onder de knop Rapport (`Spel.debug.rapport()`). Met de spelregel Land aan
 (`O`) loop je over de weg je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). Met de spelregel "Je
 gehucht" op "Elk spel een ander" legt de maker elk nieuw spel een ander gehucht (`Spel.debug.gehucht(3)` voor zaad 3).
-De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 717/717.
+De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 722/722.
 
-**Waar het werk staat:** het werk van de twintigste sessie staat in `main` (Marcel, 1 okt: "Alles pushen en main"). Dat
-van de eenentwintigste sessie (vraag 78 tot en met 84, stap 1 en het zaaigraan) staat op `ccr-b5dfb962-d3bery`, gepusht maar nog niet
-in `main`: zet het erin als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook het werk van de eenentwintigste sessie (vraag 78 tot en met 84,
+stap 1 en het zaaigraan; Marcel, 1 okt: "Ok alles naar main pushen dan kunnen we nieuwe sessie doen?"). Hoe een eigen
+branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** **bouw stap 2, de wensen per stand, klein** (vraag 80 en 82; Marcel, 1 okt: "80: a,
 Ja. B, Ja. C, Ja. D, een jaar", en "82: correct"). Alles is besloten, dus bouwen kan meteen, in de volgorde van vraag
