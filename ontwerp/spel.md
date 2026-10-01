@@ -188,9 +188,10 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
 
 ## De voorvallen: het dorp spreekt je aan (Marcel, 29 sep 2026; werklijst vraag 65)
 
-**Richtlijn** (Marcel, 1 okt: "Honger, droogte of een plaag, moet een status zijn. Als richtlijn"): wat een tijd duurt,
-is een status, met een begin en een eind, en te zien zolang het duurt; een bericht of het rapport zegt het als het
-begint of ophoudt, niet elke dag. De oorzaken hieronder (honger, kou, vol, onvrede) zijn zulke statussen; hoe je ze in
+**Richtlijn** (Marcel, 1 okt: "Honger, droogte of een plaag, moet een status zijn. Als richtlijn", en "Iets wat begint
+en eindigt. Mogelijk in verschillende niveaus. Ernstige droogte, en droogte bijvoorbeeld"): wat een tijd duurt, is een
+status, met een begin en een eind, soms in niveaus (droogte, ernstige droogte), en te zien zolang het duurt; een bericht
+of het rapport zegt het als het begint, erger of minder wordt, of ophoudt, niet elke dag. De oorzaken hieronder (honger, kou, vol, onvrede) zijn zulke statussen; hoe je ze in
 beeld ziet, en droogte en een plaag erbij, hoort bij het plan voor een spel van begin tot eind (werklijst, vraag 77).
 
 **Zo werkt het nu** (29 sep, zeventiende sessie; `js/voorvallen.js`, de woorden in `js/gesprekken.js`, toetsen in

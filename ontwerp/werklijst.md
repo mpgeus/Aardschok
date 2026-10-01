@@ -40,9 +40,10 @@ met wat er gebeurde, hoe het graan en het hout gaan sinds gisteren, of ze de win
 en zijn rekenen kleurt de getallen. Met het rapport uit speelt de speeltest letter voor letter hetzelfde jaar (alle 15
 jaren); daarna zegt het een oorzaak en de winter alleen nog als ze veranderen (vraag 76, af). **Nu eerst een spel van
 begin tot eind** (Marcel, 1 okt: "We gaan ook eerst verder 3b kan later. Laten we eerst eens een speelbaar spel maken van
-begin tot eind"): **het plan is vraag 77, en wacht op Marcel** (één bestuursjaar als een heel spel, met het oordeel van
-de heer op 1 lentemaand, het eind met het jaar in het kort, een jaar dat te winnen is, en de statussen in beeld, met
-Marcels richtlijn "Honger, droogte of een plaag, moet een status zijn"). De zitting (3b) en de herberg (3c) wachten. **Hoe we hier kwamen:** stuk 2 van het
+begin tot eind", en "Gebruik de slice in de pdf"): **het plan is vraag 77, en wacht op Marcel**: de vertical slice uit
+het concept naast ons spel, met een voorstel in zes stappen (de cyclus met een eind per jaar, statussen met niveaus,
+ambtenaren, wacht en misdaad, mensen met banden, de kleine stad), en Marcels richtlijn "Honger, droogte of een plaag,
+moet een status zijn", met niveaus. De zitting (3b) en de herberg (3c) wachten. **Hoe we hier kwamen:** stuk 2 van het
 land is af (vraag 71): alles van een dorp staat bij elkaar (`S.dorpen`, `js/dorp.js`), en elk dorp leeft, ook als je er
 niet bent. **Daarna bracht Marcel een concept mee** ("De Schout", `concept.md`: het poppetje is de manier waarop je
 bestuurt). Het concept is ons kompas, en **eerst komt de kern** (vraag 73; Marcel: "We zetten eerst de kern goed neer. Ik
@@ -90,7 +91,8 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 77 (een speelbaar spel van begin tot eind: het plan); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* vraag 77 (een speelbaar spel van begin tot eind: de vertical slice, in zes stappen); het plan
+voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -2384,48 +2386,55 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     een spel dat van begin tot eind te spelen is (het plan daarvoor is vraag 77). En als richtlijn (Marcel, 1 okt):
     "Honger, droogte of een plaag, moet een status zijn" (in `CLAUDE.md` en `spel.md`). **Gebouwd** (1 okt, twintigste
     sessie; zie onder Af).
-77. **Een speelbaar spel van begin tot eind: het plan** (Claude, 1 okt, twintigste sessie; Marcel: "Laten we eerst eens
-    een speelbaar spel maken van begin tot eind", en als richtlijn "Honger, droogte of een plaag, moet een status zijn";
-    wacht op Marcel). Wat er nu is:
-    - **Het begin is er:** het titelscherm, je dorp een naam geven, de benoemingsbrief ("Wij verwachten dat Ons gehucht
-      een dorp wordt"), de raad onder het doel, en sinds vandaag het rapport.
-    - **Winnen komt te vroeg:** bij 50 mensen, een kapel en een smidse schrijft de heer dat het een dorp is. De bouwer
-      haalt dat op 1 herfstmaand, na zes maanden, vóór de inner, de heer en de winter (vraag 59).
-    - **Doorspelen is verliezen:** daarna sterft in de eerste winter de helft, is er in de lente geen zaaigraan, en houdt
-      hij één mens over of is hij zijn ambt kwijt (vraag 59).
-    - **Verliezen kan op twee manieren,** elk met een eigen scherm: je ambt kwijt (twee keer te weinig voor de heer, dus
-      pas in het tweede jaar) en gevallen (de schout in een gevecht). Een dorp dat uitsterft, speelt door met één mens.
-    - **Een status zie je nergens** zolang hij duurt; het rapport zegt sinds vandaag als hij begint en ophoudt.
-    - **Het concept** wil voor de eerste versie "één volledig speelbare bestuurlijke cyclus" (p.13), zonder te zeggen hoe
-      lang, en zonder winnen of verliezen; crises zetten er de systemen onder druk, met een oorzaak die je had kunnen zien
-      (p.10; `concept.md`, "Nog nagelezen").
-    Voorstel: **één bestuursjaar is een heel spel**, van de benoeming op 1 lentemaand tot 1 lentemaand een jaar later,
-    met de inner, de heer en de winter erin: zo'n uur op 30×.
-    - **A, het eind: de heer oordeelt op 1 lentemaand** (vraag 59, A). Is het dan een dorp (50 mensen, een kapel en een
-      smidse, pas dan geteld), dan heb je gewonnen: "Gefeliciteerd. Dat kost u vanaf nu meer", en je speelt door als dorp
-      of gaat naar het titelscherm. Is het geen dorp, maar heb je je ambt en je mensen nog, dan krijg je nog een jaar
-      ("Wij zijn geduldig. Bijna."), en oordeelt hij volgend voorjaar weer. Verloren is: je ambt kwijt, gevallen, of
-      uitgestorven (minder dan tien mensen, in de werkbank). Het doel linksboven zegt de datum.
-    - **B, het eind laat zien wat je deed:** één scherm voor elk eind (gewonnen, nog een jaar, verloren), met het oordeel
-      van de heer in zijn eigen toon en het jaar in het kort: mensen aan het begin en het eind, wie er kwamen, stierven
-      en wegtrokken, wat de heer vroeg en kreeg, de rovers, en de voorvallen met wat jij of je raadsman koos. Dat is de
-      afrekening als jaaroverzicht (vraag 49, geparkeerd), maar dan aan het eind van het spel.
-    - **C, een jaar dat te winnen is,** met wat de bouwer liet instorten (vraag 59, B en C): er komt geen gezin als het
-      hout of het eten de winter niet haalt (de raad en het rapport zeggen waarom); de raad zegt waar goud vandaan komt
-      als het je tekortkomt; en in de lente verkoopt de marskramer zaaigraan, voor wie nog een jaar krijgt. Klaar als de
-      bouwer, die dan op 1 lentemaand mikt, het in de speeltest haalt, en wie niets doet niet.
-    - **D, de status in beeld** (de richtlijn): in de balk een rij statussen zolang ze duren, nu honger, kou, vol en
-      onvrede (de oorzaken), elk met sinds wanneer, waarom en wat helpt; het rapport zegt het begin en het eind al (vraag
-      76). Daarna **droogte en een plaag** als de eerste twee crises uit het concept: een droge zomer (de akkers geven
-      minder, en de honger komt in de winter) en een ziekte die uitbreekt in een vol of koud dorp (wie ziek is, werkt
-      niet, en wie zwak is, sterft), elk een status met een oorzaak die je kon zien.
-    - **E, de volgorde:** eerst A en B (het spel heeft een eind), dan C (het is te winnen), dan D (je ziet hoe het staat);
-      na elke stap de speeltest; daarna speel jij het, en dan een tester (vraag 33, d). De zitting en de herberg (3b en
-      3c) wachten, en het buurdorp ook.
-    Vragen: **a**, één bestuursjaar als een heel spel, met het oordeel van de heer op 1 lentemaand, en nog een jaar als
-    het geen dorp is maar ook niet verloren? **b**, het eind met het jaar in het kort? **c**, de drie dingen die het jaar
-    te winnen maken? **d**, de statussen in de balk; en droogte en een plaag nu, of na het eerste hele spel? **e**, in
-    die volgorde?
+77. **Een speelbaar spel van begin tot eind: de vertical slice** (Claude, 1 okt, twintigste sessie; Marcel: "Laten we
+    eerst eens een speelbaar spel maken van begin tot eind", "Gebruik de slice in de pdf", en als richtlijn "Honger,
+    droogte of een plaag, moet een status zijn ... Iets wat begint en eindigt. Mogelijk in verschillende niveaus"; wacht
+    op Marcel). Het eerste voorstel (één bestuursjaar als een heel spel, met het oordeel van de heer) is hieronder stap
+    1 geworden. **De slice naast ons spel:**
+
+    | De slice | Wat er is | Wat ontbreekt |
+    |---|---|---|
+    | Eén kleine stad, 100 tot 200 mensen | een gehucht van 26 dat een dorp wordt bij 50 (de bouwer haalt 74) | de stad: het gehucht (76 bij 76 tegels) is vol bij 76 tot 102 mensen, en het spel loopt vloeiend tot zo'n 150 op 30× (vraag 74) |
+    | Markt, woonwijk, ambachtswijk, raadhuis, kerk, stadspoort | huizen en erven, de werkplaatsen (smidse, molen, bakker, brouwer, ...), de kapel; de markt, het raadhuis en de stadsmuur met poort staan in `T.GEBOUWEN` | dat de markt, het raadhuis en de poort iets doen; nu komen ze pas met marktrecht of de stad, en doen ze niets |
+    | Dag en nacht | ja, met het ritme van de mensen | |
+    | Voedsel en economie | graan, melk, kaas, vlees, hout, goud, de marskramer, de belasting, de heer | prijzen, en een markt waar je ze ziet |
+    | Wacht en misdaad | het wachthuis en de militie tegen de rovers; diefstal, de stroper, de heler en de woeker als voorvallen | misdaad als status (een misdaadgolf), een wacht die patrouilleert, het gevang |
+    | 3 of 4 ambtenaren | de raadsman, met zijn rapport | twee of drie anderen, elk met een eigen terrein en een eigen rapport |
+    | 10 tot 20 mensen met echte banden | de vijf boeren met een karakter en aanzien, de herbergierster, de roddelaar, de heer, de inner, de marskramer | wat ze van jou vinden (vertrouwen), en wat ze van elkaar vinden |
+    | Een paar bouwprojecten | erven, de kapel, de smidse, de houthakker, het wachthuis, en meer | |
+    | 5 tot 10 soorten gebeurtenissen | 35 voorvallen, de rovers, de heervaart, de inner, de heer, de marskramer | crises als status met niveaus: droogte, een ziekte, een brand, een misdaadgolf (`concept.md`, p.10) |
+    | Eén volledig speelbare bestuurlijke cyclus | het jaar, met de heer op Sint-Maarten | een eind: winnen kan na zes maanden, en wie doorspeelt, verliest alles (vraag 59) |
+
+    **Voorstel: we groeien naar de slice toe, met een eind per jaar.** Je begint zoals nu, als schout van een gehucht, en
+    het spel gaat over gehucht, dorp en kleine stad (de stad van de slice) in een paar bestuursjaren; elk jaar eindigt
+    met het oordeel van de heer. Zo blijft wat er is en getest werd, en is groeien meer verantwoordelijkheid (het
+    concept: "Uit handen geven is groeien"): de ambtenaren komen als het dorp groeit. Het andere: meteen beginnen als
+    schout van een kleine stad van 100 mensen, zoals het concept zelf, met een nieuwe kaart en alles er tegelijk. In
+    stappen, elk eerst een plan voor Marcel, en na elke stap de speeltest:
+    - **Stap 1, de cyclus: een jaar met een eind.** De heer oordeelt op 1 lentemaand: een dorp (pas dan geteld, vraag 59,
+      A) is een trede verder; geen dorp maar je ambt en je mensen nog: nog een jaar; je ambt kwijt, gevallen of
+      uitgestorven (minder dan tien mensen): verloren. Het eind laat het jaar in het kort zien (wie kwam, stierf en
+      wegtrok, wat de heer kreeg, de voorvallen en wat je koos; de afrekening, vraag 49). En een jaar dat te winnen is
+      (vraag 59, B en C): geen gezin als het hout of het eten de winter niet haalt, de raad zegt waar goud vandaan komt,
+      en in de lente verkoopt de marskramer zaaigraan. Daarna is het spel al van begin tot eind te spelen, als gehucht.
+    - **Stap 2, statussen met niveaus** (de richtlijn): wat een tijd duurt, is een status met een begin, een eind en
+      niveaus, te zien in de balk zolang hij duurt (sinds wanneer, waarom, wat helpt), en het rapport zegt het begin, het
+      erger of minder worden en het eind. Eerst wat er is (honger en hongersnood, kou en strenge kou, vol en overvol,
+      onvrede en onrust), dan de crises uit het concept: droogte en ernstige droogte (de akkers geven minder), een ziekte
+      (wie ziek is, werkt niet), een brand, elk met een oorzaak die je kon zien. Samen met de voorvallen de 5 tot 10
+      soorten gebeurtenissen van de slice.
+    - **Stap 3, ambtenaren:** naast de raadsman twee of drie, elk met een terrein en een rapport: een marktmeester (de
+      markt, de prijzen), een wachtmeester (de wacht, de misdaad) en een rentmeester (het geld, de belasting, wat de heer
+      vraagt). Je kiest ze uit je mensen, zoals de raadsman, en wat ze kunnen, kleurt hun rapport.
+    - **Stap 4, wacht en misdaad:** een wacht die patrouilleert, misdaad als status (een misdaadgolf), en het gevang.
+    - **Stap 5, mensen met banden:** 10 tot 20 mensen (de boeren, de ambtenaren, de herbergierster, de smid, ...) met
+      wat ze van jou vinden (vertrouwen) en van elkaar, dat verandert door wat je beslist en terugkomt in wat ze doen.
+    - **Stap 6, de kleine stad:** de markt, het raadhuis en de poort die iets doen (de markt met prijzen en kramen die je
+      ziet, het raadhuis waar de ambtenaren zitten, de poort waar alles binnenkomt), een kaart met plaats voor 200
+      mensen, en het zoeken van paden sneller, zodat 200 mensen vloeiend lopen (vraag 74).
+    Vragen: **a**, groeien naar de slice (gehucht, dorp, kleine stad, in een paar jaar), of meteen beginnen als kleine
+    stad? **b**, de statussen zo, met niveaus, in de balk en in het rapport? **c**, welke ambtenaren: de marktmeester, de
+    wachtmeester en de rentmeester? **d**, in deze volgorde, en beginnen met stap 1, de cyclus?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

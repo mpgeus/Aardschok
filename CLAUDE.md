@@ -501,10 +501,16 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   heervaart, dan een rivaal), in beurten op je eigen kaart met je militie; daarna de streek als
   kaarten naast elkaar; tussen steden pas na de vrijheid.
 - Toon: zwarte satire. De heer is lachwekkend, zijn straffen niet (voorstel).
-- **Een toestand is een status** (Marcel, 1 okt, als richtlijn: "Honger, droogte of een plaag, moet een status zijn"):
-  wat een tijd duurt, heeft een begin en een eind en is te zien zolang het duurt; een bericht of het rapport zegt het
-  als het begint of ophoudt, niet elke dag (vraag 76). Nu zijn dat de oorzaken (`T.OORZAKEN`: honger, kou, vol,
-  onvrede); de status in beeld, en droogte en een plaag, horen bij het plan voor een spel van begin tot eind (vraag 77).
+- **Een toestand is een status** (Marcel, 1 okt, als richtlijn: "Honger, droogte of een plaag, moet een status zijn",
+  en "Iets wat begint en eindigt. Mogelijk in verschillende niveaus. Ernstige droogte, en droogte bijvoorbeeld"): wat
+  een tijd duurt, heeft een begin en een eind, soms in niveaus, en is te zien zolang het duurt; een bericht of het
+  rapport zegt het als het begint, erger of minder wordt, of ophoudt, niet elke dag (vraag 76). Nu zijn dat de oorzaken
+  (`T.OORZAKEN`: honger, kou, vol, onvrede); de rest hoort bij het plan voor de vertical slice (vraag 77).
+- **Het doel is de vertical slice uit het concept** (Marcel, 1 okt: "Laten we eerst eens een speelbaar spel maken van
+  begin tot eind", en "Gebruik de slice in de pdf"): één kleine stad met 100 tot 200 mensen, markt, woonwijk,
+  ambachtswijk, raadhuis, kerk en stadspoort, dag en nacht, voedsel en economie, wacht en misdaad, 3 of 4 ambtenaren,
+  10 tot 20 mensen met echte banden, een paar bouwprojecten, 5 tot 10 soorten gebeurtenissen, en één volledig speelbare
+  bestuurlijke cyclus (`concept.md`; het plan is vraag 77).
 - **Niet te ingewikkeld** (Marcel, 29 sep): "er is geen gelijkenis met de werkelijkheid. We zijn gewoon een
   schout die een dorp runt en land wil uitbreiden." De eenvoudige regel gaat voor de regel die klopt met vroeger.
 - **Instelbaar** (Marcel, 24 sep): waar een ontwerpvraag meer dan één goed antwoord heeft, wordt het
