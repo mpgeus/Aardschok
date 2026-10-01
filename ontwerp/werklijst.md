@@ -3169,6 +3169,23 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 1 okt 2026 — **Stap 2a en 2b: de wensen per huis, doorgroeien, en zes stenen huizen** (tweeëntwintigste sessie; vraag
+  80 en 85; Marcel: "a ja, maar een hogere stand eigent zich spullen toe ... b ja voor nu. c zacht d ja"). **2a**
+  (`js/wensen.js`): elk huis met mensen heeft een stand naar zijn soort (een hut keuters, een huis dorpelingen, een stenen
+  huis ambachtslieden, een boerderij boeren; het huis van de schout en de herberg geen), en een stand wil wat de stand
+  eronder wil, en meer: goederen uit de voorraad (bier, vlees of vis, brood, laken; **de hoogste stand neemt eerst**), en
+  plekken in een kring om het huis (een put 12 tegels, een kapel, de herberg en een markt 30). Elk huis heeft zijn eigen
+  tevredenheid (eten 0,5, brandhout 0,3, de rest 0,2), en het dorp is het gemiddelde, naar mensen; het gehucht begint zo
+  op 83% in plaats van 67%, want de afwisseling ging op in de wensen. De balk zegt de tevredenheid per stand en in hoeveel
+  huizen iets gemist wordt; met een put, kapel, herberg of markt in de hand zie je de kring, en zegt de muis wie hij
+  bereikt (de kring is groter dan het scherm, `opmerkingen.md`). **2b** (`js/behoeften.js`): heeft een huis 30 dagen op
+  rij alles, dan groeit het door, voor 8 hout (een huis) of 12 steen (een stenen huis); zonder bouwstof wacht het, en zegt
+  het dorp het één keer. De woningen van het begin groeiden nooit (ze hadden geen voorwerp); nu wel. Achteruitgaan is
+  zacht (een gezin trekt alleen weg uit een huis onder de vertrekdrempel), en de spelregel "Achteruitgaan" kan het
+  streng. Een hogere stand betaalt meer belasting. **De stenen huizen:** zes stenen broertjes van de zes huizen, van
+  veldsteen onder riet (`huizen.cjs`, met bouwfases); een huis versteent op zijn eigen grond. De spelregel "Wensen" op
+  "Het dorp als geheel" is het spel van vóór 1 okt: daarmee speelt de speeltest alle vijftien jaren letter voor letter
+  zoals op de stand ervoor (`d51ff59`). `Spel.debug.wensen()`. 21 nieuwe toetsen, `npm test` 743/743.
 - 1 okt 2026 — **Het zaaigraan, pas bij nood** (eenentwintigste sessie; vraag 81; Marcel: "zaaigraan wordt bij nood
   opgegeten, anders sterven er mensen"). Van de oogst tot het zaaien houden de boeren het zaaigraan voor volgend jaar
   achter (`T.zaaigraanApart`, wat de akkers van volgend jaar vragen), en het dorp eet het pas na het andere graan, de
