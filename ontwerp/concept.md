@@ -89,6 +89,27 @@ mensen; dat slaat niet op ons: wij beginnen met een gehucht, en onze opzet zonde
 Het slot: geen "RPG waarin je een schout bent" en geen "city-builder met een poppetje", maar "een managementsim waarin
 het poppetje de manier is waarop je bestuurt."
 
+**Nog nagelezen** (1 okt, bij werklijst vraag 77; Marcel: "Staat in deze pdf, opmerkingen over Godot negeren"):
+wat hierboven ontbrak en nu telt.
+- **Crises zetten de systemen onder druk** (p.10): "Crises moeten de bestaande systemen onder druk zetten." Een tabel
+  met per gebeurtenis wat hij raakt: een slechte oogst (voedsel, prijzen, bevolking, criminaliteit), een brand
+  (veiligheid, bouw, bevolking, stadsfinanciën), een ziekte-uitbraak (gezondheid, arbeid, bevolking, kerk), een
+  overstroming (infrastructuur, voedsel, woningen), en verder een handelsboycot, een misdaadgolf, vluchtelingen, een
+  politieke crisis en oorlogsdreiging. "De speler moet achteraf kunnen begrijpen waarom hij ontstond": wie maandenlang
+  het water verwaarloost, krijgt de ziekte als gevolg, niet als straf. Hoe lang een crisis duurt en hoe hij eindigt,
+  staat er niet in; dat vult Marcels richtlijn in: een toestand is een status, met een begin en een eind (vraag 76).
+- **De eerste versie** (p.13, "vertical slice"): één kleine stad, 100 tot 200 mensen, markt, woonwijk, ambachtswijk,
+  raadhuis, kerk en stadspoort, dag en nacht, voedsel en economie, wacht en misdaad, 3 of 4 ambtenaren, 10 tot 20
+  mensen met echte banden, een paar bouwprojecten, 5 tot 10 soorten gebeurtenissen, en "één volledig speelbare
+  bestuurlijke cyclus". Hoe lang die is, en hoe je wint of verliest, zegt het concept niet: het is een zandbak.
+- **De wereld eerst** (p.11): "lege marktkramen, volle gevangenis, drukke wachtrij bij de bakker, kapotte straat";
+  "De graphics zijn niet alleen decor; ze zijn informatie." Tabellen alleen "wanneer de speler ze echt nodig heeft".
+- **Een dagrapport 's avonds** (p.14, een tweede voorbeelddag): naast het rapport om zeven uur ("graanvoorraad laag")
+  om tien uur 's avonds een dagrapport ("prioriteiten voor morgen"); en een rentmeester die de financiën toont, en een
+  marktmeester.
+- **Hoe de stad groeit** (p.9): van kleine stad (500 tot 800) via groeiende stad en regionaal centrum naar machtige
+  stad (3.000 en meer), elk met wat erbij komt; bij ons zijn dat de treden, van gehucht af.
+
 ## Naast ons spel gelegd (Claude, 30 sep)
 
 **Wat er al is.** Veel van het concept is wat Marcel op 23 sep koos, of wat er sindsdien gebouwd is:
