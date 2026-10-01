@@ -40,7 +40,7 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - `ontwerp/commercieel.md`: hoe het spel geld gaat verdienen (Marcel, 1 okt: "Ik wil hier eigenlijk geld mee
   verdienen"): de markt, verlanglijstjes en Steam Next Fest, de haak (je bent geen god boven het dorp, maar de schout
   erin), de beeldstijl als troef, Engels, en een tijdpad.
-  Het commerciële deel denkt mee in elke keuze; de vragen zijn vraag 83.
+  Het commerciële deel denkt mee in elke keuze; de vragen waren vraag 83 en 84 (open: welke zin de haak wordt).
 - `ontwerp/speelbaar.md`: wat er nog ontbreekt voor een eerste speelbaar product (vraag 33), en wat er
   in een speeltest van een heel jaar gebeurde.
 - `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
@@ -517,7 +517,9 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 - **Geld verdienen** (Marcel, 1 okt): "we moeten echt denken aan het commerciële deel van het project. Ik wil hier
   eigenlijk geld mee verdienen." En: "Volgens mij is ons idee dieper dan wat er op Steam staat? Ook de art stijl speelt
   een grote rol." Wat het spel verkoopt, is het concept (je bestuurt als één mens in het dorp) en de beeldstijl; de
-  heer, de inner en het verstoppen zijn de satire daarin (`commercieel.md`).
+  heer, de inner en het verstoppen zijn de satire daarin (`commercieel.md`). Het tijdpad (vraag 83): de kern dit jaar,
+  in januari 2027 de naam, geluid, Engels en de Steam-pagina, in juni 2027 de demo in Next Fest. Er is weinig geld
+  ("Ik gebruik jou ☺️"): wat kan, maakt Claude, zoals de beelden uit code; Marcel kiest, luistert en plaatst.
 - **Een toestand is een status** (Marcel, 1 okt, als richtlijn: "Honger, droogte of een plaag, moet een status zijn",
   en "Iets wat begint en eindigt. Mogelijk in verschillende niveaus. Ernstige droogte, en droogte bijvoorbeeld"): wat
   een tijd duurt, heeft een begin en een eind, soms in niveaus, en is te zien zolang het duurt; een bericht of het

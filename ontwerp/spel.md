@@ -23,6 +23,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt | vraag 58, 79 |
+| Dorpsfeesten | idee voor later (Marcel, 1 okt): feesten bij het seizoen waar het hele dorp aan meedoet, en een grote bruiloft; nu alleen een notitie | |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
 | De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen, vreemden welkom, houtkap en belasting | vraag 54 |
@@ -162,7 +163,7 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
 - **Een kazerne** (Marcel, 1 okt: "Extra gebouwen als barakken of iets om te soldaten te trainen / rekruteren"): een
   gebouw waar je mannen rekruteert en traint tot soldaten, die beter vechten dan de wachters van het wachthuis, met
   wapens van de wapenmaker. Nu is er alleen het wachthuis (twee man die meevechten) en de veteraan die terugkomt van de
-  heervaart. Wanneer: werklijst vraag 84, c.
+  heervaart. **Besloten (Marcel, 1 okt, vraag 84, c):** "later, met de oorlog".
 - **Besloten (Marcel, 29 sep, werklijst vraag 56):** "schout kan sterven": valt hij, dan is het spel uit, en een
   aanval waarschuwt daar niet voor ("A laten zo, geen bericht"). Tegen drie rovers valt een schout die voorop loopt
   in de tweede of derde ronde, en wint wie de wachters voor laat gaan. En "We bouwen het langzaam op": de wilde
@@ -429,6 +430,28 @@ doel"):
 - **Instelbaar:** de spelregel "Raad" zet hem uit, en de dagen staan in de werkbank (`T.RAAD_INSTELLINGEN`).
   `Spel.debug.raad()` zegt welke raden nu gelden.
 - **Nog niet:** de raad zegt niets over de wetten. Wat de bouwer in de speeltest ermee deed, staat in `speelbaar.md`.
+
+## Dorpsfeesten (Marcel, 1 okt 2026; later)
+
+**Zo werkt het nu:** nog niets; een notitie, later bouwen. Marcel: "Later wil ik ook dorpsfeesten die passen bij het
+seizoen, hier wil ik het hele dorp wat mee doet etc. Ook een bruiloft wordt groots gevierd. Er zijn veel soorten
+feesten die we kunnen gebruiken hiervoor. Voor nu een notitie later pas bouwen."
+
+- **Wat er al is:** drie voorvallen zijn feesten (een bruiloft, het oogstfeest, een lied over de heer), met een
+  stemming die wegslijt ("Het is blij met de bruiloft"; "De voorvallen" hierboven), en de raadsman die het oogstfeest
+  klein houdt. In "Lords of the Realm 2 als voorbeeld" (idee 4) laat een kermis of een bruiloft vlak voor de inner een
+  overschot verdwijnen: wat op is, kan hij niet tellen.
+- **Ideeën erbij** (Claude, voorstel, niets besloten):
+  - Bij het seizoen, uit de kalender die er al is: de meiboom (1 bloeimaand), het vuur van Sint-Jan (zomermaand), het
+    oogstfeest na de laatste schoof, het slachtfeest (slachtmaand) en midwinter. En Sint-Maarten: dan viert het dorp
+    feest, en komt de heer innen, op dezelfde dag.
+  - De kermis komt met de kapel: "kermis" is "kerkmis", het feest van de wijding van de kerk. Wie een kapel bouwt,
+    krijgt een eigen kermis.
+  - Het hele dorp doet mee: iedereen gaat naar het plein (een anker voor die dag, zoals de herberg 's avonds), met
+    muziek en lantaarns, en dat kost bier, eten en een dag werk.
+  - Een bruiloft verbindt twee gezinnen (de mensen met banden, stap 5 van de slice), en het nieuwe paar zoekt een huis.
+  - Een feest kan een wens zijn (vraag 80): wie super gelukkig moet zijn, wil ook eens feest.
+  - Ook een moment voor de trailer: het hele dorp op één plek (`commercieel.md`).
 
 ## Besloten (Marcel, 23 sep 2026)
 

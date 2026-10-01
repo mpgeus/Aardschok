@@ -28,13 +28,15 @@ gehucht" op "Elk spel een ander" legt de maker elk nieuw spel een ander gehucht 
 De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 717/717.
 
 **Waar het werk staat:** het werk van de twintigste sessie staat in `main` (Marcel, 1 okt: "Alles pushen en main"). Dat
-van de eenentwintigste sessie (vraag 78 tot en met 81, en stap 1) staat op `ccr-b5dfb962-d3bery`, gepusht maar nog niet
+van de eenentwintigste sessie (vraag 78 tot en met 84, stap 1 en het zaaigraan) staat op `ccr-b5dfb962-d3bery`, gepusht maar nog niet
 in `main`: zet het erin als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** **bouw stap 2, de wensen per stand, klein** (vraag 80 en 82; Marcel, 1 okt: "80: a,
 Ja. B, Ja. C, Ja. D, een jaar", en "82: correct"). Alles is besloten, dus bouwen kan meteen, in de volgorde van vraag
 80 (2a de stand en de wensen per huis, met de tevredenheid als gemiddelde; 2b doorgroeien en achteruitgaan, met
-bouwstof; 2c zien wat een huis wil; 2d de treden uit de standen; 2e het eind en het jaar in het kort). **Klein** is: drie
+bouwstof; 2c zien wat een huis wil; 2d de treden uit de standen; 2e het eind en het jaar in het kort). **Vóór 2c eerst
+een pagina met ontwerpen voor de ui** (vraag 84, a: "ja"): de vensters worden papieren in de beeldstijl, en Marcel kiest
+uit een paar schetsen van de balk, een venster en een papier; dan krijgen de wensen meteen vensters in die stijl. **Klein** is: drie
 standen, op de huizen die er al zijn; de poorters en hun huis komen later. De tabel:
 
 | Stand | Huis | Gebruikt | Wil in de buurt (een kring om het gebouw) |
@@ -118,6 +120,14 @@ als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speelt
    paden zoeken; zo gebouwd dat het later een stad van 5000 of meer kan worden (Marcel, 1 okt; `opmerkingen.md`).
 Later: een scherm met de statussen en de laatst bekende inventarisatie (vraag 77, b).
 
+*0b. Het tijdpad naar Steam* (Marcel, 1 okt, vraag 83: "Tijdspan is goed"; `commercieel.md`). Tot december 2026 de
+kleine speelbare kern (stap 1 en 2 hierboven, en de eisen van de heer), met de eerste filmpjes en testers. In januari
+2027 de naam (vraag 8), geluid (eerst, vóór de seizoenen in beeld en het weer; vraag 84, b), Engels (de spelteksten op
+één plek), de ui als papieren in de beeldstijl met een fotomodus (vraag 84, a; 83, e), en de Steam-pagina: een capsule,
+vijf plaatjes en een trailer van een minuut. In juni 2027 de demo in Steam Next Fest (aanmelden vóór 25 april 2027).
+Daarna early access. Er is weinig geld ("Ik gebruik jou ☺️"): wat kan, maakt Claude, en Marcel kiest, luistert en
+plaatst.
+
 *1. Gebouwd (28 en 29 sep): naar de proef "van gehucht tot dorp"* (Marcel, 28 sep, vraag 51: "A ja B ja C ja D ja";
 sinds 1 okt opgegaan in de vertical slice, hierboven).
 Je begint zoals nu, met de brief van de heer en 26 mensen, en het doel is dat het gehucht in zo'n twee jaar een dorp
@@ -142,7 +152,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* het commerciële deel (vraag 83: a tot en met e, `commercieel.md`); de sfeer, de ui en een kazerne (vraag 84: a tot en met c); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* welke zin de haak wordt, nu hij is nagezocht tegen Steam (vraag 83, c; de rest van 83 en heel 84 is beantwoord, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -162,7 +172,11 @@ speeltest (vraag 46) komt later, met een menu met opties.
   buurdorp (vraag 50, C);
 - de rest van punt 4: het bos met de kudde (vraag 43), de marskramer die vee koopt en verkoopt, de twee
   rekenboeken; en de afrekening als jaaroverzicht (vraag 49);
-- deel F: geluid, en verpakken voor Steam als de proef goed is; sneeuw of rijp in de winter (vraag 44, C).
+- deel F: geluid, en verpakken voor Steam als de proef goed is; sneeuw of rijp in de winter (vraag 44, C). Sinds 1 okt
+  op het tijdpad naar Steam (blok 0b, hierboven): eerst geluid, dan de seizoenen in beeld en het weer (vraag 84, b);
+- de kazerne, met de oorlog (vraag 84, c: "later, met de oorlog"; `spel.md`, bij de rovers);
+- dorpsfeesten bij het seizoen, waar het hele dorp aan meedoet, en een bruiloft die groots gevierd wordt (Marcel, 1 okt:
+  "Voor nu een notitie later pas bouwen"; `spel.md`, "Dorpsfeesten").
 
 *4. Opruimen, als die bestanden toch open moeten:* `hud.js` en `tekenen.js` splitsen (vraag 25, C en D).
 
@@ -2754,6 +2768,19 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     troef, maar de vensters erover maken de plaatjes zwakker. Dus c en een vijfde vraag worden: **c**, de haak zo, en
     wat hem zichtbaar maakt ("wat je weet, is wat er het laatst geteld werd", vraag 77, b) naar voren, vóór de demo?
     **e**, een fotomodus en vensters en een letter in de beeldstijl, vóór de Steam-pagina?
+    **Beantwoord (Marcel, 1 okt):** "1. Tijdspan is goed 2. Engels is prima 3. De nieuwe hook nogmaals checken tegen
+    steam 4. Geld is beperkt. Ik gebruik jou ☺️ 5. Foto modus is ingeschakeld en goed idee voor de Steam pagina" (en
+    daarna: "Ik bedoelde goed idee"). Dus **a** en **b** ja (het tijdpad staat als blok 0b bovenaan), **d**: wat kan,
+    maakt Claude (de capsule uit de pijplijn van de pixel art, geluid uit vrije bibliotheken en code, de vertaling, de
+    teksten voor de Steam-pagina), en Marcel kiest, luistert en plaatst; alleen de 100 dollar voor Steam staat vast.
+    **e** ja: de fotomodus komt met de ui (vraag 84, a). **c** is nagezocht (`commercieel.md`, "De haak, nagezocht
+    tegen Steam"): de twee helften bestaan elk apart, "tussen je dorpelingen lopen" in *Noble Legacy* (als heer, en met
+    een knop naar boven) en "de ambtenaar tussen de heer en het dorp" in *The Reeve* (een keuzespel zonder dorp, en het
+    woord "reeve" is dus bezet); allebei samen heeft niemand. Daarom een scherpere zin, met de plek ertussen. Nog open,
+    **c**: welke zin? 1, "De heer wil geld. Het dorp wil leven. Jij staat ertussen." (advies, als de zin onder de naam);
+    2, "Je bent geen god boven het dorp. Je bent de schout erin." (zoals het was; advies: als de gedachte in de
+    beschrijving); of 3, "Bestuur een dorp te voet, voor een heer die alleen geld ziet." En komt wat de haak zichtbaar
+    maakt ("wat je weet, is wat er het laatst geteld werd") naar voren, vóór de demo?
 84. **De sfeer, de ui, en een kazerne** (Marcel, 1 okt, eenentwintigste sessie: "De atmosfeer moet goed zijn. Trekken als
     het ware. De ui moeten we nog maken. De losse info panelen etc ook. Extra gebouwen als barakken of iets om te soldaten
     te trainen / rekruteren"; wacht op Marcel). Het voorstel staat in `commercieel.md` ("De sfeer en de ui") en `spel.md`
@@ -2764,6 +2791,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     ontwerpen om uit te kiezen, vóór de wensen zichtbaar worden (vraag 80, 2c)? **b**, voor de sfeer eerst geluid
     (omgeving en muziek), dan de seizoenen in beeld en het weer? **c**, de kazerne: nu, zodat je militie tegen de rovers
     beter wordt, of later, met de oorlog?
+    **Beantwoord (Marcel, 1 okt):** "a ja b ja c later, met de oorlog". Dus vóór 2c eerst de pagina met ontwerpen voor de
+    ui (zie "Waar de volgende sessie begint"); voor de sfeer eerst geluid, dan de seizoenen en het weer (blok 0b); en de
+    kazerne komt met de oorlog (onder 3). In hetzelfde bericht: "Later wil ik ook dorpsfeesten die passen bij het seizoen,
+    hier wil ik het hele dorp wat mee doet etc. Ook een bruiloft wordt groots gevierd. Er zijn veel soorten feesten die we
+    kunnen gebruiken hiervoor. Voor nu een notitie later pas bouwen." Dat staat in `spel.md`, "Dorpsfeesten", en onder 3.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
