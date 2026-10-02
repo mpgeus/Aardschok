@@ -292,25 +292,62 @@
     const soort = T.GEBOUWEN[g.soort];
     const de = `de ${soort.naam}`;
     if (g.stilWant) return `${de} staat stil: ${g.stilWant}`;
-    if (soort.handen > 0 && !g.handen) return `${de} heeft geen handen`;
+    if (soort.handen > (g.handen || 0)) return `${de} heeft ${g.handen ? 'te weinig' : 'geen'} handen`;
     if (g.tekort) return `${de} heeft ${g.werkte > 0 ? 'te weinig' : 'geen'} ${g.tekort}`;
     return `${de} maakt te weinig`;
   }
 
+  // De ketens (werklijst vraag 90, D; Marcel, 2 okt: "d ja"): wat een werkplaats nodig heeft (T.GEBOUWEN[x].maakt.in), en
+  // wie dat maakt. Brood komt van de bakkerij, die meel nodig heeft van de molen; laken van de weverij, met wol van de
+  // schapen. Wat geen werkplaats maakt, komt van buiten het bouwmenu: daar valt niets voor te bouwen.
+  const makersVan = (wat) => Object.keys(T.GEBOUWEN).filter((s) => T.GEBOUWEN[s].maakt && T.GEBOUWEN[s].maakt.uit && T.GEBOUWEN[s].maakt.uit[wat]);
+  const VAN = { graan: 'graan komt van de akkers', wol: 'wol komt van de schapen, in zomermaand' };
+
+  // Wat een werkplaats die je gaat bouwen nodig heeft en nergens gemaakt wordt, en wel te bouwen is: een bakkerij zonder
+  // molen. Die noemt de raad er meteen bij ("bouw een bakkerij en een molen [B]"), zodat je de keten in één keer ziet.
+  function ookNodig(D, soort) {
+    const nodig = (T.GEBOUWEN[soort].maakt && T.GEBOUWEN[soort].maakt.in) || {};
+    const erbij = [];
+    for (const wat of Object.keys(nodig)) {
+      const makers = makersVan(wat);
+      if (!makers.length || (D.voorraad[wat] || 0) >= nodig[wat] || (D.gebouwen || []).some((g) => makers.includes(g.soort))) continue;
+      const kan = makers.find((s) => T.inBouwmenu(D, s));
+      if (kan) erbij.push(kan);
+    }
+    return erbij;
+  }
+
   // Wat helpt, uit de soorten die het maken (een visser of een jager voor vlees of vis, een houthakker voor hout): { kan,
   // bouw, tekst }. Wat in dit seizoen stilligt (de visser in de winter), helpt nu niet. Wordt er een gebouwd, dan wacht
-  // je daarop; staat er een en is het niet genoeg, dan nog een, of waarom niet; en wat je nog niet kunt bouwen, wanneer
-  // wel.
-  function watHelpt(D, soorten) {
+  // je daarop. Staat er een die niet genoeg heeft van wat hij nodig heeft, dan helpt wie dat maakt (de keten: "de
+  // bakkerij heeft geen meel, bouw een molen [B]"), en wie te weinig handen heeft, helpt nog een niet. Anders nog een,
+  // of waarom niet; en wat je nog niet kunt bouwen, wanneer wel. `keten`: hoe diep in een keten (een molen voor een
+  // bakkerij is 1).
+  function watHelpt(D, soorten, keten = 0) {
     const seizoen = D.kalender ? T.datumVanDag(D.kalender.dag).seizoen : null;
     const staan = (D.gebouwen || []).filter((g) => soorten.includes(g.soort));
     const inBouw = staan.find((g) => !g.klaar);
     if (inBouw) return { kan: false, bouw: null, tekst: `de ${naamVan(inBouw.soort)} wordt gebouwd` };
-    const helpen = soorten.filter((s) => T.inBouwmenu(D, s) && !(T.GEBOUWEN[s].stilIn && seizoen && T.GEBOUWEN[s].stilIn[seizoen]));
+    const stil = (soort) => T.GEBOUWEN[soort].stilIn && seizoen && T.GEBOUWEN[soort].stilIn[seizoen];
+    const werken = staan.filter((g) => !stil(g.soort));
+    const zonder = werken.find((g) => g.tekort);
+    if (zonder) {
+      const waarom = waaromTeWeinig(zonder);
+      const makers = makersVan(zonder.tekort);
+      if (makers.length && keten < 2) {
+        const h = watHelpt(D, makers, keten + 1);
+        return { kan: h.kan, bouw: h.bouw, tekst: `${waarom}, ${h.kan ? '' : 'en '}${h.tekst}` };
+      }
+      return { kan: false, bouw: null, tekst: VAN[zonder.tekort] && !keten ? `${waarom}, en ${VAN[zonder.tekort]}` : waarom };
+    }
+    const zonderHanden = werken.find((g) => T.GEBOUWEN[g.soort].handen > (g.handen || 0));
+    if (zonderHanden) return { kan: false, bouw: null, tekst: waaromTeWeinig(zonderHanden) };
+    const helpen = soorten.filter((s) => T.inBouwmenu(D, s) && !stil(s));
     if (helpen.length) {
       const er = helpen.find((s) => staan.some((g) => g.soort === s));
       if (er) return { kan: true, bouw: er, tekst: `nog een ${naamVan(er)} [B]` };
-      return { kan: true, bouw: helpen[0], tekst: `bouw ${of(helpen.map((x) => `een ${naamVan(x)}`))} [B]` };
+      const erbij = helpen.length === 1 ? ookNodig(D, helpen[0]) : [];
+      return { kan: true, bouw: helpen[0], tekst: `bouw ${T.opsomming(helpen.length === 1 ? [helpen[0], ...erbij].map((x) => `een ${naamVan(x)}`) : [of(helpen.map((x) => `een ${naamVan(x)}`))])} [B]` };
     }
     if (staan.length) return { kan: false, bouw: null, tekst: waaromTeWeinig(staan[0]) };
     return nogNiet(soorten[0]);

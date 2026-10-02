@@ -31,7 +31,9 @@
 //
 // En een vijfde, voor de proef "van gehucht tot dorp" (werklijst, vraag 58, A; Marcel, 29 sep: "A Ja goed idee"):
 //   bouwer  doet wat het doel vraagt (js/treden.js), twee jaar lang: hij houdt steeds één erf vrij, neemt Vreemden
-//           welkom aan, bouwt de kapel en de smidse zodra het goud en het hout er zijn, een houthakker als het
+//           welkom aan, bouwt wat het doel aan gebouwen vraagt zodra het goud en het hout er zijn (sinds 2 okt, vraag
+//           90, niets meer: een trede komt met de dorpelingen; met de spelregel Treden op de proef de kapel en de
+//           smidse), een houthakker als het
 //           dorp zegt dat het hout de winter niet haalt, verkoopt de marskramer graan als het goud tekortschiet (en
 //           houdt wat het dorp tot de lente eet, het zaaigraan en het graan van de heer), koopt in de lente zaaigraan
 //           als er akkers kaal liggen (sinds 1 okt, vraag 79), bouwt een jager als het eten de winter niet haalt
@@ -40,9 +42,11 @@
 //           (T.watDeHuizenMissen): een put of een kapel waar hij de meeste huizen zonder bereikt, een visser of een
 //           jager voor vlees of vis, en een houthakker of een steengroeve als een huis op bouwstof wacht, hooguit één
 //           per maand; en een houthakker vóór een nieuw erf, als er nog geen staat. Bij de marskramer verkoopt hij ook
-//           graan voor het goud van zijn volgende wens (vraag 89, c).
+//           graan voor het goud van zijn volgende wens (vraag 89, c). Sinds vraag 90, D kent de raad de ketens, en
+//           de bouwer dus ook: een bakkerij en een molen voor brood, en een molen als de bakkerij geen meel heeft.
 // Van elke speler schrijft hij op waarom er op een groeidag geen gezin kwam (T.waaromGeenGezin, js/gebouwen.js),
-// op welke dag het gehucht een dorp werd, en welke raad er elke dag onder het doel stond (js/raad.js).
+// op welke dag het gehucht een dorp werd en marktrecht kreeg, en welke raad er elke dag onder het doel stond
+// (js/raad.js).
 (function (T) {
   'use strict';
 

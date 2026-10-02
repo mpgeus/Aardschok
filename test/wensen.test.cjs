@@ -422,6 +422,10 @@ test('wat de huizen missen: in de winter ligt de visser stil, dus een jager; sta
   assert.equal(vind(D, 'vleesOfVis').kan, false, 'de jager wordt gebouwd');
   assert.match(vind(D, 'vleesOfVis').tekst, /de jager wordt gebouwd\.$/);
   jager.klaar = true;
+  // Zonder handen helpt nog een jager niet (vraag 90, D): dan zijn er mensen nodig, en dat zegt de raad niet met [B].
+  assert.equal(vind(D, 'vleesOfVis').tekst, 'Een huis wil vlees of vis: de jager heeft geen handen.');
+  assert.equal(vind(D, 'vleesOfVis').kan, false);
+  jager.handen = 1;
   assert.equal(vind(D, 'vleesOfVis').tekst, 'Een huis wil vlees of vis: nog een jager [B].');
 });
 
@@ -439,6 +443,55 @@ test('wat de huizen missen: wat je nog niet kunt bouwen, zegt wanneer wel, en de
   assert.equal(vind(D, 'markt').tekst, 'Een stenen huis wil een markt binnen 30 tegels: een markt bouw je pas in een dorp.');
   assert.equal(vind(D, 'herberg').tekst, 'Een stenen huis wil de herberg binnen 30 tegels: een herberg bouw je pas in een dorp.');
   assert.equal(vind(D, 'kapel').kan, true, 'een kapel kun je in een gehucht bouwen');
+});
+
+// De ketens (werklijst vraag 90, D; Marcel, 2 okt: "d ja"): brood komt van de bakkerij, die meel nodig heeft van de molen,
+// en laken van de weverij, met wol van de schapen.
+test('de ketens: wie brood wil, hoort van de bakkerij en de molen; staat de bakkerij zonder meel, dan een molen', () => {
+  const D = Object.assign(kaalDorp(), { trede: 'dorp', kalender: T.nieuweKalender() });
+  zetHuis(D, 'stenenHuis', 10, 10, 8);
+  T.onthoudWensen(D, T.berekenWensen(D, ZOMERDAG, alles));
+  // Er is nog niets: dan de hele keten in één keer, en de bouwer begint bij de bakkerij.
+  let x = vind(D, 'brood');
+  assert.equal(x.tekst, 'Een stenen huis wil brood: bouw een bakkerij en een molen [B].');
+  assert.deepEqual([x.kan, x.bouw], [true, 'bakkerij']);
+  // De bakkerij staat, maar heeft geen meel (zoals T.tikGebouwenDag het opschrijft): nog een bakkerij helpt niet, een
+  // molen wel.
+  const bakkerij = zetHuis(D, 'bakkerij', 30, 10, 0, { handen: 1, tekort: 'meel', werkte: 0 });
+  x = vind(D, 'brood');
+  assert.equal(x.tekst, 'Een stenen huis wil brood: de bakkerij heeft geen meel, bouw een molen [B].');
+  assert.deepEqual([x.kan, x.bouw], [true, 'molen']);
+  // Wordt de molen gebouwd, dan wacht je daarop.
+  const molen = zetHuis(D, 'molen', 40, 10, 0, { klaar: false });
+  x = vind(D, 'brood');
+  assert.equal(x.tekst, 'Een stenen huis wil brood: de bakkerij heeft geen meel, en de molen wordt gebouwd.');
+  assert.equal(x.kan, false);
+  // Staat hij, zonder graan, dan zegt het dat; met graan maar te weinig, dan nog een molen.
+  Object.assign(molen, { klaar: true, handen: 1, tekort: 'graan', werkte: 0 });
+  assert.equal(vind(D, 'brood').tekst, 'Een stenen huis wil brood: de bakkerij heeft geen meel, en de molen heeft geen graan.');
+  Object.assign(molen, { tekort: null, werkte: 1 });
+  bakkerij.werkte = 0.5;
+  assert.equal(vind(D, 'brood').tekst, 'Een stenen huis wil brood: de bakkerij heeft te weinig meel, nog een molen [B].');
+  // Heeft de bakkerij genoeg meel, dan nog een bakkerij.
+  Object.assign(bakkerij, { tekort: null, werkte: 1 });
+  assert.equal(vind(D, 'brood').tekst, 'Een stenen huis wil brood: nog een bakkerij [B].');
+});
+
+test('de ketens: wol maakt geen werkplaats, die komt van de schapen; in een gehucht bouw je de bakkerij nog niet', () => {
+  const D = Object.assign(kaalDorp(), { trede: 'dorp', kalender: T.nieuweKalender() });
+  zetHuis(D, 'stenenHuis', 10, 10, 8);
+  T.onthoudWensen(D, T.berekenWensen(D, ZOMERDAG, alles));
+  assert.equal(vind(D, 'laken').tekst, 'Een stenen huis wil laken: bouw een weverij [B].', 'wol maakt geen werkplaats: niets erbij');
+  zetHuis(D, 'weverij', 30, 10, 0, { handen: 2, tekort: 'wol', werkte: 0 });
+  const x = vind(D, 'laken');
+  assert.equal(x.tekst, 'Een stenen huis wil laken: de weverij heeft geen wol, en wol komt van de schapen, in zomermaand.');
+  assert.equal(x.kan, false);
+  // Ligt er genoeg meel voor vandaag, dan noemt de raad de molen er nog niet bij; in een gehucht staat de bakkerij nog
+  // niet in het bouwmenu.
+  T.zetVoorraad(D, 'meel', 10);
+  assert.equal(vind(D, 'brood').tekst, 'Een stenen huis wil brood: bouw een bakkerij [B].');
+  D.trede = 'gehucht';
+  assert.equal(vind(D, 'brood').tekst, 'Een stenen huis wil brood: een bakkerij bouw je pas in een dorp.');
 });
 
 test('wat de huizen missen: een huis buiten de kring van de herberg van het gehucht, en een tweede bouw je pas in een dorp', () => {
@@ -468,6 +521,7 @@ test('wat de huizen missen: wie een maand alles had en op bouwstof wacht, gaat v
   assert.match(missen(D)[0].tekst, /: de houthakker wordt gebouwd\.$/);
   assert.equal(missen(D)[0].kan, false);
   houthakker.klaar = true;
+  houthakker.handen = 1;
   assert.match(missen(D)[0].tekst, /: nog een houthakker \[B\]\.$/);
   T.zetVoorraad(D, 'hout', 8);
   lijst = missen(D);
