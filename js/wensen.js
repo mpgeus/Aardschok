@@ -32,8 +32,10 @@
     // weeft 2 laken.
     perMens: { bier: 0.05, vleesOfVis: 0.02, brood: 0.03, laken: 0.01 },
     // De kring om een plek, in tegels, van het midden van het huis tot het midden van de plek (vraag 80, B; vraag 85, b:
-    // 25 was te klein voor het gehucht, waar de boerderijen aan de rand staan).
-    kring: { put: 12, kapel: 30, herberg: 30, markt: 30 },
+    // 25 was te klein voor het gehucht, waar de boerderijen aan de rand staan). Een kapel 40 (vraag 87, c; Marcel, 2 okt):
+    // met 30 haalde één kapel in het gehucht hooguit vier van de zes huizen die er een willen, met 40 zijn er 50 plekken
+    // die ze alle zes halen.
+    kring: { put: 12, kapel: 40, herberg: 30, markt: 30 },
     // Doorgroeien (vraag 80, C; 2b): heeft een huis T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen op rij alles, dan groeit het
     // door naar de volgende stand, en dat kost bouwstof uit de voorraad, naar wat het wordt (zo krijgt steen een doel).
     bouwstof: { huis: { hout: 8 }, stenenHuis: { steen: 12 } },

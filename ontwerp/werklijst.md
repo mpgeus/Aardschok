@@ -54,9 +54,9 @@ de poorters en hun huis komen later. De tabel:
 | Stand | Huis | Gebruikt | Wil in de buurt (een kring om het gebouw) |
 |---|---|---|---|
 | keuters | hut (3 mensen) | eten; brandhout in de winter | een put (12 tegels) |
-| dorpelingen | huis (5) | daarbij bier, en vlees of vis | een kapel en de herberg (30) |
+| dorpelingen | huis (5) | daarbij bier, en vlees of vis | een kapel (40) en de herberg (30) |
 | ambachtslieden | stenen huis (8) | daarbij brood en laken | een markt (30) |
-| boeren | boerderij (4) | eten; brandhout in de winter | een kapel (30) |
+| boeren | boerderij (4) | eten; brandhout in de winter | een kapel (40) |
 
 Doorgroeien kost bouwstof (een huis 8 hout, een stenen huis 12 steen), en **gewonnen** is: alle woningen stenen huizen
 die alles hebben, en de boerderijen wat zij willen, **een jaar lang**. Daarna: het weer en zaaien over dagen (vraag 82, b

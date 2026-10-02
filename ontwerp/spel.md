@@ -150,18 +150,19 @@ letter voor letter mee zoals ervoor).
   | Stand | Huis | Gebruikt | Wil in de buurt |
   |---|---|---|---|
   | keuters | hut (3 mensen) | eten; brandhout in de winter | een put (12 tegels) |
-  | dorpelingen | huis (5) | daarbij bier, en vlees of vis | daarbij een kapel en de herberg (30) |
+  | dorpelingen | huis (5) | daarbij bier, en vlees of vis | daarbij een kapel (40) en de herberg (30) |
   | ambachtslieden | stenen huis (8) | daarbij brood en laken | daarbij een markt (30) |
-  | boeren | boerderij (4) | eten; brandhout in de winter | een kapel (30); de herberg niet, "voor nu" |
+  | boeren | boerderij (4) | eten; brandhout in de winter | een kapel (40); de herberg niet, "voor nu" |
 
 - **Goederen: de hoogste stand neemt eerst** (Marcel, vraag 85: "een hogere stand eigent zich spullen toe. Dus stel er is
   te weinig bier, dan nemen zij het laatste"). Elke dag gebruikt een mens van zijn stand zoveel bier, vlees of vis, brood
   en laken uit de voorraad (de getallen in de werkbank). Is er te weinig, dan krijgt de hoogste stand het eerst, en gaat
   wat over is naar de stand eronder; binnen een stand gelijk op. Eten en brandhout gaan zoals ze gingen, voor het hele
   dorp.
-- **In de buurt is een kring om het gebouw** (vraag 80, B): de put 12 tegels, een kapel, de herberg en een markt 30
-  (vraag 85, b: 25 was te klein voor dit gehucht, waar de boerderijen aan de rand staan). Een put telt ook als hij op de
-  kaart staat, zoals die op het plein.
+- **In de buurt is een kring om het gebouw** (vraag 80, B): de put 12 tegels, de herberg en een markt 30 (vraag 85, b: 25
+  was te klein voor dit gehucht, waar de boerderijen aan de rand staan), en een kapel 40 (vraag 87, c; Marcel, 2 okt: met 30
+  haalde één kapel hooguit vier van de zes huizen die er een willen). Een put telt ook als hij op de kaart staat, zoals
+  die op het plein.
 - **Elk huis zijn eigen tevredenheid,** uit zijn wensen: eten de helft, brandhout 0,3 (alleen in de winter) en de rest
   samen 0,2, met de herberg, de wetten, de voorvallen en de heer erbij of eraf, zoals voor het hele dorp. Heeft een huis
   alles, dan is het **super gelukkig**. De tevredenheid van het dorp is het gemiddelde, naar mensen, zodat de groei, het

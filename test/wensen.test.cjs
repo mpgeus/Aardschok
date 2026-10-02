@@ -77,7 +77,7 @@ test('een plek telt in de kring om het huis, van midden tot midden; een put op d
   assert.deepEqual(w.gemist.map((m) => [m.naam, m.huizen, m.mensen]), [['een put', 1, 3]]);
 });
 
-test('een kapel telt pas als hij klaar is, en de boeren willen hem binnen 30 tegels', () => {
+test('een kapel telt pas als hij klaar is, en de boeren willen hem binnen 40 tegels', () => {
   const D = kaalDorp();
   const boer = zetHuis(D, 'boerderij', 0, 0, 4, { huis: 'boer1' });
   const kapel = { soort: 'kapel', x: 20, y: 20, voet: { b: 4, h: 4 }, klaar: false };
@@ -85,7 +85,9 @@ test('een kapel telt pas als hij klaar is, en de boeren willen hem binnen 30 teg
   assert.equal(huisVan(T.berekenWensen(D, ZOMERDAG, alles), boer).heeft.kapel, 0, 'in aanbouw telt niet');
   kapel.klaar = true;
   assert.equal(huisVan(T.berekenWensen(D, ZOMERDAG, alles), boer).heeft.kapel, 1);
-  kapel.x = 25; // midden 27,27: 35 tegels
+  kapel.x = 25; // midden 27,22: 32 tegels
+  assert.equal(huisVan(T.berekenWensen(D, ZOMERDAG, alles), boer).heeft.kapel, 1, 'een kapel bereikt 40 tegels (vraag 87, c)');
+  kapel.x = kapel.y = 30; // midden 32,32: 42 tegels
   assert.equal(huisVan(T.berekenWensen(D, ZOMERDAG, alles), boer).heeft.kapel, 0);
 });
 
