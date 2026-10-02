@@ -149,6 +149,36 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 2 okt: brood is eten, en het zaaigraan is niet voor de molen (werklijst, vraag 92)
+
+Gespeeld in de drieëntwintigste sessie, op `claude/werklijst-doorzetten-73hi30`, twee keer: met brood, vis en vlees als
+eten (`29d79b8`), en daarna ook met een werkplaats die het zaaigraan laat liggen (`f630cce`). De nulmeting is de
+speeltest van vraag 91 hieronder. Alleen de bouwer, twee jaar, zaad 1 tot en met 3. Geen fouten in de console.
+
+| Jaar | Mensen aan het eind | Doden | Tevreden | Met alles | De heer, eerste en tweede jaar | Ongezaaid in het derde jaar (van 179) |
+|---|---|---|---|---|---|---|
+| bouwer, zaad 1 | 100, ambt kwijt → 98 → 98 | 0 → 0 → 0 | 82% → 82% → 82% | 10 van 19 → 6 van 18 → 6 van 18 | 49 en 26% → 77 en 67% (boete) → zo | — → 114 → 30 |
+| bouwer, zaad 2 | 90 → 97 → 97 | 0 → 0 → 0 | 80% → 80% → 79% | 5 van 17 → 6 van 19 → 6 van 19 | 65 en 46% → 57 en 57% (soldaten) → zo | 179 → 179 → 96 |
+| bouwer, zaad 3 | 101 → 95 → 95 | 0 → 0 → 0 | 81% → 81% → 80% | 5 van 19 → 5 van 18 → 5 van 18 | 59 en 28% → 61 en 43% (schandpaal) → zo | 172 → 143 → 51 |
+
+**Wat opviel:**
+
+1. **Brood als eten houdt het ambt.** Bij zaad 1 kreeg de heer 77 en 67% (een boete) in plaats van 49 en 26%, en bleef
+   de schout schout; bij zaad 2 57 en 57%. Maar het brood spaart weinig graan: het dorp eet eerst de melk en het verse
+   vlees (de jagers schieten er genoeg), en pas dan graan, dus het brood vervangt vooral vlees dat anders bederft.
+2. **De molen maalde het zaaigraan.** In het tweede jaar zei het dorp nergens dat het van het zaaigraan at, en toch was
+   er op 1 lentemaand zaaigraan voor 0 à 65 van de 179 tegels: de molen (en de herberg) namen al het graan dat er lag.
+   Sinds `41cd52f` laat een werkplaats het zaaigraan liggen; daarna bleven er 30, 96 en 51 tegels ongezaaid.
+3. **Wat er dan nog onder het zaaigraan wegging, zijn gebeurtenissen:** rovers namen in de tweede winter 30 graan, een
+   bruiloft 5, en bij zaad 2 aten twee soldaten van de heer tot de lente mee (elk voor drie: zo'n 33 graan).
+4. **Het graan is de kern.** Wat er van de oogst overblijft na het eten, het zaaigraan en de heer, is wat er aan bier en
+   brood kan komen. Met de spelregel "Graan" op "Honger" (Marcels keuze, 24 sep: "wie alles betaalt, komt elk jaar graan
+   tekort: de heer bedriegen is nood") is dat bij honderd man bijna niets: de bouwer betaalt de heer alles en verstopt
+   niets, en aan het eind van de tweede winter missen elf à dertien huizen bier ("de herberg heeft geen graan"), de
+   stenen huizen ook brood, en laken (de wol is op). Alleen de boerderijen hebben alles (bij twee zaden ook een hut).
+
+Wat eruit volgt, staat in de werklijst als vraag 93.
+
 ## De speeltest van 2 okt: het goud, de werkplaatsen en het laken (werklijst, vraag 91)
 
 Gespeeld in de drieëntwintigste sessie, op `claude/werklijst-doorzetten-73hi30` (`d6a234f`), met als nulmeting de

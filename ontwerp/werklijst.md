@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (2 okt 2026, drieëntwintigste sessie): eerst een kleine speelbare kern, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 92); 2d is af (vraag 90), en het goud, de werkplaatsen en het laken ook (vraag 91): voor het eerst heeft een stenen huis alles; wat nu tussen het dorp en een gewonnen jaar staat, is het graan (vraag 92, wacht op Marcel), dan de pagina met ontwerpen voor de ui (vraag 84, a) en 2c
+## De stand (2 okt 2026, drieëntwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 93); 2d is af (vraag 90), het goud, de werkplaatsen en het laken (vraag 91), en brood als eten (vraag 92); wat nu tussen het dorp en een gewonnen jaar staat, is het graan: wie de heer alles betaalt, heeft niets over voor bier en brood (vraag 93, wacht op Marcel), dan de pagina met ontwerpen voor de ui (vraag 84, a) en 2c
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -31,15 +31,16 @@ en een huis willen een kapel binnen 40 tegels [B]"), en het rapport ook (vraag 8
 huis. Sinds 2 okt komt een trede met de mensen van een stand (vraag 90): linksboven staat "2 van 20 dorpelingen" (wie in
 een huis of een stenen huis woont), dan "0 van 20 ambachtslieden" voor marktrecht, en de heer schrijft bij elke trede;
 `Spel.debug.trede('marktrecht')` laat het nu gebeuren. De pagina "Stand van het gehucht" (25 sep) loopt achter op de
-dag. Sinds vraag 91 maakt een werkplaats die iets omzet tot er 30 ligt, en wil een ambachtsman 0,005 laken per dag.
-`npm test`: 770/770.
+dag. Sinds vraag 91 maakt een werkplaats die iets omzet tot er 30 ligt (en laat hij het zaaigraan liggen), en wil een
+ambachtsman 0,005 laken per dag; sinds vraag 92 zijn brood, vis en vlees eten. `npm test`: 773/773.
 
 **Waar het werk staat:** het werk van de drieëntwintigste sessie tot en met vraag 89 staat in `main` (Marcel, 2 okt:
 "naar main"); 2d (vraag 90), vraag 91 en 92 staan op `claude/werklijst-doorzetten-73hi30`, gepusht, en gaan naar `main`
 als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **vraag 92, het graan** (wacht op Marcel): brood is eten, en graan van buiten op de
-markt. **Vraag 91 is af** (Marcel: "a ja b ja c ja d ja"; zie onder Af): de bouwer volgt ook het goud van de raad, een
+**Waar de volgende sessie begint:** **vraag 93, wie de heer bedriegt, heeft graan over?** (wacht op Marcel): een sluwe
+bouwer in de speeltest, en dan de pagina met ontwerpen voor de ui. **Vraag 92 is af** (zie onder Af): brood, vis en vlees
+zijn eten, brood is minder lekker, en het zaaigraan is niet meer voor de molen. **Vraag 91 is af** (Marcel: "a ja b ja c ja d ja"; zie onder Af): de bouwer volgt ook het goud van de raad, een
 werkplaats maakt tot er genoeg ligt, en laken is 0,005; in de speeltest komen de bakkerij, de molen, de weverij en de
 markt er, en heeft bij zaad 1 voor het eerst een stenen huis alles, maar het brood eet het graan op, en bij zaad 2 en 3
 at het dorp in de tweede winter zijn zaaigraan. Begin met Marcels antwoord op vraag 92. **2d
@@ -132,9 +133,9 @@ als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speelt
    81) zijn af (zie onder Af), en van stap 2, de wensen per stand, klein (vraag 80, 82 en 85), ook 2a en 2b: de wensen per
    huis en doorgroeien, met zes stenen huizen. Sinds 2 okt zeggen de raad en het rapport wat de huizen missen, en volgt de
    bouwer van de speeltest ze (vraag 86, a en b, en 87); niemand staat nog ingemetseld (vraag 88). 2d, de treden uit de
-   standen, is af (vraag 90), en het goud, de werkplaatsen en het laken ook (vraag 91). Het volgende is het graan (vraag
-   92: brood is eten, en graan van buiten op de markt), dan de pagina met ontwerpen voor de ui (vraag 84, a), en 2c en
-   2e.
+   standen, is af (vraag 90), het goud, de werkplaatsen en het laken ook (vraag 91), en brood als eten (vraag 92). Het
+   volgende is het graan (vraag 93: een sluwe bouwer, die de heer bedriegt), dan de pagina met ontwerpen voor de ui
+   (vraag 84, a), en 2c en 2e. Het graan van buiten op de markt komt bij stap 6.
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept; en het
    weer, met zaaien dat dagen kost (Marcel, 1 okt: "Stel er is slecht weer"; vraag 82).
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
@@ -3116,7 +3117,27 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 2 okt):** "A ja, maar brood is wel minder lekker en levert minder blijheid op. B prima, maar
     moet dat nu? We focussen op een kleine speelbare demoversie. C en d prima". Dus: brood, vlees en vis zijn eten, en
     brood telt minder mee in hoe blij een huis is dan de andere wensen; het graan van de markt komt later (achteraan bij
-    "Daarna", na de demo); dan de bouwer nog eens, en daarna de pagina met ontwerpen voor de ui.
+    "Daarna", na de demo); dan de bouwer nog eens, en daarna de pagina met ontwerpen voor de ui. **Af** (zie onder Af),
+    met erbij een fout die de speeltest liet zien: de molen maalde het zaaigraan. Wat eruit volgt, is vraag 93.
+93. **Na vraag 92: wie de heer bedriegt, heeft graan over?** (Claude, 2 okt, drieëntwintigste sessie; wacht op Marcel).
+    De speeltest (`speelbaar.md`): brood als eten houdt het ambt (de heer kreeg bij zaad 1 77 en 67% in plaats van 49 en
+    26%), en sinds een werkplaats het zaaigraan laat liggen, blijven er in het derde jaar 30 à 96 van de 179 akkertegels
+    ongezaaid in plaats van vrijwel allemaal; wat er dan nog weggaat, zijn rovers, een bruiloft en de soldaten van de
+    heer. Maar **het graan is de kern geworden:** wat er van de oogst overblijft na het eten, het zaaigraan en de heer, is
+    wat er aan bier en brood kan komen, en met "Graan" op "Honger" (Marcel, 24 sep: "wie alles betaalt, komt elk jaar
+    graan tekort: de heer bedriegen is nood") is dat bij honderd man bijna niets. De bouwer betaalt de heer alles en
+    verstopt niets; aan het eind van de tweede winter missen elf à dertien huizen bier en de stenen huizen brood, en
+    hebben alleen de boerderijen alles. Dat is precies de spanning van het spel: betaal je de heer, of maak je je mensen
+    blij? Voorstel:
+    - **a, een sluwe bouwer** in de speeltest (gereedschap, geen spel): de bouwer, maar hij verstopt graan voor de inner en
+      de heer zoals de slimme speler (60% weg, 's nachts, niet bij de roddelaar) en betaalt de heer 90%. Dan zien we of de
+      kern zelf, rijk worden en arm lijken, een jaar met iedereen super gelukkig haalbaar maakt, of dat het graan voor
+      honderd man te krap is.
+    - **b, daarna kiezen:** is het ook dan te krap, dan voor de demo meer graan (bijvoorbeeld "Graan" op "Net rond") of
+      minder bier en brood per mens; anders zo laten.
+    - **c, de volgorde:** eerst a en die speeltest, dan de pagina met ontwerpen voor de ui (vraag 84, a), in een nieuwe
+      sessie, want deze is groot.
+    Vragen: **a**, een sluwe bouwer? **b**, zo kiezen? **c**, die volgorde?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -3417,6 +3438,12 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 2 okt 2026 — **Brood is eten, en het zaaigraan is niet voor de molen** (drieëntwintigste sessie; vraag 92; Marcel: "A ja,
+  maar brood is wel minder lekker en levert minder blijheid op. B prima, maar moet dat nu? ... C en d prima"). Wat een huis
+  aan brood, vis en vlees krijgt, eet het dorp minder aan graan (`T.voedtAlsGraan`, `T.eetVandaag`), en brood weegt half
+  zo zwaar in hoe blij een huis is (`blijheid` in de werkbank). De speeltest liet een fout zien: een werkplaats nam ook het
+  zaaigraan dat de boeren achterhouden (vraag 81), en de molen maalde het op; nu laat hij het liggen. Het graan van buiten
+  op de markt komt later (stap 6, de kleine stad). 3 nieuwe toetsen, `npm test` 773/773.
 - 2 okt 2026 — **Het goud, de werkplaatsen en het laken** (drieëntwintigste sessie; vraag 91; Marcel: "a ja b ja c ja d
   ja"). **a:** de bouwer van de speeltest neemt de belasting aan als de raad zegt dat die goud brengt, en bouwt de eerste
   wens die hij kan betalen. **b:** een werkplaats die iets omzet (de molen, de bakkerij, de brouwerij, de weverij, de
