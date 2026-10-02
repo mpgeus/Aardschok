@@ -3148,7 +3148,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     ziet; de soldaten langs lege kelders leiden; de heer 90% betalen; na Sint-Maarten alles terughalen), en wat er verder
     aan knoppen is: houtkap in het bos van de heer, het rantsoen, graan verkopen en zaaigraan kopen, een wachthuis tegen
     de rovers. De uitslag zegt of rijk worden en arm lijken een jaar met iedereen super gelukkig haalbaar maakt (B).
-94. **Het plan voor vraag 93, a: de sluwe bouwer** (Claude, 2 okt, vierentwintigste sessie; open). Eerst wat de regels
+94. **Het plan voor vraag 93, a: de sluwe bouwer** (Claude, 2 okt, vierentwintigste sessie; beantwoord). Eerst wat de regels
     zelf zeggen, want dat verandert de vraag een beetje:
     - **Bier kost bijna geen graan.** De herberg brouwt 8 kan van 0,2 graan (`T.GEBOUWEN.herberg.maakt`); honderd man
       drinken samen zo'n 30 graan per jaar.
@@ -3177,6 +3177,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Niet nu: langzamer groeien (geen nieuw erf als de huizen bier of brood missen); eerst zien of bedriegen genoeg is bij
     dezelfde groei als de bouwer.
     Vragen: **a**, **b** en **c** zo? **d**, met het graanboek?
+    **Beantwoord (Marcel, 2 okt):** "ja prima". Dus a tot en met d, zoals hierboven.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
