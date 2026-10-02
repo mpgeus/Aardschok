@@ -234,12 +234,13 @@ test('de herbergierster brouwt van graan, tot er genoeg bier ligt', () => {
   const was = { ...IN };
   Object.assign(IN, { kansPerAvond: 0, kansWinter: 0, karakters: {} });
   try {
-    T.zetVoorraad(S.dorp, 'bier', soort.maakt.tot.bier - 1);
+    T.zetVoorraad(S.dorp, 'bier', T.maaktTot(soort).bier - 1);
     T.tikGebouwenDag(S.dorp, HERFST + 2);
   } finally {
     Object.assign(IN, was);
   }
-  assert.ok(Math.abs(S.dorp.voorraad.bier - soort.maakt.tot.bier) < 1e-9, `${S.dorp.voorraad.bier}`);
+  assert.ok(Math.abs(S.dorp.voorraad.bier - T.maaktTot(soort).bier) < 1e-9, `${S.dorp.voorraad.bier}`);
+  assert.equal(T.maaktTot(soort).bier, 30, 'zoals sinds 27 sep: tot er 30 bier is');
   assert.equal(g.vol, 'bier');
   g.werkte = 0;
   assert.match(T.gebouwToestand(S.dorp, g), /^Herberg: er ligt genoeg bier\./);

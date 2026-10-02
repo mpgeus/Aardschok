@@ -422,6 +422,30 @@ test('een molen zonder graan maalt niets', () => {
   assert.equal(S.voorraad.meel || 0, 0);
 });
 
+test('wie iets omzet, maakt tot er genoeg ligt (vraag 91, b); wie iets uit het land haalt, maakt door', () => alsJijHetSeizoenDoet(() => {
+  const genoeg = T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot;
+  assert.deepEqual(T.maaktTot(T.GEBOUWEN.molen), { meel: genoeg });
+  assert.deepEqual(T.maaktTot(T.GEBOUWEN.timmerman), { planken: genoeg });
+  assert.equal(T.maaktTot(T.GEBOUWEN.houthakker), null);
+  // Een molen maalt tot er genoeg meel ligt, en neemt dan geen graan meer: daarvoor maalde hij ruim 880 graan per jaar,
+  // ook als niemand brood wilde.
+  const S = metGebouw('molen');
+  S.voorraad.meel = genoeg - 1;
+  T.tikGebouwenDag(S, 1);
+  assert.ok(Math.abs(S.voorraad.meel - genoeg) < 1e-9, `meel ${S.voorraad.meel}`);
+  assert.equal(S.gebouwen[0].vol, 'meel');
+  const graan = S.voorraad.graan;
+  T.tikGebouwenDag(S, 2);
+  assert.ok(graan - S.voorraad.graan < 1, 'vol: hij maalt niets, en het dorp eet alleen zelf');
+  assert.equal(S.gebouwen[0].werkte, 0);
+  assert.match(T.gebouwToestand(S, S.gebouwen[0]), /er ligt genoeg meel/);
+  // Een houthakker hakt door, hoeveel hout er ook ligt.
+  const H = metGebouw('houthakker');
+  H.voorraad.hout = 10 * genoeg;
+  T.tikGebouwenDag(H, 1);
+  assert.ok(H.voorraad.hout > 10 * genoeg, 'hij hakt door');
+}));
+
 test('gereedschap laat harder werken, en wat in gebruik is, slijt', () => alsJijHetSeizoenDoet(() => {
   const zonder = metGebouw('houthakker');
   const met = metGebouw('houthakker');

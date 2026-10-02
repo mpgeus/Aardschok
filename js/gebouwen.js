@@ -30,8 +30,8 @@
 //                                    // dan groeit deze soort niet door.
 //     maakt:       null,             // of { in: {hout: 1}, uit: {planken: 1} }: per dag, op volle
 //                                    // bezetting (T.tikGebouwenDag schaalt mee met hoe bezet hij is
-//                                    // én, sinds js/behoeften.js, met de tevredenheid). Met
-//                                    // tot: {bier: 30} maakt hij niet meer als er zoveel ligt.
+//                                    // én, sinds js/behoeften.js, met de tevredenheid). Wie iets
+//                                    // omzet (met `in`), maakt tot er genoeg ligt (T.maaktTot).
 //     stilIn:      null,             // of { winter: 'de beek ligt dicht' }: in dat seizoen maakt hij
 //                                    // niets, en dit is waarom (de visser; spel.md, "Handel")
 //     verdacht:    false,            // moet de heer dit niet zien? (wapenmaker, schuttershof, …)
@@ -85,6 +85,11 @@
     // helft werkt de helft harder. Een stuk in gebruik gaat zoveel dagen mee en is dan versleten.
     gereedschapBonus: 0.25,
     gereedschapSlijtDagen: 180,
+    // Een werkplaats die iets omzet (maakt.in: de molen graan tot meel, de timmerman hout tot planken), maakt tot er
+    // zoveel ligt van wat hij maakt (Marcel, 2 okt, werklijst vraag 91, b: "b ja"). Daarvoor maalde een molen elke dag
+    // graan tot meel, ook als niemand brood wilde: ruim 880 graan per jaar. Wie iets uit het land haalt (de houthakker,
+    // de visser), maakt door. De herberg brouwt zo tot er 30 bier is, zoals sinds 27 sep.
+    werkplaatsMaaktTot: 30,
   };
 
   T.GEBOUWEN = {
@@ -258,7 +263,7 @@
       naam: 'herberg', trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 12 }, heer: { goud: 5 }, bouwtijd: 4,
       // Wie er woont, tapt en brouwt: van graan, zolang er niet genoeg bier ligt (27 sep, werklijst punt
       // 2). Een kan bier kost een veertigste graan; wie er 's avonds heen gaat, staat in js/herberg.js.
-      handen: 1, woonruimte: 1, maakt: { in: { graan: 0.2 }, uit: { bier: 8 }, tot: { bier: 30 } }, verdacht: false, menu: true,
+      handen: 1, woonruimte: 1, maakt: { in: { graan: 0.2 }, uit: { bier: 8 } }, verdacht: false, menu: true,
       tekening: 'gebouwen/herberg', beschrijving: 'reizigers, nieuws en verhalen, bier',
       opmerking: 'In het gehucht staat er een vanaf het begin, met de herbergierster (kaarten/gehucht.betekenis.json), '
         + 'in een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in het dorp bouwt, krijgt nog de '
@@ -934,6 +939,17 @@
     return r;
   };
 
+  // Tot hoeveel een gebouw maakt van wat het maakt: { wat: zoveel }, of null als het doormaakt. Wie iets omzet (maakt.in),
+  // maakt tot er genoeg ligt (T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot; vraag 91, b); wie iets uit het land haalt,
+  // maakt door.
+  T.maaktTot = function (soort) {
+    const m = soort.maakt;
+    if (!m || !m.in || !m.uit) return null;
+    const tot = {};
+    for (const wat in m.uit) tot[wat] = T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot;
+    return tot;
+  };
+
   // ---------------------------------------------------------------------------------------------
   // Elke dag: gebouwen die klaarkomen, woonruimte, eten, groei, handen en productie
   // ---------------------------------------------------------------------------------------------
@@ -1050,15 +1066,18 @@
           }
         }
       }
-      // Wie maakt tot er genoeg ligt (maakt.tot: de herberg brouwt tot er zoveel bier is), maakt niet
-      // meer dan wat er nog bij kan.
-      if (soort.maakt.tot) {
-        for (const wat in soort.maakt.tot) {
+      // Wie iets omzet, maakt tot er genoeg ligt (T.maaktTot: de herberg brouwt tot er 30 bier is, de molen maalt tot
+      // er 30 meel is), en niet meer dan wat er nog bij kan. Houdt dat hem tegen, dan is dat wat hem tegenhoudt, en
+      // niet wat hij nodig heeft.
+      const tot = T.maaktTot(soort);
+      if (tot) {
+        for (const wat in tot) {
           const per = (soort.maakt.uit && soort.maakt.uit[wat]) || 0;
-          const kan = per > 0 ? Math.max(0, soort.maakt.tot[wat] - (D.voorraad[wat] || 0)) / per : factor;
+          const kan = per > 0 ? Math.max(0, tot[wat] - (D.voorraad[wat] || 0)) / per : factor;
           if (kan < factor) {
             factor = kan;
             g.vol = wat;
+            g.tekort = null;
           }
         }
       }
