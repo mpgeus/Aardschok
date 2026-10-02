@@ -44,6 +44,9 @@
 //           per maand; en een houthakker vóór een nieuw erf, als er nog geen staat. Bij de marskramer verkoopt hij ook
 //           graan voor het goud van zijn volgende wens (vraag 89, c). Sinds vraag 90, D kent de raad de ketens, en
 //           de bouwer dus ook: een bakkerij en een molen voor brood, en een molen als de bakkerij geen meel heeft.
+//           Sinds vraag 91, a volgt hij ook wat de raad over goud zegt: zegt die dat de belasting goud brengt, dan
+//           neemt hij hem aan (W), en hij bouwt de eerste wens die hij kan betalen, in plaats van op de eerste te
+//           wachten.
 // Van elke speler schrijft hij op waarom er op een groeidag geen gezin kwam (T.waaromGeenGezin, js/gebouwen.js),
 // op welke dag het gehucht een dorp werd en marktrecht kreeg, en welke raad er elke dag onder het doel stond
 // (js/raad.js).
@@ -102,6 +105,16 @@
     if (!b || b.disabled) return false;
     b.click();
     return true;
+  }
+
+  // Een wet aannemen zoals een speler: het menu (W), de knop op de kaart van de wet, en het menu weer dicht. Zegt of de
+  // wet nu aangenomen is.
+  function neemWetAan(wet) {
+    const s = S();
+    T.ui.openWetten(s);
+    klik(`#wetten button[data-wet="${wet}"][data-stand="aangenomen"]`);
+    if (!klik('#wetten [data-actie="sluit"]')) T.ui.sluitWetten(s);
+    return T.standVanWet(s.dorp, wet) === 'aangenomen';
   }
 
   // ── De tijd laten lopen ────────────────────────────────────────────────────────────────────────
@@ -783,6 +796,7 @@
     let erfNietVoor = 0; // paste een erf nergens, dan zoekt hij pas een maand later opnieuw
     let jagerNietVoor = 0; // een jager hooguit één keer per maand
     let wensNietVoor = 0; // een bouwwerk voor de wensen hooguit één keer per maand (vraag 87, D)
+    let belastingNietVoor = 0; // de raad over de belasting: één keer per dag gelezen, en na een mislukking een maand niet
     let houthakkerNietVoor = 0; // paste een houthakker nergens, dan zoekt hij pas een maand later opnieuw
     const jaar = () => Math.floor(dagNu() / JAAR);
     const kosten = (soort) => T.GEBOUWEN[soort].kosten;
@@ -826,13 +840,14 @@
       await koopGraan(pakken, prijs);
     }
     // De wensen (werklijst vraag 86, b, en 87, D): het eerste wat de raad over de huizen zegt waar je iets aan kunt doen
-    // (T.watDeHuizenMissen, js/wensen.js), als hij het kan betalen; hooguit één per maand, zodat er hout overblijft voor
-    // de hutten. Een put of een kapel komt waar hij de meeste huizen zonder bereikt.
+    // (T.watDeHuizenMissen, js/wensen.js) en dat hij kan betalen; hooguit één per maand, zodat er hout overblijft voor
+    // de hutten. Een put of een kapel komt waar hij de meeste huizen zonder bereikt. Tot vraag 91, a wachtte hij op de
+    // eerste, ook als hij die niet kon betalen: dan kwam er een maand lang ook geen put voor 6 hout die erachter stond.
     function volgDeWensen() {
       const s = S();
       if (dagNu() < wensNietVoor) return;
-      const x = T.watDeHuizenMissen(s.dorp).find((w) => w.kan);
-      if (!x || !T.kanBetalen(s.dorp, kosten(x.bouw))) return;
+      const x = T.watDeHuizenMissen(s.dorp).find((w) => w.kan && T.kanBetalen(s.dorp, kosten(w.bouw)));
+      if (!x) return;
       wensNietVoor = dagNu() + 30;
       if (isPlek(x.bouw)) bouwInDeKring(x.bouw);
       else bouw(x.bouw);
@@ -854,10 +869,7 @@
       async begin() {
         // Vreemden welkom, met het menu (W) en de knop op de kaart van de wet, zoals een speler.
         const s = S();
-        T.ui.openWetten(s);
-        if (!klik('#wetten button[data-wet="vreemden"][data-stand="aangenomen"]')) daad('kan Vreemden welkom niet aannemen');
-        if (!klik('#wetten [data-actie="sluit"]')) T.ui.sluitWetten(s);
-        if (T.standVanWet(s.dorp, 'vreemden') === 'aangenomen') daad('neemt Vreemden welkom aan');
+        daad(neemWetAan('vreemden') ? 'neemt Vreemden welkom aan' : 'kan Vreemden welkom niet aannemen');
         // Een raadsman, met de knop in de balk (R) zoals een speler: de eerste van de drie. Hij beslist alleen als de
         // schout weg is (vraag 68, B), en de bouwer blijft in het dorp: de voorvallen beantwoordt hij zelf.
         klik('#raadsman-knop');
@@ -869,6 +881,19 @@
       async elkeStap() {
         const s = S();
         luisterNaarDeWinterBouwer();
+        // Zegt de raad dat de belasting goud brengt (als er goud mist voor een wens of voor het doel), dan neemt hij hem
+        // aan, zoals een speler die de raad volgt (werklijst vraag 91, a). Eén keer per dag kijken is genoeg.
+        if (dagNu() >= belastingNietVoor && T.standVanWet(s.dorp, 'belasting') !== 'aangenomen') {
+          belastingNietVoor = Math.floor(dagNu()) + 1;
+          const r = T.raadNu(s.dorp);
+          if (r && /belasting \[W\]/.test(r.tekst)) {
+            if (neemWetAan('belasting')) daad(`neemt de belasting aan, want de raad zegt: "${r.tekst}"`);
+            else {
+              daad('kan de belasting niet aannemen');
+              belastingNietVoor = Math.floor(dagNu()) + 30;
+            }
+          }
+        }
         // Haalt het eten de winter niet, dan een jager, hooguit één per maand (werklijst vraag 81, b): zoals een speler die
         // de raad volgt ("een jager [B] schiet 1 vlees per dag"), en niet negen in louwmaand, zoals de bouwer van 29 sep.
         if (dagNu() >= jagerNietVoor && T.watDeWinterNietHaalt(s.dorp, Math.floor(dagNu())).includes('eten') && T.kanBetalen(s.dorp, kosten('jager'))) {
