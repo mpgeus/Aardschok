@@ -23,6 +23,7 @@
 //     liefst:      'jong',           // wie hij het liefst neemt (T.LEEFTIJDEN, js/bewoners.js): de
 //                                    // schaapskooi een knaap. Ontbreekt hij, dan eerst volwassenen.
 //     woonruimte:  5,                // hoeveel mensen erbij kunnen als hij klaar is
+//     meervoud:    'huizen',         // alleen bij een woning met een stand (js/wensen.js): "vijf hutten willen een put"
 //     wordt:       'huis',           // waar hij in doorgroeit als zijn bewoners lang genoeg
 //                                    // tevreden zijn (js/behoeften.js, T.tikBehoeftenDag); alleen
 //                                    // bij een huis dat de speler zelf neerzette. Ontbreekt hij,
@@ -98,7 +99,7 @@
       opmerking: '',
     },
     hut: {
-      naam: 'hut', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, heer: {}, bouwtijd: 2,
+      naam: 'hut', meervoud: 'hutten', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, heer: {}, bouwtijd: 2,
       handen: 0, woonruimte: 3, wordt: 'huis', maakt: null, verdacht: false, menu: true, woning: true,
       tekening: 'huizen/hut1', beschrijving: 'ruimte voor een gezin; goedkoop, en arm om te zien',
       // Vier echte hutten van vlechtwerk en leem onder riet, laag, zonder schoorsteen (ronde 4b van de
@@ -108,7 +109,7 @@
       opmerking: '',
     },
     huis: {
-      naam: 'huis', trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
+      naam: 'huis', meervoud: 'huizen', trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
       handen: 0, woonruimte: 5, wordt: 'stenenHuis', maakt: null, verdacht: false, menu: true, woning: true,
       tekening: 'huizen/huis1', beschrijving: 'ruimte voor meer mensen', opmerking: '',
       // Zes huizen van vakwerk onder riet, met een schoorsteen van leem, want steen hoort pas bij een
@@ -116,7 +117,7 @@
       tekeningen: ['huizen/huis1', 'huizen/huis2', 'huizen/huis3', 'huizen/huis4', 'huizen/huis5', 'huizen/huis6'],
     },
     boerderij: {
-      naam: 'boerderij', trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, heer: { goud: 1 }, bouwtijd: 5,
+      naam: 'boerderij', meervoud: 'boerderijen', trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, heer: { goud: 1 }, bouwtijd: 5,
       handen: 2, woonruimte: 4, maakt: null, verdacht: false, menu: true,
       tekening: 'huizen/boerderij1', beschrijving: 'boeren voor de akkers, en een schuur voor de oogst',
       // De vijf boerderijen van het gehucht (ronde 4b): een L, een T, twee met hun deur achter, en een
@@ -339,7 +340,7 @@
 
     // ── Stad ──
     stenenHuis: {
-      naam: 'stenen huis', trede: 'stad', voet: { b: 7, h: 5 }, kosten: { hout: 20, goud: 30 }, heer: { goud: 6 }, bouwtijd: 6,
+      naam: 'stenen huis', meervoud: 'stenen huizen', trede: 'stad', voet: { b: 7, h: 5 }, kosten: { hout: 20, goud: 30 }, heer: { goud: 6 }, bouwtijd: 6,
       handen: 0, woonruimte: 8, maakt: null, verdacht: false, menu: true, woning: true,
       tekening: 'huizen/steen1', beschrijving: 'veel ruimte, en rijk om te zien', opmerking: '',
       // Het stenen broertje van elk huis, met dezelfde vorm (werklijst vraag 85, d; gereedschap/pixelart/huizen.cjs): een
