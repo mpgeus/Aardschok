@@ -188,6 +188,16 @@ letter voor letter mee zoals ervoor).
   put en groeit dan niet door; en elke nieuwe hut kost 8 hout. Wat eruit volgt, is werklijst vraag 86 (Marcel, 1 okt: "a
   ja b ja c ja"): eerst zeggen de raad en het rapport wat de huizen missen, vóór de pagina met ontwerpen voor de ui; dan
   volgt de bouwer van de speeltest de wensen; en wegtrekken bij honger blijft zoals het is.
+- **Een stenen huis wordt in een gehucht nooit super gelukkig** (vraag 87, d; Marcel, 2 okt: "zo laten"). De
+  ambachtslieden willen brood, laken en een markt, en een bakkerij komt pas in een dorp, een weverij en een markt pas met
+  marktrecht. Zo werkt het in Anno 1602 ook: wie een stand bereikt, maakt de gebouwen vrij die die stand wil. Dat wordt
+  2d, de treden uit de standen.
+- **Later: de kapel wordt een kerk, en dan een kathedraal, met meer bereik** (Marcel, 2 okt, vraag 87: "misschien wordt de
+  kapel een kerk en dan een kathedraal met meer bereik?"). Zoals een huis doorgroeit, groeit de kapel door, en zijn kring
+  wordt groter; zo stond het op 26 sep al voor de werkplaatsen ("de kapel die een kerk met een toren wordt", hieronder bij
+  "Beter bouwen"). Het past bij 2d: een kapel in een gehucht, een kerk in een dorp, een kathedraal in een stad, en een
+  hogere stand die een kerk wil in plaats van een kapel, zoals in Anno 1602. Eerst de kring van 40 (vraag 87, c: met 30
+  haalt één kapel hooguit vier van de zes huizen die er een willen).
 
 ## Rovers en de militie (Marcel, 28 en 29 sep 2026; werklijst vraag 51 en 55)
 

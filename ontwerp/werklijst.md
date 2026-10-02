@@ -39,8 +39,9 @@ ziet ze nog nauwelijks, en de bouwer van de speeltest kent ze niet. Dus eerst **
 doel en het rapport van de raadsman zeggen wat de huizen het meest missen en wat helpt ("Vijf hutten willen een put binnen
 12 tegels [B]", "Twee hutten kunnen een huis worden, maar er is geen 8 hout"); dan **b**, een bouwer die de wensen volgt
 (een put waar hutten er een missen, wat de dorpelingen willen, en een houthakker vóór een nieuw erf), en de speeltest
-erna. **Het plan is vraag 87** (drieëntwintigste sessie; wacht op Marcel), met wat er bij het uitzoeken opviel: één
-kapel haalt nooit alle zes huizen die er een willen, en een stenen huis wordt in een gehucht nooit super gelukkig. Daarna,
+erna. **Het plan is vraag 87** (drieëntwintigste sessie; Marcel, 2 okt: "a ja b ja c 40 ... d zo laten"), met wat er bij het
+uitzoeken opviel: één kapel haalt nooit alle zes huizen die er een willen (de kring wordt 40), en een stenen huis wordt
+in een gehucht nooit super gelukkig (zo laten tot 2d). Daarna,
 zoals besloten: **de pagina met ontwerpen voor de ui** (vraag 84, a: de
 vensters worden papieren in de beeldstijl, en Marcel kiest uit een paar schetsen van de balk, een venster en een papier),
 en dan de rest van stap 2 (vraag 80): 2c zien wat een huis wil (het teken bij de deur, het venster van een huis), 2d de
@@ -2948,6 +2949,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **c**, één kapel haalt nooit alle zes: de kring van een kapel naar 40 ("zo ver als je de klok hoort"; de herberg en de
     markt blijven 30), of twee kapellen? **d**, een stenen huis in een gehucht: zo laten tot 2d, en het rapport zegt wat
     nog niet kan (advies), of groeit een huis pas door als zijn nieuwe stand kan krijgen wat hij wil?
+    **Beantwoord (Marcel, 2 okt):** "a ja b ja c 40, misschien wordt de kapel een kerk en dan een kathedraal met meer
+    bereik? d zo laten". Dus de raad en het rapport zo, met de wensen vóór de kapel en de smidse van het doel; de bouwer
+    zo; de kring van een kapel wordt 40 (de herberg en de markt blijven 30); en een stenen huis blijft zo tot 2d. De kapel
+    die een kerk en dan een kathedraal wordt, met een grotere kring, is een idee voor later, bij 2d (`spel.md`, "De
+    wensen van de mensen, per stand").
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
