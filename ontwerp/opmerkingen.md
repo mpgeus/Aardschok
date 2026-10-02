@@ -9,6 +9,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De schout valt tegen één wilde rover** (2 okt, drieëntwintigste sessie; de speeltest van 2d, zaad 1). Na een roof
+  zag een rover de schout, en in het gevecht deelde de rover 22 schade uit en de schout 11: op 18 bloeimaand van het tweede
+  jaar was het spel uit. De raad had 20 dagen gezegd dat de rovers terugkomen en een wachthuis helpt; de bouwer van de
+  speeltest bouwt er geen en loopt niet weg. Na te lopen: of één rover de schout zo makkelijk hoort te verslaan (de
+  levenspunten en de schade in `T.WEZENS`), of de schout wegkan als hij ziet dat hij verliest, en of de bouwer de raad over
+  de rovers volgt.
 - **Een erf ver van de herberg geeft een huis dat nooit alles heeft** (1 okt, drieëntwintigste sessie; vraag 87). Een huis
   (de dorpelingen) wil de herberg binnen 30 tegels, en een herberg bouw je in een gehucht niet (hij staat in het bouwmenu
   van een dorp). Van de 704 plekken waar een erf past, liggen er 113 zo dicht bij de herberg. Een hut op een erf verder weg

@@ -149,6 +149,49 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 2 okt: de treden uit de standen (werklijst, vraag 90, 2d)
+
+Gespeeld in de drieëntwintigste sessie, op `claude/werklijst-doorzetten-73hi30` (`536e002`), met de nulmeting op
+`deaccdf` (het spel van `89d9bf1`: de stand van `main` vóór 2d, met een put voor alleen hout en een bouwer die ook voor
+zijn volgende wens verkoopt) in een losse kopie (`git worktree`). Alleen de bouwer, twee jaar, zaad 1 tot en met 3. Geen
+fouten in de console. Wat er veranderde: een dorp bij 20 dorpelingen en marktrecht bij 20 ambachtslieden, elk met een
+brief (A en C); de markt en de weverij al in een dorp (B); en de raad, en dus de bouwer, kent de ketens (D).
+
+**Vóór → na** (tevreden is het gemiddelde over de maanden; "met alles" telt de huizen die aan het eind alles hebben wat
+hun stand wil; een speeljaar loopt van 1 lentemaand tot 1 lentemaand, dus louwmaand en sprokkelmaand van '24 horen nog
+bij het eerste):
+
+| Jaar | Mensen aan het eind (het meest) | Doden | Tevreden | Doorgegroeid | Hutten, huizen, stenen huizen | Met alles | Een dorp | Marktrecht |
+|---|---|---|---|---|---|---|---|---|
+| bouwer, zaad 1 | 100 (100) → 89 (89), de schout gevallen | 0 → 0 | 85% → 85% | 12 → 8 | 5, 7, 3 → 8, 3, 3 | 5 van 20 → 8 van 19 | 21 oogstmaand '23 → 6 slachtmaand '23 | → 1 sprokkelmaand '24 |
+| bouwer, zaad 2 | 100 (100) → 106 (106) | 0 → 0 | 85% → 85% | 12 → 14 | 5, 7, 3 → 4, 7, 4 | 5 van 20 → 5 van 20 | 21 oogstmaand '23 → 1 slachtmaand '23 | → 1 louwmaand '24 |
+| bouwer, zaad 3 | 100 (100) → 98 (98) | 0 → 0 | 85% → 84% | 12 → 11 | 5, 7, 3 → 6, 6, 3 | 5 van 20 → 5 van 20 | 21 oogstmaand '23 → 5 slachtmaand '23 | → 11 sprokkelmaand '24 |
+
+**Wat opviel:**
+
+1. **De treden komen, en snel.** Een dorp op 1 à 6 slachtmaand, met 50 à 54 mensen (ervoor, met de kapel en de smidse:
+   21 oogstmaand, ruim twee maanden eerder), en marktrecht nog in het eerste jaar, in louwmaand of sprokkelmaand, met 57 à
+   58 mensen in drie à vier stenen huizen. Linksboven stond "2 van 20 dorpelingen", de brieven kwamen, en de bouwer
+   bouwde geen smidse meer: die vraagt het doel niet.
+2. **Maar wat een dorp en marktrecht vrijmaken, komt er niet: er is geen goud.** Aan het eind zegt de raad wat de stenen
+   huizen missen, en alles staat nu in het bouwmenu: "Drie stenen huizen willen brood: bouw een bakkerij en een molen
+   [B].", "laken: bouw een weverij [B]", "een markt binnen 30 tegels [B]". Maar het goud staat het hele tweede jaar
+   tussen 0 en 8, de heer kreeg in het tweede jaar 23 à 27% (de schandpaal; ervoor 23 à 33%), en de bouwer verkoopt geen
+   graan ("zou graan verkopen voor 109 goud, maar het graan is nodig"). Twee dingen doet hij niet die een speler die de
+   raad volgt wel zou doen: hij neemt de belasting niet aan, die de raad noemt als er goud mist ("belasting [W] brengt
+   elke maand goud"), en hij blijft hangen op de eerste wens die hij niet kan betalen (de bakkerij, 8 goud), ook als er
+   een put voor 6 hout achter staat. Super gelukkig blijft bij de vijf boerderijen (bij zaad 1 ook drie hutten).
+3. **Zaad 1: de schout viel** op 18 bloeimaand van het tweede jaar, tegen één wilde rover die hem zag na de roof (22
+   schade tegen 11). De raad zei 20 dagen dat de rovers terugkomen en een wachthuis helpt; de bouwer bouwt er geen en
+   loopt niet weg. Dat staat los van 2d (het spel liep alleen anders), en staat in `opmerkingen.md`.
+4. **Wat de ketens in de speeltest nog niet lieten zien, rekende ik na.** Een molen maalt elke dag graan tot meel, zonder
+   grens (alleen de herberg brouwt "tot er genoeg ligt"), en meel en brood zijn geen eten: in het gehucht als dorp nam een
+   molen met één hand in 30 dagen 73 graan, ruim 880 per jaar, terwijl niemand brood wilde. En de weverij krijgt van acht
+   schapen 32 wol per jaar, waarvan de heer er 20 per schaapskooi vraagt: laken voor vier à vijf ambachtslieden, terwijl
+   er 24 à 32 zijn (een ambachtsman wil 0,01 laken per dag, 3,6 per jaar).
+
+Wat eruit volgt, staat in de werklijst als vraag 91.
+
 ## De speeltest van 2 okt: de raad over de wensen, en een bouwer die ze volgt (werklijst, vraag 87 en 88)
 
 Gespeeld in de drieëntwintigste sessie, op `claude/werklijst-doorzetten-73hi30` (`9c9af1a`; de bouwer nog eens op dezelfde
