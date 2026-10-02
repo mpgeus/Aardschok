@@ -158,7 +158,9 @@ letter voor letter mee zoals ervoor).
 
 - **Goederen: de hoogste stand neemt eerst** (Marcel, vraag 85: "een hogere stand eigent zich spullen toe. Dus stel er is
   te weinig bier, dan nemen zij het laatste"). Elke dag gebruikt een mens van zijn stand zoveel bier, vlees of vis, brood
-  en laken uit de voorraad (de getallen in de werkbank). Is er te weinig, dan krijgt de hoogste stand het eerst, en gaat
+  en laken uit de voorraad (de getallen in de werkbank). Laken is sinds 2 okt 0,005 per dag (vraag 91, c; was 0,01): de
+  wol komt van de schapen, eens per jaar, en de heer vraagt er 20 per schaapskooi, zodat acht schapen laken gaven voor
+  vier à vijf ambachtslieden; een volle kooi (20 schapen) dekt er nu zo'n 33. Is er te weinig, dan krijgt de hoogste stand het eerst, en gaat
   wat over is naar de stand eronder; binnen een stand gelijk op. Eten en brandhout gaan zoals ze gingen, voor het hele
   dorp.
 - **In de buurt is een kring om het gebouw** (vraag 80, B): de put 12 tegels, de herberg en een markt 30 (vraag 85, b: 25
@@ -1151,6 +1153,12 @@ winter zichtbaar te maken staat in de werklijst bij vraag 44, en werd op 28 sep 
 - Een gebouw dat iets maakt, vraagt handen en maakt alleen wat zijn grondstof toelaat: de smidse
   staat zonder ijzer stil, en zegt dat bij de muis. Gereedschap laat 25% harder werken en slijt in
   180 dagen.
+- **Wie iets omzet, maakt tot er genoeg ligt** (2 okt, werklijst vraag 91, b; Marcel: "b ja"): de molen, de bakkerij,
+  de brouwerij, de weverij, de timmerman, de kuiper, de kalkbrander, de smidse, de wapenmaker en de herberg maken tot er
+  30 ligt van wat ze maken (`T.maaktTot`; één getal in de werkbank), en zeggen het bij de muis ("er ligt genoeg meel").
+  Wie iets uit het land haalt (de houthakker, de visser, de steengroeve), maakt door. Daarvoor maalde een molen elke dag
+  graan tot meel, ook als niemand brood wilde, en meel en brood zijn geen eten: ruim 880 graan per jaar. De herberg
+  brouwde al tot er 30 bier was (27 sep); dat ging in dezelfde regel op.
 - **Werk telt in uren** (26 sep; "Mensen worden poppetjes", stuk 2): een gebouw maakt naar de uren
   dat zijn handen er echt zijn, en de weg van hun huis erheen gaat eraf. Bij de muis: "Houthakker:
   aan het werk (1 van 1 handen), 10 van de 12 uur; 2 uur onderweg." Een optie in de spelregels.
