@@ -34,9 +34,8 @@ een huis of een stenen huis woont), dan "0 van 20 ambachtslieden" voor marktrech
 dag. Sinds vraag 91 maakt een werkplaats die iets omzet tot er 30 ligt (en laat hij het zaaigraan liggen), en wil een
 ambachtsman 0,005 laken per dag; sinds vraag 92 zijn brood, vis en vlees eten. `npm test`: 773/773.
 
-**Waar het werk staat:** het werk van de drieëntwintigste sessie tot en met vraag 89 staat in `main` (Marcel, 2 okt:
-"naar main"); 2d (vraag 90), vraag 91 en 92 staan op `claude/werklijst-doorzetten-73hi30`, gepusht, en gaan naar `main`
-als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook het werk van de drieëntwintigste sessie (vraag 87 tot en met 93, met
+de speeltests; Marcel, 2 okt: "naar main", en aan het eind "ja, naar main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** **vraag 93, a: de sluwe bouwer** (Marcel, 2 okt: "De bouwer mag alles er aan doen,
 totale vrijheid"; en "moeten we dit al in nieuwe sessie doen?": ja). Begin met een kort plan voor Marcel (wat de sluwe
