@@ -343,6 +343,18 @@
           uitleg: 'Mist een huis een maand lang iets, dan trekt zijn gezin weg, hooguit één huis per dag. Een huis dat net doorgroeide, wil meteen meer: zorg dat het er is.' },
       ],
     },
+    // De treden (werklijst vraag 90, A; Marcel, 2 okt: "a ja"; js/treden.js). Zoals de proef is het spel van 28 sep tot
+    // 2 okt (vraag 51).
+    {
+      id: 'treden', naam: 'Treden', standaard: 'standen',
+      uitleg: 'Wanneer het gehucht een dorp wordt.',
+      keuzes: [
+        { id: 'standen', naam: 'Uit de standen', zet: { 'TREDEN_INSTELLINGEN.dorp': { stand: 'dorpelingen', mensen: 20, gebouwen: [] } },
+          uitleg: 'Zoals in Anno 1602: een dorp bij 20 dorpelingen, wie in een huis woont (of in een stenen huis). Daarna marktrecht bij 20 ambachtslieden, in een stenen huis.' },
+        { id: 'proef', naam: 'Zoals de proef van 28 sep', zet: { 'TREDEN_INSTELLINGEN.dorp': { mensen: 50, gebouwen: ['kapel', 'smidse'] } },
+          uitleg: 'Een dorp bij 50 mensen, wie het ook zijn, met een kapel en een smidse klaar. Marktrecht blijft bij 20 ambachtslieden.' },
+      ],
+    },
     // De raad onder het doel (Marcel, 29 sep, werklijst vraag 58: "B onder het doel"; js/raad.js).
     {
       id: 'raad', naam: 'Raad', standaard: 'aan',

@@ -35,12 +35,6 @@
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
   const heeft = (D, soort) => (D.gebouwen || []).some((g) => g.soort === soort);
 
-  // Hoeveel mensen het doel nog vraagt (js/treden.js), of 0 als er geen trede meer te halen is.
-  function mensenNodig(D) {
-    const trede = T.volgendeTrede(D);
-    return trede ? Math.max(0, T.TREDEN_INSTELLINGEN[trede].mensen - (D.bevolking || 0)) : 0;
-  }
-
   // Over hoeveel dagen de inner komt (T.INNER_INSTELLINGEN.komt), als dat binnen `binnen` dagen is; anders null.
   function innerOver(D, binnen) {
     const komt = T.INNER_INSTELLINGEN.komt;
@@ -178,7 +172,7 @@
     },
     {
       id: 'plaats',
-      als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('plaats'),
+      als: (D) => T.tredeMensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('plaats'),
       tekst: () => (T.ERVEN_INSTELLINGEN.dorpBouwtZelf
         ? 'Er komt geen gezin: het dorp is vol. Wijs een erf aan: [B], dan Erf.'
         : 'Er komt geen gezin: het dorp is vol. Bouw een hut of een huis: [B].'),
@@ -211,17 +205,17 @@
     },
     {
       id: 'tevreden',
-      als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('tevreden'),
+      als: (D) => T.tredeMensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('tevreden'),
       tekst: (D) => `Er komt geen gezin: het dorp is ${Math.round(D.behoeften.tevredenheid * 100)}% tevreden, en een gezin wil ${Math.round(T.BEHOEFTEN_INSTELLINGEN.groeiDrempel * 100)}%.`,
     },
     {
       id: 'graan',
-      als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('graan'),
+      als: (D) => T.tredeMensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('graan'),
       tekst: () => `Er komt geen gezin: er ligt minder dan ${T.GEBOUWEN_INSTELLINGEN.graanBufferVoorGroei} graan.`,
     },
     {
       id: 'gezin',
-      als: (D) => mensenNodig(D) > 0,
+      als: (D) => T.tredeMensenNodig(D) > 0,
       tekst: (D) => `Het volgende gezin komt ${over(T.volgendeGezinDag(D) - dagNu(D))}.`,
     },
   ];

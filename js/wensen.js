@@ -143,6 +143,25 @@
     return tel;
   }
 
+  // De stand onder deze op de ladder (de keuters onder de dorpelingen), of null: de onderste, en de boeren, die ernaast
+  // staan.
+  T.standOnder = function (stand) {
+    const i = ladder().indexOf(stand);
+    return i > 0 ? ladder()[i - 1] : null;
+  };
+
+  // Hoeveel mensen er nu minstens deze stand hebben: wie in een huis van die stand woont, of van een stand erboven (de
+  // boeren staan ernaast en tellen alleen voor zichzelf). Voor de treden (js/treden.js; Marcel, 2 okt, vraag 90, A): een
+  // dorp bij 20 dorpelingen. Een huis dat versteent, blijft meetellen: anders werd een gehucht waar de huizen te vroeg
+  // versteenden, nooit een dorp.
+  T.mensenVanStand = function (D, stand) {
+    const vanaf = ladder().indexOf(stand);
+    const telt = (s) => (vanaf < 0 ? s === stand : ladder().indexOf(s) >= vanaf);
+    let n = 0;
+    for (const [g, m] of mensenPerHuis(D)) if (telt(T.standVan(g))) n += m;
+    return n;
+  };
+
   // Wat elk huis wil en heeft, vandaag; puur, zoals T.berekenTevredenheid (js/behoeften.js), dat het vraagt. `basis` is
   // wat voor het hele dorp geldt: `eten` (welk deel er vandaag te eten is), `brandhout` (welk deel er gestookt kan
   // worden; buiten de winter 1), en `erbij` (wat de herberg, de wetten en de voorvallen erbij doen, min wat de heer

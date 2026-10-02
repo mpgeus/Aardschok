@@ -108,7 +108,12 @@ test('geen gezin: het dorp is vol, niet tevreden genoeg, of er ligt te weinig gr
 
 test('is het doel voor de mensen gehaald, dan zegt de raad niets meer over de groei', () => {
   const S = metRaadsman(opDag(gehucht(), 3.5));
-  S.dorp.bevolking = T.TREDEN_INSTELLINGEN.dorp.mensen;
+  assert.equal(id(S), 'gezin');
+  // Een huis met zoveel bewoners als het doel nog dorpelingen vraagt (js/treden.js), zonder te bouwen.
+  const huis = { soort: 'huis', x: 0, y: 0, klaar: true, handen: 0 };
+  S.dorp.gebouwen.push(huis);
+  for (let i = T.tredeMensenNodig(S.dorp); i > 0; i--) S.dorp.bewoners.mensen.push({ naam: `dorpeling ${i}`, huis });
+  assert.equal(T.tredeMensenNodig(S.dorp), 0);
   assert.equal(raad(S), null);
 });
 
@@ -252,6 +257,9 @@ test('de spelregel zet hem uit, en op een kaart zonder plein is er geen', () => 
 });
 
 test('bouwen: wat je mist voor wat het doel vraagt, en waar het vandaan komt (vraag 59, C)', () => zonderWensen(() => {
+  // Gebouwen vraagt het doel alleen met de spelregel "Treden" op de proef van 28 sep (js/treden.js; vraag 90, A).
+  assert.deepEqual(T.doelGebouwen(gehucht().dorp), [], 'uit de standen vraagt het doel geen gebouwen');
+  T.zetOptie('treden', 'proef');
   const S = opDag(gehucht(), 40.5); // na de eerste dagen, en ver van de winter
   const kosten = (wat, soorten) => soorten.reduce((som, s) => som + (T.GEBOUWEN[s].kosten[wat] || 0), 0);
   // In het begin kun je de kapel en de smidse allebei betalen: dan zegt hij niets.

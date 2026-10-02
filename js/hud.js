@@ -376,7 +376,7 @@
         );
       })
       .join('');
-    return `<div class="kop">Bouwen — het ${S.dorp.trede}</div>${rijen || '<p class="bouw-leeg">Hier valt nu niets te bouwen.</p>'}`;
+    return `<div class="kop">Bouwen — ${T.tredeNaam(S.dorp)}</div>${rijen || '<p class="bouw-leeg">Hier valt nu niets te bouwen.</p>'}`;
   }
 
   // De rij van het erf (js/erven.js): wat het kost is niets, maar er staat bij hoeveel er vrij zijn, en

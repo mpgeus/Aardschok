@@ -37,7 +37,7 @@
       gebouwen: [], // wat er staat of in aanbouw is (js/gebouwen.js), en hoe ver D.gebouwenDag is
       bevolking: 0, woonruimte: 0, // aantal mensen, en hoeveel er als woonruimte gegeven is
       behoeften: T.nieuweBehoeften(), // tevredenheid en wat het dorp mist (js/behoeften.js)
-      trede: 'gehucht', // de trede van het dorp: een dorp bij genoeg mensen, een kapel en een smidse (js/treden.js)
+      trede: 'gehucht', // de trede van het dorp: een dorp bij 20 dorpelingen, marktrecht bij 20 ambachtslieden (js/treden.js)
       wetten: T.nieuweWetten(), // welke wetten het dorp aannam (js/wetten.js)
       goud: 0,
       goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
