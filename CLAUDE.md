@@ -272,13 +272,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwmenu staat, zegt `T.inBouwmenu`: het erf, en de woningen niet, tenzij de spelregel "Huizen" anders zegt. Op
   een akker, een weide, een pad of een erf bouw je niet (`T.waaromNietOpDezeGrond`). De paaltjes op een vrij erf
   tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`).
-- `js/treden.js`: **van gehucht tot dorp** (stap 2 van de proef, vraag 53, 29 sep): het gehucht wordt een dorp bij
-  50 mensen met een kapel en een smidse klaar (`T.TREDEN_INSTELLINGEN`, in de werkbank). `T.tredeDoel` geeft het
-  doel voor het vak linksboven (js/main.js, als er geen quest is), `T.tikTredeDag` zet `D.trede` (en die gaat nooit
-  terug), en de heer schrijft dan (`T.ui.toonBrief(D, 'dorp')` in js/brieven.js): het eind van de proef. Het bouwmenu
-  toont deze trede en de treden ervoor (`T.inBouwmenu`); wat pas in een dorp komt, vraagt `T.tredeMinstens`. Hoe je
-  dorp heet (`D.dorpsnaam`, `T.dorpsnaam`, `T.zetDorpsnaam`), kies je bij Nieuw spel (js/menu.js), met een voorstel
-  uit `T.DORPSNAMEN` (vraag 60).
+- `js/treden.js`: **van gehucht tot dorp, en tot marktrecht** (stap 2 van de proef, vraag 53, 29 sep; sinds 2 okt uit de
+  standen, vraag 90): zoals in Anno 1602 wordt het gehucht een dorp bij 20 dorpelingen (wie in een huis of een stenen
+  huis woont, `T.mensenVanStand` in `js/wensen.js`), en krijgt het marktrecht bij 20 ambachtslieden
+  (`T.TREDEN_INSTELLINGEN`, in de werkbank; de spelregel "Treden" zet de proef van 28 sep terug: 50 mensen met een kapel
+  en een smidse). De volgorde van de treden is `T.GEBOUW_TREDEN` (`js/gebouwen.js`). `T.tredeDoel` geeft het doel voor
+  het vak linksboven (js/main.js, als er geen quest is), `T.tredeMensenNodig` hoeveel mensen het nog vraagt (voor de
+  raad), `T.tikTredeDag` zet `D.trede` (en die gaat nooit terug), en de heer schrijft dan (`T.ui.toonBrief(D, trede)` in
+  js/brieven.js, een brief per trede). Het bouwmenu toont deze trede en de treden ervoor (`T.inBouwmenu`; de markt en de
+  weverij al in een dorp, vraag 90, B); wat pas in een dorp komt, vraagt `T.tredeMinstens`, en hoe een trede heet,
+  `T.tredeNaam`. Hoe je dorp heet (`D.dorpsnaam`, `T.dorpsnaam`, `T.zetDorpsnaam`), kies je bij Nieuw spel
+  (js/menu.js), met een voorstel uit `T.DORPSNAMEN` (vraag 60).
 - `js/raad.js`: **de raad onder het doel** (stap 5 van de proef, vraag 58, 29 sep; de eerste weken, vraag 47,
   herschreven): één regel onder het doel linksboven die zegt wat nu tussen jou en een dorp staat, met de toets erbij
   (`[B]` wordt een toets): de eerste uit `T.RADEN` die nu geldt (`T.raadNu`). Hij vraagt het aan de regels zelf: of er
@@ -296,7 +300,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.berekenTevredenheid` (`js/behoeften.js`) maakt er het gemiddelde van, naar mensen; de huizen nemen hun goederen
   vóór het eten (`T.gebruikGoederen`), en wat een huis wil en heeft, staat op het huis (`g.wensen`). **Wat de huizen
   missen en wat helpt, zegt `T.watDeHuizenMissen`** (vraag 87): de raad, het rapport en de bouwer van de speeltest vragen
-  het alle drie, eerst een huis dat op bouwstof wacht, dan wat de meeste mensen missen. Met een put, een
+  het alle drie, eerst een huis dat op bouwstof wacht, dan wat de meeste mensen missen, met de ketens (vraag 90, D: wat
+  een werkplaats nodig heeft, `maakt.in`, en wie dat maakt: "de bakkerij heeft geen meel, bouw een molen [B]"). Met een put, een
   kapel, de herberg of een markt in de hand zie je de kring (`js/tekenen.js`) en zegt de muis wie hij bereikt
   (`T.kringTekst`). **Doorgroeien per huis** (2b, in `js/behoeften.js`): heeft een huis een maand op rij alles, dan
   groeit het door naar de volgende stand, als de bouwstof er is (`bouwstof`: een huis hout, een stenen huis steen), ook
@@ -469,7 +474,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   laadt het bewust niet), `js/hud.js` (de balk, het bouwmenu onder
   `B`, het veldenvenster onder `V`, het handelsvenster en het betalen aan de heer), en `js/brieven.js`: **de
   brieven van de heer op één plek** (vraag 60, het eerste stuk van hud.js splitsen): de benoeming waarmee een nieuw
-  spel begint, de schatting op 1 wijnmaand, de heervaart en de dorpsbrief, elk een soort in `BRIEVEN`, getoond met
+  spel begint, de schatting op 1 wijnmaand, de heervaart, en een brief bij elke trede (het dorp, marktrecht), elk een
+  soort in `BRIEVEN`, getoond met
   `T.ui.toonBrief(D, soort)`, en alleen die aan jouw dorp komt in beeld; de knop Brief opent een brief die op je antwoord wacht. Een nieuw spel begint in
   het gehucht met `T.beginOpKaart`
   (`js/gebied.js`; `?kaart=<naam>` begint op een andere kaart, zonder brief); de kaart komt uit
@@ -660,7 +666,8 @@ waar hij staat en waar hij nu hoort (`('herder')` zoekt er een). `Spel.debug.gez
 gezin komen (overdag over de weg; is het dorp vol, dan neemt het een vrij erf), `(-4)` laat er een wegtrekken.
 `Spel.debug.bouw('erf', 48, 50)` wijst een erf aan (daar is plaats, ten zuidoosten van het plein), en
 `Spel.debug.erven()` zegt per erf of het vrij is, wie er woont, en hoe ver de hut is. `Spel.debug.trede()` zegt
-hoe ver het gehucht is met een dorp worden, en `('dorp')` maakt er nu een dorp van, met de brief van de heer.
+hoe ver het gehucht is met de volgende trede, en `('dorp')` maakt er nu een dorp van, met de brief van de heer
+(`('marktrecht')` net zo).
 `Spel.debug.rovers()` zegt wie er in de bende zit, wanneer die en de wilde rovers komen, en hoe een aanval ervoor
 staat; `(3)` laat nu drie wilde rovers komen, `('bende')` de bende.
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat

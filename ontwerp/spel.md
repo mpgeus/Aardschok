@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 1 okt 2026, eenentwintigste sessie)
+## Waar staat wat (bijgewerkt 2 okt 2026, drieëntwintigste sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -14,7 +14,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Onderwerp | Stand | Werklijst |
 |---|---|---|
 | De vertical slice | besloten (Marcel, 1 okt, vraag 77): het doel is de vertical slice uit het concept: je begint als gehucht, zoals nu, en groeit naar haar maat (een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te klein), en uiteindelijk naar een stad van mogelijk 5000 of meer ("we moeten een manier zoeken", vraag 78, E), in zes stappen te beginnen met de wensen van de mensen, zoals in Anno 1602 (vraag 78; het plan is vraag 79); statussen met niveaus; een ambtenaar voor elke tak van het bestuur; en later een scherm met de statussen en de laatst bekende inventarisatie | vraag 77, 78, 79 |
-| De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85); 2a en 2b gebouwd (1 okt): elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt, en wie een jaar lang alles heeft, wint | vraag 79, 80, 82, 85 |
+| De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85); 2a en 2b gebouwd (1 okt): elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt, en wie een jaar lang alles heeft, wint; 2d gebouwd (2 okt, vraag 90): de treden uit de standen, een dorp bij 20 dorpelingen en marktrecht bij 20 ambachtslieden, met de markt en de weverij al in een dorp | vraag 79, 80, 82, 85, 90 |
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern | vraag 50, 51, 54, 73, 74, 78 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
@@ -23,7 +23,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug; sinds 30 sep heeft een probleem een oorzaak (honger, kou, vol, onvrede) | vraag 65, 74 |
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
-| De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt | vraag 58, 79 |
+| De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
 | Dorpsfeesten | idee voor later (Marcel, 1 okt): feesten bij het seizoen waar het hele dorp aan meedoet, en een grote bruiloft; nu alleen een notitie | |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -39,7 +39,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep); sinds 30 sep kiezen de boeren hun velden en slachten ze zelf, en jij kunt het veranderen | 6a, vraag 74 |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | besloten, nog niet gebouwd | 6c |
-| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14 |
+| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep), de treden tot marktrecht (2 okt, "Van dorp tot stad"); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
@@ -134,9 +134,11 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 ## De wensen van de mensen, per stand (Marcel, 1 okt 2026; werklijst vraag 79, 80, 82 en 85)
 
-**Zo werkt het nu** (1 okt, tweeëntwintigste sessie): **2a en 2b zijn gebouwd** (`js/wensen.js`, en het doorgroeien in
-`js/behoeften.js`); 2c (zien wat een huis wil, na de pagina met ontwerpen voor de ui), 2d (de treden uit de standen) en 2e
-(het eind) komen nog, in de volgorde van vraag 80. Zoals in Anno 1602: elk huis heeft een stand, en elke stand wil iets.
+**Zo werkt het nu** (1 en 2 okt, tweeëntwintigste en drieëntwintigste sessie): **2a, 2b en 2d zijn gebouwd**
+(`js/wensen.js`, het doorgroeien in `js/behoeften.js`, en de treden in `js/treden.js`: een dorp bij 20 dorpelingen,
+marktrecht bij 20 ambachtslieden, en de markt en de weverij al in een dorp; zie "Van dorp tot stad"); 2c (zien wat een
+huis wil, na de pagina met ontwerpen voor de ui) en 2e (het eind) komen nog, in de volgorde van vraag 80. Zoals in Anno
+1602: elk huis heeft een stand, en elke stand wil iets.
 Klein (vraag 82): drie standen, op de huizen die er al zijn; de poorters en hun huis komen later. Wat er nu al te zien is:
 de tevredenheid in de balk is het gemiddelde van de huizen, en bij de muis staat hij per stand, met wat er gemist wordt
 en in hoeveel huizen; met een put, een kapel, de herberg of een markt in de hand zie je de kring, en zegt de muis welke
@@ -193,9 +195,9 @@ letter voor letter mee zoals ervoor).
   alles; bier genoeg, een herberg dichtbij, brood, laken en een markt komen pas in een dorp of met marktrecht (2d), en
   het goud gaat op aan putten (werklijst vraag 89).
 - **Een stenen huis wordt in een gehucht nooit super gelukkig** (vraag 87, d; Marcel, 2 okt: "zo laten"). De
-  ambachtslieden willen brood, laken en een markt, en een bakkerij komt pas in een dorp, een weverij en een markt pas met
-  marktrecht. Zo werkt het in Anno 1602 ook: wie een stand bereikt, maakt de gebouwen vrij die die stand wil. Dat wordt
-  2d, de treden uit de standen.
+  ambachtslieden willen brood, laken en een markt, en een bakkerij, een weverij en een markt komen pas in een dorp (sinds
+  2d; tot 2 okt de weverij en de markt pas met marktrecht). Zo werkt het in Anno 1602 ook: wie een stand bereikt, maakt de
+  gebouwen vrij die die stand wil. Dat is 2d, de treden uit de standen (vraag 90).
 - **Later: de kapel wordt een kerk, en dan een kathedraal, met meer bereik** (Marcel, 2 okt, vraag 87: "misschien wordt de
   kapel een kerk en dan een kathedraal met meer bereik?"). Zoals een huis doorgroeit, groeit de kapel door, en zijn kring
   wordt groter; zo stond het op 26 sep al voor de werkplaatsen ("de kapel die een kerk met een toren wordt", hieronder bij
@@ -489,7 +491,8 @@ zitting (3b) en 's avonds de herberg (3c) komen nog.
 
 **Zo werkt het nu** (29 sep, zestiende sessie; `js/raad.js`, toetsen in `test/raad.test.cjs`; Marcel: "B onder het
 doel"):
-- **Onder het doel** linksboven ("26 van 50 mensen · nog geen kapel · nog geen smidse", `js/treden.js`) staat in goud
+- **Onder het doel** linksboven ("2 van 20 dorpelingen", `js/treden.js`; tot 2 okt "26 van 50 mensen · nog geen kapel ·
+  nog geen smidse") staat in goud
   één regel die zegt wat nu tussen jou en een dorp staat, met de toets erbij. Het is de eerste die nu geldt, in deze
   volgorde: de inner (drie dagen vooraf: "wat hij niet ziet, telt de heer niet"); het goud voor de heer, als de
   marskramer er in de herfst is en je te weinig hebt; een wachthuis, tien dagen na een aanval als er geen is; het hout
@@ -500,9 +503,18 @@ doel"):
   wacht ("Een hut kan een huis worden, maar er is geen 8 hout: bouw een houthakker [B]."), en anders wat de meeste mensen
   missen ("Vijf boerderijen en een huis willen een kapel binnen 40 tegels [B]."), alleen als je er nu iets aan kunt doen,
   en kun je niet betalen wat helpt, met wat je mist en waar het vandaan komt; en dan het doel en de groei: wat je mist
-  voor de kapel en de smidse en waar het vandaan komt (sinds 1 okt, vraag 59, C: "Voor de smidse mis je 8 goud: de
-  marskramer koopt graan in hooimaand en belasting [W] brengt elke maand goud"), waarom er verder geen gezin komt (niet tevreden genoeg; te weinig graan), of wanneer het volgende komt, zoals
-  een stad in Civilization zegt wanneer hij groeit.
+  voor de gebouwen die het doel vraagt en waar het vandaan komt (sinds 1 okt, vraag 59, C: "Voor de smidse mis je 8
+  goud: de marskramer koopt graan in hooimaand en belasting [W] brengt elke maand goud"; sinds 2 okt vraagt het doel
+  alleen nog gebouwen met de spelregel "Treden" op de proef van 28 sep), waarom er verder geen gezin komt (niet tevreden
+  genoeg; te weinig graan), of wanneer het volgende komt, zoals een stad in Civilization zegt wanneer hij groeit,
+  zolang het doel nog mensen vraagt.
+- **De ketens** (sinds 2 okt, werklijst vraag 90, D; Marcel: "d ja"): de raad weet wat een werkplaats nodig heeft en wie
+  dat maakt. Brood komt van de bakkerij, die meel nodig heeft van de molen; laken van de weverij, met wol van de
+  schapen. Is er nog niets, dan de hele keten in één keer ("Een stenen huis wil brood: bouw een bakkerij en een molen
+  [B]."); staat de bakkerij zonder meel, dan wie dat maakt ("de bakkerij heeft geen meel, bouw een molen [B]") in plaats
+  van nog een bakkerij; en wat geen werkplaats maakt, zegt waar het vandaan komt ("de weverij heeft geen wol, en wol komt
+  van de schapen, in zomermaand"). Een werkplaats met te weinig handen krijgt geen "nog een": een tweede zonder handen
+  helpt niet. Het rapport zegt hetzelfde, en de bouwer van de speeltest volgt het.
 - **Uit de regels zelf:** de raad vraagt het aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in
   `js/gebouwen.js`, dezelfde vraag die de groei stelt), aan de winter (`T.houtVoorDeWinter`, `T.etenVoorDeWinter`) en
   aan de wensen (`T.watDeHuizenMissen` in `js/wensen.js`, die het rapport en de bouwer van de speeltest ook stellen),
@@ -2709,14 +2721,34 @@ wordt, wordt dus vanzelf duurder. De schout moet kiezen:
 
 ### Van dorp tot stad
 
-**Zo werkt het nu: de eerste trede** (29 sep, veertiende sessie; `js/treden.js`, werklijst vraag 53). Het gehucht
-wordt een dorp als er 50 mensen zijn en een kapel en een smidse klaar staan (`T.TREDEN_INSTELLINGEN`, in de
-werkbank). Het doel staat vanaf het begin linksboven, met hoe ver je bent ("26 van 50 mensen · een kapel ✓ · nog
-geen smidse"), zolang geen quest het vak nodig heeft, en de benoemingsbrief noemt het. Is het zover, dan blijft
-het een dorp, staat de tijd stil en schrijft de heer, met "Verder als dorp" en "Naar het titelscherm". Het
-bouwmenu toont dan de gebouwen van het dorp, met die van het gehucht erbij. Het hoofdgeld in een dorp staat in de
-werkbank op 1 ("Dat kost u vanaf nu meer" is nog alleen woorden). Nog niet: de treden daarna (marktrecht, de
-stad), de schepenen, en wat een dorp verder anders maakt.
+**Zo werkt het nu: de treden uit de standen** (2 okt, drieëntwintigste sessie; `js/treden.js`, werklijst vraag 90).
+Zoals in Anno 1602 komt een trede met de mensen van een stand: het gehucht wordt een dorp bij 20 dorpelingen, en het
+dorp krijgt marktrecht bij 20 ambachtslieden (`T.TREDEN_INSTELLINGEN`, in de werkbank). Een dorpeling is wie in een
+huis woont, of in een stenen huis (`T.mensenVanStand`, `js/wensen.js`): een huis dat versteent, blijft meetellen, anders
+werd een gehucht waar de huizen te vroeg versteenden, nooit een dorp; een hut, een boerderij en het huis van de schout
+tellen niet. Het doel staat vanaf het begin linksboven, met hoe ver je bent ("2 van 20 dorpelingen", en na het dorp
+"0 van 20 ambachtslieden"), zolang geen quest het vak nodig heeft, en de heer vraagt in zijn benoemingsbrief "twintig
+zielen in huizen, niet in hutten". Is een trede gehaald, dan blijft die, staat de tijd stil en schrijft de heer: bij
+het dorp met "Verder als dorp" en "Naar het titelscherm", bij marktrecht "Wij vernemen dat in Ons dorp gehandeld
+wordt. Wij verlenen u marktrecht. Dat kost u vanaf nu meer." (`js/brieven.js`). Het bouwmenu toont de gebouwen van de
+trede, met die van de treden ervoor ("Bouwen — het dorp met marktrecht"). Wat een stand wil, komt een trede eerder: de
+markt en de weverij komen al in een dorp, zodat een huis dat versteent meteen wat het wil kan krijgen; marktrecht
+brengt het badhuis, het gasthuis, de steenbakkerij, het pakhuis en de ambachten. De spelregel "Treden" zet de proef
+van 28 sep terug (een dorp bij 50 mensen, met een kapel en een smidse klaar; marktrecht blijft bij de
+ambachtslieden). Het hoofdgeld in een dorp staat in de werkbank op 1 ("Dat kost u vanaf nu meer" is nog alleen
+woorden). Nog niet: de stad, de poorters en hun huis, de kapel die een kerk en een kathedraal wordt (Marcels idee bij
+vraag 87), de schepenen, en wat een dorp verder anders maakt.
+
+**Besloten: de treden uit de standen** (Marcel, 2 okt, werklijst vraag 90: "a ja b ja c ja d ja"; vraag 80, D: "de
+treden gaan op in de standen"). A: een trede komt met de mensen van een stand, een dorp bij 20 dorpelingen en
+marktrecht bij 20 ambachtslieden, met de oude eis als spelregel. B: de markt en de weverij al in een dorp. C: een
+brief bij marktrecht, voorlopig alleen woorden. D: de raad en de bouwer kennen de ketens (`ontwerp/spel.md`, "De raad
+onder het doel"). Waarom: de speeltest van vraag 89 liet zien dat wat de huizen missen voor super gelukkig (bier genoeg,
+een herberg dichtbij, brood, laken, een markt) pas met een trede komt, en de smidse als eis hield twee van de drie
+bouwers in een gehucht.
+
+**De eerste trede** (29 sep, veertiende sessie; tot 2 okt): het gehucht werd een dorp bij 50 mensen met een kapel en
+een smidse klaar ("26 van 50 mensen · een kapel ✓ · nog geen smidse"); daarna was er geen trede meer.
 
 **Besloten: de eerste trede** (Marcel, 28 en 29 sep, werklijst vraag 51 en 53: "A ja B ja C ja D ja"). Het gehucht
 wordt een dorp bij 50 mensen, met een kapel en een smidse die klaar zijn (de getallen in de werkbank). Het doel
