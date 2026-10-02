@@ -2954,6 +2954,36 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     zo; de kring van een kapel wordt 40 (de herberg en de markt blijven 30); en een stenen huis blijft zo tot 2d. De kapel
     die een kerk en dan een kathedraal wordt, met een grotere kring, is een idee voor later, bij 2d (`spel.md`, "De
     wensen van de mensen, per stand").
+88. **Mensen ingemetseld, en paden die de hele kaart afzoeken** (Claude, 2 okt, drieëntwintigste sessie; wacht op
+    Marcel). Met de bouwer die de wensen volgt (vraag 87, D) groeide het dorp beter (bij zaad 2 op dag 250 zes huizen in
+    plaats van drie), maar een speeljaar duurde geen 2,5 minuut meer, maar meer dan een kwartier, en elke dag trager.
+    Gemeten: bijna alle tijd gaat naar het zoeken van paden (A*, `js/pad.js`), voor wie dwaalt (`T.dwaal`).
+    - **Een gebouw komt over mensen heen, en over deuren.** Bouwen en doorgroeien kijken alleen of een tegel vast is (een
+      muur, een boom), niet of er iemand staat of een deur is. Dat zit al in de nulmeting: Otto en Hille staan vanaf dag 50
+      tot het eind ingemetseld in de hut van het oude stel, die over hen heen doorgroeide (2b). Bij de nieuwe bouwer kwam
+      de kapel over Geertje, groeiden twee huizen over Egbert, Diewer en Berend, en staat er een put op de deur van de
+      schout. Wie ingemetseld is, probeert elke paar seconden naar huis, en wie naar een dichtgebouwde deur wil, laat A*
+      de hele kaart afzoeken: 4.000 keer per tien dagen, vanaf dag 320 elke keer zo'n 1.200 tegels.
+    - **A* zocht de beste tegel elke stap door de hele lijst**, zodat een zoektocht die niet slaagt, de kaart in het
+      kwadraat kostte. Sinds 2 okt een hoop, met precies dezelfde paden: 3.400 willekeurige zoektochten van 3.400 gelijk,
+      ook die geen weg vinden, en de nulmeting speelt er alle vijftien jaren letter voor letter mee zoals ervoor, 8%
+      sneller (912 → 842 seconden). Dat helpt waar een zoektocht niet slaagt; de ingemetselde mensen lost het niet op.
+    **Marcel (2 okt):** "Zoizo bezette tegels zijn uit te sluiten toch? Bomen, versiering etc", en vier technieken: flow
+    fields, time-slicing, HPA* en group steering (`opmerkingen.md`, "Een dorp van meer dan zo'n 150 mensen hapert").
+    Voorstel:
+    - **a, nu: niet bouwen op iemand of op een deur.** Het bouwmenu zegt "Daar staat iemand" of "Daar is een deur", de
+      bouwer kiest een andere plek, en een huis groeit niet over iemand heen (dan morgen) of over een deur. Zo blijft
+      niemand ingemetseld, en meet de speeltest van vraag 87 het dorp zoals het hoort.
+    - **b, nu: eilanden**, Marcels "bezette tegels uitsluiten": het dorp rekent één keer uit, en opnieuw als er gebouwd
+      wordt, welke begaanbare tegels samen één gebied vormen. Ligt het doel in een ander gebied, dan weet A* meteen dat er
+      geen weg is, in plaats van na de hele kaart. Hetzelfde spel, alleen sneller.
+    - **c, later, met stap 6 van de slice (de kleine stad) en de 5.000:** flow fields voor wat veel mensen delen (de put,
+      de kerk, de herberg, de markt, het plein; soldaten naar de poort); voor wat ieder alleen heeft (zijn deur, zijn werk)
+      de vaste wegen onthouden, wat op hetzelfde neerkomt; time-slicing tegen de spits 's ochtends en 's avonds; HPA* over
+      de wijken, met de eilanden als eerste laag; group steering voor wie achter één leider loopt (de militie met de
+      schout, de soldaten van de heer, de rovers). Bij 5.000 loopt het grootste deel van de stad toch niet als poppetje
+      (`opmerkingen.md`: wat je niet ziet, telt per wijk).
+    Vragen: **a**, niet bouwen op iemand of op een deur, nu? **b**, de eilanden nu? **c**, de rest later, met stap 6?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

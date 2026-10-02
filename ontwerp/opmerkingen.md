@@ -46,8 +46,15 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   meting bij vraag 74). In de ochtend- en avondspits zoekt iedereen tegelijk een pad (`T.dwaal` in `js/verkennen.js` →
   `T.zoekPad` in `js/pad.js`), en voor elke tegel die A* bekijkt, loopt `T.wezenOp` (`js/wereld.js`) alle wezens af. Wat
   helpt, van meeste naar minste: wie waar staat per tegel bijhouden (zoals `T.voorwerpOp` sinds stuk 2); de vaste wegen
-  (huis, werk, put, herberg) onthouden in plaats van elke dag opnieuw zoeken; A* met een heap en getallen als sleutel; een
-  zoektocht die niet slaagt, niet de hele kaart laten afzoeken. En de kaart hoeft niet in een bewaard spel (55 bytes per
+  (huis, werk, put, herberg) onthouden in plaats van elke dag opnieuw zoeken; A* met een heap en getallen als sleutel (af,
+  2 okt: dezelfde paden, letter voor letter); een zoektocht die niet slaagt, niet de hele kaart laten afzoeken. Marcel
+  (2 okt, vraag 88): "Zoizo bezette tegels zijn uit te sluiten toch? Bomen, versiering etc", en vier technieken om naar
+  te kijken: **flow fields** (één zoektocht terug vanaf een doel over de hele kaart, en iedereen volgt de pijl op zijn
+  tegel: voor wat veel mensen delen, de put, de kerk, de herberg, de markt, het plein, en soldaten naar de poort),
+  **time-slicing** (de zoektochten over een paar beelden spreiden: tegen de spits 's ochtends en 's avonds), **HPA\***
+  (eerst een pad over grote stukken, zoals de wijken, dan een klein stuk A*) en **group steering** (alleen de leider
+  zoekt een pad, de rest volgt hem: de militie met de schout, de soldaten van de heer, de rovers). Wat Claude erin ziet,
+  staat bij vraag 88. En de kaart hoeft niet in een bewaard spel (55 bytes per
   tegel; bij 256 bij 256 al 3,6 MB): die komt uit het zaad of uit het bestand. Pas nodig als het dorp een stad wordt.
   **Uiteindelijk wordt het een stad van mogelijk 5000 of meer mensen** (Marcel, 1 okt; vraag 77). Dat haal je niet met
   alleen snellere paden (bij 1.600 mensen kost een beeld nu 15 seconden): dan loopt niet iedereen altijd zijn eigen
