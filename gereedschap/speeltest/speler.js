@@ -156,9 +156,9 @@
 
   function beantwoord() {
     const s = S();
-    // De brief van de heer als het gehucht een dorp is (js/treden.js): verder als dorp. Wanneer, schrijft de
-    // luisteraar op wordtTrede op.
-    if (T.ui.briefOpen() && /dorp is geworden/.test((document.querySelector('#brief .brief-tekst') || {}).textContent || '')) {
+    // De brief van de heer bij een trede (js/treden.js): als het gehucht een dorp is, verder als dorp, en bij marktrecht
+    // aan het werk. Wanneer, schrijft de luisteraar op wordtTrede op.
+    if (T.ui.briefOpen() && T.GEBOUW_TREDEN.includes(document.querySelector('#brief').dataset.soort)) {
       if (!klik('#brief .heer-geef-knop')) T.ui.sluitBrief(s);
     }
     // De heervaart (js/heervaart.js; in een dorp, op 1 hooimaand): de speler stuurt ze, en schrijft op wat de heer
@@ -1049,9 +1049,9 @@
     na('doorzoekDorp', () => {
       boek.soldaten.hetHeleDorp = true;
     });
-    // Van gehucht tot dorp (js/treden.js): op welke dag, en met hoeveel mensen.
+    // Van gehucht tot dorp, en tot marktrecht (js/treden.js): op welke dag, en met hoeveel mensen.
     na('wordtTrede', (r, voor, S_, trede) => {
-      if (!boek.dorp) boek.dorp = { trede, dag: heel(s.kalender.dag), datum: datum(), mensen: s.dorp.bevolking };
+      if (!boek[trede]) boek[trede] = { trede, dag: heel(s.kalender.dag), datum: datum(), mensen: s.dorp.bevolking };
     });
     // Op elke groeidag: waarom er geen gezin kwam, zoals de groei het zelf vraagt (T.waaromGeenGezin, stap 4 van
     // T.tikGebouwenDag, js/gebouwen.js). Alleen wat die dag in de groei gevraagd wordt, telt: de raad linksboven
@@ -1149,7 +1149,7 @@
         inner: { geschenken: [], gepraatUren: 0, rapport: null },
         soldaten: { beurten: [], zoeken: null, hetHeleDorp: false, leeg: null },
         argwaan: { naInner: null, opSintMaarten: null }, heer: null, brief: null, naSintMaarten: null, luisterFouten: [],
-        heerJaren: [], dorp: null, groei: [], raad: {}, voorvallen: [],
+        heerJaren: [], dorp: null, marktrecht: null, groei: [], raad: {}, voorvallen: [],
       };
       const s = S();
       luister();

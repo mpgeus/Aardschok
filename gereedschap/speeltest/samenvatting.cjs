@@ -162,12 +162,12 @@ function deVoorvallen(goed) {
   return uit;
 }
 
-// Van gehucht tot dorp (vraag 58): op welke dag het een dorp werd, en op de groeidagen hoe vaak er een gezin kwam en
-// waarom niet (T.waaromGeenGezin: een dag kan meer dan één reden hebben). En per jaar wat de heer kreeg, en hoeveel
-// dagen welke raad onder het doel stond (js/raad.js).
+// Van gehucht tot dorp (vraag 58): op welke dag het een dorp werd en marktrecht kreeg (vraag 90), en op de groeidagen
+// hoe vaak er een gezin kwam en waarom niet (T.waaromGeenGezin: een dag kan meer dan één reden hebben). En per jaar wat
+// de heer kreeg, en hoeveel dagen welke raad onder het doel stond (js/raad.js).
 function vanGehuchtTotDorp(goed) {
   const uit = ['## Van gehucht tot dorp', '', 'Een groeidag is elke 20ste dag (met Vreemden welkom elke 10de). Een dag zonder gezin kan meer dan één reden hebben.', ''];
-  const kop = ['speler', 'zaad', 'een dorp op', 'mensen', 'huizen met alles', 'groeidagen', 'een gezin', 'geen plaats', 'te weinig graan', 'niet tevreden', 'de winter niet gehaald', 'de heer kreeg', 'doden (kou, honger, gesneuveld)', 'gebouwd', 'de raad (dagen)'];
+  const kop = ['speler', 'zaad', 'een dorp op', 'marktrecht op', 'mensen', 'huizen met alles', 'groeidagen', 'een gezin', 'geen plaats', 'te weinig graan', 'niet tevreden', 'de winter niet gehaald', 'de heer kreeg', 'doden (kou, honger, gesneuveld)', 'gebouwd', 'de raad (dagen)'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   const kort = (datum) => datum.replace(/ 13(\d\d)$/, " '$1");
   // Hoeveel huizen aan het eind alles hebben wat hun stand wil (js/wensen.js; vraag 87): super gelukkig.
@@ -182,6 +182,7 @@ function vanGehuchtTotDorp(goed) {
     uit.push(regel([
       NAMEN[u.speler] || u.speler, u.zaad,
       u.dorp ? `${kort(u.dorp.datum)} (${u.dorp.mensen} mensen)` : 'nee',
+      u.marktrecht ? `${kort(u.marktrecht.datum)} (${u.marktrecht.mensen} mensen)` : 'nee',
       `${u.begin.bevolking} → ${u.eind.bevolking}`,
       alles(u.eind.standen),
       String(groei.length),

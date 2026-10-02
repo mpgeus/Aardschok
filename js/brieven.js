@@ -1,10 +1,11 @@
 // De brieven van de heer, op één plek (werklijst vraag 60; het eerste stuk van js/hud.js splitsen, vraag 25, C).
 // Ze staan allemaal in hetzelfde venster (#brief) en in dezelfde hand: de benoeming als een nieuw spel begint
-// (js/menu.js), de schatting op 1 wijnmaand (js/heer.js), de heervaart op 1 hooimaand (js/heervaart.js), en de
-// brief als het gehucht een dorp is (js/treden.js). Elke brief is een soort in BRIEVEN hieronder: wat erin staat,
-// en welke knoppen eronder staan. T.ui.toonBrief(D, soort) zet hem neer (D: het dorp waar hij heen gaat; alleen jouw
-// dorp komt in beeld), en zolang je leest, staat de tijd stil. In hetzelfde venster, in een andere hand: het rapport
-// van je raadsman, 's ochtends (js/ochtendrapport.js; werklijst vraag 75, 3a).
+// (js/menu.js), de schatting op 1 wijnmaand (js/heer.js), de heervaart op 1 hooimaand (js/heervaart.js), en een
+// brief bij elke trede: als het gehucht een dorp is, en als het dorp marktrecht krijgt (js/treden.js). Elke brief is
+// een soort in BRIEVEN hieronder: wat erin staat, en welke knoppen eronder staan. T.ui.toonBrief(D, soort) zet hem
+// neer (D: het dorp waar hij heen gaat; alleen jouw dorp komt in beeld), en zolang je leest, staat de tijd stil. In
+// hetzelfde venster, in een andere hand: het rapport van je raadsman, 's ochtends (js/ochtendrapport.js; werklijst
+// vraag 75, 3a).
 // Een brief die op je wacht (de schatting tot je betaald hebt, de heervaart tot je kiest, het rapport tot je het las),
 // opent de knop Brief bovenin weer; voor het rapport heet hij Rapport. Wat een knop doet, vraagt de brief aan de regels
 // (T.heervaartKeuzes), zodat de knop en wat hij doet uit hetzelfde antwoord komen.
@@ -116,6 +117,15 @@
         { actie: 'titel', tekst: 'Naar het titelscherm' },
         { actie: 'sluit', tekst: 'Verder als dorp', hoofd: true },
       ],
+    }),
+
+    // Het dorp krijgt marktrecht (js/treden.js; Marcel, 2 okt, vraag 90, C: bij 20 ambachtslieden). Net als bij het
+    // dorp voorlopig alleen woorden.
+    marktrecht: (S) => ({
+      wanneer: vandaag(S),
+      aan: 'Aan Onze schout,',
+      tekst: `<p>Wij vernemen dat in ${hetDorp(S, 'dorp')} gehandeld wordt. Wij verlenen u marktrecht. Dat kost u vanaf nu meer.</p>`,
+      knoppen: [{ actie: 'sluit', tekst: 'Aan het werk', hoofd: true }],
     }),
 
     // Het rapport van je raadsman, 's ochtends (js/ochtendrapport.js; werklijst vraag 75, 3a): wat er gebeurde, hoe het
