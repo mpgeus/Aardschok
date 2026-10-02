@@ -29,8 +29,10 @@
     gewichtRest: 0.2,
     // Wat een mens per dag gebruikt van een goed dat zijn stand wil (een eerste gok; de speeltest zegt het). De herberg
     // brouwt 8 bier per dag, een jager schiet 1 vlees, een visser vangt 2 vis, een bakkerij bakt 2 brood en een weverij
-    // weeft 2 laken.
-    perMens: { bier: 0.05, vleesOfVis: 0.02, brood: 0.03, laken: 0.01 },
+    // weeft 2 laken. Laken 0,005 (Marcel, 2 okt, werklijst vraag 91, c; was 0,01): de wol komt van de schapen, eens per
+    // jaar, en de heer vraagt er 20 per schaapskooi; acht schapen gaven laken voor vier à vijf ambachtslieden, en een
+    // volle kooi (20 schapen) dekt er nu zo'n 33.
+    perMens: { bier: 0.05, vleesOfVis: 0.02, brood: 0.03, laken: 0.005 },
     // De kring om een plek, in tegels, van het midden van het huis tot het midden van de plek (vraag 80, B; vraag 85, b:
     // 25 was te klein voor het gehucht, waar de boerderijen aan de rand staan). Een kapel 40 (vraag 87, c; Marcel, 2 okt):
     // met 30 haalde één kapel in het gehucht hooguit vier van de zes huizen die er een willen, met 40 zijn er 50 plekken
