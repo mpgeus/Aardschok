@@ -9,6 +9,14 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **"Daar kun je niet bij" bij een huis waarvan de deur open ligt** (2 okt, vierentwintigste sessie; de speeltest van
+  vraag 94). Wie op een huis klikt om te verstoppen, loopt naar de tegel aan de rand van het huis die het dichtst bij hem
+  ligt en een vrije buur heeft (`T.randVanGebouw`, `js/verstoppen.js`). Of die buur te bereiken is, kijkt het niet. Bij
+  zaad 2 zette de bouwer een houthakker tussen twee huizen, en daarachter raakte een stuk gras ingesloten (een ander
+  eiland, `T.eilandOp`). De hoek van het stenen huis aan dat stuk lag het dichtst bij de schout, dus zei elke klik "Daar
+  kun je niet bij", terwijl de deur en twaalf andere randtegels gewoon bereikbaar waren. Bij zaad 1 gebeurde hetzelfde bij
+  de boerderij van Klaas, en in beide spellen lag er 40 graan vast. Een klein herstel: eerst de randtegels waar de schout
+  kan komen (`T.kanErKomen`, `js/wereld.js`), en alleen als er geen is de dichtste (werklijst, vraag 95).
 - **De schout valt tegen één wilde rover** (2 okt, drieëntwintigste sessie; de speeltest van 2d, zaad 1). Na een roof
   zag een rover de schout, en in het gevecht deelde de rover 22 schade uit en de schout 11: op 18 bloeimaand van het tweede
   jaar was het spel uit. De raad had 20 dagen gezegd dat de rovers terugkomen en een wachthuis helpt; de bouwer van de
