@@ -5,8 +5,9 @@
 // blijft het na de eerste weken nuttig. Het zijn de eerste weken als opdrachten (vraag 47), herschreven.
 //
 // Of er een gezin komt, vraagt de raad aan de groei zelf (T.waaromGeenGezin en T.volgendeGezinDag, js/gebouwen.js),
-// en of het hout en het eten de winter halen aan het dorp (T.houtVoorDeWinter en T.etenVoorDeWinter,
-// js/behoeften.js): de raad zegt wat het spel doet, en rekent niet naast het spel.
+// of het hout en het eten de winter halen aan het dorp (T.houtVoorDeWinter en T.etenVoorDeWinter, js/behoeften.js),
+// en wat de huizen missen aan de wensen (T.watDeHuizenMissen, js/wensen.js; vraag 87): de raad zegt wat het spel doet,
+// en rekent niet naast het spel.
 //
 // Een toets staat tussen haken, [B]: in het vak wordt dat een toets (<kbd>, js/ui.js).
 //
@@ -67,30 +68,50 @@
   // genoeg is; de bouwer die alleen hoorde dat het niet genoeg was, bouwde er een na de ander (29 sep).
   const haalt = (v) => `${v.dagen} van de ${v.winter} dagen`;
 
-  // Wat je mist voor de gebouwen die het doel nog vraagt (T.doelGebouwen, js/treden.js): { soorten, mist: { goud, hout
-  // } }, of null als je ze kunt betalen. Alles samen, want wie eerst de kapel bouwt, heeft daarna minder voor de smidse.
-  function tekortVoorHetDoel(D) {
-    const soorten = T.doelGebouwen(D);
-    if (!soorten.length) return null;
-    const mist = {};
-    for (const wat of ['goud', 'hout']) {
+  // Wat je mist om deze soorten te bouwen: { goud, hout, ... }, goud eerst, of null als je ze kunt betalen. Alles samen,
+  // want wie eerst de kapel bouwt, heeft daarna minder voor de smidse.
+  function tekortVoor(D, soorten) {
+    const mist = { goud: 0, hout: 0 };
+    for (const soort of soorten) for (const wat of Object.keys(T.GEBOUWEN[soort].kosten)) mist[wat] = 0;
+    for (const wat of Object.keys(mist)) {
       const nodig = soorten.reduce((som, soort) => som + (T.GEBOUWEN[soort].kosten[wat] || 0), 0);
       const tekort = Math.ceil(nodig - (D.voorraad[wat] || 0) - 1e-9);
       if (tekort > 0) mist[wat] = tekort;
+      else delete mist[wat];
     }
-    return Object.keys(mist).length ? { soorten, mist } : null;
+    return Object.keys(mist).length ? mist : null;
+  }
+
+  // Wat je mist voor de gebouwen die het doel nog vraagt (T.doelGebouwen, js/treden.js): { soorten, mist }, of null.
+  function tekortVoorHetDoel(D) {
+    const soorten = T.doelGebouwen(D);
+    const mist = soorten.length ? tekortVoor(D, soorten) : null;
+    return mist ? { soorten, mist } : null;
   }
 
   // Waar het vandaan komt (werklijst vraag 59, C): goud van de marskramer, die graan koopt, en van de belasting; hout
-  // van een houthakker.
-  function waarVandaan(D, mist) {
+  // van een houthakker, behalve als je juist die wilt bouwen (`voor`).
+  function waarVandaan(D, mist, voor) {
     const bronnen = [];
     if (mist.goud) {
       bronnen.push(T.kanHandelen(D) ? 'de marskramer koopt graan, zolang hij er is' : `de marskramer koopt graan in ${T.volgendeMarskramer(D.kalender.dag)}`);
       bronnen.push(T.standVanWet(D, 'belasting') === 'aangenomen' ? 'de belasting brengt elke maand goud' : 'belasting [W] brengt elke maand goud');
     }
-    if (mist.hout) bronnen.push(heeft(D, 'houthakker') ? 'de houthakker hakt hout' : 'een houthakker [B] hakt hout');
+    if (mist.hout && voor !== 'houthakker') bronnen.push(heeft(D, 'houthakker') ? 'de houthakker hakt hout' : 'een houthakker [B] hakt hout');
     return bronnen;
+  }
+  const hoeveelTekst = (mist) => T.opsomming(Object.entries(mist).map(([wat, n]) => `${n} ${wat}`));
+
+  // Het eerste wat de huizen missen waar je nu iets aan kunt doen (T.watDeHuizenMissen, js/wensen.js), van deze soort
+  // ('bouwstof' of 'wens'), of null.
+  const watNuHelpt = (D, soort) => T.watDeHuizenMissen(D).find((x) => x.soort === soort && x.kan) || null;
+  // Wat erbij komt als je niet kunt betalen wat helpt: wat je mist, en waar het vandaan komt. Anders hoor je het niet
+  // meer, want de wensen gaan voor wat het doel vraagt.
+  function wensTekst(D, x) {
+    const mist = tekortVoor(D, [x.bouw]);
+    if (!mist) return x.tekst;
+    const bronnen = waarVandaan(D, mist, x.bouw);
+    return `${x.tekst} Daarvoor mis je ${hoeveelTekst(mist)}${bronnen.length ? `: ${T.opsomming(bronnen)}` : ''}.`;
   }
 
   // De marskramer staat op het plein, op zijn laatste ronde vóór de heer komt (js/handel.js).
@@ -100,7 +121,8 @@
   }
 
   // De raden, van wat het zwaarst weegt naar wat het minst weegt. `als(S)` zegt of hij nu geldt, `tekst(S)` wat er
-  // dan staat. Wat aan een dag hangt, gaat voor; dan de winter; dan de eerste dag; dan de groei.
+  // dan staat. Wat aan een dag hangt, gaat voor; dan de winter; dan de eerste dag; dan een vol dorp; dan de wensen
+  // (vraag 87); dan het doel en de groei.
   T.RADEN = [
     {
       id: 'inner',
@@ -162,6 +184,20 @@
         : 'Er komt geen gezin: het dorp is vol. Bouw een hut of een huis: [B].'),
     },
     {
+      // De wensen (werklijst vraag 86, a, en 87; Marcel, 2 okt: "a ja"): wat de huizen missen en wat helpt, zoals
+      // T.watDeHuizenMissen (js/wensen.js) het zegt, en alleen wat je nu kunt doen. Eerst een huis dat een maand alles had
+      // en op bouwstof wacht, dan wat de meeste mensen missen. Vóór wat het doel vraagt, want met de wensen win je (vraag
+      // 80): "Vijf boerderijen en een huis willen een kapel binnen 40 tegels [B]."
+      id: 'doorgroeien',
+      als: (D) => !!watNuHelpt(D, 'bouwstof'),
+      tekst: (D) => wensTekst(D, watNuHelpt(D, 'bouwstof')),
+    },
+    {
+      id: 'wens',
+      als: (D) => !!watNuHelpt(D, 'wens'),
+      tekst: (D) => wensTekst(D, watNuHelpt(D, 'wens')),
+    },
+    {
       // Wat je mist voor wat het doel vraagt, en waar het vandaan komt (werklijst vraag 59, C; Marcel, 1 okt, vraag 78:
       // "D dat is prima"). De tweede bouwer van de speeltest kwam twee goud tekort voor de smidse (29 sep), en goud komt
       // alleen van de marskramer en de belasting.
@@ -170,8 +206,7 @@
       tekst: (D) => {
         const { soorten, mist } = tekortVoorHetDoel(D);
         const wat = T.opsomming(soorten.map((soort) => `de ${T.GEBOUWEN[soort].naam}`));
-        const hoeveel = T.opsomming(Object.entries(mist).map(([w, n]) => `${n} ${w}`));
-        return `Voor ${wat} mis je ${hoeveel}: ${T.opsomming(waarVandaan(D, mist))}.`;
+        return `Voor ${wat} mis je ${hoeveelTekst(mist)}: ${T.opsomming(waarVandaan(D, mist))}.`;
       },
     },
     {

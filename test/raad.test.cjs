@@ -47,6 +47,17 @@ function metRaadsman(S) {
   return S;
 }
 
+// Met de spelregel "Wensen" op "Het dorp als geheel" (js/opties.js): dan zegt de raad niets over wat de huizen missen
+// (vraag 87), en blijft over wat een toets van vóór de wensen wil zien.
+function zonderWensen(fn) {
+  T.zetOptie('wensen', 'dorp');
+  try {
+    return fn();
+  } finally {
+    T.optiesTerug();
+  }
+}
+
 // Een plek voor een erf, zo dicht mogelijk bij het plein (zoals in test/erven.test.cjs).
 function erfPlek(S) {
   const plein = T.pleinVan(S.wereld);
@@ -66,7 +77,7 @@ test('de eerste dag: hoe de tijd sneller gaat en hoe je slaapt, tot je de tijd z
   assert.equal(id(S), 'gezin');
 });
 
-test('niets houdt de groei tegen: wanneer het volgende gezin komt, zoals de groei het telt', () => {
+test('niets houdt de groei tegen: wanneer het volgende gezin komt, zoals de groei het telt', () => zonderWensen(() => {
   const S = metRaadsman(opDag(gehucht(), 0.5));
   const n = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
   assert.equal(raad(S).tekst, `Het volgende gezin komt over ${n} dagen.`);
@@ -76,7 +87,7 @@ test('niets houdt de groei tegen: wanneer het volgende gezin komt, zoals de groe
   opDag(S, 1.5);
   T.zetWet(S.dorp, 'vreemden', 'aangenomen');
   assert.equal(raad(S).tekst, `Het volgende gezin komt over ${T.gezinDagen(S.dorp) - 1} dagen.`);
-});
+}));
 
 test('geen gezin: het dorp is vol, niet tevreden genoeg, of er ligt te weinig graan; vol weegt het zwaarst', () => {
   const S = metRaadsman(opDag(gehucht(), 3.5));
@@ -240,7 +251,7 @@ test('de spelregel zet hem uit, en op een kaart zonder plein is er geen', () => 
   assert.equal(raad(S), null);
 });
 
-test('bouwen: wat je mist voor wat het doel vraagt, en waar het vandaan komt (vraag 59, C)', () => {
+test('bouwen: wat je mist voor wat het doel vraagt, en waar het vandaan komt (vraag 59, C)', () => zonderWensen(() => {
   const S = opDag(gehucht(), 40.5); // na de eerste dagen, en ver van de winter
   const kosten = (wat, soorten) => soorten.reduce((som, s) => som + (T.GEBOUWEN[s].kosten[wat] || 0), 0);
   // In het begin kun je de kapel en de smidse allebei betalen: dan zegt hij niets.
@@ -269,4 +280,61 @@ test('bouwen: wat je mist voor wat het doel vraagt, en waar het vandaan komt (vr
   S.dorp.trede = 'dorp';
   assert.deepEqual(T.doelGebouwen(S.dorp), []);
   assert.notEqual(id(S), 'bouwen');
+}));
+
+// ---------------------------------------------------------------------------------------------
+// De wensen (werklijst vraag 86, a, en 87): wat de huizen missen en wat helpt, vóór wat het doel vraagt
+// ---------------------------------------------------------------------------------------------
+
+// Een nacht in het gehucht: dan weten de huizen wat ze willen en hebben (T.tikBehoeftenDag, js/behoeften.js).
+function naEenNacht(S, dag) {
+  opDag(S, dag);
+  T.tikBehoeftenDag(S.dorp, Math.floor(dag));
+  return S;
+}
+
+test('de wensen: na een nacht zegt de raad wat de meeste mensen missen, met de toets, vóór het doel en de groei', () => {
+  const S = metRaadsman(opDag(gehucht(), 40.5));
+  assert.equal(id(S), 'gezin', 'vóór de eerste nacht weet het dorp het nog niet');
+  naEenNacht(S, 40.5);
+  assert.equal(id(S), 'wens');
+  assert.equal(raad(S).tekst, 'Vijf boerderijen en een huis willen een kapel binnen 40 tegels [B].');
+  // Kun je de kapel niet betalen, dan zegt hij erbij wat je mist en waar het vandaan komt: dat zei eerst het doel.
+  T.zetVoorraad(S.dorp, 'goud', T.GEBOUWEN.kapel.kosten.goud - 6);
+  const maand = T.volgendeMarskramer(S.kalender.dag);
+  assert.equal(raad(S).tekst, `Vijf boerderijen en een huis willen een kapel binnen 40 tegels [B]. Daarvoor mis je 6 goud: de marskramer koopt graan in ${maand} en belasting [W] brengt elke maand goud.`);
+  // Wordt er een kapel gebouwd die ze allemaal bereikt, dan het volgende: de put van het huis.
+  T.zetVoorraad(S.dorp, 'goud', 50);
+  const huis = S.dorp.gebouwen.find((g) => g.bewoners === 'jongGezin');
+  const r = T.voetVanGebouw(huis);
+  S.dorp.gebouwen.push({ soort: 'kapel', x: r.x, y: r.y, voet: { b: 1, h: 1 }, klaar: false });
+  assert.equal(raad(S).tekst, 'Een huis wil een put binnen 12 tegels [B].');
+});
+
+test('de wensen: een huis dat op bouwstof wacht, gaat voor; is wat helpt zelf te duur, dan zegt hij wat je mist', () => {
+  const S = metRaadsman(naEenNacht(gehucht(), 40.5));
+  const hut = S.dorp.gebouwen.find((g) => g.bewoners === 'oudStel');
+  hut.wachtOpBouwstof = true;
+  T.zetVoorraad(S.dorp, 'hout', 3);
+  assert.equal(id(S), 'doorgroeien');
+  // Een houthakker kost zelf hout, en die hakt hij nog niet: dan zegt hij niet dat een houthakker hout hakt.
+  assert.equal(raad(S).tekst, `Een hut kan een huis worden, maar er is geen 8 hout: bouw een houthakker [B]. Daarvoor mis je ${T.GEBOUWEN.houthakker.kosten.hout - 3} hout.`);
+});
+
+test('de wensen: wat je nu niet kunt doen, zegt de raad niet; de winter en de spelregel gaan voor', () => {
+  const S = metRaadsman(naEenNacht(gehucht(), 40.5));
+  // Een kapel in aanbouw die ze alle zes bereikt, een put bij het huis en vis: dan mist niemand meer iets wat je kunt bouwen.
+  const huis = S.dorp.gebouwen.find((g) => g.bewoners === 'jongGezin');
+  const r = T.voetVanGebouw(huis);
+  S.dorp.gebouwen.push({ soort: 'kapel', x: r.x, y: r.y, voet: { b: 1, h: 1 }, klaar: false });
+  S.dorp.gebouwen.push({ soort: 'put', x: r.x + 1, y: r.y, voet: { b: 1, h: 1 }, klaar: true });
+  S.dorp.gebouwen.push({ soort: 'visser', x: 0, y: 0, voet: { b: 3, h: 3 }, klaar: false });
+  assert.equal(id(S), 'gezin', 'alles wordt gebouwd: niets te doen');
+  // De spelregel "Wensen" op het dorp als geheel: geen wensen per huis, dus ook geen raad erover.
+  const S2 = metRaadsman(naEenNacht(gehucht(), 40.5));
+  assert.equal(id(S2), 'wens');
+  zonderWensen(() => {
+    T.tikBehoeftenDag(S2.dorp, 41);
+    assert.notEqual(id(S2), 'wens');
+  });
 });
