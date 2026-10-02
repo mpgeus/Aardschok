@@ -1057,10 +1057,13 @@
       if (factor <= 0) continue;
       // Wat hij nodig heeft, bepaalt hoeveel hij kan: een smidse zonder ijzer staat stil, met ijzer
       // voor een halve dag werkt hij een halve dag. Tot 24 sep maakte hij toch gereedschap, uit
-      // niets, en maalde een molen zonder graan toch meel (spel.md, "Handel").
+      // niets, en maalde een molen zonder graan toch meel (spel.md, "Handel"). Het zaaigraan dat de
+      // boeren achterhouden, neemt hij niet (T.zaaigraanApart, js/akkers.js; vraag 81): in de speeltest
+      // van 2 okt maalde de molen het op, en bleven de akkers in de lente ongezaaid.
       if (soort.maakt.in) {
         for (const wat in soort.maakt.in) {
-          const kan = (D.voorraad[wat] || 0) / soort.maakt.in[wat];
+          const vrij = Math.max(0, (D.voorraad[wat] || 0) - (wat === 'graan' ? T.zaaigraanApart(D, dag) : 0));
+          const kan = vrij / soort.maakt.in[wat];
           if (kan < factor) {
             factor = kan;
             g.tekort = wat;

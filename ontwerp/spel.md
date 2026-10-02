@@ -1164,7 +1164,9 @@ winter zichtbaar te maken staat in de werklijst bij vraag 44, en werd op 28 sep 
   30 ligt van wat ze maken (`T.maaktTot`; één getal in de werkbank), en zeggen het bij de muis ("er ligt genoeg meel").
   Wie iets uit het land haalt (de houthakker, de visser, de steengroeve), maakt door. Daarvoor maalde een molen elke dag
   graan tot meel, ook als niemand brood wilde, en meel en brood zijn geen eten: ruim 880 graan per jaar. De herberg
-  brouwde al tot er 30 bier was (27 sep); dat ging in dezelfde regel op.
+  brouwde al tot er 30 bier was (27 sep); dat ging in dezelfde regel op. **Het zaaigraan is niet voor de molen** (2 okt):
+  een werkplaats neemt alleen het graan dat de boeren niet achterhouden voor het zaaien (vraag 81); in de speeltest van
+  vraag 92 maalde de molen het op, en bleven de akkers in het derde jaar grotendeels ongezaaid.
 - **Werk telt in uren** (26 sep; "Mensen worden poppetjes", stuk 2): een gebouw maakt naar de uren
   dat zijn handen er echt zijn, en de weg van hun huis erheen gaat eraf. Bij de muis: "Houthakker:
   aan het werk (1 van 1 handen), 10 van de 12 uur; 2 uur onderweg." Een optie in de spelregels.

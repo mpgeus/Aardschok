@@ -669,6 +669,27 @@ test('vlees vult een maag, ook in de winter: wie alleen vlees heeft, sterft niet
   assert.ok(S.voorraad.vlees < 200, 'en het vlees is gegeten');
 });
 
+test('het zaaigraan is niet voor de molen: een werkplaats neemt alleen het graan dat de boeren niet achterhouden', () => {
+  // In de speeltest van 2 okt (vraag 92) maalde de molen het zaaigraan op, en bleven de akkers in de lente ongezaaid.
+  const S = maakS();
+  S.wereld.akkers = [{ x: 0, y: 0, b: 5, h: 4 }];
+  S.wereld.wezens = []; // met akkers komen er rovers kijken (js/rovers.js), en die zoeken de wezens van de kaart
+  const zaai = 20 * T.ZAAIGRAAN_PER_TEGEL;
+  S.gebouwen.push({ soort: 'molen', x: 30, y: 30, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
+  S.bevolking = T.GEBOUWEN.molen.handen; // de molenaar; hij eet het zaaigraan ook niet, want er is kaas
+  T.zetVoorraad(S, 'kaas', 100);
+  T.zetVoorraad(S, 'graan', zaai);
+  T.tikGebouwenDag(S, WINTERDAG);
+  assert.ok(bijna(S.voorraad.graan, zaai), `het zaaigraan blijft liggen: ${S.voorraad.graan}`);
+  assert.equal(S.voorraad.meel || 0, 0);
+  assert.equal(S.gebouwen[0].tekort, 'graan');
+  // Wat er meer ligt, maalt hij wel.
+  T.zetVoorraad(S, 'graan', zaai + 1);
+  T.tikGebouwenDag(S, WINTERDAG + 1);
+  assert.ok(S.voorraad.meel > 0, 'het graan boven het zaaigraan maalt hij');
+  assert.ok(S.voorraad.graan >= zaai - 1e-9, `${S.voorraad.graan}`);
+});
+
 test('het zaaigraan: van de oogst tot het zaaien achtergehouden, en pas bij nood gegeten (vraag 81)', () => {
   const S = maakS();
   S.wereld.akkers = [{ x: 0, y: 0, b: 5, h: 4 }, { x: 10, y: 0, b: 2, h: 5, plan: 'weide' }];
