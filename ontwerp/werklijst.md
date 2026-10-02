@@ -2990,6 +2990,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     ander kon, moet later nog naar huis. Maar het dwalen is ook de weg naar huis, naar het werk en naar de put (het
     anker van de dag), en de rem verbergt alleen de kosten: Otto en Hille blijven in de muur staan, en het gezin van de
     schout komt niet meer door zijn deur. Dus a blijft nodig, met de rem erbij en zonder de eilanden.
+    **Beantwoord (Marcel, 2 okt):** "A ja, B, mag C wat zijn de eilanden". Dus a: een gebouw komt niet meer op iemand of
+    op een deur, en een huis groeit niet over iemand of een deur heen. b: de eilanden mogen, naast zijn rem (na twee keer
+    geen weg een uur wachten): de eilanden maken een zoektocht naar een plek die nooit te halen is gratis, de rem begrenst
+    wat overblijft (iemand staat even in de weg). c: de rest blijft voor later, met stap 6.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
