@@ -309,10 +309,22 @@
   // Waar je bent (js/main.js), met het dorp dat er ligt (js/dorp.js): zijn bewoners hebben een ritme. Een dorp waar je
   // niet bent, dwaalt ook, op zijn eigen kaart (T.dwaal vanuit T.werkDorpBij).
   T.laatDwalen = (S, dt) => T.dwaal(S, S.wereld, T.dorpHier(S), dt);
+
+  // Wie geen weg vindt naar waar hij hoort (zijn deur, zijn werk, de put), probeerde het tot 2 okt elke paar seconden
+  // opnieuw, en liet A* zo telkens de hele kaart afzoeken: bij de bouwer van de speeltest, met een dichtgebouwde deur,
+  // 4.000 keer per tien dagen (werklijst vraag 88). Marcel (2 okt): "kun je toch na 2x falen om route te vinden
+  // overslaan?". Dus: na zoveel keer na elkaar geen weg wacht hij zo lang (een uur, als deel van een dag) voor hij het
+  // opnieuw probeert. Niet voor altijd: wie even niet langs een ander kon, moet later nog naar huis.
+  T.LOPEN_INSTELLINGEN = {
+    geenWegKeer: 2,
+    geenWegWacht: 1 / 24,
+  };
+
   T.dwaal = function (S, w, D, dt) {
     // Eén keer per beurt de datum omrekenen, niet per wezen: T.wandelAnker heeft alleen het
     // stadium nodig (kiemend/groen/rijp), niet de datum zelf.
     const datum = T.datumVanDag && S.kalender ? T.datumVanDag(S.kalender.dag) : null;
+    const dag = S.kalender ? S.kalender.dag : null;
     const basis = datum && T.akkerStadium(datum.maand, datum.dagVanMaand);
     // In de oogst (graan of hooi) werkt men tot het donker (js/dag.js).
     const oogst = basis === 'rijp' || !!(datum && T.isHooitijd(datum));
@@ -375,11 +387,18 @@
       // voor een deur waar een heel gezin woont (js/bewoners.js).
       const straalNu = thuisNu && (thuisNu.straal != null ? thuisNu.straal : (m.straal || 3));
       if (thuisNu && T.afstand(thuisNu, { x: m.tx, y: m.ty }) > straalNu) {
+        // Vond hij net twee keer geen weg, dan wacht hij (T.LOPEN_INSTELLINGEN hierboven).
+        if (dag != null && m.geenWegTot > dag) continue;
         const doel = { x: Math.round(thuisNu.x), y: Math.round(thuisNu.y) };
         const van = { x: m.tx, y: m.ty };
         const vast = (x, y) => T.isVast(w, x, y);
         const padOpties = { tot: Math.max(straalNu, naastDeur) };
-        let pad = T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: m }), vast, padOpties);
+        // Ligt het doel op een ander eiland (T.kanErKomen, js/wereld.js), dan is er geen weg, en hoeft A* de kaart niet
+        // af te zoeken om dat te merken.
+        let pad = T.kanErKomen(w, van, doel, padOpties)
+          ? T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: m }), vast, padOpties)
+          : null;
+        const geenWeg = !pad;
         // Een lange omweg, alleen omdat er iemand in de weg staat, neemt hij niet: een kleuter vlak
         // naast zijn deur liep anders om het hele huis heen, omdat de schout in de deur stond en een
         // broertje op de tegel ernaast. Dan wacht hij liever even. Een omweg door de muren is wél
@@ -390,7 +409,17 @@
         }
         if (pad && pad.length) {
           m.pad = pad;
+          delete m.geenWeg;
+          delete m.geenWegTot;
           continue;
+        }
+        // Geen weg (een lange omweg die hij niet neemt, telt niet): na geenWegKeer keer na elkaar wacht hij.
+        if (geenWeg && dag != null) {
+          m.geenWeg = (m.geenWeg || 0) + 1;
+          if (m.geenWeg >= T.LOPEN_INSTELLINGEN.geenWegKeer) {
+            m.geenWegTot = dag + T.LOPEN_INSTELLINGEN.geenWegWacht;
+            m.geenWeg = 0;
+          }
         }
         // Geen weg, omdat anderen in de weg staan: in een steegje van één tegel breed willen er soms
         // twee langs elkaar, en dan wachten ze voor altijd op elkaar. Een stap opzij, waar niemand

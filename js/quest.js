@@ -207,9 +207,11 @@
       if (hoort && !staatEr) {
         w.deuren.set(sleutel, g);
         w.tegels[g.y][g.x] = 'deur';
+        T.kaartVeranderd(w); // een doorgang erbij: de eilanden (js/wereld.js)
       } else if (!hoort && staatEr) {
         w.deuren.delete(sleutel);
         w.tegels[g.y][g.x] = g.onder;
+        T.kaartVeranderd(w);
       }
     }
   };

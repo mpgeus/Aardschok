@@ -229,6 +229,11 @@ function berichten(fn) {
 const hutVanHetOudeStel = (D) => D.gebouwen.find((g) => g.bewoners === 'oudStel');
 const huisVanHetJongeGezin = (D) => D.gebouwen.find((g) => g.bewoners === 'jongGezin');
 const mensenIn = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
+// Wie in dit huis woont, is binnen, zoals 's nachts als een huis doorgroeit: in een toets loopt niemand, en het oude
+// stel staat bij het begin voor zijn deur, waar het huis overheen groeit (werklijst vraag 88: niet over iemand heen).
+function binnen(D, g) {
+  for (const p of mensenIn(D, g)) if (p.wezen) p.wezen.binnen = true;
+}
 
 test('de woningen van het begin hebben hun tekening als voorwerp, zodat ze kunnen doorgroeien', () => {
   const D = gehucht().dorp;
@@ -243,6 +248,7 @@ test('de woningen van het begin hebben hun tekening als voorwerp, zodat ze kunne
 test('een hut die een maand alles heeft, groeit door tot een huis, voor 8 hout, en wie erin woont, is dan dorpeling', () => metRegels({ seizoen: 'jij' }, () => {
   const D = gehucht().dorp;
   const hut = hutVanHetOudeStel(D);
+  binnen(D, hut);
   assert.equal(T.berekenTevredenheid(D, ZOMERDAG).wensen.huizen.find((h) => h.g === hut).alles, true, 'de hut bij de put heeft alles');
   const hout = D.voorraad.hout;
   let dag = ZOMERDAG;
@@ -255,6 +261,10 @@ test('een hut die een maand alles heeft, groeit door tot een huis, voor 8 hout, 
   assert.ok(gezegd.includes('Een hut is gegroeid tot een huis, voor 8 hout: wie erin woont, hoort nu bij de dorpelingen.'), gezegd.join(' | '));
   assert.ok(hut.voorwerp.vel != null, 'met de tekening van een huis');
   assert.ok(T.GEBOUWEN.huis.tekeningen.includes(hut.tekening));
+  // Wie binnen was, komt door de nieuwe deur weer naar buiten, niet in de muur waar de oude deur was (vraag 88).
+  const deur = T.deurVan(D.wereld, hut);
+  for (const p of mensenIn(D, hut)) assert.deepEqual([p.wezen.tx, p.wezen.ty], [deur.x, deur.y]);
+  assert.ok(T.isBegaanbaar(D.wereld, deur.x, deur.y));
   // Nu wil het meer, en heeft het dat niet: het groeit niet verder.
   for (let i = 0; i < 40; i++) T.tikBehoeftenDag(D, ++dag);
   assert.equal(hut.soort, 'huis');
@@ -264,6 +274,7 @@ test('een hut die een maand alles heeft, groeit door tot een huis, voor 8 hout, 
 test('zonder hout wacht de hut, en zegt het dorp het één keer; met hout groeit hij de volgende dag', () => metRegels({ seizoen: 'jij' }, () => {
   const D = gehucht().dorp;
   const hut = hutVanHetOudeStel(D);
+  binnen(D, hut);
   T.zetVoorraad(D, 'hout', 0);
   let dag = ZOMERDAG;
   const gezegd = berichten(() => {
@@ -461,3 +472,15 @@ test('wat de huizen missen: wie een maand alles had en op bouwstof wacht, gaat v
   lijst = missen(D);
   assert.ok(!lijst.some((x) => x.soort === 'bouwstof'), 'is het hout er, dan groeit hij vannacht');
 });
+
+test('een huis groeit niet over iemand heen die ervoor staat: dan morgen weer', () => metRegels({ seizoen: 'jij' }, () => {
+  const D = gehucht().dorp;
+  const hut = hutVanHetOudeStel(D);
+  // Het oude stel staat bij het begin voor zijn deur, buiten, en het huis zou over die tegels heen groeien.
+  let dag = ZOMERDAG;
+  for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen + 3; i++) T.tikBehoeftenDag(D, ++dag);
+  assert.equal(hut.soort, 'hut', 'niet over iemand heen (vraag 88)');
+  binnen(D, hut);
+  T.tikBehoeftenDag(D, ++dag);
+  assert.equal(hut.soort, 'huis', 'zijn ze binnen, dan wel');
+}));

@@ -345,3 +345,60 @@ test('de tegels van het plein komen één keer per kaart, en een plek op het ple
   assert.deepEqual(T.pleinTegels({ plein: null }), [], 'een kaart zonder plein heeft geen tegels op het plein');
   assert.equal(T.plekOpHetPlein(T.gebied({}, 'proef'), 1), null);
 });
+
+// ---------------------------------------------------------------------------------------------
+// Eilanden (werklijst vraag 88; Marcel, 2 okt: "Zoizo bezette tegels zijn uit te sluiten toch?")
+// ---------------------------------------------------------------------------------------------
+
+// Een lege kaart van b bij h tegels, met een muur over de hele hoogte op kolom `muurX`.
+function kaartMetMuur(b, h, muurX) {
+  const tegels = [];
+  for (let y = 0; y < h; y++) tegels.push(Array.from({ length: b }, (_, x) => (x === muurX ? 'muur' : 'vloer')));
+  return { b, h, tegels, voorwerpen: [], wezens: [] };
+}
+
+test('eilanden: twee kanten van een muur zijn twee eilanden, en een gat erin maakt er weer één', () => {
+  const w = kaartMetMuur(10, 6, 4);
+  assert.notEqual(T.eilandOp(w, 1, 1), T.eilandOp(w, 8, 1));
+  assert.equal(T.eilandOp(w, 4, 2), -1, 'een muur ligt op geen eiland');
+  assert.equal(T.kanErKomen(w, { x: 1, y: 1 }, { x: 8, y: 4 }), false);
+  assert.equal(T.zoekPad({ x: 1, y: 1 }, { x: 8, y: 4 }, (x, y) => T.isBegaanbaar(w, x, y), (x, y) => T.isVast(w, x, y)), null);
+  w.tegels[3][4] = 'vloer';
+  T.kaartVeranderd(w);
+  assert.equal(T.eilandOp(w, 1, 1), T.eilandOp(w, 8, 1));
+  assert.equal(T.kanErKomen(w, { x: 1, y: 1 }, { x: 8, y: 4 }), true);
+});
+
+test('eilanden: een voorwerp dat de doorgang sluit, en wie ingemetseld staat, of met tot en naast', () => {
+  const w = kaartMetMuur(10, 6, 4);
+  w.tegels[3][4] = 'vloer';
+  T.kaartVeranderd(w);
+  const blok = T.zetVoorwerp(w, { soort: 'blokkade', x: 4, y: 3 });
+  T.VOORWERPEN.blokkade = T.VOORWERPEN.blokkade || { blokkeert: true };
+  T.kaartVeranderd(w);
+  assert.equal(T.kanErKomen(w, { x: 1, y: 1 }, { x: 8, y: 4 }), false, 'het voorwerp sluit het gat');
+  T.haalVoorwerpWeg(w, blok);
+  assert.equal(T.kanErKomen(w, { x: 1, y: 1 }, { x: 8, y: 4 }), true, 'weggehaald, en het weet het meteen');
+  // Een doel in de muur zelf, met tot: de tegels eromheen tellen.
+  assert.equal(T.kanErKomen(w, { x: 1, y: 1 }, { x: 4, y: 0 }, { tot: 1 }), true);
+  // Ingemetseld: op een muur, en alles eromheen muur.
+  const dicht = kaartMetMuur(5, 5, 99);
+  for (let y = 1; y <= 3; y++) for (let x = 1; x <= 3; x++) dicht.tegels[y][x] = 'muur';
+  T.kaartVeranderd(dicht);
+  assert.equal(T.kanErKomen(dicht, { x: 2, y: 2 }, { x: 0, y: 0 }), false);
+  assert.equal(T.kanErKomen(dicht, { x: 2, y: 2 }, { x: 2, y: 2 }), true, 'wie er al is, hoeft niet te zoeken');
+});
+
+test('wie een tegel van de kaart verandert, zegt het met T.kaartVeranderd', () => {
+  // Anders kennen de eilanden de muur niet, en zegt T.kanErKomen "geen weg" waar er wel een is, of andersom.
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const map = path.join(__dirname, '..', 'js');
+  const fout = [];
+  for (const f of fs.readdirSync(map).filter((f) => f.endsWith('.js') && !['kaart.js', 'maker.js'].includes(f))) {
+    const tekst = fs.readFileSync(path.join(map, f), 'utf8');
+    const schrijft = tekst.split('\n').some((r) => !/^\s*\/\//.test(r) && /\.tegels\[[^\]]+\]\[[^\]]+\]\s*=[^=]/.test(r));
+    if (schrijft && !tekst.includes('T.kaartVeranderd(')) fout.push(`js/${f}`);
+  }
+  assert.deepEqual(fout, [], `Zeg na het veranderen van een tegel T.kaartVeranderd(w) (js/wereld.js): ${fout.join(', ')}`);
+});

@@ -467,3 +467,42 @@ test('de visser vangt niets als de beek dichtligt, en zegt dat', () => {
   assert.ok(S.voorraad.vis > 0);
   assert.doesNotMatch(T.gebouwToestand(S, S.gebouwen[0]), /beek/);
 });
+
+// ---------------------------------------------------------------------------------------------
+// Niemand ingemetseld, geen deur dicht (werklijst vraag 88; Marcel, 2 okt: "A ja")
+// ---------------------------------------------------------------------------------------------
+
+test('bouwen: niet waar iemand staat, en niet op de deur van een ander gebouw', () => {
+  const S = maakS();
+  S.wereld.wezens = [{ soort: 'dorpeling', x: 6, y: 6, tx: 6, ty: 6, pad: [] }];
+  const voet = T.gebouwVoet('put');
+  assert.equal(T.waaromPastHetNiet(S, 'put', 6, 6), 'Daar staat iemand.');
+  S.wereld.wezens[0].binnen = true; // wie binnen is, staat in zijn deur, en daar komt toch niets
+  assert.equal(T.waaromPastHetNiet(S, 'put', 6, 6), null);
+  S.wereld.wezens = [];
+  // Een huis met zijn deur: daar komt geen put op.
+  const huis = { soort: 'houthakker', x: 2, y: 2, voet: { b: 4, h: 4 }, klaar: true };
+  S.gebouwen.push(huis);
+  const deur = T.deurVan(S.wereld, huis);
+  assert.equal(T.waaromPastHetNiet(S, 'put', deur.x, deur.y), 'Daar is een deur.');
+  assert.equal(T.waaromPastHetNiet(S, 'put', deur.x + voet.b + 3, deur.y), null, 'ernaast mag het');
+});
+
+test('een erf laat een deur vrij', () => {
+  const S = maakS(40, 40);
+  const huis = { soort: 'houthakker', x: 2, y: 2, voet: { b: 4, h: 4 }, klaar: true };
+  S.gebouwen.push(huis);
+  const deur = T.deurVan(S.wereld, huis);
+  assert.equal(T.waaromPastErfNiet(S, deur.x - 2, deur.y), 'Daar is een deur.');
+});
+
+test('wie op een bouwplaats staat (een hut op een erf), stapt eraf en staat niet ingemetseld', () => {
+  const S = maakS();
+  const e = { soort: 'dorpeling', x: 7, y: 7, tx: 7, ty: 7, pad: [{ x: 8, y: 7 }], onderweg: false };
+  S.wereld.wezens = [e];
+  T.bouwGebouw(S, { soort: 'houthakker', x: 6, y: 6, voet: { b: 4, h: 4 }, klaar: false, klaarOp: 3, handen: 0, voorwerp: null });
+  assert.ok(e.tx < 6 || e.tx > 9 || e.ty < 6 || e.ty > 9, `(${e.tx},${e.ty}) staat buiten de voet`);
+  assert.ok(T.isBegaanbaar(S.wereld, e.tx, e.ty));
+  assert.deepEqual([e.x, e.y], [e.tx, e.ty]);
+  assert.deepEqual(e.pad, []);
+});

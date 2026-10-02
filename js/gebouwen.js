@@ -614,8 +614,72 @@
         else reden = reden || T.waaromNietOpDezeGrond(D, x + dx, y + dy);
       }
     }
-    return vast ? 'Daar past het niet.' : reden;
+    if (vast) return 'Daar past het niet.';
+    return reden || T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h });
   };
+
+  // ---------------------------------------------------------------------------------------------
+  // Niemand ingemetseld, geen deur dicht (werklijst vraag 88; Marcel, 2 okt: "A ja")
+  // ---------------------------------------------------------------------------------------------
+  // Tot 2 okt keek bouwen alleen of een tegel vast was (een muur, een boom), niet of er iemand stond of een deur was. In
+  // de nulmeting van de speeltest stonden twee mensen vanaf dag 50 tot het eind ingemetseld in een hut die over hen heen
+  // doorgroeide, en de bouwer die de wensen volgt, zette een put op de deur van de schout. Nu komt een gebouw niet op
+  // iemand en niet op een deur (hierboven, en het erf in js/erven.js), groeit een huis niet over iemand of een deur heen
+  // (js/behoeften.js), en wie toch op een bouwplaats staat (een hut die een gezin zelf op zijn erf zet), stapt eraf.
+
+  const opRechthoek = (r, x, y) => x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h;
+
+  // Wie er buiten op deze rechthoek staat, of null. Wie binnen is, staat in zijn deur, en op een deur komt niets.
+  T.wieStaatOp = function (w, r) {
+    return (w.wezens || []).find((e) => !e.dood && !e.binnen && opRechthoek(r, e.tx, e.ty)) || null;
+  };
+
+  // Het gebouw waarvan de deur (de tegel ervoor, T.deurVan in js/bewoners.js) op deze rechthoek ligt, of null. `behalve`
+  // telt niet mee: een huis dat doorgroeit, krijgt zelf een nieuwe deur.
+  T.deurOpRechthoek = function (D, r, behalve) {
+    for (const g of D.gebouwen || []) {
+      if (g === behalve) continue;
+      const d = T.deurVan(D.wereld, g);
+      if (d && opRechthoek(r, d.x, d.y)) return g;
+    }
+    return null;
+  };
+
+  // Waarom hier niets mag komen, of null: er staat iemand, of het is de deur van een gebouw.
+  T.waaromNietOpIemand = function (D, r, behalve) {
+    if (T.wieStaatOp(D.wereld, r)) return 'Daar staat iemand.';
+    if (T.deurOpRechthoek(D, r, behalve)) return 'Daar is een deur.';
+    return null;
+  };
+
+  // Wie toch op een bouwplaats staat (een gezin zet zijn hut op zijn erf, js/erven.js, terwijl er iemand over dat erf
+  // loopt), stapt eraf: naar de begaanbare tegel ernaast die het dichtst bij is. Anders staat hij ingemetseld.
+  function stapEraf(D, r) {
+    const w = D.wereld;
+    for (const e of w.wezens || []) {
+      if (e.dood || e.binnen || !opRechthoek(r, e.tx, e.ty)) continue;
+      let beste = null;
+      for (let ring = 1; ring <= Math.max(r.b, r.h) + 2 && !beste; ring++) {
+        let afstand = Infinity;
+        for (let y = e.ty - ring; y <= e.ty + ring; y++) {
+          for (let x = e.tx - ring; x <= e.tx + ring; x++) {
+            if (Math.max(Math.abs(x - e.tx), Math.abs(y - e.ty)) !== ring || opRechthoek(r, x, y)) continue;
+            if (!T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e })) continue;
+            const a = Math.hypot(x - e.tx, y - e.ty);
+            if (a < afstand) {
+              afstand = a;
+              beste = { x, y };
+            }
+          }
+        }
+      }
+      if (!beste) continue;
+      e.x = e.tx = beste.x;
+      e.y = e.ty = beste.y;
+      e.pad = [];
+      e.onderweg = false;
+    }
+  }
 
   // Of er op deze tegel gebouwd mag worden, voor een gebouw en voor een erf: niet op een akker of weide
   // (T.veldOp, js/akkers.js), niet op een pad (T.opPad, js/wereld.js), en niet op een erf (T.erfOp,
@@ -700,6 +764,8 @@
         if (w.tegels[yy] && w.tegels[yy][xx] !== undefined) w.tegels[yy][xx] = 'muur';
       }
     }
+    T.kaartVeranderd(w); // de voet is muur geworden: de eilanden (js/wereld.js)
+    stapEraf(D, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
   }
 
   // Een nieuw gebouw neerzetten via het bouwmenu (js/hud.js, js/main.js): kijkt of het past en of

@@ -725,6 +725,14 @@
     for (const p of D.bewoners.mensen) {
       if (p.huis !== g) continue;
       if (p.wezen) p.wezen.thuis = { x: deur.x, y: deur.y };
+      // Wie binnen is, komt er door de nieuwe deur weer uit: de oude kan nu muur zijn (werklijst vraag 88).
+      const e = p.wezen;
+      if (e && e.binnen) {
+        e.x = e.tx = deur.x;
+        e.y = e.ty = deur.y;
+        e.deur = { x: deur.x, y: deur.y };
+        e.pad = [];
+      }
       zetPlekken(D, p);
     }
   };

@@ -367,7 +367,6 @@
     instantie.voorwerp.id = opz ? opz.id : null;
     instantie.voorwerp.beslaat = [nieuweVoet.b, nieuweVoet.h];
     instantie.voorwerp.tekeningNaam = tekening ? tekening.split('/').pop() : null;
-    T.voorwerpenVeranderd(w); // een andere soort, dus misschien een andere voet (js/wereld.js)
     for (let dy = 0; dy < nieuweVoet.h; dy++) {
       for (let dx = 0; dx < nieuweVoet.b; dx++) {
         const yy = instantie.y + dy;
@@ -383,6 +382,7 @@
         if (w.tegels[yy] && w.tegels[yy][xx] !== undefined) w.tegels[yy][xx] = 'vloer';
       }
     }
+    T.kaartVeranderd(w); // een andere soort en een andere voet: de lijst per tegel en de eilanden (js/wereld.js)
     // Rijker ogen is niet alleen voor de speler: het is ook wat de heer straks ziet
     // (ontwerp/werklijst.md, punt 6, "Rijk worden en arm lijken" — de argwaan van de inner stijgt
     // als wat hij ziet niet bij het rekenboek past). Een dorp vol stenen huizen wekt dus andere
@@ -408,17 +408,22 @@
     }
     for (const tekening of kandidaten) {
       const voet = T.gebouwVoet(nieuw, tekening) || oudeVoet;
-      if (heeftRuimte(D.wereld, instantie, oudeVoet, voet)) return { tekening, voet };
+      if (heeftRuimte(D, instantie, oudeVoet, voet)) return { tekening, voet };
     }
     return null;
   }
 
-  // Is er plaats voor de nieuwe voet: wat buiten de oude voet valt, mag niet vast zijn (een muur, een boom, een gebouw).
-  function heeftRuimte(w, instantie, oudeVoet, voet) {
+  // Is er plaats voor de nieuwe voet: wat buiten de oude voet valt, mag niet vast zijn (een muur, een boom, een gebouw),
+  // er mag niemand staan, en het mag niet de deur van een ander gebouw zijn (werklijst vraag 88: in de nulmeting groeide
+  // een hut over twee mensen heen, die er tot het eind ingemetseld stonden). Staat er iemand, dan morgen weer.
+  function heeftRuimte(D, instantie, oudeVoet, voet) {
+    const w = D.wereld;
     for (let dy = 0; dy < voet.h; dy++) {
       for (let dx = 0; dx < voet.b; dx++) {
         if (dx < oudeVoet.b && dy < oudeVoet.h) continue; // eigen grond: was toch al van dit huis
-        if (T.isVast(w, instantie.x + dx, instantie.y + dy)) return false;
+        const x = instantie.x + dx;
+        const y = instantie.y + dy;
+        if (T.isVast(w, x, y) || T.waaromNietOpIemand(D, { x, y, b: 1, h: 1 }, instantie)) return false;
       }
     }
     return true;

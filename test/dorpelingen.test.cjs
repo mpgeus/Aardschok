@@ -164,3 +164,37 @@ test('het zaad van een dorpeling kiest zijn vel via een modulo die altijd binnen
   assert.equal(T.sprites.dorpelingVariant(5, 3), 2);
   assert.equal(T.sprites.dorpelingVariant(7, 0), 0); // nog geen varianten: geen crash
 });
+
+test('wie twee keer geen weg vindt naar waar hij hoort, wacht een uur voor hij het opnieuw zoekt (vraag 88)', () => {
+  const w = T.maakProefkamers();
+  const S = { wereld: w, spreektMet: null, kalender: { dag: 10 } };
+  const dorpeling = maakDorpeling(4, 3, 1);
+  // Zijn thuis ligt ver weg, op een tegel die nooit te halen is: in de muur van de kaart.
+  dorpeling.thuis = { x: -5, y: -5 };
+  w.wezens.push(dorpeling);
+  const echt = T.zoekPad;
+  const echtKan = T.kanErKomen;
+  let gezocht = 0;
+  T.kanErKomen = () => true; // laat A* het zelf merken, zodat we tellen hoe vaak hij zoekt
+  T.zoekPad = (...a) => {
+    gezocht++;
+    return echt(...a);
+  };
+  try {
+    for (let i = 0; i < 10; i++) {
+      dorpeling.pad = [];
+      dorpeling.dwaalTijd = 0;
+      T.laatDwalen(S, 0.01);
+    }
+    assert.equal(gezocht, 2, 'twee keer, dan wacht hij');
+    assert.ok(dorpeling.geenWegTot > S.kalender.dag);
+    S.kalender.dag += T.LOPEN_INSTELLINGEN.geenWegWacht + 0.001;
+    dorpeling.pad = [];
+    dorpeling.dwaalTijd = 0;
+    T.laatDwalen(S, 0.01);
+    assert.equal(gezocht, 3, 'na een uur zoekt hij weer');
+  } finally {
+    T.zoekPad = echt;
+    T.kanErKomen = echtKan;
+  }
+});

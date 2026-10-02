@@ -463,6 +463,8 @@ test('wie er doorgroeide: "De hut van ... is een huis geworden", in wat er gebeu
   metRaadsman(S);
   const hut = D.gebouwen.find((g) => g.bewoners === 'oudStel');
   const wie = D.bewoners.mensen.find((p) => p.huis === hut).naam;
+  // Binnen, zoals 's nachts: het oude stel staat bij het begin voor zijn deur, en daar groeit het huis niet overheen.
+  for (const p of D.bewoners.mensen) if (p.huis === hut && p.wezen) p.wezen.binnen = true;
   T.zetVoorraad(D, 'hout', 100);
   let dag = 30;
   nacht(S, dag);

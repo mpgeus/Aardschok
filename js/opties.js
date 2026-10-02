@@ -449,6 +449,7 @@
     { naam: 'De dag', blok: 'DAG_INSTELLINGEN' },
     { naam: 'Gebouwen en bevolking', blok: 'GEBOUWEN_INSTELLINGEN' },
     { naam: 'De bewoners', blok: 'BEWONERS_INSTELLINGEN' },
+    { naam: 'Lopen', blok: 'LOPEN_INSTELLINGEN' },
     { naam: 'De erven', blok: 'ERVEN_INSTELLINGEN' },
     { naam: 'De treden', blok: 'TREDEN_INSTELLINGEN' },
     { naam: 'De wetten', blok: 'WETTEN_INSTELLINGEN' },

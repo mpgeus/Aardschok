@@ -244,7 +244,8 @@
   // lijst per tegel bij, die er pas komt als iemand hem vraagt. Het is geen spelstaat maar iets wat uit de kaart volgt,
   // dus hij staat niet in S en gaat niet mee in het opslaan: een geladen kaart bouwt hem opnieuw.
   // Een voorwerp zet je erbij met T.zetVoorwerp en haal je weg met T.haalVoorwerpWeg; verandert er een van plaats of
-  // maat, dan zegt T.voorwerpenVeranderd het (test/wereld.test.cjs kijkt dat niemand het anders doet).
+  // maat, of wordt een tegel een muur, dan zegt T.kaartVeranderd het (test/wereld.test.cjs kijkt dat niemand het anders
+  // doet).
   const PER_TEGEL = new WeakMap();
   const tegelSleutel = (x, y) => (y + 4096) * 8192 + (x + 4096);
   function lijstPerTegel(w) {
@@ -274,15 +275,103 @@
   };
   T.zetVoorwerp = function (w, v) {
     (w.voorwerpen || (w.voorwerpen = [])).push(v);
-    PER_TEGEL.delete(w);
+    T.kaartVeranderd(w);
     return v;
   };
   T.haalVoorwerpWeg = function (w, v) {
     const i = w.voorwerpen.indexOf(v);
     if (i >= 0) w.voorwerpen.splice(i, 1);
-    PER_TEGEL.delete(w);
+    T.kaartVeranderd(w);
   };
-  T.voorwerpenVeranderd = (w) => PER_TEGEL.delete(w);
+  // De kaart is veranderd (een voorwerp, of een tegel die een muur werd of weer vloer): wat eruit volgt, rekent hij
+  // opnieuw uit als iemand het vraagt, de lijst per tegel en de eilanden (hieronder).
+  T.kaartVeranderd = function (w) {
+    PER_TEGEL.delete(w);
+    EILANDEN.delete(w);
+  };
+
+  // ── Eilanden: welke tegels samen één gebied vormen ──
+  // Marcel (2 okt, werklijst vraag 88): "Zoizo bezette tegels zijn uit te sluiten toch? Bomen, versiering etc". Wat
+  // vaststaat (muren, huizen, bomen, versiering), rekent de kaart één keer uit: welke begaanbare tegels samen één
+  // gebied vormen, een eiland. Wil iemand naar een plek op een ander eiland, dan is er geen weg, en dat hoeft A* niet
+  // na de hele kaart te merken (T.kanErKomen). Zoals de lijst per tegel is het geen spelstaat maar iets wat uit de
+  // kaart volgt: niet in S, en na T.kaartVeranderd opnieuw. Een eiland is ruim: een deur telt als open en wie er staat,
+  // telt niet. Zo zegt het nooit "geen weg" waar er een is, en verandert er niets aan wie waar loopt; het gaat alleen
+  // sneller (bij de bouwer van de speeltest liet een dichtgebouwde deur A* 4.000 keer per tien dagen de kaart afzoeken).
+  const EILANDEN = new WeakMap();
+  const RUIM = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+  function ruim(w, x, y) {
+    const t = T.tegel(w, x, y);
+    if (t === 'muur' || t === 'buiten') return false;
+    const v = T.voorwerpOp(w, x, y);
+    return !(v && T.VOORWERPEN[v.soort].blokkeert);
+  }
+  function eilandenVan(w) {
+    const al = EILANDEN.get(w);
+    if (al) return al;
+    const b = w.b;
+    const h = w.h;
+    const op = new Int32Array(b * h).fill(-1);
+    const kan = new Uint8Array(b * h);
+    for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) kan[y * b + x] = ruim(w, x, y) ? 1 : 0;
+    let n = 0;
+    for (let i = 0; i < b * h; i++) {
+      if (!kan[i] || op[i] >= 0) continue;
+      op[i] = n;
+      const rij = [i];
+      while (rij.length) {
+        const j = rij.pop();
+        const x = j % b;
+        const y = (j - x) / b;
+        for (const [dx, dy] of RUIM) {
+          const nx = x + dx;
+          const ny = y + dy;
+          if (nx < 0 || ny < 0 || nx >= b || ny >= h) continue;
+          const k = ny * b + nx;
+          if (!kan[k] || op[k] >= 0) continue;
+          // Schuin alleen als geen van de twee hoektegels vast is, zoals A* (js/pad.js).
+          if (dx && dy && (!kan[y * b + nx] || !kan[ny * b + x])) continue;
+          op[k] = n;
+          rij.push(k);
+        }
+      }
+      n++;
+    }
+    const e = { op, b, h };
+    EILANDEN.set(w, e);
+    return e;
+  }
+  // Het eiland van een tegel, of -1 (vast, of buiten de kaart).
+  T.eilandOp = function (w, x, y) {
+    const e = eilandenVan(w);
+    return x >= 0 && y >= 0 && x < e.b && y < e.h ? e.op[y * e.b + x] : -1;
+  };
+
+  // Kan wie op `van` staat ooit bij `doel` komen, met de opties van T.zoekPad (js/pad.js: `tot`, `naast`)? Nee als geen
+  // tegel waar A* zou eindigen, op een eiland ligt waar hij vanaf `van` op kan stappen. `van` zelf mag vast zijn (wie
+  // binnen in zijn deur staat, of ingemetseld is): dan telt waar hij heen kan stappen. Ja betekent alleen: zoek maar.
+  T.kanErKomen = function (w, van, doel, opties) {
+    const naast = !!(opties && opties.naast);
+    const tot = opties && opties.tot >= 1 ? Math.floor(opties.tot) : 0;
+    const ver = Math.max(Math.abs(van.x - doel.x), Math.abs(van.y - doel.y));
+    if (ver <= tot || (naast && ver <= 1)) return true;
+    const vanaf = new Set();
+    const eigen = T.eilandOp(w, van.x, van.y);
+    if (eigen >= 0) vanaf.add(eigen);
+    for (const [dx, dy] of RUIM) {
+      const e = T.eilandOp(w, van.x + dx, van.y + dy);
+      if (e >= 0) vanaf.add(e);
+    }
+    if (!vanaf.size) return false;
+    const r = naast ? 1 : tot;
+    for (let y = doel.y - r; y <= doel.y + r; y++) {
+      for (let x = doel.x - r; x <= doel.x + r; x++) {
+        if (naast && x === doel.x && y === doel.y) continue;
+        if (vanaf.has(T.eilandOp(w, x, y))) return true;
+      }
+    }
+    return false;
+  };
   // Wie binnen is (een boer 's nachts in zijn huis, js/dag.js), staat niemand in de weg.
   T.wezenOp = (w, x, y, behalve) => w.wezens.find((e) => !e.dood && !e.binnen && e !== behalve && e.tx === x && e.ty === y) || null;
 
