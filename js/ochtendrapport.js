@@ -6,11 +6,12 @@
 //
 //   - Wat er gebeurde, houdt het dorp bij in een dagboek (D.dagboek, T.schrijfOp): wie er kwam, stierf of wegtrok
 //     (T.wijzigBevolking in js/gebouwen.js, de enige weg), wat de boeren uit zichzelf deden (js/akkers.js, js/vee.js),
-//     wat de raadsman besliste (js/raadsman.js) en wie je zocht en niet sprak (js/voorvallen.js).
+//     wat de raadsman besliste (js/raadsman.js), wie je zocht en niet sprak (js/voorvallen.js), en welk huis
+//     doorgroeide (js/behoeften.js; vraag 87).
 //   - Elke nacht, als laatste stap van de dag (T.tikGebouwenDag), maakt de raadsman er het rapport van
 //     (T.tikOchtendrapportDag, in D.ochtendrapport), en begint het dagboek opnieuw.
-//   - Het rapport zegt wat de balk niet zegt (vraag 75, b): niet wat er ligt, maar hoe het gaat sinds gisteren, en hoe
-//     lang het hout en het eten de winter halen. Hoe goed die getallen kloppen, zegt zijn rekenen (T.vaardighedenVan):
+//   - Het rapport zegt wat de balk niet zegt (vraag 75, b): niet wat er ligt, maar hoe het gaat sinds gisteren, hoe
+//     lang het hout en het eten de winter halen, en wat de huizen missen en wat helpt (vraag 86, a, en 87). Hoe goed die getallen kloppen, zegt zijn rekenen (T.vaardighedenVan):
 //     wie niet kan rekenen, kost je zo echt iets, want de balk verraadt hem niet.
 //   - Hij brengt het (vraag 75, a): hij vertrekt zo vroeg dat hij aan je deur staat als je opstaat (T.rapportAnker,
 //     voor T.dagAnker in js/dag.js). Ben je bij huis, dan komt hij naar je toe, en sta je stil naast hem, dan geeft hij
@@ -45,6 +46,8 @@
     // dagen nog eens. Op 1 zegt hij alles elke dag.
     herhaalNa: 7,
     winterVerschil: 10,
+    // Wat de huizen missen (vraag 87): zoveel regels per rapport, het zwaarste eerst; wat hij niet zei, zegt hij later.
+    wensenPerRapport: 3,
     // Tot deze dag zegt de raad onder het doel dat een raadsman je een rapport brengt, als je er nog geen hebt
     // (vraag 75, c: een nieuw spel begint zonder raadsman, en anders komt een tester het nooit tegen).
     raadTot: 5,
@@ -69,7 +72,8 @@
 
   // Schrijf op wat er gebeurde, voor het rapport van morgen. `soort`: 'mensen' (wie er kwam, stierf of wegtrok:
   // verschil, reden, waarom en wie, T.wijzigBevolking), 'boeren' (wat ze uit zichzelf deden: tekst), 'besluit' (wat de
-  // raadsman besliste: door, titel, antwoord en prijs) of 'voorbij' (wie je zocht en niet sprak: wie en titel).
+  // raadsman besliste: door, titel, antwoord en prijs), 'voorbij' (wie je zocht en niet sprak: wie en titel) of 'huis'
+  // (een huis groeide door: wie er woont, van, naar en de stand, js/behoeften.js).
   T.schrijfOp = function (D, soort, wat) {
     const boek = D.dagboek || (D.dagboek = nieuwDagboek(D, dagNu(D)));
     boek.regels.push({ dag: dagNu(D), soort, ...wat });
@@ -123,6 +127,10 @@
     // af, zoals in zijn bericht (js/raadsman.js).
     if (g.soort === 'besluit') return `Over ${g.titel} besliste ${g.door === door ? 'ik' : g.door}: "${g.antwoord}"${g.prijs ? ` (${g.prijs})` : ''}`;
     if (g.soort === 'voorbij') return `${T.hoofdletter(g.wie)} zocht je over ${g.titel}, en sprak je niet.`;
+    if (g.soort === 'huis') {
+      const stand = T.STANDEN[g.stand] ? `: ${g.wie ? 'ze horen' : 'wie erin woont, hoort'} nu bij de ${T.STANDEN[g.stand].naam}` : '';
+      return `${g.wie ? `De ${g.van} van ${g.wie}` : `Een ${g.van}`} is een ${g.naar} geworden${stand}.`;
+    }
     return null;
   }
 
@@ -191,6 +199,38 @@
     return uit;
   }
 
+  // Wat de huizen missen, en wat helpt (werklijst vraag 86, a, en 87), zoals de raad het zegt (T.watDeHuizenMissen,
+  // js/wensen.js), zonder de toets, en ook wat je nu niet kunt doen ("een bakkerij bouw je pas in een dorp"). Als status
+  // (vraag 76, en de richtlijn van 1 okt): hij zegt het als het begint of verandert (een huis meer of minder, of wat
+  // helpt), zolang het zo blijft om de herhaalNa dagen, en als het ophoudt ("Niemand mist nog een kapel."). Hooguit
+  // wensenPerRapport per dag, het zwaarste eerst; wat hij niet zei, zegt hij een volgende dag. Heeft elk huis alles, dan
+  // zegt hij dat één keer.
+  function wensRegels(D, dag, oud, nieuw) {
+    const uit = [];
+    const lijst = T.watDeHuizenMissen(D);
+    let ruimte = IN().wensenPerRapport;
+    for (const x of lijst) {
+      const tekst = x.tekst.replace(/ ?\[[^\]]*\]/g, '');
+      const m = oud[x.id];
+      if (m && m.tekst === tekst && !nogEens(dag, m)) nieuw[x.id] = m;
+      else if (ruimte > 0) {
+        ruimte--;
+        uit.push(tekst);
+        nieuw[x.id] = { tekst, gezegd: dag };
+      } else if (m) nieuw[x.id] = m; // nog niet gezegd: morgen
+    }
+    for (const id of Object.keys(oud)) {
+      if (id === 'alles' || lijst.some((x) => x.id === id)) continue;
+      if (T.WENSEN[id]) uit.push(`Niemand mist nog ${T.WENSEN[id].naam}.`);
+    }
+    const huizen = (D.gebouwen || []).filter((g) => g.wensen && g.wensen.mensen > 0);
+    if (huizen.length && huizen.every((g) => g.wensen.alles)) {
+      if (!oud.alles) uit.push('Alle huizen hebben wat ze willen.');
+      nieuw.alles = oud.alles || { gezegd: dag };
+    }
+    return uit;
+  }
+
   // Wat er komt: wie er vandaag komt, en de raden over de inner, de rovers en het goud voor de heer (js/raad.js),
   // zonder de toets erbij.
   const RADEN_DIE_KOMEN = ['inner', 'rovers', 'heerGoud'];
@@ -208,7 +248,7 @@
   }
 
   // Wat hij nog niet zei: een leeg geheugen.
-  const niksGezegd = () => ({ winter: {}, oorzaken: {} });
+  const niksGezegd = () => ({ winter: {}, oorzaken: {}, wensen: {} });
 
   // Het rapport van vandaag, door raadsman `p`, over wat er gebeurde (`gebeurd`, uit het dagboek) en hoe het ging sinds
   // `boek` begon, met wat je al wist (`basis`, vraag 76): { dag, door, regels, gebeurd, basis, onthoud, gebracht,
@@ -222,6 +262,7 @@
     const gaat = hoeHetGaat(D, boek, reken);
     const rest = winterRegels(D, dag, reken, basis.winter, onthoud.winter)
       .concat(oorzaakRegels(D, dag, basis.oorzaken, onthoud.oorzaken))
+      .concat(wensRegels(D, dag, basis.wensen || {}, onthoud.wensen))
       .concat(watErKomt(D, dag));
     if (!regels.length && !rest.length) regels.push(`Niets bijzonders.${gaat ? ` ${gaat}` : ''}`);
     else regels.push(...(gaat ? [gaat] : []), ...rest);

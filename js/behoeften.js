@@ -476,6 +476,9 @@
       delete g.wachtOpBouwstof;
       const voor = Object.keys(kosten).length ? `, voor ${kostenTekst(kosten)}` : '';
       T.zeg(D, `Een ${soort.naam} is gegroeid tot een ${nieuw.naam}${voor}: wie erin woont, hoort nu bij de ${T.STANDEN[T.standVan(g)].naam}.`, 'goed');
+      // Voor het rapport van de raadsman (js/ochtendrapport.js; vraag 87): "De hut van Geert is een huis geworden".
+      const p = ((D.bewoners && D.bewoners.mensen) || []).find((m) => m.huis === g);
+      T.schrijfOp(D, 'huis', { wie: p ? p.naam : null, van: soort.naam, naar: nieuw.naam, stand: T.standVan(g) });
     }
   }
 

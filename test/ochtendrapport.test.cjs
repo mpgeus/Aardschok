@@ -106,12 +106,14 @@ test('wat erin staat: wie er ging en kwam, hoe het gaat sinds gisteren, en wat e
   const nieuw = D.dagboek.regels[1].wie;
   assert.ok(T.zetWet(D, 'rantsoen', 'krap').kan);
   const R = nacht(S, 11);
-  assert.deepEqual(R.regels, [
+  assert.deepEqual(R.regels.slice(0, 4), [
     `${T.hoofdletter(weg)}${weg.includes(',') ? ',' : ''} trok weg: het dorp is niet tevreden genoeg.`,
     `Nieuw in het dorp: ${nieuw}.`,
     'Sinds gisteren is er 12 graan minder en 3 hout meer.',
     'Er is honger, want het rantsoen is krap.',
   ]);
+  // Daarna wat de huizen missen (vraag 87): de wet liet het dorp zijn tevredenheid opnieuw tellen, dus het weet het al.
+  assert.match(R.regels[4], /willen een kapel binnen 40 tegels\.$/);
 });
 
 test('wat de boeren deden, wat hij besliste toen je weg was, en wie je zocht en niet sprak', () => {
@@ -384,4 +386,88 @@ test('de winter zegt hij als hij omslaat of flink verschuift, en anders om de we
   // Weer zonder hout (een brand): het slaat weer om, en dat zegt hij meteen.
   T.zetVoorraad(D, 'hout', 0);
   assert.ok(gelezenNacht(S, herfst + 8).regels.some((r) => /^Het hout haalt/.test(r)));
+});
+
+// ---------------------------------------------------------------------------------------------
+// Wat de huizen missen, en wie er doorgroeide (werklijst vraag 86, a, en 87)
+// ---------------------------------------------------------------------------------------------
+
+// Een kapel die alle zes huizen bereikt die er een willen (de vijf boerderijen en het huis van het jonge gezin): zijn
+// midden op 40,34, binnen 40 tegels van elk van hen. Alleen de boekhouding: hij staat niet getekend.
+const kapelVoorIedereen = (D) => D.gebouwen.push({ soort: 'kapel', x: 39, y: 33, voet: { b: 2, h: 2 }, klaar: true });
+const wensRegelsVan = (R) => R.regels.filter((r) => / wil(len)? |^Niemand mist|^Alle huizen/.test(r));
+
+test('wat de huizen missen: als het begint, niet elke dag, om de week, en als het ophoudt', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  metRaadsman(S);
+  T.tikBehoeftenDag(D, 10);
+  let R = nacht(S, 11);
+  assert.deepEqual(wensRegelsVan(R), [
+    'Vijf boerderijen en een huis willen een kapel binnen 40 tegels.',
+    'Een huis wil een put binnen 12 tegels.',
+    'Een huis wil vlees of vis: bouw een visser of een jager.',
+  ], 'wat helpt, zonder de toets; het zwaarste eerst');
+  T.leesRapport(D);
+  assert.deepEqual(wensRegelsVan(nacht(S, 12)), [], 'de volgende dag niet nog eens');
+  T.leesRapport(D);
+  kapelVoorIedereen(D);
+  assert.deepEqual(wensRegelsVan(nacht(S, 13)), ['Niemand mist nog een kapel.'], 'een plek telt meteen');
+  T.leesRapport(D);
+  // Om de week zegt hij wat er nog steeds gemist wordt.
+  R = nacht(S, 11 + T.OCHTENDRAPPORT_INSTELLINGEN.herhaalNa);
+  assert.deepEqual(wensRegelsVan(R), ['Een huis wil een put binnen 12 tegels.', 'Een huis wil vlees of vis: bouw een visser of een jager.']);
+});
+
+test('wat de huizen missen: verandert wat helpt, dan zegt hij het; en hooguit zoveel per dag, de rest later', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  metRaadsman(S);
+  T.tikBehoeftenDag(D, 10);
+  const IN = T.OCHTENDRAPPORT_INSTELLINGEN;
+  const oud = IN.wensenPerRapport;
+  IN.wensenPerRapport = 1;
+  try {
+    assert.deepEqual(wensRegelsVan(nacht(S, 11)), ['Vijf boerderijen en een huis willen een kapel binnen 40 tegels.']);
+    T.leesRapport(D);
+    assert.deepEqual(wensRegelsVan(nacht(S, 12)), ['Een huis wil een put binnen 12 tegels.']);
+    T.leesRapport(D);
+    assert.deepEqual(wensRegelsVan(nacht(S, 13)), ['Een huis wil vlees of vis: bouw een visser of een jager.']);
+    T.leesRapport(D);
+  } finally {
+    IN.wensenPerRapport = oud;
+  }
+  D.gebouwen.push({ soort: 'visser', x: 0, y: 0, voet: { b: 3, h: 3 }, klaar: false });
+  assert.deepEqual(wensRegelsVan(nacht(S, 14)), ['Een huis wil vlees of vis: de visser wordt gebouwd.']);
+});
+
+test('heeft elk huis wat het wil, dan zegt hij dat één keer', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  metRaadsman(S);
+  kapelVoorIedereen(D);
+  const huis = D.gebouwen.find((g) => g.bewoners === 'jongGezin');
+  const r = T.voetVanGebouw(huis);
+  D.gebouwen.push({ soort: 'put', x: r.x, y: r.y + r.h, voet: { b: 1, h: 1 }, klaar: true });
+  T.zetVoorraad(D, 'vis', 20);
+  T.tikBehoeftenDag(D, 10);
+  assert.ok(D.gebouwen.filter((g) => g.wensen).every((g) => g.wensen.alles), 'alles, in elk huis');
+  assert.deepEqual(wensRegelsVan(nacht(S, 11)), ['Alle huizen hebben wat ze willen.']);
+  T.leesRapport(D);
+  assert.deepEqual(wensRegelsVan(nacht(S, 12)), [], 'één keer');
+});
+
+test('wie er doorgroeide: "De hut van ... is een huis geworden", in wat er gebeurde', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  metRaadsman(S);
+  const hut = D.gebouwen.find((g) => g.bewoners === 'oudStel');
+  const wie = D.bewoners.mensen.find((p) => p.huis === hut).naam;
+  T.zetVoorraad(D, 'hout', 100);
+  let dag = 30;
+  nacht(S, dag);
+  for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen; i++) T.tikBehoeftenDag(D, ++dag);
+  assert.equal(hut.soort, 'huis', 'een maand alles: doorgegroeid');
+  const R = nacht(S, dag + 1);
+  assert.ok(R.regels.includes(`De hut van ${wie} is een huis geworden: ze horen nu bij de dorpelingen.`), R.regels.join(' | '));
 });
