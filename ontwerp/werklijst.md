@@ -3018,8 +3018,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 2 okt):** "a ja b ja c ja, en naar main". Dus 2d nu, vóór de pagina met ontwerpen voor de ui,
     met eerst een plan (vraag 90); een put kost alleen hout; de bouwer verkoopt ook graan voor zijn volgende wens; en het
     werk van de drieëntwintigste sessie gaat naar `main`.
-90. **Stap 2d: de treden uit de standen, het plan** (Claude, 2 okt, drieëntwintigste sessie; vraag 80, D, en 89, a; wacht
-    op Marcel). Bij vraag 80 werd besloten: "de treden gaan op in de standen", zoals in Anno 1602; klein (vraag 82): drie
+90. **Stap 2d: de treden uit de standen, het plan** (Claude, 2 okt, drieëntwintigste sessie; vraag 80, D, en 89, a;
+    beantwoord). Bij vraag 80 werd besloten: "de treden gaan op in de standen", zoals in Anno 1602; klein (vraag 82): drie
     standen, de poorters later. De speeltest (vraag 89) liet zien waarom het nu moet: wat de huizen missen voor super
     gelukkig (bier genoeg, een herberg dichtbij, brood, laken, een markt), komt pas met een trede.
     **Wat er al is:** het gehucht wordt een dorp bij 50 mensen met een kapel en een smidse (`js/treden.js`), en de heer
@@ -3050,6 +3050,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     volgt; `npm test` groen is; en de speeltest zegt hoe ver de bouwer komt.
     Vragen: **a**, de treden zo, met de oude eis als spelregel? **b**, de markt en de weverij al in een dorp? **c**, een
     brief bij marktrecht? **d**, de raad en de bouwer met de ketens?
+    **Beantwoord (Marcel, 2 okt):** "a ja b ja c ja d ja". Dus alle vier, in de volgorde van het plan.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
