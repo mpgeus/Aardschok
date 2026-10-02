@@ -36,7 +36,10 @@
 //           houdt wat het dorp tot de lente eet, het zaaigraan en het graan van de heer), koopt in de lente zaaigraan
 //           als er akkers kaal liggen (sinds 1 okt, vraag 79), bouwt een jager als het eten de winter niet haalt
 //           (hooguit één per maand; vraag 81), en betaalt de heer alles. Hij verstopt niets en loopt de rovers niet
-//           achterna.
+//           achterna. Sinds 2 okt (vraag 86, b, en 87, D) volgt hij ook de wensen, zoals de raad ze zegt
+//           (T.watDeHuizenMissen): een put of een kapel waar hij de meeste huizen zonder bereikt, een visser of een
+//           jager voor vlees of vis, en een houthakker of een steengroeve als een huis op bouwstof wacht, hooguit één
+//           per maand; en een houthakker vóór een nieuw erf, als er nog geen staat.
 // Van elke speler schrijft hij op waarom er op een groeidag geen gezin kwam (T.waaromGeenGezin, js/gebouwen.js),
 // op welke dag het gehucht een dorp werd, en welke raad er elke dag onder het doel stond (js/raad.js).
 (function (T) {
@@ -438,6 +441,34 @@
     return false;
   }
 
+  // Een plek die huizen in de buurt willen (een put, een kapel; js/wensen.js): waar hij de meeste huizen bereikt die er
+  // nog geen hebben, zoals een speler die met de put in de hand kijkt wat de muis zegt (T.watDeKringBereikt, met de voet
+  // zoals js/main.js hem neemt); bij gelijk spel het dichtst bij de deur van de schout.
+  const isPlek = (soort) => Object.values(T.WENSEN).some((w) => w.plek === soort);
+  function bouwInDeKring(soort) {
+    const s = S();
+    const huis = huisVanDeSchout();
+    const midden = huis ? T.deurVan(s.wereld, huis.gebouw) : schoutTegel();
+    const voet = T.gebouwVoet(soort, T.volgendeTekening(s.dorp, soort)) || T.GEBOUWEN[soort].voet;
+    let beste = null;
+    for (let y = 0; y < s.wereld.tegels.length; y++) {
+      for (let x = 0; x < s.wereld.tegels[0].length; x++) {
+        if (!T.gebouwPast(s.dorp, soort, x, y)) continue;
+        const zonder = T.watDeKringBereikt(s.dorp, soort, { x, y, b: voet.b, h: voet.h }).zonder;
+        const d = Math.hypot(x - midden.x, y - midden.y);
+        if (zonder > 0 && (!beste || zonder > beste.zonder || (zonder === beste.zonder && d < beste.d))) beste = { x, y, d, zonder };
+      }
+    }
+    if (!beste) {
+      daad(`vindt geen plek waar een ${soort} iemand helpt`);
+      return false;
+    }
+    const u = T.plaatsGebouw(s.dorp, soort, beste.x, beste.y);
+    boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort, gelukt: u.gelukt, reden: u.reden || null });
+    daad(u.gelukt ? `bouwt een ${soort} voor ${beste.zonder === 1 ? 'één huis' : `${beste.zonder} huizen`}` : `wil een ${soort} bouwen, maar: ${u.reden}`);
+    return u.gelukt;
+  }
+
   // De winter: zegt het dorp dat het hout hem niet haalt, dan een houthakker (alle vier de spelers).
   let gelezen = 0;
   function luisterNaarDeWinter() {
@@ -746,6 +777,8 @@
     let gelezenWinter = 0;
     let erfNietVoor = 0; // paste een erf nergens, dan zoekt hij pas een maand later opnieuw
     let jagerNietVoor = 0; // een jager hooguit één keer per maand
+    let wensNietVoor = 0; // een bouwwerk voor de wensen hooguit één keer per maand (vraag 87, D)
+    let houthakkerNietVoor = 0; // paste een houthakker nergens, dan zoekt hij pas een maand later opnieuw
     const jaar = () => Math.floor(dagNu() / JAAR);
     const kosten = (soort) => T.GEBOUWEN[soort].kosten;
     // Zegt het dorp dat het hout de winter niet haalt, dan wil hij eerst een houthakker (ook als het goud er nog
@@ -785,6 +818,18 @@
       }
       await koopGraan(pakken, prijs);
     }
+    // De wensen (werklijst vraag 86, b, en 87, D): het eerste wat de raad over de huizen zegt waar je iets aan kunt doen
+    // (T.watDeHuizenMissen, js/wensen.js), als hij het kan betalen; hooguit één per maand, zodat er hout overblijft voor
+    // de hutten. Een put of een kapel komt waar hij de meeste huizen zonder bereikt.
+    function volgDeWensen() {
+      const s = S();
+      if (dagNu() < wensNietVoor) return;
+      const x = T.watDeHuizenMissen(s.dorp).find((w) => w.kan);
+      if (!x || !T.kanBetalen(s.dorp, kosten(x.bouw))) return;
+      wensNietVoor = dagNu() + 30;
+      if (isPlek(x.bouw)) bouwInDeKring(x.bouw);
+      else bouw(x.bouw);
+    }
     async function verkoop() {
       const s = S();
       const nodig = goudNodig() - Math.floor(s.dorp.voorraad.goud || 0);
@@ -823,10 +868,21 @@
           jagerNietVoor = dagNu() + 30;
           bouw('jager');
         }
+        // Een houthakker vóór een nieuw erf, als er nog geen staat (vraag 86, b): elke hut kost 8 hout, en een bouwplaats
+        // neemt het hout zodra het er is; zo kwam de houthakker er bij zaad 2 nooit (de speeltest van 1 okt).
+        const houthakker = s.dorp.gebouwen.some((g) => g.soort === 'houthakker');
+        if (!houthakker && !wil.includes('houthakker') && dagNu() >= houthakkerNietVoor) wil.unshift('houthakker');
         // Steeds één erf vrij.
-        if (!T.vrijeErven(s.dorp).length && dagNu() >= erfNietVoor && !bouw('erf')) erfNietVoor = dagNu() + 30;
-        // Bouwen wat hij wil, zodra het goud en het hout er zijn.
-        while (wil.length && T.kanBetalen(s.dorp, kosten(wil[0]))) bouw(wil.shift());
+        if (houthakker && !T.vrijeErven(s.dorp).length && dagNu() >= erfNietVoor && !bouw('erf')) erfNietVoor = dagNu() + 30;
+        // Bouwen wat hij wil, zodra het goud en het hout er zijn; een kapel waar hij de meeste huizen bereikt. Wat het doel
+        // vraagt en er al staat (een kapel voor de wensen), hoeft niet meer.
+        while (wil.length && wil[0] !== 'houthakker' && !T.doelGebouwen(s.dorp).includes(wil[0])) wil.shift();
+        while (wil.length && T.kanBetalen(s.dorp, kosten(wil[0]))) {
+          const soort = wil.shift();
+          const gelukt = isPlek(soort) ? bouwInDeKring(soort) : bouw(soort);
+          if (!gelukt && soort === 'houthakker') houthakkerNietVoor = dagNu() + 30;
+        }
+        volgDeWensen();
         const m = s.dorp.marskramer;
         if (m && !m.weg && m.staat && nuEenKeer(`handel${jaar()}-${m.bezoek}`)) {
           await koopZaaigraan();

@@ -380,6 +380,12 @@ zitting (3b) en 's avonds de herberg (3c) komen nog.
   schout,": "Niets bijzonders. Sinds gisteren is er 3 graan minder."
 - **Wat de balk niet zegt** (vraag 75, b): het rapport herhaalt niet wat er ligt, want dat zegt de balk precies. Het
   zegt hoe het gaat en hoe lang het duurt.
+- **Wat de huizen missen** (2 okt, drieëntwintigste sessie; vraag 86, a, en 87): zoals de raad het zegt, zonder de toets
+  ("Vijf boerderijen en een huis willen een kapel binnen 40 tegels."), en ook wat je nu niet kunt doen ("Een stenen huis
+  wil brood: een bakkerij bouw je pas in een dorp."), als status: als het begint of verandert, zolang het blijft één keer
+  per week, en als het ophoudt ("Niemand mist nog een kapel."); hooguit drie per dag (`wensenPerRapport`), de rest later.
+  Heeft elk huis alles, dan zegt hij dat één keer: "Alle huizen hebben wat ze willen." En bij wat er gebeurde staat wie
+  er doorgroeide: "De hut van Geert is een huis geworden: ze horen nu bij de dorpelingen."
 - **Wat blijft zoals het was, zegt hij niet elke dag** (vraag 76; Marcel: "a ja b ja c nu"): een oorzaak als hij begint
   ("Er is honger, want het rantsoen is krap."), zolang hij duurt één keer per week ("Er is nog steeds honger, al
   twaalf dagen: het rantsoen is krap.") en als hij over is ("De honger is voorbij."); de winter de eerste keer, als hij
@@ -486,13 +492,17 @@ doel"):
   marskramer er in de herfst is en je te weinig hebt; een wachthuis, tien dagen na een aanval als er geen is; het hout
   en het eten voor de winter, vanaf drie maanden ervoor, met de houthakker en de jager erbij, en dat er zolang geen
   gezin komt (sinds 1 okt, vraag 59, B); het graan dat na Sint-Maarten nog in de kelders ligt ("dat eet niemand en
-  zaait niemand"); de eerste dag hoe de tijd sneller gaat en hoe je slaapt; en dan de groei: waarom er geen gezin komt
-  (het dorp is vol: wijs een erf aan), wat je mist voor de kapel en de smidse en waar het vandaan komt (sinds 1 okt,
-  vraag 59, C: "Voor de smidse mis je 8 goud: de marskramer koopt graan in hooimaand en belasting [W] brengt elke maand
-  goud"), waarom er verder geen gezin komt (niet tevreden genoeg; te weinig graan), of wanneer het volgende komt, zoals
+  zaait niemand"); de eerste dag hoe de tijd sneller gaat en hoe je slaapt; dan of het dorp vol is (wijs een erf aan);
+  dan **de wensen** (sinds 2 okt, vraag 86, a, en 87; Marcel: "a ja"): een huis dat een maand alles had en op bouwstof
+  wacht ("Een hut kan een huis worden, maar er is geen 8 hout: bouw een houthakker [B]."), en anders wat de meeste mensen
+  missen ("Vijf boerderijen en een huis willen een kapel binnen 40 tegels [B]."), alleen als je er nu iets aan kunt doen,
+  en kun je niet betalen wat helpt, met wat je mist en waar het vandaan komt; en dan het doel en de groei: wat je mist
+  voor de kapel en de smidse en waar het vandaan komt (sinds 1 okt, vraag 59, C: "Voor de smidse mis je 8 goud: de
+  marskramer koopt graan in hooimaand en belasting [W] brengt elke maand goud"), waarom er verder geen gezin komt (niet tevreden genoeg; te weinig graan), of wanneer het volgende komt, zoals
   een stad in Civilization zegt wanneer hij groeit.
 - **Uit de regels zelf:** de raad vraagt het aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in
-  `js/gebouwen.js`, dezelfde vraag die de groei stelt) en aan de winter (`T.houtVoorDeWinter`, `T.etenVoorDeWinter`),
+  `js/gebouwen.js`, dezelfde vraag die de groei stelt), aan de winter (`T.houtVoorDeWinter`, `T.etenVoorDeWinter`) en
+  aan de wensen (`T.watDeHuizenMissen` in `js/wensen.js`, die het rapport en de bouwer van de speeltest ook stellen),
   zodat hij zegt wat het spel doet.
 - **De eerste weken** (vraag 47, herschreven): geen rij opdrachten die je afwerkt, maar wat nu telt. Zo blijft niemand
   op een stap hangen, komt een toets pas als je hem nodig hebt, en blijft het na de eerste weken nuttig.

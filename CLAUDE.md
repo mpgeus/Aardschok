@@ -279,8 +279,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   herschreven): één regel onder het doel linksboven die zegt wat nu tussen jou en een dorp staat, met de toets erbij
   (`[B]` wordt een toets): de eerste uit `T.RADEN` die nu geldt (`T.raadNu`). Hij vraagt het aan de regels zelf: of er
   een gezin komt aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in `js/gebouwen.js`), het hout en het eten
-  aan de winter, en wat je mist voor wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt.
-  Uit te zetten in de spelregels ("Raad").
+  aan de winter, wat de huizen missen aan de wensen (`T.watDeHuizenMissen`, vóór het doel; vraag 87), en wat je mist voor
+  wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Uit te zetten in de spelregels
+  ("Raad").
 - `js/wensen.js`: **de wensen van de mensen, per stand** (stap 2 van vraag 79, vraag 80 en 85, 1 okt; zoals in Anno
   1602): elk huis met mensen heeft een stand naar zijn soort (`T.standVan`: een hut keuters, een huis dorpelingen, een
   stenen huis ambachtslieden, een boerderij boeren; het huis van de schout en de herberg geen), en elke stand wil wat de
@@ -289,7 +290,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   een kapel, de herberg, een markt; waar die staan, zegt `T.plekkenVan` in `js/gebouwen.js`). `T.berekenWensen` geeft
   per huis wat het heeft en zijn tevredenheid (eten, brandhout en de rest, met wat het dorp erbij doet), en
   `T.berekenTevredenheid` (`js/behoeften.js`) maakt er het gemiddelde van, naar mensen; de huizen nemen hun goederen
-  vóór het eten (`T.gebruikGoederen`), en wat een huis wil en heeft, staat op het huis (`g.wensen`). Met een put, een
+  vóór het eten (`T.gebruikGoederen`), en wat een huis wil en heeft, staat op het huis (`g.wensen`). **Wat de huizen
+  missen en wat helpt, zegt `T.watDeHuizenMissen`** (vraag 87): de raad, het rapport en de bouwer van de speeltest vragen
+  het alle drie, eerst een huis dat op bouwstof wacht, dan wat de meeste mensen missen. Met een put, een
   kapel, de herberg of een markt in de hand zie je de kring (`js/tekenen.js`) en zegt de muis wie hij bereikt
   (`T.kringTekst`). **Doorgroeien per huis** (2b, in `js/behoeften.js`): heeft een huis een maand op rij alles, dan
   groeit het door naar de volgende stand, als de bouwstof er is (`bouwstof`: een huis hout, een stenen huis steen), ook
@@ -367,7 +370,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   boeren uit zichzelf deden, wat de raadsman besliste, wie je niet sprak), en elke nacht maakt hij er als laatste stap
   van de dag zijn rapport van (`T.tikOchtendrapportDag`, `D.ochtendrapport`): wat er gebeurde, hoe het graan en het hout
   gaan sinds gisteren, de winter, de oorzaken (`T.oorzakenNu` in `js/voorvallen.js`) en wat er komt. Het zegt wat de
-  balk niet zegt, en zijn rekenen kleurt de getallen (`T.rekenaarVan`). Hij brengt het: hij staat aan je deur als je
+  balk niet zegt, en wat de huizen missen, als status (vraag 87), en zijn rekenen kleurt de getallen (`T.rekenaarVan`).
+  Hij brengt het: hij staat aan je deur als je
   opstaat (`T.rapportAnker`, voor `T.dagAnker`), en naast je opent het papier (`T.werkOchtendrapportBij`, het venster
   van de brieven, soort `rapport`); anders ligt het onder de knop Rapport. De spelregel "Het rapport".
 - `js/land.js`: **het land** (vraag 63 en 69, 30 sep; stap 1a, stuk 1): een kaart met provincies uit het zaad van het

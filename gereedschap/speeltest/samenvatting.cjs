@@ -167,9 +167,11 @@ function deVoorvallen(goed) {
 // dagen welke raad onder het doel stond (js/raad.js).
 function vanGehuchtTotDorp(goed) {
   const uit = ['## Van gehucht tot dorp', '', 'Een groeidag is elke 20ste dag (met Vreemden welkom elke 10de). Een dag zonder gezin kan meer dan één reden hebben.', ''];
-  const kop = ['speler', 'zaad', 'een dorp op', 'mensen', 'groeidagen', 'een gezin', 'geen plaats', 'te weinig graan', 'niet tevreden', 'de winter niet gehaald', 'de heer kreeg', 'doden (kou, honger, gesneuveld)', 'gebouwd', 'de raad (dagen)'];
+  const kop = ['speler', 'zaad', 'een dorp op', 'mensen', 'huizen met alles', 'groeidagen', 'een gezin', 'geen plaats', 'te weinig graan', 'niet tevreden', 'de winter niet gehaald', 'de heer kreeg', 'doden (kou, honger, gesneuveld)', 'gebouwd', 'de raad (dagen)'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   const kort = (datum) => datum.replace(/ 13(\d\d)$/, " '$1");
+  // Hoeveel huizen aan het eind alles hebben wat hun stand wil (js/wensen.js; vraag 87): super gelukkig.
+  const alles = (st) => (st ? `${Object.values(st).reduce((n, x) => n + x.alles, 0)} van ${Object.values(st).reduce((n, x) => n + x.huizen, 0)}` : '');
   for (const u of goed) {
     const groei = u.groei || [];
     const telt = (reden) => groei.filter((g) => g.waarom.includes(reden)).length;
@@ -181,6 +183,7 @@ function vanGehuchtTotDorp(goed) {
       NAMEN[u.speler] || u.speler, u.zaad,
       u.dorp ? `${kort(u.dorp.datum)} (${u.dorp.mensen} mensen)` : 'nee',
       `${u.begin.bevolking} → ${u.eind.bevolking}`,
+      alles(u.eind.standen),
       String(groei.length),
       String(groei.filter((g) => !g.waarom.length).length),
       String(telt('plaats')), String(telt('graan')), String(telt('tevreden')), String(telt('winter')),
