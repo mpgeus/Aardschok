@@ -2984,6 +2984,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       schout, de soldaten van de heer, de rovers). Bij 5.000 loopt het grootste deel van de stad toch niet als poppetje
       (`opmerkingen.md`: wat je niet ziet, telt per wijk).
     Vragen: **a**, niet bouwen op iemand of op een deur, nu? **b**, de eilanden nu? **c**, de rest later, met stap 6?
+    **Marcel, daarna (2 okt):** "Als het alleen het dwaalgedrag is, kun je toch na 2x falen om route te vinden overslaan?
+    Vaste routes zullen geen probleem zijn". Claude: dat kan, als rem in plaats van de eilanden (b): wie twee keer geen
+    weg vindt, wacht een uur speltijd voor hij het opnieuw probeert, niet voor altijd, want wie even niet langs een
+    ander kon, moet later nog naar huis. Maar het dwalen is ook de weg naar huis, naar het werk en naar de put (het
+    anker van de dag), en de rem verbergt alleen de kosten: Otto en Hille blijven in de muur staan, en het gezin van de
+    schout komt niet meer door zijn deur. Dus a blijft nodig, met de rem erbij en zonder de eilanden.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
