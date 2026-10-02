@@ -223,7 +223,8 @@ test('de avond wordt verrekend: het bier gaat op, en wie er was, maakt het dorp 
 
 test('de herbergierster brouwt van graan, tot er genoeg bier ligt', () => {
   const S = gehucht({ bier: 0 });
-  T.zetVoorraad(S.dorp, 'graan', 100);
+  // Na de oogst houden de boeren het zaaigraan achter, en dat brouwt ze niet (js/gebouwen.js): 100 graan erboven.
+  T.zetVoorraad(S.dorp, 'graan', T.zaaigraanApart(S.dorp, HERFST + 1) + 100);
   const g = T.herbergVan(S.dorp);
   const soort = T.GEBOUWEN.herberg;
   T.tikGebouwenDag(S.dorp, HERFST + 1);
