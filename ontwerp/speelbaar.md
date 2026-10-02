@@ -149,6 +149,74 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 2 okt: de sluwe bouwer en het graanboek (werklijst, vraag 93 en 94)
+
+Gespeeld in de vierentwintigste sessie, op `ccr-ef948901-4zrtmk` op `3487718` (het spel van `41cd52f`, hetzelfde als bij
+vraag 92). De sluwe bouwer (`npm run speeltest -- sluw`) en, om te vergelijken, de bouwer; elk twee jaar, zaad 1 tot en
+met 3. De bouwer speelde letter voor letter als bij vraag 92 (98, 97 en 95 mensen; 30, 96 en 51 tegels ongezaaid). Geen
+fouten in de console. De sluwe bouwer is de bouwer, maar hij bedriegt de heer elk jaar zoals de slimme speler, houdt het
+graan verstopt en haalt 's nachts 10 graan terug als de herberg of de bakkerij stilvalt, en zet het rantsoen op krap als
+het eten de winter niet haalt (vraag 94). Het graanboek is nieuw: per jaar waar het graan bleef, en op hoeveel dagen er
+geen bier of brood was.
+
+| Spel | Mensen | Tevreden | Met alles aan het eind | Huizen met alles, gemiddeld (jaar 1, 2) | Dagen zonder bier (jaar 1, 2) | Dagen zonder brood (jaar 1, 2) | De heer vroeg, graan en goud (jaar 1; 2) | Hij kreeg | Ongezaaid in het derde jaar |
+|---|---|---|---|---|---|---|---|---|---|
+| sluw, zaad 1 | 80 | 66% | 5 van 14 | 53%, 53% | 68, 80 | 33, 0 | 16 en 2; 19 en 1 | 96%, 96% | 5 |
+| bouwer, zaad 1 | 98 | 79% | 6 van 18 | 51%, 41% | 68, 122 | 67, 14 | 68 en 30; 60 en 78 | 77%, 67% (boete) | 30 |
+| sluw, zaad 2 | 101 | 66% | 5 van 19 | 48%, 41% | 79, 66 | 96, 36 | 20 en 2; 19 en 4 | 93%, 97% | 0 |
+| bouwer, zaad 2 | 97 | 79% | 6 van 19 | 47%, 38% | 79, 141 | 126, 89 | 72 en 27; 41 en 95 | 57%, 57% (soldaten) | 96 |
+| sluw, zaad 3 | 79 | 82% | 8 van 13 | 49%, 47% | 73, 34 | 0, 60 | 40 en 2; 27 en 2 | 91%, 94% | 0 |
+| bouwer, zaad 3 | 95 | 77% | 5 van 18 | 49%, 40% | 73, 129 | 27, 59 | 81 en 27; 58 en 83 | 61% (soldaten), 43% (schandpaal) | 51 |
+
+Bij de bouwer vroeg de heer daarbij hout, wol, steen, vis en vlees. Het graanboek, het tweede jaar:
+
+| Spel | Oogst | Zaaien | Molen (brood) | Herberg (bier) | De heer | Soldaten | Rovers | Voorvallen | Verstopt, terug |
+|---|---|---|---|---|---|---|---|---|---|
+| sluw, zaad 1 | 521 | 179 | 298 | 56 | 18 | 0 | 34 | 24 | 170, 240 |
+| bouwer, zaad 1 | 521 | 179 | 335 | 55 | 60 | 0 | 30 | 13 | |
+| sluw, zaad 2 | 433 | 173 | 323 | 65 | 18 | 0 | 63 | 21 | 160, 320 |
+| bouwer, zaad 2 | 433 | 173 | 285 | 53 | 41 | 33 | 60 | 16 | |
+| sluw, zaad 3 | 564 | 192 | 317 | 67 | 25 | 0 | 79 | 16 | 240, 360 |
+| bouwer, zaad 3 | 564 | 192 | 261 | 51 | 58 | 33 | 90 | 21 | |
+
+**Wat opviel:**
+
+1. **Het brood maakt een gewonnen jaar onmogelijk, ook voor wie de heer bedriegt.** In het tweede jaar hadden de huizen
+   bij geen van de zes spellen ook maar één dag allemaal alles: de sluwe bouwer gemiddeld 41 à 53% van de huizen, de
+   bouwer 38 à 41%. De langste reeks dagen met alle huizen alles was 18 à 19, in de lente van het eerste jaar, toen het
+   gehucht klein was. Een brood kost een graan (de molen maalt 3 graan tot 3 meel, de bakkerij bakt 2 meel tot 2 brood),
+   en een ambachtsman wil 0,03 brood per dag. In het tweede jaar nam de molen 261 à 335 graan, meer dan de helft van wat
+   er na het zaaien overbleef, voor 31 à 41 ambachtslieden. Gewonnen is: alle woningen stenen huizen (vraag 85). Elke
+   woning is dan 8 ambachtslieden, en die willen samen 86 graan aan brood en 4 aan bier per jaar. De 179 akkertegels geven
+   op "Honger" 626, min 179 zaaigraan; trek je er de heer (bedrogen), de rovers en de voorvallen af, dan blijft er zo'n
+   380. Dat is brood en bier voor vier woningen, een dorp van zo'n 55 mensen met de boeren. De bouwers hadden er 8 à 14.
+2. **Bier kost bijna niets; het graan is op.** De herberg nam 51 à 67 graan per jaar (een kan is een veertigste graan).
+   Wat de herberg stillegt, is dat de molen het graan in een paar maanden opmaalt. De sluwe bouwer haalde 43 à 130 keer
+   10 graan terug, en had in het tweede jaar 34 à 80 dagen geen bier, tegen 122 à 141 bij de bouwer. Maar wat hij
+   terughaalde, nam ook de molen (3 graan per dag tot er 30 meel ligt), en tegen de zomer was zijn voorraad op.
+3. **Het dorp at in het tweede jaar geen graan.** Melk, vlees en brood vulden de magen; de bouwers zetten een jager neer
+   als de raad zegt dat het eten de winter niet haalt (hooguit één per maand). Het graan is er dan alleen nog voor het
+   zaaien, het brood, het bier, de heer en de rovers. Wat vraag 94 verwachtte (het dorp eet het graan op vóór de herberg
+   zijn deel neemt), klopte in het eerste jaar (127 à 160 graan gegeten), maar niet meer in het tweede.
+4. **Bedriegen werkt bijna te goed.** De inner zag bij de sluwe bouwer in alle zes jaren geen akkertegel, en zijn
+   argwaan bleef hooguit 8%. De heer vroeg 16 à 40 graan en 1 à 4 goud, tegen 41 à 81 graan en 27 à 95 goud bij de
+   bouwer, die hem dat nooit helemaal kon geven (43 à 77%: een boete, soldaten of de schandpaal). Dat is "de inner is uit
+   te schakelen" van 28 sep (hieronder; vraag 46, A), nu bij een dorp van honderd man. Het verstoppen zelf scheelt weinig.
+5. **De ligging staat los van het graan.** In alle zes spellen misten in alle twaalf maanden van het tweede jaar een paar
+   huizen de herberg en een markt binnen 30 tegels, en vaak een put of een kapel. "Vindt geen plek waar een herberg iemand
+   helpt": er past er geen meer bij de huizen die hem missen. Dat is het erf ver van de herberg (`opmerkingen.md`, 1 okt).
+6. **Een krap rantsoen kost tevredenheid, en was niet nodig.** Met het graan verstopt ziet het dorp minder eten dan er is
+   ("het eten haalt de winter niet"), dus zette de sluwe bouwer in de herfst het rantsoen op krap: bij zaad 1 en 2 was hij
+   aan het eind 66% tevreden, tegen 79% bij de bouwer, en er stierf bij geen van beiden iemand. Om dezelfde reden kwamen
+   er minder gezinnen: bij zaad 1 en 3 had hij 80 en 79 mensen, tegen 98 en 95. Een huis heeft met een krap rantsoen
+   nog steeds alles.
+7. **Rovers namen meer dan de heer.** In het tweede jaar 30 à 90 graan; een wachthuis bouwt geen van beide bouwers.
+8. **"Daar kun je niet bij" bij een huis waarvan de deur open ligt.** Bij zaad 1 en 2 bleef 40 graan vastliggen in een
+   kelder die de schout niet meer bereikte, terwijl de deur gewoon bereikbaar was. Nagespeeld: `T.randVanGebouw` kiest een
+   randtegel die aan een ingesloten hoekje grenst (`opmerkingen.md`).
+
+Wat eruit volgt, staat in de werklijst als vraag 95.
+
 ## De speeltest van 2 okt: brood is eten, en het zaaigraan is niet voor de molen (werklijst, vraag 92)
 
 Gespeeld in de drieëntwintigste sessie, op `claude/werklijst-doorzetten-73hi30`, twee keer: met brood, vis en vlees als
