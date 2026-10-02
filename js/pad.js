@@ -6,6 +6,47 @@
   const RICHTINGEN = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
   const sleutel = (x, y) => x + ',' + y;
 
+  // De open lijst van A* als binaire hoop (werklijst vraag 87, 2 okt; `opmerkingen.md`, "Een dorp van meer dan zo'n
+  // 150 mensen hapert"): eerst het laagste f, bij gelijk het hoogste g, en bij gelijk wie er het eerst in kwam. Dat is
+  // precies de volgorde van de gewone lijst die hier tot 2 okt stond, dus de paden zijn dezelfde, letter voor letter.
+  // Die lijst werd elke stap helemaal doorzocht, en een zoektocht die niet slaagde (iemand staat in de enige deur),
+  // kostte zo de hele kaart in het kwadraat: met de wensen, waar huizen doorgroeien en dichter op elkaar staan, werd een
+  // speeljaar van de bouwer zes keer zo traag.
+  const eerder = (a, b) => a.f < b.f || (a.f === b.f && (a.g > b.g || (a.g === b.g && a.n < b.n)));
+  function erbij(hoop, e) {
+    hoop.push(e);
+    let i = hoop.length - 1;
+    while (i > 0) {
+      const ouder = (i - 1) >> 1;
+      if (!eerder(hoop[i], hoop[ouder])) break;
+      [hoop[i], hoop[ouder]] = [hoop[ouder], hoop[i]];
+      i = ouder;
+    }
+  }
+  function eraf(hoop) {
+    const top = hoop[0];
+    const laatste = hoop.pop();
+    if (hoop.length) {
+      hoop[0] = laatste;
+      let i = 0;
+      for (;;) {
+        const l = 2 * i + 1;
+        const r = l + 1;
+        let k = i;
+        if (l < hoop.length && eerder(hoop[l], hoop[k])) k = l;
+        if (r < hoop.length && eerder(hoop[r], hoop[k])) k = r;
+        if (k === i) break;
+        [hoop[i], hoop[k]] = [hoop[k], hoop[i]];
+        i = k;
+      }
+    }
+    return top;
+  }
+  // Een tegel als getal, voor de boekhouding van A* (sneller dan "x,y"): ruim genoeg voor elke kaart, ook voor een tegel
+  // net buiten de rand, die magBetreden afwijst.
+  const RAND = 4096;
+  const nummer = (x, y) => (x + 1024) * RAND + (y + 1024);
+
   // A* van start naar doel. magBetreden(x, y): mag er een stap naar deze tegel?
   // isVast(x, y): houdt deze tegel een schuine stap om de hoek tegen?
   // opties.naast: eindig op een tegel die het doel raakt (om te slaan of iets te gebruiken).
@@ -30,28 +71,23 @@
     };
     if (isKlaar(start.x, start.y)) return [];
 
-    const startSleutel = sleutel(start.x, start.y);
-    const open = [{ x: start.x, y: start.y, g: 0, f: schatting(start.x, start.y) }];
+    const startSleutel = nummer(start.x, start.y);
+    let n = 0;
+    const open = [{ x: start.x, y: start.y, g: 0, f: schatting(start.x, start.y), n: n++ }];
     const kosten = new Map([[startSleutel, 0]]);
     const herkomst = new Map();
     const gesloten = new Set();
 
     while (open.length) {
-      // Het raster is klein: zoeken in een gewone lijst is snel genoeg.
-      let beste = 0;
-      for (let i = 1; i < open.length; i++) {
-        if (open[i].f < open[beste].f || (open[i].f === open[beste].f && open[i].g > open[beste].g)) beste = i;
-      }
-      const huidig = open.splice(beste, 1)[0];
-      const hs = sleutel(huidig.x, huidig.y);
+      const huidig = eraf(open);
+      const hs = nummer(huidig.x, huidig.y);
       if (gesloten.has(hs)) continue;
       gesloten.add(hs);
 
       if (isKlaar(huidig.x, huidig.y)) {
         const pad = [];
         for (let s = hs; s !== startSleutel; s = herkomst.get(s)) {
-          const [x, y] = s.split(',').map(Number);
-          pad.unshift({ x, y });
+          pad.unshift({ x: Math.floor(s / RAND) - 1024, y: (s % RAND) - 1024 });
         }
         return pad;
       }
@@ -59,7 +95,7 @@
       for (const [dx, dy] of RICHTINGEN) {
         const nx = huidig.x + dx;
         const ny = huidig.y + dy;
-        const ns = sleutel(nx, ny);
+        const ns = nummer(nx, ny);
         if (gesloten.has(ns) || !magBetreden(nx, ny)) continue;
         const schuin = dx !== 0 && dy !== 0;
         if (schuin && (isVast(huidig.x + dx, huidig.y) || isVast(huidig.x, huidig.y + dy))) continue;
@@ -69,7 +105,7 @@
         if (g >= (kosten.has(ns) ? kosten.get(ns) : Infinity)) continue;
         kosten.set(ns, g);
         herkomst.set(ns, hs);
-        open.push({ x: nx, y: ny, g, f: g + schatting(nx, ny) });
+        erbij(open, { x: nx, y: ny, g, f: g + schatting(nx, ny), n: n++ });
       }
     }
     return null;
