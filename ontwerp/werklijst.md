@@ -3057,7 +3057,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     brief bij marktrecht? **d**, de raad en de bouwer met de ketens?
     **Beantwoord (Marcel, 2 okt):** "a ja b ja c ja d ja". Dus alle vier, in de volgorde van het plan. **Af** (zie onder
     Af); de speeltest staat in `speelbaar.md`, en wat eruit volgt, is vraag 91.
-91. **Na 2d: het goud, de werkplaatsen en het laken** (Claude, 2 okt, drieëntwintigste sessie; wacht op Marcel). De
+91. **Na 2d: het goud, de werkplaatsen en het laken** (Claude, 2 okt, drieëntwintigste sessie; beantwoord). De
     speeltest van 2d (`speelbaar.md`): de treden komen snel (een dorp in slachtmaand, met 50 à 54 mensen, en marktrecht
     nog in het eerste jaar), niemand sterft in de winter, en alles wat de stenen huizen missen, staat nu in het bouwmenu
     ("Drie stenen huizen willen brood: bouw een bakkerij en een molen [B]."). Maar de bouwer bouwt het niet: het goud
@@ -3081,6 +3081,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       het eind (een jaar lang iedereen super gelukkig), en dat vraagt een jaar dat te winnen is.
     Vragen: **a**, de bouwer zo? **b**, een werkplaats tot er genoeg ligt? **c**, laken naar 0,005, of liever een andere
     weg? **d**, die volgorde?
+    **Beantwoord (Marcel, 2 okt):** "a ja b ja c ja d ja". Dus alle vier: de bouwer volgt ook het goud van de raad, een
+    werkplaats maakt tot er genoeg ligt, laken 0,005 per mens per dag, en dan de bouwer nog eens, vóór de pagina met
+    ontwerpen voor de ui.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
