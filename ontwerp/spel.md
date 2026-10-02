@@ -1116,6 +1116,11 @@ winter zichtbaar te maken staat in de werklijst bij vraag 44, en werd op 28 sep 
   kippenhok, moestuin, put, steengroeve, kleiput, rietsnijder, jager, visser, wachthuis, smidse en
   kapel, elk met zijn kosten, wat het doet, en zijn prijs voor de heer.
 - Bouwen kost grondstof en tijd, en je ziet een gebouw in vijf fases oprijzen.
+- **Niet op iemand, niet op een deur** (2 okt, werklijst vraag 88; Marcel: "A ja"): het bouwmenu zegt "Daar staat
+  iemand." of "Daar is een deur.", een erf laat een deur vrij, en een huis groeit niet over iemand of een deur heen (dan
+  de dag erna). Wie binnen is als zijn huis doorgroeit, komt door de nieuwe deur naar buiten; wie toch op een bouwplaats
+  staat (een hut die een gezin op zijn erf zet), stapt eraf. Tot 2 okt keek bouwen alleen of een tegel vast was, en
+  stonden er in de speeltest mensen ingemetseld in een huis dat over hen heen doorgroeide.
 - **Een hut is niet elke hut** (26 sep; Marcel: "We hebben meer afwisseling nodig in de huizen en
   hutten"): een gebouw krijgt een van zijn tekeningen, en nooit twee keer achter elkaar dezelfde
   (`tekeningen` in `T.GEBOUWEN`, `T.volgendeTekening`). Het spookbeeld van het bouwmenu toont de voet

@@ -47,7 +47,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   `T.zoekPad` in `js/pad.js`), en voor elke tegel die A* bekijkt, loopt `T.wezenOp` (`js/wereld.js`) alle wezens af. Wat
   helpt, van meeste naar minste: wie waar staat per tegel bijhouden (zoals `T.voorwerpOp` sinds stuk 2); de vaste wegen
   (huis, werk, put, herberg) onthouden in plaats van elke dag opnieuw zoeken; A* met een heap en getallen als sleutel (af,
-  2 okt: dezelfde paden, letter voor letter); een zoektocht die niet slaagt, niet de hele kaart laten afzoeken. Marcel
+  2 okt: dezelfde paden, letter voor letter); een zoektocht die niet slaagt, niet de hele kaart laten afzoeken (af, 2 okt:
+  de eilanden, en wie twee keer geen weg vindt, wacht een uur; vraag 88). Marcel
   (2 okt, vraag 88): "Zoizo bezette tegels zijn uit te sluiten toch? Bomen, versiering etc", en vier technieken om naar
   te kijken: **flow fields** (één zoektocht terug vanaf een doel over de hele kaart, en iedereen volgt de pijl op zijn
   tegel: voor wat veel mensen delen, de put, de kerk, de herberg, de markt, het plein, en soldaten naar de poort),

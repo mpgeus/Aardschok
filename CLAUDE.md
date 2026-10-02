@@ -204,8 +204,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   Elke kaart van het spel komt uit Tiled (`js/kaart.js`). De speler is `S.schout`, met soort
   'schout' en kant 'speler' (Marcel, 26 sep: een man van de militie vecht later ook aan kant
   'speler' zonder de schout te zijn); hij draagt het vel van een gewone dorpeling (`js/sprites.js`).
-- `js/pad.js`: A* (`zoekPad`, acht richtingen, schuin kost ook 1, geen hoeken afsnijden) en
-  `bereik` (alle tegels binnen N stappen).
+- `js/pad.js`: A* (`zoekPad`, acht richtingen, schuin kost ook 1, geen hoeken afsnijden; sinds 2 okt met een hoop, die
+  in precies dezelfde volgorde kiest als de lijst ervoor) en `bereik` (alle tegels binnen N stappen). **De eilanden**
+  (`T.eilandOp`, `T.kanErKomen` in `js/wereld.js`, vraag 88): welke tegels samen één gebied vormen, ruim gerekend, zodat
+  wie naar een ander eiland wil, meteen weet dat er geen weg is. Verandert er een tegel of een voorwerp, dan zegt
+  `T.kaartVeranderd(w)` het (een toets kijkt dat niemand het vergeet).
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
   een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
@@ -216,7 +219,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`. Wie loopt, loopt op een kaart
   (`T.beweegWezens(S, w, ...)`): waar je bent, of een dorp waar je niet bent (`js/dorp.js`).
 - `js/verkennen.js`: rondlopen, klikhandelingen, dwalende monsters, ontdekt worden. Dwalen gaat op een kaart met het dorp
-  dat er ligt (`T.dwaal(S, w, D, dt)`; `T.laatDwalen(S, dt)` is dat voor waar je bent).
+  dat er ligt (`T.dwaal(S, w, D, dt)`; `T.laatDwalen(S, dt)` is dat voor waar je bent). Wie twee keer na elkaar geen weg
+  vindt naar waar hij hoort, wacht een uur (de rem, `T.LOPEN_INSTELLINGEN`; Marcel, vraag 88).
 - `js/gevecht.js`: de overgang, beurtvolgorde, actiepunten, handelingen, monster-AI
   (`planMonsterBeurt`, los van het scherm en dus te toetsen). Sinds 29 sep voor een groep: aan jouw kant (kant
   'speler') de schout en de militie, elk met een eigen beurt; wie aan de beurt is, zegt `T.aanDeBeurt`, en een
@@ -427,7 +431,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `js/voorraad.js` (`D.voorraad`; alles verandert via
   `T.wijzigVoorraad`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
   soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag,
-  `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; een gebouw maakt alleen wat zijn grondstof
+  `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; niet op iemand en niet op een deur, `T.waaromNietOpIemand`, vraag 88; een gebouw maakt alleen wat zijn grondstof
   toelaat, en gereedschap laat harder werken), `js/behoeften.js` (tevredenheid uit eten, brandhout
   en wat elk huis wil, `js/wensen.js`; de winter, en of het hout en het eten hem halen, `T.houtVoorDeWinter` en
   `T.etenVoorDeWinter`, uit één regel met het hooi, `T.haaltDeWinter` en `T.raaktOp`; vanaf 90 dagen ervoor kijkt het dorp
