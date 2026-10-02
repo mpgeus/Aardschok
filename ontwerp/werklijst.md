@@ -3013,6 +3013,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **c, de bouwer** verkoopt de marskramer graan ook voor zijn volgende wens, niet alleen voor de heer en het doel. Dat
       is gereedschap, geen spel.
     Vragen: **a**, 2d nu, vóór de pagina met ontwerpen voor de ui? **b**, een put alleen voor hout? **c**, de bouwer zo?
+    **Beantwoord (Marcel, 2 okt):** "a ja b ja c ja, en naar main". Dus 2d nu, vóór de pagina met ontwerpen voor de ui,
+    met eerst een plan (vraag 90); een put kost alleen hout; de bouwer verkoopt ook graan voor zijn volgende wens; en het
+    werk van de drieëntwintigste sessie gaat naar `main`.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

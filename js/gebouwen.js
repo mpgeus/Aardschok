@@ -161,7 +161,9 @@
       tekening: 'erf/moestuin', beschrijving: 'groente bij het huis', opmerking: '',
     },
     put: {
-      naam: 'put', trede: 'gehucht', voet: { b: 1, h: 1 }, kosten: { hout: 6, goud: 2 }, heer: {}, bouwtijd: 2,
+      // Alleen hout (werklijst vraag 89, b; Marcel, 2 okt: "b ja"): een put graaf je zelf, en met 2 goud per put aten de
+      // wensen van de hutten in de speeltest het goud op dat de heer en de smidse nodig hadden.
+      naam: 'put', trede: 'gehucht', voet: { b: 1, h: 1 }, kosten: { hout: 6 }, heer: {}, bouwtijd: 2,
       handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: true,
       tekening: 'erf/put', beschrijving: 'water; zonder put wordt het dorp ziek',
       opmerking: 'Het effect ("zonder put wordt het dorp ziek") is nog geen regel, alleen de tekening staat er al.',

@@ -94,12 +94,11 @@ test('op het plein wordt niet gebouwd, en het bouwmenu zegt waarom', () => {
 
 test('T.plaatsGebouw: betaalt de kosten en zet hem in aanbouw neer', () => {
   const S = maakS();
-  T.zetVoorraad(S, 'hout', 6);
-  T.zetVoorraad(S, 'goud', 2);
+  const kosten = T.GEBOUWEN.put.kosten; // alleen hout, sinds 2 okt (vraag 89, b)
+  for (const [wat, n] of Object.entries(kosten)) T.zetVoorraad(S, wat, n);
   const r = T.plaatsGebouw(S, 'put', 2, 2);
   assert.equal(r.gelukt, true);
-  assert.equal(S.voorraad.hout, 0);
-  assert.equal(S.voorraad.goud, 0);
+  for (const wat of Object.keys(kosten)) assert.equal(S.voorraad[wat], 0, wat);
   assert.equal(S.gebouwen.length, 1);
   assert.equal(S.gebouwen[0].klaar, false);
   assert.equal(S.gebouwen[0].klaarOp, T.GEBOUWEN.put.bouwtijd);

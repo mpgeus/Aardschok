@@ -39,7 +39,8 @@
 //           achterna. Sinds 2 okt (vraag 86, b, en 87, D) volgt hij ook de wensen, zoals de raad ze zegt
 //           (T.watDeHuizenMissen): een put of een kapel waar hij de meeste huizen zonder bereikt, een visser of een
 //           jager voor vlees of vis, en een houthakker of een steengroeve als een huis op bouwstof wacht, hooguit één
-//           per maand; en een houthakker vóór een nieuw erf, als er nog geen staat.
+//           per maand; en een houthakker vóór een nieuw erf, als er nog geen staat. Bij de marskramer verkoopt hij ook
+//           graan voor het goud van zijn volgende wens (vraag 89, c).
 // Van elke speler schrijft hij op waarom er op een groeidag geen gezin kwam (T.waaromGeenGezin, js/gebouwen.js),
 // op welke dag het gehucht een dorp werd, en welke raad er elke dag onder het doel stond (js/raad.js).
 (function (T) {
@@ -788,11 +789,13 @@
         if (/Het hout haalt \d+ van de \d+ dagen/.test(boek.berichten[gelezenWinter].tekst) && !wil.includes('houthakker')) wil.unshift('houthakker');
       }
     }
-    // Het goud dat hij nodig heeft: voor de heer (als hij hem dit jaar nog niet betaalde) en voor wat hij als
-    // eerste wil bouwen.
+    // Het goud dat hij nodig heeft: voor de heer (als hij hem dit jaar nog niet betaalde), voor wat hij als eerste wil
+    // bouwen, en voor zijn volgende wens (werklijst vraag 89, c: zonder die verkocht hij te weinig, en kwam de smidse er
+    // bij twee van de drie zaden niet).
     function goudNodig() {
       const heer = betaald.has(jaar()) ? 0 : T.eisVanDeHeer(D()).per.goud || 0;
-      return heer + (wil.length ? kosten(wil[0]).goud || 0 : 0);
+      const wens = T.watDeHuizenMissen(D()).find((w) => w.kan);
+      return heer + (wil.length ? kosten(wil[0]).goud || 0 : 0) + (wens ? kosten(wens.bouw).goud || 0 : 0);
     }
     // Het graan dat hij kan missen: wat er ligt, min wat het dorp tot 1 lentemaand eet, het zaaigraan, het graan
     // van de heer (als hij nog niet betaald is), en 20 over.
