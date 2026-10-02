@@ -149,6 +149,53 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 2 okt: de raad over de wensen, en een bouwer die ze volgt (werklijst, vraag 87 en 88)
+
+Gespeeld in de drieëntwintigste sessie, op `claude/werklijst-doorzetten-73hi30` (`9c9af1a`; de bouwer nog eens op dezelfde
+stand, met wat de huizen missen per maand erbij, en dezelfde uitslag), met de nulmeting op `323a6cb` (het spel van
+`107a28f`) in een losse kopie (`git worktree`). Geen fouten in de console. Wat er veranderde: de raad en het rapport
+zeggen wat de huizen missen en wat helpt, de kring van een kapel is 40, en de bouwer volgt de wensen, met een houthakker
+vóór een nieuw erf (vraag 87); een gebouw komt niet meer op iemand of een deur, wie twee keer geen weg vindt, wacht een
+uur, en de eilanden (vraag 88). A* kiest sinds 2 okt met een hoop: daarmee speelt de nulmeting alle vijftien jaren
+letter voor letter zoals ervoor, in 842 in plaats van 912 seconden.
+
+**Vóór → na,** de bouwer twee jaar (tevreden is het gemiddelde over de maanden; "met alles" telt de huizen die aan het
+eind alles hebben wat hun stand wil):
+
+| Jaar | Mensen aan het eind (het meest) | Doden | Tevreden | Doorgegroeid | Hutten, huizen, stenen huizen | Met alles | Een dorp |
+|---|---|---|---|---|---|---|---|
+| bouwer, zaad 1 | 46 (51) → 104 (104), allebei ambt kwijt | 28 → 0 | 77% → 86% | 1 → 14 | 5, 2, 0 → 3, 9, 3 | 3 van 12 → 5 van 20 | 21 oogstmaand '23 → nee |
+| bouwer, zaad 2 | 38 (78) → 100 (100) | 64 → 0 | 74% → 84% | 1 → 12 | 14, 2, 0 → 5, 7, 3 | 2 van 11 → 5 van 20 | 11 grasmaand '24 → 21 oogstmaand '23 |
+| bouwer, zaad 3 | 51 (51) → 104 (104) | 28 → 0 | 76% → 85% | 1 → 14 | 5, 2, 0 → 3, 9, 3 | 2 van 12 → 5 van 20 | 21 oogstmaand '23 → nee |
+
+De vier anderen eindigen met evenveel mensen, doden en weggetrokkenen als ervoor (braaf 38, lui30 25, 30 en 22, lui60
+9, 13 en 39, slim 39, 26 en 39), al loopt hun jaar iets anders: de oude hut groeit nu pas door als het oude stel binnen
+is, en wie geen weg vindt, wacht. Slim is tevredener (82, 79 en 81% → 88, 85 en 86%): zijn kapel haalt met een kring
+van 40 alle boerderijen.
+
+**Wat opviel:**
+
+1. **Wie de wensen volgt, groeit, en niemand sterft.** De bouwer zet eerst een houthakker, een kapel waar hij de meeste
+   huizen haalt, putten bij de hutten (vijf à negen) en jagers voor vlees (acht à elf); de hutten groeien door tot
+   huizen, en drie huizen versteenden. Twee keer zoveel mensen als ervoor, en geen enkele dode in de winter (ervoor 28 à
+   64): het hout is er, en het eten ook. De raad zei 223 à 357 dagen een wens, 16 à 24 dagen dat een huis op bouwstof
+   wachtte, en 59 à 130 dagen wat je mist voor de kapel en de smidse.
+2. **Super gelukkig is nog ver: alleen de vijf boerderijen hebben alles.** Wat de huizen aan het eind missen (zoals de
+   raad het zegt): **bier** ("Negen huizen willen bier: de herberg maakt te weinig"), want één herberg brouwt niet
+   genoeg voor honderd man; **de herberg binnen 30 tegels** (zes à acht huizen op erven verder weg), en een tweede
+   herberg bouw je pas in een dorp; **een kapel** voor vier à vijf huizen op de verste erven; en de stenen huizen willen
+   **brood, laken en een markt**, die pas in een dorp en met marktrecht komen (vraag 87, d). Winnen kan dus pas met 2d,
+   de treden uit de standen.
+3. **Bij zaad 1 en 3 werd het geen dorp: de smidse kwam er niet.** Het goud ging naar de wensen (een put kost 2 goud,
+   een kapel 8, een steengroeve 4) en bleef het hele spel rond nul, net als ervoor; de heer kreeg 25 à 62% (ervoor 13 à
+   58%). Goud was al de rem (vraag 59, C, geparkeerd); met de wensen ervoor komt het doel er niet meer bij. Bij zaad 2
+   kwam de smidse er wel, en werd het een dorp op 21 oogstmaand, eerder dan ervoor.
+4. **Ingemetseld en dichte deuren zijn weg.** Op dag 100, 250 en 400 staat er niemand meer in een muur (in de nulmeting
+   stonden Otto en Hille er vanaf dag 50). Een speeljaar van de bouwer met honderd man duurt zes minuten; zonder vraag
+   88 was hij na een kwartier, met tachtig man, pas net in zijn tweede jaar, en elke dag trager.
+
+Wat eruit volgt, staat in de werklijst als vraag 89.
+
 ## De speeltest van 1 okt: de wensen per huis (werklijst, vraag 85, stap 2a en 2b)
 
 Gespeeld in de tweeëntwintigste sessie, op `ccr-c70a2140-wt5zmz` (`107a28f`), in een losse kopie (`git worktree`), met de

@@ -957,6 +957,8 @@
       // huizen alles hebben, en hoeveel woningen er van elke soort staan (wat er doorgroeide).
       standen: s.dorp.behoeften.standen ? Object.fromEntries(Object.entries(s.dorp.behoeften.standen).map(([k, x]) => [k, { mensen: x.mensen, huizen: x.huizen, alles: x.alles, tevreden: heel(x.tevredenheid * 100) / 100 }])) : null,
       woningen: Object.fromEntries(['hut', 'huis', 'stenenHuis'].map((soort) => [soort, s.dorp.gebouwen.filter((g) => g.soort === soort && g.huis !== 'schout').length])),
+      // Wat de huizen missen, zoals de raad en het rapport het zeggen (T.watDeHuizenMissen, js/wensen.js; vraag 87).
+      missen: T.watDeHuizenMissen(s.dorp).slice(0, 5).map((x) => x.tekst),
       argwaan: heel(argwaan() * 100) / 100,
       houthakkers: houthakkers.map((g) => ({ klaar: !!g.klaar, handen: g.handen || 0 })),
     };

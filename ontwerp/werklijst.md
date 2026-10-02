@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (1 okt 2026, tweeëntwintigste sessie): eerst een kleine speelbare kern, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 86); stap 2a en 2b, de wensen per huis en doorgroeien, zijn af, met zes stenen huizen; het volgende is vraag 86, a en b (de raad en het rapport over de wensen, en een bouwer die ze volgt), dan de pagina met ontwerpen voor de ui (vraag 84, a) en 2c
+## De stand (2 okt 2026, drieëntwintigste sessie): eerst een kleine speelbare kern, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 89); de raad en het rapport zeggen wat de huizen missen, de bouwer van de speeltest volgt ze, en niemand staat nog ingemetseld (vraag 87 en 88); het volgende is vraag 89 (2d nu, en een put alleen voor hout?), dan de pagina met ontwerpen voor de ui (vraag 84, a) en 2c
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -26,23 +26,22 @@ deur als je bij huis slaapt (`Z`), en anders onder de knop Rapport (`Spel.debug.
 (`O`) loop je over de weg je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). Met de spelregel "Je
 gehucht" op "Elk spel een ander" legt de maker elk nieuw spel een ander gehucht (`Spel.debug.gehucht(3)` voor zaad 3).
 Elk huis heeft een stand met zijn wensen (sinds 1 okt, vraag 85): bij de muis op de tevredenheid in de balk staat hoe
-tevreden elke stand is en wat er gemist wordt, en `Spel.debug.wensen()` zegt het per huis. De pagina "Stand van het
-gehucht" (25 sep) loopt achter op de dag. `npm test`: 743/743.
+tevreden elke stand is, en sinds 2 okt zegt de raad onder het doel wat de huizen missen en wat helpt ("Vijf boerderijen
+en een huis willen een kapel binnen 40 tegels [B]"), en het rapport ook (vraag 87); `Spel.debug.wensen()` zegt het per
+huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 764/764.
 
-**Waar het werk staat:** alles staat in `main`, ook het werk van de tweeëntwintigste sessie (2a, 2b, de stenen huizen,
-de speeltest en vraag 85 en 86; Marcel, 1 okt: "push it", en daarna "naar main"). Hoe een
-eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** het werk van de drieëntwintigste sessie (vraag 87 en 88, de speeltest, vraag 89) staat op
+`claude/werklijst-doorzetten-73hi30`, nog niet in `main`; `main` staat op het werk van de tweeëntwintigste sessie. Vraag
+Marcel of het naar `main` mag. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **bouw vraag 86, a en b** (na de speeltest van 2a en 2b, `speelbaar.md`; Marcel, 1
-okt: "a ja b ja c ja"): de wensen doen wat ze moeten (wie ze niet geeft, blijft een gehucht van hutten), maar de speler
-ziet ze nog nauwelijks, en de bouwer van de speeltest kent ze niet. Dus eerst **a**, de woorden van 2c: de raad onder het
-doel en het rapport van de raadsman zeggen wat de huizen het meest missen en wat helpt ("Vijf hutten willen een put binnen
-12 tegels [B]", "Twee hutten kunnen een huis worden, maar er is geen 8 hout"); dan **b**, een bouwer die de wensen volgt
-(een put waar hutten er een missen, wat de dorpelingen willen, en een houthakker vóór een nieuw erf), en de speeltest
-erna. **Het plan is vraag 87** (drieëntwintigste sessie; Marcel, 2 okt: "a ja b ja c 40 ... d zo laten"), met wat er bij het
-uitzoeken opviel: één kapel haalt nooit alle zes huizen die er een willen (de kring wordt 40), en een stenen huis wordt
-in een gehucht nooit super gelukkig (zo laten tot 2d). Daarna,
-zoals besloten: **de pagina met ontwerpen voor de ui** (vraag 84, a: de
+**Waar de volgende sessie begint:** **vraag 89** (na de speeltest van vraag 87 en 88, `speelbaar.md`; wacht op Marcel):
+wie de wensen volgt, groeit tot honderd mensen zonder één dode, maar alleen de boerderijen hebben alles. Wat de rest mist
+(bier, een herberg dichtbij, brood, laken, een markt), komt pas in een dorp of met marktrecht, en het goud raakt op aan
+putten, zodat de smidse er bij twee van de drie zaden niet kwam. Voorstel: 2d nu, de treden uit de standen, vóór de
+pagina met ontwerpen voor de ui; een put alleen voor hout; en de bouwer verkoopt graan ook voor zijn volgende wens.
+**Vraag 87 en 88 zijn af** (drieëntwintigste sessie; zie onder Af): de raad en het rapport over de wensen, de bouwer die
+ze volgt, een kapel die 40 tegels bereikt, niet bouwen op iemand of een deur, Marcels rem (wie twee keer geen weg vindt,
+wacht een uur) en de eilanden, en A* met een hoop. Daarna, zoals besloten: **de pagina met ontwerpen voor de ui** (vraag 84, a: de
 vensters worden papieren in de beeldstijl, en Marcel kiest uit een paar schetsen van de balk, een venster en een papier),
 en dan de rest van stap 2 (vraag 80): 2c zien wat een huis wil (het teken bij de deur, het venster van een huis), 2d de
 treden uit de standen, en 2e het eind en het jaar in het kort. **Stap 2a en 2b zijn af** (tweeëntwintigste sessie; vraag
@@ -120,8 +119,9 @@ als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speelt
    gekozen: twee manieren om te winnen (veroveren, of iedereen super gelukkig), en eerst een speelbare kern; oorlog,
    de rest van het land, diplomatie en handel komen daarna. Stap 1, een jaar dat te winnen is, en het zaaigraan (vraag
    81) zijn af (zie onder Af), en van stap 2, de wensen per stand, klein (vraag 80, 82 en 85), ook 2a en 2b: de wensen per
-   huis en doorgroeien, met zes stenen huizen. Het volgende is vraag 86, a en b (de raad en het rapport over de wensen, en
-   een bouwer die ze volgt), dan de pagina met ontwerpen voor de ui (vraag 84, a), en 2c, 2d en 2e.
+   huis en doorgroeien, met zes stenen huizen. Sinds 2 okt zeggen de raad en het rapport wat de huizen missen, en volgt de
+   bouwer van de speeltest ze (vraag 86, a en b, en 87); niemand staat nog ingemetseld (vraag 88). Het volgende is vraag
+   89 (voorstel: 2d nu, en een put alleen voor hout), dan de pagina met ontwerpen voor de ui (vraag 84, a), en 2c en 2e.
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept; en het
    weer, met zaaien dat dagen kost (Marcel, 1 okt: "Stel er is slecht weer"; vraag 82).
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
@@ -2994,6 +2994,25 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     op een deur, en een huis groeit niet over iemand of een deur heen. b: de eilanden mogen, naast zijn rem (na twee keer
     geen weg een uur wachten): de eilanden maken een zoektocht naar een plek die nooit te halen is gratis, de rem begrenst
     wat overblijft (iemand staat even in de weg). c: de rest blijft voor later, met stap 6.
+89. **Na de speeltest van vraag 87 en 88** (Claude, 2 okt, drieëntwintigste sessie; `speelbaar.md`; wacht op Marcel). De
+    bouwer die de wensen volgt, groeit in twee jaar tot 100 à 104 mensen zonder één dode (ervoor 38 à 51, met 28 à 64
+    doden), en twaalf à veertien huizen groeiden door. Maar alleen de vijf boerderijen hebben alles. Wat de rest aan het eind
+    mist, zoals de raad het zegt: **bier** ("de herberg maakt te weinig": één herberg brouwt niet genoeg voor honderd man),
+    **de herberg binnen 30 tegels** (zes à acht huizen op erven verder weg), **een kapel** voor de verste erven, en voor
+    de stenen huizen **brood, laken en een markt**. Een tweede herberg, een brouwerij en een bakkerij komen pas in een
+    dorp, een weverij en een markt met marktrecht. En bij zaad 1 en 3 werd het **geen dorp**: het goud ging naar de wensen
+    (vijf à negen putten van 2 goud, een kapel, een steengroeve), bleef rond nul, en de smidse kwam er niet; de heer kreeg
+    25 à 62%, zoals ervoor (goud was al de rem, vraag 59, C, geparkeerd).
+    Voorstel:
+    - **a, 2d nu, vóór de pagina met ontwerpen voor de ui.** De pagina gaat over hoe je de wensen ziet (2c); 2d zijn regels.
+      Zoals in Anno 1602: wie een stand bereikt, maakt vrij wat die stand wil, bijvoorbeeld een dorp als er genoeg
+      dorpelingen zijn (met een tweede herberg, een brouwerij en een bakkerij), en marktrecht als er genoeg
+      ambachtslieden zijn (een weverij en een markt). Zonder dat is super gelukkig niet te halen. Eerst een plan.
+    - **b, een put kost alleen hout** (6, geen 2 goud: een put graaf je zelf), zodat de wensen van de hutten het goud niet
+      opeten dat de heer en het doel nodig hebben. Het andere: zo laten, en het goud regelen bij 2d of vraag 59, C.
+    - **c, de bouwer** verkoopt de marskramer graan ook voor zijn volgende wens, niet alleen voor de heer en het doel. Dat
+      is gereedschap, geen spel.
+    Vragen: **a**, 2d nu, vóór de pagina met ontwerpen voor de ui? **b**, een put alleen voor hout? **c**, de bouwer zo?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -3294,6 +3313,28 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 2 okt 2026 — **Niemand ingemetseld, de rem op zoeken, de eilanden en A* met een hoop** (drieëntwintigste sessie; vraag
+  88; Marcel: "A ja, B, mag", en zijn eigen rem: "na 2x falen om route te vinden overslaan"). Bouwen keek alleen of een
+  tegel vast was: in de nulmeting van de speeltest stonden twee mensen vanaf dag 50 ingemetseld in een hut die over hen
+  heen doorgroeide, en de bouwer zette een put op de deur van de schout. Nu komt een gebouw niet op iemand of op een deur
+  ("Daar staat iemand.", "Daar is een deur."), laat een erf een deur vrij, groeit een huis niet over iemand of een deur
+  heen, komt wie binnen is door de nieuwe deur naar buiten, en stapt wie toch op een bouwplaats staat eraf. Wie twee keer
+  na elkaar geen weg vindt, wacht een uur (`T.LOPEN_INSTELLINGEN`). De eilanden (`T.kanErKomen`, `js/wereld.js`): een
+  zoektocht naar een ander eiland stopt meteen; ruim gerekend, dus nooit "geen weg" waar er een is (6.000 zoektochten
+  nagekeken). Een tegel of voorwerp dat verandert, zegt het met `T.kaartVeranderd`. A* kiest met een hoop, in precies
+  dezelfde volgorde: de nulmeting speelt er alle vijftien jaren letter voor letter mee. 8 nieuwe toetsen, `npm test`
+  764/764.
+- 2 okt 2026 — **De raad en het rapport over de wensen, en een bouwer die ze volgt** (drieëntwintigste sessie; vraag 86,
+  a en b, en het plan, vraag 87; Marcel: "a ja b ja c 40 ... d zo laten"). Eén vraag, `T.watDeHuizenMissen`
+  (`js/wensen.js`), zegt wat de huizen missen en wat helpt, voor de raad, het rapport en de bouwer. **De raad** (vóór het
+  doel): "Een hut kan een huis worden, maar er is geen 8 hout: bouw een houthakker [B].", "Vijf boerderijen en een huis
+  willen een kapel binnen 40 tegels [B].", alleen wat je nu kunt doen, en kun je het niet betalen, met wat je mist en
+  waar het vandaan komt. **Het rapport**: wat er gemist wordt als status (als het begint, verandert of ophoudt, en om de
+  week), ook wat pas in een dorp kan, "Alle huizen hebben wat ze willen.", en wie er doorgroeide. **De kring van een
+  kapel is 40** (met 30 haalde één kapel hooguit vier van de zes huizen die er een willen). **De bouwer** van de
+  speeltest volgt dezelfde lijst (een put of kapel waar hij de meeste huizen haalt, een visser of jager, een houthakker
+  of steengroeve), met een houthakker vóór een nieuw erf. In de speeltest: 100 à 104 mensen zonder één dode, en twaalf à
+  veertien huizen groeiden door (`speelbaar.md`; wat eruit volgt, is vraag 89). 13 nieuwe toetsen.
 - 1 okt 2026 — **Stap 2a en 2b: de wensen per huis, doorgroeien, en zes stenen huizen** (tweeëntwintigste sessie; vraag
   80 en 85; Marcel: "a ja, maar een hogere stand eigent zich spullen toe ... b ja voor nu. c zacht d ja"). **2a**
   (`js/wensen.js`): elk huis met mensen heeft een stand naar zijn soort (een hut keuters, een huis dorpelingen, een stenen
