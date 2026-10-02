@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (2 okt 2026, drieëntwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 93); 2d is af (vraag 90), het goud, de werkplaatsen en het laken (vraag 91), en brood als eten (vraag 92); wat nu tussen het dorp en een gewonnen jaar staat, is het graan: wie de heer alles betaalt, heeft niets over voor bier en brood (vraag 93, wacht op Marcel), dan de pagina met ontwerpen voor de ui (vraag 84, a) en 2c
+## De stand (2 okt 2026, drieëntwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 93); 2d is af (vraag 90), het goud, de werkplaatsen en het laken (vraag 91), en brood als eten (vraag 92); wat nu tussen het dorp en een gewonnen jaar staat, is het graan: wie de heer alles betaalt, heeft niets over voor bier en brood; het volgende is een sluwe bouwer met totale vrijheid (vraag 93, in een nieuwe sessie), dan de pagina met ontwerpen voor de ui (vraag 84, a) en 2c
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -38,8 +38,11 @@ ambachtsman 0,005 laken per dag; sinds vraag 92 zijn brood, vis en vlees eten. `
 "naar main"); 2d (vraag 90), vraag 91 en 92 staan op `claude/werklijst-doorzetten-73hi30`, gepusht, en gaan naar `main`
 als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **vraag 93, wie de heer bedriegt, heeft graan over?** (wacht op Marcel): een sluwe
-bouwer in de speeltest, en dan de pagina met ontwerpen voor de ui. **Vraag 92 is af** (zie onder Af): brood, vis en vlees
+**Waar de volgende sessie begint:** **vraag 93, a: de sluwe bouwer** (Marcel, 2 okt: "De bouwer mag alles er aan doen,
+totale vrijheid"; en "moeten we dit al in nieuwe sessie doen?": ja). Begin met een kort plan voor Marcel (wat de sluwe
+bouwer doet, uit wat er bij vraag 93 staat), bouw hem in `gereedschap/speeltest/speler.js` naast de bouwer, en speel
+hem twee jaar met zaad 1 tot en met 3; vergelijk met de bouwer van vraag 92 (`speelbaar.md`). Daarna B (meer graan
+voor de demo, of zo laten) en de pagina met ontwerpen voor de ui (vraag 84, a). **Vraag 92 is af** (zie onder Af): brood, vis en vlees
 zijn eten, brood is minder lekker, en het zaaigraan is niet meer voor de molen. **Vraag 91 is af** (Marcel: "a ja b ja c ja d ja"; zie onder Af): de bouwer volgt ook het goud van de raad, een
 werkplaats maakt tot er genoeg ligt, en laken is 0,005; in de speeltest komen de bakkerij, de molen, de weverij en de
 markt er, en heeft bij zaad 1 voor het eerst een stenen huis alles, maar het brood eet het graan op, en bij zaad 2 en 3
@@ -3119,7 +3122,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     brood telt minder mee in hoe blij een huis is dan de andere wensen; het graan van de markt komt later (achteraan bij
     "Daarna", na de demo); dan de bouwer nog eens, en daarna de pagina met ontwerpen voor de ui. **Af** (zie onder Af),
     met erbij een fout die de speeltest liet zien: de molen maalde het zaaigraan. Wat eruit volgt, is vraag 93.
-93. **Na vraag 92: wie de heer bedriegt, heeft graan over?** (Claude, 2 okt, drieëntwintigste sessie; wacht op Marcel).
+93. **Na vraag 92: wie de heer bedriegt, heeft graan over?** (Claude, 2 okt, drieëntwintigste sessie; beantwoord).
     De speeltest (`speelbaar.md`): brood als eten houdt het ambt (de heer kreeg bij zaad 1 77 en 67% in plaats van 49 en
     26%), en sinds een werkplaats het zaaigraan laat liggen, blijven er in het derde jaar 30 à 96 van de 179 akkertegels
     ongezaaid in plaats van vrijwel allemaal; wat er dan nog weggaat, zijn rovers, een bruiloft en de soldaten van de
@@ -3138,6 +3141,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **c, de volgorde:** eerst a en die speeltest, dan de pagina met ontwerpen voor de ui (vraag 84, a), in een nieuwe
       sessie, want deze is groot.
     Vragen: **a**, een sluwe bouwer? **b**, zo kiezen? **c**, die volgorde?
+    **Beantwoord (Marcel, 2 okt):** "A. Ja goed idee. De bouwer mag alles er aan doen, totale vrijheid. B. Ja inderdaad
+    C. Ja prima, moeten we dit al in nieuwe sessie doen?" Dus een sluwe bouwer met **totale vrijheid**, in een nieuwe
+    sessie (deze was groot). Wat dat kan zijn, als begin voor het plan: alles wat de bouwer nu doet (de wensen, de
+    belasting, de erven, de treden), en daarbij alles wat de slimme speler doet (60% graan en goud weg, 's nachts als
+    niemand kijkt en niet bij de roddelaar; met de inner praten en hem 10 goud geven; met hem lopen waar hij niets nieuws
+    ziet; de soldaten langs lege kelders leiden; de heer 90% betalen; na Sint-Maarten alles terughalen), en wat er verder
+    aan knoppen is: houtkap in het bos van de heer, het rantsoen, graan verkopen en zaaigraan kopen, een wachthuis tegen
+    de rovers. De uitslag zegt of rijk worden en arm lijken een jaar met iedereen super gelukkig haalbaar maakt (B).
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
