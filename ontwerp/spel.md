@@ -188,7 +188,10 @@ letter voor letter mee zoals ervoor).
   na 2a en 2b (`speelbaar.md`): wie de wensen niet geeft, blijft een gehucht van hutten, want een hut op een erf mist een
   put en groeit dan niet door; en elke nieuwe hut kost 8 hout. Wat eruit volgt, is werklijst vraag 86 (Marcel, 1 okt: "a
   ja b ja c ja"): eerst zeggen de raad en het rapport wat de huizen missen, vóór de pagina met ontwerpen voor de ui; dan
-  volgt de bouwer van de speeltest de wensen; en wegtrekken bij honger blijft zoals het is.
+  volgt de bouwer van de speeltest de wensen; en wegtrekken bij honger blijft zoals het is. Dat is gebouwd (2 okt, vraag
+  87): wie de wensen volgt, groeit in twee jaar tot honderd mensen zonder één dode, maar alleen de boerderijen hebben
+  alles; bier genoeg, een herberg dichtbij, brood, laken en een markt komen pas in een dorp of met marktrecht (2d), en
+  het goud gaat op aan putten (werklijst vraag 89).
 - **Een stenen huis wordt in een gehucht nooit super gelukkig** (vraag 87, d; Marcel, 2 okt: "zo laten"). De
   ambachtslieden willen brood, laken en een markt, en een bakkerij komt pas in een dorp, een weverij en een markt pas met
   marktrecht. Zo werkt het in Anno 1602 ook: wie een stand bereikt, maakt de gebouwen vrij die die stand wil. Dat wordt
