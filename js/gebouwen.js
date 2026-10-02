@@ -972,7 +972,7 @@
     // Behoeften: eten, brandhout en een kerk, en de tevredenheid die daaruit volgt
     // (js/behoeften.js, T.tikBehoeftenDag) — vóór de rest, zodat stap 4 en 6 hieronder de
     // tevredenheid van vandaag gebruiken.
-    T.tikBehoeftenDag(D, dag);
+    const alGegeten = T.tikBehoeftenDag(D, dag); // wat de huizen aan brood, vis en vlees aten (stap 3)
     // En de marskramer (js/handel.js): komt hij vandaag, of is zijn tijd om?
     T.tikHandelDag(D, dag);
     // En de heer (js/heer.js): zijn brief in wijnmaand, hijzelf op Sint-Maarten, en de soldaten.
@@ -1001,8 +1001,9 @@
     // 3. Eten: iedereen eet, of er genoeg is of niet (T.wijzigVoorraad zakt nooit onder nul — een
     // dorp dat te veel monden telt, eet zijn voorraad dus leeg; wat honger doet, staat in
     // js/behoeften.js). Eerst de melk van vandaag, dan graan, dan kaas, en wat er van de melk over
-    // is, wordt kaas; het zaaigraan pas bij nood (T.eetVandaag, js/behoeften.js).
-    T.eetVandaag(D, dag);
+    // is, wordt kaas; het zaaigraan pas bij nood (T.eetVandaag, js/behoeften.js). Wat de huizen al aten aan brood, vis
+    // en vlees van hun wensen, eet het dorp minder (vraag 92, a).
+    T.eetVandaag(D, dag, alGegeten);
     // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als de voorraad een buffer overhoudt
     // (zodat een net geboren gezin niet meteen honger lijdt), het dorp tevreden genoeg is
     // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel), en het de winter haalt als die in zicht

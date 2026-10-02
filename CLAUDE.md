@@ -298,7 +298,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   een kapel, de herberg, een markt; waar die staan, zegt `T.plekkenVan` in `js/gebouwen.js`). `T.berekenWensen` geeft
   per huis wat het heeft en zijn tevredenheid (eten, brandhout en de rest, met wat het dorp erbij doet), en
   `T.berekenTevredenheid` (`js/behoeften.js`) maakt er het gemiddelde van, naar mensen; de huizen nemen hun goederen
-  vóór het eten (`T.gebruikGoederen`), en wat een huis wil en heeft, staat op het huis (`g.wensen`). **Wat de huizen
+  vóór het eten (`T.gebruikGoederen`), en wat eten is (brood, vis, vlees: `T.voedtAlsGraan`), eet het dorp dan minder
+  aan graan (vraag 92); brood weegt minder in hoe blij een huis is (`blijheid`). Wat een huis wil en heeft, staat op het
+  huis (`g.wensen`). **Wat de huizen
   missen en wat helpt, zegt `T.watDeHuizenMissen`** (vraag 87): de raad, het rapport en de bouwer van de speeltest vragen
   het alle drie, eerst een huis dat op bouwstof wacht, dan wat de meeste mensen missen, met de ketens (vraag 90, D: wat
   een werkplaats nodig heeft, `maakt.in`, en wie dat maakt: "de bakkerij heeft geen meel, bouw een molen [B]"). Met een put, een

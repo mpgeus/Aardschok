@@ -119,10 +119,46 @@ test('vlees of vis: de vis gaat eerst op, want vlees vult ook een maag', () => {
   D.voorraad.vlees = 10;
   const w = T.berekenWensen(D, ZOMERDAG, alles);
   assert.equal(w.huizen[0].heeft.vleesOfVis, 1);
-  const bederfelijk = T.gebruikGoederen(D, w);
+  const { bederfelijk, gegeten } = T.gebruikGoederen(D, w);
   assert.ok(bijna(D.voorraad.vis, 0));
   assert.ok(bijna(D.voorraad.vlees, 10 - nodig / 2));
   assert.ok(bijna(bederfelijk, nodig), 'wat er van vis en vlees opging, neemt zijn zout mee');
+  assert.ok(bijna(gegeten, nodig), 'en het vult de magen: zoveel eet het dorp minder aan graan (vraag 92, a)');
+});
+
+// Brood is eten (werklijst vraag 92, a; Marcel, 2 okt: "A ja, maar brood is wel minder lekker en levert minder blijheid
+// op"): wat een huis aan brood krijgt, eet het dorp minder aan graan, zodat een bakkerij geen graan extra kost.
+test('brood is eten: wat de stenen huizen aan brood krijgen, eet het dorp minder aan graan; bier en laken niet', () => {
+  const D = Object.assign(kaalDorp(), { bevolking: 8, kalender: T.nieuweKalender() });
+  zetHuis(D, 'stenenHuis', 0, 0, 8);
+  Object.assign(D.voorraad, { graan: 100, brood: 10, bier: 10, laken: 10 });
+  const w = T.berekenWensen(D, ZOMERDAG, alles);
+  const { gegeten } = T.gebruikGoederen(D, w);
+  const brood = 8 * T.WENSEN_INSTELLINGEN.perMens.brood;
+  assert.ok(bijna(D.voorraad.brood, 10 - brood));
+  assert.ok(bijna(gegeten, brood * T.BEHOEFTEN_INSTELLINGEN.broodAlsGraan), `gegeten ${gegeten}: alleen het brood vult een maag`);
+  const r = T.eetVandaag(D, ZOMERDAG, gegeten);
+  const nodig = 8 * T.etenPerMens(D);
+  assert.ok(bijna(100 - D.voorraad.graan, nodig - gegeten), `graan ${D.voorraad.graan}`);
+  assert.ok(bijna(r.tekort, 0));
+  assert.equal(T.voedtAlsGraan('bier'), 0);
+  assert.equal(T.voedtAlsGraan('laken'), 0);
+});
+
+test('brood is minder lekker: een huis zonder brood is blijer dan een huis zonder laken (vraag 92, a)', () => {
+  const zonder = (wat) => {
+    const D = kaalDorp();
+    const g = zetHuis(D, 'stenenHuis', 0, 0, 8);
+    // Een put, een kapel, de herberg en een markt in de buurt, en alles in de voorraad behalve wat ontbreekt.
+    for (const soort of ['put', 'kapel', 'herberg', 'markt']) D.wereld.voorwerpen.push({ soort, x: 2, y: 2, beslaat: [1, 1] });
+    Object.assign(D.voorraad, { bier: 100, vis: 100, brood: 100, laken: 100 });
+    D.voorraad[wat] = 0;
+    const h = T.berekenWensen(D, ZOMERDAG, alles).huizen.find((x) => x.g === g);
+    assert.equal(h.alles, false, `zonder ${wat} heeft het niet alles`);
+    return h.tevredenheid;
+  };
+  assert.ok(zonder('brood') > zonder('laken'), `${zonder('brood')} tegen ${zonder('laken')}`);
+  assert.ok(T.WENSEN_INSTELLINGEN.blijheid.brood < 1, 'in de werkbank');
 });
 
 test('het dorp is het gemiddelde van zijn huizen, naar mensen; wat de wetten erbij doen, gaat per huis tot 100%', () => {

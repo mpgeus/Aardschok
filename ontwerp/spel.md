@@ -160,7 +160,13 @@ letter voor letter mee zoals ervoor).
   te weinig bier, dan nemen zij het laatste"). Elke dag gebruikt een mens van zijn stand zoveel bier, vlees of vis, brood
   en laken uit de voorraad (de getallen in de werkbank). Laken is sinds 2 okt 0,005 per dag (vraag 91, c; was 0,01): de
   wol komt van de schapen, eens per jaar, en de heer vraagt er 20 per schaapskooi, zodat acht schapen laken gaven voor
-  vier à vijf ambachtslieden; een volle kooi (20 schapen) dekt er nu zo'n 33. Is er te weinig, dan krijgt de hoogste stand het eerst, en gaat
+  vier à vijf ambachtslieden; een volle kooi (20 schapen) dekt er nu zo'n 33.
+- **Brood, vis en vlees zijn eten** (2 okt, werklijst vraag 92, a; Marcel: "A ja, maar brood is wel minder lekker en
+  levert minder blijheid op"): wat een huis ervan krijgt, eet het dorp die dag minder aan graan (een brood of een vis
+  vult zoveel als een graan, `T.voedtAlsGraan`). Daarvoor kwam het brood bovenop wat een ambachtsman at, maalde de molen
+  er graan voor dat het dorp niet had, en at het dorp in de speeltest in de tweede winter zijn zaaigraan op. **Brood is
+  minder lekker:** in hoe blij een huis is, weegt brood half zo zwaar als een andere wens (`blijheid` in de werkbank);
+  super gelukkig vraagt het wel. Is er te weinig, dan krijgt de hoogste stand het eerst, en gaat
   wat over is naar de stand eronder; binnen een stand gelijk op. Eten en brandhout gaan zoals ze gingen, voor het hele
   dorp.
 - **In de buurt is een kring om het gebouw** (vraag 80, B): de put 12 tegels, de herberg en een markt 30 (vraag 85, b: 25

@@ -3090,7 +3090,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 2 okt):** "a ja b ja c ja d ja". Dus alle vier: de bouwer volgt ook het goud van de raad, een
     werkplaats maakt tot er genoeg ligt, laken 0,005 per mens per dag, en dan de bouwer nog eens, vóór de pagina met
     ontwerpen voor de ui. **Af** (zie onder Af); de speeltest staat in `speelbaar.md`, en wat eruit volgt, is vraag 92.
-92. **Na vraag 91: het graan** (Claude, 2 okt, drieëntwintigste sessie; wacht op Marcel). De speeltest (`speelbaar.md`):
+92. **Na vraag 91: het graan** (Claude, 2 okt, drieëntwintigste sessie; beantwoord). De speeltest (`speelbaar.md`):
     met de belasting heeft de bouwer goud (tot 26 à 63 in het tweede jaar), en hij bouwt alles wat de treden vrijmaken
     (een bakkerij, een molen, een weverij, een markt, een tweede herberg). Bij zaad 1 hebben aan het eind drie van de
     vier stenen huizen alles: voor het eerst is een stenen huis super gelukkig (10 van de 19 huizen). Maar:
@@ -3113,6 +3113,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       (een tweede kooi) daarna.
     - **d, de volgorde:** a, de bouwer, dan het plan voor b; de pagina met ontwerpen voor de ui (vraag 84, a) daarna.
     Vragen: **a**, brood (en vlees en vis) als eten? **b**, graan op de markt, eerst een plan? **c** en **d**, zo?
+    **Beantwoord (Marcel, 2 okt):** "A ja, maar brood is wel minder lekker en levert minder blijheid op. B prima, maar
+    moet dat nu? We focussen op een kleine speelbare demoversie. C en d prima". Dus: brood, vlees en vis zijn eten, en
+    brood telt minder mee in hoe blij een huis is dan de andere wensen; het graan van de markt komt later (achteraan bij
+    "Daarna", na de demo); dan de bouwer nog eens, en daarna de pagina met ontwerpen voor de ui.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

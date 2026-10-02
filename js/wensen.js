@@ -33,6 +33,10 @@
     // jaar, en de heer vraagt er 20 per schaapskooi; acht schapen gaven laken voor vier à vijf ambachtslieden, en een
     // volle kooi (20 schapen) dekt er nu zo'n 33.
     perMens: { bier: 0.05, vleesOfVis: 0.02, brood: 0.03, laken: 0.005 },
+    // Hoe zwaar een wens weegt in hoe blij een huis is (de rest, hierboven), naast de andere: 1, behalve brood (Marcel,
+    // 2 okt, werklijst vraag 92, a: "brood is wel minder lekker en levert minder blijheid op"). Een huis zonder brood
+    // is dus blijer dan een huis zonder laken; alles hebben, en dus super gelukkig zijn, vraagt het brood wel.
+    blijheid: { brood: 0.5 },
     // De kring om een plek, in tegels, van het midden van het huis tot het midden van de plek (vraag 80, B; vraag 85, b:
     // 25 was te klein voor het gehucht, waar de boerderijen aan de rand staan). Een kapel 40 (vraag 87, c; Marcel, 2 okt):
     // met 30 haalde één kapel in het gehucht hooguit vier van de zes huizen die er een willen, met 40 zijn er 50 plekken
@@ -207,8 +211,9 @@
         else heeft = plekkenVan(wens.plek).some((r) => T.inDeKring(voet, r, IN().kring[wens.plek])) ? 1 : 0;
         h.heeft[id] = heeft;
         if (!BASIS.includes(id)) {
-          rest += heeft;
-          n++;
+          const w = IN().blijheid[id] != null ? IN().blijheid[id] : 1;
+          rest += heeft * w;
+          n += w;
           if (!gedekt(heeft)) {
             const m = gemist[id] || (gemist[id] = { id, naam: wens.naam, huizen: 0, mensen: 0 });
             m.huizen++;
@@ -451,10 +456,12 @@
   };
 
   // De huizen nemen hun goederen uit de voorraad, zoals T.berekenWensen ze verdeelde (vanuit T.tikBehoeftenDag, vóór het
-  // eten: het vlees dat een dorpeling bij zijn brood wil, eet het dorp niet als graan op). Geeft hoeveel vis en vlees er
-  // gebruikt werd, voor het zout (js/behoeften.js, pasBederfToe).
+  // eten). Wat eten is (brood, vis, vlees), eten ze op: zoveel eet het dorp daarna minder aan graan (vraag 92, a; Marcel,
+  // 2 okt: "A ja"). Geeft { bederfelijk: hoeveel vis en vlees er gebruikt werd, voor het zout (js/behoeften.js,
+  // pasBederfToe), gegeten: hoeveel graan dat eten vulde (T.voedtAlsGraan) }.
   T.gebruikGoederen = function (D, wensen) {
     let bederfelijk = 0;
+    let gegeten = 0;
     for (const id of Object.keys(wensen.goederen)) {
       let nodig = Object.values(wensen.goederen[id]).reduce((n, s) => n + s.krijgt, 0);
       for (const soort of T.WENSEN[id].goed) {
@@ -463,9 +470,10 @@
         T.wijzigVoorraad(D, soort, -neem);
         nodig -= neem;
         if (T.BEHOEFTEN_INSTELLINGEN.bederfelijk.includes(soort)) bederfelijk += neem;
+        gegeten += neem * T.voedtAlsGraan(soort);
       }
     }
-    return bederfelijk;
+    return { bederfelijk, gegeten };
   };
 
   // Voor hoeveel mensen het dorp belasting betaalt (de wet, js/wetten.js): een hogere stand betaalt meer (vraag 80, C),
