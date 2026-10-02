@@ -89,9 +89,11 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   zijn bladzijde laadt (`.pagina('gereedschap/wereld.html')`). Nooit een eigen lijstje: dan mist er
   vroeg of laat een bestand, en toetst de toets een ander spel dan er draait.
 - `npm run speeltest` speelt het gehucht een jaar met vier spelers in code (braaf, lui 30%, lui 60%, slim;
-  vraag 45), en twee jaar met een vijfde, de bouwer, die van gehucht tot dorp wil en de raad volgt (vraag 58), elk met
-  zaad 1 tot en met 3, in een onzichtbare browser, en zet de uitslag in
-  `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`. Hetzelfde zaad geeft
+  vraag 45), en twee jaar met een vijfde, de bouwer, die van gehucht tot dorp wil en de raad volgt (vraag 58), en een
+  zesde, de sluwe bouwer, die daarbij de heer bedriegt en het graan verstopt houdt voor de herberg en de molen (vraag 94),
+  elk met zaad 1 tot en met 3, in een onzichtbare browser, en zet de uitslag in
+  `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`; wie twee jaar speelt, krijgt er een
+  graanboek bij: per jaar waar het graan bleef, en hoeveel dagen er geen bier of brood was. Hetzelfde zaad geeft
   hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed (`-- slim --zaad 2` voor
   één jaar). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
   (`gereedschap/speeltest/speler.js`). Een jaar kost twee tot zeven minuten; nodig is Playwright (in de

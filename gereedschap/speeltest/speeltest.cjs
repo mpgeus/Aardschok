@@ -4,9 +4,11 @@
 // vast zaad: hetzelfde zaad geeft dezelfde boeren en hetzelfde lot. Zo speel je na het bijstellen van een
 // getal hetzelfde jaar opnieuw, en zie je precies wat de wijziging deed.
 //
-//   npm run speeltest                          de vijf spelers, elk met zaad 1, 2 en 3
+//   npm run speeltest                          de zes spelers, elk met zaad 1, 2 en 3
 //   npm run speeltest -- slim                  één speler, met zaad 1, 2 en 3
 //   npm run speeltest -- bouwer                de bouwer, die twee jaar speelt (vraag 58): van gehucht tot dorp
+//   npm run speeltest -- sluw                  de sluwe bouwer (vraag 94): de bouwer, maar hij bedriegt de heer en
+//                                              houdt het graan verstopt voor de herberg en de molen
 //   npm run speeltest -- slim --zaad 7         één jaar
 //   npm run speeltest -- --zaden 1-5           andere zaden
 //   npm run speeltest -- lui60 --zaad 1 --opslaan        de proef met opslaan (vraag 48): op 1 oogstmaand
@@ -33,7 +35,7 @@ const { execSync } = require('node:child_process');
 
 const WORTEL = path.join(__dirname, '..', '..');
 const UIT = path.join(__dirname, 'uit');
-const SPELERS = ['braaf', 'lui30', 'lui60', 'slim', 'bouwer'];
+const SPELERS = ['braaf', 'lui30', 'lui60', 'slim', 'bouwer', 'sluw'];
 const TEGELIJK = 3; // zoveel jaren tegelijk, elk in een eigen tabblad
 
 function laadPlaywright() {

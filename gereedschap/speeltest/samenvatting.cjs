@@ -1,11 +1,12 @@
 // De tabellen van de speeltest (speeltest.cjs): per jaar drie tabellen (de inner en de heer; verstoppen en de
 // soldaten; het dorp), en per speler het gemiddelde over zijn zaden. De getallen komen uit wat speler.js per
 // jaar teruggeeft; wat een jaar niet heeft, blijft leeg. Daarna, voor alle spelers, van gehucht tot dorp (vraag
-// 58): wanneer het een dorp werd, en waarom er op een groeidag geen gezin kwam.
-const NAMEN = { braaf: 'braaf', lui30: 'lui, 30% weg', lui60: 'lui, 60% weg', slim: 'slim, 60% weg', bouwer: 'bouwer, twee jaar' };
+// 58): wanneer het een dorp werd, en waarom er op een groeidag geen gezin kwam; en voor wie twee jaar speelt het graanboek
+// (vraag 94, d).
+const NAMEN = { braaf: 'braaf', lui30: 'lui, 30% weg', lui60: 'lui, 60% weg', slim: 'slim, 60% weg', bouwer: 'bouwer, twee jaar', sluw: 'sluwe bouwer, twee jaar' };
 const VOLGORDE = Object.keys(NAMEN);
-// De drie tabellen en het gemiddelde gaan over één jaar met de heer en het verstoppen; de bouwer speelt er twee,
-// en staat alleen in de tabel van gehucht tot dorp.
+// De drie tabellen en het gemiddelde gaan over één jaar met de heer en het verstoppen; de bouwer en de sluwe bouwer spelen
+// er twee, en staan in de tabel van gehucht tot dorp en in het graanboek.
 const EEN_JAAR = ['braaf', 'lui30', 'lui60', 'slim'];
 
 const getal = (x) => (x == null || Number.isNaN(x) ? '' : String(Math.round(x)));
@@ -101,7 +102,7 @@ const TABELLEN = [
 exports.maak = function (uitslagen, stand) {
   const lijst = [...uitslagen].sort((a, b) => VOLGORDE.indexOf(a.speler) - VOLGORDE.indexOf(b.speler) || a.zaad - b.zaad);
   const goed = lijst.filter((u) => !u.mislukt);
-  const uit = [`# De speeltest`, '', `Gespeeld op ${stand}. Een jaar loopt van 1 lentemaand tot 1 grasmaand van het jaar erna; de bouwer speelt er twee, tot 1 grasmaand van het derde.`, ''];
+  const uit = [`# De speeltest`, '', `Gespeeld op ${stand}. Een jaar loopt van 1 lentemaand tot 1 grasmaand van het jaar erna; de bouwer en de sluwe bouwer spelen er twee, tot 1 grasmaand van het derde.`, ''];
   const mislukt = lijst.filter((u) => u.mislukt);
   if (mislukt.length) uit.push(...mislukt.map((u) => `- **Mislukt:** ${NAMEN[u.speler] || u.speler}, zaad ${u.zaad}: ${u.mislukt}`), '');
   const fouten = goed.filter((u) => u.fouten.length || (u.luisterFouten || []).length);
@@ -115,6 +116,7 @@ exports.maak = function (uitslagen, stand) {
   if (eenJaar.length) uit.push(...gemiddeldPerSpeler(eenJaar));
   uit.push(...deVoorvallen(goed));
   uit.push(...vanGehuchtTotDorp(goed));
+  uit.push(...hetGraanboek(goed));
   return uit.join('\n') + '\n';
 };
 
@@ -150,7 +152,7 @@ function deVoorvallen(goed) {
   uit.push(regel(kop), regel(kop.map(() => '---')));
   for (const u of goed) {
     const v = u.voorvallen || [];
-    const jaren = u.speler === 'bouwer' ? 2 : 1;
+    const jaren = u.jaren || (u.speler === 'bouwer' ? 2 : 1);
     uit.push(regel([
       NAMEN[u.speler] || u.speler, u.zaad, String(v.length), getal(v.length / jaren),
       `${(60 / (v.length / jaren + KEUZES_ZONDER)).toFixed(1).replace('.', ',')} min`,
@@ -195,6 +197,37 @@ function vanGehuchtTotDorp(goed) {
     ]));
   }
   uit.push('');
+  return uit;
+}
+
+// Het graanboek (vraag 94, d): per jaar waar het graan bleef (de luisteraar op T.wijzigVoorraad in speler.js; erbij is +,
+// eraf is −), en wat dat deed: hoeveel dagen er geen bier of brood was, hoeveel huizen gemiddeld alles hadden, en op
+// hoeveel dagen allemaal. Het derde jaar is alleen de eerste maand, tot 1 grasmaand.
+function hetGraanboek(goed) {
+  const twee = goed.filter((u) => (u.graan || []).length);
+  if (!twee.length) return [];
+  const teken = (x) => (x == null || Math.abs(x) < 0.5 ? '' : x > 0 ? `+${Math.round(x)}` : `−${Math.round(-x)}`);
+  const samen = (b, ...namen) => namen.reduce((n, k) => n + (b[k] || 0), 0);
+  const BEKEND = ['oogst', 'gegeten', 'zaaien', 'heer', 'herberg', 'molen', 'brouwerij', 'gekocht', 'verkocht', 'rovers', 'soldaten', 'voorvallen', 'verstopt', 'teruggehaald'];
+  const uit = ['## Het graanboek', '', 'Per jaar waar het graan bleef (erbij +, eraf −), en wat dat deed. Het derde jaar is de eerste maand, tot 1 grasmaand.', ''];
+  const kop = ['speler', 'zaad', 'jaar', 'oogst', 'gegeten', 'zaaien', 'de heer', 'herberg', 'molen', 'brouwerij', 'handel', 'rovers, soldaten, voorvallen', 'verstopt, terug', 'anders', 'dagen zonder bier', 'dagen zonder brood', 'huizen met alles', 'dagen alle huizen alles'];
+  uit.push(regel(kop), regel(kop.map(() => '---')));
+  for (const u of twee) {
+    u.graan.forEach((jaar, j) => {
+      const b = jaar || {};
+      const g = (u.geluk || [])[j] || {};
+      const anders = Object.keys(b).filter((k) => !BEKEND.includes(k)).reduce((n, k) => n + b[k], 0);
+      uit.push(regel([
+        NAMEN[u.speler] || u.speler, u.zaad, String(j + 1),
+        teken(b.oogst), teken(b.gegeten), teken(b.zaaien), teken(b.heer), teken(b.herberg), teken(b.molen), teken(b.brouwerij),
+        teken(samen(b, 'gekocht', 'verkocht')), teken(samen(b, 'rovers', 'soldaten', 'voorvallen')),
+        `${teken(b.verstopt) || '0'}, ${teken(b.teruggehaald) || '0'}`, teken(anders),
+        g.dagen ? String(g.zonderBier) : '', g.dagen ? String(g.zonderBrood) : '',
+        g.dagen ? pct(g.alles / g.dagen) : '', g.dagen ? `${g.allemaal} van ${g.dagen}${g.gewonnen ? ` (${g.gewonnen} gewonnen)` : ''}` : '',
+      ]));
+    });
+  }
+  uit.push('', ...twee.map((u) => `- ${NAMEN[u.speler] || u.speler}, zaad ${u.zaad}: alle huizen hadden alles hooguit ${u.reeks ? u.reeks.langste : 0} dagen achter elkaar.`), '');
   return uit;
 }
 
