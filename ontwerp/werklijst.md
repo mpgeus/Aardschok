@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (2 okt 2026, drieëntwintigste sessie): eerst een kleine speelbare kern, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 89); de raad en het rapport zeggen wat de huizen missen, de bouwer van de speeltest volgt ze, en niemand staat nog ingemetseld (vraag 87 en 88); het volgende is vraag 89 (2d nu, en een put alleen voor hout?), dan de pagina met ontwerpen voor de ui (vraag 84, a) en 2c
+## De stand (2 okt 2026, drieëntwintigste sessie): eerst een kleine speelbare kern, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 89); de raad en het rapport zeggen wat de huizen missen, de bouwer van de speeltest volgt ze, en niemand staat nog ingemetseld (vraag 87 en 88); het volgende is 2d, de treden uit de standen (het plan is vraag 90), dan de pagina met ontwerpen voor de ui (vraag 84, a) en 2c
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -30,21 +30,22 @@ tevreden elke stand is, en sinds 2 okt zegt de raad onder het doel wat de huizen
 en een huis willen een kapel binnen 40 tegels [B]"), en het rapport ook (vraag 87); `Spel.debug.wensen()` zegt het per
 huis. De pagina "Stand van het gehucht" (25 sep) loopt achter op de dag. `npm test`: 764/764.
 
-**Waar het werk staat:** het werk van de drieëntwintigste sessie (vraag 87 en 88, de speeltest, vraag 89) staat op
-`claude/werklijst-doorzetten-73hi30`, nog niet in `main`; `main` staat op het werk van de tweeëntwintigste sessie. Vraag
-Marcel of het naar `main` mag. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook het werk van de drieëntwintigste sessie (vraag 87 tot en met 90, de
+speeltest; Marcel, 2 okt: "naar main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **vraag 89** (na de speeltest van vraag 87 en 88, `speelbaar.md`; wacht op Marcel):
+**Waar de volgende sessie begint:** **vraag 90, het plan voor 2d** (de treden uit de standen; wacht op Marcel), want
+vraag 89 is beantwoord (Marcel, 2 okt: "a ja b ja c ja, en naar main": 2d nu, een put alleen voor hout, en de bouwer
+verkoopt ook voor zijn volgende wens; b en c zijn gebouwd). Wat eruit volgde:
 wie de wensen volgt, groeit tot honderd mensen zonder één dode, maar alleen de boerderijen hebben alles. Wat de rest mist
 (bier, een herberg dichtbij, brood, laken, een markt), komt pas in een dorp of met marktrecht, en het goud raakt op aan
-putten, zodat de smidse er bij twee van de drie zaden niet kwam. Voorstel: 2d nu, de treden uit de standen, vóór de
-pagina met ontwerpen voor de ui; een put alleen voor hout; en de bouwer verkoopt graan ook voor zijn volgende wens.
+putten, zodat de smidse er bij twee van de drie zaden niet kwam. Dus nu 2d, vóór de pagina met ontwerpen voor de ui:
+begin met Marcels antwoord op vraag 90.
 **Vraag 87 en 88 zijn af** (drieëntwintigste sessie; zie onder Af): de raad en het rapport over de wensen, de bouwer die
 ze volgt, een kapel die 40 tegels bereikt, niet bouwen op iemand of een deur, Marcels rem (wie twee keer geen weg vindt,
 wacht een uur) en de eilanden, en A* met een hoop. Daarna, zoals besloten: **de pagina met ontwerpen voor de ui** (vraag 84, a: de
 vensters worden papieren in de beeldstijl, en Marcel kiest uit een paar schetsen van de balk, een venster en een papier),
-en dan de rest van stap 2 (vraag 80): 2c zien wat een huis wil (het teken bij de deur, het venster van een huis), 2d de
-treden uit de standen, en 2e het eind en het jaar in het kort. **Stap 2a en 2b zijn af** (tweeëntwintigste sessie; vraag
+en dan de rest van stap 2 (vraag 80): 2c zien wat een huis wil (het teken bij de deur, het venster van een huis), en 2e
+het eind en het jaar in het kort. **Stap 2a en 2b zijn af** (tweeëntwintigste sessie; vraag
 85, het plan, en Marcels antwoord: "a ja, maar een hogere stand eigent zich spullen toe ... b ja voor nu. c zacht d ja";
 zie onder Af): elk huis heeft een stand met zijn wensen, de hoogste stand neemt eerst, en een huis dat een maand alles
 heeft, groeit door voor bouwstof en versteent op zijn eigen grond. **Klein** is: drie standen, op de huizen die er al zijn;
@@ -120,8 +121,9 @@ als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speelt
    de rest van het land, diplomatie en handel komen daarna. Stap 1, een jaar dat te winnen is, en het zaaigraan (vraag
    81) zijn af (zie onder Af), en van stap 2, de wensen per stand, klein (vraag 80, 82 en 85), ook 2a en 2b: de wensen per
    huis en doorgroeien, met zes stenen huizen. Sinds 2 okt zeggen de raad en het rapport wat de huizen missen, en volgt de
-   bouwer van de speeltest ze (vraag 86, a en b, en 87); niemand staat nog ingemetseld (vraag 88). Het volgende is vraag
-   89 (voorstel: 2d nu, en een put alleen voor hout), dan de pagina met ontwerpen voor de ui (vraag 84, a), en 2c en 2e.
+   bouwer van de speeltest ze (vraag 86, a en b, en 87); niemand staat nog ingemetseld (vraag 88). Het volgende is 2d, de
+   treden uit de standen (vraag 89: "a ja"; het plan is vraag 90), dan de pagina met ontwerpen voor de ui (vraag 84, a),
+   en 2c en 2e.
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept; en het
    weer, met zaaien dat dagen kost (Marcel, 1 okt: "Stel er is slecht weer"; vraag 82).
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
@@ -3016,6 +3018,38 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 2 okt):** "a ja b ja c ja, en naar main". Dus 2d nu, vóór de pagina met ontwerpen voor de ui,
     met eerst een plan (vraag 90); een put kost alleen hout; de bouwer verkoopt ook graan voor zijn volgende wens; en het
     werk van de drieëntwintigste sessie gaat naar `main`.
+90. **Stap 2d: de treden uit de standen, het plan** (Claude, 2 okt, drieëntwintigste sessie; vraag 80, D, en 89, a; wacht
+    op Marcel). Bij vraag 80 werd besloten: "de treden gaan op in de standen", zoals in Anno 1602; klein (vraag 82): drie
+    standen, de poorters later. De speeltest (vraag 89) liet zien waarom het nu moet: wat de huizen missen voor super
+    gelukkig (bier genoeg, een herberg dichtbij, brood, laken, een markt), komt pas met een trede.
+    **Wat er al is:** het gehucht wordt een dorp bij 50 mensen met een kapel en een smidse (`js/treden.js`), en de heer
+    schrijft dan; een volgende trede is er niet. Elk gebouw heeft een trede: in een dorp komen de herberg, de brouwerij,
+    de molen, de bakkerij, de timmerman en de tiendschuur in het bouwmenu, met marktrecht de markt, de weverij, het
+    pakhuis, de steenbakkerij, het badhuis en het gasthuis. Aan het dorp hangen de heervaart en het hoofdgeld.
+    - **A, een trede komt met de mensen van een stand.** Een dorp zodra er 20 dorpelingen zijn (wie in een huis woont),
+      marktrecht zodra er 20 ambachtslieden zijn (in een stenen huis): de getallen in de werkbank. De kapel en de smidse
+      zijn geen eis meer (de kapel willen de huizen toch al). Linksboven staat dan "12 van 20 dorpelingen", en de heer
+      vraagt in zijn benoemingsbrief een dorp van huizen in plaats van "een kapel, een smidse en vijftig zielen". De oude
+      eis blijft als spelregel ("Treden": zoals de proef van 28 sep).
+    - **B, wat een stand wil, komt een trede eerder** (vraag 80, D: "de markt, de molen, de bakkerij en de weverij bij 20
+      dorpelingen"). Zo kun je de bakkerij, de molen, de weverij en de markt al bouwen vóór je huizen versteenen, en heeft
+      een stenen huis meteen wat het wil, in plaats van een tijd bij 92% te staan. Daarvoor gaan de markt en de weverij
+      van marktrecht naar het dorp. Marktrecht brengt dan wat de poorters straks willen (het badhuis, het gasthuis, de
+      steenbakkerij), en de pakhuizen en ambachten.
+    - **C, bij marktrecht schrijft de heer**, zoals bij het dorp: "Wij vernemen dat in Ons dorp gehandeld wordt. Wij
+      verlenen u marktrecht. Dat kost u vanaf nu meer." Voorlopig alleen woorden, zoals bij het dorp.
+    - **D, de raad en de bouwer kennen de ketens.** Brood komt van de bakkerij, die meel nodig heeft van de molen, en laken
+      van de weverij, met wol van de schapen. Mist een huis brood en heeft de bakkerij geen meel, dan zegt de raad "bouw
+      een molen [B]" in plaats van "de bakkerij heeft geen meel", en de bouwer van de speeltest volgt dat.
+    Niet nu: de kapel die een kerk en een kathedraal wordt (Marcels idee bij vraag 87), de poorters en hun huis, en een
+    stad; dat komt na de speelbare kern.
+    **In deze volgorde:** A met toetsen, B, C, D, en de speeltest (komt de bouwer tot marktrecht, en hoeveel huizen
+    hebben dan alles?). Daarna de pagina met ontwerpen voor de ui (vraag 84, a), 2c en 2e.
+    **Klaar als** het gehucht een dorp wordt bij 20 dorpelingen en marktrecht krijgt bij 20 ambachtslieden, elk met een
+    brief; linksboven staat wat de volgende trede nog mist; het bouwmenu de gebouwen van de trede geeft; de raad een keten
+    volgt; `npm test` groen is; en de speeltest zegt hoe ver de bouwer komt.
+    Vragen: **a**, de treden zo, met de oude eis als spelregel? **b**, de markt en de weverij al in een dorp? **c**, een
+    brief bij marktrecht? **d**, de raad en de bouwer met de ketens?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
