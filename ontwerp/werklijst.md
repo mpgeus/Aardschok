@@ -3148,6 +3148,35 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     ziet; de soldaten langs lege kelders leiden; de heer 90% betalen; na Sint-Maarten alles terughalen), en wat er verder
     aan knoppen is: houtkap in het bos van de heer, het rantsoen, graan verkopen en zaaigraan kopen, een wachthuis tegen
     de rovers. De uitslag zegt of rijk worden en arm lijken een jaar met iedereen super gelukkig haalbaar maakt (B).
+94. **Het plan voor vraag 93, a: de sluwe bouwer** (Claude, 2 okt, vierentwintigste sessie; open). Eerst wat de regels
+    zelf zeggen, want dat verandert de vraag een beetje:
+    - **Bier kost bijna geen graan.** De herberg brouwt 8 kan van 0,2 graan (`T.GEBOUWEN.herberg.maakt`); honderd man
+      drinken samen zo'n 30 graan per jaar.
+    - **Het dorp eet het graan als eerste op,** vóór de kaas en het gezouten vlees, en vóór de werkplaatsen hun deel nemen
+      (`T.tikGebouwenDag`: eerst eten, dan maken). Daarna ligt er alleen nog het zaaigraan, en dat laten de herberg en de
+      molen liggen (vraag 92). Zo staat de herberg zo'n negen maanden per jaar stil, terwijl er kaas en vlees genoeg is: er
+      stierf niemand. **Het tekort aan bier is dus een kwestie van volgorde, niet van hoeveelheid.** Bij brood ligt het
+      anders: een brood kost een graan, maar brood is eten, dus wie brood eet, eet minder pap.
+    Voorstel: de sluwe bouwer doet alles wat de bouwer doet (`gereedschap/speeltest/speler.js`, dezelfde code, met een
+    vlag erbij), en daarbij:
+    - **a, de heer bedriegen, elk jaar,** zoals de slimme speler: de nacht vóór de dag vóór de inner 60% van het graan
+      (boven het zaaigraan) en van het goud weg, waar niemand kijkt en niet bij de roddelaar; de inner opwachten, met hem
+      praten, hem 10 goud geven en meelopen waar hij niets nieuws ziet; op Sint-Maarten de soldaten langs lege kelders; de
+      heer 90%. Na Sint-Maarten haalt hij het goud terug, om te bouwen.
+    - **b, het graan blijft verstopt, voor de herberg en de molen.** Dat is het nieuwe: hij haalt telkens een beetje terug
+      als de herberg of de molen stilstaat, en vóór 1 lentemaand wat er aan zaaigraan mist. Hij verstopt het dus ook voor
+      zijn eigen dorp, zodat het de kaas eet en het graan voor bier en brood blijft.
+    - **c, de andere knoppen, alleen als de raad erom vraagt:** een krap rantsoen als het eten de winter niet haalt, en
+      houtkap in het bos van de heer als het hout de winter niet haalt (de boete is 5 goud). Geen wachthuis: vechten kan
+      de schout het leven kosten, en de rovers namen in twee jaar 30 graan. Wat opviel: een krap rantsoen maakt het dorp
+      minder tevreden, maar een huis heeft dan nog steeds "alles", en dat is wat super gelukkig nu telt (voor 2e).
+    - **d, meten:** twee jaar, zaad 1 tot en met 3, naast de bouwer van vraag 92, met een **graanboek** per jaar: waar
+      het graan bleef (de oogst, het zaaigraan, gegeten, de heer, bier, brood, verkocht, rovers, soldaten, verstopt).
+      Dan weten we bij B (vraag 93) waar het knelt. Helpt b het meest, dan is de keuze voor de demo misschien niet meer
+      graan, maar een regel: het dorp laat graan liggen voor de herberg en de molen, zoals nu al het zaaigraan.
+    Niet nu: langzamer groeien (geen nieuw erf als de huizen bier of brood missen); eerst zien of bedriegen genoeg is bij
+    dezelfde groei als de bouwer.
+    Vragen: **a**, **b** en **c** zo? **d**, met het graanboek?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
