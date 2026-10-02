@@ -434,8 +434,9 @@ test('wat de huizen missen: wat je nog niet kunt bouwen, zegt wanneer wel, en de
   const brood = vind(D, 'brood');
   assert.equal(brood.kan, false);
   assert.equal(brood.tekst, 'Een stenen huis wil brood: een bakkerij bouw je pas in een dorp.');
-  assert.equal(vind(D, 'laken').tekst, 'Een stenen huis wil laken: een weverij bouw je pas met marktrecht.');
-  assert.equal(vind(D, 'markt').tekst, 'Een stenen huis wil een markt binnen 30 tegels: een markt bouw je pas met marktrecht.');
+  // De weverij en de markt komen al in een dorp (vraag 90, B).
+  assert.equal(vind(D, 'laken').tekst, 'Een stenen huis wil laken: een weverij bouw je pas in een dorp.');
+  assert.equal(vind(D, 'markt').tekst, 'Een stenen huis wil een markt binnen 30 tegels: een markt bouw je pas in een dorp.');
   assert.equal(vind(D, 'herberg').tekst, 'Een stenen huis wil de herberg binnen 30 tegels: een herberg bouw je pas in een dorp.');
   assert.equal(vind(D, 'kapel').kan, true, 'een kapel kun je in een gehucht bouwen');
 });

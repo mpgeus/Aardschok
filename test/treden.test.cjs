@@ -158,14 +158,20 @@ test('de spelregel "Treden" zet de proef van 28 sep terug: 50 mensen, met een ka
   assert.deepEqual(T.TREDEN_INSTELLINGEN.dorp, { stand: 'dorpelingen', mensen: 20, gebouwen: [] });
 });
 
-test('in een dorp staan de gebouwen van het gehucht nog in het bouwmenu, met die van het dorp erbij', () => {
+test('in een dorp staan de gebouwen van het gehucht nog in het bouwmenu, met die van het dorp erbij; marktrecht net zo', () => {
   const gehuchtMenu = Object.keys(T.GEBOUWEN).filter((id) => T.inBouwmenu({ trede: 'gehucht' }, id));
   const dorpMenu = Object.keys(T.GEBOUWEN).filter((id) => T.inBouwmenu({ trede: 'dorp' }, id));
   assert.ok(gehuchtMenu.includes('kapel') && gehuchtMenu.includes('put') && gehuchtMenu.includes('erf'));
   assert.ok(!gehuchtMenu.includes('molen'), 'de molen hoort bij het dorp');
   for (const id of gehuchtMenu) assert.ok(dorpMenu.includes(id), `${id} staat in het dorp niet meer in het menu`);
   for (const id of ['timmerman', 'molen', 'bakkerij', 'wapenmaker', 'schuttershof']) assert.ok(dorpMenu.includes(id), id);
-  assert.ok(!dorpMenu.includes('markt'), 'de markt hoort bij marktrecht');
+  // De markt en de weverij komen al in een dorp (vraag 90, B): wat de ambachtslieden willen, een trede eerder.
+  for (const id of ['markt', 'weverij']) assert.ok(dorpMenu.includes(id), id);
+  const marktrechtMenu = Object.keys(T.GEBOUWEN).filter((id) => T.inBouwmenu({ trede: 'marktrecht' }, id));
+  for (const id of dorpMenu) assert.ok(marktrechtMenu.includes(id), `${id} staat met marktrecht niet meer in het menu`);
+  for (const id of ['badhuis', 'gasthuis', 'steenbakkerij', 'pakhuis']) {
+    assert.ok(!dorpMenu.includes(id) && marktrechtMenu.includes(id), `${id} komt met marktrecht`);
+  }
 });
 
 test('het hoofdgeld in een dorp: alleen woorden, tenzij de werkbank het hoger zet', () => {

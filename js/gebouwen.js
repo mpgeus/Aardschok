@@ -282,20 +282,23 @@
         + 'al in T.SINT_MAARTEN (js/tijd.js); wat er dan gebeurt is het tweede proefje (werklijst.md, punt 3).',
     },
 
-    // ── Marktrecht ──
+    // De markt en de weverij komen een trede eerder dan het marktrecht (Marcel, 2 okt, vraag 90, B): de ambachtslieden
+    // willen brood, laken en een markt (js/wensen.js), en zo heeft een huis dat versteent meteen wat het wil.
     markt: {
-      naam: 'markt', trede: 'marktrecht', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 14 }, heer: { goud: 10 }, bouwtijd: 4,
+      naam: 'markt', trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 14 }, heer: { goud: 10 }, bouwtijd: 4,
       handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true,
       tekening: 'gebouwen/dorpGroot1', beschrijving: 'handel met buiten; handelaars komen',
       opmerking: 'nieuw in gebouwen.tsx (de kraam bestaat als model in gereedschap/pixelart/dorp.cjs, '
         + 'nog niet geëxporteerd); leent voorlopig een groot dorpshuis.',
     },
     weverij: {
-      naam: 'weverij', trede: 'marktrecht', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 12 }, heer: { goud: 6 }, bouwtijd: 4,
+      naam: 'weverij', trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 12 }, heer: { goud: 6 }, bouwtijd: 4,
       handen: 2, woonruimte: 0, maakt: { in: { wol: 2 }, uit: { laken: 2 } }, verdacht: false,
       menu: true, tekening: 'gebouwen/dorpGroot2', beschrijving: 'wol tot laken, het rijkste handelsgoed',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis.',
     },
+
+    // ── Marktrecht ──
     pakhuis: {
       naam: 'pakhuis', trede: 'marktrecht', voet: { b: 6, h: 6 }, kosten: { hout: 18, goud: 10 }, heer: { goud: 5 }, bouwtijd: 3,
       handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: true,
