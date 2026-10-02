@@ -149,6 +149,45 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 2 okt: het goud, de werkplaatsen en het laken (werklijst, vraag 91)
+
+Gespeeld in de drieëntwintigste sessie, op `claude/werklijst-doorzetten-73hi30` (`d6a234f`), met als nulmeting de
+speeltest van 2d hieronder (`536e002`; het spel is daarna alleen in vraag 91 veranderd). Alleen de bouwer, twee jaar,
+zaad 1 tot en met 3. Geen fouten in de console. Wat er veranderde: de bouwer neemt de belasting aan als de raad zegt
+dat die goud brengt, en bouwt de eerste wens die hij kan betalen (a); een werkplaats die iets omzet, maakt tot er 30
+ligt (b); en laken is 0,005 per mens per dag (c).
+
+**Vóór → na:**
+
+| Jaar | Mensen aan het eind (het meest) | Doden | Tevreden | Doorgegroeid | Hutten, huizen, stenen huizen | Met alles | De heer, tweede jaar | Ongezaaid in het derde jaar |
+|---|---|---|---|---|---|---|---|---|
+| bouwer, zaad 1 | 89 (89), de schout gevallen → 100 (100), het ambt kwijt op Sint-Maarten | 0 → 0 | 85% → 82% | 8 → 14 | 8, 3, 3 → 3, 7, 4 | 8 van 19 → 10 van 19 | — → 26%, schandpaal | — |
+| bouwer, zaad 2 | 106 (106) → 90 (90) | 0 → 0 | 85% → 80% | 14 → 13 | 4, 7, 4 → 2, 6, 4 | 5 van 20 → 5 van 17 | 23% → 46%, schandpaal | 0 → 179 van 179 |
+| bouwer, zaad 3 | 98 (98) → 101 (101) | 0 → 0 | 84% → 81% | 11 → 19 | 6, 6, 3 → 2, 4, 8 | 5 van 20 → 5 van 19 | 27% → 28%, schandpaal | 0 → 172 van 179 |
+
+**Wat opviel:**
+
+1. **Er is goud, en wat de treden vrijmaken, komt er.** De bouwer nam de belasting aan in slachtmaand of louwmaand van
+   het eerste jaar, toen de raad zei "Daarvoor mis je 7 goud: ... belasting [W] brengt elke maand goud"; in het tweede
+   jaar liep zijn goud op tot 26 à 63 (ervoor tussen 0 en 8). Bij alle drie de zaden bouwde hij in het tweede jaar een bakkerij, een molen, een weverij,
+   een markt en een tweede herberg, in de volgorde die de raad zei.
+2. **Voor het eerst een stenen huis met alles.** Bij zaad 1 hadden aan het eind drie van de vier stenen huizen alles
+   wat ze willen, en twee hutten ook: 10 van de 19 huizen. Bij zaad 3 groeiden er 19 huizen door, tot acht stenen huizen.
+3. **Maar het brood eet het graan op.** Een ambachtsman wil 0,03 brood per dag, en dat brood komt bovenop wat hij eet:
+   de molen maalt er graan voor, eerst zo'n 60 om meel en brood op voorraad te hebben, en dan een graan per dag voor
+   dertig ambachtslieden. Het graan van de 179 akkertegels is bij honderd man na een maand of drie op (dat was het
+   ervoor ook; daarna eet het dorp melk, kaas en vlees van acht à elf jagers). Met de molen erbij was het bij zaad 2 en
+   3 in de tweede winter op, at het dorp zijn zaaigraan ("De honger is groot: het dorp eet van het zaaigraan"), en bleef
+   in het derde jaar vrijwel alles ongezaaid: dan komt er geen oogst. Zonder graan brouwt de herberg ook geen bier en
+   maalt de molen niets: aan het eind zegt de raad "Zes huizen en vier stenen huizen willen bier: de herberg heeft geen
+   graan, en graan komt van de akkers."
+4. **De heer blijft de rem.** In het tweede jaar kreeg hij 26 à 46% (de schandpaal), en bij zaad 1 was het ambt op
+   Sint-Maarten van het tweede jaar kwijt. Met de belasting gaat de tevredenheid 3 à 5 punten omlaag (80 à 82%).
+5. **Laken:** bij zaad 3 waren er 49 ambachtslieden in acht stenen huizen; een volle kooi dekt er zo'n 33, en aan het
+   eind zegt de raad "de weverij heeft geen wol, en wol komt van de schapen, in zomermaand".
+
+Wat eruit volgt, staat in de werklijst als vraag 92.
+
 ## De speeltest van 2 okt: de treden uit de standen (werklijst, vraag 90, 2d)
 
 Gespeeld in de drieëntwintigste sessie, op `claude/werklijst-doorzetten-73hi30` (`536e002`), met de nulmeting op
