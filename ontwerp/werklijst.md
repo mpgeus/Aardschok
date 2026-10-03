@@ -3387,8 +3387,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     eigen wil; jij stuurt met oproepen met een premie en met de wetten; **ook de put, de kapel, de markt en het wachthuis
     komen als verzoek**, zodat jij alleen nog erven aanwijst; en eerst klein: de verzoeken uit wat het dorp mist, met een
     bestuurder in de speeltest, en daarna die uit eigen wil. Vraag 102 wacht.
-    **Stap 1 gebouwd** (3 okt, zie onder Af): de verzoeken uit wat het dorp mist. Daarna: stap 2, oproepen met een premie;
-    stap 3, de bestuurder in de speeltest; dan de verzoeken uit eigen wil.
+    **Stap 1, 2 en 3 gebouwd** (3 okt, zie onder Af): de verzoeken uit wat het dorp mist, oproepen met een premie, en de
+    speeltest die bestuurt in plaats van bouwt. Daarna: de verzoeken uit eigen wil.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -3694,6 +3694,15 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **Vraag 103, stap 2 en 3: oproepen met een premie, en de speeltest bestuurt** (vijfentwintigste sessie).
+  **Oproepen:** in het bouwmenu staat onder het erf een rij Oproepen; een klik hangt op het plein "Het dorp zoekt een
+  steengroeve", met een premie van 5 goud voor wie het bouwt, nog een klik haalt hem weg (`T.doeOproep`). Wat erop staat,
+  vraagt iemand als eerste, ook wat niemand mist; hangt hij er een week en kan het dorp hem niet betalen, dan zegt de raad
+  wat er mist. **De speeltest:** onder "De mensen" bouwen de spelers zelf niets behalve erven, en zeggen ja op een
+  bouwverzoek als het dorp het kan betalen. Een eerste speeltest (op `1991fc5`) zei op alle verzoeken nee, omdat de
+  speler voor een voorval het "verstandige" antwoord kiest, en dat is geen hout uitgeven dat de winter nodig heeft: alle
+  dorpen liepen leeg. Een hut die op hout wacht, laat nu een houthakker vragen, en de bouwer wijst erven aan zonder op
+  een houthakker te wachten. 3 nieuwe toetsen, `npm test` 803/803.
 - 3 okt 2026 — **Vraag 103, stap 1: de verzoeken** (vijfentwintigste sessie; Marcel: "103 a b c ja d ook verzoek e ja";
   `js/verzoeken.js`). Met de spelregel "Wie bouwt" op "De mensen vragen het" (de standaard) staat in het bouwmenu alleen
   nog het erf. Wat het dorp mist (wat de raad je vroeger liet bouwen, `T.watTeBouwen`), komt een inwoner je vragen, zoals

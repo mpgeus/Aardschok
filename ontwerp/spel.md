@@ -24,7 +24,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
-| De verzoeken | stap 1 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf (de spelregel "Wie bouwt") | vraag 103 |
+| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo | vraag 103 |
 | Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -279,8 +279,15 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
   karakter. Een zanger zegt eerder ja, een woekeraar of een weduwe eerder nee.
 - **De raad** zegt wat zou helpen, zonder [B] ("Het hout haalt 10 van de 90 dagen van de winter: een houthakker zou
   helpen."), en wie je er nu om vraagt. De getallen in de werkbank ("De verzoeken"); `Spel.debug.verzoek()`.
-- **Nog niet** (de volgende stappen van vraag 103): oproepen met een premie (stap 2), de bestuurder in de speeltest (stap
-  3), en verzoeken uit eigen wil (de wapensmid, een tweede herberg), met wat ze aan gevolgen hebben.
+- **Oproepen** (stap 2; vraag 103, c): zo bepaal jij de richting. In het bouwmenu staat onder het erf een rij Oproepen,
+  één per gebouw dat al mag: een klik hangt op het plein "Het dorp zoekt een steengroeve", met een premie van 5 goud uit de
+  kist voor wie het bouwt (bovenop wat het kost, betaald bij ja); nog een klik haalt hem weg (`T.doeOproep`). Wat erop
+  staat, vraagt iemand je als eerste, ook wat niemand nog mist ("Op het plein hangt je oproep, met een premie van 5
+  goud."). Hangt hij er een week en kan het dorp hem niet betalen, dan zegt de raad wat er mist.
+- **De speeltest** (stap 3) speelt onder "De mensen": de spelers bouwen zelf niets behalve erven, en zeggen ja op een
+  bouwverzoek als het dorp het kan betalen, zoals de bouwer bouwde wat de raad zei.
+- **Nog niet:** verzoeken uit eigen wil (de wapensmid, een tweede herberg), met wat ze aan gevolgen hebben; een oproep
+  die ook een nieuwkomer met dat vak laat komen; en een bord op het plein waar je oproep aan hangt.
 
 "Jij bouwt" is het spel van vóór 3 okt. Het besluit en waarom staan bovenaan bij "Een nieuwe richting".
 

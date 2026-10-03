@@ -183,3 +183,41 @@ test('een hut op een erf die op hout wacht, en geen houthakker: dan vraagt ieman
   const x = T.watTeBouwen(D).find((w) => w.soort === 'houthakker');
   assert.deepEqual([x.waarom, x.voor], ['Een hut op een erf wacht op hout.', 'erf']);
 });
+
+test('een oproep (stap 2): wat erop staat, vraagt iemand als eerste, ook wat niemand mist, en de premie gaat erbij', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  nacht(S, 1);
+  T.voorvalBeantwoord(D, lopend(D).id); // de kapel van de eerste nacht
+  assert.equal(T.doeOproep(D, 'steengroeve'), 'Op het plein hangt je oproep: het dorp zoekt een steengroeve, met een premie van 5 goud.');
+  assert.ok(T.oproepVoor(D, 'steengroeve'));
+  assert.ok(!T.watTeBouwen(D).some((x) => x.soort === 'steengroeve'), 'niemand mist een steengroeve');
+  D.verzoeken.volgende = 0;
+  assert.ok(T.beginBouwverzoek(D, 2));
+  const L = lopend(D);
+  assert.deepEqual([L.bouw.soort, L.bouw.premie, L.bouw.nut], ['steengroeve', 5, T.VERZOEKEN_INSTELLINGEN.nutTot], 'de oproep gaat voor de kapel');
+  assert.match(tekstVan(D), /Op het plein hangt je oproep, met een premie van 5 goud\. Het dorp betaalt 12 hout en 9 goud, met de premie\.$/);
+  assert.equal(T.prijsVanKeuze(D, antwoord(0).doe).tekst, '−12 hout, −9 goud, tevredenheid +3%');
+  const goud = D.voorraad.goud;
+  zeg(S, 0);
+  assert.ok(D.gebouwen.some((g) => g.soort === 'steengroeve' && g.meester === L.wie));
+  assert.equal(D.voorraad.goud, goud - 4 - 5, 'wat de steengroeve kost, en de premie');
+  assert.equal(T.oproepVoor(D, 'steengroeve'), null, 'de oproep hangt er niet meer');
+});
+
+test('nog een klik haalt een oproep weg; wat nog niet mag, kan niet; en wacht hij een week op goud, dan zegt de raad het', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  nacht(S, 1);
+  assert.equal(T.doeOproep(D, 'weverij'), 'Een weverij mag hier nog niet.');
+  T.doeOproep(D, 'wachthuis');
+  assert.equal(T.doeOproep(D, 'wachthuis'), 'Je haalt je oproep weg: het dorp zoekt geen wachthuis meer.');
+  assert.equal(T.oproepVoor(D, 'wachthuis'), null);
+  T.doeOproep(D, 'steengroeve');
+  T.zetVoorraad(D, 'goud', 2);
+  const raad = T.RADEN.find((r) => r.id === 'oproep');
+  assert.equal(raad.als(D), false, 'de eerste week niet');
+  S.kalender.dag = 1 + T.RAAD_INSTELLINGEN.oproepNa + 0.5;
+  assert.equal(raad.als(D), true);
+  assert.match(raad.tekst(D), /^Je oproep voor een steengroeve hangt op het plein, maar het dorp mist 7 goud: /);
+});

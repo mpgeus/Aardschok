@@ -376,7 +376,31 @@
         );
       })
       .join('');
-    return `<div class="kop">Bouwen — ${T.tredeNaam(S.dorp)}</div>${rijen || '<p class="bouw-leeg">Hier valt nu niets te bouwen.</p>'}`;
+    return `<div class="kop">Bouwen — ${T.tredeNaam(S.dorp)}</div>${rijen || '<p class="bouw-leeg">Hier valt nu niets te bouwen.</p>'}${oproepRijen(S)}`;
+  }
+
+  // De oproepen (js/verzoeken.js; werklijst vraag 103, c): vragen de mensen het je (de spelregel "Wie bouwt"), dan zet je
+  // niets zelf neer, maar laat je op het plein een oproep hangen: "Het dorp zoekt een weverij", met een premie voor wie
+  // het bouwt. Een klik hangt hem op, nog een klik haalt hem weg.
+  function oproepRijen(S) {
+    if (!T.VERZOEKEN_INSTELLINGEN.mensen) return '';
+    const premie = T.VERZOEKEN_INSTELLINGEN.premie;
+    const rijen = Object.keys(T.GEBOUWEN)
+      .filter((id) => T.magGebouwd(S.dorp, id) && !T.GEBOUWEN[id].erf && !T.GEBOUWEN[id].woning)
+      .map((id) => {
+        const g = T.GEBOUWEN[id];
+        const hangt = T.oproepVoor(S.dorp, id);
+        const kosten = Object.entries(g.kosten).map(([wat, n]) => `${n} ${wat}`).join(', ');
+        return (
+          `<button data-oproep="${id}"${hangt ? ' class="hangt"' : ''}>` +
+          `<span class="bouw-naam">${T.hoofdletter(g.naam)}${hangt ? ' · hangt op het plein' : ''}</span>` +
+          `<span class="bouw-kosten">${kosten} · premie ${premie} goud</span>` +
+          `<span class="bouw-uitleg">${hangt ? 'Klik om de oproep weg te halen.' : g.beschrijving}</span>` +
+          `</button>`
+        );
+      })
+      .join('');
+    return `<div class="kop bouw-oproepen">Oproepen — wat de mensen niet vanzelf vragen</div>${rijen}`;
   }
 
   // De rij van het erf (js/erven.js): wat het kost is niets, maar er staat bij hoeveel er vrij zijn, en
@@ -404,6 +428,12 @@
   $('bouwmenu').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
     if (!b || !T.S) return;
+    // Een oproep (js/verzoeken.js): hangt hem op of haalt hem weg, en het menu blijft open.
+    if (b.dataset.oproep) {
+      T.ui.bericht(T.doeOproep(T.S.dorp, b.dataset.oproep));
+      T.ui.toonBouwmenu(T.S);
+      return;
+    }
     T.S.bouwSoort = b.dataset.soort;
     T.S.bouwMenuOpen = false;
     T.ui.toonBouwmenu(T.S);

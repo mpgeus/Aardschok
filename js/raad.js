@@ -27,6 +27,9 @@
     // Zoveel dagen nadat een voorval voorbijging dat een raadsman had beslist, als je er een had (js/voorvallen.js: je
     // was weg), zegt de raad: kies een raadsman (js/raadsman.js).
     raadsmanNa: 10,
+    // Hangt je oproep zoveel dagen op het plein en kan het dorp hem niet betalen, dan zegt de raad wat er mist
+    // (js/verzoeken.js).
+    oproepNa: 7,
   };
   const IN = () => T.RAAD_INSTELLINGEN;
 
@@ -102,6 +105,22 @@
   // zonder [B], en of iemand je er al om vraagt.
   const mensenBouwen = () => T.VERZOEKEN_INSTELLINGEN.mensen;
   const verzoekZin = (D, soort) => (mensenBouwen() && soort ? T.verzoekZin(D, soort) : '');
+
+  // Je oproep op het plein (js/verzoeken.js; vraag 103, c) die er al oproepNa dagen hangt, terwijl het dorp niet kan
+  // betalen wat hij kost (met de premie): { soort, mist }, of null.
+  function oproepDieWacht(D) {
+    if (!mensenBouwen() || !D.verzoeken || !D.verzoeken.oproepen) return null;
+    for (const o of D.verzoeken.oproepen) {
+      if (dagNu(D) - o.dag < IN().oproepNa) continue;
+      const mist = {};
+      for (const [wat, n] of Object.entries(T.kostenVanVerzoek({ soort: o.soort, premie: T.VERZOEKEN_INSTELLINGEN.premie }))) {
+        const tekort = Math.ceil(n - (D.voorraad[wat] || 0) - 1e-9);
+        if (tekort > 0) mist[wat] = tekort;
+      }
+      if (Object.keys(mist).length) return { soort: o.soort, mist };
+    }
+    return null;
+  }
 
   // Het eerste wat de huizen missen waar je nu iets aan kunt doen (T.watDeHuizenMissen, js/wensen.js), van deze soort
   // ('bouwstof' of 'wens'), of null.
@@ -221,6 +240,16 @@
         const { soorten, mist } = tekortVoorHetDoel(D);
         const wat = T.opsomming(soorten.map((soort) => `de ${T.GEBOUWEN[soort].naam}`));
         return `Voor ${wat} mis je ${hoeveelTekst(mist)}: ${T.opsomming(waarVandaan(D, mist))}.`;
+      },
+    },
+    {
+      // Je oproep hangt al een week, en niemand kan hem bouwen: het dorp mist wat hij kost (werklijst vraag 103, c).
+      id: 'oproep',
+      als: (D) => !!oproepDieWacht(D),
+      tekst: (D) => {
+        const { soort, mist } = oproepDieWacht(D);
+        const bronnen = waarVandaan(D, mist, soort);
+        return `Je oproep voor een ${T.GEBOUWEN[soort].naam} hangt op het plein, maar het dorp mist ${hoeveelTekst(mist)}${bronnen.length ? `: ${T.opsomming(bronnen)}` : ''}.`;
       },
     },
     {

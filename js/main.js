@@ -957,10 +957,12 @@
       };
     },
     // De verzoeken (js/verzoeken.js; werklijst vraag 103): wat het dorp nu zou willen bouwen en waarom, wie er nu om vraagt
-    // en waar, en waar je nee op zei. Spel.debug.verzoek('nu') laat het eerste nu vragen (wie het vraagt, zoekt je
-    // meteen); ('jij') of ('mensen') zet de spelregel "Wie bouwt".
-    verzoek(wat) {
+    // en waar, je oproepen, en waar je nee op zei. Spel.debug.verzoek('nu') laat het eerste nu vragen (wie het vraagt,
+    // zoekt je meteen); ('oproep', 'weverij') hangt een oproep op of haalt hem weg; ('jij') of ('mensen') zet de spelregel
+    // "Wie bouwt".
+    verzoek(wat, soort) {
       const D = S.dorp;
+      if (wat === 'oproep') return T.doeOproep(D, soort);
       if (wat === 'jij' || wat === 'mensen') T.VERZOEKEN_INSTELLINGEN.mensen = wat === 'mensen';
       if (wat === 'nu') {
         const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
@@ -977,7 +979,8 @@
         watTeBouwen: T.watTeBouwen(D).map((x) => `${x.soort}: ${x.waarom}`),
         nu: L && L.bouw ? `${T.naamVanBewoner(L.wie)} wil een ${T.GEBOUWEN[L.bouw.soort].naam} op ${L.bouw.x},${L.bouw.y}: "${T.vulWoordenIn(D, T.GESPREKKEN.bouwverzoek.knopen.begin.tekst[0].zeg)}"` : null,
         volgende: R.volgende,
-        nee: Object.entries(R.nee).map(([soort, dag]) => `${soort} op ${T.datumVanDag(dag).tekst}`),
+        oproepen: (R.oproepen || []).map((o) => `${o.soort}, sinds ${T.datumVanDag(o.dag).tekst}`),
+        nee: Object.entries(R.nee).map(([s2, dag]) => `${s2} op ${T.datumVanDag(dag).tekst}`),
         ja: R.ja,
         meesters: (D.gebouwen || []).filter((g) => g.meester).map((g) => `${T.GEBOUWEN[g.soort].naam}: ${T.naamVanBewoner(g.meester)}`),
       };

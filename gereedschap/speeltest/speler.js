@@ -241,7 +241,11 @@
     for (let i = 0; i < 4 && voorvalOpen(s); i++) {
       const L = s.dorp.voorvallen.lopend;
       const knoppen = [...document.querySelectorAll('#dialoog-keuzes button')].filter((b) => !b.disabled);
-      const knop = knoppen.find((b) => verstandig(s, prijsVan(b))) || knoppen[0];
+      // Een bouwverzoek (js/verzoeken.js; werklijst vraag 103): ja als het kan, zoals de bouwer bouwde wat de raad zei,
+      // ook als het hout voor de winter krap is (daar waarschuwt de raad voor, en dan vraagt iemand een houthakker); kan
+      // het niet, dan nee. Een gewoon voorval: het eerste verstandige antwoord.
+      const ja = L.bouw ? knoppen.find((b) => /^\dJa/.test(b.textContent)) : null;
+      const knop = L.bouw ? ja || knoppen.find((b) => /^\dNee/.test(b.textContent)) || knoppen[0] : knoppen.find((b) => verstandig(s, prijsVan(b))) || knoppen[0];
       if (!knop) break;
       const antwoord = knop.textContent.replace(/^\d/, '');
       if (!geboekt.has(L)) {

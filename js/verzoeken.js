@@ -19,8 +19,14 @@
 // het dorp onthoudt het. Ben je weg, dan beslist je raadsman (js/raadsman.js): wat het helpt tegen wat het kost, naar
 // zijn karakter.
 //
-// D.verzoeken: { volgende (de dag waarop er weer een kan komen), nee: { soort: dag }, ja, geweigerd (hoe vaak) }
-// Op het voorval (D.voorvallen.lopend.bouw): { soort, x, y, waarom, nut }
+// Jij bepaalt de richting met een oproep op het plein (T.doeOproep; vraag 103, c): "Het dorp zoekt een weverij", met een
+// premie uit de kist voor wie het bouwt. Wat erop staat, vraagt iemand je als eerste, ook wat niemand nog mist (een
+// schaapskooi voor de wol van later).
+//
+// D.verzoeken: { volgende (de dag waarop er weer een kan komen), nee: { soort: dag }, ja, geweigerd (hoe vaak), oproepen:
+//              [{ soort, dag }] }
+// Op het voorval (D.voorvallen.lopend.bouw): { soort, x, y, waarom, voor (waarvoor: T.watTeBouwen), nut, premie (bij een
+// oproep) }
 (function (T) {
   'use strict';
 
@@ -32,6 +38,9 @@
     elke: 4,
     // Wie nee hoorde, vraagt hetzelfde pas na zoveel dagen weer.
     naNee: 30,
+    // Een oproep op het plein (stap 2): wie bouwt wat erop staat, krijgt deze premie in goud uit de kist, bovenop wat het
+    // gebouw kost.
+    premie: 5,
     // Wat een verzoek de raadsman waard is, als tevredenheid (js/raadsman.js): per zoveel mensen die het missen één punt,
     // tot `nutTot`; het hout of het eten voor de winter en een wachthuis na de rovers wegen `nutTot`, het doel de helft.
     nutPerMensen: 4,
@@ -45,8 +54,12 @@
   const heeftKring = (soort) => T.WENSEN_INSTELLINGEN.kring[soort] != null;
   const wieNaam = (p) => T.naamVanBewoner(p);
 
-  T.nieuweVerzoeken = () => ({ volgende: 0, nee: {}, ja: 0, geweigerd: 0 });
-  const verzoekenVan = (D) => D.verzoeken || (D.verzoeken = T.nieuweVerzoeken());
+  T.nieuweVerzoeken = () => ({ volgende: 0, nee: {}, ja: 0, geweigerd: 0, oproepen: [] });
+  const verzoekenVan = (D) => {
+    const R = D.verzoeken || (D.verzoeken = T.nieuweVerzoeken());
+    if (!R.oproepen) R.oproepen = []; // een spel van vóór de oproepen
+    return R;
+  };
 
   // ---------------------------------------------------------------------------------------------
   // Waar het komt
@@ -117,8 +130,10 @@
     return lijst.length ? lijst[Math.floor(T.lotVanDeDag(D, dag, 53) * lijst.length)] : null;
   }
 
-  // Wat het verzoek de raadsman waard is (js/raadsman.js), als tevredenheid: zie nutPerMensen hierboven.
+  // Wat het verzoek de raadsman waard is (js/raadsman.js), als tevredenheid: zie nutPerMensen hierboven. Wat jij op het
+  // plein liet hangen, weegt het zwaarst.
   function nutVan(D, x) {
+    if (x.voor === 'oproep') return IN().nutTot;
     if (x.voor === 'doel') return IN().nutTot / 2;
     if (x.mensen == null) return IN().nutTot;
     return Math.min(IN().nutTot, Math.ceil(x.mensen / IN().nutPerMensen));
@@ -128,17 +143,27 @@
   // Elke dag
   // ---------------------------------------------------------------------------------------------
 
+  // Wat er gevraagd kan worden, in volgorde: eerst je oproepen, dan wat het dorp zou willen bouwen (T.watTeBouwen,
+  // js/raad.js). [{ soort, waarom, voor, premie }]
+  function watTeVragen(D) {
+    const R = verzoekenVan(D);
+    const bouwt = (soort) => (D.gebouwen || []).some((g) => g.soort === soort && !g.klaar);
+    const oproepen = R.oproepen.filter((o) => T.magGebouwd(D, o.soort) && !bouwt(o.soort))
+      .map((o) => ({ soort: o.soort, waarom: `Op het plein hangt je oproep, met een premie van ${IN().premie} goud.`, voor: 'oproep', premie: IN().premie }));
+    return oproepen.concat(T.watTeBouwen(D).filter((x) => !R.oproepen.some((o) => o.soort === x.soort)));
+  }
+
   // Komt er vandaag iemand iets vragen? Vanuit T.tikVoorvallenDag (js/voorvallen.js), als er niets anders loopt. Het
-  // eerste wat het dorp zou willen bouwen (T.watTeBouwen, js/raad.js), dat het kan betalen, waar niet kort geleden nee
-  // op kwam, met een plek en iemand die het vraagt. Geeft of er een verzoek begon.
+  // eerste wat er gevraagd kan worden (je oproepen, dan wat het dorp mist), dat het dorp kan betalen, waar niet kort
+  // geleden nee op kwam, met een plek en iemand die het vraagt. Geeft of er een verzoek begon.
   T.beginBouwverzoek = function (D, dag) {
     if (!IN().mensen || D.ander || !D.bewoners || !D.wereld || !D.wereld.tegels) return false;
     const R = verzoekenVan(D);
     if (dag < (R.volgende || 0)) return false;
     const missen = new Map(T.watDeHuizenMissen(D).filter((x) => x.bouw).map((x) => [x.bouw, x]));
-    for (const x of T.watTeBouwen(D)) {
+    for (const x of watTeVragen(D)) {
       if (R.nee[x.soort] != null && dag - R.nee[x.soort] < IN().naNee) continue;
-      if (!T.kanBetalen(D, T.GEBOUWEN[x.soort].kosten || {})) continue;
+      if (!T.kanBetalen(D, T.kostenVanVerzoek(x))) continue;
       let wie = null;
       let plek = null;
       if (vanIedereen(x.soort)) {
@@ -151,7 +176,8 @@
       if (!wie || !plek) continue;
       const mist = missen.get(x.soort);
       const L = T.beginVoorval(D, 'bouwverzoek', wie, null, dag);
-      L.bouw = { soort: x.soort, x: plek.x, y: plek.y, waarom: x.waarom, nut: nutVan(D, { mensen: mist ? mist.mensen : null, voor: x.voor }) };
+      L.bouw = { soort: x.soort, x: plek.x, y: plek.y, waarom: x.waarom, voor: x.voor, nut: nutVan(D, { mensen: mist ? mist.mensen : null, voor: x.voor }) };
+      if (x.premie) L.bouw.premie = x.premie;
       R.volgende = dag + IN().elke;
       return true;
     }
@@ -164,8 +190,8 @@
   // ---------------------------------------------------------------------------------------------
 
   // Ja (doe: { bouw: true }, js/voorvallen.js): het gebouw komt er, op zijn plek, of als die intussen bezet is (er staat
-  // iemand) op de plek die hij nu zou kiezen. T.plaatsGebouw (js/gebouwen.js) betaalt de kosten. Wie het vroeg, is er de
-  // meester.
+  // iemand) op de plek die hij nu zou kiezen. T.plaatsGebouw (js/gebouwen.js) betaalt de kosten, en de premie van een
+  // oproep gaat erbij; de oproep hangt er dan niet meer. Wie het vroeg, is er de meester.
   T.verzoekToegestaan = function (D, L) {
     const b = L.bouw;
     const wie = L.wie;
@@ -177,7 +203,12 @@
       return;
     }
     u.instantie.meester = wie;
-    verzoekenVan(D).ja++;
+    const R = verzoekenVan(D);
+    R.ja++;
+    if (b.premie) {
+      T.wijzigVoorraad(D, 'goud', -b.premie);
+      R.oproepen = R.oproepen.filter((o) => o.soort !== b.soort);
+    }
     T.zeg(D, `${T.hoofdletter(wieNaam(wie))} begint aan ${deVan(b.soort)} ${naamVan(b.soort)}.`, 'goed');
   };
 
@@ -188,8 +219,33 @@
     R.geweigerd++;
   };
 
-  // Wat een verzoek kost, voor het venster (T.prijsVanKeuze, js/voorvallen.js) en de raadsman: de kosten van het gebouw.
-  T.kostenVanVerzoek = (bouw) => T.GEBOUWEN[bouw.soort].kosten || {};
+  // Wat een verzoek kost, voor het venster (T.prijsVanKeuze, js/voorvallen.js) en de raadsman: de kosten van het gebouw,
+  // en bij een oproep de premie in goud erbij.
+  T.kostenVanVerzoek = function (bouw) {
+    const k = { ...(T.GEBOUWEN[bouw.soort].kosten || {}) };
+    if (bouw.premie) k.goud = (k.goud || 0) + bouw.premie;
+    return k;
+  };
+
+  // ---------------------------------------------------------------------------------------------
+  // De oproepen (stap 2; vraag 103, c)
+  // ---------------------------------------------------------------------------------------------
+
+  // Een oproep op het plein: "Het dorp zoekt een weverij", met een premie uit de kist voor wie het bouwt (betaald bij ja).
+  // Hangt er al een voor deze soort, dan haal je hem weg. Geeft wat het bericht zegt.
+  T.doeOproep = function (D, soort) {
+    const R = verzoekenVan(D);
+    if (R.oproepen.some((o) => o.soort === soort)) {
+      R.oproepen = R.oproepen.filter((o) => o.soort !== soort);
+      return `Je haalt je oproep weg: het dorp zoekt geen ${naamVan(soort)} meer.`;
+    }
+    if (!T.magGebouwd(D, soort)) return `Een ${naamVan(soort)} mag hier nog niet.`;
+    R.oproepen.push({ soort, dag: dagNu(D) });
+    return `Op het plein hangt je oproep: het dorp zoekt een ${naamVan(soort)}, met een premie van ${IN().premie} goud.`;
+  };
+
+  // De oproep voor deze soort, of null.
+  T.oproepVoor = (D, soort) => ((D.verzoeken && D.verzoeken.oproepen) || []).find((o) => o.soort === soort) || null;
 
   // Wat de raad erbij zegt over deze soort (js/raad.js): wie je er nu om vraagt, of dat je er kort geleden nee op zei.
   // Met een spatie ervoor, of leeg.
@@ -248,10 +304,11 @@
     const L = bouwNu(D);
     return L ? L.bouw.waarom : '';
   };
-  // "14 hout en 8 goud", of "niets"
+  // "14 hout en 8 goud", of "niets"; bij een oproep met de premie erin
   T.GESPREK_WOORDEN.kosten = (D) => {
     const L = bouwNu(D);
     const k = L ? T.kostenVanVerzoek(L.bouw) : {};
-    return Object.keys(k).length ? T.opsomming(Object.entries(k).map(([wat, n]) => `${n} ${wat}`)) : 'niets';
+    const wat = Object.keys(k).length ? T.opsomming(Object.entries(k).map(([w, n]) => `${n} ${w}`)) : 'niets';
+    return L && L.bouw.premie ? `${wat}, met de premie` : wat;
   };
 })(globalThis.Spel = globalThis.Spel || {});
