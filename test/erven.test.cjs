@@ -406,6 +406,9 @@ test('het huis op een erf krijgt drie tegels looppad rondom, en wat later komt, 
   // tegels ervan af, en niet meer in de noordwesthoek.
   T.zetVoorraad(D, 'hout', 100);
   T.zetVoorraad(D, 'goud', 100);
+  // Een hut met zijn deur aan de voorkant (huizen/hut1): de tekening wordt geloot (T.volgendeTekening), en hut2 heeft
+  // zijn deur aan de oostkant, waar het erf hieronder komt. Dan zegt het erf terecht "Daar is een deur."
+  D.volgendeTekening = { hut: 'huizen/hut1' };
   const hut = T.plaatsGebouw(D, 'hut', 5, 5);
   assert.equal(hut.gelukt, true, hut.reden);
   const v = T.voetVanGebouw(hut.instantie);

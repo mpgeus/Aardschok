@@ -267,6 +267,35 @@ test('een overgang naar een kaart die niet bestaat, laat de speler niet vastlope
   assert.ok(fouten.some((m) => String(m).includes('ditbestaatniet')), 'en het klaagt hoorbaar');
 });
 
+test('de weg het gehucht uit leidt bewust nergens heen: alleen mist, en geen fout in de console', () => {
+  // Zolang de spelregel "Land" uit staat (js/land.js), is er achter de weg nog niets; de speeltest telde die fout als
+  // zijn schout de weg af liep (3 okt).
+  const echt = console.warn;
+  console.warn = () => {};
+  const S = { kalender: T.nieuweKalender() };
+  try {
+    assert.ok(T.beginOpKaart(S, 'gehucht'));
+  } finally {
+    console.warn = echt;
+  }
+  const uit = S.wereld.overgangen[0];
+  assert.ok(S.wereld.proef && uit && !T.GEBIEDEN[uit.naar], 'het gehucht is een proefkaart met een weg naar nergens');
+  const fouten = [];
+  const berichten = [];
+  const oud = console.error;
+  const oudUi = T.ui;
+  console.error = (m) => fouten.push(m);
+  T.ui = { bericht: (t) => berichten.push(t) };
+  try {
+    T.gaNaarGebied(S, uit.naar);
+  } finally {
+    console.error = oud;
+    T.ui = oudUi;
+  }
+  assert.deepEqual(fouten, []);
+  assert.deepEqual(berichten, ['Die kant op is nog niets, alleen mist.']);
+});
+
 // ------------------------------------------------- wat er op een tegel staat (js/wereld.js, werklijst vraag 71)
 
 // Zoals T.voorwerpOp het tot 30 sep deed: alle voorwerpen aflopen. De lijst per tegel moet precies dit geven.

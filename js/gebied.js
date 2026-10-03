@@ -135,7 +135,11 @@
     // De kaart is nog niet getekend. Dan gebeurt er niets: je blijft staan waar je staat, want
     // een half aangelegde wereld mag nooit een lopend spel omgooien.
     if (!nieuw) {
-      ontbreekt(naar, 'je stapte er net op');
+      // Op een proefkaart leidt een overgang bewust nergens heen (de weg het gehucht uit, zolang de spelregel "Land" uit
+      // staat; hierboven klaagt het daar bij het inlezen ook niet over): dan alleen de mist, en geen fout in de console.
+      // De speeltest telde die fout, als zijn schout de weg af liep.
+      const bewust = !!(oud && oud.proef && (oud.overgangen || []).some((o) => o.naar === naar));
+      if (!bewust) ontbreekt(naar, 'je stapte er net op');
       if (T.ui && T.ui.bericht) T.ui.bericht('Die kant op is nog niets, alleen mist.');
       return;
     }
