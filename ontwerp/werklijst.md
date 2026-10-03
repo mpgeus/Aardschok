@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; sinds vandaag is er dat eind (2e), met het jaarverslag, en zie je wat een huis wil (2c); het laken, de feesten en de richting van de ui (de schrijftafel) zijn af of gekozen; de speeltest zegt nu dat het graan tussen een dorp van 100 en de winst staat (vraag 102)
+## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; sinds vandaag is er dat eind (2e), met het jaarverslag, en zie je wat een huis wil (2c); het laken, de feesten en de richting van de ui (de schrijftafel) zijn af of gekozen; de speeltest zegt nu dat het graan tussen een dorp van 100 en de winst staat (vraag 102); en Marcel kiest een andere richting: de stad groeit door haar mensen, en jij bepaalt de richting (vraag 103)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht laten groeien en het besturen, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -29,9 +29,10 @@ sessie, `ccr-0d0c2710-bcd5tx`, staan daarbovenop Marcels antwoorden op vraag 98 
 (vraag 100), 2e (vraag 101) en de speeltest van het laken; dat gaat naar `main` als Marcel het vraagt. Hoe een eigen
 branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** Marcels antwoord op **vraag 102** (naar een jaar dat te winnen is: de bouwer die naar
-de winst speelt, meer graan door ontginnen, de raad over de weverij en de groei, en of een slechte dag het hele jaar
-terugzet), en of het werk van deze sessie in `main` gaat. De speeltest van het laken (`speelbaar.md`) zegt: het laken
+**Waar de volgende sessie begint:** Marcels antwoord op **vraag 103** (Marcel, 3 okt: "Ik wil een iets andere richting
+op": de inwoners beginnen zelf een ambacht en vragen toestemming, en jij bepaalt de richting, want "weer een bouw
+spelletje" wordt te snel saai; het plan: verzoeken in plaats van bouwen, oproepen met een premie, en eerst klein). Vraag
+102 (naar een jaar dat te winnen is) wacht daarop. En of het werk van deze sessie in `main` gaat. De speeltest van het laken (`speelbaar.md`) zegt: het laken
 loopt zodra de weverij er staat, maar de bouwers bouwen hem soms laat, en het laken van de marskramer kon niemand betalen;
 de dorpen halen 100 mensen in twee jaar, maar de eerlijke bouwer heeft dan geen graan meer voor bier en brood; alleen
 wie de heer bedriegt, komt in de buurt van een gewonnen jaar, en dan in een dorp van 74. De ui wordt de schrijftafel
@@ -79,7 +80,8 @@ als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speelt
    standen, is af (vraag 90), het goud, de werkplaatsen en het laken ook (vraag 91), brood als eten (vraag 92), en de
    sluwe bouwer (vraag 94), en brood 0,01 met erven binnen de kringen (vraag 95). Daarna de ligging van de herberg
    en de markt (vraag 96), de feesten (vraag 97), het laken (vraag 99), de pagina met ontwerpen voor de ui (vraag 84, a;
-   gekozen: de schrijftafel, vraag 98), 2c en 2e (vraag 100 en 101): af. **Nu: de speeltest naar de winst (vraag 102).**
+   gekozen: de schrijftafel, vraag 98), 2c en 2e (vraag 100 en 101): af. **Nu: de stad groeit door haar mensen (vraag
+   103, Marcel, 3 okt), en daarna de speeltest naar de winst (vraag 102).**
    Het graan van buiten op de markt komt bij stap 6.
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept; en het
    weer, met zaaien dat dagen kost (Marcel, 1 okt: "Stel er is slecht weer"; vraag 82).
@@ -122,7 +124,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 102 (naar een jaar dat te winnen is; zie hierboven), en of het werk van de vijfentwintigste sessie in `main` gaat; welke zin de haak wordt, nu hij is nagezocht tegen Steam (vraag 83, c; de rest van 83 en heel 84 is beantwoord, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* vraag 103 (de stad groeit door haar mensen; zie hierboven) en daarna vraag 102 (naar een jaar dat te winnen is), en of het werk van de vijfentwintigste sessie in `main` gaat; welke zin de haak wordt, nu hij is nagezocht tegen Steam (vraag 83, c; de rest van 83 en heel 84 is beantwoord, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -3334,6 +3336,52 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **a**, de bouwer zo, vier jaar? **b**, meer graan door ontginnen (eerst een plan), door de marskramer, of zo
     laten? **c**, de raad zo? **d**, "een week mag" als spelregel, en welke standaard? **e**, de raad, of een wet die de
     poort dichtzet?
+    **Wacht op vraag 103** (Marcel, 3 okt: de stad groeit door haar mensen): wie de weverij bouwt (a, c) en waar het
+    graan vandaan komt (b), hangt daarvan af.
+103. **De stad groeit door haar mensen, en jij bepaalt de richting** (Marcel, 3 okt, vijfentwintigste sessie: "Ik wil een
+    iets andere richting op. De inwoners bouwen zelf een weverij etc. Ze vragen alleen toestemming om te bouwen. Jij
+    beslist niet wie welk ambacht start natuurlijk. Stel er is een ondernemende inwoner die wapens wil maken etc. Zo groeit
+    de stad zelf, door de mensen. Jij bepaalt alleen de richting?", en: "Ik ben bang dat het te snel saai wordt. Weer een
+    bouw spelletje zelfde kettingen van materialen etc"; plan van Claude; open).
+    **Wat Claude erin ziet.** De zorg klopt, en de speeltest laat het zien: een bot die de raad volgt ("bouw een weverij
+    [B]"), speelt het spel al bijna zo goed als het kan. Zegt de raad wat je moet bouwen, en is dat altijd goed, dan valt
+    er niets te kiezen: dan is het een rekensom, en dat is Anno. Het concept zegt iets anders ("De stad genereert de
+    agenda"; de mensen hebben "een rol, een belang en een band met jou"; "bijna elke beslissing helpt de een en benadeelt
+    de ander"), en Marcel zei het op 26 sep al als iets voor later: "misschien kunnen we later iets doen dat iemand een
+    aanvraag komt doen om iets te bouwen". **De ketens blijven, maar onder water:** de huizen willen brood en laken, en
+    een bakker of een wever maakt het, maar jij bouwt de keten niet; je ziet hem pas als hij hapert ("de bakker heeft
+    geen meel"). Jouw beslissingen gaan over mensen: wie mag wat, waar, op wiens kosten, en wie heeft er last van.
+    Voorstel:
+    - **a, verzoeken in plaats van bouwen.** De werkplaatsen gaan uit het bouwmenu. Een inwoner die een ambacht wil
+      beginnen, komt het je vragen, met een plek die hij zelf koos: "Geert wil een weverij beginnen op het erf achter de
+      kapel." Je kunt gaan kijken, en dan: ja, nee, of ja met een voorwaarde (ergens anders; het dorp betaalt mee en hij
+      begint meteen; hij betaalt een jaar geen belasting). Wie ja hoort, bouwt het met zijn gezin en is er de meester: het
+      is zijn werkplaats. Het verzoek komt zoals een voorval (hij komt je zoeken), of als een papier op je tafel (de
+      schrijftafel, vraag 98, C). Ben je weg, dan beslist je raadsman naar zijn karakter: een zuinige raadsman zegt
+      eerder nee. Een spelregel "Wie bouwt": de mensen (nieuw), of jij (zoals nu).
+    - **b, wie vraagt wat.** Meestal wat het dorp mist: de huizen willen laken, en wie kan weven, ziet zijn kans (dezelfde
+      vraag die de raad nu stelt, `T.watDeHuizenMissen`). Maar soms wat iemand zelf wil, naar zijn karakter: de
+      wapensmid, een tweede herberg die de eerste klanten afneemt, een woekeraar, een stokerij. Om die verzoeken gaat het:
+      ja maakt de een rijk en de ander boos, en een wapensmid maakt de militie sterker, terwijl de heer zich afvraagt
+      waarom zijn dorp wapens maakt. Wie nee hoort, onthoudt het, en kan het ook stiekem doen.
+    - **c, de richting: oproepen en wetten.** Wat jij zelf doet: een oproep op het plein ("Het dorp zoekt een wever"),
+      met een premie uit de kist, zodat iemand het oppakt of er een nieuwkomer met dat vak komt (met vreemden welkom gaat
+      dat sneller); en de wetten, zoals nu. Zo trek je aan het dorp, maar je bouwt het niet.
+    - **d, wat van iedereen is:** de put, de kapel, de markt en het wachthuis bouw jij, uit de kist van het dorp, want die
+      zijn van niemand in het bijzonder. Of komen ook die als verzoek ("de buurt wil een put"), en wijs jij alleen nog
+      erven aan?
+    - **e, eerst klein:** de weverij, de bakkerij, de molen, de brouwerij en de smidse als verzoek, uit wat het dorp mist,
+      met een handvol meesters met een naam en een karakter; de speeltest speelt met een bestuurder die verzoeken tekent
+      en oproepen doet, in plaats van een bouwer. Daarna de verzoeken uit eigen wil (b), want die vragen gevolgen: wie
+      boos is, wat de heer ervan vindt.
+    **Wat het betekent voor wat er is:** de wensen, het doorgroeien, de erven, de voorvallen, de raadsman, de wetten en de
+    heer blijven; ze krijgen er een taak bij. Vraag 102 wacht hierop: de weverij komt dan van een wever, en ook ontginnen
+    kan een verzoek worden ("een boerenzoon wil het bos achter de heide ontginnen"). De meesters die verzoeken doen, zijn
+    ook de "mensen met banden" van stap 5 van de slice, die zo naar voren komt. En het scherpt de haak (`commercieel.md`,
+    vraag 83, c): "Je bouwt het dorp niet. Je bestuurt het."
+    Vragen: **a**, verzoeken in plaats van bouwen, met de spelregel? **b**, uit wat het dorp mist én uit eigen wil? **c**,
+    oproepen met een premie als jouw manier van sturen? **d**, de put, kapel en markt nog van jou, of ook als verzoek?
+    **e**, eerst klein zo, en vraag 102 wacht?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

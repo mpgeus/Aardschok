@@ -134,6 +134,14 @@ zet, is de plek **ertussen**. Drie kandidaten:
 
 Advies: 1 als de zin onder de naam, en 2 als de gedachte in de beschrijving. Welke het wordt, is vraag 83, c.
 
+**Sinds 3 okt** (Marcel: "De inwoners bouwen zelf een weverij etc. Ze vragen alleen toestemming om te bouwen", en "Ik ben
+bang dat het te snel saai wordt. Weer een bouw spelletje zelfde kettingen van materialen etc"; werklijst vraag 103): groeit
+de stad door haar mensen, dan is er een vierde kandidaat, die zegt wat ons in het genre apart zet, waar je elders elk
+gebouw zelf neerzet:
+4. "Je bouwt het dorp niet. Je bestuurt het." (Engels: "You don't build the town. You run it.") Zoals *Majesty* (je
+   stuurt helden met beloningen, niet met bevelen) en *Yes, Your Grace* (verzoekers komen naar je toe), maar dan te voet,
+   in je eigen dorp, tussen de heer en de mensen.
+
 ## Weinig geld: wat Claude maakt (Marcel, 1 okt)
 
 "Geld is beperkt. Ik gebruik jou ☺️" Dus wat kan, maken we zelf, zoals de beelden al uit code komen (voorstel):
