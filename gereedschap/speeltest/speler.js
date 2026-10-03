@@ -46,7 +46,8 @@
 //           de bouwer dus ook: een bakkerij en een molen voor brood, en een molen als de bakkerij geen meel heeft.
 //           Sinds vraag 91, a volgt hij ook wat de raad over goud zegt: zegt die dat de belasting goud brengt, dan
 //           neemt hij hem aan (W), en hij bouwt de eerste wens die hij kan betalen, in plaats van op de eerste te
-//           wachten.
+//           wachten. Sinds vraag 95, b wijst hij een erf aan waar het huis de herberg, een markt, een kapel en een put in
+//           zijn kring heeft (bouwErf), en niet meer gewoon zo dicht mogelijk bij zijn eigen deur.
 // En een zesde (werklijst vraag 93, a, en 94; Marcel, 2 okt: "De bouwer mag alles er aan doen, totale vrijheid"):
 //   sluw    de bouwer, maar hij bedriegt de heer, elk jaar zoals de slimme speler: 60% van het graan boven het zaaigraan
 //           en van het goud weg, de inner bespelen, de soldaten langs lege kelders, de heer 90%. Het goud haalt hij terug
@@ -491,6 +492,41 @@
     }
     daad(`vindt geen plek voor een ${soort}`);
     return false;
+  }
+
+  // Een erf (werklijst vraag 95, b): waar het huis dat erop komt, de plekken die de huizen willen in zijn kring heeft
+  // (T.inDeKring, js/wensen.js), zoals een speler die met het erf in de hand naar de kringen kijkt: eerst de herberg (een
+  // tweede vond in de speeltest van vraag 94 geen plek meer), dan een markt, een kapel en een put. Het huis komt ergens op
+  // het erf, dus telt het midden van het erf, met 2 tegels speling. Van de plekken waar een erf past, die met de beste
+  // kringen; bij gelijk spel het dichtst bij de deur van de schout, zoals bouw(). Tot 3 okt kwam een erf gewoon zo dicht
+  // mogelijk bij de schout, en misten een paar huizen het hele tweede jaar de herberg of een markt.
+  const KRINGEN_VAN_EEN_ERF = [['herberg', 8], ['markt', 4], ['kapel', 2], ['put', 1]];
+  function bouwErf() {
+    const s = S();
+    const huis = huisVanDeSchout();
+    const midden = huis ? T.deurVan(s.wereld, huis.gebouw) : schoutTegel();
+    const maat = T.erfMaat();
+    const plekken = KRINGEN_VAN_EEN_ERF.map(([soort, telt]) => ({ soort, telt, er: T.plekkenVan(s.dorp, soort), straal: T.WENSEN_INSTELLINGEN.kring[soort] - 2 }));
+    let beste = null;
+    for (let y = 0; y < s.wereld.tegels.length; y++) {
+      for (let x = 0; x < s.wereld.tegels[0].length; x++) {
+        if (!T.gebouwPast(s.dorp, 'erf', x, y)) continue;
+        const erf = { x, y, b: maat.b, h: maat.h };
+        const kringen = plekken.filter((p) => p.er.some((r) => T.inDeKring(erf, r, p.straal)));
+        const n = kringen.reduce((som, p) => som + p.telt, 0);
+        const d = Math.hypot(x - midden.x, y - midden.y);
+        if (!beste || n > beste.n || (n === beste.n && d < beste.d)) beste = { x, y, n, d, kringen };
+      }
+    }
+    if (!beste) {
+      daad('vindt geen plek voor een erf');
+      return false;
+    }
+    const u = T.plaatsGebouw(s.dorp, 'erf', beste.x, beste.y);
+    boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort: 'erf', gelukt: u.gelukt, reden: u.reden || null });
+    const bij = beste.kringen.map((p) => (p.soort === 'herberg' ? 'de herberg' : `een ${p.soort}`));
+    daad(u.gelukt ? `wijst een erf aan${bij.length ? ` binnen de kring van ${bij.join(', ')}` : ', buiten elke kring'}` : `wil een erf aanwijzen, maar: ${u.reden}`);
+    return u.gelukt;
   }
 
   // Een plek die huizen in de buurt willen (een put, een kapel; js/wensen.js): waar hij de meeste huizen bereikt die er
@@ -1024,8 +1060,8 @@
         // neemt het hout zodra het er is; zo kwam de houthakker er bij zaad 2 nooit (de speeltest van 1 okt).
         const houthakker = s.dorp.gebouwen.some((g) => g.soort === 'houthakker');
         if (!houthakker && !wil.includes('houthakker') && dagNu() >= houthakkerNietVoor) wil.unshift('houthakker');
-        // Steeds één erf vrij.
-        if (houthakker && !T.vrijeErven(s.dorp).length && dagNu() >= erfNietVoor && !bouw('erf')) erfNietVoor = dagNu() + 30;
+        // Steeds één erf vrij, binnen de kringen (vraag 95, b).
+        if (houthakker && !T.vrijeErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
         // Bouwen wat hij wil, zodra het goud en het hout er zijn; een kapel waar hij de meeste huizen bereikt. Wat het doel
         // vraagt en er al staat (een kapel voor de wensen), hoeft niet meer.
         while (wil.length && wil[0] !== 'houthakker' && !T.doelGebouwen(s.dorp).includes(wil[0])) wil.shift();
@@ -1127,10 +1163,12 @@
     // Per jaar (vraag 94, d): op hoeveel dagen er geen bier of brood was (als er een herberg of een bakkerij staat), hoeveel
     // huizen alles hadden (gemiddeld over de dagen), op hoeveel dagen allemaal, en op hoeveel dagen het gewonnen was zoals
     // vraag 85 het zegt: alle woningen stenen huizen, en alle huizen alles. En de langste reeks dagen dat alle huizen alles
-    // hadden: winnen vraagt een jaar.
+    // hadden: winnen vraagt een jaar. En de druk om eten (vraag 95, Marcel: "er moet altijd druk zijn om voldoende eten"):
+    // op hoeveel dagen er te weinig eten was (wat de balk als honger zegt, D.behoeften.mist), het dorp zei dat het eten de
+    // winter niet haalt (T.watDeWinterNietHaalt), en er geen graan meer lag boven het zaaigraan.
     const st = D().behoeften && D().behoeften.standen;
     if (!st) return;
-    const g = boek.geluk[Math.floor(d / JAAR)] || (boek.geluk[Math.floor(d / JAAR)] = { dagen: 0, alles: 0, allemaal: 0, gewonnen: 0, zonderBier: 0, zonderBrood: 0 });
+    const g = boek.geluk[Math.floor(d / JAAR)] || (boek.geluk[Math.floor(d / JAAR)] = { dagen: 0, alles: 0, allemaal: 0, gewonnen: 0, zonderBier: 0, zonderBrood: 0, honger: 0, etenWinter: 0, graanOp: 0 });
     const huizen = Object.values(st).reduce((n, x) => n + x.huizen, 0);
     const alles = Object.values(st).reduce((n, x) => n + x.alles, 0);
     const staat = (soort) => D().gebouwen.some((x) => x.soort === soort && x.klaar);
@@ -1141,6 +1179,9 @@
     if (allemaal && !D().gebouwen.some((x) => (x.soort === 'hut' || x.soort === 'huis') && x.huis !== 'schout')) g.gewonnen++;
     if (staat('herberg') && (D().voorraad.bier || 0) < 1) g.zonderBier++;
     if (staat('bakkerij') && (D().voorraad.brood || 0) < 1) g.zonderBrood++;
+    if ((D().behoeften.mist || []).includes('eten')) g.honger++;
+    if (T.watDeWinterNietHaalt(D(), d).includes('eten')) g.etenWinter++;
+    if ((D().voorraad.graan || 0) - T.zaaigraanApart(D(), d) < 1) g.graanOp++;
     boek.reeks.nu = allemaal ? boek.reeks.nu + 1 : 0;
     boek.reeks.langste = Math.max(boek.reeks.langste, boek.reeks.nu);
   }

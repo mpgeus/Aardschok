@@ -202,7 +202,9 @@ function vanGehuchtTotDorp(goed) {
 
 // Het graanboek (vraag 94, d): per jaar waar het graan bleef (de luisteraar op T.wijzigVoorraad in speler.js; erbij is +,
 // eraf is −), en wat dat deed: hoeveel dagen er geen bier of brood was, hoeveel huizen gemiddeld alles hadden, en op
-// hoeveel dagen allemaal. Het derde jaar is alleen de eerste maand, tot 1 grasmaand.
+// hoeveel dagen allemaal. Het derde jaar is alleen de eerste maand, tot 1 grasmaand. Daaronder de druk om eten (vraag 95):
+// op hoeveel dagen er honger was, het eten de winter niet haalde, en er geen graan lag boven het zaaigraan, en hoeveel
+// jagers er dat jaar kwamen.
 function hetGraanboek(goed) {
   const twee = goed.filter((u) => (u.graan || []).length);
   if (!twee.length) return [];
@@ -228,6 +230,17 @@ function hetGraanboek(goed) {
     });
   }
   uit.push('', ...twee.map((u) => `- ${NAMEN[u.speler] || u.speler}, zaad ${u.zaad}: alle huizen hadden alles hooguit ${u.reeks ? u.reeks.langste : 0} dagen achter elkaar.`), '');
+  uit.push('### De druk om eten', '', 'Per jaar op hoeveel dagen (vraag 95: "er moet altijd druk zijn om voldoende eten").', '');
+  const kop2 = ['speler', 'zaad', 'jaar', 'honger', 'het eten haalt de winter niet', 'geen graan boven het zaaigraan', 'jagers erbij'];
+  uit.push(regel(kop2), regel(kop2.map(() => '---')));
+  for (const u of twee) {
+    (u.geluk || []).forEach((g, j) => {
+      if (!g || g.honger == null) return;
+      const jagers = (u.gebouwd || []).filter((x) => x.gelukt && x.soort === 'jager' && Math.floor(x.dag / 360) === j).length;
+      uit.push(regel([NAMEN[u.speler] || u.speler, u.zaad, String(j + 1), String(g.honger), String(g.etenWinter), String(g.graanOp), String(jagers)]));
+    });
+  }
+  uit.push('');
   return uit;
 }
 
