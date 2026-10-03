@@ -226,6 +226,12 @@ pixels, ongeveer vijftien bij zeventien tegels. Dan vullen twee of drie huizen h
 zijn de mensen groot genoeg. De brede platen die we renderen zijn overzichtskaarten, niet wat
 de speler ziet.
 
+**Het overzicht** (Marcel, 3 okt 2026, vraag 108, a: "108 a tab"): met `Tab` kijk je over je dorp, op 0,5 (een
+kwart van wat je op 1080p ziet, in elke richting twee keer zo ver) en met het wiel op 0,35. Daar zijn de mensen nog
+te zien, maar klein; de kunst is gemaakt voor ×2, en het overzicht is om te kijken en te plannen, niet om te genieten.
+Het tekenen kost daar meer (gemeten op 3 okt, zonder scherm: 10 ms per beeld bij het volgen, 30 ms op 0,5 en 49 ms
+op 0,35), omdat er vier tot acht keer zoveel tegels in beeld zijn.
+
 De toren en zijn kamers houden hun eigen sfeer, die uit Mystic Towers.
 
 ### De leidende referentie: de boerderij met de watermolen (Marcel, 20 sep 2026)

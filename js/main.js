@@ -7,6 +7,7 @@
   const ctx = canvas.getContext('2d');
   let bw = 0;
   let bh = 0;
+  let zoomVenster = 1; // de zoom die bij het venster hoort (formaat); het overzicht zoomt verder uit
   const S = (T.S = { tijd: 0, wind: 0 });
 
   // Een nieuw spel begint in het gehucht. Met index.html?kaart=<naam> begint het op een andere
@@ -32,6 +33,7 @@
   // een gehucht van de maker uit dat zaad (T.beginOpKaart, js/gebied.js; Spel.debug.gehucht).
   T.nieuwSpel = function (makerZaad) {
     for (const k of Object.keys(S)) if (k !== 'zoom') delete S[k];
+    S.zoom = zoomVenster; // ook als het vorige spel in het overzicht stond
     Object.assign(S, {
       tijd: 0,
       gebieden: {}, // een nieuw spel begint met schone gebieden
@@ -117,7 +119,8 @@
     canvas.style.width = bw + 'px';
     canvas.style.height = bh + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    S.zoom = Math.max(1, Math.min(2, Math.min(bw / 900, bh / 540)));
+    zoomVenster = Math.max(1, Math.min(2, Math.min(bw / 900, bh / 540)));
+    S.zoom = S.overzicht ? S.overzicht.zoom : zoomVenster;
   }
 
   // Van schermpixels naar de isometrische vlakte waarop getekend wordt, en terug. Precies
@@ -298,6 +301,7 @@
   // In een gevecht kijkt de camera naar wie van jouw kant aan de beurt is (de schout, of een man van de
   // militie) en de vijanden die nog staan.
   function cameraDoel() {
+    if (S.overzicht) return S.overzicht.doel;
     const aanleiding = S.overgang && S.overgang.aanleiding;
     const wie = T.spelerAanDeBeurt(S) ? T.aanDeBeurt(S) : S.schout;
     const lijst = S.gevecht
@@ -314,6 +318,48 @@
     }
     return { x: x / lijst.length, y: y / lijst.length - 24 };
   }
+
+  // Het overzicht (werklijst vraag 108, a; Marcel, 3 okt: "108 a tab", op "we hebben misschien toch een overview modus
+  // nodig. Dus dat we wisselen tussen volgen van de speler en een overview"). Tab tilt de camera van de schout af en zoomt
+  // uit, zodat je over je dorp kijkt en plant: slepen of de pijltjes schuiven het beeld, het wiel zoomt. Wat je doet, doet
+  // de schout nog altijd: een klik op iemand of ergens heen, en hij loopt erheen (het poppetje blijft de manier waarop je
+  // bestuurt; geen god boven het dorp, commercieel.md). Tab, of een klik op de schout, brengt je terug. Een gevecht ook.
+  // Alleen scherm: S.overzicht staat in T.schermVelden (js/opslaan.js), en wordt niet bewaard.
+  const OVERZICHT = {
+    zoom: [0.5, 0.35], // waar Tab heen zoomt, en verder uit met het wiel (dichterbij gaat tot de zoom van het venster)
+    stap: 64, // zoveel schermpixels per druk op een pijltje
+    sleepVanaf: 6, // zoveel pixels moet de muis bewegen voor het slepen is in plaats van een klik
+  };
+  const zoomStanden = () => [zoomVenster, ...OVERZICHT.zoom];
+  function wisselOverzicht(aan = !S.overzicht) {
+    if (aan && S.modus !== 'verkennen') return;
+    S.overzicht = aan ? { doel: { x: S.camera.x, y: S.camera.y }, zoom: OVERZICHT.zoom[0] } : null;
+    S.zoom = aan ? S.overzicht.zoom : zoomVenster;
+    T.ui.toonOverzicht(S);
+  }
+  T.wisselOverzicht = wisselOverzicht;
+  // Het beeld schuiven, in schermpixels: wat je sleept of met de pijltjes duwt, meteen, zonder na te glijden.
+  function schuifOverzicht(dx, dy) {
+    S.overzicht.doel.x += dx / S.zoom;
+    S.overzicht.doel.y += dy / S.zoom;
+    S.camera.x = S.overzicht.doel.x;
+    S.camera.y = S.overzicht.doel.y;
+  }
+  // Een stand verder uit (+1) of dichterbij (-1), met het wiel.
+  function zoomOverzicht(richting) {
+    const z = zoomStanden();
+    const i = Math.max(0, z.indexOf(S.overzicht.zoom));
+    S.overzicht.zoom = z[Math.max(0, Math.min(z.length - 1, i + richting))];
+    S.zoom = S.overzicht.zoom;
+  }
+  // Staat de muis op het lijf van de schout (met dezelfde maten als zoekDoel)?
+  function opDeSchout(mx, my) {
+    const { x: sx, y: sy } = naarVlak(mx, my);
+    const p = T.naarScherm(S.schout.x, S.schout.y);
+    return sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoogteVan(S.schout) && sy < p.y + 9;
+  }
+  const SCHUIF = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+  let slepen = null; // { x, y, bewogen }: de muis ging omlaag in het overzicht
 
   // De raad onder het doel (js/raad.js) rekent met de groei en de winter, en dat hoeft niet elk beeld: om de halve
   // seconde is genoeg. Hij verandert niets, en is alleen scherm, dus hij staat niet in S.
@@ -378,6 +424,8 @@
     if (S.modus === 'overgang' && S.wereld.wezens.every((e) => !e.pad.length)) T.beginGevecht(S);
     const doelAlpha = S.modus === 'gevecht' ? 1 : 0;
     S.rasterAlpha += (doelAlpha - S.rasterAlpha) * Math.min(1, dt * 5);
+    // Een gevecht begint: dan terug naar de schout, want het gevecht wil je zien.
+    if (S.overzicht && (S.modus === 'overgang' || S.modus === 'gevecht')) wisselOverzicht(false);
     const doel = T.ui.titelOpen() ? titelCamera() : cameraDoel();
     const k = 1 - Math.exp(-dt * 5);
     S.camera.x += (doel.x - S.camera.x) * k;
@@ -394,14 +442,43 @@
     requestAnimationFrame(lus);
   }
 
+  canvas.addEventListener('mousedown', (ev) => {
+    slepen = ev.button === 0 && S.overzicht ? { x: ev.clientX, y: ev.clientY, bewogen: false } : null;
+  });
   canvas.addEventListener('mousemove', (ev) => {
     S.muis = { x: ev.clientX, y: ev.clientY };
+    // Slepen in het overzicht schuift het beeld (pas na een paar pixels: anders is het een klik).
+    if (!slepen || !S.overzicht) return;
+    if (!(ev.buttons & 1)) {
+      slepen = null;
+      return;
+    }
+    const dx = ev.clientX - slepen.x;
+    const dy = ev.clientY - slepen.y;
+    if (!slepen.bewogen && Math.hypot(dx, dy) < OVERZICHT.sleepVanaf) return;
+    slepen.bewogen = true;
+    schuifOverzicht(-dx, -dy);
+    slepen.x = ev.clientX;
+    slepen.y = ev.clientY;
   });
+  canvas.addEventListener('wheel', (ev) => {
+    if (!S.overzicht) return;
+    ev.preventDefault();
+    zoomOverzicht(ev.deltaY > 0 ? 1 : -1);
+  }, { passive: false });
   canvas.addEventListener('mouseleave', () => {
     S.muis = null;
   });
   canvas.addEventListener('click', (ev) => {
     S.muis = { x: ev.clientX, y: ev.clientY };
+    // Na het slepen is het loslaten geen klik; in het overzicht brengt een klik op de schout je terug.
+    const gesleept = slepen && slepen.bewogen;
+    slepen = null;
+    if (gesleept) return;
+    if (S.overzicht && opDeSchout(ev.clientX, ev.clientY)) {
+      wisselOverzicht(false);
+      return;
+    }
     // Wie slaapt en ergens heen wil, is wakker (js/dag.js).
     if (S.slaap && T.wordWakker) T.wordWakker(S);
     werkHoverBij();
@@ -505,6 +582,17 @@
       return;
     }
     if (S.modus !== 'verkennen' && S.modus !== 'gevecht') return;
+    // Tab: het overzicht (werklijst vraag 108, a), alleen bij het rondlopen; in het overzicht schuiven de pijltjes het beeld.
+    if (ev.key === 'Tab') {
+      ev.preventDefault();
+      if (S.modus === 'verkennen') wisselOverzicht();
+      return;
+    }
+    if (S.overzicht && SCHUIF[ev.key]) {
+      ev.preventDefault();
+      schuifOverzicht(SCHUIF[ev.key][0] * OVERZICHT.stap, SCHUIF[ev.key][1] * OVERZICHT.stap);
+      return;
+    }
     // B: het bouwmenu (js/hud.js), alleen in het nieuwe spel en alleen bij het rondlopen — botst
     // nergens mee (CLAUDE.md, "Toetsen"). Nog eens B, Esc of rechtsklik legt een gebouw weer weg.
     // O: de spelregels (js/hud.js, js/opties.js), net als B alleen bij het rondlopen.

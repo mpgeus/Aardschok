@@ -2164,7 +2164,8 @@ Nog open (vragen van Claude):
 **Zo staat het nu** (25 sep): besloten, nog niet gebouwd (punt 6c). Nu loop je over gras even snel
 als over de weg, en de steengroeve staat nog in het bouwmenu. **Sinds 3 okt hoort het bij de demo** (Marcel: "De gebouwen moeten
 menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan voor de
-demo."), samen met een overzicht naast het volgen van de schout: het plan is werklijst vraag 108.
+demo."), samen met een overzicht naast het volgen van de schout: het plan is werklijst vraag 108. Het overzicht is er
+sinds 3 okt (`Tab`, vraag 108, a; `beeld.md`): je kijkt van boven en plant, maar wat je klikt, doet de schout.
 
 **Hoe het zo kwam:**
 

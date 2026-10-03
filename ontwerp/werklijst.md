@@ -3645,6 +3645,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     vanwaar je overziet? **b**, paadjes die ontstaan, en meteen een paadje van elke nieuwe deur? **c**, stenen zo (keien,
     en het plein bij marktrecht)? **d**, lantaarns bij de gebouwen van het dorp en op kruisingen, en ramen die 's avonds
     branden? **e**, eerst de moestuin en een stapel hout, of iets anders?
+    **Marcel koos (3 okt): "108 a tab, b c d e ja".** Dus een overzicht met `Tab` (kijken en plannen, spreken doet de
+    schout), en b tot en met e zoals voorgesteld, in deze volgorde: eerst a, dan b en d, dan c en e.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
@@ -3949,6 +3951,26 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **Vraag 108, a: het overzicht onder `Tab`** (vijfentwintigste sessie; Marcel: "108 a tab"; `js/main.js`).
+  `Tab` tilt de camera van de schout af en zoomt uit tot 0,5, zodat je over het dorp kijkt; slepen of de pijltjes
+  schuiven het beeld, het wiel zoomt verder uit (0,35) of terug. Wat je klikt, doet de schout nog altijd: hij loopt erheen
+  en spreekt wie je aanklikt, en het bouwmenu, een erf en het briefje bij een huis werken zoals altijd. `Tab`, een klik
+  op de schout of een gevecht brengt je terug. Het tekenen kost op 0,5 drie keer zoveel als bij het volgen (30 ms per
+  beeld zonder scherm, op 0,35 49 ms; `beeld.md`).
+- 3 okt 2026 — **Een looppad van drie tegels om elk nieuw gebouw, en de tekenvolgorde** (vijfentwintigste sessie; Marcel:
+  "Er moet wel altijd een looppad zijn, het liefste van 3 tegels breed", en "Nee ik wil 3 tegels"). Rondom elk nieuw
+  gebouw blijven drie tegels te belopen, zonder gebouw of boom (`T.looppadOm`), bij een verzoek en in het bouwmenu; een
+  erf legt bij het aanwijzen vast waar zijn huis komt (`erf.plan`), zo dat ook dat huis drie tegels houdt. En een fout
+  in het tekenen: een lang gebouw (de kapel, 5 bij 10) kwam over de hut ervóór, omdat twee gebouwen alleen naar een hoek
+  keken; nu vergelijken ze hun hele voet (`T.gebouwVoorGebouw`). `npm test` 851/851.
+- 3 okt 2026 — **Vraag 102, b, c en d, en het vertrouwen dat de tevredenheid volgt** (vijfentwintigste sessie; Marcel:
+  "102 a b c d e ja, vertrouwen ook ja"). **b:** de herbergierster houdt bier apart voor de huizen tot de oogst binnen is
+  (hooguit 150 dagen; `T.bierApart`), zoals de boeren het zaaigraan: de gasten drinken alleen wat erboven ligt. **c:** na
+  de laatste trede telt de raad tot de 100 mensen van de winst, en zijn het er genoeg, dan zegt hij dat je het vrije erf
+  weghaalt (een gezin op een erf begint in een hut, en zet de teller terug). **d:** de spelregel "Het eind": een slechte
+  reeks van hooguit zeven dagen zet de teller stil in plaats van op nul, en het doel zegt hoeveel dagen je nog hebt.
+  **Vraag 106, stap 3:** het vertrouwen van het dorp gaat elke dag een zestigste van het verschil naar hoe tevreden het
+  dorp is, zodat een klap in een paar maanden wegslijt, en een tevreden dorp je niet meer langzaam wegjaagt.
 - 3 okt 2026 — **Vraag 106, stap 2: elke maand een gril van de heer** (vijfentwintigste sessie; `js/grillen.js`). Op de
   twaalfde van elke maand (niet in de eerste, en niet in wijnmaand en slachtmaand) een brief met iets wat hij wil,
   geloot uit veertien en pas na een jaar weer: het standbeeld, zijn jacht in je velden, het bier voor de bruiloft van

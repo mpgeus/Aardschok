@@ -235,7 +235,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   gesprek erop let (`T.questVoorwaarde`, `T.questGevolg`), voorwerpen die aan een quest hangen,
   en `T.keurQuests`, dat de toets van drie antwoorden nakijkt.
 - `js/dialoog.js`, `js/ui.js` (alle html over het beeld), `js/tekenen.js`, `js/main.js`
-  (spellus, invoer, zoom, camera).
+  (spellus, invoer, zoom, camera). **Het overzicht** (vraag 108, a): `Tab` tilt de camera van de schout af en zoomt uit
+  (`T.wisselOverzicht`, `S.overzicht`, alleen scherm); slepen of de pijltjes schuiven, het wiel zoomt, en wat je klikt,
+  doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug.
 - `js/doorkijk.js`: wie je door een boom of een huis heen ziet (`T.zichtbaarDoor`,
   `T.werkDoorkijkBij`), en hoe: het kijkvenster (`T.tekenKijkgat`) of het raster (`T.tekenGerasterd`),
   een keuze in de spelregels (`beeld.md`, "Doorkijk"). `js/tekenen.js` vraagt het aan. Het eerste stuk

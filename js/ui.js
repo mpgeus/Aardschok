@@ -47,6 +47,7 @@
       this.verbergOverlay();
       this.verbergTooltip();
       this.opdracht(null);
+      this.toonOverzicht(S); // een geladen of nieuw spel volgt de schout weer
       $('terug').classList.add('verborgen'); // wat er gebeurde toen je op reis was (js/landkaart.js)
       // De kalender en de voorraad van het gehuchtspel (js/hud.js); dat bestand laadt na dit
       // bestand, dus staan de functies er dan al, maar niet als ui.js ooit alleen gebruikt wordt.
@@ -54,6 +55,11 @@
       // De balk is die van je eigen dorp (js/dorp.js): met het spel zelf (S) bleef hij leeg tot er iets veranderde.
       if (this.toonVoorraad && S.dorp) this.toonVoorraad(S.dorp);
       if (this.toonBevolking && S.dorp) this.toonBevolking(S.dorp);
+    },
+
+    // Het overzicht (js/main.js, Tab; werklijst vraag 108, a): het label bovenin zegt hoe je kijkt en hoe je terugkomt.
+    toonOverzicht(S) {
+      $('overzicht-label').classList.toggle('verborgen', !S.overzicht);
     },
 
     toonSluipen(aan) {
