@@ -149,6 +149,53 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 3 okt: de twee bazen (werklijst, vraag 106)
+
+Twee keer gespeeld in de vijfentwintigste sessie, op `ccr-0d0c2710-bcd5tx`: eerst op `ab14eed` (de gunst, het
+vertrouwen en de grillen; de speeltest zelf op `0ed04ab`, waarin de spelers op de grillen antwoorden), en na het
+bijstellen van het vertrouwen op `00d25a5`. Alle achttien spellen liepen beide keren zonder fouten in de console. De
+brave speler kiest bij een gril het eerste antwoord, de bouwer het eerste dat het dorp kan betalen, de luie spelers het
+goedkoopste dat de heer blij maakt, en de slimme en de sluwe wegen de gunst, het vertrouwen en de kosten tegen elkaar.
+
+| Speler | De gunst, eind (laagst) | Het vertrouwen, eerste keer | Het vertrouwen, tweede keer | Tevreden, gemiddeld | Waarschuwingen en weg |
+|---|---|---|---|---|---|
+| braaf | 49, 67, 56 (38) | 99, 92, 89 (50) | 40, 31, 30 (30) | 91 à 92% | geen |
+| lui 30% | 25, 37, 73 (19) | 95, 100, 0 (0) | 48, 48, 0 (0) | 90 à 91% | de heer met zaad 1; met zaad 3 beide keren weggejaagd door het dorp |
+| lui 60% | 40, 37, 32 (24) | 96, 99, 90 (50) | 38, 44, 35 (35) | 90% | geen |
+| slim | 85, 98, 77 (48) | 100, 100, 98 (50) | 60, 47, 56 (45) | 94% | geen |
+| bouwer, twee jaar | 54, 50, 28 (14) | 91, 97, 92 (50) | 2, 11, 9 (2) | 81 à 82% | het dorp alle drie, de heer met zaad 1 en 3 |
+| sluw, twee jaar | 100, 94, 100 (48) | 93, 97, 95 (50) | 30, 29, 40 (26) | 78% | geen |
+
+Per speler de drie zaden, en tussen haakjes het laagste; de gunst is die van de tweede keer.
+
+**Wat opviel:**
+1. **De gunst van de heer doet wat hij moet.** Wie betaalt wat de heer vraagt, houdt hem tevreden (de slimme 77 à 98, de
+   sluwe 94 à 100). Wie te weinig geeft, verliest bij de schatting 25 à 40. Drie spellen zakten onder de 20 (laagst
+   14) en kregen een waarschuwing: de luie met zaad 1, en de bouwer met zaad 1 en 3. Zijn ambt raakte niemand kwijt: na
+   de waarschuwing komt de volgende schatting pas een jaar later. Elke speler beantwoordde alle grillen (tien per jaar),
+   en een antwoord verschuift de gunst met −10 tot +8.
+2. **Het vertrouwen liep de eerste keer vol:** 89 à 100 bij iedereen die het jaar uitspeelde. Een tevreden dorp gaf er
+   elke dag wat bij, en elk antwoord op een voorval telde helemaal. Bijgesteld in `00d25a5`: een voorval telt half, en per
+   dag komt er alleen iets bij boven 75% tevreden ((tevredenheid − 0,75) × 0,15).
+3. **De tweede keer zakt het vertrouwen bij iedereen.** Ook een dorp dat 90% tevreden is, eindigt na een jaar op 30 à
+   48. De bouwer eindigt na twee jaar op 2, 11 en 9: in een derde jaar had zijn dorp hem weggejaagd. Per maand (de
+   bouwer, zaad 1): 50 à 55 in het eerste jaar, dan −9 in wintermaand (de soldaten van de heer, omdat hij te weinig
+   betaalde). In het tweede jaar −13 rond de heervaart (acht mannen mee: −8), daarna elke maand een paar punten (een
+   gesneuvelde, antwoorden op voorvallen, wie hij niet sprak), en weer −9 in wintermaand. Daartegen staat per dag bijna
+   niets: bij 85% tevreden een half punt per maand. Zo telt het vertrouwen
+   alleen de klappen op, en wie langer speelt, krijgt er meer. Alleen de slimme speler, die de heer betaalt en dus geen
+   soldaten krijgt, blijft rond de 50.
+4. **De luie speler met 30% en zaad 3 werd beide keren weggejaagd**, op 10 slachtmaand van het eerste jaar: hij sprak te
+   veel mensen niet ("je had geen tijd", elke keer −2). Zo hoort het.
+5. **De rest bleef gelijk:** de mensen (bouwer 96, 97 en 85; sluw 74, 94 en 76), de langste reeks dagen waarop alle
+   huizen alles hadden (bouwer 74 à 92, sluw 23 à 39), en de dagen zonder bier in het tweede jaar (bouwer 70 à 150). Het
+   bijstellen raakte alleen het vertrouwen. Wat dit zegt over de winst, staat bij vraag 102 in de werklijst.
+
+**Voorstel** (vraag 106, stap 3; open): het vertrouwen volgt hoe tevreden het dorp is. Elke dag gaat het een zestigste
+van de weg naar de tevredenheid (bij 85% tevreden naar 85), zodat een klap in een paar maanden wegslijt. Dan jaagt het
+dorp je weg als het slecht gaat (honger, kou) en je het daarbij nog eens raakt, en niet omdat de heer twee keer
+soldaten stuurde naar een dorp dat verder tevreden is.
+
 ## De speeltest van 3 okt: de ondernemers (werklijst, vraag 104)
 
 Gespeeld in de vijfentwintigste sessie, op `ccr-0d0c2710-bcd5tx` op `cb62acc` (de wapenmaker en de tweede herberg; de

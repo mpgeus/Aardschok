@@ -41,8 +41,10 @@ vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Gi
 zag: het is één knoop, het land. De 209 tegels akker zijn in het derde jaar dezelfde als in het eerste. Bij zo'n 90
 mensen is er een groot deel van het jaar geen graan over, en dan komt er geen gezin, brouwt de herberg niet en krijgt de
 heer te weinig. Het voorstel: ontginnen als verzoek, de herberg die na de oogst vooruit brouwt, de raad die bij 100 zegt
-dat je geen erf meer aanwijst, "een week mag", en een speeltest van vier jaar. Daarvoor nog: de tweede speeltest van de
-twee bazen (vraag 106, stap 3) opschrijven in `speelbaar.md`. Na te lopen uit de speeltests: drie of vier herbergen per
+dat je geen erf meer aanwijst, "een week mag", en een speeltest van vier jaar. En op het voorstel bij **vraag 106, stap 3**:
+de tweede speeltest van de twee bazen (`speelbaar.md`) laat het vertrouwen van het dorp bij iedereen zakken, ook bij een
+tevreden dorp (de bouwer eindigt na twee jaar op 2 à 11), omdat het alleen de klappen optelt; het voorstel is dat het
+de tevredenheid volgt, en dat moet vóór de speeltest van vier jaar. Na te lopen uit de speeltests: drie of vier herbergen per
 dorp (het bier mist om het graan, en dan vraagt de keten een herberg; vraag 102, b), en een schout die alleen tegen drie
 wilde rovers viel, omdat de militie onderweg was. De rest van **vraag 105** (wat ons uniek maakt) komt na de kern. De ui
 wordt de schrijftafel (vraag 98, C): het briefje bij een huis is het eerste papier, en de rest volgt later (januari, met
@@ -113,7 +115,8 @@ plaatst.
 *0c. Wat er nog open staat, naar de kern en de demo* (Claude, 3 okt, op Marcels vraag "Wat staat er nog open voor de
 kleine slice? / Demo versie"; een overzicht, geen besluit). **De kern** (tot december): de wensen, het eind, het dorp
 dat zelf bouwt, de ondernemers en de twee bazen met de grillen staan. Open, in de volgorde die Claude aanraadt:
-1. De twee bazen afmaken (vraag 106, stap 3): de tweede speeltest, en bijstellen.
+1. De twee bazen afmaken (vraag 106, stap 3): de tweede speeltest is gedaan (`speelbaar.md`). De gunst werkt; het
+   vertrouwen zakt bij iedereen, en het voorstel is dat het de tevredenheid volgt.
 2. **Een jaar dat te winnen is** (vraag 102, opnieuw, met de maat eerst): geen dorp van de speeltest wint in twee jaar.
    De groei stopt op eten en op de winter, niet op plaats; en elk nieuw gezin in een hut zet de teller terug. Het plan
    staat er (3 okt): het is één knoop, het land, en het voorstel begint met ontginnen als verzoek.
@@ -3397,8 +3400,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       betrapt wordt. Hoe lang dat is: een jaar duurt een uur op 30× en drie uur op 10×. Een winst in het derde jaar is dus
       drie à negen uur spelen, zoals een scenario in Anno. Voor een demo (Next Fest, een half uur à een uur) is dat te
       lang; die gaat dan over het eerste stuk, van gehucht tot dorp. Welk stuk de demo wordt, is een eigen vraag (`0c`).
-    De volgorde, als het ja is: b, c en d (klein, één sessie). Dan de speeltest van vier jaar (e), die zegt hoeveel land er
-    tekort is. Dan het plan voor ontginnen (a), en de speeltest opnieuw.
+    De volgorde, als het ja is: b, c en d (klein, één sessie), met het vertrouwen van vraag 106, stap 3. Dan de speeltest
+    van vier jaar (e), die zegt hoeveel land er tekort is. Dan het plan voor ontginnen (a), en de speeltest opnieuw.
     Vragen: **a**, de maat 100, met ontginnen als verzoek (eerst een plan), of graan kopen, of de maat omlaag? **b**, de
     herberg brouwt na de oogst vooruit? **c**, de raad zegt het bij 100, zonder wet? **d**, "een week mag" als standaard?
     **e**, de speeltest zo, met de winst in het derde of vierde jaar als doel?
@@ -3557,6 +3560,19 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       de ander niet: zijn gunst tegen het vertrouwen van het dorp. Een stuk of vijftien grillen, zodat twee jaar niet
       herhaalt.
     - **Stap 3, de speeltest.** Wordt er iemand weggestuurd, en is het te streng of te slap? De getallen in de werkbank.
+      **Twee keer gespeeld** (Claude, 3 okt; `speelbaar.md`). De gunst werkt: wie de heer betaalt, houdt hem (de
+      slimme 77 à 98, de sluwe 94 à 100), en wie te weinig geeft, zakt; drie spellen kregen een waarschuwing, en niemand
+      raakte zijn ambt kwijt. Het vertrouwen nog niet. De eerste keer liep het vol (89 à 100). Na het bijstellen
+      (`00d25a5`: een voorval telt half, en per dag komt er alleen iets bij boven 75% tevreden) zakt het bij iedereen.
+      Ook een dorp dat 90% tevreden is, eindigt op 30 à 48, en de bouwer na twee jaar op 2, 11 en 9, met een
+      waarschuwing van het dorp. De klappen komen vooral van de heer: zijn soldaten (−10, elk jaar dat je te weinig
+      betaalt) en de heervaart (−8). Per dag komt er bij 85% tevreden maar een half punt per maand bij. Zo telt het
+      vertrouwen alleen de klappen op, en zakt het bij iedereen die lang genoeg speelt.
+      **Voorstel (open): het vertrouwen volgt hoe tevreden het dorp is.** Elke dag gaat het een zestigste van de weg naar
+      de tevredenheid (bij 85% tevreden naar 85), zodat een klap in een paar maanden wegslijt. Dan jaagt het dorp je weg
+      als het slecht gaat (honger, kou) en je het daarbij nog eens raakt, en niet omdat de heer twee keer soldaten
+      stuurde naar een dorp dat verder tevreden is. Dit moet vóór de speeltest van vier jaar (vraag 102, e). Vraag:
+      **zo?**
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
