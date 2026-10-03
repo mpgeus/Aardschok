@@ -47,7 +47,9 @@ function aanval(S, aantal) {
 function metWachthuis(S) {
   S.dorp.voorraad.hout = 100;
   S.dorp.voorraad.goud = 100;
-  const r = T.plaatsGebouw(S.dorp, 'wachthuis', 49, 51);
+  // Waar het past, met een looppad rondom (js/gebouwen.js), zo dicht mogelijk bij 49, 51 (ten zuidoosten van het plein).
+  const plek = T.plekVoor(S.dorp, 'wachthuis', { x: 49, y: 51 });
+  const r = T.plaatsGebouw(S.dorp, 'wachthuis', plek.x, plek.y);
   assert.equal(r.gelukt, true, r.reden);
   r.instantie.klaar = true;
   T.verdeelHanden(S.dorp);

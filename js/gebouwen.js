@@ -91,12 +91,10 @@
     // de visser), maakt door. De herberg brouwt zo tot er 30 bier is, zoals sinds 27 sep.
     werkplaatsMaaktTot: 30,
     // Een looppad om elk nieuw gebouw (Marcel, 3 okt: "Er moet wel altijd een looppad zijn, het liefste van 3 tegels
-    // breed", met een kapel die klem stond tussen twee huizen, met struiken voor de deur): rondom moeten zoveel tegels
-    // te belopen zijn, zonder gebouw en zonder boom. `minstens` geldt altijd, ook in het bouwmenu; wie zelf een plek
-    // kiest voor een verzoek (T.plekVoor, js/verzoeken.js), neemt een plek met `liefst` als die hooguit `omweg` tegels
-    // verder ligt dan de dichtste plek (en net zoveel huizen bereikt), en anders een smallere: in het volle midden van het
-    // gehucht lag een plek met drie tegels rondom soms 26 tegels verderop.
-    looppad: { minstens: 1, liefst: 3, omweg: 8 },
+    // breed", met een kapel die klem stond tussen twee huizen, met struiken voor de deur; en op de vraag of één tegel
+    // genoeg is: "Nee ik wil 3 tegels"): rondom moeten zoveel tegels te belopen zijn, zonder gebouw en zonder boom, ook in
+    // het bouwmenu en voor wie zelf een plek kiest voor een verzoek (T.plekVoor, js/verzoeken.js).
+    looppad: 3,
   };
 
   T.GEBOUWEN = {
@@ -634,8 +632,8 @@
     }
     if (vast) return 'Daar past het niet.';
     if (reden) return reden;
-    const n = T.GEBOUWEN_INSTELLINGEN.looppad.minstens;
-    if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n)) return `Er moet een looppad omheen: ${n === 1 ? 'een tegel' : `${n} tegels`} vrij, zonder gebouw of boom.`;
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n)) return `Er moet een looppad omheen: ${n === 1 ? 'een tegel' : `${T.telwoord(n)} tegels`} vrij, zonder gebouw of boom.`;
     return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h });
   };
 

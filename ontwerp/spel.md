@@ -319,12 +319,12 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
 - **Waar:** de plek die hij koos (`T.plekVoor`): een put of een kapel waar hij de meeste huizen bereikt die er nog geen
   hebben; een werkplaats zo dicht mogelijk bij zijn huis; wat van iedereen is (de markt, het wachthuis) bij het huis van
   de schout. Zolang hij het vraagt, ligt de plek in goud op de grond, met de kring erbij: zo kun je gaan kijken.
-  **Altijd met een looppad** (Marcel, 3 okt: "Er moet wel altijd een looppad zijn, het liefste van 3 tegels breed",
-  met een kapel die klem stond tussen twee huizen, met struiken voor de deur): rondom elk nieuw gebouw blijft minstens
-  één tegel te belopen, zonder gebouw of boom, ook in het bouwmenu (`T.looppadOm`, `js/gebouwen.js`). Wie de plek kiest,
-  neemt liefst drie tegels rondom, als die plek net zoveel huizen bereikt en hooguit acht tegels verder ligt dan de
-  dichtste plek met één tegel; anders twee, en anders één (`T.GEBOUWEN_INSTELLINGEN.looppad`). In het volle midden van
-  het gehucht lag een plek met drie tegels rondom soms 26 tegels verderop. Een dak steekt nog over het pad: een huis is
+  **Altijd een looppad van drie tegels** (Marcel, 3 okt: "Er moet wel altijd een looppad zijn, het liefste van 3
+  tegels breed", met een kapel die klem stond tussen twee huizen, met struiken voor de deur; en daarna: "Nee ik wil 3
+  tegels"): rondom elk nieuw gebouw blijven drie tegels te belopen, zonder gebouw of boom, ook in het bouwmenu
+  (`T.looppadOm`, `js/gebouwen.js`; het getal staat in de werkbank, `T.GEBOUWEN_INSTELLINGEN.looppad`). In het volle
+  midden van het gehucht komt een werkplaats zo verder van wie hem vraagt (de wapenmaker in een toets op 20 tegels in
+  plaats van 10), en een put of een kapel bereikt soms een huis minder. Een dak steekt nog over het pad: een huis is
   breder getekend dan zijn muren.
 - **Wanneer:** om de vier dagen kan er een komen, als er niets anders loopt (het gaat vóór een geloot voorval), en alleen
   als het dorp het kan betalen. Hij komt je zoeken zoals bij een voorval ("Aafke wil een kapel bouwen, en zoekt je."),

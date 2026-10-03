@@ -256,45 +256,35 @@ test('na een ja vraagt niemand hetzelfde de eerste naJa dagen weer: geen jager e
 });
 
 // Een looppad om elk nieuw gebouw (Marcel, 3 okt: "Er moet wel altijd een looppad zijn, het liefste van 3 tegels breed",
-// met een kapel die klem stond tussen twee huizen, met struiken voor de deur; js/gebouwen.js en T.plekVoor).
-test('een looppad: minstens een tegel vrij rondom, en wie de plek kiest, neemt liefst drie, met een kleine omweg', () => {
+// met een kapel die klem stond tussen twee huizen, met struiken voor de deur; en: "Nee ik wil 3 tegels"; js/gebouwen.js).
+test('een looppad: drie tegels vrij rondom elk nieuw gebouw, ook waar een inwoner de plek kiest', () => {
   const S = gehucht();
   const D = S.dorp;
   D.trede = 'dorp';
-  const L = T.GEBOUWEN_INSTELLINGEN.looppad;
+  const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+  assert.equal(n, 3);
   const voet = T.gebouwVoet('bakkerij', T.volgendeTekening(D, 'bakkerij'));
   const rect = (p) => ({ x: p.x, y: p.y, b: voet.b, h: voet.h });
-  // Recht tegen een huis aan mag niet meer: er moet een tegel tussen.
+  // Eén of twee tegels van een huis af mag niet: dan zegt het bouwen dat er een looppad omheen moet.
   const huis = D.gebouwen.find((g) => g.soort === 'hut');
-  const v = T.voetVanGebouw(huis);
-  let tegenAan = null;
-  for (let y = v.y - voet.h - 2; y <= v.y + v.h + 2 && !tegenAan; y++) {
-    for (let x = v.x - voet.b - 2; x <= v.x + v.b + 2 && !tegenAan; x++) {
-      const raakt = x + voet.b === v.x || x === v.x + v.b || y + voet.h === v.y || y === v.y + v.h;
-      if (raakt && /looppad/.test(T.waaromPastHetNiet(D, 'bakkerij', x, y) || '')) tegenAan = { x, y };
+  let teDicht = null;
+  for (const g of D.gebouwen.filter((x) => x.soort === 'hut' || x.soort === 'boerderij')) {
+    const v = T.voetVanGebouw(g);
+    for (let y = v.y - voet.h - 2; y <= v.y + v.h + 2 && !teDicht; y++) {
+      for (let x = v.x - voet.b - 2; x <= v.x + v.b + 2 && !teDicht; x++) {
+        const tussen = Math.max(v.x - (x + voet.b), x - (v.x + v.b), v.y - (y + voet.h), y - (v.y + v.h));
+        if (tussen >= 1 && tussen <= 2 && /looppad omheen: drie tegels vrij/.test(T.waaromPastHetNiet(D, 'bakkerij', x, y) || '')) teDicht = { x, y };
+      }
     }
   }
-  assert.ok(tegenAan, 'ergens recht tegen het huis aan zegt het bouwen: er moet een looppad omheen');
-  // Wie de plek kiest: altijd een looppad, en liefst drie tegels breed als dat hooguit een omweg kost.
+  assert.ok(teDicht, 'een of twee tegels van een huis af: er moet een looppad omheen');
+  // Wie de plek kiest voor een verzoek: altijd drie tegels rondom.
   for (const g of D.gebouwen.filter((x) => x.soort === 'hut').slice(0, 4)) {
     const deur = T.deurVan(D.wereld, g);
     const p = T.plekVoor(D, 'bakkerij', deur);
-    assert.ok(p && T.gebouwPast(D, 'bakkerij', p.x, p.y));
-    assert.ok(T.looppadOm(D, rect(p), L.minstens), 'altijd een looppad');
-    // Drie tegels rondom als dat hooguit een omweg kost tegenover de dichtste plek met het smalste pad; anders smaller.
-    const zoek = (breed) => {
-      const was = { ...L };
-      Object.assign(L, { minstens: breed, liefst: breed });
-      try {
-        return T.plekVoor(D, 'bakkerij', deur);
-      } finally {
-        Object.assign(L, was);
-      }
-    };
-    const ver = (q) => Math.hypot(q.x - deur.x, q.y - deur.y);
-    const basis = zoek(L.minstens);
-    const drie = zoek(L.liefst);
-    if (T.looppadOm(D, rect(p), L.liefst)) assert.ok(ver(p) <= ver(basis) + L.omweg, 'drie tegels, met hooguit een omweg');
-    else assert.ok(!drie || ver(drie) > ver(basis) + L.omweg, 'drie tegels lagen te ver weg');
+    assert.ok(p && T.looppadOm(D, rect(p), n), 'drie tegels rondom de bakkerij');
   }
+  const kapel = T.plekVoor(D, 'kapel', T.deurVan(D.wereld, huis));
+  const kv = T.gebouwVoet('kapel', T.volgendeTekening(D, 'kapel'));
+  assert.ok(kapel && T.looppadOm(D, { x: kapel.x, y: kapel.y, b: kv.b, h: kv.h }, n), 'en rondom de kapel');
 });
