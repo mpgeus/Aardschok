@@ -270,7 +270,7 @@
   ];
 
   // Wat het dorp nu zou willen bouwen, in de volgorde van de raad: [{ soort, waarom, voor }], met wat er gemist wordt in
-  // `waarom` ("Tien stenen huizen willen laken.") en waarvoor in `voor` ('rovers', 'winter', 'erf', 'bouwstof', 'wens',
+  // `waarom` ("Tien stenen huizen willen laken.") en waarvoor in `voor` ('rovers', 'winter', 'hout', 'bouwstof', 'wens',
   // 'doel'). Voor de verzoeken (js/verzoeken.js; werklijst vraag 103): wat de raad je
   // liet bouwen, vraagt een inwoner je. Alleen wat al gebouwd mag worden (T.magGebouwd, js/gebouwen.js), en niet wat er
   // al gebouwd wordt. Een keten komt één voor één: staat de bakkerij er zonder meel, dan helpt een molen (js/wensen.js).
@@ -289,8 +289,11 @@
     if (T.BEHOEFTEN_INSTELLINGEN.vleesIsEten && haaltHetNiet(D, T.etenVoorDeWinter)) {
       erbij('jager', `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter.`, 'winter');
     }
-    // Een hut op een erf die op hout wacht (js/erven.js), en er hakt niemand: dan stopt de groei.
-    if (!heeft(D, 'houthakker') && (D.gebouwen || []).some((g) => g.wachtOpHout)) erbij('houthakker', 'Een hut op een erf wacht op hout.', 'erf');
+    // Er hakt niemand hout: dan stopt alles, want elke hut op een erf (js/erven.js) en elk gebouw kost hout. Dus eerst een
+    // houthakker, zoals de bouwer van de speeltest hem er altijd eerst neerzette (vraag 86, b). Zonder dat at het dorp in
+    // de eerste speeltest van vraag 103 zijn hout op aan de kapel en de putten, en kon het daarna geen houthakker en geen
+    // jager meer betalen.
+    if (!heeft(D, 'houthakker')) erbij('houthakker', 'Er hakt niemand hout, en elke hut en elk gebouw kost hout.', 'hout');
     for (const x of T.watDeHuizenMissen(D)) if (x.kan && x.bouw) erbij(x.bouw, x.zin, x.soort);
     for (const soort of T.doelGebouwen(D)) erbij(soort, `Voor het doel is er een ${T.GEBOUWEN[soort].naam} nodig.`, 'doel');
     return uit;

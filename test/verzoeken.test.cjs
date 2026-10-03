@@ -35,6 +35,14 @@ function nacht(S, dag) {
   S.kalender.stil = [];
   T.tikGebouwenDag(S.dorp, dag);
 }
+// Een houthakker die er al staat: anders vraagt iemand die eerst (T.watTeBouwen, js/raad.js).
+function metHouthakker(S) {
+  const D = S.dorp;
+  const huis = D.gebouwen.find((g) => g.huis === 'schout');
+  const plek = T.plekVoor(D, 'houthakker', T.deurVan(D.wereld, huis));
+  assert.ok(T.plaatsGebouw(D, 'houthakker', plek.x, plek.y).gelukt);
+  return S;
+}
 const lopend = (D) => D.voorvallen && D.voorvallen.lopend;
 const tekstVan = (D) => T.vulWoordenIn(D, T.GESPREKKEN.bouwverzoek.knopen.begin.tekst[0].zeg);
 const antwoord = (n) => T.GESPREKKEN.bouwverzoek.knopen.begin.keuzes[n];
@@ -62,7 +70,7 @@ test('de standaard: de mensen vragen het, en in het bouwmenu staat alleen het er
 });
 
 test('na de eerste nacht vraagt iemand namens de buurt om een kapel, met de plek, waarom en wat het kost', () => {
-  const S = gehucht();
+  const S = metHouthakker(gehucht());
   const D = S.dorp;
   assert.deepEqual(T.watTeBouwen(D), [], 'vóór de eerste nacht weet het dorp nog niet wat het mist');
   nacht(S, 1);
@@ -82,7 +90,7 @@ test('na de eerste nacht vraagt iemand namens de buurt om een kapel, met de plek
 });
 
 test('de raad zegt wat zou helpen, zonder [B], en wie je erom vraagt', () => {
-  const S = gehucht();
+  const S = metHouthakker(gehucht());
   const D = S.dorp;
   nacht(S, 1);
   const x = T.watDeHuizenMissen(D).find((w) => w.id === 'kapel');
@@ -95,7 +103,7 @@ test('de raad zegt wat zou helpen, zonder [B], en wie je erom vraagt', () => {
 });
 
 test('ja: de kapel komt er, het dorp betaalt, en wie het vroeg is er de meester', () => {
-  const S = gehucht();
+  const S = metHouthakker(gehucht());
   const D = S.dorp;
   nacht(S, 1);
   const L = lopend(D);
@@ -118,7 +126,7 @@ test('ja: de kapel komt er, het dorp betaalt, en wie het vroeg is er de meester'
 });
 
 test('nee: niemand vraagt de kapel weer, tot naNee dagen later', () => {
-  const S = gehucht();
+  const S = metHouthakker(gehucht());
   const D = S.dorp;
   nacht(S, 1);
   zeg(S, 1);
@@ -151,7 +159,7 @@ test('een verzoek komt alleen als het dorp het kan betalen, en niet vaker dan om
 });
 
 test('ben je weg, dan beslist je raadsman: wat het helpt tegen wat het kost, naar zijn karakter', () => {
-  const S = gehucht();
+  const S = metHouthakker(gehucht());
   const D = S.dorp;
   nacht(S, 1);
   const boer = D.bewoners.mensen.find((p) => T.isBoer(p.wezen) && p !== lopend(D).wie);
@@ -173,29 +181,33 @@ test('een verzoek en wat het dorp weigerde, worden bewaard en geladen', () => {
   assert.equal(terug.staat.dorp.voorvallen.lopend.wie.naam, D.voorvallen.lopend.wie.naam);
 });
 
-test('een hut op een erf die op hout wacht, en geen houthakker: dan vraagt iemand er een', () => {
+test('zonder houthakker vraagt iemand die eerst, bij zijn eigen huis: elke hut en elk gebouw kost hout', () => {
   const S = gehucht();
   const D = S.dorp;
-  nacht(S, 1);
   assert.ok(!D.gebouwen.some((g) => g.soort === 'houthakker'), 'het gehucht begint zonder houthakker');
-  assert.ok(!T.watTeBouwen(D).some((x) => x.soort === 'houthakker'));
-  D.gebouwen.push({ soort: 'hut', x: 0, y: 0, wachtOpHout: true, klaar: false });
-  const x = T.watTeBouwen(D).find((w) => w.soort === 'houthakker');
-  assert.deepEqual([x.waarom, x.voor], ['Een hut op een erf wacht op hout.', 'erf']);
+  nacht(S, 1);
+  const x = T.watTeBouwen(D)[0];
+  assert.deepEqual([x.soort, x.voor], ['houthakker', 'hout']);
+  const L = lopend(D);
+  assert.equal(L.bouw.soort, 'houthakker');
+  assert.ok(!T.isBoer(L.wie.wezen), 'een werkplaats vraagt iemand die geen boer is');
+  assert.match(tekstVan(D), /^Schout, ik wil een houthakker bouwen, [^.]+\. Er hakt niemand hout, en elke hut en elk gebouw kost hout\. Het dorp betaalt 10 hout en 4 goud\.$/);
+  zeg(S, 0);
+  assert.ok(!T.watTeBouwen(D).some((w) => w.soort === 'houthakker'), 'staat hij er, dan vraagt niemand er nog een');
 });
 
 test('een oproep (stap 2): wat erop staat, vraagt iemand als eerste, ook wat niemand mist, en de premie gaat erbij', () => {
   const S = gehucht();
   const D = S.dorp;
   nacht(S, 1);
-  T.voorvalBeantwoord(D, lopend(D).id); // de kapel van de eerste nacht
+  T.voorvalBeantwoord(D, lopend(D).id); // het verzoek van de eerste nacht (de houthakker)
   assert.equal(T.doeOproep(D, 'steengroeve'), 'Op het plein hangt je oproep: het dorp zoekt een steengroeve, met een premie van 5 goud.');
   assert.ok(T.oproepVoor(D, 'steengroeve'));
   assert.ok(!T.watTeBouwen(D).some((x) => x.soort === 'steengroeve'), 'niemand mist een steengroeve');
   D.verzoeken.volgende = 0;
   assert.ok(T.beginBouwverzoek(D, 2));
   const L = lopend(D);
-  assert.deepEqual([L.bouw.soort, L.bouw.premie, L.bouw.nut], ['steengroeve', 5, T.VERZOEKEN_INSTELLINGEN.nutTot], 'de oproep gaat voor de kapel');
+  assert.deepEqual([L.bouw.soort, L.bouw.premie, L.bouw.nut], ['steengroeve', 5, T.VERZOEKEN_INSTELLINGEN.nutTot], 'de oproep gaat voor de rest');
   assert.match(tekstVan(D), /Op het plein hangt je oproep, met een premie van 5 goud\. Het dorp betaalt 12 hout en 9 goud, met de premie\.$/);
   assert.equal(T.prijsVanKeuze(D, antwoord(0).doe).tekst, '−12 hout, −9 goud, tevredenheid +3%');
   const goud = D.voorraad.goud;
