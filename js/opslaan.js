@@ -29,6 +29,9 @@
     // daarvoor mocht vervallen (Marcel: "oud spel mag vervallen").
     versie: 2,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
+    // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
+    // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).
+    vanzelfSnelDagen: 3,
   };
   const IN = () => T.OPSLAAN_INSTELLINGEN;
 
@@ -296,6 +299,8 @@
     if (!k) return null;
     const dag = Math.floor(k.dag);
     if (S.vanzelfBewaard === dag || T.uurVanDag(k.dag) < T.dagindeling(dag).opstaan) return null;
+    const tussen = k.snelheid >= 30 ? IN().vanzelfSnelDagen : 1;
+    if (S.vanzelfBewaard != null && dag - S.vanzelfBewaard < tussen) return null;
     if (S.slaap || T.waaromNietOpslaan(S)) return null;
     S.vanzelfBewaard = dag;
     return T.slaOp(S, 'auto');

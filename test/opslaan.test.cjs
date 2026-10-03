@@ -282,6 +282,26 @@ test('is de opslag vol, of is er geen, dan zegt het dat', (t) => {
   assert.match(T.slaOp(S, '1', NU).reden, /bewaart niets/);
 });
 
+test('vanzelf opslaan op 30×: om de drie dagen, want een dag duurt dan tien seconden', (t) => {
+  const opslag = nepOpslag();
+  T.gebruikOpslagPlek(opslag);
+  t.after(() => T.gebruikOpslagPlek(null));
+  const S = gehucht();
+  const opstaan = (dag) => Math.floor(dag) + T.dagindeling(Math.floor(dag)).opstaan / 24 + 0.001;
+  S.kalender.snelheid = 30;
+  S.kalender.dag = opstaan(3);
+  assert.equal(T.werkOpslaanBij(S).gelukt, true);
+  for (const dag of [4, 5]) {
+    S.kalender.dag = opstaan(dag);
+    assert.equal(T.werkOpslaanBij(S), null, `dag ${dag}: nog niet`);
+  }
+  S.kalender.dag = opstaan(6);
+  assert.equal(T.werkOpslaanBij(S).gelukt, true, 'na drie dagen weer');
+  S.kalender.snelheid = 10;
+  S.kalender.dag = opstaan(7);
+  assert.equal(T.werkOpslaanBij(S).gelukt, true, 'op 10× elke ochtend');
+});
+
 test('vanzelf opslaan: elke ochtend één keer, als de mensen opstaan, en niet achter het titelscherm', (t) => {
   const opslag = nepOpslag();
   T.gebruikOpslagPlek(opslag);
