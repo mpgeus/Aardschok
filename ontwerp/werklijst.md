@@ -3382,6 +3382,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **a**, verzoeken in plaats van bouwen, met de spelregel? **b**, uit wat het dorp mist én uit eigen wil? **c**,
     oproepen met een premie als jouw manier van sturen? **d**, de put, kapel en markt nog van jou, of ook als verzoek?
     **e**, eerst klein zo, en vraag 102 wacht?
+    **Beantwoord (Marcel, 3 okt):** "103 a b c ja d ook verzoek e ja". Dus: de werkplaatsen komen als verzoek van de
+    mensen, met een spelregel "Wie bouwt" (de mensen, of jij zoals vroeger); een verzoek komt uit wat het dorp mist én uit
+    eigen wil; jij stuurt met oproepen met een premie en met de wetten; **ook de put, de kapel, de markt en het wachthuis
+    komen als verzoek**, zodat jij alleen nog erven aanwijst; en eerst klein: de verzoeken uit wat het dorp mist, met een
+    bestuurder in de speeltest, en daarna die uit eigen wil. Vraag 102 wacht.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

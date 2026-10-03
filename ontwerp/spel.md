@@ -48,8 +48,9 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 **Zo staat het nu** (28 sep tot en met 3 okt): besloten; wat er sindsdien van gebouwd is, staat bij elk onderwerp. Marcel koos op vier vragen van Claude
 (werklijst, vraag 50: "A ja B allebei C ja D ja"):
-- **De stad groeit door haar mensen, en jij bepaalt de richting** (Marcel, 3 okt, werklijst vraag 103; de richting is
-  gekozen, hoe het werkt nog open): "Ik wil een iets andere richting op. De inwoners bouwen zelf een weverij etc. Ze
+- **De stad groeit door haar mensen, en jij bepaalt de richting** (Marcel, 3 okt, werklijst vraag 103; besloten: "103 a
+  b c ja d ook verzoek e ja", dus alles wat gebouwd wordt, komt als verzoek van de mensen, ook de put en de kapel, jij
+  wijst nog erven aan en stuurt met oproepen en wetten, en eerst klein): "Ik wil een iets andere richting op. De inwoners bouwen zelf een weverij etc. Ze
   vragen alleen toestemming om te bouwen. Jij beslist niet wie welk ambacht start natuurlijk. Stel er is een
   ondernemende inwoner die wapens wil maken etc. Zo groeit de stad zelf, door de mensen. Jij bepaalt alleen de
   richting?" En waarom: "Ik ben bang dat het te snel saai wordt. Weer een bouw spelletje zelfde kettingen van
