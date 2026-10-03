@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de heer en het dorp kunnen je allebei wegsturen (vraag 106); sinds vandaag een overzicht onder `Tab`, paadjes, lantaarns en ramen die 's avonds branden (vraag 108); de speeltest van vier jaar laat zien dat het land op is, en dat het dorp op 99 mensen blijft steken, één onder de winst (vraag 102, e; vraag 107 en 110 wachten op Marcel)
+## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; alles van deze sessie staat in `main` (twee bazen, het overzicht, paadjes, lantaarns); Marcel wil nu de boeren aan het werk op hun veld (vraag 111) en elk spel een ander, wijder land met natuur, om opnieuw te spelen (vraag 112)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -33,14 +33,16 @@ een of de ander iets. Wie de soldaten betrappen op verstoppen, krijgt de laatste
 je dorp, loopt er van elke deur een paadje, slijt het gras waar veel gelopen wordt, en branden 's avonds de lantaarns en
 de ramen van wie thuis is. `npm test`: 862/862.
 
-**Waar het werk staat:** in `main` staat alles tot en met de twee bazen, stap 1 en 2 (`0ed04ab`). Op de branch van
-deze sessie, `ccr-0d0c2710-bcd5tx`, staan daarbovenop: het vertrouwen dat de tevredenheid volgt, vraag 102 b, c en d (bier
+**Waar het werk staat:** alles staat in `main` (`22a7ba9`; Marcel: "push main"). Dat was, bovenop de twee bazen: het vertrouwen dat de tevredenheid volgt, vraag 102 b, c en d (bier
 apart, de raad bij de maat, "een week mag"), het looppad van drie tegels en de tekenvolgorde van twee gebouwen (Marcel zag
 op `main` een houthakker tegen het huis van de schout, en de muur eroverheen: op de branch is dat goed), het overzicht
-(108 a), de paadjes, de lantaarns en de ramen (108 b en d), en de weg het gehucht uit zonder fout. Dat gaat naar `main`
-als Marcel het vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+(108 a), de paadjes, de lantaarns en de ramen (108 b en d), en de weg het gehucht uit zonder fout. Hoe een eigen branch
+en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** Marcels antwoorden op **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen
+**Waar de volgende sessie begint:** Marcels antwoorden op **vraag 111** (de boeren aan het werk op hun veld: zaaien,
+wieden, hooien, maaien, mest en spitten, en sprokkelen in de winter) en **vraag 112** (elk spel een ander land: de maker
+als standaard, wijder, met natuur en meer huizen; Marcel: "belangrijk voor de demo. Zodat je kunt herspelen"). Een
+groter land lost ook vraag 110 op. Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen
 en het erf: bestraten als verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de
 maat van de winst: het dorp loopt vol op 99, de winst vraagt 100; het voorstel is de winst vanaf 90, en bouwgrond uit het
 ontginnen). De speeltest van vier jaar staat in `speelbaar.md` (vijf van de zes spelers; de uitslagen buiten git in
@@ -3702,7 +3704,60 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **c, ontginnen geeft ook bouwgrond** (bij vraag 107): wie bos ontgint, krijgt grond voor een erf. Dat is het grootst,
       en het past bij "het land groeit mee".
     Wat Claude zou doen: a nu, zodat de demo te winnen is, en c met het ontginnen; b niet, want het graan is de krapste
-    knoop. Vragen: **a**, **b** of **c**, of meer dan één?
+    knoop. Vragen: **a**, **b** of **c**, of meer dan één? **Sinds vraag 112:** een groter land, met het dorp losser,
+    geeft ook bouwgrond genoeg; dan is a misschien niet nodig.
+111. **De boeren aan het werk op hun veld** (Marcel, 3 okt, vijfentwintigste sessie: "Ook wil ik dat boeren op hun veld
+    aan het werk zijn. Nu hebben ze wel velden, maar lopen ze gewoon random door het dorp. Ze moeten zaaien en op het
+    veld bezig zijn."; plan van Claude; open).
+    **Waarom het nu zo is:** een boer is een bewoner, en overdag stuurt het dagritme hem naar de deur van zijn boerderij
+    (`T.dagAnker`, `plek.werk`, met een straal van twee tegels). De regel die hem in het groeiseizoen naar zijn akker
+    stuurt (`T.wandelAnker` in `js/akkers.js`), komt daardoor nooit aan de beurt. Alleen bij de oogst is hij echt op zijn
+    veld: dan maait hij tegel voor tegel, met een eigen figuur (de maaier). Een boer heeft verder alleen staan en lopen.
+    Voorstel:
+    - **a, het werk per seizoen,** overdag, op zijn eigen velden:
+      - lentemaand: **zaaien**, rij voor rij over zijn akker, met een zak op zijn heup en een zwaaiende arm;
+      - grasmaand tot hooimaand: **wieden en schoffelen**, gebukt, tegel voor tegel, met rustpozen;
+      - de hooitijd: **hooien** op zijn weide, met de maaier die er al is; het vee nakijken;
+      - oogstmaand: **maaien**, zoals nu;
+      - herfstmaand: **mest uitrijden** op een akker die mest krijgt, en **spitten** voor volgend jaar;
+      - de winter: **sprokkelen** aan de bosrand (het hout dat de mensen sprokkelen, `T.sprokkelHout`, is er al als getal)
+        en dorsen bij de boerderij.
+    - **b, de figuren:** een zaaier en een wieder (met een schoffel, ook om te spitten), uit code zoals de maaier; het
+      sprokkelen met een bundel hout op de rug.
+    - **c, wat het aan de regels verandert: niets.** Het zaaien, de oogst en het sprokkelen blijven zoals ze zijn; alleen
+      waar de boer is en wat hij doet. 's Avonds en 's nachts is hij thuis, zoals nu. De boerin en de grote kinderen
+      helpen bij het zaaien en de oogst, de rest van het jaar doen ze wat ze nu doen.
+    Vragen: **a**, dit werk per seizoen? **b**, de zaaier en de wieder als nieuwe figuren? **c**, alleen hoe het eruitziet,
+    en de regels zoals ze zijn?
+112. **Elk spel een ander land: de maker als standaard, wijder, met natuur en meer huizen** (Marcel, 3 okt,
+    vijfentwintigste sessie: "Alles moet denk ik ook wijder opgezet worden. En meer variatie in de huizen. Her en der wat
+    foliage, bomen, stenen, water. Eigenlijk een random map generator per nieuwe game. Doe is ook wel belangrijk voor de
+    demo. Zodat je kunt herspelen"; plan van Claude; open).
+    **Wat er al is:** de maker (vraag 69 en 70, `js/maker.js`) legt elk spel een ander gehucht, uit dezelfde delen als
+    het ontworpen gehucht: het plein, het huis van de schout, de herberg, hutten, vijf boerderijen met hun akkers, de
+    heide met de kooi, de weg met een brug over de beek, en bos langs een of twee kanten. Maar alleen met de spelregel
+    "Je gehucht" op "Elk spel een ander"; de standaard is het ontworpen gehucht. Allebei zijn ze 76 bij 76 tegels, met de
+    huizen dicht om het plein, daaromheen een leeg grasveld met kleine akkers, en een dichte bosrand. Aan natuur legt de
+    maker twee eiken, een wilg en de beek. Getekend is er veel meer: struiken, bessenstruiken, varens, graspollen, hoog
+    gras, bloemen, paddenstoelen, boomstronken, rotsen en kleine stenen, en water met zijn oevers.
+    Voorstel:
+    - **a, elk nieuw spel een eigen land.** De standaard wordt "Elk spel een ander", en het zaad staat in het menu: een
+      land dat je mooi vond, speel je opnieuw door het zaad in te typen bij Nieuw spel. Het ontworpen gehucht blijft als
+      keuze, en de toetsen spelen erop.
+    - **b, wijder.** Een grotere kaart (zo'n 100 bij 100), en het dorp losser: tussen de huizen minstens het looppad van
+      drie tegels, de boerderijen verder naar buiten, elk tussen zijn eigen velden. Dan is er ook bouwgrond genoeg: het
+      dorp liep in de speeltest vol op 99 mensen (vraag 110).
+    - **c, natuur, uit wat er al getekend is.** Losse bomen en bosjes, struiken, varens, bloemen en hoog gras langs de
+      randen, stenen en rotsen, boomstronken; water: de beek en een of twee vijvers; een bosrand met inhammen en open
+      plekken. Wat er ligt, doet er ook toe: bos voor de houthakker, stenen voor de steengroeve (en de keien, vraag 109),
+      water voor de visser. Zo is elk land een andere puzzel.
+    - **d, meer huizen.** De huizenbouwer maakt meer tekeningen: andere kleuren voor muren, luiken en daken (riet,
+      pannen, leien), gespiegeld met de deur aan de andere kant, en meer maten. Elk spel kiest er andere uit.
+    **In stappen:** 1. de maker wijder en met natuur (b en c), en de standaard (a): een à twee sessies; 2. de huizen
+    (d): tekenwerk, een sessie; 3. de speeltest op gemaakte landen (`npm run speeltest -- --maker`), en meten hoe groot een
+    dorp kan worden. De boeren op hun veld (vraag 111) kan ervoor of erna.
+    Vragen: **a**, elk spel een eigen land, met het zaad om opnieuw te spelen? **b**, 100 bij 100, en het dorp losser?
+    **c**, deze natuur, en dat ze ertoe doet? **d**, meer huizen zo? **e**, eerst de kaart, dan de boeren?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
