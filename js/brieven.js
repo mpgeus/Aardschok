@@ -119,6 +119,24 @@
       ],
     }),
 
+    // Een gril van de heer (js/grillen.js; werklijst vraag 106, stap 2): elke maand iets wat hij wil, met de antwoorden en
+    // wat ze kosten onder elke knop. Hij wacht tot je antwoordt; de knop Brief opent hem weer.
+    gril: (S) => {
+      const g = T.grilNu(S.dorp);
+      if (!g) return null;
+      const knoppen = T.grilKeuzes(S.dorp).map((k) => ({
+        actie: k.actie, kan: k.kan, hoofd: k.hoofd,
+        tekst: `${veilig(k.tekst)}<span class="brief-prijs">${veilig(k.kan ? k.prijs || 'het kost niets' : k.waarom)}</span>`,
+      }));
+      return {
+        wanneer: T.datumVanDag(g.dag).tekst,
+        aan: 'Aan Onze schout,',
+        tekst: g.tekst.map((p) => `<p>${veilig(p)}</p>`).join(''),
+        knoppen,
+        voet: `<p class="venster-voet">Antwoord je niet vóór ${T.datumVanDag(g.uiterlijk).tekst}, dan neemt hij het je kwalijk. <kbd>Esc</kbd> sluit; de knop Brief bovenin opent hem weer.</p>`,
+      };
+    },
+
     // De waarschuwing (js/bazen.js; werklijst vraag 106, a): zijn gunst zakte onder de grens. Nog één tegenvaller, en je
     // bent je ambt kwijt.
     waarschuwing: (S) => {
@@ -196,6 +214,7 @@
   // de heervaart (daar hoort een dag bij), dan de schatting.
   const wachtend = (S) => (T.rapportKlaar(S.dorp) ? 'rapport'
     : S.dorp.heervaart && S.dorp.heervaart.vraag ? 'heervaart'
+    : T.grilNu(S.dorp) ? 'gril'
     : S.dorp.heer && S.dorp.heer.brief ? 'schatting' : null);
 
   // De knop Brief naast Bouwen: alleen zolang er een brief op je wacht. Is dat het rapport, dan heet hij Rapport.
@@ -249,7 +268,7 @@
 
   T.ui.briefOpen = () => !$('brief').classList.contains('verborgen');
 
-  // Een knop onder een brief. Sluiten en het titelscherm kan elke brief; de heervaart vraagt het aan de regels.
+  // Een knop onder een brief. Sluiten en het titelscherm kan elke brief; de heervaart en een gril vragen het aan de regels.
   $('brief').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
     const S = T.S;
@@ -260,8 +279,9 @@
       T.ui.sluitBrief(S);
       return T.naarTitelscherm();
     }
-    if (open === 'heervaart') {
-      const keuze = T.heervaartKeuzes(S.dorp).find((k) => k.actie === actie);
+    if (open === 'heervaart' || open === 'gril') {
+      const keuzes = open === 'gril' ? T.grilKeuzes(S.dorp) : T.heervaartKeuzes(S.dorp);
+      const keuze = keuzes.find((k) => k.actie === actie);
       if (!keuze || !keuze.kan) return;
       keuze.doe();
       T.ui.sluitBrief(S);

@@ -3806,6 +3806,14 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **Vraag 106, stap 2: elke maand een gril van de heer** (vijfentwintigste sessie; `js/grillen.js`). Op de
+  twaalfde van elke maand (niet in de eerste, en niet in wijnmaand en slachtmaand) een brief met iets wat hij wil,
+  geloot uit veertien en pas na een jaar weer: het standbeeld, zijn jacht in je velden, het bier voor de bruiloft van
+  zijn neef, belasting op ramen, zijn ontsnapte valk ("We vonden hem. Gebraden, helaas."). Elk antwoord is een knop met
+  wat het kost; wie hem geeft wat hij wil, betaalt het met het dorp, en wie het dorp spaart, ergert hem. Geen antwoord
+  binnen tien dagen ergert hem ook. Wie een jaar lang alles weigert, is binnen dat jaar weg. Onderweg twee oude
+  fouten: bij een nieuw of geladen spel bleef de balk leeg tot er iets veranderde (`T.ui.reset` gaf het spel mee in
+  plaats van het dorp), en de mensen stonden op 0/0 tot de eerste nacht. 9 nieuwe toetsen, `npm test` 841/841.
 - 3 okt 2026 — **Vraag 106, stap 1: twee bazen** (vijfentwintigste sessie; Marcel: "106 a b c d ja"; `js/bazen.js`). De
   gunst van de heer en het vertrouwen van het dorp in jou, elk van 0 tot 100, als twee gezichten in de balk (de heer met
   een kroon, het dorp met een boerenhoed), met bij de muis waarom. Wat ze nu al beweegt: de schatting, de heervaart, de

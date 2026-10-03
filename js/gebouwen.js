@@ -992,6 +992,8 @@
     // En zijn heervaart (js/heervaart.js): in een dorp vraagt hij op 1 hooimaand mannen, en op 1 herfstmaand komen
     // ze terug. Vóór het verdelen van de handen hieronder, want wie vandaag gaat, werkt vandaag niet meer.
     T.tikHeervaartDag(D, dag);
+    // En zijn grillen (js/grillen.js): elke maand een brief met iets wat hij wil (met de spelregel "Twee bazen").
+    T.tikGrillenDag(D, dag);
     // En de inner (js/inner.js): hij komt in oogstmaand tellen, en soms onverwacht terug.
     T.tikInnerDag(D, dag);
     // En de voorvallen (js/voorvallen.js): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp.

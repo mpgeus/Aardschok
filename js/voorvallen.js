@@ -585,8 +585,11 @@
     for (const wat of WAREN) if (doe[wat]) T.wijzigVoorraad(D, wat, doe[wat]);
     for (const soort of Object.keys(T.VEE)) if (doe[soort] < 0) T.verliesVee(D, soort, -doe[soort]);
     if (doe.tevreden) stemming(D, doe.tevreden, v, dag, L.door);
-    // Twee bazen (js/bazen.js): wat het dorp van jóú vindt, zo zwaar als het het dorp tevreden maakt.
+    // Twee bazen (js/bazen.js): wat het dorp van jóú vindt, zo zwaar als het het dorp tevreden maakt; en een antwoord kan
+    // de heer of het dorp ook rechtstreeks raken (doe.gunst, doe.vertrouwen).
     if (doe.tevreden) T.vertrouwenNaVoorval(D, doe.tevreden, v.titel, !!L.door);
+    if (doe.gunst) T.wijzigGunst(D, doe.gunst, v.titel);
+    if (doe.vertrouwen) T.wijzigVertrouwen(D, doe.vertrouwen, v.titel);
     if (doe.argwaan) T.zetArgwaan(D, doe.argwaan / 100, v.titel);
     for (let i = 0; i < (doe.gezin || 0); i++) T.gezinKomt(D);
     const verbannen = doe.verban && L[doe.verban];
@@ -636,6 +639,9 @@
     }
     if (doe.tevreden) delen.push(`tevredenheid ${teken(doe.tevreden)}${Math.abs(doe.tevreden)}%`);
     if (doe.argwaan) delen.push(`argwaan ${teken(doe.argwaan)}${Math.abs(doe.argwaan)}%`);
+    // Twee bazen (js/bazen.js): wat de heer en het dorp van je vinden, als de spelregel aan staat.
+    if (doe.gunst && T.BAZEN_INSTELLINGEN.aan) delen.push(`gunst van de heer ${teken(doe.gunst)}${Math.abs(doe.gunst)}`);
+    if (doe.vertrouwen && T.BAZEN_INSTELLINGEN.aan) delen.push(`vertrouwen van het dorp ${teken(doe.vertrouwen)}${Math.abs(doe.vertrouwen)}`);
     // Wie verbannen wordt, gaat het bos in, en wie het bos in gaat, kan als rover terugkomen (js/rovers.js).
     if (doe.verban && L[doe.verban]) delen.push(`${naam(L[doe.verban])} moet het bos in`);
     if (doe.gezin) {

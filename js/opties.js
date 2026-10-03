@@ -538,6 +538,7 @@
     { naam: 'De verzoeken', blok: 'VERZOEKEN_INSTELLINGEN' },
     { naam: 'De ondernemers', blok: 'ONDERNEMERS_INSTELLINGEN' },
     { naam: 'De twee bazen', blok: 'BAZEN_INSTELLINGEN' },
+    { naam: 'De grillen van de heer', blok: 'GRILLEN_INSTELLINGEN' },
     { naam: 'De raadsman', blok: 'RAADSMAN_INSTELLINGEN' },
     { naam: 'Het rapport', blok: 'OCHTENDRAPPORT_INSTELLINGEN' },
     { naam: 'Het land', blok: 'LAND_INSTELLINGEN' },

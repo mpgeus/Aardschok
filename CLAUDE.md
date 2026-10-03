@@ -414,6 +414,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `js/brieven.js`, en de raad), op 0 weg (`T.ambtKwijt` met waarom, of `D.einde` met reden 'verjaagd'), maar altijd eerst
   de waarschuwing. Betrapt op verstoppen: `T.betrapt` (vanuit `T.zoekOpPlek`). De twee gezichten in de balk:
   `T.ui.toonBazen` (`js/hud.js`). De spelregels "Twee bazen" en "Betrapt"; de getallen in `T.BAZEN_INSTELLINGEN`.
+- `js/grillen.js`: **elke maand een gril van de heer in een brief** (vraag 106, stap 2): `T.GRILLEN` (veertien, elk met
+  zijn brief, antwoorden met `doe` zoals een voorval, en `stil` voor wie niet antwoordt), `T.tikGrillenDag` (op de
+  twaalfde, niet in wijnmaand en slachtmaand, als er geen andere brief van de heer wacht), de vraag die wacht
+  (`D.grillen.vraag`, `T.grilNu`), de knoppen (`T.grilKeuzes`, met de prijs van `T.prijsVanKeuze`) en het antwoord
+  (`T.beantwoordGril`); de brief is soort `gril` in `js/brieven.js`. Een voorval kan nu ook `gunst` en `vertrouwen` in
+  zijn `doe` hebben.
 - `js/raadsman.js`: **de raadsman** (vraag 66, 30 sep): een van de boeren (`T.isBoer` in `js/boeren.js`), met twee gelote
   vaardigheden (`T.vaardighedenVan`: uit het zaad en zijn naam, zodat het lot van de boeren niet verandert). Is de schout
   weg (niet in het dorp als wie hem zoekt, gaat zoeken, of als diens tijd om is), dan beslist hij het voorval; wie je in
@@ -743,6 +749,7 @@ wat de heer verzegelde en hoeveel wapens er zijn; `('wapens')` laat de eerste di
 net kwamen (in een dorp: `Spel.debug.trede('dorp')`, en sluit dan de brief van de heer), `('herberg')` de eerste die een
 tweede herberg wil (vanaf `T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf` mensen), `('stiekem')` laat de wapenmaker
 beginnen in zijn kelder.
+`Spel.debug.gril()` zegt welke gril op je antwoord wacht, met de keuzes en wat ze kosten; `('jacht')` laat die nu komen.
 `Spel.debug.bazen()` zegt de gunst van de heer en het vertrouwen van het dorp, waarom ze het laatst veranderden en of je
 gewaarschuwd bent; `('gunst', 15)` zet de gunst op 15 (met de brief als hij onder 20 komt), `('vertrouwen', 0)` jaagt je
 weg als je al gewaarschuwd was. De oude toetsen van de heer en het verstoppen spelen met "Alleen de heer"

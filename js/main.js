@@ -1052,6 +1052,29 @@
         einde: D.einde,
       };
     },
+    // De grillen van de heer (js/grillen.js; werklijst vraag 106, stap 2): welke er op je antwoord wacht, welke er waren,
+    // en hoe vaak je antwoordde of zweeg. Spel.debug.gril('standbeeld') laat die nu komen, met zijn brief (zonder naam
+    // een gelote uit wat kan).
+    gril(id) {
+      const D = S.dorp;
+      if (!T.bazenTellen(D)) return 'De spelregel "Twee bazen" staat uit, of hier komt geen heer.';
+      const G = D.grillen || (D.grillen = T.nieuweGrillen());
+      if (id !== undefined) {
+        if (id && !T.GRILLEN[id]) return `Die gril bestaat niet. Wel: ${Object.keys(T.GRILLEN).join(', ')}.`;
+        const dag = Math.floor(S.kalender.dag);
+        const kies = id || Object.keys(T.GRILLEN)[Math.floor(Math.random() * Object.keys(T.GRILLEN).length)];
+        G.vraag = { id: kies, dag, uiterlijk: dag + T.GRILLEN_INSTELLINGEN.antwoordBinnen };
+        G.geweest[kies] = dag;
+        T.ui.toonBrief(D, 'gril');
+      }
+      const nu = T.grilNu(D);
+      return {
+        nu: nu ? `${nu.titel}, tot ${T.datumVanDag(nu.uiterlijk).tekst}` : null,
+        keuzes: T.grilKeuzes(D).map((k) => `${k.tekst} (${k.kan ? k.prijs : k.waarom})`),
+        geweest: Object.entries(G.geweest).map(([g, dag]) => `${g} op ${T.datumVanDag(dag).tekst}`),
+        aantal: G.aantal, beantwoord: G.beantwoord, stil: G.stil,
+      };
+    },
     // Het eind (js/einde.js): het doel, hoeveel dagen op rij iedereen gelukkig is, en het jaarboek tot nu.
     // Spel.debug.einde('winst') zet de teller op één dag voor het eind (de volgende nacht wint het, als iedereen dan
     // gelukkig is); ('gewonnen') wint nu, met het feest en het eindscherm; ('jaarverslag') maakt het verslag nu en

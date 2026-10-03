@@ -262,6 +262,8 @@
       cel.querySelector('.aantal').textContent = Math.floor(S.dorp.voorraad[wat] || 0);
       if (BALK_LATER.includes(wat)) cel.classList.toggle('verborgen', !(S.dorp.gehad && S.dorp.gehad[wat]));
     }
+    // De twee bazen (js/bazen.js) staan in dezelfde balk, ook meteen bij een nieuw of geladen spel.
+    T.ui.toonBazen(D);
     // Wat er verstopt ligt (js/verstoppen.js), klein naast het graan en het goud, en bij de muis
     // waar: het dorp eet het niet, en de inner telt het niet.
     if (T.verstoptTotaal) {

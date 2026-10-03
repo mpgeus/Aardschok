@@ -25,7 +25,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
 | De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104) | vraag 103, 104 |
-| Twee bazen | stap 1 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; nog niet: een gril van de heer elke maand (stap 2) | vraag 106 |
+| Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
 | Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -291,8 +291,17 @@ veranderde. Ze beginnen op 50.
   waarschuwing; had je die al, dan ben je weg. De spelregel "Betrapt" kan het op "Meteen weg" zetten.
 - De spelregel "Twee bazen" op "Alleen de heer" is het spel van vóór 3 okt: de heer ontslaat je na twee jaar veel te
   weinig. De getallen in de werkbank ("De twee bazen"); `Spel.debug.bazen()`.
-- **Nog niet:** elke maand een gril van de heer in een brief, die zijn gunst tegen het vertrouwen van het dorp weegt
-  (stap 2), en de speeltest (stap 3).
+- **Elke maand een gril** (stap 2, `js/grillen.js`): op de twaalfde van elke maand (niet in de eerste maand, en niet in
+  wijnmaand en slachtmaand, als hij al schrijft of komt) een brief met iets wat hij wil, geloot uit veertien, en
+  hetzelfde pas na een jaar weer: een standbeeld van hemzelf, zijn vetste varken, het bier voor de bruiloft van zijn neef
+  ("hij is degene die uw ambt wil"), zijn jacht in je velden, belasting op ramen, zijn hofdichter die een maand bij je
+  eet, de klok van de bisschop, soldaten op doortocht, zijn verjaardag, zijn ontsnapte valk, een lening, de weg naar zijn
+  kasteel, zijn portret, en de pest in de streek. Elk antwoord staat als een knop onder zijn brief, met wat het kost:
+  wie hem geeft wat hij wil, betaalt het met het dorp ("Jaag waar u wilt, heer": −15 graan, gunst +8, vertrouwen −6);
+  wie het dorp spaart, ergert hem ("Het wild heeft de schurft, heer": gunst −6, vertrouwen +2). Geen knop gaat voor: het
+  spel kiest niet voor je. Antwoord je niet binnen tien dagen, dan neemt hij het je kwalijk. Wie hem een jaar lang alles
+  weigert, is binnen dat jaar zijn ambt kwijt (na de waarschuwing). `Spel.debug.gril('jacht')`.
+- **Nog niet:** de speeltest (stap 3).
 
 ## De stad groeit door haar mensen: de verzoeken (Marcel, 3 okt 2026; werklijst vraag 103)
 
