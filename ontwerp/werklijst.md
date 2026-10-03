@@ -3254,6 +3254,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       avond. Muziek komt met het geluid (januari, vraag 84, b).
     - **d, de volgorde:** eerst A en B van vraag 96 en de speeltest, dan a, b en c.
     Vragen: **a**, het oogstfeest zo? **b**, de kermis of de meiboom? **c** en **d**, zo?
+    **Beantwoord (Marcel, 3 okt, vlak voor een vlucht van twee uur):** het oogstfeest "Ja, een hele dag vrij", het tweede
+    feest "De meiboom", en voor tijdens de vlucht: "De feesten bouwen, Schetsen voor de ui, Plan voor het laken"; pushen
+    "Ook naar main" (na elk af stuk, met de controle uit `CLAUDE.md`). Dus: zeg je ja op het oogstfeest, dan werkt de dag
+    erna niemand en is het hele dorp op het plein, tot in de avond; dat kost een dag werk bovenop het graan en het bier. De
+    meiboom werkt net zo, op 1 bloeimaand, het eerste feest dat een speler ziet (het spel begint op 1 lentemaand). De
+    speeltest van vraag 96 koos hij niet.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
