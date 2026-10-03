@@ -9,6 +9,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Na de eerste zomer heeft niemand meer honger** (3 okt, vierentwintigste sessie; de speeltest van vraag 95). Bij de
+  bouwers was er alleen honger in de eerste zomer, vóór de eerste oogst (76 à 84 dagen). In het tweede jaar geen dag,
+  met brood 0,01 of 0,03: de bouwers zetten een jager neer zolang het dorp zegt dat het eten de winter niet haalt (zes per
+  jaar), en de jagers en de melk houden iedereen te eten, ook als het graan op is. De druk is er wel in woorden (op 162
+  à 175 dagen "het eten haalt de winter niet"), maar niet in honger. Marcel (3 okt): "er moet altijd druk zijn om
+  voldoende eten. Het mag niet te makkelijk". Na te lopen: of een jager zonder grens vlees mag schieten (het wild in het
+  bos zou op kunnen raken), en of dat bij de demo hoort of later.
 - **De schout valt tegen één wilde rover** (2 okt, drieëntwintigste sessie; de speeltest van 2d, zaad 1). Na een roof
   zag een rover de schout, en in het gevecht deelde de rover 22 schade uit en de schout 11: op 18 bloeimaand van het tweede
   jaar was het spel uit. De raad had 20 dagen gezegd dat de rovers terugkomen en een wachthuis helpt; de bouwer van de

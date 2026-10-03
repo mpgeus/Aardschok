@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (2 okt 2026, vierentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 95); de sluwe bouwer is af (vraag 94): ook wie de heer bedriegt, wint niet, want het brood van een dorp met alleen stenen huizen kost meer graan dan de akkers geven; het voorstel is vraag 95 (brood naar 0,01, de ligging van de erven, en "Daar kun je niet bij"), dan de pagina met ontwerpen voor de ui (vraag 84, a) en 2c
+## De stand (3 okt 2026, vierentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 96); de sluwe bouwer (vraag 94) en brood 0,01 met erven binnen de kringen (vraag 95) zijn af: bij de sluwe bouwer hadden alle huizen op 79 dagen alles, maar een gewonnen jaar haalt nog geen spel; wat nu remt, is de ligging van de herberg en de markt (vraag 96), dan het laken, de pagina met ontwerpen voor de ui (vraag 84, a) en 2c
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -32,15 +32,21 @@ huis. Sinds 2 okt komt een trede met de mensen van een stand (vraag 90): linksbo
 een huis of een stenen huis woont), dan "0 van 20 ambachtslieden" voor marktrecht, en de heer schrijft bij elke trede;
 `Spel.debug.trede('marktrecht')` laat het nu gebeuren. De pagina "Stand van het gehucht" (25 sep) loopt achter op de
 dag. Sinds vraag 91 maakt een werkplaats die iets omzet tot er 30 ligt (en laat hij het zaaigraan liggen), en wil een
-ambachtsman 0,005 laken per dag; sinds vraag 92 zijn brood, vis en vlees eten. `npm test`: 773/773.
+ambachtsman 0,005 laken per dag; sinds vraag 92 zijn brood, vis en vlees eten, en sinds vraag 95 wil een ambachtsman
+0,01 brood per dag. `npm test`: 774/774.
 
-**Waar het werk staat:** alles staat in `main`, ook het werk van de vierentwintigste sessie tot en met Marcels antwoord
-op vraag 95 (Marcel, 3 okt: "Push main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** in `main` staat het werk van de vierentwintigste sessie tot en met Marcels antwoord op vraag 95
+(Marcel, 3 okt: "Push main"); wat daarna kwam (vraag 95 gebouwd, de speeltest, vraag 96), staat op de branch
+`ccr-ef948901-4zrtmk` tot Marcel vraagt het te pushen. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`,
+onder Git. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **Marcels antwoord op vraag 95** (het brood naar 0,01, de ligging van de erven, en
-"Daar kun je niet bij" repareren). Bouw in de volgorde van zijn antwoord, en speel dan de sluwe bouwer en de bouwer nog
-eens (`npm run speeltest -- sluw bouwer`; vergelijk met `speelbaar.md`, de speeltest van vraag 94). Daarna de pagina met
-ontwerpen voor de ui (vraag 84, a). **Vraag 94 is af** (zie onder Af): de sluwe bouwer bedriegt de heer elk jaar en houdt
+**Waar de volgende sessie begint:** **Marcels antwoord op vraag 96** (de kring van de herberg en de markt naar 40, of één
+van elk voor het hele dorp; de bouwers die een keten in één keer bouwen; en of de honger na de eerste zomer bij de demo
+hoort). Bouw in de volgorde van zijn antwoord, en speel dan de sluwe bouwer en de bouwer nog eens (`npm run speeltest --
+sluw bouwer`; vergelijk met `speelbaar.md`, de speeltest van vraag 95, en let op de druk om eten). Daarna het laken en de
+pagina met ontwerpen voor de ui (vraag 84, a). **Vraag 95 is af** (zie onder Af): brood 0,01, de bouwers leggen erven
+binnen de kringen, "Daar kun je niet bij" is hersteld, en de speeltest telt de druk om eten; die bleef gelijk. **Vraag 94
+is af** (zie onder Af): de sluwe bouwer bedriegt de heer elk jaar en houdt
 het graan verstopt voor de herberg en de molen, en de speeltest heeft een graanboek. Hij heeft meer bier en brood dan de
 bouwer, en de heer krijgt bijna niets, maar ook hij heeft nooit een dag waarop alle huizen alles hebben. **Vraag 92 is af** (zie onder Af): brood, vis en vlees
 zijn eten, brood is minder lekker, en het zaaigraan is niet meer voor de molen. **Vraag 91 is af** (Marcel: "a ja b ja c ja d ja"; zie onder Af): de bouwer volgt ook het goud van de raad, een
@@ -137,9 +143,9 @@ als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speelt
    huis en doorgroeien, met zes stenen huizen. Sinds 2 okt zeggen de raad en het rapport wat de huizen missen, en volgt de
    bouwer van de speeltest ze (vraag 86, a en b, en 87); niemand staat nog ingemetseld (vraag 88). 2d, de treden uit de
    standen, is af (vraag 90), het goud, de werkplaatsen en het laken ook (vraag 91), brood als eten (vraag 92), en de
-   sluwe bouwer (vraag 94). Het volgende is het brood (vraag 95: wat een stenen huis aan brood wil, kost meer graan dan
-   de akkers geven), dan de pagina met ontwerpen voor de ui (vraag 84, a), en 2c en 2e. Het graan van buiten op de markt
-   komt bij stap 6.
+   sluwe bouwer (vraag 94), en brood 0,01 met erven binnen de kringen (vraag 95). Het volgende is de ligging van de
+   herberg en de markt (vraag 96), dan het laken, de pagina met ontwerpen voor de ui (vraag 84, a), en 2c en 2e. Het graan
+   van buiten op de markt komt bij stap 6.
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept; en het
    weer, met zaaien dat dagen kost (Marcel, 1 okt: "Stel er is slecht weer"; vraag 82).
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
@@ -181,7 +187,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 95 (het brood naar 0,01, de ligging van de erven, en "Daar kun je niet bij" repareren); welke zin de haak wordt, nu hij is nagezocht tegen Steam (vraag 83, c; de rest van 83 en heel 84 is beantwoord, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* vraag 96 (de kring van de herberg en de markt naar 40, de keten in één keer, en de honger na de eerste zomer); welke zin de haak wordt, nu hij is nagezocht tegen Steam (vraag 83, c; de rest van 83 en heel 84 is beantwoord, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -3208,7 +3214,29 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 3 okt):** "A. Ok, maar er moet altijd druk zijn om voldoende eten. Het mag niet te makkelijk.
     Verder akkoord met b c d". Dus brood naar 0,01, en de speeltest kijkt erbij of er druk blijft om eten: zegt de raad
     nog dat het eten de winter niet haalt, moeten er jagers bij, en raakt het graan op? Is het te makkelijk geworden, dan
-    eerst een voorstel aan Marcel. En b, c en d zoals voorgesteld.
+    eerst een voorstel aan Marcel. En b, c en d zoals voorgesteld. **Af** (zie onder Af); de speeltest staat in
+    `speelbaar.md`, en wat eruit volgt, is vraag 96.
+96. **Na vraag 95: de herberg en de markt, en de keten** (Claude, 3 okt, vierentwintigste sessie; open). De speeltest
+    (`speelbaar.md`): brood 0,01 maakt het eten niet makkelijker (honger in de eerste zomer, in het tweede jaar op 162 à 175
+    dagen "het eten haalt de winter niet", zes jagers), maar het bier en het brood wel: het bier ontbrak in het tweede jaar 0
+    à 62 dagen in plaats van 69 à 199. Bij de sluwe bouwer met zaad 1 hadden alle huizen op 79 dagen alles. Een gewonnen
+    jaar (een jaar lang alle huizen alles) haalt nog geen spel; de langste reeks is 26 dagen. Wat nu remt:
+    - **de ligging:** in elk spel pasten er maar drie erven binnen de kring van de herberg (30 tegels). De erven daarna
+      kwamen verder weg, en hun huizen missen de herberg of een markt: in vijf van de zes spellen misten een paar stenen
+      huizen het hele tweede jaar een markt binnen 30 tegels, en een tweede herberg of markt "vindt geen plek waar hij
+      iemand helpt". Een dorp dat alleen erven binnen de kring aanwijst, blijft steken rond de 50 mensen, en dat is te klein
+      (vraag 77);
+    - **de keten:** de bakkerij kwam vóór de molen, bij zaad 2 een half jaar eerder, en zolang is er geen brood.
+    Voorstel:
+    - **a, de kring van de herberg en de markt naar 40** (de werkbank), zoals de kapel (vraag 87, c, om dezelfde reden):
+      dan past er bijna twee keer zoveel binnen, en bereikt één markt bij het midden de huizen eromheen. Of eenvoudiger:
+      één herberg en één markt zijn genoeg voor het hele dorp, zonder kring.
+    - **b, de bouwers bouwen een keten in één keer:** zegt de raad "bouw een bakkerij en een molen", dan allebei.
+    - **c, daarna** de speeltest, dan het laken, en dan de pagina met ontwerpen voor de ui (vraag 84, a). De honger na de
+      eerste zomer staat in `opmerkingen.md`: na de eerste oogst heeft niemand meer honger, met of zonder brood, want de
+      jagers en de melk voeden iedereen. Hoort dat bij de demo, of later?
+    Vragen: **a**, de herberg en de markt naar 40, of één van elk voor het hele dorp? **b**, de bouwers zo? **c**, die
+    volgorde, en de honger na de eerste zomer: nu of later?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -3509,6 +3537,16 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **Brood 0,01, erven binnen de kringen, en "Daar kun je niet bij"** (vierentwintigste sessie; vraag 95;
+  Marcel: "A. Ok, maar er moet altijd druk zijn om voldoende eten. Het mag niet te makkelijk. Verder akkoord met b c d").
+  **a:** een ambachtsman wil 0,01 brood per dag (was 0,03): het brood van een stenen huis kost nu 29 graan per jaar.
+  **b:** de bouwers van de speeltest wijzen een erf aan waar het huis de herberg, een markt, een kapel en een put in zijn
+  kring heeft, de herberg eerst. **c:** `T.randVanGebouw` kiest eerst een randtegel waar de schout kan komen, en "Daar
+  kun je niet bij" bij een huis met een open deur is weg (een toets erbij). De speeltest telt nu ook de druk om eten: honger,
+  "het eten haalt de winter niet", geen graan, en de jagers. De uitslag (`speelbaar.md`): meer bier en brood, dezelfde druk
+  om eten, en bij de sluwe bouwer met zaad 1 op 79 dagen alle huizen alles; nu remt vooral de ligging van de herberg en
+  de markt (vraag 96).
+  `npm test` 774/774.
 - 2 okt 2026 — **De sluwe bouwer en het graanboek** (vierentwintigste sessie; vraag 93, a, en 94; Marcel: "ja prima").
   In de speeltest een zesde speler, `sluw`: de bouwer, maar hij bedriegt de heer elk jaar zoals de slimme speler (het
   verstoppen en het wachten op de soldaten staan daarvoor nu op één plek), houdt het graan verstopt en haalt 's nachts

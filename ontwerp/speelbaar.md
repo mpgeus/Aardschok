@@ -149,6 +149,64 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 3 okt: brood 0,01, erven binnen de kringen, en de druk om eten (werklijst, vraag 95)
+
+Gespeeld in de vierentwintigste sessie, op `ccr-ef948901-4zrtmk` op `4ceee99` (het spel van `c98439f`): de sluwe bouwer
+en de bouwer, twee jaar, zaad 1 tot en met 3, met brood 0,01 (vraag 95, a), de bouwers die een erf aanwijzen binnen de
+kringen (b), en het herstel van "Daar kun je niet bij" (c). Daarnaast de bouwer op dezelfde stand met brood 0,03
+(`--getal WENSEN_INSTELLINGEN.perMens.brood=0.03`): het verschil daarmee is alleen het brood. Geen fouten in de console,
+en "Daar kun je niet bij" kwam niet meer voor.
+
+Het tweede jaar (de getallen van vraag 94 erachter, voor zover gemeten):
+
+| Spel | Mensen | Huizen met alles, gemiddeld | Dagen dat alle huizen alles hadden | Dagen zonder bier | Dagen zonder brood | De molen (graan) |
+|---|---|---|---|---|---|---|
+| sluw, zaad 1 | 83 | 72% (was 53%) | 79 (was 0) | 3 (80) | 0 (0) | 141 (298) |
+| sluw, zaad 2 | 103 | 40% (41%) | 0 | 49 (66) | 36 (36) | 194 (323) |
+| sluw, zaad 3 | 81 | 51% (47%) | 0 | 4 (34) | 60 (60) | 182 (317) |
+| bouwer, zaad 1, brood 0,03 | 90 | 50% (41%) | 0 | 199 (122) | 122 (14) | 280 (335) |
+| bouwer, zaad 1 | 94 | 59% | 0 | 62 | 0 | 174 |
+| bouwer, zaad 2, brood 0,03 | 79 | 39% (38%) | 0 | 69 (141) | 66 (89) | 216 (285) |
+| bouwer, zaad 2 | 87 | 39% | 0 | 0 | 66 | 125 |
+| bouwer, zaad 3, brood 0,03 | 92 | 41% (40%) | 0 | 98 (129) | 143 (59) | 260 (261) |
+| bouwer, zaad 3 | 92 | 45% | 0 | 17 | 96 | 166 |
+
+De druk om eten (vraag 95; Marcel: "er moet altijd druk zijn om voldoende eten"), bij de bouwer, brood 0,03 tegen 0,01:
+
+| Bouwer | Dagen honger (jaar 1, 2) | Dagen "het eten haalt de winter niet" (jaar 1, 2) | Dagen zonder graan boven het zaaigraan (jaar 1, 2) | Jagers erbij (jaar 1, 2) |
+|---|---|---|---|---|
+| zaad 1 | 76, 0 tegen 76, 0 | 124, 175 tegen 124, 173 | 77, 207 tegen 77, 68 | 5, 6 tegen 5, 6 |
+| zaad 2 | 84, 0 tegen 84, 0 | 111, 169 tegen 111, 162 | 85, 71 tegen 85, 0 | 5, 6 tegen 5, 6 |
+| zaad 3 | 80, 0 tegen 80, 0 | 133, 175 tegen 133, 173 | 81, 105 tegen 81, 24 | 5, 6 tegen 5, 6 |
+
+**Wat opviel:**
+
+1. **Een gewonnen jaar komt in zicht, maar is er nog niet.** Bij de sluwe bouwer met zaad 1 hadden alle huizen in het
+   tweede jaar op 79 dagen alles, de langste reeks was 26 dagen, en gemiddeld had 72% van de huizen alles. Bij zaad 3
+   werden alle zeven woningen stenen huizen. Maar geen spel kwam ook maar een maand lang tot alle huizen alles.
+2. **Brood 0,01 maakt het eten niet makkelijker.** Wat het dorp voelt, bleef gelijk: honger alleen in de eerste zomer (76
+   à 84 dagen, vóór de eerste oogst), in het tweede jaar op 162 à 175 dagen "het eten haalt de winter niet", en zes
+   jagers erbij. Wat veranderde, is het graan voor bier en brood: de molen nam 125 à 174 graan in plaats van 216 à 280,
+   het graan raakte in het tweede jaar 0 à 68 dagen op in plaats van 71 à 207, en het bier ontbrak 0 à 62 dagen in plaats
+   van 69 à 199. Wat wel opvalt: na de eerste zomer heeft niemand meer honger, met of zonder brood. De jagers en de melk
+   houden iedereen te eten (`opmerkingen.md`).
+3. **De erven binnen de kringen helpen, tot het midden vol is.** "De herberg binnen 30 tegels" ontbrak in het tweede jaar
+   nog 1 à 9 maanden in plaats van 12. Maar in elk spel pasten er maar drie erven binnen de kring van de herberg, en bij
+   zaad 2 groeide het dorp door tot 103 mensen: na vier erven binnen een kring kwamen er vijf buiten elke kring, en daarna
+   paste er nergens meer een erf. Die huizen missen de herberg, een kapel, een markt en een put.
+4. **Nu remt vooral de markt.** In vijf van de zes spellen misten een paar stenen huizen het hele tweede jaar een markt
+   binnen 30 tegels. De bouwers bouwen hem laat (een wens per maand, en hij kost 14 goud), en daarna "vindt geen plek waar
+   een markt iemand helpt": er is geen plek meer die de huizen zonder markt bereikt. Daarna komen een put (een kring van
+   12 tegels) en laken.
+5. **Zonder brood is nu een volgorde, geen graan.** De bakkerij kwam er steeds vóór de molen, bij zaad 2 een half jaar
+   eerder; zolang is er geen meel. Ook bij zaad 2, waar het graan nooit op raakte, ontbrak het brood zo 66 dagen.
+6. **De heer of je mensen.** De bouwer gaf de heer in het tweede jaar 23 à 63% (de schandpaal of soldaten), tegen 43 à
+   67% bij vraag 94: bij zaad 1 ging zijn goud naar de markt, de bakkerij en de weverij, en had hij op 1 slachtmaand 12
+   goud in de kist, tegen 48. De sluwe bouwer gaf 93 à 96% van bijna niets. Wat hij verstopte, had hij nu niet allemaal
+   nodig: aan het eind lag er nog 130 à 195 graan.
+
+Wat eruit volgt, staat in de werklijst als vraag 96.
+
 ## De speeltest van 2 okt: de sluwe bouwer en het graanboek (werklijst, vraag 93 en 94)
 
 Gespeeld in de vierentwintigste sessie, op `ccr-ef948901-4zrtmk` op `3487718` (het spel van `41cd52f`, hetzelfde als bij
