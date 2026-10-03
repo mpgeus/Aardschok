@@ -4,8 +4,9 @@
 // Winnen: een stad waar iedereen een jaar lang super gelukkig is, zoals in Anno 1602. Elke nacht kijkt het dorp of
 // alle huizen alles hebben wat hun stand wil (g.wensen.alles, js/wensen.js) en alle woningen in de hoogste stand zijn
 // (stenen huizen; de boerderijen staan ernaast), en of er minstens `minstensMensen` mensen wonen (100, de maat van de
-// demo; vraag 77: "een dorp van 50 is als doel te klein"). Dan loopt er een teller, en een dag waarop één huis iets
-// mist, zet hem op nul. Na `dagen` (360) is het gewonnen: het dorp viert het grote feest op het plein
+// demo; vraag 77: "een dorp van 50 is als doel te klein"). Dan loopt er een teller. Een slechte reeks van hooguit
+// `magMissen` dagen zet hem stil, en een dag meer zet hem op nul (de spelregel "Het eind": "Een week mag", de standaard,
+// of "Een jaar op rij": één slechte dag zet hem op nul; werklijst vraag 102, d). Na `dagen` (360) is het gewonnen: het dorp viert het grote feest op het plein
 // (js/feesten.js), en die avond komt het eindscherm over het feest (js/hud.js, T.ui.toonGewonnen). Wie wint, kan
 // verder spelen. Linksboven staat het doel zodra er geen trede meer te halen is (T.eindDoel, na marktrecht): hoeveel
 // mensen nog, hoeveel huizen alles hebben, en hoeveel dagen op rij.
@@ -19,8 +20,8 @@
 // bracht, welke huizen doorgroeiden, welke feesten er waren, wat de heer kreeg, wat het meest gemist werd, en op
 // hoeveel dagen iedereen alles had. Regels zonder scherm; toetsen in test/einde.test.cjs.
 //
-// D.eind:        { dagen, beste, gewonnen }: hoeveel dagen op rij iedereen gelukkig is, de langste reeks, en
-//                { dag, getoond } zodra het gewonnen is
+// D.eind:        { dagen, beste, gewonnen, mis }: hoeveel dagen op rij iedereen gelukkig is, de langste reeks,
+//                { dag, getoond } zodra het gewonnen is, en hoeveel slechte dagen op rij de teller nu stilstaat
 // D.jaarboek:    { begin, mensen, kwamen, stierven, weg, doorgegroeid, gelukkig, geoogst, gemist: { wens: dagen } },
 //                sinds begin
 // D.jaarverslag: het laatste jaarverslag, { dag, regels }
@@ -33,6 +34,10 @@
     dagen: 360,
     // Pas vanaf zoveel mensen telt het: anders win je met één stenen huis in een gehucht.
     minstensMensen: 100,
+    // Zoveel slechte dagen op rij zetten de teller stil, niet terug; een dag meer, en hij begint opnieuw. Met 0 zet één
+    // slechte dag hem terug (de spelregel "Het eind"; werklijst vraag 102, d: anders kost één aanval van de rovers of
+    // één late marskramer een heel jaar, en dat is pech, geen spel).
+    magMissen: 7,
     // Minder mensen dan dit, en het spel is uit.
     minstensOver: 10,
   };
@@ -51,6 +56,14 @@
     return huizen.length > 0 && huizen.every(gelukkig);
   };
 
+  // Staat de teller stil (een slechte dag, en het mag nog), dan zegt het doel hoe lang nog.
+  function stil(E) {
+    if (!E.mis) return '';
+    const nog = IN().magMissen - E.mis;
+    return nog > 0 ? `; de teller staat stil, nog ${nog} ${nog === 1 ? 'dag' : 'dagen'} om het goed te maken`
+      : '; de teller staat stil: maak het vandaag goed, of hij begint opnieuw';
+  }
+
   // Het doel linksboven (js/main.js) als er geen trede meer te halen is: { kop, tekst }, of null zolang er nog een trede
   // komt, of als hier niet gewonnen kan worden (een kaart zonder plein: geen gehucht).
   T.eindDoel = function (D) {
@@ -60,7 +73,7 @@
     const E = D.eind || {};
     if (E.gewonnen) return { kop, tekst: `gewonnen op ${T.datumVanDag(E.gewonnen.dag).tekst}`, klaar: true };
     if ((D.bevolking || 0) < IN().minstensMensen) return { kop, tekst: `${D.bevolking || 0} van ${IN().minstensMensen} mensen` };
-    if (E.dagen > 0) return { kop, tekst: `${E.dagen} van ${IN().dagen} dagen` };
+    if (E.dagen > 0) return { kop, tekst: `${E.dagen} van ${IN().dagen} dagen${stil(E)}` };
     const huizen = woningen(D);
     return { kop, tekst: `${huizen.filter(gelukkig).length} van ${huizen.length} huizen zijn super gelukkig` };
   };
@@ -148,7 +161,15 @@
     }
     const E = D.eind || (D.eind = { dagen: 0, beste: 0, gewonnen: null });
     if (E.gewonnen) return;
-    E.dagen = T.iedereenGelukkig(D) ? E.dagen + 1 : 0;
+    if (T.iedereenGelukkig(D)) {
+      E.dagen++;
+      E.mis = 0;
+    } else if (E.dagen > 0 && (E.mis || 0) < IN().magMissen) {
+      E.mis = (E.mis || 0) + 1; // de teller staat stil
+    } else {
+      E.dagen = 0;
+      E.mis = 0;
+    }
     E.beste = Math.max(E.beste, E.dagen);
     if (E.dagen < IN().dagen) return;
     E.gewonnen = { dag, getoond: false };

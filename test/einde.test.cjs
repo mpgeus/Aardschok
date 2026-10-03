@@ -74,18 +74,45 @@ test('iedereen is super gelukkig: genoeg mensen, en elk huis heeft alles in de h
   assert.equal(T.iedereenGelukkig(D), false, 'onder de honderd mensen telt het niet: geen winst met één stenen huis');
 });
 
-test('een jaar lang iedereen gelukkig, en het dorp viert het grote feest; één dag niet, en de teller begint opnieuw', () => {
+test('een week mag: een slechte reeks van hooguit zeven dagen zet de teller stil, een dag meer zet hem op nul', () => {
   const S = gehucht();
   const D = S.dorp;
   allesGelukkig(D);
   const begin = dagVan('zomermaand', 1);
-  const N = T.EINDE_INSTELLINGEN.dagen;
-  for (let i = 0; i < 10; i++) T.tikEindeDag(D, begin + i);
-  assert.equal(D.eind.dagen, 10);
+  const mag = T.EINDE_INSTELLINGEN.magMissen;
+  assert.equal(mag, 7, 'de standaard: een week');
+  let dag = begin;
+  for (let i = 0; i < 10; i++) T.tikEindeDag(D, dag++);
   woningen(D)[0].wensen.alles = false;
-  T.tikEindeDag(D, begin + 10);
-  assert.equal(D.eind.dagen, 0, 'een dag waarop één huis iets mist, zet de teller op nul');
-  assert.equal(D.eind.beste, 10, 'de langste reeks blijft bewaard');
+  for (let i = 0; i < mag; i++) T.tikEindeDag(D, dag++);
+  assert.equal(D.eind.dagen, 10, 'een week lang mist een huis iets: de teller staat stil');
+  woningen(D)[0].wensen.alles = true;
+  T.tikEindeDag(D, dag++);
+  assert.equal(D.eind.dagen, 11, 'weer goed: hij telt verder');
+  woningen(D)[0].wensen.alles = false;
+  for (let i = 0; i < mag + 1; i++) T.tikEindeDag(D, dag++);
+  assert.equal(D.eind.dagen, 0, 'een dag meer dan een week: opnieuw');
+  assert.equal(D.eind.beste, 11, 'de langste reeks blijft bewaard');
+});
+
+test('een jaar lang iedereen gelukkig, en het dorp viert het grote feest; met "Een jaar op rij" zet één dag de teller op nul', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  T.zetOptie('eind', 'jaar');
+  try {
+    allesGelukkig(D);
+    const begin = dagVan('zomermaand', 1);
+    for (let i = 0; i < 10; i++) T.tikEindeDag(D, begin + i);
+    assert.equal(D.eind.dagen, 10);
+    woningen(D)[0].wensen.alles = false;
+    T.tikEindeDag(D, begin + 10);
+    assert.equal(D.eind.dagen, 0, 'een dag waarop één huis iets mist, zet de teller op nul');
+    assert.equal(D.eind.beste, 10, 'de langste reeks blijft bewaard');
+  } finally {
+    T.optiesTerug();
+  }
+  const begin = dagVan('zomermaand', 1);
+  const N = T.EINDE_INSTELLINGEN.dagen;
   woningen(D)[0].wensen.alles = true;
 
   berichten.length = 0;
@@ -213,6 +240,10 @@ test('het doel linksboven: pas na de laatste trede, en dan wat er nog tussen jou
   assert.equal(T.eindDoel(D).tekst, `${n - 1} van ${n} huizen zijn super gelukkig`);
   D.eind = { dagen: 12, beste: 12, gewonnen: null };
   assert.equal(T.eindDoel(D).tekst, '12 van 360 dagen');
+  D.eind.mis = 3;
+  assert.equal(T.eindDoel(D).tekst, '12 van 360 dagen; de teller staat stil, nog 4 dagen om het goed te maken');
+  D.eind.mis = 7;
+  assert.equal(T.eindDoel(D).tekst, '12 van 360 dagen; de teller staat stil: maak het vandaag goed, of hij begint opnieuw');
   D.eind.gewonnen = { dag: 400, getoond: true };
   assert.equal(T.eindDoel(D).tekst, `gewonnen op ${T.datumVanDag(400).tekst}`);
 });

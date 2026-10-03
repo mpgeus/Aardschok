@@ -320,6 +320,17 @@
           uitleg: 'Zoals vóór 3 okt: de heer ontslaat je pas als je hem twee jaar achter elkaar veel te weinig gaf, en het dorp stuurt je niet weg.' },
       ],
     },
+    // Een slechte dag in het jaar dat je wint (werklijst vraag 102, d; Marcel, 3 okt: "102 a b c d e ja"; js/einde.js).
+    {
+      id: 'eind', naam: 'Het eind', standaard: 'week',
+      uitleg: 'Wat een slechte dag doet met het jaar waarin iedereen gelukkig moet zijn.',
+      keuzes: [
+        { id: 'week', naam: 'Een week mag', zet: { 'EINDE_INSTELLINGEN.magMissen': 7 },
+          uitleg: 'Mist een huis iets, dan staat de teller stil. Is het binnen een week weer goed, dan telt hij verder; anders begint hij opnieuw.' },
+        { id: 'jaar', naam: 'Een jaar op rij', zet: { 'EINDE_INSTELLINGEN.magMissen': 0 },
+          uitleg: 'Eén dag waarop een huis iets mist, en de teller begint opnieuw.' },
+      ],
+    },
     // Wie betrapt wordt op verstoppen (werklijst vraag 106, c; Marcel koos niet tussen de twee, dus de laatste
     // waarschuwing als standaard tot hij kiest; js/bazen.js, T.betrapt).
     {

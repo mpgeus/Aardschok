@@ -173,11 +173,13 @@ een stand, en elke stand wil iets.
 - **2e, het eind en het jaar in het kort** (3 okt, vijfentwintigste sessie; werklijst vraag 101, Marcel: "101 ja";
   `js/einde.js`). **Winnen:** elke nacht kijkt het dorp of elk huis met mensen alles heeft wat zijn stand wil, in de
   hoogste stand (stenen huizen; de boerderijen staan ernaast), met minstens 100 mensen (`T.iedereenGelukkig`). Dan loopt
-  er een teller, en een dag waarop één huis iets mist, zet hem op nul. Na 360 dagen op rij is het gewonnen: het hele dorp
+  er een teller. Mist een huis iets, dan staat hij stil, en is het na een week nog niet goed, dan begint hij opnieuw (de
+  spelregel "Het eind": "Een week mag", sinds 3 okt de standaard, vraag 102, d; of "Een jaar op rij": één slechte dag
+  zet hem op nul). Na 360 dagen is het gewonnen: het hele dorp
   viert het grote feest op het plein (de feesten, `T.vierVandaag`), en die avond, of eerder als de schout bij het feest
   staat, komt het eindscherm "Iedereen gelukkig" over het feest, met het jaar tot nu toe; Verder spelen kan. Linksboven
   staat het doel zodra er geen trede meer te halen is (na marktrecht): eerst hoeveel mensen nog, dan hoeveel huizen
-  alles hebben, dan "12 van 360 dagen" (`T.eindDoel`). **Verliezen:** je ambt kwijt, gevallen, en sinds 3 okt ook minder
+  alles hebben, dan "12 van 360 dagen", en staat hij stil, hoe lang nog (`T.eindDoel`). **Verliezen:** je ambt kwijt, gevallen, en sinds 3 okt ook minder
   dan 10 mensen ("Het dorp is leeg"). **Het jaar in het kort:** het dorp houdt een jaarboek bij (uit het dagboek van de
   raadsman, en de oogst), en op 1 lentemaand komt het jaarverslag, als een brief in de hand van je raadsman: hoe het dorp
   groeide of kromp, wie er kwam, stierf en wegtrok, wat de oogst bracht, welke huizen doorgroeiden, welke feesten er

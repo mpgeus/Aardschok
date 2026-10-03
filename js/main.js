@@ -1096,7 +1096,7 @@
       return {
         doel: T.eindDoel(D) || `eerst nog een trede: ${T.volgendeTrede(D)}`,
         iedereenGelukkig: T.iedereenGelukkig(D),
-        dagenOpRij: `${E.dagen} van ${T.EINDE_INSTELLINGEN.dagen} (de langste reeks: ${E.beste})`,
+        dagenOpRij: `${E.dagen} van ${T.EINDE_INSTELLINGEN.dagen} (de langste reeks: ${E.beste})${E.mis ? `, staat ${E.mis} ${E.mis === 1 ? 'dag' : 'dagen'} stil (er mogen ${T.EINDE_INSTELLINGEN.magMissen})` : ''}`,
         gewonnen: E.gewonnen && `${T.datumVanDag(E.gewonnen.dag).tekst}${E.gewonnen.getoond ? ', getoond' : ''}`,
         jaarboek: D.jaarboek,
         laatsteJaarverslag: D.jaarverslag && D.jaarverslag.regels,

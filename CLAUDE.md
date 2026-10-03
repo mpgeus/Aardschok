@@ -383,7 +383,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   De spelregel "Feesten"; de getallen in `T.FEESTEN_INSTELLINGEN`.
 - `js/einde.js`: **het eind en het jaar in het kort** (2e, vraag 101, 3 okt): elke nacht (`T.tikEindeDag`, vanuit
   `T.tikGebouwenDag`) telt het dorp de dagen op rij dat iedereen super gelukkig is (`T.iedereenGelukkig`: elk huis met
-  mensen heeft alles, in de hoogste stand of ernaast, vanaf 100 mensen; `D.eind`); na 360 is het gewonnen, viert het
+  mensen heeft alles, in de hoogste stand of ernaast, vanaf 100 mensen; `D.eind`; een slechte week zet de teller stil,
+  niet terug, de spelregel "Het eind", vraag 102, d); na 360 is het gewonnen, viert het
   dorp het grote feest (`T.vierVandaag` in `js/feesten.js`) en komt het eindscherm (`T.werkEindeBij`,
   `T.ui.toonGewonnen` in `js/hud.js`). Onder 10 mensen is het spel uit (`D.einde`, reden `'leeg'`). Het jaarboek
   (`D.jaarboek`, uit het dagboek en de oogst, `T.telOogstInJaarboek`) wordt op 1 lentemaand het jaarverslag (een brief,
