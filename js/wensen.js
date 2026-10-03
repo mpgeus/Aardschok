@@ -31,8 +31,10 @@
     // brouwt 8 bier per dag, een jager schiet 1 vlees, een visser vangt 2 vis, een bakkerij bakt 2 brood en een weverij
     // weeft 2 laken. Laken 0,005 (Marcel, 2 okt, werklijst vraag 91, c; was 0,01): de wol komt van de schapen, eens per
     // jaar, en de heer vraagt er 20 per schaapskooi; acht schapen gaven laken voor vier à vijf ambachtslieden, en een
-    // volle kooi (20 schapen) dekt er nu zo'n 33.
-    perMens: { bier: 0.05, vleesOfVis: 0.02, brood: 0.03, laken: 0.005 },
+    // volle kooi (20 schapen) dekt er nu zo'n 33. Brood 0,01 (Marcel, 3 okt, werklijst vraag 95, a; was 0,03): een brood
+    // kost een graan, en met 0,03 kostte het brood van één stenen huis 86 graan per jaar, zodat de akkers na het zaaigraan
+    // er hooguit vier voedden; nu tien à elf. Wel moet er druk blijven om genoeg eten ("Het mag niet te makkelijk").
+    perMens: { bier: 0.05, vleesOfVis: 0.02, brood: 0.01, laken: 0.005 },
     // Hoe zwaar een wens weegt in hoe blij een huis is (de rest, hierboven), naast de andere: 1, behalve brood (Marcel,
     // 2 okt, werklijst vraag 92, a: "brood is wel minder lekker en levert minder blijheid op"). Een huis zonder brood
     // is dus blijer dan een huis zonder laken; alles hebben, en dus super gelukkig zijn, vraagt het brood wel.

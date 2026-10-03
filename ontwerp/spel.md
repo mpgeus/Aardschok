@@ -160,7 +160,11 @@ letter voor letter mee zoals ervoor).
   te weinig bier, dan nemen zij het laatste"). Elke dag gebruikt een mens van zijn stand zoveel bier, vlees of vis, brood
   en laken uit de voorraad (de getallen in de werkbank). Laken is sinds 2 okt 0,005 per dag (vraag 91, c; was 0,01): de
   wol komt van de schapen, eens per jaar, en de heer vraagt er 20 per schaapskooi, zodat acht schapen laken gaven voor
-  vier à vijf ambachtslieden; een volle kooi (20 schapen) dekt er nu zo'n 33.
+  vier à vijf ambachtslieden; een volle kooi (20 schapen) dekt er nu zo'n 33. Brood is sinds 3 okt 0,01 per dag (vraag
+  95, a; was 0,03; Marcel: "Ok, maar er moet altijd druk zijn om voldoende eten. Het mag niet te makkelijk"): een brood
+  kost een graan, en met 0,03 kostte het brood van één stenen huis 86 graan per jaar, zodat de 179 akkertegels na het
+  zaaigraan, de heer en de rovers er hooguit vier voedden. Een gewonnen dorp heeft alleen stenen huizen; nu kunnen dat er
+  tien à elf zijn.
 - **Brood, vis en vlees zijn eten** (2 okt, werklijst vraag 92, a; Marcel: "A ja, maar brood is wel minder lekker en
   levert minder blijheid op"): wat een huis ervan krijgt, eet het dorp die dag minder aan graan (een brood of een vis
   vult zoveel als een graan, `T.voedtAlsGraan`). Daarvoor kwam het brood bovenop wat een ambachtsman at, maalde de molen
