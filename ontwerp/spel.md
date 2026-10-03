@@ -281,8 +281,10 @@ veranderde. Ze beginnen op 50.
 - **Het vertrouwen van het dorp:** elk antwoord op een voorval of een verzoek, zo zwaar als het het dorp tevreden of
   ontevreden maakt (besliste je raadsman, de helft); niet gevonden of geen tijd −2; mannen naar de oorlog −8, vrijgekocht
   +8; wie verhongerde of bevroor −3 per mens, wie sneuvelde −2; soldaten in huis −10; jezelf aan de schandpaal +10,
-  iemand anders naar zijn aanzien; een ondernemer die na twee keer nee wegtrok −10. En elke dag een beetje, naar hoe het
-  gaat: een tevreden dorp gunt het je, een ellendig dorp geeft jou de schuld.
+  iemand anders naar zijn aanzien; een ondernemer die na twee keer nee wegtrok −10. En elke dag gaat het een stukje
+  naar hoe tevreden het dorp is (een zestigste van het verschil): een tevreden dorp vertrouwt je, en een klap slijt in
+  een paar maanden weg; een ellendig dorp vertrouwt je weinig, en een klap erbij jaagt je weg (vraag 106, stap 3; Marcel,
+  3 okt: "vertrouwen ook ja"; tot dan telde het vooral de klappen op, en zakte het bij iedereen, `speelbaar.md`).
 - **Onder 20 een waarschuwing:** de heer schrijft een brief ("Nog één keer, schout. Wij hebben een neef die ook schout
   wil worden."), het dorp mort, en de raad onder het doel zegt het, vóór alles. **Op 0 ben je weg:** de heer ontslaat je,
   of het dorp staat met fakkels voor je deur. Maar altijd eerst de waarschuwing: wie er nog geen kreeg, zakt niet verder

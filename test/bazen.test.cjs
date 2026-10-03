@@ -182,12 +182,39 @@ test('ja op een verzoek om te bouwen is je werk: het vertrouwen blijft', () => {
   assert.equal(T.bazenNu(D).vertrouwen, 50);
 });
 
-test('het vertrouwen volgt langzaam hoe het gaat, en op 0 jaagt het dorp je weg, na een waarschuwing', () => {
+test('het vertrouwen gaat elke dag een stukje naar hoe tevreden het dorp is', () => {
   const S = gehucht();
   const D = S.dorp;
   D.behoeften = { tevredenheid: 1 };
   T.tikBazenDag(D);
-  assert.ok(Math.abs(T.bazenNu(D).vertrouwen - (50 + (1 - IN().midden) * IN().perDag)) < 1e-9);
+  assert.ok(Math.abs(T.bazenNu(D).vertrouwen - (50 + 50 / IN().volgDagen)) < 1e-9);
+  assert.match(T.bazenTekst(D, 'vertrouwen'), /naar hoe tevreden het dorp is \(100%\)/);
+  // Een dorp dat 90% tevreden is, en de soldaten van de heer: de klap slijt in een paar maanden weg (de speeltest van
+  // 3 okt: zonder dit zakte het vertrouwen bij iedereen die lang genoeg speelde).
+  D.behoeften = { tevredenheid: 0.9 };
+  for (let d = 0; d < 360; d++) T.tikBazenDag(D);
+  assert.ok(Math.abs(T.bazenNu(D).vertrouwen - 90) < 1, 'na een jaar zo tevreden als het dorp');
+  T.wijzigVertrouwen(D, IN().soldaten, 'de soldaten van de heer');
+  for (let d = 0; d < 90; d++) T.tikBazenDag(D);
+  assert.ok(T.bazenNu(D).vertrouwen > 90 + IN().soldaten / 4, 'na drie maanden is de klap grotendeels weg');
+  assert.ok(!D.einde && !berichten.some((t) => /Het dorp mort/.test(t)));
+});
+
+test('een dorp dat het slecht heeft, mort vanzelf, maar jaagt je pas weg na een klap erbij', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  D.behoeften = { tevredenheid: 0.1 };
+  for (let d = 0; d < 360; d++) T.tikBazenDag(D);
+  assert.ok(T.bazenNu(D).vertrouwen > 0 && T.bazenNu(D).vertrouwen < IN().waarschuwing);
+  assert.equal(berichten.filter((t) => /Het dorp mort/.test(t)).length, 1, 'één keer');
+  assert.ok(!D.einde, 'het slechte jaar alleen jaagt je niet weg');
+  T.wijzigVertrouwen(D, -20, 'de honger');
+  assert.equal(D.einde && D.einde.reden, 'verjaagd');
+});
+
+test('op 0 jaagt het dorp je weg, na een waarschuwing', () => {
+  const S = gehucht();
+  const D = S.dorp;
   T.wijzigVertrouwen(D, -60, 'een slechte maand');
   assert.equal(T.bazenNu(D).vertrouwen, IN().laatsteWaarschuwing, 'eerst de waarschuwing');
   assert.ok(berichten.some((t) => /Het dorp mort/.test(t)));

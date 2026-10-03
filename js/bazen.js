@@ -8,7 +8,8 @@
 //   vertrouwen  wat het dorp van jóú vindt, niet hoe tevreden het is: je antwoorden op de voorvallen (zo zwaar als ze het
 //               dorp tevreden of ontevreden maken), wie je naar de oorlog stuurde of vrijkocht, wie je aan de
 //               schandpaal zette, wie verhongerde of bevroor, wie sneuvelde, de soldaten van de heer in huis, en wie
-//               wegtrok na twee keer nee; en langzaam, elke dag, hoe het gaat (de tevredenheid).
+//               wegtrok na twee keer nee. En elke dag gaat het een stukje naar hoe tevreden het dorp is, zodat een
+//               klap in een paar maanden wegslijt.
 // Zakt een meter onder `waarschuwing`, dan krijg je een waarschuwing: de heer in een brief, of het dorp mort. Op 0 ben je
 // weg: de heer ontslaat je (T.ambtKwijt, js/heer.js), of het dorp jaagt je weg (D.einde, reden 'verjaagd'). Maar altijd
 // eerst de waarschuwing: wie er nog geen kreeg, zakt niet verder dan de laatste waarschuwing (naar, hieronder). Wie
@@ -72,10 +73,12 @@
     schandpaalPerAanzien: 100,
     // Een ondernemer trok weg na twee keer nee (js/ondernemers.js).
     wegGetrokken: -10,
-    // Elke dag, langzaam: wie het lang slecht heeft, geeft de schout de schuld, en wie het goed heeft, gunt het hem.
-    // (tevredenheid − midden) × perDag: bij 95% tevreden zo'n 11 per jaar erbij, bij 60% 8 eraf.
-    midden: 0.75,
-    perDag: 0.15,
+    // Elke dag gaat het vertrouwen een stukje naar hoe tevreden het dorp is (de tevredenheid × 100): het verschil gedeeld
+    // door zoveel dagen. Een tevreden dorp vertrouwt je, en wat je het aandeed, slijt in een paar maanden weg; een dorp
+    // dat het slecht heeft, vertrouwt je weinig, en een klap erbij jaagt je weg (werklijst vraag 106, stap 3; Marcel,
+    // 3 okt: "vertrouwen ook ja"). Tot 3 okt kwam er elke dag (tevredenheid − 0,75) × 0,15 bij: dan telde het alleen de
+    // klappen op, en zakte het bij iedereen die lang genoeg speelde, ook in een dorp dat 90% tevreden was (speelbaar.md).
+    volgDagen: 60,
   };
   const IN = () => T.BAZEN_INSTELLINGEN;
 
@@ -213,13 +216,18 @@
   // Elke dag
   // ---------------------------------------------------------------------------------------------
 
-  // Elke dag (T.tikGebouwenDag, js/gebouwen.js, na de behoeften): het vertrouwen volgt langzaam hoe het gaat.
+  // Elke dag (T.tikGebouwenDag, js/gebouwen.js, na de behoeften): het vertrouwen gaat een stukje naar hoe tevreden het
+  // dorp is.
   T.tikBazenDag = function (D) {
-    if (!T.bazenTellen(D) || !D.behoeften || D.einde) return;
-    const t = D.behoeften.tevredenheid;
-    if (t == null) return;
-    wijzig(D, 'vertrouwen', (t - IN().midden) * IN().perDag, null);
+    const doel = vertrouwenDoel(D);
+    if (doel == null || D.einde) return;
+    wijzig(D, 'vertrouwen', (doel - bazenVan(D).vertrouwen) / IN().volgDagen, null);
   };
+  // Waar het vertrouwen heen gaat: de tevredenheid × 100, of null (zonder de spelregel, of zolang er geen is).
+  function vertrouwenDoel(D) {
+    const t = T.bazenTellen(D) && D.behoeften ? D.behoeften.tevredenheid : null;
+    return t == null ? null : Math.round(t * 100);
+  }
 
   // ---------------------------------------------------------------------------------------------
   // Voor het scherm (js/hud.js) en de raad (js/raad.js)
@@ -234,9 +242,11 @@
     const n = Math.round(b[welk]);
     const wie = welk === 'gunst' ? 'De heer' : 'Het dorp';
     const recent = b.waarom[welk].slice().reverse().map((w) => `${w.n > 0 ? '+' : ''}${w.n} ${w.tekst}`).join('; ');
+    const doel = vertrouwenDoel(D);
     const grens = welk === 'gunst'
       ? `Onder ${IN().waarschuwing} schrijft hij je een waarschuwing, op 0 ben je je ambt kwijt.`
-      : `Onder ${IN().waarschuwing} mort het dorp, op 0 jagen ze je weg.`;
+      : `Het gaat elke dag een stukje naar hoe tevreden het dorp is${doel == null ? '' : ` (${doel}%)`}. `
+        + `Onder ${IN().waarschuwing} mort het dorp, op 0 jagen ze je weg.`;
     return `${T.hoofdletter(NAAM[welk])}: ${n} (${wie.toLowerCase()} is ${T.bazenStemming(n)}).${recent ? ` Het laatst: ${recent}.` : ''} ${grens}`;
   };
 })(globalThis.Spel = globalThis.Spel || {});

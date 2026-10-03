@@ -410,8 +410,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en het vertrouwen van het dorp in jou (`D.bazen`, 0 tot 100), veranderd met `T.wijzigGunst(D, n, waarom)` en
   `T.wijzigVertrouwen(D, n, waarom)` vanuit de regels waar het gebeurt (de schatting via `T.gunstNaSchatting` in
   `T.gevolgVanBetaling`, de heervaart, de schandpaal, de soldaten, `T.vertrouwenNaVoorval`, `T.vertrouwenNaBevolking` in
-  `T.wijzigBevolking`, en elke dag `T.tikBazenDag`). Onder 20 een waarschuwing (de brief `waarschuwing` in
-  `js/brieven.js`, en de raad), op 0 weg (`T.ambtKwijt` met waarom, of `D.einde` met reden 'verjaagd'), maar altijd eerst
+  `T.wijzigBevolking`, en elke dag `T.tikBazenDag`: het vertrouwen gaat een stukje naar de tevredenheid, vraag 106,
+  stap 3). Onder 20 een waarschuwing (de brief `waarschuwing` in `js/brieven.js`, en de raad), op 0 weg (`T.ambtKwijt` met waarom, of `D.einde` met reden 'verjaagd'), maar altijd eerst
   de waarschuwing. Betrapt op verstoppen: `T.betrapt` (vanuit `T.zoekOpPlek`). De twee gezichten in de balk:
   `T.ui.toonBazen` (`js/hud.js`). De spelregels "Twee bazen" en "Betrapt"; de getallen in `T.BAZEN_INSTELLINGEN`.
 - `js/grillen.js`: **elke maand een gril van de heer in een brief** (vraag 106, stap 2): `T.GRILLEN` (veertien, elk met

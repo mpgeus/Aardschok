@@ -3405,6 +3405,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **a**, de maat 100, met ontginnen als verzoek (eerst een plan), of graan kopen, of de maat omlaag? **b**, de
     herberg brouwt na de oogst vooruit? **c**, de raad zegt het bij 100, zonder wet? **d**, "een week mag" als standaard?
     **e**, de speeltest zo, met de winst in het derde of vierde jaar als doel?
+    **Marcel koos (3 okt): "102 a b c d e ja".** Dus alle vijf zoals voorgesteld, in de volgorde hierboven: eerst b, c en d,
+    met het vertrouwen van vraag 106, stap 3; dan de speeltest van vier jaar; dan het plan voor ontginnen.
 103. **De stad groeit door haar mensen, en jij bepaalt de richting** (Marcel, 3 okt, vijfentwintigste sessie: "Ik wil een
     iets andere richting op. De inwoners bouwen zelf een weverij etc. Ze vragen alleen toestemming om te bouwen. Jij
     beslist niet wie welk ambacht start natuurlijk. Stel er is een ondernemende inwoner die wapens wil maken etc. Zo groeit
@@ -3572,7 +3574,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       de tevredenheid (bij 85% tevreden naar 85), zodat een klap in een paar maanden wegslijt. Dan jaagt het dorp je weg
       als het slecht gaat (honger, kou) en je het daarbij nog eens raakt, en niet omdat de heer twee keer soldaten
       stuurde naar een dorp dat verder tevreden is. Dit moet vóór de speeltest van vier jaar (vraag 102, e). Vraag:
-      **zo?**
+      **zo?** **Marcel (3 okt): "vertrouwen ook ja".**
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
