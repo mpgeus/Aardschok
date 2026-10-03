@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (3 okt 2026, vierentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 96); de sluwe bouwer (vraag 94) en brood 0,01 met erven binnen de kringen (vraag 95) zijn af: bij de sluwe bouwer hadden alle huizen op 79 dagen alles, maar een gewonnen jaar haalt nog geen spel; wat nu remt, is de ligging van de herberg en de markt (vraag 96), dan het laken, de pagina met ontwerpen voor de ui (vraag 84, a) en 2c
+## De stand (3 okt 2026, vierentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 97); de sluwe bouwer (vraag 94), brood 0,01 met erven binnen de kringen (vraag 95), en één herberg en één markt voor het hele dorp met de keten in één keer (vraag 96) zijn af; Marcel: "we hebben een speelbaar dorp nodig", met één of twee feesten voor de demo (vraag 97, het plan wacht op Marcel)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -35,16 +35,13 @@ dag. Sinds vraag 91 maakt een werkplaats die iets omzet tot er 30 ligt (en laat 
 ambachtsman 0,005 laken per dag; sinds vraag 92 zijn brood, vis en vlees eten, en sinds vraag 95 wil een ambachtsman
 0,01 brood per dag. `npm test`: 774/774.
 
-**Waar het werk staat:** in `main` staat het werk van de vierentwintigste sessie tot en met Marcels antwoord op vraag 95
-(Marcel, 3 okt: "Push main"); wat daarna kwam (vraag 95 gebouwd, de speeltest, vraag 96), staat op de branch
-`ccr-ef948901-4zrtmk` tot Marcel vraagt het te pushen. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`,
-onder Git. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook het werk van de vierentwintigste sessie tot en met vraag 96, a en b
+(Marcel, 3 okt: "Push main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **Marcels antwoord op vraag 96** (de kring van de herberg en de markt naar 40, of één
-van elk voor het hele dorp; de bouwers die een keten in één keer bouwen; en of de honger na de eerste zomer bij de demo
-hoort). Bouw in de volgorde van zijn antwoord, en speel dan de sluwe bouwer en de bouwer nog eens (`npm run speeltest --
-sluw bouwer`; vergelijk met `speelbaar.md`, de speeltest van vraag 95, en let op de druk om eten). Daarna het laken en de
-pagina met ontwerpen voor de ui (vraag 84, a). **Vraag 95 is af** (zie onder Af): brood 0,01, de bouwers leggen erven
+**Waar de volgende sessie begint:** **Marcels antwoord op vraag 97** (de feesten: het oogstfeest op het plein, en de
+kermis of de meiboom), en wat de speeltest van vraag 96 zegt (`speelbaar.md`; liep nog toen dit in `main` ging). **Vraag
+96, a en b, is af** (zie onder Af): één herberg en één markt zijn genoeg voor het hele dorp (de spelregel "De herberg en
+de markt"), en de bouwers bouwen een keten in één keer. **Vraag 95 is af** (zie onder Af): brood 0,01, de bouwers leggen erven
 binnen de kringen, "Daar kun je niet bij" is hersteld, en de speeltest telt de druk om eten; die bleef gelijk. **Vraag 94
 is af** (zie onder Af): de sluwe bouwer bedriegt de heer elk jaar en houdt
 het graan verstopt voor de herberg en de molen, en de speeltest heeft een graanboek. Hij heeft meer bier en brood dan de
@@ -3557,6 +3554,12 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **Eén herberg en één markt voor het hele dorp, en de keten in één keer** (vierentwintigste sessie; vraag 96,
+  a en b; Marcel: "A. Ja, 1 markt 1 herberg voor nu. B prima"). **a:** de herberg en de markt hebben geen kring meer
+  (`T.WENSEN_INSTELLINGEN.kring`: null); staat er een in het dorp, dan heeft elk huis dat hem wil hem. De kring van 30 is
+  de spelregel "De herberg en de markt" op "Binnen een kring". **b:** wat de raad over een keten zegt, geeft de rest mee
+  (`ook` in `T.watDeHuizenMissen`), en de bouwers van de speeltest bouwen een bakkerij en een molen samen. 1 nieuwe toets,
+  `npm test` 775/775. De speeltest erna staat in `speelbaar.md`.
 - 3 okt 2026 — **Brood 0,01, erven binnen de kringen, en "Daar kun je niet bij"** (vierentwintigste sessie; vraag 95;
   Marcel: "A. Ok, maar er moet altijd druk zijn om voldoende eten. Het mag niet te makkelijk. Verder akkoord met b c d").
   **a:** een ambachtsman wil 0,01 brood per dag (was 0,03): het brood van een stenen huis kost nu 29 graan per jaar.
