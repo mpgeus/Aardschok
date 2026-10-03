@@ -149,6 +149,46 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 3 okt: vier jaar naar de winst (werklijst, vraag 102, e)
+
+Gespeeld in de vijfentwintigste sessie, op `ccr-0d0c2710-bcd5tx`: het spel van `8da1369` (vraag 102, b, c en d, en het
+vertrouwen dat de tevredenheid volgt; nog zonder het looppad van drie tegels en de paadjes), de speeltest van `0238f58`.
+De bouwer en de sluwe bouwer spelen vier jaar, met zaad 1 tot en met 3, tot 1 grasmaand van het vijfde. Geen fouten,
+behalve de weg het gehucht uit (de sluwe bouwer liep hem af, en het spel meldde de mist als fout: opgelost in `3a3d4e9`).
+
+| Speler | Mensen, eind | Stenen huizen | Langste reeks alle huizen alles | De teller van de winst | Waarom niet gewonnen |
+|---|---|---|---|---|---|
+| bouwer, zaad 1 | 102 | 9, en een hut | 267 dagen | 0 | een gezin in een hut, het hele vierde jaar |
+| bouwer, zaad 2 | 105 | 10 | 264 dagen | 210, 193, 162 | de reeks brak om brood, laken en bier |
+| bouwer, zaad 3 | 99 | 9 | 279 dagen | 0 | 99 mensen |
+| sluw, zaad 1 | 99 | 9 | 575 dagen | 0 | 99 mensen, met het vierde jaar 360 van 360 dagen alles in steen |
+| sluw, zaad 2 | loopt nog | | | | |
+| sluw, zaad 3 | 99 | 9 | 289 dagen | 0 | 99 mensen |
+
+**Wat opviel:**
+1. **Het dorp loopt vol op 99, één onder de 100 van de winst.** Elk dorp eindigt met de vijf boerderijen (20 mensen) en
+   negen stenen huizen van acht mensen, en de rest (de herbergierster, de schout en zijn gezin): samen 99. Een tiende
+   stenen huis vraagt een tiende erf, en vanaf het derde jaar vindt de bouwer daar geen plek meer voor ("vindt geen plek
+   voor een erf", elke maand opnieuw). Alleen de bouwer met zaad 2 had er tien (105 mensen). In een leeg gehucht passen 13
+   erven, met het looppad van drie tegels 12; de werkplaatsen, de putten en de markt nemen de rest. De sluwe bouwer met
+   zaad 1 had in het vierde jaar alle 360 dagen alle huizen alles, in steen, en had met één mens meer gewonnen.
+2. **De reeks breekt om eten en laken.** De bouwer met zaad 2 haalde drie keer een reeks van 162 à 210 dagen, en die brak
+   telkens na meer dan een week zonder brood, laken of bier. "Een week mag" (vraag 102, d) hielp: de teller stond 7 à 14
+   dagen stil in plaats van terug te gaan, maar de tekorten duurden langer.
+3. **Het graan raakt op, en steeds eerder.** De oogst valt van 550 à 630 in het eerste jaar tot 340 à 450 in het vierde
+   (een uitgeputte akker rust), terwijl de molen er 200 à 265 van wil. Op 150 à 280 dagen per jaar is er geen graan boven
+   het zaaigraan, en in het vierde jaar mist het brood 150 dagen bij de eerlijke bouwer. De sluwe bouwer, die minder aan
+   de heer geeft en graan verstopt, heeft bijna nooit een tekort.
+4. **Het bier voor de huizen werkt** (vraag 102, b): in het eerste en tweede jaar geen dag zonder bier (eerder 70 à 156);
+   pas in het derde en vierde jaar, als het graan opraakt, 26 à 81 dagen.
+5. **De bouwer met zaad 1** had het hele vierde jaar een gezin in een hut (keuters), dat niet doorgroeide; een hut is niet
+   de hoogste stand, en dan telt de dag niet. Een hut groeit alleen door als zijn huis ernaast past (elk huis is groter
+   dan elke hut), en past het nergens, dan blijft hij een hut zolang er iemand woont. Deze speeltest speelde nog zonder
+   het looppad van drie tegels, dat die ruimte om een nieuw gebouw vrijhoudt; na te lopen in de volgende.
+
+**Wat het zegt:** de winst is bijna te halen, maar het land is op, twee keer: het akkerland (vraag 107, ontginnen), en
+de grond om te bouwen. Zie vraag 110 in de werklijst.
+
 ## De speeltest van 3 okt: de twee bazen (werklijst, vraag 106)
 
 Twee keer gespeeld in de vijfentwintigste sessie, op `ccr-0d0c2710-bcd5tx`: eerst op `ab14eed` (de gunst, het

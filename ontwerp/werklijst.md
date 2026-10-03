@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; het dorp groeit door zijn mensen (vraag 103) en door ondernemers met een eigen wil (vraag 104); sinds vandaag kunnen de heer en het dorp je allebei wegsturen (vraag 106, twee bazen), en wil de heer elke maand iets geks; het plan voor een jaar dat te winnen is (vraag 102, opnieuw) wacht op Marcel
+## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de heer en het dorp kunnen je allebei wegsturen (vraag 106); sinds vandaag een overzicht onder `Tab`, paadjes, lantaarns en ramen die 's avonds branden (vraag 108); de speeltest van vier jaar laat zien dat het land op is, en dat het dorp op 99 mensen blijft steken, één onder de winst (vraag 102, e; vraag 107 en 110 wachten op Marcel)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -29,26 +29,25 @@ werkplaats) of een tweede herberg (de herbergierster wordt boos); wie twee keer 
 heb je twee bazen: in de balk staan de gunst van de heer (een kroon) en het vertrouwen van het dorp (een hoed), van 0 tot
 100. Onder 20 komt er een waarschuwing, en op 0 ben je je ambt kwijt, of jaagt het dorp je weg. Elke maand wil de heer in
 een brief iets geks (een gril: een standbeeld, een vet varken, de bruiloft van zijn neef), en wat je antwoordt, kost de
-een of de ander iets. Wie de soldaten betrappen op verstoppen, krijgt de laatste waarschuwing. `npm test`: 842/842.
+een of de ander iets. Wie de soldaten betrappen op verstoppen, krijgt de laatste waarschuwing. **Sinds vraag 108** kijk je met `Tab` over
+je dorp, loopt er van elke deur een paadje, slijt het gras waar veel gelopen wordt, en branden 's avonds de lantaarns en
+de ramen van wie thuis is. `npm test`: 862/862.
 
-**Waar het werk staat:** in `main` staat alles tot en met de twee bazen, stap 1 en 2, met de spelers van de speeltest
-die op de grillen antwoorden (`0ed04ab`; Marcel: "106 a b c d ja, push main", en "push main"). Op de branch van deze
-sessie, `ccr-0d0c2710-bcd5tx`, staan daarbovenop het vertrouwen bijgesteld na de eerste speeltest (`00d25a5`), wat er nog
-open staat naar de kern en de demo (`0c`, hieronder), en het plan voor vraag 102; dat gaat naar `main` als Marcel het
-vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** in `main` staat alles tot en met de twee bazen, stap 1 en 2 (`0ed04ab`). Op de branch van
+deze sessie, `ccr-0d0c2710-bcd5tx`, staan daarbovenop: het vertrouwen dat de tevredenheid volgt, vraag 102 b, c en d (bier
+apart, de raad bij de maat, "een week mag"), het looppad van drie tegels en de tekenvolgorde van twee gebouwen (Marcel zag
+op `main` een houthakker tegen het huis van de schout, en de muur eroverheen: op de branch is dat goed), het overzicht
+(108 a), de paadjes, de lantaarns en de ramen (108 b en d), en de weg het gehucht uit zonder fout. Dat gaat naar `main`
+als Marcel het vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** Marcels antwoord op **vraag 102, opnieuw** (met de maat eerst). Wat Claude erin
-zag: het is één knoop, het land. De 209 tegels akker zijn in het derde jaar dezelfde als in het eerste. Bij zo'n 90
-mensen is er een groot deel van het jaar geen graan over, en dan komt er geen gezin, brouwt de herberg niet en krijgt de
-heer te weinig. Het voorstel: ontginnen als verzoek, de herberg die na de oogst vooruit brouwt, de raad die bij 100 zegt
-dat je geen erf meer aanwijst, "een week mag", en een speeltest van vier jaar. En op het voorstel bij **vraag 106, stap 3**:
-de tweede speeltest van de twee bazen (`speelbaar.md`) laat het vertrouwen van het dorp bij iedereen zakken, ook bij een
-tevreden dorp (de bouwer eindigt na twee jaar op 2 à 11), omdat het alleen de klappen optelt; het voorstel is dat het
-de tevredenheid volgt, en dat moet vóór de speeltest van vier jaar. Na te lopen uit de speeltests: drie of vier herbergen per
-dorp (het bier mist om het graan, en dan vraagt de keten een herberg; vraag 102, b), en een schout die alleen tegen drie
-wilde rovers viel, omdat de militie onderweg was. De rest van **vraag 105** (wat ons uniek maakt) komt na de kern. De ui
-wordt de schrijftafel (vraag 98, C): het briefje bij een huis is het eerste papier, en de rest volgt later (januari, met
-de Steam-pagina).
+**Waar de volgende sessie begint:** Marcels antwoorden op **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen
+en het erf: bestraten als verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de
+maat van de winst: het dorp loopt vol op 99, de winst vraagt 100; het voorstel is de winst vanaf 90, en bouwgrond uit het
+ontginnen). De speeltest van vier jaar staat in `speelbaar.md`: de reeks breekt om brood, laken en bier als het graan
+opraakt, de oogst valt van 600 naar 350 à 450 in vier jaar, en een hut die geen plaats heeft om door te groeien, blijft
+een hut. Na te lopen uit de speeltests: een schout die alleen tegen drie wilde rovers viel, omdat de militie onderweg
+was. De rest van **vraag 105** (wat ons uniek maakt) komt na de kern. De ui wordt de schrijftafel (vraag 98, C): het
+briefje bij een huis is het eerste papier, en de rest volgt later (januari, met de Steam-pagina).
 
 **Wat wacht:** het buurdorp (vraag 72) tot de kern staat, en het land eromheen naar de provincie (vraag 70, B); de
 zitting (3b) en de herberg als plek van gesprekken (3c); staande orders voor de raadsman (vraag 66, D) met het land; de
@@ -3580,8 +3579,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
 107. **Ontginnen als verzoek: het land groeit mee** (Claude, 3 okt, vijfentwintigste sessie; vraag 102, a, Marcel: "102 a
     b c d e ja", en daar stond "eerst een eigen plan"; besloten op 25 sep als punt 6b, `spel.md`, "Ontginnen"; open).
     **Waarom:** de velden van het gehucht (179 tegels akker en 30 weide) zijn in elk jaar dezelfde, en bij zo'n 90 mensen
-    is het graan op voordat de nieuwe oogst er is (vraag 102). Hoeveel er
-    tekort is, zegt de speeltest van vier jaar (vraag 102, e), die nu loopt.
+    is het graan op voordat de nieuwe oogst er is (vraag 102). De speeltest van vier jaar (vraag 102, e; `speelbaar.md`)
+    zegt hoeveel: de oogst valt van zo'n 600 graan in het eerste jaar tot 340 à 450 in het vierde (een uitgeputte akker
+    rust), terwijl de molen er 200 à 265 van wil, het zaaien 160 à 180, de herberg en de heer elk zo'n 40 à 60, en de
+    rovers, de soldaten en de voorvallen 60 à 130. Op 150 à 280 dagen per jaar is er geen graan boven het zaaigraan, en
+    in het vierde jaar mist het brood 150 dagen (de eerlijke bouwer). Wat tekort is, is zo'n 150 à 250 graan per jaar:
+    drie à vijf velden van dertig tegels. De heide heeft er 184, waarvan de schapen er 40 nodig hebben. **En niet alleen
+    het akkerland:** vanaf het derde jaar vindt de bouwer geen plek meer voor een erf, en zo blijft het dorp op 99
+    mensen, één onder de 100 van de winst (vraag 102, e). Ontginnen kan ook bouwgrond geven.
     Een akker brengt per tegel 2,4 à 3,5 graan (de oogst in de speeltest), min 1 zaaigraan en 0,5 pacht voor de heer:
     netto 1 à 2. Een nieuw veld van dertig tegels geeft dus 30 à 60 graan per jaar, en stiekem, zonder pacht, 15 meer.
     Voorstel:
@@ -3647,6 +3652,55 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     branden? **e**, eerst de moestuin en een stapel hout, of iets anders?
     **Marcel koos (3 okt): "108 a tab, b c d e ja".** Dus een overzicht met `Tab` (kijken en plannen, spreken doet de
     schout), en b tot en met e zoals voorgesteld, in deze volgorde: eerst a, dan b en d, dan c en e.
+109. **De stenen en het erf: hoe het dorp bestraat, en wat er bij een huis staat** (Claude, 3 okt, vijfentwintigste
+    sessie; vraag 108, c en e, uitgewerkt nu a, b en d er zijn; open).
+    **Wat er al is:** de paadjes (108, b): van elke deur, en waar veel gelopen wordt. De grondtegels kennen kasseien naast
+    gras en zand, met de overgangen ertussen. Steen komt uit de steengroeve (een per dag met twee handen), en de stenen
+    huizen hebben het nodig om door te groeien. Voor het erf is er al getekend: een moestuin (5 bij 5), kool, prei, bonen,
+    een kruidenbed, bloemen, een houtstapel, een waslijn, een regenton, een bank, en hekken van tenen en van latten, met
+    hoeken en eindjes. Een kar is er niet.
+    **c, de stenen.** Sinds vraag 103 bouwt het dorp door zijn mensen, en jij zegt ja of nee. Bestraten past daarin:
+    - Een inwoner vraagt het, zoals een gebouw: "Lambert wil het paadje van de put naar de herberg bestraten, achttien
+      tegels, voor achttien steen." Hij kiest het stuk dat het meest belopen wordt (uit de paadjes), en je ziet het in goud
+      op de grond. Zeg je ja, dan liggen de keien er in een paar dagen, en daar slijt niets meer en groeit niets dicht.
+    - Bij marktrecht wordt het plein bestraat, zoals de heer het in zijn brief vraagt ("een markt staat op stenen"), met
+      steen uit de voorraad; is die er niet, dan wacht het.
+    - De steen komt voorlopig uit de steengroeve, en straks ook van het ontginnen (vraag 107): wie heide ontgint, raapt
+      keien. Bestraten en stenen huizen vragen dan allebei steen, en dat is een keuze.
+    - Sneller lopen over steen (besloten op 25 sep, de getallen nog open) laat ik voor later: het verandert wie waar loopt,
+      en daarmee de hele speeltest.
+    **e, het erf.** Kleine dingen bij een huis, uit wat er al getekend is:
+    - Bij een huis op een erf: een moestuin, of een paar bedden kool en prei, en een regenton of een waslijn bij de muur,
+      naar het zaad van het huis, zodat niet elk erf hetzelfde is. Een hek van tenen langs de rand van het erf, open waar
+      het paadje naar buiten gaat; een stenen huis krijgt een hek van latten.
+    - Bij de houthakker een houtstapel, groter naarmate er meer hout ligt. Een kar bij de molen moet nog getekend worden:
+      later.
+    - **Het looppad.** Rond een gebouw blijven drie tegels vrij van andere gebouwen en bomen (Marcel: "Nee ik wil 3
+      tegels"). Een moestuin en een hek zijn geen gebouw, maar je loopt er ook niet doorheen. Het voorstel: de drie tegels
+      gelden tussen gebouwen, en de tuin en het hek mogen erin, als er rond het huis en langs het paadje naar de deur één
+      tegel vrij blijft.
+    **In stappen:** 1. het erf (e), want alles is al getekend (één sessie); 2. het plein bij marktrecht; 3. bestraten als
+    verzoek, na het ontginnen (vraag 107).
+    Vragen: **a**, bestraten als verzoek van een inwoner, op het paadje dat het meest belopen wordt? **b**, het plein
+    bij marktrecht, met steen uit de voorraad? **c**, de tuin en het hek binnen de drie tegels, als er één tegel rond het
+    huis en langs het paadje vrij blijft? **d**, in deze stappen, met het erf eerst?
+110. **De maat van de winst, en de grond om te bouwen** (Claude, 3 okt, vijfentwintigste sessie; uit de speeltest van
+    vier jaar, vraag 102, e, `speelbaar.md`; open).
+    **Wat de speeltest liet zien:** het dorp loopt vol op 99 mensen. Vijf boerderijen van vier en negen stenen huizen van
+    acht, en de herbergierster en het gezin van de schout: samen 99. Voor een tiende erf is er vanaf het derde jaar geen
+    plek meer, en met het looppad van drie tegels past er in het gehucht nog een erf minder (12 in plaats van 13 in een
+    leeg gehucht). De winst vraagt 100 mensen. De sluwe bouwer met zaad 1 had het vierde jaar alle 360 dagen alles, in
+    steen, en won niet.
+    Voorstel, van klein naar groot:
+    - **a, de winst vanaf 90 mensen** (een getal in de werkbank, `T.EINDE_INSTELLINGEN.minstensMensen`). Dan is het
+      gehucht te winnen zoals het is, met negen stenen huizen. Maar het is minder dan de maat van de slice ("een kleine
+      stad van 100 tot 200 mensen").
+    - **b, een stenen huis voor tien in plaats van acht.** Dan haalt het dorp 117 met dezelfde negen huizen, en is 100 te
+      halen. Maar meer monden, en het graan is al op (vraag 107).
+    - **c, ontginnen geeft ook bouwgrond** (bij vraag 107): wie bos ontgint, krijgt grond voor een erf. Dat is het grootst,
+      en het past bij "het land groeit mee".
+    Wat Claude zou doen: a nu, zodat de demo te winnen is, en c met het ontginnen; b niet, want het graan is de krapste
+    knoop. Vragen: **a**, **b** of **c**, of meer dan één?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
