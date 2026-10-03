@@ -629,7 +629,7 @@
       for (let dx = 0; dx < voet.b; dx++) {
         if (T.opHetPlein(w, x + dx, y + dy)) return 'Op het plein wordt niet gebouwd.';
         if (T.isVast(w, x + dx, y + dy)) vast = true;
-        else reden = reden || T.waaromNietOpDezeGrond(D, x + dx, y + dy);
+        else if (!vast) reden = reden || T.waaromNietOpDezeGrond(D, x + dx, y + dy);
       }
     }
     if (vast) return 'Daar past het niet.';
@@ -668,20 +668,45 @@
   const opRechthoek = (r, x, y) => x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h;
 
   // Wie er buiten op deze rechthoek staat, of null. Wie binnen is, staat in zijn deur, en op een deur komt niets.
+  // Staat iedereen stil (T.iedereenStil, js/wereld.js: tijdens het zoeken van een pad of een plek), dan per tegel van de
+  // rechthoek in één stap (T.wezenOp); anders alle wezens af.
   T.wieStaatOp = function (w, r) {
+    if (T.iedereenStaatStil()) {
+      for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.b; x++) {
+        const e = T.wezenOp(w, x, y);
+        if (e) return e;
+      }
+      return null;
+    }
     return (w.wezens || []).find((e) => !e.dood && !e.binnen && opRechthoek(r, e.tx, e.ty)) || null;
   };
 
   // Het gebouw waarvan de deur (de tegel ervoor, T.deurVan in js/bewoners.js) op deze rechthoek ligt, of null. `behalve`
-  // telt niet mee: een huis dat doorgroeit, krijgt zelf een nieuwe deur.
+  // telt niet mee: een huis dat doorgroeit, krijgt zelf een nieuwe deur. De deuren worden bewaard tot de kaart of de
+  // gebouwen veranderen (deurenVan): T.plekVoor vraagt dit voor elke tegel van de kaart, en tot 3 okt rekende het elke
+  // keer alle deuren opnieuw uit (in een dorp van 200 mensen een seconde per bouwverzoek).
   T.deurOpRechthoek = function (D, r, behalve) {
-    for (const g of D.gebouwen || []) {
-      if (g === behalve) continue;
-      const d = T.deurVan(D.wereld, g);
-      if (d && opRechthoek(r, d.x, d.y)) return g;
+    for (const { g, x, y } of deurenVan(D)) {
+      if (g !== behalve && opRechthoek(r, x, y)) return g;
     }
     return null;
   };
+  const DEUREN = new WeakMap(); // dorp → { sleutel, deuren: [{ g, x, y }] }, in de volgorde van D.gebouwen
+  function deurenVan(D) {
+    const gebouwen = D.gebouwen || [];
+    let som = gebouwen.length;
+    for (const g of gebouwen) som = (som * 31 + g.x * 1009 + g.y * 9176 + (g.tekening ? g.tekening.length : 0)) % 1e9;
+    const sleutel = `${T.kaartVersie(D.wereld)}|${som}`;
+    const al = DEUREN.get(D);
+    if (al && al.sleutel === sleutel) return al.deuren;
+    const deuren = [];
+    for (const g of gebouwen) {
+      const d = T.deurVan(D.wereld, g);
+      if (d) deuren.push({ g, x: d.x, y: d.y });
+    }
+    DEUREN.set(D, { sleutel, deuren });
+    return deuren;
+  }
 
   // Waarom hier niets mag komen, of null: er staat iemand, of het is de deur van een gebouw.
   T.waaromNietOpIemand = function (D, r, behalve) {

@@ -318,6 +318,10 @@
   T.LOPEN_INSTELLINGEN = {
     geenWegKeer: 2,
     geenWegWacht: 1 / 24,
+    // Zo vaak per beeld (per kaart) zoekt iemand een weg naar waar hij hoort. 's Ochtends en 's avonds gaan veel mensen
+    // tegelijk op weg, en in een dorp van 200 waren dat 15 tot 28 zoektochten in één beeld (30 à 40 ms; npm run grootte,
+    // 3 okt). Wie na deze grens komt, vertrekt een beeld later: op 30× een halve seconde van de wereld.
+    zoekPerBeeld: 8,
   };
 
   T.dwaal = function (S, w, D, dt) {
@@ -328,6 +332,7 @@
     const basis = datum && T.akkerStadium(datum.maand, datum.dagVanMaand);
     // In de oogst (graan of hooi) werkt men tot het donker (js/dag.js).
     const oogst = basis === 'rijp' || !!(datum && T.isHooitijd(datum));
+    let zoekNog = T.LOPEN_INSTELLINGEN.zoekPerBeeld;
     for (const m of w.wezens) {
       // Een man van de militie bij een aanval dwaalt niet: hij loopt met de schout mee (js/rovers.js). Wie de schout
       // zoekt met een voorval, ook niet (js/voorvallen.js).
@@ -389,6 +394,12 @@
       if (thuisNu && T.afstand(thuisNu, { x: m.tx, y: m.ty }) > straalNu) {
         // Vond hij net twee keer geen weg, dan wacht hij (T.LOPEN_INSTELLINGEN hierboven).
         if (dag != null && m.geenWegTot > dag) continue;
+        // Zochten er dit beeld al genoeg mensen een weg, dan het volgende beeld (zoekPerBeeld hierboven).
+        if (zoekNog <= 0) {
+          m.dwaalTijd = 0;
+          continue;
+        }
+        zoekNog--;
         const doel = { x: Math.round(thuisNu.x), y: Math.round(thuisNu.y) };
         const van = { x: m.tx, y: m.ty };
         const vast = (x, y) => T.isVast(w, x, y);

@@ -89,17 +89,29 @@
   // (een deur), in ringen, op de eerste plek waar het past (T.gebouwPast). Zo zocht de bouwer van de speeltest al
   // (gereedschap/speeltest/speler.js), en die vraagt het nu hier. Met een looppad rondom, zoals elk gebouw
   // (T.GEBOUWEN_INSTELLINGEN.looppad, js/gebouwen.js; Marcel, 3 okt: "Nee ik wil 3 tegels").
+  // Tijdens het zoeken staat iedereen stil (T.iedereenStil, js/wereld.js): wie er op een tegel staat, vraagt het dan in
+  // één stap, voor elke tegel van de kaart.
   T.plekVoor = function (D, soort, bij) {
+    T.iedereenStil(true);
+    try {
+      return zoekPlek(D, soort, bij);
+    } finally {
+      T.iedereenStil(false);
+    }
+  };
+  function zoekPlek(D, soort, bij) {
     const w = D.wereld;
     if (heeftKring(soort)) {
       const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || T.GEBOUWEN[soort].voet;
+      const kring = T.kringTeller(D, soort);
       let beste = null;
       for (let y = 0; y < w.tegels.length; y++) {
         for (let x = 0; x < w.tegels[0].length; x++) {
-          if (!T.gebouwPast(D, soort, x, y)) continue;
-          const zonder = T.watDeKringBereikt(D, soort, { x, y, b: voet.b, h: voet.h }).zonder;
+          // Eerst wat de plek bereikt (tellen), en alleen als hij beter is dan de beste tot nu toe, of hij past (duur).
+          const zonder = kring({ x, y, b: voet.b, h: voet.h }).zonder;
           const d = Math.hypot(x - bij.x, y - bij.y);
-          if (zonder > 0 && (!beste || zonder > beste.zonder || (zonder === beste.zonder && d < beste.d))) beste = { x, y, d, zonder };
+          if (!(zonder > 0) || (beste && (zonder < beste.zonder || (zonder === beste.zonder && d >= beste.d)))) continue;
+          if (T.gebouwPast(D, soort, x, y)) beste = { x, y, d, zonder };
         }
       }
       return beste && { x: beste.x, y: beste.y, zonder: beste.zonder };
@@ -113,7 +125,7 @@
       }
     }
     return null;
-  };
+  }
 
   // Een werkplaats komt bij het huis van wie hem vraagt; wat van iedereen is (een plek met een kring, en wat geen handen
   // heeft of het hele dorp dient: de markt, het wachthuis), bij het hart van het dorp.

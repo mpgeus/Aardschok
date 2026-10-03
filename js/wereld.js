@@ -380,7 +380,39 @@
     return false;
   };
   // Wie binnen is (een boer 's nachts in zijn huis, js/dag.js), staat niemand in de weg.
-  T.wezenOp = (w, x, y, behalve) => w.wezens.find((e) => !e.dood && !e.binnen && e !== behalve && e.tx === x && e.ty === y) || null;
+  T.wezenOp = function (w, x, y, behalve) {
+    if (stil) {
+      const lijst = bezetIndex(w).get((x + 1024) * 4096 + (y + 1024));
+      return (lijst && lijst.find((e) => e !== behalve)) || null;
+    }
+    return w.wezens.find((e) => !e.dood && !e.binnen && e !== behalve && e.tx === x && e.ty === y) || null;
+  };
+  // Wie waar staat, tijdens een zoektocht naar een pad (T.zoekPad, js/pad.js). A* vraagt het voor elke tegel die hij
+  // bekijkt, en tot 3 okt liep dat elke keer alle wezens van de kaart af: bij een dorp van 100 mensen was het zoeken van
+  // paden 64% van de tijd van een beeld, met beelden van 115 ms als 's ochtends iedereen op weg gaat (npm run grootte;
+  // Marcel, 3 okt: "Als de performance slecht is, hebben we niks"). Tijdens één zoektocht staat iedereen stil, dus één
+  // lijst per zoektocht geeft precies hetzelfde antwoord, in dezelfde volgorde. Geen spelstaat: hij leeft zolang de
+  // zoektocht duurt.
+  let stil = 0;
+  let index = null; // { w, bezet: Map(tegel → [wezens, in de volgorde van w.wezens]) }
+  T.iedereenStil = function (aan) {
+    stil = Math.max(0, stil + (aan ? 1 : -1));
+    if (!stil) index = null;
+  };
+  T.iedereenStaatStil = () => stil > 0;
+  function bezetIndex(w) {
+    if (index && index.w === w) return index.bezet;
+    const bezet = new Map();
+    for (const e of w.wezens) {
+      if (e.dood || e.binnen) continue;
+      const k = (e.tx + 1024) * 4096 + (e.ty + 1024);
+      const lijst = bezet.get(k);
+      if (lijst) lijst.push(e);
+      else bezet.set(k, [e]);
+    }
+    index = { w, bezet };
+    return bezet;
+  }
 
   // Mag je deze tegel op? deurenOpenen: een dichte deur telt als doorgang (de schout duwt
   // hem open, een monster niet). wezensBlokkeren: andere wezens staan in de weg.

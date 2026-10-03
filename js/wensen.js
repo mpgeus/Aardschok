@@ -252,23 +252,34 @@
   // js/main.js; de kring zelf tekent js/tekenen.js): hoeveel huizen met mensen die hem willen in zijn kring vallen, en
   // hoeveel daarvan er nu nog geen in de buurt hebben. `plek` is de rechthoek waar hij komt. Null voor een soort zonder
   // kring.
-  T.watDeKringBereikt = function (D, soort, plek) {
+  T.watDeKringBereikt = (D, soort, plek) => T.kringTeller(D, soort)(plek);
+
+  // Hetzelfde voor veel plekken na elkaar (T.plekVoor, js/verzoeken.js, vraagt het voor elke tegel van de kaart): welke
+  // huizen het willen en of ze er al een hebben, staat één keer vast, en per plek wordt alleen nog geteld. Geeft een
+  // functie van de plek, of een die null geeft als deze soort geen kring heeft.
+  T.kringTeller = function (D, soort) {
     const wens = Object.keys(T.WENSEN).find((id) => T.WENSEN[id].plek === soort);
     const straal = IN().kring[soort];
-    if (!wens || !straal) return null;
+    if (!wens || !straal) return () => null;
     const er = T.plekkenVan(D, soort);
     const tel = mensenPerHuis(D);
-    let huizen = 0;
-    let zonder = 0;
+    const willen = [];
     for (const g of D.gebouwen || []) {
       const stand = T.standVan(g);
       if (!stand || !tel.get(g) || !T.wensenVanStand(stand).includes(wens)) continue;
       const r = T.voetVanGebouw(g);
-      if (!T.inDeKring(r, plek, straal)) continue;
-      huizen++;
-      if (!er.some((p) => T.inDeKring(r, p, straal))) zonder++;
+      willen.push({ r, heeft: er.some((p) => T.inDeKring(r, p, straal)) });
     }
-    return { wens, straal, huizen, zonder };
+    return (plek) => {
+      let huizen = 0;
+      let zonder = 0;
+      for (const h of willen) {
+        if (!T.inDeKring(h.r, plek, straal)) continue;
+        huizen++;
+        if (!h.heeft) zonder++;
+      }
+      return { wens, straal, huizen, zonder };
+    };
   };
 
   // Hetzelfde in een zin, voor bij de muis: "Binnen 30 tegels: 6 huizen die een kapel willen. Ze hebben er nu geen."

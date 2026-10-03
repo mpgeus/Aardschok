@@ -54,7 +54,17 @@
   // te lopen (een plek met een straal, T.laatDwalen in js/verkennen.js). Het doel zelf mag dan bezet
   // zijn; zonder dit bleef wie naar het erf liep staan zolang er iemand voor de deur stond.
   // Geeft de stappen terug zonder de starttegel, of null als er geen weg is.
+  // Tijdens het zoeken staat iedereen stil (T.iedereenStil, js/wereld.js): zo vraagt magBetreden wie er op een tegel
+  // staat in één stap, in plaats van alle wezens af te lopen.
   T.zoekPad = function (start, doel, magBetreden, isVast, opties) {
+    T.iedereenStil(true);
+    try {
+      return zoek(start, doel, magBetreden, isVast, opties);
+    } finally {
+      T.iedereenStil(false);
+    }
+  };
+  function zoek(start, doel, magBetreden, isVast, opties) {
     const naast = !!(opties && opties.naast);
     const tot = opties && opties.tot >= 1 ? Math.floor(opties.tot) : 0;
     const schatting = (x, y) => {
@@ -109,7 +119,7 @@
       }
     }
     return null;
-  };
+  }
 
   // Alle tegels die binnen `max` stappen te halen zijn, met het aantal stappen erbij.
   // Voor het gekleurde bereik tijdens de eigen beurt.
