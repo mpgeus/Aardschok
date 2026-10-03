@@ -3486,6 +3486,21 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     gelukkig maakt, kost wat de heer wil hebben. Het hoort dus vóór vraag 102, want het verandert wat winnen is.
     Vragen: **a**, de heer zichtbaar en sneller? **b**, kan het dorp je wegsturen? **c**, wie betrapt wordt: de laatste
     waarschuwing, of meteen weg? **d**, twee gezichten in de balk? En dit vóór vraag 102?
+    **Beantwoord (Marcel, 3 okt):** "106 a b c d ja, push main". Dus: de heer kan je wegsturen, en je ziet het aankomen;
+    het dorp kan je ook wegsturen; verstoppen wordt één kaart met echte gevolgen; en twee gezichten in de balk. Bij c
+    koos hij niet tussen de laatste waarschuwing en meteen weg: dat wordt een spelregel, met de laatste waarschuwing als
+    standaard (Claude), tot Marcel anders kiest. Of het vóór vraag 102 komt, zei hij niet; Claude doet het eerst, omdat
+    het verandert wat winnen is.
+    **Het plan** (Claude, 3 okt):
+    - **Stap 1, de twee meters.** De gunst van de heer en het vertrouwen van het dorp in jou, elk van 0 tot 100, met
+      wat ze nu al beweegt: de schatting op Sint-Maarten, de heervaart, de schandpaal, wapens die hij vindt (de heer); de
+      antwoorden op de voorvallen, de ondernemers, doden door honger of kou, en soldaten in huis (het dorp). Onder een
+      grens een waarschuwing, op 0 ben je weg: de heer ontslaat je, of het dorp jaagt je weg. Betrapt op verstoppen: de
+      laatste waarschuwing (c). En de twee gezichten in de balk, met bij de muis waarom (d).
+    - **Stap 2, de brieven.** Elke maand een gril van de heer in een brief, met antwoorden die de een tevreden maken en
+      de ander niet: zijn gunst tegen het vertrouwen van het dorp. Een stuk of vijftien grillen, zodat twee jaar niet
+      herhaalt.
+    - **Stap 3, de speeltest.** Wordt er iemand weggestuurd, en is het te streng of te slap? De getallen in de werkbank.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

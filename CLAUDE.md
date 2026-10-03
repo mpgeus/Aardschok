@@ -551,6 +551,10 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   een plek, een papier of een handeling. De boeren zaaien, oogsten en halen de winter zelf (sinds 30 sep: ze kiezen hun
   velden, slachten en sprokkelen; de spelregel "Het seizoen"); jij houdt een oogje in het zeil. Een probleem heeft een
   oorzaak die je had kunnen zien (`T.OORZAKEN`). Eerst de kern (vraag 74), dan het buurdorp.
+- **Twee bazen** (Marcel, 3 okt, vraag 106: "106 a b c d ja"): de heer en het dorp kunnen je allebei wegsturen. De
+  gunst van de heer en het vertrouwen van het dorp in jou zijn twee meters in de balk, met een waarschuwing onder een
+  grens, en op 0 ben je weg; bijna elke keuze kost aan de ene kant wat de andere wint. Verstoppen is één kaart met echte
+  gevolgen, niet de haak (Marcel: "als de grote hook, te slap").
 - De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het
   dorp, jou zelf, met hogere eisen, en met soldaten. Zijn **inner** komt kijken, en wat je opzij
   zet, moet uit zijn zicht. Hij stelt geen doelen (Marcel, 1 okt, vraag 78, a): "de heer moet alleen betaald

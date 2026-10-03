@@ -25,6 +25,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
 | De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104) | vraag 103, 104 |
+| Twee bazen | besloten (Marcel, 3 okt, vraag 106: "106 a b c d ja"): de heer en het dorp kunnen je allebei wegsturen, elk met een meter in de balk; verstoppen wordt één kaart met echte gevolgen; nog niet gebouwd | vraag 106 |
 | Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -49,6 +50,14 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 **Zo staat het nu** (28 sep tot en met 3 okt): besloten; wat er sindsdien van gebouwd is, staat bij elk onderwerp. Marcel koos op vier vragen van Claude
 (werklijst, vraag 50: "A ja B allebei C ja D ja"):
+- **Twee bazen: de heer en het dorp kunnen je allebei wegsturen** (Marcel, 3 okt, werklijst vraag 106; besloten: "106 a
+  b c d ja"). Waarom: Marcel vond het verstoppen als haak te slap ("Dat is 1x leuk en dan niet langer boeiend. Of de
+  gevolgen moeten echt groter zijn. Je wordt weg gevraagd als je niet ophoest wat ze willen hebben van je ofzo."). Dus
+  wordt haak 1 ("De heer wil geld. Het dorp wil leven. Jij staat ertussen.") de kern van het spel: de gunst van de heer
+  en het vertrouwen van het dorp in jou zijn twee meters, met een waarschuwing onder een grens, en op 0 ben je weg. Bijna
+  elke keuze kost aan de ene kant wat de andere wint. Verstoppen blijft, als één kaart: wie betrapt wordt, krijgt de
+  laatste waarschuwing (of, als spelregel, is meteen weg). In de balk twee gezichten, de heer en het dorp. Winnen blijft
+  een jaar lang iedereen gelukkig, maar terwijl de heer krijgt wat hij wil. Het plan in stappen staat bij vraag 106.
 - **De stad groeit door haar mensen, en jij bepaalt de richting** (Marcel, 3 okt, werklijst vraag 103; besloten: "103 a
   b c ja d ook verzoek e ja", dus alles wat gebouwd wordt, komt als verzoek van de mensen, ook de put en de kapel, jij
   wijst nog erven aan en stuurt met oproepen en wetten, en eerst klein): "Ik wil een iets andere richting op. De inwoners bouwen zelf een weverij etc. Ze

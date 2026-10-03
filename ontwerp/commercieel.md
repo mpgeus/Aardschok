@@ -137,8 +137,9 @@ Advies: 1 als de zin onder de naam, en 2 als de gedachte in de beschrijving. Wel
 **Marcel (3 okt), over het verstoppen als haak:** "Kijk dat hele verstoppen verhaal is een beetje lame. Dat is 1x leuk
 en dan niet langer boeiend. Of de gevolgen moeten echt groter zijn. Je wordt weg gevraagd als je niet ophoest wat ze
 willen hebben van je ofzo. Maar als de grote hook, te slap." (Zo zei hij het op 1 okt ook al: het verstoppen alleen is
-niet sterk genoeg.) Het voorstel om haak 1 de kern van het spel te maken, met twee bazen die je allebei kunnen
-wegsturen, is werklijst vraag 106.
+niet sterk genoeg.) **Besloten (Marcel, 3 okt, vraag 106: "106 a b c d ja"):** haak 1 wordt de kern van het spel, met twee
+bazen die je allebei kunnen wegsturen, en twee gezichten in de balk. Daarmee is haak 1 niet alleen een zin, maar wat je
+speelt; welke zin het op de Steam-pagina wordt, blijft vraag 83, c.
 
 **Sinds 3 okt** (Marcel: "De inwoners bouwen zelf een weverij etc. Ze vragen alleen toestemming om te bouwen", en "Ik ben
 bang dat het te snel saai wordt. Weer een bouw spelletje zelfde kettingen van materialen etc"; werklijst vraag 103): groeit
