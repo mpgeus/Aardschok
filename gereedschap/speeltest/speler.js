@@ -186,8 +186,54 @@
     ['komt', /^Vandaag komt|^De inner komt|^De rovers|^De heer wil/],
   ];
 
+  // Een gril van de heer (js/grillen.js; werklijst vraag 106, stap 2): elke speler antwoordt naar zijn aard. De brave
+  // geeft hem wat hij wil; de bouwer ook, als het de winter niet kost (zoals bij een voorval); de luie wat het minst kost
+  // en hem nog tevreden houdt; de slimme en de sluwe wegen de heer tegen het dorp, en redden wie het dichtst bij de
+  // grens zit (js/bazen.js). Geeft de keuze (een getal), of null als er niets kan.
+  function grilAntwoord(s) {
+    const g = T.grilNu(s.dorp);
+    if (!g) return null;
+    const keuzes = T.grilKeuzes(s.dorp);
+    const doe = (i) => T.GRILLEN[g.id].keuzes[i].doe;
+    const BAAS = ['gunst', 'vertrouwen', 'argwaan'];
+    const kost = (i) => Object.entries(doe(i)).reduce((n, [w, x]) => n + (x < 0 && !BAAS.includes(w) ? -x * (w === 'goud' ? 1 : 0.2) : 0), 0);
+    const gunst = (i) => doe(i).gunst || 0;
+    const vertrouwen = (i) => doe(i).vertrouwen || 0;
+    const kan = keuzes.map((k, i) => i).filter((i) => keuzes[i].kan);
+    if (!kan.length) return null;
+    const beste = (score) => kan.reduce((a, i) => (score(i) > score(a) ? i : a), kan[0]);
+    const b = T.bazenNu(s.dorp) || { gunst: 50, vertrouwen: 50 };
+    if (boek.speler === 'braaf') return kan[0];
+    if (boek.speler === 'bouwer') {
+      const goed = kan.find((i) => verstandig(s, keuzes[i].prijs));
+      return goed != null ? goed : beste((i) => -kost(i));
+    }
+    if (boek.speler === 'lui30' || boek.speler === 'lui60') {
+      const blij = kan.filter((i) => gunst(i) > 0);
+      return blij.length ? blij.reduce((a, i) => (kost(i) < kost(a) ? i : a), blij[0]) : beste(gunst);
+    }
+    if (b.gunst < 30) return beste(gunst);
+    if (b.vertrouwen < 30) return beste(vertrouwen);
+    return beste((i) => gunst(i) + vertrouwen(i) - kost(i) / 5);
+  }
+
   function beantwoord() {
     const s = S();
+    // Een gril van de heer: antwoorden naar zijn aard, en opschrijven wat hij koos (js/grillen.js; vraag 106).
+    if (T.ui.briefOpen() && document.querySelector('#brief').dataset.soort === 'gril') {
+      const g = T.grilNu(s.dorp);
+      const i = grilAntwoord(s);
+      if (g && i != null) {
+        const k = T.grilKeuzes(s.dorp)[i];
+        (boek.grillen = boek.grillen || []).push({ datum: datum(), id: g.id, antwoord: k.tekst, prijs: k.prijs });
+        if (!klik(`#brief [data-actie="gril${i}"]`)) T.ui.sluitBrief(s);
+      } else if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
+    }
+    // De waarschuwing van de heer (js/bazen.js): opschrijven, en lezen.
+    if (T.ui.briefOpen() && document.querySelector('#brief').dataset.soort === 'waarschuwing') {
+      (boek.waarschuwingen = boek.waarschuwingen || []).push({ datum: datum(), wie: 'de heer', waarom: (s.dorp.bazen.brief && s.dorp.bazen.brief.waarom) || '' });
+      if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
+    }
     // De brief van de heer bij een trede (js/treden.js): als het gehucht een dorp is, verder als dorp, en bij marktrecht
     // aan het werk. Wanneer, schrijft de luisteraar op wordtTrede op.
     if (T.ui.briefOpen() && T.GEBOUW_TREDEN.includes(document.querySelector('#brief').dataset.soort)) {
@@ -1175,6 +1221,8 @@
       missen: T.watDeHuizenMissen(s.dorp).slice(0, 5).map((x) => x.tekst),
       argwaan: heel(argwaan() * 100) / 100,
       houthakkers: houthakkers.map((g) => ({ klaar: !!g.klaar, handen: g.handen || 0 })),
+      // De twee bazen (js/bazen.js; vraag 106): de gunst van de heer en het vertrouwen van het dorp.
+      bazen: T.bazenNu(s.dorp),
     };
   }
 
@@ -1366,9 +1414,23 @@
       ongezaaid += a.ongezaaid ? a.ongezaaid.size : 0;
     }
     return Object.assign(tel(), {
-      tekst: s.dorp.einde ? `${s.dorp.einde.reden === 'leeg' ? 'het dorp leeg' : 'het ambt kwijt'} op ${datum()}` : s.modus === 'dood' ? `gevallen op ${datum()}` : `het jaar uit, tot ${datum()}`,
-      ambtKwijt: !!s.dorp.einde && s.dorp.einde.reden !== 'leeg',
+      tekst: s.dorp.einde ? `${{ leeg: 'het dorp leeg', verjaagd: 'weggejaagd door het dorp' }[s.dorp.einde.reden] || 'het ambt kwijt'} op ${datum()}` : s.modus === 'dood' ? `gevallen op ${datum()}` : `het jaar uit, tot ${datum()}`,
+      ambtKwijt: !!s.dorp.einde && s.dorp.einde.reden === 'ambt',
       dorpLeeg: !!s.dorp.einde && s.dorp.einde.reden === 'leeg',
+      // De twee bazen (js/bazen.js; vraag 106): waar ze eindigden, hoe laag ze kwamen, de waarschuwingen, waarom je weg
+      // moest, en wat de speler op de grillen van de heer antwoordde (js/grillen.js).
+      bazen: T.bazenNu(s.dorp) ? {
+        nu: T.bazenNu(s.dorp),
+        laagst: {
+          gunst: Math.min(...boek.maanden.map((m) => (m.bazen ? m.bazen.gunst : 100)), T.bazenNu(s.dorp).gunst),
+          vertrouwen: Math.min(...boek.maanden.map((m) => (m.bazen ? m.bazen.vertrouwen : 100)), T.bazenNu(s.dorp).vertrouwen),
+        },
+        waarschuwingen: (boek.waarschuwingen || []).length + boek.berichten.filter((b) => /^Het dorp mort/.test(b.tekst)).length,
+        weg: s.dorp.einde && s.dorp.einde.reden !== 'leeg' ? { reden: s.dorp.einde.reden, waarom: s.dorp.einde.waarom || null } : null,
+        grillen: s.dorp.grillen ? { aantal: s.dorp.grillen.aantal, beantwoord: s.dorp.grillen.beantwoord, stil: s.dorp.grillen.stil } : null,
+        antwoorden: (boek.grillen || []).map((g) => `${g.datum}: ${g.id}, ${g.antwoord}`),
+        laatst: { gunst: s.dorp.bazen.waarom.gunst.slice(), vertrouwen: s.dorp.bazen.waarom.vertrouwen.slice() },
+      } : null,
       // Het eind (js/einde.js): de langste reeks dagen dat iedereen alles had, en of het gewonnen is.
       eind: s.dorp.eind ? { dagenOpRij: s.dorp.eind.dagen, beste: s.dorp.eind.beste, gewonnen: boek.gewonnen || null } : null,
       jaarverslagen: boek.jaarverslagen || [],

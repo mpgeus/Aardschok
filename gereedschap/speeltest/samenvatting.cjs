@@ -116,6 +116,7 @@ exports.maak = function (uitslagen, stand) {
   if (eenJaar.length) uit.push(...gemiddeldPerSpeler(eenJaar));
   uit.push(...deVoorvallen(goed));
   uit.push(...deOndernemers(goed));
+  uit.push(...deTweeBazen(goed));
   uit.push(...vanGehuchtTotDorp(goed));
   uit.push(...hetGraanboek(goed));
   return uit.join('\n') + '\n';
@@ -176,6 +177,25 @@ function deOndernemers(goed) {
   for (const u of met) {
     const o = u.eind.ondernemers;
     uit.push(regel([NAMEN[u.speler] || u.speler, u.zaad, o.vroegen.join('; '), o.berichten.join('; '), String(o.wapens), o.verzegeld.join(', ') || 'niets', String(o.herbergen)]));
+  }
+  uit.push('');
+  return uit;
+}
+
+// De twee bazen (js/bazen.js, vraag 106): de gunst van de heer en het vertrouwen van het dorp aan het eind en op hun
+// laagst, de waarschuwingen, of je weg moest en waarom, en wat de speler op de grillen van de heer antwoordde.
+function deTweeBazen(goed) {
+  const met = goed.filter((u) => u.eind && u.eind.bazen);
+  const uit = ['## De twee bazen', ''];
+  if (!met.length) return uit.concat('De spelregel "Twee bazen" stond uit.', '');
+  const kop = ['speler', 'zaad', 'gunst (laagst)', 'vertrouwen (laagst)', 'waarschuwingen', 'weg', 'grillen (beantwoord, stil)', 'het laatst'];
+  uit.push(regel(kop), regel(kop.map(() => '---')));
+  for (const u of met) {
+    const b = u.eind.bazen;
+    const weg = b.weg ? `${b.weg.reden === 'verjaagd' ? 'weggejaagd' : 'ontslagen'}${b.weg.waarom ? `: ${b.weg.waarom}` : ''}` : 'nee';
+    const g = b.grillen ? `${b.grillen.aantal} (${b.grillen.beantwoord}, ${b.grillen.stil})` : '';
+    const laatst = [...b.laatst.gunst.map((x) => `heer ${x.n > 0 ? '+' : ''}${x.n} ${x.tekst}`), ...b.laatst.vertrouwen.map((x) => `dorp ${x.n > 0 ? '+' : ''}${x.n} ${x.tekst}`)].join('; ');
+    uit.push(regel([NAMEN[u.speler] || u.speler, u.zaad, `${Math.round(b.nu.gunst)} (${Math.round(b.laagst.gunst)})`, `${Math.round(b.nu.vertrouwen)} (${Math.round(b.laagst.vertrouwen)})`, String(b.waarschuwingen), weg, g, laatst]));
   }
   uit.push('');
   return uit;
