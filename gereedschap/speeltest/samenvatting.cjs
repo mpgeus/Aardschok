@@ -4,6 +4,9 @@
 // 58): wanneer het een dorp werd, en waarom er op een groeidag geen gezin kwam; en voor wie twee jaar speelt het graanboek
 // (vraag 94, d).
 const NAMEN = { braaf: 'braaf', lui30: 'lui, 30% weg', lui60: 'lui, 60% weg', slim: 'slim, 60% weg', bouwer: 'bouwer, twee jaar', sluw: 'sluwe bouwer, twee jaar' };
+const BASIS = { bouwer: 'bouwer', sluw: 'sluwe bouwer' };
+const TELWOORD = ['', 'een', 'twee', 'drie', 'vier', 'vijf', 'zes'];
+const RANG = ['', 'eerste', 'tweede', 'derde', 'vierde', 'vijfde', 'zesde', 'zevende'];
 const VOLGORDE = Object.keys(NAMEN);
 // De drie tabellen en het gemiddelde gaan over één jaar met de heer en het verstoppen; de bouwer en de sluwe bouwer spelen
 // er twee, en staan in de tabel van gehucht tot dorp en in het graanboek.
@@ -102,7 +105,10 @@ const TABELLEN = [
 exports.maak = function (uitslagen, stand) {
   const lijst = [...uitslagen].sort((a, b) => VOLGORDE.indexOf(a.speler) - VOLGORDE.indexOf(b.speler) || a.zaad - b.zaad);
   const goed = lijst.filter((u) => !u.mislukt);
-  const uit = [`# De speeltest`, '', `Gespeeld op ${stand}. Een jaar loopt van 1 lentemaand tot 1 grasmaand van het jaar erna; de bouwer en de sluwe bouwer spelen er twee, tot 1 grasmaand van het derde.`, ''];
+  // Hoeveel jaar de bouwers speelden (--jaren; standaard twee), in hun naam en in de kop.
+  const jaren = Math.max(2, ...lijst.map((u) => u.jaren || 1));
+  for (const s of Object.keys(BASIS)) NAMEN[s] = `${BASIS[s]}, ${TELWOORD[jaren] || jaren} jaar`;
+  const uit = [`# De speeltest`, '', `Gespeeld op ${stand}. Een jaar loopt van 1 lentemaand tot 1 grasmaand van het jaar erna; de bouwer en de sluwe bouwer spelen er ${TELWOORD[jaren] || jaren}, tot 1 grasmaand van het ${RANG[jaren + 1] || `${jaren + 1}e`}.`, ''];
   const mislukt = lijst.filter((u) => u.mislukt);
   if (mislukt.length) uit.push(...mislukt.map((u) => `- **Mislukt:** ${NAMEN[u.speler] || u.speler}, zaad ${u.zaad}: ${u.mislukt}`), '');
   const fouten = goed.filter((u) => u.fouten.length || (u.luisterFouten || []).length);
@@ -117,6 +123,7 @@ exports.maak = function (uitslagen, stand) {
   uit.push(...deVoorvallen(goed));
   uit.push(...deOndernemers(goed));
   uit.push(...deTweeBazen(goed));
+  uit.push(...naarDeWinst(goed));
   uit.push(...vanGehuchtTotDorp(goed));
   uit.push(...hetGraanboek(goed));
   return uit.join('\n') + '\n';
@@ -201,6 +208,42 @@ function deTweeBazen(goed) {
   return uit;
 }
 
+// Naar de winst (werklijst vraag 102, e): per jaar de mensen aan het eind, op hoeveel dagen alle huizen alles hadden en
+// hoeveel daarvan in steen (zoals de winst het vraagt), de teller van het eind (js/einde.js: de langste reeks dat jaar, en
+// waar hij aan het eind stond), op hoeveel dagen hij stilstond (een slechte week mag), en de twee bazen aan het eind van het
+// jaar. Daaronder of het gewonnen werd, en wat de reeks brak als hij na een maand of meer op nul ging.
+const WENS_NAAM = { vleesOfVis: 'vlees of vis', bouwstof: 'wacht op bouwstof' };
+function naarDeWinst(goed) {
+  const meer = goed.filter((u) => (u.jaren || 1) > 1 && (u.geluk || []).some((g) => g && g.winBeste != null));
+  if (!meer.length) return [];
+  const r = meer[0].eindRegels || {};
+  const uit = ['## Naar de winst', '', `Per jaar. De winst vraagt ${r.dagen} dagen op de teller, met alle woningen in steen en alles wat ze willen, vanaf ${r.minstensMensen} mensen; ${r.magMissen ? `een slechte reeks van hooguit ${r.magMissen} dagen zet de teller stil` : 'één slechte dag zet de teller op nul'}. Het laatste jaar is de eerste maand, tot 1 grasmaand.`, ''];
+  const kop = ['speler', 'zaad', 'jaar', 'mensen', 'dagen alle huizen alles', 'waarvan in steen', 'de teller (langst, eind)', 'dagen stil', 'gunst', 'vertrouwen'];
+  uit.push(regel(kop), regel(kop.map(() => '---')));
+  for (const u of meer) {
+    (u.geluk || []).forEach((g, j) => {
+      if (!g || !g.dagen) return;
+      uit.push(regel([
+        NAMEN[u.speler] || u.speler, u.zaad, String(j + 1), getal(g.mensen), `${g.allemaal} van ${g.dagen}`, String(g.gewonnen || 0),
+        `${g.winBeste || 0}, ${g.winNu || 0}`, String(g.stil || 0), getal(g.gunst), getal(g.vertrouwen),
+      ]));
+    });
+  }
+  uit.push('');
+  for (const u of meer) {
+    const gewonnen = u.eind && u.eind.eind && u.eind.eind.gewonnen;
+    const breuken = u.breuken || [];
+    const brak = breuken.slice(0, 6).map((b) => {
+      const wat = Object.entries(b.gemist || {}).sort((x, y) => y[1] - x[1]).map(([w, n]) => `${WENS_NAAM[w] || w} ${n}`).join(', ');
+      return `${b.datum} na ${b.lengte} dagen, met ${b.mensen} mensen (${wat || 'niets te zien'})`;
+    });
+    const meerDan = breuken.length > 6 ? `, en nog ${breuken.length - 6} keer` : '';
+    uit.push(`- ${NAMEN[u.speler] || u.speler}, zaad ${u.zaad}: ${gewonnen ? `gewonnen op ${gewonnen}` : 'niet gewonnen'}. ${breuken.length ? `De reeks brak ${breuken.length} keer na een maand of meer: ${brak.join('; ')}${meerDan}.` : 'De reeks brak nooit na een maand of meer.'}`);
+  }
+  uit.push('');
+  return uit;
+}
+
 // Van gehucht tot dorp (vraag 58): op welke dag het een dorp werd en marktrecht kreeg (vraag 90), en op de groeidagen
 // hoe vaak er een gezin kwam en waarom niet (T.waaromGeenGezin: een dag kan meer dan één reden hebben). En per jaar wat
 // de heer kreeg, en hoeveel dagen welke raad onder het doel stond (js/raad.js).
@@ -248,7 +291,7 @@ function hetGraanboek(goed) {
   const teken = (x) => (x == null || Math.abs(x) < 0.5 ? '' : x > 0 ? `+${Math.round(x)}` : `−${Math.round(-x)}`);
   const samen = (b, ...namen) => namen.reduce((n, k) => n + (b[k] || 0), 0);
   const BEKEND = ['oogst', 'gegeten', 'zaaien', 'heer', 'herberg', 'molen', 'brouwerij', 'gekocht', 'verkocht', 'rovers', 'soldaten', 'voorvallen', 'verstopt', 'teruggehaald'];
-  const uit = ['## Het graanboek', '', 'Per jaar waar het graan bleef (erbij +, eraf −), en wat dat deed. Het derde jaar is de eerste maand, tot 1 grasmaand.', ''];
+  const uit = ['## Het graanboek', '', 'Per jaar waar het graan bleef (erbij +, eraf −), en wat dat deed. Het laatste jaar is de eerste maand, tot 1 grasmaand.', ''];
   const kop = ['speler', 'zaad', 'jaar', 'oogst', 'gegeten', 'zaaien', 'de heer', 'herberg', 'molen', 'brouwerij', 'handel', 'rovers, soldaten, voorvallen', 'verstopt, terug', 'anders', 'dagen zonder bier', 'dagen zonder brood', 'dagen zonder laken', 'huizen met alles', 'dagen alle huizen alles'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   for (const u of twee) {

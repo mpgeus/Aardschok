@@ -95,7 +95,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`; wie twee jaar speelt, krijgt er een
   graanboek bij: per jaar waar het graan bleef, en hoeveel dagen er geen bier, brood of laken was. Hetzelfde zaad geeft
   hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed (`-- slim --zaad 2` voor
-  één jaar). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
+  één jaar). Met `-- bouwer sluw --jaren 4` spelen de bouwers vier jaar, naar de winst (vraag 102, e): de samenvatting
+  krijgt dan "Naar de winst", per jaar de teller van het eind en wat de reeks brak; `--tegelijk 4` speelt vier spellen
+  tegelijk (standaard drie). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
   (`gereedschap/speeltest/speler.js`). Een jaar kost twee tot zeven minuten; nodig is Playwright (in de
   cloud staat het klaar). Wat het vond, staat in `ontwerp/speelbaar.md`. Met `--opslaan` is het de proef met
   opslaan: de speler slaat op 1 oogstmaand op via het menu, de bladzijde herlaadt, hij gaat verder met Verder,

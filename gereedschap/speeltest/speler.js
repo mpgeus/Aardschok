@@ -1277,6 +1277,34 @@
     if ((D().voorraad.graan || 0) - T.zaaigraanApart(D(), d) < 1) g.graanOp++;
     boek.reeks.nu = allemaal ? boek.reeks.nu + 1 : 0;
     boek.reeks.langste = Math.max(boek.reeks.langste, boek.reeks.nu);
+    // Naar de winst (werklijst vraag 102, e): de teller van het eind (js/einde.js, D.eind) per jaar, hoeveel dagen hij
+    // stilstond (een slechte week mag), de mensen en de twee bazen aan het eind van het jaar, en wat de reeks brak als
+    // hij na minstens een maand op nul ging.
+    const E = D().eind || { dagen: 0, mis: 0 };
+    g.winBeste = Math.max(g.winBeste || 0, E.dagen);
+    g.winNu = E.dagen;
+    if (E.mis) g.stil = (g.stil || 0) + 1;
+    g.mensen = D().bevolking || 0;
+    const b = T.bazenNu(D());
+    if (b) Object.assign(g, { gunst: Math.round(b.gunst), vertrouwen: Math.round(b.vertrouwen) });
+    if (E.dagen === 0 && vorigeTeller >= 30) boek.breuken.push({ dag: d, datum: datum(d), lengte: vorigeTeller, mensen: D().bevolking || 0, gemist: watBrakDeReeks() });
+    vorigeTeller = E.dagen;
+  }
+  let vorigeTeller = 0;
+
+  // Wat de reeks brak: per wens hoeveel huizen hem als eerste misten (T.tekenVanHuis, js/wensen.js), hoeveel huizen nog
+  // niet in de hoogste stand zijn, en of er te weinig mensen waren.
+  function watBrakDeReeks() {
+    const uit = {};
+    const hoogste = Object.keys(T.STANDEN).filter((s) => !T.STANDEN[s].los).pop();
+    for (const g of D().gebouwen) {
+      if (!g.wensen || !(g.wensen.mensen > 0)) continue;
+      const mist = T.tekenVanHuis(g);
+      if (mist) uit[mist] = (uit[mist] || 0) + 1;
+      if (g.wensen.stand !== hoogste && !T.STANDEN[g.wensen.stand].los) uit[`een ${T.GEBOUWEN[g.soort].naam}`] = (uit[`een ${T.GEBOUWEN[g.soort].naam}`] || 0) + 1;
+    }
+    if ((D().bevolking || 0) < T.EINDE_INSTELLINGEN.minstensMensen) uit['te weinig mensen'] = D().bevolking || 0;
+    return uit;
   }
 
   // Luisteraars op de regels die iets doen wat telt. Ze roepen de regel zelf aan en schrijven daarna op;
@@ -1507,7 +1535,9 @@
     // opslaan: { dag, bewaar }: op de eerste stille stap vanaf die dag opslaan en stoppen (bewaar), of alleen
     // het lot opnieuw trekken (hetzelfde jaar zonder opslaan). verder: { eenKeer }: na het herladen verder
     // met Verder op het titelscherm, met wat de speler al één keer deed.
-    async speel({ speler, zaad, opslaan = null, verder = null }) {
+    // `jaren` (npm run speeltest -- --jaren 4): zoveel jaren voor wie er meer dan één speelt (de bouwers), in plaats
+    // van twee; voor de speeltest naar de winst (werklijst vraag 102, e).
+    async speel({ speler, zaad, opslaan = null, verder = null, jaren = null }) {
       if (!verder) {
         zaai(Math.imul(zaad, 2654435761) ^ 0x5eed);
         // En de klok van het scherm op nul: of een koe ligt of graast, hangt ervan af (T.rustVanDier,
@@ -1520,7 +1550,8 @@
         soldaten: { beurten: [], zoeken: null, hetHeleDorp: false, leeg: null },
         argwaan: { naInner: null, opSintMaarten: null }, heer: null, brief: null, naSintMaarten: null, luisterFouten: [],
         heerJaren: [], dorp: null, marktrecht: null, groei: [], raad: {}, voorvallen: [],
-        jaren: (SPELERS[speler].jaren || 1), graan: [], geluk: [], reeks: { nu: 0, langste: 0 },
+        jaren: jaren && (SPELERS[speler].jaren || 1) > 1 ? jaren : (SPELERS[speler].jaren || 1), graan: [], geluk: [],
+        reeks: { nu: 0, langste: 0 }, breuken: [],
       };
       const s = S();
       luister();
@@ -1542,12 +1573,13 @@
       }
       T.zetSnelheid(s, 30);
       boek.spelZaad = s.dorp.lot.zaad;
+      boek.eindRegels = { ...T.EINDE_INSTELLINGEN }; // wat de winst vraagt, voor de samenvatting (vraag 102, e)
       // Op welk gehucht: het ontworpen, of een van de maker (uit het zaad van het spel; js/maker.js).
       boek.gehucht = s.gebieden.gehucht && s.gebieden.gehucht.maker ? 'van de maker' : 'ontworpen';
       boek.boeren = Object.fromEntries(Object.entries(s.dorp.lot.boeren).map(([id, b]) => [id, b.karakter]));
       boek.begin = tel(); // de eerste van de maand zelf schrijft de boekhouding op, bij de eerste stap
       const P = SPELERS[speler];
-      const eindDag = EIND + JAAR * ((P.jaren || 1) - 1);
+      const eindDag = EIND + JAAR * (boek.jaren - 1);
       if (P.begin && !verder) await P.begin();
       for (let i = 0; i < 800000 && dagNu() < eindDag && !s.dorp.einde && s.modus !== 'dood'; i++) {
         if (opslaan && !opslaan.gedaan && dagNu() >= opslaan.dag && !T.waaromNietOpslaan(s) && !s.slaap) {

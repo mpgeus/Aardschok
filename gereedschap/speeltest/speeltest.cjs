@@ -9,6 +9,8 @@
 //   npm run speeltest -- bouwer                de bouwer, die twee jaar speelt (vraag 58): van gehucht tot dorp
 //   npm run speeltest -- sluw                  de sluwe bouwer (vraag 94): de bouwer, maar hij bedriegt de heer en
 //                                              houdt het graan verstopt voor de herberg en de molen
+//   npm run speeltest -- bouwer sluw --jaren 4 de bouwers spelen vier jaar in plaats van twee: naar de winst (vraag 102, e)
+//   npm run speeltest -- --tegelijk 4          zoveel spellen tegelijk, elk in een eigen tabblad (standaard 3)
 //   npm run speeltest -- slim --zaad 7         één jaar
 //   npm run speeltest -- --zaden 1-5           andere zaden
 //   npm run speeltest -- lui60 --zaad 1 --opslaan        de proef met opslaan (vraag 48): op 1 oogstmaand
@@ -36,7 +38,7 @@ const { execSync } = require('node:child_process');
 const WORTEL = path.join(__dirname, '..', '..');
 const UIT = path.join(__dirname, 'uit');
 const SPELERS = ['braaf', 'lui30', 'lui60', 'slim', 'bouwer', 'sluw'];
-const TEGELIJK = 3; // zoveel jaren tegelijk, elk in een eigen tabblad
+const TEGELIJK = 3; // zoveel spellen tegelijk, elk in een eigen tabblad (--tegelijk)
 
 function laadPlaywright() {
   try {
@@ -54,7 +56,7 @@ function laadPlaywright() {
 const OOGSTMAAND = 150; // 1 oogstmaand, de dag waarop de proef met opslaan opslaat (vraag 48)
 
 function leesOpdracht(argv) {
-  const o = { spelers: [], zaden: [1, 2, 3], opslaan: null, maker: false, regels: {}, getallen: {} };
+  const o = { spelers: [], zaden: [1, 2, 3], opslaan: null, maker: false, regels: {}, getallen: {}, jaren: null, tegelijk: TEGELIJK };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--opslaan') o.opslaan = /^\d+$/.test(argv[i + 1] || '') ? Number(argv[++i]) : OOGSTMAAND;
@@ -68,6 +70,8 @@ function leesOpdracht(argv) {
       if (a === '--regel') o.regels[naam] = waarde;
       else o.getallen[naam] = Number(waarde);
     }
+    else if (a === '--jaren') o.jaren = Number(argv[++i]);
+    else if (a === '--tegelijk') o.tegelijk = Number(argv[++i]);
     else if (a === '--zaad') o.zaden = [Number(argv[++i])];
     else if (a === '--zaden') {
       const [van, tot] = argv[++i].split('-').map(Number);
@@ -75,7 +79,7 @@ function leesOpdracht(argv) {
       for (let z = van; z <= (tot || van); z++) o.zaden.push(z);
     } else if (SPELERS.includes(a)) o.spelers.push(a);
     else {
-      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot, --opslaan [dag], --maker, --regel naam=keuze of --getal pad=waarde.`);
+      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot, --jaren n, --tegelijk n, --opslaan [dag], --maker, --regel naam=keuze of --getal pad=waarde.`);
       process.exit(1);
     }
   }
@@ -94,7 +98,7 @@ function leesOpdracht(argv) {
 // hij verder met Verder op het titelscherm. Met `maker` staat de spelregel "Je gehucht" op "Elk spel een
 // ander" (js/opties.js), zoals de browser het onthoudt als een speler hem kiest: dan legt de maker het gehucht
 // uit het zaad van het spel (js/maker.js). `spelregels`: wat de browser onthoudt (leesOpdracht), of null.
-async function speelJaar(browser, speler, zaad, opslaan = null, spelregels = null) {
+async function speelJaar(browser, speler, zaad, opslaan = null, spelregels = null, jaren = null) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await context.newPage();
   const fouten = [];
@@ -122,7 +126,7 @@ async function speelJaar(browser, speler, zaad, opslaan = null, spelregels = nul
   const begin = Date.now();
   let uitslag;
   try {
-    uitslag = await page.evaluate((o) => Spel.speeltest.speel(o), { speler, zaad, opslaan });
+    uitslag = await page.evaluate((o) => Spel.speeltest.speel(o), { speler, zaad, opslaan, jaren });
     if (uitslag.opgeslagen) {
       const opgeslagen = uitslag.opgeslagen;
       await page.reload();
@@ -166,7 +170,7 @@ async function main() {
   async function werker() {
     while (volgende < rij.length) {
       const { speler, zaad } = rij[volgende++];
-      const u = await speelJaar(browser, speler, zaad, null, o.spelregels);
+      const u = await speelJaar(browser, speler, zaad, null, o.spelregels, o.jaren);
       u.stand = op;
       uitslagen.push(u);
       fs.writeFileSync(path.join(UIT, `${speler}-${zaad}${achter}.json`), JSON.stringify(u, null, 1));
@@ -174,7 +178,7 @@ async function main() {
       console.log(`${speler}, zaad ${zaad}: ${u.duurSeconden} s, ${u.fouten.length} fouten. ${kort}`);
     }
   }
-  await Promise.all(Array.from({ length: Math.min(TEGELIJK, rij.length) }, werker));
+  await Promise.all(Array.from({ length: Math.min(o.tegelijk, rij.length) }, werker));
   await browser.close();
   const tabel = require('./samenvatting.cjs').maak(uitslagen, op);
   fs.writeFileSync(path.join(UIT, `samenvatting${achter}.md`), tabel);
