@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 2 okt 2026, drieëntwintigste sessie)
+## Waar staat wat (bijgewerkt 3 okt 2026, vijfentwintigste sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -14,7 +14,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Onderwerp | Stand | Werklijst |
 |---|---|---|
 | De vertical slice | besloten (Marcel, 1 okt, vraag 77): het doel is de vertical slice uit het concept: je begint als gehucht, zoals nu, en groeit naar haar maat (een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te klein), en uiteindelijk naar een stad van mogelijk 5000 of meer ("we moeten een manier zoeken", vraag 78, E), in zes stappen te beginnen met de wensen van de mensen, zoals in Anno 1602 (vraag 78; het plan is vraag 79); statussen met niveaus; een ambtenaar voor elke tak van het bestuur; en later een scherm met de statussen en de laatst bekende inventarisatie | vraag 77, 78, 79 |
-| De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85); 2a en 2b gebouwd (1 okt): elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt, en wie een jaar lang alles heeft, wint; 2d gebouwd (2 okt, vraag 90): de treden uit de standen, een dorp bij 20 dorpelingen en marktrecht bij 20 ambachtslieden, met de markt en de weverij al in een dorp | vraag 79, 80, 82, 85, 90 |
+| De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85); 2a en 2b gebouwd (1 okt): elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt, en wie een jaar lang alles heeft, wint; 2d gebouwd (2 okt, vraag 90): de treden uit de standen, een dorp bij 20 dorpelingen en marktrecht bij 20 ambachtslieden, met de markt en de weverij al in een dorp; 2c en 2e gebouwd (3 okt, vraag 100 en 101): een teken bij de deur en een briefje bij de muis, en het eind: een jaar lang iedereen gelukkig vanaf 100 mensen is gewonnen, met het grote feest, onder 10 mensen verloren, en op 1 lentemaand het jaarverslag | vraag 79, 80, 82, 85, 90, 100, 101 |
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern | vraag 50, 51, 54, 73, 74, 78 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
@@ -137,8 +137,8 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 **Zo werkt het nu** (1 en 2 okt, tweeëntwintigste en drieëntwintigste sessie): **2a, 2b en 2d zijn gebouwd**
 (`js/wensen.js`, het doorgroeien in `js/behoeften.js`, en de treden in `js/treden.js`: een dorp bij 20 dorpelingen,
 marktrecht bij 20 ambachtslieden, en de markt en de weverij al in een dorp; zie "Van dorp tot stad"); **2c sinds 3 okt**
-(vraag 100, hieronder); 2e (het eind) komt nog, in de volgorde van vraag 80. Zoals in Anno
-1602: elk huis heeft een stand, en elke stand wil iets.
+(vraag 100, hieronder); **2e, het eind, ook sinds 3 okt** (vraag 101, hieronder). Zoals in Anno 1602: elk huis heeft
+een stand, en elke stand wil iets.
 - **2c, zien wat een huis wil** (3 okt, vijfentwintigste sessie; werklijst vraag 100, Marcel: "100 ja"; in de stijl van
   vraag 98, "98 C", de schrijftafel). Een huis dat iets mist, heeft boven zijn deur een **teken**: een papiertje aan een
   spijker met wat het als eerste mist (een kom voor eten, houtblokken, een put, een bierkroes, een vis, een kapel, het
@@ -149,6 +149,21 @@ marktrecht bij 20 ambachtslieden, en de markt en de weverij al in een dorp; zie 
   (`T.huisToestand` in `js/wensen.js`). Een klik blijft verstoppen in de kelder. Met een **erf** in de hand zegt de muis
   welke put en kapel een huis daar zou halen (`T.erfKringTekst`). Het briefje is het eerste in de letters van de
   schrijftafel (`letters/`: Jacquarda Bastarda 9 en IM Fell English, met hun licentie); de rest van de ui volgt later.
+- **2e, het eind en het jaar in het kort** (3 okt, vijfentwintigste sessie; werklijst vraag 101, Marcel: "101 ja";
+  `js/einde.js`). **Winnen:** elke nacht kijkt het dorp of elk huis met mensen alles heeft wat zijn stand wil, in de
+  hoogste stand (stenen huizen; de boerderijen staan ernaast), met minstens 100 mensen (`T.iedereenGelukkig`). Dan loopt
+  er een teller, en een dag waarop één huis iets mist, zet hem op nul. Na 360 dagen op rij is het gewonnen: het hele dorp
+  viert het grote feest op het plein (de feesten, `T.vierVandaag`), en die avond, of eerder als de schout bij het feest
+  staat, komt het eindscherm "Iedereen gelukkig" over het feest, met het jaar tot nu toe; Verder spelen kan. Linksboven
+  staat het doel zodra er geen trede meer te halen is (na marktrecht): eerst hoeveel mensen nog, dan hoeveel huizen
+  alles hebben, dan "12 van 360 dagen" (`T.eindDoel`). **Verliezen:** je ambt kwijt, gevallen, en sinds 3 okt ook minder
+  dan 10 mensen ("Het dorp is leeg"). **Het jaar in het kort:** het dorp houdt een jaarboek bij (uit het dagboek van de
+  raadsman, en de oogst), en op 1 lentemaand komt het jaarverslag, als een brief in de hand van je raadsman: hoe het dorp
+  groeide of kromp, wie er kwam, stierf en wegtrok, wat de oogst bracht, welke huizen doorgroeiden, welke feesten er
+  waren, wat de heer kreeg, wat het meest gemist werd, en op hoeveel dagen iedereen alles had. De getallen in de werkbank
+  ("Het eind": 360 dagen, 100 mensen, 10 over); `Spel.debug.einde()` zegt hoe ver het is, `('winst')` zet de teller op
+  één dag ervoor, `('gewonnen')` wint nu, en `('jaarverslag')` toont het verslag nu. De speeltest schrijft het
+  jaarverslag op, en speelt na een winst verder.
 Klein (vraag 82): drie standen, op de huizen die er al zijn; de poorters en hun huis komen later. Wat er nu al te zien is:
 de tevredenheid in de balk is het gemiddelde van de huizen, en bij de muis staat hij per stand, met wat er gemist wordt
 en in hoeveel huizen; met een put, een kapel, de herberg of een markt in de hand zie je de kring, en zegt de muis welke

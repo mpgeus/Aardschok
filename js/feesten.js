@@ -39,6 +39,8 @@
   T.FEESTEN = {
     oogstfeest: { naam: 'het oogstfeest' },
     meiboom: { naam: 'de meiboom', voorwerp: 'meiboom' },
+    // Gewonnen: een jaar lang had iedereen alles (js/einde.js, vraag 101, c).
+    stad: { naam: 'het grote feest' },
   };
 
   T.nieuweFeesten = () => ({ komt: null, boom: null, gevierd: [] });
@@ -96,6 +98,16 @@
     const F = feestenVan(D);
     F.komt = { id, dag, heel, midden: null, begonnen: false };
     if (dag === vandaag) T.feestBegint(D, F.komt, true);
+    return F.komt;
+  };
+
+  // Een feest dat vandaag begint en de hele dag duurt: de winst (js/einde.js), die 's nachts vaststaat. Het dorp zegt het
+  // zelf (T.tikEindeDag). Null als de spelregel zegt dat het dorp niet viert.
+  T.vierVandaag = function (D, id, dag) {
+    if (!IN().vieren || !T.FEESTEN[id]) return null;
+    const F = feestenVan(D);
+    F.komt = { id, dag: Math.floor(dag), heel: true, midden: null, begonnen: false };
+    T.feestBegint(D, F.komt, true);
     return F.komt;
   };
 

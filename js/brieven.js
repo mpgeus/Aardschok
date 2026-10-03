@@ -150,6 +150,22 @@
         voet: `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`,
       };
     },
+    // Het jaar in het kort (js/einde.js; werklijst vraag 101, e): op 1 lentemaand, in de hand van je raadsman, zoals zijn
+    // rapport; zonder raadsman staat het gewoon in het jaarboek.
+    jaarverslag: (S) => {
+      const J = S.dorp.jaarverslag;
+      if (!J) return null;
+      const p = T.raadsmanVan(S.dorp);
+      return {
+        titel: 'Het jaar in het kort',
+        wanneer: T.datumVanDag(J.dag).tekst,
+        aan: 'Heer schout,',
+        tekst: J.regels.map((r) => `<p>${veilig(r)}</p>`).join(''),
+        groet: p ? `Uw raadsman,<br>${veilig(T.naamVanBewoner(p))}` : 'Opgetekend in het jaarboek',
+        knoppen: [{ actie: 'sluit', tekst: 'Een nieuw jaar', hoofd: true }],
+        voet: `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`,
+      };
+    },
   };
 
   // Komt de marskramer nog deze maand, dan kun je nog verkopen voor zijn goud: de brief zegt het erbij.

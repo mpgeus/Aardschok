@@ -719,13 +719,51 @@
     const jaren = ((S.dorp.heer && S.dorp.heer.jaren) || [])
       .map((j) => `${j.jaar}: ${Math.floor(j.deel * 100 + 1e-9)}%${j.straf ? `, ${j.straf}` : ''}`)
       .join(' · ');
+    const heer = jaren ? `<p class="einde-jaren">Wat de heer kreeg: ${jaren}</p>` : '';
+    // Minder dan tien mensen over (js/einde.js; werklijst vraag 101, d), of je ambt kwijt (js/heer.js).
+    if (D.einde && D.einde.reden === 'leeg') {
+      T.ui.toonOverlay(
+        'Het dorp is leeg',
+        `<p>Er zijn minder dan ${T.EINDE_INSTELLINGEN.minstensOver} mensen over. De heer streept ${veiligeNaam(D)} door in zijn boek: een dorp zonder mensen brengt niets op.</p>` +
+          `<p>Wie overbleef, trekt weg. Jij ook.</p>` + heer,
+        'Naar het titelscherm',
+        () => T.naarTitelscherm(),
+      );
+      return;
+    }
     T.ui.toonOverlay(
       'Je ambt kwijt',
       `<p>Twee keer achter elkaar gaf je de heer veel te weinig. Hij heeft een nieuwe schout benoemd: zijn neef, die ook niet kan tellen.</p>` +
-        `<p>Jij bent weer een gewone dorpeling, en je buren weten nog precies wat je deed.</p>` +
-        (jaren ? `<p class="einde-jaren">Wat de heer kreeg: ${jaren}</p>` : ''),
+        `<p>Jij bent weer een gewone dorpeling, en je buren weten nog precies wat je deed.</p>` + heer,
       'Naar het titelscherm', // daar begin je opnieuw, of laad je een bewaard spel (js/menu.js)
       () => T.naarTitelscherm(),
+    );
+  };
+
+  // De naam van je dorp, veilig in html (je typt hem zelf bij Nieuw spel), of "het dorp".
+  const veiligeNaam = (D) => veilig(T.dorpsnaam(D) || 'het dorp');
+
+  // Gewonnen (js/einde.js, T.werkEindeBij; werklijst vraag 101): een jaar lang had iedereen alles. Het scherm komt over het
+  // grote feest op het plein, met het jaar tot nu toe; wie wil, speelt verder. Zolang het openstaat, staat de tijd stil.
+  T.ui.toonGewonnen = function (D) {
+    const S = T.S;
+    if (D !== S.dorp) return;
+    T.houdTijdStil(S, 'gewonnen');
+    const regels = T.jaarverslagRegels(D, D.jaarboek, Math.floor(S.kalender.dag));
+    T.ui.toonOverlay(
+      'Iedereen gelukkig',
+      `<p>Een jaar lang had iedereen in ${veiligeNaam(D)} alles wat hij wilde. Vandaag viert het hele dorp het op het plein.</p>` +
+        `<p>De heer schrijft dat het niet kan kloppen, en stuurt zijn inner.</p>` +
+        `<div class="einde-jaren">${regels.map((r) => `<p>${veilig(r)}</p>`).join('')}</div>`,
+      'Verder spelen',
+      () => T.laatTijdGaan(S, 'gewonnen'),
+      {
+        knop: 'Naar het titelscherm',
+        opKlik: () => {
+          T.laatTijdGaan(S, 'gewonnen');
+          T.naarTitelscherm();
+        },
+      },
     );
   };
 

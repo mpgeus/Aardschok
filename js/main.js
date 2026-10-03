@@ -356,7 +356,9 @@
     // je het eerst aannam; zonder quest staat er het doel van het gehucht: een dorp worden
     // (js/treden.js). Daaronder de raad: wat nu tussen jou en een dorp staat (js/raad.js).
     T.werkQuestsBij(S);
-    const doelNu = T.questDoel(S) || T.tredeDoel(S.dorp);
+    // Na de laatste trede: iedereen een jaar gelukkig (js/einde.js), en is het gewonnen, dan het eindscherm.
+    const doelNu = T.questDoel(S) || T.tredeDoel(S.dorp) || T.eindDoel(S.dorp);
+    T.werkEindeBij(S);
     if (!(S.tijd - raadOp < RAAD_ELKE) || S.tijd < raadOp) {
       raadNu = T.raadNu(S.dorp);
       raadOp = S.tijd;
@@ -952,6 +954,33 @@
         meiboom: F.boom ? { staat: `${F.boom.x},${F.boom.y}`, tot: T.datumVanDag(F.boom.tot).tekst } : null,
         gevierd: F.gevierd.map((g) => `${naam(g)}, ${T.datumVanDag(g.dag).tekst}${g.heel ? ', de hele dag' : ', de avond'}`),
         vrij: T.vrijeDag(D, S.kalender.dag),
+      };
+    },
+    // Het eind (js/einde.js): het doel, hoeveel dagen op rij iedereen gelukkig is, en het jaarboek tot nu.
+    // Spel.debug.einde('winst') zet de teller op één dag voor het eind (de volgende nacht wint het, als iedereen dan
+    // gelukkig is); ('gewonnen') wint nu, met het feest en het eindscherm; ('jaarverslag') maakt het verslag nu en
+    // toont het.
+    einde(wat) {
+      const D = S.dorp;
+      const dag = Math.floor(S.kalender.dag);
+      const E = D.eind || (D.eind = { dagen: 0, beste: 0, gewonnen: null });
+      if (wat === 'winst') E.dagen = T.EINDE_INSTELLINGEN.dagen - 1;
+      if (wat === 'gewonnen' && !E.gewonnen) {
+        E.dagen = T.EINDE_INSTELLINGEN.dagen;
+        E.gewonnen = { dag, getoond: false };
+        T.vierVandaag(D, 'stad', dag);
+      }
+      if (wat === 'jaarverslag') {
+        D.jaarverslag = { dag, regels: T.jaarverslagRegels(D, D.jaarboek || { begin: dag, mensen: D.bevolking, kwamen: 0, stierven: 0, weg: 0, doorgegroeid: 0, gelukkig: 0, gemist: {} }, dag) };
+        T.ui.toonBrief(D, 'jaarverslag');
+      }
+      return {
+        doel: T.eindDoel(D) || `eerst nog een trede: ${T.volgendeTrede(D)}`,
+        iedereenGelukkig: T.iedereenGelukkig(D),
+        dagenOpRij: `${E.dagen} van ${T.EINDE_INSTELLINGEN.dagen} (de langste reeks: ${E.beste})`,
+        gewonnen: E.gewonnen && `${T.datumVanDag(E.gewonnen.dag).tekst}${E.gewonnen.getoond ? ', getoond' : ''}`,
+        jaarboek: D.jaarboek,
+        laatsteJaarverslag: D.jaarverslag && D.jaarverslag.regels,
       };
     },
     // De soldaten nu laten zoeken, zoals op Sint-Maarten: staat de heer op het plein, dan op twee of drie

@@ -378,6 +378,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.feestLicht`, in `T.lichtBronnen`), en niemand gaat naar de herberg (`T.feestAvond`). De meiboom komt op een vaste dag
   (`op` in `T.VOORVALLEN`, 30 grasmaand) en staat een maand op het plein (een voorwerp, `gereedschap/pixelart/meiboom.cjs`).
   De spelregel "Feesten"; de getallen in `T.FEESTEN_INSTELLINGEN`.
+- `js/einde.js`: **het eind en het jaar in het kort** (2e, vraag 101, 3 okt): elke nacht (`T.tikEindeDag`, vanuit
+  `T.tikGebouwenDag`) telt het dorp de dagen op rij dat iedereen super gelukkig is (`T.iedereenGelukkig`: elk huis met
+  mensen heeft alles, in de hoogste stand of ernaast, vanaf 100 mensen; `D.eind`); na 360 is het gewonnen, viert het
+  dorp het grote feest (`T.vierVandaag` in `js/feesten.js`) en komt het eindscherm (`T.werkEindeBij`,
+  `T.ui.toonGewonnen` in `js/hud.js`). Onder 10 mensen is het spel uit (`D.einde`, reden `'leeg'`). Het jaarboek
+  (`D.jaarboek`, uit het dagboek en de oogst, `T.telOogstInJaarboek`) wordt op 1 lentemaand het jaarverslag (een brief,
+  soort `'jaarverslag'`). Het doel linksboven na de laatste trede: `T.eindDoel`. De getallen in `T.EINDE_INSTELLINGEN`.
 - `js/raadsman.js`: **de raadsman** (vraag 66, 30 sep): een van de boeren (`T.isBoer` in `js/boeren.js`), met twee gelote
   vaardigheden (`T.vaardighedenVan`: uit het zaad en zijn naam, zodat het lot van de boeren niet verandert). Is de schout
   weg (niet in het dorp als wie hem zoekt, gaat zoeken, of als diens tijd om is), dan beslist hij het voorval; wie je in
@@ -536,7 +543,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602". Dat zijn twee manieren om te winnen (vraag
   79: "a twee manieren"). **Eerst een speelbare kern** ("Daarna komt oorlog etc erbij en de rest van het land
   diplomatie trading etc"): één stad die je wint als iedereen een jaar lang super gelukkig is, met wensen per stand en
-  per huis (vraag 79 en 80), en klein: eerst drie standen op de huizen die er al zijn (vraag 82). Hoe de heer en de vrijheid in het veroveren passen, is nog open (`spel.md`, "Een nieuwe richting").
+  per huis (vraag 79 en 80), en klein: eerst drie standen op de huizen die er al zijn (vraag 82). Sinds 3 okt is dat eind
+  gebouwd (vraag 101, `js/einde.js`): een jaar lang alle huizen alles, vanaf 100 mensen, en het dorp viert het. Hoe de heer en de vrijheid in het veroveren passen, is nog open (`spel.md`, "Een nieuwe richting").
 - **Tegenspelers** (Marcel, 29 sep, vraag 60, D): aan het begin kies je hoeveel. Het zijn dorpen met een AI, die
   tegelijk met jou beginnen, ergens op de kaart waar je ze nog moet vinden, en zelf bouwen om de grootste te worden;
   "intelligent genoeg om echt weerstand te bieden". Marcel koos (vraag 61 en 62): een land met provincies waar je
@@ -690,6 +698,9 @@ hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
 `Spel.debug.feest()` zegt welk feest er komt of nu is, waar het dorp staat en de meiboom; `('meiboom')` laat het vandaag
 beginnen, de hele dag (`('oogstfeest', 'avond')` alleen vanavond); zet er het uur bij met `Spel.debug.uur(11)` of `(20)`.
+`Spel.debug.einde()` zegt hoe ver het is met winnen (het doel, de dagen op rij, het jaarboek); `('winst')` zet de teller
+op één dag ervoor, `('gewonnen')` wint nu (het feest, en het eindscherm 's avonds of bij het feest), `('jaarverslag')`
+toont het jaar in het kort nu.
 `Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
 en daarboven het dorp per stand en wat er gemist wordt; `('dorpelingen')` laat alleen die stand zien.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een

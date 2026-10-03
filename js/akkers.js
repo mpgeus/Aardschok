@@ -589,7 +589,9 @@
             if (D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'hooi', T.hooiPerTegel(a, e));
           } else {
             a.geoogst.add(sleutel(e.maait.x, e.maait.y));
-            if (D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'graan', T.oogstPerTegel(a, e));
+            const graan = T.oogstPerTegel(a, e);
+            if (D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'graan', graan);
+            T.telOogstInJaarboek(D, graan); // voor het jaarverslag (js/einde.js)
           }
           e.maait = null;
           e.oogstDoel = null;
@@ -676,6 +678,7 @@
     }
     if (tegels && D.voorraad && T.wijzigVoorraad) {
       T.wijzigVoorraad(D, 'graan', graan);
+      T.telOogstInJaarboek(D, graan);
       T.zeg(D, `De boeren halen de rest van de oogst binnen: ${Math.round(graan)} graan.`, 'goed');
     }
     return tegels;

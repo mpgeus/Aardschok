@@ -3343,7 +3343,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     huis (in de stijl van vraag 98, C: een briefje aan een spijker bij het huis), de kringen bij het aanwijzen van een
     erf, en eerst de regels met toetsen, dan het scherm. Vraag 98 is beantwoord, dus er hoeft niets te wachten.
 101. **2e, het eind en het jaar in het kort: het plan** (Claude, 3 okt, vijfentwintigste sessie, tijdens Marcels vlucht;
-    vraag 80, F, besloten; open). Wat er al is: twee eindschermen, je ambt kwijt en de schout gevallen (`T.ambtKwijt`,
+    vraag 80, F, besloten; gebouwd 3 okt). Wat er al was: twee eindschermen, je ambt kwijt en de schout gevallen (`T.ambtKwijt`,
     `js/heer.js`; `T.ui.toonEinde`). Er is nog geen winst. Voorstel:
     - **a, winnen:** elke dag telt het dorp of alle woningen stenen huizen zijn die alles hebben, en de boerderijen wat zij
       willen (`g.wensen.alles`, `js/wensen.js`); dan loopt er een teller, en een dag waarop één huis iets mist, zet hem op
@@ -3362,7 +3362,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     de winst als feest? **d**, ook bij minder dan tien mensen? **e**, het jaarverslag zo?
     **Beantwoord (Marcel, 3 okt):** "101 ja". Dus zoals voorgesteld: gewonnen na een jaar (360 dagen, in de werkbank)
     waarin alle huizen alles hebben, vanaf 100 mensen; de winst is een feest op het plein met het eindscherm erover;
-    verloren ook bij minder dan tien mensen; en op 1 lentemaand een jaarverslag van de raadsman.
+    verloren ook bij minder dan tien mensen; en op 1 lentemaand een jaarverslag van de raadsman. **Gebouwd** (3 okt, zie
+    onder Af).
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -3668,6 +3669,17 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **2e: het eind en het jaar in het kort** (vijfentwintigste sessie; vraag 101, Marcel: "101 ja";
+  `js/einde.js`). **Winnen:** elke nacht telt het dorp of elk huis met mensen alles heeft, in de hoogste stand of
+  ernaast, vanaf 100 mensen (`T.iedereenGelukkig`); na 360 dagen op rij (de werkbank, "Het eind") is het gewonnen: het
+  dorp viert het grote feest op het plein, de hele dag, en die avond (of eerder, bij het feest) komt het eindscherm
+  "Iedereen gelukkig" met het jaar tot nu toe, en Verder spelen of Naar het titelscherm. Linksboven staat het doel zodra
+  er geen trede meer is: mensen, huizen, dan dagen (`T.eindDoel`). **Verliezen** ook onder 10 mensen ("Het dorp is
+  leeg"). **Het jaar in het kort:** een jaarboek uit het dagboek van de raadsman en de oogst, en op 1 lentemaand het
+  jaarverslag als brief in zijn hand: groei, wie kwam, stierf en wegtrok, de oogst, wat doorgroeide, de feesten, de heer,
+  wat het meest gemist werd, en de dagen dat iedereen alles had. De speeltest schrijft het verslag op (`jaarverslagen`),
+  telt een leeg dorp apart van een ambt kwijt, en speelt na een winst verder. `Spel.debug.einde()`. 7 nieuwe toetsen,
+  `npm test` 792/792.
 - 3 okt 2026 — **2c: zien wat een huis wil** (vijfentwintigste sessie; vraag 100, Marcel: "100 ja", in de stijl van vraag
   98, "98 C"). Een huis dat iets mist, heeft boven zijn deur een teken met wat het als eerste mist (pixel art,
   `gereedschap/pixelart/papieren.cjs`); staat de muis op een huis, dan hangt er een briefje aan een spijker naast de deur

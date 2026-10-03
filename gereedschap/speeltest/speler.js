@@ -216,6 +216,17 @@
       }
       if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
     }
+    // Het jaar in het kort (1 lentemaand, js/einde.js): de speler schrijft het op, en leest door. Het is geen brief van de
+    // heer.
+    if (T.ui.briefOpen() && document.querySelector('#brief').dataset.soort === 'jaarverslag') {
+      if (s.dorp.jaarverslag) (boek.jaarverslagen = boek.jaarverslagen || []).push({ datum: datum(), regels: s.dorp.jaarverslag.regels.slice() });
+      if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
+    }
+    // Gewonnen (js/einde.js): het eindscherm over het feest. De speler schrijft de dag op, en speelt verder.
+    if (s.dorp.eind && s.dorp.eind.gewonnen && !document.querySelector('#overlay').classList.contains('verborgen')) {
+      boek.gewonnen = boek.gewonnen || datum();
+      klik('#overlay-knop');
+    }
     if (T.ui.briefOpen()) {
       if (s.kalender.dag > 1) boek.brief = { dag: heel(s.kalender.dag), datum: datum(), eis: eisKort(T.eisVanDeHeer(s.dorp)) };
       if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
@@ -1369,8 +1380,12 @@
       ongezaaid += a.ongezaaid ? a.ongezaaid.size : 0;
     }
     return Object.assign(tel(), {
-      tekst: s.dorp.einde ? `het ambt kwijt op ${datum()}` : s.modus === 'dood' ? `gevallen op ${datum()}` : `het jaar uit, tot ${datum()}`,
-      ambtKwijt: !!s.dorp.einde,
+      tekst: s.dorp.einde ? `${s.dorp.einde.reden === 'leeg' ? 'het dorp leeg' : 'het ambt kwijt'} op ${datum()}` : s.modus === 'dood' ? `gevallen op ${datum()}` : `het jaar uit, tot ${datum()}`,
+      ambtKwijt: !!s.dorp.einde && s.dorp.einde.reden !== 'leeg',
+      dorpLeeg: !!s.dorp.einde && s.dorp.einde.reden === 'leeg',
+      // Het eind (js/einde.js): de langste reeks dagen dat iedereen alles had, en of het gewonnen is.
+      eind: s.dorp.eind ? { dagenOpRij: s.dorp.eind.dagen, beste: s.dorp.eind.beste, gewonnen: boek.gewonnen || null } : null,
+      jaarverslagen: boek.jaarverslagen || [],
       gevallen: s.modus === 'dood',
       // De rovers (js/rovers.js): hoe vaak ze kwamen, hoe vaak ze verslagen werden, en wat ze meenamen.
       rovers: {

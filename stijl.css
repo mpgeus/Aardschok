@@ -337,6 +337,18 @@ kbd {
   cursor: pointer;
 }
 #overlay-knop:hover { filter: brightness(1.08); }
+/* De tweede knop (Naar het titelscherm naast Verder spelen, js/hud.js T.ui.toonGewonnen): stiller dan de eerste. */
+#overlay-knop2 {
+  margin: 10px 0 0 8px;
+  padding: 8px 18px;
+  font: 15px system-ui, sans-serif;
+  color: var(--goud);
+  background: transparent;
+  border: 1px solid var(--goud);
+  border-radius: 8px;
+  cursor: pointer;
+}
+#overlay-knop2:hover { background: rgba(226, 182, 74, 0.12); }
 
 /* De uitleg rechtsboven */
 #hulp,
@@ -563,7 +575,8 @@ kbd {
 #brief .brief-samen { font-style: normal; font-size: 13px; }
 #brief .brief-groet { text-align: right; margin-bottom: 0; }
 /* Het rapport van de raadsman (js/ochtendrapport.js): in zijn hand, niet in die van de heer. */
-#brief[data-soort="rapport"] .brief-tekst {
+#brief[data-soort="rapport"] .brief-tekst,
+#brief[data-soort="jaarverslag"] .brief-tekst {
   font-style: normal;
   background: rgba(255, 255, 255, 0.03);
   border-color: var(--rand);

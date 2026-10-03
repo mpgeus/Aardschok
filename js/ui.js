@@ -240,7 +240,9 @@
       if (k && k.kan !== false) k.kies();
     },
 
-    toonOverlay(titel, html, knop, opKlik) {
+    // Een scherm over het spel, met een knop; `tweede` is een tweede knop ({ knop, opKlik }), zoals Verder spelen naast
+    // Naar het titelscherm als je wint (js/hud.js, T.ui.toonGewonnen).
+    toonOverlay(titel, html, knop, opKlik, tweede) {
       $('overlay-titel').textContent = titel;
       $('overlay-tekst').innerHTML = html;
       const b = $('overlay-knop');
@@ -249,6 +251,15 @@
         this.verbergOverlay();
         opKlik();
       };
+      const b2 = $('overlay-knop2');
+      b2.classList.toggle('verborgen', !tweede);
+      if (tweede) {
+        b2.textContent = tweede.knop;
+        b2.onclick = () => {
+          this.verbergOverlay();
+          tweede.opKlik();
+        };
+      }
       $('overlay').classList.remove('verborgen');
       this.verbergTooltip();
     },
