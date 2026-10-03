@@ -878,6 +878,8 @@
     if (!echt || reden === 'begin') return echt;
     const wieTekst = T.bewonersVolgen ? T.bewonersVolgen(D, echt, reden, waarom, wie) : '';
     T.schrijfOp(D, 'mensen', { verschil: echt, reden, waarom: waarom || null, wie: wieTekst || null });
+    // Wie verhongerde, bevroor of sneuvelde, rekent het dorp de schout aan (js/bazen.js).
+    T.vertrouwenNaBevolking(D, echt, reden);
     return echt;
   };
 
@@ -981,6 +983,8 @@
     // (js/behoeften.js, T.tikBehoeftenDag) — vóór de rest, zodat stap 4 en 6 hieronder de
     // tevredenheid van vandaag gebruiken.
     const alGegeten = T.tikBehoeftenDag(D, dag); // wat de huizen aan brood, vis en vlees aten (stap 3)
+    // Twee bazen (js/bazen.js): het vertrouwen van het dorp volgt langzaam hoe het gaat.
+    T.tikBazenDag(D);
     // En de marskramer (js/handel.js): komt hij vandaag, of is zijn tijd om?
     T.tikHandelDag(D, dag);
     // En de heer (js/heer.js): zijn brief in wijnmaand, hijzelf op Sint-Maarten, en de soldaten.

@@ -282,10 +282,14 @@
       ambtKwijt = veelTeWeinig && keer >= IN().ambtKwijtNa;
     }
     const schuld = zwaarte ? Math.ceil(tekort * (1 + IN().boete) - 1e-9) : 0;
+    // Met de spelregel "Twee bazen" (js/bazen.js; werklijst vraag 106) beslist zijn gunst over je ambt: wat deze schatting
+    // ermee doet, en waar hij dan staat. Zonder: twee keer achter elkaar veel te weinig, zoals hierboven.
+    const gunst = T.gunstNaSchatting(D, zwaarte ? STRAFFEN[zwaarte - 1] : null);
+    if (gunst) ambtKwijt = gunst.na <= 0;
     const uit = {
       kan: T.heerWacht(D), neemt, gevraagd, gegeven, deel, tekort, straf: zwaarte ? STRAFFEN[zwaarte - 1] : null,
       boete: zwaarte >= 1, soldaten: zwaarte >= 2, schandpaal: zwaarte >= 3,
-      veelTeWeinig, ambtKwijt, schuld, keer,
+      veelTeWeinig, ambtKwijt, schuld, keer, gunst,
     };
     if (!uit.kan) uit.reden = 'De heer is er niet.';
     uit.tekst = gevolgTekst(uit);
@@ -296,6 +300,7 @@
   const rang = (n) => RANG[n] || `${n}e`;
 
   function gevolgTekst(g) {
+    if (g.gunst) return gunstTekst(g);
     const hoeVaak = IN().telWijze === 'hoeVaak';
     const nogKeer = IN().ambtKwijtNa - g.keer;
     if (g.ambtKwijt) {
@@ -315,6 +320,19 @@
     if (g.boete) return `${wanneer}Een boete: volgend jaar komt er ${g.schuld} goud bij wat hij vraagt.${hoeVaak ? nog : ''}`;
     if (g.deel < 1 - 1e-9) return 'Hij telt slecht: dit merkt hij niet.';
     return 'Hij krijgt alles wat hij vraagt.';
+  }
+
+  // Met twee bazen (js/bazen.js): de straf, en wat het met zijn gunst doet.
+  function gunstTekst(g) {
+    const voor = g.gunst.na - g.gunst.erbij;
+    if (g.ambtKwijt) return `Zijn gunst zakt naar 0: dit kost je je ambt.`;
+    const straf = g.schandpaal
+      ? `Een boete (volgend jaar ${g.schuld} goud erbij), twee soldaten tot de lente, én de schandpaal: jij wijst aan wie.`
+      : g.soldaten ? `Een boete (volgend jaar ${g.schuld} goud erbij), en twee soldaten die tot de lente blijven en meeëten.`
+        : g.boete ? `Een boete: volgend jaar komt er ${g.schuld} goud bij wat hij vraagt.`
+          : g.deel < 1 - 1e-9 ? 'Hij telt slecht: dit merkt hij niet.' : 'Hij krijgt alles wat hij vraagt.';
+    const waarschuwt = g.gunst.na < T.BAZEN_INSTELLINGEN.waarschuwing ? ' Dan schrijft hij je een waarschuwing.' : '';
+    return `${straf} Zijn gunst: ${Math.round(Math.max(0, voor))} → ${Math.round(g.gunst.na)}.${waarschuwt}`;
   }
 
   // Wat de heer zegt als hij geteld heeft. Hij is de grap; zijn soldaten niet (spel.md).
@@ -370,6 +388,8 @@
     h.brief = null;
     b.betaald = g;
     h.jaren.push({ jaar: T.datumVanDag(dagNu(D)).jaar, deel: g.deel, straf: g.straf });
+    // Twee bazen (js/bazen.js): zijn gunst; op 0 ontslaat hij je (hieronder, of al via de meter).
+    if (g.gunst) T.wijzigGunst(D, g.gunst.erbij, g.gunst.erbij > 0 ? 'je betaalde wat hij vroeg' : 'je betaalde te weinig');
     // Het rapport van de inner is betaald, en zijn argwaan zakt (js/inner.js); de boete voor de houtkap ook.
     T.innerNaSintMaarten(D);
     T.wettenNaSintMaarten(D);
@@ -407,6 +427,7 @@
     const eis = T.eisVanDeHeer(D);
     const geef = { ...eis.per, goud: (D.voorraad && D.voorraad.goud) || 0 };
     T.zeg(D, 'Je bent niet gekomen. De heer neemt zelf mee wat hij hebben wil.', 'gevaar');
+    T.wijzigGunst(D, T.BAZEN_INSTELLINGEN.nietGekomen, 'je kwam niet naar het plein');
     const g = T.betaalHeer(D, geef);
     if (g.schandpaal && !D.einde) {
       const keuzes = T.schandpaalKeuzes(D).filter((k) => k.wie !== 'schout');
@@ -441,6 +462,7 @@
       }
     }
     T.zetVlag(D, 'soldatenInHuis');
+    T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.soldaten, 'soldaten van de heer in huis');
   }
 
   function soldatenGaan(D) {
@@ -565,6 +587,7 @@
       // Het dorp neemt het je niet kwalijk, maar de heer vindt het lachwekkend (Marcel, 24 sep).
       h.schuld += keuze.boete;
       T.zetVlag(D, 'schoutAanDeSchandpaal');
+      T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.schandpaalZelf, 'je zette jezelf aan de schandpaal');
       T.zeg(D, `Je zet jezelf aan de schandpaal. Het dorp kijkt zwijgend toe. De heer lacht tot hij hikt, en zet er ${keuze.boete} goud bij.`, 'gevaar');
     } else {
       // Zijn poppetje loopt naar het plein en staat daar (T.wandelAnker, js/akkers.js, kijkt naar
@@ -577,6 +600,7 @@
       T.zetVlag(D, T.schandpaalVlag(e ? T.gesprekIdVan(e) : wie));
       if (e) e.moetNaar = { ...voorDePaal(D), straal: 0 };
       T.zeg(D, `${keuze.naam} moet ${IN().schandpaalDagen} dagen aan de schandpaal op het plein. Het dorp zal het onthouden.`, 'gevaar');
+      T.wijzigVertrouwen(D, -keuze.kost * T.BAZEN_INSTELLINGEN.schandpaalPerAanzien, `${keuze.naam} aan de schandpaal`);
     }
     b.schandpaal = false;
     T.heerVertrekt(D);
@@ -605,9 +629,11 @@
 
   // Je ambt kwijt: de heer ontslaat de schout van dit dorp (D.einde). In jouw dorp is het spel dan uit: js/hud.js
   // toont het einde, en zet het spel stil.
-  T.ambtKwijt = function (D) {
-    D.einde = { reden: 'ambt', dag: dagNu(D) };
-    T.zeg(D, '"Twee keer, schout." De heer schudt zijn hoofd. "U bent ontslagen."', 'gevaar');
+  // Met twee bazen (js/bazen.js) omdat zijn gunst op is (`waarom`), anders na twee keer veel te weinig.
+  T.ambtKwijt = function (D, waarom) {
+    if (D.einde) return;
+    D.einde = { reden: 'ambt', dag: dagNu(D), waarom: waarom || null };
+    T.zeg(D, waarom ? '"Genoeg, schout." De heer schudt zijn hoofd. "U bent ontslagen."' : '"Twee keer, schout." De heer schudt zijn hoofd. "U bent ontslagen."', 'gevaar');
     if (!D.ander) T.houdTijdStil(D, 'einde');
     if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
   };

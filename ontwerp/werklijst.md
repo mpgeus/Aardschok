@@ -3806,6 +3806,14 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **Vraag 106, stap 1: twee bazen** (vijfentwintigste sessie; Marcel: "106 a b c d ja"; `js/bazen.js`). De
+  gunst van de heer en het vertrouwen van het dorp in jou, elk van 0 tot 100, als twee gezichten in de balk (de heer met
+  een kroon, het dorp met een boerenhoed), met bij de muis waarom. Wat ze nu al beweegt: de schatting, de heervaart, de
+  schandpaal, de soldaten, wapens en wat je verstopte (de heer); de antwoorden op de voorvallen en verzoeken, wie
+  verhongerde, bevroor of sneuvelde, en elke dag hoe het gaat (het dorp). Onder 20 een waarschuwing (een brief van de
+  heer, of het dorp mort), op 0 weg, maar altijd eerst de waarschuwing. Betrapt: de laatste waarschuwing, en daarna weg
+  (de spelregel "Betrapt" kan "Meteen weg"). De oude toetsen van de heer en het verstoppen spelen met "Alleen de heer".
+  Onderweg: `Spel.debug.raad()` gaf het spel mee in plaats van het dorp. 12 nieuwe toetsen, `npm test` 832/832.
 - 3 okt 2026 — **Vraag 104: de ondernemers, de wapenmaker en de tweede herberg** (vijfentwintigste sessie; Marcel: "104
   a b c d ja"; `js/ondernemers.js`). Een op de zes volwassenen is ondernemer, uit het zaad zoals het karakter van de
   boeren, en vraagt je iets wat niemand mist, na je oproepen en vóór wat het dorp mist. Ja: zijn huis is je dankbaar.

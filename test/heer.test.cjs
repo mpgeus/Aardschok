@@ -7,6 +7,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+// Het spel van vóór de twee bazen (werklijst vraag 106): de heer ontslaat je na twee keer veel te weinig. De twee bazen staan in test/bazen.test.cjs.
+T.zetOptie('tweeBazen', 'uit');
 const IN = T.HEER_INSTELLINGEN;
 // Deze toetsen rekenen met de pacht per akkertegel: vast en makkelijk na te tellen. Een deel van
 // wat de inner telde (de standaard sinds punt 6) staat in test/inner.test.cjs.

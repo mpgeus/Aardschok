@@ -158,6 +158,27 @@
     '<path d="M8 14.6c1.1 1.3 2.5 1.9 4 1.9s2.9-.6 4-1.9" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
     '</svg>';
 
+  // De twee bazen (js/bazen.js; werklijst vraag 106, d): de heer met zijn kroon, en het dorp met een kap, elk met een
+  // mond die meebeweegt met hoe hij erbij staat (T.bazenStemming: blij, tevreden, ontevreden, boos).
+  const MOND = {
+    blij: '<path d="M8.6 15.4c1 1.3 2.1 1.9 3.4 1.9s2.4-.6 3.4-1.9" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>',
+    tevreden: '<path d="M9.2 16.1c.9.5 1.8.8 2.8.8s1.9-.3 2.8-.8" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>',
+    ontevreden: '<path d="M9.3 16.6h5.4" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>',
+    boos: '<path d="M9 17.4c.9-1.1 1.9-1.6 3-1.6s2.1.5 3 1.6" fill="none" stroke="#c0503a" stroke-width="1.5" stroke-linecap="round"/>' +
+      '<path d="M8.4 11.2l2.3.9M15.6 11.2l-2.3.9" stroke="#c0503a" stroke-width="1.3" stroke-linecap="round"/>',
+  };
+  function gezicht(stemming, heer) {
+    const rand = stemming === 'boos' ? '#c0503a' : '#e2b64a';
+    // De heer: een kroon met drie punten; het dorp: een boerenhoed met een rand.
+    const hoofd = heer
+      ? '<path d="M6.6 9.4L5.6 3.2l3.3 2.6L12 1.6l3.1 4.2 3.3-2.6-1 6.2z" fill="#e2b64a" stroke="#c9972f" stroke-width=".7" stroke-linejoin="round"/>'
+      : '<path d="M7.6 8.6c.3-3.2 2-4.9 4.4-4.9s4.1 1.7 4.4 4.9" fill="#9c7424"/><path d="M4.2 8.8h15.6" stroke="#9c7424" stroke-width="1.9" stroke-linecap="round"/>';
+    return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+      `<circle cx="12" cy="14.6" r="6.6" fill="none" stroke="${rand}" stroke-width="1.5"/>` +
+      '<circle cx="9.6" cy="13.4" r=".95" fill="#e2b64a"/><circle cx="14.4" cy="13.4" r=".95" fill="#e2b64a"/>' +
+      MOND[stemming] + hoofd + '</svg>';
+  }
+
   // De voorraadbalk wordt één keer gemaakt; daarna verandert alleen het getal per grondstof, en
   // het getal bij de mensen.
   function bouwVoorraadbalk(box) {
@@ -170,9 +191,39 @@
       `<span class="icoon">${BEVOLKING_ICOON}</span><span class="aantal">0/0</span></div>` +
       `<div class="grondstof" data-wat="tevredenheid" title="Tevredenheid.">` +
       `<span class="icoon">${TEVREDENHEID_ICOON}</span><span class="aantal">100%</span></div>` +
+      `<div class="grondstof verborgen" data-wat="gunst" title="De gunst van de heer.">` +
+      `<span class="icoon">${gezicht('tevreden', true)}</span><span class="aantal">50</span></div>` +
+      `<div class="grondstof verborgen" data-wat="vertrouwen" title="Het vertrouwen van het dorp in jou.">` +
+      `<span class="icoon">${gezicht('tevreden', false)}</span><span class="aantal">50</span></div>` +
       `<div class="grondstof verborgen" data-wat="argwaan" title="De argwaan van de inner.">` +
       `<span class="icoon">${ARGWAAN_ICOON}</span><span class="aantal">0%</span></div>`;
   }
+
+  // De twee bazen (js/bazen.js): de gunst van de heer en het vertrouwen van het dorp, met een gezicht dat zegt hoe ze
+  // erbij staan, en bij de muis waarom. Zonder de spelregel "Twee bazen" staan ze niet in de balk.
+  T.ui.toonBazen = function (D) {
+    const S = T.S;
+    if (!S || D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
+    const box = $('voorraadbalk');
+    if (!box) return;
+    if (!box.children.length) bouwVoorraadbalk(box);
+    const nu = T.bazenNu(D);
+    for (const welk of ['gunst', 'vertrouwen']) {
+      const cel = box.querySelector(`[data-wat="${welk}"]`);
+      if (!cel) continue;
+      cel.classList.toggle('verborgen', !nu);
+      if (!nu) continue;
+      const n = Math.round(nu[welk]);
+      const stemming = T.bazenStemming(n);
+      if (cel.dataset.stemming !== stemming) {
+        cel.querySelector('.icoon').innerHTML = gezicht(stemming, welk === 'gunst');
+        cel.dataset.stemming = stemming;
+      }
+      cel.querySelector('.aantal').textContent = String(n);
+      cel.classList.toggle('hoog', stemming === 'boos');
+      cel.title = T.bazenTekst(D, welk);
+    }
+  };
 
   T.ui = T.ui || {};
 
@@ -313,6 +364,7 @@
     if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
     const box = $('voorraadbalk');
     if (!box.children.length) bouwVoorraadbalk(box);
+    T.ui.toonBazen(D); // de twee bazen staan ernaast (js/bazen.js)
     const cel = box.querySelector('[data-wat="tevredenheid"]');
     if (!cel || !S.dorp.behoeften) return;
     const pct = Math.round(S.dorp.behoeften.tevredenheid * 100);
@@ -772,9 +824,25 @@
       );
       return;
     }
+    // Het dorp jaagt je weg (js/bazen.js; werklijst vraag 106, b): het vertrouwen is op.
+    if (D.einde && D.einde.reden === 'verjaagd') {
+      const waarom = D.einde.waarom ? ` Het laatste wat ze je aanrekenden: ${veilig(D.einde.waarom)}.` : '';
+      T.ui.toonOverlay(
+        'Weggejaagd',
+        `<p>Het dorp vertrouwde je niet meer. Op een avond stonden ze voor je deur, met fakkels.${waarom}</p>` +
+          `<p>De heer benoemt een nieuwe schout. Of het dorp die wel vertrouwt, hoor je nooit: je bent al over de heuvel.</p>` + heer,
+        'Naar het titelscherm',
+        () => T.naarTitelscherm(),
+      );
+      return;
+    }
+    // Je ambt kwijt: met twee bazen omdat zijn gunst op is (D.einde.waarom), anders na twee keer veel te weinig.
+    const ontslag = D.einde && D.einde.waarom
+      ? `<p>${veilig(D.einde.waarom)} Hij heeft een nieuwe schout benoemd: zijn neef, die ook niet kan tellen.</p>`
+      : `<p>Twee keer achter elkaar gaf je de heer veel te weinig. Hij heeft een nieuwe schout benoemd: zijn neef, die ook niet kan tellen.</p>`;
     T.ui.toonOverlay(
       'Je ambt kwijt',
-      `<p>Twee keer achter elkaar gaf je de heer veel te weinig. Hij heeft een nieuwe schout benoemd: zijn neef, die ook niet kan tellen.</p>` +
+      ontslag +
         `<p>Jij bent weer een gewone dorpeling, en je buren weten nog precies wat je deed.</p>` + heer,
       'Naar het titelscherm', // daar begin je opnieuw, of laad je een bewaard spel (js/menu.js)
       () => T.naarTitelscherm(),

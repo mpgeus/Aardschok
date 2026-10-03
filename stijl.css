@@ -404,6 +404,8 @@ kbd {
 /* De argwaan van de inner (js/inner.js): rood vanaf de drempel waarop de soldaten gaan zoeken. */
 #voorraadbalk .grondstof[data-wat="argwaan"] { padding-left: 13px; border-left: 1px solid var(--rand); }
 #voorraadbalk .grondstof[data-wat="argwaan"].hoog .aantal { color: var(--rood); }
+#voorraadbalk .grondstof[data-wat="gunst"].hoog .aantal,
+#voorraadbalk .grondstof[data-wat="vertrouwen"].hoog .aantal { color: var(--rood); }
 
 /* Het bouwmenu (js/hud.js, js/gebouwen.js): de knop in dezelfde rij als de kalender en de
    voorraad, en het paneel met de soorten van de huidige trede eronder. */

@@ -451,6 +451,7 @@
     T.zeg(D, `${T.hoofdletter(naam(L.wie))} heeft je niet gesproken, en gaat weer aan het werk.`);
     T.schrijfOp(D, 'voorbij', { wie: naam(L.wie), titel: T.VOORVALLEN[L.id].titel }); // voor het rapport (js/ochtendrapport.js)
     stemming(D, IN().nietGevonden, { woorden: { last: weg ? 'een schout die er niet was' : 'een schout die geen tijd had' } }, dag);
+    T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.nietGevonden, weg ? 'je was er niet' : 'je had geen tijd');
     stop(D);
   }
 
@@ -584,6 +585,8 @@
     for (const wat of WAREN) if (doe[wat]) T.wijzigVoorraad(D, wat, doe[wat]);
     for (const soort of Object.keys(T.VEE)) if (doe[soort] < 0) T.verliesVee(D, soort, -doe[soort]);
     if (doe.tevreden) stemming(D, doe.tevreden, v, dag, L.door);
+    // Twee bazen (js/bazen.js): wat het dorp van jóú vindt, zo zwaar als het het dorp tevreden maakt.
+    if (doe.tevreden) T.vertrouwenNaVoorval(D, doe.tevreden, v.titel, !!L.door);
     if (doe.argwaan) T.zetArgwaan(D, doe.argwaan / 100, v.titel);
     for (let i = 0; i < (doe.gezin || 0); i++) T.gezinKomt(D);
     const verbannen = doe.verban && L[doe.verban];

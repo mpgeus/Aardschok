@@ -738,7 +738,7 @@
     raad() {
       if (!(S.wereld && S.wereld.plein)) return 'Hier is geen raad: deze kaart heeft geen plein.';
       const nu = T.raadNu(S.dorp);
-      return { nu: nu ? nu.tekst : 'geen', gelden: T.RADEN.filter((r) => r.als(S)).map((r) => r.id) };
+      return { nu: nu ? nu.tekst : 'geen', gelden: T.RADEN.filter((r) => r.als(S.dorp)).map((r) => r.id) };
     },
     // De rovers (js/rovers.js): de bende (wie wegtrok), wanneer die en de wilde rovers komen, en de aanval die
     // loopt. Spel.debug.rovers(3) laat nu drie wilde rovers komen, Spel.debug.rovers('bende') de bende.
@@ -1030,6 +1030,26 @@
         verzegeld: (D.gebouwen || []).filter((g) => g.verzegeld).map((g) => `${T.GEBOUWEN[g.soort].naam}, op ${T.datumVanDag(g.verzegeld.dag).tekst}`),
         wapens: T.wapensInHetDorp(D),
         herbergen: T.herbergenVan(D).map((g) => `${g.x},${g.y}${g.meester ? ` (${T.naamVanBewoner(g.meester)})` : ''}${g.weigert && S.kalender.dag < g.weigert.tot ? `: ${g.weigert.waarom}, tot ${T.datumVanDag(g.weigert.tot).tekst}` : ''}`),
+      };
+    },
+    // De twee bazen (js/bazen.js; werklijst vraag 106): de gunst van de heer en het vertrouwen van het dorp, hoe ze erbij
+    // staan, waarom, en of je al gewaarschuwd bent. Spel.debug.bazen('gunst', 15) zet de gunst op 15 (met de
+    // waarschuwing als hij onder de grens komt), ('vertrouwen', 0) jaagt je weg als je al gewaarschuwd was.
+    bazen(welk, n) {
+      const D = S.dorp;
+      const b = T.bazenNu(D);
+      if (!b) return 'De spelregel "Twee bazen" staat uit, of hier komt geen heer.';
+      if ((welk === 'gunst' || welk === 'vertrouwen') && typeof n === 'number') {
+        (welk === 'gunst' ? T.wijzigGunst : T.wijzigVertrouwen)(D, n - b[welk], 'Spel.debug');
+      }
+      const nu = T.bazenNu(D) || b;
+      return {
+        gunst: `${Math.round(nu.gunst)} (${T.bazenStemming(nu.gunst)})`,
+        vertrouwen: `${Math.round(nu.vertrouwen)} (${T.bazenStemming(nu.vertrouwen)})`,
+        waarom: D.bazen.waarom,
+        gewaarschuwd: D.bazen.gewaarschuwd,
+        betrapt: T.BAZEN_INSTELLINGEN.betrapt,
+        einde: D.einde,
       };
     },
     // Het eind (js/einde.js): het doel, hoeveel dagen op rij iedereen gelukkig is, en het jaarboek tot nu.

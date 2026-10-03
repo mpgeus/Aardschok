@@ -119,6 +119,21 @@
       ],
     }),
 
+    // De waarschuwing (js/bazen.js; werklijst vraag 106, a): zijn gunst zakte onder de grens. Nog één tegenvaller, en je
+    // bent je ambt kwijt.
+    waarschuwing: (S) => {
+      const w = S.dorp.bazen && S.dorp.bazen.brief;
+      return {
+        wanneer: w ? T.datumVanDag(w.dag).tekst : vandaag(S),
+        aan: 'Aan Onze schout,',
+        tekst:
+          `<p>${veilig((w && w.waarom) || 'Wij zijn niet tevreden over u.')}</p>` +
+          `<p>Nog één keer, schout. Wij hebben een neef die ook schout wil worden. Hij kan niet tellen, maar dat kunt u blijkbaar ook niet.</p>`,
+        staat: `<p class="venster-staat">De gunst van de heer is ${Math.round(S.dorp.bazen ? S.dorp.bazen.gunst : 0)}. Op 0 ben je je ambt kwijt.</p>`,
+        knoppen: [{ actie: 'sluit', tekst: 'Begrepen', hoofd: true }],
+      };
+    },
+
     // Het dorp krijgt marktrecht (js/treden.js; Marcel, 2 okt, vraag 90, C: bij 20 ambachtslieden). Net als bij het
     // dorp voorlopig alleen woorden.
     marktrecht: (S) => ({

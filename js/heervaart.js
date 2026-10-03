@@ -120,6 +120,10 @@
     }
     T.stuurWeg(D, wie, 'heervaart');
     H.tocht = { wie, terugOp: volgende(dagNu(D), IN().terug) };
+    // Twee bazen (js/bazen.js): de heer krijgt zijn mannen, of haalde ze zelf; het dorp ziet ze gaan.
+    const BZ = T.BAZEN_INSTELLINGEN;
+    T.wijzigGunst(D, hoe === 'gehaald' ? BZ.heervaart.gehaald : BZ.heervaart.gestuurd, hoe === 'gehaald' ? 'je antwoordde hem niet' : 'je stuurde hem mannen');
+    T.wijzigVertrouwen(D, BZ.heervaartWeg, 'je stuurde mannen naar de oorlog');
     const terug = `${IN().terug.dag} ${IN().terug.maand}`;
     if (hoe === 'gehaald') T.zeg(D, `Je antwoordde de heer niet. Zijn soldaten haalden ${namen(wie)} op; terug op ${terug}.`, 'gevaar');
     else T.zeg(D, `${T.hoofdletter(namen(wie))} ${wie.length === 1 ? 'gaat' : 'gaan'} met de heer ten strijde. Terug op ${terug}.`);
@@ -134,6 +138,8 @@
     H.vraag = null;
     T.wijzigVoorraad(D, 'goud', -v.goud);
     T.zetArgwaan(D, v.goud * IN().argwaanPerGoud, 'je kocht je mannen vrij van zijn heervaart');
+    T.wijzigGunst(D, T.BAZEN_INSTELLINGEN.heervaart.vrijgekocht, 'je betaalde voor je mannen');
+    T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.heervaartVrij, 'je kocht de mannen vrij');
     H.laatste = { jaar: v.jaar, antwoord: 'vrijgekocht', goud: v.goud };
     T.zeg(D, `Je koopt je mannen vrij voor ${v.goud} goud. De heer vraagt zich af waar dat vandaan kwam.`);
     return true;

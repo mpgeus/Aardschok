@@ -25,7 +25,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
 | De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104) | vraag 103, 104 |
-| Twee bazen | besloten (Marcel, 3 okt, vraag 106: "106 a b c d ja"): de heer en het dorp kunnen je allebei wegsturen, elk met een meter in de balk; verstoppen wordt één kaart met echte gevolgen; nog niet gebouwd | vraag 106 |
+| Twee bazen | stap 1 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; nog niet: een gril van de heer elke maand (stap 2) | vraag 106 |
 | Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -267,6 +267,32 @@ letter voor letter mee zoals ervoor).
   "Beter bouwen"). Het past bij 2d: een kapel in een gehucht, een kerk in een dorp, een kathedraal in een stad, en een
   hogere stand die een kerk wil in plaats van een kapel, zoals in Anno 1602. Eerst de kring van 40 (vraag 87, c: met 30
   haalt één kapel hooguit vier van de zes huizen die er een willen).
+
+## Twee bazen: de heer en het dorp kunnen je wegsturen (Marcel, 3 okt 2026; werklijst vraag 106)
+
+**Zo werkt het nu** (3 okt, vijfentwintigste sessie; stap 1 van vraag 106, `js/bazen.js`): de haak ("De heer wil geld.
+Het dorp wil leven. Jij staat ertussen.") is de kern van het spel. In de balk staan twee gezichten naast de tevredenheid:
+de heer met zijn kroon (zijn **gunst**) en het dorp met een boerenhoed (zijn **vertrouwen in jou**), elk van 0 tot 100,
+met een mond die zegt hoe ze erbij staan (blij, tevreden, ontevreden, boos) en bij de muis het getal en wat het laatst
+veranderde. Ze beginnen op 50.
+- **De gunst van de heer:** de schatting op Sint-Maarten (alles betaald +15, een boete −10, ook soldaten −25, ook de
+  schandpaal −40; het venster zegt vooraf waar zijn gunst dan staat), niet naar het plein komen −10, de heervaart
+  (mannen gestuurd +10, vrijgekocht +5, niet geantwoord −10), en wapens die zijn soldaten vinden −30.
+- **Het vertrouwen van het dorp:** elk antwoord op een voorval of een verzoek, zo zwaar als het het dorp tevreden of
+  ontevreden maakt (besliste je raadsman, de helft); niet gevonden of geen tijd −2; mannen naar de oorlog −8, vrijgekocht
+  +8; wie verhongerde of bevroor −3 per mens, wie sneuvelde −2; soldaten in huis −10; jezelf aan de schandpaal +10,
+  iemand anders naar zijn aanzien; een ondernemer die na twee keer nee wegtrok −10. En elke dag een beetje, naar hoe het
+  gaat: een tevreden dorp gunt het je, een ellendig dorp geeft jou de schuld.
+- **Onder 20 een waarschuwing:** de heer schrijft een brief ("Nog één keer, schout. Wij hebben een neef die ook schout
+  wil worden."), het dorp mort, en de raad onder het doel zegt het, vóór alles. **Op 0 ben je weg:** de heer ontslaat je,
+  of het dorp staat met fakkels voor je deur. Maar altijd eerst de waarschuwing: wie er nog geen kreeg, zakt niet verder
+  dan 5, dus één tegenvaller jaagt je nooit in één keer weg.
+- **Betrapt** (vraag 106, c): vinden zijn soldaten wat je verstopte, dan zakt zijn gunst naar 5, met de laatste
+  waarschuwing; had je die al, dan ben je weg. De spelregel "Betrapt" kan het op "Meteen weg" zetten.
+- De spelregel "Twee bazen" op "Alleen de heer" is het spel van vóór 3 okt: de heer ontslaat je na twee jaar veel te
+  weinig. De getallen in de werkbank ("De twee bazen"); `Spel.debug.bazen()`.
+- **Nog niet:** elke maand een gril van de heer in een brief, die zijn gunst tegen het vertrouwen van het dorp weegt
+  (stap 2), en de speeltest (stap 3).
 
 ## De stad groeit door haar mensen: de verzoeken (Marcel, 3 okt 2026; werklijst vraag 103)
 

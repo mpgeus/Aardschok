@@ -6,6 +6,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+// Het spel van vóór de twee bazen (werklijst vraag 106): wat de soldaten vinden, kost alleen argwaan. De twee bazen staan in test/bazen.test.cjs.
+T.zetOptie('tweeBazen', 'uit');
 // Ook de bewoners, ná verstoppen.js, zoals in index.html: tot 27 sep hadden de twee bestanden twee
 // namen gemeen (T.bewonerVan en T.overBewonerTekst), en dan won in het spel die van js/bewoners.js. Het
 // karakter van wie er woont, telde bij de kelder dus nooit, terwijl deze toetsen groen bleven.

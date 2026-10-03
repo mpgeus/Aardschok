@@ -146,6 +146,17 @@
   // dan staat. Wat aan een dag hangt, gaat voor; dan de winter; dan de eerste dag; dan een vol dorp; dan de wensen
   // (vraag 87); dan het doel en de groei.
   T.RADEN = [
+    // Twee bazen (js/bazen.js; werklijst vraag 106): staat een van de twee onder de grens, dan gaat dat voor alles.
+    {
+      id: 'heerWaarschuwt',
+      als: (D) => { const b = T.bazenNu(D); return !!b && b.gunst < T.BAZEN_INSTELLINGEN.waarschuwing; },
+      tekst: () => 'De heer gaf je een laatste waarschuwing. Nog één tegenvaller, en je bent je ambt kwijt.',
+    },
+    {
+      id: 'dorpMort',
+      als: (D) => { const b = T.bazenNu(D); return !!b && b.vertrouwen < T.BAZEN_INSTELLINGEN.waarschuwing; },
+      tekst: () => 'Het dorp mort. Nog één tegenvaller, en ze jagen je weg: zeg eens ja, of geef een feest.',
+    },
     {
       id: 'inner',
       als: (D) => innerOver(D, IN().innerVooraf) != null,

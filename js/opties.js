@@ -308,6 +308,30 @@
           uitleg: 'Alles staat in het bouwmenu, en jij zet het neer waar je wilt.' },
       ],
     },
+    // Twee bazen (werklijst vraag 106; Marcel, 3 okt: "106 a b c d ja"; js/bazen.js): de heer en het dorp kunnen je
+    // allebei wegsturen. Uit is het spel van vóór 3 okt.
+    {
+      id: 'tweeBazen', naam: 'Twee bazen', standaard: 'aan',
+      uitleg: 'Of de heer en het dorp je allebei kunnen wegsturen.',
+      keuzes: [
+        { id: 'aan', naam: 'De heer en het dorp', zet: { 'BAZEN_INSTELLINGEN.aan': true },
+          uitleg: 'De gunst van de heer en het vertrouwen van het dorp staan in de balk. Onder 20 komt een waarschuwing, op 0 ben je weg: ontslagen, of weggejaagd.' },
+        { id: 'uit', naam: 'Alleen de heer', zet: { 'BAZEN_INSTELLINGEN.aan': false },
+          uitleg: 'Zoals vóór 3 okt: de heer ontslaat je pas als je hem twee jaar achter elkaar veel te weinig gaf, en het dorp stuurt je niet weg.' },
+      ],
+    },
+    // Wie betrapt wordt op verstoppen (werklijst vraag 106, c; Marcel koos niet tussen de twee, dus de laatste
+    // waarschuwing als standaard tot hij kiest; js/bazen.js, T.betrapt).
+    {
+      id: 'betrapt', naam: 'Betrapt', standaard: 'waarschuwing',
+      uitleg: 'Wat er gebeurt als de soldaten van de heer vinden wat je verstopte (met twee bazen).',
+      keuzes: [
+        { id: 'waarschuwing', naam: 'De laatste waarschuwing', zet: { 'BAZEN_INSTELLINGEN.betrapt': 'waarschuwing' },
+          uitleg: 'Zijn gunst zakt tot 5, en hij schrijft je: nog één tegenvaller, en je bent je ambt kwijt.' },
+        { id: 'weg', naam: 'Meteen weg', zet: { 'BAZEN_INSTELLINGEN.betrapt': 'weg' },
+          uitleg: 'Wie betrapt wordt, is meteen zijn ambt kwijt. Verstoppen is dan alles of niets.' },
+      ],
+    },
     // Een gezin wacht op de winter (werklijst vraag 59, B; Marcel, 1 okt, vraag 78: "D dat is prima"; js/gebouwen.js,
     // T.waaromGeenGezin). Altijd is het spel van vóór 1 okt.
     {
@@ -513,6 +537,7 @@
     { naam: 'Het eind', blok: 'EINDE_INSTELLINGEN' },
     { naam: 'De verzoeken', blok: 'VERZOEKEN_INSTELLINGEN' },
     { naam: 'De ondernemers', blok: 'ONDERNEMERS_INSTELLINGEN' },
+    { naam: 'De twee bazen', blok: 'BAZEN_INSTELLINGEN' },
     { naam: 'De raadsman', blok: 'RAADSMAN_INSTELLINGEN' },
     { naam: 'Het rapport', blok: 'OCHTENDRAPPORT_INSTELLINGEN' },
     { naam: 'Het land', blok: 'LAND_INSTELLINGEN' },

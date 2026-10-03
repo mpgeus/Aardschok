@@ -354,6 +354,8 @@
       delete g.verteldDoor;
       if (VI().argwaanPerVondst > 0 && T.zetArgwaan) T.zetArgwaan(D, VI().argwaanPerVondst, 'de soldaten vonden wat je verstopte');
       delen.push(`${tekst} in ${p.naam}`);
+      // Twee bazen (js/bazen.js; werklijst vraag 106, c): betrapt. De laatste waarschuwing, of meteen weg.
+      T.betrapt(D);
     }
     if (g.stiekem) delen.push(T.verbodenGevonden(D, g));
     if (T.ui && T.ui.toonVoorraad) T.ui.toonVoorraad(D);

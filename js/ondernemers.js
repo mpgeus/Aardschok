@@ -242,6 +242,7 @@
     if (E.nee >= IN().wegNa) {
       const wie = gezinVan(D, p);
       T.wijzigBevolking(D, -wie.length, 'vertrek', `${naamVan(p)} kreeg ${T.telwoord(E.nee)} keer nee van de schout`, wie);
+      T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.wegGetrokken, `${naamVan(p)} trok weg`);
     } else if (p.huis) voegStemmingToe(p.huis, -IN().wrok, dag, IN().wrokDagen, 'wrok', naamVan(p));
     if (o && o.nee) o.nee(D, L);
   };
@@ -365,6 +366,7 @@
     }
     T.heerRekentErbij(D, W.boete);
     T.zetArgwaan(D, W.argwaanGevonden, 'er werden wapens gemaakt');
+    T.wijzigGunst(D, T.BAZEN_INSTELLINGEN.wapens, 'zijn soldaten vonden wapens');
     T.zeg(D, `"Wapens, schout? In Mijn dorp?" ${zin} Volgend jaar komt er ${W.boete} goud bij wat hij vraagt.`, 'gevaar');
     if (T.ui && T.ui.toonVoorraad) T.ui.toonVoorraad(D);
     return wat;
