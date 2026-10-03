@@ -332,6 +332,18 @@
           uitleg: 'Eén getal voor het hele dorp: eten, met groente, vis of vlees erbij, brandhout in de winter, en een kapel. Is het dorp een maand tevreden genoeg, dan groeien alle huizen door, zonder bouwstof.' },
       ],
     },
+    // De herberg en de markt (werklijst vraag 96, a; Marcel, 3 okt: "1 markt 1 herberg voor nu"; js/wensen.js). Alleen met
+    // de wensen per huis.
+    {
+      id: 'herbergEnMarkt', naam: 'De herberg en de markt', standaard: 'heelDorp',
+      uitleg: 'Of één herberg en één markt genoeg zijn voor het hele dorp, of dat een huis ze in de buurt wil.',
+      keuzes: [
+        { id: 'heelDorp', naam: 'Eén voor het hele dorp', zet: { 'WENSEN_INSTELLINGEN.kring.herberg': null, 'WENSEN_INSTELLINGEN.kring.markt': null },
+          uitleg: 'Staat er een herberg en een markt in het dorp, dan heeft elk huis dat ze wil ze, waar het ook staat.' },
+        { id: 'kring', naam: 'Binnen een kring', zet: { 'WENSEN_INSTELLINGEN.kring.herberg': 30, 'WENSEN_INSTELLINGEN.kring.markt': 30 },
+          uitleg: 'Een huis wil de herberg en een markt binnen 30 tegels, zoals een put en een kapel in hun kring. Een dorp dat groeit, heeft er dan meer nodig, en daar is niet altijd plaats voor.' },
+      ],
+    },
     // Achteruitgaan (werklijst vraag 85, c; Marcel, 1 okt: "c zacht"; js/behoeften.js). Alleen met de wensen per huis.
     {
       id: 'achteruit', naam: 'Achteruitgaan', standaard: 'zacht',

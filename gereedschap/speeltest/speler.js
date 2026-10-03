@@ -47,7 +47,8 @@
 //           Sinds vraag 91, a volgt hij ook wat de raad over goud zegt: zegt die dat de belasting goud brengt, dan
 //           neemt hij hem aan (W), en hij bouwt de eerste wens die hij kan betalen, in plaats van op de eerste te
 //           wachten. Sinds vraag 95, b wijst hij een erf aan waar het huis de herberg, een markt, een kapel en een put in
-//           zijn kring heeft (bouwErf), en niet meer gewoon zo dicht mogelijk bij zijn eigen deur.
+//           zijn kring heeft (bouwErf), en niet meer gewoon zo dicht mogelijk bij zijn eigen deur. Sinds vraag 96, b bouwt
+//           hij een keten in één keer: een bakkerij en een molen samen.
 // En een zesde (werklijst vraag 93, a, en 94; Marcel, 2 okt: "De bouwer mag alles er aan doen, totale vrijheid"):
 //   sluw    de bouwer, maar hij bedriegt de heer, elk jaar zoals de slimme speler: 60% van het graan boven het zaaigraan
 //           en van het goud weg, de inner bespelen, de soldaten langs lege kelders, de heer 90%. Het goud haalt hij terug
@@ -506,7 +507,9 @@
     const huis = huisVanDeSchout();
     const midden = huis ? T.deurVan(s.wereld, huis.gebouw) : schoutTegel();
     const maat = T.erfMaat();
-    const plekken = KRINGEN_VAN_EEN_ERF.map(([soort, telt]) => ({ soort, telt, er: T.plekkenVan(s.dorp, soort), straal: T.WENSEN_INSTELLINGEN.kring[soort] - 2 }));
+    // Een plek zonder kring (de herberg en de markt sinds vraag 96, a: één voor het hele dorp) telt overal.
+    const straalVan = (soort) => (T.WENSEN_INSTELLINGEN.kring[soort] == null ? null : T.WENSEN_INSTELLINGEN.kring[soort] - 2);
+    const plekken = KRINGEN_VAN_EEN_ERF.map(([soort, telt]) => ({ soort, telt, er: T.plekkenVan(s.dorp, soort), straal: straalVan(soort) }));
     let beste = null;
     for (let y = 0; y < s.wereld.tegels.length; y++) {
       for (let x = 0; x < s.wereld.tegels[0].length; x++) {
@@ -534,6 +537,7 @@
   // zoals js/main.js hem neemt); bij gelijk spel het dichtst bij de deur van de schout.
   const isPlek = (soort) => Object.values(T.WENSEN).some((w) => w.plek === soort);
   function bouwInDeKring(soort) {
+    if (T.WENSEN_INSTELLINGEN.kring[soort] == null) return bouw(soort); // geen kring (vraag 96, a): waar hij past
     const s = S();
     const huis = huisVanDeSchout();
     const midden = huis ? T.deurVan(s.wereld, huis.gebouw) : schoutTegel();
@@ -999,14 +1003,23 @@
     // (T.watDeHuizenMissen, js/wensen.js) en dat hij kan betalen; hooguit één per maand, zodat er hout overblijft voor
     // de hutten. Een put of een kapel komt waar hij de meeste huizen zonder bereikt. Tot vraag 91, a wachtte hij op de
     // eerste, ook als hij die niet kon betalen: dan kwam er een maand lang ook geen put voor 6 hout die erachter stond.
+    // Een keten bouwt hij in één keer (vraag 96, b): zegt de raad "bouw een bakkerij en een molen", dan allebei, als hij ze
+    // samen kan betalen (`ook`, T.watDeHuizenMissen); anders wacht hij ermee, want een bakkerij zonder molen bakt niets. In de
+    // speeltest van vraag 95 kwam de bakkerij steeds vóór de molen, een keer een half jaar eerder.
+    const ketenKosten = (w) => [w.bouw, ...(w.ook || [])].reduce((som, soort) => {
+      for (const [wat, n] of Object.entries(kosten(soort))) som[wat] = (som[wat] || 0) + n;
+      return som;
+    }, {});
     function volgDeWensen() {
       const s = S();
       if (dagNu() < wensNietVoor) return;
-      const x = T.watDeHuizenMissen(s.dorp).find((w) => w.kan && T.kanBetalen(s.dorp, kosten(w.bouw)));
+      const x = T.watDeHuizenMissen(s.dorp).find((w) => w.kan && T.kanBetalen(s.dorp, ketenKosten(w)));
       if (!x) return;
       wensNietVoor = dagNu() + 30;
-      if (isPlek(x.bouw)) bouwInDeKring(x.bouw);
-      else bouw(x.bouw);
+      for (const soort of [x.bouw, ...(x.ook || [])]) {
+        if (isPlek(soort)) bouwInDeKring(soort);
+        else bouw(soort);
+      }
     }
     async function verkoop() {
       const s = S();

@@ -42,8 +42,11 @@
     // De kring om een plek, in tegels, van het midden van het huis tot het midden van de plek (vraag 80, B; vraag 85, b:
     // 25 was te klein voor het gehucht, waar de boerderijen aan de rand staan). Een kapel 40 (vraag 87, c; Marcel, 2 okt):
     // met 30 haalde één kapel in het gehucht hooguit vier van de zes huizen die er een willen, met 40 zijn er 50 plekken
-    // die ze alle zes halen.
-    kring: { put: 12, kapel: 40, herberg: 30, markt: 30 },
+    // die ze alle zes halen. De herberg en de markt hebben geen kring (null): één is genoeg voor het hele dorp (Marcel,
+    // 3 okt, werklijst vraag 96, a: "1 markt 1 herberg voor nu"; in de speeltest van vraag 95 pasten er maar drie erven
+    // binnen 30 tegels van de herberg, en wie verder woonde, miste hem altijd). De spelregel "De herberg en de markt" op
+    // "Binnen een kring" zet ze op 30, zoals tot 3 okt.
+    kring: { put: 12, kapel: 40, herberg: null, markt: null },
     // Doorgroeien (vraag 80, C; 2b): heeft een huis T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen op rij alles, dan groeit het
     // door naar de volgende stand, en dat kost bouwstof uit de voorraad, naar wat het wordt (zo krijgt steen een doel).
     bouwstof: { huis: { hout: 8 }, stenenHuis: { steen: 12 } },
@@ -113,8 +116,10 @@
 
   const midden = (r) => ({ x: r.x + r.b / 2, y: r.y + r.h / 2 });
 
-  // Ligt de plek `r` in de kring van `straal` tegels om de rechthoek `huis`? Van midden tot midden.
+  // Ligt de plek `r` in de kring van `straal` tegels om de rechthoek `huis`? Van midden tot midden. Zonder kring (null,
+  // zoals de herberg en de markt: één is genoeg voor het hele dorp) telt elke plek.
   T.inDeKring = function (huis, r, straal) {
+    if (straal == null) return true;
     const a = midden(huis);
     const b = midden(r);
     return Math.hypot(a.x - b.x, a.y - b.y) <= straal + 1e-9;
@@ -356,7 +361,7 @@
       const er = helpen.find((s) => staan.some((g) => g.soort === s));
       if (er) return { kan: true, bouw: er, tekst: `nog een ${naamVan(er)} [B]` };
       const erbij = helpen.length === 1 ? ookNodig(D, helpen[0]) : [];
-      return { kan: true, bouw: helpen[0], tekst: `bouw ${T.opsomming(helpen.length === 1 ? [helpen[0], ...erbij].map((x) => `een ${naamVan(x)}`) : [of(helpen.map((x) => `een ${naamVan(x)}`))])} [B]` };
+      return { kan: true, bouw: helpen[0], ook: erbij, tekst: `bouw ${T.opsomming(helpen.length === 1 ? [helpen[0], ...erbij].map((x) => `een ${naamVan(x)}`) : [of(helpen.map((x) => `een ${naamVan(x)}`))])} [B]` };
     }
     if (staan.length) return { kan: false, bouw: null, tekst: waaromTeWeinig(staan[0]) };
     return nogNiet(soorten[0]);
@@ -369,9 +374,10 @@
   // alleen een plek in de buurt kijkt naar nu, zodat een put die vandaag klaar is, meteen telt.
   //
   // Eerst de huizen die een maand alles hadden en op bouwstof wachten (js/behoeften.js), dan wat de meeste mensen
-  // missen. Elk: { soort ('bouwstof' of 'wens'), id, huizen, mensen, kan, bouw, tekst }. `kan`: je kunt er nu iets aan
-  // doen (iets uit het bouwmenu helpt, en er wordt er nog geen gebouwd); `bouw`: wat (een soort uit T.GEBOUWEN); `tekst`:
-  // de zin, met [B] waar het bouwmenu helpt. Geen eten of brandhout: dat zeggen de winter en de oorzaken.
+  // missen. Elk: { soort ('bouwstof' of 'wens'), id, huizen, mensen, kan, bouw, ook, tekst }. `kan`: je kunt er nu iets aan
+  // doen (iets uit het bouwmenu helpt, en er wordt er nog geen gebouwd); `bouw`: wat (een soort uit T.GEBOUWEN); `ook`:
+  // wat de keten erbij nodig heeft (een molen bij een bakkerij; vraag 96, b), anders leeg; `tekst`: de zin, met [B] waar
+  // het bouwmenu helpt. Geen eten of brandhout: dat zeggen de winter en de oorzaken.
   T.watDeHuizenMissen = function (D) {
     const huizen = (D.gebouwen || []).filter((g) => g.wensen && g.wensen.mensen > 0);
     const uit = [];
@@ -450,7 +456,7 @@
         h = watHelpt(D, makers);
       }
       uit.push({
-        soort: 'wens', id: w.id, huizen: w.n, mensen: w.mensen, kan: h.kan, bouw: h.bouw,
+        soort: 'wens', id: w.id, huizen: w.n, mensen: w.mensen, kan: h.kan, bouw: h.bouw, ook: h.ook || [],
         tekst: h.tekst ? `${zin}: ${h.tekst}.` : `${zin} [B].`,
       });
     }

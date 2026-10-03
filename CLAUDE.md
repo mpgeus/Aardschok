@@ -297,7 +297,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   stenen huis ambachtslieden, een boerderij boeren; het huis van de schout en de herberg geen), en elke stand wil wat de
   stand eronder wil, en meer (`T.STANDEN`, `T.WENSEN`, `T.wensenVanStand`): goederen uit de voorraad (bier, vlees of
   vis, brood, laken; **de hoogste stand neemt eerst**) en plekken in een kring om het huis (`T.inDeKring`; een put,
-  een kapel, de herberg, een markt; waar die staan, zegt `T.plekkenVan` in `js/gebouwen.js`). `T.berekenWensen` geeft
+  een kapel; de herberg en een markt zijn één voor het hele dorp, zonder kring, de spelregel "De herberg en de markt";
+  waar ze staan, zegt `T.plekkenVan` in `js/gebouwen.js`). `T.berekenWensen` geeft
   per huis wat het heeft en zijn tevredenheid (eten, brandhout en de rest, met wat het dorp erbij doet), en
   `T.berekenTevredenheid` (`js/behoeften.js`) maakt er het gemiddelde van, naar mensen; de huizen nemen hun goederen
   vóór het eten (`T.gebruikGoederen`), en wat eten is (brood, vis, vlees: `T.voedtAlsGraan`), eet het dorp dan minder

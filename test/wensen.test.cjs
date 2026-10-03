@@ -476,8 +476,9 @@ test('wat de huizen missen: wat je nog niet kunt bouwen, zegt wanneer wel, en de
   assert.equal(brood.tekst, 'Een stenen huis wil brood: een bakkerij bouw je pas in een dorp.');
   // De weverij en de markt komen al in een dorp (vraag 90, B).
   assert.equal(vind(D, 'laken').tekst, 'Een stenen huis wil laken: een weverij bouw je pas in een dorp.');
-  assert.equal(vind(D, 'markt').tekst, 'Een stenen huis wil een markt binnen 30 tegels: een markt bouw je pas in een dorp.');
-  assert.equal(vind(D, 'herberg').tekst, 'Een stenen huis wil de herberg binnen 30 tegels: een herberg bouw je pas in een dorp.');
+  // De herberg en de markt: één is genoeg voor het hele dorp (vraag 96, a), dus zonder "binnen 30 tegels".
+  assert.equal(vind(D, 'markt').tekst, 'Een stenen huis wil een markt: een markt bouw je pas in een dorp.');
+  assert.equal(vind(D, 'herberg').tekst, 'Een stenen huis wil de herberg: een herberg bouw je pas in een dorp.');
   assert.equal(vind(D, 'kapel').kan, true, 'een kapel kun je in een gehucht bouwen');
 });
 
@@ -491,6 +492,7 @@ test('de ketens: wie brood wil, hoort van de bakkerij en de molen; staat de bakk
   let x = vind(D, 'brood');
   assert.equal(x.tekst, 'Een stenen huis wil brood: bouw een bakkerij en een molen [B].');
   assert.deepEqual([x.kan, x.bouw], [true, 'bakkerij']);
+  assert.deepEqual(x.ook, ['molen'], 'de rest van de keten, voor wie hem in één keer bouwt (vraag 96, b)');
   // De bakkerij staat, maar heeft geen meel (zoals T.tikGebouwenDag het opschrijft): nog een bakkerij helpt niet, een
   // molen wel.
   const bakkerij = zetHuis(D, 'bakkerij', 30, 10, 0, { handen: 1, tekort: 'meel', werkte: 0 });
@@ -530,15 +532,36 @@ test('de ketens: wol maakt geen werkplaats, die komt van de schapen; in een gehu
   assert.equal(vind(D, 'brood').tekst, 'Een stenen huis wil brood: een bakkerij bouw je pas in een dorp.');
 });
 
-test('wat de huizen missen: een huis buiten de kring van de herberg van het gehucht, en een tweede bouw je pas in een dorp', () => {
-  const D = gehucht().dorp;
+// De herberg en de markt (werklijst vraag 96, a; Marcel, 3 okt: "1 markt 1 herberg voor nu"): één is genoeg voor het hele
+// dorp, waar het huis ook staat. Met de spelregel op "Binnen een kring" wil een huis ze binnen 30 tegels, zoals tot 3 okt.
+test('de herberg en de markt: één is genoeg voor het hele dorp, ook voor een huis ver weg', () => {
+  const D = Object.assign(gehucht().dorp, { trede: 'dorp' });
   const herberg = T.plekkenVan(D, 'herberg')[0];
-  const g = zetHuis(D, 'huis', herberg.x + 40, herberg.y, 5);
+  const ver = zetHuis(D, 'stenenHuis', herberg.x + 40, herberg.y, 8);
+  zetHuis(D, 'markt', herberg.x - 20, herberg.y, 0);
   T.onthoudWensen(D, T.berekenWensen(D, ZOMERDAG, alles));
-  assert.equal(g.wensen.heeft.herberg, 0);
-  const x = vind(D, 'herberg');
-  assert.equal(x.tekst, 'Een huis wil de herberg binnen 30 tegels: een herberg bouw je pas in een dorp.');
-  assert.equal(x.kan, false);
+  assert.equal(ver.wensen.heeft.herberg, 1, 'de herberg van het gehucht');
+  assert.equal(ver.wensen.heeft.markt, 1, 'een markt 60 tegels verderop');
+  assert.equal(vind(D, 'herberg'), undefined);
+  assert.equal(vind(D, 'markt'), undefined);
+  // Met een herberg in de hand bereikt hij geen kring: die is er niet (js/tekenen.js tekent niets, de muis zegt niets).
+  assert.equal(T.watDeKringBereikt(D, 'herberg', { x: 0, y: 0, b: 6, h: 6 }), null);
+});
+
+test('wat de huizen missen: een huis buiten de kring van de herberg van het gehucht, en een tweede bouw je pas in een dorp', () => {
+  T.pasOptiesToe({ keuzes: { herbergEnMarkt: 'kring' } });
+  try {
+    const D = gehucht().dorp;
+    const herberg = T.plekkenVan(D, 'herberg')[0];
+    const g = zetHuis(D, 'huis', herberg.x + 40, herberg.y, 5);
+    T.onthoudWensen(D, T.berekenWensen(D, ZOMERDAG, alles));
+    assert.equal(g.wensen.heeft.herberg, 0);
+    const x = vind(D, 'herberg');
+    assert.equal(x.tekst, 'Een huis wil de herberg binnen 30 tegels: een herberg bouw je pas in een dorp.');
+    assert.equal(x.kan, false);
+  } finally {
+    T.pasOptiesToe(null);
+  }
 });
 
 test('wat de huizen missen: wie een maand alles had en op bouwstof wacht, gaat voor, met wat helpt', () => {

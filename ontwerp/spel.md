@@ -152,9 +152,14 @@ letter voor letter mee zoals ervoor).
   | Stand | Huis | Gebruikt | Wil in de buurt |
   |---|---|---|---|
   | keuters | hut (3 mensen) | eten; brandhout in de winter | een put (12 tegels) |
-  | dorpelingen | huis (5) | daarbij bier, en vlees of vis | daarbij een kapel (40) en de herberg (30) |
-  | ambachtslieden | stenen huis (8) | daarbij brood en laken | daarbij een markt (30) |
+  | dorpelingen | huis (5) | daarbij bier, en vlees of vis | daarbij een kapel (40) en de herberg (in het dorp) |
+  | ambachtslieden | stenen huis (8) | daarbij brood en laken | daarbij een markt (in het dorp) |
   | boeren | boerderij (4) | eten; brandhout in de winter | een kapel (40); de herberg niet, "voor nu" |
+
+  **Eén herberg en één markt zijn genoeg voor het hele dorp** (sinds 3 okt; vraag 96, a; Marcel: "1 markt 1 herberg voor
+  nu"): ze hebben geen kring, en elk huis dat ze wil, heeft ze, waar het ook staat. In de speeltest van vraag 95 pasten er
+  maar drie erven binnen 30 tegels van de herberg, en wie verder woonde, miste hem altijd; een tweede vond geen plek. De
+  spelregel "De herberg en de markt" op "Binnen een kring" zet ze op 30 tegels, zoals tot 3 okt.
 
 - **Goederen: de hoogste stand neemt eerst** (Marcel, vraag 85: "een hogere stand eigent zich spullen toe. Dus stel er is
   te weinig bier, dan nemen zij het laatste"). Elke dag gebruikt een mens van zijn stand zoveel bier, vlees of vis, brood
