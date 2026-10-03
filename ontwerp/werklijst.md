@@ -3290,6 +3290,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     het meeste werk, en de tafel neemt onderin 100 pixels.
     Vragen: **a**, welke richting, of welke mengeling (de balk van, het venster van, het papier van)? **b**, welke letter?
     **c**, eerst alleen de nieuwe vensters van 2c in die stijl, en de rest van de ui later (januari, met de Steam-pagina)?
+    **Beantwoord (Marcel, 3 okt, na zijn vlucht):** "98 C". Dus de schrijftafel: onderin de tafel van de schout met het
+    rekenboek, de papieren als dingen op tafel, en bij een huis een briefje aan een spijker; de letter van C (Jacquarda
+    Bastarda 9 voor koppen, IM Fell English voor tekst). Op b en c gaf hij geen apart antwoord: zoals voorgesteld komt
+    eerst wat 2c nieuw maakt in die stijl (het briefje bij een huis), en de rest van de ui later (januari, met de
+    Steam-pagina).
 99. **Het laken: genoeg voor een stad van stenen huizen?** (Claude, 3 okt, vijfentwintigste sessie, tijdens Marcels vlucht;
     open). Na vraag 96 was het laken de volgende stap. Uitgerekend uit de regels (`js/wensen.js`, `js/vee.js`,
     `js/gebouwen.js`):
@@ -3315,6 +3320,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - Niet nu: vlas als tweede bron van laken (een gewas en een keten erbij), en minder laken per mens (de wens wordt dan
       onzichtbaar klein).
     Vragen: **a**, 8 wol per schaap? **b**, 50% lammeren? **c**, de marskramer met laken, nu of met de markt? **d**, zo?
+    **Beantwoord (Marcel, 3 okt):** "99 a b c d ja". Dus 8 wol per schaap, 50% kans op een lam, de marskramer verkoopt
+    laken in een dorp, voor goud, en de speeltest telt de dagen zonder laken; daarna een speeltest.
 100. **2c, zien wat een huis wil: het plan** (Claude, 3 okt, vijfentwintigste sessie, tijdens Marcels vlucht; vraag 80, E,
     besloten; open). Wat er al is: elk huis weet wat het wil en heeft (`g.wensen`: stand, mensen, ✓ en ✗, tevredenheid),
     en de raad en het rapport zeggen wat de huizen het meest missen, met wat helpt (vraag 87). Wat er nog niet is, is het
@@ -3332,6 +3339,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       dan het teken en het venster. Daar hoort het opsplitsen van `js/hud.js` bij (vraag 25, C), want het venster komt erin.
     Vragen: **a**, het teken altijd, of alleen als de schout in de buurt is (een spelregel)? **b**, het venster zo? **c**, de
     kringen bij het erf nu ook? **d**, wachten op vraag 98 (de stijl), of eerst a en c, die geen venster nodig hebben?
+    **Beantwoord (Marcel, 3 okt):** "100 ja". Dus zoals voorgesteld: het teken bij de deur (altijd), het venster van een
+    huis (in de stijl van vraag 98, C: een briefje aan een spijker bij het huis), de kringen bij het aanwijzen van een
+    erf, en eerst de regels met toetsen, dan het scherm. Vraag 98 is beantwoord, dus er hoeft niets te wachten.
 101. **2e, het eind en het jaar in het kort: het plan** (Claude, 3 okt, vijfentwintigste sessie, tijdens Marcels vlucht;
     vraag 80, F, besloten; open). Wat er al is: twee eindschermen, je ambt kwijt en de schout gevallen (`T.ambtKwijt`,
     `js/heer.js`; `T.ui.toonEinde`). Er is nog geen winst. Voorstel:
@@ -3350,6 +3360,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       feesten er waren, en wat het dorp het meest miste. Het eindscherm toont het laatste jaar zo.
     Vragen: **a**, een jaar lang, zoals besloten, of eerst korter om te testen (de werkbank)? **b**, vanaf 100 mensen? **c**,
     de winst als feest? **d**, ook bij minder dan tien mensen? **e**, het jaarverslag zo?
+    **Beantwoord (Marcel, 3 okt):** "101 ja". Dus zoals voorgesteld: gewonnen na een jaar (360 dagen, in de werkbank)
+    waarin alle huizen alles hebben, vanaf 100 mensen; de winst is een feest op het plein met het eindscherm erover;
+    verloren ook bij minder dan tien mensen; en op 1 lentemaand een jaarverslag van de raadsman.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
