@@ -188,6 +188,14 @@ niet). "Win-dagen": alle huizen alles, en elke woning een stenen huis, zoals 2e 
    at zijn zaaigraan op en liep leeg. De derde (op `02780f7`) vroeg elke vier dagen een jager, 25 in vier maanden. Nu vraagt
    iemand eerst een houthakker als er geen staat, en na een ja komt hetzelfde gebouw pas na dertig dagen weer.
 
+**De spelers van één jaar** (braaf, lui 30%, lui 60%, slim; zaad 1 tot en met 3, op `9dfa906`): alle twaalf spellen
+liepen het jaar uit, zonder fouten. Ook zij zeggen ja op wat het dorp kan betalen (7 à 14 verzoeken), en hun dorpen
+groeien daardoor: 26 → 41 à 50 mensen, behalve lui 30% met zaad 3 (26 → 23). De luie speler die 60% verstopt, verloor
+eerst de helft van zijn dorp aan honger (26 → 9 à 13); nu niet meer (26 → 41 à 49), want het dorp vraagt zelf jagers en
+een houthakker. Maar de brave speler geeft de heer nu 57 à 67% van wat hij vraagt (was 83 à 91%), en krijgt boetes en
+soldaten: het goud ging naar de verzoeken, en de heer wil meer van een dorp met meer gebouwen. **Wie overal ja op zegt,
+kan de heer niet betalen.** Dat is de keuze die vraag 103 zocht, maar de spelers van de speeltest maken hem nog niet.
+
 Wat eruit volgt: de verzoeken blijven de standaard, en vraag 102 (naar een jaar dat te winnen is) kan nu verder, met de
 maat van het dorp als eerste vraag.
 
