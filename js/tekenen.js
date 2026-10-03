@@ -113,36 +113,111 @@
     return D && D.gebouwen && T.padVersie ? T.padVersie(D) : '';
   }
 
-  function werkGrondBij(S, bw, bh, zicht, inBeeld) {
-    if (!S.grond) S.grond = { canvas: null, ctx: null, vx: 0, vy: 0, b: 0, h: 0, sleutel: '' };
+  // Ver uitgezoomd (het overzicht, js/main.js, vraag 108, a) wordt de grond niet op de maat van de vlakte bewaard
+  // maar op die van het scherm (`k`, de zoom maal de pixels per css-pixel), en gaat het bos om de kaart heen mee in
+  // een buffer in plaats van dat elke boom elk beeld opnieuw getekend wordt. Gemeten op 3 okt (Marcel: "Als de
+  // performance slecht is, hebben we niks"): in het overzicht waren 2100 van de 2600 tekenopdrachten per beeld bomen
+  // van de bosrand, en het spel haalde 13 beelden per seconde. Wat ten noorden en westen van de kaart staat, ligt
+  // achter alles op de kaart en gaat in de buffer van de grond; wat ten zuiden en oosten staat, ligt ervóór en gaat in
+  // een tweede buffer die na alles komt (bosVoorBij). Dat is dezelfde volgorde als de tekenlijst geeft. Van dichtbij
+  // blijft het zoals het was: dan buigt het bos in de wind, en valt een boom weg als hij de schout bedekt.
+  const BAK_ZOOM = 0.75;
+  const bosGebakken = (S) => !!S.wereld.buiten && S.zoom < BAK_ZOOM;
+  // De pixels per vlakte-pixel van de buffers: 1 van dichtbij, minder ver uitgezoomd.
+  const bufferSchaal = (S, dpr) => (S.zoom < BAK_ZOOM ? Math.min(1, S.zoom * dpr) : 1);
+
+  function nieuweBuffer(buf, b, h, k) {
+    const pb = Math.ceil(b * k);
+    const ph = Math.ceil(h * k);
+    if (!buf.canvas || buf.canvas.width !== pb || buf.canvas.height !== ph) {
+      buf.canvas = document.createElement('canvas');
+      buf.canvas.width = pb;
+      buf.canvas.height = ph;
+      buf.ctx = buf.canvas.getContext('2d');
+    }
+    buf.b = b;
+    buf.h = h;
+    buf.k = k;
+  }
+
+  function werkGrondBij(S, bw, bh, zicht, inBeeld, dpr) {
+    if (!S.grond) S.grond = { canvas: null, ctx: null, vx: 0, vy: 0, b: 0, h: 0, k: 1, sleutel: '' };
     const g = S.grond;
     const b = Math.ceil(bw / S.zoom) + BUFFERRAND * 2;
     const h = Math.ceil(bh / S.zoom) + BUFFERRAND * 2;
-    const past = g.canvas && g.b === b && g.h === h && zicht.x0 >= g.vx && zicht.y0 >= g.vy && zicht.x1 <= g.vx + b && zicht.y1 <= g.vy + h;
-    const sleutel = grondSleutel(S);
+    const k = bufferSchaal(S, dpr);
+    const past = g.canvas && g.b === b && g.h === h && g.k === k && zicht.x0 >= g.vx && zicht.y0 >= g.vy && zicht.x1 <= g.vx + b && zicht.y1 <= g.vy + h;
+    const sleutel = grondSleutel(S) + '|' + k;
     if (past && sleutel === g.sleutel) return g;
-    if (!g.canvas || g.b !== b || g.h !== h) {
-      g.canvas = document.createElement('canvas');
-      g.canvas.width = b;
-      g.canvas.height = h;
-      g.ctx = g.canvas.getContext('2d');
-      g.b = b;
-      g.h = h;
-    }
+    nieuweBuffer(g, b, h, k);
     g.vx = Math.round((zicht.x0 + zicht.x1) / 2 - b / 2);
     g.vy = Math.round((zicht.y0 + zicht.y1) / 2 - h / 2);
     g.sleutel = sleutel;
     const c = g.ctx;
     c.setTransform(1, 0, 0, 1, 0, 0);
-    c.clearRect(0, 0, b, h);
-    c.setTransform(1, 0, 0, 1, -g.vx, -g.vy);
+    c.clearRect(0, 0, g.canvas.width, g.canvas.height);
+    c.setTransform(k, 0, 0, k, -g.vx * k, -g.vy * k);
     c.imageSmoothingEnabled = false;
     tekenVloeren(c, S, inBeeld, tegelsIn(S.wereld, { x0: g.vx, y0: g.vy, x1: g.vx + b, y1: g.vy + h }));
+    if (bosGebakken(S)) for (const v of bosrandIn(S, g)) if (bosAchter(S.wereld, v)) tekenGebakkenBoom(c, v);
+    S.bosVoor = null; // het bos ervóór hoort bij deze grond: het wordt opnieuw gelegd (bosVoorBij)
     return g;
+  }
+
+  // De bosrand in het gebied van een buffer, van achter naar voor, zoals de tekenlijst hem zou zetten.
+  function bosrandIn(S, g) {
+    const w = S.wereld;
+    const vak = tegelsIn(w, { x0: g.vx, y0: g.vy, x1: g.vx + g.b, y1: g.vy + g.h }, BOSRAND_DIEP);
+    const lijst = [];
+    for (let y = vak.y0; y <= vak.y1; y++) {
+      for (let x = vak.x0; x <= vak.x1; x++) {
+        if (x >= 0 && y >= 0 && x < w.b && y < w.h) continue;
+        const v = bosrandOp(w, x, y);
+        if (v) lijst.push(v);
+      }
+    }
+    return lijst.sort((a, c) => a.x + a.y - (c.x + c.y) || a.y - c.y);
+  }
+
+  // Ligt deze boom van de bosrand achter alles op de kaart? Ten noorden of westen ervan wel, ten zuiden of oosten
+  // niet; in een hoek links of rechts in beeld naar de diepte van de hoek van de kaart ernaast.
+  function bosAchter(w, v) {
+    const noordWest = v.x < 0 || v.y < 0;
+    const zuidOost = v.x >= w.b || v.y >= w.h;
+    if (noordWest !== zuidOost) return noordWest;
+    return v.x + v.y < (v.x >= w.b ? w.b - 1 : w.h - 1);
+  }
+
+  // Eén boom van de bosrand in een buffer: zoals tekenBosrandBoom, zonder wind en zonder doorkijk.
+  function tekenGebakkenBoom(c, v) {
+    const p = T.naarScherm(v.x, v.y);
+    const helder = bosrandHelder(v.r);
+    const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, 0);
+    if (ruw) T.sprites.teken(c, bosrandGedimd(ruw, helder), p.x, p.y, 1);
+    else tekenBuitenVlak(c, v, helder);
+  }
+
+  // Het bos ten zuiden en oosten van de kaart, in een buffer over hetzelfde gebied als de grond (hierboven).
+  function bosVoorBij(S, g) {
+    if (S.bosVoor && S.bosVoor.sleutel === g.sleutel && S.bosVoor.vx === g.vx && S.bosVoor.vy === g.vy) return S.bosVoor;
+    const buf = S.bosVoor && S.bosVoor.canvas ? S.bosVoor : { canvas: null, ctx: null };
+    nieuweBuffer(buf, g.b, g.h, g.k);
+    buf.vx = g.vx;
+    buf.vy = g.vy;
+    buf.sleutel = g.sleutel;
+    const c = buf.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.clearRect(0, 0, buf.canvas.width, buf.canvas.height);
+    c.setTransform(g.k, 0, 0, g.k, -g.vx * g.k, -g.vy * g.k);
+    c.imageSmoothingEnabled = false;
+    for (const v of bosrandIn(S, g)) if (!bosAchter(S.wereld, v)) tekenGebakkenBoom(c, v);
+    S.bosVoor = buf;
+    return buf;
   }
 
   T.tekenScene = function (ctx, S, bw, bh) {
     const w = S.wereld;
+    const dpr = ctx.getTransform().a || 1; // pixels per css-pixel (js/main.js, formaat)
     // Het dorp dat hier ligt (js/dorp.js), of geen: een ander gebied, of het gereedschap.
     const D = T.dorpHier(S);
     // Buiten is het niets de nacht tussen de bomen, binnen het donker om de kamer heen.
@@ -162,8 +237,9 @@
     const zicht = zichtVlak(S, bw, bh);
     const vak = tegelsIn(w, zicht);
 
-    const g = werkGrondBij(S, bw, bh, zicht, inBeeld);
-    ctx.drawImage(g.canvas, g.vx, g.vy);
+    const g = werkGrondBij(S, bw, bh, zicht, inBeeld, dpr);
+    ctx.drawImage(g.canvas, g.vx, g.vy, g.b, g.h);
+    const gebakken = bosGebakken(S);
     tekenWeides(ctx, S, vak);
     tekenRaster(ctx, S);
     tekenMarkeringen(ctx, S);
@@ -251,7 +327,7 @@
     // Doet mee in `zichtbaar`, zodat een boom die de schout bedekt net als elk ander hoog voorwerp
     // wegdooft (T.werkDoorkijkBij, js/doorkijk.js), en in `lijst`, zodat de gewone dieptesortering
     // hem netjes voor of achter de schout zet.
-    if (w.buiten) {
+    if (w.buiten && !gebakken) {
       const randVak = tegelsIn(w, zicht, BOSRAND_DIEP);
       for (let y = randVak.y0; y <= randVak.y1; y++) {
         for (let x = randVak.x0; x <= randVak.x1; x++) {
@@ -290,6 +366,11 @@
     for (const item of tekenVolgorde(lijst)) {
       item.f();
       for (const r of ramen) if (isTekeningVan(item, r.g)) ponsRamen(ctx, r);
+    }
+    // Ver uitgezoomd: het bos ten zuiden en oosten van de kaart, uit zijn buffer (werkGrondBij hierboven).
+    if (gebakken) {
+      const voor = bosVoorBij(S, g);
+      ctx.drawImage(voor.canvas, voor.vx, voor.vy, voor.b, voor.h);
     }
     ctx.restore();
 

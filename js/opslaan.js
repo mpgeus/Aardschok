@@ -38,6 +38,7 @@
   // waarde. De camera en de zoom gaan ook niet mee: die zet js/main.js zelf.
   T.schermVelden = () => ({
     grond: null, // de buffer waar de grond op staat (js/tekenen.js)
+    bosVoor: null, // ver uitgezoomd: het bos ten zuiden en oosten van de kaart, in een buffer (js/tekenen.js)
     wind: 0, // hoe de wind nu staat, elk beeld opnieuw uit S.tijd (js/main.js)
     muis: null, // waar de muis op het doek staat (js/main.js)
     hover: null, // wat onder de muis is, en wat een klik daar zou doen
