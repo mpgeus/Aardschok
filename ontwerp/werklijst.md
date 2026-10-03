@@ -3182,7 +3182,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **a**, **b** en **c** zo? **d**, met het graanboek?
     **Beantwoord (Marcel, 2 okt):** "ja prima". Dus a tot en met d, zoals hierboven. **Af** (zie onder Af); de speeltest
     staat in `speelbaar.md`, en wat eruit volgt, is vraag 95.
-95. **Na vraag 94: het brood, en een jaar dat te winnen is** (Claude, 2 okt, vierentwintigste sessie; open). De speeltest
+95. **Na vraag 94: het brood, en een jaar dat te winnen is** (Claude, 2 okt, vierentwintigste sessie; beantwoord). De speeltest
     (`speelbaar.md`): de sluwe bouwer heeft meer bier en brood dan de bouwer (in het tweede jaar 34 à 80 dagen zonder bier,
     tegen 122 à 141), de heer krijgt bijna niets en het ambt blijft, maar ook hij heeft nooit een dag waarop alle huizen
     alles hebben. Het graan is niet te krap voor het bier (een kan is een veertigste graan), wel voor het brood. Een
@@ -3206,6 +3206,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       Dan het laken (een volle kooi dekt 33 ambachtslieden, en tien stenen huizen zijn er 80), en de pagina met ontwerpen
       voor de ui (vraag 84, a). De inner die uit te schakelen is (vraag 46, A), blijft voor het bijstellen.
     Vragen: **a**, brood naar 0,01? **b**, de bouwers zo, en het spel met 2c? **c**, repareren? **d**, die volgorde?
+    **Beantwoord (Marcel, 3 okt):** "A. Ok, maar er moet altijd druk zijn om voldoende eten. Het mag niet te makkelijk.
+    Verder akkoord met b c d". Dus brood naar 0,01, en de speeltest kijkt erbij of er druk blijft om eten: zegt de raad
+    nog dat het eten de winter niet haalt, moeten er jagers bij, en raakt het graan op? Is het te makkelijk geworden, dan
+    eerst een voorstel aan Marcel. En b, c en d zoals voorgesteld.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
