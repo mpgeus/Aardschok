@@ -38,6 +38,10 @@
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
   const heeft = (D, soort) => (D.gebouwen || []).some((g) => g.soort === soort);
 
+  // Hoeveel mensen het doel nog vraagt: de volgende trede (js/treden.js), en na de laatste de maat van de winst
+  // (js/einde.js; werklijst vraag 102, c).
+  const mensenNodig = (D) => (T.volgendeTrede(D) ? T.tredeMensenNodig(D) : T.mensenVoorDeWinst(D));
+
   // Over hoeveel dagen de inner komt (T.INNER_INSTELLINGEN.komt), als dat binnen `binnen` dagen is; anders null.
   function innerOver(D, binnen) {
     const komt = T.INNER_INSTELLINGEN.komt;
@@ -221,8 +225,20 @@
       tekst: () => 'Een raadsman brengt je elke ochtend een rapport: kies er een [R].',
     },
     {
+      // Groeien en winnen (werklijst vraag 102, c; Marcel, 3 okt: "102 a b c d e ja"): op een vrij erf zet een nieuw
+      // gezin een hut, en wie in een hut woont, is niet super gelukkig (js/einde.js). Heeft het dorp de maat van de winst,
+      // dan zegt de raad dat je het erf weghaalt (in het bouwmenu, met het erf in de hand, klik je erop; js/main.js).
+      // Nieuwe gezinnen trekken dan alleen nog in de plaats die doorgroeiende huizen vrijmaken.
+      id: 'geenErf',
+      als: (D) => T.maatGehaald(D) && T.vrijeErven(D).length > 0,
+      tekst: (D) => {
+        const wat = T.vrijeErven(D).length === 1 ? 'het erf' : 'de vrije erven';
+        return `Genoeg mensen voor de winst. Op een vrij erf begint een nieuw gezin in een hut, en dan begint de teller opnieuw: haal ${wat} weg ([B], Erf, en klik erop).`;
+      },
+    },
+    {
       id: 'plaats',
-      als: (D) => T.tredeMensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('plaats'),
+      als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('plaats'),
       tekst: () => (T.ERVEN_INSTELLINGEN.dorpBouwtZelf
         ? 'Er komt geen gezin: het dorp is vol. Wijs een erf aan: [B], dan Erf.'
         : 'Er komt geen gezin: het dorp is vol. Bouw een hut of een huis: [B].'),
@@ -265,17 +281,17 @@
     },
     {
       id: 'tevreden',
-      als: (D) => T.tredeMensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('tevreden'),
+      als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('tevreden'),
       tekst: (D) => `Er komt geen gezin: het dorp is ${Math.round(D.behoeften.tevredenheid * 100)}% tevreden, en een gezin wil ${Math.round(T.BEHOEFTEN_INSTELLINGEN.groeiDrempel * 100)}%.`,
     },
     {
       id: 'graan',
-      als: (D) => T.tredeMensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('graan'),
+      als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('graan'),
       tekst: () => `Er komt geen gezin: er ligt minder dan ${T.GEBOUWEN_INSTELLINGEN.graanBufferVoorGroei} graan.`,
     },
     {
       id: 'gezin',
-      als: (D) => T.tredeMensenNodig(D) > 0,
+      als: (D) => mensenNodig(D) > 0,
       tekst: (D) => `Het volgende gezin komt ${over(T.volgendeGezinDag(D) - dagNu(D))}.`,
     },
   ];

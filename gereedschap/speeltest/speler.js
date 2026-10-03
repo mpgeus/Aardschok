@@ -1140,7 +1140,15 @@
         if (!houthakker && !wil.includes('houthakker') && dagNu() >= houthakkerNietVoor) wil.unshift('houthakker');
         // Steeds één erf vrij, binnen de kringen (vraag 95, b). Vragen de mensen het je (vraag 103), dan zonder op een
         // houthakker te wachten: een hut die op hout wacht, is wat de houthakker laat vragen (T.watTeBouwen, js/raad.js).
-        const erfMag = houthakker || T.VERZOEKEN_INSTELLINGEN.mensen;
+        // Heeft het dorp de maat van de winst (vraag 102, c), dan wijst hij geen erf meer aan en haalt hij een vrij erf
+        // weg, zoals de raad zegt: op een vrij erf begint een nieuw gezin in een hut, en dan begint de teller opnieuw.
+        const maat = T.maatGehaald(s.dorp);
+        if (maat) {
+          for (const e of T.vrijeErven(s.dorp)) {
+            if (T.haalErfWeg(s.dorp, e).gelukt) daad(`haalt een vrij erf weg: ${s.dorp.bevolking} mensen is genoeg voor de winst`);
+          }
+        }
+        const erfMag = (houthakker || T.VERZOEKEN_INSTELLINGEN.mensen) && !maat;
         if (erfMag && !T.vrijeErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
         // Bouwen wat hij wil, zodra het goud en het hout er zijn; een kapel waar hij de meeste huizen bereikt. Wat het doel
         // vraagt en er al staat (een kapel voor de wensen), hoeft niet meer.

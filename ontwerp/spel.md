@@ -657,7 +657,9 @@ doel"):
   marskramer er in de herfst is en je te weinig hebt; een wachthuis, tien dagen na een aanval als er geen is; het hout
   en het eten voor de winter, vanaf drie maanden ervoor, met de houthakker en de jager erbij, en dat er zolang geen
   gezin komt (sinds 1 okt, vraag 59, B); het graan dat na Sint-Maarten nog in de kelders ligt ("dat eet niemand en
-  zaait niemand"); de eerste dag hoe de tijd sneller gaat en hoe je slaapt; dan of het dorp vol is (wijs een erf aan);
+  zaait niemand"); de eerste dag hoe de tijd sneller gaat en hoe je slaapt; met de maat van de winst (100 mensen, na de
+  laatste trede) dat je een vrij erf weghaalt, want daarop begint een nieuw gezin in een hut, en dan begint de teller
+  opnieuw (sinds 3 okt, vraag 102, c); dan of het dorp vol is (wijs een erf aan);
   dan **de wensen** (sinds 2 okt, vraag 86, a, en 87; Marcel: "a ja"): een huis dat een maand alles had en op bouwstof
   wacht ("Een hut kan een huis worden, maar er is geen 8 hout: bouw een houthakker [B]."), en anders wat de meeste mensen
   missen ("Vijf boerderijen en een huis willen een kapel binnen 40 tegels [B]."), alleen als je er nu iets aan kunt doen,
@@ -666,7 +668,7 @@ doel"):
   goud: de marskramer koopt graan in hooimaand en belasting [W] brengt elke maand goud"; sinds 2 okt vraagt het doel
   alleen nog gebouwen met de spelregel "Treden" op de proef van 28 sep), waarom er verder geen gezin komt (niet tevreden
   genoeg; te weinig graan), of wanneer het volgende komt, zoals een stad in Civilization zegt wanneer hij groeit,
-  zolang het doel nog mensen vraagt.
+  zolang het doel nog mensen vraagt: een trede, of na de laatste de 100 mensen van de winst (sinds 3 okt).
 - **De ketens** (sinds 2 okt, werklijst vraag 90, D; Marcel: "d ja"): de raad weet wat een werkplaats nodig heeft en wie
   dat maakt. Brood komt van de bakkerij, die meel nodig heeft van de molen; laken van de weverij, met wol van de
   schapen. Is er nog niets, dan de hele keten in één keer ("Een stenen huis wil brood: bouw een bakkerij en een molen

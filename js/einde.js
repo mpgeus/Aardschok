@@ -56,6 +56,17 @@
     return huizen.length > 0 && huizen.every(gelukkig);
   };
 
+  // Hoeveel mensen de winst nog vraagt (voor de raad, js/raad.js): na de laatste trede, zolang het niet gewonnen is, tot
+  // `minstensMensen`; anders 0.
+  T.mensenVoorDeWinst = function (D) {
+    if (!T.eindDoel(D) || (D.eind && D.eind.gewonnen)) return 0;
+    return Math.max(0, IN().minstensMensen - (D.bevolking || 0));
+  };
+  // Heeft het dorp de maat van de winst, en is het nog niet gewonnen? Dan groeit het niet meer met een nieuw erf: daarop
+  // begint een gezin in een hut, en dan begint de teller opnieuw (werklijst vraag 102, c). De raad zegt het (js/raad.js),
+  // en de bouwers van de speeltest volgen hem.
+  T.maatGehaald = (D) => !!T.eindDoel(D) && !(D.eind && D.eind.gewonnen) && (D.bevolking || 0) >= IN().minstensMensen;
+
   // Staat de teller stil (een slechte dag, en het mag nog), dan zegt het doel hoe lang nog.
   function stil(E) {
     if (!E.mis) return '';

@@ -290,8 +290,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`[B]` wordt een toets): de eerste uit `T.RADEN` die nu geldt (`T.raadNu`). Hij vraagt het aan de regels zelf: of er
   een gezin komt aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in `js/gebouwen.js`), het hout en het eten
   aan de winter, wat de huizen missen aan de wensen (`T.watDeHuizenMissen`, vóór het doel; vraag 87), en wat je mist voor
-  wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Uit te zetten in de spelregels
-  ("Raad").
+  wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Na de laatste trede telt hij tot de
+  maat van de winst (`T.mensenVoorDeWinst` in `js/einde.js`), en is die gehaald (`T.maatGehaald`), dan zegt hij dat je
+  een vrij erf weghaalt (vraag 102, c). Uit te zetten in de spelregels ("Raad").
 - `js/wensen.js`: **de wensen van de mensen, per stand** (stap 2 van vraag 79, vraag 80 en 85, 1 okt; zoals in Anno
   1602): elk huis met mensen heeft een stand naar zijn soort (`T.standVan`: een hut keuters, een huis dorpelingen, een
   stenen huis ambachtslieden, een boerderij boeren; het huis van de schout en de herberg geen), en elke stand wil wat de
