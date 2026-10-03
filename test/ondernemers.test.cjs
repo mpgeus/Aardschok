@@ -146,7 +146,10 @@ test('ja: de wapenmaker komt er, hij is er de meester en je dankbaar, en hij maa
   const g = D.gebouwen.find((x) => x.soort === 'wapenmaker');
   assert.ok(g, 'de wapenmaker staat er');
   assert.equal(g.meester, p);
-  assert.ok(Math.hypot(g.x - T.deurVan(D.wereld, p.huis).x, g.y - T.deurVan(D.wereld, p.huis).y) < 12, 'naast zijn huis');
+  // In de buurt van zijn huis, met een looppad rondom (js/gebouwen.js; Marcel, 3 okt): tot dan stond hij er op 10 tegels
+  // klem tussen een huis en een eik, en nu op de eerste plek met een pad eromheen.
+  assert.ok(Math.hypot(g.x - T.deurVan(D.wereld, p.huis).x, g.y - T.deurVan(D.wereld, p.huis).y) < 25, 'in de buurt van zijn huis');
+  assert.ok(T.looppadOm(D, T.voetVanGebouw(g), T.GEBOUWEN_INSTELLINGEN.looppad.minstens), 'met een looppad rondom');
   assert.ok(T.huisStemming(p.huis, 1) > 0, 'zijn huis is je dankbaar');
   assert.equal(D.verzoeken.eigen[p.id].ja, 1);
   assert.ok(!T.eigenVerzoeken(D, 2).some((x) => x.wie === p), 'wie ja hoorde, vraagt het niet meer');

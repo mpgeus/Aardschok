@@ -90,6 +90,13 @@
     // graan tot meel, ook als niemand brood wilde: ruim 880 graan per jaar. Wie iets uit het land haalt (de houthakker,
     // de visser), maakt door. De herberg brouwt zo tot er 30 bier is, zoals sinds 27 sep.
     werkplaatsMaaktTot: 30,
+    // Een looppad om elk nieuw gebouw (Marcel, 3 okt: "Er moet wel altijd een looppad zijn, het liefste van 3 tegels
+    // breed", met een kapel die klem stond tussen twee huizen, met struiken voor de deur): rondom moeten zoveel tegels
+    // te belopen zijn, zonder gebouw en zonder boom. `minstens` geldt altijd, ook in het bouwmenu; wie zelf een plek
+    // kiest voor een verzoek (T.plekVoor, js/verzoeken.js), neemt een plek met `liefst` als die hooguit `omweg` tegels
+    // verder ligt dan de dichtste plek (en net zoveel huizen bereikt), en anders een smallere: in het volle midden van het
+    // gehucht lag een plek met drie tegels rondom soms 26 tegels verderop.
+    looppad: { minstens: 1, liefst: 3, omweg: 8 },
   };
 
   T.GEBOUWEN = {
@@ -626,7 +633,26 @@
       }
     }
     if (vast) return 'Daar past het niet.';
-    return reden || T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h });
+    if (reden) return reden;
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad.minstens;
+    if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n)) return `Er moet een looppad omheen: ${n === 1 ? 'een tegel' : `${n} tegels`} vrij, zonder gebouw of boom.`;
+    return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h });
+  };
+
+  // Is er een looppad van `breed` tegels rondom de rechthoek r ({ x, y, b, h })? Elke tegel in die rand is te belopen
+  // (T.isBegaanbaar, js/wereld.js: geen muur, geen gebouw, geen boom), of ligt buiten de kaart, waar niemand loopt.
+  T.looppadOm = function (D, r, breed) {
+    const w = D.wereld;
+    const hoog = w.tegels.length;
+    const wijd = w.tegels[0].length;
+    for (let y = r.y - breed; y < r.y + r.h + breed; y++) {
+      for (let x = r.x - breed; x < r.x + r.b + breed; x++) {
+        if (x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) continue;
+        if (x < 0 || y < 0 || x >= wijd || y >= hoog) continue;
+        if (!T.isBegaanbaar(w, x, y, { deurenOpenen: true })) return false;
+      }
+    }
+    return true;
   };
 
   // ---------------------------------------------------------------------------------------------

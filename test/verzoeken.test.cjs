@@ -254,3 +254,47 @@ test('na een ja vraagt niemand hetzelfde de eerste naJa dagen weer: geen jager e
   assert.ok(T.beginBouwverzoek(D, 1 + T.VERZOEKEN_INSTELLINGEN.naJa));
   assert.equal(lopend(D).bouw.soort, 'houthakker', 'daarna wel weer');
 });
+
+// Een looppad om elk nieuw gebouw (Marcel, 3 okt: "Er moet wel altijd een looppad zijn, het liefste van 3 tegels breed",
+// met een kapel die klem stond tussen twee huizen, met struiken voor de deur; js/gebouwen.js en T.plekVoor).
+test('een looppad: minstens een tegel vrij rondom, en wie de plek kiest, neemt liefst drie, met een kleine omweg', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  D.trede = 'dorp';
+  const L = T.GEBOUWEN_INSTELLINGEN.looppad;
+  const voet = T.gebouwVoet('bakkerij', T.volgendeTekening(D, 'bakkerij'));
+  const rect = (p) => ({ x: p.x, y: p.y, b: voet.b, h: voet.h });
+  // Recht tegen een huis aan mag niet meer: er moet een tegel tussen.
+  const huis = D.gebouwen.find((g) => g.soort === 'hut');
+  const v = T.voetVanGebouw(huis);
+  let tegenAan = null;
+  for (let y = v.y - voet.h - 2; y <= v.y + v.h + 2 && !tegenAan; y++) {
+    for (let x = v.x - voet.b - 2; x <= v.x + v.b + 2 && !tegenAan; x++) {
+      const raakt = x + voet.b === v.x || x === v.x + v.b || y + voet.h === v.y || y === v.y + v.h;
+      if (raakt && /looppad/.test(T.waaromPastHetNiet(D, 'bakkerij', x, y) || '')) tegenAan = { x, y };
+    }
+  }
+  assert.ok(tegenAan, 'ergens recht tegen het huis aan zegt het bouwen: er moet een looppad omheen');
+  // Wie de plek kiest: altijd een looppad, en liefst drie tegels breed als dat hooguit een omweg kost.
+  for (const g of D.gebouwen.filter((x) => x.soort === 'hut').slice(0, 4)) {
+    const deur = T.deurVan(D.wereld, g);
+    const p = T.plekVoor(D, 'bakkerij', deur);
+    assert.ok(p && T.gebouwPast(D, 'bakkerij', p.x, p.y));
+    assert.ok(T.looppadOm(D, rect(p), L.minstens), 'altijd een looppad');
+    // Drie tegels rondom als dat hooguit een omweg kost tegenover de dichtste plek met het smalste pad; anders smaller.
+    const zoek = (breed) => {
+      const was = { ...L };
+      Object.assign(L, { minstens: breed, liefst: breed });
+      try {
+        return T.plekVoor(D, 'bakkerij', deur);
+      } finally {
+        Object.assign(L, was);
+      }
+    };
+    const ver = (q) => Math.hypot(q.x - deur.x, q.y - deur.y);
+    const basis = zoek(L.minstens);
+    const drie = zoek(L.liefst);
+    if (T.looppadOm(D, rect(p), L.liefst)) assert.ok(ver(p) <= ver(basis) + L.omweg, 'drie tegels, met hooguit een omweg');
+    else assert.ok(!drie || ver(drie) > ver(basis) + L.omweg, 'drie tegels lagen te ver weg');
+  }
+});

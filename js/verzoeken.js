@@ -87,15 +87,30 @@
   // gelijk spel het dichtst bij `bij` (met `zonder`: hoeveel); bereikt hij nergens zo'n huis, dan nergens. De rest: zo
   // dicht mogelijk bij `bij`
   // (een deur), in ringen, op de eerste plek waar het past (T.gebouwPast). Zo zocht de bouwer van de speeltest al
-  // (gereedschap/speeltest/speler.js), en die vraagt het nu hier.
+  // (gereedschap/speeltest/speler.js), en die vraagt het nu hier. Met een looppad rondom zo breed als het liefst
+  // (T.GEBOUWEN_INSTELLINGEN.looppad, js/gebouwen.js; Marcel, 3 okt: "Er moet wel altijd een looppad zijn, het liefste
+  // van 3 tegels breed"), als die plek net zoveel huizen bereikt en hooguit `omweg` tegels verder ligt dan de beste met
+  // het smalste pad dat mag; anders een smaller pad, tot wat er minstens moet.
   T.plekVoor = function (D, soort, bij) {
+    const L = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const basis = plekMetLooppad(D, soort, bij, L.minstens);
+    if (!basis) return null;
+    const ver = (p) => Math.hypot(p.x - bij.x, p.y - bij.y);
+    for (let breed = L.liefst; breed > L.minstens; breed--) {
+      const p = plekMetLooppad(D, soort, bij, breed);
+      if (p && (p.zonder || 0) >= (basis.zonder || 0) && ver(p) <= ver(basis) + L.omweg) return p;
+    }
+    return basis;
+  };
+  function plekMetLooppad(D, soort, bij, breed) {
     const w = D.wereld;
+    const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || T.GEBOUWEN[soort].voet;
+    const past = (x, y) => T.gebouwPast(D, soort, x, y) && T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, breed);
     if (heeftKring(soort)) {
-      const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || T.GEBOUWEN[soort].voet;
       let beste = null;
       for (let y = 0; y < w.tegels.length; y++) {
         for (let x = 0; x < w.tegels[0].length; x++) {
-          if (!T.gebouwPast(D, soort, x, y)) continue;
+          if (!past(x, y)) continue;
           const zonder = T.watDeKringBereikt(D, soort, { x, y, b: voet.b, h: voet.h }).zonder;
           const d = Math.hypot(x - bij.x, y - bij.y);
           if (zonder > 0 && (!beste || zonder > beste.zonder || (zonder === beste.zonder && d < beste.d))) beste = { x, y, d, zonder };
@@ -107,12 +122,12 @@
       for (let dy = -r; dy <= r; dy++) {
         for (let dx = -r; dx <= r; dx++) {
           if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
-          if (T.gebouwPast(D, soort, bij.x + dx, bij.y + dy)) return { x: bij.x + dx, y: bij.y + dy };
+          if (past(bij.x + dx, bij.y + dy)) return { x: bij.x + dx, y: bij.y + dy };
         }
       }
     }
     return null;
-  };
+  }
 
   // Een werkplaats komt bij het huis van wie hem vraagt; wat van iedereen is (een plek met een kring, en wat geen handen
   // heeft of het hele dorp dient: de markt, het wachthuis), bij het hart van het dorp.
