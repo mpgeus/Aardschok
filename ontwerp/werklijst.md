@@ -3389,6 +3389,27 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     bestuurder in de speeltest, en daarna die uit eigen wil. Vraag 102 wacht.
     **Stap 1, 2 en 3 gebouwd** (3 okt, zie onder Af): de verzoeken uit wat het dorp mist, oproepen met een premie, en de
     speeltest die bestuurt in plaats van bouwt. Daarna: de verzoeken uit eigen wil.
+104. **Verzoeken uit eigen wil: het plan** (Claude, 3 okt, vijfentwintigste sessie; het laatste deel van vraag 103, b;
+    open). Er is nu: wat het dorp mist, vraagt iemand je (stap 1), je stuurt met oproepen (stap 2), en de speeltest
+    bestuurt (stap 3). Wat er nog niet is: iemand die iets wil wat niemand mist, uit zichzelf, zoals Marcels voorbeeld
+    ("Stel er is een ondernemende inwoner die wapens wil maken"). Daar zitten de keuzes die het spel anders maken dan een
+    bouwspel: ja maakt de een rijk en de ander boos. Voorstel, klein:
+    - **a, twee ondernemers om mee te beginnen,** met wat er al is:
+      1. **De wapenmaker.** Het gebouw is er al ("ijzer en hout tot wapens, voor de opstand. Verboden, dus verstopt").
+         Na een aanval van de rovers, of in een dorp met een smidse, wil iemand wapens maken. Ja: de wachters vechten
+         beter, maar het is verboden: ziet de inner hem, dan stijgt de argwaan, en vinden de soldaten hem, dan straft de
+         heer. Nee: hij onthoudt het.
+      2. **De tweede herberg.** In een dorp met één herberg wil iemand er een tweede beginnen. Ja: meer bier en plaats,
+         maar de herbergierster is boos, en ze vechten om de gasten. Nee: de herbergierster is je dankbaar.
+    - **b, wie nee hoort, onthoudt het:** zijn huis is een tijd minder tevreden, en na twee keer nee trekt hij weg (en kan
+      als rover terugkomen, zoals nu wie wegtrekt). De wapenmaker kan het ook stiekem doen: een verstopte werkplaats in
+      zijn kelder, die de inner niet ziet maar de soldaten op Sint-Maarten kunnen vinden.
+    - **c, wie ja hoort, is je dankbaar:** de meester (die er nu al is) onthoudt het; met stap 5 van de slice (mensen met
+      banden) wordt dat een band met jou.
+    - **d, wie ondernemer is:** een bewoner met ondernemingszin, geloot uit het zaad van het spel zoals het karakter van de
+      boeren, zodat elk spel andere ondernemers heeft.
+    Vragen: **a**, deze twee om mee te beginnen? **b**, nee onthouden, wegtrekken, en stiekem? **c**, zo? **d**, geloot uit
+    het zaad?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
