@@ -142,6 +142,54 @@ gebouw zelf neerzet:
    stuurt helden met beloningen, niet met bevelen) en *Yes, Your Grace* (verzoekers komen naar je toe), maar dan te voet,
    in je eigen dorp, tussen de heer en de mensen.
 
+## Norland, nagezocht op 3 okt (Marcel: "Kijk eens naar Norland als game")
+
+Nagezocht met zoeken. De pagina's zelf (Steam, SteamDB, de recensies) gingen vanuit de cloud niet open: wat hieronder
+staat, komt uit samenvattingen van zoekresultaten en is niet aan de bron nagelopen.
+
+- **Wat het is.** *Norland* (Long Jaunt; uitgever Hooded Horse, die ook Manor Lords uitgaf), in early access sinds 18
+  juli 2024, nog zonder 1.0, voor 30 euro. Een "medieval kingdom sim / story generator": je leidt een adellijke familie,
+  en de stad eromheen zit vol mensen met eigen behoeften, karakter en gedrag. Spelers noemen het RimWorld in de
+  middeleeuwen, met iets van Crusader Kings. ([gamespress](https://gamespress.com/Norland-early-access-out-now),
+  [PCGamesN](https://www.pcgamesn.com/norland/early-access-launch))
+- **Hoe het speelt.** Je bestuurt alleen je familie, de boeren nooit. Jij zet de gebouwen neer en wijst de akkers aan; de
+  boeren zoeken zelf werk, en jij geeft elk gebouw een voorrang. Elke werkplaats vraagt een edele als leider. Lonen,
+  prijzen en straffen stel je in, en zonder erfgenaam eindigt je huis. Sinds 2025 is er een wereldkaart en handel in goud,
+  en edelen die je weinig trouw zijn, worden politicus. Legers kiezen een kant, en de gevechten gaan vanzelf. De verhalen
+  komen uit de simulatie; gebeurtenissen komen pas in de tweede helft van 2026.
+  ([wiki](https://wiki.hoodedhorse.com/Norland/Construction), [Octavius](https://www.octaviusreviews.com/early-access/norland/),
+  [zomerupdate 2025](https://www.gamespress.com/Norland-summer-update-2025),
+  [routekaart 2026](https://simulationdaily.com/news/norland-2026-q3-q4-roadmap-news/))
+- **Hoe het het deed.**
+  - Vóór de lancering 350.000 verlanglijstjes. De demo in Next Fest (juni 2023) gaf er naar zeggen meer dan 50.000.
+  - 185.000 keer verkocht in twee weken. Schattingen komen nu rond de 600.000 (onzeker, zulke schattingen zitten er zo'n
+    30% naast).
+  - 81% positief van ruim 10.000 recensies.
+  - Klachten: het spel loopt na een uur stroever (een geheugenlek, vermoeden spelers), het crasht, en het
+    micromanagement groeit met het aantal edelen. Wie korter dan twee uur speelt, oordeelt vaker negatief.
+  ([gamesmarket](https://www.gamesmarket.global/sales-und-wishlists-hooded-horse-celebrates-a-summer-of-releases-and-milestones-823ea748e804476f4402851a53900a8c/),
+  [Steambase](https://steambase.io/apps/norland), [Steam-draad](https://steamcommunity.com/app/1857090/discussions/4/4839771730904962620),
+  [PC Games](https://www.pcgames.de/Norland-Spiel-74766/Tests/Review-Wertung-Gameplay-Release-Termin-Veroeffentlichung-Early-Access-1451776/))
+
+**Wat het voor ons betekent** (Claude, 3 okt):
+1. **Dit is het spel waarmee we vergeleken worden.** Een middeleeuwse stad vol mensen met een eigen leven: dat is Norland,
+   en wie Norland koopt, is onze speler. Dat is goed nieuws, want de markt is er (350.000 verlanglijstjes). Het is ook een
+   opdracht: in één zin anders zijn. "Mensen met een eigen leven" alleen is als haak te zwak, want dat heeft Norland al,
+   en groter.
+2. **Het verschil zit in de plek.** In Norland ben je de heer, met de camera boven de stad, en bouw je zelf. Bij ons ben
+   je de man tussen de heer en het dorp, je loopt te voet, en je bouwt niet. Dat maakt haak 1 en 4 hierboven sterker:
+   "De heer wil geld. Het dorp wil leven. Jij staat ertussen." (in Norland bén je de heer), en "Je bouwt het dorp niet.
+   Je bestuurt het." (in Norland bouw je wel).
+3. **Waar spelers over klagen, is waar onze opzet op mikt.** Het micromanagement dat groeit met de stad: bij ons vragen
+   de mensen het je, en beslist je raadsman als je weg is. De eerste twee uur: bij ons het doel en de raad linksboven.
+   Een spel dat na een uur trager loopt: wij meten de maat van het dorp (vraag 74), maar nog niet of het geheugen over
+   een lang spel groeit. De speeltest kan dat erbij meten (in Chromium: `performance.memory`).
+4. **Een uitgever voor precies dit genre.** Hooded Horse gaf Manor Lords en Norland uit. Met weinig geld is zo'n
+   uitgever een weg: zij doen de marketing, en nemen een deel van de opbrengst. Wanneer en hoe, is iets voor na de demo
+   (open).
+5. **De prijs.** Norland vraagt 30 euro, voor een groot spel in early access. Onze rekensom ging uit van 18 euro; dat
+   blijft passend voor een kleiner spel.
+
 ## Weinig geld: wat Claude maakt (Marcel, 1 okt)
 
 "Geld is beperkt. Ik gebruik jou ☺️" Dus wat kan, maken we zelf, zoals de beelden al uit code komen (voorstel):
@@ -215,4 +263,5 @@ met lantaarns en muziek, een moment voor de trailer. Het ontwerp staat in `spel.
 
 Zie de werklijst, vraag 83, c: welke zin de haak wordt (na het nazoeken, hierboven), en of wat hem zichtbaar maakt ("wat
 je weet, is wat er het laatst geteld werd", vraag 77, b) naar voren komt, vóór de demo. Verder de naam (vraag 8), en hoe
-de schout in het Engels heet.
+de schout in het Engels heet. En na de demo: zelf uitgeven, of een uitgever voor dit genre (Hooded Horse, zie Norland
+hierboven).
