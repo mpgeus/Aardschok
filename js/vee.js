@@ -39,10 +39,12 @@
     // Kaas telt in dezelfde maat als graan: één kaas voedt zoveel als één graan.
     melkNaarKaas: 0.5,
     // Of de kudde vanzelf groeit: een optie in de spelregels ("Het vee"). Op de dag hieronder werpt
-    // elk dier van minstens een jaar oud met zijn kans een jong, zolang er op zijn weide plaats is.
+    // elk dier van minstens een jaar oud met zijn kans een jong, zolang er op zijn weide plaats is. Een
+    // schaap 0,5 (Marcel, 3 okt, werklijst vraag 99, b; was 0,3): dan is de kooi in een jaar of drie vol,
+    // in plaats van vijf, en heeft een stad van stenen huizen op tijd laken.
     groeit: true,
     werpen: { maand: 'grasmaand', dag: 1 },
-    kansOpJong: { koe: 0.5, schaap: 0.3 },
+    kansOpJong: { koe: 0.5, schaap: 0.5 },
     // Waar het gehucht mee begint, op de weide(s) die de kaart noemt (T.zetBeginKudde).
     beginKudde: { koe: 3, schaap: 8 },
 
@@ -82,9 +84,11 @@
 
     // ── De schapen en de kooi (stap 2; Marcel koos het op 25 sep, uit een voorstel van Claude) ──
     // Op deze dag worden de schapen geschoren: elk volwassen schaap geeft zoveel wol. Een lam van
-    // dit voorjaar nog niet. De heer vraagt 20 wol per schaapskooi (js/gebouwen.js).
+    // dit voorjaar nog niet. De heer vraagt 20 wol per schaapskooi (js/gebouwen.js). 8 wol per schaap
+    // (Marcel, 3 okt, werklijst vraag 99, a; was 4): met 4 gaf het eerste jaar laken voor zes
+    // ambachtslieden en een volle kooi voor 33, en een stad van tien stenen huizen heeft er 80.
     scheren: { maand: 'zomermaand', dag: 1 },
-    wolPerSchaap: 4,
+    wolPerSchaap: 8,
     // Zoveel karren mest geeft één schaap per jaar in de kooi, als de kooi zijn herder heeft (zijn
     // hand, js/gebouwen.js). De mest leg je in het veldenvenster op een akker (js/akkers.js).
     mestPerSchaap: 2.5,

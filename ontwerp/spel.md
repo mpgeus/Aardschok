@@ -1338,6 +1338,11 @@ ziet de inner, behalve wat verstopt is.
   op 1 lentemaand niet gezaaid kon worden, zodra er graan is, tot het graan groen wordt op 1 bloeimaand (`T.zaaiNa` in
   `js/akkers.js`, ook met graan uit een kelder); wat rovers vertrapten, zaaien ze niet na. Het venster toont alleen wat
   hij die ronde bij zich heeft (`T.verkooptNu`).
+- **Laken in een dorp** (3 okt, vijfentwintigste sessie; werklijst vraag 99, c; Marcel: "c ja"): in een dorp verkoopt
+  hij in de zomer en de herfst ook laken, drie pakken van vier voor 6 à 7 goud per pak (de werkbank; `trede` in
+  `T.HANDEL_INSTELLINGEN.verkoopt`). Zo koop je wat je niet maakt, zoals in Anno 1602, en heeft het goud van de
+  belasting een doel. Met één kooi en 8 wol per schaap is er het eerste jaar laken voor zo'n 24 ambachtslieden, en met
+  een volle kooi voor 76; wat er tekort is, koop je bij hem.
 - Sinds 25 sep houdt hij bij wat hij je betaalde en wat jij hem, en vertelt hij dat de inner: het
   spoor van goud ("Rijk worden en arm lijken").
 - **Nog open:** vee, kaas en hooi kopen en verkopen (verstoppen, deel 3); hem omkopen (stap 3 van de
@@ -1704,10 +1709,10 @@ en meer soorten (sluw, praatziek, sterk) komen bij de punten waar ze iets doen.
   voorstel; zelf slachten kan altijd, onderaan het veldenvenster. Vlees vult een maag (sinds 25 sep): wat je niet zout,
   eet het dorp eerst op, gezouten vlees bewaart het tot het graan op is.
 - **Schapen:** ze grazen op de heide (de meent, 23 bij 8 tegels, 2 tegels per schaap) en slapen in
-  de schaapskooi (hoogstens 20); in grasmaand werpt een schaap met kans 0,3 een lam, als er plaats
-  is in de kooi (sinds 25 sep; was 0,7). In
-  zomermaand geeft elk schaap 4 wol, en met een herder geeft de kooi 2,5 karren mest per schaap per
-  jaar, die je in het veldenvenster op een akker legt.
+  de schaapskooi (hoogstens 20); in grasmaand werpt een schaap met kans 0,5 een lam, als er plaats
+  is in de kooi (sinds 3 okt, werklijst vraag 99, b; was 0,3, en vóór 25 sep 0,7). In
+  zomermaand geeft elk schaap 8 wol (sinds 3 okt, vraag 99, a; was 4), en met een herder geeft de kooi 2,5 karren
+  mest per schaap per jaar, die je in het veldenvenster op een akker legt.
 - Het gehucht begint met één weide (het blok van Klaas), drie koeien en acht schapen.
 - In de spelregels: de vruchtbaarheid, of het vee groeit, het vee in de winter, wat de schapen 's
   winters eten, en de mest.
@@ -1920,7 +1925,7 @@ met de toetsen in `test/velden.test.cjs`.
   een huid, een schaap 6, een jong de helft. Je opent het ook onderaan het veldenvenster.
 - **De heide en de kooi.** Het gehucht heeft een meent in het zuidwesten (23 bij 8 tegels) en een
   schaapskooi aan de noordrand, met zijn deur naar de heide. De schapen grazen ervoor; lammeren komen
-  alleen als er plaats is in de kooi (20 per kooi). In zomermaand geeft elk schaap 4 wol, en de kooi
+  alleen als er plaats is in de kooi (20 per kooi). In zomermaand geeft elk schaap 8 wol (was 4), en de kooi
   geeft per schaap 2,5 karren mest per jaar, zolang hij zijn herder (een hand) heeft. De kooi maakt
   zelf geen wol meer.
 - **Mest.** In het veldenvenster zet je mest op een akker: op 1 lentemaand wordt die 10% vruchtbaarder,

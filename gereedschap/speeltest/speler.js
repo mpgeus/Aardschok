@@ -48,7 +48,9 @@
 //           neemt hij hem aan (W), en hij bouwt de eerste wens die hij kan betalen, in plaats van op de eerste te
 //           wachten. Sinds vraag 95, b wijst hij een erf aan waar het huis de herberg, een markt, een kapel en een put in
 //           zijn kring heeft (bouwErf), en niet meer gewoon zo dicht mogelijk bij zijn eigen deur. Sinds vraag 96, b bouwt
-//           hij een keten in één keer: een bakkerij en een molen samen.
+//           hij een keten in één keer: een bakkerij en een molen samen. Sinds vraag 99, c koopt hij laken bij de
+//           marskramer als de ambachtslieden het tot zijn volgende bezoek tekortkomen, met het goud dat hij niet nodig
+//           heeft voor zijn volgende wens.
 // En een zesde (werklijst vraag 93, a, en 94; Marcel, 2 okt: "De bouwer mag alles er aan doen, totale vrijheid"):
 //   sluw    de bouwer, maar hij bedriegt de heer, elk jaar zoals de slimme speler: 60% van het graan boven het zaaigraan
 //           en van het goud weg, de inner bespelen, de soldaten langs lege kelders, de heer 90%. Het goud haalt hij terug
@@ -1021,6 +1023,25 @@
         else bouw(soort);
       }
     }
+    // Laken (werklijst vraag 99, c): in een dorp verkoopt de marskramer het. Wat de ambachtslieden tot zijn volgende
+    // bezoek gebruiken (zo'n 120 dagen), min wat er ligt, koopt hij, met het goud dat over is na zijn volgende wens.
+    async function koopLaken() {
+      const w = T.HANDEL_INSTELLINGEN.verkoopt.laken;
+      const m = D().marskramer;
+      if (!w || !((m.heeft && m.heeft.laken) || 0)) return;
+      const st = D().behoeften && D().behoeften.standen;
+      const ambacht = st && st.ambachtslieden ? st.ambachtslieden.mensen : 0;
+      const nodig = Math.ceil(ambacht * T.WENSEN_INSTELLINGEN.perMens.laken * 120 - (D().voorraad.laken || 0));
+      if (nodig <= 0) return;
+      const prijs = w.prijs[m.bezoek];
+      const pakken = Math.min(m.heeft.laken, Math.ceil(nodig / w.per), Math.floor((Math.floor(D().voorraad.goud || 0) - goudNodig()) / prijs));
+      if (pakken <= 0) {
+        daad(`zou ${nodig} laken kopen van de marskramer, maar heeft het goud niet`);
+        return;
+      }
+      const gekocht = await handelMet(() => klikHandel('koop', 'laken', pakken));
+      daad(`koopt ${gekocht * w.per} laken van de marskramer, voor ${gekocht * prijs} goud`);
+    }
     async function verkoop() {
       const s = S();
       const nodig = goudNodig() - Math.floor(s.dorp.voorraad.goud || 0);
@@ -1087,6 +1108,7 @@
         const m = s.dorp.marskramer;
         if (m && !m.weg && m.staat && nuEenKeer(`handel${jaar()}-${m.bezoek}`)) {
           await koopZaaigraan();
+          await koopLaken();
           await verkoop();
         }
         if (sluw) await bedrieg();
@@ -1173,7 +1195,8 @@
     }
     if (d === DAG_HEER + 3) boek.argwaan.opSintMaarten = argwaan();
     if (d === DAG_HEER + 4) boek.naSintMaarten = tel(); // hoe rijk het dorp is als de heer weg is
-    // Per jaar (vraag 94, d): op hoeveel dagen er geen bier of brood was (als er een herberg of een bakkerij staat), hoeveel
+    // Per jaar (vraag 94, d): op hoeveel dagen er geen bier of brood was (als er een herberg of een bakkerij staat), en
+    // sinds vraag 99, d geen laken (als er ambachtslieden zijn), hoeveel
     // huizen alles hadden (gemiddeld over de dagen), op hoeveel dagen allemaal, en op hoeveel dagen het gewonnen was zoals
     // vraag 85 het zegt: alle woningen stenen huizen, en alle huizen alles. En de langste reeks dagen dat alle huizen alles
     // hadden: winnen vraagt een jaar. En de druk om eten (vraag 95, Marcel: "er moet altijd druk zijn om voldoende eten"):
@@ -1181,7 +1204,7 @@
     // winter niet haalt (T.watDeWinterNietHaalt), en er geen graan meer lag boven het zaaigraan.
     const st = D().behoeften && D().behoeften.standen;
     if (!st) return;
-    const g = boek.geluk[Math.floor(d / JAAR)] || (boek.geluk[Math.floor(d / JAAR)] = { dagen: 0, alles: 0, allemaal: 0, gewonnen: 0, zonderBier: 0, zonderBrood: 0, honger: 0, etenWinter: 0, graanOp: 0 });
+    const g = boek.geluk[Math.floor(d / JAAR)] || (boek.geluk[Math.floor(d / JAAR)] = { dagen: 0, alles: 0, allemaal: 0, gewonnen: 0, zonderBier: 0, zonderBrood: 0, zonderLaken: 0, honger: 0, etenWinter: 0, graanOp: 0 });
     const huizen = Object.values(st).reduce((n, x) => n + x.huizen, 0);
     const alles = Object.values(st).reduce((n, x) => n + x.alles, 0);
     const staat = (soort) => D().gebouwen.some((x) => x.soort === soort && x.klaar);
@@ -1192,6 +1215,7 @@
     if (allemaal && !D().gebouwen.some((x) => (x.soort === 'hut' || x.soort === 'huis') && x.huis !== 'schout')) g.gewonnen++;
     if (staat('herberg') && (D().voorraad.bier || 0) < 1) g.zonderBier++;
     if (staat('bakkerij') && (D().voorraad.brood || 0) < 1) g.zonderBrood++;
+    if (st.ambachtslieden && st.ambachtslieden.mensen > 0 && (D().voorraad.laken || 0) < 1) g.zonderLaken++;
     if ((D().behoeften.mist || []).includes('eten')) g.honger++;
     if (T.watDeWinterNietHaalt(D(), d).includes('eten')) g.etenWinter++;
     if ((D().voorraad.graan || 0) - T.zaaigraanApart(D(), d) < 1) g.graanOp++;

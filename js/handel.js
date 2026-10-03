@@ -42,10 +42,14 @@
     // "D dat is prima"): wie na een slechte winter niets meer heeft, kan het kopen, en de boeren
     // zaaien het na tot 1 bloeimaand (T.zaaiNa, js/akkers.js). Een pak is tien graan, net als
     // wanneer hij het koopt, en duurder dan hij het in de lente koopt. Een `naam` is hoe het venster het noemt.
+    // Laken alleen in een dorp (`trede`), in de zomer en de herfst, duur (Marcel, 3 okt, werklijst vraag 99, c: "c ja"):
+    // zoals in Anno 1602 koop je wat je niet maakt, zodat het goud van de belasting een doel heeft en een tekort aan
+    // laken te overbruggen is. Een pak is vier laken: wat drie stenen huizen samen in een maand of twee willen.
     verkoopt: {
       ijzer: { heeft: 12, prijs: [3, 3, 4] },
       zout: { heeft: 15, prijs: [1, 1, 2] },
       graan: { naam: 'zaaigraan', per: 10, heeft: [10, 0, 0], prijs: [5, 5, 5] },
+      laken: { per: 4, heeft: [0, 3, 3], prijs: [6, 6, 7], trede: 'dorp' },
     },
     // Wat hij koopt: per pak van zoveel stuks, voor zoveel goud, per bezoek (lente, zomer,
     // herfst). Graan is in de lente schaars en na de oogst goedkoop: wie het door Sint-Maarten
@@ -95,20 +99,22 @@
     return (na || IN().bezoeken[0]).maand;
   };
 
-  // Hoeveel hij van iets bij zich heeft als bezoek `i` begint: in stuks, of in pakken als het per pak gaat.
-  function heeftBijBezoek(wat, i) {
-    const h = IN().verkoopt[wat].heeft;
-    return Array.isArray(h) ? h[i] || 0 : h;
+  // Hoeveel hij van iets bij zich heeft als bezoek `i` begint: in stuks, of in pakken als het per pak gaat. Wat pas
+  // vanaf een trede komt (laken in een dorp), brengt hij een kleiner dorp niet.
+  function heeftBijBezoek(D, wat, i) {
+    const waar = IN().verkoopt[wat];
+    if (waar.trede && !T.tredeMinstens(D, waar.trede)) return 0;
+    return Array.isArray(waar.heeft) ? waar.heeft[i] || 0 : waar.heeft;
   }
   // Wat hij bij dit bezoek te koop heeft (voor het venster, js/hud.js): wat hij die ronde meebracht, ook als het op is.
-  T.verkooptNu = (D) => (D.marskramer ? Object.keys(IN().verkoopt).filter((wat) => heeftBijBezoek(wat, D.marskramer.bezoek) > 0) : []);
+  T.verkooptNu = (D) => (D.marskramer ? Object.keys(IN().verkoopt).filter((wat) => heeftBijBezoek(D, wat, D.marskramer.bezoek) > 0) : []);
 
   // Hij komt: een vers bezoek met een volle mars en een volle beurs. `dag` is de dag dat hij het
   // gehucht in loopt; T.werkMarskramerBij zet de klok pas echt aan als hij op het plein staat.
   T.marskramerKomt = function (D, i, dag) {
     const bezoek = IN().bezoeken[i];
     const heeft = {};
-    for (const wat in IN().verkoopt) heeft[wat] = heeftBijBezoek(wat, i);
+    for (const wat in IN().verkoopt) heeft[wat] = heeftBijBezoek(D, wat, i);
     D.marskramer = {
       bezoek: i, komtOp: dag, gaatOp: dag + IN().blijftDagen,
       beurs: IN().beurs, plaats: IN().plaats, heeft,

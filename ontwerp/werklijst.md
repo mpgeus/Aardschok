@@ -3668,6 +3668,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **Het laken: 8 wol per schaap, meer lammeren, en laken bij de marskramer** (vijfentwintigste sessie, na
+  Marcels vlucht; vraag 99; Marcel: "99 a b c d ja"). **a:** een schaap geeft 8 wol (was 4): het eerste jaar laken voor
+  zo'n 24 ambachtslieden, een volle kooi voor 76. **b:** een schaap werpt met 50% kans een lam (was 30%). **c:** in een
+  dorp verkoopt de marskramer in de zomer en de herfst laken, drie pakken van vier voor 6 à 7 goud (`trede` in
+  `T.HANDEL_INSTELLINGEN.verkoopt`), en de bouwer van de speeltest koopt het als de ambachtslieden het tekortkomen. **d:**
+  het graanboek van de speeltest telt de dagen zonder laken (als er ambachtslieden zijn). 1 nieuwe toets, `npm test`
+  783/783. De speeltest erna staat in `speelbaar.md`.
 - 3 okt 2026 — **De feesten: het oogstfeest als vrije dag, en de meiboom** (vijfentwintigste sessie, tijdens Marcels
   vlucht; vraag 97; Marcel: het oogstfeest "Ja, een hele dag vrij", en "De meiboom"). Een antwoord op een voorval kan nu
   een feest zijn (`feest: 'dag'` of `'avond'`, `js/feesten.js`): het hele dorp staat dan op het plein rond het midden, de

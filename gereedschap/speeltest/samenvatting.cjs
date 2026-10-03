@@ -212,7 +212,7 @@ function hetGraanboek(goed) {
   const samen = (b, ...namen) => namen.reduce((n, k) => n + (b[k] || 0), 0);
   const BEKEND = ['oogst', 'gegeten', 'zaaien', 'heer', 'herberg', 'molen', 'brouwerij', 'gekocht', 'verkocht', 'rovers', 'soldaten', 'voorvallen', 'verstopt', 'teruggehaald'];
   const uit = ['## Het graanboek', '', 'Per jaar waar het graan bleef (erbij +, eraf −), en wat dat deed. Het derde jaar is de eerste maand, tot 1 grasmaand.', ''];
-  const kop = ['speler', 'zaad', 'jaar', 'oogst', 'gegeten', 'zaaien', 'de heer', 'herberg', 'molen', 'brouwerij', 'handel', 'rovers, soldaten, voorvallen', 'verstopt, terug', 'anders', 'dagen zonder bier', 'dagen zonder brood', 'huizen met alles', 'dagen alle huizen alles'];
+  const kop = ['speler', 'zaad', 'jaar', 'oogst', 'gegeten', 'zaaien', 'de heer', 'herberg', 'molen', 'brouwerij', 'handel', 'rovers, soldaten, voorvallen', 'verstopt, terug', 'anders', 'dagen zonder bier', 'dagen zonder brood', 'dagen zonder laken', 'huizen met alles', 'dagen alle huizen alles'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   for (const u of twee) {
     u.graan.forEach((jaar, j) => {
@@ -224,7 +224,7 @@ function hetGraanboek(goed) {
         teken(b.oogst), teken(b.gegeten), teken(b.zaaien), teken(b.heer), teken(b.herberg), teken(b.molen), teken(b.brouwerij),
         teken(samen(b, 'gekocht', 'verkocht')), teken(samen(b, 'rovers', 'soldaten', 'voorvallen')),
         `${teken(b.verstopt) || '0'}, ${teken(b.teruggehaald) || '0'}`, teken(anders),
-        g.dagen ? String(g.zonderBier) : '', g.dagen ? String(g.zonderBrood) : '',
+        g.dagen ? String(g.zonderBier) : '', g.dagen ? String(g.zonderBrood) : '', g.dagen && g.zonderLaken != null ? String(g.zonderLaken) : '',
         g.dagen ? pct(g.alles / g.dagen) : '', g.dagen ? `${g.allemaal} van ${g.dagen}${g.gewonnen ? ` (${g.gewonnen} gewonnen)` : ''}` : '',
       ]));
     });

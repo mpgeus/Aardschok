@@ -156,6 +156,28 @@ test('zaaigraan: in de lente verkoopt hij graan per pak van tien, en in de zomer
   }
 });
 
+test('laken: in een dorp verkoopt hij het in de zomer en de herfst, per pak van vier, en in een gehucht niet (vraag 99, c)', () => {
+  const l = T.HANDEL_INSTELLINGEN.verkoopt.laken;
+  // In een gehucht brengt hij het niet mee.
+  for (const i of [0, 1, 2]) assert.ok(!T.verkooptNu(metMarskramer(i)).includes('laken'), `gehucht, bezoek ${i}`);
+  // In een dorp wel, maar niet in de lente.
+  const inDorp = (i) => {
+    const S = maakS();
+    S.trede = 'dorp';
+    T.marskramerKomt(S, i, 0);
+    return S;
+  };
+  assert.ok(!T.verkooptNu(inDorp(0)).includes('laken'), 'in de lente niet');
+  const S = inDorp(1);
+  assert.ok(T.verkooptNu(S).includes('laken'), 'in de zomer wel');
+  assert.equal(S.marskramer.heeft.laken, l.heeft[1]);
+  S.voorraad.goud = 100;
+  const r = T.koop(S, 'laken', 2);
+  assert.ok(r.kan);
+  assert.equal(S.voorraad.laken, 2 * l.per, 'twee pakken is acht laken');
+  assert.equal(S.voorraad.goud, 100 - 2 * l.prijs[1]);
+});
+
 test('verkopen gaat per pak, tot zijn beurs leeg of zijn mars vol is', () => {
   const S = metMarskramer(0);
   S.voorraad.graan = 1000;
