@@ -10,32 +10,32 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; sinds vandaag is er dat eind (2e), met het jaarverslag, en zie je wat een huis wil (2c); het laken, de feesten en de richting van de ui (de schrijftafel) zijn af of gekozen; de speeltest zegt nu dat het graan tussen een dorp van 100 en de winst staat (vraag 102); en Marcel kiest een andere richting: de stad groeit door haar mensen, en jij bepaalt de richting (vraag 103)
+## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; sinds vandaag groeit het dorp door zijn mensen (vraag 103: wat het dorp mist, komt een inwoner je vragen, en jij stuurt met oproepen), is er een eind met het jaarverslag (2e), en zie je wat een huis wil (2c); de speeltest zegt dat iedereen nu veel vaker gelukkig is, en dat de maat van het dorp (100 mensen) tussen het dorp en de winst staat
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
-gehucht laten groeien en het besturen, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
+gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
 Wat er nu speelt en hoe het werkt, staat per onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met
 **Zo werkt het nu**. Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, en Nieuw spel geeft de
 naam van je dorp en de benoemingsbrief van de heer; `W` zijn de wetten, `R` de raadsman, `Z` is slapen bij je huis, `Esc`
-het menu, en het spel slaat elke ochtend zelf op; onder het doel linksboven staat de raad. Elk huis heeft een stand met zijn
-wensen (zoals in Anno 1602): wie een huis aanwijst, ziet een briefje met wat het wil, en een huis dat iets mist, heeft
-een teken bij zijn deur (2c, vraag 100). Linksboven staat de volgende trede (een dorp bij 20 dorpelingen, marktrecht bij
-20 ambachtslieden), en daarna het eind: een jaar lang iedereen gelukkig, vanaf 100 mensen, en dan viert het dorp het
-grote feest (2e, vraag 101; `Spel.debug.einde()`). Op 1 lentemaand brengt de raadsman het jaarverslag. Het dorp viert het
-oogstfeest en de meiboom (vraag 97), en een schaap geeft 8 wol (vraag 99). `npm test`: 792/792.
+het menu, en het spel slaat elke ochtend zelf op; onder het doel linksboven staat de raad. **Sinds 3 okt bouw je niet
+meer zelf** (vraag 103, de spelregel "Wie bouwt"): wat het dorp mist, komt een inwoner je vragen, met de plek in goud op
+de grond en wat het kost, en jij zegt ja of nee; in het bouwmenu (`B`) wijs je erven aan en hang je oproepen op het plein
+("Het dorp zoekt een steengroeve", met een premie). Elk huis heeft een stand met zijn wensen (zoals in Anno 1602): wie een
+huis aanwijst, ziet een briefje met wat het wil, en een huis dat iets mist, heeft een teken bij zijn deur (2c, vraag 100).
+Linksboven staat de volgende trede, en daarna het eind: een jaar lang iedereen gelukkig, vanaf 100 mensen, en dan viert
+het dorp het grote feest (2e, vraag 101). Op 1 lentemaand brengt de raadsman het jaarverslag. `npm test`: 804/804.
 
-**Waar het werk staat:** in `main` staat alles tot en met de feesten en hun controle (`48d4c3d`). Op de branch van deze
-sessie, `ccr-0d0c2710-bcd5tx`, staan daarbovenop Marcels antwoorden op vraag 98 tot en met 101, het laken (vraag 99), 2c
-(vraag 100), 2e (vraag 101) en de speeltest van het laken; dat gaat naar `main` als Marcel het vraagt. Hoe een eigen
-branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** in `main` staat alles tot en met Marcels antwoord op vraag 103 (`6bd27f6`, Marcel: "push main").
+Op de branch van deze sessie, `ccr-0d0c2710-bcd5tx`, staan daarbovenop de verzoeken (vraag 103, stap 1 tot en met 3,
+met de verbeteringen uit de speeltest), het bouwmenu zonder het doel erover, vraag 104 en de speeltest van de verzoeken;
+dat gaat naar `main` als Marcel het vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** Marcels antwoord op **vraag 103** (Marcel, 3 okt: "Ik wil een iets andere richting
-op": de inwoners beginnen zelf een ambacht en vragen toestemming, en jij bepaalt de richting, want "weer een bouw
-spelletje" wordt te snel saai; het plan: verzoeken in plaats van bouwen, oproepen met een premie, en eerst klein). Vraag
-102 (naar een jaar dat te winnen is) wacht daarop. En of het werk van deze sessie in `main` gaat. De speeltest van het laken (`speelbaar.md`) zegt: het laken
-loopt zodra de weverij er staat, maar de bouwers bouwen hem soms laat, en het laken van de marskramer kon niemand betalen;
-de dorpen halen 100 mensen in twee jaar, maar de eerlijke bouwer heeft dan geen graan meer voor bier en brood; alleen
-wie de heer bedriegt, komt in de buurt van een gewonnen jaar, en dan in een dorp van 74. De ui wordt de schrijftafel
+**Waar de volgende sessie begint:** Marcels antwoord op **vraag 104** (verzoeken uit eigen wil: eerst de wapenmaker en
+een tweede herberg, met wat nee en ja aan gevolgen hebben), en of het werk van deze sessie in `main` gaat. De speeltest
+van de verzoeken (`speelbaar.md`, op `9dfa906`): het dorp bouwt zelf, in dezelfde volgorde als de bouwer deed; in het
+tweede jaar hadden alle huizen samen alles op 97 à 269 dagen (was 0 à 109), met reeksen tot 121 dagen; maar geen dorp
+haalde 100 mensen (76 à 98), en de eerlijke bouwer mist vaker bier. Daarmee kan **vraag 102** (naar een jaar dat te
+winnen is) verder, met de maat van het dorp als eerste vraag: waarom er minder erven kwamen. De ui wordt de schrijftafel
 (vraag 98, C): het briefje bij een huis is het eerste papier, en de rest volgt later (januari, met de Steam-pagina).
 
 **Wat wacht:** het buurdorp (vraag 72) tot de kern staat, en het land eromheen naar de provincie (vraag 70, B); de
@@ -3336,8 +3336,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **a**, de bouwer zo, vier jaar? **b**, meer graan door ontginnen (eerst een plan), door de marskramer, of zo
     laten? **c**, de raad zo? **d**, "een week mag" als spelregel, en welke standaard? **e**, de raad, of een wet die de
     poort dichtzet?
-    **Wacht op vraag 103** (Marcel, 3 okt: de stad groeit door haar mensen): wie de weverij bouwt (a, c) en waar het
-    graan vandaan komt (b), hangt daarvan af.
+    **Wachtte op vraag 103** (Marcel, 3 okt: de stad groeit door haar mensen), en die is gebouwd. De speeltest van de
+    verzoeken (`speelbaar.md`) verandert het beeld: in het tweede jaar hadden alle huizen samen alles op 97 à 269 dagen,
+    met reeksen tot 121 dagen, de weverij komt van een verzoek (c is zo beantwoord), en de bouwer zegt ja op wat het dorp
+    mist (a). Wat nu het eerst tussen het dorp en de winst staat, is de maat: geen dorp haalde 100 mensen (76 à 98). Dit
+    plan moet dus opnieuw, met de maat als eerste vraag, en het graan (b) en een slechte dag (d) daarna.
 103. **De stad groeit door haar mensen, en jij bepaalt de richting** (Marcel, 3 okt, vijfentwintigste sessie: "Ik wil een
     iets andere richting op. De inwoners bouwen zelf een weverij etc. Ze vragen alleen toestemming om te bouwen. Jij
     beslist niet wie welk ambacht start natuurlijk. Stel er is een ondernemende inwoner die wapens wil maken etc. Zo groeit

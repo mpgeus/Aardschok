@@ -149,6 +149,48 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 3 okt: de verzoeken (werklijst, vraag 103)
+
+Gespeeld in de vijfentwintigste sessie, op `ccr-0d0c2710-bcd5tx` op `9dfa906`: de spelregel "Wie bouwt" op "De mensen
+vragen het" (de standaard sinds vraag 103). De bouwer en de sluwe bouwer bouwen zelf niets meer behalve erven: wat het
+dorp mist, komt als verzoek, en ze zeggen ja als het dorp het kan betalen. Twee jaar, zaad 1 tot en met 3. Geen fouten in
+de console, en alle zes spellen liepen de twee jaar uit. Te vergelijken met de speeltest van het laken hieronder
+(`3951656`, waarin de bouwer zelf bouwde; 2c en 2e zitten er nog tussen, maar die veranderen het spel van de bouwer bijna
+niet). "Win-dagen": alle huizen alles, en elke woning een stenen huis, zoals 2e het eind wil, maar zonder de 100 mensen.
+
+| Spel | Mensen (eind) | Erven | Verzoeken (ja) | Huizen met alles, jaar 2 | Dagen alle huizen alles, jaar 2 (win-dagen) | Langste reeks | Dagen zonder bier, jaar 2 |
+|---|---|---|---|---|---|---|---|
+| bouwer, zaad 1 | 82 (was 112) | 6 | 31 (31) | 81% (53%) | 141 (104) (was 0) | 70 (18) | 90 (38) |
+| bouwer, zaad 2 | 98 (110) | 9 | 33 (33) | 66% (59%) | 146 (0) (22) | 121 (17) | 140 (74) |
+| bouwer, zaad 3 | 85 (101) | 7 | 33 (33) | 72% (58%) | 97 (0) (0) | 54 (19) | 139 (97) |
+| sluw, zaad 1 | 82 (107) | 6 | 33 (33) | 84% (70%) | 157 (72) (18) | 34 (51) | 2 (5) |
+| sluw, zaad 2 | 77 (110) | 6 | 32 (32) | 77% (49%) | 156 (52) (0) | 43 (17) | 39 (58) |
+| sluw, zaad 3 | 76 (74) | 4 | 30 (30) | 87% (69%) | 269 (209) (109) | 90 (46) | 5 (44) |
+
+**Wat opviel:**
+
+1. **Het dorp bouwt nu zelf, en in dezelfde volgorde als de bouwer.** Per spel 30 à 33 verzoeken, allemaal ja: eerst de
+   houthakker (2 lentemaand), dan de kapel, een put, de visser, een steengroeve en het wachthuis, in de herfst een jager per
+   maand, de bakkerij en de molen, en in het tweede jaar de weverij en de markt. Honger was er alleen in de eerste zomer,
+   zoals voorheen.
+2. **Veel vaker iedereen gelukkig.** In het tweede jaar hadden alle huizen samen alles op 97 à 269 dagen (was 0 à 109),
+   en de langste reeks was 34 à 121 dagen (was 17 à 51). De sluwe bouwer met zaad 3 had 209 win-dagen, en in de eerste
+   maand van het derde jaar 30 van de 31. Dat de dorpen kleiner bleven (hieronder), speelt vermoedelijk mee: minder nieuwe
+   hutten die nog niets hebben. De plek van een put of een kapel kiest het spel nu zoals de bouwer hem al koos.
+3. **Wat nu tussen het dorp en de winst staat, is de maat.** Geen dorp haalde 100 mensen (76 à 98, was 101 à 112): er
+   kwamen 4 à 9 erven, tegen 5 à 12. Waarom precies, is nog niet nagezocht.
+4. **De eerlijke bouwer mist vaker bier** (90 à 140 dagen in het tweede jaar, was 38 à 97); de sluwe bouwer, met het
+   verstopte graan voor de herberg, bijna nooit.
+5. **Wat de oude bouwer stil wist, moest het spel nu zelf weten.** De eerste speeltest (op `1991fc5`) zei op alle
+   verzoeken nee: de speler kiest bij een voorval het "verstandige" antwoord, en dat geeft geen hout uit dat de winter nodig
+   heeft. De tweede (op `827accd`) zei ja, maar niemand vroeg een houthakker, want de raad noemt die pas als het hout de
+   winter niet haalt: het hout ging op aan de kapel en de putten, het dorp kon daarna geen houthakker of jager meer betalen,
+   at zijn zaaigraan op en liep leeg. De derde (op `02780f7`) vroeg elke vier dagen een jager, 25 in vier maanden. Nu vraagt
+   iemand eerst een houthakker als er geen staat, en na een ja komt hetzelfde gebouw pas na dertig dagen weer.
+
+Wat eruit volgt: de verzoeken blijven de standaard, en vraag 102 (naar een jaar dat te winnen is) kan nu verder, met de
+maat van het dorp als eerste vraag.
+
 ## De speeltest van 3 okt: het laken (werklijst, vraag 99)
 
 Gespeeld in de vijfentwintigste sessie, op `ccr-0d0c2710-bcd5tx` op `3951656`: het laken van vraag 99 (een schaap geeft 8
