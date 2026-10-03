@@ -285,6 +285,26 @@
     return `Binnen ${k.straal} tegels: ${wie}. ${nu}`;
   };
 
+  // Welke plekken een huis op dit erf in zijn kring zou hebben (2c, werklijst vraag 100, c; `opmerkingen.md`, 1 okt): voor
+  // de muis met een erf in de hand (js/main.js), zodat je niet pas na een jaar merkt dat het huis er nooit alles krijgt.
+  // Alleen de plekken met een kring (een put, een kapel); de herberg en een markt gelden voor het hele dorp. Een plek in
+  // aanbouw telt mee. `erf` is de rechthoek van het erf.
+  T.erfKringTekst = function (D, erf) {
+    const ja = [];
+    const nee = [];
+    for (const id of Object.keys(T.WENSEN)) {
+      const wens = T.WENSEN[id];
+      const straal = wens.plek && IN().kring[wens.plek];
+      if (!straal) continue;
+      const inBouw = (D.gebouwen || []).filter((g) => g.soort === wens.plek && !g.klaar).map((g) => T.voetVanGebouw(g));
+      if (T.plekkenVan(D, wens.plek).concat(inBouw).some((r) => T.inDeKring(erf, r, straal))) ja.push(`${wens.naam} binnen ${straal} tegels`);
+      else nee.push(`${wens.naam.replace(/^een /, 'geen ')} binnen ${straal}`);
+    }
+    if (!ja.length && !nee.length) return null;
+    const delen = [ja.length ? `heeft ${T.opsomming(ja)}` : '', nee.length ? `${ja.length ? 'maar ' : 'heeft '}${T.opsomming(nee)}` : ''];
+    return `Een huis op dit erf ${delen.filter(Boolean).join(', ')}.`;
+  };
+
   // ---------------------------------------------------------------------------------------------
   // Wat de huizen missen, en wat helpt
   // ---------------------------------------------------------------------------------------------
@@ -367,6 +387,17 @@
     return nogNiet(soorten[0]);
   }
 
+  // Wat helpt tegen een wens die gemist wordt, voor de raad (T.watDeHuizenMissen hieronder) en het briefje van een huis
+  // (T.huisToestand): { kan, bouw, ook, tekst }. Een plek die je kunt bouwen, zeg je met de toets erachter, dus zonder
+  // tekst ("Vijf hutten willen een put binnen 12 tegels [B]."); een die er al staat, ligt te ver: de herberg van het
+  // gehucht helpt een huis buiten zijn kring niet. Een goed: wie het maakt (watHelpt).
+  function hulpVoorWens(D, wens) {
+    if (wens.plek) return T.inBouwmenu(D, wens.plek) ? { kan: true, bouw: wens.plek, tekst: null } : nogNiet(wens.plek);
+    const makers = Object.keys(T.GEBOUWEN).filter((s) => T.GEBOUWEN[s].maakt && wens.goed.some((goed) => T.GEBOUWEN[s].maakt.uit[goed]));
+    makers.sort((a, b) => wens.goed.findIndex((goed) => T.GEBOUWEN[a].maakt.uit[goed]) - wens.goed.findIndex((goed) => T.GEBOUWEN[b].maakt.uit[goed]));
+    return watHelpt(D, makers);
+  }
+
   // Wat de huizen missen, en wat helpt (werklijst vraag 86, a, en 87; Marcel, 2 okt: "a ja b ja"), voor de raad onder
   // het doel (js/raad.js), het rapport van de raadsman (js/ochtendrapport.js) en de bouwer van de speeltest
   // (gereedschap/speeltest/speler.js): zo zeggen ze alle drie hetzelfde. Uit wat elk huis op de laatste dag wilde en had
@@ -445,22 +476,57 @@
         continue;
       }
       const zin = `${T.hoofdletter(wieTekst(w.wie))} ${w.n === 1 ? 'wil' : 'willen'} ${w.wens.naam}${binnen}`;
-      let h;
-      if (w.wens.plek) {
-        // Een plek die je kunt bouwen, zeg je met de toets erachter: "Vijf hutten willen een put binnen 12 tegels [B]." Een
-        // die er al staat, ligt te ver: de herberg van het gehucht helpt een huis buiten zijn kring niet.
-        h = T.inBouwmenu(D, w.wens.plek) ? { kan: true, bouw: w.wens.plek, tekst: null } : nogNiet(w.wens.plek);
-      } else {
-        const makers = Object.keys(T.GEBOUWEN).filter((s) => T.GEBOUWEN[s].maakt && w.wens.goed.some((goed) => T.GEBOUWEN[s].maakt.uit[goed]));
-        makers.sort((a, b) => w.wens.goed.findIndex((goed) => T.GEBOUWEN[a].maakt.uit[goed]) - w.wens.goed.findIndex((goed) => T.GEBOUWEN[b].maakt.uit[goed]));
-        h = watHelpt(D, makers);
-      }
+      const h = hulpVoorWens(D, w.wens);
       uit.push({
         soort: 'wens', id: w.id, huizen: w.n, mensen: w.mensen, kan: h.kan, bouw: h.bouw, ook: h.ook || [],
         tekst: h.tekst ? `${zin}: ${h.tekst}.` : `${zin} [B].`,
       });
     }
     return uit;
+  };
+
+  // Wat een huis laat zien (2c, werklijst vraag 100; Marcel, 3 okt: "100 ja"): het teken bij zijn deur (js/tekenen.js), en
+  // het briefje als de muis erop staat (js/hud.js). Uit wat het op de laatste dag wilde en had (g.wensen, T.onthoudWensen
+  // hieronder), net als de raad. Null voor een huis zonder mensen. Geeft:
+  //   stand, mensen, tevredenheid (0 tot 1), wie (de namen van wie er woont)
+  //   wensen: [{ id, naam, heeft, helpt }], in de volgorde van zijn stand (eten en brandhout eerst); `helpt` zegt wat
+  //           helpt als het mist ("bouw een visser of een jager [B]"), anders null; voor eten en brandhout zegt dat de raad
+  //   teken: wat het als eerste mist, 'bouwstof' als het een maand alles had en op bouwstof wacht, of null
+  //   groei: { dagen, nodig, wordt, kosten }: hoe ver het is met doorgroeien (js/behoeften.js), of null op de hoogste stand
+  // Wat een huis als eerste mist, voor het teken bij zijn deur (js/tekenen.js): de eerste wens van zijn stand die het niet
+  // heeft, 'bouwstof' als het een maand alles had en op bouwstof wacht, of null. Licht, want het scherm vraagt het elk beeld.
+  T.tekenVanHuis = function (g) {
+    const w = g && g.wensen;
+    if (!w || !w.mensen) return null;
+    const id = T.wensenVanStand(w.stand).find((x) => !gedekt(w.heeft[x] != null ? w.heeft[x] : 1));
+    return id || (g.wachtOpBouwstof ? 'bouwstof' : null);
+  };
+
+  T.huisToestand = function (D, g) {
+    const w = g && g.wensen;
+    if (!w || !w.mensen) return null;
+    const wensen = T.wensenVanStand(w.stand).map((id) => {
+      const wens = T.WENSEN[id];
+      const heeft = gedekt(w.heeft[id] != null ? w.heeft[id] : 1);
+      let helpt = null;
+      if (!heeft && !BASIS.includes(id)) {
+        const h = hulpVoorWens(D, wens);
+        const binnen = wens.plek && IN().kring[wens.plek] ? ` binnen ${IN().kring[wens.plek]} tegels` : '';
+        helpt = h.tekst || `bouw er een${binnen} [B]`;
+      }
+      return { id, naam: wens.naam, heeft, helpt };
+    });
+    const soort = T.GEBOUWEN[g.soort];
+    const wordt = soort && soort.wordt && T.GEBOUWEN[soort.wordt];
+    return {
+      stand: w.stand, mensen: w.mensen, tevredenheid: w.tevredenheid,
+      wie: ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g).map(T.naamVanBewoner),
+      wensen,
+      teken: T.tekenVanHuis(g),
+      groei: wordt
+        ? { dagen: g.groeiDagen || 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: wordt.naam, kosten: IN().bouwstof[soort.wordt] || {} }
+        : null,
+    };
   };
 
   // De huizen nemen hun goederen uit de voorraad, zoals T.berekenWensen ze verdeelde (vanuit T.tikBehoeftenDag, vóór het

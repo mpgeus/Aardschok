@@ -1,3 +1,9 @@
+/* De letters van de schrijftafel (werklijst vraag 98, C; Marcel, 3 okt: "98 C"): gotisch voor koppen, oud drukwerk voor
+   tekst. Ze staan in letters/, met hun licentie (OFL), zodat het spel ze ook zonder internet heeft. */
+@font-face { font-family: 'Jacquarda Bastarda 9'; src: url('letters/jacquarda-bastarda-9.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'IM Fell English'; src: url('letters/imfell-english.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'IM Fell English'; font-style: italic; src: url('letters/imfell-english-cursief.woff2') format('woff2'); font-display: swap; }
+
 :root {
   --inkt: #efe6d2;
   --gedempt: #b5a78c;
@@ -7,6 +13,14 @@
   --rood: #e0604f;
   --groen: #86c46f;
   --kop: Georgia, 'Times New Roman', serif;
+  /* Papier (vraag 98, C): inkt op perkament. */
+  --papier-inkt: #2c1d12;
+  --papier-grijs: #5a4430;
+  --papier-rood: #7a2022;
+  --papier-groen: #3e5624;
+  --papier-lijn: #9a8260;
+  --boek: 'IM Fell English', Georgia, serif;
+  --gotisch: 'Jacquarda Bastarda 9', 'IM Fell English', Georgia, serif;
 }
 
 * { box-sizing: border-box; }
@@ -1038,3 +1052,43 @@ body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht) 
 #terug .terug-lijst li { padding: 3px 0; border-top: 1px solid var(--rand); }
 #terug .terug-lijst li span { color: var(--gedempt); font: italic 12px var(--kop); margin-right: 4px; }
 #terug .terug-lijst li.gevaar { color: #f0a594; }
+
+/* Het briefje bij een huis (js/huisbriefje.js; werklijst vraag 100, 2c, in de stijl van vraag 98, C): een papiertje aan
+   een spijker, met wie er woont, wat het huis wil en wat helpt. Het papier en de spijker zijn pixel art
+   (gereedschap/pixelart/papieren.cjs), twee keer zo groot. */
+#huisbriefje {
+  position: fixed;
+  z-index: 40;
+  width: 290px;
+  pointer-events: none;
+  border-style: solid;
+  border-width: 16px;
+  border-image: url('beelden/papier.png') 8 fill / 16px round;
+  image-rendering: pixelated;
+  padding: 4px 8px 6px;
+  color: var(--papier-inkt);
+  font: 16px/1.3 var(--boek);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+#huisbriefje::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  background: url('beelden/spijker.png') 0 0 / 16px 16px;
+  image-rendering: pixelated;
+}
+#huisbriefje .briefje-kop { font: 26px/1 var(--gotisch); }
+#huisbriefje .briefje-stand { font-style: italic; color: var(--papier-grijs); font-size: 15px; }
+#huisbriefje .briefje-wensen { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px 12px; margin: 2px 0; }
+#huisbriefje .ja { color: var(--papier-groen); }
+#huisbriefje .nee { color: var(--papier-rood); }
+#huisbriefje .briefje-helpt,
+#huisbriefje .briefje-groei { font-size: 15px; border-top: 1px dotted var(--papier-lijn); padding-top: 4px; }
+#huisbriefje .briefje-groei { font-style: italic; color: var(--papier-grijs); }
+#huisbriefje kbd { color: var(--papier-inkt); border-color: var(--papier-inkt); background: none; }

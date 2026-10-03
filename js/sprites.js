@@ -70,6 +70,7 @@
       if (gegevens.schandpaal) vellen.push(gegevens.schandpaal.bestand);
       if (gegevens.paaltje) vellen.push(gegevens.paaltje.bestand);
       if (gegevens.meiboom) vellen.push(gegevens.meiboom.bestand);
+      if (gegevens.tekens) vellen.push(gegevens.tekens.bestand);
       const lijst = vellen.map((f) => MAP + f);
       for (const f of Object.values(gegevens.figuren)) {
         for (const h of Object.values(f.houdingen)) lijst.push(MAP + 'figuren/' + h.bestand);
@@ -377,6 +378,16 @@
     if (!gegevens || !gegevens.paaltje) return null;
     const t = gegevens.paaltje;
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
+  };
+
+  // Het teken bij de deur van een huis dat iets mist (js/tekenen.js; 2c, vraag 100): een papiertje aan een spijker met
+  // wat het als eerste mist, in dezelfde namen als T.WENSEN (gereedschap/pixelart/papieren.cjs). Null als het er niet is.
+  S.huisTeken = function (naam) {
+    if (!gegevens || !gegevens.tekens) return null;
+    const t = gegevens.tekens;
+    const i = t.namen.indexOf(naam);
+    if (i < 0) return null;
+    return stuk(MAP + t.bestand, i * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
   };
 
   // De meiboom op het plein (js/feesten.js, gereedschap/pixelart/meiboom.cjs): één tekening, zoals het paaltje, met

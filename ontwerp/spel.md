@@ -136,9 +136,19 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 **Zo werkt het nu** (1 en 2 okt, tweeëntwintigste en drieëntwintigste sessie): **2a, 2b en 2d zijn gebouwd**
 (`js/wensen.js`, het doorgroeien in `js/behoeften.js`, en de treden in `js/treden.js`: een dorp bij 20 dorpelingen,
-marktrecht bij 20 ambachtslieden, en de markt en de weverij al in een dorp; zie "Van dorp tot stad"); 2c (zien wat een
-huis wil, na de pagina met ontwerpen voor de ui) en 2e (het eind) komen nog, in de volgorde van vraag 80. Zoals in Anno
+marktrecht bij 20 ambachtslieden, en de markt en de weverij al in een dorp; zie "Van dorp tot stad"); **2c sinds 3 okt**
+(vraag 100, hieronder); 2e (het eind) komt nog, in de volgorde van vraag 80. Zoals in Anno
 1602: elk huis heeft een stand, en elke stand wil iets.
+- **2c, zien wat een huis wil** (3 okt, vijfentwintigste sessie; werklijst vraag 100, Marcel: "100 ja"; in de stijl van
+  vraag 98, "98 C", de schrijftafel). Een huis dat iets mist, heeft boven zijn deur een **teken**: een papiertje aan een
+  spijker met wat het als eerste mist (een kom voor eten, houtblokken, een put, een bierkroes, een vis, een kapel, het
+  uithangbord van de herberg, brood, lappen stof voor laken, een marktkraam, of een hamer als het op bouwstof wacht;
+  `T.tekenVanHuis`, de pixel art in `gereedschap/pixelart/papieren.cjs`). Staat de muis op een huis met mensen, dan hangt
+  er naast zijn deur een **briefje** (`js/huisbriefje.js`): wie er woont, de stand, hoe tevreden, wat het wil met ✓ en ✗,
+  wat helpt ("Vlees of vis: bouw een visser of een jager [B]", zoals de raad het zegt) en hoe ver het is met doorgroeien
+  (`T.huisToestand` in `js/wensen.js`). Een klik blijft verstoppen in de kelder. Met een **erf** in de hand zegt de muis
+  welke put en kapel een huis daar zou halen (`T.erfKringTekst`). Het briefje is het eerste in de letters van de
+  schrijftafel (`letters/`: Jacquarda Bastarda 9 en IM Fell English, met hun licentie); de rest van de ui volgt later.
 Klein (vraag 82): drie standen, op de huizen die er al zijn; de poorters en hun huis komen later. Wat er nu al te zien is:
 de tevredenheid in de balk is het gemiddelde van de huizen, en bij de muis staat hij per stand, met wat er gemist wordt
 en in hoeveel huizen; met een put, een kapel, de herberg of een markt in de hand zie je de kring, en zegt de muis welke

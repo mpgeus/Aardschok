@@ -205,7 +205,9 @@
     // Een plek die een huis in de buurt wil (een put, een kapel, de herberg, een markt): wie hij hier bereikt. De kring is
     // groter dan het scherm, dus zegt de muis het ook in woorden (js/wensen.js).
     const voet = !reden && T.gebouwVoet(S.bouwSoort, T.volgendeTekening(S.dorp, S.bouwSoort));
-    const kring = voet && T.kringTekst(S.dorp, S.bouwSoort, { x, y, b: voet.b, h: voet.h });
+    // Met een erf in de hand: welke put en kapel een huis hier zou halen (2c, vraag 100, c).
+    const rechthoek = voet && { x, y, b: voet.b, h: voet.h };
+    const kring = voet && (T.GEBOUWEN[S.bouwSoort].erf ? T.erfKringTekst(S.dorp, rechthoek) : T.kringTekst(S.dorp, S.bouwSoort, rechthoek));
     if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
     else if (kring) T.ui.tooltip(kring, S.muis.x, S.muis.y);
     else T.ui.verbergTooltip();
@@ -213,8 +215,24 @@
     S.handeling = null;
   }
 
+  // Het briefje bij een huis (js/huisbriefje.js; 2c, werklijst vraag 100): staat de muis op een huis met mensen in je eigen
+  // dorp, dan hangt het naast zijn deur.
+  function werkHuisbriefjeBij() {
+    const D = S.modus === 'verkennen' && S.hover && T.dorpHier(S);
+    const g = D === S.dorp && T.gebouwOp(D, S.hover.x, S.hover.y);
+    if (!g || !T.huisToestand(D, g)) {
+      T.ui.verbergHuisbriefje();
+      return;
+    }
+    const deur = T.deurVan(S.wereld, g);
+    const p = T.naarScherm(deur.x, deur.y);
+    const c = vanVlak(p.x, p.y);
+    T.ui.toonHuisbriefje(S, g, c.x, c.y);
+  }
+
   function werkHoverBij() {
     if (S.bouwSoort) {
+      T.ui.verbergHuisbriefje();
       werkBouwHoverBij();
       return;
     }
@@ -224,6 +242,7 @@
       S.hover = null;
       S.handeling = null;
       T.ui.verbergTooltip();
+      T.ui.verbergHuisbriefje();
       canvas.style.cursor = 'default';
       if (S.modus === 'gevecht' && T.spelerAanDeBeurt(S)) {
         const v = T.aanDeBeurt(S);
@@ -241,6 +260,7 @@
     if (h && h.tekst) T.ui.tooltip(tipTekst(h), S.muis.x, S.muis.y, !!h.fout || h.kan === false);
     else T.ui.verbergTooltip();
     canvas.style.cursor = h ? 'pointer' : 'default';
+    werkHuisbriefjeBij();
   }
 
   // Bij het rondlopen volgt de camera de schout; in een gevecht zoekt hij het midden tussen

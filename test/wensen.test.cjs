@@ -598,3 +598,48 @@ test('een huis groeit niet over iemand heen die ervoor staat: dan morgen weer', 
   T.tikBehoeftenDag(D, ++dag);
   assert.equal(hut.soort, 'huis', 'zijn ze binnen, dan wel');
 }));
+
+// ---------------------------------------------------------------------------------------------
+// 2c: zien wat een huis wil (werklijst vraag 100; Marcel, 3 okt: "100 ja")
+// ---------------------------------------------------------------------------------------------
+
+test('2c: een huis zegt wie er woont, wat het wil met wat helpt, wat het als eerste mist, en hoe ver het is met doorgroeien', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  T.zetVoorraad(D, 'bier', 50);
+  T.tikBehoeftenDag(D, ZOMERDAG);
+  const huis = D.gebouwen.find((g) => g.soort === 'huis' && g.huis !== 'schout');
+  const t = T.huisToestand(D, huis);
+  assert.equal(t.stand, 'dorpelingen');
+  assert.deepEqual(t.wie, D.bewoners.mensen.filter((p) => p.huis === huis).map(T.naamVanBewoner));
+  assert.deepEqual(t.wensen.map((w) => w.id), T.wensenVanStand('dorpelingen'), 'in de volgorde van zijn stand');
+  const bier = t.wensen.find((w) => w.id === 'bier');
+  assert.deepEqual({ heeft: bier.heeft, helpt: bier.helpt }, { heeft: true, helpt: null });
+  const vis = t.wensen.find((w) => w.id === 'vleesOfVis');
+  assert.equal(vis.heeft, false);
+  assert.equal(vis.helpt, 'bouw een visser of een jager [B]', 'wat helpt, zoals de raad het zegt');
+  const kapel = t.wensen.find((w) => w.id === 'kapel');
+  assert.equal(kapel.helpt, `bouw er een binnen ${T.WENSEN_INSTELLINGEN.kring.kapel} tegels [B]`);
+  assert.equal(t.teken, t.wensen.find((w) => !w.heeft).id, 'het teken is wat het als eerste mist');
+  assert.deepEqual(t.groei, { dagen: 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: 'stenen huis', kosten: T.WENSEN_INSTELLINGEN.bouwstof.stenenHuis });
+  // Een huis zonder mensen laat niets zien.
+  assert.equal(T.huisToestand(D, D.gebouwen.find((g) => g.huis === 'schout')), null);
+  // Heeft het alles, dan geen teken; wacht het op bouwstof, dan dat.
+  const hut = D.gebouwen.find((g) => g.soort === 'hut' && g.wensen && T.huisToestand(D, g).teken === null);
+  if (hut) {
+    hut.wachtOpBouwstof = true;
+    assert.equal(T.huisToestand(D, hut).teken, 'bouwstof');
+  }
+});
+
+test('2c: met een erf in de hand zegt de muis welke put en kapel een huis daar zou halen', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  const put = T.plekkenVan(D, 'put')[0];
+  const bij = { x: put.x - 4, y: put.y + 2, b: 10, h: 10 };
+  assert.equal(T.erfKringTekst(D, bij), `Een huis op dit erf heeft een put binnen ${T.WENSEN_INSTELLINGEN.kring.put} tegels, maar geen kapel binnen ${T.WENSEN_INSTELLINGEN.kring.kapel}.`);
+  assert.equal(T.erfKringTekst(D, { x: 0, y: 0, b: 10, h: 10 }), `Een huis op dit erf heeft geen put binnen ${T.WENSEN_INSTELLINGEN.kring.put} en geen kapel binnen ${T.WENSEN_INSTELLINGEN.kring.kapel}.`);
+  // Een kapel in aanbouw telt mee: daar komt hij.
+  D.gebouwen.push({ soort: 'kapel', x: put.x + 3, y: put.y + 3, voet: { b: 4, h: 4 }, klaar: false });
+  assert.match(T.erfKringTekst(D, bij), /een kapel binnen/);
+});

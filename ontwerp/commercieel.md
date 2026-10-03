@@ -182,6 +182,11 @@ muziek), dan de seizoenen in beeld en het weer; en de kazerne komt met de oorlog
 (https://claude.ai/artifact/JRKq7fwaANmLd3fGc4EbD8), vier richtingen (perkament, hout en ijzer, de schrijftafel, licht en
 stil) en vijf letters. De keuze is vraag 98 in de werklijst.
 
+**Besloten (Marcel, 3 okt, vraag 98):** "98 C", de schrijftafel: onderin de tafel van de schout met het rekenboek, de
+papieren als dingen op tafel, en bij een huis een briefje aan een spijker; de letters Jacquarda Bastarda 9 (koppen) en IM
+Fell English (tekst), meegeleverd in `letters/`. Het eerste stuk is het briefje bij een huis (2c, vraag 100); de rest van
+de ui volgt later, met de Steam-pagina in januari.
+
 **Later: dorpsfeesten** (Marcel, 1 okt: "Later wil ik ook dorpsfeesten die passen bij het seizoen, hier wil ik het hele
 dorp wat mee doet etc. Ook een bruiloft wordt groots gevierd. Er zijn veel soorten feesten die we kunnen gebruiken
 hiervoor. Voor nu een notitie later pas bouwen."). Een feest is ook sfeer om te laten zien: het hele dorp op één plek,

@@ -32,7 +32,7 @@ function onder(map) {
   return uit;
 }
 
-// Wat het spel laadt: index.html, de scripts en de stijl die erin staan, en de plaatjes.
+// Wat het spel laadt: index.html, de scripts en de stijl die erin staan, de plaatjes en de letters.
 function bestanden() {
   const html = fs.readFileSync(path.join(WORTEL, 'index.html'), 'utf8');
   const lijst = new Set(['index.html']);
@@ -41,6 +41,8 @@ function bestanden() {
     lijst.add(m[1]);
   }
   for (const map of ['beelden', 'tegels']) for (const f of onder(map)) if (f.endsWith('.png')) lijst.add(f);
+  // De letters (stijl.css), met hun licentie: die moet bij de letters blijven.
+  for (const f of onder('letters')) lijst.add(f);
   for (const f of lijst) if (!fs.existsSync(path.join(WORTEL, f))) throw new Error(`${f} staat in index.html, maar bestaat niet.`);
   return [...lijst].sort();
 }
@@ -52,7 +54,7 @@ function stand() {
   const MAANDEN = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
   const nu = new Date();
   const commit = git('rev-parse --short HEAD');
-  const vies = git('status --porcelain -- js index.html kaarten beelden tegels stijl.css');
+  const vies = git('status --porcelain -- js index.html kaarten beelden tegels letters stijl.css');
   return {
     tekst: `Proefversie van ${nu.getDate()} ${MAANDEN[nu.getMonth()]} ${nu.getFullYear()} · ${commit}${vies ? ' en wijzigingen' : ''}`,
     bestand: `${NAAM.toLowerCase()}-proef-${nu.toISOString().slice(0, 10)}-${commit}${vies ? '-met-wijzigingen' : ''}.zip`,

@@ -2253,6 +2253,30 @@
      24,
      184
     ]
+   },
+   "tekens": {
+    "bestand": "tekens.png",
+    "cel": [
+     20,
+     20
+    ],
+    "anker": [
+     10,
+     19
+    ],
+    "namen": [
+     "eten",
+     "brandhout",
+     "put",
+     "bier",
+     "vleesOfVis",
+     "kapel",
+     "herberg",
+     "brood",
+     "laken",
+     "markt",
+     "bouwstof"
+    ]
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});

@@ -303,7 +303,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.berekenTevredenheid` (`js/behoeften.js`) maakt er het gemiddelde van, naar mensen; de huizen nemen hun goederen
   vóór het eten (`T.gebruikGoederen`), en wat eten is (brood, vis, vlees: `T.voedtAlsGraan`), eet het dorp dan minder
   aan graan (vraag 92); brood weegt minder in hoe blij een huis is (`blijheid`). Wat een huis wil en heeft, staat op het
-  huis (`g.wensen`). **Wat de huizen
+  huis (`g.wensen`); wat een huis laat zien (2c, vraag 100), zegt `T.huisToestand` (het briefje bij de muis,
+  `js/huisbriefje.js`, in de stijl van de schrijftafel, vraag 98, C) en `T.tekenVanHuis` (het teken bij zijn deur,
+  `js/tekenen.js`); met een erf in de hand zegt `T.erfKringTekst` welke put en kapel een huis daar haalt. **Wat de huizen
   missen en wat helpt, zegt `T.watDeHuizenMissen`** (vraag 87): de raad, het rapport en de bouwer van de speeltest vragen
   het alle drie, eerst een huis dat op bouwstof wacht, dan wat de meeste mensen missen, met de ketens (vraag 90, D: wat
   een werkplaats nodig heeft, `maakt.in`, en wie dat maakt: "de bakkerij heeft geen meel, bouw een molen [B]"). Met een put, een

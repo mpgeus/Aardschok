@@ -6,6 +6,7 @@
 //   node gereedschap/pixelart/naar-spel.cjs --alleen schandpaal
 //   node gereedschap/pixelart/naar-spel.cjs --alleen paaltje
 //   node gereedschap/pixelart/naar-spel.cjs --alleen meiboom
+//   node gereedschap/pixelart/naar-spel.cjs --alleen tekens
 //
 // Met --alleen werkt het alleen de genoemde figuren bij: het leest de bestaande
 // beelden/beschrijving.json, zet die figuren erin (erbij, of in de plaats van wat er stond),
@@ -14,7 +15,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, het paaltje en de meiboom) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, het paaltje, de meiboom en de tekens met het papier) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -33,6 +34,7 @@ const Graan = require('./graan-vel.cjs');
 const Schandpaal = require('./schandpaal.cjs');
 const Paaltje = require('./paaltje.cjs');
 const Meiboom = require('./meiboom.cjs');
+const Papieren = require('./papieren.cjs');
 
 const UIT = path.join(__dirname, 'uit');
 const BEELDEN = path.join(__dirname, '..', '..', 'beelden');
@@ -152,9 +154,21 @@ function meiboom() {
   return Meiboom.beschrijving('meiboom.png');
 }
 
+// ---------------------------------------------------------------- de tekens, het papier en de spijker
+//
+// De tekens bij de deur van een huis dat iets mist (papieren.cjs; werklijst vraag 100, 2c), één rij cellen: js/sprites.js
+// zoekt ze op met S.teken(naam). Het papier en de spijker gebruikt stijl.css voor het briefje bij een huis (de stijl van
+// vraag 98, C): die staan niet in de beschrijving, alleen als bestand.
+function tekens() {
+  schrijf('tekens.png', Papieren.tekensVel());
+  schrijf('papier.png', Papieren.papier());
+  schrijf('spijker.png', Papieren.spijker());
+  return Papieren.beschrijving();
+}
+
 // Losse vellen die --alleen ook kent, naast de figuren: ze worden hier gerenderd, niet gekopieerd
 // uit uit/, en geven hun ingang in de beschrijving terug.
-const LOSSE_VELLEN = { schandpaal, paaltje, meiboom };
+const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, tekens };
 
 // ---------------------------------------------------------------- kopiëren
 

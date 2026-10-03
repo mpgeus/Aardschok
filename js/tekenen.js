@@ -289,6 +289,7 @@
     ctx.scale(S.zoom, S.zoom);
     ctx.translate(-Math.round(S.camera.x), -Math.round(S.camera.y));
     for (const r of ramen) vulRamen(ctx, S, r);
+    tekenHuisTekens(ctx, S);
     tekenOogjes(ctx, S);
     tekenEffecten(ctx, S);
     ctx.restore();
@@ -1521,6 +1522,22 @@
     if (e.alarm > 0) roep(ctx, '!', cx, top - 14 - Math.abs(Math.sin(e.alarm * 9)) * 4, '#ffd24a');
     // Wie de schout zoekt met een voorval (js/voorvallen.js): een uitroepteken dat zacht op en neer gaat.
     else if (e.zoektSchout && !e.binnen) roep(ctx, '!', cx, top - 12 - Math.abs(Math.sin(S.tijd * 3)) * 3, '#f3e2a4');
+  }
+
+  // Het teken bij de deur van een huis dat iets mist (2c, werklijst vraag 100; js/wensen.js, T.tekenVanHuis): een
+  // papiertje aan een spijker met wat het als eerste mist. Na de nacht getekend, zoals het oogje, zodat je het ook in het
+  // donker ziet. Alleen in het dorp dat hier ligt; zonder de kunst niet, en het gereedschap kent de wensen niet.
+  function tekenHuisTekens(ctx, S) {
+    const D = T.dorpHier(S);
+    if (!D || !T.tekenVanHuis || !T.deurVan || !metSprites() || !T.sprites.huisTeken) return;
+    for (const g of D.gebouwen || []) {
+      const naam = T.tekenVanHuis(g);
+      const deel = naam && T.sprites.huisTeken(naam);
+      if (!deel) continue;
+      const deur = T.deurVan(S.wereld, g);
+      const p = T.naarScherm(deur.x, deur.y);
+      T.sprites.teken(ctx, deel, p.x, p.y - 66, 1); // boven hoofdhoogte, zodat het bij het huis hoort en niet bij wie ervoor staat
+    }
   }
 
   // Het oogje boven een getuige (js/zien.js, T.werdGezien): hij zag je iets wegzetten of terughalen

@@ -3668,6 +3668,14 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **2c: zien wat een huis wil** (vijfentwintigste sessie; vraag 100, Marcel: "100 ja", in de stijl van vraag
+  98, "98 C"). Een huis dat iets mist, heeft boven zijn deur een teken met wat het als eerste mist (pixel art,
+  `gereedschap/pixelart/papieren.cjs`); staat de muis op een huis, dan hangt er een briefje aan een spijker naast de deur
+  met wie er woont, wat het wil met ✓ en ✗, wat helpt en hoe ver het is met doorgroeien (`T.huisToestand`,
+  `js/huisbriefje.js`); en met een erf in de hand zegt de muis welke put en kapel een huis daar haalt
+  (`T.erfKringTekst`). Wat helpt, zegt het briefje zoals de raad (één functie, `hulpVoorWens`). Het briefje is het eerste
+  in de stijl van de schrijftafel: papier, de spijker, en de letters Jacquarda Bastarda 9 en IM Fell English
+  (`letters/`, met hun licentie, ook in de proefversie). 2 nieuwe toetsen, `npm test` 785/785.
 - 3 okt 2026 — **Het laken: 8 wol per schaap, meer lammeren, en laken bij de marskramer** (vijfentwintigste sessie, na
   Marcels vlucht; vraag 99; Marcel: "99 a b c d ja"). **a:** een schaap geeft 8 wol (was 4): het eerste jaar laken voor
   zo'n 24 ambachtslieden, een volle kooi voor 76. **b:** een schaap werpt met 50% kans een lam (was 30%). **c:** in een
