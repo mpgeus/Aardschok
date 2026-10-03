@@ -2123,7 +2123,10 @@ jaar later vol dan eerst in het derde jaar, tenzij je slacht.
 ## Ontginnen: nieuwe velden uit bos of heide (Marcel, 25 sep 2026; werklijst punt 6b)
 
 **Zo staat het nu** (25 sep): besloten, nog niet gebouwd (punt 6b). De velden van het gehucht liggen
-vast op 209 tegels, en een veld maken kan nog niet. De vraag onderaan of er heide komt, is
+vast op 209 tegels, en een veld maken kan nog niet. **Sinds 3 okt is er een plan** (werklijst vraag 107, uit vraag 102,
+a: het land is wat het dorp tegenhoudt): ontginnen als verzoek van een boer, op de heide (de meent: het vertrouwen van
+het dorp) of in het bos (de heer: zijn gunst, of stiekem, en dan betrapt als ze het vinden). Het beantwoordt de open
+vragen hieronder. De vraag onderaan of er heide komt, is
 beantwoord: de heide ligt er sinds 25 sep (23 bij 8 tegels, met de schaapskooi aan de noordrand).
 
 **Hoe het zo kwam:**

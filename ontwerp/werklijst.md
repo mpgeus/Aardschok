@@ -3576,6 +3576,37 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       stuurde naar een dorp dat verder tevreden is. Dit moet vóór de speeltest van vier jaar (vraag 102, e). Vraag:
       **zo?** **Marcel (3 okt): "vertrouwen ook ja".**
 
+107. **Ontginnen als verzoek: het land groeit mee** (Claude, 3 okt, vijfentwintigste sessie; vraag 102, a, Marcel: "102 a
+    b c d e ja", en daar stond "eerst een eigen plan"; besloten op 25 sep als punt 6b, `spel.md`, "Ontginnen"; open).
+    **Waarom:** de velden van het gehucht (179 tegels akker en 30 weide) zijn in elk jaar dezelfde, en bij zo'n 90 mensen
+    is het graan op voordat de nieuwe oogst er is (vraag 102). Hoeveel er
+    tekort is, zegt de speeltest van vier jaar (vraag 102, e), die nu loopt.
+    Een akker brengt per tegel 2,4 à 3,5 graan (de oogst in de speeltest), min 1 zaaigraan en 0,5 pacht voor de heer:
+    netto 1 à 2. Een nieuw veld van dertig tegels geeft dus 30 à 60 graan per jaar, en stiekem, zonder pacht, 15 meer.
+    Voorstel:
+    - **a, wie, en wat het wordt:** als het dorp graan tekortkomt (de herberg of de molen staat stil om graan, of er komt
+      geen gezin om het graan: dezelfde vraag die de raad stelt), komt een boer of zijn zoon het vragen: "Jan, de zoon
+      van Klaas, wil het stuk heide naast hun akker ontginnen, dertig tegels." Ja: het veld hoort bij zijn boerderij, en
+      zijn boeren zaaien en maaien het. Geen nieuwe boerderij en geen nieuw gezin: zo is het het kleinst, en groeit het
+      land waar het dorp het nodig heeft. Een nieuw boerengezin met een eigen boerderij kan later, als er meer moet.
+    - **b, waar, en wat het kost: de heide of het bos.** Zo kost elke keuze iets bij een van de twee bazen (vraag 106).
+      De heide is de meent, van iedereen. Plaats is er genoeg: de kooi heeft 20 schapen, en die hebben 40 tegels nodig
+      van de 184. Maar het dorp vindt het zijn grond: het vertrouwen −5 ("de meent is van ons allemaal"). Het bos is van
+      de heer. Openlijk kost het zijn gunst (−5: hij wil erom gevraagd worden), en de inner telt de nieuwe akker, zodat
+      de pacht omhooggaat. Stiekem, diep in het bos waar de inner niet komt, betaal je geen pacht en kost het geen gunst.
+      Maar vinden zijn soldaten het, dan ben je betrapt: de laatste waarschuwing. Wie bos ontgint, krijgt er het hout bij.
+    - **c, hoe lang:** de heide een maand (plaggen steken), het bos een winter (stobben trekken). Daarna wordt het in
+      lentemaand gezaaid, met zaaigraan zoals elke akker.
+    - **d, op de kaart:** de akker komt erbij als een veld van die boer, op de grond die er lag, en de bomen gaan weg. Op
+      een pad, een plein, een erf of een gebouw komt hij niet. De plek kiest de boer zelf, naast zijn akker als het kan,
+      en je ziet hem in goud op de grond, zoals bij elk verzoek.
+    - **e, de spelregel "Ontginnen"** (aan of uit). Ben je weg, dan beslist je raadsman, zoals bij elk verzoek. De bouwers
+      van de speeltest zeggen ja: de eerlijke op de heide, de sluwe stiekem in het bos.
+    **In stappen:** 1. ontginnen op de heide, als verzoek, met het vertrouwen (één sessie); 2. het bos, openlijk en
+    stiekem, met de inner, de soldaten en het hout; 3. de speeltest van vier jaar opnieuw.
+    Vragen: **a**, een boer die zijn veld groter maakt, of een nieuw boerengezin? **b**, de heide tegen het vertrouwen van
+    het dorp, het bos tegen de gunst van de heer, en stiekem met betrapt als ze het vinden? **c**, een maand en een
+    winter? **d**, dertig tegels per keer? **e**, in deze stappen?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
