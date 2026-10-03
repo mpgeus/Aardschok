@@ -42,8 +42,11 @@ ambachtsman 0,005 laken per dag; sinds vraag 92 zijn brood, vis en vlees eten, e
 vijfentwintigste sessie): **vraag 98** (de ui: welke richting, op de pagina "De ui als papieren",
 https://claude.ai/artifact/JRKq7fwaANmLd3fGc4EbD8), **vraag 99** (het laken: met één kooi en 4 wol per schaap haalt een
 stad van stenen huizen het nooit), **vraag 100** (2c, zien wat een huis wil) en **vraag 101** (2e, het eind en het jaar in
-het kort). En wat hij vindt van de feesten (zie onder Af; de schermafdruk van de meiboom 's avonds). De speeltest van vraag
-96 is nooit opgeschreven (hij liep nog toen de vorige sessie stopte), en Marcel koos hem niet voor de vlucht.
+het kort). En wat hij vindt van de feesten (zie onder Af; de schermafdruk en een eerste filmpje van de meiboom 's avonds,
+13 seconden, allebei aan Marcel gestuurd en niet in git). Eén spel van de speeltest (de bouwer, zaad 1) liep met de feesten
+twee jaar door zonder fouten (`speelbaar.md`, "De controle van 3 okt"). Een proefversie voor itch.io van 3 okt (`36c713e`,
+met de feesten) is gemaakt en aan Marcel gestuurd. De speeltest van vraag 96 is nooit opgeschreven (hij liep nog toen de
+vorige sessie stopte), en Marcel koos hem niet voor de vlucht.
 **Vraag 97 is af** (zie onder Af): het oogstfeest is een hele dag vrij (groot) of een avond (klein), en de meiboom komt
 op 30 grasmaand. **Vraag 96, a en b, is af** (zie onder Af): één herberg en één markt zijn genoeg voor het hele dorp (de spelregel "De herberg en
 de markt"), en de bouwers bouwen een keten in één keer. **Vraag 95 is af** (zie onder Af): brood 0,01, de bouwers leggen erven

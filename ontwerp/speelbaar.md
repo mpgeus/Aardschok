@@ -149,6 +149,22 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De controle van 3 okt: de feesten in de speeltest (werklijst, vraag 97)
+
+Geen volledige speeltest (die koos Marcel niet voor zijn vlucht), maar één spel om na te gaan dat de feesten niets laten
+vastlopen: de bouwer, twee jaar, zaad 1, in de vijfentwintigste sessie, op `ccr-0d0c2710-bcd5tx` op `2162189` (het spel van
+`07991fa`, met vraag 96, a en b, en de feesten). Geen fouten in de console, en het jaar liep door.
+- **De meiboom** kwam op 30 grasmaand en werd gevierd: "Vandaag viert het dorp de meiboom op het plein. Er wordt niet
+  gewerkt." Het **oogstfeest** kwam ook; de bouwer koos "Geen feest. De heer telt mee." Samen 104 voorvallen in twee
+  jaar, een keuze per minuut op 30×.
+- **Op de feestdag zei de raad:** "Twee huizen willen bier: de herberg staat stil: het dorp viert feest." Dat klopt (de
+  herberg brouwt die dag niet), maar er valt niets aan te doen. Na te lopen als het vaker opvalt.
+- **Hoe het dorp ervoor stond** (te vergelijken met de bouwer, zaad 1, hieronder, op `c98439f`, maar vraag 96 zit er ook
+  tussen, dus wat van de feesten komt, is niet te scheiden): 26 → 111 mensen (was 94), een dorp op 24 wijnmaand en
+  marktrecht op 24 slachtmaand van het eerste jaar; in het tweede jaar gemiddeld 51% van de huizen met alles (59%), 2
+  dagen waarop alle huizen alles hadden (0; in het eerste jaar 36, de langste reeks 19), 86 dagen zonder bier (62) en 3
+  zonder brood (0).
+
 ## De speeltest van 3 okt: brood 0,01, erven binnen de kringen, en de druk om eten (werklijst, vraag 95)
 
 Gespeeld in de vierentwintigste sessie, op `ccr-ef948901-4zrtmk` op `4ceee99` (het spel van `c98439f`): de sluwe bouwer
