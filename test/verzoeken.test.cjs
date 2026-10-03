@@ -233,3 +233,24 @@ test('nog een klik haalt een oproep weg; wat nog niet mag, kan niet; en wacht hi
   assert.equal(raad.als(D), true);
   assert.match(raad.tekst(D), /^Je oproep voor een steengroeve hangt op het plein, maar het dorp mist 7 goud: /);
 });
+
+test('na een ja vraagt niemand hetzelfde de eerste naJa dagen weer: geen jager elke vier dagen', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  nacht(S, 1);
+  assert.equal(lopend(D).bouw.soort, 'houthakker');
+  zeg(S, 0);
+  const houthakker = D.gebouwen.find((g) => g.soort === 'houthakker');
+  houthakker.klaar = true;
+  D.gebouwen.splice(D.gebouwen.indexOf(houthakker), 1); // hij brandt af: nu mist het dorp er weer een
+  for (let dag = 2; dag < 1 + T.VERZOEKEN_INSTELLINGEN.naJa; dag++) {
+    D.verzoeken.volgende = 0;
+    if (lopend(D)) T.voorvalBeantwoord(D, lopend(D).id);
+    T.beginBouwverzoek(D, dag);
+    assert.ok(!lopend(D) || lopend(D).bouw.soort !== 'houthakker', `op dag ${dag} vraagt niemand weer een houthakker`);
+  }
+  if (lopend(D)) T.voorvalBeantwoord(D, lopend(D).id);
+  D.verzoeken.volgende = 0;
+  assert.ok(T.beginBouwverzoek(D, 1 + T.VERZOEKEN_INSTELLINGEN.naJa));
+  assert.equal(lopend(D).bouw.soort, 'houthakker', 'daarna wel weer');
+});

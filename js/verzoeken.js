@@ -13,7 +13,8 @@
 //            bereikt die er nog geen hebben; een werkplaats zo dicht mogelijk bij zijn huis; wat van het hele dorp is (de
 //            markt, het wachthuis) zo dicht mogelijk bij het huis van de schout.
 //   wanneer  om de `elke` dagen, als er niets anders loopt (het gaat vóór een geloot voorval, js/voorvallen.js), en alleen
-//            als het dorp het kan betalen. Wie nee hoorde, vraagt hetzelfde pas na `naNee` dagen weer.
+//            als het dorp het kan betalen. Wie nee hoorde, vraagt hetzelfde pas na `naNee` dagen weer, en na een ja komt
+//            hetzelfde pas na `naJa` dagen weer.
 // Hij komt je zoeken zoals bij een voorval (het voorval 'bouwverzoek', js/voorvallen.js, met de woorden in
 // js/gesprekken.js), en zegt wat het het dorp kost. Ja: het gebouw komt er (T.plaatsGebouw, dat de kosten betaalt). Nee:
 // het dorp onthoudt het. Ben je weg, dan beslist je raadsman (js/raadsman.js): wat het helpt tegen wat het kost, naar
@@ -23,8 +24,8 @@
 // premie uit de kist voor wie het bouwt. Wat erop staat, vraagt iemand je als eerste, ook wat niemand nog mist (een
 // schaapskooi voor de wol van later).
 //
-// D.verzoeken: { volgende (de dag waarop er weer een kan komen), nee: { soort: dag }, ja, geweigerd (hoe vaak), oproepen:
-//              [{ soort, dag }] }
+// D.verzoeken: { volgende (de dag waarop er weer een kan komen), nee: { soort: dag }, laatst: { soort: dag van het laatste
+//              ja }, ja, geweigerd (hoe vaak), oproepen: [{ soort, dag }] }
 // Op het voorval (D.voorvallen.lopend.bouw): { soort, x, y, waarom, voor (waarvoor: T.watTeBouwen), nut, premie (bij een
 // oproep) }
 (function (T) {
@@ -38,6 +39,10 @@
     elke: 4,
     // Wie nee hoorde, vraagt hetzelfde pas na zoveel dagen weer.
     naNee: 30,
+    // En wie ja hoorde ook: zo komt er niet elke vier dagen een jager bij zolang het eten de winter niet haalt (de tweede
+    // speeltest van vraag 103: 25 jagers in vier maanden). De bouwer van de speeltest nam er hooguit één per maand. Een
+    // oproep van jou wacht er niet op.
+    naJa: 30,
     // Een oproep op het plein (stap 2): wie bouwt wat erop staat, krijgt deze premie in goud uit de kist, bovenop wat het
     // gebouw kost.
     premie: 5,
@@ -54,10 +59,11 @@
   const heeftKring = (soort) => T.WENSEN_INSTELLINGEN.kring[soort] != null;
   const wieNaam = (p) => T.naamVanBewoner(p);
 
-  T.nieuweVerzoeken = () => ({ volgende: 0, nee: {}, ja: 0, geweigerd: 0, oproepen: [] });
+  T.nieuweVerzoeken = () => ({ volgende: 0, nee: {}, laatst: {}, ja: 0, geweigerd: 0, oproepen: [] });
   const verzoekenVan = (D) => {
     const R = D.verzoeken || (D.verzoeken = T.nieuweVerzoeken());
     if (!R.oproepen) R.oproepen = []; // een spel van vóór de oproepen
+    if (!R.laatst) R.laatst = {};
     return R;
   };
 
@@ -163,6 +169,7 @@
     const missen = new Map(T.watDeHuizenMissen(D).filter((x) => x.bouw).map((x) => [x.bouw, x]));
     for (const x of watTeVragen(D)) {
       if (R.nee[x.soort] != null && dag - R.nee[x.soort] < IN().naNee) continue;
+      if (x.voor !== 'oproep' && R.laatst[x.soort] != null && dag - R.laatst[x.soort] < IN().naJa) continue;
       if (!T.kanBetalen(D, T.kostenVanVerzoek(x))) continue;
       let wie = null;
       let plek = null;
@@ -205,6 +212,7 @@
     u.instantie.meester = wie;
     const R = verzoekenVan(D);
     R.ja++;
+    R.laatst[b.soort] = dagNu(D);
     if (b.premie) {
       T.wijzigVoorraad(D, 'goud', -b.premie);
       R.oproepen = R.oproepen.filter((o) => o.soort !== b.soort);
