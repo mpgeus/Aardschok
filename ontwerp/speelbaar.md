@@ -153,7 +153,8 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 
 Gespeeld in de vijfentwintigste sessie, op `ccr-0d0c2710-bcd5tx`: het spel van `8da1369` (vraag 102, b, c en d, en het
 vertrouwen dat de tevredenheid volgt; nog zonder het looppad van drie tegels en de paadjes), de speeltest van `0238f58`.
-De bouwer en de sluwe bouwer spelen vier jaar, met zaad 1 tot en met 3, tot 1 grasmaand van het vijfde. Geen fouten,
+De bouwer en de sluwe bouwer spelen vier jaar, met zaad 1 tot en met 3, tot 1 grasmaand van het vijfde; de sluwe bouwer
+met zaad 2 werd na twee uur gestopt (een volgende speeltest van vier jaar splitst de spelers over twee taken). Geen fouten,
 behalve de weg het gehucht uit (de sluwe bouwer liep hem af, en het spel meldde de mist als fout: opgelost in `3a3d4e9`).
 
 | Speler | Mensen, eind | Stenen huizen | Langste reeks alle huizen alles | De teller van de winst | Waarom niet gewonnen |
@@ -162,7 +163,7 @@ behalve de weg het gehucht uit (de sluwe bouwer liep hem af, en het spel meldde 
 | bouwer, zaad 2 | 105 | 10 | 264 dagen | 210, 193, 162 | de reeks brak om brood, laken en bier |
 | bouwer, zaad 3 | 99 | 9 | 279 dagen | 0 | 99 mensen |
 | sluw, zaad 1 | 99 | 9 | 575 dagen | 0 | 99 mensen, met het vierde jaar 360 van 360 dagen alles in steen |
-| sluw, zaad 2 | loopt nog | | | | |
+| sluw, zaad 2 | gestopt | | | | na twee uur, de grens van een taak op de achtergrond |
 | sluw, zaad 3 | 99 | 9 | 289 dagen | 0 | 99 mensen |
 
 **Wat opviel:**

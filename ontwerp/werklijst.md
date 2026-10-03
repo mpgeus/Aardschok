@@ -43,7 +43,9 @@ als Marcel het vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUD
 **Waar de volgende sessie begint:** Marcels antwoorden op **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen
 en het erf: bestraten als verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de
 maat van de winst: het dorp loopt vol op 99, de winst vraagt 100; het voorstel is de winst vanaf 90, en bouwgrond uit het
-ontginnen). De speeltest van vier jaar staat in `speelbaar.md`: de reeks breekt om brood, laken en bier als het graan
+ontginnen). De speeltest van vier jaar staat in `speelbaar.md` (vijf van de zes spelers; de uitslagen buiten git in
+`gereedschap/speeltest/uit/vier-jaar-8da1369/`, en een volgende speeltest van vier jaar splitst de spelers over twee
+taken, want een taak op de achtergrond stopt na twee uur): de reeks breekt om brood, laken en bier als het graan
 opraakt, de oogst valt van 600 naar 350 à 450 in vier jaar, en een hut die geen plaats heeft om door te groeien, blijft
 een hut. Na te lopen uit de speeltests: een schout die alleen tegen drie wilde rovers viel, omdat de militie onderweg
 was. De rest van **vraag 105** (wat ons uniek maakt) komt na de kern. De ui wordt de schrijftafel (vraag 98, C): het
