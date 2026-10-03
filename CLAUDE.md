@@ -393,6 +393,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ja (`doe.bouw`) zet het neer (`T.verzoekToegestaan`, met `g.meester`), nee (`doe.weiger`) onthoudt het (`D.verzoeken`).
   Een oproep op het plein (`T.doeOproep`, de rij Oproepen in het bouwmenu) gaat voor, met een premie bovenop de kosten.
   Wat er mag (de trede), vraag je aan `T.magGebouwd`; wat jij in het bouwmenu hebt, aan `T.inBouwmenu` (`js/gebouwen.js`).
+- `js/ondernemers.js`: **wie iets wil beginnen wat niemand mist** (vraag 104, 3 okt; Marcel: "Stel er is een ondernemende
+  inwoner die wapens wil maken etc"): een op de zes volwassenen is ondernemer, uit het zaad en wie hij is
+  (`T.ondernemingVan`, `T.ONDERNEMINGEN`); wat hij nu wil vragen, geeft `T.eigenVerzoeken` aan `js/verzoeken.js` (na je
+  oproepen, vóór wat het dorp mist), met een eigen voorval (`wapenverzoek`) en `L.bouw.eigen`. Ja (`T.eigenToegestaan`)
+  en nee (`T.eigenGeweigerd`: na twee keer trekt hij weg) laten een stemming op zijn huis (`g.stemming`,
+  `T.huisStemming` in `T.berekenWensen`). De wapenmaker: wapens (`T.wapensInHetDorp`, `T.bewapen` bij een aanval,
+  `T.slagSchade` in `js/gevecht.js`), stiekem in een kelder (`g.stiekem`), de inner die het ziet (`T.innerZietVerboden`),
+  en de heer die het op Sint-Maarten verzegelt (`T.heerVindtVerboden`, `T.verbodenGevonden`, `g.verzegeld`, de boete via
+  `T.heerRekentErbij` in `js/heer.js`). De getallen in `T.ONDERNEMERS_INSTELLINGEN`.
 - `js/raadsman.js`: **de raadsman** (vraag 66, 30 sep): een van de boeren (`T.isBoer` in `js/boeren.js`), met twee gelote
   vaardigheden (`T.vaardighedenVan`: uit het zaad en zijn naam, zodat het lot van de boeren niet verandert). Is de schout
   weg (niet in het dorp als wie hem zoekt, gaat zoeken, of als diens tijd om is), dan beslist hij het voorval; wie je in
@@ -713,6 +722,10 @@ toont het jaar in het kort nu.
 zei; `('nu')` laat het eerste nu vragen, `('oproep', 'steengroeve')` hangt een oproep op (of haalt hem weg), `('jij')` of
 `('mensen')` zet de spelregel "Wie bouwt". De oude toetsen spelen
 met "Jij bouwt" (`T.zetOptie('wieBouwt', 'jij')`); die van de verzoeken staan in `test/verzoeken.test.cjs`.
+`Spel.debug.ondernemers()` zegt wie wat wil beginnen, of hij het nu zou vragen, wat hij onthoudt, wie stiekem smeedt,
+wat de heer verzegelde en hoeveel wapens er zijn; `('wapens')` laat de eerste die wapens wil het nu vragen, alsof de rovers
+net kwamen (in een dorp: `Spel.debug.trede('dorp')`, en sluit dan de brief van de heer), `('stiekem')` laat hem
+beginnen in zijn kelder.
 `Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
 en daarboven het dorp per stand en wat er gemist wordt; `('dorpelingen')` laat alleen die stand zien.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een

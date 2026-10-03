@@ -1056,6 +1056,21 @@
         },
       },
     },
+    wapenverzoek: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, ik wil wapens maken, {plek}. {waarom} Het mag niet van de heer, dus het blijft onder ons. Het dorp betaalt {kosten}.' },
+          ],
+          keuzes: [
+            { zeg: 'Ja. Maar laat de inner het niet zien.', sluit: true, doe: { bouw: true, tevreden: 3 } },
+            { zeg: 'Nee. Dat is verboden.', sluit: true, doe: { weiger: true, tevreden: -2 } },
+          ],
+        },
+      },
+    },
     lied: {
       naam: '{wie}',
       start: 'begin',

@@ -57,6 +57,13 @@
     '<path d="M11 10.5l8.5 8.5" stroke="#8a5a2c" stroke-width="2.4" stroke-linecap="round"/>' +
     '<path d="M4.5 8.5l5-5 2.2 2.2-1.5 1.5 2.6 2.6-2.2 2.2-2.6-2.6-1.3 1.3z" fill="#8f949a" stroke="#c3c7cc" stroke-width="1.1" stroke-linejoin="round"/>' +
     '</svg>';
+  // Van de wapenmaker (js/ondernemers.js): een zwaard, schuin, met een houten gevest.
+  const WAPENS_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M18.5 4.5l1 1-9.6 9.6-1-1z" fill="#c3c7cc" stroke="#8f949a" stroke-width="1" stroke-linejoin="round"/>' +
+    '<path d="M6.8 13.2l4 4" stroke="#8a5a2c" stroke-width="2.2" stroke-linecap="round"/>' +
+    '<path d="M7.3 17.7l-2.6 2.6" stroke="#8a5a2c" stroke-width="2.2" stroke-linecap="round"/>' +
+    '</svg>';
   // Van de melk die het dorp niet dezelfde dag drinkt (js/behoeften.js, T.eetVandaag): een punt
   // kaas, met de korst aan de dikke kant en twee gaatjes in het snijvlak.
   const KAAS_ICOON =
@@ -105,6 +112,7 @@
     goud: GOUD_ICOON, graan: GRAAN_ICOON, wol: WOL_ICOON, hout: HOUT_ICOON,
     ijzer: IJZER_ICOON, zout: ZOUT_ICOON, gereedschap: GEREEDSCHAP_ICOON, kaas: KAAS_ICOON,
     hooi: HOOI_ICOON, mest: MEST_ICOON, vlees: VLEES_ICOON, huiden: HUIDEN_ICOON, bier: BIER_ICOON,
+    wapens: WAPENS_ICOON,
   };
   const GRONDSTOF_UITLEG = {
     goud: 'Goud. Wat de heer het liefst ziet.',
@@ -120,11 +128,12 @@
     vlees: 'Vlees. Van het slachten: het vult een maag. Wat je niet zout, bederft, dus dat eet het dorp eerst op; gezouten vlees bewaart het tot het graan op is.',
     huiden: 'Huiden. Van het slachten.',
     bier: 'Bier. De herbergierster brouwt het van graan, en wie \'s avonds in de herberg zit, drinkt het. Wie er deze week was, is tevredener.',
+    wapens: 'Wapens. Van de wapenmaker: wie van de militie er een heeft, slaat harder als de rovers komen. Verboden: vindt de heer ze, dan neemt hij ze mee.',
   };
   // Deze staan pas in de balk als het dorp ze eens gehad heeft (S.gehad, js/voorraad.js): in het
   // begin blijft de balk kort. Kaas, hooi, vlees en bier staan naast het graan, want het is allemaal
   // eten en drinken, voor mens of dier; de rest achteraan.
-  const BALK_LATER = ['kaas', 'hooi', 'vlees', 'bier', 'ijzer', 'zout', 'gereedschap', 'mest', 'huiden'];
+  const BALK_LATER = ['kaas', 'hooi', 'vlees', 'bier', 'ijzer', 'zout', 'gereedschap', 'wapens', 'mest', 'huiden'];
   const NAAST_GRAAN = ['kaas', 'hooi', 'vlees', 'bier'];
   const BALK = T.GRONDSTOFFEN.flatMap((wat) => (wat === 'graan' ? ['graan', ...NAAST_GRAAN] : [wat]))
     .concat(BALK_LATER.filter((wat) => !NAAST_GRAAN.includes(wat)));

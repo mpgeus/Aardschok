@@ -35,6 +35,7 @@
       `<div class="briefje-stand">${stand}</div>` +
       `<div class="briefje-wensen">${wensen}</div>` +
       helpt +
+      (t.nadraagt ? `<div class="briefje-groei">${t.nadraagt}</div>` : '') +
       (groei ? `<div class="briefje-groei">${groei}</div>` : '')
     );
   }

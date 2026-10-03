@@ -360,8 +360,10 @@
     const b = h.bezoek;
     const g = T.gevolgVanBetaling(D, geef);
     for (const wat in g.neemt) if (g.neemt[wat] > 0) T.wijzigVoorraad(D, wat, -g.neemt[wat]);
-    // De oude schuld zat in wat hij vroeg; wat er nu openstaat, met de boete, is de nieuwe.
-    h.schuld = g.schuld;
+    // De oude schuld zat in wat hij vroeg; wat er nu openstaat, met de boete, is de nieuwe. Wat hij er dit jaar bij
+    // rekende (T.heerRekentErbij), komt erbij.
+    h.schuld = g.schuld + (h.erbij || 0);
+    h.erbij = 0;
     h.tekort = g.tekort;
     h.veelTeWeinig = g.veelTeWeinig ? h.veelTeWeinig + 1 : 0;
     h.tekortJaren = g.deel < 1 - 1e-9 ? (h.tekortJaren || 0) + 1 : 0;
@@ -386,6 +388,15 @@
     if (g.schandpaal) b.schandpaal = true;
     else T.heerVertrekt(D);
     return g;
+  };
+
+  // Wat de heer er volgend jaar bij vraagt, buiten de schatting om: de boete voor wapens (js/ondernemers.js). Is de
+  // schatting van dit jaar nog niet betaald, dan komt het erbij als die betaald is (T.betaalHeer zet de schuld dan
+  // opnieuw); anders meteen.
+  T.heerRekentErbij = function (D, goud) {
+    const h = D.heer || (D.heer = T.nieuweHeer());
+    if (h.bezoek && !h.bezoek.betaald) h.erbij = (h.erbij || 0) + goud;
+    else h.schuld = (h.schuld || 0) + goud;
   };
 
   // Komt de schout niet, dan neemt de heer het zelf: van alles wat hij vraagt zoveel als er is, en
@@ -648,8 +659,12 @@
     // (js/doorzoeken.js; werklijst punt 4, vraag 41).
     T.heerKijktRond(D);
     const INN = T.INNER_INSTELLINGEN;
-    if (INN && D.inner && D.inner.argwaan >= INN.doorzoekenVanaf && T.doorzoekDorp) T.doorzoekDorp(D);
+    const heelDorp = !!(INN && D.inner && D.inner.argwaan >= INN.doorzoekenVanaf && T.doorzoekDorp);
+    if (heelDorp) T.doorzoekDorp(D);
     else T.beginDoorzoeken(D);
+    // Een verboden werkplaats die zijn inner of hijzelf zag, of die zijn soldaten in het hele dorp vonden, straft hij
+    // (js/ondernemers.js).
+    T.heerVindtVerboden(D, heelDorp);
     b.wachtTot = dagNu(D) + IN().wachtDagen;
     T.naarGewoneSnelheid(D);
     T.zeg(D, 'De heer staat op het plein en wacht op je.');

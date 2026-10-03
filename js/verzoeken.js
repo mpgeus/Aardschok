@@ -22,12 +22,13 @@
 //
 // Jij bepaalt de richting met een oproep op het plein (T.doeOproep; vraag 103, c): "Het dorp zoekt een weverij", met een
 // premie uit de kist voor wie het bouwt. Wat erop staat, vraagt iemand je als eerste, ook wat niemand nog mist (een
-// schaapskooi voor de wol van later).
+// schaapskooi voor de wol van later). Daarna wat een ondernemer uit zichzelf wil (js/ondernemers.js; vraag 104), met zijn
+// eigen woorden (een eigen voorval, zoals 'wapenverzoek'), en dan wat het dorp mist.
 //
 // D.verzoeken: { volgende (de dag waarop er weer een kan komen), nee: { soort: dag }, laatst: { soort: dag van het laatste
-//              ja }, ja, geweigerd (hoe vaak), oproepen: [{ soort, dag }] }
-// Op het voorval (D.voorvallen.lopend.bouw): { soort, x, y, waarom, voor (waarvoor: T.watTeBouwen), nut, premie (bij een
-// oproep) }
+//              ja }, ja, geweigerd (hoe vaak), oproepen: [{ soort, dag }], eigen (js/ondernemers.js) }
+// Op het voorval (D.voorvallen.lopend.bouw): { soort, x, y, waarom, voor (waarvoor: T.watTeBouwen, of 'eigen'), nut,
+// premie (bij een oproep), eigen (wat een ondernemer wil: 'wapens') }
 (function (T) {
   'use strict';
 
@@ -56,14 +57,17 @@
   const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
   const naamVan = (soort) => T.GEBOUWEN[soort].naam;
   const deVan = (soort) => (/huis$|hok$|hof$|^erf$|^gevang$/.test(naamVan(soort)) ? 'het' : 'de');
+  // "de wapenmaker", "het schuttershof": ook voor js/ondernemers.js.
+  T.metLidwoord = (soort) => `${deVan(soort)} ${naamVan(soort)}`;
   const heeftKring = (soort) => T.WENSEN_INSTELLINGEN.kring[soort] != null;
   const wieNaam = (p) => T.naamVanBewoner(p);
 
-  T.nieuweVerzoeken = () => ({ volgende: 0, nee: {}, laatst: {}, ja: 0, geweigerd: 0, oproepen: [] });
+  T.nieuweVerzoeken = () => ({ volgende: 0, nee: {}, laatst: {}, ja: 0, geweigerd: 0, oproepen: [], eigen: {} });
   const verzoekenVan = (D) => {
     const R = D.verzoeken || (D.verzoeken = T.nieuweVerzoeken());
     if (!R.oproepen) R.oproepen = []; // een spel van vóór de oproepen
     if (!R.laatst) R.laatst = {};
+    if (!R.eigen) R.eigen = {}; // en van vóór de ondernemers
     return R;
   };
 
@@ -140,6 +144,7 @@
   // plein liet hangen, weegt het zwaarst.
   function nutVan(D, x) {
     if (x.voor === 'oproep') return IN().nutTot;
+    if (x.voor === 'eigen') return T.ONDERNEMERS_INSTELLINGEN.nut;
     if (x.voor === 'doel') return IN().nutTot / 2;
     if (x.mensen == null) return IN().nutTot;
     return Math.min(IN().nutTot, Math.ceil(x.mensen / IN().nutPerMensen));
@@ -149,14 +154,16 @@
   // Elke dag
   // ---------------------------------------------------------------------------------------------
 
-  // Wat er gevraagd kan worden, in volgorde: eerst je oproepen, dan wat het dorp zou willen bouwen (T.watTeBouwen,
-  // js/raad.js). [{ soort, waarom, voor, premie }]
-  function watTeVragen(D) {
+  // Wat er gevraagd kan worden, in volgorde: eerst je oproepen, dan wat een ondernemer uit zichzelf wil
+  // (T.eigenVerzoeken, js/ondernemers.js), dan wat het dorp zou willen bouwen (T.watTeBouwen, js/raad.js).
+  // [{ soort, waarom, voor, premie, wie (wie het vraagt, als dat vastligt), voorval, wil }]
+  function watTeVragen(D, dag) {
     const R = verzoekenVan(D);
     const bouwt = (soort) => (D.gebouwen || []).some((g) => g.soort === soort && !g.klaar);
     const oproepen = R.oproepen.filter((o) => T.magGebouwd(D, o.soort) && !bouwt(o.soort))
       .map((o) => ({ soort: o.soort, waarom: `Op het plein hangt je oproep, met een premie van ${IN().premie} goud.`, voor: 'oproep', premie: IN().premie }));
-    return oproepen.concat(T.watTeBouwen(D).filter((x) => !R.oproepen.some((o) => o.soort === x.soort)));
+    const eigen = T.eigenVerzoeken(D, dag).filter((x) => !R.oproepen.some((o) => o.soort === x.soort));
+    return oproepen.concat(eigen, T.watTeBouwen(D).filter((x) => !R.oproepen.some((o) => o.soort === x.soort)));
   }
 
   // Komt er vandaag iemand iets vragen? Vanuit T.tikVoorvallenDag (js/voorvallen.js), als er niets anders loopt. Het
@@ -167,13 +174,17 @@
     const R = verzoekenVan(D);
     if (dag < (R.volgende || 0)) return false;
     const missen = new Map(T.watDeHuizenMissen(D).filter((x) => x.bouw).map((x) => [x.bouw, x]));
-    for (const x of watTeVragen(D)) {
+    for (const x of watTeVragen(D, dag)) {
       if (R.nee[x.soort] != null && dag - R.nee[x.soort] < IN().naNee) continue;
       if (x.voor !== 'oproep' && R.laatst[x.soort] != null && dag - R.laatst[x.soort] < IN().naJa) continue;
       if (!T.kanBetalen(D, T.kostenVanVerzoek(x))) continue;
       let wie = null;
       let plek = null;
-      if (vanIedereen(x.soort)) {
+      if (x.wie) {
+        // Een ondernemer vraagt het zelf, voor naast zijn huis.
+        wie = T.kanJeKomenZoeken(D, x.wie) ? x.wie : null;
+        plek = wie && T.plekVoor(D, x.soort, wie.huis ? T.deurVan(D.wereld, wie.huis) : hartVan(D));
+      } else if (vanIedereen(x.soort)) {
         plek = T.plekVoor(D, x.soort, hartVan(D));
         wie = plek && wieVraagt(D, x.soort, plek, dag);
       } else {
@@ -182,9 +193,10 @@
       }
       if (!wie || !plek) continue;
       const mist = missen.get(x.soort);
-      const L = T.beginVoorval(D, 'bouwverzoek', wie, null, dag);
+      const L = T.beginVoorval(D, x.voorval || 'bouwverzoek', wie, null, dag);
       L.bouw = { soort: x.soort, x: plek.x, y: plek.y, waarom: x.waarom, voor: x.voor, nut: nutVan(D, { mensen: mist ? mist.mensen : null, voor: x.voor }) };
       if (x.premie) L.bouw.premie = x.premie;
+      if (x.wil) L.bouw.eigen = x.wil;
       R.volgende = dag + IN().elke;
       return true;
     }
@@ -217,14 +229,17 @@
       T.wijzigVoorraad(D, 'goud', -b.premie);
       R.oproepen = R.oproepen.filter((o) => o.soort !== b.soort);
     }
+    if (b.eigen) T.eigenToegestaan(D, L);
     T.zeg(D, `${T.hoofdletter(wieNaam(wie))} begint aan ${deVan(b.soort)} ${naamVan(b.soort)}.`, 'goed');
   };
 
-  // Nee (doe: { weiger: true }): het dorp onthoudt het, en vraagt het pas na naNee dagen weer.
+  // Nee (doe: { weiger: true }): het dorp onthoudt het, en vraagt het pas na naNee dagen weer. Een ondernemer onthoudt
+  // het zelf ook (js/ondernemers.js).
   T.verzoekGeweigerd = function (D, L) {
     const R = verzoekenVan(D);
     R.nee[L.bouw.soort] = dagNu(D);
     R.geweigerd++;
+    if (L.bouw.eigen) T.eigenGeweigerd(D, L);
   };
 
   // Wat een verzoek kost, voor het venster (T.prijsVanKeuze, js/voorvallen.js) en de raadsman: de kosten van het gebouw,

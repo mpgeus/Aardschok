@@ -144,6 +144,7 @@
   function laatGaan(D) {
     for (const e of opgeroepen(D)) {
       e.opgeroepen = false;
+      e.gewapend = false;
       e.kant = 'neutraal';
       if (!e.onderweg) e.pad = [];
     }
@@ -238,6 +239,8 @@
     // Is de schout weg (op reis, js/land.js), dan roept niemand de militie bij hem: de rovers hebben vrij spel.
     const militie = T.schoutIsWeg(D) ? [] : militieVan(D);
     for (const e of militie) roepOp(e);
+    // Wie een wapen heeft (js/ondernemers.js), slaat harder.
+    const gewapend = T.bewapen(D, militie);
     const boer = T.boerVanVeld(D, w.akkers[A.veld]);
     const akker = `de akker${boer ? ` van ${boer.naam}` : ''}`;
     const wie = A.soort === 'bende'
@@ -246,7 +249,8 @@
     // Wie er komt: de wachters, de veteranen van de heervaart, of allebei.
     const veteranen = militie.filter((e) => e.bewoner && e.bewoner.veteraan).length;
     const wachters = militie.length - veteranen;
-    const hulp = !militie.length ? '' : ` ${wachters && veteranen ? 'De wachters en de veteranen komen' : wachters ? 'De wachters komen' : veteranen === 1 ? 'De veteraan komt' : 'De veteranen komen'} naar je toe.`;
+    const metWapens = !gewapend ? '' : gewapend === militie.length ? ', met wapens' : `, ${T.telwoord(gewapend)} met een wapen`;
+    const hulp = !militie.length ? '' : ` ${wachters && veteranen ? 'De wachters en de veteranen komen' : wachters ? 'De wachters komen' : veteranen === 1 ? 'De veteraan komt' : 'De veteranen komen'} naar je toe${metWapens}.`;
     T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: `Rovers! ${wie}, op weg naar ${akker}.${hulp}`, soort: 'gevaar', naarGewoon: true } });
   }
 

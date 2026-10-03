@@ -17,6 +17,9 @@
   // 25 sep speelde je een tovenaar die ook kon toveren, met zijn leeftijd als levensbalk; dat ging
   // eruit met het oude spel (ontwerp/werklijst.md, punt 7b).
   T.SLAAN = { kosten: 3, schade: [3, 5] };
+  // Wat een slag van `v` aan schade doet, [van, tot]: een man van de militie met een wapen (js/ondernemers.js, T.bewapen)
+  // slaat harder.
+  T.slagSchade = (v) => (v && v.gewapend ? T.SLAAN.schade.map((n) => n + T.ONDERNEMERS_INSTELLINGEN.wapens.schade) : T.SLAAN.schade);
   T.DEUR_SLUITEN = 1;
 
   const worp = (b) => b[0] + Math.floor(Math.random() * (b[1] - b[0] + 1));
@@ -247,7 +250,7 @@
       const m = doel.wezen;
       const p = T.tegelVan(m);
       const k = T.SLAAN.kosten;
-      if (T.raakt(w, h, p)) return { tekst: `Slaan (${T.SLAAN.schade.join('–')} schade)`, kosten: k, kan: ap >= k, doe: () => slaan(S, v, m, []) };
+      if (T.raakt(w, h, p)) return { tekst: `Slaan (${T.slagSchade(v).join('–')} schade)`, kosten: k, kan: ap >= k, doe: () => slaan(S, v, m, []) };
       const pad = padVoor(S, v, p, true);
       if (!pad) return { tekst: 'Je kunt er niet bij', kosten: 0, kan: false };
       const totaal = pad.length + k;
@@ -283,7 +286,7 @@
     v.ap -= T.SLAAN.kosten;
     T.ui.toonAp(v.ap, v.maxAp, 0, true);
     await T.anim.uitval(v, T.tegelVan(m));
-    const n = worp(T.SLAAN.schade);
+    const n = worp(T.slagSchade(v));
     T.ui.bericht(`${wie(S, v)} slaat de ${m.naam}: ${n} schade.`);
     raak(S, m, n);
     await T.anim.wacht(S, 320);

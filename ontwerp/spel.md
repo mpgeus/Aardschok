@@ -24,7 +24,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
-| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo | vraag 103 |
+| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken, verboden, met wat ja en nee aan gevolgen hebben (vraag 104) | vraag 103, 104 |
 | Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -286,13 +286,25 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
   goud."). Hangt hij er een week en kan het dorp hem niet betalen, dan zegt de raad wat er mist.
 - **De speeltest** (stap 3) speelt onder "De mensen": de spelers bouwen zelf niets behalve erven, en zeggen ja op een
   bouwverzoek als het dorp het kan betalen, zoals de bouwer bouwde wat de raad zei.
-- **Besloten, nog niet gebouwd: verzoeken uit eigen wil** (Marcel, 3 okt, werklijst vraag 104: "104 a b c d ja"). Iemand
-  wil iets wat niemand mist, uit zichzelf: eerst **de wapenmaker** (na een aanval van de rovers, of in een dorp met een
-  smidse; ja: de wachters vechten beter, maar het is verboden, en de inner en de soldaten kunnen hem zien of vinden) en
-  **een tweede herberg** (ja: meer bier en plaats, maar de herbergierster is boos; nee: zij is je dankbaar). Wie nee hoort,
-  onthoudt het: zijn huis is een tijd minder tevreden, na twee keer nee trekt hij weg (en kan als rover terugkomen), en
-  de wapenmaker kan het ook stiekem doen, in zijn kelder. Wie ja hoort, is je dankbaar. Wie ondernemer is, komt uit het
-  zaad van het spel, zoals het karakter van de boeren.
+- **Verzoeken uit eigen wil** (Marcel, 3 okt, werklijst vraag 104: "104 a b c d ja"; `js/ondernemers.js`). Iemand wil
+  iets wat niemand mist, uit zichzelf. **Wie:** een op de zes volwassenen (geen boer, niet van de schout) is ondernemer,
+  geloot uit het zaad van het spel en wie hij is, zoals het karakter van de boeren (`T.ondernemingVan`). Zijn verzoek
+  komt na je oproepen en vóór wat het dorp mist. **Ja:** het gebouw komt er, naast zijn huis, hij is er de meester, en
+  zijn huis is je een tijd dankbaar (10%, dat in 60 dagen wegslijt). **Nee:** zijn huis neemt het je kwalijk (15%), en na
+  twee keer nee trekt hij weg, met zijn gezin als hij het hoofd is of diens vrouw of man, en kan als rover terugkomen.
+  Onder elk antwoord staat het ("Janna neemt het je kwalijk", "Janna trekt weg, met haar gezin"), en het briefje bij
+  zijn huis zegt het ook.
+  - **De wapenmaker (gebouwd, 3 okt).** In een dorp, na een aanval van de rovers (60 dagen lang) of als er een smidse
+    staat, wil hij wapens maken: "Schout, ik wil wapens maken, naast mijn huis. Na de rovers wil niemand nog met een
+    hooivork voor zijn akker staan. Het mag niet van de heer, dus het blijft onder ons." Hij zoekt je onder vier ogen.
+    De wapenmaker maakt wapens van hout en ijzer (de marskramer verkoopt ijzer), en wie van de militie er een heeft,
+    slaat 2 harder. Maar het is verboden: **ziet de inner hem**, dan stijgt de argwaan (20%), en op Sint-Maarten **laat
+    de heer hem verzegelen** als zijn inner of hijzelf hem zag, of als zijn soldaten het hele dorp doorzoeken: de wapens
+    gaan mee, en volgend jaar komt er 20 goud bij wat hij vraagt. Zeg je nee en heeft hij een kelder, dan smeedt hij
+    **stiekem** ("Een paar dagen later hoor je hameren, 's nachts, onder zijn huis."): een wapen per vier dagen, die de
+    inner niet ziet, maar de soldaten vinden als ze die kelder doorzoeken, en dan straft de heer net zo. Na de tweede
+    nee trekt hij weg.
+  - **Nog niet: de tweede herberg** (ja: meer bier en plaats, maar de herbergierster is boos; nee: zij is je dankbaar).
 - **Nog niet:** een oproep die ook een nieuwkomer met dat vak laat komen, en een bord op het plein waar je oproep aan
   hangt.
 

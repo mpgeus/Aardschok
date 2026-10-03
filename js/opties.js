@@ -512,6 +512,7 @@
     { naam: 'De feesten', blok: 'FEESTEN_INSTELLINGEN' },
     { naam: 'Het eind', blok: 'EINDE_INSTELLINGEN' },
     { naam: 'De verzoeken', blok: 'VERZOEKEN_INSTELLINGEN' },
+    { naam: 'De ondernemers', blok: 'ONDERNEMERS_INSTELLINGEN' },
     { naam: 'De raadsman', blok: 'RAADSMAN_INSTELLINGEN' },
     { naam: 'Het rapport', blok: 'OCHTENDRAPPORT_INSTELLINGEN' },
     { naam: 'Het land', blok: 'LAND_INSTELLINGEN' },

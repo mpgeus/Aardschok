@@ -578,6 +578,7 @@
       const nog = Math.max(1, g.klaarOp - dagNu);
       return `${naam}: in aanbouw, nog ${nog} dag${nog === 1 ? '' : 'en'}.`;
     }
+    if (g.verzegeld) return `${naam}: verzegeld door de heer.`;
     if (!soort.maakt) return `${naam}: ${soort.beschrijving}.`;
     if (g.stilWant) return `${naam}: staat stil, ${g.stilWant}.`;
     if (soort.handen > 0 && !g.handen) return `${naam}: staat stil, er zijn geen handen voor.`;
@@ -888,7 +889,7 @@
     let vrij = T.werkendeHanden(D);
     for (const g of D.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
-      if (!g.klaar || !soort.handen) {
+      if (!g.klaar || !soort.handen || g.verzegeld) {
         g.handen = 0;
         continue;
       }
@@ -1053,6 +1054,11 @@
       g.stilWant = null;
       g.uren = null;
       if (!g.klaar || !soort.maakt) continue;
+      // Verzegeld door de heer (js/ondernemers.js): hij maakt niets meer.
+      if (g.verzegeld) {
+        g.stilWant = 'de heer liet hem verzegelen';
+        continue;
+      }
       if (vrij && soort.handen > 0) {
         g.stilWant = 'het dorp viert feest';
         continue;
@@ -1113,6 +1119,8 @@
     for (const g of D.gebouwen) if (g.werkte > 0 && g.handen > 0) aanHetWerk += g.handen;
     const slijt = Math.min(D.voorraad.gereedschap || 0, aanHetWerk) / IN.gereedschapSlijtDagen;
     if (slijt > 0) T.wijzigVoorraad(D, 'gereedschap', -slijt);
+    // De ondernemers (js/ondernemers.js): wie stiekem werkt, maakt wapens in zijn kelder, en wat een huis nadroeg, slijt.
+    T.tikOndernemersDag(D, dag);
     // 7. De wetten (js/wetten.js): wie vandaag in het bos van de heer hakte, en de belasting op de eerste van de maand.
     T.tikWettenDag(D, dag);
     // En de rovers (js/rovers.js): de doden begraven, wie het overleefde geneest, en komen ze vandaag?

@@ -341,17 +341,23 @@
   // dat is weg; elke vondst maakt argwanend. Geeft wat ze vonden als tekst ("20 graan in de kelder van
   // Klaas"), of null. `r` (voor een toets) is een getal 0..1 in plaats van het lot. Voor het hele dorp
   // (T.zoekVerstopt) en voor de soldaten die met de schout meelopen (js/doorzoeken.js).
+  // Smeedt iemand er stiekem wapens (g.stiekem, js/ondernemers.js), dan vinden ze die ook, en straft de heer.
   T.zoekOpPlek = function (D, p, r) {
     const g = p.gebouw;
     const tekst = T.inhoudTekst(inhoudVan(g));
-    if (!tekst) return null;
+    if (!tekst && !g.stiekem) return null;
     if ((r != null ? r : lot(D, g)) >= p.vinden) return null;
-    g.verstopt = { graan: 0, goud: 0 };
-    delete g.verteld;
-    delete g.verteldDoor;
-    if (VI().argwaanPerVondst > 0 && T.zetArgwaan) T.zetArgwaan(D, VI().argwaanPerVondst, 'de soldaten vonden wat je verstopte');
+    const delen = [];
+    if (tekst) {
+      g.verstopt = { graan: 0, goud: 0 };
+      delete g.verteld;
+      delete g.verteldDoor;
+      if (VI().argwaanPerVondst > 0 && T.zetArgwaan) T.zetArgwaan(D, VI().argwaanPerVondst, 'de soldaten vonden wat je verstopte');
+      delen.push(`${tekst} in ${p.naam}`);
+    }
+    if (g.stiekem) delen.push(T.verbodenGevonden(D, g));
     if (T.ui && T.ui.toonVoorraad) T.ui.toonVoorraad(D);
-    return `${tekst} in ${p.naam}`;
+    return delen.join(', en ');
   };
 
   // Het hele dorp, plek voor plek. Geeft wat ze vonden. `getal` (voor een toets) geeft per plek een getal

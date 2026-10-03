@@ -161,6 +161,9 @@
     // Een inwoner wil iets bouwen wat het dorp mist (js/verzoeken.js; werklijst vraag 103): wie, wat en waar zet dat
     // bestand op het voorval (L.bouw), en de woorden ervan ook.
     bouwverzoek: { soort: 'verzoek', titel: 'een verzoek om te bouwen', zelf: true, roep: '{wie} wil {gebouw} bouwen, en zoekt je.' },
+    // Een ondernemer wil wapens maken, uit zichzelf (js/ondernemers.js; werklijst vraag 104). Zoals het bouwverzoek, met
+    // zijn eigen woorden.
+    wapenverzoek: { soort: 'verzoek', titel: 'de wapens', zelf: true, roep: '{wie} wil je onder vier ogen spreken.' },
     lied: { soort: 'feest', titel: 'het lied over de heer', als: { gebouw: 'herberg' }, wie: { karakter: 'zanger' } },
     // De meiboom (werklijst vraag 97; Marcel, 3 okt: "De meiboom"): niet geloot, maar elk jaar op 30 grasmaand, zodat hij
     // op 1 bloeimaand op het plein staat (js/feesten.js). De jongeren komen het vragen.
@@ -636,6 +639,8 @@
     }
     if (doe.sterfkans) delen.push(`${doe.sterfkans}% kans op een dode`);
     if (doe.feest && T.feestPrijs(doe.feest)) delen.push(T.feestPrijs(doe.feest));
+    // Een ondernemer (js/ondernemers.js): nee, en hij neemt het je kwalijk of trekt weg; ja, en het is verboden.
+    if (L.bouw && L.bouw.eigen) delen.push(...T.eigenPrijs(D, L, doe));
     uit.tekst = delen.join(', ');
     return uit;
   };

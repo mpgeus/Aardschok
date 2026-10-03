@@ -977,12 +977,54 @@
       return {
         wieBouwt: T.VERZOEKEN_INSTELLINGEN.mensen ? 'de mensen' : 'jij',
         watTeBouwen: T.watTeBouwen(D).map((x) => `${x.soort}: ${x.waarom}`),
-        nu: L && L.bouw ? `${T.naamVanBewoner(L.wie)} wil een ${T.GEBOUWEN[L.bouw.soort].naam} op ${L.bouw.x},${L.bouw.y}: "${T.vulWoordenIn(D, T.GESPREKKEN.bouwverzoek.knopen.begin.tekst[0].zeg)}"` : null,
+        nu: L && L.bouw ? `${T.naamVanBewoner(L.wie)} wil een ${T.GEBOUWEN[L.bouw.soort].naam} op ${L.bouw.x},${L.bouw.y}: "${T.vulWoordenIn(D, T.GESPREKKEN[L.id].knopen.begin.tekst[0].zeg)}"` : null,
         volgende: R.volgende,
         oproepen: (R.oproepen || []).map((o) => `${o.soort}, sinds ${T.datumVanDag(o.dag).tekst}`),
         nee: Object.entries(R.nee).map(([s2, dag]) => `${s2} op ${T.datumVanDag(dag).tekst}`),
         ja: R.ja,
         meesters: (D.gebouwen || []).filter((g) => g.meester).map((g) => `${T.GEBOUWEN[g.soort].naam}: ${T.naamVanBewoner(g.meester)}`),
+      };
+    },
+    // De ondernemers (js/ondernemers.js; werklijst vraag 104): wie wat wil beginnen, of hij het nu zou vragen, wat hij
+    // onthoudt (nee, ja), wie stiekem wapens maakt en hoeveel, wat de heer verzegelde, en de wapens in het dorp.
+    // Spel.debug.ondernemers('wapens') laat de eerste die wapens wil het nu vragen, alsof de rovers net kwamen (in een
+    // dorp: Spel.debug.trede('dorp')); ('stiekem') laat hem beginnen in zijn kelder, alsof je nee zei.
+    ondernemers(wat) {
+      const D = S.dorp;
+      const dag = Math.floor(S.kalender.dag);
+      const mensen = (D.bewoners ? D.bewoners.mensen : []).filter((p) => T.ondernemingVan(D, p));
+      const eerste = mensen.find((p) => T.ondernemingVan(D, p) === 'wapens');
+      if (wat === 'wapens') {
+        if (!eerste) return 'Niemand in dit dorp wil wapens maken (een ander zaad geeft andere ondernemers).';
+        if (!T.magGebouwd(D, 'wapenmaker')) return 'Een wapenmaker mag pas in een dorp: Spel.debug.trede(\'dorp\').';
+        const R = D.rovers || (D.rovers = T.nieuweRovers());
+        R.laatsteAanval = dag;
+        const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
+        if (V.lopend) T.voorvalBeantwoord(D, V.lopend.id);
+        if (D.verzoeken) {
+          D.verzoeken.volgende = 0;
+          delete D.verzoeken.nee.wapenmaker;
+        }
+        if (!T.beginBouwverzoek(D, dag) || !V.lopend.bouw.eigen) return 'Er kwam iets anders tussen, of het dorp kan het niet betalen.';
+        V.lopend.vanaf = S.kalender.dag;
+      }
+      if (wat === 'stiekem') {
+        if (!eerste || !eerste.huis || !T.verstopPlekVan(D, eerste.huis)) return 'Niemand die wapens wil maken, heeft een kelder.';
+        eerste.huis.stiekem = { wat: 'wapens', wie: eerste.id, sinds: dag, wapens: 0 };
+      }
+      const E = (D.verzoeken && D.verzoeken.eigen) || {};
+      return {
+        ondernemers: mensen.map((p) => {
+          const wil = T.ondernemingVan(D, p);
+          const o = T.ONDERNEMINGEN[wil];
+          const e = E[p.id];
+          const nu = !T.magGebouwd(D, o.soort) ? `pas in een ${T.GEBOUWEN[o.soort].trede}` : o.wil(D, dag, p) ? 'zou het nu vragen' : 'wil het nu niet';
+          const onthoudt = e ? `, ${e.nee}× nee${e.ja != null ? `, ja op ${T.datumVanDag(e.ja).tekst}` : ''}` : '';
+          return `${T.naamVanBewoner(p)} (${p.huis ? T.GEBOUWEN[p.huis.soort].naam : 'zonder huis'}): ${wil}, ${nu}${onthoudt}`;
+        }),
+        stiekem: (D.gebouwen || []).filter((g) => g.stiekem).map((g) => `de kelder op ${g.x},${g.y}: ${g.stiekem.wapens.toFixed(2)} wapens, sinds ${T.datumVanDag(g.stiekem.sinds).tekst}`),
+        verzegeld: (D.gebouwen || []).filter((g) => g.verzegeld).map((g) => `${T.GEBOUWEN[g.soort].naam}, op ${T.datumVanDag(g.verzegeld.dag).tekst}`),
+        wapens: T.wapensInHetDorp(D),
       };
     },
     // Het eind (js/einde.js): het doel, hoeveel dagen op rij iedereen gelukkig is, en het jaarboek tot nu.

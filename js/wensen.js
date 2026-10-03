@@ -230,7 +230,8 @@
       }
       h.alles = Object.values(h.heeft).every(gedekt);
       const deel = IN().gewichtEten * basis.eten + IN().gewichtBrandhout * basis.brandhout + IN().gewichtRest * (n ? rest / n : 1);
-      h.tevredenheid = Math.min(1, Math.max(0, deel + basis.erbij));
+      // Wat dit huis je nadraagt: een ondernemer die nee hoorde, of ja (js/ondernemers.js).
+      h.tevredenheid = Math.min(1, Math.max(0, deel + basis.erbij + T.huisStemming(h.g, dag)));
       const st = standen[h.stand] || (standen[h.stand] = { mensen: 0, huizen: 0, alles: 0, tevredenheid: 0 });
       st.mensen += h.mensen;
       st.huizen++;
@@ -532,6 +533,8 @@
       wie: ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g).map(T.naamVanBewoner),
       wensen,
       teken: T.tekenVanHuis(g),
+      // Wat het huis je nadraagt: een ondernemer die nee of ja hoorde (js/ondernemers.js).
+      nadraagt: T.huisNadraagtTekst(g, D.kalender ? D.kalender.dag : 0),
       groei: wordt
         ? { dagen: g.groeiDagen || 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: wordt.naam, kosten: IN().bouwstof[soort.wordt] || {} }
         : null,
