@@ -99,7 +99,18 @@
   function grondSleutel(S) {
     const w = S.wereld;
     const g = S.gevecht ? S.gevecht.kamers.size : -1;
-    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}`;
+    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${padVersie(S)}`;
+  }
+
+  // De paadjes van het dorp dat hier ligt (js/paden.js): ze liggen in de grond, dus verandert er een, dan wordt de grond
+  // opnieuw getekend. Het gereedschap (gereedschap/wereld.html) laadt js/paden.js niet, en tekent dan alleen de kaart.
+  function zandVan(S) {
+    const D = T.dorpHier(S);
+    return D && D.gebouwen && T.zandHoeken ? { D, zand: T.zandHoeken(D) } : null;
+  }
+  function padVersie(S) {
+    const D = T.dorpHier(S);
+    return D && D.gebouwen && T.padVersie ? T.padVersie(D) : '';
   }
 
   function werkGrondBij(S, bw, bh, zicht, inBeeld) {
@@ -478,6 +489,7 @@
     const weides = w.akkers.filter((v) => T.bestemmingVan(v) === 'weide');
     if (!weides.length) return;
     const sp = metSprites();
+    const paden = zandVan(S);
     const opWeide = (x, y) => weides.some((v) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h);
     const HOEK = [[0, 0], [1, 0], [1, 1], [0, 1]]; // noord, oost, zuid, west, vanaf (x, y)
     const gehad = new Set();
@@ -501,7 +513,9 @@
             continue;
           }
           const g = w.grond && w.grond[y] && w.grond[y][x];
-          const oud = g && T.sprites.grondHoeken(g.vel, g.id);
+          const kaart = g && T.sprites.grondHoeken(g.vel, g.id);
+          // Met de paadjes erin (js/paden.js), zoals de grond eronder getekend is.
+          const oud = (paden && kaart && T.hoekenMetPaden(paden.D, paden.zand, x, y, kaart)) || kaart;
           let deel = null;
           if (oud) {
             const nieuw = oud.map((soort, i) => (opWeide(x + HOEK[i][0], y + HOEK[i][1]) ? 'gras' : soort));
@@ -640,6 +654,7 @@
     const w = S.wereld;
     const sp = metSprites();
     const buiten = !!w.buiten;
+    const paden = buiten ? zandVan(S) : null;
     for (let y = vak.y0; y <= vak.y1; y++) {
       for (let x = vak.x0; x <= vak.x1; x++) {
         const t = T.tegel(w, x, y);
@@ -671,7 +686,10 @@
         const dof = buiten ? randDof(w, x, y) : 1;
         if (dof <= 0) continue;
         if (dof < 1) ctx.globalAlpha = dof;
-        const deel = sp && (g ? T.sprites.buiten(g.vel, g.id) : !buiten && T.sprites.tegel(vloerSoort(w, x, y), x, y));
+        // Een paadje (js/paden.js) maakt de hoeken die gras waren zand, met de tegel uit hetzelfde vel die die hoeken heeft.
+        const metPad = paden && g ? T.hoekenMetPaden(paden.D, paden.zand, x, y, T.sprites.grondHoeken(g.vel, g.id)) : null;
+        if (metPad && !sp && metPad.every((soort) => soort === 'zandpad')) hex = BUITENKLEUR.zandpad[(x + y) % 2];
+        const deel = sp && ((metPad && T.sprites.grondMetHoeken(g.vel, metPad, x, y)) || (g ? T.sprites.buiten(g.vel, g.id) : !buiten && T.sprites.tegel(vloerSoort(w, x, y), x, y)));
         if (deel) {
           T.sprites.teken(ctx, deel, p.x, p.y, helder);
           if (dof < 1) ctx.globalAlpha = 1;

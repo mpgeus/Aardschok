@@ -40,7 +40,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Instelbaar, en de boeren | gebouwd (24 sep): 17 keuzes, 188 getallen | |
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep); sinds 30 sep kiezen de boeren hun velden en slachten ze zelf, en jij kunt het veranderen | 6a, vraag 74 |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
-| Straten en paden | besloten, nog niet gebouwd | 6c |
+| Straten en paden | paadjes van de deuren en waar gelopen wordt, lantaarns en brandende ramen gebouwd (3 okt, vraag 108); sneller lopen, modder en keien nog niet | 6c, vraag 108 |
 | Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep), de treden tot marktrecht (2 okt, "Van dorp tot stad"); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
@@ -2161,11 +2161,23 @@ Nog open (vragen van Claude):
 
 ## Straten en paden (Marcel, 25 sep 2026)
 
-**Zo staat het nu** (25 sep): besloten, nog niet gebouwd (punt 6c). Nu loop je over gras even snel
-als over de weg, en de steengroeve staat nog in het bouwmenu. **Sinds 3 okt hoort het bij de demo** (Marcel: "De gebouwen moeten
-menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan voor de
-demo."), samen met een overzicht naast het volgen van de schout: het plan is werklijst vraag 108. Het overzicht is er
-sinds 3 okt (`Tab`, vraag 108, a; `beeld.md`): je kijkt van boven en plant, maar wat je klikt, doet de schout.
+**Zo werkt het nu** (3 okt, vraag 108, b en d; `js/paden.js`): van elke deur loopt een paadje naar de weg, of naar het
+paadje van een buur dat dichterbij ligt, recht en met een hoek, zoals mensen het aanleggen. Een nieuw gebouw heeft het
+meteen, ook in aanbouw, en staat er later iets in de weg, dan loopt het eromheen. Waar veel gelopen wordt, slijt het gras
+tot zand, zoals in Foundation: elke stap van een mens telt (een koe niet), als gemiddelde over twintig dagen; vanaf vier
+stappen per dag is het een paadje, en onder twee groeit het weer dicht. In het gehucht van 26 mensen is dat na een maand
+vooral voor de deuren en op het grasdeel van het plein, waar de mensen staan. Op een veld slijt niets. Getekend met de
+grondtegels van de kaart (zandpad over gras, met zachte randen), dus de weg van de kaart blijft zoals hij was. Een
+lantaarn komt naast de deur van de kapel, de herberg, de markt en het wachthuis als ze klaar zijn, en op de kruisingen
+van de paadjes, niet dichter dan acht tegels bij ander licht; hij brandt 's avonds, en wie erbij staat, wordt verder
+gezien (`T.zichtOp`). 's Avonds en 's morgens vroeg branden de ramen van een huis waar iemand thuis is. De spelregel
+"Paadjes" kan alleen de paadjes van de deuren, of geen. **Nog niet:** een pad loopt nog even snel als gras, modder in de
+natte maanden, en de keien (vraag 108, c). Het overzicht is er ook sinds 3 okt (`Tab`, vraag 108, a; `beeld.md`): je
+kijkt van boven en plant, maar wat je klikt, doet de schout.
+
+**Eerder** (25 sep): besloten, nog niet gebouwd (punt 6c). **Sinds 3 okt hoort het bij de demo** (Marcel: "De gebouwen
+moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
+voor de demo."), samen met een overzicht naast het volgen van de schout: het plan is werklijst vraag 108.
 
 **Hoe het zo kwam:**
 
@@ -2202,11 +2214,13 @@ komt als punt 6c, na het ontginnen (werklijst), omdat de keien daar vandaan kome
 Nog open, voor als punt 6c gebouwd wordt (vragen van Claude):
 - Hoeveel sneller? Een eerste gok voor de werkbank: een pad 1,3 keer, kinderkopjes 1,6 keer, modder
   0,6 keer zo snel als gras.
-- Hoeveel voetstappen maken een pad, en groeit een pad weer dicht als er niemand meer loopt?
+- ~~Hoeveel voetstappen maken een pad, en groeit een pad weer dicht als er niemand meer loopt?~~ Gebouwd op 3 okt: vier
+  stappen per dag, gemiddeld over twintig dagen, en onder twee groeit het dicht (`T.PADEN_INSTELLINGEN`).
 - Wat kost verharden behalve keien: handen en tijd, een tegel per dag, zoals een gebouw in fases?
 - Ziet de inner een straat, en vraagt de heer ervoor (een voorstel, nog niet gekozen)?
 - De keienraper: een gebouw aan de rand van de heide of de akkers, en hoeveel keien levert ontginnen?
-- Tekenwerk: de kinderkopjes (Marcel, 21 sep, `beeld.md`), een platgelopen paadje, en modder.
+- Tekenwerk: de kinderkopjes (Marcel, 21 sep, `beeld.md`), ~~een platgelopen paadje~~ (de grondtegels van de kaart
+  volstaan: zandpad over gras), en modder.
 
 ## Een dorp dat leeft en groeit (Marcel, 26 sep 2026)
 

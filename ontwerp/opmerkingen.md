@@ -594,6 +594,13 @@ vijf fases per gebouw, sinds ronde 4b in rijen, want één rij per gebouw werd 1
 met per tekening een eigen uitsnede en een eigen anker, zoals `bouwfasen.json` dat al doet. Dat raakt
 de vorm van `tegels.json`, `js/sprites.js` en hoe Tiled een vel leest; vóór het verpakken (punt 18).
 
+**De grond tekent helemaal opnieuw als er een paadje verandert** (3 okt, vijfentwintigste sessie; vraag 108, b,
+`js/paden.js`). De paadjes liggen in de buffer van de grond (`werkGrondBij` in `js/tekenen.js`), en die wordt helemaal
+opnieuw getekend als er een bij komt of verdwijnt: hooguit één keer per speldag, 's nachts, en bij een nieuw gebouw.
+Gemeten zonder videokaart kost dat één keer 13 ms bij het volgen, 50 ms in het overzicht op 0,5 en 70 ms op 0,35. Op
+30× is dat in het overzicht een hapering om de tien seconden. Voorstel als het opvalt: alleen de tegels opnieuw tekenen
+die veranderden (elke grondtegel past precies in zijn ruit), of de verandering meenemen als de camera toch al schuift.
+
 **De doorkijk** (26 sep, zevende sessie; `beeld.md`, "Doorkijk"):
 - Het raster kost tijd: in de proef, in een browser zonder videokaart, duurde een beeld met één groot
   huis in het raster 15 ms tegen 12 ms met het kijkvenster. Een echte browser met videokaart doet het

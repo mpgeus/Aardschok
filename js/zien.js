@@ -36,6 +36,10 @@
     // js/tekenen.js).
     lantaarnStraal: 3,
     lantaarnSterkte: 0.45,
+    // Een huis waar 's avonds (en 's morgens vroeg) iemand thuis is, heeft zijn ramen aan (werklijst vraag 108, d): een
+    // klein licht bij de deur, zo ver en zo fel.
+    huisStraal: 1.5,
+    huisSterkte: 0.22,
     // Zo lang staat het oogje boven een getuige, in seconden op het scherm.
     oogjeTijd: 5,
     // Zie je meteen wie je ziet (het venster, het oogje en het bericht), of hoor je het pas later, als het
@@ -52,15 +56,47 @@
     const w = D.wereld;
     const herberg = T.herbergLicht(D);
     if (!w || !D.kalender || !T.dagdeelVan) return herberg;
-    if (T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag)) !== 'avond') return herberg;
+    const deel = T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag));
+    const huizen = huizenLicht(D, deel);
+    if (deel !== 'avond') return herberg.concat(huizen);
     // De lantaarn naast de deur van de herberg is het licht van de herberg al.
     const vanDeHerberg = (v) => herberg.some((h) => T.afstand(h, v) <= 1);
     const lantaarns = w.voorwerpen
       .filter((v) => v.soort === 'lantaarn' && !vanDeHerberg(v))
       .map((v) => ({ x: v.x, y: v.y, straal: IN().lantaarnStraal, sterkte: IN().lantaarnSterkte }));
     // En op een feest het licht op het plein (js/feesten.js).
-    return herberg.concat(lantaarns, T.feestLicht(D));
+    return herberg.concat(lantaarns, T.feestLicht(D), huizen);
   };
+
+  // De ramen van de huizen (werklijst vraag 108, d; Marcel, 3 okt: "Lantaarns voor in de avond etc."): 's avonds en 's
+  // morgens vroeg brandt er licht in een huis waar iemand thuis is, binnen of op zijn erf, en niet als ze allemaal in de
+  // herberg zitten, op het feest zijn of weg. Met de ramen van de tekening (ramenVan; js/tekenen.js tekent ze, zoals die
+  // van de herberg) en een klein licht bij de deur. De herberg heeft zijn eigen licht (T.herbergLicht), en een huis dat
+  // nog gebouwd wordt, heeft nog geen ramen.
+  function huizenLicht(D, deel) {
+    if ((deel !== 'avond' && deel !== 'ochtend') || !D.bewoners) return [];
+    const w = D.wereld;
+    const herbergen = new Set(T.herbergenVan(D));
+    const straal = T.DAG_INSTELLINGEN.erfStraal + 2;
+    const deuren = new Map();
+    const uit = [];
+    for (const p of D.bewoners.mensen) {
+      const g = p.huis;
+      const e = p.wezen;
+      if (!g || g.klaar === false || herbergen.has(g) || p.weg || !e || e.dood) continue;
+      if (deuren.has(g) && deuren.get(g).aan) continue;
+      if (!deuren.has(g)) deuren.set(g, { deur: T.deurVan(w, g), aan: false });
+      const huis = deuren.get(g);
+      const deur = huis.deur;
+      const thuis = e.binnen
+        ? !!(e.deur && e.deur.x === deur.x && e.deur.y === deur.y)
+        : T.afstand({ x: e.tx, y: e.ty }, deur) <= straal;
+      if (!thuis) continue;
+      huis.aan = true;
+      uit.push({ x: deur.x, y: deur.y, straal: IN().huisStraal, sterkte: IN().huisSterkte, ramenVan: g, schimmen: 0 });
+    }
+    return uit;
+  }
 
   // Hoe ver je iemand ziet die op deze tegel staat: naar het licht van de dag, en verder als hij in het
   // licht van een lantaarn of de herberg staat.

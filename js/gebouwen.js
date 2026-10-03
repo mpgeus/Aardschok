@@ -37,6 +37,8 @@
 //     verdacht:    false,            // moet de heer dit niet zien? (wapenmaker, schuttershof, …)
 //     kerk:        false,            // telt als "een kerk" voor de behoeften (js/behoeften.js:
 //                                    // T.heeftKerk) — nu alleen de kapel, later ook de kerk zelf
+//     lantaarn:    true,             // van het dorp: als hij klaar is, komt er een lantaarn naast de
+//                                    // deur die 's avonds brandt (js/paden.js, T.zetLantaarns)
 //     woning:      true,             // een huis om in te wonen (hut, huis, stenen huis): als het dorp zelf
 //                                    // bouwt (js/erven.js, T.ERVEN_INSTELLINGEN.dorpBouwtZelf), zet jij
 //                                    // die niet neer, en staat hij niet in het bouwmenu (T.inBouwmenu).
@@ -225,7 +227,7 @@
     },
     wachthuis: {
       naam: 'wachthuis', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 10, goud: 4 }, heer: { goud: 2 }, bouwtijd: 3,
-      handen: 2, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 2, woonruimte: 0, maakt: null, verdacht: false, menu: true, lantaarn: true,
       tekening: 'gebouwen/dorpKlein3', beschrijving: 'rakkers en de nachtwacht: orde houden, dieven pakken, keuren handhaven, of wegkijken',
       opmerking: 'nieuw (Marcel, 23 sep: "orde bewaarders, leger etc moeten een optie zijn"): nog niet getekend, '
         + 'leent voorlopig een klein dorpshuis. De heer vindt het goed; voor wie de rakkers echt werken, is de vraag.',
@@ -268,7 +270,7 @@
       naam: 'herberg', trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 12 }, heer: { goud: 5 }, bouwtijd: 4,
       // Wie er woont, tapt en brouwt: van graan, zolang er niet genoeg bier ligt (27 sep, werklijst punt
       // 2). Een kan bier kost een veertigste graan; wie er 's avonds heen gaat, staat in js/herberg.js.
-      handen: 1, woonruimte: 1, maakt: { in: { graan: 0.2 }, uit: { bier: 8 } }, verdacht: false, menu: true,
+      handen: 1, woonruimte: 1, maakt: { in: { graan: 0.2 }, uit: { bier: 8 } }, verdacht: false, menu: true, lantaarn: true,
       tekening: 'gebouwen/herberg', beschrijving: 'reizigers, nieuws en verhalen, bier',
       opmerking: 'In het gehucht staat er een vanaf het begin, met de herbergierster (kaarten/gehucht.betekenis.json), '
         + 'in een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in het dorp bouwt, krijgt nog de '
@@ -277,7 +279,7 @@
     },
     kapel: {
       naam: 'kapel', trede: 'gehucht', voet: { b: 5, h: 5 }, kosten: { hout: 10, goud: 8 }, heer: {}, bouwtijd: 4,
-      handen: 1, woonruimte: 0, maakt: null, verdacht: false, kerk: true, menu: true,
+      handen: 1, woonruimte: 0, maakt: null, verdacht: false, kerk: true, menu: true, lantaarn: true,
       tekening: 'gebouwen/kapel', beschrijving: 'de kerk als groep, en tevredenheid',
       opmerking: 'De tevredenheid (T.heeftKerk, js/behoeften.js, werklijst.md punt 3) is er; de kerk '
         + 'als groep met eigen belangen komt pas met de politiek (werklijst.md, punt 9). Zijn trede '
@@ -296,7 +298,7 @@
     // willen brood, laken en een markt (js/wensen.js), en zo heeft een huis dat versteent meteen wat het wil.
     markt: {
       naam: 'markt', trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 14 }, heer: { goud: 10 }, bouwtijd: 4,
-      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true, lantaarn: true,
       tekening: 'gebouwen/dorpGroot1', beschrijving: 'handel met buiten; handelaars komen',
       opmerking: 'nieuw in gebouwen.tsx (de kraam bestaat als model in gereedschap/pixelart/dorp.cjs, '
         + 'nog niet geëxporteerd); leent voorlopig een groot dorpshuis.',
@@ -718,13 +720,16 @@
   }
 
   // Of er op deze tegel gebouwd mag worden, voor een gebouw en voor een erf: niet op een akker of weide
-  // (T.veldOp, js/akkers.js), niet op een pad (T.opPad, js/wereld.js), en niet op een erf (T.erfOp,
-  // js/erven.js). Geeft de reden, of null.
+  // (T.veldOp, js/akkers.js), niet op een pad (T.opPad, js/wereld.js), niet op een erf (T.erfOp,
+  // js/erven.js), en niet op een lantaarn. Geeft de reden, of null.
   T.waaromNietOpDezeGrond = function (D, x, y) {
     const w = D.wereld;
     if (T.veldOp(w, x, y)) return 'Daar ligt een veld.';
     if (T.opPad(w, x, y)) return 'Daar loopt een pad.';
     if (T.erfOp(D, x, y)) return 'Daar ligt een erf.';
+    // Een lantaarn houdt niemand tegen die loopt, maar er komt geen gebouw overheen (js/paden.js).
+    const v = T.voorwerpOp(w, x, y);
+    if (v && v.soort === 'lantaarn') return 'Daar staat een lantaarn.';
     return null;
   };
 
@@ -1167,6 +1172,9 @@
     // 9. Het eind (js/einde.js): het jaarboek telt wat er vandaag in het dagboek staat (dus vóór het rapport, dat het
     // dagboek opnieuw laat beginnen), op 1 lentemaand het jaarverslag, en of het gewonnen of verloren is.
     T.tikEindeDag(D, dag);
+    // De paadjes (js/paden.js): waar vandaag gelopen werd, slijt het gras; en een lantaarn bij wat er van het dorp klaar
+    // kwam, en op een nieuwe kruising.
+    T.tikPadenDag(D);
     // 10. Als laatste het rapport (js/ochtendrapport.js): de raadsman schrijft op wat er gebeurde en hoe het gaat, en
     // brengt het je morgenvroeg; het dagboek begint opnieuw.
     T.tikOchtendrapportDag(D, dag);

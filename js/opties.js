@@ -331,6 +331,20 @@
           uitleg: 'Eén dag waarop een huis iets mist, en de teller begint opnieuw.' },
       ],
     },
+    // De paadjes (werklijst vraag 108, b; js/paden.js): van elke deur een paadje naar de weg, en waar veel gelopen wordt,
+    // slijt het gras (Marcel, 25 sep: "paden ontstaan vanzelf", en 3 okt: "108 a tab, b c d e ja").
+    {
+      id: 'paadjes', naam: 'Paadjes', standaard: 'lopen',
+      uitleg: 'Waar de paadjes in het dorp vandaan komen.',
+      keuzes: [
+        { id: 'lopen', naam: 'Waar gelopen wordt', zet: { 'PADEN_INSTELLINGEN.paadjes': 'lopen' },
+          uitleg: 'Van elke deur loopt een paadje naar de weg, en waar veel mensen lopen, slijt het gras tot een paadje. Waar niemand meer loopt, groeit het weer dicht.' },
+        { id: 'deuren', naam: 'Alleen van de deuren', zet: { 'PADEN_INSTELLINGEN.paadjes': 'deuren' },
+          uitleg: 'Van elke deur loopt een paadje naar de weg; verder blijft het gras.' },
+        { id: 'uit', naam: 'Geen', zet: { 'PADEN_INSTELLINGEN.paadjes': 'uit' },
+          uitleg: 'Alleen de weg van de kaart, zoals voor 3 okt.' },
+      ],
+    },
     // Wie betrapt wordt op verstoppen (werklijst vraag 106, c; Marcel koos niet tussen de twee, dus de laatste
     // waarschuwing als standaard tot hij kiest; js/bazen.js, T.betrapt).
     {
@@ -532,6 +546,7 @@
     { naam: 'Gebouwen en bevolking', blok: 'GEBOUWEN_INSTELLINGEN' },
     { naam: 'De bewoners', blok: 'BEWONERS_INSTELLINGEN' },
     { naam: 'Lopen', blok: 'LOPEN_INSTELLINGEN' },
+    { naam: 'De paadjes', blok: 'PADEN_INSTELLINGEN' },
     { naam: 'De erven', blok: 'ERVEN_INSTELLINGEN' },
     { naam: 'De treden', blok: 'TREDEN_INSTELLINGEN' },
     { naam: 'De wetten', blok: 'WETTEN_INSTELLINGEN' },

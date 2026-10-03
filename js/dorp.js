@@ -55,6 +55,9 @@
     // Wie er verder woont, en wie waar werkt (js/bewoners.js): ná het lot, want het karakter van een boer zegt wie er
     // bij hem woont (de weduwe heeft drie kleine kinderen).
     T.zetBeginBewoners(D);
+    // Wat er gelopen wordt, telt vanaf de eerste stap, en wat van het dorp is, heeft meteen zijn lantaarn (js/paden.js).
+    T.nieuwePaden(w);
+    T.zetLantaarns(D);
     return D;
   };
 

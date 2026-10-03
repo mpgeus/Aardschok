@@ -3611,7 +3611,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
 108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
     misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
     moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
-    voor de demo."; plan van Claude; open).
+    voor de demo."; plan van Claude; a, b en d gebouwd op 3 okt, c en e volgen).
     **Wat er al is:** het besluit over straten en paden (25 sep, punt 6c, `spel.md`): paadjes ontstaan vanzelf waar veel
     gelopen wordt, zoals in Foundation, jij verhardt ze met keien, een pad loopt sneller, en een zandpad wordt modder in de
     natte maanden. Er zijn lantaarns op de kaart die 's avonds branden (`T.lichtBronnen`), en de ramen van de herberg
@@ -3951,6 +3951,17 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **Vraag 108, b en d: paadjes, lantaarns en ramen die 's avonds branden** (vijfentwintigste sessie; Marcel:
+  "108 a tab, b c d e ja"; `js/paden.js`). Van elke deur loopt een paadje naar de weg, of naar het paadje van een buur,
+  recht en met een hoek; een nieuw gebouw heeft het meteen, en het loopt om een later gebouw heen. Waar veel gelopen
+  wordt, slijt het gras tot zand (een gemiddelde over twintig dagen: vanaf vier stappen per dag een paadje, onder twee
+  groeit het dicht), en een koe telt niet; in een maand vooral voor de deuren en op het grasdeel van het plein. Getekend
+  met de grondtegels die de kaart al had. Een lantaarn naast de deur van de kapel, de herberg, de markt en het wachthuis,
+  en op de kruisingen, niet dichter dan acht tegels bij ander licht; op een lantaarn bouw je niet. 's Avonds en 's morgens
+  vroeg branden de ramen van een huis waar iemand thuis is. De spelregel "Paadjes" (waar gelopen wordt, alleen van de
+  deuren, of geen). Kosten: een maand spelen kost in de browser zes seconden, het tekenen blijft gelijk, maar als er een
+  paadje bij komt, tekent de grond opnieuw (`opmerkingen.md`). Een pad loopt nog niet sneller. 10 nieuwe toetsen,
+  `npm test` 861/861.
 - 3 okt 2026 — **Vraag 108, a: het overzicht onder `Tab`** (vijfentwintigste sessie; Marcel: "108 a tab"; `js/main.js`).
   `Tab` tilt de camera van de schout af en zoomt uit tot 0,5, zodat je over het dorp kijkt; slepen of de pijltjes
   schuiven het beeld, het wiel zoomt verder uit (0,35) of terug. Wat je klikt, doet de schout nog altijd: hij loopt erheen

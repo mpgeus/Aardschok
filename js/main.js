@@ -755,6 +755,25 @@
         licht: T.lichtBronnen(S.dorp).map((b) => `${b.x},${b.y} (${b.straal})`),
       };
     },
+    // De paadjes en de lantaarns (js/paden.js; werklijst vraag 108, b en d): hoeveel tegels paadje zijn (van de deuren, en
+    // gesleten), waar het meest gelopen wordt, en de lantaarns. ('nacht') doet nu wat de nacht doet: slijten en
+    // lantaarns zetten.
+    paden(wat) {
+      const D = S.dorp;
+      const w = D.wereld;
+      if (wat === 'nacht') T.tikPadenDag(D);
+      const b = w.tegels[0].length;
+      const net = T.aangelegdNet(D);
+      const P = w.paden || { slijt: {}, gesleten: new Set() };
+      const tegel = (k) => `${k % b},${Math.floor(k / b)}`;
+      return {
+        spelregel: T.PADEN_INSTELLINGEN.paadjes,
+        vanDeDeuren: net.filter((v) => v === 2).length,
+        gesleten: P.gesleten.size,
+        meestGelopen: Object.entries(P.slijt).sort((a, c) => c[1] - a[1]).slice(0, 8).map(([k, n]) => `${tegel(Number(k))}: ${n} per dag`),
+        lantaarns: w.voorwerpen.filter((v) => v.soort === 'lantaarn').map((v) => `${v.x},${v.y}${v.vanHetDorp ? '' : ' (kaart)'}`),
+      };
+    },
     // De verstopplekken (js/verstoppen.js): waar je iets kunt verstoppen, wat er ligt, en hoe vaak
     // de soldaten het er vinden. Spel.debug.verstopt('boer1', 30, 5) zet 30 graan en 5 goud in
     // de kelder van boer1 (of 'schout', of 'kapel'), zonder te lopen, als het kan.

@@ -290,7 +290,12 @@
   T.kaartVeranderd = function (w) {
     PER_TEGEL.delete(w);
     EILANDEN.delete(w);
+    VERSIES.set(w, T.kaartVersie(w) + 1);
   };
+  // Hoe vaak de kaart al veranderde: wat er verder uit de kaart volgt (de paadjes van de deuren, js/paden.js), weet zo
+  // of het opnieuw moet. Ook geen spelstaat: een geladen kaart begint weer bij 0, en rekent alles opnieuw uit.
+  const VERSIES = new WeakMap();
+  T.kaartVersie = (w) => VERSIES.get(w) || 0;
 
   // ── Eilanden: welke tegels samen één gebied vormen ──
   // Marcel (2 okt, werklijst vraag 88): "Zoizo bezette tegels zijn uit te sluiten toch? Bomen, versiering etc". Wat

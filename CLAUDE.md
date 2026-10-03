@@ -279,6 +279,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwmenu staat, zegt `T.inBouwmenu`: het erf, en de woningen niet, tenzij de spelregel "Huizen" anders zegt. Op
   een akker, een weide, een pad of een erf bouw je niet (`T.waaromNietOpDezeGrond`). De paaltjes op een vrij erf
   tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`).
+- `js/paden.js`: **de paadjes en de lantaarns** (vraag 108, b en d, 3 okt): van elke deur een paadje naar de weg, of naar
+  het paadje van een buur (`T.aangelegdNet`, uit de kaart en de gebouwen, niet in S: na `T.kaartVeranderd` opnieuw, met
+  `T.kaartVersie` in `js/wereld.js`); waar mensen lopen, slijt het gras (`T.telStap` vanuit `js/anim.js`, een dier telt
+  niet; elke nacht `T.tikPadenDag`, in S als `w.paden`), en waar niemand meer loopt, groeit het dicht. Hoe het eruitziet:
+  `T.zandHoeken` en `T.hoekenMetPaden` (de hoeken van de grond, zoals `T.sprites.grondHoeken`), in de buffer van de grond
+  (`js/tekenen.js`). Een lantaarn bij de deur van wat `lantaarn` heeft in `T.GEBOUWEN` (de kapel, de herberg, de markt,
+  het wachthuis) en op de kruisingen (`T.zetLantaarns`; op een lantaarn bouw je niet). De ramen van een huis waar iemand
+  thuis is, branden 's avonds (`T.lichtBronnen` in `js/zien.js`). De spelregel "Paadjes"; de getallen in
+  `T.PADEN_INSTELLINGEN`. Een pad loopt nog niet sneller.
 - `js/treden.js`: **van gehucht tot dorp, en tot marktrecht** (stap 2 van de proef, vraag 53, 29 sep; sinds 2 okt uit de
   standen, vraag 90): zoals in Anno 1602 wordt het gehucht een dorp bij 20 dorpelingen (wie in een huis of een stenen
   huis woont, `T.mensenVanStand` in `js/wensen.js`), en krijgt het marktrecht bij 20 ambachtslieden
@@ -779,7 +788,8 @@ spelregel Land aan); `('open')` opent de kaart, `('reis', 'De heide')` reist erh
 zien, `('nieuw')` maakt het opnieuw uit het zaad.
 `Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
-en het bier (`(30)` zet eerst 30 bier). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
+en het bier (`(30)` zet eerst 30 bier). `Spel.debug.paden()` zegt hoeveel tegels paadje zijn, waar het meest gelopen wordt en waar de lantaarns staan;
+`('nacht')` doet nu wat de nacht doet. `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
 hij staat, wie er kijkt, en welk licht er brandt.
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1
 slachtmaand). `Spel.debug.opslaan('2')` zet het spel op plek 2, `Spel.debug.laden('auto')` laadt wat er vanzelf

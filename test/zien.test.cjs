@@ -80,7 +80,9 @@ test('\'s avonds branden de lantaarns; overdag en na bedtijd niet', () => {
   assert.equal(T.dagdeelVan(S.kalender.dag), 'avond');
   const lantaarns = S.wereld.voorwerpen.filter((v) => v.soort === 'lantaarn');
   assert.ok(lantaarns.length >= 2, 'een op het plein, bij de put, en die van de herberg');
-  const bronnen = T.lichtBronnen(S.dorp);
+  // De ramen van een huis waar iemand thuis is, branden ook (werklijst vraag 108, d); hier gaat het om de lantaarns.
+  const herbergen = T.herbergenVan(S.dorp);
+  const bronnen = T.lichtBronnen(S.dorp).filter((b) => !b.ramenVan || herbergen.includes(b.ramenVan));
   for (const v of lantaarns) {
     const hier = bronnen.filter((b) => T.afstand(b, v) <= 1);
     assert.equal(hier.length, 1, `de lantaarn op ${v.x},${v.y} brandt, en één keer (die van de herberg is het licht van de herberg)`);
