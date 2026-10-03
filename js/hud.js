@@ -753,7 +753,7 @@
     T.ui.toonOverlay(
       'Iedereen gelukkig',
       `<p>Een jaar lang had iedereen in ${veiligeNaam(D)} alles wat hij wilde. Vandaag viert het hele dorp het op het plein.</p>` +
-        `<p>De heer schrijft dat het niet kan kloppen, en stuurt zijn inner.</p>` +
+        `<p>De heer schrijft dat het niet kan kloppen: een dorp waar iedereen tevreden is, betaalt te weinig.</p>` +
         `<div class="einde-jaren">${regels.map((r) => `<p>${veilig(r)}</p>`).join('')}</div>`,
       'Verder spelen',
       () => T.laatTijdGaan(S, 'gewonnen'),

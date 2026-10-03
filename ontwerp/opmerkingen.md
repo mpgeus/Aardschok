@@ -9,6 +9,16 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Het eind, wat er nog niet is** (3 okt, vijfentwintigste sessie; vraag 101, 2e). Na te lopen:
+  - Wie wint, viert het grote feest op de dag zelf (`T.vierVandaag`). Stond er al een feest klaar voor later (een
+    oogstfeest voor morgen), dan gaat dat verloren. Zeldzaam; na te lopen als het voorkomt.
+  - Een nieuw gezin in een hut is een keuter, en dan is niet iedereen meer in de hoogste stand: de teller begint opnieuw.
+    Wie wil winnen, moet de groei dus een jaar stilzetten (geen erf meer aanwijzen). Dat is een keuze die het spel nergens
+    uitlegt; de raad zou het kunnen zeggen als het doel "een jaar gelukkig" is.
+  - Het jaarverslag en het eindscherm zijn nog in de stijl van vóór de schrijftafel (vraag 98, C); ze worden papier met de
+    rest van de ui.
+  - Het eindscherm komt 's avonds of bij het feest. Wie op reis is (de spelregel Land), krijgt het die avond over de kaart
+    van het land, zonder het feest te zien.
 - **De feesten, wat er nog niet is** (3 okt, vijfentwintigste sessie; vraag 97, gebouwd tijdens Marcels vlucht). Ideeën
   van Claude, niet gekozen:
   - De schout kan op het feest gaan staan, maar dat doet nog niets. Een idee: wie er de schout ziet, is er een tijd wat
