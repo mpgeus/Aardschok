@@ -193,7 +193,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/opslaan.js`: **opslaan en laden** (werklijst punt 3, vraag 48): het bewaart heel `Spel.S` behalve wat
   alleen scherm is (`T.schermVelden`), met de verzamelingen en alles wat elkaar aanwijst heel
   (`T.bewaarSpel`, `T.leesSpel`, `T.zetSpel`). Een plek die vanzelf gaat, elke ochtend als de mensen opstaan
-  (`T.werkOpslaanBij`), en vijf eigen (`T.slaOp`, `T.opgeslagenSpellen`); waar het blijft, zegt één functie
+  (`T.werkOpslaanBij`; op 30× om de drie dagen, want het kost een hapering), en vijf eigen (`T.slaOp`, `T.opgeslagenSpellen`); waar het blijft, zegt één functie
   (`T.opslagPlek`: de opslag van de browser, straks een bestand). `js/menu.js` is het scherm erbij: het
   titelscherm, waarop het spel opent, en het menu onder `Esc`. `js/main.js` begint een nieuw spel
   (`T.nieuwSpel`, dat een vorig spel helemaal wist), laadt er een (`T.laadSpel`), en gaat terug naar het
@@ -209,7 +209,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   'schout' en kant 'speler' (Marcel, 26 sep: een man van de militie vecht later ook aan kant
   'speler' zonder de schout te zijn); hij draagt het vel van een gewone dorpeling (`js/sprites.js`).
 - `js/pad.js`: A* (`zoekPad`, acht richtingen, schuin kost ook 1, geen hoeken afsnijden; sinds 2 okt met een hoop, die
-  in precies dezelfde volgorde kiest als de lijst ervoor) en `bereik` (alle tegels binnen N stappen). **De eilanden**
+  in precies dezelfde volgorde kiest als de lijst ervoor; tijdens het zoeken staat iedereen stil, `T.iedereenStil` in
+  `js/wereld.js`, zodat wie op een tegel staat in één stap bekend is, 3 okt) en `bereik` (alle tegels binnen N stappen). **De eilanden**
   (`T.eilandOp`, `T.kanErKomen` in `js/wereld.js`, vraag 88): welke tegels samen één gebied vormen, ruim gerekend, zodat
   wie naar een ander eiland wil, meteen weet dat er geen weg is. Verandert er een tegel of een voorwerp, dan zegt
   `T.kaartVeranderd(w)` het (een toets kijkt dat niemand het vergeet).
@@ -224,7 +225,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.beweegWezens(S, w, ...)`): waar je bent, of een dorp waar je niet bent (`js/dorp.js`).
 - `js/verkennen.js`: rondlopen, klikhandelingen, dwalende monsters, ontdekt worden. Dwalen gaat op een kaart met het dorp
   dat er ligt (`T.dwaal(S, w, D, dt)`; `T.laatDwalen(S, dt)` is dat voor waar je bent). Wie twee keer na elkaar geen weg
-  vindt naar waar hij hoort, wacht een uur (de rem, `T.LOPEN_INSTELLINGEN`; Marcel, vraag 88).
+  vindt naar waar hij hoort, wacht een uur (de rem, `T.LOPEN_INSTELLINGEN`; Marcel, vraag 88), en per beeld zoeken hooguit
+  `zoekPerBeeld` mensen een weg (de drukte 's ochtends en 's avonds, 3 okt).
 - `js/gevecht.js`: de overgang, beurtvolgorde, actiepunten, handelingen, monster-AI
   (`planMonsterBeurt`, los van het scherm en dus te toetsen). Sinds 29 sep voor een groep: aan jouw kant (kant
   'speler') de schout en de militie, elk met een eigen beurt; wie aan de beurt is, zegt `T.aanDeBeurt`, en een
@@ -237,7 +239,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/dialoog.js`, `js/ui.js` (alle html over het beeld), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera). **Het overzicht** (vraag 108, a): `Tab` tilt de camera van de schout af en zoomt uit
   (`T.wisselOverzicht`, `S.overzicht`, alleen scherm); slepen of de pijltjes schuiven, het wiel zoomt, en wat je klikt,
-  doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug.
+  doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug. Ver uitgezoomd bewaart
+  `js/tekenen.js` de grond op de maat van het scherm, en het bos om de kaart heen in een buffer (`bosGebakken`). **De
+  meter** (`F2`): beelden per seconde, en wat de regels en het tekenen per beeld kosten.
 - `js/doorkijk.js`: wie je door een boom of een huis heen ziet (`T.zichtbaarDoor`,
   `T.werkDoorkijkBij`), en hoe: het kijkvenster (`T.tekenKijkgat`) of het raster (`T.tekenGerasterd`),
   een keuze in de spelregels (`beeld.md`, "Doorkijk"). `js/tekenen.js` vraagt het aan. Het eerste stuk
@@ -788,7 +792,7 @@ spelregel Land aan); `('open')` opent de kaart, `('reis', 'De heide')` reist erh
 zien, `('nieuw')` maakt het opnieuw uit het zaad.
 `Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
-en het bier (`(30)` zet eerst 30 bier). `Spel.debug.paden()` zegt hoeveel tegels paadje zijn, waar het meest gelopen wordt en waar de lantaarns staan;
+en het bier (`(30)` zet eerst 30 bier). `Spel.debug.meter()` (of `F2`) zet de meter in beeld. `Spel.debug.paden()` zegt hoeveel tegels paadje zijn, waar het meest gelopen wordt en waar de lantaarns staan;
 `('nacht')` doet nu wat de nacht doet. `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
 hij staat, wie er kijkt, en welk licht er brandt.
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1

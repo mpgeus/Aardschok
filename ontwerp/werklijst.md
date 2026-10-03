@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; alles van deze sessie staat in `main` (twee bazen, het overzicht, paadjes, lantaarns); Marcel wil nu de boeren aan het werk op hun veld (vraag 111) en elk spel een ander, wijder land met natuur, om opnieuw te spelen (vraag 112)
+## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles, en is voor een groot deel gedaan (vraag 113, de meter onder F2); daarna elk spel een ander, wijder land met natuur (vraag 112), gebouwen in verhouding en een woontoren (vraag 114), en de boeren aan het werk op hun veld (vraag 111)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -36,13 +36,15 @@ de ramen van wie thuis is. `npm test`: 862/862.
 **Waar het werk staat:** alles staat in `main` (`22a7ba9`; Marcel: "push main"). Dat was, bovenop de twee bazen: het vertrouwen dat de tevredenheid volgt, vraag 102 b, c en d (bier
 apart, de raad bij de maat, "een week mag"), het looppad van drie tegels en de tekenvolgorde van twee gebouwen (Marcel zag
 op `main` een houthakker tegen het huis van de schout, en de muur eroverheen: op de branch is dat goed), het overzicht
-(108 a), de paadjes, de lantaarns en de ramen (108 b en d), en de weg het gehucht uit zonder fout. Hoe een eigen branch
-en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+(108 a), de paadjes, de lantaarns en de ramen (108 b en d), en de weg het gehucht uit zonder fout. Op de branch
+`ccr-0d0c2710-bcd5tx` staat daarbovenop de snelheid (vraag 113) en de plannen 111 tot en met 114; dat gaat naar `main` als
+Marcel het vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** Marcels antwoorden op **vraag 111** (de boeren aan het werk op hun veld: zaaien,
-wieden, hooien, maaien, mest en spitten, en sprokkelen in de winter) en **vraag 112** (elk spel een ander land: de maker
-als standaard, wijder, met natuur en meer huizen; Marcel: "belangrijk voor de demo. Zodat je kunt herspelen"). Een
-groter land lost ook vraag 110 op. Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen
+**Waar de volgende sessie begint:** de snelheid gaat voor alles (**vraag 113**; Marcel: "Als de performance slecht is,
+hebben we niks"): het meeste is gedaan, en Marcel kijkt met `F2` in Firefox wat de meter zegt. Dan **vraag 112** (elk
+spel een ander land: de maker als standaard, wijder, met natuur en meer huizen; Marcel: "ja die zijn goed. volgorde is
+oke"), met de gebouwen in verhouding en een woontoren (**vraag 114**, wacht op Marcel), en daarna **vraag 111** (de boeren
+op hun veld). Een groter land lost ook vraag 110 op. Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen
 en het erf: bestraten als verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de
 maat van de winst: het dorp loopt vol op 99, de winst vraagt 100; het voorstel is de winst vanaf 90, en bouwgrond uit het
 ontginnen). De speeltest van vier jaar staat in `speelbaar.md` (vijf van de zes spelers; de uitslagen buiten git in
@@ -3729,6 +3731,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       helpen bij het zaaien en de oogst, de rest van het jaar doen ze wat ze nu doen.
     Vragen: **a**, dit werk per seizoen? **b**, de zaaier en de wieder als nieuwe figuren? **c**, alleen hoe het eruitziet,
     en de regels zoals ze zijn?
+    **Marcel koos (3 okt): "ja die zijn goed. volgorde is oke."** Dus a, b en c zoals voorgesteld, na vraag 112.
 112. **Elk spel een ander land: de maker als standaard, wijder, met natuur en meer huizen** (Marcel, 3 okt,
     vijfentwintigste sessie: "Alles moet denk ik ook wijder opgezet worden. En meer variatie in de huizen. Her en der wat
     foliage, bomen, stenen, water. Eigenlijk een random map generator per nieuwe game. Doe is ook wel belangrijk voor de
@@ -3758,6 +3761,51 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     dorp kan worden. De boeren op hun veld (vraag 111) kan ervoor of erna.
     Vragen: **a**, elk spel een eigen land, met het zaad om opnieuw te spelen? **b**, 100 bij 100, en het dorp losser?
     **c**, deze natuur, en dat ze ertoe doet? **d**, meer huizen zo? **e**, eerst de kaart, dan de boeren?
+    **Marcel koos (3 okt): "ja die zijn goed. volgorde is oke."** Dus a tot en met e zoals voorgesteld: eerst het land,
+    dan de boeren (vraag 111). Hij zag ook in het ontworpen gehucht twee huizen "over elkaar vallen": het huis van de
+    schout en het huis ernaast staan drie tegels uit elkaar, en in beeld reikt het dak van het voorste over de muur van
+    het achterste. De tekenvolgorde klopt (Marcel: "volgorde is oke"); het land legt hoge gebouwen verder uit elkaar,
+    vooral naar achteren in beeld.
+113. **De snelheid** (Marcel, 3 okt, vijfentwintigste sessie: "oh en nog 1 heel belangrijke... de performance", "loopt
+    nogal traag", en "Als de performance slecht is, hebben we niks"; gaat voor alles; voor een deel gebouwd).
+    **Gemeten** (zonder videokaart, Chromium; Marcel speelt in Firefox): in het overzicht 13 beelden per seconde, want
+    elk beeld tekende 2600 plaatjes, waarvan 2100 bomen van het bos om de kaart heen; van dichtbij 50 à 60 beelden per
+    seconde. De haperingen kwamen uit de regels: bij 100 mensen beelden tot 115 ms als iedereen tegelijk op weg gaat
+    (A* liep bij elke tegel alle wezens af), een nacht van 15 ms, en het opslaan elke ochtend 25 à 50 ms; bij 200 mensen
+    een nacht van 210 ms, soms een seconde (de plek voor een bouwverzoek).
+    **Gedaan (3 okt):** het overzicht bewaart de grond op de maat van het scherm en het bos in een buffer (34 beelden per
+    seconde); wie waar staat in één stap tijdens het zoeken, de deuren bewaard, een put of kapel telt eerst wat hij
+    bereikt, hooguit acht mensen per beeld op zoek naar een weg, en op 30× om de drie dagen vanzelf opslaan. Bij 100
+    mensen nu gemiddeld 0,64 ms aan regels per beeld (was 1,5), de traagste 5% 5,7 ms (was 17), de nacht 10 ms; bij 200
+    mensen 2,1 ms (was 9,1), de traagste 5% 17 ms (was 106), de nacht 25 ms (was 210). En de meter onder `F2`.
+    **Nog te doen, als het nodig blijkt:** het tekenen van dichtbij (10 à 18 ms zonder videokaart: 's avonds de nacht,
+    de ramen en het licht), de eerste nacht van een spel (80 ms), het opslaan zelf kleiner (twee derde is de kaart, die
+    niet verandert), de bomen en het graan in het overzicht, en een land van 100 bij 100 (vraag 112) opnieuw meten.
+    Vraag: **a**, wil je met `F2` in Firefox kijken wat de meter zegt, van dichtbij en in het overzicht, overdag en 's
+    avonds, en op 30×? Dan weten we of het tekenen van dichtbij ook nog moet.
+114. **Gebouwen in verhouding, en een woontoren** (Marcel, 3 okt, vijfentwintigste sessie: "Gebouwen moeten in
+    verhouding komen. Een herberg is vaak veel groter dan een huis. Een kapel zelfde verhaal. Een warehouse ook.
+    Misschien moeten we ook een woontoren hebben"; plan van Claude; open).
+    **Hoe het nu is:** een huis is 7 bij 5 tot 10 bij 7 tegels, een boerderij 6 bij 8 tot 9 bij 8. De herberg is 9 bij 7
+    (die op de kaart 8 bij 11), nauwelijks groter dan een huis. De kapel is 5 bij 10, smal, en met zijn dak niet hoger
+    dan een huis. Het pakhuis en de tiendschuur lenen een blokhutschuur van 5 bij 7, kleiner dan een huis; de markt en
+    de meeste werkplaatsen lenen ook een tekening (een klein dorpshuis of een schuurtje).
+    Voorstel:
+    - **a, een ladder van maten:** klein (een hut, een schuurtje, de put: 3 tot 5 tegels), een huis (het huis, het
+      stenen huis, een ambacht zoals de smidse en de bakkerij: 6 tot 8), groot (de boerderij met zijn schuur, de herberg
+      met een stal en een binnenplaats, het pakhuis, de tiendschuur, de molen: 9 tot 12 lang, en hoger), en het grootst:
+      de kapel met een toren, het hoogste punt van het dorp (en later de kerk). De markt is een plein met kramen.
+    - **b, de woontoren:** een kleine voet (5 bij 5) maar hoog, van steen, met kantelen. Wat is hij? (1) Het huis van de
+      schout groeit door tot een woontoren als het dorp marktrecht krijgt: jouw stand, een sterke plek tegen de rovers,
+      en een kelder die de soldaten niet zomaar doorzoeken. (2) Een nieuwe stand bovenaan: de rijken, zoals in een stad.
+      (3) De toren van de heer in het dorp, waar de inner zit en de tiend heen gaat. Claude zou 1 nemen: het past bij
+      "je bent de schout", je ziet je eigen macht groeien, en het is satire (de man van de heer bouwt zijn eigen toren).
+    - **c, wie het tekent:** de huizenbouwer, in dezelfde stijl als de huizen: een grote herberg, een kapel met toren,
+      een lang pakhuis met een grote deur, de tiendschuur, de woontoren, en per gebouw een paar varianten.
+    - **d, de ruimte:** grote gebouwen vragen plaats, en hoge vragen meer ruimte vóór zich in beeld: dat hoort bij het
+      wijdere land (vraag 112, b). Daarom samen met 112, stap 2 (de huizen).
+    Vragen: **a**, deze ladder? **b**, de woontoren als 1, 2 of 3? **c**, met "warehouse" bedoel je het pakhuis (de
+    voorraad van het dorp), of de tiendschuur (van de heer)? **d**, eerst de herberg, de kapel en de woontoren?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
@@ -4062,6 +4110,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **Vraag 113: sneller** (vijfentwintigste sessie; Marcel: "Als de performance slecht is, hebben we
+  niks"). Het overzicht bewaart de grond op de maat van het scherm en het bos om de kaart heen in een buffer (van 13 naar
+  34 beelden per seconde, zonder videokaart). Tijdens het zoeken van een pad of een plek staat iedereen stil
+  (`T.iedereenStil`), de deuren worden bewaard, een put of kapel telt eerst wat hij bereikt (`T.kringTeller`), en hooguit
+  acht mensen per beeld zoeken een weg: bij 100 mensen van 1,5 naar 0,64 ms per beeld, de nacht van 15 naar 10 ms; bij
+  200 mensen van 9,1 naar 2,1 ms, de nacht van 210 ms naar 25 ms. Op 30× om de drie dagen vanzelf opslaan. De meter
+  onder `F2`. `npm test` 863/863.
 - 3 okt 2026 — **Vraag 108, b en d: paadjes, lantaarns en ramen die 's avonds branden** (vijfentwintigste sessie; Marcel:
   "108 a tab, b c d e ja"; `js/paden.js`). Van elke deur loopt een paadje naar de weg, of naar het paadje van een buur,
   recht en met een hoek; een nieuw gebouw heeft het meteen, en het loopt om een later gebouw heen. Waar veel gelopen
