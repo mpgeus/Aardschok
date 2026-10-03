@@ -554,8 +554,12 @@
   // Tot 26 sep deed één sort dat met een vergelijking per paar (een huis tegen een wezen per paar,
   // twee wezens op de som), maar zo'n vergelijking is niet eenduidig, en dan zet het sorteren soms
   // iets verkeerd: iemand die achter een huis liep, stond dan bovenop het dak. Met vijf boeren zag je
-  // dat bijna nooit; met het hele dorp op straat (js/bewoners.js) steeds. Twee gebouwen die elkaar
-  // overlappen, gaan op hun som: het achterste eerst.
+  // dat bijna nooit; met het hele dorp op straat (js/bewoners.js) steeds. Twee gebouwen die op dezelfde schuine rijen
+  // staan, gaan op hun hele voet (gebouwVoorGebouw): wie helemaal ten zuiden of ten oosten van de ander staat, ervóór.
+  // Tot 3 okt telde van het andere gebouw alleen zijn achterste hoek (`punt`): lag die buiten de rijen, dan zag het
+  // het niet, en zo kwam een lange kapel (5 bij 10) over de hut ten zuiden ervan heen (Marcel, 3 okt: "komen op een
+  // laag vóór de rest te staan"). En alleen de som klopt ook niet: een lang gebouw kan een grotere som hebben dan wat er
+  // ten zuiden van staat.
   T.tekenVolgorde = tekenVolgorde;
   function tekenVolgorde(lijst) {
     const volgorde = lijst.filter((it) => !it.gebouw).sort((a, b) => a.d - b.d || a.l - b.l);
@@ -571,14 +575,31 @@
       let eersteErvoor = volgorde.length;
       for (let i = 0; i < volgorde.length; i++) {
         const it = volgorde[i];
+        if (it.gebouw) {
+          // Een ander gebouw: deelt het een schuine rij met dit gebouw (zonder de tegel speling voor een figuur)?
+          const w = it.gebouw;
+          const c = w.beslaat || [1, 1];
+          if (w.x + c[0] - 1 - w.y < links + 1 || w.x - (w.y + c[1] - 1) > rechts - 1) continue;
+          if (gebouwVoorGebouw(w, v)) eersteErvoor = Math.min(eersteErvoor, i);
+          else laatsteErachter = i;
+          continue;
+        }
         const rij = it.punt.x - it.punt.y;
         if (rij < links || rij > rechts) continue;
-        if (!it.gebouw && staatVoorGebouw(it.punt.x, it.punt.y, v)) eersteErvoor = Math.min(eersteErvoor, i);
+        if (staatVoorGebouw(it.punt.x, it.punt.y, v)) eersteErvoor = Math.min(eersteErvoor, i);
         else laatsteErachter = i;
       }
       volgorde.splice(Math.min(laatsteErachter + 1, eersteErvoor), 0, g);
     }
     return volgorde;
+  }
+
+  // Staat gebouw a helemaal vóór gebouw b: ten zuiden of ten oosten van zijn hele voet? Twee voeten overlappen niet, dus
+  // op dezelfde schuine rijen is het altijd het een of het ander.
+  T.gebouwVoorGebouw = gebouwVoorGebouw;
+  function gebouwVoorGebouw(a, b) {
+    const c = b.beslaat || [1, 1];
+    return a.x > b.x + c[0] - 1 || a.y > b.y + c[1] - 1;
   }
 
   // Ligt deze tegel aan de voorkant (zuid- of oostkant) van een van deze kamers?

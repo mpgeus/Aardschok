@@ -86,6 +86,25 @@ test('T.tekenVolgorde: wie achter een huis loopt, komt ervóór; wie ervoor loop
   assert.ok(plek('wezen 24,29') > plek('huis21'), 'en staat vóór het huis van de schout');
 });
 
+test('T.tekenVolgorde: twee gebouwen gaan op hun hele voet, ook een lang gebouw met een grotere som', () => {
+  const item = (v, naam) => ({ d: T.diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: v, naam });
+  const namen = (lijst) => T.tekenVolgorde(lijst).map((it) => it.naam);
+  // De kapel van een nieuw spel (5 bij 10) en de hut ten zuiden ervan: de hut staat ervóór. Tot 3 okt telde van de kapel
+  // alleen zijn achterste hoek, die buiten de schuine rijen van de hut lag, en kwam de kapel over de hut heen (Marcel:
+  // "komen op een laag vóór de rest te staan").
+  const kapel = { x: 20, y: 24, beslaat: [5, 10] };
+  const hut = { x: 21, y: 36, beslaat: [5, 4] };
+  assert.deepEqual(namen([item(hut, 'hut'), item(kapel, 'kapel')]), ['kapel', 'hut']);
+  assert.deepEqual(namen([item(kapel, 'kapel'), item(hut, 'hut')]), ['kapel', 'hut']);
+  // Een lange rij (30 breed) en een klein huis ten zuiden ervan: het huis staat ervóór, al is zijn som kleiner.
+  const rij = { x: 0, y: 0, beslaat: [30, 2] };
+  const klein = { x: 10, y: 5, beslaat: [2, 2] };
+  assert.ok(T.diepteVan(klein) < T.diepteVan(rij));
+  assert.deepEqual(namen([item(klein, 'klein'), item(rij, 'rij')]), ['rij', 'klein']);
+  assert.equal(T.gebouwVoorGebouw(klein, rij), true);
+  assert.equal(T.gebouwVoorGebouw(rij, klein), false);
+});
+
 // ---------------------------------------------------------------- de overgang
 
 // Een spel op de proefkaart, met de schout naast de uitgang naar het proefbos.
