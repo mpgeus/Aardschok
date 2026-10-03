@@ -130,7 +130,8 @@ dat zelf bouwt, de ondernemers en de twee bazen met de grillen staan. Open, in d
 Stap 3 tot en met 6 van de slice (ambtenaren, wacht en misdaad, banden, de kleine stad) horen niet bij de demo, maar bij
 early access. **De demo** (januari de Steam-pagina, juni 2027 Next Fest, aanmelden vóór 25 april): de naam (vraag 8)
 en de zin (vraag 83, c); Engels, met alle teksten op één plek (het grootste werk); geluid (er is nog niets); de ui als
-papier (de schrijftafel, vraag 98) met een fotomodus, en wat het nu nog browserig maakt (`verpakken.md`); de schil
+papier (de schrijftafel, vraag 98) met een fotomodus, en wat het nu nog browserig maakt (`verpakken.md`); het dorp zoals mensen het bouwen (paadjes van zand en steen, lantaarns, een moestuin) en een overzicht naast het volgen
+(vraag 108; Marcel, 3 okt: "Dit moet allemaal straks staan voor de demo"); de schil
 (Electron) en opslaan in een bestand; de Steam-pagina (een capsule, vijf plaatjes, een trailer van een minuut); welk
 stuk van het spel de demo is; en filmpjes en testers voor de verlanglijstjes.
 
@@ -3607,6 +3608,43 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **a**, een boer die zijn veld groter maakt, of een nieuw boerengezin? **b**, de heide tegen het vertrouwen van
     het dorp, het bos tegen de gunst van de heer, en stiekem met betrapt als ze het vinden? **c**, een maand en een
     winter? **d**, dertig tegels per keer? **e**, in deze stappen?
+108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
+    misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
+    moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
+    voor de demo."; plan van Claude; open).
+    **Wat er al is:** het besluit over straten en paden (25 sep, punt 6c, `spel.md`): paadjes ontstaan vanzelf waar veel
+    gelopen wordt, zoals in Foundation, jij verhardt ze met keien, een pad loopt sneller, en een zandpad wordt modder in de
+    natte maanden. Er zijn lantaarns op de kaart die 's avonds branden (`T.lichtBronnen`), en de ramen van de herberg
+    branden. En sinds vandaag heeft elk nieuw gebouw drie tegels looppad rondom. Wat er niet is: de camera volgt altijd de
+    schout, en zoomen doet alleen het venster (1 tot 2 keer).
+    **Wat Claude erin ziet: het overzicht raakt de haak.** Op 30 sep koos het plan geen oog van bovenaf (vraag 74, d), want
+    het concept zegt: "dan ben je weer de god boven de stad". Wat het spel verkoopt, is dat je de schout ín het dorp bent
+    (`commercieel.md`). Maar een dorp van 100 mensen op 76 bij 76 tegels zie je niet als je alleen meeloopt, en een speler
+    in een demo wil zijn dorp zien. Het kan allebei: kijken van boven, maar doen als de schout.
+    Voorstel:
+    - **a, overzicht en volgen** (een toets, `Tab`). In het overzicht zoom je uit tot je het hele gehucht ziet, en schuif
+      je met de muis of de pijltjes. De schout loopt door waar je hem heen stuurde. Je kijkt en je plant (een erf, een
+      oproep, het briefje bij een huis), maar wie je wilt spreken, daar loopt de schout naartoe: het poppetje blijft de
+      manier waarop je bestuurt. `Tab` of een klik op de schout brengt je terug. Een andere manier, die de haak nog meer
+      houdt: het overzicht is een plek, de toren van de kapel of de heuvel bij de heide, en vanaf daar zie je het hele dorp.
+      Eerst meten of het tekenen ver uitgezoomd vlot blijft (`npm run grootte -- --browser`): de gereedschapspagina tekent
+      ver uitgezoomd een plattegrond, omdat de tekencode van het spel daar niet op gebouwd is.
+    - **b, paadjes** (punt 6c, zoals besloten): waar veel gelopen wordt, slijt het gras tot een zandpad. Elk nieuw gebouw
+      krijgt meteen een paadje van zijn deur naar het dichtste pad, zodat het er vanaf de eerste dag bij hoort.
+    - **c, stenen:** jij verhardt een pad met keien (kinderkopjes), en het plein en de straat erheen worden van steen als
+      het dorp marktrecht krijgt. De keien komen van de heide, van het ontginnen (vraag 107).
+    - **d, lantaarns:** een lantaarn bij de deur van wat van het dorp is (de kapel, de herberg, de markt, het wachthuis)
+      en op de kruisingen van de paden, die 's avonds brandt. En 's avonds gaan de ramen van de huizen aan, zoals die van
+      de herberg nu (`brandendeRamen`). Wie 's avonds buiten loopt, ziet in het licht verder (`T.zichtOp`).
+    - **e, wat het verder bewoond maakt** ("etc"): een moestuin voor het huis op een erf (daar is het erf al op gemaakt),
+      een hek, een stapel hout bij de houthakker, een kar bij de molen. Kleine dingen bij een gebouw, getekend uit code
+      zoals de rest.
+    **De volgorde, voor de demo:** eerst a (het overzicht staat los van de rest), dan b en d (het dorp ziet er bewoond uit),
+    dan c en e. Het hoort bij de demo (`0c`), na de kern.
+    Vragen: **a**, een overzicht met `Tab` waarin je kijkt en plant, maar spreken doet de schout? Of een plek in het dorp
+    vanwaar je overziet? **b**, paadjes die ontstaan, en meteen een paadje van elke nieuwe deur? **c**, stenen zo (keien,
+    en het plein bij marktrecht)? **d**, lantaarns bij de gebouwen van het dorp en op kruisingen, en ramen die 's avonds
+    branden? **e**, eerst de moestuin en een stapel hout, of iets anders?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
