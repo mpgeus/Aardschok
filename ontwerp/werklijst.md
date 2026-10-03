@@ -3216,7 +3216,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     nog dat het eten de winter niet haalt, moeten er jagers bij, en raakt het graan op? Is het te makkelijk geworden, dan
     eerst een voorstel aan Marcel. En b, c en d zoals voorgesteld. **Af** (zie onder Af); de speeltest staat in
     `speelbaar.md`, en wat eruit volgt, is vraag 96.
-96. **Na vraag 95: de herberg en de markt, en de keten** (Claude, 3 okt, vierentwintigste sessie; open). De speeltest
+96. **Na vraag 95: de herberg en de markt, en de keten** (Claude, 3 okt, vierentwintigste sessie; beantwoord). De speeltest
     (`speelbaar.md`): brood 0,01 maakt het eten niet makkelijker (honger in de eerste zomer, in het tweede jaar op 162 à 175
     dagen "het eten haalt de winter niet", zes jagers), maar het bier en het brood wel: het bier ontbrak in het tweede jaar 0
     à 62 dagen in plaats van 69 à 199. Bij de sluwe bouwer met zaad 1 hadden alle huizen op 79 dagen alles. Een gewonnen
@@ -3237,6 +3237,26 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       jagers en de melk voeden iedereen. Hoort dat bij de demo, of later?
     Vragen: **a**, de herberg en de markt naar 40, of één van elk voor het hele dorp? **b**, de bouwers zo? **c**, die
     volgorde, en de honger na de eerste zomer: nu of later?
+    **Beantwoord (Marcel, 3 okt):** "A. Ja, 1 markt 1 herberg voor nu. B prima. C dat kan later, we hebben een speelbaar
+    dorp nodig. Wel met 1 of 2 feesten erin voor de demo". Dus één herberg en één markt zijn genoeg voor het hele dorp
+    (voor nu: een spelregel, met de kring als andere keuze), de bouwers bouwen een keten in één keer, de honger na de eerste
+    zomer komt later, en eerst een speelbaar dorp, met één of twee feesten voor de demo (het plan is vraag 97).
+97. **Eén of twee feesten voor de demo** (Claude, 3 okt, vierentwintigste sessie; open). Marcel, 3 okt: "Wel met 1 of 2
+    feesten erin voor de demo". Wat er al is (`spel.md`, "Dorpsfeesten"): drie voorvallen zijn feesten (de bruiloft, het
+    oogstfeest, het lied over de heer). Bij het oogstfeest komt een boer na de oogst vragen of er een feest komt (groot: −40
+    graan en −15 bier; klein: −15 graan; geen), en het dorp is er een tijd blijer of bozer om. Maar je ziet er niets van: het
+    is een gesprek en een getal. Voorstel:
+    - **a, het oogstfeest wordt een echt feest:** zeg je ja, dan gaat de avond erna het hele dorp naar het plein (een anker
+      voor die avond, zoals de herberg 's avonds: `T.dagAnker`), met lantaarns die branden (`T.lichtBronnen`) en de
+      herbergierster die tapt; de schout kan erbij gaan staan. Het kost wat het nu kost, en de stemming blijft. Wat op is,
+      kan de inner niet tellen: als het voor zijn komst valt, telt hij minder graan (dat doet het nu al).
+    - **b, een tweede feest,** te kiezen: de **kermis** (eens per jaar op de dag dat de kapel klaarkwam: "kermis" is
+      "kerkmis"; kost bier, en de marskramer komt die dag mee), of de **meiboom** op 1 bloeimaand (een lichte avond in de
+      lente, vóór de hongerige zomer). Het werkt zoals a.
+    - **c, een feest is zichtbaar,** voor de demo en de trailer (`commercieel.md`): iedereen op één plek, met licht in de
+      avond. Muziek komt met het geluid (januari, vraag 84, b).
+    - **d, de volgorde:** eerst A en B van vraag 96 en de speeltest, dan a, b en c.
+    Vragen: **a**, het oogstfeest zo? **b**, de kermis of de meiboom? **c** en **d**, zo?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
