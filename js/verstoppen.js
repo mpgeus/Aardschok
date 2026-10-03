@@ -293,8 +293,11 @@
   };
 
   // Waar de schout gaat staan om bij een gebouw te komen: een tegel aan de rand van zijn voet die
-  // aan een begaanbare tegel grenst, zo dicht mogelijk bij hem. T.loopNaast loopt dan tot naast
-  // die tegel. Null als er geen is.
+  // aan een begaanbare tegel grenst waar hij kan komen (T.kanErKomen, js/wereld.js), zo dicht mogelijk
+  // bij hem. T.loopNaast loopt dan tot naast die tegel. Tot 3 okt telde ook een kant die aan een
+  // ingesloten hoekje grenst (een ander eiland): lag die het dichtst bij, dan zei de klik "Daar kun je
+  // niet bij", terwijl de deur openlag (de speeltest van vraag 94). Kan hij nergens komen, dan de
+  // dichtste, en zegt de klik dat. Null als er geen is.
   T.randVanGebouw = function (D, g) {
     const w = D.wereld;
     const v = T.voetVanGebouw(g);
@@ -302,18 +305,24 @@
     const van = D.schout ? { x: D.schout.tx != null ? D.schout.tx : Math.round(D.schout.x), y: D.schout.ty != null ? D.schout.ty : Math.round(D.schout.y) } : { x: v.x, y: v.y };
     let beste = null;
     let bij = Infinity;
+    let dichtste = null;
+    let dichtsteBij = Infinity;
     for (let y = v.y; y < v.y + v.h; y++) {
       for (let x = v.x; x < v.x + v.b; x++) {
-        const bereikbaar = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => !binnen(x + dx, y + dy) && T.isBegaanbaar(w, x + dx, y + dy));
-        if (!bereikbaar) continue;
+        const buren = [[1, 0], [-1, 0], [0, 1], [0, -1]].map(([dx, dy]) => ({ x: x + dx, y: y + dy })).filter((t) => !binnen(t.x, t.y) && T.isBegaanbaar(w, t.x, t.y));
+        if (!buren.length) continue;
         const a = Math.hypot(x - van.x, y - van.y);
-        if (a < bij) {
+        if (a < dichtsteBij) {
+          dichtsteBij = a;
+          dichtste = { x, y };
+        }
+        if (a < bij && buren.some((t) => T.kanErKomen(w, van, t))) {
           bij = a;
           beste = { x, y };
         }
       }
     }
-    return beste;
+    return beste || dichtste;
   };
 
   // ---------------------------------------------------------------------------------------------

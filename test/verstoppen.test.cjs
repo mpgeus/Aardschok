@@ -303,6 +303,37 @@ test('de schout kan bij elke plek komen: een tegel aan de rand van de voet met e
   assert.equal(T.gebouwOp(S.dorp, g.x + 1, g.y + 1), g);
 });
 
+// De speeltest van vraag 94 (3 okt): naast een huis raakte een stuk gras ingesloten tussen andere gebouwen, en de kant van
+// het huis die het dichtst bij de schout lag, grensde eraan. Elke klik zei toen "Daar kun je niet bij", terwijl de deur
+// openlag.
+test('de schout loopt niet naar een ingesloten hoekje naast een huis, maar naar een kant waar hij kan komen', () => {
+  const S = gehucht();
+  const w = S.wereld;
+  const g = kelderVan(S, 'boer3');
+  const v = T.voetVanGebouw(g);
+  const binnen = (t) => t.x >= v.x && t.x < v.x + v.b && t.y >= v.y && t.y < v.y + v.h;
+  // Een hoekje tegen het midden van de oostkant, met muur eromheen.
+  const y = v.y + Math.floor(v.h / 2);
+  const x = v.x + v.b;
+  assert.ok(T.isBegaanbaar(w, x, y), 'het hoekje is gras');
+  for (const [mx, my] of [[x + 1, y], [x, y - 1], [x + 1, y - 1], [x, y + 1], [x + 1, y + 1]]) w.tegels[my][mx] = 'muur';
+  T.kaartVeranderd(w);
+  // De schout zes tegels oostelijk, op dezelfde rij: de randtegel die het dichtst bij hem ligt, grenst aan het hoekje.
+  S.schout.x = S.schout.tx = x + 6;
+  S.schout.y = S.schout.ty = y;
+  const van = T.tegelVan(S.schout);
+  assert.ok(T.isBegaanbaar(w, van.x, van.y));
+  assert.equal(T.kanErKomen(w, van, { x, y }), false, 'het hoekje is ingesloten');
+  const r = T.randVanGebouw(S.dorp, g);
+  assert.ok(r && binnen(r), 'een tegel aan de rand van het huis');
+  assert.notDeepEqual(r, { x: x - 1, y }, 'niet de tegel tegen het hoekje');
+  const buren = [[1, 0], [-1, 0], [0, 1], [0, -1]].map(([dx, dy]) => ({ x: r.x + dx, y: r.y + dy })).filter((t) => !binnen(t) && T.isBegaanbaar(w, t.x, t.y));
+  assert.ok(buren.some((t) => T.kanErKomen(w, van, t)), 'met een vrije buur waar hij kan komen');
+  // En de schout vindt er echt een weg heen, zoals de klik hem zoekt (js/verkennen.js).
+  const pad = T.zoekPad(van, r, (px, py) => T.isBegaanbaar(w, px, py, { deurenOpenen: true }), (px, py) => T.isVast(w, px, py), { naast: true });
+  assert.ok(pad && pad.length > 0, 'een pad naar naast de rand');
+});
+
 // ---------------------------------------------------------------------------------------------
 // Wat de inner telt: niet wat verstopt ligt, wel de kist
 // ---------------------------------------------------------------------------------------------
