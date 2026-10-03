@@ -2828,7 +2828,11 @@ wordt gepraat:
   plaats voor een moestuin. Het moet helemaal vrij zijn: niet op het plein, een veld, een pad of iets vasts. Het
   is land, geen gebouw: je loopt eroverheen, en de inner en de heer zien het niet. Een vrij erf heeft paaltjes op
   zijn hoeken; met het bouwmenu open staat de rand van elk erf op de grond. Met het erf in de hand maakt een klik
-  op een vrij erf het weer gewone grond.
+  op een vrij erf het weer gewone grond. **Sinds 3 okt krijgt het huis een looppad van drie tegels rondom**, zoals elk
+  gebouw (Marcel: "Ja"): als je het erf aanwijst, ligt vast waar het huis komt (`erf.plan`), zo ver mogelijk naar
+  achteren waar het looppad kan, en een gebouw dat later komt, blijft er drie tegels vandaan, ook als het huis er nog
+  niet staat (`T.huisPlekOp`). Kan het nergens in het erf, dan zegt het bouwmenu dat er geen huis met een looppad past.
+  Twee erven naast elkaar mogen: hun huizen houden vanzelf drie of vier tegels tussen zich.
 - **Een huis met plaats gaat voor.** Is het dorp vol, dan neemt een nieuw gezin op een groeidag het vrije erf dat
   het dichtst bij de werkplaats ligt die de meeste handen mist (anders bij het plein), en komt over de weg. Het
   zet er zelf een hut op (8 hout uit de voorraad, twee dagen), woont er al terwijl hij oprijst, en is er overdag

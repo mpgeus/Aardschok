@@ -13,8 +13,14 @@
 // hij later doorgroeit (js/behoeften.js): een huis dat in het erf past, dus het dorp groeit nooit over
 // een erf heen.
 //
-//   S.erven = [{ x, y, b, h, hut }]  // waar een erf ligt, en de hut erop (een gebouw uit S.gebouwen),
-//                                    // of null zolang het vrij is. De hut wijst terug: hut.erf.
+// Het huis krijgt rondom een looppad, zoals elk gebouw (T.GEBOUWEN_INSTELLINGEN.looppad, js/gebouwen.js; Marcel, 3 okt:
+// "Ja" op drie tegels ook om een huis op een erf): waar het komt, ligt vast als je het erf aanwijst (erf.plan), en een
+// gebouw dat later komt, blijft er met zijn looppad vandaan, ook als het huis er nog niet staat (T.huisPlekOp).
+//
+//   S.erven = [{ x, y, b, h, hut, plan }]  // waar een erf ligt, en de hut erop (een gebouw uit S.gebouwen),
+//                                          // of null zolang het vrij is. De hut wijst terug: hut.erf. plan: waar het
+//                                          // huis komt, { hut, huis, dx, dy, b, h } (de hoek in het erf, en de maat
+//                                          // van het grootste van de twee).
 //
 // Alles hier is zonder scherm, en dus getoetst (test/erven.test.cjs).
 (function (T) {
@@ -73,7 +79,26 @@
     // Geen deur op een erf (werklijst vraag 88, js/gebouwen.js): de hut erop zou hem dichtzetten.
     if (T.deurOpRechthoek(D, { x, y, b, h })) return 'Daar is een deur.';
     if (!maatPast(D, b, h)) return 'Een erf van deze maat is te klein voor een hut.';
+    if (!kiesTekeningen(D, { b, h }, { x, y, b, h })) {
+      const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+      return `Hier past geen huis met een looppad van ${T.telwoord(n)} tegels rondom.`;
+    }
     return null;
+  };
+
+  // Ligt (x, y) op de plek van het huis van een erf (erf.plan)? Een gebouw blijft er met zijn looppad vandaan, ook als
+  // het huis er nog niet staat (T.looppadOm, js/gebouwen.js). `behalve`: het erf dat zelf zijn plek zoekt.
+  T.huisPlekOp = function (D, x, y, behalve) {
+    for (const e of D.erven || []) {
+      const p = e !== behalve && e.plan;
+      if (p && x >= e.x + p.dx && x < e.x + p.dx + p.b && y >= e.y + p.dy && y < e.y + p.dy + p.h) return true;
+    }
+    return false;
+  };
+  const planVan = (keus) => {
+    if (!keus) return null;
+    const v = [vorm('hut', keus.hut), vorm('huis', keus.huis)];
+    return { ...keus, b: Math.max(...v.map((x) => x.b)), h: Math.max(...v.map((x) => x.h)) };
   };
 
   // Past er in een erf van deze maat een hut die tot een huis kan doorgroeien? Dat hangt alleen af van de
@@ -92,7 +117,8 @@
     const reden = T.waaromPastErfNiet(D, x, y);
     if (reden) return { gelukt: false, reden };
     const { b, h } = T.erfMaat();
-    const erf = { x, y, b, h, hut: null };
+    const erf = { x, y, b, h, hut: null, plan: null };
+    erf.plan = planVan(kiesTekeningen(D, erf, erf));
     ervenVan(D).push(erf);
     return { gelukt: true, erf, bericht: 'Een erf aangewezen. Een nieuw gezin zet er zelf een hut op.' };
   };
@@ -144,14 +170,21 @@
 
   // Een hut en het huis waar hij in doorgroeit, zo dat ze allebei met dezelfde linkerbovenhoek in het erf
   // passen, met hun deur erbinnen: js/behoeften.js laat een huis doorgroeien vanuit dezelfde hoek. De hoek
-  // zo ver mogelijk naar achteren (noord), zodat de voorkant van het erf vrij blijft voor een moestuin.
-  // Geeft { hut, huis, dx, dy }, of null als er niets past.
-  function kiesTekeningen(D, maat) {
+  // zo ver mogelijk naar achteren (noord), zodat de voorkant van het erf vrij blijft voor een moestuin. Met
+  // `erf` (waar het erf ligt) alleen een hoek waar het huis rondom een looppad heeft. Geeft { hut, huis, dx, dy },
+  // of null als er niets past.
+  function kiesTekeningen(D, maat, erf = null) {
     for (const huis of opVolgorde(D, 'huis')) {
       for (const hut of opVolgorde(D, 'hut')) {
         const vormen = [vorm('hut', hut), vorm('huis', huis)];
+        const b = Math.max(...vormen.map((v) => v.b));
+        const h = Math.max(...vormen.map((v) => v.h));
         for (let dy = 0; dy < maat.h; dy++) {
-          for (let dx = 0; dx < maat.b; dx++) if (pastOp(maat, vormen, dx, dy)) return { hut, huis, dx, dy };
+          for (let dx = 0; dx < maat.b; dx++) {
+            if (!pastOp(maat, vormen, dx, dy)) continue;
+            if (erf && !T.looppadOm(D, { x: erf.x + dx, y: erf.y + dy, b, h }, T.GEBOUWEN_INSTELLINGEN.looppad, erf)) continue;
+            return { hut, huis, dx, dy };
+          }
         }
       }
     }
@@ -193,8 +226,11 @@
   // pas als het hout er is (`wachtOpHout`, en dan nog geen `klaarOp`). Geeft de hut, of null als er niets
   // past.
   T.zetHutOpErf = function (D, erf) {
-    const keus = kiesTekeningen(D, erf);
+    const plan = erf.plan;
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const keus = plan && T.looppadOm(D, { x: erf.x + plan.dx, y: erf.y + plan.dy, b: plan.b, h: plan.h }, n, erf) ? plan : kiesTekeningen(D, erf, erf);
     if (!keus) return null;
+    erf.plan = planVan(keus);
     // Wat genomen is, is genomen: de volgende hut en het volgende huis worden een andere tekening.
     if (keus.hut === T.volgendeTekening(D, 'hut')) T.neemTekening(D, 'hut');
     if (keus.huis === T.volgendeTekening(D, 'huis')) T.neemTekening(D, 'huis');

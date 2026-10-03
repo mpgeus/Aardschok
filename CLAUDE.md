@@ -270,7 +270,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/erven.js`: **het dorp bouwt zelf** (stap 1 van de proef, vraag 52, 28 sep): jij wijst een erf aan met het
   bouwmenu (10 bij 10 tegels, `T.ERVEN_INSTELLINGEN`; land, geen gebouw: `D.erven`), en is het dorp vol, dan
   neemt een nieuw gezin een vrij erf (`T.kiesErf`) en zet er zelf een hut op met hout uit de voorraad
-  (`T.zetHutOpErf`; zonder hout wacht de bouwplaats, `T.tikErvenDag`). Het woont er al terwijl de hut oprijst
+  (`T.zetHutOpErf`; zonder hout wacht de bouwplaats, `T.tikErvenDag`), op de plek die bij het aanwijzen al vastlag, met
+  drie tegels looppad rondom (`erf.plan`, `T.huisPlekOp`; Marcel, 3 okt). Het woont er al terwijl de hut oprijst
   (`T.telWoonruimte` in `js/gebouwen.js`), en de hut weet welk huis hij wordt (`wordtTekening`), zodat hij binnen
   zijn erf doorgroeit. Zonder vrij erf zegt het dorp dat er geen plaats is (`T.gezinZoektEenErf`). Wat in het
   bouwmenu staat, zegt `T.inBouwmenu`: het erf, en de woningen niet, tenzij de spelregel "Huizen" anders zegt. Op

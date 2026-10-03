@@ -638,8 +638,9 @@
   };
 
   // Is er een looppad van `breed` tegels rondom de rechthoek r ({ x, y, b, h })? Elke tegel in die rand is te belopen
-  // (T.isBegaanbaar, js/wereld.js: geen muur, geen gebouw, geen boom), of ligt buiten de kaart, waar niemand loopt.
-  T.looppadOm = function (D, r, breed) {
+  // (T.isBegaanbaar, js/wereld.js: geen muur, geen gebouw, geen boom) en niet de plek van het huis op een erf (T.huisPlekOp,
+  // js/erven.js; behalve van het erf `behalve`), of ligt buiten de kaart, waar niemand loopt.
+  T.looppadOm = function (D, r, breed, behalve = null) {
     const w = D.wereld;
     const hoog = w.tegels.length;
     const wijd = w.tegels[0].length;
@@ -647,7 +648,7 @@
       for (let x = r.x - breed; x < r.x + r.b + breed; x++) {
         if (x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) continue;
         if (x < 0 || y < 0 || x >= wijd || y >= hoog) continue;
-        if (!T.isBegaanbaar(w, x, y, { deurenOpenen: true })) return false;
+        if (!T.isBegaanbaar(w, x, y, { deurenOpenen: true }) || T.huisPlekOp(D, x, y, behalve)) return false;
       }
     }
     return true;

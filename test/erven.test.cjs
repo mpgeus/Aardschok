@@ -397,3 +397,38 @@ test('bewaren en laden houdt de erven, en de hut die naar zijn erf wijst', () =>
   assert.equal(hut2.wordtTekening, hut.wordtTekening);
   assert.ok(S2.dorp.bewoners.mensen.some((p) => p.huis === hut2), 'het gezin woont er nog');
 });
+
+// Een looppad om het huis op een erf, zoals om elk gebouw (js/gebouwen.js; Marcel, 3 okt: "Ja" op drie tegels ook hier).
+test('het huis op een erf krijgt drie tegels looppad rondom, en wat later komt, blijft ervan weg', () => {
+  const D = leeg();
+  const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+  // Een hut die er al staat, met een erf er recht naast (ten oosten): het huis komt niet tegen de hut aan, maar drie
+  // tegels ervan af, en niet meer in de noordwesthoek.
+  T.zetVoorraad(D, 'hout', 100);
+  T.zetVoorraad(D, 'goud', 100);
+  const hut = T.plaatsGebouw(D, 'hut', 5, 5);
+  assert.equal(hut.gelukt, true, hut.reden);
+  const v = T.voetVanGebouw(hut.instantie);
+  const r = T.legErfAan(D, v.x + v.b, v.y);
+  assert.equal(r.gelukt, true, r.reden);
+  const p = r.erf.plan;
+  assert.ok(p, 'het erf weet waar het huis komt');
+  assert.ok(r.erf.x + p.dx - (v.x + v.b) >= n, 'drie tegels tussen de hut en het huis');
+  // Een gebouw dat later komt, blijft drie tegels van de plek van het huis, ook al staat het huis er nog niet.
+  const huis = { x: r.erf.x + p.dx, y: r.erf.y + p.dy, b: p.b, h: p.h };
+  let teDicht = 0;
+  for (let y = huis.y + huis.h; y < huis.y + huis.h + n + 4; y++) {
+    if (T.gebouwPast(D, 'put', huis.x, y)) {
+      assert.ok(y - (huis.y + huis.h) >= n, `een put op ${huis.x},${y} staat te dicht bij het huis`);
+    } else teDicht++;
+  }
+  assert.ok(teDicht > 0, 'vlak voor het huis mag geen put');
+  // Twee erven naast elkaar mogen: hun huizen houden vanzelf vier tegels tussen zich.
+  const naast = T.legErfAan(D, r.erf.x + r.erf.b, r.erf.y);
+  assert.equal(naast.gelukt, true, naast.reden);
+  // En zet het gezin er zijn hut op, dan komt die op de plek uit het plan.
+  const gezin = T.zetHutOpErf(D, naast.erf);
+  assert.ok(gezin);
+  assert.equal(gezin.x, naast.erf.x + naast.erf.plan.dx);
+  assert.equal(gezin.y, naast.erf.y + naast.erf.plan.dy);
+});
