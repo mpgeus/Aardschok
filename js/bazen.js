@@ -19,7 +19,8 @@
 // na twee jaar veel te weinig (js/heer.js).
 //
 // D.bazen: { gunst, vertrouwen, waarom: { gunst: [{ dag, n, tekst }], vertrouwen: [...] } (het laatste, voor de balk),
-//            gewaarschuwd: { gunst, vertrouwen }, brief: { waarom, dag } (de brief met de waarschuwing, js/brieven.js),
+//            gewaarschuwd: { gunst, vertrouwen }, waarschuwingen: { gunst, vertrouwen } (hoe vaak),
+//            brief: { waarom, dag } (de brief met de waarschuwing, js/brieven.js),
 //            betraptOp (de dag dat zijn soldaten iets vonden) }
 (function (T) {
   'use strict';
@@ -49,8 +50,10 @@
     // Zijn soldaten vonden wapens (js/ondernemers.js).
     wapens: -30,
     // Het dorp. Een antwoord op een voorval telt zo zwaar als het het dorp tevreden of ontevreden maakt (doe.tevreden,
-    // in procenten), keer zoveel; besliste je raadsman, dan keer doorRaadsman.
-    voorval: 1,
+    // in procenten), keer zoveel; besliste je raadsman, dan keer doorRaadsman. Een verzoek om te bouwen telt niet: ja
+    // zeggen op wat het dorp mist, is je werk (de speeltest van 3 okt: met +3 per ja stond het vertrouwen na een jaar
+    // bij iedereen op 90 à 100). Wat nee kost, zit bij de ondernemers (js/ondernemers.js).
+    voorval: 0.5,
     doorRaadsman: 0.5,
     // Wie je zocht, vond je niet, of je had geen tijd.
     nietGevonden: -2,
@@ -70,9 +73,9 @@
     // Een ondernemer trok weg na twee keer nee (js/ondernemers.js).
     wegGetrokken: -10,
     // Elke dag, langzaam: wie het lang slecht heeft, geeft de schout de schuld, en wie het goed heeft, gunt het hem.
-    // (tevredenheid − midden) × perDag.
-    midden: 0.6,
-    perDag: 0.25,
+    // (tevredenheid − midden) × perDag: bij 95% tevreden zo'n 11 per jaar erbij, bij 60% 8 eraf.
+    midden: 0.75,
+    perDag: 0.15,
   };
   const IN = () => T.BAZEN_INSTELLINGEN;
 
@@ -82,6 +85,7 @@
   T.nieuweBazen = () => ({
     gunst: IN().gunstBegin, vertrouwen: IN().vertrouwenBegin,
     waarom: { gunst: [], vertrouwen: [] }, gewaarschuwd: { gunst: false, vertrouwen: false }, brief: null,
+    waarschuwingen: { gunst: 0, vertrouwen: 0 },
   });
   const bazenVan = (D) => D.bazen || (D.bazen = T.nieuweBazen());
 
@@ -130,6 +134,8 @@
   function waarschuw(D, welk, tekst) {
     const b = bazenVan(D);
     b.gewaarschuwd[welk] = true;
+    const n = b.waarschuwingen || (b.waarschuwingen = { gunst: 0, vertrouwen: 0 }); // een spel van vóór de telling
+    n[welk]++;
     if (welk === 'gunst') {
       b.brief = { waarom: waaromZin(tekst), dag: dagNu(D) };
       if (T.ui && T.ui.toonBrief && !D.ander) T.ui.toonBrief(D, 'waarschuwing');

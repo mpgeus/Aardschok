@@ -585,9 +585,9 @@
     for (const wat of WAREN) if (doe[wat]) T.wijzigVoorraad(D, wat, doe[wat]);
     for (const soort of Object.keys(T.VEE)) if (doe[soort] < 0) T.verliesVee(D, soort, -doe[soort]);
     if (doe.tevreden) stemming(D, doe.tevreden, v, dag, L.door);
-    // Twee bazen (js/bazen.js): wat het dorp van jóú vindt, zo zwaar als het het dorp tevreden maakt; en een antwoord kan
-    // de heer of het dorp ook rechtstreeks raken (doe.gunst, doe.vertrouwen).
-    if (doe.tevreden) T.vertrouwenNaVoorval(D, doe.tevreden, v.titel, !!L.door);
+    // Twee bazen (js/bazen.js): wat het dorp van jóú vindt, naar hoe tevreden het het dorp maakt (een verzoek om te bouwen
+    // niet: dat is je werk); en een antwoord kan de heer of het dorp ook rechtstreeks raken (doe.gunst, doe.vertrouwen).
+    if (doe.tevreden && !L.bouw) T.vertrouwenNaVoorval(D, doe.tevreden, v.titel, !!L.door);
     if (doe.gunst) T.wijzigGunst(D, doe.gunst, v.titel);
     if (doe.vertrouwen) T.wijzigVertrouwen(D, doe.vertrouwen, v.titel);
     if (doe.argwaan) T.zetArgwaan(D, doe.argwaan / 100, v.titel);

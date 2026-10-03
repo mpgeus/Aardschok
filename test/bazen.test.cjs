@@ -89,6 +89,7 @@ test('altijd eerst een waarschuwing: wie er nog geen kreeg, komt niet onder de l
   T.wijzigGunst(D, -70, 'een grote tegenvaller');
   assert.equal(T.bazenNu(D).gunst, IN().laatsteWaarschuwing, 'niet op 0: de laatste waarschuwing');
   assert.deepEqual(brieven, ['waarschuwing']);
+  assert.deepEqual(D.bazen.waarschuwingen, { gunst: 1, vertrouwen: 0 }, 'het spel telt ze');
   assert.ok(!D.einde);
   T.wijzigGunst(D, -10, 'nog een');
   assert.equal(D.einde && D.einde.reden, 'ambt');
@@ -152,14 +153,15 @@ test('het dorp: antwoorden, de heervaart, de schandpaal, soldaten en wie sterft,
   const S = gehucht();
   const D = S.dorp;
   const v = () => T.bazenNu(D).vertrouwen;
-  T.vertrouwenNaVoorval(D, 4, 'het feest', false);
-  assert.equal(v(), 54);
-  T.vertrouwenNaVoorval(D, -4, 'de diefstal', true);
-  assert.equal(v(), 52, 'besliste de raadsman, dan de helft');
+  T.vertrouwenNaVoorval(D, 8, 'het feest', false);
+  assert.equal(v(), 50 + 8 * IN().voorval);
+  T.vertrouwenNaVoorval(D, -8, 'de diefstal', true);
+  assert.equal(v(), 50 + 8 * IN().voorval - 8 * IN().voorval * IN().doorRaadsman, 'besliste de raadsman, dan minder');
+  const na = v();
   T.wijzigBevolking(D, -2, 'winter', 'De winter is hard');
-  assert.equal(v(), 52 + 2 * IN().doodDoorWinter, 'wie verhongerde of bevroor');
+  assert.equal(v(), na + 2 * IN().doodDoorWinter, 'wie verhongerde of bevroor');
   T.wijzigBevolking(D, -1, 'vertrek', 'het dorp is niet tevreden genoeg');
-  assert.equal(v(), 52 + 2 * IN().doodDoorWinter, 'wie wegtrekt, niet');
+  assert.equal(v(), na + 2 * IN().doodDoorWinter, 'wie wegtrekt, niet');
   assert.match(T.bazenTekst(D, 'vertrouwen'), /-6 wie verhongerde of bevroor; -2 de diefstal; \+4 het feest/);
 });
 
@@ -168,7 +170,16 @@ test('een antwoord op een voorval telt mee, ook als je raadsman het besliste', (
   const D = S.dorp;
   T.beginVoorval(D, 'klok', D.bewoners.mensen.find((p) => p.leeftijd === 'volwassen'), null, 1);
   T.voorvalGevolg(D, { tevreden: 4 });
-  assert.equal(T.bazenNu(D).vertrouwen, 54);
+  assert.equal(T.bazenNu(D).vertrouwen, 50 + 4 * IN().voorval);
+});
+
+test('ja op een verzoek om te bouwen is je werk: het vertrouwen blijft', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  const L = T.beginVoorval(D, 'bouwverzoek', D.bewoners.mensen.find((p) => p.leeftijd === 'volwassen'), null, 1);
+  L.bouw = { soort: 'put', x: 0, y: 0, waarom: '', voor: 'doel', nut: 1 };
+  T.voorvalGevolg(D, { tevreden: 3 });
+  assert.equal(T.bazenNu(D).vertrouwen, 50);
 });
 
 test('het vertrouwen volgt langzaam hoe het gaat, en op 0 jaagt het dorp je weg, na een waarschuwing', () => {

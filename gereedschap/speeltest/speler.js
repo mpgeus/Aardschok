@@ -219,6 +219,9 @@
 
   function beantwoord() {
     const s = S();
+    // Wacht er een gril, en is er geen brief open (het rapport kwam ertussen), dan opent hij hem met de knop Brief, zoals
+    // een mens.
+    if (T.grilNu(s.dorp) && !T.ui.briefOpen() && s.modus === 'verkennen') T.ui.toonBrief(s.dorp, 'gril');
     // Een gril van de heer: antwoorden naar zijn aard, en opschrijven wat hij koos (js/grillen.js; vraag 106).
     if (T.ui.briefOpen() && document.querySelector('#brief').dataset.soort === 'gril') {
       const g = T.grilNu(s.dorp);
@@ -1425,7 +1428,7 @@
           gunst: Math.min(...boek.maanden.map((m) => (m.bazen ? m.bazen.gunst : 100)), T.bazenNu(s.dorp).gunst),
           vertrouwen: Math.min(...boek.maanden.map((m) => (m.bazen ? m.bazen.vertrouwen : 100)), T.bazenNu(s.dorp).vertrouwen),
         },
-        waarschuwingen: (boek.waarschuwingen || []).length + boek.berichten.filter((b) => /^Het dorp mort/.test(b.tekst)).length,
+        waarschuwingen: s.dorp.bazen.waarschuwingen ? s.dorp.bazen.waarschuwingen.gunst + s.dorp.bazen.waarschuwingen.vertrouwen : 0,
         weg: s.dorp.einde && s.dorp.einde.reden !== 'leeg' ? { reden: s.dorp.einde.reden, waarom: s.dorp.einde.waarom || null } : null,
         grillen: s.dorp.grillen ? { aantal: s.dorp.grillen.aantal, beantwoord: s.dorp.grillen.beantwoord, stil: s.dorp.grillen.stil } : null,
         antwoorden: (boek.grillen || []).map((g) => `${g.datum}: ${g.id}, ${g.antwoord}`),
