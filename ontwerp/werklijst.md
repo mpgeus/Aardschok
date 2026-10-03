@@ -105,6 +105,26 @@ vijf plaatjes en een trailer van een minuut. In juni 2027 de demo in Steam Next 
 Daarna early access. Er is weinig geld ("Ik gebruik jou ☺️"): wat kan, maakt Claude, en Marcel kiest, luistert en
 plaatst.
 
+*0c. Wat er nog open staat, naar de kern en de demo* (Claude, 3 okt, op Marcels vraag "Wat staat er nog open voor de
+kleine slice? / Demo versie"; een overzicht, geen besluit). **De kern** (tot december): de wensen, het eind, het dorp
+dat zelf bouwt, de ondernemers en de twee bazen met de grillen staan. Open, in de volgorde die Claude aanraadt:
+1. De twee bazen afmaken (vraag 106, stap 3): de tweede speeltest, en bijstellen.
+2. **Een jaar dat te winnen is** (vraag 102, opnieuw, met de maat eerst): geen dorp van de speeltest wint in twee jaar.
+   De groei stopt op eten en op de winter, niet op plaats; en elk nieuw gezin in een hut zet de teller terug.
+3. Een nieuwe proefversie en de **eerste tester** (33d): de laatste (`36c713e`) heeft nog geen verzoeken en geen twee
+   bazen. Of de haak werkt, zegt een mens, niet de speeltest.
+4. Wat de speeltests lieten zien: drie of vier herbergen door de keten van het bier, en een schout die alleen tegen
+   drie rovers valt omdat de militie onderweg niet meedoet.
+5. Wat ons uniek maakt (vraag 105): vooral b, wat je weet is wat je zag, omdat het verandert hoe je vanaf het begin
+   speelt.
+6. Stap 2 van de slice: statussen met niveaus en het weer (droogte, ernstige droogte; zaaien dat dagen kost).
+Stap 3 tot en met 6 van de slice (ambtenaren, wacht en misdaad, banden, de kleine stad) horen niet bij de demo, maar bij
+early access. **De demo** (januari de Steam-pagina, juni 2027 Next Fest, aanmelden vóór 25 april): de naam (vraag 8)
+en de zin (vraag 83, c); Engels, met alle teksten op één plek (het grootste werk); geluid (er is nog niets); de ui als
+papier (de schrijftafel, vraag 98) met een fotomodus, en wat het nu nog browserig maakt (`verpakken.md`); de schil
+(Electron) en opslaan in een bestand; de Steam-pagina (een capsule, vijf plaatjes, een trailer van een minuut); welk
+stuk van het spel de demo is; en filmpjes en testers voor de verlanglijstjes.
+
 *1. Gebouwd (28 en 29 sep): naar de proef "van gehucht tot dorp"* (Marcel, 28 sep, vraag 51: "A ja B ja C ja D ja";
 sinds 1 okt opgegaan in de vertical slice, hierboven).
 Je begint zoals nu, met de brief van de heer en 26 mensen, en het doel is dat het gehucht in zo'n twee jaar een dorp
