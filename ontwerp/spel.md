@@ -936,6 +936,11 @@ Is rijk worden en arm lijken leuk?
 
 ## Rijk worden en arm lijken: de inner (Marcel, 24 sep 2026; werklijst punt 6)
 
+**Marcel, 3 okt:** "Kijk dat hele verstoppen verhaal is een beetje lame. Dat is 1x leuk en dan niet langer boeiend. Of
+de gevolgen moeten echt groter zijn. Je wordt weg gevraagd als je niet ophoest wat ze willen hebben van je ofzo. Maar als
+de grote hook, te slap." Het verstoppen blijft in het spel, maar niet als haak; wat ervoor in de plaats kan komen (twee
+bazen die je allebei kunnen wegsturen), is werklijst vraag 106.
+
 **Zo werkt het nu** (25 sep, bijgewerkt 27 sep; `js/inner.js`, `js/verstoppen.js`, `js/heer.js`):
 - **De inner** komt op 15 oogstmaand, tien dagen vooraf aangekondigd, overdag vanaf negen uur. Sinds
   de dag (26 sep) loopt de tijd dan door, op 1× (daarvoor stond hij stil zolang de inner er was). Hij

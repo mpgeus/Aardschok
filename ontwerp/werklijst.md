@@ -3451,6 +3451,36 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     tussen de heer en het dorp. c en e daarna, f misschien.
     Vragen: **a** tot en met **f**: welke ja, en welke voor de demo? En komt b (wat je weet, is wat je zag) vóór de demo,
     omdat het verandert hoe je vanaf het begin speelt?
+    **Marcel (3 okt), over a en c:** "Kijk dat hele verstoppen verhaal is een beetje lame. Dat is 1x leuk en dan niet
+    langer boeiend. Of de gevolgen moeten echt groter zijn. Je wordt weg gevraagd als je niet ophoest wat ze willen hebben
+    van je ofzo. Maar als de grote hook, te slap." Dus a en c niet als haak: ze zijn verstoppen in een nieuw jasje. Wat dan
+    wel: vraag 106. De rest (b, d, e, f) wacht op zijn antwoord.
+106. **Twee bazen: de heer en het dorp kunnen je allebei wegsturen** (Claude, 3 okt, vijfentwintigste sessie, na Marcels
+    reactie op vraag 105; voorstel; open). **Waarom verstoppen maar één keer leuk is:** het is een puzzel met één
+    oplossing. Weet je eenmaal waar de inner kijkt, dan is hij opgelost; hij komt één keer per jaar, en een fout kost
+    weinig. Wat blijft boeien, is een keuze waarvan het goede antwoord elke keer anders is, omdat de mensen, de eisen en
+    de toestand anders zijn. **Het voorstel:** haak 1 ("De heer wil geld. Het dorp wil leven. Jij staat ertussen.",
+    `commercieel.md`) wordt de kern van het spel, en niet alleen een zin. Nu is alleen het dorp echt: je wint door
+    iedereen gelukkig te maken, en de heer is een rekening.
+    - **a, de heer kan je wegsturen, en dat voel je.** Hij eist zijn schatting, en elke maand een gril in een brief:
+      mannen voor zijn oorlog, een feest voor zijn bezoek, een standbeeld, zijn jacht in jouw bos. Wie niet levert, ziet
+      zijn gunst zakken, met een duidelijke waarschuwing ("Nog één keer, schout."), en dan ben je je ambt kwijt. Dat
+      bestaat nu ook, maar pas na twee jaar onder de helft, dus het komt zelden en je ziet het niet aankomen.
+    - **b, het dorp kan je ook wegsturen.** Niet hoe tevreden ze zijn, maar wat ze van jóú vinden. Elke nee, elke
+      schandpaal en elke man die je naar de oorlog stuurt, onthouden ze; de wrok van de ondernemers is daar het begin
+      van. Elke ja en elk feest ook. Zakt het te ver, dan vragen ze je niets meer, en uiteindelijk staan ze voor je deur.
+    - **c, verstoppen wordt één kaart, met echte gevolgen** (Marcel: "Of de gevolgen moeten echt groter zijn"): wie
+      betrapt wordt, krijgt de laatste waarschuwing, of is meteen zijn ambt kwijt. Zo speel je hem zelden, en dan is het
+      spannend.
+    - **d, op één plaatje:** twee gezichten in de balk, de heer en het dorp, die meebewegen met wat je doet. In bijna
+      elk bouwspel ben jij de baas; hier heb je er een, en je mensen kunnen je ook wegsturen.
+    **Wat er al is:** de schatting, de straffen tot je ambt kwijt, de heervaart, de grillen van de heer (het standbeeld,
+    de jacht, de ramen), de wrok per huis, de voorvallen. **Nieuw:** twee meters met waarschuwingen, een brief met een
+    gril elke maand, en een tweede manier om te verliezen. **Wat het met het eind doet:** winnen blijft een jaar lang
+    iedereen gelukkig (vraag 101), maar terwijl de heer krijgt wat hij wil. Dat is precies het knelpunt: wat de mensen
+    gelukkig maakt, kost wat de heer wil hebben. Het hoort dus vóór vraag 102, want het verandert wat winnen is.
+    Vragen: **a**, de heer zichtbaar en sneller? **b**, kan het dorp je wegsturen? **c**, wie betrapt wordt: de laatste
+    waarschuwing, of meteen weg? **d**, twee gezichten in de balk? En dit vóór vraag 102?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
