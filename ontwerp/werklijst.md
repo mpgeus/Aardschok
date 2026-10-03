@@ -3416,6 +3416,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Beantwoord (Marcel, 3 okt):** "104 a b c d ja". Dus: eerst de wapenmaker en de tweede herberg; wie nee hoort,
     onthoudt het, trekt na twee keer weg en kan stiekem beginnen; wie ja hoort, is je dankbaar; en wie ondernemer is,
     komt uit het zaad van het spel. De volgorde: eerst de wapenmaker (Marcels eigen voorbeeld), dan de tweede herberg.
+    **Gebouwd** (3 okt, zie onder Af; hoe het werkt in `spel.md`, "De verzoeken").
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -3721,6 +3722,17 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **Vraag 104: de ondernemers, de wapenmaker en de tweede herberg** (vijfentwintigste sessie; Marcel: "104
+  a b c d ja"; `js/ondernemers.js`). Een op de zes volwassenen is ondernemer, uit het zaad zoals het karakter van de
+  boeren, en vraagt je iets wat niemand mist, na je oproepen en vóór wat het dorp mist. Ja: zijn huis is je dankbaar.
+  Nee: zijn huis neemt het je kwalijk, en na twee keer trekt hij weg met zijn gezin, het bos in; het venster zegt het
+  vooraf, het briefje bij zijn huis ook. **De wapenmaker** (na de rovers of met een smidse): de militie slaat met een
+  wapen 2 harder; de inner die hem ziet, wordt argwanend, en op Sint-Maarten laat de heer hem verzegelen (wapens weg, 20
+  goud boete volgend jaar) als zijn inner of hijzelf hem zag of zijn soldaten het hele dorp doorzoeken. Na een nee smeedt
+  hij stiekem in zijn kelder, wat de soldaten daar kunnen vinden. **De tweede herberg** (in een dorp vanaf 50 mensen):
+  ja, en ze vechten om de gasten (elk gaat naar de dichtste herberg), maar de herbergierster is boos en brouwt 60 dagen
+  niet; nee, en zij zet een vat bier klaar. `js/herberg.js` rekent nu met meer herbergen; met één verandert er niets. 16
+  nieuwe toetsen, `npm test` 820/820.
 - 3 okt 2026 — **Vraag 103, stap 2 en 3: oproepen met een premie, en de speeltest bestuurt** (vijfentwintigste sessie).
   **Oproepen:** in het bouwmenu staat onder het erf een rij Oproepen; een klik hangt op het plein "Het dorp zoekt een
   steengroeve", met een premie van 5 goud voor wie het bouwt, nog een klik haalt hem weg (`T.doeOproep`). Wat erop staat,

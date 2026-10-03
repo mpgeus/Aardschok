@@ -9,6 +9,18 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De ondernemers, wat er nog niet is** (3 okt, vijfentwintigste sessie; vraag 104). Ideeën van Claude, niet gekozen:
+  - Een omgekochte inner (`T.koopInnerOm`) schrijft minder op, maar wat hij zag, onthoudt hij: de wapenmaker staat in zijn
+    rapport, en de heer verzegelt hem toch. Een idee: wie de inner genoeg geeft, laat hem de wapenmaker vergeten. Dan
+    wordt omkopen de manier om met een wapenmaker te leven.
+  - De wapenmaker maakt wapens van hout en ijzer, en ijzer komt van de marskramer (of een ertsgraver). Zonder ijzer staat
+    hij stil, en alleen de muis op het gebouw zegt het; de raad en het rapport zwijgen. Een regel in de raad ("De
+    wapenmaker heeft geen ijzer: de marskramer verkoopt het") zou de keten laten zien zonder dat je hem bouwt.
+  - Wat de heer verzegelt, blijft verzegeld. Een vervolg: de meester breekt het zegel (een voorval: "Mag ik weer
+    smeden?"), met argwaan als prijs, of de heer haalt het zegel na een jaar weg.
+  - Met twee herbergen weet de herbergierster alleen wie er bij háár zat. De tweede herbergier heeft nog geen gesprek; een
+    eigen gesprek met zijn gasten en zijn roddel maakt van de twee herbergen twee bronnen.
+
 - **Het eind, wat er nog niet is** (3 okt, vijfentwintigste sessie; vraag 101, 2e). Na te lopen:
   - Wie wint, viert het grote feest op de dag zelf (`T.vierVandaag`). Stond er al een feest klaar voor later (een
     oogstfeest voor morgen), dan gaat dat verloren. Zeldzaam; na te lopen als het voorkomt.
