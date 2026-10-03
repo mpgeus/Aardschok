@@ -286,8 +286,15 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
   goud."). Hangt hij er een week en kan het dorp hem niet betalen, dan zegt de raad wat er mist.
 - **De speeltest** (stap 3) speelt onder "De mensen": de spelers bouwen zelf niets behalve erven, en zeggen ja op een
   bouwverzoek als het dorp het kan betalen, zoals de bouwer bouwde wat de raad zei.
-- **Nog niet:** verzoeken uit eigen wil (de wapensmid, een tweede herberg), met wat ze aan gevolgen hebben; een oproep
-  die ook een nieuwkomer met dat vak laat komen; en een bord op het plein waar je oproep aan hangt.
+- **Besloten, nog niet gebouwd: verzoeken uit eigen wil** (Marcel, 3 okt, werklijst vraag 104: "104 a b c d ja"). Iemand
+  wil iets wat niemand mist, uit zichzelf: eerst **de wapenmaker** (na een aanval van de rovers, of in een dorp met een
+  smidse; ja: de wachters vechten beter, maar het is verboden, en de inner en de soldaten kunnen hem zien of vinden) en
+  **een tweede herberg** (ja: meer bier en plaats, maar de herbergierster is boos; nee: zij is je dankbaar). Wie nee hoort,
+  onthoudt het: zijn huis is een tijd minder tevreden, na twee keer nee trekt hij weg (en kan als rover terugkomen), en
+  de wapenmaker kan het ook stiekem doen, in zijn kelder. Wie ja hoort, is je dankbaar. Wie ondernemer is, komt uit het
+  zaad van het spel, zoals het karakter van de boeren.
+- **Nog niet:** een oproep die ook een nieuwkomer met dat vak laat komen, en een bord op het plein waar je oproep aan
+  hangt.
 
 "Jij bouwt" is het spel van vóór 3 okt. Het besluit en waarom staan bovenaan bij "Een nieuwe richting".
 
