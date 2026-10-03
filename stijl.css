@@ -1132,3 +1132,15 @@ body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht) 
 #huisbriefje .briefje-groei { font-size: 15px; border-top: 1px dotted var(--papier-lijn); padding-top: 4px; }
 #huisbriefje .briefje-groei { font-style: italic; color: var(--papier-grijs); }
 #huisbriefje kbd { color: var(--papier-inkt); border-color: var(--papier-inkt); background: none; }
+
+/* De meter (F2, js/main.js): rechtsonder, klein, en de muis gaat erdoorheen. */
+#meter {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  z-index: 30;
+}

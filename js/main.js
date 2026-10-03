@@ -437,9 +437,43 @@
   function lus(nu) {
     const dt = vorige ? Math.min(0.05, (nu - vorige) / 1000) : 0;
     vorige = nu;
+    const t0 = performance.now();
     werkBij(dt);
+    const t1 = performance.now();
     T.tekenScene(ctx, S, bw, bh);
+    if (meter) meetBeeld(nu, t1 - t0, performance.now() - t1);
     requestAnimationFrame(lus);
+  }
+
+  // De meter (F2, of Spel.debug.meter()): hoeveel beelden per seconde, en per beeld hoe lang de regels en het tekenen
+  // duren, met het traagste beeld van de laatste seconden. Zo zie je op je eigen machine waar het hapert (Marcel, 3 okt:
+  // "Als de performance slecht is, hebben we niks"). Alleen scherm: niet in S, en hij meet pas als hij aan staat.
+  let meter = null;
+  function wisselMeter(aan = !meter) {
+    let el = document.getElementById('meter');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'meter';
+      el.className = 'paneel verborgen';
+      document.body.appendChild(el);
+    }
+    meter = aan ? { sinds: performance.now(), beelden: 0, regels: 0, tekenen: 0, traagst: 0 } : null;
+    el.classList.toggle('verborgen', !aan);
+    return aan;
+  }
+  function meetBeeld(nu, regels, tekenen) {
+    const m = meter;
+    if (m.vorig != null) m.traagst = Math.max(m.traagst, nu - m.vorig);
+    m.vorig = nu;
+    m.beelden++;
+    m.regels += regels;
+    m.tekenen += tekenen;
+    const duur = performance.now() - m.sinds;
+    if (duur < 1000) return;
+    const ms = (x) => (Math.round(x * 10) / 10).toLocaleString('nl-NL');
+    document.getElementById('meter').textContent =
+      `${Math.round((m.beelden * 1000) / duur)} beelden/s · regels ${ms(m.regels / m.beelden)} ms · tekenen ${ms(m.tekenen / m.beelden)} ms · traagste beeld ${ms(m.traagst)} ms`;
+    Object.assign(m, { sinds: performance.now(), beelden: 0, regels: 0, tekenen: 0, traagst: 0 });
   }
 
   canvas.addEventListener('mousedown', (ev) => {
@@ -513,6 +547,12 @@
     if (S.bouwSoort) S.bouwSoort = null;
   });
   window.addEventListener('keydown', (ev) => {
+    // F2: de meter (hierboven), altijd, ook als er een venster openstaat.
+    if (ev.key === 'F2') {
+      ev.preventDefault();
+      wisselMeter();
+      return;
+    }
     // Bij de marskramer (js/hud.js, het handelsvenster) ligt de rest stil; Esc sluit het venster.
     if (S.modus === 'handel') {
       if (ev.key === 'Escape') T.ui.sluitHandel(S.dorp);
@@ -1338,6 +1378,10 @@
     // geeft het gemiddelde, de mediaan en de slechtste terug. Een beeld hoort ruim onder de 16 ms
     // te blijven (zestig beelden per seconde), het liefst onder de 5, zodat er ruimte overblijft
     // voor een tragere machine.
+    // De meter in beeld (F2): beelden per seconde, en wat de regels en het tekenen per beeld kosten.
+    meter(aan) {
+      return wisselMeter(aan);
+    },
     meet(n) {
       const aantal = n || 120;
       const tijden = [];
