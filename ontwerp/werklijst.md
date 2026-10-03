@@ -3387,6 +3387,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     eigen wil; jij stuurt met oproepen met een premie en met de wetten; **ook de put, de kapel, de markt en het wachthuis
     komen als verzoek**, zodat jij alleen nog erven aanwijst; en eerst klein: de verzoeken uit wat het dorp mist, met een
     bestuurder in de speeltest, en daarna die uit eigen wil. Vraag 102 wacht.
+    **Stap 1 gebouwd** (3 okt, zie onder Af): de verzoeken uit wat het dorp mist. Daarna: stap 2, oproepen met een premie;
+    stap 3, de bestuurder in de speeltest; dan de verzoeken uit eigen wil.
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
@@ -3691,6 +3693,16 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 - **Bewegende omgeving:** vlammen, water, stof in het licht.
 
 ## Af
+
+- 3 okt 2026 — **Vraag 103, stap 1: de verzoeken** (vijfentwintigste sessie; Marcel: "103 a b c ja d ook verzoek e ja";
+  `js/verzoeken.js`). Met de spelregel "Wie bouwt" op "De mensen vragen het" (de standaard) staat in het bouwmenu alleen
+  nog het erf. Wat het dorp mist (wat de raad je vroeger liet bouwen, `T.watTeBouwen`), komt een inwoner je vragen, zoals
+  een voorval: een put of een kapel namens de buurt, een werkplaats iemand zonder werk, met de plek die hij koos
+  (`T.plekVoor`, overgenomen van de bouwer van de speeltest) in goud op de grond, en wat het kost onder het antwoord. Ja:
+  het komt er, en hij is er de meester. Nee: dertig dagen niet weer. Ben je weg, dan weegt je raadsman wat het helpt tegen
+  wat het kost, naar zijn karakter. De raad zegt "zou helpen" in plaats van "bouw ... [B]", en wie je erom vraagt. De
+  oude toetsen spelen met "Jij bouwt"; 8 nieuwe toetsen, `npm test` 800/800. Nog niet: oproepen (stap 2), de bestuurder in
+  de speeltest (stap 3), verzoeken uit eigen wil.
 
 - 3 okt 2026 — **2e: het eind en het jaar in het kort** (vijfentwintigste sessie; vraag 101, Marcel: "101 ja";
   `js/einde.js`). **Winnen:** elke nacht telt het dorp of elk huis met mensen alles heeft, in de hoogste stand of

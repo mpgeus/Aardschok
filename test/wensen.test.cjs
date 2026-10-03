@@ -5,6 +5,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+// Deze toetsen gaan over het spel waarin jij bouwt (de spelregel "Wie bouwt" op "Jij bouwt"; werklijst vraag 103):
+// wat helpt zoals jij bouwt. Hoe het gaat als de mensen het vragen, staat in test/verzoeken.test.cjs.
+T.zetOptie('wieBouwt', 'jij');
 
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {}, toonArgwaan() {} };
 
@@ -201,6 +204,7 @@ test('het gehucht begint op zo\'n 83%; met de spelregel "Wensen" op het dorp als
     assert.ok(oud.mist.includes('een kerk'));
   } finally {
     T.optiesTerug();
+    T.zetOptie('wieBouwt', 'jij');
   }
 });
 
@@ -248,6 +252,7 @@ function metRegels(regels, fn) {
     return fn();
   } finally {
     T.optiesTerug();
+    T.zetOptie('wieBouwt', 'jij');
   }
 }
 // De berichten die het dorp zegt, zolang fn loopt.
@@ -549,7 +554,7 @@ test('de herberg en de markt: één is genoeg voor het hele dorp, ook voor een h
 });
 
 test('wat de huizen missen: een huis buiten de kring van de herberg van het gehucht, en een tweede bouw je pas in een dorp', () => {
-  T.pasOptiesToe({ keuzes: { herbergEnMarkt: 'kring' } });
+  T.pasOptiesToe({ keuzes: { herbergEnMarkt: 'kring', wieBouwt: 'jij' } });
   try {
     const D = gehucht().dorp;
     const herberg = T.plekkenVan(D, 'herberg')[0];
@@ -560,7 +565,7 @@ test('wat de huizen missen: een huis buiten de kring van de herberg van het gehu
     assert.equal(x.tekst, 'Een huis wil de herberg binnen 30 tegels: een herberg bouw je pas in een dorp.');
     assert.equal(x.kan, false);
   } finally {
-    T.pasOptiesToe(null);
+    T.pasOptiesToe({ keuzes: { wieBouwt: 'jij' } });
   }
 });
 

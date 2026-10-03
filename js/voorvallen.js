@@ -90,7 +90,8 @@
   //            (metOorzaak, zonderOorzaak), en het bericht zegt waarom
   //   pauze    niet binnen zoveel dagen terug (zonder: de pauze uit het blok hierboven)
   //   vervolg  true: komt alleen als vervolg op een ander voorval; na: [van, tot], na zoveel dagen
-  //   roep     het bericht als hij je gaat zoeken (zonder: "{wie} zoekt je.")
+  //   zelf     true: wordt niet geloot; een ander deel van het spel begint het (het bouwverzoek, js/verzoeken.js)
+  //   roep     het bericht als hij je gaat zoeken (zonder: "{wie} zoekt je."), met de woorden van een gesprek (js/gesprek.js)
   //   sterft   wie er sterft, zegt het bericht zo: "De koorts: ..." (zonder: de titel)
   const MAN = { geslacht: 'man', leeftijd: ['jong', 'volwassen'] };
   T.VOORVALLEN = {
@@ -157,6 +158,9 @@
       als: { maanden: ['oogstmaand', 'herfstmaand'], voorraad: { graan: 80 } }, pauze: 200, gewicht: 3, wie: { boer: true },
     },
     klok: { soort: 'verzoek', titel: 'de klok voor de kapel', als: { gebouw: 'kapel' }, pauze: 360, wie: { karakter: 'vrome' } },
+    // Een inwoner wil iets bouwen wat het dorp mist (js/verzoeken.js; werklijst vraag 103): wie, wat en waar zet dat
+    // bestand op het voorval (L.bouw), en de woorden ervan ook.
+    bouwverzoek: { soort: 'verzoek', titel: 'een verzoek om te bouwen', zelf: true, roep: '{wie} wil {gebouw} bouwen, en zoekt je.' },
     lied: { soort: 'feest', titel: 'het lied over de heer', als: { gebouw: 'herberg' }, wie: { karakter: 'zanger' } },
     // De meiboom (werklijst vraag 97; Marcel, 3 okt: "De meiboom"): niet geloot, maar elk jaar op 30 grasmaand, zodat hij
     // op 1 bloeimaand op het plein staat (js/feesten.js). De jongeren komen het vragen.
@@ -174,6 +178,7 @@
   // Een getal 0..1, vast per spel, per dag en per vraag `n` (zoals in js/rovers.js), zodat een speeltest met hetzelfde
   // zaad hetzelfde jaar speelt.
   const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 43 + Math.floor(dag) * 7919 + n)();
+  T.lotVanDeDag = lot; // ook voor de verzoeken (js/verzoeken.js)
   const elk = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
   const naam = (p) => T.naamVanBewoner(p);
   const inWinter = (dag) => T.datumVanDag(dag).seizoen === 'winter';
@@ -203,6 +208,7 @@
     const e = p && p.wezen;
     return kanHetBetreffen(D, p) && !!e && !e.dood && !e.vertrekt && !e.opgeroepen && !e.moetNaar;
   }
+  T.kanJeKomenZoeken = kanKomen; // ook voor wie een verzoek doet (js/verzoeken.js)
   const isBoer = (p) => T.isBoer(p.wezen);
 
   // Past hij bij een vraag (zie T.VOORVALLEN)? Een karakter is altijd een boer, van elke leeftijd.
@@ -316,7 +322,7 @@
   // zeggen (en over wie het gaat). Geeft { wie, ander } of null. Een vervolg komt alleen na zijn eerste keer.
   T.voorvalKan = function (D, id, dag) {
     const v = T.VOORVALLEN[id];
-    if (!v || v.vervolg || !T.GESPREKKEN[id] || !D.bewoners) return null;
+    if (!v || v.vervolg || v.zelf || !T.GESPREKKEN[id] || !D.bewoners) return null;
     const V = D.voorvallen || T.nieuweVoorvallen();
     const vorige = V.geweest[id];
     if (vorige != null && dag - vorige < (v.pauze != null ? v.pauze : IN().pauze)) return null;
@@ -474,6 +480,8 @@
         return;
       }
     }
+    // Wil iemand iets bouwen wat het dorp mist (js/verzoeken.js; werklijst vraag 103), dan gaat dat voor.
+    if (T.beginBouwverzoek(D, dag)) return;
     if (V.volgende == null) V.volgende = IN().eersteNa;
     if (dag < V.volgende) return;
     const k = T.kiesVoorval(D, dag);
@@ -526,7 +534,7 @@
         L.gemeld = true;
         const roep = T.VOORVALLEN[L.id].roep || '{wie} zoekt je.';
         const waarom = L.oorzaak ? ` ${L.oorzaak.zin}` : '';
-        T.zeg(D, T.hoofdletter(roep.replace('{wie}', naam(L.wie))) + waarom, T.VOORVALLEN[L.id].soort === 'ramp' ? 'gevaar' : undefined);
+        T.zeg(D, T.hoofdletter(T.vulWoordenIn(D, roep)) + waarom, T.VOORVALLEN[L.id].soort === 'ramp' ? 'gevaar' : undefined);
       }
     }
     if (S.modus !== 'verkennen' || S.slaap) return;
@@ -581,6 +589,9 @@
     }
     // Een feest (js/feesten.js): het dorp viert dit voorval op het plein, morgen de hele dag of 's avonds.
     if (doe.feest && L.id) T.zetFeest(D, L.id, doe.feest, D.kalender ? D.kalender.dag : dag);
+    // Een bouwverzoek (js/verzoeken.js): ja, en het gebouw komt er; nee, en hij onthoudt het.
+    if (doe.bouw && L.bouw) T.verzoekToegestaan(D, L);
+    if (doe.weiger && L.bouw) T.verzoekGeweigerd(D, L);
     if (doe.voorval && L.wie) {
       const lijst = elk(doe.voorval);
       const id = lijst[Math.floor(lot(D, dag, 41 + V.aantal) * lijst.length)];
@@ -597,6 +608,13 @@
     const L = (D.voorvallen && D.voorvallen.lopend) || {};
     const delen = [];
     const teken = (n) => (n > 0 ? '+' : '−');
+    // Wat een bouwverzoek het dorp kost (js/verzoeken.js): de kosten van het gebouw, zoals T.plaatsGebouw ze betaalt.
+    const kosten = doe.bouw && L.bouw ? T.kostenVanVerzoek(L.bouw) : {};
+    for (const [wat, n] of Object.entries(kosten)) {
+      delen.push(`−${n} ${wat}`);
+      const heeft = Math.floor((D.voorraad && D.voorraad[wat]) || 0);
+      if (heeft < n && uit.kan) Object.assign(uit, { kan: false, waarom: `je hebt ${heeft} ${wat}` });
+    }
     for (const wat of ['goud', ...WAREN]) {
       const n = doe[wat] || 0;
       if (!n) continue;

@@ -91,10 +91,17 @@
       bronnen.push(T.kanHandelen(D) ? 'de marskramer koopt graan, zolang hij er is' : `de marskramer koopt graan in ${T.volgendeMarskramer(D.kalender.dag)}`);
       bronnen.push(T.standVanWet(D, 'belasting') === 'aangenomen' ? 'de belasting brengt elke maand goud' : 'belasting [W] brengt elke maand goud');
     }
-    if (mist.hout && voor !== 'houthakker') bronnen.push(heeft(D, 'houthakker') ? 'de houthakker hakt hout' : 'een houthakker [B] hakt hout');
+    if (mist.hout && voor !== 'houthakker') {
+      bronnen.push(heeft(D, 'houthakker') ? 'de houthakker hakt hout' : T.VERZOEKEN_INSTELLINGEN.mensen ? 'een houthakker zou hout hakken' : 'een houthakker [B] hakt hout');
+    }
     return bronnen;
   }
   const hoeveelTekst = (mist) => T.opsomming(Object.entries(mist).map(([wat, n]) => `${n} ${wat}`));
+
+  // Bouwen de mensen (js/verzoeken.js, de spelregel "Wie bouwt"; werklijst vraag 103), dan zegt de raad wat zou helpen,
+  // zonder [B], en of iemand je er al om vraagt.
+  const mensenBouwen = () => T.VERZOEKEN_INSTELLINGEN.mensen;
+  const verzoekZin = (D, soort) => (mensenBouwen() && soort ? T.verzoekZin(D, soort) : '');
 
   // Het eerste wat de huizen missen waar je nu iets aan kunt doen (T.watDeHuizenMissen, js/wensen.js), van deze soort
   // ('bouwstof' of 'wens'), of null.
@@ -102,6 +109,8 @@
   // Wat erbij komt als je niet kunt betalen wat helpt: wat je mist, en waar het vandaan komt. Anders hoor je het niet
   // meer, want de wensen gaan voor wat het doel vraagt.
   function wensTekst(D, x) {
+    const vraagt = verzoekZin(D, x.bouw);
+    if (vraagt) return `${x.tekst}${vraagt}`;
     const mist = tekortVoor(D, [x.bouw]);
     if (!mist) return x.tekst;
     const bronnen = waarVandaan(D, mist, x.bouw);
@@ -131,18 +140,29 @@
     {
       id: 'rovers',
       als: (D) => D.rovers && D.rovers.laatsteAanval != null && dagNu(D) - D.rovers.laatsteAanval < IN().roversNa && !heeft(D, 'wachthuis'),
-      tekst: () => `De rovers komen terug. Een wachthuis [B] geeft je ${T.telwoord(T.GEBOUWEN.wachthuis.handen)} man die meevechten.`,
+      tekst: (D) => (mensenBouwen()
+        ? `De rovers komen terug. Een wachthuis zou je ${T.telwoord(T.GEBOUWEN.wachthuis.handen)} man geven die meevechten.${verzoekZin(D, 'wachthuis')}`
+        : `De rovers komen terug. Een wachthuis [B] geeft je ${T.telwoord(T.GEBOUWEN.wachthuis.handen)} man die meevechten.`),
     },
     {
       id: 'hout',
       als: (D) => haaltHetNiet(D, T.houtVoorDeWinter),
-      tekst: (D) => `Het hout haalt ${haalt(T.houtVoorDeWinter(D, D.kalender.dag))} van de winter: ${heeft(D, 'houthakker') ? 'nog een houthakker [B] hakt erbij' : 'bouw een houthakker [B]'}.${geenGezin()}`,
+      tekst: (D) => {
+        const helpt = mensenBouwen()
+          ? `${heeft(D, 'houthakker') ? 'nog een houthakker' : 'een houthakker'} zou helpen.${verzoekZin(D, 'houthakker')}`
+          : `${heeft(D, 'houthakker') ? 'nog een houthakker [B] hakt erbij' : 'bouw een houthakker [B]'}.`;
+        return `Het hout haalt ${haalt(T.houtVoorDeWinter(D, D.kalender.dag))} van de winter: ${helpt}${geenGezin()}`;
+      },
     },
     {
       id: 'eten',
       als: (D) => haaltHetNiet(D, T.etenVoorDeWinter),
       // Wat helpt, zegt het dorp ook (js/behoeften.js): een jager, als vlees een maag vult.
-      tekst: (D) => `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? `: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag` : ''}.${geenGezin()}`,
+      tekst: (D) => {
+        const vlees = T.GEBOUWEN.jager.maakt.uit.vlees;
+        const jager = mensenBouwen() ? `: een jager zou ${vlees} vlees per dag schieten` : `: een jager [B] schiet ${vlees} vlees per dag`;
+        return `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? jager : ''}.${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? verzoekZin(D, 'jager') : ''}${geenGezin()}`;
+      },
     },
     {
       id: 'kelders',
@@ -219,6 +239,30 @@
       tekst: (D) => `Het volgende gezin komt ${over(T.volgendeGezinDag(D) - dagNu(D))}.`,
     },
   ];
+
+  // Wat het dorp nu zou willen bouwen, in de volgorde van de raad: [{ soort, waarom, voor }], met wat er gemist wordt in
+  // `waarom` ("Tien stenen huizen willen laken.") en waarvoor in `voor` ('rovers', 'winter', 'bouwstof', 'wens', 'doel'). Voor de verzoeken (js/verzoeken.js; werklijst vraag 103): wat de raad je
+  // liet bouwen, vraagt een inwoner je. Alleen wat al gebouwd mag worden (T.magGebouwd, js/gebouwen.js), en niet wat er
+  // al gebouwd wordt. Een keten komt één voor één: staat de bakkerij er zonder meel, dan helpt een molen (js/wensen.js).
+  T.watTeBouwen = function (D) {
+    const uit = [];
+    if (!D.kalender || !D.voorraad) return uit;
+    const erbij = (soort, waarom, voor) => {
+      if (!soort || uit.some((x) => x.soort === soort) || !T.magGebouwd(D, soort)) return;
+      if ((D.gebouwen || []).some((g) => g.soort === soort && !g.klaar)) return;
+      uit.push({ soort, waarom, voor });
+    };
+    if (D.rovers && D.rovers.laatsteAanval != null && dagNu(D) - D.rovers.laatsteAanval < IN().roversNa && !heeft(D, 'wachthuis')) {
+      erbij('wachthuis', 'De rovers komen terug.', 'rovers');
+    }
+    if (haaltHetNiet(D, T.houtVoorDeWinter)) erbij('houthakker', `Het hout haalt ${haalt(T.houtVoorDeWinter(D, D.kalender.dag))} van de winter.`, 'winter');
+    if (T.BEHOEFTEN_INSTELLINGEN.vleesIsEten && haaltHetNiet(D, T.etenVoorDeWinter)) {
+      erbij('jager', `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter.`, 'winter');
+    }
+    for (const x of T.watDeHuizenMissen(D)) if (x.kan && x.bouw) erbij(x.bouw, x.zin, x.soort);
+    for (const soort of T.doelGebouwen(D)) erbij(soort, `Voor het doel is er een ${T.GEBOUWEN[soort].naam} nodig.`, 'doel');
+    return uit;
+  };
 
   // De raad van nu: { id, tekst }, of null. Alleen in het gehucht zelf (een wereld met een plein, waar de heer
   // komt), en niet als de spelregel hem uitzette.

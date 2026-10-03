@@ -345,10 +345,17 @@
     for (const wat of Object.keys(nodig)) {
       const makers = makersVan(wat);
       if (!makers.length || (D.voorraad[wat] || 0) >= nodig[wat] || (D.gebouwen || []).some((g) => makers.includes(g.soort))) continue;
-      const kan = makers.find((s) => T.inBouwmenu(D, s));
+      const kan = makers.find((s) => T.magGebouwd(D, s));
       if (kan) erbij.push(kan);
     }
     return erbij;
+  }
+
+  // Hoe de raad zegt wat helpt: bouw het, met [B] (het bouwmenu); of, als de mensen het je vragen (js/verzoeken.js, de
+  // spelregel "Wie bouwt"; werklijst vraag 103), dat het zou helpen. `meer`: het zijn er twee (een bakkerij en een molen).
+  function helptZin(wat, nog, meer) {
+    if (!T.VERZOEKEN_INSTELLINGEN.mensen) return `${nog ? 'nog' : 'bouw'} ${wat} [B]`;
+    return `${nog ? 'nog ' : ''}${wat} ${meer ? 'zouden' : 'zou'} helpen`;
   }
 
   // Wat helpt, uit de soorten die het maken (een visser of een jager voor vlees of vis, een houthakker voor hout): { kan,
@@ -376,12 +383,13 @@
     }
     const zonderHanden = werken.find((g) => T.GEBOUWEN[g.soort].handen > (g.handen || 0));
     if (zonderHanden) return { kan: false, bouw: null, tekst: waaromTeWeinig(zonderHanden) };
-    const helpen = soorten.filter((s) => T.inBouwmenu(D, s) && !stil(s));
+    const helpen = soorten.filter((s) => T.magGebouwd(D, s) && !stil(s));
     if (helpen.length) {
       const er = helpen.find((s) => staan.some((g) => g.soort === s));
-      if (er) return { kan: true, bouw: er, tekst: `nog een ${naamVan(er)} [B]` };
+      if (er) return { kan: true, bouw: er, tekst: helptZin(`een ${naamVan(er)}`, true) };
       const erbij = helpen.length === 1 ? ookNodig(D, helpen[0]) : [];
-      return { kan: true, bouw: helpen[0], ook: erbij, tekst: `bouw ${T.opsomming(helpen.length === 1 ? [helpen[0], ...erbij].map((x) => `een ${naamVan(x)}`) : [of(helpen.map((x) => `een ${naamVan(x)}`))])} [B]` };
+      const wat = T.opsomming(helpen.length === 1 ? [helpen[0], ...erbij].map((x) => `een ${naamVan(x)}`) : [of(helpen.map((x) => `een ${naamVan(x)}`))]);
+      return { kan: true, bouw: helpen[0], ook: erbij, tekst: helptZin(wat, false, erbij.length > 0) };
     }
     if (staan.length) return { kan: false, bouw: null, tekst: waaromTeWeinig(staan[0]) };
     return nogNiet(soorten[0]);
@@ -392,7 +400,7 @@
   // tekst ("Vijf hutten willen een put binnen 12 tegels [B]."); een die er al staat, ligt te ver: de herberg van het
   // gehucht helpt een huis buiten zijn kring niet. Een goed: wie het maakt (watHelpt).
   function hulpVoorWens(D, wens) {
-    if (wens.plek) return T.inBouwmenu(D, wens.plek) ? { kan: true, bouw: wens.plek, tekst: null } : nogNiet(wens.plek);
+    if (wens.plek) return T.magGebouwd(D, wens.plek) ? { kan: true, bouw: wens.plek, tekst: null } : nogNiet(wens.plek);
     const makers = Object.keys(T.GEBOUWEN).filter((s) => T.GEBOUWEN[s].maakt && wens.goed.some((goed) => T.GEBOUWEN[s].maakt.uit[goed]));
     makers.sort((a, b) => wens.goed.findIndex((goed) => T.GEBOUWEN[a].maakt.uit[goed]) - wens.goed.findIndex((goed) => T.GEBOUWEN[b].maakt.uit[goed]));
     return watHelpt(D, makers);
@@ -405,10 +413,11 @@
   // alleen een plek in de buurt kijkt naar nu, zodat een put die vandaag klaar is, meteen telt.
   //
   // Eerst de huizen die een maand alles hadden en op bouwstof wachten (js/behoeften.js), dan wat de meeste mensen
-  // missen. Elk: { soort ('bouwstof' of 'wens'), id, huizen, mensen, kan, bouw, ook, tekst }. `kan`: je kunt er nu iets aan
-  // doen (iets uit het bouwmenu helpt, en er wordt er nog geen gebouwd); `bouw`: wat (een soort uit T.GEBOUWEN); `ook`:
-  // wat de keten erbij nodig heeft (een molen bij een bakkerij; vraag 96, b), anders leeg; `tekst`: de zin, met [B] waar
-  // het bouwmenu helpt. Geen eten of brandhout: dat zeggen de winter en de oorzaken.
+  // missen. Elk: { soort ('bouwstof' of 'wens'), id, huizen, mensen, kan, bouw, ook, tekst, zin }. `kan`: er is nu iets
+  // aan te doen (iets wat al gebouwd mag worden helpt, en er wordt er nog geen gebouwd); `bouw`: wat (een soort uit
+  // T.GEBOUWEN); `ook`: wat de keten erbij nodig heeft (een molen bij een bakkerij; vraag 96, b), anders leeg; `tekst`:
+  // de zin met wat helpt, met [B] waar het bouwmenu helpt; `zin`: alleen wat er gemist wordt ("Tien stenen huizen willen
+  // laken."), voor een verzoek (js/verzoeken.js). Geen eten of brandhout: dat zeggen de winter en de oorzaken.
   T.watDeHuizenMissen = function (D) {
     const huizen = (D.gebouwen || []).filter((g) => g.wensen && g.wensen.mensen > 0);
     const uit = [];
@@ -431,7 +440,7 @@
       const zin = `${T.hoofdletter(wieTekst({ [soort]: n }))} ${n === 1 ? 'kan' : 'kunnen'} een ${naamVan(T.GEBOUWEN[soort].wordt)} worden, maar er is geen ${T.opsomming(mist.map((wat) => `${kosten[wat]} ${wat}`))}`;
       uit.push({
         soort: 'bouwstof', id: `bouwstof:${soort}`, huizen: n, mensen: lijst.reduce((m, g) => m + g.wensen.mensen, 0),
-        kan: h.kan, bouw: h.bouw, tekst: h.tekst ? `${zin}: ${h.tekst}.` : `${zin}.`,
+        kan: h.kan, bouw: h.bouw, tekst: h.tekst ? `${zin}: ${h.tekst}.` : `${zin}.`, zin: `${zin}.`,
       });
     }
 
@@ -472,14 +481,14 @@
       if (!w.n) {
         // Alle huizen die het missen, wachten op een plek in aanbouw: dat zegt het rapport, en er valt niets te doen.
         const zin = `${T.hoofdletter(T.telwoord(w.wacht))} ${w.wacht === 1 ? 'huis wacht' : 'huizen wachten'} op ${w.wens.naam}: er wordt er een gebouwd.`;
-        uit.push({ soort: 'wens', id: w.id, huizen: w.wacht, mensen: 0, kan: false, bouw: null, tekst: zin });
+        uit.push({ soort: 'wens', id: w.id, huizen: w.wacht, mensen: 0, kan: false, bouw: null, tekst: zin, zin });
         continue;
       }
       const zin = `${T.hoofdletter(wieTekst(w.wie))} ${w.n === 1 ? 'wil' : 'willen'} ${w.wens.naam}${binnen}`;
       const h = hulpVoorWens(D, w.wens);
       uit.push({
         soort: 'wens', id: w.id, huizen: w.n, mensen: w.mensen, kan: h.kan, bouw: h.bouw, ook: h.ook || [],
-        tekst: h.tekst ? `${zin}: ${h.tekst}.` : `${zin} [B].`,
+        tekst: h.tekst ? `${zin}: ${h.tekst}.` : T.VERZOEKEN_INSTELLINGEN.mensen ? `${zin}.` : `${zin} [B].`, zin: `${zin}.`,
       });
     }
     return uit;
@@ -512,7 +521,7 @@
       if (!heeft && !BASIS.includes(id)) {
         const h = hulpVoorWens(D, wens);
         const binnen = wens.plek && IN().kring[wens.plek] ? ` binnen ${IN().kring[wens.plek]} tegels` : '';
-        helpt = h.tekst || `bouw er een${binnen} [B]`;
+        helpt = h.tekst || (T.VERZOEKEN_INSTELLINGEN.mensen ? `een${binnen} zou helpen` : `bouw er een${binnen} [B]`);
       }
       return { id, naam: wens.naam, heeft, helpt };
     });

@@ -956,6 +956,32 @@
         vrij: T.vrijeDag(D, S.kalender.dag),
       };
     },
+    // De verzoeken (js/verzoeken.js; werklijst vraag 103): wat het dorp nu zou willen bouwen en waarom, wie er nu om vraagt
+    // en waar, en waar je nee op zei. Spel.debug.verzoek('nu') laat het eerste nu vragen (wie het vraagt, zoekt je
+    // meteen); ('jij') of ('mensen') zet de spelregel "Wie bouwt".
+    verzoek(wat) {
+      const D = S.dorp;
+      if (wat === 'jij' || wat === 'mensen') T.VERZOEKEN_INSTELLINGEN.mensen = wat === 'mensen';
+      if (wat === 'nu') {
+        const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
+        if (V.lopend) T.voorvalBeantwoord(D, V.lopend.id);
+        if (D.verzoeken) D.verzoeken.volgende = 0;
+        const dag = Math.floor(S.kalender.dag);
+        if (!T.beginBouwverzoek(D, dag)) return 'Er is nu niets wat iemand wil bouwen (en kan betalen).';
+        V.lopend.vanaf = S.kalender.dag;
+      }
+      const L = D.voorvallen && D.voorvallen.lopend;
+      const R = D.verzoeken || T.nieuweVerzoeken();
+      return {
+        wieBouwt: T.VERZOEKEN_INSTELLINGEN.mensen ? 'de mensen' : 'jij',
+        watTeBouwen: T.watTeBouwen(D).map((x) => `${x.soort}: ${x.waarom}`),
+        nu: L && L.bouw ? `${T.naamVanBewoner(L.wie)} wil een ${T.GEBOUWEN[L.bouw.soort].naam} op ${L.bouw.x},${L.bouw.y}: "${T.vulWoordenIn(D, T.GESPREKKEN.bouwverzoek.knopen.begin.tekst[0].zeg)}"` : null,
+        volgende: R.volgende,
+        nee: Object.entries(R.nee).map(([soort, dag]) => `${soort} op ${T.datumVanDag(dag).tekst}`),
+        ja: R.ja,
+        meesters: (D.gebouwen || []).filter((g) => g.meester).map((g) => `${T.GEBOUWEN[g.soort].naam}: ${T.naamVanBewoner(g.meester)}`),
+      };
+    },
     // Het eind (js/einde.js): het doel, hoeveel dagen op rij iedereen gelukkig is, en het jaarboek tot nu.
     // Spel.debug.einde('winst') zet de teller op één dag voor het eind (de volgende nacht wint het, als iedereen dan
     // gelukkig is); ('gewonnen') wint nu, met het feest en het eindscherm; ('jaarverslag') maakt het verslag nu en

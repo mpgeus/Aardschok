@@ -769,13 +769,13 @@
     return D.bewoners.mensen.filter(kanWerken).length;
   };
 
-  // Hoe goed iemand past op een plek bij gebouw g: hoe lager, hoe liever. De boer op zijn eigen
-  // boerderij het eerst (ook de oudste: hij maait zelf). Verder naar leeftijd (T.LEEFTIJDEN: eerst de
-  // volwassenen) en wie het dichtstbij woont; wie de werkplaats het liefst heeft
-  // (T.GEBOUWEN[soort].liefst: de schaapskooi een knaap) gaat vóór, en het gezin van de schout het
-  // laatst.
+  // Hoe goed iemand past op een plek bij gebouw g: hoe lager, hoe liever. De boer op zijn eigen boerderij het eerst (ook
+  // de oudste: hij maait zelf), en de meester op de werkplaats die hij vroeg (js/verzoeken.js). Verder naar leeftijd
+  // (T.LEEFTIJDEN: eerst de volwassenen) en wie het dichtstbij woont; wie de werkplaats het liefst heeft
+  // (T.GEBOUWEN[soort].liefst: de schaapskooi een knaap) gaat vóór, en het gezin van de schout het laatst.
   function voorkeur(D, p, g, deur) {
     if (p.wie && p.huis === g) return -1e6;
+    if (g.meester === p) return -1e6 + 1; // wie het vroeg, is er de meester (js/verzoeken.js)
     let s = T.LEEFTIJDEN[p.leeftijd].werkt * 100 + T.afstand(deur(p.huis), deur(g));
     const soort = T.GEBOUWEN[g.soort];
     if (soort && soort.liefst === p.leeftijd) s -= 500;

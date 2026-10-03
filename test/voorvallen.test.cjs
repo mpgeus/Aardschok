@@ -5,6 +5,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+// Deze toetsen gaan over het spel waarin jij bouwt (de spelregel "Wie bouwt" op "Jij bouwt"; werklijst vraag 103):
+// de gelote voorvallen, zonder bouwverzoeken ertussen. Hoe het gaat als de mensen het vragen, staat in test/verzoeken.test.cjs.
+T.zetOptie('wieBouwt', 'jij');
 
 const berichten = [];
 const aangesproken = [];
@@ -51,7 +54,7 @@ const antwoorden = (id) => knoopVan(id).keuzes;
 
 // Wat een antwoord mag doen: wat elk gesprek kan, en wat js/voorvallen.js erbij doet (het kop-commentaar daar).
 const WAREN = ['graan', 'hout', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi'];
-const GEVOLGEN = new Set(['zetVlag', 'wisVlag', 'geef', 'neem', 'goud', ...WAREN, 'tevreden', 'argwaan', 'verban', 'sterfkans', 'gezin', 'voorval', 'feest', ...Object.keys(T.VEE)]);
+const GEVOLGEN = new Set(['zetVlag', 'wisVlag', 'geef', 'neem', 'goud', ...WAREN, 'tevreden', 'argwaan', 'verban', 'sterfkans', 'gezin', 'voorval', 'feest', 'bouw', 'weiger', ...Object.keys(T.VEE)]);
 
 test('elk voorval heeft een gesprek onder zijn naam, en elk antwoord gaat ergens heen en doet wat het spel kent', () => {
   for (const [id, v] of Object.entries(T.VOORVALLEN)) {
@@ -395,6 +398,7 @@ test('de spelregel: uit komt er niemand, en vaak komen ze vaker', () => {
     assert.ok(tel('zelden') < gewoon);
   } finally {
     T.optiesTerug();
+    T.zetOptie('wieBouwt', 'jij');
   }
   assert.equal(T.VOORVALLEN_INSTELLINGEN.dagenTussen, 10, 'gewoon is de standaard');
 });

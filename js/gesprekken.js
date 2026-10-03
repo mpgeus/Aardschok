@@ -1041,6 +1041,21 @@
         },
       },
     },
+    bouwverzoek: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, {wil} {gebouw} bouwen, {plek}. {waarom} Het dorp betaalt {kosten}.' },
+          ],
+          keuzes: [
+            { zeg: 'Ja, bouw maar.', sluit: true, doe: { bouw: true, tevreden: 3 } },
+            { zeg: 'Nee, nu niet.', sluit: true, doe: { weiger: true, tevreden: -2 } },
+          ],
+        },
+      },
+    },
     lied: {
       naam: '{wie}',
       start: 'begin',

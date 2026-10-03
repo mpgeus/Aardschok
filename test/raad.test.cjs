@@ -4,6 +4,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+// Deze toetsen gaan over het spel waarin jij bouwt (de spelregel "Wie bouwt" op "Jij bouwt"; werklijst vraag 103):
+// de raad zoals jij bouwt. Hoe het gaat als de mensen het vragen, staat in test/verzoeken.test.cjs.
+T.zetOptie('wieBouwt', 'jij');
 
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {}, toonArgwaan() {} };
 
@@ -55,6 +58,7 @@ function zonderWensen(fn) {
     return fn();
   } finally {
     T.optiesTerug();
+    T.zetOptie('wieBouwt', 'jij');
   }
 }
 

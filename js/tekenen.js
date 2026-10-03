@@ -157,6 +157,7 @@
     tekenRaster(ctx, S);
     tekenMarkeringen(ctx, S);
     tekenBouwSpook(ctx, S);
+    tekenVerzoekPlek(ctx, S);
 
     const lijst = [];
     // Buiten zijn er geen muren: wat daar "muur" heet, is de voet van een boom of een gebouw, en
@@ -746,6 +747,27 @@
       }
     }
     tekenKring(ctx, S, S.bouwSoort, { x: S.bouwHover.x, y: S.bouwHover.y, b: voet.b, h: voet.h });
+  }
+
+  // De plek van een bouwverzoek (js/verzoeken.js; werklijst vraag 103): zolang iemand je erom vraagt, ligt de voet van
+  // wat hij wil bouwen er in goud, met de kring erbij als het een put of een kapel is. Zo kun je gaan kijken waar het
+  // komt voor je ja zegt.
+  function tekenVerzoekPlek(ctx, S) {
+    const D = T.dorpHier(S);
+    const L = D && D.voorvallen && D.voorvallen.lopend;
+    if (!L || !L.bouw || S.bouwSoort) return;
+    const b = L.bouw;
+    const voet = T.gebouwVoet(b.soort, T.volgendeTekening(D, b.soort)) || T.GEBOUWEN[b.soort].voet;
+    if (!voet) return;
+    ctx.fillStyle = 'rgba(226, 182, 74, 0.42)';
+    for (let dy = 0; dy < voet.h; dy++) {
+      for (let dx = 0; dx < voet.b; dx++) {
+        const p = T.naarScherm(b.x + dx, b.y + dy);
+        T.ruit(ctx, p.x, p.y, 0.94);
+        ctx.fill();
+      }
+    }
+    tekenKring(ctx, S, b.soort, { x: b.x, y: b.y, b: voet.b, h: voet.h });
   }
 
   // Een rechthoek van tegels { x, y, b, h } als lijn langs de buitenkant, op de grond (zoals de erven hierboven).

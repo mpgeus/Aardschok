@@ -296,6 +296,18 @@
           uitleg: 'De hut en het huis staan in het bouwmenu, en een nieuw gezin komt alleen als er een huis met plaats is. Erven zijn er niet.' },
       ],
     },
+    // Wie de rest bouwt (werklijst vraag 103; Marcel, 3 okt: "De inwoners bouwen zelf een weverij etc. Ze vragen alleen
+    // toestemming om te bouwen", en "103 a b c ja d ook verzoek e ja"; js/verzoeken.js). Jij is het spel van vóór 3 okt.
+    {
+      id: 'wieBouwt', naam: 'Wie bouwt', standaard: 'mensen',
+      uitleg: 'Wie de werkplaatsen, de put, de kapel en de markt neerzet.',
+      keuzes: [
+        { id: 'mensen', naam: 'De mensen vragen het', zet: { 'VERZOEKEN_INSTELLINGEN.mensen': true },
+          uitleg: 'Wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost. Jij zegt ja of nee, en wijst erven aan; ben je weg, dan beslist je raadsman.' },
+        { id: 'jij', naam: 'Jij bouwt', zet: { 'VERZOEKEN_INSTELLINGEN.mensen': false },
+          uitleg: 'Alles staat in het bouwmenu, en jij zet het neer waar je wilt.' },
+      ],
+    },
     // Een gezin wacht op de winter (werklijst vraag 59, B; Marcel, 1 okt, vraag 78: "D dat is prima"; js/gebouwen.js,
     // T.waaromGeenGezin). Altijd is het spel van vóór 1 okt.
     {
@@ -499,6 +511,7 @@
     { naam: 'De voorvallen', blok: 'VOORVALLEN_INSTELLINGEN' },
     { naam: 'De feesten', blok: 'FEESTEN_INSTELLINGEN' },
     { naam: 'Het eind', blok: 'EINDE_INSTELLINGEN' },
+    { naam: 'De verzoeken', blok: 'VERZOEKEN_INSTELLINGEN' },
     { naam: 'De raadsman', blok: 'RAADSMAN_INSTELLINGEN' },
     { naam: 'Het rapport', blok: 'OCHTENDRAPPORT_INSTELLINGEN' },
     { naam: 'Het land', blok: 'LAND_INSTELLINGEN' },

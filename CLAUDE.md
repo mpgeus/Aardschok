@@ -385,6 +385,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.ui.toonGewonnen` in `js/hud.js`). Onder 10 mensen is het spel uit (`D.einde`, reden `'leeg'`). Het jaarboek
   (`D.jaarboek`, uit het dagboek en de oogst, `T.telOogstInJaarboek`) wordt op 1 lentemaand het jaarverslag (een brief,
   soort `'jaarverslag'`). Het doel linksboven na de laatste trede: `T.eindDoel`. De getallen in `T.EINDE_INSTELLINGEN`.
+- `js/verzoeken.js`: **de stad groeit door haar mensen** (vraag 103, 3 okt; Marcel: "De inwoners bouwen zelf een weverij
+  etc. Ze vragen alleen toestemming om te bouwen"): met de spelregel "Wie bouwt" op "De mensen"
+  (`T.VERZOEKEN_INSTELLINGEN.mensen`) staat alleen het erf in het bouwmenu, en vraagt een inwoner je wat het dorp mist
+  (`T.watTeBouwen` in `js/raad.js`): een voorval `bouwverzoek` (`T.beginBouwverzoek`, vanuit `T.tikVoorvallenDag`), met `L.bouw` = { soort, x,
+  y, waarom, nut } en de woorden `{wil}`, `{gebouw}`, `{plek}`, `{waarom}`, `{kosten}`. Waar het komt, zegt `T.plekVoor`;
+  ja (`doe.bouw`) zet het neer (`T.verzoekToegestaan`, met `g.meester`), nee (`doe.weiger`) onthoudt het (`D.verzoeken`).
+  Wat er mag (de trede), vraag je aan `T.magGebouwd`; wat jij in het bouwmenu hebt, aan `T.inBouwmenu` (`js/gebouwen.js`).
 - `js/raadsman.js`: **de raadsman** (vraag 66, 30 sep): een van de boeren (`T.isBoer` in `js/boeren.js`), met twee gelote
   vaardigheden (`T.vaardighedenVan`: uit het zaad en zijn naam, zodat het lot van de boeren niet verandert). Is de schout
   weg (niet in het dorp als wie hem zoekt, gaat zoeken, of als diens tijd om is), dan beslist hij het voorval; wie je in
@@ -701,6 +708,9 @@ beginnen, de hele dag (`('oogstfeest', 'avond')` alleen vanavond); zet er het uu
 `Spel.debug.einde()` zegt hoe ver het is met winnen (het doel, de dagen op rij, het jaarboek); `('winst')` zet de teller
 op één dag ervoor, `('gewonnen')` wint nu (het feest, en het eindscherm 's avonds of bij het feest), `('jaarverslag')`
 toont het jaar in het kort nu.
+`Spel.debug.verzoek()` zegt wat het dorp nu zou willen bouwen en waarom, wie er nu om vraagt en waar, en waar je nee op
+zei; `('nu')` laat het eerste nu vragen, `('jij')` of `('mensen')` zet de spelregel "Wie bouwt". De oude toetsen spelen
+met "Jij bouwt" (`T.zetOptie('wieBouwt', 'jij')`); die van de verzoeken staan in `test/verzoeken.test.cjs`.
 `Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
 en daarboven het dorp per stand en wat er gemist wordt; `('dorpelingen')` laat alleen die stand zien.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een

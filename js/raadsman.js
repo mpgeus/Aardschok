@@ -169,6 +169,15 @@
     return n;
   }
 
+  // Een bouwverzoek (js/verzoeken.js; werklijst vraag 103): wat het helpt (L.bouw.nut, als tevredenheid) tegen wat het
+  // kost (goud als goud, hout en steen als waren), naar zijn karakter. Een woekeraar of een weduwe zegt zo eerder nee.
+  function bouwWaarde(p, bouw) {
+    const t = IN().karakters[p.wezen.karakter] || IN().gewoon;
+    let n = (t.tevreden || 0) * (bouw.nut || 0);
+    for (const [wat, k] of Object.entries(T.kostenVanVerzoek(bouw))) n -= wat === 'goud' ? (t.goud || 0) * k : ((t.waren || 0) * k) / 10;
+    return n;
+  }
+
   // De antwoorden die hij kan geven: wat het gesprek sluit, en wat naar een knoop gaat, samen met het eerste antwoord
   // daar dat het sluit (de oude die eerst een kan bier wil). [{ zeg, doe }].
   function antwoordenVan(id) {
@@ -187,11 +196,12 @@
   // Welk antwoord hij kiest op het voorval van nu: het meest waard, uit wat er te betalen valt; bij gelijk het eerste.
   // { zeg, doe } (doe met zijn vaardigheden erin), of null.
   T.raadsmanKeuze = function (D, p, id) {
+    const L = (D.voorvallen && D.voorvallen.lopend) || {};
     let beste = null;
     for (const a of antwoordenVan(id)) {
       const doe = T.metVaardigheden(D, p, a.doe);
       if (!T.prijsVanKeuze(D, doe).kan) continue;
-      const w = waarde(p, doe);
+      const w = waarde(p, doe) + (doe.bouw && L.bouw ? bouwWaarde(p, L.bouw) : 0);
       if (!beste || w > beste.w) beste = { zeg: a.zeg, doe, w };
     }
     return beste && { zeg: beste.zeg, doe: beste.doe };

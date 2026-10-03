@@ -24,6 +24,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
+| De verzoeken | stap 1 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf (de spelregel "Wie bouwt") | vraag 103 |
 | Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -257,6 +258,31 @@ letter voor letter mee zoals ervoor).
   "Beter bouwen"). Het past bij 2d: een kapel in een gehucht, een kerk in een dorp, een kathedraal in een stad, en een
   hogere stand die een kerk wil in plaats van een kapel, zoals in Anno 1602. Eerst de kring van 40 (vraag 87, c: met 30
   haalt één kapel hooguit vier van de zes huizen die er een willen).
+
+## De stad groeit door haar mensen: de verzoeken (Marcel, 3 okt 2026; werklijst vraag 103)
+
+**Zo werkt het nu** (3 okt, vijfentwintigste sessie; stap 1 van vraag 103, `js/verzoeken.js`): met de spelregel "Wie
+bouwt" op **De mensen vragen het** (de standaard) staat in het bouwmenu alleen nog het erf. Wat het dorp mist, komt een
+inwoner je vragen: wat de raad je vroeger liet bouwen (`T.watTeBouwen`, `js/raad.js`): hout of eten voor de winter, een
+wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel vraagt.
+- **Wie:** een put of een kapel vraagt iemand uit een huis dat hem dan bereikt, namens de buurt ("Schout, de buurt wil een
+  kapel bouwen, bij jouw huis."); een werkplaats iemand zonder werk, of anders iemand die geen boer is. Wie ja hoort, is
+  er de meester (`g.meester`), en werkt er als eerste.
+- **Waar:** de plek die hij koos (`T.plekVoor`): een put of een kapel waar hij de meeste huizen bereikt die er nog geen
+  hebben; een werkplaats zo dicht mogelijk bij zijn huis; wat van iedereen is (de markt, het wachthuis) bij het huis van
+  de schout. Zolang hij het vraagt, ligt de plek in goud op de grond, met de kring erbij: zo kun je gaan kijken.
+- **Wanneer:** om de vier dagen kan er een komen, als er niets anders loopt (het gaat vóór een geloot voorval), en alleen
+  als het dorp het kan betalen. Hij komt je zoeken zoals bij een voorval ("Aafke wil een kapel bouwen, en zoekt je."),
+  en zegt waarom en wat het kost; onder elk antwoord staat de prijs. **Ja:** het gebouw komt er, het dorp betaalt.
+  **Nee:** dan vraagt niemand het de eerste dertig dagen weer, en de raad zegt "Je zei er nee tegen."
+- **Ben je weg,** dan beslist je raadsman: wat het helpt (hoeveel mensen het missen) tegen wat het kost, naar zijn
+  karakter. Een zanger zegt eerder ja, een woekeraar of een weduwe eerder nee.
+- **De raad** zegt wat zou helpen, zonder [B] ("Het hout haalt 10 van de 90 dagen van de winter: een houthakker zou
+  helpen."), en wie je er nu om vraagt. De getallen in de werkbank ("De verzoeken"); `Spel.debug.verzoek()`.
+- **Nog niet** (de volgende stappen van vraag 103): oproepen met een premie (stap 2), de bestuurder in de speeltest (stap
+  3), en verzoeken uit eigen wil (de wapensmid, een tweede herberg), met wat ze aan gevolgen hebben.
+
+"Jij bouwt" is het spel van vóór 3 okt. Het besluit en waarom staan bovenaan bij "Een nieuwe richting".
 
 ## Rovers en de militie (Marcel, 28 en 29 sep 2026; werklijst vraag 51 en 55)
 

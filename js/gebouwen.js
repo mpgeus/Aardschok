@@ -702,18 +702,25 @@
     return null;
   };
 
-  // Staat deze soort nu in het bouwmenu (js/hud.js)? Die van de trede van nu en de treden ervoor (in een
-  // dorp ook de put en de kapel van het gehucht; js/treden.js), behalve wat een eigen manier van
-  // neerzetten heeft (menu: false). Bouwt het dorp zelf (js/erven.js, de spelregel "Huizen"), dan staat
-  // het erf erin en de woningen niet; anders andersom.
-  T.inBouwmenu = function (D, soort) {
+  // Mag deze soort hier al gebouwd worden, door wie dan ook? Die van de trede van nu en de treden ervoor (in een dorp
+  // ook de put en de kapel van het gehucht; js/treden.js), behalve wat een eigen manier van neerzetten heeft (menu:
+  // false). Voor de raad en de verzoeken (js/wensen.js, js/verzoeken.js): wat mag, kan iemand je vragen.
+  T.magGebouwd = function (D, soort) {
     const g = T.GEBOUWEN[soort];
     const vrij = T.GEBOUW_TREDEN.indexOf(g && g.trede) <= T.GEBOUW_TREDEN.indexOf(D.trede);
-    if (!g || !vrij || g.menu === false) return false;
+    return !!g && vrij && g.menu !== false;
+  };
+
+  // Staat deze soort nu in het bouwmenu (js/hud.js)? Wat mag (T.magGebouwd), en wat jij neerzet. Bouwt het dorp zelf
+  // (js/erven.js, de spelregel "Huizen"), dan staat het erf erin en de woningen niet; anders andersom. Vragen de mensen
+  // het je (js/verzoeken.js, de spelregel "Wie bouwt"; werklijst vraag 103), dan staat de rest er niet in.
+  T.inBouwmenu = function (D, soort) {
+    if (!T.magGebouwd(D, soort)) return false;
+    const g = T.GEBOUWEN[soort];
     const zelf = T.ERVEN_INSTELLINGEN.dorpBouwtZelf;
     if (g.erf) return zelf;
     if (g.woning) return !zelf;
-    return true;
+    return !T.VERZOEKEN_INSTELLINGEN.mensen;
   };
   T.gebouwPast = (D, soort, x, y) => !T.waaromPastHetNiet(D, soort, x, y);
 
