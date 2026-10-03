@@ -149,6 +149,48 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 3 okt: de ondernemers (werklijst, vraag 104)
+
+Gespeeld in de vijfentwintigste sessie, op `ccr-0d0c2710-bcd5tx` op `cb62acc` (de wapenmaker en de tweede herberg; de
+speeltest zelf op `1b62f0e`). Alle achttien spellen zonder fouten in de console. Te vergelijken met de speeltest van de
+verzoeken hieronder (`9dfa906`); de spelers zeggen nog steeds ja op elk verzoek dat het dorp kan betalen, ook op de
+ondernemers.
+
+| Spel | Mensen (eind) | Erven | Herbergen | De ondernemers | Dagen alle huizen alles, jaar 2 (win-dagen) | Dagen zonder bier, jaar 2 |
+|---|---|---|---|---|---|---|
+| bouwer, zaad 1 | 104 (was 82) | 9 (6) | 3 | herberg ja; wapens ja, de inner zag hem niet: 30 wapens | 172 (0) (was 141) | 110 (90) |
+| bouwer, zaad 2 | 97 (98) | 8 (9) | 3 | herberg ja; wapens ja, de inner zag hem, de heer verzegelde hem | 115 (28) (146) | 169 (140) |
+| bouwer, zaad 3 | 85 (85) | 7 (7) | 3 | herberg ja; wapens ja, de inner zag hem, de heer verzegelde hem | 111 (66) (97) | 150 (139) |
+| sluw, zaad 1 | 78 (82) | 6 (6) | 4 | wapens ja, niet gezien: 30 wapens | 81 (0) (157) | 2 (2) |
+| sluw, zaad 2 | 75 (77) | 6 (6) | 3 | herberg ja | gevallen op 18 herfstmaand van het tweede jaar | 5 (39) |
+| sluw, zaad 3 | 77 (76) | 4 (4) | 4 | herberg ja; wapens ja, niet gezien: 30 wapens | 123 (119) (269) | 3 (5) |
+
+**Wat opviel:**
+
+1. **De ondernemers vragen het, en de gevolgen komen.** In vijf van de zes spellen wilde iemand een tweede herberg, en
+   in vijf wapens maken. Twee keer zag de inner de wapenmaker in oogstmaand ("Hij schrijft lang."), en op Sint-Maarten
+   liet de heer hem verzegelen, met 20 goud boete; drie keer zag hij hem niet, en lagen er aan het eind 30 wapens. De
+   herbergierster was elke keer boos. Nee zei geen speler, dus stiekem smeden en wegtrekken kwamen niet voor; dat
+   toetsen de toetsen.
+2. **Drie of vier herbergen per dorp, maar niet door de ondernemers.** Mist het dorp bier, dan zegt de keten van de
+   wensen "nog een herberg zou helpen", en iemand vraagt er een (zo al sinds de verzoeken, vraag 103; de nieuwe kolom
+   laat het pas zien). Een herberg brouwt 8 bier van 0,2 graan, een brouwerij 2 van 2: de herberg is de goedkoopste
+   brouwer, dus vraagt de keten herbergen. Sinds vandaag trekt elke herberg ook zijn eigen gasten, en de eerlijke bouwer
+   mist het bier vaker (110 à 169 dagen in het tweede jaar, was 90 à 140). En als de herbergierster 60 dagen niet
+   brouwt, kan het bier opraken, en dan vraagt iemand de volgende herberg (bij de sluwe bouwer met zaad 2 kwam er zo een
+   tijdens haar staking). Na te lopen: of de keten een brouwerij moet vragen in plaats van nog een herberg, en of elke
+   nieuwe herberg de herbergierster boos maakt.
+3. **De maat van het dorp (vraag 102) heeft een antwoord.** Er kwam nooit een gezin te weinig om plaats: de groei stopte
+   op te weinig graan (22 à 27 groeidagen van de 75) en op een winter die het dorp niet zou halen (18 à 34). De erven
+   volgen de gezinnen, dus minder erven betekent minder gezinnen, en die wachten op het eten. De bouwer met zaad 1 haalde
+   104 mensen.
+4. **De schout viel** (sluw, zaad 2, herfstmaand van het tweede jaar): drie wilde rovers zagen hem voordat de wachters
+   en de veteranen bij hem waren, en wie bij het begin van het gevecht verder dan 12 tegels staat, doet niet mee. Alleen
+   tegen drie (12 leven elk, 2 à 4 schade per slag) haalt hij het niet. Dat staat los van de wapenmaker (dat spel had er
+   geen); het kan in elk spel. Een idee: wie onderweg is, doet mee als hij aankomt.
+5. **De spelers van één jaar** spelen zoals bij de verzoeken (braaf 26 → 50 mensen en de heer 61%, lui 30% met zaad 3
+   weer naar 23 door honger). Geen van hen kreeg een ondernemer: hun dorpen zijn klein, of werden het pas laat.
+
 ## De speeltest van 3 okt: de verzoeken (werklijst, vraag 103)
 
 Gespeeld in de vijfentwintigste sessie, op `ccr-0d0c2710-bcd5tx` op `9dfa906`: de spelregel "Wie bouwt" op "De mensen

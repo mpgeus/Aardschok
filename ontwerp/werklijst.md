@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; sinds vandaag groeit het dorp door zijn mensen (vraag 103: wat het dorp mist, komt een inwoner je vragen, en jij stuurt met oproepen), is er een eind met het jaarverslag (2e), en zie je wat een huis wil (2c); de speeltest zegt dat iedereen nu veel vaker gelukkig is, en dat de maat van het dorp (100 mensen) tussen het dorp en de winst staat
+## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; het dorp groeit door zijn mensen (vraag 103), en sinds vandaag ook door ondernemers met een eigen wil (vraag 104: de wapenmaker, verboden, en een tweede herberg); Marcel vindt het verstoppen als haak te slap, en vraag 106 stelt voor dat de heer en het dorp je allebei kunnen wegsturen
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -23,20 +23,25 @@ de grond en wat het kost, en jij zegt ja of nee; in het bouwmenu (`B`) wijs je e
 ("Het dorp zoekt een steengroeve", met een premie). Elk huis heeft een stand met zijn wensen (zoals in Anno 1602): wie een
 huis aanwijst, ziet een briefje met wat het wil, en een huis dat iets mist, heeft een teken bij zijn deur (2c, vraag 100).
 Linksboven staat de volgende trede, en daarna het eind: een jaar lang iedereen gelukkig, vanaf 100 mensen, en dan viert
-het dorp het grote feest (2e, vraag 101). Op 1 lentemaand brengt de raadsman het jaarverslag. `npm test`: 804/804.
+het dorp het grote feest (2e, vraag 101). Op 1 lentemaand brengt de raadsman het jaarverslag. **Sinds vraag 104** vraagt
+een ondernemer je ook wat hij zelf wil: wapens maken (na de rovers; verboden: ziet de inner het, dan verzegelt de heer de
+werkplaats) of een tweede herberg (de herbergierster wordt boos); wie twee keer nee hoort, trekt weg. `npm test`: 820/820.
 
-**Waar het werk staat:** in `main` staat alles tot en met Marcels antwoord op vraag 103 (`6bd27f6`, Marcel: "push main").
-Op de branch van deze sessie, `ccr-0d0c2710-bcd5tx`, staan daarbovenop de verzoeken (vraag 103, stap 1 tot en met 3,
-met de verbeteringen uit de speeltest), het bouwmenu zonder het doel erover, vraag 104 en de speeltest van de verzoeken;
-dat gaat naar `main` als Marcel het vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** in `main` staat alles tot en met de speeltest van de verzoeken (`cee364c`, Marcel: "104 a b c d
+ja, push main"). Op de branch van deze sessie, `ccr-0d0c2710-bcd5tx`, staan daarbovenop vraag 104 (de ondernemers, de
+wapenmaker, de tweede herberg) met zijn speeltest, Norland in `commercieel.md`, en vraag 105 en 106; dat gaat naar `main`
+als Marcel het vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** Marcels antwoord op **vraag 104** (verzoeken uit eigen wil: eerst de wapenmaker en
-een tweede herberg, met wat nee en ja aan gevolgen hebben), en of het werk van deze sessie in `main` gaat. De speeltest
-van de verzoeken (`speelbaar.md`, op `9dfa906`): het dorp bouwt zelf, in dezelfde volgorde als de bouwer deed; in het
-tweede jaar hadden alle huizen samen alles op 97 à 269 dagen (was 0 à 109), met reeksen tot 121 dagen; maar geen dorp
-haalde 100 mensen (76 à 98), en de eerlijke bouwer mist vaker bier. Daarmee kan **vraag 102** (naar een jaar dat te
-winnen is) verder, met de maat van het dorp als eerste vraag: waarom er minder erven kwamen. De ui wordt de schrijftafel
-(vraag 98, C): het briefje bij een huis is het eerste papier, en de rest volgt later (januari, met de Steam-pagina).
+**Waar de volgende sessie begint:** Marcels antwoord op **vraag 106** (twee bazen: de heer en het dorp kunnen je
+allebei wegsturen, en verstoppen wordt één kaart met echte gevolgen; Marcel: "dat hele verstoppen verhaal is een beetje
+lame ... als de grote hook, te slap"), en op de rest van **vraag 105** (b, d, e en f: wat ons uniek maakt). Vraag 106 komt
+vóór **vraag 102**, want het verandert wat winnen is. Voor 102 heeft de speeltest van vraag 104 (`speelbaar.md`, op
+`cb62acc`) het antwoord op de eerste vraag: het dorp groeit niet om plaats maar om eten; de gezinnen bleven weg om te
+weinig graan (22 à 27 groeidagen van de 75) en om een winter die het niet zou halen (18 à 34), en de bouwer met zaad 1
+haalde 104 mensen. Na te lopen uit die speeltest: drie of vier herbergen per dorp, omdat de keten van het bier om een
+herberg vraagt (een herberg is de goedkoopste brouwer), en een schout die alleen tegen drie wilde rovers viel, omdat de
+militie onderweg was. De ui wordt de schrijftafel (vraag 98, C): het briefje bij een huis is het eerste papier, en de rest
+volgt later (januari, met de Steam-pagina).
 
 **Wat wacht:** het buurdorp (vraag 72) tot de kern staat, en het land eromheen naar de provincie (vraag 70, B); de
 zitting (3b) en de herberg als plek van gesprekken (3c); staande orders voor de raadsman (vraag 66, D) met het land; de
@@ -124,7 +129,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 103 (de stad groeit door haar mensen; zie hierboven) en daarna vraag 102 (naar een jaar dat te winnen is), en of het werk van de vijfentwintigste sessie in `main` gaat; welke zin de haak wordt, nu hij is nagezocht tegen Steam (vraag 83, c; de rest van 83 en heel 84 is beantwoord, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* vraag 106 (twee bazen) en de rest van vraag 105 (wat ons uniek maakt), dan vraag 102 (naar een jaar dat te winnen is), en of het werk van de vijfentwintigste sessie in `main` gaat; welke zin de haak wordt, nu hij is nagezocht tegen Steam (vraag 83, c; de rest van 83 en heel 84 is beantwoord, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
