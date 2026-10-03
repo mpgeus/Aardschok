@@ -178,6 +178,10 @@ nu is en wat de sfeer maakt (voorstel van Claude):
 met eerst een pagina met ontwerpen, vóór de wensen zichtbaar worden (2c); voor de sfeer eerst geluid (omgeving en
 muziek), dan de seizoenen in beeld en het weer; en de kazerne komt met de oorlog (`spel.md`, bij de rovers).
 
+**De pagina met ontwerpen** (3 okt, tijdens Marcels vlucht): "De ui als papieren"
+(https://claude.ai/artifact/JRKq7fwaANmLd3fGc4EbD8), vier richtingen (perkament, hout en ijzer, de schrijftafel, licht en
+stil) en vijf letters. De keuze is vraag 98 in de werklijst.
+
 **Later: dorpsfeesten** (Marcel, 1 okt: "Later wil ik ook dorpsfeesten die passen bij het seizoen, hier wil ik het hele
 dorp wat mee doet etc. Ook een bruiloft wordt groots gevierd. Er zijn veel soorten feesten die we kunnen gebruiken
 hiervoor. Voor nu een notitie later pas bouwen."). Een feest is ook sfeer om te laten zien: het hele dorp op één plek,

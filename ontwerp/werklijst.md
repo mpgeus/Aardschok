@@ -3261,7 +3261,29 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     "Ook naar main" (na elk af stuk, met de controle uit `CLAUDE.md`). Dus: zeg je ja op het oogstfeest, dan werkt de dag
     erna niemand en is het hele dorp op het plein, tot in de avond; dat kost een dag werk bovenop het graan en het bier. De
     meiboom werkt net zo, op 1 bloeimaand, het eerste feest dat een speler ziet (het spel begint op 1 lentemaand). De
-    speeltest van vraag 96 koos hij niet.
+    speeltest van vraag 96 koos hij niet. **Af** (zie onder Af).
+98. **De ui als papieren: welke richting?** (Claude, 3 okt, vijfentwintigste sessie, tijdens Marcels vlucht; vraag 84, a;
+    open). De pagina met ontwerpen staat er: "De ui als papieren" (https://claude.ai/artifact/JRKq7fwaANmLd3fGc4EbD8), vier
+    borden met hetzelfde spelscherm (13 lentemaand, Wolfsdonk), elk met de balk, het venster van een huis (wat het wil,
+    voor 2c) en een papier (het rapport van de raadsman, of de brief van de heer met zijn lakzegel). Het papier, het hout,
+    het leer en de lakzegel zijn uit de kleurrampen van het spel gerenderd (`gereedschap/pixelart/kern.cjs`), als schets.
+    - **A, perkament:** alles is papier op het beeld: de balk een strook, de knoppen een lijstje, het huis een briefje aan
+      een spijker, het rapport een vel. Gotische pixelletter voor de koppen, oud drukwerk voor de tekst.
+    - **B, hout en ijzer:** een houten paneel onderin met ijzeren hoeken, zoals Anno 1602; de brief op perkament met de
+      lakzegel; het huis op een plankje.
+    - **C, de schrijftafel:** geen balk bovenin: onderin de tafel van de schout, met het rekenboek open (de voorraad, "geteld
+      vanochtend, door Aaltje", zoals vraag 77, b wil: wat je weet, is wat er het laatst geteld werd), de brief, het wetboek
+      en de velden als dingen op tafel, en bij het huis een briefje aan een spijker (2c: het teken bij de deur). Het dorp
+      blijft het meest vrij.
+    - **D, licht en stil:** de ui van nu, maar met vierkante pixelranden en een pixelletter; alleen brieven en het rapport
+      zijn papier. Het minste werk.
+    - **De letter:** vijf naast elkaar (twee gotische pixelletters, oud drukwerk, een pixelletter, en Georgia van nu).
+    Voorstel van Claude: **C**, met het venster van A en de letter van A (Jacquarda Bastarda 9 voor koppen, IM Fell English
+    voor tekst). C maakt de haak zichtbaar ("je bent de schout in het dorp": wat je weet, ligt op je tafel), laat het dorp
+    het meest vrij voor de beelden en de trailer, en het rekenboek is meteen de plek voor de laatst bekende telling. Nadeel:
+    het meeste werk, en de tafel neemt onderin 100 pixels.
+    Vragen: **a**, welke richting, of welke mengeling (de balk van, het venster van, het papier van)? **b**, welke letter?
+    **c**, eerst alleen de nieuwe vensters van 2c in die stijl, en de rest van de ui later (januari, met de Steam-pagina)?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
