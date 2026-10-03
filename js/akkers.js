@@ -546,6 +546,8 @@
     // Gemaaid wordt in de werkuren, in de oogst tot het donker (js/dag.js); zonder de dag (een
     // toets die js/dag.js niet laadt) altijd.
     const werktijd = T.isWerktijd(D.kalender.dag, true);
+    // Op een hele feestdag (js/feesten.js) maait niemand: het dorp staat op het plein.
+    const vrij = T.vrijeDag(D, D.kalender.dag);
     const nu = S.wereldTijd || 0;
     for (const e of w.wezens) {
       if (e.dood || !e.werkAkkers || !e.werkAkkers.length) continue;
@@ -568,7 +570,7 @@
       }
       if (e.binnen) continue; // 's nachts in zijn huis
       // Wie de schout zoekt met een voorval (js/voorvallen.js), maait niet: hij stopt zoals in de schaft.
-      const werkt = werktijd && !e.zoektSchout;
+      const werkt = werktijd && !e.zoektSchout && !vrij;
       if (e.maait) {
         // Schaft of avond: hij stopt, en wat hij van deze tegel al maaide, blijft liggen voor morgen.
         if (!werkt) {

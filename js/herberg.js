@@ -103,6 +103,8 @@
     const g = T.herbergVan(D);
     if (!B || !B.wereld || !g) return [];
     const d = Math.floor(dag);
+    // Op de avond van een feest (js/feesten.js) is iedereen op het plein, en het bier staat in het antwoord.
+    if (T.feestAvond(D, d)) return [];
     const bier = (D.voorraad && D.voorraad.bier) || 0;
     const plaats = Math.floor(bier / IN().bierPerBezoek + 1e-9);
     const sleutel = `${d}:${plaats}:${B.mensen.length}`;

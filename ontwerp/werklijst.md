@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (3 okt 2026, vierentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 97); de sluwe bouwer (vraag 94), brood 0,01 met erven binnen de kringen (vraag 95), en één herberg en één markt voor het hele dorp met de keten in één keer (vraag 96) zijn af; Marcel: "we hebben een speelbaar dorp nodig", met één of twee feesten voor de demo (vraag 97, het plan wacht op Marcel)
+## De stand (3 okt 2026, vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 97); één herberg en één markt voor het hele dorp (vraag 96) en de feesten (vraag 97: het oogstfeest als vrije dag, en de meiboom) zijn af; tijdens Marcels vlucht ook de schetsen voor de ui (vraag 84, a) en een plan voor het laken
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
 sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
@@ -38,9 +38,11 @@ ambachtsman 0,005 laken per dag; sinds vraag 92 zijn brood, vis en vlees eten, e
 **Waar het werk staat:** alles staat in `main`, ook het werk van de vierentwintigste sessie tot en met vraag 96, a en b
 (Marcel, 3 okt: "Push main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **Marcels antwoord op vraag 97** (de feesten: het oogstfeest op het plein, en de
-kermis of de meiboom), en wat de speeltest van vraag 96 zegt (`speelbaar.md`; liep nog toen dit in `main` ging). **Vraag
-96, a en b, is af** (zie onder Af): één herberg en één markt zijn genoeg voor het hele dorp (de spelregel "De herberg en
+**Waar de volgende sessie begint:** wat Marcel vindt van de feesten (zie onder Af; de schermafdruk van de meiboom 's
+avonds), de schetsen voor de ui en het plan voor het laken (de vijfentwintigste sessie, tijdens zijn vlucht). De speeltest
+van vraag 96 is nooit opgeschreven (hij liep nog toen de vorige sessie stopte), en Marcel koos hem niet voor de vlucht.
+**Vraag 97 is af** (zie onder Af): het oogstfeest is een hele dag vrij (groot) of een avond (klein), en de meiboom komt
+op 30 grasmaand. **Vraag 96, a en b, is af** (zie onder Af): één herberg en één markt zijn genoeg voor het hele dorp (de spelregel "De herberg en
 de markt"), en de bouwers bouwen een keten in één keer. **Vraag 95 is af** (zie onder Af): brood 0,01, de bouwers leggen erven
 binnen de kringen, "Daar kun je niet bij" is hersteld, en de speeltest telt de druk om eten; die bleef gelijk. **Vraag 94
 is af** (zie onder Af): de sluwe bouwer bedriegt de heer elk jaar en houdt
@@ -3560,6 +3562,17 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 3 okt 2026 — **De feesten: het oogstfeest als vrije dag, en de meiboom** (vijfentwintigste sessie, tijdens Marcels
+  vlucht; vraag 97; Marcel: het oogstfeest "Ja, een hele dag vrij", en "De meiboom"). Een antwoord op een voorval kan nu
+  een feest zijn (`feest: 'dag'` of `'avond'`, `js/feesten.js`): het hele dorp staat dan op het plein rond het midden, de
+  herbergierster tapt, 's avonds brandt er licht, en niemand gaat naar de herberg. Een hele dag kost een dag werk: de
+  werkplaatsen staan stil ("het dorp viert feest") en de boeren maaien niet. Het oogstfeest: groot is morgen de hele dag,
+  klein is vanavond. De meiboom: een voorval op een vaste dag (30 grasmaand, `op`), zonder bier (in de lente is er bijna
+  geen), en een meiboom in pixel art die dertig dagen op het plein staat (`gereedschap/pixelart/meiboom.cjs`). De
+  spelregel "Feesten" ("Alleen de stemming" is het spel van ervoor), `Spel.debug.feest()`, en een schermafdruk van het
+  feest 's avonds (`gereedschap/pixelart/uit/schermen/feest-avond.png`, niet in git). Wat er nog niet is (de schout op het
+  feest, een ton, het oogstfeest pas na de laatste schoof), staat in `opmerkingen.md`. 6 nieuwe toetsen, `npm test`
+  781/781.
 - 3 okt 2026 — **Eén herberg en één markt voor het hele dorp, en de keten in één keer** (vierentwintigste sessie; vraag 96,
   a en b; Marcel: "A. Ja, 1 markt 1 herberg voor nu. B prima"). **a:** de herberg en de markt hebben geen kring meer
   (`T.WENSEN_INSTELLINGEN.kring`: null); staat er een in het dorp, dan heeft elk huis dat hem wil hem. De kring van 30 is

@@ -155,6 +155,7 @@
   //   - overdag, bij het werk en de schaft, bij zijn werk. Wie geen werk heeft: een kind op het plein,
   //     een oude en een kleuter bij huis (de plekken zet js/bewoners.js, per bewoner);
   //   - 's avonds op zijn erf, of in de herberg als hij vanavond gaat (js/herberg.js, T.herbergAnker);
+  //   - op een feest op het plein: een hele dag, of de avond (js/feesten.js, T.feestAnker);
   //   - wie net in het gehucht komt, eerst naar zijn huis, en wie wegtrekt, overdag naar de uitgang
   //     van de kaart (js/bewoners.js, T.werkBewonersBij).
   // Een boer volgt hetzelfde, maar overdag geeft dit voor hem null: dan geldt zijn eigen anker
@@ -181,6 +182,10 @@
     // Wie wegtrekt, loopt overdag de weg af; wie nieuw is, loopt eerst naar zijn huis (js/bewoners.js,
     // T.werkBewonersBij).
     if (e.vertrekt) return { x: e.vertrekt.x, y: e.vertrekt.y, straal: 1 };
+    // Op een feest staat het hele dorp op het plein (js/feesten.js): een hele dag vanaf het begin van het werk, of
+    // 's avonds; ook een boer, en de herbergierster tapt er.
+    const feest = T.feestAnker ? T.feestAnker(D, e) : null;
+    if (feest) return feest;
     const erf = { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
     // 's Avonds de herberg in, wie vanavond gaat (ook een boer, en de herbergierster zelf).
     const herberg = deel === 'avond' && T.herbergAnker ? T.herbergAnker(D, e) : null;

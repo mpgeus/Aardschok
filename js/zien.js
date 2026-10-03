@@ -44,8 +44,8 @@
   };
   const IN = () => T.ZIEN_INSTELLINGEN;
 
-  // Het licht in het dorp: de herberg, met zijn eigen lantaarn en zijn ramen (T.herbergLicht), en elke
-  // andere lantaarn op de kaart, die 's avonds brandt. Wie ze aansteekt, komt later (de koster; spel.md,
+  // Het licht in het dorp: de herberg, met zijn eigen lantaarn en zijn ramen (T.herbergLicht), elke
+  // andere lantaarn op de kaart, die 's avonds brandt, en op een feest het plein (T.feestLicht, js/feesten.js). Wie ze aansteekt, komt later (de koster; spel.md,
   // "lichtbronnen in het dorp"). Geeft een lijst { x, y, straal, sterkte } (tegels, 0 tot 1), bij de
   // herberg ook met ramenVan en schimmen.
   T.lichtBronnen = function (D) {
@@ -58,7 +58,8 @@
     const lantaarns = w.voorwerpen
       .filter((v) => v.soort === 'lantaarn' && !vanDeHerberg(v))
       .map((v) => ({ x: v.x, y: v.y, straal: IN().lantaarnStraal, sterkte: IN().lantaarnSterkte }));
-    return herberg.concat(lantaarns);
+    // En op een feest het licht op het plein (js/feesten.js).
+    return herberg.concat(lantaarns, T.feestLicht(D));
   };
 
   // Hoe ver je iemand ziet die op deze tegel staat: naar het licht van de dag, en verder als hij in het

@@ -2242,6 +2242,17 @@
      10,
      25
     ]
+   },
+   "meiboom": {
+    "bestand": "meiboom.png",
+    "cel": [
+     48,
+     196
+    ],
+    "anker": [
+     24,
+     184
+    ]
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});

@@ -72,8 +72,9 @@
 
   // Schrijf op wat er gebeurde, voor het rapport van morgen. `soort`: 'mensen' (wie er kwam, stierf of wegtrok:
   // verschil, reden, waarom en wie, T.wijzigBevolking), 'boeren' (wat ze uit zichzelf deden: tekst), 'besluit' (wat de
-  // raadsman besliste: door, titel, antwoord en prijs), 'voorbij' (wie je zocht en niet sprak: wie en titel) of 'huis'
-  // (een huis groeide door: wie er woont, van, naar en de stand, js/behoeften.js).
+  // raadsman besliste: door, titel, antwoord en prijs), 'voorbij' (wie je zocht en niet sprak: wie en titel), 'huis'
+  // (een huis groeide door: wie er woont, van, naar en de stand, js/behoeften.js) of 'feest' (het dorp vierde feest:
+  // tekst, js/feesten.js).
   T.schrijfOp = function (D, soort, wat) {
     const boek = D.dagboek || (D.dagboek = nieuwDagboek(D, dagNu(D)));
     boek.regels.push({ dag: dagNu(D), soort, ...wat });
@@ -122,7 +123,7 @@
       if (g.reden === 'gesneuveld') return `${T.hoofdletter(g.wie)}${komma} ${een ? 'sneuvelde' : 'sneuvelden'} voor de heer.`;
       return `${T.hoofdletter(g.wie)}${komma} ${stierf(een)} gestorven.`;
     }
-    if (g.soort === 'boeren') return g.tekst;
+    if (g.soort === 'boeren' || g.soort === 'feest') return g.tekst;
     // Wat hij besliste toen je weg was: "ik", tenzij het een raadsman van eerder was. Wat hij zei, sluit de zin zelf
     // af, zoals in zijn bericht (js/raadsman.js).
     if (g.soort === 'besluit') return `Over ${g.titel} besliste ${g.door === door ? 'ik' : g.door}: "${g.antwoord}"${g.prijs ? ` (${g.prijs})` : ''}`;

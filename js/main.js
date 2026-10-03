@@ -910,6 +910,30 @@
       }));
       return { deur: `${deur.x},${deur.y}`, bier: Math.floor(S.dorp.voorraad.bier || 0), vanavond, gisteravond: S.dorp.herberg && S.dorp.herberg.gisteravond, tekst: T.gebouwToestand(S.dorp, g) };
     },
+    // De feesten (js/feesten.js): welk feest er komt of nu is, waar het dorp staat, de meiboom, en wat er gevierd werd.
+    // Spel.debug.feest('oogstfeest') laat het vandaag beginnen, de hele dag; ('meiboom', 'avond') alleen vanavond. Zet
+    // er de tijd bij met Spel.debug.uur(10) (overdag) of (20) (de avond).
+    feest(id, hoe) {
+      const D = S.dorp;
+      if (id) {
+        if (!T.FEESTEN[id]) return `Er is geen feest "${id}". Er zijn: ${Object.keys(T.FEESTEN).join(', ')}.`;
+        if (!T.FEESTEN_INSTELLINGEN.vieren) return 'De spelregel Feesten staat op "Alleen de stemming".';
+        const f = T.zetFeest(D, id, hoe || 'dag', S.kalender.dag);
+        if (f.dag !== Math.floor(S.kalender.dag)) {
+          f.dag = Math.floor(S.kalender.dag);
+          T.feestBegint(D, f);
+        }
+      }
+      const F = D.feesten || T.nieuweFeesten();
+      const f = F.komt;
+      const naam = (x) => T.FEESTEN[x.id].naam;
+      return {
+        komt: f ? { feest: naam(f), op: T.datumVanDag(f.dag).tekst, heel: f.heel, midden: f.midden && `${f.midden.x},${f.midden.y}`, nu: !!T.feestOp(D, S.kalender.dag) } : null,
+        meiboom: F.boom ? { staat: `${F.boom.x},${F.boom.y}`, tot: T.datumVanDag(F.boom.tot).tekst } : null,
+        gevierd: F.gevierd.map((g) => `${naam(g)}, ${T.datumVanDag(g.dag).tekst}${g.heel ? ', de hele dag' : ', de avond'}`),
+        vrij: T.vrijeDag(D, S.kalender.dag),
+      };
+    },
     // De soldaten nu laten zoeken, zoals op Sint-Maarten: staat de heer op het plein, dan op twee of drie
     // plekken, met de schout mee of waar de heer wijst (js/doorzoeken.js); anders, of met ('dorp'), het
     // hele dorp in één keer (js/inner.js), en dan zegt het wat ze vonden.

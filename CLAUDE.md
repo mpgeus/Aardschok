@@ -369,6 +369,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `voorval` (een vervolg, later, over dezelfde mensen). Wie je niet sprak, gaat na twee dagen voorbij; ben je weg (een
   ander gebied), dan beslist je raadsman (vraag 68, B). De spelregel "Voorvallen", de getallen in
   `T.VOORVALLEN_INSTELLINGEN`.
+- `js/feesten.js`: **de feesten** (vraag 97, 3 okt; Marcel: het oogstfeest "Ja, een hele dag vrij", en "De meiboom"): een
+  antwoord met `feest: 'dag'` of `'avond'` (`T.zetFeest`, vanuit `T.voorvalGevolg`) laat het dorp het voorval vieren op
+  het plein: een hele dag, en dan werkt niemand (`T.vrijeDag`: de werkplaatsen in `T.tikGebouwenDag` en het maaien in
+  `T.werkOogstBij`), of een avond. Wie er is, staat rond het midden (`T.feestAnker`, voor `T.dagAnker`), er brandt licht
+  (`T.feestLicht`, in `T.lichtBronnen`), en niemand gaat naar de herberg (`T.feestAvond`). De meiboom komt op een vaste dag
+  (`op` in `T.VOORVALLEN`, 30 grasmaand) en staat een maand op het plein (een voorwerp, `gereedschap/pixelart/meiboom.cjs`).
+  De spelregel "Feesten"; de getallen in `T.FEESTEN_INSTELLINGEN`.
 - `js/raadsman.js`: **de raadsman** (vraag 66, 30 sep): een van de boeren (`T.isBoer` in `js/boeren.js`), met twee gelote
   vaardigheden (`T.vaardighedenVan`: uit het zaad en zijn naam, zodat het lot van de boeren niet verandert). Is de schout
   weg (niet in het dorp als wie hem zoekt, gaat zoeken, of als diens tijd om is), dan beslist hij het voorval; wie je in
@@ -679,6 +686,8 @@ staat; `(3)` laat nu drie wilde rovers komen, `('bende')` de bende.
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
+`Spel.debug.feest()` zegt welk feest er komt of nu is, waar het dorp staat en de meiboom; `('meiboom')` laat het vandaag
+beginnen, de hele dag (`('oogstfeest', 'avond')` alleen vanavond); zet er het uur bij met `Spel.debug.uur(11)` of `(20)`.
 `Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
 en daarboven het dorp per stand en wat er gemist wordt; `('dorpelingen')` laat alleen die stand zien.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een

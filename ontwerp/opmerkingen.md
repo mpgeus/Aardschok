@@ -9,6 +9,18 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De feesten, wat er nog niet is** (3 okt, vijfentwintigste sessie; vraag 97, gebouwd tijdens Marcels vlucht). Ideeën
+  van Claude, niet gekozen:
+  - De schout kan op het feest gaan staan, maar dat doet nog niets. Een idee: wie er de schout ziet, is er een tijd wat
+    blijer om ("de schout vierde mee"), zodat het poppetje er ook hier toe doet.
+  - De herbergierster tapt naast de meiboom, maar er staat geen ton of tafel. Een ton (hij staat al in
+    `gereedschap/pixelart/voorwerpen.cjs`) of een lange tafel zou het feest leesbaarder maken, ook voor de trailer.
+  - Het oogstfeest kan komen terwijl er nog gemaaid wordt (het vraagt alleen oogstmaand of herfstmaand en 80 graan),
+    terwijl de boer zegt "De oogst is binnen". Met een hele dag vrij kost het dan een dag maaien. Na te lopen: pas na de
+    laatste schoof.
+  - De raadsman weegt de dag werk niet mee als hij een feest kiest: hij kijkt naar graan, bier en de stemming.
+  - De bruiloft kan met één regel ook een feest worden (`feest: 'avond'` in het antwoord, en de bruiloft in
+    `T.FEESTEN`); Marcel wil die "groots" (1 okt). En muziek op het feest komt met het geluid (januari, vraag 84, b).
 - **Na de eerste zomer heeft niemand meer honger** (3 okt, vierentwintigste sessie; de speeltest van vraag 95). Bij de
   bouwers was er alleen honger in de eerste zomer, vóór de eerste oogst (76 à 84 dagen). In het tweede jaar geen dag,
   met brood 0,01 of 0,03: de bouwers zetten een jager neer zolang het dorp zegt dat het eten de winter niet haalt (zes per

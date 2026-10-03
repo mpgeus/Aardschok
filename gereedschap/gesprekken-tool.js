@@ -583,6 +583,7 @@
     { naam: 'gezin', soort: 'getal', uitleg: 'er komen zoveel gezinnen bij, als er plaats is' },
     { naam: 'schaap', soort: 'getal', uitleg: 'schapen erbij (of eraf, met een min: de wolven)' },
     { naam: 'voorval', soort: 'namen', uitleg: "later komt dit voorval, over dezelfde mensen; een lijstje: een ervan ('niets' is niets)" },
+    { naam: 'feest', soort: 'namen', uitleg: "het dorp viert het op het plein: 'dag' (morgen werkt niemand) of 'avond' (js/feesten.js)" },
   ];
   // De beginwaarde van een nieuw gevolg: een getal begint op nul, een aan/uit (handel) staat aan.
   const beginWaarde = (g) => (g && g.soort === 'getal' ? 0 : g && g.soort === 'aan' ? true : '');

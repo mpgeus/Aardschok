@@ -404,6 +404,17 @@
           uitleg: 'Niemand komt je zoeken. Het dorp gaat zijn gang.' },
       ],
     },
+    // De feesten (Marcel, 3 okt, werklijst vraag 97: het oogstfeest "Ja, een hele dag vrij", en "De meiboom"; js/feesten.js).
+    {
+      id: 'feesten', naam: 'Feesten', standaard: 'vieren',
+      uitleg: 'Wat er gebeurt als je ja zegt op een feest, zoals het oogstfeest of de meiboom.',
+      keuzes: [
+        { id: 'vieren', naam: 'Het dorp viert het', zet: { 'FEESTEN_INSTELLINGEN.vieren': true },
+          uitleg: 'Het hele dorp staat op het plein, met licht en bier. Bij een groot feest werkt de dag erna niemand: dat kost een dag werk.' },
+        { id: 'stemming', naam: 'Alleen de stemming', zet: { 'FEESTEN_INSTELLINGEN.vieren': false },
+          uitleg: 'Een feest kost wat het antwoord zegt en maakt het dorp blij, maar je ziet er niets van. Zoals vóór 3 okt.' },
+      ],
+    },
     // De raadsman (Marcel, 30 sep, werklijst vraag 66: "c Nee, wordt automatisch als de schout er niet is"; en vraag 68:
     // "Ja B inderdaad", alleen als je echt weg bent; js/raadsman.js).
     {
@@ -486,6 +497,7 @@
     { naam: 'De heer', blok: 'HEER_INSTELLINGEN' },
     { naam: 'De heervaart', blok: 'HEERVAART_INSTELLINGEN' },
     { naam: 'De voorvallen', blok: 'VOORVALLEN_INSTELLINGEN' },
+    { naam: 'De feesten', blok: 'FEESTEN_INSTELLINGEN' },
     { naam: 'De raadsman', blok: 'RAADSMAN_INSTELLINGEN' },
     { naam: 'Het rapport', blok: 'OCHTENDRAPPORT_INSTELLINGEN' },
     { naam: 'Het land', blok: 'LAND_INSTELLINGEN' },

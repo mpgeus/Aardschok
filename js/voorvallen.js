@@ -19,6 +19,9 @@
 //   schaap: -2        van het vee (T.VEE, js/vee.js) gaan er twee, het jongste eerst
 //   voorval: 'x'      later komt voorval x, over dezelfde mensen. Een lijstje: een ervan, geloot; 'niets' in dat
 //                     lijstje is: niets. Dat zegt het venster niet: wie je liet gaan, kan terugkomen.
+//   feest: 'dag'      het dorp viert dit voorval op het plein (js/feesten.js): 'dag' is morgen de hele dag, en niemand
+//                     werkt; 'avond' is 's avonds, vanavond nog als het kan
+// Een voorval komt geloot, of op een vaste dag (op: { maand, dag }, de meiboom).
 //
 // Wanneer er een komt en welke, zegt dit bestand (T.VOORVALLEN hieronder). Wie je zoekt, loopt naar de schout en
 // spreekt hem aan zodra hij stilstaat; de tijd staat stil tot je antwoordt (js/dialoog.js). Sluit je het gesprek
@@ -43,6 +46,9 @@
     eersteNa: 4,
     // Hetzelfde voorval komt niet binnen zoveel dagen terug.
     pauze: 90,
+    // Een voorval met een vaste dag (op, de meiboom) dat dan niet kan beginnen omdat er een ander loopt, komt nog tot
+    // zoveel dagen later.
+    vastMarge: 3,
     // Een vervolg (voorval: 'x' in een antwoord) komt na zoveel dagen, tussen van en tot; een voorval kan zijn eigen
     // tijd hebben (na, in T.VOORVALLEN).
     vervolgVan: 8,
@@ -152,6 +158,12 @@
     },
     klok: { soort: 'verzoek', titel: 'de klok voor de kapel', als: { gebouw: 'kapel' }, pauze: 360, wie: { karakter: 'vrome' } },
     lied: { soort: 'feest', titel: 'het lied over de heer', als: { gebouw: 'herberg' }, wie: { karakter: 'zanger' } },
+    // De meiboom (werklijst vraag 97; Marcel, 3 okt: "De meiboom"): niet geloot, maar elk jaar op 30 grasmaand, zodat hij
+    // op 1 bloeimaand op het plein staat (js/feesten.js). De jongeren komen het vragen.
+    meiboom: {
+      soort: 'feest', titel: 'de meiboom', woorden: { blij: 'de meiboom', last: 'de meiboom die er niet kwam' },
+      op: { maand: 'grasmaand', dag: 30 }, pauze: 300, wie: [{ leeftijd: 'jong' }, {}],
+    },
     // De grillen van de heer (een idee van 23 sep): wat zijn bode kwam zeggen.
     standbeeld: { soort: 'heer', titel: 'het standbeeld', pauze: 360, wie: [{ werk: 'herberg' }, {}] },
     jacht: { soort: 'heer', titel: 'de jacht van de heer', als: { maanden: ['herfstmaand', 'wijnmaand'] }, pauze: 360 },
@@ -319,6 +331,7 @@
   // oorzaak, dan vaker als die speelt en zelden als hij niet speelt (metOorzaak en zonderOorzaak).
   T.gewichtVanVoorval = function (D, id, dag) {
     const v = T.VOORVALLEN[id];
+    if (v.op) return 0; // een vaste dag wordt niet geloot (vastVoorval hieronder)
     const gewicht = inWinter(dag) && v.winter != null ? v.winter : v.gewicht != null ? v.gewicht : 1;
     if (!v.oorzaak) return gewicht;
     return gewicht * (T.oorzaakVan(D, id, dag) ? IN().metOorzaak : IN().zonderOorzaak);
@@ -339,6 +352,21 @@
     for (const k of kan) if ((r -= k.gewicht) < 0) return k;
     return null;
   };
+
+  // Een voorval met een vaste dag (op, in T.VOORVALLEN: de meiboom) dat vandaag kan: op die dag, of als er toen een ander
+  // liep, tot vastMarge dagen later. Geeft { id, wie, ander } of null.
+  function vastVoorval(D, dag) {
+    const jaarDag = T.dagVanJaar(dag);
+    for (const id of Object.keys(T.VOORVALLEN)) {
+      const op = T.VOORVALLEN[id].op;
+      if (!op) continue;
+      const opDag = T.MAANDEN.findIndex((m) => m.naam === op.maand) * T.DAGEN_PER_MAAND + op.dag - 1;
+      if ((jaarDag - opDag + T.DAGEN_PER_JAAR) % T.DAGEN_PER_JAAR > IN().vastMarge) continue;
+      const mensen = T.voorvalKan(D, id, dag);
+      if (mensen) return { id, ...mensen };
+    }
+    return null;
+  }
 
   // Om de hoeveel dagen het volgende komt: in de winter vaker, en nooit precies even vaak.
   function tussen(D, dag) {
@@ -416,7 +444,8 @@
   }
 
   // Elke dag (T.tikGebouwenDag, js/gebouwen.js): loopt er een voorval, dan komt wie het zei morgen terug, tot zijn
-  // tijd om is; anders eerst een vervolg dat nu komt, en dan, als het de dag is, een nieuw voorval.
+  // tijd om is; anders eerst een voorval met een vaste dag, dan een vervolg dat nu komt, en dan, als het de dag is, een
+  // nieuw voorval.
   T.tikVoorvallenDag = function (D, dag) {
     const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
     V.stemming = V.stemming.filter((s) => dag - s.dag < IN().stemmingDagen);
@@ -429,6 +458,11 @@
       if (!kanKomen(D, L.wie) || (L.ander && !kanHetBetreffen(D, L.ander))) stop(D);
       else if (dag >= L.tot) voorbij(D, dag);
       else L.aangesproken = false;
+      return;
+    }
+    const vast = vastVoorval(D, dag);
+    if (vast) {
+      T.beginVoorval(D, vast.id, vast.wie, vast.ander, dag);
       return;
     }
     const i = V.wacht.findIndex((w) => w.op <= dag);
@@ -545,6 +579,8 @@
       const wie = L.ander && kanHetBetreffen(D, L.ander) ? [L.ander] : undefined;
       T.wijzigBevolking(D, -1, 'ziekte', v.sterft || T.hoofdletter(v.titel), wie);
     }
+    // Een feest (js/feesten.js): het dorp viert dit voorval op het plein, morgen de hele dag of 's avonds.
+    if (doe.feest && L.id) T.zetFeest(D, L.id, doe.feest, D.kalender ? D.kalender.dag : dag);
     if (doe.voorval && L.wie) {
       const lijst = elk(doe.voorval);
       const id = lijst[Math.floor(lot(D, dag, 41 + V.aantal) * lijst.length)];
@@ -581,6 +617,7 @@
       if (!T.plaatsVoorEenGezin(D) && uit.kan) Object.assign(uit, { kan: false, waarom: 'er is geen plaats: wijs een erf aan (B)' });
     }
     if (doe.sterfkans) delen.push(`${doe.sterfkans}% kans op een dode`);
+    if (doe.feest && T.feestPrijs(doe.feest)) delen.push(T.feestPrijs(doe.feest));
     uit.tekst = delen.join(', ');
     return uit;
   };

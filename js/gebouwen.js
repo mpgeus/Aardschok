@@ -984,6 +984,9 @@
     T.tikInnerDag(D, dag);
     // En de voorvallen (js/voorvallen.js): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp.
     T.tikVoorvallenDag(D, dag);
+    // En de feesten (js/feesten.js): begint er vandaag een, dan zegt het dorp het en staat de meiboom er; op een hele
+    // feestdag werkt niemand (stap 6 hieronder).
+    T.tikFeestenDag(D, dag);
     // Een hut op een erf die op hout wachtte, begint als het er nu is (js/erven.js).
     T.tikErvenDag(D);
     // 1. Gebouwen die vandaag klaarkomen: het spookbeeld wordt de tekening zelf (dezelfde
@@ -1032,6 +1035,8 @@
     // vandaag niets; de eerste dag dat het zo is, zegt het dorp het.
     const seizoen = seizoenVan(dag);
     const gereedschap = T.gereedschapDekking(D, seizoen);
+    // Op een hele feestdag (js/feesten.js, T.vrijeDag) werkt niemand: wie handen heeft, maakt vandaag niets.
+    const vrij = T.vrijeDag(D, dag);
     for (const g of D.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
       const wasStil = g.stilWant;
@@ -1041,6 +1046,10 @@
       g.stilWant = null;
       g.uren = null;
       if (!g.klaar || !soort.maakt) continue;
+      if (vrij && soort.handen > 0) {
+        g.stilWant = 'het dorp viert feest';
+        continue;
+      }
       const stil = soort.stilIn && seizoen && soort.stilIn[seizoen];
       if (stil) {
         g.stilWant = stil;

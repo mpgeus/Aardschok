@@ -24,7 +24,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
-| Dorpsfeesten | idee voor later (Marcel, 1 okt): feesten bij het seizoen waar het hele dorp aan meedoet, en een grote bruiloft; nu alleen een notitie | |
+| Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
 | De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen, vreemden welkom, houtkap en belasting | vraag 54 |
@@ -542,11 +542,33 @@ doel"):
   `Spel.debug.raad()` zegt welke raden nu gelden.
 - **Nog niet:** de raad zegt niets over de wetten. Wat de bouwer in de speeltest ermee deed, staat in `speelbaar.md`.
 
-## Dorpsfeesten (Marcel, 1 okt 2026; later)
+## Dorpsfeesten (Marcel, 1 okt 2026; de eerste twee gebouwd op 3 okt, vraag 97)
 
-**Zo werkt het nu:** nog niets; een notitie, later bouwen. Marcel: "Later wil ik ook dorpsfeesten die passen bij het
-seizoen, hier wil ik het hele dorp wat mee doet etc. Ook een bruiloft wordt groots gevierd. Er zijn veel soorten
-feesten die we kunnen gebruiken hiervoor. Voor nu een notitie later pas bouwen."
+**Zo werkt het nu** (3 okt, `js/feesten.js`; Marcel: "Wel met 1 of 2 feesten erin voor de demo", en bij het plan: het
+oogstfeest "Ja, een hele dag vrij", en "De meiboom"): twee feesten komen als voorval (js/voorvallen.js), en zeg je ja, dan
+viert het hele dorp het op het plein.
+- **Het oogstfeest:** na de oogst komt een boer het vragen (zoals sinds 29 sep). Een groot feest (−40 graan, −15 bier) is
+  morgen de hele dag: niemand werkt, de werkplaatsen maken niets ("staat stil, het dorp viert feest") en de boeren maaien
+  niet, en van het begin van het werk tot bedtijd staat iedereen op het plein. Een klein feest (−15 graan) is vanavond, na
+  het werk. Het venster zegt het vooraf: "morgen werkt niemand", of "'s avonds feest op het plein".
+- **De meiboom:** niet geloot, maar elk jaar op 30 grasmaand (een vaste dag, `op` in T.VOORVALLEN) komen de jongeren het
+  vragen: "Zet hem maar op. Morgen werkt niemand." (−2 hout) is 1 bloeimaand de hele dag feest; "Na het werk, dan." (−2
+  hout) vanavond. Er komt een meiboom op het plein, in pixel art (`gereedschap/pixelart/meiboom.cjs`: een berk met een
+  kroon, een krans met bloemen en linten in vier kleuren), en hij blijft dertig dagen staan. Geen bier: in de lente is er
+  bijna geen (een speeltest van 3 okt had er 7). Het spel begint op 1 lentemaand, dus dit is het eerste feest dat een
+  speler ziet.
+- **Op het feest** staat het hele dorp rond het midden van het plein, elk op zijn eigen plek in een kring van vijf
+  tegels, de kinderen wat ruimer; de herbergierster tapt naast het midden. 's Avonds brandt er licht op het plein
+  (`T.feestLicht`, zoals de lantaarns), en niemand gaat die avond naar de herberg. De schout kan erbij gaan staan; dat
+  doet nog niets. Het rapport van de raadsman zegt de ochtend erna dat het dorp feest vierde.
+- **De spelregel "Feesten"** op "Alleen de stemming" is een feest wat het vóór 3 okt was: een prijs en een stemming. De
+  getallen in de werkbank (`T.FEESTEN_INSTELLINGEN`: de kring, het licht, hoe lang de meiboom staat).
+- **Met één regel erbij** wordt ook een ander voorval een feest: `feest: 'dag'` of `'avond'` in een antwoord, en het
+  voorval in `T.FEESTEN`. De bruiloft zou zo kunnen (Marcel, 1 okt: "Ook een bruiloft wordt groots gevierd").
+
+Wat Marcel op 1 okt zei: "Later wil ik ook dorpsfeesten die passen bij het seizoen, hier wil ik het hele dorp wat mee
+doet etc. Ook een bruiloft wordt groots gevierd. Er zijn veel soorten feesten die we kunnen gebruiken hiervoor. Voor nu
+een notitie later pas bouwen."
 
 - **Wat er al is:** drie voorvallen zijn feesten (een bruiloft, het oogstfeest, een lied over de heer), met een
   stemming die wegslijt ("Het is blij met de bruiloft"; "De voorvallen" hierboven), en de raadsman die het oogstfeest

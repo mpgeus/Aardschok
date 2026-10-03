@@ -52,8 +52,9 @@
 //
 // Een voorval (js/voorvallen.js) is een gesprek dat de ander begint, onder dezelfde naam als in T.VOORVALLEN. Zijn
 // naam is '{wie}': wie het je komt zeggen. Een antwoord mag daar ook hebben: graan: -20 (of hout, bier, ijzer, ...),
-// tevreden: 5, argwaan: 3, verban: 'ander', sterfkans: 30, gezin: 1, schaap: -2 en voorval: 'x' (een vervolg). Wat
-// dat is, staat boven in js/voorvallen.js; het venster zegt de prijs vooraf.
+// tevreden: 5, argwaan: 3, verban: 'ander', sterfkans: 30, gezin: 1, schaap: -2, voorval: 'x' (een vervolg) en
+// feest: 'dag' of 'avond' (het dorp viert het op het plein, js/feesten.js). Wat dat is, staat boven in
+// js/voorvallen.js; het venster zegt de prijs vooraf.
 //
 // In een zin mag {woord} staan: dat vult het spel in (T.GESPREK_WOORDEN in js/gesprek.js), zoals
 // {gisteravond}, wie er gisteravond in de herberg zat (js/herberg.js), en in een voorval {wie} en {ander}.
@@ -1018,8 +1019,8 @@
             { zeg: 'De oogst is binnen, schout! Vroeger hielden we dan een feest, met alles erop en eraan. Wat op is, kan de inner niet tellen, zei mijn vader altijd.' },
           ],
           keuzes: [
-            { zeg: 'Een groot feest.', sluit: true, doe: { graan: -40, bier: -15, tevreden: 8 } },
-            { zeg: 'Een klein feest.', sluit: true, doe: { graan: -15, tevreden: 3 } },
+            { zeg: 'Een groot feest.', sluit: true, doe: { graan: -40, bier: -15, tevreden: 8, feest: 'dag' } },
+            { zeg: 'Een klein feest.', sluit: true, doe: { graan: -15, tevreden: 3, feest: 'avond' } },
             { zeg: 'Geen feest. De heer telt mee.', sluit: true, doe: { tevreden: -3 } },
           ],
         },
@@ -1052,6 +1053,22 @@
             { zeg: 'Zing maar. Hard.', sluit: true, doe: { tevreden: 4, argwaan: 4 } },
             { zeg: 'Zing het zachtjes. En niet het laatste couplet.', sluit: true, doe: { tevreden: 2, argwaan: 1 } },
             { zeg: 'Niet zingen.', sluit: true, doe: { tevreden: -1 } },
+          ],
+        },
+      },
+    },
+    meiboom: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, morgen is het de eerste van bloeimaand. We hebben een berk uitgezocht in het bos, de rechtste die er staat. Mogen we hem op het plein zetten, met linten erin? Dan dansen we eromheen tot het donker is.' },
+          ],
+          keuzes: [
+            { zeg: 'Zet hem maar op. Morgen werkt niemand.', sluit: true, doe: { hout: -2, tevreden: 5, feest: 'dag' } },
+            { zeg: 'Na het werk, dan.', sluit: true, doe: { hout: -2, tevreden: 2, feest: 'avond' } },
+            { zeg: 'Een boom is hout, en het bos is van de heer.', sluit: true, doe: { tevreden: -3 } },
           ],
         },
       },

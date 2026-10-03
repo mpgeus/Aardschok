@@ -1288,6 +1288,18 @@
       T.blok(ctx, p.x, p.y, 0.08, 0.08, 80, '#6e4a2a', { helder, basis: 6 });
       return;
     }
+    if (v.soort === 'meiboom') {
+      // De meiboom (js/feesten.js): een berk met een kroon, een krans en linten. Zonder kunst: een witte paal met een
+      // groene kroon.
+      const boom = metSprites() && T.sprites.meiboom && T.sprites.meiboom();
+      if (boom) {
+        T.sprites.teken(ctx, boom, p.x, p.y, helder);
+        return;
+      }
+      T.blok(ctx, p.x, p.y, 0.05, 0.05, 140, '#e6e2da', { helder });
+      T.blok(ctx, p.x, p.y, 0.16, 0.16, 16, '#5d8a34', { helder, basis: 140 });
+      return;
+    }
     if (v.soort === 'pilaar') {
       T.blok(ctx, p.x, p.y, 0.32, 0.32, 8, '#6f6a62', { helder });
       T.blok(ctx, p.x, p.y, 0.22, 0.22, 74, '#8d877d', { helder, basis: 8 });

@@ -69,6 +69,7 @@
       if (gegevens.graan) vellen.push(gegevens.graan.bestand);
       if (gegevens.schandpaal) vellen.push(gegevens.schandpaal.bestand);
       if (gegevens.paaltje) vellen.push(gegevens.paaltje.bestand);
+      if (gegevens.meiboom) vellen.push(gegevens.meiboom.bestand);
       const lijst = vellen.map((f) => MAP + f);
       for (const f of Object.values(gegevens.figuren)) {
         for (const h of Object.values(f.houdingen)) lijst.push(MAP + 'figuren/' + h.bestand);
@@ -375,6 +376,14 @@
   S.paaltje = function () {
     if (!gegevens || !gegevens.paaltje) return null;
     const t = gegevens.paaltje;
+    return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
+  };
+
+  // De meiboom op het plein (js/feesten.js, gereedschap/pixelart/meiboom.cjs): één tekening, zoals het paaltje, met
+  // het anker op de grond in het midden van de tegel. Null als het vel er niet is.
+  S.meiboom = function () {
+    if (!gegevens || !gegevens.meiboom) return null;
+    const t = gegevens.meiboom;
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
   };
 
