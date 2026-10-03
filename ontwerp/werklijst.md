@@ -3382,6 +3382,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vóór je veel bouwt.
 
 *Spelen, en zeggen hoe het voelt:*
+- **De feesten** (3 okt, vijfentwintigste sessie; vraag 97). Begin een nieuw spel en speel tot 30 grasmaand (op 10× een
+  paar minuten): de jongeren komen vragen of de meiboom mag. Zeg "Zet hem maar op" en kijk de dag erna op het plein,
+  overdag en 's avonds. Sneller: `Spel.debug.feest('meiboom')` laat hem nu beginnen, en `Spel.debug.uur(20)` zet de
+  avond. Het oogstfeest komt na de oogst (`Spel.debug.voorval('oogstfeest')`). Is een hele dag vrij te duur, of juist
+  goed? Is de meiboom groot genoeg, en moet hij blijven staan? En kies je bij het oogstfeest weleens "Een klein feest"?
 - **De herberg** (27 sep, negende sessie; stuk 1 en 2). Loop naar de hoek tussen het plein en de weg, en
   blijf er tot de avond (`Spel.debug.uur(17)`): wie gaat erheen, en brandt de lantaarn? Zijn twee à drie
   gasten per avond genoeg, en is de herberg herkenbaar zonder uithangbord? Praat de volgende ochtend met
@@ -3656,8 +3661,8 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   geen), en een meiboom in pixel art die dertig dagen op het plein staat (`gereedschap/pixelart/meiboom.cjs`). De
   spelregel "Feesten" ("Alleen de stemming" is het spel van ervoor), `Spel.debug.feest()`, en een schermafdruk van het
   feest 's avonds (`gereedschap/pixelart/uit/schermen/feest-avond.png`, niet in git). Wat er nog niet is (de schout op het
-  feest, een ton, het oogstfeest pas na de laatste schoof), staat in `opmerkingen.md`. 6 nieuwe toetsen, `npm test`
-  781/781.
+  feest, een ton, het oogstfeest pas na de laatste schoof), staat in `opmerkingen.md`. 7 nieuwe toetsen (de laatste op
+  drie gehuchten van de maker), `npm test` 782/782.
 - 3 okt 2026 — **Eén herberg en één markt voor het hele dorp, en de keten in één keer** (vierentwintigste sessie; vraag 96,
   a en b; Marcel: "A. Ja, 1 markt 1 herberg voor nu. B prima"). **a:** de herberg en de markt hebben geen kring meer
   (`T.WENSEN_INSTELLINGEN.kring`: null); staat er een in het dorp, dan heeft elk huis dat hem wil hem. De kring van 30 is

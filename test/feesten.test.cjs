@@ -216,3 +216,25 @@ test('met de spelregel "Alleen de stemming" is een feest wat het was: een prijs 
     T.FEESTEN_INSTELLINGEN.vieren = true;
   }
 });
+
+test('ook op een gehucht van de maker staat het dorp op zijn plein, rond de meiboom', () => {
+  for (const zaad of [1, 2, 3]) {
+    const echt = console.warn;
+    console.warn = () => {};
+    const S = { kalender: T.nieuweKalender() };
+    try {
+      assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
+    } finally {
+      console.warn = echt;
+    }
+    Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+    const D = S.dorp;
+    const f = T.zetFeest(D, 'meiboom', 'avond', bijUur(HERFST, 14));
+    assert.ok(f.midden, `zaad ${zaad}: een midden`);
+    assert.ok(T.opHetPlein(S.wereld, f.midden.x, f.midden.y), `zaad ${zaad}: op het plein`);
+    assert.ok(S.wereld.voorwerpen.some((v) => v.soort === 'meiboom' && v.x === f.midden.x && v.y === f.midden.y), `zaad ${zaad}: de meiboom staat er`);
+    S.kalender.dag = bijUur(HERFST, 20);
+    const p = D.bewoners.mensen.find((x) => x.wezen && !x.komt && !x.schout);
+    assert.ok(r(T.dagAnker(D, p.wezen), f.midden) <= T.FEESTEN_INSTELLINGEN.kring, `zaad ${zaad}: wie er woont, staat erbij`);
+  }
+});
