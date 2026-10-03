@@ -34,9 +34,8 @@ een huis of een stenen huis woont), dan "0 van 20 ambachtslieden" voor marktrech
 dag. Sinds vraag 91 maakt een werkplaats die iets omzet tot er 30 ligt (en laat hij het zaaigraan liggen), en wil een
 ambachtsman 0,005 laken per dag; sinds vraag 92 zijn brood, vis en vlees eten. `npm test`: 773/773.
 
-**Waar het werk staat:** het werk van de vierentwintigste sessie (vraag 94 en 95, met de speeltest) staat op de branch
-`ccr-ef948901-4zrtmk`, nog niet in `main`; gepusht tot en met het plan (`02540e8`). Het werk van de drieëntwintigste
-sessie staat in `main` (Marcel, 2 okt: "naar main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main`, ook het werk van de vierentwintigste sessie tot en met Marcels antwoord
+op vraag 95 (Marcel, 3 okt: "Push main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** **Marcels antwoord op vraag 95** (het brood naar 0,01, de ligging van de erven, en
 "Daar kun je niet bij" repareren). Bouw in de volgorde van zijn antwoord, en speel dan de sluwe bouwer en de bouwer nog
