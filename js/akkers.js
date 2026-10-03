@@ -841,6 +841,14 @@
     return dagInJaar(g.maand, g.dag);
   }
 
+  // Over hoeveel dagen de oogst binnen is (het stadium 'gemaaid', 1 herfstmaand), vanaf dag `dag`; op die dag zelf een
+  // heel jaar. Voor de herbergierster, die tot dan bier apart houdt voor de huizen (T.bierApart, js/herberg.js).
+  T.dagenTotDeOogst = function (dag) {
+    const d = T.datumVanDag(dag);
+    const n = (stadiumBegin('gemaaid') - dagInJaar(d.maand, d.dagVanMaand) + T.DAGEN_PER_JAAR) % T.DAGEN_PER_JAAR;
+    return n || T.DAGEN_PER_JAAR;
+  };
+
   // Het eerste jaar is al gezaaid: het spel begint op 1 lentemaand, net nadat de boeren hun eigen
   // zaaigoed de grond in brachten. Pas vanaf het tweede jaar kost zaaien graan uit de voorraad, en
   // pas dan wisselen de velden (T.wisselVelden): eerst de wissel, dan het zaaien, zodat alleen

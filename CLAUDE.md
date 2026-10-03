@@ -331,7 +331,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   avond (`T.herbergAnker`, dat `T.dagAnker` vraagt), de afrekening elke nacht (`T.tikHerbergDag`: bier op,
   en wie er was, maakt het dorp tevredener), en de lantaarn 's avonds (`T.herbergLicht`). Het brouwen is
   gewoon werk van het gebouw (`T.GEBOUWEN.herberg.maakt`), tot er genoeg ligt, zoals elke werkplaats die iets omzet
-  (`T.maaktTot` in `js/gebouwen.js`, vraag 91, b). In het gehucht
+  (`T.maaktTot` in `js/gebouwen.js`, vraag 91, b), boven het bier dat ze apart houdt voor de huizen tot de oogst
+  (`T.bierApart`, `T.dagenTotDeOogst` in `js/akkers.js`; vraag 102, b): de gasten drinken wat erboven ligt. In het gehucht
   staat hij vanaf het begin, en de herbergierster woont er. In de herberg wordt gepraat: de roddelaar
   vertelt er wat er in zijn kelder ligt (`g.verteld`, `js/verstoppen.js`), de herbergierster vertelt jou
   wie er zat, en de marskramer logeert er (`T.logiesAnker`). 's Avonds branden de ramen van de herberg,

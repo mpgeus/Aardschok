@@ -41,12 +41,34 @@
     minstensUren: 0.5,
     // Wat een bezoek drinkt, aan bier. De herbergierster brouwt het zelf (T.GEBOUWEN.herberg.maakt).
     bierPerBezoek: 1,
+    // Bier apart voor de huizen (werklijst vraag 102, b; Marcel, 3 okt: "102 a b c d e ja"): de herbergierster houdt
+    // achter wat de huizen drinken tot de volgende oogst, hooguit zoveel dagen, voor de magere maanden waarin er geen
+    // graan over is om te brouwen, zoals de boeren het zaaigraan apart houden. De gasten drinken wat erboven ligt, en
+    // wie bier maakt, maakt tot er erboven genoeg ligt (T.maaktTot, js/gebouwen.js). In de speeltest van 3 okt dronken de
+    // gasten alles op, en hadden de huizen 70 à 156 dagen per jaar geen bier: bijna precies de dagen zonder graan.
+    bierApartDagen: 150,
     // Wie er de laatste zoveel dagen was, is tevredener: zoveel erbij als alle volwassenen er waren
     // (js/behoeften.js, T.berekenTevredenheid).
     gezelligheidDagen: 7,
     gezelligheid: 0.06,
   };
   const IN = () => T.HERBERG_INSTELLINGEN;
+
+  // Wat de huizen per dag aan bier drinken: wie in een huis woont waarvan de stand bier wil (js/wensen.js).
+  T.bierVoorDeHuizen = function (D) {
+    let mensen = 0;
+    for (const g of D.gebouwen || []) {
+      if (g.wensen && g.wensen.mensen > 0 && T.wensenVanStand(g.wensen.stand).includes('bier')) mensen += g.wensen.mensen;
+    }
+    return mensen * (T.WENSEN_INSTELLINGEN.perMens.bier || 0);
+  };
+  // Hoeveel bier de herbergierster apart houdt voor de huizen: wat ze drinken tot de oogst binnen is
+  // (T.dagenTotDeOogst, js/akkers.js), hooguit `bierApartDagen` dagen.
+  T.bierApart = function (D, dag = D.kalender ? D.kalender.dag : 0) {
+    return Math.ceil(T.bierVoorDeHuizen(D) * Math.min(IN().bierApartDagen, T.dagenTotDeOogst(dag)));
+  };
+  // Het bier voor de gasten: wat er boven het deel voor de huizen ligt.
+  const bierVoorGasten = (D, dag) => Math.max(0, ((D.voorraad && D.voorraad.bier) || 0) - T.bierApart(D, dag));
 
   // De herbergen van het dorp die klaar zijn, die van het begin eerst.
   T.herbergenVan = (D) => (D.gebouwen || []).filter((g) => g.soort === 'herberg' && g.klaar);
@@ -110,7 +132,7 @@
   }
 
   // Wie er op de avond van dag `dag` naar de herberg gaat: een lijst bewoners, wie het dichtst bij woont
-  // eerst, en niet meer dan er bier is. Hetzelfde antwoord voor het scherm (wie er loopt) en voor de
+  // eerst, en niet meer dan er bier voor de gasten is. Hetzelfde antwoord voor het scherm (wie er loopt) en voor de
   // regels (T.tikHerbergDag), en bewaard zolang de dag, het bier en het dorp hetzelfde zijn. Naar welke
   // herberg elk gaat, zegt T.herbergVanGast.
   T.herbergGasten = function (D, dag) {
@@ -120,8 +142,7 @@
     const d = Math.floor(dag);
     // Op de avond van een feest (js/feesten.js) is iedereen op het plein, en het bier staat in het antwoord.
     if (T.feestAvond(D, d)) return [];
-    const bier = (D.voorraad && D.voorraad.bier) || 0;
-    const plaats = Math.floor(bier / IN().bierPerBezoek + 1e-9);
+    const plaats = Math.floor(bierVoorGasten(D, d) / IN().bierPerBezoek + 1e-9);
     const sleutel = `${d}:${plaats}:${B.mensen.length}:${herbergen.length}`;
     const H = D.herberg || (D.herberg = {});
     if (H.gasten && H.gasten.sleutel === sleutel) return H.gasten.lijst;
@@ -243,9 +264,10 @@
     return (IN().gezelligheid * waren) / wie.length;
   };
 
-  // Is de herberg droog? Dan mist het dorp bier (js/behoeften.js).
+  // Is de herberg droog: geen bier voor de gasten (wat er ligt, is voor de huizen)? Met de spelregel "Wensen" op "Het
+  // dorp als geheel" mist het dorp dan bier (js/behoeften.js).
   T.herbergDroog = function (D) {
-    return !!T.herbergVan(D) && ((D.voorraad && D.voorraad.bier) || 0) < IN().bierPerBezoek;
+    return !!T.herbergVan(D) && bierVoorGasten(D) < IN().bierPerBezoek;
   };
 
   // Het licht van de herberg, voor de nacht (js/tekenen.js): 's avonds brandt de lantaarn bij de deur,
@@ -282,7 +304,9 @@
       : `vanavond ${gasten.length ? `${gasten.length} ${gasten.length === 1 ? 'gast' : 'gasten'}` : 'geen gasten'}`;
     const m = D.marskramer;
     const logeert = m && m.staat && !m.weg && g === T.herbergVan(D) ? '; de marskramer logeert hier' : '';
-    return `${vanavond}; ${bier ? `${bier} bier` : 'geen bier meer'}${logeert}.`;
+    const apart = Math.min(bier, T.bierApart(D));
+    const bierTekst = bier ? `${bier} bier${apart ? `, waarvan ${apart} apart voor de huizen` : ''}` : 'geen bier meer';
+    return `${vanavond}; ${bierTekst}${logeert}.`;
   };
   T.GEBOUW_ERBIJ = T.GEBOUW_ERBIJ || {};
   T.GEBOUW_ERBIJ.herberg = T.herbergTekst;

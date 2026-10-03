@@ -2745,7 +2745,12 @@ eigen erf.
 - **De herbergierster woont er, alleen** (`js/mensen.js`, met haar eigen vel), en werkt er: het gehucht
   telt nu 26 mensen. Ze brouwt van graan, zolang er niet genoeg bier ligt: acht kannen per dag voor
   een vijfde graan, tot er dertig liggen (`T.GEBOUWEN.herberg.maakt`, met `tot`). Het gehucht begint met
-  twintig bier. Het bier staat in de balk, naast het graan.
+  twintig bier. Het bier staat in de balk, naast het graan. **Sinds 3 okt houdt ze bier apart voor de huizen**
+  (werklijst vraag 102, b; Marcel: "102 a b c d e ja"): wat de huizen drinken tot de oogst binnen is, hooguit 150 dagen
+  (`T.bierApart`), voor de magere maanden waarin er geen graan over is om te brouwen. De gasten drinken alleen wat
+  erboven ligt, en ze brouwt tot er erboven dertig liggen. In de speeltest van 3 okt dronken de gasten alles op, en
+  hadden de huizen 70 à 156 dagen per jaar geen bier, bijna precies de dagen zonder graan boven het zaaigraan; en dan
+  vroeg de keten nog een herberg, terwijl het aan het graan lag. Heeft de herberg geen graan, dan zegt de raad dat nu.
 - **Wie er 's avonds gaat** (`T.herbergGasten`): een volwassene, niet de schout, met een kans van 0,3
   per avond, 0,45 in de winter. De drinker gaat elke avond, de vrome nooit. Wie ver woont, gaat minder
   vaak: de kans zakt met de weg erheen, tot niets bij drie uur lopen, en wie er niet minstens een half

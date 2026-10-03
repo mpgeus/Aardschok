@@ -951,12 +951,13 @@
 
   // Tot hoeveel een gebouw maakt van wat het maakt: { wat: zoveel }, of null als het doormaakt. Wie iets omzet (maakt.in),
   // maakt tot er genoeg ligt (T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot; vraag 91, b); wie iets uit het land haalt,
-  // maakt door.
-  T.maaktTot = function (soort) {
+  // maakt door. Bier maakt hij tot er genoeg ligt boven wat de herbergierster apart houdt voor de huizen (T.bierApart, js/herberg.js;
+  // vraag 102, b), als je het dorp meegeeft.
+  T.maaktTot = function (soort, D) {
     const m = soort.maakt;
     if (!m || !m.in || !m.uit) return null;
     const tot = {};
-    for (const wat in m.uit) tot[wat] = T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot;
+    for (const wat in m.uit) tot[wat] = T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot + (wat === 'bier' && D ? T.bierApart(D) : 0);
     return tot;
   };
 
@@ -1103,10 +1104,10 @@
           }
         }
       }
-      // Wie iets omzet, maakt tot er genoeg ligt (T.maaktTot: de herberg brouwt tot er 30 bier is, de molen maalt tot
-      // er 30 meel is), en niet meer dan wat er nog bij kan. Houdt dat hem tegen, dan is dat wat hem tegenhoudt, en
+      // Wie iets omzet, maakt tot er genoeg ligt (T.maaktTot: de herberg brouwt tot er 30 bier is boven wat apart ligt
+      // voor de huizen, de molen maalt tot er 30 meel is), en niet meer dan wat er nog bij kan. Houdt dat hem tegen, dan is dat wat hem tegenhoudt, en
       // niet wat hij nodig heeft.
-      const tot = T.maaktTot(soort);
+      const tot = T.maaktTot(soort, D);
       if (tot) {
         for (const wat in tot) {
           const per = (soort.maakt.uit && soort.maakt.uit[wat]) || 0;

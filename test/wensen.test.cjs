@@ -487,6 +487,18 @@ test('wat de huizen missen: wat je nog niet kunt bouwen, zegt wanneer wel, en de
   assert.equal(vind(D, 'kapel').kan, true, 'een kapel kun je in een gehucht bouwen');
 });
 
+// Het bier (werklijst vraag 102, b): heeft de herberg geen graan om te brouwen, dan helpt nog een herberg niet. In de
+// speeltest van 3 okt hadden de dorpen er drie of vier.
+test('de keten van het bier: heeft de herberg geen graan, dan zegt het dat, en vraagt het geen herberg erbij', () => {
+  const D = Object.assign(kaalDorp(), { trede: 'dorp', kalender: T.nieuweKalender() });
+  zetHuis(D, 'huis', 10, 10, 5);
+  T.onthoudWensen(D, T.berekenWensen(D, ZOMERDAG, alles));
+  zetHuis(D, 'herberg', 30, 10, 0, { handen: 1, tekort: 'graan', werkte: 0 });
+  const x = vind(D, 'bier');
+  assert.equal(x.tekst, 'Een huis wil bier: de herberg heeft geen graan, en graan komt van de akkers.');
+  assert.deepEqual([x.kan, x.bouw], [false, null]);
+});
+
 // De ketens (werklijst vraag 90, D; Marcel, 2 okt: "d ja"): brood komt van de bakkerij, die meel nodig heeft van de molen,
 // en laken van de weverij, met wol van de schapen.
 test('de ketens: wie brood wil, hoort van de bakkerij en de molen; staat de bakkerij zonder meel, dan een molen', () => {

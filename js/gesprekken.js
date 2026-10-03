@@ -281,7 +281,7 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'herbergDroog' }, zeg: 'Geen druppel meer, schout. Zonder graan brouw ik niets, en zonder bier zit hier niemand. Een lege herberg hoort alles en weet niets.' },
+            { als: { vlag: 'herbergDroog' }, zeg: 'Geen druppel voor de tap, schout. Zonder graan brouw ik niets, en wat ik nog heb, is voor de huizen. Een lege herberg hoort alles en weet niets.' },
             { als: { vlag: 'herbergGetuige' }, zeg: 'Aan de tap gisteravond: {gisteravond}. En {getuige} wist te vertellen dat de schout {gezien}. Ik zeg niet dat het waar is, schout. Ik zeg dat iedereen het nu weet.' },
             { als: { vlag: 'herbergRoddel' }, zeg: 'Aan de tap gisteravond: {gisteravond}. En {roddelaar} had het weer over wat er in de kelder ligt. Hardop, schout. Wat de halve herberg weet, weet de heer met Sint-Maarten.' },
             { als: { vlag: 'herbergGasten' }, zeg: 'Aan de tap gisteravond: {gisteravond}. Het weer, de pacht, en wie er met wie. Niets wat u hoeft te weten, en alles wat ik wil weten.' },

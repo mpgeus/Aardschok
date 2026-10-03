@@ -930,7 +930,7 @@
         uurLopen: Math.round(T.looptijdVan(w, p, T.deurVan(w, p.huis), { x: deur.x, y: deur.y, straal: 0 }, 'herberg') * 10) / 10,
         staat: p.wezen ? (p.wezen.binnen ? 'binnen' : `${p.wezen.tx},${p.wezen.ty}`) : '-',
       }));
-      return { deur: `${deur.x},${deur.y}`, bier: Math.floor(S.dorp.voorraad.bier || 0), vanavond, gisteravond: S.dorp.herberg && S.dorp.herberg.gisteravond, tekst: T.gebouwToestand(S.dorp, g) };
+      return { deur: `${deur.x},${deur.y}`, bier: Math.floor(S.dorp.voorraad.bier || 0), apartVoorDeHuizen: T.bierApart(S.dorp), vanavond, gisteravond: S.dorp.herberg && S.dorp.herberg.gisteravond, tekst: T.gebouwToestand(S.dorp, g) };
     },
     // De feesten (js/feesten.js): welk feest er komt of nu is, waar het dorp staat, de meiboom, en wat er gevierd werd.
     // Spel.debug.feest('oogstfeest') laat het vandaag beginnen, de hele dag; ('meiboom', 'avond') alleen vanavond. Zet

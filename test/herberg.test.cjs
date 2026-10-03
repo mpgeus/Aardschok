@@ -235,16 +235,45 @@ test('de herbergierster brouwt van graan, tot er genoeg bier ligt', () => {
   const was = { ...IN };
   Object.assign(IN, { kansPerAvond: 0, kansWinter: 0, karakters: {} });
   try {
-    T.zetVoorraad(S.dorp, 'bier', T.maaktTot(soort).bier - 1);
+    T.zetVoorraad(S.dorp, 'bier', T.maaktTot(soort, S.dorp).bier - 1);
     T.tikGebouwenDag(S.dorp, HERFST + 2);
   } finally {
     Object.assign(IN, was);
   }
-  assert.ok(Math.abs(S.dorp.voorraad.bier - T.maaktTot(soort).bier) < 1e-9, `${S.dorp.voorraad.bier}`);
-  assert.equal(T.maaktTot(soort).bier, 30, 'zoals sinds 27 sep: tot er 30 bier is');
+  assert.ok(Math.abs(S.dorp.voorraad.bier - T.maaktTot(soort, S.dorp).bier) < 1e-9, `${S.dorp.voorraad.bier}`);
+  assert.equal(T.maaktTot(soort).bier, 30, 'zoals sinds 27 sep: tot er 30 bier is, boven wat apart ligt voor de huizen');
   assert.equal(g.vol, 'bier');
   g.werkte = 0;
   assert.match(T.gebouwToestand(S.dorp, g), /^Herberg: er ligt genoeg bier\./);
+});
+
+// Bier apart voor de huizen (werklijst vraag 102, b; Marcel, 3 okt: "102 a b c d e ja"): in de speeltest van 3 okt
+// dronken de gasten alles op, en hadden de huizen in de magere maanden geen bier.
+test('bier apart voor de huizen: de gasten drinken wat erboven ligt, en de herbergierster brouwt tot erboven genoeg ligt', () => {
+  const S = gehucht({ bier: 0 });
+  const D = S.dorp;
+  // Twee hutten waar dorpelingen wonen, die bier willen (js/wensen.js).
+  for (const g of D.gebouwen.filter((x) => x.soort === 'hut').slice(0, 2)) g.wensen = { stand: 'dorpelingen', mensen: 5, heeft: {} };
+  const perDag = 10 * T.WENSEN_INSTELLINGEN.perMens.bier;
+  assert.ok(Math.abs(T.bierVoorDeHuizen(D) - perDag) < 1e-9);
+  // In wijnmaand is de volgende oogst ver weg: `bierApartDagen` dagen. Tien dagen voor de oogst binnen is: tien dagen.
+  const apart = T.bierApart(D);
+  assert.equal(apart, Math.ceil(perDag * IN.bierApartDagen));
+  const vlakVoor = dagVan('oogstmaand', 21);
+  assert.equal(T.dagenTotDeOogst(vlakVoor), 10);
+  assert.equal(T.bierApart(D, vlakVoor), Math.ceil(perDag * 10));
+  // De gasten drinken niet meer dan er boven het deel voor de huizen ligt.
+  T.zetVoorraad(D, 'bier', apart + 2);
+  assert.ok(T.herbergGasten(D, HERFST).length <= 2);
+  T.zetVoorraad(D, 'bier', apart);
+  assert.equal(T.herbergGasten(D, HERFST + 1).length, 0, 'wat er ligt, is voor de huizen');
+  assert.ok(T.herbergDroog(D));
+  assert.ok(T.herbergTekst(D, T.herbergVan(D)).endsWith(`; ${apart} bier, waarvan ${apart} apart voor de huizen.`));
+  // Wie bier maakt, maakt tot er erboven genoeg ligt.
+  const tot = T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot;
+  assert.deepEqual(T.maaktTot(T.GEBOUWEN.herberg, D), { bier: tot + apart });
+  assert.deepEqual(T.maaktTot(T.GEBOUWEN.brouwerij, D), { bier: tot + apart });
+  assert.deepEqual(T.maaktTot(T.GEBOUWEN.molen, D), { meel: tot });
 });
 
 test('bij de muis op de herberg: hoeveel gasten er vanavond komen, en hoeveel bier er ligt', () => {
