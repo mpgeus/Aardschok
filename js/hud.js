@@ -421,6 +421,8 @@
   T.ui.toonBouwmenu = function (S) {
     const box = $('bouwmenu');
     box.classList.toggle('verborgen', !S.bouwMenuOpen);
+    // Het doel linksboven ligt op dezelfde plek: zolang het menu open is, staat het er niet (stijl.css).
+    document.body.classList.toggle('bouwmenu-open', !!S.bouwMenuOpen);
     if (S.bouwMenuOpen) box.innerHTML = bouwmenuInhoud(S);
     $('bouwmenu-knop').classList.toggle('actief', S.bouwMenuOpen || !!S.bouwSoort);
   };

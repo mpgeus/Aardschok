@@ -453,6 +453,8 @@ kbd {
 /* De oproepen (js/hud.js, js/verzoeken.js): een kop erboven, en wat al op het plein hangt, in goud. */
 #bouwmenu .kop.bouw-oproepen { margin-top: 12px; }
 #bouwmenu button.hangt { border-color: rgba(226, 182, 74, 0.7); background: rgba(226, 182, 74, 0.1); }
+/* Het doel linksboven (#opdracht) ligt op de plek van het bouwmenu: zolang dat open is, staat het er niet (js/hud.js). */
+body.bouwmenu-open #opdracht { visibility: hidden; }
 
 /* Handelen met de marskramer (js/hud.js, T.ui.openHandel): in het midden, zoals je bij zijn
    uitgestalde waar staat. Links wat het is en wat je hebt, midden de prijs, rechts de knoppen. */
