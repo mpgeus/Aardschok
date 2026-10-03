@@ -3417,6 +3417,40 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     onthoudt het, trekt na twee keer weg en kan stiekem beginnen; wie ja hoort, is je dankbaar; en wie ondernemer is,
     komt uit het zaad van het spel. De volgorde: eerst de wapenmaker (Marcels eigen voorbeeld), dan de tweede herberg.
     **Gebouwd** (3 okt, zie onder Af; hoe het werkt in `spel.md`, "De verzoeken").
+105. **Wat ons uniek maakt** (Marcel, 3 okt, vijfentwintigste sessie: "Ik ben op zoek naar meer mogelijkheden om ons spel
+    'uniek' te maken"; na Norland, `commercieel.md`; voorstel van Claude; open). **Het inzicht:** uniek is pas uniek als je
+    het ziet: op één plaatje, in één zin, en in het eerste kwartier van de demo. Ons diepste idee (je bestuurt als één mens,
+    tussen de heer en het dorp) zit nu in regels die je niet ziet: de inner telt wat hij ziet, de raadsman beslist als je
+    weg bent. De sterkste ideeën maken die regels zichtbaar. Ze komen ná de speelbare kern (vraag 102), en vóór de demo.
+    - **a, het zicht van de inner, te zien:** tijdens zijn bezoek zie je zijn blik als een kegel over het dorp, zoals in
+      een sluipspel (Commandos); wat erin valt, telt hij. Je loopt met hem mee en leidt hem langs de arme kant. In een
+      snelle zoektocht vond ik geen bouwspel waarin de belastinginner een zichtveld heeft. Klein tot middel: zijn zicht
+      bestaat al (`T.innerKijkt`, `T.zietTegel`); nieuw zijn het tekenen en een teller van wat hij nu ziet. Dit is de
+      GIF voor de Steam-pagina: "Lead the tax collector around your village."
+    - **b, wat je weet, is wat je zag:** de balk toont wat er het laatst geteld werd, en hoe oud dat is ("graan 140,
+      eergisteren"). Tellen doe je door langs de schuur te lopen, of via het rapport van je raadsman. Dit staat al in het
+      concept (vraag 77, b), en het maakt de haak echt: Norland en Manor Lords tonen alles live. Middel: de balk, de raad
+      en het rapport lezen nu de echte voorraad.
+    - **c, twee boeken:** op Sint-Maarten geef je de heer je eigen boek, dat je zelf invult; de inner legt zijn rapport
+      ernaast, en wat hij kan bewijzen, kost argwaan. Papers, Please in een dorp. Middel tot groot: een stap op
+      Sint-Maarten en een papier op de schrijftafel.
+    - **d, de brieven van de heer als de stem van het spel:** elke maand een brief met een gril (een standbeeld van
+      hemzelf, belasting op ramen, de mooiste geit), en je kiest je antwoord (vleien, uitstellen, weigeren). Weinig
+      bouwspellen hebben deze zwarte humor, en een brief is een schermafdruk die mensen delen. Klein: de brieven en de
+      grillen bestaan al; het is vooral schrijven.
+    - **e, het dorp praat, en je ziet het gaan:** wat een getuige zag, vertelt hij in de herberg, en daarna gaat het van
+      mond tot mond verder, met een wolkje boven wie het zegt, tot de inner het hoort. Je kunt zelf ook iets laten
+      rondgaan, via de herbergierster. Middel: de getuigen en de roddel bestaan al; het doorvertellen is nieuw.
+    - **f, je dag is schaars:** mensen vragen je op een tijd en een plek (de molenaar om twaalf uur bij de molen). Wie je
+      mist, regelt je raadsman, of het gaat mis. Een agenda op de schrijftafel: het bestuursspel als de dag van één mens.
+      Middel.
+    Wat al uniek is en alleen getoond moet worden: het gevecht in beurten in je eigen straten, met mensen die je bij naam
+    kent (de rovers). En een zin die niet van ons is: "Middle management in the Middle Ages" heeft al een klein spel op
+    itch.io (*Medieval Middle Manager*); als zin in de beschrijving kan hij, als haak niet.
+    **Advies:** a, b en d voor de demo. Samen laten ze in één GIF, één schermafdruk en één lach zien dat je een mens bent
+    tussen de heer en het dorp. c en e daarna, f misschien.
+    Vragen: **a** tot en met **f**: welke ja, en welke voor de demo? En komt b (wat je weet, is wat je zag) vóór de demo,
+    omdat het verandert hoe je vanaf het begin speelt?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):

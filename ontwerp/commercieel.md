@@ -264,4 +264,4 @@ met lantaarns en muziek, een moment voor de trailer. Het ontwerp staat in `spel.
 Zie de werklijst, vraag 83, c: welke zin de haak wordt (na het nazoeken, hierboven), en of wat hem zichtbaar maakt ("wat
 je weet, is wat er het laatst geteld werd", vraag 77, b) naar voren komt, vóór de demo. Verder de naam (vraag 8), en hoe
 de schout in het Engels heet. En na de demo: zelf uitgeven, of een uitgever voor dit genre (Hooded Horse, zie Norland
-hierboven).
+hierboven). Wat ons verder uniek maakt, en wat daarvan in de demo komt: werklijst, vraag 105.
