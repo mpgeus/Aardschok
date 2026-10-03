@@ -1071,6 +1071,21 @@
         },
       },
     },
+    herbergverzoek: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, ik wil een tweede herberg beginnen, {plek}. {waarom} Het dorp betaalt {kosten}.' },
+          ],
+          keuzes: [
+            { zeg: 'Ja. Er is plaats voor twee.', sluit: true, doe: { bouw: true, tevreden: 3 } },
+            { zeg: 'Nee. Het dorp heeft een herberg.', sluit: true, doe: { weiger: true, bier: 10 } },
+          ],
+        },
+      },
+    },
     lied: {
       naam: '{wie}',
       start: 'begin',

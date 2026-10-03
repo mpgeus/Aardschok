@@ -164,6 +164,8 @@
     // Een ondernemer wil wapens maken, uit zichzelf (js/ondernemers.js; werklijst vraag 104). Zoals het bouwverzoek, met
     // zijn eigen woorden.
     wapenverzoek: { soort: 'verzoek', titel: 'de wapens', zelf: true, roep: '{wie} wil je onder vier ogen spreken.' },
+    // En een ondernemer die een tweede herberg wil beginnen; de herbergierster heeft daar een mening over.
+    herbergverzoek: { soort: 'verzoek', titel: 'de tweede herberg', zelf: true, roep: '{wie} wil een herberg beginnen, en zoekt je.' },
     lied: { soort: 'feest', titel: 'het lied over de heer', als: { gebouw: 'herberg' }, wie: { karakter: 'zanger' } },
     // De meiboom (werklijst vraag 97; Marcel, 3 okt: "De meiboom"): niet geloot, maar elk jaar op 30 grasmaand, zodat hij
     // op 1 bloeimaand op het plein staat (js/feesten.js). De jongeren komen het vragen.

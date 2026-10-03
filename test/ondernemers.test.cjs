@@ -195,13 +195,15 @@ test('nee: zijn huis neemt het je kwalijk, hij smeedt stiekem in zijn kelder, en
   assert.ok(tweede && tweede.wie === p, 'hij vraagt het nog eens');
   // Het venster zegt het vooraf.
   assert.match(T.prijsVanKeuze(D, T.GESPREKKEN.wapenverzoek.knopen.begin.keuzes[1].doe).tekst, /trekt weg/);
+  // Wie bij zijn gezin hoort, vooraf: wie wegtrekt, laat de banden van wie blijft opnieuw leggen (js/bewoners.js).
   const hoofd = p.hoofd || p;
   const voor = D.bewoners.mensen.slice();
+  const gezin = new Set(voor.filter((x) => x === p || x === hoofd || x.hoofd === hoofd));
   const bevolking = D.bevolking;
   zeg(S, false);
   const weg = voor.filter((x) => !D.bewoners.mensen.includes(x));
   assert.ok(weg.includes(p), 'hij is weg');
-  assert.ok(weg.every((x) => x === p || x === hoofd || x.hoofd === hoofd), 'met zijn gezin, en niemand anders');
+  assert.ok(weg.every((x) => gezin.has(x)), 'met zijn gezin, en niemand anders');
   assert.equal(D.bevolking, bevolking - weg.length);
   assert.ok(D.rovers.bende.some((l) => l.id === p.id), 'en kan als rover terugkomen');
   assert.ok(berichten.some((t) => /twee keer nee/.test(t)));
@@ -352,3 +354,103 @@ test('wat een ondernemer onthoudt, wat zijn huis nadraagt en wat verzegeld is, g
   assert.equal(T.huisStemming(p2.huis, 3), T.huisStemming(p.huis, 3));
   assert.deepEqual(terug.gebouwen.find((x) => x.soort === 'smidse').verzegeld, { dag: 2 });
 }));
+
+// ── De tweede herberg ──
+
+// Wie een herberg wil beginnen: in dit dorp vanaf `vanaf` mensen; in de toets meteen.
+const metHerberg = (doe) => allemaal(() => met(T.ONDERNEMERS_INSTELLINGEN.herberg, 'vanaf', 0, doe));
+function herbergVerzoek(S) {
+  const D = S.dorp;
+  for (let dag = 1; dag < 8; dag++) {
+    nacht(S, dag);
+    const L = lopend(D);
+    if (L && L.id === 'herbergverzoek') return L;
+    if (L) T.voorvalBeantwoord(D, L.id);
+  }
+  return null;
+}
+
+test('in een dorp met één herberg wil iemand er een tweede beginnen, vanaf zoveel mensen', () => allemaal(() => {
+  const S = dorp();
+  const D = S.dorp;
+  assert.ok(D.bevolking < T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf);
+  assert.ok(!T.eigenVerzoeken(D, 1).some((x) => x.wil === 'herberg'), 'een klein dorp heeft genoeg aan één');
+  met(T.ONDERNEMERS_INSTELLINGEN.herberg, 'vanaf', 0, () => {
+    const L = herbergVerzoek(S);
+    assert.ok(L, 'nu vraagt iemand het');
+    assert.equal(L.bouw.soort, 'herberg');
+    assert.equal(L.bouw.eigen, 'herberg');
+    assert.equal(T.ondernemingVan(D, L.wie), 'herberg');
+    const tekst = T.vulWoordenIn(D, T.GESPREKKEN.herbergverzoek.knopen.begin.tekst[0].zeg);
+    assert.match(tekst, /ik wil een tweede herberg beginnen/);
+    assert.match(tekst, /16 hout en 12 goud/);
+    const [ja, nee] = T.GESPREKKEN.herbergverzoek.knopen.begin.keuzes.map((k) => T.prijsVanKeuze(D, k.doe).tekst);
+    assert.match(ja, /is boos, en brouwt 60 dagen niet/);
+    assert.match(nee, /\+10 bier/);
+    assert.match(nee, /neemt het je kwalijk/);
+    assert.match(nee, /is je dankbaar/);
+    // In een gehucht nog niet, en met twee herbergen ook niet.
+    D.trede = 'gehucht';
+    assert.ok(!T.eigenVerzoeken(D, 9).some((x) => x.wil === 'herberg'));
+  });
+}));
+
+test('ja: de tweede herberg komt er, en de herbergierster brouwt een tijd niet', () => metHerberg(() => {
+  const S = dorp();
+  const D = S.dorp;
+  const eerste = T.herbergVan(D);
+  const L = herbergVerzoek(S);
+  zeg(S, true);
+  const tweede = D.gebouwen.find((g) => g.soort === 'herberg' && g !== eerste);
+  assert.ok(tweede, 'er komt een tweede herberg');
+  assert.equal(tweede.meester, L.wie);
+  assert.ok(eerste.weigert, 'de herbergierster is boos');
+  assert.ok(berichten.some((t) => /Een tweede herberg, schout\?/.test(t)));
+  assert.ok(!T.eigenVerzoeken(D, 10).some((x) => x.wil === 'herberg'), 'met twee vraagt niemand een derde');
+  // Ze brouwt niet tot haar tijd om is.
+  const dag = L.dag + 1;
+  T.zetVoorraad(D, 'bier', 0);
+  nacht(S, dag);
+  assert.equal(eerste.werkte, 0);
+  assert.match(T.gebouwToestand(D, eerste), /is boos op je/);
+  nacht(S, eerste.weigert.tot);
+  assert.ok(!(eerste.stilWant || '').includes('boos'), 'daarna weer wel');
+}));
+
+test('nee: de herbergierster is je dankbaar, met een vat bier', () => metHerberg(() => {
+  const S = dorp();
+  const D = S.dorp;
+  const L = herbergVerzoek(S);
+  const bier = D.voorraad.bier;
+  zeg(S, false);
+  assert.equal(D.voorraad.bier, bier + 10);
+  assert.ok(berichten.some((t) => /zet een vat bier voor het dorp klaar/.test(t)));
+  assert.ok(T.huisStemming(L.wie.huis, L.dag + 1) < 0, 'en wie het vroeg, neemt het je kwalijk');
+  assert.ok(!T.herbergVan(D).weigert);
+}));
+
+test('met twee herbergen gaat elke gast naar de herberg die het dichtst bij zijn huis staat', () => {
+  const S = dorp();
+  const D = S.dorp;
+  const w = D.bewoners.wereld;
+  const eerste = T.herbergVan(D);
+  // De tweede, zo ver mogelijk van de eerste: bij het huis dat er het verst vandaan staat.
+  const deur1 = T.deurVan(w, eerste);
+  const ver = D.gebouwen.filter((g) => T.standVan(g)).sort((a, b) => T.afstand(T.deurVan(w, b), deur1) - T.afstand(T.deurVan(w, a), deur1))[0];
+  const plek = T.plekVoor(D, 'herberg', T.deurVan(w, ver));
+  const tweede = T.plaatsGebouw(D, 'herberg', plek.x, plek.y).instantie;
+  tweede.klaar = true;
+  T.zetVoorraad(D, 'bier', 200);
+  assert.deepEqual(T.herbergenVan(D), [eerste, tweede]);
+  // Een winteravond, als iedereen vaker gaat; over een paar avonden.
+  const gasten = [];
+  for (let dag = 300; dag < 306; dag++) for (const p of T.herbergGasten(D, dag)) gasten.push({ p, g: T.herbergVanGast(D, p, dag) });
+  assert.ok(gasten.some((x) => x.g === tweede), 'er gaan er naar de tweede');
+  assert.ok(gasten.some((x) => x.g === eerste), 'en naar de eerste');
+  for (const { p, g } of gasten) {
+    const naar = (h) => T.looptijdVan(w, p, T.deurVan(w, p.huis), Object.assign({ straal: 0 }, T.deurVan(w, h)), h === eerste ? 'herberg' : 'herberg1');
+    assert.ok(naar(g) <= naar(g === eerste ? tweede : eerste) + 1e-9, `${T.naamVanBewoner(p)} gaat naar de dichtste`);
+  }
+  // Licht en tekst per herberg.
+  assert.match(T.herbergTekst(D, tweede), /bier/);
+});

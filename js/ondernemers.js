@@ -6,10 +6,14 @@
 //   wie      een op de zoveel volwassenen (geen boer, niet van de schout) heeft een onderneming, geloot uit het zaad
 //            van het spel en wie hij is (T.ondernemingVan), zoals het karakter van de boeren: elk spel andere
 //            ondernemers.
-//   wat      T.ONDERNEMINGEN: de wapenmaker (na een aanval van de rovers, of met een smidse), en later meer.
+//   wat      T.ONDERNEMINGEN: de wapenmaker (na een aanval van de rovers, of met een smidse), en een tweede herberg (in
+//            een dorp met één herberg, vanaf zoveel mensen).
 //   ja       het gebouw komt er, hij is er de meester (js/verzoeken.js), en zijn huis is je een tijd dankbaar.
 //   nee      zijn huis neemt het je een tijd kwalijk; heeft hij een kelder, dan doet de wapenmaker het daar stiekem; en
 //            na `wegNa` keer nee trekt hij weg, met zijn gezin, en kan als rover terugkomen (js/rovers.js).
+// En wat het een ander doet: de herbergierster is boos als er een tweede herberg komt (ze brouwt een tijd niet), en je
+// dankbaar als je nee zegt. Ze vechten om de gasten: wie 's avonds gaat, gaat naar de herberg die het dichtst bij zijn
+// huis staat (js/herberg.js).
 // Wat een huis nadraagt (wrok, dank), staat op het huis (g.stemming) en slijt weg; T.huisStemming geeft het aan de
 // tevredenheid van dat huis (T.berekenWensen, js/wensen.js).
 //
@@ -22,7 +26,7 @@
 //
 // D.verzoeken.eigen: { [id van de bewoner]: { nee (hoe vaak), ja (de dag), dag (van het laatste antwoord) } }
 // Op een huis: g.stemming = [{ waarde (procent), dag, dagen, waarom ('wrok' of 'dank'), wie (zijn naam) }]; g.stiekem = { wat: 'wapens', wie (id), sinds,
-// wapens }. Op een werkplaats: g.verzegeld = { dag }.
+// wapens }. Op een werkplaats: g.verzegeld = { dag }, of g.weigert = { tot, waarom } (wie er werkt, doet het niet).
 (function (T) {
   'use strict';
 
@@ -54,6 +58,12 @@
       boete: 20,
       argwaanGevonden: 0.15,
     },
+    herberg: {
+      // Een tweede herberg vraagt iemand pas in een dorp met zoveel mensen.
+      vanaf: 50,
+      // Komt hij er, dan brouwt de herbergierster zoveel dagen niet.
+      boosDagen: 60,
+    },
   };
   const IN = () => T.ONDERNEMERS_INSTELLINGEN;
 
@@ -66,7 +76,9 @@
   // ---------------------------------------------------------------------------------------------
 
   // Wat een ondernemer kan willen. Per onderneming: het gebouw, het voorval (zijn woorden staan onder dezelfde naam in
-  // js/gesprekken.js), wanneer hij het vraagt (`wil`, naast de trede: T.magGebouwd), en waarom, als zin.
+  // js/gesprekken.js), wanneer hij het vraagt (`wil`, naast de trede: T.magGebouwd), en waarom, als zin. En wat ja en
+  // nee verder doen (`ja`, `nee`: naast wat elk eigen verzoek doet, hieronder), en wat het venster daarover zegt
+  // (`prijs`: [tekst]).
   T.ONDERNEMINGEN = {
     wapens: {
       soort: 'wapenmaker',
@@ -78,10 +90,68 @@
       waarom: (D, dag) => (naAanval(D, dag)
         ? 'Na de rovers wil niemand nog met een hooivork voor zijn akker staan.'
         : 'De smid maakt hamers en hoefijzers, en de rovers komen terug.'),
+      // Nee, en hij woont er nog en heeft een kelder: dan doet hij het daar, stiekem.
+      nee: (D, L) => {
+        const p = L.wie;
+        if (!D.bewoners.mensen.includes(p) || !p.huis || p.huis.stiekem || !T.verstopPlekVan(D, p.huis)) return;
+        p.huis.stiekem = { wat: 'wapens', wie: p.id, sinds: dagNu(D), wapens: 0 };
+        T.zeg(D, `${hoofdletter(naamVan(p))} zegt niets meer. Een paar dagen later hoor je hameren, 's nachts, onder zijn huis.`, 'gevaar');
+      },
+      prijs: (D, L, doe) => (doe.bouw ? ['verboden: de heer mag het niet zien'] : []),
+    },
+    herberg: {
+      soort: 'herberg',
+      voorval: 'herbergverzoek',
+      wil: (D) => {
+        const herbergen = (D.gebouwen || []).filter((g) => g.soort === 'herberg');
+        return herbergen.length === 1 && herbergen[0].klaar && (D.bevolking || 0) >= IN().herberg.vanaf;
+      },
+      waarom: (D) => {
+        const ver = verVanDeHerberg(D);
+        if (ver >= 3) return `${hoofdletter(T.telwoord(ver))} mensen wonen meer dan een uur van de herberg, en komen er zelden.`;
+        if (T.herbergDroog(D)) return 'De herberg is droog: de herbergierster brouwt alleen.';
+        return 'Eén herberg is te weinig voor een dorp: wie bij haar geen plaats heeft, zit thuis.';
+      },
+      // Ja: de herbergierster is boos, en brouwt een tijd niet.
+      ja: (D) => {
+        const g = T.herbergVan(D);
+        if (!g) return;
+        const naam = herbergierVan(D);
+        g.weigert = { tot: dagNu(D) + IN().herberg.boosDagen, waarom: `${naam} is boos op je` };
+        T.zeg(D, `${hoofdletter(naam)} hoort het. "Een tweede herberg, schout? Dan brouw jij je bier voortaan zelf maar."`, 'gevaar');
+      },
+      // Nee: zij is je dankbaar (het vat bier staat in het antwoord, js/gesprekken.js).
+      nee: (D) => {
+        if (T.herbergVan(D)) T.zeg(D, `${hoofdletter(herbergierVan(D))} hoort het, en zet een vat bier voor het dorp klaar.`, 'goed');
+      },
+      prijs: (D, L, doe) => {
+        if (!T.herbergVan(D)) return [];
+        if (doe.bouw) return [`${herbergierVan(D)} is boos, en brouwt ${IN().herberg.boosDagen} dagen niet`];
+        if (doe.weiger) return [`${herbergierVan(D)} is je dankbaar`];
+        return [];
+      },
     },
   };
   const naAanval = (D, dag) => !!(D.rovers && D.rovers.laatsteAanval != null && dag - D.rovers.laatsteAanval <= IN().wapens.naAanval);
   const heeftSmidse = (D) => (D.gebouwen || []).some((g) => g.soort === 'smidse' && g.klaar);
+
+  // Wie de herberg van het begin houdt: wie er woont (de herbergierster), of "de herbergier".
+  function herbergierVan(D) {
+    const g = T.herbergVan(D);
+    const p = g && D.bewoners && D.bewoners.mensen.find((x) => x.huis === g && x.leeftijd === 'volwassen');
+    return p ? naamVan(p) : 'de herbergier';
+  }
+
+  // Hoeveel volwassenen meer dan een uur van de herberg wonen (T.looptijdVan, js/bewoners.js; dezelfde weg als
+  // js/herberg.js onthoudt).
+  function verVanDeHerberg(D) {
+    const g = T.herbergVan(D);
+    const w = D.bewoners && D.bewoners.wereld;
+    if (!g || !w) return 0;
+    const deur = T.deurVan(w, g);
+    return D.bewoners.mensen.filter((p) => p.leeftijd === 'volwassen' && p.huis && p.huis !== g && !p.schout
+      && T.looptijdVan(w, p, T.deurVan(w, p.huis), { x: deur.x, y: deur.y, straal: 0 }, 'herberg') > 1).length;
+  }
 
   // Wat hij wil beginnen (een sleutel van T.ONDERNEMINGEN), of null: uit het zaad van het spel en zijn id, zodat elk
   // spel andere ondernemers heeft en een spel ze houdt. Alleen een volwassene die geen boer is en niet bij de schout
@@ -120,7 +190,7 @@
   // Het antwoord (vanuit js/verzoeken.js)
   // ---------------------------------------------------------------------------------------------
 
-  // Ja: hij is je dankbaar, en wat hij stiekem deed, doet hij nu in het open.
+  // Ja: hij is je dankbaar, en wat hij stiekem deed, doet hij nu in het open. En wat zijn onderneming verder doet.
   T.eigenToegestaan = function (D, L) {
     const p = L.wie;
     const dag = dagNu(D);
@@ -131,6 +201,8 @@
       voegStemmingToe(p.huis, IN().dank, dag, IN().dankDagen, 'dank', naamVan(p));
       delete p.huis.stiekem;
     }
+    const o = T.ONDERNEMINGEN[L.bouw.eigen];
+    if (o && o.ja) o.ja(D, L);
   };
 
   // Wie er met hem wegtrekt: is hij het hoofd van zijn gezin, of de vrouw of man ervan, dan het hele gezin; een zoon of
@@ -142,8 +214,8 @@
   }
 
   // Wat een antwoord op zijn verzoek nog meer doet, voor het venster (T.prijsVanKeuze, js/voorvallen.js): nee, en hij
-  // neemt het je kwalijk of trekt weg; ja op iets verbodens, en de heer mag het niet zien. Wat hij stiekem doet, zegt
-  // het niet: dat is de verrassing, zoals een vervolg. [tekst]
+  // neemt het je kwalijk of trekt weg; en wat zijn onderneming erover zegt (verboden; de herbergierster). Wat hij
+  // stiekem doet, zegt het niet: dat is de verrassing, zoals een vervolg. [tekst]
   T.eigenPrijs = function (D, L, doe) {
     const p = L.wie;
     const delen = [];
@@ -153,28 +225,25 @@
       const zijn = p.geslacht === 'vrouw' ? 'haar' : 'zijn';
       delen.push(!weg ? `${naamVan(p)} neemt het je kwalijk` : gezin.length > 1 ? `${naamVan(p)} trekt weg, met ${zijn} gezin` : `${naamVan(p)} trekt weg`);
     }
-    if (doe.bouw && T.GEBOUWEN[L.bouw.soort].verdacht) delen.push('verboden: de heer mag het niet zien');
+    const o = T.ONDERNEMINGEN[L.bouw.eigen];
+    if (o && o.prijs) delen.push(...o.prijs(D, L, doe));
     return delen;
   };
 
-  // Nee: hij neemt het je kwalijk. Na wegNa keer trekt hij weg (met zijn gezin, gezinVan); anders doet de wapenmaker
-  // het stiekem, als hij een kelder heeft.
+  // Nee: hij neemt het je kwalijk, en wat zijn onderneming verder doet (de wapenmaker smeedt stiekem). Na wegNa keer trekt
+  // hij weg (met zijn gezin, gezinVan).
   T.eigenGeweigerd = function (D, L) {
     const p = L.wie;
     const dag = dagNu(D);
     const E = eigenVan(D, p);
     E.nee++;
     E.dag = dag;
+    const o = T.ONDERNEMINGEN[L.bouw.eigen];
     if (E.nee >= IN().wegNa) {
       const wie = gezinVan(D, p);
       T.wijzigBevolking(D, -wie.length, 'vertrek', `${naamVan(p)} kreeg ${T.telwoord(E.nee)} keer nee van de schout`, wie);
-      return;
-    }
-    if (p.huis) voegStemmingToe(p.huis, -IN().wrok, dag, IN().wrokDagen, 'wrok', naamVan(p));
-    if (L.bouw.eigen === 'wapens' && p.huis && !p.huis.stiekem && T.verstopPlekVan(D, p.huis)) {
-      p.huis.stiekem = { wat: 'wapens', wie: p.id, sinds: dag, wapens: 0 };
-      T.zeg(D, `${hoofdletter(naamVan(p))} zegt niets meer. Een paar dagen later hoor je hameren, 's nachts, onder zijn huis.`, 'gevaar');
-    }
+    } else if (p.huis) voegStemmingToe(p.huis, -IN().wrok, dag, IN().wrokDagen, 'wrok', naamVan(p));
+    if (o && o.nee) o.nee(D, L);
   };
 
   // ---------------------------------------------------------------------------------------------

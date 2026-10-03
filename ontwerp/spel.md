@@ -24,7 +24,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
-| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken, verboden, met wat ja en nee aan gevolgen hebben (vraag 104) | vraag 103, 104 |
+| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104) | vraag 103, 104 |
 | Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
@@ -304,7 +304,13 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
     **stiekem** ("Een paar dagen later hoor je hameren, 's nachts, onder zijn huis."): een wapen per vier dagen, die de
     inner niet ziet, maar de soldaten vinden als ze die kelder doorzoeken, en dan straft de heer net zo. Na de tweede
     nee trekt hij weg.
-  - **Nog niet: de tweede herberg** (ja: meer bier en plaats, maar de herbergierster is boos; nee: zij is je dankbaar).
+  - **De tweede herberg (gebouwd, 3 okt).** In een dorp met één herberg, vanaf 50 mensen, wil iemand er een tweede
+    beginnen: "Schout, ik wil een tweede herberg beginnen, naast mijn huis. Elf mensen wonen meer dan een uur van de
+    herberg, en komen er zelden." (of: de herberg is droog; of: één is te weinig). **Ja:** hij brouwt ook, en ze vechten
+    om de gasten: wie 's avonds gaat, gaat naar de herberg die het dichtst bij zijn huis staat, zodat wie ver woonde nu
+    ook gaat. Maar de herbergierster is boos ("Een tweede herberg, schout? Dan brouw jij je bier voortaan zelf maar.") en
+    brouwt 60 dagen niet, en ze weet voortaan alleen wie er bij háár zat. **Nee:** zij is je dankbaar, en zet een vat bier
+    (10) voor het dorp klaar; wie het vroeg, neemt het je kwalijk.
 - **Nog niet:** een oproep die ook een nieuwkomer met dat vak laat komen, en een bord op het plein waar je oproep aan
   hangt.
 

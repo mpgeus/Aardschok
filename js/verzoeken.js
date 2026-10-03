@@ -214,7 +214,7 @@
   T.verzoekToegestaan = function (D, L) {
     const b = L.bouw;
     const wie = L.wie;
-    const bij = vanIedereen(b.soort) || !(wie && wie.huis) ? hartVan(D) : T.deurVan(D.wereld, wie.huis);
+    const bij = (vanIedereen(b.soort) && !b.eigen) || !(wie && wie.huis) ? hartVan(D) : T.deurVan(D.wereld, wie.huis);
     const plek = T.gebouwPast(D, b.soort, b.x, b.y) ? b : T.plekVoor(D, b.soort, bij);
     const u = plek ? T.plaatsGebouw(D, b.soort, plek.x, plek.y) : { gelukt: false, reden: 'er is geen plek meer' };
     if (!u.gelukt) {

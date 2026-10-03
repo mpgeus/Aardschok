@@ -1054,9 +1054,14 @@
       g.stilWant = null;
       g.uren = null;
       if (!g.klaar || !soort.maakt) continue;
-      // Verzegeld door de heer (js/ondernemers.js): hij maakt niets meer.
+      // Verzegeld door de heer (js/ondernemers.js): hij maakt niets meer. En wie er werkt en het een tijd weigert (de
+      // herbergierster die boos is om een tweede herberg), maakt tot dan niets.
       if (g.verzegeld) {
         g.stilWant = 'de heer liet hem verzegelen';
+        continue;
+      }
+      if (g.weigert && dag < g.weigert.tot) {
+        g.stilWant = g.weigert.waarom;
         continue;
       }
       if (vrij && soort.handen > 0) {

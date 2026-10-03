@@ -335,7 +335,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   vertelt er wat er in zijn kelder ligt (`g.verteld`, `js/verstoppen.js`), de herbergierster vertelt jou
   wie er zat, en de marskramer logeert er (`T.logiesAnker`). 's Avonds branden de ramen van de herberg,
   met de gasten erachter als schimmen: de huizenbouwer geeft per huis door waar de ramen zitten (`ramen`
-  in `tegels.json`), en `js/tekenen.js` tekent ze zo dat wat ervoor staat ze afdekt (`brandendeRamen`).
+  in `tegels.json`), en `js/tekenen.js` tekent ze zo dat wat ervoor staat ze afdekt (`brandendeRamen`). Sinds vraag 104
+  kan er een tweede herberg komen (`js/ondernemers.js`): `T.herbergenVan` geeft ze allemaal, `T.herbergVan` de eerste
+  (waar de herbergierster woont en de marskramer logeert), en wie 's avonds gaat, gaat naar de dichtste
+  (`T.herbergVanGast`).
 - `js/doorzoeken.js`: **de soldaten doorzoeken het dorp** (werklijst punt 4, stuk 1, 27 sep): op
   Sint-Maarten onder de grens van de argwaan op twee of drie plekken (`T.beginDoorzoeken`, vanuit
   `T.heerStaatErOp`). Ze lopen met de schout mee (`T.loopNaastDeSchout` in `js/inner.js`, zoals de inner)
@@ -396,9 +399,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/ondernemers.js`: **wie iets wil beginnen wat niemand mist** (vraag 104, 3 okt; Marcel: "Stel er is een ondernemende
   inwoner die wapens wil maken etc"): een op de zes volwassenen is ondernemer, uit het zaad en wie hij is
   (`T.ondernemingVan`, `T.ONDERNEMINGEN`); wat hij nu wil vragen, geeft `T.eigenVerzoeken` aan `js/verzoeken.js` (na je
-  oproepen, vóór wat het dorp mist), met een eigen voorval (`wapenverzoek`) en `L.bouw.eigen`. Ja (`T.eigenToegestaan`)
-  en nee (`T.eigenGeweigerd`: na twee keer trekt hij weg) laten een stemming op zijn huis (`g.stemming`,
-  `T.huisStemming` in `T.berekenWensen`). De wapenmaker: wapens (`T.wapensInHetDorp`, `T.bewapen` bij een aanval,
+  oproepen, vóór wat het dorp mist), met een eigen voorval (`wapenverzoek`, `herbergverzoek`) en `L.bouw.eigen`. Ja
+  (`T.eigenToegestaan`) en nee (`T.eigenGeweigerd`: na twee keer trekt hij weg) laten een stemming op zijn huis
+  (`g.stemming`, `T.huisStemming` in `T.berekenWensen`), en wat een onderneming verder doet, staat bij haar (`ja`, `nee`,
+  `prijs` in `T.ONDERNEMINGEN`): de tweede herberg maakt de herbergierster boos (`g.weigert`: ze brouwt een tijd niet). De wapenmaker: wapens (`T.wapensInHetDorp`, `T.bewapen` bij een aanval,
   `T.slagSchade` in `js/gevecht.js`), stiekem in een kelder (`g.stiekem`), de inner die het ziet (`T.innerZietVerboden`),
   en de heer die het op Sint-Maarten verzegelt (`T.heerVindtVerboden`, `T.verbodenGevonden`, `g.verzegeld`, de boete via
   `T.heerRekentErbij` in `js/heer.js`). De getallen in `T.ONDERNEMERS_INSTELLINGEN`.
@@ -724,7 +728,8 @@ zei; `('nu')` laat het eerste nu vragen, `('oproep', 'steengroeve')` hangt een o
 met "Jij bouwt" (`T.zetOptie('wieBouwt', 'jij')`); die van de verzoeken staan in `test/verzoeken.test.cjs`.
 `Spel.debug.ondernemers()` zegt wie wat wil beginnen, of hij het nu zou vragen, wat hij onthoudt, wie stiekem smeedt,
 wat de heer verzegelde en hoeveel wapens er zijn; `('wapens')` laat de eerste die wapens wil het nu vragen, alsof de rovers
-net kwamen (in een dorp: `Spel.debug.trede('dorp')`, en sluit dan de brief van de heer), `('stiekem')` laat hem
+net kwamen (in een dorp: `Spel.debug.trede('dorp')`, en sluit dan de brief van de heer), `('herberg')` de eerste die een
+tweede herberg wil (vanaf `T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf` mensen), `('stiekem')` laat de wapenmaker
 beginnen in zijn kelder.
 `Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
 en daarboven het dorp per stand en wat er gemist wordt; `('dorpelingen')` laat alleen die stand zien.
