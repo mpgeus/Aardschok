@@ -38,9 +38,12 @@ ambachtsman 0,005 laken per dag; sinds vraag 92 zijn brood, vis en vlees eten, e
 **Waar het werk staat:** alles staat in `main`, ook het werk van de vierentwintigste sessie tot en met vraag 96, a en b
 (Marcel, 3 okt: "Push main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** wat Marcel vindt van de feesten (zie onder Af; de schermafdruk van de meiboom 's
-avonds), de schetsen voor de ui en het plan voor het laken (de vijfentwintigste sessie, tijdens zijn vlucht). De speeltest
-van vraag 96 is nooit opgeschreven (hij liep nog toen de vorige sessie stopte), en Marcel koos hem niet voor de vlucht.
+**Waar de volgende sessie begint:** Marcels antwoorden op de vier vragen die tijdens zijn vlucht klaarkwamen (de
+vijfentwintigste sessie): **vraag 98** (de ui: welke richting, op de pagina "De ui als papieren",
+https://claude.ai/artifact/JRKq7fwaANmLd3fGc4EbD8), **vraag 99** (het laken: met één kooi en 4 wol per schaap haalt een
+stad van stenen huizen het nooit), **vraag 100** (2c, zien wat een huis wil) en **vraag 101** (2e, het eind en het jaar in
+het kort). En wat hij vindt van de feesten (zie onder Af; de schermafdruk van de meiboom 's avonds). De speeltest van vraag
+96 is nooit opgeschreven (hij liep nog toen de vorige sessie stopte), en Marcel koos hem niet voor de vlucht.
 **Vraag 97 is af** (zie onder Af): het oogstfeest is een hele dag vrij (groot) of een avond (klein), en de meiboom komt
 op 30 grasmaand. **Vraag 96, a en b, is af** (zie onder Af): één herberg en één markt zijn genoeg voor het hele dorp (de spelregel "De herberg en
 de markt"), en de bouwers bouwen een keten in één keer. **Vraag 95 is af** (zie onder Af): brood 0,01, de bouwers leggen erven
@@ -186,7 +189,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 96 (de kring van de herberg en de markt naar 40, de keten in één keer, en de honger na de eerste zomer); welke zin de haak wordt, nu hij is nagezocht tegen Steam (vraag 83, c; de rest van 83 en heel 84 is beantwoord, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* vraag 98 tot en met 101 (de ui, het laken, 2c en 2e; zie hierboven); welke zin de haak wordt, nu hij is nagezocht tegen Steam (vraag 83, c; de rest van 83 en heel 84 is beantwoord, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -3284,6 +3287,66 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     het meeste werk, en de tafel neemt onderin 100 pixels.
     Vragen: **a**, welke richting, of welke mengeling (de balk van, het venster van, het papier van)? **b**, welke letter?
     **c**, eerst alleen de nieuwe vensters van 2c in die stijl, en de rest van de ui later (januari, met de Steam-pagina)?
+99. **Het laken: genoeg voor een stad van stenen huizen?** (Claude, 3 okt, vijfentwintigste sessie, tijdens Marcels vlucht;
+    open). Na vraag 96 was het laken de volgende stap. Uitgerekend uit de regels (`js/wensen.js`, `js/vee.js`,
+    `js/gebouwen.js`):
+    - **Wat een stad vraagt:** een ambachtsman wil 0,005 laken per dag, 1,8 per jaar. Een stenen huis (8 mensen) is 15
+      laken per jaar; tien stenen huizen, de maat van de demo, 146.
+    - **Wat er is:** het gehucht begint met 8 schapen en één kooi. Een schaap geeft 4 wol per jaar (scheren op 1
+      zomermaand, een lam van dat voorjaar nog niet), de weverij maakt van 1 wol 1 laken, en de heer vraagt 20 wol per
+      kooi. Een schaap werpt met 30% kans een lam in grasmaand, en de kooi bergt er 20; de heide heeft plaats voor 92.
+    - **Wat dat geeft:** het eerste jaar 32 wol, min 20 voor de heer: 12 laken, genoeg voor 6 ambachtslieden, nog geen
+      stenen huis. Het tweede jaar zo'n 10 schapen: 21 laken, voor zo'n 12. Een volle kooi (na een jaar of vijf) geeft 60 laken,
+      voor 33. Tien stenen huizen halen het dus nooit met één kooi, en met een tweede kooi pas na jaren (en de heer vraagt
+      dan 40 wol). Zolang er laken mist, is niemand super gelukkig, en is de demo niet te winnen.
+    Voorstel:
+    - **a, een schaap geeft 8 wol** (één getal in de werkbank, `T.VEE_INSTELLINGEN.wolPerSchaap`; nu 4): het eerste jaar 44
+      laken (24 ambachtslieden, drie stenen huizen), een volle kooi 140 (76 ambachtslieden). Net als bij het brood (vraag
+      95): de eenvoudige regel die het spel speelbaar maakt, gaat voor de werkelijkheid.
+    - **b, de kudde groeit sneller:** 50% kans op een lam (nu 30%), zodat de kooi in een jaar of drie vol is in plaats van
+      vijf. Dan is een tweede kooi iets om over na te denken, met de 20 wol voor de heer als prijs.
+    - **c, de marskramer verkoopt laken,** in een dorp, voor goud (zoals in Anno 1602: wat je niet maakt, koop je): een
+      paar pakken per bezoek, duur. Dan heeft het goud van de belasting een doel, en kan een tekort overbrugd worden. Of
+      later, met de markt van de kleine stad (stap 6), waar ook het graan van buiten komt.
+    - **d, de speeltest telt de dagen zonder laken,** zoals nu die zonder bier of brood, en daarna een speeltest.
+    - Niet nu: vlas als tweede bron van laken (een gewas en een keten erbij), en minder laken per mens (de wens wordt dan
+      onzichtbaar klein).
+    Vragen: **a**, 8 wol per schaap? **b**, 50% lammeren? **c**, de marskramer met laken, nu of met de markt? **d**, zo?
+100. **2c, zien wat een huis wil: het plan** (Claude, 3 okt, vijfentwintigste sessie, tijdens Marcels vlucht; vraag 80, E,
+    besloten; open). Wat er al is: elk huis weet wat het wil en heeft (`g.wensen`: stand, mensen, ✓ en ✗, tevredenheid),
+    en de raad en het rapport zeggen wat de huizen het meest missen, met wat helpt (vraag 87). Wat er nog niet is, is het
+    zien in de wereld. Voorstel, in deze volgorde:
+    - **a, het teken bij de deur:** een huis dat iets mist, heeft boven zijn deur een klein teken met wat het het meest mist
+      (het pictogram van bier, vis, brood, laken, of een kapel), zoals het uitroepteken van een voorval. Zo zie je over het
+      hele dorp wat er ontbreekt, zonder venster. Een huis dat alles heeft, krijgt geen teken; een huis dat doorgroeit, kort
+      een sterretje.
+    - **b, het venster van een huis:** klik een huis, en je ziet wie er wonen (namen, zoals de muis nu), de stand, hoe
+      tevreden, de wensen met ✓ en ✗ en wat helpt ("bouw een visser of een jager [B]"), en hoe ver het is met doorgroeien
+      ("nog 12 dagen alles, dan een stenen huis; daarvoor 12 steen, je hebt er 0"). In de stijl die je kiest bij vraag 98.
+    - **c, bij het aanwijzen van een erf de kringen:** welke put en kapel het nieuwe huis zou halen (`opmerkingen.md`, 1
+      okt); de herberg en de markt hebben sinds vraag 96 geen kring meer.
+    - **d, eerst de regels, dan het scherm:** één functie die zegt wat een huis toont (`T.huisToestand`, met toetsen), en
+      dan het teken en het venster. Daar hoort het opsplitsen van `js/hud.js` bij (vraag 25, C), want het venster komt erin.
+    Vragen: **a**, het teken altijd, of alleen als de schout in de buurt is (een spelregel)? **b**, het venster zo? **c**, de
+    kringen bij het erf nu ook? **d**, wachten op vraag 98 (de stijl), of eerst a en c, die geen venster nodig hebben?
+101. **2e, het eind en het jaar in het kort: het plan** (Claude, 3 okt, vijfentwintigste sessie, tijdens Marcels vlucht;
+    vraag 80, F, besloten; open). Wat er al is: twee eindschermen, je ambt kwijt en de schout gevallen (`T.ambtKwijt`,
+    `js/heer.js`; `T.ui.toonEinde`). Er is nog geen winst. Voorstel:
+    - **a, winnen:** elke dag telt het dorp of alle woningen stenen huizen zijn die alles hebben, en de boerderijen wat zij
+      willen (`g.wensen.alles`, `js/wensen.js`); dan loopt er een teller, en een dag waarop één huis iets mist, zet hem op
+      nul. Na een jaar (360 dagen, de werkbank) is het gewonnen. Linksboven staat het zolang het loopt: "Iedereen super
+      gelukkig: 12 van 360 dagen".
+    - **b, alleen een stad wint:** pas vanaf een aantal mensen (voorstel: 100, de maat van de demo; vraag 77: "een dorp van
+      50 is als doel te klein"), anders win je met één stenen huis in een gehucht.
+    - **c, de winst is een feest:** op de dag dat je wint, viert het hele dorp het op het plein (de feesten van vraag 97), en
+      over dat beeld komt het eindscherm, met het jaar in het kort. Wie wint, kan verder spelen.
+    - **d, verliezen:** naast je ambt kwijt en gevallen ook als er minder dan tien mensen over zijn (vraag 80, F), met
+      hetzelfde scherm.
+    - **e, het jaar in het kort:** op 1 lentemaand brengt de raadsman een jaarverslag, in de vorm van zijn rapport: hoeveel
+      mensen er kwamen, stierven en wegtrokken, wat er geoogst werd en wat de heer kreeg, welke huizen doorgroeiden, welke
+      feesten er waren, en wat het dorp het meest miste. Het eindscherm toont het laatste jaar zo.
+    Vragen: **a**, een jaar lang, zoals besloten, of eerst korter om te testen (de werkbank)? **b**, vanaf 100 mensen? **c**,
+    de winst als feest? **d**, ook bij minder dan tien mensen? **e**, het jaarverslag zo?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
