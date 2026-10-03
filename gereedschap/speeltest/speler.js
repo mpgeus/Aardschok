@@ -243,11 +243,21 @@
       const knoppen = [...document.querySelectorAll('#dialoog-keuzes button')].filter((b) => !b.disabled);
       const knop = knoppen.find((b) => verstandig(s, prijsVan(b))) || knoppen[0];
       if (!knop) break;
+      const antwoord = knop.textContent.replace(/^\d/, '');
       if (!geboekt.has(L)) {
         geboekt.add(L);
-        boek.voorvallen.push({ dag: heel(s.kalender.dag), datum: datum(), id: L.id, wie: T.naamVanBewoner(L.wie), antwoord: knop.textContent.replace(/^\d/, '') });
+        boek.voorvallen.push({ dag: heel(s.kalender.dag), datum: datum(), id: L.id, wie: T.naamVanBewoner(L.wie), antwoord, bouw: L.bouw ? L.bouw.soort : undefined });
       }
+      const bouw = L.bouw && L.bouw.soort;
+      const voor = s.dorp.gebouwen.length;
       knop.click();
+      // Een bouwverzoek (js/verzoeken.js; werklijst vraag 103): wat er zo gebouwd werd, telt als gebouwd, zoals toen de
+      // speler het zelf deed.
+      if (bouw && /^Ja/.test(antwoord)) {
+        const gelukt = s.dorp.gebouwen.length > voor;
+        boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort: bouw, gelukt, reden: gelukt ? null : 'geen plek of geen bouwstof', door: 'verzoek' });
+        daad(`zegt ja tegen ${T.naamVanBewoner(L.wie)}: een ${bouw}`);
+      } else if (bouw) daad(`zegt nee tegen ${T.naamVanBewoner(L.wie)}: een ${bouw}`);
     }
     if (s.modus === 'raadsman' && !bezig.raadsman) T.ui.sluitRaadsman(s);
     if (s.modus === 'verstoppen' && !bezig.verstoppen) T.ui.sluitVerstoppen(s);
@@ -485,27 +495,27 @@
     return plekken().find((p) => p.vanSchout);
   }
 
-  // Waar het past, zo dicht mogelijk bij de deur van de schout (zoals het bouwmenu: T.gebouwPast).
+  // Waar het past, zoals een inwoner die het vraagt het kiest (T.plekVoor, js/verzoeken.js): een put of een kapel waar hij
+  // de meeste huizen bereikt die er nog geen hebben (zoals een speler die met de put in de hand kijkt wat de muis zegt),
+  // de rest zo dicht mogelijk bij de deur van de schout. Vragen de mensen het je (de spelregel "Wie bouwt"; werklijst
+  // vraag 103), dan bouwt de speler zelf niets: dan komt het als verzoek, en zegt hij ja of nee (de voorvallen, in
+  // beantwoord hierboven).
   function bouw(soort) {
+    if (T.VERZOEKEN_INSTELLINGEN.mensen) return false;
     const s = S();
     const huis = huisVanDeSchout();
     const midden = huis ? T.deurVan(s.wereld, huis.gebouw) : schoutTegel();
-    for (let r = 3; r < 45; r++) {
-      for (let dy = -r; dy <= r; dy++) {
-        for (let dx = -r; dx <= r; dx++) {
-          if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
-          const x = midden.x + dx;
-          const y = midden.y + dy;
-          if (!T.gebouwPast(s.dorp, soort, x, y)) continue;
-          const u = T.plaatsGebouw(s.dorp, soort, x, y);
-          boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort, gelukt: u.gelukt, reden: u.reden || null });
-          daad(u.gelukt ? `bouwt een ${soort}` : `wil een ${soort} bouwen, maar: ${u.reden}`);
-          return u.gelukt;
-        }
-      }
+    const kring = T.WENSEN_INSTELLINGEN.kring[soort] != null;
+    const plek = T.plekVoor(s.dorp, soort, midden);
+    if (!plek) {
+      daad(kring ? `vindt geen plek waar een ${soort} iemand helpt` : `vindt geen plek voor een ${soort}`);
+      return false;
     }
-    daad(`vindt geen plek voor een ${soort}`);
-    return false;
+    const u = T.plaatsGebouw(s.dorp, soort, plek.x, plek.y);
+    boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort, gelukt: u.gelukt, reden: u.reden || null });
+    const voor = kring ? ` voor ${plek.zonder === 1 ? 'één huis' : `${plek.zonder} huizen`}` : '';
+    daad(u.gelukt ? `bouwt een ${soort}${voor}` : `wil een ${soort} bouwen, maar: ${u.reden}`);
+    return u.gelukt;
   }
 
   // Een erf (werklijst vraag 95, b): waar het huis dat erop komt, de plekken die de huizen willen in zijn kring heeft
@@ -542,35 +552,6 @@
     boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort: 'erf', gelukt: u.gelukt, reden: u.reden || null });
     const bij = beste.kringen.map((p) => (p.soort === 'herberg' ? 'de herberg' : `een ${p.soort}`));
     daad(u.gelukt ? `wijst een erf aan${bij.length ? ` binnen de kring van ${bij.join(', ')}` : ', buiten elke kring'}` : `wil een erf aanwijzen, maar: ${u.reden}`);
-    return u.gelukt;
-  }
-
-  // Een plek die huizen in de buurt willen (een put, een kapel; js/wensen.js): waar hij de meeste huizen bereikt die er
-  // nog geen hebben, zoals een speler die met de put in de hand kijkt wat de muis zegt (T.watDeKringBereikt, met de voet
-  // zoals js/main.js hem neemt); bij gelijk spel het dichtst bij de deur van de schout.
-  const isPlek = (soort) => Object.values(T.WENSEN).some((w) => w.plek === soort);
-  function bouwInDeKring(soort) {
-    if (T.WENSEN_INSTELLINGEN.kring[soort] == null) return bouw(soort); // geen kring (vraag 96, a): waar hij past
-    const s = S();
-    const huis = huisVanDeSchout();
-    const midden = huis ? T.deurVan(s.wereld, huis.gebouw) : schoutTegel();
-    const voet = T.gebouwVoet(soort, T.volgendeTekening(s.dorp, soort)) || T.GEBOUWEN[soort].voet;
-    let beste = null;
-    for (let y = 0; y < s.wereld.tegels.length; y++) {
-      for (let x = 0; x < s.wereld.tegels[0].length; x++) {
-        if (!T.gebouwPast(s.dorp, soort, x, y)) continue;
-        const zonder = T.watDeKringBereikt(s.dorp, soort, { x, y, b: voet.b, h: voet.h }).zonder;
-        const d = Math.hypot(x - midden.x, y - midden.y);
-        if (zonder > 0 && (!beste || zonder > beste.zonder || (zonder === beste.zonder && d < beste.d))) beste = { x, y, d, zonder };
-      }
-    }
-    if (!beste) {
-      daad(`vindt geen plek waar een ${soort} iemand helpt`);
-      return false;
-    }
-    const u = T.plaatsGebouw(s.dorp, soort, beste.x, beste.y);
-    boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort, gelukt: u.gelukt, reden: u.reden || null });
-    daad(u.gelukt ? `bouwt een ${soort} voor ${beste.zonder === 1 ? 'één huis' : `${beste.zonder} huizen`}` : `wil een ${soort} bouwen, maar: ${u.reden}`);
     return u.gelukt;
   }
 
@@ -1030,8 +1011,7 @@
       if (!x) return;
       wensNietVoor = dagNu() + 30;
       for (const soort of [x.bouw, ...(x.ook || [])]) {
-        if (isPlek(soort)) bouwInDeKring(soort);
-        else bouw(soort);
+        bouw(soort);
       }
     }
     // Laken (werklijst vraag 99, c): in een dorp verkoopt de marskramer het. Wat de ambachtslieden tot zijn volgende
@@ -1105,14 +1085,16 @@
         // neemt het hout zodra het er is; zo kwam de houthakker er bij zaad 2 nooit (de speeltest van 1 okt).
         const houthakker = s.dorp.gebouwen.some((g) => g.soort === 'houthakker');
         if (!houthakker && !wil.includes('houthakker') && dagNu() >= houthakkerNietVoor) wil.unshift('houthakker');
-        // Steeds één erf vrij, binnen de kringen (vraag 95, b).
-        if (houthakker && !T.vrijeErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
+        // Steeds één erf vrij, binnen de kringen (vraag 95, b). Vragen de mensen het je (vraag 103), dan zonder op een
+        // houthakker te wachten: een hut die op hout wacht, is wat de houthakker laat vragen (T.watTeBouwen, js/raad.js).
+        const erfMag = houthakker || T.VERZOEKEN_INSTELLINGEN.mensen;
+        if (erfMag && !T.vrijeErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
         // Bouwen wat hij wil, zodra het goud en het hout er zijn; een kapel waar hij de meeste huizen bereikt. Wat het doel
         // vraagt en er al staat (een kapel voor de wensen), hoeft niet meer.
         while (wil.length && wil[0] !== 'houthakker' && !T.doelGebouwen(s.dorp).includes(wil[0])) wil.shift();
         while (wil.length && T.kanBetalen(s.dorp, kosten(wil[0]))) {
           const soort = wil.shift();
-          const gelukt = isPlek(soort) ? bouwInDeKring(soort) : bouw(soort);
+          const gelukt = bouw(soort);
           if (!gelukt && soort === 'houthakker') houthakkerNietVoor = dagNu() + 30;
         }
         volgDeWensen();

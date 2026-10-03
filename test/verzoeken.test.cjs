@@ -172,3 +172,14 @@ test('een verzoek en wat het dorp weigerde, worden bewaard en geladen', () => {
   assert.deepEqual(terug.staat.dorp.voorvallen.lopend.bouw, D.voorvallen.lopend.bouw);
   assert.equal(terug.staat.dorp.voorvallen.lopend.wie.naam, D.voorvallen.lopend.wie.naam);
 });
+
+test('een hut op een erf die op hout wacht, en geen houthakker: dan vraagt iemand er een', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  nacht(S, 1);
+  assert.ok(!D.gebouwen.some((g) => g.soort === 'houthakker'), 'het gehucht begint zonder houthakker');
+  assert.ok(!T.watTeBouwen(D).some((x) => x.soort === 'houthakker'));
+  D.gebouwen.push({ soort: 'hut', x: 0, y: 0, wachtOpHout: true, klaar: false });
+  const x = T.watTeBouwen(D).find((w) => w.soort === 'houthakker');
+  assert.deepEqual([x.waarom, x.voor], ['Een hut op een erf wacht op hout.', 'erf']);
+});

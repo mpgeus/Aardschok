@@ -61,7 +61,8 @@
 
   // Waar een gebouw van deze soort komt, zoals wie het wil bouwen het kiest: { x, y }, of null. Een plek met een kring (een
   // put, een kapel; js/wensen.js): waar hij de meeste huizen bereikt die er nog geen hebben (T.watDeKringBereikt), bij
-  // gelijk spel het dichtst bij `bij`; bereikt hij nergens zo'n huis, dan nergens. De rest: zo dicht mogelijk bij `bij`
+  // gelijk spel het dichtst bij `bij` (met `zonder`: hoeveel); bereikt hij nergens zo'n huis, dan nergens. De rest: zo
+  // dicht mogelijk bij `bij`
   // (een deur), in ringen, op de eerste plek waar het past (T.gebouwPast). Zo zocht de bouwer van de speeltest al
   // (gereedschap/speeltest/speler.js), en die vraagt het nu hier.
   T.plekVoor = function (D, soort, bij) {
@@ -77,7 +78,7 @@
           if (zonder > 0 && (!beste || zonder > beste.zonder || (zonder === beste.zonder && d < beste.d))) beste = { x, y, d, zonder };
         }
       }
-      return beste && { x: beste.x, y: beste.y };
+      return beste && { x: beste.x, y: beste.y, zonder: beste.zonder };
     }
     for (let r = 3; r < 45; r++) {
       for (let dy = -r; dy <= r; dy++) {
