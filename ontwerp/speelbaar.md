@@ -149,6 +149,59 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 3 okt: het laken (werklijst, vraag 99)
+
+Gespeeld in de vijfentwintigste sessie, op `ccr-0d0c2710-bcd5tx` op `3951656`: het laken van vraag 99 (een schaap geeft 8
+wol, werpt met 50% kans een lam, en in een dorp verkoopt de marskramer laken), nog zonder 2c en 2e. Alle zes spelers, zaad
+1 tot en met 3, de bouwers twee jaar. Geen fouten in de console. Het eerste spel dat de dagen zonder laken telt (vraag 99,
+d), dus een "ervoor" is er voor het laken niet; voor de rest is de bouwer met zaad 1 te vergelijken met de controle van de
+feesten hieronder (`2162189`).
+
+| Spel | Mensen (eind) | De weverij | Dagen zonder laken (jaar 1, 2) | Dagen zonder bier (jaar 2) | Huizen met alles (jaar 2) | Dagen dat alle huizen alles hadden (jaar 1, 2) | Langste reeks | Graan op 1 grasmaand '25 |
+|---|---|---|---|---|---|---|---|---|
+| bouwer, zaad 1 | 112 | 1 lentemaand '24 | 171, 4 | 38 | 53% | 25, 0 | 18 | 0 |
+| bouwer, zaad 2 | 110 | 1 louwmaand '24 | 116, 11 | 74 | 59% | 24, 22 | 17 | 0 |
+| bouwer, zaad 3 | 101 | 12 zomermaand '24 | 172, 105 | 97 | 58% | 36, 0 | 19 | 0 |
+| sluw, zaad 1 | 107 | 17 louwmaand '24 | 95, 0 | 5 | 70% | 76, 18 | 51 | 7 |
+| sluw, zaad 2 | 110 | 22 hooimaand '24 | 171, 145 | 58 | 49% | 24, 0 | 17 | 6 |
+| sluw, zaad 3 | 74 | 1 lentemaand '24 | 140, 4 | 44 | 69% | 82, 109 | 46 | 6 |
+
+De bouwer met zaad 1 naast de controle van de feesten (tussen haakjes): 112 mensen (111), in het tweede jaar 53% van de
+huizen met alles (51%), 0 dagen met alle huizen alles (2), 38 dagen zonder bier (86) en 3 zonder brood (3).
+
+**Wat opviel:**
+
+1. **Het laken loopt, zodra de weverij er staat.** In het tweede jaar ontbrak het 0 à 11 dagen bij wie de weverij in
+   louwmaand of lentemaand bouwde, en 105 à 145 dagen bij wie hem pas in zomermaand of hooimaand bouwde (de bouwer met
+   zaad 3, de sluwe bouwer met zaad 2). De wol is er dus genoeg; wat remt, is wanneer de weverij komt.
+2. **In het eerste jaar is er geen laken te krijgen** (95 à 172 dagen zonder). De eerste ambachtslieden wonen er al in
+   herfstmaand (bij de sluwe bouwers met zaad 1 en 3 in wijnmaand), maar geen bouwer bouwt in het eerste jaar een
+   weverij, en de marskramer verkoopt laken alleen in hooimaand en wijnmaand, en pas in een dorp. Wie in de lente van het
+   derde jaar zijn wol op heeft, mist het weer (de bouwer met zaad 2: 31 van de 31 dagen in lentemaand '25), want er
+   wordt pas op 1 zomermaand geschoren.
+3. **Laken bij de marskramer hielp bijna niet** (vraag 99, c). In hooimaand en wijnmaand van het tweede jaar wilden de
+   bouwers 2 à 34 laken kopen, maar ze hadden het goud niet; alleen de sluwe bouwer met zaad 1 kocht er één keer 4, voor 7
+   goud.
+4. **Het graan is nu de rem.** Op 1 grasmaand van het derde jaar hebben de drie bouwers geen graan meer, en hun huizen
+   missen bier ("de herberg heeft geen graan, en graan komt van de akkers"). In het tweede jaar bracht de oogst 433 à 564
+   graan, en gingen er 173 à 192 naar het zaaien, 129 à 233 naar de molen, 54 à 80 naar de herberg, 13 à 67 naar de heer,
+   en 45 à 147 naar de rovers, de soldaten en de voorvallen. Een dorp van 100 met bier en brood vraagt meer dan de 179
+   akkertegels geven.
+5. **Wie de heer bedriegt, komt het dichtst bij een gewonnen jaar.** De sluwe bouwers gaven de heer 13 à 28 graan, en
+   hielden er 150 à 270 verstopt voor de herberg en de molen: zij hadden aan het eind nog wat graan (6 à 7), en bij zaad
+   1 en 2 miste hooguit één huis een put. Bij zaad 3 hadden alle huizen in het tweede jaar op 109 dagen alles, en in de eerste maand
+   van het derde jaar op 28 van de 31 dagen (98% van de huizen). Maar dat dorp bleef op 74 mensen (vijf erven), en met
+   2e telt een jaar pas vanaf 100. Rijk worden en arm lijken is zo de weg naar de winst, en dat is de satire: wie iedereen
+   gelukkig wil, moet de heer bestelen.
+6. **Geen dorp van 100 heeft alleen stenen huizen.** Aan het eind van het tweede jaar hadden de grote dorpen 7 à 12
+   stenen huizen, en daarnaast 2 à 7 huizen en soms nog een hut. Met 2e moet elk huis een stenen huis zijn, en een nieuw
+   gezin begint in een hut. De bouwers wijzen erven aan zolang er een gezin komt, dus de groei stopt nooit (zie
+   `opmerkingen.md`, "Het eind").
+7. **De luie speler die 60% verstopt, verliest nu.** Met zaad 1 ging zijn gehucht van 26 naar 9 mensen (honger): met 2e
+   is dat "Het dorp is leeg" (minder dan 10). Met zaad 2 bleven er 13 over.
+
+Wat eruit volgt, staat in de werklijst als vraag 102.
+
 ## De controle van 3 okt: de feesten in de speeltest (werklijst, vraag 97)
 
 Geen volledige speeltest (die koos Marcel niet voor zijn vlucht), maar één spel om na te gaan dat de feesten niets laten

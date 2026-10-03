@@ -10,126 +10,55 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (3 okt 2026, vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken (vraag 78 tot en met 97); één herberg en één markt voor het hele dorp (vraag 96) en de feesten (vraag 97: het oogstfeest als vrije dag, en de meiboom) zijn af; tijdens Marcels vlucht ook de schetsen voor de ui (vraag 84, a) en een plan voor het laken
+## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; sinds vandaag is er dat eind (2e), met het jaarverslag, en zie je wat een huis wil (2c); het laken, de feesten en de richting van de ui (de schrijftafel) zijn af of gekozen; de speeltest zegt nu dat het graan tussen een dorp van 100 en de winst staat (vraag 102)
 
-**Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Sinds 28
-sep (vraag 50) is het hart: het gehucht laten groeien en het besturen, terwijl de heer eraan trekt en er later
-gevochten wordt; rijk worden en arm lijken blijft de druk van boven. Wat er nu speelt en hoe het werkt, staat
-per onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met **Zo werkt het nu**.
-Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, en Nieuw spel geeft de
-naam van je dorp en de benoemingsbrief van de heer; `W` zijn de wetten, `Z` is slapen bij je huis, `Esc` het menu, en
-het spel slaat elke ochtend zelf op; onder het doel linksboven staat de raad. In een dorp vraagt de heer op 1 hooimaand
-mannen voor zijn oorlog (`Spel.debug.heervaart('vraag')`). Om de paar dagen komt iemand je zoeken met een voorval: een
-uitroepteken boven zijn hoofd, en hij spreekt je aan als je stilstaat (`Spel.debug.voorval('brand')`); ben je weg,
-dan beslist je raadsman, die je kiest met de knop Raadsman (`R`); die brengt je ook elke ochtend een rapport, aan je
-deur als je bij huis slaapt (`Z`), en anders onder de knop Rapport (`Spel.debug.rapport()`). Met de spelregel Land aan
-(`O`) loop je over de weg je gehucht uit, het land in, en reis je in dagen (`Spel.debug.land()`). Met de spelregel "Je
-gehucht" op "Elk spel een ander" legt de maker elk nieuw spel een ander gehucht (`Spel.debug.gehucht(3)` voor zaad 3).
-Elk huis heeft een stand met zijn wensen (sinds 1 okt, vraag 85): bij de muis op de tevredenheid in de balk staat hoe
-tevreden elke stand is, en sinds 2 okt zegt de raad onder het doel wat de huizen missen en wat helpt ("Vijf boerderijen
-en een huis willen een kapel binnen 40 tegels [B]"), en het rapport ook (vraag 87); `Spel.debug.wensen()` zegt het per
-huis. Sinds 2 okt komt een trede met de mensen van een stand (vraag 90): linksboven staat "2 van 20 dorpelingen" (wie in
-een huis of een stenen huis woont), dan "0 van 20 ambachtslieden" voor marktrecht, en de heer schrijft bij elke trede;
-`Spel.debug.trede('marktrecht')` laat het nu gebeuren. De pagina "Stand van het gehucht" (25 sep) loopt achter op de
-dag. Sinds vraag 91 maakt een werkplaats die iets omzet tot er 30 ligt (en laat hij het zaaigraan liggen), en wil een
-ambachtsman 0,005 laken per dag; sinds vraag 92 zijn brood, vis en vlees eten, en sinds vraag 95 wil een ambachtsman
-0,01 brood per dag. `npm test`: 774/774.
+**Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
+gehucht laten groeien en het besturen, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
+Wat er nu speelt en hoe het werkt, staat per onderwerp in `spel.md`: bovenaan "Waar staat wat", en elk onderwerp begint met
+**Zo werkt het nu**. Spelen: `npm start`, dan `localhost:8123/`: het spel opent op het titelscherm, en Nieuw spel geeft de
+naam van je dorp en de benoemingsbrief van de heer; `W` zijn de wetten, `R` de raadsman, `Z` is slapen bij je huis, `Esc`
+het menu, en het spel slaat elke ochtend zelf op; onder het doel linksboven staat de raad. Elk huis heeft een stand met zijn
+wensen (zoals in Anno 1602): wie een huis aanwijst, ziet een briefje met wat het wil, en een huis dat iets mist, heeft
+een teken bij zijn deur (2c, vraag 100). Linksboven staat de volgende trede (een dorp bij 20 dorpelingen, marktrecht bij
+20 ambachtslieden), en daarna het eind: een jaar lang iedereen gelukkig, vanaf 100 mensen, en dan viert het dorp het
+grote feest (2e, vraag 101; `Spel.debug.einde()`). Op 1 lentemaand brengt de raadsman het jaarverslag. Het dorp viert het
+oogstfeest en de meiboom (vraag 97), en een schaap geeft 8 wol (vraag 99). `npm test`: 792/792.
 
-**Waar het werk staat:** alles staat in `main`, ook het werk van de vierentwintigste sessie tot en met vraag 96, a en b
-(Marcel, 3 okt: "Push main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** in `main` staat alles tot en met de feesten en hun controle (`48d4c3d`). Op de branch van deze
+sessie, `ccr-0d0c2710-bcd5tx`, staan daarbovenop Marcels antwoorden op vraag 98 tot en met 101, het laken (vraag 99), 2c
+(vraag 100), 2e (vraag 101) en de speeltest van het laken; dat gaat naar `main` als Marcel het vraagt. Hoe een eigen
+branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** Marcels antwoorden op de vier vragen die tijdens zijn vlucht klaarkwamen (de
-vijfentwintigste sessie): **vraag 98** (de ui: welke richting, op de pagina "De ui als papieren",
-https://claude.ai/artifact/JRKq7fwaANmLd3fGc4EbD8), **vraag 99** (het laken: met één kooi en 4 wol per schaap haalt een
-stad van stenen huizen het nooit), **vraag 100** (2c, zien wat een huis wil) en **vraag 101** (2e, het eind en het jaar in
-het kort). En wat hij vindt van de feesten (zie onder Af; de schermafdruk en een eerste filmpje van de meiboom 's avonds,
-13 seconden, allebei aan Marcel gestuurd en niet in git). Eén spel van de speeltest (de bouwer, zaad 1) liep met de feesten
-twee jaar door zonder fouten (`speelbaar.md`, "De controle van 3 okt"). Een proefversie voor itch.io van 3 okt (`36c713e`,
-met de feesten) is gemaakt en aan Marcel gestuurd. De speeltest van vraag 96 is nooit opgeschreven (hij liep nog toen de
-vorige sessie stopte), en Marcel koos hem niet voor de vlucht.
-**Vraag 97 is af** (zie onder Af): het oogstfeest is een hele dag vrij (groot) of een avond (klein), en de meiboom komt
-op 30 grasmaand. **Vraag 96, a en b, is af** (zie onder Af): één herberg en één markt zijn genoeg voor het hele dorp (de spelregel "De herberg en
-de markt"), en de bouwers bouwen een keten in één keer. **Vraag 95 is af** (zie onder Af): brood 0,01, de bouwers leggen erven
-binnen de kringen, "Daar kun je niet bij" is hersteld, en de speeltest telt de druk om eten; die bleef gelijk. **Vraag 94
-is af** (zie onder Af): de sluwe bouwer bedriegt de heer elk jaar en houdt
-het graan verstopt voor de herberg en de molen, en de speeltest heeft een graanboek. Hij heeft meer bier en brood dan de
-bouwer, en de heer krijgt bijna niets, maar ook hij heeft nooit een dag waarop alle huizen alles hebben. **Vraag 92 is af** (zie onder Af): brood, vis en vlees
-zijn eten, brood is minder lekker, en het zaaigraan is niet meer voor de molen. **Vraag 91 is af** (Marcel: "a ja b ja c ja d ja"; zie onder Af): de bouwer volgt ook het goud van de raad, een
-werkplaats maakt tot er genoeg ligt, en laken is 0,005; in de speeltest komen de bakkerij, de molen, de weverij en de
-markt er, en heeft bij zaad 1 voor het eerst een stenen huis alles, maar het brood eet het graan op, en bij zaad 2 en 3
-at het dorp in de tweede winter zijn zaaigraan. Begin met Marcels antwoord op vraag 92. **2d
-is af** (vraag 90; Marcel: "a ja b ja c ja d ja"; zie onder Af): een dorp bij 20 dorpelingen, marktrecht bij 20
-ambachtslieden, elk met een brief, de markt en de weverij al in een dorp, en de raad kent de ketens ("bouw een bakkerij
-en een molen [B]"). In de speeltest (`speelbaar.md`) komen de treden snel: een dorp in slachtmaand, marktrecht nog in het
-eerste jaar. Maar wat ze vrijmaken, bouwt de bouwer niet: het goud staat het hele tweede jaar tussen 0 en 8, want hij
-neemt de belasting niet aan en blijft hangen op de eerste wens die hij niet kan betalen. En wat de speeltest nog niet
-liet zien: een molen maalt zonder grens (ruim 880 graan per jaar), en acht schapen geven laken voor vier à vijf
-ambachtslieden. Begin met Marcels antwoord op vraag 91.
-**Vraag 87 en 88 zijn af** (drieëntwintigste sessie; zie onder Af): de raad en het rapport over de wensen, de bouwer die
-ze volgt, een kapel die 40 tegels bereikt, niet bouwen op iemand of een deur, Marcels rem (wie twee keer geen weg vindt,
-wacht een uur) en de eilanden, en A* met een hoop. Daarna, zoals besloten: **de pagina met ontwerpen voor de ui** (vraag 84, a: de
-vensters worden papieren in de beeldstijl, en Marcel kiest uit een paar schetsen van de balk, een venster en een papier),
-en dan de rest van stap 2 (vraag 80): 2c zien wat een huis wil (het teken bij de deur, het venster van een huis), en 2e
-het eind en het jaar in het kort. **Stap 2a en 2b zijn af** (tweeëntwintigste sessie; vraag
-85, het plan, en Marcels antwoord: "a ja, maar een hogere stand eigent zich spullen toe ... b ja voor nu. c zacht d ja";
-zie onder Af): elk huis heeft een stand met zijn wensen, de hoogste stand neemt eerst, en een huis dat een maand alles
-heeft, groeit door voor bouwstof en versteent op zijn eigen grond. **Klein** is: drie standen, op de huizen die er al zijn;
-de poorters en hun huis komen later. De tabel:
+**Waar de volgende sessie begint:** Marcels antwoord op **vraag 102** (naar een jaar dat te winnen is: de bouwer die naar
+de winst speelt, meer graan door ontginnen, de raad over de weverij en de groei, en of een slechte dag het hele jaar
+terugzet), en of het werk van deze sessie in `main` gaat. De speeltest van het laken (`speelbaar.md`) zegt: het laken
+loopt zodra de weverij er staat, maar de bouwers bouwen hem soms laat, en het laken van de marskramer kon niemand betalen;
+de dorpen halen 100 mensen in twee jaar, maar de eerlijke bouwer heeft dan geen graan meer voor bier en brood; alleen
+wie de heer bedriegt, komt in de buurt van een gewonnen jaar, en dan in een dorp van 74. De ui wordt de schrijftafel
+(vraag 98, C): het briefje bij een huis is het eerste papier, en de rest volgt later (januari, met de Steam-pagina).
+
+**Wat wacht:** het buurdorp (vraag 72) tot de kern staat, en het land eromheen naar de provincie (vraag 70, B); de
+zitting (3b) en de herberg als plek van gesprekken (3c); staande orders voor de raadsman (vraag 66, D) met het land; de
+balk die volloopt (`opmerkingen.md`); de proefversie op itch.io en de eerste tester (33d; de laatste proefversie is van 3
+okt, `36c713e`, met de feesten); vraag 59 is geparkeerd. Het dorp van bovenaf komt er niet (vraag 74, d). De pagina
+"Stand van het gehucht" (25 sep) loopt achter op de dag, en de speeltest van vraag 96 is nooit opgeschreven.
+
+**De demo, klein** (vraag 79, 80, 82 en 85): drie standen, op de huizen die er al zijn; de poorters en hun huis komen
+later.
 
 | Stand | Huis | Gebruikt | Wil in de buurt (een kring om het gebouw) |
 |---|---|---|---|
 | keuters | hut (3 mensen) | eten; brandhout in de winter | een put (12 tegels) |
-| dorpelingen | huis (5) | daarbij bier, en vlees of vis | een kapel (40) en de herberg (30) |
-| ambachtslieden | stenen huis (8) | daarbij brood en laken | een markt (30) |
+| dorpelingen | huis (5) | daarbij bier, en vlees of vis | een kapel (40) en de herberg (in het dorp) |
+| ambachtslieden | stenen huis (8) | daarbij brood en laken | een markt (in het dorp) |
 | boeren | boerderij (4) | eten; brandhout in de winter | een kapel (40) |
 
 Doorgroeien kost bouwstof (een huis 8 hout, een stenen huis 12 steen), en **gewonnen** is: alle woningen stenen huizen
-die alles hebben, en de boerderijen wat zij willen, **een jaar lang**. Daarna: het weer en zaaien over dagen (vraag 82, b
-en c) en de eisen van de heer; het vaste pad voor 5.000 als het dorp groter moet. Hoe we hier kwamen: **het plan is vraag
-79, en Marcel koos het** (eenentwintigste sessie: "a twee manieren b ja c ja d ja. We focussen ons op een speelbare kern.
-Daarna komt oorlog etc erbij en de rest van het land diplomatie trading etc"). Gebouwd wordt in de volgorde van vraag 79:
-1, een jaar dat te winnen is; 2, de wensen per stand, met het eind; 3, het vaste pad buiten beeld; 4, de eisen van de
-heer; 5, de speeltest. **Stap 1 is af** (zie onder Af): een gezin wacht op de winter, de raad zegt wat je mist voor de
-kapel en de smidse, en de marskramer verkoopt in de lente zaaigraan, dat de boeren nazaaien; en het zaaigraan eet het dorp
-pas bij nood (vraag 81). Het plan voor
-stap 1 (vraag 78: elk jaar een doel van de heer) ging niet door: "de heer moet alleen betaald worden, en hij mag wel
-eisen stellen. Maar meer om het je moeilijk te maken"; het einddoel is "totale verovering van de wereld", en "dat
-mensen super gelukkig zijn en in al hun wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602"; en "we
-moeten een manier zoeken zodat we toch 5k man kunnen hebben", met buiten zicht een vast pad. Vraag 79 stelt voor: wensen
-per stand en per huis (keuters, dorpelingen, ambachtslieden, poorters), met als eind van de slice iedereen super
-gelukkig; de heer met eisen die pijn doen; en 5.000 man in drie lagen. Het jaar in het kort en een jaar dat te winnen is
-(vraag 59, B en C) zijn al goed (vraag 78, D). Daarvóór, in de twintigste sessie: **3a, het rapport van de raadsman, is af** (vraag 75; Marcel: "A Ja dat is goed", en
-bij het nakijken van het plan "a ja b ja c ja"; zie onder Af): heb je een raadsman, dan staat hij 's ochtends aan je deur
-met wat er gebeurde, hoe het graan en het hout gaan sinds gisteren, of ze de winter halen, wat er speelt en wat er komt,
-en zijn rekenen kleurt de getallen. Met het rapport uit speelt de speeltest letter voor letter hetzelfde jaar (alle 15
-jaren); daarna zegt het een oorzaak en de winter alleen nog als ze veranderen (vraag 76, af). **Nu eerst een spel van
-begin tot eind** (Marcel, 1 okt: "We gaan ook eerst verder 3b kan later. Laten we eerst eens een speelbaar spel maken van
-begin tot eind", en "Gebruik de slice in de pdf"): **het plan is vraag 77, en Marcel koos het** ("A we starten vanaf
-de slice kwa afmeting een gehucht met 50 is echt te klein ... D prima", en "Nee, we starten wel als gehucht"): de
-vertical slice uit het concept, in zes stappen (de cyclus met een eind per jaar, statussen met niveaus, ambtenaren, wacht
-en misdaad, mensen met banden, de kleine stad); je begint als gehucht, zoals nu, en groeit naar de maat van de slice,
-een kleine stad van 100 tot 200 mensen. **Begin met het plan voor stap 1, de cyclus** (bij vraag 77 staat waar het mee
-begint: welke doelen de heer per jaar stelt op weg naar de stad, en wat hij op 1 lentemaand beoordeelt). De zitting (3b)
-en de herberg (3c) wachten. **Hoe we hier kwamen:** stuk 2 van het
-land is af (vraag 71): alles van een dorp staat bij elkaar (`S.dorpen`, `js/dorp.js`), en elk dorp leeft, ook als je er
-niet bent. **Daarna bracht Marcel een concept mee** ("De Schout", `concept.md`: het poppetje is de manier waarop je
-bestuurt). Het concept is ons kompas, en **eerst komt de kern** (vraag 73; Marcel: "We zetten eerst de kern goed neer. Ik
-wil meer naar management sim toe"): de boeren doen het seizoen en jij houdt een oogje in het zeil, voorvallen krijgen een
-oorzaak (B), de dag komt in fasen (A), en zelf gaan kijken kan altijd (C). **Het plan voor de kern is vraag 74**: stap 1
-en 2 zijn af (een probleem heeft een oorzaak die je kunt zien; de boeren kiezen hun velden, slachten en sprokkelen zelf),
-en stap 3 is de dag in fasen (vraag 75): het rapport (3a, af), de zitting (3b) en de herberg (3c). Ernaast liep een
-meting van hoe groot een dorp kan worden (vraag 74; de uitslag staat daar). Het buurdorp (vraag 72) wacht tot de kern
-staat. Het land eromheen naar de provincie komt later (vraag 70, B). Staande orders voor de
-raadsman komen met het land (vraag 66, D). Het dorp van bovenaf is beslist: niet
-(vraag 74, d). Open blijft de balk die volloopt (`opmerkingen.md`). Van vraag 60 zijn A en B gebouwd (de heervaart en de veteranen) en de naam van je
-dorp bij Nieuw spel; zie onder Af. Houd het eenvoudig (Marcel, 29 sep: "Maak het niet te ingewikkeld"). Vraag 59 is geparkeerd (Marcel: "Parkeer deze vraag"): de proef is nu in zes maanden klaar, en wie
-verder speelt, verliest alles; de voorstellen staan er, voor later. De proefversie zet Marcel op itch.io als hij
-thuis is (`npm run proefversie`, `verpakken.md`), en wie de eerste tester is, staat open (33d). Van de proef zijn
-stap 1 tot en met 5 gebouwd: het dorp bouwt zelf (vraag 52), de eerste trede (vraag 53), de eerste wetten (vraag
-54), rovers met een militie (vraag 55), en de raad, de bouwer en de proefversie (vraag 58). De richting staat (vraag
-50: besturen en groeien worden het hart, de heer blijft als de druk van boven, en vechten begint met aanvallen op je
-eigen dorp), en de volgorde ook (vraag 51). De afrekening (vraag 49) is geparkeerd, en vraag 47 (de eerste weken als
-opdrachten) werd de raad (vraag 58, B).
+die alles hebben, en de boerderijen wat zij willen, een jaar lang (360 dagen op rij), vanaf 100 mensen (2e, vraag 101).
+De volgorde (vraag 79 en 82; Marcel: "82: correct"): het zaaigraan (vraag 81), de wensen klein (vraag 80), het eind, de
+speeltest (nu: vraag 102); dan het weer en de eisen van de heer; het vaste pad buiten beeld voor 5.000 als het dorp
+groter moet. Hoe we hier kwamen, staat in de vragen zelf (vraag 73 tot en met 102) en onder Af; ouder dan twee weken in
+`git log`.
 
 **Al het werk, op prioriteit** (Marcel, 27 sep: "Al het werk ordenen op prioriteit"; opnieuw geordend op 28 sep,
 vraag 51, na de nieuwe richting, en op 1 okt, vraag 77). De maat is Marcels eigen regel, eerst speelbaar: sinds 1 okt
@@ -148,9 +77,10 @@ als doel te klein. In zes stappen, elk eerst een plan, en na elke stap de speelt
    huis en doorgroeien, met zes stenen huizen. Sinds 2 okt zeggen de raad en het rapport wat de huizen missen, en volgt de
    bouwer van de speeltest ze (vraag 86, a en b, en 87); niemand staat nog ingemetseld (vraag 88). 2d, de treden uit de
    standen, is af (vraag 90), het goud, de werkplaatsen en het laken ook (vraag 91), brood als eten (vraag 92), en de
-   sluwe bouwer (vraag 94), en brood 0,01 met erven binnen de kringen (vraag 95). Het volgende is de ligging van de
-   herberg en de markt (vraag 96), dan het laken, de pagina met ontwerpen voor de ui (vraag 84, a), en 2c en 2e. Het graan
-   van buiten op de markt komt bij stap 6.
+   sluwe bouwer (vraag 94), en brood 0,01 met erven binnen de kringen (vraag 95). Daarna de ligging van de herberg
+   en de markt (vraag 96), de feesten (vraag 97), het laken (vraag 99), de pagina met ontwerpen voor de ui (vraag 84, a;
+   gekozen: de schrijftafel, vraag 98), 2c en 2e (vraag 100 en 101): af. **Nu: de speeltest naar de winst (vraag 102).**
+   Het graan van buiten op de markt komt bij stap 6.
 2. Statussen met niveaus (droogte, ernstige droogte), in de balk en in het rapport, en de crises uit het concept; en het
    weer, met zaaien dat dagen kost (Marcel, 1 okt: "Stel er is slecht weer"; vraag 82).
 3. Ambtenaren: de marktmeester, de wachtmeester en de rentmeester; uiteindelijk één voor elke tak van het bestuur.
@@ -192,7 +122,7 @@ Gefeliciteerd. Dat kost u vanaf nu meer."
 speeltest als script (twaalfde; het bijstellen komt later, vraag 46), en opslaan, het menu en het titelscherm
 (dertiende). Geparkeerd: de afrekening (vraag 49). Zie onder Af.
 
-*2. Wacht op Marcel:* vraag 98 tot en met 101 (de ui, het laken, 2c en 2e; zie hierboven); welke zin de haak wordt, nu hij is nagezocht tegen Steam (vraag 83, c; de rest van 83 en heel 84 is beantwoord, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
+*2. Wacht op Marcel:* vraag 102 (naar een jaar dat te winnen is; zie hierboven), en of het werk van de vijfentwintigste sessie in `main` gaat; welke zin de haak wordt, nu hij is nagezocht tegen Steam (vraag 83, c; de rest van 83 en heel 84 is beantwoord, `commercieel.md`); het plan voor het buurdorp (vraag 72: A tot en met E), als de kern staat; het bijstellen van het land komt later (Marcel, 30 sep: "we finetunen later"); het dorp van bovenaf
 is beslist (vraag 74, d: geen camera van bovenaf); de proefversie op itch.io zetten als hij
 thuis is, en wie de eerste tester is; vraag 59 is
 geparkeerd (wanneer het een dorp is, een rem op de groei, en waar goud vandaan komt); en later vraag 54, C (hoe de
@@ -3321,7 +3251,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       onzichtbaar klein).
     Vragen: **a**, 8 wol per schaap? **b**, 50% lammeren? **c**, de marskramer met laken, nu of met de markt? **d**, zo?
     **Beantwoord (Marcel, 3 okt):** "99 a b c d ja". Dus 8 wol per schaap, 50% kans op een lam, de marskramer verkoopt
-    laken in een dorp, voor goud, en de speeltest telt de dagen zonder laken; daarna een speeltest.
+    laken in een dorp, voor goud, en de speeltest telt de dagen zonder laken; daarna een speeltest. **Gebouwd** (3 okt,
+    zie onder Af). De speeltest erna (`speelbaar.md`): het laken loopt zodra de weverij er staat, maar de bouwers bouwen
+    hem soms pas in de zomer van het tweede jaar, en het laken van de marskramer kon bijna niemand betalen. Wat eruit
+    volgt, is vraag 102.
 100. **2c, zien wat een huis wil: het plan** (Claude, 3 okt, vijfentwintigste sessie, tijdens Marcels vlucht; vraag 80, E,
     besloten; open). Wat er al is: elk huis weet wat het wil en heeft (`g.wensen`: stand, mensen, ✓ en ✗, tevredenheid),
     en de raad en het rapport zeggen wat de huizen het meest missen, met wat helpt (vraag 87). Wat er nog niet is, is het
@@ -3364,6 +3297,43 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     waarin alle huizen alles hebben, vanaf 100 mensen; de winst is een feest op het plein met het eindscherm erover;
     verloren ook bij minder dan tien mensen; en op 1 lentemaand een jaarverslag van de raadsman. **Gebouwd** (3 okt, zie
     onder Af).
+102. **Naar een jaar dat te winnen is: wat er tussen een dorp van 100 en de winst staat** (Claude, 3 okt, vijfentwintigste
+    sessie; stap 5 van vraag 79, de speeltest; open). Sinds 2e is er een eind, en de speeltest van het laken
+    (`speelbaar.md`, 3 okt) zegt hoe ver het weg is. De dorpen halen 100 mensen in twee jaar (101 à 112), met 7 à 12
+    stenen huizen. Maar geen spel kwam in de buurt van een gewonnen jaar: de langste reeks dagen waarop alle huizen alles
+    hadden, was 51 (de sluwe bouwer), en bij de eerlijke bouwer 19. Vier dingen staan ertussen:
+    1. **Het graan.** De eerlijke bouwer heeft na twee jaar geen graan meer, en zijn huizen missen bier (38 à 97 dagen in
+       het tweede jaar). De oogst (433 à 564) gaat naar het zaaien, de molen, de herberg, de heer en de rovers, en dat is
+       meer dan er is. Alleen wie de heer bedriegt, houdt graan over.
+    2. **Het laken komt laat:** pas met de weverij, en die bouwt de bouwer soms pas in de zomer van het tweede jaar (105 à
+       145 dagen zonder laken); het laken van de marskramer kon bijna niemand betalen.
+    3. **De groei stopt niet:** elk nieuw gezin begint in een hut, en dan is niet iedereen in de hoogste stand. De bouwers
+       wijzen erven aan zolang er gezinnen komen.
+    4. **Eén slechte dag zet het jaar terug:** de teller begint opnieuw als één huis één dag iets mist.
+    Voorstel:
+    - **a, de bouwer speelt naar de winst** (dat is stap 5): vanaf 100 mensen wijst hij geen erf meer aan en laat hij elk
+      huis doorgroeien tot een stenen huis; de weverij bouwt hij zodra er ambachtslieden zijn; en hij speelt vier jaar in
+      plaats van twee. De uitslag krijgt per jaar het jaarverslag (wat het meest gemist werd) en de langste reeks. Dan
+      weten we of een jaar te winnen is als je het wilt, en wat de reeks breekt.
+    - **b, meer graan voor een stad.** Drie wegen: (1) **ontginnen** (besloten op 25 sep, punt 6b, nog niet gebouwd): een
+      nieuw veld uit heide of bos. Meer mensen vragen meer land, zoals in elk bouwspel, en in het bos kan het ook in het
+      geheim (een akker die de inner niet ziet). (2) **Graan bij de marskramer** in de zomer en de herfst, duur, voor het
+      goud van de belasting. (3) **Zo laten:** wie een stad gelukkig wil, moet de heer bestelen. Dat is de satire, maar
+      dan is het eerlijke spel niet te winnen. Voorstel: (1), want het is al besloten, het is wat een speler in een
+      bouwspel verwacht, en het verstoppen krijgt er een stuk bij; eerst een plan (de open vragen staan in `spel.md`,
+      "Ontginnen"), en de speeltest van a zegt hoeveel graan er tekort is.
+    - **c, de raad noemt de weverij op tijd:** zodra er ambachtslieden zijn en er staat geen weverij, zegt de raad het
+      ("Laken komt van een weverij [B], en de wol van de schapen"), vóór wat de meeste mensen missen. Zo hoort ook een
+      speler het op tijd, en niet pas als het laken op is.
+    - **d, een slechte dag:** een spelregel "Het eind", met "Een jaar op rij" (zoals nu) en "Een week mag" (een slechte
+      reeks van hooguit zeven dagen zet de teller stil, maar niet terug). De standaard is wat Marcel kiest.
+    - **e, de groei stilzetten:** heb je 100 mensen en is het doel een jaar gelukkig, dan zegt de raad: "Wie een jaar
+      gelukkig wil, wijst geen erf meer aan." Of een derde stand in de wet "vreemden": niet welkom, en er komt geen gezin
+      meer van buiten (met wat dat aan tevredenheid kost), zodat het een keuze in het wettenmenu is.
+    De volgorde, als het ja is: c, d en e (klein), dan a (de speeltest van vier jaar), dan het plan voor b.
+    Vragen: **a**, de bouwer zo, vier jaar? **b**, meer graan door ontginnen (eerst een plan), door de marskramer, of zo
+    laten? **c**, de raad zo? **d**, "een week mag" als spelregel, en welke standaard? **e**, de raad, of een wet die de
+    poort dichtzet?
 
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
