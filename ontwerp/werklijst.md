@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (3 okt 2026, eind van de vijfentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles, en is voor een groot deel gedaan (vraag 113, de meter onder F2); daarna elk spel een ander, wijder land met natuur (vraag 112), gebouwen in verhouding en een woontoren (vraag 114), en de boeren aan het werk op hun veld (vraag 111)
+## De stand (4 okt 2026, eind van de zesentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113: de meter onder F2, en een weg zoeken nu bijna drie keer zo snel); elk spel een ander, wijder land met natuur die ertoe doet, is gebouwd (vraag 112, stap 1); nu de huizen: de vellen inpakken, meer afwisseling, en de herberg, de kapel en de woontoren in verhouding (vraag 112, stap 2, en 114), dan de boeren aan het werk op hun veld (vraag 111)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -31,29 +31,30 @@ heb je twee bazen: in de balk staan de gunst van de heer (een kroon) en het vert
 een brief iets geks (een gril: een standbeeld, een vet varken, de bruiloft van zijn neef), en wat je antwoordt, kost de
 een of de ander iets. Wie de soldaten betrappen op verstoppen, krijgt de laatste waarschuwing. **Sinds vraag 108** kijk je met `Tab` over
 je dorp, loopt er van elke deur een paadje, slijt het gras waar veel gelopen wordt, en branden 's avonds de lantaarns en
-de ramen van wie thuis is. `npm test`: 862/862.
+de ramen van wie thuis is. **Sinds vraag 112** is elk spel een ander land van 100 bij 100, met bossen, vijvers en rotsen,
+en het nummer van het land staat bij Nieuw spel; een houthakker hoort bij het bos, een steengroeve bij de rotsen, een
+visser aan het water. `npm test`: 868/868.
 
-**Waar het werk staat:** alles staat in `main` (`22a7ba9`; Marcel: "push main"). Dat was, bovenop de twee bazen: het vertrouwen dat de tevredenheid volgt, vraag 102 b, c en d (bier
-apart, de raad bij de maat, "een week mag"), het looppad van drie tegels en de tekenvolgorde van twee gebouwen (Marcel zag
-op `main` een houthakker tegen het huis van de schout, en de muur eroverheen: op de branch is dat goed), het overzicht
-(108 a), de paadjes, de lantaarns en de ramen (108 b en d), en de weg het gehucht uit zonder fout. Op de branch
-`ccr-0d0c2710-bcd5tx` staat daarbovenop de snelheid (vraag 113) en de plannen 111 tot en met 114; dat gaat naar `main` als
-Marcel het vraagt. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** in `main` staat alles tot en met de speeltest van vier jaar (`22a7ba9`; Marcel: "push main").
+Op de branch `ccr-0d0c2710-bcd5tx` staan daarbovenop de snelheid van 3 okt (vraag 113, de meter onder `F2`), de plannen
+111 tot en met 114, Marcels antwoorden op 114, en vandaag het wijdere land (vraag 112, stap 1), een bewaard spel half zo
+groot, en het sneller zoeken van een weg; dat gaat naar `main` als Marcel het vraagt. Hoe een eigen branch en `main`
+samengaan, staat in `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** de snelheid gaat voor alles (**vraag 113**; Marcel: "Als de performance slecht is,
-hebben we niks"): het meeste is gedaan, en Marcel kijkt met `F2` in Firefox wat de meter zegt. Dan **vraag 112** (elk
-spel een ander land: de maker als standaard, wijder, met natuur en meer huizen; Marcel: "ja die zijn goed. volgorde is
-oke"), met de gebouwen in verhouding en een woontoren (**vraag 114**, wacht op Marcel), en daarna **vraag 111** (de boeren
-op hun veld). Een groter land lost ook vraag 110 op. Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen
-en het erf: bestraten als verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de
-maat van de winst: het dorp loopt vol op 99, de winst vraagt 100; het voorstel is de winst vanaf 90, en bouwgrond uit het
-ontginnen). De speeltest van vier jaar staat in `speelbaar.md` (vijf van de zes spelers; de uitslagen buiten git in
-`gereedschap/speeltest/uit/vier-jaar-8da1369/`, en een volgende speeltest van vier jaar splitst de spelers over twee
-taken, want een taak op de achtergrond stopt na twee uur): de reeks breekt om brood, laken en bier als het graan
-opraakt, de oogst valt van 600 naar 350 à 450 in vier jaar, en een hut die geen plaats heeft om door te groeien, blijft
-een hut. Na te lopen uit de speeltests: een schout die alleen tegen drie wilde rovers viel, omdat de militie onderweg
-was. De rest van **vraag 105** (wat ons uniek maakt) komt na de kern. De ui wordt de schrijftafel (vraag 98, C): het
-briefje bij een huis is het eerste papier, en de rest volgt later (januari, met de Steam-pagina).
+**Waar de volgende sessie begint:** **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij vraag 114):
+eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
+wanden, luiken, gespiegeld) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien.
+**Open bij Marcel:** hoe de woontoren komt (het voorstel: een stenen huis dat alles heeft, groeit door tot woontoren
+met drie appartementen, vanaf marktrecht), vraag 113, a (de meter in Firefox), en **vraag 115** (Marcel, 4 okt: de
+houthakker hakt bomen om en plant nieuwe; het voorstel is om dat samen met de boeren te doen). Daarna **vraag 111** (de
+boeren op hun veld), met 115. Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
+verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de maat van de winst: op het
+wijdere land is er grond genoeg, maar de speeltest speelt standaard nog het ontworpen gehucht). De speeltest van vier
+jaar staat in `speelbaar.md`, en een volgende speeltest van vier jaar splitst de spelers over twee taken, want een taak
+op de achtergrond stopt na twee uur. Na te lopen uit de speeltests: een schout die alleen tegen drie wilde rovers viel,
+omdat de militie onderweg was. De rest van **vraag 105** (wat ons uniek maakt) komt na de kern. De ui wordt de
+schrijftafel (vraag 98, C): het briefje bij een huis is het eerste papier, en de rest volgt later (januari, met de
+Steam-pagina).
 
 **Wat wacht:** het buurdorp (vraag 72) tot de kern staat, en het land eromheen naar de provincie (vraag 70, B); de
 zitting (3b) en de herberg als plek van gesprekken (3c); staande orders voor de raadsman (vraag 66, D) met het land; de
@@ -3766,6 +3767,18 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     schout en het huis ernaast staan drie tegels uit elkaar, en in beeld reikt het dak van het voorste over de muur van
     het achterste. De tekenvolgorde klopt (Marcel: "volgorde is oke"); het land legt hoge gebouwen verder uit elkaar,
     vooral naar achteren in beeld.
+    **Stap 1 is gebouwd (4 okt, zesentwintigste sessie):** a, b en c, zoals hierboven (zie onder Af, en `spel.md`, "Het
+    wijdere land, met natuur"). Wat anders liep dan het plan: een hut mag zijn deur van het plein af hebben (elke deur in
+    de tekeningen zit aan de kant van de camera, dus wie vóór het plein staat, keert het zijn rug toe; gespiegelde
+    tekeningen met de deur aan de andere kant lossen dat op, bij stap 2); het hoge gras in de wei ging eruit (het stond
+    als dorre stokjes) en staat nu alleen als riet aan het water; wilgen alleen aan de achterkant van het water; en het
+    bos liever achteraan, want vooraan dekt het het land af. Het overzicht (`Tab`) laat op 0,35 zo'n driekwart van het
+    land zien. De jager hoort niet bij het bos (dat was van Claude; in de speeltest vond hij aan de bosrand geen plek meer
+    en verhongerde het dorp), en een verzoek om iets dat bij de natuur hoort, zoekt over de hele kaart. **De speeltest op
+    gemaakte landen** (stap 3, 4 okt; `speelbaar.md`): de bouwer haalt op drie landen de twee jaar, met marktrecht in het
+    eerste jaar en twee keer 100 mensen; maar met het dorp wijder vraagt bijna elk huis zijn eigen put (9 à 11 putten), en
+    op één land kwam daardoor nooit een molen. **Nog te doen:** stap 2 (de huizen, met vraag 114), en de putten
+    (een grotere kring op een groter land, of erven binnen de kring van een put).
 113. **De snelheid** (Marcel, 3 okt, vijfentwintigste sessie: "oh en nog 1 heel belangrijke... de performance", "loopt
     nogal traag", en "Als de performance slecht is, hebben we niks"; gaat voor alles; voor een deel gebouwd).
     **Gemeten** (zonder videokaart, Chromium; Marcel speelt in Firefox): in het overzicht 13 beelden per seconde, want
@@ -3783,6 +3796,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     niet verandert), de bomen en het graan in het overzicht, en een land van 100 bij 100 (vraag 112) opnieuw meten.
     Vraag: **a**, wil je met `F2` in Firefox kijken wat de meter zegt, van dichtbij en in het overzicht, overdag en 's
     avonds, en op 30×? Dan weten we of het tekenen van dichtbij ook nog moet.
+    **Op het wijdere land (4 okt, zesentwintigste sessie):** het tekenen kost er evenveel als op het ontworpen gehucht
+    (zonder videokaart 55 beelden/s van dichtbij, 43 en 30 in het overzicht), want de lage begroeiing ligt in de buffer
+    van de grond. Wel kost de eerste keer uitzoomen naar 0,35 één beeld van een seconde (de browser maakt dan verkleinde
+    versies van de grote tekenvellen; daarna 130 à 180 ms per zoomstap, zoals op het ontworpen gehucht): het inpakken van
+    de vellen bij vraag 114 helpt daar. Het zoeken van een weg kostte er drie keer zoveel per zoektocht (langere wegen,
+    meer struiken); A* is nu 2,8 keer zo snel, met dezelfde wegen: bij 100 mensen op land 5 op 30× 1,3 ms aan regels per
+    beeld (de traagste 5% 12 ms), bij 200 mensen 3,0 ms (20 ms). Een bewaard spel is half zo groot (331 kB op een
+    gemaakt land, 162 kB op het ontworpen gehucht).
 114. **Gebouwen in verhouding, en een woontoren** (Marcel, 3 okt, vijfentwintigste sessie: "Gebouwen moeten in
     verhouding komen. Een herberg is vaak veel groter dan een huis. Een kapel zelfde verhaal. Een warehouse ook.
     Misschien moeten we ook een woontoren hebben"; plan van Claude; open).
@@ -3818,6 +3839,45 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     ambachtslieden, met dezelfde wensen), maar drie appartementen: 24 mensen in plaats van 8. Zo groeit het dorp verder
     als de grond op is (vraag 110), zonder nieuwe regel ernaast: het is gewoon de volgende trap van het doorgroeien. Een
     spelregel "Woontoren" kan hem ook als verzoek van een inwoner laten komen, of uitzetten.
+    **Plan voor de huizen (Claude, 4 okt; samen met vraag 112, stap 2):** de huizenbouwer
+    (`gereedschap/pixelart/huis-sdf.cjs`) kan al veel meer dan het spel gebruikt: daken van riet, spanen, leien en
+    pannen, wanden van vakwerk, vlechtwerk, planken, blokhut en veldsteen, luiken in kaal hout, groen, rood en
+    blauwgrijs, en een vierkante stenen toren met een plat dak en kantelen (`matenToren`). Het spel heeft 32 tekeningen,
+    bijna allemaal riet.
+    - **2a, eerst de vellen inpakken** (snelheid, vraag 113): elke tekening strak gesneden, met zijn eigen rechthoek en
+      anker, in plaats van een raster van even grote cellen. `tegels/huizen.png` is nu 32 cellen van 662 bij 789, in de
+      browser 64 MB, en de eerste keer uitzoomen kost daardoor een seconde; met twintig tekeningen erbij wordt het het
+      dubbele. Ingepakt zo'n de helft. Raakt `js/sprites.js` en de stap naar Tiled en het spel (`naar-tiled.cjs`,
+      `naar-spel.cjs`).
+    - **2b, de afwisseling** (vraag 112, d, en Marcel: "andere kleuren etc"): per soort meer tekeningen uit wat de bouwer
+      al kan, en elk ook gespiegeld, met de deur aan de andere kant (dan kan een huis vóór het plein er ook zijn deur
+      naartoe keren). De daken volgen de treden: in het gehucht riet en spanen, in een dorp ook leien, met marktrecht
+      pannen; zo zie je aan de daken hoe ver het dorp is. De wanden en de luiken wisselen per huis.
+    - **2c, de grote gebouwen** (vraag 114, eerst deze drie): de herberg groter (twee lagen, met een stal aan een
+      binnenplaats, 12 à 14 tegels lang), de kapel met een toren (het hoogste punt van het dorp), en de woontoren (de
+      stenen toren van de bouwer, vier lagen hoog, met per laag een appartement). Daarna het pakhuis: lang, van planken,
+      met een grote deur.
+    - **2d:** de maker kiest per land uit de tekeningen (elk spel ziet het dorp er anders uit), de verzoeken en het
+      doorgroeien ook, en wat gebouwd wordt, krijgt bouwfases (`bouwfasen.cjs`).
+    Een proefplaat eerst, om naar te kijken, zoals bij ronde 4b.
+115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
+    gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
+    **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
+    112, c), maar hij hakt geen boom om: zijn hout komt uit het niets, 2 per dag, en het bos blijft zoals het was.
+    Voorstel:
+    - **a, hakken:** de houthakker loopt naar een boom in zijn buurt (zoals een boer naar zijn akker, vraag 111), hakt hem
+      om (een tijdje werk, met een eigen beweging), en er blijft een stronk staan. Een boom geeft zoveel hout (zo'n 10);
+      zijn hout per dag komt dan uit wat hij omhakte en naar huis bracht.
+    - **b, planten:** na het hakken plant hij een boompje op een vrije plek in de buurt, of op de stronk zodra die
+      vergaan is; een boompje groeit in een jaar of twee tot een boom (drie maten: boompje, jonge boom, boom).
+    - **c, het bos doet ertoe:** hakt hij harder dan het bos aangroeit (meer houthakkers, of de wet Houtkap), dan wordt
+      het bos om hem heen dunner en zie je de bosrand wijken; onder de 8 bomen hakt hij minder. Zo is een bos een
+      voorraad die je ziet, en een keuze (hout nu, of bos later). De bomen in het bos van de heer: de wet Houtkap.
+    - **d, wie hem ziet:** de stronken en de boompjes zijn te zien, en de houthakker is een poppetje aan het werk, net als
+      de boeren op hun veld. Daarom samen met vraag 111: dezelfde manier van een plek om te werken, een weg erheen en
+      een beweging erbij (een bijl, zoals de maaier een zeis heeft).
+    Vragen: **a**, zo? **b**, groeit een boompje in een jaar, of langer (dan is het bos echt schaars)? **c**, samen met
+    de boeren (vraag 111), dus na de huizen (vraag 114)?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
@@ -4122,6 +4182,17 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 4 okt 2026 — **Vraag 112, stap 1: elk spel een ander, wijder land, met natuur die ertoe doet** (zesentwintigste sessie;
+  Marcel: "ja die zijn goed. volgorde is oke"; `js/maker.js`). Het land van de maker is 100 bij 100, en de standaard: bij
+  Nieuw spel staat het nummer van het land onder de naam van je dorp, met een knop Ander land; wie een nummer typt,
+  speelt precies dat land opnieuw. Huizen staan verder uit elkaar (het looppad, en achter zich hun dak), boerderijen
+  verder naar buiten. Een bosrand met inhammen en open plekken, bosjes, losse bomen en struiken in de wei, een of twee
+  vijvers, een of twee rotspartijen, en varens, paddenstoelen, stronken, graspollen, bloemen en riet. Een houthakker
+  hoort bij het bos, een steengroeve bij de rotsen, een visser en een rietsnijder aan het water; het ontworpen gehucht
+  kreeg een rotspartij. De bouwer van de speeltest haalt op drie gemaakte landen de twee jaar (`speelbaar.md`). De toetsen en de speeltest spelen nog op het ontworpen gehucht (de speeltest met
+  `--maker` op gemaakte landen). Vijf nieuwe toetsen (`test/natuur.test.cjs`).
+- 4 okt 2026 — **Vraag 113, verder: een weg zoeken 2,8 keer zo snel, en een bewaard spel half zo groot**
+  (zesentwintigste sessie). Zie vraag 113. `npm test` 868/868.
 - 3 okt 2026 — **Vraag 113: sneller** (vijfentwintigste sessie; Marcel: "Als de performance slecht is, hebben we
   niks"). Het overzicht bewaart de grond op de maat van het scherm en het bos om de kaart heen in een buffer (van 13 naar
   34 beelden per seconde, zonder videokaart). Tijdens het zoeken van een pad of een plek staat iedereen stil

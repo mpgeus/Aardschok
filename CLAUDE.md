@@ -111,7 +111,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - `npm run grootte` meet hoe groot een dorp kan worden (vraag 74): het bouwt het gehucht uit tot N bewoners, met erven en
   werkplekken zoals het spel ze bouwt, en meet de wereld per beeld op 30×, de dagtik en het opslaan, elke N in een eigen
   Node (`gereedschap/grootte/`, uitleg bovenin `grootte.cjs`); `-- 26 800` voor andere N, `--browser` ook het tekenen
-  (start zelf de server), `--astar` het zoeken van een pad, `--prof` een CPU-profiel. De uitslag in
+  (start zelf de server), `--astar` het zoeken van een pad, `--prof` een CPU-profiel, `--maker 5` op land 5 van de maker
+  in plaats van het ontworpen gehucht. De uitslag in
   `gereedschap/grootte/uit/` (niet in git), met een tabel in `samenvatting.md`. Meet op een stille machine.
 - `npm run maker` legt gehuchten met de maker (`js/maker.js`, `T.maakGehucht(zaad)`: elk spel een ander gehucht, vraag
   69 en 70) en tekent ze als plattegrond naast het ontworpen gehucht, in `gereedschap/maker/uit/` (niet in git);
@@ -471,16 +472,22 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.briefVoorLater`), en een bezoeker zet de reis niet op 1× (`T.naarGewoneSnelheid`). Achter de spelregel "Land"
   (standaard uit, tot het buurdorp er is); de getallen in `T.LAND_INSTELLINGEN`. Het scherm: `js/landkaart.js` (de kaart
   als SVG, en het venster als je terug bent).
-- `js/maker.js`: **de maker, een gehucht dat elk spel anders ligt** (vraag 69 en 70, 30 sep): `T.maakGehucht(zaad)` legt
-  een plan uit dezelfde delen als het ontworpen gehucht (het plein als hart, de schout erachter, de herberg en hutten
-  eromheen, vijf boerderijen met hun akkers aan de buitenkant, samen 209 tegels, de heide met de kooi, de weg met het
-  bruggetje, het bos), keurt het zelf (`T.keurGehucht`) en probeert het anders tot het deugt; `T.kaartVanGehucht(plan)`
-  maakt er een kaart met betekenisbestand van, zoals Tiled en `gereedschap/wereld.html` ze maken (de grondtegels uit de
-  groep van de rand-tegels: "gras over zandpad: boven+rechts"), en `T.laadGemaaktGehucht` leest het in met
-  `T.laadKaart`. Met de spelregel "Je gehucht" op "Elk spel een ander" (`T.MAKER_INSTELLINGEN.eigenGehucht`) begint een
-  nieuw spel erop: `T.beginOpKaart` (`js/gebied.js`) trekt het zaad, en de boeren worden uit hetzelfde zaad geloot, zodat
-  `D.lot.zaad` ook het gehucht zegt. Het gehucht blijft `'gehucht'` heten, zodat alles wat het ontworpen gehucht kent,
-  ook hier werkt; `w.maker` zegt uit welk zaad het komt.
+- `js/maker.js`: **de maker, elk spel een ander land** (vraag 69 en 70, 30 sep; sinds 4 okt de standaard, 100 bij 100,
+  met natuur, vraag 112): `T.maakGehucht(zaad)` legt een plan uit dezelfde delen als het ontworpen gehucht (het plein als
+  hart, de schout erachter, de herberg en hutten eromheen, vijf boerderijen met hun akkers aan de buitenkant, samen 209
+  tegels, de heide met de kooi, de weg met het bruggetje), met een bosrand met inhammen, bosjes, struiken, vijvers,
+  rotsen en ondergroei; een huis houdt het looppad en achter zich zijn dak vrij (`erfRand`, `dakRand`). Hij keurt het
+  zelf (`T.keurGehucht`) en probeert het anders tot het deugt; `T.kaartVanGehucht(plan)` maakt er een kaart met
+  betekenisbestand van, zoals Tiled en `gereedschap/wereld.html` ze maken (de grondtegels uit de groep van de
+  rand-tegels: "gras over zandpad: boven+rechts"), en `T.laadGemaaktGehucht` leest het in met `T.laadKaart`. Welk land
+  een nieuw spel krijgt, zegt `T.landVoorNieuwSpel` (`js/gebied.js`; de spelregel "Je gehucht", een nummer van vijf
+  cijfers, in het menu bij Nieuw spel); `T.beginOpKaart` legt alleen met een nummer een land van de maker, dus de
+  toetsen spelen op het ontworpen gehucht. De boeren worden uit hetzelfde nummer geloot (`D.lot.zaad`). Het gehucht
+  blijft `'gehucht'` heten, zodat alles wat het ontworpen gehucht kent, ook hier werkt; `w.maker` zegt uit welk zaad
+  het komt. **Wat er ligt, doet ertoe:** een houthakker bij het bos, een steengroeve bij de rotsen, een visser en een
+  rietsnijder aan het water (`bij` in `T.GEBOUWEN`, `T.natuurBij` in `js/gebouwen.js`). Wat plat op de
+  grond ligt (niet vast, laag), tekent `js/tekenen.js` in de buffer van de grond (`isPlat`), en het maakt plaats voor
+  een gebouw.
 - `js/zien.js`: **het zichtveld en de getuigen** (werklijst punt 3, 27 sep): wie buiten is, ziet de
   schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
   verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het

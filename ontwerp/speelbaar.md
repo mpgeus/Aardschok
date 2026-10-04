@@ -149,6 +149,37 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 4 okt: de bouwer op het wijdere land (werklijst, vraag 112)
+
+Gespeeld in de zesentwintigste sessie, op `ccr-0d0c2710-bcd5tx`: het spel van `f5d9ce5` met de twee wijzigingen hieronder
+(gecommit als de commit erna), `npm run speeltest -- bouwer --maker`. De bouwer speelt twee jaar op drie gemaakte landen
+(het zaad van de speeltest kiest het land: 62707, 73425 en 72022), 100 bij 100, met natuur.
+
+**De eerste keer ging het mis.** Op twee van de drie landen verloor de bouwer in het tweede jaar: zijn ambt kwijt (land
+72022, 11 slachtmaand) of weggejaagd door een hongerend dorp (land 73425). Het dorp at in het eerste jaar 500 graan op
+(op het ontworpen gehucht 150), want er kwam geen jager: een jager moest bij het bos staan (twaalf bomen dichtbij, en
+drie tegels looppad), en die paar plekken aan de bosrand waren tegen de herfst bezet. Zonder graan voor het zaaien
+oogstte het tweede jaar 80 à 130. Twee wijzigingen: de jager hoeft niet meer bij het bos (die eis was van Claude, niet
+van Marcel: hij loopt het bos in), en een verzoek om iets dat wél bij de natuur hoort (de houthakker, de steengroeve,
+de visser), zoekt over de hele kaart in plaats van tot 44 tegels van wie het vraagt.
+
+**Daarna:**
+
+| Land | Een dorp | Marktrecht | Mensen | Huizen met alles | Jagers | Putten | Wat opviel |
+|---|---|---|---|---|---|---|---|
+| 62707 | 4 herfstmaand | 10 wijnmaand | 26 → 67 | 10 van 10 | 7 | 3 | de reeks naar de winst liep 141 dagen |
+| 73425 | 21 oogstmaand | 10 wintermaand | 26 → 99 | 4 van 16 | 6 | 11 | nooit een molen: het hele tweede jaar geen brood |
+| 72022 | 11 wijnmaand | 1 slachtmaand | 26 → 102 | 0 van 16 | 5 | 9 | |
+
+**Wat opviel:**
+1. **Het spel loopt op het wijdere land:** drie keer twee jaar, geen fouten, niemand weg, een dorp met marktrecht in het
+   eerste jaar, en twee keer de 100 mensen in het tweede (op het ontworpen gehucht liep het vol op 99, vraag 110).
+2. **Veel meer putten.** Een put bereikt huizen tot 12 tegels; op het wijdere land liggen de erven verder uit elkaar, dus
+   vraagt bijna elk nieuw huis zijn eigen put: 9 à 11 putten (het ontworpen gehucht 5), en drie kapellen (1). Die
+   verzoeken komen elke maand, en gaan voor wat verder op de lijst staat: op land 73425 kwam zo nooit een molen. Te
+   overwegen: een grotere kring voor de put op een groter land, of de bouwer (en de raad) die een erf binnen de kring
+   van een put legt.
+
 ## De speeltest van 3 okt: vier jaar naar de winst (werklijst, vraag 102, e)
 
 Gespeeld in de vijfentwintigste sessie, op `ccr-0d0c2710-bcd5tx`: het spel van `8da1369` (vraag 102, b, c en d, en het

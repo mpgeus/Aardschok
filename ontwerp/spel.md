@@ -18,7 +18,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern; sinds 3 okt: de stad groeit door haar mensen (inwoners beginnen zelf een ambacht en vragen toestemming), en jij bepaalt de richting, want "weer een bouw spelletje" wordt te snel saai (het plan is vraag 103, open) | vraag 50, 51, 54, 73, 74, 78, 103 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
-| Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt met de spelregel "Je gehucht" elk spel een ander gehucht (30 sep). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
+| Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt elk spel een ander land, sinds 4 okt de standaard: 100 bij 100, met natuur die ertoe doet, en het nummer van het land bij Nieuw spel (vraag 112). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
 | De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug; sinds 30 sep heeft een probleem een oorzaak (honger, kou, vol, onvrede) | vraag 65, 74 |
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
@@ -618,13 +618,32 @@ zitting (3b) en 's avonds de herberg (3c) komen nog.
   `npm run maker` tekent ze als plattegrond. **Marcel koos (vraag 70):** de delen kloppen; voor nu verschilt een
   gehucht alleen in de ligging (het land eromheen naar de provincie komt later); en de maker mag ook je eigen gehucht
   leggen.
-- **Je eigen gehucht van de maker** (30 sep, achttiende sessie; vraag 70, C): de spelregel "Je gehucht" (standaard "Het
-  ontworpen gehucht", en dan speelt alles zoals ervoor; of "Elk spel een ander"). Met "Elk spel een ander" begint een
-  nieuw spel op een gehucht van de maker, uit het zaad van dat spel: hetzelfde zaad geeft hetzelfde gehucht en dezelfde
-  boeren, en een bewaard spel komt met zijn gehucht terug. Er wonen dezelfde 26 mensen, met dezelfde beginvoorraad;
+- **Je eigen gehucht van de maker** (30 sep, achttiende sessie; vraag 70, C; sinds 4 okt de standaard, vraag 112, a):
+  de spelregel "Je gehucht" ("Elk spel een ander", of "Het ontworpen gehucht"). Een nieuw spel begint op een land van
+  de maker, met een nummer van vijf cijfers (`T.landVoorNieuwSpel`, `js/gebied.js`): bij Nieuw spel staat het onder de
+  naam van je dorp, met een knop Ander land die meteen een ander land achter het menu legt, en wie een nummer typt,
+  krijgt precies dat land (Marcel: "Zodat je kunt herspelen"). Hetzelfde nummer geeft hetzelfde land en dezelfde
+  boeren, en een bewaard spel komt met zijn land terug. Er wonen dezelfde 26 mensen, met dezelfde beginvoorraad;
   Klaas, Aaltje, Gerrit, Trijn en Wouter wonen er ook, elk bij zijn eigen akkers. Het gehucht leest het spel in zoals
   het ontworpen gehucht (een kaart met een betekenisbestand), dus de heer, de inner, de marskramer, de rovers, het vee
-  en de herberg vinden er hun weg zonder dat een regel het weet. `Spel.debug.gehucht(3)` begint een spel op zaad 3.
+  en de herberg vinden er hun weg zonder dat een regel het weet. De toetsen spelen op het ontworpen gehucht
+  (`T.beginOpKaart` zonder nummer), en de speeltest ook, tenzij met `--maker`. `Spel.debug.gehucht(3)` begint een spel
+  op land 3.
+- **Het wijdere land, met natuur** (4 okt, zesentwintigste sessie; vraag 112, b en c; Marcel: "Alles moet denk ik ook
+  wijder opgezet worden", en "Her en der wat foliage, bomen, stenen, water"): het land van de maker is 100 bij 100 (het
+  ontworpen gehucht 76 bij 76). Een huis houdt het looppad van drie tegels vrij, en achter zich, waar zijn dak in beeld
+  overheen reikt, drie meer; de boerderijen staan verder naar buiten. Het bos ligt langs een of twee randen, het liefst
+  achteraan, met inhammen en open plekken; in de wei staan bosjes, losse bomen en groepjes struiken; er zijn een of twee
+  vijvers (wilgen alleen aan de achterkant, want vooraan verbergen ze het water) en een of twee rotspartijen in het open;
+  en er groeien varens, paddenstoelen en stronken onder de bomen, graspollen, bloemen in plekken, en riet aan het water.
+  Wat plat op de grond ligt, zit in de buffer van de grond en kost per beeld niets (`js/tekenen.js`), en maakt plaats
+  voor een gebouw. **Wat er ligt, doet ertoe:** een houthakker hoort bij het bos, een steengroeve bij de rotsen, een
+  visser en een rietsnijder aan het water (`bij` in `T.GEBOUWEN`, `T.natuurBij`); het bouwmenu zegt waarom niet, en een
+  verzoek zoekt vanzelf een plek die past, over de hele kaart. (Een jager niet: hij loopt het bos in. Met die eis vond hij
+  in de speeltest van 4 okt aan de bosrand geen plek meer, en verhongerde het dorp.) Marcel (4 okt): de houthakker hakt
+  bomen om en plant nieuwe (vraag 115). Het ontworpen gehucht kreeg daarvoor een rotspartij aan de
+  bosrand in het noordoosten. Een bewaard spel op het wijdere land is 331 kB (de grond schrijft het één keer per soort
+  tegel).
 - **Eén dorp als één ding** (30 sep, negentiende sessie; stuk 2 van stap 1a, vraag 71; `js/dorp.js`; Marcel: "A ja B ja
   C ja, oud spel mag vervallen"). Alles van een dorp staat bij elkaar: zijn kaart, voorraad, gebouwen en mensen, zijn
   wetten, hoe de heer en de inner ertegenover staan, zijn rovers, voorvallen en raadsman, zijn trede, zijn vee, en zijn
