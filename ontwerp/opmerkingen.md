@@ -602,6 +602,14 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het beeld
 
+**Een achterkant met leven** (4 okt, tweeëndertigste sessie; werklijst vraag 124, B; idee van Claude, Marcel: "het idee
+opslaan, hier komt later ook iets van een moestuin bij"). De draaibare huizen geven de achterkant en de linker gevel
+hetzelfde als de voorkant (vakwerk, ramen, luiken, bakken), maar de uitbouwen blijven voor en rechts, zodat een huis een
+gezicht naar de straat houdt. Als de camera draait (vraag 124), zie je de achterkant net zo vaak als de voorkant, en daar
+gebeurde vroeger het leven: een achterdeur naar het erf, een houtstapel tegen de achtergevel, een regenton onder de goot,
+en een moestuin achter het huis. Dat laatste raakt het erf (`js/erven.js`, waar nu de moestuin vóór het huis ligt) en de
+moestuin als gebouw; samen met vraag 109 (de tuin en het hek binnen het looppad). Na de kern.
+
 **De tegelvellen worden groot** (26 sep, achtste sessie, bij ronde 4b). Een vel heeft vakken van
 gelijke maat, zo groot als de grootste tekening, en een vast aantal (zodat de tegelnummers blijven).
 De browser pakt een vel helemaal uit in het geheugen: `gebouwen.png` (5184×7584, met 27 van de 96

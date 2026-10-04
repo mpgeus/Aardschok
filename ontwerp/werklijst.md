@@ -4232,6 +4232,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **A**, de achterkant en de linker gevel krijgen wat de voorkant heeft (vakwerk, ramen, luiken, bakken, een gevel met
     topraam), maar de uitbouwen blijven waar ze nu staan (vooral voor en rechts), en er komt geen tweede deur? **B**, de
     steiger rondom? **C**, eerst de proefplaat, en pas na jouw blik wit opnieuw renderen?
+    **Marcel (4 okt): "A ja en het idee opslaan, hier komt later ook iets van een moestuin bij. B ja C ja".** Dus: de
+    achterkant en de linker gevel zoals de voorkant, de uitbouwen blijven waar ze staan, geen tweede deur; de steiger
+    rondom; en eerst de proefplaat. Het idee van een achterkant met leven (een achterdeur naar het erf, een houtstapel,
+    een regenton, en later een moestuin achter het huis) staat in `opmerkingen.md`, onder Het beeld.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
