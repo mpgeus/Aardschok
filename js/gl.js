@@ -22,6 +22,7 @@
   let doek = null; // het canvas van WebGL
   let gl = null;
   let kapot = false; // geen WebGL, of de kaart liet het los
+  let geenKaart = false; // geen echte videokaart: zonder, tenzij ookOpDeProcessor later aangaat (de proeven)
   let ratio = 1;
 
   // ---------------------------------------------------------------- kleuren
@@ -123,6 +124,7 @@
     if (kapot) return false;
     if (gl) return true;
     if (typeof document === 'undefined') return false;
+    if (geenKaart && !T.TEKENEN_INSTELLINGEN.ookOpDeProcessor) return false;
     doek = document.createElement('canvas');
     doek.id = 'scherm-gl';
     // Zonder echte videokaart tekent WebGL op de processor (SwiftShader), en dat is vele malen trager dan het 2D-doek:
@@ -133,7 +135,10 @@
     };
     gl = doek.getContext('webgl', opties);
     if (!gl) {
-      kapot = true;
+      // Op de processor kan het wel, als een proef dat later vraagt (dan met een nieuw doek); anders is het geen WebGL.
+      if (opties.failIfMajorPerformanceCaveat) geenKaart = true;
+      else kapot = true;
+      doek = null;
       return false;
     }
     doek.addEventListener('webglcontextlost', (ev) => {
