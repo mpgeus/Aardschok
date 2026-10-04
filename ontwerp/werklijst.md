@@ -4013,6 +4013,27 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (4 okt): "A. Ja prima voor nu. B. Ja".** Dus vier stijlen zoals hierboven, en de natuursteen hoort bij de
     stijl (het ene land veldsteen, het andere zandsteen). En: "Push alles maar en zet alles op main dan maak ik nieuwe
     sessie". De volgende sessie begint met stap 1.
+    **Plan voor stap 1, een vel per tekening (Claude, 4 okt, dertigste sessie; wacht op Marcel).** Gemeten: bij het
+    begin staan er op het ontworpen gehucht en op elk land van de maker 10 tekeningen uit `tegels/huizen.png` (23 erop)
+    en 1 uit `tegels/gebouwen.png` (27 erop), samen 12 MB, terwijl de browser beide vellen helemaal vasthoudt: 55 MB.
+    Met de bouwstijlen (stap 2, zo'n 500 tekeningen van gemiddeld 1 MB) zou een vel ruim 500 MB worden.
+    - **a, elke tekening een eigen bestand:** `tegels/huizen/<naam>.png` en `tegels/gebouwen/<naam>.png`, strak
+      gesneden zoals nu, met zijn maat en anker in `tegels.js`; `npm run tiled` maakt ze zo. In Tiled wordt zo'n vel een
+      echte verzameling met een plaatje per tegel. De andere vellen (bomen, begroeiing, erf, tuin: samen 5 MB, en overal
+      op de kaart) blijven zoals ze zijn.
+    - **b, laden wat er staat:** zodra de kaart er is (nieuw spel, laden, een ander gebied), laadt het spel de
+      tekeningen die erop staan; een nieuw gebouw als het neergezet wordt (de bouwplaats duurt dagen), en een huis dat
+      doorgroeit, houdt zijn oude plaatje tot het nieuwe er is. Nooit een grijs blok. "Bleker", zoals hierboven in het
+      plan, kan niet: van een huis dat nog niet geladen is, is er niets om bleker te tekenen.
+    - **c, meten:** `Spel.debug.vellen()` zegt welke vellen en tekeningen de browser nu vasthoudt, en hoeveel MB;
+      daarmee ervoor en erna, en in stap 2 en 3 weer. Verwacht bij het begin 12 MB in plaats van 55 (van zo'n 200 MB aan
+      plaatjes); het eerste keer uitzoomen verandert niet (die 165 ms zijn de grond en het bos).
+    - **d, nakijken:** elke nieuwe tekening pixel voor pixel gelijk aan zijn stuk van het oude vel, rond hetzelfde anker;
+      vaste schermafdrukken (het gehucht, het overzicht, een bouwplaats, een huis dat doorgroeit) byte voor byte gelijk;
+      toetsen erbij; `npm test` groen. Een sessie.
+    Gezien onderweg, niet in deze stap (`opmerkingen.md`, "Het beeld"): ook de figuren laden altijd alles.
+    Vragen: **A**, ook de gebouwen, niet alleen de huizen? **B**, zo laden? **C**, de figuren op de lijst, of meteen
+    erna?
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
