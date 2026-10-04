@@ -149,6 +149,29 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 4 okt: het praatje (werklijst, vraag 120)
+
+Gespeeld in de zevenentwintigste sessie: `npm run speeltest -- bouwer --zaden 1-3`, op het spel met het praatje
+(`ccr-6762008a-w9xt0l`, de commit `1f10f36` op één kleine reparatie na: onderweg één kans per keer dat twee bekenden
+elkaar treffen). Wie vrij is, blijft staan voor een praatje met een buur of iemand van zijn werk, en 's avonds staat een
+deel van het dorp op het plein. De regels van het spel veranderen niet, maar de worpen vallen anders, dus de speeltest
+speelt niet letter voor letter het jaar van ervoor.
+
+| zaad | een dorp op | marktrecht op | mensen, na het lopen | mensen, met het praatje | een spel |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 24 oogstmaand '23 | 24 wijnmaand '23 | 26 → 71 | 26 → 76 | 200 s |
+| 2 | 24 oogstmaand '23 | 21 wijnmaand '23 | 26 → 69 | 26 → 76 | 191 s |
+| 3 | 24 oogstmaand '23 | 28 wijnmaand '23 | 26 → 75 | 26 → 77 | 215 s |
+
+Het dorp en marktrecht komen op dezelfde dag als na het lopen; aan het eind een paar mensen meer, binnen wat een ander
+toeval ook geeft. Geen fouten in de console, niemand weg. Drie spellen tegelijk (de vorige keer twee keer drie), dus de
+tijden zijn niet te vergelijken met die hieronder.
+
+**De proef met opslaan faalt**, ook op `main` zonder het praatje (`npm run speeltest -- lui60 --zaad 1 --opslaan`): op
+deze stand speelt het geladen spel een ander jaar (20 verschillen, met "reading 'blokkeert'" in de console), op `main`
+staat er na het herladen geen Verder op het titelscherm. Een verse bladzijde kent na het laden de gebouwen niet die in
+het spel neergezet zijn (`opmerkingen.md`, bovenaan).
+
 ## De speeltest van 4 okt: lopen tussen anderen (werklijst, vraag 119, D en A)
 
 Gespeeld in de zesentwintigste sessie: `npm run speeltest -- bouwer --zaden 1-3`, twee keer naast elkaar: op het spel van
