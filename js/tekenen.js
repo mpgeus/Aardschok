@@ -503,6 +503,7 @@
   function tekenNacht(ctx, S, bw, bh) {
     if (!S.kalender || !T.lichtVan || (T.debug && T.debug.geenNacht)) return;
     if (ctx.tekenLichtkaart) {
+      // Het weer (vraag 82, c; Marcel, 4 okt) zet hier straks zijn kleur in: de kleur van het uur maal die van het weer.
       ctx.tekenLichtkaart(T.lichtKleurVan(S.kalender.dag), lichtenInBeeld(S, bw, bh));
       return;
     }

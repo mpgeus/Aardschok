@@ -4702,6 +4702,16 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     van de maker) en 0,22% op 0,5. Het echt andere valt binnen de maat van vraag 123 (C en E), maar de afronding niet: C
     stond hooguit 0,1% van de pixels toe, ook voor 1 of 2 op 255. Zien doe je het niet. Vraag **D** (aan Marcel): telt
     afronding tot 2 op 255 voortaan niet mee in de maat? Voorstel: ja; wat telt, is wat echt anders is.
+    **Marcel (4 okt): "D ja".** Afronding tot 2 op 255 telt niet mee in de maat van vraag 123, C; wat telt, is wat echt
+    anders is (`npm run schermen` telt het al apart).
+    **Het weer** (Marcel vroeg: "Hoort het weer hier ook bij?"). Het weer als spel is vraag 82, c (regen bij het zaaien,
+    droogte in de zomer, als status), na de wensen. Het beeld ervan past op de lichtkaart: een grijze of juist felle kleur
+    die met de kleur van het uur wordt vermenigvuldigd, mist als waas over de verte, regen en sneeuw als strepen en vlokjes
+    erbovenop (sneeuw op de grond en de daken vraagt nieuwe kunst). Voorstel van Claude: het beeld van het weer bouwen
+    samen met de regels ervan, niet los. **Marcel koos (4 okt): "A"**: zo, bij vraag 82, c. De plek waar het weer zijn
+    kleur inzet, is `tekenNacht` in `js/tekenen.js`: de kleur van het uur maal die van het weer, vóór de lichtkaart.
+    **En: "B graag, C mag later".** De proefplaat van B (schaduwen met de zon) komt nu; die van C (licht op de muren)
+    later.
     `npm run schermen` heeft drie beelden erbij: de dageraad, de zonsondergang en het plein 's avonds vóór bedtijd (om
     20.8 uur slaapt het dorp al, en zijn de lantaarns uit). Hoe snel de lichtkaart is, zien we alleen op een echte
     videokaart (hier tekent WebGL op de processor).
