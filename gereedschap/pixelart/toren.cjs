@@ -215,6 +215,30 @@ function doorGroep(g, ox, oy, oz, vx, vy, vz) {
   return t0 <= t1 ? [t0, t1] : null;
 }
 
+// ---------------------------------------------------------------- een kwartslag
+
+// Een wereld die k kwartslagen om de z-as gedraaid staat (werklijst vraag 124, B: de draaibare huizen): +y wordt +x, +x
+// wordt -y. Op het scherm draait hij dan tegen de klok in: wat linksvoor stond, staat rechtsvoor. draaiNaar draait een
+// punt of een richting ([x, y] of [x, y, z]) van de wereld zo, draaiTerug de andere kant op. Alleen wisselen en
+// mintekens, dus k = 0 laat elk getal precies zoals het was.
+function draaiNaar(k, p) {
+  const [x, y] = p;
+  const rest = Array.prototype.slice.call(p, 2);
+  switch (((k % 4) + 4) % 4) {
+    case 1:
+      return [y, -x, ...rest];
+    case 2:
+      return [-x, -y, ...rest];
+    case 3:
+      return [-y, x, ...rest];
+    default:
+      return [x, y, ...rest];
+  }
+}
+const draaiTerug = (k, p) => draaiNaar(-k, p);
+// de lichten van een wereld (W.lichten, in de maten van de wereld) op hun plek in een gedraaid beeld
+const lichtenNaar = (k, lichten) => (k ? lichten.map((l) => ({ ...l, pos: draaiNaar(k, l.pos) })) : lichten);
+
 // ---------------------------------------------------------------- de tekenaar
 
 // Tekent de wereld W in beeld B. Per pixel één straal, en negen waar de buren verschillen (randen
@@ -223,8 +247,22 @@ function doorGroep(g, ox, oy, oz, vx, vy, vz) {
 // (x, y, z), de normaal, het licht, de stap, de pixel (px, py) en dxv/dyv: hoe ver het oppervlak
 // opschuift bij één pixel naar rechts of omlaag. o.plek = [X, Y] (eenheden) zet de wereld op een
 // andere plek in het beeld. Geeft het veld en de schaduwvragen terug, in beeldcoördinaten.
+//
+// o.draai = k tekent de wereld k kwartslagen gedraaid (draaiNaar). Daarvoor draait de tekenaar de camera, de zon en het
+// randlicht de andere kant op, en laat de wereld zelf zoals hij is: elk patroon krijgt dezelfde plek en normaal als
+// zonder draai, dus elke steen, balk en lap riet ligt van elke kant op dezelfde plek, en de zon staat op het scherm
+// altijd linksboven. Wat in het beeld komt (B.pos, B.nrm) en wat hij teruggeeft, is in beeldcoördinaten, gedraaid; de
+// lichten van de wereld zet lichtenNaar op hun plek.
 function tekenWereld(B, W, o = {}) {
-  const [TX, TY] = o.plek || [0, 0];
+  const k = o.draai || 0;
+  const EX = draaiTerug(k, K.EX);
+  const EY = draaiTerug(k, K.EY);
+  const [V0, V1, V2] = draaiTerug(k, K.V);
+  const [L0, L1, L2] = draaiTerug(k, LICHT);
+  const RL = draaiTerug(k, RANDLICHT);
+  // de plek in de maten van de wereld, en een punt van het beeld terug naar de wereld
+  const [TX, TY] = draaiTerug(k, o.plek || [0, 0]);
+  const naarScherm = (x, y, z) => [B.OX + x * EX[0] + y * EX[1] + z * EX[2], B.OY + x * EY[0] + y * EY[1] + z * EY[2]];
   const alle = W.groepen.filter((g) => g.delen.length);
   for (const g of alle) {
     sluitGroep(g);
@@ -243,7 +281,7 @@ function tekenWereld(B, W, o = {}) {
   for (const g of alle) {
     for (const [dx, dy] of [[-1, -1], [1, 1], [-1, 1], [1, -1]]) {
       for (const z of [g.z0, g.z1]) {
-        const [sx, sy] = K.naarScherm(B, g.cx + dx * g.cr + TX, g.cy + dy * g.cr + TY, z);
+        const [sx, sy] = naarScherm(g.cx + dx * g.cr + TX, g.cy + dy * g.cr + TY, z);
         sx0 = Math.min(sx0, sx);
         sx1 = Math.max(sx1, sx);
         sy0 = Math.min(sy0, sy);
@@ -271,7 +309,7 @@ function tekenWereld(B, W, o = {}) {
     let b1 = -Infinity;
     for (const [dx, dy] of [[-1, -1], [1, 1], [-1, 1], [1, -1]]) {
       for (const z of [g.z0, g.z1]) {
-        const [sx, sy] = K.naarScherm(B, g.cx + dx * g.cr + TX, g.cy + dy * g.cr + TY, z);
+        const [sx, sy] = naarScherm(g.cx + dx * g.cr + TX, g.cy + dy * g.cr + TY, z);
         a0 = Math.min(a0, sx);
         a1 = Math.max(a1, sx);
         b0 = Math.min(b0, sy);
@@ -483,7 +521,7 @@ function tekenWereld(B, W, o = {}) {
           a += (h - f(x + nx * h, y + ny * h, z + nz * h)) / (1 << s);
         }
         ao = klem(1 - a * 0.5, 0.35, 1);
-        const rim = Math.pow(1 - Math.max(0, kijk), 2.5) * Math.max(0, nx * RANDLICHT[0] + ny * RANDLICHT[1] + nz * RANDLICHT[2]);
+        const rim = Math.pow(1 - Math.max(0, kijk), 2.5) * Math.max(0, nx * RL[0] + ny * RL[1] + nz * RL[2]);
         const b = (0.24 + 0.76 * licht) * (0.45 + 0.55 * ao);
         stap = mat.lo + (mat.hi - mat.lo) * b + rim * (mat.rand ?? 1.4);
         if (mat.glans) {
@@ -516,21 +554,42 @@ function tekenWereld(B, W, o = {}) {
       B.obj[idx] = p.groep.obj;
       B.deel[idx] = p.deel ?? 0;
       B.vlag[idx] = vlag;
-      B.pos[idx * 3] = x + TX;
-      B.pos[idx * 3 + 1] = y + TY;
+      if (k) {
+        // in het beeld de plek en de normaal zoals ze daar liggen: gedraaid
+        const [bx, by] = draaiNaar(k, [x + TX, y + TY]);
+        const [mx, my] = draaiNaar(k, [nx, ny]);
+        B.pos[idx * 3] = bx;
+        B.pos[idx * 3 + 1] = by;
+        B.nrm[idx * 3] = mx;
+        B.nrm[idx * 3 + 1] = my;
+      } else {
+        B.pos[idx * 3] = x + TX;
+        B.pos[idx * 3 + 1] = y + TY;
+        B.nrm[idx * 3] = nx;
+        B.nrm[idx * 3 + 1] = ny;
+      }
       B.pos[idx * 3 + 2] = z;
-      B.nrm[idx * 3] = nx;
-      B.nrm[idx * 3 + 1] = ny;
       B.nrm[idx * 3 + 2] = nz;
       B.zon[idx] = zon;
     }
   }
+  // een punt van het beeld terug in de maten van de wereld
+  const terug = (x, y) => (k ? draaiTerug(k, [x, y]) : [x, y]);
   return {
-    f: (x, y, z) => f(x - TX, y - TY, z),
-    inSchaduw: (x, y, z) => inSchaduw(x - TX, y - TY, z),
-    zacht: (x, y, z, k) => zacht(x - TX, y - TY, z, k),
+    f: (x, y, z) => {
+      const [a, b] = terug(x, y);
+      return f(a - TX, b - TY, z);
+    },
+    inSchaduw: (x, y, z) => {
+      const [a, b] = terug(x, y);
+      return inSchaduw(a - TX, b - TY, z);
+    },
+    zacht: (x, y, z, kk) => {
+      const [a, b] = terug(x, y);
+      return zacht(a - TX, b - TY, z, kk);
+    },
     groepen: alle,
-    plek: [TX, TY],
+    plek: [...(o.plek || [0, 0])],
   };
 }
 
@@ -2487,8 +2546,11 @@ module.exports = {
   BREED,
   HOOG,
   ANKER,
-  // de tekenaar, bruikbaar voor andere grote dingen (huizen, bomen)
+  // de tekenaar, bruikbaar voor andere grote dingen (huizen, bomen), ook een kwartslag gedraaid
   tekenWereld,
+  draaiNaar,
+  draaiTerug,
+  lichtenNaar,
   Wereld,
   voeg,
   stelsel,
