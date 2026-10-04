@@ -325,6 +325,10 @@ de stand ernaast (`T.metDeurNaar`).
   elke kant dezelfde. In de laatste fase staat hij nog langs de voor- en de achterkant.
 - **De standen** (`STANDEN` in `huizen.cjs`) zijn de draai: zuid 0, oost 1, noord 2, west 3; de namen van de tekeningen
   bleven. De voet, de deur en het anker meet `meetHuis` zoals het huis in het beeld ligt.
+- **Wat uitsteekt, komt in een van de standen vooraan.** Bij het renderen stak de schoor van hut 1 in stand west over de
+  rand van zijn voet: het meten miste de dunne stok, en bij het gespiegelde wit stond hij altijd achteraan. Rondom staat
+  een schoor nu steiler, binnen één tegel voor de gevel, en telt hij altijd mee in de voet (hut 1 6 bij 4, huis 3 9 bij
+  7).
 - **De proefplaat:** `node gereedschap/pixelart/huis-sdf-export.cjs rondom` (huis 1, de L-hut en de T in hun vier standen,
   en huis 1 in aanbouw van vier kanten). De toetsen staan in `test/draaibare-huizen.test.cjs`.
 
