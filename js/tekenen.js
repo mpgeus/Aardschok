@@ -99,7 +99,51 @@
   function grondSleutel(S) {
     const w = S.wereld;
     const g = S.gevecht ? S.gevecht.kamers.size : -1;
-    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${padVersie(S)}`;
+    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${padVersie(S)}|${platVan(w).versie}`;
+  }
+
+  // Wat plat op de grond groeit (een graspol, bloemen, een varen, paddenstoelen, een kleine steen, een rij kool; vraag
+  // 112): niet in de weg, en zo laag dat het niemand bedekt. Het ligt in de buffer van de grond, zodat het per beeld niets
+  // kost; op een land van de maker zijn het er een paar honderd. Wat plat is, zegt de tekening zelf (tegels/tegels.js):
+  // niet vast, één tegel, en niet hoger dan PLAT_HOOG pixels boven zijn voet.
+  const PLAT_HOOG = 24;
+  function isPlat(v) {
+    const vel = v.vel && T.TEGELS && T.TEGELS[v.vel];
+    const t = vel && vel.tiles[v.id];
+    return !!(t && !t.vast && !t.beslaat && t.doos && t.doos[1] <= PLAT_HOOG);
+  }
+  // Per wereld de platte voorwerpen, opnieuw gezocht als de kaart veranderde (T.kaartVersie, js/wereld.js); `versie` gaat
+  // alleen omhoog als die lijst echt anders werd, want alleen dan hoeft de grond opnieuw.
+  const PLAT = new WeakMap();
+  function platVan(w) {
+    const kaart = T.kaartVersie(w);
+    let p = PLAT.get(w);
+    if (p && p.kaart === kaart) return p;
+    const lijst = w.buiten ? (w.voorwerpen || []).filter(isPlat) : [];
+    const zelfde = p && p.lijst.length === lijst.length && p.lijst.every((v, i) => v === lijst[i]);
+    p = { kaart, lijst, versie: p ? p.versie + (zelfde ? 0 : 1) : 0 };
+    PLAT.set(w, p);
+    return p;
+  }
+  const isGebakken = (w, v) => !!w.buiten && isPlat(v);
+  // Het platte spul in het gebied van een buffer, van achter naar voor; niet op een paadje (js/paden.js), want daar
+  // is het weggelopen.
+  function tekenPlatIn(c, S, vak) {
+    const w = S.wereld;
+    const paden = zandVan(S);
+    const bv = paden ? w.tegels[0].length + 1 : 0; // de hoekpunten, zoals T.zandHoeken ze legt
+    const opPaadje = (x, y) => paden && (paden.zand[y * bv + x] || paden.zand[y * bv + x + 1] || paden.zand[(y + 1) * bv + x] || paden.zand[(y + 1) * bv + x + 1]);
+    const lijst = platVan(w).lijst.filter((v) => v.x >= vak.x0 && v.x <= vak.x1 && v.y >= vak.y0 && v.y <= vak.y1 && !opPaadje(v.x, v.y));
+    lijst.sort((a, b) => a.x + a.y - (b.x + b.y) || a.y - b.y);
+    for (const v of lijst) {
+      const p = T.naarScherm(v.x, v.y);
+      const dof = randDof(w, v.x, v.y);
+      const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, 0);
+      if (!stuk || dof <= 0.02) continue;
+      if (dof < 1) c.globalAlpha = dof;
+      T.sprites.teken(c, stuk, p.x, p.y, 1);
+      if (dof < 1) c.globalAlpha = 1;
+    }
   }
 
   // De paadjes van het dorp dat hier ligt (js/paden.js): ze liggen in de grond, dus verandert er een, dan wordt de grond
@@ -158,7 +202,9 @@
     c.clearRect(0, 0, g.canvas.width, g.canvas.height);
     c.setTransform(k, 0, 0, k, -g.vx * k, -g.vy * k);
     c.imageSmoothingEnabled = false;
-    tekenVloeren(c, S, inBeeld, tegelsIn(S.wereld, { x0: g.vx, y0: g.vy, x1: g.vx + b, y1: g.vy + h }));
+    const vak = tegelsIn(S.wereld, { x0: g.vx, y0: g.vy, x1: g.vx + b, y1: g.vy + h });
+    tekenVloeren(c, S, inBeeld, vak);
+    if (S.wereld.buiten) tekenPlatIn(c, S, vak);
     if (bosGebakken(S)) for (const v of bosrandIn(S, g)) if (bosAchter(S.wereld, v)) tekenGebakkenBoom(c, v);
     S.bosVoor = null; // het bos ervóór hoort bij deze grond: het wordt opnieuw gelegd (bosVoorBij)
     return g;
@@ -267,7 +313,7 @@
     }
     const zichtbaar = [];
     for (const v of w.voorwerpen) {
-      if (!inVak(vak, v.x, v.y) || !T.isZichtbaar(w, v.x, v.y)) continue;
+      if (!inVak(vak, v.x, v.y) || !T.isZichtbaar(w, v.x, v.y) || isGebakken(w, v)) continue;
       zichtbaar.push(v);
       const k = T.kamerVan(w, v.x, v.y);
       const helder = k && inBeeld(k.id) ? 1 : GEDIMD;

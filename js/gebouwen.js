@@ -828,6 +828,10 @@
       tekeningNaam: tekening ? tekening.split('/').pop() : null,
       klaarOp: instantie.klaarOp, bouwtijd: g.bouwtijd,
     };
+    // Wat er laag groeit of ligt (een varen, bloemen, een kool; js/maker.js), maakt plaats: het gebouw komt erop. Wat
+    // in de weg staat (een boom, een struik), hield het bouwen al tegen (T.waaromPastHetNiet).
+    const eronder = (o) => o.vel && !T.VOORWERPEN[o.soort].blokkeert && o.x >= v.x && o.x < v.x + voet.b && o.y >= v.y && o.y < v.y + voet.h;
+    for (const o of w.voorwerpen.filter(eronder)) T.haalVoorwerpWeg(w, o);
     T.zetVoorwerp(w, v);
     instantie.voorwerp = v;
     for (let dy = 0; dy < voet.h; dy++) {
