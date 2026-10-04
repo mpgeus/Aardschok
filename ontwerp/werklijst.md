@@ -4727,6 +4727,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     alleen op de grond, niet op een muur erachter.
     Vragen: **A**, zo verder (de schakelaar, dan de huizen opnieuw door de bouwer), of niet? **B**, de lengte en de
     donkerte (in de werkbank, "Het licht" en "De dag")?
+    **Marcel (4 okt): "A ja, B goed zo".** Dus verder: de bouwer krijgt een schakelaar voor de ingebakken vloerschaduw
+    (de huizen in `huis-sdf.cjs`, en de bomen in `bomen.cjs`: allebei in `gereedschap/pixelart/`, het werk van de sessie
+    van de huizen), dan gaan de huizen en de bomen zonder vloerschaduw opnieuw door de bouwer, en dan staat de spelregel
+    "Schaduwen" standaard op "Met de zon". De lengte en de donkerte blijven zoals ze zijn.
     `npm run schermen` heeft drie beelden erbij: de dageraad, de zonsondergang en het plein 's avonds vóór bedtijd (om
     20.8 uur slaapt het dorp al, en zijn de lantaarns uit). Hoe snel de lichtkaart is, zien we alleen op een echte
     videokaart (hier tekent WebGL op de processor).
