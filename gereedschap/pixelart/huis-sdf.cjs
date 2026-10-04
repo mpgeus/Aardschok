@@ -631,7 +631,10 @@ function maten(zaad = 1, o = {}) {
   // f is de plek langs de gevel, in beeld van links naar rechts: bij nok 'x' achteraan. Een huis van een bouwstijl
   // (deurOp) dat gespiegeld is (nok 'y'), keert hem om, anders staat de schoor vooraan en steekt hij buiten zijn voet.
   const f = 0.72 + 0.12 * r(69);
-  H.schoor = sch && gevels.length && wilSchoor ? { P: gevels[Math.floor(r(67) * gevels.length)], f: H.deurOp === 'hoofd' && H.nok === 'y' ? 1 - f : f, uit: 44 + 16 * r(70), h: schoorH } : null;
+  // Rondom staat hij steiler, binnen één tegel voor de gevel: gedraaid staat hij in een van de standen vooraan, en de voet
+  // telt hem mee (meetHuis in huizen.cjs).
+  const uit = 44 + 16 * r(70);
+  H.schoor = sch && gevels.length && wilSchoor ? { P: gevels[Math.floor(r(67) * gevels.length)], f: H.deurOp === 'hoofd' && H.nok === 'y' ? 1 - f : f, uit: H.rondom ? Math.min(uit, TEGEL - 8) : uit, h: schoorH } : null;
   return H;
 }
 
@@ -4684,11 +4687,8 @@ function huis(zaad = 1, o = {}) {
   }
   // een schoor tegen de gevel: iemand heeft de muur overeind gehouden
   if (H.schoor) {
-    const P = H.schoor.P;
-    const [bx, by, bz] = P.pos(P.Lu * H.schoor.f, H.schoor.h, 1);
-    const Tw = P.zijde === 'q' ? [P.V.Ax * P.dirU, P.V.Ay * P.dirU] : [P.V.Qx * P.dirU, P.V.Qy * P.dirU];
-    const voet = [bx + P.N[0] * H.schoor.uit - Tw[0] * 4, by + P.N[1] * H.schoor.uit - Tw[1] * 4, -2];
-    const p = T.hulp.stok(voet, [bx, by, bz], sp ? 5.5 : 3.5);
+    const { voet, top } = schoorPunten(H);
+    const p = T.hulp.stok(voet, top, sp ? 5.5 : 3.5);
     p.m = 'hout';
     p.deel = deel++;
     voeg(W.groep('schoor'), p);
@@ -5055,6 +5055,15 @@ function kiesHuis(zaad) {
   return spec;
 }
 
+// De schoor tegen een gevel (H.schoor): waar hij op de grond staat en waar hij tegen de muur komt, in eenheden. Ook voor
+// de voet van het huis (meetHuis in huizen.cjs): hij steekt een tegel voor de gevel uit.
+function schoorPunten(H) {
+  const P = H.schoor.P;
+  const [bx, by, bz] = P.pos(P.Lu * H.schoor.f, H.schoor.h, 1);
+  const Tw = P.zijde === 'q' ? [P.V.Ax * P.dirU, P.V.Ay * P.dirU] : [P.V.Qx * P.dirU, P.V.Qy * P.dirU];
+  return { voet: [bx + P.N[0] * H.schoor.uit - Tw[0] * 4, by + P.N[1] * H.schoor.uit - Tw[1] * 4, -2], top: [bx, by, bz] };
+}
+
 // Waar de tovenaar kan staan: een eind voor de deur, in tegels.
 // Waar je voor de deur staat, in tegels vanaf het midden van het plan: `afstand` tegels voor de muur.
 // Ook voor een deur aan de kant die je niet ziet (H.achterDeur); zonder deur het midden.
@@ -5203,4 +5212,4 @@ const WARM = {
 
 // Wat de losse tuinstukken (tuin-sdf.cjs) met de huizen delen: het hout (balkPatroon voor balken
 // en planken, stamHuid voor stammen, vlechtwerk voor twijgen), de knoppen en het zaad.
-module.exports = { huis, samen, kaderSamen, proefhuis, maten, dakPlek, voorDeDeur, kaderVan, WARM, kiesHuis, DAKEN, WANDEN, balkPatroon, stamHuid, vlechtwerk, knoppenVan, meng, kiesUit };
+module.exports = { huis, samen, kaderSamen, proefhuis, maten, dakPlek, voorDeDeur, schoorPunten, kaderVan, WARM, kiesHuis, DAKEN, WANDEN, balkPatroon, stamHuid, vlechtwerk, knoppenVan, meng, kiesUit };

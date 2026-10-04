@@ -120,10 +120,13 @@ test('de voet en de deur van een stand zijn die van zuid, een kwartslag gedraaid
     const [bk, dk] = k % 2 ? [d, b] : [b, d];
     return [Math.floor(p[0] + bk / 2), Math.floor(p[1] + dk / 2)];
   };
-  for (const vorm of ['hut4', 'huis6']) {
+  // de L, de T, en hut 1 met zijn schoor: die telt mee in de voet, anders steekt hij in een van de standen vooraan over de
+  // rand (hij staat rondom binnen één tegel voor de gevel)
+  for (const vorm of ['hut4', 'huis6', 'hut1']) {
     const o = opgave(vorm, 'riet', 'z');
     const W = HS.huis(o.zaad, o);
     const zuid = HZ.meetHuis(W, 0);
+    if (W.H.schoor) assert.ok(W.H.schoor.uit < 45.25, `${vorm}: de schoor reikt verder dan één tegel`);
     // de deur van zuid ligt aan de zuidkant, net buiten de voet
     assert.equal(zuid.deur[1], zuid.voet[1], `${vorm}: de deur van zuid ligt niet aan de zuidkant`);
     for (const k of [1, 2, 3]) {

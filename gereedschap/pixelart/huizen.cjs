@@ -219,6 +219,18 @@ function meetHuis(W, draai = 0) {
       j1 = Math.max(j1, j);
     }
   }
+  // Een huis rondom (vraag 124, B) telt de voet van zijn schoor altijd mee: de punten hierboven missen de dunne stok
+  // soms, en gedraaid staat hij in een van de standen vooraan, waar hij anders over de rand van de voet steekt (de oude
+  // huizen houden hun voet: daar staat hij achteraan, en het ontworpen gehucht ligt erop).
+  if (H.rondom && H.schoor) {
+    const [x, y] = naar(HS.schoorPunten(H).voet);
+    const i = Math.floor(x / TEGEL - gx);
+    const j = Math.floor(y / TEGEL - gy);
+    i0 = Math.min(i0, i);
+    j0 = Math.min(j0, j);
+    i1 = Math.max(i1, i);
+    j1 = Math.max(j1, j);
+  }
   if (!Number.isFinite(i0)) throw new Error('geen voet gevonden');
   const voet = [i1 - i0 + 1, j1 - j0 + 1];
   // de hoek van de voet: de achterste hoek van de eerste bezette tegel
