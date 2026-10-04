@@ -116,11 +116,20 @@
       }
       return beste && { x: beste.x, y: beste.y, zonder: beste.zonder };
     }
-    for (let r = 3; r < 45; r++) {
+    // Wat bij de natuur hoort (een jager bij het bos, een visser aan het water; `bij` in js/gebouwen.js), zoekt over de
+    // hele kaart: het bos kan verder liggen dan 44 tegels van wie het vraagt. Op een land van de maker van 100 bij 100
+    // vroeg zo nooit iemand om een jager, en at het dorp zijn zaaigraan op (de speeltest van 4 okt; vraag 112). Eerst de
+    // vraag of de natuur er ligt: die kost één stap (T.natuurBij), gebouwPast veel meer.
+    const g = T.GEBOUWEN[soort];
+    const natuur = g.bij ? T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || g.voet : null;
+    const tot = natuur ? Math.max(45, w.tegels.length, w.tegels[0].length) : 45;
+    const probeer = (x, y) => (!natuur || !T.waaromNietBijDeNatuur(D, soort, { x, y, b: natuur.b, h: natuur.h })) && T.gebouwPast(D, soort, x, y);
+    // ring na ring om `bij`, en in elke ring van boven naar onder en van links naar rechts
+    for (let r = 3; r < tot; r++) {
       for (let dy = -r; dy <= r; dy++) {
-        for (let dx = -r; dx <= r; dx++) {
-          if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
-          if (T.gebouwPast(D, soort, bij.x + dx, bij.y + dy)) return { x: bij.x + dx, y: bij.y + dy };
+        const rand = Math.abs(dy) === r;
+        for (let dx = -r; dx <= r; dx += rand ? 1 : 2 * r) {
+          if (probeer(bij.x + dx, bij.y + dy)) return { x: bij.x + dx, y: bij.y + dy };
         }
       }
     }

@@ -221,7 +221,8 @@
     jager: {
       naam: 'jager', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 8 }, heer: { vlees: 5 }, bouwtijd: 2,
       handen: 1, woonruimte: 0, maakt: { uit: { vlees: 1, huiden: 1 } }, verdacht: false, menu: true,
-      bij: { natuur: 'bos', straal: 9, minstens: 12 },
+      // Geen `bij`: hij loopt het bos in. Met de eis van het bos (4 okt) vond de jager aan de bosrand al in de eerste
+      // herfst geen plek meer, en at het dorp in de speeltest zijn zaaigraan op.
       tekening: 'gebouwen/jagershut', beschrijving: 'wild uit het bos, en huiden voor de looier',
       opmerking: 'Het bos is van de heer: stropen is ook een keuze.',
     },
@@ -654,8 +655,8 @@
   // ---------------------------------------------------------------------------------------------
   // Wat er ligt, doet ertoe (werklijst vraag 112, c; Marcel, 3 okt: "Her en der wat foliage, bomen, stenen, water")
   // ---------------------------------------------------------------------------------------------
-  // Een houthakker en een jager horen bij het bos, een steengroeve bij de rotsen, een visser en een rietsnijder aan het
-  // water (`bij` in T.GEBOUWEN). Op een land van de maker ligt dat elk spel ergens anders (js/maker.js), zodat elk land
+  // Een houthakker hoort bij het bos, een steengroeve bij de rotsen, een visser en een rietsnijder aan het water (`bij` in
+  // T.GEBOUWEN). Op een land van de maker ligt dat elk spel ergens anders (js/maker.js), zodat elk land
   // een andere puzzel is. Wat telt, zegt T.NATUUR per soort: een voorwerp op de tegel, of de grond zelf.
   const BOMEN = new Set(['eik', 'herfstEik', 'den', 'berk', 'wilg', 'dodeBoom']);
   T.NATUUR = {

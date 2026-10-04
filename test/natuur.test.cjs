@@ -1,5 +1,5 @@
 // Wat er ligt, doet ertoe (werklijst vraag 112, c; Marcel, 3 okt: "Her en der wat foliage, bomen, stenen, water"): een
-// houthakker en een jager horen bij het bos, een steengroeve bij de rotsen, een visser en een rietsnijder aan het water
+// houthakker hoort bij het bos, een steengroeve bij de rotsen, een visser en een rietsnijder aan het water
 // (`bij` in T.GEBOUWEN, js/gebouwen.js). Op elk land van de maker kan dat ergens (js/maker.js), en wat laag groeit,
 // maakt plaats voor een gebouw.
 const test = require('node:test');
@@ -26,8 +26,10 @@ function spel(zaad) {
 
 const NATUURGEBOUWEN = Object.keys(T.GEBOUWEN).filter((s) => T.GEBOUWEN[s].bij);
 
-test('wie bij de natuur hoort: de houthakker en de jager bij het bos, de steengroeve bij de rotsen, de visser en de rietsnijder aan het water', () => {
-  assert.deepEqual(NATUURGEBOUWEN.sort(), ['houthakker', 'jager', 'rietsnijder', 'steengroeve', 'visser']);
+test('wie bij de natuur hoort: de houthakker bij het bos, de steengroeve bij de rotsen, de visser en de rietsnijder aan het water', () => {
+  // de jager niet: hij loopt het bos in, en met de eis van het bos vond hij in de speeltest van 4 okt al in de eerste
+  // herfst geen plek meer
+  assert.deepEqual(NATUURGEBOUWEN.sort(), ['houthakker', 'rietsnijder', 'steengroeve', 'visser']);
   for (const s of NATUURGEBOUWEN) assert.ok(T.NATUUR[T.GEBOUWEN[s].bij.natuur], `${s}: onbekende natuur`);
 });
 
@@ -57,6 +59,16 @@ test('een steengroeve bouw je alleen bij de rotsen, en het bouwmenu zegt waarom 
   assert.ok(plek, 'geen plek voor een steengroeve bij de rotsen');
   assert.ok(T.natuurBij(S.wereld, 'rotsen', { x: plek.x, y: plek.y, b: 4, h: 4 }, 6) >= 2);
   assert.equal(T.plaatsGebouw(D, 'steengroeve', plek.x, plek.y).gelukt, true);
+});
+
+test('een verzoek vindt de natuur ook ver van wie het vraagt (meer dan 44 tegels)', () => {
+  const S = spel();
+  const D = S.dorp;
+  // de rotsen liggen in het noordoosten (64, 9); wie het vraagt, woont in het zuidwesten
+  const plek = T.plekVoor(D, 'steengroeve', { x: 8, y: 70 });
+  assert.ok(plek, 'geen steengroeve gevonden');
+  assert.ok(Math.max(Math.abs(plek.x - 8), Math.abs(plek.y - 70)) > 44);
+  assert.ok(T.natuurBij(S.wereld, 'rotsen', { x: plek.x, y: plek.y, b: 4, h: 4 }, 6) >= 2);
 });
 
 test('op elk land van de maker kan alles wat bij de natuur hoort ergens staan', () => {
