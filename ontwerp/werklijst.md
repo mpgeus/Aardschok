@@ -35,19 +35,19 @@ de ramen van wie thuis is. **Sinds vraag 112** is elk spel een ander land van 10
 en het nummer van het land staat bij Nieuw spel; een houthakker hoort bij het bos, een steengroeve bij de rotsen, een
 visser aan het water. `npm test`: 868/868.
 
-**Waar het werk staat:** in `main` staat alles tot en met de speeltest van vier jaar (`22a7ba9`; Marcel: "push main").
-Op de branch `ccr-0d0c2710-bcd5tx` staan daarbovenop de snelheid van 3 okt (vraag 113, de meter onder `F2`), de plannen
-111 tot en met 114, Marcels antwoorden op 114, en vandaag het wijdere land (vraag 112, stap 1), een bewaard spel half zo
-groot, en het sneller zoeken van een weg; dat gaat naar `main` als Marcel het vraagt. Hoe een eigen branch en `main`
-samengaan, staat in `CLAUDE.md`, onder Git.
+**Waar het werk staat:** alles staat in `main` (4 okt; Marcel: "ja" op "push main"): de snelheid van 3 okt (vraag 113, de
+meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
+van een weg, en het bos om de kaart alleen aan de kant van het bos. Hoe een eigen branch en `main` samengaan, staat in
+`CLAUDE.md`, onder Git.
 
 **Waar de volgende sessie begint:** **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij vraag 114):
 eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
 wanden, luiken, gespiegeld) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien.
-**Open bij Marcel:** hoe de woontoren komt (het voorstel: een stenen huis dat alles heeft, groeit door tot woontoren
-met drie appartementen, vanaf marktrecht), vraag 113, a (de meter in Firefox), en **vraag 115** (Marcel, 4 okt: de
-houthakker hakt bomen om en plant nieuwe; het voorstel is om dat samen met de boeren te doen). Daarna **vraag 111** (de
-boeren op hun veld), met 115. Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
+**Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
+met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant (**vraag 115**). De meter in Firefox
+(vraag 113, a) komt van hem. **Open bij Marcel:** **vraag 116** (beesten in het bos: wolven die de houthakker bedreigen,
+rode ogen in het donker) en **vraag 117** (één kaart: een eiland met de zee rondom, en de mist; "uiteindelijk"). Daarna
+**vraag 111** (de boeren op hun veld), met 115 en 116; dan 117. Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
 verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de maat van de winst: op het
 wijdere land is er grond genoeg, maar de speeltest speelt standaard nog het ontworpen gehucht). De speeltest van vier
 jaar staat in `speelbaar.md`, en een volgende speeltest van vier jaar splitst de spelers over twee taken, want een taak
@@ -3795,7 +3795,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     de ramen en het licht), de eerste nacht van een spel (80 ms), het opslaan zelf kleiner (twee derde is de kaart, die
     niet verandert), de bomen en het graan in het overzicht, en een land van 100 bij 100 (vraag 112) opnieuw meten.
     Vraag: **a**, wil je met `F2` in Firefox kijken wat de meter zegt, van dichtbij en in het overzicht, overdag en 's
-    avonds, en op 30×? Dan weten we of het tekenen van dichtbij ook nog moet.
+    avonds, en op 30×? Dan weten we of het tekenen van dichtbij ook nog moet. **Marcel (4 okt): ja**; de getallen
+    wachten nog (alles staat sinds 4 okt in `main`).
     **Op het wijdere land (4 okt, zesentwintigste sessie):** het tekenen kost er evenveel als op het ontworpen gehucht
     (zonder videokaart 55 beelden/s van dichtbij, 43 en 30 in het overzicht), want de lage begroeiing ligt in de buffer
     van de grond. Wel kost de eerste keer uitzoomen naar 0,35 één beeld van een seconde (de browser maakt dan verkleinde
@@ -3838,7 +3839,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     woontoren, zoals een hut tot huis groeit: op zijn eigen erf, vanaf marktrecht, met steen. Dezelfde stand (de
     ambachtslieden, met dezelfde wensen), maar drie appartementen: 24 mensen in plaats van 8. Zo groeit het dorp verder
     als de grond op is (vraag 110), zonder nieuwe regel ernaast: het is gewoon de volgende trap van het doorgroeien. Een
-    spelregel "Woontoren" kan hem ook als verzoek van een inwoner laten komen, of uitzetten.
+    spelregel "Woontoren" kan hem ook als verzoek van een inwoner laten komen, of uitzetten. **Marcel (4 okt): "ja op de
+    openstaande vragen"**, dus zo.
     **Plan voor de huizen (Claude, 4 okt; samen met vraag 112, stap 2):** de huizenbouwer
     (`gereedschap/pixelart/huis-sdf.cjs`) kan al veel meer dan het spel gebruikt: daken van riet, spanen, leien en
     pannen, wanden van vakwerk, vlechtwerk, planken, blokhut en veldsteen, luiken in kaal hout, groen, rood en
@@ -3878,6 +3880,52 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       een beweging erbij (een bijl, zoals de maaier een zeis heeft).
     Vragen: **a**, zo? **b**, groeit een boompje in een jaar, of langer (dan is het bos echt schaars)? **c**, samen met
     de boeren (vraag 111), dus na de huizen (vraag 114)?
+    **Marcel (4 okt): "ja op de openstaande vragen".** Dus a zoals voorgesteld, b een jaar of twee (drie maten), en c
+    samen met de boeren en de beesten in het bos (vraag 116), na de huizen.
+116. **Beesten in het bos** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil dat er beesten kunnen rondlopen in het bos.
+    Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het duister."; plan van Claude; open).
+    **Wat er al is:** de wolf staat in `T.WEZENS` (`js/wereld.js`): een monster om mee te vechten, uit het oude spel, met
+    een tekening en een loopbeweging (`gereedschap/pixelart/bosvijanden.cjs`, met de reuzenspin en de kobold), en hij kan
+    al dwalen. Het voorval "wolven" kost een schaap. Op de kaart loopt nog geen dier in het bos.
+    Voorstel:
+    - **a, wie er leven:** wolven, in roedels van twee tot vier, diep in het bos; herten, schuw, die wegrennen (de jager
+      jaagt op wat er rondloopt); later een wild zwijn of een beer. Hoeveel, zegt het bos van het land.
+    - **b, dag en nacht:** overdag blijven de wolven diep in het bos; tegen de avond komen ze naar de rand, en 's nachts
+      zie je in het donker alleen hun ogen: twee rode puntjes die bewegen, ook waar je de wolf zelf niet ziet.
+    - **c, de dreiging:** wie aan de bosrand werkt (de houthakker, de jager, wie sprokkelt), vooral in de schemering,
+      kan een wolf tegenkomen: hij vlucht naar huis, en zijn werk van die dag is half. In de winter hebben de wolven
+      honger: ze pakken een schaap van de meent, of vallen iemand aan (gewond, en een enkele keer dood).
+    - **d, wat je ertegen doet:** de jager houdt ze klein; een jacht (het voorval dat er al is), of de schout met de
+      militie in een gevecht in beurten (de wolf is al een monster om mee te vechten); een hek om de schapen; een lantaarn
+      aan de bosrand.
+    - **e, wanneer:** samen met de houthakker die hakt en plant (vraag 115) en de boeren op hun veld (vraag 111): dan
+      werkt de houthakker echt in het bos, en is er iets om bang voor te zijn.
+    Vragen: **a**, deze dieren? **b**, mag een wolf iemand doden (de spelregel kan het zachter)? **c**, samen met 111 en
+    115?
+117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
+    Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
+    water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
+    Claude; open).
+    **Wat er nu is:** het land is een aparte kaart met provincies waar je in dagen reist (vraag 63, `js/land.js`, achter de
+    spelregel Land, die standaard uit staat), en elke provincie zou een eigen kaart krijgen. Dit vervangt dat: één grote
+    kaart, een eiland met de zee rondom, waarop alles ligt.
+    Voorstel, in stappen:
+    - **a, het eiland uit de maker:** een kust met de zee rondom (de zee in plaats van het donker aan de rand), binnenin
+      bossen, heide, veen, heuvels met rotsen en een rivier; je dorp op een plek die het lot kiest, aan de kust (dan vis,
+      en later een haven) of binnenin.
+    - **b, de mist:** wat niemand van jou zag, is donker; wat je eerder zag, maar nu niet ziet, is grijs, zoals je het
+      je herinnert (dat past bij Marcels "laatst bekende inventarisatie", 1 okt). De schout ontdekt lopend; later ook
+      anderen (de jager, een verkenner), en de marskramer vertelt wat hij zag.
+    - **c, de rest op het eiland:** het kasteel van de heer (de heer, de inner en de soldaten komen dan over de weg van
+      daar, en je ziet waar ze vandaan komen), de stad, en later het buurdorp en de tegenspelers (vraag 72 en 60), elk met
+      een eigen dorp ergens op het eiland. De kaart van de provincies gaat weg; reizen is lopen (en later rijden).
+    - **d, de maat en de snelheid:** een eiland van 300 bij 300 is negen keer het land van nu. Het tekenen maakt dat niets
+      uit (alleen wat in beeld is), de regels wel: een dorp ver weg loopt dan niet met al zijn poppetjes tegel voor tegel,
+      maar als getallen (vraag 79, D), en dichtbij als poppetjes. Een bewaard spel houdt alleen wat veranderde; het eiland
+      zelf komt uit het nummer.
+    - **e, wanneer:** eerst de kern (vraag 114, dan 111 met 115 en 116), dan a en b, dan c met het buurdorp.
+    Vragen: **a**, hoe groot? **b**, het kasteel en de stad ook op het eiland? **c**, kun je van het eiland af (met een
+    schip)? **d**, de mist zo, zwart en grijs? **e**, deze volgorde?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste

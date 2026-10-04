@@ -371,6 +371,15 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
 
 "Jij bouwt" is het spel van vóór 3 okt. Het besluit en waarom staan bovenaan bij "Een nieuwe richting".
 
+## Beesten in het bos (Marcel, 4 okt 2026; werklijst vraag 116, open)
+
+"Ik wil dat er beesten kunnen rondlopen in het bos. Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het
+duister." Het voorstel (vraag 116): wolven in roedels diep in het bos, herten die wegrennen, later een zwijn of een beer;
+'s avonds komen de wolven naar de bosrand, en 's nachts zie je alleen hun rode ogen; wie aan de bosrand werkt, vlucht
+naar huis, en in de winter pakken ze een schaap of vallen ze iemand aan; de jager, een jacht, de militie, een hek en een
+lantaarn helpen. De wolf staat al in `T.WEZENS` (`js/wereld.js`), als monster om mee te vechten, met een tekening.
+Samen met de houthakker die hakt en plant (vraag 115) en de boeren op hun veld (vraag 111).
+
 ## Rovers en de militie (Marcel, 28 en 29 sep 2026; werklijst vraag 51 en 55)
 
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
@@ -583,6 +592,14 @@ zitting (3b) en 's avonds de herberg (3c) komen nog.
   was, vindt het rapport onder de knop, de raadsman komt het niet later nog brengen.
 
 ## Het land (Marcel, 29 en 30 sep 2026; werklijst vraag 63 en 69)
+
+**Een nieuwe richting (Marcel, 4 okt 2026; werklijst vraag 117, open):** "Ik wil uiteindelijk toch alles op dezelfde
+kaart. Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een
+eiland. Met water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."
+Dat vervangt de kaart van de provincies hieronder (die staat achter de spelregel Land, standaard uit): één eiland met de
+zee rondom, met je dorp, het kasteel van de heer, de stad en de andere dorpen erop, en de mist over wat je nog niet
+zag. Het plan in stappen staat bij vraag 117 in de werklijst.
+
 
 **Zo werkt het nu** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in
 `test/land.test.cjs`; Marcel: "Ja, begin aan het land"):
