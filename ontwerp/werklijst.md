@@ -4643,6 +4643,42 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel koos (4 okt): "A ja B ja C ja D na webgl".** Dus: A (licht) bouwen, B (schaduwen met de zon) en C (echt licht op
     de muren) eerst als proefplaat, en alles direct na WebGL, dat nu staat. De volgorde wordt: Marcel meet WebGL op zijn
     pc, dan vraag 125 (A, en de proefplaten van B en C), dan het draaien (vraag 124) en de boeren (vraag 111).
+    **Plan van Claude voor A, licht (4 okt; nog niet gebouwd).** Nu is de nacht een donkerblauwe laag eroverheen
+    (`tekenNacht`, 'source-atop'), met lichtere kringen rond de schout en een gele gloed eroverheen bij de lantaarns: het
+    licht maakt alleen minder donker. Voortaan wordt het licht een **lichtkaart** waarmee de wereld vermenigvuldigd wordt:
+    - **De lichtkaart:** eerst de kleur van het uur over het hele beeld, dan per lichtbron een warme plas erbij (opgeteld).
+      Dan gaat de lichtkaart in één keer over de wereld, als vermenigvuldiging (in `js/gl.js` een mengstand, zonder extra
+      buffer; een gat voor een raam blijft een gat, zoals nu met 'source-atop'). Twee keer vermenigvuldigen, met de helft
+      als "gewoon", zodat een lantaarn een muur ook warmer en lichter kan maken dan overdag, in plaats van alleen minder
+      donker. Daarna de ramen (`vulRamen`, zoals nu), de tekens en het vignet. Op de kaart is dat een paar opdrachten,
+      hoeveel lantaarns er ook branden.
+    - **De kleur van het uur** komt uit de regels, niet uit het tekenen: `T.lichtKleurVan(dag)` naast `T.lichtVan` in
+      `js/dag.js`, met een paar sleutelkleuren in `T.DAG_INSTELLINGEN` (in de werkbank): roze bij het opkomen, neutraal
+      (wit, dus de kunst zoals hij is) van de ochtend tot de middag, oranje bij het ondergaan, blauw in de nacht, en
+      ertussen vloeiend. Te toetsen zonder scherm.
+    - **De lampen:** `T.lichtBronnen` (`js/zien.js`) krijgt per bron een kleur en of het een vlam is. Een vlam flakkert
+      (op de klok van het scherm, `S.tijd`, elk met zijn eigen ritme uit zijn plek, zodat ze niet samen knipperen); een
+      brandend raam geeft een zachte plas voor het huis op de grond; de deur van de herberg een grotere. De schout draagt
+      's avonds en 's nachts buiten een lantaarn: zijn plas licht komt van zijn hand, en gaat met hem mee. Dat is de
+      lichtere kring van nu, maar warm. Welke lichten in beeld staan en waar, zegt één functie (`T.lichtenInBeeld`), die
+      2D en WebGL allebei vragen.
+    - **Wat niet verandert:** het licht in de plaatjes blijft van linksboven komen (vraag 124); het licht van het uur en
+      van de lampen komt erbovenop, zonder richting. Het zicht en de getuigen (`T.zichtOp`) blijven zoals ze zijn: dit is
+      alleen beeld.
+    - **Zonder videokaart** (de spelregel "Tekenen" op "Zonder"): zie vraag B.
+    - **Laten zien:** `npm run schermen -- --tekenen met` (WebGL op de processor) met vier nieuwe schermen: de dageraad,
+      de middag, de zonsondergang en de nacht bij de herberg met de lantaarns. Ik beoordeel op uitsneden, en Marcel krijgt
+      ze naast het oude beeld. De maat van vraag 123, C (2D en WebGL 's avonds tot 8 op 255) geldt dan alleen als 2D
+      dezelfde lichtkaart krijgt; anders vergelijkt de proef alleen overdag. En `npm run tekenmeting` 's avonds, voor en
+      na, zodat we weten wat het kost.
+    - **Hoe groot:** een sessie.
+    Vragen: **A**, dit plan, met de kleuren in de werkbank? **B**, het 2D-tekenen erbij: zo dicht mogelijk bij hetzelfde
+    (dezelfde lichtkaart, klein getekend op een eigen doek en er met 'multiply' overheen; dan oogt het bijna gelijk, maar
+    de avond kost in 2D wat meer tijd, en het "lichter dan overdag" valt weg), of bewust eenvoudiger (de nacht zoals nu,
+    alleen getint met de kleur van het uur, zonder plassen)? Voorstel: zo dicht mogelijk, want wie zonder videokaart speelt,
+    ziet anders een ander spel, en de proef met de schermen blijft dan ook 's avonds vergelijken. **C**, de lantaarn van de
+    schout alleen als beeld, of ook in het spel (met een lantaarn zien ze je 's nachts van verder, en sluipen, `S`, dooft
+    hem)? Voorstel: nu alleen beeld; het spel-deel gaat naar `opmerkingen.md`, want het is een nieuw idee (functie creep).
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
