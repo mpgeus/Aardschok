@@ -41,8 +41,7 @@ treft, soms staan voor een praatje, met een wolkje boven wie praat. `npm test`: 
 meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
 van een weg, en het bos om de kaart alleen aan de kant van het bos. Sinds het eind van de zesentwintigste sessie ook het
 lopen (vraag 119, D en A; Marcel: "ja push main"), en sinds de zevenentwintigste sessie het praatje (vraag 120;
-Marcel: "2 ja push main"). De reparatie van het laden staat op de branch van die sessie (`ccr-6762008a-w9xt0l`), nog
-niet in `main`. Hoe een eigen branch en `main` samengaan, staat in
+Marcel: "2 ja push main"), en de reparatie van het laden (Marcel: "ja push main"). Hoe een eigen branch en `main` samengaan, staat in
 `CLAUDE.md`, onder Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
