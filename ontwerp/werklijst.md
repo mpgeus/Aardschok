@@ -3876,6 +3876,26 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       browser 64 MB, en de eerste keer uitzoomen kost daardoor een seconde; met twintig tekeningen erbij wordt het het
       dubbele. Ingepakt zo'n de helft. Raakt `js/sprites.js` en de stap naar Tiled en het spel (`naar-tiled.cjs`,
       `naar-spel.cjs`).
+      **Gemeten (4 okt, achtentwintigste sessie): niet de huizen wegen het meest.** Uitgepakt, zoals de browser ze
+      vasthoudt, laadt het spel bij het begin bijna 900 MB aan vellen. `tegels/bouwfasen.png` is 271 MB (195 tekeningen,
+      strak 137 MB, en 8303 pixels hoog: boven de 8192 van veel videokaarten), `tegels/gebouwen.png` 157 MB (27 van zijn
+      96 cellen hebben een tekening, samen 22 MB), `tegels/huizen.png` 67 MB (strak 25), `bomen.png` en `erf.png` 14 en
+      13 MB (strak elk 1), en de figuren in `beelden/figuren/` samen 362 MB (de cellen zijn veel groter dan wat erin
+      staat). Een browser houdt een uitgepakt vel niet altijd vast: is het geheugen krap, dan pakt hij het opnieuw uit
+      als het weer getekend wordt, en bij 271 MB is dat een hapering. Voorstel (wacht op Marcel):
+      1. de vellen met voorwerpen (huizen, gebouwen, bomen, erf) ingepakt: elke tekening met zijn eigen rechthoek en
+         anker in `T.TEGELS`, zo gesneden dat Tiled ze nog goed neerzet (links en rechts even ver van het anker; strak
+         kan ook, dat scheelt nog 15 MB). De grondvellen blijven een raster, want Tiled schildert ermee. 251 MB wordt
+         zo'n 75.
+      2. de bouwfasen per gebouw een eigen klein vel, pas geladen als er een in aanbouw staat (tot dan tekent hij
+         bleker, zoals zonder fases): een paar MB tegelijk in plaats van 271.
+      3. de figuren: elke cel krimpt tot wat er in alle cellen van dat vel samen staat; het raster blijft, het anker
+         schuift mee. 362 MB wordt 124.
+      4. elk vel bij het laden al uitpakken (`img.decode()`), zodat het eerste beeld met een gebouw niet hapert.
+      Samen bij het begin zo'n 210 MB in plaats van 900. Klaar als: het spel en `gereedschap/wereld.html` pixel voor
+      pixel hetzelfde tekenen (schermafdrukken ervoor en erna), `npm test` groen, en gemeten: de eerste keer uitzoomen
+      en het geheugen, ervoor en erna. Bij 2b: de bouwfasen per vorm, niet per kleur, anders groeien ze vijf keer zo
+      hard als de tekeningen.
     - **2b, de afwisseling** (vraag 112, d, en Marcel: "andere kleuren etc"): per soort meer tekeningen uit wat de bouwer
       al kan, en elk ook gespiegeld, met de deur aan de andere kant (dan kan een huis vóór het plein er ook zijn deur
       naartoe keren). De daken volgen de treden: in het gehucht riet en spanen, in een dorp ook leien, met marktrecht
