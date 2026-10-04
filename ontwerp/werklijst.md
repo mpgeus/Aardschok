@@ -92,7 +92,8 @@ alvast het webgl deel uitvoert?"): het tekenen met WebGL loopt naast de huizen, 
 de tussenbuffer, waarmee 4K zo snel tekent als 1920×1080. De proefversie voor Windows is er
 (`npm run proefversie -- --windows`), zodat Marcel op zijn eigen pc meet. Stap 2 tot en met 5 zijn gebouwd: de WebGL-laag
 (`js/gl.js`), de spelregel "Tekenen" (standaard met de videokaart, zonder als er geen is). Volgende: Marcel meet op zijn
-pc (een nieuwe proefversie), en vraag E (het overzicht). Het draaien
+pc (een nieuwe proefversie; vraag E: ja), en dan schaduwen en licht (vraag 125: A bouwen, B en C als proefplaat;
+Marcel: "A ja B ja C ja D na webgl"). Het draaien
 van de camera (vraag 124) komt na WebGL, en de huizen worden alvast draaibaar gerenderd (Marcel: "124b Ja dan").
 
 **Waar de volgende sessie begint:** **vraag 114: de huizen in het spel, stap 2: de vier bouwstijlen** (het plan staat bij
@@ -4639,6 +4640,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **A**, licht zoals hierboven, en meteen? **B**, schaduwen met de zon, na een proefplaat (en dan de vloerschaduw
     uit de kunst, ook bij de huizen)? **C**, een proefplaat met echt licht op de muren? **D**, waar in de volgorde: vóór
     of na de camera draaien (vraag 124) en de boeren (vraag 111)?
+    **Marcel koos (4 okt): "A ja B ja C ja D na webgl".** Dus: A (licht) bouwen, B (schaduwen met de zon) en C (echt licht op
+    de muren) eerst als proefplaat, en alles direct na WebGL, dat nu staat. De volgorde wordt: Marcel meet WebGL op zijn
+    pc, dan vraag 125 (A, en de proefplaten van B en C), dan het draaien (vraag 124) en de boeren (vraag 111).
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
