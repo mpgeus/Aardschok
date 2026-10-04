@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (4 okt 2026, eind van de negenentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt (vraag 114, 2a): de browser houdt zo'n 210 MB aan plaatjes vast in plaats van 900, elke tekening pixel voor pixel dezelfde; de proefplaten met meer afwisseling in de huizen, en de herberg, de kapel en de woontoren in verhouding (vraag 114, 2b en 2c), zijn gemaakt en gekozen; nu de huizen in het spel (eerst een vel per tekening, dan vier bouwstijlen per land, dan de herberg, de kapel en de woontoren), dan tekenen met WebGL, ook op 4K, met een proefversie voor Marcels pc (vraag 123), dan de boeren aan het werk op hun veld (vraag 111), en daarna hoogteverschillen op de kaart (vraag 121: terrassen, die het lopen, het zicht en het bouwen raken)
+## De stand (4 okt 2026, eind van de dertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt (vraag 114, 2a), en sinds de dertigste sessie laadt het spel alleen wat er staat: elk huis en gebouw een eigen bestand (vraag 114, stap 1), en de figuren pas als hun wezen er is (stap 1b): bij het begin 81 MB aan plaatjes in plaats van 197; de proefplaten met meer afwisseling in de huizen, en de herberg, de kapel en de woontoren in verhouding (vraag 114, 2b en 2c), zijn gemaakt en gekozen; nu de vier bouwstijlen per land (vraag 114, stap 2), dan de herberg, de kapel en de woontoren (stap 3), dan tekenen met WebGL, ook op 4K, met een proefversie voor Marcels pc (vraag 123), dan de boeren aan het werk op hun veld (vraag 111), en daarna hoogteverschillen op de kaart (vraag 121: terrassen, die het lopen, het zicht en het bouwen raken)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -35,7 +35,7 @@ de ramen van wie thuis is. **Sinds vraag 112** is elk spel een ander land van 10
 en het nummer van het land staat bij Nieuw spel; een houthakker hoort bij het bos, een steengroeve bij de rotsen, een
 visser aan het water. **Sinds vraag 119** lopen de mensen om wat vaststaat, en lossen ze onderweg op wie er staat:
 wachten, langs elkaar, opzij. **Sinds vraag 120** blijft wie vrij is en toevallig een buur of iemand van zijn werk
-treft, soms staan voor een praatje, met een wolkje boven wie praat. `npm test`: 895/895.
+treft, soms staan voor een praatje, met een wolkje boven wie praat. `npm test`: 908/908.
 
 **Waar het werk staat:** in `main` (4 okt; Marcel: "ja" op "push main") staan de snelheid van 3 okt (vraag 113, de
 meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
@@ -44,8 +44,9 @@ lopen (vraag 119, D en A; Marcel: "ja push main"), en sinds de zevenentwintigste
 Marcel: "2 ja push main"), en de reparatie van het laden (Marcel: "ja push main"). Sinds de achtentwintigste sessie
 ook het inpakken van de vellen (vraag 114, 2a) en de snelheid via Steam (vraag 122; Marcel: "push main"). De
 proefplaten van de negenentwintigste sessie (vraag 114, 2b en 2c: de huizenbouwer, niets in het spel) staan er ook in
-(Marcel: "Push alles maar en zet alles op main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder
-Git.
+(Marcel: "Push alles maar en zet alles op main"). Het werk van de dertigste sessie (een vel per tekening, de figuren, de
+meter en de proef met schermafdrukken) staat op de branch `ccr-93c2a635-0b74w6`, nog niet in `main`. Hoe een eigen
+branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
 huizen"): een weg gaat om wat vaststaat, wie onderweg een ander treft, wacht, schuift langs hem, laat hem opzij gaan of
@@ -76,11 +77,23 @@ grijzig", en vroeg of er toen al bakstenen waren). Marcel koos: de torenvorm en 
 bouwstijlen), baksteen na de steenbakkerij, en de herberg met een muur en een poort om de binnenplaats. Zie `beeld.md`,
 "De afwisseling en de grote gebouwen", en vraag 114.
 
-**Waar de volgende sessie begint:** **vraag 114: de huizen in het spel, stap 1: een vel per tekening** (het plan staat bij
-vraag 114, onder "Plan voor de huizen in het spel"; Marcel koos de proefplaten en het plan, zie daar): elk huis zijn eigen
-plaatje, pas geladen als het op de kaart staat, gemeten ervoor en erna. Dan stap 2, de vier bouwstijlen (de stijl per
-land, met de tekeningen in vier standen, de daken per trede, baksteen na de steenbakkerij), en stap 3, de herberg, de
-kapel en de woontoren. **Vraag 121 is besloten**
+**Het spel laadt alleen wat er staat** (vraag 114, stap 1 en 1b, 4 okt; Marcel: "A ja B ja C meteen erna"): elk huis en
+gebouw is een eigen bestand (`tegels/huizen/`, `tegels/gebouwen/`), en een tekening laadt pas als hij op de kaart staat;
+een figuur pas als zijn wezen er is. Een huis dat doorgroeit, of een kind dat opgroeit, houdt zijn oude beeld tot het
+nieuwe er is. Bij het begin 81 MB aan plaatjes in plaats van 197, en elke tekening pixel voor pixel dezelfde. Nieuw
+gereedschap: `Spel.debug.vellen()` (wat de browser vasthoudt) en `npm run schermen` (twintig vaste schermafdrukken,
+byte voor byte te vergelijken; ook voor stap 2 en 3 en WebGL). Zie onder Af, en `beeld.md`, "Een vel per tekening".
+Gezien en niet gerepareerd (`opmerkingen.md`): de wereldbouwer tekent op ware grootte geen huizen (dat was er al: hij
+valt om op de akkers zonder kalender), en een toets in `bewoners.test.cjs` faalt soms, door ongezaaid toeval.
+
+**Waar de volgende sessie begint:** **vraag 114: de huizen in het spel, stap 2: de vier bouwstijlen** (het plan staat bij
+vraag 114, onder "Plan voor de huizen in het spel"; Marcel koos de vier stijlen): de stijl per land, met de tekeningen in
+vier standen, de daken per trede en baksteen na de steenbakkerij. Begin met een plan voor Marcel met de aantallen: sinds
+stap 1 is het geheugen de grens niet meer, wel de tijd van het renderen en de grootte van de opslagplaats (alles samen
+gerekend, vier stijlen maal 21 ontwerpen maal vier standen maal de daken, worden het er zo'n duizend: bijna drie uur
+renderen, want 23 huizen kostten nu vier minuten);
+en of een huis dat er al staat een nieuw dak krijgt bij een nieuwe trede, of alleen wat daarna gebouwd wordt of
+doorgroeit. Meet met `npm run schermen`. Dan stap 3, de herberg, de kapel en de woontoren. **Vraag 121 is besloten**
 (hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁", en "121 a terrassen, b ja, c na de
 boeren"): terrassen met wanden en hellingen, en de hoogte raakt het lopen, het zicht en het bouwen; na de boeren, vóór
 het eiland. Een proefplaat van de hoogte kan met die van de huizen mee. **Vraag 122** (de snelheid via Steam;
