@@ -38,17 +38,19 @@ wachten, langs elkaar, opzij. `npm test`: 881/881.
 
 **Waar het werk staat:** in `main` (4 okt; Marcel: "ja" op "push main") staan de snelheid van 3 okt (vraag 113, de
 meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
-van een weg, en het bos om de kaart alleen aan de kant van het bos. Het lopen (vraag 119, D en A) staat op de branch van
-de sessie, `ccr-0d0c2710-bcd5tx`, en gaat naar `main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in
+van een weg, en het bos om de kaart alleen aan de kant van het bos. Sinds het eind van de zesentwintigste sessie ook het
+lopen (vraag 119, D en A; Marcel: "ja push main"). Hoe een eigen branch en `main` samengaan, staat in
 `CLAUDE.md`, onder Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
 huizen"): een weg gaat om wat vaststaat, wie onderweg een ander treft, wacht, schuift langs hem, laat hem opzij gaan of
-loopt er even omheen, en waar velen heen gaan, komt de weg uit een veld (`js/lopen.js`). Open bij Marcel: B (een
-tijdsbudget kost de vergelijkbaarheid van de speeltest; voorstel: zoals het is, zie vraag 119).
+loopt er even omheen, en waar velen heen gaan, komt de weg uit een veld (`js/lopen.js`). B blijft zoals het is (Marcel:
+"B akkoord"): hooguit 8 wegen per beeld, want een tijdsbudget kost de vergelijkbaarheid van de speeltest.
 
-**Waar de volgende sessie begint:** **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij
-vraag 114): eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
+**Waar de volgende sessie begint:** **het praatje** (vraag 120, a; Marcel: "120 a b d ja", en d is: het praatje hoort
+bij het lopen van vraag 119, D): wie vrij is en een bekende treft, blijft staan voor een praatje, en wie langskomt,
+schuift aan; het plan staat bij vraag 120. Begin met een plan voor Marcel (welke plekken, hoe lang, hoe het eruitziet).
+Daarna **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij vraag 114): eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
 wanden, luiken, gespiegeld) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
 met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant (**vraag 115**). De meter in Firefox
@@ -59,8 +61,9 @@ veld) met 115 en 116, dan 117, dat begint met een proef die meet of een kaart in
 (inwoners met stats: levenspunten, vaardigheden die groeien met het werk, en eigenschappen, zoals in Dwarf Fortress),
 samen met de mensen aan het werk. Voor het eiland gebruiken we Marcels technieken voor het zoeken van paden (vraag 117 en
 **vraag 119**: HPA\* over de stukken, flow fields, time-slicing, sturen in plaats van iedereen als muur, Jump Point
-Search). **Open bij Marcel: vraag 120** (een levendig dorp: "Mensen die een praatje staan te maken als ze even niets te
-doen hebben"; het praatje past bij het lopen van 119, D) **en vraag 119, B.** Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
+Search). **Vraag 120 is besloten** (een levendig dorp; Marcel: "120 a b d ja"): het praatje nu, het wolkje met waar ze
+het over hebben (b) met de mensen aan het werk; de kleine dingen (c: groeten, water halen, een bankje) koos hij niet.
+Nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
 verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de maat van de winst: op het
 wijdere land is er grond genoeg, maar de speeltest speelt standaard nog het ontworpen gehucht). De speeltest van vier
 jaar staat in `speelbaar.md`, en een volgende speeltest van vier jaar splitst de spelers over twee taken, want een taak
@@ -4068,6 +4071,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       18% (de ochtend en de avond); met 32 per beeld werd het traagste beeld twee keer zo traag. De grens doet dus wat
       hij moet. Voorstel: B blijft zoals het is, en een budget in werk (hoeveel tegels het zoeken bekijkt, op elke
       computer hetzelfde) pas met het eiland (vraag 117), als een zoektocht daar veel meer kan kosten.
+      **Marcel koos (4 okt): "B akkoord".** B blijft zoals het is: hooguit 8 wegen per beeld (`zoekPerBeeld`).
 120. **Een levendig dorp: een praatje als ze even niets te doen hebben** (Marcel, 4 okt, zesentwintigste sessie: "Het
     dorp moet echt levendig en realistisch aanvoelen. Mensen die een praatje staan te maken als ze even niets te doen
     hebben etc"; plan van Claude; open).
@@ -4096,6 +4100,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       (vraag 111, 115, 116 en 118), want die geven de figuren (de emmer, de bundel hout) en de eigenschappen.
     Vragen: **a**, het praatje zo? **b**, het wolkje met waar ze het over hebben, uit het spel? **c**, welke van c? **d**,
     het praatje met 119 D, en de rest met de mensen aan het werk?
+    **Marcel koos (4 okt): "120 a b d ja".** Dus het praatje zoals voorgesteld (a), het wolkje met waar ze het over
+    hebben, uit het spel (b), en de volgorde (d): het praatje bij het lopen van vraag 119, D, dus als eerste nu dat af is,
+    en het wolkje met de mensen aan het werk (vraag 111, 115, 116 en 118). De kleine dingen (c) koos hij niet: die blijven
+    liggen, tot hij er een wil.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
