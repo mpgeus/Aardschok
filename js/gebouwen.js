@@ -32,6 +32,11 @@
 //                                    // bezetting (T.tikGebouwenDag schaalt mee met hoe bezet hij is
 //                                    // én, sinds js/behoeften.js, met de tevredenheid). Wie iets
 //                                    // omzet (met `in`), maakt tot er genoeg ligt (T.maaktTot).
+//     bij:         null,             // of { natuur: 'bos', straal: 7, minstens: 8 }: hij hoort bij het
+//                                    // bos, de rotsen of het water (T.NATUUR), en wordt alleen gebouwd
+//                                    // waar daarvan zoveel binnen `straal` tegels van zijn voet ligt.
+//                                    // Meer dan het looppad (drie tegels): een boom, een rots en water
+//                                    // staan in de weg, dus ze liggen pas daarbuiten
 //     stilIn:      null,             // of { winter: 'de beek ligt dicht' }: in dat seizoen maakt hij
 //                                    // niets, en dit is waarom (de visser; spel.md, "Handel")
 //     verdacht:    false,            // moet de heer dit niet zien? (wapenmaker, schuttershof, …)
@@ -150,6 +155,7 @@
       naam: 'houthakker', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 4 }, heer: { hout: 20 }, bouwtijd: 3,
       // bos: hij hakt in het bos van de heer, dus de wet Houtkap laat hem meer hakken (js/wetten.js, T.maaktUit).
       handen: 1, woonruimte: 0, maakt: { uit: { hout: 2 } }, bos: true, verdacht: false, menu: true,
+      bij: { natuur: 'bos', straal: 7, minstens: 8 },
       tekening: 'gebouwen/houtschuur', beschrijving: 'hout uit het bos van de heer', opmerking: '',
     },
     // Sinds de weides, stap 2 (25 sep 2026) maakt de kooi zelf niets: de schapen van de heide slapen
@@ -195,6 +201,7 @@
     steengroeve: {
       naam: 'steengroeve', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 12, goud: 4 }, heer: { steen: 10 }, bouwtijd: 3,
       handen: 2, woonruimte: 0, maakt: { uit: { steen: 1 } }, verdacht: false, menu: true,
+      bij: { natuur: 'rotsen', straal: 6, minstens: 2 },
       tekening: 'gebouwen/houtschuur', beschrijving: 'steen voor funderingen en stenen huizen',
       opmerking: 'nieuw: nog niet getekend (een groeve is een kuil met een kraan, geen huis), leent voorlopig de houtschuur.',
     },
@@ -207,18 +214,21 @@
     rietsnijder: {
       naam: 'rietsnijder', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, heer: { goud: 1 }, bouwtijd: 2,
       handen: 1, woonruimte: 0, maakt: { uit: { riet: 2 } }, verdacht: false, menu: true,
+      bij: { natuur: 'water', straal: 5, minstens: 3 },
       tekening: 'erf/schuurtje', beschrijving: 'riet uit de beek en het moeras, voor rieten daken',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje. Hoort aan het water.',
     },
     jager: {
       naam: 'jager', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 8 }, heer: { vlees: 5 }, bouwtijd: 2,
       handen: 1, woonruimte: 0, maakt: { uit: { vlees: 1, huiden: 1 } }, verdacht: false, menu: true,
+      bij: { natuur: 'bos', straal: 9, minstens: 12 },
       tekening: 'gebouwen/jagershut', beschrijving: 'wild uit het bos, en huiden voor de looier',
       opmerking: 'Het bos is van de heer: stropen is ook een keuze.',
     },
     visser: {
       naam: 'visser', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, heer: { vis: 10 }, bouwtijd: 2,
       handen: 1, woonruimte: 0, maakt: { uit: { vis: 2 } }, verdacht: false, menu: true,
+      bij: { natuur: 'water', straal: 5, minstens: 3 },
       // Marcel, 24 sep: 's winters ligt de beek dicht, dus wie dan vis wil eten, heeft hem in de
       // herfst gezouten (spel.md, "Handel").
       stilIn: { winter: 'de beek ligt dicht' },
@@ -634,9 +644,65 @@
     }
     if (vast) return 'Daar past het niet.';
     if (reden) return reden;
+    const natuur = T.waaromNietBijDeNatuur(D, soort, { x, y, b: voet.b, h: voet.h });
+    if (natuur) return natuur;
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
     if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n)) return `Er moet een looppad omheen: ${n === 1 ? 'een tegel' : `${T.telwoord(n)} tegels`} vrij, zonder gebouw of boom.`;
     return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h });
+  };
+
+  // ---------------------------------------------------------------------------------------------
+  // Wat er ligt, doet ertoe (werklijst vraag 112, c; Marcel, 3 okt: "Her en der wat foliage, bomen, stenen, water")
+  // ---------------------------------------------------------------------------------------------
+  // Een houthakker en een jager horen bij het bos, een steengroeve bij de rotsen, een visser en een rietsnijder aan het
+  // water (`bij` in T.GEBOUWEN). Op een land van de maker ligt dat elk spel ergens anders (js/maker.js), zodat elk land
+  // een andere puzzel is. Wat telt, zegt T.NATUUR per soort: een voorwerp op de tegel, of de grond zelf.
+  const BOMEN = new Set(['eik', 'herfstEik', 'den', 'berk', 'wilg', 'dodeBoom']);
+  T.NATUUR = {
+    bos: { naam: 'het bos', meervoud: 'bomen', telt: (w, x, y, v) => !!v && BOMEN.has(v.soort) },
+    rotsen: { naam: 'de rotsen', meervoud: 'rotsen', telt: (w, x, y, v) => !!v && v.soort === 'rots' },
+    water: { naam: 'het water', meervoud: 'tegels water', telt: (w, x, y) => !!(w.grond && w.grond[y] && w.grond[y][x] && w.grond[y][x].naam === 'water') },
+  };
+  // Per kaart en per soort een optelsom over de tegels, opnieuw als de kaart veranderde (T.kaartVersie, js/wereld.js):
+  // zo kost de vraag hoeveel er rond een plek ligt één stap, ook voor de duizenden plekken die een verzoek afzoekt
+  // (T.plekVoor, js/verzoeken.js).
+  const NATUUR_SOMMEN = new WeakMap();
+  function natuurSom(w, soort) {
+    const versie = T.kaartVersie(w);
+    let per = NATUUR_SOMMEN.get(w);
+    if (!per || per.versie !== versie) NATUUR_SOMMEN.set(w, (per = { versie }));
+    if (per[soort]) return per[soort];
+    const b = w.tegels[0].length;
+    const h = w.tegels.length;
+    const s = new Int32Array((b + 1) * (h + 1));
+    const telt = T.NATUUR[soort].telt;
+    for (let y = 0; y < h; y++) {
+      let rij = 0;
+      for (let x = 0; x < b; x++) {
+        if (telt(w, x, y, T.voorwerpOp(w, x, y))) rij++;
+        s[(y + 1) * (b + 1) + x + 1] = s[y * (b + 1) + x + 1] + rij;
+      }
+    }
+    return (per[soort] = { s, b, h });
+  }
+  // Hoeveel van deze soort (T.NATUUR) er binnen `straal` tegels van de rechthoek r ({ x, y, b, h }) ligt.
+  T.natuurBij = function (w, soort, r, straal) {
+    const { s, b, h } = natuurSom(w, soort);
+    const x1 = Math.max(0, r.x - straal);
+    const y1 = Math.max(0, r.y - straal);
+    const x2 = Math.min(b, r.x + r.b + straal);
+    const y2 = Math.min(h, r.y + r.h + straal);
+    if (x2 <= x1 || y2 <= y1) return 0;
+    return s[y2 * (b + 1) + x2] - s[y1 * (b + 1) + x2] - s[y2 * (b + 1) + x1] + s[y1 * (b + 1) + x1];
+  };
+  // Waarom deze soort niet op de plek r kan omdat de natuur die hij nodig heeft er niet ligt, of null.
+  T.waaromNietBijDeNatuur = function (D, soort, r) {
+    const bij = T.GEBOUWEN[soort] && T.GEBOUWEN[soort].bij;
+    if (!bij) return null;
+    const n = T.natuurBij(D.wereld, bij.natuur, r, bij.straal);
+    if (n >= bij.minstens) return null;
+    const N = T.NATUUR[bij.natuur];
+    return `Een ${T.GEBOUWEN[soort].naam} hoort bij ${N.naam}: hier ${n ? `zijn maar ${n} ${N.meervoud}` : `zijn geen ${N.meervoud}`} in de buurt.`;
   };
 
   // Is er een looppad van `breed` tegels rondom de rechthoek r ({ x, y, b, h })? Elke tegel in die rand is te belopen

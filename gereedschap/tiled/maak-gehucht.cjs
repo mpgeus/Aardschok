@@ -455,6 +455,12 @@ const BOMEN = [
 ];
 for (const [x, y, soort] of BOMEN) zetTegel(soort, x, y);
 
+// ---- een rotspartij aan de bosrand in het noordoosten (vraag 112, c; 4 okt) ----
+// Een steengroeve hoort bij de rotsen (T.GEBOUWEN.steengroeve.bij, js/gebouwen.js), net als op een land van de maker
+// (js/maker.js); zonder rotsen kwam er in het ontworpen gehucht nooit steen.
+for (const [x, y] of [[64, 9], [65, 9], [64, 10], [63, 9]]) zetTegel('rots', x, y);
+for (const [x, y] of [[66, 10], [62, 10], [65, 11], [63, 11], [66, 8]]) zetTegel('kleineRots', x, y);
+
 // ---- groente: een rijtje kool bij een huis, en een moestuin bij Gerrit (boer3) ----
 // [x, y, b, h] in tegels: een rijtje van b bij h. (Het rijtje bij de hut aan de westkant van het plein
 // ging weg toen de herberg daar kwam, 27 sep: het lag onder zijn voet en werd stil overgeslagen.)
