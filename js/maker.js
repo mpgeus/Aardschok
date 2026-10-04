@@ -1105,6 +1105,37 @@
     // steengroeve (vraag 112, c). Een kern van grote rotsen, en kleine eromheen.
     const rotsen = [];
     {
+      // Bij elke rotspartij een plek voor de steengroeve, die het bos en de struiken daarna vrijlaten: zijn voet, met
+      // genoeg grote rotsen binnen zijn bereik, en het looppad rondom (`voet` en `bij` van de steengroeve in
+      // js/gebouwen.js, en T.GEBOUWEN_INSTELLINGEN.looppad). Zonder die plek groeide het bos er soms helemaal omheen, en
+      // kon een land geen steen hakken (4 okt: land 3 en 5, nadat de bouwstijl het toeval van de maker veranderde).
+      const SG = T.GEBOUWEN.steengroeve;
+      const lp = T.GEBOUWEN_INSTELLINGEN.looppad;
+      let groeven = 0;
+      const houdGroeveVrij = (k) => {
+        let beste = null;
+        for (let gy = k.y - 12; gy <= k.y + 12; gy++) {
+          for (let gx = k.x - 12; gx <= k.x + 12; gx++) {
+            const s = SG.bij.straal;
+            const rots = voorwerpen.filter((v) => v.naam === 'rots' && v.x >= gx - s && v.x < gx + SG.voet.b + s && v.y >= gy - s && v.y < gy + SG.voet.h + s).length;
+            if (rots < SG.bij.minstens) continue;
+            let past = true;
+            for (let y = gy - lp; y < gy + SG.voet.h + lp && past; y++) {
+              for (let x = gx - lp; x < gx + SG.voet.b + lp && past; x++) {
+                const opVoet = x >= gx && y >= gy && x < gx + SG.voet.b && y < gy + SG.voet.h;
+                if (!vrijVoor(x, y) || ![VRIJ, BOS].includes(op(x, y)) || (opVoet && !opGras(x, y))) past = false;
+              }
+            }
+            const d = Math.hypot(gx - cx, gy - cy);
+            if (past && (!beste || d < beste.d)) beste = { gx, gy, d };
+          }
+        }
+        if (!beste) return;
+        groeven++;
+        for (let y = beste.gy - lp; y < beste.gy + SG.voet.h + lp; y++) {
+          for (let x = beste.gx - lp; x < beste.gx + SG.voet.b + lp; x++) bezet.add(sleutel(x, y));
+        }
+      };
       const aantal = 1 + (r() < I.rotsen ? 1 : 0);
       const opties = [];
       for (let y = 5; y < H - 5; y++) {
@@ -1136,8 +1167,10 @@
             klein--;
           }
         }
+        houdGroeveVrij(k);
       }
       if (!rotsen.length) return mis('geen plek voor de rotsen');
+      if (!groeven) return mis('geen plek voor de steengroeve bij de rotsen');
     }
     // Het bos: bomen in de zone langs de randen, dicht aan de rand van de kaart, dunner naar het dorp toe, en met open
     // plekken waar de ruis hoog is. Hier en daar een dode boom.
