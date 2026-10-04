@@ -515,14 +515,15 @@
       ],
     },
     {
-      // Vraag 70, C (Marcel, 30 sep: "c ja"): de maker (js/maker.js) mag ook je eigen gehucht leggen.
-      id: 'gehucht', naam: 'Je gehucht', standaard: 'ontworpen',
+      // Vraag 70, C (Marcel, 30 sep: "c ja"): de maker (js/maker.js) mag ook je eigen gehucht leggen. Sinds 4 okt de
+      // standaard (vraag 112, a; Marcel: "Eigenlijk een random map generator per nieuwe game").
+      id: 'gehucht', naam: 'Je gehucht', standaard: 'maker',
       uitleg: 'Waar een nieuw spel begint. Geldt vanaf het volgende nieuwe spel.',
       keuzes: [
+        { id: 'maker', naam: 'Elk spel een ander', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true },
+          uitleg: 'De maker legt elk nieuw spel een ander land, uit dezelfde delen: het plein, de schout erachter, de boerderijen bij hun akkers, de heide, de beek, het bos, vijvers en rotsen, maar elke keer anders. Bij Nieuw spel zie je het nummer van het land: een land dat je mooi vond, speel je opnieuw door dat nummer in te typen.' },
         { id: 'ontworpen', naam: 'Het ontworpen gehucht', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': false },
           uitleg: 'Elk spel hetzelfde gehucht, met de hand gelegd: het plein als hart, en Klaas, Aaltje, Gerrit, Trijn en Wouter bij hun velden.' },
-        { id: 'maker', naam: 'Elk spel een ander', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true },
-          uitleg: 'De maker legt elk nieuw spel een ander gehucht, uit dezelfde delen: het plein, de schout erachter, de boerderijen bij hun akkers, de heide, de beek en het bos, maar elke keer anders.' },
       ],
     },
   ];

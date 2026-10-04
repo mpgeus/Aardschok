@@ -194,19 +194,27 @@
     return nieuw;
   };
 
+  // Het land van een nieuw spel (vraag 112, a; Marcel, 3 okt: "Eigenlijk een random map generator per nieuwe game"):
+  // met de spelregel "Je gehucht" op "Elk spel een ander" het zaad voor de maker (het land dat je bij Nieuw spel koos,
+  // of een nieuw), anders null, het ontworpen gehucht. Een zaad is een getal van vijf cijfers, zodat je een land dat je
+  // mooi vond, kunt onthouden en opnieuw spelen.
+  T.landVoorNieuwSpel = function (gekozen) {
+    if (!T.MAKER_INSTELLINGEN.eigenGehucht) return null;
+    return gekozen != null ? gekozen : T.nieuwLandZaad();
+  };
+  T.nieuwLandZaad = () => 1 + Math.floor(Math.random() * T.MAKER_INSTELLINGEN.zaden);
+
   // Een nieuw spel beginnen op een kaart: het gehucht, of een andere voor een proefje
   // (index.html?kaart=<naam>, zie js/main.js). Geeft true terug als het gelukt is; S.wereld en
   // S.schout staan dan klaar. Bestaat de kaart niet, dan false — de aanroeper valt dan terug op het
   // gehucht. Staat er geen "schout" op, dan zet het er zelf een neer.
   //
-  // Met de spelregel "Je gehucht" op "Elk spel een ander" (vraag 70, C) legt de maker het gehucht
-  // (js/maker.js), uit een nieuw zaad; met `makerZaad` uit dat zaad, ook zonder de spelregel
-  // (Spel.debug.gehucht). De boeren worden daarna uit hetzelfde zaad geloot, zodat het zaad van het spel
-  // (S.lot.zaad) ook het gehucht zegt, en hetzelfde zaad hetzelfde spel geeft.
+  // Met `makerZaad` legt de maker het gehucht (js/maker.js) uit dat zaad, anders is het het ontworpen gehucht. Welk land
+  // een nieuw spel krijgt, zegt T.landVoorNieuwSpel hieronder (vanuit T.nieuwSpel, js/main.js). De boeren worden daarna
+  // uit hetzelfde zaad geloot, zodat het zaad van het spel (S.lot.zaad) ook het gehucht zegt, en hetzelfde zaad
+  // hetzelfde spel geeft.
   T.beginOpKaart = function (S, naam, makerZaad) {
-    let zaad = null;
-    if (naam === 'gehucht' && makerZaad != null) zaad = makerZaad;
-    else if (naam === 'gehucht' && T.MAKER_INSTELLINGEN.eigenGehucht) zaad = Math.floor(Math.random() * 2147483647);
+    const zaad = naam === 'gehucht' && makerZaad != null ? makerZaad : null;
     const w = T.gebied(S, naam, zaad != null ? () => T.laadGemaaktGehucht(zaad) : null);
     if (!w) {
       console.warn(`Spel.beginOpKaart: kaart "${naam}" bestaat niet — draai npm run kaarten?`);

@@ -84,10 +84,11 @@ function leesOpdracht(argv) {
     }
   }
   if (!o.spelers.length) o.spelers = SPELERS;
-  // De spelregels zoals de browser ze onthoudt (js/opties.js, onder aardschok.spelregels): alleen als er iets anders is
-  // dan de standaard.
-  const keuzes = { ...(o.maker ? { gehucht: 'maker' } : {}), ...o.regels };
-  o.spelregels = Object.keys(keuzes).length || Object.keys(o.getallen).length ? { keuzes, namen: {}, getallen: o.getallen } : null;
+  // De spelregels zoals de browser ze onthoudt (js/opties.js, onder aardschok.spelregels). Het gehucht altijd: zonder
+  // --maker het ontworpen gehucht, ook nu de standaard "Elk spel een ander" is (vraag 112, a), zodat een speeltest te
+  // vergelijken blijft met de speeltests ervoor.
+  const keuzes = { gehucht: o.maker ? 'maker' : 'ontworpen', ...o.regels };
+  o.spelregels = { keuzes, namen: {}, getallen: o.getallen };
   o.anders = [...Object.entries(o.regels), ...Object.entries(o.getallen)].map(([k, v]) => `${k}=${v}`);
   return o;
 }
@@ -97,7 +98,8 @@ function leesOpdracht(argv) {
 // met opslaan): { dag, bewaar }, zie speler.js; slaat de speler op, dan herlaadt dit de bladzijde, en gaat
 // hij verder met Verder op het titelscherm. Met `maker` staat de spelregel "Je gehucht" op "Elk spel een
 // ander" (js/opties.js), zoals de browser het onthoudt als een speler hem kiest: dan legt de maker het gehucht
-// uit het zaad van het spel (js/maker.js). `spelregels`: wat de browser onthoudt (leesOpdracht), of null.
+// uit het zaad van het spel (js/maker.js); zonder `maker` op "Het ontworpen gehucht". `spelregels`: wat de browser
+// onthoudt (leesOpdracht).
 async function speelJaar(browser, speler, zaad, opslaan = null, spelregels = null, jaren = null) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await context.newPage();

@@ -29,8 +29,9 @@
   // blijft. Het begint niet vanzelf: het titelscherm (js/menu.js, vraag 48) laat het erachter wachten, en
   // pas "Nieuw spel" geeft de benoemingsbrief van de heer, waarmee een spel begint sinds Marcel hem op
   // 25 sep koos (T.ui.toonBrief(S.dorp, 'benoeming'), js/brieven.js). Een proefje (?kaart=) begint meteen,
-  // zonder brief, en wordt nooit opgeslagen (S.proefje; js/opslaan.js). Met `makerZaad` begint het op
-  // een gehucht van de maker uit dat zaad (T.beginOpKaart, js/gebied.js; Spel.debug.gehucht).
+  // zonder brief, en wordt nooit opgeslagen (S.proefje; js/opslaan.js). Het land zegt de spelregel "Je gehucht"
+  // (T.landVoorNieuwSpel, js/gebied.js); met `makerZaad` is het het gehucht van de maker uit dat zaad, ook zonder de
+  // spelregel (het land dat je bij Nieuw spel koos, js/menu.js; Spel.debug.gehucht).
   T.nieuwSpel = function (makerZaad) {
     for (const k of Object.keys(S)) if (k !== 'zoom') delete S[k];
     S.zoom = zoomVenster; // ook als het vorige spel in het overzicht stond
@@ -57,8 +58,8 @@
     // Een proefje (?kaart=) begint op zijn eigen kaart, zonder brief; lukt dat niet (de kaart
     // bestaat niet), dan valt het terug op het gehucht — een half aangelegde wereld mag nooit het
     // spel breken.
-    const proefje = !!BEGIN_KAART && T.beginOpKaart(S, BEGIN_KAART, makerZaad);
-    if (!proefje) T.beginOpKaart(S, 'gehucht', makerZaad); // zet S.wereld en S.schout
+    const proefje = !!BEGIN_KAART && T.beginOpKaart(S, BEGIN_KAART);
+    if (!proefje) T.beginOpKaart(S, 'gehucht', makerZaad != null ? makerZaad : T.landVoorNieuwSpel()); // zet S.wereld en S.schout
     if (proefje) S.proefje = true;
     zetCameraOpSchout();
     T.ui.reset(S);

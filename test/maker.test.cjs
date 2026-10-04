@@ -91,20 +91,28 @@ test('een nieuw spel op een gemaakt gehucht: 26 mensen, en het zaad van het spel
   assert.deepEqual(nieuwSpel(5).dorp.lot, S.dorp.lot);
 });
 
-test('de spelregel "Je gehucht": standaard het ontworpen gehucht, en met "Elk spel een ander" legt de maker het', () => {
+test('de spelregel "Je gehucht": standaard elk spel een ander land (vraag 112, a), en het ontworpen gehucht blijft een keuze', () => {
   const o = T.OPTIES.find((x) => x.id === 'gehucht');
-  assert.equal(o.standaard, 'ontworpen');
+  assert.equal(o.standaard, 'maker');
+  assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, true);
+  // een nieuw spel krijgt een land van vijf cijfers, of het land dat je koos
+  const zaad = T.landVoorNieuwSpel();
+  assert.ok(Number.isInteger(zaad) && zaad >= 1 && zaad <= 99999, `zaad ${zaad}`);
+  assert.equal(T.landVoorNieuwSpel(4321), 4321);
+  const S = nieuwSpel(T.landVoorNieuwSpel(7));
+  assert.equal(S.wereld.maker.zaad, 7);
+  assert.equal(S.dorp.lot.zaad, 7);
+  // zonder zaad is het het ontworpen gehucht: daar spelen de toetsen op
   assert.equal(nieuwSpel().wereld.maker, undefined);
-  T.pasOptiesToe({ keuzes: { gehucht: 'maker' } });
+  T.pasOptiesToe({ keuzes: { gehucht: 'ontworpen' } });
   try {
-    assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, true);
-    const S = nieuwSpel();
-    assert.ok(S.wereld.maker, 'geen gehucht van de maker');
-    assert.equal(S.dorp.lot.zaad, S.wereld.maker.zaad);
+    assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, false);
+    assert.equal(T.landVoorNieuwSpel(), null);
+    assert.equal(T.landVoorNieuwSpel(4321), null, 'met het ontworpen gehucht telt het gekozen land niet');
   } finally {
     T.pasOptiesToe({});
   }
-  assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, false);
+  assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, true);
 });
 
 test('een spel op een gemaakt gehucht bewaren en weer laden geeft precies hetzelfde spel', () => {

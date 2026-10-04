@@ -998,6 +998,10 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   outline: none;
 }
 .menu-invoer:focus { border-color: var(--goud); }
+/* Het land bij Nieuw spel (vraag 112, a): zijn nummer, en een knop voor een ander. */
+.menu-land { display: flex; gap: 8px; align-items: stretch; }
+.menu-land .menu-invoer { width: 6.5em; text-align: center; }
+.menu-land .menu-knop { flex: 1; }
 .menu-melding { margin: 0 0 4px; font-size: 13px; color: var(--goud); }
 #menu.titel .menu-kop, #menu.titel .menu-vraag, #menu.titel .menu-melding { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8); }
 /* Zolang het titelscherm er ligt, is er nog geen spel om over te zeggen. */

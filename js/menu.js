@@ -94,9 +94,16 @@
     let midden;
     if (vraag) midden = `<p class="menu-vraag">${veilig(vraag.tekst)}</p>` + knop('ja', vraag.ja, { hoofd: true }) + knop('terug', 'Terug');
     else if (naamVoorstel != null) {
+      // Het land (vraag 112, a): zijn nummer, om een land dat je mooi vond opnieuw te spelen, en een ander land.
+      const land = landNu(S);
       midden =
         `<label class="menu-kop" for="dorpsnaam">Hoe heet je dorp?</label>` +
-        `<input id="dorpsnaam" class="menu-invoer" type="text" maxlength="24" autocomplete="off" spellcheck="false" value="${veilig(naamVoorstel)}">` +
+        `<input id="dorpsnaam" class="menu-invoer" type="text" maxlength="24" autocomplete="off" spellcheck="false" value="${veilig(naamNu != null ? naamNu : naamVoorstel)}">` +
+        (land != null
+          ? `<label class="menu-kop" for="landzaad">Het land</label>` +
+            `<div class="menu-land"><input id="landzaad" class="menu-invoer" type="text" inputmode="numeric" maxlength="5" autocomplete="off" spellcheck="false" value="${land}">` +
+            `<button class="menu-knop" data-actie="anderland" title="Een ander land, uit een nieuw nummer"><span>Ander land</span></button></div>`
+          : '') +
         knop('begin', 'Begin', { hoofd: true }) + knop('terug', 'Terug');
     }
     else if (lijst) midden = `<p class="menu-kop">${lijst === 'opslaan' ? 'Opslaan op' : 'Laden van'}</p>` + plekKnoppen() + knop('terug', 'Terug');
@@ -189,10 +196,37 @@
     toon(S);
   }
 
-  // Begin: de naam die er staat (leeg is het voorstel), en dan de brief van de heer.
+  // Het nummer van het land achter het titelscherm, of null als het het ontworpen gehucht is (js/maker.js).
+  const landNu = (S) => (T.MAKER_INSTELLINGEN.eigenGehucht && S.wereld && S.wereld.maker ? S.wereld.maker.zaad : null);
+  // Wat er in het veld van de naam staat, als je het land verandert: dat blijft staan (tenzij het het voorstel was).
+  let naamNu = null;
+
+  // Een ander land achter het menu, uit dit nummer: een vers spel (js/main.js), dat net zo stil wacht. Het voorstel voor
+  // de naam hoort bij het land; wie zelf een naam typte, houdt die.
+  function naarLand(S, zaad) {
+    const veld = $('dorpsnaam');
+    const getypt = veld && veld.value.trim();
+    naamNu = getypt && getypt !== naamVoorstel ? getypt : null;
+    T.nieuwSpel(zaad);
+    T.houdTijdStil(S, 'titel');
+    S.camera = T.titelCamera();
+    naamVoorstel = T.voorgesteldeDorpsnaam(S.dorp.lot && S.dorp.lot.zaad);
+  }
+
+  // Het nummer in het veld van het land, als het een land is (1 tot T.MAKER_INSTELLINGEN.zaden), anders null.
+  function gekozenLand() {
+    const veld = $('landzaad');
+    const n = veld && /^\d+$/.test(veld.value.trim()) ? Number(veld.value.trim()) : null;
+    return n != null && n >= 1 && n <= T.MAKER_INSTELLINGEN.zaden ? n : null;
+  }
+
+  // Begin: de naam die er staat (leeg is het voorstel), op het land dat er staat, en dan de brief van de heer.
   function begin(S) {
+    const land = gekozenLand();
+    if (land != null && land !== landNu(S)) naarLand(S, land);
     const veld = $('dorpsnaam');
     T.zetDorpsnaam(S.dorp, (veld && veld.value.trim()) || naamVoorstel);
+    naamNu = null;
     sluit(S);
     T.ui.toonBrief(S.dorp, 'benoeming'); // een nieuw spel begint met de brief van de heer (js/brieven.js)
   }
@@ -226,7 +260,7 @@
     }
     if (actie === 'terug') {
       if (vraag) vraag = null;
-      else if (naamVoorstel != null) naamVoorstel = null;
+      else if (naamVoorstel != null) naamVoorstel = naamNu = null;
       else lijst = null;
     } else if (actie === 'verder') {
       if (scherm === 'menu') return sluit(S);
@@ -245,6 +279,8 @@
       }
     } else if (actie === 'begin') {
       return begin(S);
+    } else if (actie === 'anderland') {
+      naarLand(S, T.nieuwLandZaad());
     } else if (actie === 'opslaan' || actie === 'laden') {
       lijst = actie;
     } else if (actie === 'spelregels') {
