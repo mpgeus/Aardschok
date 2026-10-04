@@ -153,7 +153,35 @@ titelscherm en het opslaan:
 
 **En de keuze blijft omkeerbaar.** Bijna alles wat er ligt is onafhankelijk van de motor: het
 ontwerp, de pixel art-keten, alle beelden, en de kaarten (Tiled leest Godot net zo goed in). Alleen
-de spelcode zelf, een paar duizend regels, zou opnieuw moeten.
+de spelcode zelf zou opnieuw moeten: op 20 sep een paar duizend regels, op 4 okt 30.000 (en 18.000
+regels toetsen). Zie "Een native exe?" hieronder.
+
+## Een native exe? (Marcel, 4 okt 2026: "Is er een manier om te bouwen naar een native exe?"; werklijst vraag 122)
+
+**Een .exe krijgen we hoe dan ook.** Electron maakt er een (`Aardschok.exe`, met de motor ernaast, zo'n 150 MB), en
+Tauri ook (zo'n 10 MB, met de webweergave van Windows, WebView2, en dat is ook Chromium). Wat erin draait, blijft onze
+JavaScript in Chromium. Tauri gebruikt op macOS en Linux de motor van Safari, en de Steam Deck is Linux: daarom blijft
+Electron de keuze (zie "Hoe" bovenaan).
+
+**Echt native** (de code zelf vertaald naar machinecode) kan alleen door het spel opnieuw te schrijven in een andere
+motor of taal: Godot, Unity (C#), of Rust of C++ met een eigen tekenlaag. Wat meegaat: het ontwerp, de pixel art-keten
+en alle beelden, de kaarten en de teksten. Wat opnieuw moet: 30.000 regels spel en 18.000 regels toetsen, maanden werk
+waarin het spel niet verder komt. Wat het oplevert: het rekenwerk van de regels zo'n twee tot vijf keer sneller, geen
+haperingen van het opruimen van geheugen (in Rust of C++), en consoles worden mogelijk. Een programma als Node SEA, Deno
+compile of Bun compile maakt van JavaScript wel één .exe, maar zonder browser: geen canvas om op te tekenen, dus dat
+helpt ons niet.
+
+**De middenweg: native snelheid waar het telt, zonder alles opnieuw.**
+- **Tekenen met WebGL** in plaats van het 2D-canvas: de videokaart tekent duizenden plaatjes in een paar opdrachten.
+  Dat is de grootste winst voor het tekenen, en voor grote schermen. Het raakt de tekenlaag (`js/tekenen.js`,
+  `js/sprites.js`), niet de regels.
+- **Het zware rekenwerk** (paden voor duizenden mensen, de nacht) in een Web Worker, op een andere processorkern, zodat
+  een beeld er niet op wacht; of de heetste stukken in WebAssembly (Rust of C, vertaald naar bijna-machinecode).
+- Allebei werkt het in de browser (itch.io) én in Electron (Steam).
+
+**Voorstel:** JavaScript en Electron voor Steam houden; op echte machines meten tegen de lat (vraag 122); haalt het die
+niet, dan eerst WebGL, dan een Worker of WebAssembly voor wat het zwaarst is. Een nieuwe motor pas als consoles een doel
+worden. Een voorbeeld: Vampire Survivors begon in JavaScript (Phaser) en ging in 2023 naar Unity, ook voor de consoles.
 
 ## De naam (vraag 8; voorstel van Claude, 27 sep, tiende sessie)
 

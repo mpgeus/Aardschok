@@ -4257,6 +4257,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     spel, onder 1,5 GB bij 200 mensen); **b**, een proefverpakking voor Marcels pc (Windows, Electron), zodat hij met `F2`
     Firefox en de Steam-versie naast elkaar meet; **c**, `npm run grootte` ook in de schil, zodat groei tegen de lat
     gemeten wordt. Vragen: **a**, deze lat? **b**, de proefverpakking nu, of bij het echte verpakken (januari)?
+    **Marcel vroeg erbij: "Is er een manier om te bouwen naar een native exe?"** Een .exe maakt Electron al; echt native
+    is het spel opnieuw schrijven (30.000 regels, maanden). De middenweg, als de lat niet gehaald wordt: eerst tekenen met
+    WebGL, dan het zwaarste rekenwerk in een Web Worker of WebAssembly (`verpakken.md`, "Een native exe?").
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
