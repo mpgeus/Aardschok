@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (4 okt 2026, eind van de zesentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113: de meter onder F2, en een weg zoeken nu bijna drie keer zo snel); elk spel een ander, wijder land met natuur die ertoe doet, is gebouwd (vraag 112, stap 1); nu eerst het lopen: wie een ander treft, wacht of wijkt uit in plaats van eromheen te plannen, flow fields en een tijdsbudget (vraag 119, D, A en B; Marcel: "eerst, voor de huizen"), dan de huizen: de vellen inpakken, meer afwisseling, en de herberg, de kapel en de woontoren in verhouding (vraag 112, stap 2, en 114), dan de boeren aan het werk op hun veld (vraag 111)
+## De stand (4 okt 2026, eind van de zesentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113: de meter onder F2, en een weg zoeken nu bijna drie keer zo snel); elk spel een ander, wijder land met natuur die ertoe doet, is gebouwd (vraag 112, stap 1); het lopen ook: een weg om wat vaststaat, wie een ander treft, wacht of wijkt uit, en velden voor waar velen heen gaan (vraag 119, D en A; een beeld bij 200 mensen 44% sneller); nu de huizen: de vellen inpakken, meer afwisseling, en de herberg, de kapel en de woontoren in verhouding (vraag 112, stap 2, en 114), dan de boeren aan het werk op hun veld (vraag 111)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -33,17 +33,21 @@ een of de ander iets. Wie de soldaten betrappen op verstoppen, krijgt de laatste
 je dorp, loopt er van elke deur een paadje, slijt het gras waar veel gelopen wordt, en branden 's avonds de lantaarns en
 de ramen van wie thuis is. **Sinds vraag 112** is elk spel een ander land van 100 bij 100, met bossen, vijvers en rotsen,
 en het nummer van het land staat bij Nieuw spel; een houthakker hoort bij het bos, een steengroeve bij de rotsen, een
-visser aan het water. `npm test`: 868/868.
+visser aan het water. **Sinds vraag 119** lopen de mensen om wat vaststaat, en lossen ze onderweg op wie er staat:
+wachten, langs elkaar, opzij. `npm test`: 881/881.
 
-**Waar het werk staat:** alles staat in `main` (4 okt; Marcel: "ja" op "push main"): de snelheid van 3 okt (vraag 113, de
+**Waar het werk staat:** in `main` (4 okt; Marcel: "ja" op "push main") staan de snelheid van 3 okt (vraag 113, de
 meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
-van een weg, en het bos om de kaart alleen aan de kant van het bos. Hoe een eigen branch en `main` samengaan, staat in
+van een weg, en het bos om de kaart alleen aan de kant van het bos. Het lopen (vraag 119, D en A) staat op de branch van
+de sessie, `ccr-0d0c2710-bcd5tx`, en gaat naar `main` als Marcel dat vraagt. Hoe een eigen branch en `main` samengaan, staat in
 `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **vraag 119, D, A en B: het lopen** (Marcel, 4 okt: "eerst, voor de huizen", en
-op wachten of uitwijken: "Je kunt nu eenmaal niet over iemand heen"): een weg zoeken alleen nog over wat vaststaat, wie
-een ander treft, wacht, ruilt of stapt opzij, een weg die elke dag dezelfde is, onthouden; dan flow fields voor wat veel
-mensen delen, en een tijdsbudget per beeld. Daarna **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij
+**Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
+huizen"): een weg gaat om wat vaststaat, wie onderweg een ander treft, wacht, schuift langs hem, laat hem opzij gaan of
+loopt er even omheen, en waar velen heen gaan, komt de weg uit een veld (`js/lopen.js`). Open bij Marcel: B (een
+tijdsbudget kost de vergelijkbaarheid van de speeltest; voorstel: zoals het is, zie vraag 119).
+
+**Waar de volgende sessie begint:** **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij
 vraag 114): eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
 wanden, luiken, gespiegeld) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
@@ -56,7 +60,7 @@ veld) met 115 en 116, dan 117, dat begint met een proef die meet of een kaart in
 samen met de mensen aan het werk. Voor het eiland gebruiken we Marcels technieken voor het zoeken van paden (vraag 117 en
 **vraag 119**: HPA\* over de stukken, flow fields, time-slicing, sturen in plaats van iedereen als muur, Jump Point
 Search). **Open bij Marcel: vraag 120** (een levendig dorp: "Mensen die een praatje staan te maken als ze even niets te
-doen hebben"; het praatje kan met 119, D). Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
+doen hebben"; het praatje past bij het lopen van 119, D) **en vraag 119, B.** Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
 verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de maat van de winst: op het
 wijdere land is er grond genoeg, maar de speeltest speelt standaard nog het ontworpen gehucht). De speeltest van vier
 jaar staat in `speelbaar.md`, en een volgende speeltest van vier jaar splitst de spelers over twee taken, want een taak
@@ -4040,11 +4044,30 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       een veld: vanaf het doel ring voor ring hoeveel stappen elke tegel ervan af ligt, zo ver als de verste die erheen
       wilde. Even kort als A* (een toets kijkt het na op een doolhof), en omdat een veld alleen uit de kaart is, dezelfde
       weg hoe ver het veld ook al gegroeid was, en na het laden.
-    - **Gemeten** (`npm run grootte`, wereld per beeld op 30×, en het deel van het zoeken van paden), vóór en na D:
-      op land 5 van de maker 100 mensen 1,3 → 0,84 ms (zoeken 50% → 24%), 200 mensen 3,9 → 2,7 ms (53% → 28%), 400
-      mensen 10 → 9,8 ms (41% → 26%); op het ontworpen gehucht 200 mensen 2,5 → 2,5 ms (29% → 21%), 400 mensen 9,6 → 8,6
-      ms (36% → 26%). Na D vroeg het dwalen bij 200 mensen 828 wegen per dag, maar maar een kwart kende de kaart al: wie
-      dwaalt, vertrekt elke dag van een andere tegel. Daarvoor is A.
+    - **Gemeten** (`npm run grootte` op land 5 van de maker, de wereld per beeld op 30×, gemiddeld en de traagste 5%):
+      | mensen | vóór | na D | na D en A |
+      | --- | --- | --- | --- |
+      | 100 | 1,3 ms (12 ms) | 0,84 ms (7,6 ms) | 0,68 ms (5,4 ms) |
+      | 200 | 3,9 ms (24 ms) | 2,7 ms (19 ms) | 2,2 ms (14 ms) |
+      | 400 | 10 ms (63 ms) | 9,8 ms (63 ms) | 7,4 ms (50 ms) |
+      Het zoeken van een weg was 50 à 53% van een beeld; nu 16% (de meting telt sinds 4 okt ook de velden, en niet alleen
+      A*). Na D vroeg het dwalen bij 200 mensen 828 wegen per dag, maar maar een kwart kende de kaart al: wie dwaalt,
+      vertrekt elke dag van een andere tegel; daarvoor is A. Een veld groeit door het raster van wat vaststaat direct te
+      lezen (`T.vastRaster`); toen het per buur T.isBegaanbaar vroeg, was dat bij 400 mensen de helft van het zoeken.
+      De bouwer speelt zoals ervoor: een dorp en marktrecht op dezelfde dagen, aan het eind een paar mensen minder
+      (`speelbaar.md`).
+    - **Wat nog kan, als het nodig is:** een veld nu alleen vergeten als de kaart vlak bij zijn tegels verandert (de
+      houthakker van vraag 115 verandert de kaart bij elke boom); de lantaarns van één nacht in één keer zetten (nu
+      rekent het raster na elke lantaarn opnieuw: bij 400 mensen een hapering van zo'n 150 ms 's nachts).
+    - **B, open bij Marcel.** Mijn voorstel was een tijdsbudget: zoveel milliseconden per beeld voor het zoeken. Dat
+      heeft een prijs die ik eerst niet zag: dan loopt het spel op een snelle computer anders dan op een trage, en een
+      geladen spel anders dan hetzelfde spel zonder laden. De speeltest geeft dan bij hetzelfde zaad niet meer hetzelfde
+      jaar (daarmee zien we wat een bijgesteld getal deed), en de proef met opslaan kan niet meer letter voor letter
+      vergelijken. Wat er nu is, is wat Marcels lijst onder B noemt ("a fixed number per frame"): hooguit 8 wegen per
+      beeld (`zoekPerBeeld`). Gemeten op 30×: bij 200 mensen zit het dwalen in 8% van de beelden aan die grens, bij 400 in
+      18% (de ochtend en de avond); met 32 per beeld werd het traagste beeld twee keer zo traag. De grens doet dus wat
+      hij moet. Voorstel: B blijft zoals het is, en een budget in werk (hoeveel tegels het zoeken bekijkt, op elke
+      computer hetzelfde) pas met het eiland (vraag 117), als een zoektocht daar veel meer kan kosten.
 120. **Een levendig dorp: een praatje als ze even niets te doen hebben** (Marcel, 4 okt, zesentwintigste sessie: "Het
     dorp moet echt levendig en realistisch aanvoelen. Mensen die een praatje staan te maken als ze even niets te doen
     hebben etc"; plan van Claude; open).
@@ -4377,6 +4400,15 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 4 okt 2026 — **Lopen tussen anderen: een weg om wat vaststaat, en onderweg wachten, langs elkaar of opzij** (zesentwintigste
+  sessie; vraag 119, D en A; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de huizen";
+  `js/lopen.js`). Een weg gaat alleen om huizen, bomen en water (`T.zoekRoute`), en de kaart onthoudt hem; wie onderweg
+  iemand op zijn volgende tegel treft, lost het daar op (`T.ontwijk`): langs elkaar schuiven, even wachten, de ander
+  opzij of van plaats ruilen, of een korte omweg. Waar velen heen gaan (hun deur, hun werk, de put, de herberg), komt
+  de weg uit een veld. Een beeld bij 200 mensen op een gemaakt land is 44% sneller (3,9 → 2,2 ms), bij 400 26%; het
+  zoeken van een weg ging van de helft van een beeld naar 16%. De bouwer speelt zoals ervoor (`speelbaar.md`).
+  `Spel.debug.lopen()` zegt wie op wie wacht. Twaalf nieuwe toetsen (`test/lopen.test.cjs`); `npm run grootte` telt nu
+  ook de velden.
 - 4 okt 2026 — **Vraag 112, stap 1: elk spel een ander, wijder land, met natuur die ertoe doet** (zesentwintigste sessie;
   Marcel: "ja die zijn goed. volgorde is oke"; `js/maker.js`). Het land van de maker is 100 bij 100, en de standaard: bij
   Nieuw spel staat het nummer van het land onder de naam van je dorp, met een knop Ander land; wie een nummer typt,
