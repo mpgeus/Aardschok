@@ -4273,6 +4273,16 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Die sessie maakt eerst een plan en proefplaten voor Marcel, en schrijft onder vraag 114, stap 2b. Afgesproken: ze
     blijft uit `tegels/` tot het wit van deze sessie in `main` staat, ze verandert de bouwer zelf alleen als een stijl het
     vraagt, en ze rendert in delen onder twee uur (`bouwfasen.cjs --erbij <soorten>`).
+    **Stap 6 is af (tweeëndertigste sessie):** wit staat draaibaar in het spel, met alle bouwfasen (108 tekeningen, elk
+    met vijf fasen; de bouwfasen in drie delen, want een taak op de achtergrond stopt na twee uur, en één deel ging
+    verloren toen de container herstartte). Onderweg bleek dat de schoor van hut 1 in stand west vooraan over de rand
+    van zijn voet stak (de toets van het anker zag het): bij een huis rondom staat een schoor nu binnen één tegel voor
+    de gevel en telt hij mee in de voet (hut 1 6 bij 4, huis 3 9 bij 7). Nagekeken: alleen de witte tekeningen
+    veranderden, de oude bleven pixel voor pixel dezelfde; geen deur aan de verkeerde kant; `npm test` 928/928;
+    `npm run schermen` tegen de stand van vóór (`6bfd3ba`, gemaakt in een losse kopie met `git worktree`): 21 van 23
+    beelden byte voor byte gelijk (het hele ontworpen gehucht, de nacht, de herberg, de bouwplaatsen), en alleen land 5
+    van de maker anders, met het nieuwe wit en een iets ander gelegd land (de maker legt het anders nu de voet van hut 1
+    en huis 3 veranderde).
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
