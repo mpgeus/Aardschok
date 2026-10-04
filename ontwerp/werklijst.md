@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (4 okt 2026, eind van de zevenentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje zijn gebouwd: wie vrij is en toevallig een buur of iemand van zijn werk treft, blijft soms staan, met een wolkje (vraag 120; Marcel: "geen praatjes forceren"); het laden van een bewaard spel in een verse bladzijde bleek stuk (een vraag aan Marcel); dan de huizen: de vellen inpakken, meer afwisseling, en de herberg, de kapel en de woontoren in verhouding (vraag 112, stap 2, en 114), dan de boeren aan het werk op hun veld (vraag 111)
+## De stand (4 okt 2026, eind van de zevenentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje zijn gebouwd: wie vrij is en toevallig een buur of iemand van zijn werk treft, blijft soms staan, met een wolkje (vraag 120; Marcel: "geen praatjes forceren"); het laden van een bewaard spel in een verse bladzijde bleek stuk, en is gerepareerd; nu de huizen: de vellen inpakken, meer afwisseling, en de herberg, de kapel en de woontoren in verhouding (vraag 112, stap 2, en 114), dan de boeren aan het werk op hun veld (vraag 111)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -35,13 +35,14 @@ de ramen van wie thuis is. **Sinds vraag 112** is elk spel een ander land van 10
 en het nummer van het land staat bij Nieuw spel; een houthakker hoort bij het bos, een steengroeve bij de rotsen, een
 visser aan het water. **Sinds vraag 119** lopen de mensen om wat vaststaat, en lossen ze onderweg op wie er staat:
 wachten, langs elkaar, opzij. **Sinds vraag 120** blijft wie vrij is en toevallig een buur of iemand van zijn werk
-treft, soms staan voor een praatje, met een wolkje boven wie praat. `npm test`: 894/894.
+treft, soms staan voor een praatje, met een wolkje boven wie praat. `npm test`: 895/895.
 
 **Waar het werk staat:** in `main` (4 okt; Marcel: "ja" op "push main") staan de snelheid van 3 okt (vraag 113, de
 meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
 van een weg, en het bos om de kaart alleen aan de kant van het bos. Sinds het eind van de zesentwintigste sessie ook het
 lopen (vraag 119, D en A; Marcel: "ja push main"), en sinds de zevenentwintigste sessie het praatje (vraag 120;
-Marcel: "2 ja push main"). Hoe een eigen branch en `main` samengaan, staat in
+Marcel: "2 ja push main"). De reparatie van het laden staat op de branch van die sessie (`ccr-6762008a-w9xt0l`), nog
+niet in `main`. Hoe een eigen branch en `main` samengaan, staat in
 `CLAUDE.md`, onder Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
@@ -55,12 +56,11 @@ onderweg; wie langskomt, schuift aan, tot vier; boven wie praat staat om de beur
 Niemand gaat ergens heen om te praten: c (een deel 's avonds naar het plein) ging er weer uit. Waar ze het over hebben
 (het tekentje in het wolkje) komt met de mensen aan het werk.
 
-**Waar de volgende sessie begint:** **eerst het laden van een bewaard spel** (Marcel, 4 okt: "1 ja" op "Mag ik dat
-eerst repareren, vóór de huizen?"). De proef met opslaan faalt al op `main`: een gebouw dat in het spel neergezet is,
-kent een verse bladzijde niet na het laden, en zodra iets vraagt of die tegel vaststaat, valt het spel om
-(`opmerkingen.md`, bovenaan). De reparatie: `T.herstelSpel` meldt de soorten aan van wat er op de kaart ligt, en de proef
-met opslaan komt in de toetsen, zodat het niet weer ongemerkt breekt.
-Daarna **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij vraag 114): eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
+**Het laden van een bewaard spel is gerepareerd** (Marcel, 4 okt: "1 ja" op "Mag ik dat eerst repareren, vóór de
+huizen?"): een gebouw uit het spel kende een verse bladzijde niet na het laden; nu meldt het laden de soorten aan van wat
+er op de kaarten ligt, en de proef met opslaan speelt weer letter voor letter hetzelfde jaar. Zie onder Af.
+
+**Waar de volgende sessie begint:** **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij vraag 114): eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
 wanden, luiken, gespiegeld) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
 met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant (**vraag 115**). De meter in Firefox
@@ -4486,6 +4486,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 4 okt 2026 — **Een bewaard spel laden in een verse bladzijde** (zevenentwintigste sessie; Marcel: "1 ja"). Een gebouw
+  meldt zijn soort aan als het neergezet wordt, en een kaart bij het laden; een verse bladzijde die een bewaard spel
+  laadt, deed geen van beide, en viel om zodra iets vroeg of zo'n tegel vaststaat ("reading 'blokkeert'"). Nu meldt het
+  laden de soorten aan van wat er op de kaarten ligt (`T.zetSpel` in `js/opslaan.js`, met `T.kenSoortVan` in
+  `js/kaart.js`), zoals ze erbij kwamen. Een nieuwe toets doet een verse bladzijde na (een huis op een land van de
+  maker, geladen in een nieuw spel op het ontworpen gehucht), en faalt zonder de reparatie; de proef met opslaan
+  (`npm run speeltest -- lui60 --zaad 1 --opslaan`) speelt weer precies hetzelfde jaar. `npm test` 895/895.
 - 4 okt 2026 — **Een praatje: wie vrij is en toevallig een buur of iemand van zijn werk treft, blijft soms staan**
   (zevenentwintigste sessie; vraag 120, a en b; Marcel: "Het dorp moet echt levendig en realistisch aanvoelen", en "geen
   praatjes forceren. Alleen als mensen een reden hebben en elkaar toevallig tegenkomen"; `js/praatje.js`). Wie vrij is

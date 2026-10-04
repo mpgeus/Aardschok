@@ -251,7 +251,22 @@
     Object.assign(S, gelezen.staat);
     for (const k of Object.keys(vers)) if (!(k in S)) S[k] = vers[k];
     Object.assign(S, T.schermVelden());
+    kenDeSoorten(S);
   };
+
+  // Wat er op de kaarten ligt, moet het spel kennen (T.VOORWERPEN). Een verse bladzijde kent alleen wat ze zelf
+  // neerzette: de kaart van het nieuwe spel dat js/main.js eerst begint, en wat er sindsdien gebouwd werd. Een bewaard
+  // spel kan meer hebben, een gebouw uit het spel of iets van een ander land van de maker, en dan viel het spel om zodra
+  // iets vroeg of zo'n tegel vaststaat (de proef met opslaan, 4 okt). Dus meldt het laden die soorten aan
+  // (T.kenSoortVan, js/kaart.js).
+  function kenDeSoorten(S) {
+    const kaarten = new Set([...Object.values(S.gebieden || {}), ...(S.dorpen || []).map((D) => D.wereld)]);
+    for (const w of kaarten) {
+      if (!w) continue;
+      for (const v of w.voorwerpen || []) T.kenSoortVan(v);
+      for (const v of w.questVoorwerpen || []) T.kenSoortVan(v);
+    }
+  }
 
   // Allebei in één keer. Lukt het niet, dan blijft S zoals het was.
   T.herstelSpel = function (S, tekst) {

@@ -195,7 +195,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   alleen scherm is (`T.schermVelden`), met de verzamelingen en alles wat elkaar aanwijst heel
   (`T.bewaarSpel`, `T.leesSpel`, `T.zetSpel`). Een plek die vanzelf gaat, elke ochtend als de mensen opstaan
   (`T.werkOpslaanBij`; op 30× om de drie dagen, want het kost een hapering), en vijf eigen (`T.slaOp`, `T.opgeslagenSpellen`); waar het blijft, zegt één functie
-  (`T.opslagPlek`: de opslag van de browser, straks een bestand). `js/menu.js` is het scherm erbij: het
+  (`T.opslagPlek`: de opslag van de browser, straks een bestand). Na het laden meldt het de soorten aan van wat er op de
+  kaarten ligt (`T.kenSoortVan` in `js/kaart.js`): een verse bladzijde kent alleen wat ze zelf neerzette, niet een gebouw
+  uit het spel (gevonden met de proef met opslaan, 4 okt). `js/menu.js` is het scherm erbij: het
   titelscherm, waarop het spel opent, en het menu onder `Esc`. `js/main.js` begint een nieuw spel
   (`T.nieuwSpel`, dat een vorig spel helemaal wist), laadt er een (`T.laadSpel`), en gaat terug naar het
   titelscherm (`T.naarTitelscherm`).

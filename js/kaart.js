@@ -164,6 +164,21 @@
     if (!T.VOORWERPEN[naam]) T.VOORWERPEN[naam] = { blokkeert: !!vast, zichtDicht: !!vast };
   }
 
+  // Kent het spel de soort van dit voorwerp? Zo niet, dan meldt hij hem aan zoals hij erbij kwam: een gebouw blokkeert
+  // altijd (T.registreerGebouwSoort, js/gebouwen.js), en wat uit een tegelvel komt (een kaart, de maker, een lantaarn),
+  // zoals het vel zegt. Voor een bewaard spel in een verse bladzijde (T.zetSpel, js/opslaan.js): die kent alleen de
+  // soorten van wat ze zelf neerzette, niet een gebouw uit het spel of iets van een ander land van de maker.
+  T.kenSoortVan = function (v) {
+    if (!v || !v.soort || T.VOORWERPEN[v.soort]) return;
+    if (v.soort.startsWith('gebouw:')) {
+      T.registreerGebouwSoort(v.soort);
+      return;
+    }
+    const vel = T.TEGELS && T.TEGELS[v.vel];
+    const eig = vel && vel.tiles && vel.tiles[v.id];
+    if (eig) registreerVoorwerp(v.soort, eig.vast);
+  };
+
   function eigenschappenVan(obj) {
     const e = {};
     for (const p of obj.properties || []) e[p.name] = p.value;

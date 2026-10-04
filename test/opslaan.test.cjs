@@ -5,6 +5,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+// Wat het spel kent voor er een kaart is: zo begint een verse bladzijde (T.VOORWERPEN, js/wereld.js).
+const KENT_VERS = new Set(Object.keys(T.VOORWERPEN));
 
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {}, toonArgwaan() {} };
 
@@ -332,4 +334,49 @@ test('vanzelf opslaan: elke ochtend één keer, als de mensen opstaan, en niet a
   assert.equal(T.werkOpslaanBij(S), null, 'wie slaapt, slaat pas op als hij wakker is');
   S.slaap = null;
   assert.equal(T.werkOpslaanBij(S).gelukt, true, 'de volgende ochtend weer');
+});
+
+test('een verse bladzijde laadt een spel met een gebouw uit het spel, op een land van de maker', (t) => {
+  // Bewaard: land 3 van de maker, met een huis dat in het spel neergezet is.
+  const echt = console.warn;
+  console.warn = () => {};
+  const S = { kalender: T.nieuweKalender() };
+  try {
+    assert.ok(T.beginOpKaart(S, 'gehucht', 3));
+  } finally {
+    console.warn = echt;
+  }
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  let huis = null;
+  for (let y = 5; y < S.wereld.h - 5 && !huis; y++) {
+    for (let x = 5; x < S.wereld.b - 5 && !huis; x++) {
+      if (T.waaromPastHetNiet(S.dorp, 'huis', x, y)) continue;
+      const r = T.plaatsGebouw(S.dorp, 'huis', x, y);
+      if (r && r.gelukt) huis = r.instantie;
+    }
+  }
+  assert.ok(huis, 'er staat een huis');
+  const tekst = T.bewaarSpel(S, { nu: NU });
+  // Een verse bladzijde kent alleen wat het spel zelf kent, en wat het nieuwe spel neerzet (het ontworpen gehucht): niet
+  // het gebouw uit het spel, en niet wat alleen op het land van de maker ligt.
+  const weg = {};
+  for (const k of Object.keys(T.VOORWERPEN)) {
+    if (KENT_VERS.has(k)) continue;
+    weg[k] = T.VOORWERPEN[k];
+    delete T.VOORWERPEN[k];
+  }
+  t.after(() => {
+    for (const k of Object.keys(weg)) if (!T.VOORWERPEN[k]) T.VOORWERPEN[k] = weg[k];
+  });
+  const S2 = gehucht();
+  assert.ok(!T.VOORWERPEN['gebouw:huis'], 'de verse bladzijde kent het huis nog niet');
+  const r = T.herstelSpel(S2, tekst);
+  assert.equal(r.gelukt, true, r.reden);
+  const onbekend = new Set();
+  for (const w of new Set([...Object.values(S2.gebieden), ...S2.dorpen.map((d) => d.wereld)])) {
+    for (const v of [...w.voorwerpen, ...(w.questVoorwerpen || [])]) if (!T.VOORWERPEN[v.soort]) onbekend.add(v.soort);
+  }
+  assert.deepEqual([...onbekend], [], 'na het laden kent het alles wat er ligt');
+  assert.ok(T.isVast(S2.wereld, huis.x, huis.y), 'en het huis staat vast');
+  assert.deepEqual(T.VOORWERPEN['gebouw:huis'], { blokkeert: true, zichtDicht: true }, 'zoals toen het gebouwd werd');
 });

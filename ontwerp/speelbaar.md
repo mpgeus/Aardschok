@@ -167,10 +167,11 @@ Op zaad 1 werd het gehucht een maand later een dorp, en kwam marktrecht twee dag
 dag. Aan het eind evenveel mensen, binnen wat een ander toeval ook geeft. Geen fouten in de console, niemand weg. Drie
 spellen tegelijk (de vorige keer twee keer drie), dus de tijden zijn niet te vergelijken met die hieronder.
 
-**De proef met opslaan faalt**, ook op `main` zonder het praatje (`npm run speeltest -- lui60 --zaad 1 --opslaan`): op
-deze stand speelt het geladen spel een ander jaar (20 verschillen, met "reading 'blokkeert'" in de console), op `main`
-staat er na het herladen geen Verder op het titelscherm. Een verse bladzijde kent na het laden de gebouwen niet die in
-het spel neergezet zijn (`opmerkingen.md`, bovenaan).
+**De proef met opslaan faalde**, ook op `main` zonder het praatje (`npm run speeltest -- lui60 --zaad 1 --opslaan`):
+het geladen spel speelde een ander jaar (20 verschillen, met "reading 'blokkeert'" in de console), of er stond na het
+herladen geen Verder op het titelscherm. Een verse bladzijde kende na het laden de gebouwen niet die in het spel
+neergezet waren. Gerepareerd in dezelfde sessie (Marcel: "1 ja"): het laden meldt die soorten aan, en de proef speelt
+weer precies hetzelfde jaar (237 kB, gelijk tot de laatste letter), met het praatje erin.
 
 ## De speeltest van 4 okt: lopen tussen anderen (werklijst, vraag 119, D en A)
 
