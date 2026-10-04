@@ -785,3 +785,7 @@ die veranderden (elke grondtegel past precies in zijn ruit), of de verandering m
   zouden er het hele jaar kunnen zijn, onder een toets: wat je echt hebt, en wat de heer tot nu toe van je
   weet (wat zijn inner telde, wat de marskramer hem vertelde). Dat zijn de rekenboeken van `spel.md` (punt 6),
   en het maakt de kern elke dag zichtbaar, niet pas in lentemaand. Na de proef; niet gekozen.
+- **Een toets die soms omvalt** (4 okt, sessie van het licht, vraag 125). Van acht keer `npm test` op dezelfde stand
+  (commit 6cb27a0) viel één keer één toets om (909 van 910); welke, liet de uitvoer niet zien, en de zeven keer erna
+  was alles groen. Er hangt dus ergens een toets van het toeval of de klok af. Draai bij twijfel
+  `npm test > uit.log` en kijk naar `not ok`, zodat de naam bewaard blijft als het weer gebeurt.
