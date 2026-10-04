@@ -307,11 +307,16 @@
     const basis = datum && T.akkerStadium(datum.maand, datum.dagVanMaand);
     // In de oogst (graan of hooi) werkt men tot het donker (js/dag.js).
     const oogst = basis === 'rijp' || !!(datum && T.isHooitijd(datum));
+    // Het deel van de dag, voor een praatje (js/praatje.js). Wie een praatje maakt, blijft staan tot het om is, en wie
+    // langskomt, schuift aan: dat gebeurt hier, vóór het dwalen, zodat elke kaart die dwaalt het ook doet (het
+    // gereedschap laadt de praatjes niet).
+    const deel = D && D.kalender ? T.dagdeelVan(D.kalender.dag, oogst) : null;
+    if (deel && T.werkPraatjesBij) T.werkPraatjesBij(S, D);
     let zoekNog = T.LOPEN_INSTELLINGEN.zoekPerBeeld;
     for (const m of w.wezens) {
       // Een man van de militie bij een aanval dwaalt niet: hij loopt met de schout mee (js/rovers.js). Wie de schout
-      // zoekt met een voorval, ook niet (js/voorvallen.js).
-      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.opgeroepen || m.zoektSchout) continue;
+      // zoekt met een voorval, ook niet (js/voorvallen.js), en wie een praatje maakt evenmin (js/praatje.js).
+      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.opgeroepen || m.zoektSchout || m.praatje) continue;
       // Een dier dat ligt, blijft liggen tot zijn rust zegt dat het weer opstaat (js/vee.js).
       if (m.dier && T.rustVanDier && T.rustVanDier(m, S.tijd || 0) === 'liggen') continue;
       // Het ritme van de dag (js/dag.js): 's ochtends en 's avonds op zijn erf, 's nachts binnen. Wie
@@ -358,6 +363,9 @@
         } else if (opties.length) stap(m, opties[Math.floor(Math.random() * opties.length)]);
         continue;
       }
+      // Kijkt hij om zich heen en staat er een bekende die ook vrij is, dan blijven ze staan voor een praatje (js/praatje.js;
+      // het gereedschap laadt het niet).
+      if (T.zoekPraatje && T.zoekPraatje(S, w, D, m, deel)) continue;
       const thuisNu = dagAnker || T.wandelAnker(m, basis) || m.thuis;
       // Ligt hij nu buiten die straal — een boer wiens huis niet naast zijn akker staat, bij het
       // begin van het groeiseizoen — dan is geen van de vier buurtegels ooit dichtbij genoeg, en

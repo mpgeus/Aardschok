@@ -228,6 +228,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   herberg), vraagt het dwalen een weg met `veld: true`, en die komt uit een veld: vanaf het doel ring voor ring hoeveel
   stappen elke tegel ervan af ligt, zo ver als nodig, tot de kaart verandert (`veldenOnthouden`). Een veld is alleen uit
   de kaart, dus een weg is dezelfde, hoe ver het veld ook al gegroeid was, en ook na het laden.
+- `js/praatje.js`: **een praatje** (vraag 120, 4 okt; Marcel: "Het dorp moet echt levendig en realistisch aanvoelen", en
+  "120 a b c ja"): wie vrij is (`T.kanPraten`: 's ochtends, in de schaft, 's avonds, en overdag wie geen werk heeft) en
+  een bekende uit een ander huis ziet (`T.kentElkaar`: een buur of wie op hetzelfde werk werkt, niet je eigen gezin),
+  blijft soms staan, bij een stap van het dwalen (`T.zoekPraatje`) of onderweg in plaats van uit te wijken
+  (`T.praatjeOnderweg`, vanuit `T.ontwijk`); wie langskomt, schuift aan, tot vier. Het groepje is een ding dat ze delen
+  (`e.praatje`: het midden, tot wanneer, een zaad voor het wolkje), zonder lijst ernaast (`T.praatjesOp(w)`); ze kijken
+  naar elkaar (`e.kijkt` als plek, js/sprites.js). Elk beeld, vóór het dwalen (`T.werkPraatjesBij`, vanuit `T.dwaal`):
+  wie niet meer vrij is, gaat, en na een kwartier tot een uur is het om. Op een vaste plek (`T.opVastePlek`: het plein,
+  de put, voor de herberg of de kapel) vaker en zonder rust. 's Avonds gaat een op de drie die in de buurt woont naar het
+  midden van het plein (`T.avondPleinAnker`, voor `T.dagAnker`). Het wolkje tekent `js/tekenen.js` (`tekenWolkjes`). De
+  regels van het spel veranderen niet. De spelregel "Praatjes"; de getallen in `T.PRAATJE_INSTELLINGEN`.
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
   een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
@@ -814,7 +825,9 @@ zien, `('nieuw')` maakt het opnieuw uit het zaad.
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
 en het bier (`(30)` zet eerst 30 bier). `Spel.debug.meter()` (of `F2`) zet de meter in beeld. `Spel.debug.paden()` zegt hoeveel tegels paadje zijn, waar het meest gelopen wordt en waar de lantaarns staan;
 `('nacht')` doet nu wat de nacht doet. `Spel.debug.lopen()` zegt wie er met een doel onderweg is, wie daarvan staat te
-wachten en op wie, en hoeveel wegen en velden de kaart onthoudt (vraag 119). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
+wachten en op wie, en hoeveel wegen en velden de kaart onthoudt (vraag 119). `Spel.debug.praatjes()` zegt wie er waar
+staat te praten en tot hoe laat, hoeveel er vrij zijn, en wie vanavond naar het plein gaat; `('nu')` laat de twee vrije
+bekenden die het dichtst bij elkaar staan nu beginnen (vraag 120). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
 hij staat, wie er kijkt, en welk licht er brandt.
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1
 slachtmaand). `Spel.debug.opslaan('2')` zet het spel op plek 2, `Spel.debug.laden('auto')` laadt wat er vanzelf

@@ -431,6 +431,7 @@
     for (const r of ramen) vulRamen(ctx, S, r);
     tekenHuisTekens(ctx, S);
     tekenOogjes(ctx, S);
+    tekenWolkjes(ctx, S);
     tekenEffecten(ctx, S);
     ctx.restore();
     tekenVignet(ctx, S, bw, bh);
@@ -1872,6 +1873,79 @@
       ctx.fill();
       ctx.restore();
     }
+  }
+
+  // Het wolkje boven wie een praatje maakt (js/praatje.js; werklijst vraag 120, b; Marcel, 4 okt: "120 a b c ja"): leeg,
+  // met drie puntjes, om de beurt boven wie er praat, met een stilte tussen de beurten. Waar ze het over hebben, komt er
+  // later in (met de mensen aan het werk). Na de nacht getekend, zoals het oogje, zodat je het ook in het donker ziet. Wie
+  // er praat, komt uit de klok van het scherm en het zaad van het groepje: het is geen spelstaat. Het gereedschap kent
+  // de praatjes niet.
+  const BEURT = 2.2; // seconden per beurt, op het scherm
+  const PRATEN = 0.75; // zo'n deel van een beurt staat het wolkje er; dan een stilte
+  function tekenWolkjes(ctx, S) {
+    if (!T.praatjesOp || S.gevecht) return;
+    const w = S.wereld;
+    for (const [g, leden] of T.praatjesOp(w)) {
+      // Met wie jij praat, praat niet met hen.
+      const erbij = leden.filter((e) => T.staatErbij(e) && e !== S.spreektMet && T.isZichtbaar(w, e.tx, e.ty));
+      const n = erbij.length;
+      if (n < 2) continue;
+      const t = S.tijd / BEURT + (g.zaad % 10) / 10;
+      const beurt = Math.floor(t);
+      const deel = t - beurt;
+      if (deel > PRATEN) continue;
+      // Om en om met twee; met drie of vier steeds een ander, nooit twee keer achter elkaar dezelfde.
+      const i = n === 2 ? (beurt + g.zaad) % 2 : (beurt + g.zaad + Math.floor(beurt / n)) % n;
+      wolkje(ctx, erbij[i], Math.min(1, deel / 0.08, (PRATEN - deel) / 0.08));
+    }
+  }
+
+  function wolkje(ctx, e, alpha) {
+    const p = T.naarScherm(e.x, e.y);
+    const hoogte = metSprites() ? T.sprites.hoogte(e.soort) : 52;
+    const b = 22;
+    const h = 13;
+    const r = 6;
+    const x0 = p.x + 6 - b / 2;
+    const y0 = p.y - hoogte - 8 - h;
+    const vorm = () => {
+      ctx.beginPath();
+      ctx.moveTo(x0 + r, y0);
+      ctx.arcTo(x0 + b, y0, x0 + b, y0 + h, r);
+      ctx.arcTo(x0 + b, y0 + h, x0, y0 + h, r);
+      ctx.arcTo(x0, y0 + h, x0, y0, r);
+      ctx.arcTo(x0, y0, x0 + b, y0, r);
+      ctx.closePath();
+    };
+    // Het staartje wijst naar wie er praat.
+    const staart = () => {
+      ctx.beginPath();
+      ctx.moveTo(x0 + 5, y0 + h - 1);
+      ctx.lineTo(p.x - 1, y0 + h + 6);
+      ctx.lineTo(x0 + 11, y0 + h - 1);
+      ctx.closePath();
+    };
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, alpha);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.75)';
+    ctx.fillStyle = '#f4ecd6';
+    // Eerst beide randen, dan beide vlakken: zo valt de rand tussen het wolkje en zijn staartje weg.
+    vorm();
+    ctx.stroke();
+    staart();
+    ctx.stroke();
+    vorm();
+    ctx.fill();
+    staart();
+    ctx.fill();
+    ctx.fillStyle = '#3a2a1a';
+    for (const dx of [-5.5, 0, 5.5]) {
+      ctx.beginPath();
+      ctx.arc(x0 + b / 2 + dx, y0 + h / 2, 1.7, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
   }
 
   function roep(ctx, teken, cx, y, kleur) {

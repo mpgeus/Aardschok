@@ -835,6 +835,42 @@
         onthouden: T.onthoudenVan(w),
       };
     },
+    // Wie er een praatje maakt (js/praatje.js; werklijst vraag 120): per groepje wie erin staan (en wie nog komt), waar
+    // en tot hoe laat, hoeveel er nu vrij zijn, en wie vanavond naar het plein gaat. ('nu'): de twee vrije bekenden die
+    // het dichtst bij elkaar staan, beginnen nu een praatje (staan ze verder dan zes tegels uit elkaar, dan zegt het dat).
+    praatjes(wat) {
+      const D = T.dorpHier(S);
+      if (!D || !D.kalender) return 'Praatjes zijn er alleen in een dorp.';
+      const w = S.wereld;
+      const dag = D.kalender.dag;
+      const deel = T.dagdeelVan(dag, T.isOogstDag(dag));
+      const naam = (e) => {
+        const p = T.bewonerVan(D, e);
+        return p ? T.naamVanBewoner(p) : e.naam || e.soort;
+      };
+      const vrij = w.wezens.filter((e) => T.kanPraten(S, D, e, deel));
+      if (wat === 'nu') {
+        const stil = vrij.filter((e) => !e.praatje && !e.onderweg && !e.pad.length);
+        let beste = null;
+        for (const e of stil) {
+          for (const b of stil) {
+            if (e === b || !T.kentElkaar(D, T.bewonerVan(D, e), T.bewonerVan(D, b))) continue;
+            const a = T.afstand({ x: e.tx, y: e.ty }, { x: b.tx, y: b.ty });
+            if (!beste || a < beste.a) beste = { e, b, a };
+          }
+        }
+        if (!beste) return `Er staan nu geen twee vrije bekenden stil (${deel}, ${vrij.length} vrij).`;
+        if (beste.a > 6) return `De dichtste twee vrije bekenden, ${naam(beste.e)} en ${naam(beste.b)}, staan ${beste.a} tegels uit elkaar.`;
+        if (!T.beginPraatje(D, beste.e, beste.b)) return `${naam(beste.e)} kan niet bij ${naam(beste.b)} komen.`;
+      }
+      const groepjes = [...T.praatjesOp(w)].map(([g, leden]) => ({
+        wie: leden.map((e) => naam(e) + (T.staatErbij(e) ? '' : ' (komt)')).join(', '),
+        waar: `${g.plek.x},${g.plek.y}${T.opHetPlein(w, g.plek.x, g.plek.y) ? ' (op het plein)' : ''}`,
+        tot: T.uurTekst(g.tot),
+      }));
+      const plein = (D.bewoners ? D.bewoners.mensen : []).filter((p) => T.gaatNaarHetPlein(D, p, dag)).map(T.naamVanBewoner);
+      return { deel, vrij: vrij.length, groepjes, 'vanavond naar het plein': plein };
+    },
     // De verstopplekken (js/verstoppen.js): waar je iets kunt verstoppen, wat er ligt, en hoe vaak
     // de soldaten het er vinden. Spel.debug.verstopt('boer1', 30, 5) zet 30 graan en 5 goud in
     // de kelder van boer1 (of 'schout', of 'kapel'), zonder te lopen, als het kan.

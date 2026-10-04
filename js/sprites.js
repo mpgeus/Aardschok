@@ -570,10 +570,12 @@
 
     // Kijkrichting: onderweg naar de volgende tegel kijken, anders blijven staan zoals je stond —
     // of, wie een vaste kant op moet kijken zolang hij stilstaat (`e.kijkt`: aan de schandpaal met
-    // zijn rug naar de paal, js/heer.js), die kant op.
+    // zijn rug naar de paal, js/heer.js), die kant op. `e.kijkt` kan ook een plek zijn: wie een praatje
+    // maakt, kijkt naar de anderen (js/praatje.js).
     if (e.pad && e.pad.length) st.richting = S.richtingVan(e.pad[0].x - e.x, e.pad[0].y - e.y);
     else if (dx || dy) st.richting = S.richtingVan(dx, dy);
-    else if (e.kijkt) st.richting = e.kijkt;
+    else if (typeof e.kijkt === 'string') st.richting = e.kijkt;
+    else if (e.kijkt && (e.kijkt.x !== e.x || e.kijkt.y !== e.y)) st.richting = S.richtingVan(e.kijkt.x - e.x, e.kijkt.y - e.y);
     if (e.uitval) st.richting = S.richtingVan(e.uitval.doel.x - e.x, e.uitval.doel.y - e.y);
 
     // Eenmalige houdingen: uithalen en geraakt worden. Ze worden vastgehouden tot ze zijn

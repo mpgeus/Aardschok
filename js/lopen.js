@@ -10,8 +10,10 @@
 // - komen ze recht op elkaar af, dan schuiven ze langs elkaar (ze ruilen van tegel);
 // - loopt de ander door, dan wacht hij even;
 // - staat de ander maar wat (hij dwaalt), dan gaat die een stap opzij;
-// - is de ander bezig (hij maait, hij praat met de schout, het is een koe), dan loopt hij er even omheen;
+// - is de ander bezig (hij maait, hij praat met de schout of in een praatje, het is een koe), dan loopt hij er even
+//   omheen, en staat er in een smalle doorgang een praatje, dan gaat er een even opzij;
 // - en lukt dat niet, dan wacht hij, tot zijn geduld op is: dan geeft hij het op, en zoekt het later opnieuw.
+// Zijn ze allebei vrij en kennen ze elkaar, dan blijven ze soms staan voor een praatje (js/praatje.js).
 // Een gevecht doet hier niet aan mee: daar telt elke tegel, en plant iedereen om de anderen heen (js/gevecht.js). Een
 // monster gaat voor niemand opzij.
 (function (T) {
@@ -264,9 +266,11 @@
 
   // Mag b een stap opzij gaan voor wie langs wil? Alleen wie maar wat staat: niet de schout (dat ben jij), niet wie
   // bezig is (maaien, een gesprek, de schout zoeken met een voorval), geen dier en geen monster, en niet in een gevecht.
-  T.magOpzij = (S, b) =>
+  // Wie een praatje maakt (js/praatje.js), is ook bezig, maar gaat in een smalle doorgang toch even opzij (`ookPraatje`,
+  // hieronder).
+  T.magOpzij = (S, b, ookPraatje) =>
     !b.dood && !b.binnen && b !== S.schout && !b.dier && b.kant !== 'monster' && !b.maait && b !== S.spreektMet &&
-    !b.zoektSchout && !S.gevecht && !b.onderweg && !b.pad.length;
+    !b.zoektSchout && !S.gevecht && !b.onderweg && !b.pad.length && (ookPraatje || !b.praatje);
 
   // Wat doet e, die zijn volgende tegel bezet vindt (js/anim.js)? 'wacht': hij blijft staan, en kijkt het volgende beeld
   // opnieuw. 'verder': hij stapt nu (ze schuiven langs elkaar), of zijn weg is anders (een omweg). 'klaar': hij is er
@@ -278,6 +282,8 @@
     if (!T.isBegaanbaar(w, volgende.x, volgende.y, { deurenOpenen: e === S.schout })) return 'klaar';
     const ander = T.wezenOp(w, volgende.x, volgende.y, e);
     if (!ander) return 'verder';
+    // Zijn ze allebei vrij en kennen ze elkaar, dan blijven ze staan voor een praatje (js/praatje.js; vraag 120, d).
+    if (T.praatjeOnderweg && T.praatjeOnderweg(S, w, e, ander)) return e.pad.length ? 'verder' : 'klaar';
     if (!e.gewacht) e.omwegBij = 0; // net een stap gezet: een omweg mag meteen weer
     e.gewacht = (e.gewacht || 0) + dt;
     const laatste = e.pad.length === 1;
@@ -307,6 +313,15 @@
     if (e.gewacht >= (e.omwegBij || 0)) {
       if (omweg(S, w, e)) return 'verder';
       e.omwegBij = e.gewacht + IN().omwegOpnieuw;
+      // Geen omweg om een praatje heen (een smalle doorgang): dan gaat er een even opzij, of ruilen ze van plaats. Na zijn
+      // stap loopt hij terug naar zijn groepje (js/praatje.js).
+      if (!loopt && ander.praatje && T.magOpzij(S, ander, true)) {
+        if (stapOpzij(w, ander, e)) return 'wacht';
+        if (magRuilen(S, w, e, ander)) {
+          ruil(S, w, e, ander, volgende);
+          return 'verder';
+        }
+      }
     }
     return e.gewacht < IN().geduld ? 'wacht' : 'klaar';
   };

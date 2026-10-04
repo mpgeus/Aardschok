@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 4 okt 2026, zesentwintigste sessie)
+## Waar staat wat (bijgewerkt 4 okt 2026, zevenentwintigste sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -41,7 +41,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep); sinds 30 sep kiezen de boeren hun velden en slachten ze zelf, en jij kunt het veranderen | 6a, vraag 74 |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | paadjes van de deuren en waar gelopen wordt, lantaarns en brandende ramen gebouwd (3 okt, vraag 108); sneller lopen, modder en keien nog niet | 6c, vraag 108 |
-| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep), de treden tot marktrecht (2 okt, "Van dorp tot stad"); sinds 4 okt lopen de mensen om wat vaststaat en lossen ze onderweg op wie er staat ("Lopen tussen anderen", vraag 119); een praatje als ze niets te doen hebben is besloten en komt nu (vraag 120); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90, 119, 120 |
+| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep), de treden tot marktrecht (2 okt, "Van dorp tot stad"); sinds 4 okt lopen de mensen om wat vaststaat en lossen ze onderweg op wie er staat ("Lopen tussen anderen", vraag 119), en wie vrij is, maakt een praatje met een buur of wie bij hem werkt, met een wolkje, en 's avonds staat een deel van het dorp op het plein (vraag 120, a en c); waar ze het over hebben komt met de mensen aan het werk; de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90, 119, 120 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
@@ -2646,12 +2646,33 @@ geduld op is en zoekt het later opnieuw. Ook de schout loopt zo door een groepje
 telt elke tegel. Tot 4 okt was iedereen bij het zoeken een muur: dan liep een kleuter om het hele huis heen omdat er
 iemand in de deur stond, en vond wie achter een ander stond soms helemaal geen weg.
 
-**Een levendig dorp** (vraag 120, besloten, nog niet gebouwd): "Het dorp moet echt levendig en realistisch aanvoelen.
-Mensen die een praatje staan te maken als ze even niets te doen hebben etc." Marcel koos (4 okt, "120 a b d ja"): wie
-vrij is en een bekende treft, blijft staan voor een praatje (bij de put, op het plein), en wie langskomt, schuift aan;
-dat komt eerst, bij het lopen. Daarna, met de mensen aan het werk, een wolkje boven het groepje van waar ze het over
-hebben, uit het spel zelf (het graan, de heer, de rovers). Kleine dingen als groeten, water halen of een bankje koos hij
-niet.
+**Een praatje: zo werkt het nu** (4 okt, zevenentwintigste sessie, vraag 120; Marcel: "120 a b c ja"; `js/praatje.js`,
+toetsen in `test/praatje.test.cjs`): wie vrij is ('s ochtends, in de schaft, 's avonds, en overdag wie geen werk heeft;
+geen kleuter, en niet wie maait, de schout zoekt of aan zijn hut bouwt) en een bekende ziet die ook vrij is, blijft
+soms staan voor een praatje: bij een stap van het dwalen een op de drie keer, op een vaste plek (het plein, de put,
+voor de herberg of de kapel) twee op de drie, en ook onderweg, als twee bekenden elkaar op het raster treffen, in plaats
+van uit te wijken. Een bekende is iemand uit een ander huis: een buur (de huizen hooguit 20 tegels van elkaar) of wie
+op hetzelfde werk werkt; je eigen gezin spreek je binnen. De een loopt tot naast de ander, liefst links of rechts op het
+scherm, zodat je ze van opzij ziet, en ze draaien naar elkaar toe; wie langskomt en er een kent, schuift aan, tot vier.
+Een praatje duurt een kwartier tot een uur, en dan een uur niet weer, behalve op een vaste plek: daar blijven ze praten,
+met steeds een ander. Boven wie praat staat om de beurt een leeg wolkje met drie puntjes. Wie langs wil, loopt om het
+groepje heen, en in een smalle doorgang gaat er een even opzij. 's Avonds gaat een op de drie die in de buurt van het
+plein woont (binnen 40 tegels) na het werk naar het midden van het plein, tot een uur voor bedtijd. De regels van het
+spel veranderen er niet door (een werkplaats rekent met de looptijd), en het kost geen meetbare snelheid (bij 200
+mensen, voor en na achter elkaar gemeten). De spelregel "Praatjes" zet het uit; de getallen in
+`T.PRAATJE_INSTELLINGEN`, in de werkbank. Gemeten (3× gespeeld, twee dagen): in het ontworpen gehucht zo'n 24 praatjes
+per dag, bijna altijd ergens een; op een land van de maker 21 tot 47; in een dorp van 200 zo'n 32, 's avonds drie
+tegelijk. Nog niet: waar ze het over hebben (b, een tekentje in het wolkje, met de mensen aan het werk), en wie met wie
+bevriend raakt (vraag 118).
+
+**Hoe het zo kwam** (vraag 120): "Het dorp moet echt levendig en realistisch aanvoelen. Mensen die een praatje staan te
+maken als ze even niets te doen hebben etc." Marcel koos eerst "120 a b d ja": het praatje bij het lopen, en later een
+wolkje van waar ze het over hebben, uit het spel zelf (het graan, de heer, de rovers). Kleine dingen als groeten, water
+halen of een bankje koos hij niet. Voor het plan mat Claude een paar gespeelde dagen: meer dan de helft van wie elkaar
+tegenkomt, is een gezin op zijn eigen erf, en het ene huis komt het andere zelden tegen. Daarop koos Marcel "120 a b c
+ja": niet met je eigen gezin, het lege wolkje nu al, en 's avonds een deel naar het plein. Onder het bouwen bleek lopen
+langzaam tegenover de dag (van een boerderij aan de rand naar het plein is anderhalf uur), en kwamen er drie dingen bij:
+tot een uur voor bedtijd op het plein in plaats van een uur, geen rust op een vaste plek, en het praatje onderweg.
 
 ### Mensen worden poppetjes
 

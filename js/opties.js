@@ -345,6 +345,18 @@
           uitleg: 'Alleen de weg van de kaart, zoals voor 3 okt.' },
       ],
     },
+    // Een praatje (werklijst vraag 120; Marcel, 4 okt: "Het dorp moet echt levendig en realistisch aanvoelen", en op het
+    // plan "120 a b c ja"; js/praatje.js).
+    {
+      id: 'praatjes', naam: 'Praatjes', standaard: 'aan',
+      uitleg: 'Of wie even vrij is, blijft staan voor een praatje.',
+      keuzes: [
+        { id: 'aan', naam: 'Aan', zet: { 'PRAATJE_INSTELLINGEN.aan': true },
+          uitleg: "Wie vrij is en een buur of iemand van zijn werk ziet, blijft staan voor een praatje van een kwartier tot een uur, en wie langskomt, schuift aan. Boven wie praat, staat een wolkje. 's Avonds gaat een op de drie het eerste uur na het werk naar het plein." },
+        { id: 'uit', naam: 'Uit', zet: { 'PRAATJE_INSTELLINGEN.aan': false },
+          uitleg: "Ieder dwaalt alleen, en 's avonds blijft iedereen bij zijn huis. Zoals voor 4 okt." },
+      ],
+    },
     // Wie betrapt wordt op verstoppen (werklijst vraag 106, c; Marcel koos niet tussen de twee, dus de laatste
     // waarschuwing als standaard tot hij kiest; js/bazen.js, T.betrapt).
     {
@@ -548,6 +560,7 @@
     { naam: 'De bewoners', blok: 'BEWONERS_INSTELLINGEN' },
     { naam: 'Lopen', blok: 'LOPEN_INSTELLINGEN' },
     { naam: 'De paadjes', blok: 'PADEN_INSTELLINGEN' },
+    { naam: 'De praatjes', blok: 'PRAATJE_INSTELLINGEN' },
     { naam: 'De erven', blok: 'ERVEN_INSTELLINGEN' },
     { naam: 'De treden', blok: 'TREDEN_INSTELLINGEN' },
     { naam: 'De wetten', blok: 'WETTEN_INSTELLINGEN' },
