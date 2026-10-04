@@ -4728,6 +4728,100 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel koos (4 okt): "A ja B ja C ja D na webgl".** Dus: A (licht) bouwen, B (schaduwen met de zon) en C (echt licht op
     de muren) eerst als proefplaat, en alles direct na WebGL, dat nu staat. De volgorde wordt: Marcel meet WebGL op zijn
     pc, dan vraag 125 (A, en de proefplaten van B en C), dan het draaien (vraag 124) en de boeren (vraag 111).
+    **Plan van Claude voor A, licht (4 okt; nog niet gebouwd).** Nu is de nacht een donkerblauwe laag eroverheen
+    (`tekenNacht`, 'source-atop'), met lichtere kringen rond de schout en een gele gloed eroverheen bij de lantaarns: het
+    licht maakt alleen minder donker. Voortaan wordt het licht een **lichtkaart** waarmee de wereld vermenigvuldigd wordt:
+    - **De lichtkaart:** eerst de kleur van het uur over het hele beeld, dan per lichtbron een warme plas erbij (opgeteld).
+      Dan gaat de lichtkaart in één keer over de wereld, als vermenigvuldiging (in `js/gl.js` een mengstand, zonder extra
+      buffer; een gat voor een raam blijft een gat, zoals nu met 'source-atop'). Twee keer vermenigvuldigen, met de helft
+      als "gewoon", zodat een lantaarn een muur ook warmer en lichter kan maken dan overdag, in plaats van alleen minder
+      donker. Daarna de ramen (`vulRamen`, zoals nu), de tekens en het vignet. Op de kaart is dat een paar opdrachten,
+      hoeveel lantaarns er ook branden.
+    - **De kleur van het uur** komt uit de regels, niet uit het tekenen: `T.lichtKleurVan(dag)` naast `T.lichtVan` in
+      `js/dag.js`, met een paar sleutelkleuren in `T.DAG_INSTELLINGEN` (in de werkbank): roze bij het opkomen, neutraal
+      (wit, dus de kunst zoals hij is) van de ochtend tot de middag, oranje bij het ondergaan, blauw in de nacht, en
+      ertussen vloeiend. Te toetsen zonder scherm.
+    - **De lampen:** `T.lichtBronnen` (`js/zien.js`) krijgt per bron een kleur en of het een vlam is. Een vlam flakkert
+      (op de klok van het scherm, `S.tijd`, elk met zijn eigen ritme uit zijn plek, zodat ze niet samen knipperen); een
+      brandend raam geeft een zachte plas voor het huis op de grond; de deur van de herberg een grotere. De schout draagt
+      's avonds en 's nachts buiten een lantaarn: zijn plas licht komt van zijn hand, en gaat met hem mee. Dat is de
+      lichtere kring van nu, maar warm. Welke lichten in beeld staan en waar, zegt één functie (`T.lichtenInBeeld`), die
+      2D en WebGL allebei vragen.
+    - **Wat niet verandert:** het licht in de plaatjes blijft van linksboven komen (vraag 124); het licht van het uur en
+      van de lampen komt erbovenop, zonder richting. Het zicht en de getuigen (`T.zichtOp`) blijven zoals ze zijn: dit is
+      alleen beeld.
+    - **Zonder videokaart** (de spelregel "Tekenen" op "Zonder"): zie vraag B.
+    - **Laten zien:** `npm run schermen -- --tekenen met` (WebGL op de processor) met vier nieuwe schermen: de dageraad,
+      de middag, de zonsondergang en de nacht bij de herberg met de lantaarns. Ik beoordeel op uitsneden, en Marcel krijgt
+      ze naast het oude beeld. De maat van vraag 123, C (2D en WebGL 's avonds tot 8 op 255) geldt dan alleen als 2D
+      dezelfde lichtkaart krijgt; anders vergelijkt de proef alleen overdag. En `npm run tekenmeting` 's avonds, voor en
+      na, zodat we weten wat het kost.
+    - **Hoe groot:** een sessie.
+    Vragen: **A**, dit plan, met de kleuren in de werkbank? **B**, het 2D-tekenen erbij: zo dicht mogelijk bij hetzelfde
+    (dezelfde lichtkaart, klein getekend op een eigen doek en er met 'multiply' overheen; dan oogt het bijna gelijk, maar
+    de avond kost in 2D wat meer tijd, en het "lichter dan overdag" valt weg), of bewust eenvoudiger (de nacht zoals nu,
+    alleen getint met de kleur van het uur, zonder plassen)? Voorstel: zo dicht mogelijk, want wie zonder videokaart speelt,
+    ziet anders een ander spel, en de proef met de schermen blijft dan ook 's avonds vergelijken. **C**, de lantaarn van de
+    schout alleen als beeld, of ook in het spel (met een lantaarn zien ze je 's nachts van verder, en sluipen, `S`, dooft
+    hem)? Voorstel: nu alleen beeld; het spel-deel gaat naar `opmerkingen.md`, want het is een nieuw idee (functie creep).
+    **Marcel koos (4 okt): "A ja", B: "zonder videokaart wordt er bijna niet meer gespeeld...", C: "ook spel. Voegt leuke
+    elementen toe".** Dus: het plan zoals het hier staat; zonder videokaart bewust eenvoudiger (de nacht zoals hij was,
+    met de lantaarn van de schout als gloed erbij), en de proef met de schermen vergelijkt 2D en WebGL dan alleen overdag;
+    en de lantaarn van de schout is ook spel: 's avonds en 's nachts buiten brandt hij, en dan zien ze je van verder (je
+    staat in je eigen licht, `bijLicht`), en sluipen (`S`) dooft hem: dan ben je in het donker, en zie je zelf ook minder.
+    Een spelregel ("De lantaarn van de schout": ook spel, of alleen beeld), zoals alles met meer dan één goed antwoord.
+    **A is gebouwd (4 okt, op de branch `claude/licht-videokaart`).** Met de videokaart is de nacht een lichtkaart op de
+    halve maat van het doek (`js/gl.js`, `tekenLichtkaart`): de kleur van het uur (`T.lichtKleurVan` in `js/dag.js`, de
+    vier kleuren en `kleurUren` in de werkbank onder "De dag") en per lamp een warme plas die flakkert (`lichtenInBeeld`
+    en `T.LICHT_INSTELLINGEN` in `js/tekenen.js`, in de werkbank onder "Het licht": de kracht, de maat van een plas, de
+    kleur per soort lamp, het flakkeren). De wereld wordt ermee vermenigvuldigd, tot twee keer zo licht; een gat voor een
+    brandend raam blijft een gat. Op de kaart zijn het drie opdrachten, hoeveel lampen er ook branden. Zonder videokaart
+    is de nacht zoals hij was, met de lantaarn van de schout als gloed erbij. De lantaarn van de schout is ook spel
+    (`T.draagtLantaarn` in `js/zien.js`, `lantaarn` in `T.ZIEN_INSTELLINGEN`): buiten in het donker brandt hij, dan zien ze
+    je van zes tegels, en sluipen dooft hem; de spelregel "De lantaarn van de schout". Sluip je zonder lantaarn, dan geeft
+    het beeld nog een zwak licht om je heen (`ogen`), zodat je ziet waar je loopt.
+    Gevonden onderweg: zette een proef WebGL op de processor pas aan nadat het spel geladen was (`npm run schermen --
+    --tekenen met`), dan bleef het 2D: het spel had al besloten dat er geen videokaart was. Nu probeert het dan opnieuw.
+    De schermafdrukken van vraag 123 met `--tekenen met` tekenden dus ook met 2D. Nu WebGL er echt in zit, verschilt
+    overdag 22% van de pixels 1 of 2 op 255 (afronding van doorzichtigheid), en echt anders hooguit 0,04% (dichtbij, land 5
+    van de maker) en 0,22% op 0,5. Het echt andere valt binnen de maat van vraag 123 (C en E), maar de afronding niet: C
+    stond hooguit 0,1% van de pixels toe, ook voor 1 of 2 op 255. Zien doe je het niet. Vraag **D** (aan Marcel): telt
+    afronding tot 2 op 255 voortaan niet mee in de maat? Voorstel: ja; wat telt, is wat echt anders is.
+    **Marcel (4 okt): "D ja".** Afronding tot 2 op 255 telt niet mee in de maat van vraag 123, C; wat telt, is wat echt
+    anders is (`npm run schermen` telt het al apart).
+    **Het weer** (Marcel vroeg: "Hoort het weer hier ook bij?"). Het weer als spel is vraag 82, c (regen bij het zaaien,
+    droogte in de zomer, als status), na de wensen. Het beeld ervan past op de lichtkaart: een grijze of juist felle kleur
+    die met de kleur van het uur wordt vermenigvuldigd, mist als waas over de verte, regen en sneeuw als strepen en vlokjes
+    erbovenop (sneeuw op de grond en de daken vraagt nieuwe kunst). Voorstel van Claude: het beeld van het weer bouwen
+    samen met de regels ervan, niet los. **Marcel koos (4 okt): "A"**: zo, bij vraag 82, c. De plek waar het weer zijn
+    kleur inzet, is `tekenNacht` in `js/tekenen.js`: de kleur van het uur maal die van het weer, vóór de lichtkaart.
+    **En: "B graag, C mag later".** De proefplaat van B (schaduwen met de zon) komt nu; die van C (licht op de muren)
+    later.
+    **Plan voor de proefplaat van B (4 okt), Marcel: "A ja, B zoals je voorstelt, C ja".** Elk ding in de tekenlijst
+    werpt zijn silhouet scheef over de grond, met de zon mee; beginnen met de figuren en de bomen, en de sessie van de huizen
+    vragen om de schakelaar voor de ingebakken vloerschaduw (gevraagd op 4 okt); een huis klopt ongeveer, en dat is goed
+    genoeg voor de proef.
+    **De proefplaat is gebouwd (4 okt).** De spelregel "Schaduwen" op "Met de zon" (standaard "Ingebakken"; alleen met de
+    videokaart): `T.zonStand` in `js/dag.js` zegt de richting en de lengte (de zon op de middag 50 graden hoog, een schaduw
+    hooguit 2,5 keer zo lang als wat hem werpt), `tekenZonneschaduw` in `js/tekenen.js` tekent de tekenlijst nog een keer
+    als silhouet, en `js/gl.js` legt alle silhouetten op een masker en dat in één keer over de grond (`beginSchaduw`,
+    `eindSchaduw`), zodat twee schaduwen over elkaar niet donkerder worden. **De richting past bij de plaatjes:** op de
+    middag valt hij kort naar rechtsonder, net als de schaduw die erin gebakken is (licht van linksboven); 's ochtends
+    lang naar rechtsboven, 's avonds lang naar linksonder. Het graan op de akkers werpt geen schaduw. Wat nog ontbreekt:
+    de huizen en de bomen hebben hun ingebakken schaduw er nog bij (de schakelaar van de bouwer), en een schaduw valt
+    alleen op de grond, niet op een muur erachter.
+    Vragen: **A**, zo verder (de schakelaar, dan de huizen opnieuw door de bouwer), of niet? **B**, de lengte en de
+    donkerte (in de werkbank, "Het licht" en "De dag")?
+    **Marcel (4 okt): "A ja, B goed zo".** Dus verder: de bouwer krijgt een schakelaar voor de ingebakken vloerschaduw
+    (de huizen in `huis-sdf.cjs`, en de bomen in `bomen.cjs`: allebei in `gereedschap/pixelart/`, het werk van de sessie
+    van de huizen), dan gaan de huizen en de bomen zonder vloerschaduw opnieuw door de bouwer, en dan staat de spelregel
+    "Schaduwen" standaard op "Met de zon". De lengte en de donkerte blijven zoals ze zijn.
+    `npm run schermen` heeft drie beelden erbij: de dageraad, de zonsondergang en het plein 's avonds vóór bedtijd (om
+    20.8 uur slaapt het dorp al, en zijn de lantaarns uit). Hoe snel de lichtkaart is, zien we alleen op een echte
+    videokaart (hier tekent WebGL op de processor).
+    **Wat Marcel kan proberen:** een nieuw spel, en tegen de avond (`Spel.debug.uur(19)`) naar het plein: de lantaarn bij
+    de put, de ramen, de herberg. Druk `S` en kijk hoe je lantaarn uitgaat. Bij zonsopgang en zonsondergang kleurt het
+    dorp. De kleuren en de kracht staan in de werkbank (`O`), onder "De dag" en "Het licht".
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste

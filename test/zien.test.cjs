@@ -82,7 +82,7 @@ test('\'s avonds branden de lantaarns; overdag en na bedtijd niet', () => {
   assert.ok(lantaarns.length >= 2, 'een op het plein, bij de put, en die van de herberg');
   // De ramen van een huis waar iemand thuis is, branden ook (werklijst vraag 108, d); hier gaat het om de lantaarns.
   const herbergen = T.herbergenVan(S.dorp);
-  const bronnen = T.lichtBronnen(S.dorp).filter((b) => !b.ramenVan || herbergen.includes(b.ramenVan));
+  const bronnen = T.lichtBronnen(S.dorp).filter((b) => b.soort !== 'schout' && (!b.ramenVan || herbergen.includes(b.ramenVan)));
   for (const v of lantaarns) {
     const hier = bronnen.filter((b) => T.afstand(b, v) <= 1);
     assert.equal(hier.length, 1, `de lantaarn op ${v.x},${v.y} brandt, en één keer (die van de herberg is het licht van de herberg)`);
@@ -90,11 +90,13 @@ test('\'s avonds branden de lantaarns; overdag en na bedtijd niet', () => {
   S.kalender.dag = bijUur(WINTER, 12);
   assert.equal(T.lichtBronnen(S.dorp).length, 0, 'overdag brandt er niets');
   S.kalender.dag = bijUur(WINTER + 1, 2);
-  assert.ok(T.lichtBronnen(S.dorp).every((b) => b.ramenVan), 'na bedtijd alleen nog de herberg, als er iemand binnen zit');
+  // Behalve de lantaarn van de schout, als hij buiten is (vraag 125, C; de toets hieronder).
+  assert.ok(T.lichtBronnen(S.dorp).every((b) => b.ramenVan || b.soort === 'schout'), 'na bedtijd alleen nog de herberg, als er iemand binnen zit');
 });
 
 test('in het licht van een lantaarn zie je iemand ook in het donker van verder', () => {
   const S = gehucht(bijUur(WINTER, 19));
+  S.schout.lantaarnUit = true; // hij sluipt: alleen de lantaarns op de kaart (zijn eigen, in de toets hieronder)
   assert.equal(T.lichtVan(S.kalender.dag).nacht, 1, 'het is donker');
   assert.equal(T.zichtOp(S.dorp, { x: 36, y: RIJ }), IN.nacht, 'ver van elke lantaarn: twee tegels');
   assert.equal(T.zichtOp(S.dorp, { x: 35, y: 34 }), IN.bijLicht, 'naast de lantaarn bij de put: zes');
@@ -107,6 +109,40 @@ test('in het licht van een lantaarn zie je iemand ook in het donker van verder',
   zet(S.schout, 36, RIJ);
   zet(p.wezen, 41, RIJ);
   assert.ok(!T.getuigenVan(S.dorp, null).includes(p.wezen), 'in het donker niet');
+});
+
+test('de schout draagt in het donker buiten een lantaarn: dan zien ze hem van verder; sluipen dooft hem', () => {
+  const S = gehucht(bijUur(WINTER, 19));
+  T.ui.toonSluipen = () => {};
+  const p = vreemde(S);
+  alleen(S, p.wezen);
+  zet(S.schout, 36, RIJ);
+  zet(p.wezen, 41, RIJ);
+  assert.ok(T.draagtLantaarn(S.dorp), 'het is donker en hij is buiten');
+  const eigen = T.lichtBronnen(S.dorp).filter((b) => b.soort === 'schout');
+  assert.equal(eigen.length, 1, 'zijn lantaarn is een lichtbron');
+  assert.equal(T.zichtOp(S.dorp, { x: 36, y: RIJ }), IN.bijLicht, 'in zijn eigen licht: zes tegels');
+  assert.ok(T.getuigenVan(S.dorp, null).includes(p.wezen), 'met zijn lantaarn ziet de ander hem op vijf tegels');
+  T.wisselSluipen(S);
+  assert.ok(S.sluipen && !T.draagtLantaarn(S.dorp), 'sluipen dooft hem');
+  assert.equal(T.zichtOp(S.dorp, { x: 36, y: RIJ }), IN.nacht);
+  assert.ok(!T.getuigenVan(S.dorp, null).includes(p.wezen), 'in het donker niet');
+  T.wisselSluipen(S);
+  assert.ok(T.draagtLantaarn(S.dorp), 'gewoon lopen steekt hem weer aan');
+  // Alleen beeld (de spelregel): hij geeft licht, maar wie je ziet, hangt er niet van af.
+  T.ZIEN_INSTELLINGEN.lantaarn.zichtbaar = false;
+  try {
+    assert.equal(T.zichtOp(S.dorp, { x: 36, y: RIJ }), IN.nacht);
+    assert.equal(T.lichtBronnen(S.dorp).filter((b) => b.soort === 'schout').length, 1);
+  } finally {
+    T.ZIEN_INSTELLINGEN.lantaarn.zichtbaar = true;
+  }
+  // Overdag, of binnen, brandt hij niet.
+  S.schout.binnen = true;
+  assert.ok(!T.draagtLantaarn(S.dorp), 'binnen niet');
+  zet(S.schout, 36, RIJ);
+  S.kalender.dag = bijUur(WINTER, 12);
+  assert.ok(!T.draagtLantaarn(S.dorp), 'overdag niet');
 });
 
 test('wie de schout ziet: dichtbij genoeg, buiten, en niets ertussen', () => {

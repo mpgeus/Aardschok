@@ -25,6 +25,35 @@
     ookOpDeProcessor: false, // alleen voor de proeven zonder videokaart (js/gl.js)
   };
 
+  // Het licht met de videokaart (werklijst vraag 125, A; tekenNacht hieronder, js/gl.js): de kleur van het uur
+  // (T.lichtKleurVan in js/dag.js) en per lamp een warme plas licht erbij, en daarmee wordt de wereld vermenigvuldigd.
+  T.LICHT_INSTELLINGEN = {
+    // Hoeveel een lamp in het midden van zijn plas erbij doet: zijn sterkte (js/zien.js) maal dit. Boven 1 maakt een
+    // lamp een muur lichter dan overdag (tot twee keer).
+    kracht: 2.4,
+    // Hoe breed een plas is: de straal van de bron (tegels) maal dit, in pixels op zoom 1; en hoe hoog, tegen de breedte.
+    breedte: 44,
+    hoogte: 0.7,
+    // Het midden van de plas, zoveel pixels boven de voet van de lamp (op zoom 1).
+    boven: 12,
+    // De kleur van een lamp, per soort (T.lichtBronnen in js/zien.js); 255 is wit.
+    kleuren: {
+      lantaarn: { r: 255, g: 176, b: 92 },
+      herberg: { r: 255, g: 166, b: 80 },
+      huis: { r: 255, g: 192, b: 112 },
+      feest: { r: 255, g: 158, b: 76 },
+      schout: { r: 255, g: 196, b: 120 },
+    },
+    // Een vlam flakkert: zoveel van zijn sterkte op en neer, zo snel; een raam half zo veel.
+    flakkeren: 0.14,
+    flakkerSnelheid: 1,
+    // Zonder lantaarn (wie sluipt) zie je 's nachts nog net om je heen: een zwak licht zonder kleur (tegels, 0 tot 1).
+    ogen: { straal: 2.5, sterkte: 0.2 },
+    // De schaduwen van de zon (vraag 125, B, de proefplaat; de spelregel "Schaduwen"): hoe donker, en de kleur ervan.
+    zonneschaduw: false,
+    schaduw: { sterkte: 0.42, r: 18, g: 22, b: 44 },
+  };
+
   const metSprites = () => !!(T.sprites && T.sprites.aan) && !(T.debug && T.debug.vlakken);
   T.metSprites = metSprites; // ook voor js/doorkijk.js
 
@@ -386,11 +415,11 @@
               const frame = T.windBeeld(S.tijd, x, y);
               const achter = T.sprites.graanLaag(stadium, variant, 'achter', frame);
               const voor = T.sprites.graanLaag(stadium, variant, 'voor', frame);
-              lijst.push({ d: x + y, l: 1, punt: { x, y }, f: () => T.sprites.teken(ctx, achter, p.x, p.y, 1) });
-              lijst.push({ d: x + y, l: 2.5, punt: { x, y }, f: () => T.sprites.teken(ctx, voor, p.x, p.y, 1) });
+              lijst.push({ d: x + y, l: 1, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, achter, p.x, p.y, 1) });
+              lijst.push({ d: x + y, l: 2.5, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, voor, p.x, p.y, 1) });
             } else {
               const deel = T.sprites.graanTegel(stadium, variant);
-              lijst.push({ d: x + y, l: 1, punt: { x, y }, f: () => T.sprites.teken(ctx, deel, p.x, p.y, 1) });
+              lijst.push({ d: x + y, l: 1, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, deel, p.x, p.y, 1) });
             }
           }
         }
@@ -437,6 +466,7 @@
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
     // nacht licht wordt (brandendeRamen, hieronder).
     const ramen = brandendeRamen(S);
+    tekenZonneschaduw(ctx, S, lijst);
     for (const item of tekenVolgorde(lijst)) {
       item.f();
       for (const r of ramen) if (isTekeningVan(item, r.g)) ponsRamen(ctx, r);
@@ -469,14 +499,77 @@
   // 26 sep: "Omdat de camera de schout volgt, 'zie' je ook niet alles"). Rond zonsopgang en
   // zonsondergang een warme gloed. Alleen waar een kalender is (het gehucht). Spel.debug.geenNacht =
   // true zet hem uit, om te vergelijken.
+  //
+  // Met de videokaart (werklijst vraag 125, A) is het licht een lichtkaart: de kleur van het uur over het hele beeld,
+  // met per lamp een warme plas erbij, en daarmee wordt de wereld vermenigvuldigd (js/gl.js, tekenLichtkaart). Zonder
+  // videokaart blijft het de donkere laag van hiervoor (Marcel, 4 okt: "zonder videokaart wordt er bijna niet meer
+  // gespeeld"), met de lantaarn van de schout als gloed erbij.
   function tekenNacht(ctx, S, bw, bh) {
     if (!S.kalender || !T.lichtVan || (T.debug && T.debug.geenNacht)) return;
+    if (ctx.tekenLichtkaart) {
+      // Het weer (vraag 82, c; Marcel, 4 okt) zet hier straks zijn kleur in: de kleur van het uur maal die van het weer.
+      ctx.tekenLichtkaart(T.lichtKleurVan(S.kalender.dag), lichtenInBeeld(S, bw, bh));
+      return;
+    }
     ctx.save();
     // Alleen over wat er getekend is: waar een raam brandt, zit nog een gat in het doek (ponsRamen
     // hieronder), en daar valt de nacht niet in. Op de rest is dit hetzelfde als gewoon eroverheen.
     ctx.globalCompositeOperation = 'source-atop';
     tekenNachtLagen(ctx, S, bw, bh);
     ctx.restore();
+  }
+
+  // De schaduwen van de zon (werklijst vraag 125, B, de proefplaat; Marcel, 4 okt: "B graag"): alles wat in de tekenlijst
+  // staat, nog een keer, als silhouet scheef over de grond vanaf zijn onderrand (js/gl.js, beginSchaduw), in de richting
+  // en de lengte die de zon zegt (T.zonStand in js/dag.js). De silhouetten worden één vlak, zodat twee schaduwen over
+  // elkaar niet donkerder zijn, en dat gaat over de grond, onder alles wat erop staat. Alleen met de videokaart, buiten, en
+  // met de spelregel "Schaduwen" op "Met de zon". De huizen en de bomen hebben hun schaduw nog in het plaatje gebakken:
+  // daar zie je er twee, tot de bouwer hem los kan zetten (vraag 124).
+  function tekenZonneschaduw(ctx, S, lijst) {
+    const L = T.LICHT_INSTELLINGEN;
+    if (!L.zonneschaduw || !ctx.beginSchaduw || !S.kalender || !S.wereld.buiten || !metSprites()) return;
+    const z = T.zonStand(S.kalender.dag);
+    if (z.sterkte <= 0.01) return;
+    // Een richting over de grond, op het scherm: een tegel is 64 breed en 32 hoog, dus de y gaat half mee.
+    const sx = ((z.x - z.y) / Math.SQRT2) * z.lengte;
+    const sy = ((z.x + z.y) / (2 * Math.SQRT2)) * z.lengte;
+    ctx.beginSchaduw(sx, sy);
+    for (const item of lijst) if (!item.zonderSchaduw) item.f();
+    const k = L.schaduw;
+    ctx.eindSchaduw(k.sterkte * z.sterkte, [k.r / 255, k.g / 255, k.b / 255]);
+  }
+
+  // De lampen die nu branden, als plassen licht op het scherm: { x, y, rx, ry, k: [r, g, b] }, met k wat de lamp in het
+  // midden erbij doet (vraag 125, A). Een vlam flakkert, elk in zijn eigen ritme uit zijn plek, op de klok van het scherm.
+  // Zonder lantaarn krijgt de schout 's nachts een zwak licht zonder kleur, zodat je nog net ziet waar je loopt.
+  function lichtenInBeeld(S, bw, bh) {
+    const D = T.dorpHier(S);
+    const nacht = nachtVan(S);
+    if (!D || nacht <= 0.01) return [];
+    const L = T.LICHT_INSTELLINGEN;
+    const bronnen = T.lichtBronnen(D).slice();
+    const h = S.schout;
+    if (h && D.schout === h && !h.binnen && !h.dood && !T.draagtLantaarn(D) && !T.schoutIsWeg(D)) {
+      bronnen.push({ x: h.x, y: h.y, straal: L.ogen.straal, sterkte: L.ogen.sterkte, soort: 'ogen' });
+    }
+    const uit = [];
+    for (const b of bronnen) {
+      const q = T.naarScherm(b.x, b.y);
+      const x = Math.round(bw / 2) + (q.x - Math.round(S.camera.x)) * S.zoom;
+      const y = Math.round(bh / 2) + (q.y - L.boven - Math.round(S.camera.y)) * S.zoom;
+      const rx = Math.max(1, b.straal * L.breedte * S.zoom);
+      const ry = rx * L.hoogte;
+      if (x + rx < 0 || y + ry < 0 || x - rx > bw || y - ry > bh) continue;
+      const kleur = L.kleuren[b.soort] || { r: 255, g: 255, b: 255 };
+      // Flakkeren: twee golven door elkaar, met een fase uit de plek, zodat de lampen niet samen knipperen.
+      const fase = ((Math.sin(b.x * 12.9898 + b.y * 78.233) * 43758.5453) % 1) * Math.PI * 2;
+      const t = S.tijd * L.flakkerSnelheid;
+      const golf = 0.6 * Math.sin(t * 7.1 + fase) + 0.4 * Math.sin(t * 12.7 + fase * 2.3);
+      const flakker = b.soort === 'ogen' ? 0 : b.soort === 'huis' ? L.flakkeren / 2 : L.flakkeren;
+      const n = b.sterkte * L.kracht * nacht * (1 + flakker * golf);
+      uit.push({ x, y, rx, ry, k: [(kleur.r / 255) * n, (kleur.g / 255) * n, (kleur.b / 255) * n] });
+    }
+    return uit;
   }
   function tekenNachtLagen(ctx, S, bw, bh) {
     const l = T.lichtVan(S.kalender.dag);

@@ -297,6 +297,28 @@
           uitleg: 'Je weet niet wie er keek. Je hoort het pas als het rondverteld is: van de herbergierster, of als de soldaten het vinden.' },
       ],
     },
+    // De schaduwen van de zon (Marcel, 4 okt, werklijst vraag 125, B: "B graag"; een proefplaat; js/tekenen.js, js/gl.js).
+    {
+      id: 'schaduwen', naam: 'Schaduwen', standaard: 'ingebakken',
+      uitleg: 'Een proef: of de schaduwen met de zon meedraaien. Alleen met de videokaart.',
+      keuzes: [
+        { id: 'ingebakken', naam: 'Ingebakken', zet: { 'LICHT_INSTELLINGEN.zonneschaduw': false },
+          uitleg: 'Elke tekening heeft zijn eigen schaduw, altijd naar rechtsonder.' },
+        { id: 'zon', naam: 'Met de zon', zet: { 'LICHT_INSTELLINGEN.zonneschaduw': true },
+          uitleg: "Wat staat, werpt zijn silhouet over de grond: 's ochtends lang naar rechtsboven, 's middags kort, 's avonds lang naar linksonder. Huizen en bomen hebben hun ingebakken schaduw er nog bij." },
+      ],
+    },
+    // De lantaarn van de schout (Marcel, 4 okt, werklijst vraag 125, C: "ook spel. Voegt leuke elementen toe"; js/zien.js).
+    {
+      id: 'lantaarn', naam: 'De lantaarn van de schout', standaard: 'spel',
+      uitleg: "'s Avonds en 's nachts draagt de schout buiten een lantaarn. Sluipen (S) dooft hem.",
+      keuzes: [
+        { id: 'spel', naam: 'Ook spel', zet: { 'ZIEN_INSTELLINGEN.lantaarn.zichtbaar': true },
+          uitleg: 'Met je lantaarn aan zien ze je in het donker van ver. Wie iets wil verstoppen, sluipt.' },
+        { id: 'beeld', naam: 'Alleen beeld', zet: { 'ZIEN_INSTELLINGEN.lantaarn.zichtbaar': false },
+          uitleg: 'De lantaarn geeft licht, maar wie je ziet, hangt alleen af van de lantaarns en de herberg, zoals vóór 4 okt 2026.' },
+      ],
+    },
     // Het dorp bouwt zelf (Marcel, 28 sep, werklijst vraag 52: "C ja"; js/erven.js).
     {
       id: 'huizen', naam: 'Huizen', standaard: 'dorpBouwtZelf',
@@ -568,6 +590,7 @@
       },
     },
     { naam: 'De dag', blok: 'DAG_INSTELLINGEN' },
+    { naam: 'Het licht', blok: 'LICHT_INSTELLINGEN' },
     { naam: 'Gebouwen en bevolking', blok: 'GEBOUWEN_INSTELLINGEN' },
     { naam: 'De bewoners', blok: 'BEWONERS_INSTELLINGEN' },
     { naam: 'Lopen', blok: 'LOPEN_INSTELLINGEN' },

@@ -22,6 +22,7 @@
   let doek = null; // het canvas van WebGL
   let gl = null;
   let kapot = false; // geen WebGL, of de kaart liet het los
+  let geenKaart = false; // geen echte videokaart: zonder, tenzij ookOpDeProcessor later aangaat (de proeven)
   let ratio = 1;
 
   // ---------------------------------------------------------------- kleuren
@@ -73,6 +74,25 @@
       k.rgb *= k.a;
       gl_FragColor = k * vKleur.a;
     }`;
+  // De lichtkaart (werklijst vraag 125, A). Een plas licht: een ellips (aUv van -1 tot 1), in het midden zijn kleur,
+  // zacht naar de rand. Op de lichtkaart worden ze opgeteld, op de helft van hun waarde (zie FRAG_MAAL).
+  const FRAG_PLAS = `
+    precision highp float; varying vec2 vUv; varying vec4 vKleur;
+    void main() {
+      float t = 1.0 - min(dot(vUv, vUv), 1.0);
+      gl_FragColor = vec4(vKleur.rgb * t * t, 0.0);
+    }`;
+  // De wereld maal de lichtkaart. De lichtkaart staat op de helft (0,5 is "zoals de kunst is"), en de mengstand telt
+  // het product twee keer (DST_COLOR, SRC_COLOR), zodat een lamp een muur tot twee keer zo licht kan maken. De
+  // doorzichtigheid blijft: een gat voor een brandend raam blijft een gat, zoals met 'source-atop' (js/tekenen.js).
+  const FRAG_MAAL = `
+    precision highp float; uniform sampler2D uLicht; uniform vec2 uDoek;
+    void main() { gl_FragColor = vec4(texture2D(uLicht, gl_FragCoord.xy / uDoek).rgb, 0.0); }`;
+  // De schaduwen van de zon (vraag 125, B): het masker met alle silhouetten, als één vlak over de grond, in de kleur
+  // van de schaduw.
+  const FRAG_SCHADUW = `
+    precision highp float; uniform sampler2D uMasker; uniform vec2 uDoek; uniform vec4 uKleur;
+    void main() { gl_FragColor = uKleur * texture2D(uMasker, gl_FragCoord.xy / uDoek).a; }`;
 
   function maakProgramma(vert, frag) {
     const p = gl.createProgram();
@@ -99,6 +119,9 @@
 
   let beeldProg = null;
   let verloopProg = null;
+  let plasProg = null;
+  let maalProg = null;
+  let schaduwProg = null;
   let wit = null; // een textuur van één witte pixel, voor vlakken
   let maxTextuur = 4096;
   const PER_HOEK = 8; // x, y, u, v, r, g, b, a
@@ -123,6 +146,7 @@
     if (kapot) return false;
     if (gl) return true;
     if (typeof document === 'undefined') return false;
+    if (geenKaart && !T.TEKENEN_INSTELLINGEN.ookOpDeProcessor) return false;
     doek = document.createElement('canvas');
     doek.id = 'scherm-gl';
     // Zonder echte videokaart tekent WebGL op de processor (SwiftShader), en dat is vele malen trager dan het 2D-doek:
@@ -133,7 +157,10 @@
     };
     gl = doek.getContext('webgl', opties);
     if (!gl) {
-      kapot = true;
+      // Op de processor kan het wel, als een proef dat later vraagt (dan met een nieuw doek); anders is het geen WebGL.
+      if (opties.failIfMajorPerformanceCaveat) geenKaart = true;
+      else kapot = true;
+      doek = null;
       return false;
     }
     doek.addEventListener('webglcontextlost', (ev) => {
@@ -144,6 +171,9 @@
     try {
       beeldProg = maakProgramma(VERT, FRAG_BEELD);
       verloopProg = maakProgramma(VERT, FRAG_VERLOOP);
+      plasProg = maakProgramma(VERT, FRAG_PLAS);
+      maalProg = maakProgramma(VERT, FRAG_MAAL);
+      schaduwProg = maakProgramma(VERT, FRAG_SCHADUW);
     } catch (e) {
       console.error(e);
       kapot = true;
@@ -290,6 +320,91 @@
     G.telling.opdrachten++;
   }
 
+  // ---------------------------------------------------------------- de lichtkaart (vraag 125, A)
+  // Op de halve maat van het doek: licht is zacht, en zo kost hij een kwart.
+  let licht = null; // { fb, tex, b, h }
+  function lichtkaart() {
+    const b = Math.max(1, Math.ceil(doek.width / 2));
+    const h = Math.max(1, Math.ceil(doek.height / 2));
+    if (licht && licht.b === b && licht.h === h) return licht;
+    if (!licht) licht = { fb: gl.createFramebuffer(), tex: nieuweTextuur() };
+    gl.bindTexture(gl.TEXTURE_2D, licht.tex);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, b, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, licht.fb);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, licht.tex, 0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    Object.assign(licht, { b, h });
+    return licht;
+  }
+  // Tekent de lichtkaart (de kleur van het uur, [r, g, b], en de plassen { x, y, rx, ry, k }, in pixels op het doek)
+  // en vermenigvuldigt de wereld ermee.
+  function tekenLicht(kleur, plassen) {
+    const L = lichtkaart();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, L.fb);
+    gl.viewport(0, 0, L.b, L.h);
+    gl.clearColor(kleur[0] / 2, kleur[1] / 2, kleur[2] / 2, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    if (plassen.length) {
+      gl.useProgram(plasProg.p);
+      gl.uniform2f(plasProg.u.uMaat, doek.width, doek.height);
+      gl.blendFuncSeparate(gl.ONE, gl.ONE, gl.ZERO, gl.ONE);
+      const data = new Float32Array(plassen.length * 6 * PER_HOEK);
+      let i = 0;
+      const zet = (x, y, u, v, k) => {
+        data.set([x, y, u, v, k[0] / 2, k[1] / 2, k[2] / 2, 1], i);
+        i += PER_HOEK;
+      };
+      for (const p of plassen) {
+        const [x0, y0, x1, y1] = [p.x - p.rx, p.y - p.ry, p.x + p.rx, p.y + p.ry];
+        zet(x0, y0, -1, -1, p.k);
+        zet(x1, y0, 1, -1, p.k);
+        zet(x0, y1, -1, 1, p.k);
+        zet(x1, y0, 1, -1, p.k);
+        zet(x1, y1, 1, 1, p.k);
+        zet(x0, y1, -1, 1, p.k);
+      }
+      gl.bufferData(gl.ARRAY_BUFFER, data, gl.STREAM_DRAW);
+      gl.drawArrays(gl.TRIANGLES, 0, plassen.length * 6);
+      G.telling.opdrachten++;
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, doek.width, doek.height);
+    gl.useProgram(maalProg.p);
+    gl.uniform1i(maalProg.u.uLicht, 0);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, L.tex);
+    gl.blendFuncSeparate(gl.DST_COLOR, gl.SRC_COLOR, gl.ZERO, gl.ONE);
+    overHetDoek(maalProg);
+    G.telling.lampen = plassen.length;
+  }
+
+  // ---------------------------------------------------------------- de schaduwen van de zon (vraag 125, B)
+  // Een masker even groot als het doek: de silhouetten erop, en dan in één keer over de grond.
+  let masker = null; // { fb, tex, b, h }
+  function maskerVan() {
+    if (masker && masker.b === doek.width && masker.h === doek.height) return masker;
+    if (!masker) masker = { fb: gl.createFramebuffer(), tex: nieuweTextuur() };
+    gl.bindTexture(gl.TEXTURE_2D, masker.tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, doek.width, doek.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, masker.fb);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, masker.tex, 0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    Object.assign(masker, { b: doek.width, h: doek.height });
+    return masker;
+  }
+  // Een vlak over het hele doek met een programma dat zijn kleur uit de plek op het scherm haalt.
+  function overHetDoek(prog) {
+    const w = doek.width;
+    const h = doek.height;
+    gl.uniform2f(prog.u.uMaat, w, h);
+    gl.uniform2f(prog.u.uDoek, w, h);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 0, 0, 0, 0, 0, 0, 1, w, 0, 0, 0, 0, 0, 0, 1, 0, h, 0, 0, 0, 0, 0, 1, w, 0, 0, 0, 0, 0, 0, 1, w, h, 0, 0, 0, 0, 0, 1, 0, h, 0, 0, 0, 0, 0, 1]), gl.STREAM_DRAW);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    G.telling.opdrachten++;
+  }
+
   // ---------------------------------------------------------------- het kladdoek
   let klad = null; // { canvas, ctx }
   let kladVak = null; // [x0, y0, x1, y1] in pixels waarop getekend werd, of null
@@ -347,6 +462,7 @@
       this.stapel = [];
       this.pad = []; // deelpaden: { p: [x, y, ...] in pixels, bol: true als het een ellips of cirkel is }
       this.padRond = false; // het pad heeft bochten die het snelle pad niet kent
+      this.schaduw = null; // { sx, sy } tussen beginSchaduw en eindSchaduw: alleen plaatjes, als silhouet op het masker
     }
     get canvas() {
       return doek;
@@ -485,6 +601,26 @@
       if (a.length === 2) [dx, dy, dw, dh] = [a[0], a[1], sw, sh];
       else if (a.length === 4) [dx, dy, dw, dh] = a;
       else [sx, sy, sw, sh, dx, dy, dw, dh] = a;
+      if (this.schaduw) {
+        // Het silhouet scheef over de grond: de onderrand blijft staan, een punt zo hoog erboven komt zo ver in de richting
+        // van de schaduw te liggen.
+        const t = textuurVan(bron);
+        if (!t) return;
+        const m = this.st.m;
+        const yb = dy + dh;
+        const { sx: rx, sy: ry } = this.schaduw;
+        const p = [];
+        for (const [x, y] of [[dx, dy], [dx + dw, dy], [dx, yb], [dx + dw, yb]]) {
+          const h = yb - y;
+          const gx = x + h * rx;
+          const gy = yb + h * ry;
+          p.push(m[0] * gx + m[2] * gy + m[4], m[1] * gx + m[3] * gy + m[5]);
+        }
+        const al = this.st.alpha;
+        plekVoor(t.tex, 'source-over', 6);
+        vierhoek(p, [sx / t.b, sy / t.h, (sx + sw) / t.b, (sy + sh) / t.h], [0, 0, 0, al]);
+        return;
+      }
       if (this.snel()) {
         if (kladVak) legKladAf();
         const t = textuurVan(bron);
@@ -504,6 +640,7 @@
     }
     // ---- vlakken
     fillRect(x, y, b, h) {
+      if (this.schaduw) return;
       const v = this.st.vul;
       const verloop = typeof v === 'object' ? verlopen.get(v) : null;
       if (this.snel() && (typeof v === 'string' || verloop)) {
@@ -527,6 +664,7 @@
       this.opKlad(this.vakVan(x, y, x + b, y + h), (k) => k.fillRect(x, y, b, h));
     }
     clearRect(x, y, b, h) {
+      if (this.schaduw) return;
       if (!this.st.clip) {
         if (kladVak) legKladAf();
         const m = this.st.m;
@@ -622,6 +760,7 @@
       return [x0 - r, y0 - r, x1 + r, y1 + r];
     }
     fill(...a) {
+      if (this.schaduw) return;
       const v = this.st.vul;
       const verloop = typeof v === 'object' ? verlopen.get(v) : null;
       if (!a.length && this.snel() && !this.padRond && (typeof v === 'string' || verloop) && this.pad.length && this.pad.every(bolPad)) {
@@ -648,6 +787,7 @@
       this.opKlad(this.padVak(0), (k) => k.fill(...a));
     }
     stroke(...a) {
+      if (this.schaduw) return;
       this.opKlad(this.padVak(this.k.lineWidth * Math.hypot(this.st.m[0], this.st.m[1])), (k) => k.stroke(...a));
     }
     clip(...a) {
@@ -661,14 +801,51 @@
       return this.vakVan(x - w, y - grootte * 1.5, x + w, y + grootte * 1.5, 4);
     }
     fillText(t, x, y, ...a) {
+      if (this.schaduw) return;
       this.opKlad(this.tekstVak(t, x, y), (k) => k.fillText(t, x, y, ...a));
     }
     strokeText(t, x, y, ...a) {
+      if (this.schaduw) return;
       this.opKlad(this.tekstVak(t, x, y), (k) => k.strokeText(t, x, y, ...a));
     }
     putImageData(...a) {
+      if (this.schaduw) return;
       legRijAf();
       this.opKlad(null, (k) => k.putImageData(...a));
+    }
+    // Het licht (vraag 125, A; tekenNacht in js/tekenen.js): de kleur van het uur, [r, g, b] van 0 tot 1, en de plassen
+    // licht { x, y, rx, ry, k } in de vlakte van nu. Wat al klaarstaat, eerst; overdag zonder lampen doet het niets.
+    tekenLichtkaart(kleur, plassen) {
+      if (!plassen.length && kleur.every((c) => c > 0.999)) return;
+      legKladAf();
+      legRijAf();
+      const m = this.st.m;
+      const s = Math.hypot(m[0], m[1]);
+      tekenLicht(kleur, plassen.map((p) => ({ x: m[0] * p.x + m[2] * p.y + m[4], y: m[1] * p.x + m[3] * p.y + m[5], rx: p.rx * s, ry: p.ry * s, k: p.k })));
+    }
+    // De schaduwen van de zon (vraag 125, B; tekenZonneschaduw in js/tekenen.js): tussen beginSchaduw en eindSchaduw
+    // tekent alleen drawImage, als silhouet op het masker, scheef met (sx, sy) per pixel hoogte in de vlakte van het
+    // plaatje. eindSchaduw legt het masker in één keer over wat er al staat, met deze dekking en kleur ([r, g, b]).
+    beginSchaduw(sx, sy) {
+      legKladAf();
+      legRijAf();
+      const M = maskerVan();
+      gl.bindFramebuffer(gl.FRAMEBUFFER, M.fb);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      this.schaduw = { sx, sy };
+    }
+    eindSchaduw(dekking, kleur) {
+      legRijAf();
+      this.schaduw = null;
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.useProgram(schaduwProg.p);
+      gl.uniform1i(schaduwProg.u.uMasker, 0);
+      gl.uniform4f(schaduwProg.u.uKleur, kleur[0] * dekking, kleur[1] * dekking, kleur[2] * dekking, dekking);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, maskerVan().tex);
+      MENG['source-over'](gl);
+      overHetDoek(schaduwProg);
     }
     // Eén pixel teruglezen (het gereedschap van het meten): alles wat klaarstaat, eerst tekenen.
     getImageData(x, y, b, h) {
@@ -716,7 +893,7 @@
 
   // ---------------------------------------------------------------- een beeld
   let hetDoek = null;
-  G.telling = { plaatjes: 0, vormen: 0, opdrachten: 0, klad: 0, kladPixels: 0, opgestuurd: 0 };
+  G.telling = { plaatjes: 0, vormen: 0, opdrachten: 0, klad: 0, kladPixels: 0, opgestuurd: 0, lampen: 0 };
   // Het doek even groot als dat van de browser (formaat in js/main.js), met dezelfde ratio.
   G.zetMaat = function (b, h, r) {
     if (!start()) return;
@@ -730,6 +907,7 @@
     if (!hetDoek) hetDoek = new Doek();
     hetDoek.st = { m: [ratio, 0, 0, ratio, 0, 0], alpha: 1, meng: 'source-over', filter: 'none', helder: 1, vul: '#000', clip: false };
     hetDoek.stapel = [];
+    hetDoek.schaduw = null;
     const k = kladdoek().ctx;
     k.setTransform(1, 0, 0, 1, 0, 0);
     k.clearRect(0, 0, klad.canvas.width, klad.canvas.height);

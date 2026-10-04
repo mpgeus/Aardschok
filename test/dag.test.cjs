@@ -110,6 +110,38 @@ test('het licht: helder als de zon op is, donker in de nacht, en daartussen de s
   assert.equal(T.lichtVan(bijUur(ZOMER, 12)).gloed, 0);
 });
 
+test('de zon voor de schaduwen: op de middag kort naar rechtsonder, \'s ochtends en \'s avonds lang naar opzij, \'s nachts geen', () => {
+  const zon = T.zonVan(ZOMER);
+  const z = (uur) => T.zonStand(bijUur(ZOMER, uur));
+  const midden = z((zon.op + zon.onder) / 2);
+  assert.ok(Math.abs(midden.x - 1) < 1e-9 && Math.abs(midden.y) < 1e-9, 'op de middag naar x+, zoals het licht van linksboven');
+  assert.ok(midden.lengte < 1 && midden.sterkte === 1);
+  const ochtend = z(zon.op + 1);
+  const avond = z(zon.onder - 1);
+  assert.ok(ochtend.y < -0.5 && avond.y > 0.5, "'s ochtends naar y-, 's avonds naar y+");
+  assert.ok(ochtend.lengte > midden.lengte && ochtend.lengte <= IN.schaduwLangst, 'lager is langer, tot het langst');
+  assert.equal(z(0).sterkte, 0, "'s nachts geen");
+});
+
+test('de kleur van het uur: roze bij het opkomen, neutraal overdag, oranje bij het ondergaan, blauw in de nacht', () => {
+  const zon = T.zonVan(ZOMER);
+  const k = (uur) => T.lichtKleurVan(bijUur(ZOMER, uur));
+  const K = IN.lichtKleuren;
+  const is = (c, v) => c.every((x, n) => Math.abs(x - [v.r, v.g, v.b][n] / 255) < 1e-9);
+  assert.ok(is(k(12), K.dag), 'op de middag de kunst zoals hij is');
+  assert.ok(is(k(0), K.nacht), "'s nachts blauw");
+  assert.ok(is(k(zon.op), K.dageraad), 'bij zonsopgang roze');
+  assert.ok(is(k(zon.onder), K.avondrood), 'bij zonsondergang oranje');
+  const [r, g, b] = k(zon.onder + IN.schemerUren / 2);
+  assert.ok(b > K.avondrood.b / 255 && b < K.nacht.b / 255 && r < 1, `in de schemering ertussen (${r}, ${g}, ${b})`);
+  // Vloeiend: geen sprong van meer dan een paar procent per kwartier.
+  for (let u = 0; u < 24; u += 0.25) {
+    const a = k(u);
+    const c = k(u + 0.25);
+    assert.ok(a.every((x, n) => Math.abs(x - c[n]) < 0.2), `geen sprong om ${u} uur`);
+  }
+});
+
 // ---------------------------------------------------------------------------------------------
 // Het ritme van de boeren
 // ---------------------------------------------------------------------------------------------

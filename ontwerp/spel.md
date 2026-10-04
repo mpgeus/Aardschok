@@ -2507,6 +2507,11 @@ Wat het vraagt:
 - **Het licht in het dorp** (`T.lichtBronnen`): de herberg, met zijn lantaarn en zijn ramen, en een
   lantaarn bij de put, voor de deur van de schout, die 's avonds brandt tot bedtijd (D). Een tweede bij de
   bank viel vanuit de camera achter de hut weg. Het spel tekent er de gloed van in de nacht.
+- **De lantaarn van de schout** (4 okt, vraag 125, C; Marcel: "ook spel. Voegt leuke elementen toe"): 's avonds en
+  's nachts draagt de schout buiten een lantaarn (`T.draagtLantaarn`, `T.ZIEN_INSTELLINGEN.lantaarn`). Hij staat in zijn
+  eigen licht, dus ze zien hem van zes tegels in plaats van twee. Sluipen (`S`) dooft hem: dan is hij in het donker,
+  trager, en ziet hij zelf ook minder. Wie iets wil verstoppen, sluipt dus. De spelregel "De lantaarn van de schout" op
+  "Alleen beeld" zet het zien terug zoals het was.
 - **Een getuige** (A, B): zet je iets weg of haal je iets terug terwijl iemand je ziet, dan krijgt hij
   een oogje boven zijn hoofd, zegt het bericht wie het was ("Klaas zag je 10 graan in je eigen kelder
   zetten"), en onthoudt de plek het (`g.getuigen`: wie, wanneer, wat), voor stuk 2. Zag niemand het, dan

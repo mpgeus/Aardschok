@@ -40,6 +40,11 @@
     // klein licht bij de deur, zo ver en zo fel.
     huisStraal: 1.5,
     huisSterkte: 0.22,
+    // De lantaarn van de schout (werklijst vraag 125, C; Marcel, 4 okt: "ook spel. Voegt leuke elementen toe"): buiten,
+    // vanaf zo donker (T.lichtVan(dag).nacht), brandt hij, zo ver en zo fel. Wie in zijn eigen licht staat, zie je van
+    // bijLicht tegels (`zichtbaar`; de spelregel "De lantaarn van de schout" zet het uit, dan is het alleen beeld).
+    // Sluipen dooft hem (T.wisselSluipen in js/verkennen.js).
+    lantaarn: { vanaf: 0.4, straal: 3, sterkte: 0.5, zichtbaar: true },
     // Zo lang staat het oogje boven een getuige, in seconden op het scherm.
     oogjeTijd: 5,
     // Zie je meteen wie je ziet (het venster, het oogje en het bericht), of hoor je het pas later, als het
@@ -50,23 +55,40 @@
 
   // Het licht in het dorp: de herberg, met zijn eigen lantaarn en zijn ramen (T.herbergLicht), elke
   // andere lantaarn op de kaart, die 's avonds brandt, en op een feest het plein (T.feestLicht, js/feesten.js). Wie ze aansteekt, komt later (de koster; spel.md,
-  // "lichtbronnen in het dorp"). Geeft een lijst { x, y, straal, sterkte } (tegels, 0 tot 1), bij de
-  // herberg ook met ramenVan en schimmen.
+  // "lichtbronnen in het dorp"). En de lantaarn van de schout, als hij er een draagt (T.draagtLantaarn, vraag 125, C).
+  // Geeft een lijst { x, y, straal, sterkte, soort } (tegels, 0 tot 1; soort is 'herberg', 'lantaarn', 'feest', 'huis'
+  // of 'schout', voor de kleur in js/tekenen.js), bij de herberg en de huizen ook met ramenVan en schimmen.
   T.lichtBronnen = function (D) {
     const w = D.wereld;
-    const herberg = T.herbergLicht(D);
-    if (!w || !D.kalender || !T.dagdeelVan) return herberg;
+    const herberg = T.herbergLicht(D).map((b) => ({ ...b, soort: 'herberg' }));
+    const schout = schoutLicht(D);
+    if (!w || !D.kalender || !T.dagdeelVan) return herberg.concat(schout);
     const deel = T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag));
     const huizen = huizenLicht(D, deel);
-    if (deel !== 'avond') return herberg.concat(huizen);
+    if (deel !== 'avond') return herberg.concat(huizen, schout);
     // De lantaarn naast de deur van de herberg is het licht van de herberg al.
     const vanDeHerberg = (v) => herberg.some((h) => T.afstand(h, v) <= 1);
     const lantaarns = w.voorwerpen
       .filter((v) => v.soort === 'lantaarn' && !vanDeHerberg(v))
-      .map((v) => ({ x: v.x, y: v.y, straal: IN().lantaarnStraal, sterkte: IN().lantaarnSterkte }));
+      .map((v) => ({ x: v.x, y: v.y, straal: IN().lantaarnStraal, sterkte: IN().lantaarnSterkte, soort: 'lantaarn' }));
     // En op een feest het licht op het plein (js/feesten.js).
-    return herberg.concat(lantaarns, T.feestLicht(D), huizen);
+    const feest = T.feestLicht(D).map((b) => ({ ...b, soort: 'feest' }));
+    return herberg.concat(lantaarns, feest, huizen, schout);
   };
+
+  // Draagt de schout van dit dorp nu een brandende lantaarn? Buiten, op de kaart van zijn dorp, als het donker genoeg
+  // is, en niet als hij hem doofde (sluipen, e.lantaarnUit).
+  T.draagtLantaarn = function (D) {
+    const h = D.schout;
+    if (!h || h.dood || h.binnen || h.lantaarnUit || !D.kalender || T.schoutIsWeg(D)) return false;
+    return T.lichtVan(D.kalender.dag).nacht >= IN().lantaarn.vanaf;
+  };
+  // Zijn licht gaat met hem mee, op zijn plek zoals hij loopt (niet per tegel), met soort 'schout'.
+  function schoutLicht(D) {
+    if (!T.draagtLantaarn(D)) return [];
+    const L = IN().lantaarn;
+    return [{ x: D.schout.x, y: D.schout.y, straal: L.straal, sterkte: L.sterkte, soort: 'schout' }];
+  }
 
   // De ramen van de huizen (werklijst vraag 108, d; Marcel, 3 okt: "Lantaarns voor in de avond etc."): 's avonds en 's
   // morgens vroeg brandt er licht in een huis waar iemand thuis is, binnen of op zijn erf, en niet als ze allemaal in de
@@ -93,7 +115,7 @@
         : T.afstand({ x: e.tx, y: e.ty }, deur) <= straal;
       if (!thuis) continue;
       huis.aan = true;
-      uit.push({ x: deur.x, y: deur.y, straal: IN().huisStraal, sterkte: IN().huisSterkte, ramenVan: g, schimmen: 0 });
+      uit.push({ x: deur.x, y: deur.y, straal: IN().huisStraal, sterkte: IN().huisSterkte, ramenVan: g, schimmen: 0, soort: 'huis' });
     }
     return uit;
   }
@@ -105,6 +127,7 @@
     const nacht = D.kalender ? T.lichtVan(D.kalender.dag).nacht : 0;
     let ver = I.dag + (I.nacht - I.dag) * nacht;
     for (const b of T.lichtBronnen(D)) {
+      if (b.soort === 'schout' && !I.lantaarn.zichtbaar) continue; // alleen beeld (de spelregel)
       const dx = plek.x - b.x;
       const dy = plek.y - b.y;
       if (dx * dx + dy * dy <= b.straal * b.straal) ver = Math.max(ver, I.bijLicht);

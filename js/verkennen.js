@@ -436,8 +436,13 @@
   T.wisselSluipen = function (S) {
     if (S.modus !== 'verkennen') return;
     S.sluipen = !S.sluipen;
+    // Wie sluipt, dooft zijn lantaarn (js/zien.js, T.draagtLantaarn; vraag 125, C): in het donker zien ze je dan
+    // niet van ver, maar je ziet zelf ook minder. Wie weer gewoon loopt, steekt hem weer aan.
+    if (S.schout) S.schout.lantaarnUit = S.sluipen;
     T.ui.toonSluipen(S.sluipen);
-    T.ui.bericht(S.sluipen ? 'Je sluipt: trager, maar minder snel opgemerkt.' : 'Je loopt weer gewoon.');
+    const donker = S.kalender && T.lichtVan(S.kalender.dag).nacht >= T.ZIEN_INSTELLINGEN.lantaarn.vanaf;
+    if (S.sluipen) T.ui.bericht(donker ? 'Je sluipt en dooft je lantaarn: trager, en in het donker zien ze je niet.' : 'Je sluipt: trager, maar minder snel opgemerkt.');
+    else T.ui.bericht(donker ? 'Je loopt weer gewoon, met je lantaarn aan.' : 'Je loopt weer gewoon.');
   };
 
   // Mag deze stap nog? Tijdens het rondlopen kan er intussen een monster in de weg staan.
