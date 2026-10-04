@@ -4124,6 +4124,20 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel vroeg erbij (4 okt): "Kunnen we een andere agent starten die alvast het webgl deel uitvoert?"** Dus loopt
     vraag 123 (tekenen met WebGL) sinds 4 okt in een eigen sessie naast de huizen, op een eigen branch, met een eigen
     plan voor Marcel; die sessie blijft uit de bestanden van de huizen, en schrijft onder vraag 123.
+    **Marcel (4 okt): "A ja B ja C ik wil overal bouwfase voor. Dat maakt het toch wel leuker. Kost meer tijd. Maar is
+    eenmalig toch? D ja E ja".** Dus: de stijl wit met hut 1, 3 en 4, huis 1, 3 en 6 (en steen 1, 3 en 6) en boerderij 1
+    en 4; elke stijl een eigen drietal vormen (bij 2b); bouwfasen voor alle 108 tekeningen; de maker zet de huizen rondom
+    het plein met hun deur ernaartoe; en de toets die soms faalt, krijgt een vast zaad. Het renderen is eenmalig: rekentijd
+    van de machine, en alleen opnieuw als de huizenbouwer zo verandert dat alle huizen anders worden. Wat blijft, is de
+    opslagplaats: met alle bouwfasen zo'n 18 MB per stijl, samen zo'n 75 MB. Nog open, **G**: met "overal" ook een huis
+    dat doorgroeit? Dat gebeurt nu in één nacht, zonder fases (`groeiGebouw` in `js/behoeften.js`). Voorstel van Claude:
+    het nieuwe huis rijst op in de laatste drie fases (muren met steigers, het dakgebinte, half gedekt) over de bouwtijd
+    van zijn soort, en de mensen blijven erin wonen.
+    **Marcel vroeg erbij: "ik wil ook de camera kunnen draaien. Is dat mogelijk"**, aan de sessie van WebGL gegeven (die
+    schrijft het als vraag 124). Voor de huizen: de vier standen zijn nu gespiegeld in de diagonaal (`nok: 'y'`), niet
+    gedraaid, en de bouwer vult alleen de muren in die je ziet. Voor een draaiende camera moet een huis van vier kanten
+    hetzelfde huis zijn, en dan zijn de vier standen meteen de vier aanzichten. Voor wit maakt dat weinig uit (opnieuw
+    renderen is een uur rekenen); vóór 2b moet het besluit er zijn.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
