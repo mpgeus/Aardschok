@@ -102,7 +102,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   **time-slicing** (de zoektochten over een paar beelden spreiden: tegen de spits 's ochtends en 's avonds), **HPA\***
   (eerst een pad over grote stukken, zoals de wijken, dan een klein stuk A*) en **group steering** (alleen de leider
   zoekt een pad, de rest volgt hem: de militie met de schout, de soldaten van de heer, de rovers). Wat Claude erin ziet,
-  staat bij vraag 88. Op 4 okt gaf Marcel de uitgebreide lijst (vraag 119): flow fields of Dijkstra-kaarten (één
+  staat bij vraag 88. Op 4 okt gaf Marcel de uitgebreide lijst (vraag 119), die begint met de vraag of duizend mensen
+  naar verschillende doelen gaan (dan duizend zoektochten, verdeeld over de beelden, met HPA\*) of naar hetzelfde (dan
+  één): flow fields of Dijkstra-kaarten (één
   berekening voor duizend mensen naar hetzelfde doel), time-slicing (15 à 20 zoektochten per beeld, een kleine
   vertraging voor wie vertrekt), hiërarchisch A* (eerst tussen kamers of stukken van 10 bij 10, dan lokaal; ook in meer
   lagen: blokken, dorpen, steden, landen), sturen en elkaar ontwijken (A* alleen voor een grove route over wat
