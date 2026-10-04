@@ -4008,6 +4008,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **Tegels samenvoegen** (2×2, 4×4): voor de grove lagen van HPA\* en voor wat ver weg als getallen loopt.
     - **Vooraf berekende snelwegen:** op het eiland over de wegen en kruispunten; HPA\* onthoudt de wegen tussen de
       ingangen van een stuk al, en dat is hetzelfde idee. Pas als dat niet genoeg is.
+    **Twee soorten lopen** (het begin van Marcels lijst: "All 1,000 moving to different targets" of "to the same
+    target"): het dorp heeft ze allebei. In de spits 's ochtends en 's avonds gaat iedereen naar zijn eigen doel (zijn
+    werk, zijn deur): daar helpen D (dezelfde weg elke dag, onthouden), B en op het eiland C. Op andere momenten gaan veel
+    mensen naar hetzelfde (de herberg 's avonds, de put, de kerk, het plein bij een feest, de soldaten naar de poort, de
+    rovers naar een akker): daar helpt A, één berekening voor iedereen.
     **Voorstel voor wanneer:** D, A en B met de mensen aan het werk (vraag 111, 115, 116 en 118), want dan lopen er veel
     meer mensen naar akkers en het bos, en het is ook de weg naar de 5000 (vraag 79). C, Jump Point Search, het
     samenvoegen en de snelwegen met het eiland (vraag 117).
