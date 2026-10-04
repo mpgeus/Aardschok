@@ -74,6 +74,20 @@
       k.rgb *= k.a;
       gl_FragColor = k * vKleur.a;
     }`;
+  // De lichtkaart (werklijst vraag 125, A). Een plas licht: een ellips (aUv van -1 tot 1), in het midden zijn kleur,
+  // zacht naar de rand. Op de lichtkaart worden ze opgeteld, op de helft van hun waarde (zie FRAG_MAAL).
+  const FRAG_PLAS = `
+    precision highp float; varying vec2 vUv; varying vec4 vKleur;
+    void main() {
+      float t = 1.0 - min(dot(vUv, vUv), 1.0);
+      gl_FragColor = vec4(vKleur.rgb * t * t, 0.0);
+    }`;
+  // De wereld maal de lichtkaart. De lichtkaart staat op de helft (0,5 is "zoals de kunst is"), en de mengstand telt
+  // het product twee keer (DST_COLOR, SRC_COLOR), zodat een lamp een muur tot twee keer zo licht kan maken. De
+  // doorzichtigheid blijft: een gat voor een brandend raam blijft een gat, zoals met 'source-atop' (js/tekenen.js).
+  const FRAG_MAAL = `
+    precision highp float; uniform sampler2D uLicht; uniform vec2 uDoek;
+    void main() { gl_FragColor = vec4(texture2D(uLicht, gl_FragCoord.xy / uDoek).rgb, 0.0); }`;
 
   function maakProgramma(vert, frag) {
     const p = gl.createProgram();
@@ -100,6 +114,8 @@
 
   let beeldProg = null;
   let verloopProg = null;
+  let plasProg = null;
+  let maalProg = null;
   let wit = null; // een textuur van één witte pixel, voor vlakken
   let maxTextuur = 4096;
   const PER_HOEK = 8; // x, y, u, v, r, g, b, a
@@ -149,6 +165,8 @@
     try {
       beeldProg = maakProgramma(VERT, FRAG_BEELD);
       verloopProg = maakProgramma(VERT, FRAG_VERLOOP);
+      plasProg = maakProgramma(VERT, FRAG_PLAS);
+      maalProg = maakProgramma(VERT, FRAG_MAAL);
     } catch (e) {
       console.error(e);
       kapot = true;
@@ -293,6 +311,72 @@
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.STREAM_DRAW);
     gl.drawArrays(gl.TRIANGLES, 0, punten.length / 2);
     G.telling.opdrachten++;
+  }
+
+  // ---------------------------------------------------------------- de lichtkaart (vraag 125, A)
+  // Op de halve maat van het doek: licht is zacht, en zo kost hij een kwart.
+  let licht = null; // { fb, tex, b, h }
+  function lichtkaart() {
+    const b = Math.max(1, Math.ceil(doek.width / 2));
+    const h = Math.max(1, Math.ceil(doek.height / 2));
+    if (licht && licht.b === b && licht.h === h) return licht;
+    if (!licht) licht = { fb: gl.createFramebuffer(), tex: nieuweTextuur() };
+    gl.bindTexture(gl.TEXTURE_2D, licht.tex);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, b, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, licht.fb);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, licht.tex, 0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    Object.assign(licht, { b, h });
+    return licht;
+  }
+  // Tekent de lichtkaart (de kleur van het uur, [r, g, b], en de plassen { x, y, rx, ry, k }, in pixels op het doek)
+  // en vermenigvuldigt de wereld ermee.
+  function tekenLicht(kleur, plassen) {
+    const L = lichtkaart();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, L.fb);
+    gl.viewport(0, 0, L.b, L.h);
+    gl.clearColor(kleur[0] / 2, kleur[1] / 2, kleur[2] / 2, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    if (plassen.length) {
+      gl.useProgram(plasProg.p);
+      gl.uniform2f(plasProg.u.uMaat, doek.width, doek.height);
+      gl.blendFuncSeparate(gl.ONE, gl.ONE, gl.ZERO, gl.ONE);
+      const data = new Float32Array(plassen.length * 6 * PER_HOEK);
+      let i = 0;
+      const zet = (x, y, u, v, k) => {
+        data.set([x, y, u, v, k[0] / 2, k[1] / 2, k[2] / 2, 1], i);
+        i += PER_HOEK;
+      };
+      for (const p of plassen) {
+        const [x0, y0, x1, y1] = [p.x - p.rx, p.y - p.ry, p.x + p.rx, p.y + p.ry];
+        zet(x0, y0, -1, -1, p.k);
+        zet(x1, y0, 1, -1, p.k);
+        zet(x0, y1, -1, 1, p.k);
+        zet(x1, y0, 1, -1, p.k);
+        zet(x1, y1, 1, 1, p.k);
+        zet(x0, y1, -1, 1, p.k);
+      }
+      gl.bufferData(gl.ARRAY_BUFFER, data, gl.STREAM_DRAW);
+      gl.drawArrays(gl.TRIANGLES, 0, plassen.length * 6);
+      G.telling.opdrachten++;
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, doek.width, doek.height);
+    gl.useProgram(maalProg.p);
+    gl.uniform2f(maalProg.u.uMaat, doek.width, doek.height);
+    gl.uniform2f(maalProg.u.uDoek, doek.width, doek.height);
+    gl.uniform1i(maalProg.u.uLicht, 0);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, L.tex);
+    gl.blendFuncSeparate(gl.DST_COLOR, gl.SRC_COLOR, gl.ZERO, gl.ONE);
+    const w = doek.width;
+    const h = doek.height;
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 0, 0, 0, 0, 0, 0, 1, w, 0, 0, 0, 0, 0, 0, 1, 0, h, 0, 0, 0, 0, 0, 1, w, 0, 0, 0, 0, 0, 0, 1, w, h, 0, 0, 0, 0, 0, 1, 0, h, 0, 0, 0, 0, 0, 1]), gl.STREAM_DRAW);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    G.telling.opdrachten++;
+    G.telling.lampen = plassen.length;
   }
 
   // ---------------------------------------------------------------- het kladdoek
@@ -675,6 +759,16 @@
       legRijAf();
       this.opKlad(null, (k) => k.putImageData(...a));
     }
+    // Het licht (vraag 125, A; tekenNacht in js/tekenen.js): de kleur van het uur, [r, g, b] van 0 tot 1, en de plassen
+    // licht { x, y, rx, ry, k } in de vlakte van nu. Wat al klaarstaat, eerst; overdag zonder lampen doet het niets.
+    tekenLichtkaart(kleur, plassen) {
+      if (!plassen.length && kleur.every((c) => c > 0.999)) return;
+      legKladAf();
+      legRijAf();
+      const m = this.st.m;
+      const s = Math.hypot(m[0], m[1]);
+      tekenLicht(kleur, plassen.map((p) => ({ x: m[0] * p.x + m[2] * p.y + m[4], y: m[1] * p.x + m[3] * p.y + m[5], rx: p.rx * s, ry: p.ry * s, k: p.k })));
+    }
     // Eén pixel teruglezen (het gereedschap van het meten): alles wat klaarstaat, eerst tekenen.
     getImageData(x, y, b, h) {
       G.klaar();
@@ -721,7 +815,7 @@
 
   // ---------------------------------------------------------------- een beeld
   let hetDoek = null;
-  G.telling = { plaatjes: 0, vormen: 0, opdrachten: 0, klad: 0, kladPixels: 0, opgestuurd: 0 };
+  G.telling = { plaatjes: 0, vormen: 0, opdrachten: 0, klad: 0, kladPixels: 0, opgestuurd: 0, lampen: 0 };
   // Het doek even groot als dat van de browser (formaat in js/main.js), met dezelfde ratio.
   G.zetMaat = function (b, h, r) {
     if (!start()) return;

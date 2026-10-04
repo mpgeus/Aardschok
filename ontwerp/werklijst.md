@@ -4679,6 +4679,35 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     ziet anders een ander spel, en de proef met de schermen blijft dan ook 's avonds vergelijken. **C**, de lantaarn van de
     schout alleen als beeld, of ook in het spel (met een lantaarn zien ze je 's nachts van verder, en sluipen, `S`, dooft
     hem)? Voorstel: nu alleen beeld; het spel-deel gaat naar `opmerkingen.md`, want het is een nieuw idee (functie creep).
+    **Marcel koos (4 okt): "A ja", B: "zonder videokaart wordt er bijna niet meer gespeeld...", C: "ook spel. Voegt leuke
+    elementen toe".** Dus: het plan zoals het hier staat; zonder videokaart bewust eenvoudiger (de nacht zoals hij was,
+    met de lantaarn van de schout als gloed erbij), en de proef met de schermen vergelijkt 2D en WebGL dan alleen overdag;
+    en de lantaarn van de schout is ook spel: 's avonds en 's nachts buiten brandt hij, en dan zien ze je van verder (je
+    staat in je eigen licht, `bijLicht`), en sluipen (`S`) dooft hem: dan ben je in het donker, en zie je zelf ook minder.
+    Een spelregel ("De lantaarn van de schout": ook spel, of alleen beeld), zoals alles met meer dan één goed antwoord.
+    **A is gebouwd (4 okt, op de branch `claude/licht-videokaart`).** Met de videokaart is de nacht een lichtkaart op de
+    halve maat van het doek (`js/gl.js`, `tekenLichtkaart`): de kleur van het uur (`T.lichtKleurVan` in `js/dag.js`, de
+    vier kleuren en `kleurUren` in de werkbank onder "De dag") en per lamp een warme plas die flakkert (`lichtenInBeeld`
+    en `T.LICHT_INSTELLINGEN` in `js/tekenen.js`, in de werkbank onder "Het licht": de kracht, de maat van een plas, de
+    kleur per soort lamp, het flakkeren). De wereld wordt ermee vermenigvuldigd, tot twee keer zo licht; een gat voor een
+    brandend raam blijft een gat. Op de kaart zijn het drie opdrachten, hoeveel lampen er ook branden. Zonder videokaart
+    is de nacht zoals hij was, met de lantaarn van de schout als gloed erbij. De lantaarn van de schout is ook spel
+    (`T.draagtLantaarn` in `js/zien.js`, `lantaarn` in `T.ZIEN_INSTELLINGEN`): buiten in het donker brandt hij, dan zien ze
+    je van zes tegels, en sluipen dooft hem; de spelregel "De lantaarn van de schout". Sluip je zonder lantaarn, dan geeft
+    het beeld nog een zwak licht om je heen (`ogen`), zodat je ziet waar je loopt.
+    Gevonden onderweg: zette een proef WebGL op de processor pas aan nadat het spel geladen was (`npm run schermen --
+    --tekenen met`), dan bleef het 2D: het spel had al besloten dat er geen videokaart was. Nu probeert het dan opnieuw.
+    De schermafdrukken van vraag 123 met `--tekenen met` tekenden dus ook met 2D. Nu WebGL er echt in zit, verschilt
+    overdag 22% van de pixels 1 of 2 op 255 (afronding van doorzichtigheid), en echt anders hooguit 0,04% (dichtbij, land 5
+    van de maker) en 0,22% op 0,5. Het echt andere valt binnen de maat van vraag 123 (C en E), maar de afronding niet: C
+    stond hooguit 0,1% van de pixels toe, ook voor 1 of 2 op 255. Zien doe je het niet. Vraag **D** (aan Marcel): telt
+    afronding tot 2 op 255 voortaan niet mee in de maat? Voorstel: ja; wat telt, is wat echt anders is.
+    `npm run schermen` heeft drie beelden erbij: de dageraad, de zonsondergang en het plein 's avonds vóór bedtijd (om
+    20.8 uur slaapt het dorp al, en zijn de lantaarns uit). Hoe snel de lichtkaart is, zien we alleen op een echte
+    videokaart (hier tekent WebGL op de processor).
+    **Wat Marcel kan proberen:** een nieuw spel, en tegen de avond (`Spel.debug.uur(19)`) naar het plein: de lantaarn bij
+    de put, de ramen, de herberg. Druk `S` en kijk hoe je lantaarn uitgaat. Bij zonsopgang en zonsondergang kleurt het
+    dorp. De kleuren en de kracht staan in de werkbank (`O`), onder "De dag" en "Het licht".
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste

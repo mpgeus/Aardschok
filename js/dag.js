@@ -52,6 +52,16 @@
     nachtDonker: 0.68,
     schemerUren: 1,
     lichtStraal: 5,
+    // De kleur van het uur (werklijst vraag 125, A; T.lichtKleurVan): de wereld wordt ermee vermenigvuldigd, dus 255 is de
+    // kunst zoals hij is. Roze bij het opkomen, neutraal overdag, oranje bij het ondergaan, blauw in de nacht. Het roze
+    // en het oranje liggen op de zon zelf, en gaan in kleurUren over naar de dag; de nacht komt in de schemering.
+    lichtKleuren: {
+      nacht: { r: 70, g: 86, b: 150 },
+      dageraad: { r: 255, g: 200, b: 214 },
+      dag: { r: 255, g: 255, b: 255 },
+      avondrood: { r: 255, g: 186, b: 128 },
+    },
+    kleurUren: 2,
     // Slapen kan zo dichtbij je eigen huis, in tegels.
     slaapAfstand: 3,
   };
@@ -143,6 +153,27 @@
     else if (u > zon.onder) donker = Math.min(1, (u - zon.onder) / s);
     const gloed = Math.max(0, 1 - Math.min(Math.abs(u - zon.op), Math.abs(u - zon.onder)) / s);
     return { donker: donker * i.nachtDonker, nacht: donker, gloed };
+  };
+
+  // De kleur van het licht op dit uur (werklijst vraag 125, A; Marcel, 4 okt: "A ja"): [r, g, b] van 0 tot 1, waarmee
+  // js/gl.js de wereld vermenigvuldigt. Van de nacht naar de dageraad in de schemering voor zonsopgang, dan in kleurUren
+  // naar de dag; voor zonsondergang in kleurUren naar het avondrood, en in de schemering erna naar de nacht.
+  T.lichtKleurVan = function (dag) {
+    const i = IN();
+    const k = i.lichtKleuren;
+    const u = T.uurVanDag(dag);
+    const zon = T.zonVan(dag);
+    const s = Math.max(0.01, i.schemerUren);
+    const o = Math.max(0.01, i.kleurUren);
+    const meng = (a, b, t) => {
+      const f = tussen(t, 0, 1);
+      return [a.r + (b.r - a.r) * f, a.g + (b.g - a.g) * f, a.b + (b.b - a.b) * f].map((v) => v / 255);
+    };
+    if (u < zon.op) return meng(k.nacht, k.dageraad, 1 - (zon.op - u) / s);
+    if (u < zon.op + o) return meng(k.dageraad, k.dag, (u - zon.op) / o);
+    if (u < zon.onder - o) return meng(k.dag, k.dag, 0);
+    if (u < zon.onder) return meng(k.dag, k.avondrood, (u - (zon.onder - o)) / o);
+    return meng(k.avondrood, k.nacht, (u - zon.onder) / s);
   };
 
   // ---------------------------------------------------------------------------------------------

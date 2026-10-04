@@ -579,6 +579,7 @@
       },
     },
     { naam: 'De dag', blok: 'DAG_INSTELLINGEN' },
+    { naam: 'Het licht', blok: 'LICHT_INSTELLINGEN' },
     { naam: 'Gebouwen en bevolking', blok: 'GEBOUWEN_INSTELLINGEN' },
     { naam: 'De bewoners', blok: 'BEWONERS_INSTELLINGEN' },
     { naam: 'Lopen', blok: 'LOPEN_INSTELLINGEN' },

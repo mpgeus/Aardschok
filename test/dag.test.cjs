@@ -110,6 +110,25 @@ test('het licht: helder als de zon op is, donker in de nacht, en daartussen de s
   assert.equal(T.lichtVan(bijUur(ZOMER, 12)).gloed, 0);
 });
 
+test('de kleur van het uur: roze bij het opkomen, neutraal overdag, oranje bij het ondergaan, blauw in de nacht', () => {
+  const zon = T.zonVan(ZOMER);
+  const k = (uur) => T.lichtKleurVan(bijUur(ZOMER, uur));
+  const K = IN.lichtKleuren;
+  const is = (c, v) => c.every((x, n) => Math.abs(x - [v.r, v.g, v.b][n] / 255) < 1e-9);
+  assert.ok(is(k(12), K.dag), 'op de middag de kunst zoals hij is');
+  assert.ok(is(k(0), K.nacht), "'s nachts blauw");
+  assert.ok(is(k(zon.op), K.dageraad), 'bij zonsopgang roze');
+  assert.ok(is(k(zon.onder), K.avondrood), 'bij zonsondergang oranje');
+  const [r, g, b] = k(zon.onder + IN.schemerUren / 2);
+  assert.ok(b > K.avondrood.b / 255 && b < K.nacht.b / 255 && r < 1, `in de schemering ertussen (${r}, ${g}, ${b})`);
+  // Vloeiend: geen sprong van meer dan een paar procent per kwartier.
+  for (let u = 0; u < 24; u += 0.25) {
+    const a = k(u);
+    const c = k(u + 0.25);
+    assert.ok(a.every((x, n) => Math.abs(x - c[n]) < 0.2), `geen sprong om ${u} uur`);
+  }
+});
+
 // ---------------------------------------------------------------------------------------------
 // Het ritme van de boeren
 // ---------------------------------------------------------------------------------------------

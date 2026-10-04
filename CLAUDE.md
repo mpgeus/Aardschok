@@ -302,7 +302,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de rest gaat via een kladdoek in 2D en komt als plaatje op zijn plek (`T.gl.telling` zegt hoeveel). Een buffer die
   opnieuw getekend wordt, krijgt een nieuwe `versie` (`nieuweBuffer`), anders gaat hij niet opnieuw naar de kaart.
   `T.tekenBeeld()` (`js/main.js`) tekent het scherm met of zonder, naar de spelregel "Tekenen"; zonder echte videokaart
-  vanzelf zonder (`ookOpDeProcessor` zet het voor de proeven hier toch aan). Het gewone doek ligt erboven en vangt de muis.
+  vanzelf zonder (`ookOpDeProcessor` zet het voor de proeven hier toch aan, ook nadat het spel geladen is). Het gewone
+  doek ligt erboven en vangt de muis. **Het licht** (vraag 125, A): de nacht is met de videokaart een lichtkaart op de
+  halve maat (de kleur van het uur, `T.lichtKleurVan` in `js/dag.js`, en per lamp een warme plas die flakkert,
+  `lichtenInBeeld` en `T.LICHT_INSTELLINGEN` in `js/tekenen.js`), waarmee de wereld vermenigvuldigd wordt
+  (`tekenLichtkaart`); zonder videokaart blijft het de donkere laag van hiervoor.
 - `js/doorkijk.js`: wie je door een boom of een huis heen ziet (`T.zichtbaarDoor`,
   `T.werkDoorkijkBij`), en hoe: het kijkvenster (`T.tekenKijkgat`) of het raster (`T.tekenGerasterd`),
   een keuze in de spelregels (`beeld.md`, "Doorkijk"). `js/tekenen.js` vraagt het aan. Het eerste stuk
@@ -552,7 +556,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
   verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het
   dorp staat op één plek (`T.lichtBronnen`: de herberg en de lantaarns op de kaart, die 's avonds
-  branden), voor wie wat ziet én voor de gloed in `js/tekenen.js`. Wie de schout iets ziet wegzetten of
+  branden, en de lantaarn van de schout, `T.draagtLantaarn`: buiten in het donker, tot hij sluipt, vraag 125, C),
+  voor wie wat ziet én voor het licht in `js/tekenen.js`. Wie de schout iets ziet wegzetten of
   terughalen, is getuige (`T.werdGezien`: de plek onthoudt het in `g.getuigen`, en boven zijn hoofd
   staat een oogje); wie er woont, telt niet. Het venster van de plek zegt vooraf wie je ziet
   (`T.kijkersTekst`). Wie het rondvertelt (de roddelaar, `T.vertelInDeHerberg` in `js/verstoppen.js`),

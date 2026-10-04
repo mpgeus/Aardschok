@@ -151,6 +151,15 @@ async function hetOntworpenGehucht(context, beelden, meting) {
   beelden['herberg-avond'] = await afdruk(page);
   await zet(page, { uur: 2, zoom, op: plein });
   beelden.nacht = await afdruk(page);
+  // De kleur van het uur (vraag 125, A): net na zonsopgang en net voor zonsondergang, op het plein.
+  const zon = await page.evaluate(() => Spel.zonVan(Spel.S.kalender.dag));
+  await zet(page, { uur: zon.op + 0.25, zoom, op: plein });
+  beelden.dageraad = await afdruk(page);
+  await zet(page, { uur: zon.onder - 0.25, zoom, op: plein });
+  beelden.zonsondergang = await afdruk(page);
+  // En de avond vóór bedtijd, als de lantaarns en de ramen branden (om 20.8 slaapt het dorp al).
+  await zet(page, { uur: zon.onder + 1.1, zoom, op: plein });
+  beelden['plein-avond'] = await afdruk(page);
   // Twee bouwplaatsen, een uit elk vel (de smidse uit de gebouwen, een stenen huis uit de huizen), in hun vijf fases,
   // en dan klaar. Een fase volgt uit hoe ver de bouwtijd is (T.bouwFaseIndex): die zetten we hier recht.
   const plaatsen = await page.evaluate(() => {

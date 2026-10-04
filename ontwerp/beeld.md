@@ -15,6 +15,11 @@
 - **Licht komt van linksboven,** met een omlijning van één pixel in de donkerste tint van de kleur
   ernaast. Per kamer wordt het licht berekend: lampen, kaarsen, de bol op de staf, en de zon die
   door het glas-in-lood valt.
+- **Het licht van de dag en de lampen komt er in het spel bovenop** (4 okt, vraag 125, A; `T.lichtKleurVan` in
+  `js/dag.js`, `T.LICHT_INSTELLINGEN` in `js/tekenen.js`, de lichtkaart in `js/gl.js`): met de videokaart wordt de
+  wereld vermenigvuldigd met de kleur van het uur (roze bij het opkomen, neutraal overdag, oranje bij het ondergaan,
+  blauw in de nacht) en met een warme plas licht per lamp, die flakkert. Het licht in de plaatjes blijft van linksboven
+  komen; dit heeft geen richting. Zonder videokaart blijft het de donkere laag van vóór 4 okt.
 - **Stijl van Mystic Towers.** De kamer staat als een diorama in het donker, en de voorste muren
   zijn laag weggesneden.
 
