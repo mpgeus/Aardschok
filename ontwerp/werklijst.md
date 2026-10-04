@@ -5049,7 +5049,8 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   en de maker zet de huizen ook vóór het plein met hun deur ernaartoe. Het ontworpen gehucht en eerder bewaarde spellen
   spelen zoals altijd; de 23 oude huizen zijn byte voor byte dezelfde gebleven. Voorlopig gespiegeld en zonder
   bouwfasen: de draaibare huizen vervangen ze (vraag 124, B). Onderweg: een controle vooraf of alles op het vel past
-  (`nodigeCapaciteit`), en `bouwfasen.cjs --erbij`.
+  (`nodigeCapaciteit`), en `bouwfasen.cjs --erbij`. Nagespeeld (`speelbaar.md`): de bouwer twee jaar op drie landen
+  van de maker, zonder fouten, met een dorp en marktrecht in het eerste jaar en zeven à acht stenen huizen van veldsteen.
 - 4 okt 2026 — **De toets die soms faalde, speelt een vaste dag** (eenendertigste sessie; vraag 114, E; Marcel: "E
   ja"). "In het gehucht is iedereen 's nachts binnen, overdag waar hij hoort, en 's avonds thuis"
   (`test/bewoners.test.cjs`) faalde ongezaaid in 7 van de 200 dagen, en het was steeds een paar dat om elf uur een

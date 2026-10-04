@@ -149,6 +149,34 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 4 okt: de bouwstijl wit op landen van de maker (werklijst, vraag 114, stap 2a)
+
+Gespeeld in de eenendertigste sessie, op `ccr-32a5a0e4-w5loh4` op `9f3f4e4` (de bouwstijl wit, samengevoegd met `main`,
+dus met WebGL): `npm run speeltest -- bouwer --maker`. De bouwer speelt twee jaar op dezelfde drie landnummers als bij
+vraag 112 (62707, 73425 en 72022), maar het zijn andere landen geworden: de maker legt nu de vormen van de stijl, ook
+vóór het plein met de deur ernaartoe, en houdt een plek vrij voor de steengroeve. Sinds vraag 112 kwamen ook het lopen
+(vraag 119) en het praatje (120) erbij, dus het verschil met toen komt niet alleen van de stijl.
+
+| Land | Een dorp | Marktrecht | Mensen | Het eerste stenen huis | Woningen aan het eind | Bij vraag 112 (dorp, marktrecht, mensen) |
+|---|---|---|---|---|---|---|
+| 62707 | 23 oogstmaand | 6 wijnmaand | 26 → 82 | 1 herfstmaand | 7 stenen huizen | 4 herfstmaand, 10 wijnmaand, 26 → 67 |
+| 73425 | 11 wijnmaand | 1 slachtmaand | 26 → 90 | 1 wijnmaand | 7 stenen huizen, een huis, een hut | 21 oogstmaand, 10 wintermaand, 26 → 99 |
+| 72022 | 21 herfstmaand | 15 slachtmaand | 26 → 84 | 1 slachtmaand | 8 stenen huizen, een huis | 11 wijnmaand, 1 slachtmaand, 26 → 102 |
+
+(Daarnaast de vijf boerderijen. Een dorp en marktrecht vallen in het eerste jaar.)
+
+**Wat opviel:**
+1. **Het spel loopt in de stijl:** drie keer twee jaar, geen fouten in de console, en de bouwer bleef schout. Op 72022
+   ging het het krapst: de gunst van de heer zakte tot 5 (twee waarschuwingen; de heer kreeg 47% en 38%), en drie mensen
+   stierven van de honger. Op dat land ging bij vraag 112 de eerste keer het ambt verloren.
+2. **Zeven à acht stenen huizen per dorp**, de eerste in de herfst van het eerste jaar. Geen dorp bouwde een
+   steenbakkerij, dus al die huizen zijn van veldsteen; de baksteen kwam in echt spel niet aan bod. Die dekken de toetsen
+   (`test/bouwstijl.test.cjs`) en het dorpje op land 5 uit de sessie. De speeltest schrijft nog niet op welke tekening
+   een huis kreeg, dus dat het dak met de trede meegaat, zie je hier niet; in het dorpje wel.
+3. **Op 72022 drie steengroeven.** Een huis wachtte vanaf 2 oogstmaand op 12 steen, de eerste groeve kwam pas op 28
+   herfstmaand (op de andere landen in oogstmaand), en zolang er een huis op steen wacht, vraagt het dorp er nog een
+   (`T.watDeHuizenMissen`). Zo werkte het al; het is een vraag voor de balans, niet voor de stijl.
+
 ## De speeltest van 4 okt: het praatje (werklijst, vraag 120)
 
 Gespeeld in de zevenentwintigste sessie: `npm run speeltest -- bouwer --zaden 1-3`, op het spel met het praatje zoals het
