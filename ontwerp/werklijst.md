@@ -4188,6 +4188,50 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     hoofdvleugel. De vier standen zijn dan `draai` 0 tot en met 3 van één huis; spiegelen (`nok: 'y'`) is voor de stijlen
     niet meer nodig. De oude huizen blijven zoals ze zijn (zonder `rondom`). Nakijken: één huis van vier kanten op een
     plaat, en een muur die je in twee aanzichten ziet, moet in beide hetzelfde zijn.
+    **Plan voor de draaibare huizen (Claude, 4 okt, tweeëndertigste sessie; wacht op Marcel).** Nagelezen op `988a7fd`
+    (`huis-sdf.cjs`, `huizen.cjs`, `tekenWereld`): de doos van een huis is rondom dicht, maar alles wat de bouwer óp een
+    muur zet, staat alleen aan de twee kanten naar de camera: de stukken muur (`maakStukken`), de deur en de ramen
+    (`verdeel`, alleen waar `zicht` is), het vakwerk, de gevel met zijn topraam en de windveren (alleen de +a-kop), de
+    bulten, de dakkapellen, de aanbouw, de erker en de gevelschoorsteen, en de steiger van de bouwfasen ('xy'). De
+    achterkant en de linker gevel zijn nu een kale muur in de kleur van de wand. `zicht` meet met de kijkrichting
+    (`zichtbaar`, `K.V`). Het tekenen kent de camera en de zon op één plek (`EX`, `EY`, `V`, `LICHT` en `RANDLICHT` in
+    `tekenWereld`); de patronen rekenen in de maten van het huis zelf (de stenen uit de normaal, het riet uit zijn plek op
+    het dak), alleen het korrelige in schermpixels.
+    1. **De camera draait om het huis, niet het huis om de camera:** `tekenWereld` krijgt `draai` (0 tot en met 3), en de
+       camera, de zon en het randlicht gaan een kwartslag om het huis, zodat de zon op het scherm linksboven blijft. Het
+       huis zelf blijft precies hetzelfde, dus elke steen, balk en lap riet ligt in alle vier op dezelfde plek. (Het huis
+       draaien, zoals de schets zei, kan ook, maar dan vallen de patronen die met de assen van de wereld rekenen per stand
+       anders uit: de stenen, de helling van het huis, de steenlijn.) Een kwartslag is wisselen en een minteken, dus draai
+       0 rekent precies zoals nu: de oude huizen blijven byte voor byte dezelfde. Het kader, de voet, de deur en het anker
+       (`kaderVan`, `meetHuis`, `renderHuis`) rekenen met de draai; de ramen die 's avonds branden, komen al uit de pixels.
+    2. **De bouwer met `rondom: true`:** elke muur van elke vleugel krijgt stukken (ook aan de -q- en de -a-kant, van links
+       naar rechts zoals je hem van buiten ziet, wat voor de muren van nu op hetzelfde uitkomt), met ramen, vakwerk,
+       luiken en bakken, en beide kopse kanten een gevel met topraam en windveren. "Wat je ziet" wordt "wat je van een van
+       de vier kanten ziet" (`zichtVanStukken` met de vier kijkrichtingen). De deur staat op de lange muur van de
+       hoofdvleugel; `nok: 'y'` en `deur: 'achter'` zijn voor een huis rondom niet meer nodig. Elke muur krijgt zijn eigen
+       lot (uit het zaad, de vleugel, de kant en de verdieping), zodat wat er aan de ene muur verandert, de andere niet
+       verschuift.
+    3. **De standen** (`STANDEN` in `huizen.cjs`) worden de draai: zuid is draai 0, oost, noord en west hetzelfde huis een,
+       twee en drie kwartslagen verder. De namen blijven (`wit-huis1-riet-o`), dus het spel hoeft niets te veranderen, en
+       `T.metDeurNaar` is straks ook het draaien van de camera. Elke muur zie je in twee standen: één keer links in de zon,
+       één keer rechts in de schaduw. Bij een L of een T wijst de vleugel dan echt de andere kant op, niet gespiegeld.
+    4. **De bouwfasen** komen uit hetzelfde huis en draaien mee; de steiger komt rondom, zodat de bouwplaats van vier
+       kanten dezelfde is.
+    5. **Nakijken:** een proefplaat (`huis-sdf-export.cjs rondom`): huis 1, de L-hut (hut 4) en de T (huis 6), elk van
+       vier kanten naast elkaar, en een bouwfase van vier kanten. Toetsen: een muur die je in twee standen ziet, heeft in
+       beide dezelfde ramen op dezelfde plek (gemeten aan de bouwer); een oud huis is byte voor byte zijn plaat van nu; de
+       voet en de deur van een stand zijn die van zuid, gedraaid. `npm test` groen, en `npm run schermen` byte voor byte
+       op het ontworpen gehucht.
+    6. **Dan wit opnieuw door de bouwer**, met alle bouwfasen (`bouwfasen.cjs --erbij`; hier op vier kernen zo'n twee
+       uur, in twee delen, want een taak op de achtergrond stopt na twee uur), en daarmee **G**: een huis dat doorgroeit,
+       rijst op in de laatste drie fases over zijn bouwtijd, en de mensen blijven erin wonen. Een bewaard spel houdt zijn
+       tekeningen (dezelfde namen); alleen de deur van een L of T kan een tegel verschuiven, want gedraaid is niet
+       gespiegeld.
+    Niet in dit plan: de camera draaien in het spel, de oude huizen van het ontworpen gehucht, de gebouwen uit `dorp.cjs`,
+    de bomen en de grond (vraag 124, na WebGL). Stap 1 tot en met 5 is een sessie; 6 rekent op de achtergrond. Vragen:
+    **A**, de achterkant en de linker gevel krijgen wat de voorkant heeft (vakwerk, ramen, luiken, bakken, een gevel met
+    topraam), maar de uitbouwen blijven waar ze nu staan (vooral voor en rechts), en er komt geen tweede deur? **B**, de
+    steiger rondom? **C**, eerst de proefplaat, en pas na jouw blik wit opnieuw renderen?
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
