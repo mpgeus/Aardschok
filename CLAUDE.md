@@ -658,7 +658,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   staan daar ook (`STIJLEN`, vraag 114, stap 2): per stijl 108 tekeningen, elke vorm in vier standen onder elk dak, met
   zijn `stijl` in `tegels.js`; `node gereedschap/pixelart/huis-sdf-export.cjs stijl wit` maakt er de proefplaat van, en
   `bouwfasen.cjs --erbij` rendert alleen de bouwfasen die er nog niet zijn (een nieuwe stijl kost zo ruim twee uur, niet
-  drie).
+  drie). **Een stand is hetzelfde huis, een kwartslag gedraaid** (vraag 124, B): een huis van een stijl is gebouwd met elke
+  muur ingevuld (`rondom` in `huis-sdf.cjs`), en de tekenaar draait de camera en de zon eromheen (`tekenWereld` met
+  `o.draai` in `toren.cjs`), zodat de zon linksboven blijft en elke steen van elke kant op zijn plek ligt; zonder draai
+  tekent hij pixel voor pixel als vroeger. De proefplaat: `huis-sdf-export.cjs rondom`.
   Elk vel gaat ingepakt naar het spel (`inpakken.cjs`): een raster kost de browser elke lege pixel, en een
   vel groter dan 8192 pixels laadt niet elke videokaart. Een leeg vak in een vel kost dus niets meer.
 - Het spel tekent met sprites zodra `beelden/` er is, en anders met vlakken. Wat de kunst niet

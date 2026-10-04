@@ -13,6 +13,7 @@
 //   node gereedschap/pixelart/huis-sdf-export.cjs stijl wit    uit/proefhuis/stijl-wit.png (vraag 114, 2a: een bouwstijl)
 //   node gereedschap/pixelart/huis-sdf-export.cjs verhouding   uit/proefhuis/verhouding.png (vraag 114, 2c)
 //   node gereedschap/pixelart/huis-sdf-export.cjs steen        uit/proefhuis/steen.png (de steen van de torens)
+//   node gereedschap/pixelart/huis-sdf-export.cjs rondom       uit/proefhuis/rondom.png (vraag 124, B: de draaibare huizen)
 //
 // uitbouwen.png (ronde 3): de uitbouwen elk op een huis, de losse tuinstukken (tuin-sdf.cjs) naast
 // elkaar met een tuintje daaruit, en zes huizen met willekeurige zaden, los van elkaar. De platen
@@ -163,20 +164,21 @@ function paneelProef(zaad, knoppen = {}) {
 // ---------------------------------------------------------------- een huis naar keuze
 
 // Het kader van een huis op het scherm (HS.kaderVan, ook voor het huizenvel van het spel), met de
-// tovenaar voor de deur erbij.
-function kaderVan(H) {
-  const [tx, ty] = HS.voorDeDeur(H, 1.25);
+// tovenaar voor de deur erbij. draai: het huis zoveel kwartslagen gedraaid (een stand van een stijl, vraag 124, B).
+function kaderVan(H, draai = 0) {
+  const [tx, ty] = T.draaiNaar(draai, HS.voorDeDeur(H, 1.25));
   const X = tx * K.TEGEL;
   const Y = ty * K.TEGEL;
-  return HS.kaderVan(H, [[-34, 0], [34, 0], [0, 110]].map(([dx, dz]) => [X + dx * K.EX[0], Y + dx * K.EX[1], dz]));
+  return HS.kaderVan(H, [[-34, 0], [34, 0], [0, 110]].map(([dx, dz]) => [X + dx * K.EX[0], Y + dx * K.EX[1], dz]), draai);
 }
 
 // Een huis op een stuk grond, met de tovenaar voor de deur. o.b, o.h: de maat van het paneel,
 // o.onder: hoeveel ruimte er onder de voet van het huis blijft.
 function paneelHuis(spec, o = {}) {
   const t0 = Date.now();
+  const draai = spec.draai || 0;
   const H = HS.maten(spec.zaad, spec);
-  const kd = kaderVan(H);
+  const kd = kaderVan(H, draai);
   const b = o.b ?? Math.ceil(kd.b + 80);
   const h = o.h ?? Math.ceil(kd.h + 120);
   const onder = o.onder ?? 70;
@@ -185,11 +187,12 @@ function paneelHuis(spec, o = {}) {
   const B = new K.Beeld(b, h, OX, OY);
   const kaart = grond(B);
   const W = HS.huis(spec.zaad, spec);
-  const R = T.tekenWereld(B, W);
+  const R = T.tekenWereld(B, W, { draai });
   const msHuis = Date.now() - t0;
-  B.lichten.push(...W.lichten);
-  const [tx, ty] = HS.voorDeDeur(W.H, 1.25);
-  const fig = W.H.deurKant === 'achter' ? null : figuur(o.figuur);
+  B.lichten.push(...T.lichtenNaar(draai, W.lichten));
+  const [tx, ty] = T.draaiNaar(draai, HS.voorDeDeur(W.H, 1.25));
+  // de figuur voor de deur, als die naar je toe kijkt (niet met de deur achter, of in een stand die hem van je af keert)
+  const fig = W.H.deurKant === 'achter' || draai >= 2 ? null : figuur(o.figuur);
   if (fig) D.zetModel(B, fig, tx, ty, 'Z');
   D.grasPollen(B, kaart, { dicht: 0.8 });
   grondZon(B, R, { kracht: 2.6, tot: o.zonTot });
@@ -537,8 +540,8 @@ function paneelZes(zaden, o = {}) {
 // een dorp ({ dorp: zaden, o }), een
 // tuinstuk ({ tuin: naam, zaad }), het tuintje ({ tuintje: true }) of de zes ({ zes: zaden }).
 if (!isMainThread && workerData === 'huis') {
-  parentPort.on('message', ({ i, spec, o, dorp, tuin, zaad, tuintje, zes, delen, oud }) => {
-    const r = oud ? paneelOud(oud, o) : delen ? paneelSamen(delen, o) : zes ? paneelZes(zes, o) : tuintje ? paneelTuintje(o) : tuin ? paneelTuin(tuin, zaad, o) : dorp ? paneelDorp(dorp, o) : paneelHuis(spec, o);
+  parentPort.on('message', ({ i, spec, o, dorp, tuin, zaad, tuintje, zes, delen, oud, fasen }) => {
+    const r = fasen ? paneelFasen(fasen) : oud ? paneelOud(oud, o) : delen ? paneelSamen(delen, o) : zes ? paneelZes(zes, o) : tuintje ? paneelTuintje(o) : tuin ? paneelTuin(tuin, zaad, o) : dorp ? paneelDorp(dorp, o) : paneelHuis(spec, o);
     parentPort.postMessage({ i, b: r.p.b, h: r.p.h, px: r.p.px, ms: r.ms, msTotaal: r.msTotaal, extra: r.extra });
   });
 }
@@ -1091,7 +1094,7 @@ const VERHOUDING = [
 function kaderVanPaneel(p) {
   if (p.oud) return meetOud(p.oud);
   if (p.delen) return HS.kaderSamen(HS.samen(p.delen.map((d) => ({ W: HS.huis(d.spec.zaad, d.spec), plek: d.plek }))));
-  return kaderVan(HS.maten(p.spec.zaad, p.spec));
+  return kaderVan(HS.maten(p.spec.zaad, p.spec), p.spec.draai || 0);
 }
 // steen.png (Marcel, 4 okt: "Torens zijn wel wat grijzig", en "Waren er in die tijd al bakstenen? Dit was eigenlijk
 // natuurstenen blokken"): de kapel met haar zadeldaktoren en de woontoren met zijn tentdak, elk in veldsteen, in gehakte
@@ -1136,6 +1139,11 @@ function stijlRijen(stijl) {
 
 // Een plaat met rijen panelen, elke rij op één grondlijn (verhouding.png, steen.png).
 async function rijenPlaat(RIJEN, bestand) {
+  const plaat = await rijenBeeld(RIJEN);
+  fs.writeFileSync(path.join(UIT, bestand), K.png(plaat, 1, '#0e0a14'));
+  log(`${bestand}  ${plaat.b}×${plaat.h}`);
+}
+async function rijenBeeld(RIJEN) {
   const S = STROOK;
   const taken = [];
   const rijen = RIJEN.map((rij) => {
@@ -1164,8 +1172,46 @@ async function rijenPlaat(RIJEN, bestand) {
     });
     y += 2 * S + rijen[j].h;
   });
-  fs.writeFileSync(path.join(UIT, bestand), K.png(plaat, 1, '#0e0a14'));
-  log(`${bestand}  ${plaat.b}×${plaat.h}`);
+  return plaat;
+}
+
+// De vijf bouwfasen van een huis van het vel (huizen.cjs) naast elkaar, op één anker.
+function paneelFasen(naam) {
+  const t0 = Date.now();
+  const r = require('./huizen.cjs').renderHuisFasen(naam);
+  const tussen = 16;
+  const p = new K.Plaat(r.platen.length * (r.cb + tussen), r.ch);
+  r.platen.forEach((q, i) => p.plak(q, i * (r.cb + tussen), 0));
+  const ms = Date.now() - t0;
+  return { p, ms, msTotaal: ms };
+}
+
+// rondom.png (werklijst vraag 124, B; Marcel, 4 okt: "124b Ja dan", en "A ja ... B ja C ja"): de draaibare huizen van
+// de stijl wit, elk in zijn vier standen, en daaronder huis 1 in aanbouw in de vier standen. Een stand is hetzelfde huis,
+// een kwartslag gedraaid (huis-sdf.cjs, rondom; huizen.cjs, STANDEN): elke muur zie je in twee standen, één keer in de zon
+// en één keer in de schaduw, en in allebei met dezelfde ramen.
+async function rondom() {
+  const { stijlNaam } = require('./huizen.cjs');
+  const STAND = ['z', 'o', 'n', 'w'];
+  const KANT = { z: 'zuid', o: 'oost', n: 'noord', w: 'west' };
+  const rij = (vorm, naam) => ({ naam, panelen: STAND.map((k) => [`deur ${KANT[k]}`, { spec: VORM(stijlNaam('wit', vorm, 'riet', k)) }]) });
+  const huizen = await rijenBeeld([
+    rij('huis1', 'huis 1, een kwartslag per stand: elke muur zie je twee keer, in de zon en in de schaduw'),
+    rij('hut4', 'hut 4, een L: de deur in de gevel van de vleugel, die je van zuid en van oost ziet'),
+    rij('huis6', 'huis 6, een T: de deur ook in de gevel van de vleugel'),
+  ]);
+  const fasen = await renderAlle(STAND.map((k) => ({ naam: `huis 1 in aanbouw, deur ${KANT[k]}`, fasen: stijlNaam('wit', 'huis1', 'riet', k) })), Math.max(2, Math.min(4, os.cpus().length)));
+  const S = STROOK;
+  const plaat = new K.Plaat(Math.max(huizen.b, ...fasen.map((r) => r.p.b)), huizen.h + fasen.reduce((n, r) => n + 2 * S + r.p.h, 0));
+  plaat.plak(huizen, 0, 0);
+  let y = huizen.h;
+  fasen.forEach((r, i) => {
+    schrijf(plaat, `huis 1 in aanbouw, deur ${KANT[STAND[i]]}: de steiger staat rondom`, 8, y + 6);
+    plaat.plak(r.p, 0, y + 2 * S);
+    y += 2 * S + r.p.h;
+  });
+  fs.writeFileSync(path.join(UIT, 'rondom.png'), K.png(plaat, 1, '#0e0a14'));
+  log(`rondom.png  ${plaat.b}×${plaat.h}`);
 }
 
 if (isMainThread && require.main === module) {
@@ -1183,6 +1229,8 @@ if (isMainThread && require.main === module) {
     afwisseling().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'verhouding' || wat === 'steen') {
     rijenPlaat(wat === 'steen' ? STEEN_PLAAT : VERHOUDING, `${wat}.png`).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
+  } else if (wat === 'rondom') {
+    rondom().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'stijl') {
     // node huis-sdf-export.cjs stijl wit: een bouwstijl van het spel (huizen.cjs, STIJLEN)
     const stijl = process.argv[3] || 'wit';
@@ -1221,7 +1269,7 @@ if (isMainThread && require.main === module) {
     vergelijk();
     if (wat === 'knoppen') knoppen();
   }
-  if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen', 'stijl'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen', 'stijl', 'rondom'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 }
 
 module.exports = { paneelNu, paneelProef, paneelHuis, paneelSamen, paneelTuin, paneelTuintje, paneelZes, kaderVan, grondZon };

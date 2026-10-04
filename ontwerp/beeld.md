@@ -299,6 +299,35 @@ land ook aan zijn vormen herkent.
 - Een huis kost zo'n 35 seconden, zijn vijf bouwfasen ruim drie minuten (op één kern); `bouwfasen.cjs --erbij` rendert
   alleen wat nog geen fasen heeft.
 
+### De draaibare huizen (4 okt 2026, werklijst vraag 124, B)
+
+Marcel: "124b Ja dan", en op het plan "A ja en het idee opslaan, hier komt later ook iets van een moestuin bij. B ja C
+ja". Een huis van een stijl is één huis van vier kanten, en zijn vier standen zijn dat huis een kwartslag gedraaid, niet
+gespiegeld. Dan is een stand meteen een aanzicht: als de camera straks draait (vraag 124), neemt het spel de tekening van
+de stand ernaast (`T.metDeurNaar`).
+- **De camera draait om het huis, niet het huis om de camera.** `tekenWereld` (`toren.cjs`) krijgt `o.draai` (0 tot en met
+  3): de camera, de zon en het randlicht gaan een kwartslag om de wereld, zodat de zon op het scherm altijd linksboven
+  staat, en de wereld zelf blijft zoals hij is. Zo ligt elke steen, balk en lap riet van elke kant op dezelfde plek: de
+  patronen rekenen in de maten van het huis (de stenen uit de normaal, het riet uit zijn plek op het dak). Een kwartslag is
+  wisselen en een minteken, dus zonder draai rekent alles precies zoals ervoor: de oude huizen zijn pixel voor pixel
+  dezelfde gebleven (nagekeken op tien huizen, ook het wit van nu).
+- **Elke muur ingevuld** (`rondom` in `huis-sdf.cjs`): ook achter en aan de linker gevel vakwerk, ramen, luiken en
+  bloembakken, en beide kopse kanten een gevel met een raampje in de top en windveren. Elke muur zie je in twee standen: één
+  keer links in de zon, één keer rechts in de schaduw. Wat je ziet, is wat je van een van de vier kanten ziet; elke muur
+  heeft zijn eigen lot, zodat wat aan de ene muur verandert, de andere niet verschuift.
+- **Een huis houdt een gezicht naar de straat** (Marcel: "A ja"): de uitbouwen (een aanbouw, een erker, een dakkapel, een
+  schoor tegen de gevel) blijven waar het zaad ze zet, voor en rechts; er komt geen tweede deur. De bloembakken komen aan
+  elke kant evenveel, liefst op de lange muur. Een achterkant met leven (een achterdeur, een houtstapel, een regenton, een
+  moestuin) staat in `opmerkingen.md`.
+- **De voordeur zie je van zuid en van oost**, de twee standen waarin hij naar je toe kijkt. In de binnenhoek van een T of
+  een L met de vleugel naar voren zie je de muur maar van één kant; dan komt de deur in de gevel van die vleugel.
+- **De bouwfasen** komen uit hetzelfde huis en draaien mee, met de steiger rondom (Marcel: "B ja"): de bouwplaats is van
+  elke kant dezelfde. In de laatste fase staat hij nog langs de voor- en de achterkant.
+- **De standen** (`STANDEN` in `huizen.cjs`) zijn de draai: zuid 0, oost 1, noord 2, west 3; de namen van de tekeningen
+  bleven. De voet, de deur en het anker meet `meetHuis` zoals het huis in het beeld ligt.
+- **De proefplaat:** `node gereedschap/pixelart/huis-sdf-export.cjs rondom` (huis 1, de L-hut en de T in hun vier standen,
+  en huis 1 in aanbouw van vier kanten). De toetsen staan in `test/draaibare-huizen.test.cjs`.
+
 ## Ontwerpcanvas
 
 https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:

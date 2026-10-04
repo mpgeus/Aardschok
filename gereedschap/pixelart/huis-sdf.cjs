@@ -79,6 +79,18 @@
 //   schoor      true of false: een schoor tegen een kopgevel, bij een oud huis. Zonder beslist het
 //               zaad; hij steekt een tegel voor de gevel uit.
 //
+// Vraag 124, B, de draaibare huizen (Marcel, 4 okt: "124b Ja dan", en "A ja ... B ja C ja"):
+//
+//   rondom      true: elke muur van elke vleugel ingevuld, niet alleen de twee naar de kijker toe: ramen,
+//               vakwerk, luiken en bakken ook achter en aan de linker gevel, en beide kopse kanten een
+//               gevel met topraam en windveren. Wat je ziet, is dan wat je van een van de vier kanten
+//               ziet, en de vier standen van een bouwstijl zijn hetzelfde huis, een kwartslag gedraaid
+//               (tekenWereld met o.draai in toren.cjs; huizen.cjs, STANDEN). De voordeur staat voor (de
+//               +q-kant), de uitbouwen blijven waar het zaad ze zet (voor en rechts: een huis houdt een
+//               gezicht naar de straat), en elke muur heeft zijn eigen lot (lotVan), zodat wat aan de ene
+//               muur verandert, de andere niet verschuift. Een stuk muur weet aan welke kant het staat
+//               (P.kant: 1 naar de kijker toe, zoals altijd, -1 erachter).
+//
 // Vraag 114, 2c, de grote gebouwen in verhouding (ontwerp/beeld.md, "De afwisseling en de grote gebouwen"):
 //
 //   steen       'veldsteen' (standaard), 'zandsteen' (gehakte blokken, geelgrijs) of 'baksteen': de steen
@@ -396,6 +408,9 @@ function maten(zaad = 1, o = {}) {
   H.deurKant = o.deur === 'achter' ? 'achter' : 'voor';
   // de voordeur alleen op de lange muur van de hoofdvleugel (zie "deurOp" bovenaan)
   H.deurOp = o.deurOp === 'hoofd' ? 'hoofd' : null;
+  // elke muur ingevuld, niet alleen de twee die je ziet (zie "rondom" bovenaan)
+  H.rondom = !!o.rondom;
+  if (H.rondom) H.deurKant = 'voor';
 
   // --- het materiaal: eerst het dak, dan per vleugel een wand die erbij past. Een zijvleugel is
   // meestal van hetzelfde, maar soms is hij later aangezet in iets anders.
@@ -609,7 +624,7 @@ function maten(zaad = 1, o = {}) {
   luikenEnBakken(H);
   if (H.deurKant === 'achter') H.achterDeur = achterDeurVan(H);
   // een schoor tegen een kopgevel, bij een oud huis (niet waar al een trap of schoorsteen staat)
-  const gevels = H.stukken.filter((S) => !S.U && !S.bezet.length && S.zijde === 'a' && S.s === 0 && S.Lu > 120 && S.zicht > 0.5 && S.wand !== 'veldsteen');
+  const gevels = H.stukken.filter((S) => !S.U && !S.bezet.length && S.zijde === 'a' && S.kant > 0 && S.s === 0 && S.Lu > 120 && S.zicht > 0.5 && S.wand !== 'veldsteen');
   const schoorH = Math.min(118 + 20 * r(71), H.lagen === 2 ? H.h1 - 26 : 140);
   // o.schoor: true of false; zonder beslist het zaad (ronde 4b: de huizen van het spel leggen het vast)
   const wilSchoor = o.schoor ?? r(68) < 0.5;
@@ -1057,8 +1072,10 @@ function aftrekken(vrij, [g0, g1]) {
 // op de muur (met helling en uitpuilen), lokAN(x, y, z) omgekeerd [eenheden langs vanaf links,
 // eenheden uit de muur]. links/rechts: 'hoek' als de muur daar de hoek om gaat, 'binnen' als hij
 // tegen een andere vleugel loopt.
-function stuk(H, V, zijde, s, S, mLo, mHi, loBinnen, hiBinnen) {
-  const dirU = (zijde === 'q' ? Math.sign(V.Ax - V.Ay) : Math.sign(V.Qx - V.Qy)) || 1;
+// kant -1 (rondom, vraag 124, B) is de muur aan de andere kant, de -q- of de -a-kant: u loopt dan van
+// links naar rechts zoals je hem van buiten ziet, als je om het huis heen loopt (of het huis draait).
+function stuk(H, V, zijde, s, S, mLo, mHi, loBinnen, hiBinnen, kant = 1) {
+  const dirU = kant * ((zijde === 'q' ? Math.sign(V.Ax - V.Ay) : Math.sign(V.Qx - V.Qy)) || 1);
   const l0 = dirU > 0 ? mLo : mHi;
   const len = mHi - mLo;
   const wand = zijde === 'q' ? V.hq + S.uit : V.ha + S.uit;
@@ -1077,8 +1094,9 @@ function stuk(H, V, zijde, s, S, mLo, mHi, loBinnen, hiBinnen) {
     rechts: (dirU > 0 ? hiBinnen : loBinnen) ? 'binnen' : 'hoek',
     // een kopmuur is een gevel als het dak erboven ophoudt; bij de hoek van een L loopt het
     // dak eroverheen door en is het een muur onder de goot, zoals een lange muur
-    gevel: !H.plat && zijde === 'a' && V.eind[1] === 'gevel',
-    N: zijde === 'q' ? [V.Qx, V.Qy] : [V.Ax, V.Ay],
+    gevel: !H.plat && zijde === 'a' && V.eind[kant > 0 ? 1 : 0] === 'gevel',
+    N: zijde === 'q' ? [kant * V.Qx, kant * V.Qy] : [kant * V.Ax, kant * V.Ay],
+    kant,
     openingen: [],
     // de wand van deze muur, en hoever het oppervlak voor de doos ligt (de stammen van een blokhut)
     wand: V.wanden[Math.min(s, V.wanden.length - 1)],
@@ -1095,7 +1113,7 @@ function stuk(H, V, zijde, s, S, mLo, mHi, loBinnen, hiBinnen) {
   P.pos = (u, h, uit = 0) => {
     const z = h / PXH;
     const m = P.langs(u);
-    const w = wand + bol(m, z) + uit;
+    const w = kant * (wand + bol(m, z) + uit);
     const a = zijde === 'q' ? m : w;
     const q = zijde === 'q' ? w : m;
     const [x, y] = V.wereld(a + V.hellA * z, q + V.hellQ * z);
@@ -1107,28 +1125,32 @@ function stuk(H, V, zijde, s, S, mLo, mHi, loBinnen, hiBinnen) {
     const qs = q - V.hellQ * z;
     const m = zijde === 'q' ? as : qs;
     const w = zijde === 'q' ? qs : as;
-    return [(m - l0) * dirU, w - wand - bol(m, z)];
+    return [(m - l0) * dirU, kant * w - wand - bol(m, z)];
   };
   // de hoek bij een eind van het stuk: tekens (sa, sq) in het stelsel van de vleugel
   P.hoekTekens = (eind) => {
     const m = eind === 'links' ? l0 : l0 + dirU * len;
-    return zijde === 'q' ? [Math.sign(m), 1] : [1, Math.sign(m)];
+    return zijde === 'q' ? [Math.sign(m), kant] : [kant, Math.sign(m)];
   };
   return P;
 }
+
+// de muren van een vleugel: de twee naar de kijker toe, en met rondom ook de twee erachter
+const ZIJDEN = [['q', 1], ['a', 1]];
+const ZIJDEN_RONDOM = [['q', 1], ['a', 1], ['q', -1], ['a', -1]];
 
 function maakStukken(H) {
   const uit = [];
   H.verd.forEach((S, s) => {
     for (const V of H.vleugels) {
-      for (const zijde of ['q', 'a']) {
+      for (const [zijde, kant] of H.rondom ? ZIJDEN_RONDOM : ZIJDEN) {
         // de voet van een T zit altijd in de hoofdvleugel; de kop bij de hoek van een L kan een
         // gewone muur onder de goot zijn
-        if (zijde === 'a' && V.eind[1] === 'tak') continue;
+        if (zijde === 'a' && V.eind[kant > 0 ? 1 : 0] === 'tak') continue;
         const ha = V.ha + S.uit;
         const hq = V.hq + S.uit;
         const [m0, m1] = zijde === 'q' ? [-ha, ha] : [-hq, hq];
-        const punt = (m) => (zijde === 'q' ? V.wereld(m, hq) : V.wereld(ha, m));
+        const punt = (m) => (zijde === 'q' ? V.wereld(m, kant * hq) : V.wereld(kant * ha, m));
         const P0 = punt(m0);
         const P1 = punt(m1);
         let vrij = [[0, 1]];
@@ -1144,9 +1166,12 @@ function maakStukken(H) {
           const g = knip(U, GEEN_UIT, P0, P1, 1.5);
           if (g) vrij = aftrekken(vrij, g);
         }
+        let nr = 0;
         for (const [t0, t1] of vrij) {
           if ((t1 - t0) * (m1 - m0) * SQ < 24) continue;
-          uit.push(stuk(H, V, zijde, s, S, m0 + t0 * (m1 - m0), m0 + t1 * (m1 - m0), t0 > 1e-4, t1 < 1 - 1e-4));
+          const P = stuk(H, V, zijde, s, S, m0 + t0 * (m1 - m0), m0 + t1 * (m1 - m0), t0 > 1e-4, t1 < 1 - 1e-4, kant);
+          P.nr = nr++;
+          uit.push(P);
         }
       }
     }
@@ -1158,13 +1183,17 @@ function maakStukken(H) {
 const GEEN_UIT = { uit: 0 };
 
 // De muren van een uitbouw die je ziet, voor zover ze niet in het huis of een andere uitbouw
-// steken. U.S0 is de verdieping van het huis waar hij tegenaan staat.
+// steken. U.S0 is de verdieping van het huis waar hij tegenaan staat. Met rondom ook de muren in
+// U.achter aan de andere kant (kant -1): de andere kop van een aanbouw of een erker, de andere
+// wang van een dakkapel.
 function stukkenVan(H, U) {
   const uit = [];
   const S = U.verd[0];
-  for (const zijde of U.zijden) {
+  const zijden = U.zijden.map((z) => [z, 1]);
+  if (H.rondom) for (const z of U.achter || []) zijden.push([z, -1]);
+  for (const [zijde, kant] of zijden) {
     const [m0, m1] = zijde === 'q' ? [-U.ha, U.ha] : [-U.hq, U.hq];
-    const punt = (m) => (zijde === 'q' ? U.wereld(m, U.hq) : U.wereld(U.ha, m));
+    const punt = (m) => (zijde === 'q' ? U.wereld(m, kant * U.hq) : U.wereld(kant * U.ha, m));
     const P0 = punt(m0);
     const P1 = punt(m1);
     let vrij = [[0, 1]];
@@ -1178,19 +1207,38 @@ function stukkenVan(H, U) {
       const g = knip(U2, GEEN_UIT, P0, P1, 1.5);
       if (g) vrij = aftrekken(vrij, g);
     }
+    let nr = 0;
     for (const [t0, t1] of vrij) {
       if ((t1 - t0) * (m1 - m0) * SQ < 16) continue;
-      uit.push(stuk(H, U, zijde, 0, S, m0 + t0 * (m1 - m0), m0 + t1 * (m1 - m0), t0 > 1e-4, t1 < 1 - 1e-4));
+      const P = stuk(H, U, zijde, 0, S, m0 + t0 * (m1 - m0), m0 + t1 * (m1 - m0), t0 > 1e-4, t1 < 1 - 1e-4, kant);
+      P.nr = nr++;
+      uit.push(P);
     }
   }
   return uit;
 }
 
-// Ziet de camera punt (x, y, z)? Een straal naar de kijker toe, langs de muren en het dak.
-function zichtbaar(H, dak, x, y, z) {
-  const vx = -K.V[0];
-  const vy = -K.V[1];
-  const vz = -K.V[2];
+// Het eigen lot van een stuk muur (rondom): waar zijn toevalsgetallen beginnen (H.r(k), k vanaf dit
+// getal), alleen uit de muur zelf (welke vleugel of uitbouw, welke verdieping, welke zijde en kant, het
+// hoeveelste stuk), niet uit hoeveel muren er vóór hem kwamen. Wat aan de ene muur verandert,
+// verschuift zo het lot van de andere niet. Elk doel zijn eigen honderd miljoen getallen, elke muur
+// er duizend van.
+const LOT = { verdeel: 1e8, vakwerk: 2e8, luiken: 3e8, uitbouwen: 4e8 };
+function lotVan(P, doel) {
+  const wie = P.U ? `${P.U.soort}${P.U.i}` : `v${P.V.i}`;
+  const sleutel = `${wie}/${P.s}/${P.zijde}/${P.kant}/${P.nr || 0}`;
+  let h = 0;
+  for (let i = 0; i < sleutel.length; i++) h = (Math.imul(h, 31) + sleutel.charCodeAt(i)) | 0;
+  return LOT[doel] + ((h >>> 0) % 100000) * 1000;
+}
+
+// Ziet de camera punt (x, y, z)? Een straal naar de kijker toe, langs de muren en het dak. draai: de
+// camera van het huis dat zoveel kwartslagen gedraaid staat (T.draaiNaar; rondom).
+function zichtbaar(H, dak, x, y, z, draai = 0) {
+  const [kx, ky, kz] = draai ? T.draaiTerug(draai, K.V) : K.V;
+  const vx = -kx;
+  const vy = -ky;
+  const vz = -kz;
   let t = 0;
   for (let i = 0; i < 120 && t < 1200; i++) {
     const px = x + vx * t;
@@ -1217,10 +1265,17 @@ function zichtbaar(H, dak, x, y, z) {
 
 // Hoeveel van elk stuk muur de camera ziet (0 tot 1): een ander stuk van het huis kan ervoor
 // staan, zoals de dwarsvleugel van een T voor de voorgevel van de hoofdvleugel. Een stuk dat je
-// niet ziet krijgt geen deur, geen ramen en geen vakwerk.
+// niet ziet krijgt geen deur, geen ramen en geen vakwerk. Rondom telt wat je van een van de vier
+// kanten ziet: elk stuk met de camera's die naar zijn kant kijken.
 function zichtVanStukken(H, lijst = H.stukken) {
   const dak = dakVeld(H);
   for (const P of lijst) {
+    const draaien = H.rondom
+      ? [0, 1, 2, 3].filter((k) => {
+          const [vx, vy] = T.draaiTerug(k, K.V);
+          return -(vx * P.N[0] + vy * P.N[1]) > 0.05;
+        })
+      : [0];
     const bovenst = P.s === H.verd.length - 1;
     let top = !bovenst ? H.h1 - 24 : P.gevel ? H.trekH : H.plaatH - 10;
     let lo = P.s === 0 ? 30 : H.h1 + 20;
@@ -1234,6 +1289,8 @@ function zichtVanStukken(H, lijst = H.stukken) {
     }
     let n = 0;
     let ja = 0;
+    // rondom ook per camera: hoeveel ziet die van dit stuk (zichtDeur)
+    const per = [0, 0, 0, 0];
     P.zichtU = [];
     for (let i = 0; i < 9; i++) {
       const u = 6 + ((P.Lu - 12) * i) / 8;
@@ -1241,7 +1298,14 @@ function zichtVanStukken(H, lijst = H.stukken) {
       for (const h of [lo, (lo + top) / 2, top]) {
         const [x, y, z] = P.pos(u, h, 3);
         n++;
-        if (zichtbaar(H, dak, x, y, z)) {
+        let gezien = false;
+        for (const k of draaien) {
+          if (!zichtbaar(H, dak, x, y, z, k)) continue;
+          gezien = true;
+          per[k]++;
+          if (!H.rondom) break;
+        }
+        if (gezien) {
           ja++;
           zie++;
         }
@@ -1249,8 +1313,15 @@ function zichtVanStukken(H, lijst = H.stukken) {
       P.zichtU.push([u, zie / 3]);
     }
     P.zicht = ja / n;
+    P.zichtPer = per.map((m) => m / n);
   }
 }
+
+// Hoeveel je van een stuk muur ziet als er een voordeur in moet. Rondom: wat je ervan ziet in de twee
+// standen waarin de deur naar je toe kijkt (zuid en oost, draai 0 en 1), het minste van de twee. In de
+// binnenhoek van een T of een L met de vleugel naar voren zie je de muur maar van één kant, en dan komt
+// de deur in de gevel van die vleugel, die je van allebei ziet.
+const zichtDeur = (H, P) => (H.rondom ? Math.min(P.zichtPer[0], P.zichtPer[1]) : P.zicht);
 
 // De lagen vakwerk op een stuk muur: van onder naar boven, elk met een onderregel, stijlen en
 // een bovenregel. lo 'steen' is de steenlijn; boven 'plaat' (de bovenregel onder de goot), 'trek'
@@ -1342,10 +1413,12 @@ function verdeel(H) {
   for (const hoofd of H.deurOp === 'hoofd' ? [true, false] : [false]) {
     for (const streng of H.deurKant === 'achter' ? [] : [true, false]) {
       for (const P of H.stukken) {
-        if (P.U || P.s !== 0 || P.Lu < (hoofd ? 90 : 120) || P.zicht < 0.6) continue;
+        if (P.U || P.s !== 0 || P.Lu < (hoofd ? 90 : 120) || zichtDeur(H, P) < 0.6) continue;
+        // rondom staat de voordeur voor, aan de kant van de kijker van stand zuid
+        if (H.rondom && P.kant < 0) continue;
         if (hoofd && P.N[0] * V0.Qx + P.N[1] * V0.Qy < 0.9) continue;
         if (streng && (P.bezet.length || P.openingen.length) && !deurZones(P).length) continue;
-        const w = P.Lu * P.zicht * (P.zijde === 'q' ? 1.6 : 1) * (P.V.i === 0 ? 1.15 : 1);
+        const w = P.Lu * zichtDeur(H, P) * (P.zijde === 'q' ? 1.6 : 1) * (P.V.i === 0 ? 1.15 : 1);
         if (w > beste) {
           beste = w;
           deurStuk = P;
@@ -1393,6 +1466,7 @@ function verdeel(H) {
 
   for (const P of H.stukken) {
     if (!P.zicht || P.U) continue;
+    if (H.rondom) k = lotVan(P, 'verdeel');
     const regs = registers(H, P);
     for (const reg of regs) {
       const bezet = [];
@@ -1474,7 +1548,7 @@ function verdeel(H) {
         }
       } else if (H.lagen === 2) {
         // de bovenverdieping: boven de ramen en de deur van beneden, of verdeeld als die er niet zijn
-        const beneden = H.stukken.find((Q) => !Q.U && Q.s === 0 && Q.V === P.V && Q.zijde === P.zijde && Q.l0 * Q.dirU <= P.langs(P.Lu / 2) * Q.dirU && P.langs(P.Lu / 2) * Q.dirU <= (Q.l0 + Q.dirU * Q.len) * Q.dirU);
+        const beneden = H.stukken.find((Q) => !Q.U && Q.s === 0 && Q.V === P.V && Q.zijde === P.zijde && Q.kant === P.kant && Q.l0 * Q.dirU <= P.langs(P.Lu / 2) * Q.dirU && P.langs(P.Lu / 2) * Q.dirU <= (Q.l0 + Q.dirU * Q.len) * Q.dirU);
         const ops = beneden ? beneden.openingen : [];
         const h0 = reg.lo + (sp ? 28 : 22);
         const bz = voorbezet(P, h0 - 4, h0 + raamH + 4);
@@ -1872,7 +1946,7 @@ function randSchaduw(H, C) {
       const a = P.langs(al * SQ);
       let zLijn = P.zijde === 'q' ? V.voetZ(a) - H.randK * H.dik - 0.82 * (V.voetQ(a) - V.qW) : H.voetZ - H.randK * H.dik - 0.82 * H.ov;
       // onder een bult in het riet loopt de rand mee omhoog
-      if (V.bulten && P.zijde === 'q') zLijn += bultOp(V, a, V.voetQ(a))?.z || 0;
+      if (V.bulten && P.zijde === 'q') zLijn += bultOp(V, a, P.kant * V.voetQ(a))?.z || 0;
       d = Math.max(d, H.sp ? baan(zLijn - z, E(9), E(14)) : baan(zLijn - z, 0, E(10)));
     } else {
       // langs een gevel: onder het rietpak dat er schuin overheen steekt
@@ -3008,6 +3082,7 @@ function kapellenVan(H, V, zones, n) {
       wF: 0,
       eind: ['tak', 'gevel'],
       zijden: ['a', 'q'],
+      achter: ['q'], // rondom: ook de andere wang
       wanden: ['planken'],
       wand: 'planken',
       verd: [{ uit: 0, z0: zVoor - 40, z1: zNK + 4 }],
@@ -3135,6 +3210,7 @@ function aanbouwVan(H) {
     wF: R(9) * 6.3,
     eind: ['gevel', 'gevel'],
     zijden: ['q', 'a'],
+    achter: ['a'], // rondom: ook de andere kop (de -q-kant staat tegen het huis)
     wanden: [wand],
     wand,
     verd: [{ uit: 0, z0: -3, z1: keus.zHi + 12 }],
@@ -3203,9 +3279,10 @@ function aanbouwVan(H) {
 
 // --- aan de muren
 
-// het stuk muur van vleugel V aan zijde `zijde` op verdieping s dat je het best ziet
+// het stuk muur van vleugel V aan zijde `zijde` op verdieping s dat je het best ziet (rondom: aan de kant
+// van de kijker van stand zuid, want de uitbouwen blijven voor en rechts)
 const stukVan = (H, V, zijde, s) =>
-  H.stukken.filter((P) => !P.U && P.V === V && P.zijde === zijde && P.s === s && P.zicht > 0.4).sort((a, b) => b.Lu * b.zicht - a.Lu * a.zicht)[0] || null;
+  H.stukken.filter((P) => !P.U && P.V === V && P.zijde === zijde && P.kant > 0 && P.s === s && P.zicht > 0.4).sort((a, b) => b.Lu * b.zicht - a.Lu * a.zicht)[0] || null;
 
 // de stroken [u0, u1] van stuk P die vrij zijn op hoogte h0..h1
 function vrijeStroken(P, h0, h1, mL = 26, mR = 26) {
@@ -3215,7 +3292,7 @@ function vrijeStroken(P, h0, h1, mL = 26, mR = 26) {
   return zones.filter(([a, b]) => b > a);
 }
 // hetzelfde stuk muur op een andere verdieping (voor een erker of een galerij boven de deur)
-const stukOnder = (H, P, s) => H.stukken.find((Q) => !Q.U && Q.V === P.V && Q.zijde === P.zijde && Q.s === s && Q.l0 * Q.dirU <= P.langs(P.Lu / 2) * Q.dirU && P.langs(P.Lu / 2) * Q.dirU <= (Q.l0 + Q.dirU * Q.len) * Q.dirU);
+const stukOnder = (H, P, s) => H.stukken.find((Q) => !Q.U && Q.V === P.V && Q.zijde === P.zijde && Q.kant === P.kant && Q.s === s && Q.l0 * Q.dirU <= P.langs(P.Lu / 2) * Q.dirU && P.langs(P.Lu / 2) * Q.dirU <= (Q.l0 + Q.dirU * Q.len) * Q.dirU);
 // u op stuk Q voor dezelfde plek als u op stuk P
 const uOp = (P, u, Q) => (P.langs(u) - Q.l0) * Q.dirU * SQ;
 
@@ -3246,7 +3323,7 @@ function deurMogelijk(H) {
   const h = H.sp ? 102 : 94;
   const jamb = H.sp ? 12 : 7;
   for (const P of H.stukken) {
-    if (P.U || P.s !== 0 || P.Lu < 120 || P.zicht < 0.6) continue;
+    if (P.U || P.s !== 0 || P.Lu < 120 || zichtDeur(H, P) < 0.6 || P.kant < 0) continue;
     let zones = [[30 + b / 2 + jamb, P.Lu - 30 - b / 2 - jamb]];
     for (const z of P.bezet) if (z[3] > 0 && z[2] < h) zones = aftrekken(zones, [z[0] - b / 2 - jamb, z[1] + b / 2 + jamb]);
     for (const op of P.openingen) if (op.vast && op.h0 < h) zones = aftrekken(zones, [op.u - op.b / 2 - 26 - b / 2 - jamb, op.u + op.b / 2 + 26 + b / 2 + jamb]);
@@ -3485,6 +3562,7 @@ function erkerVan(H) {
       wF: 0,
       eind: ['zij', 'zij'],
       zijden: ['q', 'a'],
+      achter: ['a'], // rondom: ook de andere kop
       wanden: [wand],
       wand,
       verd: [{ uit: 0, z0: E(hV), z1: E(hT) + 6 }],
@@ -3558,10 +3636,15 @@ function erkerVan(H) {
 // De ramen en deuren in de muren van een uitbouw.
 function verdeelUitbouwen(H) {
   const { sp, sch } = H;
-  const R = (k) => H.r(5000 + k);
+  let basis = 5000;
+  const R = (k) => H.r(basis + k);
   let k = 0;
   for (const P of H.stukken) {
     if (!P.U || !P.zicht) continue;
+    if (H.rondom) {
+      basis = lotVan(P, 'uitbouwen');
+      k = 0;
+    }
     const U = P.U;
     const X = P.X;
     if (U.soort === 'kapel' && P.zijde === 'a') {
@@ -3603,7 +3686,7 @@ function luikenEnBakken(H) {
   const ramen = H.openingen.filter((op) => op.raam && !op.raam.top && !op.raam.spleet && !op.raam.bult && !op.raam.kelder && !op.P.U && op.P.zicht > 0.3);
   ramen.forEach((op, i) => {
     const w = op.raam;
-    const R = (k) => H.r(4900 + i * 13 + k);
+    const R = H.rondom ? (k) => H.r(lotVan(op.P, 'luiken') + op.P.openingen.indexOf(op) * 13 + k) : (k) => H.r(4900 + i * 13 + k);
     if (U.luiken && w.b >= (sp ? 22 : 16)) {
       const lb = Math.round(w.b / 2 + 2);
       const nodig = w.b / 2 + rw + lb + 3;
@@ -3622,14 +3705,23 @@ function luikenEnBakken(H) {
     }
   });
   if (U.bakken) {
-    // de mooiste ramen beneden, liefst aan de zonkant
-    const kand = ramen
-      .filter((op) => op.P.s === 0 && op.reg === 0 && op.raam.b >= (sp ? 22 : 16) && op.h0 > 40)
-      .map((op) => ({ op, w: op.P.zicht * (1 + (op.P.N[1] - op.P.N[0]) * 0.3) * (1 + H.r(4990 + op.u) * 0.6) }))
-      .sort((a, b) => b.w - a.w);
+    // De mooiste ramen beneden, liefst aan de zonkant. Rondom krijgt de achterkant wat de voorkant
+    // heeft: aan elke kant evenveel bakken, liefst op de lange muur (de zon staat van elke kant anders).
     const kleuren = [['rood', 'goud'], ['magie', 'baard'], ['goud', 'herfst'], ['rood', 'baard'], ['magie', 'rood']];
-    kand.slice(0, U.bakken).forEach(({ op }, i) => {
-      op.raam.bak = { kleuren: kleuren[Math.floor(H.r(4995 + i) * kleuren.length)], zaad: H.zaad * 31 + i * 7 };
+    const groepen = H.rondom ? [1, -1].map((kant) => ramen.filter((op) => op.P.kant === kant)) : [ramen];
+    groepen.forEach((lijst, g) => {
+      const kand = lijst
+        .filter((op) => op.P.s === 0 && op.reg === 0 && op.raam.b >= (sp ? 22 : 16) && op.h0 > 40)
+        .map((op) => ({
+          op,
+          w: H.rondom
+            ? op.P.zicht * (op.P.zijde === 'q' ? 1.3 : 1) * (1 + H.r(lotVan(op.P, 'luiken') + 900 + op.P.openingen.indexOf(op)) * 0.6)
+            : op.P.zicht * (1 + (op.P.N[1] - op.P.N[0]) * 0.3) * (1 + H.r(4990 + op.u) * 0.6),
+        }))
+        .sort((a, b) => b.w - a.w);
+      kand.slice(0, U.bakken).forEach(({ op }, i) => {
+        op.raam.bak = { kleuren: kleuren[Math.floor(H.r(4995 + i + g * 50) * kleuren.length)], zaad: H.zaad * 31 + i * 7 + g * 3 };
+      });
     });
   }
 }
@@ -3696,9 +3788,9 @@ function bouwUitbouwen(W, H, T) {
     p.toon = sch ? toon : 0;
     return voeg(g, p);
   };
-  // een platte plank langs de schuine rand van een dun dak (stelsel F, kant 1 of -1)
-  const windveer = (g, F, kant, t0, t1, n, deel) => {
-    const x = F.XR + 1.2;
+  // een platte plank langs de schuine rand van een dun dak (stelsel F, kant 1 of -1), aan de kop eind 1 (+a) of -1
+  const windveer = (g, F, kant, t0, t1, n, deel, eind = 1) => {
+    const x = eind * (F.XR + 1.2);
     const pts = [];
     for (let i = 0; i <= n; i++) {
       const t = t0 + ((t1 - t0) * i) / n;
@@ -3721,6 +3813,8 @@ function bouwUitbouwen(W, H, T) {
     const [gx, gy] = F.wereld(0, vq / 2);
     voeg(g, { f: A.dakVeld, grens: [gx, gy, Math.hypot(F.XR, vq / 2) + 12, F.voetZ(0) - 16, F.nokZ(0) + 16], m: dunMat(F), deel: 700, plek: A.plek });
     windveer(W.groep('aanbouwveer'), F, 1, 0.05, 1.02, 4, 710);
+    // rondom ook aan de andere kop
+    if (H.rondom) windveer(W.groep('aanbouwveer'), F, 1, 0.05, 1.02, 4, 710, -1);
     for (const P of H.stukken) if (P.U === A && P.zicht) omlijsting(P, W.groep('aanbouwhout'), W.groep('aanbouwstijlen'));
   }
 
@@ -4377,6 +4471,7 @@ function huis(zaad = 1, o = {}) {
 
   for (const P of H.stukken) {
     if (!P.zicht || P.U) continue; // een uitbouw tekent zijn eigen hout (bouwUitbouwen)
+    if (H.rondom) kb = lotVan(P, 'vakwerk');
     const lig = W.groep('liggers');
     const stl = W.groep('stijlen');
     const Lu = P.Lu;
@@ -4700,20 +4795,22 @@ function huis(zaad = 1, o = {}) {
   }
 
   // --- de windveren: dikke gebogen planken over de kopse kant van het riet, met een knop in de top.
-  // Alleen aan de gevels die je ziet (de +a-kant). Op een dun dak een platte plank langs de rand.
+  // Alleen aan de gevels die je ziet (de +a-kant), rondom aan allebei. Op een dun dak een platte plank
+  // langs de rand.
   // een schoorsteen tegen de gevel: daar houdt de windveer op
   const GS = H.gevelSchoorsteen;
   const achterSchoorsteen = (V, pa, pb) => {
     if (!GS || GS.V !== V) return false;
-    const q = V.lok((pa[0] + pb[0]) / 2, (pa[1] + pb[1]) / 2)[1];
+    const [a, q] = V.lok((pa[0] + pb[0]) / 2, (pa[1] + pb[1]) / 2);
+    if (a < 0) return false; // rondom: de andere gevel, de schoorsteen staat tegen de +a-kop
     return Math.abs(q - GS.qC) < GS.w1 / 2 + 7 && Math.min(pa[2], pb[2]) < GS.zTop + 4;
   };
   for (const G of H.gevels) {
-    if (G.e < 0) continue;
+    if (G.e < 0 && !H.rondom) continue;
     const V = G.V;
     const wv = W.groep('windveer');
     if (H.dun) {
-      const x = V.XR + 1.3;
+      const x = G.e * (V.XR + 1.3);
       for (const kant of [1, -1]) {
         const n = 6;
         const pts = [];
@@ -4734,7 +4831,7 @@ function huis(zaad = 1, o = {}) {
       }
       continue;
     }
-    const x = V.XR + 1.5;
+    const x = G.e * (V.XR + 1.5);
     for (const kant of [1, -1]) {
       const pts = [];
       const n = 9;
@@ -4997,15 +5094,16 @@ function achterDeurVan(H) {
 
 // Het kader van een huis op het scherm (pixels, met de oorsprong van de wereld op 0, 0): de voet
 // van de muren, de rand van het dak en de nok, de schoorsteen, en wat er uitsteekt. `extra`: nog
-// meer wereldpunten [x, y, z] die erin moeten (de tovenaar voor de deur op een proefplaat).
-function kaderVan(H, extra = []) {
+// meer punten [x, y, z] die erin moeten (de tovenaar voor de deur op een proefplaat), zoals ze in
+// het beeld staan. `draai`: het huis zoveel kwartslagen gedraaid (T.draaiNaar, vraag 124, B).
+function kaderVan(H, extra = [], draai = 0) {
   const [e0, e1, e2] = K.EX;
   const [f0, f1, f2] = K.EY;
   let x0 = Infinity;
   let x1 = -Infinity;
   let y0 = Infinity;
   let y1 = -Infinity;
-  const zie = (x, y, z) => {
+  const inBeeld = (x, y, z) => {
     const sx = x * e0 + y * e1 + z * e2;
     const sy = x * f0 + y * f1 + z * f2;
     x0 = Math.min(x0, sx);
@@ -5013,6 +5111,8 @@ function kaderVan(H, extra = []) {
     y0 = Math.min(y0, sy);
     y1 = Math.max(y1, sy);
   };
+  // een punt van het huis, gedraaid zoals het in het beeld staat
+  const zie = (x, y, z) => (draai ? inBeeld(...T.draaiNaar(draai, [x, y]), z) : inBeeld(x, y, z));
   const top = (V) => V.zN + H.dik + H.worstR + 4;
   for (const V of H.vleugels) {
     for (const sa of [-1, 1]) {
@@ -5028,7 +5128,7 @@ function kaderVan(H, extra = []) {
   if (S) zie(...S.V.wereld(S.a, S.q), S.V.nokZ(S.a) + H.dik + S.hoog + 12);
   // en wat er uitsteekt: een aanbouw, een erker, een galerij, een trap, een gevelschoorsteen
   for (const p of H.uitPunten || []) zie(...p);
-  for (const p of extra) zie(...p);
+  for (const p of extra) inBeeld(...p);
   return { x0, x1, y0, y1, b: x1 - x0, h: y1 - y0 };
 }
 

@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (4 okt 2026, eind van de eenendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit, voorlopig gespiegeld en zonder bouwfasen), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); nu de draaibare huizen (vraag 124, B: elk huis van vier kanten, voor een camera die in kwartslagen draait), dan wit opnieuw met bouwfasen en de andere drie stijlen (2b), dan de herberg, de kapel en de woontoren (stap 3), dan de boeren aan het werk (vraag 111), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
+## De stand (4 okt 2026, tweeëndertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit, voorlopig gespiegeld en zonder bouwfasen), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie kan de huizenbouwer elk huis van vier kanten bouwen en een kwartslag gedraaid tekenen (vraag 124, B; de proefplaat wacht op Marcel), dan wit opnieuw, draaibaar en met bouwfasen en de andere drie stijlen (2b), dan de herberg, de kapel en de woontoren (stap 3), dan de boeren aan het werk (vraag 111), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -112,13 +112,20 @@ pc (een nieuwe proefversie; vraag E: ja), en dan schaduwen en licht (vraag 125: 
 Marcel: "A ja B ja C ja D na webgl"). Het draaien
 van de camera (vraag 124) komt na WebGL, en de huizen worden alvast draaibaar gerenderd (Marcel: "124b Ja dan").
 
-**Waar de volgende sessie begint:** **de draaibare huizen** (vraag 124, B; Marcel: "124b Ja dan"): de huizenbouwer
-bouwt een huis als één 3D-huis met deur, ramen en vakwerk vast op alle vier de muren, en draait het in kwartslagen in
-plaats van het te spiegelen, zodat de vier standen de vier aanzichten zijn. De schets staat bij vraag 114 ("Schets voor
-de draaibare huizen"): eerst nader lezen in `huis-sdf.cjs` (`maakStukken`, `stuk`, `verdeel`, de uitbouwen), dan een plan
-voor Marcel. Daarna wit opnieuw door de bouwer, nu met alle bouwfasen (`bouwfasen.cjs --erbij`; Marcel: "ik wil overal
-bouwfase"), en daarmee **G** (Marcel: "G ja", en "G bij de draaibare huizen is goed"): een huis dat doorgroeit,
-rijst op in de laatste drie fases over zijn bouwtijd, en de mensen blijven erin wonen. Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
+**De draaibare huizen zijn gebouwd, de proefplaat wacht op Marcel** (vraag 124, B, tweeëndertigste sessie; Marcel: "A
+ja ... B ja C ja"): de huizenbouwer bouwt een huis van een stijl als één huis met alle vier de muren ingevuld (`rondom`),
+en de tekenaar draait de camera en de zon er een kwartslag omheen, zodat de vier standen de vier aanzichten zijn en de zon
+linksboven blijft; de uitbouwen blijven voor en rechts, de steiger van de bouwfasen staat rondom, en de deur zie je van
+zuid en van oost. De oude huizen bleven pixel voor pixel dezelfde, en aan het spel is nog niets veranderd. Het plan en wat
+er gebouwd is, staan bij vraag 114 (onder "Schets voor de draaibare huizen"), en in `beeld.md`, "De draaibare huizen".
+
+**Waar de volgende sessie begint:** Marcel bekijkt de proefplaat (`node gereedschap/pixelart/huis-sdf-export.cjs rondom`,
+`uit/proefhuis/rondom.png`; Marcel: "C ja", eerst de proefplaat). Daarna wit opnieuw door de bouwer, nu draaibaar en met
+alle bouwfasen (`npm run tiled huizen`, dan `bouwfasen.cjs --erbij`; hier zo'n twee uur, in twee delen, want een taak op de
+achtergrond stopt na twee uur; Marcel: "ik wil overal bouwfase"), dan `npm test`, `npm run schermen` (het ontworpen
+gehucht byte voor byte, land 5 in het nieuwe wit) en de speeltest op landen van de maker, en daarmee **G** (Marcel: "G
+ja", en "G bij de draaibare huizen is goed"): een huis dat doorgroeit, rijst op in de laatste drie fases over zijn
+bouwtijd, en de mensen blijven erin wonen. Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
 veranderen: de huizen in `tegels/` hebben geen schaduw op de vloer, en het spel tekent hun schaduw zelf. En dan stap 2b,
 de andere drie stijlen, elk met een eigen drietal vormen (Marcel: "B ja"), en stap 3, de herberg, de kapel en de
 woontoren, meteen draaibaar. **Vraag 121 is besloten**
@@ -4236,6 +4243,19 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     achterkant en de linker gevel zoals de voorkant, de uitbouwen blijven waar ze staan, geen tweede deur; de steiger
     rondom; en eerst de proefplaat. Het idee van een achterkant met leven (een achterdeur naar het erf, een houtstapel,
     een regenton, en later een moestuin achter het huis) staat in `opmerkingen.md`, onder Het beeld.
+    **Gebouwd (4 okt, tweeëndertigste sessie): stap 1 tot en met 5; de proefplaat wacht op Marcel (C).** De tekenaar
+    draait de camera, de zon en het randlicht om de wereld (`tekenWereld` met `o.draai`, `draaiNaar` en `lichtenNaar` in
+    `toren.cjs`); de bouwer vult met `rondom` elke muur in (`huis-sdf.cjs`: een stuk muur heeft een `kant`, het zicht telt
+    van vier kanten, elke muur heeft zijn eigen lot, `lotVan`); `STANDEN` in `huizen.cjs` zijn de draai, en `meetHuis`,
+    `renderHuis` en `renderHuisFasen` meten en tekenen gedraaid, met de steiger rondom. Onderweg bleek: in de binnenhoek van
+    een T of een L met de vleugel naar voren zie je de deur maar van één van de twee kanten waar hij naar je toe kijkt (bij
+    zuid zat de vleugel ervoor); nu moet de deur te zien zijn van zuid én van oost (`zichtDeur`), en komt hij dan in de
+    gevel van die vleugel. Nagekeken: tien oude huizen (ook het witte gespiegelde van nu) pixel voor pixel dezelfde;
+    alle acht standen van de L en de T met hun deur aan de goede kant, en voet en deur precies elkaars kwartslag;
+    `test/draaibare-huizen.test.cjs` (ook: een wereld die de tekenaar draait, is pixel voor pixel die wereld zelf
+    gedraaid); `npm test` 925/925. Aan het spel (`js/`, `tegels/`) is niets veranderd: in het spel staat nog het witte
+    gespiegelde, tot stap 6. De proefplaat: `node gereedschap/pixelart/huis-sdf-export.cjs rondom`. Zie `beeld.md`, "De
+    draaibare huizen".
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag

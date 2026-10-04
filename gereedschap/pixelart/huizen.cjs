@@ -112,10 +112,13 @@ const STIJLEN = {
   // (1) wit vakwerk, groene luiken, veldsteen (Marcel, 4 okt, "A ja": hut 1, 3 en 4, huis 1, 3 en 6, boerderij 1 en 4)
   wit: { kalk: 'wit', luiken: 'den', steen: 'veldsteen', dak: 'riet', hut: ['hut1', 'hut3', 'hut4'], huis: ['huis1', 'huis3', 'huis6'], boerderij: ['boerderij1', 'boerderij4'] },
 };
-// De vier standen: de deur naar zuid (+y), oost (+x), noord (-y) of west (-x), altijd op de lange muur van de
-// hoofdvleugel (deurOp in huis-sdf.cjs). Bij nok 'y' is het huis gespiegeld in de diagonaal; met de deur achter staat
-// het met zijn achterkant naar de kijker (Marcel, 27 sep: "Ja dat mag, geeft het wat meer leven").
-const STANDEN = { z: { nok: 'x', deur: 'voor' }, o: { nok: 'y', deur: 'voor' }, n: { nok: 'x', deur: 'achter' }, w: { nok: 'y', deur: 'achter' } };
+// De vier standen: de deur naar zuid (+y), oost (+x), noord (-y) of west (-x), op de lange muur van de hoofdvleugel
+// (deurOp in huis-sdf.cjs), of in de gevel van een vleugel die naar voren steekt. Een huis van een stijl is één huis
+// rondom (huis-sdf.cjs, rondom), gebouwd met zijn deur naar zuid, en een stand is hoeveel kwartslagen het gedraaid staat
+// (tekenWereld met o.draai in toren.cjs; werklijst vraag 124, B; Marcel: "124b Ja dan"): oost, noord en west zijn
+// hetzelfde huis van een andere kant, en elke muur zie je in twee standen, één keer in de zon en één keer in de schaduw.
+// Tot 4 okt was oost het spiegelbeeld van zuid (nok 'y'), en stonden noord en west met hun deur achter.
+const STANDEN = { z: { draai: 0 }, o: { draai: 1 }, n: { draai: 2 }, w: { draai: 3 } };
 // De naam van een tekening van een stijl, "<stijl>-<vorm>-<dak>-<stand>"; een stenen huis van baksteen heeft
 // "baksteen" waar het dak staat (het ligt altijd onder pannen). Dezelfde afspraak als T.stijlNaam in js/gebouwen.js.
 const stijlNaam = (stijl, vorm, dak, stand) => `${stijl}-${vorm}-${dak}-${stand}`;
@@ -130,7 +133,7 @@ function stijlHuizen() {
         for (const [stand, st] of Object.entries(STANDEN)) {
           const naam = stijlNaam(stijl, vorm, steen === 'baksteen' ? 'baksteen' : dak, stand);
           uit[naam] = {
-            ...basis, ...extra, gebouw: soort, nok: st.nok, deur: st.deur, deurOp: 'hoofd', dak, kalk: S.kalk,
+            ...basis, ...extra, gebouw: soort, nok: 'x', deur: 'voor', rondom: true, draai: st.draai, deurOp: 'hoofd', dak, kalk: S.kalk,
             ...(steen ? { steen } : {}),
             stijl: { stijl, vorm, soort, dak, steen: steen || null, stand },
           };
@@ -164,9 +167,15 @@ Object.assign(HUIZEN, stijlHuizen());
 // gevel uit, en je loopt er niet doorheen. Omdat de voet een rechthoek is (js/kaart.js zet hem
 // helemaal vast), gaat dan een hele rij tegels langs die gevel dicht; daarom ligt `schoor` in elke
 // opgave vast.
+//
+// draai: het huis zoveel kwartslagen gedraaid (Tr.draaiNaar; een stand van een stijl, vraag 124, B): dan is alles
+// gemeten zoals het in het beeld ligt, de voet, de hoek en de deur.
 const Z_VOET = [10];
-function meetHuis(W) {
+function meetHuis(W, draai = 0) {
   const H = W.H;
+  // een punt van het huis zoals het in het beeld ligt, en terug
+  const naar = (p) => (draai ? Tr.draaiNaar(draai, p) : p);
+  const terug = (x, y) => (draai ? Tr.draaiTerug(draai, [x, y]) : [x, y]);
   // de achterste hoek van het plan, op een halve tegel afgerond (de vleugels staan scheef, en een
   // tweede vleugel een graad of twee uit het haakse: dat mag de hoek niet verschuiven)
   let px = Infinity;
@@ -174,7 +183,7 @@ function meetHuis(W) {
   for (const V of H.vleugels) {
     for (const sa of [-1, 1]) {
       for (const sq of [-1, 1]) {
-        const [x, y] = V.wereld(sa * V.ha, sq * V.hq);
+        const [x, y] = naar(V.wereld(sa * V.ha, sq * V.hq));
         px = Math.min(px, x);
         py = Math.min(py, y);
       }
@@ -189,8 +198,7 @@ function meetHuis(W) {
   const bezet = (i, j) => {
     for (let a = 0; a < 5; a++) {
       for (let b = 0; b < 5; b++) {
-        const x = (gx + i + 0.2 + a * 0.15) * TEGEL;
-        const y = (gy + j + 0.2 + b * 0.15) * TEGEL;
+        const [x, y] = terug((gx + i + 0.2 + a * 0.15) * TEGEL, (gy + j + 0.2 + b * 0.15) * TEGEL);
         for (const z of Z_VOET) if (Tr.veld(groepen, n, x, y, z) < 0) return true;
       }
     }
@@ -232,10 +240,10 @@ function meetHuis(W) {
   };
   // De voordeur, of een andere deur op de grond die aan de rand van de voet ligt: de bouwer zet een
   // aanbouw altijd tegen de lange muur, naast de voordeur, en dan gaat de boer door de staldeur.
-  const deuren = [(a) => HS.voorDeDeur(H, a)];
+  const deuren = [(a) => naar(HS.voorDeDeur(H, a))];
   for (const d of H.deuren) {
     if (d === H.deur || d.h0 > 20) continue;
-    deuren.push((a) => d.P.pos(d.u, 0, a * TEGEL).slice(0, 2).map((v) => v / TEGEL));
+    deuren.push((a) => naar(d.P.pos(d.u, 0, a * TEGEL).slice(0, 2).map((v) => v / TEGEL)));
   }
   let beste = null;
   for (const plek of deuren) {
@@ -250,20 +258,22 @@ function meetHuis(W) {
 
 // Eén huis voor het vel: dezelfde tekenaar en hetzelfde licht als de proefplaten (paneelHuis in
 // huis-sdf-export.cjs), zonder gras en zonder grondschaduw. Een marge rond het kader voor de omlijning.
+// spec.draai: zoveel kwartslagen gedraaid (een stand van een stijl, STANDEN).
 function renderHuis(spec) {
   const t0 = Date.now();
+  const draai = spec.draai || 0;
   const W = HS.huis(spec.zaad, spec);
   const H = W.H;
-  const m = meetHuis(W);
-  const kd = HS.kaderVan(H);
+  const m = meetHuis(W, draai);
+  const kd = HS.kaderVan(H, [], draai);
   const RAND = 12;
   const b = Math.ceil(kd.b + RAND * 2);
   const h = Math.ceil(kd.h + RAND * 2);
   const OX = Math.round(RAND - kd.x0);
   const OY = Math.round(RAND - kd.y0);
   const B = new K.Beeld(b, h, OX, OY);
-  Tr.tekenWereld(B, W);
-  B.lichten.push(...W.lichten);
+  Tr.tekenWereld(B, W, { draai });
+  B.lichten.push(...Tr.lichtenNaar(draai, W.lichten));
   K.belicht(B, { omgeving: () => 0.2 });
   D.avondlicht(B, { warm: HS.WARM });
   K.verwarm(B, 1.8);
@@ -478,7 +488,9 @@ function fasenVanHuis(W, m) {
     }
   };
   // De steiger langs de kanten die je ziet (de +x- en de +y-kant van de voet): palen, en een loopplank
-  // op werkhoogte.
+  // op werkhoogte. Een huis rondom (een stijl, vraag 124, B) krijgt hem ook aan de -x- en de -y-kant ('X' en
+  // 'Y'), zodat de bouwplaats van elke kant dezelfde is (Marcel, 4 okt: "B ja"). m is de voet van het huis
+  // zelf, niet gedraaid.
   const [X0, Y0] = [m.hoek[0] * TEGEL, m.hoek[1] * TEGEL];
   const [X1, Y1] = [X0 + m.voet[0] * TEGEL, Y0 + m.voet[1] * TEGEL];
   const steiger = (N, hoogte, kanten) => {
@@ -505,6 +517,16 @@ function fasenVanHuis(W, m) {
       const n = Math.max(2, Math.round((Y1 - Y0) / FASE.stap) + 1);
       for (let i = 0; i < n; i++) paal(X1 + u, Y0 + 10 + ((Y1 - Y0 - 20) * i) / (n - 1));
       plank(X1 + u, (Y0 + Y1) / 2, 7, (Y1 - Y0) / 2);
+    }
+    if (kanten.includes('Y')) {
+      const n = Math.max(2, Math.round((X1 - X0) / FASE.stap) + 1);
+      for (let i = 0; i < n; i++) paal(X0 + 10 + ((X1 - X0 - 20) * i) / (n - 1), Y0 - u);
+      plank((X0 + X1) / 2, Y0 - u, (X1 - X0) / 2, 7);
+    }
+    if (kanten.includes('X')) {
+      const n = Math.max(2, Math.round((Y1 - Y0) / FASE.stap) + 1);
+      for (let i = 0; i < n; i++) paal(X0 - u, Y0 + 10 + ((Y1 - Y0 - 20) * i) / (n - 1));
+      plank(X0 - u, (Y0 + Y1) / 2, 7, (Y1 - Y0) / 2);
     }
   };
   // Het dak in latten: de buitenste laag van het dak, alleen waar een lat ligt, van de goot tot de nok,
@@ -550,16 +572,16 @@ function fasenVanHuis(W, m) {
   // 3. muren tot twee derde, met steigers
   neem(w[2], muur, schilTot(zMuur));
   geraamte(w[2]);
-  steiger(w[2], zMuur, 'xy');
+  steiger(w[2], zMuur, H.rondom ? 'xyXY' : 'xy');
   // 4. de muren af, het dak in latten
   neem(w[3], muur, zolder);
   latten(w[3]);
-  steiger(w[3], zTop, 'xy');
-  // 5. de onderste helft van het dak gedekt
+  steiger(w[3], zTop, H.rondom ? 'xyXY' : 'xy');
+  // 5. de onderste helft van het dak gedekt (rondom: de steiger nog langs de voor- en de achterkant)
   neem(w[4], muur, zolder);
   neem(w[4], (n) => HET_DAK.has(n), (p) => ({ ...p, f: (x, y, z) => Math.max(p.f(x, y, z), z - zHalf) }));
   latten(w[4], zHalf);
-  steiger(w[4], zTop, 'y');
+  steiger(w[4], zTop, H.rondom ? 'yY' : 'y');
   return w;
 }
 
@@ -569,10 +591,12 @@ function fasenVanHuis(W, m) {
 // een hoop steen voor de voet, een maat groter dan anders, net als bij de oude gebouwen.
 function renderHuisFasen(naam) {
   const spec = HUIZEN[naam];
+  const draai = spec.draai || 0;
   const W = HS.huis(spec.zaad, spec);
   const H = W.H;
-  const m = meetHuis(W);
-  const werelden = fasenVanHuis(W, m);
+  // de voet zoals hij in het beeld ligt (het anker, de stapels), en die van het huis zelf (de steiger)
+  const m = meetHuis(W, draai);
+  const werelden = fasenVanHuis(W, draai ? meetHuis(W) : m);
   const s = 1.6;
   const x0 = m.hoek[0];
   const y1 = m.hoek[1] + m.voet[1];
@@ -585,7 +609,9 @@ function renderHuisFasen(naam) {
   for (const p of stapel) for (const [dx, dy, z] of [[-1.5, -1.5, 0], [1.5, 1.5, 0], [0, 0, 90]]) extra.push([(p.gx + dx) * TEGEL, (p.gy + dy) * TEGEL, z]);
   const [X1, Y1] = [(m.hoek[0] + m.voet[0]) * TEGEL, (m.hoek[1] + m.voet[1]) * TEGEL];
   extra.push([X1 + 30, Y1 + 30, 0], [X1 + 30, m.hoek[1] * TEGEL, H.zM + 40], [m.hoek[0] * TEGEL, Y1 + 30, H.zM + 40]);
-  const kd = HS.kaderVan(H, extra);
+  // rondom staat de steiger ook achter
+  if (H.rondom) extra.push([m.hoek[0] * TEGEL - 30, m.hoek[1] * TEGEL - 30, H.zM + 40], [m.hoek[0] * TEGEL - 30, Y1 + 30, 0], [X1 + 30, m.hoek[1] * TEGEL - 30, 0]);
+  const kd = HS.kaderVan(H, extra, draai);
   const RAND = 12;
   const b = Math.ceil(kd.b + RAND * 2);
   const h = Math.ceil(kd.h + RAND * 2);
@@ -593,9 +619,9 @@ function renderHuisFasen(naam) {
   const OY = Math.round(RAND - kd.y0);
   const platen = werelden.map((N, i) => {
     const B = new K.Beeld(b, h, OX, OY);
-    Tr.tekenWereld(B, N);
+    Tr.tekenWereld(B, N, { draai });
     if (i === 0) for (const p of stapel) D.zetModel(B, p.model, p.gx, p.gy, 'Z');
-    B.lichten.push(...N.lichten);
+    B.lichten.push(...Tr.lichtenNaar(draai, N.lichten));
     K.belicht(B, { omgeving: () => 0.2 });
     D.avondlicht(B, { warm: HS.WARM });
     K.verwarm(B, 1.8);
