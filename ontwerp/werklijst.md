@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (4 okt 2026, eind van de zesentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113: de meter onder F2, en een weg zoeken nu bijna drie keer zo snel); elk spel een ander, wijder land met natuur die ertoe doet, is gebouwd (vraag 112, stap 1); nu de huizen: de vellen inpakken, meer afwisseling, en de herberg, de kapel en de woontoren in verhouding (vraag 112, stap 2, en 114), dan de boeren aan het werk op hun veld (vraag 111)
+## De stand (4 okt 2026, eind van de zesentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113: de meter onder F2, en een weg zoeken nu bijna drie keer zo snel); elk spel een ander, wijder land met natuur die ertoe doet, is gebouwd (vraag 112, stap 1); nu eerst het lopen: wie een ander treft, wacht of wijkt uit in plaats van eromheen te plannen, flow fields en een tijdsbudget (vraag 119, D, A en B; Marcel: "eerst, voor de huizen"), dan de huizen: de vellen inpakken, meer afwisseling, en de herberg, de kapel en de woontoren in verhouding (vraag 112, stap 2, en 114), dan de boeren aan het werk op hun veld (vraag 111)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -40,8 +40,11 @@ meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard 
 van een weg, en het bos om de kaart alleen aan de kant van het bos. Hoe een eigen branch en `main` samengaan, staat in
 `CLAUDE.md`, onder Git.
 
-**Waar de volgende sessie begint:** **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij vraag 114):
-eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
+**Waar de volgende sessie begint:** **vraag 119, D, A en B: het lopen** (Marcel, 4 okt: "eerst, voor de huizen", en
+op wachten of uitwijken: "Je kunt nu eenmaal niet over iemand heen"): een weg zoeken alleen nog over wat vaststaat, wie
+een ander treft, wacht, ruilt of stapt opzij, een weg die elke dag dezelfde is, onthouden; dan flow fields voor wat veel
+mensen delen, en een tijdsbudget per beeld. Daarna **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij
+vraag 114): eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
 wanden, luiken, gespiegeld) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
 met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant (**vraag 115**). De meter in Firefox
@@ -52,7 +55,8 @@ veld) met 115 en 116, dan 117, dat begint met een proef die meet of een kaart in
 (inwoners met stats: levenspunten, vaardigheden die groeien met het werk, en eigenschappen, zoals in Dwarf Fortress),
 samen met de mensen aan het werk. Voor het eiland gebruiken we Marcels technieken voor het zoeken van paden (vraag 117 en
 **vraag 119**: HPA\* over de stukken, flow fields, time-slicing, sturen in plaats van iedereen als muur, Jump Point
-Search). **Open bij Marcel:** vraag 119, a en b (een andere manier van lopen, en wanneer). Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
+Search). **Open bij Marcel: vraag 120** (een levendig dorp: "Mensen die een praatje staan te maken als ze even niets te
+doen hebben"; het praatje kan met 119, D). Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
 verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de maat van de winst: op het
 wijdere land is er grond genoeg, maar de speeltest speelt standaard nog het ontworpen gehucht). De speeltest van vier
 jaar staat in `speelbaar.md`, en een volgende speeltest van vier jaar splitst de spelers over twee taken, want een taak
@@ -4019,6 +4023,37 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **a**, D is een andere manier van lopen (de mensen plannen niet meer om elkaar heen, maar wachten of wijken
     uit), dus de speeltest speelt daarna niet meer letter voor letter hetzelfde jaar: goed? **b**, D, A en B met de
     mensen aan het werk, of eerst, vóór de huizen?
+    **Marcel koos (4 okt):** a, "ja, dat werkt in het 'echt' ook zo denk ik. Je kunt nu eenmaal niet over iemand heen";
+    b, "eerst, voor de huizen". Dus D, A en B nu, in die volgorde, en dan de huizen (vraag 114). Na elk stuk meten met
+    `npm run grootte` (ook `--maker 5`) en een speeltest, zodat te zien is wat het deed.
+120. **Een levendig dorp: een praatje als ze even niets te doen hebben** (Marcel, 4 okt, zesentwintigste sessie: "Het
+    dorp moet echt levendig en realistisch aanvoelen. Mensen die een praatje staan te maken als ze even niets te doen
+    hebben etc"; plan van Claude; open).
+    **Wat er nu is:** iedereen heeft per uur een plek (`T.dagAnker`: zijn deur, de put, zijn werk, waar hij vrij is), en
+    daar dwaalt hij in een straal rond (`T.dwaal`); 's avonds gaan er een paar naar de herberg, en bij een feest staat het
+    dorp op het plein. Maar wie vrij is, dwaalt alleen, en wie elkaar tegenkomt, ziet elkaar niet.
+    Voorstel:
+    - **a, een praatje:** wie vrij is en een bekende tegenkomt die ook vrij is (een buur, familie, wie bij hem werkt),
+      blijft staan, en ze draaien naar elkaar toe; wie langskomt, schuift aan, tot een groepje van drie of vier. Na een
+      kwartier tot een uur gaan ze verder. Op vaste plekken vaker: bij de put 's ochtends, op het plein, voor de kerk na de
+      mis, voor de herberg.
+    - **b, waarover:** een wolkje boven het groepje met een tekentje van waar ze het over hebben, uit het spel zelf: het
+      graan (honger), het hout (kou), de heer (een kroon, na een gril), de inner, de rovers, een bruiloft, het weer. Sta je
+      erbij, dan hoor je een zin ("Ze zeggen dat de heer een standbeeld wil, van zichzelf"). Zo voel je hoe het dorp
+      ervoor staat zonder venster, zoals het concept het wil: wat elders één klik is, gaat hier via een persoon. En wat een
+      getuige zag, vertelt hij dan niet alleen in de herberg (`T.getuigenVertellen`), maar ook in een praatje.
+    - **c, wat het dorp verder laat leven** (om uit te kiezen): wie langs elkaar loopt, groet (een knik); 's ochtends
+      halen ze water bij de put, met een emmer; een oude man op een bankje voor zijn deur, in de zon; kinderen die
+      tikkertje spelen op het plein; een hond die meeloopt, kippen bij een boerderij; rook uit de schoorsteen als er iemand
+      thuis is en het koud is; wie iets maakt, brengt het weg (de bakker met brood naar de markt).
+    - **d, de regels:** a en c veranderen niets aan de regels (alleen waar iemand staat en wat hij doet); b laat de roddel
+      ook in een praatje rondgaan. Met vraag 118 (e) zegt wie met wie praat ook wie bevriend is, en een praatje maakt
+      vrienden; de eigenschappen zeggen wie graag praat en wie stil is.
+    - **e, wanneer:** het praatje (a) past bij vraag 119, D: daar komen twee mensen elkaar op het raster tegen, en in
+      plaats van uit te wijken blijven ze staan als ze allebei vrij zijn. Het waarover (b) en c met de mensen aan het werk
+      (vraag 111, 115, 116 en 118), want die geven de figuren (de emmer, de bundel hout) en de eigenschappen.
+    Vragen: **a**, het praatje zo? **b**, het wolkje met waar ze het over hebben, uit het spel? **c**, welke van c? **d**,
+    het praatje met 119 D, en de rest met de mensen aan het werk?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
