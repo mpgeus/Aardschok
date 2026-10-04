@@ -373,3 +373,8 @@ komen. Alle drie versterken ze de afweging tussen jaren en veiligheid.
 
 **Wanneer:** na de randtegels en nadat elke kaart vanzelf een gebied is, want hoogte bouwen in een
 wereld die nog niet af is, is de verkeerde volgorde.
+
+**Opnieuw gevraagd (Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁"; werklijst vraag 121).** Sinds 4 okt maakt de
+maker het land (`js/maker.js`), en schildert Marcel in Tiled alleen nog de grond; de hoogte komt dus uit de maker, niet
+uit een laag in Tiled. Het plan (terrassen met wanden en hellingen, wat het doet aan lopen, zien en bouwen, en wanneer)
+staat bij vraag 121.

@@ -3896,6 +3896,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       pixel hetzelfde tekenen (schermafdrukken ervoor en erna), `npm test` groen, en gemeten: de eerste keer uitzoomen
       en het geheugen, ervoor en erna. Bij 2b: de bouwfasen per vorm, niet per kleur, anders groeien ze vijf keer zo
       hard als de tekeningen.
+      **Marcel (4 okt): "1 ja 2 alleen nog de grond."** Dus alle vier de stappen, en strak gesneden: Tiled hoeft alleen
+      de grond nog goed te tonen. De voorwerpen staan er in Tiled dan niet precies op hun plek; het spel zet ze neer met
+      hun eigen anker.
     - **2b, de afwisseling** (vraag 112, d, en Marcel: "andere kleuren etc"): per soort meer tekeningen uit wat de bouwer
       al kan, en elk ook gespiegeld, met de deur aan de andere kant (dan kan een huis vóór het plein er ook zijn deur
       naartoe keren). De daken volgen de treden: in het gehucht riet en spanen, in een dorp ook leien, met marktrecht
@@ -4196,6 +4199,33 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Gedaan (dezelfde dag): het plein en die rust eruit. Gemeten zoals hierboven: het ontworpen gehucht zo'n 10 praatjes
     per dag, en een derde van de tijd staat er ergens een; landen van de maker 6 tot 17; een dorp van 100 zo'n 16, van
     200 zo'n 25, 's avonds anderhalf tegelijk. De oude toetsen van het dagritme zijn weer zoals ze waren.
+121. **Hoogteverschillen op de kaart** (Marcel, 4 okt, achtentwintigste sessie: "Ik heb wel 1 extra verzoek. Hoogte
+    verschillen op de kaart. 😁"; plan van Claude; open).
+    **Wat er al is:** het ontwerp van 20 sep (`kaarten.md`, "Hoogte is een getal per tegel", Marcels keuze toen): een
+    getal per tegel, de wand tussen twee hoogtes afgeleid zoals een randtegel tussen twee grondsoorten, een helling waar
+    je over mag, alles op een hogere tegel een trede omhoog, en wie hoog staat, ziet verder. Dat was nog voor Tiled en de
+    toren; gebouwd is er niets. Sinds 4 okt maakt de maker het land (vraag 112), dus de hoogte komt nu uit de maker.
+    Voorstel:
+    - **a, terrassen, geen glooiing:** het land in een paar niveaus (zo'n drie: het dal met de beek, het maaiveld, een
+      heuvel of richel), met een wand waar twee niveaus elkaar raken (een rotswand in de heuvels, een begroeide wal
+      elders) en hellingen waar je over kunt. Glooiende heuvels (zoals in Age of Empires) ogen zachter, maar dan moet elke
+      grondtegel in negentien schuine vormen, en staat een huis scheef; terrassen houden de grondtegels zoals ze zijn.
+    - **b, wat het doet:** lopen gaat over een helling en niet tegen een wand op (de wegen, de eilanden en de velden van
+      vraag 88 en 119 krijgen dat mee); wie hoog staat, ziet verder, en een heuvel houdt het zicht tegen (de schout, de
+      getuigen, de inner: iets verstoppen achter de heuvel); een gebouw en een erf staan op één niveau; de beek loopt
+      door het dal. Later: een windmolen of de kapel op de heuvel, het wachthuis dat van boven verder ziet, en in een
+      gevecht het hoge punt.
+    - **c, waar:** de maker legt heuvels en richels per land, vooral aan de randen en achter het dorp, met de rotsen erop
+      (de steengroeve); het hart (het plein, de huizen, de akkers) blijft grotendeels vlak. Het ontworpen gehucht blijft
+      vlak, zodat de toetsen erop blijven spelen.
+    - **d, eerst een proefplaat:** een stukje land met twee niveaus, een rotswand, een wal, een helling met een pad en een
+      huis erop, om naar te kijken vóór er iets in het spel komt. Die kan al met de proefplaat van de huizen mee.
+    - **e, wanneer:** het raakt veel (het tekenen en de volgorde ervan, lopen, zien, bouwen, de maker, opslaan): twee à
+      drie sessies. Het hoort bij het land: na de boeren (vraag 111 met 115 en 116) en vóór het eiland (vraag 117), dan
+      begint het eiland er meteen mee. Commercieel telt het mee: een land met heuvels oogt op een schermafdruk veel beter
+      (`commercieel.md`, de beeldstijl als troef).
+    Vragen: **a**, terrassen? **b**, dat het lopen, het zicht en het bouwen raakt? **e**, na de boeren en vóór het
+    eiland, of eerder?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
