@@ -37,6 +37,12 @@ visser aan het water. **Sinds vraag 119** lopen de mensen om wat vaststaat, en l
 wachten, langs elkaar, opzij. **Sinds vraag 120** blijft wie vrij is en toevallig een buur of iemand van zijn werk
 treft, soms staan voor een praatje, met een wolkje boven wie praat. `npm test`: 919/919.
 
+**Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
+bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
+licht die flakkeren, en werpt alles wat staat een schaduw die met de zon meegaat. De schout draagt 's avonds buiten een
+lantaarn: dan zien ze je van verder, en sluipen (`S`) dooft hem. Nog open bij vraag 125: de proefplaat van C (licht op
+de muren, "mag later").
+
 **Waar het werk staat:** in `main` (4 okt; Marcel: "ja" op "push main") staan de snelheid van 3 okt (vraag 113, de
 meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
 van een weg, en het bos om de kaart alleen aan de kant van het bos. Sinds het eind van de zesentwintigste sessie ook het
@@ -4820,6 +4826,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     (de huizen in `huis-sdf.cjs`, en de bomen in `bomen.cjs`: allebei in `gereedschap/pixelart/`, het werk van de sessie
     van de huizen), dan gaan de huizen en de bomen zonder vloerschaduw opnieuw door de bouwer, en dan staat de spelregel
     "Schaduwen" standaard op "Met de zon". De lengte en de donkerte blijven zoals ze zijn.
+    **Bij het nakijken bleek (4 okt): er is geen ingebakken schaduw in het spel.** De plaatjes van de huizen, de gebouwen
+    en de bomen in `tegels/` hebben geen schaduw op de grond (de bouwer snijdt ze zonder: `huizen.cjs`, "zonder gras en
+    zonder schaduw op de grond"; de bomen gaan los door de renderer, zonder slagschaduw). Alleen onder een figuur tekent
+    het spel een ovaaltje (`tekenWezen`). De dubbele schaduw die Claude op de proefplaat meldde, was er dus niet, en de
+    bouwer hoeft niets los te zetten. De spelregel "Schaduwen" staat nu standaard op "Met de zon" (met de videokaart);
+    "Zonder" is het spel van vóór 4 okt. Het verzoek aan de sessie van de huizen om een schakelaar vervalt.
     `npm run schermen` heeft drie beelden erbij: de dageraad, de zonsondergang en het plein 's avonds vóór bedtijd (om
     20.8 uur slaapt het dorp al, en zijn de lantaarns uit). Hoe snel de lichtkaart is, zien we alleen op een echte
     videokaart (hier tekent WebGL op de processor).

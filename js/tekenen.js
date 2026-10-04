@@ -49,8 +49,8 @@
     flakkerSnelheid: 1,
     // Zonder lantaarn (wie sluipt) zie je 's nachts nog net om je heen: een zwak licht zonder kleur (tegels, 0 tot 1).
     ogen: { straal: 2.5, sterkte: 0.2 },
-    // De schaduwen van de zon (vraag 125, B, de proefplaat; de spelregel "Schaduwen"): hoe donker, en de kleur ervan.
-    zonneschaduw: false,
+    // De schaduwen van de zon (vraag 125, B; de spelregel "Schaduwen"): hoe donker, en de kleur ervan.
+    zonneschaduw: true,
     schaduw: { sterkte: 0.42, r: 18, g: 22, b: 44 },
   };
 
@@ -523,8 +523,8 @@
   // staat, nog een keer, als silhouet scheef over de grond vanaf zijn onderrand (js/gl.js, beginSchaduw), in de richting
   // en de lengte die de zon zegt (T.zonStand in js/dag.js). De silhouetten worden één vlak, zodat twee schaduwen over
   // elkaar niet donkerder zijn, en dat gaat over de grond, onder alles wat erop staat. Alleen met de videokaart, buiten, en
-  // met de spelregel "Schaduwen" op "Met de zon". De huizen en de bomen hebben hun schaduw nog in het plaatje gebakken:
-  // daar zie je er twee, tot de bouwer hem los kan zetten (vraag 124).
+  // met de spelregel "Schaduwen" op "Met de zon". De plaatjes van het spel hebben geen schaduw op de grond (de bouwer
+  // snijdt ze zonder); alleen onder een figuur ligt het ovaaltje van tekenWezen, als de plek waar hij staat.
   function tekenZonneschaduw(ctx, S, lijst) {
     const L = T.LICHT_INSTELLINGEN;
     if (!L.zonneschaduw || !ctx.beginSchaduw || !S.kalender || !S.wereld.buiten || !metSprites()) return;
