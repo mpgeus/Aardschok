@@ -62,6 +62,12 @@
       avondrood: { r: 255, g: 186, b: 128 },
     },
     kleurUren: 2,
+    // De zon voor de schaduwen (werklijst vraag 125, B; T.zonStand): hoe hoog ze op de middag staat (graden), hoe lang een
+    // schaduw hooguit wordt (keer de hoogte van wat hem werpt), en hoe laag de zon mag staan voor er een schaduw is
+    // (graden; daaronder zakt hij weg).
+    zonHoogte: 50,
+    schaduwLangst: 2.5,
+    zonLaag: 6,
     // Slapen kan zo dichtbij je eigen huis, in tegels.
     slaapAfstand: 3,
   };
@@ -153,6 +159,22 @@
     else if (u > zon.onder) donker = Math.min(1, (u - zon.onder) / s);
     const gloed = Math.max(0, 1 - Math.min(Math.abs(u - zon.op), Math.abs(u - zon.onder)) / s);
     return { donker: donker * i.nachtDonker, nacht: donker, gloed };
+  };
+
+  // Waar de schaduwen van de zon heen vallen (werklijst vraag 125, B, de proefplaat): { x, y } de richting over de grond
+  // (in tegels, lengte 1), `lengte` hoe lang een schaduw is tegen de hoogte van wat hem werpt, en `sterkte` van 0 (de zon
+  // is onder) tot 1. Op de middag valt hij naar rechtsonder op het scherm (x+), zoals de schaduw die in de plaatjes
+  // gebakken is: hun licht komt van linksboven (vraag 124). 's Ochtends draait hij een kwartslag naar rechtsboven (y-), en
+  // 's avonds naar linksonder (y+); hoe lager de zon, hoe langer.
+  T.zonStand = function (dag) {
+    const i = IN();
+    const u = T.uurVanDag(dag);
+    const zon = T.zonVan(dag);
+    const f = (u - zon.op) / Math.max(0.01, zon.onder - zon.op); // 0 bij zonsopgang, 1 bij zonsondergang
+    const hoogte = f > 0 && f < 1 ? i.zonHoogte * Math.sin(Math.PI * f) : 0;
+    const draai = (f - 0.5) * Math.PI;
+    const lengte = hoogte > 0 ? Math.min(i.schaduwLangst, 1 / Math.tan((hoogte * Math.PI) / 180)) : 0;
+    return { x: Math.cos(draai), y: Math.sin(draai), lengte, sterkte: tussen(hoogte / Math.max(0.01, i.zonLaag), 0, 1) };
   };
 
   // De kleur van het licht op dit uur (werklijst vraag 125, A; Marcel, 4 okt: "A ja"): [r, g, b] van 0 tot 1, waarmee

@@ -88,6 +88,11 @@
   const FRAG_MAAL = `
     precision highp float; uniform sampler2D uLicht; uniform vec2 uDoek;
     void main() { gl_FragColor = vec4(texture2D(uLicht, gl_FragCoord.xy / uDoek).rgb, 0.0); }`;
+  // De schaduwen van de zon (vraag 125, B): het masker met alle silhouetten, als één vlak over de grond, in de kleur
+  // van de schaduw.
+  const FRAG_SCHADUW = `
+    precision highp float; uniform sampler2D uMasker; uniform vec2 uDoek; uniform vec4 uKleur;
+    void main() { gl_FragColor = uKleur * texture2D(uMasker, gl_FragCoord.xy / uDoek).a; }`;
 
   function maakProgramma(vert, frag) {
     const p = gl.createProgram();
@@ -116,6 +121,7 @@
   let verloopProg = null;
   let plasProg = null;
   let maalProg = null;
+  let schaduwProg = null;
   let wit = null; // een textuur van één witte pixel, voor vlakken
   let maxTextuur = 4096;
   const PER_HOEK = 8; // x, y, u, v, r, g, b, a
@@ -167,6 +173,7 @@
       verloopProg = maakProgramma(VERT, FRAG_VERLOOP);
       plasProg = maakProgramma(VERT, FRAG_PLAS);
       maalProg = maakProgramma(VERT, FRAG_MAAL);
+      schaduwProg = maakProgramma(VERT, FRAG_SCHADUW);
     } catch (e) {
       console.error(e);
       kapot = true;
@@ -365,18 +372,37 @@
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, doek.width, doek.height);
     gl.useProgram(maalProg.p);
-    gl.uniform2f(maalProg.u.uMaat, doek.width, doek.height);
-    gl.uniform2f(maalProg.u.uDoek, doek.width, doek.height);
     gl.uniform1i(maalProg.u.uLicht, 0);
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, L.tex);
     gl.blendFuncSeparate(gl.DST_COLOR, gl.SRC_COLOR, gl.ZERO, gl.ONE);
+    overHetDoek(maalProg);
+    G.telling.lampen = plassen.length;
+  }
+
+  // ---------------------------------------------------------------- de schaduwen van de zon (vraag 125, B)
+  // Een masker even groot als het doek: de silhouetten erop, en dan in één keer over de grond.
+  let masker = null; // { fb, tex, b, h }
+  function maskerVan() {
+    if (masker && masker.b === doek.width && masker.h === doek.height) return masker;
+    if (!masker) masker = { fb: gl.createFramebuffer(), tex: nieuweTextuur() };
+    gl.bindTexture(gl.TEXTURE_2D, masker.tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, doek.width, doek.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, masker.fb);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, masker.tex, 0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    Object.assign(masker, { b: doek.width, h: doek.height });
+    return masker;
+  }
+  // Een vlak over het hele doek met een programma dat zijn kleur uit de plek op het scherm haalt.
+  function overHetDoek(prog) {
     const w = doek.width;
     const h = doek.height;
+    gl.uniform2f(prog.u.uMaat, w, h);
+    gl.uniform2f(prog.u.uDoek, w, h);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 0, 0, 0, 0, 0, 0, 1, w, 0, 0, 0, 0, 0, 0, 1, 0, h, 0, 0, 0, 0, 0, 1, w, 0, 0, 0, 0, 0, 0, 1, w, h, 0, 0, 0, 0, 0, 1, 0, h, 0, 0, 0, 0, 0, 1]), gl.STREAM_DRAW);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     G.telling.opdrachten++;
-    G.telling.lampen = plassen.length;
   }
 
   // ---------------------------------------------------------------- het kladdoek
@@ -436,6 +462,7 @@
       this.stapel = [];
       this.pad = []; // deelpaden: { p: [x, y, ...] in pixels, bol: true als het een ellips of cirkel is }
       this.padRond = false; // het pad heeft bochten die het snelle pad niet kent
+      this.schaduw = null; // { sx, sy } tussen beginSchaduw en eindSchaduw: alleen plaatjes, als silhouet op het masker
     }
     get canvas() {
       return doek;
@@ -574,6 +601,26 @@
       if (a.length === 2) [dx, dy, dw, dh] = [a[0], a[1], sw, sh];
       else if (a.length === 4) [dx, dy, dw, dh] = a;
       else [sx, sy, sw, sh, dx, dy, dw, dh] = a;
+      if (this.schaduw) {
+        // Het silhouet scheef over de grond: de onderrand blijft staan, een punt zo hoog erboven komt zo ver in de richting
+        // van de schaduw te liggen.
+        const t = textuurVan(bron);
+        if (!t) return;
+        const m = this.st.m;
+        const yb = dy + dh;
+        const { sx: rx, sy: ry } = this.schaduw;
+        const p = [];
+        for (const [x, y] of [[dx, dy], [dx + dw, dy], [dx, yb], [dx + dw, yb]]) {
+          const h = yb - y;
+          const gx = x + h * rx;
+          const gy = yb + h * ry;
+          p.push(m[0] * gx + m[2] * gy + m[4], m[1] * gx + m[3] * gy + m[5]);
+        }
+        const al = this.st.alpha;
+        plekVoor(t.tex, 'source-over', 6);
+        vierhoek(p, [sx / t.b, sy / t.h, (sx + sw) / t.b, (sy + sh) / t.h], [0, 0, 0, al]);
+        return;
+      }
       if (this.snel()) {
         if (kladVak) legKladAf();
         const t = textuurVan(bron);
@@ -593,6 +640,7 @@
     }
     // ---- vlakken
     fillRect(x, y, b, h) {
+      if (this.schaduw) return;
       const v = this.st.vul;
       const verloop = typeof v === 'object' ? verlopen.get(v) : null;
       if (this.snel() && (typeof v === 'string' || verloop)) {
@@ -616,6 +664,7 @@
       this.opKlad(this.vakVan(x, y, x + b, y + h), (k) => k.fillRect(x, y, b, h));
     }
     clearRect(x, y, b, h) {
+      if (this.schaduw) return;
       if (!this.st.clip) {
         if (kladVak) legKladAf();
         const m = this.st.m;
@@ -711,6 +760,7 @@
       return [x0 - r, y0 - r, x1 + r, y1 + r];
     }
     fill(...a) {
+      if (this.schaduw) return;
       const v = this.st.vul;
       const verloop = typeof v === 'object' ? verlopen.get(v) : null;
       if (!a.length && this.snel() && !this.padRond && (typeof v === 'string' || verloop) && this.pad.length && this.pad.every(bolPad)) {
@@ -737,6 +787,7 @@
       this.opKlad(this.padVak(0), (k) => k.fill(...a));
     }
     stroke(...a) {
+      if (this.schaduw) return;
       this.opKlad(this.padVak(this.k.lineWidth * Math.hypot(this.st.m[0], this.st.m[1])), (k) => k.stroke(...a));
     }
     clip(...a) {
@@ -750,12 +801,15 @@
       return this.vakVan(x - w, y - grootte * 1.5, x + w, y + grootte * 1.5, 4);
     }
     fillText(t, x, y, ...a) {
+      if (this.schaduw) return;
       this.opKlad(this.tekstVak(t, x, y), (k) => k.fillText(t, x, y, ...a));
     }
     strokeText(t, x, y, ...a) {
+      if (this.schaduw) return;
       this.opKlad(this.tekstVak(t, x, y), (k) => k.strokeText(t, x, y, ...a));
     }
     putImageData(...a) {
+      if (this.schaduw) return;
       legRijAf();
       this.opKlad(null, (k) => k.putImageData(...a));
     }
@@ -768,6 +822,30 @@
       const m = this.st.m;
       const s = Math.hypot(m[0], m[1]);
       tekenLicht(kleur, plassen.map((p) => ({ x: m[0] * p.x + m[2] * p.y + m[4], y: m[1] * p.x + m[3] * p.y + m[5], rx: p.rx * s, ry: p.ry * s, k: p.k })));
+    }
+    // De schaduwen van de zon (vraag 125, B; tekenZonneschaduw in js/tekenen.js): tussen beginSchaduw en eindSchaduw
+    // tekent alleen drawImage, als silhouet op het masker, scheef met (sx, sy) per pixel hoogte in de vlakte van het
+    // plaatje. eindSchaduw legt het masker in één keer over wat er al staat, met deze dekking en kleur ([r, g, b]).
+    beginSchaduw(sx, sy) {
+      legKladAf();
+      legRijAf();
+      const M = maskerVan();
+      gl.bindFramebuffer(gl.FRAMEBUFFER, M.fb);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      this.schaduw = { sx, sy };
+    }
+    eindSchaduw(dekking, kleur) {
+      legRijAf();
+      this.schaduw = null;
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.useProgram(schaduwProg.p);
+      gl.uniform1i(schaduwProg.u.uMasker, 0);
+      gl.uniform4f(schaduwProg.u.uKleur, kleur[0] * dekking, kleur[1] * dekking, kleur[2] * dekking, dekking);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, maskerVan().tex);
+      MENG['source-over'](gl);
+      overHetDoek(schaduwProg);
     }
     // Eén pixel teruglezen (het gereedschap van het meten): alles wat klaarstaat, eerst tekenen.
     getImageData(x, y, b, h) {
@@ -829,6 +907,7 @@
     if (!hetDoek) hetDoek = new Doek();
     hetDoek.st = { m: [ratio, 0, 0, ratio, 0, 0], alpha: 1, meng: 'source-over', filter: 'none', helder: 1, vul: '#000', clip: false };
     hetDoek.stapel = [];
+    hetDoek.schaduw = null;
     const k = kladdoek().ctx;
     k.setTransform(1, 0, 0, 1, 0, 0);
     k.clearRect(0, 0, klad.canvas.width, klad.canvas.height);

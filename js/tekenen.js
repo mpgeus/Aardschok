@@ -49,6 +49,9 @@
     flakkerSnelheid: 1,
     // Zonder lantaarn (wie sluipt) zie je 's nachts nog net om je heen: een zwak licht zonder kleur (tegels, 0 tot 1).
     ogen: { straal: 2.5, sterkte: 0.2 },
+    // De schaduwen van de zon (vraag 125, B, de proefplaat; de spelregel "Schaduwen"): hoe donker, en de kleur ervan.
+    zonneschaduw: false,
+    schaduw: { sterkte: 0.42, r: 18, g: 22, b: 44 },
   };
 
   const metSprites = () => !!(T.sprites && T.sprites.aan) && !(T.debug && T.debug.vlakken);
@@ -412,11 +415,11 @@
               const frame = T.windBeeld(S.tijd, x, y);
               const achter = T.sprites.graanLaag(stadium, variant, 'achter', frame);
               const voor = T.sprites.graanLaag(stadium, variant, 'voor', frame);
-              lijst.push({ d: x + y, l: 1, punt: { x, y }, f: () => T.sprites.teken(ctx, achter, p.x, p.y, 1) });
-              lijst.push({ d: x + y, l: 2.5, punt: { x, y }, f: () => T.sprites.teken(ctx, voor, p.x, p.y, 1) });
+              lijst.push({ d: x + y, l: 1, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, achter, p.x, p.y, 1) });
+              lijst.push({ d: x + y, l: 2.5, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, voor, p.x, p.y, 1) });
             } else {
               const deel = T.sprites.graanTegel(stadium, variant);
-              lijst.push({ d: x + y, l: 1, punt: { x, y }, f: () => T.sprites.teken(ctx, deel, p.x, p.y, 1) });
+              lijst.push({ d: x + y, l: 1, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, deel, p.x, p.y, 1) });
             }
           }
         }
@@ -463,6 +466,7 @@
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
     // nacht licht wordt (brandendeRamen, hieronder).
     const ramen = brandendeRamen(S);
+    tekenZonneschaduw(ctx, S, lijst);
     for (const item of tekenVolgorde(lijst)) {
       item.f();
       for (const r of ramen) if (isTekeningVan(item, r.g)) ponsRamen(ctx, r);
@@ -513,6 +517,26 @@
     ctx.globalCompositeOperation = 'source-atop';
     tekenNachtLagen(ctx, S, bw, bh);
     ctx.restore();
+  }
+
+  // De schaduwen van de zon (werklijst vraag 125, B, de proefplaat; Marcel, 4 okt: "B graag"): alles wat in de tekenlijst
+  // staat, nog een keer, als silhouet scheef over de grond vanaf zijn onderrand (js/gl.js, beginSchaduw), in de richting
+  // en de lengte die de zon zegt (T.zonStand in js/dag.js). De silhouetten worden één vlak, zodat twee schaduwen over
+  // elkaar niet donkerder zijn, en dat gaat over de grond, onder alles wat erop staat. Alleen met de videokaart, buiten, en
+  // met de spelregel "Schaduwen" op "Met de zon". De huizen en de bomen hebben hun schaduw nog in het plaatje gebakken:
+  // daar zie je er twee, tot de bouwer hem los kan zetten (vraag 124).
+  function tekenZonneschaduw(ctx, S, lijst) {
+    const L = T.LICHT_INSTELLINGEN;
+    if (!L.zonneschaduw || !ctx.beginSchaduw || !S.kalender || !S.wereld.buiten || !metSprites()) return;
+    const z = T.zonStand(S.kalender.dag);
+    if (z.sterkte <= 0.01) return;
+    // Een richting over de grond, op het scherm: een tegel is 64 breed en 32 hoog, dus de y gaat half mee.
+    const sx = ((z.x - z.y) / Math.SQRT2) * z.lengte;
+    const sy = ((z.x + z.y) / (2 * Math.SQRT2)) * z.lengte;
+    ctx.beginSchaduw(sx, sy);
+    for (const item of lijst) if (!item.zonderSchaduw) item.f();
+    const k = L.schaduw;
+    ctx.eindSchaduw(k.sterkte * z.sterkte, [k.r / 255, k.g / 255, k.b / 255]);
   }
 
   // De lampen die nu branden, als plassen licht op het scherm: { x, y, rx, ry, k: [r, g, b] }, met k wat de lamp in het

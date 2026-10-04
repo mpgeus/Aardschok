@@ -4712,6 +4712,21 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     kleur inzet, is `tekenNacht` in `js/tekenen.js`: de kleur van het uur maal die van het weer, vóór de lichtkaart.
     **En: "B graag, C mag later".** De proefplaat van B (schaduwen met de zon) komt nu; die van C (licht op de muren)
     later.
+    **Plan voor de proefplaat van B (4 okt), Marcel: "A ja, B zoals je voorstelt, C ja".** Elk ding in de tekenlijst
+    werpt zijn silhouet scheef over de grond, met de zon mee; beginnen met de figuren en de bomen, en de sessie van de huizen
+    vragen om de schakelaar voor de ingebakken vloerschaduw (gevraagd op 4 okt); een huis klopt ongeveer, en dat is goed
+    genoeg voor de proef.
+    **De proefplaat is gebouwd (4 okt).** De spelregel "Schaduwen" op "Met de zon" (standaard "Ingebakken"; alleen met de
+    videokaart): `T.zonStand` in `js/dag.js` zegt de richting en de lengte (de zon op de middag 50 graden hoog, een schaduw
+    hooguit 2,5 keer zo lang als wat hem werpt), `tekenZonneschaduw` in `js/tekenen.js` tekent de tekenlijst nog een keer
+    als silhouet, en `js/gl.js` legt alle silhouetten op een masker en dat in één keer over de grond (`beginSchaduw`,
+    `eindSchaduw`), zodat twee schaduwen over elkaar niet donkerder worden. **De richting past bij de plaatjes:** op de
+    middag valt hij kort naar rechtsonder, net als de schaduw die erin gebakken is (licht van linksboven); 's ochtends
+    lang naar rechtsboven, 's avonds lang naar linksonder. Het graan op de akkers werpt geen schaduw. Wat nog ontbreekt:
+    de huizen en de bomen hebben hun ingebakken schaduw er nog bij (de schakelaar van de bouwer), en een schaduw valt
+    alleen op de grond, niet op een muur erachter.
+    Vragen: **A**, zo verder (de schakelaar, dan de huizen opnieuw door de bouwer), of niet? **B**, de lengte en de
+    donkerte (in de werkbank, "Het licht" en "De dag")?
     `npm run schermen` heeft drie beelden erbij: de dageraad, de zonsondergang en het plein 's avonds vóór bedtijd (om
     20.8 uur slaapt het dorp al, en zijn de lantaarns uit). Hoe snel de lichtkaart is, zien we alleen op een echte
     videokaart (hier tekent WebGL op de processor).
