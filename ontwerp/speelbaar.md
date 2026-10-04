@@ -149,6 +149,24 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 4 okt: lopen tussen anderen (werklijst, vraag 119, D en A)
+
+Gespeeld in de zesentwintigste sessie: `npm run speeltest -- bouwer --zaden 1-3`, twee keer naast elkaar: op het spel van
+vóór het nieuwe lopen (`99e61a0`, in een losse kopie) en op het spel met D en A (`ccr-0d0c2710-bcd5tx`, gecommit als
+`bac25fe`). De mensen zoeken nu een weg alleen om wat vaststaat, en lossen onderweg op wie er staat (wachten, langs elkaar,
+opzij, eromheen); waar velen heen gaan, komt de weg uit een veld. Marcel wist dat de speeltest dan niet meer letter voor
+letter hetzelfde jaar speelt.
+
+| zaad | een dorp op | marktrecht op | mensen, vóór | mensen, na | een spel, vóór | na |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | 24 oogstmaand '23 | 24 wijnmaand '23 | 26 → 72 | 26 → 71 | 433 s | 387 s |
+| 2 | 24 oogstmaand '23 | 21 wijnmaand '23 | 26 → 73 | 26 → 69 | 417 s | 412 s |
+| 3 | 24 oogstmaand '23 | 28 wijnmaand '23 | 26 → 77 | 26 → 75 | 449 s | 406 s |
+
+Het dorp en marktrecht komen op dezelfde dag, ervoor en erna; aan het eind een paar mensen minder, binnen wat een ander
+toeval ook geeft (met alleen D, zonder de velden, werd zaad 1 26 → 76). Geen fouten in de console. De twee speeltests
+liepen tegelijk op dezelfde machine, dus de tijden zijn te vergelijken: een spel was zo'n 8% sneller.
+
 ## De speeltest van 4 okt: de bouwer op het wijdere land (werklijst, vraag 112)
 
 Gespeeld in de zesentwintigste sessie, op `ccr-0d0c2710-bcd5tx`: het spel van `f5d9ce5` met de twee wijzigingen hieronder
