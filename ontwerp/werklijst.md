@@ -4034,6 +4034,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Gezien onderweg, niet in deze stap (`opmerkingen.md`, "Het beeld"): ook de figuren laden altijd alles.
     Vragen: **A**, ook de gebouwen, niet alleen de huizen? **B**, zo laden? **C**, de figuren op de lijst, of meteen
     erna?
+    **Marcel (4 okt): "A ja B ja C meteen erna".** Dus de huizen en de gebouwen elk een eigen bestand, laden wat er
+    staat zoals hierboven, en meteen daarna dezelfde regel voor de figuren (stap 1b): een figuur laadt als zijn wezen op
+    de kaart komt.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
