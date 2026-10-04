@@ -968,17 +968,78 @@ function png(plaat, schaal = 1, achtergrond = null) {
       raw[o + 3] = src[s + 3];
     }
   }
+  return pngVanRijen(b, h, raw);
+}
+
+// De rijen van een beeld, elk met filterbyte 0 ervoor, als PNG-bestand: 8-bit RGBA, in één IDAT.
+const PNG_HANDTEKENING = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+function pngVanRijen(b, h, raw) {
   const ihdr = Buffer.alloc(13);
   ihdr.writeUInt32BE(b, 0);
   ihdr.writeUInt32BE(h, 4);
   ihdr[8] = 8;
   ihdr[9] = 6;
   return Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+    PNG_HANDTEKENING,
     chunk('IHDR', ihdr),
     chunk('IDAT', zlib.deflateSync(raw, { level: 9 })),
     chunk('IEND', Buffer.alloc(0)),
   ]);
+}
+
+// Een beeld { b, h, rgba } (8-bit RGBA, rij na rij) als PNG, net zoals png() een plaat schrijft: voor een vel dat
+// uit bestaande vellen is samengesteld (inpakken.cjs).
+function pngVanBeeld({ b, h, rgba }) {
+  const raw = Buffer.alloc((b * 4 + 1) * h);
+  for (let y = 0; y < h; y++) rgba.copy(raw, y * (b * 4 + 1) + 1, y * b * 4, (y + 1) * b * 4);
+  return pngVanRijen(b, h, raw);
+}
+
+// En terug: een PNG (een pad of de bytes) als { b, h, rgba }. Alleen 8-bit RGBA zonder interlace, zoals png() ze
+// schrijft, maar met alle vijf de rijfilters, voor een vel dat een ander programma opsloeg.
+function leesPng(bron) {
+  const buf = Buffer.isBuffer(bron) ? bron : require('fs').readFileSync(bron);
+  if (!buf.subarray(0, 8).equals(PNG_HANDTEKENING)) throw new Error(`${bron}: geen PNG`);
+  let o = 8;
+  let ihdr = null;
+  const idat = [];
+  while (o + 8 <= buf.length) {
+    const len = buf.readUInt32BE(o);
+    const type = buf.toString('ascii', o + 4, o + 8);
+    if (type === 'IHDR') ihdr = buf.subarray(o + 8, o + 8 + len);
+    else if (type === 'IDAT') idat.push(buf.subarray(o + 8, o + 8 + len));
+    else if (type === 'IEND') break;
+    o += 12 + len;
+  }
+  const b = ihdr.readUInt32BE(0);
+  const h = ihdr.readUInt32BE(4);
+  if (ihdr[8] !== 8 || ihdr[9] !== 6 || ihdr[12] !== 0) throw new Error(`${bron}: geen 8-bit RGBA zonder interlace`);
+  const raw = zlib.inflateSync(Buffer.concat(idat));
+  const rij = b * 4;
+  const rgba = Buffer.alloc(rij * h);
+  for (let y = 0; y < h; y++) {
+    const filter = raw[y * (rij + 1)];
+    const van = y * (rij + 1) + 1;
+    const naar = y * rij;
+    for (let i = 0; i < rij; i++) {
+      const a = i >= 4 ? rgba[naar + i - 4] : 0; // links
+      const c = y > 0 ? rgba[naar - rij + i] : 0; // boven
+      const d = i >= 4 && y > 0 ? rgba[naar - rij + i - 4] : 0; // linksboven
+      let v = raw[van + i];
+      if (filter === 1) v += a;
+      else if (filter === 2) v += c;
+      else if (filter === 3) v += (a + c) >> 1;
+      else if (filter === 4) {
+        const p = a + c - d;
+        const pa = Math.abs(p - a);
+        const pc = Math.abs(p - c);
+        const pd = Math.abs(p - d);
+        v += pa <= pc && pa <= pd ? a : pc <= pd ? c : d;
+      }
+      rgba[naar + i] = v & 255;
+    }
+  }
+  return { b, h, rgba };
 }
 
 // Een figuur of voorwerp los renderen, op een doorzichtige achtergrond. anker = de pixel waar
@@ -1032,6 +1093,8 @@ module.exports = {
   naarScherm,
   tegelNaarScherm,
   png,
+  pngVanBeeld,
+  leesPng,
   losRenderen,
   BAYER4: BAYER,
 };

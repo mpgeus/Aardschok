@@ -175,7 +175,7 @@
      "gid": 161,
      "x": 288,
      "y": 64,
-     "width": 346,
+     "width": 180,
      "height": 308,
      "properties": []
     },
@@ -187,7 +187,7 @@
      "gid": 163,
      "x": 320,
      "y": 128,
-     "width": 346,
+     "width": 124,
      "height": 308,
      "properties": []
     },
@@ -199,8 +199,8 @@
      "gid": 193,
      "x": 32,
      "y": 32,
-     "width": 648,
-     "height": 632,
+     "width": 430,
+     "height": 436,
      "properties": []
     }
    ]

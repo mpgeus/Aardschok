@@ -73,9 +73,11 @@
 //   gereedschap/pixelart/uit/bouwfasen/<tekening>.png   per gebouw, de vijf fases naast elkaar
 //   gereedschap/pixelart/uit/bouwfasen/overzicht.png    alle gebouwen onder elkaar
 //   (geen van deze twee in git — net als de rest van uit/, zie CLAUDE.md)
-//   tegels/bouwfasen.png + .json + .js                  het vel voor het spel (.js is dezelfde
-//                                                        inhoud als .json, als script voor file://
-//                                                        — zie de toelichting bij `schrijfSpelVel`).
+//   tegels/bouwfasen/<tekening>.png                     per gebouw een klein vel voor het spel, met
+//                                                        zijn vijf fases strak gesneden (inpakken.cjs)
+//   tegels/bouwfasen.json + .js                         waar elke fase op zijn vel staat (.js is
+//                                                        dezelfde inhoud als .json, als script voor
+//                                                        file:// — zie de toelichting bij `schrijfSpelVel`).
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -87,6 +89,7 @@ const P = require('./dorp2.cjs');
 const VW = require('./voorwerpen.cjs');
 const F = require('./figuren.cjs');
 const HZ = require('./huizen.cjs');
+const I = require('./inpakken.cjs');
 const { RAMP, UIT, PXH, TEGEL } = K;
 
 const PIXELART = __dirname;
@@ -634,71 +637,57 @@ function schrijfOverzicht(resultaten) {
   schrijfPng(path.join(UITDIR, 'overzicht.png'), vel, '#20202a');
 }
 
-// Het vel voor het spel: elk gebouw krijgt zijn eigen, krap uitgesneden cel (niet de gedeelde,
-// royale cel van bouwfasen zelf — die is voor alle vijf fases van ÉÉN gebouw gelijk gehouden zodat
-// het anker niet verschuift, maar tussen gebouwen onderling hoeft dat niet, en een kippenhok hoeft
-// geen cel zo groot als een schuur). Per fase dus een eigen (x, y, b, h) in het vel, plus een eigen
-// `anker` (het punt in DIE cel dat op T.naarScherm(x, y) van de aangeklikte tegel komt — dezelfde
-// afspraak als tegels.json "anker": de achterste voethoek van de voet, een halve tegel (16 px)
-// boven het midden van die tegel). Dat ankerpunt is voor alle vijf fases van hetzelfde gebouw
-// hetzelfde WERELDPUNT als voor de kant-en-klare tekening in gebouwen.tsx (zie de koptekst: `hoek`
-// hangt alleen van g.voet af, dat verandert nooit) — alleen de pixel-COÖRDINAAT ervan verschuift
-// mee met de krappere cel hier, want dit is een eigen vel, geen gedeeld Tiled-raster met gebouwen.tsx
-// se eigen (veel grotere) cel. `beslaat` is letterlijk hetzelfde getal als in gebouwen.tsx voor
-// diezelfde tekening (allebei uit g.voet/TEGEL) — dat wordt dus nooit gecontroleerd, dat IS gelijk.
+// De vellen voor het spel: per gebouw een eigen klein vel, tegels/bouwfasen/<tekening>.png, met zijn vijf fases elk
+// strak gesneden (inpakken.cjs; werklijst vraag 114, 2a). Eerst stonden alle gebouwen op één vel, en dat was in de
+// browser 271 MB en 8303 pixels hoog; nu laadt het spel het vel van een gebouw pas als er een in aanbouw staat
+// (js/sprites.js, S.bouwfase). Per fase een eigen (x, y, b, h) op dat vel, plus een eigen `anker` (het punt in DIE
+// cel dat op T.naarScherm(x, y) van de aangeklikte tegel komt — dezelfde afspraak als tegels.json "anker": de
+// achterste voethoek van de voet, een halve tegel (16 px) boven het midden van die tegel). Dat ankerpunt is voor alle
+// vijf fases van hetzelfde gebouw hetzelfde WERELDPUNT als voor de kant-en-klare tekening in gebouwen.tsx (zie de
+// koptekst: `hoek` hangt alleen van g.voet af, dat verandert nooit) — alleen de pixel-COÖRDINAAT ervan verschuift mee
+// met de strakke cel. `beslaat` is letterlijk hetzelfde getal als in gebouwen.tsx voor diezelfde tekening (allebei uit
+// g.voet/TEGEL) — dat wordt dus nooit gecontroleerd, dat IS gelijk.
 //
-// Voor het spel: zoek de tekeningnaam op (T.GEBOUWEN.<soort>.tekening is "gebouwen/<naam>"; gebruik
-// <naam> hier), lees `fasen[naam][faseIndex]` (0..4; fase 5 = de bestaande tekening in
-// tegels/gebouwen.tsx zelf), teken `bouwfasen.png` uitgesneden op (x, y, b, h), met (ankerX, ankerY)
-// van die cel op dezelfde schermplek als anders het anker van gebouwen.tsx (T.sprites.teken doet
-// dat al zo voor de vlakken/losse sprites, zie CLAUDE.md "js/sprites.js").
-// Een gebouw is een strook van vijf cellen naast elkaar; de stroken liggen in rijen naast elkaar, tot
-// MAX_BREED (geen gedeeld Tiled-raster nodig, zie hierboven). Eerst stond elk gebouw op een eigen rij,
-// en met de huizen van ronde 4b werd het vel 15.593 pixels hoog: boven 16.384 laadt een videokaart
-// een beeld niet meer als één geheel.
-const MAX_BREED = 8192;
+// Voor het spel: zoek de tekeningnaam op (T.GEBOUWEN.<soort>.tekening is "gebouwen/<naam>"; gebruik <naam> hier), lees
+// `fasen[naam]` voor het vel (`bestand`, vanaf tegels/) en `fasen[naam].fasen[faseIndex]` (0..4; fase 5 = de bestaande
+// tekening in tegels/gebouwen.tsx zelf), en teken die cel met zijn anker op dezelfde schermplek als anders het anker
+// van gebouwen.tsx (T.sprites.teken doet dat al zo, zie CLAUDE.md "js/sprites.js").
+//
+// `resultaten`: per gebouw { id, tekening, cb, ch, ankerX, ankerY, beslaat, fasenNamen, beelden }, met `beelden` de
+// fases als beeld van cb bij ch (inpakken.cjs), het anker voor allemaal op (ankerX, ankerY).
 function schrijfSpelVel(resultaten) {
-  const plek = [];
-  let x = 0;
-  let y = 0;
-  let rijH = 0;
-  let breedte = 0;
-  for (const r of resultaten) {
-    const b = r.cb * r.platen.length;
-    if (x > 0 && x + b > MAX_BREED) {
-      y += rijH;
-      x = 0;
-      rijH = 0;
-    }
-    plek.push([x, y]);
-    x += b;
-    rijH = Math.max(rijH, r.ch);
-    breedte = Math.max(breedte, x);
-  }
-  const hoogte = y + rijH;
-  const vel = new K.Plaat(breedte, hoogte);
+  const MAP = path.join(TEGELS, 'bouwfasen');
+  fs.rmSync(MAP, { recursive: true, force: true });
+  fs.mkdirSync(MAP, { recursive: true });
+  fs.rmSync(path.join(TEGELS, 'bouwfasen.png'), { force: true }); // het ene vel van vóór 4 okt
   const fasenJson = {};
-  resultaten.forEach((r, k) => {
-    const [x0, y0] = plek[k];
-    const lijst = [];
-    r.platen.forEach((p, i) => {
-      vel.plak(p, x0 + i * r.cb, y0);
-      lijst.push({ x: x0 + i * r.cb, y: y0, b: r.cb, h: r.ch, anker: [r.ankerX, r.ankerY + 16], naam: r.fasenNamen[i] });
-    });
-    fasenJson[r.tekening] = { gebouw: r.id, beslaat: r.beslaat, fasen: lijst };
-  });
-  fs.mkdirSync(TEGELS, { recursive: true });
-  schrijfPng(path.join(TEGELS, 'bouwfasen.png'), vel, null);
+  let pixels = 0;
+  for (const r of resultaten) {
+    const rij = I.leegBeeld(r.cb * r.beelden.length, r.ch);
+    r.beelden.forEach((b, i) => I.kopieer(b, [0, 0, r.cb, r.ch], rij, i * r.cb, 0));
+    const uit = I.pakVelIn(rij, r.beelden.map((_, i) => ({ cel: [i * r.cb, 0, r.cb, r.ch], anker: [r.ankerX, r.ankerY + 16] })));
+    if (uit.tegels.some((t) => !t)) {
+      console.warn(`  overgeslagen: ${r.tekening} (een fase is leeg)`);
+      continue;
+    }
+    const bestand = `bouwfasen/${r.tekening}.png`;
+    fs.writeFileSync(path.join(TEGELS, bestand), I.pngVanBeeld(uit.beeld));
+    pixels += uit.beeld.b * uit.beeld.h;
+    fasenJson[r.tekening] = {
+      gebouw: r.id, beslaat: r.beslaat, bestand,
+      fasen: uit.tegels.map((t, i) => ({ x: t.cel[0], y: t.cel[1], b: t.cel[2], h: t.cel[3], anker: t.anker, naam: r.fasenNamen[i] })),
+    };
+  }
   const data = {
     _lees_dit: 'Vijf bouwfases per gebouw uit tegels/gebouwen.tsx en tegels/huizen.tsx, gemaakt door '
       + 'gereedschap/pixelart/bouwfasen.cjs — niet met de hand bijwerken. Sleutel is de '
-      + 'tekeningnaam (T.GEBOUWEN.<soort>.tekening, na "gebouwen/" of "huizen/"). Per fase (0..4, oplopend '
-      + 'in afbouw): x/y/b/h snijdt de cel uit bouwfasen.png, anker is het punt in die cel dat op '
+      + 'tekeningnaam (T.GEBOUWEN.<soort>.tekening, na "gebouwen/" of "huizen/"). Elk gebouw heeft een eigen vel '
+      + '(bestand, vanaf tegels/), dat het spel pas laadt als er een in aanbouw staat. Per fase (0..4, oplopend '
+      + 'in afbouw): x/y/b/h snijdt de cel uit dat vel, anker is het punt in die cel dat op '
       + 'T.naarScherm(x, y) van de aangeklikte tegel komt — dezelfde achterste-voethoek-afspraak '
       + 'als tegels.json ("anker" bij de tsx-vellen), en beslaat is dezelfde tegelmaat als in '
       + 'gebouwen.tsx of huizen.tsx voor dezelfde tekening. Fase 5 (klaar) staat niet hier: dat is gewoon de '
       + 'bestaande tegel in tegels/gebouwen.png of tegels/huizen.png.',
-    breedte: vel.b, hoogte: vel.h, bestand: 'bouwfasen.png',
     fasen: fasenJson,
   };
   // bouwfasen.json is de bron, bouwfasen.js dezelfde inhoud als gewoon script (zelfde recept als
@@ -715,7 +704,7 @@ function schrijfSpelVel(resultaten) {
       + json.replace(/\n/g, '\n  ')
       + ';\n})(globalThis.Spel = globalThis.Spel || {});\n',
   );
-  return { breedte: vel.b, hoogte: vel.h };
+  return { gebouwen: Object.keys(fasenJson).length, mb: Math.round((pixels * 4) / 1e6) };
 }
 
 // ---------------------------------------------------------------- hoofdprogramma
@@ -740,12 +729,12 @@ async function main() {
     console.log('  spelvel niet geschreven: dat gebeurt alleen als alle gebouwen gerenderd zijn (zonder namen)');
     return;
   }
-  const { breedte, hoogte } = schrijfSpelVel(resultaten);
-  console.log(`  spelvel: tegels/bouwfasen.png (${breedte}×${hoogte}) + tegels/bouwfasen.json + .js`);
+  const { gebouwen, mb } = schrijfSpelVel(resultaten.map((r) => ({ ...r, beelden: r.platen.map(I.beeldVanPlaat) })));
+  console.log(`  spelvellen: tegels/bouwfasen/ (${gebouwen} gebouwen, samen ${mb} MB in de browser) + tegels/bouwfasen.json + .js`);
 }
 
 if (isMainThread && require.main === module) {
   main().catch((e) => { console.error(e); process.exit(1); });
 }
 
-module.exports = { BUILDINGEN, fasesVan, renderGebouw };
+module.exports = { BUILDINGEN, fasesVan, renderGebouw, schrijfSpelVel };

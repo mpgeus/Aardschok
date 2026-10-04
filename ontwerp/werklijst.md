@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (4 okt 2026, eind van de zevenentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje zijn gebouwd: wie vrij is en toevallig een buur of iemand van zijn werk treft, blijft soms staan, met een wolkje (vraag 120; Marcel: "geen praatjes forceren"); het laden van een bewaard spel in een verse bladzijde bleek stuk, en is gerepareerd; nu de huizen: de vellen inpakken, meer afwisseling, en de herberg, de kapel en de woontoren in verhouding (vraag 112, stap 2, en 114), dan de boeren aan het werk op hun veld (vraag 111)
+## De stand (4 okt 2026, eind van de achtentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt (vraag 114, 2a): de browser houdt zo'n 210 MB aan plaatjes vast in plaats van 900, elke tekening pixel voor pixel dezelfde; nu de proefplaat met meer afwisseling in de huizen, en de herberg, de kapel en de woontoren in verhouding (vraag 114, 2b en 2c), dan de boeren aan het werk op hun veld (vraag 111); Marcel vroeg om hoogteverschillen op de kaart (vraag 121, het plan wacht op hem)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -41,8 +41,9 @@ treft, soms staan voor een praatje, met een wolkje boven wie praat. `npm test`: 
 meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
 van een weg, en het bos om de kaart alleen aan de kant van het bos. Sinds het eind van de zesentwintigste sessie ook het
 lopen (vraag 119, D en A; Marcel: "ja push main"), en sinds de zevenentwintigste sessie het praatje (vraag 120;
-Marcel: "2 ja push main"), en de reparatie van het laden (Marcel: "ja push main"). Hoe een eigen branch en `main` samengaan, staat in
-`CLAUDE.md`, onder Git.
+Marcel: "2 ja push main"), en de reparatie van het laden (Marcel: "ja push main"). Het inpakken van de vellen (vraag 114,
+2a, achtentwintigste sessie) staat op de branch van die sessie (`ccr-85053a7c-trfw1j`), nog niet in `main`. Hoe een
+eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
 huizen"): een weg gaat om wat vaststaat, wie onderweg een ander treft, wacht, schuift langs hem, laat hem opzij gaan of
@@ -59,8 +60,16 @@ Niemand gaat ergens heen om te praten: c (een deel 's avonds naar het plein) gin
 huizen?"): een gebouw uit het spel kende een verse bladzijde niet na het laden; nu meldt het laden de soorten aan van wat
 er op de kaarten ligt, en de proef met opslaan speelt weer letter voor letter hetzelfde jaar. Zie onder Af.
 
-**Waar de volgende sessie begint:** **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij vraag 114): eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
-wanden, luiken, gespiegeld) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien.
+**De vellen zijn ingepakt** (vraag 114, 2a, 4 okt; Marcel: "1 ja 2 alleen nog de grond"): elke tekening strak gesneden,
+de bouwfasen per gebouw (pas geladen als er een in aanbouw staat), en de cellen van de figuren gekrompen. Elke tekening
+is pixel voor pixel dezelfde gebleven; het geheugen van de browser ging in het overzicht van zo'n 1.000 naar 730 MB, en
+het eerste keer uitzoomen van 290 naar 165 ms. Zie onder Af, en `beeld.md`, "De vellen zijn ingepakt".
+
+**Waar de volgende sessie begint:** **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij vraag 114): de vellen
+zijn ingepakt (2a); nu een proefplaat met meer afwisseling (daken, wanden, luiken, gespiegeld; de bouwfasen per vorm, niet
+per kleur) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien. **Vraag 121**
+(hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁") wacht op Marcel: terrassen, wat het
+doet, en wanneer; een proefplaat van de hoogte kan met die van de huizen mee.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
 met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant (**vraag 115**). De meter in Firefox
 (vraag 113, a) komt van hem. Ook besloten (4 okt): **vraag 116** (beesten in het bos: wolven die de houthakker bedreigen,
@@ -3899,6 +3908,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       **Marcel (4 okt): "1 ja 2 alleen nog de grond."** Dus alle vier de stappen, en strak gesneden: Tiled hoeft alleen
       de grond nog goed te tonen. De voorwerpen staan er in Tiled dan niet precies op hun plek; het spel zet ze neer met
       hun eigen anker.
+      **Gebouwd (4 okt, achtentwintigste sessie; zie onder Af).** Wat anders liep dan het plan: (4) het uitpakken bij het
+      laden (`img.decode()`) ging er weer uit, want dat wacht in Chromium tot de bladzijde een beeld tekent, en in een
+      verborgen tabblad blijft het spel dan bij zijn vlakken; een ingepakt vel is klein genoeg om bij het eerste beeld
+      uit te pakken (het eerste beeld van een bouwplaats met vijf gebouwen tegelijk: 50 à 80 ms, voorheen 50). Een plant die in de wind
+      buigt, kreeg aan beide kanten plaats, want strak gesneden viel zijn kruin over de rand. En de vellen met planten
+      (bomen, begroeiing, erf) houden de hoogte van hun oude vak, want de wind buigt naar de hoogte in het vak. Wat er bij
+      het eerste keer uitzoomen nog over is (165 ms), is zo groot als elke volgende zoomstap: de grond en het bos opnieuw in
+      hun buffer (vraag 113).
     - **2b, de afwisseling** (vraag 112, d, en Marcel: "andere kleuren etc"): per soort meer tekeningen uit wat de bouwer
       al kan, en elk ook gespiegeld, met de deur aan de andere kant (dan kan een huis vóór het plein er ook zijn deur
       naartoe keren). De daken volgen de treden: in het gehucht riet en spanen, in een dorp ook leien, met marktrecht
@@ -4535,6 +4552,23 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 4 okt 2026 — **De vellen ingepakt** (achtentwintigste sessie; vraag 114, 2a; Marcel: "1 ja 2 alleen nog de grond";
+  `gereedschap/pixelart/inpakken.cjs`). Gemeten: de browser hield bij het begin bijna 900 MB aan vellen vast, waarvan de
+  bouwfasen 271 MB (8303 pixels hoog), de gebouwen 157 MB (69 van de 96 vakken leeg) en de figuren 362 MB. Nu: elk vel
+  met voorwerpen (bomen, begroeiing, gebouwen, erf, tuin, huizen) heeft elke tekening strak gesneden, met per tegel een
+  eigen `cel` en `anker` in `tegels.js` (`T.sprites.celVan`; de grond blijft een raster, want Tiled schildert ermee, en
+  in Tiled is zo'n vel een verzameling met een rechthoek per tegel); de bouwfasen hebben per gebouw een eigen vel in
+  `tegels/bouwfasen/`, dat het spel pas laadt als er een in aanbouw staat; en de cel van een figuur krimpt tot wat erin
+  staat (362 → 124 MB). `npm run tiled`, `bouwfasen.cjs` en `naar-spel.cjs` doen het voortaan zelf. Nagekeken: alle
+  6.934 tekeningen (elke tegel, elke bouwfase, elk beeld van elke figuur) pixel voor pixel gelijk rond hetzelfde anker,
+  en elf vaste schermafdrukken van het spel (het gehucht, het plein, het overzicht, een bouwplaats in vijf fases, het vee,
+  de herberg 's avonds, een land van de maker) byte voor byte gelijk, op de twee verste overzichten na (op 0,35 kiest
+  het verkleinen in 0,6% van de pixels de buurpixel). De render van de gebouwen, de huizen en de bouwfasen bleek
+  byte voor byte te herhalen, dus de vellen zijn door de nieuwe stappen zelf gemaakt (de bouwfasen omgezet uit het oude
+  vel, met dezelfde code). Gemeten in Chromium zonder videokaart: het geheugen in het overzicht van zo'n 1.000 naar 730
+  MB (met een bouwplaats erbij van 1.130 naar 745), het langste beeld bij het eerste keer uitzoomen van 290 naar 165 ms,
+  en in het overzicht 50 beelden per seconde in plaats van 38. De kaarten in Tiled kregen objecten op de maat van hun
+  tegel. Vijf nieuwe toetsen (`test/inpakken.test.cjs`); `npm test` 900/900.
 - 4 okt 2026 — **Een bewaard spel laden in een verse bladzijde** (zevenentwintigste sessie; Marcel: "1 ja"). Een gebouw
   meldt zijn soort aan als het neergezet wordt, en een kaart bij het laden; een verse bladzijde die een bewaard spel
   laadt, deed geen van beide, en viel om zodra iets vroeg of zo'n tegel vaststaat ("reading 'blokkeert'"). Nu meldt het

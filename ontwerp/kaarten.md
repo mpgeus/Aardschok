@@ -326,7 +326,9 @@ Twee regels, allebei nodig:
 - **Vaste capaciteit.** Elk vel is aangevuld met lege cellen tot een vast aantal (grond 160,
   bomen 32, begroeiing 40, gebouwen 96, toren 8, erf 24, tuin 48, rand 600), zodat het aantal nooit
   verandert als er iets bijkomt. Past er niets meer bij, dan gooit `npm run tiled` een fout; dan
-  wordt de capaciteit bewust verhoogd én worden de kaarten meeverhuisd.
+  wordt de capaciteit bewust verhoogd én worden de kaarten meeverhuisd. Sinds 4 okt (werklijst vraag
+  114, 2a) is elk vel behalve de grond ingepakt: een lege cel heeft daar geen plek op het vel en kost
+  dus niets; de capaciteit is alleen nog het aantal nummers.
 
 **Voor wie in Tiled werkt:** laat de lege cellen aan het eind van een vel met rust. Na een
 wijziging aan de kunst eerst `npm run tiled`, dan `npm run kaarten`; dat laatste klaagt luid als

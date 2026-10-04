@@ -179,6 +179,24 @@ verschillend. Wat de nieuwe bouwer moet kunnen, in Marcels woorden en daarna uit
   goed." Een huis mag dus elke kant op staan, zolang het past.
 - Over de plaat van de ladder: "De ladder is goed zo."
 
+### De vellen zijn ingepakt (4 okt 2026, werklijst vraag 114, 2a)
+
+Marcel: "1 ja 2 alleen nog de grond" (alle vellen inpakken, en Tiled hoeft alleen de grond nog goed te tonen). Een
+browser houdt een vel uitgepakt vast, vier bytes per pixel, ook de lege. Met vakken van gelijke maat was dat bijna
+900 MB: de bouwfasen 271 MB (en 8303 pixels hoog, boven de 8192 van veel videokaarten), de gebouwen 157 MB voor 22 MB
+aan tekeningen, de figuren 362 MB. Nu (`gereedschap/pixelart/inpakken.cjs`):
+- **Een vel met voorwerpen** (bomen, begroeiing, gebouwen, erf, tuin, huizen) heeft elke tekening strak gesneden,
+  met per tegel zijn eigen rechthoek en anker in `tegels.js`. Op de vellen met planten houdt een tekening de hoogte van
+  zijn oude vak, want de wind buigt naar de hoogte in het vak. In Tiled is zo'n vel een verzameling met een rechthoek
+  per tegel; de voorwerpen staan daar niet precies op hun plek, het spel wel.
+- **De grond** (grond, rand) blijft een raster, want Tiled schildert ermee.
+- **De bouwfasen** hebben per gebouw een eigen vel (`tegels/bouwfasen/<tekening>.png`), dat het spel pas laadt als
+  er een in aanbouw staat. Tot het er is, tekent het gebouw bleker, zoals vóór er fases waren.
+- **Een figuur** blijft een raster (een rij per kijkrichting, een kolom per beeld), maar zijn cel krimpt tot wat er
+  in alle cellen samen staat.
+Elke tekening is pixel voor pixel dezelfde gebleven, rond hetzelfde anker. Een leeg vak kost nu niets meer, dus voor
+meer tekeningen (de afwisseling, 2b) is er ruimte.
+
 ## Ontwerpcanvas
 
 https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:

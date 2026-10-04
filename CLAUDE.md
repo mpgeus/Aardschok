@@ -119,7 +119,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   `-- 7 12` voor andere zaden.
 - `npm run pixelart` rendert alle HD-pixel art naar `gereedschap/pixelart/uit/` (niet in git).
 - `npm run pixelart:spel` zet daaruit alleen wat het spel tekent in `beelden/` (wél in git,
-  want het spel heeft het nodig als het draait). Draai het opnieuw als de kunst verandert.
+  want het spel heeft het nodig als het draait), met de cellen van de figuren gekrompen tot wat erin staat
+  (`gereedschap/pixelart/inpakken.cjs`). Draai het opnieuw als de kunst verandert. `npm run tiled` en
+  `bouwfasen.cjs` pakken hun vellen net zo in.
 
 ## Zuinig werken met agents
 
@@ -247,7 +249,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
   spelstaat zelf (pad, uitval, flits, dood), en
   `T.sprites.teken` legt het anker van de cel op het midden van de tegel. Laadt alles met
-  `Image`, nooit `getImageData`: anders werkt `file://` niet meer.
+  `Image`, nooit `getImageData`: anders werkt `file://` niet meer. **De vellen zijn ingepakt**
+  (vraag 114, 2a; samen zo'n 210 MB in de browser, was 900): een vel met voorwerpen in `tegels/` zegt per tegel
+  waar hij staat (`cel` en `anker` in `tegels.js`; vraag het aan `T.sprites.celVan`), alleen de grond is nog een
+  raster; een figuurvel is een raster met een cel die zo klein is als wat erin staat; en de bouwfasen hebben per
+  gebouw een eigen vel (`tegels/bouwfasen/`), dat pas laadt als er een in aanbouw staat (`T.sprites.bouwfase`;
+  `T.sprites.bezig()` zegt hoeveel er nog onderweg zijn).
 - `js/anim.js`: beweging en effecten. `T.anim.*` geeft beloftes, zodat een beurt als gewone
   code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`. Wie loopt, loopt op een kaart
   (`T.beweegWezens(S, w, ...)`): waar je bent, of een dorp waar je niet bent (`js/dorp.js`).
@@ -592,7 +599,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het gehucht met `T.beginOpKaart`
   (`js/gebied.js`; `?kaart=<naam>` begint op een andere kaart, zonder brief); de kaart komt uit
   `gereedschap/tiled/maak-gehucht.cjs`, de
-  bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen.png` + `.json`). Getallen
+  bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen/<tekening>.png` + `bouwfasen.json`). Getallen
   om bij te stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
   `T.BEHOEFTEN_INSTELLINGEN`, `T.AKKER_STADIA`, `T.GRAAN_PER_TEGEL`, `T.HANDEL_INSTELLINGEN`,
   `T.HEER_INSTELLINGEN`, `T.INNER_INSTELLINGEN`).
@@ -604,6 +611,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel. De huizen komen van de huizenbouwer
   (`huis-sdf.cjs`); welke het spel heeft, staat in `huizen.cjs` (vel `tegels/huizen.png`), elk met
   zijn voet en de tegel voor zijn deur, waar `T.deurVan` (`js/bewoners.js`) de bewoners heen stuurt.
+  Elk vel gaat ingepakt naar het spel (`inpakken.cjs`): een raster kost de browser elke lege pixel, en een
+  vel groter dan 8192 pixels laadt niet elke videokaart. Een leeg vak in een vel kost dus niets meer.
 - Het spel tekent met sprites zodra `beelden/` er is, en anders met vlakken. Wat de kunst niet
   dekt (raster, bereik, zwevende tekst, de pilaar) blijft altijd
   vlakken. `Spel.debug.vlakken = true` zet alles terug naar vlakken, om te vergelijken.

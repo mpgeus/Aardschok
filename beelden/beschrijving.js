@@ -33,7 +33,15 @@
        "bestand": "skelet-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        54,
+        86
+       ],
+       "anker": [
+        27,
+        82
+       ]
       },
       "lopen": {
        "bestand": "skelet-lopen.png",
@@ -41,25 +49,57 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 2.2,
+       "cel": [
+        58,
+        94
+       ],
+       "anker": [
+        29,
+        80
+       ],
        "stap": 0.88
       },
       "aanval": {
        "bestand": "skelet-aanval.png",
        "beelden": 6,
        "fps": 12,
-       "herhaal": false
+       "herhaal": false,
+       "cel": [
+        107,
+        87
+       ],
+       "anker": [
+        53,
+        82
+       ]
       },
       "geraakt": {
        "bestand": "skelet-geraakt.png",
        "beelden": 3,
        "fps": 12,
-       "herhaal": false
+       "herhaal": false,
+       "cel": [
+        52,
+        88
+       ],
+       "anker": [
+        26,
+        84
+       ]
       },
       "sterven": {
        "bestand": "skelet-sterven.png",
        "beelden": 8,
        "fps": 10,
-       "herhaal": false
+       "herhaal": false,
+       "cel": [
+        112,
+        113
+       ],
+       "anker": [
+        56,
+        81
+       ]
       }
      }
     },
@@ -89,7 +129,15 @@
        "bestand": "slijm-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        50,
+        47
+       ],
+       "anker": [
+        25,
+        35
+       ]
       },
       "lopen": {
        "bestand": "slijm-lopen.png",
@@ -97,25 +145,57 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        68,
+        61
+       ],
+       "anker": [
+        34,
+        47
+       ],
        "stap": 0.56
       },
       "aanval": {
        "bestand": "slijm-aanval.png",
        "beelden": 6,
        "fps": 12,
-       "herhaal": false
+       "herhaal": false,
+       "cel": [
+        94,
+        67
+       ],
+       "anker": [
+        47,
+        54
+       ]
       },
       "geraakt": {
        "bestand": "slijm-geraakt.png",
        "beelden": 3,
        "fps": 12,
-       "herhaal": false
+       "herhaal": false,
+       "cel": [
+        68,
+        46
+       ],
+       "anker": [
+        34,
+        32
+       ]
       },
       "sterven": {
        "bestand": "slijm-sterven.png",
        "beelden": 8,
        "fps": 10,
-       "herhaal": false
+       "herhaal": false,
+       "cel": [
+        70,
+        52
+       ],
+       "anker": [
+        35,
+        35
+       ]
       }
      }
     },
@@ -146,7 +226,15 @@
        "beelden": 4,
        "fps": 4,
        "herhaal": true,
-       "bestand": "wolf-staan.png"
+       "bestand": "wolf-staan.png",
+       "cel": [
+        92,
+        69
+       ],
+       "anker": [
+        46,
+        58
+       ]
       },
       "lopen": {
        "beelden": 8,
@@ -154,12 +242,12 @@
        "herhaal": true,
        "bestand": "wolf-lopen.png",
        "cel": [
-        112,
-        132
+        94,
+        70
        ],
        "anker": [
-        56,
-        114
+        47,
+        55
        ],
        "stap": 1.4
       },
@@ -169,19 +257,27 @@
        "herhaal": false,
        "bestand": "wolf-aanval.png",
        "cel": [
-        144,
-        136
+        110,
+        79
        ],
        "anker": [
-        72,
-        116
+        55,
+        62
        ]
       },
       "geraakt": {
        "beelden": 3,
        "fps": 12,
        "herhaal": false,
-       "bestand": "wolf-geraakt.png"
+       "bestand": "wolf-geraakt.png",
+       "cel": [
+        92,
+        70
+       ],
+       "anker": [
+        46,
+        60
+       ]
       },
       "sterven": {
        "beelden": 8,
@@ -189,12 +285,12 @@
        "herhaal": false,
        "bestand": "wolf-sterven.png",
        "cel": [
-        160,
-        148
+        92,
+        84
        ],
        "anker": [
-        80,
-        120
+        46,
+        61
        ]
       }
      }
@@ -226,7 +322,15 @@
        "beelden": 4,
        "fps": 4,
        "herhaal": true,
-       "bestand": "reuzenspin-staan.png"
+       "bestand": "reuzenspin-staan.png",
+       "cel": [
+        64,
+        54
+       ],
+       "anker": [
+        32,
+        41
+       ]
       },
       "lopen": {
        "beelden": 8,
@@ -234,12 +338,12 @@
        "herhaal": true,
        "bestand": "reuzenspin-lopen.png",
        "cel": [
-        128,
-        132
+        68,
+        51
        ],
        "anker": [
-        64,
-        114
+        34,
+        35
        ],
        "stap": 0.8
       },
@@ -249,19 +353,27 @@
        "herhaal": false,
        "bestand": "reuzenspin-aanval.png",
        "cel": [
-        144,
-        132
+        78,
+        59
        ],
        "anker": [
-        72,
-        114
+        39,
+        46
        ]
       },
       "geraakt": {
        "beelden": 3,
        "fps": 12,
        "herhaal": false,
-       "bestand": "reuzenspin-geraakt.png"
+       "bestand": "reuzenspin-geraakt.png",
+       "cel": [
+        68,
+        53
+       ],
+       "anker": [
+        34,
+        40
+       ]
       },
       "sterven": {
        "beelden": 8,
@@ -269,12 +381,12 @@
        "herhaal": false,
        "bestand": "reuzenspin-sterven.png",
        "cel": [
-        128,
-        132
+        64,
+        56
        ],
        "anker": [
-        64,
-        114
+        32,
+        40
        ]
       }
      }
@@ -306,13 +418,29 @@
        "beelden": 4,
        "fps": 4,
        "herhaal": true,
-       "bestand": "kobold-staan.png"
+       "bestand": "kobold-staan.png",
+       "cel": [
+        69,
+        63
+       ],
+       "anker": [
+        34,
+        57
+       ]
       },
       "lopen": {
        "beelden": 8,
        "fps": 10,
        "herhaal": true,
        "bestand": "kobold-lopen.png",
+       "cel": [
+        78,
+        67
+       ],
+       "anker": [
+        39,
+        58
+       ],
        "stap": 0.96
       },
       "aanval": {
@@ -321,19 +449,27 @@
        "herhaal": false,
        "bestand": "kobold-aanval.png",
        "cel": [
-        144,
-        132
+        119,
+        74
        ],
        "anker": [
-        72,
-        114
+        59,
+        61
        ]
       },
       "geraakt": {
        "beelden": 3,
        "fps": 12,
        "herhaal": false,
-       "bestand": "kobold-geraakt.png"
+       "bestand": "kobold-geraakt.png",
+       "cel": [
+        62,
+        71
+       ],
+       "anker": [
+        31,
+        65
+       ]
       },
       "sterven": {
        "beelden": 8,
@@ -341,12 +477,12 @@
        "herhaal": false,
        "bestand": "kobold-sterven.png",
        "cel": [
-        160,
-        168
+        138,
+        106
        ],
        "anker": [
-        80,
-        126
+        69,
+        65
        ]
       }
      }
@@ -377,7 +513,15 @@
        "bestand": "smid-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        54,
+        85
+       ],
+       "anker": [
+        27,
+        80
+       ]
       },
       "lopen": {
        "bestand": "smid-lopen.png",
@@ -385,6 +529,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        54,
+        91
+       ],
+       "anker": [
+        27,
+        80
+       ],
        "stap": 0.6
       }
      }
@@ -415,7 +567,15 @@
        "bestand": "dorpeling0-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        34,
+        73
+       ],
+       "anker": [
+        17,
+        68
+       ]
       },
       "lopen": {
        "bestand": "dorpeling0-lopen.png",
@@ -423,6 +583,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.2,
+       "cel": [
+        44,
+        77
+       ],
+       "anker": [
+        22,
+        68
+       ],
        "stap": 0.48
       }
      }
@@ -453,7 +621,15 @@
        "bestand": "dorpeling1-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        38,
+        77
+       ],
+       "anker": [
+        19,
+        69
+       ]
       },
       "lopen": {
        "bestand": "dorpeling1-lopen.png",
@@ -461,6 +637,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.2,
+       "cel": [
+        42,
+        78
+       ],
+       "anker": [
+        21,
+        68
+       ],
        "stap": 0.48
       }
      }
@@ -491,7 +675,15 @@
        "bestand": "herbergierster-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        40,
+        76
+       ],
+       "anker": [
+        20,
+        67
+       ]
       },
       "lopen": {
        "bestand": "herbergierster-lopen.png",
@@ -499,6 +691,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        44,
+        78
+       ],
+       "anker": [
+        22,
+        67
+       ],
        "stap": 0.56
       }
      }
@@ -529,7 +729,15 @@
        "bestand": "boer-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        40,
+        89
+       ],
+       "anker": [
+        20,
+        80
+       ]
       },
       "lopen": {
        "bestand": "boer-lopen.png",
@@ -537,6 +745,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        50,
+        91
+       ],
+       "anker": [
+        25,
+        80
+       ],
        "stap": 0.6
       }
      }
@@ -567,7 +783,15 @@
        "bestand": "dorpsoudste-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        42,
+        80
+       ],
+       "anker": [
+        21,
+        70
+       ]
       },
       "lopen": {
        "bestand": "dorpsoudste-lopen.png",
@@ -575,6 +799,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1,
+       "cel": [
+        42,
+        80
+       ],
+       "anker": [
+        21,
+        70
+       ],
        "stap": 0.4
       }
      }
@@ -605,7 +837,15 @@
        "bestand": "jongen-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        30,
+        63
+       ],
+       "anker": [
+        15,
+        59
+       ]
       },
       "lopen": {
        "bestand": "jongen-lopen.png",
@@ -613,6 +853,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.3,
+       "cel": [
+        42,
+        68
+       ],
+       "anker": [
+        21,
+        59
+       ],
        "stap": 0.52
       }
      }
@@ -643,7 +891,15 @@
        "bestand": "meisje-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        30,
+        56
+       ],
+       "anker": [
+        15,
+        53
+       ]
       },
       "lopen": {
        "bestand": "meisje-lopen.png",
@@ -651,6 +907,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.25,
+       "cel": [
+        36,
+        61
+       ],
+       "anker": [
+        18,
+        52
+       ],
        "stap": 0.5
       }
      }
@@ -681,7 +945,15 @@
        "bestand": "kleuter-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        52,
+        62
+       ],
+       "anker": [
+        26,
+        50
+       ]
       },
       "lopen": {
        "bestand": "kleuter-lopen.png",
@@ -689,6 +961,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 0.85,
+       "cel": [
+        52,
+        61
+       ],
+       "anker": [
+        26,
+        49
+       ],
        "stap": 0.34
       }
      }
@@ -719,7 +999,15 @@
        "bestand": "smidsvrouw-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        50,
+        83
+       ],
+       "anker": [
+        25,
+        74
+       ]
       },
       "lopen": {
        "bestand": "smidsvrouw-lopen.png",
@@ -727,6 +1015,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.45,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ],
        "stap": 0.58
       }
      }
@@ -757,7 +1053,15 @@
        "bestand": "boerin-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        38,
+        79
+       ],
+       "anker": [
+        19,
+        70
+       ]
       },
       "lopen": {
        "bestand": "boerin-lopen.png",
@@ -765,6 +1069,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ],
        "stap": 0.56
       }
      }
@@ -795,7 +1107,15 @@
        "bestand": "bruidegom-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        34,
+        81
+       ],
+       "anker": [
+        17,
+        76
+       ]
       },
       "lopen": {
        "bestand": "bruidegom-lopen.png",
@@ -803,6 +1123,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        48,
+        87
+       ],
+       "anker": [
+        24,
+        76
+       ],
        "stap": 0.6
       }
      }
@@ -833,7 +1161,15 @@
        "bestand": "bruid-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        34,
+        80
+       ],
+       "anker": [
+        17,
+        71
+       ]
       },
       "lopen": {
        "bestand": "bruid-lopen.png",
@@ -841,6 +1177,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.3,
+       "cel": [
+        44,
+        82
+       ],
+       "anker": [
+        22,
+        71
+       ],
        "stap": 0.52
       }
      }
@@ -871,7 +1215,15 @@
        "bestand": "oudeman-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        40,
+        80
+       ],
+       "anker": [
+        20,
+        75
+       ]
       },
       "lopen": {
        "bestand": "oudeman-lopen.png",
@@ -879,6 +1231,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1,
+       "cel": [
+        42,
+        83
+       ],
+       "anker": [
+        21,
+        75
+       ],
        "stap": 0.4
       }
      }
@@ -908,7 +1268,15 @@
        "bestand": "maaier-maaien.png",
        "beelden": 12,
        "fps": 8,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        139,
+        115
+       ],
+       "anker": [
+        70,
+        77
+       ]
       }
      }
     },
@@ -938,7 +1306,15 @@
        "bestand": "heer-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        46,
+        76
+       ],
+       "anker": [
+        23,
+        71
+       ]
       },
       "lopen": {
        "bestand": "heer-lopen.png",
@@ -946,6 +1322,14 @@
        "fps": 20,
        "herhaal": true,
        "snelheid": 1.55,
+       "cel": [
+        54,
+        79
+       ],
+       "anker": [
+        27,
+        71
+       ],
        "stap": 0.31
       }
      }
@@ -976,7 +1360,15 @@
        "bestand": "soldaat-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        52,
+        115
+       ],
+       "anker": [
+        26,
+        105
+       ]
       },
       "lopen": {
        "bestand": "soldaat-lopen.png",
@@ -984,6 +1376,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        54,
+        119
+       ],
+       "anker": [
+        27,
+        108
+       ],
        "stap": 0.6
       }
      }
@@ -1014,7 +1414,15 @@
        "bestand": "inner-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        38,
+        80
+       ],
+       "anker": [
+        19,
+        75
+       ]
       },
       "lopen": {
        "bestand": "inner-lopen.png",
@@ -1022,6 +1430,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ],
        "stap": 0.6
       }
      }
@@ -1052,7 +1468,15 @@
        "bestand": "marskramer-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        50,
+        97
+       ],
+       "anker": [
+        25,
+        84
+       ]
       },
       "lopen": {
        "bestand": "marskramer-lopen.png",
@@ -1060,6 +1484,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        54,
+        97
+       ],
+       "anker": [
+        27,
+        84
+       ],
        "stap": 0.56
       }
      }
@@ -1090,7 +1522,15 @@
        "bestand": "boer-zanger-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        42,
+        88
+       ],
+       "anker": [
+        21,
+        83
+       ]
       },
       "lopen": {
        "bestand": "boer-zanger-lopen.png",
@@ -1098,6 +1538,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        50,
+        94
+       ],
+       "anker": [
+        25,
+        83
+       ],
        "stap": 0.6
       }
      }
@@ -1128,7 +1576,15 @@
        "bestand": "boerin-zanger-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        44,
+        91
+       ],
+       "anker": [
+        22,
+        82
+       ]
       },
       "lopen": {
        "bestand": "boerin-zanger-lopen.png",
@@ -1136,6 +1592,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        44,
+        93
+       ],
+       "anker": [
+        22,
+        82
+       ],
        "stap": 0.56
       }
      }
@@ -1166,7 +1630,15 @@
        "bestand": "boer-woekeraar-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        36,
+        82
+       ],
+       "anker": [
+        18,
+        77
+       ]
       },
       "lopen": {
        "bestand": "boer-woekeraar-lopen.png",
@@ -1174,6 +1646,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ],
        "stap": 0.6
       }
      }
@@ -1204,7 +1684,15 @@
        "bestand": "boerin-woekeraar-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        70
+       ]
       },
       "lopen": {
        "bestand": "boerin-woekeraar-lopen.png",
@@ -1212,6 +1700,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ],
        "stap": 0.56
       }
      }
@@ -1242,7 +1738,15 @@
        "bestand": "boer-heethoofd-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        44,
+        80
+       ],
+       "anker": [
+        22,
+        75
+       ]
       },
       "lopen": {
        "bestand": "boer-heethoofd-lopen.png",
@@ -1250,6 +1754,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ],
        "stap": 0.6
       }
      }
@@ -1280,7 +1792,15 @@
        "bestand": "boerin-heethoofd-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        46,
+        79
+       ],
+       "anker": [
+        23,
+        70
+       ]
       },
       "lopen": {
        "bestand": "boerin-heethoofd-lopen.png",
@@ -1288,6 +1808,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        46,
+        81
+       ],
+       "anker": [
+        23,
+        70
+       ],
        "stap": 0.56
       }
      }
@@ -1318,7 +1846,15 @@
        "bestand": "boerin-weduwe-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        38,
+        80
+       ],
+       "anker": [
+        19,
+        71
+       ]
       },
       "lopen": {
        "bestand": "boerin-weduwe-lopen.png",
@@ -1326,6 +1862,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        44,
+        82
+       ],
+       "anker": [
+        22,
+        71
+       ],
        "stap": 0.56
       }
      }
@@ -1356,7 +1900,15 @@
        "bestand": "boerin-vroedvrouw-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        70
+       ]
       },
       "lopen": {
        "bestand": "boerin-vroedvrouw-lopen.png",
@@ -1364,6 +1916,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ],
        "stap": 0.56
       }
      }
@@ -1394,7 +1954,15 @@
        "bestand": "boer-vrome-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        36,
+        78
+       ],
+       "anker": [
+        18,
+        73
+       ]
       },
       "lopen": {
        "bestand": "boer-vrome-lopen.png",
@@ -1402,6 +1970,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        50,
+        83
+       ],
+       "anker": [
+        25,
+        72
+       ],
        "stap": 0.6
       }
      }
@@ -1432,7 +2008,15 @@
        "bestand": "boerin-vrome-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        70
+       ]
       },
       "lopen": {
        "bestand": "boerin-vrome-lopen.png",
@@ -1440,6 +2024,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ],
        "stap": 0.56
       }
      }
@@ -1470,7 +2062,15 @@
        "bestand": "boer-roddelaar-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        44,
+        82
+       ],
+       "anker": [
+        22,
+        77
+       ]
       },
       "lopen": {
        "bestand": "boer-roddelaar-lopen.png",
@@ -1478,6 +2078,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ],
        "stap": 0.6
       }
      }
@@ -1508,7 +2116,15 @@
        "bestand": "boerin-roddelaar-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        70
+       ]
       },
       "lopen": {
        "bestand": "boerin-roddelaar-lopen.png",
@@ -1516,6 +2132,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        46,
+        81
+       ],
+       "anker": [
+        23,
+        70
+       ],
        "stap": 0.56
       }
      }
@@ -1546,7 +2170,15 @@
        "bestand": "boer-grijsaard-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        44,
+        82
+       ],
+       "anker": [
+        22,
+        73
+       ]
       },
       "lopen": {
        "bestand": "boer-grijsaard-lopen.png",
@@ -1554,6 +2186,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        73
+       ],
        "stap": 0.6
       }
      }
@@ -1584,7 +2224,15 @@
        "bestand": "boerin-grijsaard-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        40,
+        83
+       ],
+       "anker": [
+        20,
+        72
+       ]
       },
       "lopen": {
        "bestand": "boerin-grijsaard-lopen.png",
@@ -1592,6 +2240,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        52,
+        85
+       ],
+       "anker": [
+        26,
+        72
+       ],
        "stap": 0.56
       }
      }
@@ -1622,7 +2278,15 @@
        "bestand": "boer-nieuwkomer-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        74
+       ]
       },
       "lopen": {
        "bestand": "boer-nieuwkomer-lopen.png",
@@ -1630,6 +2294,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ],
        "stap": 0.6
       }
      }
@@ -1660,7 +2332,15 @@
        "bestand": "boerin-nieuwkomer-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        70
+       ]
       },
       "lopen": {
        "bestand": "boerin-nieuwkomer-lopen.png",
@@ -1668,6 +2348,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ],
        "stap": 0.56
       }
      }
@@ -1698,7 +2386,15 @@
        "bestand": "boer-drinker-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        40,
+        82
+       ],
+       "anker": [
+        20,
+        77
+       ]
       },
       "lopen": {
        "bestand": "boer-drinker-lopen.png",
@@ -1706,6 +2402,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.5,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ],
        "stap": 0.6
       }
      }
@@ -1736,7 +2440,15 @@
        "bestand": "boerin-drinker-staan.png",
        "beelden": 4,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        40,
+        80
+       ],
+       "anker": [
+        20,
+        70
+       ]
       },
       "lopen": {
        "bestand": "boerin-drinker-lopen.png",
@@ -1744,6 +2456,14 @@
        "fps": 10,
        "herhaal": true,
        "snelheid": 1.4,
+       "cel": [
+        44,
+        82
+       ],
+       "anker": [
+        22,
+        70
+       ],
        "stap": 0.56
       }
      }
@@ -1776,13 +2496,29 @@
        "bestand": "koe0-grazen.png",
        "beelden": 8,
        "fps": 5,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        94,
+        79
+       ],
+       "anker": [
+        47,
+        59
+       ]
       },
       "staan": {
        "bestand": "koe0-staan.png",
        "beelden": 8,
        "fps": 5,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        116,
+        85
+       ],
+       "anker": [
+        58,
+        71
+       ]
       },
       "lopen": {
        "bestand": "koe0-lopen.png",
@@ -1790,13 +2526,29 @@
        "fps": 8,
        "herhaal": true,
        "snelheid": 0.9,
+       "cel": [
+        116,
+        87
+       ],
+       "anker": [
+        58,
+        67
+       ],
        "stap": 0.45
       },
       "liggen": {
        "bestand": "koe0-liggen.png",
        "beelden": 8,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        118,
+        82
+       ],
+       "anker": [
+        59,
+        55
+       ]
       }
      }
     },
@@ -1828,13 +2580,29 @@
        "bestand": "koe1-grazen.png",
        "beelden": 8,
        "fps": 5,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        90,
+        79
+       ],
+       "anker": [
+        45,
+        59
+       ]
       },
       "staan": {
        "bestand": "koe1-staan.png",
        "beelden": 8,
        "fps": 5,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        116,
+        82
+       ],
+       "anker": [
+        58,
+        68
+       ]
       },
       "lopen": {
        "bestand": "koe1-lopen.png",
@@ -1842,13 +2610,29 @@
        "fps": 8,
        "herhaal": true,
        "snelheid": 0.9,
+       "cel": [
+        116,
+        85
+       ],
+       "anker": [
+        58,
+        65
+       ],
        "stap": 0.45
       },
       "liggen": {
        "bestand": "koe1-liggen.png",
        "beelden": 8,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        118,
+        79
+       ],
+       "anker": [
+        59,
+        52
+       ]
       }
      }
     },
@@ -1880,13 +2664,29 @@
        "bestand": "koe2-grazen.png",
        "beelden": 8,
        "fps": 5,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        92,
+        79
+       ],
+       "anker": [
+        46,
+        59
+       ]
       },
       "staan": {
        "bestand": "koe2-staan.png",
        "beelden": 8,
        "fps": 5,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        116,
+        84
+       ],
+       "anker": [
+        58,
+        70
+       ]
       },
       "lopen": {
        "bestand": "koe2-lopen.png",
@@ -1894,13 +2694,29 @@
        "fps": 8,
        "herhaal": true,
        "snelheid": 0.9,
+       "cel": [
+        116,
+        87
+       ],
+       "anker": [
+        58,
+        67
+       ],
        "stap": 0.45
       },
       "liggen": {
        "bestand": "koe2-liggen.png",
        "beelden": 8,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        118,
+        81
+       ],
+       "anker": [
+        59,
+        54
+       ]
       }
      }
     },
@@ -1932,13 +2748,29 @@
        "bestand": "schaap0-grazen.png",
        "beelden": 8,
        "fps": 5,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        48,
+        45
+       ],
+       "anker": [
+        24,
+        34
+       ]
       },
       "staan": {
        "bestand": "schaap0-staan.png",
        "beelden": 8,
        "fps": 5,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        64,
+        50
+       ],
+       "anker": [
+        32,
+        41
+       ]
       },
       "lopen": {
        "bestand": "schaap0-lopen.png",
@@ -1946,13 +2778,29 @@
        "fps": 12,
        "herhaal": true,
        "snelheid": 1.1,
+       "cel": [
+        66,
+        51
+       ],
+       "anker": [
+        33,
+        39
+       ],
        "stap": 0.367
       },
       "liggen": {
        "bestand": "schaap0-liggen.png",
        "beelden": 8,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        64,
+        44
+       ],
+       "anker": [
+        32,
+        31
+       ]
       }
      }
     },
@@ -1984,13 +2832,29 @@
        "bestand": "schaap1-grazen.png",
        "beelden": 8,
        "fps": 5,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        48,
+        45
+       ],
+       "anker": [
+        24,
+        34
+       ]
       },
       "staan": {
        "bestand": "schaap1-staan.png",
        "beelden": 8,
        "fps": 5,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        64,
+        50
+       ],
+       "anker": [
+        32,
+        41
+       ]
       },
       "lopen": {
        "bestand": "schaap1-lopen.png",
@@ -1998,13 +2862,29 @@
        "fps": 12,
        "herhaal": true,
        "snelheid": 1.1,
+       "cel": [
+        66,
+        51
+       ],
+       "anker": [
+        33,
+        39
+       ],
        "stap": 0.367
       },
       "liggen": {
        "bestand": "schaap1-liggen.png",
        "beelden": 8,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        64,
+        44
+       ],
+       "anker": [
+        32,
+        31
+       ]
       }
      }
     },
@@ -2036,13 +2916,29 @@
        "bestand": "schaap2-grazen.png",
        "beelden": 8,
        "fps": 5,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        48,
+        45
+       ],
+       "anker": [
+        24,
+        34
+       ]
       },
       "staan": {
        "bestand": "schaap2-staan.png",
        "beelden": 8,
        "fps": 5,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        64,
+        50
+       ],
+       "anker": [
+        32,
+        41
+       ]
       },
       "lopen": {
        "bestand": "schaap2-lopen.png",
@@ -2050,13 +2946,29 @@
        "fps": 12,
        "herhaal": true,
        "snelheid": 1.1,
+       "cel": [
+        66,
+        51
+       ],
+       "anker": [
+        33,
+        39
+       ],
        "stap": 0.367
       },
       "liggen": {
        "bestand": "schaap2-liggen.png",
        "beelden": 8,
        "fps": 4,
-       "herhaal": true
+       "herhaal": true,
+       "cel": [
+        64,
+        44
+       ],
+       "anker": [
+        32,
+        31
+       ]
       }
      }
     }

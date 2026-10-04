@@ -62,6 +62,10 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   bouwfasen (uit het huis zelf gesneden; een kwartier voor alle gebouwen samen), en
   `node huizen.cjs [namen]` een proefplaat met voet en deur erop (`uit/huizen/proef.png`). Een nieuw
   huis: een regel in `HUIZEN`, dan die drie stappen, en `T.GEBOUWEN` in `js/gebouwen.js`.
+- `inpakken.cjs`: hoe een vel naar het spel gaat (werklijst vraag 114, 2a). `naar-tiled.cjs` pakt elk vel
+  behalve de grond in (elke tekening strak gesneden, met zijn eigen rechthoek en anker in `tegels.json`),
+  `bouwfasen.cjs` geeft elk gebouw een eigen vel in `tegels/bouwfasen/`, en `naar-spel.cjs` laat de cel van
+  een figuur krimpen tot wat erin staat. Een tekening verandert daar niet van, alleen waar hij op het vel staat.
 - `dorpelingen.cjs`, `dorpelingen2.cjs` en `dorpelingen3.cjs`: negentien dorpelingen, van de smid
   tot de kleuter, plus `dorpeling(zaad)` die uit elk zaad een andere gewone dorpeling maakt. De
   marskramer daarin kan staan en lopen, met zijn rek op de rug en zijn stok als derde voet

@@ -610,6 +610,15 @@ vijf fases per gebouw, sinds ronde 4b in rijen, want één rij per gebouw werd 1
 235 MB. Voor een stad met honderden huizen is dat te veel. Voorstel: de vellen inpakken,
 met per tekening een eigen uitsnede en een eigen anker, zoals `bouwfasen.json` dat al doet. Dat raakt
 de vorm van `tegels.json`, `js/sprites.js` en hoe Tiled een vel leest; vóór het verpakken (punt 18).
+**Opgelost op 4 okt** (werklijst vraag 114, 2a; `beeld.md`, "De vellen zijn ingepakt"): bij het begin zo'n 210 MB in
+plaats van 900, en de bouwfasen per gebouw, pas als er een in aanbouw staat.
+
+**Een vel kan de browser weer weggooien** (4 okt, achtentwintigste sessie, bij het inpakken; vraag 114, 2a). Een
+browser houdt een uitgepakt vel niet altijd vast: is het geheugen krap, of is het een tijd niet getekend (Firefox), dan
+pakt hij het opnieuw uit zodra het weer in beeld komt, en dat is een hapering. Ingepakt is dat veel kleiner dan het was.
+Helpt het niet genoeg (de meter in Firefox, vraag 113, a), dan kan het spel elk vel als ImageBitmap houden
+(`createImageBitmap`): dan blijft het uitgepakt, maar kost het die 210 MB ook altijd. `img.decode()` bij het laden werkt
+niet: dat wacht in Chromium tot de bladzijde een beeld tekent, en in een verborgen tabblad komt dat niet.
 
 **De grond tekent helemaal opnieuw als er een paadje verandert** (3 okt, vijfentwintigste sessie; vraag 108, b,
 `js/paden.js`). De paadjes liggen in de buffer van de grond (`werkGrondBij` in `js/tekenen.js`), en die wordt helemaal

@@ -31,10 +31,14 @@ test('elk tuinstuk heeft een gevulde cel (geen stille misser van veilig() in naa
   }
 });
 
-test('het anker staat op het midden van de tegel: horizontaal precies het midden van de cel', () => {
+test('het anker staat op het midden van de tegel: een recht stuk hek reikt links en rechts even ver', () => {
   // Anders dan een boom (voetpunt) of een gebouw (achterste voethoek) is een tuinstuk symmetrisch
   // rond het midden van zijn tegel: een recht stuk hek staat voor de helft op de ene buurtegel.
-  assert.equal(VEL.anker[0], Math.round(VEL.tegelB / 2));
+  // Sinds het vel ingepakt is (vraag 114, 2a), heeft elke tegel zijn eigen anker; dit kijkt het na
+  // aan wat er getekend staat (`doos`: links, boven, rechts, onder vanaf het anker).
+  const recht = VEL.tiles.filter((t) => t.naam && /^hek(je)?-(tenen|lat)-[xy]$/.test(t.naam));
+  assert.ok(recht.length >= 4, 'de rechte stukken hek staan op het vel');
+  for (const t of recht) assert.ok(Math.abs(t.doos[0] - t.doos[2]) <= 1, `${t.naam}: reikt ${t.doos[0]} naar links en ${t.doos[2]} naar rechts`);
 });
 
 test('wat vast is, komt overeen met ontwerp/beeld.md ("Wat vast is", 22 sep 2026)', () => {

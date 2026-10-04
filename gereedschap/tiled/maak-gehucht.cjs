@@ -364,7 +364,8 @@ function zetTegel(naam, mx, my, moet) {
   for (let dy = 0; dy < vd; dy++) for (let dx = 0; dx < vb; dx++) bezet.add(sleutel(mx + dx, my + dy));
   objecten.push({
     id: volgendId++, visible: true, rotation: 0, name: naam, gid: g.gid,
-    x: mx * 32, y: my * 32, width: g.vel.tegelB, height: g.vel.tegelH, properties: [],
+    // Een ingepakt vel (naar-tiled.cjs) heeft per tegel een eigen maat; Tiled tekent een object op die maat.
+    x: mx * 32, y: my * 32, width: g.tegel.cel ? g.tegel.cel[2] : g.vel.tegelB, height: g.tegel.cel ? g.tegel.cel[3] : g.vel.tegelH, properties: [],
   });
   return true;
 }

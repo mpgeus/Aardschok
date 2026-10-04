@@ -21,7 +21,6 @@
   const S = {
     aan: false, // staan alle vellen van binnen klaar? Zo niet, tekent het spel zijn vlakken.
     buitenAan: false, // en die van buiten (tegels/, gemaakt door npm run tiled)
-    bouwfasenAan: false, // en het bouwfasenvel (tegels/bouwfasen.png, gemaakt door bouwfasen.cjs)
     mist: [], // wat er niet geladen kon worden, om in de console te zien
   };
   T.sprites = S;
@@ -30,7 +29,9 @@
 
   // `pad` is het pad vanaf index.html. De vellen van binnen staan in beelden/, die van buiten in
   // tegels/ (daar maakt npm run tiled ze, voor Tiled én voor het spel: het zijn dezelfde
-  // plaatjes, in dezelfde projectie, met hetzelfde ankerpunt).
+  // plaatjes, in dezelfde projectie, met hetzelfde ankerpunt). Niet wachten op img.decode(): dat
+  // wacht in Chromium tot de bladzijde een beeld tekent, en in een verborgen tabblad komt dat niet
+  // (vraag 114, 2a). Een ingepakt vel is klein genoeg om bij het eerste beeld uit te pakken.
   function laadBeeld(pad) {
     return new Promise((klaar) => {
       const img = new Image();
@@ -76,19 +77,13 @@
         for (const h of Object.values(f.houdingen)) lijst.push(MAP + 'figuren/' + h.bestand);
       }
       // De vellen van buiten staan los: gaat daar iets mis, dan tekent het spel buiten vlakken
-      // en binnen nog gewoon zijn pixel art. Het bouwfasenvel (tegels/bouwfasen.png, T.BOUWFASEN
-      // uit tegels/bouwfasen.js — CLAUDE.md "Opbouw", js/gebouwen.js) net zo los: zonder dat vel
-      // blijft een gebouw in aanbouw gewoon bleker tekenen, zoals vóór de fases er waren. (Tot
-      // 25 sep laadde hier ook beelden/effecten/, de spreukeffecten van het oude spel.)
+      // en binnen nog gewoon zijn pixel art. De bouwfasen laden hier niet: elk gebouw heeft zijn
+      // eigen vel, dat pas komt als er een in aanbouw staat (S.bouwfase hieronder). (Tot 25 sep
+      // laadde hier ook beelden/effecten/, de spreukeffecten van het oude spel.)
       const buiten = [...new Set(Object.values(T.TEGELS || {}).map((v) => v.bestand).filter(Boolean))];
-      const bouwfasenPad = T.BOUWFASEN ? TEGELMAP + T.BOUWFASEN.bestand : null;
-      const [uitslag, uitBuiten, bouwfasenOk] = await Promise.all([
-        Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld)),
-        bouwfasenPad ? laadBeeld(bouwfasenPad) : Promise.resolve(false),
-      ]);
+      const [uitslag, uitBuiten] = await Promise.all([Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld))]);
       S.aan = uitslag.every(Boolean);
       S.buitenAan = buiten.length > 0 && uitBuiten.every(Boolean);
-      S.bouwfasenAan = !!bouwfasenOk;
       if (S.aan) snijVloeren();
       if (!S.aan || !S.buitenAan) console.warn(`${T.NAAM}: sprites ontbreken, het spel tekent daar vlakken.`, S.mist);
       return S.aan;
@@ -97,6 +92,21 @@
   };
 
   S.gereed = () => S.laad();
+
+  // Een vel dat pas geladen wordt als het nodig is (de bouwfasen van één gebouw): de eerste vraag zet
+  // het laden in gang, en tot het er is, is het antwoord nee. Lukt het niet, dan probeert het niet
+  // elk beeld opnieuw.
+  const laden = new Map(); // pad → 'laadt' of 'mist'
+  function laadAlsNodig(pad) {
+    if (beelden.has(pad)) return true;
+    if (!laden.has(pad) && typeof Image !== 'undefined') {
+      laden.set(pad, 'laadt');
+      laadBeeld(pad).then((gelukt) => (gelukt ? laden.delete(pad) : laden.set(pad, 'mist')));
+    }
+    return false;
+  }
+  // Hoeveel vellen er nog onderweg zijn, voor wie wil wachten tot alles er is (een proef met schermafdrukken).
+  S.bezig = () => [...laden.values()].filter((s) => s === 'laadt').length;
 
   // ---------------------------------------------------------------- stukken van een vel
 
@@ -251,10 +261,11 @@
 
   // ---------------------------------------------------------------- buiten (tegels/)
   //
-  // De vellen die npm run tiled maakt: gras en paden, bomen en begroeiing, de gebouwen, de toren
+  // De vellen die npm run tiled maakt: gras en paden, bomen en begroeiing, de gebouwen, de huizen
   // en wat er op het erf staat. Ze staan in dezelfde projectie als alles hierboven, en tegels.js
-  // (T.TEGELS) draagt per vel het ankerpunt: het punt in een cel dat op het midden van de tegel
-  // hoort te liggen. Tekenen is dus ook hier niets meer dan het anker op T.naarScherm leggen.
+  // (T.TEGELS) zegt waar elke tegel op zijn vel staat en waar zijn ankerpunt ligt: het punt dat op
+  // het midden van de tegel hoort te liggen (S.celVan). Tekenen is dus ook hier niets meer dan het
+  // anker op T.naarScherm leggen.
   // -------------------------------------------------------------- wind
   //
   // Eén windwaarde voor de hele wereld (S.wind, T.windWaarde in js/main.js) buigt de was, de
@@ -283,8 +294,11 @@
     if (!bron || typeof document === 'undefined') return stuk(bestand, sx, sy, b, h, anker);
     const midden = (WIND_STANDEN - 1) / 2;
     const uitslag = midden ? ((stand - midden) / midden) * gewicht : 0;
+    // Zo ver buigt de top opzij: daar moet aan beide kanten plaats voor zijn, want een ingepakte
+    // tekening (vraag 114, 2a) is strak gesneden, en dan viel een buigende kruin over de rand.
+    const rand = Math.ceil(Math.abs(uitslag));
     const c = document.createElement('canvas');
-    c.width = b;
+    c.width = b + 2 * rand;
     c.height = h;
     const cx = c.getContext('2d');
     cx.imageSmoothingEnabled = false;
@@ -292,37 +306,48 @@
       const ph = Math.min(WIND_PLAK, h - y);
       const t = 1 - y / h; // 1 boven aan het beeld, bijna 0 onderaan
       const dx = Math.round(uitslag * t * t);
-      cx.drawImage(bron, sx, sy + y, b, ph, dx, y, b, ph);
+      cx.drawImage(bron, sx, sy + y, b, ph, rand + dx, y, b, ph);
     }
-    return { beeld: c, sx: 0, sy: 0, b, h, ax: anker[0], ay: anker[1] };
+    return { beeld: c, sx: 0, sy: 0, b: b + 2 * rand, h, ax: anker[0] + rand, ay: anker[1] };
   }
+
+  // Waar tegel `id` op zijn vel staat: { cel: [x, y, b, h], anker: [ax, ay] }, met het anker binnen
+  // de cel. Een ingepakt vel (alles behalve de grond; gereedschap/pixelart/inpakken.cjs, vraag 114,
+  // 2a) zegt het per tegel; een raster (de grond, waar Tiled mee schildert) heeft één celmaat en
+  // één anker, en dan volgt de plek uit de kolommen. null als er op die plek niets getekend staat.
+  S.celVan = function (velNaam, id) {
+    const v = T.TEGELS && T.TEGELS[velNaam];
+    const t = v && id != null && v.tiles[id];
+    if (!t) return null;
+    if (v.ingepakt) return t.cel ? { cel: t.cel, anker: t.anker } : null;
+    const kol = v.kolommen || v.tiles.length;
+    return {
+      cel: [(id % kol) * v.tegelB, Math.floor(id / kol) * v.tegelH, v.tegelB, v.tegelH],
+      anker: v.anker || [Math.round(v.tegelB / 2), Math.round(v.tegelH / 2)],
+    };
+  };
 
   // `wind`, als meegegeven, is de windwaarde voor dít voorwerp (-1..1, T.windWaarde in
   // js/main.js). Weegt de soort niets mee (of wordt geen windwaarde meegegeven), dan gewoon het
   // stilstaande beeld — precies zoals voorheen.
   S.buiten = function (velNaam, id, wind) {
     const v = T.TEGELS && T.TEGELS[velNaam];
-    if (!v || !v.bestand || id == null) return null;
-    const kol = v.kolommen || v.tiles.length;
-    const anker = v.anker || [Math.round(v.tegelB / 2), Math.round(v.tegelH / 2)];
-    const tegel = v.tiles[id];
-    const gewicht = wind != null && tegel && WIND_GEWICHT[tegel.naam];
-    if (!gewicht) {
-      return onthoud(`buiten,${velNaam},${id}`, () => stuk(v.bestand, (id % kol) * v.tegelB, Math.floor(id / kol) * v.tegelH, v.tegelB, v.tegelH, anker));
-    }
+    const plek = v && v.bestand && S.celVan(velNaam, id);
+    if (!plek) return null;
+    const [x, y, b, h] = plek.cel;
+    const gewicht = wind != null && WIND_GEWICHT[v.tiles[id].naam];
+    if (!gewicht) return onthoud(`buiten,${velNaam},${id}`, () => stuk(v.bestand, x, y, b, h, plek.anker));
     const midden = (WIND_STANDEN - 1) / 2;
     const w = Math.max(-1, Math.min(1, wind));
     const stand = Math.max(0, Math.min(WIND_STANDEN - 1, Math.round(midden + w * midden)));
-    return onthoud(`buitenwind,${velNaam},${id},${stand}`, () =>
-      bakWindStand(v.bestand, (id % kol) * v.tegelB, Math.floor(id / kol) * v.tegelH, v.tegelB, v.tegelH, anker, gewicht, stand));
+    return onthoud(`buitenwind,${velNaam},${id},${stand}`, () => bakWindStand(v.bestand, x, y, b, h, plek.anker, gewicht, stand));
   };
 
   // Hoe hoog steekt dit ding boven zijn tegel uit? Voor het aanwijzen met de muis. Het ankerpunt
   // is de voet, dus wat erboven zit is precies het stuk cel boven het anker.
-  S.buitenHoogte = function (velNaam) {
-    const v = T.TEGELS && T.TEGELS[velNaam];
-    if (!v) return 0;
-    return (v.anker || [0, 0])[1];
+  S.buitenHoogte = function (velNaam, id) {
+    const plek = S.celVan(velNaam, id);
+    return plek ? plek.anker[1] : 0;
   };
 
   // Een muurstuk. `west` is waar of niet: een westmuur kijkt naar het zuidoosten, een
@@ -398,21 +423,23 @@
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
   };
 
-  // ---------------------------------------------------------------- bouwfasen (tegels/bouwfasen.png + .json/.js)
+  // ---------------------------------------------------------------- bouwfasen (tegels/bouwfasen/<tekening>.png, bouwfasen.js)
   //
   // Een gebouw in aanbouw: vijf fases tussen "net begonnen" en de afgewerkte tekening
   // (gereedschap/pixelart/bouwfasen.cjs, ontwerp/werklijst.md punt 2b). `tekeningNaam` is dezelfde
   // naam als T.GEBOUWEN.<soort>.tekening na "gebouwen/" (js/gebouwen.js zet 'm op het voorwerp),
-  // `faseIndex` komt uit T.bouwFaseIndex (ook js/gebouwen.js). Niet elk gebouw heeft fases (kapel,
-  // watermolen, put, ...): dan geeft dit null en blijft tekenVoorwerp (js/tekenen.js) bij het
-  // bestaande gedrag (bleker tot hij klaar is).
+  // `faseIndex` komt uit T.bouwFaseIndex (ook js/gebouwen.js). Elk gebouw heeft zijn eigen vel, dat
+  // pas laadt als er een in aanbouw staat (vraag 114, 2a: alle fases samen waren 271 MB). Tot het er
+  // is, en voor een gebouw zonder fases (kapel, watermolen, put, ...), geeft dit null, en tekent
+  // tekenVoorwerp (js/tekenen.js) de afgewerkte tekening bleker, zoals vóór er fases waren.
   S.bouwfase = function (tekeningNaam, faseIndex) {
-    if (!S.bouwfasenAan || !T.BOUWFASEN || !tekeningNaam) return null;
-    const g = T.BOUWFASEN.fasen[tekeningNaam];
+    const g = T.BOUWFASEN && tekeningNaam && T.BOUWFASEN.fasen[tekeningNaam];
     if (!g || !g.fasen.length) return null;
-    const f = g.fasen[Math.max(0, Math.min(g.fasen.length - 1, faseIndex))];
-    if (!f) return null;
-    return onthoud(`bouwfase,${tekeningNaam},${faseIndex}`, () => stuk(TEGELMAP + T.BOUWFASEN.bestand, f.x, f.y, f.b, f.h, f.anker));
+    const pad = TEGELMAP + g.bestand;
+    if (!laadAlsNodig(pad)) return null;
+    const i = Math.max(0, Math.min(g.fasen.length - 1, faseIndex));
+    const f = g.fasen[i];
+    return onthoud(`bouwfase,${tekeningNaam},${i}`, () => stuk(pad, f.x, f.y, f.b, f.h, f.anker));
   };
 
   // ---------------------------------------------------------------- gras op een weide

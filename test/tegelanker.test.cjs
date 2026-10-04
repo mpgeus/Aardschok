@@ -20,7 +20,9 @@ const path = require('path');
 const zlib = require('zlib');
 
 const TEGELS = path.join(__dirname, '..', 'tegels');
-const TEGELS_JSON = JSON.parse(fs.readFileSync(path.join(TEGELS, 'tegels.json'), 'utf8'));
+// Het spel zoals het draait: waar een tegel op zijn vel staat, vraagt deze toets aan T.sprites.celVan (js/sprites.js),
+// net als het tekenen. Een ingepakt vel zegt het per tegel, een raster (de grond) uit zijn kolommen.
+const T = require('./laad.cjs').spel();
 
 // Een klein, eigen PNG-lezertje: kern.cjs se png() (gereedschap/pixelart/kern.cjs) schrijft altijd
 // 8-bit RGBA zonder interlace en met filtertype 0 (geen) op elke rij — dat is alles wat we hier
@@ -112,8 +114,8 @@ const SPELING = 0.85;
 // leeg, en (elders, T.isBegaanbaar) zijn hele voet vast. Zie ontwerp/kaarten.md.
 const KRAP = 3;
 
-for (const [velNaam, vel] of Object.entries(TEGELS_JSON)) {
-  if (!vel.anker || !Array.isArray(vel.tiles)) continue;
+for (const [velNaam, vel] of Object.entries(T.TEGELS)) {
+  if (!Array.isArray(vel.tiles)) continue;
   const metVoet = vel.tiles
     .map((t, id) => ({ ...t, id }))
     .filter((t) => t.naam && t.beslaat && (t.beslaat[0] > 1 || t.beslaat[1] > 1));
@@ -121,11 +123,12 @@ for (const [velNaam, vel] of Object.entries(TEGELS_JSON)) {
 
   test(`${velNaam}.png: elke tegel met een voet heeft een gevulde cel, geen lege plek waar een plaatje hoort te staan`, () => {
     const png = velPng(vel.bestand);
-    const kolommen = vel.kolommen || vel.tiles.length;
     for (const t of metVoet) {
-      const x0 = (t.id % kolommen) * vel.tegelB;
-      const y0 = Math.floor(t.id / kolommen) * vel.tegelH;
-      assert.ok(ondersteRij(png, x0, y0, vel.tegelB, vel.tegelH), `${velNaam}/${t.naam}: de cel is helemaal leeg`);
+      const plek = T.sprites.celVan(velNaam, t.id);
+      assert.ok(plek, `${velNaam}/${t.naam}: staat nergens op het vel`);
+      const [x0, y0, cb, ch] = plek.cel;
+      assert.ok(x0 >= 0 && y0 >= 0 && x0 + cb <= png.breedte && y0 + ch <= png.hoogte, `${velNaam}/${t.naam}: de cel valt buiten het vel`);
+      assert.ok(ondersteRij(png, x0, y0, cb, ch), `${velNaam}/${t.naam}: de cel is helemaal leeg`);
     }
   });
 
@@ -134,16 +137,14 @@ for (const [velNaam, vel] of Object.entries(TEGELS_JSON)) {
 
   test(`${velNaam}.png: elke tegel met een ruime voet (3 tegels of meer) staat ook echt op die voet (het anker is de achterste hoek, niet het midden)`, () => {
     const png = velPng(vel.bestand);
-    const kolommen = vel.kolommen || vel.tiles.length;
     for (const t of ruim) {
       const [bw, bd] = t.beslaat;
-      const x0 = (t.id % kolommen) * vel.tegelB;
-      const y0 = Math.floor(t.id / kolommen) * vel.tegelH;
-      const rij = ondersteRij(png, x0, y0, vel.tegelB, vel.tegelH);
+      const { cel: [x0, y0, cb, ch], anker } = T.sprites.celVan(velNaam, t.id);
+      const rij = ondersteRij(png, x0, y0, cb, ch);
 
       // De twee uiteinden van de onderste rij, t.o.v. het anker, terug naar tegel-eenheden.
-      const links = naarTegelDelta(rij.links - vel.anker[0], rij.y - vel.anker[1]);
-      const rechts = naarTegelDelta(rij.rechts - vel.anker[0], rij.y - vel.anker[1]);
+      const links = naarTegelDelta(rij.links - anker[0], rij.y - anker[1]);
+      const rechts = naarTegelDelta(rij.rechts - anker[0], rij.y - anker[1]);
       // De voorste hoek van de voet (de tegel is de achterste hoek, "beslaat" telt vanaf daar naar
       // rechtsonder, zie js/kaart.js): in tegel-eenheden t.o.v. de aangeklikte tegel zelf.
       const voorTx = bw - 1;

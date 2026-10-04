@@ -1,66 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="begroeiing" tilewidth="123" tileheight="119" tilecount="40" columns="8" objectalignment="bottom">
- <tileoffset x="0" y="26"/>
- <image source="begroeiing.png" width="984" height="595"/>
- <tile id="0">
+<tileset version="1.10" tiledversion="1.11.0" name="begroeiing" tilewidth="70" tileheight="119" tilecount="40" columns="0" objectalignment="bottom">
+ <grid orientation="orthogonal" width="1" height="1"/>
+ <properties>
+  <property name="notitie" value="Ingepakt: elke tegel is een eigen rechthoek op het vel. In Tiled staan de voorwerpen daardoor niet precies op hun plek; het spel zet ze neer met hun eigen anker (tegels.json)."/>
+ </properties>
+ <tile id="0" x="0" y="0" width="70" height="119">
   <properties>
     <property name="naam" value="struik"/>
     <property name="vast" type="bool" value="true"/>
   </properties>
+  <image source="begroeiing.png" width="243" height="240"/>
  </tile>
- <tile id="1">
+ <tile id="1" x="72" y="0" width="60" height="119">
   <properties>
     <property name="naam" value="bessenStruik"/>
     <property name="vast" type="bool" value="true"/>
   </properties>
+  <image source="begroeiing.png" width="243" height="240"/>
  </tile>
- <tile id="2">
+ <tile id="2" x="134" y="0" width="58" height="119">
   <properties>
     <property name="naam" value="varen"/>
     <property name="vast" type="bool" value="false"/>
   </properties>
+  <image source="begroeiing.png" width="243" height="240"/>
  </tile>
- <tile id="3">
+ <tile id="3" x="149" y="121" width="25" height="119">
   <properties>
     <property name="naam" value="grasPol"/>
     <property name="vast" type="bool" value="false"/>
   </properties>
+  <image source="begroeiing.png" width="243" height="240"/>
  </tile>
- <tile id="4">
+ <tile id="4" x="46" y="121" width="37" height="119">
   <properties>
     <property name="naam" value="hoogGras"/>
     <property name="vast" type="bool" value="false"/>
   </properties>
+  <image source="begroeiing.png" width="243" height="240"/>
  </tile>
- <tile id="5">
+ <tile id="5" x="85" y="121" width="33" height="119">
   <properties>
     <property name="naam" value="bloemen"/>
     <property name="vast" type="bool" value="false"/>
   </properties>
+  <image source="begroeiing.png" width="243" height="240"/>
  </tile>
- <tile id="6">
+ <tile id="6" x="120" y="121" width="27" height="119">
   <properties>
     <property name="naam" value="paddenstoelen"/>
     <property name="vast" type="bool" value="false"/>
   </properties>
+  <image source="begroeiing.png" width="243" height="240"/>
  </tile>
- <tile id="7">
+ <tile id="7" x="194" y="0" width="49" height="119">
   <properties>
     <property name="naam" value="boomstronk"/>
     <property name="vast" type="bool" value="true"/>
   </properties>
+  <image source="begroeiing.png" width="243" height="240"/>
  </tile>
- <tile id="8">
+ <tile id="8" x="0" y="121" width="44" height="119">
   <properties>
     <property name="naam" value="rots"/>
     <property name="vast" type="bool" value="true"/>
   </properties>
+  <image source="begroeiing.png" width="243" height="240"/>
  </tile>
- <tile id="9">
+ <tile id="9" x="176" y="121" width="22" height="119">
   <properties>
     <property name="naam" value="kleineRots"/>
     <property name="vast" type="bool" value="false"/>
   </properties>
+  <image source="begroeiing.png" width="243" height="240"/>
  </tile>
  <tile id="10">
   <properties>

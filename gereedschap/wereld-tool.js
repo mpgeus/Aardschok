@@ -836,7 +836,7 @@
     // niets aan te doen — en anders zou elke boom het poppetje erachter afschermen.
     for (const v of [...w.voorwerpen, ...(w.questVoorwerpen || [])]) {
       if (!dingOp(v.x, v.y)) continue;
-      const hoog = (T.sprites.buitenHoogte && T.sprites.buitenHoogte(v.vel)) || 32;
+      const hoog = (T.sprites.buitenHoogte && T.sprites.buitenHoogte(v.vel, v.id)) || 32;
       const p = T.naarScherm(v.x, v.y);
       if (sx > p.x - 24 && sx < p.x + 24 && sy > p.y - hoog && sy < p.y + 10) {
         kandidaten.push({ d: v.x + v.y, voorwerp: v, x: v.x, y: v.y });

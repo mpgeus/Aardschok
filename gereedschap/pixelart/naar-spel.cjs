@@ -35,6 +35,7 @@ const Schandpaal = require('./schandpaal.cjs');
 const Paaltje = require('./paaltje.cjs');
 const Meiboom = require('./meiboom.cjs');
 const Papieren = require('./papieren.cjs');
+const I = require('./inpakken.cjs');
 
 const UIT = path.join(__dirname, 'uit');
 const BEELDEN = path.join(__dirname, '..', '..', 'beelden');
@@ -261,6 +262,16 @@ const FIGUURLIJST = {
   schaap2: { map: ['vee', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'liggen'], bron: 'vee-anim.cjs schaap2' },
 };
 
+// Een figuurvel op schijf laten krimpen tot wat er in al zijn cellen samen staat (inpakken.cjs,
+// krimpRaster; werklijst vraag 114, 2a): de cel van een houding was zo ruim als een zwaard in de lucht
+// of een dier dat valt, en de browser houdt elke lege pixel vast. Het raster blijft, het anker schuift
+// mee. Geeft de cel en het anker erna.
+function krimpVel(pad, cel, anker) {
+  const k = I.krimpRaster(I.leesPng(pad), cel, anker);
+  if (k.gekrompen) fs.writeFileSync(pad, I.pngVanBeeld(k.beeld));
+  return { cel: k.cel, anker: k.anker };
+}
+
 // Eén figuur: zijn vellen naar beelden/figuren/ en zijn beschrijving terug (of null als hij er
 // in uit/ niet is).
 function figuur(naam, opzet) {
@@ -277,15 +288,14 @@ function figuur(naam, opzet) {
     const o = beschrijving.houdingen[h];
     if (!o) continue;
     if (!kopieer(path.join(map, o.bestand), path.join(FIGUREN, o.bestand))) continue;
+    gekozen[h] = { ...o, ...krimpVel(path.join(FIGUREN, o.bestand), o.cel || beschrijving.cel, o.anker || beschrijving.anker) };
     // `stap` (hoeveel tegels één pas is) houdt de voeten op de grond: js/sprites.js leidt de
     // fase van de loopcyclus af uit de afgelegde afstand, niet uit de klok. Niet elk script
     // schrijft hem, dus reken hem hier uit de snelheid waarvoor de cyclus gemaakt is: twee
     // passen per cyclus.
     if (h === 'lopen' && o.stap == null && beschrijving.snelheid) {
-      gekozen[h] = { ...o, stap: Math.round((beschrijving.snelheid * (o.beelden / o.fps)) / 2 * 100) / 100 };
-      continue;
+      gekozen[h].stap = Math.round((beschrijving.snelheid * (o.beelden / o.fps)) / 2 * 100) / 100;
     }
-    gekozen[h] = o;
   }
   beschrijving.houdingen = gekozen;
   return beschrijving;

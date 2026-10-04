@@ -69,15 +69,16 @@
 
   // De doos die het beeld van een voorwerp inneemt, rond het midden van zijn eigen tegel. Elke
   // tegel draagt zijn eigen maat (`doos`: links, boven, rechts, onder vanaf het ankerpunt), want
-  // een cel is voor alle tegels van een vel even groot maar een bank is geen waslijn. Zonder die
-  // maat valt het terug op de cel. Dit gaat op de voettegel en de maat van het beeld, niet op
-  // pixels: genoeg om te weten of er iemand achter kan staan.
+  // een bank is geen waslijn. Zonder die maat valt het terug op zijn cel op het vel
+  // (T.sprites.celVan). Dit gaat op de voettegel en de maat van het beeld, niet op pixels: genoeg
+  // om te weten of er iemand achter kan staan.
   function voorwerpDoos(v) {
     const vel = T.TEGELS && T.TEGELS[v.vel];
     const tegel = vel && vel.tiles[v.id];
-    if (!vel) return null;
-    const a = vel.anker || [Math.round(vel.tegelB / 2), Math.round(vel.tegelH / 2)];
-    const d = (tegel && tegel.doos) || [a[0], a[1], vel.tegelB - a[0], vel.tegelH - a[1]];
+    const plek = T.sprites.celVan(v.vel, v.id);
+    if (!plek) return null;
+    const a = plek.anker;
+    const d = (tegel && tegel.doos) || [a[0], a[1], plek.cel[2] - a[0], plek.cel[3] - a[1]];
     if (d[1] < T.DOORKIJK_INSTELLINGEN.hoogGenoeg) return null; // laag spul verbergt niemand
     const p = T.naarScherm(v.x, v.y);
     return { x0: p.x - d[0], x1: p.x + d[2], y0: p.y - d[1], y1: p.y + d[3] };
