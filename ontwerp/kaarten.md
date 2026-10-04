@@ -379,4 +379,6 @@ wereld die nog niet af is, is de verkeerde volgorde.
 **Opnieuw gevraagd (Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁"; werklijst vraag 121).** Sinds 4 okt maakt de
 maker het land (`js/maker.js`), en schildert Marcel in Tiled alleen nog de grond; de hoogte komt dus uit de maker, niet
 uit een laag in Tiled. Het plan (terrassen met wanden en hellingen, wat het doet aan lopen, zien en bouwen, en wanneer)
-staat bij vraag 121.
+staat bij vraag 121. **Besloten (Marcel, 4 okt: "121 a terrassen, b ja, c na de boeren"):** terrassen met wanden en
+hellingen, zoals op 20 sep; de hoogte raakt het lopen, het zicht en het bouwen; en het komt na de boeren (vraag 111),
+vóór het eiland (vraag 117), zodat het eiland er meteen mee begint.
