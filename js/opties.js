@@ -297,6 +297,17 @@
           uitleg: 'Je weet niet wie er keek. Je hoort het pas als het rondverteld is: van de herbergierster, of als de soldaten het vinden.' },
       ],
     },
+    // De lantaarn van de schout (Marcel, 4 okt, werklijst vraag 125, C: "ook spel. Voegt leuke elementen toe"; js/zien.js).
+    {
+      id: 'lantaarn', naam: 'De lantaarn van de schout', standaard: 'spel',
+      uitleg: "'s Avonds en 's nachts draagt de schout buiten een lantaarn. Sluipen (S) dooft hem.",
+      keuzes: [
+        { id: 'spel', naam: 'Ook spel', zet: { 'ZIEN_INSTELLINGEN.lantaarn.zichtbaar': true },
+          uitleg: 'Met je lantaarn aan zien ze je in het donker van ver. Wie iets wil verstoppen, sluipt.' },
+        { id: 'beeld', naam: 'Alleen beeld', zet: { 'ZIEN_INSTELLINGEN.lantaarn.zichtbaar': false },
+          uitleg: 'De lantaarn geeft licht, maar wie je ziet, hangt alleen af van de lantaarns en de herberg, zoals vóór 4 okt 2026.' },
+      ],
+    },
     // Het dorp bouwt zelf (Marcel, 28 sep, werklijst vraag 52: "C ja"; js/erven.js).
     {
       id: 'huizen', naam: 'Huizen', standaard: 'dorpBouwtZelf',
