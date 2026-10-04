@@ -91,10 +91,13 @@
   // (T.GEBOUWEN_INSTELLINGEN.looppad, js/gebouwen.js; Marcel, 3 okt: "Nee ik wil 3 tegels").
   // Tijdens het zoeken staat iedereen stil (T.iedereenStil, js/wereld.js): wie er op een tegel staat, vraagt het dan in
   // één stap, voor elke tegel van de kaart.
+  // Een huis of boerderij van een bouwstijl keert daar zijn deur naar de weg (T.keerNaarDeWeg, js/bouwstijl.js).
   T.plekVoor = function (D, soort, bij) {
     T.iedereenStil(true);
     try {
-      return zoekPlek(D, soort, bij);
+      const plek = zoekPlek(D, soort, bij);
+      if (plek) T.keerNaarDeWeg(D, soort, plek.x, plek.y);
+      return plek;
     } finally {
       T.iedereenStil(false);
     }

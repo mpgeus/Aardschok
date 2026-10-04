@@ -498,19 +498,26 @@
   // één stempel komt (Marcel, 26 sep: "We hebben meer afwisseling nodig in de huizen en hutten"). De
   // keuze ligt vast tot hij gebouwd is (S.volgendeTekening), zodat het spookbeeld van het bouwmenu de
   // voet laat zien die er echt komt. T.neemTekening zegt dat hij gebouwd is: de volgende wordt een
-  // andere.
+  // andere. In een land met een bouwstijl (js/bouwstijl.js) is het een vorm van die stijl, met het dak
+  // van nu; de keuze mag zijn deur naar een andere kant hebben (een verzoek keert hem naar de weg, js/verzoeken.js).
   T.volgendeTekening = function (D, soort) {
     const g = T.GEBOUWEN[soort];
     if (!g) return null;
-    const lijst = g.tekeningen && g.tekeningen.length ? g.tekeningen : null;
+    const lijst = T.tekeningenVan(D, soort);
     if (!lijst) return g.tekening || null;
     const volgende = D.volgendeTekening || (D.volgendeTekening = {});
-    if (!lijst.includes(volgende[soort])) {
+    if (!lijst.includes(T.metDeurNaar(volgende[soort], 'z'))) {
       const vorige = D.vorigeTekening && D.vorigeTekening[soort];
-      const kan = lijst.length > 1 ? lijst.filter((t) => t !== vorige) : lijst;
+      const kan = lijst.length > 1 ? lijst.filter((t) => T.vormVan(t) !== T.vormVan(vorige)) : lijst;
       volgende[soort] = kan[Math.floor(Math.random() * kan.length)];
     }
     return volgende[soort];
+  };
+  // De tekeningen die een nieuw gebouw van deze soort kan krijgen: die van de bouwstijl van het land
+  // (T.stijlTekeningen, js/bouwstijl.js), of anders `tekeningen` hierboven. Null bij één vaste tekening.
+  T.tekeningenVan = function (D, soort) {
+    const g = T.GEBOUWEN[soort];
+    return T.stijlTekeningen(D, soort) || (g.tekeningen && g.tekeningen.length ? g.tekeningen : null);
   };
   T.neemTekening = function (D, soort) {
     const t = T.volgendeTekening(D, soort);
@@ -629,9 +636,10 @@
   // erf: tot dan kon een werkplaats midden op een akker staan. Een erf heeft een eigen regel
   // (T.waaromPastErfNiet, js/erven.js). Het bouwmenu laat de reden zien bij de muis en na een klik
   // (js/main.js).
-  T.waaromPastHetNiet = function (D, soort, x, y) {
+  // Met `tekening` voor een andere tekening dan de volgende (een andere stand, js/bouwstijl.js).
+  T.waaromPastHetNiet = function (D, soort, x, y, tekening) {
     if (T.GEBOUWEN[soort] && T.GEBOUWEN[soort].erf) return T.waaromPastErfNiet(D, x, y);
-    const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort));
+    const voet = T.gebouwVoet(soort, tekening || T.volgendeTekening(D, soort));
     const w = D.wereld;
     if (!voet || !w) return 'Daar past het niet.';
     let vast = false;
@@ -845,7 +853,7 @@
     if (g.woning) return !zelf;
     return !T.VERZOEKEN_INSTELLINGEN.mensen;
   };
-  T.gebouwPast = (D, soort, x, y) => !T.waaromPastHetNiet(D, soort, x, y);
+  T.gebouwPast = (D, soort, x, y, tekening) => !T.waaromPastHetNiet(D, soort, x, y, tekening);
 
   // Eén keer aan T.VOORWERPEN toevoegen, zoals kaart.js dat doet voor een tegel uit Tiled: hij
   // blokkeert altijd zijn voet (dat ís zijn voet immers al in de tegelslaag hieronder), en het

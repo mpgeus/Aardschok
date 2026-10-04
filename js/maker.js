@@ -118,6 +118,14 @@
   const MEENT = 7;
   const BOS = 8;
 
+  // De tekeningen van een soort (de hut, het huis, de boerderij) als vormen, elk een lijst namen: met een bouwstijl elke
+  // vorm in zijn vier standen onder het dak van het gehucht (T.vormenVanStijl, js/bouwstijl.js), en anders elke tekening
+  // in T.MAKER_INSTELLINGEN.tekeningen alleen.
+  function vormenVoor(stijl, soort) {
+    const v = stijl ? T.vormenVanStijl(stijl, soort) : [];
+    return v.length ? v : IN().tekeningen[soort].map((naam) => [naam]);
+  }
+
   // Een tekening opzoeken: zijn maat, en waar zijn deur zit (anders het midden van de zuidkant, zoals T.deurVan
   // in js/bewoners.js). `kant` zegt naar welke kant de deur kijkt.
   function tekening(naam) {
@@ -215,6 +223,10 @@
     const I = IN();
     const B = I.b;
     const H = I.h;
+    // De bouwstijl van dit land (js/bouwstijl.js), uit zijn nummer: de huizen, de hutten en de boerderijen komen uit
+    // die stijl, elk in zijn vier standen, zodat een huis zijn deur ook vóór het plein ernaartoe kan keren (Marcel, 4
+    // okt, vraag 114: "D ja"). Zonder stijl (er zijn nog geen tekeningen van) de tekeningen hieronder.
+    const stijl = T.stijlVoorLand(zaad);
     const r = T.dobbelsteen((Math.imul(zaad >>> 0, 7919) ^ Math.imul(poging + 1, 104729)) >>> 0);
     const tussen = (a, b) => a + (b - a) * r();
     const kies = (lijst) => lijst[Math.floor(r() * lijst.length)];
@@ -637,12 +649,12 @@
     // het plein: de hut in het westen van het ontworpen gehucht staat er acht tegels vanaf, met een pad.
     const voorwerpen = [];
     {
-      const hutten = schud(I.tekeningen.hut);
+      const hutten = schud(vormenVoor(stijl, 'hut'));
       const rij = [
         { rol: 'herberg', namen: I.tekeningen.herberg, huis: 'herbergierster', totPlein: 3 },
-        { rol: 'huis', namen: schud(I.tekeningen.huis), bewoners: 'jongGezin', totPlein: 3 },
-        { rol: 'hut', namen: [hutten[0]], bewoners: 'oudStel', totPlein: 8, deurVrij: true },
-        { rol: 'hut', namen: [hutten[1]], totPlein: 8, deurVrij: true },
+        { rol: 'huis', namen: schud(vormenVoor(stijl, 'huis').flat()), bewoners: 'jongGezin', totPlein: 3 },
+        { rol: 'hut', namen: hutten[0], bewoners: 'oudStel', totPlein: 8, deurVrij: true },
+        { rol: 'hut', namen: hutten[1], totPlein: 8, deurVrij: true },
       ];
       for (const wie of rij) {
         const kandidaten = [];
@@ -701,7 +713,7 @@
       const start = tussen(0, Math.PI * 2);
       const richtingen = [0, 1, 2, 3, 4].map((i) => start + (i * Math.PI * 2) / 5 + tussen(-0.2, 0.2));
       const verdeling = schud(I.akkers);
-      let vrijeTekeningen = I.tekeningen.boerderij.slice();
+      let vrijeTekeningen = vormenVoor(stijl, 'boerderij').flat();
       const volgorde = schud([0, 1, 2, 3, 4]);
       for (let n = 0; n < volgorde.length; n++) {
         const i = volgorde[n];
@@ -1204,7 +1216,7 @@
 
     // ---- 13. Keuren ----
     const plan = {
-      zaad, poging, b: B, h: H, grond, plein, zand, marskramer, uitgang, brug, huizen, akkers, meent, voorwerpen, vijvers, rotsen,
+      zaad, poging, stijl, b: B, h: H, grond, plein, zand, marskramer, uitgang, brug, huizen, akkers, meent, voorwerpen, vijvers, rotsen,
       wegen, paden, schout: { x: deurS.x, y: deurS.y },
       landschap: { weg: as, beek: beekVooraan ? (as === 'x' ? 'west' : 'noord') : as === 'x' ? 'oost' : 'zuid', bos, uitgangBijBeek },
     };
@@ -1472,6 +1484,7 @@
     const { kaart, betekenis } = T.kaartVanGehucht(plan);
     const w = T.laadKaart(kaart, betekenis);
     w.maker = { zaad: plan.zaad, poging: plan.poging };
+    if (plan.stijl) w.stijl = plan.stijl;
     return w;
   };
 })(globalThis.Spel = globalThis.Spel || {});

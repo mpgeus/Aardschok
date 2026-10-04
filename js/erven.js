@@ -106,7 +106,7 @@
   // maar wat uit de tekeningen volgt; het muisspook vraagt het elk beeld.)
   const PAST = new Map();
   function maatPast(D, b, h) {
-    const k = `${b}x${h}`;
+    const k = `${T.stijlVan(D) || ''}:${b}x${h}`;
     if (!PAST.has(k)) PAST.set(k, !!kiesTekeningen(D, { b, h }));
     return PAST.get(k);
   }
@@ -163,8 +163,8 @@
   // De tekeningen van een soort, die van het bouwmenu voorop (T.volgendeTekening, js/gebouwen.js): zo wordt
   // een rij hutten niet één stempel.
   function opVolgorde(D, soort) {
-    const lijst = T.GEBOUWEN[soort].tekeningen || [T.GEBOUWEN[soort].tekening];
-    const eerst = T.volgendeTekening(D, soort);
+    const lijst = T.tekeningenVan(D, soort) || [T.GEBOUWEN[soort].tekening];
+    const eerst = T.metDeurNaar(T.volgendeTekening(D, soort), 'z');
     return [eerst, ...lijst.filter((t) => t !== eerst)];
   }
 
@@ -174,6 +174,7 @@
   // `erf` (waar het erf ligt) alleen een hoek waar het huis rondom een looppad heeft. Geeft { hut, huis, dx, dy },
   // of null als er niets past.
   function kiesTekeningen(D, maat, erf = null) {
+    if (T.stijlVan(D)) return kiesInStijl(D, maat, erf);
     for (const huis of opVolgorde(D, 'huis')) {
       for (const hut of opVolgorde(D, 'hut')) {
         const vormen = [vorm('hut', hut), vorm('huis', huis)];
@@ -189,6 +190,44 @@
       }
     }
     return null;
+  }
+
+  // In een land met een bouwstijl (js/bouwstijl.js) hebben de hut en het huis hun deur naar dezelfde kant: de kant van
+  // het erf die het dichtst bij de weg ligt (T.zijdenNaarDeWeg; Marcel, 4 okt), en past dat niet, naar de volgende
+  // kant. Het huis staat achteraan op zijn erf, zodat de moestuin tussen de deur en de weg ligt: bij een deur naar het
+  // zuiden zo ver mogelijk naar het noorden, bij een deur naar het oosten zo ver mogelijk naar het westen, enzovoort.
+  function kiesInStijl(D, maat, erf) {
+    const kanten = erf ? T.zijdenNaarDeWeg(D.wereld, erf) : T.DEURKANTEN;
+    const huizen = opVolgorde(D, 'huis');
+    const hutten = opVolgorde(D, 'hut');
+    for (const kant of kanten) {
+      for (const huis0 of huizen) {
+        for (const hut0 of hutten) {
+          const huis = T.metDeurNaar(huis0, kant);
+          const hut = T.metDeurNaar(hut0, kant);
+          const vormen = [vorm('hut', hut), vorm('huis', huis)];
+          const b = Math.max(...vormen.map((v) => v.b));
+          const h = Math.max(...vormen.map((v) => v.h));
+          for (const [dx, dy] of hoekenVanAchter(maat, kant)) {
+            if (!pastOp(maat, vormen, dx, dy)) continue;
+            if (erf && !T.looppadOm(D, { x: erf.x + dx, y: erf.y + dy, b, h }, T.GEBOUWEN_INSTELLINGEN.looppad, erf)) continue;
+            return { hut, huis, dx, dy };
+          }
+        }
+      }
+    }
+    return null;
+  }
+  // De hoeken van een erf, van achter naar voren als de deur naar `kant` kijkt.
+  function hoekenVanAchter(maat, kant) {
+    const xs = [...Array(maat.b).keys()];
+    const ys = [...Array(maat.h).keys()];
+    if (kant === 'n') ys.reverse();
+    if (kant === 'w') xs.reverse();
+    const uit = [];
+    if (kant === 'z' || kant === 'n') for (const dy of ys) for (const dx of xs) uit.push([dx, dy]);
+    else for (const dx of xs) for (const dy of ys) uit.push([dx, dy]);
+    return uit;
   }
 
   // ---------------------------------------------------------------------------------------------
@@ -232,8 +271,8 @@
     if (!keus) return null;
     erf.plan = planVan(keus);
     // Wat genomen is, is genomen: de volgende hut en het volgende huis worden een andere tekening.
-    if (keus.hut === T.volgendeTekening(D, 'hut')) T.neemTekening(D, 'hut');
-    if (keus.huis === T.volgendeTekening(D, 'huis')) T.neemTekening(D, 'huis');
+    if (T.vormVan(keus.hut) === T.vormVan(T.volgendeTekening(D, 'hut'))) T.neemTekening(D, 'hut');
+    if (T.vormVan(keus.huis) === T.vormVan(T.volgendeTekening(D, 'huis'))) T.neemTekening(D, 'huis');
     const hut = {
       soort: 'hut', x: erf.x + keus.dx, y: erf.y + keus.dy, tekening: keus.hut, voet: T.gebouwVoet('hut', keus.hut),
       klaar: false, klaarOp: null, handen: 0, voorwerp: null,

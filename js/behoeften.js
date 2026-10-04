@@ -359,7 +359,7 @@
     if (!keus) return false; // geen ruimte: morgen weer
     const { tekening, voet: nieuweVoet } = keus;
     const inNieuw = (dx, dy) => dx < nieuweVoet.b && dy < nieuweVoet.h;
-    if (!instantie.wordtTekening && tekening === T.volgendeTekening(D, soort.wordt)) T.neemTekening(D, soort.wordt);
+    if (!instantie.wordtTekening && T.vormVan(tekening) === T.vormVan(T.volgendeTekening(D, soort.wordt))) T.neemTekening(D, soort.wordt);
     delete instantie.wordtTekening;
     instantie.soort = soort.wordt;
     instantie.tekening = tekening;
@@ -402,17 +402,30 @@
   // welk huis hij wordt, zodat het in het erf past; js/erven.js), het stenen broertje van zijn huis (`broertjes` op de
   // nieuwe soort: dezelfde voet, dus er is altijd plaats; werklijst vraag 85, d), of de volgende van zijn nieuwe soort
   // (T.volgendeTekening, js/gebouwen.js), en past die niet, een andere die wel past. Null als er geen past.
+  //
+  // Een huis van een bouwstijl (js/bouwstijl.js) houdt de kant van zijn deur, en krijgt het dak en de steen van nu (Marcel, 4 okt:
+  // het dak "Alleen als het doorgroeit of gebouwd wordt daarna"): wat zijn erf al voor hem koos, zijn stenen broertje, de
+  // volgende vorm van zijn nieuwe soort, of een andere die past.
   function kiesGroei(D, instantie, nieuw, oudeVoet) {
     const soort = T.GEBOUWEN[nieuw];
     const kandidaten = [];
-    if (instantie.wordtTekening) kandidaten.push(instantie.wordtTekening);
+    const kant = T.deurKantVan(instantie.tekening);
+    if (kant) {
+      if (instantie.wordtTekening) kandidaten.push(T.zoalsNu(D, instantie.wordtTekening, nieuw));
+      else {
+        kandidaten.push(T.zoalsNu(D, instantie.tekening, nieuw));
+        kandidaten.push(T.metDeurNaar(T.volgendeTekening(D, nieuw), kant));
+        kandidaten.push(...T.andereVormen(D, instantie.tekening, nieuw));
+      }
+      kandidaten.splice(0, kandidaten.length, ...kandidaten.filter(Boolean));
+    } else if (instantie.wordtTekening) kandidaten.push(instantie.wordtTekening);
     else {
       const broertje = soort.broertjes && soort.broertjes[instantie.tekening];
       if (broertje) kandidaten.push(broertje);
       kandidaten.push(T.volgendeTekening(D, nieuw));
       for (const t of soort.tekeningen || []) if (!kandidaten.includes(t)) kandidaten.push(t);
     }
-    for (const tekening of kandidaten) {
+    for (const tekening of kandidaten.filter((t, i, a) => a.indexOf(t) === i)) {
       const voet = T.gebouwVoet(nieuw, tekening) || oudeVoet;
       if (heeftRuimte(D, instantie, oudeVoet, voet)) return { tekening, voet };
     }

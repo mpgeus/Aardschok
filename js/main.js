@@ -935,7 +935,8 @@
     gehucht(zaad) {
       if (zaad != null) T.nieuwSpel(Number(zaad));
       const w = S.gebieden && S.gebieden.gehucht;
-      return w && w.maker ? `Een gehucht van de maker, uit zaad ${w.maker.zaad}.` : 'Het ontworpen gehucht.';
+      const stijl = w && w.stijl ? `, in de bouwstijl ${w.stijl} (js/bouwstijl.js)` : '';
+      return w && w.maker ? `Een gehucht van de maker, uit zaad ${w.maker.zaad}${stijl}.` : 'Het ontworpen gehucht.';
     },
     // De raad onder het doel (js/raad.js): wat er nu staat, en welke raden nu allemaal gelden, in hun volgorde.
     raad() {
