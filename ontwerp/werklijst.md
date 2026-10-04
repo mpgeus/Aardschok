@@ -50,8 +50,9 @@ rode ogen in het donker; "doden mag") en **vraag 117** (één kaart: een eiland 
 mist; "uiteindelijk"). De volgorde (Marcel: "akkoord"): de huizen (vraag 114), dan **vraag 111** (de boeren op hun
 veld) met 115 en 116, dan 117, dat begint met een proef die meet of een kaart in stukken loopt. Ook besloten: **vraag 118**
 (inwoners met stats: levenspunten, vaardigheden die groeien met het werk, en eigenschappen, zoals in Dwarf Fortress),
-samen met de mensen aan het werk. Voor het eiland gebruiken we Marcels vier technieken voor het zoeken van paden (HPA\*
-over de stukken van de kaart, flow fields, time-slicing en group steering; vraag 117). Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
+samen met de mensen aan het werk. Voor het eiland gebruiken we Marcels technieken voor het zoeken van paden (vraag 117 en
+**vraag 119**: HPA\* over de stukken, flow fields, time-slicing, sturen in plaats van iedereen als muur, Jump Point
+Search). **Open bij Marcel:** vraag 119, a en b (een andere manier van lopen, en wanneer). Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
 verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de maat van de winst: op het
 wijdere land is er grond genoeg, maar de speeltest speelt standaard nog het ontworpen gehucht). De speeltest van vier
 jaar staat in `speelbaar.md`, en een volgende speeltest van vier jaar splitst de spelers over twee taken, want een taak
@@ -3982,6 +3983,37 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **a**, deze stats? **b**, vaardigheden die groeien met het werk? **c**, samen met 111, 115 en 116?
     **Marcel koos (4 okt): "1 ja 2 ja 3 akkoord"**: deze stats, vaardigheden die groeien met het werk, en samen met de
     boeren, de houthakker en de beesten.
+119. **Paden zoeken voor veel mensen en een groot eiland** (Marcel, 4 okt, zesentwintigste sessie: een lijst technieken,
+    met "Wat ik typte bedoel ik": flow fields of Dijkstra-kaarten, time-slicing, hiërarchisch A* (HPA\*, ook in meer lagen),
+    sturen en elkaar ontwijken (ORCA, RVO), Jump Point Search, tegels samenvoegen (2×2, 4×4), en vooraf berekende
+    snelwegen (contraction hierarchies); de uitgebreide versie van zijn lijst van 2 okt, vraag 88; plan van Claude; open).
+    **Hoe het nu zoekt:** A* met een hoop en een tabel van getallen (2,8 keer zo snel sinds 4 okt), een raster van wat
+    vaststaat, de eilanden (een onbereikbaar doel weet hij meteen), en hooguit acht zoektochten per beeld. Maar bij het
+    zoeken telt iedereen die ergens staat als een muur (`wezensBlokkeren`): daardoor is elke zoektocht uniek en niets te
+    hergebruiken, mislukt een zoektocht als er iemand in een deur staat (vandaar de rem, vraag 88), en kan een flow field
+    niet, want dat kent alleen wat vaststaat.
+    Wat waar past:
+    - **D, sturen in plaats van iedereen als muur (het belangrijkste):** A* alleen over wat vaststaat (muren, huizen,
+      bomen, water); wie een ander op zijn volgende tegel treft, wacht even, ruilt van plaats of stapt opzij. ORCA en RVO
+      zijn voor vrij bewegen; op ons raster wordt het wachten, ruilen of uitwijken. Dan is een weg te hergebruiken (van
+      huis naar werk elke dag dezelfde, tot de kaart verandert), en kunnen A en C erbovenop.
+    - **A, flow fields** voor wat veel mensen delen: de put, de kerk, de herberg, de markt, het plein, de weg uit het dorp.
+      Eén zoektocht terug vanaf het doel, opnieuw als de kaart verandert, en iedereen volgt de pijl op zijn tegel.
+    - **B, time-slicing:** nu acht per beeld; beter een tijdsbudget (zoveel milliseconden per beeld), zodat een goedkoop
+      beeld er meer doet en een duur beeld minder.
+    - **C, HPA\* in lagen** voor het eiland (vraag 117): tegels, stukken van 64 bij 64, wijken en streken, het eiland;
+      eerst de route over de grove lagen, dan A* in het stuk waar je bent.
+    - **Jump Point Search:** ons raster heeft overal dezelfde stapkosten, dus het past, vooral in de open wei van het
+      wijdere land; de wegen zijn even kort, maar niet letter voor letter dezelfde.
+    - **Tegels samenvoegen** (2×2, 4×4): voor de grove lagen van HPA\* en voor wat ver weg als getallen loopt.
+    - **Vooraf berekende snelwegen:** op het eiland over de wegen en kruispunten; HPA\* onthoudt de wegen tussen de
+      ingangen van een stuk al, en dat is hetzelfde idee. Pas als dat niet genoeg is.
+    **Voorstel voor wanneer:** D, A en B met de mensen aan het werk (vraag 111, 115, 116 en 118), want dan lopen er veel
+    meer mensen naar akkers en het bos, en het is ook de weg naar de 5000 (vraag 79). C, Jump Point Search, het
+    samenvoegen en de snelwegen met het eiland (vraag 117).
+    Vragen: **a**, D is een andere manier van lopen (de mensen plannen niet meer om elkaar heen, maar wachten of wijken
+    uit), dus de speeltest speelt daarna niet meer letter voor letter hetzelfde jaar: goed? **b**, D, A en B met de
+    mensen aan het werk, of eerst, vóór de huizen?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste

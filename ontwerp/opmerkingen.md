@@ -102,7 +102,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   **time-slicing** (de zoektochten over een paar beelden spreiden: tegen de spits 's ochtends en 's avonds), **HPA\***
   (eerst een pad over grote stukken, zoals de wijken, dan een klein stuk A*) en **group steering** (alleen de leider
   zoekt een pad, de rest volgt hem: de militie met de schout, de soldaten van de heer, de rovers). Wat Claude erin ziet,
-  staat bij vraag 88. En de kaart hoeft niet in een bewaard spel (55 bytes per
+  staat bij vraag 88. Op 4 okt gaf Marcel de uitgebreide lijst (vraag 119): flow fields of Dijkstra-kaarten (één
+  berekening voor duizend mensen naar hetzelfde doel), time-slicing (15 à 20 zoektochten per beeld, een kleine
+  vertraging voor wie vertrekt), hiërarchisch A* (eerst tussen kamers of stukken van 10 bij 10, dan lokaal; ook in meer
+  lagen: blokken, dorpen, steden, landen), sturen en elkaar ontwijken (A* alleen voor een grove route over wat
+  vaststaat, en ORCA of RVO om elkaar niet te raken: "Do not bake obstacle/agent-to-agent collision into the core A*
+  calculation"), Jump Point Search (over open stukken springen in plaats van elke buur te bekijken), tegels samenvoegen
+  (2×2, 4×4), en vooraf berekende snelwegen (contraction hierarchies). En de kaart hoeft niet in een bewaard spel (55 bytes per
   tegel; bij 256 bij 256 al 3,6 MB): die komt uit het zaad of uit het bestand. Pas nodig als het dorp een stad wordt.
   **Uiteindelijk wordt het een stad van mogelijk 5000 of meer mensen** (Marcel, 1 okt; vraag 77). Dat haal je niet met
   alleen snellere paden (bij 1.600 mensen kost een beeld nu 15 seconden): dan loopt niet iedereen altijd zijn eigen
