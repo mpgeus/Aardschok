@@ -40,8 +40,8 @@ treft, soms staan voor een praatje, met een wolkje boven wie praat. `npm test`: 
 **Waar het werk staat:** in `main` (4 okt; Marcel: "ja" op "push main") staan de snelheid van 3 okt (vraag 113, de
 meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
 van een weg, en het bos om de kaart alleen aan de kant van het bos. Sinds het eind van de zesentwintigste sessie ook het
-lopen (vraag 119, D en A; Marcel: "ja push main"). Het praatje (vraag 120) staat op de branch van de
-zevenentwintigste sessie (`ccr-6762008a-w9xt0l`), nog niet in `main`. Hoe een eigen branch en `main` samengaan, staat in
+lopen (vraag 119, D en A; Marcel: "ja push main"), en sinds de zevenentwintigste sessie het praatje (vraag 120;
+Marcel: "2 ja push main"). Hoe een eigen branch en `main` samengaan, staat in
 `CLAUDE.md`, onder Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
@@ -55,11 +55,11 @@ onderweg; wie langskomt, schuift aan, tot vier; boven wie praat staat om de beur
 Niemand gaat ergens heen om te praten: c (een deel 's avonds naar het plein) ging er weer uit. Waar ze het over hebben
 (het tekentje in het wolkje) komt met de mensen aan het werk.
 
-**Waar de volgende sessie begint:** **eerst een vraag aan Marcel: het laden van een bewaard spel.** De proef met
-opslaan faalt al op `main`: een gebouw dat in het spel neergezet is, kent een verse bladzijde niet na het laden, en
-zodra iets vraagt of die tegel vaststaat, valt het spel om (`opmerkingen.md`, bovenaan). Voorstel: dat eerst repareren
-(`T.herstelSpel` meldt de soorten aan van wat er op de kaart ligt), een kleine klus, en de proef met opslaan in de
-toetsen zetten, zodat het niet weer ongemerkt breekt.
+**Waar de volgende sessie begint:** **eerst het laden van een bewaard spel** (Marcel, 4 okt: "1 ja" op "Mag ik dat
+eerst repareren, vóór de huizen?"). De proef met opslaan faalt al op `main`: een gebouw dat in het spel neergezet is,
+kent een verse bladzijde niet na het laden, en zodra iets vraagt of die tegel vaststaat, valt het spel om
+(`opmerkingen.md`, bovenaan). De reparatie: `T.herstelSpel` meldt de soorten aan van wat er op de kaart ligt, en de proef
+met opslaan komt in de toetsen, zodat het niet weer ongemerkt breekt.
 Daarna **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij vraag 114): eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
 wanden, luiken, gespiegeld) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
