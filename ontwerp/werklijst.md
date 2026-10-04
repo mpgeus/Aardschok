@@ -4261,6 +4261,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     alleen daar), en "ja start maar". Dus stap 6: wit opnieuw door de bouwer, eerst de huizen (`npm run tiled huizen`), dan
     de bouwfasen in twee delen (`bouwfasen.cjs --erbij hut huis`, dan `--erbij stenenHuis boerderij`; met namen schrijft
     `--erbij` sinds vandaag zijn fasen erbij, zodat een deel niet verloren gaat als een taak stopt).
+    **G is gebouwd** (tweeëndertigste sessie, terwijl wit renderde): een huis dat doorgroeit, rijst op in de laatste drie
+    bouwfasen van zijn nieuwe tekening (vanaf `groeiVanafFase`, 2: de muren met steigers) over de bouwtijd van zijn
+    nieuwe soort, en wie erin woont, blijft erin wonen. Alleen het beeld: het voorwerp is `inAanbouw`, het gebouw blijft
+    `klaar`, dus de regels zien het nieuwe huis meteen, en de speeltest speelt hetzelfde jaar; een tekening zonder
+    bouwfasen groeit in één nacht, zoals altijd (`groeiGebouw` in `js/behoeften.js`, `T.bouwFaseIndex` met `vanaf`, en
+    `T.tikGebouwenDag` zet hem af; drie toetsen in `test/behoeften.test.cjs`).
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag

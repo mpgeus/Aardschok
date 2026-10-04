@@ -190,7 +190,10 @@ een stand, en elke stand wil iets.
 Klein (vraag 82): drie standen, op de huizen die er al zijn; de poorters en hun huis komen later. Wat er nu al te zien is:
 de tevredenheid in de balk is het gemiddelde van de huizen, en bij de muis staat hij per stand, met wat er gemist wordt
 en in hoeveel huizen; met een put, een kapel, de herberg of een markt in de hand zie je de kring, en zegt de muis welke
-huizen hij bereikt; en een huis dat doorgroeit, zegt het dorp. `Spel.debug.wensen()` zegt per huis wat het wil en heeft.
+huizen hij bereikt; en een huis dat doorgroeit, zegt het dorp, en het rijst op in de laatste bouwfasen van zijn nieuwe
+tekening (de muren met steigers, het dakgebinte, half gedekt) over de bouwtijd van zijn soort, terwijl wie erin woont
+erin blijft wonen (G, werklijst vraag 114; Marcel, 4 okt: "G ja"; alleen het beeld, de regels zien het nieuwe huis
+meteen, en een tekening zonder bouwfasen groeit in één nacht). `Spel.debug.wensen()` zegt per huis wat het wil en heeft.
 De spelregel "Wensen" op "Het dorp als geheel" is het spel van vóór 1 okt (de speeltest speelt er alle vijftien jaren
 letter voor letter mee zoals ervoor).
 - **Elk huis een stand, naar zijn soort.** Een stand wil wat de stand eronder wil, en meer. De boeren staan ernaast: hun

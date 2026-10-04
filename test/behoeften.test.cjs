@@ -293,6 +293,68 @@ test('T.tikBehoeftenDag: een huis groeit door (T.GEBOUWEN[x].wordt) als het lang
   assert.equal(T.isVast(S.wereld, 14, 14), true);
 });
 
+// G (werklijst vraag 114; Marcel, 4 okt: "G ja"): het nieuwe huis rijst op in de laatste bouwfasen van zijn nieuwe tekening,
+// over de bouwtijd van zijn soort, en wie erin woont, blijft erin wonen. Alleen het beeld: het gebouw is meteen klaar.
+function laatEenHutDoorgroeien(S) {
+  let dag = 0;
+  const tik = () => {
+    dag++;
+    S.kalender.dag = dag;
+    T.tikGebouwenDag(S, dag);
+  };
+  T.zetVoorraad(S, 'hout', 8);
+  T.plaatsGebouw(S, 'hut', 10, 10);
+  for (let d = 1; d <= T.GEBOUWEN.hut.bouwtijd; d++) tik();
+  S.bevolking = 4;
+  T.zetVoorraad(S, 'graan', 100000);
+  T.zetVoorraad(S, 'groente', 1000);
+  T.zetVoorraad(S, 'vis', 1000);
+  T.zetVoorraad(S, 'vlees', 1000);
+  S.gebouwen.push({ soort: 'kapel', x: 30, y: 30, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
+  for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen; i++) tik();
+  return tik;
+}
+
+test('G: een huis dat doorgroeit, rijst op in zijn laatste bouwfasen, en wie erin woont, blijft erin wonen', () => {
+  const S = maakS(40, 40);
+  const tik = laatEenHutDoorgroeien(S);
+  const g = S.gebouwen[0];
+  assert.equal(g.soort, 'huis');
+  assert.equal(g.klaar, true, 'het gebouw is klaar: de regels zien het nieuwe huis meteen');
+  const v = g.voorwerp;
+  assert.ok(T.BOUWFASEN.fasen[v.tekeningNaam], `${v.tekeningNaam} heeft bouwfasen`);
+  assert.equal(v.inAanbouw, true, 'het voorwerp rijst op');
+  // van de muren met steigers tot half gedekt, over de bouwtijd van een huis
+  const fasen = [];
+  for (let d = 0; d < T.GEBOUWEN.huis.bouwtijd; d++) {
+    fasen.push(T.bouwFaseIndex(S.kalender.dag, v.klaarOp, v.bouwtijd, v.vanFase));
+    tik();
+  }
+  assert.deepEqual([...new Set(fasen)], [2, 3, 4]);
+  assert.equal(v.inAanbouw, false, 'na de bouwtijd van een huis staat het er af');
+});
+
+test('G: een tekening zonder bouwfasen groeit in één nacht, zoals altijd', () => {
+  const bewaard = T.BOUWFASEN;
+  T.BOUWFASEN = { fasen: {} };
+  try {
+    const S = maakS(40, 40);
+    laatEenHutDoorgroeien(S);
+    assert.equal(S.gebouwen[0].soort, 'huis');
+    assert.ok(!S.gebouwen[0].voorwerp.inAanbouw);
+  } finally {
+    T.BOUWFASEN = bewaard;
+  }
+});
+
+test('T.bouwFaseIndex vanaf een fase: de bouwtijd in zoveel stukken als er fases over zijn', () => {
+  // zonder vanaf zoals altijd: vijf stukken (midden in elk stuk gemeten)
+  assert.deepEqual([0.5, 1.5, 2.5, 3.5, 4.5, 5].map((d) => T.bouwFaseIndex(d, 5, 5)), [0, 1, 2, 3, 4, 4]);
+  // vanaf de muren met steigers (2): drie stukken
+  assert.deepEqual([0, 1, 2, 3, 4].map((d) => T.bouwFaseIndex(d, 4, 4, 2)), [2, 2, 3, 4, 4]);
+  assert.equal(T.bouwFaseIndex(0, null, 4, 2), 2, 'nog niet begonnen: de eerste fase');
+});
+
 test('T.tikBehoeftenDag: een huis groeit niet door als er geen ruimte voor de uitbreiding is', () => {
   const S = maakS(40, 40);
   T.zetVoorraad(S, 'hout', 8);

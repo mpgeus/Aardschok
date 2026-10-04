@@ -869,12 +869,14 @@
   // eerste stuk, fase 4 (half-gedekt) in het laatste — daarna is hij klaar (T.tikGebouwenDag zet
   // `klaar`, js/tekenen.js tekent dan de gewone, afgewerkte tekening in plaats van een fase). Puur
   // (geen S, geen scherm) en dus in een toets te vangen zonder een gebouw echt neer te zetten.
+  // vanaf: de eerste fase, als een gebouw niet bij de fundering begint (een huis dat doorgroeit, vanaf de muren met
+  // steigers; groeiVanafFase in js/behoeften.js): dan de bouwtijd in zoveel stukken als er fases over zijn.
   const AANTAL_BOUWFASEN = 5;
-  T.bouwFaseIndex = function (dagNu, klaarOp, bouwtijd) {
-    if (klaarOp == null) return 0; // nog niet begonnen: een bouwplaats die op hout wacht (js/erven.js)
+  T.bouwFaseIndex = function (dagNu, klaarOp, bouwtijd, vanaf = 0) {
+    if (klaarOp == null) return vanaf; // nog niet begonnen: een bouwplaats die op hout wacht (js/erven.js)
     if (!(bouwtijd > 0)) return AANTAL_BOUWFASEN - 1; // bouwtijd 0: meteen de laatste fase
     const voortgang = 1 - (klaarOp - dagNu) / bouwtijd;
-    return Math.max(0, Math.min(AANTAL_BOUWFASEN - 1, Math.floor(voortgang * AANTAL_BOUWFASEN)));
+    return Math.max(vanaf, Math.min(AANTAL_BOUWFASEN - 1, vanaf + Math.floor(voortgang * (AANTAL_BOUWFASEN - vanaf))));
   };
 
   // Het voorwerp in S.wereld zetten (zo tekent js/tekenen.js hem mee, op precies dezelfde manier
@@ -1145,6 +1147,9 @@
       if (!g.klaar && g.klaarOp != null && dag >= g.klaarOp) {
         g.klaar = true;
         if (g.voorwerp) g.voorwerp.inAanbouw = false;
+      } else if (g.klaar && g.voorwerp && g.voorwerp.inAanbouw && g.voorwerp.klaarOp != null && dag >= g.voorwerp.klaarOp) {
+        // een huis dat doorgroeide (js/behoeften.js, groeiGebouw), is opgerezen
+        g.voorwerp.inAanbouw = false;
       }
     }
     // 2. Woonruimte (T.telWoonruimte hieronder).

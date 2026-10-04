@@ -87,6 +87,10 @@
     // tevreden was; hoger dan groeiDrempel, want een huis groeien is meer dan net rondkomen.
     huisGroeiDagen: 30,
     huisGroeiDrempel: 0.7,
+    // Wie doorgroeit, rijst op in de laatste bouwfasen van zijn nieuwe tekening, vanaf deze (0 de fundering, 2 de muren
+    // met steigers, 4 half gedekt), over de bouwtijd van zijn nieuwe soort, en blijft erin wonen (werklijst vraag 114, G;
+    // Marcel, 4 okt: "G ja"). Alleen het beeld: de regels zien het nieuwe huis meteen.
+    groeiVanafFase: 2,
     // Zout (Marcel, 24 sep 2026; spel.md, "Handel"): vis en vlees bederven, tenzij ze gezouten zijn.
     // Eén zout houdt zoveel vis of vlees goed (zoutHoudtGoed); van wat het zout niet dekt, bederft
     // elke dag een deel (bederfPerDag). Wie gezouten vis eet, eet het zout mee op. Zout komt van de
@@ -389,6 +393,18 @@
       }
     }
     T.kaartVeranderd(w); // een andere soort en een andere voet: de lijst per tegel en de eilanden (js/wereld.js)
+    // Het nieuwe huis rijst op in de laatste bouwfasen over de bouwtijd van zijn soort (groeiVanafFase; G), en wie erin
+    // woont, blijft erin wonen: alleen het voorwerp is in aanbouw, het gebouw is klaar. Een tekening zonder bouwfasen
+    // groeit in één nacht, zoals altijd. T.tikGebouwenDag (js/gebouwen.js) zet hem klaar.
+    const fasen = T.BOUWFASEN && T.BOUWFASEN.fasen[instantie.voorwerp.tekeningNaam];
+    if (fasen && nieuweSoort.bouwtijd > 0) {
+      Object.assign(instantie.voorwerp, {
+        inAanbouw: true,
+        klaarOp: Math.floor(D.kalender.dag) + nieuweSoort.bouwtijd,
+        bouwtijd: nieuweSoort.bouwtijd,
+        vanFase: T.BEHOEFTEN_INSTELLINGEN.groeiVanafFase,
+      });
+    }
     // Rijker ogen is niet alleen voor de speler: het is ook wat de heer straks ziet
     // (ontwerp/werklijst.md, punt 6, "Rijk worden en arm lijken" — de argwaan van de inner stijgt
     // als wat hij ziet niet bij het rekenboek past). Een dorp vol stenen huizen wekt dus andere
