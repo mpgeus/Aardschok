@@ -4601,6 +4601,22 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (4 okt): "124b Ja dan."** De huizen worden draaibaar gerenderd: alle vier de muren ingevuld (deur, ramen en
     vakwerk op elke muur), zodat de vier standen de vier aanzichten zijn. Dat is werk voor de sessie van de huizen,
     vóór de andere drie stijlen (vraag 114, 2b); de eerste stijl (wit) gaat dan opnieuw door de bouwer.
+    **Afgesproken tussen de twee sessies (4 okt; Marcel aan de sessie van de huizen: "Praat even met de webgl sessie over
+    draaiende camera en welke gevolgen dat heeft"):** de sessie van de huizen maakt de huizen draaibaar (de bouwer bouwt
+    één 3D-huis met alle vier de muren vast ingevuld, en draait het echt), ook de herberg, de kapel, de woontoren en het
+    huis van de schout (stap 3). Het spel kiest het aanzicht met `T.metDeurNaar(tekening, kant)` (`js/bouwstijl.js`, op
+    de branch van de huizen). De oude huizen van het ontworpen gehucht, de gebouwen uit `dorp.cjs`, de bomen, de grond en
+    de akkers horen bij het draaien zelf, na WebGL. Drie afspraken voor de bouwer:
+    - **Het licht blijft in elk aanzicht van linksboven op het scherm komen**, de zon draait niet mee met de wereld. Alleen
+      dan is een stand ook een aanzicht: een huis met de deur naar het zuiden, een kwartslag gedraaid, ís de tekening
+      met de deur naar het oosten, licht en al. Draaide de zon mee, dan moest elk aanzicht apart belicht worden: vier
+      keer zoveel tekeningen. Het past ook bij `beeld.md` (één lichtrichting). Het licht van de dag en de lantaarns komt
+      er later bovenop (vraag 125).
+    - **Het anker ligt in elke stand op dezelfde manier**: op de achterste tegel van de voet op het scherm, zoals nu. Het
+      spel rekent bij een draai uit welke tegel van de wereld dan achteraan ligt; de voet en de deur in de wereld
+      veranderen niet, alleen welke tekening erop komt.
+    - **De schaduw op de vloer los te zetten** (een keuze in de bouwer, nu niets aan het beeld): komen de schaduwen met de
+      zon (vraag 125, B), dan moet de ingebakken schaduw eruit, en dan hoeven de huizen alleen nog één keer door de bouwer.
 125. **Schaduwen en licht met de videokaart** (Marcel, 4 okt, na WebGL: "Ja schaduwen en licht etc"; plan van Claude;
     open). Nu: de pixel art heeft zijn licht ingebakken (van linksboven, met een schaduw op de vloer, `belicht` en
     `schaduwOpVloer` in `gereedschap/pixelart/kern.cjs`; `beeld.md`), en de nacht is een donkere laag met lichtere
