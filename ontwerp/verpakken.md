@@ -57,10 +57,20 @@ Chromium-venster draagt de hele browser mee). Met een videokaart tekent allebei 
   in stukken.
 - Een hapering uit het opruimen van het geheugen (garbage collection) is in beide hetzelfde.
 
-**Voorstel (vraag 122, wacht op Marcel):**
-- **Een lat**, zodat "geen lag" iets is wat je kunt nakijken: op een machine zoals de Steam Deck 60 beelden per
-  seconde, geen beeld boven de 50 ms in gewoon spel, en het hele programma onder 1,5 GB bij 200 mensen; en een
-  minimum voor de Steam-pagina (4 GB geheugen, een ingebouwde videokaart).
+**Voorstel (vraag 122; Marcel, 4 okt: "122 is goed, maar scherm wordt voor 1920x1080 en ook 4k (heb ik zelf)"):**
+- **De lat**, zodat "geen lag" iets is wat je kunt nakijken: op **1920 bij 1080 en op 4K** 60 beelden per seconde, geen
+  beeld boven de 50 ms in gewoon spel, en het hele programma onder 1,5 GB bij 200 mensen; en een minimum voor de
+  Steam-pagina (4 GB geheugen, een videokaart). De Steam Deck (1280 bij 800) is kleiner, en dus lichter.
+- **Gemeten op die schermen** (dezelfde dag, de schil, zonder videokaart): op 1920 bij 1080 dichtbij zo'n 48 beelden
+  per seconde en in het overzicht 30, samen ~950 MB; op 4K 15 beelden per seconde, het eerste keer uitzoomen 550 ms, en
+  ~1,4 GB. Op 4K zijn er vier keer zoveel pixels als op 1920 bij 1080, en het spel tekent ze nu allemaal zelf: zonder
+  videokaart haalt 4K het niet, met een is het te meten (de proefverpakking).
+- **4K zoals 1920 bij 1080** (voorstel van Claude, nog niet gekozen): pixel art hoeft niet op 4K getekend te worden. Het
+  spel tekent op 1920 bij 1080 (of een hele deling van het scherm), en de videokaart vergroot dat met een hele factor,
+  zonder te vervagen: hetzelfde beeld, een kwart van het werk en van het geheugen voor de buffers, en de balk en de
+  vensters (html) blijven scherp. Nu is het anders: op 4K met Windows op 100% ziet de speler vier keer zoveel van het
+  land, in kleine poppetjes (`zoomVenster` in `js/main.js` gaat niet boven 2), en op 200% tekent het spel op 3840 bij 2160
+  wat er op 1920 bij 1080 ook staat. Met hele factoren zie je op elk scherm ongeveer hetzelfde stuk van het land.
 - **Een proefverpakking voor Marcels eigen pc**: een Windows-versie in Electron (een zip, dubbelklikken), zodat hij met
   `F2` op dezelfde plek Firefox en de Steam-versie naast elkaar meet. Alleen zo weten we hoe het op echte machines
   loopt; hier is geen videokaart.

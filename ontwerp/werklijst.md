@@ -72,8 +72,9 @@ per kleur) en de herberg, de kapel met toren en de woontoren in verhouding, om a
 boeren"): terrassen met wanden en hellingen, en de hoogte raakt het lopen, het zicht en het bouwen; na de boeren, vóór
 het eiland. Een proefplaat van de hoogte kan met die van de huizen mee. **Vraag 122** (de snelheid via Steam;
 Marcel: "lag, geheugen tekort etc is geen optie straks") is half besloten: JavaScript en Electron blijven, en haalt het
-spel de lat niet, dan de middenweg (WebGL, dan een Worker of WebAssembly; Marcel: "snelheid, middenweg is goed"). Nog
-open: de lat, en een proefverpakking voor zijn pc om Firefox en de Steam-versie naast elkaar te meten.
+spel de lat niet, dan de middenweg (WebGL, dan een Worker of WebAssembly; Marcel: "snelheid, middenweg is goed"). De lat
+geldt op 1920 bij 1080 en op 4K (Marcel: "heb ik zelf"); nog open: 4K tekenen zoals 1920 bij 1080 (c), en een
+proefverpakking voor zijn pc om Firefox en de Steam-versie naast elkaar te meten (b).
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
 met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant (**vraag 115**). De meter in Firefox
 (vraag 113, a) komt van hem. Ook besloten (4 okt): **vraag 116** (beesten in het bos: wolven die de houthakker bedreigen,
@@ -4272,6 +4273,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel koos (4 okt): "snelheid, middenweg is goed."** Het gaat om de snelheid, niet om consoles: JavaScript en
     Electron blijven, en haalt het spel de lat niet, dan de middenweg. Nog open: **a** (deze lat?) en **b** (de
     proefverpakking voor zijn pc nu, of bij het echte verpakken in januari?).
+    **Marcel (4 okt): "122 is goed, maar scherm wordt voor 1920x1080 en ook 4k (heb ik zelf)".** De lat geldt dus op
+    1920 bij 1080 en op 4K. Gemeten in de schil zonder videokaart: 1920 bij 1080 zo'n 48 beelden per seconde dichtbij en
+    30 in het overzicht, ~950 MB; 4K 15 beelden per seconde en ~1,4 GB. Voorstel van Claude: **4K zoals 1920 bij 1080**,
+    tekenen op 1920 bij 1080 (of een hele deling van het scherm) en met een hele factor vergroten: hetzelfde beeld voor
+    pixel art, een kwart van het werk, en op elk scherm ongeveer hetzelfde stuk van het land (`verpakken.md`). Vraag:
+    **c**, zo? En **b** blijft: de proefverpakking nu (dan meet Marcel op zijn eigen 4K-scherm), of in januari?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
