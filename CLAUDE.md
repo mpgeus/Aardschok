@@ -120,6 +120,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   het tekenen of het laden `-- --naam na --tegen voor`: dan zegt het per beeld of het byte voor byte gelijk bleef
   (vraag 114, stap 1; ook voor WebGL, vraag 123). In `gereedschap/schermen/uit/` (niet in git). Op 0,35 kan het
   verkleinen in een paar honderd pixels de buurpixel kiezen als alleen het vel van een tekening anders is.
+- `npm run tekenmeting` meet waar het tekenen zijn tijd kwijt is, per laag (vraag 123, f): land 5 van de maker op
+  1920×1080, 4K en 4K op 200%, dichtbij en in het overzicht, overdag en 's avonds; `-- 1920x1080@1` voor één scherm. In
+  `gereedschap/schermen/uit/tekenmeting.json` (niet in git).
 - `npm run maker` legt gehuchten met de maker (`js/maker.js`, `T.maakGehucht(zaad)`: elk spel een ander gehucht, vraag
   69 en 70) en tekent ze als plattegrond naast het ontworpen gehucht, in `gereedschap/maker/uit/` (niet in git);
   `-- 7 12` voor andere zaden.

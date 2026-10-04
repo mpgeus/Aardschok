@@ -86,6 +86,11 @@ byte voor byte te vergelijken; ook voor stap 2 en 3 en WebGL). Zie onder Af, en 
 Gezien en niet gerepareerd (`opmerkingen.md`): de wereldbouwer tekent op ware grootte geen huizen (dat was er al: hij
 valt om op de akkers zonder kalender), en een toets in `bewoners.test.cjs` faalt soms, door ongezaaid toeval.
 
+**WebGL, in een eigen sessie naast de huizen** (vraag 123; Marcel, 4 okt: "Kunnen we een andere agent starten die
+alvast het webgl deel uitvoert?"): het tekenen met WebGL loopt nu naast de huizen, op een eigen branch, en blijft uit de
+bestanden van de huizen. Gemeten waar het tekenen zijn tijd kwijt is (`npm run tekenmeting`); het plan, met vragen A tot
+en met D, staat bij vraag 123 en wacht op Marcel.
+
 **Waar de volgende sessie begint:** **vraag 114: de huizen in het spel, stap 2: de vier bouwstijlen** (het plan staat bij
 vraag 114, onder "Plan voor de huizen in het spel"; Marcel koos de vier stijlen): de stijl per land, met de tekeningen in
 vier standen, de daken per trede en baksteen na de steenbakkerij. Besloten (vraag 114, na "Stap 1b gebouwd"): het dak
@@ -4458,6 +4463,60 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     en vóór de boeren (vraag 111). De volgorde is nu: de proefplaat van de huizen (vraag 114, 2b en 2c), tekenen met
     WebGL met de proefversie erna (vraag 123), de boeren met de houthakker en de beesten (vraag 111, 115 en 116), de
     hoogte (vraag 121), en dan het eiland (vraag 117).
+    **Naast de huizen** (Marcel, 4 okt: "Kunnen we een andere agent starten die alvast het webgl deel uitvoert?"): WebGL
+    loopt nu in een eigen sessie, tegelijk met de huizen (vraag 114, stap 2), en niet erna. Die sessie blijft uit de
+    bestanden van de huizen; een nieuwe tekening komt binnen zoals nu (een bestand per tekening, `T.sprites.laadWatErStaat`),
+    en wordt een textuur op het moment dat hij geladen is, dus de huizen werken vanzelf.
+    **Gemeten (f, 4 okt, `npm run tekenmeting`):** land 5 van de maker, zonder videokaart, ms per beeld (de mediaan, met
+    een pixel teruggelezen zodat de browser het werk ook doet), en de beelden per seconde van de echte spellus:
+
+    | | 1920×1080 | 4K (3840×2160) | 4K op 200% (1920×1080, ratio 2) |
+    |---|---|---|---|
+    | dichtbij, dag | 19 ms, 41/s | 64 ms, 13/s | 65 ms, 14/s |
+    | dichtbij, avond | 28 ms, 35/s | 99 ms, 10/s | 96 ms, 10/s |
+    | overzicht 0,5, dag | 30 ms, 29/s | 75 ms, 11/s | 68 ms, 11/s |
+    | overzicht 0,35, dag | 33 ms, 25/s | 74 ms, 12/s | 96 ms, 9/s |
+    | overzicht 0,35, avond | 42 ms, 23/s | 109 ms, 7/s | 123 ms, 6/s |
+
+    Per laag: **het rekenwerk van het tekenen is klein** (uitzoeken wat in beeld staat, sorteren, sprites kiezen: 1 à 4
+    ms, op elk scherm hetzelfde); **de rest is de browser die pixels zet**, en dat groeit met het scherm (4K is 3,5 keer
+    1920×1080). De grond (één buffer, één plaatje): 2 à 3 ms, op 4K 8 à 12. De nacht, het licht en de ramen: zo'n 10 ms,
+    op 4K 35 ms (verlopen en samenstelmodi over het hele scherm). De huizen, bomen en mensen: de rest, dichtbij zo'n 100
+    plaatjes per beeld, in het overzicht zo'n 930, plus de doorkijk (een uitsnede die het doek laat wachten). De tekst en
+    de wolkjes: niet te meten, onder 0,1 ms. Het langste beeld in de spellus: 50 à 80 ms op 1920×1080, 120 tot 500 op 4K.
+    **Wat dat zegt:** WebGL wint juist waar de tijd zit (pixels zetten, de nacht als één bewerking), en de tussenbuffer
+    (b) maakt van 4K vanzelf 1920×1080: de kolom van 4K wordt de eerste kolom. Die stap kan ook al in 2D.
+    **Plan van Claude (4 okt), in deze volgorde:**
+    1. **De tussenbuffer, eerst in 2D** (b): het doek is nooit groter dan 1920×1080 (een hele deling van het scherm), en
+       de browser vergroot het met een hele factor (`image-rendering: pixelated`). Een kleine stap in `js/main.js`, die
+       4K meteen zo snel maakt als 1920×1080, ook zonder WebGL. Je ziet op 4K hetzelfde stuk land als op 1920×1080.
+    2. **De WebGL-laag** (a): een nieuw bestand (`js/gl.js`, gewone script, geen bibliotheek) met wat het tekenen nodig
+       heeft: een plaatje uit een vel op een plek, met doorzichtigheid, alle plaatjes van een beeld samen in een paar
+       opdrachten. Een vel wordt een textuur zodra het geladen is. `js/tekenen.js` tekent naar "een doek" dat het 2D-doek
+       of de WebGL-laag is, in dezelfde volgorde als nu: eerst de grond (de buffer blijft eerst in 2D gebakken, en gaat als
+       één textuur mee), dan de huizen, bomen en mensen.
+    3. **De nacht, het licht en de ramen als shader**: één bewerking over het beeld, met de lichtbronnen
+       (`T.lichtBronnen`) als lijst, in plaats van verlopen en samenstelmodi. Daarna de doorkijk (het kijkgat en het
+       raster) in dezelfde shader.
+    4. **Wat klein is, op een doek erboven** (c): de tekst, de wolkjes, de oogjes, de tekens bij de deur, het raster en
+       de markeringen van een gevecht, de kringen en het spookbeeld van het bouwmenu. Wat op de grond ligt (de kring, het
+       raster) komt dan boven een huis te staan; past dat niet, dan gaat het als laag op de grond mee naar WebGL.
+    5. **De spelregel** (d): "Tekenen: met de videokaart / zonder". Zonder WebGL in de browser gaat het vanzelf zonder.
+    6. **De proefversie** (e): Windows, Electron, met `F2` en de spelregel, zodat Marcel op zijn 4K-scherm beide meet.
+    **Nakijken dat beide hetzelfde tekenen:** `npm run schermen` krijgt een keuze voor de manier van tekenen, en vergelijkt
+    WebGL met 2D op dezelfde commit (niet met een oude reeks: de huizen veranderen land 5). De maat: overdag (de plaatjes
+    zijn pixel art, op hele pixels) mag hooguit 0,1% van de pixels verschillen, en dan hooguit 2 op 255 per kleur (afronding
+    van doorzichtigheid); 's avonds rekent het licht anders, dus mag elke pixel tot 8 op 255 verschillen, gemiddeld onder 2,
+    en Marcel ziet de avond één keer naast elkaar. Wat erboven ligt, is een fout, of een besluit dat hier komt te staan.
+    Hier is geen videokaart (WebGL draait in de cloud op de processor, SwiftShader): of het klopt, zien we hier; hoe snel
+    het is, alleen op een echte machine.
+    **Wat Marcel daarna kan proberen:** na stap 1 het spel op zijn 4K-scherm (in Firefox, en `F2`); na stap 5 de spelregel
+    aan en uit; na stap 6 de proefversie naast Firefox.
+    Vragen: **A**, dit plan, in deze volgorde? **B**, de tussenbuffer (stap 1) ook voor wie een 4K-scherm op 150% heeft
+    (dan is het doek nu 2560×1440: naar 1920×1080 is geen hele factor, dus 1280×720 maal twee, of zo laten)? Voorstel:
+    zo laten, alleen een hele factor. **C**, deze maat voor wat anders mag zijn? **D**, de proefversie al na stap 1? Met een
+    videokaart tekent Chrome ook het 2D-doek al op de kaart; dan weet je vooraf op je eigen pc hoeveel WebGL wint, en
+    daarna meet je het nog een keer. Voorstel: ja, het is een uur werk.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
