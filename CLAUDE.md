@@ -114,6 +114,12 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   (start zelf de server), `--astar` het zoeken van een pad, `--prof` een CPU-profiel, `--maker 5` op land 5 van de maker
   in plaats van het ontworpen gehucht. De uitslag in
   `gereedschap/grootte/uit/` (niet in git), met een tabel in `samenvatting.md`. Meet op een stille machine.
+- `npm run schermen` maakt twintig vaste schermafdrukken van het spel (het plein op vier zoomstanden, de herberg 's avonds,
+  de nacht, twee bouwplaatsen in hun fases, land 5 van de maker) en meet wat de browser aan plaatjes vasthoudt
+  (`Spel.debug.vellen`) en hoe lang het eerste beeld na het uitzoomen duurt; `-- --naam voor`, en na een verandering aan
+  het tekenen of het laden `-- --naam na --tegen voor`: dan zegt het per beeld of het byte voor byte gelijk bleef
+  (vraag 114, stap 1; ook voor WebGL, vraag 123). In `gereedschap/schermen/uit/` (niet in git). Op 0,35 kan het
+  verkleinen in een paar honderd pixels de buurpixel kiezen als alleen het vel van een tekening anders is.
 - `npm run maker` legt gehuchten met de maker (`js/maker.js`, `T.maakGehucht(zaad)`: elk spel een ander gehucht, vraag
   69 en 70) en tekent ze als plattegrond naast het ontworpen gehucht, in `gereedschap/maker/uit/` (niet in git);
   `-- 7 12` voor andere zaden.
@@ -254,7 +260,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   waar hij staat (`cel` en `anker` in `tegels.js`; vraag het aan `T.sprites.celVan`), alleen de grond is nog een
   raster; een figuurvel is een raster met een cel die zo klein is als wat erin staat; en de bouwfasen hebben per
   gebouw een eigen vel (`tegels/bouwfasen/`), dat pas laadt als er een in aanbouw staat (`T.sprites.bouwfase`;
-  `T.sprites.bezig()` zegt hoeveel er nog onderweg zijn).
+  `T.sprites.bezig()` zegt hoeveel er nog onderweg zijn). **Een vel per tekening** (vraag 114, stap 1): de huizen en
+  de gebouwen hebben elke tekening in een eigen bestand (`tegels/huizen/`, `tegels/gebouwen/`; `perTekening` en
+  `bestand` per tegel in `tegels.js`), dat pas laadt als hij op de kaart staat (`T.sprites.laadWatErStaat`, vanuit
+  `js/tekenen.js` bij een andere kaart of `T.kaartVersie`); tot dan tekent hij niets, en een huis dat doorgroeit, houdt
+  zijn oude plaatje tot het nieuwe er is (`T.sprites.wachtOp`). Bij het begin zo'n 155 MB aan plaatjes; wat de browser
+  vasthoudt, zegt `Spel.debug.vellen()` (`T.sprites.geladen`).
 - `js/anim.js`: beweging en effecten. `T.anim.*` geeft beloftes, zodat een beurt als gewone
   code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`. Wie loopt, loopt op een kaart
   (`T.beweegWezens(S, w, ...)`): waar je bent, of een dorp waar je niet bent (`js/dorp.js`).
@@ -835,7 +846,7 @@ spelregel Land aan); `('open')` opent de kaart, `('reis', 'De heide')` reist erh
 zien, `('nieuw')` maakt het opnieuw uit het zaad.
 `Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
-en het bier (`(30)` zet eerst 30 bier). `Spel.debug.meter()` (of `F2`) zet de meter in beeld. `Spel.debug.paden()` zegt hoeveel tegels paadje zijn, waar het meest gelopen wordt en waar de lantaarns staan;
+en het bier (`(30)` zet eerst 30 bier). `Spel.debug.meter()` (of `F2`) zet de meter in beeld. `Spel.debug.vellen()` zegt welke plaatjes de browser nu vasthoudt, samen en per map, in MB (`('alles')` noemt elk vel). `Spel.debug.paden()` zegt hoeveel tegels paadje zijn, waar het meest gelopen wordt en waar de lantaarns staan;
 `('nacht')` doet nu wat de nacht doet. `Spel.debug.lopen()` zegt wie er met een doel onderweg is, wie daarvan staat te
 wachten en op wie, en hoeveel wegen en velden de kaart onthoudt (vraag 119). `Spel.debug.praatjes()` zegt wie er waar
 staat te praten en tot hoe laat, en hoeveel er vrij zijn; `('nu')` laat de twee vrije bekenden die het dichtst bij elkaar

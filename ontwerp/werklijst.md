@@ -4037,6 +4037,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (4 okt): "A ja B ja C meteen erna".** Dus de huizen en de gebouwen elk een eigen bestand, laden wat er
     staat zoals hierboven, en meteen daarna dezelfde regel voor de figuren (stap 1b): een figuur laadt als zijn wezen op
     de kaart komt.
+    **Stap 1 gebouwd (4 okt, dertigste sessie; zie onder Af, en `beeld.md`, "Een vel per tekening").** Bij het begin 153
+    MB aan plaatjes in plaats van 197; alle 50 tekeningen pixel voor pixel dezelfde. Erbij: `Spel.debug.vellen()` en
+    `npm run schermen` (twintig vaste schermafdrukken, byte voor byte te vergelijken), ook voor stap 2 en 3 en WebGL.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
@@ -4722,6 +4725,19 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 4 okt 2026 — **Een vel per tekening: de huizen en de gebouwen laden wat er staat** (dertigste sessie; vraag 114,
+  stap 1; Marcel: "A ja B ja C meteen erna"). Elke tekening van de huizen en de gebouwen is een eigen bestand
+  (`tegels/huizen/`, `tegels/gebouwen/`; `npm run tiled`, `snijLos` in `inpakken.cjs`), en het spel laadt er een pas als
+  hij op de kaart staat (`T.sprites.laadWatErStaat`, vanuit `js/tekenen.js` bij een andere kaart of als `T.kaartVersie`
+  verandert); tot dan tekent hij niets, en een huis dat doorgroeit, houdt zijn oude plaatje tot het nieuwe er is
+  (`T.sprites.wachtOp`). Erbij: `Spel.debug.vellen()` (wat de browser aan plaatjes vasthoudt) en `npm run schermen`
+  (twintig vaste schermafdrukken, byte voor byte te vergelijken; de proef van 2a was niet bewaard). Gemeten: bij het
+  begin 153 MB aan plaatjes in plaats van 197, met twee bouwplaatsen 162 in plaats van 204, Chromium zo'n 540 MB in
+  plaats van 580; het eerste beeld na het uitzoomen ongeveer gelijk. Nagekeken: alle 50 tekeningen pixel voor pixel
+  dezelfde rond hetzelfde anker, 19 van de 20 schermafdrukken byte voor byte (op 0,35 kiest het verkleinen in 232
+  pixels de buurpixel, bij dezelfde tekenopdrachten), een doorgroeiend huis in de browser, en de wereldbouwer. Zeven
+  nieuwe toetsen (`test/vellen.test.cjs`, `test/inpakken.test.cjs`); `npm test` 907/907. Gezien, niet gerepareerd
+  (`opmerkingen.md`): de wereldbouwer tekent op ware grootte geen huizen, al van voor deze stap.
 - 4 okt 2026 — **De proefplaten van de huizen** (negenentwintigste sessie; vraag 114, 2b en 2c; Marcel: "1 ja 2 ja 3
   allebei 4 allebei 5 ja", en bij de eerste torens "Torens zijn wel wat grijzig"). De huizenbouwer
   (`gereedschap/pixelart/huis-sdf.cjs`) kreeg kalk in wit, oker en zacht roze, baksteen en zandsteen (Marcel: "Torens

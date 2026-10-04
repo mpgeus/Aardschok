@@ -262,8 +262,20 @@
     return buf;
   }
 
+  // Wat er op een kaart staat met een eigen bestand (de huizen en de gebouwen, js/sprites.js; vraag 114, stap 1), vast
+  // laden: bij een andere kaart, en als er iets op veranderde (T.kaartVersie, js/wereld.js). Per kaart de versie waarvoor
+  // dat gebeurde; alleen scherm.
+  const geladenVoor = new WeakMap();
+  function laadWatErStaat(w) {
+    const versie = T.kaartVersie(w);
+    if (geladenVoor.get(w) === versie) return;
+    geladenVoor.set(w, versie);
+    T.sprites.laadWatErStaat(w);
+  }
+
   T.tekenScene = function (ctx, S, bw, bh) {
     const w = S.wereld;
+    if (metSprites()) laadWatErStaat(w);
     const dpr = ctx.getTransform().a || 1; // pixels per css-pixel (js/main.js, formaat)
     // Het dorp dat hier ligt (js/dorp.js), of geen: een ander gebied, of het gereedschap.
     const D = T.dorpHier(S);
@@ -1518,6 +1530,10 @@
     T.sprites.teken(ctx, deel, p.x, p.y - T.sprites.nekHoogte(e), 1);
   }
 
+  // Per huis of gebouw het plaatje dat er het laatst stond, voor zolang een nieuw plaatje laadt (tekenVoorwerp). Alleen
+  // scherm, en weg met het voorwerp.
+  const vorigBeeld = new WeakMap();
+
   function tekenVoorwerp(ctx, S, v, helder) {
     const p = T.naarScherm(v.x, v.y);
     // Buiten komt het plaatje uit de tegelvellen (tegels/, zie js/sprites.js): een boom, een
@@ -1539,11 +1555,18 @@
       const alpha = dof * (v.inAanbouw && !fase ? 0.45 : 1);
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;
-      const stuk = fase || (metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v)));
+      const plaatjes = metSprites() && T.sprites.buitenAan;
+      let stuk = fase || (plaatjes && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v)));
+      // Een huis of een gebouw heeft een eigen bestand, dat pas laadt als hij op de kaart staat (js/sprites.js; vraag
+      // 114, stap 1). Laadt het nog, dan wat er daarnet stond (een huis dat net doorgroeide), en anders niets: een vlak
+      // alleen als het plaatje echt ontbreekt.
+      const wacht = !stuk && plaatjes && T.sprites.wachtOp(v.vel, v.id);
+      if (wacht) stuk = vorigBeeld.get(v) || null;
+      else if (stuk && (T.TEGELS[v.vel] || {}).perTekening) vorigBeeld.set(v, stuk);
       const raster = stuk && doorkijk > 0.02 && T.DOORKIJK_INSTELLINGEN.manier === 'raster';
       if (raster) T.tekenGerasterd(ctx, stuk, p.x, p.y, helder, doorkijk);
       else if (stuk) T.sprites.teken(ctx, stuk, p.x, p.y, helder);
-      else tekenBuitenVlak(ctx, v, helder);
+      else if (!wacht) tekenBuitenVlak(ctx, v, helder);
       if (alpha < 1) ctx.globalAlpha = 1;
       if (!raster && doorkijk > 0.02 && v.kijkgat) for (const e of v.kijkgat) T.tekenKijkgat(ctx, S, e, doorkijk, v);
       return;

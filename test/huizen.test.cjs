@@ -1,7 +1,7 @@
 // De huizen van de huizenbouwer in het spel (ronde 4b; ontwerp/beeld.md, "Ronde 4b: de huizen in het
-// spel"): het vel tegels/huizen.png uit gereedschap/pixelart/huizen.cjs, en de deur die elk huis
-// meebrengt (T.deurVan, js/bewoners.js). Het anker van elk huis bewaakt test/tegelanker.test.cjs, net
-// als bij de andere vellen.
+// spel"): het vel "huizen" uit gereedschap/pixelart/huizen.cjs (sinds 4 okt een bestand per huis in
+// tegels/huizen/, vraag 114, stap 1), en de deur die elk huis meebrengt (T.deurVan, js/bewoners.js).
+// Het anker van elk huis bewaakt test/tegelanker.test.cjs, net als bij de andere vellen.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 

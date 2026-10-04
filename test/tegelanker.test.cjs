@@ -98,6 +98,9 @@ function velPng(bestand) {
   if (!velCache.has(bestand)) velCache.set(bestand, leesAlfa(path.join(TEGELS, bestand.replace(/^tegels\//, ''))));
   return velCache.get(bestand);
 }
+// Het plaatje waarop een tegel staat: zijn eigen bestand (de huizen en de gebouwen, een vel per tekening; werklijst
+// vraag 114, stap 1), of het vel.
+const pngVan = (vel, t) => velPng(t.bestand || vel.bestand);
 
 // Hoeveel speling: een dakrand of een fundering steekt best een stukje buiten zijn eigen tegel.
 // Gemeten aan alle huizen van gebouwen.tsx (waarvan het anker al goed stond) is dat een nette,
@@ -121,9 +124,9 @@ for (const [velNaam, vel] of Object.entries(T.TEGELS)) {
     .filter((t) => t.naam && t.beslaat && (t.beslaat[0] > 1 || t.beslaat[1] > 1));
   if (!metVoet.length) continue;
 
-  test(`${velNaam}.png: elke tegel met een voet heeft een gevulde cel, geen lege plek waar een plaatje hoort te staan`, () => {
-    const png = velPng(vel.bestand);
+  test(`${velNaam}: elke tegel met een voet heeft een gevulde cel, geen lege plek waar een plaatje hoort te staan`, () => {
     for (const t of metVoet) {
+      const png = pngVan(vel, t);
       const plek = T.sprites.celVan(velNaam, t.id);
       assert.ok(plek, `${velNaam}/${t.naam}: staat nergens op het vel`);
       const [x0, y0, cb, ch] = plek.cel;
@@ -135,9 +138,9 @@ for (const [velNaam, vel] of Object.entries(T.TEGELS)) {
   const ruim = metVoet.filter((t) => t.beslaat[0] >= KRAP || t.beslaat[1] >= KRAP);
   if (!ruim.length) continue;
 
-  test(`${velNaam}.png: elke tegel met een ruime voet (3 tegels of meer) staat ook echt op die voet (het anker is de achterste hoek, niet het midden)`, () => {
-    const png = velPng(vel.bestand);
+  test(`${velNaam}: elke tegel met een ruime voet (3 tegels of meer) staat ook echt op die voet (het anker is de achterste hoek, niet het midden)`, () => {
     for (const t of ruim) {
+      const png = pngVan(vel, t);
       const [bw, bd] = t.beslaat;
       const { cel: [x0, y0, cb, ch], anker } = T.sprites.celVan(velNaam, t.id);
       const rij = ondersteRij(png, x0, y0, cb, ch);

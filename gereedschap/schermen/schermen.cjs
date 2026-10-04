@@ -91,8 +91,9 @@ async function openSpel(context, adres) {
     window.requestAnimationFrame = () => 0; // de spellus loopt niet: alleen Spel.debug.stap laat het spel verder gaan
   });
   await page.goto(adres);
-  await page.waitForFunction(() => globalThis.Spel && Spel.S && Spel.S.kalender && Spel.debug && Spel.sprites);
-  await page.waitForFunction(() => Spel.sprites.aan && Spel.sprites.buitenAan, null, { timeout: 60000 });
+  // Op een klok kijken, niet per beeld van de browser: de spellus loopt hier niet.
+  await page.waitForFunction(() => globalThis.Spel && Spel.S && Spel.S.kalender && Spel.debug && Spel.sprites, null, { polling: 100 });
+  await page.waitForFunction(() => Spel.sprites.aan && Spel.sprites.buitenAan, null, { polling: 100, timeout: 60000 });
   await page.addScriptTag({ path: path.join(WORTEL, 'gereedschap', 'grootte', 'pagina.js') });
   return { page, fouten };
 }

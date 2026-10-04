@@ -616,7 +616,7 @@ function schrijfPng(bestand, plaat, achtergrond) {
 }
 
 // Eén plaat per gebouw: de vijf fases op een rij (oplopend: fundering, geraamte, muren-steigers,
-// dakgebinte, half-gedekt — klaar is de bestaande tekening in tegels/gebouwen.png, niet hier).
+// dakgebinte, half-gedekt — klaar is de bestaande tekening in tegels/gebouwen/, niet hier).
 // Alleen om te bekijken — gaat naar uit/, niet in git (CLAUDE.md); de bestandsnaam zegt om welk
 // gebouw het gaat, geen opschrift nodig op de plaat zelf.
 function schrijfProefPlaat(r) {
@@ -687,7 +687,7 @@ function schrijfSpelVel(resultaten) {
       + 'T.naarScherm(x, y) van de aangeklikte tegel komt — dezelfde achterste-voethoek-afspraak '
       + 'als tegels.json ("anker" bij de tsx-vellen), en beslaat is dezelfde tegelmaat als in '
       + 'gebouwen.tsx of huizen.tsx voor dezelfde tekening. Fase 5 (klaar) staat niet hier: dat is gewoon de '
-      + 'bestaande tegel in tegels/gebouwen.png of tegels/huizen.png.',
+      + 'bestaande tegel in tegels/gebouwen/ of tegels/huizen/.',
     fasen: fasenJson,
   };
   // bouwfasen.json is de bron, bouwfasen.js dezelfde inhoud als gewoon script (zelfde recept als

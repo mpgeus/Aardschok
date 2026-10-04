@@ -2,223 +2,223 @@
 <tileset version="1.10" tiledversion="1.11.0" name="gebouwen" tilewidth="567" tileheight="615" tilecount="96" columns="0" objectalignment="bottom">
  <grid orientation="orthogonal" width="1" height="1"/>
  <properties>
-  <property name="notitie" value="Ingepakt: elke tegel is een eigen rechthoek op het vel. In Tiled staan de voorwerpen daardoor niet precies op hun plek; het spel zet ze neer met hun eigen anker (tegels.json)."/>
+  <property name="notitie" value="Een plaatje per tekening (tegels/gebouwen/): het spel laadt een tekening pas als hij op de kaart staat. In Tiled staan de voorwerpen daardoor niet precies op hun plek; het spel zet ze neer met hun eigen anker (tegels.json)."/>
  </properties>
- <tile id="0" x="1766" y="1126" width="430" height="436">
+ <tile id="0">
   <properties>
     <property name="naam" value="vakwerkhuis"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="7x5"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/vakwerkhuis.png" width="430" height="436"/>
  </tile>
- <tile id="1" x="2025" y="617" width="468" height="465">
+ <tile id="1">
   <properties>
     <property name="naam" value="stenenHuis"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/stenenHuis.png" width="468" height="465"/>
  </tile>
- <tile id="2" x="0" y="0" width="546" height="615">
+ <tile id="2">
   <properties>
     <property name="naam" value="herberg"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="9x7"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/herberg.png" width="546" height="615"/>
  </tile>
- <tile id="3" x="1360" y="1579" width="404" height="399">
+ <tile id="3">
   <properties>
     <property name="naam" value="smidse"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="7x5"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/smidse.png" width="404" height="399"/>
  </tile>
- <tile id="4" x="1334" y="1126" width="430" height="444">
+ <tile id="4">
   <properties>
     <property name="naam" value="dorpshuis1"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="7x5"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/dorpshuis1.png" width="430" height="444"/>
  </tile>
- <tile id="5" x="1529" y="617" width="494" height="476">
+ <tile id="5">
   <properties>
     <property name="naam" value="dorpshuis3"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/dorpshuis3.png" width="494" height="476"/>
  </tile>
- <tile id="6" x="470" y="1126" width="430" height="451">
+ <tile id="6">
   <properties>
     <property name="naam" value="dorpshuis5"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="5x7"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/dorpshuis5.png" width="430" height="451"/>
  </tile>
- <tile id="7" x="2630" y="1126" width="430" height="432">
+ <tile id="7">
   <properties>
     <property name="naam" value="dorpKlein1"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="5x7"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/dorpKlein1.png" width="430" height="432"/>
  </tile>
- <tile id="8" x="1766" y="1579" width="404" height="392">
+ <tile id="8">
   <properties>
     <property name="naam" value="dorpKlein2"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="5x7"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/dorpKlein2.png" width="404" height="392"/>
  </tile>
- <tile id="9" x="902" y="1126" width="430" height="445">
+ <tile id="9">
   <properties>
     <property name="naam" value="dorpKlein3"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="5x7"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/dorpKlein3.png" width="430" height="445"/>
  </tile>
- <tile id="10" x="2173" y="0" width="536" height="510">
+ <tile id="10">
   <properties>
     <property name="naam" value="dorpGewoonAanbouw"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x9"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/dorpGewoonAanbouw.png" width="536" height="510"/>
  </tile>
- <tile id="11" x="0" y="617" width="497" height="507">
+ <tile id="11">
   <properties>
     <property name="naam" value="dorpGewoonVleugel"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="9x8"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/dorpGewoonVleugel.png" width="497" height="507"/>
  </tile>
- <tile id="12" x="2495" y="617" width="468" height="455">
+ <tile id="12">
   <properties>
     <property name="naam" value="dorpGewoon3"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/dorpGewoon3.png" width="468" height="455"/>
  </tile>
- <tile id="13" x="1033" y="617" width="494" height="483">
+ <tile id="13">
   <properties>
     <property name="naam" value="dorpGewoon4"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/dorpGewoon4.png" width="494" height="483"/>
  </tile>
- <tile id="14" x="548" y="0" width="558" height="547">
+ <tile id="14">
   <properties>
     <property name="naam" value="dorpGroot1"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="7x9"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/dorpGroot1.png" width="558" height="547"/>
  </tile>
- <tile id="15" x="499" y="617" width="532" height="495">
+ <tile id="15">
   <properties>
     <property name="naam" value="dorpGroot2"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="7x9"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/dorpGroot2.png" width="532" height="495"/>
  </tile>
- <tile id="16" x="2172" y="1579" width="436" height="364">
+ <tile id="16">
   <properties>
     <property name="naam" value="schuurBlokhut"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="5x7"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/schuurBlokhut.png" width="436" height="364"/>
  </tile>
- <tile id="17" x="2610" y="1579" width="272" height="242">
+ <tile id="17">
   <properties>
     <property name="naam" value="houtschuur"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="3x4"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/houtschuur.png" width="272" height="242"/>
  </tile>
- <tile id="18" x="324" y="2009" width="162" height="192">
+ <tile id="18">
   <properties>
     <property name="naam" value="kippenhok"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="2x2"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/kippenhok.png" width="162" height="192"/>
  </tile>
- <tile id="19" x="1108" y="0" width="494" height="538">
+ <tile id="19">
   <properties>
     <property name="naam" value="kapel"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="5x10"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/kapel.png" width="494" height="538"/>
  </tile>
- <tile id="20" x="0" y="2009" width="322" height="214">
+ <tile id="20">
   <properties>
     <property name="naam" value="kerkhof"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x4"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/kerkhof.png" width="322" height="214"/>
  </tile>
- <tile id="21" x="1604" y="0" width="567" height="525">
+ <tile id="21">
   <properties>
     <property name="naam" value="watermolen"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/watermolen.png" width="567" height="525"/>
  </tile>
- <tile id="22" x="0" y="1126" width="468" height="451">
+ <tile id="22">
   <properties>
     <property name="naam" value="bakkerij"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/bakkerij.png" width="468" height="451"/>
  </tile>
- <tile id="23" x="972" y="1579" width="386" height="406">
+ <tile id="23">
   <properties>
     <property name="naam" value="kruidenhut"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x5"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/kruidenhut.png" width="386" height="406"/>
  </tile>
- <tile id="24" x="534" y="1579" width="436" height="425">
+ <tile id="24">
   <properties>
     <property name="naam" value="jagershut"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="7x6"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/jagershut.png" width="436" height="425"/>
  </tile>
- <tile id="25" x="2198" y="1126" width="430" height="436">
+ <tile id="25">
   <properties>
     <property name="naam" value="oudstehuis"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="7x5"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/oudstehuis.png" width="430" height="436"/>
  </tile>
- <tile id="26" x="0" y="1579" width="532" height="428">
+ <tile id="26">
   <properties>
     <property name="naam" value="schuur"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x9"/>
   </properties>
-  <image source="gebouwen.png" width="3060" height="2223"/>
+  <image source="gebouwen/schuur.png" width="532" height="428"/>
  </tile>
  <tile id="27">
   <properties>

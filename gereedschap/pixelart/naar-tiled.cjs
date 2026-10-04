@@ -132,7 +132,8 @@ function eigenschapXml(naam, waarde) {
 function schrijfTsx(vel) {
   let x = '<?xml version="1.0" encoding="UTF-8"?>\n';
   if (vel.ingepakt) {
-    // Een verzameling (Tiled 1.9 en later): elke tegel is een eigen rechthoek op hetzelfde beeld (schrijfVel).
+    // Een verzameling (Tiled 1.9 en later): elke tegel is een eigen rechthoek op hetzelfde beeld, of (een vel per
+    // tekening) een eigen beeld (schrijfVel).
     const grootste = (i) => Math.max(1, ...vel.tiles.map((t) => (t.cel ? t.cel[i] : 0)));
     x += `<tileset version="1.10" tiledversion="1.11.0" name="${vel.naam}" tilewidth="${grootste(2)}" tileheight="${grootste(3)}" tilecount="${vel.aantal}" columns="0" objectalignment="bottom">\n`;
     x += ' <grid orientation="orthogonal" width="1" height="1"/>\n';
@@ -144,11 +145,14 @@ function schrijfTsx(vel) {
   }
   // Een korte notitie bij het hele vel (Tiled toont dit bij de eigenschappen van de tileset
   // zelf, niet van een tegel): hoe Marcel de tegels moet gebruiken, zie ook het verslag.
-  const notitie = [vel.notitie, vel.ingepakt && 'Ingepakt: elke tegel is een eigen rechthoek op het vel. In Tiled staan de voorwerpen daardoor niet precies op hun plek; het spel zet ze neer met hun eigen anker (tegels.json).'].filter(Boolean).join(' ');
+  const ingepakt = vel.perTekening
+    ? `Een plaatje per tekening (tegels/${vel.naam}/): het spel laadt een tekening pas als hij op de kaart staat.`
+    : 'Ingepakt: elke tegel is een eigen rechthoek op het vel.';
+  const notitie = [vel.notitie, vel.ingepakt && `${ingepakt} In Tiled staan de voorwerpen daardoor niet precies op hun plek; het spel zet ze neer met hun eigen anker (tegels.json).`].filter(Boolean).join(' ');
   if (notitie) x += ` <properties>\n  ${eigenschapXml('notitie', notitie).trim()}\n </properties>\n`;
   if (!vel.ingepakt) x += ` <image source="${vel.bestand}" width="${vel.breedte}" height="${vel.hoogte}"/>\n`;
   vel.tiles.forEach((t, id) => {
-    const rechthoek = vel.ingepakt && t.cel ? ` x="${t.cel[0]}" y="${t.cel[1]}" width="${t.cel[2]}" height="${t.cel[3]}"` : '';
+    const rechthoek = vel.ingepakt && !vel.perTekening && t.cel ? ` x="${t.cel[0]}" y="${t.cel[1]}" width="${t.cel[2]}" height="${t.cel[3]}"` : '';
     x += ` <tile id="${id}"${rechthoek}>\n  <properties>\n`;
     // Een lege cel (t.naam is null: gereserveerd voor een tegel die er later bij komt, zie
     // vasteVolgordeEnCapaciteit) krijgt een lege naam in plaats van de tekst "null", zodat
@@ -161,24 +165,32 @@ function schrijfTsx(vel) {
     // de tegel voor de deur, vanaf de achterste tegel van de voet (huizen.cjs): "dx,dy"
     if (t.deur) x += eigenschapXml('deur', t.deur.join(','));
     x += '  </properties>\n';
-    if (vel.ingepakt && t.cel) x += `  <image source="${vel.bestand}" width="${vel.breedte}" height="${vel.hoogte}"/>\n`;
+    if (vel.perTekening && t.bestand) x += `  <image source="${t.bestand}" width="${t.cel[2]}" height="${t.cel[3]}"/>\n`;
+    else if (vel.ingepakt && t.cel) x += `  <image source="${vel.bestand}" width="${vel.breedte}" height="${vel.hoogte}"/>\n`;
     x += ' </tile>\n';
   });
   x += '</tileset>\n';
   fs.writeFileSync(path.join(TEGELS, `${vel.naam}.tsx`), x);
 }
 
-// ---------------------------------------------------------------- een vel wegschrijven: raster of ingepakt
+// ---------------------------------------------------------------- een vel wegschrijven: raster, ingepakt of per tekening
 //
 // De grond blijft een raster van even grote cellen, want Tiled schildert ermee (Marcel, 4 okt: Tiled is "alleen nog de
 // grond"). Elk ander vel hier wordt ingepakt (inpakken.cjs; werklijst vraag 114, 2a): elke tekening strak gesneden, met
-// zijn eigen rechthoek (`cel`) en anker in tegels.json, en het vel zo klein als dat toelaat. In Tiled is zo'n vel een
-// verzameling met een rechthoek per tegel (schrijfTsx); de voorwerpen staan daar niet precies op hun plek, want Tiled
-// kent geen anker per tegel, maar het spel wel.
+// zijn eigen rechthoek (`cel`) en anker in tegels.json, en het vel zo klein als dat toelaat; de huizen en de gebouwen
+// krijgen elke tekening in een eigen bestand (PER_TEKENING hieronder). In Tiled is zo'n vel een verzameling met een
+// rechthoek of een plaatje per tegel (schrijfTsx); de voorwerpen staan daar niet precies op hun plek, want Tiled kent
+// geen anker per tegel, maar het spel wel.
 const RASTER = new Set(['grond']);
 // De wind buigt een plant naar hoe hoog een pixel in zijn cel staat (js/sprites.js, bakWindStand). Op deze vellen houdt
 // elke tekening daarom de hoogte van zijn cel, en snijden we alleen links en rechts bij: dan buigt hij als voorheen.
 const MET_WIND = new Set(['bomen', 'begroeiing', 'erf']);
+// Een vel per tekening (werklijst vraag 114, stap 1; Marcel, 4 okt: "A ja B ja"): op deze vellen staan veel grote
+// tekeningen, waarvan er maar een paar tegelijk op een kaart staan (bij het begin 10 van de 23 huizen en 1 van de 27
+// gebouwen). Elke tekening krijgt een eigen bestand in tegels/<vel>/, strak gesneden zoals op een ingepakt vel, en het
+// spel laadt hem pas als hij op de kaart staat (js/sprites.js). Dan kost een tekening die er niet staat niets, hoeveel
+// het er ook worden (de bouwstijlen van stap 2).
+const PER_TEKENING = new Set(['huizen', 'gebouwen']);
 
 // Het punt in een cel van het raster dat op het midden van de tegel komt: een vel met een eigen afspraak (een voethoek)
 // zet het zelf; anders volgt het uit tileoffset (een model op zijn voetpunt), of is het het midden van de cel (grond).
@@ -190,11 +202,30 @@ const rasterAnker = (v) => v.anker || (v.tileoffset
 // kolommen, tiles). Na het inpakken staat in de beschrijving de maat van het ingepakte vel, en per tegel zijn cel en anker.
 function schrijfVel(vel, beschrijving) {
   beschrijving.anker = rasterAnker(beschrijving);
+  const { tegelB: cb, tegelH: ch, kolommen, anker } = beschrijving;
+  const tegels = beschrijving.tiles.map((t, i) => (t.naam ? { cel: [(i % kolommen) * cb, Math.floor(i / kolommen) * ch, cb, ch], anker } : null));
   if (RASTER.has(beschrijving.naam)) {
     schrijfPng(beschrijving.bestand, vel);
+  } else if (PER_TEKENING.has(beschrijving.naam)) {
+    // De map helemaal opnieuw, zodat een tekening die er niet meer is, ook als bestand verdwijnt; en het vel van vóór
+    // 4 okt weg.
+    const map = path.join(TEGELS, beschrijving.naam);
+    fs.rmSync(map, { recursive: true, force: true });
+    fs.mkdirSync(map, { recursive: true });
+    fs.rmSync(path.join(TEGELS, beschrijving.bestand), { force: true });
+    const los = I.snijLos(I.beeldVanPlaat(vel), tegels);
+    beschrijving.ingepakt = true;
+    beschrijving.perTekening = true;
+    beschrijving.tiles.forEach((t, i) => {
+      if (!los[i]) {
+        if (t.naam) console.warn(`  ${beschrijving.naam}/${t.naam}: niets getekend`);
+        return;
+      }
+      const bestand = `${beschrijving.naam}/${t.naam}.png`;
+      fs.writeFileSync(path.join(TEGELS, bestand), I.pngVanBeeld(los[i].beeld));
+      Object.assign(t, { bestand, cel: los[i].cel, anker: los[i].anker });
+    });
   } else {
-    const { tegelB: cb, tegelH: ch, kolommen, anker } = beschrijving;
-    const tegels = beschrijving.tiles.map((t, i) => (t.naam ? { cel: [(i % kolommen) * cb, Math.floor(i / kolommen) * ch, cb, ch], anker } : null));
     const uit = I.pakVelIn(I.beeldVanPlaat(vel), tegels, { houdHoogte: MET_WIND.has(beschrijving.naam) });
     fs.writeFileSync(path.join(TEGELS, beschrijving.bestand), I.pngVanBeeld(uit.beeld));
     beschrijving.ingepakt = true;
@@ -207,6 +238,9 @@ function schrijfVel(vel, beschrijving) {
   }
   schrijfTsx(beschrijving);
 }
+
+// Eén regel voor het verslag: het ingepakte vel met zijn maat, of de map met een bestand per tekening.
+const velVerslag = (b) => (b.perTekening ? `${b.naam}/  een bestand per tekening` : `${b.bestand}  ${b.breedte}×${b.hoogte}, ingepakt`);
 
 // ---------------------------------------------------------------- grond (64×32, geen speling)
 
@@ -362,7 +396,7 @@ function bouwModelVel(veldNaam, lijst, vastVan) {
     tiles: geordend.map((it) => (it ? { naam: it.naam, vast: it.vast, doos: it.doos || null } : { naam: null, vast: false })),
   };
   schrijfVel(vel, beschrijving);
-  console.log(`${veldNaam}.png  ${beschrijving.breedte}×${beschrijving.hoogte}  (${items.length} echte tegels van ${capaciteit}, ingepakt)`);
+  console.log(`${velVerslag(beschrijving)}  (${items.length} echte tegels van ${capaciteit})`);
   return beschrijving;
 }
 
@@ -444,7 +478,7 @@ function bouwTuinVel() {
     tiles: geordend.map((it) => (it ? { naam: it.naam, vast: it.vast, doos: it.doos || null } : { naam: null, vast: false })),
   };
   schrijfVel(vel, beschrijving);
-  console.log(`tuin.png  ${beschrijving.breedte}×${beschrijving.hoogte}  (${items.length} echte tegels van ${capaciteit}, ingepakt)`);
+  console.log(`${velVerslag(beschrijving)}  (${items.length} echte tegels van ${capaciteit})`);
   return beschrijving;
 }
 
@@ -586,7 +620,7 @@ function bouwGebouwenVel() {
     tiles: geordend.map((it) => (it ? { naam: it.naam, vast: true, beslaat: it.beslaat, doos: it.doos || null } : { naam: null, vast: false })),
   };
   schrijfVel(vel, beschrijving);
-  console.log(`gebouwen.png  ${beschrijving.breedte}×${beschrijving.hoogte}  (${items.length} echte tegels van ${capaciteit}, ingepakt)`);
+  console.log(`${velVerslag(beschrijving)}  (${items.length} echte tegels van ${capaciteit})`);
   items.forEach((it) => console.log(`  ${it.naam.padEnd(14)} beslaat ${it.beslaat[0]}x${it.beslaat[1]}`));
   return beschrijving;
 }
@@ -782,7 +816,7 @@ function bouwLosVel(veldNaam, items, notitie) {
     } : { naam: null, vast: false })),
   };
   schrijfVel(vel, beschrijving);
-  console.log(`${veldNaam}.png  ${beschrijving.breedte}×${beschrijving.hoogte}  (${items.length} echte tegels van ${capaciteit}, ingepakt)`);
+  console.log(`${velVerslag(beschrijving)}  (${items.length} echte tegels van ${capaciteit})`);
   return beschrijving;
 }
 
@@ -1067,6 +1101,16 @@ if (wil('rand')) padRandTegels();
     const eigenschappen = (t) => ({ naam: t.naam, vast: t.vast, beslaat: t.beslaat || null, groep: t.groep || null, staat: t.staat || null, deur: t.deur || null, doos: t.doos || null, ...(t.ramen ? { ramen: t.ramen } : {}) });
     // Een ingepakt vel (schrijfVel) zegt per tegel waar hij staat: `cel` [x, y, b, h] op het vel, en `anker`, het punt
     // in die cel dat op het midden van de tegel komt. Een raster (de grond) zegt het één keer voor het hele vel.
+    // Een vel per tekening (PER_TEKENING) heeft geen vel van zichzelf: elke tegel zegt ook in welk bestand hij staat.
+    if (v.perTekening) {
+      TEGELS_JSON[v.naam] = {
+        tsx: `tegels/${v.naam}.tsx`,
+        ingepakt: true,
+        perTekening: true,
+        tiles: v.tiles.map((t) => ({ ...eigenschappen(t), ...(t.bestand ? { bestand: `tegels/${t.bestand}`, cel: t.cel, anker: t.anker } : {}) })),
+      };
+      continue;
+    }
     TEGELS_JSON[v.naam] = v.ingepakt ? {
       tsx: `tegels/${v.naam}.tsx`,
       bestand: `tegels/${v.bestand}`,

@@ -7,9 +7,10 @@
 // als één beeld aankunnen. Alles samen laadde het spel bijna 900 MB aan vellen; ingepakt is dat zo'n 210.
 //
 // Wie het gebruikt:
-//   naar-tiled.cjs   de vellen met voorwerpen in tegels/ (bomen, begroeiing, gebouwen, erf, tuin, huizen): elke tegel
-//                    krijgt in tegels.json zijn eigen `cel` [x, y, b, h] en `anker`. De grond blijft een raster, want
-//                    Tiled schildert ermee.
+//   naar-tiled.cjs   de vellen met voorwerpen in tegels/ (bomen, begroeiing, erf, tuin): elke tegel krijgt in
+//                    tegels.json zijn eigen `cel` [x, y, b, h] en `anker`. De huizen en de gebouwen krijgen elke
+//                    tekening in een eigen bestand (snijLos; vraag 114, stap 1), dat het spel pas laadt als hij op de
+//                    kaart staat. De grond blijft een raster, want Tiled schildert ermee.
 //   bouwfasen.cjs    per gebouw een eigen klein vel met zijn vijf fases (tegels/bouwfasen/<tekening>.png), dat het spel
 //                    pas laadt als er zo'n gebouw in aanbouw staat.
 //   naar-spel.cjs    de figuren in beelden/figuren/: daar blijft het raster (een rij per kijkrichting, een kolom per
@@ -119,6 +120,20 @@ function pakVelIn(beeld, tegels, { houdHoogte = false } = {}) {
   return { beeld: vel, tegels: nieuw };
 }
 
+// Elke tekening los (vraag 114, stap 1; Marcel, 4 okt: "A ja B ja"): strak gesneden zoals pakVelIn, maar elk in een eigen
+// beeld, zodat een tekening die niet op de kaart staat, niets kost. Geeft per tegel { beeld, cel: [0, 0, b, h], anker },
+// of null als er niets getekend stond.
+function snijLos(beeld, tegels) {
+  return tegels.map((t) => {
+    const g = t && grens(beeld, t.cel);
+    if (!g) return null;
+    const [x0, y0, x1, y1] = g;
+    const los = leegBeeld(x1 - x0, y1 - y0);
+    kopieer(beeld, [x0, y0, los.b, los.h], los, 0, 0);
+    return { beeld: los, cel: [0, 0, los.b, los.h], anker: [t.anker[0] - (x0 - t.cel[0]), t.anker[1] - (y0 - t.cel[1])] };
+  });
+}
+
 // Een raster van even grote cellen (een figuur: een rij per kijkrichting, een kolom per beeld) laten krimpen tot wat
 // er in al zijn cellen samen staat. Het raster blijft, dus het spel snijdt nog altijd kolom maal cel; alleen is de
 // cel kleiner, en schuift het anker mee. Een vel dat al gekrompen is, blijft zoals het is.
@@ -148,4 +163,4 @@ function krimpRaster(beeld, cel, anker) {
 // Een plaat van kern.cjs als beeld.
 const beeldVanPlaat = (plaat) => ({ b: plaat.b, h: plaat.h, rgba: plaat.rgba() });
 
-module.exports = { MAX_ZIJDE, grens, kopieer, pakIn, pakVelIn, krimpRaster, beeldVanPlaat, leegBeeld, leesPng: K.leesPng, pngVanBeeld: K.pngVanBeeld };
+module.exports = { MAX_ZIJDE, grens, kopieer, pakIn, pakVelIn, snijLos, krimpRaster, beeldVanPlaat, leegBeeld, leesPng: K.leesPng, pngVanBeeld: K.pngVanBeeld };

@@ -244,6 +244,25 @@ woontoren kantelen of een tentdak, naar de bouwstijl van het land (werklijst vra
 baksteen pas als het dorp een steenbakkerij heeft; de kalk en de straatjes zoals op de plaat; en de binnenplaats van
 de herberg krijgt een muur met een poort.
 
+### Een vel per tekening (4 okt 2026, werklijst vraag 114, stap 1)
+
+Marcel: "A ja B ja C meteen erna" (ook de gebouwen, laden wat er staat, en daarna de figuren). Bij het begin stonden er
+10 van de 23 huizen en 1 van de 27 gebouwen op de kaart, terwijl de browser beide vellen helemaal vasthield (55 MB); met
+de bouwstijlen van stap 2, zo'n 500 tekeningen, zou een vel ruim 500 MB worden. Nu:
+- **Elke tekening van de huizen en de gebouwen is een eigen bestand** (`tegels/huizen/<naam>.png`,
+  `tegels/gebouwen/<naam>.png`), strak gesneden zoals op een ingepakt vel, met zijn maat en anker in `tegels.js`
+  (`npm run tiled`, `snijLos` in `inpakken.cjs`). In Tiled is zo'n vel een verzameling met een plaatje per tegel. De
+  andere vellen (bomen, begroeiing, erf, tuin; samen 5 MB, en overal op de kaart) bleven zoals ze waren.
+- **Het spel laadt wat er staat**: de tekeningen op de kaart zodra die er is (een nieuw spel, laden, een ander gebied),
+  en een nieuwe als er iets gebouwd wordt of doorgroeit (`T.kaartVersie`). Tot een tekening er is, tekent hij niets; een
+  huis dat doorgroeit, houdt zijn oude plaatje tot het nieuwe er is. Een vlak alleen als het bestand echt ontbreekt.
+- **Gemeten** (`npm run schermen`, in Chromium zonder videokaart): bij het begin 153 MB aan plaatjes in plaats van 197,
+  met twee bouwplaatsen 162 in plaats van 204; Chromium samen zo'n 540 MB in plaats van 580. Het eerste beeld na het
+  uitzoomen bleef ongeveer gelijk (rond de 190 ms tegen 225: dat is de grond en het bos, vraag 113). Alle 50 tekeningen
+  zijn pixel voor pixel dezelfde gebleven, rond hetzelfde anker, en 19 van de 20 vaste schermafdrukken byte voor byte;
+  in het verste overzicht (0,35) kiest het verkleinen in 232 pixels (0,02%) de buurpixel, bij dezelfde tekenopdrachten.
+- Wat nu het meest weegt, zijn de figuren (124 MB): die laden allemaal, ook wat er niet is (stap 1b).
+
 ## Ontwerpcanvas
 
 https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:

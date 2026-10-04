@@ -2222,10 +2222,8 @@
    },
    "gebouwen": {
     "tsx": "tegels/gebouwen.tsx",
-    "bestand": "tegels/gebouwen.png",
-    "breedte": 3060,
-    "hoogte": 2223,
     "ingepakt": true,
+    "perTekening": true,
     "tiles": [
      {
       "naam": "vakwerkhuis",
@@ -2243,9 +2241,10 @@
        247,
        178
       ],
+      "bestand": "tegels/gebouwen/vakwerkhuis.png",
       "cel": [
-       1766,
-       1126,
+       0,
+       0,
        430,
        436
       ],
@@ -2270,9 +2269,10 @@
        202,
        210
       ],
+      "bestand": "tegels/gebouwen/stenenHuis.png",
       "cel": [
-       2025,
-       617,
+       0,
+       0,
        468,
        465
       ],
@@ -2297,6 +2297,7 @@
        305,
        242
       ],
+      "bestand": "tegels/gebouwen/herberg.png",
       "cel": [
        0,
        0,
@@ -2324,9 +2325,10 @@
        234,
        178
       ],
+      "bestand": "tegels/gebouwen/smidse.png",
       "cel": [
-       1360,
-       1579,
+       0,
+       0,
        404,
        399
       ],
@@ -2351,9 +2353,10 @@
        247,
        178
       ],
+      "bestand": "tegels/gebouwen/dorpshuis1.png",
       "cel": [
-       1334,
-       1126,
+       0,
+       0,
        430,
        444
       ],
@@ -2378,9 +2381,10 @@
        215,
        210
       ],
+      "bestand": "tegels/gebouwen/dorpshuis3.png",
       "cel": [
-       1529,
-       617,
+       0,
+       0,
        494,
        476
       ],
@@ -2405,9 +2409,10 @@
        183,
        178
       ],
+      "bestand": "tegels/gebouwen/dorpshuis5.png",
       "cel": [
-       470,
-       1126,
+       0,
+       0,
        430,
        451
       ],
@@ -2432,9 +2437,10 @@
        183,
        178
       ],
+      "bestand": "tegels/gebouwen/dorpKlein1.png",
       "cel": [
-       2630,
-       1126,
+       0,
+       0,
        430,
        432
       ],
@@ -2459,9 +2465,10 @@
        170,
        178
       ],
+      "bestand": "tegels/gebouwen/dorpKlein2.png",
       "cel": [
-       1766,
-       1579,
+       0,
+       0,
        404,
        392
       ],
@@ -2486,9 +2493,10 @@
        183,
        178
       ],
+      "bestand": "tegels/gebouwen/dorpKlein3.png",
       "cel": [
-       902,
-       1126,
+       0,
+       0,
        430,
        445
       ],
@@ -2513,8 +2521,9 @@
        215,
        210
       ],
+      "bestand": "tegels/gebouwen/dorpGewoonAanbouw.png",
       "cel": [
-       2173,
+       0,
        0,
        536,
        510
@@ -2540,9 +2549,10 @@
        218,
        243
       ],
+      "bestand": "tegels/gebouwen/dorpGewoonVleugel.png",
       "cel": [
        0,
-       617,
+       0,
        497,
        507
       ],
@@ -2567,9 +2577,10 @@
        202,
        210
       ],
+      "bestand": "tegels/gebouwen/dorpGewoon3.png",
       "cel": [
-       2495,
-       617,
+       0,
+       0,
        468,
        455
       ],
@@ -2594,9 +2605,10 @@
        215,
        210
       ],
+      "bestand": "tegels/gebouwen/dorpGewoon4.png",
       "cel": [
-       1033,
-       617,
+       0,
+       0,
        494,
        483
       ],
@@ -2621,8 +2633,9 @@
        247,
        242
       ],
+      "bestand": "tegels/gebouwen/dorpGroot1.png",
       "cel": [
-       548,
+       0,
        0,
        558,
        547
@@ -2648,9 +2661,10 @@
        234,
        242
       ],
+      "bestand": "tegels/gebouwen/dorpGroot2.png",
       "cel": [
-       499,
-       617,
+       0,
+       0,
        532,
        495
       ],
@@ -2675,9 +2689,10 @@
        186,
        178
       ],
+      "bestand": "tegels/gebouwen/schuurBlokhut.png",
       "cel": [
-       2172,
-       1579,
+       0,
+       0,
        436,
        364
       ],
@@ -2702,9 +2717,10 @@
        120,
        98
       ],
+      "bestand": "tegels/gebouwen/houtschuur.png",
       "cel": [
-       2610,
-       1579,
+       0,
+       0,
        272,
        242
       ],
@@ -2729,9 +2745,10 @@
        81,
        74
       ],
+      "bestand": "tegels/gebouwen/kippenhok.png",
       "cel": [
-       324,
-       2009,
+       0,
+       0,
        162,
        192
       ],
@@ -2756,8 +2773,9 @@
        167,
        226
       ],
+      "bestand": "tegels/gebouwen/kapel.png",
       "cel": [
-       1108,
+       0,
        0,
        494,
        538
@@ -2783,9 +2801,10 @@
        193,
        145
       ],
+      "bestand": "tegels/gebouwen/kerkhof.png",
       "cel": [
        0,
-       2009,
+       0,
        322,
        214
       ],
@@ -2810,8 +2829,9 @@
        301,
        210
       ],
+      "bestand": "tegels/gebouwen/watermolen.png",
       "cel": [
-       1604,
+       0,
        0,
        567,
        525
@@ -2837,9 +2857,10 @@
        266,
        210
       ],
+      "bestand": "tegels/gebouwen/bakkerij.png",
       "cel": [
        0,
-       1126,
+       0,
        468,
        451
       ],
@@ -2864,9 +2885,10 @@
        209,
        162
       ],
+      "bestand": "tegels/gebouwen/kruidenhut.png",
       "cel": [
-       972,
-       1579,
+       0,
+       0,
        386,
        406
       ],
@@ -2891,9 +2913,10 @@
        234,
        194
       ],
+      "bestand": "tegels/gebouwen/jagershut.png",
       "cel": [
-       534,
-       1579,
+       0,
+       0,
        436,
        425
       ],
@@ -2918,9 +2941,10 @@
        247,
        178
       ],
+      "bestand": "tegels/gebouwen/oudstehuis.png",
       "cel": [
-       2198,
-       1126,
+       0,
+       0,
        430,
        436
       ],
@@ -2945,9 +2969,10 @@
        218,
        226
       ],
+      "bestand": "tegels/gebouwen/schuur.png",
       "cel": [
        0,
-       1579,
+       0,
        532,
        428
       ],
@@ -9685,10 +9710,8 @@
    },
    "huizen": {
     "tsx": "tegels/huizen.tsx",
-    "bestand": "tegels/huizen.png",
-    "breedte": 3032,
-    "hoogte": 2321,
     "ingepakt": true,
+    "perTekening": true,
     "tiles": [
      {
       "naam": "hut1",
@@ -9775,9 +9798,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/hut1.png",
       "cel": [
-       2278,
-       1813,
+       0,
+       0,
        376,
        411
       ],
@@ -9883,9 +9907,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/hut2.png",
       "cel": [
-       2656,
-       1813,
+       0,
+       0,
        376,
        400
       ],
@@ -10085,9 +10110,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/hut3.png",
       "cel": [
-       1868,
-       1813,
+       0,
+       0,
        408,
        424
       ],
@@ -10153,9 +10179,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/hut4.png",
       "cel": [
-       1458,
-       1813,
+       0,
+       0,
        408,
        446
       ],
@@ -10413,9 +10440,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/huis1.png",
       "cel": [
        0,
-       1813,
+       0,
        472,
        508
       ],
@@ -10753,9 +10781,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/huis2.png",
       "cel": [
        0,
-       711,
+       0,
        474,
        564
       ],
@@ -10887,9 +10916,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/huis3.png",
       "cel": [
-       2019,
-       1277,
+       0,
+       0,
        504,
        529
       ],
@@ -11189,8 +11219,9 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/huis4.png",
       "cel": [
-       1752,
+       0,
        0,
        514,
        567
@@ -11479,9 +11510,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/huis5.png",
       "cel": [
-       597,
-       1277,
+       0,
+       0,
        440,
        533
       ],
@@ -11669,9 +11701,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/huis6.png",
       "cel": [
-       1494,
-       711,
+       0,
+       0,
        550,
        540
       ],
@@ -11935,9 +11968,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/boerderij1.png",
       "cel": [
        0,
-       1277,
+       0,
        595,
        534
       ],
@@ -12283,9 +12317,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/boerderij2.png",
       "cel": [
-       1481,
-       1277,
+       0,
+       0,
        536,
        532
       ],
@@ -12781,8 +12816,9 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/boerderij3.png",
       "cel": [
-       579,
+       0,
        0,
        569,
        631
@@ -13127,9 +13163,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/boerderij4.png",
       "cel": [
-       952,
-       711,
+       0,
+       0,
        540,
        552
       ],
@@ -13219,9 +13256,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/boerderij5.png",
       "cel": [
-       948,
-       1813,
+       0,
+       0,
        508,
        477
       ],
@@ -13649,6 +13687,7 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/schoutshuis.png",
       "cel": [
        0,
        0,
@@ -14135,8 +14174,9 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/herberg1.png",
       "cel": [
-       1150,
+       0,
        0,
        600,
        613
@@ -14350,9 +14390,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/steen1.png",
       "cel": [
-       474,
-       1813,
+       0,
+       0,
        472,
        508
       ],
@@ -14554,9 +14595,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/steen2.png",
       "cel": [
-       476,
-       711,
+       0,
+       0,
        474,
        564
       ],
@@ -14670,9 +14712,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/steen3.png",
       "cel": [
-       2525,
-       1277,
+       0,
+       0,
        504,
        529
       ],
@@ -14842,8 +14885,9 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/steen4.png",
       "cel": [
-       2268,
+       0,
        0,
        514,
        567
@@ -15010,9 +15054,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/steen5.png",
       "cel": [
-       1039,
-       1277,
+       0,
+       0,
        440,
        533
       ],
@@ -15090,9 +15135,10 @@
         ]
        ]
       ],
+      "bestand": "tegels/huizen/steen6.png",
       "cel": [
-       2046,
-       711,
+       0,
+       0,
        550,
        540
       ],

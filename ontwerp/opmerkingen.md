@@ -9,6 +9,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een toets die soms faalt** (4 okt, dertigste sessie, gezien bij vraag 114, stap 1, die geen spelregel raakt):
+  "in het gehucht is iedereen 's nachts binnen, overdag waar hij hoort, en 's avonds thuis" (`test/bewoners.test.cjs`)
+  faalde één keer op drie in de hele reeks (`npm test`), en slaagde alleen achttien keer op achttien. Het gehucht van
+  die toets speelt met ongezaaid toeval (`Math.random`: het dwalen, het lot), en de toets laat er hooguit één naast zijn
+  plek toe. Na te lopen: een vast zaad voor die toets, of zien wie er dan niet thuis is.
+
 - **Het praatje, wat er nog niet is** (4 okt, zevenentwintigste sessie; vraag 120). Na te lopen:
   - Lopen is langzaam tegenover de dag: van een boerderij aan de rand van het gehucht naar het plein is anderhalf uur
     (een dag duurt 300 seconden, een mens loopt 1,35 tegel per seconde). Wie 's avonds naar de herberg gaat, loopt zo de
@@ -625,6 +631,17 @@ stap 1). Alle figuren in `beelden/figuren/` laden bij het begin, samen 124 MB in
 oude spel (kobold, skelet, slijm, reuzenspin: 23 MB), die nu nooit op de kaart komen, en drie kleuren koeien (28 MB),
 ook in een dorp zonder koeien. Dezelfde regel als voor de huizen (laden wat er staat) kan hier ook: een figuur laadt
 als zijn wezen op de kaart komt (een bezoeker die over de weg komt, een monster in een gevecht).
+
+**Een tekening die niet meer op de kaart staat, blijft geladen** (4 okt, dertigste sessie; vraag 114, stap 1). Een huis
+dat doorgroeit, laadt zijn nieuwe tekening, maar de oude blijft in de browser tot de bladzijde herlaadt. In één spel
+is dat begrensd (één bouwstijl, stap 2: hooguit een paar tientallen tekeningen van een MB); wordt het toch te veel, dan
+kan het spel een tekening weer vrijgeven als hij een tijd nergens meer staat.
+
+**De wereldbouwer tekent op ware grootte geen huizen** (4 okt, dertigste sessie, gezien bij vraag 114, stap 1; was er
+al vóór die stap). `gereedschap/wereld.html` heeft geen kalender, en `T.tekenScene` (`js/tekenen.js`, de akkers:
+`T.datumVanDag(S.kalender.dag)`) valt daar elk beeld om, na de grond en vóór de voorwerpen: "Cannot read properties
+of undefined (reading 'dag')". Ver uitgezoomd tekent het gereedschap zijn eigen plattegrond, en dan is er niets aan de
+hand. Een regel: de akkers alleen met een kalender, of een vaste datum in het gereedschap.
 
 **De grond tekent helemaal opnieuw als er een paadje verandert** (3 okt, vijfentwintigste sessie; vraag 108, b,
 `js/paden.js`). De paadjes liggen in de buffer van de grond (`werkGrondBij` in `js/tekenen.js`), en die wordt helemaal

@@ -78,8 +78,10 @@
       }
       // De vellen van buiten staan los: gaat daar iets mis, dan tekent het spel buiten vlakken
       // en binnen nog gewoon zijn pixel art. De bouwfasen laden hier niet: elk gebouw heeft zijn
-      // eigen vel, dat pas komt als er een in aanbouw staat (S.bouwfase hieronder). (Tot 25 sep
-      // laadde hier ook beelden/effecten/, de spreukeffecten van het oude spel.)
+      // eigen vel, dat pas komt als er een in aanbouw staat (S.bouwfase hieronder); en de huizen
+      // en de gebouwen ook niet: die hebben een bestand per tekening, dat pas komt als hij op de
+      // kaart staat (S.laadWatErStaat). (Tot 25 sep laadde hier ook beelden/effecten/, de
+      // spreukeffecten van het oude spel.)
       const buiten = [...new Set(Object.values(T.TEGELS || {}).map((v) => v.bestand).filter(Boolean))];
       const [uitslag, uitBuiten] = await Promise.all([Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld))]);
       S.aan = uitslag.every(Boolean);
@@ -107,6 +109,30 @@
   }
   // Hoeveel vellen er nog onderweg zijn, voor wie wil wachten tot alles er is (een proef met schermafdrukken).
   S.bezig = () => [...laden.values()].filter((s) => s === 'laadt').length;
+
+  // Een vel per tekening (vraag 114, stap 1; Marcel, 4 okt: "A ja B ja"): de huizen en de gebouwen hebben elke tekening
+  // in een eigen bestand (tegels/huizen/, tegels/gebouwen/; `bestand` per tegel in T.TEGELS), en dat laadt pas als hij
+  // op de kaart staat. Zo kost een tekening die er niet staat niets, hoeveel het er ook zijn. Het eigen bestand van een
+  // tegel, of null als hij op een gedeeld vel staat:
+  const eigenBestand = (velNaam, id) => {
+    const v = T.TEGELS && T.TEGELS[velNaam];
+    const t = v && v.perTekening && id != null && v.tiles[id];
+    return (t && t.bestand) || null;
+  };
+  // Alles op een kaart met een eigen bestand vast laden (js/tekenen.js vraagt het bij een andere kaart, en als er iets op
+  // veranderde: een nieuw gebouw, een huis dat doorgroeit), zodat het er is voor het in beeld komt.
+  S.laadWatErStaat = function (w) {
+    for (const v of w.voorwerpen) {
+      const bestand = v.vel && eigenBestand(v.vel, v.id);
+      if (bestand) laadAlsNodig(bestand);
+    }
+  };
+  // Wacht deze tekening nog op zijn eigen bestand? Dan tekent js/tekenen.js wat er daarnet stond, of niets; ontbreekt het
+  // bestand echt, dan niet meer (en tekent het een vlak, zoals zonder sprites).
+  S.wachtOp = function (velNaam, id) {
+    const bestand = eigenBestand(velNaam, id);
+    return !!bestand && !beelden.has(bestand) && laden.get(bestand) !== 'mist';
+  };
 
   // Wat de browser nu aan vellen vasthoudt (Spel.debug.vellen, vraag 114, stap 1): elk geladen vel met zijn maat en wat
   // het uitgepakt kost, vier bytes per pixel, zoals een browser een plaatje in zijn geheugen houdt. Wat nog laadt of
@@ -338,18 +364,21 @@
 
   // `wind`, als meegegeven, is de windwaarde voor dít voorwerp (-1..1, T.windWaarde in
   // js/main.js). Weegt de soort niets mee (of wordt geen windwaarde meegegeven), dan gewoon het
-  // stilstaande beeld — precies zoals voorheen.
+  // stilstaande beeld — precies zoals voorheen. Een tekening met een eigen bestand (een huis, een
+  // gebouw) laadt de eerste keer dat hij gevraagd wordt, en tot hij er is, is het antwoord null.
   S.buiten = function (velNaam, id, wind) {
     const v = T.TEGELS && T.TEGELS[velNaam];
-    const plek = v && v.bestand && S.celVan(velNaam, id);
-    if (!plek) return null;
+    const eigen = v && eigenBestand(velNaam, id);
+    const bestand = eigen || (v && v.bestand);
+    const plek = bestand && S.celVan(velNaam, id);
+    if (!plek || (eigen && !laadAlsNodig(eigen))) return null;
     const [x, y, b, h] = plek.cel;
     const gewicht = wind != null && WIND_GEWICHT[v.tiles[id].naam];
-    if (!gewicht) return onthoud(`buiten,${velNaam},${id}`, () => stuk(v.bestand, x, y, b, h, plek.anker));
+    if (!gewicht) return onthoud(`buiten,${velNaam},${id}`, () => stuk(bestand, x, y, b, h, plek.anker));
     const midden = (WIND_STANDEN - 1) / 2;
     const w = Math.max(-1, Math.min(1, wind));
     const stand = Math.max(0, Math.min(WIND_STANDEN - 1, Math.round(midden + w * midden)));
-    return onthoud(`buitenwind,${velNaam},${id},${stand}`, () => bakWindStand(v.bestand, x, y, b, h, plek.anker, gewicht, stand));
+    return onthoud(`buitenwind,${velNaam},${id},${stand}`, () => bakWindStand(bestand, x, y, b, h, plek.anker, gewicht, stand));
   };
 
   // Hoe hoog steekt dit ding boven zijn tegel uit? Voor het aanwijzen met de muis. Het ankerpunt

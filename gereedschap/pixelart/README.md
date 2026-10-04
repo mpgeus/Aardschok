@@ -51,7 +51,7 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
 - `dorp.cjs` en `dorp2.cjs`: de grond (gras, zandpad, kasseien, water), de huizen (`huis(o)`
   bouwt er een uit onderdelen), en de plekken: kapel, kerkhof, watermolen, bakkerij, kruidenhut,
   jagershut, het huis van de dorpsoudste, het bruggetje en de vijver. De werkplaatsen van het spel
-  komen nog hiervandaan (`tegels/gebouwen.png`); de huizen niet meer (zie hieronder).
+  komen nog hiervandaan (`tegels/gebouwen/`, een bestand per tekening); de huizen niet meer (zie hieronder).
 - `huis-sdf.cjs`: de huizenbouwer op ronde vormen (`ontwerp/beeld.md`, "De huizenbouwer op ronde
   vormen"): elk huis in elke vorm en elk materiaal, niet waterpas, met uitbouwen. Bovenaan staat wat
   een opgave kan. `huis-sdf-export.cjs` maakt er proefplaten van (`uit/proefhuis/`), en
@@ -62,7 +62,8 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   (`ontwerp/beeld.md`, "De afwisseling en de grote gebouwen").
 - `huizen.cjs`: de huizen van het spel (ronde 4b): een vaste lijst opgaven (`HUIZEN`), en hoe er een
   voor het vel gerenderd wordt, met zijn voet en de tegel voor zijn deur. `node naar-tiled.cjs huizen`
-  zet ze op `tegels/huizen.png` (twee minuten, in vier draden), `node bouwfasen.cjs` maakt hun vijf
+  zet ze in `tegels/huizen/`, elk huis een eigen bestand dat het spel pas laadt als het op de kaart staat (vier
+  minuten, in vier draden; werklijst vraag 114, stap 1), `node bouwfasen.cjs` maakt hun vijf
   bouwfasen (uit het huis zelf gesneden; een kwartier voor alle gebouwen samen), en
   `node huizen.cjs [namen]` een proefplaat met voet en deur erop (`uit/huizen/proef.png`). Een nieuw
   huis: een regel in `HUIZEN`, dan die drie stappen, en `T.GEBOUWEN` in `js/gebouwen.js`.
