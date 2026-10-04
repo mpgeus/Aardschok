@@ -4082,6 +4082,48 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     hun riet (in de plankenstijl spanen, zoals voorgesteld), en de huizen, de stenen huizen en de boerderijen krijgen het
     dak van de trede waarin ze gebouwd worden of doorgroeien. Eerst één stijl helemaal in het spel (stap 2a), dan de
     andere drie (stap 2b).
+    **Plan voor stap 2a, de eerste stijl helemaal in het spel (Claude, 4 okt, eenendertigste sessie; wacht op
+    Marcel).** Nagekeken vóór het plan (op `75c681a`, `npm test` 908/908): het spel kiest de tekening van een nieuw huis
+    los van waar het komt (`T.volgendeTekening`, uit een lijst per soort); een erf zet zijn huis zo ver mogelijk naar
+    achteren (noord), waar de weg ook ligt; de maker zet een huis alleen achter het plein (noord of west), want elke deur
+    zit aan de kant van de camera (zuid of oost); en wie doorgroeit, doet dat zonder bouwfasen (`groeiGebouw` in
+    `js/behoeften.js`): alleen de hut op een erf, de boerderij op verzoek en, met de spelregel "Huizen", een huis dat jij
+    neerzet, rijzen op in fases. De vormen van nu stonden voor Marcel op één blad ("De vormen van nu").
+    1. **Een proefplaat van de eerste stijl, wit** (wit vakwerk, groene luiken, veldsteen, riet): de gekozen hutten,
+       huizen, hun stenen broertjes en boerderijen in de stijl; één huis in zijn vier standen (de deur naar zuid, oost,
+       noord of west); dat huis onder riet, leien en pannen, en zijn stenen broertje in veldsteen onder leien en onder
+       pannen, en in baksteen onder pannen; en drie straatjes (het gehucht, een dorp, marktrecht met een steenbakkerij).
+       Terwijl Marcel kijkt, komen de regels.
+    2. **Renderen:** de 108 tekeningen en hun bouwfasen, zo'n drie kwartier op de achtergrond; `npm run tiled` zet ze in
+       `tegels/huizen/`, elk met zijn voet en zijn deur.
+    3. **In het spel:** (a) **de stijl per land:** de maker geeft elk land een stijl, die het dorp onthoudt (`D.stijl`),
+       dus een bewaard spel houdt hem; in 2a krijgt elk land wit, in 2b kiest het nummer van het land er een van de vier.
+       Het ontworpen gehucht en een spel dat eerder bewaard is, hebben geen stijl en blijven precies zoals nu (en dus de
+       toetsen en de speeltest ook). (b) **Het dak van de trede** (`T.volgendeTekening`, `kiesGroei`): riet in het
+       gehucht (in de plankenstijl spanen), leien in een dorp, pannen met marktrecht; een hut houdt riet, en wat er
+       staat, houdt zijn dak tot het doorgroeit. Een stenen huis in een gehucht krijgt leien (er zijn er drie per ontwerp,
+       zoals besloten). (c) **De steen:** een stenen huis in de natuursteen van zijn stijl, en baksteen onder pannen pas
+       als het dorp een steenbakkerij heeft. (d) **De stand:** op een erf staat het huis achteraan, met zijn deur naar de
+       weg en de moestuin ervoor, zodat zijn paadje kort is; een boerderij op verzoek keert zijn deur naar de weg; wie
+       doorgroeit, houdt zijn stand. Het huis van de schout is al wit vakwerk op veldsteen en past bij wit; in 2b krijgt
+       het de stijl van zijn land.
+    4. **Nakijken:** toetsen erbij (de stijl, het dak per trede, de baksteen, de stand, het doorgroeien), `npm test`
+       groen; `npm run schermen`: het ontworpen gehucht byte voor byte hetzelfde, land 5 van de maker in de nieuwe stijl;
+       de speeltest met de bouwer op landen van de maker (`--maker`, zaad 1 tot 3, twee jaar): geen fout, en een dorp
+       dat door de daken heen groeit; en schermafdrukken van zo'n dorp voor Marcel.
+    Per stijl zo'n 10 MB in de opslagplaats (die is nu 48 MB), en `tegels/tegels.js` groeit van 245 naar zo'n 460 kB.
+    Een sessie. Vragen: **A**, de eerste stijl wit, met hut 1, 3 en 4, huis 1, 3 en 6 (en hun stenen broertjes) en
+    boerderij 1 en 4? Per soort zo verschillend mogelijk (recht, met een aanbouw, een T; een L-hut); boerderij 2
+    (planken) en 5 (blokhut onder spanen) passen bij de plankenstijl. **B** (idee van Claude), elke stijl een eigen
+    drietal vormen, zodat je een land ook aan zijn vormen herkent en niet alleen aan zijn kleur (oker bijvoorbeeld huis
+    2, 4 en 5)? **C**, bouwfasen alleen voor wat het dorp met een bouwplaats bouwt, de hut en de boerderij (36 per stijl
+    in plaats van 108)? Een huis dat jij neerzet met de spelregel "Huizen", rijst dan bleek op, zoals vóór de fases.
+    **D**, de maker zet de huizen rondom het plein met hun deur ernaartoe, ook vóór het plein (dan met hun achterkant
+    naar je toe, zoals twee boerderijen nu)? Elk land ziet er dan anders uit dan nu, ook land 5. **E**, tussendoor de
+    toets die soms faalt (`opmerkingen.md`, bovenaan) een vast zaad geven, zodat een push er niet op stukloopt?
+    **Marcel vroeg erbij (4 okt): "Kunnen we een andere agent starten die alvast het webgl deel uitvoert?"** Dus loopt
+    vraag 123 (tekenen met WebGL) sinds 4 okt in een eigen sessie naast de huizen, op een eigen branch, met een eigen
+    plan voor Marcel; die sessie blijft uit de bestanden van de huizen, en schrijft onder vraag 123.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
