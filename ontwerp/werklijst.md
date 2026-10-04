@@ -117,10 +117,8 @@ bouwt een huis als één 3D-huis met deur, ramen en vakwerk vast op alle vier de
 plaats van het te spiegelen, zodat de vier standen de vier aanzichten zijn. De schets staat bij vraag 114 ("Schets voor
 de draaibare huizen"): eerst nader lezen in `huis-sdf.cjs` (`maakStukken`, `stuk`, `verdeel`, de uitbouwen), dan een plan
 voor Marcel. Daarna wit opnieuw door de bouwer, nu met alle bouwfasen (`bouwfasen.cjs --erbij`; Marcel: "ik wil overal
-bouwfase") en zonder de ingebakken schaduw op de vloer: de schaduwen gaan met de zon mee (vraag 125, B; Marcel: "A ja, B
-goed zo"), en de schakelaar daarvoor maakt de sessie van het licht in de bouwer (Marcel: "A"; waar hij zit, staat bij
-vraag 125). Render de huizen in `tegels/` pas opnieuw als die schakelaar er is, zodat ze maar één keer gaan. En dan
-stap 2b, de andere drie stijlen, elk met een eigen drietal vormen (Marcel: "B ja"), en stap 3, de herberg, de kapel en
+bouwfase"). Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te veranderen: de huizen in `tegels/`
+hebben geen schaduw op de vloer, en het spel tekent hun schaduw zelf. En dan stap 2b, de andere drie stijlen, elk met een eigen drietal vormen (Marcel: "B ja"), en stap 3, de herberg, de kapel en
 de woontoren, meteen draaibaar. Nog open bij vraag 114: **G**, of een huis dat doorgroeit ook in
 fases oprijst (voorstel: de laatste drie fases over zijn bouwtijd, en de mensen blijven erin wonen). **Vraag 121 is besloten**
 (hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁", en "121 a terrassen, b ja, c na de
@@ -4713,6 +4711,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       veranderen niet, alleen welke tekening erop komt.
     - **De schaduw op de vloer los te zetten** (een keuze in de bouwer, nu niets aan het beeld): komen de schaduwen met de
       zon (vraag 125, B), dan moet de ingebakken schaduw eruit, en dan hoeven de huizen alleen nog één keer door de bouwer.
+      **Vervallen** (4 okt): de huizen in het spel hebben geen schaduw op de vloer (zie vraag 125, "Bij het nakijken
+      bleek").
 125. **Schaduwen en licht met de videokaart** (Marcel, 4 okt, na WebGL: "Ja schaduwen en licht etc"; plan van Claude;
     open). Nu: de pixel art heeft zijn licht ingebakken (van linksboven, met een schaduw op de vloer, `belicht` en
     `schaduwOpVloer` in `gereedschap/pixelart/kern.cjs`; `beeld.md`), en de nacht is een donkere laag met lichtere
