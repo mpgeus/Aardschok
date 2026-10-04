@@ -48,9 +48,10 @@ met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant 
 (vraag 113, a) komt van hem. Ook besloten (4 okt): **vraag 116** (beesten in het bos: wolven die de houthakker bedreigen,
 rode ogen in het donker; "doden mag") en **vraag 117** (één kaart: een eiland van 2500 bij 2500 met de zee rondom en de
 mist; "uiteindelijk"). De volgorde (Marcel: "akkoord"): de huizen (vraag 114), dan **vraag 111** (de boeren op hun
-veld) met 115 en 116, dan 117, dat begint met een proef die meet of een kaart in stukken loopt. **Open bij Marcel:**
-**vraag 118** (inwoners met stats, levenspunten, vaardigheden en eigenschappen, zoals in Dwarf Fortress; het voorstel is
-om het met de mensen aan het werk te doen). Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
+veld) met 115 en 116, dan 117, dat begint met een proef die meet of een kaart in stukken loopt. Ook besloten: **vraag 118**
+(inwoners met stats: levenspunten, vaardigheden die groeien met het werk, en eigenschappen, zoals in Dwarf Fortress),
+samen met de mensen aan het werk. Voor het eiland gebruiken we Marcels vier technieken voor het zoeken van paden (HPA\*
+over de stukken van de kaart, flow fields, time-slicing en group steering; vraag 117). Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
 verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de maat van de winst: op het
 wijdere land is er grond genoeg, maar de speeltest speelt standaard nog het ontworpen gehucht). De speeltest van vier
 jaar staat in `speelbaar.md`, en een volgende speeltest van vier jaar splitst de spelers over twee taken, want een taak
@@ -3943,8 +3944,16 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **Opslaan wat veranderde.** Het eiland zelf komt uit het nummer; een bewaard spel houdt alleen wat er gebouwd,
       gehakt en ontdekt is. Dan moet de maker zijn versie onthouden: verandert hij, dan legt hetzelfde nummer een ander
       eiland, en past een oud spel niet meer (of de oude maker blijft bewaard).
-    - **Ver lopen.** A* over 2500 tegels is te duur; een lange tocht gaat over de wegen (een netwerk van wegen en
-      kruispunten), en A* zoekt alleen het stukje tot de eerste weg en van de laatste weg af.
+    - **Ver lopen, met Marcels vier technieken** (2 okt, bij vraag 88; Marcel, 4 okt: "kunnen we de a* technieken niet
+      gebruiken die ik eerder in de lijst aan je gaf?"): ja, en ze passen beter dan het idee van de wegen. **HPA\*** is
+      gemaakt voor precies dit: de stukken van 64 bij 64 zijn zijn blokken; per blok onthoudt het eiland waar je van het ene
+      blok in het andere kunt, en hoe ver dat binnen het blok is. Een lange tocht zoekt eerst over die blokken (een kaart
+      van 39 bij 39 blokken in plaats van 2500 bij 2500 tegels) en daarna A* binnen het blok waar je nu bent, onderweg
+      steeds het volgende. De eilanden (vraag 88) zijn de eerste laag: is het doel onbereikbaar, dan weet hij het meteen.
+      **Flow fields** voor wat veel mensen in een dorp delen (de put, de kerk, de herberg, de markt): één zoektocht vanaf
+      het doel, en iedereen volgt de pijl op zijn tegel. **Time-slicing**: de zoektochten over een paar beelden spreiden
+      (dat doet het spel al een beetje: hooguit acht per beeld). **Group steering**: alleen de leider zoekt, de rest volgt
+      hem: een roedel wolven (vraag 116), de soldaten van de heer, de rovers, de militie met de schout.
     - **Wat ver weg is, als getallen.** Een dorp, een roedel wolven of de heer die onderweg is, loopt dichtbij met zijn
       poppetjes en ver weg als getallen (vraag 79, D).
     - **De tijd.** Op 1× loopt de schout zo'n kwartier van de ene kust naar de andere, op 30× minder dan een minuut; later
@@ -3971,6 +3980,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       vaardigheden (het hakken, het maaien). Een dorp van 5000 (vraag 79, D) houdt het per persoon klein: een handvol
       getallen.
     Vragen: **a**, deze stats? **b**, vaardigheden die groeien met het werk? **c**, samen met 111, 115 en 116?
+    **Marcel koos (4 okt): "1 ja 2 ja 3 akkoord"**: deze stats, vaardigheden die groeien met het werk, en samen met de
+    boeren, de houthakker en de beesten.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste

@@ -601,7 +601,8 @@ Dat vervangt de kaart van de provincies hieronder (die staat achter de spelregel
 zee rondom, met je dorp, het kasteel van de heer, de stad en de andere dorpen erop, en de mist over wat je nog niet
 zag. Het plan in stappen staat bij vraag 117 in de werklijst. **Marcel koos de maat: 2500 bij 2500 tegels** (4 okt), na
 de kern (eerst de huizen, dan de boeren met de houthakker en de beesten). Wat dat technisch vraagt (de kaart in stukken
-uit het nummer, opslaan wat veranderde, lange tochten over de wegen, wat ver weg is als getallen), staat erbij.
+uit het nummer, opslaan wat veranderde, lange tochten met HPA\* over de stukken en de andere drie technieken die Marcel
+op 2 okt gaf, wat ver weg is als getallen), staat erbij.
 
 
 **Zo werkt het nu** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in
@@ -2630,7 +2631,8 @@ hieronder).
 "Inwoners krijgen ook 'stats' hp, skills, eigenschappen, etc ala dwarf fortress." Het voorstel (vraag 118): levenspunten
 voor iedereen (de wolven en de rovers kunnen doden), vaardigheden per soort werk die groeien met wie het doet, een
 karakter en een paar eigenschappen voor iedereen (zoals nu de boeren), die sturen wat hij doet en zegt, en een papier
-met wie hij is als je hem aanklikt. Samen met de mensen aan het werk (vraag 111, 115 en 116).
+met wie hij is als je hem aanklikt. Samen met de mensen aan het werk (vraag 111, 115 en 116). **Marcel koos (4 okt):**
+"1 ja 2 ja 3 akkoord".
 
 ### Mensen worden poppetjes
 
