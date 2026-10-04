@@ -91,7 +91,7 @@ alvast het webgl deel uitvoert?"): het tekenen met WebGL loopt naast de huizen, 
 (`claude/webgl-tekenen`), en blijft uit de bestanden van de huizen. Marcel koos het plan (A tot en met D). Stap 1 is af:
 de tussenbuffer, waarmee 4K zo snel tekent als 1920×1080. De proefversie voor Windows is er
 (`npm run proefversie -- --windows`), zodat Marcel op zijn eigen pc meet. Volgende: stap 2, de WebGL-laag. Het draaien
-van de camera (vraag 124) komt na WebGL; vraag B daar (de huizen draaibaar renderen) wacht op Marcel.
+van de camera (vraag 124) komt na WebGL, en de huizen worden alvast draaibaar gerenderd (Marcel: "124b Ja dan").
 
 **Waar de volgende sessie begint:** **vraag 114: de huizen in het spel, stap 2: de vier bouwstijlen** (het plan staat bij
 vraag 114, onder "Plan voor de huizen in het spel"; Marcel koos de vier stijlen): de stijl per land, met de tekeningen in
@@ -4576,6 +4576,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     en de beeldstijl is de troef van het spel (`commercieel.md`). Acht richtingen (om de 45 graden) maken van de ruiten
     rechte vierkanten: een tweede set grond en acht tekeningen per gebouw, voor weinig. Voorstel: kwartslagen. Vraag B
     (de huizen draaibaar renderen) wacht nog op een antwoord.
+    **Marcel (4 okt): "124b Ja dan."** De huizen worden draaibaar gerenderd: alle vier de muren ingevuld (deur, ramen en
+    vakwerk op elke muur), zodat de vier standen de vier aanzichten zijn. Dat is werk voor de sessie van de huizen,
+    vóór de andere drie stijlen (vraag 114, 2b); de eerste stijl (wit) gaat dan opnieuw door de bouwer.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
