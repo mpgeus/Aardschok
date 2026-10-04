@@ -37,6 +37,12 @@ visser aan het water. **Sinds vraag 119** lopen de mensen om wat vaststaat, en l
 wachten, langs elkaar, opzij. **Sinds vraag 120** blijft wie vrij is en toevallig een buur of iemand van zijn werk
 treft, soms staan voor een praatje, met een wolkje boven wie praat. `npm test`: 908/908.
 
+**Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
+bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
+licht die flakkeren, en werpt alles wat staat een schaduw die met de zon meegaat. De schout draagt 's avonds buiten een
+lantaarn: dan zien ze je van verder, en sluipen (`S`) dooft hem. Nog open bij vraag 125: de proefplaat van C (licht op
+de muren, "mag later").
+
 **Waar het werk staat:** in `main` (4 okt; Marcel: "ja" op "push main") staan de snelheid van 3 okt (vraag 113, de
 meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
 van een weg, en het bos om de kaart alleen aan de kant van het bos. Sinds het eind van de zesentwintigste sessie ook het
