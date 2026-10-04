@@ -4597,7 +4597,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     het toch doen, tekenen klein en vergroten met veel shaderwerk, en het blijft een andere stijl. Dat is maanden werk,
     en de beeldstijl is de troef van het spel (`commercieel.md`). Acht richtingen (om de 45 graden) maken van de ruiten
     rechte vierkanten: een tweede set grond en acht tekeningen per gebouw, voor weinig. Voorstel: kwartslagen. Vraag B
-    (de huizen draaibaar renderen) wacht nog op een antwoord.
+    (de huizen draaibaar renderen) is hieronder beantwoord.
     **Marcel (4 okt): "124b Ja dan."** De huizen worden draaibaar gerenderd: alle vier de muren ingevuld (deur, ramen en
     vakwerk op elke muur), zodat de vier standen de vier aanzichten zijn. Dat is werk voor de sessie van de huizen,
     vóór de andere drie stijlen (vraag 114, 2b); de eerste stijl (wit) gaat dan opnieuw door de bouwer.
