@@ -70,6 +70,10 @@
 //                                                        proefplaat, het spelvel blijft staan)
 //   node gereedschap/pixelart/bouwfasen.cjs --erbij     alleen wat nog geen fasen heeft (een nieuwe
 //                                                        bouwstijl), de rest blijft staan
+//   node gereedschap/pixelart/bouwfasen.cjs --erbij hut huis
+//                                                        net zo, maar alleen die soorten of tekeningen: zo
+//                                                        gaat een stijl in delen, want een taak op de
+//                                                        achtergrond stopt na twee uur
 //
 // Uitvoer:
 //   gereedschap/pixelart/uit/bouwfasen/<tekening>.png   per gebouw, de vijf fases naast elkaar
@@ -734,8 +738,9 @@ async function main() {
   console.log(`klaar in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   console.log(`  proefplaten: gereedschap/pixelart/uit/bouwfasen/ (${resultaten.length} + overzicht.png, niet in git)`);
   // Het spelvel alleen met alle gebouwen: het vel wordt in zijn geheel opnieuw geschreven, en met één
-  // gebouw erop zouden de fases van alle andere uit het spel verdwijnen.
-  if (GEVRAAGD.length) {
+  // gebouw erop zouden de fases van alle andere uit het spel verdwijnen. Met --erbij blijft wat er al
+  // is staan, en komen alleen de nieuwe erbij: dan mag het ook met namen.
+  if (GEVRAAGD.length && !bestaand) {
     console.log('  spelvel niet geschreven: dat gebeurt alleen als alle gebouwen gerenderd zijn (zonder namen)');
     return;
   }

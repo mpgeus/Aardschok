@@ -4256,6 +4256,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     gedraaid); `npm test` 925/925. Aan het spel (`js/`, `tegels/`) is niets veranderd: in het spel staat nog het witte
     gespiegelde, tot stap 6. De proefplaat: `node gereedschap/pixelart/huis-sdf-export.cjs rondom`. Zie `beeld.md`, "De
     draaibare huizen".
+    **Marcel (4 okt), na de proefplaat:** "En dus zonder schaduw he? Want dat doet webgl nu" (ja: de tekeningen voor het
+    spel hebben geen schaduw op de grond, alleen het licht op het huis zelf; het gras en de schaduw op de proefplaat zijn
+    alleen daar), en "ja start maar". Dus stap 6: wit opnieuw door de bouwer, eerst de huizen (`npm run tiled huizen`), dan
+    de bouwfasen in twee delen (`bouwfasen.cjs --erbij hut huis`, dan `--erbij stenenHuis boerderij`; met namen schrijft
+    `--erbij` sinds vandaag zijn fasen erbij, zodat een deel niet verloren gaat als een taak stopt).
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
