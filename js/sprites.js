@@ -303,6 +303,7 @@
           const ax = v.anker[0] + (a - b) * T.HB;
           const ay = v.anker[1] + (a + b) * T.HH;
           cx.drawImage(bron, k * v.cel[0], 0, v.cel[0], v.cel[1], Math.round(VLOER_ANKER[0] - ax), Math.round(VLOER_ANKER[1] - ay), v.cel[0], v.cel[1]);
+          c.versie = 1; // eens getekend, blijft hij zo (js/gl.js)
           vloertegels.set(`${soort},${a},${b}`, { beeld: c, sx: 0, sy: 0, b: VLOER_B, h: VLOER_H, ax: VLOER_ANKER[0], ay: VLOER_ANKER[1] });
         }
       }
@@ -364,6 +365,7 @@
       const dx = Math.round(uitslag * t * t);
       cx.drawImage(bron, sx, sy + y, b, ph, rand + dx, y, b, ph);
     }
+    c.versie = 1; // eens getekend, blijft hij zo (js/gl.js)
     return { beeld: c, sx: 0, sy: 0, b: b + 2 * rand, h, ax: anker[0] + rand, ay: anker[1] };
   }
 

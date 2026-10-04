@@ -135,7 +135,14 @@
     canvas.height = bh * ratio;
     canvas.style.width = cssB + 'px';
     canvas.style.height = cssH + 'px';
+    const glDoek = glZichtbaar ? T.gl.doek() : null;
+    if (glDoek) {
+      glDoek.style.width = cssB + 'px';
+      glDoek.style.height = cssH + 'px';
+    }
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    tekenRatio = ratio;
+    if (metVideokaart()) T.gl.zetMaat(canvas.width, canvas.height, ratio);
     zoomVenster = Math.max(1, Math.min(2, Math.min(bw / 900, bh / 540)));
     S.zoom = S.overzicht ? S.overzicht.zoom : zoomVenster;
   }
@@ -152,6 +159,38 @@
   });
   // De maat waarop getekend wordt (formaat), voor wie zelf een beeld tekent: het gereedschap van het meten.
   T.tekenMaat = () => ({ b: bw, h: bh });
+
+  // Het beeld op het scherm, met de videokaart (js/gl.js, op een doek onder het gewone) of met het 2D-doek, naar de
+  // spelregel "Tekenen" (T.TEKENEN_INSTELLINGEN.videokaart; werklijst vraag 123). Kan de browser geen WebGL, of laat
+  // de kaart het los, dan zonder.
+  let tekenRatio = 1;
+  let glZichtbaar = false;
+  const metVideokaart = () => T.TEKENEN_INSTELLINGEN.videokaart && T.gl.kan();
+  T.tekenBeeld = function () {
+    const gl = metVideokaart();
+    if (gl !== glZichtbaar) {
+      glZichtbaar = gl;
+      const doek = T.gl.doek();
+      if (doek) {
+        if (!doek.parentNode) canvas.parentNode.insertBefore(doek, canvas);
+        doek.classList.toggle('verborgen', !gl);
+      }
+      if (gl) {
+        T.gl.zetMaat(canvas.width, canvas.height, tekenRatio);
+        doek.style.width = cssB + 'px';
+        doek.style.height = cssH + 'px';
+      }
+    }
+    if (!gl) return T.tekenScene(ctx, S, bw, bh);
+    // Het gewone doek ligt erboven en blijft leeg: wat er buiten dit beeld op kwam (het meten), gaat eraf.
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+    const d = T.gl.begin();
+    T.tekenScene(d, S, bw, bh);
+    T.gl.klaar();
+  };
 
   // Wat ligt er onder de muis? Wezens en voorwerpen steken boven hun tegel uit, dus die
   // worden eerst gezocht, van voor naar achter. Anders is het de tegel zelf.
@@ -459,7 +498,7 @@
     const t0 = performance.now();
     werkBij(dt);
     const t1 = performance.now();
-    T.tekenScene(ctx, S, bw, bh);
+    T.tekenBeeld();
     if (meter) meetBeeld(nu, t1 - t0, performance.now() - t1);
     requestAnimationFrame(lus);
   }
@@ -491,7 +530,7 @@
     if (duur < 1000) return;
     const ms = (x) => (Math.round(x * 10) / 10).toLocaleString('nl-NL');
     document.getElementById('meter').textContent =
-      `${Math.round((m.beelden * 1000) / duur)} beelden/s · regels ${ms(m.regels / m.beelden)} ms · tekenen ${ms(m.tekenen / m.beelden)} ms · traagste beeld ${ms(m.traagst)} ms`;
+      `${Math.round((m.beelden * 1000) / duur)} beelden/s · regels ${ms(m.regels / m.beelden)} ms · tekenen ${ms(m.tekenen / m.beelden)} ms · traagste beeld ${ms(m.traagst)} ms · ${glZichtbaar ? 'met de videokaart' : 'zonder videokaart'}`;
     Object.assign(m, { sinds: performance.now(), beelden: 0, regels: 0, tekenen: 0, traagst: 0 });
   }
 
@@ -1443,10 +1482,28 @@
     // Alleen het doek, dus zonder de html-balken erover. Zo kan een sessie of agent een blik op het
     // spel laten zien zonder de hele afbeelding als tekst door zijn gesprek te halen.
     async schermafdruk(naam) {
-      const doek = document.querySelector('canvas');
+      const doek = T.debug.beeld();
       const blob = await new Promise((klaar) => doek.toBlob(klaar, 'image/png'));
       const r = await fetch('/gereedschap/api/schermafdruk/' + encodeURIComponent(naam), { method: 'POST', body: blob });
       return r.json();
+    },
+    // Het beeld zoals het nu op het scherm staat, als één 2D-doek: met de videokaart (js/gl.js) het doek van WebGL met
+    // het gewone erover. Het tekent eerst een beeld, want WebGL houdt een beeld niet vast nadat het getoond is.
+    beeld() {
+      T.tekenBeeld();
+      if (!glZichtbaar) return canvas;
+      const c = document.createElement('canvas');
+      c.width = canvas.width;
+      c.height = canvas.height;
+      const x = c.getContext('2d');
+      x.drawImage(T.gl.doek(), 0, 0);
+      x.drawImage(canvas, 0, 0);
+      return c;
+    },
+    // Wachten tot het beeld echt getekend is (het meten): de browser spaart tekenwerk op tot hij het moet laten zien.
+    wacht() {
+      if (glZichtbaar) T.gl.wacht();
+      else ctx.getImageData(0, 0, 1, 1);
     },
     // Hoeveel milliseconden kost één beeld? Spel.debug.meet() tekent n beelden achter elkaar en
     // geeft het gemiddelde, de mediaan en de slechtste terug. Een beeld hoort ruim onder de 16 ms
@@ -1480,7 +1537,7 @@
       const tijden = [];
       for (let i = 0; i < aantal; i++) {
         const t0 = performance.now();
-        T.tekenScene(ctx, S, bw, bh);
+        T.tekenBeeld();
         tijden.push(performance.now() - t0);
       }
       tijden.sort((a, b) => a - b);
@@ -1534,7 +1591,7 @@
         werkBij(1 / 60);
         for (let k = 0; k < 8; k++) await null;
       }
-      T.tekenScene(ctx, S, bw, bh);
+      T.tekenBeeld();
     },
   };
 

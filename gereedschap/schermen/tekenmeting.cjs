@@ -7,6 +7,7 @@
 //
 //   npm run tekenmeting                                  alle drie de schermen (een kwartier)
 //   npm run tekenmeting -- 1920x1080@1                   één scherm
+//   npm run tekenmeting -- 1920x1080@1 --tekenen met     met de videokaart (WebGL; de grond alleen meet dan nog 2D)
 // De uitslag in gereedschap/schermen/uit/tekenmeting.json (niet in git).
 const fs = require('node:fs');
 const path = require('node:path');
@@ -16,7 +17,9 @@ const WORTEL = path.join(__dirname, '..', '..');
 let pw;
 try { pw = require('playwright'); } catch { pw = require(path.join(execSync('npm root -g', { encoding: 'utf8' }).trim(), 'playwright')); }
 const URL = 'http://localhost:8123/';
-const SCHERMEN = (process.argv[2] || '1920x1080@1,3840x2160@1,1920x1080@2').split(',');
+const args = process.argv.slice(2);
+const TEKENEN = args.includes('--tekenen') ? args[args.indexOf('--tekenen') + 1] : null; // 'met': met de videokaart
+const SCHERMEN = (args.find((a) => /^\d+x\d+@\d/.test(a)) || '1920x1080@1,3840x2160@1,1920x1080@2').split(',');
 const serverDraait = () => new Promise((klaar) => {
   http.get(URL, (r) => { r.resume(); klaar(true); }).on('error', () => klaar(false));
 });
@@ -68,6 +71,7 @@ async function meet(browser, scherm) {
   await page.evaluate(() => { window.__rafStop = true; });
   await page.waitForTimeout(300);
   await page.addScriptTag({ path: path.join(WORTEL, 'gereedschap', 'grootte', 'pagina.js') });
+  if (TEKENEN) await page.evaluate((k) => { Spel.zetOptie('tekenen', k); Spel.TEKENEN_INSTELLINGEN.ookOpDeProcessor = true; }, TEKENEN);
   const cdp = await context.newCDPSession(page);
   await cdp.send('Profiler.enable');
   await cdp.send('Profiler.setSamplingInterval', { interval: 100 });
@@ -85,7 +89,7 @@ async function meet(browser, scherm) {
       Meet.zetPlekken(uur); const s = Spel.S; if (s.grond) s.grond.sleutel = ''; s.zoom = zoom; Meet.cameraOp(s.schout.tx, s.schout.ty);
     }, [sc.uur, sc.zoom]);
     for (let i = 0; i < 100; i++) {
-      await page.evaluate(() => Spel.tekenScene(document.getElementById('scherm').getContext('2d'), Spel.S, Spel.tekenMaat().b, Spel.tekenMaat().h));
+      await page.evaluate(() => Spel.tekenBeeld());
       if (await page.evaluate(() => Spel.sprites.bezig() === 0)) break;
       await page.waitForTimeout(50);
     }
@@ -105,13 +109,13 @@ async function meet(browser, scherm) {
       for (const k of ['drawImage', 'fill', 'fillRect', 'stroke', 'fillText', 'createRadialGradient', 'createLinearGradient', 'save', 'clip']) {
         oud[k] = P[k]; P[k] = function (...a) { tel[k] = (tel[k] || 0) + 1; return oud[k].apply(this, a); };
       }
-      Spel.tekenScene(document.getElementById('scherm').getContext('2d'), Spel.S, Spel.tekenMaat().b, Spel.tekenMaat().h);
+      Spel.tekenBeeld();
       for (const k in oud) P[k] = oud[k];
       return tel;
     });
     await page.evaluate((u) => { Spel.S.kalender.dag = Math.floor(Spel.S.kalender.dag) + u / 24; }, sc.uur);
     await cdp.send('Profiler.start');
-    await page.evaluate(() => { const c = document.getElementById('scherm').getContext('2d'); for (let i = 0; i < 30; i++) { Spel.tekenScene(c, Spel.S, Spel.tekenMaat().b, Spel.tekenMaat().h); c.getImageData(0, 0, 1, 1); } });
+    await page.evaluate(() => { for (let i = 0; i < 30; i++) { Spel.tekenBeeld(); Spel.debug.wacht(); } });
     const { profile } = await cdp.send('Profiler.stop');
     const p = inclusief(profile);
     r.profiel = { perBeeld: Object.fromEntries(Object.entries(p.lagen).map(([k, v]) => [k, Math.round((v / 30) * 10) / 10])), topEigenMsSamen: p.topEigen };
@@ -135,5 +139,5 @@ async function meet(browser, scherm) {
   const alles = [];
   try { for (const s of SCHERMEN) alles.push(await meet(browser, s)); } finally { await browser.close(); if (server) server.kill(); }
   fs.mkdirSync(path.join(__dirname, 'uit'), { recursive: true });
-  fs.writeFileSync(path.join(__dirname, 'uit', 'tekenmeting.json'), JSON.stringify(alles, null, 1) + '\n');
+  fs.writeFileSync(path.join(__dirname, 'uit', TEKENEN ? `tekenmeting-${TEKENEN}.json` : 'tekenmeting.json'), JSON.stringify(alles, null, 1) + '\n');
 })().catch((e) => { console.error(e); process.exit(1); });

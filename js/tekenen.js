@@ -18,8 +18,11 @@
   // Hoe het beeld getekend wordt (werklijst vraag 123). `tussenbuffer`: op een groot scherm tekent het spel op de
   // grootste hele deling van het scherm die nog minstens zo groot is, en vergroot de browser het (formaat in
   // js/main.js); op 4K is dat 1920 bij 1080 maal twee.
+  // `videokaart`: tekenen met WebGL (js/gl.js), of met het 2D-doek van de browser; de spelregel "Tekenen".
   T.TEKENEN_INSTELLINGEN = {
     tussenbuffer: { b: 1920, h: 1080 },
+    videokaart: true,
+    ookOpDeProcessor: false, // alleen voor de proeven zonder videokaart (js/gl.js)
   };
 
   const metSprites = () => !!(T.sprites && T.sprites.aan) && !(T.debug && T.debug.vlakken);
@@ -180,8 +183,11 @@
   function nieuweBuffer(buf, b, h, k) {
     const pb = Math.ceil(b * k);
     const ph = Math.ceil(h * k);
+    // Een buffer die opnieuw getekend wordt, krijgt een nieuwe versie: dan stuurt js/gl.js hem opnieuw naar de kaart.
+    if (buf.canvas) buf.canvas.versie = (buf.canvas.versie || 0) + 1;
     if (!buf.canvas || buf.canvas.width !== pb || buf.canvas.height !== ph) {
       buf.canvas = document.createElement('canvas');
+      buf.canvas.versie = 1;
       buf.canvas.width = pb;
       buf.canvas.height = ph;
       buf.ctx = buf.canvas.getContext('2d');
@@ -304,7 +310,9 @@
     const vak = tegelsIn(w, zicht);
 
     const g = werkGrondBij(S, bw, bh, zicht, inBeeld, dpr);
-    ctx.drawImage(g.canvas, g.vx, g.vy, g.b, g.h);
+    // Op zijn eigen maat (de breedte van het doek gedeeld door zijn schaal), niet op g.b bij g.h: het doek is naar boven
+    // afgerond, en dan werd hij ver uitgezoomd een fractie verkleind, met een kolom pixels die wegviel (vraag 123).
+    ctx.drawImage(g.canvas, g.vx, g.vy, g.canvas.width / g.k, g.canvas.height / g.k);
     const gebakken = bosGebakken(S);
     tekenWeides(ctx, S, vak);
     tekenRaster(ctx, S);
@@ -436,7 +444,7 @@
     // Ver uitgezoomd: het bos ten zuiden en oosten van de kaart, uit zijn buffer (werkGrondBij hierboven).
     if (gebakken) {
       const voor = bosVoorBij(S, g);
-      ctx.drawImage(voor.canvas, voor.vx, voor.vy, voor.b, voor.h);
+      ctx.drawImage(voor.canvas, voor.vx, voor.vy, voor.canvas.width / g.k, voor.canvas.height / g.k);
     }
     ctx.restore();
 
@@ -1497,6 +1505,7 @@
     cx.imageSmoothingEnabled = false;
     cx.filter = `brightness(${stap / (BOSRAND_HELDER_STAPPEN - 1)})`;
     cx.drawImage(stuk.beeld, stuk.sx, stuk.sy, stuk.b, stuk.h, 0, 0, stuk.b, stuk.h);
+    c.versie = 1; // eens getekend, blijft hij zo (js/gl.js)
     const gebakken = { beeld: c, sx: 0, sy: 0, b: stuk.b, h: stuk.h, ax: stuk.ax, ay: stuk.ay };
     perStap.set(stap, gebakken);
     return gebakken;

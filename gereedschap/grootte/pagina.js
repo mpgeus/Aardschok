@@ -90,12 +90,17 @@
       if (!window.__klein) { window.__klein = document.createElement('canvas'); window.__klein.width = 1; window.__klein.height = 1; }
       cx = window.__klein.getContext('2d');
     }
-    for (let i = 0; i < 6; i++) { T.tekenScene(cx, s, bw, bh); if (flush) cx.getImageData(0, 0, 1, 1); }
+    // Het beeld op het scherm gaat met T.tekenBeeld, met of zonder de videokaart (de spelregel "Tekenen", vraag 123).
+    const een = () => {
+      if (o.klein) T.tekenScene(cx, s, bw, bh);
+      else T.tekenBeeld();
+      if (flush) (o.klein ? cx.getImageData(0, 0, 1, 1) : T.debug.wacht());
+    };
+    for (let i = 0; i < 6; i++) een();
     const t = [];
     for (let i = 0; i < K; i++) {
       const a = performance.now();
-      T.tekenScene(cx, s, bw, bh);
-      if (flush) cx.getImageData(0, 0, 1, 1);
+      een();
       t.push(performance.now() - a);
     }
     s.kalender.dag = dag0;

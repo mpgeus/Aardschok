@@ -90,7 +90,9 @@ valt om op de akkers zonder kalender), en een toets in `bewoners.test.cjs` faalt
 alvast het webgl deel uitvoert?"): het tekenen met WebGL loopt naast de huizen, op een eigen branch
 (`claude/webgl-tekenen`), en blijft uit de bestanden van de huizen. Marcel koos het plan (A tot en met D). Stap 1 is af:
 de tussenbuffer, waarmee 4K zo snel tekent als 1920×1080. De proefversie voor Windows is er
-(`npm run proefversie -- --windows`), zodat Marcel op zijn eigen pc meet. Volgende: stap 2, de WebGL-laag. Het draaien
+(`npm run proefversie -- --windows`), zodat Marcel op zijn eigen pc meet. Stap 2 tot en met 5 zijn gebouwd: de WebGL-laag
+(`js/gl.js`), de spelregel "Tekenen" (standaard met de videokaart, zonder als er geen is). Volgende: Marcel meet op zijn
+pc (een nieuwe proefversie), en vraag E (het overzicht). Het draaien
 van de camera (vraag 124) komt na WebGL, en de huizen worden alvast draaibaar gerenderd (Marcel: "124b Ja dan").
 
 **Waar de volgende sessie begint:** **vraag 114: de huizen in het spel, stap 2: de vier bouwstijlen** (het plan staat bij
@@ -4535,6 +4537,24 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     beelden per seconde en het traagste beeld noteren: dichtbij, in het overzicht (`Tab`, en met het wiel ver uit), en
     's avonds. Daarna hetzelfde in Firefox, met `Aardschok/resources/app/index.html` (hetzelfde spel). Dan weten we wat
     zijn videokaart al doet met het 2D-tekenen, en wat WebGL er nog bij moet winnen.
+    **Stap 2 is gebouwd (4 okt): de WebGL-laag** (`js/gl.js`). Hij doet zich voor als het 2D-doek, zodat
+    `js/tekenen.js` er hetzelfde op tekent, in dezelfde volgorde. Wat de kaart zelf kan, tekent ze: plaatjes, vlakken,
+    bolle vormen (de schaduw onder een figuur, de ruitjes van een raam) en ronde verlopen (de nacht, de lantaarns, het
+    vignet), met de samenstelmodi van de nacht en de ramen als mengstanden. De rest (tekst, lijnen, een uitsnede) gaat via
+    een kladdoek in 2D en komt als plaatje op zijn plek, zodat alles meteen klopt; daarmee zijn stap 3 en 4 al grotendeels
+    gedaan, en wat nog via het kladdoek gaat, zegt `Spel.gl.telling`. De spelregel "Tekenen" (stap 5): standaard met de
+    videokaart. Zonder echte videokaart (WebGL op de processor, SwiftShader, is hier zes keer trager dan het 2D-doek:
+    125 tegen 19 ms per beeld) of als de browser het niet kan, tekent het spel vanzelf zonder; de meter (`F2`) zegt welke.
+    **Nagekeken met `npm run schermen -- --tekenen met`** (dat zet WebGL ook op de processor aan): dichtbij en 's avonds
+    is hooguit 0,04% van de pixels echt anders; de rest is afronding (1 of 2 op 255) of een buurpixel (bij een zoom die
+    geen heel getal is, kiest de kaart soms de pixel ernaast). In het overzicht (0,5 en 0,35) is 0,2 tot 1,4% echt anders:
+    daar laat het spel van een tekening maar één op de twee of drie pixels zien, en de browser en de kaart kiezen daarbij
+    elk andere; je ziet het niet. Dat valt buiten de maat van C, en is dus een vraag aan Marcel (**E**). Gevonden
+    onderweg, ook voor 2D: de grondbuffer werd ver uitgezoomd een fractie verkleind, met een kolom pixels die wegviel; nu
+    gaat hij er 1 op 1 op. Electron opent het spel vanaf een los bestand en mag de plaatjes naar de kaart sturen.
+    Vraag **E**: in het overzicht mag WebGL andere pixels kiezen dan 2D? Voorstel: ja. Later kan WebGL het overzicht zelfs
+    mooier maken (verkleinen met gemiddelde kleuren in plaats van pixels overslaan), maar dat is dan een keuze, geen
+    stap van dit plan.
 124. **De camera draaien** (Marcel, 4 okt, gevraagd in de sessie van de huizen en doorgegeven aan die van WebGL: "ik wil
     ook de camera kunnen draaien. Is dat mogelijk"; plan van Claude; open).
     **Kan het?** Ja, in kwartslagen (`Q` en `E`, zoals in Anno, The Sims en Project Zomboid). Vrij draaien niet: pixel art

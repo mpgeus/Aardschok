@@ -297,6 +297,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en de muis rekent om in `naarVlak`. Ver uitgezoomd bewaart
   `js/tekenen.js` de grond op de maat van het scherm, en het bos om de kaart heen in een buffer (`bosGebakken`). **De
   meter** (`F2`): beelden per seconde, en wat de regels en het tekenen per beeld kosten.
+- `js/gl.js`: **tekenen met de videokaart** (vraag 123): een eigen kleine laag op WebGL die zich voordoet als het 2D-doek,
+  zodat `js/tekenen.js` er hetzelfde op tekent. Plaatjes, vlakken, bolle vormen en ronde verlopen tekent de kaart zelf;
+  de rest gaat via een kladdoek in 2D en komt als plaatje op zijn plek (`T.gl.telling` zegt hoeveel). Een buffer die
+  opnieuw getekend wordt, krijgt een nieuwe `versie` (`nieuweBuffer`), anders gaat hij niet opnieuw naar de kaart.
+  `T.tekenBeeld()` (`js/main.js`) tekent het scherm met of zonder, naar de spelregel "Tekenen"; zonder echte videokaart
+  vanzelf zonder (`ookOpDeProcessor` zet het voor de proeven hier toch aan). Het gewone doek ligt erboven en vangt de muis.
 - `js/doorkijk.js`: wie je door een boom of een huis heen ziet (`T.zichtbaarDoor`,
   `T.werkDoorkijkBij`), en hoe: het kijkvenster (`T.tekenKijkgat`) of het raster (`T.tekenGerasterd`),
   een keuze in de spelregels (`beeld.md`, "Doorkijk"). `js/tekenen.js` vraagt het aan. Het eerste stuk
