@@ -297,15 +297,16 @@
           uitleg: 'Je weet niet wie er keek. Je hoort het pas als het rondverteld is: van de herbergierster, of als de soldaten het vinden.' },
       ],
     },
-    // De schaduwen van de zon (Marcel, 4 okt, werklijst vraag 125, B: "B graag"; een proefplaat; js/tekenen.js, js/gl.js).
+    // De schaduwen van de zon (Marcel, 4 okt, werklijst vraag 125, B: "B graag", en "A ja, B goed zo"; js/tekenen.js,
+    // js/gl.js).
     {
-      id: 'schaduwen', naam: 'Schaduwen', standaard: 'ingebakken',
-      uitleg: 'Een proef: of de schaduwen met de zon meedraaien. Alleen met de videokaart.',
+      id: 'schaduwen', naam: 'Schaduwen', standaard: 'zon',
+      uitleg: 'Of wat staat een schaduw over de grond werpt die met de zon meegaat. Alleen met de videokaart.',
       keuzes: [
-        { id: 'ingebakken', naam: 'Ingebakken', zet: { 'LICHT_INSTELLINGEN.zonneschaduw': false },
-          uitleg: 'Elke tekening heeft zijn eigen schaduw, altijd naar rechtsonder.' },
         { id: 'zon', naam: 'Met de zon', zet: { 'LICHT_INSTELLINGEN.zonneschaduw': true },
-          uitleg: "Wat staat, werpt zijn silhouet over de grond: 's ochtends lang naar rechtsboven, 's middags kort, 's avonds lang naar linksonder. Huizen en bomen hebben hun ingebakken schaduw er nog bij." },
+          uitleg: "Wat staat, werpt zijn silhouet over de grond: 's ochtends lang naar rechtsboven, 's middags kort naar rechtsonder, 's avonds lang naar linksonder." },
+        { id: 'uit', naam: 'Zonder', zet: { 'LICHT_INSTELLINGEN.zonneschaduw': false },
+          uitleg: 'Alleen het schaduwtje onder de voeten van wie er loopt, zoals vóór 4 okt 2026.' },
       ],
     },
     // De lantaarn van de schout (Marcel, 4 okt, werklijst vraag 125, C: "ook spel. Voegt leuke elementen toe"; js/zien.js).

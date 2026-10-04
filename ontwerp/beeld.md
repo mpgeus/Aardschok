@@ -20,6 +20,10 @@
   wereld vermenigvuldigd met de kleur van het uur (roze bij het opkomen, neutraal overdag, oranje bij het ondergaan,
   blauw in de nacht) en met een warme plas licht per lamp, die flakkert. Het licht in de plaatjes blijft van linksboven
   komen; dit heeft geen richting. Zonder videokaart blijft het de donkere laag van vóór 4 okt.
+- **Schaduwen die met de zon meegaan** (4 okt, vraag 125, B; `T.zonStand` in `js/dag.js`, `tekenZonneschaduw` in
+  `js/tekenen.js`): met de videokaart werpt alles wat staat zijn silhouet over de grond, op de middag kort naar
+  rechtsonder (zoals het licht van linksboven in de plaatjes), 's ochtends lang naar rechtsboven, 's avonds lang naar
+  linksonder. De plaatjes zelf hebben geen schaduw op de grond; de spelregel "Schaduwen".
 - **Stijl van Mystic Towers.** De kamer staat als een diorama in het donker, en de voorste muren
   zijn laag weggesneden.
 

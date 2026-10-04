@@ -306,7 +306,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   doek ligt erboven en vangt de muis. **Het licht** (vraag 125, A): de nacht is met de videokaart een lichtkaart op de
   halve maat (de kleur van het uur, `T.lichtKleurVan` in `js/dag.js`, en per lamp een warme plas die flakkert,
   `lichtenInBeeld` en `T.LICHT_INSTELLINGEN` in `js/tekenen.js`), waarmee de wereld vermenigvuldigd wordt
-  (`tekenLichtkaart`); zonder videokaart blijft het de donkere laag van hiervoor.
+  (`tekenLichtkaart`); zonder videokaart blijft het de donkere laag van hiervoor. **De schaduwen** (vraag 125, B): wat in
+  de tekenlijst staat, nog een keer als silhouet scheef over de grond (`tekenZonneschaduw`, `T.zonStand` in `js/dag.js`),
+  op een masker dat in één keer over de grond gaat (`beginSchaduw`, `eindSchaduw`); de spelregel "Schaduwen".
 - `js/doorkijk.js`: wie je door een boom of een huis heen ziet (`T.zichtbaarDoor`,
   `T.werkDoorkijkBij`), en hoe: het kijkvenster (`T.tekenKijkgat`) of het raster (`T.tekenGerasterd`),
   een keuze in de spelregels (`beeld.md`, "Doorkijk"). `js/tekenen.js` vraagt het aan. Het eerste stuk

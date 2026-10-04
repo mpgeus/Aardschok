@@ -4731,6 +4731,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     (de huizen in `huis-sdf.cjs`, en de bomen in `bomen.cjs`: allebei in `gereedschap/pixelart/`, het werk van de sessie
     van de huizen), dan gaan de huizen en de bomen zonder vloerschaduw opnieuw door de bouwer, en dan staat de spelregel
     "Schaduwen" standaard op "Met de zon". De lengte en de donkerte blijven zoals ze zijn.
+    **Bij het nakijken bleek (4 okt): er is geen ingebakken schaduw in het spel.** De plaatjes van de huizen, de gebouwen
+    en de bomen in `tegels/` hebben geen schaduw op de grond (de bouwer snijdt ze zonder: `huizen.cjs`, "zonder gras en
+    zonder schaduw op de grond"; de bomen gaan los door de renderer, zonder slagschaduw). Alleen onder een figuur tekent
+    het spel een ovaaltje (`tekenWezen`). De dubbele schaduw die Claude op de proefplaat meldde, was er dus niet, en de
+    bouwer hoeft niets los te zetten. De spelregel "Schaduwen" staat nu standaard op "Met de zon" (met de videokaart);
+    "Zonder" is het spel van vóór 4 okt. Het verzoek aan de sessie van de huizen om een schakelaar vervalt.
     `npm run schermen` heeft drie beelden erbij: de dageraad, de zonsondergang en het plein 's avonds vóór bedtijd (om
     20.8 uur slaapt het dorp al, en zijn de lantaarns uit). Hoe snel de lichtkaart is, zien we alleen op een echte
     videokaart (hier tekent WebGL op de processor).
