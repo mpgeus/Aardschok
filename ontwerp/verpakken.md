@@ -179,9 +179,10 @@ helpt ons niet.
   een beeld er niet op wacht; of de heetste stukken in WebAssembly (Rust of C, vertaald naar bijna-machinecode).
 - Allebei werkt het in de browser (itch.io) én in Electron (Steam).
 
-**Voorstel:** JavaScript en Electron voor Steam houden; op echte machines meten tegen de lat (vraag 122); haalt het die
-niet, dan eerst WebGL, dan een Worker of WebAssembly voor wat het zwaarst is. Een nieuwe motor pas als consoles een doel
-worden. Een voorbeeld: Vampire Survivors begon in JavaScript (Phaser) en ging in 2023 naar Unity, ook voor de consoles.
+**Besloten (Marcel, 4 okt: "snelheid, middenweg is goed"):** het gaat om de snelheid, niet om consoles. Dus
+JavaScript en Electron voor Steam; op echte machines meten tegen de lat (vraag 122); haalt het die niet, dan eerst
+WebGL, dan een Worker of WebAssembly voor wat het zwaarst is. Een nieuwe motor alleen als consoles ooit een doel worden.
+Een voorbeeld: Vampire Survivors begon in JavaScript (Phaser) en ging in 2023 naar Unity, ook voor de consoles.
 
 ## De naam (vraag 8; voorstel van Claude, 27 sep, tiende sessie)
 

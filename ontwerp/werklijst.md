@@ -41,9 +41,9 @@ treft, soms staan voor een praatje, met een wolkje boven wie praat. `npm test`: 
 meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
 van een weg, en het bos om de kaart alleen aan de kant van het bos. Sinds het eind van de zesentwintigste sessie ook het
 lopen (vraag 119, D en A; Marcel: "ja push main"), en sinds de zevenentwintigste sessie het praatje (vraag 120;
-Marcel: "2 ja push main"), en de reparatie van het laden (Marcel: "ja push main"). Het inpakken van de vellen (vraag 114,
-2a, achtentwintigste sessie) staat op de branch van die sessie (`ccr-85053a7c-trfw1j`), nog niet in `main`. Hoe een
-eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+Marcel: "2 ja push main"), en de reparatie van het laden (Marcel: "ja push main"). Sinds de achtentwintigste sessie
+ook het inpakken van de vellen (vraag 114, 2a) en de snelheid via Steam (vraag 122; Marcel: "push main"). Hoe een eigen
+branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
 huizen"): een weg gaat om wat vaststaat, wie onderweg een ander treft, wacht, schuift langs hem, laat hem opzij gaan of
@@ -70,8 +70,9 @@ zijn ingepakt (2a); nu een proefplaat met meer afwisseling (daken, wanden, luike
 per kleur) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien. **Vraag 121**
 (hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁") wacht op Marcel: terrassen, wat het
 doet, en wanneer; een proefplaat van de hoogte kan met die van de huizen mee. **Vraag 122** (de snelheid via Steam;
-Marcel: "lag, geheugen tekort etc is geen optie straks") wacht ook op hem: een lat, en een proefverpakking voor zijn pc
-om Firefox en de Steam-versie naast elkaar te meten.
+Marcel: "lag, geheugen tekort etc is geen optie straks") is half besloten: JavaScript en Electron blijven, en haalt het
+spel de lat niet, dan de middenweg (WebGL, dan een Worker of WebAssembly; Marcel: "snelheid, middenweg is goed"). Nog
+open: de lat, en een proefverpakking voor zijn pc om Firefox en de Steam-versie naast elkaar te meten.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
 met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant (**vraag 115**). De meter in Firefox
 (vraag 113, a) komt van hem. Ook besloten (4 okt): **vraag 116** (beesten in het bos: wolven die de houthakker bedreigen,
@@ -4260,6 +4261,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel vroeg erbij: "Is er een manier om te bouwen naar een native exe?"** Een .exe maakt Electron al; echt native
     is het spel opnieuw schrijven (30.000 regels, maanden). De middenweg, als de lat niet gehaald wordt: eerst tekenen met
     WebGL, dan het zwaarste rekenwerk in een Web Worker of WebAssembly (`verpakken.md`, "Een native exe?").
+    **Marcel koos (4 okt): "snelheid, middenweg is goed."** Het gaat om de snelheid, niet om consoles: JavaScript en
+    Electron blijven, en haalt het spel de lat niet, dan de middenweg. Nog open: **a** (deze lat?) en **b** (de
+    proefverpakking voor zijn pc nu, of bij het echte verpakken in januari?).
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
