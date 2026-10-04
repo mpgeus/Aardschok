@@ -44,9 +44,9 @@ lopen (vraag 119, D en A; Marcel: "ja push main"), en sinds de zevenentwintigste
 Marcel: "2 ja push main"), en de reparatie van het laden (Marcel: "ja push main"). Sinds de achtentwintigste sessie
 ook het inpakken van de vellen (vraag 114, 2a) en de snelheid via Steam (vraag 122; Marcel: "push main"). De
 proefplaten van de negenentwintigste sessie (vraag 114, 2b en 2c: de huizenbouwer, niets in het spel) staan er ook in
-(Marcel: "Push alles maar en zet alles op main"). Het werk van de dertigste sessie (een vel per tekening, de figuren, de
-meter en de proef met schermafdrukken) staat op de branch `ccr-93c2a635-0b74w6`, nog niet in `main`. Hoe een eigen
-branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+(Marcel: "Push alles maar en zet alles op main"). Ook het werk van de dertigste sessie (een vel per tekening, de
+figuren, de meter en de proef met schermafdrukken; Marcel: "Ja maar main"). Hoe een eigen branch en `main` samengaan,
+staat in `CLAUDE.md`, onder Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
 huizen"): een weg gaat om wat vaststaat, wie onderweg een ander treft, wacht, schuift langs hem, laat hem opzij gaan of
@@ -88,12 +88,10 @@ valt om op de akkers zonder kalender), en een toets in `bewoners.test.cjs` faalt
 
 **Waar de volgende sessie begint:** **vraag 114: de huizen in het spel, stap 2: de vier bouwstijlen** (het plan staat bij
 vraag 114, onder "Plan voor de huizen in het spel"; Marcel koos de vier stijlen): de stijl per land, met de tekeningen in
-vier standen, de daken per trede en baksteen na de steenbakkerij. Begin met een plan voor Marcel met de aantallen: sinds
-stap 1 is het geheugen de grens niet meer, wel de tijd van het renderen en de grootte van de opslagplaats (alles samen
-gerekend, vier stijlen maal 21 ontwerpen maal vier standen maal de daken, worden het er zo'n duizend: bijna drie uur
-renderen, want 23 huizen kostten nu vier minuten);
-en of een huis dat er al staat een nieuw dak krijgt bij een nieuwe trede, of alleen wat daarna gebouwd wordt of
-doorgroeit. Meet met `npm run schermen`. Dan stap 3, de herberg, de kapel en de woontoren. **Vraag 121 is besloten**
+vier standen, de daken per trede en baksteen na de steenbakkerij. Het dak is besloten (Marcel: "Alleen als het
+doorgroeit of gebouwd wordt daarna"); hoeveel ontwerpen per soort, wacht op Marcel (het antwoord van Claude staat bij
+vraag 114, na "Stap 1b gebouwd": drie per soort en twee boerderijen, 432 samen, en eerst één stijl helemaal). Meet met
+`npm run schermen`. Dan stap 3, de herberg, de kapel en de woontoren. **Vraag 121 is besloten**
 (hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁", en "121 a terrassen, b ja, c na de
 boeren"): terrassen met wanden en hellingen, en de hoogte raakt het lopen, het zicht en het bouwen; na de boeren, vóór
 het eiland. Een proefplaat van de hoogte kan met die van de huizen mee. **Vraag 122** (de snelheid via Steam;
@@ -4056,6 +4054,25 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Stap 1b gebouwd (4 okt, dertigste sessie; zie onder Af):** de figuren laden net zo, als hun wezen op de kaart
     staat. Bij het begin 81 MB aan plaatjes; de twintig schermafdrukken byte voor byte dezelfde als na stap 1. De
     volgende stap is 2, de vier bouwstijlen.
+    **Marcel (4 okt, dertigste sessie): "En optie 2 over het dak. Alleen als het doorgroeit of gebouwd wordt daarna."**
+    Dus een huis krijgt het dak van de trede waarin het gebouwd wordt of doorgroeit; wat er al staat, houdt zijn dak, en
+    aan de daken zie je de geschiedenis van het dorp. En hij vroeg: "Hoeveel ontwerpen zijn acceptabel?"
+    **Antwoord van Claude (wacht op Marcel):** het geheugen is geen grens meer (een spel heeft één stijl, en laadt
+    alleen wat er staat). De grenzen zijn nu de tijd van het renderen (een huis kost zo'n 40 seconden rekenen, hier op
+    vier kernen 10 seconden per huis, en een bouwfase per ontwerp en stand ook) en de opslagplaats: een huis is zo'n 60
+    kB, die is nu 44 MB, en elke keer dat de huizenbouwer zo verandert dat alle huizen anders worden, komt de hele reeks
+    er in de geschiedenis bij (elke sessie in de cloud haalt die geschiedenis op). Gerekend, met de daken per trede
+    (riet of spanen, leien, pannen) en baksteen pas met een steenbakkerij:
+    - **drie ontwerpen per soort, twee boerderijen** (voorstel): per stijl 12 hutten (die houden riet of spanen: een hut
+      is een hut), 36 huizen, 36 stenen huizen (natuursteen onder leien of pannen, baksteen onder pannen) en 24
+      boerderijen, samen 108; vier stijlen 432 tekeningen, met hun bouwfasen zo'n twee uur renderen, en de opslagplaats
+      van 44 naar zo'n 90 MB. In één straat van tien huizen herhaalt er zelden een (drie ontwerpen maal vier standen
+      maal het dak van wanneer het gebouwd werd);
+    - **twee per soort:** 80 per stijl, 320 samen, anderhalf uur, zo'n 80 MB;
+    - **alle ontwerpen van nu** (4 hutten, 6 huizen, 6 stenen huizen, 5 boerderijen): 220 per stijl, bijna 900 samen,
+      vijf uur, en de opslagplaats drie keer zo groot.
+    En eerst één stijl helemaal in het spel (renderen, de maker, de daken, nakijken met `npm run schermen`), dan de
+    andere drie in één keer: zo kost een fout één stijl renderen en niet vier.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
