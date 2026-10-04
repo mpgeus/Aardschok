@@ -35,7 +35,7 @@ de ramen van wie thuis is. **Sinds vraag 112** is elk spel een ander land van 10
 en het nummer van het land staat bij Nieuw spel; een houthakker hoort bij het bos, een steengroeve bij de rotsen, een
 visser aan het water. **Sinds vraag 119** lopen de mensen om wat vaststaat, en lossen ze onderweg op wie er staat:
 wachten, langs elkaar, opzij. **Sinds vraag 120** blijft wie vrij is en toevallig een buur of iemand van zijn werk
-treft, soms staan voor een praatje, met een wolkje boven wie praat. `npm test`: 908/908.
+treft, soms staan voor een praatje, met een wolkje boven wie praat. `npm test`: 919/919.
 
 **Waar het werk staat:** in `main` (4 okt; Marcel: "ja" op "push main") staan de snelheid van 3 okt (vraag 113, de
 meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
@@ -46,8 +46,9 @@ ook het inpakken van de vellen (vraag 114, 2a) en de snelheid via Steam (vraag 1
 proefplaten van de negenentwintigste sessie (vraag 114, 2b en 2c: de huizenbouwer, niets in het spel) staan er ook in
 (Marcel: "Push alles maar en zet alles op main"). Ook het werk van de dertigste sessie (een vel per tekening, de
 figuren, de meter en de proef met schermafdrukken; Marcel: "Ja maar main"). Het werk van de eenendertigste sessie (de
-bouwstijl wit, vraag 114, stap 2a) staat op branch `ccr-32a5a0e4-w5loh4`, gepusht en met `main` samengevoegd, maar
-nog niet in `main`; dat van WebGL staat sinds 4 okt in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+bouwstijl wit, vraag 114, stap 2a) staat op branch `ccr-32a5a0e4-w5loh4`, gepusht en met `main` samengevoegd (ook
+met het licht), maar nog niet in `main`; WebGL (vraag 123) en het licht (vraag 125: A en C, en de proefplaat van B) staan
+sinds 4 okt in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
 huizen"): een weg gaat om wat vaststaat, wie onderweg een ander treft, wacht, schuift langs hem, laat hem opzij gaan of
@@ -110,8 +111,11 @@ bouwt een huis als één 3D-huis met deur, ramen en vakwerk vast op alle vier de
 plaats van het te spiegelen, zodat de vier standen de vier aanzichten zijn. De schets staat bij vraag 114 ("Schets voor
 de draaibare huizen"): eerst nader lezen in `huis-sdf.cjs` (`maakStukken`, `stuk`, `verdeel`, de uitbouwen), dan een plan
 voor Marcel. Daarna wit opnieuw door de bouwer, nu met alle bouwfasen (`bouwfasen.cjs --erbij`; Marcel: "ik wil overal
-bouwfase"), en dan stap 2b, de andere drie stijlen, elk met een eigen drietal vormen (Marcel: "B ja"), en stap 3, de
-herberg, de kapel en de woontoren, meteen draaibaar. Nog open bij vraag 114: **G**, of een huis dat doorgroeit ook in
+bouwfase") en zonder de ingebakken schaduw op de vloer: de schaduwen gaan met de zon mee (vraag 125, B; Marcel: "A ja, B
+goed zo"), en de schakelaar daarvoor maakt de sessie van het licht in de bouwer (Marcel: "A"; waar hij zit, staat bij
+vraag 125). Render de huizen in `tegels/` pas opnieuw als die schakelaar er is, zodat ze maar één keer gaan. En dan
+stap 2b, de andere drie stijlen, elk met een eigen drietal vormen (Marcel: "B ja"), en stap 3, de herberg, de kapel en
+de woontoren, meteen draaibaar. Nog open bij vraag 114: **G**, of een huis dat doorgroeit ook in
 fases oprijst (voorstel: de laatste drie fases over zijn bouwtijd, en de mensen blijven erin wonen). **Vraag 121 is besloten**
 (hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁", en "121 a terrassen, b ja, c na de
 boeren"): terrassen met wanden en hellingen, en de hoogte raakt het lopen, het zicht en het bouwen; na de boeren, vóór
@@ -5150,7 +5154,8 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   (`test/bewoners.test.cjs`) faalde ongezaaid in 7 van de 200 dagen, en het was steeds een paar dat om elf uur een
   praatje maakte (vraag 120): wie vrij is, blijft onderweg staan voor een bekende en loopt daarna terug. Geen fout in
   het spel, dus: wie praat of net praatte (`e.praatRust`), is waar hij hoort, en de toets heeft een vast zaad, zoals
-  dertien andere toetsbestanden. Met de uitzondering alleen slaagde hij in 398 van de 400 dagen.
+  dertien andere toetsbestanden. Met de uitzondering alleen slaagde hij in 398 van de 400 dagen. De sessie van het licht
+  vond hem ook (op `main` 2 van de 30 keer); na het samenvoegen met `main` 20 van de 20 keer groen.
 - 4 okt 2026 — **De figuren laden als hun wezen op de kaart staat** (dertigste sessie; vraag 114, stap 1b; Marcel: "C
   meteen erna"). Alle 122 figuurvellen laadden bij het begin (124 MB), ook de monsters van het oude spel, de soldaten,
   de heer en de inner. Nu laadt een figuur met al zijn houdingen pas als zijn wezen op de kaart staat
