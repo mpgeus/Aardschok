@@ -68,6 +68,9 @@
 //   deur        'voor' (standaard: op een muur die je ziet) of 'achter': de voordeur aan de kant die
 //               je niet ziet, zodat een huis met zijn achterkant naar de kijker staat. Hij wordt dan
 //               niet getekend; voorDeDeur zegt waar hij is.
+//   deurOp      'hoofd': de voordeur op de lange muur van de hoofdvleugel (voor: de +q-kant, achter: de
+//               -q-kant), niet op de muur die het best uitkomt. Zo wijst de deur bij nok 'x' naar +y of -y,
+//               en bij nok 'y' naar +x of -x: de vier standen van een bouwstijl (huizen.cjs, vraag 114).
 //   laag        true: een hut, met lagere muren. Het riet hangt tot vlak boven de deur.
 //   plint       hoe hoog de stenen plint is, in px (standaard 60): laag in het gehucht.
 //   schoorsteen 'steen' (standaard), 'leem' (gevlochten en besmeerd) of false (geen: de rook trekt
@@ -391,6 +394,8 @@ function maten(zaad = 1, o = {}) {
   H.nok = o.nok || 'x';
   // de voordeur op een muur die je ziet, of aan de kant die je niet ziet (ronde 4b; zie "deur" bovenaan)
   H.deurKant = o.deur === 'achter' ? 'achter' : 'voor';
+  // de voordeur alleen op de lange muur van de hoofdvleugel (zie "deurOp" bovenaan)
+  H.deurOp = o.deurOp === 'hoofd' ? 'hoofd' : null;
 
   // --- het materiaal: eerst het dak, dan per vleugel een wand die erbij past. Een zijvleugel is
   // meestal van hetzelfde, maar soms is hij later aangezet in iets anders.
@@ -608,7 +613,10 @@ function maten(zaad = 1, o = {}) {
   const schoorH = Math.min(118 + 20 * r(71), H.lagen === 2 ? H.h1 - 26 : 140);
   // o.schoor: true of false; zonder beslist het zaad (ronde 4b: de huizen van het spel leggen het vast)
   const wilSchoor = o.schoor ?? r(68) < 0.5;
-  H.schoor = sch && gevels.length && wilSchoor ? { P: gevels[Math.floor(r(67) * gevels.length)], f: 0.72 + 0.12 * r(69), uit: 44 + 16 * r(70), h: schoorH } : null;
+  // f is de plek langs de gevel, in beeld van links naar rechts: bij nok 'x' achteraan. Een huis van een bouwstijl
+  // (deurOp) dat gespiegeld is (nok 'y'), keert hem om, anders staat de schoor vooraan en steekt hij buiten zijn voet.
+  const f = 0.72 + 0.12 * r(69);
+  H.schoor = sch && gevels.length && wilSchoor ? { P: gevels[Math.floor(r(67) * gevels.length)], f: H.deurOp === 'hoofd' && H.nok === 'y' ? 1 - f : f, uit: 44 + 16 * r(70), h: schoorH } : null;
   return H;
 }
 
@@ -1326,16 +1334,24 @@ function verdeel(H) {
   let beste = -1;
   // een huis heeft altijd een voordeur: past hij nergens naast wat er al staat, dan toch op de
   // beste muur. Behalve als hij aan de kant zit die je niet ziet (o.deur: 'achter'): dan krijgen de
-  // muren die je ziet alleen ramen, en zet achterDeurVan hem achter het huis.
-  for (const streng of H.deurKant === 'achter' ? [] : [true, false]) {
-    for (const P of H.stukken) {
-      if (P.U || P.s !== 0 || P.Lu < 120 || P.zicht < 0.6) continue;
-      if (streng && (P.bezet.length || P.openingen.length) && !deurZones(P).length) continue;
-      const w = P.Lu * P.zicht * (P.zijde === 'q' ? 1.6 : 1) * (P.V.i === 0 ? 1.15 : 1);
-      if (w > beste) {
-        beste = w;
-        deurStuk = P;
+  // muren die je ziet alleen ramen, en zet achterDeurVan hem achter het huis. Met o.deurOp 'hoofd'
+  // eerst alleen op een muur die dezelfde kant op kijkt als de lange muur van de hoofdvleugel (bij een T
+  // of L met de vleugel naar voren ook de gevel van die vleugel), zoals achterDeurVan aan de andere
+  // kant; een smalle muur mag dan ook, want een hut is klein.
+  const V0 = H.vleugels[0];
+  for (const hoofd of H.deurOp === 'hoofd' ? [true, false] : [false]) {
+    for (const streng of H.deurKant === 'achter' ? [] : [true, false]) {
+      for (const P of H.stukken) {
+        if (P.U || P.s !== 0 || P.Lu < (hoofd ? 90 : 120) || P.zicht < 0.6) continue;
+        if (hoofd && P.N[0] * V0.Qx + P.N[1] * V0.Qy < 0.9) continue;
+        if (streng && (P.bezet.length || P.openingen.length) && !deurZones(P).length) continue;
+        const w = P.Lu * P.zicht * (P.zijde === 'q' ? 1.6 : 1) * (P.V.i === 0 ? 1.15 : 1);
+        if (w > beste) {
+          beste = w;
+          deurStuk = P;
+        }
       }
+      if (deurStuk) break;
     }
     if (deurStuk) break;
   }

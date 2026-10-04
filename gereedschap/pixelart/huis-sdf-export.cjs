@@ -10,6 +10,7 @@
 //   node gereedschap/pixelart/huis-sdf-export.cjs uitbouwen uit/proefhuis/uitbouwen.png
 //   node gereedschap/pixelart/huis-sdf-export.cjs ladder    uit/proefhuis/ladder.png (ronde 4b)
 //   node gereedschap/pixelart/huis-sdf-export.cjs afwisseling  uit/proefhuis/afwisseling.png (vraag 114, 2b)
+//   node gereedschap/pixelart/huis-sdf-export.cjs stijl wit    uit/proefhuis/stijl-wit.png (vraag 114, 2a: een bouwstijl)
 //   node gereedschap/pixelart/huis-sdf-export.cjs verhouding   uit/proefhuis/verhouding.png (vraag 114, 2c)
 //   node gereedschap/pixelart/huis-sdf-export.cjs steen        uit/proefhuis/steen.png (de steen van de torens)
 //
@@ -1107,6 +1108,32 @@ const STEEN_PLAAT = [
   },
 ];
 
+// stijl-<naam>.png (werklijst vraag 114, stap 2a; Marcel, 4 okt: "A ja B ja C ik wil overal bouwfase voor"): een
+// bouwstijl zoals het spel hem krijgt (huizen.cjs, STIJLEN): zijn vormen, een huis en een hut in de vier standen, de
+// daken van de treden en de steen, en drie straatjes: het gehucht, een dorp (wat nieuw is of doorgroeit, krijgt leien)
+// en marktrecht met een steenbakkerij.
+function stijlRijen(stijl) {
+  const { STIJLEN, stijlNaam } = require('./huizen.cjs');
+  const S = STIJLEN[stijl];
+  if (!S) throw new Error(`geen stijl "${stijl}" (huizen.cjs, STIJLEN: ${Object.keys(STIJLEN).join(', ')})`);
+  const KANT = { z: 'zuid', o: 'oost', n: 'noord', w: 'west' };
+  const leesbaar = (vorm) => vorm.replace(/(\D+)(\d+)/, (_, s, n) => `${s === 'steen' ? 'stenen huis' : s} ${n}`);
+  const p = (vorm, dak, stand, naam) => [naam || `${leesbaar(vorm)}, ${dak}`, { spec: VORM(stijlNaam(stijl, vorm, dak, stand)) }];
+  const [h1, h2, h3] = S.huis;
+  const [s1, s2, s3] = S.huis.map((v) => v.replace('huis', 'steen'));
+  const [t1, t2, t3] = S.hut;
+  const [b1, b2] = S.boerderij;
+  const d = S.dak;
+  return [
+    { naam: `de vormen van ${stijl}`, panelen: [...S.hut.map((v) => p(v, d, 'z')), ...S.huis.map((v) => p(v, d, 'z')), ...S.boerderij.map((v) => p(v, d, 'z'))] },
+    { naam: 'in de vier standen: de deur naar zuid, oost, noord en west', panelen: [...['z', 'o', 'n', 'w'].map((k) => p(h3, d, k, `${leesbaar(h3)}, deur ${KANT[k]}`)), ...['z', 'o', 'n', 'w'].map((k) => p(t3, d, k, `${leesbaar(t3)}, deur ${KANT[k]}`))] },
+    { naam: 'de daken van de treden, en de steen', panelen: [p(h1, d, 'z'), p(h1, 'leien', 'z'), p(h1, 'pannen', 'z'), p(s1, 'leien', 'z'), p(s1, 'pannen', 'z'), p(s1, 'baksteen', 'z')] },
+    { naam: `het gehucht: ${d}`, panelen: [p(t2, d, 'o'), p(h1, d, 'z'), p(t3, d, 'w'), p(b2, d, 'z'), p(h2, d, 'n'), p(t1, d, 'z')] },
+    { naam: 'een dorp: wat nieuw is of doorgroeit, krijgt leien', panelen: [p(h3, 'leien', 'o'), p(h1, d, 'z'), p(s2, 'leien', 'z'), p(t1, d, 'w'), p(b1, 'leien', 'z'), p(h2, 'leien', 'n')] },
+    { naam: 'marktrecht, met een steenbakkerij: pannen, en baksteen', panelen: [p(s1, 'baksteen', 'z'), p(h2, 'pannen', 'o'), p(s3, 'pannen', 'n'), p(h1, 'leien', 'z'), p(s2, 'baksteen', 'w'), p(b2, 'pannen', 'z')] },
+  ];
+}
+
 // Een plaat met rijen panelen, elke rij op één grondlijn (verhouding.png, steen.png).
 async function rijenPlaat(RIJEN, bestand) {
   const S = STROOK;
@@ -1156,6 +1183,10 @@ if (isMainThread && require.main === module) {
     afwisseling().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'verhouding' || wat === 'steen') {
     rijenPlaat(wat === 'steen' ? STEEN_PLAAT : VERHOUDING, `${wat}.png`).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
+  } else if (wat === 'stijl') {
+    // node huis-sdf-export.cjs stijl wit: een bouwstijl van het spel (huizen.cjs, STIJLEN)
+    const stijl = process.argv[3] || 'wit';
+    rijenPlaat(stijlRijen(stijl), `stijl-${stijl}.png`).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'een') {
     // één huis naar keuze: een <vorm> <lagen> <zaad> [nok] [sleutel=waarde ...]; schrijft het
     // paneel en het huis twee keer vergroot. snede=x,y,b,h kiest een uitsnede voor het vergrote.
@@ -1190,7 +1221,7 @@ if (isMainThread && require.main === module) {
     vergelijk();
     if (wat === 'knoppen') knoppen();
   }
-  if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen', 'stijl'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 }
 
 module.exports = { paneelNu, paneelProef, paneelHuis, paneelSamen, paneelTuin, paneelTuintje, paneelZes, kaderVan, grondZon };

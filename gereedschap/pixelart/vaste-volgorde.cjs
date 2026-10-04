@@ -53,4 +53,20 @@ function vasteVolgordeEnCapaciteit(map, veldNaam, items, capaciteit, kolommen) {
   return uit;
 }
 
-module.exports = { vasteVolgordeEnCapaciteit };
+// Hoeveel vakken het vel nodig heeft als deze sleutels erop moeten, zonder iets te schrijven: zoals
+// vasteVolgordeEnCapaciteit hierboven telt, een nieuwe sleutel achteraan en afgerond op een hele rij. Zo kan wie lang
+// rendert (naar-tiled.cjs, de huizen) vooraf zien of het past.
+function nodigeCapaciteit(map, veldNaam, sleutels, kolommen) {
+  let volgorde = [];
+  try {
+    volgorde = JSON.parse(fs.readFileSync(path.join(map, `${veldNaam}.volgorde.json`), 'utf8'));
+  } catch (e) {
+    // nog niets bevroren
+  }
+  let n = volgorde.length;
+  const nieuw = sleutels.filter((k) => !volgorde.includes(k)).length;
+  if (nieuw) n = Math.ceil((n + nieuw) / kolommen) * kolommen;
+  return n;
+}
+
+module.exports = { vasteVolgordeEnCapaciteit, nodigeCapaciteit };

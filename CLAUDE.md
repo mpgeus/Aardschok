@@ -332,6 +332,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwmenu staat, zegt `T.inBouwmenu`: het erf, en de woningen niet, tenzij de spelregel "Huizen" anders zegt. Op
   een akker, een weide, een pad of een erf bouw je niet (`T.waaromNietOpDezeGrond`). De paaltjes op een vrij erf
   tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`).
+- `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
+  (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
+  met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
+  de kant van de deur (`T.deurKantVan`, `T.metDeurNaar`), want een stand is in het spel die van de mensen (`T.STANDEN`,
+  `T.standVan` in `js/wensen.js`). Een nieuw huis krijgt het dak van de trede (dat van het gehucht, leien in een dorp,
+  pannen met marktrecht), en een stenen huis baksteen pas met een steenbakkerij (`T.stijlTekeningen`, via
+  `T.tekeningenVan` en `T.volgendeTekening` in `js/gebouwen.js`); wie doorgroeit, houdt zijn kant en krijgt het dak van nu
+  (`T.zoalsNu`, `kiesGroei` in `js/behoeften.js`). Op een erf kijkt de deur naar de weg en staat het huis achteraan
+  (`T.zijdenNaarDeWeg`, `js/erven.js`), een verzoek keert zijn deur naar de weg (`T.keerNaarDeWeg`, `js/verzoeken.js`),
+  en de maker zet een huis ook vóór het plein, met zijn deur ernaartoe (`T.vormenVanStijl`). Elke tekening zegt in
+  `tegels.js` wat ze is (`stijl`), uit `STIJLEN` in `gereedschap/pixelart/huizen.cjs`.
 - `js/paden.js`: **de paadjes en de lantaarns** (vraag 108, b en d, 3 okt): van elke deur een paadje naar de weg, of naar
   het paadje van een buur (`T.aangelegdNet`, uit de kaart en de gebouwen, niet in S: na `T.kaartVeranderd` opnieuw, met
   `T.kaartVersie` in `js/wereld.js`); waar mensen lopen, slijt het gras (`T.telStap` vanuit `js/anim.js`, een dier telt
@@ -623,8 +634,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar.
   `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel. De huizen komen van de huizenbouwer
-  (`huis-sdf.cjs`); welke het spel heeft, staat in `huizen.cjs` (vel `tegels/huizen.png`), elk met
-  zijn voet en de tegel voor zijn deur, waar `T.deurVan` (`js/bewoners.js`) de bewoners heen stuurt.
+  (`huis-sdf.cjs`); welke het spel heeft, staat in `huizen.cjs` (elk een eigen bestand in `tegels/huizen/`), elk met
+  zijn voet en de tegel voor zijn deur, waar `T.deurVan` (`js/bewoners.js`) de bewoners heen stuurt. De bouwstijlen
+  staan daar ook (`STIJLEN`, vraag 114, stap 2): per stijl 108 tekeningen, elke vorm in vier standen onder elk dak, met
+  zijn `stijl` in `tegels.js`; `node gereedschap/pixelart/huis-sdf-export.cjs stijl wit` maakt er de proefplaat van, en
+  `bouwfasen.cjs --erbij` rendert alleen de bouwfasen die er nog niet zijn (een nieuwe stijl kost zo ruim twee uur, niet
+  drie).
   Elk vel gaat ingepakt naar het spel (`inpakken.cjs`): een raster kost de browser elke lege pixel, en een
   vel groter dan 8192 pixels laadt niet elke videokaart. Een leeg vak in een vel kost dus niets meer.
 - Het spel tekent met sprites zodra `beelden/` er is, en anders met vlakken. Wat de kunst niet

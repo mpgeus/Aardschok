@@ -2983,6 +2983,15 @@ erf zie je aan paaltjes op zijn hoeken. Stap 1 van de proef "van gehucht tot dor
 
 ### Beter bouwen: hetzelfde huis in duurder materiaal
 
+**Zo werkt het nu** (4 okt, werklijst vraag 114, stap 2a): een land van de maker bouwt in een bouwstijl (`js/bouwstijl.js`;
+de eerste is wit: wit vakwerk, groene luiken, veldsteen, riet). Een huis dat gebouwd wordt of doorgroeit, krijgt het dak
+van de trede: riet in het gehucht, leien in een dorp, pannen met marktrecht; wat er al staat, houdt zijn dak, dus aan de
+daken zie je hoe het dorp groeide. Een stenen huis is het stenen broertje van zijn huis, in veldsteen, en in baksteen pas
+als het dorp een steenbakkerij heeft. Een hut blijft onder riet. Op een erf kijkt de deur naar de weg, met de moestuin
+ervoor; een verzoek (een boerderij) keert zijn deur ook naar de weg. Het ontworpen gehucht heeft geen stijl en bouwt met
+de huizen van ronde 4b, zoals altijd. Wat volgt: de andere drie stijlen (2b), en de herberg, de kapel en de woontoren
+(stap 3).
+
 - Nu wordt een groeiend huis een andere tekening. Voorstel: het blijft hetzelfde huis, met dezelfde
   vorm op dezelfde plek, en krijgt stap voor stap beter materiaal. Je herkent het huis van Klaas, nu
   met pannen. De huizenbouwer kan dat al, want bij hem is materiaal een keuze naast de vorm.

@@ -97,6 +97,60 @@ const HUIZEN = {
   herberg1: { gebouw: 'herberg', trede: 2, fasen: false, zaad: 53, vorm: 'T', b: 11, d: 5, b2: 4, p2: 3, voor: false, lagen: 1.5, nok: 'y', dak: 'riet', wand: 'vakwerk', plint: 40, schoorsteen: 'leem', schoor: false, uit: { kapellen: 3, luiken: true, bakken: 2 } },
 };
 
+// ---------------------------------------------------------------- de bouwstijlen
+
+// Elk land bouwt in één stijl (werklijst vraag 114, stap 2; Marcel, 4 okt: de vier stijlen, "ja drie per soort, hutten
+// houden riet", en voor de eerste "A ja B ja C ik wil overal bouwfase voor"): de kalk op het vakwerk, de kleur van de
+// luiken, de natuursteen en het dak van het gehucht, met per soort drie eigen vormen uit de huizen hierboven (twee
+// boerderijen); het stenen huis is het stenen broertje van een huis van de stijl. Elke vorm komt in de vier standen
+// hieronder, onder het dak van elke trede: dat van het gehucht (riet, of spanen), leien in een dorp, pannen met
+// marktrecht; een stenen huis in de natuursteen van zijn stijl onder leien of pannen, en in baksteen onder pannen (pas
+// met een steenbakkerij). Een hut houdt het dak van het gehucht, en heeft geen luiken. Alles met bouwfasen. De maker
+// geeft elk land een stijl (js/maker.js), en het spel zoekt een tekening op met T.stijlTekening (js/gebouwen.js), uit
+// `stijl` bij elke tekening in tegels.js (naar-tiled.cjs).
+const STIJLEN = {
+  // (1) wit vakwerk, groene luiken, veldsteen (Marcel, 4 okt, "A ja": hut 1, 3 en 4, huis 1, 3 en 6, boerderij 1 en 4)
+  wit: { kalk: 'wit', luiken: 'den', steen: 'veldsteen', dak: 'riet', hut: ['hut1', 'hut3', 'hut4'], huis: ['huis1', 'huis3', 'huis6'], boerderij: ['boerderij1', 'boerderij4'] },
+};
+// De vier standen: de deur naar zuid (+y), oost (+x), noord (-y) of west (-x), altijd op de lange muur van de
+// hoofdvleugel (deurOp in huis-sdf.cjs). Bij nok 'y' is het huis gespiegeld in de diagonaal; met de deur achter staat
+// het met zijn achterkant naar de kijker (Marcel, 27 sep: "Ja dat mag, geeft het wat meer leven").
+const STANDEN = { z: { nok: 'x', deur: 'voor' }, o: { nok: 'y', deur: 'voor' }, n: { nok: 'x', deur: 'achter' }, w: { nok: 'y', deur: 'achter' } };
+// De naam van een tekening van een stijl, "<stijl>-<vorm>-<dak>-<stand>"; een stenen huis van baksteen heeft
+// "baksteen" waar het dak staat (het ligt altijd onder pannen). Dezelfde afspraak als T.stijlNaam in js/gebouwen.js.
+const stijlNaam = (stijl, vorm, dak, stand) => `${stijl}-${vorm}-${dak}-${stand}`;
+
+// De opgaven van alle stijlen, elk met `stijl`: { stijl, vorm, soort, dak, steen, stand } (naar-tiled.cjs zet het bij
+// de tekening in tegels.js). Een vorm houdt het zaad en de uitbouwen van zijn huis hierboven.
+function stijlHuizen() {
+  const uit = {};
+  for (const [stijl, S] of Object.entries(STIJLEN)) {
+    const zet = (soort, vorm, basis, daken, extra = {}) => {
+      for (const [dak, steen] of daken) {
+        for (const [stand, st] of Object.entries(STANDEN)) {
+          const naam = stijlNaam(stijl, vorm, steen === 'baksteen' ? 'baksteen' : dak, stand);
+          uit[naam] = {
+            ...basis, ...extra, gebouw: soort, nok: st.nok, deur: st.deur, deurOp: 'hoofd', dak, kalk: S.kalk,
+            ...(steen ? { steen } : {}),
+            stijl: { stijl, vorm, soort, dak, steen: steen || null, stand },
+          };
+        }
+      }
+    };
+    const metLuiken = (basis) => ({ ...(basis.uit || {}), luiken: S.luiken });
+    const daken = [[S.dak], ['leien'], ['pannen']];
+    for (const vorm of S.hut) zet('hut', vorm, HUIZEN[vorm], [[S.dak]]);
+    for (const vorm of S.huis) {
+      zet('huis', vorm, HUIZEN[vorm], daken, { uit: metLuiken(HUIZEN[vorm]) });
+      const broertje = vorm.replace('huis', 'steen');
+      zet('stenenHuis', broertje, HUIZEN[broertje], [['leien', S.steen], ['pannen', S.steen], ['pannen', 'baksteen']], { uit: metLuiken(HUIZEN[vorm]) });
+    }
+    for (const vorm of S.boerderij) zet('boerderij', vorm, HUIZEN[vorm], daken, { uit: metLuiken(HUIZEN[vorm]) });
+  }
+  return uit;
+}
+Object.assign(HUIZEN, stijlHuizen());
+
 // ---------------------------------------------------------------- meten: voet en deur
 
 // Welke tegels het huis beslaat en waar zijn deur is, gemeten aan de wereld zelf. Het raster van
@@ -632,7 +686,7 @@ function renderHuizen(namen = Object.keys(HUIZEN), draden = DRADEN()) {
   });
 }
 
-module.exports = { HUIZEN, FASEN, renderHuis, renderHuizen, renderHuisFasen, meetHuis };
+module.exports = { HUIZEN, STIJLEN, STANDEN, stijlNaam, FASEN, renderHuis, renderHuizen, renderHuisFasen, meetHuis };
 
 // node gereedschap/pixelart/huizen.cjs [naam ...]: de huizen los op een proefplaat, met hun voet
 // (een ruit) en de tegel voor hun deur (een punt), om te zien of die kloppen. Naar

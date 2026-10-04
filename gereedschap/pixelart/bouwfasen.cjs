@@ -68,6 +68,8 @@
 //   node gereedschap/pixelart/bouwfasen.cjs            alle gebouwen hieronder (BUILDINGEN)
 //   node gereedschap/pixelart/bouwfasen.cjs kippenhok   alleen kippenhok (snel proberen: alleen de
 //                                                        proefplaat, het spelvel blijft staan)
+//   node gereedschap/pixelart/bouwfasen.cjs --erbij     alleen wat nog geen fasen heeft (een nieuwe
+//                                                        bouwstijl), de rest blijft staan
 //
 // Uitvoer:
 //   gereedschap/pixelart/uit/bouwfasen/<tekening>.png   per gebouw, de vijf fases naast elkaar
@@ -655,12 +657,16 @@ function schrijfOverzicht(resultaten) {
 //
 // `resultaten`: per gebouw { id, tekening, cb, ch, ankerX, ankerY, beslaat, fasenNamen, beelden }, met `beelden` de
 // fases als beeld van cb bij ch (inpakken.cjs), het anker voor allemaal op (ankerX, ankerY).
-function schrijfSpelVel(resultaten) {
+//
+// `bestaand` (met --erbij): de fasen die er al zijn (bouwfasen.json); die blijven staan, en de nieuwe komen erachter.
+function schrijfSpelVel(resultaten, bestaand = null) {
   const MAP = path.join(TEGELS, 'bouwfasen');
-  fs.rmSync(MAP, { recursive: true, force: true });
+  if (!bestaand) {
+    fs.rmSync(MAP, { recursive: true, force: true });
+    fs.rmSync(path.join(TEGELS, 'bouwfasen.png'), { force: true }); // het ene vel van vóór 4 okt
+  }
   fs.mkdirSync(MAP, { recursive: true });
-  fs.rmSync(path.join(TEGELS, 'bouwfasen.png'), { force: true }); // het ene vel van vóór 4 okt
-  const fasenJson = {};
+  const fasenJson = { ...(bestaand || {}) };
   let pixels = 0;
   for (const r of resultaten) {
     const rij = I.leegBeeld(r.cb * r.beelden.length, r.ch);
@@ -711,10 +717,14 @@ function schrijfSpelVel(resultaten) {
 
 async function main() {
   const GEVRAAGD = process.argv.slice(2).filter((a) => !a.startsWith('-'));
+  // --erbij: alleen de gebouwen die nog geen fasen hebben in tegels/bouwfasen.json (een nieuwe bouwstijl, vraag 114),
+  // en de rest blijft staan. Zonder: alles opnieuw, zoals na een verandering aan de bouwer.
+  const bestaand = process.argv.includes('--erbij') ? JSON.parse(fs.readFileSync(path.join(TEGELS, 'bouwfasen.json'), 'utf8')).fasen : null;
   const indices = BUILDINGEN
     .map((b, i) => i)
-    .filter((i) => !GEVRAAGD.length || GEVRAAGD.includes(BUILDINGEN[i].id) || GEVRAAGD.includes(BUILDINGEN[i].tekening));
-  if (!indices.length) { console.error('geen gebouw gevonden voor:', GEVRAAGD.join(' ')); process.exit(1); }
+    .filter((i) => !GEVRAAGD.length || GEVRAAGD.includes(BUILDINGEN[i].id) || GEVRAAGD.includes(BUILDINGEN[i].tekening))
+    .filter((i) => !bestaand || !bestaand[BUILDINGEN[i].tekening]);
+  if (!indices.length) { console.error(bestaand ? 'alle gebouwen hebben al fasen' : `geen gebouw gevonden voor: ${GEVRAAGD.join(' ')}`); process.exit(1); }
   const draden = Math.max(1, Math.min(6, os.cpus().length - 1, indices.length));
   console.log(`bouwfasen: ${indices.length} gebouw(en), ${draden} draad/draden`);
   const t0 = Date.now();
@@ -729,7 +739,7 @@ async function main() {
     console.log('  spelvel niet geschreven: dat gebeurt alleen als alle gebouwen gerenderd zijn (zonder namen)');
     return;
   }
-  const { gebouwen, mb } = schrijfSpelVel(resultaten.map((r) => ({ ...r, beelden: r.platen.map(I.beeldVanPlaat) })));
+  const { gebouwen, mb } = schrijfSpelVel(resultaten.map((r) => ({ ...r, beelden: r.platen.map(I.beeldVanPlaat) })), bestaand);
   console.log(`  spelvellen: tegels/bouwfasen/ (${gebouwen} gebouwen, samen ${mb} MB in de browser) + tegels/bouwfasen.json + .js`);
 }
 

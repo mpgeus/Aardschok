@@ -108,8 +108,9 @@ const pngVan = (vel, t) => velPng(t.bestand || vel.bestand);
 // om het model (RAND in naar-tiled.cjs) zijn vaste maten, geen percentage van de voet. Gemeten aan
 // de schuur vóór de fix (git-geschiedenis: tegels.json se erf.anker ging van [126, 129] naar
 // [126, 145]) stak de onderste rij 1,2 tegel over de voorste hoek heen — dus 0,85 speling laat een
-// dakrand met rust maar vangt de oude fout ruim.
-const SPELING = 0.85;
+// dakrand met rust maar vangt de oude fout ruim. Sinds de bouwstijlen (vraag 114, stap 2a) 0,9: de L-hut van de stijl
+// wit met zijn deur op de gevel van zijn vleugel heeft daar een stoep die 0,86 tegel over de voorste hoek steekt.
+const SPELING = 0.9;
 // Bij een klein ding (hooguit 2×2, zoals de houtstapel of het kippenhok) is diezelfde vaste rand
 // al een groot deel van de hele voet, en soms hoort er ook iets bij dat wijder uitwaaiert dan het
 // hoofdgebouwtje (het kippenhok se hek, de overstekende blokken hout op de houtstapel) — die halen

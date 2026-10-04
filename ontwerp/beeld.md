@@ -268,6 +268,28 @@ de bouwstijlen van stap 2, zo'n 500 tekeningen, zou een vel ruim 500 MB worden. 
   als ze komen. Samen nu 81 MB aan plaatjes bij het begin, in plaats van 197 bij het begin van de dag; de twintig vaste
   schermafdrukken bleven byte voor byte dezelfde als na stap 1.
 
+### De eerste bouwstijl: wit (4 okt 2026, werklijst vraag 114, stap 2a)
+
+Marcel: "A ja B ja C ik wil overal bouwfase voor. Dat maakt het toch wel leuker. Kost meer tijd. Maar is eenmalig toch?
+D ja E ja". Elk land van de maker bouwt in één stijl (`STIJLEN` in `gereedschap/pixelart/huizen.cjs`); de eerste is
+**wit**: wit vakwerk, groene luiken, veldsteen en riet, met hut 1, 3 en 4, huis 1, 3 en 6 (en hun stenen broertjes) en
+boerderij 1 en 4 (de vormen van ronde 4b). Elke andere stijl krijgt straks zijn eigen drietal vormen (B), zodat je een
+land ook aan zijn vormen herkent.
+- **Vier standen:** de deur naar zuid, oost, noord of west, altijd op de lange muur van de hoofdvleugel, of (bij een T of
+  een L met de vleugel naar voren) op de gevel die dezelfde kant op kijkt (`deurOp: 'hoofd'` in `huis-sdf.cjs`). Zonder
+  die regel koos de bouwer de muur die het best uitkwam, en dan wezen bij de T twee standen dezelfde kant op. Oost en
+  west zijn gespiegeld in de diagonaal (nok 'y'), noord en west staan met hun achterkant naar je toe. Spiegelen is niet
+  overal een spiegel: de bouwer zet iets langs een muur van links naar rechts in beeld, dus een schoor stond gespiegeld
+  vooraan op zijn gevel en stak buiten de voet; bij een huis van een stijl keert hij die plek nu om. De draaibare huizen
+  (vraag 124, B; Marcel: "124b Ja dan") lossen dat op, want dan ligt alles vast per muur.
+- **De daken van de treden:** een hut houdt riet; een huis en een boerderij komen onder riet, leien en pannen, en een
+  stenen huis in veldsteen onder leien of pannen, en in baksteen onder pannen. Samen 12 hutten, 36 huizen, 36 stenen
+  huizen en 24 boerderijen: 108 tekeningen, elk met bouwfasen.
+- **De proefplaat:** `node gereedschap/pixelart/huis-sdf-export.cjs stijl wit` (de vormen, een huis en een hut in de vier
+  standen, de daken en de steen, en drie straatjes: het gehucht, een dorp, marktrecht met een steenbakkerij).
+- Een huis kost zo'n 35 seconden, zijn vijf bouwfasen ruim drie minuten (op één kern); `bouwfasen.cjs --erbij` rendert
+  alleen wat nog geen fasen heeft.
+
 ## Ontwerpcanvas
 
 https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:
