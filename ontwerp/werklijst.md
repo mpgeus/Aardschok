@@ -4031,7 +4031,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **d, nakijken:** elke nieuwe tekening pixel voor pixel gelijk aan zijn stuk van het oude vel, rond hetzelfde anker;
       vaste schermafdrukken (het gehucht, het overzicht, een bouwplaats, een huis dat doorgroeit) byte voor byte gelijk;
       toetsen erbij; `npm test` groen. Een sessie.
-    Gezien onderweg, niet in deze stap (`opmerkingen.md`, "Het beeld"): ook de figuren laden altijd alles.
+    Gezien onderweg, niet in deze stap: ook de figuren laden altijd alles (werd stap 1b).
     Vragen: **A**, ook de gebouwen, niet alleen de huizen? **B**, zo laden? **C**, de figuren op de lijst, of meteen
     erna?
     **Marcel (4 okt): "A ja B ja C meteen erna".** Dus de huizen en de gebouwen elk een eigen bestand, laden wat er
@@ -4040,6 +4040,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Stap 1 gebouwd (4 okt, dertigste sessie; zie onder Af, en `beeld.md`, "Een vel per tekening").** Bij het begin 153
     MB aan plaatjes in plaats van 197; alle 50 tekeningen pixel voor pixel dezelfde. Erbij: `Spel.debug.vellen()` en
     `npm run schermen` (twintig vaste schermafdrukken, byte voor byte te vergelijken), ook voor stap 2 en 3 en WebGL.
+    **Stap 1b gebouwd (4 okt, dertigste sessie; zie onder Af):** de figuren laden net zo, als hun wezen op de kaart
+    staat. Bij het begin 81 MB aan plaatjes; de twintig schermafdrukken byte voor byte dezelfde als na stap 1. De
+    volgende stap is 2, de vier bouwstijlen.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
@@ -4725,6 +4728,14 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 4 okt 2026 — **De figuren laden als hun wezen op de kaart staat** (dertigste sessie; vraag 114, stap 1b; Marcel: "C
+  meteen erna"). Alle 122 figuurvellen laadden bij het begin (124 MB), ook de monsters van het oude spel, de soldaten,
+  de heer en de inner. Nu laadt een figuur met al zijn houdingen pas als zijn wezen op de kaart staat
+  (`T.sprites.laadWatErStaat`, ook als er iemand bij komt of weggaat; wie maait, krijgt de maaier erbij); wie van figuur
+  wisselt, houdt zijn oude beeld tot het nieuwe er is, en wie net komt, staat er pas als zijn figuur er is
+  (`T.sprites.laadtWezen`, in `tekenWezen`). Gemeten: bij het begin 81 MB aan plaatjes in plaats van 153 (en 197 bij
+  het begin van de sessie); de twintig vaste schermafdrukken byte voor byte dezelfde als na stap 1; een nieuw spel via
+  het menu met de marskramer en drie rovers zonder fouten. `npm test` 908/908.
 - 4 okt 2026 — **Een vel per tekening: de huizen en de gebouwen laden wat er staat** (dertigste sessie; vraag 114,
   stap 1; Marcel: "A ja B ja C meteen erna"). Elke tekening van de huizen en de gebouwen is een eigen bestand
   (`tegels/huizen/`, `tegels/gebouwen/`; `npm run tiled`, `snijLos` in `inpakken.cjs`), en het spel laadt er een pas als

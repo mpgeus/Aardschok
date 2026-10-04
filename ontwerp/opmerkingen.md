@@ -626,12 +626,6 @@ Helpt het niet genoeg (de meter in Firefox, vraag 113, a), dan kan het spel elk 
 (`createImageBitmap`): dan blijft het uitgepakt, maar kost het die 210 MB ook altijd. `img.decode()` bij het laden werkt
 niet: dat wacht in Chromium tot de bladzijde een beeld tekent, en in een verborgen tabblad komt dat niet.
 
-**De figuren laden ook wat er niet is** (4 okt, dertigste sessie, bij het plan voor een vel per tekening; vraag 114,
-stap 1). Alle figuren in `beelden/figuren/` laden bij het begin, samen 124 MB in de browser: ook de monsters van het
-oude spel (kobold, skelet, slijm, reuzenspin: 23 MB), die nu nooit op de kaart komen, en drie kleuren koeien (28 MB),
-ook in een dorp zonder koeien. Dezelfde regel als voor de huizen (laden wat er staat) kan hier ook: een figuur laadt
-als zijn wezen op de kaart komt (een bezoeker die over de weg komt, een monster in een gevecht).
-
 **Een tekening die niet meer op de kaart staat, blijft geladen** (4 okt, dertigste sessie; vraag 114, stap 1). Een huis
 dat doorgroeit, laadt zijn nieuwe tekening, maar de oude blijft in de browser tot de bladzijde herlaadt. In één spel
 is dat begrensd (één bouwstijl, stap 2: hooguit een paar tientallen tekeningen van een MB); wordt het toch te veel, dan

@@ -264,8 +264,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de gebouwen hebben elke tekening in een eigen bestand (`tegels/huizen/`, `tegels/gebouwen/`; `perTekening` en
   `bestand` per tegel in `tegels.js`), dat pas laadt als hij op de kaart staat (`T.sprites.laadWatErStaat`, vanuit
   `js/tekenen.js` bij een andere kaart of `T.kaartVersie`); tot dan tekent hij niets, en een huis dat doorgroeit, houdt
-  zijn oude plaatje tot het nieuwe er is (`T.sprites.wachtOp`). Bij het begin zo'n 155 MB aan plaatjes; wat de browser
-  vasthoudt, zegt `Spel.debug.vellen()` (`T.sprites.geladen`).
+  zijn oude plaatje tot het nieuwe er is (`T.sprites.wachtOp`). **De figuren net zo** (stap 1b): een figuur laadt pas
+  als zijn wezen op de kaart staat (wie maait, krijgt de maaier erbij; welke figuur iemand draagt, zegt `figuurNu` bij
+  `T.sprites.houding`), wie van figuur wisselt, houdt zijn oude beeld tot het nieuwe er is, en wie net komt, staat er
+  pas als zijn figuur er is (`T.sprites.laadtWezen`, in `tekenWezen`). Bij het begin zo'n 80 MB aan plaatjes; wat de
+  browser vasthoudt, zegt `Spel.debug.vellen()` (`T.sprites.geladen`).
 - `js/anim.js`: beweging en effecten. `T.anim.*` geeft beloftes, zodat een beurt als gewone
   code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`. Wie loopt, loopt op een kaart
   (`T.beweegWezens(S, w, ...)`): waar je bent, of een dorp waar je niet bent (`js/dorp.js`).

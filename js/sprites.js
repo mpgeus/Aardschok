@@ -72,10 +72,9 @@
       if (gegevens.paaltje) vellen.push(gegevens.paaltje.bestand);
       if (gegevens.meiboom) vellen.push(gegevens.meiboom.bestand);
       if (gegevens.tekens) vellen.push(gegevens.tekens.bestand);
+      // De figuren laden hier niet: een figuur komt pas als zijn wezen op de kaart staat (S.laadWatErStaat, vraag 114,
+      // stap 1b).
       const lijst = vellen.map((f) => MAP + f);
-      for (const f of Object.values(gegevens.figuren)) {
-        for (const h of Object.values(f.houdingen)) lijst.push(MAP + 'figuren/' + h.bestand);
-      }
       // De vellen van buiten staan los: gaat daar iets mis, dan tekent het spel buiten vlakken
       // en binnen nog gewoon zijn pixel art. De bouwfasen laden hier niet: elk gebouw heeft zijn
       // eigen vel, dat pas komt als er een in aanbouw staat (S.bouwfase hieronder); en de huizen
@@ -119,12 +118,28 @@
     const t = v && v.perTekening && id != null && v.tiles[id];
     return (t && t.bestand) || null;
   };
-  // Alles op een kaart met een eigen bestand vast laden (js/tekenen.js vraagt het bij een andere kaart, en als er iets op
-  // veranderde: een nieuw gebouw, een huis dat doorgroeit), zodat het er is voor het in beeld komt.
+  // De figuren net zo (vraag 114, stap 1b; Marcel: "C meteen erna"): een figuur laadt pas als zijn wezen op de kaart
+  // staat, met al zijn houdingen tegelijk (staan, lopen, slaan, ...). Welke figuur een wezen draagt, zegt figuurNu
+  // hieronder (bij S.houding).
+  const figurenGevraagd = new Set();
+  function laadFiguur(naam) {
+    if (figurenGevraagd.has(naam)) return;
+    const f = S.figuurGegevens(naam);
+    if (!f) return;
+    figurenGevraagd.add(naam);
+    for (const h of Object.values(f.houdingen)) laadAlsNodig(MAP + 'figuren/' + h.bestand);
+  }
+  // Alles wat op een kaart staat vast laden (js/tekenen.js vraagt het bij een andere kaart, en als er iets op veranderde:
+  // een nieuw gebouw, een huis dat doorgroeit, iemand die erbij kwam), zodat het er is voor het in beeld komt: de
+  // tekeningen met een eigen bestand, en de figuren van wie er staat; wie maait, leent de maaier.
   S.laadWatErStaat = function (w) {
     for (const v of w.voorwerpen) {
       const bestand = v.vel && eigenBestand(v.vel, v.id);
       if (bestand) laadAlsNodig(bestand);
+    }
+    for (const e of w.wezens) {
+      laadFiguur(eigenFiguur(e));
+      if (e.werkAkkers && e.werkAkkers.length) laadFiguur('maaier');
     }
   };
   // Wacht deze tekening nog op zijn eigen bestand? Dan tekent js/tekenen.js wat er daarnet stond, of niets; ontbreekt het
@@ -132,6 +147,11 @@
   S.wachtOp = function (velNaam, id) {
     const bestand = eigenBestand(velNaam, id);
     return !!bestand && !beelden.has(bestand) && laden.get(bestand) !== 'mist';
+  };
+  // En laadt de figuur die dit wezen nu draagt nog? Dan net zo: wat er daarnet stond, of nog niemand.
+  S.laadtWezen = function (e) {
+    const f = S.figuurGegevens(figuurNu(e));
+    return !!f && Object.values(f.houdingen).some((h) => laden.get(MAP + 'figuren/' + h.bestand) === 'laadt');
   };
 
   // Wat de browser nu aan vellen vasthoudt (Spel.debug.vellen, vraag 114, stap 1): elk geladen vel met zijn maat en wat
@@ -199,6 +219,7 @@
     if (!f) return null;
     const h = f.houdingen[houding] || f.houdingen.staan;
     if (!h) return null;
+    laadFiguur(naam); // als hij er nog niet is (vraag 114, stap 1b); tot dan is het antwoord null
     const cel = h.cel || f.cel;
     const rij = Math.max(0, f.richtingen.indexOf(richting));
     let beeld = Math.floor((h.herhaal ? ((fase % 1) + 1) % 1 : Math.min(0.999999, Math.max(0, fase))) * h.beelden);
@@ -609,21 +630,26 @@
     return e.beeldStand;
   }
 
-  // De houding van dit wezen op dit moment: { naam, houding, richting, fase }.
-  // `naam` is het figuur op het vel. De schout draagt het vel van een gewone dorpeling,
-  // net als de menigte; welk, kiest zijn zaad. (Tot 25 sep was hij de tovenaar van het oude spel.)
-  S.houding = function (spel, e) {
-    // Een boer die aan het maaien is (T.werkOogstBij, js/akkers.js) leent zolang het vel van de
-    // maaier in plaats van zijn eigen boer/boerin-vel — maar alleen als dat vel er ook echt is,
-    // anders blijft hij gewoon zichzelf staan (geen kunst mist dan nooit iemand helemaal).
+  // Welke figuur een wezen draagt. De schout draagt het vel van een gewone dorpeling, net als de
+  // menigte; welk, kiest zijn zaad. (Tot 25 sep was hij de tovenaar van het oude spel.) Wie nog geen
+  // eigen vel heeft, mag er een lenen (T.MENSEN, vel: 'boer'): zo lopen de vijf boeren van het
+  // gehucht rond op het vel van de boer en de boerin. Zie ontwerp/werklijst.md, fase B2b. Een boer
+  // met een karakter draagt dat karakter op zijn lijf (boer-zanger), als dat vel er al is. Een dier
+  // (js/vee.js) heeft geen vel onder zijn soort, maar een per kleur: `vel` is koe0, koe1 of koe2.
+  function eigenFiguur(e) {
     const alsDorpeling = e.soort === 'dorpeling' || e.soort === 'schout';
-    let naam = e.maait && S.figuurGegevens('maaier') ? 'maaier' : alsDorpeling ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
-    // Wie nog geen eigen vel heeft, mag er een lenen (T.MENSEN, vel: 'boer'): zo lopen de vijf
-    // boeren van het gehucht rond op het vel van de boer en de boerin. Zie ontwerp/werklijst.md,
-    // fase B2b. Een boer met een
-    // karakter draagt dat karakter op zijn lijf (boer-zanger), als dat vel er al is. Een dier
-    // (js/vee.js) heeft geen vel onder zijn soort, maar een per kleur: `vel` is koe0, koe1 of koe2.
-    if (!S.figuurGegevens(naam) && e.vel) naam = S.velMetKarakter(e.vel, e.karakter);
+    const naam = alsDorpeling ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
+    return !S.figuurGegevens(naam) && e.vel ? S.velMetKarakter(e.vel, e.karakter) : naam;
+  }
+  // En wat hij nu draagt: een boer die aan het maaien is (T.werkOogstBij, js/akkers.js) leent
+  // zolang het vel van de maaier in plaats van zijn eigen boer/boerin-vel — maar alleen als dat vel
+  // er ook echt is, anders blijft hij gewoon zichzelf staan (geen kunst mist dan nooit iemand helemaal).
+  const figuurNu = (e) => (e.maait && S.figuurGegevens('maaier') ? 'maaier' : eigenFiguur(e));
+
+  // De houding van dit wezen op dit moment: { naam, houding, richting, fase }. `naam` is het figuur
+  // op het vel (figuurNu).
+  S.houding = function (spel, e) {
+    const naam = figuurNu(e);
     const f = S.figuurGegevens(naam);
     if (!f) return null;
     const st = stand(e);

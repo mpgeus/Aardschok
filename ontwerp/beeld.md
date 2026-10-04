@@ -261,7 +261,12 @@ de bouwstijlen van stap 2, zo'n 500 tekeningen, zou een vel ruim 500 MB worden. 
   uitzoomen bleef ongeveer gelijk (rond de 190 ms tegen 225: dat is de grond en het bos, vraag 113). Alle 50 tekeningen
   zijn pixel voor pixel dezelfde gebleven, rond hetzelfde anker, en 19 van de 20 vaste schermafdrukken byte voor byte;
   in het verste overzicht (0,35) kiest het verkleinen in 232 pixels (0,02%) de buurpixel, bij dezelfde tekenopdrachten.
-- Wat nu het meest weegt, zijn de figuren (124 MB): die laden allemaal, ook wat er niet is (stap 1b).
+- **De figuren net zo** (stap 1b): een figuur laadt pas als zijn wezen op de kaart staat, met al zijn houdingen; wie
+  maait, krijgt de maaier erbij. Wie van figuur wisselt (een kind dat opgroeit, een boer die gaat maaien), houdt zijn
+  oude beeld tot het nieuwe er is, en wie net op de kaart komt (de marskramer over de weg), staat er pas als zijn figuur
+  er is. Bij het begin 20 van de 48 figuren (49 van de 122 vellen): de monsters van het oude spel, de soldaten, de heer en de inner laden pas
+  als ze komen. Samen nu 81 MB aan plaatjes bij het begin, in plaats van 197 bij het begin van de dag; de twintig vaste
+  schermafdrukken bleven byte voor byte dezelfde als na stap 1.
 
 ## Ontwerpcanvas
 

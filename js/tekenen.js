@@ -262,12 +262,12 @@
     return buf;
   }
 
-  // Wat er op een kaart staat met een eigen bestand (de huizen en de gebouwen, js/sprites.js; vraag 114, stap 1), vast
-  // laden: bij een andere kaart, en als er iets op veranderde (T.kaartVersie, js/wereld.js). Per kaart de versie waarvoor
-  // dat gebeurde; alleen scherm.
+  // Wat er op een kaart staat met een eigen bestand (de huizen en de gebouwen, js/sprites.js; vraag 114, stap 1), en de
+  // figuren van wie er staat (stap 1b), vast laden: bij een andere kaart, als er iets op veranderde (T.kaartVersie,
+  // js/wereld.js), en als er iemand bij kwam of wegging. Per kaart de stand waarvoor dat gebeurde; alleen scherm.
   const geladenVoor = new WeakMap();
   function laadWatErStaat(w) {
-    const versie = T.kaartVersie(w);
+    const versie = `${T.kaartVersie(w)}|${w.wezens.length}`;
     if (geladenVoor.get(w) === versie) return;
     geladenVoor.set(w, versie);
     T.sprites.laadWatErStaat(w);
@@ -1530,8 +1530,8 @@
     T.sprites.teken(ctx, deel, p.x, p.y - T.sprites.nekHoogte(e), 1);
   }
 
-  // Per huis of gebouw het plaatje dat er het laatst stond, voor zolang een nieuw plaatje laadt (tekenVoorwerp). Alleen
-  // scherm, en weg met het voorwerp.
+  // Per huis, gebouw of wezen het plaatje dat er het laatst stond, voor zolang een nieuw plaatje laadt (tekenVoorwerp,
+  // tekenWezen). Alleen scherm, en weg met het voorwerp of het wezen.
   const vorigBeeld = new WeakMap();
 
   function tekenVoorwerp(ctx, S, v, helder) {
@@ -1806,7 +1806,14 @@
     }
     // Met sprites speelt het vel de houding af (staan, lopen, uithalen, geraakt, sterven);
     // met vlakken blijft het bij een huppelpas en een vervagend lijk.
-    const deel = metSprites() ? T.sprites.wezen(S, e) : null;
+    let deel = metSprites() ? T.sprites.wezen(S, e) : null;
+    // Een figuur laadt pas als zijn wezen op de kaart komt (js/sprites.js; vraag 114, stap 1b). Laadt hij nog, dan het beeld
+    // van daarnet (een kind dat opgroeit, een boer die gaat maaien), en anders staat er nog niemand.
+    if (deel) vorigBeeld.set(e, deel);
+    else if (metSprites() && T.sprites.laadtWezen(e)) {
+      deel = vorigBeeld.get(e);
+      if (!deel) return;
+    }
     ctx.save();
     if (stap) ctx.globalAlpha *= stap.alpha;
     if (e.dood && !deel) {
