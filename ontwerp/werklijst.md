@@ -87,9 +87,11 @@ Gezien en niet gerepareerd (`opmerkingen.md`): de wereldbouwer tekent op ware gr
 valt om op de akkers zonder kalender), en een toets in `bewoners.test.cjs` faalt soms, door ongezaaid toeval.
 
 **WebGL, in een eigen sessie naast de huizen** (vraag 123; Marcel, 4 okt: "Kunnen we een andere agent starten die
-alvast het webgl deel uitvoert?"): het tekenen met WebGL loopt nu naast de huizen, op een eigen branch, en blijft uit de
-bestanden van de huizen. Gemeten waar het tekenen zijn tijd kwijt is (`npm run tekenmeting`); het plan, met vragen A tot
-en met D, staat bij vraag 123 en wacht op Marcel.
+alvast het webgl deel uitvoert?"): het tekenen met WebGL loopt naast de huizen, op een eigen branch
+(`claude/webgl-tekenen`), en blijft uit de bestanden van de huizen. Marcel koos het plan (A tot en met D). Stap 1 is af:
+de tussenbuffer, waarmee 4K zo snel tekent als 1920×1080. De proefversie voor Windows is er
+(`npm run proefversie -- --windows`), zodat Marcel op zijn eigen pc meet. Volgende: stap 2, de WebGL-laag. Het draaien
+van de camera (vraag 124) komt na WebGL; vraag B daar (de huizen draaibaar renderen) wacht op Marcel.
 
 **Waar de volgende sessie begint:** **vraag 114: de huizen in het spel, stap 2: de vier bouwstijlen** (het plan staat bij
 vraag 114, onder "Plan voor de huizen in het spel"; Marcel koos de vier stijlen): de stijl per land, met de tekeningen in
@@ -4525,6 +4527,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     browser vergroot het; de muis rekent om (`naarVlak`, `vanVlak`). Gemeten, zonder videokaart: 4K dichtbij van 13 naar
     36 beelden per seconde, 4K op 200% van 14 naar 45, in het overzicht van 7 à 12 naar 17 à 28: 4K is nu 1920×1080.
     Op 1280×800 zijn de twintig schermafdrukken byte voor byte gelijk, en klikken klopt op vijf schermen.
+    **De proefversie voor Windows is er (4 okt, `npm run proefversie -- --windows`):** het spel in Electron 44.5.1 (de
+    versie van de meting in `verpakken.md`), een zip van 161 MB met `Aardschok/Aardschok.exe`; F11 is het hele scherm,
+    Ctrl+Shift+I het gereedschap van de browser. Hier nagekeken met Electron voor Linux: het venster opent het spel vanaf
+    een los bestand, met de stand op het titelscherm, en `F2` meet. **Wat Marcel kan proberen:** uitpakken, `Aardschok.exe`
+    starten (Windows waarschuwt voor een onbekende uitgever: "Meer info", dan "Toch uitvoeren"), F11, en met `F2` de
+    beelden per seconde en het traagste beeld noteren: dichtbij, in het overzicht (`Tab`, en met het wiel ver uit), en
+    's avonds. Daarna hetzelfde in Firefox, met `Aardschok/resources/app/index.html` (hetzelfde spel). Dan weten we wat
+    zijn videokaart al doet met het 2D-tekenen, en wat WebGL er nog bij moet winnen.
 124. **De camera draaien** (Marcel, 4 okt, gevraagd in de sessie van de huizen en doorgegeven aan die van WebGL: "ik wil
     ook de camera kunnen draaien. Is dat mogelijk"; plan van Claude; open).
     **Kan het?** Ja, in kwartslagen (`Q` en `E`, zoals in Anno, The Sims en Project Zomboid). Vrij draaien niet: pixel art
