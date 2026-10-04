@@ -19,6 +19,55 @@ Tauri is de elegantere keuze voor later, als de omvang gaat storen.
 laat het venster daarheen kijken. Dan draait het spel in de verpakking precies zoals bij ons, en is
 er geen apart pad voor "in het echt".
 
+## Snelheid: in de browser of via Steam (Marcel, 4 okt 2026: "lag, geheugen tekort etc is geen optie straks")
+
+Marcel: "Ik wil nu ook weten wat het verschil in performance is tussen nu spelen in de browser en straks via Steam."
+Werklijst vraag 122.
+
+**Wat er verschilt.** Via Steam draait het spel in Electron, en Electron ís Chromium: dezelfde motor als Chrome en Edge,
+met dezelfde JavaScript (V8) en hetzelfde tekenen. Marcel speelt nu in Firefox, een andere motor; wat hij daar ziet,
+is dus niet wat een speler op Steam krijgt, maar wel wat een tester op itch.io in Firefox krijgt. Wat in de schil
+beter is: de versie van de motor kiezen wij (een update van de browser verandert niets), er draait niets naast (geen
+tabbladen, geen extensies), een verborgen venster wordt niet afgeremd, en opslaan gaat naar een bestand in plaats van
+naar de opslag van de browser (die heeft een grens van een paar MB). Wat erbij komt: Electron zelf, zo'n 150 MB op
+schijf.
+
+**Gemeten (4 okt, achtentwintigste sessie)**, op dezelfde machine zonder videokaart (alles tekent dan op de processor,
+dus het is de slechtste kant), in een venster van 1280 bij 800 (de maat van de Steam Deck), op het ontworpen
+gehucht, elk twee keer, met de kleinste schil die dit plan volgt (server.cjs in het programma, een venster erop;
+Electron 44):
+
+| | Chromium-venster | Electron (Steam) |
+|---|---|---|
+| beelden per seconde, dichtbij | 60 | 60 |
+| beelden per seconde, overzicht 0,5 | 53 | 59 |
+| beelden per seconde, overzicht 0,35 | 49 | 57 |
+| langste beeld, eerste keer uitzoomen | 150 à 200 ms | 167 ms |
+| geheugen, alles samen | ~1.140 MB | ~985 MB |
+
+Electron is dus even snel als een Chromium-venster, en wat sneller in het overzicht, met minder geheugen (een
+Chromium-venster draagt de hele browser mee). Met een videokaart tekent allebei op de kaart en gaat het sneller.
+
+**Waar het echte risico zit:** niet in de schil, maar in het spel zelf, en dat is in de browser en in de schil hetzelfde.
+- Wat het spel per beeld doet: de regels groeien met het aantal mensen (vraag 113: bij 200 mensen gemiddeld 2 à 3 ms
+  per beeld, het traagste beeld 20 ms), en het tekenen met wat er in beeld staat.
+- Het scherm: een speler op Steam heeft vaak 1920 bij 1080 of 4K, twee tot zes keer zoveel pixels als hier. Met een
+  videokaart is dat geen punt; zonder (een oude laptop) wel.
+- Het geheugen groeit met het land: het eiland van 2500 bij 2500 (vraag 117) is het grootste risico, en daarom komt het
+  in stukken.
+- Een hapering uit het opruimen van het geheugen (garbage collection) is in beide hetzelfde.
+
+**Voorstel (vraag 122, wacht op Marcel):**
+- **Een lat**, zodat "geen lag" iets is wat je kunt nakijken: op een machine zoals de Steam Deck 60 beelden per
+  seconde, geen beeld boven de 50 ms in gewoon spel, en het hele programma onder 1,5 GB bij 200 mensen; en een
+  minimum voor de Steam-pagina (4 GB geheugen, een ingebouwde videokaart).
+- **Een proefverpakking voor Marcels eigen pc**: een Windows-versie in Electron (een zip, dubbelklikken), zodat hij met
+  `F2` op dezelfde plek Firefox en de Steam-versie naast elkaar meet. Alleen zo weten we hoe het op echte machines
+  loopt; hier is geen videokaart.
+- **De meting vast in het gereedschap**: `npm run grootte` ook in de schil, zodat elke groei (meer mensen, het eiland)
+  meteen tegen de lat gemeten wordt.
+- Bij het echte verpakken: een Content-Security-Policy in `index.html` (Electron waarschuwt erover zonder).
+
 ## Wat we tot die tijd niet mogen breken
 
 1. **Geen bouwstap, gewone scripts.** Bewust gekozen, en het maakt verpakken bijna niets.

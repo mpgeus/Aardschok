@@ -69,7 +69,9 @@ het eerste keer uitzoomen van 290 naar 165 ms. Zie onder Af, en `beeld.md`, "De 
 zijn ingepakt (2a); nu een proefplaat met meer afwisseling (daken, wanden, luiken, gespiegeld; de bouwfasen per vorm, niet
 per kleur) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien. **Vraag 121**
 (hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁") wacht op Marcel: terrassen, wat het
-doet, en wanneer; een proefplaat van de hoogte kan met die van de huizen mee.
+doet, en wanneer; een proefplaat van de hoogte kan met die van de huizen mee. **Vraag 122** (de snelheid via Steam;
+Marcel: "lag, geheugen tekort etc is geen optie straks") wacht ook op hem: een lat, en een proefverpakking voor zijn pc
+om Firefox en de Steam-versie naast elkaar te meten.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
 met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant (**vraag 115**). De meter in Firefox
 (vraag 113, a) komt van hem. Ook besloten (4 okt): **vraag 116** (beesten in het bos: wolven die de houthakker bedreigen,
@@ -4243,6 +4245,18 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       (`commercieel.md`, de beeldstijl als troef).
     Vragen: **a**, terrassen? **b**, dat het lopen, het zicht en het bouwen raakt? **e**, na de boeren en vóór het
     eiland, of eerder?
+122. **De snelheid in de browser en via Steam** (Marcel, 4 okt, achtentwintigste sessie: "Ik wil nu ook weten wat het
+    verschil in performance is tussen nu spelen in de browser en straks via Steam. Want lag, geheugen tekort etc is geen
+    optie straks"; plan van Claude; open). Uitgewerkt in `verpakken.md`, "Snelheid: in de browser of via Steam".
+    **Gemeten (dezelfde dag):** via Steam draait het in Electron, en dat is Chromium; in een venster van 1280 bij 800
+    zonder videokaart was de kleinste schil even snel als een Chromium-venster (dichtbij 60 beelden per seconde, het
+    overzicht op 0,35 57 tegen 49) en zuiniger (zo'n 985 tegen 1.140 MB voor alles samen). Marcel speelt in Firefox, een
+    andere motor: wat hij ziet, is niet wat een speler op Steam krijgt. Het echte risico zit in het spel zelf (de regels
+    bij veel mensen, grote schermen zonder videokaart, het eiland), en dat is in beide hetzelfde.
+    Voorstel: **a**, een lat (op een machine als de Steam Deck 60 beelden per seconde, geen beeld boven de 50 ms in gewoon
+    spel, onder 1,5 GB bij 200 mensen); **b**, een proefverpakking voor Marcels pc (Windows, Electron), zodat hij met `F2`
+    Firefox en de Steam-versie naast elkaar meet; **c**, `npm run grootte` ook in de schil, zodat groei tegen de lat
+    gemeten wordt. Vragen: **a**, deze lat? **b**, de proefverpakking nu, of bij het echte verpakken (januari)?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
