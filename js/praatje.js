@@ -1,16 +1,16 @@
 // Een praatje (werklijst vraag 120; Marcel, 4 okt: "Het dorp moet echt levendig en realistisch aanvoelen. Mensen die een
-// praatje staan te maken als ze even niets te doen hebben etc", en op het plan: "120 a b c ja"). Regels zonder scherm,
-// zoals js/lopen.js; het wolkje tekent js/tekenen.js. Toetsen: test/praatje.test.cjs.
+// praatje staan te maken als ze even niets te doen hebben etc", en na het bouwen: "geen praatjes forceren. Alleen als
+// mensen een reden hebben en elkaar toevallig tegenkomen"). Regels zonder scherm, zoals js/lopen.js; het wolkje tekent
+// js/tekenen.js. Toetsen: test/praatje.test.cjs.
 //
-// Wie vrij is (T.kanPraten) en een bekende ziet die ook vrij is, blijft staan voor een praatje: de een loopt tot naast de
-// ander, en ze draaien naar elkaar toe (e.kijkt, js/sprites.js). Wie langskomt en een van hen kent, schuift aan, tot een
-// groepje van vier. Na een kwartier tot een uur gaan ze verder, en dan een uur niet weer.
+// Wie vrij is (T.kanPraten), zijn eigen gang gaat en toevallig een bekende treft die ook vrij is, blijft soms staan voor
+// een praatje: de een loopt tot naast de ander, en ze draaien naar elkaar toe (e.kijkt, js/sprites.js). Wie langskomt en
+// een van hen kent, schuift aan, tot een groepje van vier. Na een kwartier tot een uur gaan ze verder, en dan een uur niet
+// weer. Niemand gaat ergens heen om te praten: gebeurt het niet, dan is het zo.
 //
 // Een bekende is iemand uit een ander huis: een buur of wie op hetzelfde werk werkt (T.kentElkaar). Niet je eigen gezin:
 // dat spreek je binnen. Gemeten voor het plan (4 okt): zonder die regel is meer dan de helft van de praatjes een gezin
-// voor zijn eigen deur, en het ene huis komt het andere toch al zelden tegen. Daarom gaat 's avonds, na het werk tot
-// een uur voor bedtijd, een deel van wie vrij is naar het plein (T.avondPleinAnker, voor T.dagAnker in js/dag.js): daar
-// treffen de huizen elkaar.
+// voor zijn eigen deur.
 //
 // Wie erin staat, zegt het poppetje zelf: e.praatje is het groepje, een gewoon ding dat ze delen, met het midden waar
 // ze omheen staan (`plek`), tot wanneer het duurt (`tot`, een dag van de kalender) en een getal voor wie er om de beurt
@@ -47,15 +47,6 @@
     rust: 1,
     // Wie langsloopt en doorloopt, kijkt zoveel uur niet weer: zo is het één kans per keer dat hij langskomt.
     doorlopen: 0.25,
-    // 's Avonds gaat dit deel van wie vrij is na het werk naar het plein (vraag 120, c), elke avond anderen, en blijft er
-    // tot zoveel uur voor bedtijd. Niet een vast uur: van een boerderij aan de rand is het anderhalf uur lopen. Ze staan
-    // rond het midden (waar de marskramer staat), binnen zoveel tegels; en alleen wie hooguit `avondPleinAfstand` tegels
-    // van het plein woont, gaat: in een grote stad loopt niemand 's avonds tachtig tegels heen en terug (en elke stap kost
-    // het spel tijd, gemeten bij 200 mensen).
-    avondPlein: 1 / 3,
-    avondPleinTot: 1,
-    avondPleinStraal: 5,
-    avondPleinAfstand: 40,
   };
   const IN = () => T.PRAATJE_INSTELLINGEN;
 
@@ -108,8 +99,8 @@
     return false;
   }
   const kansBij = (D, w, t) => (opVastePlek(D, w, t.x, t.y) ? IN().kansOpPlek : IN().kans);
-  // Rust hij nog van zijn vorige praatje? Op een vaste plek niet: daar blijven ze praten, met steeds een ander.
-  const rust = (D, w, e) => e.praatRust > D.kalender.dag && !opVastePlek(D, w, e.tx, e.ty);
+  // Rust hij nog van zijn vorige praatje, of liep hij net door?
+  const rust = (D, e) => e.praatRust > D.kalender.dag;
 
   // ── De groepjes ──
 
@@ -182,8 +173,7 @@
   T.zoekPraatje = function (S, w, D, e, deel) {
     const I = IN();
     if (!I.aan || !D || !D.kalender || e.praatje || D.wereld !== w) return false;
-    const dag = D.kalender.dag;
-    if (rust(D, w, e) || !T.kanPraten(S, D, e, deel)) return false;
+    if (rust(D, e) || !T.kanPraten(S, D, e, deel)) return false;
     const p = T.bewonerVan(D, e);
     let groepen = null;
     let met = null;
@@ -192,7 +182,7 @@
       if (b.praatje) {
         groepen = groepen || T.praatjesOp(w);
         if ((groepen.get(b.praatje) || []).length >= I.groep) continue;
-      } else if (loopt(b) || rust(D, w, b)) continue;
+      } else if (loopt(b) || rust(D, b)) continue;
       if (!T.kanPraten(S, D, b, deel) || !T.kentElkaar(D, p, T.bewonerVan(D, b))) continue;
       met = b;
       if (b.praatje) break; // liever aansluiten dan een tweede groepje ernaast
@@ -227,9 +217,8 @@
     const D = (S.dorpen || []).find((d) => d.wereld === w);
     if (!D || !D.kalender) return false;
     const dag = D.kalender.dag;
-    // Wie net doorliep (of net praatte), kijkt niet: ook op een vaste plek niet, anders gooit hij elk beeld opnieuw
-    // zolang hij wacht.
-    if (e.praatRust > dag || rust(D, w, ander)) return false;
+    // Wie net praatte of net doorliep, kijkt niet; anders gooide hij elk beeld opnieuw zolang hij wacht.
+    if (rust(D, e) || rust(D, ander)) return false;
     const deel = T.dagdeelVan(dag, T.isOogstDag(dag));
     if (!T.kanPraten(S, D, e, deel) || !T.kanPraten(S, D, ander, deel)) return false;
     if (!T.kentElkaar(D, T.bewonerVan(D, e), T.bewonerVan(D, ander))) return false;
@@ -257,7 +246,7 @@
       if (leden.length >= I.groep) return;
       if (b.praatje || !loopt(b)) continue;
       if (Math.abs(b.tx - g.plek.x) > I.afstand || Math.abs(b.ty - g.plek.y) > I.afstand) continue;
-      if (b.praatRust > dag || !T.kanPraten(S, D, b, deel)) continue;
+      if (rust(D, b) || !T.kanPraten(S, D, b, deel)) continue;
       const q = T.bewonerVan(D, b);
       if (!leden.some((e) => T.kentElkaar(D, T.bewonerVan(D, e), q))) continue;
       if (Math.random() >= kansBij(D, w, g.plek)) {
@@ -315,35 +304,5 @@
       }
       langskomers(S, w, D, g, leden, deel, dag);
     }
-  };
-
-  // ── 's Avonds op het plein ──
-
-  // Een getal van 0 tot 1 uit iemand en een dag, elke dag een ander, zonder worp: zo kost het geen toeval, en is het na
-  // het laden hetzelfde.
-  function lot(id, dag) {
-    let h = Math.imul((id | 0) + 1, 2654435761) ^ Math.imul((dag | 0) + 1, 2246822519);
-    h = Math.imul(h ^ (h >>> 15), 2654435761);
-    return ((h ^ (h >>> 13)) >>> 0) / 4294967296;
-  }
-
-  // Gaat bewoner p op dag `dag` 's avonds naar het plein? Een op de drie (avondPlein), elke avond anderen, van wie in de
-  // buurt van het plein woont. Geen kleuter, niet de schout, en niet wie net komt of een tijd weg is.
-  T.gaatNaarHetPlein = function (D, p, dag) {
-    const I = IN();
-    if (!I.aan || !p || !p.huis || p.schout || p.komt || p.weg || p.leeftijd === 'kleuter') return false;
-    if (lot(p.id, Math.floor(dag)) >= I.avondPlein) return false;
-    const midden = T.pleinVan(D.wereld);
-    return !!midden && T.afstand(p.huis, midden) <= I.avondPleinAfstand;
-  };
-
-  // Waar hij 's avonds is, als hij vanavond naar het plein gaat (vraag 120, c): rond het midden van het plein, tot een uur
-  // voor bedtijd; dan gaat hij naar huis. Voor iedereen hetzelfde doel, zodat de weg erheen uit één veld komt (vraag 119,
-  // A). Voor T.dagAnker (js/dag.js), als het avond is en hij niet naar de herberg gaat; anders null.
-  T.avondPleinAnker = function (D, e) {
-    if (!D.kalender || !T.gaatNaarHetPlein(D, T.bewonerVan(D, e), D.kalender.dag)) return null;
-    if (T.uurVanDag(D.kalender.dag) >= T.dagindeling(D.kalender.dag).slapen - IN().avondPleinTot) return null;
-    const midden = T.pleinVan(D.wereld);
-    return { x: midden.x, y: midden.y, straal: IN().avondPleinStraal };
   };
 })(globalThis.Spel = globalThis.Spel || {});

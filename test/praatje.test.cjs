@@ -1,6 +1,7 @@
-// Een praatje (js/praatje.js; werklijst vraag 120; Marcel, 4 okt: "120 a b c ja"): wie vrij is en een bekende uit een
-// ander huis ziet, blijft staan; ze draaien naar elkaar toe, wie langskomt schuift aan, tot vier; na een kwartier tot een
-// uur gaan ze verder. 's Avonds gaat een op de drie naar het plein. De regels van het spel veranderen er niet door.
+// Een praatje (js/praatje.js; werklijst vraag 120; Marcel, 4 okt: "geen praatjes forceren. Alleen als mensen een reden
+// hebben en elkaar toevallig tegenkomen"): wie vrij is en toevallig een bekende uit een ander huis treft, blijft soms
+// staan; ze draaien naar elkaar toe, wie langskomt schuift aan, tot vier; na een kwartier tot een uur gaan ze verder, en
+// dan een uur niet weer. De regels van het spel veranderen er niet door.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -202,7 +203,6 @@ test('wie een bekende ziet die al in een groepje staat, schuift aan, tot vier', 
 test('wie langsloopt en er een kent, schuift aan: één kans per keer dat hij langskomt', () => {
   const S = gehucht(20);
   const D = S.dorp;
-  const w = S.wereld;
   const [a, b, c, d] = bekenden(S, 4);
   const p = pleinPlek(S);
   zet(a, p.x, p.y);
@@ -228,7 +228,6 @@ test('wie langsloopt en er een kent, schuift aan: één kans per keer dat hij la
 
 test('onderweg: twee vrije bekenden die elkaar treffen, blijven staan in plaats van uit te wijken', () => {
   const S = gehucht(20);
-  const D = S.dorp;
   const w = S.wereld;
   const [a, b] = bekenden(S, 2);
   const p = pleinPlek(S);
@@ -266,7 +265,7 @@ test('onderweg: lopen ze door, dan is het één kans per keer dat ze elkaar tref
   assert.deepEqual(tegel(a), { x: p.x + 2, y: p.y }, 'hij kwam erlangs');
 });
 
-test('het praatje is om na zijn tijd, en dan een uur rust; op een vaste plek niet', () => {
+test('het praatje is om na zijn tijd, en dan een uur rust, ook op het plein', () => {
   const S = gehucht(20);
   const D = S.dorp;
   const w = S.wereld;
@@ -284,11 +283,14 @@ test('het praatje is om na zijn tijd, en dan een uur rust; op een vaste plek nie
   assert.equal(a.kijkt, null, 'hij kijkt weer waar hij wil');
   assert.ok(Math.abs((a.praatRust - S.kalender.dag) * 24 - T.PRAATJE_INSTELLINGEN.rust) < 1e-9, 'een uur rust');
   assert.ok(!metWorp(0, () => T.zoekPraatje(S, w, D, a, deelNu(S))), 'dus nu geen nieuw');
-  // Op het plein blijven ze praten, met steeds een ander.
+  // Ook niet op het plein: niemand wordt tot een praatje gedwongen.
   const q = pleinPlek(S);
   zet(a, q.x, q.y);
   zet(b, q.x + 1, q.y - 1);
-  assert.ok(metWorp(0, () => T.zoekPraatje(S, w, D, a, deelNu(S))), 'op het plein wel');
+  assert.ok(!metWorp(0, () => T.zoekPraatje(S, w, D, a, deelNu(S))), 'op het plein ook niet');
+  // Na dat uur wel.
+  S.kalender.dag += T.PRAATJE_INSTELLINGEN.rust / 24 + 1e-6;
+  assert.ok(metWorp(0, () => T.zoekPraatje(S, w, D, a, deelNu(S))), 'na een uur weer');
 });
 
 test('wie niet meer vrij is, gaat; staat er nog maar één, dan is het praatje om', () => {
@@ -351,37 +353,7 @@ test('wie langs wil, loopt om een praatje heen; in een smalle doorgang gaat er e
   assert.deepEqual(tegel(f), { x: 7, y: 1 }, 'hij kon erlangs');
 });
 
-test("'s avonds gaat een op de drie naar het plein, elke avond anderen, tot een uur voor bedtijd", () => {
-  const S = gehucht(19.5);
-  const D = S.dorp;
-  const w = S.wereld;
-  const mensen = vrijeMensen(S);
-  let gaan = 0;
-  let keer = 0;
-  const avonden = new Map();
-  for (let dag = 40; dag < 100; dag++) {
-    for (const p of mensen) {
-      keer++;
-      if (!T.gaatNaarHetPlein(D, p, dag)) continue;
-      gaan++;
-      avonden.set(p, (avonden.get(p) || 0) + 1);
-    }
-  }
-  assert.ok(gaan / keer > 0.28 && gaan / keer < 0.39, `een op de drie (${(gaan / keer).toFixed(2)})`);
-  assert.ok([...avonden.values()].every((n) => n < 40), 'niet elke avond dezelfden');
-  const kleuter = D.bewoners.mensen.find((p) => p.leeftijd === 'kleuter');
-  if (kleuter) for (let dag = 40; dag < 100; dag++) assert.ok(!T.gaatNaarHetPlein(D, kleuter, dag), 'een kleuter niet');
-  // Wie vanavond gaat, hoort op het plein, en een uur voor bedtijd weer thuis.
-  const p = mensen.find((q) => T.gaatNaarHetPlein(D, q, 40) && !T.herbergGasten(D, 40).includes(q));
-  assert.ok(p, 'iemand gaat vanavond');
-  const a = T.dagAnker(D, p.wezen, false);
-  assert.ok(a && T.opHetPlein(w, a.x, a.y), 'zijn plek is op het plein');
-  S.kalender.dag = 40 + (T.dagindeling(40).slapen - 0.9) / 24;
-  const later = T.dagAnker(D, p.wezen, false);
-  assert.ok(later && !T.opHetPlein(w, later.x, later.y), 'een uur voor bedtijd gaat hij naar huis');
-});
-
-test('de spelregel Praatjes uit: geen praatje, geen plein, en wie praatte, gaat', () => {
+test('de spelregel Praatjes uit: geen praatje, en wie praatte, gaat', () => {
   const S = gehucht(20);
   const D = S.dorp;
   const w = S.wereld;
@@ -395,7 +367,6 @@ test('de spelregel Praatjes uit: geen praatje, geen plein, en wie praatte, gaat'
     T.werkPraatjesBij(S, D);
     assert.ok(!a.praatje && !b.praatje, 'wie praatte, gaat');
     assert.ok(!metWorp(0, () => T.zoekPraatje(S, w, D, a, deelNu(S))), 'geen nieuw praatje');
-    assert.ok(vrijeMensen(S).every((q) => !T.gaatNaarHetPlein(D, q, 40)), "'s avonds niemand naar het plein");
   } finally {
     T.zetOptie('praatjes', 'aan');
   }
@@ -430,7 +401,7 @@ test('een dag in het gehucht: er wordt gepraat, nooit twee op één tegel, wie p
   let nachtGezien = false;
   for (let i = 0; i < 6000; i++) {
     beelden(S, 1);
-    // Om twee uur 's nachts is iedereen binnen, ook wie 's avonds op het plein stond of praatte.
+    // Om twee uur 's nachts is iedereen binnen, ook wie 's avonds praatte.
     if (!nachtGezien && S.kalender.dag >= 41 + 2 / 24) {
       nachtGezien = true;
       const buiten = D.bewoners.mensen.filter((p) => p.wezen && !p.schout && !p.wezen.binnen);

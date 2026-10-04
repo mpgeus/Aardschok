@@ -19,11 +19,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   meldt na het laden de soorten aan van wat er op elke kaart ligt, en de proef met opslaan komt in de toetsen.
 - **Het praatje, wat er nog niet is** (4 okt, zevenentwintigste sessie; vraag 120). Na te lopen:
   - Lopen is langzaam tegenover de dag: van een boerderij aan de rand van het gehucht naar het plein is anderhalf uur
-    (een dag duurt 300 seconden, een mens loopt 1,35 tegel per seconde). Wie 's avonds ergens heen gaat (de herberg, het
-    plein), loopt zo de halve avond. In een stad van 200 op 160 bij 160 nog meer; daarom gaat alleen wie binnen 40
-    tegels van het plein woont. Te overwegen: met de wijken (stap 6 van de slice) elke wijk een eigen pleintje.
-  - Buurten (Claude, niet gekozen): 's avonds naar een buur toe voor een praatje. Zonder dat praten de huizen 's avonds
-    op het plein en onderweg, en op hun eigen erf niet.
+    (een dag duurt 300 seconden, een mens loopt 1,35 tegel per seconde). Wie 's avonds naar de herberg gaat, loopt zo de
+    halve avond, en in een stad van 200 op 160 bij 160 nog meer.
   - Wie langs wil, loopt om een praatje heen; staat het op een smal pad, dan gaat er een even opzij. Zo houdt een
     praatje het verkeer niet op, maar een praatje in een deur of op een brug is nog niet te zien geweest.
   - Meet de snelheid voor en na achter elkaar: de eerste nulmeting (1,1 ms per beeld bij 200 mensen) lag een derde lager

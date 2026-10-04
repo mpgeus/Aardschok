@@ -151,21 +151,21 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 
 ## De speeltest van 4 okt: het praatje (werklijst, vraag 120)
 
-Gespeeld in de zevenentwintigste sessie: `npm run speeltest -- bouwer --zaden 1-3`, op het spel met het praatje
-(`ccr-6762008a-w9xt0l`, de commit `1f10f36` op één kleine reparatie na: onderweg één kans per keer dat twee bekenden
-elkaar treffen). Wie vrij is, blijft staan voor een praatje met een buur of iemand van zijn werk, en 's avonds staat een
-deel van het dorp op het plein. De regels van het spel veranderen niet, maar de worpen vallen anders, dus de speeltest
-speelt niet letter voor letter het jaar van ervoor.
+Gespeeld in de zevenentwintigste sessie: `npm run speeltest -- bouwer --zaden 1-3`, op het spel met het praatje zoals het
+blijft (`ccr-6762008a-w9xt0l`): wie vrij is en toevallig een buur of iemand van zijn werk treft, blijft soms staan. Het
+avondplein ging eruit (Marcel: "geen praatjes forceren"); de eerste speeltest speelde nog met het plein, en gaf 26 → 76,
+76 en 77, met het dorp en marktrecht op dezelfde dagen als na het lopen. De regels van het spel veranderen niet, maar de
+worpen vallen anders, dus de speeltest speelt niet letter voor letter het jaar van ervoor.
 
 | zaad | een dorp op | marktrecht op | mensen, na het lopen | mensen, met het praatje | een spel |
 | --- | --- | --- | --- | --- | --- |
-| 1 | 24 oogstmaand '23 | 24 wijnmaand '23 | 26 → 71 | 26 → 76 | 200 s |
-| 2 | 24 oogstmaand '23 | 21 wijnmaand '23 | 26 → 69 | 26 → 76 | 191 s |
-| 3 | 24 oogstmaand '23 | 28 wijnmaand '23 | 26 → 75 | 26 → 77 | 215 s |
+| 1 | 24 herfstmaand '23 (na het lopen 24 oogstmaand) | 26 wijnmaand '23 (24) | 26 → 71 | 26 → 76 | 176 s |
+| 2 | 24 oogstmaand '23 | 21 wijnmaand '23 | 26 → 69 | 26 → 68 | 157 s |
+| 3 | 24 oogstmaand '23 | 28 wijnmaand '23 | 26 → 75 | 26 → 77 | 183 s |
 
-Het dorp en marktrecht komen op dezelfde dag als na het lopen; aan het eind een paar mensen meer, binnen wat een ander
-toeval ook geeft. Geen fouten in de console, niemand weg. Drie spellen tegelijk (de vorige keer twee keer drie), dus de
-tijden zijn niet te vergelijken met die hieronder.
+Op zaad 1 werd het gehucht een maand later een dorp, en kwam marktrecht twee dagen later; op de andere twee op dezelfde
+dag. Aan het eind evenveel mensen, binnen wat een ander toeval ook geeft. Geen fouten in de console, niemand weg. Drie
+spellen tegelijk (de vorige keer twee keer drie), dus de tijden zijn niet te vergelijken met die hieronder.
 
 **De proef met opslaan faalt**, ook op `main` zonder het praatje (`npm run speeltest -- lui60 --zaad 1 --opslaan`): op
 deze stand speelt het geladen spel een ander jaar (20 verschillen, met "reading 'blokkeert'" in de console), op `main`

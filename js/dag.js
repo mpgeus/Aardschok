@@ -154,8 +154,7 @@
   //   - 's ochtends op zijn erf, en wie van het gezin water haalt, bij de put;
   //   - overdag, bij het werk en de schaft, bij zijn werk. Wie geen werk heeft: een kind op het plein,
   //     een oude en een kleuter bij huis (de plekken zet js/bewoners.js, per bewoner);
-  //   - 's avonds op zijn erf, of in de herberg als hij vanavond gaat (js/herberg.js, T.herbergAnker), of tot een uur voor
-  //     bedtijd op het plein, een op de drie, voor een praatje (js/praatje.js, T.avondPleinAnker);
+  //   - 's avonds op zijn erf, of in de herberg als hij vanavond gaat (js/herberg.js, T.herbergAnker);
   //   - op een feest op het plein: een hele dag, of de avond (js/feesten.js, T.feestAnker);
   //   - wie net in het gehucht komt, eerst naar zijn huis, en wie wegtrekt, overdag naar de uitgang
   //     van de kaart (js/bewoners.js, T.werkBewonersBij).
@@ -191,9 +190,6 @@
     // 's Avonds de herberg in, wie vanavond gaat (ook een boer, en de herbergierster zelf).
     const herberg = deel === 'avond' && T.herbergAnker ? T.herbergAnker(D, e) : null;
     if (herberg) return herberg;
-    // 's Avonds een deel van het dorp op het plein, voor een praatje (js/praatje.js).
-    const plein = deel === 'avond' && T.avondPleinAnker ? T.avondPleinAnker(D, e) : null;
-    if (plein) return plein;
     if (!p) return deel === 'ochtend' || deel === 'avond' ? erf : null;
     if (p.komt) return erf;
     const plek = p.plek || {};

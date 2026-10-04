@@ -371,22 +371,16 @@ test('T.dagAnker voor een bewoner: \'s nachts binnen, \'s ochtends de put of het
   assert.ok(new Set(plekken.map((a) => a.x + ',' + a.y)).size > 1, 'niet allemaal op dezelfde plek');
   const oud = nieuwe(S).find((p) => p.leeftijd === 'oud' || p.leeftijd === 'kleuter');
   assert.equal(T.dagAnker(S.dorp, oud.wezen).straal, IN.straalBijHuis, 'een oude of een kleuter blijft bij huis');
-  // 's Avonds is hij op zijn erf, of in de herberg als hij daar vanavond heen gaat (js/herberg.js), of op het plein (een
-  // op de drie, js/praatje.js); dat lot is per spel anders, want de gezinnen zijn het ook.
+  // 's Avonds is hij op zijn erf, of in de herberg als hij daar vanavond heen gaat (js/herberg.js; dat
+  // lot is per spel anders, want de gezinnen zijn het ook).
   zet(20.5);
   const avond = T.gaatNaarDeHerberg(S.dorp, herder)
     ? T.herbergAnker(S.dorp, herder.wezen)
-    : T.gaatNaarHetPlein(S.dorp, herder, S.kalender.dag)
-      ? T.avondPleinAnker(S.dorp, herder.wezen)
-      : { x: herder.wezen.thuis.x, y: herder.wezen.thuis.y, straal: T.DAG_INSTELLINGEN.erfStraal };
+    : { x: herder.wezen.thuis.x, y: herder.wezen.thuis.y, straal: T.DAG_INSTELLINGEN.erfStraal };
   assert.deepEqual(T.dagAnker(S.dorp, herder.wezen), avond);
 });
 
-test('in het gehucht is iedereen \'s nachts binnen, overdag waar hij hoort, en \'s avonds thuis', (t) => {
-  // Het avondritme van vóór de praatjes (werklijst vraag 120): sindsdien gaat 's avonds een op de drie naar het plein, en
-  // staat er wie praat soms net buiten zijn plek. Dat staat in test/praatje.test.cjs.
-  T.zetOptie('praatjes', 'uit');
-  t.after(() => T.zetOptie('praatjes', 'aan'));
+test('in het gehucht is iedereen \'s nachts binnen, overdag waar hij hoort, en \'s avonds thuis', () => {
   const S = gehucht({ dag: bijUur(GROEI, 4), snelheid: 10 });
   const binnen = (p) => p.wezen.binnen;
   // Waar hij hoort: binnen de straal van zijn plek, of, als hij daar naar binnen hoort (de herberg,

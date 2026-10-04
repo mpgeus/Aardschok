@@ -836,8 +836,8 @@
       };
     },
     // Wie er een praatje maakt (js/praatje.js; werklijst vraag 120): per groepje wie erin staan (en wie nog komt), waar
-    // en tot hoe laat, hoeveel er nu vrij zijn, en wie vanavond naar het plein gaat. ('nu'): de twee vrije bekenden die
-    // het dichtst bij elkaar staan, beginnen nu een praatje (staan ze verder dan zes tegels uit elkaar, dan zegt het dat).
+    // en tot hoe laat, en hoeveel er nu vrij zijn. ('nu'): de twee vrije bekenden die het dichtst bij elkaar staan,
+    // beginnen nu een praatje (staan ze verder dan zes tegels uit elkaar, dan zegt het dat).
     praatjes(wat) {
       const D = T.dorpHier(S);
       if (!D || !D.kalender) return 'Praatjes zijn er alleen in een dorp.';
@@ -868,8 +868,7 @@
         waar: `${g.plek.x},${g.plek.y}${T.opHetPlein(w, g.plek.x, g.plek.y) ? ' (op het plein)' : ''}`,
         tot: T.uurTekst(g.tot),
       }));
-      const plein = (D.bewoners ? D.bewoners.mensen : []).filter((p) => T.gaatNaarHetPlein(D, p, dag)).map(T.naamVanBewoner);
-      return { deel, vrij: vrij.length, groepjes, 'vanavond naar het plein': plein };
+      return { deel, vrij: vrij.length, groepjes };
     },
     // De verstopplekken (js/verstoppen.js): waar je iets kunt verstoppen, wat er ligt, en hoe vaak
     // de soldaten het er vinden. Spel.debug.verstopt('boer1', 30, 5) zet 30 graan en 5 goud in
