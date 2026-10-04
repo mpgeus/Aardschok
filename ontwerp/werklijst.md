@@ -49,7 +49,8 @@ loopt er even omheen, en waar velen heen gaan, komt de weg uit een veld (`js/lop
 
 **Waar de volgende sessie begint:** **het praatje** (vraag 120, a; Marcel: "120 a b d ja", en d is: het praatje hoort
 bij het lopen van vraag 119, D): wie vrij is en een bekende treft, blijft staan voor een praatje, en wie langskomt,
-schuift aan; het plan staat bij vraag 120. Begin met een plan voor Marcel (welke plekken, hoe lang, hoe het eruitziet).
+schuift aan. Het plan (welke plekken, hoe lang, hoe het eruitziet) staat bij vraag 120 (zevenentwintigste sessie, eerst
+gemeten), met drie vragen aan Marcel.
 Daarna **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij vraag 114): eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
 wanden, luiken, gespiegeld) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
@@ -4104,6 +4105,41 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     hebben, uit het spel (b), en de volgorde (d): het praatje bij het lopen van vraag 119, D, dus als eerste nu dat af is,
     en het wolkje met de mensen aan het werk (vraag 111, 115, 116 en 118). De kleine dingen (c) koos hij niet: die blijven
     liggen, tot hij er een wil.
+    **Het plan voor het praatje** (4 okt, zevenentwintigste sessie; Claude, eerst gemeten met een paar gespeelde dagen):
+    in het ontworpen gehucht komen vrije mensen elkaar zo'n 70 keer per dag tot op twee tegels na, maar meer dan de helft
+    daarvan is een gezin op zijn eigen erf. Tussen twee huizen is het zo'n 30 keer, vooral overdag op het plein (de
+    kinderen en de ouden) en bij de put. In een dorp van 100 is het zo'n 250 keer, en ook daar is ruim de helft een gezin
+    op zijn erf; de rest vooral 's avonds op straat. Wie vrij is, blijft bij zijn deur, en het ene huis komt het andere
+    zelden tegen.
+    - **Wie:** wie vrij is: 's ochtends, in de schaft, 's avonds, en overdag wie geen werk heeft. Geen kleuter, en niet
+      wie maait, aan zijn hut bouwt, de schout zoekt, opgeroepen is, wegtrekt of net komt; de herbergierster 's avonds
+      ook niet, want dan tapt ze.
+    - **Met wie:** iemand uit een ander huis die hij kent: een buur (de deuren binnen 20 tegels; in het gehucht is dat
+      bijna iedereen) of wie bij hem werkt. Zijn eigen gezin niet: dat spreekt hij binnen, en anders is meer dan de
+      helft van de praatjes een gezin voor zijn eigen deur.
+    - **Waar:** waar ze elkaar tot op twee tegels naderen, en vaker op de vaste plekken: de put, het plein, voor de
+      herberg en de kapel, en op een feest. Na de mis kan nog niet, want er is geen zondag.
+    - **Hoe vaak en hoe lang:** een op de drie keer dat twee bekenden elkaar zien, op een vaste plek twee op de drie;
+      een kwartier tot een uur (op 1× 3 tot 12 seconden, op 10× een tiende daarvan), en nooit langer dan het deel van de
+      dag (de schaft eindigt om één uur, het werk begint, het is bedtijd). Daarna een uur niet weer. Hooguit vier in een
+      groepje. Geschat: in het gehucht zo'n tien praatjes per dag, en staat er een derde van de tijd ergens een; in een
+      dorp van 100 zo'n twintig, in een van 200 zo'n vijftig, anderhalf tegelijk.
+    - **Hoe het eruitziet:** wie een bekende ziet, loopt tot naast hem, liefst links of rechts op het scherm, zodat je
+      ze van opzij ziet, en ze draaien naar elkaar toe (`e.kijkt`, zoals aan de schandpaal). Met drie of vier staan ze in
+      een kringetje en kijken ze naar het midden. Ze staan stil en ademen; een houding "praten" is er nog niet (die hoort
+      bij de mensen aan het werk). Wie langs wil, loopt om ze heen, zoals om een maaier, en in een smalle doorgang gaat
+      er een even opzij. Spreek je er een aan, dan stapt hij uit het groepje.
+    - **De regels:** niets verandert: een werkplaats rekent met de looptijd, niet met waar iemand staat
+      (`T.werkUrenVan`). Wel valt het toeval anders, dus de speeltest speelt een ander jaar dan ervoor. De snelheid: wie
+      vrij is, kijkt alleen bij zijn dwaalstap wie er binnen twee tegels staat (gemeten met `npm run grootte`, bij 200).
+      Het groepje staat in `S`, dus het blijft na het laden.
+    - **Instelbaar:** de spelregel "Praatjes" (aan of uit), de getallen in de werkbank (`T.PRAATJE_INSTELLINGEN`).
+      `Spel.debug.praatjes()` zegt wie er waar staat te praten. Toetsen in `test/praatje.test.cjs`.
+    Vragen: **a**, met buren en wie bij hem werkt, en niet met zijn eigen gezin? **b**, nu al een leeg wolkje (drie
+    puntjes), om de beurt boven wie praat, of alleen naar elkaar toe gedraaid? Met het wolkje zie je een praatje ook van
+    verder, en met b (later) komt er het tekentje in. **c**, het gehucht blijft zo stil: een derde van de tijd één
+    groepje. Zal een deel van wie vrij is 's avonds een uur naar het plein gaan (in de proef met de helft verdubbelde dat
+    de praatjes van de avond), of eerst zo spelen?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
