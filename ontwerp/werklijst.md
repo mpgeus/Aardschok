@@ -88,10 +88,14 @@ valt om op de akkers zonder kalender), en een toets in `bewoners.test.cjs` faalt
 
 **Waar de volgende sessie begint:** **vraag 114: de huizen in het spel, stap 2: de vier bouwstijlen** (het plan staat bij
 vraag 114, onder "Plan voor de huizen in het spel"; Marcel koos de vier stijlen): de stijl per land, met de tekeningen in
-vier standen, de daken per trede en baksteen na de steenbakkerij. Het dak is besloten (Marcel: "Alleen als het
-doorgroeit of gebouwd wordt daarna"); hoeveel ontwerpen per soort, wacht op Marcel (het antwoord van Claude staat bij
-vraag 114, na "Stap 1b gebouwd": drie per soort en twee boerderijen, 432 samen, en eerst één stijl helemaal). Meet met
-`npm run schermen`. Dan stap 3, de herberg, de kapel en de woontoren. **Vraag 121 is besloten**
+vier standen, de daken per trede en baksteen na de steenbakkerij. Besloten (vraag 114, na "Stap 1b gebouwd"): het dak
+van de trede waarin een huis gebouwd wordt of doorgroeit (Marcel: "Alleen als het doorgroeit of gebouwd wordt daarna"),
+en drie ontwerpen per soort, twee boerderijen, en de hutten houden riet (Marcel: "ja drie per soort, hutten houden
+riet"): 108 per stijl, 432 samen. Begin met een plan voor Marcel voor **stap 2a, de eerste stijl helemaal in het spel**:
+welke drie ontwerpen per soort (uit wat er nu is, of nieuw), hoe de maker de stijl kiest en het ontworpen gehucht zijn
+huizen houdt, de daken per trede in `T.volgendeTekening` en `kiesGroei`, en een proefplaat; dan renderen, in het spel,
+en nakijken met `npm run schermen`. Dan stap 2b (de andere drie stijlen), en stap 3, de herberg, de kapel en de
+woontoren. **Vraag 121 is besloten**
 (hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁", en "121 a terrassen, b ja, c na de
 boeren"): terrassen met wanden en hellingen, en de hoogte raakt het lopen, het zicht en het bouwen; na de boeren, vóór
 het eiland. Een proefplaat van de hoogte kan met die van de huizen mee. **Vraag 122** (de snelheid via Steam;
@@ -4057,7 +4061,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (4 okt, dertigste sessie): "En optie 2 over het dak. Alleen als het doorgroeit of gebouwd wordt daarna."**
     Dus een huis krijgt het dak van de trede waarin het gebouwd wordt of doorgroeit; wat er al staat, houdt zijn dak, en
     aan de daken zie je de geschiedenis van het dorp. En hij vroeg: "Hoeveel ontwerpen zijn acceptabel?"
-    **Antwoord van Claude (wacht op Marcel):** het geheugen is geen grens meer (een spel heeft één stijl, en laadt
+    **Antwoord van Claude:** het geheugen is geen grens meer (een spel heeft één stijl, en laadt
     alleen wat er staat). De grenzen zijn nu de tijd van het renderen (een huis kost zo'n 40 seconden rekenen, hier op
     vier kernen 10 seconden per huis, en een bouwfase per ontwerp en stand ook) en de opslagplaats: een huis is zo'n 60
     kB, die is nu 44 MB, en elke keer dat de huizenbouwer zo verandert dat alle huizen anders worden, komt de hele reeks
@@ -4073,6 +4077,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       vijf uur, en de opslagplaats drie keer zo groot.
     En eerst één stijl helemaal in het spel (renderen, de maker, de daken, nakijken met `npm run schermen`), dan de
     andere drie in één keer: zo kost een fout één stijl renderen en niet vier.
+    **Marcel (4 okt): "ja drie per soort, hutten houden riet".** Dus per stijl drie ontwerpen per soort en twee
+    boerderijen: 12 hutten, 36 huizen, 36 stenen huizen en 24 boerderijen, 108 per stijl en 432 samen; de hutten houden
+    hun riet (in de plankenstijl spanen, zoals voorgesteld), en de huizen, de stenen huizen en de boerderijen krijgen het
+    dak van de trede waarin ze gebouwd worden of doorgroeien. Eerst één stijl helemaal in het spel (stap 2a), dan de
+    andere drie (stap 2b).
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
