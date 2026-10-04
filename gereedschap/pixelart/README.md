@@ -55,7 +55,11 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
 - `huis-sdf.cjs`: de huizenbouwer op ronde vormen (`ontwerp/beeld.md`, "De huizenbouwer op ronde
   vormen"): elk huis in elke vorm en elk materiaal, niet waterpas, met uitbouwen. Bovenaan staat wat
   een opgave kan. `huis-sdf-export.cjs` maakt er proefplaten van (`uit/proefhuis/`), en
-  `tuin-sdf.cjs` de losse tuinstukken.
+  `tuin-sdf.cjs` de losse tuinstukken. Sinds vraag 114 (2b en 2c) ook kalk in drie kleuren, baksteen en zandsteen,
+  torens met een steil dak (zadeldak, tentdak, naaldspits), de ramen van een kapel en een woontoren, een
+  uithangbord, en gebouwen uit meer delen (`samen`: de kapel met haar toren, de herberg met zijn stal);
+  `node huis-sdf-export.cjs afwisseling`, `verhouding` en `steen` maken de proefplaten daarvan
+  (`ontwerp/beeld.md`, "De afwisseling en de grote gebouwen").
 - `huizen.cjs`: de huizen van het spel (ronde 4b): een vaste lijst opgaven (`HUIZEN`), en hoe er een
   voor het vel gerenderd wordt, met zijn voet en de tegel voor zijn deur. `node naar-tiled.cjs huizen`
   zet ze op `tegels/huizen.png` (twee minuten, in vier draden), `node bouwfasen.cjs` maakt hun vijf

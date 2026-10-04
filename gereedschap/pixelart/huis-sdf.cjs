@@ -47,6 +47,8 @@
 //              met vlechtwerk en leem), 'planken', 'blokhut' (gestapelde stammen met overstekende
 //              hoeken) of 'veldsteen'. Bij twee lagen is 'veldsteen' steen onder en hout boven.
 //   hout       'schors' (verweerd grijs) of 'hout' (warmer bruin), voor planken, stammen en balken.
+//   kalk       'wit' (standaard), 'oker' of 'roze': de kalk op het pleister van het vakwerk (vraag 114, 2b).
+//              Het zaad kiest hem nooit zelf.
 //   plat dak   lagen 2 of 3, kantelen true of false (dan een gladde borstwering).
 //
 // kiesHuis(zaad) kiest ook de vorm, de maat en de lagen, voor een dorp van willekeurige huizen.
@@ -73,6 +75,23 @@
 //               "Beter bouwen").
 //   schoor      true of false: een schoor tegen een kopgevel, bij een oud huis. Zonder beslist het
 //               zaad; hij steekt een tegel voor de gevel uit.
+//
+// Vraag 114, 2c, de grote gebouwen in verhouding (ontwerp/beeld.md, "De afwisseling en de grote gebouwen"):
+//
+//   steen       'veldsteen' (standaard), 'zandsteen' (gehakte blokken, geelgrijs) of 'baksteen': de steen
+//               van een stenen muur en van een toren (Marcel, 4 okt: "Torens zijn wel wat grijzig", en
+//               "Dit was eigenlijk natuurstenen blokken"); bij baksteen de lijsten in natuursteen.
+//   ramen       'kerk': hoge smalle ramen met een spitsboog en glas in lood, voor het schip van een
+//               kapel. Een toren kent 'wacht' (spleten, standaard), 'woon' (ramen op elke verdieping:
+//               de woontoren) en 'kerk' (spleten, en bovenin galmgaten met een ronde boog).
+//   bord        true: een uithangbord naast de voordeur (de herberg).
+//   Een toren (dak: 'plat') kan ook een steil dak krijgen in plaats van de borstwering:
+//   torendak    'zadel' (een zadeldak tussen twee topgevels, zoals de dorpskerken in Groningen),
+//               'tent' (vier dakvlakken naar één punt) of 'spits' (een naaldspits met een kraag), met
+//               lood op de nok en de graten en een bol en een vaan erop (bouwTorendak);
+//   dekking     waarmee het steile dak gedekt is: 'leien' (standaard), 'pannen' of 'spanen';
+//   deurZijde   'a' of 'q': op welke muur de deur komt (de toren van een kapel: aan de weg).
+//   Een gebouw uit meer delen (een kapel met haar toren, een herberg met zijn stal) is samen(delen).
 //
 // Assen als in kern.cjs: +x rechtsonder in beeld, +y linksonder, z omhoog, in eenheden (een tegel
 // is 45,25; één eenheid hoog is 0,866 pixel). De oorsprong is het midden van het plan. Hoogtes die
@@ -118,11 +137,40 @@ const DUN = {
   leien: { rij: 8.5, lang: 17, spreiding: 10, stoot: 1, golf: 0.3, helling: 53, ramp: 'veldsteen', nokR: 5.2 },
   pannen: { rij: 12.5, pan: 15.5, stoot: 1.6, golf: 0.7, helling: 46, ramp: 'dak', nokR: 6.8, nokL: 23 },
 };
+// Het steile dak van een toren (vraag 114, 2c; zie "torendak" bovenaan): de helling in graden, en hoever het over de
+// muur steekt (ov, eenheden). Een spits heeft onderaan een kraag: een flauwer dak dat er glad in overgaat, zodat hij
+// uitwaaiert als een klokrok.
+const TORENDAKEN = {
+  zadel: { helling: 55, ov: 8 },
+  tent: { helling: 57, ov: 10 },
+  spits: { helling: 81, ov: 2, kraag: { helling: 38, ov: 12 } },
+};
 // het materiaal van de muur tussen het hout, per wand
 const WANDMAT = { vakwerk: 'pleister', vlecht: 'leem', planken: 'plank', blokhut: 'blok', veldsteen: 'steen' };
 // hoe hoog de stenen plint is, als deel van de gewone (H.hS): stammen en planken staan lager
 const PLINT = { vakwerk: 1, vlecht: 1, planken: 0.72, blokhut: 0.42, veldsteen: 1 };
 const HOUTWAND = (w) => w === 'vakwerk' || w === 'vlecht';
+// De kalk op het pleister van het vakwerk (vraag 114, 2b; Marcel, 4 okt: "2 ja"): wit, oker of zacht roze, in de
+// stappen van 'pleister'. De kleuren (en die van de baksteen) komen achteraan in de tabellen van kern.cjs, zoals de
+// veldsteen in dorp.cjs: zo verschuift er geen ramp, en blijft elke tekening die er al is pixel voor pixel dezelfde.
+const KALK = { wit: 'pleister', oker: 'kalkOker', roze: 'kalkRoze' };
+// de steen van een stenen muur (o.steen): veldsteen (standaard), gehakte blokken zandsteen, of baksteen
+const STENEN = ['veldsteen', 'zandsteen', 'baksteen'];
+for (const [naam, hexen] of [
+  ['kalkOker', ['#4a3826', '#6e5432', '#94723e', '#b8924e', '#d4ae62', '#e8c87e', '#f6e2a8']],
+  ['kalkRoze', ['#4a3432', '#6e4e4a', '#946a62', '#b8877c', '#d4a496', '#e8bfb0', '#f6d8cc']],
+  // baksteen (vraag 114, 2c; Marcel, 4 okt: "Torens zijn wel wat grijzig"): rood en bruin, zoals de dorpskerken
+  ['baksteen', ['#24120e', '#3e1e16', '#5c2c1e', '#7a3c28', '#985034', '#b06642', '#c67e54', '#d89a6c']],
+  // zandsteen (Marcel, 4 okt: "Dit was eigenlijk natuurstenen blokken"): geelgrijs, warm in de zon
+  ['zandsteen', ['#262018', '#3e3426', '#5a4c36', '#786848', '#94845c', '#ae9e72', '#c6b88c', '#dcd0a8']],
+]) {
+  if (K.RAMP[naam] !== undefined) continue;
+  K.RAMPEN[naam] = hexen;
+  K.RAMP[naam] = K.RAMP_NAMEN.length;
+  K.RAMP_NAMEN.push(naam);
+  K.RAMP_RGB.push(hexen.map((h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]));
+  K.RAMP_LEN.push(hexen.length);
+}
 
 // kies uit een lijst [naam, kans] met een getal van 0 tot 1
 function kiesUit(lijst, x) {
@@ -142,6 +190,20 @@ function rechthoek(a, v, hx, hy) {
   const qa = Math.abs(a) - hx;
   const qv = Math.abs(v) - hy;
   return qa > 0 || qv > 0 ? Math.hypot(Math.max(qa, 0), Math.max(qv, 0)) : Math.max(qa, qv);
+}
+// De vorm van een gat in de muur (een raam, een deur, een galmgat), in zijn eigen vlak (a opzij, v omhoog vanaf zijn
+// midden): een rechthoek van 2·hb bij 2·hh, of met een boog erboven (op.boog): 'rond' (een halve cirkel) of 'spits'
+// (twee bogen die elkaar in een punt raken, zoals de oude kapel). De top van de boog ligt op v = hh.
+function gatVorm(op, a, v, hb = op.hb, hh = op.hh) {
+  if (!op.boog) return rechthoek(a, v, hb, hh);
+  if (op.boog === 'rond') {
+    const vc = hh - hb;
+    return Math.min(rechthoek(a, v - (vc - hh) / 2, hb, (vc + hh) / 2), Math.hypot(a, v - vc) - hb);
+  }
+  const R = hb * 1.6;
+  const vc = hh - Math.sqrt(2 * R * hb - hb * hb);
+  const boog = Math.max(Math.hypot(a - (R - hb), v - vc) - R, Math.hypot(a + (R - hb), v - vc) - R, vc - v);
+  return Math.min(rechthoek(a, v - (vc - hh) / 2, hb, (vc + hh) / 2), boog);
 }
 // een 2D-vorm (afstand d) als laag van n0 tot n1 langs de normaal
 function laag(d, n, n0, n1) {
@@ -350,6 +412,13 @@ function maten(zaad = 1, o = {}) {
   // het hout: warm eiken of grijs verweerd. Bij vakwerk zoals in ronde 1; planken en stammen
   // zijn vaker grijs, want die staan zonder pleister in de regen.
   H.hout = o.hout || (HOUTWAND(w0) ? (sch && r(35) < 0.34 ? 'schors' : 'hout') : kz(506) < 0.5 ? 'schors' : 'hout');
+  // de kalk op het pleister (zie KALK): alleen als de opgave hem vraagt, zodat het zaad niets anders kiest
+  H.kalk = KALK[o.kalk] ? o.kalk : 'wit';
+  // de steen van een stenen muur: veldsteen, of (o.steen) gehakte blokken zandsteen of baksteen
+  H.steenSoort = STENEN.includes(o.steen) ? o.steen : 'veldsteen';
+  // de ramen: die van een huis, of (o.ramen: 'kerk') hoge smalle ramen met een spitsboog en glas in lood, voor het
+  // schip van een kapel (vraag 114, 2c)
+  H.ramenSoort = o.ramen === 'kerk' ? 'kerk' : null;
 
   // --- de hoogtes, in px. plaatH is de bovenregel van een lange muur. voetPx is de voet van het
   // dak (de middellijn van het pak): het riet hangt vóór de muur tot zo'n 36 px lager, en een dun
@@ -575,6 +644,14 @@ function matenToren(zaad, o) {
   H.lagen = o.lagen ?? 3;
   H.nok = o.nok || 'x';
   H.kantelen = o.kantelen ?? true;
+  // het dak: een borstwering (plat), of een steil dak (zie "torendak" bovenaan); de ramen: spleten zoals een
+  // wachttoren, ramen op elke verdieping (een woontoren), of spleten met galmgaten bovenin (de toren van een kapel)
+  H.torendak = TORENDAKEN[o.torendak] ? o.torendak : null;
+  if (H.torendak) H.kantelen = false;
+  H.ramenSoort = o.ramen === 'woon' || o.ramen === 'kerk' ? o.ramen : 'wacht';
+  H.steenSoort = STENEN.includes(o.steen) ? o.steen : 'veldsteen';
+  H.dekking = o.dekking === 'pannen' || o.dekking === 'spanen' ? o.dekking : 'leien'; // waarmee het steile dak gedekt is
+  H.deurZijde = o.deurZijde === 'a' || o.deurZijde === 'q' ? o.deurZijde : null;
   H.wandKeus = ['veldsteen'];
   H.wandLagen = [Array.from({ length: H.lagen }, () => 'veldsteen')];
   H.hoekStenen = true;
@@ -591,6 +668,15 @@ function matenToren(zaad, o) {
   H.dikB = sp ? 12 : 9; // hoe dik ze is
   H.zBorst0 = E(H.hDak - 14); // de onderkant van de borstwering
   H.zKlos0 = H.zBorst0 - E(sp ? 15 : 12); // de onderkant van de klossen
+  if (H.torendak) {
+    // geen borstwering: het dak ligt op de muren, en steekt er zoveel over (het kader rekent ermee)
+    const T = TORENDAKEN[H.torendak];
+    H.borstH = 0;
+    H.uitB = Math.max(T.ov, T.kraag ? T.kraag.ov : 0);
+    H.dikB = 0;
+    H.zBorst0 = Infinity;
+    H.zKlos0 = Infinity;
+  }
   H.talud = sp ? 6 : 4; // de voet loopt schuin uit
   H.zTalud = E(30);
   // de vloer van het dak loopt naar één hoek af
@@ -618,6 +704,21 @@ function matenToren(zaad, o) {
   V.bolA = sch * (0.9 + 1 * r(307));
   V.wF = r(381) * 6.3;
   H.zNmax = H.zTop;
+  if (H.torendak) {
+    // het vlak van het dak gaat door de bovenrand van de muur; de nok (zadel) of de top (tent, spits) ligt daarboven,
+    // en daar nog boven een bol en een vaan
+    const T = TORENDAKEN[H.torendak];
+    H.dakHelling = (T.helling + sch * rs(517) * 1.5) * GRAAD;
+    const tan = Math.tan(H.dakHelling);
+    H.zNok = H.zDak + (H.torendak === 'zadel' ? V.hq : Math.min(V.ha, V.hq)) * tan;
+    H.zTop = H.zNok + E(H.torendak === 'spits' ? 54 : H.torendak === 'tent' ? 26 : 6);
+    // waar de rand van het dak de muur in beeld afdekt (randSchaduw), zoals onder de goot van een huis
+    H.zRand = H.zDak - T.ov * tan - 4.5 - 0.82 * T.ov;
+    V.zN = H.zTop;
+    V.nokZ = () => H.zNok;
+    V.XR = V.ha + (H.torendak === 'zadel' ? 2 : H.uitB);
+    H.zNmax = H.zTop;
+  }
   H.verd = vl.slice(0, -1).map((h0, i) => ({ uit: 0, z0: i ? E(h0) : -3, z1: E(vl[i + 1]) }));
   H.zOnderMin = Infinity;
   H.gevels = [];
@@ -635,6 +736,102 @@ function matenToren(zaad, o) {
   zichtVanStukken(H);
   verdeelToren(H);
   return H;
+}
+
+// Het steile dak van een toren (H.torendak; vraag 114, 2c; Marcel, 4 okt: "3 allebei 4 allebei"): stelsels zoals het dakje
+// van een dakkapel (kapellenVan), zodat plekV, pakAfstand en dakPatroon er zonder meer mee werken, gedekt met leien,
+// pannen of spanen (H.dekking). Een zadeldak
+// is één stelsel met de nok langs de toren, tussen de twee topgevels (torenVeld); een tentdak is de doorsnede van twee
+// stelsels dwars op elkaar, vier dakvlakken naar één punt (zoals de schild in de buitenhoek van een L); een spits net zo,
+// maar steil, met onderaan een kraag: een flauwer tentdak dat er glad in overgaat (unie), zodat hij uitwaaiert. Lood op
+// de nok en op de graten, en bovenop een ijzeren stang met een gouden bol en een vaan.
+function bouwTorendak(W, H) {
+  const { sp, sch, rs } = H;
+  const V = H.vleugels[0];
+  const T = TORENDAKEN[H.torendak];
+  // de toren helt: het dak ligt op de bovenrand van de muren
+  const c = V.wereld(V.hellA * H.zDak, V.hellQ * H.zDak);
+  const AV = [V.Ax, V.Ay];
+  const QV = [V.Qx, V.Qy];
+  const dik = sp ? 4.5 : 3.6;
+  const stelsel = (A, Q, ha, hq, helling, ov, i) => {
+    const tan = Math.tan(helling);
+    const F = stelselV({ c, A, Q });
+    const zN = H.zDak + hq * tan;
+    const f1 = H.r(560 + i) * 6.3;
+    Object.assign(F, {
+      i, D: DUN[H.dekking], dak: H.dekking, dik, hoekig: true, voetDik: 0, bol: 0, laagH: 0, XR: ha, ha, hq,
+      nokZ: () => zN,
+      voetQ: () => hq + ov,
+      voetZ: () => H.zDak - ov * tan,
+      laagGolf: (a) => sch * 1.1 * Math.sin(a * 0.06 + f1),
+      panDrift: () => 0,
+    });
+    return F;
+  };
+  const tan = Math.tan(H.dakHelling);
+  const op = dik / Math.cos(H.dakHelling); // hoeveel de bovenkant van de leien boven het vlak ligt, recht omhoog
+  const lood = W.groep('lood');
+  let plek;
+  let veld;
+  if (H.torendak === 'zadel') {
+    const F = stelsel(AV, QV, V.ha + 1, V.hq, H.dakHelling, T.ov, 40);
+    plek = (x, y, z) => plekV(H, F, x, y, z);
+    veld = (x, y, z) => Math.max(pakAfstand(H, plek(x, y, z)), Math.abs(F.lok(x, y)[0]) - F.XR);
+    // de nok: een rol lood van gevel tot gevel
+    const p = stok([...F.wereld(-V.ha, 0), H.zNok + op - 0.6], [...F.wereld(V.ha, 0), H.zNok + op - 0.6], sp ? 2.8 : 2.2);
+    voeg(lood, { ...p, m: 'lood', deel: 81 });
+  } else {
+    const piramide = (helling, ov, i) => {
+      const F0 = stelsel(AV, QV, 1e4, V.hq, helling, ov, i);
+      const F1 = stelsel(QV, AV, 1e4, V.ha, helling, ov, i + 1);
+      return (x, y, z) => doorsnede(plekV(H, F0, x, y, z), plekV(H, F1, x, y, z), 0);
+    };
+    const dak = piramide(H.dakHelling, T.ov, 40);
+    if (T.kraag) {
+      const kraag = piramide(T.kraag.helling * GRAAD, T.kraag.ov, 44);
+      plek = (x, y, z) => unie(dak(x, y, z), kraag(x, y, z), 10);
+    } else plek = dak;
+    veld = (x, y, z) => pakAfstand(H, plek(x, y, z));
+    // de graten: van elke hoek van de goot naar de top, een rol lood (bij een spits begint hij boven de kraag)
+    const top = [c[0], c[1], H.zNok + op];
+    for (const sa of [-1, 1]) {
+      for (const sq of [-1, 1]) {
+        const voet = [...V.wereld(V.hellA * H.zDak + sa * (V.ha + T.ov), V.hellQ * H.zDak + sq * (V.hq + T.ov)), H.zDak - T.ov * tan + op];
+        voeg(lood, { ...stok(voet, top, sp ? 2.2 : 1.8), m: 'lood', deel: 82 });
+      }
+    }
+  }
+  const R = Math.hypot(V.ha, V.hq) + H.uitB + 14;
+  voeg(W.groep('dak'), { f: veld, grens: [c[0], c[1], R, H.zDak - H.uitB * 2 - 24, H.zNok + op + 12], m: 'dak', deel: 2, plek });
+  // bovenop: een ijzeren stang, een gouden bol, en een vaan die in de wind staat; op een zadeldak op de voorste gevel
+  const versiering = W.groep('vaan');
+  const [vx, vy] = H.torendak === 'zadel' ? V.wereld(V.hellA * H.zDak + V.ha - (sp ? 6 : 5), V.hellQ * H.zDak) : c;
+  const z0 = H.zNok + (H.torendak === 'zadel' ? E(8) : op * 0.5);
+  const lang = E(H.torendak === 'spits' ? 50 : H.torendak === 'tent' ? 24 : 18);
+  voeg(versiering, { ...stok([vx, vy, z0 - 2], [vx, vy, z0 + lang], sp ? 1.3 : 1.1), m: 'ijzer', deel: 83 });
+  const zBol = z0 + lang * (H.torendak === 'spits' ? 0.34 : 0.45);
+  const rBol = H.torendak === 'spits' ? (sp ? 4.6 : 3.8) : sp ? 3.4 : 2.8;
+  voeg(versiering, { f: (x, y, z) => sdf.bol(x - vx, y - vy, z - zBol, rBol), g: [vx, vy, zBol, rBol + 1], m: 'goud', deel: 84 });
+  if (H.torendak !== 'zadel') {
+    // de vaan: een plaatje ijzer aan de stang, met de punt van de stang erboven, een eind in de richting van de wind
+    const hoek = (35 + sch * rs(518) * 25) * GRAAD;
+    const [wx, wy] = [Math.cos(hoek), Math.sin(hoek)];
+    const zV = z0 + lang * 0.78;
+    const lengte = sp ? 15 : 12;
+    voeg(versiering, {
+      f: (x, y, z) => {
+        const dx = x - vx;
+        const dy = y - vy;
+        const l = dx * wx + dy * wy;
+        const n = -dx * wy + dy * wx;
+        return sdf.doos(l - lengte / 2, n, z - zV, lengte / 2, 0.7, E(5) * (1 - 0.35 * klem(l / lengte, 0, 1)), 0.3);
+      },
+      g: [vx + (wx * lengte) / 2, vy + (wy * lengte) / 2, zV, lengte / 2 + E(6)],
+      m: 'ijzer',
+      deel: 85,
+    });
+  }
 }
 
 // De kantelen: per zijde van de borstwering de gaten, met op elke hoek een merlon. Niet allemaal
@@ -669,18 +866,25 @@ function verdeelToren(H) {
   const diep = sp ? 15 : 12;
   let deurStuk = null;
   let beste = -1;
-  for (const P of H.stukken) {
-    if (P.s !== 0 || P.Lu < 90 || P.zicht < 0.6) continue;
-    const w = P.Lu * P.zicht * (P.zijde === 'q' ? 1.3 : 1);
-    if (w > beste) {
-      beste = w;
-      deurStuk = P;
+  // de deur op de muur die je het best ziet, of op een muur naar keuze (H.deurZijde: de toren van een kapel heeft
+  // zijn deur aan de kant van de weg, niet aan die van het schip)
+  for (const zijde of H.deurZijde ? [H.deurZijde, null] : [null]) {
+    for (const P of H.stukken) {
+      if (P.s !== 0 || P.Lu < 90 || P.zicht < 0.6 || (zijde && P.zijde !== zijde)) continue;
+      const w = P.Lu * P.zicht * (P.zijde === 'q' ? 1.3 : 1);
+      if (w > beste) {
+        beste = w;
+        deurStuk = P;
+      }
     }
+    if (deurStuk) break;
   }
-  const maak = (P, u, h0, b, h, spleet) => {
-    const w = { P, reg: P.s, u, h0, b, h, hoek: sch * RS() * 1.2 * GRAAD, warm: !spleet && R() < 0.4, spleet };
-    w.op = opening(P, u, h0, b, h, w.hoek, diep, spleet ? 'donker' : w.warm ? 'glasWarm' : 'glas');
+  // spleet: een spleet zonder glas; binnen: wat er in het gat zit (anders donker of glas); boog: 'rond' of 'spits'
+  const maak = (P, u, h0, b, h, spleet, o = {}) => {
+    const w = { P, reg: P.s, u, h0, b, h, hoek: sch * RS() * 1.2 * GRAAD, warm: !spleet && R() < (o.warm ?? 0.4), spleet };
+    w.op = opening(P, u, h0, b, h, w.hoek, o.diep ?? diep, o.binnen || (spleet ? 'donker' : w.warm ? 'glasWarm' : 'glas'));
     Object.assign(w.op, { reg: P.s, raam: w });
+    if (o.boog) w.op.boog = o.boog;
     P.openingen.push(w.op);
     H.openingen.push(w.op);
   };
@@ -692,12 +896,31 @@ function verdeelToren(H) {
       const h = sp ? 100 : 92;
       const u = Math.round(P.Lu * (0.42 + 0.16 * R()));
       const d = { P, u, b, h, hoek: sch * RS() * GRAAD, blad: sch * RS() * 2 * GRAAD };
-      d.op = opening(P, u, 0, b, h, d.hoek, diep, 'donker');
+      d.op = opening(P, u, 0, b, h + (H.ramenSoort === 'kerk' ? 14 : 0), d.hoek, diep, 'donker');
       Object.assign(d.op, { reg: 0, deur: d });
+      if (H.ramenSoort === 'kerk') d.op.boog = 'rond'; // de deur van een kerktoren heeft een ronde boog
       P.openingen.push(d.op);
       H.openingen.push(d.op);
       H.deur = d;
       H.deuren.push(d);
+      continue;
+    }
+    if (H.ramenSoort === 'woon') {
+      // een woontoren: op elke verdieping een of twee ramen per muur, en ook beneden een raam
+      const n = P.s && P.Lu > 200 ? 2 : 1;
+      for (let i = 0; i < n; i++) {
+        const u = (P.Lu * (i + 0.5)) / n + sch * RS() * 10;
+        maak(P, u, h0 + (P.s ? 40 : 44) + RS() * 3, sp ? 28 : 22, sp ? 42 : 36, false, { warm: 0.45 });
+      }
+      continue;
+    }
+    if (H.ramenSoort === 'kerk' && P.s === H.lagen - 1) {
+      // de toren van een kapel: bovenin galmgaten, twee naast elkaar met een ronde boog, met galmborden erin
+      const b = sp ? 15 : 12;
+      const h = sp ? 58 : 50;
+      const tussen = sp ? 11 : 9;
+      const u = P.Lu / 2 + sch * RS() * 4;
+      for (const k of [-1, 1]) maak(P, u + k * (b + tussen) / 2, h0 + 34 + RS() * 2, b, h, true, { binnen: 'galm', boog: 'rond', diep: diep + 4 });
       continue;
     }
     if (P.s === 0) {
@@ -1157,6 +1380,28 @@ function verdeel(H) {
     const regs = registers(H, P);
     for (const reg of regs) {
       const bezet = [];
+      if (H.ramenSoort === 'kerk') {
+        // een kapel: beneden hoge smalle ramen met een spitsboog (in een gevel één, in het midden), en verder niets; haar
+        // deur zit in de toren (het schip krijgt o.deur 'achter')
+        if (reg.lo !== 'steen') continue;
+        const b = sp ? 26 : 22;
+        const h = Math.min(H.plaatH - 64, sp ? 104 : 94);
+        const zones = vrij(P, voorbezet(P, 44, 44 + h + 10), 30, 30);
+        const maak = (u) => {
+          const w = raam(P, reg.i, u, 48 + sch * RS() * 2, b, h, R() < 0.35, { kerk: true });
+          w.op.boog = 'spits';
+        };
+        if (P.gevel) {
+          if (zones.some(([a, z]) => a < P.Lu / 2 && z > P.Lu / 2)) maak(P.Lu / 2 + sch * RS() * 4);
+        } else {
+          // dichter bij elkaar dan de ramen van een huis: een schip van negen tegels krijgt er drie
+          for (const [z0, z1] of zones) {
+            const n = Math.max(1, Math.floor((z1 - z0 + 30) / 78));
+            for (let i = 0; i < n; i++) maak(z0 + ((z1 - z0) * (i + 0.5)) / n + sch * RS() * 3);
+          }
+        }
+        continue;
+      }
       if (reg.lo === 'steen') {
         // de begane grond: eerst de deur
         if (P === deurStuk) {
@@ -1588,7 +1833,12 @@ function randSchaduw(H, C) {
     if (H.plat) {
       // onder de borstwering op zijn klossen, en een smalle schaduw onder elke lijst
       if (z > H.zBorst0) continue;
-      const zLijn = H.zKlos0 - 0.82 * H.uitB;
+      // onder een steil dak: de rand van het dak, behalve op de topgevels van een zadeldak
+      if (H.torendak === 'zadel' && P.zijde === 'a') {
+        for (const zb of H.banden || []) d = Math.max(d, 0.55 * baan(zb - E(3.4) - z, E(1.2), E(2)));
+        continue;
+      }
+      const zLijn = H.torendak ? H.zRand : H.zKlos0 - 0.82 * H.uitB;
       d = Math.max(d, H.sp ? baan(zLijn - z, E(2), E(9)) : baan(zLijn - z, 0, E(7)));
       for (const zb of H.banden || []) d = Math.max(d, 0.55 * baan(zb - E(3.4) - z, E(1.2), E(2)));
       continue;
@@ -1741,6 +1991,54 @@ function steenPatroon(H, C, maat) {
   return { stap: s };
 }
 
+// Baksteen (o.steen; vraag 114, 2c): stenen in rijen, elke rij een halve steen verschoven (halfsteens verband), met een
+// lichte voeg van kalk eronder en rechts, en niet elke steen even hard gebakken: een enkele donkere klinker, een enkele
+// lichtere, oranjere. De lijsten van een toren blijven natuursteen, als een band.
+function baksteenPatroon(H, C) {
+  const { x, y, z, nx, ny } = C;
+  // de afdekking van de topgevels onder een zadeldak: natuursteen, zoals de lijsten
+  if (H.torendak === 'zadel' && z > H.zDak + 2 && C.nz > 0.3) return { ramp: 'veldsteen', stap: C.stap * 1.1 + 0.6 };
+  if (H.plat && (H.banden || []).some((zb) => Math.abs(z - zb) < E(2.9))) {
+    const U = (Math.abs(ny) >= Math.abs(nx) ? (ny >= 0 ? -x : x) : nx >= 0 ? y : -y) * SQ;
+    const st = steenOp(U, z * PXH, 1, 1, H.zaad * 13 + 7, 60, 26, 12);
+    return { ramp: 'veldsteen', stap: steenStap(st, C.stap * 1.15 + 0.8, C.px, C.py, { voeg: 2.2, vlak: true, zaad: H.zaad }) };
+  }
+  const U = (Math.abs(ny) >= Math.abs(nx) ? (ny >= 0 ? -x : x) : nx >= 0 ? y : -y) * SQ;
+  const rij = H.sp ? 7 : 6;
+  const lang = H.sp ? 17 : 14;
+  const Hp = z * PXH + H.sch * 0.8 * Math.sin(U * 0.031 + H.zaad);
+  const r = Math.floor(Hp / rij);
+  const dh = Hp - r * rij;
+  const Uv = U + ((r & 1) * lang) / 2 + H.sch * ((hash(r, 3, H.zaad + 331) % 5) - 2) * 0.4;
+  const k = Math.floor(Uv / lang);
+  const du = Uv - k * lang;
+  if (dh < 1.15 || du > lang - 1.15) return { ramp: 'veldsteen', stap: klem(C.stap * 0.75 + 1.4, 1.5, 6.2) };
+  const id = hash(k, r, H.zaad + 333);
+  let s = C.stap;
+  if (id % 9 === 0) s -= 1.2; // een klinker
+  else if (id % 7 === 1) s += 0.7;
+  else if (id % 5 === 2) s -= 0.4;
+  if (dh > rij - 1.8) s += 0.45; // de bovenrand vangt licht
+  if (du < 1.6) s += 0.3;
+  return { stap: s };
+}
+
+// Zandsteen (o.steen; Marcel, 4 okt: "Dit was eigenlijk natuurstenen blokken"): gehakte blokken in rechte lagen, met
+// een dunne voeg, vlak gehakt; niet elk blok even geel, hier en daar een grijzer, en een enkele lichtere. De lijsten van
+// een toren zijn dezelfde steen.
+function zandsteenPatroon(H, C) {
+  const { x, y, z, nx, ny } = C;
+  const U = (Math.abs(ny) >= Math.abs(nx) ? (ny >= 0 ? -x : x) : nx >= 0 ? y : -y) * SQ;
+  const Hp = z * PXH + H.sch * 0.6 * Math.sin(U * 0.029 + H.zaad);
+  const st = steenOp(U, Hp, 1, 1, H.zaad * 13 + 5, H.sp ? 14 : 12, H.sp ? 30 : 25, H.sp ? 14 : 11);
+  const s = steenStap(st, C.stap, C.px, C.py, { voeg: 1.7, vlak: true, zaad: H.zaad });
+  if (st.pb >= 1 && st.pr >= 1) {
+    if (st.id % 9 === 0) return { ramp: 'veldsteen', stap: (s * (RAMP_LEN[RAMP.veldsteen] - 1)) / (RAMP_LEN[RAMP.zandsteen] - 1) };
+    if (st.id % 7 === 3) return { stap: s + 0.5 };
+  }
+  return { stap: s };
+}
+
 // pleister: vlekkerig, en onderaan wat vuiler
 function pleisterPatroon(H, C) {
   const n = ruis2(C.px * 0.16, C.py * 0.16, H.zaad + 7);
@@ -1810,6 +2108,15 @@ function glasPatroon(C) {
   const p = C.deel;
   if (!p.op) return 0;
   const [a, v] = p.op.lok(C.x, C.y, C.z);
+  if (p.op.boog) {
+    // glas in lood (een kapel): ruitjes op hun punt, met een lijn lood ertussen, en niet elk ruitje even licht
+    const m = 6.5;
+    const i = Math.round((a + v) / m);
+    const j = Math.round((a - v) / m);
+    const lood = Math.min(Math.abs((a + v) / m - i), Math.abs((a - v) / m - j)) * m;
+    if (lood < 0.75) return { ramp: 'veldsteen', stap: 0.6 };
+    return ((hash(i, j, 77) % 5) - 2) * 0.35;
+  }
   const ka = a / p.op.hb;
   const kv = v / p.op.hh;
   const la = ka < 0 ? ka + 0.5 : ka - 0.5; // midden van het vak
@@ -2245,6 +2552,12 @@ function torenVeld(H) {
   const V = H.vleugels[0];
   const ops = H.openingen;
   const zB1 = H.zDak + 4;
+  // onder een zadeldak: de muur loopt door tot onder het dak, en aan de twee kopse kanten steekt een topgevel er een
+  // eind bovenuit (gevelDik eenheden dik), zoals bij de dorpskerken in Groningen
+  const zadel = H.torendak === 'zadel';
+  const tan = zadel ? Math.tan(H.dakHelling) : 0;
+  const cos = zadel ? Math.cos(H.dakHelling) : 1;
+  const gevelDik = H.sp ? 12 : 10;
   return (x, y, z) => {
     const dx = x - V.cx;
     const dy = y - V.cy;
@@ -2255,6 +2568,13 @@ function torenVeld(H) {
     const ba = bolA(H, V, qs, z) + tal;
     let d = sdf.doos(as, qs, z - (zB1 - 3) / 2, V.ha + ba, V.hq + bq, (zB1 + 3) / 2, 1.5);
     for (const zb of H.banden) if (Math.abs(z - zb) < 10) d = Math.min(d, sdf.doos(as, qs, z - zb, V.ha + ba + 2.6, V.hq + bq + 2.6, E(2.8), 0.8));
+    if (zadel && z > H.zDak - 12) {
+      const onder = ((z - H.zDak) + (Math.abs(qs) - V.hq) * tan) * cos; // het vlak van het dak
+      const muur = Math.max(Math.abs(as) - (V.ha + ba), Math.abs(qs) - (V.hq + bq), H.zDak - 12 - z);
+      d = Math.min(d, Math.max(muur, onder + 1));
+      // de topgevels, met hun afdekking een eind boven de leien
+      d = Math.min(d, Math.max(muur, V.ha + ba - gevelDik - Math.abs(as), onder - E(8)));
+    }
     if (z > H.zKlos0 - 3) {
       const top = H.zTop + H.sch * E(1.6) * Math.sin(as * 0.05 + qs * 0.043 + V.wF);
       let dp = sdf.doos(as, qs, z - (H.zBorst0 + top) / 2, V.ha + H.uitB, V.hq + H.uitB, (top - H.zBorst0) / 2, 1);
@@ -2262,7 +2582,7 @@ function torenVeld(H) {
       d = Math.min(d, dp);
       if (z < H.zBorst0 + 1) d = Math.min(d, klossen(H, V, as, qs, z));
     }
-    if (z > H.zDak - 8) {
+    if (!H.torendak && z > H.zDak - 8) {
       const bi = H.uitB - H.dikB;
       const vloer = H.zDak + H.vloerAf[0] * as + H.vloerAf[1] * qs;
       d = Math.max(d, -Math.max(Math.abs(as) - (V.ha + bi), Math.abs(qs) - (V.hq + bi), vloer - z));
@@ -2274,7 +2594,7 @@ function torenVeld(H) {
       const ez = z - op.m[2];
       if (ex * ex + ey * ey + ez * ez > op.r2) continue;
       const [a, v, n] = op.lok(x, y, z);
-      const gat = laag(rechthoek(a, v, op.hb, op.hh), n, -op.diep, 16);
+      const gat = laag(gatVorm(op, a, v), n, -op.diep, 16);
       if (-gat > d) d = -gat;
     }
     return d;
@@ -2341,7 +2661,7 @@ function rompVeld(H) {
       const ez = z - op.m[2];
       if (ex * ex + ey * ey + ez * ez > op.r2) continue;
       const [a, v, n] = op.lok(x, y, z);
-      const gat = laag(rechthoek(a, v, op.hb, op.hh), n, -op.diep, op.uitGat ?? 14);
+      const gat = laag(gatVorm(op, a, v), n, -op.diep, op.uitGat ?? 14);
       if (-gat > d) d = -gat;
     }
     return d;
@@ -2371,10 +2691,10 @@ function rompMat(H) {
       const ez = z - op.m[2];
       if (ex * ex + ey * ey + ez * ez > op.r2) continue;
       const [a, v, n] = op.lok(x, y, z);
-      if (n < -op.diep + 1.2 && rechthoek(a, v, op.hb, op.hh) < 1) return op.binnen;
+      if (n < -op.diep + 1.2 && gatVorm(op, a, v) < 1) return op.binnen;
     }
     if (H.plat) {
-      if (z < H.zDak - 3) return 'steen';
+      if (H.torendak || z < H.zDak - 3) return 'steen';
       const V = H.vleugels[0];
       const [a, q] = V.lok(x, y);
       const bi = H.uitB - H.dikB - 1;
@@ -3698,12 +4018,16 @@ function huis(zaad = 1, o = {}) {
     // het riet in de zon komt op stap 4 à 5 uit, zodat er boven nog licht en onder nog schaduw past
     riet: { ramp: 'stro', lo: sp ? 0.2 : 1.2, hi: sp ? 4.9 : 5.3, schaduwKracht: sp ? 0.18 : 0.35, patroon: (C) => rietPatroon(H, C) },
     nok: { ramp: 'stro', lo: 0.2, hi: sp ? 4.3 : 4.8, schaduwKracht: diepe, patroon: (C) => nokPatroon(H, C) },
-    steen: { ramp: 'veldsteen', lo: sp ? 0.8 : 1.6, hi: sp ? 7.8 : 7, schaduwKracht: diepe, patroon: metRand(H, (C) => steenPatroon(H, C, sp ? [13, 22, 16] : [9, 13, 9])) },
+    steen: H.steenSoort === 'baksteen'
+      ? { ramp: 'baksteen', lo: sp ? 0.7 : 1.4, hi: sp ? 6.9 : 6.2, schaduwKracht: diepe, patroon: metRand(H, (C) => baksteenPatroon(H, C)) }
+      : H.steenSoort === 'zandsteen'
+      ? { ramp: 'zandsteen', lo: sp ? 0.8 : 1.5, hi: sp ? 7 : 6.4, schaduwKracht: diepe, patroon: metRand(H, (C) => zandsteenPatroon(H, C)) }
+      : { ramp: 'veldsteen', lo: sp ? 0.8 : 1.6, hi: sp ? 7.8 : 7, schaduwKracht: diepe, patroon: metRand(H, (C) => steenPatroon(H, C, sp ? [13, 22, 16] : [9, 13, 9])) },
     schoorsteen: H.schoorsteenSoort === 'leem'
       ? { ramp: 'perkament', lo: sp ? 0.9 : 1.3, hi: sp ? 5.2 : 4.8, schaduwKracht: diepe, patroon: (C) => schouwPatroon(H, C) }
       : { ramp: 'veldsteen', lo: 1, hi: sp ? 7.6 : 7, schaduwKracht: diepe, patroon: (C) => steenPatroon(H, C, sp ? [9, 14, 8] : [7, 10, 6]) },
     drempel: { ramp: 'veldsteen', lo: 1.4, hi: 7, schaduwKracht: diepe },
-    pleister: { ramp: 'pleister', lo: sp ? 0.7 : 1.5, hi: sp ? 6.2 : 5.8, schaduwKracht: diepe, patroon: metRand(H, (C) => pleisterPatroon(H, C)) },
+    pleister: { ramp: KALK[H.kalk] || 'pleister', lo: sp ? 0.7 : 1.5, hi: sp ? 6.2 : 5.8, schaduwKracht: diepe, patroon: metRand(H, (C) => pleisterPatroon(H, C)) },
     hout: { ramp: H.hout, lo: 0.5, hi: houtHi, schaduwKracht: diepe, patroon: metRand(H, (C) => balkPatroon(C, false)) },
     kozijn: { ramp: H.hout, lo: 0.8, hi: houtHi + 0.2, schaduwKracht: diepe, patroon: metRand(H, kozijnPatroon) },
     deur: { ramp: H.hout, lo: 0.3, hi: sp ? 4.6 : 4.2, schaduwKracht: diepe, patroon: metRand(H, (C) => deurPatroon(H, C)) },
@@ -3727,6 +4051,17 @@ function huis(zaad = 1, o = {}) {
     W.mat.nok = { ramp, lo: 0.5 + lichter, hi: (sp ? 6 : 5.6) + lichter, schaduwKracht: diepe, patroon: (C) => (H.dak === 'spanen' ? balkPatroon(C, true) : nokDunPatroon(H, C)) };
   }
   if (H.plat) W.mat.dakvloer = { ramp: 'veldsteen', lo: 1.2, hi: 6.4, schaduwKracht: diepe, patroon: (C) => vloerPatroon(H, C) };
+  // de galmborden in de galmgaten van een kerktoren: schuine planken, om en om in licht en schaduw
+  if (H.plat) W.mat.galm = { ramp: H.hout, lo: 0.2, hi: 2.8, schaduwKracht: diepe, patroon: (C) => (Math.floor((C.z * PXH) / 4.5) % 2 ? -0.8 : 0.4) };
+  if (H.torendak) {
+    // het steile dak van een toren: leien, zoals een dun dak (dakPatroon), met lood op de nok en de graten, en een bol
+    // en een vaan
+    const lichter = H.dekking === 'leien' ? 0.6 : 0;
+    W.mat.dak = { ramp: DUN[H.dekking].ramp || 'schors', lo: 0.6 + lichter, hi: (sp ? 6.2 : 5.8) + lichter, schaduwKracht: sp ? 0.25 : 0.4, patroon: (C) => dakPatroon(H, C) };
+    W.mat.lood = { ramp: 'veldsteen', lo: 0.6, hi: 4.4, schaduwKracht: diepe };
+    W.mat.ijzer = { ramp: 'ijzer', lo: 0.4, hi: 4.2, schaduwKracht: diepe };
+    W.mat.goud = { ramp: 'goud', lo: 1.6, hi: 6.4, schaduwKracht: 0.45, glans: 2.2 };
+  }
 
   // de grenzen van het hele huis, als staande cilinder rond de oorsprong
   let straal = 0;
@@ -3764,6 +4099,9 @@ function huis(zaad = 1, o = {}) {
       deel: 9,
     });
   }
+
+  // --- het steile dak van een toren
+  if (H.torendak) bouwTorendak(W, H);
 
   // --- het dak: riet, of een dunne plaat spanen, leien of pannen
   if (!H.plat) {
@@ -3997,7 +4335,7 @@ function huis(zaad = 1, o = {}) {
         }
         const ov = steen ? 5 : 8;
         wandBalk(lig, P, d.u - d.b / 2 - jamb - ov, latei + balkH / 2 + wiebel(2), d.u + d.b / 2 + jamb + ov, latei + balkH / 2 + wiebel(2), dik(balkH + (steen ? 4 : 2)), steen ? 3.5 : uit + 1, mLat);
-      } else if (steen && op.raam) {
+      } else if (steen && op.raam && !op.boog) {
         const w = op.raam;
         const top = w.h0 + w.h + (sp ? 6 : 4);
         const ov = w.spleet ? 5 : 9;
@@ -4311,8 +4649,8 @@ function huis(zaad = 1, o = {}) {
   });
 
   // --- De toren: een luik in de vloer van het dak, en een spuwer door de borstwering waar het
-  // water naartoe loopt.
-  if (H.plat) {
+  // water naartoe loopt. (Onder een steil dak geen van beide.)
+  if (H.plat && !H.torendak) {
     const V = H.vleugels[0];
     const lk = W.groep('luik');
     const bi = V.ha + H.uitB - H.dikB;
@@ -4448,6 +4786,13 @@ function huis(zaad = 1, o = {}) {
     const p = {
       f: (x, y, z) => {
         const [a, v, n] = op.lok(x, y, z);
+        if (op.boog) {
+          // een raam met een boog (een kapel): een rand van gehakte steen, en een dorpel; het lood zit in het glas
+          const binnen = gatVorm(op, a, v);
+          const d = laag(Math.max(binnen - rw * 1.3, -binnen), n - voor, -2.5, sp ? 3.6 : 2.4);
+          const bank = rechthoek(a, v + op.hh + bankH / 2, op.hb + rw + 2, bankH / 2 + 0.5);
+          return Math.min(d, laag(bank, n - voor, -2, sp ? 6 : 4));
+        }
         const buiten = rechthoek(a, v, op.hb + rw, op.hh + rw * 0.8);
         const binnen = rechthoek(a, v, op.hb, op.hh);
         let d = laag(Math.max(buiten, -binnen), n - voor, -2.5, sp ? 3.2 : 2);
@@ -4459,7 +4804,7 @@ function huis(zaad = 1, o = {}) {
         return Math.min(d, laag(bank, n - voor, -2, sp ? 7 : 4.5));
       },
       g: [cx, cy, cz, Math.hypot(op.hb + rw + 5, op.hh + rw + bankH + 3) + 8],
-      m: 'kozijn',
+      m: op.boog ? 'gehakt' : 'kozijn',
       deel: 400 + i,
     };
     p.raam = w;
@@ -4474,7 +4819,7 @@ function huis(zaad = 1, o = {}) {
     voeg(glas, {
       f: (x, y, z) => {
         const [a, v, n] = op.lok(x, y, z);
-        return laag(rechthoek(a, v, op.hb + 0.6, op.hh + 0.6), n, -op.diep, -op.diep + 0.8);
+        return laag(op.boog ? gatVorm(op, a, v) - 0.6 : rechthoek(a, v, op.hb + 0.6, op.hh + 0.6), n, -op.diep, -op.diep + 0.8);
       },
       g: [cx, cy, cz, Math.hypot(op.hb, op.hh) + op.diep + 4],
       m: w.warm ? 'glasWarm' : 'glas',
@@ -4489,6 +4834,59 @@ function huis(zaad = 1, o = {}) {
 
   // --- de uitbouwen (ronde 3)
   bouwUitbouwen(W, H, { wandBalk, hoekStijl, omlijsting, dik, wiebel, balkH, stijlB });
+
+  // --- het uithangbord van een herberg (o.bord; vraag 114, 2c): naast de voordeur een ijzeren arm uit de muur, met een
+  // bord eraan dat dwars op de muur hangt, zodat je het van de weg af ziet, met een gouden kroes erop
+  if (o.bord && H.deur) {
+    const d = H.deur;
+    const P = d.P;
+    const zij = d.u + d.b / 2 + 26 < P.Lu - 20 ? 1 : -1;
+    const u = d.u + zij * (d.b / 2 + 26);
+    const hArm = d.h + 40;
+    const voet = P.pos(u, hArm, 0);
+    const uit = sp ? 34 : 28;
+    const kop = P.pos(u, hArm, uit);
+    const bg = W.groep('bord');
+    voeg(bg, { ...stok(voet, kop, sp ? 1.3 : 1.1), m: 'ijzer', deel: 70 });
+    voeg(bg, { ...stok(P.pos(u, hArm - 22, 0), P.pos(u, hArm, uit * 0.55), sp ? 1 : 0.8), m: 'ijzer', deel: 71 });
+    // het bord: in het vlak van de normaal van de muur en omhoog, onder de buitenste helft van de arm
+    const [nx, ny] = P.N;
+    const mid = P.pos(u, hArm - 24, uit * 0.6);
+    const hb = uit * 0.4;
+    const hv = E(16);
+    voeg(bg, {
+      f: (x, y, z) => {
+        const dx = x - mid[0];
+        const dy = y - mid[1];
+        const l = dx * nx + dy * ny;
+        const t = -dx * ny + dy * nx;
+        return sdf.doos(l, t, z - mid[2], hb, 0.9, hv, 0.6);
+      },
+      g: [mid[0], mid[1], mid[2], Math.hypot(hb, hv) + 2],
+      m: 'bord',
+      deel: 72,
+      lok: (x, y, z) => [(x - mid[0]) * nx + (y - mid[1]) * ny, z - mid[2]],
+      hb,
+      hv,
+    });
+    W.mat.ijzer = W.mat.ijzer || { ramp: 'ijzer', lo: 0.4, hi: 4.2, schaduwKracht: diepe };
+    W.mat.bord = {
+      ramp: H.hout,
+      lo: 0.6,
+      hi: houtHi,
+      schaduwKracht: diepe,
+      patroon: (C) => {
+        const p = C.deel;
+        const [l, v] = p.lok(C.x, C.y, C.z);
+        // een rand, en in het midden een gouden kroes: een buik met een oor
+        if (Math.abs(l) > p.hb - 1.6 || Math.abs(v) > p.hv - 1.6) return -1.2;
+        const buik = Math.abs(l + 0.8) < p.hb * 0.32 && Math.abs(v + 1) < p.hv * 0.42;
+        const oor = Math.abs(Math.hypot(l - p.hb * 0.36, v + 0.6) - p.hv * 0.2) < 0.9;
+        if (buik || oor) return { ramp: 'goud', stap: 3.4 + C.licht * 2 };
+        return 0.3;
+      },
+    };
+  }
 
   // --- de deuren, die er net niet recht in hangen (de voordeur, en een deur boven een buitentrap,
   // op een galerij of in een aanbouw)
@@ -4509,7 +4907,7 @@ function huis(zaad = 1, o = {}) {
     voeg(dg, {
       f: (x, y, z) => {
         const [a, v, n] = lok(x, y, z);
-        return laag(rechthoek(a, v, hb, hh), n, -1.5, 1.2);
+        return laag(gatVorm(op, a, v, hb, hh), n, -1.5, 1.2);
       },
       g: [cx, cy, cz, Math.hypot(hb, hh) + 10],
       m: 'deur',
@@ -4618,6 +5016,66 @@ function kaderVan(H, extra = []) {
   return { x0, x1, y0, y1, b: x1 - x0, h: y1 - y0 };
 }
 
+// Een gebouw uit meer delen (vraag 114, 2c): de herberg met zijn stal, de kapel met haar toren. Elk deel is een huis of
+// een toren van de bouwer ({ W: huis(zaad, o), plek: [x, y] }, de plek in tegels vanaf het midden van het eerste deel);
+// samen één wereld, zodat de zon over alles gaat (de toren werpt zijn schaduw op het schip) en de tekenaar één ding
+// tekent. Elk deel houdt zijn eigen patronen (zijn eigen zaad, zijn eigen muren): zijn materialen krijgen een
+// voorvoegsel, en een patroon krijgt de plek terug in het stelsel van zijn eigen deel. W.H is het eerste deel; W.delen
+// zegt waar elk deel staat (in eenheden), en kaderSamen(W) is het kader van het geheel.
+function samen(delen) {
+  const W = new Wereld();
+  W.H = delen[0].W.H;
+  W.delen = [];
+  delen.forEach(({ W: Wd, plek = [0, 0] }, i) => {
+    const dx = plek[0] * TEGEL;
+    const dy = plek[1] * TEGEL;
+    const pre = i ? `deel${i}:` : '';
+    W.delen.push({ H: Wd.H, plek: [dx, dy] });
+    const terug = (f) =>
+      f &&
+      ((C) => {
+        const { x, y } = C;
+        C.x = x - dx;
+        C.y = y - dy;
+        try {
+          return f(C);
+        } finally {
+          C.x = x;
+          C.y = y;
+        }
+      });
+    for (const [naam, m] of Object.entries(Wd.mat)) W.mat[pre + naam] = { ...m, patroon: terug(m.patroon), gloei: terug(m.gloei) };
+    for (const g of Wd.groepen) {
+      const ng = W.groep(pre + g.naam);
+      for (const d of g.delen) {
+        // de vorm verschuift; wat een patroon aan het deel vraagt (plek, raam, op), rekent in zijn eigen stelsel
+        const n = { ...d, f: (x, y, z) => d.f(x - dx, y - dy, z) };
+        if (d.g) n.g = [d.g[0] + dx, d.g[1] + dy, d.g[2], d.g[3]];
+        if (d.grens) n.grens = [d.grens[0] + dx, d.grens[1] + dy, d.grens[2], d.grens[3], d.grens[4]];
+        n.m = typeof d.m === 'function' ? (x, y, z) => pre + d.m(x - dx, y - dy, z) : pre + d.m;
+        voeg(ng, n);
+      }
+    }
+    for (const l of Wd.lichten) W.lichten.push({ ...l, pos: [l.pos[0] + dx, l.pos[1] + dy, l.pos[2]] });
+  });
+  return W;
+}
+function kaderSamen(W) {
+  const [e0, e1] = K.EX;
+  const [f0, f1] = K.EY;
+  const kaders = W.delen.map(({ H, plek: [dx, dy] }) => {
+    const k = kaderVan(H);
+    const sx = dx * e0 + dy * e1;
+    const sy = dx * f0 + dy * f1;
+    return { x0: k.x0 + sx, x1: k.x1 + sx, y0: k.y0 + sy, y1: k.y1 + sy };
+  });
+  const x0 = Math.min(...kaders.map((k) => k.x0));
+  const x1 = Math.max(...kaders.map((k) => k.x1));
+  const y0 = Math.min(...kaders.map((k) => k.y0));
+  const y1 = Math.max(...kaders.map((k) => k.y1));
+  return { x0, x1, y0, y1, b: x1 - x0, h: y1 - y0 };
+}
+
 // Avondlicht zoals in dorp.cjs (die tabel wordt niet geëxporteerd), maar de veldsteen blijft koel:
 // op de referentie is de steen grijsblauw en het hout warm, twee temperaturen per huis. En riet
 // blijft riet: een oude lap mag in de zon grauw blijven naast het goudstro. Voor de proefplaten
@@ -4629,4 +5087,4 @@ const WARM = {
 
 // Wat de losse tuinstukken (tuin-sdf.cjs) met de huizen delen: het hout (balkPatroon voor balken
 // en planken, stamHuid voor stammen, vlechtwerk voor twijgen), de knoppen en het zaad.
-module.exports = { huis, proefhuis, maten, dakPlek, voorDeDeur, kaderVan, WARM, kiesHuis, DAKEN, WANDEN, balkPatroon, stamHuid, vlechtwerk, knoppenVan, meng, kiesUit };
+module.exports = { huis, samen, kaderSamen, proefhuis, maten, dakPlek, voorDeDeur, kaderVan, WARM, kiesHuis, DAKEN, WANDEN, balkPatroon, stamHuid, vlechtwerk, knoppenVan, meng, kiesUit };

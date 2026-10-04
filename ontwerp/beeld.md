@@ -197,6 +197,51 @@ aan tekeningen, de figuren 362 MB. Nu (`gereedschap/pixelart/inpakken.cjs`):
 Elke tekening is pixel voor pixel dezelfde gebleven, rond hetzelfde anker. Een leeg vak kost nu niets meer, dus voor
 meer tekeningen (de afwisseling, 2b) is er ruimte.
 
+### De afwisseling en de grote gebouwen: twee proefplaten (4 okt 2026, werklijst vraag 114, 2b en 2c)
+
+Marcel: "1 ja 2 ja 3 allebei 4 allebei 5 ja" (eerst twee platen, nog niets in het spel; kalk in drie kleuren; de
+kapel met een zadeldaktoren én met een naaldspits, de woontoren met kantelen én met een dak, om te kiezen als hij ze
+ziet). Bij de eerste torens: "Torens zijn wel wat grijzig", en bij de baksteen: "Waren er in die tijd al bakstenen?
+Dit was eigenlijk natuurstenen blokken". De platen: `node huis-sdf-export.cjs afwisseling`, `verhouding` en `steen`
+(`gereedschap/pixelart/uit/proefhuis/`, niet in git).
+
+**Wat de huizenbouwer erbij kreeg** (`huis-sdf.cjs`, bovenaan; elk huis dat er al was, bleef pixel voor pixel hetzelfde):
+- **Kalk** op het pleister van het vakwerk: wit, oker of zacht roze (`kalk`). Het zaad kiest hem nooit zelf.
+- **Baksteen en zandsteen** (`steen`): veldsteen onder leien is samen te grijs. Baksteen: rode en bruine stenen in
+  halfsteens verband met een lichte voeg, een enkele donkere klinker; de lijsten van een toren en de afdekking van een
+  topgevel blijven natuursteen. Baksteen kwam hier rond 1200 terug via de kloosters (de kloostermoppen), juist waar
+  weinig natuursteen was; daarvoor bouwde men in tufsteen, zandsteen of veldkeien. Bij een schout en een heer passen dus
+  allebei, en het spel heeft al een steenbakkerij (bij marktrecht). Zandsteen: gehakte blokken in rechte lagen,
+  geelgrijs, warm in de zon, de natuurstenen blokken die Marcel bedoelde. Idee (Claude): eerst natuursteen, baksteen
+  pas met een steenbakkerij, zodat je aan de muren ziet hoe ver het dorp is, zoals aan de daken.
+- **Een toren met een steil dak** in plaats van de borstwering (`torendak`): een zadeldak tussen twee topgevels
+  (zoals de dorpskerken in Groningen), een tentdak (vier vlakken naar één punt) of een naaldspits met een kraag die
+  uitwaaiert; lood op de nok en de graten, en een gouden bol en een vaan erop. Gedekt met leien, pannen of spanen
+  (`dekking`), met dezelfde patronen als een dun dak.
+- **Ramen per soort**: een woontoren heeft op elke verdieping ramen (`ramen: 'woon'`, een appartement per laag), een
+  kerktoren spleten en bovenin twee galmgaten met een ronde boog en galmborden (`'kerk'`), en het schip van een
+  kapel hoge smalle ramen met een spitsboog en glas in lood. Een gat kan nu een boog hebben (`gatVorm`).
+- **Een uithangbord** naast de deur van de herberg (`bord`): een ijzeren arm met een bord met een gouden kroes.
+- **Een gebouw uit meer delen** (`samen`): de herberg met zijn stal, de kapel met haar toren, als één wereld, zodat de
+  zon over alles gaat en de toren zijn schaduw op het schip werpt.
+
+**Plaat 1, de afwisseling** (2b): bovenaan één huis in zijn vier standen (de deur linksvoor of rechtsvoor op een muur
+die je ziet, of achter), daaronder drie straatjes: het gehucht (riet en spanen), het dorp (ook leien, en de eerste
+stenen huizen) en marktrecht (ook pannen, een huis van twee lagen). De vormen zijn die van de huizen van het spel
+(`huizen.cjs`), in andere wanden, kalk en luiken.
+
+**Plaat 2, in verhouding** (2c), per rij op één grondlijn, met een boer voor de maat: de hut, het huis, het stenen
+huis, de boerderij, en de woontoren van baksteen (vier lagen op 5 bij 5) met kantelen en met een tentdak van pannen;
+daaronder de herberg zoals hij nu is en de nieuwe (twee lagen, 12 tegels, met een stal aan een binnenplaats en het
+bord), en de kapel zoals ze nu is en de nieuwe, van baksteen onder leien, met een zadeldaktoren en met een naaldspits.
+
+**Plaat 3, de steen**: de kapel met haar zadeldaktoren en de woontoren met zijn tentdak, elk in veldsteen, zandsteen
+en baksteen.
+
+**Open** (wacht op Marcel): welke toren de kapel krijgt en welke vorm de woontoren; welke steen (zandsteen,
+baksteen, of eerst het een en dan het ander); of de kalk zo goed is; of de binnenplaats van de herberg een muur met
+een poort krijgt.
+
 ## Ontwerpcanvas
 
 https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:
