@@ -194,6 +194,11 @@
     // en dan liep je tegen je eigen brug op. (De brugtegels uit rand.tsx tekenen het water er
     // zelf onder, dus het maakt niet uit of Marcel de brug in de grondlaag legt of op een laag
     // erboven; allebei komt het goed.)
+    //
+    // Eén ding per soort tegel, dat elke tegel van die soort aanwijst: het verandert nooit, en zo schrijft het opslaan
+    // het één keer en daarna een verwijzing (js/opslaan.js). Op een land van de maker van 100 bij 100 was de grond
+    // anders de helft van een bewaard spel (vraag 112).
+    const grondSoort = new Map();
     for (const laag of kaart.layers || []) {
       if (laag.type !== 'tilelayer' || !laag.data) continue;
       const breedte = laag.width || b;
@@ -203,7 +208,9 @@
           if (!gid) continue;
           const t = opzoek(gid);
           tegels[y][x] = t && t.eig.vast ? 'muur' : 'vloer';
-          if (t) grond[y][x] = { vel: t.vel, id: t.id, naam: t.eig.naam };
+          if (!t) continue;
+          if (!grondSoort.has(gid)) grondSoort.set(gid, { vel: t.vel, id: t.id, naam: t.eig.naam });
+          grond[y][x] = grondSoort.get(gid);
         }
       }
     }
@@ -399,12 +406,10 @@
     // ingelezen kaart altijd "alles gezien"; dat hoort niet bij deze opdracht (T.isBegaanbaar,
     // T.isVast en T.raakt wel, en die vragen niets aan kamers).
     const kamerBuiten = { id: 'buiten', naam: 'Buiten', x1: 0, y1: 0, x2: b - 1, y2: h - 1, vloer: ['#3c5e1e', '#355f22'] };
-    const burenKamers = [];
-    for (let y = 0; y < h; y++) {
-      const rij = [];
-      for (let x = 0; x < b; x++) rij.push(['buiten']);
-      burenKamers.push(rij);
-    }
+    // Buiten is elke tegel gelijk: één rij die elke rij aanwijst, zodat het opslaan hem één keer schrijft (vraag 112).
+    const buren = ['buiten'];
+    const rij = new Array(b).fill(buren);
+    const burenKamers = new Array(h).fill(rij);
 
     // Eigenschappen van de kaart zelf (in Tiled: de eigenschappen van de map). `doof` zegt over
     // hoeveel ringen vanaf de rand het bos naar het donker toe wegdooft, zodat een speler nooit
