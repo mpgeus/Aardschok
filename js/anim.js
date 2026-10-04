@@ -12,6 +12,7 @@
           return;
         }
         e.pad = pad.slice();
+        e.padDoel = null; // een pad van een beurt: staat er iemand, dan stopt hij (js/lopen.js)
         e.opKlaar = klaar;
       });
     },
@@ -80,7 +81,8 @@
   };
 
   // Een stap begint pas als de volgende tegel vrij is. Bij het begin wordt die tegel
-  // gereserveerd (tx, ty), zodat niemand anders er tegelijk in stapt.
+  // gereserveerd (tx, ty), zodat niemand anders er tegelijk in stapt. Staat er iemand, dan lost hij dat op (T.ontwijk,
+  // js/lopen.js; werklijst vraag 119, D): even wachten, langs elkaar schuiven, de ander opzij laten gaan, of eromheen.
   //
   // Wie in één beeld verder komt dan de volgende tegel, loopt door naar de tegel daarna: bij 30×
   // legt iemand zo'n 45 tegels per seconde af, en tot 26 sep bleef er na elke aankomst de rest van
@@ -92,13 +94,20 @@
       const volgende = e.pad[0];
       if (!e.onderweg) {
         if (!T.magStappen(S, e, volgende, w)) {
-          e.pad = [];
-          klaar(e);
-          return;
+          const keus = T.ontwijk(S, w, e, volgende, rest);
+          if (keus === 'wacht') return;
+          if (keus === 'klaar') {
+            e.pad = [];
+            klaar(e);
+            return;
+          }
+          if (!e.onderweg) continue; // een omweg: nu naar de eerste tegel daarvan
+        } else {
+          e.onderweg = true;
+          e.tx = volgende.x;
+          e.ty = volgende.y;
         }
-        e.onderweg = true;
-        e.tx = volgende.x;
-        e.ty = volgende.y;
+        e.gewacht = 0;
         if (hier) T.bijStapBegin(S, e, volgende);
       }
       const dx = volgende.x - e.x;
@@ -129,7 +138,9 @@
     }
   }
 
+  // Zijn weg is af, of hij gaf het op: zijn doel is er niet meer (js/lopen.js).
   function klaar(e) {
+    if (e.padDoel) e.padDoel = null;
     if (e.opKlaar) {
       const k = e.opKlaar;
       e.opKlaar = null;

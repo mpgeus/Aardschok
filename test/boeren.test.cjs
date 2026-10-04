@@ -213,9 +213,9 @@ function eenBoerOpZijnAkker(eigenschappen) {
   e.eigenschappen = eigenschappen;
   // Om tien uur 's ochtends: een boer maait alleen onder werktijd (js/dag.js).
   const S = { wereld: { wezens: [e], akkers: [akker], tegels: [['vloer']] }, tijd: 0, kalender: { dag: RIJP_DAG + 10 / 24 }, voorraad: T.nieuweVoorraad() };
-  const zoek = T.zoekPad;
-  T.zoekPad = (van, doel) => [{ x: doel.x, y: doel.y }];
-  return { S, e, akker, klaar: () => { T.zoekPad = zoek; } };
+  const zoek = T.zoekRoute;
+  T.zoekRoute = (w, van, doel) => [{ x: doel.x, y: doel.y }];
+  return { S, e, akker, klaar: () => { T.zoekRoute = zoek; } };
 }
 
 test('een snelle maaier doet korter over een tegel, een trage langer', () => {

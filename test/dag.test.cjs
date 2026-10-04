@@ -150,8 +150,8 @@ function maaiDagen(snelheid, dagen) {
   const akker = { x: 0, y: 0, b: 3, h: 3, huis: 'boer1', geoogst: new Set() };
   const boer = { tx: 0, ty: 0, x: 0, y: 0, dood: false, pad: [], werkAkkers: [akker] };
   const S = { wereld: { wezens: [boer], akkers: [akker] }, wereldTijd: 0, kalender: { dag: bijUur(HOOI, 0), snelheid }, voorraad: { graan: 0 } };
-  const echtPad = T.zoekPad;
-  T.zoekPad = (van, doel) => (van.x === doel.x && van.y === doel.y ? [] : [{ x: doel.x, y: doel.y }]);
+  const echtPad = T.zoekRoute;
+  T.zoekRoute = (w, van, doel) => (van.x === doel.x && van.y === doel.y ? [] : [{ x: doel.x, y: doel.y }]);
   try {
     const dt = 0.1;
     while (S.kalender.dag < HOOI + dagen) {
@@ -166,7 +166,7 @@ function maaiDagen(snelheid, dagen) {
       }
     }
   } finally {
-    T.zoekPad = echtPad;
+    T.zoekRoute = echtPad;
   }
   return akker.geoogst.size;
 }

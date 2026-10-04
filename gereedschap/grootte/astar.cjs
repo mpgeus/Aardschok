@@ -1,6 +1,8 @@
 'use strict';
 // node astar.cjs [uit.json] (npm run grootte -- --astar). Wat kost één T.zoekPad (js/pad.js)? Op de kaart van het gehucht (76×76), en op een grote lege kaart (256×256),
-// met en zonder andere wezens in de weg (T.isBegaanbaar met wezensBlokkeren: T.wezenOp loopt alle wezens af).
+// met en zonder andere wezens in de weg (T.isBegaanbaar met wezensBlokkeren: T.wezenOp loopt alle wezens af). Sinds 4 okt
+// zoekt het spel een weg zonder de anderen (T.zoekRoute, js/lopen.js; vraag 119, D), en met de anderen alleen nog een
+// korte omweg om wie er staat.
 const { T, beginSpel, nu, pct, gem } = require('./harnas.cjs');
 
 // Een kaart in code, zoals T.maakProefkamers dat doet, maar dan een lege vlakte van L bij L.
@@ -10,7 +12,8 @@ function legeKaart(L) {
   return { b: L, h: L, tegels, deuren: new Map(), voorwerpen: [], wezens: [], kamers: [{ id: 'buiten', x1: 0, y1: 0, x2: L - 1, y2: L - 1 }], bekend: new Set(['buiten']), buiten: true };
 }
 
-// Wat het spel aan T.zoekPad meegeeft bij het dwalen (js/verkennen.js:382): begaanbaar met wezensBlokkeren, en vast.
+// Wat het spel aan T.zoekPad meegeeft (T.zoekRoute, js/lopen.js): begaanbaar en vast; en met wezensBlokkeren, zoals
+// het dwalen tot 4 okt deed.
 const gewoon = (w) => ({ mag: (x, y) => T.isBegaanbaar(w, x, y), vast: (x, y) => T.isVast(w, x, y) });
 const metWezens = (w, wie) => ({ mag: (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie }), vast: (x, y) => T.isVast(w, x, y) });
 

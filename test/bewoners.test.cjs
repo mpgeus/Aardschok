@@ -465,7 +465,8 @@ test('werk in uren: de weg heen is de weg die zijn poppetje loopt, met zijn eige
   const w = S.wereld;
   const deur = T.deurVan(w, p.huis);
   const doel = p.plek.werk;
-  const pad = T.zoekPad(deur, doel, (x, y) => T.isBegaanbaar(w, x, y), (x, y) => T.isVast(w, x, y), { tot: doel.straal });
+  // de weg zoals het dwalen hem vraagt: naar een plek waar velen heen gaan, uit een veld (js/lopen.js)
+  const pad = T.zoekRoute(w, deur, doel, { tot: doel.straal, veld: true });
   let lengte = 0;
   let vorig = deur;
   for (const t of pad) {

@@ -283,8 +283,8 @@
   }
 
   // Hoe lang iemand onderweg is van `van` naar `doel` (tot binnen doel.straal), in uren (stuk 2; Marcel
-  // koos op 26 sep de looptijd): langs de weg die zijn poppetje ook loopt (T.zoekPad, zonder anderen in
-  // de weg), met zijn eigen snelheid, en schuin telt als √2, zoals bij het lopen zelf (js/anim.js). Een
+  // koos op 26 sep de looptijd): langs de weg die zijn poppetje ook loopt (T.zoekRoute, js/lopen.js: om
+  // wat vaststaat), met zijn eigen snelheid, en schuin telt als √2, zoals bij het lopen zelf (js/anim.js). Een
   // uur is T.DAG_LENGTE / 24 seconden van de wereld. Een pad zoeken kost een paar milliseconden, en dit
   // gebeurt elke dag voor iedereen; daarom bewaart hij zijn weg per doel (p.wegen[sleutel]: 'werk', of
   // 'herberg' in js/herberg.js), zolang begin en doel dezelfde zijn en er niets op staat.
@@ -295,7 +295,7 @@
     let o = wegen[sleutel];
     const zelfde = o && o.van.x === van.x && o.van.y === van.y && o.doel.x === doel.x && o.doel.y === doel.y && o.straal === straal;
     if (!zelfde || !o.pad.every((t) => T.isBegaanbaar(w, t.x, t.y))) {
-      const pad = T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y), (x, y) => T.isVast(w, x, y), { tot: straal });
+      const pad = T.zoekRoute(w, van, doel, { tot: straal, veld: true });
       let lengte = 0;
       let vorig = van;
       for (const t of pad || []) {

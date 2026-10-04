@@ -107,6 +107,7 @@
   // opties.tot: eindig op een tegel die hoogstens zoveel tegels van het doel af ligt: om ergens rond
   // te lopen (een plek met een straal, T.laatDwalen in js/verkennen.js). Het doel zelf mag dan bezet
   // zijn; zonder dit bleef wie naar het erf liep staan zolang er iemand voor de deur stond.
+  // opties.max: bekijk hooguit zoveel tegels, en geef het dan op (een korte omweg om iemand heen, js/lopen.js).
   // Geeft de stappen terug zonder de starttegel, of null als er geen weg is.
   // Tijdens het zoeken staat iedereen stil (T.iedereenStil, js/wereld.js): zo vraagt magBetreden wie er op een tegel
   // staat in één stap, in plaats van alle wezens af te lopen.
@@ -121,6 +122,8 @@
   function zoek(start, doel, magBetreden, isVast, opties) {
     const naast = !!(opties && opties.naast);
     const tot = opties && opties.tot >= 1 ? Math.floor(opties.tot) : 0;
+    const max = opties && opties.max > 0 ? opties.max : Infinity;
+    let bekeken = 0;
     const schatting = (x, y) => {
       const d = Math.max(Math.abs(x - doel.x), Math.abs(y - doel.y));
       return naast ? Math.max(0, d - 1) : Math.max(0, d - tot);
@@ -147,6 +150,7 @@
       const hp = plek(hs, true);
       if (tabel.dicht[hp]) continue;
       tabel.dicht[hp] = 1;
+      if (++bekeken > max) return null;
 
       if (isKlaar(huidig.x, huidig.y)) {
         const pad = [];

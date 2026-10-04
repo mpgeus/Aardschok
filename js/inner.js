@@ -553,16 +553,10 @@
     return null;
   }
 
+  // Een weg om wat vaststaat; wie er onderweg staat, lost hij onderweg op (js/lopen.js).
   function loopNaar(D, e, doel) {
-    const w = D.wereld;
-    const pad = T.zoekPad(
-      { x: e.tx, y: e.ty },
-      doel,
-      (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e }),
-      (x, y) => T.isVast(w, x, y),
-      {},
-    );
-    if (pad && pad.length) e.pad = pad;
+    const pad = T.zoekRoute(D.wereld, { x: e.tx, y: e.ty }, doel, {});
+    if (pad && pad.length) T.geefRoute(e, pad, doel);
     return !!(pad && pad.length);
   }
 

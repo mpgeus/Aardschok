@@ -215,6 +215,19 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.eilandOp`, `T.kanErKomen` in `js/wereld.js`, vraag 88): welke tegels samen één gebied vormen, ruim gerekend, zodat
   wie naar een ander eiland wil, meteen weet dat er geen weg is. Verandert er een tegel of een voorwerp, dan zegt
   `T.kaartVeranderd(w)` het (een toets kijkt dat niemand het vergeet).
+- `js/lopen.js`: **lopen tussen anderen** (vraag 119, D, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen"): een
+  weg gaat alleen om wat vaststaat (`T.zoekRoute`, met A* uit `js/pad.js`), niet om wie er staat, en de kaart onthoudt
+  hem tot hij verandert. Wie een weg krijgt, krijgt hem met zijn doel (`T.geefRoute(e, pad, doel)`, `e.padDoel`, met `tot`
+  of `naast`), en wie onderweg een ander op zijn volgende tegel treft, lost het daar op (`T.ontwijk`, vanuit
+  `js/anim.js`): langs elkaar schuiven als ze elkaar tegemoet lopen, even wachten op wie doorloopt, wie maar wat staat
+  gaat opzij (`T.magOpzij`) of ruilt van plaats, om wie bezig is een korte omweg, en anders wachten tot zijn geduld op is.
+  Een stap van het dwalen (zonder doel) en een gevecht doen dat niet: daar stopt wie zijn tegel bezet vindt. Ook de rem
+  (wie twee keer na elkaar geen weg vindt, wacht een uur; vraag 88) en `zoekPerBeeld` staan hier, in
+  `T.LOPEN_INSTELLINGEN`. Een weg zoeken met de anderen als muur gebeurt alleen nog in een gevecht en voor een omweg.
+  **De velden** (vraag 119, A): waar velen heen gaan (de plekken van `T.dagAnker`: hun deur, hun werk, de put, de
+  herberg), vraagt het dwalen een weg met `veld: true`, en die komt uit een veld: vanaf het doel ring voor ring hoeveel
+  stappen elke tegel ervan af ligt, zo ver als nodig, tot de kaart verandert (`veldenOnthouden`). Een veld is alleen uit
+  de kaart, dus een weg is dezelfde, hoe ver het veld ook al gegroeid was, en ook na het laden.
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
   een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
@@ -226,8 +239,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.beweegWezens(S, w, ...)`): waar je bent, of een dorp waar je niet bent (`js/dorp.js`).
 - `js/verkennen.js`: rondlopen, klikhandelingen, dwalende monsters, ontdekt worden. Dwalen gaat op een kaart met het dorp
   dat er ligt (`T.dwaal(S, w, D, dt)`; `T.laatDwalen(S, dt)` is dat voor waar je bent). Wie twee keer na elkaar geen weg
-  vindt naar waar hij hoort, wacht een uur (de rem, `T.LOPEN_INSTELLINGEN`; Marcel, vraag 88), en per beeld zoeken hooguit
-  `zoekPerBeeld` mensen een weg (de drukte 's ochtends en 's avonds, 3 okt).
+  vindt naar waar hij hoort, wacht een uur (de rem, `T.LOPEN_INSTELLINGEN` in `js/lopen.js`; Marcel, vraag 88), en per
+  beeld zoeken hooguit `zoekPerBeeld` mensen een weg (de drukte 's ochtends en 's avonds, 3 okt).
 - `js/gevecht.js`: de overgang, beurtvolgorde, actiepunten, handelingen, monster-AI
   (`planMonsterBeurt`, los van het scherm en dus te toetsen). Sinds 29 sep voor een groep: aan jouw kant (kant
   'speler') de schout en de militie, elk met een eigen beurt; wie aan de beurt is, zegt `T.aanDeBeurt`, en een
@@ -800,7 +813,8 @@ zien, `('nieuw')` maakt het opnieuw uit het zaad.
 `Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
 en het bier (`(30)` zet eerst 30 bier). `Spel.debug.meter()` (of `F2`) zet de meter in beeld. `Spel.debug.paden()` zegt hoeveel tegels paadje zijn, waar het meest gelopen wordt en waar de lantaarns staan;
-`('nacht')` doet nu wat de nacht doet. `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
+`('nacht')` doet nu wat de nacht doet. `Spel.debug.lopen()` zegt wie er met een doel onderweg is, wie daarvan staat te
+wachten en op wie, en hoeveel wegen en velden de kaart onthoudt (vraag 119). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
 hij staat, wie er kijkt, en welk licht er brandt.
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1
 slachtmaand). `Spel.debug.opslaan('2')` zet het spel op plek 2, `Spel.debug.laden('auto')` laadt wat er vanzelf

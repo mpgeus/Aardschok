@@ -106,13 +106,13 @@ test('T.wandelAnker: in het groeiseizoen rond de akker, anders (of zonder akker)
 
 // ---------------------------------------------------------------- T.werkOogstBij
 //
-// T.zoekPad hoort bij js/pad.js en T.afstand bij js/wereld.js; die vragen om een echt raster, en voor
+// T.zoekRoute hoort bij js/lopen.js en T.afstand bij js/wereld.js; die vragen om een echt raster, en voor
 // deze toets is alleen de vorm van hun antwoord van belang, dus worden ze hier met een simpele, eigen
 // versie ingevuld. Het "aankomen" zelf (e.pad leegmaken, e.tx/e.ty
 // bijwerken) doet normaal js/anim.js tijdens het lopen; hier wordt dat met de hand nagedaan, één
 // stap per keer, precies zoals de echte animator dat ook doet.
 T.afstand = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
-T.zoekPad = (van, doel) => [{ x: doel.x, y: doel.y }];
+T.zoekRoute = (w, van, doel) => [{ x: doel.x, y: doel.y }];
 T.isBegaanbaar = () => true;
 T.isVast = () => false;
 
@@ -495,8 +495,8 @@ test('T.werkOogstBij: een boer die al op een ongemaaide tegel staat, begint daar
   const { w, akker, boer } = nieuweBoerWereld();
   boer.tx = boer.x = 1;
   boer.ty = boer.y = 1; // midden op zijn akker, zoals hij in het groeiseizoen dwaalt
-  const echtPad = T.zoekPad;
-  T.zoekPad = (van, doel) => (van.x === doel.x && van.y === doel.y ? [] : [{ x: doel.x, y: doel.y }]); // zoals js/pad.js
+  const echtPad = T.zoekRoute;
+  T.zoekRoute = (w, van, doel) => (van.x === doel.x && van.y === doel.y ? [] : [{ x: doel.x, y: doel.y }]); // zoals js/lopen.js
   try {
     const S = { wereld: w, tijd: 0, kalender: { dag: RIJP_DAG }, voorraad: { graan: 0 } };
     T.werkOogstBij(S, S, 0.1);
@@ -505,7 +505,7 @@ test('T.werkOogstBij: een boer die al op een ongemaaide tegel staat, begint daar
     maaiTotKlaar(S, boer, () => akker.geoogst.size === 4);
     assert.equal(akker.geoogst.size, 4);
   } finally {
-    T.zoekPad = echtPad;
+    T.zoekRoute = echtPad;
   }
 });
 

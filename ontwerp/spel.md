@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 3 okt 2026, vijfentwintigste sessie)
+## Waar staat wat (bijgewerkt 4 okt 2026, zesentwintigste sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -41,7 +41,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep); sinds 30 sep kiezen de boeren hun velden en slachten ze zelf, en jij kunt het veranderen | 6a, vraag 74 |
 | Ontginnen | besloten, nog niet gebouwd | 6b |
 | Straten en paden | paadjes van de deuren en waar gelopen wordt, lantaarns en brandende ramen gebouwd (3 okt, vraag 108); sneller lopen, modder en keien nog niet | 6c, vraag 108 |
-| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep), de treden tot marktrecht (2 okt, "Van dorp tot stad"); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90 |
+| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep), de treden tot marktrecht (2 okt, "Van dorp tot stad"); sinds 4 okt lopen de mensen om wat vaststaat en lossen ze onderweg op wie er staat ("Lopen tussen anderen", vraag 119); een praatje als ze niets te doen hebben is een voorstel (vraag 120); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90, 119, 120 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
@@ -2633,6 +2633,23 @@ voor iedereen (de wolven en de rovers kunnen doden), vaardigheden per soort werk
 karakter en een paar eigenschappen voor iedereen (zoals nu de boeren), die sturen wat hij doet en zegt, en een papier
 met wie hij is als je hem aanklikt. Samen met de mensen aan het werk (vraag 111, 115 en 116). **Marcel koos (4 okt):**
 "1 ja 2 ja 3 akkoord".
+
+### Lopen tussen anderen, en een levendig dorp (Marcel, 4 okt 2026; werklijst vraag 119 en 120)
+
+**Zo werkt het nu** (4 okt, vraag 119, D; `js/lopen.js`, toetsen in `test/lopen.test.cjs`): een weg gaat alleen om wat
+vaststaat (huizen, bomen, water), niet om wie er staat, en het dorp onthoudt hem tot de kaart verandert. Wie onderweg
+iemand op zijn volgende tegel treft, lost dat daar op, zoals mensen dat doen (Marcel: "Je kunt nu eenmaal niet over
+iemand heen"): lopen ze elkaar tegemoet, dan schuiven ze langs elkaar; loopt de ander door, dan wacht hij even; staat
+de ander maar wat, dan gaat die een stap opzij, of ze ruilen van plaats als hij nergens heen kan; is de ander bezig
+(hij maait, hij praat met de schout, het is een koe), dan loopt hij er even omheen, en anders wacht hij tot zijn
+geduld op is en zoekt het later opnieuw. Ook de schout loopt zo door een groepje heen. Een gevecht doet niet mee: daar
+telt elke tegel. Tot 4 okt was iedereen bij het zoeken een muur: dan liep een kleuter om het hele huis heen omdat er
+iemand in de deur stond, en vond wie achter een ander stond soms helemaal geen weg.
+
+**Een levendig dorp** (vraag 120, open): "Het dorp moet echt levendig en realistisch aanvoelen. Mensen die een praatje
+staan te maken als ze even niets te doen hebben etc." Het voorstel staat in de werklijst: wie vrij is en een bekende
+treft, blijft staan voor een praatje (bij de put, op het plein), met een wolkje van waar ze het over hebben, uit het spel
+zelf (het graan, de heer, de rovers), en kleine dingen die het dorp laten leven (groeten, water halen, een bankje).
 
 ### Mensen worden poppetjes
 

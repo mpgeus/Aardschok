@@ -531,6 +531,16 @@
 
   // Twee tegels raken elkaar als ze naast elkaar liggen, ook schuin, maar niet schuin
   // om een muurhoek heen. Dat geldt voor slaan, praten en iets gebruiken.
+  // Staat deze tegel een doorgang in de weg? Een deur, of de tegel er pal naast: daar mag niemand
+  // blijven staan te dwalen (js/verkennen.js), en daar gaat niemand opzij heen (js/lopen.js). Anders sta je voor een
+  // dichte deur te wachten tot iemand opschuift, en dat mag je nooit jaren kosten (ontwerp/wereld.md).
+  T.bijDeur = function (w, x, y) {
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) if (T.tegel(w, x + dx, y + dy) === 'deur') return true;
+    }
+    return false;
+  };
+
   T.raakt = function (w, a, b) {
     const dx = b.x - a.x;
     const dy = b.y - a.y;

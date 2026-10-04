@@ -4026,6 +4026,25 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel koos (4 okt):** a, "ja, dat werkt in het 'echt' ook zo denk ik. Je kunt nu eenmaal niet over iemand heen";
     b, "eerst, voor de huizen". Dus D, A en B nu, in die volgorde, en dan de huizen (vraag 114). Na elk stuk meten met
     `npm run grootte` (ook `--maker 5`) en een speeltest, zodat te zien is wat het deed.
+    **Gebouwd (4 okt, zesentwintigste sessie): D en A** (`js/lopen.js`, toetsen in `test/lopen.test.cjs`).
+    - **D:** een weg gaat alleen om wat vaststaat (`T.zoekRoute`), en de kaart onthoudt hem tot hij verandert. Wie
+      onderweg een ander op zijn volgende tegel treft, lost het daar op (`T.ontwijk`): lopen ze elkaar tegemoet, dan
+      schuiven ze langs elkaar (na even wachten ook als de ander dwars wil); loopt de ander door, dan wacht hij even;
+      staat de ander maar wat, dan gaat die een stap opzij, of ze ruilen van plaats als hij nergens heen kan; om wie bezig
+      is (maaien, een gesprek, een koe) loopt hij een korte omweg; en anders wacht hij tot zijn geduld op is (8 seconden
+      van de wereld, zo'n veertig minuten van de dag) en zoekt het later opnieuw. Zo lopen de dorpelingen, de schout, de
+      inner, de rovers, het vee en de maaiers; een gevecht niet (daar telt elke tegel). Een drukte die van twee kanten
+      door een doorgang van één tegel breed wil: 20 mensen zijn er na 28 seconden van de wereld allemaal, 40 na 47, 60
+      na 68 (zonder het ruilen in een drukte liepen 40 vast).
+    - **A:** waar velen heen gaan (de plekken van het dagritme: hun deur, hun werk, de put, de herberg), komt de weg uit
+      een veld: vanaf het doel ring voor ring hoeveel stappen elke tegel ervan af ligt, zo ver als de verste die erheen
+      wilde. Even kort als A* (een toets kijkt het na op een doolhof), en omdat een veld alleen uit de kaart is, dezelfde
+      weg hoe ver het veld ook al gegroeid was, en na het laden.
+    - **Gemeten** (`npm run grootte`, wereld per beeld op 30×, en het deel van het zoeken van paden), vóór en na D:
+      op land 5 van de maker 100 mensen 1,3 → 0,84 ms (zoeken 50% → 24%), 200 mensen 3,9 → 2,7 ms (53% → 28%), 400
+      mensen 10 → 9,8 ms (41% → 26%); op het ontworpen gehucht 200 mensen 2,5 → 2,5 ms (29% → 21%), 400 mensen 9,6 → 8,6
+      ms (36% → 26%). Na D vroeg het dwalen bij 200 mensen 828 wegen per dag, maar maar een kwart kende de kaart al: wie
+      dwaalt, vertrekt elke dag van een andere tegel. Daarvoor is A.
 120. **Een levendig dorp: een praatje als ze even niets te doen hebben** (Marcel, 4 okt, zesentwintigste sessie: "Het
     dorp moet echt levendig en realistisch aanvoelen. Mensen die een praatje staan te maken als ze even niets te doen
     hebben etc"; plan van Claude; open).

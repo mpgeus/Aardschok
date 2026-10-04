@@ -815,6 +815,26 @@
         lantaarns: w.voorwerpen.filter((v) => v.soort === 'lantaarn').map((v) => `${v.x},${v.y}${v.vanHetDorp ? '' : ' (kaart)'}`),
       };
     },
+    // Lopen tussen anderen (js/lopen.js; werklijst vraag 119): wie er nu onderweg is met een doel, wie daarvan staat te
+    // wachten en op wie, en hoeveel wegen en velden de kaart onthoudt.
+    lopen() {
+      const w = S.wereld;
+      const naam = (e) => {
+        const p = e.bewoner;
+        return p ? T.naamVanBewoner(p) : e.wie || e.soort;
+      };
+      const wachten = w.wezens
+        .filter((e) => e.padDoel && e.pad.length && !e.onderweg && e.gewacht > 0)
+        .map((e) => {
+          const ander = T.wezenOp(w, e.pad[0].x, e.pad[0].y, e);
+          return `${naam(e)} op ${e.tx},${e.ty} wacht ${Math.round(e.gewacht * 10) / 10} s${ander ? ` op ${naam(ander)}` : ''}`;
+        });
+      return {
+        onderweg: w.wezens.filter((e) => e.padDoel && e.pad.length).length,
+        wachten,
+        onthouden: T.onthoudenVan(w),
+      };
+    },
     // De verstopplekken (js/verstoppen.js): waar je iets kunt verstoppen, wat er ligt, en hoe vaak
     // de soldaten het er vinden. Spel.debug.verstopt('boer1', 30, 5) zet 30 graan en 5 goud in
     // de kelder van boer1 (of 'schout', of 'kapel'), zonder te lopen, als het kan.

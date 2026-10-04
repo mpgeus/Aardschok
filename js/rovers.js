@@ -186,8 +186,7 @@
     for (let y = 1; y < w.h - 1; y++) rand.push({ x: 0, y }, { x: w.b - 1, y });
     const kan = rand.filter((t) => T.isBegaanbaar(w, t.x, t.y, {})).sort((a, b) => T.afstand(a, midden) - T.afstand(b, midden));
     for (const t of kan.slice(0, 12)) {
-      const pad = T.zoekPad(t, midden, (x, y) => T.isBegaanbaar(w, x, y, {}), (x, y) => T.isVast(w, x, y), { naast: true });
-      if (pad) return t;
+      if (T.zoekRoute(w, t, midden, { naast: true })) return t;
     }
     return null;
   };
@@ -260,17 +259,13 @@
     return T.LEEFTIJDEN[leeftijd][lot(D, dag, 40 + i) < 0.75 ? 'man' : 'vrouw'];
   }
 
-  // Een pad voor een rover naar (x, y), of naast die tegel als hij bezet is.
+  // Een pad voor een rover naar (x, y), of naast die tegel als hij bezet is; om wat vaststaat, en wie er onderweg staat,
+  // lost hij onderweg op (js/lopen.js).
   function stuur(D, e, doel) {
     const w = D.wereld;
-    const pad = T.zoekPad(
-      { x: e.tx, y: e.ty },
-      doel,
-      (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e }),
-      (x, y) => T.isVast(w, x, y),
-      { naast: T.wezenOp(w, doel.x, doel.y, e) != null },
-    );
-    if (pad && pad.length) e.pad = pad;
+    const naast = T.wezenOp(w, doel.x, doel.y, e) != null;
+    const pad = T.zoekRoute(w, { x: e.tx, y: e.ty }, doel, { naast });
+    if (pad && pad.length) T.geefRoute(e, pad, { x: doel.x, y: doel.y, naast });
   }
 
   const opVeld = (veld, e) => e.tx >= veld.x && e.tx < veld.x + veld.b && e.ty >= veld.y && e.ty < veld.y + veld.h;

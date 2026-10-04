@@ -626,15 +626,10 @@
         e.maait = begin(e, doel, nu);
         continue;
       }
-      const pad = T.zoekPad(
-        { x: e.tx, y: e.ty },
-        doel,
-        (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e }),
-        (x, y) => T.isVast(w, x, y),
-        {},
-      );
+      // Een weg om wat vaststaat; wie er onderweg staat, lost hij onderweg op (js/lopen.js).
+      const pad = T.zoekRoute(w, { x: e.tx, y: e.ty }, doel, {});
       if (pad && pad.length) {
-        e.pad = pad;
+        T.geefRoute(e, pad, doel);
         e.oogstDoel = doel;
       } else {
         e.oogstDoel = null; // niet te bereiken, volgende beurt opnieuw proberen
