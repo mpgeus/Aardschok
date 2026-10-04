@@ -112,20 +112,20 @@ pc (een nieuwe proefversie; vraag E: ja), en dan schaduwen en licht (vraag 125: 
 Marcel: "A ja B ja C ja D na webgl"). Het draaien
 van de camera (vraag 124) komt na WebGL, en de huizen worden alvast draaibaar gerenderd (Marcel: "124b Ja dan").
 
-**De draaibare huizen zijn gebouwd, de proefplaat wacht op Marcel** (vraag 124, B, tweeëndertigste sessie; Marcel: "A
-ja ... B ja C ja"): de huizenbouwer bouwt een huis van een stijl als één huis met alle vier de muren ingevuld (`rondom`),
+**De draaibare huizen zijn gebouwd, en Marcel keurde de proefplaat** (vraag 124, B, tweeëndertigste sessie; Marcel: "A
+ja ... B ja C ja", en na de proefplaat "ja start maar"): de huizenbouwer bouwt een huis van een stijl als één huis met alle vier de muren ingevuld (`rondom`),
 en de tekenaar draait de camera en de zon er een kwartslag omheen, zodat de vier standen de vier aanzichten zijn en de zon
 linksboven blijft; de uitbouwen blijven voor en rechts, de steiger van de bouwfasen staat rondom, en de deur zie je van
 zuid en van oost. De oude huizen bleven pixel voor pixel dezelfde, en aan het spel is nog niets veranderd. Het plan en wat
 er gebouwd is, staan bij vraag 114 (onder "Schets voor de draaibare huizen"), en in `beeld.md`, "De draaibare huizen".
 
-**Waar de volgende sessie begint:** Marcel bekijkt de proefplaat (`node gereedschap/pixelart/huis-sdf-export.cjs rondom`,
-`uit/proefhuis/rondom.png`; Marcel: "C ja", eerst de proefplaat). Daarna wit opnieuw door de bouwer, nu draaibaar en met
-alle bouwfasen (`npm run tiled huizen`, dan `bouwfasen.cjs --erbij`; hier zo'n twee uur, in twee delen, want een taak op de
-achtergrond stopt na twee uur; Marcel: "ik wil overal bouwfase"), dan `npm test`, `npm run schermen` (het ontworpen
-gehucht byte voor byte, land 5 in het nieuwe wit) en de speeltest op landen van de maker, en daarmee **G** (Marcel: "G
-ja", en "G bij de draaibare huizen is goed"): een huis dat doorgroeit, rijst op in de laatste drie fases over zijn
-bouwtijd, en de mensen blijven erin wonen. Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
+**Waar de volgende sessie begint:** wit gaat opnieuw door de bouwer, nu draaibaar en met alle bouwfasen (`npm run tiled
+huizen`, dan `bouwfasen.cjs --erbij hut huis` en `--erbij stenenHuis boerderij`; in delen, want een taak op de achtergrond
+stopt na twee uur; Marcel: "ik wil overal bouwfase"), dan `npm test`, `npm run schermen` (het ontworpen gehucht byte voor
+byte, land 5 in het nieuwe wit) en de speeltest op landen van de maker. **G is gebouwd** (Marcel: "G ja"): een huis dat
+doorgroeit, rijst op in de laatste drie fases over de bouwtijd van zijn soort, en de mensen blijven erin wonen. **Stap 2b
+loopt in een eigen sessie** (Marcel: "Kun je alvast een extra agent starten voor het volgende punt op de werklijst?"), op
+de branch `claude/bouwstijlen-2b`: de andere drie stijlen, eerst een plan voor Marcel (zie vraag 114). Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
 veranderen: de huizen in `tegels/` hebben geen schaduw op de vloer, en het spel tekent hun schaduw zelf. En dan stap 2b,
 de andere drie stijlen, elk met een eigen drietal vormen (Marcel: "B ja"), en stap 3, de herberg, de kapel en de
 woontoren, meteen draaibaar. **Vraag 121 is besloten**
@@ -4267,6 +4267,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     `klaar`, dus de regels zien het nieuwe huis meteen, en de speeltest speelt hetzelfde jaar; een tekening zonder
     bouwfasen groeit in één nacht, zoals altijd (`groeiGebouw` in `js/behoeften.js`, `T.bouwFaseIndex` met `vanaf`, en
     `T.tikGebouwenDag` zet hem af; drie toetsen in `test/behoeften.test.cjs`).
+    **Marcel vroeg erbij (4 okt): "Kun je alvast een extra agent starten voor het volgende punt op de werklijst?"** Dus
+    loopt stap 2b (de andere drie bouwstijlen: oker, planken, roze, elk met een eigen drietal vormen) sinds 4 okt in een
+    eigen sessie, op de branch `claude/bouwstijlen-2b`, begonnen op `ccr-9fc8b85a-tfgsyn` (met de draaibare bouwer en G).
+    Die sessie maakt eerst een plan en proefplaten voor Marcel, en schrijft onder vraag 114, stap 2b. Afgesproken: ze
+    blijft uit `tegels/` tot het wit van deze sessie in `main` staat, ze verandert de bouwer zelf alleen als een stijl het
+    vraagt, en ze rendert in delen onder twee uur (`bouwfasen.cjs --erbij <soorten>`).
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
