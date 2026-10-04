@@ -4517,6 +4517,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     zo laten, alleen een hele factor. **C**, deze maat voor wat anders mag zijn? **D**, de proefversie al na stap 1? Met een
     videokaart tekent Chrome ook het 2D-doek al op de kaart; dan weet je vooraf op je eigen pc hoeveel WebGL wint, en
     daarna meet je het nog een keer. Voorstel: ja, het is een uur werk.
+    **Marcel koos (4 okt): "A prima B oke C dat is goed D graag".** Dus het plan in deze volgorde; op 150% blijft het doek
+    zoals het is (alleen een hele factor); de maat voor wat anders mag zijn, zoals hierboven; en de proefversie al na
+    stap 1.
 124. **De camera draaien** (Marcel, 4 okt, gevraagd in de sessie van de huizen en doorgegeven aan die van WebGL: "ik wil
     ook de camera kunnen draaien. Is dat mogelijk"; plan van Claude; open).
     **Kan het?** Ja, in kwartslagen (`Q` en `E`, zoals in Anno, The Sims en Project Zomboid). Vrij draaien niet: pixel art
@@ -4550,6 +4553,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     dan een uur opnieuw rekenen, en het besluit moet er zijn vóór de andere drie stijlen (vraag 114, 2b). Voorstel: ja, want
     het houdt de deur open. **C**, wanneer: na WebGL en na de boeren (vraag 111), vóór de hoogte (vraag 121)? Voorstel: ja;
     voor de demo is het mooi, niet nodig, want de doorkijk laat al zien wat achter een huis staat.
+    **Marcel (4 okt): "Mag na webgl"**, en hij vroeg erbij: "Als we de modellen maar 3d modellen maken? Is dat een optie?
+    Of zijn de extra richtingen beter? Vraag me af of volledige camera rotatie niet beter is?" Antwoord van Claude: vrij
+    draaien vraagt echte 3D in het spel (de huizen en mensen als modellen die de videokaart elk beeld tekent), en dan is
+    het geen pixel art meer, of pixel art die bij elke graad flikkert (de trapjes in de randen verspringen); spellen die
+    het toch doen, tekenen klein en vergroten met veel shaderwerk, en het blijft een andere stijl. Dat is maanden werk,
+    en de beeldstijl is de troef van het spel (`commercieel.md`). Acht richtingen (om de 45 graden) maken van de ruiten
+    rechte vierkanten: een tweede set grond en acht tekeningen per gebouw, voor weinig. Voorstel: kwartslagen. Vraag B
+    (de huizen draaibaar renderen) wacht nog op een antwoord.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
