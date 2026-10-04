@@ -1438,6 +1438,25 @@
     meter(aan) {
       return wisselMeter(aan);
     },
+    // Welke plaatjes de browser nu vasthoudt (T.sprites.geladen, js/sprites.js; vraag 114, stap 1): samen en per map, in
+    // MB uitgepakt (vier bytes per pixel), met de grootste vellen; ('alles') noemt elk vel. `laadt` is wat er nog
+    // onderweg is.
+    vellen(wat) {
+      const lijst = T.sprites.geladen().sort((a, b) => b.mb - a.mb || (a.pad < b.pad ? -1 : 1));
+      const mb = (x) => Math.round(x * 10) / 10;
+      const som = (l) => mb(l.reduce((s, v) => s + v.mb, 0));
+      const perMap = {};
+      for (const v of lijst) {
+        const map = v.pad.slice(0, v.pad.lastIndexOf('/') + 1);
+        (perMap[map] = perMap[map] || []).push(v);
+      }
+      const noem = (l) => l.map((v) => `${v.pad}: ${v.b}×${v.h}, ${mb(v.mb)} MB`);
+      return {
+        samen: som(lijst), vellen: lijst.length, laadt: T.sprites.bezig(), mist: T.sprites.mist.slice(),
+        perMap: Object.fromEntries(Object.entries(perMap).map(([map, l]) => [map, `${som(l)} MB in ${l.length}`])),
+        ...(wat === 'alles' ? { alles: noem(lijst) } : { grootste: noem(lijst.slice(0, 8)) }),
+      };
+    },
     meet(n) {
       const aantal = n || 120;
       const tijden = [];

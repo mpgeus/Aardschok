@@ -9,6 +9,8 @@ gereedschap/proefversie/uit/
 gereedschap/maker/uit/
 # de meting van hoe groot een dorp kan worden: komt uit npm run grootte
 gereedschap/grootte/uit/
+# de vaste schermafdrukken van het spel: komen uit npm run schermen
+gereedschap/schermen/uit/
 # reservekopieën van het gereedschap (gereedschap/gesprekken.html en quests.html)
 *.bak
 # losse werkkopieën van agents (git worktree), niet van het spel zelf

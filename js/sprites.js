@@ -108,6 +108,15 @@
   // Hoeveel vellen er nog onderweg zijn, voor wie wil wachten tot alles er is (een proef met schermafdrukken).
   S.bezig = () => [...laden.values()].filter((s) => s === 'laadt').length;
 
+  // Wat de browser nu aan vellen vasthoudt (Spel.debug.vellen, vraag 114, stap 1): elk geladen vel met zijn maat en wat
+  // het uitgepakt kost, vier bytes per pixel, zoals een browser een plaatje in zijn geheugen houdt. Wat nog laadt of
+  // mist, staat er niet in, en wat het spel zelf uit een vel bakt (de wind, de vloertegels) ook niet.
+  S.geladen = () => [...beelden].map(([pad, img]) => {
+    const b = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    return { pad, b, h, mb: (b * h * 4) / 1e6 };
+  });
+
   // ---------------------------------------------------------------- stukken van een vel
 
   // Een stuk is één cel: welk beeld, waar het staat, en waar het anker ligt.
