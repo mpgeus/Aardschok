@@ -9,6 +9,26 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een bewaard spel laden in een verse bladzijde kent de gebouwen van het spel niet** (4 okt, zevenentwintigste sessie;
+  gevonden met de proef met opslaan, die al op `main` faalt, `afe9355`). Een gebouw meldt zijn soort pas aan als het
+  neergezet wordt (`T.registreerGebouwSoort`, js/gebouwen.js), en een kaart uit Tiled of van de maker bij het laden van
+  de kaart (`registreerVoorwerp`, js/kaart.js). Laadt een verse bladzijde een bewaard spel, dan gebeurt geen van beide:
+  bouwen, opslaan, herladen en laden geeft `gebouw:huis` als onbekende soort, en zodra iets vraagt of die tegel vaststaat,
+  valt het spel om ("Cannot read properties of undefined (reading 'blokkeert')", js/wereld.js). De speeltest liep daarna
+  een ander jaar (20 verschillen), of vond geen Verder op het titelscherm. Voorstel: `T.herstelSpel` (js/opslaan.js)
+  meldt na het laden de soorten aan van wat er op elke kaart ligt, en de proef met opslaan komt in de toetsen.
+- **Het praatje, wat er nog niet is** (4 okt, zevenentwintigste sessie; vraag 120). Na te lopen:
+  - Lopen is langzaam tegenover de dag: van een boerderij aan de rand van het gehucht naar het plein is anderhalf uur
+    (een dag duurt 300 seconden, een mens loopt 1,35 tegel per seconde). Wie 's avonds ergens heen gaat (de herberg, het
+    plein), loopt zo de halve avond. In een stad van 200 op 160 bij 160 nog meer; daarom gaat alleen wie binnen 40
+    tegels van het plein woont. Te overwegen: met de wijken (stap 6 van de slice) elke wijk een eigen pleintje.
+  - Buurten (Claude, niet gekozen): 's avonds naar een buur toe voor een praatje. Zonder dat praten de huizen 's avonds
+    op het plein en onderweg, en op hun eigen erf niet.
+  - Wie langs wil, loopt om een praatje heen; staat het op een smal pad, dan gaat er een even opzij. Zo houdt een
+    praatje het verkeer niet op, maar een praatje in een deur of op een brug is nog niet te zien geweest.
+  - Meet de snelheid voor en na achter elkaar: de eerste nulmeting (1,1 ms per beeld bij 200 mensen) lag een derde lager
+    dan dezelfde meting een uur later (1,4 ms). Achter elkaar gemeten kostte het praatje niets meetbaars.
+
 - **De ondernemers, wat er nog niet is** (3 okt, vijfentwintigste sessie; vraag 104). Ideeën van Claude, niet gekozen:
   - Een omgekochte inner (`T.koopInnerOm`) schrijft minder op, maar wat hij zag, onthoudt hij: de wapenmaker staat in zijn
     rapport, en de heer verzegelt hem toch. Een idee: wie de inner genoeg geeft, laat hem de wapenmaker vergeten. Dan

@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (4 okt 2026, eind van de zesentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113: de meter onder F2, en een weg zoeken nu bijna drie keer zo snel); elk spel een ander, wijder land met natuur die ertoe doet, is gebouwd (vraag 112, stap 1); het lopen ook: een weg om wat vaststaat, wie een ander treft, wacht of wijkt uit, en velden voor waar velen heen gaan (vraag 119, D en A; een beeld bij 200 mensen 44% sneller); nu de huizen: de vellen inpakken, meer afwisseling, en de herberg, de kapel en de woontoren in verhouding (vraag 112, stap 2, en 114), dan de boeren aan het werk op hun veld (vraag 111)
+## De stand (4 okt 2026, eind van de zevenentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje zijn gebouwd: wie vrij is, praat met een buur of wie bij hem werkt, met een wolkje, en 's avonds staat een deel van het dorp op het plein (vraag 120); het laden van een bewaard spel in een verse bladzijde bleek stuk (een vraag aan Marcel); dan de huizen: de vellen inpakken, meer afwisseling, en de herberg, de kapel en de woontoren in verhouding (vraag 112, stap 2, en 114), dan de boeren aan het werk op hun veld (vraag 111)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -34,12 +34,14 @@ je dorp, loopt er van elke deur een paadje, slijt het gras waar veel gelopen wor
 de ramen van wie thuis is. **Sinds vraag 112** is elk spel een ander land van 100 bij 100, met bossen, vijvers en rotsen,
 en het nummer van het land staat bij Nieuw spel; een houthakker hoort bij het bos, een steengroeve bij de rotsen, een
 visser aan het water. **Sinds vraag 119** lopen de mensen om wat vaststaat, en lossen ze onderweg op wie er staat:
-wachten, langs elkaar, opzij. `npm test`: 881/881.
+wachten, langs elkaar, opzij. **Sinds vraag 120** blijft wie vrij is staan voor een praatje met een buur of wie bij hem
+werkt, met een wolkje boven wie praat, en staat 's avonds een deel van het dorp op het plein. `npm test`: 895/895.
 
 **Waar het werk staat:** in `main` (4 okt; Marcel: "ja" op "push main") staan de snelheid van 3 okt (vraag 113, de
 meter onder `F2`), het wijdere land met natuur (vraag 112, stap 1), een bewaard spel half zo groot, het sneller zoeken
 van een weg, en het bos om de kaart alleen aan de kant van het bos. Sinds het eind van de zesentwintigste sessie ook het
-lopen (vraag 119, D en A; Marcel: "ja push main"). Hoe een eigen branch en `main` samengaan, staat in
+lopen (vraag 119, D en A; Marcel: "ja push main"). Het praatje (vraag 120) staat op de branch van de
+zevenentwintigste sessie (`ccr-6762008a-w9xt0l`), nog niet in `main`. Hoe een eigen branch en `main` samengaan, staat in
 `CLAUDE.md`, onder Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
@@ -47,10 +49,16 @@ huizen"): een weg gaat om wat vaststaat, wie onderweg een ander treft, wacht, sc
 loopt er even omheen, en waar velen heen gaan, komt de weg uit een veld (`js/lopen.js`). B blijft zoals het is (Marcel:
 "B akkoord"): hooguit 8 wegen per beeld, want een tijdsbudget kost de vergelijkbaarheid van de speeltest.
 
-**Waar de volgende sessie begint:** **het praatje** (vraag 120, a; Marcel: "120 a b d ja", en d is: het praatje hoort
-bij het lopen van vraag 119, D): wie vrij is en een bekende treft, blijft staan voor een praatje, en wie langskomt,
-schuift aan. Het plan (welke plekken, hoe lang, hoe het eruitziet) staat bij vraag 120 (zevenentwintigste sessie, eerst
-gemeten), met drie vragen aan Marcel.
+**Het praatje is af** (vraag 120, a, b en c, 4 okt; Marcel: "120 a b c ja"): wie vrij is en een buur of iemand van zijn
+werk ziet, blijft soms staan, ook onderweg; wie langskomt, schuift aan, tot vier; boven wie praat staat om de beurt een
+leeg wolkje; 's avonds gaat een op de drie die in de buurt woont naar het plein (`js/praatje.js`). Wat het bouwen liet
+zien, staat bij vraag 120. Waar ze het over hebben (het tekentje in het wolkje) komt met de mensen aan het werk.
+
+**Waar de volgende sessie begint:** **eerst een vraag aan Marcel: het laden van een bewaard spel.** De proef met
+opslaan faalt al op `main`: een gebouw dat in het spel neergezet is, kent een verse bladzijde niet na het laden, en
+zodra iets vraagt of die tegel vaststaat, valt het spel om (`opmerkingen.md`, bovenaan). Voorstel: dat eerst repareren
+(`T.herstelSpel` meldt de soorten aan van wat er op de kaart ligt), een kleine klus, en de proef met opslaan in de
+toetsen zetten, zodat het niet weer ongemerkt breekt.
 Daarna **vraag 114 met vraag 112, stap 2: de huizen** (het plan staat bij vraag 114): eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een proefplaat met meer afwisseling (daken,
 wanden, luiken, gespiegeld) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
@@ -4140,6 +4148,26 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     verder, en met b (later) komt er het tekentje in. **c**, het gehucht blijft zo stil: een derde van de tijd één
     groepje. Zal een deel van wie vrij is 's avonds een uur naar het plein gaan (in de proef met de helft verdubbelde dat
     de praatjes van de avond), of eerst zo spelen?
+    **Marcel koos (4 okt): "120 a b c ja".** Dus: een praatje tussen twee huizen, met buren en wie bij hem werkt, en niet
+    met zijn eigen gezin (a); nu al het lege wolkje met drie puntjes, om de beurt boven wie praat (b); en 's avonds gaat
+    een deel van wie vrij is het eerste uur na het werk naar het plein (c).
+    **Gebouwd (4 okt, zevenentwintigste sessie; `js/praatje.js`, zie onder Af).** Zoals het plan, met vier dingen die
+    het bouwen liet zien:
+    - **Tot een uur voor bedtijd op het plein, niet een uur.** Van een boerderij aan de rand van het gehucht is het
+      anderhalf uur lopen naar het plein; wie een uur ging, kwam er nauwelijks aan. Ze staan rond het midden (waar de
+      marskramer staat), zodat de weg erheen voor iedereen uit één veld komt, en alleen wie binnen 40 tegels van het
+      plein woont, gaat: in een stad van 200 op 160 bij 160 liep anders een derde 's avonds de hele kaart over.
+    - **Geen rust op een vaste plek.** Na een praatje een uur geen nieuw, behalve op het plein, bij de put of voor de
+      herberg of de kapel: daar blijven ze praten, met steeds een ander. Dat verdrievoudigde de praatjes in het gehucht.
+    - **Onderweg** (d, vraag 119): treffen twee vrije bekenden elkaar op het raster, dan blijven ze soms staan in plaats
+      van uit te wijken. In een dorp van 100 of 200 is dat de helft van de praatjes, want daar woont iedereen verder
+      uit elkaar.
+    - **Wie begint, neemt de mooiste plek:** links of rechts van de ander op het scherm, ook als hij er al schuin achter
+      stond, zodat de een de ander niet verbergt.
+    Gemeten (twee gespeelde dagen op 3×): het ontworpen gehucht zo'n 24 praatjes per dag, en bijna altijd staat er ergens
+    een; vier landen van de maker 21 tot 47; een dorp van 100 zo'n 21, van 200 zo'n 32, 's avonds drie tegelijk. De
+    snelheid: bij 200 mensen voor en na achter elkaar gemeten geen verschil (1,43 tegen 1,39 ms per beeld, de avond 3,0
+    tegen 3,1).
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
@@ -4174,6 +4202,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vóór je veel bouwt.
 
 *Spelen, en zeggen hoe het voelt:*
+- **Het praatje** (4 okt, zevenentwintigste sessie; vraag 120). Begin een nieuw spel en kijk overdag op het plein (de
+  kinderen en de ouden praten daar) en 's avonds na het werk (`Spel.debug.uur(19)`): een deel van het dorp staat dan op
+  het plein, en boven wie praat staat om de beurt een wolkje. `Spel.debug.praatjes()` zegt wie waar staat te praten en
+  tot hoe laat; `('nu')` laat er nu een beginnen. Is het te veel, te weinig, te lang? De getallen (de kans, hoe lang, een
+  op de drie naar het plein, hoe ver ze ervoor lopen) staan in de werkbank (`O`), onder "De praatjes"; uit kan ook.
 - **De feesten** (3 okt, vijfentwintigste sessie; vraag 97). Begin een nieuw spel en speel tot 30 grasmaand (op 10× een
   paar minuten): de jongeren komen vragen of de meiboom mag. Zeg "Zet hem maar op" en kijk de dag erna op het plein,
   overdag en 's avonds. Sneller: `Spel.debug.feest('meiboom')` laat hem nu beginnen, en `Spel.debug.uur(20)` zet de
@@ -4444,6 +4477,18 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 4 okt 2026 — **Een praatje: wie vrij is, blijft staan met een buur of iemand van zijn werk** (zevenentwintigste sessie;
+  vraag 120, a, b en c; Marcel: "Het dorp moet echt levendig en realistisch aanvoelen", en "120 a b c ja";
+  `js/praatje.js`). Wie vrij is ('s ochtends, in de schaft, 's avonds, en overdag wie geen werk heeft) en een bekende uit
+  een ander huis ziet, blijft soms staan: bij een stap van het dwalen, en onderweg in plaats van uit te wijken. De een
+  loopt tot naast de ander, liefst links of rechts op het scherm, en ze kijken naar elkaar; wie langskomt, schuift aan,
+  tot vier. Een kwartier tot een uur, dan een uur niet weer, behalve op het plein, bij de put en voor de herberg of de
+  kapel. Boven wie praat staat om de beurt een leeg wolkje met drie puntjes. 's Avonds gaat een op de drie die in de
+  buurt woont naar het midden van het plein, tot een uur voor bedtijd. Wie langs wil, loopt om een praatje heen. De
+  regels van het spel veranderen niet, en het kost geen meetbare snelheid. De spelregel "Praatjes",
+  `Spel.debug.praatjes()`. Veertien nieuwe toetsen (`test/praatje.test.cjs`); twee oude toetsen van het dagritme kennen
+  het plein nu, of spelen zonder praatjes. Onderweg gevonden: het laden van een bewaard spel in een verse bladzijde is
+  stuk, al op `main` (`opmerkingen.md`).
 - 4 okt 2026 — **Lopen tussen anderen: een weg om wat vaststaat, en onderweg wachten, langs elkaar of opzij** (zesentwintigste
   sessie; vraag 119, D en A; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de huizen";
   `js/lopen.js`). Een weg gaat alleen om huizen, bomen en water (`T.zoekRoute`), en de kaart onthoudt hem; wie onderweg
