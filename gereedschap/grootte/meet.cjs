@@ -46,15 +46,24 @@ const soorten = {};
 for (const e of w.wezens) soorten[e.soort] = (soorten[e.soort] || 0) + 1;
 
 // ── Wat we meten ──
+// Het zoeken van een weg: T.zoekRoute (js/lopen.js: A* om wat vaststaat, of een veld; vraag 119), en T.zoekPad waar
+// het niet binnen T.zoekRoute gebeurt (een omweg om iemand heen, een gevecht). Tot 4 okt telde hier alleen T.zoekPad.
 const teller = { padN: 0, padMs: 0, dagtikken: [], opslaan: [] };
-const origPad = T.zoekPad;
-T.zoekPad = function (...a) {
+let inRoute = 0;
+const telZoeken = (orig) => function (...a) {
+  if (inRoute) return orig.apply(this, a);
+  inRoute++;
   const s = nu();
-  const r = origPad.apply(this, a);
-  teller.padMs += nu() - s;
-  teller.padN++;
-  return r;
+  try {
+    return orig.apply(this, a);
+  } finally {
+    inRoute--;
+    teller.padMs += nu() - s;
+    teller.padN++;
+  }
 };
+T.zoekPad = telZoeken(T.zoekPad);
+T.zoekRoute = telZoeken(T.zoekRoute);
 const origTik = T.tikGebouwenDag;
 T.tikGebouwenDag = function (...a) {
   const s = nu();
@@ -87,7 +96,7 @@ if (metDelen) {
     'werkVoorvallenBij', 'beweegWezens', 'werkOogstBij', 'laatDwalen',
     'tikAkkersDag', 'tikVeeDag', 'tikHerbergDag', 'tikBehoeftenDag', 'tikHandelDag', 'tikHeerDag', 'tikHeervaartDag', 'tikInnerDag',
     'tikVoorvallenDag', 'tikErvenDag', 'eetVandaag', 'verdeelHanden', 'wijsWerkToe', 'looptijdVan', 'tikWettenDag', 'tikRoversDag', 'tikTredeDag',
-    'werkUrenVan', 'zoekPad'].forEach(wikkel);
+    'werkUrenVan', 'zoekRoute'].forEach(wikkel);
 }
 
 // ── Spelen ──
@@ -209,7 +218,7 @@ console.log(`N=${N} L=${bouw.L} ${indeling}${metWerk ? '+werk' : ''} huizen=${bo
 console.log(`  beeld ms: gem ${f3(uitslag.beeld.gem)}  gem-gewoon ${f3(uitslag.beeld.gemGewoon)}  overdag ${f3(uitslag.beeld.gemOverdag)}  p50 ${f3(uitslag.beeld.p50)}  p95 ${f3(uitslag.beeld.p95)}  p99 ${f3(uitslag.beeld.p99)}  max ${f3(uitslag.beeld.max)}`);
 console.log('  dagdelen:', JSON.stringify(uitslag.dagdeel));
 console.log(`  dagtik: n=${uitslag.dagtik.n} gem ${f3(uitslag.dagtik.gem)} ms max ${f3(uitslag.dagtik.max)} ms; opslaan: n=${uitslag.opslaan.n} gem ${f3(uitslag.opslaan.gem)} ms`);
-console.log(`  zoekPad: ${uitslag.pad.perDag.toFixed(0)} aanroepen/dag, ${uitslag.pad.msPerDag.toFixed(1)} ms/dag = ${(uitslag.pad.aandeel * 100).toFixed(1)}% van de beeldtijd`);
+console.log(`  een weg zoeken: ${uitslag.pad.perDag.toFixed(0)} keer/dag, ${uitslag.pad.msPerDag.toFixed(1)} ms/dag = ${(uitslag.pad.aandeel * 100).toFixed(1)}% van de beeldtijd`);
 console.log('  traagste:', JSON.stringify(traagste.slice(0, 5)));
 console.log(`  dagtik (10 dagen): gem ${f3(uitslag.dagtikBank.gem)} ms, max ${f3(uitslag.dagtikBank.max)} ms; opslag ${uitslag.opslag.kB.toFixed(0)} kB (kaart ${uitslag.opslag.kaartKB.toFixed(0)} kB), ${uitslag.opslag.ms.toFixed(1)} ms (eerste ${uitslag.opslag.msEerste.toFixed(1)}); heap +${uitslag.heapMB.toFixed(1)} MB; gem van traagste 5%: ${f3(uitslag.beeld.gemSlechtste5)} ms`);
 if (metDelen) {

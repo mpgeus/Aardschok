@@ -465,6 +465,10 @@
     laatste = r;
     return r.raster;
   }
+  // Het raster zelf, voor wie per tegel heel vaak vraagt en de tegels al als getal kent (de velden in js/lopen.js: een
+  // veld vraagt het voor elke buur van elke tegel). Een DEUR vraag je dan nog aan T.isBegaanbaar of T.isVast.
+  T.vastRaster = vastRaster;
+  T.RASTER = { VRIJ, VAST, DEUR };
   function vastOp(w, x, y) {
     if (!(x >= 0 && y >= 0 && x < w.b && y < w.h)) return VAST;
     if ((x | 0) === x && (y | 0) === y) {

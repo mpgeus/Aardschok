@@ -147,23 +147,41 @@
     return { doel: { x: doel.x, y: doel.y }, open, afstand, rand, ring: 0, op: !rand.length };
   }
 
+  // Mag je op tegel j (x, y) staan, en houdt hij een schuine stap om de hoek tegen? Uit het raster van wat vaststaat
+  // (js/wereld.js), zonder voor elke buur T.isBegaanbaar te vragen: bij 400 mensen was dat de helft van het zoeken. Een
+  // deur vraagt het nog aan de deur.
+  const R = T.RASTER;
+  const DX = RICHTINGEN.map((r) => r[0]);
+  const DY = RICHTINGEN.map((r) => r[1]);
+  function vrijOp(w, raster, j, x, y, open) {
+    const g = raster[j];
+    return g === R.VRIJ || (g === R.DEUR && T.isBegaanbaar(w, x, y, { deurenOpenen: open }));
+  }
+  function vastOp(w, raster, j, x, y) {
+    const g = raster[j];
+    return g === R.VAST || (g === R.DEUR && T.isVast(w, x, y));
+  }
+
   // Eén ring verder: de tegels die een stap verder liggen dan de vorige ring. Een schuine stap om een hoek telt niet,
   // zoals bij A*.
   function groei(w, v) {
     const b = w.b;
-    const mag = { deurenOpenen: v.open };
+    const h = w.h;
+    const raster = T.vastRaster(w);
     const d = v.ring + 1;
     const volgende = [];
     for (const i of v.rand) {
       const x = i % b;
       const y = (i - x) / b;
-      for (const [dx, dy] of RICHTINGEN) {
+      for (let r = 0; r < 8; r++) {
+        const dx = DX[r];
+        const dy = DY[r];
         const nx = x + dx;
         const ny = y + dy;
-        if (nx < 0 || ny < 0 || nx >= b || ny >= w.h) continue;
+        if (nx < 0 || ny < 0 || nx >= b || ny >= h) continue;
         const j = ny * b + nx;
-        if (v.afstand[j] !== ONBEKEND || !T.isBegaanbaar(w, nx, ny, mag)) continue;
-        if (dx && dy && (T.isVast(w, x + dx, y) || T.isVast(w, x, y + dy))) continue;
+        if (v.afstand[j] !== ONBEKEND || !vrijOp(w, raster, j, nx, ny, v.open)) continue;
+        if (dx && dy && (vastOp(w, raster, y * b + nx, nx, y) || vastOp(w, raster, ny * b + x, x, ny))) continue;
         v.afstand[j] = d;
         volgende.push(j);
       }
@@ -175,15 +193,18 @@
 
   // De buren van (x, y) waar je heen kunt stappen en die het veld al kent, met hun afstand.
   function burenInVeld(w, v, x, y) {
+    const b = w.b;
+    const raster = T.vastRaster(w);
     const uit = [];
     for (let r = 0; r < 8; r++) {
-      const [dx, dy] = RICHTINGEN[r];
+      const dx = DX[r];
+      const dy = DY[r];
       const nx = x + dx;
       const ny = y + dy;
-      if (nx < 0 || ny < 0 || nx >= w.b || ny >= w.h) continue;
-      const a = v.afstand[ny * w.b + nx];
+      if (nx < 0 || ny < 0 || nx >= b || ny >= w.h) continue;
+      const a = v.afstand[ny * b + nx];
       if (a === ONBEKEND) continue;
-      if (dx && dy && (T.isVast(w, x + dx, y) || T.isVast(w, x, y + dy))) continue;
+      if (dx && dy && (vastOp(w, raster, y * b + nx, nx, y) || vastOp(w, raster, ny * b + x, x, ny))) continue;
       uit.push({ x: nx, y: ny, a, r });
     }
     return uit;
