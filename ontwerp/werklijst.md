@@ -52,9 +52,9 @@ ook het inpakken van de vellen (vraag 114, 2a) en de snelheid via Steam (vraag 1
 proefplaten van de negenentwintigste sessie (vraag 114, 2b en 2c: de huizenbouwer, niets in het spel) staan er ook in
 (Marcel: "Push alles maar en zet alles op main"). Ook het werk van de dertigste sessie (een vel per tekening, de
 figuren, de meter en de proef met schermafdrukken; Marcel: "Ja maar main"). Het werk van de eenendertigste sessie (de
-bouwstijl wit, vraag 114, stap 2a) staat op branch `ccr-32a5a0e4-w5loh4`, gepusht en met `main` samengevoegd (ook
-met het licht), maar nog niet in `main`; WebGL (vraag 123) en het licht (vraag 125: A en C, en de proefplaat van B) staan
-sinds 4 okt in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+bouwstijl wit, vraag 114, stap 2a) staat sinds 4 okt ook in `main` (Marcel: "ja push main"), net als WebGL (vraag 123)
+en het licht (vraag 125: A en C, en de schaduwen met de zon). Hoe een eigen branch en `main` samengaan, staat in
+`CLAUDE.md`, onder Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
 huizen"): een weg gaat om wat vaststaat, wie onderweg een ander treft, wacht, schuift langs hem, laat hem opzij gaan of
@@ -117,10 +117,11 @@ bouwt een huis als één 3D-huis met deur, ramen en vakwerk vast op alle vier de
 plaats van het te spiegelen, zodat de vier standen de vier aanzichten zijn. De schets staat bij vraag 114 ("Schets voor
 de draaibare huizen"): eerst nader lezen in `huis-sdf.cjs` (`maakStukken`, `stuk`, `verdeel`, de uitbouwen), dan een plan
 voor Marcel. Daarna wit opnieuw door de bouwer, nu met alle bouwfasen (`bouwfasen.cjs --erbij`; Marcel: "ik wil overal
-bouwfase"). Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te veranderen: de huizen in `tegels/`
-hebben geen schaduw op de vloer, en het spel tekent hun schaduw zelf. En dan stap 2b, de andere drie stijlen, elk met een eigen drietal vormen (Marcel: "B ja"), en stap 3, de herberg, de kapel en
-de woontoren, meteen draaibaar. Nog open bij vraag 114: **G**, of een huis dat doorgroeit ook in
-fases oprijst (voorstel: de laatste drie fases over zijn bouwtijd, en de mensen blijven erin wonen). **Vraag 121 is besloten**
+bouwfase"), en daarmee **G** (Marcel: "G ja"): een huis dat doorgroeit, rijst op in de laatste drie fases over zijn
+bouwtijd, en de mensen blijven erin wonen. Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
+veranderen: de huizen in `tegels/` hebben geen schaduw op de vloer, en het spel tekent hun schaduw zelf. En dan stap 2b,
+de andere drie stijlen, elk met een eigen drietal vormen (Marcel: "B ja"), en stap 3, de herberg, de kapel en de
+woontoren, meteen draaibaar. **Vraag 121 is besloten**
 (hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁", en "121 a terrassen, b ja, c na de
 boeren"): terrassen met wanden en hellingen, en de hoogte raakt het lopen, het zicht en het bouwen; na de boeren, vóór
 het eiland. Een proefplaat van de hoogte kan met die van de huizen mee. **Vraag 122** (de snelheid via Steam;
@@ -4154,10 +4155,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     en 4; elke stijl een eigen drietal vormen (bij 2b); bouwfasen voor alle 108 tekeningen; de maker zet de huizen rondom
     het plein met hun deur ernaartoe; en de toets die soms faalt, krijgt een vast zaad. Het renderen is eenmalig: rekentijd
     van de machine, en alleen opnieuw als de huizenbouwer zo verandert dat alle huizen anders worden. Wat blijft, is de
-    opslagplaats: met alle bouwfasen zo'n 18 MB per stijl, samen zo'n 75 MB. Nog open, **G**: met "overal" ook een huis
+    opslagplaats: met alle bouwfasen zo'n 18 MB per stijl, samen zo'n 75 MB. Daarna gevraagd, **G**: met "overal" ook een huis
     dat doorgroeit? Dat gebeurt nu in één nacht, zonder fases (`groeiGebouw` in `js/behoeften.js`). Voorstel van Claude:
     het nieuwe huis rijst op in de laatste drie fases (muren met steigers, het dakgebinte, half gedekt) over de bouwtijd
-    van zijn soort, en de mensen blijven erin wonen.
+    van zijn soort, en de mensen blijven erin wonen. **Marcel (4 okt): "G ja".** Het komt met de bouwfasen van wit, dus
+    met de draaibare huizen (voorstel van Claude: eerder zie je het alleen op het ontworpen gehucht, want de huizen van
+    de maker hebben nog geen fases); tot dan groeit een huis in één nacht, zoals nu.
     **Marcel vroeg erbij: "ik wil ook de camera kunnen draaien. Is dat mogelijk"**, aan de sessie van WebGL gegeven (die
     schrijft het als vraag 124). Voor de huizen: de vier standen zijn nu gespiegeld in de diagonaal (`nok: 'y'`), niet
     gedraaid, en de bouwer vult alleen de muren in die je ziet. Voor een draaiende camera moet een huis van vier kanten
