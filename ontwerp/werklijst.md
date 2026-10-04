@@ -3806,6 +3806,18 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       wijdere land (vraag 112, b). Daarom samen met 112, stap 2 (de huizen).
     Vragen: **a**, deze ladder? **b**, de woontoren als 1, 2 of 3? **c**, met "warehouse" bedoel je het pakhuis (de
     voorraad van het dorp), of de tiendschuur (van de heer)? **d**, eerst de herberg, de kapel en de woontoren?
+    **Marcel koos (4 okt, zesentwintigste sessie): "1. Ja 2. Appartementen, niet historisch correct, maar dat is ook niet
+    nodig. 3. Ja een pakhuis, maar we gaan over naar het Engels uiteindelijk. 4. Dat is goed. 5. Vergeet niet dat we meer
+    afwisseling willen. Je gaf eerder aan andere kleuren etc te gaan gebruiken".** Dus: a, de ladder zoals voorgesteld;
+    b, geen van de drie: de woontoren is een gebouw met appartementen, meer gezinnen op een kleine voet, de hoogte in;
+    c, het pakhuis (en het spel gaat uiteindelijk naar het Engels, dus een naam is niet heilig: `commercieel.md`); d, eerst
+    de herberg, de kapel en de woontoren; en de afwisseling uit vraag 112, d hoort erbij: andere kleuren voor muren,
+    luiken en daken, ander materiaal, gespiegeld, en meer maten.
+    **Voorstel van Claude voor de woontoren (wacht op Marcel):** een stenen huis dat een maand alles heeft, groeit door tot
+    woontoren, zoals een hut tot huis groeit: op zijn eigen erf, vanaf marktrecht, met steen. Dezelfde stand (de
+    ambachtslieden, met dezelfde wensen), maar drie appartementen: 24 mensen in plaats van 8. Zo groeit het dorp verder
+    als de grond op is (vraag 110), zonder nieuwe regel ernaast: het is gewoon de volgende trap van het doorgroeien. Een
+    spelregel "Woontoren" kan hem ook als verzoek van een inwoner laten komen, of uitzetten.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
