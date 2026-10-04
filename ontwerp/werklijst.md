@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (4 okt 2026, eind van de achtentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt (vraag 114, 2a): de browser houdt zo'n 210 MB aan plaatjes vast in plaats van 900, elke tekening pixel voor pixel dezelfde; nu de proefplaat met meer afwisseling in de huizen, en de herberg, de kapel en de woontoren in verhouding (vraag 114, 2b en 2c), dan de boeren aan het werk op hun veld (vraag 111), en daarna hoogteverschillen op de kaart (vraag 121: terrassen, die het lopen, het zicht en het bouwen raken)
+## De stand (4 okt 2026, eind van de achtentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt (vraag 114, 2a): de browser houdt zo'n 210 MB aan plaatjes vast in plaats van 900, elke tekening pixel voor pixel dezelfde; nu de proefplaat met meer afwisseling in de huizen, en de herberg, de kapel en de woontoren in verhouding (vraag 114, 2b en 2c), dan tekenen met WebGL, ook op 4K, met een proefversie voor Marcels pc (vraag 123), dan de boeren aan het werk op hun veld (vraag 111), en daarna hoogteverschillen op de kaart (vraag 121: terrassen, die het lopen, het zicht en het bouwen raken)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -75,14 +75,17 @@ Marcel: "lag, geheugen tekort etc is geen optie straks") is half besloten: JavaS
 spel de lat niet, dan de middenweg (WebGL, dan een Worker of WebAssembly; Marcel: "snelheid, middenweg is goed"). De lat
 geldt op 1920 bij 1080 en op 4K (Marcel: "heb ik zelf"); nog open: 4K tekenen zoals 1920 bij 1080 (c), en een
 proefverpakking (b), die komt als het spel met WebGL tekent (Marcel: "Proefversie wil ik als we de draws doen met
-webgl"). **Vraag 123** (tekenen met WebGL) wacht op Marcel: het plan, en of het vóór of na de boeren komt.
+webgl"). **Vraag 123 is besloten** (Marcel: "1 ja 2 voor de boeren"): tekenen met WebGL, met een eigen kleine laag, 4K
+via een tussenbuffer op 1920 bij 1080, en het 2D-tekenen als spelregel ernaast; na de proefplaat van de huizen, vóór de
+boeren; daarna de proefversie voor Marcels 4K-scherm.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
 met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant (**vraag 115**). De meter in Firefox
 (vraag 113, a) komt van hem. Ook besloten (4 okt): **vraag 116** (beesten in het bos: wolven die de houthakker bedreigen,
 rode ogen in het donker; "doden mag") en **vraag 117** (één kaart: een eiland van 2500 bij 2500 met de zee rondom en de
 mist; "uiteindelijk"). De volgorde (Marcel: "akkoord"): de huizen (vraag 114), dan **vraag 111** (de boeren op hun
 veld) met 115 en 116, dan de hoogte (**vraag 121**; Marcel: "na de boeren"), dan 117, dat begint met een proef die meet of
-een kaart in stukken loopt. Ook besloten: **vraag 118**
+een kaart in stukken loopt. Tussen de huizen en de boeren komt het tekenen met WebGL (**vraag 123**; Marcel: "voor de
+boeren"). Ook besloten: **vraag 118**
 (inwoners met stats: levenspunten, vaardigheden die groeien met het werk, en eigenschappen, zoals in Dwarf Fortress),
 samen met de mensen aan het werk. Voor het eiland gebruiken we Marcels technieken voor het zoeken van paden (vraag 117 en
 **vraag 119**: HPA\* over de stukken, flow fields, time-slicing, sturen in plaats van iedereen als muur, Jump Point
@@ -4306,6 +4309,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       werk, de terrassen van vraag 121), komt dan meteen op de nieuwe laag. Of na de boeren, maar in elk geval vóór de
       hoogte, want terrassen tekenen en dan overzetten is dubbel werk.
     Vragen: **a**, dit plan? **g**, vóór of na de boeren?
+    **Marcel koos (4 okt): "1 ja 2 voor de boeren".** Dus het plan zoals het hier staat, na de proefplaat van de huizen
+    en vóór de boeren (vraag 111). De volgorde is nu: de proefplaat van de huizen (vraag 114, 2b en 2c), tekenen met
+    WebGL met de proefversie erna (vraag 123), de boeren met de houthakker en de beesten (vraag 111, 115 en 116), de
+    hoogte (vraag 121), en dan het eiland (vraag 117).
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
