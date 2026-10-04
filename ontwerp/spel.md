@@ -2625,6 +2625,13 @@ punt 6c). Met vijf boeren slijt er weinig. Als iedereen elke dag naar zijn werk,
 herberg loopt, tekent het dorp zijn eigen stratenplan, en de huizen groeien er vanzelf langs (zie
 hieronder).
 
+### Inwoners met stats (Marcel, 4 okt 2026; werklijst vraag 118, open)
+
+"Inwoners krijgen ook 'stats' hp, skills, eigenschappen, etc ala dwarf fortress." Het voorstel (vraag 118): levenspunten
+voor iedereen (de wolven en de rovers kunnen doden), vaardigheden per soort werk die groeien met wie het doet, een
+karakter en een paar eigenschappen voor iedereen (zoals nu de boeren), die sturen wat hij doet en zegt, en een papier
+met wie hij is als je hem aanklikt. Samen met de mensen aan het werk (vraag 111, 115 en 116).
+
 ### Mensen worden poppetjes
 
 **Zo werkt het nu** (26 sep, het hele plan hieronder gebouwd: stuk 1, punt 1 tot en met 3, en stuk 2,

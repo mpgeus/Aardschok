@@ -48,7 +48,9 @@ met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant 
 (vraag 113, a) komt van hem. Ook besloten (4 okt): **vraag 116** (beesten in het bos: wolven die de houthakker bedreigen,
 rode ogen in het donker; "doden mag") en **vraag 117** (één kaart: een eiland van 2500 bij 2500 met de zee rondom en de
 mist; "uiteindelijk"). De volgorde (Marcel: "akkoord"): de huizen (vraag 114), dan **vraag 111** (de boeren op hun
-veld) met 115 en 116, dan 117, dat begint met een proef die meet of een kaart in stukken loopt. Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
+veld) met 115 en 116, dan 117, dat begint met een proef die meet of een kaart in stukken loopt. **Open bij Marcel:**
+**vraag 118** (inwoners met stats, levenspunten, vaardigheden en eigenschappen, zoals in Dwarf Fortress; het voorstel is
+om het met de mensen aan het werk te doen). Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
 verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de maat van de winst: op het
 wijdere land is er grond genoeg, maar de speeltest speelt standaard nog het ontworpen gehucht). De speeltest van vier
 jaar staat in `speelbaar.md`, en een volgende speeltest van vier jaar splitst de spelers over twee taken, want een taak
@@ -3947,6 +3949,28 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       poppetjes en ver weg als getallen (vraag 79, D).
     - **De tijd.** Op 1× loopt de schout zo'n kwartier van de ene kust naar de andere, op 30× minder dan een minuut; later
       een paard. Dat past bij het ontdekken.
+118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
+    'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
+    **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
+    boeren hebben een karakter (`T.KARAKTERS`, tien soorten, met een eigen gesprek) en gelote eigenschappen (maaien,
+    opbrengst, zaaien, aanzien; `js/boeren.js`); de raadsman twee vaardigheden (`js/raadsman.js`). Levenspunten hebben
+    alleen wie vechten: de schout, de militie en de veteranen.
+    Voorstel:
+    - **a, levenspunten voor iedereen:** wie een wolf of een rover treft, raakt gewond of sterft (vraag 116: "doden
+      mag"); een wond geneest in een paar nachten, ziekte en kou kosten ook leven.
+    - **b, vaardigheden die groeien:** per soort werk (hakken, maaien, jagen, vissen, bouwen, brouwen, bakken, weven,
+      smeden, vechten) een getal dat groeit met wie het doet: wie een jaar houthakker is, hakt sneller dan wie net begint.
+      Wat een werkplaats maakt, hangt dan af van wie er werkt, en wie er weggaat (de heervaart, een wolf), laat een gat.
+    - **c, eigenschappen:** iedereen een karakter, zoals nu de boeren, en een of twee eigenschappen uit het zaad (sterk,
+      snel, lui, moedig, bang, handig, gierig, ...): ze sturen wat hij doet (wie vlucht voor een wolf en wie vecht, wie
+      naar de herberg gaat, wie je iets komt vragen) en wat hij zegt.
+    - **d, te zien:** klik iemand, en een papier (zoals het briefje bij een huis) zegt wie hij is: zijn leven, zijn
+      vaardigheden, zijn eigenschappen, zijn familie en waar hij werkt.
+    - **e, later:** wie met wie bevriend is of ruzie heeft, en verhalen die daaruit komen (zoals in Dwarf Fortress).
+    - **f, wanneer:** met de mensen aan het werk (vraag 111, 115 en 116): dan doen de levenspunten ertoe (de wolven) en de
+      vaardigheden (het hakken, het maaien). Een dorp van 5000 (vraag 79, D) houdt het per persoon klein: een handvol
+      getallen.
+    Vragen: **a**, deze stats? **b**, vaardigheden die groeien met het werk? **c**, samen met 111, 115 en 116?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
