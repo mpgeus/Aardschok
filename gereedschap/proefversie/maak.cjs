@@ -2,7 +2,9 @@
 // spel nodig heeft, met index.html bovenin, zoals itch.io een spel in de browser wil. Uitgepakt speelt hij ook los,
 // met een dubbelklik op index.html, want het spel draait vanaf een los bestand (ontwerp/verpakken.md).
 //
-//   npm run proefversie        maakt gereedschap/proefversie/uit/<naam>-proef-<datum>-<commit>.zip
+//   npm run proefversie                  maakt gereedschap/proefversie/uit/<naam>-proef-<datum>-<commit>.zip
+//   npm run proefversie -- --windows     maakt <naam>-windows-<datum>-<commit>.zip: het spel in Electron, zoals straks
+//                                        op Steam (werklijst vraag 122 en 123, e). Uitpakken, en <Naam>.exe starten.
 //
 // In de zip staat in js/naam.js de stand (T.STAND): de datum en de commit, en of er nog wijzigingen in het spel
 // waren die niet gecommit zijn. Het titelscherm zet hem klein rechtsonder, zodat we weten waarop een tester speelde
@@ -10,11 +12,15 @@
 // plaatjes uit beelden/ en tegels/, die js/sprites.js zelf laadt. De bronnen van die plaatjes (Tiled, .json) niet.
 // Hoe de zip op itch.io komt, staat in ontwerp/verpakken.md, "Een proefversie op itch.io".
 //
-// Zonder afhankelijkheden: de zip maakt dit bestand zelf, met zlib uit Node.
+// Zonder afhankelijkheden: de zip maakt dit bestand zelf, met zlib uit Node. Voor Windows haalt het Electron één keer
+// van GitHub (in uit/, niet in git), en zet het spel erin als resources/app, met een kleine schil (SCHIL hieronder).
 const fs = require('node:fs');
 const path = require('node:path');
 const zlib = require('node:zlib');
 const { execSync } = require('node:child_process');
+
+const WINDOWS = process.argv.includes('--windows');
+const ELECTRON = '44.5.1'; // de versie waarin het spel gemeten is (ontwerp/verpakken.md); verander hem bewust
 
 const WORTEL = path.join(__dirname, '..', '..');
 const UIT = path.join(__dirname, 'uit');
@@ -76,6 +82,39 @@ function crc32(buf) {
   return (c ^ 0xffffffff) >>> 0;
 }
 
+function pak(data) {
+  const ingepakt = zlib.deflateRawSync(data, { level: 9 });
+  const deflate = ingepakt.length < data.length;
+  return { deflate, lijf: deflate ? ingepakt : data, crc: crc32(data), grootte: data.length };
+}
+
+// De delen van een zip, zoals ze erin staan (alleen deflate of niet ingepakt, zoals Electron ze levert).
+function leesZip(buf) {
+  let eind = buf.length - 22;
+  while (eind >= 0 && buf.readUInt32LE(eind) !== 0x06054b50) eind--;
+  if (eind < 0) throw new Error('Dat is geen zip.');
+  const aantal = buf.readUInt16LE(eind + 10);
+  let p = buf.readUInt32LE(eind + 16);
+  const uit = [];
+  for (let i = 0; i < aantal; i++) {
+    const methode = buf.readUInt16LE(p + 10);
+    const crc = buf.readUInt32LE(p + 16);
+    const lengte = buf.readUInt32LE(p + 20);
+    const grootte = buf.readUInt32LE(p + 24);
+    const nl = buf.readUInt16LE(p + 28);
+    const el = buf.readUInt16LE(p + 30);
+    const cl = buf.readUInt16LE(p + 32);
+    const kop = buf.readUInt32LE(p + 42);
+    const naam = buf.toString('utf8', p + 46, p + 46 + nl);
+    p += 46 + nl + el + cl;
+    if (naam.endsWith('/')) continue;
+    if (methode !== 0 && methode !== 8) throw new Error(`${naam}: onbekende manier van inpakken (${methode}).`);
+    const begin = kop + 30 + buf.readUInt16LE(kop + 26) + buf.readUInt16LE(kop + 28);
+    uit.push({ naam, ingepakt: { deflate: methode === 8, lijf: buf.subarray(begin, begin + lengte), crc, grootte } });
+  }
+  return uit;
+}
+
 function maakZip(lijst) {
   const nu = new Date();
   const tijd = (nu.getHours() << 11) | (nu.getMinutes() << 5) | Math.floor(nu.getSeconds() / 2);
@@ -83,12 +122,10 @@ function maakZip(lijst) {
   const delen = [];
   const inhoud = [];
   let plek = 0;
-  for (const { naam, data } of lijst) {
-    const n = Buffer.from(naam, 'utf8');
-    const ingepakt = zlib.deflateRawSync(data, { level: 9 });
-    const deflate = ingepakt.length < data.length;
-    const lijf = deflate ? ingepakt : data;
-    const crc = crc32(data);
+  for (const deel of lijst) {
+    const n = Buffer.from(deel.naam, 'utf8');
+    // Een deel uit een andere zip (Electron) gaat mee zoals het daar ingepakt was.
+    const { deflate, lijf, crc, grootte } = deel.ingepakt || pak(deel.data);
     const kop = Buffer.alloc(30);
     kop.writeUInt32LE(0x04034b50, 0);
     kop.writeUInt16LE(20, 4);
@@ -98,7 +135,7 @@ function maakZip(lijst) {
     kop.writeUInt16LE(datum, 12);
     kop.writeUInt32LE(crc, 14);
     kop.writeUInt32LE(lijf.length, 18);
-    kop.writeUInt32LE(data.length, 22);
+    kop.writeUInt32LE(grootte, 22);
     kop.writeUInt16LE(n.length, 26);
     delen.push(kop, n, lijf);
     const regel = Buffer.alloc(46);
@@ -111,7 +148,7 @@ function maakZip(lijst) {
     regel.writeUInt16LE(datum, 14);
     regel.writeUInt32LE(crc, 16);
     regel.writeUInt32LE(lijf.length, 20);
-    regel.writeUInt32LE(data.length, 24);
+    regel.writeUInt32LE(grootte, 24);
     regel.writeUInt16LE(n.length, 28);
     regel.writeUInt32LE(plek, 42);
     inhoud.push(regel, n);
@@ -127,8 +164,41 @@ function maakZip(lijst) {
   return Buffer.concat([...delen, opgave, eind]);
 }
 
+// De schil: één venster, groot, zonder menubalk, met het spel erin zoals het vanaf een los bestand draait. F11 is het
+// hele scherm, Ctrl+Shift+I het gereedschap van de browser (om te zien wat er misgaat).
+const SCHIL = `'use strict';
+const { app, BrowserWindow, Menu } = require('electron');
+app.whenReady().then(() => {
+  Menu.setApplicationMenu(null);
+  const venster = new BrowserWindow({ width: 1600, height: 900, show: false, backgroundColor: '#000000', webPreferences: { backgroundThrottling: false } });
+  venster.maximize();
+  venster.show();
+  venster.loadFile('index.html');
+  venster.webContents.on('before-input-event', (e, toets) => {
+    if (toets.type !== 'keyDown') return;
+    if (toets.key === 'F11') { venster.setFullScreen(!venster.isFullScreen()); e.preventDefault(); }
+    if (toets.control && toets.shift && toets.key.toLowerCase() === 'i') { venster.webContents.toggleDevTools(); e.preventDefault(); }
+  });
+});
+app.on('window-all-closed', () => app.quit());
+`;
+
+// Electron voor Windows, één keer gehaald en bewaard in uit/.
+function electronVoorWindows() {
+  const naam = `electron-v${ELECTRON}-win32-x64.zip`;
+  const plek = path.join(UIT, naam);
+  if (!fs.existsSync(plek)) {
+    fs.mkdirSync(UIT, { recursive: true });
+    console.log(`Electron ${ELECTRON} voor Windows halen (zo'n 120 MB)...`);
+    execSync(`curl -sSfL -o "${plek}.deel" https://github.com/electron/electron/releases/download/v${ELECTRON}/${naam}`, { stdio: 'inherit' });
+    fs.renameSync(`${plek}.deel`, plek);
+  }
+  return leesZip(fs.readFileSync(plek));
+}
+
 function main() {
   const s = stand();
+  if (WINDOWS) s.bestand = s.bestand.replace('-proef-', '-windows-');
   const lijst = bestanden().map((naam) => {
     let data = fs.readFileSync(path.join(WORTEL, naam));
     if (naam === 'js/naam.js') {
@@ -139,12 +209,22 @@ function main() {
     }
     return { naam, data };
   });
-  const zip = maakZip(lijst);
+  let delen = lijst;
+  if (WINDOWS) {
+    // Alles in één map met de naam van het spel; het spel zelf in resources/app, waar Electron het zoekt.
+    const map = NAAM;
+    const app = [...lijst, { naam: 'main.js', data: Buffer.from(SCHIL) }, { naam: 'package.json', data: Buffer.from(JSON.stringify({ name: NAAM.toLowerCase(), productName: NAAM, version: '0.1.0', main: 'main.js' }, null, 2)) }];
+    delen = [
+      ...electronVoorWindows().map((d) => ({ ...d, naam: `${map}/${d.naam === 'electron.exe' ? `${NAAM}.exe` : d.naam}` })),
+      ...app.map((d) => ({ ...d, naam: `${map}/resources/app/${d.naam}` })),
+    ];
+  }
+  const zip = maakZip(delen);
   fs.mkdirSync(UIT, { recursive: true });
   const doel = path.join(UIT, s.bestand);
   fs.writeFileSync(doel, zip);
   const mb = (n) => (n / 1024 / 1024).toFixed(1).replace('.', ',');
-  console.log(`${s.tekst}: ${lijst.length} bestanden, ${mb(zip.length)} MB.`);
+  console.log(`${s.tekst}: ${lijst.length} bestanden van het spel${WINDOWS ? `, in Electron ${ELECTRON} voor Windows (${NAAM}/${NAAM}.exe)` : ''}, ${mb(zip.length)} MB.`);
   console.log(`Klaar: ${path.relative(WORTEL, doel)}`);
   if (s.vies) console.log('Let op: het spel heeft wijzigingen die nog niet gecommit zijn. Commit eerst, dan weet je waarop de tester speelt.');
 }

@@ -43,6 +43,16 @@ canvas {
   image-rendering: crisp-edges;
   image-rendering: pixelated; /* wint waar de browser hem kent; crisp-edges is de oudere naam */
 }
+/* Met de videokaart (js/gl.js) tekent het spel op een doek onder het gewone, dat dan leeg blijft en de muis vangt. */
+#scherm-gl {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+#scherm {
+  position: relative;
+}
 
 .verborgen { display: none !important; }
 

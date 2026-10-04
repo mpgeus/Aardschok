@@ -107,7 +107,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   een getal uit de werkbank anders (allebei zo vaak als je wilt; de uitslag krijgt `-regels` achter zijn naam).
 - `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
-  titelscherm (`T.STAND`). Commit eerst.
+  titelscherm (`T.STAND`). Commit eerst. Met `-- --windows` is het het spel in Electron voor Windows, zoals straks op Steam
+  (`Aardschok/Aardschok.exe`; Electron komt één keer van GitHub, in `uit/`; vraag 123, e).
 - `npm run grootte` meet hoe groot een dorp kan worden (vraag 74): het bouwt het gehucht uit tot N bewoners, met erven en
   werkplekken zoals het spel ze bouwt, en meet de wereld per beeld op 30×, de dagtik en het opslaan, elke N in een eigen
   Node (`gereedschap/grootte/`, uitleg bovenin `grootte.cjs`); `-- 26 800` voor andere N, `--browser` ook het tekenen
@@ -120,6 +121,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   het tekenen of het laden `-- --naam na --tegen voor`: dan zegt het per beeld of het byte voor byte gelijk bleef
   (vraag 114, stap 1; ook voor WebGL, vraag 123). In `gereedschap/schermen/uit/` (niet in git). Op 0,35 kan het
   verkleinen in een paar honderd pixels de buurpixel kiezen als alleen het vel van een tekening anders is.
+- `npm run tekenmeting` meet waar het tekenen zijn tijd kwijt is, per laag (vraag 123, f): land 5 van de maker op
+  1920×1080, 4K en 4K op 200%, dichtbij en in het overzicht, overdag en 's avonds; `-- 1920x1080@1` voor één scherm. In
+  `gereedschap/schermen/uit/tekenmeting.json` (niet in git).
 - `npm run maker` legt gehuchten met de maker (`js/maker.js`, `T.maakGehucht(zaad)`: elk spel een ander gehucht, vraag
   69 en 70) en tekent ze als plattegrond naast het ontworpen gehucht, in `gereedschap/maker/uit/` (niet in git);
   `-- 7 12` voor andere zaden.
@@ -288,9 +292,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/dialoog.js`, `js/ui.js` (alle html over het beeld), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera). **Het overzicht** (vraag 108, a): `Tab` tilt de camera van de schout af en zoomt uit
   (`T.wisselOverzicht`, `S.overzicht`, alleen scherm); slepen of de pijltjes schuiven, het wiel zoomt, en wat je klikt,
-  doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug. Ver uitgezoomd bewaart
+  doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug. Op een groot scherm tekent het spel op een hele deling ervan, minstens
+  1920×1080 (de tussenbuffer, `formaat`, vraag 123): op 4K 1920×1080 maal twee; wat er getekend wordt, zegt `T.tekenMaat()`,
+  en de muis rekent om in `naarVlak`. Ver uitgezoomd bewaart
   `js/tekenen.js` de grond op de maat van het scherm, en het bos om de kaart heen in een buffer (`bosGebakken`). **De
   meter** (`F2`): beelden per seconde, en wat de regels en het tekenen per beeld kosten.
+- `js/gl.js`: **tekenen met de videokaart** (vraag 123): een eigen kleine laag op WebGL die zich voordoet als het 2D-doek,
+  zodat `js/tekenen.js` er hetzelfde op tekent. Plaatjes, vlakken, bolle vormen en ronde verlopen tekent de kaart zelf;
+  de rest gaat via een kladdoek in 2D en komt als plaatje op zijn plek (`T.gl.telling` zegt hoeveel). Een buffer die
+  opnieuw getekend wordt, krijgt een nieuwe `versie` (`nieuweBuffer`), anders gaat hij niet opnieuw naar de kaart.
+  `T.tekenBeeld()` (`js/main.js`) tekent het scherm met of zonder, naar de spelregel "Tekenen"; zonder echte videokaart
+  vanzelf zonder (`ookOpDeProcessor` zet het voor de proeven hier toch aan). Het gewone doek ligt erboven en vangt de muis.
 - `js/doorkijk.js`: wie je door een boom of een huis heen ziet (`T.zichtbaarDoor`,
   `T.werkDoorkijkBij`), en hoe: het kijkvenster (`T.tekenKijkgat`) of het raster (`T.tekenGerasterd`),
   een keuze in de spelregels (`beeld.md`, "Doorkijk"). `js/tekenen.js` vraagt het aan. Het eerste stuk

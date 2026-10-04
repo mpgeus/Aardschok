@@ -45,8 +45,8 @@
   function inBeeld() {
     const s = S();
     const w = s.wereld;
-    const bw = window.innerWidth;
-    const bh = window.innerHeight;
+    const bw = T.tekenMaat().b;
+    const bh = T.tekenMaat().h;
     const binnen = (x, y) => {
       const p = T.naarScherm(x, y);
       const sx = (p.x - Math.round(s.camera.x)) * s.zoom + Math.round(bw / 2);
@@ -77,8 +77,8 @@
   function teken(zoom, K, flush, opties) {
     const o = opties || {};
     const s = S();
-    const bw = window.innerWidth;
-    const bh = window.innerHeight;
+    const bw = T.tekenMaat().b;
+    const bh = T.tekenMaat().h;
     const zoom0 = s.zoom;
     if (zoom) s.zoom = zoom;
     const dag0 = s.kalender.dag;
@@ -90,12 +90,17 @@
       if (!window.__klein) { window.__klein = document.createElement('canvas'); window.__klein.width = 1; window.__klein.height = 1; }
       cx = window.__klein.getContext('2d');
     }
-    for (let i = 0; i < 6; i++) { T.tekenScene(cx, s, bw, bh); if (flush) cx.getImageData(0, 0, 1, 1); }
+    // Het beeld op het scherm gaat met T.tekenBeeld, met of zonder de videokaart (de spelregel "Tekenen", vraag 123).
+    const een = () => {
+      if (o.klein) T.tekenScene(cx, s, bw, bh);
+      else T.tekenBeeld();
+      if (flush) (o.klein ? cx.getImageData(0, 0, 1, 1) : T.debug.wacht());
+    };
+    for (let i = 0; i < 6; i++) een();
     const t = [];
     for (let i = 0; i < K; i++) {
       const a = performance.now();
-      T.tekenScene(cx, s, bw, bh);
-      if (flush) cx.getImageData(0, 0, 1, 1);
+      een();
       t.push(performance.now() - a);
     }
     s.kalender.dag = dag0;
@@ -154,8 +159,8 @@
   function dicht(K) {
     const s = S();
     const w = s.wereld;
-    const bw = window.innerWidth;
-    const bh = window.innerHeight;
+    const bw = T.tekenMaat().b;
+    const bh = T.tekenMaat().h;
     const z = s.zoom;
     const tegels = [];
     for (let y = 0; y < w.h; y++) {

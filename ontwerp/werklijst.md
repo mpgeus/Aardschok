@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (4 okt 2026, eind van de eenendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit, voorlopig gespiegeld en zonder bouwfasen), en loopt tekenen met WebGL in een eigen sessie naast de huizen (vraag 123); nu de draaibare huizen (vraag 124, B: elk huis van vier kanten, voor een camera die in kwartslagen draait), dan wit opnieuw met bouwfasen en de andere drie stijlen (2b), dan de herberg, de kapel en de woontoren (stap 3), dan de boeren aan het werk (vraag 111), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
+## De stand (4 okt 2026, eind van de eenendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit, voorlopig gespiegeld en zonder bouwfasen), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); nu de draaibare huizen (vraag 124, B: elk huis van vier kanten, voor een camera die in kwartslagen draait), dan wit opnieuw met bouwfasen en de andere drie stijlen (2b), dan de herberg, de kapel en de woontoren (stap 3), dan de boeren aan het werk (vraag 111), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -46,8 +46,8 @@ ook het inpakken van de vellen (vraag 114, 2a) en de snelheid via Steam (vraag 1
 proefplaten van de negenentwintigste sessie (vraag 114, 2b en 2c: de huizenbouwer, niets in het spel) staan er ook in
 (Marcel: "Push alles maar en zet alles op main"). Ook het werk van de dertigste sessie (een vel per tekening, de
 figuren, de meter en de proef met schermafdrukken; Marcel: "Ja maar main"). Het werk van de eenendertigste sessie (de
-bouwstijl wit, vraag 114, stap 2a) staat op branch `ccr-32a5a0e4-w5loh4`, gepusht maar nog niet in `main`; dat van WebGL
-op `claude/webgl-tekenen`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+bouwstijl wit, vraag 114, stap 2a) staat op branch `ccr-32a5a0e4-w5loh4`, gepusht en met `main` samengevoegd, maar
+nog niet in `main`; dat van WebGL staat sinds 4 okt in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
 huizen"): een weg gaat om wat vaststaat, wie onderweg een ander treft, wacht, schuift langs hem, laat hem opzij gaan of
@@ -95,9 +95,15 @@ en 4, huis 1, 3 en 6 en hun stenen broertjes, boerderij 1 en 4), elke vorm met z
 deur naar de weg, met de moestuin ervoor; een verzoek keert zijn deur naar de weg; de maker zet de huizen ook vóór het
 plein, met hun deur ernaartoe. Het ontworpen gehucht speelt zoals altijd. Voorlopig zijn de witte huizen gespiegeld en
 zonder bouwfasen: de draaibare vervangen ze (vraag 124, B). Zie onder Af, en `beeld.md`, "De eerste bouwstijl: wit".
-**WebGL loopt in een eigen sessie** (Marcel: "Kunnen we een andere agent starten die alvast het webgl deel uitvoert?"),
-op branch `claude/webgl-tekenen`, met vraag 123 en 124 (de draaiende camera; Marcel: "A prima", "124b Ja dan", "Mag na
-webgl"). Die sessie blijft uit de bestanden van de huizen; wie als tweede in `main` komt, voegt eerst `main` samen.
+**WebGL, in een eigen sessie naast de huizen** (vraag 123; Marcel, 4 okt: "Kunnen we een andere agent starten die
+alvast het webgl deel uitvoert?"): het tekenen met WebGL loopt naast de huizen, op een eigen branch
+(`claude/webgl-tekenen`), en blijft uit de bestanden van de huizen. Marcel koos het plan (A tot en met D). Stap 1 is af:
+de tussenbuffer, waarmee 4K zo snel tekent als 1920×1080. De proefversie voor Windows is er
+(`npm run proefversie -- --windows`), zodat Marcel op zijn eigen pc meet. Stap 2 tot en met 5 zijn gebouwd: de WebGL-laag
+(`js/gl.js`), de spelregel "Tekenen" (standaard met de videokaart, zonder als er geen is). Volgende: Marcel meet op zijn
+pc (een nieuwe proefversie; vraag E: ja), en dan schaduwen en licht (vraag 125: A bouwen, B en C als proefplaat;
+Marcel: "A ja B ja C ja D na webgl"). Het draaien
+van de camera (vraag 124) komt na WebGL, en de huizen worden alvast draaibaar gerenderd (Marcel: "124b Ja dan").
 
 **Waar de volgende sessie begint:** **de draaibare huizen** (vraag 124, B; Marcel: "124b Ja dan"): de huizenbouwer
 bouwt een huis als één 3D-huis met deur, ramen en vakwerk vast op alle vier de muren, en draait het in kwartslagen in
@@ -4547,6 +4553,181 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     en vóór de boeren (vraag 111). De volgorde is nu: de proefplaat van de huizen (vraag 114, 2b en 2c), tekenen met
     WebGL met de proefversie erna (vraag 123), de boeren met de houthakker en de beesten (vraag 111, 115 en 116), de
     hoogte (vraag 121), en dan het eiland (vraag 117).
+    **Naast de huizen** (Marcel, 4 okt: "Kunnen we een andere agent starten die alvast het webgl deel uitvoert?"): WebGL
+    loopt nu in een eigen sessie, tegelijk met de huizen (vraag 114, stap 2), en niet erna. Die sessie blijft uit de
+    bestanden van de huizen; een nieuwe tekening komt binnen zoals nu (een bestand per tekening, `T.sprites.laadWatErStaat`),
+    en wordt een textuur op het moment dat hij geladen is, dus de huizen werken vanzelf.
+    **Gemeten (f, 4 okt, `npm run tekenmeting`):** land 5 van de maker, zonder videokaart, ms per beeld (de mediaan, met
+    een pixel teruggelezen zodat de browser het werk ook doet), en de beelden per seconde van de echte spellus:
+
+    | | 1920×1080 | 4K (3840×2160) | 4K op 200% (1920×1080, ratio 2) |
+    |---|---|---|---|
+    | dichtbij, dag | 19 ms, 41/s | 64 ms, 13/s | 65 ms, 14/s |
+    | dichtbij, avond | 28 ms, 35/s | 99 ms, 10/s | 96 ms, 10/s |
+    | overzicht 0,5, dag | 30 ms, 29/s | 75 ms, 11/s | 68 ms, 11/s |
+    | overzicht 0,35, dag | 33 ms, 25/s | 74 ms, 12/s | 96 ms, 9/s |
+    | overzicht 0,35, avond | 42 ms, 23/s | 109 ms, 7/s | 123 ms, 6/s |
+
+    Per laag: **het rekenwerk van het tekenen is klein** (uitzoeken wat in beeld staat, sorteren, sprites kiezen: 1 à 4
+    ms, op elk scherm hetzelfde); **de rest is de browser die pixels zet**, en dat groeit met het scherm (4K is 3,5 keer
+    1920×1080). De grond (één buffer, één plaatje): 2 à 3 ms, op 4K 8 à 12. De nacht, het licht en de ramen: zo'n 10 ms,
+    op 4K 35 ms (verlopen en samenstelmodi over het hele scherm). De huizen, bomen en mensen: de rest, dichtbij zo'n 100
+    plaatjes per beeld, in het overzicht zo'n 930, plus de doorkijk (een uitsnede die het doek laat wachten). De tekst en
+    de wolkjes: niet te meten, onder 0,1 ms. Het langste beeld in de spellus: 50 à 80 ms op 1920×1080, 120 tot 500 op 4K.
+    **Wat dat zegt:** WebGL wint juist waar de tijd zit (pixels zetten, de nacht als één bewerking), en de tussenbuffer
+    (b) maakt van 4K vanzelf 1920×1080: de kolom van 4K wordt de eerste kolom. Die stap kan ook al in 2D.
+    **Plan van Claude (4 okt), in deze volgorde:**
+    1. **De tussenbuffer, eerst in 2D** (b): het doek is nooit groter dan 1920×1080 (een hele deling van het scherm), en
+       de browser vergroot het met een hele factor (`image-rendering: pixelated`). Een kleine stap in `js/main.js`, die
+       4K meteen zo snel maakt als 1920×1080, ook zonder WebGL. Je ziet op 4K hetzelfde stuk land als op 1920×1080.
+    2. **De WebGL-laag** (a): een nieuw bestand (`js/gl.js`, gewone script, geen bibliotheek) met wat het tekenen nodig
+       heeft: een plaatje uit een vel op een plek, met doorzichtigheid, alle plaatjes van een beeld samen in een paar
+       opdrachten. Een vel wordt een textuur zodra het geladen is. `js/tekenen.js` tekent naar "een doek" dat het 2D-doek
+       of de WebGL-laag is, in dezelfde volgorde als nu: eerst de grond (de buffer blijft eerst in 2D gebakken, en gaat als
+       één textuur mee), dan de huizen, bomen en mensen.
+    3. **De nacht, het licht en de ramen als shader**: één bewerking over het beeld, met de lichtbronnen
+       (`T.lichtBronnen`) als lijst, in plaats van verlopen en samenstelmodi. Daarna de doorkijk (het kijkgat en het
+       raster) in dezelfde shader.
+    4. **Wat klein is, op een doek erboven** (c): de tekst, de wolkjes, de oogjes, de tekens bij de deur, het raster en
+       de markeringen van een gevecht, de kringen en het spookbeeld van het bouwmenu. Wat op de grond ligt (de kring, het
+       raster) komt dan boven een huis te staan; past dat niet, dan gaat het als laag op de grond mee naar WebGL.
+    5. **De spelregel** (d): "Tekenen: met de videokaart / zonder". Zonder WebGL in de browser gaat het vanzelf zonder.
+    6. **De proefversie** (e): Windows, Electron, met `F2` en de spelregel, zodat Marcel op zijn 4K-scherm beide meet.
+    **Nakijken dat beide hetzelfde tekenen:** `npm run schermen` krijgt een keuze voor de manier van tekenen, en vergelijkt
+    WebGL met 2D op dezelfde commit (niet met een oude reeks: de huizen veranderen land 5). De maat: overdag (de plaatjes
+    zijn pixel art, op hele pixels) mag hooguit 0,1% van de pixels verschillen, en dan hooguit 2 op 255 per kleur (afronding
+    van doorzichtigheid); 's avonds rekent het licht anders, dus mag elke pixel tot 8 op 255 verschillen, gemiddeld onder 2,
+    en Marcel ziet de avond één keer naast elkaar. Wat erboven ligt, is een fout, of een besluit dat hier komt te staan.
+    Hier is geen videokaart (WebGL draait in de cloud op de processor, SwiftShader): of het klopt, zien we hier; hoe snel
+    het is, alleen op een echte machine.
+    **Wat Marcel daarna kan proberen:** na stap 1 het spel op zijn 4K-scherm (in Firefox, en `F2`); na stap 5 de spelregel
+    aan en uit; na stap 6 de proefversie naast Firefox.
+    Vragen: **A**, dit plan, in deze volgorde? **B**, de tussenbuffer (stap 1) ook voor wie een 4K-scherm op 150% heeft
+    (dan is het doek nu 2560×1440: naar 1920×1080 is geen hele factor, dus 1280×720 maal twee, of zo laten)? Voorstel:
+    zo laten, alleen een hele factor. **C**, deze maat voor wat anders mag zijn? **D**, de proefversie al na stap 1? Met een
+    videokaart tekent Chrome ook het 2D-doek al op de kaart; dan weet je vooraf op je eigen pc hoeveel WebGL wint, en
+    daarna meet je het nog een keer. Voorstel: ja, het is een uur werk.
+    **Marcel koos (4 okt): "A prima B oke C dat is goed D graag".** Dus het plan in deze volgorde; op 150% blijft het doek
+    zoals het is (alleen een hele factor); de maat voor wat anders mag zijn, zoals hierboven; en de proefversie al na
+    stap 1.
+    **Stap 1 is af (4 okt): de tussenbuffer.** Op een groot scherm tekent het spel op de grootste hele deling ervan die nog
+    minstens 1920×1080 is (`T.TEKENEN_INSTELLINGEN.tussenbuffer` in `js/tekenen.js`, `formaat` in `js/main.js`), en de
+    browser vergroot het; de muis rekent om (`naarVlak`, `vanVlak`). Gemeten, zonder videokaart: 4K dichtbij van 13 naar
+    36 beelden per seconde, 4K op 200% van 14 naar 45, in het overzicht van 7 à 12 naar 17 à 28: 4K is nu 1920×1080.
+    Op 1280×800 zijn de twintig schermafdrukken byte voor byte gelijk, en klikken klopt op vijf schermen.
+    **De proefversie voor Windows is er (4 okt, `npm run proefversie -- --windows`):** het spel in Electron 44.5.1 (de
+    versie van de meting in `verpakken.md`), een zip van 161 MB met `Aardschok/Aardschok.exe`; F11 is het hele scherm,
+    Ctrl+Shift+I het gereedschap van de browser. Hier nagekeken met Electron voor Linux: het venster opent het spel vanaf
+    een los bestand, met de stand op het titelscherm, en `F2` meet. **Wat Marcel kan proberen:** uitpakken, `Aardschok.exe`
+    starten (Windows waarschuwt voor een onbekende uitgever: "Meer info", dan "Toch uitvoeren"), F11, en met `F2` de
+    beelden per seconde en het traagste beeld noteren: dichtbij, in het overzicht (`Tab`, en met het wiel ver uit), en
+    's avonds. Daarna hetzelfde in Firefox, met `Aardschok/resources/app/index.html` (hetzelfde spel). Dan weten we wat
+    zijn videokaart al doet met het 2D-tekenen, en wat WebGL er nog bij moet winnen.
+    **Stap 2 is gebouwd (4 okt): de WebGL-laag** (`js/gl.js`). Hij doet zich voor als het 2D-doek, zodat
+    `js/tekenen.js` er hetzelfde op tekent, in dezelfde volgorde. Wat de kaart zelf kan, tekent ze: plaatjes, vlakken,
+    bolle vormen (de schaduw onder een figuur, de ruitjes van een raam) en ronde verlopen (de nacht, de lantaarns, het
+    vignet), met de samenstelmodi van de nacht en de ramen als mengstanden. De rest (tekst, lijnen, een uitsnede) gaat via
+    een kladdoek in 2D en komt als plaatje op zijn plek, zodat alles meteen klopt; daarmee zijn stap 3 en 4 al grotendeels
+    gedaan, en wat nog via het kladdoek gaat, zegt `Spel.gl.telling`. De spelregel "Tekenen" (stap 5): standaard met de
+    videokaart. Zonder echte videokaart (WebGL op de processor, SwiftShader, is hier zes keer trager dan het 2D-doek:
+    125 tegen 19 ms per beeld) of als de browser het niet kan, tekent het spel vanzelf zonder; de meter (`F2`) zegt welke.
+    **Nagekeken met `npm run schermen -- --tekenen met`** (dat zet WebGL ook op de processor aan): dichtbij en 's avonds
+    is hooguit 0,04% van de pixels echt anders; de rest is afronding (1 of 2 op 255) of een buurpixel (bij een zoom die
+    geen heel getal is, kiest de kaart soms de pixel ernaast). In het overzicht (0,5 en 0,35) is 0,2 tot 1,4% echt anders:
+    daar laat het spel van een tekening maar één op de twee of drie pixels zien, en de browser en de kaart kiezen daarbij
+    elk andere; je ziet het niet. Dat valt buiten de maat van C, en is dus een vraag aan Marcel (**E**). Gevonden
+    onderweg, ook voor 2D: de grondbuffer werd ver uitgezoomd een fractie verkleind, met een kolom pixels die wegviel; nu
+    gaat hij er 1 op 1 op. Electron opent het spel vanaf een los bestand en mag de plaatjes naar de kaart sturen.
+    Vraag **E**: in het overzicht mag WebGL andere pixels kiezen dan 2D? Voorstel: ja. Later kan WebGL het overzicht zelfs
+    mooier maken (verkleinen met gemiddelde kleuren in plaats van pixels overslaan), maar dat is dan een keuze, geen
+    stap van dit plan.
+    **Marcel (4 okt): "Ja"** op E: in het overzicht mag WebGL andere pixels kiezen dan 2D. En over de proefversie: "Ik
+    maak hem straks wel zelf" (hij kon niet mee: de zip van 161 MB, en ook een stuk van 55 MB, gaf bij het sturen een 502).
+124. **De camera draaien** (Marcel, 4 okt, gevraagd in de sessie van de huizen en doorgegeven aan die van WebGL: "ik wil
+    ook de camera kunnen draaien. Is dat mogelijk"; plan van Claude; open).
+    **Kan het?** Ja, in kwartslagen (`Q` en `E`, zoals in Anno, The Sims en Project Zomboid). Vrij draaien niet: pixel art
+    is getekend voor één hoek, en tussenstanden worden vlekken. Bij een kwartslag blijft de kaart dezelfde (Tiled, de
+    regels, het lopen, het zicht: niets verandert); alleen hoe hij op het scherm komt, draait.
+    **Wat het vraagt, nagegaan per deel:**
+    - *Het spel* (zo'n sessie): `T.naarScherm` en `T.naarWereld` (`js/iso.js`) draaien mee, en wat daarop leunt: de
+      volgorde van tekenen (`diepteVan`, `staatVoorGebouw`: "ten zuiden of oosten" wordt per stand een andere kant), de
+      doorkijk, het klikken (de tegel onder de muis), de camera, de buffers van de grond en het bos (opnieuw bij een
+      draai), het bos om de kaart (nu alleen aan de kant van het bos, en de kant die vooraan staat, verandert), de
+      voet en de deur van een gebouw van meer tegels.
+    - *De figuren, het vee en de rovers*: niets, ze hebben al acht richtingen; een draai kiest een andere.
+    - *De grond*: bijna niets. De randtegels ("gras over zandpad: boven+rechts") zijn er voor alle zestien combinaties
+      van hoeken, en hun patroon zit aan het scherm vast; na een draai kiest het spel de tegel waarvan de hoeken op het
+      scherm kloppen. De akkers: de rijen hebben een richting, dus twee varianten in plaats van één.
+    - *De huizen*: geen extra tekeningen, als de bouwer ze draaibaar rendert (zie B). Een huis in stand zuid, een
+      kwartslag gedraaid, is dan de tekening van stand oost.
+    - *De andere gebouwen* (`tegels/gebouwen`, uit `dorp.cjs`, een aanzicht; de herberg, het huis van de schout, de
+      kapel) en hun bouwfasen: vier aanzichten renderen in plaats van een. De beelden komen uit code, dus dat is rekenen,
+      geen tekenen; de bouwers moeten wel een kijkhoek krijgen (de patronen rekenen nu in schermpixels).
+    - *Bomen, struiken, rotsen, voorwerpen*: vier aanzichten, of de bestaande als ze rond genoeg zijn; het licht valt dan
+      van dezelfde kant van het scherm, wat niemand opvalt.
+    - *Het geheugen*: alleen de stand die je ziet, is geladen (een vel per tekening, zoals nu); na een draai laadt de
+      nieuwe stand, met een korte wachttijd de eerste keer.
+    **Hoe groot:** het spel een sessie, de beelden twee à drie (de bouwers een kijkhoek geven, en renderen).
+    **Waar in de volgorde:** WebGL staat het niet in de weg (beide tekenen met dezelfde `naarScherm`), en het hoort vóór de
+    hoogte (vraag 121): terrassen hebben een wand die je per stand anders ziet, en dat moet in één keer goed.
+    Vragen: **A**, kwartslagen, met `Q` en `E`? **B** (nu nodig, voor de sessie van de huizen): de huizen draaibaar
+    renderen, met alle vier de muren ingevuld (deur, ramen en vakwerk op elke muur), zodat de vier standen de vier
+    aanzichten zijn? Het kost geen tekeningen, alleen werk aan de bouwer; de eerste stijl (wit) is nu gespiegeld en moet
+    dan een uur opnieuw rekenen, en het besluit moet er zijn vóór de andere drie stijlen (vraag 114, 2b). Voorstel: ja, want
+    het houdt de deur open. **C**, wanneer: na WebGL en na de boeren (vraag 111), vóór de hoogte (vraag 121)? Voorstel: ja;
+    voor de demo is het mooi, niet nodig, want de doorkijk laat al zien wat achter een huis staat.
+    **Marcel (4 okt): "Mag na webgl"**, en hij vroeg erbij: "Als we de modellen maar 3d modellen maken? Is dat een optie?
+    Of zijn de extra richtingen beter? Vraag me af of volledige camera rotatie niet beter is?" Antwoord van Claude: vrij
+    draaien vraagt echte 3D in het spel (de huizen en mensen als modellen die de videokaart elk beeld tekent), en dan is
+    het geen pixel art meer, of pixel art die bij elke graad flikkert (de trapjes in de randen verspringen); spellen die
+    het toch doen, tekenen klein en vergroten met veel shaderwerk, en het blijft een andere stijl. Dat is maanden werk,
+    en de beeldstijl is de troef van het spel (`commercieel.md`). Acht richtingen (om de 45 graden) maken van de ruiten
+    rechte vierkanten: een tweede set grond en acht tekeningen per gebouw, voor weinig. Voorstel: kwartslagen. Vraag B
+    (de huizen draaibaar renderen) is hieronder beantwoord.
+    **Marcel (4 okt): "124b Ja dan."** De huizen worden draaibaar gerenderd: alle vier de muren ingevuld (deur, ramen en
+    vakwerk op elke muur), zodat de vier standen de vier aanzichten zijn. Dat is werk voor de sessie van de huizen,
+    vóór de andere drie stijlen (vraag 114, 2b); de eerste stijl (wit) gaat dan opnieuw door de bouwer.
+    **Afgesproken tussen de twee sessies (4 okt; Marcel aan de sessie van de huizen: "Praat even met de webgl sessie over
+    draaiende camera en welke gevolgen dat heeft"):** de sessie van de huizen maakt de huizen draaibaar (de bouwer bouwt
+    één 3D-huis met alle vier de muren vast ingevuld, en draait het echt), ook de herberg, de kapel, de woontoren en het
+    huis van de schout (stap 3). Het spel kiest het aanzicht met `T.metDeurNaar(tekening, kant)` (`js/bouwstijl.js`, op
+    de branch van de huizen). De oude huizen van het ontworpen gehucht, de gebouwen uit `dorp.cjs`, de bomen, de grond en
+    de akkers horen bij het draaien zelf, na WebGL. Drie afspraken voor de bouwer:
+    - **Het licht blijft in elk aanzicht van linksboven op het scherm komen**, de zon draait niet mee met de wereld. Alleen
+      dan is een stand ook een aanzicht: een huis met de deur naar het zuiden, een kwartslag gedraaid, ís de tekening
+      met de deur naar het oosten, licht en al. Draaide de zon mee, dan moest elk aanzicht apart belicht worden: vier
+      keer zoveel tekeningen. Het past ook bij `beeld.md` (één lichtrichting). Het licht van de dag en de lantaarns komt
+      er later bovenop (vraag 125).
+    - **Het anker ligt in elke stand op dezelfde manier**: op de achterste tegel van de voet op het scherm, zoals nu. Het
+      spel rekent bij een draai uit welke tegel van de wereld dan achteraan ligt; de voet en de deur in de wereld
+      veranderen niet, alleen welke tekening erop komt.
+    - **De schaduw op de vloer los te zetten** (een keuze in de bouwer, nu niets aan het beeld): komen de schaduwen met de
+      zon (vraag 125, B), dan moet de ingebakken schaduw eruit, en dan hoeven de huizen alleen nog één keer door de bouwer.
+125. **Schaduwen en licht met de videokaart** (Marcel, 4 okt, na WebGL: "Ja schaduwen en licht etc"; plan van Claude;
+    open). Nu: de pixel art heeft zijn licht ingebakken (van linksboven, met een schaduw op de vloer, `belicht` en
+    `schaduwOpVloer` in `gereedschap/pixelart/kern.cjs`; `beeld.md`), en de nacht is een donkere laag met lichtere
+    kringen rond de schout en de lantaarns. Met WebGL kan er meer, in drie stappen, van goedkoop naar duur:
+    - **A, licht** (een sessie, geen nieuwe kunst): de nacht en de lampen als één shader, met licht dat kleurt in plaats
+      van alleen minder donker te zijn: warme plassen licht onder een lantaarn, bij een brandend raam en de deur van de
+      herberg, een flakkerende vlam, de schout met een lantaarn in de hand; en de dag in kleuren in plaats van een laag
+      erover: roze bij het opkomen, neutraal op de middag, oranje bij het ondergaan, blauw in de nacht.
+    - **B, schaduwen die met de zon meegaan** (een à twee sessies, en de kunst opnieuw renderen): elke figuur, boom en
+      elk huis werpt zijn eigen silhouet scheef over de grond, 's ochtends lang naar het westen, 's middags kort, 's avonds
+      lang naar het oosten, en 's nachts weg van een lantaarn als je erlangs loopt. Dan moet de ingebakken schaduw op de
+      vloer uit de kunst (de huizen raakt dat: de sessie van de huizen).
+    - **C, echt licht op de muren** (twee à drie sessies, alle kunst opnieuw): omdat de beelden uit code komen, kan elke
+      tekening naast zijn kleuren ook de richting van elk vlakje meekrijgen (een normal map). Dan verlicht een lantaarn de
+      muur die naar hem toe staat, en klopt het licht ook als de camera draait (vraag 124). Het mooiste, en het grootste
+      risico voor de stijl: het palet en het ditheren (`beeld.md`) laten dan los, en het geheugen voor plaatjes verdubbelt.
+    Commercieel: een dorp in de schemering met warme ramen en lange schaduwen is het plaatje voor de Steam-pagina
+    (`commercieel.md`, de beeldstijl als troef).
+    Voorstel: A meteen na WebGL; B met eerst een proefplaat; C alleen als proefplaat, om de stijl te beoordelen.
+    Vragen: **A**, licht zoals hierboven, en meteen? **B**, schaduwen met de zon, na een proefplaat (en dan de vloerschaduw
+    uit de kunst, ook bij de huizen)? **C**, een proefplaat met echt licht op de muren? **D**, waar in de volgorde: vóór
+    of na de camera draaien (vraag 124) en de boeren (vraag 111)?
+    **Marcel koos (4 okt): "A ja B ja C ja D na webgl".** Dus: A (licht) bouwen, B (schaduwen met de zon) en C (echt licht op
+    de muren) eerst als proefplaat, en alles direct na WebGL, dat nu staat. De volgorde wordt: Marcel meet WebGL op zijn
+    pc, dan vraag 125 (A, en de proefplaten van B en C), dan het draaien (vraag 124) en de boeren (vraag 111).
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste

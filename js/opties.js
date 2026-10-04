@@ -263,6 +263,18 @@
           uitleg: 'Het hele huis gaat om de andere pixel open, zoals in oude spellen: je ziet het huis en wat erachter staat door elkaar.' },
       ],
     },
+    // Tekenen met de videokaart (werklijst vraag 123; js/gl.js): sneller, vooral op een groot scherm. Zonder is het
+    // 2D-doek van de browser, voor een browser zonder WebGL en om te vergelijken.
+    {
+      id: 'tekenen', naam: 'Tekenen', standaard: 'met',
+      uitleg: 'Hoe het spel het beeld tekent. Hetzelfde beeld; met de videokaart gaat het sneller.',
+      keuzes: [
+        { id: 'met', naam: 'Met de videokaart', zet: { 'TEKENEN_INSTELLINGEN.videokaart': true },
+          uitleg: 'Het beeld gaat in een paar opdrachten naar de videokaart (WebGL). Zonder echte videokaart, of als je browser het niet kan, tekent het zonder.' },
+        { id: 'zonder', naam: 'Zonder', zet: { 'TEKENEN_INSTELLINGEN.videokaart': false },
+          uitleg: 'De browser tekent het beeld zelf, zoals vóór 4 okt 2026.' },
+      ],
+    },
     {
       id: 'doorkijkPlein', naam: 'Wie je door een huis heen ziet', standaard: 'ookHetPlein',
       uitleg: 'Altijd de schout, wie je spreekt, wie vecht, en de heer, de marskramer, de inner en de soldaten.',

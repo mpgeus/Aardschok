@@ -7,6 +7,7 @@
 //
 //   npm run schermen -- --naam voor              schrijft gereedschap/schermen/uit/voor/ (de beelden en meting.json)
 //   npm run schermen -- --naam na --tegen voor   en vergelijkt met wat er in uit/voor/ staat
+//   npm run schermen -- --naam gl --tegen voor --tekenen met    met de videokaart (WebGL, vraag 123)
 //
 // Vast blijft het zo: de spellus loopt niet (requestAnimationFrame staat stil), het toeval is een vaste reeks, het spel
 // gaat alleen verder met Spel.debug.stap (elk beeld 1/60 seconde), de mensen staan op hun plek voor het uur
@@ -40,6 +41,7 @@ const args = process.argv.slice(2);
 const optie = (naam) => (args.includes(naam) ? args[args.indexOf(naam) + 1] : null);
 const NAAM = optie('--naam') || 'laatste';
 const TEGEN = optie('--tegen');
+const TEKENEN = optie('--tekenen'); // 'met': met de videokaart (de spelregel "Tekenen", vraag 123)
 
 // Antwoordt de server van npm start (server.cjs)? Zo niet, dan start dit hem, en stopt hem na afloop.
 const serverDraait = () => new Promise((klaar) => {
@@ -95,6 +97,7 @@ async function openSpel(context, adres) {
   await page.waitForFunction(() => globalThis.Spel && Spel.S && Spel.S.kalender && Spel.debug && Spel.sprites, null, { polling: 100 });
   await page.waitForFunction(() => Spel.sprites.aan && Spel.sprites.buitenAan, null, { polling: 100, timeout: 60000 });
   await page.addScriptTag({ path: path.join(WORTEL, 'gereedschap', 'grootte', 'pagina.js') });
+  if (TEKENEN) await page.evaluate((k) => { Spel.zetOptie('tekenen', k); Spel.TEKENEN_INSTELLINGEN.ookOpDeProcessor = true; }, TEKENEN);
   return { page, fouten };
 }
 
@@ -105,7 +108,7 @@ async function afdruk(page) {
     if (await page.evaluate(() => Spel.sprites.bezig() === 0)) break;
     await page.waitForTimeout(50);
   }
-  const data = await page.evaluate(() => { Spel.debug.stap(0); return document.getElementById('scherm').toDataURL('image/png'); });
+  const data = await page.evaluate(() => Spel.debug.beeld().toDataURL('image/png'));
   return Buffer.from(data.slice(data.indexOf(',') + 1), 'base64');
 }
 
@@ -114,10 +117,8 @@ async function afdruk(page) {
 const eersteBeeldOp = (page, zoom) => page.evaluate((z) => {
   const s = Spel.S;
   s.zoom = z;
-  const doek = document.getElementById('scherm');
   const t0 = performance.now();
-  Spel.tekenScene(doek.getContext('2d'), s, innerWidth, innerHeight);
-  doek.getContext('2d').getImageData(0, 0, 1, 1);
+  Spel.debug.beeld().getContext('2d').getImageData(0, 0, 1, 1);
   return Math.round(performance.now() - t0);
 }, zoom);
 
@@ -203,17 +204,41 @@ async function eenLandVanDeMaker(context, beelden, meting) {
   await page.close();
 }
 
-// Twee afdrukken vergelijken: byte voor byte, en anders pixel voor pixel.
+// Twee afdrukken vergelijken: byte voor byte, en anders pixel voor pixel. Een pixel die anders is, is afronding (hooguit
+// 2 op 255 per kleur: doorzichtigheid en verlopen rekenen op de videokaart net anders), een buurpixel (de andere manier
+// van tekenen koos bij een zoom die geen heel getal is de pixel ernaast: hij is gelijk aan een van de acht buren), of echt
+// anders. De maat voor WebGL tegen 2D (vraag 123): overdag niet meer dan 0,1% echt anders.
 function vergelijk(a, b) {
   if (a.equals(b)) return { gelijk: true };
   const pa = K.leesPng(a);
   const pb = K.leesPng(b);
   if (pa.b !== pb.b || pa.h !== pb.h) return { gelijk: false, reden: `maat ${pa.b}×${pa.h} tegen ${pb.b}×${pb.h}` };
+  const verschil = (i, j) => Math.max(Math.abs(pa.rgba[i] - pb.rgba[j]), Math.abs(pa.rgba[i + 1] - pb.rgba[j + 1]), Math.abs(pa.rgba[i + 2] - pb.rgba[j + 2]), Math.abs(pa.rgba[i + 3] - pb.rgba[j + 3]));
   let anders = 0;
-  for (let i = 0; i < pa.rgba.length; i += 4) {
-    if (pa.rgba[i] !== pb.rgba[i] || pa.rgba[i + 1] !== pb.rgba[i + 1] || pa.rgba[i + 2] !== pb.rgba[i + 2] || pa.rgba[i + 3] !== pb.rgba[i + 3]) anders++;
+  let afronding = 0;
+  let buur = 0;
+  let echt = 0;
+  for (let y = 0; y < pa.h; y++) {
+    for (let x = 0; x < pa.b; x++) {
+      const i = (y * pa.b + x) * 4;
+      const d = verschil(i, i);
+      if (!d) continue;
+      anders++;
+      if (d <= 2) { afronding++; continue; }
+      let isBuur = false;
+      for (let dy = -1; dy <= 1 && !isBuur; dy++) {
+        for (let dx = -1; dx <= 1 && !isBuur; dx++) {
+          const xx = x + dx;
+          const yy = y + dy;
+          if ((dx || dy) && xx >= 0 && yy >= 0 && xx < pa.b && yy < pa.h && verschil((yy * pa.b + xx) * 4, i) <= 2) isBuur = true;
+        }
+      }
+      if (isBuur) buur++;
+      else echt++;
+    }
   }
-  return { gelijk: false, anders, procent: Math.round((anders / (pa.b * pa.h)) * 10000) / 100 };
+  const pct = (n) => Math.round((n / (pa.b * pa.h)) * 10000) / 100;
+  return { gelijk: false, anders, procent: pct(anders), afronding, buur, echt, echtProcent: pct(echt) };
 }
 
 (async () => {
@@ -249,7 +274,7 @@ function vergelijk(a, b) {
       if (!fs.existsSync(ander)) { console.log(`  ${naam}: niet in ${TEGEN}`); continue; }
       const v = vergelijk(beelden[naam], fs.readFileSync(ander));
       if (v.gelijk) gelijk++;
-      else console.log(`  ${naam}: anders dan in ${TEGEN}: ${v.reden || `${v.anders} pixels (${v.procent}%)`}`);
+      else console.log(`  ${naam}: anders dan in ${TEGEN}: ${v.reden || `${v.anders} pixels (${v.procent}%): ${v.afronding} afronding, ${v.buur} buurpixel, ${v.echt} echt anders (${v.echtProcent}%)`}`);
     }
     console.log(`  ${gelijk} van ${Object.keys(beelden).length} beelden byte voor byte gelijk aan ${TEGEN}`);
   }
