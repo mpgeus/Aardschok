@@ -3936,7 +3936,28 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       met een grote deur.
     - **2d:** de maker kiest per land uit de tekeningen (elk spel ziet het dorp er anders uit), de verzoeken en het
       doorgroeien ook, en wat gebouwd wordt, krijgt bouwfases (`bouwfasen.cjs`).
+      - **Een vel per tekening** (Claude, 4 okt, negenentwintigste sessie; Marcel: "5 ja"): meer tekeningen kosten nu
+        geheugen, want het hele vel `tegels/huizen.png` laadt bij het begin (28 MB in de browser voor 23 huizen, met 100
+        ruim 120). Zoals de bouwfasen (vraag 114, 2a): een vel per tekening, pas geladen als hij op de kaart staat (tot
+        dan bleker, zoals een bouwfase die nog laadt). Dan kost een tekening die er niet staat niets, en mogen het er
+        honderden zijn. Komt met het in het spel zetten van de afwisseling (2b); meten zoals bij 2a.
+      - **Een eigen bouwstijl per land** (Claude, idem; Marcel: "5 ja"): in plaats van elk huis los te loten, kiest de
+        maker per land één stijl: het ene land bouwt met planken, spanen en groene luiken, het andere met oker kalk en
+        riet. Het dorp oogt als één geheel, en elk spel als een andere streek. Bij 2d.
     Een proefplaat eerst, om naar te kijken, zoals bij ronde 4b.
+    **Plan voor de proefplaten (Claude, 4 okt, negenentwintigste sessie):** twee platen, nog niets in het spel. Plaat 1,
+    de afwisseling (2b): drie straatjes naast elkaar, het gehucht (riet en spanen), het dorp (ook leien) en marktrecht (ook
+    pannen), met hutten, huizen, stenen huizen en een boerderij in andere wanden en luiken, elk ontwerp in vier standen
+    (de deur linksvoor, rechtsvoor, linksachter, rechtsachter), en nieuw in de bouwer: kalk op het vakwerk in drie kleuren.
+    Plaat 2, in verhouding (2c): op één grondlijn een hut, een huis, een stenen huis en een boerderij, de nieuwe herberg
+    (twee lagen, 12 à 14 tegels, met een lagere stal aan een binnenplaats), de kapel met een toren, en de woontoren (vier
+    lagen steen op 5 bij 5), met de oude herberg en kapel ernaast. Vragen: 1, zo? 2, kalk in wit, oker en zacht roze? 3,
+    de kapel met een zadeldaktoren (stoer, zoals de dorpskerken in Groningen) of een naaldspits (slank, het hoogste punt)?
+    4, de woontoren met kantelen of met een steil dak van leien? 5, het vel per tekening en de stijl per land op de
+    werklijst?
+    **Marcel (4 okt): "1 ja 2 ja 3 allebei 4 allebei 5 ja".** Dus de twee platen zoals voorgesteld, kalk in drie kleuren,
+    de kapel met allebei de torens op de plaat en de woontoren in allebei de vormen, om te kiezen als hij ze ziet; het vel
+    per tekening en de stijl per land staan hierboven bij 2d.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
