@@ -306,6 +306,7 @@ test('T.tikBehoeftenDag: een huis groeit niet door als er geen ruimte voor de ui
       S.wereld.tegels[y][x] = 'muur';
     }
   }
+  T.kaartVeranderd(S.wereld); // zoals elke regel die een tegel verandert (js/wereld.js)
   S.bevolking = 4;
   T.zetVoorraad(S, 'graan', 100000);
   T.zetVoorraad(S, 'groente', 1000);

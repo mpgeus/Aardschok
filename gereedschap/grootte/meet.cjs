@@ -27,12 +27,13 @@ const snelheid = arg('snelheid', 30);
 const profUit = arg('prof', null);
 const maxFrames = arg('frames', 0); // 0 = hele dagen
 const vanUur = arg('van', 0); // begin van de meting, in uren na 00:00
+const maker = arg('maker', null); // het nummer van een land van de maker, in plaats van het ontworpen gehucht
 
 // ── Het dorp ──
 if (global.gc) global.gc();
 const heapVoor = process.memoryUsage().heapUsed;
 let t0 = nu();
-const S = beginSpel();
+const S = beginSpel({ maker: typeof maker === 'number' ? maker : null });
 const D = S.dorp;
 const bouw = N > D.bevolking || kaart ? bouwDorp(S, N, { werk: metWerk, kaart, indeling }) : { gelukt: true, L: S.wereld.b, huizen: 0, werkplekken: 0, gebouwen: D.gebouwen.length, bewoners: D.bewoners.mensen.length, wezens: S.wereld.wezens.length };
 const bouwMs = nu() - t0;

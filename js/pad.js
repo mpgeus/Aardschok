@@ -4,6 +4,8 @@
   'use strict';
 
   const RICHTINGEN = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+  const DX = RICHTINGEN.map((r) => r[0]); // dezelfde, als twee rijtjes: A* loopt ze voor elke tegel af
+  const DY = RICHTINGEN.map((r) => r[1]);
   const sleutel = (x, y) => x + ',' + y;
 
   // De open lijst van A* als binaire hoop (werklijst vraag 87, 2 okt; `opmerkingen.md`, "Een dorp van meer dan zo'n
@@ -47,6 +49,58 @@
   const RAND = 4096;
   const nummer = (x, y) => (x + 1024) * RAND + (y + 1024);
 
+  // De boekhouding van A*: per tegel (als nummer) wat hij tot nu toe kost, waar hij vandaan kwam, en of hij klaar is. Eén
+  // tabel van getallen voor alle zoektochten, die bij elke zoektocht leeg is doordat hij een nieuwe generatie begint. Tot
+  // 4 okt waren het een Map, een Map en een Set per zoektocht, en dat was de helft van het zoeken (vraag 113; op een land
+  // van de maker van 100 bij 100 zijn de wegen langer). Open adressering: botst een plek, dan de volgende.
+  const tabel = { bits: 0, sleutel: null, generatie: null, kosten: null, van: null, dicht: null, nu: 0, aantal: 0 };
+  function maakTabel(bits) {
+    const n = 1 << bits;
+    const oud = tabel.bits ? { ...tabel } : null;
+    Object.assign(tabel, { bits, sleutel: new Int32Array(n), generatie: new Uint32Array(n), kosten: new Float64Array(n), van: new Int32Array(n), dicht: new Uint8Array(n), aantal: 0 });
+    if (!oud) return;
+    // wat er in deze zoektocht al stond, gaat mee
+    for (let i = 0; i < oud.sleutel.length; i++) {
+      if (oud.generatie[i] !== oud.nu) continue;
+      const j = plek(oud.sleutel[i], true);
+      tabel.kosten[j] = oud.kosten[i];
+      tabel.van[j] = oud.van[i];
+      tabel.dicht[j] = oud.dicht[i];
+    }
+  }
+  // De plek van tegel k in de tabel, of -1 als hij er (in deze zoektocht) niet in staat; met `maak` komt hij erin.
+  function plek(k, maak) {
+    const masker = (1 << tabel.bits) - 1;
+    let i = Math.imul(k, 0x9e3779b1) >>> (32 - tabel.bits);
+    for (;;) {
+      if (tabel.generatie[i] !== tabel.nu) {
+        if (!maak) return -1;
+        if ((tabel.aantal + 1) * 2 > masker) {
+          maakTabel(tabel.bits + 1);
+          return plek(k, true);
+        }
+        tabel.generatie[i] = tabel.nu;
+        tabel.sleutel[i] = k;
+        tabel.kosten[i] = Infinity;
+        tabel.van[i] = 0;
+        tabel.dicht[i] = 0;
+        tabel.aantal++;
+        return i;
+      }
+      if (tabel.sleutel[i] === k) return i;
+      i = (i + 1) & masker;
+    }
+  }
+  function nieuweZoektocht() {
+    if (!tabel.bits) maakTabel(14);
+    tabel.nu = (tabel.nu + 1) >>> 0;
+    if (tabel.nu === 0) {
+      tabel.generatie.fill(0);
+      tabel.nu = 1;
+    }
+    tabel.aantal = 0;
+  }
+
   // A* van start naar doel. magBetreden(x, y): mag er een stap naar deze tegel?
   // isVast(x, y): houdt deze tegel een schuine stap om de hoek tegen?
   // opties.naast: eindig op een tegel die het doel raakt (om te slaan of iets te gebruiken).
@@ -81,40 +135,44 @@
     };
     if (isKlaar(start.x, start.y)) return [];
 
+    nieuweZoektocht();
     const startSleutel = nummer(start.x, start.y);
     let n = 0;
     const open = [{ x: start.x, y: start.y, g: 0, f: schatting(start.x, start.y), n: n++ }];
-    const kosten = new Map([[startSleutel, 0]]);
-    const herkomst = new Map();
-    const gesloten = new Set();
+    tabel.kosten[plek(startSleutel, true)] = 0;
 
     while (open.length) {
       const huidig = eraf(open);
       const hs = nummer(huidig.x, huidig.y);
-      if (gesloten.has(hs)) continue;
-      gesloten.add(hs);
+      const hp = plek(hs, true);
+      if (tabel.dicht[hp]) continue;
+      tabel.dicht[hp] = 1;
 
       if (isKlaar(huidig.x, huidig.y)) {
         const pad = [];
-        for (let s = hs; s !== startSleutel; s = herkomst.get(s)) {
+        for (let s = hs; s !== startSleutel; s = tabel.van[plek(s, false)]) {
           pad.unshift({ x: Math.floor(s / RAND) - 1024, y: (s % RAND) - 1024 });
         }
         return pad;
       }
 
-      for (const [dx, dy] of RICHTINGEN) {
+      for (let r = 0; r < 8; r++) {
+        const dx = DX[r];
+        const dy = DY[r];
         const nx = huidig.x + dx;
         const ny = huidig.y + dy;
         const ns = nummer(nx, ny);
-        if (gesloten.has(ns) || !magBetreden(nx, ny)) continue;
+        const np = plek(ns, false);
+        if ((np >= 0 && tabel.dicht[np]) || !magBetreden(nx, ny)) continue;
         const schuin = dx !== 0 && dy !== 0;
         if (schuin && (isVast(huidig.x + dx, huidig.y) || isVast(huidig.x, huidig.y + dy))) continue;
         // Schuin kost een haar meer, zodat van twee even korte paden het rechtste wint.
         // Het verschil is te klein om ooit een langer pad te laten winnen.
         const g = huidig.g + (schuin ? 1.001 : 1);
-        if (g >= (kosten.has(ns) ? kosten.get(ns) : Infinity)) continue;
-        kosten.set(ns, g);
-        herkomst.set(ns, hs);
+        if (np >= 0 && g >= tabel.kosten[np]) continue;
+        const q = np >= 0 ? np : plek(ns, true);
+        tabel.kosten[q] = g;
+        tabel.van[q] = hs;
         erbij(open, { x: nx, y: ny, g, f: g + schatting(nx, ny), n: n++ });
       }
     }

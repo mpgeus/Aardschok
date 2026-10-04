@@ -14,18 +14,19 @@ const { T } = require('./harnas.cjs');
 function vergroot(S, L) {
   const w = S.wereld;
   if (L <= w.b && L <= w.h) return;
+  const gras = { vel: 'rand', id: 0, naam: 'gras' }; // één ding voor elke tegel gras, zoals T.laadKaart
   for (let y = 0; y < L; y++) {
     if (y >= w.h) {
       w.tegels.push([]);
       w.grond.push([]);
-      w.burenKamers.push([]);
     }
     for (let x = y < w.h ? w.b : 0; x < L; x++) {
       w.tegels[y].push('vloer');
-      w.grond[y].push({ vel: 'rand', id: 0, naam: 'gras' }); // elke tegel zijn eigen object, zoals T.laadKaart
-      w.burenKamers[y].push(['buiten']);
+      w.grond[y].push(gras);
     }
   }
+  // buiten is elke rij kamers dezelfde (T.laadKaart): een nieuwe, even breed
+  w.burenKamers = new Array(L).fill(new Array(L).fill(['buiten']));
   w.b = L;
   w.h = L;
   w.kamers[0].x2 = L - 1;
@@ -197,6 +198,7 @@ function bouwDorp(S, N, opties = {}) {
     const werkNodig = opties.werk ? Math.max(0, Math.ceil((0.85 * N - handenVan(D)) / 1.5)) : 0;
     let gehut = 0;
     let gewerkt = 0;
+    let overgeslagen = 0;
     let mislukt = false;
     const totaal = huizen + werkNodig;
     for (let k = 0; k < totaal && !mislukt; k++) {
@@ -207,7 +209,15 @@ function bouwDorp(S, N, opties = {}) {
         if (!g) mislukt = true;
         else gehut++;
       } else if (gewerkt < werkNodig) {
-        const g = zetGebouw(D, WERKPLEKKEN[gewerkt % WERKPLEKKEN.length], r, kand, wijzer, lucht);
+        // Wat bij het bos, de rotsen of het water hoort (T.GEBOUWEN[soort].bij; vraag 112, c), past niet overal: lukt
+        // het niet, dan de volgende soort.
+        let g = null;
+        for (let n = 0; n < WERKPLEKKEN.length && !g; n++) {
+          const soort = WERKPLEKKEN[(gewerkt + overgeslagen) % WERKPLEKKEN.length];
+          g = zetGebouw(D, soort, r, kand, wijzer, lucht);
+          if (g || !T.GEBOUWEN[soort].bij) break;
+          overgeslagen++;
+        }
         if (!g) mislukt = true;
         else gewerkt++;
       }

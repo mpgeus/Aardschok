@@ -290,6 +290,8 @@
   T.kaartVeranderd = function (w) {
     PER_TEGEL.delete(w);
     EILANDEN.delete(w);
+    RASTERS.delete(w);
+    if (laatste && laatste.w === w) laatste = null;
     VERSIES.set(w, T.kaartVersie(w) + 1);
   };
   // Hoe vaak de kaart al veranderde: wat er verder uit de kaart volgt (de paadjes van de deuren, js/paden.js), weet zo
@@ -418,15 +420,13 @@
   // hem open, een monster niet). wezensBlokkeren: andere wezens staan in de weg.
   T.isBegaanbaar = function (w, x, y, opties) {
     const o = opties || {};
-    const t = T.tegel(w, x, y);
-    if (t === 'muur' || t === 'buiten') return false;
-    if (t === 'deur') {
+    const g = vastOp(w, x, y);
+    if (g === VAST) return false;
+    if (g === DEUR) {
       const d = T.deurOp(w, x, y);
       if (d.staat === 'opslot') return false;
       if (d.staat === 'dicht' && !o.deurenOpenen) return false;
     }
-    const v = T.voorwerpOp(w, x, y);
-    if (v && T.VOORWERPEN[v.soort].blokkeert) return false;
     if (o.wezensBlokkeren && T.wezenOp(w, x, y, o.wie)) return false;
     return true;
   };
@@ -434,12 +434,51 @@
   // Houdt deze tegel een schuine stap om de hoek tegen? Alleen vaste dingen tellen: een
   // wezen dat schuin naast je staat, sluit de doorgang niet af.
   T.isVast = function (w, x, y) {
-    const t = T.tegel(w, x, y);
-    if (t === 'muur' || t === 'buiten') return true;
-    if (t === 'deur' && T.deurOp(w, x, y).staat !== 'open') return true;
-    const v = T.voorwerpOp(w, x, y);
-    return !!(v && T.VOORWERPEN[v.soort].blokkeert);
+    const g = vastOp(w, x, y);
+    return g === VAST || (g === DEUR && T.deurOp(w, x, y).staat !== 'open');
   };
+
+  // Wat vaststaat, per tegel in een raster (vraag 113, 4 okt): A* vraagt voor elke tegel die hij bekijkt zestien keer
+  // of er iets staat, en op een land van de maker van 100 bij 100 zijn het er duizenden per zoektocht. VAST is een muur,
+  // buiten de kaart, of een voorwerp dat in de weg staat (een huis, een boom); DEUR een deur, die open of dicht kan; en
+  // VRIJ de rest. Opnieuw als de kaart veranderde (T.kaartVeranderd), met hetzelfde vangnet als de lijst per tegel
+  // hierboven, en als de kaart groeide (het meetgereedschap, gereedschap/grootte/).
+  const VRIJ = 0;
+  const VAST = 1;
+  const DEUR = 2;
+  const RASTERS = new WeakMap();
+  let laatste = null; // het raster waar het laatst naar gevraagd werd: A* vraagt duizenden keren achter elkaar dezelfde kaart
+  function vastRaster(w) {
+    let r = laatste && laatste.w === w ? laatste : RASTERS.get(w);
+    if (!(r && r.voorwerpen === w.voorwerpen && r.aantal === w.voorwerpen.length && r.b === w.b && r.h === w.h)) {
+      const raster = new Uint8Array(w.b * w.h);
+      for (let y = 0; y < w.h; y++) {
+        for (let x = 0; x < w.b; x++) {
+          const t = w.tegels[y][x];
+          const v = t === 'muur' || t === 'buiten' ? null : T.voorwerpOp(w, x, y);
+          raster[y * w.b + x] = t === 'muur' || t === 'buiten' || (v && T.VOORWERPEN[v.soort].blokkeert) ? VAST : t === 'deur' ? DEUR : VRIJ;
+        }
+      }
+      r = { w, voorwerpen: w.voorwerpen, aantal: w.voorwerpen.length, b: w.b, h: w.h, raster };
+      RASTERS.set(w, r);
+    }
+    laatste = r;
+    return r.raster;
+  }
+  function vastOp(w, x, y) {
+    if (!(x >= 0 && y >= 0 && x < w.b && y < w.h)) return VAST;
+    if ((x | 0) === x && (y | 0) === y) {
+      const l = laatste;
+      const raster = l && l.w === w && l.voorwerpen === w.voorwerpen && l.aantal === w.voorwerpen.length && l.b === w.b && l.h === w.h ? l.raster : vastRaster(w);
+      return raster[y * w.b + x];
+    }
+    // tussen twee tegels in: zoals vroeger
+    const t = T.tegel(w, x, y);
+    if (t === 'muur' || t === 'buiten') return VAST;
+    const v = T.voorwerpOp(w, x, y);
+    if (v && T.VOORWERPEN[v.soort].blokkeert) return VAST;
+    return t === 'deur' ? DEUR : VRIJ;
+  }
 
   // Ligt het punt (px, py) binnen een rand, een lijst hoekpunten [[x, y], ...]? Een straal naar rechts
   // telt hoe vaak hij de rand kruist. Ook voor gereedschap/tiled/maak-gehucht.cjs, dat er het plein

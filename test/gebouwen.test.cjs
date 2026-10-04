@@ -65,12 +65,14 @@ test('T.gebouwPast: ja op lege grond, nee waar al iets vast staat', () => {
   const S = maakS();
   assert.equal(T.gebouwPast(S, 'put', 5, 5), true);
   S.wereld.tegels[5][5] = 'muur';
+  T.kaartVeranderd(S.wereld); // zoals elke regel die een tegel verandert (js/wereld.js)
   assert.equal(T.gebouwPast(S, 'put', 5, 5), false);
 });
 
 test('T.gebouwPast: de hele voet moet vrij zijn, niet alleen de linkerbovenhoek', () => {
   const S = maakS();
   S.wereld.tegels[3][4] = 'muur'; // ergens binnen de voet van "huis" (6x6) vanaf (2, 2)
+  T.kaartVeranderd(S.wereld);
   assert.equal(T.gebouwPast(S, 'huis', 2, 2), false);
 });
 
@@ -86,6 +88,7 @@ test('op het plein wordt niet gebouwd, en het bouwmenu zegt waarom', () => {
   assert.equal(T.gebouwPast(S, 'put', 3, 3), true, 'ernaast mag het');
   assert.equal(T.waaromPastHetNiet(S, 'put', 3, 3), null);
   S.wereld.tegels[3][3] = 'muur';
+  T.kaartVeranderd(S.wereld);
   assert.equal(T.waaromPastHetNiet(S, 'put', 3, 3), 'Daar past het niet.');
   const r = T.plaatsGebouw(S, 'put', 10, 10);
   assert.deepEqual(r, { gelukt: false, reden: 'Op het plein wordt niet gebouwd.' });

@@ -404,10 +404,11 @@
         const van = { x: m.tx, y: m.ty };
         const vast = (x, y) => T.isVast(w, x, y);
         const padOpties = { tot: Math.max(straalNu, naastDeur) };
+        const anderenOpzij = { wezensBlokkeren: true, wie: m }; // één keer, niet voor elke tegel die A* bekijkt
         // Ligt het doel op een ander eiland (T.kanErKomen, js/wereld.js), dan is er geen weg, en hoeft A* de kaart niet
         // af te zoeken om dat te merken.
         let pad = T.kanErKomen(w, van, doel, padOpties)
-          ? T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: m }), vast, padOpties)
+          ? T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y, anderenOpzij), vast, padOpties)
           : null;
         const geenWeg = !pad;
         // Een lange omweg, alleen omdat er iemand in de weg staat, neemt hij niet: een kleuter vlak
