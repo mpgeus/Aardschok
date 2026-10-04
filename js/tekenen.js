@@ -203,6 +203,7 @@
     c.setTransform(k, 0, 0, k, -g.vx * k, -g.vy * k);
     c.imageSmoothingEnabled = false;
     const vak = tegelsIn(S.wereld, { x0: g.vx, y0: g.vy, x1: g.vx + b, y1: g.vy + h });
+    if (S.wereld.buiten) tekenBuitenGrond(c, S, g);
     tekenVloeren(c, S, inBeeld, vak);
     if (S.wereld.buiten) tekenPlatIn(c, S, vak);
     if (bosGebakken(S)) for (const v of bosrandIn(S, g)) if (bosAchter(S.wereld, v)) tekenGebakkenBoom(c, v);
@@ -771,10 +772,119 @@
   function randDof(w, x, y) {
     const ringen = w.doof || 0;
     if (!w.buiten || !ringen) return 1;
-    const d = Math.min(x, y, w.b - 1 - x, w.h - 1 - y);
-    if (d >= ringen) return 1;
-    const t = (d + 0.5) / ringen;
-    return Math.max(0.02, t * t);
+    if (Math.min(x, y, w.b - 1 - x, w.h - 1 - y) >= ringen) return 1;
+    // Alleen naar een kant waar bos staat (Marcel, 4 okt: "Alleen aan de kant van het bos"): daar loopt de kaart over in
+    // het donkere bos erbuiten. Aan een open kant loopt het land door (tekenBuitenGrond), en vervaagt er niets.
+    const rb = randBos(w);
+    const cx = Math.max(0, Math.min(w.b - 1, x));
+    const cy = Math.max(0, Math.min(w.h - 1, y));
+    let dof = 1;
+    const vervaag = (d, bos) => {
+      if (d >= ringen || bos <= 0) return;
+      const t = (d + 0.5) / ringen;
+      dof = Math.min(dof, 1 - (1 - Math.max(0.02, t * t)) * bos);
+    };
+    vervaag(y, rb.noord[cx]);
+    vervaag(x, rb.west[cy]);
+    vervaag(w.h - 1 - y, rb.zuid[cx]);
+    vervaag(w.b - 1 - x, rb.oost[cy]);
+    return dof;
+  }
+
+  // Hoe bebost de rand van de kaart is, per plek langs elke kant (0 open land, 1 bos): uit de bomen in een strook vlak
+  // binnen de rand. Het bos om de kaart heen volgt het bos erbinnen (Marcel, 4 okt: "Ik denk dat we het niet moeten
+  // afbakenen met die bomen vierkant er omheen. Alleen aan de kant van het bos"). Eén keer per kaart.
+  const RAND_BOS = new WeakMap();
+  const RANDBOS_DIEP = 6; // zo diep kijkt hij de kaart in
+  const RANDBOS_BREED = 2; // en zoveel tegels opzij, om het glad te houden
+  const BOMEN_VOOR_DE_RAND = new Set(['eik', 'herfstEik', 'den', 'berk', 'wilg', 'dodeBoom']);
+  function randBos(w) {
+    let rb = RAND_BOS.get(w);
+    if (rb) return rb;
+    const b = w.b;
+    const h = w.h;
+    const boom = new Uint8Array(b * h);
+    for (const v of w.voorwerpen || []) if (BOMEN_VOOR_DE_RAND.has(v.soort) && v.x >= 0 && v.y >= 0 && v.x < b && v.y < h) boom[v.y * b + v.x] = 1;
+    const deel = (x0, y0, x1, y1) => {
+      let n = 0;
+      let t = 0;
+      for (let y = Math.max(0, y0); y <= Math.min(h - 1, y1); y++) {
+        for (let x = Math.max(0, x0); x <= Math.min(b - 1, x1); x++) {
+          t++;
+          n += boom[y * b + x];
+        }
+      }
+      return t ? n / t : 0;
+    };
+    // een strook met zo'n kwart bomen of meer is bos; met een enkele losse boom is het open land
+    const bos = (f) => Math.max(0, Math.min(1, (f - 0.1) / 0.25));
+    const D = RANDBOS_DIEP;
+    const R = RANDBOS_BREED;
+    rb = { noord: new Float32Array(b), zuid: new Float32Array(b), west: new Float32Array(h), oost: new Float32Array(h) };
+    for (let x = 0; x < b; x++) {
+      rb.noord[x] = bos(deel(x - R, 0, x + R, D - 1));
+      rb.zuid[x] = bos(deel(x - R, h - D, x + R, h - 1));
+    }
+    for (let y = 0; y < h; y++) {
+      rb.west[y] = bos(deel(0, y - R, D - 1, y + R));
+      rb.oost[y] = bos(deel(b - D, y - R, b - 1, y + R));
+    }
+    RAND_BOS.set(w, rb);
+    return rb;
+  }
+  // Hoeveel bos er buiten de kaart staat op (x, y): dat van de kant (of in een hoek de twee kanten) waar hij ligt.
+  function bosBuiten(w, x, y) {
+    const rb = randBos(w);
+    const cx = Math.max(0, Math.min(w.b - 1, x));
+    const cy = Math.max(0, Math.min(w.h - 1, y));
+    let f = 0;
+    if (y < 0) f = Math.max(f, rb.noord[cx]);
+    if (y >= w.h) f = Math.max(f, rb.zuid[cx]);
+    if (x < 0) f = Math.max(f, rb.west[cy]);
+    if (x >= w.b) f = Math.max(f, rb.oost[cy]);
+    return f;
+  }
+
+  // ---- Het land buiten een open kant (Marcel, 4 okt) ----
+  // Waar de kaart aan open land grenst, loopt de grond door: elke hoek buiten de kaart neemt de soort van de dichtstbijzijnde
+  // hoek op de rand over (zo lopen de weg en de beek rechtdoor de kaart uit), en ring na ring wordt het donkerder en
+  // dunner, gedithered zoals het bos (ontwerp/beeld.md), tot het donker van de achtergrond. Onder het bos blijft het donker.
+  const BUITENGROND_DIEP = 10; // zoveel ringen ver
+  const BUITENGROND_VOL = 4; // tot hier ligt elke tegel er
+  function randHoek(w, vx, vy) {
+    const x = Math.max(0, Math.min(w.b, vx));
+    const y = Math.max(0, Math.min(w.h, vy));
+    const tx = Math.min(x, w.b - 1);
+    const ty = Math.min(y, w.h - 1);
+    const g = w.grond && w.grond[ty] && w.grond[ty][tx];
+    const hoeken = g && T.sprites.grondHoeken(g.vel, g.id);
+    if (!hoeken) return 'gras';
+    const dx = x - tx;
+    const dy = y - ty;
+    return hoeken[dx === 0 ? (dy === 0 ? 0 : 3) : dy === 0 ? 1 : 2]; // boven, rechts, onder, links
+  }
+  function tekenBuitenGrond(c, S, g) {
+    const w = S.wereld;
+    if (!metSprites() || !w.grond) return;
+    const vel = (w.grond[0] && w.grond[0][0] && w.grond[0][0].vel) || 'rand';
+    const zaad = bosrandZaad(w) + 7;
+    const vak = tegelsIn(w, { x0: g.vx, y0: g.vy, x1: g.vx + g.b, y1: g.vy + g.h }, BUITENGROND_DIEP);
+    for (let y = vak.y0; y <= vak.y1; y++) {
+      for (let x = vak.x0; x <= vak.x1; x++) {
+        if (x >= 0 && y >= 0 && x < w.b && y < w.h) continue;
+        const r = bosrandRing(w, x, y);
+        if (r > BUITENGROND_DIEP) continue;
+        const dicht = r <= BUITENGROND_VOL ? 1 : 1 - (r - BUITENGROND_VOL) / (BUITENGROND_DIEP - BUITENGROND_VOL + 1);
+        if (hasj(x, y, zaad) >= dicht * (1 - bosBuiten(w, x, y))) continue;
+        const hoeken = [randHoek(w, x, y), randHoek(w, x + 1, y), randHoek(w, x + 1, y + 1), randHoek(w, x, y + 1)];
+        const deel = T.sprites.grondMetHoeken(vel, hoeken, x, y) || T.sprites.grasTegel(x, y);
+        if (!deel) continue;
+        const p = T.naarScherm(x, y);
+        // elke tegel een eigen stapje donkerder of lichter, zodat het donker geen strepen langs de rand legt
+        const rij = Math.max(0, r + (hasj(x, y, zaad + 1) - 0.5) * 2.5);
+        T.sprites.teken(c, bosrandGedimd(deel, bosrandHelder(rij)), p.x, p.y, 1);
+      }
+    }
   }
 
   function tekenVloeren(ctx, S, inBeeld, vak) {
@@ -1260,6 +1370,7 @@
   const BOSRAND_DICHT = 2; // ringen die helemaal vol staan, vlak tegen de kaart aan
   const BOSRAND_DIEP = 16; // ringen waarna er niets meer bij komt
   const BOSRAND_HELDER_MIN = 0.32;
+  const BOSRAND_OPEN = 0.05; // zoveel van het bos staat er buiten een open kant: een losse boom hier en daar
 
   // Welke (vel, id)-paren in tegels/bomen.png en tegels/begroeiing.png een boom of struik zijn:
   // op naam opgezocht in T.TEGELS, niet op een vast nummer. De pixel-art-gereedschap maakt die
@@ -1325,7 +1436,8 @@
     let v = null;
     if (r >= 1 && r <= BOSRAND_DIEP) {
       const zaad = bosrandZaad(w);
-      if (hasj(x, y, zaad) < bosrandDichtheid(r)) {
+      // alleen aan de kant van het bos; in het open land erbuiten hier en daar een boom (Marcel, 4 okt)
+      if (hasj(x, y, zaad) < bosrandDichtheid(r) * Math.max(BOSRAND_OPEN, bosBuiten(w, x, y))) {
         const metHerfst = !BOSRAND_GEBIEDEN_ZONDER_HERFST.includes(w.gebied);
         const soort = metHerfst ? 'met' : 'zonder';
         if (!bosrandVellenPerSoort[soort]) bosrandVellenPerSoort[soort] = bosrandVellenOpbouwen(metHerfst);

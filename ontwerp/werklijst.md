@@ -4191,6 +4191,10 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   hoort bij het bos, een steengroeve bij de rotsen, een visser en een rietsnijder aan het water; het ontworpen gehucht
   kreeg een rotspartij. De bouwer van de speeltest haalt op drie gemaakte landen de twee jaar (`speelbaar.md`). De toetsen en de speeltest spelen nog op het ontworpen gehucht (de speeltest met
   `--maker` op gemaakte landen). Vijf nieuwe toetsen (`test/natuur.test.cjs`).
+- 4 okt 2026 — **Het bos om de kaart alleen aan de kant van het bos** (zesentwintigste sessie; Marcel: "Ik denk dat we
+  het niet moeten afbakenen met die bomen vierkant er omheen. Alleen aan de kant van het bos"; `js/tekenen.js`). Het bos
+  buiten de kaart volgt het bos erbinnen; aan een open kant loopt het land door en vervaagt het in het donker. De rand
+  van de kaart vervaagt alleen nog naar een kant met bos.
 - 4 okt 2026 — **Vraag 113, verder: een weg zoeken 2,8 keer zo snel, en een bewaard spel half zo groot**
   (zesentwintigste sessie). Zie vraag 113. `npm test` 868/868.
 - 3 okt 2026 — **Vraag 113: sneller** (vijfentwintigste sessie; Marcel: "Als de performance slecht is, hebben we

@@ -637,7 +637,10 @@ zitting (3b) en 's avonds de herberg (3c) komen nog.
   vijvers (wilgen alleen aan de achterkant, want vooraan verbergen ze het water) en een of twee rotspartijen in het open;
   en er groeien varens, paddenstoelen en stronken onder de bomen, graspollen, bloemen in plekken, en riet aan het water.
   Wat plat op de grond ligt, zit in de buffer van de grond en kost per beeld niets (`js/tekenen.js`), en maakt plaats
-  voor een gebouw. **Wat er ligt, doet ertoe:** een houthakker hoort bij het bos, een steengroeve bij de rotsen, een
+  voor een gebouw. **Buiten de kaart** (Marcel, 4 okt: "Ik denk dat we het niet moeten afbakenen met die bomen vierkant
+  er omheen. Alleen aan de kant van het bos"): het bos om de kaart heen staat alleen waar binnen de rand ook bos staat;
+  aan een open kant loopt het land door (de weg en de beek rechtdoor) en wordt het ring na ring donkerder en dunner, met
+  hier en daar een losse boom. Op het ontworpen gehucht net zo. **Wat er ligt, doet ertoe:** een houthakker hoort bij het bos, een steengroeve bij de rotsen, een
   visser en een rietsnijder aan het water (`bij` in `T.GEBOUWEN`, `T.natuurBij`); het bouwmenu zegt waarom niet, en een
   verzoek zoekt vanzelf een plek die past, over de hele kaart. (Een jager niet: hij loopt het bos in. Met die eis vond hij
   in de speeltest van 4 okt aan de bosrand geen plek meer, en verhongerde het dorp.) Marcel (4 okt): de houthakker hakt
