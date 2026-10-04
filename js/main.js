@@ -5,8 +5,11 @@
 
   const canvas = document.getElementById('scherm');
   const ctx = canvas.getContext('2d');
-  let bw = 0;
+  let bw = 0; // de maat waarop getekend wordt (formaat): css-pixels, of minder op een groot scherm
   let bh = 0;
+  let cssB = 0; // de maat van het venster in css-pixels
+  let cssH = 0;
+  let perPunt = 1; // css-pixels per getekende pixel: 1, of 2 op een 4K-scherm zonder schaal
   let zoomVenster = 1; // de zoom die bij het venster hoort (formaat); het overzicht zoomt verder uit
   const S = (T.S = { tijd: 0, wind: 0 });
 
@@ -111,15 +114,28 @@
   // schaalt de buffer daarna met image-rendering: pixelated na (zie stijl.css). Op een scherm met
   // een echte hele ratio (2, een retina) tekenen we wel op die ratio, want daar levert het wél
   // scherpere pixels op; een halve ratio ronden we naar beneden af.
+  //
+  // De tussenbuffer (werklijst vraag 123, b; Marcel, 4 okt): op een groot scherm tekent het spel op een hele deling
+  // ervan, de grootste die nog minstens 1920 bij 1080 is (`T.TEKENEN_INSTELLINGEN.tussenbuffer`), en de browser
+  // vergroot dat met die factor. Op 4K is dat 1920 bij 1080 maal twee: een kwart van het tekenwerk, hetzelfde beeld
+  // voor pixel art, en hetzelfde stuk land als op 1920 bij 1080. Op 2560 bij 1440 (4K op 150%) is er geen hele
+  // deling die groot genoeg blijft, en blijft het zoals het was. Wat er getekend wordt, is bw bij bh; de muis komt in
+  // css-pixels binnen, en naarVlak en vanVlak rekenen om (perPunt).
   function formaat() {
     const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
-    bw = window.innerWidth;
-    bh = window.innerHeight;
-    canvas.width = Math.round(bw * dpr);
-    canvas.height = Math.round(bh * dpr);
-    canvas.style.width = bw + 'px';
-    canvas.style.height = bh + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const tb = T.TEKENEN_INSTELLINGEN.tussenbuffer;
+    cssB = window.innerWidth;
+    cssH = window.innerHeight;
+    const deling = Math.max(1, Math.floor(Math.min((cssB * dpr) / tb.b, (cssH * dpr) / tb.h)));
+    const ratio = Math.max(1, Math.floor(dpr / deling)); // wat er van de ratio overblijft (een retina zonder deling)
+    bw = Math.round((cssB * dpr) / deling / ratio);
+    bh = Math.round((cssH * dpr) / deling / ratio);
+    perPunt = cssB / bw;
+    canvas.width = bw * ratio;
+    canvas.height = bh * ratio;
+    canvas.style.width = cssB + 'px';
+    canvas.style.height = cssH + 'px';
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     zoomVenster = Math.max(1, Math.min(2, Math.min(bw / 900, bh / 540)));
     S.zoom = S.overzicht ? S.overzicht.zoom : zoomVenster;
   }
@@ -127,13 +143,15 @@
   // Van schermpixels naar de isometrische vlakte waarop getekend wordt, en terug. Precies
   // dezelfde afronding als in tekenScene, anders wijst de muis net naast de tegel.
   const naarVlak = (mx, my) => ({
-    x: (mx - Math.round(bw / 2)) / S.zoom + Math.round(S.camera.x),
-    y: (my - Math.round(bh / 2)) / S.zoom + Math.round(S.camera.y),
+    x: (mx / perPunt - Math.round(bw / 2)) / S.zoom + Math.round(S.camera.x),
+    y: (my / perPunt - Math.round(bh / 2)) / S.zoom + Math.round(S.camera.y),
   });
   const vanVlak = (sx, sy) => ({
-    x: (sx - Math.round(S.camera.x)) * S.zoom + Math.round(bw / 2),
-    y: (sy - Math.round(S.camera.y)) * S.zoom + Math.round(bh / 2),
+    x: ((sx - Math.round(S.camera.x)) * S.zoom + Math.round(bw / 2)) * perPunt,
+    y: ((sy - Math.round(S.camera.y)) * S.zoom + Math.round(bh / 2)) * perPunt,
   });
+  // De maat waarop getekend wordt (formaat), voor wie zelf een beeld tekent: het gereedschap van het meten.
+  T.tekenMaat = () => ({ b: bw, h: bh });
 
   // Wat ligt er onder de muis? Wezens en voorwerpen steken boven hun tegel uit, dus die
   // worden eerst gezocht, van voor naar achter. Anders is het de tegel zelf.
@@ -371,7 +389,7 @@
   function werkBij(dt) {
     // Een resize-gebeurtenis komt niet altijd (een tabblad dat verborgen opstartte, heeft
     // eerst geen maat), dus kijkt de lus zelf of het venster veranderd is.
-    if (window.innerWidth !== bw || window.innerHeight !== bh) formaat();
+    if (window.innerWidth !== cssB || window.innerHeight !== cssH) formaat();
     S.tijd += dt;
     S.wind = T.windWaarde(S.tijd);
     // De tijd van de wereld: de schermtijd maal de snelheid van de kalender (T.wereldFactor,
@@ -492,7 +510,7 @@
     const dy = ev.clientY - slepen.y;
     if (!slepen.bewogen && Math.hypot(dx, dy) < OVERZICHT.sleepVanaf) return;
     slepen.bewogen = true;
-    schuifOverzicht(-dx, -dy);
+    schuifOverzicht(-dx / perPunt, -dy / perPunt);
     slepen.x = ev.clientX;
     slepen.y = ev.clientY;
   });
@@ -1469,7 +1487,7 @@
       const som = tijden.reduce((a, b) => a + b, 0);
       const af = (x) => Math.round(x * 100) / 100;
       return {
-        venster: `${bw}×${bh}`, zoom: Math.round(S.zoom * 100) / 100, buffer: `${canvas.width}×${canvas.height}`,
+        venster: `${cssB}×${cssH}`, getekend: `${bw}×${bh}`, zoom: Math.round(S.zoom * 100) / 100, buffer: `${canvas.width}×${canvas.height}`,
         gemiddeld: af(som / aantal), mediaan: af(tijden[aantal >> 1]), slechtste: af(tijden[aantal - 1]),
       };
     },

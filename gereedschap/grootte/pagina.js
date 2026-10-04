@@ -45,8 +45,8 @@
   function inBeeld() {
     const s = S();
     const w = s.wereld;
-    const bw = window.innerWidth;
-    const bh = window.innerHeight;
+    const bw = T.tekenMaat().b;
+    const bh = T.tekenMaat().h;
     const binnen = (x, y) => {
       const p = T.naarScherm(x, y);
       const sx = (p.x - Math.round(s.camera.x)) * s.zoom + Math.round(bw / 2);
@@ -77,8 +77,8 @@
   function teken(zoom, K, flush, opties) {
     const o = opties || {};
     const s = S();
-    const bw = window.innerWidth;
-    const bh = window.innerHeight;
+    const bw = T.tekenMaat().b;
+    const bh = T.tekenMaat().h;
     const zoom0 = s.zoom;
     if (zoom) s.zoom = zoom;
     const dag0 = s.kalender.dag;
@@ -154,8 +154,8 @@
   function dicht(K) {
     const s = S();
     const w = s.wereld;
-    const bw = window.innerWidth;
-    const bh = window.innerHeight;
+    const bw = T.tekenMaat().b;
+    const bh = T.tekenMaat().h;
     const z = s.zoom;
     const tegels = [];
     for (let y = 0; y < w.h; y++) {

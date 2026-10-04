@@ -85,7 +85,7 @@ async function meet(browser, scherm) {
       Meet.zetPlekken(uur); const s = Spel.S; if (s.grond) s.grond.sleutel = ''; s.zoom = zoom; Meet.cameraOp(s.schout.tx, s.schout.ty);
     }, [sc.uur, sc.zoom]);
     for (let i = 0; i < 100; i++) {
-      await page.evaluate(() => Spel.tekenScene(document.getElementById('scherm').getContext('2d'), Spel.S, innerWidth, innerHeight));
+      await page.evaluate(() => Spel.tekenScene(document.getElementById('scherm').getContext('2d'), Spel.S, Spel.tekenMaat().b, Spel.tekenMaat().h));
       if (await page.evaluate(() => Spel.sprites.bezig() === 0)) break;
       await page.waitForTimeout(50);
     }
@@ -96,7 +96,7 @@ async function meet(browser, scherm) {
     // de grond alleen: zijn buffer over het hele scherm, met een pixel teruggelezen
     r.grondAlleen = await page.evaluate(() => {
       const c = document.getElementById('scherm').getContext('2d'); const g = Spel.S.grond; const t = [];
-      for (let i = 0; i < 30; i++) { const a = performance.now(); c.save(); c.imageSmoothingEnabled = false; c.drawImage(g.canvas, 0, 0, innerWidth, innerHeight); c.restore(); c.getImageData(0, 0, 1, 1); t.push(performance.now() - a); }
+      for (let i = 0; i < 30; i++) { const a = performance.now(); c.save(); c.imageSmoothingEnabled = false; c.drawImage(g.canvas, 0, 0, Spel.tekenMaat().b, Spel.tekenMaat().h); c.restore(); c.getImageData(0, 0, 1, 1); t.push(performance.now() - a); }
       t.sort((a, b) => a - b); return t[15];
     });
     // hoeveel opdrachten aan het doek per beeld
@@ -105,13 +105,13 @@ async function meet(browser, scherm) {
       for (const k of ['drawImage', 'fill', 'fillRect', 'stroke', 'fillText', 'createRadialGradient', 'createLinearGradient', 'save', 'clip']) {
         oud[k] = P[k]; P[k] = function (...a) { tel[k] = (tel[k] || 0) + 1; return oud[k].apply(this, a); };
       }
-      Spel.tekenScene(document.getElementById('scherm').getContext('2d'), Spel.S, innerWidth, innerHeight);
+      Spel.tekenScene(document.getElementById('scherm').getContext('2d'), Spel.S, Spel.tekenMaat().b, Spel.tekenMaat().h);
       for (const k in oud) P[k] = oud[k];
       return tel;
     });
     await page.evaluate((u) => { Spel.S.kalender.dag = Math.floor(Spel.S.kalender.dag) + u / 24; }, sc.uur);
     await cdp.send('Profiler.start');
-    await page.evaluate(() => { const c = document.getElementById('scherm').getContext('2d'); for (let i = 0; i < 30; i++) { Spel.tekenScene(c, Spel.S, innerWidth, innerHeight); c.getImageData(0, 0, 1, 1); } });
+    await page.evaluate(() => { const c = document.getElementById('scherm').getContext('2d'); for (let i = 0; i < 30; i++) { Spel.tekenScene(c, Spel.S, Spel.tekenMaat().b, Spel.tekenMaat().h); c.getImageData(0, 0, 1, 1); } });
     const { profile } = await cdp.send('Profiler.stop');
     const p = inclusief(profile);
     r.profiel = { perBeeld: Object.fromEntries(Object.entries(p.lagen).map(([k, v]) => [k, Math.round((v / 30) * 10) / 10])), topEigenMsSamen: p.topEigen };

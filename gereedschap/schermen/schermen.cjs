@@ -116,7 +116,7 @@ const eersteBeeldOp = (page, zoom) => page.evaluate((z) => {
   s.zoom = z;
   const doek = document.getElementById('scherm');
   const t0 = performance.now();
-  Spel.tekenScene(doek.getContext('2d'), s, innerWidth, innerHeight);
+  Spel.tekenScene(doek.getContext('2d'), s, Spel.tekenMaat().b, Spel.tekenMaat().h);
   doek.getContext('2d').getImageData(0, 0, 1, 1);
   return Math.round(performance.now() - t0);
 }, zoom);

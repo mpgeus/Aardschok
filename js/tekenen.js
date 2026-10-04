@@ -15,6 +15,13 @@
 
   const GEDIMD = 0.58;
 
+  // Hoe het beeld getekend wordt (werklijst vraag 123). `tussenbuffer`: op een groot scherm tekent het spel op de
+  // grootste hele deling van het scherm die nog minstens zo groot is, en vergroot de browser het (formaat in
+  // js/main.js); op 4K is dat 1920 bij 1080 maal twee.
+  T.TEKENEN_INSTELLINGEN = {
+    tussenbuffer: { b: 1920, h: 1080 },
+  };
+
   const metSprites = () => !!(T.sprites && T.sprites.aan) && !(T.debug && T.debug.vlakken);
   T.metSprites = metSprites; // ook voor js/doorkijk.js
 

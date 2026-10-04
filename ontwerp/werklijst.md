@@ -4520,6 +4520,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel koos (4 okt): "A prima B oke C dat is goed D graag".** Dus het plan in deze volgorde; op 150% blijft het doek
     zoals het is (alleen een hele factor); de maat voor wat anders mag zijn, zoals hierboven; en de proefversie al na
     stap 1.
+    **Stap 1 is af (4 okt): de tussenbuffer.** Op een groot scherm tekent het spel op de grootste hele deling ervan die nog
+    minstens 1920×1080 is (`T.TEKENEN_INSTELLINGEN.tussenbuffer` in `js/tekenen.js`, `formaat` in `js/main.js`), en de
+    browser vergroot het; de muis rekent om (`naarVlak`, `vanVlak`). Gemeten, zonder videokaart: 4K dichtbij van 13 naar
+    36 beelden per seconde, 4K op 200% van 14 naar 45, in het overzicht van 7 à 12 naar 17 à 28: 4K is nu 1920×1080.
+    Op 1280×800 zijn de twintig schermafdrukken byte voor byte gelijk, en klikken klopt op vijf schermen.
 124. **De camera draaien** (Marcel, 4 okt, gevraagd in de sessie van de huizen en doorgegeven aan die van WebGL: "ik wil
     ook de camera kunnen draaien. Is dat mogelijk"; plan van Claude; open).
     **Kan het?** Ja, in kwartslagen (`Q` en `E`, zoals in Anno, The Sims en Project Zomboid). Vrij draaien niet: pixel art
