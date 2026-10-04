@@ -9,12 +9,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
-- **Een toets die soms faalt** (4 okt, dertigste sessie, gezien bij vraag 114, stap 1, die geen spelregel raakt):
-  "in het gehucht is iedereen 's nachts binnen, overdag waar hij hoort, en 's avonds thuis" (`test/bewoners.test.cjs`)
-  faalde één keer op drie in de hele reeks (`npm test`), en slaagde alleen achttien keer op achttien. Het gehucht van
-  die toets speelt met ongezaaid toeval (`Math.random`: het dwalen, het lot), en de toets laat er hooguit één naast zijn
-  plek toe. Na te lopen: een vast zaad voor die toets, of zien wie er dan niet thuis is.
-
 - **Het praatje, wat er nog niet is** (4 okt, zevenentwintigste sessie; vraag 120). Na te lopen:
   - Lopen is langzaam tegenover de dag: van een boerderij aan de rand van het gehucht naar het plein is anderhalf uur
     (een dag duurt 300 seconden, een mens loopt 1,35 tegel per seconde). Wie 's avonds naar de herberg gaat, loopt zo de

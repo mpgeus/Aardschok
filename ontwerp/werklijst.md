@@ -4823,6 +4823,12 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 4 okt 2026 — **De toets die soms faalde, speelt een vaste dag** (eenendertigste sessie; vraag 114, E; Marcel: "E
+  ja"). "In het gehucht is iedereen 's nachts binnen, overdag waar hij hoort, en 's avonds thuis"
+  (`test/bewoners.test.cjs`) faalde ongezaaid in 7 van de 200 dagen, en het was steeds een paar dat om elf uur een
+  praatje maakte (vraag 120): wie vrij is, blijft onderweg staan voor een bekende en loopt daarna terug. Geen fout in
+  het spel, dus: wie praat of net praatte (`e.praatRust`), is waar hij hoort, en de toets heeft een vast zaad, zoals
+  dertien andere toetsbestanden. Met de uitzondering alleen slaagde hij in 398 van de 400 dagen.
 - 4 okt 2026 — **De figuren laden als hun wezen op de kaart staat** (dertigste sessie; vraag 114, stap 1b; Marcel: "C
   meteen erna"). Alle 122 figuurvellen laadden bij het begin (124 MB), ook de monsters van het oude spel, de soldaten,
   de heer en de inner. Nu laadt een figuur met al zijn houdingen pas als zijn wezen op de kaart staat

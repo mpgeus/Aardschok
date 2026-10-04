@@ -381,28 +381,39 @@ test('T.dagAnker voor een bewoner: \'s nachts binnen, \'s ochtends de put of het
 });
 
 test('in het gehucht is iedereen \'s nachts binnen, overdag waar hij hoort, en \'s avonds thuis', () => {
-  const S = gehucht({ dag: bijUur(GROEI, 4), snelheid: 10 });
-  const binnen = (p) => p.wezen.binnen;
-  // Waar hij hoort: binnen de straal van zijn plek, of, als hij daar naar binnen hoort (de herberg,
-  // js/herberg.js), binnen, of voor die deur.
-  const binnenStraal = (p) => {
-    const a = T.dagAnker(S.dorp, p.wezen);
-    return !!a && (T.afstand(a, opTegel(p.wezen)) <= a.straal || (a.binnen && (p.wezen.binnen || T.afstand(a, opTegel(p.wezen)) <= 1)));
-  };
-  loopTot(S, bijUur(GROEI, 11));
-  const verkeerd = nieuwe(S).filter((p) => !binnenStraal(p));
-  assert.ok(verkeerd.length <= 1, `om elf uur is (bijna) iedereen waar hij hoort; niet: ${verkeerd.map((p) => p.naam).join(', ')}`);
-  loopTot(S, bijUur(GROEI, 21.5));
-  // De herder mag dan nog onderweg zijn: in het gehucht van 26 sep ligt de heide ver van het plein en
-  // van de boerderijen aan de oostkant, en woont hij daar, dan loopt hij bijna de hele kaart over. 's
-  // Nachts is ook hij binnen (hieronder). Wie naar de herberg ging, zit daar (binnenStraal).
-  const nietThuis = nieuwe(S).filter((p) => !binnenStraal(p) && !(p.werk && p.werk.soort === 'schaapskooi'));
-  assert.ok(nietThuis.length <= 1, `'s avonds is (bijna) iedereen op zijn erf; niet: ${nietThuis.map((p) => p.naam).join(', ')}`);
-  // Om twee uur 's nachts: wie in de herberg zat, liep bij bedtijd (tien uur) naar huis, en wie ver
-  // woont, doet daar ruim twee uur over (js/herberg.js; tot 27 sep stond hier half twaalf).
-  loopTot(S, bijUur(GROEI + 1, 2));
-  const buiten = nieuwe(S).filter((p) => !binnen(p));
-  assert.equal(buiten.length, 0, `'s nachts is iedereen binnen; niet: ${buiten.map((p) => p.naam).join(', ')}`);
+  // Met een vast zaad, zodat de toets elke keer dezelfde dag speelt (Marcel, 4 okt, vraag 114, E: "zodat een push er
+  // niet op stukloopt"). Ongezaaid faalde hij in 7 van de 200 dagen, en het was steeds een paar dat een praatje maakte
+  // (js/praatje.js, vraag 120): wie vrij is, blijft onderweg staan voor een bekende, en loopt daarna terug.
+  const toeval = Math.random;
+  let n = 7;
+  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
+  try {
+    const S = gehucht({ dag: bijUur(GROEI, 4), snelheid: 10 });
+    const binnen = (p) => p.wezen.binnen;
+    // Waar hij hoort: binnen de straal van zijn plek, of, als hij daar naar binnen hoort (de herberg,
+    // js/herberg.js), binnen, of voor die deur. Of hij praat, of praatte net en loopt terug (e.praatRust).
+    const binnenStraal = (p) => {
+      if (p.wezen.praatje || p.wezen.praatRust > S.kalender.dag) return true;
+      const a = T.dagAnker(S.dorp, p.wezen);
+      return !!a && (T.afstand(a, opTegel(p.wezen)) <= a.straal || (a.binnen && (p.wezen.binnen || T.afstand(a, opTegel(p.wezen)) <= 1)));
+    };
+    loopTot(S, bijUur(GROEI, 11));
+    const verkeerd = nieuwe(S).filter((p) => !binnenStraal(p));
+    assert.ok(verkeerd.length <= 1, `om elf uur is (bijna) iedereen waar hij hoort; niet: ${verkeerd.map((p) => p.naam).join(', ')}`);
+    loopTot(S, bijUur(GROEI, 21.5));
+    // De herder mag dan nog onderweg zijn: in het gehucht van 26 sep ligt de heide ver van het plein en
+    // van de boerderijen aan de oostkant, en woont hij daar, dan loopt hij bijna de hele kaart over. 's
+    // Nachts is ook hij binnen (hieronder). Wie naar de herberg ging, zit daar (binnenStraal).
+    const nietThuis = nieuwe(S).filter((p) => !binnenStraal(p) && !(p.werk && p.werk.soort === 'schaapskooi'));
+    assert.ok(nietThuis.length <= 1, `'s avonds is (bijna) iedereen op zijn erf; niet: ${nietThuis.map((p) => p.naam).join(', ')}`);
+    // Om twee uur 's nachts: wie in de herberg zat, liep bij bedtijd (tien uur) naar huis, en wie ver
+    // woont, doet daar ruim twee uur over (js/herberg.js; tot 27 sep stond hier half twaalf).
+    loopTot(S, bijUur(GROEI + 1, 2));
+    const buiten = nieuwe(S).filter((p) => !binnen(p));
+    assert.equal(buiten.length, 0, `'s nachts is iedereen binnen; niet: ${buiten.map((p) => p.naam).join(', ')}`);
+  } finally {
+    Math.random = toeval;
+  }
 });
 
 test('staat de schout in zijn deur, dan gaat zijn gezin vanaf de tegel ernaast naar binnen', () => {
