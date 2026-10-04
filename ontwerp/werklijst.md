@@ -4517,6 +4517,39 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     zo laten, alleen een hele factor. **C**, deze maat voor wat anders mag zijn? **D**, de proefversie al na stap 1? Met een
     videokaart tekent Chrome ook het 2D-doek al op de kaart; dan weet je vooraf op je eigen pc hoeveel WebGL wint, en
     daarna meet je het nog een keer. Voorstel: ja, het is een uur werk.
+124. **De camera draaien** (Marcel, 4 okt, gevraagd in de sessie van de huizen en doorgegeven aan die van WebGL: "ik wil
+    ook de camera kunnen draaien. Is dat mogelijk"; plan van Claude; open).
+    **Kan het?** Ja, in kwartslagen (`Q` en `E`, zoals in Anno, The Sims en Project Zomboid). Vrij draaien niet: pixel art
+    is getekend voor één hoek, en tussenstanden worden vlekken. Bij een kwartslag blijft de kaart dezelfde (Tiled, de
+    regels, het lopen, het zicht: niets verandert); alleen hoe hij op het scherm komt, draait.
+    **Wat het vraagt, nagegaan per deel:**
+    - *Het spel* (zo'n sessie): `T.naarScherm` en `T.naarWereld` (`js/iso.js`) draaien mee, en wat daarop leunt: de
+      volgorde van tekenen (`diepteVan`, `staatVoorGebouw`: "ten zuiden of oosten" wordt per stand een andere kant), de
+      doorkijk, het klikken (de tegel onder de muis), de camera, de buffers van de grond en het bos (opnieuw bij een
+      draai), het bos om de kaart (nu alleen aan de kant van het bos, en de kant die vooraan staat, verandert), de
+      voet en de deur van een gebouw van meer tegels.
+    - *De figuren, het vee en de rovers*: niets, ze hebben al acht richtingen; een draai kiest een andere.
+    - *De grond*: bijna niets. De randtegels ("gras over zandpad: boven+rechts") zijn er voor alle zestien combinaties
+      van hoeken, en hun patroon zit aan het scherm vast; na een draai kiest het spel de tegel waarvan de hoeken op het
+      scherm kloppen. De akkers: de rijen hebben een richting, dus twee varianten in plaats van één.
+    - *De huizen*: geen extra tekeningen, als de bouwer ze draaibaar rendert (zie B). Een huis in stand zuid, een
+      kwartslag gedraaid, is dan de tekening van stand oost.
+    - *De andere gebouwen* (`tegels/gebouwen`, uit `dorp.cjs`, een aanzicht; de herberg, het huis van de schout, de
+      kapel) en hun bouwfasen: vier aanzichten renderen in plaats van een. De beelden komen uit code, dus dat is rekenen,
+      geen tekenen; de bouwers moeten wel een kijkhoek krijgen (de patronen rekenen nu in schermpixels).
+    - *Bomen, struiken, rotsen, voorwerpen*: vier aanzichten, of de bestaande als ze rond genoeg zijn; het licht valt dan
+      van dezelfde kant van het scherm, wat niemand opvalt.
+    - *Het geheugen*: alleen de stand die je ziet, is geladen (een vel per tekening, zoals nu); na een draai laadt de
+      nieuwe stand, met een korte wachttijd de eerste keer.
+    **Hoe groot:** het spel een sessie, de beelden twee à drie (de bouwers een kijkhoek geven, en renderen).
+    **Waar in de volgorde:** WebGL staat het niet in de weg (beide tekenen met dezelfde `naarScherm`), en het hoort vóór de
+    hoogte (vraag 121): terrassen hebben een wand die je per stand anders ziet, en dat moet in één keer goed.
+    Vragen: **A**, kwartslagen, met `Q` en `E`? **B** (nu nodig, voor de sessie van de huizen): de huizen draaibaar
+    renderen, met alle vier de muren ingevuld (deur, ramen en vakwerk op elke muur), zodat de vier standen de vier
+    aanzichten zijn? Het kost geen tekeningen, alleen werk aan de bouwer; de eerste stijl (wit) is nu gespiegeld en moet
+    dan een uur opnieuw rekenen, en het besluit moet er zijn vóór de andere drie stijlen (vraag 114, 2b). Voorstel: ja, want
+    het houdt de deur open. **C**, wanneer: na WebGL en na de boeren (vraag 111), vóór de hoogte (vraag 121)? Voorstel: ja;
+    voor de demo is het mooi, niet nodig, want de doorkijk laat al zien wat achter een huis staat.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
