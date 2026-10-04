@@ -378,7 +378,8 @@ duister." Het voorstel (vraag 116): wolven in roedels diep in het bos, herten di
 's avonds komen de wolven naar de bosrand, en 's nachts zie je alleen hun rode ogen; wie aan de bosrand werkt, vlucht
 naar huis, en in de winter pakken ze een schaap of vallen ze iemand aan; de jager, een jacht, de militie, een hek en een
 lantaarn helpen. De wolf staat al in `T.WEZENS` (`js/wereld.js`), als monster om mee te vechten, met een tekening.
-Samen met de houthakker die hakt en plant (vraag 115) en de boeren op hun veld (vraag 111).
+Samen met de houthakker die hakt en plant (vraag 115) en de boeren op hun veld (vraag 111). **Marcel koos (4 okt):** "ja,
+doden mag".
 
 ## Rovers en de militie (Marcel, 28 en 29 sep 2026; werklijst vraag 51 en 55)
 
@@ -598,7 +599,9 @@ kaart. Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken'
 eiland. Met water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."
 Dat vervangt de kaart van de provincies hieronder (die staat achter de spelregel Land, standaard uit): één eiland met de
 zee rondom, met je dorp, het kasteel van de heer, de stad en de andere dorpen erop, en de mist over wat je nog niet
-zag. Het plan in stappen staat bij vraag 117 in de werklijst.
+zag. Het plan in stappen staat bij vraag 117 in de werklijst. **Marcel koos de maat: 2500 bij 2500 tegels** (4 okt), na
+de kern (eerst de huizen, dan de boeren met de houthakker en de beesten). Wat dat technisch vraagt (de kaart in stukken
+uit het nummer, opslaan wat veranderde, lange tochten over de wegen, wat ver weg is als getallen), staat erbij.
 
 
 **Zo werkt het nu** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in

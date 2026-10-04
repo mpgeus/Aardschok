@@ -45,9 +45,10 @@ eerst de vellen inpakken (de snelheid, en ruimte voor meer tekeningen), dan een 
 wanden, luiken, gespiegeld) en de herberg, de kapel met toren en de woontoren in verhouding, om aan Marcel te laten zien.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
 met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant (**vraag 115**). De meter in Firefox
-(vraag 113, a) komt van hem. **Open bij Marcel:** **vraag 116** (beesten in het bos: wolven die de houthakker bedreigen,
-rode ogen in het donker) en **vraag 117** (één kaart: een eiland met de zee rondom, en de mist; "uiteindelijk"). Daarna
-**vraag 111** (de boeren op hun veld), met 115 en 116; dan 117. Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
+(vraag 113, a) komt van hem. Ook besloten (4 okt): **vraag 116** (beesten in het bos: wolven die de houthakker bedreigen,
+rode ogen in het donker; "doden mag") en **vraag 117** (één kaart: een eiland van 2500 bij 2500 met de zee rondom en de
+mist; "uiteindelijk"). De volgorde (Marcel: "akkoord"): de huizen (vraag 114), dan **vraag 111** (de boeren op hun
+veld) met 115 en 116, dan 117, dat begint met een proef die meet of een kaart in stukken loopt. Daarna nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het erf: bestraten als
 verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de maat van de winst: op het
 wijdere land is er grond genoeg, maar de speeltest speelt standaard nog het ontworpen gehucht). De speeltest van vier
 jaar staat in `speelbaar.md`, en een volgende speeltest van vier jaar splitst de spelers over twee taken, want een taak
@@ -3902,6 +3903,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       werkt de houthakker echt in het bos, en is er iets om bang voor te zijn.
     Vragen: **a**, deze dieren? **b**, mag een wolf iemand doden (de spelregel kan het zachter)? **c**, samen met 111 en
     115?
+    **Marcel koos (4 okt): "1 ja, doden mag"**: deze dieren, een wolf mag iemand doden, en samen met de boeren (111) en de
+    houthakker (115), na de huizen.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
@@ -3926,6 +3929,24 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **e, wanneer:** eerst de kern (vraag 114, dan 111 met 115 en 116), dan a en b, dan c met het buurdorp.
     Vragen: **a**, hoe groot? **b**, het kasteel en de stad ook op het eiland? **c**, kun je van het eiland af (met een
     schip)? **d**, de mist zo, zwart en grijs? **e**, deze volgorde?
+    **Marcel koos (4 okt): "2500x2500 is goed"** en "akkoord" op de volgorde (eerst de huizen, dan de boeren met de
+    houthakker en de beesten, dan het eiland). Het kasteel, de stad, het schip en de mist zijn nog niet beantwoord: het
+    voorstel hierboven staat, en dat vragen we opnieuw als het eiland begint.
+    **Wat 2500 bij 2500 betekent (Claude, 4 okt):** 6,25 miljoen tegels, 625 keer het land van nu. Het kan, maar niet zoals
+    de kaart nu in het spel zit, en het is de grootste technische stap tot nu toe. Vijf dingen moeten anders, en daarom
+    eerst een proef die het meet, vóór er iets op het eiland komt:
+    - **De kaart in stukken.** Nu staat elke tegel als tekst en als ding in het geheugen (op 100 bij 100 zo'n 10.000);
+      bij 6,25 miljoen is dat honderden MB. Het eiland komt in stukken van zo'n 64 bij 64 tegels, als compacte getallen,
+      en een stuk wordt pas gemaakt (uit het nummer van het eiland) als je in de buurt komt, zoals in Minecraft.
+    - **Opslaan wat veranderde.** Het eiland zelf komt uit het nummer; een bewaard spel houdt alleen wat er gebouwd,
+      gehakt en ontdekt is. Dan moet de maker zijn versie onthouden: verandert hij, dan legt hetzelfde nummer een ander
+      eiland, en past een oud spel niet meer (of de oude maker blijft bewaard).
+    - **Ver lopen.** A* over 2500 tegels is te duur; een lange tocht gaat over de wegen (een netwerk van wegen en
+      kruispunten), en A* zoekt alleen het stukje tot de eerste weg en van de laatste weg af.
+    - **Wat ver weg is, als getallen.** Een dorp, een roedel wolven of de heer die onderweg is, loopt dichtbij met zijn
+      poppetjes en ver weg als getallen (vraag 79, D).
+    - **De tijd.** Op 1× loopt de schout zo'n kwartier van de ene kust naar de andere, op 30× minder dan een minuut; later
+      een paard. Dat past bij het ontdekken.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
