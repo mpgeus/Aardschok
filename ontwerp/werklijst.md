@@ -4267,6 +4267,44 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     `klaar`, dus de regels zien het nieuwe huis meteen, en de speeltest speelt hetzelfde jaar; een tekening zonder
     bouwfasen groeit in één nacht, zoals altijd (`groeiGebouw` in `js/behoeften.js`, `T.bouwFaseIndex` met `vanaf`, en
     `T.tikGebouwenDag` zet hem af; drie toetsen in `test/behoeften.test.cjs`).
+    **Plan voor stap 2b, de andere drie stijlen (Claude, 4 okt, tweede sessie naast de draaibare huizen; wacht op
+    Marcel).** Nagelezen op `5b1793f` (de branch van de draaibare huizen). Wit gebruikt hut 1, 3 en 4, huis 1, 3 en 6 en
+    boerderij 1 en 4. Over zijn nog maar hut 2, huis 2, 4 en 5 en boerderij 2, 3 en 5: genoeg voor één stijl, dus er
+    komen nieuwe vormen bij. De bouwer kan al alles wat de stijlen vragen: kalk oker en roze, luiken rood (`rood`),
+    blauwgrijs (`pet`) en kaal (het hout zelf), zandsteen op een muur, wanden van planken en blokhut, en spanen. Hij heeft
+    ook uitbouwen die het spel nog nergens gebruikt: een galerij op palen (`balkon`), een buitentrap naar een opkamer
+    (`trap`), een erker op klossen, en twee lagen met een overkragende verdieping (alleen het huis van de schout). Daarmee
+    kan elke stijl een eigen karakter krijgen, niet alleen een eigen kleur:
+    - **(2) oker, "de zolders":** oker kalk, rode luiken, zandsteen, riet. Huis 2 (anderhalve laag met een dakkapel),
+      huis 4 (de L met de vleugel naar achter) en huis 5 (smal en hoog, met een schoorsteen op de gevel); hut 2 en twee
+      nieuwe (een kleine vierkante van 4 bij 4 met een schoor, een lange van 7 bij 4); boerderij 3 (anderhalve laag, twee
+      kapellen) en een nieuwe: een T met de vleugel naar voren, 10 bij 5.
+    - **(3) planken, "het houtland":** planken onder spanen, blauwgrijze luiken, veldsteen. Alles van hout: de huizen van
+      planken (nu vakwerk), de hutten van planken of stammen (nu vlechtwerk), het stenen broertje veldsteen met planken
+      erboven. Drie nieuwe huizen: een lang huis van 9 bij 5 met een galerij op palen, een L met een buitentrap, en een
+      van 8 bij 5 met een aanbouw en een schoor; drie nieuwe hutten (planken 5 bij 4, stammen 6 bij 4, een L van planken);
+      boerderij 2 (de T van planken) en 5 (de blokhut onder spanen).
+    - **(4) roze, "het rijke vakwerk":** roze kalk, kale luiken, zandsteen, riet. Drie nieuwe huizen: twee lagen met een
+      overkragende verdieping (7 bij 5), een met een erker (8 bij 5), en een T met de vleugel naar achter en anderhalve
+      laag; drie nieuwe hutten; twee nieuwe boerderijen (een L met de vleugel aan de andere kant, en een lange van 10 bij 6
+      met twee lagen boven de woning).
+    Wat de bouwer er nog voor mist (klein, in `huizen.cjs`, niet in de bouwer zelf): een stijl die de wand zet (de
+    planken), en wat er op het stenen broertje boven de steen komt; een vorm die alleen voor een stijl is, zodat hij
+    niet ook als losse tekening in het spel komt; een hut zonder luiken, ook als zijn vorm ze had (hut 2). Wat de
+    proefplaat moet laten zien: of de galerij, de trap en de erker goed gaan met `rondom` en de draai (ze zijn nooit
+    van vier kanten getekend; ze blijven voor en rechts, zoals de andere uitbouwen).
+    Volgorde: (1) per stijl een proefplaat (`huis-sdf-export.cjs stijl oker`, `planken`, `roze`), zoals die van wit:
+    de vormen, een huis en een hut in de vier standen, de daken en de steen, drie straatjes. Alleen in
+    `gereedschap/pixelart/uit/`, niets in `tegels/`. (2) Na jouw ja, en pas als het wit van de draaibare huizen in
+    `main` staat: renderen, per stijl in drie delen van minder dan twee uur (de huizen, de bouwfasen van de hutten en
+    de huizen, die van de stenen huizen en de boerderijen), samen zo'n zeven uur; de opslagplaats groeit zo'n 55 MB.
+    (3) De maker kiest de stijl uit het nummer van het land (`T.stijlVoorLand`, nu altijd wit), dan `npm test`,
+    `npm run schermen` en de speeltest op landen van de maker.
+    Vragen: **A**, de vormen zo, met de galerij, de trap, de erker en twee lagen als kenmerk van een stijl? **B**, de
+    plankenstijl helemaal van hout (ook de hutten en boven het stenen broertje)? **C**, eigen hutten per stijl (acht
+    nieuwe), of delen de stijlen de hutten (een hut verschilt dan alleen in dak en wand)? **D**, het huis van de schout in
+    de stijl van zijn land (het stond bij 2a voor 2b), nu, of met de grote gebouwen (stap 3)? **E**, zo'n zeven uur
+    renderen en 55 MB erbij in de opslagplaats?
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
