@@ -117,8 +117,8 @@ bouwt een huis als één 3D-huis met deur, ramen en vakwerk vast op alle vier de
 plaats van het te spiegelen, zodat de vier standen de vier aanzichten zijn. De schets staat bij vraag 114 ("Schets voor
 de draaibare huizen"): eerst nader lezen in `huis-sdf.cjs` (`maakStukken`, `stuk`, `verdeel`, de uitbouwen), dan een plan
 voor Marcel. Daarna wit opnieuw door de bouwer, nu met alle bouwfasen (`bouwfasen.cjs --erbij`; Marcel: "ik wil overal
-bouwfase"), en daarmee **G** (Marcel: "G ja"): een huis dat doorgroeit, rijst op in de laatste drie fases over zijn
-bouwtijd, en de mensen blijven erin wonen. Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
+bouwfase"), en daarmee **G** (Marcel: "G ja", en "G bij de draaibare huizen is goed"): een huis dat doorgroeit,
+rijst op in de laatste drie fases over zijn bouwtijd, en de mensen blijven erin wonen. Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
 veranderen: de huizen in `tegels/` hebben geen schaduw op de vloer, en het spel tekent hun schaduw zelf. En dan stap 2b,
 de andere drie stijlen, elk met een eigen drietal vormen (Marcel: "B ja"), en stap 3, de herberg, de kapel en de
 woontoren, meteen draaibaar. **Vraag 121 is besloten**
@@ -4159,8 +4159,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     dat doorgroeit? Dat gebeurt nu in één nacht, zonder fases (`groeiGebouw` in `js/behoeften.js`). Voorstel van Claude:
     het nieuwe huis rijst op in de laatste drie fases (muren met steigers, het dakgebinte, half gedekt) over de bouwtijd
     van zijn soort, en de mensen blijven erin wonen. **Marcel (4 okt): "G ja".** Het komt met de bouwfasen van wit, dus
-    met de draaibare huizen (voorstel van Claude: eerder zie je het alleen op het ontworpen gehucht, want de huizen van
-    de maker hebben nog geen fases); tot dan groeit een huis in één nacht, zoals nu.
+    met de draaibare huizen (Marcel: "G bij de draaibare huizen is goed"; eerder zie je het alleen op het ontworpen
+    gehucht, want de huizen van de maker hebben nog geen fases); tot dan groeit een huis in één nacht, zoals nu.
     **Marcel vroeg erbij: "ik wil ook de camera kunnen draaien. Is dat mogelijk"**, aan de sessie van WebGL gegeven (die
     schrijft het als vraag 124). Voor de huizen: de vier standen zijn nu gespiegeld in de diagonaal (`nok: 'y'`), niet
     gedraaid, en de bouwer vult alleen de muren in die je ziet. Voor een draaiende camera moet een huis van vier kanten
