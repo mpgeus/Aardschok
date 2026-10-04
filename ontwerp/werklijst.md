@@ -4555,6 +4555,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vraag **E**: in het overzicht mag WebGL andere pixels kiezen dan 2D? Voorstel: ja. Later kan WebGL het overzicht zelfs
     mooier maken (verkleinen met gemiddelde kleuren in plaats van pixels overslaan), maar dat is dan een keuze, geen
     stap van dit plan.
+    **Marcel (4 okt): "Ja"** op E: in het overzicht mag WebGL andere pixels kiezen dan 2D. En over de proefversie: "Ik
+    maak hem straks wel zelf" (hij kon niet mee: de zip van 161 MB, en ook een stuk van 55 MB, gaf bij het sturen een 502).
 124. **De camera draaien** (Marcel, 4 okt, gevraagd in de sessie van de huizen en doorgegeven aan die van WebGL: "ik wil
     ook de camera kunnen draaien. Is dat mogelijk"; plan van Claude; open).
     **Kan het?** Ja, in kwartslagen (`Q` en `E`, zoals in Anno, The Sims en Project Zomboid). Vrij draaien niet: pixel art
@@ -4599,6 +4601,28 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (4 okt): "124b Ja dan."** De huizen worden draaibaar gerenderd: alle vier de muren ingevuld (deur, ramen en
     vakwerk op elke muur), zodat de vier standen de vier aanzichten zijn. Dat is werk voor de sessie van de huizen,
     vóór de andere drie stijlen (vraag 114, 2b); de eerste stijl (wit) gaat dan opnieuw door de bouwer.
+125. **Schaduwen en licht met de videokaart** (Marcel, 4 okt, na WebGL: "Ja schaduwen en licht etc"; plan van Claude;
+    open). Nu: de pixel art heeft zijn licht ingebakken (van linksboven, met een schaduw op de vloer, `belicht` en
+    `schaduwOpVloer` in `gereedschap/pixelart/kern.cjs`; `beeld.md`), en de nacht is een donkere laag met lichtere
+    kringen rond de schout en de lantaarns. Met WebGL kan er meer, in drie stappen, van goedkoop naar duur:
+    - **A, licht** (een sessie, geen nieuwe kunst): de nacht en de lampen als één shader, met licht dat kleurt in plaats
+      van alleen minder donker te zijn: warme plassen licht onder een lantaarn, bij een brandend raam en de deur van de
+      herberg, een flakkerende vlam, de schout met een lantaarn in de hand; en de dag in kleuren in plaats van een laag
+      erover: roze bij het opkomen, neutraal op de middag, oranje bij het ondergaan, blauw in de nacht.
+    - **B, schaduwen die met de zon meegaan** (een à twee sessies, en de kunst opnieuw renderen): elke figuur, boom en
+      elk huis werpt zijn eigen silhouet scheef over de grond, 's ochtends lang naar het westen, 's middags kort, 's avonds
+      lang naar het oosten, en 's nachts weg van een lantaarn als je erlangs loopt. Dan moet de ingebakken schaduw op de
+      vloer uit de kunst (de huizen raakt dat: de sessie van de huizen).
+    - **C, echt licht op de muren** (twee à drie sessies, alle kunst opnieuw): omdat de beelden uit code komen, kan elke
+      tekening naast zijn kleuren ook de richting van elk vlakje meekrijgen (een normal map). Dan verlicht een lantaarn de
+      muur die naar hem toe staat, en klopt het licht ook als de camera draait (vraag 124). Het mooiste, en het grootste
+      risico voor de stijl: het palet en het ditheren (`beeld.md`) laten dan los, en het geheugen voor plaatjes verdubbelt.
+    Commercieel: een dorp in de schemering met warme ramen en lange schaduwen is het plaatje voor de Steam-pagina
+    (`commercieel.md`, de beeldstijl als troef).
+    Voorstel: A meteen na WebGL; B met eerst een proefplaat; C alleen als proefplaat, om de stijl te beoordelen.
+    Vragen: **A**, licht zoals hierboven, en meteen? **B**, schaduwen met de zon, na een proefplaat (en dan de vloerschaduw
+    uit de kunst, ook bij de huizen)? **C**, een proefplaat met echt licht op de muren? **D**, waar in de volgorde: vóór
+    of na de camera draaien (vraag 124) en de boeren (vraag 111)?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
