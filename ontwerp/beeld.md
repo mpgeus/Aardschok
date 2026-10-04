@@ -238,9 +238,11 @@ bord), en de kapel zoals ze nu is en de nieuwe, van baksteen onder leien, met ee
 **Plaat 3, de steen**: de kapel met haar zadeldaktoren en de woontoren met zijn tentdak, elk in veldsteen, zandsteen
 en baksteen.
 
-**Open** (wacht op Marcel): welke toren de kapel krijgt en welke vorm de woontoren; welke steen (zandsteen,
-baksteen, of eerst het een en dan het ander); of de kalk zo goed is; of de binnenplaats van de herberg een muur met
-een poort krijgt.
+**Besloten** (Marcel, 4 okt: "1. Afwisselen, je stelde eerder voor kleuren per soort land. 2. Zelfde als 1. 3. Ja,
+baksteen na de steenbakker. 4. Ja prima. 5. Ja graag"): de kapel krijgt een zadeldaktoren of een naaldspits, en de
+woontoren kantelen of een tentdak, naar de bouwstijl van het land (werklijst vraag 114, 2d); eerst natuursteen, en
+baksteen pas als het dorp een steenbakkerij heeft; de kalk en de straatjes zoals op de plaat; en de binnenplaats van
+de herberg krijgt een muur met een poort.
 
 ## Ontwerpcanvas
 

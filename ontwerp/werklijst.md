@@ -3981,6 +3981,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Nu aan Marcel:** a, welke toren krijgt de kapel (zadeldak of naaldspits)? b, welke woontoren (kantelen of
     tentdak)? c, welke steen: zandsteen, baksteen, of eerst zandsteen en baksteen pas met een steenbakkerij? d, de kalk en
     de straatjes zo? e, krijgt de binnenplaats van de herberg een muur met een poort?
+    **Marcel (4 okt): "1. Afwisselen, je stelde eerder voor kleuren per soort land. 2. Zelfde als 1. 3. Ja, baksteen na
+    de steenbakker. 4. Ja prima. 5. Ja graag".** Dus: a en b, allebei, en welke een dorp krijgt, hangt af van zijn land
+    (de bouwstijl per land, 2d hierboven): het ene land bouwt zijn kapel met een zadeldaktoren en zijn woontoren met
+    kantelen, het andere met een naaldspits en een tentdak; c, eerst natuursteen, baksteen pas als het dorp een
+    steenbakkerij heeft (die komt bij marktrecht); d, de kalk en de straatjes zoals op de plaat; e, de binnenplaats van
+    de herberg krijgt een muur met een poort.
     **Daarna, in het spel** (een sessie of twee): de tekeningen in `huizen.cjs` (elk ontwerp in zijn vier standen, de
     daken per trede), een vel per tekening (2d, hierboven), de bouwfasen per vorm, de herberg en de kapel als gebouw uit
     delen (`meetHuis` meet dan de voet en de deur van het geheel), en de woontoren als regel (een stenen huis dat een
