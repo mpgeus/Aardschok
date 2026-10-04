@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (4 okt 2026, eind van de negenentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt (vraag 114, 2a): de browser houdt zo'n 210 MB aan plaatjes vast in plaats van 900, elke tekening pixel voor pixel dezelfde; de proefplaten met meer afwisseling in de huizen, en de herberg, de kapel en de woontoren in verhouding (vraag 114, 2b en 2c), zijn gemaakt en wachten op Marcels keuze; dan ze in het spel, dan tekenen met WebGL, ook op 4K, met een proefversie voor Marcels pc (vraag 123), dan de boeren aan het werk op hun veld (vraag 111), en daarna hoogteverschillen op de kaart (vraag 121: terrassen, die het lopen, het zicht en het bouwen raken)
+## De stand (4 okt 2026, eind van de negenentwintigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt (vraag 114, 2a): de browser houdt zo'n 210 MB aan plaatjes vast in plaats van 900, elke tekening pixel voor pixel dezelfde; de proefplaten met meer afwisseling in de huizen, en de herberg, de kapel en de woontoren in verhouding (vraag 114, 2b en 2c), zijn gemaakt en gekozen; nu de huizen in het spel (eerst een vel per tekening, dan vier bouwstijlen per land, dan de herberg, de kapel en de woontoren), dan tekenen met WebGL, ook op 4K, met een proefversie voor Marcels pc (vraag 123), dan de boeren aan het werk op hun veld (vraag 111), en daarna hoogteverschillen op de kaart (vraag 121: terrassen, die het lopen, het zicht en het bouwen raken)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -43,8 +43,9 @@ van een weg, en het bos om de kaart alleen aan de kant van het bos. Sinds het ei
 lopen (vraag 119, D en A; Marcel: "ja push main"), en sinds de zevenentwintigste sessie het praatje (vraag 120;
 Marcel: "2 ja push main"), en de reparatie van het laden (Marcel: "ja push main"). Sinds de achtentwintigste sessie
 ook het inpakken van de vellen (vraag 114, 2a) en de snelheid via Steam (vraag 122; Marcel: "push main"). De
-proefplaten van de negenentwintigste sessie (vraag 114, 2b en 2c: de huizenbouwer, niets in het spel) staan op de
-branch van die sessie, nog niet in `main`. Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder Git.
+proefplaten van de negenentwintigste sessie (vraag 114, 2b en 2c: de huizenbouwer, niets in het spel) staan er ook in
+(Marcel: "Push alles maar en zet alles op main"). Hoe een eigen branch en `main` samengaan, staat in `CLAUDE.md`, onder
+Git.
 
 **Het lopen is af** (vraag 119, D en A, 4 okt; Marcel: "Je kunt nu eenmaal niet over iemand heen", en "eerst, voor de
 huizen"): een weg gaat om wat vaststaat, wie onderweg een ander treft, wacht, schuift langs hem, laat hem opzij gaan of
@@ -71,12 +72,15 @@ het eerste keer uitzoomen van 290 naar 165 ms. Zie onder Af, en `beeld.md`, "De 
 daken de treden volgen, met kalk in wit, oker en roze), `verhouding` (de hut tot de boerderij, de woontoren met kantelen
 en met een tentdak, de herberg en de kapel zoals ze nu zijn en nieuw, de kapel met een zadeldaktoren en met een
 naaldspits) en `steen` (de kapel en de woontoren in veldsteen, zandsteen en baksteen: Marcel vond de torens "wel wat
-grijzig", en vroeg of er toen al bakstenen waren). Zie `beeld.md`, "De afwisseling en de grote gebouwen", en vraag 114.
+grijzig", en vroeg of er toen al bakstenen waren). Marcel koos: de torenvorm en de natuursteen per land (vier
+bouwstijlen), baksteen na de steenbakkerij, en de herberg met een muur en een poort om de binnenplaats. Zie `beeld.md`,
+"De afwisseling en de grote gebouwen", en vraag 114.
 
-**Waar de volgende sessie begint:** **vraag 114: Marcels keuze op de twee proefplaten** (de vragen a tot d staan bij vraag
-114, onder "Nu aan Marcel"), **en dan de huizen in het spel** (daar ook, onder "Daarna, in het spel": elk ontwerp in vier
-standen, de daken per trede, een vel per tekening, de bouwfasen per vorm, de herberg en de kapel uit delen, de woontoren
-als regel). **Vraag 121 is besloten**
+**Waar de volgende sessie begint:** **vraag 114: de huizen in het spel, stap 1: een vel per tekening** (het plan staat bij
+vraag 114, onder "Plan voor de huizen in het spel"; Marcel koos de proefplaten en het plan, zie daar): elk huis zijn eigen
+plaatje, pas geladen als het op de kaart staat, gemeten ervoor en erna. Dan stap 2, de vier bouwstijlen (de stijl per
+land, met de tekeningen in vier standen, de daken per trede, baksteen na de steenbakkerij), en stap 3, de herberg, de
+kapel en de woontoren. **Vraag 121 is besloten**
 (hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁", en "121 a terrassen, b ja, c na de
 boeren"): terrassen met wanden en hellingen, en de hoogte raakt het lopen, het zicht en het bouwen; na de boeren, vóór
 het eiland. Een proefplaat van de hoogte kan met die van de huizen mee. **Vraag 122** (de snelheid via Steam;
@@ -3987,10 +3991,28 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     kantelen, het andere met een naaldspits en een tentdak; c, eerst natuursteen, baksteen pas als het dorp een
     steenbakkerij heeft (die komt bij marktrecht); d, de kalk en de straatjes zoals op de plaat; e, de binnenplaats van
     de herberg krijgt een muur met een poort.
-    **Daarna, in het spel** (een sessie of twee): de tekeningen in `huizen.cjs` (elk ontwerp in zijn vier standen, de
-    daken per trede), een vel per tekening (2d, hierboven), de bouwfasen per vorm, de herberg en de kapel als gebouw uit
-    delen (`meetHuis` meet dan de voet en de deur van het geheel), en de woontoren als regel (een stenen huis dat een
-    maand alles heeft, groeit door, vanaf marktrecht).
+    **Plan voor de huizen in het spel (Claude, 4 okt, negenentwintigste sessie; een sessie of twee)**, in drie stappen,
+    elk apart te zien en te meten:
+    1. **Een vel per tekening** (eerst, want de snelheid gaat voor alles; 2d hierboven): elk huis zijn eigen plaatje,
+       pas geladen als het op de kaart staat, zoals de bouwfasen (`T.sprites.bouwfase`); tot dan tekent het bleker. Dan
+       kost een tekening die er niet staat geen geheugen, hoeveel het er ook zijn. Klaar als: elke tekening pixel voor
+       pixel dezelfde, en het geheugen en het eerste keer uitzoomen gemeten, ervoor en erna (zoals bij 2a).
+    2. **Vier bouwstijlen, en de tekeningen ervoor** (de stijl per land, 2d): een stijl is de kalk, de luiken, hout of
+       vakwerk, de natuursteen, en de vorm van de kapeltoren en de woontoren: (1) wit vakwerk, groene luiken, veldsteen,
+       zadeldaktoren, kantelen; (2) oker vakwerk, rode luiken, zandsteen, naaldspits, tentdak; (3) planken onder spanen,
+       blauwgrijze luiken, veldsteen, naaldspits, kantelen; (4) roze vakwerk, kale luiken, zandsteen, zadeldaktoren,
+       tentdak. De maker kiest de stijl uit het nummer van het land (`w.maker`), en het ontworpen gehucht houdt zijn
+       eigen huizen. Elk ontwerp in zijn vier standen, zodat een nieuw huis zijn deur naar de weg keert; de daken volgen
+       de trede (riet of spanen, dan leien, dan pannen; `T.volgendeTekening` en `kiesGroei` vragen het aan de trede), en
+       baksteen pas met een steenbakkerij. Zo'n 120 tekeningen per stijl, bijna 500 in totaal (een uur renderen, zo'n
+       30 MB op schijf); een spel laadt er een paar tientallen (stap 1). De bouwfasen per vorm, niet per kleur.
+    3. **De grote gebouwen:** de herberg met stal, binnenplaats, muur en poort; de kapel met de toren van de stijl; de
+       woontoren als regel (een stenen huis dat een maand alles heeft, groeit vanaf marktrecht door tot woontoren, met
+       drie appartementen); en hun bouwfasen. Een gebouw uit delen (`samen`) krijgt zijn voet en zijn deur van het
+       geheel (`meetHuis` in `huizen.cjs`).
+    **Marcel (4 okt): "A. Ja prima voor nu. B. Ja".** Dus vier stijlen zoals hierboven, en de natuursteen hoort bij de
+    stijl (het ene land veldsteen, het andere zandsteen). En: "Push alles maar en zet alles op main dan maak ik nieuwe
+    sessie". De volgende sessie begint met stap 1.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
