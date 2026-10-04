@@ -73,7 +73,8 @@ Chromium-venster draagt de hele browser mee). Met een videokaart tekent allebei 
   wat er op 1920 bij 1080 ook staat. Met hele factoren zie je op elk scherm ongeveer hetzelfde stuk van het land.
 - **Een proefverpakking voor Marcels eigen pc**: een Windows-versie in Electron (een zip, dubbelklikken), zodat hij met
   `F2` op dezelfde plek Firefox en de Steam-versie naast elkaar meet. Alleen zo weten we hoe het op echte machines
-  loopt; hier is geen videokaart.
+  loopt; hier is geen videokaart. **Marcel (4 okt): "Proefversie wil ik als we de draws doen met webgl"**: ze komt
+  met het tekenen met WebGL (werklijst vraag 123).
 - **De meting vast in het gereedschap**: `npm run grootte` ook in de schil, zodat elke groei (meer mensen, het eiland)
   meteen tegen de lat gemeten wordt.
 - Bij het echte verpakken: een Content-Security-Policy in `index.html` (Electron waarschuwt erover zonder).

@@ -74,7 +74,8 @@ het eiland. Een proefplaat van de hoogte kan met die van de huizen mee. **Vraag 
 Marcel: "lag, geheugen tekort etc is geen optie straks") is half besloten: JavaScript en Electron blijven, en haalt het
 spel de lat niet, dan de middenweg (WebGL, dan een Worker of WebAssembly; Marcel: "snelheid, middenweg is goed"). De lat
 geldt op 1920 bij 1080 en op 4K (Marcel: "heb ik zelf"); nog open: 4K tekenen zoals 1920 bij 1080 (c), en een
-proefverpakking voor zijn pc om Firefox en de Steam-versie naast elkaar te meten (b).
+proefverpakking (b), die komt als het spel met WebGL tekent (Marcel: "Proefversie wil ik als we de draws doen met
+webgl"). **Vraag 123** (tekenen met WebGL) wacht op Marcel: het plan, en of het vóór of na de boeren komt.
 **Marcel zei ja** (4 okt) op de woontoren zoals voorgesteld (een stenen huis dat alles heeft, groeit door tot woontoren
 met drie appartementen, vanaf marktrecht) en op de houthakker die hakt en plant (**vraag 115**). De meter in Firefox
 (vraag 113, a) komt van hem. Ook besloten (4 okt): **vraag 116** (beesten in het bos: wolven die de houthakker bedreigen,
@@ -4279,6 +4280,32 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     tekenen op 1920 bij 1080 (of een hele deling van het scherm) en met een hele factor vergroten: hetzelfde beeld voor
     pixel art, een kwart van het werk, en op elk scherm ongeveer hetzelfde stuk van het land (`verpakken.md`). Vraag:
     **c**, zo? En **b** blijft: de proefverpakking nu (dan meet Marcel op zijn eigen 4K-scherm), of in januari?
+    **Marcel (4 okt): "Proefversie wil ik als we de draws doen met webgl".** Dus b: de proefverpakking komt met het
+    tekenen met WebGL (vraag 123), en daarmee de middenweg niet pas als de lat niet gehaald wordt, maar als werk.
+123. **Tekenen met WebGL** (Marcel, 4 okt, achtentwintigste sessie: "Proefversie wil ik als we de draws doen met webgl";
+    na vraag 122, de snelheid via Steam, en de meting op 4K; plan van Claude; open).
+    **Wat er nu is:** het spel tekent met het 2D-doek van de browser: de tekenlaag is `js/tekenen.js`, `js/sprites.js`,
+    `js/doorkijk.js` en `js/iso.js`, zo'n 3.100 regels, met plaatjes (`drawImage`), vlakken, verlopen en samenstelmodi
+    voor de nacht, het licht en de ramen, het raster en het kijkgat van de doorkijk, tekst, en een paar buffers (de grond,
+    het bos). De regels (27.000 regels) tekenen niets. Op 4K tekent het zonder videokaart 15 beelden per seconde.
+    Voorstel:
+    - **a, een eigen kleine WebGL-laag**, zonder bibliotheek (geen afhankelijkheden, gewone scripts): de ingepakte vellen
+      (vraag 114, 2a) worden texturen, en alle plaatjes van een beeld gaan in een paar opdrachten naar de videokaart, in
+      dezelfde volgorde als nu. De nacht, het licht van de lantaarns, de ramen en de gloed worden één bewerking in een
+      shader in plaats van verlopen en samenstelmodi.
+    - **b, 4K zoals 1920 bij 1080** (vraag 122, c): het beeld gaat naar een tussenbuffer op 1920 bij 1080 (of een hele
+      deling van het scherm), en de videokaart vergroot het met een hele factor.
+    - **c, wat klein is, blijft eerst 2D** op een doek erboven: de tekst, de wolkjes, het raster van een gevecht.
+    - **d, het 2D-tekenen blijft als spelregel** ("Tekenen: met de videokaart / zonder"), voor een browser zonder WebGL en
+      om te vergelijken; de proef met vaste schermafdrukken (vraag 114, 2a) kijkt na dat beide hetzelfde tekenen.
+    - **e, dan de proefversie** (Windows, in Electron) voor Marcels 4K-scherm, met `F2`, naast Firefox. Hier is geen
+      videokaart: of het klopt, zien we hier; hoe snel het is, alleen op een echte machine.
+    - **f, hoe groot:** twee à drie sessies. Eerst meten waar het tekenen nu zijn tijd kwijt is, per laag.
+    - **g, wanneer:** na de proefplaat van de huizen (die is tekenwerk in de pixel art-keten, los van het spel) en vóór
+      de boeren (vraag 111): de snelheid gaat voor alles (vraag 113), en wat daarna getekend wordt (de boeren aan het
+      werk, de terrassen van vraag 121), komt dan meteen op de nieuwe laag. Of na de boeren, maar in elk geval vóór de
+      hoogte, want terrassen tekenen en dan overzetten is dubbel werk.
+    Vragen: **a**, dit plan? **g**, vóór of na de boeren?
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
