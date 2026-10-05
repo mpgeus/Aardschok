@@ -194,14 +194,14 @@
     if (reden === 'gesneuveld') T.wijzigVertrouwen(D, -verschil * IN().gesneuveld, 'wie sneuvelde');
   };
 
-  // Betrapt: zijn soldaten vonden wat je verstopte (js/verstoppen.js). De laatste waarschuwing, of meteen weg.
+  // Betrapt: zijn soldaten vonden wat je verstopte (js/verstoppen.js), of zijn inner of zijn soldaten een akker in zijn bos
+  // die niet in zijn boeken stond (js/ontginnen.js; `tekst` zegt wat). De laatste waarschuwing, of meteen weg.
   // Eén keer per dag: vinden ze in één zoektocht twee plekken, dan is dat één keer betrapt.
-  T.betrapt = function (D) {
+  T.betrapt = function (D, tekst = 'zijn soldaten vonden wat je verstopte') {
     if (!T.bazenTellen(D) || D.einde) return;
     const b = bazenVan(D);
     if (b.betraptOp === dagNu(D)) return;
     b.betraptOp = dagNu(D);
-    const tekst = 'zijn soldaten vonden wat je verstopte';
     // Meteen weg (de spelregel), of je had je waarschuwing al: dan is dit de tegenvaller te veel.
     if (IN().betrapt === 'weg' || b.gewaarschuwd.gunst) {
       wijzig(D, 'gunst', -b.gunst, tekst, true);

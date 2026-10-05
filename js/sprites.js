@@ -663,10 +663,13 @@
     spitten: { figuur: 'wieder', houding: 'wieden' },
     mesten: { figuur: 'wieder', houding: 'wieden' },
     ontginnen: { figuur: 'wieder', houding: 'wieden' },
+    // In het bos (js/ontginnen.js, vraag 107, f): een boom omhakken en een stronk rooien, met de bijl.
+    hakken: { figuur: 'hakker', houding: 'hakken' },
+    rooien: { figuur: 'hakker', houding: 'hakken' },
     sprokkelen: { figuur: 'sprokkelaar', houding: 'rapen' },
   };
-  const WERKVELLEN = ['maaier', 'zaaier', 'wieder', 'sprokkelaar'];
-  const VAN_EEN_VROUW = { maaier: 'maaister', zaaier: 'zaaister', wieder: 'wiedster', sprokkelaar: 'sprokkelaarster' };
+  const WERKVELLEN = ['maaier', 'zaaier', 'wieder', 'sprokkelaar', 'hakker'];
+  const VAN_EEN_VROUW = { maaier: 'maaister', zaaier: 'zaaister', wieder: 'wiedster', sprokkelaar: 'sprokkelaarster', hakker: 'hakster' };
   const werkVelVan = (e, naam) => (e.vel === 'boerin' && S.figuurGegevens(VAN_EEN_VROUW[naam]) ? VAN_EEN_VROUW[naam] : naam);
   // Het vel waarmee deze boer of boerin maait (ook voor test/vellen.test.cjs).
   S.maaierVan = (e) => werkVelVan(e, 'maaier');
@@ -702,9 +705,11 @@
     // Kijkrichting: onderweg naar de volgende tegel kijken, anders blijven staan zoals je stond —
     // of, wie een vaste kant op moet kijken zolang hij stilstaat (`e.kijkt`: aan de schandpaal met
     // zijn rug naar de paal, js/heer.js), die kant op. `e.kijkt` kan ook een plek zijn: wie een praatje
-    // maakt, kijkt naar de anderen (js/praatje.js).
+    // maakt, kijkt naar de anderen (js/praatje.js). Wie naast zijn werk staat (een boom die hij omhakt,
+    // e.werkt.op, js/veldwerk.js), kijkt ernaar.
     if (e.pad && e.pad.length) st.richting = S.richtingVan(e.pad[0].x - e.x, e.pad[0].y - e.y);
     else if (dx || dy) st.richting = S.richtingVan(dx, dy);
+    else if (e.werkt && e.werkt.op) st.richting = S.richtingVan(e.werkt.op.x - e.x, e.werkt.op.y - e.y);
     else if (typeof e.kijkt === 'string') st.richting = e.kijkt;
     else if (e.kijkt && (e.kijkt.x !== e.x || e.kijkt.y !== e.y)) st.richting = S.richtingVan(e.kijkt.x - e.x, e.kijkt.y - e.y);
     if (e.uitval) st.richting = S.richtingVan(e.uitval.doel.x - e.x, e.uitval.doel.y - e.y);

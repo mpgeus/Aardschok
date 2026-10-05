@@ -562,8 +562,9 @@
   };
 
   // Zicht langs een lijn van tegelmidden naar tegelmidden (Bresenham). De begin- en
-  // eindtegel tellen niet mee: wie in een deuropening staat, ziet eruit.
-  T.zicht = function (w, a, b) {
+  // eindtegel tellen niet mee: wie in een deuropening staat, ziet eruit. `open(x, y)` (mag ontbreken) zegt welke tegels
+  // het zicht niet houden, wat er ook staat: een stuk bos dat ontgonnen gaat worden, zonder zijn bomen (js/ontginnen.js).
+  T.zicht = function (w, a, b, open) {
     let x = a.x;
     let y = a.y;
     const dx = Math.abs(b.x - x);
@@ -577,21 +578,21 @@
       if (f2 >= dy) { fout += dy; x += sx; }
       if (f2 <= dx) { fout += dx; y += sy; }
       if (x === b.x && y === b.y) return true;
-      if (T.blokkeertZicht(w, x, y)) return false;
+      if (T.blokkeertZicht(w, x, y) && !(open && open(x, y))) return false;
     }
   };
 
   // Een lijn is niet altijd heen en terug dezelfde; zien werkt hier twee kanten op.
-  T.zichtTussen = (w, a, b) => T.zicht(w, a, b) || T.zicht(w, b, a);
+  T.zichtTussen = (w, a, b, open) => T.zicht(w, a, b, open) || T.zicht(w, b, a, open);
 
   // Ziet wie op `van` staat de tegel `naar`, als hij `ver` tegels ver kijkt? Hemelsbreed (een cirkel,
   // geen vierkant) en met niets ertussen. Zo kijken de inner (js/inner.js) en de getuigen (js/zien.js);
   // een monster kijkt nog in een vierkant (T.zoekOntdekking, js/verkennen.js).
-  T.zietTegel = function (w, van, naar, ver) {
+  T.zietTegel = function (w, van, naar, ver, open) {
     const dx = naar.x - van.x;
     const dy = naar.y - van.y;
     if (dx * dx + dy * dy > ver * ver) return false;
-    return !w.tegels || T.zichtTussen(w, van, naar);
+    return !w.tegels || T.zichtTussen(w, van, naar, open);
   };
 
   T.isZichtbaar = function (w, x, y) {

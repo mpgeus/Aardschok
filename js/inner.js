@@ -168,10 +168,16 @@
       nieuw.push(T.GEBOUWEN[g.soort].naam);
     }
     for (const akker of w.akkers || []) {
+      let zag = false;
       for (const t of T.akkerTegels(akker)) {
         const k = sleutel(t.x, t.y);
-        if (!b.tegels.has(k) && ziet(w, van, t.x, t.y, IN().zicht)) b.tegels.add(k);
+        if (!b.tegels.has(k) && ziet(w, van, t.x, t.y, IN().zicht)) {
+          b.tegels.add(k);
+          zag = true;
+        }
       }
+      // Een akker in het bos die niet in de boeken staat (js/ontginnen.js): die schrijft hij op.
+      if (zag && akker.stiekem) T.innerZietBosAkker(D, akker);
     }
     return nieuw;
   };
@@ -223,7 +229,9 @@
       doelen.push({ x: v.x + Math.floor(v.b / 2), y: v.y + Math.floor(v.h / 2), gebouw: g });
     }
     for (const akker of (D.wereld && D.wereld.akkers) || []) {
-      if (overslaan.has(akker)) continue;
+      // Een akker die niet in de boeken staat (stiekem ontgonnen in het bos, js/ontginnen.js), zoekt hij niet: hij weet
+      // er niet van.
+      if (overslaan.has(akker) || !T.inDeBoeken(akker)) continue;
       const tegels = T.akkerTegels(akker);
       const gezien = tegels.filter((t) => b.tegels.has(sleutel(t.x, t.y))).length;
       if (gezien < tegels.length / 2) doelen.push({ x: akker.x + Math.floor(akker.b / 2), y: akker.y + Math.floor(akker.h / 2), akker });

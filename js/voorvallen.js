@@ -166,8 +166,9 @@
     wapenverzoek: { soort: 'verzoek', titel: 'de wapens', zelf: true, roep: '{wie} wil je onder vier ogen spreken.' },
     // En een ondernemer die een tweede herberg wil beginnen; de herbergierster heeft daar een mening over.
     herbergverzoek: { soort: 'verzoek', titel: 'de tweede herberg', zelf: true, roep: '{wie} wil een herberg beginnen, en zoekt je.' },
-    // Een boer wil een stuk heide ontginnen, als het dorp graan tekortkomt (js/ontginnen.js; werklijst vraag 107).
-    ontginverzoek: { soort: 'verzoek', titel: 'de heide', zelf: true, roep: '{wie} wil heide ontginnen, en zoekt je.' },
+    // Een boer wil land ontginnen, als het dorp graan tekortkomt: een stuk heide, een stuk bos, of allebei om uit te kiezen
+    // (js/ontginnen.js; werklijst vraag 107).
+    ontginverzoek: { soort: 'verzoek', titel: 'het ontginnen', zelf: true, roep: '{wie} wil land ontginnen, en zoekt je.' },
     lied: { soort: 'feest', titel: 'het lied over de heer', als: { gebouw: 'herberg' }, wie: { karakter: 'zanger' } },
     // De meiboom (werklijst vraag 97; Marcel, 3 okt: "De meiboom"): niet geloot, maar elk jaar op 30 grasmaand, zodat hij
     // op 1 bloeimaand op het plein staat (js/feesten.js). De jongeren komen het vragen.
@@ -431,10 +432,17 @@
     e.pad = e.onderweg && e.pad.length ? [e.pad[0]] : [];
   }
 
+  // Een voorval kan vlaggen zetten zolang het loopt (L.vlaggen; js/gesprek.js): welke antwoorden er kunnen, zoals bij het
+  // ontginnen (js/ontginnen.js). Als het om is, gaan ze weg.
+  function wisVlaggen(D, L) {
+    for (const v of (L && L.vlaggen) || []) T.wisVlag(D, v);
+  }
+
   // Het voorval is om, zonder dat iets het afmaakt: wie het zei, is weg of dood, of de spelregel staat uit.
   function stop(D) {
     const L = D.voorvallen.lopend;
     if (L && L.wie) laatLos(L.wie.wezen);
+    wisVlaggen(D, L);
     D.voorvallen.lopend = null;
   }
 
@@ -570,6 +578,7 @@
     const V = D.voorvallen;
     if (!V || !V.lopend || V.lopend.id !== id) return;
     laatLos(V.lopend.wie.wezen);
+    wisVlaggen(D, V.lopend);
     V.lopend = null;
     if (door) V.doorRaadsman = (V.doorRaadsman || 0) + 1;
     else V.beantwoord = (V.beantwoord || 0) + 1;
@@ -607,8 +616,8 @@
     // Een bouwverzoek (js/verzoeken.js): ja, en het gebouw komt er; nee, en hij onthoudt het.
     if (doe.bouw && L.bouw) T.verzoekToegestaan(D, L);
     if (doe.weiger && L.bouw) T.verzoekGeweigerd(D, L);
-    // Heide ontginnen (js/ontginnen.js): ja, en het wordt een veld van zijn boerderij.
-    if (doe.ontgin && L.ontgin) T.ontginToegestaan(D, L);
+    // Ontginnen (js/ontginnen.js): ja, de heide of het bos (gemeld of stiekem), en het wordt een veld van zijn boerderij.
+    if (doe.ontgin && L.ontgin) T.ontginToegestaan(D, L, doe.ontgin === true ? 'heide' : doe.ontgin);
     if (doe.voorval && L.wie) {
       const lijst = elk(doe.voorval);
       const id = lijst[Math.floor(lot(D, dag, 41 + V.aantal) * lijst.length)];
@@ -648,8 +657,13 @@
     // Twee bazen (js/bazen.js): wat de heer en het dorp van je vinden, als de spelregel aan staat.
     if (doe.gunst && T.BAZEN_INSTELLINGEN.aan) delen.push(`gunst van de heer ${teken(doe.gunst)}${Math.abs(doe.gunst)}`);
     if (doe.vertrouwen && T.BAZEN_INSTELLINGEN.aan) delen.push(`vertrouwen van het dorp ${teken(doe.vertrouwen)}${Math.abs(doe.vertrouwen)}`);
-    // Heide ontginnen (js/ontginnen.js): het vertrouwen dat dit stuk kost, meer naarmate de meent kleiner wordt.
-    if (doe.ontgin && L.ontgin && L.ontgin.vertrouwen) delen.push(`vertrouwen van het dorp −${L.ontgin.vertrouwen}`);
+    // Ontginnen (js/ontginnen.js): de heide kost vertrouwen, meer naarmate de meent kleiner wordt; het bos de gunst van de
+    // heer, of stiekem het risico; en wat er niet meer is, kan niet.
+    if (doe.ontgin && L.ontgin) {
+      const p = T.ontginPrijs(D, L, doe.ontgin === true ? 'heide' : doe.ontgin);
+      delen.push(...p.delen);
+      if (!p.kan && uit.kan) Object.assign(uit, { kan: false, waarom: p.waarom });
+    }
     // Wie verbannen wordt, gaat het bos in, en wie het bos in gaat, kan als rover terugkomen (js/rovers.js).
     if (doe.verban && L[doe.verban]) delen.push(`${naam(L[doe.verban])} moet het bos in`);
     if (doe.gezin) {

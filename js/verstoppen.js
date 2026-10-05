@@ -362,14 +362,15 @@
     return delen.join(', en ');
   };
 
-  // Het hele dorp, plek voor plek. Geeft wat ze vonden. `getal` (voor een toets) geeft per plek een getal
-  // 0..1 in plaats van het lot.
+  // Het hele dorp, plek voor plek, en de akkers in het bos die niet in de boeken staan (js/ontginnen.js). Geeft wat ze
+  // vonden. `getal` (voor een toets) geeft per plek (of akker) een getal 0..1 in plaats van het lot.
   T.zoekVerstopt = function (D, getal) {
     const gevonden = [];
     for (const p of T.verstopPlekken(D)) {
       const t = T.zoekOpPlek(D, p, getal ? getal(p) : null);
       if (t) gevonden.push(t);
     }
+    gevonden.push(...T.zoekBosAkkers(D, getal));
     return gevonden;
   };
 })(globalThis.Spel = globalThis.Spel || {});

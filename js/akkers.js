@@ -386,8 +386,8 @@
   // 'geploegd', tot er een eigen tekening voor braakland is (onkruid); dat is tekenwerk. Zo vraagt
   // js/tekenen.js het per tegel, en hoeft het zelf niets van bestemmingen te weten.
   T.akkerTegelStadium = function (akker, x, y, basisStadium) {
-    // Een veld dat nog ontgonnen wordt (js/ontginnen.js): wat de boer nog niet stak, is heide.
-    if (akker.ontginning && !T.isGestoken(akker, x, y)) return 'heide';
+    // Een veld dat nog ontgonnen wordt (js/ontginnen.js): wat de boer nog niet af heeft, is nog heide of bos.
+    if (akker.ontginning && !T.isGestoken(akker, x, y)) return akker.ontginning.op || 'heide';
     const bestemming = T.bestemmingVan(akker);
     if (bestemming === 'weide') return 'weide';
     if (bestemming === 'braak' || ongezaaidOp(akker, x, y)) return 'geploegd';

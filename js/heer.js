@@ -150,7 +150,9 @@
     const argwaan = (I && I.argwaan) || 0;
     const INN = T.INNER_INSTELLINGEN;
     const rapport = IN().rekening === 'rapport' && I && I.rapport && !(INN && argwaan >= INN.rapportTeltNietVanaf) ? I.rapport : null;
-    const akkers = (D.wereld && D.wereld.akkers) || [];
+    // De akkers die hij kent: wat stiekem in zijn bos ontgonnen werd en niemand vond, staat niet in zijn boeken
+    // (js/ontginnen.js).
+    const akkers = ((D.wereld && D.wereld.akkers) || []).filter(T.inDeBoeken);
     if (rapport) {
       if (IN().graan === 'deel') tel('graan', rapport.graanGezien * IN().deelVanGraan, `een deel van de ${Math.round(rapport.graanGezien)} graan die Onze inner telde`);
       else if (rapport.tegels) tel('graan', rapport.tegels * IN().pachtPerAkkertegel, `de pacht voor ${rapport.tegels} akkertegels die Onze inner zag`);
@@ -691,6 +693,8 @@
     // Een verboden werkplaats die zijn inner of hijzelf zag, of die zijn soldaten in het hele dorp vonden, straft hij
     // (js/ondernemers.js).
     T.heerVindtVerboden(D, heelDorp);
+    // Een akker in zijn bos die zijn inner zag en die niet in zijn boeken stond: betrapt (js/ontginnen.js).
+    T.heerVindtBosAkkers(D);
     b.wachtTot = dagNu(D) + IN().wachtDagen;
     T.naarGewoneSnelheid(D);
     T.zeg(D, 'De heer staat op het plein en wacht op je.');

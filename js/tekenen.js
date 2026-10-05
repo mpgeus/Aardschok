@@ -409,7 +409,7 @@
             if (!T.isZichtbaar(w, x, y)) continue;
             const stadium = T.akkerTegelStadium(akker, x, y, basis);
             if (stadium === 'weide') continue; // dat is gras, al getekend (tekenWeides hieronder)
-            if (stadium === 'heide') continue; // nog niet ontgonnen (js/ontginnen.js): de heide die er al ligt
+            if (stadium === 'heide' || stadium === 'bos') continue; // nog niet ontgonnen (js/ontginnen.js): wat er al ligt
             const variant = T.akkerVariant(x, y, varianten);
             const p = T.naarScherm(x, y);
             if (stadium === 'groen' || stadium === 'rijp') {
@@ -1153,14 +1153,17 @@
   function tekenVerzoekPlek(ctx, S) {
     const D = T.dorpHier(S);
     const L = D && D.voorvallen && D.voorvallen.lopend;
-    // Heide om te ontginnen (js/ontginnen.js): het stuk in goud, zonder kring.
+    // Land om te ontginnen (js/ontginnen.js): het stuk heide en het stuk bos in goud, zonder kring.
     if (L && L.ontgin && !S.bouwSoort) {
       ctx.fillStyle = 'rgba(226, 182, 74, 0.42)';
-      for (let dy = 0; dy < L.ontgin.h; dy++) {
-        for (let dx = 0; dx < L.ontgin.b; dx++) {
-          const p = T.naarScherm(L.ontgin.x + dx, L.ontgin.y + dy);
-          T.ruit(ctx, p.x, p.y, 0.94);
-          ctx.fill();
+      for (const stuk of [L.ontgin.heide, L.ontgin.bos]) {
+        if (!stuk) continue;
+        for (let dy = 0; dy < stuk.h; dy++) {
+          for (let dx = 0; dx < stuk.b; dx++) {
+            const p = T.naarScherm(stuk.x + dx, stuk.y + dy);
+            T.ruit(ctx, p.x, p.y, 0.94);
+            ctx.fill();
+          }
         }
       }
       return;

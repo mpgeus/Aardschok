@@ -178,20 +178,26 @@
     return n;
   }
 
-  // Heide ontginnen (js/ontginnen.js; werklijst vraag 107): het graan dat het dorp tekortkomt, als tevredenheid
-  // (L.ontgin.nut), tegen het vertrouwen dat het kost (L.ontgin.vertrouwen; dat weegt hij als tevredenheid, want het is
-  // wat het dorp ervan vindt), naar zijn karakter. Het eerste stuk zegt hij ja, een volgend niet: dat laat hij aan jou.
-  function ontginWaarde(p, ontgin) {
+  // Ontginnen (js/ontginnen.js; werklijst vraag 107): het graan dat het dorp tekortkomt, als tevredenheid (L.ontgin.nut),
+  // tegen wat het kost, naar zijn karakter. De heide kost het vertrouwen van het dorp (dat weegt hij als tevredenheid, want
+  // het is wat het dorp ervan vindt): het eerste stuk zegt hij ja, een volgend niet. Het bos melden kost de gunst van de
+  // heer (L.ontgin.gunst); stiekem kost niets, maar weegt hij naar hoe zwaar hij de argwaan van de heer neemt
+  // (stiekemRisico): wie de heer vreest, meldt het, en een heethoofd doet het stiekem (vraag 107, g).
+  function ontginWaarde(p, ontgin, soort) {
     const t = IN().karakters[p.wezen.karakter] || IN().gewoon;
+    const nut = (t.tevreden || 0) * (ontgin.nut || 0);
+    if (soort === 'bos') return nut - (ontgin.gunst || 0);
+    if (soort === 'stiekem') return nut - (t.argwaan || 0) * T.ONTGINNEN_INSTELLINGEN.stiekemRisico;
     return (t.tevreden || 0) * ((ontgin.nut || 0) - (ontgin.vertrouwen || 0));
   }
 
   // De antwoorden die hij kan geven: wat het gesprek sluit, en wat naar een knoop gaat, samen met het eerste antwoord
-  // daar dat het sluit (de oude die eerst een kan bier wil). [{ zeg, doe }].
-  function antwoordenVan(id) {
+  // daar dat het sluit (de oude die eerst een kan bier wil). Alleen wat je zelf ook zou zien (de vlaggen van het dorp, en
+  // van het voorval: js/gesprek.js), zonder je tas: hij beslist zonder jou. [{ zeg, doe }].
+  function antwoordenVan(D, id) {
     const g = T.GESPREKKEN[id];
     const uit = [];
-    for (const k of g.knopen[g.start].keuzes) {
+    for (const k of T.zichtbareKeuzes(null, D, id, g.knopen[g.start].keuzes)) {
       if (k.sluit) uit.push({ zeg: k.zeg, doe: k.doe || {} });
       else {
         const verder = ((g.knopen[k.naar] || {}).keuzes || []).find((x) => x.sluit);
@@ -206,10 +212,10 @@
   T.raadsmanKeuze = function (D, p, id) {
     const L = (D.voorvallen && D.voorvallen.lopend) || {};
     let beste = null;
-    for (const a of antwoordenVan(id)) {
+    for (const a of antwoordenVan(D, id)) {
       const doe = T.metVaardigheden(D, p, a.doe);
       if (!T.prijsVanKeuze(D, doe).kan) continue;
-      const w = waarde(p, doe) + (doe.bouw && L.bouw ? bouwWaarde(p, L.bouw) : 0) + (doe.ontgin && L.ontgin ? ontginWaarde(p, L.ontgin) : 0);
+      const w = waarde(p, doe) + (doe.bouw && L.bouw ? bouwWaarde(p, L.bouw) : 0) + (doe.ontgin && L.ontgin ? ontginWaarde(p, L.ontgin, doe.ontgin) : 0);
       if (!beste || w > beste.w) beste = { zeg: a.zeg, doe, w };
     }
     return beste && { zeg: beste.zeg, doe: beste.doe };

@@ -927,9 +927,11 @@
       }));
       return { datum: `${datum.dagVanMaand} ${T.MAANDEN[datum.maand].naam}, ${T.uurTekst(D.kalender.dag)}`, boeren };
     },
-    // Ontginnen (js/ontginnen.js; werklijst vraag 107): of het dorp graan tekortkomt, welk stuk heide elke boer zou vragen,
-    // hoeveel stukken er al van de meent af gingen en wat het volgende aan vertrouwen kost, wat er nu ontgonnen wordt en
-    // hoe ver, en wanneer er weer een verzoek kan komen. ('nu') laat het verzoek nu komen, ook zonder tekort.
+    // Ontginnen (js/ontginnen.js; werklijst vraag 107): of het dorp graan tekortkomt, welk stuk heide en welk stuk bos
+    // elke boer zou vragen (en of de inner dat stuk bos van zijn ronde ziet), hoeveel stukken er al van de meent af gingen
+    // en wat het volgende aan vertrouwen kost, wat er nu ontgonnen wordt en hoe ver, welke akkers stiekem in het bos liggen
+    // (en of de inner ze zag, of er een paadje heen loopt), en wanneer er weer een verzoek kan komen. ('nu') laat het
+    // verzoek nu komen, ook zonder tekort.
     ontginnen(wat) {
       const D = T.dorpHier(S);
       if (!D || !D.kalender) return 'Ontginnen kan alleen in een dorp.';
@@ -939,22 +941,31 @@
         const echt = T.graanTekort;
         T.graanTekort = () => true;
         const st = D.ontginnen;
-        D.ontginnen = { gevraagd: null, klaar: null };
+        D.ontginnen = { gevraagd: null, klaar: null, gezocht: null };
         try {
-          if (!T.beginOntginverzoek(D, dag)) return 'Er is geen boer met een stuk vrije heide, of er loopt al een voorval.';
+          if (!T.beginOntginverzoek(D, dag)) return 'Er is geen boer met een stuk vrije heide of bos, of er loopt al een voorval.';
         } finally {
           T.graanTekort = echt;
           if (st) Object.assign(D.ontginnen, st);
         }
       }
       const boeren = w.wezens.filter((e) => !e.dood && e.werkAkkers && e.werkAkkers.length);
+      const stuk = (p) => p && `${p.x},${p.y} ${p.b}x${p.h}`;
       return {
         graanTekort: T.graanTekort(D),
-        wieZouVragen: boeren.map((e) => ({ boer: e.naam, stuk: T.ontginPlekVoor(D, e) })),
+        wieZouVragen: boeren.map((e) => {
+          const bos = T.bosPlekVoor(D, e);
+          return { boer: e.naam, heide: stuk(T.ontginPlekVoor(D, e)), bos: bos && `${stuk(bos)}, ${bos.bomen} bomen, ${bos.verborgen ? 'de inner ziet het niet' : 'de inner ziet het'}` };
+        }),
         vanDeMeent: `${T.ontgonnenStukken(w)} stukken; het volgende kost ${T.ontginVertrouwen(D)} vertrouwen`,
         inOntginning: T.inOntginning(w).map((v) => ({
-          veld: v.naam, waar: `${v.x},${v.y} ${v.b}x${v.h}`, gestoken: `${v.ontginning.gestoken.size} van ${v.b * v.h}`,
+          veld: v.naam, waar: stuk(v), op: v.ontginning.op, af: `${v.ontginning.gestoken.size} van ${v.b * v.h}`,
+          bomen: T.akkerTegels(v).filter((t) => T.ontginWerkOp(w, t.x, t.y) === 'hakken').length,
           klaarOp: v.ontginning.tot - dag + ' dagen',
+        })),
+        stiekem: w.akkers.filter((v) => v.stiekem).map((v) => ({
+          veld: v.naam, waar: stuk(v), sinds: v.stiekem.sinds, innerZag: v.stiekem.gezien,
+          paadje: T.paadjeNaar(D, v), soldatenVinden: T.vindKansVanBosAkker(D, v),
         })),
         staat: D.ontginnen || null,
       };
