@@ -9555,6 +9555,4881 @@
      "naam": "half-gedekt"
     }
    ]
+  },
+  "oker-huis2-riet-z": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-huis2-riet-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 990,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 559,
+     "b": 386,
+     "h": 427,
+     "anker": [
+      161,
+      248
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 559,
+     "b": 418,
+     "h": 429,
+     "anker": [
+      177,
+      248
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 469,
+     "y": 0,
+     "b": 450,
+     "h": 557,
+     "anker": [
+      193,
+      376
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 467,
+     "h": 557,
+     "anker": [
+      201,
+      376
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis2-riet-o": {
+   "gebouw": "huis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-huis2-riet-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 994,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 563,
+     "b": 386,
+     "h": 427,
+     "anker": [
+      225,
+      248
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 563,
+     "b": 418,
+     "h": 429,
+     "anker": [
+      241,
+      248
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 469,
+     "y": 0,
+     "b": 450,
+     "h": 561,
+     "anker": [
+      257,
+      380
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 467,
+     "h": 561,
+     "anker": [
+      265,
+      380
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis2-riet-n": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-huis2-riet-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 994,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 563,
+     "b": 386,
+     "h": 427,
+     "anker": [
+      161,
+      248
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 563,
+     "b": 418,
+     "h": 429,
+     "anker": [
+      177,
+      248
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 469,
+     "y": 0,
+     "b": 450,
+     "h": 561,
+     "anker": [
+      193,
+      380
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 467,
+     "h": 561,
+     "anker": [
+      202,
+      380
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis2-riet-w": {
+   "gebouw": "huis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-huis2-riet-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 990,
+     "b": 432,
+     "h": 206,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 559,
+     "b": 386,
+     "h": 427,
+     "anker": [
+      225,
+      248
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 559,
+     "b": 418,
+     "h": 429,
+     "anker": [
+      241,
+      248
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 469,
+     "y": 0,
+     "b": 450,
+     "h": 557,
+     "anker": [
+      257,
+      376
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 467,
+     "h": 557,
+     "anker": [
+      266,
+      376
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis2-leien-z": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-huis2-leien-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 952,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 541,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 541,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 439,
+     "h": 539,
+     "anker": [
+      187,
+      358
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 441,
+     "y": 0,
+     "b": 439,
+     "h": 539,
+     "anker": [
+      187,
+      358
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis2-leien-o": {
+   "gebouw": "huis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-huis2-leien-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 956,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 545,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      225,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 545,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 543,
+     "anker": [
+      252,
+      362
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 543,
+     "anker": [
+      252,
+      362
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis2-leien-n": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-huis2-leien-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 956,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 545,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 545,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 543,
+     "anker": [
+      188,
+      362
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 543,
+     "anker": [
+      188,
+      362
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis2-leien-w": {
+   "gebouw": "huis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-huis2-leien-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 952,
+     "b": 432,
+     "h": 206,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 541,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      225,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 541,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 439,
+     "h": 539,
+     "anker": [
+      252,
+      358
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 441,
+     "y": 0,
+     "b": 439,
+     "h": 539,
+     "anker": [
+      252,
+      358
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis2-pannen-z": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-huis2-pannen-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 914,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 503,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 503,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 501,
+     "anker": [
+      188,
+      320
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 501,
+     "anker": [
+      188,
+      320
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis2-pannen-o": {
+   "gebouw": "huis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-huis2-pannen-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 917,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 506,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      225,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 506,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 504,
+     "anker": [
+      252,
+      323
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 504,
+     "anker": [
+      252,
+      323
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis2-pannen-n": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-huis2-pannen-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 917,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 506,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 506,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 504,
+     "anker": [
+      188,
+      323
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 504,
+     "anker": [
+      188,
+      323
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis2-pannen-w": {
+   "gebouw": "huis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-huis2-pannen-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 914,
+     "b": 432,
+     "h": 206,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 503,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      225,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 503,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 501,
+     "anker": [
+      252,
+      320
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 501,
+     "anker": [
+      252,
+      320
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen2-leien-z": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-steen2-leien-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 952,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 541,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 541,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 439,
+     "h": 539,
+     "anker": [
+      187,
+      358
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 441,
+     "y": 0,
+     "b": 439,
+     "h": 539,
+     "anker": [
+      187,
+      358
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen2-leien-o": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-steen2-leien-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 956,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 545,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      225,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 545,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 543,
+     "anker": [
+      252,
+      362
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 543,
+     "anker": [
+      252,
+      362
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen2-leien-n": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-steen2-leien-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 956,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 545,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 545,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 543,
+     "anker": [
+      188,
+      362
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 543,
+     "anker": [
+      188,
+      362
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen2-leien-w": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-steen2-leien-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 952,
+     "b": 432,
+     "h": 206,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 541,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      225,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 541,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 439,
+     "h": 539,
+     "anker": [
+      252,
+      358
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 441,
+     "y": 0,
+     "b": 439,
+     "h": 539,
+     "anker": [
+      252,
+      358
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen2-pannen-z": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-steen2-pannen-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 914,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 503,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 503,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 501,
+     "anker": [
+      188,
+      320
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 501,
+     "anker": [
+      188,
+      320
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen2-pannen-o": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-steen2-pannen-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 917,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 506,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      225,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 506,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 504,
+     "anker": [
+      252,
+      323
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 504,
+     "anker": [
+      252,
+      323
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen2-pannen-n": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-steen2-pannen-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 917,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 506,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 506,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 504,
+     "anker": [
+      188,
+      323
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 504,
+     "anker": [
+      188,
+      323
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen2-pannen-w": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-steen2-pannen-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 914,
+     "b": 432,
+     "h": 206,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 503,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      225,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 503,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 501,
+     "anker": [
+      252,
+      320
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 501,
+     "anker": [
+      252,
+      320
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen2-baksteen-z": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-steen2-baksteen-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 914,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 503,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 503,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 501,
+     "anker": [
+      188,
+      320
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 501,
+     "anker": [
+      188,
+      320
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen2-baksteen-o": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-steen2-baksteen-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 917,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 506,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      225,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 506,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 504,
+     "anker": [
+      252,
+      323
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 504,
+     "anker": [
+      252,
+      323
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen2-baksteen-n": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-steen2-baksteen-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 917,
+     "b": 431,
+     "h": 206,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 506,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 506,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 504,
+     "anker": [
+      188,
+      323
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 504,
+     "anker": [
+      188,
+      323
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen2-baksteen-w": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-steen2-baksteen-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 914,
+     "b": 432,
+     "h": 206,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 503,
+     "b": 386,
+     "h": 407,
+     "anker": [
+      225,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 503,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 501,
+     "anker": [
+      252,
+      320
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 440,
+     "h": 501,
+     "anker": [
+      252,
+      320
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis4-riet-z": {
+   "gebouw": "huis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-huis4-riet-z.png",
+   "fasen": [
+    {
+     "x": 420,
+     "y": 561,
+     "b": 464,
+     "h": 272,
+     "anker": [
+      303,
+      29
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 561,
+     "b": 418,
+     "h": 437,
+     "anker": [
+      257,
+      194
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1128,
+     "y": 0,
+     "b": 546,
+     "h": 439,
+     "anker": [
+      273,
+      194
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 580,
+     "y": 0,
+     "b": 546,
+     "h": 559,
+     "anker": [
+      273,
+      314
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 578,
+     "h": 559,
+     "anker": [
+      305,
+      314
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis4-riet-o": {
+   "gebouw": "huis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-huis4-riet-o.png",
+   "fasen": [
+    {
+     "x": 520,
+     "y": 503,
+     "b": 559,
+     "h": 222,
+     "anker": [
+      303,
+      -21
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 503,
+     "b": 518,
+     "h": 387,
+     "anker": [
+      261,
+      144
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1149,
+     "y": 0,
+     "b": 546,
+     "h": 398,
+     "anker": [
+      273,
+      153
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 601,
+     "y": 0,
+     "b": 546,
+     "h": 501,
+     "anker": [
+      273,
+      256
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 599,
+     "h": 501,
+     "anker": [
+      301,
+      256
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis4-riet-n": {
+   "gebouw": "huis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-huis4-riet-n.png",
+   "fasen": [
+    {
+     "x": 420,
+     "y": 551,
+     "b": 559,
+     "h": 272,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 551,
+     "b": 418,
+     "h": 437,
+     "anker": [
+      161,
+      192
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1128,
+     "y": 0,
+     "b": 546,
+     "h": 437,
+     "anker": [
+      273,
+      192
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 580,
+     "y": 0,
+     "b": 546,
+     "h": 549,
+     "anker": [
+      273,
+      304
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 578,
+     "h": 549,
+     "anker": [
+      273,
+      304
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis4-riet-w": {
+   "gebouw": "huis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-huis4-riet-w.png",
+   "fasen": [
+    {
+     "x": 520,
+     "y": 521,
+     "b": 563,
+     "h": 222,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 521,
+     "b": 518,
+     "h": 387,
+     "anker": [
+      257,
+      192
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1149,
+     "y": 0,
+     "b": 546,
+     "h": 437,
+     "anker": [
+      273,
+      192
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 601,
+     "y": 0,
+     "b": 546,
+     "h": 519,
+     "anker": [
+      273,
+      274
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 599,
+     "h": 519,
+     "anker": [
+      298,
+      274
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis4-leien-z": {
+   "gebouw": "huis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-huis4-leien-z.png",
+   "fasen": [
+    {
+     "x": 420,
+     "y": 541,
+     "b": 464,
+     "h": 272,
+     "anker": [
+      303,
+      29
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 541,
+     "b": 418,
+     "h": 417,
+     "anker": [
+      257,
+      174
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1110,
+     "y": 0,
+     "b": 546,
+     "h": 419,
+     "anker": [
+      273,
+      174
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 562,
+     "y": 0,
+     "b": 546,
+     "h": 539,
+     "anker": [
+      273,
+      294
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 560,
+     "h": 539,
+     "anker": [
+      287,
+      294
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis4-leien-o": {
+   "gebouw": "huis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-huis4-leien-o.png",
+   "fasen": [
+    {
+     "x": 520,
+     "y": 483,
+     "b": 559,
+     "h": 222,
+     "anker": [
+      303,
+      -21
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 483,
+     "b": 518,
+     "h": 367,
+     "anker": [
+      261,
+      124
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1121,
+     "y": 0,
+     "b": 546,
+     "h": 385,
+     "anker": [
+      273,
+      140
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 573,
+     "y": 0,
+     "b": 546,
+     "h": 481,
+     "anker": [
+      273,
+      236
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 571,
+     "h": 481,
+     "anker": [
+      287,
+      236
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis4-leien-n": {
+   "gebouw": "huis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-huis4-leien-n.png",
+   "fasen": [
+    {
+     "x": 420,
+     "y": 531,
+     "b": 559,
+     "h": 272,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 531,
+     "b": 418,
+     "h": 417,
+     "anker": [
+      161,
+      172
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1110,
+     "y": 0,
+     "b": 546,
+     "h": 417,
+     "anker": [
+      273,
+      172
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 562,
+     "y": 0,
+     "b": 546,
+     "h": 529,
+     "anker": [
+      273,
+      284
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 560,
+     "h": 529,
+     "anker": [
+      273,
+      284
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis4-leien-w": {
+   "gebouw": "huis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-huis4-leien-w.png",
+   "fasen": [
+    {
+     "x": 520,
+     "y": 500,
+     "b": 563,
+     "h": 222,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 500,
+     "b": 518,
+     "h": 367,
+     "anker": [
+      257,
+      172
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1121,
+     "y": 0,
+     "b": 546,
+     "h": 417,
+     "anker": [
+      273,
+      172
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 573,
+     "y": 0,
+     "b": 546,
+     "h": 498,
+     "anker": [
+      273,
+      253
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 571,
+     "h": 498,
+     "anker": [
+      284,
+      253
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis4-pannen-z": {
+   "gebouw": "huis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-huis4-pannen-z.png",
+   "fasen": [
+    {
+     "x": 420,
+     "y": 508,
+     "b": 464,
+     "h": 272,
+     "anker": [
+      303,
+      29
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 508,
+     "b": 418,
+     "h": 417,
+     "anker": [
+      257,
+      174
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1110,
+     "y": 0,
+     "b": 546,
+     "h": 419,
+     "anker": [
+      273,
+      174
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 562,
+     "y": 0,
+     "b": 546,
+     "h": 506,
+     "anker": [
+      273,
+      261
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 560,
+     "h": 506,
+     "anker": [
+      287,
+      261
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis4-pannen-o": {
+   "gebouw": "huis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-huis4-pannen-o.png",
+   "fasen": [
+    {
+     "x": 520,
+     "y": 450,
+     "b": 559,
+     "h": 222,
+     "anker": [
+      303,
+      -21
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 450,
+     "b": 518,
+     "h": 367,
+     "anker": [
+      261,
+      124
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1121,
+     "y": 0,
+     "b": 546,
+     "h": 385,
+     "anker": [
+      273,
+      140
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 573,
+     "y": 0,
+     "b": 546,
+     "h": 448,
+     "anker": [
+      273,
+      203
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 571,
+     "h": 448,
+     "anker": [
+      287,
+      203
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis4-pannen-n": {
+   "gebouw": "huis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-huis4-pannen-n.png",
+   "fasen": [
+    {
+     "x": 420,
+     "y": 498,
+     "b": 559,
+     "h": 272,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 498,
+     "b": 418,
+     "h": 417,
+     "anker": [
+      161,
+      172
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1111,
+     "y": 0,
+     "b": 546,
+     "h": 417,
+     "anker": [
+      273,
+      172
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 563,
+     "y": 0,
+     "b": 546,
+     "h": 496,
+     "anker": [
+      273,
+      251
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 561,
+     "h": 496,
+     "anker": [
+      273,
+      251
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis4-pannen-w": {
+   "gebouw": "huis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-huis4-pannen-w.png",
+   "fasen": [
+    {
+     "x": 520,
+     "y": 466,
+     "b": 563,
+     "h": 222,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 466,
+     "b": 518,
+     "h": 367,
+     "anker": [
+      257,
+      172
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1121,
+     "y": 0,
+     "b": 546,
+     "h": 417,
+     "anker": [
+      273,
+      172
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 573,
+     "y": 0,
+     "b": 546,
+     "h": 464,
+     "anker": [
+      273,
+      219
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 571,
+     "h": 464,
+     "anker": [
+      284,
+      219
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen4-leien-z": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-steen4-leien-z.png",
+   "fasen": [
+    {
+     "x": 420,
+     "y": 541,
+     "b": 464,
+     "h": 272,
+     "anker": [
+      303,
+      29
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 541,
+     "b": 418,
+     "h": 417,
+     "anker": [
+      257,
+      174
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1110,
+     "y": 0,
+     "b": 546,
+     "h": 419,
+     "anker": [
+      273,
+      174
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 562,
+     "y": 0,
+     "b": 546,
+     "h": 539,
+     "anker": [
+      273,
+      294
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 560,
+     "h": 539,
+     "anker": [
+      287,
+      294
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen4-leien-o": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-steen4-leien-o.png",
+   "fasen": [
+    {
+     "x": 520,
+     "y": 483,
+     "b": 559,
+     "h": 222,
+     "anker": [
+      303,
+      -21
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 483,
+     "b": 518,
+     "h": 367,
+     "anker": [
+      261,
+      124
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1121,
+     "y": 0,
+     "b": 546,
+     "h": 385,
+     "anker": [
+      273,
+      140
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 573,
+     "y": 0,
+     "b": 546,
+     "h": 481,
+     "anker": [
+      273,
+      236
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 571,
+     "h": 481,
+     "anker": [
+      287,
+      236
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen4-leien-n": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-steen4-leien-n.png",
+   "fasen": [
+    {
+     "x": 420,
+     "y": 531,
+     "b": 559,
+     "h": 272,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 531,
+     "b": 418,
+     "h": 417,
+     "anker": [
+      161,
+      172
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1110,
+     "y": 0,
+     "b": 546,
+     "h": 417,
+     "anker": [
+      273,
+      172
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 562,
+     "y": 0,
+     "b": 546,
+     "h": 529,
+     "anker": [
+      273,
+      284
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 560,
+     "h": 529,
+     "anker": [
+      273,
+      284
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen4-leien-w": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-steen4-leien-w.png",
+   "fasen": [
+    {
+     "x": 520,
+     "y": 500,
+     "b": 563,
+     "h": 222,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 500,
+     "b": 518,
+     "h": 367,
+     "anker": [
+      257,
+      172
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1121,
+     "y": 0,
+     "b": 546,
+     "h": 417,
+     "anker": [
+      273,
+      172
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 573,
+     "y": 0,
+     "b": 546,
+     "h": 498,
+     "anker": [
+      273,
+      253
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 571,
+     "h": 498,
+     "anker": [
+      284,
+      253
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen4-pannen-z": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-steen4-pannen-z.png",
+   "fasen": [
+    {
+     "x": 420,
+     "y": 508,
+     "b": 464,
+     "h": 272,
+     "anker": [
+      303,
+      29
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 508,
+     "b": 418,
+     "h": 417,
+     "anker": [
+      257,
+      174
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1110,
+     "y": 0,
+     "b": 546,
+     "h": 419,
+     "anker": [
+      273,
+      174
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 562,
+     "y": 0,
+     "b": 546,
+     "h": 506,
+     "anker": [
+      273,
+      261
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 560,
+     "h": 506,
+     "anker": [
+      287,
+      261
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen4-pannen-o": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-steen4-pannen-o.png",
+   "fasen": [
+    {
+     "x": 520,
+     "y": 450,
+     "b": 559,
+     "h": 222,
+     "anker": [
+      303,
+      -21
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 450,
+     "b": 518,
+     "h": 367,
+     "anker": [
+      261,
+      124
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1121,
+     "y": 0,
+     "b": 546,
+     "h": 385,
+     "anker": [
+      273,
+      140
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 573,
+     "y": 0,
+     "b": 546,
+     "h": 448,
+     "anker": [
+      273,
+      203
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 571,
+     "h": 448,
+     "anker": [
+      287,
+      203
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen4-pannen-n": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-steen4-pannen-n.png",
+   "fasen": [
+    {
+     "x": 420,
+     "y": 498,
+     "b": 559,
+     "h": 272,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 498,
+     "b": 418,
+     "h": 417,
+     "anker": [
+      161,
+      172
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1111,
+     "y": 0,
+     "b": 546,
+     "h": 417,
+     "anker": [
+      273,
+      172
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 563,
+     "y": 0,
+     "b": 546,
+     "h": 496,
+     "anker": [
+      273,
+      251
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 561,
+     "h": 496,
+     "anker": [
+      273,
+      251
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen4-pannen-w": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-steen4-pannen-w.png",
+   "fasen": [
+    {
+     "x": 520,
+     "y": 466,
+     "b": 563,
+     "h": 222,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 466,
+     "b": 518,
+     "h": 367,
+     "anker": [
+      257,
+      172
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1121,
+     "y": 0,
+     "b": 546,
+     "h": 417,
+     "anker": [
+      273,
+      172
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 573,
+     "y": 0,
+     "b": 546,
+     "h": 464,
+     "anker": [
+      273,
+      219
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 571,
+     "h": 464,
+     "anker": [
+      284,
+      219
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen4-baksteen-z": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-steen4-baksteen-z.png",
+   "fasen": [
+    {
+     "x": 420,
+     "y": 508,
+     "b": 464,
+     "h": 272,
+     "anker": [
+      303,
+      29
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 508,
+     "b": 418,
+     "h": 417,
+     "anker": [
+      257,
+      174
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1110,
+     "y": 0,
+     "b": 546,
+     "h": 419,
+     "anker": [
+      273,
+      174
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 562,
+     "y": 0,
+     "b": 546,
+     "h": 506,
+     "anker": [
+      273,
+      261
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 560,
+     "h": 506,
+     "anker": [
+      287,
+      261
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen4-baksteen-o": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-steen4-baksteen-o.png",
+   "fasen": [
+    {
+     "x": 520,
+     "y": 450,
+     "b": 559,
+     "h": 222,
+     "anker": [
+      303,
+      -21
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 450,
+     "b": 518,
+     "h": 367,
+     "anker": [
+      261,
+      124
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1121,
+     "y": 0,
+     "b": 546,
+     "h": 385,
+     "anker": [
+      273,
+      140
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 573,
+     "y": 0,
+     "b": 546,
+     "h": 448,
+     "anker": [
+      273,
+      203
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 571,
+     "h": 448,
+     "anker": [
+      287,
+      203
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen4-baksteen-n": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-steen4-baksteen-n.png",
+   "fasen": [
+    {
+     "x": 420,
+     "y": 498,
+     "b": 559,
+     "h": 272,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 498,
+     "b": 418,
+     "h": 417,
+     "anker": [
+      161,
+      172
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1111,
+     "y": 0,
+     "b": 546,
+     "h": 417,
+     "anker": [
+      273,
+      172
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 563,
+     "y": 0,
+     "b": 546,
+     "h": 496,
+     "anker": [
+      273,
+      251
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 561,
+     "h": 496,
+     "anker": [
+      273,
+      251
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen4-baksteen-w": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    8,
+    8
+   ],
+   "bestand": "bouwfasen/oker-steen4-baksteen-w.png",
+   "fasen": [
+    {
+     "x": 520,
+     "y": 466,
+     "b": 563,
+     "h": 222,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 466,
+     "b": 518,
+     "h": 367,
+     "anker": [
+      257,
+      172
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1121,
+     "y": 0,
+     "b": 546,
+     "h": 417,
+     "anker": [
+      273,
+      172
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 573,
+     "y": 0,
+     "b": 546,
+     "h": 464,
+     "anker": [
+      273,
+      219
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 571,
+     "h": 464,
+     "anker": [
+      284,
+      219
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis5-riet-z": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-huis5-riet-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 976,
+     "b": 399,
+     "h": 190,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 545,
+     "b": 354,
+     "h": 411,
+     "anker": [
+      161,
+      248
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 545,
+     "b": 418,
+     "h": 429,
+     "anker": [
+      177,
+      248
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 418,
+     "h": 543,
+     "anker": [
+      177,
+      362
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 543,
+     "anker": [
+      199,
+      362
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis5-riet-o": {
+   "gebouw": "huis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-huis5-riet-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 937,
+     "b": 399,
+     "h": 190,
+     "anker": [
+      271,
+      11
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 522,
+     "b": 354,
+     "h": 411,
+     "anker": [
+      225,
+      232
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 522,
+     "b": 418,
+     "h": 413,
+     "anker": [
+      241,
+      232
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 418,
+     "h": 520,
+     "anker": [
+      241,
+      339
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 520,
+     "anker": [
+      263,
+      339
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis5-riet-n": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-huis5-riet-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 937,
+     "b": 431,
+     "h": 190,
+     "anker": [
+      207,
+      11
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 522,
+     "b": 354,
+     "h": 411,
+     "anker": [
+      129,
+      232
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 522,
+     "b": 418,
+     "h": 413,
+     "anker": [
+      177,
+      232
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 418,
+     "h": 520,
+     "anker": [
+      177,
+      339
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 520,
+     "anker": [
+      177,
+      339
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis5-riet-w": {
+   "gebouw": "huis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-huis5-riet-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 976,
+     "b": 432,
+     "h": 193,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 545,
+     "b": 354,
+     "h": 411,
+     "anker": [
+      193,
+      248
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 545,
+     "b": 418,
+     "h": 429,
+     "anker": [
+      241,
+      248
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 442,
+     "y": 0,
+     "b": 418,
+     "h": 543,
+     "anker": [
+      241,
+      362
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 440,
+     "h": 543,
+     "anker": [
+      241,
+      362
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis5-leien-z": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-huis5-leien-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 936,
+     "b": 399,
+     "h": 190,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 525,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 525,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 523,
+     "anker": [
+      177,
+      342
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 523,
+     "anker": [
+      185,
+      342
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis5-leien-o": {
+   "gebouw": "huis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-huis5-leien-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 897,
+     "b": 399,
+     "h": 190,
+     "anker": [
+      271,
+      11
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 502,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      225,
+      212
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 502,
+     "b": 418,
+     "h": 393,
+     "anker": [
+      241,
+      212
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 500,
+     "anker": [
+      241,
+      319
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 500,
+     "anker": [
+      249,
+      319
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis5-leien-n": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-huis5-leien-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 897,
+     "b": 431,
+     "h": 190,
+     "anker": [
+      207,
+      11
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 502,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      129,
+      212
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 502,
+     "b": 418,
+     "h": 393,
+     "anker": [
+      177,
+      212
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 500,
+     "anker": [
+      177,
+      319
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 500,
+     "anker": [
+      177,
+      319
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis5-leien-w": {
+   "gebouw": "huis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-huis5-leien-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 936,
+     "b": 432,
+     "h": 193,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 525,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      193,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 525,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 523,
+     "anker": [
+      241,
+      342
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 523,
+     "anker": [
+      241,
+      342
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis5-pannen-z": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-huis5-pannen-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 904,
+     "b": 399,
+     "h": 190,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 493,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 493,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 491,
+     "anker": [
+      177,
+      310
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 491,
+     "anker": [
+      185,
+      310
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis5-pannen-o": {
+   "gebouw": "huis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-huis5-pannen-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 864,
+     "b": 399,
+     "h": 190,
+     "anker": [
+      271,
+      11
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 469,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      225,
+      212
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 469,
+     "b": 418,
+     "h": 393,
+     "anker": [
+      241,
+      212
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 467,
+     "anker": [
+      241,
+      286
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 467,
+     "anker": [
+      249,
+      286
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis5-pannen-n": {
+   "gebouw": "huis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-huis5-pannen-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 864,
+     "b": 431,
+     "h": 190,
+     "anker": [
+      207,
+      11
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 469,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      129,
+      212
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 469,
+     "b": 418,
+     "h": 393,
+     "anker": [
+      177,
+      212
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 467,
+     "anker": [
+      177,
+      286
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 467,
+     "anker": [
+      177,
+      286
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-huis5-pannen-w": {
+   "gebouw": "huis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-huis5-pannen-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 904,
+     "b": 432,
+     "h": 193,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 493,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      193,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 493,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 491,
+     "anker": [
+      241,
+      310
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 491,
+     "anker": [
+      241,
+      310
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen5-leien-z": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-steen5-leien-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 936,
+     "b": 399,
+     "h": 190,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 525,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 525,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 523,
+     "anker": [
+      177,
+      342
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 523,
+     "anker": [
+      185,
+      342
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen5-leien-o": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-steen5-leien-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 897,
+     "b": 399,
+     "h": 190,
+     "anker": [
+      271,
+      11
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 502,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      225,
+      212
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 502,
+     "b": 418,
+     "h": 393,
+     "anker": [
+      241,
+      212
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 500,
+     "anker": [
+      241,
+      319
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 500,
+     "anker": [
+      249,
+      319
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen5-leien-n": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-steen5-leien-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 897,
+     "b": 431,
+     "h": 190,
+     "anker": [
+      207,
+      11
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 502,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      129,
+      212
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 502,
+     "b": 418,
+     "h": 393,
+     "anker": [
+      177,
+      212
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 500,
+     "anker": [
+      177,
+      319
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 500,
+     "anker": [
+      177,
+      319
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen5-leien-w": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-steen5-leien-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 936,
+     "b": 432,
+     "h": 193,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 525,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      193,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 525,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 523,
+     "anker": [
+      241,
+      342
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 523,
+     "anker": [
+      241,
+      342
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen5-pannen-z": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-steen5-pannen-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 904,
+     "b": 399,
+     "h": 190,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 493,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 493,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 491,
+     "anker": [
+      177,
+      310
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 491,
+     "anker": [
+      185,
+      310
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen5-pannen-o": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-steen5-pannen-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 864,
+     "b": 399,
+     "h": 190,
+     "anker": [
+      271,
+      11
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 469,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      225,
+      212
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 469,
+     "b": 418,
+     "h": 393,
+     "anker": [
+      241,
+      212
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 467,
+     "anker": [
+      241,
+      286
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 467,
+     "anker": [
+      249,
+      286
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen5-pannen-n": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-steen5-pannen-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 864,
+     "b": 431,
+     "h": 190,
+     "anker": [
+      207,
+      11
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 469,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      129,
+      212
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 469,
+     "b": 418,
+     "h": 393,
+     "anker": [
+      177,
+      212
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 467,
+     "anker": [
+      177,
+      286
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 467,
+     "anker": [
+      177,
+      286
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen5-pannen-w": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-steen5-pannen-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 904,
+     "b": 432,
+     "h": 193,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 493,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      193,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 493,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 491,
+     "anker": [
+      241,
+      310
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 491,
+     "anker": [
+      241,
+      310
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen5-baksteen-z": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-steen5-baksteen-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 904,
+     "b": 399,
+     "h": 190,
+     "anker": [
+      207,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 493,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      161,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 493,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      177,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 491,
+     "anker": [
+      177,
+      310
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 491,
+     "anker": [
+      185,
+      310
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen5-baksteen-o": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-steen5-baksteen-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 864,
+     "b": 399,
+     "h": 190,
+     "anker": [
+      271,
+      11
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 469,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      225,
+      212
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 469,
+     "b": 418,
+     "h": 393,
+     "anker": [
+      241,
+      212
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 467,
+     "anker": [
+      241,
+      286
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 467,
+     "anker": [
+      249,
+      286
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen5-baksteen-n": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    7,
+    5
+   ],
+   "bestand": "bouwfasen/oker-steen5-baksteen-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 864,
+     "b": 431,
+     "h": 190,
+     "anker": [
+      207,
+      11
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 469,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      129,
+      212
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 469,
+     "b": 418,
+     "h": 393,
+     "anker": [
+      177,
+      212
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 467,
+     "anker": [
+      177,
+      286
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 467,
+     "anker": [
+      177,
+      286
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-steen5-baksteen-w": {
+   "gebouw": "stenenHuis",
+   "beslaat": [
+    5,
+    7
+   ],
+   "bestand": "bouwfasen/oker-steen5-baksteen-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 904,
+     "b": 432,
+     "h": 193,
+     "anker": [
+      271,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 420,
+     "y": 493,
+     "b": 354,
+     "h": 391,
+     "anker": [
+      193,
+      228
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 493,
+     "b": 418,
+     "h": 409,
+     "anker": [
+      241,
+      228
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 428,
+     "y": 0,
+     "b": 418,
+     "h": 491,
+     "anker": [
+      241,
+      310
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 426,
+     "h": 491,
+     "anker": [
+      241,
+      310
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-boerderij6-riet-z": {
+   "gebouw": "boerderij",
+   "beslaat": [
+    10,
+    8
+   ],
+   "bestand": "bouwfasen/oker-boerderij6-riet-z.png",
+   "fasen": [
+    {
+     "x": 503,
+     "y": 571,
+     "b": 623,
+     "h": 254,
+     "anker": [
+      303,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 571,
+     "b": 501,
+     "h": 419,
+     "anker": [
+      180,
+      192
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1254,
+     "y": 0,
+     "b": 610,
+     "h": 469,
+     "anker": [
+      273,
+      192
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 635,
+     "y": 0,
+     "b": 617,
+     "h": 569,
+     "anker": [
+      273,
+      292
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 633,
+     "h": 569,
+     "anker": [
+      273,
+      292
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-boerderij6-riet-o": {
+   "gebouw": "boerderij",
+   "beslaat": [
+    8,
+    10
+   ],
+   "bestand": "bouwfasen/oker-boerderij6-riet-o.png",
+   "fasen": [
+    {
+     "x": 484,
+     "y": 578,
+     "b": 528,
+     "h": 264,
+     "anker": [
+      367,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 578,
+     "b": 482,
+     "h": 429,
+     "anker": [
+      321,
+      192
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1256,
+     "y": 0,
+     "b": 610,
+     "h": 469,
+     "anker": [
+      337,
+      192
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 637,
+     "y": 0,
+     "b": 617,
+     "h": 576,
+     "anker": [
+      344,
+      299
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 635,
+     "h": 576,
+     "anker": [
+      362,
+      299
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-boerderij6-riet-n": {
+   "gebouw": "boerderij",
+   "beslaat": [
+    10,
+    8
+   ],
+   "bestand": "bouwfasen/oker-boerderij6-riet-n.png",
+   "fasen": [
+    {
+     "x": 503,
+     "y": 530,
+     "b": 547,
+     "h": 254,
+     "anker": [
+      303,
+      -21
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 530,
+     "b": 501,
+     "h": 419,
+     "anker": [
+      257,
+      144
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1254,
+     "y": 0,
+     "b": 610,
+     "h": 430,
+     "anker": [
+      273,
+      153
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 635,
+     "y": 0,
+     "b": 617,
+     "h": 528,
+     "anker": [
+      280,
+      251
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 633,
+     "h": 528,
+     "anker": [
+      296,
+      251
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
   }
  }
 }
