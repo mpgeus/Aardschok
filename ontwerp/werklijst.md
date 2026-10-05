@@ -3843,6 +3843,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     (stap 2). De houthakker die hakt en plant (115) en de wolven (116) komen na 2b: hun stronken en boompjes zijn
     voorwerpen in `tegels/`. En erbij, als kleine klus: de militie die onderweg niet meevecht (een schout viel alleen
     tegen drie wilde rovers; `0c`, punt 4).
+    **Na de proefplaat van de figuren (5 okt; Marcel: "a ja b ja c nu"):** a, de zaaier, de wieder en de sprokkelaar
+    gaan zo in het spel; b, een boerin krijgt een eigen werkvel (de zaaister, de wiedster, de sprokkelaarster, en ook de
+    maaister, want een boerin die maait, droeg tot nu toe het vel van een man); c, de zwakke punten nu verbeteren: het
+    rapen (hij bukt zo diep dat je van voren alleen zijn hoed en de bundel ziet), de schoffel (leest van sommige kanten
+    als een hamertje) en de hand van de zaaier (een platte peddel; het zaad is stipjes van 2 à 3 pixels).
 112. **Elk spel een ander land: de maker als standaard, wijder, met natuur en meer huizen** (Marcel, 3 okt,
     vijfentwintigste sessie: "Alles moet denk ik ook wijder opgezet worden. En meer variatie in de huizen. Her en der wat
     foliage, bomen, stenen, water. Eigenlijk een random map generator per nieuwe game. Doe is ook wel belangrijk voor de
