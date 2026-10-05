@@ -26133,6 +26133,2931 @@
        "naam": "half-gedekt"
       }
      ]
+    },
+    "roze-huis12-riet-w": {
+     "gebouw": "huis",
+     "beslaat": [
+      8,
+      9
+     ],
+     "bestand": "bouwfasen/roze-huis12-riet-w.png",
+     "fasen": [
+      {
+       "x": 504,
+       "y": 631,
+       "b": 548,
+       "h": 238,
+       "anker": [
+        335,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 631,
+       "b": 502,
+       "h": 459,
+       "anker": [
+        289,
+        248
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1206,
+       "y": 0,
+       "b": 578,
+       "h": 509,
+       "anker": [
+        305,
+        248
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 605,
+       "y": 0,
+       "b": 599,
+       "h": 629,
+       "anker": [
+        326,
+        368
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 603,
+       "h": 629,
+       "anker": [
+        330,
+        368
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-huis12-leien-z": {
+     "gebouw": "huis",
+     "beslaat": [
+      9,
+      8
+     ],
+     "bestand": "bouwfasen/roze-huis12-leien-z.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 579,
+       "b": 496,
+       "h": 264,
+       "anker": [
+        303,
+        5
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 579,
+       "b": 450,
+       "h": 466,
+       "anker": [
+        257,
+        207
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1168,
+       "y": 0,
+       "b": 578,
+       "h": 468,
+       "anker": [
+        273,
+        207
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 588,
+       "y": 0,
+       "b": 578,
+       "h": 577,
+       "anker": [
+        273,
+        316
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 586,
+       "h": 577,
+       "anker": [
+        281,
+        316
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-huis12-leien-o": {
+     "gebouw": "huis",
+     "beslaat": [
+      8,
+      9
+     ],
+     "bestand": "bouwfasen/roze-huis12-leien-o.png",
+     "fasen": [
+      {
+       "x": 504,
+       "y": 570,
+       "b": 591,
+       "h": 238,
+       "anker": [
+        335,
+        -21
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 570,
+       "b": 502,
+       "h": 439,
+       "anker": [
+        245,
+        180
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1170,
+       "y": 0,
+       "b": 578,
+       "h": 441,
+       "anker": [
+        305,
+        180
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 590,
+       "y": 0,
+       "b": 578,
+       "h": 568,
+       "anker": [
+        305,
+        307
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 588,
+       "h": 568,
+       "anker": [
+        305,
+        307
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-huis12-leien-n": {
+     "gebouw": "huis",
+     "beslaat": [
+      9,
+      8
+     ],
+     "bestand": "bouwfasen/roze-huis12-leien-n.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 618,
+       "b": 591,
+       "h": 264,
+       "anker": [
+        303,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 618,
+       "b": 450,
+       "h": 465,
+       "anker": [
+        161,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1168,
+       "y": 0,
+       "b": 578,
+       "h": 489,
+       "anker": [
+        273,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 588,
+       "y": 0,
+       "b": 578,
+       "h": 616,
+       "anker": [
+        273,
+        355
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 586,
+       "h": 616,
+       "anker": [
+        273,
+        355
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-huis12-leien-w": {
+     "gebouw": "huis",
+     "beslaat": [
+      8,
+      9
+     ],
+     "bestand": "bouwfasen/roze-huis12-leien-w.png",
+     "fasen": [
+      {
+       "x": 504,
+       "y": 612,
+       "b": 548,
+       "h": 238,
+       "anker": [
+        335,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 612,
+       "b": 502,
+       "h": 439,
+       "anker": [
+        289,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1170,
+       "y": 0,
+       "b": 578,
+       "h": 489,
+       "anker": [
+        305,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 590,
+       "y": 0,
+       "b": 578,
+       "h": 610,
+       "anker": [
+        305,
+        349
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 588,
+       "h": 610,
+       "anker": [
+        315,
+        349
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-huis12-pannen-z": {
+     "gebouw": "huis",
+     "beslaat": [
+      9,
+      8
+     ],
+     "bestand": "bouwfasen/roze-huis12-pannen-z.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 549,
+       "b": 496,
+       "h": 264,
+       "anker": [
+        303,
+        5
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 549,
+       "b": 450,
+       "h": 466,
+       "anker": [
+        257,
+        207
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1169,
+       "y": 0,
+       "b": 578,
+       "h": 468,
+       "anker": [
+        273,
+        207
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 589,
+       "y": 0,
+       "b": 578,
+       "h": 547,
+       "anker": [
+        273,
+        286
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 587,
+       "h": 547,
+       "anker": [
+        282,
+        286
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-huis12-pannen-o": {
+     "gebouw": "huis",
+     "beslaat": [
+      8,
+      9
+     ],
+     "bestand": "bouwfasen/roze-huis12-pannen-o.png",
+     "fasen": [
+      {
+       "x": 504,
+       "y": 534,
+       "b": 591,
+       "h": 238,
+       "anker": [
+        335,
+        -21
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 534,
+       "b": 502,
+       "h": 439,
+       "anker": [
+        245,
+        180
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1170,
+       "y": 0,
+       "b": 578,
+       "h": 441,
+       "anker": [
+        305,
+        180
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 590,
+       "y": 0,
+       "b": 578,
+       "h": 532,
+       "anker": [
+        305,
+        271
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 588,
+       "h": 532,
+       "anker": [
+        305,
+        271
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-huis12-pannen-n": {
+     "gebouw": "huis",
+     "beslaat": [
+      9,
+      8
+     ],
+     "bestand": "bouwfasen/roze-huis12-pannen-n.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 582,
+       "b": 591,
+       "h": 264,
+       "anker": [
+        303,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 582,
+       "b": 450,
+       "h": 465,
+       "anker": [
+        161,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1169,
+       "y": 0,
+       "b": 578,
+       "h": 489,
+       "anker": [
+        273,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 589,
+       "y": 0,
+       "b": 578,
+       "h": 580,
+       "anker": [
+        273,
+        319
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 587,
+       "h": 580,
+       "anker": [
+        273,
+        319
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-huis12-pannen-w": {
+     "gebouw": "huis",
+     "beslaat": [
+      8,
+      9
+     ],
+     "bestand": "bouwfasen/roze-huis12-pannen-w.png",
+     "fasen": [
+      {
+       "x": 504,
+       "y": 576,
+       "b": 548,
+       "h": 238,
+       "anker": [
+        335,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 576,
+       "b": 502,
+       "h": 439,
+       "anker": [
+        289,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1170,
+       "y": 0,
+       "b": 578,
+       "h": 489,
+       "anker": [
+        305,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 590,
+       "y": 0,
+       "b": 578,
+       "h": 574,
+       "anker": [
+        305,
+        313
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 588,
+       "h": 574,
+       "anker": [
+        315,
+        313
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-steen12-leien-z": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      9,
+      8
+     ],
+     "bestand": "bouwfasen/roze-steen12-leien-z.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 579,
+       "b": 496,
+       "h": 264,
+       "anker": [
+        303,
+        5
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 579,
+       "b": 450,
+       "h": 466,
+       "anker": [
+        257,
+        207
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1168,
+       "y": 0,
+       "b": 578,
+       "h": 468,
+       "anker": [
+        273,
+        207
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 588,
+       "y": 0,
+       "b": 578,
+       "h": 577,
+       "anker": [
+        273,
+        316
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 586,
+       "h": 577,
+       "anker": [
+        281,
+        316
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-steen12-leien-o": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      8,
+      9
+     ],
+     "bestand": "bouwfasen/roze-steen12-leien-o.png",
+     "fasen": [
+      {
+       "x": 504,
+       "y": 570,
+       "b": 591,
+       "h": 238,
+       "anker": [
+        335,
+        -21
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 570,
+       "b": 502,
+       "h": 439,
+       "anker": [
+        245,
+        180
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1170,
+       "y": 0,
+       "b": 578,
+       "h": 441,
+       "anker": [
+        305,
+        180
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 590,
+       "y": 0,
+       "b": 578,
+       "h": 568,
+       "anker": [
+        305,
+        307
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 588,
+       "h": 568,
+       "anker": [
+        305,
+        307
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-steen12-leien-n": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      9,
+      8
+     ],
+     "bestand": "bouwfasen/roze-steen12-leien-n.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 618,
+       "b": 591,
+       "h": 264,
+       "anker": [
+        303,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 618,
+       "b": 450,
+       "h": 465,
+       "anker": [
+        161,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1168,
+       "y": 0,
+       "b": 578,
+       "h": 489,
+       "anker": [
+        273,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 588,
+       "y": 0,
+       "b": 578,
+       "h": 616,
+       "anker": [
+        273,
+        355
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 586,
+       "h": 616,
+       "anker": [
+        273,
+        355
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-steen12-leien-w": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      8,
+      9
+     ],
+     "bestand": "bouwfasen/roze-steen12-leien-w.png",
+     "fasen": [
+      {
+       "x": 504,
+       "y": 612,
+       "b": 548,
+       "h": 238,
+       "anker": [
+        335,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 612,
+       "b": 502,
+       "h": 439,
+       "anker": [
+        289,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1170,
+       "y": 0,
+       "b": 578,
+       "h": 489,
+       "anker": [
+        305,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 590,
+       "y": 0,
+       "b": 578,
+       "h": 610,
+       "anker": [
+        305,
+        349
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 588,
+       "h": 610,
+       "anker": [
+        315,
+        349
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-steen12-pannen-z": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      9,
+      8
+     ],
+     "bestand": "bouwfasen/roze-steen12-pannen-z.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 549,
+       "b": 496,
+       "h": 264,
+       "anker": [
+        303,
+        5
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 549,
+       "b": 450,
+       "h": 466,
+       "anker": [
+        257,
+        207
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1169,
+       "y": 0,
+       "b": 578,
+       "h": 468,
+       "anker": [
+        273,
+        207
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 589,
+       "y": 0,
+       "b": 578,
+       "h": 547,
+       "anker": [
+        273,
+        286
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 587,
+       "h": 547,
+       "anker": [
+        282,
+        286
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-steen12-pannen-o": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      8,
+      9
+     ],
+     "bestand": "bouwfasen/roze-steen12-pannen-o.png",
+     "fasen": [
+      {
+       "x": 504,
+       "y": 534,
+       "b": 591,
+       "h": 238,
+       "anker": [
+        335,
+        -21
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 534,
+       "b": 502,
+       "h": 439,
+       "anker": [
+        245,
+        180
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1170,
+       "y": 0,
+       "b": 578,
+       "h": 441,
+       "anker": [
+        305,
+        180
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 590,
+       "y": 0,
+       "b": 578,
+       "h": 532,
+       "anker": [
+        305,
+        271
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 588,
+       "h": 532,
+       "anker": [
+        305,
+        271
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-steen12-pannen-n": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      9,
+      8
+     ],
+     "bestand": "bouwfasen/roze-steen12-pannen-n.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 582,
+       "b": 591,
+       "h": 264,
+       "anker": [
+        303,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 582,
+       "b": 450,
+       "h": 465,
+       "anker": [
+        161,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1169,
+       "y": 0,
+       "b": 578,
+       "h": 489,
+       "anker": [
+        273,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 589,
+       "y": 0,
+       "b": 578,
+       "h": 580,
+       "anker": [
+        273,
+        319
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 587,
+       "h": 580,
+       "anker": [
+        273,
+        319
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-steen12-pannen-w": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      8,
+      9
+     ],
+     "bestand": "bouwfasen/roze-steen12-pannen-w.png",
+     "fasen": [
+      {
+       "x": 504,
+       "y": 576,
+       "b": 548,
+       "h": 238,
+       "anker": [
+        335,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 576,
+       "b": 502,
+       "h": 439,
+       "anker": [
+        289,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1170,
+       "y": 0,
+       "b": 578,
+       "h": 489,
+       "anker": [
+        305,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 590,
+       "y": 0,
+       "b": 578,
+       "h": 574,
+       "anker": [
+        305,
+        313
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 588,
+       "h": 574,
+       "anker": [
+        315,
+        313
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-steen12-baksteen-z": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      9,
+      8
+     ],
+     "bestand": "bouwfasen/roze-steen12-baksteen-z.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 549,
+       "b": 496,
+       "h": 264,
+       "anker": [
+        303,
+        5
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 549,
+       "b": 450,
+       "h": 466,
+       "anker": [
+        257,
+        207
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1169,
+       "y": 0,
+       "b": 578,
+       "h": 468,
+       "anker": [
+        273,
+        207
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 589,
+       "y": 0,
+       "b": 578,
+       "h": 547,
+       "anker": [
+        273,
+        286
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 587,
+       "h": 547,
+       "anker": [
+        282,
+        286
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-steen12-baksteen-o": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      8,
+      9
+     ],
+     "bestand": "bouwfasen/roze-steen12-baksteen-o.png",
+     "fasen": [
+      {
+       "x": 504,
+       "y": 534,
+       "b": 591,
+       "h": 238,
+       "anker": [
+        335,
+        -21
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 534,
+       "b": 502,
+       "h": 439,
+       "anker": [
+        245,
+        180
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1170,
+       "y": 0,
+       "b": 578,
+       "h": 441,
+       "anker": [
+        305,
+        180
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 590,
+       "y": 0,
+       "b": 578,
+       "h": 532,
+       "anker": [
+        305,
+        271
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 588,
+       "h": 532,
+       "anker": [
+        305,
+        271
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-steen12-baksteen-n": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      9,
+      8
+     ],
+     "bestand": "bouwfasen/roze-steen12-baksteen-n.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 582,
+       "b": 591,
+       "h": 264,
+       "anker": [
+        303,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 582,
+       "b": 450,
+       "h": 465,
+       "anker": [
+        161,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1169,
+       "y": 0,
+       "b": 578,
+       "h": 489,
+       "anker": [
+        273,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 589,
+       "y": 0,
+       "b": 578,
+       "h": 580,
+       "anker": [
+        273,
+        319
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 587,
+       "h": 580,
+       "anker": [
+        273,
+        319
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-steen12-baksteen-w": {
+     "gebouw": "stenenHuis",
+     "beslaat": [
+      8,
+      9
+     ],
+     "bestand": "bouwfasen/roze-steen12-baksteen-w.png",
+     "fasen": [
+      {
+       "x": 504,
+       "y": 576,
+       "b": 548,
+       "h": 238,
+       "anker": [
+        335,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 576,
+       "b": 502,
+       "h": 439,
+       "anker": [
+        289,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1170,
+       "y": 0,
+       "b": 578,
+       "h": 489,
+       "anker": [
+        305,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 590,
+       "y": 0,
+       "b": 578,
+       "h": 574,
+       "anker": [
+        305,
+        313
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 588,
+       "h": 574,
+       "anker": [
+        315,
+        313
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij8-riet-z": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      9,
+      7
+     ],
+     "bestand": "bouwfasen/roze-boerderij8-riet-z.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 557,
+       "b": 496,
+       "h": 269,
+       "anker": [
+        271,
+        26
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 557,
+       "b": 450,
+       "h": 434,
+       "anker": [
+        225,
+        191
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1154,
+       "y": 0,
+       "b": 546,
+       "h": 436,
+       "anker": [
+        241,
+        191
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 585,
+       "y": 0,
+       "b": 567,
+       "h": 555,
+       "anker": [
+        262,
+        310
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 583,
+       "h": 555,
+       "anker": [
+        278,
+        310
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij8-riet-o": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      7,
+      9
+     ],
+     "bestand": "bouwfasen/roze-boerderij8-riet-o.png",
+     "fasen": [
+      {
+       "x": 513,
+       "y": 518,
+       "b": 559,
+       "h": 238,
+       "anker": [
+        335,
+        -5
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 518,
+       "b": 511,
+       "h": 403,
+       "anker": [
+        286,
+        160
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1175,
+       "y": 0,
+       "b": 546,
+       "h": 405,
+       "anker": [
+        305,
+        160
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 596,
+       "y": 0,
+       "b": 577,
+       "h": 516,
+       "anker": [
+        315,
+        271
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 594,
+       "h": 516,
+       "anker": [
+        327,
+        271
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij8-riet-n": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      9,
+      7
+     ],
+     "bestand": "bouwfasen/roze-boerderij8-riet-n.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 550,
+       "b": 559,
+       "h": 268,
+       "anker": [
+        271,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 550,
+       "b": 450,
+       "h": 433,
+       "anker": [
+        161,
+        192
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1155,
+       "y": 0,
+       "b": 546,
+       "h": 437,
+       "anker": [
+        241,
+        192
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 586,
+       "y": 0,
+       "b": 567,
+       "h": 548,
+       "anker": [
+        241,
+        303
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 584,
+       "h": 548,
+       "anker": [
+        241,
+        303
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij8-riet-w": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      7,
+      9
+     ],
+     "bestand": "bouwfasen/roze-boerderij8-riet-w.png",
+     "fasen": [
+      {
+       "x": 513,
+       "y": 523,
+       "b": 557,
+       "h": 238,
+       "anker": [
+        335,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 523,
+       "b": 511,
+       "h": 403,
+       "anker": [
+        289,
+        192
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1175,
+       "y": 0,
+       "b": 546,
+       "h": 437,
+       "anker": [
+        305,
+        192
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 596,
+       "y": 0,
+       "b": 577,
+       "h": 521,
+       "anker": [
+        326,
+        276
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 594,
+       "h": 521,
+       "anker": [
+        331,
+        276
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij8-leien-z": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      9,
+      7
+     ],
+     "bestand": "bouwfasen/roze-boerderij8-leien-z.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 537,
+       "b": 496,
+       "h": 269,
+       "anker": [
+        271,
+        26
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 537,
+       "b": 450,
+       "h": 414,
+       "anker": [
+        225,
+        171
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1116,
+       "y": 0,
+       "b": 546,
+       "h": 416,
+       "anker": [
+        241,
+        171
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 568,
+       "y": 0,
+       "b": 546,
+       "h": 535,
+       "anker": [
+        241,
+        290
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 566,
+       "h": 535,
+       "anker": [
+        261,
+        290
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij8-leien-o": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      7,
+      9
+     ],
+     "bestand": "bouwfasen/roze-boerderij8-leien-o.png",
+     "fasen": [
+      {
+       "x": 513,
+       "y": 498,
+       "b": 559,
+       "h": 238,
+       "anker": [
+        335,
+        -5
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 498,
+       "b": 511,
+       "h": 383,
+       "anker": [
+        286,
+        140
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1119,
+       "y": 0,
+       "b": 546,
+       "h": 385,
+       "anker": [
+        305,
+        140
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 567,
+       "y": 0,
+       "b": 550,
+       "h": 496,
+       "anker": [
+        309,
+        251
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 565,
+       "h": 496,
+       "anker": [
+        312,
+        251
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij8-leien-n": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      9,
+      7
+     ],
+     "bestand": "bouwfasen/roze-boerderij8-leien-n.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 530,
+       "b": 559,
+       "h": 268,
+       "anker": [
+        271,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 530,
+       "b": 450,
+       "h": 413,
+       "anker": [
+        161,
+        172
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1116,
+       "y": 0,
+       "b": 546,
+       "h": 417,
+       "anker": [
+        241,
+        172
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 568,
+       "y": 0,
+       "b": 546,
+       "h": 528,
+       "anker": [
+        241,
+        283
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 566,
+       "h": 528,
+       "anker": [
+        241,
+        283
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij8-leien-w": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      7,
+      9
+     ],
+     "bestand": "bouwfasen/roze-boerderij8-leien-w.png",
+     "fasen": [
+      {
+       "x": 513,
+       "y": 500,
+       "b": 557,
+       "h": 238,
+       "anker": [
+        335,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 500,
+       "b": 511,
+       "h": 383,
+       "anker": [
+        289,
+        172
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1120,
+       "y": 0,
+       "b": 546,
+       "h": 417,
+       "anker": [
+        305,
+        172
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 568,
+       "y": 0,
+       "b": 550,
+       "h": 498,
+       "anker": [
+        305,
+        253
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 566,
+       "h": 498,
+       "anker": [
+        317,
+        253
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij8-pannen-z": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      9,
+      7
+     ],
+     "bestand": "bouwfasen/roze-boerderij8-pannen-z.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 504,
+       "b": 496,
+       "h": 269,
+       "anker": [
+        271,
+        26
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 504,
+       "b": 450,
+       "h": 414,
+       "anker": [
+        225,
+        171
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1117,
+       "y": 0,
+       "b": 546,
+       "h": 416,
+       "anker": [
+        241,
+        171
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 569,
+       "y": 0,
+       "b": 546,
+       "h": 502,
+       "anker": [
+        241,
+        257
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 567,
+       "h": 502,
+       "anker": [
+        262,
+        257
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij8-pannen-o": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      7,
+      9
+     ],
+     "bestand": "bouwfasen/roze-boerderij8-pannen-o.png",
+     "fasen": [
+      {
+       "x": 513,
+       "y": 466,
+       "b": 559,
+       "h": 238,
+       "anker": [
+        335,
+        -5
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 466,
+       "b": 511,
+       "h": 383,
+       "anker": [
+        286,
+        140
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1121,
+       "y": 0,
+       "b": 546,
+       "h": 385,
+       "anker": [
+        305,
+        140
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 567,
+       "y": 0,
+       "b": 552,
+       "h": 464,
+       "anker": [
+        311,
+        219
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 565,
+       "h": 464,
+       "anker": [
+        312,
+        219
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij8-pannen-n": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      9,
+      7
+     ],
+     "bestand": "bouwfasen/roze-boerderij8-pannen-n.png",
+     "fasen": [
+      {
+       "x": 452,
+       "y": 498,
+       "b": 559,
+       "h": 268,
+       "anker": [
+        271,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 498,
+       "b": 450,
+       "h": 413,
+       "anker": [
+        161,
+        172
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1117,
+       "y": 0,
+       "b": 546,
+       "h": 417,
+       "anker": [
+        241,
+        172
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 569,
+       "y": 0,
+       "b": 546,
+       "h": 496,
+       "anker": [
+        241,
+        251
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 567,
+       "h": 496,
+       "anker": [
+        241,
+        251
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij8-pannen-w": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      7,
+      9
+     ],
+     "bestand": "bouwfasen/roze-boerderij8-pannen-w.png",
+     "fasen": [
+      {
+       "x": 513,
+       "y": 468,
+       "b": 557,
+       "h": 238,
+       "anker": [
+        335,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 468,
+       "b": 511,
+       "h": 383,
+       "anker": [
+        289,
+        172
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1121,
+       "y": 0,
+       "b": 546,
+       "h": 417,
+       "anker": [
+        305,
+        172
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 567,
+       "y": 0,
+       "b": 552,
+       "h": 466,
+       "anker": [
+        305,
+        221
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 565,
+       "h": 466,
+       "anker": [
+        317,
+        221
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij9-riet-z": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      10,
+      6
+     ],
+     "bestand": "bouwfasen/roze-boerderij9-riet-z.png",
+     "fasen": [
+      {
+       "x": 516,
+       "y": 631,
+       "b": 559,
+       "h": 270,
+       "anker": [
+        239,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 631,
+       "b": 514,
+       "h": 491,
+       "anker": [
+        193,
+        248
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1158,
+       "y": 0,
+       "b": 546,
+       "h": 493,
+       "anker": [
+        209,
+        248
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 596,
+       "y": 0,
+       "b": 560,
+       "h": 629,
+       "anker": [
+        216,
+        384
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 594,
+       "h": 629,
+       "anker": [
+        235,
+        384
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij9-riet-o": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      6,
+      10
+     ],
+     "bestand": "bouwfasen/roze-boerderij9-riet-o.png",
+     "fasen": [
+      {
+       "x": 516,
+       "y": 636,
+       "b": 560,
+       "h": 270,
+       "anker": [
+        367,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 636,
+       "b": 514,
+       "h": 491,
+       "anker": [
+        321,
+        248
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1158,
+       "y": 0,
+       "b": 546,
+       "h": 493,
+       "anker": [
+        337,
+        248
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 596,
+       "y": 0,
+       "b": 560,
+       "h": 634,
+       "anker": [
+        344,
+        389
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 594,
+       "h": 634,
+       "anker": [
+        363,
+        389
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij9-riet-n": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      10,
+      6
+     ],
+     "bestand": "bouwfasen/roze-boerderij9-riet-n.png",
+     "fasen": [
+      {
+       "x": 516,
+       "y": 636,
+       "b": 559,
+       "h": 270,
+       "anker": [
+        239,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 636,
+       "b": 514,
+       "h": 491,
+       "anker": [
+        193,
+        248
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1158,
+       "y": 0,
+       "b": 546,
+       "h": 493,
+       "anker": [
+        209,
+        248
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 596,
+       "y": 0,
+       "b": 560,
+       "h": 634,
+       "anker": [
+        216,
+        389
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 594,
+       "h": 634,
+       "anker": [
+        231,
+        389
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij9-riet-w": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      6,
+      10
+     ],
+     "bestand": "bouwfasen/roze-boerderij9-riet-w.png",
+     "fasen": [
+      {
+       "x": 516,
+       "y": 631,
+       "b": 559,
+       "h": 270,
+       "anker": [
+        367,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 631,
+       "b": 514,
+       "h": 491,
+       "anker": [
+        321,
+        248
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1158,
+       "y": 0,
+       "b": 546,
+       "h": 493,
+       "anker": [
+        337,
+        248
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 596,
+       "y": 0,
+       "b": 560,
+       "h": 629,
+       "anker": [
+        344,
+        384
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 594,
+       "h": 629,
+       "anker": [
+        359,
+        384
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij9-leien-z": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      10,
+      6
+     ],
+     "bestand": "bouwfasen/roze-boerderij9-leien-z.png",
+     "fasen": [
+      {
+       "x": 516,
+       "y": 613,
+       "b": 559,
+       "h": 270,
+       "anker": [
+        239,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 613,
+       "b": 514,
+       "h": 471,
+       "anker": [
+        193,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1119,
+       "y": 0,
+       "b": 546,
+       "h": 473,
+       "anker": [
+        209,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 568,
+       "y": 0,
+       "b": 549,
+       "h": 611,
+       "anker": [
+        212,
+        366
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 566,
+       "h": 611,
+       "anker": [
+        221,
+        366
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij9-leien-o": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      6,
+      10
+     ],
+     "bestand": "bouwfasen/roze-boerderij9-leien-o.png",
+     "fasen": [
+      {
+       "x": 516,
+       "y": 618,
+       "b": 560,
+       "h": 270,
+       "anker": [
+        367,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 618,
+       "b": 514,
+       "h": 471,
+       "anker": [
+        321,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1119,
+       "y": 0,
+       "b": 546,
+       "h": 473,
+       "anker": [
+        337,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 568,
+       "y": 0,
+       "b": 549,
+       "h": 616,
+       "anker": [
+        340,
+        371
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 566,
+       "h": 616,
+       "anker": [
+        349,
+        371
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij9-leien-n": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      10,
+      6
+     ],
+     "bestand": "bouwfasen/roze-boerderij9-leien-n.png",
+     "fasen": [
+      {
+       "x": 516,
+       "y": 618,
+       "b": 559,
+       "h": 270,
+       "anker": [
+        239,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 618,
+       "b": 514,
+       "h": 471,
+       "anker": [
+        193,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1119,
+       "y": 0,
+       "b": 546,
+       "h": 473,
+       "anker": [
+        209,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 568,
+       "y": 0,
+       "b": 549,
+       "h": 616,
+       "anker": [
+        209,
+        371
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 566,
+       "h": 616,
+       "anker": [
+        217,
+        371
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij9-leien-w": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      6,
+      10
+     ],
+     "bestand": "bouwfasen/roze-boerderij9-leien-w.png",
+     "fasen": [
+      {
+       "x": 516,
+       "y": 613,
+       "b": 559,
+       "h": 270,
+       "anker": [
+        367,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 613,
+       "b": 514,
+       "h": 471,
+       "anker": [
+        321,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1119,
+       "y": 0,
+       "b": 546,
+       "h": 473,
+       "anker": [
+        337,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 568,
+       "y": 0,
+       "b": 549,
+       "h": 611,
+       "anker": [
+        337,
+        366
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 566,
+       "h": 611,
+       "anker": [
+        345,
+        366
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij9-pannen-z": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      10,
+      6
+     ],
+     "bestand": "bouwfasen/roze-boerderij9-pannen-z.png",
+     "fasen": [
+      {
+       "x": 516,
+       "y": 571,
+       "b": 559,
+       "h": 270,
+       "anker": [
+        239,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 571,
+       "b": 514,
+       "h": 471,
+       "anker": [
+        193,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1119,
+       "y": 0,
+       "b": 546,
+       "h": 473,
+       "anker": [
+        209,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 567,
+       "y": 0,
+       "b": 550,
+       "h": 569,
+       "anker": [
+        213,
+        324
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 565,
+       "h": 569,
+       "anker": [
+        220,
+        324
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij9-pannen-o": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      6,
+      10
+     ],
+     "bestand": "bouwfasen/roze-boerderij9-pannen-o.png",
+     "fasen": [
+      {
+       "x": 516,
+       "y": 576,
+       "b": 560,
+       "h": 270,
+       "anker": [
+        367,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 576,
+       "b": 514,
+       "h": 471,
+       "anker": [
+        321,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1119,
+       "y": 0,
+       "b": 546,
+       "h": 473,
+       "anker": [
+        337,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 567,
+       "y": 0,
+       "b": 550,
+       "h": 574,
+       "anker": [
+        341,
+        329
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 565,
+       "h": 574,
+       "anker": [
+        348,
+        329
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij9-pannen-n": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      10,
+      6
+     ],
+     "bestand": "bouwfasen/roze-boerderij9-pannen-n.png",
+     "fasen": [
+      {
+       "x": 516,
+       "y": 576,
+       "b": 559,
+       "h": 270,
+       "anker": [
+        239,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 576,
+       "b": 514,
+       "h": 471,
+       "anker": [
+        193,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1119,
+       "y": 0,
+       "b": 546,
+       "h": 473,
+       "anker": [
+        209,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 567,
+       "y": 0,
+       "b": 550,
+       "h": 574,
+       "anker": [
+        209,
+        329
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 565,
+       "h": 574,
+       "anker": [
+        217,
+        329
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-boerderij9-pannen-w": {
+     "gebouw": "boerderij",
+     "beslaat": [
+      6,
+      10
+     ],
+     "bestand": "bouwfasen/roze-boerderij9-pannen-w.png",
+     "fasen": [
+      {
+       "x": 516,
+       "y": 571,
+       "b": 559,
+       "h": 270,
+       "anker": [
+        367,
+        27
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 571,
+       "b": 514,
+       "h": 471,
+       "anker": [
+        321,
+        228
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 1119,
+       "y": 0,
+       "b": 546,
+       "h": 473,
+       "anker": [
+        337,
+        228
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 567,
+       "y": 0,
+       "b": 550,
+       "h": 569,
+       "anker": [
+        337,
+        324
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 565,
+       "h": 569,
+       "anker": [
+        345,
+        324
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
     }
    }
   };
