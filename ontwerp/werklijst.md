@@ -4337,6 +4337,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     roze huis 11 zijn daarom 6 tegels diep in plaats van 5. Oker huis 5 en roze huis 12 houden hun dakkapel niet onder
     elk dak (onder leien en pannen valt hij weg, bij roze huis 12 ook onder riet). `test/bouwstijl.test.cjs` faalt tot de
     stijlen gerenderd zijn (hij telt de opgaven tegen de tekeningen op het vel).
+    **Marcel (5 okt), na de proefplaten: "1 ja 2 is goed zo".** Dus de drie stijlen zoals op de platen, en oker huis 5 en
+    roze huis 12 mogen onder een dun dak hun dakkapel missen. Het renderen begint als het wit van de draaibare huizen in
+    `main` staat.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
