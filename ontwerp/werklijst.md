@@ -3927,6 +3927,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       een uitkomst, en het wordt niet opnieuw gespeeld met een ander zaad, want dan kies je de uitslag. Wat eruit komt,
       gaat naar `speelbaar.md`, en wat het vraagt, wordt een vraag; aan de regels verandert in deze stap niets.
     Vragen: **a**, zo? **b**, ja of nee? **c**, ja? **d**, zo? En mis je iets in 1 tot en met 5?
+    **Marcel koos (5 okt, vijfendertigste sessie): "a ja b ja c ja d ja".** Dus zoals voorgesteld.
 108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
     misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
     moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
