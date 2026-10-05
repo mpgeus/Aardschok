@@ -89,6 +89,15 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   `uit/dorpelingen/karakters-ronde1.png`, `karakters-ronde2.png` en `karakters-alle.png` (alle
   achttien op een rij), daarna `node naar-spel.cjs --alleen <namen,met,komma's>` en
   `--alleen schandpaal` voor hun nek.
+- `werkfiguren.cjs`: de boer aan het werk op zijn veld (werklijst vraag 111, b), op dezelfde manier als de maaier
+  (`maaier.cjs`): het lijf van de gewone boer met strohoed en kiel, met eigen gereedschap en een eigen houding voor het
+  werk, uit sleutelbeelden. De zaaier (staan, lopen, zaaien: breedwerpig uit een zaaidoek, met zaad dat uit de hand
+  vliegt), de wieder (staan leunend op de schoffel, lopen met de schoffel over de schouder, wieden: hakken en trekken,
+  met kluiten) en de sprokkelaar (een takkenbos op zijn rug; staan, lopen, rapen: bukken, een tak oprapen en over de
+  schouder in de bundel steken). Staan en lopen zijn die van de boer zelf, met zijn pas. `node werkfiguren-anim.cjs`
+  schrijft de vellen naar `uit/<naam>/animaties/` (met een bewegende PNG per houding) en de proefplaat
+  `uit/werkfiguren-proef.png` (naast de boer en de maaier, op 1×; `--proef` alleen die), daarna
+  `node naar-spel.cjs --alleen zaaier,wieder,sprokkelaar`. Zo'n tien minuten, de sprokkelaar het langst.
 - `schandpaal.cjs`: de schandpaal, leeg en bezet, en het halsijzer als eigen laag over wie eraan
   staat (`node schandpaal.cjs` maakt de proefplaat `uit/schandpaal-proef.png`, daarna
   `node naar-spel.cjs --alleen schandpaal`). De hoogte van de nek wordt gemeten op de boer en de

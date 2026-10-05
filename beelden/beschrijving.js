@@ -1280,6 +1280,210 @@
       }
      }
     },
+    "zaaier": {
+     "naam": "zaaier",
+     "cel": [
+      110,
+      105
+     ],
+     "anker": [
+      55,
+      81
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaaier-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        40,
+        82
+       ],
+       "anker": [
+        20,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "zaaier-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      },
+      "zaaien": {
+       "bestand": "zaaier-zaaien.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        104,
+        99
+       ],
+       "anker": [
+        52,
+        78
+       ]
+      }
+     }
+    },
+    "wieder": {
+     "naam": "wieder",
+     "cel": [
+      100,
+      109
+     ],
+     "anker": [
+      50,
+      82
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "wieder-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        90
+       ],
+       "anker": [
+        24,
+        79
+       ]
+      },
+      "lopen": {
+       "bestand": "wieder-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        78,
+        88
+       ],
+       "anker": [
+        39,
+        77
+       ]
+      },
+      "wieden": {
+       "bestand": "wieder-wieden.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        94,
+        101
+       ],
+       "anker": [
+        47,
+        77
+       ]
+      }
+     }
+    },
+    "sprokkelaar": {
+     "naam": "sprokkelaar",
+     "cel": [
+      104,
+      108
+     ],
+     "anker": [
+      52,
+      86
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "sprokkelaar-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        54,
+        87
+       ],
+       "anker": [
+        27,
+        82
+       ]
+      },
+      "lopen": {
+       "bestand": "sprokkelaar-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        55,
+        94
+       ],
+       "anker": [
+        27,
+        83
+       ]
+      },
+      "rapen": {
+       "bestand": "sprokkelaar-rapen.png",
+       "beelden": 16,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        98,
+        102
+       ],
+       "anker": [
+        49,
+        83
+       ]
+      }
+     }
+    },
     "heer": {
      "naam": "heer",
      "cel": [
