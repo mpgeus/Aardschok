@@ -1235,6 +1235,14 @@
     return Object.fromEntries(eis.volgorde.map((w) => [w, eis.per[w]]));
   }
 
+  // Het hart van het dorp, waar een verzoek zijn plek zoekt: de deur van het huis van de schout (zoals hartVan in
+  // js/verzoeken.js).
+  function hartVanHetDorp() {
+    const s = S();
+    const huis = s.dorp.gebouwen.find((g) => g.huis === 'schout');
+    return huis ? T.deurVan(s.wereld, huis) : { x: Math.floor(s.wereld.tegels[0].length / 2), y: Math.floor(s.wereld.tegels.length / 2) };
+  }
+
   function tel() {
     const s = S();
     const v = T.verstoptTotaal(s.dorp);
@@ -1252,6 +1260,9 @@
       woningen: Object.fromEntries(['hut', 'huis', 'stenenHuis'].map((soort) => [soort, s.dorp.gebouwen.filter((g) => g.soort === soort && g.huis !== 'schout').length])),
       // Wat de huizen missen, zoals de raad en het rapport het zeggen (T.watDeHuizenMissen, js/wensen.js; vraag 87).
       missen: T.watDeHuizenMissen(s.dorp).slice(0, 5).map((x) => x.tekst),
+      // Wat het dorp zou willen bouwen (T.watTeBouwen, js/raad.js), en of het te betalen is en er plek voor is bij het hart
+      // van het dorp (T.plekVoor, js/verzoeken.js): zo zie je waarom er geen verzoek komt (werklijst vraag 107, stap 3).
+      wilBouwen: T.watTeBouwen(s.dorp).slice(0, 4).map((x) => ({ soort: x.soort, betalen: T.kanBetalen(s.dorp, T.GEBOUWEN[x.soort].kosten || {}), plek: !!T.plekVoor(s.dorp, x.soort, hartVanHetDorp()) })),
       argwaan: heel(argwaan() * 100) / 100,
       houthakkers: houthakkers.map((g) => ({ klaar: !!g.klaar, handen: g.handen || 0 })),
       // De twee bazen (js/bazen.js; vraag 106): de gunst van de heer en het vertrouwen van het dorp.
