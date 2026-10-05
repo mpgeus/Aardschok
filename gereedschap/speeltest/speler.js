@@ -1243,6 +1243,31 @@
     return huis ? T.deurVan(s.wereld, huis) : { x: Math.floor(s.wereld.tegels[0].length / 2), y: Math.floor(s.wereld.tegels.length / 2) };
   }
 
+  // Wat er in het looppad om de plek van de hut op een erf staat (zoals T.looppadOm het nakijkt), geteld per soort: een
+  // gebouw, een voorwerp, de plek van het huis op een ander erf, of iets anders wat niet te belopen is. Leeg als hij past.
+  function watStaatOmDeHut(D, e) {
+    const p = e.plan;
+    if (!p) return { 'geen plan': 1 };
+    const w = D.wereld;
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const r = { x: e.x + p.dx, y: e.y + p.dy, b: p.b, h: p.h };
+    const uit = {};
+    for (let y = r.y - n; y < r.y + r.h + n; y++) {
+      for (let x = r.x - n; x < r.x + r.b + n; x++) {
+        if ((x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) || x < 0 || y < 0 || x >= w.tegels[0].length || y >= w.tegels.length) continue;
+        let wat = null;
+        if (T.huisPlekOp(D, x, y, e)) wat = 'de plek van een huis op een ander erf';
+        else if (!T.isBegaanbaar(w, x, y, { deurenOpenen: true })) {
+          const g = T.gebouwOp(D, x, y);
+          const v = T.voorwerpOp(w, x, y);
+          wat = g ? g.soort : v ? v.soort : 'iets vasts';
+        }
+        if (wat) uit[wat] = (uit[wat] || 0) + 1;
+      }
+    }
+    return uit;
+  }
+
   function tel() {
     const s = S();
     const v = T.verstoptTotaal(s.dorp);
@@ -1660,6 +1685,9 @@
       };
       boek.eind = eind();
       boek.winter = winter();
+      // De vrije erven aan het eind, en wat er in het looppad om de plek van hun hut staat (T.looppadOm, js/gebouwen.js):
+      // een erf dat vrij heet maar waar geen hut meer op past, houdt de groei tegen (werklijst vraag 107, stap 3).
+      boek.vrijeErven = T.vrijeErven(s.dorp).map((e) => ({ x: e.x, y: e.y, inDeWeg: watStaatOmDeHut(s.dorp, e) }));
       // De raadsman (js/raadsman.js): wie het was, en hoeveel voorvallen hij besliste.
       const rm = T.raadsmanVan(s.dorp);
       boek.raadsman = rm ? { over: T.overRaadsmanTekst(s.dorp, rm), door: (s.dorp.voorvallen && s.dorp.voorvallen.doorRaadsman) || 0, laatste: ((s.dorp.raadsman && s.dorp.raadsman.besluiten) || []).slice(-5) } : null;
