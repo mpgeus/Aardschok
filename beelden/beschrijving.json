@@ -1481,6 +1481,74 @@
     }
    }
   },
+  "hakker": {
+   "naam": "hakker",
+   "cel": [
+    94,
+    111
+   ],
+   "anker": [
+    47,
+    96
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "hakker-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      48,
+      89
+     ],
+     "anker": [
+      24,
+      77
+     ]
+    },
+    "lopen": {
+     "bestand": "hakker-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6,
+     "cel": [
+      58,
+      90
+     ],
+     "anker": [
+      29,
+      79
+     ]
+    },
+    "hakken": {
+     "bestand": "hakker-hakken.png",
+     "beelden": 12,
+     "fps": 8,
+     "herhaal": true,
+     "cel": [
+      88,
+      101
+     ],
+     "anker": [
+      44,
+      93
+     ]
+    }
+   }
+  },
   "zaaister": {
    "naam": "zaaister",
    "cel": [
@@ -1718,6 +1786,74 @@
      "anker": [
       70,
       69
+     ]
+    }
+   }
+  },
+  "hakster": {
+   "naam": "hakster",
+   "cel": [
+    90,
+    107
+   ],
+   "anker": [
+    45,
+    92
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "hakster-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      48,
+      82
+     ],
+     "anker": [
+      24,
+      70
+     ]
+    },
+    "lopen": {
+     "bestand": "hakster-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56,
+     "cel": [
+      58,
+      88
+     ],
+     "anker": [
+      29,
+      77
+     ]
+    },
+    "hakken": {
+     "bestand": "hakster-hakken.png",
+     "beelden": 12,
+     "fps": 8,
+     "herhaal": true,
+     "cel": [
+      84,
+      98
+     ],
+     "anker": [
+      42,
+      89
      ]
     }
    }
