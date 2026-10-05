@@ -602,6 +602,16 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het beeld
 
+**De werkfiguren, wat nog beter kan** (5 okt, drieëndertigste sessie; werklijst vraag 111, b; `beeld.md`, "De
+werkfiguren"). Uit wat de agent zelf nog niet goed vond, na de tweede ronde: van voren (Z, ZO) leest het blad van de
+schoffel op 1× nog als een voet of een T; de vingers van de zaaier zijn op spelgrootte een waaiertje van 2 à 3 pixels;
+met zijn korte armen kan de rug bij het rapen niet rechter dan zo'n 50°, en de tak die de bundel in gaat, valt van voren
+achter het hoofd; de boerin die hurkt, is een ronde klont rok, met de knieën alleen als bobbel; de linker onderarm van de
+maaister rekt naar de onderste greep, net als bij de maaier; en haar schort zwaait met de rok mee, zodat staan en lopen
+een enkele pixel van haar gewone vel verschillen. Verder: het dorsen bij de boerderij heeft nog geen beweging (hij staat
+er), en wie helpt (de boerin en de grote kinderen bij het zaaien en de oogst), loopt in zijn eigen vel mee, zonder
+werkhouding.
+
 **Een achterkant met leven** (4 okt, tweeëndertigste sessie; werklijst vraag 124, B; idee van Claude, Marcel: "het idee
 opslaan, hier komt later ook iets van een moestuin bij"). De draaibare huizen geven de achterkant en de linker gevel
 hetzelfde als de voorkant (vakwerk, ramen, luiken, bakken), maar de uitbouwen blijven voor en rechts, zodat een huis een

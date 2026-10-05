@@ -784,6 +784,27 @@ proefplaat is `uit/dorpelingen/marskramer-proef.png`.
   grond.
 - In het spel leent hij niets meer van Wim.
 
+## De werkfiguren: de boer en de boerin aan het werk (5 okt 2026, werklijst vraag 111, b)
+
+Een boer die op zijn land werkt (`js/veldwerk.js`), draagt zolang het vel van zijn werk, zoals hij in de oogst de maaier
+leent (`js/sprites.js`, `WERKFIGUREN`): dezelfde gewone boer met strohoed en kiel, voor elk werk één vel. Wie een
+boerin is, draagt dat van een vrouw: de gewone boerin, met haar rode jurk, blauwe schort en witte muts (Marcel, 5 okt:
+"b ja"). Uit code, zoals de maaier (`gereedschap/pixelart/werkfiguren.cjs`; `werkfiguren-anim.cjs --proef` maakt de
+proefplaat `uit/werkfiguren-proef.png`):
+- **de zaaier en de zaaister:** staan met de hand in de zaaizak, lopen met de zak op de heup, en zaaien: een vuist in de
+  zak, en bij de worp een open hand met een waaiertje korrels dat even licht vangt;
+- **de wieder en de wiedster:** staan leunend op de schoffel (zijn rustpoos), lopen met de schoffel over de schouder, en
+  wieden, gebukt, met een plat blad schuin op de steel; ook voor spitten en mest uitrijden;
+- **de sprokkelaar en de sprokkelaarster:** met een bundel takken op de rug staan, lopen (de bundel deint mee) en rapen:
+  door de knieën, de tak van de grond via de hand naar de bundel;
+- **de maaister,** naast de maaier, met dezelfde zeis en slag.
+
+Zolang hij aan dit werk is, ook op weg naar de volgende tegel of even rustend, houdt hij het vel, zodat hij niet bij elke
+tegel van kleren wisselt. De lopen-houding is de loopcyclus van de boer of de boerin zelf. Eerst kwamen de drie van de
+man (Marcel: "a ja"), daarna die van de vrouw en de betere houdingen ("b ja c nu"): het rapen ging van diep bukken naar
+hurken (van voren zag je eerst alleen de hoed), de schoffel kreeg een blad (hij leek een hamertje), en de hand vingers
+(het was een peddel). Wat nog beter kan, staat in `opmerkingen.md`, "Het beeld".
+
 ## Het vee: een koe en een schaap (Marcel, 25 sep 2026)
 
 Voor de weides met vee (`spel.md`, "Weides met koeien en schapen"). Marcel koos: eerst de dieren

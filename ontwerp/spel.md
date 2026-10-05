@@ -2704,15 +2704,20 @@ niet opzij; wie met de schout praat of hem zoekt met een voorval, houdt op. De r
 zaaien, de oogst en het sprokkelen gaan zoals ze gingen; dit zegt alleen waar de boer is en wat hij doet. De getallen
 (hoe lang een tegel duurt, hoe ver de bosrand mag zijn) staan in `T.VELDWERK_INSTELLINGEN`, in de werkbank; wat je
 vandaag aan een veld verandert, doet hij morgen. In de browser: `Spel.debug.veldwerk()`.
-**Nog niet** (stap 2, met de figuren): de zaaier, de wieder (ook voor spitten en mest) en de sprokkelaar met zijn bundel,
-uit code zoals de maaier; tot die er zijn, werkt hij in zijn eigen vel. Daarna, na de huizen: de houthakker die hakt en
-plant (vraag 115) en de wolven (vraag 116). Het dorsen heeft nog geen beweging.
+Hij werkt in het vel van zijn werk (stap 2, 5 okt): de zaaier, de wieder (ook voor spitten en mest) en de sprokkelaar
+met zijn bundel, uit code zoals de maaier, en een boerin in dat van een vrouw (de zaaister, de wiedster, de
+sprokkelaarster, de maaister; `beeld.md`, "De werkfiguren").
+**Nog niet:** na de huizen de houthakker die hakt en plant (vraag 115) en de wolven (vraag 116). Het dorsen heeft nog
+geen beweging, en wie helpt, loopt in zijn eigen vel mee.
 
 **Hoe het zo kwam:** Marcel, 3 okt: "Ook wil ik dat boeren op hun veld aan het werk zijn. Nu hebben ze wel velden, maar
 lopen ze gewoon random door het dorp. Ze moeten zaaien en op het veld bezig zijn." Het dagritme stuurde een boer overdag
 naar de deur van zijn boerderij, en de regel die hem in het groeiseizoen naar zijn akker stuurde (`T.wandelAnker`), kwam
 daardoor nooit aan de beurt. Marcel koos het werk per seizoen, de figuren, en dat de regels blijven zoals ze zijn ("ja
 die zijn goed"), en op 5 okt dat het nu kon, terwijl een andere sessie de huizen rendert ("A. Ja prima B ja graag").
+Na de eerste proefplaat van de figuren: "a ja b ja c nu" (ze gaan zo in het spel, een boerin krijgt een eigen werkvel, en
+het rapen, de schoffel en de hand worden nu beter). In het spel bleek de bosrand bij een boerderij vaak een losse boom
+achter een dak; nu is het de rand van een echt stuk bos, waar je de boer ziet.
 
 ### Mensen worden poppetjes
 
