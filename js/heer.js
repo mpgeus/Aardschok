@@ -689,7 +689,12 @@
     const INN = T.INNER_INSTELLINGEN;
     const heelDorp = !!(INN && D.inner && D.inner.argwaan >= INN.doorzoekenVanaf && T.doorzoekDorp);
     if (heelDorp) T.doorzoekDorp(D);
-    else T.beginDoorzoeken(D);
+    else {
+      T.beginDoorzoeken(D);
+      // En elk jaar lopen er een paar door het bos, naar akkers die niet in zijn boeken staan (js/ontginnen.js; vraag 107,
+      // g1). Doorzoeken ze het hele dorp, dan doen ze dat daar al.
+      T.doorzoekHetBos(D);
+    }
     // Een verboden werkplaats die zijn inner of hijzelf zag, of die zijn soldaten in het hele dorp vonden, straft hij
     // (js/ondernemers.js).
     T.heerVindtVerboden(D, heelDorp);

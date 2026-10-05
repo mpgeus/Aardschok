@@ -965,7 +965,7 @@
         })),
         stiekem: w.akkers.filter((v) => v.stiekem).map((v) => ({
           veld: v.naam, waar: stuk(v), sinds: v.stiekem.sinds, innerZag: v.stiekem.gezien,
-          spoor: T.spoorNaar(D, v), soldatenVinden: T.vindKansVanBosAkker(D, v),
+          spoor: T.spoorNaar(D, v), soldatenVinden: { elkJaar: T.vindKansVanBosAkker(D, v, false), heelDorp: T.vindKansVanBosAkker(D, v, true) },
         })),
         staat: D.ontginnen || null,
       };

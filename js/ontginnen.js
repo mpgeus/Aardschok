@@ -7,8 +7,9 @@
 //     de meent, hoe meer het dorp eraan hecht (vraag 107, f3). Een maand plaggen steken.
 //   - het bos is van de heer. Meld je het hem, dan zakt zijn gunst (hij wil erom gevraagd worden), en staat het in zijn
 //     boeken: de inner telt het, zoals elke akker. Zeg je het niemand (stiekem), dan kost het geen gunst, en zoekt de
-//     inner het niet. Maar ziet hij het toch, of vinden zijn soldaten het (vaker als er een spoor heen loopt), dan ben je
-//     betrapt (T.betrapt, js/bazen.js), en vanaf dan staat het in de boeken. Een winter werk: boom voor boom omhakken (het hout gaat naar de schuur), de stobbe
+//     inner het niet. Maar ziet hij het toch, of vinden zijn soldaten het (die lopen elk jaar op Sint-Maarten door het bos,
+//     en vinden het vaker als er een spoor heen loopt), dan ben je betrapt (T.betrapt, js/bazen.js), en vanaf dan staat
+//     het in de boeken. Een winter werk: boom voor boom omhakken (het hout gaat naar de schuur), de stobbe
 //     eruit, en omspitten.
 // Hoe de boer het doet, staat in js/veldwerk.js: hij werkt er tegel voor tegel, en wat hij af heeft, is kale grond. In
 // lentemaand wordt het gezaaid, met zaaigraan zoals elke akker (T.wisselVelden en T.zaaiAkkers, js/akkers.js). De schapen
@@ -77,10 +78,13 @@
     stiekemRisico: 8,
     // De argwaan van de inner als hij een akker in het bos ziet die niet in de boeken staat.
     argwaanGezien: 0.2,
-    // De soldaten, als ze het hele dorp doorzoeken (T.doorzoekDorp, js/inner.js): zo vaak vinden ze een akker in het bos,
-    // en zo vaak als er een spoor heen loopt (vraag 107, h: het paadje verraadt hem; T.isSpoor in js/paden.js): minstens
-    // `spoor` tegels spoor binnen twee tegels van de akker.
-    vinden: 0.3,
+    // De soldaten op Sint-Maarten (vraag 107, g1; Marcel, 5 okt: "1 en 3 later inderdaad"): elk jaar lopen er een paar
+    // door het bos, en die vinden een akker die niet in de boeken staat zelden (vindenInHetBos); doorzoeken ze het hele
+    // dorp (T.doorzoekDorp, js/inner.js, bij hoge argwaan), dan soms (vindenHeelDorp); en loopt er een spoor heen (vraag
+    // 107, h: het paadje verraadt hem; T.isSpoor in js/paden.js: minstens `spoor` tegels spoor binnen twee tegels van de
+    // akker), dan vaak (vindenMetSpoor). Elk stuk is een eigen kans: één stuk is een gok, zeven stukken bijna zeker betrapt.
+    vindenInHetBos: 0.1,
+    vindenHeelDorp: 0.3,
     vindenMetSpoor: 0.7,
     spoor: 3,
   };
@@ -554,29 +558,47 @@
     return n >= IN().spoor;
   };
 
-  // Hoe vaak de soldaten deze akker vinden als ze het hele dorp doorzoeken: soms, en vaak als er een spoor heen loopt.
-  T.vindKansVanBosAkker = (D, veld) => (T.spoorNaar(D, veld) ? IN().vindenMetSpoor : IN().vinden);
+  // Hoe vaak de soldaten deze akker vinden: als ze elk jaar door het bos lopen zelden, als ze het hele dorp doorzoeken
+  // (`heelDorp`) soms, en vaak als er een spoor heen loopt.
+  T.vindKansVanBosAkker = (D, veld, heelDorp) => {
+    if (T.spoorNaar(D, veld)) return IN().vindenMetSpoor;
+    return heelDorp ? IN().vindenHeelDorp : IN().vindenInHetBos;
+  };
 
   // Een getal 0..1, vast per spel, per dag en per akker, zodat een toets hetzelfde uitkomt (zoals js/verstoppen.js).
   function lot(D, veld) {
     return T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 31 + dagNu(D) * 7919 + veld.x * 104729 + veld.y * 1299709)();
   }
 
-  // De soldaten doorzoeken het hele dorp (T.zoekVerstopt, js/verstoppen.js): elke akker in het bos die niet in de boeken
-  // staat, vinden ze onder zijn kans. Geeft wat ze vonden, als woorden ("de akker in het bos van Klaas"). `getal(veld)`
-  // (voor een toets) geeft een getal 0..1 in plaats van het lot.
-  T.zoekBosAkkers = function (D, getal) {
+  // De soldaten zoeken: elke akker in het bos die niet in de boeken staat, vinden ze onder zijn kans
+  // (T.vindKansVanBosAkker). Als ze het hele dorp doorzoeken (`heelDorp`, vanuit T.zoekVerstopt, js/verstoppen.js), of
+  // elk jaar door het bos lopen (T.doorzoekHetBos). Geeft wat ze vonden, als woorden ("de akker in het bos van Klaas").
+  // `getal(veld)` (voor een toets) geeft een getal 0..1 in plaats van het lot.
+  T.zoekBosAkkers = function (D, getal, heelDorp = true) {
     const lijst = [];
     for (const veld of (D.wereld && D.wereld.akkers) || []) {
       if (!veld.stiekem) continue;
       const r = getal ? getal(veld) : lot(D, veld);
       const spoor = T.spoorNaar(D, veld);
-      if (r >= T.vindKansVanBosAkker(D, veld)) continue;
+      if (r >= T.vindKansVanBosAkker(D, veld, heelDorp)) continue;
       const boer = T.boerVanVeld(D, veld);
       lijst.push(`${spoor ? 'langs het spoor ' : ''}de akker in het bos${boer ? ` van ${boer.naam}` : ''}`);
       gevonden(D, veld, 'zijn soldaten vonden een akker in zijn bos');
     }
     if (lijst.length) T.zetArgwaan(D, IN().argwaanGezien, 'de soldaten vonden een akker in het bos');
+    return lijst;
+  };
+
+  // Elk jaar op Sint-Maarten, als zijn soldaten niet het hele dorp doorzoeken (T.heerStaatErOp, js/heer.js), lopen er een
+  // paar door het bos (vraag 107, g1): zo kost elke akker die niet in de boeken staat elk jaar een kans. Ligt er geen, dan
+  // zegt het niets. Geeft wat ze vonden.
+  T.doorzoekHetBos = function (D, getal) {
+    if (!((D.wereld && D.wereld.akkers) || []).some((v) => v.stiekem)) return [];
+    const lijst = T.zoekBosAkkers(D, getal, false);
+    const wat = lijst.length > 1 ? `${lijst.slice(0, -1).join(', ')} en ${lijst[lijst.length - 1]}` : lijst[0];
+    T.zeg(D, lijst.length
+      ? `Een paar soldaten lopen door het bos, en vinden ${wat}.`
+      : 'Een paar soldaten lopen door het bos, en komen terug met niets dan dennennaalden.', lijst.length ? 'gevaar' : '');
     return lijst;
   };
 

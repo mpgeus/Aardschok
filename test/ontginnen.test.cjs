@@ -492,7 +492,7 @@ test('doorzoeken de soldaten het hele dorp, dan vinden ze een akker in het bos s
   verzoek(S);
   zeg(S, 'Het bos. De heer hoeft');
   const veld = w.akkers.find((v) => v.ontginning);
-  assert.equal(T.vindKansVanBosAkker(D, veld), T.ONTGINNEN_INSTELLINGEN.vinden, 'soms');
+  assert.equal(T.vindKansVanBosAkker(D, veld, true), T.ONTGINNEN_INSTELLINGEN.vindenHeelDorp, 'soms');
   assert.deepEqual(T.zoekVerstopt(D, () => 0.5), [], 'onder de kans: niets');
   // Een spoor erheen (js/paden.js): wie er elke dag heen loopt, slijt het gras, ook voor het een paadje is dat je ziet.
   const breed = w.tegels[0].length;
@@ -501,7 +501,7 @@ test('doorzoeken de soldaten het hele dorp, dan vinden ze een akker in het bos s
   assert.ok(!T.spoorNaar(D, veld), 'twee tegels is nog geen spoor');
   w.paden.gesleten.add(veld.x + 2 + (veld.y + veld.h) * breed); // en een paadje telt ook
   assert.ok(T.spoorNaar(D, veld));
-  assert.equal(T.vindKansVanBosAkker(D, veld), T.ONTGINNEN_INSTELLINGEN.vindenMetSpoor, 'vaak');
+  assert.equal(T.vindKansVanBosAkker(D, veld, true), T.ONTGINNEN_INSTELLINGEN.vindenMetSpoor, 'vaak');
   const gunst = T.bazenNu(D).gunst;
   const gevonden = T.zoekVerstopt(D, () => 0.5);
   assert.deepEqual(gevonden.length, 1);
@@ -559,4 +559,41 @@ test('is het eerder af dan de maand of de winter, dan is het eerder ontgonnen', 
   T.tikGebouwenDag(D, 42);
   assert.equal(veld.ontginning, undefined, 'af, op dag 42 in plaats van 130');
   assert.equal(D.ontginnen.klaar, 42);
+});
+
+// Vraag 107, g1 (Marcel, 5 okt: "1 en 3 later inderdaad"): ook als de argwaan laag is, lopen er op Sint-Maarten een paar
+// soldaten door het bos. Zelden vinden ze een akker die niet in de boeken staat, maar elk stuk is een eigen kans.
+test('elk jaar op Sint-Maarten lopen er soldaten door het bos: zelden vinden ze een stiekeme akker, en vaak langs een spoor', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  const w = S.wereld;
+  assert.deepEqual(T.doorzoekHetBos(D, () => 0), [], 'zonder stiekeme akker zoeken ze niets, en zeggen ze niets');
+  const voor = berichten.length;
+  verzoek(S);
+  zeg(S, 'Het bos. De heer hoeft');
+  const veld = w.akkers.find((v) => v.stiekem);
+  assert.equal(T.vindKansVanBosAkker(D, veld, false), T.ONTGINNEN_INSTELLINGEN.vindenInHetBos, 'zelden');
+  assert.deepEqual(T.doorzoekHetBos(D, () => 0.2), [], 'boven de kans: niets');
+  assert.ok(berichten.slice(voor).some((t) => /niets dan dennennaalden/.test(t)));
+  assert.ok(veld.stiekem, 'nog niet in de boeken');
+  const gunst = T.bazenNu(D).gunst;
+  const gevonden = T.doorzoekHetBos(D, () => 0.05);
+  assert.equal(gevonden.length, 1);
+  assert.ok(berichten.some((t) => /Een paar soldaten lopen door het bos, en vinden de akker in het bos van /.test(t)));
+  assert.ok(T.inDeBoeken(veld), 'gevonden: in de boeken');
+  assert.ok(T.bazenNu(D).gunst < gunst, 'betrapt');
+  // Op Sint-Maarten, bij lage argwaan: de heer op het plein, zijn soldaten zoeken met de schout, en een paar in het bos.
+  const echt = T.doorzoekHetBos;
+  let gezocht = 0;
+  T.doorzoekHetBos = () => (gezocht++, []);
+  try {
+    D.inner = D.inner || T.nieuweInner();
+    D.inner.argwaan = 0;
+    D.heer = D.heer || {};
+    D.heer.bezoek = { staat: false };
+    T.heerStaatErOp(D);
+    assert.equal(gezocht, 1, 'het bos wordt doorzocht');
+  } finally {
+    T.doorzoekHetBos = echt;
+  }
 });
