@@ -149,6 +149,31 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 5 okt: ontginnen op de heide (werklijst, vraag 107, stap 1)
+
+Gespeeld in de drieëndertigste sessie, op `ccr-ba65ef69-kcd902` op `68649be` (ontginnen op de heide; het paadje van een
+deur dat vrij blijft, kwam erna, en lag op deze drie landen niet in het eerste stuk): `npm run speeltest -- bouwer
+--maker`, op dezelfde drie landen als hieronder. De bouwer zegt ja op elk verzoek, ook om te ontginnen.
+
+| Land | Een dorp | Marktrecht | Mensen | Ontgonnen | Oogst jaar 1 → 2 | Honger jaar 1 → 2 | Hiervoor (dorp, marktrecht, mensen) |
+|---|---|---|---|---|---|---|---|
+| 62707 | 24 oogstmaand | 25 herfstmaand | 26 → 67 | 5 stukken | 612 → 958 | 76 → 0 dagen | 29 oogstmaand, 29 herfstmaand, 26 → 98 |
+| 73425 | 24 herfstmaand | 3 slachtmaand | 26 → 103 | 4 stukken | 606 → 804 | 78 → 0 dagen | 24 herfstmaand, 2 slachtmaand, 26 → 96 |
+| 72022 | 24 oogstmaand | 3 wijnmaand | 26 → 85 | 5 stukken | 641 → 987 | 77 → 0 dagen | 13 herfstmaand, nee, 26 → 72 |
+
+**Wat opviel:**
+1. **Het loopt:** drie keer twee jaar, geen fouten in de console, en de bouwer bleef schout (het vertrouwen kwam nooit
+   onder de 50).
+2. **Het graan:** de oogst van het tweede jaar is een derde tot ruim de helft groter, het zaaien kost 270 à 300 in plaats
+   van 160 à 180, en de honger van het eerste jaar (76 à 78 dagen) is in het tweede weg. Op 72022, dat hiervoor
+   vastliep, kwam marktrecht er nu op 3 wijnmaand van het eerste jaar.
+3. **Het tempo:** het eerste verzoek komt op 28 lentemaand, want vóór de eerste oogst komt een gehucht altijd graan
+   tekort, en daarna elke twee maanden: vier à vijf stukken in het eerste jaar, de hele heide op wat de schapen nodig
+   hebben na. Dat is vraag 107, f.
+4. **Op 62707 bleef het dorp op 67** (hiervoor 98). Het graan was daar niet de rem (de oogst van het tweede jaar was
+   958), maar de wensen: het hele tweede jaar geen laken, en de raad zei 516 dagen wat de huizen missen. Dat het
+   hiervoor wel groeide, kan toeval zijn: de verzoeken om te ontginnen schuiven alle worpen van het toeval op.
+
 ## De speeltest van 5 okt: de boeren aan het werk (werklijst, vraag 111, stap 1)
 
 Gespeeld in de drieëndertigste sessie, op `ccr-ba65ef69-kcd902` op `c016d2e` (de boeren werken overdag op hun land, nog

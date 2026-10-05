@@ -138,7 +138,9 @@ graan tekort, dan vraagt een boer of zijn zoon je om dertig tegels heide, met de
 lentemaand wordt het gezaaid. Nee, of je sprak hem niet: pas na dertig dagen vraagt er weer iemand. **Wat Claude erin
 zag:** "naast zijn akker" kan bijna nooit, want de heide ligt apart (op de landen van de maker in een hoek, 8 tot 40
 tegels van de dichtste boerderij). Dus kiest hij de plek zo dicht bij zijn akker als het kan, en wordt de heide van de
-kant van het dorp af ontgonnen. Zie onder Af, en `spel.md`, "Ontginnen". Stap 2 (het bos) en 3 (vier jaar spelen) volgen.
+kant van het dorp af ontgonnen. De speeltest (`speelbaar.md`): een derde tot ruim de helft meer oogst in het tweede jaar,
+geen honger meer, en op 72022 nu wel marktrecht; maar de hele heide is in het eerste jaar op, en dat is vraag 107, f
+(het tempo). Zie onder Af, en `spel.md`, "Ontginnen". Stap 2 (het bos) en 3 (vier jaar spelen) volgen.
 
 **Waar de volgende sessie begint:** het werk van de drieëndertigste sessie staat sinds 5 okt in `main` (Marcel: "ja push
 main"), net als dat van de tweeëndertigste (Marcel: "1 ja"
@@ -3762,6 +3764,20 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **Na elk verzoek dertig dagen**, ook als je hem niet sprak: anders kwam hij elke dag terug zolang het graan
       tekortkomt (een jaar kreeg zo 199 voorvallen in plaats van 25 à 60), en nam hij elke dag de plek in van wie iets
       anders wilde vragen.
+    **Vraag f, het tempo** (Claude, 5 okt, uit de speeltest; open): vóór de eerste oogst komt een gehucht altijd graan
+    tekort, dus het eerste verzoek komt al op 28 lentemaand, en daarna elke twee maanden (een maand ontginnen, een maand
+    wachten). Elke bouwer ontgon zo in het eerste jaar vier à vijf stukken: de hele heide, op wat de schapen nodig hebben
+    na. De oogst van het tweede jaar was 800 à 1000 graan in plaats van zo'n 600, en de honger van 76 à 78 dagen in het
+    eerste jaar was in het tweede weg (`speelbaar.md`, de speeltest van 5 okt). Maar het is vijf keer dezelfde vraag in
+    één jaar, en daarna is de heide op. Mogelijkheden:
+    - **f1, zo laten:** snel lucht, en is de heide op, dan wordt het bos de volgende stap (stap 2, tegen de gunst van de
+      heer of stiekem). Dan heeft het spel een lijn: eerst de heide en het dorp, later het bos en de heer.
+    - **f2, trager:** na een ja pas weer een verzoek als het nieuwe stuk één keer geoogst is: zo'n stuk per jaar, en de
+      vraag komt elk jaar terug.
+    - **f3, elk stuk kost meer:** het eerste 5 vertrouwen, het tweede 10, het derde 15: hoe kleiner de meent, hoe meer
+      het dorp eraan hecht. Dan wordt de vijfde ja een echte afweging.
+    Voorstel van Claude: f1 met f3. Het tempo houdt de druk om eten in het eerste jaar, en f3 maakt van dezelfde vraag
+    elke keer een zwaardere.
 108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
     misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
     moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
@@ -5305,7 +5321,9 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   meteen als het klaar is terwijl de boeren nazaaien (`T.isNazaaitijd`). De schapen grazen er niet meer en houden
   altijd wat ze nodig hebben (`js/vee.js`). Na elk verzoek dertig dagen geen nieuw. Ben je weg, dan zegt de raadsman ja.
   De spelregel "Ontginnen", `T.ONTGINNEN_INSTELLINGEN`, `Spel.debug.ontginnen()`, en `test/ontginnen.test.cjs` (zes
-  toetsen). `npm test` 943/943. Zie `spel.md`, "Ontginnen", en vraag 107.
+  toetsen). Het stuk houdt de paadjes van de deuren vrij. De speeltest op drie landen van de maker liep zonder fouten,
+  met een derde tot ruim de helft meer oogst in het tweede jaar (`speelbaar.md`). `npm test` 943/943. Zie `spel.md`,
+  "Ontginnen", en vraag 107 (f: het tempo is open).
 - 5 okt 2026 — **De boeren aan het werk** (drieëndertigste sessie; vraag 111, stap 1 en 2; Marcel: "A. Ja prima B ja graag
   C doe maar", en "a ja b ja c nu"). Overdag werkt een boer op zijn eigen land (`js/veldwerk.js`, `T.werkVeldwerkBij`):
   zolang het graan moet kiemen zaait hij rij voor rij, daarna wiedt hij met rustpozen, in de herfst rijdt hij mest uit
