@@ -919,7 +919,7 @@
         waar: `${e.tx},${e.ty}`,
         gedaan: e.veldwerk ? `${e.veldwerk.gedaan} tegels ${e.veldwerk.soort}` : '',
         klaar: e.veldwerk ? e.veldwerk.klaar : {},
-        bosrand: (T.bosrandBij(w, e) || []).length,
+        bosrand: (T.bosrandBij(D, e) || []).length,
         helpers: w.wezens.filter((h) => {
           const a = T.helpAnker(D, h);
           return a && a.x === e.tx && a.y === e.ty;

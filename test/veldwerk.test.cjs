@@ -91,7 +91,7 @@ test('wat een boer vandaag doet: zaaien, wieden, maaien (dat is de oogst), mest,
   e.veldwerk.klaar.mesten = datumVan(S).jaar;
   assert.equal(op(186), 'spitten', 'en daarna spit hij');
   e.werkAkkers[0].mest = false;
-  assert.ok(T.bosrandBij(S.wereld, e), 'er is bos bij zijn boerderij');
+  assert.ok(T.bosrandBij(S.dorp, e), 'er is bos bij zijn boerderij');
   assert.equal(op(275), 'sprokkelen', 'wintermaand');
   e.veldwerk.klaar.sprokkelen = 275;
   assert.equal(op(275), null, 'een keer per dag; daarna is hij bij zijn boerderij');
@@ -175,9 +175,15 @@ test('in de winter sprokkelt hij aan de bosrand, en brengt hij een bundel hout n
   zonderVoorvallen(() => {
     const S = gehucht(275 + 7 / 24); // 6 wintermaand
     const w = S.wereld;
-    const boeren = boerenVan(S);
+    const D = S.dorp;
+    const alle = boerenVan(S);
+    // Een bosrand is de rand van een echt stuk bos, met de bomen achter hem; wie er geen in de buurt heeft, blijft bij
+    // zijn boerderij.
+    const boeren = alle.filter((e) => T.bosrandBij(D, e));
+    assert.ok(boeren.length >= 3, `${boeren.length} boeren hebben bos in de buurt`);
+    for (const e of alle) if (!boeren.includes(e)) assert.equal(T.veldwerkVandaag(D, e, datumVan(S)), null, `${e.wie} blijft bij zijn boerderij`);
     const boom = (x, y) => T.NATUUR.bos.telt(w, x, y, T.voorwerpOp(w, x, y));
-    const aanDeBosrand = (e) => [-1, 0, 1].some((dy) => [-1, 0, 1].some((dx) => (dx || dy) && boom(e.tx + dx, e.ty + dy)));
+    const aanDeBosrand = (e) => boom(e.tx - 1, e.ty) || boom(e.tx, e.ty - 1) || boom(e.tx - 1, e.ty - 1);
     const gezien = new Map(boeren.map((e) => [e, { rapen: false, bundel: false }]));
     for (let u = 8; u <= 19; u += 0.25) {
       totUur(S, 275, u);
@@ -185,7 +191,7 @@ test('in de winter sprokkelt hij aan de bosrand, en brengt hij een bundel hout n
         const g = gezien.get(e);
         if (e.werkt && e.werkt.soort === 'sprokkelen' && e.werkt.tot != null) {
           g.rapen = true;
-          assert.ok(aanDeBosrand(e), `${e.wie} raapt hout naast een boom (${e.tx},${e.ty})`);
+          assert.ok(aanDeBosrand(e), `${e.wie} raapt hout met een boom achter zich (${e.tx},${e.ty})`);
           assert.equal(e.draagt, 'bundel');
         }
         if (e.draagt === 'bundel' && !e.werkt) g.bundel = true;

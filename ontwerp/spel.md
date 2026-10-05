@@ -2693,8 +2693,10 @@ eruit (dezelfde dag).
 eigen land, naar het seizoen. Zolang het graan nog moet kiemen (lentemaand, tot de 11e) zaait hij, rij voor rij over zijn
 akkers, heen en terug; daarna wiedt hij tot het graan rijp is, tegel voor tegel, met een rustpoos ertussen. In het hooi
 en de oogst maait hij, zoals al zo was. In de herfst rijdt hij eerst mest uit op een veld dat mest krijgt, en spit hij
-wat volgend jaar akker wordt (een weide met vee niet). In de winter loopt hij naar de bosrand bij zijn boerderij (elke
-dag een ander stuk), raapt er hout, en brengt een bundel naar huis. De schaft houdt hij op de akker, met zijn brood; 's
+wat volgend jaar akker wordt (een weide met vee niet). In de winter loopt hij naar de rand van het bos bij zijn boerderij
+(een echt stuk bos binnen 25 tegels, geen losse boom tussen de huizen; elke dag een ander stuk, met de bomen achter
+hem, zodat je hem ziet), raapt er hout, en brengt een bundel naar huis; is er geen bos in de buurt, dan blijft hij bij
+zijn boerderij. De schaft houdt hij op de akker, met zijn brood; 's
 avonds en 's nachts is hij thuis, of in de herberg. Wat overblijft (dorsen, het vee, of er is niets te doen), doet hij
 bij zijn boerderij, zoals tot nu toe. Zijn boerin en grote kinderen helpen bij het zaaien: ze blijven dicht bij hem op
 het veld, en in de oogst net zo; wie ergens anders werkt, gaat daarheen. Wie werkt of helpt, maakt geen praatje en gaat

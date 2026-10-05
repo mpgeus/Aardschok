@@ -37,9 +37,11 @@
     mesten: 0.5,
     spitten: 2,
     spittenRust: 0.5,
-    // Sprokkelen: zo lang raapt hij hout aan de bosrand, en zo ver van zijn deur zoekt hij die, in tegels.
+    // Sprokkelen: zo lang raapt hij hout aan de bosrand, zo ver van zijn deur zoekt hij die, in tegels, en zoveel bomen
+    // staan er minstens in de vijf bij vijf tegels om hem heen (minder is geen bos, maar een boom tussen de huizen).
     rapen: 3,
     bosrandStraal: 25,
+    bosBomen: 4,
     // Hoe dicht de boerin en de grote kinderen bij de boer blijven als ze helpen, in tegels.
     helpStraal: 2,
   };
@@ -98,11 +100,15 @@
     return m.per[soort] || (m.per[soort] = T.veldwerkTegels(D.wereld, e, soort));
   }
 
-  // De bosrand bij zijn huis: tegels waar hij kan staan met een boom ernaast, niet verder dan bosrandStraal van zijn
-  // deur, en te bereiken; de dichtste zes, of null als er geen bos in de buurt is. Per kaart onthouden tot de kaart
-  // verandert (T.kaartVersie, js/wereld.js), zoals de natuur in js/gebouwen.js. Geen spelstaat.
+  // De bosrand bij zijn huis: een tegel aan de rand van een echt stuk bos (minstens bosBomen bomen in de vijf bij vijf
+  // eromheen; een losse boom tussen de huizen is geen bos), met de bomen achter hem en niet ervoor, en geen gebouw schuin
+  // vóór hem: zo zie je hem rapen, en verdwijnt hij niet achter een dak of een boom (wie vóór iets staat, is in dit beeld
+  // wie verder naar het zuiden staat, x en y groter). Niet verder dan bosrandStraal van zijn deur, en te bereiken; de
+  // dichtste zes, of null als er geen bos in de buurt is. Per kaart onthouden tot de kaart verandert (T.kaartVersie,
+  // js/wereld.js), zoals de natuur in js/gebouwen.js. Geen spelstaat.
   const BOSRAND = new WeakMap(); // kaart → { versie, per: Map(deur → lijst of null) }
-  function bosrandVan(w, e) {
+  function bosrandVan(D, e) {
+    const w = D.wereld;
     if (!e.thuis) return null;
     const versie = T.kaartVersie(w);
     let m = BOSRAND.get(w);
@@ -113,13 +119,16 @@
     const hoog = w.tegels.length;
     const wijd = w.tegels[0].length;
     const boom = (x, y) => x >= 0 && y >= 0 && x < wijd && y < hoog && T.NATUUR.bos.telt(w, x, y, T.voorwerpOp(w, x, y));
+    const voeten = (D.gebouwen || []).map((g) => T.voetVanGebouw(g)).filter(Boolean);
+    const gebouwVoor = (x, y) => voeten.some((f) => f.x + f.b > x && f.y + f.h > y && f.x <= x + 6 && f.y <= y + 6);
     const kandidaten = [];
     for (let y = Math.max(0, e.thuis.y - r); y <= Math.min(hoog - 1, e.thuis.y + r); y++) {
       for (let x = Math.max(0, e.thuis.x - r); x <= Math.min(wijd - 1, e.thuis.x + r); x++) {
         if (!T.isBegaanbaar(w, x, y) || T.bijDeur(w, x, y)) continue;
-        let bij = false;
-        for (let dy = -1; dy <= 1 && !bij; dy++) for (let dx = -1; dx <= 1 && !bij; dx++) bij = (dx || dy) && boom(x + dx, y + dy);
-        if (bij) kandidaten.push({ x, y, d: T.afstand(e.thuis, { x, y }) });
+        if (!(boom(x - 1, y) || boom(x, y - 1) || boom(x - 1, y - 1))) continue;
+        if (boom(x + 1, y) || boom(x, y + 1) || boom(x + 1, y + 1)) continue;
+        if (T.natuurBij(w, 'bos', { x: x - 2, y: y - 2, b: 5, h: 5 }, 0) < IN().bosBomen || gebouwVoor(x, y)) continue;
+        kandidaten.push({ x, y, d: T.afstand(e.thuis, { x, y }) });
       }
     }
     kandidaten.sort((a, b) => a.d - b.d || a.y - b.y || a.x - b.x);
@@ -149,7 +158,7 @@
       if (klaar.mesten !== datum.jaar && heeft('mesten')) return 'mesten';
       return heeft('spitten') ? 'spitten' : null;
     }
-    if (datum.seizoen === 'winter' && klaar.sprokkelen !== Math.floor(D.kalender.dag) && bosrandVan(D.wereld, e)) return 'sprokkelen';
+    if (datum.seizoen === 'winter' && klaar.sprokkelen !== Math.floor(D.kalender.dag) && bosrandVan(D, e)) return 'sprokkelen';
     return null;
   };
 
@@ -256,7 +265,7 @@
       return;
     }
     if (e.pad.length) return;
-    const rand = bosrandVan(w, e);
+    const rand = bosrandVan(D, e);
     if (!rand) {
       stop(e);
       return;
