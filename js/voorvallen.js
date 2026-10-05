@@ -648,6 +648,8 @@
     // Twee bazen (js/bazen.js): wat de heer en het dorp van je vinden, als de spelregel aan staat.
     if (doe.gunst && T.BAZEN_INSTELLINGEN.aan) delen.push(`gunst van de heer ${teken(doe.gunst)}${Math.abs(doe.gunst)}`);
     if (doe.vertrouwen && T.BAZEN_INSTELLINGEN.aan) delen.push(`vertrouwen van het dorp ${teken(doe.vertrouwen)}${Math.abs(doe.vertrouwen)}`);
+    // Heide ontginnen (js/ontginnen.js): het vertrouwen dat dit stuk kost, meer naarmate de meent kleiner wordt.
+    if (doe.ontgin && L.ontgin && L.ontgin.vertrouwen) delen.push(`vertrouwen van het dorp −${L.ontgin.vertrouwen}`);
     // Wie verbannen wordt, gaat het bos in, en wie het bos in gaat, kan als rover terugkomen (js/rovers.js).
     if (doe.verban && L[doe.verban]) delen.push(`${naam(L[doe.verban])} moet het bos in`);
     if (doe.gezin) {

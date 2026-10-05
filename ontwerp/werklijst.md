@@ -39,7 +39,7 @@ treft, soms staan voor een praatje, met een wolkje boven wie praat. **Sinds vraa
 hun land: ze zaaien, wieden, rijden mest uit, spitten en sprokkelen, en hun boerin en grote kinderen helpen bij het
 zaaien en de oogst. **Sinds vraag 107** komt een boer of zijn zoon je vragen om een stuk heide te ontginnen als het
 graan tekortkomt: ja kost het vertrouwen van het dorp, want de meent is van iedereen, en na een maand plaggen steken is
-het een akker die in lentemaand gezaaid wordt. `npm test`: 943/943.
+het een akker die in lentemaand gezaaid wordt. `npm test`: 944/944.
 
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
@@ -134,13 +134,15 @@ En de militie die onderweg is, rent nu naar het gevecht en vecht mee als ze er i
 
 **Ontginnen op de heide** (vraag 107, stap 1, drieëndertigste sessie; Marcel: "1 en 3, 107 a b c d e ja"): komt het dorp
 graan tekort, dan vraagt een boer of zijn zoon je om dertig tegels heide, met de plek in goud op de grond
-(`js/ontginnen.js`). Ja kost 5 vertrouwen, en dan steekt hij een maand plaggen, tegel voor tegel, met de schoffel; in
+(`js/ontginnen.js`). Ja kost vertrouwen, elk stuk 5 meer (5, 10, 15: f3), en dan steekt hij een maand plaggen, tegel
+voor tegel, met de schoffel; in
 lentemaand wordt het gezaaid. Nee, of je sprak hem niet: pas na dertig dagen vraagt er weer iemand. **Wat Claude erin
 zag:** "naast zijn akker" kan bijna nooit, want de heide ligt apart (op de landen van de maker in een hoek, 8 tot 40
 tegels van de dichtste boerderij). Dus kiest hij de plek zo dicht bij zijn akker als het kan, en wordt de heide van de
 kant van het dorp af ontgonnen. De speeltest (`speelbaar.md`): een derde tot ruim de helft meer oogst in het tweede jaar,
-geen honger meer, en op 72022 nu wel marktrecht; maar de hele heide is in het eerste jaar op, en dat is vraag 107, f
-(het tempo). Zie onder Af, en `spel.md`, "Ontginnen". Stap 2 (het bos) en 3 (vier jaar spelen) volgen.
+geen honger meer, en op 72022 nu wel marktrecht; maar de hele heide is in het eerste jaar op. Marcel koos daarop f1 met
+f3 (vraag 107, f: "We gaan met jouw suggestie"): het tempo blijft, en elk volgend stuk kost meer vertrouwen. Zie onder
+Af, en `spel.md`, "Ontginnen". Stap 2 (het bos) en 3 (vier jaar spelen) volgen.
 
 **Waar de volgende sessie begint:** het werk van de drieëndertigste sessie staat sinds 5 okt in `main` (Marcel: "ja push
 main"), net als dat van de tweeëndertigste (Marcel: "1 ja"
@@ -3778,6 +3780,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       het dorp eraan hecht. Dan wordt de vijfde ja een echte afweging.
     Voorstel van Claude: f1 met f3. Het tempo houdt de druk om eten in het eerste jaar, en f3 maakt van dezelfde vraag
     elke keer een zwaardere.
+    **Marcel koos (5 okt, drieëndertigste sessie): "We gaan met jouw suggestie".** Dus f1 met f3: het tempo blijft, en
+    elk stuk kost 5 vertrouwen meer dan het vorige (5, 10, 15, ...), naar hoeveel stukken er al van de meent af gingen.
 108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
     misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
     moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
@@ -5316,13 +5320,15 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   vraagt een boer of zijn grote zoon je om dertig tegels heide (een voorval `ontginverzoek`, vóór de bouwverzoeken; de
   plek in goud op de grond). De boer met een akker het dichtst bij de heide vraagt het, en hij kiest het stuk zo dicht bij
   zijn akker als het kan (`T.ontginPlekVoor`), want de heide ligt apart. Ja (`T.ontginToegestaan`) maakt er een veld van
-  zijn boerderij van en kost 5 vertrouwen; een maand steekt hij plaggen met de schoffel (`ontginnen` in
+  zijn boerderij van en kost vertrouwen, elk stuk 5 meer: 5, 10, 15 (`T.ontginVertrouwen`; vraag 107, f3, Marcel: "We
+  gaan met jouw suggestie"); een maand steekt hij plaggen met de schoffel (`ontginnen` in
   `js/veldwerk.js`; een halve plag maakt hij na de schaft of de volgende dag af), en in lentemaand wordt het gezaaid, of
   meteen als het klaar is terwijl de boeren nazaaien (`T.isNazaaitijd`). De schapen grazen er niet meer en houden
-  altijd wat ze nodig hebben (`js/vee.js`). Na elk verzoek dertig dagen geen nieuw. Ben je weg, dan zegt de raadsman ja.
-  De spelregel "Ontginnen", `T.ONTGINNEN_INSTELLINGEN`, `Spel.debug.ontginnen()`, en `test/ontginnen.test.cjs` (zes
+  altijd wat ze nodig hebben (`js/vee.js`). Na elk verzoek dertig dagen geen nieuw. Ben je weg, dan zegt de raadsman ja
+  op het eerste stuk, en nee op een volgend. De spelregel "Ontginnen", `T.ONTGINNEN_INSTELLINGEN`,
+  `Spel.debug.ontginnen()`, en `test/ontginnen.test.cjs` (zeven
   toetsen). Het stuk houdt de paadjes van de deuren vrij. De speeltest op drie landen van de maker liep zonder fouten,
-  met een derde tot ruim de helft meer oogst in het tweede jaar (`speelbaar.md`). `npm test` 943/943. Zie `spel.md`,
+  met een derde tot ruim de helft meer oogst in het tweede jaar (`speelbaar.md`). `npm test` 944/944. Zie `spel.md`,
   "Ontginnen", en vraag 107 (f: het tempo is open).
 - 5 okt 2026 — **De boeren aan het werk** (drieëndertigste sessie; vraag 111, stap 1 en 2; Marcel: "A. Ja prima B ja graag
   C doe maar", en "a ja b ja c nu"). Overdag werkt een boer op zijn eigen land (`js/veldwerk.js`, `T.werkVeldwerkBij`):

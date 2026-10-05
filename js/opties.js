@@ -386,7 +386,7 @@
       uitleg: 'Of een boer heide mag komen vragen om te ontginnen als het dorp graan tekortkomt.',
       keuzes: [
         { id: 'aan', naam: 'Aan', zet: { 'ONTGINNEN_INSTELLINGEN.aan': true },
-          uitleg: 'Komt het dorp graan tekort, dan vraagt een boer of zijn zoon je om dertig tegels heide te ontginnen, zo dicht bij zijn akker als het kan. Ja kost vertrouwen van het dorp, want de meent is van iedereen. Een maand plaggen steken, en in het voorjaar wordt het gezaaid.' },
+          uitleg: 'Komt het dorp graan tekort, dan vraagt een boer of zijn zoon je om dertig tegels heide te ontginnen, zo dicht bij zijn akker als het kan. Ja kost vertrouwen van het dorp, want de meent is van iedereen, en elk volgend stuk meer. Een maand plaggen steken, en in het voorjaar wordt het gezaaid.' },
         { id: 'uit', naam: 'Uit', zet: { 'ONTGINNEN_INSTELLINGEN.aan': false },
           uitleg: 'Het land blijft zoals het is. Zoals voor 5 okt.' },
       ],

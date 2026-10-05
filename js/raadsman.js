@@ -179,10 +179,11 @@
   }
 
   // Heide ontginnen (js/ontginnen.js; werklijst vraag 107): het graan dat het dorp tekortkomt, als tevredenheid
-  // (L.ontgin.nut), naar zijn karakter.
+  // (L.ontgin.nut), tegen het vertrouwen dat het kost (L.ontgin.vertrouwen; dat weegt hij als tevredenheid, want het is
+  // wat het dorp ervan vindt), naar zijn karakter. Het eerste stuk zegt hij ja, een volgend niet: dat laat hij aan jou.
   function ontginWaarde(p, ontgin) {
     const t = IN().karakters[p.wezen.karakter] || IN().gewoon;
-    return (t.tevreden || 0) * (ontgin.nut || 0);
+    return (t.tevreden || 0) * ((ontgin.nut || 0) - (ontgin.vertrouwen || 0));
   }
 
   // De antwoorden die hij kan geven: wat het gesprek sluit, en wat naar een knoop gaat, samen met het eerste antwoord

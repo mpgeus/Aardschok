@@ -604,8 +604,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.graanTekort`), dan vraagt een boer of zijn zoon een stuk heide te ontginnen, dertig tegels, zo dicht bij zijn akker
   als de heide komt en niet op een paadje van een deur (`T.ontginPlekVoor`, `T.isAangelegdPaadje` in `js/paden.js`; een
   nieuw veld meldt `T.kaartVeranderd`): een voorval `ontginverzoek` (`T.beginOntginverzoek`, in `T.tikVoorvallenDag`
-  vóór de bouwverzoeken), met `L.ontgin` = { x, y, b, h, boer, nut }. Ja (`doe.ontgin`, `T.ontginToegestaan`) maakt er
-  een veld van zijn boerderij van, met `veld.ontginning` = { tot, gestoken }, en kost het vertrouwen van het dorp; een
+  vóór de bouwverzoeken), met `L.ontgin` = { x, y, b, h, boer, nut, vertrouwen }. Ja (`doe.ontgin`,
+  `T.ontginToegestaan`) maakt er een veld van zijn boerderij van, met `veld.ontginning` = { tot, gestoken } en
+  `veld.ontgonnen`, en kost het vertrouwen van het dorp, elk stuk meer (`T.ontginVertrouwen`; vraag 107, f3); een
   maand steekt de boer er plaggen (`ontginnen` in `js/veldwerk.js`, `T.steekPlag`; een halve plag onthoudt hij in
   `e.veldwerk.over`), wat hij niet stak is heide (`T.akkerTegelStadium`), en de schapen grazen er niet meer
   (`T.weideStand` en `T.graaslandVan` in `js/vee.js`). Na een verzoek pas na dertig dagen een nieuw (`D.ontginnen`). De

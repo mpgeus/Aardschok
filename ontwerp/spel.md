@@ -2186,8 +2186,10 @@ bijna altijd het tweede, want de heide ligt apart: op het ontworpen gehucht tien
 landen van de maker in een hoek, 8 tot 40 tegels van de dichtste boerderij. Wat ontgonnen is, ligt de volgende keer het
 dichtst bij, dus de heide wordt van de kant van het dorp af ontgonnen. Over een weg of een paadje van een deur komt het
 niet (op het ontworpen gehucht loopt dat van de schaapskooi over de heide); een gesleten paadje mag wel. Je ziet de plek
-in goud op de grond, zoals bij elk verzoek. **Ja:** het wordt een veld van zijn boerderij, en het vertrouwen van het dorp zakt 5 ("de meent is van ons
-allemaal"). Een maand steekt hij er plaggen met de schoffel, tegel voor tegel, en wat hij stak, is kale grond. Een plag
+in goud op de grond, zoals bij elk verzoek. **Ja:** het wordt een veld van zijn boerderij, en het vertrouwen van het dorp
+zakt: 5 bij het eerste stuk, 10 bij het tweede, 15 bij het derde, want hoe kleiner de meent, hoe meer het dorp eraan hecht
+(vraag 107, f3; Marcel: "We gaan met jouw suggestie"). Het venster zegt het onder Ja, en wie het vraagt ook: "er ging al
+een stuk van de meent af, en het dorp zal er meer van vinden". Een maand steekt hij er plaggen met de schoffel, tegel voor tegel, en wat hij stak, is kale grond. Een plag
 is acht uur werk, dus hij maakt hem af na de schaft of de volgende dag: in de lente steekt hij er zo'n 1,25 per dag, in de
 herfst 1, in de winter 0,6 (wat na de maand nog heide is, steken zijn mensen dan). Daarna rust het tot lentemaand, en dan
 wordt het een akker en gezaaid, met zaaigraan zoals elke akker. Is het klaar terwijl de boeren nog nazaaien (na 1
@@ -2195,7 +2197,8 @@ lentemaand, tot het graan groen wordt), dan wordt het meteen een akker en zaaien
 wacht geen jaar. Zolang het ontgonnen wordt, wisselt het niet op 1 lentemaand. De schapen grazen er niet meer, en ze houden altijd wat
 ze nodig hebben en tien tegels erbij; zo kunnen er op de heide vier à vijf stukken af, naar hoeveel schapen er zijn. **Nee, of je sprak hem niet:** pas na
 dertig dagen vraagt er weer iemand (anders kwam hij elke dag terug, zolang het graan tekortkomt). Na een ja pas dertig
-dagen nadat het stuk klaar is. Ben je weg, dan beslist je raadsman, zoals bij elk verzoek. Geen nieuwe boerderij en geen
+dagen nadat het stuk klaar is. Ben je weg, dan beslist je raadsman: het eerste stuk ja, een volgend nee, want dat kost
+meer vertrouwen dan het hem waard is. Geen nieuwe boerderij en geen
 nieuw gezin. De spelregel "Ontginnen" (aan of uit), de getallen in `T.ONTGINNEN_INSTELLINGEN`, en
 `Spel.debug.ontginnen()`. **Nog niet:** het bos, openlijk tegen de gunst van de heer of stiekem met de inner en de
 soldaten (stap 2), en de speeltest van vier jaar (stap 3).

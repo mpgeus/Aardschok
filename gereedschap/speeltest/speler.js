@@ -293,9 +293,15 @@
       // Een bouwverzoek (js/verzoeken.js; werklijst vraag 103): ja als het kan, zoals de bouwer bouwde wat de raad zei,
       // ook als het hout voor de winter krap is (daar waarschuwt de raad voor, en dan vraagt iemand een houthakker); kan
       // het niet, dan nee. Een gewoon voorval: het eerste verstandige antwoord.
-      // Heide ontginnen (js/ontginnen.js; werklijst vraag 107, e): ja, zoals een bouwverzoek.
+      // Heide ontginnen (js/ontginnen.js; werklijst vraag 107, e): ja, zoals een bouwverzoek, zolang het vertrouwen van
+      // het dorp daarna 30 of meer is (de grens die de slimme ook bij een gril houdt): elk volgend stuk kost meer (f3).
       const verzoek = L.bouw || L.ontgin;
-      const ja = verzoek ? knoppen.find((b) => /^\dJa/.test(b.textContent)) : null;
+      const magJa = (b) => {
+        const m = /vertrouwen van het dorp −(\d+)/.exec(prijsVan(b));
+        const bazen = T.bazenNu(s.dorp);
+        return !L.ontgin || !m || !bazen || bazen.vertrouwen - Number(m[1]) >= 30;
+      };
+      const ja = verzoek ? knoppen.find((b) => /^\dJa/.test(b.textContent) && magJa(b)) : null;
       const knop = verzoek ? ja || knoppen.find((b) => /^\dNee/.test(b.textContent)) || knoppen[0] : knoppen.find((b) => verstandig(s, prijsVan(b))) || knoppen[0];
       if (!knop) break;
       const antwoord = knop.textContent.replace(/^\d/, '');

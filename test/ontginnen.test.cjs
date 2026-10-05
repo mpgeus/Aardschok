@@ -130,6 +130,38 @@ test('nee, of je sprak hem niet: pas na dertig dagen vraagt er weer iemand; met 
   }
 });
 
+// Het stuk dat ontgonnen wordt, is klaar, en het dorp mag meteen weer vragen.
+function allesKlaar(S) {
+  for (const v of T.inOntginning(S.wereld)) delete v.ontginning;
+  S.dorp.ontginnen = { gevraagd: null, klaar: null };
+}
+
+// Vraag 107, f3 (Marcel, 5 okt: "We gaan met jouw suggestie"): hoe kleiner de meent, hoe meer het dorp eraan hecht.
+test('elk volgend stuk kost meer vertrouwen, 5, 10, 15; het venster zegt het vooraf, en wie het vraagt ook', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  const zinnen = [/het is de meent, en het dorp zal er wat van vinden/, /er ging al een stuk van de meent af/, /er gingen al twee stukken van de meent af/];
+  for (const [i, kost] of [5, 10, 15].entries()) {
+    const L = verzoek(S);
+    assert.equal(L.ontgin.vertrouwen, kost, `stuk ${i + 1}`);
+    assert.match(T.prijsVanKeuze(D, antwoord(0).doe).tekst, new RegExp(`vertrouwen van het dorp −${kost}$`), 'het venster zegt wat ja kost');
+    assert.equal(T.prijsVanKeuze(D, antwoord(1).doe).tekst, '', 'nee kost niets');
+    assert.match(T.vulWoordenIn(D, T.GESPREKKEN.ontginverzoek.knopen.begin.tekst[0].zeg), zinnen[i]);
+    const voor = T.bazenNu(D).vertrouwen;
+    zeg(S, 0);
+    assert.equal(T.bazenNu(D).vertrouwen, voor - kost, `stuk ${i + 1} kost ${kost}`);
+    allesKlaar(S);
+  }
+  assert.equal(T.ontgonnenStukken(S.wereld), 3);
+  // Zonder de twee bazen (de spelregel) is er geen vertrouwen, en kost het niets.
+  T.zetOptie('tweeBazen', 'uit');
+  try {
+    assert.equal(T.ontginVertrouwen(D), 0);
+  } finally {
+    T.optiesTerug();
+  }
+});
+
 // Laat de wereld lopen zoals js/main.js, op 30×, tot het uur `tot` van dag `dag`.
 function totUur(S, dag, tot) {
   S.kalender.snelheid = 30;
@@ -213,7 +245,7 @@ test('ja in sprokkelmaand: op 1 lentemaand wisselt het nog niet, en is het in le
   assert.ok(berichten.some((t) => /zaaien hem na/.test(t)), berichten.slice(-3).join(' | '));
 });
 
-test('ben je weg, dan zegt je raadsman ja als het dorp graan tekortkomt; en het stuk gaat mee in een bewaard spel', () => {
+test('ben je weg, dan zegt je raadsman ja op het eerste stuk, en op een volgend nee; en het stuk gaat mee in een bewaard spel', () => {
   const S = gehucht();
   const D = S.dorp;
   const L = verzoek(S);
@@ -222,6 +254,14 @@ test('ben je weg, dan zegt je raadsman ja als het dorp graan tekortkomt; en het 
   assert.ok(keus && keus.doe.ontgin, `${raadsman.wezen.karakter} zegt: ${keus && keus.zeg}`);
   zeg(S, 0);
   const veld = S.wereld.akkers.find((v) => v.ontginning);
+  // Een tweede stuk kost 10 vertrouwen, meer dan het hem waard is: dat laat hij aan jou.
+  const ontginning = veld.ontginning;
+  allesKlaar(S);
+  verzoek(S);
+  const tweede = T.raadsmanKeuze(D, raadsman, 'ontginverzoek');
+  assert.ok(tweede && !tweede.doe.ontgin, `een tweede stuk: ${raadsman.wezen.karakter} zegt: ${tweede && tweede.zeg}`);
+  T.voorvalBeantwoord(D, lopend(D).id);
+  veld.ontginning = ontginning;
   T.steekPlag(veld, veld.x, veld.y);
   const gelezen = T.leesSpel(T.bewaarSpel(S, { nu: 0 }));
   assert.ok(gelezen.gelukt, gelezen.reden);
