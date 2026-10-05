@@ -149,6 +149,27 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 4 okt: het draaibare wit op landen van de maker (werklijst, vraag 124, B)
+
+Gespeeld in de tweeëndertigste sessie, op `ccr-9fc8b85a-tfgsyn` op `a0b8cc1` (het spel van `5b1793f`: wit draaibaar en met
+alle bouwfasen, en G): `npm run speeltest -- bouwer --maker`, op dezelfde drie landnummers als bij 2a hieronder. Het zijn
+weer iets andere landen: de voet van hut 1 en huis 3 veranderde (de schoor), dus kiest de maker andere standen en schuift
+zijn toeval op (op 72022 bijvoorbeeld 34 tegels meer water en 49 minder gras).
+
+| Land | Een dorp | Marktrecht | Mensen | Huizen die doorgroeiden | Bij 2a (dorp, marktrecht, mensen) |
+|---|---|---|---|---|---|
+| 62707 | 29 oogstmaand | 29 herfstmaand | 26 → 66 | 9 | 23 oogstmaand, 6 wijnmaand, 26 → 82 |
+| 73425 | 24 herfstmaand | 2 slachtmaand | 26 → 96 | 21 | 11 wijnmaand, 1 slachtmaand, 26 → 90 |
+| 72022 | 3 herfstmaand | nee | 26 → 72 | 9 | 21 herfstmaand, 15 slachtmaand, 26 → 84 |
+
+**Wat opviel:**
+1. **Het spel loopt met het draaibare wit:** drie keer twee jaar, geen fouten in de console, de bouwer bleef schout, en
+   de huizen groeiden door (en rezen daarbij op in hun laatste bouwfasen, G; dat zie je niet in de tabel).
+2. **Op 72022 liep het dorp vast op plaats:** 16 groeidagen zonder plek voor een gezin (de raad zei 168 dagen "plaats"),
+   en daardoor in twee jaar geen marktrecht, terwijl hetzelfde land bij 2a marktrecht haalde. Het land is anders gelegd
+   (meer water en heide), dus dit zegt iets over hoe de bouwer zijn erven kiest op een krap land, niet over de huizen.
+   Hoort bij vraag 107 (ontginnen) en 110 (de maat van de winst).
+
 ## De speeltest van 4 okt: de bouwstijl wit op landen van de maker (werklijst, vraag 114, stap 2a)
 
 Gespeeld in de eenendertigste sessie, op `ccr-32a5a0e4-w5loh4` op `9f3f4e4` (de bouwstijl wit, samengevoegd met `main`,

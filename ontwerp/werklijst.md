@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (4 okt 2026, tweeëndertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit, voorlopig gespiegeld en zonder bouwfasen), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie kan de huizenbouwer elk huis van vier kanten bouwen en een kwartslag gedraaid tekenen (vraag 124, B; de proefplaat wacht op Marcel), dan wit opnieuw, draaibaar en met bouwfasen en de andere drie stijlen (2b), dan de herberg, de kapel en de woontoren (stap 3), dan de boeren aan het werk (vraag 111), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
+## De stand (4 okt 2026, tweeëndertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); de andere drie stijlen lopen in een eigen sessie (2b); dan de herberg, de kapel en de woontoren (stap 3), dan de boeren aan het werk (vraag 111), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -100,8 +100,8 @@ en 4, huis 1, 3 en 6 en hun stenen broertjes, boerderij 1 en 4), elke vorm met z
 108 tekeningen uit `STIJLEN` in `huizen.cjs`). Een huis dat gebouwd wordt of doorgroeit, krijgt het dak van zijn trede
 (riet, leien in een dorp, pannen met marktrecht), een stenen huis baksteen pas met een steenbakkerij; op een erf kijkt de
 deur naar de weg, met de moestuin ervoor; een verzoek keert zijn deur naar de weg; de maker zet de huizen ook vóór het
-plein, met hun deur ernaartoe. Het ontworpen gehucht speelt zoals altijd. Voorlopig zijn de witte huizen gespiegeld en
-zonder bouwfasen: de draaibare vervangen ze (vraag 124, B). Zie onder Af, en `beeld.md`, "De eerste bouwstijl: wit".
+plein, met hun deur ernaartoe. Het ontworpen gehucht speelt zoals altijd. Sinds de tweeëndertigste sessie zijn
+de witte huizen draaibaar en hebben ze alle bouwfasen (vraag 124, B; zie hieronder). Zie onder Af, en `beeld.md`, "De eerste bouwstijl: wit".
 **WebGL, in een eigen sessie naast de huizen** (vraag 123; Marcel, 4 okt: "Kunnen we een andere agent starten die
 alvast het webgl deel uitvoert?"): het tekenen met WebGL loopt naast de huizen, op een eigen branch
 (`claude/webgl-tekenen`), en blijft uit de bestanden van de huizen. Marcel koos het plan (A tot en met D). Stap 1 is af:
@@ -112,23 +112,21 @@ pc (een nieuwe proefversie; vraag E: ja), en dan schaduwen en licht (vraag 125: 
 Marcel: "A ja B ja C ja D na webgl"). Het draaien
 van de camera (vraag 124) komt na WebGL, en de huizen worden alvast draaibaar gerenderd (Marcel: "124b Ja dan").
 
-**De draaibare huizen zijn gebouwd, de proefplaat wacht op Marcel** (vraag 124, B, tweeëndertigste sessie; Marcel: "A
-ja ... B ja C ja"): de huizenbouwer bouwt een huis van een stijl als één huis met alle vier de muren ingevuld (`rondom`),
+**De draaibare huizen staan in het spel** (vraag 124, B, tweeëndertigste sessie; Marcel: "A ja ... B ja C ja", en na de
+proefplaat "ja start maar"): de huizenbouwer bouwt een huis van een stijl als één huis met alle vier de muren ingevuld (`rondom`),
 en de tekenaar draait de camera en de zon er een kwartslag omheen, zodat de vier standen de vier aanzichten zijn en de zon
 linksboven blijft; de uitbouwen blijven voor en rechts, de steiger van de bouwfasen staat rondom, en de deur zie je van
-zuid en van oost. De oude huizen bleven pixel voor pixel dezelfde, en aan het spel is nog niets veranderd. Het plan en wat
-er gebouwd is, staan bij vraag 114 (onder "Schets voor de draaibare huizen"), en in `beeld.md`, "De draaibare huizen".
+zuid en van oost. Wit staat zo in het spel, met alle bouwfasen, en een huis dat doorgroeit, rijst op in zijn laatste
+fasen (G). De oude huizen en het ontworpen gehucht bleven pixel voor pixel dezelfde. Het plan en wat er gebouwd is, staan
+bij vraag 114 (onder "Schets voor de draaibare huizen"), en in `beeld.md`, "De draaibare huizen".
 
-**Waar de volgende sessie begint:** Marcel bekijkt de proefplaat (`node gereedschap/pixelart/huis-sdf-export.cjs rondom`,
-`uit/proefhuis/rondom.png`; Marcel: "C ja", eerst de proefplaat). Daarna wit opnieuw door de bouwer, nu draaibaar en met
-alle bouwfasen (`npm run tiled huizen`, dan `bouwfasen.cjs --erbij`; hier zo'n twee uur, in twee delen, want een taak op de
-achtergrond stopt na twee uur; Marcel: "ik wil overal bouwfase"), dan `npm test`, `npm run schermen` (het ontworpen
-gehucht byte voor byte, land 5 in het nieuwe wit) en de speeltest op landen van de maker, en daarmee **G** (Marcel: "G
-ja", en "G bij de draaibare huizen is goed"): een huis dat doorgroeit, rijst op in de laatste drie fases over zijn
-bouwtijd, en de mensen blijven erin wonen. Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
-veranderen: de huizen in `tegels/` hebben geen schaduw op de vloer, en het spel tekent hun schaduw zelf. En dan stap 2b,
-de andere drie stijlen, elk met een eigen drietal vormen (Marcel: "B ja"), en stap 3, de herberg, de kapel en de
-woontoren, meteen draaibaar. **Vraag 121 is besloten**
+**Waar de volgende sessie begint:** het werk van de tweeëndertigste sessie staat op `ccr-9fc8b85a-tfgsyn` en nog niet in
+`main`; zet het erin als Marcel het vraagt (CLAUDE.md, Git). **Stap 2b loopt in een eigen sessie** (Marcel: "Kun je alvast
+een extra agent starten voor het volgende punt op de werklijst?"), op de branch `claude/bouwstijlen-2b`: de andere drie
+stijlen. Die sessie heeft haar plan klaar en wacht op Marcels antwoorden (A tot en met E; zie vraag 114), en rendert pas
+als dit wit in `main` staat. Daarna stap 3, de herberg, de kapel en de woontoren, meteen draaibaar, en dan de boeren aan
+het werk (vraag 111). Uit de speeltest na te lopen: op land 72022 liep het dorp vast op plaats (`speelbaar.md`). Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
+veranderen: de huizen in `tegels/` hebben geen schaduw op de vloer, en het spel tekent hun schaduw zelf. **Vraag 121 is besloten**
 (hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁", en "121 a terrassen, b ja, c na de
 boeren"): terrassen met wanden en hellingen, en de hoogte raakt het lopen, het zicht en het bouwen; na de boeren, vóór
 het eiland. Een proefplaat van de hoogte kan met die van de huizen mee. **Vraag 122** (de snelheid via Steam;
@@ -4267,6 +4265,22 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     `klaar`, dus de regels zien het nieuwe huis meteen, en de speeltest speelt hetzelfde jaar; een tekening zonder
     bouwfasen groeit in één nacht, zoals altijd (`groeiGebouw` in `js/behoeften.js`, `T.bouwFaseIndex` met `vanaf`, en
     `T.tikGebouwenDag` zet hem af; drie toetsen in `test/behoeften.test.cjs`).
+    **Marcel vroeg erbij (4 okt): "Kun je alvast een extra agent starten voor het volgende punt op de werklijst?"** Dus
+    loopt stap 2b (de andere drie bouwstijlen: oker, planken, roze, elk met een eigen drietal vormen) sinds 4 okt in een
+    eigen sessie, op de branch `claude/bouwstijlen-2b`, begonnen op `ccr-9fc8b85a-tfgsyn` (met de draaibare bouwer en G).
+    Die sessie maakt eerst een plan en proefplaten voor Marcel, en schrijft onder vraag 114, stap 2b. Afgesproken: ze
+    blijft uit `tegels/` tot het wit van deze sessie in `main` staat, ze verandert de bouwer zelf alleen als een stijl het
+    vraagt, en ze rendert in delen onder twee uur (`bouwfasen.cjs --erbij <soorten>`).
+    **Stap 6 is af (tweeëndertigste sessie):** wit staat draaibaar in het spel, met alle bouwfasen (108 tekeningen, elk
+    met vijf fasen; de bouwfasen in drie delen, want een taak op de achtergrond stopt na twee uur, en één deel ging
+    verloren toen de container herstartte). Onderweg bleek dat de schoor van hut 1 in stand west vooraan over de rand
+    van zijn voet stak (de toets van het anker zag het): bij een huis rondom staat een schoor nu binnen één tegel voor
+    de gevel en telt hij mee in de voet (hut 1 6 bij 4, huis 3 9 bij 7). Nagekeken: alleen de witte tekeningen
+    veranderden, de oude bleven pixel voor pixel dezelfde; geen deur aan de verkeerde kant; `npm test` 928/928;
+    `npm run schermen` tegen de stand van vóór (`6bfd3ba`, gemaakt in een losse kopie met `git worktree`): 21 van 23
+    beelden byte voor byte gelijk (het hele ontworpen gehucht, de nacht, de herberg, de bouwplaatsen), en alleen land 5
+    van de maker anders, met het nieuwe wit en een iets ander gelegd land (de maker legt het anders nu de voet van hut 1
+    en huis 3 veranderde).
     **Plan voor stap 2b, de andere drie stijlen (Claude, 4 okt, tweede sessie naast de draaibare huizen; wacht op
     Marcel).** Nagelezen op `5b1793f` (de branch van de draaibare huizen). Wit gebruikt hut 1, 3 en 4, huis 1, 3 en 6 en
     boerderij 1 en 4. Over zijn nog maar hut 2, huis 2, 4 en 5 en boerderij 2, 3 en 5: genoeg voor één stijl, dus er
@@ -4305,6 +4319,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     nieuwe), of delen de stijlen de hutten (een hut verschilt dan alleen in dak en wand)? **D**, het huis van de schout in
     de stijl van zijn land (het stond bij 2a voor 2b), nu, of met de grote gebouwen (stap 3)? **E**, zo'n zeven uur
     renderen en 55 MB erbij in de opslagplaats?
+    **Marcel (4 okt): "A ja B ja C delen D stap 3 E tuurlijk".** Dus: de vormen zoals hierboven, met de galerij, de trap,
+    de erker en twee lagen als kenmerk; de plankenstijl helemaal van hout (de huizen en de hutten van planken, boven het
+    stenen broertje planken); de stijlen delen de hutten van wit (hut 1, 3 en 4), elk in zijn eigen dak, wand en kalk, dus
+    er komen geen nieuwe hutten; het huis van de schout krijgt de stijl van zijn land pas met de grote gebouwen (stap 3);
+    en het renderen mag.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
@@ -5267,6 +5286,15 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 4 okt 2026 — **De draaibare huizen, en G** (tweeëndertigste sessie; vraag 124, B, en vraag 114, G; Marcel: "A ja ... B
+  ja C ja", "ja start maar", "G ja"). De tekenaar draait de camera, de zon en het randlicht een kwartslag om de wereld
+  (`tekenWereld` met `o.draai`), de bouwer vult met `rondom` elke muur in (de deur voor, zichtbaar van zuid en van
+  oost; de uitbouwen voor en rechts; elke muur zijn eigen lot), de standen van een stijl zijn de draai van één huis, en
+  de bouwfasen hebben de steiger rondom. Wit is opnieuw gerenderd, nu met alle bouwfasen (108 tekeningen); een schoor
+  staat rondom binnen één tegel en telt mee in de voet. Een huis dat doorgroeit, rijst op in de laatste drie bouwfasen
+  terwijl zijn mensen erin blijven wonen (alleen het beeld). De oude huizen en het ontworpen gehucht bleven pixel voor
+  pixel dezelfde (21 van 23 schermen gelijk, alleen land 5 anders); de speeltest op drie landen van de maker liep
+  zonder fouten. `npm test` 928/928. Zie `beeld.md`, "De draaibare huizen", en `speelbaar.md`.
 - 4 okt 2026 — **Elk land van de maker bouwt in een bouwstijl: wit** (eenendertigste sessie; vraag 114, stap 2a; Marcel:
   "A ja B ja C ik wil overal bouwfase voor ... D ja E ja", en "H1 is oke"). De huizenbouwer kreeg de bouwstijlen
   (`STIJLEN` in `huizen.cjs`): wit vakwerk, groene luiken, veldsteen en riet, met hut 1, 3 en 4, huis 1, 3 en 6 (en hun
