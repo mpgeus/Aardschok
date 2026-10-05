@@ -156,7 +156,7 @@ const RIJEN = [
   },
   { naam: 'zaaier', werk: 'zaaien', fasen: [0, 5, 7], werkGrond: 'aarde' },
   { naam: 'wieder', werk: 'wieden', fasen: [0, 3, 7], werkGrond: 'aarde' },
-  { naam: 'sprokkelaar', werk: 'rapen', fasen: [0, 6, 12], werkGrond: 'gras' },
+  { naam: 'sprokkelaar', werk: 'rapen', fasen: [5, 9, 12], werkGrond: 'gras' },
 ];
 function proefplaat() {
   const t0 = Date.now();

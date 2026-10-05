@@ -91,13 +91,17 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   `--alleen schandpaal` voor hun nek.
 - `werkfiguren.cjs`: de boer aan het werk op zijn veld (werklijst vraag 111, b), op dezelfde manier als de maaier
   (`maaier.cjs`): het lijf van de gewone boer met strohoed en kiel, met eigen gereedschap en een eigen houding voor het
-  werk, uit sleutelbeelden. De zaaier (staan, lopen, zaaien: breedwerpig uit een zaaidoek, met zaad dat uit de hand
-  vliegt), de wieder (staan leunend op de schoffel, lopen met de schoffel over de schouder, wieden: hakken en trekken,
-  met kluiten) en de sprokkelaar (een takkenbos op zijn rug; staan, lopen, rapen: bukken, een tak oprapen en over de
-  schouder in de bundel steken). Staan en lopen zijn die van de boer zelf, met zijn pas. `node werkfiguren-anim.cjs`
+  werk, uit sleutelbeelden. De zaaier (staan, lopen, zaaien: breedwerpig uit een zaaidoek; de vuist gaat in de zak, en
+  bij de worp gaan de vingers open en vangt een waaiertje zaad even het licht), de wieder (staan leunend op de
+  schoffel, lopen met de schoffel over de schouder, wieden: hakken en trekken, met kluiten; de schoffel is een plat,
+  breed blad aan een zwanenhals, dat van elke kant als schoffel leest) en de sprokkelaar (een takkenbos op zijn rug;
+  staan, lopen, rapen: door de knieën tot hij hurkt, de rug zo recht als zijn korte armen toelaten en het hoofd
+  omhoog, een tak oprapen en over de schouder in de bundel steken, waar hij blijft). Een hand die opengaat, krijgt
+  vingers (`hand`). Staan en lopen zijn die van de boer zelf, met zijn pas. `node werkfiguren-anim.cjs`
   schrijft de vellen naar `uit/<naam>/animaties/` (met een bewegende PNG per houding) en de proefplaat
   `uit/werkfiguren-proef.png` (naast de boer en de maaier, op 1×; `--proef` alleen die), daarna
-  `node naar-spel.cjs --alleen zaaier,wieder,sprokkelaar`. Zo'n tien minuten, de sprokkelaar het langst.
+  `node naar-spel.cjs --alleen zaaier,wieder,sprokkelaar`. Ruim zeven minuten na elkaar, de sprokkelaar het langst
+  (vier en een half); met een figuur per proces tegelijk zo lang als de sprokkelaar.
 - `schandpaal.cjs`: de schandpaal, leeg en bezet, en het halsijzer als eigen laag over wie eraan
   staat (`node schandpaal.cjs` maakt de proefplaat `uit/schandpaal-proef.png`, daarna
   `node naar-spel.cjs --alleen schandpaal`). De hoogte van de nek wordt gemeten op de boer en de
