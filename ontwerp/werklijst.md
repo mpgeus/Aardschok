@@ -4324,6 +4324,19 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     stenen broertje planken); de stijlen delen de hutten van wit (hut 1, 3 en 4), elk in zijn eigen dak, wand en kalk, dus
     er komen geen nieuwe hutten; het huis van de schout krijgt de stijl van zijn land pas met de grote gebouwen (stap 3);
     en het renderen mag.
+    **De stijlen staan in de bouwer, en de proefplaten zijn gemaakt (4 okt, tweede sessie naast de draaibare huizen; nog
+    niets in `tegels/`):** `STIJLEN` in `huizen.cjs` heeft oker, planken en roze, de nieuwe vormen staan in `VORMEN`
+    (nooit een losse tekening op het vel), en `stijlHuizen` maakt van een nieuw huis zelf zijn stenen broertje
+    (`steenVan`). Een stijl kan de wand zetten (`wand`, de planken) en wat er boven de steen komt (`boven`), en `hut: 'wit'`
+    zegt dat oker en roze de hutten van wit nemen: die tekening krijgt `ook: ['oker', 'roze']`, en `js/bouwstijl.js` zet
+    hem dan ook onder die stijlen. Een huis dat doorgroeit, zoekt zijn nieuwe tekening nu in de stijl van zijn dorp, niet
+    in die van zijn oude tekening (anders werd een hut van wit in een dorp van oker een wit huis). Samen 300 nieuwe
+    tekeningen: oker en roze 96, planken 108; wit en de oude huizen bleven precies dezelfde opgaven. De proefplaten:
+    `node gereedschap/pixelart/huis-sdf-export.cjs stijl oker` (en `planken`, `roze`). Onderweg bleek dat de bouwer met
+    `rondom` een trap of een erker stil weglaat als de voordeur er op de lange muur niet meer naast past; planken huis 8 en
+    roze huis 11 zijn daarom 6 tegels diep in plaats van 5. Oker huis 5 en roze huis 12 houden hun dakkapel niet onder
+    elk dak (onder leien en pannen valt hij weg, bij roze huis 12 ook onder riet). `test/bouwstijl.test.cjs` faalt tot de
+    stijlen gerenderd zijn (hij telt de opgaven tegen de tekeningen op het vel).
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
