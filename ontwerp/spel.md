@@ -1583,6 +1583,10 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
   kar. Zo groeit de handel mee met het dorp: de marskramer in het gehucht, de voerman in het dorp,
   en de weekmarkt bij marktrecht.
 
+**Besloten (Marcel, 5 okt, bij werklijst vraag 110, d):** "De markt wordt essentieel voor de handel, vanaf dat punt kan
+een nederzetting pas handelen met buren etc." De marskramer komt bij elk dorp; handel met andere dorpen begint pas met
+een markt (vraag 72, het buurdorp). De markt zelf komt op het plein (vraag 110, d).
+
 **Voor later** (voorstel van Claude, nog niet gebouwd):
 
 - Het slachten in slachtmaand (de naam zegt het al): wat je dan niet zout, moet je meteen opeten,
