@@ -4061,6 +4061,34 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     laten vallen?
     **Marcel koos (5 okt, vijfendertigste sessie): "D, e, f Ja en a b laten vallen is goed".** Dus a en b vallen af, en de
     volgorde zoals voorgesteld: f meteen (een fout), dan d met eerst een plan, en e met de houthakker (vraag 115).
+    **f is gebouwd** (5 okt, vijfendertigste sessie; `f706100`; `spel.md`, "Het dorp bouwt zelf"): een huis dat doorgroeit,
+    blijft van een ander erf af, en drie tegels van de plek van het huis erop (`T.opDeGrondVanEenErf`); en een vrij erf
+    waar toch geen hut meer op past, telt niet als plaats (`T.bruikbareErven`, `T.hutPastOpErf`). Wat Claude erin zag: het
+    was erger dan het looppad: het huis van de maker groeide met 21 tegels óp het vrije erf, want het doorgroeien keek
+    alleen naar muren, bomen, mensen en deuren, niet naar erven.
+    **Plan voor d, de markt op het plein** (Claude, 5 okt, vijfendertigste sessie; open). Wat er nu is: de markt is een
+    gebouw van 6 bij 6 (16 hout, 14 goud), vanaf een dorp, en doet maar één ding: de stenen huizen willen hem (één voor
+    het hele dorp, zonder kring). Hij heeft geen eigen tekening (hij leent een groot dorpshuis). Het plein op de landen
+    van de maker is zo'n 15 bij 19 tegels, en er wordt niet op gebouwd; het feest, de meiboom en de heer staan erop. In
+    `gereedschap/pixelart/dorp.cjs` staat al een marktkraam (een toonbank, palen, een gestreepte luifel), nog niet als
+    voorwerp in het spel.
+    - **a, hoe hij komt:** a1, zoals nu: een inwoner vraagt het (of jij hangt een oproep op), en jij zegt ja, maar zijn
+      plek is het plein, niet een eigen stuk grond. Of a2: vanzelf met marktrecht. a2 is eenvoudiger, maar dan is het geen
+      keuze meer, en komt hij pas bij 20 ambachtslieden. Voorstel van Claude: a1.
+    - **b, wat het is:** vier kramen aan de rand van het plein, waar je tussendoor loopt (geen muur), en het midden blijft
+      vrij voor het feest, de meiboom en de heer. Een kraam is een voorwerp; de markt staat als gebouw in de lijst, zodat
+      de wens hem telt, maar zonder voet.
+    - **c, wat het kost:** kramen zijn geen huis: 8 hout en 6 goud in plaats van 16 en 14 (een getal in de werkbank). Het
+      goud was de tweede rem: in de eerste winter was er wél plek, maar geen goud.
+    - **d, de spelregel "De markt":** "Op het plein" (nieuw, de standaard) of "Een eigen gebouw" (zoals nu), zodat de
+      speeltests van vroeger te herhalen blijven.
+    - **e, het beeld:** de marktkraam uit `dorp.cjs` naar het spel, van vier kanten; tot hij er is, kramen als vlakken.
+    - **f, niet in deze stap:** een marktdag met kooplui, handel op de markt (met het buurdorp, vraag 72), en de weverij
+      (die wacht op e, bouwgrond uit het bos).
+    Klaar als: in de speeltest van vier jaar staat op elk van de drie landen een markt op het plein zodra het mag en het
+    goud er is, hebben de stenen huizen hun markt, en zeggen de toetsen dat de kramen niemand tegenhouden en het feest en
+    de heer hun plek houden. Winnen kan dan nog niet: het laken wacht op de weverij (e).
+    Vragen: **a**, a1 of a2? **b** tot en met **e**, zo?
 111. **De boeren aan het werk op hun veld** (Marcel, 3 okt, vijfentwintigste sessie: "Ook wil ik dat boeren op hun veld
     aan het werk zijn. Nu hebben ze wel velden, maar lopen ze gewoon random door het dorp. Ze moeten zaaien en op het
     veld bezig zijn."; plan van Claude; open).
