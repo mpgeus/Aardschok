@@ -139,7 +139,7 @@
     }
     for (const e of w.wezens) {
       laadFiguur(eigenFiguur(e));
-      if (e.werkAkkers && e.werkAkkers.length) for (const naam of WERKVELLEN) laadFiguur(naam);
+      if (e.werkAkkers && e.werkAkkers.length) for (const naam of S.werkVellenVan(e)) laadFiguur(naam);
     }
   };
   // Wacht deze tekening nog op zijn eigen bestand? Dan tekent js/tekenen.js wat er daarnet stond, of niets; ontbreekt het
@@ -652,6 +652,9 @@
   // de volgende tegel of even rustend, draagt hij het vel van het werk, zodat hij niet bij elke tegel van kleren wisselt;
   // naar het bos loopt hij nog met lege handen, en met de bundel op zijn rug weer naar huis (e.draagt). Mist het vel of
   // de houding die hij nu nodig heeft, dan blijft hij zichzelf.
+  //
+  // Een boerin (vel `boerin`) draagt het werkvel van een vrouw: de maaister, de zaaister, de wiedster of de
+  // sprokkelaarster (werklijst vraag 111; Marcel, 5 okt: "b ja"), en zolang dat er niet is, dat van de man.
   const WERKFIGUREN = {
     zaaien: { figuur: 'zaaier', houding: 'zaaien' },
     wieden: { figuur: 'wieder', houding: 'wieden' },
@@ -660,17 +663,22 @@
     sprokkelen: { figuur: 'sprokkelaar', houding: 'rapen' },
   };
   const WERKVELLEN = ['maaier', 'zaaier', 'wieder', 'sprokkelaar'];
-  S.werkVellen = WERKVELLEN; // wat een boer kan dragen, ook voor test/vellen.test.cjs
+  const VAN_EEN_VROUW = { maaier: 'maaister', zaaier: 'zaaister', wieder: 'wiedster', sprokkelaar: 'sprokkelaarster' };
+  const werkVelVan = (e, naam) => (e.vel === 'boerin' && S.figuurGegevens(VAN_EEN_VROUW[naam]) ? VAN_EEN_VROUW[naam] : naam);
+  // Wat deze boer of boerin aan het werk kan dragen, ook voor test/vellen.test.cjs.
+  S.werkVellenVan = (e) => WERKVELLEN.map((naam) => werkVelVan(e, naam));
   function werkFiguur(e) {
     const wf = e.werkt ? WERKFIGUREN[e.werkt.soort] : null;
     const bundel = e.draagt === 'bundel';
-    const naam = wf && (wf.figuur !== 'sprokkelaar' || bundel) ? wf.figuur : bundel ? 'sprokkelaar' : null;
+    const vel = wf && (wf.figuur !== 'sprokkelaar' || bundel) ? wf.figuur : bundel ? 'sprokkelaar' : null;
+    const naam = vel && werkVelVan(e, vel);
     if (!naam || !S.figuurGegevens(naam)) return null;
     const houding = e.pad && e.pad.length ? 'lopen' : wf && e.werkt.tot != null && !e.werkt.rust ? wf.houding : 'staan';
     return S.heeftHouding(naam, houding) ? { naam, houding } : null;
   }
   const figuurNu = (e) => {
-    if (e.maait && S.figuurGegevens('maaier')) return 'maaier';
+    const maaier = e.maait && werkVelVan(e, 'maaier');
+    if (maaier && S.figuurGegevens(maaier)) return maaier;
     const werk = werkFiguur(e);
     return werk ? werk.naam : eigenFiguur(e);
   };
@@ -730,7 +738,7 @@
     // Maaien is geen eenmalige houding (zoals slaan) maar een lus, zolang T.werkOogstBij
     // (js/akkers.js) deze tegel nog bezig is: dezelfde manier van doorlopen als het zo-meteen
     // stilstaan hieronder, alleen met de houding 'maaien' in plaats van 'staan'.
-    if (e.maait && naam === 'maaier' && S.heeftHouding(naam, 'maaien')) {
+    if (e.maait && naam === werkVelVan(e, 'maaier') && S.heeftHouding(naam, 'maaien')) {
       const duur = S.houdingDuur(naam, 'maaien') || 1;
       return { naam, houding: 'maaien', richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };
     }

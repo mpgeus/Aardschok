@@ -597,7 +597,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   uitrijden, spitten, sprokkelen aan de bosrand), rij voor rij (`T.veldwerkTegels`), elk beeld na het maaien en vóór het
   dwalen (`T.werkVeldwerkBij`, vanuit `js/main.js` en `T.werkDorpBij`). Wat hij doet, staat op zijn poppetje (`e.werkt`,
   `e.draagt`, `e.veldwerk`); wie werkt, dwaalt niet, praat niet en gaat niet opzij, en `js/sprites.js` geeft hem het vel
-  van zijn werk (`WERKFIGUREN`: de zaaier, de wieder, de sprokkelaar). De schaft houdt hij op de akker. Zijn boerin en
+  van zijn werk (`WERKFIGUREN`: de zaaier, de wieder, de sprokkelaar; een boerin die van een vrouw, `werkVelVan`). De schaft houdt hij op de akker. Zijn boerin en
   grote kinderen helpen bij het zaaien en de oogst (`T.helpAnker`, voor `T.dagAnker`; een anker dat meeloopt, zonder
   veld: `veld: false`). De regels veranderen niet; de getallen in `T.VELDWERK_INSTELLINGEN`.
 - **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen en het
