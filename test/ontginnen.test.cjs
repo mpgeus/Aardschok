@@ -101,6 +101,8 @@ test('ja: het wordt een veld van zijn boerderij dat nog ontgonnen wordt, de scha
   assert.equal(T.weideStand(D, meent).tegels, meentVoor - 30, 'de meent is dertig tegels kleiner');
   const schaap = T.veeVan(D).find((e) => e.weide === meent);
   if (schaap) assert.ok(!T.graaslandVan(w, schaap).op(o.x, o.y), 'een schaap graast er niet meer');
+  const net = T.aangelegdNet(D);
+  for (const t of T.akkerTegels(veld)) assert.notEqual(net[t.x + t.y * w.tegels[0].length], 2, `geen paadje over ${t.x},${t.y}`);
   assert.equal(T.akkerTegelStadium(veld, o.x, o.y, 'groen'), 'heide', 'wat hij nog niet stak, is heide');
   T.steekPlag(veld, o.x, o.y);
   assert.equal(T.akkerTegelStadium(veld, o.x, o.y, 'groen'), 'geploegd', 'wat hij stak, is kale grond');

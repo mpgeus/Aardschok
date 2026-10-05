@@ -159,13 +159,15 @@
     return net;
   };
 
+  // Is dit een paadje van een deur (aangelegd, niet gesleten)? Daar ontgint een boer niet (js/ontginnen.js).
+  T.isAangelegdPaadje = (D, x, y) => binnen(D.wereld, x, y) && T.aangelegdNet(D)[x + y * breedte(D.wereld)] === 2;
+
   // Is dit een paadje (aangelegd, of gesleten waar gelopen wordt)? De weg van de kaart telt niet: die is er al.
   T.isPaadje = function (D, x, y) {
     const w = D.wereld;
     if (!binnen(w, x, y)) return false;
-    const k = x + y * breedte(w);
-    if (T.aangelegdNet(D)[k] === 2) return true;
-    return IN().paadjes === 'lopen' && !!w.paden && w.paden.gesleten.has(k);
+    if (T.isAangelegdPaadje(D, x, y)) return true;
+    return IN().paadjes === 'lopen' && !!w.paden && w.paden.gesleten.has(x + y * breedte(w));
   };
 
   // ---------------------------------------------------------------------------------------------

@@ -2184,8 +2184,9 @@ boer of zijn grote zoon je vragen om een stuk heide te ontginnen, dertig tegels.
 heide vraagt het, en hij kiest de plek zelf: naast zijn akker als het kan, en anders zo dichtbij als het kan. Dat is
 bijna altijd het tweede, want de heide ligt apart: op het ontworpen gehucht tien tegels van de dichtste akker, op de
 landen van de maker in een hoek, 8 tot 40 tegels van de dichtste boerderij. Wat ontgonnen is, ligt de volgende keer het
-dichtst bij, dus de heide wordt van de kant van het dorp af ontgonnen. Je ziet de plek in goud op de grond, zoals bij elk
-verzoek. **Ja:** het wordt een veld van zijn boerderij, en het vertrouwen van het dorp zakt 5 ("de meent is van ons
+dichtst bij, dus de heide wordt van de kant van het dorp af ontgonnen. Over een weg of een paadje van een deur komt het
+niet (op het ontworpen gehucht loopt dat van de schaapskooi over de heide); een gesleten paadje mag wel. Je ziet de plek
+in goud op de grond, zoals bij elk verzoek. **Ja:** het wordt een veld van zijn boerderij, en het vertrouwen van het dorp zakt 5 ("de meent is van ons
 allemaal"). Een maand steekt hij er plaggen met de schoffel, tegel voor tegel, en wat hij stak, is kale grond. Een plag
 is acht uur werk, dus hij maakt hem af na de schaft of de volgende dag: in de lente steekt hij er zo'n 1,25 per dag, in de
 herfst 1, in de winter 0,6 (wat na de maand nog heide is, steken zijn mensen dan). Daarna rust het tot lentemaand, en dan

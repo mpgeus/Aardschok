@@ -54,12 +54,14 @@
     return Math.max(dx, dy);
   }
 
-  // Mag deze tegel ontgonnen worden? Heide van de meent, te belopen (geen boom, rots of gebouw), geen veld, pad, erf of
-  // lantaarn (T.waaromNietOpDezeGrond, js/gebouwen.js), niet het plein, en niet voor een deur.
+  // Mag deze tegel ontgonnen worden? Heide van de meent, te belopen (geen boom, rots of gebouw), geen veld, weg, erf of
+  // lantaarn (T.waaromNietOpDezeGrond, js/gebouwen.js), niet het plein, niet voor een deur, en geen paadje van een deur
+  // ("op een pad komt hij niet", vraag 107, d; op het ontworpen gehucht loopt dat van de schaapskooi over de heide). Een
+  // gesleten paadje mag wel: anders duwt het looppad van de boer zelf het volgende stuk weg.
   function magOntgonnen(D, m, x, y) {
     const w = D.wereld;
     if (x < m.x || y < m.y || x >= m.x + m.b || y >= m.y + m.h) return false;
-    if (!T.isBegaanbaar(w, x, y) || T.bijDeur(w, x, y) || T.opHetPlein(w, x, y)) return false;
+    if (!T.isBegaanbaar(w, x, y) || T.bijDeur(w, x, y) || T.opHetPlein(w, x, y) || T.isAangelegdPaadje(D, x, y)) return false;
     return !T.waaromNietOpDezeGrond(D, x, y);
   }
 
@@ -156,6 +158,9 @@
     };
     w.akkers.push(veld);
     boer.werkAkkers.push(veld);
+    // Een veld waar heide was: wat uit de kaart volgt (de paadjes van de deuren lopen niet over een veld, js/paden.js; de
+    // wegen en de grond), wordt opnieuw uitgerekend.
+    T.kaartVeranderd(w);
     const zaaien = T.isNazaaitijd(veld.ontginning.tot) ? 'en dan zaaien ze het meteen' : 'en in lentemaand wordt het gezaaid';
     T.zeg(D, `${T.hoofdletter(T.naamVanBewoner(L.wie))} begint de heide te ontginnen: over een maand is het een akker, ${zaaien}.`, 'goed');
     return veld;
