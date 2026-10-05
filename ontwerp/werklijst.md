@@ -3884,6 +3884,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       de getuigen van het verstoppen, `js/zien.js`); dan vinden de soldaten het makkelijker.
     Voorstel van Claude: g1, en later g3 als de herberg een plek van gesprekken wordt (3c). Stap 3 (de speeltest van vier
     jaar) kan dan meteen laten zien of het bijt.
+    **Marcel koos (5 okt, vierendertigste sessie): "1 en 3 later inderdaad".** Dus g1 nu, en g3 later, met de herberg als
+    plek van gesprekken (3c).
 108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
     misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
     moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
