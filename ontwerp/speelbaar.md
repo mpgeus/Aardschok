@@ -149,6 +149,24 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 5 okt: de boeren aan het werk (werklijst, vraag 111, stap 1)
+
+Gespeeld in de drieëndertigste sessie, op `ccr-ba65ef69-kcd902` op `c016d2e` (de boeren werken overdag op hun land, nog
+in hun eigen vel; zonder de militie die onderweg meevecht, die kwam erna): `npm run speeltest -- bouwer --maker`, op
+dezelfde drie landnummers als hieronder.
+
+| Land | Een dorp | Marktrecht | Mensen | Bij het draaibare wit (dorp, marktrecht, mensen) |
+|---|---|---|---|---|
+| 62707 | 29 oogstmaand | 29 herfstmaand | 26 → 98 | 29 oogstmaand, 29 herfstmaand, 26 → 66 |
+| 73425 | 24 herfstmaand | 2 slachtmaand | 26 → 96 | 24 herfstmaand, 2 slachtmaand, 26 → 96 |
+| 72022 | 13 herfstmaand | nee | 26 → 72 | 3 herfstmaand, nee, 26 → 72 |
+
+**Wat opviel:** het spel loopt met de boeren op hun land: drie keer twee jaar, geen fouten in de console, en de bouwer
+bleef schout. De treden vallen op dezelfde dagen (op 72022 werd het tien dagen later een dorp); de regels veranderden
+niet, alleen waar de boeren lopen, en dus vallen de worpen van het toeval anders (op 62707 groeide het dorp daardoor
+verder, tot 98). Op 72022 liep het dorp weer vast op plaats (16 groeidagen zonder plek voor een gezin), zoals bij het
+draaibare wit: dat blijft een vraag voor 107 en 110.
+
 ## De speeltest van 4 okt: het draaibare wit op landen van de maker (werklijst, vraag 124, B)
 
 Gespeeld in de tweeëndertigste sessie, op `ccr-9fc8b85a-tfgsyn` op `a0b8cc1` (het spel van `5b1793f`: wit draaibaar en met
