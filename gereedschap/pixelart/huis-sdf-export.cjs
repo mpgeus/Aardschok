@@ -1116,19 +1116,25 @@ const STEEN_PLAAT = [
 // daken van de treden en de steen, en drie straatjes: het gehucht, een dorp (wat nieuw is of doorgroeit, krijgt leien)
 // en marktrecht met een steenbakkerij.
 function stijlRijen(stijl) {
-  const { STIJLEN, stijlNaam } = require('./huizen.cjs');
+  const { STIJLEN, stijlNaam, huttenVan } = require('./huizen.cjs');
   const S = STIJLEN[stijl];
   if (!S) throw new Error(`geen stijl "${stijl}" (huizen.cjs, STIJLEN: ${Object.keys(STIJLEN).join(', ')})`);
   const KANT = { z: 'zuid', o: 'oost', n: 'noord', w: 'west' };
   const leesbaar = (vorm) => vorm.replace(/(\D+)(\d+)/, (_, s, n) => `${s === 'steen' ? 'stenen huis' : s} ${n}`);
-  const p = (vorm, dak, stand, naam) => [naam || `${leesbaar(vorm)}, ${dak}`, { spec: VORM(stijlNaam(stijl, vorm, dak, stand)) }];
+  // een hut kan uit een andere stijl komen (oker en roze nemen die van wit), onder het dak van die stijl
+  const H = huttenVan(stijl);
+  const p = (vorm, dak, stand, naam) => {
+    const hut = vorm.startsWith('hut');
+    const [st, dk] = hut ? [H.stijl, STIJLEN[H.stijl].dak] : [stijl, dak];
+    return [naam || `${leesbaar(vorm)}, ${dk}`, { spec: VORM(stijlNaam(st, vorm, dk, stand)) }];
+  };
   const [h1, h2, h3] = S.huis;
   const [s1, s2, s3] = S.huis.map((v) => v.replace('huis', 'steen'));
-  const [t1, t2, t3] = S.hut;
+  const [t1, t2, t3] = H.hut;
   const [b1, b2] = S.boerderij;
   const d = S.dak;
   return [
-    { naam: `de vormen van ${stijl}`, panelen: [...S.hut.map((v) => p(v, d, 'z')), ...S.huis.map((v) => p(v, d, 'z')), ...S.boerderij.map((v) => p(v, d, 'z'))] },
+    { naam: `de vormen van ${stijl}`, panelen: [...H.hut.map((v) => p(v, d, 'z')), ...S.huis.map((v) => p(v, d, 'z')), ...S.boerderij.map((v) => p(v, d, 'z'))] },
     { naam: 'in de vier standen: de deur naar zuid, oost, noord en west', panelen: [...['z', 'o', 'n', 'w'].map((k) => p(h3, d, k, `${leesbaar(h3)}, deur ${KANT[k]}`)), ...['z', 'o', 'n', 'w'].map((k) => p(t3, d, k, `${leesbaar(t3)}, deur ${KANT[k]}`))] },
     { naam: 'de daken van de treden, en de steen', panelen: [p(h1, d, 'z'), p(h1, 'leien', 'z'), p(h1, 'pannen', 'z'), p(s1, 'leien', 'z'), p(s1, 'pannen', 'z'), p(s1, 'baksteen', 'z')] },
     { naam: `het gehucht: ${d}`, panelen: [p(t2, d, 'o'), p(h1, d, 'z'), p(t3, d, 'w'), p(b2, d, 'z'), p(h2, d, 'n'), p(t1, d, 'z')] },

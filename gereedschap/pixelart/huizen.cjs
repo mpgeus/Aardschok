@@ -111,7 +111,46 @@ const HUIZEN = {
 const STIJLEN = {
   // (1) wit vakwerk, groene luiken, veldsteen (Marcel, 4 okt, "A ja": hut 1, 3 en 4, huis 1, 3 en 6, boerderij 1 en 4)
   wit: { kalk: 'wit', luiken: 'den', steen: 'veldsteen', dak: 'riet', hut: ['hut1', 'hut3', 'hut4'], huis: ['huis1', 'huis3', 'huis6'], boerderij: ['boerderij1', 'boerderij4'] },
+  // Stap 2b (Marcel, 4 okt: "A ja B ja C delen"): elke stijl een eigen drietal huizen, met een uitbouw als kenmerk, en
+  // de hutten van wit. Een hut van vlechtwerk onder riet ziet er in elke stijl hetzelfde uit (de kalk komt niet op leem),
+  // dus oker en roze tekenen hem niet opnieuw: `hut: 'wit'` zegt dat ze de hutten van wit nemen (js/bouwstijl.js).
+  // (2) oker, "de zolders": oker kalk, rode luiken, zandsteen; anderhalve laag, de L naar achter, smal en hoog
+  oker: { kalk: 'oker', luiken: 'rood', steen: 'zandsteen', dak: 'riet', hut: 'wit', huis: ['huis2', 'huis4', 'huis5'], boerderij: ['boerderij6', 'boerderij7'] },
+  // (3) planken, "het houtland": planken onder spanen, blauwgrijze luiken, veldsteen, en alles van hout ("B ja"): de
+  // huizen en de hutten van planken, boven het stenen broertje planken; een galerij, een buitentrap, een aanbouw
+  planken: { kalk: 'wit', luiken: 'pet', steen: 'veldsteen', dak: 'spanen', wand: 'planken', boven: 'planken', hut: ['hut1', 'hut3', 'hut4'], huis: ['huis7', 'huis8', 'huis9'], boerderij: ['boerderij2', 'boerderij5'] },
+  // (4) roze, "het rijke vakwerk": roze kalk, kale luiken, zandsteen; twee lagen die overkragen, een erker, een T
+  roze: { kalk: 'roze', luiken: 'hout', steen: 'zandsteen', dak: 'riet', hut: 'wit', huis: ['huis10', 'huis11', 'huis12'], boerderij: ['boerderij8', 'boerderij9'] },
 };
+// De vormen die alleen een stijl heeft (stap 2b): zoals de huizen hierboven, maar nooit een losse tekening op het vel. Van
+// een huis maakt stijlHuizen zelf zijn stenen broertje (steenVan). `luiken: 'hout'` hierboven: kaal hout, de kleur van het
+// hout van het huis.
+const VORMEN = {
+  // oker: een T met de vleugel naar voren, en boerderij 3 (anderhalve laag, twee kapellen) in vakwerk in plaats van vlechtwerk
+  boerderij6: { gebouw: 'boerderij', trede: 2, zaad: 36, vorm: 'T', b: 10, d: 5, b2: 4, p2: 3, voor: true, lagen: 1, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 40, schoorsteen: 'leem', schoor: false, uit: { bakken: 1 } },
+  boerderij7: { ...HUIZEN.boerderij3, zaad: 37, wand: 'vakwerk' },
+  // planken: een lang huis van twee lagen met een galerij langs de bovenverdieping, een L met een buitentrap naar een
+  // opkamer, en een huis met een aanbouw en een schoor
+  huis7: { gebouw: 'huis', trede: 2, zaad: 27, vorm: 'rechthoek', b: 9, d: 5, lagen: 2, nok: 'x', dak: 'riet', wand: 'planken', plint: 36, schoorsteen: 'leem', schoor: false, uit: { balkon: true } },
+  huis8: { gebouw: 'huis', trede: 2, zaad: 28, vorm: 'L', b: 8, d: 5, b2: 4, d2: 7, kant: 1, voor: false, lagen: 1.5, nok: 'x', dak: 'riet', wand: 'planken', plint: 36, schoorsteen: 'leem', schoor: false, uit: { trap: true } },
+  huis9: { gebouw: 'huis', trede: 2, zaad: 29, vorm: 'rechthoek', b: 8, d: 5, lagen: 1, nok: 'x', dak: 'riet', wand: 'planken', plint: 36, schoorsteen: 'leem', schoor: true, uit: { aanbouw: true } },
+  // roze: twee lagen met een overkragende verdieping, een erker, en een T met de vleugel naar achter, anderhalve laag
+  huis10: { gebouw: 'huis', trede: 2, zaad: 30, vorm: 'rechthoek', b: 7, d: 5, lagen: 2, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 36, schoorsteen: 'leem', schoor: false, uit: { bakken: 2 } },
+  huis11: { gebouw: 'huis', trede: 2, zaad: 31, vorm: 'rechthoek', b: 8, d: 5, lagen: 1, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 36, schoorsteen: 'leem', schoor: false, uit: { erker: true, bakken: 1 } },
+  huis12: { gebouw: 'huis', trede: 2, zaad: 32, vorm: 'T', b: 9, d: 5, b2: 4, p2: 3, voor: false, lagen: 1.5, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 36, schoorsteen: 'leem', schoor: false, uit: { kapellen: 1 } },
+  // roze: een L met de vleugel aan de andere kant dan boerderij 1, en een lange van anderhalve laag
+  boerderij8: { gebouw: 'boerderij', trede: 2, zaad: 38, vorm: 'L', b: 9, d: 5, b2: 3, d2: 7, kant: -1, voor: false, lagen: 1, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 40, schoorsteen: 'leem', schoor: false, uit: { bakken: 1 } },
+  boerderij9: { gebouw: 'boerderij', trede: 2, zaad: 39, vorm: 'rechthoek', b: 10, d: 6, lagen: 1.5, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 40, schoorsteen: 'leem', schoor: false, uit: { kapellen: 2 } },
+};
+// Het stenen broertje van een huis: zoals steen1 tot en met 6 hierboven (veldsteen, een stenen schoorsteen), met wat de
+// stijl boven de steen zet.
+const steenVan = (vorm) => {
+  const { schoorsteen, ...h } = HUIZEN[vorm] || VORMEN[vorm];
+  return { ...h, gebouw: 'stenenHuis', trede: 3, wand: 'veldsteen', boven: 'vakwerk' };
+};
+const vormVan = (vorm) => HUIZEN[vorm] || VORMEN[vorm];
+// De hutten van een stijl, en uit welke stijl ze komen (oker en roze nemen die van wit).
+const huttenVan = (stijl) => (typeof STIJLEN[stijl].hut === 'string' ? { stijl: STIJLEN[stijl].hut, hut: STIJLEN[STIJLEN[stijl].hut].hut } : { stijl, hut: STIJLEN[stijl].hut });
 // De vier standen: de deur naar zuid (+y), oost (+x), noord (-y) of west (-x), op de lange muur van de hoofdvleugel
 // (deurOp in huis-sdf.cjs), of in de gevel van een vleugel die naar voren steekt. Een huis van een stijl is één huis
 // rondom (huis-sdf.cjs, rondom), gebouwd met zijn deur naar zuid, en een stand is hoeveel kwartslagen het gedraaid staat
@@ -142,13 +181,16 @@ function stijlHuizen() {
     };
     const metLuiken = (basis) => ({ ...(basis.uit || {}), luiken: S.luiken });
     const daken = [[S.dak], ['leien'], ['pannen']];
-    for (const vorm of S.hut) zet('hut', vorm, HUIZEN[vorm], [[S.dak]]);
+    // de wand van de stijl (planken), op de hutten en de huizen; een boerderij houdt de zijne
+    const wand = S.wand ? { wand: S.wand } : {};
+    if (!(typeof S.hut === 'string')) for (const vorm of S.hut) zet('hut', vorm, HUIZEN[vorm], [[S.dak]], wand);
     for (const vorm of S.huis) {
-      zet('huis', vorm, HUIZEN[vorm], daken, { uit: metLuiken(HUIZEN[vorm]) });
+      zet('huis', vorm, vormVan(vorm), daken, { ...wand, uit: metLuiken(vormVan(vorm)) });
       const broertje = vorm.replace('huis', 'steen');
-      zet('stenenHuis', broertje, HUIZEN[broertje], [['leien', S.steen], ['pannen', S.steen], ['pannen', 'baksteen']], { uit: metLuiken(HUIZEN[vorm]) });
+      const basis = HUIZEN[broertje] || steenVan(vorm);
+      zet('stenenHuis', broertje, basis, [['leien', S.steen], ['pannen', S.steen], ['pannen', 'baksteen']], { ...(S.boven ? { boven: S.boven } : {}), uit: metLuiken(vormVan(vorm)) });
     }
-    for (const vorm of S.boerderij) zet('boerderij', vorm, HUIZEN[vorm], daken, { uit: metLuiken(HUIZEN[vorm]) });
+    for (const vorm of S.boerderij) zet('boerderij', vorm, vormVan(vorm), daken, { uit: metLuiken(vormVan(vorm)) });
   }
   return uit;
 }
@@ -724,7 +766,7 @@ function renderHuizen(namen = Object.keys(HUIZEN), draden = DRADEN()) {
   });
 }
 
-module.exports = { HUIZEN, STIJLEN, STANDEN, stijlNaam, FASEN, renderHuis, renderHuizen, renderHuisFasen, meetHuis };
+module.exports = { HUIZEN, STIJLEN, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, renderHuis, renderHuizen, renderHuisFasen, meetHuis };
 
 // node gereedschap/pixelart/huizen.cjs [naam ...]: de huizen los op een proefplaat, met hun voet
 // (een ruit) en de tegel voor hun deur (een punt), om te zien of die kloppen. Naar
