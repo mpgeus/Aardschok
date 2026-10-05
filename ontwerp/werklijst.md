@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (5 okt 2026, vierendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; de andere drie stijlen lopen in een eigen sessie (2b); dan de herberg, de kapel en de woontoren (stap 3), dan de houthakker die hakt en plant en de wolven (vraag 115 en 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
+## De stand (5 okt 2026, vierendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3), dan de houthakker die hakt en plant en de wolven (vraag 115 en 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -163,10 +163,9 @@ main"), ook het ontginnen op de heide met de prijs die per stuk oploopt (vraag 1
 net als het werk van de tweeëndertigste (Marcel: "1 ja" op "Zal ik het in main zetten?"). Het bos (vraag 107, stap 2)
 staat op `ccr-96e0aab5-w9cesu`, nog niet in `main`, met g1 (de soldaten lopen elk jaar door het bos; Marcel: "1 en 3 later
 inderdaad"). **Op Marcel wacht:** of het bos in `main` gaat. Daarna stap 3 van vraag 107, de speeltest van vier jaar, en
-g3 (de roddelaar) met de herberg als plek van gesprekken (3c). **Stap 2b loopt in een eigen sessie** (Marcel: "Kun je alvast een extra agent starten
-voor het volgende punt op de werklijst?"), op de branch `claude/bouwstijlen-2b`: de andere drie stijlen. Marcel
-beantwoordde daar haar vragen (A tot en met E; zie vraag 114), en nu het wit in `main` staat, mag ze `main` samenvoegen
-en renderen. Daarna stap 3, de herberg, de kapel en de woontoren, meteen draaibaar, en dan de houthakker die hakt en
+g3 (de roddelaar) met de herberg als plek van gesprekken (3c). **Stap 2b is af en staat in `main`** (de andere drie
+bouwstijlen, oker, planken en roze, in een eigen sessie; zie onder Af, en vraag 114); deze branch heeft het samengevoegd.
+Daarna stap 3, de herberg, de kapel en de woontoren, meteen draaibaar, en dan de houthakker die hakt en
 plant en de wolven (vraag 115 en 116; de boeren aan het werk, vraag 111, zijn af). Uit de speeltest na te lopen: op land 72022 liep het dorp vast op plaats (`speelbaar.md`). Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
 veranderen: de huizen in `tegels/` hebben geen schaduw op de vloer, en het spel tekent hun schaduw zelf. **Vraag 121 is besloten**
 (hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁", en "121 a terrassen, b ja, c na de
@@ -4462,6 +4461,76 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     beelden byte voor byte gelijk (het hele ontworpen gehucht, de nacht, de herberg, de bouwplaatsen), en alleen land 5
     van de maker anders, met het nieuwe wit en een iets ander gelegd land (de maker legt het anders nu de voet van hut 1
     en huis 3 veranderde).
+    **Plan voor stap 2b, de andere drie stijlen (Claude, 4 okt, tweede sessie naast de draaibare huizen; wacht op
+    Marcel).** Nagelezen op `5b1793f` (de branch van de draaibare huizen). Wit gebruikt hut 1, 3 en 4, huis 1, 3 en 6 en
+    boerderij 1 en 4. Over zijn nog maar hut 2, huis 2, 4 en 5 en boerderij 2, 3 en 5: genoeg voor één stijl, dus er
+    komen nieuwe vormen bij. De bouwer kan al alles wat de stijlen vragen: kalk oker en roze, luiken rood (`rood`),
+    blauwgrijs (`pet`) en kaal (het hout zelf), zandsteen op een muur, wanden van planken en blokhut, en spanen. Hij heeft
+    ook uitbouwen die het spel nog nergens gebruikt: een galerij op palen (`balkon`), een buitentrap naar een opkamer
+    (`trap`), een erker op klossen, en twee lagen met een overkragende verdieping (alleen het huis van de schout). Daarmee
+    kan elke stijl een eigen karakter krijgen, niet alleen een eigen kleur:
+    - **(2) oker, "de zolders":** oker kalk, rode luiken, zandsteen, riet. Huis 2 (anderhalve laag met een dakkapel),
+      huis 4 (de L met de vleugel naar achter) en huis 5 (smal en hoog, met een schoorsteen op de gevel); hut 2 en twee
+      nieuwe (een kleine vierkante van 4 bij 4 met een schoor, een lange van 7 bij 4); boerderij 3 (anderhalve laag, twee
+      kapellen) en een nieuwe: een T met de vleugel naar voren, 10 bij 5.
+    - **(3) planken, "het houtland":** planken onder spanen, blauwgrijze luiken, veldsteen. Alles van hout: de huizen van
+      planken (nu vakwerk), de hutten van planken of stammen (nu vlechtwerk), het stenen broertje veldsteen met planken
+      erboven. Drie nieuwe huizen: een lang huis van 9 bij 5 met een galerij op palen, een L met een buitentrap, en een
+      van 8 bij 5 met een aanbouw en een schoor; drie nieuwe hutten (planken 5 bij 4, stammen 6 bij 4, een L van planken);
+      boerderij 2 (de T van planken) en 5 (de blokhut onder spanen).
+    - **(4) roze, "het rijke vakwerk":** roze kalk, kale luiken, zandsteen, riet. Drie nieuwe huizen: twee lagen met een
+      overkragende verdieping (7 bij 5), een met een erker (8 bij 5), en een T met de vleugel naar achter en anderhalve
+      laag; drie nieuwe hutten; twee nieuwe boerderijen (een L met de vleugel aan de andere kant, en een lange van 10 bij 6
+      met twee lagen boven de woning).
+    Wat de bouwer er nog voor mist (klein, in `huizen.cjs`, niet in de bouwer zelf): een stijl die de wand zet (de
+    planken), en wat er op het stenen broertje boven de steen komt; een vorm die alleen voor een stijl is, zodat hij
+    niet ook als losse tekening in het spel komt; een hut zonder luiken, ook als zijn vorm ze had (hut 2). Wat de
+    proefplaat moet laten zien: of de galerij, de trap en de erker goed gaan met `rondom` en de draai (ze zijn nooit
+    van vier kanten getekend; ze blijven voor en rechts, zoals de andere uitbouwen).
+    Volgorde: (1) per stijl een proefplaat (`huis-sdf-export.cjs stijl oker`, `planken`, `roze`), zoals die van wit:
+    de vormen, een huis en een hut in de vier standen, de daken en de steen, drie straatjes. Alleen in
+    `gereedschap/pixelart/uit/`, niets in `tegels/`. (2) Na jouw ja, en pas als het wit van de draaibare huizen in
+    `main` staat: renderen, per stijl in drie delen van minder dan twee uur (de huizen, de bouwfasen van de hutten en
+    de huizen, die van de stenen huizen en de boerderijen), samen zo'n zeven uur; de opslagplaats groeit zo'n 55 MB.
+    (3) De maker kiest de stijl uit het nummer van het land (`T.stijlVoorLand`, nu altijd wit), dan `npm test`,
+    `npm run schermen` en de speeltest op landen van de maker.
+    Vragen: **A**, de vormen zo, met de galerij, de trap, de erker en twee lagen als kenmerk van een stijl? **B**, de
+    plankenstijl helemaal van hout (ook de hutten en boven het stenen broertje)? **C**, eigen hutten per stijl (acht
+    nieuwe), of delen de stijlen de hutten (een hut verschilt dan alleen in dak en wand)? **D**, het huis van de schout in
+    de stijl van zijn land (het stond bij 2a voor 2b), nu, of met de grote gebouwen (stap 3)? **E**, zo'n zeven uur
+    renderen en 55 MB erbij in de opslagplaats?
+    **Marcel (4 okt): "A ja B ja C delen D stap 3 E tuurlijk".** Dus: de vormen zoals hierboven, met de galerij, de trap,
+    de erker en twee lagen als kenmerk; de plankenstijl helemaal van hout (de huizen en de hutten van planken, boven het
+    stenen broertje planken); de stijlen delen de hutten van wit (hut 1, 3 en 4), elk in zijn eigen dak, wand en kalk, dus
+    er komen geen nieuwe hutten; het huis van de schout krijgt de stijl van zijn land pas met de grote gebouwen (stap 3);
+    en het renderen mag.
+    **De stijlen staan in de bouwer, en de proefplaten zijn gemaakt (4 okt, tweede sessie naast de draaibare huizen; nog
+    niets in `tegels/`):** `STIJLEN` in `huizen.cjs` heeft oker, planken en roze, de nieuwe vormen staan in `VORMEN`
+    (nooit een losse tekening op het vel), en `stijlHuizen` maakt van een nieuw huis zelf zijn stenen broertje
+    (`steenVan`). Een stijl kan de wand zetten (`wand`, de planken) en wat er boven de steen komt (`boven`), en `hut: 'wit'`
+    zegt dat oker en roze de hutten van wit nemen: die tekening krijgt `ook: ['oker', 'roze']`, en `js/bouwstijl.js` zet
+    hem dan ook onder die stijlen. Een huis dat doorgroeit, zoekt zijn nieuwe tekening nu in de stijl van zijn dorp, niet
+    in die van zijn oude tekening (anders werd een hut van wit in een dorp van oker een wit huis). Samen 300 nieuwe
+    tekeningen: oker en roze 96, planken 108; wit en de oude huizen bleven precies dezelfde opgaven. De proefplaten:
+    `node gereedschap/pixelart/huis-sdf-export.cjs stijl oker` (en `planken`, `roze`). Onderweg bleek dat de bouwer met
+    `rondom` een trap of een erker stil weglaat als de voordeur er op de lange muur niet meer naast past; planken huis 8 en
+    roze huis 11 zijn daarom 6 tegels diep in plaats van 5. Oker huis 5 en roze huis 12 houden hun dakkapel niet onder
+    elk dak (onder leien en pannen valt hij weg, bij roze huis 12 ook onder riet). `test/bouwstijl.test.cjs` faalt tot de
+    stijlen gerenderd zijn (hij telt de opgaven tegen de tekeningen op het vel).
+    **Marcel (5 okt), na de proefplaten: "1 ja 2 is goed zo".** Dus de drie stijlen zoals op de platen, en oker huis 5 en
+    roze huis 12 mogen onder een dun dak hun dakkapel missen. Het renderen begint als het wit van de draaibare huizen in
+    `main` staat.
+    **Stap 2b is af (5 okt, tweede sessie naast de draaibare huizen, op `claude/bouwstijlen-2b`):** de 300 huizen van oker,
+    planken en roze staan in `tegels/huizen/` (`npm run tiled huizen`, 64 minuten), elk met zijn vijf bouwfasen
+    (`bouwfasen.cjs --erbij` met namen, in zes delen; 45 tekeningen is zo'n anderhalf uur, en een deel ging verloren toen de
+    container herstartte). Het vel van de huizen heeft nu 512 vakken (huizen is het laatste vel in elke kaart, dus er
+    schuift geen nummer op). Nagekeken: alle bestaande tekeningen, wit en de oude huizen, byte voor byte dezelfde; geen deur
+    aan de verkeerde kant; `npm test` 946/946, met toetsen voor de vier stijlen, eigen vormen per stijl, de gedeelde hutten
+    en het doorgroeien in de stijl van het dorp; `npm run schermen` tegen `main` (`aca768e`): 21 van 23 beelden byte voor
+    byte gelijk, alleen land 5 van de maker anders, want dat bouwt nu in planken; de speeltest met de bouwer op landen van
+    de maker (zaad 1 tot en met 4, twee jaar): geen fouten in de console, elk land een dorp en marktrecht in het eerste
+    jaar, 26 naar 67 tot 82 mensen, geen doden van kou of honger. Opslagplaats: `tegels/huizen/` 24 MB, `tegels/bouwfasen/`
+    58 MB. Nog niet in `main`. Het huis van de schout, de herberg en de kapel krijgen hun stijl in stap 3.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
@@ -5438,6 +5507,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   speeltest van twee jaar (`speelbaar.md`): de bouwer neemt vier à vijf stukken heide en dan drie à vier stukken bos; de
   sluwe zeven stukken stiekem, en werd nooit betrapt. Daarom lopen de soldaten nu elk jaar op Sint-Maarten door het bos
   (vraag 107, g1; Marcel: "1 en 3 later inderdaad"). Zie `spel.md`, "Ontginnen", en vraag 107 (stap 2, en g).
+- 5 okt 2026 — **De andere drie bouwstijlen: oker, planken en roze** (tweede sessie naast de draaibare huizen; vraag 114,
+  stap 2b; Marcel: "A ja B ja C delen D stap 3 E tuurlijk", en na de proefplaten "1 ja 2 is goed zo"). Elke stijl eigen
+  huizen en boerderijen met een uitbouw als kenmerk (oker de zolders, planken de galerij en de buitentrap, roze twee
+  lagen en een erker), de plankenstijl helemaal van hout; oker en roze nemen de hutten van wit. 300 huizen met hun
+  bouwfasen; wie doorgroeit, krijgt de stijl van zijn dorp. Wit en de oude huizen byte voor byte dezelfde, `npm test`
+  946/946, 21 van 23 schermafdrukken gelijk (alleen land 5, nu planken), de speeltest op vier landen van de maker zonder
+  fouten. Op `claude/bouwstijlen-2b`, nog niet in `main`. Zie vraag 114, stap 2b, en `beeld.md`.
 - 5 okt 2026 — **Ontginnen op de heide** (drieëndertigste sessie; vraag 107, stap 1; Marcel: "1 en 3, 107 a b c d e ja").
   Komt het dorp graan tekort (`T.graanTekort`: er komt geen gezin om het graan, of het eten haalt de winter niet), dan
   vraagt een boer of zijn grote zoon je om dertig tegels heide (een voorval `ontginverzoek`, vóór de bouwverzoeken; de
