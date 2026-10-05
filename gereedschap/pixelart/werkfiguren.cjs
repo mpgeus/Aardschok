@@ -502,19 +502,20 @@ function hangendeArm(ctx, i) {
 // De zaaidoek: een lap linnen over de linkerschouder, van achteren over de schouder naar voren, waar de onderkant een
 // bolle zak vormt, vóór de linkerheup, met bovenin een mond vol zaad. De linkerhand houdt de rand vast. Alles gaat met
 // de romp mee (in de rusthouding van de romp, zoals de zeis van de maaier). Per lijf: de band (twee bochten: punten en
-// dikte), de zak (midden en maat), waar de rechtervuist in de zak gaat (in) en waar de linkerhand de rand houdt (rand).
-// Bij de boerin hangt de zak vóór haar schort, de band over haar lagere schouder.
+// dikte), de zak (midden en maat), waar de rechtervuist in de zak gaat (in: in de rechterkant van de mond, want verder
+// reikt de rechterarm niet over het lijf) en waar de linkerhand de rand houdt (rand). Bij de boerin hangt de zak vóór
+// haar schort, de band over haar lagere schouder.
 const ZAAIDOEK = {
   boer: {
     band: [[[-6.4, -6.2, 40], [-7.6, -6.6, 57], [-7.6, 0.2, 61.9], 1.9, 1.8], [[-7.6, 0.2, 61.9], [-8, 9.2, 59.5], [-6.4, 10.4, 44.6], 1.8, 2.3]],
     zak: { midden: [-5, 11, 38.4], maat: [5.4, 4.6, 6.2] },
-    in: [-4.8, 11.2, 42.6],
+    in: [-2.4, 11.4, 42.8],
     rand: [-8.2, 14.2, 43.4],
   },
   boerin: {
     band: [[[-6.8, -7, 42], [-7.8, -7.2, 55], [-7.8, 0.2, 59.6], 1.9, 1.8], [[-7.8, 0.2, 59.6], [-8.4, 9.6, 57.6], [-7, 12, 45.2], 1.8, 2.3]],
     zak: { midden: [-5.8, 12.6, 39.2], maat: [5.4, 4.6, 6.2] },
-    in: [-5.6, 12.8, 43.4],
+    in: [-2.2, 12, 43.6],
     rand: [-9, 15.4, 44.4],
   },
 };
@@ -567,7 +568,12 @@ const ZAAIEN = {
   buig: [[0, 7], [0.22, 4], [0.52, 2.5], [0.75, 4], [0.88, 6]],
   zij: [[0, -0.7], [0.3, 0], [0.52, 0.8], [0.75, 0.3]],
   knik: [[0, 3], [0.22, -1], [0.52, -2], [0.75, 0], [0.88, 2]],
+  // hoe ver de rechterschouder naar de zak toe komt (naar voren, naar binnen en wat omlaag; ZAK_REIK maal dit getal)
+  reik: [[0, 1], [0.12, 0.5], [0.22, 0], [0.8, 0], [0.92, 0.6]],
 };
+const ZAK_REIK = [-0.8, 1.6, -0.4];
+// de rechterschouder bij het zaaien (en staand, met de vuist in de zak), in de rusthouding van de romp
+const zaaiSchouder = (L, reik) => HH.plus(L.SCHOUDERS[1], HH.keer(ZAK_REIK, reik));
 // de sleutels van de hand per lijf
 const ZAAIEN_HAND = Object.fromEntries(
   Object.values(LIJVEN).map((L) => [L.naam, ZAAIEN.hand.map(([f, p]) => [f, p === 'in' ? ZAAIDOEK[L.naam].in : naarLijf(L, 1, p)])]),
@@ -637,7 +643,7 @@ function zaaier(stand, lijf = 'boer') {
     else {
       const hand = naam === 'zaaien' ? langsSleutels(ZAAIEN_HAND[lijf], fase) : Z.in;
       const open = naam === 'zaaien' ? klem(stapsgewijs(ZAAIEN.open, fase), 0, 1) : 0;
-      arm(ctx, 1, L.SCHOUDERS[1], hand, open);
+      arm(ctx, 1, zaaiSchouder(L, naam === 'zaaien' ? stapsgewijs(ZAAIEN.reik, fase) : 1), hand, open);
       bot(Bn.Bromp);
     }
     if (naam === 'zaaien') {
