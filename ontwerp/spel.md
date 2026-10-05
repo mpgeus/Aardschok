@@ -3042,7 +3042,13 @@ wordt gepraat:
   gebouw (Marcel: "Ja"): als je het erf aanwijst, ligt vast waar het huis komt (`erf.plan`), zo ver mogelijk naar
   achteren waar het looppad kan, en een gebouw dat later komt, blijft er drie tegels vandaan, ook als het huis er nog
   niet staat (`T.huisPlekOp`). Kan het nergens in het erf, dan zegt het bouwmenu dat er geen huis met een looppad past.
-  Twee erven naast elkaar mogen: hun huizen houden vanzelf drie of vier tegels tussen zich.
+  Twee erven naast elkaar mogen: hun huizen houden vanzelf drie of vier tegels tussen zich. **Sinds 5 okt (werklijst
+  vraag 110, f)** blijft ook een huis dat doorgroeit van een ander erf af, en drie tegels van de plek van het huis erop
+  (`T.opDeGrondVanEenErf`, in `js/behoeften.js`): in de speeltest van vier jaar groeide op 62707 een huis van de maker
+  door tot stenen huis, met 21 tegels óp een vrij erf. En past er toch geen hut meer op een vrij erf, dan telt het niet
+  als plaats (`T.bruikbareErven`, `T.hutPastOpErf`): de groei en de raad zeggen dan dat er geen plaats is, het bouwmenu
+  telt het niet als vrij, en `Spel.debug.erven()` zegt het erbij. Tot dan zagen de groei en de raad er een vrij erf, en
+  kwam er twee en een half jaar geen gezin.
 - **Een huis met plaats gaat voor.** Is het dorp vol, dan neemt een nieuw gezin op een groeidag het vrije erf dat
   het dichtst bij de werkplaats ligt die de meeste handen mist (anders bij het plein), en komt over de weg. Het
   zet er zelf een hut op (8 hout uit de voorraad, twee dagen), woont er al terwijl hij oprijst, en is er overdag

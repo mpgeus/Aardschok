@@ -435,3 +435,69 @@ test('het huis op een erf krijgt drie tegels looppad rondom, en wat later komt, 
   assert.equal(gezin.x, naast.erf.x + naast.erf.plan.dx);
   assert.equal(gezin.y, naast.erf.y + naast.erf.plan.dy);
 });
+
+// Een erf dat vrij heet, maar waar geen hut meer op past (werklijst vraag 110, f): in de speeltest van vier jaar groeide op
+// 62707 een buurhuis in het looppad om de plek van het huis, en kwam er twee en een half jaar geen gezin, want de groei en
+// de raad zagen een vrij erf. Een muur vlak buiten het erf, rondom: het huis is groter dan het erf min zijn looppad, dus
+// waar het ook komt, zijn looppad komt erbuiten, zoals bij dat buurhuis.
+function zetMuurOm(w, erf) {
+  for (let x = erf.x - 1; x <= erf.x + erf.b; x++) {
+    w.tegels[erf.y - 1][x] = 'muur';
+    w.tegels[erf.y + erf.h][x] = 'muur';
+  }
+  for (let y = erf.y - 1; y <= erf.y + erf.h; y++) {
+    w.tegels[y][erf.x - 1] = 'muur';
+    w.tegels[y][erf.x + erf.b] = 'muur';
+  }
+  T.kaartVeranderd(w); // zoals elke regel die een tegel verandert (js/wereld.js)
+}
+
+test('een vrij erf waar geen hut meer op past, is geen plaats: een gezin neemt een ander erf (vraag 110, f)', () => {
+  const D = leeg(60, 40);
+  const { erf } = T.legErfAan(D, 10, 10);
+  T.zetVoorraad(D, 'hout', 100);
+  assert.equal(T.hutPastOpErf(D, erf), true);
+  zetMuurOm(D.wereld, erf);
+  assert.equal(T.hutPastOpErf(D, erf), false);
+  assert.deepEqual(T.vrijeErven(D), [erf], 'het heet nog vrij: er staat geen hut op');
+  assert.deepEqual(T.bruikbareErven(D), []);
+  assert.equal(T.kanEenErfNemen(D), false);
+  const berichten = vangBerichten();
+  assert.equal(T.gezinZoektEenErf(D), null);
+  assert.ok(berichten.some((t) => /geen plaats\. Wijs een erf aan/.test(t)), berichten.join(' | '));
+  // Wijs je een ander erf aan, dan neemt het gezin dat.
+  const { erf: ander } = T.legErfAan(D, 35, 10);
+  assert.equal(T.kanEenErfNemen(D), true);
+  const hut = T.gezinZoektEenErf(D);
+  assert.ok(hut, 'er komt een hut');
+  assert.equal(hut.erf, ander);
+  assert.equal(erf.hut, null);
+});
+
+test('een vol dorp met alleen een erf waar geen hut meer op past: de groei zegt dat er geen plaats is', () => {
+  const S = gehucht();
+  S.dorp.behoeften = Object.assign(T.nieuweBehoeften(), { tevredenheid: 0.7 });
+  vol(S);
+  const plek = erfPlek(S);
+  T.plaatsGebouw(S.dorp, 'erf', plek.x, plek.y);
+  assert.deepEqual(T.waaromGeenGezin(S.dorp), []);
+  zetMuurOm(S.dorp.wereld, S.dorp.erven[0]);
+  assert.deepEqual(T.waaromGeenGezin(S.dorp), ['plaats']);
+});
+
+test('de grond van een erf: het erf zelf, en het looppad om de plek van zijn huis (vraag 110, f)', () => {
+  const D = leeg(60, 40);
+  const { erf } = T.legErfAan(D, 20, 10);
+  const p = erf.plan;
+  const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+  assert.equal(T.opDeGrondVanEenErf(D, erf.x + erf.b - 1, erf.y + erf.h - 1), true, 'op het erf');
+  assert.equal(T.opDeGrondVanEenErf(D, erf.x + erf.b - 1, erf.y + erf.h - 1, erf), false, 'behalve dit erf');
+  // Het looppad om het huis komt aan een kant buiten het erf: daar is het ook de grond van het erf.
+  const west = erf.x + p.dx - n;
+  const noord = erf.y + p.dy - n;
+  if (west < erf.x) assert.equal(T.opDeGrondVanEenErf(D, west, erf.y + p.dy), true, 'in het looppad, ten westen');
+  if (noord < erf.y) assert.equal(T.opDeGrondVanEenErf(D, erf.x + p.dx, noord), true, 'in het looppad, ten noorden');
+  assert.ok(west < erf.x || noord < erf.y, 'het looppad komt ergens buiten het erf');
+  // Een tegel verder is het gewone grond.
+  assert.equal(T.opDeGrondVanEenErf(D, Math.min(west, erf.x) - 1, erf.y + p.dy), false);
+});

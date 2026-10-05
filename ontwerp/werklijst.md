@@ -4059,6 +4059,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Wat Claude zou doen: f meteen (een fout), dan d (de markt, zodat de winst te halen is), en e met de houthakker
     (vraag 115). a en b niet meer: met d en e is 100 te halen op het wijdere land. Vragen: **d**, **e**, **f**, en a en b
     laten vallen?
+    **Marcel koos (5 okt, vijfendertigste sessie): "D, e, f Ja en a b laten vallen is goed".** Dus a en b vallen af, en de
+    volgorde zoals voorgesteld: f meteen (een fout), dan d met eerst een plan, en e met de houthakker (vraag 115).
 111. **De boeren aan het werk op hun veld** (Marcel, 3 okt, vijfentwintigste sessie: "Ook wil ik dat boeren op hun veld
     aan het werk zijn. Nu hebben ze wel velden, maar lopen ze gewoon random door het dorp. Ze moeten zaaien en op het
     veld bezig zijn."; plan van Claude; open).

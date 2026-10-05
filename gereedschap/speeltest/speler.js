@@ -1171,7 +1171,8 @@
           }
         }
         const erfMag = (houthakker || T.VERZOEKEN_INSTELLINGEN.mensen) && !maat;
-        if (erfMag && !T.vrijeErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
+        // Een vrij erf waar geen hut meer op past, telt niet (T.bruikbareErven; vraag 110, f).
+        if (erfMag && !T.bruikbareErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
         // Bouwen wat hij wil, zodra het goud en het hout er zijn; een kapel waar hij de meeste huizen bereikt. Wat het doel
         // vraagt en er al staat (een kapel voor de wensen), hoeft niet meer.
         while (wil.length && wil[0] !== 'houthakker' && !T.doelGebouwen(s.dorp).includes(wil[0])) wil.shift();
@@ -1264,6 +1265,33 @@
         }
         if (wat) uit[wat] = (uit[wat] || 0) + 1;
       }
+    }
+    return uit;
+  }
+
+  // De gebouwen in het looppad om de plek van de hut op een erf: waar ze staan, hun voet, of ze zelf op een erf staan, en
+  // hoeveel van hun tegels op dit erf liggen.
+  function gebouwenOmDeHut(D, e) {
+    const p = e.plan;
+    if (!p) return [];
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const r = { x: e.x + p.dx - n, y: e.y + p.dy - n, b: p.b + 2 * n, h: p.h + 2 * n };
+    const binnen = (x, y, q) => x >= q.x && x < q.x + q.b && y >= q.y && y < q.y + q.h;
+    const uit = [];
+    for (const g of D.gebouwen || []) {
+      // De voet zoals T.gebouwOp (js/gebouwen.js) hem leest: wat het voorwerp beslaat, anders de voet van het gebouw.
+      const w = g.voorwerp;
+      const v = w && w.beslaat ? { x: w.x, y: w.y, b: w.beslaat[0], h: w.beslaat[1] } : g.voet ? { x: g.x, y: g.y, b: g.voet.b, h: g.voet.h } : null;
+      if (!v) continue;
+      let inRing = 0;
+      let opErf = 0;
+      for (let dy = 0; dy < v.h; dy++) {
+        for (let dx = 0; dx < v.b; dx++) {
+          if (binnen(v.x + dx, v.y + dy, r)) inRing++;
+          if (binnen(v.x + dx, v.y + dy, e)) opErf++;
+        }
+      }
+      if (inRing) uit.push({ soort: g.soort, tekening: g.tekening, ...v, inRing, opDitErf: opErf, eigenErf: g.erf ? { x: g.erf.x, y: g.erf.y } : null });
     }
     return uit;
   }
@@ -1687,7 +1715,7 @@
       boek.winter = winter();
       // De vrije erven aan het eind, en wat er in het looppad om de plek van hun hut staat (T.looppadOm, js/gebouwen.js):
       // een erf dat vrij heet maar waar geen hut meer op past, houdt de groei tegen (werklijst vraag 107, stap 3).
-      boek.vrijeErven = T.vrijeErven(s.dorp).map((e) => ({ x: e.x, y: e.y, inDeWeg: watStaatOmDeHut(s.dorp, e) }));
+      boek.vrijeErven = T.vrijeErven(s.dorp).map((e) => ({ x: e.x, y: e.y, b: e.b, h: e.h, plan: e.plan && { dx: e.plan.dx, dy: e.plan.dy, b: e.plan.b, h: e.plan.h }, inDeWeg: watStaatOmDeHut(s.dorp, e), gebouwen: gebouwenOmDeHut(s.dorp, e) }));
       // De raadsman (js/raadsman.js): wie het was, en hoeveel voorvallen hij besliste.
       const rm = T.raadsmanVan(s.dorp);
       boek.raadsman = rm ? { over: T.overRaadsmanTekst(s.dorp, rm), door: (s.dorp.voorvallen && s.dorp.voorvallen.doorRaadsman) || 0, laatste: ((s.dorp.raadsman && s.dorp.raadsman.besluiten) || []).slice(-5) } : null;

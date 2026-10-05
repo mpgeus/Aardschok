@@ -419,6 +419,51 @@ test('T.tikBehoeftenDag: een huis dat van vorm wisselt (smal en diep naar breed 
   }
 });
 
+// Een huis dat doorgroeit, blijft van een erf af, en drie tegels van de plek van het huis erop, zoals een nieuw gebouw
+// (werklijst vraag 110, f: in de speeltest van vier jaar groeide op 62707 een huis van de maker door tot stenen huis, met
+// 21 tegels op een vrij erf, en kwam er twee en een half jaar geen gezin).
+test('T.tikBehoeftenDag: een huis groeit niet op een erf, en niet in het looppad om de plek van het huis erop', () => {
+  T.GEBOUWEN._proefKlein = { naam: 'klein', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: {}, bouwtijd: 0, handen: 0, woonruimte: 1, wordt: '_proefGroot', maakt: null, verdacht: false, menu: false, tekening: null, beschrijving: '', opmerking: 'alleen voor deze toets' };
+  T.GEBOUWEN._proefGroot = { naam: 'groot', trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: {}, bouwtijd: 0, handen: 0, woonruimte: 2, maakt: null, verdacht: false, menu: false, tekening: null, beschrijving: '', opmerking: 'alleen voor deze toets' };
+  // Het dorp vol, maar zonder dat een gezin het erf neemt: dan blijft het vrij, en kan het straks weer weg.
+  const zelf = T.ERVEN_INSTELLINGEN.dorpBouwtZelf;
+  T.ERVEN_INSTELLINGEN.dorpBouwtZelf = false;
+  try {
+    const S = maakS(60, 40);
+    const { erf } = T.legErfAan(S, 30, 10);
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const west = Math.min(erf.x, erf.x + erf.plan.dx - n); // de westrand van het erf en van het looppad om zijn huis
+    // Een klein huis net ten westen daarvan, op de rij van het huis: groot (6 bij 6) zou er met zijn oostkant in komen.
+    const x = west - 3;
+    const y = erf.y + erf.plan.dy;
+    const instantie = { soort: '_proefKlein', x, y, klaar: true, klaarOp: 0, handen: 0, voorwerp: { soort: 'gebouw:_proefKlein', vel: null, id: null, beslaat: [3, 3] } };
+    S.gebouwen.push(instantie);
+    for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 3; dx++) S.wereld.tegels[y + dy][x + dx] = 'muur';
+    T.kaartVeranderd(S.wereld);
+
+    S.bevolking = 4;
+    T.zetVoorraad(S, 'graan', 100000);
+    T.zetVoorraad(S, 'groente', 1000);
+    T.zetVoorraad(S, 'vis', 1000);
+    T.zetVoorraad(S, 'vlees', 1000);
+    S.gebouwen.push({ soort: 'kapel', x: 5, y: 30, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
+
+    let dag = 0;
+    for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen + 5; i++) T.tikGebouwenDag(S, ++dag);
+    assert.equal(instantie.soort, '_proefKlein', 'het groeit niet in het looppad van het erf');
+    assert.equal(T.hutPastOpErf(S, erf), true, 'en het erf neemt nog een hut');
+
+    // Is het erf weg, dan groeit het wel: dan was het erf het enige wat in de weg stond.
+    assert.equal(T.haalErfWeg(S, erf).gelukt, true);
+    for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen + 5; i++) T.tikGebouwenDag(S, ++dag);
+    assert.equal(instantie.soort, '_proefGroot');
+  } finally {
+    T.ERVEN_INSTELLINGEN.dorpBouwtZelf = zelf;
+    delete T.GEBOUWEN._proefKlein;
+    delete T.GEBOUWEN._proefGroot;
+  }
+});
+
 // Een gebouw op de kaart heeft sinds 1 okt wel zijn voorwerp (T.zetBestaandeGebouwen; test/wensen.test.cjs).
 test('T.tikBehoeftenDag: een gebouw zonder voorwerp groeit niet mee', () => {
   const S = maakS(40, 40);

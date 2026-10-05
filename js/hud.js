@@ -466,11 +466,11 @@
     return `<div class="kop bouw-oproepen">Oproepen — wat de mensen niet vanzelf vragen</div>${rijen}`;
   }
 
-  // De rij van het erf (js/erven.js): wat het kost is niets, maar er staat bij hoeveel er vrij zijn, en
-  // wat een gezin erop nodig heeft.
+  // De rij van het erf (js/erven.js): wat het kost is niets, maar er staat bij hoeveel er vrij zijn (waar nog een hut op
+  // past, T.bruikbareErven), en wat een gezin erop nodig heeft.
   function erfRij(S, id, g) {
     const maat = T.erfMaat();
-    const vrij = T.vrijeErven(S.dorp).length;
+    const vrij = T.bruikbareErven(S.dorp).length;
     const hout = T.GEBOUWEN.hut.kosten.hout;
     return (
       `<button data-soort="${id}">` +
