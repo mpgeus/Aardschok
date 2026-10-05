@@ -4419,6 +4419,17 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (5 okt), na de proefplaten: "1 ja 2 is goed zo".** Dus de drie stijlen zoals op de platen, en oker huis 5 en
     roze huis 12 mogen onder een dun dak hun dakkapel missen. Het renderen begint als het wit van de draaibare huizen in
     `main` staat.
+    **Stap 2b is af (5 okt, tweede sessie naast de draaibare huizen, op `claude/bouwstijlen-2b`):** de 300 huizen van oker,
+    planken en roze staan in `tegels/huizen/` (`npm run tiled huizen`, 64 minuten), elk met zijn vijf bouwfasen
+    (`bouwfasen.cjs --erbij` met namen, in zes delen; 45 tekeningen is zo'n anderhalf uur, en een deel ging verloren toen de
+    container herstartte). Het vel van de huizen heeft nu 512 vakken (huizen is het laatste vel in elke kaart, dus er
+    schuift geen nummer op). Nagekeken: alle bestaande tekeningen, wit en de oude huizen, byte voor byte dezelfde; geen deur
+    aan de verkeerde kant; `npm test` 946/946, met toetsen voor de vier stijlen, eigen vormen per stijl, de gedeelde hutten
+    en het doorgroeien in de stijl van het dorp; `npm run schermen` tegen `main` (`aca768e`): 21 van 23 beelden byte voor
+    byte gelijk, alleen land 5 van de maker anders, want dat bouwt nu in planken; de speeltest met de bouwer op landen van
+    de maker (zaad 1 tot en met 4, twee jaar): geen fouten in de console, elk land een dorp en marktrecht in het eerste
+    jaar, 26 naar 67 tot 82 mensen, geen doden van kou of honger. Opslagplaats: `tegels/huizen/` 24 MB, `tegels/bouwfasen/`
+    58 MB. Nog niet in `main`. Het huis van de schout, de herberg en de kapel krijgen hun stijl in stap 3.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
@@ -5381,6 +5392,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 5 okt 2026 — **De andere drie bouwstijlen: oker, planken en roze** (tweede sessie naast de draaibare huizen; vraag 114,
+  stap 2b; Marcel: "A ja B ja C delen D stap 3 E tuurlijk", en na de proefplaten "1 ja 2 is goed zo"). Elke stijl eigen
+  huizen en boerderijen met een uitbouw als kenmerk (oker de zolders, planken de galerij en de buitentrap, roze twee
+  lagen en een erker), de plankenstijl helemaal van hout; oker en roze nemen de hutten van wit. 300 huizen met hun
+  bouwfasen; wie doorgroeit, krijgt de stijl van zijn dorp. Wit en de oude huizen byte voor byte dezelfde, `npm test`
+  946/946, 21 van 23 schermafdrukken gelijk (alleen land 5, nu planken), de speeltest op vier landen van de maker zonder
+  fouten. Op `claude/bouwstijlen-2b`, nog niet in `main`. Zie vraag 114, stap 2b, en `beeld.md`.
 - 5 okt 2026 — **Ontginnen op de heide** (drieëndertigste sessie; vraag 107, stap 1; Marcel: "1 en 3, 107 a b c d e ja").
   Komt het dorp graan tekort (`T.graanTekort`: er komt geen gezin om het graan, of het eten haalt de winter niet), dan
   vraagt een boer of zijn grote zoon je om dertig tegels heide (een voorval `ontginverzoek`, vóór de bouwverzoeken; de
