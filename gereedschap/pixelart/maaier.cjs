@@ -90,6 +90,28 @@ function houdingMaaier(fase) {
   };
 }
 
+// De zeis in de handen op fase `fase`, in de rusthouding van de romp: de punten voor zeisDelen (P) en de as dwars op de
+// steel voor de handgrepen (zijAs). De zwaai draait niet de al-gebouwde armen (dan raakt de schouder los van het lijf
+// zodra de hoek groot wordt), maar de greeppunten zélf, om PIVOT; de schouders blijven op hun echte, vaste plek en de
+// elleboog-IK buigt de arm mee naar waar de hand deze fase moet zijn — zoals beenPunten dat voor de knie doet. De
+// maaister (werkfiguren.cjs) maait met dezelfde zeis, een eind lager (`verschuif`), want haar schouders zitten lager.
+const PIVOT = [3, 3, 46];
+function zeisInDeHanden(fase, verschuif = [0, 0, 0]) {
+  const zwaaiHoek = SWING_AMPL * HH.cosinus(fase);
+  const B_zwaai = HH.beweging({ as: [0, 0, 1], graden: zwaaiHoek, om: PIVOT });
+  const draaiPunt = (p) => HH.plus(HH.opPunt(B_zwaai, p), verschuif);
+  const P = {
+    boven: draaiPunt([13, 2, 52]),
+    greepBoven: draaiPunt([18, 6, 43]), // rechterhand: bovenste greep, een eind van het lijf af
+    greepOnder: draaiPunt([23, 16, 23]), // linkerhand: onderste greep, verder naar het blad toe
+    onder: draaiPunt([26, 20, 10]),
+    bladMid: draaiPunt([43, 25, 7]),
+    bladTip: draaiPunt([62, 29, 4]),
+  };
+  const zijAs = HH.eenheid(HH.kruis(HH.af(P.onder, P.boven), [0, 0, 1]));
+  return { P, zijAs };
+}
+
 // ---------------------------------------------------------------- de maaier
 
 // Dezelfde boer als graan-proef.cjs gebruikt (zie People.boer() daar; strohoed zit er al in), maar
@@ -168,25 +190,9 @@ function maaier(fase = 0) {
   delen.push(kegel([0.6, 7.2, 58.8], [1.4, 8.4, 54.6], 1.8, 0.7, M.doek, D.doek));
   bot(Bn.Bromp);
 
-  // --- armen + zeis: beide handen aan de steel. De zwaai draait niet de al-gebouwde armen (dan
-  // raakt de schouder los van het lijf zodra de hoek groot wordt), maar de greeppunten zélf, om
-  // PIVOT; de schouders (Sch hieronder) blijven op hun echte, vaste plek en de elleboog-IK buigt
-  // de arm mee naar waar de hand deze fase moet zijn — zoals beenPunten dat voor de knie doet.
-  // Bn.Bromp erover (bot() hieronder) laat het bovenlijf zichtbaar meedraaien met de romp.
-  const zwaaiHoek = SWING_AMPL * HH.cosinus(fase);
-  const PIVOT = [3, 3, 46];
-  const B_zwaai = HH.beweging({ as: [0, 0, 1], graden: zwaaiHoek, om: PIVOT });
-  const draaiPunt = (p) => HH.opPunt(B_zwaai, p);
-
-  const P = {
-    boven: draaiPunt([13, 2, 52]),
-    greepBoven: draaiPunt([18, 6, 43]), // rechterhand: bovenste greep, een eind van het lijf af
-    greepOnder: draaiPunt([23, 16, 23]), // linkerhand: onderste greep, verder naar het blad toe
-    onder: draaiPunt([26, 20, 10]),
-    bladMid: draaiPunt([43, 25, 7]),
-    bladTip: draaiPunt([62, 29, 4]),
-  };
-  const zijAs = HH.eenheid(HH.kruis(HH.af(P.onder, P.boven), [0, 0, 1]));
+  // --- armen + zeis: beide handen aan de steel (zeisInDeHanden hierboven). Bn.Bromp erover
+  // (bot() hieronder) laat het bovenlijf zichtbaar meedraaien met de romp.
+  const { P, zijAs } = zeisInDeHanden(fase);
   delen.push(...zeisDelen(P, zijAs, M, D));
 
   const armDeel = (Sch, ElRef, HandRef, HandDoel, dArm, dHand) => {
@@ -234,4 +240,4 @@ function maaier(fase = 0) {
   return model(delen, mat, HH.omvat(delen, 2));
 }
 
-module.exports = { zeis, zeisDelen, maaier, houdingMaaier, SWING_AMPL, TORSO_TWIST, MAAIER_FPS, MAAIER_BEELDEN };
+module.exports = { zeis, zeisDelen, zeisInDeHanden, maaier, houdingMaaier, SWING_AMPL, TORSO_TWIST, MAAIER_FPS, MAAIER_BEELDEN };

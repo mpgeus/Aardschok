@@ -293,8 +293,16 @@
       // Een bouwverzoek (js/verzoeken.js; werklijst vraag 103): ja als het kan, zoals de bouwer bouwde wat de raad zei,
       // ook als het hout voor de winter krap is (daar waarschuwt de raad voor, en dan vraagt iemand een houthakker); kan
       // het niet, dan nee. Een gewoon voorval: het eerste verstandige antwoord.
-      const ja = L.bouw ? knoppen.find((b) => /^\dJa/.test(b.textContent)) : null;
-      const knop = L.bouw ? ja || knoppen.find((b) => /^\dNee/.test(b.textContent)) || knoppen[0] : knoppen.find((b) => verstandig(s, prijsVan(b))) || knoppen[0];
+      // Heide ontginnen (js/ontginnen.js; werklijst vraag 107, e): ja, zoals een bouwverzoek, zolang het vertrouwen van
+      // het dorp daarna 30 of meer is (de grens die de slimme ook bij een gril houdt): elk volgend stuk kost meer (f3).
+      const verzoek = L.bouw || L.ontgin;
+      const magJa = (b) => {
+        const m = /vertrouwen van het dorp −(\d+)/.exec(prijsVan(b));
+        const bazen = T.bazenNu(s.dorp);
+        return !L.ontgin || !m || !bazen || bazen.vertrouwen - Number(m[1]) >= 30;
+      };
+      const ja = verzoek ? knoppen.find((b) => /^\dJa/.test(b.textContent) && magJa(b)) : null;
+      const knop = verzoek ? ja || knoppen.find((b) => /^\dNee/.test(b.textContent)) || knoppen[0] : knoppen.find((b) => verstandig(s, prijsVan(b))) || knoppen[0];
       if (!knop) break;
       const antwoord = knop.textContent.replace(/^\d/, '');
       if (!geboekt.has(L)) {
@@ -302,8 +310,15 @@
         boek.voorvallen.push({ dag: heel(s.kalender.dag), datum: datum(), id: L.id, wie: T.naamVanBewoner(L.wie), antwoord, bouw: L.bouw ? L.bouw.soort : undefined });
       }
       const bouw = L.bouw && L.bouw.soort;
+      const ontgin = !!L.ontgin;
       const voor = s.dorp.gebouwen.length;
+      const akkersVoor = s.wereld.akkers.length;
       knop.click();
+      if (ontgin && /^Ja/.test(antwoord)) {
+        const gelukt = s.wereld.akkers.length > akkersVoor;
+        boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort: 'ontginning', gelukt, reden: gelukt ? null : 'geen plek meer', door: 'verzoek' });
+        daad(`zegt ja tegen ${T.naamVanBewoner(L.wie)}: heide ontginnen`);
+      }
       // Een bouwverzoek (js/verzoeken.js; werklijst vraag 103): wat er zo gebouwd werd, telt als gebouwd, zoals toen de
       // speler het zelf deed.
       if (bouw && /^Ja/.test(antwoord)) {

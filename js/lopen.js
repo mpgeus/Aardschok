@@ -265,11 +265,11 @@
   // ── Onderweg: wie er in de weg staat ──
 
   // Mag b een stap opzij gaan voor wie langs wil? Alleen wie maar wat staat: niet de schout (dat ben jij), niet wie
-  // bezig is (maaien, een gesprek, de schout zoeken met een voorval), geen dier en geen monster, en niet in een gevecht.
-  // Wie een praatje maakt (js/praatje.js), is ook bezig, maar gaat in een smalle doorgang toch even opzij (`ookPraatje`,
-  // hieronder).
+  // bezig is (maaien, op zijn land werken, een gesprek, de schout zoeken met een voorval), geen dier en geen monster, en
+  // niet in een gevecht. Wie een praatje maakt (js/praatje.js), is ook bezig, maar gaat in een smalle doorgang toch even
+  // opzij (`ookPraatje`, hieronder).
   T.magOpzij = (S, b, ookPraatje) =>
-    !b.dood && !b.binnen && b !== S.schout && !b.dier && b.kant !== 'monster' && !b.maait && b !== S.spreektMet &&
+    !b.dood && !b.binnen && b !== S.schout && !b.dier && b.kant !== 'monster' && !b.maait && !b.werkt && b !== S.spreektMet &&
     !b.zoektSchout && !S.gevecht && !b.onderweg && !b.pad.length && (ookPraatje || !b.praatje);
 
   // Wat doet e, die zijn volgende tegel bezet vindt (js/anim.js)? 'wacht': hij blijft staan, en kijkt het volgende beeld
@@ -348,7 +348,7 @@
   // Langs elkaar schuiven kan tussen twee die lopen, niet met een monster (een rover), en ook de ander moet op e's tegel
   // mogen staan.
   function magRuilen(S, w, e, ander) {
-    if (ander.dood || ander.maait || ander.kant === 'monster' || e.kant === 'monster') return false;
+    if (ander.dood || ander.maait || (ander.werkt && !ander.pad.length) || ander.kant === 'monster' || e.kant === 'monster') return false;
     return T.isBegaanbaar(w, e.tx, e.ty, { deurenOpenen: ander === S.schout });
   }
   // Ze ruilen van tegel. Wilde de ander niet recht naar e's tegel maar ernaast, dan gaat hij eerst naar e's tegel en dan

@@ -241,6 +241,8 @@
     // De mest gaat op wat volgend jaar akker is, bovenop wat het veld het afgelopen jaar deed.
     const mest = IN.vruchtbaarheid ? strooiMest(D) : new Map();
     for (const v of w.akkers) {
+      // Een veld dat nog ontgonnen wordt (js/ontginnen.js), wisselt niet: het wordt een akker als het klaar is.
+      if (v.ontginning) continue;
       const was = T.bestemmingVan(v);
       if (IN.vruchtbaarheid) {
         const erbij = (was === 'akker' ? -IN.akkerPutUit : was === 'braak' ? IN.braakRust : IN.weideMest) + (mest.get(v) || 0) * IN.mestErbij;
@@ -384,6 +386,8 @@
   // 'geploegd', tot er een eigen tekening voor braakland is (onkruid); dat is tekenwerk. Zo vraagt
   // js/tekenen.js het per tegel, en hoeft het zelf niets van bestemmingen te weten.
   T.akkerTegelStadium = function (akker, x, y, basisStadium) {
+    // Een veld dat nog ontgonnen wordt (js/ontginnen.js): wat de boer nog niet stak, is heide.
+    if (akker.ontginning && !T.isGestoken(akker, x, y)) return 'heide';
     const bestemming = T.bestemmingVan(akker);
     if (bestemming === 'weide') return 'weide';
     if (bestemming === 'braak' || ongezaaidOp(akker, x, y)) return 'geploegd';
@@ -844,6 +848,14 @@
     return n || T.DAGEN_PER_JAAR;
   };
 
+  // Zaaien de boeren op deze dag na wat niet gezaaid is (T.zaaiNa)? Na 1 lentemaand, tot het graan groen wordt. Ook voor
+  // een stuk heide dat dan ontgonnen is (js/ontginnen.js): dat wordt meteen een akker, en ze zaaien het na.
+  T.isNazaaitijd = function (dag) {
+    const d = T.datumVanDag(dag);
+    const nu = dagInJaar(d.maand, d.dagVanMaand);
+    return nu > stadiumBegin('geploegd') && nu < stadiumBegin('groen');
+  };
+
   // Het eerste jaar is al gezaaid: het spel begint op 1 lentemaand, net nadat de boeren hun eigen
   // zaaigoed de grond in brachten. Pas vanaf het tweede jaar kost zaaien graan uit de voorraad, en
   // pas dan wisselen de velden (T.wisselVelden): eerst de wissel, dan het zaaien, zodat alleen
@@ -857,7 +869,7 @@
     if (dag >= T.DAGEN_PER_JAAR && nu === stadiumBegin('geploegd')) {
       T.wisselVelden(D);
       T.zaaiAkkers(D);
-    } else if (nu > stadiumBegin('geploegd') && nu < stadiumBegin('groen')) {
+    } else if (T.isNazaaitijd(dag)) {
       T.zaaiNa(D); // wat niet gezaaid kon worden, zodra er graan is (hierboven)
     }
     if (nu === stadiumBegin('gemaaid')) {

@@ -221,6 +221,19 @@ const FIGUURLIJST = {
   // De boer met de zeis, in de oogsttijd (T.werkOogstBij, js/akkers.js): één houding, "maaien",
   // die een boer of boerin zolang leent voor hij weer zichzelf is (js/sprites.js, S.houding).
   maaier: { map: ['maaier', 'animaties'], houdingen: ['maaien'], bron: 'maaier-anim.cjs' },
+  // De boer aan het werk op zijn veld (werkfiguren.cjs, werklijst vraag 111): dezelfde boer als de maaier, met zijn werk
+  // als lus en ook staan en lopen, want hij draagt het vel zolang hij aan dat werk is, ook tussen twee tegels. De zaaier
+  // zaait breedwerpig uit zijn zaaidoek, de wieder hakt en trekt met de schoffel (ook spitten en mest uitspreiden), en de
+  // sprokkelaar raapt takken voor het takkenbos op zijn rug.
+  zaaier: { map: ['zaaier', 'animaties'], houdingen: ['staan', 'lopen', 'zaaien'], bron: 'werkfiguren-anim.cjs zaaier' },
+  wieder: { map: ['wieder', 'animaties'], houdingen: ['staan', 'lopen', 'wieden'], bron: 'werkfiguren-anim.cjs wieder' },
+  sprokkelaar: { map: ['sprokkelaar', 'animaties'], houdingen: ['staan', 'lopen', 'rapen'], bron: 'werkfiguren-anim.cjs sprokkelaar' },
+  // Hun vrouwen (werkfiguren.cjs, vraag 111, b; Marcel, 5 okt): de boerin aan hetzelfde werk, met precies dezelfde
+  // houdingen, beelden en fps als de man ernaast, zodat het spel bij een boerin alleen de naam wisselt.
+  zaaister: { map: ['zaaister', 'animaties'], houdingen: ['staan', 'lopen', 'zaaien'], bron: 'werkfiguren-anim.cjs zaaister' }, // de zaaier als boerin
+  wiedster: { map: ['wiedster', 'animaties'], houdingen: ['staan', 'lopen', 'wieden'], bron: 'werkfiguren-anim.cjs wiedster' }, // de wieder als boerin
+  sprokkelaarster: { map: ['sprokkelaarster', 'animaties'], houdingen: ['staan', 'lopen', 'rapen'], bron: 'werkfiguren-anim.cjs sprokkelaarster' }, // de sprokkelaar als boerin
+  maaister: { map: ['maaister', 'animaties'], houdingen: ['maaien'], bron: 'werkfiguren-anim.cjs maaister' }, // de maaier als boerin
   // Het huis van de heer (heer.cjs, ontwerp/beeld.md): ze komen over de weg (js/heer.js,
   // js/inner.js) en staan in T.MENSEN (js/mensen.js) onder dezelfde naam als hier.
   heer: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' },

@@ -583,8 +583,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`js/voorvallen.js`).
 - `js/akkers.js`: **alleen het gehucht** (`ontwerp/spel.md`): welk stadium een
   akker heeft op welke dag (`T.AKKER_STADIA`, één tabel, `T.akkerStadium`), het windbeeld per
-  tegel (`T.windBeeld`) en zijn vaste variant (`T.akkerVariant`), waar een boer in het
-  groeiseizoen dwaalt (`T.wandelAnker`, anders gewoon bij zijn huis) en de oogst zelf, tegel voor
+  tegel (`T.windBeeld`) en zijn vaste variant (`T.akkerVariant`), waar een boer zonder bewoners (het gereedschap) in
+  het groeiseizoen dwaalt (`T.wandelAnker`, anders gewoon bij zijn huis) en de oogst zelf, tegel voor
   tegel (`T.werkOogstBij`, met een vangnet: haalt hij het seizoen niet, dan wordt bij de volgende
   ploegtijd toch de hele akker in één keer "gemaaid"). Na de oogst, op 1 herfstmaand, kiezen de boeren wat hun velden
   volgend jaar worden (`T.boerenKiezenVelden`, vraag 74, stap 2): een uitgeputte akker rust of krijgt mest, een braak
@@ -592,6 +592,25 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.planTekst`). `js/tekenen.js` tekent ermee (achterlaag,
   wezen, voorlaag, zodat iemand tot zijn middel in het graan staat); `js/kaart.js` koppelt een
   boer aan zijn akker(s) via `huis`, dezelfde id op de boer als op de akker.
+- `js/veldwerk.js`: **de boeren aan het werk** (vraag 111, 5 okt; Marcel: "Ze moeten zaaien en op het veld bezig
+  zijn"): overdag werkt een boer op zijn eigen land, naar het seizoen (`T.veldwerkVandaag`: zaaien, wieden, mest
+  uitrijden, spitten, sprokkelen aan de bosrand), rij voor rij (`T.veldwerkTegels`), elk beeld na het maaien en vóór het
+  dwalen (`T.werkVeldwerkBij`, vanuit `js/main.js` en `T.werkDorpBij`). Wat hij doet, staat op zijn poppetje (`e.werkt`,
+  `e.draagt`, `e.veldwerk`); wie werkt, dwaalt niet, praat niet en gaat niet opzij, en `js/sprites.js` geeft hem het vel
+  van zijn werk (`WERKFIGUREN`: de zaaier, de wieder, de sprokkelaar; een boerin die van een vrouw, `werkVelVan`). De schaft houdt hij op de akker. Zijn boerin en
+  grote kinderen helpen bij het zaaien en de oogst (`T.helpAnker`, voor `T.dagAnker`; een anker dat meeloopt, zonder
+  veld: `veld: false`). De regels veranderen niet; de getallen in `T.VELDWERK_INSTELLINGEN`.
+- `js/ontginnen.js`: **ontginnen** (vraag 107, stap 1, 5 okt; Marcel: "107 a b c d e ja"): komt het dorp graan tekort
+  (`T.graanTekort`), dan vraagt een boer of zijn zoon een stuk heide te ontginnen, dertig tegels, zo dicht bij zijn akker
+  als de heide komt en niet op een paadje van een deur (`T.ontginPlekVoor`, `T.isAangelegdPaadje` in `js/paden.js`; een
+  nieuw veld meldt `T.kaartVeranderd`): een voorval `ontginverzoek` (`T.beginOntginverzoek`, in `T.tikVoorvallenDag`
+  vóór de bouwverzoeken), met `L.ontgin` = { x, y, b, h, boer, nut, vertrouwen }. Ja (`doe.ontgin`,
+  `T.ontginToegestaan`) maakt er een veld van zijn boerderij van, met `veld.ontginning` = { tot, gestoken } en
+  `veld.ontgonnen`, en kost het vertrouwen van het dorp, elk stuk meer (`T.ontginVertrouwen`; vraag 107, f3); een
+  maand steekt de boer er plaggen (`ontginnen` in `js/veldwerk.js`, `T.steekPlag`; een halve plag onthoudt hij in
+  `e.veldwerk.over`), wat hij niet stak is heide (`T.akkerTegelStadium`), en de schapen grazen er niet meer
+  (`T.weideStand` en `T.graaslandVan` in `js/vee.js`). Na een verzoek pas na dertig dagen een nieuw (`D.ontginnen`). De
+  spelregel "Ontginnen"; de getallen in `T.ONTGINNEN_INSTELLINGEN`.
 - **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen en het
   uur: een dag duurt vijf minuten bij 1×, een maand dertig dagen; eigen klok naast `S.tijd`; de
   versneller `T.SNELHEDEN`; `T.wereldFactor` en `S.wereldTijd`; wie de tijd stilzet,
@@ -891,7 +910,11 @@ en het bier (`(30)` zet eerst 30 bier). `Spel.debug.meter()` (of `F2`) zet de me
 `('nacht')` doet nu wat de nacht doet. `Spel.debug.lopen()` zegt wie er met een doel onderweg is, wie daarvan staat te
 wachten en op wie, en hoeveel wegen en velden de kaart onthoudt (vraag 119). `Spel.debug.praatjes()` zegt wie er waar
 staat te praten en tot hoe laat, en hoeveel er vrij zijn; `('nu')` laat de twee vrije bekenden die het dichtst bij elkaar
-staan nu beginnen (vraag 120). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
+staan nu beginnen (vraag 120). `Spel.debug.veldwerk()` zegt per boer wat hij vandaag op zijn land doet, wat hij nu doet
+en waar, hoe ver hij is en wie hem helpt (vraag 111). `Spel.debug.ontginnen()` zegt of het dorp graan tekortkomt, welk
+stuk heide elke boer zou vragen, hoeveel stukken er al af zijn en wat het volgende kost, wat er ontgonnen wordt en hoe
+ver; `('nu')` laat het verzoek nu komen, ook zonder tekort
+(vraag 107). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
 hij staat, wie er kijkt, en welk licht er brandt.
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1
 slachtmaand). `Spel.debug.opslaan('2')` zet het spel op plek 2, `Spel.debug.laden('auto')` laadt wat er vanzelf

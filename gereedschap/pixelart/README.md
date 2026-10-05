@@ -89,6 +89,26 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   `uit/dorpelingen/karakters-ronde1.png`, `karakters-ronde2.png` en `karakters-alle.png` (alle
   achttien op een rij), daarna `node naar-spel.cjs --alleen <namen,met,komma's>` en
   `--alleen schandpaal` voor hun nek.
+- `werkfiguren.cjs`: de boer en de boerin aan het werk op hun veld (werklijst vraag 111, b en c), op dezelfde manier als
+  de maaier (`maaier.cjs`): het lijf van de gewone boer met strohoed en kiel (`werkBoer`), of dat van de gewone boerin
+  met witte hoofddoek, terracotta jurk en blauw schort (`werkBoerin`), met eigen gereedschap en een eigen houding voor
+  het werk, uit sleutelbeelden. De zaaier (staan, lopen, zaaien: breedwerpig uit een zaaidoek; de vuist gaat in de zak,
+  en bij de worp gaan de vingers open en vangt een waaiertje zaad even het licht), de wieder (staan leunend op de
+  schoffel, lopen met de schoffel over de schouder, wieden: hakken en trekken, met kluiten; de schoffel is een plat,
+  breed blad aan een zwanenhals, dat van elke kant als schoffel leest) en de sprokkelaar (een takkenbos op zijn rug;
+  staan, lopen, rapen: door de knieën tot hij hurkt, de rug zo recht als zijn korte armen toelaten en het hoofd
+  omhoog, een tak oprapen en over de schouder in de bundel steken, waar hij blijft). Elk heeft een vrouw met precies
+  dezelfde houdingen, beelden en fps, zodat het spel bij een boerin alleen de naam wisselt: de zaaister, de wiedster,
+  de sprokkelaarster, en de maaister (de zeis en de slag van de maaier, `zeisInDeHanden` en `houdingMaaier`). Haar rok
+  zwaait mee zoals in haar loopcyclus, en als ze hurkt, zakt hij mee en bolt hij over haar knieën (`rokProfiel`). De
+  sleutels zijn voor de boer gemaakt; haar handen gaan dezelfde weg vanuit haar eigen, lagere schouders, naar de lengte
+  van haar arm (`naarLijf`). Een hand die opengaat, krijgt vingers (`hand`). Staan en lopen zijn die van de boer of de
+  boerin zelf, met hun eigen pas. `node werkfiguren-anim.cjs` schrijft de vellen naar `uit/<naam>/animaties/` (met een
+  bewegende PNG per houding) en de proefplaat `uit/werkfiguren-proef.png` (bovenaan de gewone boer en boerin, dan per
+  werk een rij voor de man en een voor de vrouw, op 1×; `--proef` alleen die), daarna
+  `node naar-spel.cjs --alleen zaaier,wieder,sprokkelaar,zaaister,wiedster,sprokkelaarster,maaister`. Na elkaar zo'n
+  twintig minuten; met een figuur per proces tegelijk (`node werkfiguren-anim.cjs sprokkelaarster` enzovoort, vier
+  tegelijk) zo lang als de sprokkelaarster, en daarna `--proef`.
 - `schandpaal.cjs`: de schandpaal, leeg en bezet, en het halsijzer als eigen laag over wie eraan
   staat (`node schandpaal.cjs` maakt de proefplaat `uit/schandpaal-proef.png`, daarna
   `node naar-spel.cjs --alleen schandpaal`). De hoogte van de nek wordt gemeten op de boer en de

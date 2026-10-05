@@ -380,6 +380,17 @@
           uitleg: 'Alleen de weg van de kaart, zoals voor 3 okt.' },
       ],
     },
+    // Ontginnen (werklijst vraag 107; Marcel, 5 okt: "107 a b c d e ja", met e: de spelregel "Ontginnen"; js/ontginnen.js).
+    {
+      id: 'ontginnen', naam: 'Ontginnen', standaard: 'aan',
+      uitleg: 'Of een boer heide mag komen vragen om te ontginnen als het dorp graan tekortkomt.',
+      keuzes: [
+        { id: 'aan', naam: 'Aan', zet: { 'ONTGINNEN_INSTELLINGEN.aan': true },
+          uitleg: 'Komt het dorp graan tekort, dan vraagt een boer of zijn zoon je om dertig tegels heide te ontginnen, zo dicht bij zijn akker als het kan. Ja kost vertrouwen van het dorp, want de meent is van iedereen, en elk volgend stuk meer. Een maand plaggen steken, en in het voorjaar wordt het gezaaid.' },
+        { id: 'uit', naam: 'Uit', zet: { 'ONTGINNEN_INSTELLINGEN.aan': false },
+          uitleg: 'Het land blijft zoals het is. Zoals voor 5 okt.' },
+      ],
+    },
     // Een praatje (werklijst vraag 120; Marcel, 4 okt: "Het dorp moet echt levendig en realistisch aanvoelen", en "geen
     // praatjes forceren. Alleen als mensen een reden hebben en elkaar toevallig tegenkomen"; js/praatje.js).
     {
@@ -623,6 +634,8 @@
     { naam: 'De verstopplekken', blok: 'VERSTOP_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
+    { naam: 'Het veldwerk', blok: 'VELDWERK_INSTELLINGEN' },
+    { naam: 'Ontginnen', blok: 'ONTGINNEN_INSTELLINGEN' },
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
     { naam: 'De doorkijk', blok: 'DOORKIJK_INSTELLINGEN' },
     { naam: 'Het zichtveld', blok: 'ZIEN_INSTELLINGEN' },

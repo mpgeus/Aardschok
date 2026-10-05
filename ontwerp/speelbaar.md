@@ -149,6 +149,58 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 5 okt: ontginnen op de heide (werklijst, vraag 107, stap 1)
+
+Gespeeld in de drieëndertigste sessie, op `ccr-ba65ef69-kcd902` op `68649be` (ontginnen op de heide; het paadje van een
+deur dat vrij blijft, kwam erna, en lag op deze drie landen niet in het eerste stuk): `npm run speeltest -- bouwer
+--maker`, op dezelfde drie landen als hieronder. De bouwer zegt ja op elk verzoek, ook om te ontginnen.
+
+| Land | Een dorp | Marktrecht | Mensen | Ontgonnen | Oogst jaar 1 → 2 | Honger jaar 1 → 2 | Hiervoor (dorp, marktrecht, mensen) |
+|---|---|---|---|---|---|---|---|
+| 62707 | 24 oogstmaand | 25 herfstmaand | 26 → 67 | 5 stukken | 612 → 958 | 76 → 0 dagen | 29 oogstmaand, 29 herfstmaand, 26 → 98 |
+| 73425 | 24 herfstmaand | 3 slachtmaand | 26 → 103 | 4 stukken | 606 → 804 | 78 → 0 dagen | 24 herfstmaand, 2 slachtmaand, 26 → 96 |
+| 72022 | 24 oogstmaand | 3 wijnmaand | 26 → 85 | 5 stukken | 641 → 987 | 77 → 0 dagen | 13 herfstmaand, nee, 26 → 72 |
+
+**Wat opviel:**
+1. **Het loopt:** drie keer twee jaar, geen fouten in de console, en de bouwer bleef schout (het vertrouwen kwam nooit
+   onder de 50).
+2. **Het graan:** de oogst van het tweede jaar is een derde tot ruim de helft groter, het zaaien kost 270 à 300 in plaats
+   van 160 à 180, en de honger van het eerste jaar (76 à 78 dagen) is in het tweede weg. Op 72022, dat hiervoor
+   vastliep, kwam marktrecht er nu op 3 wijnmaand van het eerste jaar.
+3. **Het tempo:** het eerste verzoek komt op 28 lentemaand, want vóór de eerste oogst komt een gehucht altijd graan
+   tekort, en daarna elke twee maanden: vier à vijf stukken in het eerste jaar, de hele heide op wat de schapen nodig
+   hebben na. Dat is vraag 107, f.
+4. **Op 62707 bleef het dorp op 67** (hiervoor 98). Het graan was daar niet de rem (de oogst van het tweede jaar was
+   958), maar de wensen: het hele tweede jaar geen laken, en de raad zei 516 dagen wat de huizen missen. Dat het
+   hiervoor wel groeide, kan toeval zijn: de verzoeken om te ontginnen schuiven alle worpen van het toeval op.
+
+**Daarna, met f3** (Marcel: "We gaan met jouw suggestie"; op `f520b22`: elk stuk kost 5 vertrouwen meer, en de spelers
+zeggen ja zolang het vertrouwen daarna 30 of meer is). De bouwer zei op alle drie de landen elke keer ja: 5, 10, 15, 20
+en 25 (op 73425 vier stukken). Het vertrouwen kwam toch nooit onder de 50 waarmee het begint, en stond aan het eind van
+het eerste jaar op 76 à 80. Dat komt doordat het vertrouwen elke dag een zestigste van het verschil naar de
+tevredenheid teruggaat (`volgDagen` in `T.BAZEN_INSTELLINGEN`): in een tevreden dorp is een dip van 25 na twee maanden
+voor tweederde weg. De prijs bijt dus alleen in een ontevreden dorp. Op 73425 en 72022 liep het verder precies zoals
+hierboven (103 en 85 mensen); op 62707 kwamen het vierde en vijfde stuk pas in het tweede jaar, en was de oogst van het
+tweede jaar daardoor 748 in plaats van 958 (67 mensen, zoals hierboven).
+
+## De speeltest van 5 okt: de boeren aan het werk (werklijst, vraag 111, stap 1)
+
+Gespeeld in de drieëndertigste sessie, op `ccr-ba65ef69-kcd902` op `c016d2e` (de boeren werken overdag op hun land, nog
+in hun eigen vel; zonder de militie die onderweg meevecht, die kwam erna): `npm run speeltest -- bouwer --maker`, op
+dezelfde drie landnummers als hieronder.
+
+| Land | Een dorp | Marktrecht | Mensen | Bij het draaibare wit (dorp, marktrecht, mensen) |
+|---|---|---|---|---|
+| 62707 | 29 oogstmaand | 29 herfstmaand | 26 → 98 | 29 oogstmaand, 29 herfstmaand, 26 → 66 |
+| 73425 | 24 herfstmaand | 2 slachtmaand | 26 → 96 | 24 herfstmaand, 2 slachtmaand, 26 → 96 |
+| 72022 | 13 herfstmaand | nee | 26 → 72 | 3 herfstmaand, nee, 26 → 72 |
+
+**Wat opviel:** het spel loopt met de boeren op hun land: drie keer twee jaar, geen fouten in de console, en de bouwer
+bleef schout. De treden vallen op dezelfde dagen (op 72022 werd het tien dagen later een dorp); de regels veranderden
+niet, alleen waar de boeren lopen, en dus vallen de worpen van het toeval anders (op 62707 groeide het dorp daardoor
+verder, tot 98). Op 72022 liep het dorp weer vast op plaats (16 groeidagen zonder plek voor een gezin), zoals bij het
+draaibare wit: dat blijft een vraag voor 107 en 110.
+
 ## De speeltest van 4 okt: het draaibare wit op landen van de maker (werklijst, vraag 124, B)
 
 Gespeeld in de tweeëndertigste sessie, op `ccr-9fc8b85a-tfgsyn` op `a0b8cc1` (het spel van `5b1793f`: wit draaibaar en met

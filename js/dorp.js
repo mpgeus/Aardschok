@@ -96,6 +96,7 @@
     if (D.wereld === S.wereld) return; // waar je bent, lopen en dwalen ze in js/main.js, en worden ze getekend
     T.beweegWezens(S, D.wereld, dt, dtWereld); // lopen (js/anim.js)
     T.werkOogstBij(S, D, dtWereld); // maaien (js/akkers.js)
+    T.werkVeldwerkBij(S, D); // de boeren op hun land (js/veldwerk.js)
     T.dwaal(S, D.wereld, D, dtWereld); // en dwalen, naar het ritme van de dag (js/verkennen.js)
   };
 

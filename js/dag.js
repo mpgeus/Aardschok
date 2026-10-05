@@ -211,9 +211,9 @@
   //   - op een feest op het plein: een hele dag, of de avond (js/feesten.js, T.feestAnker);
   //   - wie net in het gehucht komt, eerst naar zijn huis, en wie wegtrekt, overdag naar de uitgang
   //     van de kaart (js/bewoners.js, T.werkBewonersBij).
-  // Een boer volgt hetzelfde, maar overdag geeft dit voor hem null: dan geldt zijn eigen anker
-  // (T.wandelAnker in js/akkers.js, zijn akker in het groeiseizoen), en in de oogst maait hij
-  // (T.werkOogstBij).
+  // Een boer volgt hetzelfde. Overdag werkt hij op zijn land (T.werkVeldwerkBij, js/veldwerk.js) en maait hij in de
+  // oogst (T.werkOogstBij, js/akkers.js), en zolang hij dat doet, dwaalt hij niet; is er niets te doen, dan is hij bij
+  // zijn boerderij (zijn werk). Zijn boerin en grote kinderen helpen bij het zaaien en de oogst (T.helpAnker).
   //
   // Voor de boeren (een huis en een akker) en de bewoners (e.bewoner, js/bewoners.js); de schout, het
   // vee en een bezoeker volgen hun eigen weg, en een man van de militie bij een aanval ook (opgeroepen: hij
@@ -250,6 +250,9 @@
     if (deel === 'avond') return erf;
     // Wie zijn eigen hut bouwt op een erf (js/erven.js), werkt er overdag aan, en niet op zijn werk.
     if (p.huis && p.huis.erf && !p.huis.klaar) return erf;
+    // De boerin en de grote kinderen helpen hun boer bij het zaaien en de oogst (js/veldwerk.js).
+    const helpt = deel === 'werk' && T.helpAnker ? T.helpAnker(D, e) : null;
+    if (helpt) return helpt;
     return plek.werk || plek.vrij || erf;
   };
 

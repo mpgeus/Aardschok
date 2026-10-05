@@ -1107,6 +1107,7 @@
     const IN = T.GEBOUWEN_INSTELLINGEN;
     // 0. De akkers (js/akkers.js): zaaien op 1 lentemaand, en het vangnet na de oogsttijd. Als
     // eerste: de boeren zaaien 's morgens, en daarna eet het dorp van wat er over is.
+    T.tikOntginnenDag(D, dag); // een stuk heide waarvan de maand om is, is ontgonnen (js/ontginnen.js)
     T.tikAkkersDag(D, dag);
     // Het vee (js/vee.js): jongen op 1 grasmaand, en de melk van vandaag. Ná de akkers, want op 1
     // lentemaand verhuist het vee daar naar zijn nieuwe weide; vóór de behoeften, want het dorp eet

@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 4 okt 2026, zevenentwintigste sessie)
+## Waar staat wat (bijgewerkt 5 okt 2026, drieëndertigste sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -39,9 +39,9 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Sint-Maarten | gebouwd (24 sep) | 5 |
 | Instelbaar, en de boeren | gebouwd (24 sep): 17 keuzes, 188 getallen | |
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep); sinds 30 sep kiezen de boeren hun velden en slachten ze zelf, en jij kunt het veranderen | 6a, vraag 74 |
-| Ontginnen | besloten, nog niet gebouwd | 6b |
+| Ontginnen | de heide gebouwd (5 okt): komt het graan tekort, dan vraagt een boer of zijn zoon een stuk heide te ontginnen; het bos nog niet | 6b, vraag 107 |
 | Straten en paden | paadjes van de deuren en waar gelopen wordt, lantaarns en brandende ramen gebouwd (3 okt, vraag 108); sneller lopen, modder en keien nog niet | 6c, vraag 108 |
-| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep), de treden tot marktrecht (2 okt, "Van dorp tot stad"); sinds 4 okt lopen de mensen om wat vaststaat en lossen ze onderweg op wie er staat ("Lopen tussen anderen", vraag 119), en wie vrij is en toevallig een buur of iemand van zijn werk treft, blijft soms staan voor een praatje, met een wolkje (vraag 120, a en b); waar ze het over hebben komt met de mensen aan het werk; de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90, 119, 120 |
+| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep), de treden tot marktrecht (2 okt, "Van dorp tot stad"); sinds 4 okt lopen de mensen om wat vaststaat en lossen ze onderweg op wie er staat ("Lopen tussen anderen", vraag 119), en wie vrij is en toevallig een buur of iemand van zijn werk treft, blijft soms staan voor een praatje, met een wolkje (vraag 120, a en b); waar ze het over hebben komt met de mensen aan het werk; sinds 5 okt werken de boeren overdag op hun land, naar het seizoen ("De boeren aan het werk", vraag 111, stap 1); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90, 111, 119, 120 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
@@ -401,7 +401,10 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
   altijd zijn levensbalk, zodat je hem herkent.
 - **De militie is het wachthuis.** Wie er werkt (twee handen), loopt bij een aanval naar de schout en met hem mee,
   zoals de inner. Ziet een rover de schout, dan begint het gevecht in beurten, met de hele bende en de wachters die
-  binnen twaalf tegels van hem staan. Elk heeft zijn eigen beurt en actiepunten (een wachter: 16 leven, 8 punten), en
+  binnen twaalf tegels van hem staan. Wie verder weg is, rent erheen (elke ronde zo ver als zijn punten reiken; "Jan
+  is nog onderweg"), en vecht mee vanaf de ronde dat hij er is ("Jan komt erbij"; sinds 5 okt: tot dan deed hij het
+  hele gevecht niet mee, en viel een schout in de speeltest alleen tegen drie rovers). Elk heeft zijn eigen beurt en
+  actiepunten (een wachter: 16 leven, 8 punten), en
   jij bestuurt wie aan de beurt is; de camera kijkt met hem mee. Een rover zoekt wie van jouw kant het dichtst bij
   staat. Zonder wachthuis vecht de schout alleen, tenzij er veteranen van de heervaart zijn: die komen ook (sinds 29
   sep, "De heervaart" hieronder).
@@ -2175,8 +2178,33 @@ jaar later vol dan eerst in het derde jaar, tenzij je slacht.
 
 ## Ontginnen: nieuwe velden uit bos of heide (Marcel, 25 sep 2026; werklijst punt 6b)
 
-**Zo staat het nu** (25 sep): besloten, nog niet gebouwd (punt 6b). De velden van het gehucht liggen
-vast op 209 tegels, en een veld maken kan nog niet. **Sinds 3 okt is er een plan** (werklijst vraag 107, uit vraag 102,
+**Zo werkt het nu** (5 okt, vraag 107, stap 1; Marcel: "107 a b c d e ja"; `js/ontginnen.js`): komt het dorp graan
+tekort (er komt geen gezin om het graan, of het eten haalt de winter niet: dezelfde vraag als de raad), dan komt een
+boer of zijn grote zoon je vragen om een stuk heide te ontginnen, dertig tegels. De boer met een akker het dichtst bij de
+heide vraagt het, en hij kiest de plek zelf: naast zijn akker als het kan, en anders zo dichtbij als het kan. Dat is
+bijna altijd het tweede, want de heide ligt apart: op het ontworpen gehucht tien tegels van de dichtste akker, op de
+landen van de maker in een hoek, 8 tot 40 tegels van de dichtste boerderij. Wat ontgonnen is, ligt de volgende keer het
+dichtst bij, dus de heide wordt van de kant van het dorp af ontgonnen. Over een weg of een paadje van een deur komt het
+niet (op het ontworpen gehucht loopt dat van de schaapskooi over de heide); een gesleten paadje mag wel. Je ziet de plek
+in goud op de grond, zoals bij elk verzoek. **Ja:** het wordt een veld van zijn boerderij, en het vertrouwen van het dorp
+zakt: 5 bij het eerste stuk, 10 bij het tweede, 15 bij het derde, want hoe kleiner de meent, hoe meer het dorp eraan hecht
+(vraag 107, f3; Marcel: "We gaan met jouw suggestie"). Het venster zegt het onder Ja, en wie het vraagt ook: "er ging al
+een stuk van de meent af, en het dorp zal er meer van vinden". Een maand steekt hij er plaggen met de schoffel, tegel voor tegel, en wat hij stak, is kale grond. Een plag
+is acht uur werk, dus hij maakt hem af na de schaft of de volgende dag: in de lente steekt hij er zo'n 1,25 per dag, in de
+herfst 1, in de winter 0,6 (wat na de maand nog heide is, steken zijn mensen dan). Daarna rust het tot lentemaand, en dan
+wordt het een akker en gezaaid, met zaaigraan zoals elke akker. Is het klaar terwijl de boeren nog nazaaien (na 1
+lentemaand, tot het graan groen wordt), dan wordt het meteen een akker en zaaien ze het na: wie in sprokkelmaand ja zei,
+wacht geen jaar. Zolang het ontgonnen wordt, wisselt het niet op 1 lentemaand. De schapen grazen er niet meer, en ze houden altijd wat
+ze nodig hebben en tien tegels erbij; zo kunnen er op de heide vier à vijf stukken af, naar hoeveel schapen er zijn. **Nee, of je sprak hem niet:** pas na
+dertig dagen vraagt er weer iemand (anders kwam hij elke dag terug, zolang het graan tekortkomt). Na een ja pas dertig
+dagen nadat het stuk klaar is. Ben je weg, dan beslist je raadsman: het eerste stuk ja, een volgend nee, want dat kost
+meer vertrouwen dan het hem waard is. Geen nieuwe boerderij en geen
+nieuw gezin. De spelregel "Ontginnen" (aan of uit), de getallen in `T.ONTGINNEN_INSTELLINGEN`, en
+`Spel.debug.ontginnen()`. **Nog niet:** het bos, openlijk tegen de gunst van de heer of stiekem met de inner en de
+soldaten (stap 2), en de speeltest van vier jaar (stap 3).
+
+**Eerder** (25 sep): besloten, nog niet gebouwd (punt 6b). De velden van het gehucht lagen
+vast op 209 tegels, en een veld maken kon nog niet. **Sinds 3 okt is er een plan** (werklijst vraag 107, uit vraag 102,
 a: het land is wat het dorp tegenhoudt): ontginnen als verzoek van een boer, op de heide (de meent: het vertrouwen van
 het dorp) of in het bos (de heer: zijn gunst, of stiekem, en dan betrapt als ze het vinden). Het beantwoordt de open
 vragen hieronder. De vraag onderaan of er heide komt, is
@@ -2683,6 +2711,38 @@ het plein tot een uur voor bedtijd. Na het bouwen zei Marcel: "Praatjes hoeven n
 is het zo. Let op wat ik zei, geen praatjes forceren. Alleen als mensen een reden hebben en elkaar toevallig
 tegenkomen. Dus dat 's avonds naar het plein mag eruit." Het plein en de rust die op een vaste plek niet gold, gingen
 eruit (dezelfde dag).
+
+### De boeren aan het werk (Marcel, 3 en 5 okt 2026; werklijst vraag 111)
+
+**Zo werkt het nu** (5 okt, stap 1; `js/veldwerk.js`, toetsen in `test/veldwerk.test.cjs`): overdag werkt een boer op zijn
+eigen land, naar het seizoen. Zolang het graan nog moet kiemen (lentemaand, tot de 11e) zaait hij, rij voor rij over zijn
+akkers, heen en terug; daarna wiedt hij tot het graan rijp is, tegel voor tegel, met een rustpoos ertussen. In het hooi
+en de oogst maait hij, zoals al zo was. In de herfst rijdt hij eerst mest uit op een veld dat mest krijgt, en spit hij
+wat volgend jaar akker wordt (een weide met vee niet). In de winter loopt hij naar de rand van het bos bij zijn boerderij
+(een echt stuk bos binnen 25 tegels, geen losse boom tussen de huizen; elke dag een ander stuk, met de bomen achter
+hem, zodat je hem ziet), raapt er hout, en brengt een bundel naar huis; is er geen bos in de buurt, dan blijft hij bij
+zijn boerderij. De schaft houdt hij op de akker, met zijn brood; 's
+avonds en 's nachts is hij thuis, of in de herberg. Wat overblijft (dorsen, het vee, of er is niets te doen), doet hij
+bij zijn boerderij, zoals tot nu toe. Zijn boerin en grote kinderen helpen bij het zaaien: ze blijven dicht bij hem op
+het veld, en in de oogst net zo; wie ergens anders werkt, gaat daarheen. Wie werkt of helpt, maakt geen praatje en gaat
+niet opzij; wie met de schout praat of hem zoekt met een voorval, houdt op. De regels veranderen er niet door: het
+zaaien, de oogst en het sprokkelen gaan zoals ze gingen; dit zegt alleen waar de boer is en wat hij doet. De getallen
+(hoe lang een tegel duurt, hoe ver de bosrand mag zijn) staan in `T.VELDWERK_INSTELLINGEN`, in de werkbank; wat je
+vandaag aan een veld verandert, doet hij morgen. In de browser: `Spel.debug.veldwerk()`.
+Hij werkt in het vel van zijn werk (stap 2, 5 okt): de zaaier, de wieder (ook voor spitten en mest) en de sprokkelaar
+met zijn bundel, uit code zoals de maaier, en een boerin in dat van een vrouw (de zaaister, de wiedster, de
+sprokkelaarster, de maaister; `beeld.md`, "De werkfiguren").
+**Nog niet:** na de huizen de houthakker die hakt en plant (vraag 115) en de wolven (vraag 116). Het dorsen heeft nog
+geen beweging, en wie helpt, loopt in zijn eigen vel mee.
+
+**Hoe het zo kwam:** Marcel, 3 okt: "Ook wil ik dat boeren op hun veld aan het werk zijn. Nu hebben ze wel velden, maar
+lopen ze gewoon random door het dorp. Ze moeten zaaien en op het veld bezig zijn." Het dagritme stuurde een boer overdag
+naar de deur van zijn boerderij, en de regel die hem in het groeiseizoen naar zijn akker stuurde (`T.wandelAnker`), kwam
+daardoor nooit aan de beurt. Marcel koos het werk per seizoen, de figuren, en dat de regels blijven zoals ze zijn ("ja
+die zijn goed"), en op 5 okt dat het nu kon, terwijl een andere sessie de huizen rendert ("A. Ja prima B ja graag").
+Na de eerste proefplaat van de figuren: "a ja b ja c nu" (ze gaan zo in het spel, een boerin krijgt een eigen werkvel, en
+het rapen, de schoffel en de hand worden nu beter). In het spel bleek de bosrand bij een boerderij vaak een losse boom
+achter een dak; nu is het de rand van een echt stuk bos, waar je de boer ziet.
 
 ### Mensen worden poppetjes
 

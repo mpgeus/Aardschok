@@ -315,8 +315,9 @@
     let zoekNog = T.LOPEN_INSTELLINGEN.zoekPerBeeld;
     for (const m of w.wezens) {
       // Een man van de militie bij een aanval dwaalt niet: hij loopt met de schout mee (js/rovers.js). Wie de schout
-      // zoekt met een voorval, ook niet (js/voorvallen.js), en wie een praatje maakt evenmin (js/praatje.js).
-      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.opgeroepen || m.zoektSchout || m.praatje) continue;
+      // zoekt met een voorval, ook niet (js/voorvallen.js), wie een praatje maakt evenmin (js/praatje.js), en een boer
+      // die op zijn land werkt ook niet (js/veldwerk.js).
+      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.werkt || m.opgeroepen || m.zoektSchout || m.praatje) continue;
       // Een dier dat ligt, blijft liggen tot zijn rust zegt dat het weer opstaat (js/vee.js).
       if (m.dier && T.rustVanDier && T.rustVanDier(m, S.tijd || 0) === 'liggen') continue;
       // Het ritme van de dag (js/dag.js): 's ochtends en 's avonds op zijn erf, 's nachts binnen. Wie
@@ -384,8 +385,9 @@
         }
         zoekNog--;
         const doel = { x: Math.round(thuisNu.x), y: Math.round(thuisNu.y), tot: Math.max(straalNu, naastDeur) };
-        // Waar hij hoort (zijn deur, zijn werk, de put, de herberg), daar gaan er meer heen: een veld (js/lopen.js).
-        const pad = T.zoekRoute(w, { x: m.tx, y: m.ty }, doel, { tot: doel.tot, veld: true });
+        // Waar hij hoort (zijn deur, zijn werk, de put, de herberg), daar gaan er meer heen: een veld (js/lopen.js). Niet
+        // naar een plek die meeloopt (wie helpt, blijft bij zijn boer, js/veldwerk.js): die zoekt niemand anders.
+        const pad = T.zoekRoute(w, { x: m.tx, y: m.ty }, doel, { tot: doel.tot, veld: thuisNu.veld !== false });
         if (pad && pad.length) {
           T.geefRoute(m, pad, doel);
           delete m.geenWeg;

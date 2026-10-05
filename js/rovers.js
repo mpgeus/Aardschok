@@ -157,6 +157,29 @@
     return opgeroepen(D).filter((e) => T.afstand({ x: e.tx, y: e.ty }, { x: h.tx, y: h.ty }) <= IN().militieBij);
   };
 
+  // Wie van de militie ver weg was toen het gevecht begon, rent erheen: bij het begin en bij elke nieuwe ronde (js/gevecht.js)
+  // zo ver als zijn punten reiken, en is hij dichtbij genoeg, dan vecht hij mee, na de rest van jouw kant. Tot 5 okt deed
+  // hij helemaal niet mee, en viel een schout in de speeltest alleen tegen drie wilde rovers terwijl zijn wachters onderweg
+  // waren (werklijst, 0c, punt 4). Geeft { erbij, onderweg }: wie er nu bij kwam, en wie nog onderweg is.
+  T.militieKomtErbij = function (S, D) {
+    const g = S.gevecht;
+    if (!g) return { erbij: [], onderweg: [] };
+    const erbij = T.militieInGevecht(D).filter((e) => !g.volgorde.includes(e));
+    if (erbij.length) {
+      const plek = g.volgorde.findIndex((e) => e.kant !== 'speler');
+      g.volgorde.splice(plek < 0 ? g.volgorde.length : plek, 0, ...erbij);
+      for (const e of erbij) e.pad = e.onderweg ? [e.pad[0]] : [];
+    }
+    const h = D.schout;
+    const onderweg = opgeroepen(D).filter((e) => !g.volgorde.includes(e));
+    for (const e of onderweg) {
+      if (e.pad.length) continue;
+      const pad = T.zoekRoute(D.wereld, { x: e.tx, y: e.ty }, { x: h.tx, y: h.ty }, { naast: true });
+      if (pad && pad.length) e.pad = pad.slice(0, e.maxAp || T.WEZENS.wachter.ap);
+    }
+    return { erbij, onderweg };
+  };
+
   // Een man van de militie valt (js/gevecht.js, raak): hij is dood, en een mond minder. Het bericht zegt wie het
   // was (T.wijzigBevolking, js/gebouwen.js, met wie het is).
   T.sneuvelt = function (D, e) {
