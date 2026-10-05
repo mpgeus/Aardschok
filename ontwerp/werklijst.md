@@ -160,10 +160,10 @@ ook door het bos, en elk stuk is een eigen kans. Zie onder Af, en `spel.md`, "On
 
 **Waar de volgende sessie begint:** het werk van de drieëndertigste sessie staat sinds 5 okt in `main` (Marcel: "ja push
 main"), ook het ontginnen op de heide met de prijs die per stuk oploopt (vraag 107, stap 1 en f; Marcel: "Push main"),
-net als het werk van de tweeëndertigste (Marcel: "1 ja" op "Zal ik het in main zetten?"). Het bos (vraag 107, stap 2)
-staat op `ccr-96e0aab5-w9cesu`, nog niet in `main`, met g1 (de soldaten lopen elk jaar door het bos; Marcel: "1 en 3 later
-inderdaad"). **Op Marcel wacht:** of het bos in `main` gaat. Daarna stap 3 van vraag 107, de speeltest van vier jaar, en
-g3 (de roddelaar) met de herberg als plek van gesprekken (3c). **Stap 2b is af en staat in `main`** (de andere drie
+net als het werk van de tweeëndertigste (Marcel: "1 ja" op "Zal ik het in main zetten?"). Het werk van de
+vierendertigste sessie staat sinds 5 okt ook in `main` (Marcel: "Pushen naar main"): het bos (vraag 107, stap 2), met g1
+(de soldaten lopen elk jaar door het bos; Marcel: "1 en 3 later inderdaad") en de hakker. Het volgende van vraag 107 is
+stap 3, de speeltest van vier jaar, en later g3 (de roddelaar) met de herberg als plek van gesprekken (3c). **Stap 2b is af en staat in `main`** (de andere drie
 bouwstijlen, oker, planken en roze, in een eigen sessie; zie onder Af, en vraag 114); deze branch heeft het samengevoegd.
 Daarna stap 3, de herberg, de kapel en de woontoren, meteen draaibaar, en dan de houthakker die hakt en
 plant en de wolven (vraag 115 en 116; de boeren aan het werk, vraag 111, zijn af). Uit de speeltest na te lopen: op land 72022 liep het dorp vast op plaats (`speelbaar.md`). Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
