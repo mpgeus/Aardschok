@@ -132,11 +132,11 @@ const VORMEN = {
   // planken: een lang huis van twee lagen met een galerij langs de bovenverdieping, een L met een buitentrap naar een
   // opkamer, en een huis met een aanbouw en een schoor
   huis7: { gebouw: 'huis', trede: 2, zaad: 27, vorm: 'rechthoek', b: 9, d: 5, lagen: 2, nok: 'x', dak: 'riet', wand: 'planken', plint: 36, schoorsteen: 'leem', schoor: false, uit: { balkon: true } },
-  huis8: { gebouw: 'huis', trede: 2, zaad: 28, vorm: 'L', b: 8, d: 5, b2: 4, d2: 7, kant: 1, voor: false, lagen: 1.5, nok: 'x', dak: 'riet', wand: 'planken', plint: 36, schoorsteen: 'leem', schoor: false, uit: { trap: true } },
+  huis8: { gebouw: 'huis', trede: 2, zaad: 28, vorm: 'L', b: 8, d: 6, b2: 4, d2: 7, kant: 1, voor: false, lagen: 1.5, nok: 'x', dak: 'riet', wand: 'planken', plint: 36, schoorsteen: 'leem', schoor: false, uit: { trap: true } },
   huis9: { gebouw: 'huis', trede: 2, zaad: 29, vorm: 'rechthoek', b: 8, d: 5, lagen: 1, nok: 'x', dak: 'riet', wand: 'planken', plint: 36, schoorsteen: 'leem', schoor: true, uit: { aanbouw: true } },
   // roze: twee lagen met een overkragende verdieping, een erker, en een T met de vleugel naar achter, anderhalve laag
   huis10: { gebouw: 'huis', trede: 2, zaad: 30, vorm: 'rechthoek', b: 7, d: 5, lagen: 2, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 36, schoorsteen: 'leem', schoor: false, uit: { bakken: 2 } },
-  huis11: { gebouw: 'huis', trede: 2, zaad: 31, vorm: 'rechthoek', b: 8, d: 5, lagen: 1, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 36, schoorsteen: 'leem', schoor: false, uit: { erker: true, bakken: 1 } },
+  huis11: { gebouw: 'huis', trede: 2, zaad: 31, vorm: 'rechthoek', b: 8, d: 6, lagen: 1, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 36, schoorsteen: 'leem', schoor: false, uit: { erker: true, bakken: 1 } },
   huis12: { gebouw: 'huis', trede: 2, zaad: 32, vorm: 'T', b: 9, d: 5, b2: 4, p2: 3, voor: false, lagen: 1.5, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 36, schoorsteen: 'leem', schoor: false, uit: { kapellen: 1 } },
   // roze: een L met de vleugel aan de andere kant dan boerderij 1, en een lange van anderhalve laag
   boerderij8: { gebouw: 'boerderij', trede: 2, zaad: 38, vorm: 'L', b: 9, d: 5, b2: 3, d2: 7, kant: -1, voor: false, lagen: 1, nok: 'x', dak: 'riet', wand: 'vakwerk', plint: 40, schoorsteen: 'leem', schoor: false, uit: { bakken: 1 } },
