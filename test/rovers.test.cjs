@@ -213,6 +213,44 @@ test('de militie: wie in het wachthuis werkt, loopt bij een aanval met de schout
   assert.equal(hdl.pad[0].x, een.tx);
 });
 
+test('wie van de militie nog onderweg was, rent erheen en vecht mee zodra hij er is', () => {
+  // Uit de speeltest (werklijst, 0c, punt 4): een schout viel alleen tegen drie wilde rovers, omdat zijn wachters nog
+  // onderweg waren toen het gevecht begon; wie toen te ver weg stond, deed het hele gevecht niet mee.
+  const S = gehucht();
+  const w = S.wereld;
+  const [een, twee] = metWachthuis(S);
+  opUur(S, 5, 17);
+  const A = aanval(S, 3);
+  const h = S.schout;
+  zet(een, h.tx + 1, h.ty);
+  let ver = null;
+  for (let d = 25; d < 45 && !ver; d++) {
+    for (const t of [{ x: h.tx + d, y: h.ty }, { x: h.tx - d, y: h.ty }, { x: h.tx, y: h.ty + d }, { x: h.tx, y: h.ty - d }]) {
+      if (!ver && T.isBegaanbaar(w, t.x, t.y, { wezensBlokkeren: true }) && T.kanErKomen(w, t, { x: h.tx, y: h.ty }, { naast: true })) ver = t;
+    }
+  }
+  assert.ok(ver, 'een plek ver van de schout');
+  zet(twee, ver.x, ver.y);
+  berichten.length = 0;
+  S.overgang = { aanleiding: A.rovers[0] };
+  T.beginGevecht(S);
+  assert.ok(!S.gevecht.volgorde.includes(twee), 'hij doet nog niet mee');
+  assert.ok(twee.pad.length > 0 && twee.pad.length <= twee.maxAp, `maar hij rent erheen, zo ver als zijn punten reiken (${twee.pad.length})`);
+  assert.ok(berichten.some((t) => t.includes(twee.naam) && /onderweg/.test(t)), berichten.join(' | '));
+  // Een paar rondes later is hij er: bij het begin van de ronde vecht hij mee, na de rest van jouw kant.
+  let naast = null;
+  for (const [dx, dy] of [[0, 1], [0, -1], [-1, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]]) {
+    if (!naast && T.isBegaanbaar(w, h.tx + dx, h.ty + dy, { wezensBlokkeren: true })) naast = { x: h.tx + dx, y: h.ty + dy };
+  }
+  zet(twee, naast.x, naast.y);
+  const { erbij, onderweg } = T.militieKomtErbij(S, S.dorp);
+  assert.deepEqual(erbij, [twee]);
+  assert.deepEqual(onderweg, []);
+  assert.deepEqual(S.gevecht.volgorde.slice(0, 3), [h, een, twee], 'na de schout en de eerste wachter');
+  assert.ok(S.gevecht.volgorde.slice(3).every((e) => e.kant === 'monster'), 'en dan de bende');
+  assert.equal(T.aanDeBeurt(S), h, 'wie aan de beurt was, blijft aan de beurt');
+});
+
 test('een rover zoekt de man van jouw kant die het dichtst bij staat', () => {
   const w = T.maakProefkamers();
   const schout = w.wezens.find((e) => e.soort === 'schout');

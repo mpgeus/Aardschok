@@ -154,8 +154,8 @@ Nog open: **vraag 107** (ontginnen als verzoek), **vraag 109** (de stenen en het
 verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de maat van de winst: op het
 wijdere land is er grond genoeg, maar de speeltest speelt standaard nog het ontworpen gehucht). De speeltest van vier
 jaar staat in `speelbaar.md`, en een volgende speeltest van vier jaar splitst de spelers over twee taken, want een taak
-op de achtergrond stopt na twee uur. Na te lopen uit de speeltests: een schout die alleen tegen drie wilde rovers viel,
-omdat de militie onderweg was. De rest van **vraag 105** (wat ons uniek maakt) komt na de kern. De ui wordt de
+op de achtergrond stopt na twee uur. Uit de speeltests: een schout die alleen tegen drie wilde rovers viel, omdat de
+militie onderweg was; sinds 5 okt rent wie onderweg is erheen en vecht hij mee als hij er is. De rest van **vraag 105** (wat ons uniek maakt) komt na de kern. De ui wordt de
 schrijftafel (vraag 98, C): het briefje bij een huis is het eerste papier, en de rest volgt later (januari, met de
 Steam-pagina).
 
@@ -232,7 +232,8 @@ dat zelf bouwt, de ondernemers en de twee bazen met de grillen staan. Open, in d
 3. Een nieuwe proefversie en de **eerste tester** (33d): de laatste (`36c713e`) heeft nog geen verzoeken en geen twee
    bazen. Of de haak werkt, zegt een mens, niet de speeltest.
 4. Wat de speeltests lieten zien: drie of vier herbergen door de keten van het bier, en een schout die alleen tegen
-   drie rovers valt omdat de militie onderweg niet meedoet.
+   drie rovers valt omdat de militie onderweg niet meedoet (dat laatste is af, 5 okt: wie onderweg is, rent erheen en
+   vecht mee zodra hij er is).
 5. Wat ons uniek maakt (vraag 105): vooral b, wat je weet is wat je zag, omdat het verandert hoe je vanaf het begin
    speelt.
 6. Stap 2 van de slice: statussen met niveaus en het weer (droogte, ernstige droogte; zaaien dat dagen kost).

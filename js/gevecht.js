@@ -70,6 +70,9 @@
     if (!kamers.size) kamers.add(w.huidigeKamer);
     monsters.sort((a, b) => b.initiatief - a.initiatief);
     S.gevecht = { monsters, volgorde: [schout, ...militie, ...monsters], beurt: 0, ronde: 1, kamers, teller: 0 };
+    // Wie van de militie nog ver weg is, rent erheen, en vecht mee als hij er is (js/rovers.js; zie ook volgendeBeurt).
+    const nog = D ? T.militieKomtErbij(S, D).onderweg : [];
+    if (nog.length) T.ui.bericht(`${T.opsomming(nog.map((e) => e.naam))} ${nog.length === 1 ? 'is' : 'zijn'} nog onderweg.`);
     S.rasterTegels = rasterVoor(w, kamers, S.gevecht.volgorde);
     S.rasterStart = S.tijd;
     S.rasterVan = T.tegelVan(schout);
@@ -182,7 +185,16 @@
       return;
     }
     g.beurt = (g.beurt + 1) % g.volgorde.length;
-    if (g.beurt === 0) g.ronde++;
+    if (g.beurt === 0) {
+      g.ronde++;
+      // Een nieuwe ronde: wie van de militie onderweg was, komt dichterbij, en wie er nu is, vecht mee (js/rovers.js).
+      const D = T.dorpHier(S);
+      const { erbij } = D ? T.militieKomtErbij(S, D) : { erbij: [] };
+      if (erbij.length) {
+        T.ui.bericht(`${T.opsomming(erbij.map((e) => e.naam))} ${erbij.length === 1 ? 'komt' : 'komen'} erbij.`, 'goed');
+        S.rasterTegels = rasterVoor(S.wereld, g.kamers, g.volgorde);
+      }
+    }
     beginBeurt(S);
   }
 

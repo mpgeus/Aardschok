@@ -401,7 +401,10 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
   altijd zijn levensbalk, zodat je hem herkent.
 - **De militie is het wachthuis.** Wie er werkt (twee handen), loopt bij een aanval naar de schout en met hem mee,
   zoals de inner. Ziet een rover de schout, dan begint het gevecht in beurten, met de hele bende en de wachters die
-  binnen twaalf tegels van hem staan. Elk heeft zijn eigen beurt en actiepunten (een wachter: 16 leven, 8 punten), en
+  binnen twaalf tegels van hem staan. Wie verder weg is, rent erheen (elke ronde zo ver als zijn punten reiken; "Jan
+  is nog onderweg"), en vecht mee vanaf de ronde dat hij er is ("Jan komt erbij"; sinds 5 okt: tot dan deed hij het
+  hele gevecht niet mee, en viel een schout in de speeltest alleen tegen drie rovers). Elk heeft zijn eigen beurt en
+  actiepunten (een wachter: 16 leven, 8 punten), en
   jij bestuurt wie aan de beurt is; de camera kijkt met hem mee. Een rover zoekt wie van jouw kant het dichtst bij
   staat. Zonder wachthuis vecht de schout alleen, tenzij er veteranen van de heervaart zijn: die komen ook (sinds 29
   sep, "De heervaart" hieronder).
