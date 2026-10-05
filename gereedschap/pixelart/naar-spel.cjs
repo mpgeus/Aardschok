@@ -228,6 +228,12 @@ const FIGUURLIJST = {
   zaaier: { map: ['zaaier', 'animaties'], houdingen: ['staan', 'lopen', 'zaaien'], bron: 'werkfiguren-anim.cjs zaaier' },
   wieder: { map: ['wieder', 'animaties'], houdingen: ['staan', 'lopen', 'wieden'], bron: 'werkfiguren-anim.cjs wieder' },
   sprokkelaar: { map: ['sprokkelaar', 'animaties'], houdingen: ['staan', 'lopen', 'rapen'], bron: 'werkfiguren-anim.cjs sprokkelaar' },
+  // Hun vrouwen (werkfiguren.cjs, vraag 111, b; Marcel, 5 okt): de boerin aan hetzelfde werk, met precies dezelfde
+  // houdingen, beelden en fps als de man ernaast, zodat het spel bij een boerin alleen de naam wisselt.
+  zaaister: { map: ['zaaister', 'animaties'], houdingen: ['staan', 'lopen', 'zaaien'], bron: 'werkfiguren-anim.cjs zaaister' }, // de zaaier als boerin
+  wiedster: { map: ['wiedster', 'animaties'], houdingen: ['staan', 'lopen', 'wieden'], bron: 'werkfiguren-anim.cjs wiedster' }, // de wieder als boerin
+  sprokkelaarster: { map: ['sprokkelaarster', 'animaties'], houdingen: ['staan', 'lopen', 'rapen'], bron: 'werkfiguren-anim.cjs sprokkelaarster' }, // de sprokkelaar als boerin
+  maaister: { map: ['maaister', 'animaties'], houdingen: ['maaien'], bron: 'werkfiguren-anim.cjs maaister' }, // de maaier als boerin
   // Het huis van de heer (heer.cjs, ontwerp/beeld.md): ze komen over de weg (js/heer.js,
   // js/inner.js) en staan in T.MENSEN (js/mensen.js) onder dezelfde naam als hier.
   heer: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' },

@@ -1484,6 +1484,247 @@
       }
      }
     },
+    "zaaister": {
+     "naam": "zaaister",
+     "cel": [
+      106,
+      94
+     ],
+     "anker": [
+      53,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaaister-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaaister-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ]
+      },
+      "zaaien": {
+       "bestand": "zaaister-zaaien.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        100,
+        88
+       ],
+       "anker": [
+        50,
+        70
+       ]
+      }
+     }
+    },
+    "wiedster": {
+     "naam": "wiedster",
+     "cel": [
+      96,
+      100
+     ],
+     "anker": [
+      48,
+      74
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "wiedster-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        56,
+        84
+       ],
+       "anker": [
+        28,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "wiedster-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        84,
+        81
+       ],
+       "anker": [
+        42,
+        70
+       ]
+      },
+      "wieden": {
+       "bestand": "wiedster-wieden.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        90,
+        93
+       ],
+       "anker": [
+        45,
+        70
+       ]
+      }
+     }
+    },
+    "sprokkelaarster": {
+     "naam": "sprokkelaarster",
+     "cel": [
+      72,
+      103
+     ],
+     "anker": [
+      36,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "sprokkelaarster-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        54,
+        90
+       ],
+       "anker": [
+        27,
+        81
+       ]
+      },
+      "lopen": {
+       "bestand": "sprokkelaarster-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        54,
+        92
+       ],
+       "anker": [
+        27,
+        81
+       ]
+      },
+      "rapen": {
+       "bestand": "sprokkelaarster-rapen.png",
+       "beelden": 16,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        66,
+        97
+       ],
+       "anker": [
+        33,
+        81
+       ]
+      }
+     }
+    },
+    "maaister": {
+     "naam": "maaister",
+     "cel": [
+      146,
+      114
+     ],
+     "anker": [
+      73,
+      72
+     ],
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "maaien": {
+       "bestand": "maaister-maaien.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        140,
+        108
+       ],
+       "anker": [
+        70,
+        69
+       ]
+      }
+     }
+    },
     "heer": {
      "naam": "heer",
      "cel": [

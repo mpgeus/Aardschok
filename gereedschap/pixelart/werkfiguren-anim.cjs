@@ -1,30 +1,33 @@
 'use strict';
-// Schrijft de werkfiguren (werkfiguren.cjs: de zaaier, de wieder en de sprokkelaar; werklijst vraag 111, b) weg als
-// spelvellen, op dezelfde manier als maaier-anim.cjs: per houding één vel (rij per richting, Z ZW W NW N NO O ZO, kolom
-// per beeld) en per figuur een <naam>.json ernaast met { naam, cel, anker, snelheid, richtingen, houdingen }, klaar voor
-// naar-spel.cjs. Elk beeld wordt in een ruime cel gerenderd en daarna krap uitgesneden; de cel van het vel past om alle
-// beelden van de figuur (alle houdingen samen), met een kleine marge, en het anker staat overal op dezelfde plek.
-// Loopt een beeld tegen de rand van de ruime cel aan (de maaier deed dat eerst met zijn zeis, zie maaier-anim.cjs), dan
-// meldt het RAND en eindigt het met een fout.
+// Schrijft de werkfiguren (werkfiguren.cjs: de zaaier, de wieder en de sprokkelaar, en hun vrouwen de zaaister, de
+// wiedster en de sprokkelaarster, en de maaister; werklijst vraag 111, b) weg als spelvellen, op dezelfde manier als
+// maaier-anim.cjs: per houding één vel (rij per richting, Z ZW W NW N NO O ZO, kolom per beeld) en per figuur een
+// <naam>.json ernaast met { naam, cel, anker, snelheid, richtingen, houdingen }, klaar voor naar-spel.cjs. Elk beeld
+// wordt in een ruime cel gerenderd en daarna krap uitgesneden; de cel van het vel past om alle beelden van de figuur
+// (alle houdingen samen), met een kleine marge, en het anker staat overal op dezelfde plek. Loopt een beeld tegen de
+// rand van de ruime cel aan (de maaier deed dat eerst met zijn zeis, zie maaier-anim.cjs), dan meldt het RAND en
+// eindigt het met een fout. Een figuur zonder lopen (de maaister) krijgt geen snelheid, zoals maaier.json.
 //
-//   node gereedschap/pixelart/werkfiguren-anim.cjs                    alle drie, en de proefplaat
-//   node gereedschap/pixelart/werkfiguren-anim.cjs zaaier wieder      alleen deze (een proefplaat alleen als alle drie meegaan)
+//   node gereedschap/pixelart/werkfiguren-anim.cjs                    alle zeven, en de proefplaat
+//   node gereedschap/pixelart/werkfiguren-anim.cjs zaaier zaaister    alleen deze (een proefplaat alleen als alle meegaan)
 //   node gereedschap/pixelart/werkfiguren-anim.cjs --proef            alleen de proefplaat (rendert alleen wat erop staat)
 //   -> uit/<naam>/animaties/<naam>-<houding>.png       het vel
 //   -> uit/<naam>/animaties/<naam>.json                naam, cel, anker, snelheid, houdingen (lopen met `stap`)
 //   -> uit/<naam>/animaties/<naam>-<houding>-zo.png    bewegende proef, richting ZO, twee keer vergroot
 //   -> uit/werkfiguren-proef.png                        de proefplaat, op 1×
-// Daarna: node gereedschap/pixelart/naar-spel.cjs --alleen zaaier,wieder,sprokkelaar
+// Daarna: node gereedschap/pixelart/naar-spel.cjs --alleen zaaier,wieder,sprokkelaar,zaaister,wiedster,sprokkelaarster,maaister
+// Een figuur per proces tegelijk gaat het snelst (de sprokkelaar en de sprokkelaarster duren het langst).
 //
-// De proefplaat: vier rijen, elk in drie groepen (Z, ZO, NW) van vijf beelden: staan, lopen, en drie beelden van het
-// werk. Bovenaan ter vergelijking de gewone boer (staan, lopen) en de maaier (drie beelden van het maaien), daaronder
-// de zaaier, de wieder en de sprokkelaar. Staan en lopen op gras, het werk op de akker (de sprokkelaar op gras: hij raapt
-// aan de bosrand).
+// De proefplaat: per rij drie groepen (Z, ZO, NW). Bovenaan ter vergelijking de gewone boer en boerin (staan, lopen),
+// dan per werk een rij voor de man en een voor de vrouw: de maaier en de maaister (drie beelden van het maaien), en de
+// zaaier, de wieder en de sprokkelaar met hun vrouw (staan, lopen, en drie beelden van het werk). Staan en lopen op
+// gras, het werk op de akker (het sprokkelen op gras: dat is aan de bosrand).
 const fs = require('fs');
 const path = require('path');
 const K = require('./kern.cjs');
 const W = require('./werkfiguren.cjs');
 const { boer } = require('./dorpelingen.cjs');
+const { boerin } = require('./dorpelingen2.cjs');
 const Ma = require('./maaier.cjs');
 const { apng } = require('./apng.cjs');
 
@@ -33,7 +36,7 @@ fs.mkdirSync(UIT, { recursive: true });
 const RUIM = { b: 260, h: 240, anker: [130, 180] }; // de ruime cel om in te renderen (de schoffel reikt ver)
 const RICHTINGEN = K.KANTEN; // altijd alle acht
 const MARGE = 3; // lucht tussen de figuur en de rand van zijn cel, zoals in maaier-anim.cjs
-const FIGUREN = Object.keys(W.HOUDINGEN); // zaaier, wieder, sprokkelaar
+const FIGUREN = Object.keys(W.HOUDINGEN); // zaaier, wieder, sprokkelaar, zaaister, wiedster, sprokkelaarster, maaister
 
 const args = process.argv.slice(2);
 const alleenProef = args.includes('--proef');
@@ -109,7 +112,8 @@ function figuur(naam) {
     c.plak(p, ANKER[0] - RUIM.anker[0], ANKER[1] - RUIM.anker[1]);
     return c;
   };
-  const beschrijving = { naam, cel: CEL, anker: ANKER, snelheid: W.SNELHEID, richtingen: RICHTINGEN, houdingen: {} };
+  const snelheid = houdingen.lopen ? W.snelheidVan(naam) : undefined; // de pas van de boer of de boerin zelf
+  const beschrijving = { naam, cel: CEL, anker: ANKER, snelheid, richtingen: RICHTINGEN, houdingen: {} };
   for (const [houding, h] of Object.entries(houdingen)) {
     const vel = new K.Plaat(CEL[0] * h.beelden, CEL[1] * RICHTINGEN.length);
     const zo = [];
@@ -126,8 +130,8 @@ function figuur(naam) {
     // lopen: de pas van de boer zelf, dus dezelfde snelheid en `stap` (tegels per pas, twee passen per cyclus), zoals
     // dorpelingen-anim.cjs hem uitrekent; js/sprites.js leidt de fase uit de afgelegde afstand af, zodat de voet niet glijdt
     if (houding === 'lopen') {
-      regel.snelheid = W.SNELHEID;
-      regel.stap = +((W.SNELHEID * (h.beelden / h.fps)) / 2).toFixed(3);
+      regel.snelheid = snelheid;
+      regel.stap = +((snelheid * (h.beelden / h.fps)) / 2).toFixed(3);
     }
     beschrijving.houdingen[houding] = regel;
     fs.writeFileSync(path.join(UIT_ANIM, `${naam}-${houding}-zo.png`), apng(zo, { fps: h.fps, schaal: 2, herhaal: 0 }));
@@ -141,22 +145,30 @@ for (const naam of TE_RENDEREN) figuur(naam);
 
 // ---------------------------------------------------------------- de proefplaat
 
-// Per rij: wie, en per richting vijf beelden (staan, lopen, drie van het werk). De gewone boer en de maaier komen uit
-// hun eigen bouwfuncties, met de cel van de rest; zo staan ze op dezelfde schaal.
+// Per rij en per richting de beelden, met hun grond, en welke beelden samen één breedte delen (vakken: hoeveel beelden
+// per vak, van links naar rechts; de werkbeelden van een richting delen er één, zodat je ziet hoe ver het werk reikt).
+// De gewone boer en boerin en de maaier komen uit hun eigen bouwfuncties; zo staan ze op dezelfde schaal.
 const KANTEN_PROEF = ['Z', 'ZO', 'NW'];
-const BOER = { houding: 'staan', fase: 0 };
+const MAAIEN = [1, 4, 8];
+const gewoneBoer = (wie, maak) => (kant) => [
+  { ...beeld(wie, () => maak({ houding: 'staan', fase: 0 }), kant, 'staan 0'), grond: 'gras' },
+  { ...beeld(wie, () => maak({ houding: 'lopen', fase: 2 / 8 }), kant, 'lopen 2'), grond: 'gras' },
+];
+const werkRij = (naam, werk, fasen, grond) => (kant) => [
+  { ...werkBeeld(naam, 'staan', 0, kant), grond: 'gras' },
+  { ...werkBeeld(naam, 'lopen', 2, kant), grond: 'gras' },
+  ...fasen.map((i) => ({ ...werkBeeld(naam, werk, i, kant), grond })),
+];
 const RIJEN = [
-  {
-    werkGrond: 'aarde',
-    beelden: (kant) => [
-      beeld('boer', () => boer(BOER), kant, 'staan 0'),
-      beeld('boer', () => boer({ houding: 'lopen', fase: 2 / 8 }), kant, 'lopen 2'),
-      ...[1, 4, 8].map((i) => beeld('maaier', () => Ma.maaier(i / Ma.MAAIER_BEELDEN), kant, `maaien ${i}`)),
-    ],
-  },
-  { naam: 'zaaier', werk: 'zaaien', fasen: [0, 5, 7], werkGrond: 'aarde' },
-  { naam: 'wieder', werk: 'wieden', fasen: [0, 3, 7], werkGrond: 'aarde' },
-  { naam: 'sprokkelaar', werk: 'rapen', fasen: [5, 9, 12], werkGrond: 'gras' },
+  { beelden: (kant) => [...gewoneBoer('boer', boer)(kant), ...gewoneBoer('boerin', boerin)(kant)], vakken: [1, 1, 1, 1] },
+  { beelden: (kant) => MAAIEN.map((i) => ({ ...beeld('maaier', () => Ma.maaier(i / Ma.MAAIER_BEELDEN), kant, `maaien ${i}`), grond: 'aarde' })), vakken: [3] },
+  { beelden: (kant) => MAAIEN.map((i) => ({ ...werkBeeld('maaister', 'maaien', i, kant), grond: 'aarde' })), vakken: [3] },
+  { beelden: werkRij('zaaier', 'zaaien', [0, 5, 7], 'aarde'), vakken: [1, 1, 3] },
+  { beelden: werkRij('zaaister', 'zaaien', [0, 5, 7], 'aarde'), vakken: [1, 1, 3] },
+  { beelden: werkRij('wieder', 'wieden', [0, 3, 7], 'aarde'), vakken: [1, 1, 3] },
+  { beelden: werkRij('wiedster', 'wieden', [0, 3, 7], 'aarde'), vakken: [1, 1, 3] },
+  { beelden: werkRij('sprokkelaar', 'rapen', [5, 9, 12], 'gras'), vakken: [1, 1, 3] },
+  { beelden: werkRij('sprokkelaarster', 'rapen', [5, 9, 12], 'gras'), vakken: [1, 1, 3] },
 ];
 function proefplaat() {
   const t0 = Date.now();
@@ -164,20 +176,10 @@ function proefplaat() {
   const GAT = 4; // tussen twee beelden
   const GROEPGAT = 14; // tussen twee richtingen
   const RIJGAT = 6;
-  // per rij en richting: de vijf beelden, en welke grond eronder komt
-  const rijen = RIJEN.map((rij) =>
-    KANTEN_PROEF.map((kant) =>
-      rij.beelden
-        ? rij.beelden(kant).map((b, i) => ({ ...b, grond: i < 2 ? 'gras' : rij.werkGrond }))
-        : [
-            { ...werkBeeld(rij.naam, 'staan', 0, kant), grond: 'gras' },
-            { ...werkBeeld(rij.naam, 'lopen', 2, kant), grond: 'gras' },
-            ...rij.fasen.map((i) => ({ ...werkBeeld(rij.naam, rij.werk, i, kant), grond: rij.werkGrond })),
-          ],
-    ),
-  );
-  // de hoogte per rij (alles op één voetlijn), de breedte per vak (de drie werkbeelden van een richting delen één breedte)
-  const maten = rijen.map((groepen) => {
+  // per rij en richting de beelden met hun grond
+  const rijen = RIJEN.map((rij) => KANTEN_PROEF.map((kant) => rij.beelden(kant)));
+  // de hoogte per rij (alles op één voetlijn), de breedte per vak
+  const maten = rijen.map((groepen, r) => {
     let y0 = Infinity, y1 = -Infinity;
     for (const g of groepen) for (const b of g) {
       y0 = Math.min(y0, b.doos.y0);
@@ -189,8 +191,14 @@ function proefplaat() {
         const x1 = Math.max(...lijst.map((b) => b.doos.x0 + b.doos.b));
         return { x0: x0 - RAND, b: x1 - x0 + 2 * RAND };
       };
-      const werk = vak(g.slice(2));
-      return [vak([g[0]]), vak([g[1]]), werk, werk, werk];
+      const uit = [];
+      let i = 0;
+      for (const n of RIJEN[r].vakken) {
+        const v = vak(g.slice(i, i + n));
+        for (let k = 0; k < n; k++) uit.push(v);
+        i += n;
+      }
+      return uit;
     });
     const breed = vakken.reduce((s, v) => s + v.reduce((t, x) => t + x.b, 0) + GAT * (v.length - 1), 0) + GROEPGAT * (vakken.length - 1);
     return { y0: y0 - RAND, h: y1 - y0 + 2 * RAND, vakken, breed };
