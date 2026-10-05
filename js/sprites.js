@@ -662,6 +662,7 @@
     wieden: { figuur: 'wieder', houding: 'wieden' },
     spitten: { figuur: 'wieder', houding: 'wieden' },
     mesten: { figuur: 'wieder', houding: 'wieden' },
+    ontginnen: { figuur: 'wieder', houding: 'wieden' },
     sprokkelen: { figuur: 'sprokkelaar', houding: 'rapen' },
   };
   const WERKVELLEN = ['maaier', 'zaaier', 'wieder', 'sprokkelaar'];

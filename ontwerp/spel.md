@@ -39,7 +39,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Sint-Maarten | gebouwd (24 sep) | 5 |
 | Instelbaar, en de boeren | gebouwd (24 sep): 17 keuzes, 188 getallen | |
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep); sinds 30 sep kiezen de boeren hun velden en slachten ze zelf, en jij kunt het veranderen | 6a, vraag 74 |
-| Ontginnen | besloten, nog niet gebouwd | 6b |
+| Ontginnen | de heide gebouwd (5 okt): komt het graan tekort, dan vraagt een boer of zijn zoon een stuk heide te ontginnen; het bos nog niet | 6b, vraag 107 |
 | Straten en paden | paadjes van de deuren en waar gelopen wordt, lantaarns en brandende ramen gebouwd (3 okt, vraag 108); sneller lopen, modder en keien nog niet | 6c, vraag 108 |
 | Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep), de treden tot marktrecht (2 okt, "Van dorp tot stad"); sinds 4 okt lopen de mensen om wat vaststaat en lossen ze onderweg op wie er staat ("Lopen tussen anderen", vraag 119), en wie vrij is en toevallig een buur of iemand van zijn werk treft, blijft soms staan voor een praatje, met een wolkje (vraag 120, a en b); waar ze het over hebben komt met de mensen aan het werk; sinds 5 okt werken de boeren overdag op hun land, naar het seizoen ("De boeren aan het werk", vraag 111, stap 1); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90, 111, 119, 120 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
@@ -2178,8 +2178,29 @@ jaar later vol dan eerst in het derde jaar, tenzij je slacht.
 
 ## Ontginnen: nieuwe velden uit bos of heide (Marcel, 25 sep 2026; werklijst punt 6b)
 
-**Zo staat het nu** (25 sep): besloten, nog niet gebouwd (punt 6b). De velden van het gehucht liggen
-vast op 209 tegels, en een veld maken kan nog niet. **Sinds 3 okt is er een plan** (werklijst vraag 107, uit vraag 102,
+**Zo werkt het nu** (5 okt, vraag 107, stap 1; Marcel: "107 a b c d e ja"; `js/ontginnen.js`): komt het dorp graan
+tekort (er komt geen gezin om het graan, of het eten haalt de winter niet: dezelfde vraag als de raad), dan komt een
+boer of zijn grote zoon je vragen om een stuk heide te ontginnen, dertig tegels. De boer met een akker het dichtst bij de
+heide vraagt het, en hij kiest de plek zelf: naast zijn akker als het kan, en anders zo dichtbij als het kan. Dat is
+bijna altijd het tweede, want de heide ligt apart: op het ontworpen gehucht tien tegels van de dichtste akker, op de
+landen van de maker in een hoek, 8 tot 40 tegels van de dichtste boerderij. Wat ontgonnen is, ligt de volgende keer het
+dichtst bij, dus de heide wordt van de kant van het dorp af ontgonnen. Je ziet de plek in goud op de grond, zoals bij elk
+verzoek. **Ja:** het wordt een veld van zijn boerderij, en het vertrouwen van het dorp zakt 5 ("de meent is van ons
+allemaal"). Een maand steekt hij er plaggen met de schoffel, tegel voor tegel, en wat hij stak, is kale grond. Een plag
+is acht uur werk, dus hij maakt hem af na de schaft of de volgende dag: in de lente steekt hij er zo'n 1,25 per dag, in de
+herfst 1, in de winter 0,6 (wat na de maand nog heide is, steken zijn mensen dan). Daarna rust het tot lentemaand, en dan
+wordt het een akker en gezaaid, met zaaigraan zoals elke akker. Is het klaar terwijl de boeren nog nazaaien (na 1
+lentemaand, tot het graan groen wordt), dan wordt het meteen een akker en zaaien ze het na: wie in sprokkelmaand ja zei,
+wacht geen jaar. Zolang het ontgonnen wordt, wisselt het niet op 1 lentemaand. De schapen grazen er niet meer, en ze houden altijd wat
+ze nodig hebben en tien tegels erbij; zo kunnen er op de heide vier à vijf stukken af, naar hoeveel schapen er zijn. **Nee, of je sprak hem niet:** pas na
+dertig dagen vraagt er weer iemand (anders kwam hij elke dag terug, zolang het graan tekortkomt). Na een ja pas dertig
+dagen nadat het stuk klaar is. Ben je weg, dan beslist je raadsman, zoals bij elk verzoek. Geen nieuwe boerderij en geen
+nieuw gezin. De spelregel "Ontginnen" (aan of uit), de getallen in `T.ONTGINNEN_INSTELLINGEN`, en
+`Spel.debug.ontginnen()`. **Nog niet:** het bos, openlijk tegen de gunst van de heer of stiekem met de inner en de
+soldaten (stap 2), en de speeltest van vier jaar (stap 3).
+
+**Eerder** (25 sep): besloten, nog niet gebouwd (punt 6b). De velden van het gehucht lagen
+vast op 209 tegels, en een veld maken kon nog niet. **Sinds 3 okt is er een plan** (werklijst vraag 107, uit vraag 102,
 a: het land is wat het dorp tegenhoudt): ontginnen als verzoek van een boer, op de heide (de meent: het vertrouwen van
 het dorp) of in het bos (de heer: zijn gunst, of stiekem, en dan betrapt als ze het vinden). Het beantwoordt de open
 vragen hieronder. De vraag onderaan of er heide komt, is

@@ -1071,6 +1071,21 @@
         },
       },
     },
+    ontginverzoek: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, ik wil {heide} ontginnen, {stuk}. Het dorp komt graan tekort, en daar groeit nu niets dan hei. Een maand plaggen steken, en volgend voorjaar zaaien we er rogge. Maar het is de meent, en het dorp zal er wat van vinden.' },
+          ],
+          keuzes: [
+            { zeg: 'Ja, ontgin het maar.', sluit: true, doe: { ontgin: true, vertrouwen: -5 } },
+            { zeg: 'Nee, de heide is van iedereen.', sluit: true },
+          ],
+        },
+      },
+    },
     herbergverzoek: {
       naam: '{wie}',
       start: 'begin',

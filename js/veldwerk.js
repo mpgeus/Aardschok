@@ -6,7 +6,8 @@
 //   - tot het graan rijp is: hij wiedt en schoffelt, tegel voor tegel, met een rustpoos ertussen;
 //   - in het hooi en de oogst maait hij (T.werkOogstBij; dat blijft daar);
 //   - in de herfst rijdt hij mest uit op een akker die mest krijgt (T.zetMest), en spit hij wat volgend jaar akker wordt;
-//   - in de winter sprokkelt hij aan de bosrand, en brengt hij een bundel hout naar huis.
+//   - in de winter sprokkelt hij aan de bosrand, en brengt hij een bundel hout naar huis;
+//   - en ontgint hij heide (js/ontginnen.js), dan steekt hij daar plaggen, tegel voor tegel, behalve als hij zaait.
 // Wat overblijft (dorsen, het vee, of er is niets te doen), doet hij bij zijn boerderij, zoals tot nu toe: T.dagAnker
 // (js/dag.js) stuurt hem daarheen. De boerin en de grote kinderen helpen bij het zaaien en de oogst (T.helpAnker).
 //
@@ -19,9 +20,9 @@
 //               loopt, en `rust`: hij staat even (`schaft`: hij schaft op de akker). Wie werkt, dwaalt niet (T.dwaal),
 //               praat niet (js/praatje.js) en gaat niet opzij (js/lopen.js).
 //   e.draagt    'bundel': hij heeft hout geraapt, en draagt het naar huis.
-//   e.veldwerk  { soort, i, gedaan, klaar }: hoe ver hij is. `i` is zijn tegel in de rij (T.veldwerkTegels), `gedaan`
-//               hoeveel hij er van dit werk deed, en `klaar` wanneer hij klaar was met zaaien en mesten (het jaar) en
-//               met sprokkelen (de dag).
+//   e.veldwerk  { soort, i, gedaan, klaar, over }: hoe ver hij is. `i` is zijn tegel in de rij (T.veldwerkTegels),
+//               `gedaan` hoeveel hij er van dit werk deed, `klaar` wanneer hij klaar was met zaaien en mesten (het jaar)
+//               en met sprokkelen (de dag), en `over` { x, y, uren }: wat de plag die hij half stak nog vraagt.
 // Regels zonder scherm, dus te toetsen (test/veldwerk.test.cjs).
 (function (T) {
   'use strict';
@@ -37,6 +38,10 @@
     mesten: 0.5,
     spitten: 2,
     spittenRust: 0.5,
+    // Plaggen steken op heide die hij ontgint (js/ontginnen.js): zwaar werk, zo'n tegel per werkdag, zodat dertig tegels
+    // ongeveer de maand vullen die het duurt.
+    ontginnen: 8,
+    ontginnenRust: 0.5,
     // Sprokkelen: zo lang raapt hij hout aan de bosrand, zo ver van zijn deur zoekt hij die, in tegels, en zoveel bomen
     // staan er minstens in de vijf bij vijf tegels om hem heen (minder is geen bos, maar een boom tussen de huizen).
     rapen: 3,
@@ -75,7 +80,9 @@
     zaaien: { veld: (v) => T.bestemmingVan(v) === 'akker', tegel: (v, t) => T.akkerTegelStadium(v, t.x, t.y, 'groen') === 'groen' },
     wieden: { veld: (v) => T.bestemmingVan(v) === 'akker', tegel: (v, t) => T.akkerTegelStadium(v, t.x, t.y, 'groen') === 'groen' },
     mesten: { veld: (v) => !!v.mest },
-    spitten: { veld: (v) => T.planVan(v) === 'akker' && T.bestemmingVan(v) !== 'weide' },
+    spitten: { veld: (v) => T.planVan(v) === 'akker' && T.bestemmingVan(v) !== 'weide' && !v.ontginning },
+    // Plaggen steken: wat hij van de heide nog niet stak (js/ontginnen.js).
+    ontginnen: { veld: (v) => !!v.ontginning, tegel: (v, t) => !T.isGestoken(v, t.x, t.y) },
   };
 
   // De tegels waar hij dit werk doet, in de volgorde waarin hij ze afloopt: veld voor veld, en op een veld rij voor rij.
@@ -94,6 +101,8 @@
   // en vindt hetzelfde.
   const TEGELS = new WeakMap(); // poppetje → { dag, per: { soort: lijst } }
   function tegelsVan(D, e, soort) {
+    // Wat hij ontgint, wordt onder het werk kleiner: dat rekent hij elke keer uit (het zijn er dertig).
+    if (soort === 'ontginnen') return T.veldwerkTegels(D.wereld, e, soort);
     const dag = Math.floor(D.kalender.dag);
     let m = TEGELS.get(e);
     if (!m || m.dag !== dag) TEGELS.set(e, (m = { dag, per: {} }));
@@ -153,6 +162,8 @@
     const klaar = (e.veldwerk && e.veldwerk.klaar) || {};
     const heeft = (soort) => tegelsVan(D, e, soort).length > 0;
     if (basis === 'geploegd' && klaar.zaaien !== datum.jaar && heeft('zaaien')) return 'zaaien';
+    // Ontgint hij heide (js/ontginnen.js), dan gaat dat voor het andere werk van het seizoen.
+    if (heeft('ontginnen')) return 'ontginnen';
     if (basis === 'geploegd' || basis === 'kiemend' || basis === 'groen') return heeft('wieden') ? 'wieden' : null;
     if (datum.seizoen === 'herfst') {
       if (klaar.mesten !== datum.jaar && heeft('mesten')) return 'mesten';
@@ -185,6 +196,16 @@
     if (!wt) return;
     if (e.pad.length && e.padDoel && e.padDoel.x === wt.x && e.padDoel.y === wt.y) e.pad = e.onderweg ? [e.pad[0]] : [];
     e.werkt = null;
+  }
+
+  // Een plag steken is meer werk dan een halve dag (IN().ontginnen, en in de winter is een werkdag zes uur): houdt hij op
+  // voor hij af is (de schaft, het eind van de werkdag, iemand roept hem), dan onthoudt hij wat die tegel nog vraagt
+  // (e.veldwerk.over), en maakt hij hem de volgende keer af.
+  function onthoudPlag(e, nu) {
+    const wt = e.werkt;
+    if (wt && wt.soort === 'ontginnen' && wt.tot != null && !wt.rust && e.veldwerk) {
+      e.veldwerk.over = { x: wt.x, y: wt.y, uren: Math.max(0, wt.tot - nu) / uur() };
+    }
   }
 
   // De tegel van de rij die het dichtst bij hem ligt: daar begint hij als hij aan nieuw werk begint.
@@ -220,6 +241,8 @@
     const wt = e.werkt;
     if (wt && wt.tot != null) {
       if (nu < wt.tot) return;
+      // Een plag gestoken (js/ontginnen.js): die tegel is nu kale grond, en valt uit de rij.
+      if (vw.soort === 'ontginnen' && !wt.rust) steekPlag(w, wt.x, wt.y);
       const rust = IN()[vw.soort + 'Rust'] || 0;
       if (!wt.rust && rust > 0) {
         wt.rust = true;
@@ -227,14 +250,22 @@
         return;
       }
       e.werkt = null;
+      if (vw.soort === 'ontginnen') return;
       verder(vw, lijst, datum.jaar);
       if (vw.klaar[vw.soort] === datum.jaar) return; // klaar: het volgende beeld kiest het volgende werk
     }
     if (e.pad.length) return; // onderweg naar zijn tegel
-    if (vw.i == null || vw.i >= lijst.length) vw.i = dichtsteIn(lijst, e);
+    // Bij het ontginnen steekt hij rij voor rij wat er nog ligt: de eerste tegel van wat over is waar niemand staat.
+    if (vw.soort === 'ontginnen') vw.i = Math.max(0, lijst.findIndex((t) => (t.x === e.tx && t.y === e.ty) || !T.wezenOp(w, t.x, t.y, e)));
+    else if (vw.i == null || vw.i >= lijst.length) vw.i = dichtsteIn(lijst, e);
     const doel = lijst[vw.i];
     if (e.tx === doel.x && e.ty === doel.y) {
-      e.werkt = { soort: vw.soort, x: doel.x, y: doel.y, tot: nu + IN()[vw.soort] * uur(), rust: false };
+      let uren = IN()[vw.soort];
+      if (vw.over && vw.over.x === doel.x && vw.over.y === doel.y) {
+        uren = vw.over.uren;
+        delete vw.over;
+      }
+      e.werkt = { soort: vw.soort, x: doel.x, y: doel.y, tot: nu + uren * uur(), rust: false };
       return;
     }
     // Een weg om wat vaststaat (js/lopen.js). Staat er al iemand op die tegel (wie helpt, een koe, de schout), of komt
@@ -245,8 +276,15 @@
       e.werkt = { soort: vw.soort, x: doel.x, y: doel.y, tot: null, rust: false };
     } else {
       e.werkt = null;
-      verder(vw, lijst, datum.jaar);
+      // Een plag waar hij niet bij kan, steken zijn mensen wel (zoals aan het eind van de maand, js/ontginnen.js).
+      if (vw.soort === 'ontginnen' && !pad && !T.wezenOp(w, doel.x, doel.y, e)) steekPlag(w, doel.x, doel.y);
+      else verder(vw, lijst, datum.jaar);
     }
+  }
+
+  function steekPlag(w, x, y) {
+    const veld = T.veldOp(w, x, y);
+    if (veld) T.steekPlag(veld, x, y);
   }
 
   // Sprokkelen: naar de bosrand (elke dag een ander stuk), daar hout rapen, en met de bundel naar huis. Dan is het
@@ -306,6 +344,7 @@
       // De schaft: brood op de akker (js/dag.js). Wie op zijn land werkt, blijft er staan tot het werk weer begint (wie
       // er net heen liep, komt er nog aan), en neemt dan de volgende tegel.
       if (deel === 'schaft' && e.werkt && !T.vrijeDag(D, dag) && magWerken(S, D, e)) {
+        onthoudPlag(e, nu);
         if (e.werkt.tot != null) Object.assign(e.werkt, { rust: true, schaft: true });
         continue;
       }
@@ -315,6 +354,7 @@
       }
       const soort = werktijd && magWerken(S, D, e) ? T.veldwerkVandaag(D, e, datum) : null;
       if (!soort) {
+        onthoudPlag(e, nu);
         stop(e);
         continue;
       }

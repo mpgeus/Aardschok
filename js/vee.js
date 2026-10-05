@@ -209,6 +209,10 @@
   const isWeide = (veld) => !!veld && !veld.meent && T.bestemmingVan(veld) === 'weide';
   const tegelsVan = (veld) => veld.b * veld.h;
   const opVeld = (v, x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
+  // Hoeveel tegels van de meent een veld werden (js/ontginnen.js): daar graast niemand meer. Voor een weide 0.
+  const overlap = (a, b) =>
+    Math.max(0, Math.min(a.x + a.b, b.x + b.b) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y));
+  const ontgonnenOp = (w, m) => (m && m.meent && w ? (w.akkers || []).reduce((n, v) => n + overlap(v, m), 0) : 0);
   // Hoeveel plaats een dier (of een soort) nodig heeft.
   const plaatsVan = (e) => IN().plaats[typeof e === 'string' ? e : e.dier] || 0;
   // Een kalf is nog geen koe: wie dit spel geboren is, melkt en werpt pas als het een jaar oud is.
@@ -355,10 +359,12 @@
     const groep = T.weideVan(w, plek);
     const velden = groep ? groep.velden : [plek];
     const tussen = groep ? groep.tussen : new Set();
+    // Op de meent niet waar een veld ontgonnen is (js/ontginnen.js).
+    const ontgonnen = (x, y) => !!plek.meent && !!T.veldOp(w, x, y);
     return {
       velden, tussen,
-      tegels: velden.reduce((n, v) => n + tegelsVan(v), 0),
-      op: (x, y) => tussen.has(x + ',' + y) || velden.some((v) => opVeld(v, x, y)),
+      tegels: velden.reduce((n, v) => n + tegelsVan(v) - ontgonnenOp(w, v), 0),
+      op: (x, y) => (tussen.has(x + ',' + y) || velden.some((v) => opVeld(v, x, y))) && !ontgonnen(x, y),
     };
   };
 
@@ -375,7 +381,7 @@
   // 0,75).
   T.weideStand = function (D, veld) {
     const dieren = T.dierenOp(D, veld);
-    const tegels = veldenVan(D && D.wereld, veld).reduce((n, v) => n + tegelsVan(v), 0);
+    const tegels = veldenVan(D && D.wereld, veld).reduce((n, v) => n + tegelsVan(v) - ontgonnenOp(D && D.wereld, v), 0);
     const nodig = dieren.reduce((n, e) => n + plaatsVan(e), 0);
     return {
       tegels, nodig, vrij: tegels - nodig,
