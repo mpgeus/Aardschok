@@ -130,8 +130,8 @@ het zaaien en de oogst. Hij draagt het vel van zijn werk (de zaaier, de wieder, 
 boerin dat van een vrouw. De regels veranderen niet; de speeltest liep zonder fouten, met de treden op dezelfde dagen.
 En de militie die onderweg is, rent nu naar het gevecht en vecht mee als ze er is (`0c`, punt 4). Zie onder Af.
 
-**Waar de volgende sessie begint:** het werk van de drieëndertigste sessie staat op de branch `ccr-ba65ef69-kcd902`, nog
-niet in `main`: dat beslist Marcel (CLAUDE.md, Git). Het werk van de tweeëndertigste sessie staat sinds 5 okt in `main` (Marcel: "1 ja"
+**Waar de volgende sessie begint:** het werk van de drieëndertigste sessie staat sinds 5 okt in `main` (Marcel: "ja push
+main"), net als dat van de tweeëndertigste (Marcel: "1 ja"
 op "Zal ik het in main zetten?"). **Stap 2b loopt in een eigen sessie** (Marcel: "Kun je alvast een extra agent starten
 voor het volgende punt op de werklijst?"), op de branch `claude/bouwstijlen-2b`: de andere drie stijlen. Marcel
 beantwoordde daar haar vragen (A tot en met E; zie vraag 114), en nu het wit in `main` staat, mag ze `main` samenvoegen
