@@ -104,7 +104,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   en het jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`). Met `--maker`
   speelt het op gehuchten van de maker (de spelregel "Je gehucht" op "Elk spel een ander"; `uit/samenvatting-maker.md`).
   Met `--regel seizoen=jij` speelt het met een spelregel anders, en met `--getal VOORVALLEN_INSTELLINGEN.metOorzaak=1` met
-  een getal uit de werkbank anders (allebei zo vaak als je wilt; de uitslag krijgt `-regels` achter zijn naam).
+  een getal uit de werkbank anders (allebei zo vaak als je wilt; de uitslag krijgt `-regels` achter zijn naam). Een
+  speeltest van vier jaar gaat in meer taken, want een taak op de achtergrond stopt na twee uur; `--samenvatting` speelt
+  dan niet, maar maakt de samenvatting opnieuw uit wat er al in `uit/` ligt, zodat de taken samen één tabel geven.
 - `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
   titelscherm (`T.STAND`). Commit eerst. Met `-- --windows` is het het spel in Electron voor Windows, zoals straks op Steam

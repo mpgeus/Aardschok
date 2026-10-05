@@ -1399,6 +1399,25 @@
     };
     zoek.voor = (S_, p) => Object.assign({}, p.gebouw.verstopt || { graan: 0, goud: 0 });
     na('zoekOpPlek', zoek);
+    // Stiekem ontgonnen (js/ontginnen.js; werklijst vraag 107, stap 3): elke keer dat er een akker in het bos werd gezocht
+    // die niet in de boeken staat (de soldaten in het bos of bij het hele dorp, of de heer met wat zijn inner zag): hoeveel
+    // er lagen en hoeveel ze vonden. En elke keer dat de schout betrapt werd (js/bazen.js), waarom, en de gunst daarna.
+    const stiekemeAkkers = (D_) => ((D_.wereld && D_.wereld.akkers) || []).filter((v) => v.stiekem).length;
+    const gezocht = (D_, wie, lagen, r) => {
+      if (D_ === s.dorp && lagen) boek.bosZoeken.push({ dag: heel(s.kalender.dag), datum: datum(), wie, lagen, gevonden: r.length });
+    };
+    const zoekBos = (r, lagen, D_, getal, heelDorp = true) => gezocht(D_, heelDorp ? 'het hele dorp' : 'het bos', lagen, r);
+    zoekBos.voor = stiekemeAkkers;
+    na('zoekBosAkkers', zoekBos);
+    const inner = (r, lagen, D_) => gezocht(D_, 'de inner', lagen, r);
+    inner.voor = stiekemeAkkers;
+    na('heerVindtBosAkkers', inner);
+    const betrapt = (r, voor, D_, tekst) => {
+      if (D_ !== s.dorp || !D_.bazen || D_.bazen.betraptOp === voor) return; // telde niet: al betrapt vandaag, of geen bazen
+      boek.betrapt.push({ dag: heel(s.kalender.dag), datum: datum(), tekst: tekst || 'zijn soldaten vonden wat je verstopte', gunst: Math.round(D_.bazen.gunst) });
+    };
+    betrapt.voor = (D_) => D_ && D_.bazen && D_.bazen.betraptOp;
+    na('betrapt', betrapt);
     na('werdGezien', (r, voor, S_, D_, g, handeling, wat, n) => {
       boek.getuigen.push({ dag: heel(s.kalender.dag), datum: datum(), plek: T.verstopPlekVan(D_, g).naam, handeling, wat, n, wie: (r && r.bericht) || '' });
     });
@@ -1573,7 +1592,7 @@
         argwaan: { naInner: null, opSintMaarten: null }, heer: null, brief: null, naSintMaarten: null, luisterFouten: [],
         heerJaren: [], dorp: null, marktrecht: null, groei: [], raad: {}, voorvallen: [],
         jaren: jaren && (SPELERS[speler].jaren || 1) > 1 ? jaren : (SPELERS[speler].jaren || 1), graan: [], geluk: [],
-        reeks: { nu: 0, langste: 0 }, breuken: [],
+        reeks: { nu: 0, langste: 0 }, breuken: [], bosZoeken: [], betrapt: [],
       };
       const s = S();
       luister();

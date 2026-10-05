@@ -124,6 +124,7 @@ exports.maak = function (uitslagen, stand) {
   uit.push(...deOndernemers(goed));
   uit.push(...deTweeBazen(goed));
   uit.push(...naarDeWinst(goed));
+  uit.push(...hetOntginnen(goed));
   uit.push(...vanGehuchtTotDorp(goed));
   uit.push(...hetGraanboek(goed));
   return uit.join('\n') + '\n';
@@ -239,6 +240,44 @@ function naarDeWinst(goed) {
     });
     const meerDan = breuken.length > 6 ? `, en nog ${breuken.length - 6} keer` : '';
     uit.push(`- ${NAMEN[u.speler] || u.speler}, zaad ${u.zaad}: ${gewonnen ? `gewonnen op ${gewonnen}` : 'niet gewonnen'}. ${breuken.length ? `De reeks brak ${breuken.length} keer na een maand of meer: ${brak.join('; ')}${meerDan}.` : 'De reeks brak nooit na een maand of meer.'}`);
+  }
+  uit.push('');
+  return uit;
+}
+
+// Ontginnen (js/ontginnen.js; werklijst vraag 107, stap 3): per jaar hoe vaak een boer erom vroeg, wat de speler koos (de
+// heide, het bos gemeld of het bos stiekem; `gebouwd` in speler.js), wie er zocht naar een akker in het bos die niet in de
+// boeken staat en hoeveel van hoeveel hij vond (`bosZoeken`), en wanneer de schout betrapt werd, waarom, en de gunst
+// daarna (`betrapt`). Daaronder per spel hoeveel stiekeme akkers er aan het eind nog niet gevonden waren.
+function hetOntginnen(goed) {
+  const ONTGINNING = /^ontginning \((.+)\)$/;
+  const met = goed.filter((u) => (u.voorvallen || []).some((v) => v.id === 'ontginverzoek') || (u.betrapt || []).length);
+  if (!met.length) return [];
+  const kort = (datum) => datum.replace(/ 13(\d\d)$/, " '$1");
+  const jaar = (x) => Math.floor(x.dag / 360);
+  const uit = ['## Ontginnen', '', 'Per jaar: hoe vaak een boer vroeg om te ontginnen en wat de speler koos, wie er zocht naar een akker in het bos die niet in de boeken stond (gevonden van wat er lag), en wanneer de schout betrapt werd, met de gunst daarna. Het laatste jaar is de eerste maand, tot 1 grasmaand.', ''];
+  const kop = ['speler', 'zaad', 'jaar', 'verzoeken', 'heide', 'bos, gemeld', 'bos, stiekem', 'gezocht in het bos', 'betrapt'];
+  uit.push(regel(kop), regel(kop.map(() => '---')));
+  for (const u of met) {
+    const ja = (u.gebouwd || []).filter((g) => g.gelukt && ONTGINNING.test(g.soort));
+    const jaren = Math.max(u.jaren || 1, (u.graan || []).length, ...ja.map((g) => jaar(g) + 1));
+    for (let j = 0; j < jaren; j++) {
+      const stukken = (waar) => String(ja.filter((g) => jaar(g) === j && ONTGINNING.exec(g.soort)[1] === waar).length);
+      const gezocht = (u.bosZoeken || []).filter((z) => jaar(z) === j).map((z) => `${kort(z.datum)}: ${z.wie}, ${z.gevonden} van ${z.lagen}`);
+      const betrapt = (u.betrapt || []).filter((b) => jaar(b) === j).map((b) => `${kort(b.datum)}: ${b.tekst} (gunst ${b.gunst})`);
+      uit.push(regel([
+        NAMEN[u.speler] || u.speler, u.zaad, String(j + 1),
+        String((u.voorvallen || []).filter((v) => v.id === 'ontginverzoek' && jaar(v) === j).length),
+        stukken('heide'), stukken('bos, gemeld'), stukken('bos, stiekem'), gezocht.join('; '), betrapt.join('; '),
+      ]));
+    }
+  }
+  uit.push('');
+  for (const u of met) {
+    const stiekem = (u.gebouwd || []).filter((g) => g.gelukt && g.soort === 'ontginning (bos, stiekem)').length;
+    if (!stiekem) continue;
+    const gevonden = som(u.bosZoeken || [], (z) => z.gevonden);
+    uit.push(`- ${NAMEN[u.speler] || u.speler}, zaad ${u.zaad}: ${stiekem} ${stiekem === 1 ? 'stuk' : 'stukken'} stiekem ontgonnen, ${gevonden} gevonden, ${stiekem - gevonden} aan het eind nog niet.`);
   }
   uit.push('');
   return uit;
