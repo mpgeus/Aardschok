@@ -477,6 +477,7 @@
       const voor = bosVoorBij(S, g);
       ctx.drawImage(voor.canvas, voor.vx, voor.vy, voor.canvas.width / g.k, voor.canvas.height / g.k);
     }
+    tekenOntginRand(ctx, S);
     ctx.restore();
 
     // De nacht valt over de wereld, maar niet over de zwevende teksten: die komen erna, met dezelfde
@@ -1145,6 +1146,26 @@
       }
     }
     tekenKring(ctx, S, S.bouwSoort, { x: S.bouwHover.x, y: S.bouwHover.y, b: voet.b, h: voet.h });
+  }
+
+  // De rand van land om te ontginnen (js/ontginnen.js; werklijst vraag 107), bovenop alles: in het bos staan de bomen over
+  // het goud op de grond heen (tekenVerzoekPlek), en dan zag je niet welk stuk hij bedoelt.
+  function tekenOntginRand(ctx, S) {
+    const D = T.dorpHier(S);
+    const L = D && D.voorvallen && D.voorvallen.lopend;
+    if (!L || !L.ontgin || S.bouwSoort) return;
+    for (const stuk of [L.ontgin.heide, L.ontgin.bos]) {
+      if (!stuk) continue;
+      const hoeken = [[0, 0], [stuk.b, 0], [stuk.b, stuk.h], [0, stuk.h]].map(([dx, dy]) => T.naarScherm(stuk.x + dx - 0.5, stuk.y + dy - 0.5));
+      ctx.beginPath();
+      hoeken.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(226, 182, 74, 0.16)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(240, 200, 96, 0.9)';
+      ctx.lineWidth = 2 / S.zoom;
+      ctx.stroke();
+    }
   }
 
   // De plek van een bouwverzoek (js/verzoeken.js; werklijst vraag 103): zolang iemand je erom vraagt, ligt de voet van
