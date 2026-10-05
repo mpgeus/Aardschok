@@ -4065,7 +4065,15 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     blijft van een ander erf af, en drie tegels van de plek van het huis erop (`T.opDeGrondVanEenErf`); en een vrij erf
     waar toch geen hut meer op past, telt niet als plaats (`T.bruikbareErven`, `T.hutPastOpErf`). Wat Claude erin zag: het
     was erger dan het looppad: het huis van de maker groeide met 21 tegels óp het vrije erf, want het doorgroeien keek
-    alleen naar muren, bomen, mensen en deuren, niet naar erven.
+    alleen naar muren, bomen, mensen en deuren, niet naar erven. **De speeltest erna** (`speelbaar.md`): 73425 en 72022
+    letter voor letter hetzelfde; op 62707 kwam de groei los (0 keer "geen plaats", was 85; 73 mensen na twee jaar, was
+    67), maar was de bouwer op Sint-Maarten van het tweede jaar zijn ambt kwijt: de heer kreeg minder (54% en 39%), zijn
+    soldaten vonden de wapens, en hij betaalde te weinig.
+    **Het goud** (Claude, 5 okt, vijfendertigste sessie; een opmerking, nog geen vraag): het goud remde vandaag drie keer.
+    De bouwer kon nooit laken kopen bij de marskramer (zes à zeven keer per spel geen goud), de markt had in de eerste
+    winter plek maar geen goud, en een dorp dat sneller groeit, kostte de bouwer op 62707 zijn ambt. Een groter dorp
+    vraagt de heer meer dan het opbrengt. Voorstel: na d en e een plan voor wat het dorp aan goud verdient (de belasting
+    per stand, de markt die iets opbrengt), want dat is na de grond de volgende knoop naar de winst.
     **Plan voor d, de markt op het plein** (Claude, 5 okt, vijfendertigste sessie; open). Wat er nu is: de markt is een
     gebouw van 6 bij 6 (16 hout, 14 goud), vanaf een dorp, en doet maar één ding: de stenen huizen willen hem (één voor
     het hele dorp, zonder kring). Hij heeft geen eigen tekening (hij leent een groot dorpshuis). Het plein op de landen

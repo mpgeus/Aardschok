@@ -208,6 +208,19 @@ niets aan het spel.
 **Wat het vraagt:** zie vraag 110 in de werklijst (de grond om te bouwen: de markt, bouwgrond uit het bos, en het erf dat
 vastzit). Stap 3 van vraag 107 is daarmee gespeeld.
 
+**Daarna, met f** (`f706100`: een huis groeit niet meer op een erf of in het looppad om zijn huis, en een vrij erf waar
+geen hut op past, telt niet als plaats; Marcel: "D, e, f Ja"). Alleen de bouwer met ontginnen, `npm run speeltest -- bouwer
+--maker --jaren 4`, 14 minuten:
+- **73425 en 72022 speelden letter voor letter hetzelfde** (83 en 79 mensen): daar zat geen erf vast; daar is de grond
+  voor erven op (vraag 110, e).
+- **Op 62707 kwam de groei los:** "Er wil een gezin komen, maar er is geen plaats" 0 keer (was 85), 5 erven (was 3), en
+  aan het eind van het tweede jaar 73 mensen (was 67). Het spel loopt al vanaf het eerste jaar anders, want het huis van
+  de maker groeide niet meer op het erf.
+- **Maar op Sint-Maarten van het tweede jaar was de bouwer zijn ambt kwijt.** De heer kreeg 54% en 39% van zijn eis (was
+  75% en 54%), zijn soldaten vonden de wapens van de wapenmaker (gunst −30), en dan "je betaalde te weinig". Een dorp dat
+  sneller groeit, kost de heer meer dan het aan goud opbrengt. Het goud remde vandaag drie keer: de bouwer kon nooit laken
+  kopen, de markt kwam in de eerste winter niet door het goud, en nu dit (vraag 110, "Het goud").
+
 ## De speeltest van 5 okt: ontginnen in het bos (werklijst, vraag 107, stap 2)
 
 Gespeeld in de vierendertigste sessie, op `ccr-96e0aab5-w9cesu` op `2aac3b8` (de heide en het bos naast elkaar, gemeld of
