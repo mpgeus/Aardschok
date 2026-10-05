@@ -184,6 +184,23 @@ inner het daar niet ziet.
 5. **Het spoor (h):** één gezin dat er elke dag heen loopt, slijt het gras tot zo'n twee à drie stappen per dag, en een
    paadje dat je ziet, vraagt er vier. Zolang ze er hakken, loopt er een spoor (T.isSpoor), na het ontginnen niet meer.
 
+**Daarna, met g1** (Marcel: "1 en 3 later inderdaad"; op `b33617a`: elk jaar op Sint-Maarten lopen er een paar soldaten
+door het bos, en vinden een stiekeme akker zelden, één op de tien, en langs een spoor vaak). Alleen de sluwe bouwer,
+`npm run speeltest -- sluw --maker`:
+
+| Land | Een dorp | Marktrecht | Mensen | Stiekem ontgonnen | Wat de soldaten in het bos vonden |
+|---|---|---|---|---|---|
+| 62707 | 24 oogstmaand | 24 herfstmaand | 26 → 67 | 7 stukken | twee keer niets ("niets dan dennennaalden") |
+| 73425 | 24 herfstmaand | — | 53, ontslagen | 2 stukken | op Sint-Maarten van het eerste jaar de akker van Wouter |
+| 72022 | 24 oogstmaand | 5 wijnmaand | 50, gevallen | 3 stukken | (gevallen op 18 wijnmaand, zoals hierboven) |
+
+Op 73425 bijt het meteen, en hard: gevonden is betrapt, dus de gunst gaat naar de laatste waarschuwing (5), en dezelfde
+dag betaalde de sluwe bouwer de heer 90% van wat hij vroeg ("je betaalde te weinig", −5): ontslagen in het eerste jaar.
+Zo werken de twee bazen (vraag 106: na de waarschuwing is de volgende tegenvaller je ambt), maar het betrapt-zijn en de
+rekening vallen altijd op dezelfde dag, dus wie stiekem ontgint en de heer ook afknijpt, speelt alles of niets. Op 62707
+ging het twee jaar goed, met zeven stukken (een kans van zo'n een op vier in het eerste jaar, en de helft in het tweede).
+Of dat de juiste maat is, zegt de speeltest van vier jaar (stap 3).
+
 ## De speeltest van 5 okt: ontginnen op de heide (werklijst, vraag 107, stap 1)
 
 Gespeeld in de drieëndertigste sessie, op `ccr-ba65ef69-kcd902` op `68649be` (ontginnen op de heide; het paadje van een

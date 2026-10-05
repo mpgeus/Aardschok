@@ -2207,13 +2207,16 @@ dichtbij als het kan.
   - **"Het bos. De heer hoeft het niet te weten.":** geen gunst. Het staat niet in zijn boeken: de inner zoekt het niet,
     en de heer telt het niet, ook niet als hij alles zelf telt. **Ziet de inner het toch** (loop je met hem het bos in,
     of ligt het waar hij langs komt), dan schrijft hij het op, zijn argwaan stijgt, en op Sint-Maarten ben je betrapt: de
-    laatste waarschuwing, of je ambt kwijt. In een echt bezoek op vier landen zag hij er geen een (5 okt). **Doorzoeken de
-    soldaten het hele dorp** (bij hoge argwaan), dan vinden ze het soms (drie op de tien), en vaak (zeven op de tien) als
-    er een spoor heen loopt (vraag 107, h): wie er elke dag heen loopt, slijt het gras. Een paadje dat je ziet, ontstaat
-    daar niet (een gezin loopt er twee à drie stappen per dag, een paadje vraagt er vier), maar het spoor telt al vanaf
-    twee (`T.isSpoor` in `js/paden.js`): zolang ze er hakken, loopt er een, en daarna groeit het dicht. Gevonden is
-    betrapt, en vanaf dan staat het in de boeken. **Nog open (vraag 107, g):** in de speeltest werd de sluwe bouwer met
-    zeven stukken nooit betrapt; stiekem is te goedkoop.
+    laatste waarschuwing, of je ambt kwijt. In een echt bezoek op vier landen zag hij er geen een (5 okt). **De soldaten
+    lopen elk jaar op Sint-Maarten door het bos** (vraag 107, g1; Marcel: "1 en 3 later inderdaad"), ook bij lage argwaan,
+    en vinden zo'n akker zelden (één op de tien); doorzoeken ze het hele dorp (bij hoge argwaan), dan soms (drie op de
+    tien); en loopt er een spoor heen, dan vaak (zeven op de tien; vraag 107, h): wie er elke dag heen loopt, slijt het
+    gras. Een paadje dat je ziet, ontstaat daar niet (een gezin loopt er twee à drie stappen per dag, een paadje vraagt er
+    vier), maar het spoor telt al vanaf twee (`T.isSpoor` in `js/paden.js`): zolang ze er hakken, loopt er een, en daarna
+    groeit het dicht. Elk stuk is een eigen kans: één stuk is een gok, zeven stukken bijna zeker betrapt (in de eerste
+    speeltest, zonder deze ronde door het bos, werd de sluwe bouwer met zeven stukken nooit betrapt). Gevonden is betrapt,
+    en vanaf dan staat het in de boeken. **Later (g3):** de buren zien de boer elke dag het bos in gaan, en de roddelaar
+    vertelt het in de herberg, als die een plek van gesprekken wordt (3c).
   Het bos is een winter werk (drie maanden uiterlijk; in de lente is een stuk na 41 à 56 dagen af, in de herfst en de
   winter na zo'n 85): hij hakt boom voor boom om, van een tegel recht ernaast en met zijn gezicht naar de boom (schuin is
   de stam te ver voor de bijl; 4 hout per boom naar de schuur: een stuk geeft er 40 à 100), rooit de stronk (die staat tot

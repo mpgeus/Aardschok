@@ -614,9 +614,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   anders het dichtste; gemeld (`doe.ontgin: 'bos'`) kost het de gunst van de heer, stiekem (`'stiekem'`) staat het niet
   in zijn boeken (`veld.stiekem`, `T.inDeBoeken`: de inner zoekt het niet, de heer telt het niet), maar ziet de inner
   het (`T.innerZietBosAkker`, vanuit `T.innerKijkt`), dan ben je op Sint-Maarten betrapt (`T.heerVindtBosAkkers`,
-  `T.betrapt` in `js/bazen.js` met een eigen tekst), en doorzoeken de soldaten het hele dorp, dan vinden ze het soms, en
-  vaak met een spoor erheen (`T.zoekBosAkkers` vanuit `T.zoekVerstopt`, `T.spoorNaar`, `T.isSpoor` in `js/paden.js`: gras
-  dat slijt, ook voor het een paadje is; vraag 107, h). Wat het kost,
+  `T.betrapt` in `js/bazen.js` met een eigen tekst), en de soldaten lopen elk jaar op Sint-Maarten door het bos
+  (`T.doorzoekHetBos` vanuit `T.heerStaatErOp`; vraag 107, g1) en vinden het zelden, doorzoeken ze het hele dorp soms
+  (`T.zoekBosAkkers` vanuit `T.zoekVerstopt`), en met een spoor erheen vaak (`T.vindKansVanBosAkker`, `T.spoorNaar`,
+  `T.isSpoor` in `js/paden.js`: gras dat slijt, ook voor het een paadje is; vraag 107, h). Wat het kost,
   zegt `T.ontginPrijs` (voor `T.prijsVanKeuze`). Ja (`T.ontginToegestaan(D, L, soort)`) maakt er een veld van zijn
   boerderij van, met `veld.ontginning` = { tot, op ('heide' of 'bos'), gestoken } en `veld.ontgonnen`; een nieuw veld
   meldt `T.kaartVeranderd`. Het werk staat in `js/veldwerk.js` (`ontgin`, `T.volgendeOntginning`): plaggen steken, en

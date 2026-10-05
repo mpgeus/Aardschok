@@ -155,14 +155,15 @@ de hakker (een nieuw figuur, ook voor vraag 115), rooit de stronk en spit om; zi
 buiten (en in een echt bezoek zag hij er geen een); het paadje dat hem zou verraden, ontstond nooit (een gezin loopt twee
 à drie stappen per dag, een paadje vraagt er vier), dus volgen de soldaten een spoor; en de bomen dekten het goud af, dus
 ligt er een rand bovenop. **De speeltest:** de sluwe bouwer ontgon zeven stukken stiekem en werd nooit betrapt: stiekem is
-te goedkoop. Dat is de nieuwe vraag g bij vraag 107 (voorstel: de soldaten lopen elk jaar ook door het bos). Zie onder
-Af, en `spel.md`, "Ontginnen".
+te goedkoop. Marcel koos daarop g1 (vraag 107, g: "1 en 3 later inderdaad"): de soldaten lopen elk jaar op Sint-Maarten
+ook door het bos, en elk stuk is een eigen kans. Zie onder Af, en `spel.md`, "Ontginnen".
 
 **Waar de volgende sessie begint:** het werk van de drieëndertigste sessie staat sinds 5 okt in `main` (Marcel: "ja push
 main"), ook het ontginnen op de heide met de prijs die per stuk oploopt (vraag 107, stap 1 en f; Marcel: "Push main"),
 net als het werk van de tweeëndertigste (Marcel: "1 ja" op "Zal ik het in main zetten?"). Het bos (vraag 107, stap 2)
-staat op `ccr-96e0aab5-w9cesu`, nog niet in `main`. **Op Marcel wacht:** vraag 107, g (stiekem is te goedkoop: g1, g2 of
-g3), en of het bos in `main` gaat. Daarna stap 3 van vraag 107, de speeltest van vier jaar. **Stap 2b loopt in een eigen sessie** (Marcel: "Kun je alvast een extra agent starten
+staat op `ccr-96e0aab5-w9cesu`, nog niet in `main`, met g1 (de soldaten lopen elk jaar door het bos; Marcel: "1 en 3 later
+inderdaad"). **Op Marcel wacht:** of het bos in `main` gaat. Daarna stap 3 van vraag 107, de speeltest van vier jaar, en
+g3 (de roddelaar) met de herberg als plek van gesprekken (3c). **Stap 2b loopt in een eigen sessie** (Marcel: "Kun je alvast een extra agent starten
 voor het volgende punt op de werklijst?"), op de branch `claude/bouwstijlen-2b`: de andere drie stijlen. Marcel
 beantwoordde daar haar vragen (A tot en met E; zie vraag 114), en nu het wit in `main` staat, mag ze `main` samenvoegen
 en renderen. Daarna stap 3, de herberg, de kapel en de woontoren, meteen draaibaar, en dan de houthakker die hakt en
@@ -3885,7 +3886,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Voorstel van Claude: g1, en later g3 als de herberg een plek van gesprekken wordt (3c). Stap 3 (de speeltest van vier
     jaar) kan dan meteen laten zien of het bijt.
     **Marcel koos (5 okt, vierendertigste sessie): "1 en 3 later inderdaad".** Dus g1 nu, en g3 later, met de herberg als
-    plek van gesprekken (3c).
+    plek van gesprekken (3c). **g1 is gebouwd** (`b33617a`): op Sint-Maarten lopen er elk jaar een paar soldaten door het
+    bos (`T.doorzoekHetBos`, ook bij lage argwaan), en die vinden een akker die niet in de boeken staat zelden (0,1),
+    bij het hele dorp soms (0,3), en langs een spoor vaak (0,7). **De speeltest** (`speelbaar.md`): op 73425 vonden ze in
+    het eerste jaar een akker, en omdat de sluwe bouwer de heer dezelfde dag te weinig betaalde, was hij meteen ontslagen;
+    op 62707 ging het twee jaar goed met zeven stukken. Het bijt nu, en hard: of dat de maat is, zegt stap 3.
 108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
     misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
     moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
@@ -5431,8 +5436,8 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   winter, met drie maanden als grens). De raadsman meldt het als hij de heer vreest, en doet het stiekem als heethoofd.
   De spelregel "Ontginnen" heeft drie standen. `test/ontginnen.test.cjs` (zeventien toetsen), `npm test` 954/954, en de
   speeltest van twee jaar (`speelbaar.md`): de bouwer neemt vier à vijf stukken heide en dan drie à vier stukken bos; de
-  sluwe zeven stukken stiekem, en werd nooit betrapt. Zie `spel.md`, "Ontginnen", en vraag 107 (stap 2, en de vraag over
-  stiekem).
+  sluwe zeven stukken stiekem, en werd nooit betrapt. Daarom lopen de soldaten nu elk jaar op Sint-Maarten door het bos
+  (vraag 107, g1; Marcel: "1 en 3 later inderdaad"). Zie `spel.md`, "Ontginnen", en vraag 107 (stap 2, en g).
 - 5 okt 2026 — **Ontginnen op de heide** (drieëndertigste sessie; vraag 107, stap 1; Marcel: "1 en 3, 107 a b c d e ja").
   Komt het dorp graan tekort (`T.graanTekort`: er komt geen gezin om het graan, of het eten haalt de winter niet), dan
   vraagt een boer of zijn grote zoon je om dertig tegels heide (een voorval `ontginverzoek`, vóór de bouwverzoeken; de
