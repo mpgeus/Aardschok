@@ -191,8 +191,7 @@ samen met de mensen aan het werk. Voor het eiland gebruiken we Marcels technieke
 **vraag 119**: HPA\* over de stukken, flow fields, time-slicing, sturen in plaats van iedereen als muur, Jump Point
 Search). **Vraag 120 is besloten** (een levendig dorp; Marcel: "120 a b d ja"): het praatje nu, het wolkje met waar ze
 het over hebben (b) met de mensen aan het werk; de kleine dingen (c: groeten, water halen, een bankje) koos hij niet.
-Nog open: **vraag 107**, stap 2 en 3 (het bos, openlijk en stiekem, en de speeltest van vier jaar; stap 1, de heide, is
-af), **vraag 109** (de stenen en het erf: bestraten als
+Nog open: **vraag 107**, stap 3 (de speeltest van vier jaar; stap 1 en 2, de heide en het bos, zijn af), **vraag 109** (de stenen en het erf: bestraten als
 verzoek, het plein bij marktrecht, de tuin en het hek binnen het looppad) en **vraag 110** (de maat van de winst: op het
 wijdere land is er grond genoeg, maar de speeltest speelt standaard nog het ontworpen gehucht). De speeltest van vier
 jaar staat in `speelbaar.md`, en een volgende speeltest van vier jaar splitst de spelers over twee taken, want een taak
@@ -5513,7 +5512,7 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   lagen en een erker), de plankenstijl helemaal van hout; oker en roze nemen de hutten van wit. 300 huizen met hun
   bouwfasen; wie doorgroeit, krijgt de stijl van zijn dorp. Wit en de oude huizen byte voor byte dezelfde, `npm test`
   946/946, 21 van 23 schermafdrukken gelijk (alleen land 5, nu planken), de speeltest op vier landen van de maker zonder
-  fouten. Op `claude/bouwstijlen-2b`, nog niet in `main`. Zie vraag 114, stap 2b, en `beeld.md`.
+  fouten. Sinds 5 okt in `main`. Zie vraag 114, stap 2b, en `beeld.md`.
 - 5 okt 2026 — **Ontginnen op de heide** (drieëndertigste sessie; vraag 107, stap 1; Marcel: "1 en 3, 107 a b c d e ja").
   Komt het dorp graan tekort (`T.graanTekort`: er komt geen gezin om het graan, of het eten haalt de winter niet), dan
   vraagt een boer of zijn grote zoon je om dertig tegels heide (een voorval `ontginverzoek`, vóór de bouwverzoeken; de
