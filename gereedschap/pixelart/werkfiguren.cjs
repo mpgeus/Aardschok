@@ -18,6 +18,13 @@
 //   sprok-       (dorpelingen3.cjs). staan, lopen (de bundel deint mee), en rapen: door de knieën tot hij hurkt, een
 //   kelaarster   tak oprapen, en hem over de schouder in de bundel steken, waar hij blijft.
 //   maaister     maaien, met de zeis en de slag van de maaier (maaier.cjs, die zelf blijft zoals hij is).
+//   hakker       de bijl (vraag 107, f): een steel van essenhout van een kleine meter met een ijzeren kop, een wig met de
+//   hakster      snede naar voren, een korte nek en een licht randje aan de snede. hakken: met twee handen over de
+//                rechterschouder omhoog, en van rechtsboven schuin naar beneden en naar voren tot de snede op
+//                kniehoogte in de stam slaat, een tegel voor hem; even stil, losgewrikt, en langs zijn rechterzij terug
+//                omhoog. Het lijf draait mee en gaat bij de inslag door de knieën. Dezelfde slag hakt de wortels van een
+//                stronk los, en straks hakt de houthakker er zo mee (vraag 115). staan: de bijl met de kop op de grond
+//                naast zijn rechtervoet, zijn hand op de knop. lopen: de bijl over de rechterschouder.
 //
 // Dit bestand verandert niets aan dorpelingen.cjs, dorpelingen2.cjs, maaier.cjs of karakters.cjs: het gebruikt alleen
 // wat die exporteren. Het lijf van de boer (werkBoer) is dat van boer() en maaier(): dezelfde benen met knieën, kiel en
@@ -31,8 +38,8 @@
 // de onderarm uit. De sleutels zijn voor de boer gemaakt; de boerin heeft lagere schouders, een hogere heup en kortere
 // armen, en haar handen volgen dezelfde weg vanuit haar eigen schouders (naarLijf).
 // Lokale assen zoals overal: x naar rechts van de figuur, y naar voren, z omhoog; de voeten op z = 0.
-// Wegschrijven: node gereedschap/pixelart/werkfiguren-anim.cjs [zaaier wieder sprokkelaar zaaister wiedster
-// sprokkelaarster maaister].
+// Wegschrijven: node gereedschap/pixelart/werkfiguren-anim.cjs [zaaier wieder sprokkelaar hakker zaaister wiedster
+// sprokkelaarster maaister hakster].
 'use strict';
 const { sdf, klem, mix, rnd } = require('./kern.cjs');
 const { model, kegel, capsule, bol, ellips, bochtKegel, plus } = require('./figuren.cjs');
@@ -107,13 +114,18 @@ const HOUDINGEN = {
   zaaier: { staan: { beelden: 4, fps: 4 }, lopen: { beelden: 8, fps: LOOP_FPS }, zaaien: { beelden: 12, fps: 8 } },
   wieder: { staan: { beelden: 4, fps: 4 }, lopen: { beelden: 8, fps: LOOP_FPS }, wieden: { beelden: 12, fps: 8 } },
   sprokkelaar: { staan: { beelden: 4, fps: 4 }, lopen: { beelden: 8, fps: LOOP_FPS }, rapen: { beelden: 16, fps: 8 } },
+  hakker: { staan: { beelden: 4, fps: 4 }, lopen: { beelden: 8, fps: LOOP_FPS }, hakken: { beelden: 12, fps: 8 } },
 };
 HOUDINGEN.zaaister = HOUDINGEN.zaaier;
 HOUDINGEN.wiedster = HOUDINGEN.wieder;
 HOUDINGEN.sprokkelaarster = HOUDINGEN.sprokkelaar;
 HOUDINGEN.maaister = { maaien: { beelden: MAAIER_BEELDEN, fps: MAAIER_FPS } };
+HOUDINGEN.hakster = HOUDINGEN.hakker;
 // welk lijf elke figuur heeft, en dus hoe snel hij loopt
-const LIJF_VAN = { zaaier: 'boer', wieder: 'boer', sprokkelaar: 'boer', zaaister: 'boerin', wiedster: 'boerin', sprokkelaarster: 'boerin', maaister: 'boerin' };
+const LIJF_VAN = {
+  zaaier: 'boer', wieder: 'boer', sprokkelaar: 'boer', hakker: 'boer',
+  zaaister: 'boerin', wiedster: 'boerin', sprokkelaarster: 'boerin', maaister: 'boerin', hakster: 'boerin',
+};
 const snelheidVan = (naam) => LIJVEN[LIJF_VAN[naam]].snelheid;
 
 // ---------------------------------------------------------------- hulpjes
@@ -1128,6 +1140,186 @@ function sprokkelaar(stand, lijf = 'boer') {
   });
 }
 
+// ---------------------------------------------------------------- de hakker en de hakster
+
+// De bijl (vraag 107, f; Marcel, 5 okt): een steel van essenhout van een kleine meter, iets korter dan die van de
+// schoffel, met een knop aan het eind, en bovenaan de kop: een ijzeren wig met de snede naar voren en een korte nek achter
+// de steel. Van het oog naar de snede wordt de kop dunner en hoger, zodat de snede langer is dan het oog: van opzij een
+// wig, van boven een smal blad. Donker ijzer, met een lichter randje aan de snede dat in het licht even blinkt (zoals het
+// blad van de schoffel en de zeis). Gebouwd vanuit het eind van de steel K, de richting van de steel naar de kop (uh,
+// eenheid) en die waar de snede heen wijst (e, dwars op uh). Geeft de punten terug waar de handen hem vasthouden (bij, in
+// eenheden vanaf het eind), het midden van de kop en de snede.
+const BIJL = {
+  steel: 36, // van het eind tot het boveneind, dat net boven de kop uitsteekt
+  oog: 33, // waar het midden van de kop op de steel zit
+  r: [1.2, 0.95], // de steel: bij het eind, bij de kop
+  knop: 1.55,
+  // de kop, vanuit het oog: tot de snede en tot de nek; half zo hoog (bij het oog en aan de snede); half zo dik (bij het
+  // oog en aan de snede); hoeveel de punten van de snede terugwijken (een bolle snede); en hoe breed het lichte randje is
+  kop: { snede: 7.6, nek: 2.6, hoog: [2.3, 4], dik: [1.8, 0.45], bol: 1, rand: 1.6 },
+};
+const GREEP_LINKS = 2.6; // de linkerhand, vlak boven de knop
+function bijl(ctx, K, uh, e) {
+  const { M, delen } = ctx;
+  const dSteel = KAR.deel(ctx, 'steel');
+  const dKop = KAR.deel(ctx, 'kop');
+  const mKop = KAR.materiaal(ctx, 'bijlkop', { ramp: 'ijzer', lo: 1.2, hi: 5.4, glans: 1.2, detail: true });
+  const mSnede = KAR.materiaal(ctx, 'snede', { ramp: 'ijzer', lo: 4, hi: 7, glans: 2.2, detail: true });
+  const n = HH.kruis(uh, e);
+  const T = HH.plus(K, HH.keer(uh, BIJL.steel));
+  const O = HH.plus(K, HH.keer(uh, BIJL.oog));
+  delen.push(kegel(K, T, BIJL.r[0], BIJL.r[1], M.hout, dSteel));
+  delen.push(bol(HH.plus(K, HH.keer(uh, 0.7)), BIJL.knop, M.hout, dSteel, 0.6));
+  const { snede, nek, hoog, dik, bol: bolheid, rand } = BIJL.kop;
+  const lokaal = (x, y, z) => {
+    const p = [x - O[0], y - O[1], z - O[2]];
+    return [HH.inwendig(p, uh), HH.inwendig(p, e), HH.inwendig(p, n)];
+  };
+  const tot = (a) => snede - bolheid * (a / hoog[1]) ** 2; // hoe ver de snede reikt op hoogte a
+  const helling = Math.max(((hoog[1] - hoog[0]) * 1.5) / snede, (dik[0] - dik[1]) / snede, (2 * bolheid) / hoog[1]);
+  const schaal = 0.9 / Math.hypot(1, helling);
+  delen.push({
+    f: (x, y, z) => {
+      const [a, b, c] = lokaal(x, y, z);
+      const t = klem(b / snede, 0, 1);
+      const h = hoog[0] + (hoog[1] - hoog[0]) * t ** 1.5;
+      const d = dik[0] + (dik[1] - dik[0]) * t;
+      return Math.max(Math.abs(a) - h, b - tot(a), -nek - b, Math.abs(c) - d) * schaal;
+    },
+    g: [...HH.plus(O, HH.keer(e, (snede - nek) / 2)), Math.hypot((snede + nek) / 2, hoog[1]) + 1],
+    m: (x, y, z) => {
+      const [a, b] = lokaal(x, y, z);
+      return b > tot(a) - rand ? mSnede : mKop;
+    },
+    deel: dKop,
+  });
+  return { kop: O, snede: HH.plus(O, HH.keer(e, snede)), bij: (s) => HH.plus(K, HH.keer(uh, s)) };
+}
+
+// Het hakken, fase 0..1, een lus van twaalf beelden. Hij staat op de tegel naast de boom en kijkt ernaar: de stam staat
+// een tegel voor hem. De bijl staat over zijn rechterschouder omhoog en naar achter, met de rechterhand tot halverwege de
+// steel opgeschoven (0, 1), komt over zijn schouder (2), en slaat van rechtsboven schuin naar beneden en naar voren
+// terwijl de rechterhand naar de linker glijdt (3), tot de snede op kniehoogte voor hem in de stam slaat (4). Daar staat
+// hij even stil (5), hij wrikt de bijl los (6), trekt hem langs zijn rechterzij terug (7) en heft hem weer over zijn
+// schouder (8 tot 11). Het lijf draait mee: bij het ophalen de rechterschouder naar achter, bij de klap naar voren, en
+// bij de inslag buigt hij en gaat hij door de knieën; de voeten blijven staan. Zo leest het ook als de wortels van een
+// stronk loshakken: dezelfde slag. Per beeld: het lijf (buig, draai, zak, voor), en de bijl in de wereld: de linkerhand
+// op de knop (links), waar de steel heen wijst (steel, naar de kop) en de snede (snede), en hoe ver de rechterhand van
+// het eind zit (rechts). De armen reiken er met de IK heen.
+const HAKKEN = [
+  { buig: 3, draai: -16, zak: 0.6, voor: -0.6, links: [5.5, 9, 57.5], steel: [0.32, -0.58, 0.75], snede: [0, 0.75, 0.66], rechts: 15 },
+  { buig: 2, draai: -18, zak: 0.5, voor: -0.8, links: [6, 8, 58.5], steel: [0.36, -0.68, 0.64], snede: [0, 0.65, 0.76], rechts: 16 },
+  { buig: 6, draai: -8, zak: 1.2, voor: -0.3, links: [6, 11, 60], steel: [0.34, -0.07, 0.94], snede: [0, 1, 0.1], rechts: 13 },
+  { buig: 15, draai: 4, zak: 2.8, voor: 0.2, links: [3, 16, 50], steel: [0.5, 0.6, 0.62], snede: [-0.4, 0.4, -0.8], rechts: 9 },
+  { buig: 22, draai: 12, zak: 4.2, voor: 0.6, links: [-4, 14, 35], steel: [0.435, 0.814, -0.389], snede: [-0.6, 0.15, -0.78], rechts: 6 },
+  { buig: 23, draai: 12.5, zak: 4.6, voor: 0.6, links: [-4, 14, 34.6], steel: [0.435, 0.814, -0.4], snede: [-0.6, 0.15, -0.78], rechts: 6 },
+  { buig: 20, draai: 10, zak: 3.8, voor: 0.4, links: [-3, 12, 38], steel: [0.4, 0.8, -0.43], snede: [-0.6, 0.15, -0.78], rechts: 6.5 },
+  { buig: 15, draai: 0, zak: 2.6, voor: 0.1, links: [4.5, 11, 44], steel: [0.45, 0.55, -0.55], snede: [-0.5, 0.3, -0.8], rechts: 9 },
+  { buig: 9, draai: -6, zak: 1.6, voor: -0.2, links: [6, 10, 51], steel: [0.6, 0.35, 0.72], snede: [-0.1, 1, 0], rechts: 12 },
+  { buig: 5, draai: -12, zak: 1, voor: -0.4, links: [5.5, 9.5, 56], steel: [0.42, -0.2, 0.88], snede: [0, 0.9, 0.4], rechts: 14 },
+  { buig: 4, draai: -15, zak: 0.7, voor: -0.5, links: [5.4, 9, 57.2], steel: [0.35, -0.48, 0.8], snede: [0, 0.8, 0.6], rechts: 15 },
+  { buig: 3, draai: -16, zak: 0.6, voor: -0.6, links: [5.5, 9, 57.5], steel: [0.33, -0.56, 0.76], snede: [0, 0.76, 0.65], rechts: 15 },
+];
+const HAK_SLEUTELS = Object.fromEntries(Object.keys(HAKKEN[0]).map((k) => [k, HAKKEN.map((b, i) => [i / HAKKEN.length, b[k]])]));
+const hakSleutel = (k, fase) => langsSleutels(HAK_SLEUTELS[k], fase);
+// Wat de hakster anders doet dan de hakker: haar schouders zitten lager en haar armen zijn korter, dus ze buigt wat
+// dieper en draait haar rechterschouder wat verder mee naar voren; haar handen gaan samen dezelfde weg vanuit het midden
+// tussen haar eigen schouders (naarLijf, zie bijlInDeHanden), en de bijl wijst dezelfde kant op. Staan: de bijl met de
+// kop op de grond naast de rechtervoet, een eind opzij, zodat hij ook van achteren te zien is (voet: waar het boveneind
+// de grond raakt), de steel schuin omhoog naar de rechterhand, die op de knop rust (naar: waar de steel heen wijst).
+// Lopen: de steel op de rechterschouder (schouder, in de rusthouding van de romp), de knop een eind voor hem (voor), de
+// kop achter hem met de snede omhoog en naar buiten, zodat hij ook van voren boven de hoed uitkomt.
+const HAKKEN_LIJF = {
+  boer: {
+    buig: 0,
+    draai: 0,
+    staan: { voet: [17, 6, 0.3], naar: [12.6, 2.8, 36], snede: [0.25, 1, 0] },
+    lopen: { schouder: [9.9, 0.5, 60.6], naar: [0.12, -1, 0.42], voor: 11, snede: [0.8, 0, 0.6] },
+  },
+  boerin: {
+    buig: 5,
+    draai: 4,
+    staan: { voet: [17.2, 6.4, 0.3], naar: [12.9, 3.2, 35.2], snede: [0.25, 1, 0] },
+    lopen: { schouder: [10.5, 0.6, 58.2], naar: [0.12, -1, 0.42], voor: 11, snede: [0.8, 0, 0.6] },
+  },
+};
+const dwarsOpSteel = (v, uh) => HH.eenheid(HH.af(v, HH.keer(uh, HH.inwendig(v, uh))));
+function houdingHakken(fase, lijf = 'boer') {
+  const h = rustDorpeling();
+  h.romp.buig = hakSleutel('buig', fase) + HAKKEN_LIJF[lijf].buig;
+  h.romp.draai = hakSleutel('draai', fase) + HAKKEN_LIJF[lijf].draai;
+  h.zak = hakSleutel('zak', fase);
+  h.voor = hakSleutel('voor', fase);
+  h.nek.knik = -0.3 * h.romp.buig;
+  h.nek.draai = -0.7 * h.romp.draai;
+  return h;
+}
+// De bijl in de handen bij het hakken, op fase t, voor lijf L: het eind van de steel (K), de richtingen van de steel (uh)
+// en de snede (e), de linker- en de rechterhand, en de schouders (in de wereld).
+function bijlInDeHanden(fase, lijf = 'boer') {
+  const L = LIJVEN[lijf];
+  const uh = HH.eenheid(hakSleutel('steel', fase));
+  const e = dwarsOpSteel(hakSleutel('snede', fase), uh);
+  const schoudersVan = (wie) => [0, 1].map((i) => HH.opPunt(botten(LIJVEN[wie], houdingHakken(fase, wie)).Bromp, LIJVEN[wie].SCHOUDERS[i]));
+  const schouders = schoudersVan(lijf);
+  const tussen = HH.keer(uh, hakSleutel('rechts', fase) - GREEP_LINKS); // van de linkerhand naar de rechter
+  let links = hakSleutel('links', fase);
+  if (L !== BOER) {
+    // de twee handen samen vanuit het midden tussen haar schouders, naar de lengte van haar arm
+    const midden = (S) => HH.tussen(S[0], S[1], 0.5);
+    const m = naarLijf(L, 0, HH.plus(links, HH.keer(tussen, 0.5)), midden(schoudersVan('boer')), midden(schouders));
+    links = HH.af(m, HH.keer(tussen, 0.5));
+  }
+  const K = HH.af(links, HH.keer(uh, GREEP_LINKS));
+  return { K, uh, e, links, rechts: HH.plus(links, tussen), schouders };
+}
+
+// De hakker (lijf 'boer') of de hakster ('boerin'), met de bijl: een boom omhakken, en de wortels van de stobbe loshakken.
+// Straks ook de houthakker die hakt en plant (vraag 115). stand: { houding: 'staan' | 'lopen' | 'hakken', fase }.
+//   staan: de bijl staat met de kop op de grond naast zijn rechtervoet, zijn rechterhand rust op de knop, de linkerarm
+//          hangt; hij ademt, de bijl staat stil.
+//   lopen: de bijl over de rechterschouder, de kop achter hem; de rechterhand houdt de steel voor de schouder, de
+//          linkerarm zwaait mee. De bijl gaat met de romp mee.
+function hakker(stand, lijf = 'boer') {
+  const L = LIJVEN[lijf];
+  const B = HAKKEN_LIJF[lijf];
+  const naam = stand.houding;
+  const fase = stand.fase || 0;
+  const hg = naam === 'hakken' ? houdingHakken(fase, lijf) : gewoon(stand, L);
+  return L.bouw(hg, (ctx) => {
+    const { Bn, bot } = ctx;
+    const schouder = (i) => HH.opPunt(Bn.Bromp, L.SCHOUDERS[i]);
+    if (naam === 'lopen') {
+      // in de rusthouding van de romp: de steel rust op de rechterschouder, de knop voor hem, de kop achter hem
+      const uh = HH.eenheid(B.lopen.naar);
+      const K = HH.af(B.lopen.schouder, HH.keer(uh, B.lopen.voor));
+      const s = bijl(ctx, K, uh, dwarsOpSteel(B.lopen.snede, uh));
+      bot(Bn.Bromp);
+      arm(ctx, 1, schouder(1), HH.opPunt(Bn.Bromp, HH.plus(s.bij(GREEP_LINKS + 0.6), [0, 0, -0.8])));
+      bot(null);
+      hangendeArm(ctx, 0);
+      return;
+    }
+    if (naam === 'staan') {
+      const uh = HH.eenheid(HH.af(B.staan.voet, B.staan.naar)); // van de knop naar de kop, omlaag
+      const K = HH.af(B.staan.voet, HH.keer(uh, BIJL.steel));
+      const s = bijl(ctx, K, uh, dwarsOpSteel(B.staan.snede, uh));
+      bot(null);
+      arm(ctx, 1, schouder(1), HH.plus(s.bij(-1.4), [0, 0, 0.6])); // de vuist op de knop
+      bot(null);
+      hangendeArm(ctx, 0);
+      return;
+    }
+    const H = bijlInDeHanden(fase, lijf);
+    bijl(ctx, H.K, H.uh, H.e);
+    bot(null);
+    arm(ctx, 0, schouder(0), H.links);
+    bot(null);
+    arm(ctx, 1, schouder(1), H.rechts);
+    bot(null);
+  });
+}
+
 // ---------------------------------------------------------------- de maaister
 
 // De maaister: de boerin met de zeis van de maaier en zijn maaislag (maaier.cjs: zeisInDeHanden, houdingMaaier), zodat
@@ -1153,14 +1345,15 @@ function maaister(stand) {
 const zaaister = (stand) => zaaier(stand, 'boerin');
 const wiedster = (stand) => wieder(stand, 'boerin');
 const sprokkelaarster = (stand) => sprokkelaar(stand, 'boerin');
+const hakster = (stand) => hakker(stand, 'boerin');
 
 BOER.bouw = werkBoer;
 BOERIN.bouw = werkBoerin;
 
 module.exports = {
   HOUDINGEN, SNELHEID, LOOP_FPS, LIJVEN, LIJF_VAN, snelheidVan,
-  zaaier, wieder, sprokkelaar, zaaister, wiedster, sprokkelaarster, maaister,
-  werkBoer, werkBoerin, arm, hand, hangendeArm, langsSleutels, stapsgewijs, schoffel, schoffelTussen, takkenbos,
-  houdingZaaien, houdingWieden, houdingRapen, rapenHand, rapenSchouder, naarLijf,
-  ZAAIEN, WIEDEN, RAPEN, RAPEN_BOERIN, GREEP_BOVEN, GREEP_ONDER, SCHOUDERS, HANGT,
+  zaaier, wieder, sprokkelaar, zaaister, wiedster, sprokkelaarster, maaister, hakker, hakster,
+  werkBoer, werkBoerin, arm, hand, hangendeArm, langsSleutels, stapsgewijs, schoffel, schoffelTussen, takkenbos, bijl,
+  houdingZaaien, houdingWieden, houdingRapen, houdingHakken, bijlInDeHanden, rapenHand, rapenSchouder, naarLijf,
+  ZAAIEN, WIEDEN, RAPEN, RAPEN_BOERIN, HAKKEN, BIJL, GREEP_BOVEN, GREEP_ONDER, GREEP_LINKS, SCHOUDERS, HANGT,
 };

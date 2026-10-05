@@ -1,6 +1,7 @@
 'use strict';
-// Schrijft de werkfiguren (werkfiguren.cjs: de zaaier, de wieder en de sprokkelaar, en hun vrouwen de zaaister, de
-// wiedster en de sprokkelaarster, en de maaister; werklijst vraag 111, b) weg als spelvellen, op dezelfde manier als
+// Schrijft de werkfiguren (werkfiguren.cjs: de zaaier, de wieder, de sprokkelaar en de hakker, en hun vrouwen de
+// zaaister, de wiedster, de sprokkelaarster en de hakster, en de maaister; werklijst vraag 111, b, en de hakker met zijn
+// bijl, vraag 107, f) weg als spelvellen, op dezelfde manier als
 // maaier-anim.cjs: per houding één vel (rij per richting, Z ZW W NW N NO O ZO, kolom per beeld) en per figuur een
 // <naam>.json ernaast met { naam, cel, anker, snelheid, richtingen, houdingen }, klaar voor naar-spel.cjs. Elk beeld
 // wordt in een ruime cel gerenderd en daarna krap uitgesneden; de cel van het vel past om alle beelden van de figuur
@@ -8,20 +9,20 @@
 // rand van de ruime cel aan (de maaier deed dat eerst met zijn zeis, zie maaier-anim.cjs), dan meldt het RAND en
 // eindigt het met een fout. Een figuur zonder lopen (de maaister) krijgt geen snelheid, zoals maaier.json.
 //
-//   node gereedschap/pixelart/werkfiguren-anim.cjs                    alle zeven, en de proefplaat
+//   node gereedschap/pixelart/werkfiguren-anim.cjs                    alle negen, en de proefplaat
 //   node gereedschap/pixelart/werkfiguren-anim.cjs zaaier zaaister    alleen deze (een proefplaat alleen als alle meegaan)
 //   node gereedschap/pixelart/werkfiguren-anim.cjs --proef            alleen de proefplaat (rendert alleen wat erop staat)
 //   -> uit/<naam>/animaties/<naam>-<houding>.png       het vel
 //   -> uit/<naam>/animaties/<naam>.json                naam, cel, anker, snelheid, houdingen (lopen met `stap`)
 //   -> uit/<naam>/animaties/<naam>-<houding>-zo.png    bewegende proef, richting ZO, twee keer vergroot
 //   -> uit/werkfiguren-proef.png                        de proefplaat, op 1×
-// Daarna: node gereedschap/pixelart/naar-spel.cjs --alleen zaaier,wieder,sprokkelaar,zaaister,wiedster,sprokkelaarster,maaister
+// Daarna: node gereedschap/pixelart/naar-spel.cjs --alleen zaaier,wieder,sprokkelaar,hakker,zaaister,wiedster,sprokkelaarster,maaister,hakster
 // Een figuur per proces tegelijk gaat het snelst (de sprokkelaar en de sprokkelaarster duren het langst).
 //
 // De proefplaat: per rij drie groepen (Z, ZO, NW). Bovenaan ter vergelijking de gewone boer en boerin (staan, lopen),
 // dan per werk een rij voor de man en een voor de vrouw: de maaier en de maaister (drie beelden van het maaien), en de
-// zaaier, de wieder en de sprokkelaar met hun vrouw (staan, lopen, en drie beelden van het werk). Staan en lopen op
-// gras, het werk op de akker (het sprokkelen op gras: dat is aan de bosrand).
+// zaaier, de wieder, de sprokkelaar en de hakker met hun vrouw (staan, lopen, en drie beelden van het werk). Staan en
+// lopen op gras, het werk op de akker (het sprokkelen en het hakken op gras: dat is aan de bosrand).
 const fs = require('fs');
 const path = require('path');
 const K = require('./kern.cjs');
@@ -36,7 +37,7 @@ fs.mkdirSync(UIT, { recursive: true });
 const RUIM = { b: 260, h: 240, anker: [130, 180] }; // de ruime cel om in te renderen (de schoffel reikt ver)
 const RICHTINGEN = K.KANTEN; // altijd alle acht
 const MARGE = 3; // lucht tussen de figuur en de rand van zijn cel, zoals in maaier-anim.cjs
-const FIGUREN = Object.keys(W.HOUDINGEN); // zaaier, wieder, sprokkelaar, zaaister, wiedster, sprokkelaarster, maaister
+const FIGUREN = Object.keys(W.HOUDINGEN); // zaaier, wieder, sprokkelaar, hakker, zaaister, wiedster, sprokkelaarster, maaister, hakster
 
 const args = process.argv.slice(2);
 const alleenProef = args.includes('--proef');
@@ -169,6 +170,8 @@ const RIJEN = [
   { beelden: werkRij('wiedster', 'wieden', [0, 3, 7], 'aarde'), vakken: [1, 1, 3] },
   { beelden: werkRij('sprokkelaar', 'rapen', [5, 9, 12], 'gras'), vakken: [1, 1, 3] },
   { beelden: werkRij('sprokkelaarster', 'rapen', [5, 9, 12], 'gras'), vakken: [1, 1, 3] },
+  { beelden: werkRij('hakker', 'hakken', [0, 3, 4], 'gras'), vakken: [1, 1, 3] },
+  { beelden: werkRij('hakster', 'hakken', [0, 3, 4], 'gras'), vakken: [1, 1, 3] },
 ];
 function proefplaat() {
   const t0 = Date.now();
