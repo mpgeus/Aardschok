@@ -3735,6 +3735,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **a**, een boer die zijn veld groter maakt, of een nieuw boerengezin? **b**, de heide tegen het vertrouwen van
     het dorp, het bos tegen de gunst van de heer, en stiekem met betrapt als ze het vinden? **c**, een maand en een
     winter? **d**, dertig tegels per keer? **e**, in deze stappen?
+    **Marcel koos (5 okt, drieëndertigste sessie, terwijl 2b rendert): "1 en 3, 107 a b c d e ja".** Dus a tot en met e
+    zoals voorgesteld, nu te bouwen (1), en tussendoor een nieuwe proefversie (3). Vraag 110 (de maat van de winst) is
+    nog open.
 108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
     misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
     moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
