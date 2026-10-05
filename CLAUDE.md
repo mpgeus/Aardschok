@@ -597,20 +597,38 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   uitrijden, spitten, sprokkelen aan de bosrand), rij voor rij (`T.veldwerkTegels`), elk beeld na het maaien en vóór het
   dwalen (`T.werkVeldwerkBij`, vanuit `js/main.js` en `T.werkDorpBij`). Wat hij doet, staat op zijn poppetje (`e.werkt`,
   `e.draagt`, `e.veldwerk`); wie werkt, dwaalt niet, praat niet en gaat niet opzij, en `js/sprites.js` geeft hem het vel
-  van zijn werk (`WERKFIGUREN`: de zaaier, de wieder, de sprokkelaar; een boerin die van een vrouw, `werkVelVan`). De schaft houdt hij op de akker. Zijn boerin en
-  grote kinderen helpen bij het zaaien en de oogst (`T.helpAnker`, voor `T.dagAnker`; een anker dat meeloopt, zonder
-  veld: `veld: false`). De regels veranderen niet; de getallen in `T.VELDWERK_INSTELLINGEN`.
-- `js/ontginnen.js`: **ontginnen** (vraag 107, stap 1, 5 okt; Marcel: "107 a b c d e ja"): komt het dorp graan tekort
-  (`T.graanTekort`), dan vraagt een boer of zijn zoon een stuk heide te ontginnen, dertig tegels, zo dicht bij zijn akker
-  als de heide komt en niet op een paadje van een deur (`T.ontginPlekVoor`, `T.isAangelegdPaadje` in `js/paden.js`; een
-  nieuw veld meldt `T.kaartVeranderd`): een voorval `ontginverzoek` (`T.beginOntginverzoek`, in `T.tikVoorvallenDag`
-  vóór de bouwverzoeken), met `L.ontgin` = { x, y, b, h, boer, nut, vertrouwen }. Ja (`doe.ontgin`,
-  `T.ontginToegestaan`) maakt er een veld van zijn boerderij van, met `veld.ontginning` = { tot, gestoken } en
-  `veld.ontgonnen`, en kost het vertrouwen van het dorp, elk stuk meer (`T.ontginVertrouwen`; vraag 107, f3); een
-  maand steekt de boer er plaggen (`ontginnen` in `js/veldwerk.js`, `T.steekPlag`; een halve plag onthoudt hij in
-  `e.veldwerk.over`), wat hij niet stak is heide (`T.akkerTegelStadium`), en de schapen grazen er niet meer
-  (`T.weideStand` en `T.graaslandVan` in `js/vee.js`). Na een verzoek pas na dertig dagen een nieuw (`D.ontginnen`). De
-  spelregel "Ontginnen"; de getallen in `T.ONTGINNEN_INSTELLINGEN`.
+  van zijn werk (`WERKFIGUREN`: de zaaier, de wieder, de sprokkelaar, en de hakker met de bijl in het bos; een boerin die van een
+  vrouw, `werkVelVan`; wie naast zijn werk staat, kijkt ernaar, `e.werkt.op`). De schaft houdt hij op de akker. Zijn boerin en
+  grote kinderen helpen bij het zaaien, de oogst en het ontginnen (`T.helpAnker`, voor `T.dagAnker`; een anker dat
+  meeloopt, zonder veld: `veld: false`). De regels veranderen niet; de getallen in `T.VELDWERK_INSTELLINGEN`.
+- `js/ontginnen.js`: **ontginnen** (vraag 107, stap 1 en 2, 5 okt; Marcel: "107 a b c d e ja", en voor het bos "A a2, B
+  ok, C ja, D ok, E ok, F Ja, G ok, H goed idee"): komt het dorp graan tekort (`T.graanTekort`), dan wijst een boer of
+  zijn zoon een stuk heide en een stuk bos aan, dertig tegels elk, en jij kiest (a2): een voorval `ontginverzoek`
+  (`T.beginOntginverzoek`, in `T.tikVoorvallenDag` vóór de bouwverzoeken), met `L.ontgin` = { heide, bos (elk { x, y, b,
+  h } of null; het bos met `bomen` en `verborgen`), boer, nut, vertrouwen, gunst }, en zolang het loopt de vlaggen
+  `ontginHeide` en `ontginBos` (`L.vlaggen`, die js/voorvallen.js wist als het om is), zodat het gesprek alleen toont wat
+  kan. De heide: zo dicht bij zijn akker als ze komt, niet op een paadje van een deur (`T.ontginPlekVoor`,
+  `T.isAangelegdPaadje` in `js/paden.js`), en ja kost het vertrouwen van het dorp, elk stuk meer (`T.ontginVertrouwen`;
+  f3). Het bos: het stuk het dichtst bij zijn akker dat de inner van zijn ronde niet ziet (`T.bosPlekVoor`,
+  `T.innerZietStuk`: van de wegen, het plein, de akkers en om de gebouwen, met `open` in `T.zietTegel`, js/wereld.js),
+  anders het dichtste; gemeld (`doe.ontgin: 'bos'`) kost het de gunst van de heer, stiekem (`'stiekem'`) staat het niet
+  in zijn boeken (`veld.stiekem`, `T.inDeBoeken`: de inner zoekt het niet, de heer telt het niet), maar ziet de inner
+  het (`T.innerZietBosAkker`, vanuit `T.innerKijkt`), dan ben je op Sint-Maarten betrapt (`T.heerVindtBosAkkers`,
+  `T.betrapt` in `js/bazen.js` met een eigen tekst), en doorzoeken de soldaten het hele dorp, dan vinden ze het soms, en
+  vaak met een spoor erheen (`T.zoekBosAkkers` vanuit `T.zoekVerstopt`, `T.spoorNaar`, `T.isSpoor` in `js/paden.js`: gras
+  dat slijt, ook voor het een paadje is; vraag 107, h). Wat het kost,
+  zegt `T.ontginPrijs` (voor `T.prijsVanKeuze`). Ja (`T.ontginToegestaan(D, L, soort)`) maakt er een veld van zijn
+  boerderij van, met `veld.ontginning` = { tot, op ('heide' of 'bos'), gestoken } en `veld.ontgonnen`; een nieuw veld
+  meldt `T.kaartVeranderd`. Het werk staat in `js/veldwerk.js` (`ontgin`, `T.volgendeOntginning`): plaggen steken, en
+  in het bos van recht naast de tegel een boom omhakken (`T.hakBoom`: 4 hout, een stronk, en de tegel wordt weer vloer) en
+  een stronk of struik rooien (`T.rooi`, `T.ontginWerkOp`), en omspitten (`T.steekPlag`, die ook wat laag groeit
+  weghaalt); een half werk onthoudt hij in `e.veldwerk.over`, en wat hij niet af heeft, is nog heide of bos
+  (`T.akkerTegelStadium`). Is het af, of is de maand of de winter om, dan is het ontgonnen, en doen zijn mensen de rest
+  (`T.tikOntginnenDag`). De plekken liggen in goud op de grond, met een rand bovenop (`tekenOntginRand` in
+  `js/tekenen.js`: in het bos staan de bomen erover). De schapen grazen
+  niet op ontgonnen heide (`T.weideStand` en `T.graaslandVan` in `js/vee.js`). Na een verzoek pas na dertig dagen een
+  nieuw (`D.ontginnen`, ook `gezocht` als er nergens een plek was). De spelregel "Ontginnen" (de heide en het bos,
+  alleen de heide, of uit); de getallen in `T.ONTGINNEN_INSTELLINGEN`.
 - **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen en het
   uur: een dag duurt vijf minuten bij 1×, een maand dertig dagen; eigen klok naast `S.tijd`; de
   versneller `T.SNELHEDEN`; `T.wereldFactor` en `S.wereldTijd`; wie de tijd stilzet,

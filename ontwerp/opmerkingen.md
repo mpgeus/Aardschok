@@ -9,6 +9,18 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Ontginnen in het bos, wat opviel** (5 okt, vierendertigste sessie; vraag 107, stap 2). Na te lopen:
+  - Een boer die midden in een bosje hakt, zie je vaak niet: de bomen voor hem dekken hem af, want de doorkijk is voor de
+    schout en wie ertoe doet (`T.zichtbaarDoor`, js/doorkijk.js; Marcel, 26 sep: niet door een boom voor iedereen). Loop
+    je er met de schout heen, dan zie je hem. Misschien later: wie in het bos werkt, ook.
+  - In één proef in de browser zonder vast toeval stond het hakken 55 dagen stil na vijf tegels; met vast toeval, en in
+    acht proeven in Node op vijf landen en in elk seizoen, kwam elk stuk af (41 à 87 dagen). Waarom is niet nagekeken
+    (het toeval was niet te herhalen). Een mogelijkheid: de boer kon niet werken, of zijn gezin trok weg. Dan doen zijn
+    mensen het na de winter (`T.tikOntginnenDag`), maar zie je drie maanden een half gehakt bos. Een stuk van een boer
+    die weggaat, zou ook naar een andere boer kunnen.
+  - Op 72022 viel de sluwe schout in het eerste jaar: twee wilde rovers zagen hem meteen toen ze de kaart op kwamen, en
+    de militie was er niet. Dat is de vraag van de militie (`0c`, punt 4), niet het bos.
+
 - **Het praatje, wat er nog niet is** (4 okt, zevenentwintigste sessie; vraag 120). Na te lopen:
   - Lopen is langzaam tegenover de dag: van een boerderij aan de rand van het gehucht naar het plein is anderhalf uur
     (een dag duurt 300 seconden, een mens loopt 1,35 tegel per seconde). Wie 's avonds naar de herberg gaat, loopt zo de

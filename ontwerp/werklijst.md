@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (5 okt 2026, drieëndertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); de andere drie stijlen lopen in een eigen sessie (2b); dan de herberg, de kapel en de woontoren (stap 3), dan de houthakker die hakt en plant en de wolven (vraag 115 en 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
+## De stand (5 okt 2026, vierendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; de andere drie stijlen lopen in een eigen sessie (2b); dan de herberg, de kapel en de woontoren (stap 3), dan de houthakker die hakt en plant en de wolven (vraag 115 en 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -37,9 +37,11 @@ visser aan het water. **Sinds vraag 119** lopen de mensen om wat vaststaat, en l
 wachten, langs elkaar, opzij. **Sinds vraag 120** blijft wie vrij is en toevallig een buur of iemand van zijn werk
 treft, soms staan voor een praatje, met een wolkje boven wie praat. **Sinds vraag 111** werken de boeren overdag op
 hun land: ze zaaien, wieden, rijden mest uit, spitten en sprokkelen, en hun boerin en grote kinderen helpen bij het
-zaaien en de oogst. **Sinds vraag 107** komt een boer of zijn zoon je vragen om een stuk heide te ontginnen als het
-graan tekortkomt: ja kost het vertrouwen van het dorp, want de meent is van iedereen, en na een maand plaggen steken is
-het een akker die in lentemaand gezaaid wordt. `npm test`: 944/944.
+zaaien en de oogst. **Sinds vraag 107** komt een boer of zijn zoon je vragen om land te ontginnen als het graan
+tekortkomt: een stuk heide en een stuk bos, allebei met een gouden rand op de grond, en jij kiest. De heide kost het
+vertrouwen van het dorp, want de meent is van iedereen (een maand plaggen steken); het bos is van de heer: meld je het,
+dan kost het zijn gunst, en doe je het stiekem, dan ben je betrapt als de inner of zijn soldaten het vinden (een winter
+bomen hakken, met de bijl, en het hout is voor het dorp). In lentemaand is het een akker. `npm test`: 954/954.
 
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
@@ -142,12 +144,25 @@ tegels van de dichtste boerderij). Dus kiest hij de plek zo dicht bij zijn akker
 kant van het dorp af ontgonnen. De speeltest (`speelbaar.md`): een derde tot ruim de helft meer oogst in het tweede jaar,
 geen honger meer, en op 72022 nu wel marktrecht; maar de hele heide is in het eerste jaar op. Marcel koos daarop f1 met
 f3 (vraag 107, f: "We gaan met jouw suggestie"): het tempo blijft, en elk volgend stuk kost meer vertrouwen. Zie onder
-Af, en `spel.md`, "Ontginnen". Stap 2 (het bos) en 3 (vier jaar spelen) volgen.
+Af, en `spel.md`, "Ontginnen". Stap 2 (het bos) is gebouwd in de vierendertigste sessie (hieronder), en 3 (vier jaar
+spelen) volgt.
+
+**Ontginnen in het bos** (vraag 107, stap 2, vierendertigste sessie; Marcel: "A a2, B ok, C ja, D ok, E ok, F Ja, G ok, H
+goed idee"): bij elk verzoek wijst de boer een stuk heide én een stuk bos aan, en jij kiest; het bos meld je de heer (5
+gunst, en het staat in zijn boeken) of je doet het stiekem. Hij hakt boom voor boom om van recht ernaast, met de bijl van
+de hakker (een nieuw figuur, ook voor vraag 115), rooit de stronk en spit om; zijn gezin helpt. **Wat Claude erin zag:**
+"diep in het bos" bestaat op onze kaarten bijna niet, maar de inner kijkt alleen van zijn ronde, dus ligt het stuk daar
+buiten (en in een echt bezoek zag hij er geen een); het paadje dat hem zou verraden, ontstond nooit (een gezin loopt twee
+à drie stappen per dag, een paadje vraagt er vier), dus volgen de soldaten een spoor; en de bomen dekten het goud af, dus
+ligt er een rand bovenop. **De speeltest:** de sluwe bouwer ontgon zeven stukken stiekem en werd nooit betrapt: stiekem is
+te goedkoop. Dat is de nieuwe vraag g bij vraag 107 (voorstel: de soldaten lopen elk jaar ook door het bos). Zie onder
+Af, en `spel.md`, "Ontginnen".
 
 **Waar de volgende sessie begint:** het werk van de drieëndertigste sessie staat sinds 5 okt in `main` (Marcel: "ja push
 main"), ook het ontginnen op de heide met de prijs die per stuk oploopt (vraag 107, stap 1 en f; Marcel: "Push main"),
-net als het werk van de tweeëndertigste (Marcel: "1 ja" op "Zal ik het in main zetten?"). Het volgende van vraag 107 is
-stap 2, het bos, met eerst een kort plan voor Marcel. **Stap 2b loopt in een eigen sessie** (Marcel: "Kun je alvast een extra agent starten
+net als het werk van de tweeëndertigste (Marcel: "1 ja" op "Zal ik het in main zetten?"). Het bos (vraag 107, stap 2)
+staat op `ccr-96e0aab5-w9cesu`, nog niet in `main`. **Op Marcel wacht:** vraag 107, g (stiekem is te goedkoop: g1, g2 of
+g3), en of het bos in `main` gaat. Daarna stap 3 van vraag 107, de speeltest van vier jaar. **Stap 2b loopt in een eigen sessie** (Marcel: "Kun je alvast een extra agent starten
 voor het volgende punt op de werklijst?"), op de branch `claude/bouwstijlen-2b`: de andere drie stijlen. Marcel
 beantwoordde daar haar vragen (A tot en met E; zie vraag 114), en nu het wit in `main` staat, mag ze `main` samenvoegen
 en renderen. Daarna stap 3, de herberg, de kapel en de woontoren, meteen draaibaar, en dan de houthakker die hakt en
@@ -3832,6 +3847,43 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel koos (5 okt, vierendertigste sessie): "A a2, B ok, C ja, D ok, E ok, F Ja, G ok, H goed idee".** Dus bij elk
     verzoek de heide en het bos naast elkaar (a2), b tot en met e en g zoals voorgesteld, de hakker met de bijl nu (f),
     en het paadje dat hem verraadt erbij (h).
+    **Stap 2 is gebouwd** (5 okt, vierendertigste sessie; `1acd1e3`; `js/ontginnen.js`, `spel.md`, "Ontginnen"). Wat
+    anders ging dan in het plan, omdat het plan het niet zag:
+    - **Een boom staat op een muur.** Wat vast is op de kaart (een boom, een struik, een stronk), legt de kaart als muur
+      (js/kaart.js), en niets maakte een muur weer vloer. Wie een boom omhakt of een stronk rooit, maakt de tegel nu weer
+      vloer; een stronk die erop komt, houdt hem zelf tegen tot hij gerooid is.
+    - **Het werk van naast de boom:** een boom staat in de weg, dus hakt de boer hem om van een tegel ernaast, eerst recht
+      ernaast en dan schuin, met zijn gezicht naar de boom (`e.werkt.op`), en werkt hij zo van de rand naar binnen. Een
+      boom is ruim twee werkdagen (hakken 6 uur, de stronk rooien 10), en dan nog acht uur omspitten: een stuk met 15
+      bomen is in de lente zo'n 50 werkdagen, in de winter 80, dus "een winter" klopt, met drie maanden als grens.
+    - **De gunst kost 5 elke keer**, niet meer per stuk zoals de heide (f3): de heer telt geld, en een akker meer is pacht
+      meer. Is dat te goedkoop, dan is dat de speeltest van vier jaar (stap 3).
+    - **Het paadje (h) werd een spoor.** Een paadje dat je ziet, vraagt vier stappen per tegel per dag, en een gezin dat
+      er elke dag heen loopt, komt op twee à drie (gemeten, een heel jaar): het paadje ontstond nooit. Daarom volgen de
+      soldaten een spoor (`T.isSpoor` in `js/paden.js`): gras dat slijt, vanaf de grens waarboven een paadje blijft liggen
+      (`blijftPad`), ook voor het een paadje is dat je ziet. Zijn boerin en grote kinderen helpen nu ook bij het ontginnen
+      (ook op de heide), zoals bij het zaaien en de oogst. Zolang ze er hakken, loopt er een spoor; daarna groeit het dicht.
+    - **Een stuk dat af is, is af:** niet pas aan het eind van de maand of de winter (in de lente wachtte een stuk bos
+      anders 45 dagen op niets).
+    - **Hakken van recht naast de boom:** de bijl van de hakker raakt de stam alleen van een tegel die er een zijde mee
+      deelt; schuin is de stam te ver.
+    - **Het goud van een stuk bos zag je niet:** de bomen staan over de grond heen. Nu ligt er een gouden rand bovenop.
+    - **Wat de inner ziet, is wat hij ziet:** het stuk kiest de boer buiten zijn ronde, maar loop je met de inner het
+      bos in, of komt er later een akker dichtbij die in de boeken staat (hij gaat naar elke akker die hij kent), dan ziet
+      hij het alsnog. In een echt bezoek op vier landen zag hij geen enkel stuk, ook niet de drie die volgens de rekensom in
+      zijn zicht lagen: de rekensom is aan de voorzichtige kant.
+    **Vraag g, stiekem is te goedkoop** (Claude, 5 okt, uit de speeltest; open): de sluwe bouwer ontgon in twee jaar zeven
+    stukken bos stiekem, 210 tegels akker die de heer niet kent, en werd nooit betrapt. De inner ziet ze niet, en de
+    soldaten doorzoeken alleen het hele dorp als de argwaan hoog is, en die hield hij laag. Mogelijkheden:
+    - **g1, de soldaten lopen elk jaar ook door het bos:** op Sint-Maarten, ook als ze maar twee of drie plekken zoeken,
+      kijken ze bij elke akker in het bos die niet in de boeken staat: zelden (één op de tien), en vaak langs een spoor.
+      Zo is één stuk een gok, en zeven stukken bijna zeker betrapt. Het is een getal per stuk, en het telt vanzelf op.
+    - **g2, de inner kan tellen:** liggen er in de schuren meer graan dan de akkers in zijn boeken kunnen geven, dan groeit
+      zijn argwaan. Satirisch, maar het bijt niet bij wie het graan ook verstopt, zoals de sluwe bouwer.
+    - **g3, iemand praat:** de buren zien de boer elke dag het bos in gaan, en de roddelaar vertelt het in de herberg (zoals
+      de getuigen van het verstoppen, `js/zien.js`); dan vinden de soldaten het makkelijker.
+    Voorstel van Claude: g1, en later g3 als de herberg een plek van gesprekken wordt (3c). Stap 3 (de speeltest van vier
+    jaar) kan dan meteen laten zien of het bijt.
 108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
     misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
     moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
@@ -5365,6 +5417,20 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 5 okt 2026 — **Ontginnen in het bos** (vierendertigste sessie; vraag 107, stap 2; Marcel: "A a2, B ok, C ja, D ok, E ok,
+  F Ja, G ok, H goed idee"). Komt het dorp graan tekort, dan wijst een boer of zijn zoon een stuk heide én een stuk bos
+  aan, allebei met een gouden rand op de grond, en jij kiest (a2): de heide kost vertrouwen (f3), het bos gemeld 5 gunst
+  ("Ons bos? Nu ja. Het staat in Onze boeken."), en stiekem staat het niet in de boeken: de inner zoekt het niet en de
+  heer telt het niet, maar ziet de inner het toch, dan ben je op Sint-Maarten betrapt, en doorzoeken de soldaten het
+  hele dorp, dan vinden ze het soms, en vaak langs een spoor (h). Het stuk bos ligt waar de inner het van zijn ronde niet
+  ziet (`T.bosPlekVoor`, `T.innerZietStuk`). De boer hakt boom voor boom om van recht ernaast (4 hout per boom), rooit de
+  stronk en spit om, met de bijl van de hakker (f; `gereedschap/pixelart/werkfiguren.cjs`, de hakker en de hakster); zijn
+  boerin en grote kinderen helpen. In de lente is een stuk na 41 à 56 dagen af, in de herfst en winter na zo'n 85 (een
+  winter, met drie maanden als grens). De raadsman meldt het als hij de heer vreest, en doet het stiekem als heethoofd.
+  De spelregel "Ontginnen" heeft drie standen. `test/ontginnen.test.cjs` (zeventien toetsen), `npm test` 954/954, en de
+  speeltest van twee jaar (`speelbaar.md`): de bouwer neemt vier à vijf stukken heide en dan drie à vier stukken bos; de
+  sluwe zeven stukken stiekem, en werd nooit betrapt. Zie `spel.md`, "Ontginnen", en vraag 107 (stap 2, en de vraag over
+  stiekem).
 - 5 okt 2026 — **Ontginnen op de heide** (drieëndertigste sessie; vraag 107, stap 1; Marcel: "1 en 3, 107 a b c d e ja").
   Komt het dorp graan tekort (`T.graanTekort`: er komt geen gezin om het graan, of het eten haalt de winter niet), dan
   vraagt een boer of zijn grote zoon je om dertig tegels heide (een voorval `ontginverzoek`, vóór de bouwverzoeken; de

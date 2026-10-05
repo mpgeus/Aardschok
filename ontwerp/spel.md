@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 5 okt 2026, drieëndertigste sessie)
+## Waar staat wat (bijgewerkt 5 okt 2026, vierendertigste sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -39,7 +39,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Sint-Maarten | gebouwd (24 sep) | 5 |
 | Instelbaar, en de boeren | gebouwd (24 sep): 17 keuzes, 188 getallen | |
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep); sinds 30 sep kiezen de boeren hun velden en slachten ze zelf, en jij kunt het veranderen | 6a, vraag 74 |
-| Ontginnen | de heide gebouwd (5 okt): komt het graan tekort, dan vraagt een boer of zijn zoon een stuk heide te ontginnen; het bos nog niet | 6b, vraag 107 |
+| Ontginnen | de heide en het bos gebouwd (5 okt): komt het graan tekort, dan wijst een boer of zijn zoon een stuk heide en een stuk bos aan, en jij kiest: de heide kost vertrouwen, het bos gemeld de gunst van de heer, stiekem het risico op betrapt; de speeltest van vier jaar nog niet | 6b, vraag 107 |
 | Straten en paden | paadjes van de deuren en waar gelopen wordt, lantaarns en brandende ramen gebouwd (3 okt, vraag 108); sneller lopen, modder en keien nog niet | 6c, vraag 108 |
 | Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep), de treden tot marktrecht (2 okt, "Van dorp tot stad"); sinds 4 okt lopen de mensen om wat vaststaat en lossen ze onderweg op wie er staat ("Lopen tussen anderen", vraag 119), en wie vrij is en toevallig een buur of iemand van zijn werk treft, blijft soms staan voor een praatje, met een wolkje (vraag 120, a en b); waar ze het over hebben komt met de mensen aan het werk; sinds 5 okt werken de boeren overdag op hun land, naar het seizoen ("De boeren aan het werk", vraag 111, stap 1); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90, 111, 119, 120 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
@@ -2178,30 +2178,59 @@ jaar later vol dan eerst in het derde jaar, tenzij je slacht.
 
 ## Ontginnen: nieuwe velden uit bos of heide (Marcel, 25 sep 2026; werklijst punt 6b)
 
-**Zo werkt het nu** (5 okt, vraag 107, stap 1; Marcel: "107 a b c d e ja"; `js/ontginnen.js`): komt het dorp graan
-tekort (er komt geen gezin om het graan, of het eten haalt de winter niet: dezelfde vraag als de raad), dan komt een
-boer of zijn grote zoon je vragen om een stuk heide te ontginnen, dertig tegels. De boer met een akker het dichtst bij de
-heide vraagt het, en hij kiest de plek zelf: naast zijn akker als het kan, en anders zo dichtbij als het kan. Dat is
-bijna altijd het tweede, want de heide ligt apart: op het ontworpen gehucht tien tegels van de dichtste akker, op de
-landen van de maker in een hoek, 8 tot 40 tegels van de dichtste boerderij. Wat ontgonnen is, ligt de volgende keer het
-dichtst bij, dus de heide wordt van de kant van het dorp af ontgonnen. Over een weg of een paadje van een deur komt het
-niet (op het ontworpen gehucht loopt dat van de schaapskooi over de heide); een gesleten paadje mag wel. Je ziet de plek
-in goud op de grond, zoals bij elk verzoek. **Ja:** het wordt een veld van zijn boerderij, en het vertrouwen van het dorp
-zakt: 5 bij het eerste stuk, 10 bij het tweede, 15 bij het derde, want hoe kleiner de meent, hoe meer het dorp eraan hecht
-(vraag 107, f3; Marcel: "We gaan met jouw suggestie"). Het venster zegt het onder Ja, en wie het vraagt ook: "er ging al
-een stuk van de meent af, en het dorp zal er meer van vinden". Een maand steekt hij er plaggen met de schoffel, tegel voor tegel, en wat hij stak, is kale grond. Een plag
-is acht uur werk, dus hij maakt hem af na de schaft of de volgende dag: in de lente steekt hij er zo'n 1,25 per dag, in de
-herfst 1, in de winter 0,6 (wat na de maand nog heide is, steken zijn mensen dan). Daarna rust het tot lentemaand, en dan
-wordt het een akker en gezaaid, met zaaigraan zoals elke akker. Is het klaar terwijl de boeren nog nazaaien (na 1
-lentemaand, tot het graan groen wordt), dan wordt het meteen een akker en zaaien ze het na: wie in sprokkelmaand ja zei,
-wacht geen jaar. Zolang het ontgonnen wordt, wisselt het niet op 1 lentemaand. De schapen grazen er niet meer, en ze houden altijd wat
-ze nodig hebben en tien tegels erbij; zo kunnen er op de heide vier à vijf stukken af, naar hoeveel schapen er zijn. **Nee, of je sprak hem niet:** pas na
-dertig dagen vraagt er weer iemand (anders kwam hij elke dag terug, zolang het graan tekortkomt). Na een ja pas dertig
-dagen nadat het stuk klaar is. Ben je weg, dan beslist je raadsman: het eerste stuk ja, een volgend nee, want dat kost
-meer vertrouwen dan het hem waard is. Geen nieuwe boerderij en geen
-nieuw gezin. De spelregel "Ontginnen" (aan of uit), de getallen in `T.ONTGINNEN_INSTELLINGEN`, en
-`Spel.debug.ontginnen()`. **Nog niet:** het bos, openlijk tegen de gunst van de heer of stiekem met de inner en de
-soldaten (stap 2), en de speeltest van vier jaar (stap 3).
+**Zo werkt het nu** (5 okt, vraag 107, stap 1 en 2; Marcel: "107 a b c d e ja", en voor het bos "A a2, B ok, C ja, D
+ok, E ok, F Ja, G ok, H goed idee"; `js/ontginnen.js`): komt het dorp graan tekort (er komt geen gezin om het graan, of het
+eten haalt de winter niet: dezelfde vraag als de raad), dan komt een boer of zijn grote zoon je vragen om land te
+ontginnen, dertig tegels. **Hij wijst een stuk heide en een stuk bos aan, allebei in goud op de grond (met een gouden
+rand bovenop, want in het bos staan de bomen over de grond heen), en jij kiest** (a2): zo is elk verzoek een keuze tussen
+je twee bazen. Is de heide op, dan vraagt hij alleen het bos. De boer met een
+stuk het dichtst bij zijn akker vraagt het, en hij kiest de plekken zelf: naast zijn akker als het kan, en anders zo
+dichtbij als het kan.
+- **De heide** is de meent, van iedereen. Op de landen van de maker ligt ze in een hoek, 8 tot 40 tegels van de dichtste
+  boerderij; wat ontgonnen is, ligt de volgende keer het dichtst bij, dus de heide wordt van de kant van het dorp af
+  ontgonnen. Over een weg of een paadje van een deur komt het niet (op het ontworpen gehucht loopt dat van de schaapskooi
+  over de heide); een gesleten paadje mag wel. **Ja kost het vertrouwen van het dorp:** 5 bij het eerste stuk, 10 bij het
+  tweede, 15 bij het derde, want hoe kleiner de meent, hoe meer het dorp eraan hecht (vraag 107, f3). Een maand steekt hij
+  er plaggen met de schoffel, tegel voor tegel, en wat hij stak, is kale grond (wat er laag groeide, gaat mee). Een plag
+  is acht uur werk, dus hij maakt hem af na de schaft of de volgende dag: in de lente zo'n 1,25 per dag, in de herfst 1,
+  in de winter 0,6. De schapen grazen er niet meer, en ze houden altijd wat ze nodig hebben en tien tegels erbij; zo
+  kunnen er op de heide vier à vijf stukken af.
+- **Het bos** is van de heer. Een stuk bos heeft minstens tien bomen, en ligt niet op water, rotsen, een pad, een erf of de
+  meent. "Diep in het bos, waar de inner niet komt" bestaat op onze kaarten bijna niet (gemeten op 5 okt: het bos is 4
+  tot 15 tegels diep, en tussen de dichtste bomen komt een boer niet), maar de inner kijkt alleen van zijn ronde: de
+  wegen, het plein, de akkers en om de gebouwen, zeven tegels ver en niet door bomen. Van daar ziet hij bijna geen bos.
+  Dus kiest de boer het stuk bos het dichtst bij zijn akker dat de inner van zijn ronde niet ziet (binnen 25 tegels), en
+  anders het dichtste; wie het vraagt, zegt welk ("Van de weg en de akkers ziet niemand het, als u begrijpt wat ik
+  bedoel"). Twee antwoorden:
+  - **"Het bos. Ik meld het de heer.":** zijn gunst −5 (hij wil erom gevraagd worden; "Ons bos? Nu ja. Het staat in Onze
+    boeken."), en het staat in zijn boeken: de inner telt het, zoals elke akker.
+  - **"Het bos. De heer hoeft het niet te weten.":** geen gunst. Het staat niet in zijn boeken: de inner zoekt het niet,
+    en de heer telt het niet, ook niet als hij alles zelf telt. **Ziet de inner het toch** (loop je met hem het bos in,
+    of ligt het waar hij langs komt), dan schrijft hij het op, zijn argwaan stijgt, en op Sint-Maarten ben je betrapt: de
+    laatste waarschuwing, of je ambt kwijt. In een echt bezoek op vier landen zag hij er geen een (5 okt). **Doorzoeken de
+    soldaten het hele dorp** (bij hoge argwaan), dan vinden ze het soms (drie op de tien), en vaak (zeven op de tien) als
+    er een spoor heen loopt (vraag 107, h): wie er elke dag heen loopt, slijt het gras. Een paadje dat je ziet, ontstaat
+    daar niet (een gezin loopt er twee à drie stappen per dag, een paadje vraagt er vier), maar het spoor telt al vanaf
+    twee (`T.isSpoor` in `js/paden.js`): zolang ze er hakken, loopt er een, en daarna groeit het dicht. Gevonden is
+    betrapt, en vanaf dan staat het in de boeken. **Nog open (vraag 107, g):** in de speeltest werd de sluwe bouwer met
+    zeven stukken nooit betrapt; stiekem is te goedkoop.
+  Het bos is een winter werk (drie maanden uiterlijk; in de lente is een stuk na 41 à 56 dagen af, in de herfst en de
+  winter na zo'n 85): hij hakt boom voor boom om, van een tegel recht ernaast en met zijn gezicht naar de boom (schuin is
+  de stam te ver voor de bijl; 4 hout per boom naar de schuur: een stuk geeft er 40 à 100), rooit de stronk (die staat tot
+  dan op de plek van de boom) en de struiken, en spit de grond om. Waar een boom stond, wordt de tegel weer vloer (wat
+  vast op de kaart stond, lag op een muur). Zijn boerin en grote kinderen helpen, zoals bij het zaaien en de oogst. Hij
+  draagt dan het vel van de hakker, met een bijl (vraag 107, f; een boerin dat van de hakster).
+**Is het af, of is de maand of de winter om,** dan is het ontgonnen; wat hij niet af had, doen zijn mensen (in het bos de
+bomen om, met hun hout, en de stronken eruit). Daarna rust het tot lentemaand, en dan wordt het een akker en gezaaid, met zaaigraan zoals elke akker. Is het klaar
+terwijl de boeren nog nazaaien (na 1 lentemaand, tot het graan groen wordt), dan wordt het meteen een akker en zaaien ze
+het na: wie in sprokkelmaand ja zei, wacht geen jaar. Zolang het ontgonnen wordt, wisselt het niet op 1 lentemaand.
+**Nee, of je sprak hem niet:** pas na dertig dagen vraagt er weer iemand (anders kwam hij elke dag terug, zolang het graan
+tekortkomt). Na een ja pas dertig dagen nadat het stuk klaar is; en was er nergens een plek, dan kijkt het dorp ook pas
+na dertig dagen weer. **Ben je weg, dan beslist je raadsman:** het eerste stuk heide ja, een volgend niet, want dat kost
+meer vertrouwen dan het hem waard is; het bos meldt hij als hij de heer vreest (de grijsaard), en doet hij stiekem als hij
+een heethoofd is (het gewicht van de argwaan in zijn karakter). Geen nieuwe boerderij en geen nieuw gezin. De spelregel
+"Ontginnen" (de heide en het bos, alleen de heide, of uit), de getallen in `T.ONTGINNEN_INSTELLINGEN` (de uren van het
+werk in `T.VELDWERK_INSTELLINGEN`), en `Spel.debug.ontginnen()`. **Nog niet:** de speeltest van vier jaar (stap 3).
 
 **Eerder** (25 sep): besloten, nog niet gebouwd (punt 6b). De velden van het gehucht lagen
 vast op 209 tegels, en een veld maken kon nog niet. **Sinds 3 okt is er een plan** (werklijst vraag 107, uit vraag 102,

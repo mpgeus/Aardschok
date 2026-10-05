@@ -149,6 +149,41 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 5 okt: ontginnen in het bos (werklijst, vraag 107, stap 2)
+
+Gespeeld in de vierendertigste sessie, op `ccr-96e0aab5-w9cesu` op `2aac3b8` (de heide en het bos naast elkaar, gemeld of
+stiekem, met de hakker; de gouden rand bovenop de bomen kwam erna en verandert niets aan de regels): `npm run speeltest
+-- bouwer sluw --maker`, op dezelfde drie landen als hieronder. De bouwer neemt de heide zolang het vertrouwen daarna 30
+of meer is, en anders het bos, gemeld, zolang de gunst daarna 30 of meer is; de sluwe bouwer doet het bos stiekem als de
+inner het daar niet ziet.
+
+| Land | Speler | Een dorp | Marktrecht | Mensen | Ontgonnen | Oogst jaar 1 → 2 | Bij stap 1 (dorp, marktrecht, mensen) |
+|---|---|---|---|---|---|---|---|
+| 62707 | bouwer | 24 oogstmaand | 25 herfstmaand | 26 → 67 | 5 heide, 4 bos | 612 → 958 | 24 oogstmaand, 25 herfstmaand, 26 → 67 |
+| 73425 | bouwer | 24 herfstmaand | 3 slachtmaand | 26 → 97 | 4 heide, 3 bos | 606 → 955 | 24 herfstmaand, 3 slachtmaand, 26 → 103 |
+| 72022 | bouwer | 24 oogstmaand | 3 wijnmaand | 26 → 93 | 5 heide, 3 bos | 641 → 987 | 24 oogstmaand, 3 wijnmaand, 26 → 85 |
+| 62707 | sluw | 24 oogstmaand | 24 herfstmaand | 26 → 67 | 7 bos, stiekem | 612 → 759 | |
+| 73425 | sluw | 24 herfstmaand | 9 slachtmaand | 26 → 82 | 7 bos, stiekem | 606 → 755 | |
+| 72022 | sluw | 24 oogstmaand | 5 wijnmaand | 50, gevallen | 3 bos, stiekem | 641 | |
+
+**Wat opviel:**
+1. **Het loopt:** vijf keer twee jaar, geen fouten in de console. Op 72022 viel de sluwe schout op 18 wijnmaand van het
+   eerste jaar: twee wilde rovers kwamen voor de akker van Aaltje, zagen hem meteen, en hij vocht alleen. Dat is de oude
+   vraag van de militie (`0c`, punt 4), en heeft met het bos niets te maken, behalve dat het toeval anders valt.
+2. **De eerlijke bouwer** neemt eerst de heide (vier à vijf stukken, tot het vertrouwen 25 zou kosten), en in het tweede
+   jaar het bos, gemeld: drie à vier stukken, elk 5 gunst. De oogst van het tweede jaar is zoals bij stap 1; wat het bos
+   oplevert, komt pas in het derde jaar (stap 3, de speeltest van vier jaar).
+3. **De sluwe bouwer** neemt alleen het bos, stiekem: zeven stukken in twee jaar, 210 tegels akker die de heer niet kent.
+   **Hij werd nooit betrapt.** De inner ziet ze niet (zie hieronder), en de soldaten doorzoeken alleen het hele dorp als
+   de argwaan hoog is, en die hield hij laag. Stiekem kost zo niets: dat is te goedkoop (vraag 107, g, in de werklijst).
+   Zijn oogst in het tweede jaar is lager (zo'n 757 tegen 955), want het bos duurt langer dan de heide, en hij nam geen
+   heide.
+4. **De inner ziet een akker in het bos niet:** in een echt bezoek (een wegwerpproef met de regels van het spel, vier
+   landen, vijf stukken per land) zag hij er geen een, ook niet de drie die volgens de rekensom van de boer in zijn zicht
+   lagen. De rekensom is dus aan de voorzichtige kant, en het risico van stiekem zit bijna helemaal bij de soldaten.
+5. **Het spoor (h):** één gezin dat er elke dag heen loopt, slijt het gras tot zo'n twee à drie stappen per dag, en een
+   paadje dat je ziet, vraagt er vier. Zolang ze er hakken, loopt er een spoor (T.isSpoor), na het ontginnen niet meer.
+
 ## De speeltest van 5 okt: ontginnen op de heide (werklijst, vraag 107, stap 1)
 
 Gespeeld in de drieëndertigste sessie, op `ccr-ba65ef69-kcd902` op `68649be` (ontginnen op de heide; het paadje van een
