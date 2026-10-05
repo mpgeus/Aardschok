@@ -3782,6 +3782,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     elke keer een zwaardere.
     **Marcel koos (5 okt, drieëndertigste sessie): "We gaan met jouw suggestie".** Dus f1 met f3: het tempo blijft, en
     elk stuk kost 5 vertrouwen meer dan het vorige (5, 10, 15, ...), naar hoeveel stukken er al van de meent af gingen.
+    Gebouwd op 5 okt (`f520b22`). **Gezien in de speeltest:** de bouwer zei elke keer ja (tot 25), en het vertrouwen kwam
+    nooit onder de 50, want het gaat elke dag een zestigste van het verschil terug naar de tevredenheid (`volgDagen`): in
+    een tevreden dorp is een dip van 25 na twee maanden voor tweederde weg. De prijs bijt dus alleen in een ontevreden
+    dorp. Voorstel van Claude: zo laten, en in de speeltest van vier jaar (stap 3) kijken of een dorp in moeilijkheden het
+    voelt; zo niet, dan kan het verlies van de meent ook de tevredenheid een tijd laten zakken (een stemming, zoals bij
+    een voorval), zodat het vertrouwen minder hoog terugkomt.
 108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
     misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
     moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan

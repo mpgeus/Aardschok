@@ -912,7 +912,8 @@ wachten en op wie, en hoeveel wegen en velden de kaart onthoudt (vraag 119). `Sp
 staat te praten en tot hoe laat, en hoeveel er vrij zijn; `('nu')` laat de twee vrije bekenden die het dichtst bij elkaar
 staan nu beginnen (vraag 120). `Spel.debug.veldwerk()` zegt per boer wat hij vandaag op zijn land doet, wat hij nu doet
 en waar, hoe ver hij is en wie hem helpt (vraag 111). `Spel.debug.ontginnen()` zegt of het dorp graan tekortkomt, welk
-stuk heide elke boer zou vragen, wat er ontgonnen wordt en hoe ver; `('nu')` laat het verzoek nu komen, ook zonder tekort
+stuk heide elke boer zou vragen, hoeveel stukken er al af zijn en wat het volgende kost, wat er ontgonnen wordt en hoe
+ver; `('nu')` laat het verzoek nu komen, ook zonder tekort
 (vraag 107). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
 hij staat, wie er kijkt, en welk licht er brandt.
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1

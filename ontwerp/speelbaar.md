@@ -174,6 +174,15 @@ deur dat vrij blijft, kwam erna, en lag op deze drie landen niet in het eerste s
    958), maar de wensen: het hele tweede jaar geen laken, en de raad zei 516 dagen wat de huizen missen. Dat het
    hiervoor wel groeide, kan toeval zijn: de verzoeken om te ontginnen schuiven alle worpen van het toeval op.
 
+**Daarna, met f3** (Marcel: "We gaan met jouw suggestie"; op `f520b22`: elk stuk kost 5 vertrouwen meer, en de spelers
+zeggen ja zolang het vertrouwen daarna 30 of meer is). De bouwer zei op alle drie de landen elke keer ja: 5, 10, 15, 20
+en 25 (op 73425 vier stukken). Het vertrouwen kwam toch nooit onder de 50 waarmee het begint, en stond aan het eind van
+het eerste jaar op 76 à 80. Dat komt doordat het vertrouwen elke dag een zestigste van het verschil naar de
+tevredenheid teruggaat (`volgDagen` in `T.BAZEN_INSTELLINGEN`): in een tevreden dorp is een dip van 25 na twee maanden
+voor tweederde weg. De prijs bijt dus alleen in een ontevreden dorp. Op 73425 en 72022 liep het verder precies zoals
+hierboven (103 en 85 mensen); op 62707 kwamen het vierde en vijfde stuk pas in het tweede jaar, en was de oogst van het
+tweede jaar daardoor 748 in plaats van 958 (67 mensen, zoals hierboven).
+
 ## De speeltest van 5 okt: de boeren aan het werk (werklijst, vraag 111, stap 1)
 
 Gespeeld in de drieëndertigste sessie, op `ccr-ba65ef69-kcd902` op `c016d2e` (de boeren werken overdag op hun land, nog

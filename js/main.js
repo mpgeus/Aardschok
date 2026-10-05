@@ -928,8 +928,8 @@
       return { datum: `${datum.dagVanMaand} ${T.MAANDEN[datum.maand].naam}, ${T.uurTekst(D.kalender.dag)}`, boeren };
     },
     // Ontginnen (js/ontginnen.js; werklijst vraag 107): of het dorp graan tekortkomt, welk stuk heide elke boer zou vragen,
-    // wat er nu ontgonnen wordt en hoe ver, en wanneer er weer een verzoek kan komen. ('nu') laat het verzoek nu komen,
-    // ook zonder tekort.
+    // hoeveel stukken er al van de meent af gingen en wat het volgende aan vertrouwen kost, wat er nu ontgonnen wordt en
+    // hoe ver, en wanneer er weer een verzoek kan komen. ('nu') laat het verzoek nu komen, ook zonder tekort.
     ontginnen(wat) {
       const D = T.dorpHier(S);
       if (!D || !D.kalender) return 'Ontginnen kan alleen in een dorp.';
@@ -951,6 +951,7 @@
       return {
         graanTekort: T.graanTekort(D),
         wieZouVragen: boeren.map((e) => ({ boer: e.naam, stuk: T.ontginPlekVoor(D, e) })),
+        vanDeMeent: `${T.ontgonnenStukken(w)} stukken; het volgende kost ${T.ontginVertrouwen(D)} vertrouwen`,
         inOntginning: T.inOntginning(w).map((v) => ({
           veld: v.naam, waar: `${v.x},${v.y} ${v.b}x${v.h}`, gestoken: `${v.ontginning.gestoken.size} van ${v.b * v.h}`,
           klaarOp: v.ontginning.tot - dag + ' dagen',
