@@ -3789,6 +3789,46 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     dorp. Voorstel van Claude: zo laten, en in de speeltest van vier jaar (stap 3) kijken of een dorp in moeilijkheden het
     voelt; zo niet, dan kan het verlies van de meent ook de tevredenheid een tijd laten zakken (een stemming, zoals bij
     een voorval), zodat het vertrouwen minder hoog terugkomt.
+    **Plan voor stap 2, het bos** (Claude, 5 okt, vierendertigste sessie; open). Eerst gemeten, op het ontworpen gehucht
+    en de landen 1 tot en met 5 en 72022 (een wegwerpscript in de kladmap; aan het spel veranderde niets):
+    - **"Diep in het bos, waar de inner niet komt" bestaat bijna niet.** Het bos is 4 tot 15 tegels diep en wordt dun naar
+      het dorp toe. Een stuk van dertig tegels dat je van geen enkele open tegel ziet, ligt alleen in een hoek van de
+      kaart, en daar komt een boer niet: de bomen staan er te dicht.
+    - **Maar de inner kijkt van zijn ronde:** de wegen, het plein, de akkers en om de gebouwen, zeven tegels ver en niet
+      door bomen (`T.innerKijkt`). Van daar ziet hij bijna geen bos: het dichtste stuk bos bij een boer is meestal voor
+      hem onzichtbaar (0 van de 30 tegels), en anders ligt er een paar tegels verder een dat het wel is (op het ontworpen
+      gehucht ligt er een stuk 1 tegel van de akker van Aaltje, dat hij ziet, en een op 6, dat hij niet ziet). Stiekem is
+      dus niet diep in het bos, maar achter de bomen, buiten zijn ronde.
+    - **Het bos ligt dichter bij de akkers dan de heide:** het dichtste stuk 3 tot 17 tegels van een akker (de heide 8 tot
+      40). Een stuk heeft 10 tot 25 bomen.
+    Voorstel:
+    - **a, wanneer:** a1, pas als de heide op is (f1: "eerst de heide en het dorp, later het bos en de heer"); of a2, bij
+      elk verzoek allebei: de boer wijst een stuk heide en een stuk bos aan, allebei in goud op de grond, en jij kiest.
+      Dan is elk verzoek een keuze tussen je twee bazen (vraag 106), en wordt de heide duurder (f3), dan kies je eerder
+      het bos. Voorstel van Claude: a2.
+    - **b, welk stuk bos:** dertig tegels, zo dicht bij zijn akker als het kan, waar de inner het van zijn ronde niet ziet.
+      Is er zo geen, dan het dichtste, en dan zegt het venster dat de inner het ziet. Niet op een pad, een erf, water of
+      rotsen; de bomen, de struiken en de varens ruimt hij op, en hij moet er kunnen komen.
+    - **c, drie antwoorden:** "Ja, en ik meld het de heer": zijn gunst −5, het staat in zijn boeken en de inner telt het
+      (de pacht: 15 graan per jaar). "Ja, maar dat hoeft de heer niet te weten": geen gunst, geen pacht. En "Nee".
+    - **d, stiekem, en betrapt:** het staat niet in de boeken, dus de inner gaat er niet heen. Ziet hij het toch, dan
+      schrijft hij het op (de pacht, en argwaan), en op Sint-Maarten ben je betrapt. Doorzoeken de soldaten het hele dorp
+      (bij hoge argwaan), dan vinden ze het soms, zoals een kelder. Betrapt is de laatste waarschuwing (`T.betrapt`), en
+      vanaf dan staat het in de boeken. Wie veel verstopt, zet zo ook zijn akker in het bos op het spel.
+    - **e, een winter, boom voor boom:** hij hakt een boom (4 hout naar de schuur; een stuk geeft er 40 à 100, voor het
+      gehucht van het begin een halve winter brandhout), steekt de stobbe eruit (tot dan staat er een stronk) en spit om;
+      waar geen boom staat, alleen dat laatste. Uiterlijk na drie maanden is het klaar (wat dan nog staat, doen zijn
+      mensen, zoals op de heide), en in lentemaand wordt het gezaaid, of meteen als het in de nazaaitijd klaar is.
+    - **f, de hakker:** een eigen figuur met een bijl, zoals de wieder en de zaaier (vraag 111), die straks ook de
+      houthakker is die hakt en plant (vraag 115). Of eerst met de schoffel, en de bijl met vraag 115.
+    - **g, de rest zoals bij de heide:** ben je weg, dan beslist de raadsman (wie de heer vreest, meldt het; een
+      heethoofd doet het stiekem: het gewicht van de argwaan per karakter); de spelregel "Ontginnen" wordt uit, alleen de
+      heide, of de heide en het bos; en in de speeltest meldt de eerlijke bouwer het, en doet de sluwe het stiekem.
+    - **h, een idee: het paadje verraadt hem.** Wie elke dag naar zijn akker in het bos loopt, slijt er een paadje heen
+      (dat gebeurt al, vraag 108). Doorzoeken de soldaten het dorp, dan volgen ze het paadje en vinden ze de akker vaker.
+      Je ziet het zelf groeien; de inner let er niet op.
+    Vragen: **a**, a1 of a2? **b tot en met e**, zo? **f**, de bijl nu of met vraag 115? **g**, zo? **h**, nu, later of
+    niet?
 108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
     misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
     moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
