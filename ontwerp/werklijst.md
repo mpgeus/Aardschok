@@ -120,11 +120,11 @@ zuid en van oost. Wit staat zo in het spel, met alle bouwfasen, en een huis dat 
 fasen (G). De oude huizen en het ontworpen gehucht bleven pixel voor pixel dezelfde. Het plan en wat er gebouwd is, staan
 bij vraag 114 (onder "Schets voor de draaibare huizen"), en in `beeld.md`, "De draaibare huizen".
 
-**Waar de volgende sessie begint:** het werk van de tweeëndertigste sessie staat op `ccr-9fc8b85a-tfgsyn` en nog niet in
-`main`; zet het erin als Marcel het vraagt (CLAUDE.md, Git). **Stap 2b loopt in een eigen sessie** (Marcel: "Kun je alvast
-een extra agent starten voor het volgende punt op de werklijst?"), op de branch `claude/bouwstijlen-2b`: de andere drie
-stijlen. Die sessie heeft haar plan klaar en wacht op Marcels antwoorden (A tot en met E; zie vraag 114), en rendert pas
-als dit wit in `main` staat. Daarna stap 3, de herberg, de kapel en de woontoren, meteen draaibaar, en dan de boeren aan
+**Waar de volgende sessie begint:** het werk van de tweeëndertigste sessie staat sinds 5 okt in `main` (Marcel: "1 ja"
+op "Zal ik het in main zetten?"). **Stap 2b loopt in een eigen sessie** (Marcel: "Kun je alvast een extra agent starten
+voor het volgende punt op de werklijst?"), op de branch `claude/bouwstijlen-2b`: de andere drie stijlen. Marcel
+beantwoordde daar haar vragen (A tot en met E; zie vraag 114), en nu het wit in `main` staat, mag ze `main` samenvoegen
+en renderen. Daarna stap 3, de herberg, de kapel en de woontoren, meteen draaibaar, en dan de boeren aan
 het werk (vraag 111). Uit de speeltest na te lopen: op land 72022 liep het dorp vast op plaats (`speelbaar.md`). Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
 veranderen: de huizen in `tegels/` hebben geen schaduw op de vloer, en het spel tekent hun schaduw zelf. **Vraag 121 is besloten**
 (hoogteverschillen op de kaart; Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁", en "121 a terrassen, b ja, c na de
