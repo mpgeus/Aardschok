@@ -149,6 +149,14 @@ gebouw zelf neerzet:
    stuurt helden met beloningen, niet met bevelen) en *Yes, Your Grace* (verzoekers komen naar je toe), maar dan te voet,
    in je eigen dorp, tussen de heer en de mensen.
 
+**Sinds 5 okt** (Marcel: "Het doel van het spel wordt de heer verstoten en verslaan"; werklijst vraag 126, open): de haak
+krijgt een eind, en de drie wegen erheen in het voorstel (trouw, de koning achter zijn rug om, de opstand) passen in één
+zin. Een vijfde kandidaat (voorstel van Claude):
+5. "De heer wil goud. Het dorp wil leven. Dien hem, verraad hem, of verjaag hem." (Engels: "The lord wants gold. The
+   village wants to live. Serve him, betray him, or overthrow him.") Haak 1, met wat je ermee doet: een premisse die
+   een vraag stelt, en die je pas in het spel beantwoordt. Samen spelen, met een speler als heer, komt in het voorstel
+   pas na de release, en alleen met vrienden via Steam, zonder matchmaking: een klein spel heeft lege lobby's.
+
 ## Norland, nagezocht op 3 okt (Marcel: "Kijk eens naar Norland als game")
 
 Nagezocht met zoeken. De pagina's zelf (Steam, SteamDB, de recensies) gingen vanuit de cloud niet open: wat hieronder

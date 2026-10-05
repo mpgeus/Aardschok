@@ -3,10 +3,13 @@
 Aardschok (werktitel, past niet meer): een spel dat Marcel en Claude samen bouwen, met als doel het
 uiteindelijk te verkopen (Steam eerst, als los programma verpakt). Een bouw- en beheerspel in
 isometrisch beeld, met politiek en avontuur erin. Je bent de schout van een dorp onder een verwarde
-heer die alleen geld ziet. Je breidt het dorp uit tot een stad en bestuurt het met wetten. Het hogere
-doel is al het land veroveren of met iedereen bevriend raken, zoals in Civilization (Marcel, 29 sep).
-Eerder was het eind dat je je van de heer losmaakt, met stadsrechten of een opstand; hoe dat met het
-hogere doel samengaat, is open. Zie "Het spel in het kort" hieronder, en `ontwerp/spel.md`.
+heer die alleen geld ziet. Je breidt het dorp uit tot een stad en bestuurt het met wetten. **Het doel
+wordt de heer verstoten en verslaan** (Marcel, 5 okt): hij krijgt een kasteel op de kaart, is sterk en
+smeedt bonden met de andere spelers, en je kunt ook aan zijn kant winnen, of hem via de koning laten
+afzetten; later misschien samen spelen, met een speler als heer. Hoe dat samengaat met wat er was (al
+het land veroveren of met iedereen bevriend raken, zoals in Civilization, 29 sep; iedereen super
+gelukkig, het eind van de kern), is vraag 126 (`ontwerp/spel.md`, "De heer als tegenstander"). Zie
+"Het spel in het kort" hieronder.
 
 Het beeld is isometrisch (Mystic Towers als voorbeeld), de HD-pixel art komt uit code, en
 rondlopen gaat naadloos over in een gevecht in beurten op dezelfde tegels (Fallout, Jagged
@@ -733,14 +736,17 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 - Het dorp groeit tot een stad met boeren, winkels, een markt en handel. Het zit vol **groepen**
   met eigen belangen (de politiek) en mensen met een verhaal (het avontuur).
 - Vrij word je door **stadsrechten** te kopen of door een **opstand**, een gevecht in beurten op
-  dezelfde kaart. Dan word je burgemeester.
+  dezelfde kaart. Dan word je burgemeester. Sinds 5 okt (vraag 126, open) ook via de koning, achter de heer om, en
+  je kunt ook aan zijn kant winnen.
 - **Het einddoel** (Marcel, 1 okt, vraag 78, B en C; eerder, 29 sep: "al het land veroveren of met iedereen vriendjes
   maken. Denk aan civilisation"): "totale verovering van de wereld", en "dat mensen super gelukkig zijn en in al hun
   wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602". Dat zijn twee manieren om te winnen (vraag
   79: "a twee manieren"). **Eerst een speelbare kern** ("Daarna komt oorlog etc erbij en de rest van het land
   diplomatie trading etc"): één stad die je wint als iedereen een jaar lang super gelukkig is, met wensen per stand en
   per huis (vraag 79 en 80), en klein: eerst drie standen op de huizen die er al zijn (vraag 82). Sinds 3 okt is dat eind
-  gebouwd (vraag 101, `js/einde.js`): een jaar lang alle huizen alles, vanaf 100 mensen, en het dorp viert het. Hoe de heer en de vrijheid in het veroveren passen, is nog open (`spel.md`, "Een nieuwe richting").
+  gebouwd (vraag 101, `js/einde.js`): een jaar lang alle huizen alles, vanaf 100 mensen, en het dorp viert het. Sinds 5 okt is de heer het doel (Marcel: "Het doel van het spel wordt de heer verstoten en
+  verslaan"); hoe het eind van de kern en het veroveren daarin passen, is vraag 126 (`spel.md`, "De heer als
+  tegenstander").
 - **Tegenspelers** (Marcel, 29 sep, vraag 60, D): aan het begin kies je hoeveel. Het zijn dorpen met een AI, die
   tegelijk met jou beginnen, ergens op de kaart waar je ze nog moet vinden, en zelf bouwen om de grootste te worden;
   "intelligent genoeg om echt weerstand te bieden". Marcel koos (vraag 61 en 62): een land met provincies waar je

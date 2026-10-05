@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 5 okt 2026, vierendertigste sessie)
+## Waar staat wat (bijgewerkt 5 okt 2026, vijfendertigste sessie)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -16,6 +16,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De vertical slice | besloten (Marcel, 1 okt, vraag 77): het doel is de vertical slice uit het concept: je begint als gehucht, zoals nu, en groeit naar haar maat (een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te klein), en uiteindelijk naar een stad van mogelijk 5000 of meer ("we moeten een manier zoeken", vraag 78, E), in zes stappen te beginnen met de wensen van de mensen, zoals in Anno 1602 (vraag 78; het plan is vraag 79); statussen met niveaus; een ambtenaar voor elke tak van het bestuur; en later een scherm met de statussen en de laatst bekende inventarisatie | vraag 77, 78, 79 |
 | De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85); 2a en 2b gebouwd (1 okt): elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt, en wie een jaar lang alles heeft, wint; 2d gebouwd (2 okt, vraag 90): de treden uit de standen, een dorp bij 20 dorpelingen en marktrecht bij 20 ambachtslieden, met de markt en de weverij al in een dorp; 2c en 2e gebouwd (3 okt, vraag 100 en 101): een teken bij de deur en een briefje bij de muis, en het eind: een jaar lang iedereen gelukkig vanaf 100 mensen is gewonnen, met het grote feest, onder 10 mensen verloren, en op 1 lentemaand het jaarverslag | vraag 79, 80, 82, 85, 90, 100, 101 |
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern; sinds 3 okt: de stad groeit door haar mensen (inwoners beginnen zelf een ambacht en vragen toestemming), en jij bepaalt de richting, want "weer een bouw spelletje" wordt te snel saai (het plan is vraag 103, open) | vraag 50, 51, 54, 73, 74, 78, 103 |
+| De heer als tegenstander | open (Marcel, 5 okt): het doel wordt de heer verstoten en verslaan; hij krijgt een kasteel op de kaart, is sterk en smeedt bonden met de andere spelers, je kunt ook aan zijn kant winnen of hem via de koning laten afzetten, en later samen spelen, met een speler als heer; het voorstel van Claude: drie wegen die je onderweg voorbereidt (de opstand, de koning, trouw), zijn bond is te koop, diplomatie te voet, en samen spelen na de release | vraag 126 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt elk spel een ander land, sinds 4 okt de standaard: 100 bij 100, met natuur die ertoe doet, en het nummer van het land bij Nieuw spel (vraag 112). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
@@ -48,8 +49,13 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 
 ## Een nieuwe richting (Marcel, 28 sep 2026)
 
-**Zo staat het nu** (28 sep tot en met 3 okt): besloten; wat er sindsdien van gebouwd is, staat bij elk onderwerp. Marcel koos op vier vragen van Claude
+**Zo staat het nu** (28 sep tot en met 5 okt): besloten; wat er sindsdien van gebouwd is, staat bij elk onderwerp. Marcel koos op vier vragen van Claude
 (werklijst, vraag 50: "A ja B allebei C ja D ja"):
+- **Het doel wordt de heer verstoten en verslaan** (Marcel, 5 okt, werklijst vraag 126; de richting is gekozen, de
+  uitwerking is open): hij krijgt een kasteel op de kaart, is sterk en smeedt bonden met de andere spelers, en een bond
+  met hem moet lonen, zodat tegen hem ingaan moeilijker wordt. Je kunt ook winnen aan zijn kant, of hem achter zijn rug
+  om via de koning laten afzetten; en later samen spelen, met een speler als heer. Zie "De heer als tegenstander",
+  hieronder.
 - **Twee bazen: de heer en het dorp kunnen je allebei wegsturen** (Marcel, 3 okt, werklijst vraag 106; besloten: "106 a
   b c d ja"). Waarom: Marcel vond het verstoppen als haak te slap ("Dat is 1x leuk en dan niet langer boeiend. Of de
   gevolgen moeten echt groter zijn. Je wordt weg gevraagd als je niet ophoest wat ze willen hebben van je ofzo."). Dus
@@ -99,6 +105,8 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
   al het land veroveren of met iedereen vriendjes maken. Denk aan civilisation". Twee manieren om te winnen, zoals
   in Civilization: alles veroveren, of met iedereen bevriend raken. Nog open: hoe de heer en de vrijheid
   (stadsrechten of een opstand) daarin passen. Is vrij worden een stap op weg, of is de heer een van de partijen?
+  **Sinds 5 okt** (Marcel, vraag 126): de heer is het eind, en een partij met bondgenoten; veroveren en bevriend raken
+  worden in het voorstel de manieren om sterk genoeg te worden ("De heer als tegenstander", hieronder).
 - **Tegenspelers die zelf bouwen** (Marcel, 29 sep, bij het plan voor de heervaart en een rivaal, werklijst vraag
   60, D): "we moeten toe naar een scenario waarin we aan het begin kiezen hoeveel tegenspelers we hebben. We hebben
   dan een AI nodig om tegen de speler te spelen. Deze worden gelijk aan het begin op de kaart gespawned, maar de
@@ -152,6 +160,106 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 - **Geparkeerd:** de afrekening na het eerste jaar (werklijst, vraag 49). Marcel: "later kan dat".
 - **De vragen** (Claude, 28 sep, vraag 50): het hart, wat besturen is, hoe groot vechten wordt, en wie de buren
   zijn. Het antwoord staat bovenaan.
+
+## De heer als tegenstander: zijn kasteel, zijn bond en drie wegen naar het eind (Marcel, 5 okt 2026; werklijst vraag 126)
+
+**Zo staat het nu** (5 okt, vijfendertigste sessie): Marcels richting voor het hele spel; er is nog niets van gebouwd,
+en het voorstel van Claude hieronder wacht op zijn antwoord (werklijst, vraag 126). Het verandert niet wat er nu gebouwd
+wordt (de kern en de demo), wel waar het spel naartoe gaat. Marcel:
+
+> De heer krijgt een kasteel op de kaart. Het doel van het spel wordt de heer verstoten en verslaan. De heer is sterk, en
+> smeedt allianties met ander spelers; spelers moeten profiteren van een bond met de heer, zodat tegen de heer ingaat
+> moeilijker wordt. Uiteindelijk zie ik een multiplayer voor me waarin spelers ook de heer kunnen spelen tegen de andere
+> spelers. Ook moet een andere mogelijkheid zijn dat je kunt winnen als je de kant van de heer kiest en de rest
+> 'verslaat'. Of achter zijn rug om contact met de koning leggen om de heer af te zetten.
+
+**Wat het verandert aan wat er besloten was:**
+- **Het eind.** Op 23 sep was het eind vrij worden van de heer, met stadsrechten of een opstand; op 29 sep al het land
+  veroveren of met iedereen bevriend raken, zoals in Civilization; op 1 okt de wereld veroveren, of iedereen super
+  gelukkig (vraag 78 en 79), en dat laatste is gebouwd als het eind van de kern (vraag 101). Nu wordt de heer het eind.
+  Hoe de rest daarin past, is vraag 126, a en b.
+- **De heer.** Op 1 okt (vraag 78): "de heer moet alleen betaald worden, en hij mag wel eisen stellen. Maar meer om het
+  je moeilijk te maken." Nu is hij een tegenstander, met een eigen kracht en bondgenoten. Zijn karakter kan blijven: hij
+  is verward en ziet alleen geld, en juist daarom is zijn bond te koop (het voorstel hieronder).
+- **De koning.** Op 23 sep ("Besloten", hieronder): "Twee wegen naar vrijheid: stadsrechten kopen, of een opstand [...]
+  Niet: de heer langs een omweg ten val brengen." De koning achter zijn rug om is zo'n omweg; die komt er nu bij. De open
+  vraag "De koning: kan hij stadsrechten geven buiten de heer om?" ("Open", onderaan) krijgt daarmee een antwoord: ja,
+  dat is deze weg (voorstel).
+- **Het kasteel** stond al op de kaart van het land, als provincie (`js/land.js`), en in het plan voor het eiland
+  (werklijst, vraag 117, c) komen de heer, de inner en de soldaten van daar over de weg. Dat had Marcel nog niet
+  beantwoord; nu dus ja.
+- **Samen spelen** is nieuw: tot nu toe waren de tegenspelers dorpen met een AI (vraag 60 tot en met 63).
+
+**Het voorstel** (Claude, 5 okt; niet besloten):
+
+- **Bijna alles wat er is, krijgt in dit doel een tweede betekenis.** Het is geen ander spel, maar een richting voor wat
+  er staat:
+  - de gunst van de heer (vraag 106) is je plaats in zijn bond, en het vertrouwen van het dorp zegt of je mensen je
+    volgen als je opstaat;
+  - de heervaart (vraag 60) is zijn leger: de mannen van zijn bondgenoten; en wie terugkomt, is veteraan en vecht mee in
+    jouw opstand (de heer traint je opstandelingen);
+  - de wapenmaker (vraag 104) maakt de wapens voor de opstand, en die zijn verboden;
+  - de inner, de argwaan, het verstoppen en de getuigen zijn de dekking voor wat je voorbereidt: wat je voor hem
+    verstopt, is de kas van je opstand (`opmerkingen.md`, "De heer als eerste tegenstander", 1 okt). Verstoppen wordt
+    geen haak, maar krijgt een doel;
+  - zijn grillen (vraag 106, stap 2) zijn bewijs voor de koning: bewaar zijn brieven;
+  - de marskramer is je weg naar buiten: hij kan een brief meenemen, maar hij praat ook met de inner;
+  - de raadsman bestuurt thuis als jij op het kasteel of onderweg bent;
+  - de militie en het gevecht in beurten zijn de bestorming van het kasteel, op dezelfde tegels.
+- **Drie wegen, die je onderweg voorbereidt, niet vooraf kiest:**
+  - **de opstand:** wapens, mannen, bondgenoten, en het kasteel bestormen in beurten; met een palissade "tegen de
+    wolven" verdedig je eerst je eigen dorp ("Lords of the Realm 2 als voorbeeld", idee 3, hieronder);
+  - **de koning:** bewijs verzamelen (zijn brieven, een inner die je omkocht, wat hij de koning onthoudt: wie alleen geld
+    ziet, steelt ook van zijn koning) en een bode sturen, achter zijn rug om. Wordt de bode onderschept of verraden, dan
+    ben je je ambt kwijt. Slaagt het, dan zet de koning hem af en geeft hij jou stadsrechten: zo zijn de stadsrechten van
+    23 sep en Marcels koning één weg. Waar de koning woont: over zee, of in de stad op het eiland (vraag 117, c);
+  - **trouw:** dien hem, onderwerp voor hem de dorpen die niet betalen, en word zijn erfgenaam, de nieuwe heer (zijn
+    neef, die je ambt wil, is je rivaal). Zwarte satire: aan het eind ben je wat je diende. En de trouwe weg eindigt
+    waar het spelen als heer begint;
+  - ze raken elkaar: een opstand zonder de zegen van de koning brengt zijn ridders (die zijn van de koning, vraag 18 bij
+    "Een dorp dat leeft en groeit"); wie eerst de koning overtuigt en dan opstaat, heeft alleen de heer tegen. Je kunt
+    twee wegen tegelijk voorbereiden en wisselen, en de heer kan het merken.
+- **De bond van de heer: wie het meest betaalt** (vraag 126, c1). Hij ziet alleen geld, dus zijn bond is te koop. Wie
+  erin zit, krijgt bescherming (zijn soldaten tegen rovers en tegen wie opstaat), een lagere schatting, en het land van
+  wie hij verslaat; het kost mannen voor zijn heervaart, en meevechten als hij roept. **Zijn kracht is zijn kist:** elke
+  zak graan die je verstopt, is een soldaat die hij niet kan betalen. Wordt hij arm, dan heeft zijn bond niets meer te
+  bieden, en lopen zijn bondgenoten over. Dat is de weg van wie hem wil verslaan: hem uithongeren tot zijn vrienden
+  weglopen. En omdat hij verward is, beloont hij soms wie hem vleit en straft hij soms een vriend: zijn grillen. De
+  tegenspelers (vraag 61) kiezen een kant naar hun karakter, en een opstandig dorp is een mogelijke bondgenoot.
+- **Diplomatie te voet.** In bijna elk spel met diplomatie is het een menu. Bij ons is het poppetje hoe je bestuurt
+  (`concept.md`): je reist zelf naar het kasteel om zijn bond te vragen, of naar een ander dorp om samen te zweren; je
+  ziet de schout van het buurdorp met een kar naar het kasteel rijden, en weet wat dat betekent; en terwijl je weg bent,
+  bestuurt je raadsman. Zo blijft de haak heel, ook in het grote spel.
+- **Samen spelen, met een speler als heer** (na de release, als update):
+  - Het wordt een spel van twee kanten: de heer met wie hem dient, tegen wie hem wil afzetten, en wie van kant wisselt,
+    verraadt. De heer weet niet wie er naar de koning schrijft. Hij moet zelf iets te winnen hebben (heer blijven en rijk
+    worden), anders bepaalt hij alleen wie er wint.
+  - De heer speelt anders: hij loopt niet door een dorp, maar zit op zijn kasteel met de rapporten van zijn inner,
+    schrijft brieven en eisen, en stuurt soldaten. Dat is een tweede manier van spelen, met een eigen scherm.
+  - Wat al helpt: hetzelfde zaad geeft hetzelfde jaar (de speeltest), en dat is wat samen spelen nodig heeft (zoals in
+    Factorio en Age of Empires: elke computer rekent het hele spel, en alleen wat de spelers doen, gaat over de lijn);
+    en elk dorp heeft zijn eigen schout die kiest (jij, of code), dus een mens als heer is een andere manier van kiezen.
+  - Wat het vraagt: de regels in vaste tikken in plaats van per beeld (nu hangt een stap af van hoe snel een computer
+    tekent, `js/main.js`); geen `Math.random` meer in de regels (de speeltest vervangt het nu door een vaste
+    dobbelsteen); tijd die niet stilstaat (een brief of een voorval zet nu de tijd stil; samen krijgt elke keuze een
+    termijn, zoals de grillen al hebben, en anders beslist de raadsman); en Steam voor het vinden en verbinden (lobby's
+    en verbinding via Steamworks, zonder eigen server).
+  - Commercieel: alleen met vrienden, met een uitnodiging via Steam, zonder matchmaking, want een klein spel heeft lege
+    lobby's.
+  - Tot dan bouwen we zo dat het kan: de heer kiest uit dezelfde knoppen als een mens zou hebben (zoals de raadsman nu al
+    kiest uit de antwoorden van een voorval, `T.raadsmanKeuze`), en elke pauze krijgt ook een termijn.
+- **Voor de demo en de Steam-pagina.** De haak krijgt een eind: "The lord wants gold. The village wants to live. Serve
+  him, betray him, or overthrow him." (`commercieel.md`, kandidaat 5). En de demo kan eindigen op het moment dat de heer
+  je zijn bond aanbiedt: een vraag die je pas in het spel beantwoordt.
+- **Wat er nieuw te bouwen is, in volgorde, na de kern:**
+  1. het kasteel op het eiland (vraag 117, c), in pixel art van de huizenbouwer (muren, torens, een poort), waar de
+     heer, de inner en de soldaten vandaan komen;
+  2. de heer als speler: zijn kist, zijn soldaten, zijn bond, en een AI die kiest uit zijn knoppen;
+  3. met het buurdorp (vraag 72): een dorp in zijn bond of niet, en diplomatie te voet;
+  4. de drie wegen en hun eind;
+  5. na de release: samen spelen.
+
+Vragen: werklijst, vraag 126.
 
 ## De wensen van de mensen, per stand (Marcel, 1 okt 2026; werklijst vraag 79, 80, 82 en 85)
 
@@ -788,7 +896,8 @@ een notitie later pas bouwen."
 
 ## Besloten (Marcel, 23 sep 2026)
 
-**Zo staat het nu** (25 sep): dit geldt nog allemaal. Gebouwd is het begin ervan: het gehucht, de
+**Zo staat het nu** (25 sep; 5 okt: behalve "Niet: de heer langs een omweg ten val brengen", want Marcel wil nu ook
+de koning als weg, en winnen aan de kant van de heer, vraag 126): dit geldt nog allemaal. Gebouwd is het begin ervan: het gehucht, de
 schout als poppetje, de heer die alleen geld ziet met vier straffen (een boete en hogere eisen,
 soldaten die inkwartieren, de schandpaal, je ambt kwijt), en de inner die komt kijken, met
 verstopplekken. Nog niet gebouwd: keuren en politiek, een huis in brand en de galg als straf, het
@@ -3502,9 +3611,11 @@ en over de heervaart [Wikipedia](https://nl.wikipedia.org/wiki/Heervaart).
   partijen en intriges aan het hof van de heer?
 - Goederen, groepen en keuren: een eerste voorstel staat hierboven ("De kern voor het tweede proefje"),
   en wacht op Marcel.
-- De koning: kan hij stadsrechten geven buiten de heer om?
+- De koning: kan hij stadsrechten geven buiten de heer om? (5 okt: Marcel wil de koning als weg om de heer af te
+  zetten; in het voorstel geeft de koning je dan stadsrechten, "De heer als tegenstander", vraag 126.)
 - Hoe ziet de opstand eruit: het eigen dorp verdedigen, of het kasteel bestormen? (Een idee: op
-  Sint-Maarten je eigen dorp verdedigen; zie "Lords of the Realm 2 als voorbeeld", idee 3.)
+  Sint-Maarten je eigen dorp verdedigen; zie "Lords of the Realm 2 als voorbeeld", idee 3. Sinds 5 okt staat het
+  kasteel op de kaart, en in het voorstel allebei: eerst je eigen dorp verdedigen, dan het kasteel bestormen; vraag 126.)
 - De naam van het spel.
 - Wat van de code blijft. Waarschijnlijk: de kunst en de huizenbouwer, de dorpelingen die lopen,
   pad en raster, de gesprekken en quests, het wereldgereedschap, en het gevecht in beurten. Eruit:

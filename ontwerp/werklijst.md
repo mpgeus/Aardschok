@@ -43,6 +43,13 @@ vertrouwen van het dorp, want de meent is van iedereen (een maand plaggen steken
 dan kost het zijn gunst, en doe je het stiekem, dan ben je betrapt als de inner of zijn soldaten het vinden (een winter
 bomen hakken, met de bijl, en het hout is voor het dorp). In lentemaand is het een akker. `npm test`: 954/954.
 
+**Vraag 126 wacht op Marcel** (5 okt, vijfendertigste sessie; alleen papier, er is niets gebouwd): de heer krijgt een
+kasteel op de kaart, en het doel van het spel wordt hem verstoten en verslaan; hij smeedt bonden met de andere spelers,
+je kunt ook aan zijn kant winnen of hem via de koning laten afzetten, en later samen spelen, met een speler als heer.
+Het voorstel (drie wegen die je onderweg voorbereidt, zijn bond te koop, diplomatie te voet, samen spelen na de
+release) staat in `spel.md`, "De heer als tegenstander", met zeven vragen bij vraag 126. Het verandert niet wat er nu
+gebouwd wordt.
+
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
 licht die flakkeren, en werpt alles wat staat een schaduw die met de zon meegaat. De schout draagt 's avonds buiten een
@@ -5184,6 +5191,54 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Wat Marcel kan proberen:** een nieuw spel, en tegen de avond (`Spel.debug.uur(19)`) naar het plein: de lantaarn bij
     de put, de ramen, de herberg. Druk `S` en kijk hoe je lantaarn uitgaat. Bij zonsopgang en zonsondergang kleurt het
     dorp. De kleuren en de kracht staan in de werkbank (`O`), onder "De dag" en "Het licht".
+126. **De heer als tegenstander: zijn kasteel, zijn bond en drie wegen naar het eind** (Marcel, 5 okt, vijfendertigste
+    sessie: "De heer krijgt een kasteel op de kaart. Het doel van het spel wordt de heer verstoten en verslaan. De heer
+    is sterk, en smeedt allianties met ander spelers; spelers moeten profiteren van een bond met de heer, zodat tegen de
+    heer ingaat moeilijker wordt. Uiteindelijk zie ik een multiplayer voor me waarin spelers ook de heer kunnen spelen
+    tegen de andere spelers. Ook moet een andere mogelijkheid zijn dat je kunt winnen als je de kant van de heer kiest
+    en de rest 'verslaat'. Of achter zijn rug om contact met de koning leggen om de heer af te zetten."; voorstel van
+    Claude; open).
+    **Wat er al is:** het kasteel als provincie op de kaart van het land (`js/land.js`, achter de spelregel Land), en in
+    het plan voor het eiland (vraag 117, c) de heer, de inner en de soldaten die van daar komen. De gunst van de heer en
+    het vertrouwen van het dorp (vraag 106), de heervaart met zijn veteranen (vraag 60), de verboden wapenmaker (vraag
+    104), de inner met het verstoppen en de getuigen, de grillen in zijn brieven, de raadsman die beslist als je weg bent,
+    en het gevecht in beurten met de militie. In het ontwerp van 23 sep hangt de heer onder een koning, en zijn de
+    ridders van de koning. Wat nieuw is: de heer als tegenstander met bondgenoten, het kasteel als plek, de koning als
+    weg, winnen aan zijn kant, en samen spelen.
+    **Voorstel** (alles in `spel.md`, "De heer als tegenstander"):
+    - **Bijna alles wat er is, krijgt een tweede betekenis:** de gunst is je plaats in zijn bond, het vertrouwen zegt of
+      het dorp je volgt als je opstaat, de heervaart is zijn leger (en traint je opstandelingen), de wapenmaker maakt de
+      wapens voor de opstand, wat je verstopt is de kas ervan, en zijn grillen zijn bewijs voor de koning.
+    - **Drie wegen, die je onderweg voorbereidt:** de opstand (het kasteel bestormen in beurten), de koning (bewijs en
+      een bode achter zijn rug om; slaagt het, dan zet de koning hem af en krijg je stadsrechten), en trouw (de rest voor
+      hem onderwerpen; jij wordt zijn erfgenaam, de nieuwe heer). Ze raken elkaar: een opstand zonder de zegen van de
+      koning brengt zijn ridders.
+    - **Zijn bond is te koop:** wie hem het meest betaalt, krijgt bescherming, een lagere schatting en het land van wie
+      hij verslaat. Zijn kracht is zijn kist: wordt hij arm, dan lopen zijn bondgenoten over.
+    - **Diplomatie te voet:** je reist zelf naar het kasteel of een ander dorp om een bond te sluiten, geen menu; je
+      raadsman bestuurt thuis.
+    - **Samen spelen na de release, als update:** twee kanten met verraad, de heer met een eigen scherm (rapporten,
+      brieven, soldaten), alleen met vrienden via Steam. Het vraagt de regels in vaste tikken in plaats van per beeld,
+      geen `Math.random` in de regels, en een termijn bij elke keuze waarvoor de tijd nu stilstaat. Tot dan kiest de heer
+      uit dezelfde knoppen als een mens zou hebben, zoals de raadsman nu kiest uit de antwoorden van een voorval.
+    - **Wanneer:** na de kern en de demo; het kasteel met het eiland (vraag 117, c), de bond met het buurdorp (vraag 72),
+      dan de drie wegen, en na de release samen spelen.
+    Vragen:
+    - **a, het eind:** de heer verslaan (of laten afzetten) is het eind van het spel, en veroveren en bevriend raken
+      (29 sep) worden de manieren om sterk genoeg te worden, geen eind ernaast?
+    - **b, het eind van de kern** (een jaar lang iedereen gelukkig, gebouwd, vraag 101): **b1** een eigen manier van
+      winnen, naast de heer; **b2** kracht op weg naar de heer (een gelukkig dorp volgt je in de opstand, een bloeiend
+      dorp krijgt het oor van de koning); **b3** alleen het eind van de demo, als eerste hoofdstuk.
+    - **c, wie de heer in zijn bond neemt:** **c1** wie hem het meest betaalt; **c2** verdeel en heers (hij steunt de
+      zwakke tegen de sterke); **c3** per spel een ander karakter.
+    - **d, de drie wegen** zoals hierboven, met de trouwe weg die eindigt als jij de nieuwe heer bent? Daarmee vervalt
+      "Niet: de heer langs een omweg ten val brengen" van 23 sep.
+    - **e, diplomatie te voet?**
+    - **f, samen spelen** na de release, en tot dan bouwen zodat het kan (de heer kiest uit knoppen, elke pauze een
+      termijn)?
+    - **g, de volgorde:** niets hiervan vóór de kern; of wil je er iets van naar voren?
+    **Advies:** a ja; b2, en b3 voor de demo, die dan eindigt op het moment dat de heer je zijn bond aanbiedt; c1, want
+    het past bij zijn karakter, is eenvoudig, en je kunt het bespelen; d, e en f ja; g zo.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
