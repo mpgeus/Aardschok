@@ -360,7 +360,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.zoalsNu`, `kiesGroei` in `js/behoeften.js`). Op een erf kijkt de deur naar de weg en staat het huis achteraan
   (`T.zijdenNaarDeWeg`, `js/erven.js`), een verzoek keert zijn deur naar de weg (`T.keerNaarDeWeg`, `js/verzoeken.js`),
   en de maker zet een huis ook vóór het plein, met zijn deur ernaartoe (`T.vormenVanStijl`). Elke tekening zegt in
-  `tegels.js` wat ze is (`stijl`), uit `STIJLEN` in `gereedschap/pixelart/huizen.cjs`.
+  `tegels.js` wat ze is (`stijl`, en met `ook` de andere stijlen die haar nemen), uit `STIJLEN` in
+  `gereedschap/pixelart/huizen.cjs`; wie doorgroeit, zoekt zijn nieuwe tekening in de stijl van zijn dorp.
 - `js/paden.js`: **de paadjes en de lantaarns** (vraag 108, b en d, 3 okt): van elke deur een paadje naar de weg, of naar
   het paadje van een buur (`T.aangelegdNet`, uit de kaart en de gebouwen, niet in S: na `T.kaartVeranderd` opnieuw, met
   `T.kaartVersie` in `js/wereld.js`); waar mensen lopen, slijt het gras (`T.telStap` vanuit `js/anim.js`, een dier telt
@@ -675,10 +676,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel. De huizen komen van de huizenbouwer
   (`huis-sdf.cjs`); welke het spel heeft, staat in `huizen.cjs` (elk een eigen bestand in `tegels/huizen/`), elk met
   zijn voet en de tegel voor zijn deur, waar `T.deurVan` (`js/bewoners.js`) de bewoners heen stuurt. De bouwstijlen
-  staan daar ook (`STIJLEN`, vraag 114, stap 2): per stijl 108 tekeningen, elke vorm in vier standen onder elk dak, met
-  zijn `stijl` in `tegels.js`; `node gereedschap/pixelart/huis-sdf-export.cjs stijl wit` maakt er de proefplaat van, en
-  `bouwfasen.cjs --erbij` rendert alleen de bouwfasen die er nog niet zijn (een nieuwe stijl kost zo ruim twee uur, niet
-  drie). **Een stand is hetzelfde huis, een kwartslag gedraaid** (vraag 124, B): een huis van een stijl is gebouwd met elke
+  staan daar ook (`STIJLEN`, vraag 114, stap 2): wit, oker, planken en roze, per stijl 108 tekeningen, elke vorm in vier
+  standen onder elk dak, met zijn `stijl` in `tegels.js`. Elke stijl heeft eigen huizen en boerderijen (vormen die alleen
+  een stijl heeft, staan in `VORMEN`); oker en roze nemen de hutten van wit (`hut: 'wit'`, en de tekening krijgt `ook`).
+  `node gereedschap/pixelart/huis-sdf-export.cjs stijl oker` maakt er de proefplaat van, en `bouwfasen.cjs --erbij`
+  rendert alleen de bouwfasen die er nog niet zijn, met namen in delen (45 tekeningen is zo'n anderhalf uur; een taak op
+  de achtergrond stopt na twee uur). **Een stand is hetzelfde huis, een kwartslag gedraaid** (vraag 124, B): een huis van een stijl is gebouwd met elke
   muur ingevuld (`rondom` in `huis-sdf.cjs`), en de tekenaar draait de camera en de zon eromheen (`tekenWereld` met
   `o.draai` in `toren.cjs`), zodat de zon linksboven blijft en elke steen van elke kant op zijn plek ligt; zonder draai
   tekent hij pixel voor pixel als vroeger. De proefplaat: `huis-sdf-export.cjs rondom`.

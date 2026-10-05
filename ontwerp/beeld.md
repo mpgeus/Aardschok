@@ -332,6 +332,25 @@ de stand ernaast (`T.metDeurNaar`).
 - **De proefplaat:** `node gereedschap/pixelart/huis-sdf-export.cjs rondom` (huis 1, de L-hut en de T in hun vier standen,
   en huis 1 in aanbouw van vier kanten). De toetsen staan in `test/draaibare-huizen.test.cjs`.
 
+### De andere drie bouwstijlen: oker, planken en roze (5 okt 2026, werklijst vraag 114, stap 2b)
+
+Marcel: "A ja B ja C delen D stap 3 E tuurlijk", en na de proefplaten "1 ja 2 is goed zo". Elke stijl heeft zijn eigen
+huizen en boerderijen, met een uitbouw als kenmerk, zodat je een land ook aan zijn vormen herkent:
+- **oker, "de zolders":** oker kalk, rode luiken, zandsteen, riet; huis 2, 4 en 5 (anderhalve laag met een dakkapel, de L
+  naar achter, smal en hoog met een schoorsteen op de gevel), een T-boerderij en boerderij 3 in vakwerk.
+- **planken, "het houtland":** alles van hout onder spanen, blauwgrijze luiken, veldsteen met planken erboven; een huis van
+  twee lagen met een galerij op palen, een L met een stenen buitentrap, een huis met een aanbouw en een schoor; de T van
+  planken en de blokhut. Ook de hutten zijn van planken.
+- **roze, "het rijke vakwerk":** roze kalk, kale luiken, zandsteen, riet; twee lagen die overkragen, een erker op de gevel,
+  een T met de vleugel naar achter; een L en een lange boerderij van anderhalve laag.
+- **De hutten delen ze** ("C delen"): oker en roze nemen die van wit, want vlechtwerk onder riet ziet er in elke stijl
+  hetzelfde uit (de kalk komt niet op leem). Alleen de plankenstijl heeft eigen hutten.
+- **Wat de bouwer niet zegt:** met `rondom` staat de voordeur op de lange muur van de hoofdvleugel, en past hij daar niet
+  meer naast een trap of een erker, dan laat de bouwer die stil weg. Planken huis 8 en roze huis 11 zijn daarom 6 tegels
+  diep. Een dakkapel valt soms weg onder een dun dak (oker huis 5 en roze huis 12; Marcel: "goed zo").
+- Het huis van de schout, de herberg en de kapel krijgen hun stijl met de grote gebouwen (stap 3).
+- De proefplaten: `node gereedschap/pixelart/huis-sdf-export.cjs stijl oker` (en `planken`, `roze`).
+
 ## Ontwerpcanvas
 
 https://claude.ai/artifact/K4frzQ2o5Ak3owGhA4AJms (privé). Daarop staan:
