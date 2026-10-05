@@ -49,7 +49,10 @@ test('elke tekening van een stijl staat op het vel, met de naam van zijn stijl, 
   const tegels = T.TEGELS.huizen.tiles.filter((t) => t && t.stijl);
   const opgaven = Object.values(HZ.HUIZEN).filter((o) => o.stijl);
   assert.equal(tegels.length, opgaven.length);
-  assert.equal(tegels.length, 108, 'de stijl wit: 12 hutten, 36 huizen, 36 stenen huizen en 24 boerderijen');
+  const per = {};
+  for (const tg of tegels) per[tg.stijl.stijl] = (per[tg.stijl.stijl] || 0) + 1;
+  // elk 12 hutten, 36 huizen, 36 stenen huizen en 24 boerderijen; oker en roze nemen de hutten van wit (vraag 114, 2b)
+  assert.deepEqual(per, { wit: 108, oker: 96, planken: 108, roze: 96 });
   for (const t of tegels) {
     const s = t.stijl;
     assert.equal(t.naam, HZ.stijlNaam(s.stijl, s.vorm, s.steen === 'baksteen' ? 'baksteen' : s.dak, s.stand));
@@ -68,7 +71,7 @@ test('het ontworpen gehucht heeft geen stijl, en bouwt met de tekeningen van T.G
 test('een land van de maker bouwt in zijn stijl: de hutten, het huis en de boerderijen van het begin ook', () => {
   const S = nieuwSpel(5);
   assert.equal(S.wereld.stijl, T.stijlVoorLand(5));
-  assert.equal(T.stijlVan(S.dorp), 'wit');
+  assert.equal(T.stijlVan(S.dorp), T.stijlVoorLand(5));
   // (het huis van de schout houdt zijn eigen tekening tot stap 3, met de herberg en de kapel)
   const woningen = S.dorp.gebouwen.filter((g) => ['hut', 'huis', 'boerderij'].includes(g.soort) && g.tekening !== 'huizen/schoutshuis');
   assert.ok(woningen.length >= 8);
@@ -76,7 +79,33 @@ test('een land van de maker bouwt in zijn stijl: de hutten, het huis en de boerd
   // en hij blijft het na bewaren en laden
   const terug = T.leesSpel(T.bewaarSpel(S, { nu: 0 }));
   assert.ok(terug.gelukt, terug.reden);
-  assert.equal(terug.staat.dorp.wereld.stijl, 'wit');
+  assert.equal(terug.staat.dorp.wereld.stijl, T.stijlVoorLand(5));
+});
+
+test('elke stijl heeft zijn eigen huizen en boerderijen; oker en roze nemen de hutten van wit (vraag 114, 2b)', () => {
+  assert.deepEqual(T.bouwstijlen(), ['oker', 'planken', 'roze', 'wit']);
+  const vormen = (stijl, soort) => [...new Set(T.stijlTekeningen({ ...leeg(), wereld: { ...leeg().wereld, stijl } }, soort).map(T.vormVan))];
+  for (const soort of ['huis', 'boerderij']) {
+    const alle = ['oker', 'planken', 'roze', 'wit'].flatMap((s) => vormen(s, soort));
+    assert.equal(new Set(alle).size, alle.length, `geen ${soort} in twee stijlen: ${alle.join(', ')}`);
+  }
+  const D = (stijl) => ({ ...leeg(), wereld: { ...leeg().wereld, stijl } });
+  assert.deepEqual(T.stijlTekeningen(D('oker'), 'hut'), T.stijlTekeningen(D('wit'), 'hut'));
+  assert.deepEqual(T.stijlTekeningen(D('roze'), 'hut'), T.stijlTekeningen(D('wit'), 'hut'));
+  // de plankenstijl heeft eigen hutten, onder spanen, en zijn huizen in een gehucht ook
+  assert.ok(T.stijlTekeningen(D('planken'), 'hut').every((n) => n.startsWith('huizen/planken-') && n.includes('-spanen-')));
+  assert.ok(T.stijlTekeningen(D('planken'), 'huis').every((n) => n.includes('-spanen-')));
+  // een stenen huis in de natuursteen van zijn stijl
+  const steen = (stijl) => T.stijlTekeningen({ ...D(stijl), trede: 'dorp' }, 'stenenHuis');
+  assert.ok(steen('oker').every((n) => n.startsWith('huizen/oker-steen')));
+});
+
+test('wie doorgroeit, krijgt de stijl van zijn dorp, ook vanuit een gedeelde hut van wit', () => {
+  const D = { ...leeg(), wereld: { ...leeg().wereld, stijl: 'oker' }, trede: 'dorp' };
+  // een hut van wit in een dorp van oker wordt geen wit huis: de vorm zoekt het dorp in zijn eigen stijl
+  assert.equal(T.zoalsNu(D, 'huizen/wit-hut1-riet-z', 'hut'), 'huizen/wit-hut1-riet-z');
+  assert.ok(T.andereVormen(D, 'huizen/wit-hut1-riet-o', 'huis').every((n) => n.startsWith('huizen/oker-huis') && n.endsWith('-o')));
+  assert.equal(T.zoalsNu(D, 'huizen/oker-huis2-riet-n', 'stenenHuis'), 'huizen/oker-steen2-leien-n');
 });
 
 test('de maker zet een huis ook vóór het plein, met zijn deur ernaartoe (vraag 114, D)', () => {
