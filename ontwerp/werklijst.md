@@ -163,7 +163,7 @@ main"), ook het ontginnen op de heide met de prijs die per stuk oploopt (vraag 1
 net als het werk van de tweeëndertigste (Marcel: "1 ja" op "Zal ik het in main zetten?"). Het werk van de
 vierendertigste sessie staat sinds 5 okt ook in `main` (Marcel: "Pushen naar main"): het bos (vraag 107, stap 2), met g1
 (de soldaten lopen elk jaar door het bos; Marcel: "1 en 3 later inderdaad") en de hakker. Het volgende van vraag 107 is
-stap 3, de speeltest van vier jaar, en later g3 (de roddelaar) met de herberg als plek van gesprekken (3c). **Stap 2b is af en staat in `main`** (de andere drie
+stap 3, de speeltest van vier jaar (het plan staat bij vraag 107 en wacht op Marcel: a tot en met d), en later g3 (de roddelaar) met de herberg als plek van gesprekken (3c). **Stap 2b is af en staat in `main`** (de andere drie
 bouwstijlen, oker, planken en roze, in een eigen sessie; zie onder Af, en vraag 114); deze branch heeft het samengevoegd.
 Daarna stap 3, de herberg, de kapel en de woontoren, meteen draaibaar, en dan de houthakker die hakt en
 plant en de wolven (vraag 115 en 116; de boeren aan het werk, vraag 111, zijn af). Uit de speeltest na te lopen: op land 72022 liep het dorp vast op plaats (`speelbaar.md`). Voor de schaduwen met de zon (vraag 125, B) hoeft de bouwer niets te
@@ -3889,6 +3889,44 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     bij het hele dorp soms (0,3), en langs een spoor vaak (0,7). **De speeltest** (`speelbaar.md`): op 73425 vonden ze in
     het eerste jaar een akker, en omdat de sluwe bouwer de heer dezelfde dag te weinig betaalde, was hij meteen ontslagen;
     op 62707 ging het twee jaar goed met zeven stukken. Het bijt nu, en hard: of dat de maat is, zegt stap 3.
+    **Plan voor stap 3, de speeltest van vier jaar** (Claude, 5 okt, vijfendertigste sessie; open). Wat hij moet zeggen:
+    1. **Wint er een dorp?** Op 3 okt won geen dorp in vier jaar: drie van de vijf liepen vol op 99 mensen (vraag 110),
+       en bij de andere twee brak de reeks op brood, laken en bier, of bleef er een hut staan. Op de landen van de maker
+       is grond genoeg: daar haalde het dorp in twee jaar al tot 103 mensen (op 62707 vaak maar 67). Wint er daar een,
+       dan kan de winst op 100 blijven, en is 110 a niet nodig.
+    2. **Houdt het graan vier jaar stand?** Op 3 okt zakte de oogst van 550 à 630 in het eerste jaar naar 340 à 450 in
+       het vierde, en miste de bouwer in het vierde jaar 150 dagen brood. Met ontginnen was de oogst van het tweede jaar
+       een derde tot ruim de helft groter; wat het bos oplevert, komt pas in het derde jaar.
+    3. **Wanneer is het land op, en wat kost het dan?** De heide is in het eerste jaar op. Het vertrouwen kwam na elk stuk
+       terug, omdat het de tevredenheid volgt (f3 bijt alleen in een ontevreden dorp), en het bos kost elke keer 5 gunst.
+       Is dat te goedkoop, of voelt een dorp in moeilijkheden het verlies van de meent niet, dan wordt dat een vraag.
+    4. **Stiekem, met g1:** hoe vaak wordt de sluwe bouwer in vier jaar betrapt, en met hoeveel stukken? Het doel van g1:
+       één stuk is een gok, zeven stukken bijna zeker betrapt. Op 62707: na twee jaar zeven stukken, nooit betrapt. Op
+       73425: in het eerste jaar betrapt en ontslagen, omdat betrapt en de rekening van de heer op dezelfde dag vallen,
+       en die rekening te laag was (alles of niets). Hoe vaak dat gebeurt, zegt of het een vraag wordt.
+    5. **Wat er in vier jaar verder vastloopt:** de plaats (72022: twee keer 16 groeidagen zonder plek), de putten die
+       voor de molen gaan (73425: 11 putten, nooit een molen), en de herbergen die de keten van het bier vraagt.
+    **Wat Claude erin zag:** de tabellen van de vorige speeltests zijn geen maatstaf meer. Sinds 2b bouwt 73425 in
+    planken en 72022 in roze (voorheen allebei wit), met andere huizen en dus andere voeten, en de maker legt die twee
+    landen nu anders (nagekeken: `T.maakGehucht` met de stijl op wit geeft voor 73425 en 72022 een ander plan, voor
+    62707 hetzelfde). Het toeval valt er dus anders, zoals bij het draaibare wit (4 okt). Een vergelijking moet op
+    dezelfde stand van het spel.
+    Voorstel:
+    - **a, waar:** de drie landen van de maker van de vorige speeltests (zaad 1 tot en met 3: 62707, 73425 en 72022),
+      want daar begint een speler nu. Niet het ontworpen gehucht: dat loopt vol op 99, en dat weten we.
+    - **b, de bouwer ook zonder ontginnen:** dezelfde drie landen met de spelregel "Ontginnen" uit (`--regel
+      ontginnen=uit`). Dan zie je wat het ontginnen in vier jaar doet, op dezelfde stand. Het kost een taak meer.
+    - **c, het gereedschap:** de samenvatting krijgt een tabel Ontginnen (per speler en per jaar de stukken heide, bos
+      gemeld en bos stiekem, en wanneer er betrapt werd, en door wie: de inner, de soldaten in het bos of het
+      doorzoeken), en ze kan opnieuw gemaakt worden uit wat er in `uit/` ligt, zodat twee taken één tabel geven. Het spel
+      verandert niet.
+    - **d, hoe:** drie taken na elkaar, elk drie spellen tegelijk: de bouwer, de sluwe bouwer, en de bouwer zonder
+      ontginnen (`npm run speeltest -- bouwer --maker --jaren 4`, enzovoort). Op 3 okt kostte een spel van vier jaar met
+      drie tegelijk zo'n uur; een taak op de achtergrond stopt na twee uur, en de machine heeft vier kernen, dus niet twee
+      taken tegelijk. Samen drie à vier uur, met weinig tokens. Eindigt een spel vroeg (gevallen, ontslagen), dan is dat
+      een uitkomst, en het wordt niet opnieuw gespeeld met een ander zaad, want dan kies je de uitslag. Wat eruit komt,
+      gaat naar `speelbaar.md`, en wat het vraagt, wordt een vraag; aan de regels verandert in deze stap niets.
+    Vragen: **a**, zo? **b**, ja of nee? **c**, ja? **d**, zo? En mis je iets in 1 tot en met 5?
 108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
     misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
     moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
