@@ -1,37 +1,55 @@
-// De boer aan het werk op zijn veld (werklijst vraag 111, b; Marcel 3 okt: "ja die zijn goed", 5 okt: de figuren nu):
-// drie werkfiguren uit code, op dezelfde manier gemaakt als de maaier (maaier.cjs). Het is de gewone boer met strohoed
-// en kiel uit dorpelingen.cjs, met eigen gereedschap en een eigen houding voor het werk. Het spel laat een boer of
-// boerin zo'n vel lenen zolang hij dat werk doet, ook als hij naar de volgende tegel loopt of even rust (js/sprites.js,
-// figuurNu, zoals bij de maaier). Daarom heeft elk ook staan en lopen, en is het overal dezelfde soort man.
+// De boer en de boerin aan het werk op hun veld (werklijst vraag 111, b; Marcel 3 okt: "ja die zijn goed", 5 okt: de
+// figuren nu, en "a ja b ja c nu"): werkfiguren uit code, op dezelfde manier gemaakt als de maaier (maaier.cjs). Het is
+// de gewone boer met strohoed en kiel uit dorpelingen.cjs, of de gewone boerin met haar witte hoofddoek, terracotta jurk
+// en blauwe schort uit dorpelingen2.cjs, met eigen gereedschap en een eigen houding voor het werk. Het spel laat een boer
+// zo'n vel lenen zolang hij dat werk doet, ook als hij naar de volgende tegel loopt of even rust (js/sprites.js,
+// figuurNu, zoals bij de maaier). Daarom heeft elk ook staan en lopen, en is het overal dezelfde man of vrouw. Een
+// boerin heeft haar eigen vel, met dezelfde houdingen, beelden en fps als dat van de man, zodat het spel alleen de naam
+// hoeft te wisselen (b: tot 5 okt droeg een boerin het vel van een man).
 //
-//   zaaier       zaaien: breedwerpig, de rechterhand uit de zak in een wijde boog naar rechts voor hem uit, en open
-//                aan het eind; de voeten blijven staan. staan: de hand in de zak. lopen: de zak op de heup, de
-//                rechterarm zwaait gewoon mee.
-//   wieder       wieden: voorover gebukt, de schoffel hakt voor zijn voeten in de grond en trekt naar hem toe (het spel
-//                gebruikt het ook voor spitten en mest uitspreiden, dus het leest als de grond omwerken). staan:
-//                leunend op de schoffel, zijn rustpoos tussen twee tegels. lopen: de schoffel over de schouder.
+//   zaaier       zaaien: breedwerpig, de rechtervuist uit de zak in een wijde boog naar rechts voor hem uit, waar de
+//   zaaister     vingers opengaan en een waaiertje zaad even het licht vangt; de voeten blijven staan. staan: de vuist
+//                in de zak. lopen: de zak op de heup, de rechterarm zwaait gewoon mee.
+//   wieder       wieden: voorover gebukt, de schoffel (een plat, breed blad aan een zwanenhals) hakt voor zijn voeten in
+//   wiedster     de grond en trekt naar hem toe (het spel gebruikt het ook voor spitten en mest uitspreiden, dus het
+//                leest als de grond omwerken). staan: leunend op de schoffel, zijn rustpoos tussen twee tegels. lopen:
+//                de schoffel over de schouder.
 //   sprokkelaar  een takkenbos met een touw erom op zijn rug, aan twee banden zoals het rek van de marskramer
-//                (dorpelingen3.cjs). staan, lopen (de bundel deint mee), en rapen: bukken, een tak oprapen en hem
-//                over de schouder in de bundel steken.
+//   sprok-       (dorpelingen3.cjs). staan, lopen (de bundel deint mee), en rapen: door de knieën tot hij hurkt, een
+//   kelaarster   tak oprapen, en hem over de schouder in de bundel steken, waar hij blijft.
+//   maaister     maaien, met de zeis en de slag van de maaier (maaier.cjs, die zelf blijft zoals hij is).
 //
-// Dit bestand verandert niets aan dorpelingen.cjs, maaier.cjs of karakters.cjs: het gebruikt alleen wat die
-// exporteren. Het lijf (werkBoer) is dat van boer() en maaier(): dezelfde benen met knieën, kiel en halsdoek, hetzelfde
-// hoofd met strootje en strohoed. Staan en lopen zijn de houdingen van de boer zelf (houdingDorpeling, met zijn
-// snelheid en fps, dus dezelfde pas en dezelfde `stap`). Het werk heeft een eigen houding in dezelfde vorm (zak, zij,
-// voor, romp, nek, voet), zoals houdingMaaier, uit sleutelbeelden (langsSleutels). Een arm die iets vasthoudt, krijgt
-// zijn elleboog met dezelfde IK als de maaier (HH.elleboog).
+// Dit bestand verandert niets aan dorpelingen.cjs, dorpelingen2.cjs, maaier.cjs of karakters.cjs: het gebruikt alleen
+// wat die exporteren. Het lijf van de boer (werkBoer) is dat van boer() en maaier(): dezelfde benen met knieën, kiel en
+// halsdoek, hetzelfde hoofd met strootje en strohoed. Dat van de boerin (werkBoerin) is dat van boerin() zonder mandje:
+// haar rok zwaait mee zoals in haar loopcyclus (rokZwaai), het schort ligt op de rok, en als ze door de knieën gaat,
+// zakt de rok mee en bolt hij over haar knieën. Staan en lopen zijn de houdingen van de boer of de boerin zelf
+// (houdingDorpeling, met hun eigen snelheid en fps, dus dezelfde pas en dezelfde `stap`). Het werk heeft een eigen
+// houding in dezelfde vorm (zak, zij, voor, romp, nek, voet), zoals houdingMaaier, uit sleutelbeelden (langsSleutels).
+// Een arm die iets vasthoudt, krijgt zijn elleboog met dezelfde IK als de maaier (HH.elleboog); een hand die opengaat,
+// krijgt vingers (hand). Hun armen zijn kort: een hand ligt nooit verder van de schouder dan de arm lang is, anders rekt
+// de onderarm uit. De sleutels zijn voor de boer gemaakt; de boerin heeft lagere schouders, een hogere heup en kortere
+// armen, en haar handen volgen dezelfde weg vanuit haar eigen schouders (naarLijf).
 // Lokale assen zoals overal: x naar rechts van de figuur, y naar voren, z omhoog; de voeten op z = 0.
-// Wegschrijven: node gereedschap/pixelart/werkfiguren-anim.cjs [zaaier wieder sprokkelaar].
+// Wegschrijven: node gereedschap/pixelart/werkfiguren-anim.cjs [zaaier wieder sprokkelaar zaaister wiedster
+// sprokkelaarster maaister].
 'use strict';
 const { sdf, klem, mix, rnd } = require('./kern.cjs');
 const { model, kegel, capsule, bol, ellips, bochtKegel, plus } = require('./figuren.cjs');
 const { ring } = require('./figuren2.cjs');
 const HH = require('./houding.cjs');
 const KAR = require('./karakters.cjs');
-const { profiel, schedel, romp, bottenDorpeling, beenPunten, voetBot, knieTussen, houdingDorpeling, rustDorpeling, BOER_SNELHEID, BOER_FPS } = require('./dorpelingen.cjs');
+const {
+  profiel, schedel, romp, schil, glimlach, bottenDorpeling, beenPunten, voetBot, knieTussen, houdingDorpeling,
+  rustDorpeling, BOER_SNELHEID, BOER_FPS,
+} = require('./dorpelingen.cjs');
+const { arm: mouwArm, blosjes, hoofddoek, haarKap, middelband, BOERIN_SNELHEID, BOERIN_FPS } = require('./dorpelingen2.cjs');
+const { zeisDelen, zeisInDeHanden, houdingMaaier, MAAIER_BEELDEN, MAAIER_FPS } = require('./maaier.cjs');
 
 // hetzelfde oogmateriaal als dorpelingen.cjs en maaier.cjs (daar niet geëxporteerd, dus hier één regel gelijk)
 const OOG = { ramp: 'inkt', lo: 0.6, hi: 1.4, detail: true, rand: 0, schaduw: false };
+
+// ---------------------------------------------------------------- de lijven
 
 // De punten van het lijf van boer() (dorpelingen.cjs).
 const H = [0, 4, 68.5]; // het midden van het hoofd
@@ -44,21 +62,59 @@ const HANGT = [
   [[-10, 0.3, 56], [-12.7, -0.2, 45.3], [-11.9, 2, 36.3]],
   [[10, 0.3, 56], [12.3, 0.4, 45.5], [11.4, 2.6, 36.2]],
 ];
+// Per lijf: zijn punten, zijn hangende armen, zijn vuist, en de pas van zijn staan en lopen. De boerin zoals boerin()
+// (dorpelingen2.cjs) haar bouwt, zonder mandje: de armen 'hangt'. Haar benen tekent niemand (de rok dekt ze), maar ze
+// heeft ze wel: waar haar knieën zitten als ze hurkt, zegt BENEN.
+const BOER = { naam: 'boer', H, HEUP, NEK, SCHOUDERS, HANGT, vuist: [2.6, 2.8, 3.1], handMaat: 1, snelheid: BOER_SNELHEID, fps: BOER_FPS, beenLengte: 24 };
+const BOERIN = {
+  naam: 'boerin',
+  H: [0, 3.4, 66.5],
+  HEUP: [0, 0.6, 36],
+  NEK: [0, 0, 56.6],
+  SCHOUDERS: [[-10.6, 0.4, 53.6], [10.6, 0.4, 53.6]],
+  HANGT: [
+    [[-10.6, 0.4, 53.6], [-12.9, 1.1, 44.2], [-12.4, 2.9, 35.5]],
+    [[10.6, 0.4, 53.6], [12.7, 1.6, 44.3], [12.2, 3.4, 35.7]],
+  ],
+  BENEN: { heup: 4.6, heupZ: 36, enkel: [4.4, 1.4, 6] },
+  vuist: [2.5, 2.7, 2.9],
+  handMaat: 0.94,
+  snelheid: BOERIN_SNELHEID,
+  fps: BOERIN_FPS,
+  beenLengte: 27,
+};
+const LIJVEN = { boer: BOER, boerin: BOERIN };
+const armLengte = (L, i) => HH.lengte(HH.af(L.HANGT[i][1], L.HANGT[i][0])) + HH.lengte(HH.af(L.HANGT[i][2], L.HANGT[i][1]));
+const botten = (L, hg) => bottenDorpeling(hg, { heup: L.HEUP, nek: L.NEK, schouders: L.SCHOUDERS });
+// Een plek die voor de hand van de boer gemaakt is, voor de hand van lijf L: even ver vanuit zijn schouder, naar de
+// lengte van zijn arm. Sb en Sl zijn de schouders van de boer en van L (standaard in rust); voor de boer zelf verandert
+// er niets.
+function naarLijf(L, i, p, Sb = SCHOUDERS[i], Sl = L.SCHOUDERS[i]) {
+  if (L === BOER) return p;
+  return HH.plus(Sl, HH.keer(HH.af(p, Sb), armLengte(L, i) / armLengte(BOER, i)));
+}
 
-// Staan en lopen gaan zoals bij de boer zelf: dezelfde snelheid en fps, dus dezelfde pas (dorpelingen-anim.cjs rekent
-// er `stap` mee uit, en werkfiguren-anim.cjs net zo).
+// Staan en lopen gaan zoals bij de boer of de boerin zelf: dezelfde snelheid en fps, dus dezelfde pas (dorpelingen-anim.cjs
+// rekent er `stap` mee uit, en werkfiguren-anim.cjs net zo).
 const SNELHEID = BOER_SNELHEID;
 const LOOP_FPS = BOER_FPS;
-const gewoon = (stand) => houdingDorpeling(stand, { snelheid: SNELHEID, fps: LOOP_FPS, beenLengte: 24 });
+const gewoon = (stand, L = BOER) => houdingDorpeling(stand, { snelheid: L.snelheid, fps: L.fps, beenLengte: L.beenLengte });
 
 // Per figuur zijn houdingen, allemaal een lus: hoeveel beelden en hoe snel. Staan en lopen zoals in
 // dorpelingen-anim.cjs (vier beelden op 4, acht op 10); het werk zoals de maaier (twaalf op 8), en het rapen zestien,
-// want bukken, rapen en de tak wegsteken is een langere beweging.
+// want bukken, rapen en de tak wegsteken is een langere beweging. Een vrouw heeft precies wat haar man heeft.
 const HOUDINGEN = {
   zaaier: { staan: { beelden: 4, fps: 4 }, lopen: { beelden: 8, fps: LOOP_FPS }, zaaien: { beelden: 12, fps: 8 } },
   wieder: { staan: { beelden: 4, fps: 4 }, lopen: { beelden: 8, fps: LOOP_FPS }, wieden: { beelden: 12, fps: 8 } },
   sprokkelaar: { staan: { beelden: 4, fps: 4 }, lopen: { beelden: 8, fps: LOOP_FPS }, rapen: { beelden: 16, fps: 8 } },
 };
+HOUDINGEN.zaaister = HOUDINGEN.zaaier;
+HOUDINGEN.wiedster = HOUDINGEN.wieder;
+HOUDINGEN.sprokkelaarster = HOUDINGEN.sprokkelaar;
+HOUDINGEN.maaister = { maaien: { beelden: MAAIER_BEELDEN, fps: MAAIER_FPS } };
+// welk lijf elke figuur heeft, en dus hoe snel hij loopt
+const LIJF_VAN = { zaaier: 'boer', wieder: 'boer', sprokkelaar: 'boer', zaaister: 'boerin', wiedster: 'boerin', sprokkelaarster: 'boerin', maaister: 'boerin' };
+const snelheidVan = (naam) => LIJVEN[LIJF_VAN[naam]].snelheid;
 
 // ---------------------------------------------------------------- hulpjes
 
@@ -112,14 +168,25 @@ function ellipsLangs(c, [u, v, w], s, m, deel, k) {
     k,
   };
 }
-// Een plaat (doos met ronde hoeken) met eigen assen, zoals het blad van de schoffel.
-function plaat(c, [u, v, w], h, r, m, deel) {
+// Een trapezium van plaat met eigen assen, zoals het blad van de schoffel: de onderrand heeft zijn midden op s, de plaat
+// gaat langs q omhoog (hoog), is langs e onderaan `onder` en bovenaan `boven` breed (de helft) en langs n `dik` (de helft).
+// Ronde hoeken r.
+function trapezium(s, [e, q, n], { onder, boven, hoog, dik }, r, m, deel) {
+  const helling = (onder - boven) / hoog;
+  const schaal = 1 / Math.hypot(1, helling); // de schuine zijden: afstand loodrecht erop
   return {
     f: (x, y, z) => {
-      const p = [x - c[0], y - c[1], z - c[2]];
-      return sdf.doos(HH.inwendig(p, u), HH.inwendig(p, v), HH.inwendig(p, w), h[0], h[1], h[2], r);
+      const p = [x - s[0], y - s[1], z - s[2]];
+      const a = Math.abs(HH.inwendig(p, e));
+      const b = HH.inwendig(p, q);
+      const c = Math.abs(HH.inwendig(p, n));
+      const breed = onder - helling * klem(b, 0, hoog);
+      const qx = (a - breed) * (a > breed ? schaal : 1) + r;
+      const qy = Math.abs(b - hoog / 2) - hoog / 2 + r;
+      const qz = c - dik + Math.min(r, dik * 0.9);
+      return Math.hypot(Math.max(qx, 0), Math.max(qy, 0), Math.max(qz, 0)) + Math.min(Math.max(qx, qy, qz), 0) - r;
     },
-    g: [c[0], c[1], c[2], Math.hypot(...h) + 0.5],
+    g: [...HH.plus(s, HH.keer(q, hoog / 2)), Math.hypot(onder, hoog / 2) + 1],
     m,
     deel,
   };
@@ -130,8 +197,11 @@ function dwarsOp(u) {
   const v = HH.lengte(v0) < 1e-3 ? [1, 0, 0] : HH.eenheid(v0);
   return [v, HH.kruis(v, u)];
 }
+// Het hout en het ijzer van het gereedschap, voor beide lijven gelijk.
+const HOUT = { ramp: 'hout', lo: 1.6, hi: 6, patroon: (x, y, z) => (Math.sin(z * 1.3 + x * 0.7) > 0.86 ? -0.6 : 0) };
+const IJZER = { ramp: 'ijzer', lo: 1.8, hi: 6.2, glans: 1.2, detail: true };
 
-// ---------------------------------------------------------------- het lijf
+// ---------------------------------------------------------------- het lijf van de boer
 
 // De gewone boer, zoals boer() en maaier() hem bouwen: benen met knieën en klompen, de kiel met de rode halsdoek, en
 // het hoofd met strootje en strohoed, in de houding hg (de vorm van houdingDorpeling). bouw(ctx) zet ertussen wat
@@ -160,8 +230,8 @@ function werkBoer(hg, bouw) {
   };
   mat[M.lint] = { ramp: 'schors', lo: 0.6, hi: 3 };
   mat[M.doek] = { ramp: 'rood', lo: 2, hi: 6.4 };
-  mat[M.hout] = { ramp: 'hout', lo: 1.6, hi: 6, patroon: (x, y, z) => (Math.sin(z * 1.3 + x * 0.7) > 0.86 ? -0.6 : 0) };
-  mat[M.ijzer] = { ramp: 'ijzer', lo: 1.8, hi: 6.2, glans: 1.2, detail: true };
+  mat[M.hout] = HOUT;
+  mat[M.ijzer] = IJZER;
   mat[M.strootje] = { ramp: 'stro', lo: 4.2, hi: 6.6 };
 
   const delen = [];
@@ -170,15 +240,18 @@ function werkBoer(hg, bouw) {
     if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
     vanaf = delen.length;
   };
-  const Bn = bottenDorpeling(hg, { heup: HEUP, nek: NEK, schouders: SCHOUDERS });
-  const ctx = { M, D, mat, delen, hg, Bn, bot };
+  const Bn = botten(BOER, hg);
+  const ctx = { M, D, mat, delen, hg, Bn, bot, knie: [], lijf: BOER };
 
-  // --- benen en klompen: zelfde punten als boer() en maaier()
+  // --- benen en klompen: zelfde punten als boer() en maaier(). Wie hurkt, zet zijn knieën wat uit elkaar (hg.knieUit,
+  // alleen in het werk); ctx.knie onthoudt waar ze zijn, voor een hand die erop steunt.
   for (const s of [-1, 1]) {
     const i = s < 0 ? 0 : 1;
     const heupR = [s * 4.4, 0, 30];
     const enkelR = [s * 4.3, 0.8, 7];
-    const P = beenPunten(hg, i, { heup: heupR, knie: knieTussen(heupR, enkelR), enkel: enkelR });
+    const knieR = HH.plus(knieTussen(heupR, enkelR), [s * (hg.knieUit || 0), 0, 0]);
+    const P = beenPunten(hg, i, { heup: heupR, knie: knieR, enkel: enkelR });
+    ctx.knie[i] = P.knie;
     delen.push(kegel(P.heup, P.knie, 3.9, 3.65, M.broek, D.benen, 1));
     delen.push(kegel(P.knie, P.enkel, 3.65, 3.4, M.broek, D.benen, 1));
     bot(null);
@@ -239,58 +312,225 @@ function werkBoer(hg, bouw) {
   return model(delen, mat, HH.omvat(delen, 2));
 }
 
+// ---------------------------------------------------------------- het lijf van de boerin
+
+// Het lijf van de boerin, zoals boerin() het bouwt (dorpelingen2.cjs, vrouwenlijf), met het bovenlijf een eind dieper in
+// de rok: als ze voorover buigt, draait het om haar heup, en dan zou er anders achter tussen lijf en rok een kier komen.
+// Zolang ze rechtop staat, zit dat stuk in de rok en zie je het niet.
+const LIJF_BOERIN = {
+  rx: profiel([[30, 10.2], [35, 10.2], [41, 10.8], [47, 11.2], [52, 11], [56, 9.6]]),
+  ry: profiel([[30, 8], [35, 8], [41, 8.2], [47, 8], [52, 7.2], [56, 6]]),
+  cy: profiel([[30, 1.2], [35, 1.2], [42, 1.6], [56, 0.6]]),
+};
+// De rok van de boerin in houding hg: de klokrok van boerin(), van de grond tot haar middel. Gaat ze door de knieën
+// (hg.hurkt, bij het rapen), dan zakt haar middel mee en wat naar achteren, spreidt de zoom zich over de grond, en bolt de
+// voorkant op waar haar knieën onder de rok zitten. Rechtop is het precies de rok van boerin(). Geeft het profiel per
+// hoogte: als functies van t (0 de zoom, 1 het middel) voor de rok, en van z (vorm) voor het schort, zoals schil() het
+// vraagt.
+const HURK = 20; // zo diep (zak) zit de rok het laagst en het wijdst
+function rokProfiel(hg) {
+  const zak = hg.hurkt ? Math.max(0, hg.zak) : 0;
+  const voor = hg.hurkt ? hg.voor : 0;
+  const s = klem(zak / HURK, 0, 1);
+  const top = 37 - zak;
+  const knie = (t) => 3 * s * Math.pow(Math.sin(Math.PI * klem(t, 0, 1)), 1.3);
+  const rx = (t) => mix(15.6 + 3.4 * s, 10.6 + 1.6 * s, Math.pow(t, 0.8));
+  const ry = (t) => mix(13.4 + 3 * s, 8.8 + 1 * s, Math.pow(t, 0.9)) + knie(t);
+  const cy = (t) => mix(0.8 + 1.4 * s, 0.8 + voor, t) + knie(t);
+  const opZ = (f) => (z) => f(klem(z / top, 0, 1));
+  return { top, rx, ry, cy, vorm: { rx: opZ(rx), ry: opZ(ry), cy: opZ(cy) } };
+}
+// de rok zelf: klokrok() uit dorpelingen.cjs, met een profiel dat per houding anders kan zijn
+function rokDeel({ top, rx, ry, cy }, m, deel, plooi = 1) {
+  return {
+    f: (x, y, z) => {
+      const t = klem(z / top, 0, 1);
+      const a = rx(t);
+      const b = ry(t);
+      const ex = x / a;
+      const ey = (y - cy(t)) / b;
+      const th = Math.atan2(ey, ex);
+      const p = plooi * (0.055 * Math.sin(th * 9 + 1.3) + 0.03 * Math.sin(th * 5 - 0.4)) * (1 - t * 0.85);
+      return Math.max((Math.hypot(ex, ey) - 1 - p) * Math.min(a, b) * 0.86, -z, z - top);
+    },
+    g: [0, 1, top / 2, Math.hypot(top / 2, rx(0), ry(0.5) + Math.abs(cy(0.5)) + 1) + 3],
+    m,
+    deel,
+  };
+}
+// De gewone boerin aan het werk: de rok met het schort erop (die zwaaien samen mee als ze loopt, Brok zonder het naar
+// voren gaan, dat zit in het profiel), het bovenlijf met de schortband (met de romp mee), en het hoofd met de witte doek,
+// onder de kin geknoopt. bouw(ctx) zet ertussen wat deze figuur draagt en doet, zoals bij werkBoer. ctx.knie zijn haar
+// knieën onder de rok, voor een hand die erop steunt.
+function werkBoerin(hg, bouw) {
+  const L = BOERIN;
+  const HB = L.H;
+  const maat = [7, 6.8, 7.3];
+  const M = { huid: 0, jurk: 1, schort: 2, doek: 3, haar: 4, oog: 5, mond: 6, hout: 7, ijzer: 8 };
+  const D = { rok: 1, lijf: 2, schort: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, doek: 9 };
+  const mat = [];
+  mat[M.huid] = { ramp: 'huid', lo: 1.8, hi: 6.6, schaduwKracht: 0.7, patroon: blosjes(3.7, HB[2] - 2.6, HB[1] + 3, 1.8, 6.6, 1.1) };
+  mat[M.jurk] = { ramp: 'dak', lo: 1, hi: 5.6 };
+  mat[M.schort] = { ramp: 'pet', lo: 1.2, hi: 5.4, patroon: (x) => (Math.sin(x * 1.1 + 0.6) > 0.8 ? -0.6 : 0) };
+  mat[M.doek] = { ramp: 'pleister', lo: 2.2, hi: 6.4, patroon: (x, y, z) => (Math.sin(x * 1.2 - z * 0.8) > 0.8 ? -0.6 : 0) };
+  mat[M.haar] = { ramp: 'aarde', lo: 1, hi: 4.6 };
+  mat[M.oog] = OOG;
+  mat[M.mond] = KAR.MOND;
+  mat[M.hout] = HOUT;
+  mat[M.ijzer] = IJZER;
+
+  const delen = [];
+  let vanaf = 0;
+  const bot = (B) => {
+    if (B) for (let i = vanaf; i < delen.length; i++) delen[i] = HH.beweegDeel(delen[i], B);
+    vanaf = delen.length;
+  };
+  const Bn = botten(L, hg);
+  const ctx = { M, D, mat, delen, hg, Bn, bot, knie: [], lijf: L };
+
+  // --- haar knieën (niet getekend): het been van heup tot enkel, met de knie zoals bij de boer
+  for (const s of [-1, 1]) {
+    const i = s < 0 ? 0 : 1;
+    const heupR = [s * L.BENEN.heup, L.HEUP[1], L.BENEN.heupZ];
+    const enkelR = [s * L.BENEN.enkel[0], L.BENEN.enkel[1], L.BENEN.enkel[2]];
+    const knieR = HH.plus(knieTussen(heupR, enkelR), [s * (hg.knieUit || 0), 0, 0]);
+    ctx.knie[i] = beenPunten(hg, i, { heup: heupR, knie: knieR, enkel: enkelR }).knie;
+  }
+
+  // --- de rok en het schort erop
+  const rok = rokProfiel(hg);
+  delen.push(rokDeel(rok, M.jurk, D.rok));
+  delen.push(schil(rok.vorm, { los: 1.2, d: 0.6, breed: (z) => mix(9.4, 7.4, z / rok.top), z0: (5 * rok.top) / 37, z1: rok.top - 0.5 }, M.schort, D.schort));
+  bot(HH.beweging({ dp: [hg.rokZwaai, 0, 0] }));
+  // --- het bovenlijf, de boezem en de schouders, en de schortband om haar middel
+  delen.push(romp(LIJF_BOERIN, 30, 56, M.jurk, D.lijf, 2));
+  delen.push(ellips([0, 4, 48.5], [9, 5.6, 4.4], M.jurk, D.lijf, 2.5));
+  delen.push(ellips([0, 0.4, 55], [10.8, 7, 4.2], M.jurk, D.lijf, 2.5));
+  middelband(delen, LIJF_BOERIN, 36.4, M.schort, D.schort);
+  bot(Bn.Bromp);
+
+  bouw(ctx);
+  bot(null);
+
+  // --- hoofd: rond gezicht in een witte doek, een pluk haar voorop, de knoop onder de kin (zelfde als boerin())
+  const oy = schedel(delen, HB, M, D, { maat, oog: [2.6, 0.6], oor: 0.8 });
+  delen.push(bol(plus(HB, [0, 6.9, -1.4]), 1.6, M.huid, D.hoofd, 1));
+  glimlach(delen, HB, maat, M.mond, D.hoofd, 1.3, -4);
+  for (const s of [-1, 1]) delen.push(ellips(plus(HB, [s * 2.7, oy + 0.1, 2.8]), [2, 0.8, 0.7], M.haar, D.hoofd, 0.4));
+  delen.push(haarKap(HB, maat, M.haar, D.hoofd, [4.6, 4.2]));
+  delen.push(hoofddoek(HB, maat, 'kin', M.doek, D.doek, { los: 1.3 }));
+  const knoop = plus(HB, [0, 5.2, -8.2]);
+  delen.push(bol(knoop, 1.5, M.doek, D.doek, 0.6));
+  delen.push(kegel(plus(HB, [0, -7.2, -3.6]), plus(HB, [0, -8.4, -10.6]), 3.4, 0.6, M.doek, D.doek, 1));
+  for (const s of [-1, 1]) delen.push(kegel(plus(knoop, [s * 0.5, 0.3, -0.6]), plus(knoop, [s * 1.8, 1.4, -4.6]), 1.1, 0.5, M.doek, D.doek, 0.4));
+  bot(Bn.Bnek);
+
+  return model(delen, mat, HH.omvat(delen, 2));
+}
+
+// ---------------------------------------------------------------- armen en handen
+
 // Een arm van schouder Sn naar een hand op Hn, met de elleboog uit dezelfde IK als de maaier (HH.elleboog): de
-// botlengtes en de kant waar de elleboog uitsteekt komen uit de hangende arm (HANGT[i]). In de rust (Sn en Hn die van
-// HANGT) is het precies de hangende arm van boer(). De mouw en zijn zoom dragen hun rusthouding mee (`terug`), zodat de
-// strepen van de kiel met de arm meegaan in plaats van erdoorheen. open: hoe ver de hand open is, van 0 (de vuist van
-// de boer) tot 1 (plat en gestrekt, in het verlengde van de onderarm: de worp van de zaaier).
+// botlengtes en de kant waar de elleboog uitsteekt komen uit de hangende arm van het lijf (HANGT[i]). In de rust (Sn en
+// Hn die van HANGT) is het precies de hangende arm van boer() of boerin(). Bij de boer dragen de mouw en zijn zoom hun
+// rusthouding mee (`terug`), zodat de strepen van de kiel met de arm meegaan in plaats van erdoorheen; de boerin heeft
+// haar lange mouw met de omgeslagen rand bij de pols (de arm van dorpelingen2.cjs). open: hoe ver de hand open is, van 0
+// (de vuist) tot 1 (de vingers gestrekt en gespreid: de worp van de zaaier), zie hand hieronder.
+const MOUW_BOERIN = { r: [3.8, 3.3, 2.6], tot: 1.92, rol: 0.8, hand: BOERIN.vuist }; // zoals in boerin()
 function arm(ctx, i, Sn, Hn, open = 0) {
-  const { M, D, delen } = ctx;
-  const [Sr, Er, Hr] = HANGT[i];
+  const { M, D, delen, lijf: L } = ctx;
+  const [Sr, Er, Hr] = L.HANGT[i];
   const El = HH.elleboog(Sr, Er, Hr, Sn, Hn);
   const dArm = i ? D.armR : D.armL;
-  const dHand = i ? D.handR : D.handL;
-  const terug = HH.terugVan(HH.lidBeweging(Sr, Er, Sn, El));
-  const mouw = kegel(Sn, El, 3.9, 3.4, M.kiel, dArm, 1.5);
-  const zoom = ring(HH.tussen(Sn, El, 0.96), HH.eenheid(HH.af(El, Sn)), 3.4, 1, M.kiel, dArm);
-  mouw.terug = terug;
-  zoom.terug = terug;
-  delen.push(mouw, zoom);
   const u = HH.eenheid(HH.af(Hn, El));
-  delen.push(kegel(El, HH.plus(Hn, HH.keer(u, -2.8)), 3.1, 2.4, M.huid, dArm, 1));
-  if (open <= 0) delen.push(ellips(Hn, [2.6, 2.8, 3.1], M.huid, dHand, 0.6));
-  else {
-    const [v, w] = dwarsOp(u);
-    const c = HH.plus(Hn, HH.keer(u, 1.4 * open));
-    delen.push(ellipsLangs(c, [u, v, w], [mix(3.1, 4.5, open), mix(2.8, 3.4, open), mix(2.6, 1.5, open)], M.huid, dHand, 0.6));
+  if (L === BOERIN) {
+    mouwArm(delen, Sn, El, Hn, { ...MOUW_BOERIN, mouw: M.jurk, huid: M.huid, dArm, dHand: i ? D.handR : D.handL });
+    delen.pop(); // haar vuist: die tekent hand() hieronder, net als bij de boer
+  } else {
+    const terug = HH.terugVan(HH.lidBeweging(Sr, Er, Sn, El));
+    const mouw = kegel(Sn, El, 3.9, 3.4, M.kiel, dArm, 1.5);
+    const zoom = ring(HH.tussen(Sn, El, 0.96), HH.eenheid(HH.af(El, Sn)), 3.4, 1, M.kiel, dArm);
+    mouw.terug = terug;
+    zoom.terug = terug;
+    delen.push(mouw, zoom);
+    delen.push(kegel(El, HH.plus(Hn, HH.keer(u, -2.8)), 3.1, 2.4, M.huid, dArm, 1));
   }
+  hand(ctx, i, Hn, u, open);
 }
-// De hangende arm van de boer, die zwaait als hij loopt (Bn.Barm[i]), precies zoals in boer().
+// Een hand op Hn, de onderarm langs u. Dicht (open 0) is het de vuist van het lijf, een eivorm. Gaat hij open, dan
+// wordt het een handpalm met vier vingers en een duim: de vingers komen uit de vuist omhoog (gekromd naar de palm toe)
+// en strekken en spreiden zich tot een waaier als hij helemaal open is. De hand staat met zijn rug naar voren en
+// omhoog, naar wie kijkt, zodat je de waaier van de vingers ziet en niet de dunne kant van een plank (Marcel, 5 okt:
+// "een platte peddel zonder vingers"). De hand van de boerin is wat kleiner (handMaat).
+const HAND = { palm: [1.9, 2.2, 1.15], vinger: [2.9, 3.4, 3.3, 2.6], tussen: 1.05, dik: 0.56, spreid: 19, krom: 95, duim: 2.4 };
+function hand(ctx, i, Hn, u, open = 0) {
+  const { M, D, delen, lijf: L } = ctx;
+  const dHand = i ? D.handR : D.handL;
+  if (open <= 0.2) {
+    delen.push(ellips(Hn, L.vuist, M.huid, dHand, 0.6));
+    return;
+  }
+  const k = L.handMaat;
+  const o = klem((open - 0.2) / 0.8, 0, 1);
+  // de rug van de hand naar voren en omhoog (w), de vingers naast elkaar langs v
+  const naar = [0, 0.55, 0.85];
+  const w = HH.eenheid(HH.af(naar, HH.keer(u, HH.inwendig(naar, u))));
+  const v = HH.kruis(w, u);
+  const zij = i ? 1 : -1; // de duim aan de kant van het lijf
+  delen.push(ellipsLangs(HH.plus(Hn, HH.keer(u, 0.4 * k)), [u, v, w], HAND.palm.map((m) => m * k), M.huid, dHand, 0.6));
+  const krom = (HAND.krom * (1 - o) * Math.PI) / 180;
+  HAND.vinger.forEach((lang, j) => {
+    const s = ((j - 1.5) * HAND.spreid * o * zij * Math.PI) / 180;
+    const d0 = HH.plus(HH.keer(u, Math.cos(s)), HH.keer(v, Math.sin(s)));
+    const d = HH.plus(HH.keer(d0, Math.cos(krom)), HH.keer(w, -Math.sin(krom))); // gekromd naar de palm
+    const voet = HH.plus(HH.plus(Hn, HH.keer(u, 1.7 * k)), HH.keer(v, (j - 1.5) * HAND.tussen * k * zij));
+    delen.push(capsule(voet, HH.plus(voet, HH.keer(d, lang * k * (0.75 + 0.25 * o))), HAND.dik, M.huid, dHand));
+  });
+  // de duim: uit de muis van de hand, schuin opzij
+  const voet = HH.plus(HH.plus(Hn, HH.keer(u, -0.2 * k)), HH.keer(v, -1.7 * k * zij));
+  const dd = HH.eenheid(HH.plus(HH.plus(HH.keer(u, 0.7), HH.keer(v, -0.75 * zij * (0.4 + 0.6 * o))), HH.keer(w, -0.35 * (1 - o))));
+  delen.push(capsule(voet, HH.plus(voet, HH.keer(dd, HAND.duim * k)), HAND.dik + 0.08, M.huid, dHand));
+}
+// De hangende arm van de boer of de boerin, die zwaait als hij loopt (Bn.Barm[i]), precies zoals in boer() en boerin().
 function hangendeArm(ctx, i) {
-  arm(ctx, i, HANGT[i][0], HANGT[i][2]);
+  arm(ctx, i, ctx.lijf.HANGT[i][0], ctx.lijf.HANGT[i][2]);
   ctx.bot(ctx.Bn.Barm[i]);
 }
 
-// ---------------------------------------------------------------- de zaaier
+// ---------------------------------------------------------------- de zaaier en de zaaister
 
-// De zaaidoek: een lap linnen over zijn linkerschouder, van achteren over de schouder naar voren, waar de onderkant
-// een bolle zak vormt, vóór zijn linkerheup, met bovenin een mond vol zaad. Zijn linkerhand houdt de rand vast. Alles
-// gaat met de romp mee (in de rusthouding van de romp, zoals de zeis van de maaier).
-const ZAK = { midden: [-5, 11, 38.4], maat: [5.4, 4.6, 6.2] };
-const ZAK_MOND = [-4.6, 11.4, 44.4]; // waar de rechterhand een greep zaad neemt
-const ZAK_RAND = [-8.2, 14.2, 43.4]; // waar de linkerhand de rand vasthoudt
+// De zaaidoek: een lap linnen over de linkerschouder, van achteren over de schouder naar voren, waar de onderkant een
+// bolle zak vormt, vóór de linkerheup, met bovenin een mond vol zaad. De linkerhand houdt de rand vast. Alles gaat met
+// de romp mee (in de rusthouding van de romp, zoals de zeis van de maaier). Per lijf: de band (twee bochten: punten en
+// dikte), de zak (midden en maat), waar de rechtervuist in de zak gaat (in: in de rechterkant van de mond, want verder
+// reikt de rechterarm niet over het lijf) en waar de linkerhand de rand houdt (rand). Bij de boerin hangt de zak vóór
+// haar schort, de band over haar lagere schouder.
+const ZAAIDOEK = {
+  boer: {
+    band: [[[-6.4, -6.2, 40], [-7.6, -6.6, 57], [-7.6, 0.2, 61.9], 1.9, 1.8], [[-7.6, 0.2, 61.9], [-8, 9.2, 59.5], [-6.4, 10.4, 44.6], 1.8, 2.3]],
+    zak: { midden: [-5, 11, 38.4], maat: [5.4, 4.6, 6.2] },
+    in: [-2.4, 11.4, 42.8],
+    rand: [-8.2, 14.2, 43.4],
+  },
+  boerin: {
+    band: [[[-6.8, -7, 42], [-7.8, -7.2, 55], [-7.8, 0.2, 59.6], 1.9, 1.8], [[-7.8, 0.2, 59.6], [-8.4, 9.6, 57.6], [-7, 12, 45.2], 1.8, 2.3]],
+    zak: { midden: [-5.8, 12.6, 39.2], maat: [5.4, 4.6, 6.2] },
+    in: [-2.2, 12, 43.6],
+    rand: [-9, 15.4, 44.4],
+  },
+};
 function zaaidoek(ctx) {
   const { delen } = ctx;
+  const Z = ZAAIDOEK[ctx.lijf.naam];
   const mDoek = KAR.materiaal(ctx, 'zaaidoek', { ramp: 'perkament', lo: 1.5, hi: 5.2, patroon: (x, y, z) => (Math.sin(x * 0.8 + z * 0.45) > 0.8 ? -0.8 : 0) });
   const mZaad = KAR.materiaal(ctx, 'zaad', { ramp: 'stro', lo: 3.6, hi: 6.6, patroon: (x, y, z) => (Math.sin(x * 3.1) * Math.sin(y * 2.9) > 0.45 ? -1 : 0) });
   const dDoek = KAR.deel(ctx, 'zaaidoek');
   const dZaad = KAR.deel(ctx, 'zaad');
   // de band: van halverwege de rug omhoog over de linkerschouder, en voorop omlaag naar de zak
-  delen.push(...bochtKegel([-6.4, -6.2, 40], [-7.6, -6.6, 57], [-7.6, 0.2, 61.9], 1.9, 1.8, 5, mDoek, dDoek, 0.6));
-  delen.push(...bochtKegel([-7.6, 0.2, 61.9], [-8, 9.2, 59.5], [-6.4, 10.4, 44.6], 1.8, 2.3, 5, mDoek, dDoek, 0.6));
+  for (const [p0, p1, p2, r0, r1] of Z.band) delen.push(...bochtKegel(p0, p1, p2, r0, r1, 5, mDoek, dDoek, 0.6));
   // de zak: bol en zwaar onderaan, de bovenkant open, met het zaad erin
-  const [cx, cy, cz] = ZAK.midden;
-  const [a, b, c] = ZAK.maat;
+  const [cx, cy, cz] = Z.zak.midden;
+  const [a, b, c] = Z.zak.maat;
   const top = cz + c - 1.4;
   delen.push({
     f: (x, y, z) => {
@@ -305,14 +545,15 @@ function zaaidoek(ctx) {
   delen.push(ellips([cx, cy, top - 1.3], [a - 1.5, b - 1.5, 1.3], mZaad, dZaad));
 }
 
-// De worp, fase 0..1, een lus: de hand neemt zaad uit de zak (0), komt eruit en gaat voor hem langs omhoog, zwaait in
-// een wijde boog naar rechts (en gaat daar open, het zaad vliegt eruit), en komt laag terug naar de zak. Het lijf draait
-// mee: naar links als de hand in de zak is, naar rechts aan het eind van de worp, met het gewicht erbij; de voeten
-// blijven staan. De hand staat in de rusthouding van de romp (zoals de zeis van de maaier): de romp draait er nog
-// overheen.
+// De worp, fase 0..1, een lus: de vuist neemt zaad uit de zak (0), komt eruit en gaat voor hem langs omhoog, zwaait in
+// een wijde boog naar rechts (en gaat daar open, de vingers spreiden en het zaad vliegt eruit), en komt laag terug naar
+// de zak. Het lijf draait mee: naar links als de hand in de zak is, naar rechts aan het eind van de worp, met het
+// gewicht erbij; de voeten blijven staan. De hand staat in de rusthouding van de romp (zoals de zeis van de maaier): de
+// romp draait er nog overheen. De weg van de hand is die van de boer; de zaaister zaait vanuit haar eigen schouder
+// (naarLijf), en begint en eindigt in haar eigen zak.
 const ZAAIEN = {
   hand: [
-    [0, ZAK_MOND],
+    [0, 'in'], // de vuist in de zak (ZAAIDOEK)
     [0.1, [-1, 15.6, 45.6]],
     [0.22, [5.6, 18.2, 46.4]],
     [0.34, [13.6, 17.6, 47]],
@@ -327,7 +568,16 @@ const ZAAIEN = {
   buig: [[0, 7], [0.22, 4], [0.52, 2.5], [0.75, 4], [0.88, 6]],
   zij: [[0, -0.7], [0.3, 0], [0.52, 0.8], [0.75, 0.3]],
   knik: [[0, 3], [0.22, -1], [0.52, -2], [0.75, 0], [0.88, 2]],
+  // hoe ver de rechterschouder naar de zak toe komt (naar voren, naar binnen en wat omlaag; ZAK_REIK maal dit getal)
+  reik: [[0, 1], [0.12, 0.5], [0.22, 0], [0.8, 0], [0.92, 0.6]],
 };
+const ZAK_REIK = [-0.8, 1.6, -0.4];
+// de rechterschouder bij het zaaien (en staand, met de vuist in de zak), in de rusthouding van de romp
+const zaaiSchouder = (L, reik) => HH.plus(L.SCHOUDERS[1], HH.keer(ZAK_REIK, reik));
+// de sleutels van de hand per lijf
+const ZAAIEN_HAND = Object.fromEntries(
+  Object.values(LIJVEN).map((L) => [L.naam, ZAAIEN.hand.map(([f, p]) => [f, p === 'in' ? ZAAIDOEK[L.naam].in : naarLijf(L, 1, p)])]),
+);
 function houdingZaaien(fase) {
   const h = rustDorpeling();
   h.romp.draai = langsSleutels(ZAAIEN.draai, fase);
@@ -339,54 +589,61 @@ function houdingZaaien(fase) {
   return h;
 }
 
-// Het zaad dat uit de hand vliegt: korrels die op hun eigen moment loslaten, met de vaart van de hand mee, wat uit
-// elkaar, en vallen. Elk heeft een vast zaad, dus de lus is elke keer dezelfde. In de wereld gerekend (de hand op het
-// moment van loslaten, door de romp van dat moment), want wat los is, draait niet meer met het lijf mee.
-const KORRELS = 8;
-function handInWereld(t) {
-  const Bn = bottenDorpeling(houdingZaaien(t), { heup: HEUP, nek: NEK, schouders: SCHOUDERS });
-  return HH.opPunt(Bn.Bromp, langsSleutels(ZAAIEN.hand, t));
+// Het zaad dat uit de hand vliegt: een waaiertje korrels dat loslaat terwijl de vingers opengaan, met de vaart van de
+// hand mee, dwars daarop uit elkaar (van de ene kant van de waaier naar de andere, met een beetje toeval), en valt. Vlak
+// na het loslaten vangen ze even het licht (lichter, als kaf in de zon), daarna zijn ze strokleurig. Elk heeft een vast
+// zaad, dus de lus is elke keer dezelfde. In de wereld gerekend (de hand op het moment van loslaten, door de romp van
+// dat moment), want wat los is, draait niet meer met het lijf mee.
+const KORRELS = 14;
+const LICHT_TOT = 0.07; // zo lang na het loslaten vangt een korrel het licht (in fase)
+function handInWereld(L, t) {
+  return HH.opPunt(botten(L, houdingZaaien(t)).Bromp, langsSleutels(ZAAIEN_HAND[L.naam], t));
 }
 function zaad(ctx, fase) {
-  const mKorrel = KAR.materiaal(ctx, 'korrel', { ramp: 'stro', lo: 4.6, hi: 6.8, detail: true, schaduw: false });
+  const L = ctx.lijf;
+  const mKorrel = KAR.materiaal(ctx, 'korrel', { ramp: 'stro', lo: 4.4, hi: 6.8, detail: true, schaduw: false });
+  const mLicht = KAR.materiaal(ctx, 'korrel in het licht', { ramp: 'perkament', lo: 4.8, hi: 6.9, detail: true, schaduw: false });
   const dKorrel = KAR.deel(ctx, 'korrel');
   for (let k = 0; k < KORRELS; k++) {
-    const los = 0.4 + 0.18 * (k / (KORRELS - 1)) + 0.02 * (rnd(71, k, 1) - 0.5);
+    const plek = k / (KORRELS - 1); // waar in de waaier
+    const los = 0.42 + 0.14 * plek + 0.02 * (rnd(71, k, 1) - 0.5);
     const dt = fase - los;
     if (dt <= 0) continue;
-    const p0 = handInWereld(los);
+    const p0 = handInWereld(L, los);
     const e = 0.01;
-    const v = HH.keer(HH.af(handInWereld(los + e), handInWereld(los - e)), 1 / (2 * e));
-    const vaart = 0.75 + 0.35 * rnd(71, k, 2);
+    const v = HH.keer(HH.af(handInWereld(L, los + e), handInWereld(L, los - e)), 1 / (2 * e));
+    const vaart = 0.8 + 0.3 * rnd(71, k, 2);
     const [dw] = dwarsOp(HH.eenheid(v));
-    const opzij = 30 * (rnd(71, k, 3) - 0.5);
-    const op = 20 + 25 * rnd(71, k, 4);
+    const opzij = 44 * (plek - 0.5) + 10 * (rnd(71, k, 3) - 0.5);
+    const op = 22 + 22 * rnd(71, k, 4);
     const p = [
       p0[0] + (v[0] * vaart + dw[0] * opzij) * dt,
       p0[1] + (v[1] * vaart + dw[1] * opzij) * dt,
       p0[2] + (v[2] * vaart + op) * dt - 0.5 * 900 * dt * dt,
     ];
     if (p[2] < 1) continue;
-    ctx.delen.push(bol(p, 0.95, mKorrel, dKorrel));
+    ctx.delen.push(bol(p, 1.05, dt < LICHT_TOT ? mLicht : mKorrel, dKorrel));
   }
 }
 
-// De zaaier. stand: { houding: 'staan' | 'lopen' | 'zaaien', fase }.
-function zaaier(stand) {
+// De zaaier (lijf 'boer') of de zaaister ('boerin'). stand: { houding: 'staan' | 'lopen' | 'zaaien', fase }.
+function zaaier(stand, lijf = 'boer') {
+  const L = LIJVEN[lijf];
   const naam = stand.houding;
   const fase = stand.fase || 0;
-  const hg = naam === 'zaaien' ? houdingZaaien(fase) : gewoon(stand);
-  return werkBoer(hg, (ctx) => {
+  const hg = naam === 'zaaien' ? houdingZaaien(fase) : gewoon(stand, L);
+  return L.bouw(hg, (ctx) => {
     const { Bn, bot } = ctx;
+    const Z = ZAAIDOEK[lijf];
     zaaidoek(ctx);
     bot(Bn.Bromp);
-    arm(ctx, 0, SCHOUDERS[0], ZAK_RAND);
+    arm(ctx, 0, L.SCHOUDERS[0], Z.rand);
     bot(Bn.Bromp);
     if (naam === 'lopen') hangendeArm(ctx, 1);
     else {
-      const hand = naam === 'zaaien' ? langsSleutels(ZAAIEN.hand, fase) : ZAK_MOND;
+      const hand = naam === 'zaaien' ? langsSleutels(ZAAIEN_HAND[lijf], fase) : Z.in;
       const open = naam === 'zaaien' ? klem(stapsgewijs(ZAAIEN.open, fase), 0, 1) : 0;
-      arm(ctx, 1, SCHOUDERS[1], hand, open);
+      arm(ctx, 1, zaaiSchouder(L, naam === 'zaaien' ? stapsgewijs(ZAAIEN.reik, fase) : 1), hand, open);
       bot(Bn.Bromp);
     }
     if (naam === 'zaaien') {
@@ -396,32 +653,41 @@ function zaaier(stand) {
   });
 }
 
-// ---------------------------------------------------------------- de wieder
+// ---------------------------------------------------------------- de wieder en de wiedster
 
-// De schoffel: een trekschoffel aan een lange steel. Het blad (ijzer, breed en laag) zit met een zwanenhals aan het
-// eind van de steel, en staat schuin terug naar de steel, zodat het bij het trekken de grond naar de wieder toe haalt.
+// De schoffel: een trekschoffel aan een lange steel. Het blad is een platte, brede plaat ijzer, breder aan de snede dan
+// bovenaan (een trapezium), en zit met een zwanenhals een eind onder het eind van de steel: de hals loopt eerst in het
+// verlengde van de steel door en buigt dan naar de bovenrand van het blad. Het blad staat schuin terug naar de steel,
+// zodat het bij het trekken de grond naar de wieder toe haalt. Zo leest hij van elke kant als schoffel: van voren en
+// van achteren het brede blad, van opzij de hoek tussen blad en steel, en schuin een platte strook aan een gebogen hals,
+// geen blokje aan het eind van een stok (dat was een hamer; Marcel, 5 okt).
 // Gebouwd vanuit de hals N (waar de steel ophoudt), de richting van de steel naar boven (uh, eenheid) en de breedte
-// van het blad (e, dwars op uh): het blad staat 55 graden van de steel af, om e gedraaid. Geeft de punten terug waar
-// de handen hem vasthouden (bij, in eenheden vanaf het boveneind) en de snede onderaan het blad.
-const STEEL = 42;
-const BLAD_HOEK = 55;
+// van het blad (e, dwars op uh): het blad staat BLAD_HOEK graden van de steel af, om e gedraaid. Geeft de punten terug
+// waar de handen hem vasthouden (bij, in eenheden vanaf het boveneind) en de snede onderaan het blad.
+const STEEL = 45;
+const BLAD_HOEK = 66;
+// het blad: halve breedte aan de snede en bovenaan, hoogte (van de snede tot de bovenrand) en halve dikte; de hals: hoe
+// ver de bovenrand van het blad onder het eind van de steel zit, langs de steel en langs het blad
+const BLAD = { onder: 7.6, boven: 4.8, hoog: 6.4, dik: 0.45 };
+const HALS = { langs: 3.6, uit: 3.4 };
 function schoffel(ctx, N, uh, e) {
   const { M, delen } = ctx;
   const dSteel = KAR.deel(ctx, 'steel');
   const dBlad = KAR.deel(ctx, 'blad');
   const q = HH.maalV(HH.draaiing(e, -BLAD_HOEK), uh); // van de snede naar de hals
   const T = HH.plus(N, HH.keer(uh, STEEL));
-  const boven = HH.plus(HH.plus(N, HH.keer(uh, -2.6)), HH.keer(q, -2.2)); // de bovenrand van het blad
+  const boven = HH.plus(HH.plus(N, HH.keer(uh, -HALS.langs)), HH.keer(q, -HALS.uit)); // het midden van de bovenrand
+  const snede = HH.plus(boven, HH.keer(q, -BLAD.hoog));
   delen.push(kegel(N, T, 1.15, 1.25, M.hout, dSteel));
   delen.push(bol(T, 1.45, M.hout, dSteel, 0.6));
-  delen.push(ring(HH.plus(N, HH.keer(uh, 1.2)), uh, 1.3, 0.55, M.ijzer, dBlad));
-  delen.push(...bochtKegel(boven, HH.plus(boven, HH.keer(q, 2.8)), N, 0.85, 1.05, 3, M.ijzer, dBlad, 0.5));
-  const n = HH.kruis(e, q);
-  delen.push(plaat(HH.plus(boven, HH.keer(q, -2.9)), [e, q, n], [5.8, 2.9, 0.4], 0.5, M.ijzer, dBlad));
-  return {
-    snede: HH.plus(boven, HH.keer(q, -5.8)),
-    bij: (s) => HH.plus(T, HH.keer(uh, -s)),
-  };
+  delen.push(ring(HH.plus(N, HH.keer(uh, 1.4)), uh, 1.35, 0.6, M.ijzer, dBlad));
+  // de hals: van het eind van de steel eerst in zijn verlengde, dan gebogen naar de bovenrand, waar hij in het blad
+  // overgaat (een dikkere voet op de plaat)
+  const knik = HH.plus(N, HH.keer(uh, -HALS.langs * 0.9));
+  delen.push(...bochtKegel(N, knik, HH.plus(boven, HH.keer(q, 0.6)), 1.05, 0.8, 4, M.ijzer, dBlad, 0.5));
+  delen.push(ellipsLangs(HH.plus(boven, HH.keer(q, -0.3)), [e, q, HH.kruis(e, q)], [1.9, 1.1, 0.75], M.ijzer, dBlad, 0.6));
+  delen.push(trapezium(snede, [e, q, HH.kruis(e, q)], BLAD, 0.7, M.ijzer, dBlad));
+  return { snede, bij: (s) => HH.plus(T, HH.keer(uh, -s)) };
 }
 // Waar de handen de steel vasthouden, in eenheden vanaf het boveneind: de linker bovenaan, de rechter een eind lager
 // (wie rechts is, trekt met de onderste hand).
@@ -430,13 +696,13 @@ const GREEP_ONDER = 9.5;
 // De schoffel tussen de bovenste hand en de snede: de hand staat waterpas op `hand` ([x, y]), de snede precies op
 // `snede`. De steel is zo lang als hij is, dus de hoogte van de hand volgt eruit, en de richting van de steel ook.
 function schoffelTussen(ctx, hand, snede) {
-  const L = STEEL - GREEP_BOVEN + 2.6; // van de bovenste hand langs de steel tot de bovenrand van het blad (schoffel)
+  const L = STEEL - GREEP_BOVEN + HALS.langs; // van de bovenste hand langs de steel tot waar de hals het blad raakt
   let d = HH.eenheid(HH.af(snede, [hand[0], hand[1], snede[2] + 35]));
   let B = null;
   for (let k = 0; k < 8; k++) {
     const uh = HH.keer(d, -1);
     const q = HH.maalV(HH.draaiing(HH.eenheid(HH.kruis([0, 0, 1], uh)), -BLAD_HOEK), uh);
-    const W = HH.plus(snede, HH.keer(q, 8));
+    const W = HH.plus(snede, HH.keer(q, BLAD.hoog + HALS.uit));
     const h = Math.hypot(W[0] - hand[0], W[1] - hand[1]);
     B = [hand[0], hand[1], W[2] + Math.sqrt(Math.max(0, L * L - h * h))];
     d = HH.eenheid(HH.af(W, B));
@@ -475,9 +741,17 @@ const WIEDEN = {
   zak: [[0, 2.6], [0.2, 3.6], [0.45, 3.2], [0.7, 2.6]],
   draai: [[0, 10], [0.2, 12], [0.58, 9], [0.85, 9]],
 };
-function houdingWieden(fase) {
+// Wat de wiedster anders doet dan de wieder: haar schouders zitten lager en verder naar achteren, en haar armen zijn
+// korter, dus ze buigt wat dieper, houdt de schoffel wat dichter bij zich en hakt wat minder ver. Staand leunt ze op een
+// schoffel die wat schuiner staat (haar handen komen anders hoger dan haar borst), en lopend rust de steel op haar
+// lagere schouder.
+const WIEDEN_LIJF = {
+  boer: { buig: 0, hand: [0, 0], snede: [0, 0, 0], staan: { hand: [0.8, 11.4], snede: [3.6, 17.4, 0] }, schouder: [9.85, 12, 60.4] },
+  boerin: { buig: 6, hand: [0, -1.6], snede: [0, -2.4, 0], staan: { hand: [0.8, 11.6], snede: [3.6, 20.4, 0] }, schouder: [10.3, 12, 58.6] },
+};
+function houdingWieden(fase, lijf = 'boer') {
   const h = rustDorpeling();
-  h.romp.buig = langsSleutels(WIEDEN.buig, fase);
+  h.romp.buig = langsSleutels(WIEDEN.buig, fase) + WIEDEN_LIJF[lijf].buig;
   h.romp.draai = langsSleutels(WIEDEN.draai, fase);
   h.zak = langsSleutels(WIEDEN.zak, fase);
   h.voor = -1.5;
@@ -490,14 +764,14 @@ function houdingWieden(fase) {
 // aarde dat voor het blad uit naar hem toe schuift en blijft liggen waar het trekken ophoudt (tot de volgende klap).
 // In de wereld.
 const EIND_VAN_DE_HAAL = [6.6, 27.6, 0];
-function losseGrond(ctx, fase, snede) {
+function losseGrond(ctx, fase, snede, eind = EIND_VAN_DE_HAAL) {
   const mAarde = KAR.materiaal(ctx, 'aarde', { ramp: 'aarde', lo: 1.2, hi: 4.8, patroon: (x, y, z) => (Math.sin(x * 2.3 + y * 1.7) > 0.6 ? -0.8 : 0) });
   const dAarde = KAR.deel(ctx, 'aarde');
   const { delen } = ctx;
   if (fase > 0.22) {
     const groei = klem((fase - 0.22) / 0.14, 0, 1);
-    const naarHem = HH.eenheid(HH.af(EIND_VAN_DE_HAAL, snede));
-    const plek = fase < 0.58 ? HH.plus(snede, HH.keer(naarHem, 2.8)) : EIND_VAN_DE_HAAL;
+    const naarHem = HH.eenheid(HH.af(eind, snede));
+    const plek = fase < 0.58 ? HH.plus(snede, HH.keer(naarHem, 2.8)) : eind;
     delen.push(ellips(HH.plus(plek, [0, 0, 0.4]), [3.8 * groei + 0.6, 2.2, 1.6 * groei + 0.4], mAarde, dAarde, 0.6));
   }
   for (let k = 0; k < 4; k++) {
@@ -509,34 +783,39 @@ function losseGrond(ctx, fase, snede) {
   }
 }
 
-// De wieder. stand: { houding: 'staan' | 'lopen' | 'wieden', fase }.
+// De wieder (lijf 'boer') of de wiedster ('boerin'). stand: { houding: 'staan' | 'lopen' | 'wieden', fase }.
 //   staan: hij leunt op zijn schoffel, die rechtop voor hem staat met het blad op de grond, de handen op elkaar op het
 //          boveneind; hij ademt, de schoffel staat stil.
 //   lopen: de schoffel over de rechterschouder, het blad achter hem; de rechterhand houdt de steel vóór de schouder,
 //          de linkerarm zwaait mee. De schoffel gaat met de romp mee.
-function wieder(stand) {
+function wieder(stand, lijf = 'boer') {
+  const L = LIJVEN[lijf];
+  const W = WIEDEN_LIJF[lijf];
   const naam = stand.houding;
   const fase = stand.fase || 0;
   let hg;
-  if (naam === 'wieden') hg = houdingWieden(fase);
+  if (naam === 'wieden') hg = houdingWieden(fase, lijf);
   else {
-    hg = gewoon(stand);
+    hg = gewoon(stand, L);
     if (naam === 'staan') hg.romp.buig += 5; // hij hangt een beetje op de steel
   }
-  return werkBoer(hg, (ctx) => {
+  return L.bouw(hg, (ctx) => {
     const { Bn, bot } = ctx;
-    const schouder = (i) => HH.opPunt(Bn.Bromp, SCHOUDERS[i]);
+    const schouder = (i) => HH.opPunt(Bn.Bromp, L.SCHOUDERS[i]);
     if (naam === 'lopen') {
       // in de rusthouding van de romp: de steel rust op de rechterschouder, het boveneind voor hem, het blad achter
       const uh = HH.eenheid([0.03, 1, 0.03]);
-      const s = schoffel(ctx, HH.plus([9.85, 12, 60.4], HH.keer(uh, -STEEL)), uh, [-1, 0, 0]);
+      const s = schoffel(ctx, HH.plus(W.schouder, HH.keer(uh, -STEEL)), uh, [-1, 0, 0]);
       bot(Bn.Bromp);
       arm(ctx, 1, schouder(1), HH.opPunt(Bn.Bromp, HH.plus(s.bij(4.6), [0, 0, -1])));
       bot(null);
       hangendeArm(ctx, 0);
       return;
     }
-    const s = naam === 'staan' ? schoffelTussen(ctx, [0.8, 11.4], [3.6, 17.4, 0]) : schoffelTussen(ctx, langsSleutels(WIEDEN.hand, fase), langsSleutels(WIEDEN.snede, fase));
+    const s =
+      naam === 'staan'
+        ? schoffelTussen(ctx, W.staan.hand, W.staan.snede)
+        : schoffelTussen(ctx, HH.plus([...langsSleutels(WIEDEN.hand, fase), 0], [...W.hand, 0]).slice(0, 2), HH.plus(langsSleutels(WIEDEN.snede, fase), W.snede));
     bot(null);
     if (naam === 'staan') {
       arm(ctx, 0, schouder(0), s.bij(GREEP_BOVEN));
@@ -549,22 +828,53 @@ function wieder(stand) {
     bot(null);
     arm(ctx, 1, schouder(1), s.bij(GREEP_ONDER));
     bot(null);
-    losseGrond(ctx, fase, s.snede);
+    losseGrond(ctx, fase, s.snede, HH.plus(EIND_VAN_DE_HAAL, W.snede));
     bot(null);
   });
 }
 
-// ---------------------------------------------------------------- de sprokkelaar
+// ---------------------------------------------------------------- de sprokkelaar en de sprokkelaarster
 
-// Het takkenbos: een bundel takken op zijn rug, van de heupen tot boven de schouders, scheef (onderaan naar links,
-// bovenaan naar rechts, waar zijn rechterhand er een tak bij steekt), met twee touwen erom en twee banden over de
+// Het takkenbos: een bundel takken op de rug, van de heupen tot boven de schouders, scheef (onderaan naar links,
+// bovenaan naar rechts, waar de rechterhand er een tak bij steekt), met twee touwen erom en twee banden over de
 // schouders naar voren, zoals het rek van de marskramer. De takken zijn dun en niet even lang, en waaieren naar de
 // einden uit (de touwen knijpen de bundel in het midden samen); een paar hebben een zijtak, en bovenaan steken
-// twijgen uit, achter en naast de rand van de hoed. In de rusthouding van de romp.
-const BUNDEL = { onder: [-6, -11.4, 29], boven: [6.4, -14.2, 67], dik: 4.8 };
+// twijgen uit, achter en naast de rand van de hoed. In de rusthouding van de romp. Per lijf: de bundel (onder, boven,
+// dik), de banden (van de bundel over de schouder, en voorop omlaag; s is links -1 of rechts 1), waar de linkerhand de
+// band vasthoudt (greep), om welk punt de bundel deint als hij loopt (deint), en waar de laatste tak in de bundel zit
+// (laatste: t langs de as, hoek en afstand, zie bundelPunt; zakken: zo ver laat de hand hem erin zakken). De boerin
+// draagt hem wat hoger op haar rug, boven de rok, en steekt de tak er wat lager in, want haar armen zijn korter.
+const TAKKENBOS = {
+  boer: {
+    bundel: { onder: [-6, -11.4, 29], boven: [6.4, -14.2, 67], dik: 4.8 },
+    banden: (s) => [[[s * 5.6, -8.2, 55 + 2 * s], [s * 7.6, -5.4, 62.6], [s * 7.6, 1.4, 61.2]], [[s * 7.6, 1.4, 61.2], [s * 7.8, 8.8, 58.6], [s * 7.2, 9, 44.5]]],
+    greep: [-6.4, 10.6, 50.6],
+    deint: [0, -8, 58],
+    laatste: { t: 1.06, hoek: 3.75, r: 4, zakken: 3.5 },
+  },
+  boerin: {
+    bundel: { onder: [-6, -12.8, 32], boven: [6.2, -14.6, 66], dik: 4.8 },
+    banden: (s) => [[[s * 5.6, -8.8, 52 + 2 * s], [s * 7.6, -5.8, 59.6], [s * 7.6, 1.2, 58.8]], [[s * 7.6, 1.2, 58.8], [s * 7.8, 9.4, 56.2], [s * 7.2, 10, 42.5]]],
+    greep: [-6.8, 10.6, 47.6],
+    deint: [0, -8, 56],
+    laatste: { t: 0.96, hoek: 3.75, r: 4.4, zakken: 3 },
+  },
+};
 const TAKKEN = 18;
+// De as van een bundel en de twee richtingen dwars erop, en een punt erin: t langs de as (0 onder, 1 boven), op hoek a
+// en afstand r van de as. In de rusthouding van de romp.
+function bundelAs(B) {
+  const as = HH.af(B.boven, B.onder);
+  const lang = HH.lengte(as);
+  const u = HH.eenheid(as);
+  const [v, w] = dwarsOp(u);
+  const punt = (t, a, r) => HH.plus(HH.plus(B.onder, HH.keer(u, t * lang)), HH.plus(HH.keer(v, r * Math.cos(a)), HH.keer(w, r * Math.sin(a))));
+  return { lang, u, v, w, punt };
+}
 function takkenbos(ctx) {
   const { delen } = ctx;
+  const T = TAKKENBOS[ctx.lijf.naam];
+  const BUNDEL = T.bundel;
   const mTak = [
     KAR.materiaal(ctx, 'tak', { ramp: 'schors', lo: 1.2, hi: 5.2 }),
     KAR.materiaal(ctx, 'tak2', { ramp: 'hout', lo: 1.2, hi: 5 }),
@@ -573,12 +883,7 @@ function takkenbos(ctx) {
   const mTouw = KAR.materiaal(ctx, 'touw', { ramp: 'riet', lo: 1.6, hi: 5.2, patroon: (x, y, z) => (Math.sin((x + y + z) * 2.2) > 0.5 ? -0.8 : 0) });
   const dBos = KAR.deel(ctx, 'takkenbos');
   const dTouw = KAR.deel(ctx, 'touw');
-  const as = HH.af(BUNDEL.boven, BUNDEL.onder);
-  const lang = HH.lengte(as);
-  const u = HH.eenheid(as);
-  const [v, w] = dwarsOp(u);
-  // een punt in de bundel: t langs de as (0 onder, 1 boven), op hoek a en afstand r van de as
-  const op = (t, a, r) => HH.plus(HH.plus(BUNDEL.onder, HH.keer(u, t * lang)), HH.plus(HH.keer(v, r * Math.cos(a)), HH.keer(w, r * Math.sin(a))));
+  const { u, v, w, punt: op } = bundelAs(BUNDEL);
   const stukken = [];
   for (let i = 0; i < TAKKEN; i++) {
     const a = (i / TAKKEN) * 2 * Math.PI * 2.618 + rnd(91, i, 1);
@@ -643,21 +948,14 @@ function takkenbos(ctx) {
     });
   }
   // de banden: van de bundel over elke schouder naar voren, tot onder de borst (onder de armen terug zie je niet)
-  for (const s of [-1, 1]) {
-    const achter = [s * 5.6, -8.2, 55 + 2 * s];
-    delen.push(...bochtKegel(achter, [s * 7.6, -5.4, 62.6], [s * 7.6, 1.4, 61.2], 0.85, 0.85, 4, mTouw, dTouw, 0.5));
-    delen.push(...bochtKegel([s * 7.6, 1.4, 61.2], [s * 7.8, 8.8, 58.6], [s * 7.2, 9, 44.5], 0.85, 0.85, 4, mTouw, dTouw, 0.5));
-  }
+  for (const s of [-1, 1]) for (const [p0, p1, p2] of T.banden(s)) delen.push(...bochtKegel(p0, p1, p2, 0.85, 0.85, 4, mTouw, dTouw, 0.5));
 }
-// Waar de linkerhand de linkerband vasthoudt, op de borst.
-const BAND_GREEP = [-6.4, 10.6, 50.6];
 
 // Lopend deint de bundel mee: hij komt een fractie na het lijf omhoog en omlaag, en kantelt wat opzij, zoals het rek
 // van de marskramer. Een beweging na de romp (Bn.Bromp), om de plek waar de banden over de schouders gaan.
-function bundelDeint(Bn, stand) {
+function bundelDeint(Bn, stand, om) {
   if (stand.houding !== 'lopen') return Bn.Bromp;
   const f = stand.fase || 0;
-  const om = [0, -8, 58];
   const deinen = HH.beweging({
     M: HH.maalM(HH.draaiing([0, 1, 0], -2.2 * HH.sinus(f - 0.2)), HH.draaiing([1, 0, 0], 1.2 * HH.sinus(2 * (f - 0.1)))),
     om,
@@ -666,50 +964,119 @@ function bundelDeint(Bn, stand) {
   return HH.naElkaar(Bn.Bromp, deinen);
 }
 
-// Het rapen, fase 0..1, een lus: hij staat (0), bukt diep met de knieën door en reikt met zijn rechterhand naar een tak
-// die rechts voor hem op de grond ligt (0,4), pakt hem bij het eind dat het dichtst bij is en komt overeind, terwijl hij
-// de tak rechtop draait (0,68), steekt hem over zijn rechterschouder bovenin de bundel (0,84), en zijn arm komt weer
-// naar beneden. De hand en de tak in de wereld, want de tak ligt op de grond.
-const TAK_OP_GROND = { greep: [8.2, 20.4, 1.2], richting: HH.eenheid([0.55, 0.84, 0]), lang: 17 };
+// Het rapen, fase 0..1, een lus (Marcel, 5 okt: hij bukte zo diep dat je van voren alleen zijn hoed en de bundel zag):
+// hij staat (0) en kijkt naar een tak die rechts voor hem op de grond ligt, gaat door de knieën tot hij diep hurkt, de
+// heupen naar achteren, de knieën uit elkaar en de rug zo recht als zijn korte armen toelaten, het hoofd omhoog naar de
+// tak; zijn linkerhand steunt op zijn knie en zijn rechterhand reikt naar de tak (0,25). Hij pakt hem bij het eind dat
+// het dichtst bij is (0,34) en komt overeind; de tak sleept eerst met zijn andere eind over de grond en hangt dan aan
+// zijn hand (0,55). Hij brengt hem voor zich langs omhoog en over zijn rechterschouder (0,72), laat hem bovenin de
+// bundel zakken (0,75 tot 0,84) en laat los: de tak zit in de bundel. Zijn arm komt weer naar beneden.
+// De tak gaat zo van de grond naar de hand en naar de bundel. Waar hij in de bundel belandt (TAKKENBOS, laatste), zit
+// altijd een tak (de vorige), zodat er aan het eind van de lus niets uit de bundel verdwijnt; alleen de nieuwe op de
+// grond is er dan weer.
+// De hand en de tak in de wereld, want de tak ligt op de grond. Van 0,72 tot 0,92 staat hij recht (de romp in rust),
+// zodat de wereld en de rusthouding van de romp daar samenvallen en de tak precies in zijn plek in de bundel zakt.
+// De sprokkelaarster doet hetzelfde in haar rok: ze moet dieper door de knieën en verder voorover om er met haar
+// kortere armen bij te komen (RAPEN_BOERIN), en haar hand gaat dezelfde weg vanuit haar eigen schouder.
+const TAK = { greep: [8.6, 14.8, 1.3], richting: HH.eenheid([0.5, 0.86, 0]), lang: 17 }; // greep: waar de boer hem pakt
+// De sleutels staan op de beelden (zestien, k/16): onderweg naar beneden hangt de hand onder de schouder, want verder
+// reiken zijn korte armen niet.
 const RAPEN = {
   hand: [
     [0, HANGT[1][2]],
-    [0.1, [11.8, 7.4, 29.6]],
-    [0.22, [10.4, 15.6, 13.6]],
-    [0.32, [8.8, 19.6, 5]],
-    [0.4, [8.2, 20.2, 3.6]],
-    [0.48, [8.8, 18.6, 7.6]],
-    [0.58, [11.6, 14, 22]],
-    [0.68, [13.2, 8.4, 40]],
-    [0.76, [12.4, 2.2, 54.4]],
-    [0.84, [9.8, -4.6, 61.4]],
-    [0.92, [12.4, 0.6, 47]],
+    [0.0625, [12, 6.4, 34.6]],
+    [0.125, [11.2, 11.4, 25.6]],
+    [0.1875, [10, 13.6, 16.4]],
+    [0.25, [8.8, 14.6, 6.4]],
+    [0.3125, [8.6, 14.8, 4.6]],
+    [0.375, [8.6, 14.8, 4.8]],
+    [0.4375, [9.4, 14, 10.4]],
+    [0.5, [11.2, 12, 19.4]],
+    [0.5625, [12.8, 9.2, 30.4]],
+    [0.625, [13.8, 6, 42.4]],
+    [0.6875, [13.4, 0.4, 56]],
+    [0.75, 'boven'], // boven de plek in de bundel (TAKKENBOS, laatste, zo ver als hij hem laat zakken)
+    [0.8125, 'in'], // de tak zit erin
+    [0.875, 'in'],
+    [0.9375, [12.6, 1.6, 47]],
   ],
-  // waar de tak heen wijst, van de hand naar zijn andere eind: eerst over de grond van hem af, dan omhoog gedraaid, en
-  // bovenaan schuin naar achteren, langs de bundel
-  tak: [
-    [0.4, HH.eenheid([0.55, 0.84, -0.06])],
-    [0.48, HH.eenheid([0.52, 0.82, -0.22])],
-    [0.58, HH.eenheid([0.5, 0.82, 0.28])],
-    [0.68, HH.eenheid([0.34, 0.42, 0.84])],
-    [0.76, HH.eenheid([0.18, -0.12, 0.98])],
-    [0.84, HH.eenheid([0.12, -0.42, 0.9])],
-  ],
-  buig: [[0, 0], [0.1, 10], [0.22, 46], [0.32, 70], [0.4, 74], [0.48, 68], [0.58, 44], [0.68, 16], [0.76, 4], [0.88, 2]],
-  zak: [[0, 0], [0.1, 2], [0.22, 7.5], [0.32, 12], [0.4, 13], [0.48, 12], [0.58, 6.5], [0.68, 1.5], [0.8, 0]],
-  voor: [[0, 0], [0.22, -2.5], [0.4, -4], [0.58, -2.5], [0.76, 0]],
-  draai: [[0, 0], [0.22, 4], [0.4, 6], [0.58, 4], [0.76, -3], [0.88, -2]],
-  open: [[0, 0], [0.24, 0], [0.33, 0.6], [0.4, 0], [0.8, 0], [0.86, 0.7], [0.93, 0]],
+  // de romp, zonder doorschieten (stapsgewijs): van 0,72 tot 0,92 precies in rust
+  zak: [[0, 0], [0.0625, 2], [0.125, 8], [0.1875, 14], [0.25, 18.6], [0.375, 19], [0.4375, 16.5], [0.5, 11], [0.5625, 5], [0.625, 1.2], [0.7, 0], [0.92, 0]],
+  voor: [[0, 0], [0.0625, -1.2], [0.125, -4], [0.1875, -6.8], [0.25, -8.5], [0.375, -8.5], [0.4375, -7], [0.5, -4.6], [0.5625, -2], [0.625, -0.4], [0.7, 0], [0.92, 0]],
+  buig: [[0, 4], [0.0625, 10], [0.125, 22], [0.1875, 36], [0.25, 49], [0.375, 51], [0.4375, 45], [0.5, 34], [0.5625, 20], [0.625, 8], [0.7, 0], [0.92, 0]],
+  draai: [[0, 3], [0.125, 6], [0.25, 7], [0.375, 7], [0.5, 4], [0.625, 1], [0.7, 0], [0.92, 0]],
+  // het hoofd: omhoog tegen de buiging in, zodat hij naar de tak kijkt en je onder de rand van zijn hoed zijn gezicht ziet
+  knik: [[0, 9], [0.0625, 4], [0.125, -10], [0.1875, -24], [0.25, -37], [0.375, -39], [0.4375, -33], [0.5, -22], [0.5625, -10], [0.625, -2], [0.7, -6], [0.8125, -4], [0.92, 2]],
+  nekDraai: [[0, 8], [0.25, 6], [0.5, 2], [0.625, 0], [0.7, 12], [0.8125, 14], [0.92, 6]],
+  knieUit: [[0, 0], [0.125, 1], [0.25, 2.6], [0.375, 2.6], [0.5, 1.2], [0.625, 0], [0.92, 0]],
+  // hoe ver de rechterschouder naar de tak toe komt (naar voren en omlaag)
+  reik: [[0, 0], [0.125, 0.8], [0.25, 2.6], [0.375, 2.6], [0.5, 0.8], [0.5625, 0], [0.92, 0]],
+  // de linkerhand: van de band (0) naar de knie (1)
+  steun: [[0, 0], [0.0625, 0], [0.1875, 1], [0.4375, 1], [0.5625, 0], [0.92, 0]],
+  open: [[0, 0], [0.19, 0], [0.25, 0.85], [0.3125, 0.85], [0.36, 0], [0.84, 0], [0.875, 0.9], [0.93, 0.6], [0.98, 0]],
 };
-function houdingRapen(fase) {
+// De romp van de sprokkelaarster: haar heup zit hoger en haar armen zijn korter, dus ze zakt dieper en buigt verder.
+const RAPEN_BOERIN = {
+  ...RAPEN,
+  zak: [[0, 0], [0.0625, 2], [0.125, 8.5], [0.1875, 15], [0.25, 19.6], [0.375, 20], [0.4375, 17.4], [0.5, 11.6], [0.5625, 5.2], [0.625, 1.2], [0.7, 0], [0.92, 0]],
+  voor: [[0, 0], [0.0625, -1], [0.125, -3.4], [0.1875, -5.6], [0.25, -7], [0.375, -7], [0.4375, -5.8], [0.5, -3.8], [0.5625, -1.6], [0.625, -0.3], [0.7, 0], [0.92, 0]],
+  buig: [[0, 4], [0.0625, 11], [0.125, 25], [0.1875, 41], [0.25, 56], [0.375, 58], [0.4375, 51], [0.5, 38], [0.5625, 22], [0.625, 8], [0.7, 0], [0.92, 0]],
+  knik: [[0, 9], [0.0625, 4], [0.125, -12], [0.1875, -28], [0.25, -42], [0.375, -44], [0.4375, -38], [0.5, -25], [0.5625, -11], [0.625, -2], [0.7, -6], [0.8125, -4], [0.92, 2]],
+};
+const RAPEN_VAN = { boer: RAPEN, boerin: RAPEN_BOERIN };
+const GRIJP = 0.34; // vanaf hier is de tak in zijn hand
+const LOS = 0.86; // en vanaf hier in de bundel
+const OPRICHTEN = [0.6, 0.73]; // van hangen naar de richting van de bundel
+function houdingRapen(fase, lijf = 'boer') {
+  const R = RAPEN_VAN[lijf];
   const h = rustDorpeling();
-  h.romp.buig = langsSleutels(RAPEN.buig, fase);
-  h.zak = langsSleutels(RAPEN.zak, fase);
-  h.voor = langsSleutels(RAPEN.voor, fase);
-  h.romp.draai = langsSleutels(RAPEN.draai, fase);
-  h.nek.knik = -0.3 * h.romp.buig;
-  h.nek.draai = -0.4 * h.romp.draai;
+  const sp = (rij) => stapsgewijs(rij, fase);
+  h.zak = sp(R.zak);
+  h.voor = sp(R.voor);
+  h.romp.buig = sp(R.buig);
+  h.romp.draai = sp(R.draai);
+  h.nek.knik = sp(R.knik);
+  h.nek.draai = sp(R.nekDraai);
+  h.knieUit = sp(R.knieUit);
+  h.hurkt = true; // de rok van de boerin gaat mee (rokProfiel)
   return h;
+}
+// De rechterschouder bij het rapen, in de wereld (hij komt wat naar voren als hij reikt).
+function rapenSchouder(L, fase) {
+  const reik = stapsgewijs(RAPEN.reik, fase);
+  return HH.opPunt(botten(L, houdingRapen(fase, L.naam)).Bromp, HH.plus(L.SCHOUDERS[1], [0, reik, -0.5 * reik]));
+}
+// Per lijf: waar de laatste tak in de bundel zit en welke kant hij op wijst (de bundel in, omlaag), de sleutels van de
+// hand (die van de boer, vanuit de schouder van dat lijf op dat moment), en waar de tak op de grond ligt: bij de boer
+// waar zijn sleutels de hand zetten (TAK), bij een ander lijf recht onder de hand op het moment dat die hem pakt.
+const RAPEN_LIJF = Object.fromEntries(
+  Object.values(LIJVEN).map((L) => {
+    const T = TAKKENBOS[L.naam];
+    const as = bundelAs(T.bundel);
+    const inBundel = as.punt(T.laatste.t, T.laatste.hoek, T.laatste.r);
+    const plek = { boven: HH.plus(inBundel, HH.keer(as.u, T.laatste.zakken)), in: inBundel };
+    const hand = RAPEN.hand.map(([f, p]) => [f, plek[p] || naarLijf(L, 1, p, rapenSchouder(BOER, f), rapenSchouder(L, f))]);
+    const grijp = langsSleutels(hand, GRIJP);
+    return [L.naam, { inBundel, omlaag: HH.keer(as.u, -1), hand, greep: L === BOER ? TAK.greep : [grijp[0], grijp[1], TAK.greep[2]] }];
+  }),
+);
+// de hand van het rapen op fase t (in de wereld)
+const rapenHand = (t, lijf = 'boer') => langsSleutels(RAPEN_LIJF[lijf].hand, t);
+// Waar de tak is op fase t: { van, r } (van het eind in de hand langs richting r), of null als hij in de bundel zit.
+function takNu(t, hand, lijf = 'boer') {
+  const R = RAPEN_LIJF[lijf];
+  if (t < GRIJP) return { van: R.greep, r: TAK.richting };
+  if (t >= LOS) return null;
+  const L = TAK.lang;
+  // het andere eind sleept over de grond, recht onder de hand weg, tot de tak aan de hand hangt
+  const hoog = Math.max(0, hand[2] - 1);
+  const over = Math.sqrt(Math.max(0, L * L - hoog * hoog));
+  const ver = [hand[0] + TAK.richting[0] * over, hand[1] + TAK.richting[1] * over, 1];
+  let r = HH.eenheid(HH.af(ver, hand));
+  // en boven de schouder draait hij hem in de richting van de bundel
+  const k = HH.soepel(klem((t - OPRICHTEN[0]) / (OPRICHTEN[1] - OPRICHTEN[0]), 0, 1));
+  if (k > 0) r = HH.eenheid(HH.plus(HH.keer(r, 1 - k), HH.keer(R.omlaag, k)));
+  return { van: hand, r };
 }
 // Een tak: een stok met één zijtak, van `van` (waar de hand hem heeft) langs richting r. Lichter en wat dikker dan de
 // takken in de bundel: een droge tak, die je ook tegen de donkere kiel ziet.
@@ -723,35 +1090,77 @@ function tak(ctx, van, r, lang) {
   ctx.delen.push(capsule(zij, HH.plus(HH.plus(zij, HH.keer(r, 4.5)), HH.keer(dw, 3.2)), 0.7, m, d));
 }
 
-// De sprokkelaar. stand: { houding: 'staan' | 'lopen' | 'rapen', fase }. In alle drie het takkenbos op zijn rug en zijn
-// linkerhand aan de band; staand en lopend hangt zijn rechterarm zoals bij de boer (en zwaait hij mee).
-function sprokkelaar(stand) {
+// De sprokkelaar (lijf 'boer') of de sprokkelaarster ('boerin'). stand: { houding: 'staan' | 'lopen' | 'rapen', fase }.
+// In alle drie het takkenbos op de rug, met de tak die er het laatst in ging, en de linkerhand aan de band (bij het
+// rapen steunt die er even mee op de knie); staand en lopend hangt de rechterarm zoals bij de boer of de boerin (en
+// zwaait hij mee).
+function sprokkelaar(stand, lijf = 'boer') {
+  const L = LIJVEN[lijf];
+  const T = TAKKENBOS[lijf];
+  const R = RAPEN_LIJF[lijf];
   const naam = stand.houding;
   const fase = stand.fase || 0;
-  const hg = naam === 'rapen' ? houdingRapen(fase) : gewoon(stand);
-  return werkBoer(hg, (ctx) => {
+  const hg = naam === 'rapen' ? houdingRapen(fase, lijf) : gewoon(stand, L);
+  return L.bouw(hg, (ctx) => {
     const { Bn, bot } = ctx;
     takkenbos(ctx);
-    bot(bundelDeint(Bn, stand));
-    arm(ctx, 0, SCHOUDERS[0], BAND_GREEP);
-    bot(Bn.Bromp);
+    tak(ctx, R.inBundel, R.omlaag, TAK.lang);
+    bot(bundelDeint(Bn, stand, T.deint));
     if (naam !== 'rapen') {
+      arm(ctx, 0, L.SCHOUDERS[0], T.greep);
+      bot(Bn.Bromp);
       hangendeArm(ctx, 1);
       return;
     }
-    const hand = langsSleutels(RAPEN.hand, fase);
-    arm(ctx, 1, HH.opPunt(Bn.Bromp, SCHOUDERS[1]), hand, klem(stapsgewijs(RAPEN.open, fase), 0, 1));
+    // de linkerhand: van de band naar de knie, en terug
+    const steun = stapsgewijs(RAPEN.steun, fase);
+    const opKnie = HH.plus(ctx.knie[0], L === BOER ? [0.6, 1.8, 3.4] : [0.4, 2.4, 5.2]);
+    const links = HH.tussen(HH.opPunt(Bn.Bromp, T.greep), opKnie, steun);
+    arm(ctx, 0, HH.opPunt(Bn.Bromp, L.SCHOUDERS[0]), links);
     bot(null);
-    // de tak: op de grond tot hij hem pakt, dan aan zijn hand, tot hij hem in de bundel laat zakken
-    if (fase < 0.4) tak(ctx, TAK_OP_GROND.greep, TAK_OP_GROND.richting, TAK_OP_GROND.lang);
-    else if (fase < 0.87) tak(ctx, hand, HH.eenheid(langsSleutels(RAPEN.tak, klem(fase, 0.4, 0.84))), TAK_OP_GROND.lang);
+    // de rechterhand, met de schouder wat naar voren als hij reikt
+    const hand = rapenHand(fase, lijf);
+    arm(ctx, 1, rapenSchouder(L, fase), hand, klem(stapsgewijs(RAPEN.open, fase), 0, 1));
+    bot(null);
+    const t = takNu(fase, hand, lijf);
+    if (t) tak(ctx, t.van, t.r, TAK.lang);
     bot(null);
   });
 }
 
+// ---------------------------------------------------------------- de maaister
+
+// De maaister: de boerin met de zeis van de maaier en zijn maaislag (maaier.cjs: zeisInDeHanden, houdingMaaier), zodat
+// het spel bij een boerin die maait alleen de naam wisselt. Haar schouders zitten lager, dus de zeis gaat een stuk mee
+// omlaag (ZEIS_LAGER, niet helemaal: anders komt het blad in de grond); de armen reiken er met haar eigen IK heen, en
+// gaan met de romp mee, zoals bij de maaier. Het hout van de zeis is dat van de maaier, zonder nerf.
+const ZEIS_LAGER = [0.6, 0.1, -1.2];
+function maaister(stand) {
+  const fase = (stand && stand.fase) || 0;
+  return werkBoerin(houdingMaaier(fase), (ctx) => {
+    const { Bn, bot, M } = ctx;
+    const { P, zijAs } = zeisInDeHanden(fase, ZEIS_LAGER);
+    const zeisHout = KAR.materiaal(ctx, 'zeishout', { ramp: 'hout', lo: 1.6, hi: 6 });
+    const steel = KAR.deel(ctx, 'steel');
+    ctx.delen.push(...zeisDelen(P, zijAs, { hout: zeisHout, ijzer: M.ijzer }, { steel, handvat: steel, blad: KAR.deel(ctx, 'blad') }));
+    arm(ctx, 1, BOERIN.SCHOUDERS[1], P.greepBoven);
+    arm(ctx, 0, BOERIN.SCHOUDERS[0], P.greepOnder);
+    bot(Bn.Bromp);
+  });
+}
+
+// de vrouwen: hetzelfde werk op het lijf van de boerin
+const zaaister = (stand) => zaaier(stand, 'boerin');
+const wiedster = (stand) => wieder(stand, 'boerin');
+const sprokkelaarster = (stand) => sprokkelaar(stand, 'boerin');
+
+BOER.bouw = werkBoer;
+BOERIN.bouw = werkBoerin;
+
 module.exports = {
-  HOUDINGEN, SNELHEID, LOOP_FPS,
-  zaaier, wieder, sprokkelaar,
-  werkBoer, arm, hangendeArm, langsSleutels, stapsgewijs, schoffel, schoffelTussen, takkenbos,
-  houdingZaaien, houdingWieden, houdingRapen, ZAAIEN, WIEDEN, RAPEN, GREEP_BOVEN, GREEP_ONDER, SCHOUDERS, HANGT,
+  HOUDINGEN, SNELHEID, LOOP_FPS, LIJVEN, LIJF_VAN, snelheidVan,
+  zaaier, wieder, sprokkelaar, zaaister, wiedster, sprokkelaarster, maaister,
+  werkBoer, werkBoerin, arm, hand, hangendeArm, langsSleutels, stapsgewijs, schoffel, schoffelTussen, takkenbos,
+  houdingZaaien, houdingWieden, houdingRapen, rapenHand, rapenSchouder, naarLijf,
+  ZAAIEN, WIEDEN, RAPEN, RAPEN_BOERIN, GREEP_BOVEN, GREEP_ONDER, SCHOUDERS, HANGT,
 };
