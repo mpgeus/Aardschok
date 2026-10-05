@@ -37,8 +37,11 @@
       const s = t && t.stijl;
       if (!s) continue;
       const ding = { naam: `huizen/${t.naam}`, stijl: s.stijl, vorm: s.vorm, soort: s.soort, dak: s.dak, steen: s.steen, kant: s.stand };
-      const per = INDEX.stijlen[s.stijl] || (INDEX.stijlen[s.stijl] = {});
-      (per[s.soort] || (per[s.soort] = [])).push(ding);
+      // een tekening kan ook bij andere stijlen horen (`ook`: oker en roze nemen de hutten van wit, vraag 114, 2b)
+      for (const stijl of [s.stijl, ...(s.ook || [])]) {
+        const per = INDEX.stijlen[stijl] || (INDEX.stijlen[stijl] = {});
+        (per[s.soort] || (per[s.soort] = [])).push(ding);
+      }
       INDEX.naam.set(ding.naam, ding);
     }
     return INDEX;
@@ -132,8 +135,10 @@
     const d = ding(tekening);
     if (!d) return null;
     const vorm = d.soort === 'huis' && soort === 'stenenHuis' ? d.vorm.replace('huis', 'steen') : d.vorm;
-    const { dak, steen } = nu(D, d.stijl, soort);
-    const t = zoek(d.stijl, soort, vorm, dak, steen, d.kant);
+    // de stijl van het dorp: een gedeelde hut van wit groeit in een dorp van oker door tot een huis van oker
+    const stijl = T.stijlVan(D) || d.stijl;
+    const { dak, steen } = nu(D, stijl, soort);
+    const t = zoek(stijl, soort, vorm, dak, steen, d.kant);
     return t ? t.naam : null;
   };
 

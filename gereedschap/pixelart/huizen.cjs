@@ -167,14 +167,14 @@ const stijlNaam = (stijl, vorm, dak, stand) => `${stijl}-${vorm}-${dak}-${stand}
 function stijlHuizen() {
   const uit = {};
   for (const [stijl, S] of Object.entries(STIJLEN)) {
-    const zet = (soort, vorm, basis, daken, extra = {}) => {
+    const zet = (soort, vorm, basis, daken, extra = {}, ook = []) => {
       for (const [dak, steen] of daken) {
         for (const [stand, st] of Object.entries(STANDEN)) {
           const naam = stijlNaam(stijl, vorm, steen === 'baksteen' ? 'baksteen' : dak, stand);
           uit[naam] = {
             ...basis, ...extra, gebouw: soort, nok: 'x', deur: 'voor', rondom: true, draai: st.draai, deurOp: 'hoofd', dak, kalk: S.kalk,
             ...(steen ? { steen } : {}),
-            stijl: { stijl, vorm, soort, dak, steen: steen || null, stand },
+            stijl: { stijl, vorm, soort, dak, steen: steen || null, stand, ...(ook.length ? { ook } : {}) },
           };
         }
       }
@@ -183,7 +183,9 @@ function stijlHuizen() {
     const daken = [[S.dak], ['leien'], ['pannen']];
     // de wand van de stijl (planken), op de hutten en de huizen; een boerderij houdt de zijne
     const wand = S.wand ? { wand: S.wand } : {};
-    if (!(typeof S.hut === 'string')) for (const vorm of S.hut) zet('hut', vorm, HUIZEN[vorm], [[S.dak]], wand);
+    // de stijlen die deze hutten ook nemen (js/bouwstijl.js zet ze er ook onder)
+    const ook = Object.keys(STIJLEN).filter((s) => STIJLEN[s].hut === stijl);
+    if (!(typeof S.hut === 'string')) for (const vorm of S.hut) zet('hut', vorm, HUIZEN[vorm], [[S.dak]], wand, ook);
     for (const vorm of S.huis) {
       zet('huis', vorm, vormVan(vorm), daken, { ...wand, uit: metLuiken(vormVan(vorm)) });
       const broertje = vorm.replace('huis', 'steen');
