@@ -48,13 +48,13 @@ const figuur = (pad) => pad.startsWith('beelden/figuren/');
 const tekeningenOp = (w) => new Set(w.voorwerpen
   .filter((v) => v.vel && T.TEGELS[v.vel].perTekening)
   .map((v) => T.TEGELS[v.vel].tiles[v.id].bestand));
-// De vellen van de figuren van wie er staat (zoals T.sprites.houding ze kiest), en voor een boer die van zijn werk: de
-// maaier, en de zaaier, de wieder en de sprokkelaar als die er zijn (js/veldwerk.js), voor een boerin die van een vrouw.
+// De vellen van de figuren van wie er staat (zoals T.sprites.houding ze kiest), en de maaier voor wie maait (een boerin
+// de maaister). Het andere werk op het land laadt pas als hij eraan begint.
 function figurenOp(S) {
   const namen = new Set();
   for (const e of S.wereld.wezens) {
     namen.add(T.sprites.houding(S, e).naam);
-    if (e.werkAkkers && e.werkAkkers.length) for (const n of T.sprites.werkVellenVan(e)) if (T.sprites.figuurGegevens(n)) namen.add(n);
+    if (e.werkAkkers && e.werkAkkers.length) namen.add(T.sprites.maaierVan(e));
   }
   const vellen = new Set();
   for (const n of namen) for (const h of Object.values(T.sprites.figuurGegevens(n).houdingen)) vellen.add(`beelden/figuren/${h.bestand}`);
@@ -160,11 +160,13 @@ test('wie op zijn land werkt, draagt het vel van zijn werk; een boerin dat van e
     T.BEELDEN.figuren.zaaister = T.BEELDEN.figuren.zaaier;
     assert.equal(T.sprites.houding(S, boerin).naam, 'zaaister');
     assert.equal(T.sprites.houding(S, boer).naam, 'zaaier', 'een boer blijft een man');
-    assert.ok(T.sprites.werkVellenVan(boerin).includes('zaaister') && !T.sprites.werkVellenVan(boer).includes('zaaister'));
   } finally {
     if (zaaister) T.BEELDEN.figuren.zaaister = zaaister;
     else delete T.BEELDEN.figuren.zaaister;
   }
+  // Maaien: een boerin met de zeis is de maaister, als die er is.
+  assert.equal(T.sprites.maaierVan(boer), 'maaier');
+  assert.equal(T.sprites.maaierVan(boerin), T.sprites.figuurGegevens('maaister') ? 'maaister' : 'maaier');
   // Rust hij even, dan staat hij; met een bundel hout loopt hij als sprokkelaar naar huis.
   boer.werkt.rust = true;
   assert.equal(T.sprites.houding(S, boer).houding, 'staan');

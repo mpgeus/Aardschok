@@ -131,7 +131,9 @@
   }
   // Alles wat op een kaart staat vast laden (js/tekenen.js vraagt het bij een andere kaart, en als er iets op veranderde:
   // een nieuw gebouw, een huis dat doorgroeit, iemand die erbij kwam), zodat het er is voor het in beeld komt: de
-  // tekeningen met een eigen bestand, en de figuren van wie er staat; wie maait, leent de maaier.
+  // tekeningen met een eigen bestand, en de figuren van wie er staat; wie maait, leent de maaier (een boerin de maaister).
+  // De vellen van het andere werk op het land (js/veldwerk.js) laden pas als hij eraan begint: tot dan houdt hij zijn
+  // vorige beeld (js/tekenen.js), en zo laadt een kaart niet bij het begin al het werk van het hele jaar.
   S.laadWatErStaat = function (w) {
     for (const v of w.voorwerpen) {
       const bestand = v.vel && eigenBestand(v.vel, v.id);
@@ -139,7 +141,7 @@
     }
     for (const e of w.wezens) {
       laadFiguur(eigenFiguur(e));
-      if (e.werkAkkers && e.werkAkkers.length) for (const naam of S.werkVellenVan(e)) laadFiguur(naam);
+      if (e.werkAkkers && e.werkAkkers.length) laadFiguur(S.maaierVan(e));
     }
   };
   // Wacht deze tekening nog op zijn eigen bestand? Dan tekent js/tekenen.js wat er daarnet stond, of niets; ontbreekt het
@@ -665,8 +667,8 @@
   const WERKVELLEN = ['maaier', 'zaaier', 'wieder', 'sprokkelaar'];
   const VAN_EEN_VROUW = { maaier: 'maaister', zaaier: 'zaaister', wieder: 'wiedster', sprokkelaar: 'sprokkelaarster' };
   const werkVelVan = (e, naam) => (e.vel === 'boerin' && S.figuurGegevens(VAN_EEN_VROUW[naam]) ? VAN_EEN_VROUW[naam] : naam);
-  // Wat deze boer of boerin aan het werk kan dragen, ook voor test/vellen.test.cjs.
-  S.werkVellenVan = (e) => WERKVELLEN.map((naam) => werkVelVan(e, naam));
+  // Het vel waarmee deze boer of boerin maait (ook voor test/vellen.test.cjs).
+  S.maaierVan = (e) => werkVelVan(e, 'maaier');
   function werkFiguur(e) {
     const wf = e.werkt ? WERKFIGUREN[e.werkt.soort] : null;
     const bundel = e.draagt === 'bundel';
