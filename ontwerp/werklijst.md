@@ -3829,6 +3829,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       Je ziet het zelf groeien; de inner let er niet op.
     Vragen: **a**, a1 of a2? **b tot en met e**, zo? **f**, de bijl nu of met vraag 115? **g**, zo? **h**, nu, later of
     niet?
+    **Marcel koos (5 okt, vierendertigste sessie): "A a2, B ok, C ja, D ok, E ok, F Ja, G ok, H goed idee".** Dus bij elk
+    verzoek de heide en het bos naast elkaar (a2), b tot en met e en g zoals voorgesteld, de hakker met de bijl nu (f),
+    en het paadje dat hem verraadt erbij (h).
 108. **Het dorp zoals mensen het bouwen, en een overzicht** (Marcel, 3 okt, vijfentwintigste sessie: "Ja, maar we hebben
     misschien toch een overview modus nodig. Dus dat we wisselen tussen volgen van de speler en een overview. De gebouwen
     moeten menselijk gebouwd zijn. Paadjes, stenen en zand. Lantaarns voor in de avond etc. Dit moet allemaal straks staan
