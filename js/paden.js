@@ -170,6 +170,16 @@
     return IN().paadjes === 'lopen' && !!w.paden && w.paden.gesleten.has(x + y * breedte(w));
   };
 
+  // Loopt hier een spoor: een paadje, of gras dat slijt waar elke dag gelopen wordt (gemiddeld blijftPad stappen per dag of
+  // meer, ook voor het een paadje is dat je ziet)? Zo volgen de soldaten een boer naar zijn akker in het bos (werklijst
+  // vraag 107, h; js/ontginnen.js): één gezin maakt er zo'n twee à drie stappen per dag (gemeten op 5 okt), en een
+  // paadje vraagt er wordtPad.
+  T.isSpoor = function (D, x, y) {
+    const w = D.wereld;
+    if (T.isPaadje(D, x, y)) return true;
+    return IN().paadjes === 'lopen' && !!w.paden && binnen(w, x, y) && (w.paden.slijt[x + y * breedte(w)] || 0) >= IN().blijftPad;
+  };
+
   // ---------------------------------------------------------------------------------------------
   // Slijten: waar gelopen wordt
   // ---------------------------------------------------------------------------------------------

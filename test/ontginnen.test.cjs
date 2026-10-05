@@ -430,7 +430,7 @@ test('de boer hakt naast de boom, met zijn gezicht ernaar; zijn boerin helpt; en
       if (wt && wt.soort === 'hakken' && wt.tot != null && !wt.rust && boer.tx === wt.x && boer.ty === wt.y) gezien = { ...wt, op: { ...wt.op } };
     }
     assert.ok(gezien, `hij hakt: ${JSON.stringify(boer.werkt)}`);
-    assert.equal(Math.max(Math.abs(gezien.op.x - gezien.x), Math.abs(gezien.op.y - gezien.y)), 1, 'hij staat naast de boom');
+    assert.equal(Math.abs(gezien.op.x - gezien.x) + Math.abs(gezien.op.y - gezien.y), 1, 'hij staat recht naast de boom');
     assert.equal(T.veldOp(w, gezien.op.x, gezien.op.y), veld, 'de boom staat op zijn nieuwe veld');
     const helpers = D.bewoners.mensen.filter((p) => p.wezen && p.wezen !== boer && T.helpAnker(D, p.wezen));
     hielp = helpers.length > 0;
@@ -485,7 +485,7 @@ test('stiekem: geen gunst, de inner zoekt het niet en de heer telt het niet; zie
   assert.ok(berichten.some((t) => /Een akker in Ons bos, schout\?/.test(t)));
 });
 
-test('doorzoeken de soldaten het hele dorp, dan vinden ze een akker in het bos soms, en vaak als er een paadje heen loopt', () => {
+test('doorzoeken de soldaten het hele dorp, dan vinden ze een akker in het bos soms, en vaak als er een spoor heen loopt', () => {
   const S = gehucht();
   const D = S.dorp;
   const w = S.wereld;
@@ -494,16 +494,18 @@ test('doorzoeken de soldaten het hele dorp, dan vinden ze een akker in het bos s
   const veld = w.akkers.find((v) => v.ontginning);
   assert.equal(T.vindKansVanBosAkker(D, veld), T.ONTGINNEN_INSTELLINGEN.vinden, 'soms');
   assert.deepEqual(T.zoekVerstopt(D, () => 0.5), [], 'onder de kans: niets');
-  // Een paadje erheen (js/paden.js): wie er elke dag heen loopt, slijt het gras.
+  // Een spoor erheen (js/paden.js): wie er elke dag heen loopt, slijt het gras, ook voor het een paadje is dat je ziet.
   const breed = w.tegels[0].length;
   T.nieuwePaden(w);
-  for (let k = 0; k < 4; k++) w.paden.gesleten.add(veld.x + k + (veld.y + veld.h) * breed);
-  assert.ok(T.paadjeNaar(D, veld));
-  assert.equal(T.vindKansVanBosAkker(D, veld), T.ONTGINNEN_INSTELLINGEN.vindenMetPaadje, 'vaak');
+  for (let k = 0; k < 2; k++) w.paden.slijt[veld.x + k + (veld.y + veld.h) * breed] = T.PADEN_INSTELLINGEN.blijftPad;
+  assert.ok(!T.spoorNaar(D, veld), 'twee tegels is nog geen spoor');
+  w.paden.gesleten.add(veld.x + 2 + (veld.y + veld.h) * breed); // en een paadje telt ook
+  assert.ok(T.spoorNaar(D, veld));
+  assert.equal(T.vindKansVanBosAkker(D, veld), T.ONTGINNEN_INSTELLINGEN.vindenMetSpoor, 'vaak');
   const gunst = T.bazenNu(D).gunst;
   const gevonden = T.zoekVerstopt(D, () => 0.5);
   assert.deepEqual(gevonden.length, 1);
-  assert.match(gevonden[0], /^langs het paadje de akker in het bos van /);
+  assert.match(gevonden[0], /^langs het spoor de akker in het bos van /);
   assert.ok(T.inDeBoeken(veld), 'gevonden: in de boeken');
   assert.ok(T.bazenNu(D).gunst < gunst, 'betrapt');
 });
@@ -537,4 +539,24 @@ test('een akker in het bos, stiekem en half gehakt, gaat mee in een bewaard spel
   assert.deepEqual(terug.stiekem, veld.stiekem);
   const stronk = w2.voorwerpen.find((v) => v.x === boom.x && v.y === boom.y);
   assert.equal(stronk && stronk.soort, 'boomstronk', 'de stronk staat er nog');
+});
+
+test('is het eerder af dan de maand of de winter, dan is het eerder ontgonnen', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  verzoek(S);
+  zeg(S, 'Het bos. Ik meld');
+  const veld = S.wereld.akkers.find((v) => v.ontginning);
+  for (const t of T.akkerTegels(veld)) {
+    T.hakBoom(D, t.x, t.y);
+    T.rooi(D, t.x, t.y);
+  }
+  D.gebouwenDag = 40;
+  T.tikGebouwenDag(D, 41);
+  assert.ok(veld.ontginning, 'nog niet omgespit: nog niet af');
+  for (const t of T.akkerTegels(veld)) T.steekPlag(veld, t.x, t.y, S.wereld);
+  D.gebouwenDag = 41;
+  T.tikGebouwenDag(D, 42);
+  assert.equal(veld.ontginning, undefined, 'af, op dag 42 in plaats van 130');
+  assert.equal(D.ontginnen.klaar, 42);
 });

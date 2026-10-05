@@ -335,9 +335,9 @@
 
   // De volgende tegel die hij ontgint, en waar hij daarvoor staat: de eerste van de rij waar hij nu bij kan. Een tegel waar
   // niets op staat, spit hij op de tegel zelf; een boom, een stronk of een struik (T.ontginWerkOp) hakt of rooit hij van een
-  // tegel ernaast, eerst recht ernaast en dan schuin, waar niemand staat en waar hij kan komen. Zo werkt hij van de rand
-  // naar binnen. { tegel, staan, werk } of null.
-  const NAAST = [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]];
+  // tegel recht ernaast (niet schuin: dan is de stam te ver, en slaat de bijl ernaast, gereedschap/pixelart/werkfiguren.cjs),
+  // waar niemand staat en waar hij kan komen. Zo werkt hij van de rand naar binnen. { tegel, staan, werk } of null.
+  const NAAST = [[0, 1], [1, 0], [0, -1], [-1, 0]];
   T.volgendeOntginning = function (w, e, lijst) {
     const van = { x: e.tx, y: e.ty };
     const vrij = (x, y) => (x === e.tx && y === e.ty) || (T.isBegaanbaar(w, x, y) && !T.wezenOp(w, x, y, e));

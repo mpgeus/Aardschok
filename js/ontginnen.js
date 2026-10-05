@@ -7,8 +7,8 @@
 //     de meent, hoe meer het dorp eraan hecht (vraag 107, f3). Een maand plaggen steken.
 //   - het bos is van de heer. Meld je het hem, dan zakt zijn gunst (hij wil erom gevraagd worden), en staat het in zijn
 //     boeken: de inner telt het, zoals elke akker. Zeg je het niemand (stiekem), dan kost het geen gunst, en zoekt de
-//     inner het niet. Maar ziet hij het toch, of vinden zijn soldaten het, dan ben je betrapt (T.betrapt, js/bazen.js), en
-//     vanaf dan staat het in de boeken. Een winter werk: boom voor boom omhakken (het hout gaat naar de schuur), de stobbe
+//     inner het niet. Maar ziet hij het toch, of vinden zijn soldaten het (vaker als er een spoor heen loopt), dan ben je
+//     betrapt (T.betrapt, js/bazen.js), en vanaf dan staat het in de boeken. Een winter werk: boom voor boom omhakken (het hout gaat naar de schuur), de stobbe
 //     eruit, en omspitten.
 // Hoe de boer het doet, staat in js/veldwerk.js: hij werkt er tegel voor tegel, en wat hij af heeft, is kale grond. In
 // lentemaand wordt het gezaaid, met zaaigraan zoals elke akker (T.wisselVelden en T.zaaiAkkers, js/akkers.js). De schapen
@@ -78,11 +78,11 @@
     // De argwaan van de inner als hij een akker in het bos ziet die niet in de boeken staat.
     argwaanGezien: 0.2,
     // De soldaten, als ze het hele dorp doorzoeken (T.doorzoekDorp, js/inner.js): zo vaak vinden ze een akker in het bos,
-    // en zo vaak als er een paadje heen loopt (vraag 107, h: het paadje verraadt hem; js/paden.js): minstens `paadje`
-    // tegels paadje binnen twee tegels van de akker.
+    // en zo vaak als er een spoor heen loopt (vraag 107, h: het paadje verraadt hem; T.isSpoor in js/paden.js): minstens
+    // `spoor` tegels spoor binnen twee tegels van de akker.
     vinden: 0.3,
-    vindenMetPaadje: 0.7,
-    paadje: 3,
+    vindenMetSpoor: 0.7,
+    spoor: 3,
   };
   const IN = () => T.ONTGINNEN_INSTELLINGEN;
 
@@ -268,15 +268,19 @@
     return ziet;
   };
 
-  // Kan de boer erbij? Naast een tegel van het stuk kan hij komen, vanaf zijn deur (T.kanErKomen, js/wereld.js). Hij hakt
-  // van de rand naar binnen, dus meer hoeft niet.
+  // Kan de boer erbij? Recht naast een tegel van de rand van het stuk kan hij komen, vanaf zijn deur (T.kanErKomen,
+  // js/wereld.js): daar hakt hij (js/veldwerk.js), en hij werkt van de rand naar binnen, dus meer hoeft niet.
+  const RECHT = [[0, 1], [1, 0], [0, -1], [-1, 0]];
   function bereikbaar(D, boer, stuk) {
     const w = D.wereld;
     const van = boer.thuis || { x: boer.tx, y: boer.ty };
     for (let y = stuk.y; y < stuk.y + stuk.h; y++) {
       for (let x = stuk.x; x < stuk.x + stuk.b; x++) {
         if (y > stuk.y && y < stuk.y + stuk.h - 1 && x > stuk.x && x < stuk.x + stuk.b - 1) continue; // de rand is genoeg
-        if (T.kanErKomen(w, van, { x, y }, { naast: true })) return true;
+        for (const [dx, dy] of RECHT) {
+          const n = { x: x + dx, y: y + dy };
+          if (T.isBegaanbaar(w, n.x, n.y) && T.kanErKomen(w, van, n)) return true;
+        }
       }
     }
     return false;
@@ -474,16 +478,16 @@
     return true;
   };
 
-  // Elke dag (T.tikGebouwenDag, js/gebouwen.js, vóór T.tikAkkersDag): een stuk waarvan de tijd om is, is ontgonnen; wat de
-  // boer niet af had, doen zijn mensen dan nog (zoals het vangnet van de oogst, js/akkers.js): in het bos de bomen om (het
-  // hout naar de schuur) en de stobben eruit. Op 1 lentemaand wordt het een akker, en gezaaid (T.wisselVelden en
+  // Elke dag (T.tikGebouwenDag, js/gebouwen.js, vóór T.tikAkkersDag): een stuk dat af is, of waarvan de tijd om is, is
+  // ontgonnen; wat de boer niet af had, doen zijn mensen dan nog (zoals het vangnet van de oogst, js/akkers.js): in het bos
+  // de bomen om (het hout naar de schuur) en de stobben eruit. Op 1 lentemaand wordt het een akker, en gezaaid (T.wisselVelden en
   // T.zaaiAkkers; zolang het ontgonnen wordt, wisselt het niet). Is het klaar terwijl de boeren nazaaien (T.isNazaaitijd),
   // dan wordt het meteen een akker, en zaaien ze het na zodra er graan is (T.zaaiNa, in dezelfde nacht): dan hoeft wie in
   // de winter ja zei, niet een jaar te wachten.
   T.tikOntginnenDag = function (D, dag) {
     const w = D.wereld;
     for (const veld of T.inOntginning(w)) {
-      if (dag < veld.ontginning.tot) continue;
+      if (dag < veld.ontginning.tot && veld.ontginning.gestoken.size < veld.b * veld.h) continue;
       for (const t of T.akkerTegels(veld)) {
         T.hakBoom(D, t.x, t.y);
         T.rooi(D, t.x, t.y);
@@ -539,18 +543,19 @@
     return lijst;
   };
 
-  // Loopt er een paadje naar deze akker (vraag 107, h; js/paden.js)? Minstens `paadje` tegels paadje, aangelegd of
-  // gesleten, binnen twee tegels om de akker: wie er elke dag heen loopt, slijt het gras.
-  T.paadjeNaar = function (D, veld) {
+  // Loopt er een spoor naar deze akker (vraag 107, h)? Minstens `spoor` tegels spoor (T.isSpoor, js/paden.js: een paadje,
+  // of gras dat slijt omdat er elke dag gelopen wordt) binnen twee tegels om de akker. Zolang de boer en zijn gezin er
+  // elke dag werken (het hakken, de oogst), loopt er een; is het stil, dan groeit het dicht.
+  T.spoorNaar = function (D, veld) {
     let n = 0;
     for (let y = veld.y - 2; y < veld.y + veld.h + 2; y++) {
-      for (let x = veld.x - 2; x < veld.x + veld.b + 2; x++) if (!opStuk(veld, x, y) && T.isPaadje(D, x, y)) n++;
+      for (let x = veld.x - 2; x < veld.x + veld.b + 2; x++) if (!opStuk(veld, x, y) && T.isSpoor(D, x, y)) n++;
     }
-    return n >= IN().paadje;
+    return n >= IN().spoor;
   };
 
-  // Hoe vaak de soldaten deze akker vinden als ze het hele dorp doorzoeken: soms, en vaak als er een paadje heen loopt.
-  T.vindKansVanBosAkker = (D, veld) => (T.paadjeNaar(D, veld) ? IN().vindenMetPaadje : IN().vinden);
+  // Hoe vaak de soldaten deze akker vinden als ze het hele dorp doorzoeken: soms, en vaak als er een spoor heen loopt.
+  T.vindKansVanBosAkker = (D, veld) => (T.spoorNaar(D, veld) ? IN().vindenMetSpoor : IN().vinden);
 
   // Een getal 0..1, vast per spel, per dag en per akker, zodat een toets hetzelfde uitkomt (zoals js/verstoppen.js).
   function lot(D, veld) {
@@ -565,10 +570,10 @@
     for (const veld of (D.wereld && D.wereld.akkers) || []) {
       if (!veld.stiekem) continue;
       const r = getal ? getal(veld) : lot(D, veld);
-      const paadje = T.paadjeNaar(D, veld);
+      const spoor = T.spoorNaar(D, veld);
       if (r >= T.vindKansVanBosAkker(D, veld)) continue;
       const boer = T.boerVanVeld(D, veld);
-      lijst.push(`${paadje ? 'langs het paadje ' : ''}de akker in het bos${boer ? ` van ${boer.naam}` : ''}`);
+      lijst.push(`${spoor ? 'langs het spoor ' : ''}de akker in het bos${boer ? ` van ${boer.naam}` : ''}`);
       gevonden(D, veld, 'zijn soldaten vonden een akker in zijn bos');
     }
     if (lijst.length) T.zetArgwaan(D, IN().argwaanGezien, 'de soldaten vonden een akker in het bos');

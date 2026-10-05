@@ -930,7 +930,7 @@
     // Ontginnen (js/ontginnen.js; werklijst vraag 107): of het dorp graan tekortkomt, welk stuk heide en welk stuk bos
     // elke boer zou vragen (en of de inner dat stuk bos van zijn ronde ziet), hoeveel stukken er al van de meent af gingen
     // en wat het volgende aan vertrouwen kost, wat er nu ontgonnen wordt en hoe ver, welke akkers stiekem in het bos liggen
-    // (en of de inner ze zag, of er een paadje heen loopt), en wanneer er weer een verzoek kan komen. ('nu') laat het
+    // (en of de inner ze zag, of er een spoor heen loopt), en wanneer er weer een verzoek kan komen. ('nu') laat het
     // verzoek nu komen, ook zonder tekort.
     ontginnen(wat) {
       const D = T.dorpHier(S);
@@ -965,7 +965,7 @@
         })),
         stiekem: w.akkers.filter((v) => v.stiekem).map((v) => ({
           veld: v.naam, waar: stuk(v), sinds: v.stiekem.sinds, innerZag: v.stiekem.gezien,
-          paadje: T.paadjeNaar(D, v), soldatenVinden: T.vindKansVanBosAkker(D, v),
+          spoor: T.spoorNaar(D, v), soldatenVinden: T.vindKansVanBosAkker(D, v),
         })),
         staat: D.ontginnen || null,
       };
