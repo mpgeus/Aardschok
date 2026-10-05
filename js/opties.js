@@ -623,6 +623,7 @@
     { naam: 'De verstopplekken', blok: 'VERSTOP_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
+    { naam: 'Het veldwerk', blok: 'VELDWERK_INSTELLINGEN' },
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
     { naam: 'De doorkijk', blok: 'DOORKIJK_INSTELLINGEN' },
     { naam: 'Het zichtveld', blok: 'ZIEN_INSTELLINGEN' },

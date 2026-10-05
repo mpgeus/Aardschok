@@ -56,11 +56,12 @@
   // ── Wie vrij is, en wie elkaar kent ──
 
   // Kan e nu een praatje maken? Wie vrij is: 's ochtends, in de schaft, 's avonds, en overdag wie geen werk heeft. Geen
-  // kleuter, niet de schout (dat ben jij, of de schout van een ander dorp), en niet wie bezig is: maaien, de schout zoeken,
-  // met de militie mee, naar de schandpaal, wegtrekken, net aankomen, een tijd weg, aan zijn eigen hut bouwen, de
-  // herbergierster 's avonds, en de raadsman met zijn rapport. `deel` is het deel van de dag (T.dagdeelVan, js/dag.js).
+  // kleuter, niet de schout (dat ben jij, of de schout van een ander dorp), en niet wie bezig is: maaien, op zijn land
+  // werken of daarbij helpen (js/veldwerk.js), de schout zoeken, met de militie mee, naar de schandpaal, wegtrekken, net
+  // aankomen, een tijd weg, aan zijn eigen hut bouwen, de herbergierster 's avonds, en de raadsman met zijn rapport.
+  // `deel` is het deel van de dag (T.dagdeelVan, js/dag.js).
   T.kanPraten = function (S, D, e, deel) {
-    if (e.dood || e.binnen || e.dier || e.maait || e.opgeroepen || e.zoektSchout || e.moetNaar || e.vertrekt) return false;
+    if (e.dood || e.binnen || e.dier || e.maait || e.werkt || e.opgeroepen || e.zoektSchout || e.moetNaar || e.vertrekt) return false;
     if (e === S.schout || e === D.schout || e === S.spreektMet || e.kant === 'monster') return false;
     if (S.gevecht && D.wereld === S.wereld) return false;
     if (deel === 'nacht') return false;
@@ -69,6 +70,7 @@
     if (deel === 'werk' && !T.vrijeDag(D, D.kalender.dag)) {
       if (p.werk || e.werkAkkers) return false;
       if (p.huis && p.huis.erf && !p.huis.klaar) return false;
+      if (T.helpAnker(D, e)) return false;
     }
     if (deel === 'avond' && T.herbergenVan(D).includes(p.huis)) return false;
     if (e.raadsman && T.rapportAnker(D, e)) return false;

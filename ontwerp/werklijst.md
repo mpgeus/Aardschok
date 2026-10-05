@@ -3836,6 +3836,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **a**, dit werk per seizoen? **b**, de zaaier en de wieder als nieuwe figuren? **c**, alleen hoe het eruitziet,
     en de regels zoals ze zijn?
     **Marcel koos (3 okt): "ja die zijn goed. volgorde is oke."** Dus a, b en c zoals voorgesteld, na vraag 112.
+    **Marcel (5 okt, terwijl de sessie van 2b de bouwfasen rendert): "A. Ja prima B ja graag C doe maar".** Dus 111 gaat
+    vóór stap 3 van de huizen (die zit in dezelfde bestanden als 2b): eerst waar de boer is en wat hij doet, zonder
+    renderen (stap 1), en meteen erna de figuren, naast 2b, want die komen in `beelden/figuren` en niet in `tegels/`
+    (stap 2). De houthakker die hakt en plant (115) en de wolven (116) komen na 2b: hun stronken en boompjes zijn
+    voorwerpen in `tegels/`. En erbij, als kleine klus: de militie die onderweg niet meevecht (een schout viel alleen
+    tegen drie wilde rovers; `0c`, punt 4).
 112. **Elk spel een ander land: de maker als standaard, wijder, met natuur en meer huizen** (Marcel, 3 okt,
     vijfentwintigste sessie: "Alles moet denk ik ook wijder opgezet worden. En meer variatie in de huizen. Her en der wat
     foliage, bomen, stenen, water. Eigenlijk een random map generator per nieuwe game. Doe is ook wel belangrijk voor de

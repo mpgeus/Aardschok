@@ -139,7 +139,7 @@
     }
     for (const e of w.wezens) {
       laadFiguur(eigenFiguur(e));
-      if (e.werkAkkers && e.werkAkkers.length) laadFiguur('maaier');
+      if (e.werkAkkers && e.werkAkkers.length) for (const naam of WERKVELLEN) laadFiguur(naam);
     }
   };
   // Wacht deze tekening nog op zijn eigen bestand? Dan tekent js/tekenen.js wat er daarnet stond, of niets; ontbreekt het
@@ -646,7 +646,34 @@
   // En wat hij nu draagt: een boer die aan het maaien is (T.werkOogstBij, js/akkers.js) leent
   // zolang het vel van de maaier in plaats van zijn eigen boer/boerin-vel — maar alleen als dat vel
   // er ook echt is, anders blijft hij gewoon zichzelf staan (geen kunst mist dan nooit iemand helemaal).
-  const figuurNu = (e) => (e.maait && S.figuurGegevens('maaier') ? 'maaier' : eigenFiguur(e));
+  //
+  // Zo ook wie op zijn land werkt (e.werkt, js/veldwerk.js; werklijst vraag 111, b): de zaaier, de wieder (ook voor
+  // spitten en mest uitrijden) of de sprokkelaar met zijn bundel hout. Zolang hij met dat werk bezig is, ook op weg naar
+  // de volgende tegel of even rustend, draagt hij het vel van het werk, zodat hij niet bij elke tegel van kleren wisselt;
+  // naar het bos loopt hij nog met lege handen, en met de bundel op zijn rug weer naar huis (e.draagt). Mist het vel of
+  // de houding die hij nu nodig heeft, dan blijft hij zichzelf.
+  const WERKFIGUREN = {
+    zaaien: { figuur: 'zaaier', houding: 'zaaien' },
+    wieden: { figuur: 'wieder', houding: 'wieden' },
+    spitten: { figuur: 'wieder', houding: 'wieden' },
+    mesten: { figuur: 'wieder', houding: 'wieden' },
+    sprokkelen: { figuur: 'sprokkelaar', houding: 'rapen' },
+  };
+  const WERKVELLEN = ['maaier', 'zaaier', 'wieder', 'sprokkelaar'];
+  S.werkVellen = WERKVELLEN; // wat een boer kan dragen, ook voor test/vellen.test.cjs
+  function werkFiguur(e) {
+    const wf = e.werkt ? WERKFIGUREN[e.werkt.soort] : null;
+    const bundel = e.draagt === 'bundel';
+    const naam = wf && (wf.figuur !== 'sprokkelaar' || bundel) ? wf.figuur : bundel ? 'sprokkelaar' : null;
+    if (!naam || !S.figuurGegevens(naam)) return null;
+    const houding = e.pad && e.pad.length ? 'lopen' : wf && e.werkt.tot != null && !e.werkt.rust ? wf.houding : 'staan';
+    return S.heeftHouding(naam, houding) ? { naam, houding } : null;
+  }
+  const figuurNu = (e) => {
+    if (e.maait && S.figuurGegevens('maaier')) return 'maaier';
+    const werk = werkFiguur(e);
+    return werk ? werk.naam : eigenFiguur(e);
+  };
 
   // De houding van dit wezen op dit moment: { naam, houding, richting, fase }. `naam` is het figuur
   // op het vel (figuurNu).
@@ -706,6 +733,12 @@
     if (e.maait && naam === 'maaier' && S.heeftHouding(naam, 'maaien')) {
       const duur = S.houdingDuur(naam, 'maaien') || 1;
       return { naam, houding: 'maaien', richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };
+    }
+    // Het werk op zijn land (zaaien, wieden, hout rapen) is net zo'n lus; lopen en staan gaan hieronder zoals altijd.
+    const werk = e.werkt && werkFiguur(e);
+    if (werk && werk.naam === naam && werk.houding !== 'lopen' && werk.houding !== 'staan') {
+      const duur = S.houdingDuur(naam, werk.houding) || 1;
+      return { naam, houding: werk.houding, richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };
     }
     if (e.pad && e.pad.length) {
       const houding = 'lopen';

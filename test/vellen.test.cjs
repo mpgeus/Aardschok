@@ -48,12 +48,13 @@ const figuur = (pad) => pad.startsWith('beelden/figuren/');
 const tekeningenOp = (w) => new Set(w.voorwerpen
   .filter((v) => v.vel && T.TEGELS[v.vel].perTekening)
   .map((v) => T.TEGELS[v.vel].tiles[v.id].bestand));
-// De vellen van de figuren van wie er staat (zoals T.sprites.houding ze kiest), en de maaier voor wie maait.
+// De vellen van de figuren van wie er staat (zoals T.sprites.houding ze kiest), en voor een boer die van zijn werk: de
+// maaier, en de zaaier, de wieder en de sprokkelaar als die er zijn (js/veldwerk.js).
 function figurenOp(S) {
   const namen = new Set();
   for (const e of S.wereld.wezens) {
     namen.add(T.sprites.houding(S, e).naam);
-    if (e.werkAkkers && e.werkAkkers.length) namen.add('maaier');
+    if (e.werkAkkers && e.werkAkkers.length) for (const n of T.sprites.werkVellen) if (T.sprites.figuurGegevens(n)) namen.add(n);
   }
   const vellen = new Set();
   for (const n of namen) for (const h of Object.values(T.sprites.figuurGegevens(n).houdingen)) vellen.add(`beelden/figuren/${h.bestand}`);

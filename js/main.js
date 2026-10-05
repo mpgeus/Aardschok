@@ -470,11 +470,14 @@
     T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, raadNu && raadNu.tekst);
     // Ook op reis (js/land.js, de kaart van het land) gaat het dorp zijn gang: er wordt gemaaid en gedwaald.
     if (S.modus === 'verkennen' || S.modus === 'land') {
-      // Vóór T.laatDwalen: wie hier een pad krijgt of aan het maaien slaat (T.werkOogstBij,
-      // js/akkers.js, alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
-      // T.laatDwalen al "bezig" (m.pad.length of m.maait) en dwaalt deze beurt niet ook nog weg.
-      const hier = T.dorpHier(S); // het dorp waar je bent; de andere maaien in T.werkDorpBij (js/dorp.js)
-      if (hier) T.werkOogstBij(S, hier, dtWereld);
+      // Vóór T.laatDwalen: wie hier een pad krijgt, aan het maaien slaat (T.werkOogstBij, js/akkers.js) of op zijn land
+      // werkt (T.werkVeldwerkBij, js/veldwerk.js; alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
+      // T.laatDwalen al "bezig" (m.pad.length, m.maait of m.werkt) en dwaalt deze beurt niet ook nog weg.
+      const hier = T.dorpHier(S); // het dorp waar je bent; de andere werken in T.werkDorpBij (js/dorp.js)
+      if (hier) {
+        T.werkOogstBij(S, hier, dtWereld);
+        T.werkVeldwerkBij(S, hier);
+      }
       T.laatDwalen(S, dtWereld);
       const m = S.modus === 'verkennen' && T.zoekOntdekking(S);
       if (m) T.startGevecht(S, m, false);
@@ -891,6 +894,38 @@
         wachten,
         onthouden: T.onthoudenVan(w),
       };
+    },
+    // De boeren op hun land (js/veldwerk.js; werklijst vraag 111): per boer zijn werk van vandaag, wat hij nu doet en
+    // waar, hoe ver hij is, hoeveel bosrand hij heeft om te sprokkelen, en wie hem helpt.
+    veldwerk() {
+      const D = T.dorpHier(S);
+      if (!D || !D.kalender) return 'Veldwerk is er alleen in een dorp.';
+      const w = S.wereld;
+      const datum = T.datumVanDag(D.kalender.dag);
+      const naam = (e) => {
+        const p = T.bewonerVan(D, e);
+        return p ? T.naamVanBewoner(p) : e.wie || e.soort;
+      };
+      const nu = (e) => {
+        if (e.maait) return `maait op ${e.maait.x},${e.maait.y}`;
+        const wt = e.werkt;
+        if (wt) return `${wt.soort}${wt.tot == null ? ', op weg' : wt.rust ? ', staat even' : ''} op ${wt.x},${wt.y}`;
+        return e.draagt ? 'brengt hout naar huis' : 'niet op zijn land';
+      };
+      const boeren = w.wezens.filter((e) => !e.dood && e.werkAkkers && e.werkAkkers.length).map((e) => ({
+        boer: naam(e),
+        vandaag: T.veldwerkVandaag(D, e, datum) || 'bij zijn boerderij (of de oogst)',
+        nu: nu(e),
+        waar: `${e.tx},${e.ty}`,
+        gedaan: e.veldwerk ? `${e.veldwerk.gedaan} tegels ${e.veldwerk.soort}` : '',
+        klaar: e.veldwerk ? e.veldwerk.klaar : {},
+        bosrand: (T.bosrandBij(w, e) || []).length,
+        helpers: w.wezens.filter((h) => {
+          const a = T.helpAnker(D, h);
+          return a && a.x === e.tx && a.y === e.ty;
+        }).map(naam).join(', '),
+      }));
+      return { datum: `${datum.dagVanMaand} ${T.MAANDEN[datum.maand].naam}, ${T.uurTekst(D.kalender.dag)}`, boeren };
     },
     // Wie er een praatje maakt (js/praatje.js; werklijst vraag 120): per groepje wie erin staan (en wie nog komt), waar
     // en tot hoe laat, en hoeveel er nu vrij zijn. ('nu'): de twee vrije bekenden die het dichtst bij elkaar staan,
