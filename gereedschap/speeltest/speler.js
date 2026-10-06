@@ -1299,6 +1299,11 @@
   function tel() {
     const s = S();
     const v = T.verstoptTotaal(s.dorp);
+    const marktNu = (s) => {
+      const g = s.dorp.gebouwen.find((x) => x.soort === 'markt' && x.opHetPlein);
+      if (!g) return null;
+      return { kramen: g.kramen.length, leeg: g.kramen.filter((k) => k.leeg).length, straat: g.kramen.filter((k) => !T.opHetPlein(s.dorp.wereld, k.x, k.y)).length, blok: (g.blok || []).length };
+    };
     const houthakkers = s.dorp.gebouwen.filter((g) => g.soort === 'houthakker');
     return {
       dag: Math.floor(s.kalender.dag), datum: datum(),
@@ -1320,6 +1325,8 @@
       houthakkers: houthakkers.map((g) => ({ klaar: !!g.klaar, handen: g.handen || 0 })),
       // De twee bazen (js/bazen.js; vraag 106): de gunst van de heer en het vertrouwen van het dorp.
       bazen: T.bazenNu(s.dorp),
+      // De markt (js/markt.js; vraag 127): hoeveel kramen, waarvan leeg en langs de straat, en hoe groot het blok is.
+      markt: marktNu(s),
     };
   }
 
