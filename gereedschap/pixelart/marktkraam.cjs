@@ -13,6 +13,7 @@ const fs = require('fs');
 const path = require('path');
 const K = require('./kern.cjs');
 const D = require('./dorp.cjs');
+const F = require('./figuren.cjs');
 
 // ---------------------------------------------------------------- maten
 
@@ -22,15 +23,40 @@ const SCHAAL = 1.1;
 const CEL = [96, 96];
 const ANKER = [48, 74];
 const RICHTINGEN = ['ZO', 'ZW', 'NW', 'NO'];
+// De soorten waar (dorp.cjs, KRAAMWAREN), elk met een lege kraam ernaast: een dorp zonder brood heeft een lege
+// broodkraam (vraag 127, A).
+const SOORTEN = Object.keys(D.KRAAMWAREN);
+// Wat er naast een kraam op de grond staat (dorp.cjs, marktmand): elk op zijn eigen tegel, kleiner dan een kraam.
+const MAND_CEL = [64, 64];
+const MAND_ANKER = [32, 46];
+const MANDEN = [
+  ['mand appels', { soort: 'mand', vol: 'appels' }],
+  ['mand kolen', { soort: 'mand', vol: 'kolen' }],
+  ['mand leeg', { soort: 'mand' }],
+  ['krat brood', { soort: 'krat', vol: 'brood' }],
+  ['krat wol', { soort: 'krat', vol: 'wol' }],
+  ['zak', { soort: 'zak' }],
+  ['ton graan', { soort: 'ton', vol: 'graan' }],
+  ['ton leeg', { soort: 'ton' }],
+];
 // Zo tekent het spel de figuren (dorpelingen-anim.cjs), voor de proefplaat.
 const FIG_CEL = [112, 124];
 const FIG_ANKER = [56, 110];
 
 // ---------------------------------------------------------------- tekenen
 
-function kraamCel(richting) {
+function kraamCel(richting, o = {}) {
   const B = new K.Beeld(CEL[0], CEL[1], ANKER[0], ANKER[1]);
-  D.zetModel(B, D.marktkraam(SCHAAL), 0, 0, richting);
+  D.zetModel(B, D.marktkraam(SCHAAL, o), 0, 0, richting);
+  D.zonSchaduw(B, []);
+  K.belicht(B);
+  K.omlijn(B);
+  return K.Plaat.van(K.kwantiseer(B));
+}
+
+function mandCel(o) {
+  const B = new K.Beeld(MAND_CEL[0], MAND_CEL[1], MAND_ANKER[0], MAND_ANKER[1]);
+  D.zetModel(B, F.geschaald(D.marktmand(o), 1.1), 0, 0, 'ZO');
   D.zonSchaduw(B, []);
   K.belicht(B);
   K.omlijn(B);
@@ -39,15 +65,33 @@ function kraamCel(richting) {
 
 // ---------------------------------------------------------------- het vel
 
+// Per soort waar vier richtingen, en daarachter dezelfde soort leeg (nog eens vier), en daarna de manden: één rij
+// cellen, zoals de tekens (papieren.cjs). Welke cel waar staat, zegt de beschrijving hieronder.
 function vel() {
-  const uit = new K.Plaat(CEL[0] * RICHTINGEN.length, CEL[1]);
-  RICHTINGEN.forEach((r, i) => uit.plak(kraamCel(r), i * CEL[0], 0));
+  const cellen = [];
+  for (const soort of SOORTEN) for (const leeg of [false, true]) for (const r of RICHTINGEN) cellen.push(kraamCel(r, { waar: soort, leeg }));
+  const uit = new K.Plaat(CEL[0] * cellen.length, CEL[1]);
+  cellen.forEach((p, i) => uit.plak(p, i * CEL[0], 0));
   return uit;
 }
 
-// Wat in beelden/beschrijving.json komt (naar-spel.cjs): het bestand, de maat van een cel, het anker en de richtingen.
-function beschrijving(bestand) {
-  return { bestand, cel: CEL, anker: ANKER, richtingen: RICHTINGEN };
+function mandenVel() {
+  const uit = new K.Plaat(MAND_CEL[0] * MANDEN.length, MAND_CEL[1]);
+  MANDEN.forEach(([, o], i) => uit.plak(mandCel(o), i * MAND_CEL[0], 0));
+  return uit;
+}
+
+// Wat in beelden/beschrijving.json komt (naar-spel.cjs): het bestand, de maat van een cel, het anker, en in welke
+// volgorde de cellen staan. Een cel zoekt het spel op met soort, leeg en richting (js/sprites.js, S.kraam).
+function beschrijving(bestand, mandenBestand) {
+  return {
+    bestand,
+    cel: CEL,
+    anker: ANKER,
+    richtingen: RICHTINGEN,
+    soorten: SOORTEN,
+    manden: { bestand: mandenBestand, cel: MAND_CEL, anker: MAND_ANKER, namen: MANDEN.map(([n]) => n) },
+  };
 }
 
 // ---------------------------------------------------------------- de proefplaat
@@ -82,38 +126,54 @@ function vergroot(p, n) {
   return uit;
 }
 
-// Een stuk plein met de vier kramen, elk naar het midden, en drie boeren ertussen, samengesteld zoals het spel het doet
-// (van achter naar voor, elk met zijn anker op het midden van zijn tegel), twee keer vergroot.
+// Een stuk markt zoals het spel het zet: een rij kramen met hun waar, manden en kisten ertussen, en wat volk ervoor,
+// van achter naar voor met elk zijn anker op het midden van zijn tegel (vraag 127, stap 1: de proefplaat die Marcel
+// keurt). Daaronder dezelfde kramen leeg, zoals een dorp ze heeft dat die waar niet maakt.
 function proef() {
-  const cellen = Object.fromEntries(RICHTINGEN.map((r) => [r, kraamCel(r)]));
-  const { boer } = require('./dorpelingen.cjs');
-  const figuur = K.losRenderen(boer({ houding: 'staan', fase: 0 }), { b: FIG_CEL[0], h: FIG_CEL[1], anker: FIG_ANKER, richting: 'Z' });
-  const B = 420;
-  const H = 300;
-  const plein = new K.Plaat(B, H);
-  // [gx, gy, wat]: de kramen op de vier kanten van een plein van zeven bij zeven, de boeren ertussen
-  const stukken = [
-    [3, 0, 'ZW'], [0, 3, 'ZO'], [6, 3, 'NW'], [3, 6, 'NO'],
-    [3, 1, 'boer'], [2, 4, 'boer'], [4, 3, 'boer'],
-  ].sort((a, b) => a[0] + a[1] - (b[0] + b[1]));
-  for (const [gx, gy, wat] of stukken) {
-    const p = wat === 'boer' ? figuur : cellen[wat];
-    const anker = wat === 'boer' ? FIG_ANKER : ANKER;
-    plein.plak(p, 210 + (gx - gy) * 32 - anker[0], 60 + (gx + gy) * 16 - anker[1] + 40);
+  const vol = {};
+  const leeg = {};
+  for (const soort of SOORTEN) {
+    vol[soort] = { ZW: kraamCel('ZW', { waar: soort }), NO: kraamCel('NO', { waar: soort }) };
+    leeg[soort] = kraamCel('ZW', { waar: soort, leeg: true });
   }
-  const plaat = vergroot(plein, 2);
+  const manden = Object.fromEntries(MANDEN.map(([n, o]) => [n, mandCel(o)]));
+  const { boer, herbergierster, dorpsoudste } = require('./dorpelingen.cjs');
+  // ze staan voor de kramen: wie bij de voorste rij staat kijkt ervandaan (Z), wie bij de achterste rij staat ernaartoe (N)
+  const fig = (maak, richting) => K.losRenderen(maak({ houding: 'staan', fase: 0 }), { b: FIG_CEL[0], h: FIG_CEL[1], anker: FIG_ANKER, richting });
+  const B = 560;
+  const H = 450;
+  const plaat = new K.Plaat(B, H);
+  const legOp = (p, anker, gx, gy, OX, OY) => plaat.plak(p, OX + (gx - gy) * 32 - anker[0], OY + (gx + gy) * 16 - anker[1]);
+
+  // Boven: het marktblok zoals het in het spel komt (vraag 127, B): twee rijen kramen tegenover elkaar met een looppad
+  // ertussen, manden en kisten ernaast, en volk dat boodschappen doet (D).
+  const blok = [];
+  SOORTEN.slice(0, 3).forEach((s, i) => blok.push([i * 2, 0, vol[s].ZW, ANKER]));
+  SOORTEN.slice(3).forEach((s, i) => blok.push([i * 2 + 1, 5, vol[s].NO, ANKER]));
+  [['mand appels', 1, 1], ['krat brood', 3, 1], ['ton graan', 0, 4], ['zak', 4, 4], ['mand kolen', 4, 0]].forEach(([n, gx, gy]) => blok.push([gx, gy, manden[n], MAND_ANKER]));
+  blok.push([1, 2, fig(boer, 'N'), FIG_ANKER]);
+  blok.push([3, 3, fig(herbergierster, 'Z'), FIG_ANKER]);
+  blok.push([4, 2, fig(dorpsoudste, 'N'), FIG_ANKER]);
+  blok.sort((a, b) => a[0] + a[1] - (b[0] + b[1]));
+  for (const [gx, gy, p, anker] of blok) legOp(p, anker, gx, gy, 230, 70);
+
+  // Onder: dezelfde vijf kramen leeg, zoals een dorp ze heeft dat die waar niet maakt, en daaronder alles wat ernaast
+  // op de grond staat.
+  SOORTEN.forEach((s, i) => plaat.plak(leeg[s], 10 + i * 108, 228));
+  MANDEN.forEach(([n], i) => plaat.plak(manden[n], 18 + i * 66, 360));
+
   const uit = path.join(__dirname, 'uit');
   fs.mkdirSync(uit, { recursive: true });
-  fs.writeFileSync(path.join(uit, 'marktkraam-proef.png'), K.png(plaat, 1, '#7d7462'));
-  for (const r of RICHTINGEN) {
-    const ru = ruimte(cellen[r]);
-    console.log(`${r}: ruimte ${JSON.stringify(ru)}`);
-    if (Math.min(ru.boven, ru.links, ru.rechts, ru.onder) < 1) console.log(`LET OP: ${r} raakt de rand van zijn cel`);
+  fs.writeFileSync(path.join(uit, 'marktkraam-proef.png'), K.png(plaat, 2, '#6e7558'));
+  for (const s of SOORTEN) {
+    const ru = ruimte(vol[s].ZW);
+    if (Math.min(ru.boven, ru.links, ru.rechts, ru.onder) < 1) console.log(`LET OP: ${s} raakt de rand van zijn cel`);
   }
-  console.log(`uit/marktkraam-proef.png (${plaat.b}×${plaat.h}); cel ${CEL.join('×')}, anker ${ANKER.join(',')}`);
+  console.log(`kramen: ${SOORTEN.join(', ')}; grond: ${MANDEN.map(([n]) => n).join(', ')}`);
+  console.log(`uit/marktkraam-proef.png (${plaat.b * 2}×${plaat.h * 2}); cel ${CEL.join('×')}, anker ${ANKER.join(',')}`);
   return plaat;
 }
 
 if (require.main === module) proef();
 
-module.exports = { vel, beschrijving, proef, kraamCel, CEL, ANKER, RICHTINGEN };
+module.exports = { vel, mandenVel, beschrijving, proef, kraamCel, mandCel, CEL, ANKER, RICHTINGEN, SOORTEN, MANDEN };

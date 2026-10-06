@@ -2788,22 +2788,132 @@ function kar(o = {}, schaal = 1.7) {
 }
 
 // Een marktkraam: een toonbank met planken, vier palen, een gestreepte luifel met een geschulpte
-// rand, en waar: een kistje appels, kolen, broden en een kruik. Lokaal: y is de klantenkant.
-function marktkraam(schaal = 1.5) {
-  const M = { hout: 0, doek: 1, rand: 2, appel: 3, kool: 4, brood: 5, kruik: 6, kist: 7 };
+// rand, en waar erop. Lokaal: y is de klantenkant.
+//
+// Sinds vraag 127, A (Marcel, 6 okt: "Ik wil producten zien, manden met fruit er omheen etc") heeft elke kraam zijn
+// eigen waar en zijn eigen kleur doek (KRAAMWAREN): groente en fruit, brood, vis en vlees, laken en garen, potten en
+// gerei. `o.waar` kiest welke (standaard groente, zoals de kraam op het dorpsplein altijd was), en `o.leeg` is de kraam
+// van een dorp dat het niet heeft: een kale toonbank met de luifel opgerold. Wat naast een kraam op de grond staat
+// (manden, kisten, zakken, tonnen), is een eigen model: marktmand hieronder.
+const KRAAMWAREN = {
+  groente: { doek: 'rood', naam: 'groente en fruit' },
+  brood: { doek: 'stro', naam: 'brood' },
+  vis: { doek: 'water', naam: 'vis en vlees' },
+  laken: { doek: 'magie', naam: 'laken en garen' },
+  potten: { doek: 'blad', naam: 'potten en gerei' },
+};
+
+// De waar op het blad van de kraam (het blad ligt op z 18.3, van x -20 tot 20 en y -4,5 tot 10,5; de klant staat aan
+// +y). Zet zijn eigen materialen achter in `mat` en geeft de delen terug, zodat elke soort zijn eigen kleuren heeft
+// zonder dat de romp van de kraam ze kent.
+function kraamWaar(soort, mat) {
+  const d = [];
+  const m = (stof) => mat.push(stof) - 1;
+  const Z = 18.3; // het blad
+  if (soort === 'groente') {
+    const kist = m(houtM(1.4, 5.8, 0.6));
+    const appel = m({ ramp: 'rood', lo: 2.4, hi: 7, glans: 1.2 });
+    const kool = m({ ramp: 'blad', lo: 2, hi: 6.6, patroon: (x, y, z) => (Math.sin(Math.atan2(y, x) * 5 + z) > 0.6 ? -0.8 : 0) });
+    const wortel = m({ ramp: 'herfst', lo: 2.2, hi: 6.4 });
+    const ui = m({ ramp: 'perkament', lo: 2.2, hi: 6.2, patroon: (x, y, z) => (Math.sin(Math.atan2(y, x) * 7) > 0.5 ? -0.7 : 0) });
+    // een kistje appels
+    d.push(F.blok([-13, 4, Z + 2.3], [5.5, 4.5, 2.3], 0.4, kist, 4));
+    for (let i = 0; i < 8; i++) d.push(F.bol([-16.5 + (i % 4) * 2.4, 1.8 + Math.floor(i / 4) * 3.4, Z + 5.2 + (i % 2) * 0.4], 1.6, appel, 5));
+    // kolen
+    for (const [x, y] of [[-3, 5], [1.6, 7.2], [0.6, 2.6]]) d.push(F.bol([x, y, Z + 2.9], 2.9, kool, 6));
+    // wortels, in een waaier
+    for (let i = 0; i < 5; i++) {
+      const x = 6.5 + i * 1.5;
+      const y = 7.4 - i * 0.5;
+      d.push(F.kegel([x, y - 3.4, Z + 1.2], [x + 0.6, y + 3, Z + 1.4], 1.3, 0.25, wortel, 7));
+    }
+    // uien
+    for (const [x, y] of [[14, 2.6], [17.4, 5], [13.6, 6.6]]) d.push(F.ellips([x, y, Z + 2.2], [2.2, 2.2, 1.9], ui, 8));
+  } else if (soort === 'brood') {
+    const brood = m({ ramp: 'zand', lo: 2, hi: 7, patroon: (x, y, z, nx, ny, nz) => (nz > 0.8 && Math.abs(Math.sin(x * 1.1)) < 0.25 ? -1.2 : 0) });
+    const korst = m({ ramp: 'jas', lo: 2.4, hi: 6.8 });
+    const korf = m({ ramp: 'stro', lo: 2, hi: 6, patroon: (x, y, z) => (Math.sin(z * 1.6) * Math.sin(Math.atan2(y, x) * 9) > 0.3 ? -0.9 : 0) });
+    // lange broden, liggend naast elkaar
+    for (let i = 0; i < 4; i++) d.push(F.ellips([-15 + i * 3.4, 5.4, Z + 1.9], [1.5, 4.6, 1.9], brood, 4 + i));
+    // twee ronde broden, gestapeld
+    d.push(F.ellips([-1.4, 3.6, Z + 2], [3.6, 3.2, 2], korst, 8));
+    d.push(F.ellips([0.4, 6.4, Z + 2], [3.6, 3.2, 2], korst, 9));
+    d.push(F.ellips([-0.6, 5, Z + 4.6], [3.2, 2.8, 1.8], brood, 10));
+    // een korf met broodjes
+    d.push(F.kegel([13, 5, Z + 0.2], [13, 5, Z + 4.2], 5.4, 6.2, korf, 11));
+    for (let i = 0; i < 5; i++) {
+      const a = (i / 5) * Math.PI * 2;
+      d.push(F.ellips([13 + Math.cos(a) * 2.6, 5 + Math.sin(a) * 2.6, Z + 4.8], [1.9, 1.7, 1.4], brood, 12 + i));
+    }
+  } else if (soort === 'vis') {
+    const vis = m({ ramp: 'ijzer', lo: 2.2, hi: 7, glans: 1.4, patroon: (x, y, z, nx, ny, nz) => (Math.sin(y * 1.5) * Math.sin(x * 2.2) > 0.4 ? -0.8 : 0) });
+    const vin = m({ ramp: 'water', lo: 2.6, hi: 6.4 });
+    const plank = m(houtM(1.6, 5.4, 0.5));
+    const worst = m({ ramp: 'rood', lo: 1.8, hi: 5.4 });
+    const ham = m({ ramp: 'leer', lo: 2, hi: 6 });
+    // een natte plank met vissen, de koppen naar de klant
+    d.push(F.blok([-10, 5, Z + 0.7], [8.5, 5.5, 0.7], 0.3, plank, 4));
+    for (let i = 0; i < 3; i++) {
+      const x = -16 + i * 5.4;
+      d.push(F.ellips([x, 5.4, Z + 2.4], [2.1, 4.4, 1.6], vis, 5 + i));
+      d.push(F.kegel([x, 1.2, Z + 2.4], [x, -1.4, Z + 2.6], 1.4, 2.2, vin, 5 + i)); // de staart
+    }
+    // worsten in een krans, en een ham
+    for (let i = 0; i < 4; i++) {
+      const a = (i / 4) * Math.PI * 2;
+      d.push(F.capsule([2 + Math.cos(a) * 3.4, 5 + Math.sin(a) * 3, Z + 1.6], [2 + Math.cos(a + 1.4) * 3.4, 5 + Math.sin(a + 1.4) * 3, Z + 1.6], 1.5, worst, 9 + i));
+    }
+    d.push(F.ellips([14.5, 5, Z + 3.4], [4.4, 3.4, 3.4], ham, 13));
+    d.push(F.kegel([14.5, 5, Z + 6.4], [14.5, 5, Z + 8.6], 1.4, 0.8, ham, 13));
+  } else if (soort === 'laken') {
+    const rol1 = m({ ramp: 'rood', lo: 2.2, hi: 6.4 });
+    const rol2 = m({ ramp: 'gewaad', lo: 2.2, hi: 6.4 });
+    const rol3 = m({ ramp: 'blad', lo: 2.2, hi: 6.2 });
+    const linnen = m({ ramp: 'perkament', lo: 2.2, hi: 6.8, patroon: (x, y, z, nx, ny, nz) => (nz > 0.7 && (Math.sin(x * 2.4) > 0.75 || Math.sin(y * 2.4) > 0.75) ? -0.8 : 0) });
+    const garen = m({ ramp: 'goud', lo: 2.4, hi: 6.4 });
+    // drie rollen stof, schuin tegen de achterwand
+    [[-15, rol1], [-10.4, rol2], [-5.8, rol3]].forEach(([x, kleur], i) => {
+      d.push(F.kegel([x, 8.6, Z + 3], [x + 1.4, 0.6, Z + 12.4], 2.6, 2.6, kleur, 4 + i));
+    });
+    // een stapel gevouwen lappen
+    for (let i = 0; i < 3; i++) d.push(F.blok([2.6, 5, Z + 1.5 + i * 2.6], [5, 4.2, 1.3], 0.5, i === 1 ? rol2 : linnen, 8 + i));
+    // klosjes garen
+    for (const [x, y] of [[13, 3.4], [16.6, 6], [12.6, 7.2]]) {
+      d.push(F.kegel([x, y, Z + 0.4], [x, y, Z + 4.4], 1.9, 1.9, garen, 12));
+      d.push(F.kegel([x, y, Z], [x, y, Z + 5], 0.7, 0.7, linnen, 12));
+    }
+  } else {
+    const aarde = m({ ramp: 'dak', lo: 2, hi: 6.4, patroon: (x, y, z) => (Math.sin(z * 2.2) > 0.8 ? -0.7 : 0) });
+    const glazuur = m({ ramp: 'olijf', lo: 2.2, hi: 6.6, glans: 1.2 });
+    const tin = m({ ramp: 'ijzer', lo: 1.6, hi: 5.8, glans: 1.4 });
+    // potten, groot naar klein
+    [[-15.5, 5.5, 4.6], [-7.6, 6.4, 3.4], [-1.4, 4.4, 2.6]].forEach(([x, y, r], i) => {
+      d.push(F.ellips([x, y, Z + r], [r, r, r * 0.95], i === 1 ? glazuur : aarde, 4 + i));
+      d.push(F.kegel([x, y, Z + r * 1.5], [x, y, Z + r * 2.1], r * 0.55, r * 0.7, i === 1 ? glazuur : aarde, 4 + i));
+    });
+    // kommen, omgekeerd gestapeld
+    for (let i = 0; i < 3; i++) d.push(F.kegel([5.6, 5, Z + 0.4 + i * 1.8], [5.6, 5, Z + 2.4 + i * 1.8], 2.2, 3.4, aarde, 8 + i));
+    // een kruik en een tinnen kan
+    d.push(F.kegel([12.4, 6, Z], [12.4, 6, Z + 5], 2.6, 1.8, glazuur, 11));
+    d.push(F.kegel([12.4, 6, Z + 5], [12.4, 6, Z + 6.8], 1.1, 0.9, glazuur, 11));
+    d.push(F.kegel([17.4, 3.6, Z], [17.4, 3.6, Z + 5.4], 2.2, 2, tin, 12));
+    d.push(F.capsule([19.4, 3.6, Z + 1.6], [19.4, 3.6, Z + 4.6], 0.5, tin, 12));
+  }
+  return d;
+}
+
+function marktkraam(schaal = 1.5, o = {}) {
+  const soort = KRAAMWAREN[o.waar] ? o.waar : 'groente';
+  const W = KRAAMWAREN[soort];
+  const M = { hout: 0, doek: 1, rand: 2 };
   const mat = [];
   mat[M.hout] = {
     ...houtM(1.2, 5.8, 0.6),
     patroon: (x, y, z, nx, ny) => (Math.abs(ny) > 0.6 && ((x + 30) % 5.2) < 0.7 ? -1.4 : 0),
   };
   const streep = (x) => Math.floor((x + 30) / 5.4) % 2 === 0;
-  mat[M.doek] = { ramp: 'rood', lo: 1.6, hi: 6.2, patroon: (x, y, z, nx, ny, nz, stap) => (streep(x) ? { ramp: 'perkament', stap: stap - 0.6 } : 0) };
-  mat[M.rand] = { ramp: 'rood', lo: 1.4, hi: 5.6, patroon: (x, y, z, nx, ny, nz, stap) => (streep(x) ? { ramp: 'perkament', stap: stap - 0.6 } : 0) };
-  mat[M.appel] = { ramp: 'rood', lo: 2.4, hi: 7, glans: 1.2 };
-  mat[M.kool] = { ramp: 'blad', lo: 2, hi: 6.6, patroon: (x, y, z) => (Math.sin(Math.atan2(y, x) * 5 + z) > 0.6 ? -0.8 : 0) };
-  mat[M.brood] = { ramp: 'zand', lo: 2, hi: 7, patroon: (x, y, z, nx, ny, nz) => (nz > 0.8 && Math.abs(Math.sin(x * 1.1)) < 0.25 ? -1.2 : 0) };
-  mat[M.kruik] = { ramp: 'dak', lo: 1.4, hi: 6, glans: 0.8 };
-  mat[M.kist] = houtM(1.4, 5.8, 0.6);
+  mat[M.doek] = { ramp: W.doek, lo: 1.6, hi: 6.2, patroon: (x, y, z, nx, ny, nz, stap) => (streep(x) ? { ramp: 'perkament', stap: stap - 0.6 } : 0) };
+  mat[M.rand] = { ramp: W.doek, lo: 1.4, hi: 5.6, patroon: (x, y, z, nx, ny, nz, stap) => (streep(x) ? { ramp: 'perkament', stap: stap - 0.6 } : 0) };
   const d = [];
   // toonbank
   d.push(F.blok([0, 3, 17.2], [20.5, 7.5, 1.1], 0.3, M.hout, 1));
@@ -2814,23 +2924,117 @@ function marktkraam(schaal = 1.5) {
     d.push(F.blok([s * 20.2, 10.4, 22], [1.1, 1.1, 22], 0.3, M.hout, 2));
     d.push(F.blok([s * 20.2, -6, 26], [1.1, 1.1, 26], 0.3, M.hout, 2));
   }
+  if (o.leeg) {
+    // de luifel opgerold tegen de voorste palen: de kraam staat er, maar het dorp heeft deze waar niet
+    d.push(F.kegel([-20.2, -6, 48], [20.2, -6, 48], 3.4, 3.4, M.doek, 3));
+    for (const s of [-1, 1]) d.push(F.kegel([s * 16, -6, 48], [s * 16, -6, 44], 0.5, 0.5, M.rand, 3));
+    return F.geschaald(F.model(d, mat, { midden: [0, 2, 26], straal: 36 }), schaal);
+  }
   // luifel en de geschulpte rand
   d.push(kantelBlok([0, 2.6, 47.6], [23, 13.4, 0.6], -21.4, 0.3, M.doek, 3));
   const voorY = 2.6 + 13.4 * Math.cos((21.4 * Math.PI) / 180);
   const voorZ = 47.6 - 13.4 * Math.sin((21.4 * Math.PI) / 180);
   d.push(F.blok([0, voorY, voorZ - 2], [23, 0.45, 2.2], 0.2, M.rand, 3));
   for (let i = 0; i < 9; i++) d.push({ ...F.bol([-20.5 + i * 5.1, voorY, voorZ - 4.2], 2.3, M.rand, 3), f: (x, y, z) => Math.max(sdf.bol(x - (-20.5 + i * 5.1), (y - voorY) * 3, z - (voorZ - 4.2), 2.3) / 3, z - (voorZ - 4)) });
-  // waar: een kistje appels
-  d.push(F.blok([-12, 4, 20.6], [5.5, 4.5, 2.3], 0.4, M.kist, 4));
-  for (let i = 0; i < 8; i++) d.push(F.bol([-15.5 + (i % 4) * 2.4, 2.4 + Math.floor(i / 4) * 3.2, 23.5 + (i % 2) * 0.4], 1.6, M.appel, 5));
-  // kolen
-  for (const [x, y] of [[-1, 4], [3.6, 6.2], [2.6, 1.6]]) d.push(F.bol([x, y, 21.2], 2.9, M.kool, 6));
-  // broden
-  for (const [x, y] of [[10.5, 5.8], [15, 4.2], [12.2, 1.4]]) d.push(F.ellips([x, y, 19.6], [2.9, 1.9, 1.5], M.brood, 7));
-  // kruik
-  d.push(F.kegel([17.6, 1, 18.3], [17.6, 1, 22.5], 2, 1.6, M.kruik, 8));
-  d.push(F.kegel([17.6, 1, 22.5], [17.6, 1, 24.5], 1.1, 0.9, M.kruik, 8));
+  d.push(...kraamWaar(soort, mat));
   return F.geschaald(F.model(d, mat, { midden: [0, 2, 26], straal: 36 }), schaal);
+}
+
+// Een mand, kist of zak naast een kraam (vraag 127, A): wat er niet op de toonbank past, staat eromheen op de grond.
+// `o.soort`: 'mand' (gevlochten, met wat erin ligt), 'krat' (open kist), 'zak' (dichtgebonden linnen) of 'ton'.
+// `o.vol`: 'appels', 'kolen', 'brood', 'wol', 'graan' of null (leeg). Lokaal staat hij op de grond, z omhoog.
+// Een staand vat: een cilinder waarvan de straal met de hoogte meebuigt (een mand, een ton, een korf). F.kegel kan dit
+// niet: die heeft ronde uiteinden, en dan wordt een mand een ei.
+function vat(z0, z1, straal, m, deel) {
+  const rmax = Math.max(straal(z0), straal((z0 + z1) / 2), straal(z1));
+  return {
+    f: (x, y, z) => {
+      const dr = Math.hypot(x, y) - straal(klem(z, z0, z1));
+      const dz = Math.max(z0 - z, z - z1);
+      return Math.min(Math.max(dr, dz), 0) + Math.hypot(Math.max(dr, 0), Math.max(dz, 0));
+    },
+    g: [0, 0, (z0 + z1) / 2, Math.hypot(rmax, (z1 - z0) / 2) + 1],
+    m,
+    deel,
+  };
+}
+// Een hoepel of een vlechtrand om een vat.
+const hoepel = (z, R, dik, m, deel) => ({ f: (x, y, zz) => sdf.torus(x, y, zz - z, R, dik), g: [0, 0, z, R + dik + 0.5], m, deel });
+
+function marktmand(o = {}) {
+  const soort = o.soort || 'mand';
+  const M = { vlecht: 0, hout: 1, linnen: 2, touw: 3, band: 4, appel: 5, kool: 6, brood: 7, wol: 8 };
+  const mat = [];
+  mat[M.vlecht] = {
+    ramp: 'riet',
+    lo: 1.8,
+    hi: 6.2,
+    patroon: (x, y, z) => (Math.sin(z * 1.5) * Math.sin(Math.atan2(y, x) * 11) > 0.25 ? -1 : 0),
+  };
+  mat[M.hout] = houtM(1.4, 5.8, 0.6);
+  mat[M.linnen] = {
+    ramp: 'jas',
+    lo: 1.8,
+    hi: 6.2,
+    patroon: (x, y, z) => (ruis3(x * 0.55, y * 0.55, z * 0.55, 4) > 0.66 ? 0.6 : 0),
+  };
+  mat[M.touw] = { ramp: 'stro', lo: 1.6, hi: 4.6 };
+  mat[M.band] = { ramp: 'ijzer', lo: 1.2, hi: 5.4, glans: 1.1 };
+  mat[M.appel] = { ramp: 'rood', lo: 2.4, hi: 7, glans: 1.2 };
+  mat[M.kool] = { ramp: 'blad', lo: 2, hi: 6.6 };
+  mat[M.brood] = { ramp: 'zand', lo: 2, hi: 7 };
+  mat[M.wol] = { ramp: 'perkament', lo: 2.4, hi: 7 };
+  const d = [];
+  let rand = 0; // de hoogte van de rand: de inhoud komt er net bovenuit
+  let wijd = 7; // hoe ver van het midden de inhoud ligt
+  if (soort === 'mand') {
+    // een gevlochten korf: smal van onderen, wijd aan de rand, met een dikke vlechtrand erbovenop
+    d.push(vat(0, 12.6, (z) => 6.2 + z * 0.19, M.vlecht, 1));
+    d.push(hoepel(12.4, 8.3, 1.1, M.vlecht, 1));
+    rand = 13;
+    wijd = 5.4;
+  } else if (soort === 'krat') {
+    // een open kist: een bodem met vier planken erom
+    d.push(F.blok([0, 0, 2.2], [9, 7, 2.2], 0.5, M.hout, 1));
+    for (const sx of [-1, 1]) d.push(F.blok([sx * 8.6, 0, 6.4], [0.9, 7.2, 6.4], 0.3, M.hout, 1));
+    for (const sy of [-1, 1]) d.push(F.blok([0, sy * 6.6, 6.4], [9.4, 0.9, 6.4], 0.3, M.hout, 1));
+    rand = 12.6;
+    wijd = 5.4;
+  } else if (soort === 'zak') {
+    // een volle zak die staat: de buik, een hals met plooien en een touw eromheen
+    d.push(F.ellips([0, 0, 9], [6.8, 6, 9.5], M.linnen, 1, 2.5));
+    for (let i = 0; i < 5; i++) {
+      const a = (i / 5) * Math.PI * 2;
+      d.push(F.kegel([Math.cos(a) * 2.4, Math.sin(a) * 2.2, 15], [Math.cos(a) * 1.1, Math.sin(a) * 1, 21.5], 1.5, 1, M.linnen, 1));
+    }
+    d.push(F.kegel([0, 0, 15.6], [0, 0, 17.2], 3.3, 3.3, M.touw, 1));
+    return F.model(d, mat, { midden: [0, 0, 10], straal: 26 });
+  } else {
+    // een ton met gebogen duigen en twee ijzeren hoepels, open van boven
+    d.push(vat(0, 17, (z) => 7.2 + 1.5 * Math.sin((Math.PI * z) / 17), M.hout, 1));
+    for (const z of [4.4, 13]) d.push(hoepel(z, 8.4, 0.8, M.band, 1));
+    d.push(hoepel(16.6, 7.6, 0.7, M.hout, 1));
+    rand = 17;
+    wijd = 4.8;
+  }
+  // Wat erin ligt, komt boven de rand uit: een mand appels is anders een bruine bal. Een ring eromheen en een hoopje
+  // in het midden, zodat het van elke kant een volle mand is.
+  const vullen = { appels: [M.appel, 2.2], kolen: [M.kool, 3], brood: [M.brood, 2.4], wol: [M.wol, 3.4], graan: [M.brood, 1.6] };
+  const vul = vullen[o.vol];
+  if (vul) {
+    const [kleur, r] = vul;
+    for (let i = 0; i < 10; i++) {
+      const ring = i < 6;
+      const a = (ring ? i / 6 : (i - 6) / 4 + 0.12) * Math.PI * 2;
+      const straal = ring ? wijd : wijd * 0.42;
+      const x = Math.cos(a) * straal;
+      const y = Math.sin(a) * straal;
+      const z = rand + r * (ring ? 0.35 : 0.95) + ((i * 7) % 3) * 0.3;
+      if (o.vol === 'brood') d.push(F.ellips([x, y, z], [r * 1.3, r * 0.9, r * 0.75], kleur, 2 + i));
+      else d.push(F.bol([x, y, z], r, kleur, 2 + i));
+    }
+  }
+  return F.model(d, mat, { midden: [0, 0, rand * 0.6], straal: rand + 18 });
 }
 
 // Een wegwijzer: een paal met drie pijlen, elk met een regeltje gekrabbelde letters.
@@ -4191,6 +4395,8 @@ module.exports = {
   afdak,
   kar,
   marktkraam,
+  marktmand,
+  KRAAMWAREN,
   wegwijzer,
   bankje,
   lantaarnpaal,
