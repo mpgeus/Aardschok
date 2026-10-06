@@ -3274,7 +3274,10 @@ wordt gepraat:
   kwam er twee en een half jaar geen gezin.
 - **Een erf mag op struiken en bomen** (6 okt, de sessie van de heer; werklijst vraag 110, e, met 115; Marcel: "A ja B ja
   C ja D zo"). Gemeten op vier landen van de maker: zo passen er 39 tot 49 erven in plaats van 13 tot 20, en een groot
-  deel komt al uit losse struiken en bomen in de wei. Water, een rots, een gebouw, een veld of een pad houden een erf
+  deel komt al uit losse struiken en bomen in de wei. Ook het looppad om de hut mag buiten het erf in het bos liggen:
+  het gezin rooit het mee (`T.kavelVanErf`). Dat kwam er na de speeltest van vier jaar: tot dan telde een boom daar als
+  in de weg, pasten er 28 tot 42 erven, en vond de bouwer op 73425 vanaf het derde jaar nergens een erf en bleef hij op
+  99 mensen steken. Water, een rots, een gebouw, een veld of een pad houden een erf
   nog tegen, maar wat te rooien is (een boom, een stronk, een struik) niet. Met het erf in de hand zegt de muis wat er
   eerst weg moet en wat het oplevert ("Het gezin dat er komt, rooit eerst 3 bomen (+30 hout)", `T.rooiTekst`). Het
   gezin dat zo'n erf neemt, rooit het zelf: het hoofd van het gezin hakt de bomen om en rooit de stronken en de

@@ -23,8 +23,8 @@
 // (js/raad.js). Het poppetje erbij hakt aan zijn boom en brengt het hout in bundels naar de schuur (js/veldwerk.js).
 //
 //   g.wachtOpRooien  het gebouw wacht nog op het rooien
-//   g.kavel          { x, y, b, h }: het stuk dat eerst vrij moet (bij een erf het erf, bij een werkplaats zijn voet met
-//                    het looppad eromheen)
+//   g.kavel          { x, y, b, h }: het stuk dat eerst vrij moet (bij een erf het erf met het looppad om de hut,
+//                    T.kavelVanErf in js/erven.js; bij een werkplaats zijn voet met het looppad eromheen)
 //   g.rooienTot      de dag waarop de buren de rest rooien
 //   p.rooit          de werkplaats die deze inwoner vroeg en nu rooit (bij een hut volgt het uit het gezin)
 //   g.boom           { x, y }: de boom waar de houthakker aan hakt; null als er geen meer binnen bereik staat

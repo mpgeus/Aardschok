@@ -619,7 +619,7 @@
         if (beste && bos > beste.bos) continue;
         const kringen = plekken.filter((p) => p.er.some((r) => T.inDeKring(erf, r, p.straal)));
         const n = kringen.reduce((som, p) => som + p.telt, 0);
-        const rooien = T.teRooienOp(s.dorp, erf).length;
+        const rooien = T.teRooienOp(s.dorp, T.kavelVanErf(s.dorp, erf)).length;
         const d = Math.hypot(x - midden.x, y - midden.y);
         const beter = !beste || bos < beste.bos || n > beste.n || (n === beste.n && (rooien < beste.rooien || (rooien === beste.rooien && d < beste.d)));
         if (beter) beste = { x, y, n, d, kringen, bos, rooien };

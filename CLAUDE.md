@@ -356,9 +356,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwmenu staat, zegt `T.inBouwmenu`: het erf, en de woningen niet, tenzij de spelregel "Huizen" anders zegt. Op
   een akker, een weide, een pad of een erf bouw je niet (`T.waaromNietOpDezeGrond`). De paaltjes op een vrij erf
   tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`). **Een erf mag op struiken en bomen** (vraag 110, e, 6
-  okt): wat te rooien is (`T.ontginWerkOp` in `js/bos.js`) houdt het niet tegen (`T.rooiTekst` voor de muis); het
-  gezin dat het neemt, rooit het zelf, en zolang wacht de hut, nog niet op de kaart (`js/bos.js`). Een erf in het bos van
-  de heer kost zijn gunst.
+  okt): wat te rooien is (`T.ontginWerkOp` in `js/bos.js`) houdt het niet tegen (`T.rooiTekst` voor de muis), ook niet in
+  het looppad om de hut buiten het erf; het gezin dat het neemt, rooit het erf met dat looppad zelf (`T.kavelVanErf`), en
+  zolang wacht de hut, nog niet op de kaart (`js/bos.js`). Een erf in het bos van de heer kost zijn gunst.
 - `js/bos.js`: **het bos: omhakken, rooien, planten en groeien** (vraag 110, e, met 115, 6 okt; Marcel: "A ja B ja C ja D
   zo"), met de getallen in `T.BOS_INSTELLINGEN`. Wat te rooien is, zegt `T.ontginWerkOp` ('hakken' voor een boom,
   'rooien' voor een stronk, een struik, een boompje of een jonge boom); een boom om met `T.hakBoom` (het hout naar de

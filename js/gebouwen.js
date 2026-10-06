@@ -726,15 +726,16 @@
 
   // Is er een looppad van `breed` tegels rondom de rechthoek r ({ x, y, b, h })? Elke tegel in die rand is te belopen
   // (T.isBegaanbaar, js/wereld.js: geen muur, geen gebouw, geen boom) en niet de plek van het huis op een erf (T.huisPlekOp,
-  // js/erven.js; behalve van het erf `behalve`), of ligt buiten de kaart, waar niemand loopt. `behalve` is het erf, of het
-  // stuk dat gerooid wordt (js/bos.js): wat daarop te rooien is, telt als vrij.
-  T.looppadOm = function (D, r, breed, behalve = null) {
+  // js/erven.js; behalve van het erf `behalve`), of ligt buiten de kaart, waar niemand loopt. Op het stuk `rooien` (een
+  // rechthoek; zonder: `behalve`) telt wat te rooien is als vrij: het erf, het looppad om de hut op een erf, of het stuk
+  // dat gerooid wordt voor een werkplaats (js/bos.js).
+  T.looppadOm = function (D, r, breed, behalve = null, rooien = behalve) {
     const w = D.wereld;
     const hoog = w.tegels.length;
     const wijd = w.tegels[0].length;
-    // Op het erf zelf, of op het stuk dat gerooid wordt, telt wat te rooien is (een boom, een stronk, een struik) als vrij:
-    // dat rooit wie er komt, voor de bouwplaats er ligt (js/bos.js; werklijst vraag 110, e).
-    const opHetErf = (x, y) => behalve && x >= behalve.x && x < behalve.x + behalve.b && y >= behalve.y && y < behalve.y + behalve.h;
+    // Op het stuk dat gerooid wordt, telt wat te rooien is (een boom, een stronk, een struik) als vrij: dat rooit wie er
+    // komt, voor de bouwplaats er ligt (js/bos.js; werklijst vraag 110, e).
+    const opHetErf = (x, y) => rooien && x >= rooien.x && x < rooien.x + rooien.b && y >= rooien.y && y < rooien.y + rooien.h;
     for (let y = r.y - breed; y < r.y + r.h + breed; y++) {
       for (let x = r.x - breed; x < r.x + r.b + breed; x++) {
         if (x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) continue;
