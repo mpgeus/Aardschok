@@ -149,6 +149,62 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 6 okt: de houthakker zonder bomen, en planten tot het bos blijft (werklijst, vraag 128)
+
+Gespeeld in de sessie van de heer, op `claude/heer-game-mechanics-6d9h5l`, na Marcels "Eens" op e en b van vraag 128
+(en f als het bos daarna nog opraakt), en met de kramen van de marktsessie erbij (vraag 127, uit `main`):
+`npm run speeltest -- bouwer sluw --maker --jaren 4`, drie keer, want elke keer liet het iets zien. **E** op `2e8b8fd`
+(e en b: een houthakker zonder bomen laat zijn hand gaan, en komt alleen bij minstens 30 bomen binnen tien tegels);
+**F** op `5bb6833` (een stronk staat niet meer in de weg); **G** op `d7d863c` (f: twee boompjes per boom, en wat hij kapt
+blijft bos; en de put om te rooien bereikt wie er een mist). Daarna **H**: alleen de bouwer op 62707 nog eens, met een
+meting erbij van de huizen die niet doorgroeien. Geen fouten in de console. 62707 is zaad 1, 73425 zaad 2, 72022 zaad 3.
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4: E; F; G | Hout van de houthakkers in jaar 1 tot 4: E; F; G | Dagen stil in jaar 4 (samen): F; G |
+|---|---|---|---|---|
+| 62707 | bouwer | 52, 75, ontslagen op Sint-Maarten; 52, 97, 129, 129; 52, 100, 129, 129 | 340, 311; 359, 310, 92, 0; 359, 449, 343, 326 | 720 (twee); 516 (twee) |
+| 73425 | bouwer | 48, 76, 102, 102; 50, 87, 116, ontslagen op Sint-Maarten; 50, 87, 126, 126 | 381, 680, 280, 92 (drie); 402, 379, 91; 402, 488, 387, 405 | ontslagen; 414 (twee) |
+| 72022 | bouwer | 24 (27 doden van de kou), 48, ontslagen op Sint-Maarten; 51, 85, 110, 110; 51, 87, 129, 129 | 90, 187; 410, 66, 166, 57; 410, 246, 426, 310 | 326 (één); 502 (twee) |
+| 62707 | sluw | 55, 105, ontslagen in jaar 3; 56, 90, ontslagen in jaar 3; 56, 94, ontslagen in jaar 3 | | |
+| 73425 | sluw | 50, 94, 114, 121; gevallen op 19 wijnmaand van het eerste jaar; net zo | | |
+| 72022 | sluw | 54, gevallen in oogstmaand van het tweede jaar; net zo; net zo | | |
+
+**Wat het zegt:**
+1. **De houthakker zette zich vast met zijn eigen stronken (E).** Zolang het dorp een nieuwe houthakker vroeg als de
+   andere stilstonden, zag je het niet; met e wel. Op 72022 hakte de enige houthakker negen bomen aan de rand van het bos
+   en stond daarna 299 dagen stil: zijn stronken stonden in de weg, en bij de bomen erachter kon hij niet. Er vroren 27
+   mensen dood, en de bouwer was op Sint-Maarten zijn ambt kwijt. Nu staat een stronk die een boom achterlaat, niet in de
+   weg, zoals in een kapvlakte (`js/wereld.js`; een stronk van de maker wel, `opmerkingen.md`).
+2. **Het bos om de houthakker raakte op (F).** Met één boompje per boom, en alleen waar nog vier volgroeide bomen om de
+   stronk stonden, was zijn bereik in het eerste jaar leeg, en plantte hij daarna niets meer: wat hij dun hakte, telde
+   niet meer als bos. In het vierde jaar hakten de houthakkers op 62707 niets en op 72022 57 hout. Daarom f, eerst
+   gemeten in Node (alleen de houthakker, vier jaar op de drie landen; in het vierde jaar gemiddeld): zo 37 hout en 313
+   tot 354 dagen stil; één boompje ook waar hij het dun hakte 218; twee boompjes 475; één en een boompje waar een stronk
+   verging 376; twee, met de stronken, boompjes en jonge bomen als bos geteld, 424 en 42 tot 66 dagen stil. Dat laatste
+   is het geworden: het plant nog steeds alleen in het bos.
+3. **Het bos blijft (G).** Twee houthakkers hakken tot het eind 310 tot 490 hout per jaar, uit een jong bos: aan het eind
+   van het vierde jaar staan er binnen hun bereik 0 tot 3 volgroeide bomen, maar 11 tot 20 jonge bomen en 15 tot 36
+   boompjes. Elk staat nog zo'n half jaar stil, terwijl zijn boompjes groeien, maar het zakt niet meer weg. De drie
+   dorpen van de bouwer spelen alle vier de jaren uit en komen tot 126, 126 en 129 mensen, zonder doden van kou of
+   honger (in F twee van de drie tot het eind).
+4. **De put die niemand hielp (F, gerepareerd in G).** Vond het dorp voor een put of een kapel geen open plek die het
+   huis bereikt dat erom vroeg, dan rooide het een plek bij het hart van het dorp, die dat huis niet bereikte; een maand
+   later vroeg het opnieuw. Op 72022 kwamen er zo 48 putten, op 73425 acht kapellen. Nu moet ook een plek om te rooien
+   het huis bereiken (`js/verzoeken.js`). In G 10 tot 12 putten, en 72022 was in herfstmaand een dorp in plaats van in
+   lentemaand van het tweede jaar.
+5. **Geen dorp wint, en dat ligt aan een hut die niet kan doorgroeien (H; vraag 129).** In G hadden op 62707 en 73425 alle
+   huizen in het vierde jaar 359 en 360 dagen alles, maar de winst vraagt dat elk huis met mensen een stenen huis is (of
+   een boerderij), en één of twee hutten bleven hut. H laat zien waarom: het zijn hutten die de maker legde, en waar het
+   grotere huis moet komen, staat iets in de weg. Op 62707 hadden ze 1349 dagen alles en groeiden ze nooit: voor de
+   kleinste vorm stond er bij elk één struik, voor de grotere een eik, een bessenstruik of een appelboom, en onder de
+   ene legde de bouwer later een erf. Op elk land staat er bij het begin minstens één zo (op 62707 twee, op 73425 en
+   72022 één), en bijna altijd is het iets wat het dorp sinds vandaag kan rooien.
+6. **De sluwe bouwer** valt op 72022 in het tweede jaar tegen drie wilde rovers, in alle drie de rondes, en in F en G op
+   73425 al in het eerste jaar tegen twee (in E speelde hij daar de vier jaar uit, tot 121 mensen; `opmerkingen.md`, "De
+   schout valt tegen één wilde rover", 2 okt). Op 62707 is hij elke keer in het derde jaar zijn ambt kwijt. Dat heeft
+   niets met het bos te maken.
+
+**Wat het vraagt:** vraag 129 (een hut die niet kan doorgroeien). Vraag 128 is klaar.
+
 ## De speeltest van 6 okt: grond uit het bos en de houthakker die hakt en plant (werklijst, vraag 110, e, en 115)
 
 Gespeeld in de sessie van de heer, op `claude/heer-game-mechanics-6d9h5l`, naar stap 4 van het plan bij vraag 115
