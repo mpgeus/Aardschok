@@ -639,6 +639,8 @@
   // Met `tekening` voor een andere tekening dan de volgende (een andere stand, js/bouwstijl.js).
   T.waaromPastHetNiet = function (D, soort, x, y, tekening) {
     if (T.GEBOUWEN[soort] && T.GEBOUWEN[soort].erf) return T.waaromPastErfNiet(D, x, y);
+    // De markt op het plein (js/markt.js): zijn plek is het plein, waar je ook wijst.
+    if (soort === 'markt' && T.marktOpHetPlein(D)) return T.waaromGeenMarktOpHetPlein(D);
     const voet = T.gebouwVoet(soort, tekening || T.volgendeTekening(D, soort));
     const w = D.wereld;
     if (!voet || !w) return 'Daar past het niet.';
@@ -791,7 +793,9 @@
   };
 
   // Wie toch op een bouwplaats staat (een gezin zet zijn hut op zijn erf, js/erven.js, terwijl er iemand over dat erf
-  // loopt), stapt eraf: naar de begaanbare tegel ernaast die het dichtst bij is. Anders staat hij ingemetseld.
+  // loopt), stapt eraf: naar de begaanbare tegel ernaast die het dichtst bij is. Anders staat hij ingemetseld. Ook voor
+  // de kramen van de markt (js/markt.js).
+  T.stapEraf = stapEraf;
   function stapEraf(D, r) {
     const w = D.wereld;
     for (const e of w.wezens || []) {
@@ -933,6 +937,8 @@
     if (!g || g.menu === false) return { gelukt: false, reden: 'Dat kan niet via het bouwmenu.' };
     // Een erf is land, geen gebouw: het krijgt geen voorwerp en maakt de grond niet vast (js/erven.js).
     if (g.erf) return T.legErfAan(D, x, y);
+    // De markt op het plein: kramen, geen gebouw met een voet (js/markt.js; werklijst vraag 110, d).
+    if (soort === 'markt' && T.marktOpHetPlein(D)) return T.zetMarktOpHetPlein(D);
     const past = T.waaromPastHetNiet(D, soort, x, y);
     if (past) return { gelukt: false, reden: past };
     if (!T.kanBetalen(D, g.kosten)) return { gelukt: false, reden: 'Daar is de voorraad niet groot genoeg voor.' };
@@ -1148,6 +1154,7 @@
       if (!g.klaar && g.klaarOp != null && dag >= g.klaarOp) {
         g.klaar = true;
         if (g.voorwerp) g.voorwerp.inAanbouw = false;
+        for (const k of g.kramen || []) k.inAanbouw = false; // de markt op het plein (js/markt.js)
       } else if (g.klaar && g.voorwerp && g.voorwerp.inAanbouw && g.voorwerp.klaarOp != null && dag >= g.voorwerp.klaarOp) {
         // een huis dat doorgroeide (js/behoeften.js, groeiGebouw), is opgerezen
         g.voorwerp.inAanbouw = false;

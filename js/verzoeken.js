@@ -104,6 +104,8 @@
   };
   function zoekPlek(D, soort, bij) {
     const w = D.wereld;
+    // De markt op het plein (js/markt.js): het midden van het plein, met de kramen.
+    if (soort === 'markt' && T.marktOpHetPlein(D)) return T.marktPlek(D);
     if (heeftKring(soort)) {
       const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || T.GEBOUWEN[soort].voet;
       const kring = T.kringTeller(D, soort);
@@ -222,6 +224,7 @@
       L.bouw = { soort: x.soort, x: plek.x, y: plek.y, waarom: x.waarom, voor: x.voor, nut: nutVan(D, { mensen: mist ? mist.mensen : null, voor: x.voor }) };
       if (x.premie) L.bouw.premie = x.premie;
       if (x.wil) L.bouw.eigen = x.wil;
+      if (plek.kramen) L.bouw.kramen = plek.kramen; // de markt op het plein: waar de kramen komen, in goud (js/tekenen.js)
       R.volgende = dag + IN().elke;
       return true;
     }
@@ -317,6 +320,7 @@
   // Waar het komt, zoals hij het zegt: naast zijn huis, of bij het gebouw dat er het dichtst bij staat en geen woning is.
   function plekTekst(D, L) {
     const b = L.bouw;
+    if (b.kramen) return 'op het plein';
     const deur = L.wie.huis && T.deurVan(D.wereld, L.wie.huis);
     if (deur && Math.hypot(b.x - deur.x, b.y - deur.y) <= 8) return 'naast mijn huis';
     let beste = null;

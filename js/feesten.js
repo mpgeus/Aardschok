@@ -48,8 +48,10 @@
 
   // Waar het dorp zich verzamelt: de tegel van het plein (T.pleinTegels, js/wereld.js) het dichtst bij zijn midden waar
   // niets staat en niemand: begaanbaar, geen voorwerp, en niet de plek van de marskramer (T.pleinVan, js/bewoners.js).
-  // Null als de kaart geen plein heeft.
-  function middenVan(w) {
+  // Null als de kaart geen plein heeft. Zonder `wezens` telt niet wie er nu staat: zo houden de kramen van de markt
+  // (js/markt.js) het midden vrij.
+  T.feestMidden = (w) => middenVan(w, false);
+  function middenVan(w, wezens = true) {
     const tegels = T.pleinTegels(w);
     if (!tegels.length) return null;
     const mx = tegels.reduce((s, t) => s + t.x, 0) / tegels.length;
@@ -59,7 +61,7 @@
     let afstand = Infinity;
     for (const t of tegels) {
       if (kraam && t.x === kraam.x && t.y === kraam.y) continue;
-      if (!T.isBegaanbaar(w, t.x, t.y) || T.voorwerpOp(w, t.x, t.y) || T.wezenOp(w, t.x, t.y)) continue;
+      if (!T.isBegaanbaar(w, t.x, t.y) || T.voorwerpOp(w, t.x, t.y) || (wezens && T.wezenOp(w, t.x, t.y))) continue;
       const a = Math.hypot(t.x - mx, t.y - my);
       if (a < afstand) {
         afstand = a;

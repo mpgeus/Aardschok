@@ -45,6 +45,8 @@
     schandpaal: { blokkeert: true, zichtDicht: false, naam: 'de schandpaal' },
     // De meiboom op het plein: de jongeren zetten hem op 1 bloeimaand, en hij blijft een maand staan (js/feesten.js).
     meiboom: { blokkeert: true, zichtDicht: false, naam: 'de meiboom' },
+    // Een kraam van de markt op het plein (js/markt.js): een toonbank met een luifel. Je loopt eromheen, en ertussendoor.
+    kraam: { blokkeert: true, zichtDicht: false, naam: 'een kraam' },
   };
 
   // Hoe snel de schout loopt, in tegels per seconde: wat vlotter dan een dorpeling (1,2 tot 1,5),
