@@ -3786,7 +3786,35 @@
      "ZW",
      "NW",
      "NO"
-    ]
+    ],
+    "soorten": [
+     "groente",
+     "brood",
+     "vis",
+     "laken",
+     "potten"
+    ],
+    "manden": {
+     "bestand": "marktmanden.png",
+     "cel": [
+      64,
+      64
+     ],
+     "anker": [
+      32,
+      46
+     ],
+     "namen": [
+      "mand appels",
+      "mand kolen",
+      "mand leeg",
+      "krat brood",
+      "krat wol",
+      "zak",
+      "ton graan",
+      "ton leeg"
+     ]
+    }
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});

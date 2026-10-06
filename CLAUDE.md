@@ -512,14 +512,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.feestLicht`, in `T.lichtBronnen`), en niemand gaat naar de herberg (`T.feestAvond`). De meiboom komt op een vaste dag
   (`op` in `T.VOORVALLEN`, 30 grasmaand) en staat een maand op het plein (een voorwerp, `gereedschap/pixelart/meiboom.cjs`).
   De spelregel "Feesten"; de getallen in `T.FEESTEN_INSTELLINGEN`.
-- `js/markt.js`: **de markt op het plein** (vraag 110, d, 6 okt; Marcel: "Voor nu a1, b tot e ja"): met de spelregel "De
-  markt" op "Op het plein" (`T.MARKT_INSTELLINGEN.opHetPlein`) komt een markt niet als gebouw van 6 bij 6, maar als vier
-  kramen aan de rand van het plein (`T.kraamPlekken`: een per kant, naar het midden, buiten het feest, `T.feestMidden`, en
-  weg van de heer; alleen waar ze niemand tegenhouden). Hij komt zoals elk gebouw (een verzoek of je oproep): `T.plekVoor`,
-  `T.waaromPastHetNiet` en `T.plaatsGebouw` vragen het hier (`T.marktPlek`, `T.zetMarktOpHetPlein`). De markt staat in
-  `D.gebouwen` met `opHetPlein` en zijn kramen (voorwerpen `kraam`), zonder voet, op het midden van het plein
-  (`T.marktMidden`). Wat hij kost, zegt `T.GEBOUWEN.markt.kosten`, naar de spelregel. De kraam is
-  `gereedschap/pixelart/marktkraam.cjs` (`T.sprites.kraam(richting)`).
+- `js/markt.js`: **de markt op het plein, die meegroeit** (vraag 110, d, en vraag 127, 6 okt; Marcel: "Grotere stad =
+  grotere markt"): met de spelregel "De markt" op "Op het plein" (`T.MARKT_INSTELLINGEN.opHetPlein`) komt een markt niet
+  als gebouw van 6 bij 6, maar als een marktblok op het plein: twee rijen kramen tegenover elkaar met een looppad
+  ertussen en een mand naast elke kraam (`T.marktBlok`: het grootste open stuk buiten het feest, `T.feestMidden`, en weg
+  van de heer, dat niemand tegenhoudt). Hij komt zoals elk gebouw (een verzoek of je oproep): `T.plekVoor`,
+  `T.waaromPastHetNiet` en `T.plaatsGebouw` vragen het hier (`T.marktPlek`, `T.zetMarktOpHetPlein`). Elke nacht
+  (`T.tikMarktDag`) komt er een kraam bij tot er een per 15 mensen is (`T.kramenNodig`), eerst in het blok (`g.blok`),
+  dan langs de weg vanaf het plein (`T.straatPlek`, de marktstraat); en een kraam ligt vol als het dorp zijn waar heeft
+  (`T.heeftWaar`, `waren`), anders leeg. De markt staat in `D.gebouwen` met `opHetPlein`, `kramen`, `manden` en `blok`
+  (voorwerpen `kraam`, met `waar` en `leeg`, en `mand`, met `wat`), zonder voet, op het midden van het plein
+  (`T.marktMidden`). Wat hij kost, zegt `T.GEBOUWEN.markt.kosten`, naar de spelregel. De kramen per waar en de manden:
+  `gereedschap/pixelart/marktkraam.cjs` (`T.sprites.kraam(waar, leeg, richting)`, `T.sprites.mand(naam)`).
 - `js/einde.js`: **het eind en het jaar in het kort** (2e, vraag 101, 3 okt): elke nacht (`T.tikEindeDag`, vanuit
   `T.tikGebouwenDag`) telt het dorp de dagen op rij dat iedereen super gelukkig is (`T.iedereenGelukkig`: elk huis met
   mensen heeft alles, in de hoogste stand of ernaast, vanaf 100 mensen; `D.eind`; een slechte week zet de teller stil,

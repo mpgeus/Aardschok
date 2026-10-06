@@ -5624,7 +5624,34 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     voorgesteld, met c1 (de maker legt het plein groter, met een kant vrij voor de markt) en c2 (is het plein vol, dan
     komen er kramen langs de weg naar het plein, een marktstraat); c3 (het plein groeit zelf) valt af. En een marktdag:
     door de week een paar kramen, op de marktdag alle, met meer volk op het plein.
-    **Stap 1 loopt** (6 okt): de proefplaat van de kramen met hun waar en de manden, die Marcel keurt.
+    **Stap 1 is af** (6 okt): de proefplaat van de kramen met hun waar en de manden (Marcel: "push main; ga door met stap
+    2"). **Stap 2 is gebouwd** (6 okt): het marktblok, het meegroeien, de marktstraat, vol of leeg, en het grotere plein
+    van de maker (`spel.md`, "De markt op het plein, die meegroeit"). **De speeltest erna** (`speelbaar.md`): op elk land
+    komt de markt en groeit hij mee (vijf kramen bij zo'n 80 mensen, het blok heeft plaats voor 10 à 12), maar **het
+    grotere plein kost bouwgrond**: het dorp eindigt op 83, 79 en 85 (gisteren 94, 83 en 79), op 62707 is de weverij weg,
+    en op alle drie is er aan het eind geen plek voor een weverij. Voorstel van Claude (open): het plein van de maker iets
+    kleiner dan nu (zo'n 260 tot 300 tegels, een blok van 8 kramen), en de rest van de groei van de markt langs de straat;
+    en e (bouwgrond uit het bos, vraag 110) eerder, want de grond is de knoop naar de winst, met of zonder markt.
+    **Marcel (6 okt, tijdens stap 2): "Misschien verschillende kramen? Ook in afmeting? Voornamelijk lengte".** Voorstel
+    van Claude (open):
+    - **a, de lengte:** kramen van één, twee en drie tegels lang, langs de rij. Een lange kraam heeft een langere toonbank
+      met meer waar erop, en een luifel op meer palen.
+    - **b, wie welke lengte krijgt:** naar de waar (laken en vis lang, want daar ligt veel uitgestald; brood en potten
+      kort), met wat toeval erbij, zodat twee groentekramen niet even lang zijn. Of alleen toeval.
+    - **c, andere vormen:** naast de kraam met de gestreepte luifel ook een kraam met een puntdakje van doek, een tafel
+      onder een schuin zeil, en een kar die als kraam dient (de boer die zijn eigen groente verkoopt). Per kraam geloot.
+    - **d, wat het meegroeien telt:** nog steeds kramen (een per 15 mensen), maar een lange kraam neemt meer plek in het
+      blok, dus het blok is eerder vol en de straat begint eerder. Of: het telt in tegels toonbank, zodat drie korte
+      kramen even veel zijn als één lange.
+    Vragen: **a**, één tot drie tegels? **b**, naar de waar met toeval, of alleen toeval? **c**, deze vormen erbij, of
+    eerst alleen de lengte? **d**, tellen in kramen of in tegels?
+    **Marcel koos (6 okt): "plein iets kleiner, a ja, b naar waar, c: ja goed idee, d. ja eens", en bij het voorstel na
+    de speeltest: "1. prima 2. graag".** Dus: het plein van de maker iets kleiner (zo'n 260 tot 300 tegels, een blok van
+    zo'n 8 kramen, de rest langs de straat); kramen van één tot drie tegels lang, naar de waar met wat toeval; de andere
+    vormen erbij (het puntdakje, de tafel onder een zeil, de kar); en het meegroeien telt in tegels toonbank. En e
+    (bouwgrond uit het bos, vraag 110) komt eerder. **Volgorde:** eerst het kleinere plein (klein, nu), dan de proefplaat
+    van de kramen in lengtes en vormen voor Marcel (stap 2b), dan e, dan stap 3 (de kooplui, de boodschappen, de
+    marktdag).
 128. **Hoeveel bos heeft een houthakker nodig?** (Claude, 6 okt, de sessie van de heer, bij stap 3 van vraag 110, e, met
     115; `spel.md`, "De houthakker hakt en plant", Open; open).
     **Gemeten** (het ontworpen gehucht en de landen 5, 62707, 72022 en 73425): een houthakker mag staan op een open plek

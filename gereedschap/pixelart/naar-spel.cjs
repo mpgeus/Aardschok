@@ -159,11 +159,13 @@ function meiboom() {
 
 // ---------------------------------------------------------------- de marktkraam
 //
-// Vier cellen: een kraam van de markt op het plein, van elke kant waarheen hij kijkt (marktkraam.cjs, ontwerp/werklijst.md,
-// vraag 110, d). js/sprites.js zoekt hem op met S.kraam(richting) en legt zijn anker op de tegel.
+// De kramen van de markt (marktkraam.cjs, ontwerp/werklijst.md, vraag 110, d en vraag 127): per waar vol en leeg, van elke
+// kant waarheen hij kijkt, en op een tweede vel de manden, kisten, zakken en tonnen ernaast. js/sprites.js zoekt ze op met
+// S.kraam(waar, leeg, richting) en S.mand(naam), en legt hun anker op de tegel.
 function marktkraam() {
   schrijf('marktkraam.png', Marktkraam.vel());
-  return Marktkraam.beschrijving('marktkraam.png');
+  schrijf('marktmanden.png', Marktkraam.mandenVel());
+  return Marktkraam.beschrijving('marktkraam.png', 'marktmanden.png');
 }
 
 // ---------------------------------------------------------------- de tekens, het papier en de spijker

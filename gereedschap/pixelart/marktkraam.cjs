@@ -45,9 +45,16 @@ const FIG_ANKER = [56, 110];
 
 // ---------------------------------------------------------------- tekenen
 
+// Een kraam van `o.lengte` tegels staat met zijn eerste tegel op het anker, en loopt langs de rij verder: bij ZW en NO
+// (de toonbank naar +y of -y) langs x, bij ZO en NW langs y (vraag 127, a).
+const LANG_CEL = [224, 136];
+const LANG_ANKER = [112, 74];
 function kraamCel(richting, o = {}) {
-  const B = new K.Beeld(CEL[0], CEL[1], ANKER[0], ANKER[1]);
-  D.zetModel(B, D.marktkraam(SCHAAL, o), 0, 0, richting);
+  const L = o.lengte || 1;
+  const [b, h, ax, ay] = L > 1 || o.lang ? [...LANG_CEL, ...LANG_ANKER] : [...CEL, ...ANKER];
+  const B = new K.Beeld(b, h, ax, ay);
+  const langsX = richting === 'ZW' || richting === 'NO';
+  D.zetModel(B, D.marktkraam(SCHAAL, o), langsX ? (L - 1) / 2 : 0, langsX ? 0 : (L - 1) / 2, richting);
   D.zonSchaduw(B, []);
   K.belicht(B);
   K.omlijn(B);
@@ -174,6 +181,32 @@ function proef() {
   return plaat;
 }
 
-if (require.main === module) proef();
+// De kramen in hun vormen en lengtes (vraag 127, stap 2b): per rij een vorm (de luifel, het puntdak, het zeil, de kar),
+// van links naar rechts één, twee en drie tegels lang, en dan dezelfde kraam leeg; elk met een andere waar, en een boer
+// ervoor voor de maat.
+function proefVormen() {
+  const { boer } = require('./dorpelingen.cjs');
+  const figuur = K.losRenderen(boer({ houding: 'staan', fase: 0 }), { b: FIG_CEL[0], h: FIG_CEL[1], anker: FIG_ANKER, richting: 'N' });
+  const waren = { luifel: ['groente', 'vis', 'laken'], puntdak: ['brood', 'laken', 'vis'], zeil: ['potten', 'vis', 'laken'], kar: ['groente', 'groente', 'brood'] };
+  const KOL = 240;
+  const RIJ = 150;
+  const plaat = new K.Plaat(KOL * 4, RIJ * D.KRAAMVORMEN.length);
+  D.KRAAMVORMEN.forEach((vorm, r) => {
+    [1, 2, 3].forEach((L, k) => {
+      const cel = kraamCel('ZW', { waar: waren[vorm][k], vorm, lengte: L, lang: true });
+      plaat.plak(cel, k * KOL + KOL / 2 - LANG_ANKER[0], r * RIJ + 4);
+      if (k === 0) plaat.plak(figuur, k * KOL + KOL / 2 - FIG_ANKER[0] - 6 + 32, r * RIJ + 4 + LANG_ANKER[1] + 32 - FIG_ANKER[1]);
+    });
+    const leeg = kraamCel('ZW', { waar: waren[vorm][1], vorm, lengte: 2, leeg: true, lang: true });
+    plaat.plak(leeg, 3 * KOL + KOL / 2 - LANG_ANKER[0], r * RIJ + 4);
+  });
+  const uit = path.join(__dirname, 'uit');
+  fs.mkdirSync(uit, { recursive: true });
+  fs.writeFileSync(path.join(uit, 'marktkraam-vormen.png'), K.png(plaat, 1, '#6e7558'));
+  console.log(`uit/marktkraam-vormen.png (${plaat.b}×${plaat.h})`);
+  return plaat;
+}
 
-module.exports = { vel, mandenVel, beschrijving, proef, kraamCel, mandCel, CEL, ANKER, RICHTINGEN, SOORTEN, MANDEN };
+if (require.main === module) (process.argv.includes('vormen') ? proefVormen : proef)();
+
+module.exports = { vel, mandenVel, beschrijving, proef, proefVormen, kraamCel, mandCel, CEL, ANKER, RICHTINGEN, SOORTEN, MANDEN };

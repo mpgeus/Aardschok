@@ -1786,14 +1786,21 @@
       // naar het midden van het plein. In aanbouw bleker, zoals een gebouw zonder bouwfasen. Zonder kunst: een toonbank
       // en een rode luifel op palen.
       if (v.inAanbouw) ctx.globalAlpha = 0.45;
-      const kraam = metSprites() && T.sprites.kraam && T.sprites.kraam(v.richting);
+      const kraam = metSprites() && T.sprites.kraam && T.sprites.kraam(v.waar || 'groente', v.leeg, v.richting);
       if (kraam) T.sprites.teken(ctx, kraam, p.x, p.y, helder);
       else {
         T.blok(ctx, p.x, p.y, 0.34, 0.34, 14, '#7a5532', { helder });
         T.blok(ctx, p.x, p.y, 0.04, 0.04, 22, '#5e4128', { helder, basis: 14 });
-        T.blok(ctx, p.x, p.y, 0.42, 0.42, 3, '#b8432f', { helder, basis: 36 });
+        if (!v.leeg) T.blok(ctx, p.x, p.y, 0.42, 0.42, 3, '#b8432f', { helder, basis: 36 });
       }
       ctx.globalAlpha = 1;
+      return;
+    }
+    if (v.soort === 'mand') {
+      // Een mand, kist, zak of ton naast een kraam (js/markt.js). Zonder kunst: een rieten blokje.
+      const mand = metSprites() && T.sprites.mand && T.sprites.mand(v.wat);
+      if (mand) T.sprites.teken(ctx, mand, p.x, p.y, helder);
+      else T.blok(ctx, p.x, p.y, 0.18, 0.18, 10, '#a08850', { helder });
       return;
     }
     if (v.soort === 'pilaar') {

@@ -196,6 +196,34 @@ alleen bij minstens 30 bomen binnen tien tegels). Geen fouten in de console, gee
 
 **Wat het vraagt:** vraag 128 (hoeveel bos een houthakker nodig heeft), met deze cijfers erbij. De sluwe bouwer op 73425
 blijft in zijn eerste jaar betrapt op een stiekeme akker in het bos, zoals op 5 okt (vraag 107, g).
+## De speeltest van 6 okt: de markt die meegroeit (werklijst, vraag 127, stap 2)
+
+Gespeeld in de zesendertigste sessie, op `main` van deze sessie: het spel van `9b3837d` (het marktblok, de marktstraat, vol
+of leeg, en het grotere plein van de maker), met de speler die per maand de markt telt. `npm run speeltest -- bouwer
+--maker --jaren 4`, 9 à 14 minuten per spel. Geen fouten in de console.
+
+| Land | Een dorp op | De markt op | Kramen (leeg), blok | Mensen aan het eind (gisteren, met het kleine plein) | Geen plaats | Weverij |
+|---|---|---|---|---|---|---|
+| 62707 | dag 172 | dag 186 | 4, dan 5 (1 leeg); blok 12 | 83 (94) | 720 keer | wil, maar geen plek |
+| 73425 | dag 170 | dag 239 | 4, dan 5 (1 leeg); blok 12 | 79 (83) | 727 keer | wil, maar geen plek |
+| 72022 | dag 264 | dag 297 | 4, dan 5 (2 leeg); blok 10 | 85 (79) | 1036 keer | wil, maar geen plek |
+
+**Wat het zegt:**
+1. **De markt komt en groeit mee.** Op elk land staat hij op het plein, 14 tot 69 dagen na het dorp, en bij zo'n 80
+   mensen staan er vijf kramen (een per 15). Het blok heeft plaats voor 10 à 12; de marktstraat was niet nodig. Leeg
+   staan de pottenkraam (geen klei of vaten) en op 72022 ook de broodkraam (de bakkerij heeft geen meel).
+2. **Het grotere plein kost bouwgrond.** Het dorp eindigt op 83, 79 en 85 mensen (gisteren 94, 83 en 79): op 62707 elf
+   minder, en daar is de weverij nu weg (geen plek), dus heeft geen huis na het eerste jaar nog een dag alles; gisteren
+   had het het hele vierde jaar alles. Op 72022 zes meer. Op alle drie wil het dorp aan het eind een weverij, en heeft
+   het het goud, maar geen plek. De grond om te bouwen blijft de knoop (vraag 110, e), en c1 maakt hem op 62707 erger.
+
+**Wat het vraagt:** zie vraag 127 in de werklijst (het plein en de grond).
+
+**Daarna, met het plein iets kleiner** (`0ae1bb5`, 260 tot 300 tegels, een blok van 8; Marcel: "plein iets kleiner"),
+dezelfde speeltest: het dorp eindigt op **89, 77 en 84** mensen (met het grote plein 83, 79 en 85; met het oude, kleine
+plein 94, 83 en 79). De markt komt op elk land (dag 271, 302 en 452) en heeft vijf kramen. Maar **geen enkel land bouwt een
+weverij**: overal wil het dorp er aan het eind een, met het goud ervoor, en is er geen plek. Op 62707 had het oude plein
+er wel een (en een vierde jaar met alles). De grond is de knoop, en dat is e (vraag 110), dat Marcel eerder wilde.
 
 ## De speeltest van 6 okt: de markt op het plein (werklijst, vraag 110, d)
 

@@ -47,6 +47,8 @@
     meiboom: { blokkeert: true, zichtDicht: false, naam: 'de meiboom' },
     // Een kraam van de markt op het plein (js/markt.js): een toonbank met een luifel. Je loopt eromheen, en ertussendoor.
     kraam: { blokkeert: true, zichtDicht: false, naam: 'een kraam' },
+    // Een mand, kist, zak of ton naast een kraam (js/markt.js): wat niet op de toonbank past.
+    mand: { blokkeert: true, zichtDicht: false, naam: 'een mand' },
   };
 
   // Hoe snel de schout loopt, in tegels per seconde: wat vlotter dan een dorpeling (1,2 tot 1,5),
