@@ -1256,7 +1256,7 @@
         const hut = e.hut;
         const wie = hut && S.dorp.bewoners ? S.dorp.bewoners.mensen.filter((p) => p.huis === hut).map((p) => p.naam) : [];
         const vrij = T.hutPastOpErf(S.dorp, e) ? 'vrij' : 'vrij, maar er past geen hut meer op (vraag 110, f)';
-        const rooien = hut && hut.wachtOpRooien ? `het gezin rooit nog ${T.teRooienOpErf(S.dorp, e).length} tegels, tot uiterlijk dag ${e.rooienTot}` : null;
+        const rooien = hut && hut.wachtOpRooien ? `het gezin rooit nog ${T.teRooienOp(S.dorp, hut.kavel).length} tegels, tot uiterlijk dag ${hut.rooienTot}` : null;
         const staat = !hut ? vrij : rooien || (hut.wachtOpHout ? 'wacht op hout' : hut.klaar ? `een ${T.GEBOUWEN[hut.soort].naam}` : `in aanbouw, klaar op dag ${hut.klaarOp}`);
         return { x: e.x, y: e.y, staat, wie: wie.join(', ') };
       });

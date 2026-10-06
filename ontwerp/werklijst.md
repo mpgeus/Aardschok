@@ -4757,7 +4757,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     de bijl, zijn gezin helpt, en zolang wacht de hut (nog niet op de kaart) en werkt het gezin nergens; is het vrij, dan
     ligt de bouwplaats er de volgende dag, en na een maand rooien de buren de rest. Een erf in het bos van de heer kost zijn
     gunst (−5), een boom geeft 10 hout (ook bij het ontginnen), een nieuw gezin neemt eerst een erf waar niets op staat, en
-    de speler van de speeltest legt een erf liever niet in het bos van de heer. `npm test`: 975/975. Volgende: stap 2.
+    de speler van de speeltest legt een erf liever niet in het bos van de heer. `npm test`: 975/975.
+    **Stap 2 is gebouwd** (6 okt, de sessie van de heer; `js/bos.js`, `js/verzoeken.js`): het rooien staat nu op één plek
+    (`js/bos.js`), voor een erf en een werkplaats. Vindt wie een werkplaats vraagt geen open grond meer, dan kiest hij een
+    plek die hij eerst rooit, met zo weinig mogelijk bomen en dan zo dicht mogelijk, en zegt wat hij er rooit; in het bos
+    van de heer kost ja diens gunst (−5, onder het antwoord). De werkplaats wacht dan, nog niet op de kaart, en wie hem
+    vroeg, rooit met de bijl en werkt zolang nergens; daarna begint de bouw, en na een maand rooien de buren de rest. Een
+    put of een kapel net zo (wie hem vroeg, rooit, ook een boer). Een gebouw dat wacht, zegt het bij de muis ("eerst
+    wordt de plek gerooid", of "de bouwplaats wacht op hout": dat zei "nog 1 dag"). `npm test`: 977/977. Volgende: stap 3.
 116. **Beesten in het bos** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil dat er beesten kunnen rondlopen in het bos.
     Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het duister."; plan van Claude; open).
     **Wat er al is:** de wolf staat in `T.WEZENS` (`js/wereld.js`): een monster om mee te vechten, uit het oude spel, met

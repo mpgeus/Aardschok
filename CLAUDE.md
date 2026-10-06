@@ -356,13 +356,20 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwmenu staat, zegt `T.inBouwmenu`: het erf, en de woningen niet, tenzij de spelregel "Huizen" anders zegt. Op
   een akker, een weide, een pad of een erf bouw je niet (`T.waaromNietOpDezeGrond`). De paaltjes op een vrij erf
   tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`). **Een erf mag op struiken en bomen** (vraag 110, e, 6
-  okt): wat te rooien is (`T.ontginWerkOp` in `js/ontginnen.js`) houdt het niet tegen (`T.teRooienOpErf`,
-  `T.watTeRooien`, `T.rooiTekst` voor de muis); het gezin dat het neemt, rooit het zelf (het hoofd met de bijl, vanuit
-  `T.werkVeldwerkBij` in `js/veldwerk.js`, zoals een boer ontgint; zijn gezin helpt, `T.helpAnker`), en zolang wacht de
-  hut nog niet op de kaart (`wachtOpRooien`; `T.bouwGebouw` zet hem er pas met `T.zetOpDeKaart` op) en werkt het gezin
-  nergens; na `rooiDagen` rooien de buren de rest (`T.tikErvenDag`). Een erf in het bos van de heer
-  (`T.inHetBosVanDeHeer`: zoveel bomen als een stuk bos bij het ontginnen) kost zijn gunst; een boom geeft
-  `T.ONTGINNEN_INSTELLINGEN.houtPerBoom` hout, wie hem ook omhakt.
+  okt): wat te rooien is (`T.ontginWerkOp` in `js/ontginnen.js`) houdt het niet tegen (`T.rooiTekst` voor de muis); het
+  gezin dat het neemt, rooit het zelf, en zolang wacht de hut, nog niet op de kaart (`js/bos.js`). Een erf in het bos van
+  de heer kost zijn gunst.
+- `js/bos.js`: **grond uit het bos** (vraag 110, e, met 115, 6 okt; Marcel: "A ja B ja C ja D zo"): een gebouw op een stuk
+  waar nog iets te rooien staat (een boom, een stronk, een struik: `T.teRooienOp`, `T.watTeRooien`), wacht erop
+  (`g.wachtOpRooien`, met `g.kavel` en `g.rooienTot`), nog niet op de kaart (`T.bouwGebouw` zet het er pas met
+  `T.zetOpDeKaart` op), maar telt al mee: de hut van een gezin op zijn erf (`js/erven.js`), of een werkplaats die een
+  inwoner vroeg waar geen open grond meer was (`T.plekVoor` in `js/verzoeken.js`; `rooien` bij `T.plaatsGebouw` en
+  `T.waaromPastHetNiet`). Wie rooit (`T.rooitHij`: het hoofd van het gezin, of wie de werkplaats vroeg, `p.rooit`), hakt en
+  rooit met de bijl zoals een boer ontgint (`T.werkVeldwerkBij` in `js/veldwerk.js`; het gezin van een erf helpt,
+  `T.helpAnker`) en werkt zolang nergens; is het stuk vrij, dan ligt de bouwplaats er de volgende dag, en na `rooiDagen`
+  rooien de buren de rest (`T.tikRooienDag`). Een stuk in het bos van de heer (`T.inHetBosVanDeHeer`: zoveel bomen als een
+  stuk bos bij het ontginnen) kost zijn gunst; een boom geeft `T.ONTGINNEN_INSTELLINGEN.houtPerBoom` hout, wie hem ook
+  omhakt.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -514,7 +521,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   etc. Ze vragen alleen toestemming om te bouwen"): met de spelregel "Wie bouwt" op "De mensen"
   (`T.VERZOEKEN_INSTELLINGEN.mensen`) staat alleen het erf in het bouwmenu, en vraagt een inwoner je wat het dorp mist
   (`T.watTeBouwen` in `js/raad.js`): een voorval `bouwverzoek` (`T.beginBouwverzoek`, vanuit `T.tikVoorvallenDag`), met `L.bouw` = { soort, x,
-  y, waarom, nut } en de woorden `{wil}`, `{gebouw}`, `{plek}`, `{waarom}`, `{kosten}`. Waar het komt, zegt `T.plekVoor` (met drie tegels looppad rondom, zoals elk gebouw);
+  y, waarom, nut } en de woorden `{wil}`, `{gebouw}`, `{plek}`, `{waarom}`, `{kosten}`. Waar het komt, zegt `T.plekVoor` (met drie tegels looppad rondom, zoals elk gebouw; is er geen open grond meer, dan een plek die hij eerst rooit, `js/bos.js`);
   ja (`doe.bouw`) zet het neer (`T.verzoekToegestaan`, met `g.meester`), nee (`doe.weiger`) onthoudt het (`D.verzoeken`).
   Een oproep op het plein (`T.doeOproep`, de rij Oproepen in het bouwmenu) gaat voor, met een premie bovenop de kosten.
   Wat er mag (de trede), vraag je aan `T.magGebouwd`; wat jij in het bouwmenu hebt, aan `T.inBouwmenu` (`js/gebouwen.js`).

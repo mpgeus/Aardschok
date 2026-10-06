@@ -10,8 +10,9 @@
 //   - en ontgint hij heide of bos (js/ontginnen.js), dan werkt hij daar, behalve als hij zaait: op de heide steekt hij
 //     plaggen, tegel voor tegel; in het bos hakt hij eerst de bomen om en rooit hij de stronken en de struiken, van naast
 //     die tegel, en spit hij de grond daarna om.
-// Net zo rooit het hoofd van een nieuw gezin zijn erf, als daar nog bomen, stronken of struiken staan (js/erven.js;
-// werklijst vraag 110, e): hij hakt en rooit, en zijn gezin helpt, tot zijn hut kan komen.
+// Net zo rooit het hoofd van een nieuw gezin zijn erf, als daar nog bomen, stronken of struiken staan, en een inwoner de
+// plek van de werkplaats die hij vroeg (js/bos.js; werklijst vraag 110, e): hij hakt en rooit, en het gezin van wie zijn
+// erf rooit, helpt, tot de bouwplaats kan komen.
 // Wat overblijft (dorsen, het vee, of er is niets te doen), doet hij bij zijn boerderij, zoals tot nu toe: T.dagAnker
 // (js/dag.js) stuurt hem daarheen. De boerin en de grote kinderen helpen bij het zaaien en de oogst (T.helpAnker).
 //
@@ -407,12 +408,11 @@
     } else vw.klaar.sprokkelen = dag; // geen weg: vandaag niet
   }
 
-  // Het erf dat dit poppetje rooit (js/erven.js; werklijst vraag 110, e): als hij het hoofd is van een gezin waarvan de hut
-  // daarop wacht, of null. Het gezin helpt (T.helpAnker).
-  function erfDatHijRooit(e) {
-    const p = e.bewoner;
-    const hut = p && !p.hoofd && p.huis;
-    return hut && hut.wachtOpRooien && hut.erf ? hut.erf : null;
+  // Het stuk dat dit poppetje rooit (js/bos.js; werklijst vraag 110, e): het erf van zijn hut als hij het hoofd is van het
+  // gezin, of de plek van de werkplaats die hij vroeg; of null. Het gezin van wie zijn erf rooit, helpt (T.helpAnker).
+  function kavelDieHijRooit(e) {
+    const g = T.rooitHij(e.bewoner);
+    return g ? g.kavel : null;
   }
 
   // Elk beeld, na het maaien (T.werkOogstBij) en vóór het dwalen (T.dwaal): elke boer doet zijn werk van vandaag, en wie
@@ -429,8 +429,8 @@
     const nu = S.wereldTijd || 0;
     for (const e of w.wezens) {
       if (e.dood) continue;
-      const erf = erfDatHijRooit(e);
-      if (!erf && (!e.werkAkkers || !e.werkAkkers.length)) continue;
+      const kavel = kavelDieHijRooit(e);
+      if (!kavel && (!e.werkAkkers || !e.werkAkkers.length)) continue;
       // Wie hout naar huis bracht, legt het bij zijn deur neer.
       if (e.draagt && !e.pad.length && e.thuis && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1) e.draagt = null;
       // De schaft: brood op de akker (js/dag.js). Wie op zijn land werkt, blijft er staan tot het werk weer begint (wie
@@ -444,7 +444,7 @@
         delete e.werkt.schaft;
         e.werkt.tot = Math.min(e.werkt.tot, nu);
       }
-      const soort = werktijd && magWerken(S, D, e) ? (erf ? 'erf' : T.veldwerkVandaag(D, e, datum)) : null;
+      const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : T.veldwerkVandaag(D, e, datum)) : null;
       if (!soort) {
         onthoudPlag(e, nu);
         stop(e);
@@ -456,7 +456,7 @@
         vw = e.veldwerk = { soort, i: null, gedaan: 0, klaar: (vw && vw.klaar) || {} };
       }
       if (soort === 'sprokkelen') sprokkel(S, D, e, vw, nu);
-      else if (soort === 'erf') ontgin(D, e, vw, nu, T.teRooienOpErf(D, erf));
+      else if (soort === 'rooien') ontgin(D, e, vw, nu, T.teRooienOp(D, kavel));
       else opHetLand(S, D, e, vw, nu, datum);
     }
   };

@@ -24,16 +24,16 @@
 // twee à drie keer zoveel erven op een land). Water, een rots, een gebouw, een veld of een pad houden het tegen, maar wat
 // te rooien is (een boom, een stronk, een struik: T.ontginWerkOp, js/ontginnen.js) niet. Het gezin dat het erf neemt,
 // rooit het eerst zelf: de man met de bijl, en zijn gezin helpt (js/veldwerk.js, zoals de boer bij het ontginnen). Zolang
-// wacht de hut, nog niet op de kaart (`wachtOpRooien`), en het gezin woont er al, zoals terwijl de hut oprijst. Is het
-// na een maand niet af, dan rooien de buren de rest (T.tikErvenDag). Een erf waar niets op staat, gaat voor (T.kiesErf).
+// wacht de hut, nog niet op de kaart (`wachtOpRooien`, met het erf als kavel), en het gezin woont er al, zoals terwijl de
+// hut oprijst. Is het na een maand niet af, dan rooien de buren de rest (js/bos.js, T.tikRooienDag, dat ook een werkplaats
+// in het bos zo laat wachten). Een erf waar niets op staat, gaat voor (T.kiesErf).
 // Staan er minstens zoveel bomen op als op een stuk bos bij het ontginnen, dan ligt het in het bos van de heer, en dat
 // kost zijn gunst als je het aanwijst; de wei kost niets.
 //
-//   S.erven = [{ x, y, b, h, hut, plan, rooienTot }]  // waar een erf ligt, en de hut erop (een gebouw uit S.gebouwen),
+//   S.erven = [{ x, y, b, h, hut, plan }]  // waar een erf ligt, en de hut erop (een gebouw uit S.gebouwen),
 //                                          // of null zolang het vrij is. De hut wijst terug: hut.erf. plan: waar het
 //                                          // huis komt, { hut, huis, dx, dy, b, h } (de hoek in het erf, en de maat
-//                                          // van het grootste van de twee). rooienTot: zolang het gezin het erf
-//                                          // rooit, de dag waarop de buren de rest doen.
+//                                          // van het grootste van de twee).
 //
 // Alles hier is zonder scherm, en dus getoetst (test/erven.test.cjs).
 (function (T) {
@@ -183,40 +183,8 @@
   };
 
   // ---------------------------------------------------------------------------------------------
-  // Wat er eerst weg moet (werklijst vraag 110, e)
+  // Wat er eerst weg moet (werklijst vraag 110, e; wat te rooien is en wie het rooit: js/bos.js)
   // ---------------------------------------------------------------------------------------------
-
-  // De tegels van het vak r ({ x, y, b, h }) waar iets te rooien staat (een boom, een stronk, een struik), rij voor rij
-  // van achter naar voren, zoals het gezin ze afwerkt (js/veldwerk.js).
-  T.teRooienOpErf = function (D, r) {
-    const w = D.wereld;
-    const lijst = [];
-    for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.b; x++) if (T.ontginWerkOp(w, x, y)) lijst.push({ x, y });
-    return lijst;
-  };
-
-  // Hoeveel bomen en hoeveel struiken en stronken er op het vak r staan: { bomen, struiken }.
-  T.watTeRooien = function (D, r) {
-    const uit = { bomen: 0, struiken: 0 };
-    for (const t of T.teRooienOpErf(D, r)) {
-      if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') uit.bomen++;
-      else uit.struiken++;
-    }
-    return uit;
-  };
-
-  // Ligt het vak r in het bos van de heer: staan er minstens zoveel bomen op als op een stuk bos dat een boer ontgint
-  // (T.ONTGINNEN_INSTELLINGEN.bosBomen)? Losse bomen in de wei zijn van niemand.
-  T.inHetBosVanDeHeer = (D, r) => T.watTeRooien(D, r).bomen >= T.ONTGINNEN_INSTELLINGEN.bosBomen;
-
-  // "3 bomen en 2 struiken en stronken (+30 hout)": wat het gezin rooit, en wat het de schuur oplevert.
-  T.rooiWoorden = function (wat) {
-    const delen = [];
-    if (wat.bomen) delen.push(wat.bomen === 1 ? 'één boom' : `${wat.bomen} bomen`);
-    if (wat.struiken) delen.push(wat.struiken === 1 ? 'één struik of stronk' : `${wat.struiken} struiken en stronken`);
-    const hout = wat.bomen * T.ONTGINNEN_INSTELLINGEN.houtPerBoom;
-    return `${delen.join(' en ')}${hout ? ` (+${hout} hout)` : ''}`;
-  };
 
   // Wat de muis zegt met een erf in de hand op het vak r (js/main.js): wat er eerst weg moet, en of het in het bos van de
   // heer ligt, of null als er niets staat.
@@ -343,7 +311,7 @@
     if (!vrij.length) return null;
     const doel = waarWerkIs(D) || T.pleinVan(D.wereld) || { x: 0, y: 0 };
     const afstand = (e) => Math.hypot(e.x + e.b / 2 - doel.x, e.y + e.h / 2 - doel.y);
-    const rooien = (e) => (T.teRooienOpErf(D, e).length ? 1 : 0);
+    const rooien = (e) => (T.teRooienOp(D, e).length ? 1 : 0);
     return vrij.slice().sort((a, b) => rooien(a) - rooien(b) || afstand(a) - afstand(b))[0];
   };
 
@@ -371,8 +339,8 @@
   // De hut op het erf: een gebouw als elk ander (T.bouwGebouw, js/gebouwen.js), maar met zijn erf erbij en
   // de tekening van het huis waar hij later in doorgroeit (`wordtTekening`, js/behoeften.js). Hij begint
   // pas als het hout er is (`wachtOpHout`, en dan nog geen `klaarOp`). Staat er op het erf nog iets te rooien, dan wacht
-  // hij daar eerst op (`wachtOpRooien`): hij telt al als het huis van het gezin, maar komt pas op de kaart als het erf vrij
-  // is (T.tikErvenDag). Geeft de hut, of null als er niets past.
+  // hij daar eerst op (`wachtOpRooien`, met het erf als kavel): hij telt al als het huis van het gezin, maar komt pas op de
+  // kaart als het erf vrij is (T.tikRooienDag, js/bos.js). Geeft de hut, of null als er niets past.
   T.zetHutOpErf = function (D, erf) {
     const keus = hutVoorErf(D, erf);
     if (!keus) return null;
@@ -380,25 +348,18 @@
     // Wat genomen is, is genomen: de volgende hut en het volgende huis worden een andere tekening.
     if (T.vormVan(keus.hut) === T.vormVan(T.volgendeTekening(D, 'hut'))) T.neemTekening(D, 'hut');
     if (T.vormVan(keus.huis) === T.vormVan(T.volgendeTekening(D, 'huis'))) T.neemTekening(D, 'huis');
-    const rooien = T.teRooienOpErf(D, erf).length > 0;
+    const rooien = T.teRooienOp(D, erf).length > 0;
     const hut = {
       soort: 'hut', x: erf.x + keus.dx, y: erf.y + keus.dy, tekening: keus.hut, voet: T.gebouwVoet('hut', keus.hut),
       klaar: false, klaarOp: null, handen: 0, voorwerp: null,
       erf, wordtTekening: keus.huis, wachtOpHout: !rooien, wachtOpRooien: rooien,
     };
+    if (rooien) Object.assign(hut, { kavel: { x: erf.x, y: erf.y, b: erf.b, h: erf.h }, rooienTot: dagNu(D) + IN().rooiDagen });
     erf.hut = hut;
     T.bouwGebouw(D, hut);
-    if (rooien) erf.rooienTot = dagNu(D) + IN().rooiDagen;
-    else begin(D, hut);
+    if (!rooien) begin(D, hut);
     return hut;
   };
-
-  // Wat er op deze tegel te rooien staat, in één keer weg: een boom om (het hout naar de schuur) en zijn stronk eruit, of
-  // een stronk of een struik eruit (js/ontginnen.js).
-  function rooiNu(D, t) {
-    if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y);
-    T.rooi(D, t.x, t.y);
-  }
 
   // Een bouwplaats begint zodra het hout er is: dan gaat het van de voorraad af, en rijst de hut in zijn
   // bouwtijd op (T.bouwFaseIndex, js/gebouwen.js). Geeft true als hij begon.
@@ -442,25 +403,11 @@
     return hut;
   };
 
-  // Elke dag (T.tikGebouwenDag, js/gebouwen.js, vóór de gebouwen die klaarkomen): een erf dat gerooid is, krijgt zijn
-  // bouwplaats, en is de tijd om, dan rooien de buren in één keer wat er nog staat (vraag 110, e). Een bouwplaats die op
-  // hout wacht, begint als het er nu is.
+  // Elke dag (T.tikGebouwenDag, js/gebouwen.js, vóór de gebouwen die klaarkomen, en na het rooien, js/bos.js): een
+  // bouwplaats die op hout wacht, begint als het er nu is.
   T.tikErvenDag = function (D) {
-    const dag = dagNu(D);
     for (const erf of D.erven || []) {
       const hut = erf.hut;
-      if (hut && hut.wachtOpRooien) {
-        const over = T.teRooienOpErf(D, erf);
-        if (over.length && dag < erf.rooienTot) continue;
-        for (const t of over) rooiNu(D, t);
-        hut.wachtOpRooien = false;
-        hut.wachtOpHout = true;
-        delete erf.rooienTot;
-        T.zetOpDeKaart(D, hut);
-        T.zeg(D, over.length
-          ? `De buren helpen ${gezinVan(D, hut)} zijn erf te rooien, en de bouwplaats van zijn hut ligt er.`
-          : `${T.hoofdletter(gezinVan(D, hut))} heeft zijn erf gerooid, en de bouwplaats van zijn hut ligt er.`);
-      }
       if (hut && hut.wachtOpHout && begin(D, hut)) T.zeg(D, `${T.hoofdletter(gezinVan(D, hut))} begint aan zijn hut: het hout is er.`);
     }
   };

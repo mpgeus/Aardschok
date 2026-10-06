@@ -62,6 +62,23 @@ function erfPlek(S, wil) {
   const maat = T.erfMaat();
   return plekken.find((p) => !T.waaromPastErfNiet(S.dorp, p.x, p.y) && wil(T.watTeRooien(S.dorp, { x: p.x, y: p.y, b: maat.b, h: maat.h }).bomen)) || null;
 }
+// Net zo voor een werkplaats: de plek die het dichtst bij het plein ligt en na het rooien past, met zoveel bomen op zijn
+// stuk (de voet met het looppad, T.kavelVan) als `wil` vraagt.
+function werkplaatsPlek(S, soort, wil) {
+  const D = S.dorp;
+  const plein = T.pleinVan(S.wereld);
+  const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort));
+  const plekken = [];
+  for (let y = 0; y < S.wereld.tegels.length; y++) {
+    for (let x = 0; x < S.wereld.tegels[0].length; x++) plekken.push({ x, y, d: Math.hypot(x - plein.x, y - plein.y) });
+  }
+  plekken.sort((a, b) => a.d - b.d);
+  for (const p of plekken) {
+    const kavel = T.kavelVan(D, p.x, p.y, voet);
+    if (wil(T.watTeRooien(D, kavel).bomen) && !T.waaromPastHetNiet(D, soort, p.x, p.y, null, kavel)) return { x: p.x, y: p.y, rooien: kavel };
+  }
+  return null;
+}
 const BOS = () => T.ONTGINNEN_INSTELLINGEN.bosBomen;
 const inDeWei = (n) => n > 0 && n < BOS();
 const leeg = (n) => n === 0;
@@ -142,7 +159,7 @@ test('een gezin rooit zijn erf eerst: de hut wacht, nog niet op de kaart, en het
     assert.equal(hut.wachtOpRooien, true);
     assert.equal(hut.wachtOpHout, false);
     assert.equal(hut.voorwerp, null, 'nog niet op de kaart');
-    assert.equal(erf.rooienTot, Math.floor(S.kalender.dag) + T.ERVEN_INSTELLINGEN.rooiDagen);
+    assert.equal(hut.rooienTot, Math.floor(S.kalender.dag) + T.ERVEN_INSTELLINGEN.rooiDagen);
     assert.equal(D.voorraad.hout, hout, 'het hout voor de hut gaat er pas af als hij begint');
     assert.equal(T.paaltjesVan(erf).length, 4, 'de paaltjes staan er nog');
     // Het gezin woont er al, en werkt nergens zolang het rooit.
@@ -154,17 +171,18 @@ test('een gezin rooit zijn erf eerst: de hut wacht, nog niet op de kaart, en het
     assert.ok(gezin.every((p) => !p.werk), 'wie rooit, werkt nergens');
     assert.match(D.bewoners.komen[D.bewoners.komen.length - 1].aankomst.tekst, /Ze rooien hun erf/);
     // Zolang er iets staat, blijft de hut wachten.
-    T.tikErvenDag(D);
+    T.tikRooienDag(D);
     assert.equal(hut.wachtOpRooien, true);
     // Het gezin rooit alles (zoals js/veldwerk.js het doet): elke boom geeft hout.
     const bomen = T.watTeRooien(D, erf).bomen;
-    for (const t of T.teRooienOpErf(D, erf)) {
+    for (const t of T.teRooienOp(D, erf)) {
       if (T.ontginWerkOp(S.wereld, t.x, t.y) === 'hakken') assert.ok(T.hakBoom(D, t.x, t.y));
       assert.ok(T.rooi(D, t.x, t.y));
     }
     assert.equal(D.voorraad.hout, hout + bomen * T.ONTGINNEN_INSTELLINGEN.houtPerBoom);
     // De volgende dag ligt de bouwplaats er, en begint hij met het hout.
     S.kalender.dag = 1;
+    T.tikRooienDag(D);
     T.tikErvenDag(D);
     assert.equal(hut.wachtOpRooien, false);
     assert.ok(hut.voorwerp, 'de bouwplaats ligt op de kaart');
@@ -189,13 +207,14 @@ test('is de maand om, dan rooien de buren de rest in één keer, en het hout gaa
     assert.equal(hut.wachtOpRooien, true);
     const bomen = T.watTeRooien(D, erf).bomen;
     const hout = D.voorraad.hout;
-    S.kalender.dag = erf.rooienTot - 1;
-    T.tikErvenDag(D);
+    S.kalender.dag = hut.rooienTot - 1;
+    T.tikRooienDag(D);
     assert.equal(hut.wachtOpRooien, true, 'de dag ervoor nog niet');
-    S.kalender.dag = erf.rooienTot;
+    S.kalender.dag = hut.rooienTot;
+    T.tikRooienDag(D);
     T.tikErvenDag(D);
     assert.equal(hut.wachtOpRooien, false);
-    assert.equal(T.teRooienOpErf(D, erf).length, 0, 'het erf is leeg');
+    assert.equal(T.teRooienOp(D, erf).length, 0, 'het erf is leeg');
     assert.ok(hut.voorwerp);
     assert.equal(D.voorraad.hout, hout + bomen * T.ONTGINNEN_INSTELLINGEN.houtPerBoom - T.GEBOUWEN.hut.kosten.hout);
   });
@@ -212,7 +231,7 @@ test('een gezin neemt eerst een erf waar niets te rooien staat', () => {
     let ver = null;
     for (let y = 0; y < S.wereld.tegels.length; y++) {
       for (let x = 0; x < S.wereld.tegels[0].length; x++) {
-        if (T.waaromPastErfNiet(D, x, y) || T.teRooienOpErf(D, { x, y, b: maat.b, h: maat.h }).length) continue;
+        if (T.waaromPastErfNiet(D, x, y) || T.teRooienOp(D, { x, y, b: maat.b, h: maat.h }).length) continue;
         const d = Math.hypot(x - wei.x, y - wei.y);
         if (!ver || d > ver.d) ver = { x, y, d };
       }
@@ -249,7 +268,7 @@ test('het hoofd van het gezin rooit zijn erf met de bijl, zijn gezin helpt, en d
     assert.ok(geholpen, 'zijn gezin hielp');
     assert.equal(hut.wachtOpRooien, false, 'het erf is gerooid');
     assert.ok(hut.voorwerp, 'en de bouwplaats van zijn hut ligt er');
-    assert.equal(T.teRooienOpErf(D, erf).length, 0);
+    assert.equal(T.teRooienOp(D, erf).length, 0);
   });
 });
 
@@ -268,8 +287,77 @@ test('bewaren en laden houdt een erf dat gerooid wordt, en de hut die erop wacht
     const erf = D2.erven[0];
     assert.equal(erf.hut.wachtOpRooien, true);
     assert.equal(erf.hut.erf, erf);
-    assert.equal(erf.rooienTot, D.erven[0].rooienTot);
+    assert.equal(erf.hut.rooienTot, D.erven[0].hut.rooienTot);
     assert.ok(D2.gebouwen.includes(erf.hut));
     assert.equal(erf.hut.voorwerp, null);
+  });
+});
+
+// Stap 2: een werkplaats waar geen open grond meer is (js/verzoeken.js, js/bos.js).
+
+test('een plek om te rooien voor een werkplaats: met zo weinig mogelijk bomen, en hij past pas na het rooien', () => {
+  zo(() => {
+    const S = gehucht();
+    const D = S.dorp;
+    const bij = erfPlek(S, (n) => n >= BOS());
+    const plek = T.plekOmTeRooien(D, 'weverij', { x: bij.x + 5, y: bij.y + 5 });
+    assert.ok(plek, 'er is een plek om te rooien');
+    assert.ok(plek.rooien, 'met het stuk dat eerst vrij moet');
+    assert.ok(T.teRooienOp(D, plek.rooien).length > 0, 'daar staat iets te rooien');
+    assert.ok(T.waaromPastHetNiet(D, 'weverij', plek.x, plek.y), 'zonder rooien past hij niet');
+    assert.equal(T.waaromPastHetNiet(D, 'weverij', plek.x, plek.y, null, plek.rooien), null, 'na het rooien wel');
+    // Het stuk is de voet met het looppad eromheen.
+    const voet = T.gebouwVoet('weverij', T.volgendeTekening(D, 'weverij'));
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    assert.deepEqual(plek.rooien, T.kavelVan(D, plek.x, plek.y, voet));
+    assert.ok(plek.rooien.b <= voet.b + 2 * n && plek.rooien.h <= voet.h + 2 * n);
+  });
+});
+
+test('ja op een werkplaats in het bos: hij wacht, nog niet op de kaart; wie hem vroeg, rooit en werkt nergens; dan de bouw', () => {
+  zo(() => {
+    const S = gehucht();
+    const D = S.dorp;
+    T.zetVoorraad(D, 'hout', 100);
+    T.zetVoorraad(D, 'goud', 100);
+    const plek = werkplaatsPlek(S, 'weverij', (n) => n >= BOS());
+    assert.ok(plek, 'er is een plek in het bos');
+    assert.ok(T.inHetBosVanDeHeer(D, plek.rooien));
+    const wie = D.bewoners.mensen.find((p) => p.leeftijd === 'volwassen' && !T.isBoer(p.wezen) && !p.schout);
+    assert.ok(wie, 'er is iemand die het vraagt');
+    const L = { wie, bouw: { soort: 'weverij', x: plek.x, y: plek.y, waarom: 'Het dorp wil laken.', rooien: plek.rooien, bos: true } };
+    D.voorvallen = D.voorvallen || T.nieuweVoorvallen();
+    D.voorvallen.lopend = L;
+    // Hij zegt waar, en wat hij er eerst rooit, in het bos van de heer; en de prijs noemt zijn gunst.
+    assert.match(T.GESPREK_WOORDEN.plek(D), /waar ik eerst .* rooi, in het bos van de heer/);
+    assert.match(T.prijsVanKeuze(D, { bouw: true }).tekst, new RegExp(`gunst van de heer −${T.ONTGINNEN_INSTELLINGEN.gunst}`));
+    const gunst = T.bazenNu(D).gunst;
+    const hout = D.voorraad.hout;
+    T.verzoekToegestaan(D, L);
+    const g = D.gebouwen.find((x) => x.soort === 'weverij');
+    assert.ok(g, 'de weverij is er');
+    assert.equal(g.wachtOpRooien, true);
+    assert.equal(g.voorwerp, null, 'nog niet op de kaart');
+    assert.equal(g.klaarOp, null);
+    assert.match(T.gebouwToestand(D, g), /eerst wordt de plek gerooid/);
+    assert.equal(g.meester, wie);
+    assert.equal(wie.rooit, g);
+    assert.equal(D.voorraad.hout, hout - T.GEBOUWEN.weverij.kosten.hout, 'de kosten gaan er meteen af, zoals bij elk verzoek');
+    assert.equal(T.bazenNu(D).gunst, gunst - T.ONTGINNEN_INSTELLINGEN.gunst);
+    T.wijsWerkToe(D);
+    assert.equal(wie.werk, null, 'wie rooit, werkt nergens');
+    assert.equal(T.rooitHij(wie), g);
+    // Hij rooit alles; de volgende dag begint de bouw.
+    for (const t of T.teRooienOp(D, g.kavel)) {
+      if (T.ontginWerkOp(S.wereld, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y);
+      T.rooi(D, t.x, t.y);
+    }
+    S.kalender.dag = 1;
+    T.tikRooienDag(D);
+    assert.equal(g.wachtOpRooien, false);
+    assert.ok(g.voorwerp, 'de bouwplaats ligt er');
+    assert.equal(g.klaarOp, 1 + T.GEBOUWEN.weverij.bouwtijd);
+    assert.equal(wie.rooit, undefined);
+    assert.equal(T.rooitHij(wie), null);
   });
 });

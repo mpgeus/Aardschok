@@ -95,7 +95,7 @@
   T.plekVoor = function (D, soort, bij) {
     T.iedereenStil(true);
     try {
-      const plek = zoekPlek(D, soort, bij);
+      const plek = zoekPlek(D, soort, bij) || zoekPlekOmTeRooien(D, soort, bij);
       if (plek) T.keerNaarDeWeg(D, soort, plek.x, plek.y);
       return plek;
     } finally {
@@ -140,6 +140,31 @@
     }
     return null;
   }
+
+  // Geen open grond meer (werklijst vraag 110, e; Marcel, 6 okt: "A ja B ja"): dan een plek waar wie het vraagt eerst
+  // rooit (een boom, een stronk, een struik, onder de voet en in het looppad), met zo weinig mogelijk bomen, en dan het
+  // dichtst bij `bij`. Wat bij de natuur hoort, zoekt over de hele kaart, de rest binnen 45 tegels, zoals hierboven.
+  // Eerst wat er op elke plek te rooien staat (één stap per plek, T.watTeRooien), dan van de beste plek af of hij past.
+  // Geeft { x, y, rooien: het stuk dat eerst vrij moet }, of null.
+  function zoekPlekOmTeRooien(D, soort, bij) {
+    const w = D.wereld;
+    const g = T.GEBOUWEN[soort];
+    if (!g || g.erf || soort === 'markt') return null;
+    const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || g.voet;
+    const tot = g.bij ? Math.max(45, w.tegels.length, w.tegels[0].length) : 45;
+    const plekken = [];
+    for (let y = Math.max(0, bij.y - tot); y < Math.min(w.tegels.length, bij.y + tot); y++) {
+      for (let x = Math.max(0, bij.x - tot); x < Math.min(w.tegels[0].length, bij.x + tot); x++) {
+        const kavel = T.kavelVan(D, x, y, voet);
+        const wat = T.watTeRooien(D, kavel);
+        if (wat.bomen || wat.struiken) plekken.push({ x, y, kavel, bomen: wat.bomen, d: Math.hypot(x - bij.x, y - bij.y) });
+      }
+    }
+    plekken.sort((a, b) => a.bomen - b.bomen || a.d - b.d);
+    const plek = plekken.find((p) => !T.waaromPastHetNiet(D, soort, p.x, p.y, null, p.kavel));
+    return plek ? { x: plek.x, y: plek.y, rooien: plek.kavel } : null;
+  }
+  T.plekOmTeRooien = zoekPlekOmTeRooien; // ook voor test/rooien.test.cjs
 
   // Een werkplaats komt bij het huis van wie hem vraagt; wat van iedereen is (een plek met een kring, en wat geen handen
   // heeft of het hele dorp dient: de markt, het wachthuis), bij het hart van het dorp.
@@ -225,6 +250,8 @@
       if (x.premie) L.bouw.premie = x.premie;
       if (x.wil) L.bouw.eigen = x.wil;
       if (plek.kramen) L.bouw.kramen = plek.kramen; // de markt op het plein: waar de kramen komen, in goud (js/tekenen.js)
+      // Geen open grond: wie het vraagt, rooit de plek eerst (js/bos.js), en in het bos van de heer kost dat zijn gunst.
+      if (plek.rooien) Object.assign(L.bouw, { rooien: plek.rooien, bos: T.inHetBosVanDeHeer(D, plek.rooien) });
       R.volgende = dag + IN().elke;
       return true;
     }
@@ -243,13 +270,21 @@
     const b = L.bouw;
     const wie = L.wie;
     const bij = (vanIedereen(b.soort) && !b.eigen) || !(wie && wie.huis) ? hartVan(D) : T.deurVan(D.wereld, wie.huis);
-    const plek = T.gebouwPast(D, b.soort, b.x, b.y) ? b : T.plekVoor(D, b.soort, bij);
-    const u = plek ? T.plaatsGebouw(D, b.soort, plek.x, plek.y) : { gelukt: false, reden: 'er is geen plek meer' };
+    // Zijn plek, of als die intussen bezet is, de plek die hij nu zou kiezen; moest hij eerst rooien en is dat nog zo, dan
+    // wacht het gebouw daarop (js/bos.js).
+    const past = b.rooien ? !T.waaromPastHetNiet(D, b.soort, b.x, b.y, null, b.rooien) : T.gebouwPast(D, b.soort, b.x, b.y);
+    const plek = past ? b : T.plekVoor(D, b.soort, bij);
+    const rooien = plek && (plek === b ? b.rooien : plek.rooien);
+    const u = plek ? T.plaatsGebouw(D, b.soort, plek.x, plek.y, rooien || null) : { gelukt: false, reden: 'er is geen plek meer' };
     if (!u.gelukt) {
       T.zeg(D, `${T.hoofdletter(wieNaam(wie))} kan ${deVan(b.soort)} ${naamVan(b.soort)} toch niet bouwen: ${u.reden.replace(/\.$/, '').toLowerCase()}.`);
       return;
     }
     u.instantie.meester = wie;
+    if (u.instantie.wachtOpRooien) {
+      wie.rooit = u.instantie;
+      if (T.inHetBosVanDeHeer(D, u.instantie.kavel)) T.wijzigGunst(D, -T.ONTGINNEN_INSTELLINGEN.gunst, 'Een werkplaats in zijn bos');
+    }
     const R = verzoekenVan(D);
     R.ja++;
     R.laatst[b.soort] = dagNu(D);
@@ -258,7 +293,8 @@
       R.oproepen = R.oproepen.filter((o) => o.soort !== b.soort);
     }
     if (b.eigen) T.eigenToegestaan(D, L);
-    T.zeg(D, `${T.hoofdletter(wieNaam(wie))} begint aan ${deVan(b.soort)} ${naamVan(b.soort)}.`, 'goed');
+    const eerst = u.instantie.wachtOpRooien ? `rooit eerst de plek voor ${deVan(b.soort)} ${naamVan(b.soort)}` : `begint aan ${deVan(b.soort)} ${naamVan(b.soort)}`;
+    T.zeg(D, `${T.hoofdletter(wieNaam(wie))} ${eerst}.`, 'goed');
   };
 
   // Nee (doe: { weiger: true }): het dorp onthoudt het, en vraagt het pas na naNee dagen weer. Een ondernemer onthoudt
@@ -321,6 +357,16 @@
   function plekTekst(D, L) {
     const b = L.bouw;
     if (b.kramen) return 'op het plein';
+    // Geen open grond (js/bos.js): waar, en wat hij er eerst rooit.
+    if (b.rooien) {
+      const wat = T.rooiWoorden(T.watTeRooien(D, b.rooien));
+      return `${plaatsTekst(D, L)}, waar ik eerst ${wat} rooi${b.bos ? ', in het bos van de heer' : ''}`;
+    }
+    return plaatsTekst(D, L);
+  }
+  // Waar het komt, zonder wat er gerooid wordt.
+  function plaatsTekst(D, L) {
+    const b = L.bouw;
     const deur = L.wie.huis && T.deurVan(D.wereld, L.wie.huis);
     if (deur && Math.hypot(b.x - deur.x, b.y - deur.y) <= 8) return 'naast mijn huis';
     let beste = null;

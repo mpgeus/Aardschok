@@ -26,7 +26,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
 | De markt op het plein | gebouwd (6 okt; Marcel: "Voor nu a1, b tot e ja"): vier kramen aan de rand van het plein, waar je tussendoor loopt, voor 8 hout en 6 goud; het midden blijft vrij voor het feest en de heer; de spelregel "De markt" | vraag 110, d |
-| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104) | vraag 103, 104 |
+| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
 | Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
 | Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
@@ -505,6 +505,13 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
   midden van het gehucht komt een werkplaats zo verder van wie hem vraagt (de wapenmaker in een toets op 20 tegels in
   plaats van 10), en een put of een kapel bereikt soms een huis minder. Een dak steekt nog over het pad: een huis is
   breder getekend dan zijn muren.
+- **Geen open grond meer** (6 okt, de sessie van de heer; werklijst vraag 110, e, stap 2; Marcel: "A ja B ja"): past het
+  nergens binnen bereik, dan kiest hij een plek die hij eerst rooit, met zo weinig mogelijk bomen en dan zo dicht
+  mogelijk, en zegt het ("Naast mijn huis, waar ik eerst 4 bomen en één struik of stronk (+40 hout) rooi, in het bos van
+  de heer."). Ja kost wat het altijd kost, en in het bos van de heer ook zijn gunst (−5, onder het antwoord). De
+  werkplaats wacht dan, nog niet op de kaart, en wie hem vroeg, rooit de voet en het looppad met de bijl, zoals een gezin
+  zijn erf (`js/bos.js`), en werkt zolang nergens; is het vrij, dan begint de bouw de volgende dag, en na een maand
+  rooien de buren de rest. Een put of een kapel net zo: wie hem vroeg, rooit, ook een boer (het maaien gaat voor).
 - **Wanneer:** om de vier dagen kan er een komen, als er niets anders loopt (het gaat vóór een geloot voorval), en alleen
   als het dorp het kan betalen. Hij komt je zoeken zoals bij een voorval ("Aafke wil een kapel bouwen, en zoekt je."),
   en zegt waarom en wat het kost; onder elk antwoord staat de prijs. **Ja:** het gebouw komt er, het dorp betaalt.
@@ -3240,12 +3247,13 @@ wordt gepraat:
   struiken, met dezelfde bijl en op dezelfde manier als een boer die bos ontgint (`js/veldwerk.js`), zijn gezin helpt
   (`T.helpAnker`), en zolang werkt niemand van hen ergens anders. De hut wacht intussen, nog niet op de kaart
   (`wachtOpRooien`); het gezin woont er al, en de paaltjes blijven staan. Is het erf vrij, dan ligt de bouwplaats er de
-  volgende dag (`T.tikErvenDag`, `T.zetOpDeKaart`); is het na een maand niet af (`rooiDagen` in de werkbank), dan rooien
+  volgende dag (`T.tikRooienDag` in `js/bos.js`, `T.zetOpDeKaart`); is het na een maand niet af (`rooiDagen` in de werkbank), dan rooien
   de buren de rest in één keer. Elke boom geeft 10 hout (ook bij het ontginnen; tot 6 okt 4). Een nieuw gezin neemt eerst
   een erf waar niets te rooien staat (`T.kiesErf`). **Het bos is van de heer** (B): een erf met minstens zoveel bomen als
   een stuk bos bij het ontginnen (10) kost zijn gunst als je het aanwijst (−5), en de muis zegt het vooraf; losse bomen
   en struiken in de wei kosten niets. De speler van de speeltest legt een erf liever niet in het bos van de heer, en bij
-  gelijke kringen liever waar minder te rooien is. Nog niet: een werkplaats die zo rooit (stap 2), en de houthakker die
+  gelijke kringen liever waar minder te rooien is. Een werkplaats die een inwoner vraagt, rooit zijn plek net zo als er
+  geen open grond meer is (stap 2; "De stad groeit door haar mensen", Geen open grond meer). Nog niet: de houthakker die
   hakt en plant (stap 3).
 - **Een huis met plaats gaat voor.** Is het dorp vol, dan neemt een nieuw gezin op een groeidag het vrije erf dat
   het dichtst bij de werkplaats ligt die de meeste handen mist (anders bij het plein), en komt over de weg. Het
